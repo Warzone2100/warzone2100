@@ -1,0 +1,23 @@
+/***********************************************************/
+/*  You may have to modify this file for it to be correct! */ 
+/*******************       WRF\frontend.wrf      *******************/
+
+
+directory	"images"
+file		IMG	"intfac.img"
+file		IMG	"frontend.img"
+directory	"audio/sfx/interfce"
+file		WAV	"beep1.ogg"
+file		WAV	"beep2.ogg"
+file		WAV	"beep3.ogg"
+file		WAV	"beep4.ogg"
+file		WAV	"beep5.ogg"
+file		WAV	"beep6.ogg"
+file		WAV	"beep7.ogg"
+file		WAV	"beep8.ogg"
+file		WAV	"beep9.ogg"
+file		WAV	"gmeshtdn.ogg"
+directory	"audio"
+file		AUDIOCFG	"frontaud.cfg"
+directory	"messages/strings"
+file		STR_RES	"names.txt"

@@ -1,0 +1,13 @@
+{
+    "RepairCentre": {
+        "id": "RepairCentre",
+        "location": "TURRET",
+        "name": "*RepairCenter*",
+        "sensorModel": "GNHREPAR.PIE"
+    },
+    "ZNULLECM": {
+        "id": "ZNULLECM",
+        "location": "DEFAULT",
+        "name": "Z NULL ECM"
+    }
+}

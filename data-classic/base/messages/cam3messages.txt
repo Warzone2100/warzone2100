@@ -1,0 +1,2 @@
+DELETE_ME,0,1,2,cam2intro1.ogg,0,0,0000,cam2intro2.ogg,0,0,0000
+END,0,1,1,end.ogg,1,END_MSG1,0,0000

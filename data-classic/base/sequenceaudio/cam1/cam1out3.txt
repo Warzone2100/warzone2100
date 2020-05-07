@@ -1,0 +1,6 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	432	1.0	5.0	_("When we failed to respond it became threatening.")
+
+

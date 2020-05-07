@@ -1,0 +1,161 @@
+{
+	"position_0": {
+		"label": "startPosition",
+		"pos": [1088, 6592]
+	},
+
+	"position_1": {
+		"label": "base1Assembly",
+		"pos": [3136, 1472]
+	},
+	"position_2": {
+		"label": "base2Assembly",
+		"pos": [5824, 2368]
+	},
+	"position_3": {
+		"label": "base3Assembly",
+		"pos": [5184, 6592]
+	},
+	"position_4": {
+		"label": "valleyPlayerBasePos",
+		"pos": [832, 6848]
+	},
+	"position_5": {
+		"label": "valleyReinforcePos",
+		"pos": [1856, 7104]
+	},
+	"position_6": {
+		"label": "hillGroupPos1",
+		"pos": [2688, 6144]
+	},
+	"position_7": {
+		"label": "hillGroupPos2",
+		"pos": [2560, 7296]
+	},
+	"position_8": {
+		"label": "hillGroupPos3",
+		"pos": [1536, 7552]
+	},
+	"position_9": {
+		"label": "artifactPos",
+		"pos": [600, 2944]
+	},
+
+	"area_0": {
+		"label": "landingZone",
+		"pos1": [512, 6784],
+		"pos2": [768, 7040]
+	},
+	"area_1": {
+		"label": "scavBase1",
+		"pos1": [2624, 448],
+		"pos2": [3648, 1344]
+	},
+	"area_2": {
+		"label": "scavBase4",
+		"pos1": [4032, 2368],
+		"pos2": [4800, 3136]
+	},
+	"area_3": {
+		"label": "scavBase2",
+		"pos1": [4800, 1472],
+		"pos2": [6464, 3584]
+	},
+	"area_4": {
+		"label": "scavBase3",
+		"pos1": [4288, 5952],
+		"pos2": [6208, 7488]
+	},
+	"area_5": {
+		"label": "factory1Trigger",
+		"subscriber": 0,
+		"pos1": [320, 4160],
+		"pos2": [2368, 5184]
+	},
+	"area_6": {
+		"label": "factory2Trigger",
+		"subscriber": 0,
+		"pos1": [1984, 832],
+		"pos2": [3008, 2368]
+	},
+	"area_7": {
+		"label": "factory3Trigger",
+		"subscriber": 0,
+		"pos1": [3904, 2496],
+		"pos2": [5312, 4288]
+	},
+	"area_8": {
+		"label": "regionGroup0",
+		"pos1": [704, 4544],
+		"pos2": [1728, 4800]
+	},
+	"area_9": {
+		"label": "regionGroup1",
+		"pos1": [576, 4032],
+		"pos2": [1728, 4543]
+	},
+	"area_10": {
+		"label": "regionGroup2",
+		"pos1": [576, 3136],
+		"pos2": [1216, 4032]
+	},
+	"area_11": {
+		"label": "regionGroup3",
+		"pos1": [576, 1728],
+		"pos2": [1600, 4032]
+	},
+	"area_12": {
+		"label": "regionGroup4",
+		"pos1": [704, 704],
+		"pos2": [2112, 1728]
+	},
+	"area_13": {
+		"label": "regionGroup5",
+		"pos1": [2432, 1536],
+		"pos2": [3712, 3584]
+	},
+
+	"object_0": {
+		"label": "base1Factory",
+		"id": 223,
+		"player": 7,
+		"type": 1
+	},
+	"object_1": {
+		"label": "radarTower",
+		"id": 650,
+		"player": 7,
+		"type": 1
+	},
+	"object_2": {
+		"label": "base2Factory",
+		"id": 481,
+		"player": 7,
+		"type": 1
+	},
+	"object_3": {
+		"label": "base3Factory",
+		"id": 623,
+		"player": 7,
+		"type": 1
+	},
+	"object_4": {
+		"label": "bunkerArti",
+		"id": 666,
+		"player": 7,
+		"type": 1
+	},
+	"object_5": {
+		"label": "flamerArti",
+		"id": 649,
+		"player": 0,
+		"type": 2
+	},
+
+	"radius_0": {
+		"label": "removeObjectiveBlip",
+		"subscriber": 0,
+		"pos": [1728, 1216],
+		"radius": 640
+	}
+}

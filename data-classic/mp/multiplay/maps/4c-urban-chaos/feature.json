@@ -1,0 +1,899 @@
+{
+    "feature_0046": {
+        "name": "OilResource",
+        "position": [
+            3264,
+            7488,
+            131
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0047": {
+        "name": "OilResource",
+        "position": [
+            4800,
+            7488,
+            123
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0048": {
+        "name": "OilResource",
+        "position": [
+            576,
+            4800,
+            131
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0049": {
+        "name": "OilResource",
+        "position": [
+            576,
+            3264,
+            134
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0050": {
+        "name": "OilResource",
+        "position": [
+            3264,
+            576,
+            134
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0051": {
+        "name": "OilResource",
+        "position": [
+            4800,
+            576,
+            130
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0052": {
+        "name": "OilResource",
+        "position": [
+            7360,
+            3264,
+            126
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0053": {
+        "name": "OilResource",
+        "position": [
+            7360,
+            4800,
+            122
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0207": {
+        "name": "building1",
+        "position": [
+            3520,
+            3520,
+            34
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0208": {
+        "name": "building2",
+        "position": [
+            3520,
+            4544,
+            31
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0209": {
+        "name": "building3",
+        "position": [
+            4544,
+            3648,
+            25
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0213": {
+        "name": "building10",
+        "position": [
+            3456,
+            3904,
+            23
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0215": {
+        "name": "building11",
+        "position": [
+            4544,
+            4544,
+            25
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0216": {
+        "name": "building12",
+        "position": [
+            3968,
+            3520,
+            20
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0218": {
+        "name": "building12",
+        "position": [
+            4096,
+            4672,
+            20
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0219": {
+        "name": "building10",
+        "position": [
+            4480,
+            4032,
+            14
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0231": {
+        "name": "Crane",
+        "position": [
+            4032,
+            4032,
+            6
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0237": {
+        "name": "Pickup",
+        "position": [
+            3264,
+            4032,
+            26
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0238": {
+        "name": "Pickup",
+        "position": [
+            4672,
+            4032,
+            20
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0240": {
+        "name": "BlueCar",
+        "position": [
+            4288,
+            4800,
+            25
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0241": {
+        "name": "OilTower",
+        "position": [
+            4032,
+            3904,
+            8
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0242": {
+        "name": "OilTower",
+        "position": [
+            4160,
+            3904,
+            8
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0243": {
+        "name": "OilTower",
+        "position": [
+            4160,
+            4032,
+            6
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0244": {
+        "name": "WaterTower",
+        "position": [
+            3904,
+            3904,
+            10
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0248": {
+        "name": "BarbWarehouse1",
+        "position": [
+            4096,
+            3776,
+            11
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0249": {
+        "name": "OldFactory",
+        "position": [
+            7552,
+            3328,
+            130
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0253": {
+        "name": "BarbTechRuin",
+        "position": [
+            4096,
+            4416,
+            11
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0256": {
+        "name": "OilDrum",
+        "position": [
+            3904,
+            4416,
+            14
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0257": {
+        "name": "OilDrum",
+        "position": [
+            3904,
+            3776,
+            14
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0258": {
+        "name": "building12",
+        "position": [
+            1024,
+            3008,
+            128
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "feature_0259": {
+        "name": "building10",
+        "position": [
+            1536,
+            3392,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0260": {
+        "name": "building2",
+        "position": [
+            960,
+            3520,
+            114
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0262": {
+        "name": "building1",
+        "position": [
+            3008,
+            704,
+            138
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0265": {
+        "name": "building11",
+        "position": [
+            3520,
+            960,
+            114
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0266": {
+        "name": "building10",
+        "position": [
+            4480,
+            448,
+            124
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0270": {
+        "name": "WreckedBuilding16",
+        "position": [
+            4672,
+            960,
+            114
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0271": {
+        "name": "BarbWarehouse1",
+        "position": [
+            5120,
+            704,
+            136
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0272": {
+        "name": "WreckedBuilding9",
+        "position": [
+            6912,
+            2944,
+            122
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0273": {
+        "name": "building10",
+        "position": [
+            7552,
+            3008,
+            140
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0274": {
+        "name": "building1",
+        "position": [
+            7104,
+            3648,
+            106
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "feature_0275": {
+        "name": "WreckedBuilding17",
+        "position": [
+            4864,
+            7168,
+            118
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0276": {
+        "name": "BarbTechRuin",
+        "position": [
+            4992,
+            7488,
+            130
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0277": {
+        "name": "building11",
+        "position": [
+            4544,
+            7616,
+            122
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0278": {
+        "name": "WaterBuilding3",
+        "position": [
+            3200,
+            7168,
+            123
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "feature_0279": {
+        "name": "WaterBuilding2",
+        "position": [
+            896,
+            4480,
+            111
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0281": {
+        "name": "building10",
+        "position": [
+            1280,
+            4544,
+            101
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0282": {
+        "name": "building1",
+        "position": [
+            1216,
+            5056,
+            119
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "feature_0284": {
+        "name": "building3",
+        "position": [
+            704,
+            5184,
+            139
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0285": {
+        "name": "Pylon",
+        "position": [
+            3520,
+            7360,
+            119
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0286": {
+        "name": "Pylon",
+        "position": [
+            3520,
+            6848,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0288": {
+        "name": "OldFactory",
+        "position": [
+            2944,
+            7552,
+            143
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0289": {
+        "name": "building1",
+        "position": [
+            3520,
+            7616,
+            127
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0296": {
+        "name": "WaterBuilding3",
+        "position": [
+            3456,
+            384,
+            134
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0297": {
+        "name": "WreckedBuilding17",
+        "position": [
+            7552,
+            4608,
+            122
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0298": {
+        "name": "WreckedBuilding16",
+        "position": [
+            7232,
+            5056,
+            126
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0299": {
+        "name": "building3",
+        "position": [
+            7104,
+            4544,
+            106
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0301": {
+        "name": "AirTrafficControl",
+        "position": [
+            5056,
+            960,
+            126
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0303": {
+        "name": "OilResource",
+        "position": [
+            3904,
+            4160,
+            7
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0304": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            3904,
+            17
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0305": {
+        "name": "OilResource",
+        "position": [
+            3648,
+            4160,
+            14
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0306": {
+        "name": "OilResource",
+        "position": [
+            4416,
+            4288,
+            14
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0307": {
+        "name": "OilResource",
+        "position": [
+            5568,
+            5568,
+            90
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0308": {
+        "name": "OilResource",
+        "position": [
+            5568,
+            2496,
+            94
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0309": {
+        "name": "OilResource",
+        "position": [
+            2496,
+            5568,
+            95
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0310": {
+        "name": "OilResource",
+        "position": [
+            2496,
+            2496,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0311": {
+        "name": "BlueCar",
+        "position": [
+            7616,
+            4800,
+            130
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0460": {
+        "name": "OldFactory",
+        "position": [
+            4096,
+            4224,
+            6
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0461": {
+        "name": "Chevy",
+        "position": [
+            3904,
+            4288,
+            10
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0462": {
+        "name": "Pickup",
+        "position": [
+            3904,
+            4032,
+            6
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    }
+}

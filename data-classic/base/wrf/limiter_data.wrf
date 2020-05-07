@@ -1,0 +1,11 @@
+/***********************************************************/
+/*              Used by structlimits screen.               */
+/*         Load structures and weapons/ecm/sensors         */ 
+/**********       WRF\limiter_data.wrf       ***************/
+
+directory	"stats"
+file		SWEAPON		"weapons.json"
+file		SSENSOR		"sensor.json"
+file		SECM		"ecm.json"
+file		SREPAIR		"repair.json"
+file		SSTRUCT		"structure.json"

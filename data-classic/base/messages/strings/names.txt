@@ -1,0 +1,577 @@
+/* Names data file for localisation
+ * The id's should be less than 20 chars 
+ *
+ * Text like this "*text*" is not final and should not be translated.
+ */ 
+
+/*
+ * VEHICLES
+ */
+
+/* FINAL VEHICLES */
+ZNULLDESIGN				_("New Design")
+
+/* PLAYER 0 VEHICLES */
+
+/* PLAYER 1 - NP VEHICLES */
+ConstructionDroidNP			"*NP - Scorpion Constructor*"
+//NP-Light-test-vehicle			"*NP-L-MdCannon-Tracks*"
+
+
+//NP-M-Command-Hover			"*NP-M-Command-Hover*"
+//NP-H-MdCannon-Hover			"*NP-H-MdCannon-Hover*"
+
+/* PLAYER 2 - CO VEHICLES */
+CO-M-Con-Htrack				"*CO-M-Con-Htrack*"
+
+CO-M-Mortar1-Halftrack			"*CO-M-Mortar1-Halftrack*"
+
+CO-M-AA1-HalfTrack			"*CO-M-AA1-HalfTrack*"
+CO-H-AA2-HalfTrack			"*CO-H-AA2-HalfTrack*"
+
+CO-L-RotMG-Wheels				"*CO-S-RotMG-Wheels*"
+
+CO-L-Rocket-VTOL-Pod-VTOL		"*CO-L-POD-VTOL*"
+//CO-L-RotCan-VTOL			"*CO-L-RotCan-VTOL*"
+
+CO-L-RotMG-HalfTrack			"*CO-L-RotMG-HalfTrack*"
+
+CO-M-Sensor-Half-Track			"*CO-M-Sensor-Half-Track*"
+
+CO-L-Rocket-BB-Hover			"*CO-L-Rocket-BB-Hover*"
+CO-L-RotMg-Hover				"*CO-L-RotMg-Hover*"
+
+CO-M-Repair-HalfTrack			"*CO-M-Repair-HalfTrack*"
+CO-M-CBS-Halftrack			"*CO-M-CBS-Halftrack*"
+CO-M-Vstrike-Halftrack			"*CO-M-Vstrike-Halftrack*"
+CO-M-VTOLCBS-Halftrack			"*CO-M-VTOLCBS-Halftrack*"
+CO-M-Command-Track			"*CO-M-Command-Track*"
+CO-L-HMG-Wheels				"*CO-L-HMG-Wheels*"
+CO-L-POD-Wheels				"*CO-L-POD-Wheels*"
+CO-M-MRL-Halftrack			"*CO-M-MRL-Halftrack*"
+CO-M-Rocket-LtA-T-Halftrack		"*CO-M-Rocket-LtA-T-Halftrack*"
+CO-M-Rocket-BB-Halftrack		"*CO-M-Rocket-BB-Halftrack*"
+CO-H-Rocket-BB-Halftrack		"*CO-H-BB-Halftrack*"
+CO-M-HvMortar-Halftrack			"*CO-M-HvMortar-Halftrack*"
+CO-M-RotMortar-Halftrack		"*CO-M-RotMortar-Halftrack*"
+CO-L-MG2-VTOL				"*CO-L-MG2-VTOL*"
+CO-M-QuadMG1AA-Halftrack		"*CO-M-QuadMG1AA-Halftrack*"
+CO-H-QuadRotAA-Halftrack		"*CO-H-QuadRotAA-Halftrack*"
+CO-L-Rocket-LtA-T-Hover			"*CO-L-Rocket-LtA-T-Hover*"
+
+/* PLAYER 3 - NX VEHICLES */
+
+//NX-M-Missile-LtSAM-HT			"*NX-M-SAMissle1-HT*"
+//NX-M-PulseLas1-Track 			"*NX-M-PulseLas1-Track*"
+//NX-L-Rail1-Whl				"*NX-L-Rail1-Whl*"
+NX-H-BeamLas-Hover			"*NX-H-BeamLas-Hover*"
+//NX-L-Missile-BB-VTOL			"*NX-L-BBMiss-VTOL*"
+//NX-M-HvySAM-Htrack			"*NX-M-HvySAM-Htrack*"
+
+// NEXUS only Cyborgs
+NX-Cyb-HvMiss-JUMP			"*NX-Cyb-HvMiss-JUMP*"
+Cyb-NXCybRail1-GRD			"*Cyb-NXCybRail1-GRD*"
+Cyb-NXCybATmiss-GRD			"*Cyb-NXCybATmiss-GRD*"
+Cyb-NXPulseLas-GRD			"*Cyb-NXPulseLas-GRD*"
+Cyb-NXCybRail1-JUMP			"*Cyb-NXCybRail1-JUMP*"
+Cyb-NXCybATmiss-JUMP			"*Cyb-NXCybATmiss-JUMP*"
+Cyb-NXPulseLas-JUMP			"*Cyb-NXPulseLas-JUMP*"
+
+/* PLAYER 4 - FORCE EDITOR VEHICLES */
+
+
+/* PLAYER 5 - MULTIPLAYER VEHICLES */
+
+/* PLAYER 6 - TEST VEHICLES */
+
+// new player cyborgs - for Pete
+
+Cyb-CybChnGun-JUMP			"*Cyb-CybChnGun-JUMP*"
+AVTOLSPOTTER				"*VTOL SPOTTER*"
+
+
+
+
+/* PLAYER 7 - SCAVENGER VEHICLES */
+
+/* FINAL CYBORGS */
+
+// Cyborgs - shared 
+
+/* TEST CYBORGS */	
+CyborgCan01Air				"*TEST - Cyborg Cannon01 Air*"
+CyborgCan01Ground			_("Cyborg Cannon")
+CyborgRkt01Air				"*TEST - Cyborg Rocket01 Air*"
+
+/*
+ * COMPONENTS *
+ */
+
+/* BODIES */
+
+
+
+/* Test Cyborg Body Parts */
+//CyborgCan1Air				"*CyborgCannon1Air*"
+//CyborgCan1Ground			"*CyborgCannon1Ground*"
+//CyborgFlame1Ground			"*CyborgFlamer1Ground*"
+//CyborgRkt1Air				"*CyborgRocket1Air*"
+//NX-CybMissGrnd				"*NX-CybMissGrnd*"
+NX-CybLasGrnd				"*NX-CybLasGrnd*"
+//NX-CybChain1Grnd			"*NX-CybChain1Grnd*"
+
+// New Cyborg Bodies - Unique body for EACH template
+//				"*Cyborg Machinegun*"
+//CyborgChn01Ground			"*Cyborg Machinegun*"
+//CybRocketGrd				"*Cyborg Rocket*"	
+
+//CyborgNXATMissGrd			"*CyborgNXATMissGrd*"
+//CyborgNXATMissJmp			"*CyborgNXATMissJ*"
+//			"*CybNXCybRail1Grd*"	
+//CybNXCybRail1Jmp			"*CybNXCybRail1J*"
+//CybNXHvMissJmp				"*CybNXHvMissJ*"		
+//CybNXPulseLasJmp			"*CybNXPulseLasJ*"
+//CybNXPulseLaserGrd			"*CybNXPulseLaserJ*"
+//NX-Cyb-HvMissile-JUMP			"*NX-Cyb-HvMissile-J*"
+//NX-Cyb-Missile-JUMP			"*NX-CybMissGrnd*"
+//NX-CybLasGrnd				"*NX-CybLasGrnd*"
+//NX-Cyb-Rail1-JUMP			"*NX-Cyb-J*"
+
+/* BRAIN */
+StandardBrain				"*TEST - Standard Brain*"
+ConstructionBrain			"*TEST - ConstructionBrain*"
+
+/* PROGRAM */
+ZNULLPROGRAM				"Z NULL PROGRAM"
+program1				"*TEST - program #1*"
+Construct				"*TEST - Construct*"
+RadarProgram				"*TEST - Radar Program*"
+Demolish				_("Demolish")
+
+/* CONSTRUCTION */	
+
+/* PROPULSION */
+//CyborgJets02				_("Cyborg Jump Pack II")
+//CyborgJets03				_("Cyborg Jump Pack III")
+Naval					_("Naval")
+
+/*BABARIAN PROPULSIONS*/
+
+/*CYBORG PROPULSIONS*/
+//CyborgJets				_("Cyborg Jump Pack")
+
+/* VEHICLE AUTO-REPAIR */
+
+/* ECM */
+//ECM1PylonMk1				_("Jammer Tower")
+//ECM1TurretMk1				_("Jammer Turret")
+//ECM1DefaultMk1				"*TEST - ECM1 Default Mk1*"
+ECM1Default				"*TEST - Baba ECM Default*"
+//ECM2PylonMk1				_("Jammer Tower II")
+//ECM2TurretMk1				_("Jammer Turret III")
+//ECM2DefaultMk1				"*Improved ECM Default Mk1*"
+//ECM3PylonMk1				_("Jammer Tower III")
+//ECM3TurretMk1				_("Jammer Turret III")
+//ECM3DefaultMk1				"*ECM3DefaultMk1*"
+
+/* SENSORS */
+
+
+
+/* PLAYER STRUCTURES */
+DemolishStructure			_("Demolish")
+A0RepairCentre				_("Repair Center")
+
+
+/* DEFENSIVE STRUCTURES */
+//SuperEmplacement			"*Super Gun*"
+//PlasmaEmplacement			"*Plasma Weapon*"
+
+AASite-TwinBof				_("Tornado AA Flak Site")
+
+//Tower-Missile1				_("Lancer Guard Tower")
+//Tower-Missile2				_("Mini-Rocket Guard Tower")
+
+/*SENSOR TOWERS*/
+//Sys-ECMTower01				_("Jammer Tower")
+
+/*WALLTOWERS*/
+
+
+/*PILLBOXES*/
+
+/*TANKTRAPS*/
+A0TankTrap2				_("Dragon's Teeth")
+TankTrap2C				_("Dragon's Teeth")
+
+/*VTOL STRUCTURES*/
+
+/* EMPLACEMENTS */
+//Emplacement-Super			"*Emplacement-SuperGun*"
+
+/* PLAYER WEAPONS */
+
+
+Howitzer105Mk1-Pit			_("Howitzer Emplacement")
+Howitzer150Mk1-Pit			_("Ground Shaker Emplacement")
+Howitzer03-Rot-Pit			_("Hellstorm Emplacement")
+//Howitzer04-Inc				_("Hellfire")
+
+//Laser1PRISMATICMk1			_("Flashlight")
+
+
+
+//Missile-BB				_("Devastator Missile")
+
+//Missile-VTOL-BB			_("VTOL Devastator Missile")
+
+Mortar1Mk1-Pit			_("Mortar Emplacement")
+Mortar2Mk1-Pit			_("Bombard Emplacement")
+Mortar3ROTARYMk1-Pit		_("Pepperpot Emplacement")
+//Rocket04-Scud			"*Earthshaker*"
+
+CyborgCannon01			"*Cyborg Cannon*"
+
+
+
+AAGun1Mk1					_("Tornado Flak Turret")
+
+//Supergun					"*Supergun*"
+
+NavaroneGun					"*NavaroneGun*"
+
+				   
+
+
+
+PBomb						_("Proximity Bomb Turret")
+SPBomb					_("Proximity Superbomb Turret")
+
+											 
+// Collective Specific Defensive Structures
+CO-Emp-Mortar2-Pit			"*CO-Emp-Mortar2-Pit*"
+CO-Emp-How105-Pit				"*CO-Emp-How105-Pit*"
+//CO-Emp-How150-Pit				"*CO-Emp-How150-Pit*"
+//CO-Emp-RotHow-Pit				"*CO-Emp-RotHow-Pit*"
+CO-Emp-RotMortar-Pit			"*CO-Emp-RotMortar-Pit*"
+// CO-AASite-Flak1				"*CO-AASite-Flak1*"
+// CO-AASite-Flak2				"*CO-AASite-Flak2*"
+// CO-AASite-QuadMg1				"*CO-AASite-QuadMg1*"
+// CO-AASite-QuadRotMg			"*CO-AASite-QuadRotMg*"
+CO-AASite-SAM1				"*CO-AASite-SAM1*"
+
+// NEXUS Specific Defensive Structures
+NX-AASite-SAM1				"*NX-AASite-SAM1*"
+NX-AASite-SAM2				"*NX-AASite-SAM2*"
+
+/*
+ * RESEARCH TOPICS
+ */
+ZNullResearch				"*Z Null Research*"
+
+//CAM2-COWall					_("CAM2 Collective Wall")
+//CAM3VEHICLES				_("CAM3 VEHICLES")
+//CAM3CYBORGS					_("CAM3 CYBORGS")
+//CAM3WEAPONS					_("CAM3 WEAPONS")
+//CAM3SYSTEMS					_("CAM3 SYSTEMS")
+//CAM3DEFENSES				_("CAM3 DEFENSES")
+//CAM3NOTUSED				_("CAM3 NOT USED")
+//CAM3-NXWall					_("CAM3 NEXUS Wall")
+
+//R-Comp-IDFAccuracy01			"*IDF Fire Accuracy*"
+
+
+
+//R-Cyborg-Metals10				_("Cyborg Bonded Laminates")
+
+R-Cyborg-Wpn-BB				_("Bunker Blaster Cyborg")
+
+R-Cyborg-Wpn-BB-Jump			_("Jump Bunker Blaster")
+R-Cyborg-Wpn-Cannon-Jump		_("Jump Heavy Gunner")
+R-Cyborg-Wpn-Rocket-Jump		_("Jump Lancer")
+R-Cyborg-Wpn-RotMG-Jump			_("Jump Assault Gunner")
+R-Cyborg-Wpn-Rail1-Jump			_("Jump Needle Gunner")
+R-Cyborg-Wpn-ATMiss-Jump		_("Jump Scourge")
+R-Cyborg-Wpn-Laser1-Jump		_("Jump Flashlight Gunner")
+
+R-Cyborg-Jump01				_("Cyborg Jump Pack")
+R-Cyborg-Legs02				_("Cyborg Propulsion II")
+R-Cyborg-Legs03				_("Cyborg Propulsion III")
+
+/* RESEARCH - DEFENSES */
+//R-Defense-HardcreteWall-CO		_("CO-Hardcrete")
+R-Defense-HardcreteWall-NP		_("NP-Hardcrete")
+//R-Defense-HardcreteWall-NX		_("NX-Hardcrete")
+//R-Defense-WallUpgrade10			_("Plasteel")
+
+R-Defense-AASite-TwinBof		_("Tornado AA Flak Site")
+
+
+
+//R-Defense-IncHow				_("Hellfire Emplacement")
+
+
+R-Defense-Pillbox03			_("Heavy Machinegun Bunker")
+
+R-DefenssLas				_("Flashlight Emplacement")
+
+
+
+R-Defense-TankTrap02			_("Dragon's Teeth")
+
+R-Defense-Tower03				_("Heavy Machinegun Guard Tower")
+R-Defense-Tower04				_("Flamer Guard Tower")
+R-Defense-Tower05				_("Lancer Guard Tower")
+
+
+R-Defense-WallTower05			_("Flamer Hardpoint")
+
+
+R-Struc-Factory-Cyborg-Upgrade07	_("Advanced Cyborg Production")
+R-Struc-Factory-Cyborg-Upgrade08	_("Advanced Cyborg Production Mk2")
+R-Struc-Factory-Cyborg-Upgrade09	_("Advanced Cyborg Production Mk3")
+//R-Struc-Factory-Cyborg-Upgrade10	_("Self-Replicating Cyborg Production")
+R-Struc-Factory-Upgrade07		_("Advanced Factory Production")
+R-Struc-Factory-Upgrade08		_("Advanced Factory Production Mk2")
+R-Struc-Factory-Upgrade09		_("Advanced Factory Production Mk3")
+//R-Struc-Factory-Upgrade10		_("Self-Replicating Factory Production")
+	
+//R-Struc-Materials10			_("High Density Base Structure Materials")
+
+
+R-Struc-RprFac-Upgrade07		_("Advanced Repair Facility Upgrade")
+R-Struc-RprFac-Upgrade08		_("Advanced Repair Facility Upgrade Mk2")
+R-Struc-RprFac-Upgrade09		_("Advanced Repair Facility Upgrade Mk3")
+
+
+R-Struc-VTOLPad-Upgrade07		_("Robotic VTOL Rearming Mk4")
+
+R-Sys-Autorepair-Cyborg			_("Cyborg Self-Repair")
+R-Sys-Autorepair-Cyborg-Upgrade01	_("Automated Cyborg Repair Mk2")
+R-Sys-Autorepair-Cyborg-Upgrade02	_("Automated Cyborg Repair Mk3")
+
+R-Sys-Autorepair-Def			_("Defenses Self-Repair")
+R-Sys-Autorepair-Def-Upgrade01	_("Automated Defenses Repair Mk2")
+R-Sys-Autorepair-Def-Upgrade02	_("Automated Defenses Repair Mk3")
+
+R-Sys-Autorepair-Struc			_("Base Structure Self-Repair")
+R-Sys-Autorepair-Struc-Upgrade01	_("Automated Base Structure Repair Mk2")
+R-Sys-Autorepair-Struc-Upgrade02	_("Automated Base Structure Repair Mk3")
+
+R-Sys-Autorepair-Vehicle		_("Vehicle Self-Repair")
+R-Sys-Autorepair-Vehicle-Upgrade01	_("Automated Vehicle Repair Mk2")
+R-Sys-Autorepair-Vehicle-Upgrade02	_("Automated Vehicle Repair Mk3")
+
+
+
+
+R-Sys-MobileRepairTurret02		_("Heavy Mobile Repair Turret")
+R-Sys-MobileRepairTurret-01		_("Mobile Repair Upgrade")
+R-Sys-MobileRepairTurret-02		_("Mobile Repair Upgrade Mk2")
+
+
+R-Sys-CBSensor-Upgrade01		_("CB Sensor Upgrade")
+R-Sys-CBSensor-Upgrade02		_("CB Sensor Upgrade Mk2")
+R-Sys-CBSensor-Upgrade03		_("CB Sensor Upgrade Mk3")
+
+//R-Sys-VTOL-RadarTower01		_("VTOL Radar Tower")
+R-Sys-VTOLCBS-Upgrade01			_("VTOL CB Upgrade")
+R-Sys-VTOLCBS-Upgrade02			_("VTOL CB Upgrade Mk2")
+R-Sys-VTOLCBS-Upgrade03			_("VTOL CB Upgrade Mk3")
+R-Sys-VTOLStrike-Upgrade01		_("VTOL Strike Upgrade")
+R-Sys-VTOLStrike-Upgrade02		_("VTOL Strike Upgrade Mk2")
+R-Sys-VTOLStrike-Upgrade03		_("VTOL Strike Upgrade Mk3")
+
+R-Sys-SpyTurret-Upgrade01		_("Improved Scrambler")
+R-Sys-SpyTurret-Upgrade02		_("Scrambler Turret Mk2")
+
+
+R-Sys-SensorLock				_("Sensor Lock")
+
+
+/* RESEARCH - VEHICLES */
+
+	
+//R-Vehicle-Engine10			_("Ionizing Turbine Engine")
+
+//R-Vehicle-Metals10			_("Bonded Laminates")
+	
+//R-Vehicle-Prop-Hover03			_("Hover Propulsion III")
+//R-Vehicle-Prop-Halftracks03		_("Half-tracked Propulsion III")
+//R-Vehicle-Prop-Tracks03			_("Tracked Propulsion III")
+//R-Vehicle-Prop-VTOL03			_("VTOL Propulsion III")
+//R-Vehicle-Prop-Wheels03			_("Wheeled Propulsion III")
+
+R-Wpn-AAGun01				_("Tornado Flak Turret")
+
+//R-Wpn-Pbomb					_("Proximity Bomb Turret")
+//R-Wpn-SPBomb				_("Proximity Superbomb Turret")
+
+
+
+
+//R-Wpn-Cannon-Damage10			"*ARGH*"
+
+
+
+R-Wpn-Energy-Accuracy02			_("Improved Laser Focusing Mk2")
+R-Wpn-Energy-Accuracy03			_("Improved Laser Focusing Mk3")
+
+
+//R-Wpn-Howitzer04-Inc			_("Incendiary Howitzer - Hellfire")
+
+
+
+
+
+
+
+R-Wpn-MissileSlow-Damage01		_("HEAP Missile Warhead")
+R-Wpn-MissileSlow-Damage02		_("HEAP Missile Warhead Mk2")
+R-Wpn-MissileSlow-Damage03		_("HEAP Missile Warhead Mk3")
+R-Wpn-MissileSlow-ROF01			_("Improved Missile Loading System")
+
+//R-Wpn-Missile-ASM-AT			"*Missile-ASM-AT*"
+//R-Wpn-Missile-ASM-BB			_("Devastator Missile")
+//R-Wpn-Missile-SAM			"*R-Wpn-Missile-SAM*"
+
+
+
+R-Wpn-Rocket-ROF04			_("Rapid Fire Mini-Rockets")
+R-Wpn-Rocket-ROF05			_("Rapid Fire Mini-Rockets Mk2")
+R-Wpn-Rocket-ROF06			_("Rapid Fire Mini-Rockets Mk3")
+
+
+
+/* ENEMY STRUCTURES */
+GunsOfNav2					"*GunsOfNavaroneTwo*"
+GunsOfNav1					"*GunsOfNavaroneOne*"
+
+/* BARBARIAN STRUCTURES */
+A0BaBaFlameTowerEnd			_("Scavenger Flame Tower End")
+Barrier					"*Barrier*"
+// MissileBunker				_("Missile Bunker")
+A0BaBaFlameTow				"*A0BaBaFlameTow*"
+
+/* BARBARIAN WEAPONS*/
+
+/* FEATURES */
+building4					"*Building 4*"
+building5					"*Building 5*"
+building6					"*Building 6*"
+bridge					_("Bridge")
+bridge1					"*Bridge 1*"
+bridge5					"*Bridge 5*"
+//OilPipe1				"*Oil Pipe 1*"
+//OilPipe2				"*Oil Pipe 2*"
+//OilPipe3				"*Oil Pipe 3*"
+//WreckedHovercraft			_("Wrecked Hovercraft")
+WreckedTank				_("Wrecked Tank")
+//WreckedBuilding1			"*Wrecked Building 1*"
+//Wreckedbuilding2			"*Wrecked Building 2*"
+//WreckedBuilding3			"*Wrecked Building 3*"
+//WreckedBuilding4			"*Wrecked Building 4*"
+//WreckedBuilding				"*Wrecked Building 5*"
+WreckedBuilding6			"*Wrecked Building 6*"
+WreckedBuilding7			"*Wrecked Building 7*"
+WreckedBuilding8			"*Wrecked Building 8*"
+WreckedBuilding10			"*Wrecked Building 10*"
+WreckedBuilding11			"*Wrecked Building 11*"
+WreckedBuilding12			"*Wrecked Building 12*"
+WreckedBuilding13			"*Wrecked Building 13*"
+WreckedBuilding14			"*Wrecked Building 14*"
+WreckedBuilding15			"*Wrecked Building 15*"
+//WreckedTankerH				_("Wrecked Tanker")
+
+/* LABS */
+Z-Lab01					_("Cyborg Laboratory")
+Z-Lab02					_("Advanced Warfare Laboratory")
+Z-Lab03					_("Engineering Laboratory")
+Z-Lab04					_("Robotics Laboratory")
+Z-Lab05					_("Laser Optics Laboratory")
+Z-Lab06					_("Electronics Laboratory")
+Z-Lab07					_("Chemical Laboratory")
+Z-Lab08					"*Advanced Materials Lab*"
+Z-Lab09					"*VTOL Lab*"
+Z-Lab10					"*Electro-Magnetics Lab*"
+Z-Lab11					"*Nanotech Lab*"
+Z-Lab12					"*High Energy Lab*"
+
+/* LABS RESEARCH */
+R-Lab-AdvWarfare			_("Advanced Warfare")
+R-Lab-Chemical				_("Chemical Laboratory")
+R-Lab-Cyborg				_("Cyborg Laboratory")
+R-Lab-Electronics			_("Electronics Laboratory")
+R-Lab-Engineering			_("Engineering Laboratory")
+R-Lab-Robotics				_("Robotics Laboratory")
+
+// *New Names...... Keith
+
+
+//CyborgChain01GroundP0	_("Gunner")
+//CyborgRkt01GroundP0		_("Lancer")
+//CyborgCannon01GrdP0		_("Heavy Gunner")
+//CyborgFlamer01GrdP0		_("Flamer")
+
+// Cyborgs used in PSX scripts - copied to Player2 and renamed P2
+
+//CyborgFlamer01GrdP2		"*CyborgFlamer01GrdP2*"
+//CyborgCannon01GrdP2		"*CyborgCannon01GrdP2*"
+//CyborgRkt01GroundP2		"*CyborgRkt01GroundP2*"
+//CyborgChain01GroundP2	"*CyborgChain01GroundP2*"
+
+// added in by Keith
+
+Howitzer04-Inc-pit		"*Howitzer04-Inc-pit*"
+//P0-Emp-IncHow-Pit		_("Hellfire Emplacement")
+Rocket-MRL-pit			"*Rocket-MRL-pit*"
+
+//Rocket-HvyA-T-pit		"*Tank Killer-pit*"
+Missile-MdArt-pit		"*Angle Missile-pit*"
+Missile-HvyArt-pit		"*Missile-HvyArt-pit*"
+
+// added by Pete
+//R-Cyborg-Wpn-Missile		_("Revenger")
+
+//ResMod-Cyb-MG-GRD		"*ResMod-Cyb-MG-GRD*"
+
+//NEW VEHICLES
+CO-M-Rocket-BB-T		"*CO-M-Rocket-BB-T*"
+
+
+Rocket-IDF-Emp		"*Rocket-IDF-Emp*"
+
+
+// Additional templates for Player 0 entering start of cam2
+
+
+// New Cyborg Bodies
+Cyb-Bod-BB-Rkt		"*Cyb-Bod-BB-Rkt*"
+
+Cyb-Wpn-BB-Rkt		"*Cyb-Wpn-BB-Rkt*"
+
+Cyb-BB-Rkt-GROUND		_("Bunker Blaster")
+
+// Multiplayer VTOLs
+
+// New Style Repair Center - replaces all instances of A0RepairCentre
+A0RepairCentre2		_("Repair Center")
+
+
+
+// CAM3 Start - Available Units
+
+
+// name change - moved to bottom of Names.TXT by Keith 9/2/99
+
+
+
+// Added Cruise Missile Launcher Struc (CAM3-1) and ANTI-SAT Launcher (CAM3-4)
+
+
+// Added 21st Feb 99 - New NEXUS Versions of Sensor Towers, etc.
+
+
+// Latest Additions
+
+// new features by Mysteryem

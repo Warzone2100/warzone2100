@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="35.026352"
+   height="24.038155"
+   id="svg3337"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   version="1.0"
+   sodipodi:docbase="/storage/projekte/programmieren/warzone/data/base/images/icons"
+   sodipodi:docname="background1.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs3339">
+    <linearGradient
+       id="linearGradient4340">
+      <stop
+         style="stop-color:#2f3357;stop-opacity:1;"
+         offset="0"
+         id="stop4342" />
+      <stop
+         style="stop-color:#3d4485;stop-opacity:1;"
+         offset="1"
+         id="stop4344" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4340"
+       id="linearGradient13822"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(310.47692,602.42822)"
+       x1="72.009903"
+       y1="87.07682"
+       x2="107.03626"
+       y2="87.07682" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#ffffff"
+     borderopacity="0.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="0"
+     inkscape:zoom="11.2"
+     inkscape:cx="25.061924"
+     inkscape:cy="10.89393"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="910"
+     inkscape:window-height="627"
+     inkscape:window-x="814"
+     inkscape:window-y="63" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-382.48682,-677.48596)">
+    <path
+       style="fill:url(#linearGradient13822);fill-opacity:1;fill-rule:evenodd;stroke:#6767a3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+       d="M 385.99535,677.98596 L 413.98552,677.98596 C 415.94587,677.99355 417.0432,678.9096 417.01255,681.01299 L 417.01255,698.0351 C 416.96741,699.98177 416.06095,701.06712 414.02483,701.02281 L 385.95604,701.02281 C 383.90504,700.98336 383.04903,699.87469 382.98798,698.05476 L 382.98798,681.0523 C 382.95024,679.13859 383.83296,678.01385 385.99535,677.98596 z "
+       id="path13820"
+       sodipodi:nodetypes="ccccccccc" />
+  </g>
+</svg>

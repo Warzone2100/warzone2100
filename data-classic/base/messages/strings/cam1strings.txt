@@ -1,0 +1,157 @@
+/* Campaign 1 Mission Briefing text */
+
+CAM1_MSG1			_("OBJECTIVE: Locate and recover neural synapse technology")
+CAM1_MSG2			_("Establish a base, then search for a Pre-Collapse structure.")
+CAM1_MSG3			_("This structure contains technology vital for the success of the Project.")
+
+CAM1A_MSG1			_("ALPHA BASE MISSION: Scavenger Raiders") 
+CAM1A_MSG2			_("Scavenger raiders are approaching our base.")
+CAM1A_MSG3			_("Defend the base then destroy the Scavenger camps.")
+
+CAM1B_MSG1			_("ALPHA BASE MISSION: Power Surge Detected")
+CAM1B_MSG2			_("A power surge has been detected to the south of our position.")
+CAM1B_MSG3			_("Investigate and secure the area.")
+
+CAM1C_MSG1			_("ALPHA BASE MISSION: The New Paradigm")
+CAM1C_MSG2			_("The New Paradigm control superior weapons technology.")
+CAM1C_MSG3			_("They may have the synaptic link technology, it's vital we retrieve it.")
+
+SUB1_1_MSG1			_("TRANSPORT MISSION: Locate and Recover Artifacts")
+SUB1_1_MSG2			_("Load an attack force into the transport.")
+SUB1_1_MSG3			_("On landing, explore the ruins and recover any artifacts.")
+
+SUB1_2_MSG1			_("TRANSPORT MISSION: Investigate Research Center")
+SUB1_2_MSG2			_("Investigate the area and recover any artifacts present.")
+SUB1_2_MSG3			_("Reinforcements are available.")
+
+SUB1_3_MSG1			_("TRANSPORT MISSION: Encoded Signals Detected")
+SUB1_3_MSG2			_("Take a scout force to investigate these signals.")
+SUB1_3_MSG3			_("Use your trucks to build defenses at your LZ.")
+
+SUB1_4A_MSG1			_("TRANSPORT MISSION: Enemy Transmissions Detected")
+SUB1_4A_MSG2			_("Scout the designated area for enemy research facilities.")
+SUB1_4A_MSG3			_("Proceed to LZ#2. Do not engage the enemy at this time.")
+
+SUB1_5_MSG1			_("TRANSPORT MISSION: Synaptic Link Location")
+SUB1_5_MSG2			_("The New Paradigm are analyzing synaptic link technology at this location.")
+SUB1_5_MSG3			_("Assemble an attack team and recover the synaptic link technology.")
+
+SUB1_7_MSG1			_("TRANSPORT MISSION: New Objectives")
+SUB1_7_MSG2			_("New Paradigm are searching for artifacts in this vicinity.")
+SUB1_7_MSG3			_("Intercept them. Do not let any enemies exit this area.")
+
+SUB1_8_MSG1			_("TRANSPORT MISSION: Enemy Base Under Construction")
+SUB1_8_MSG2			_("Enemy forces are establishing a forward base at this location.")
+SUB1_8_MSG3			_("Eradicate the base and secure the area.")
+
+/* Campaign Mission briefing additional */
+CAM1CA_MSG1			_("ALPHA BASE MISSION: Establish a Forward Base")
+CAM1CA_MSG2			_("Establish a forward base on the plateau.")
+CAM1CA_MSG3			_("Build defensive structures.")
+
+CAM1A-C_MSG1			_("ALPHA BASE MISSION: Counter Attack")
+CAM1A-C_MSG2			_("Enemy forces are approaching from the east and north.")
+CAM1A-C_MSG3			_("Hold the bases and repulse any attacks.")
+
+CAM1D_MSG1			_("ALPHA BASE MISSION: Incoming Transmission")
+CAM1D_MSG2			_("We are detecting enemy forces at these locations.")
+CAM1D_MSG3			_("This is our chance to defeat the New Paradigm and destroy their base.")
+
+
+/* New Paradigm - incoming transmission */
+NP_MSG2				" "
+
+/* Cam 1B Player Ident Congrats */
+P1B_MSG1			_("ALPHA BASE MISSION: Power Surge Detected") 
+P1B_MSG2			_("Congratulations Commander.")
+P1B_MSG3			_("We now have a further task for you.")
+
+/* Cam 1.1 Player Ident Congrats */
+P1-1_MSG1			_("ALPHA BASE MISSION: Locate and Recover Artifacts")
+P1-1_MSG2			_("The first two zones are now secure.")
+P1-1_MSG3			" "
+
+/* Project Team updates */
+P1-3A_MSG1			_("PROJECT TEAM UPDATES")
+
+/* Team Beta update */
+BETA1_MSG1			_("TEAM BETA UPDATE")
+BETA1_MSG2			_("We have recovered some artifacts.")
+BETA1_MSG3			_("There is a better equipped force operating in this area.")
+
+/* Team Gamma update */
+GAMMA_MSG1			_("TEAM GAMMA UPDATE")
+GAMMA_MSG2			_("Nothing to report.")
+GAMMA_MSG3			_("We've discovered no artifacts and encountered no hostiles.")
+
+/* Map1c mission brief - intelligence report */
+CAM1C_MSG4			_("ALPHA BASE INTELLIGENCE REPORT: Enemy Attack")
+CAM1C_MSG5			_("We are detecting an enemy attack force at this location.")
+CAM1C_MSG6			" "
+
+/* Map1c project update - enemy attack */
+CAM1C_MSG7			_("PRIMARY OBJECTIVE")
+CAM1C_MSG8			_("This structure is your primary objective.")
+CAM1C_MSG9			_("Search for and recover any artifacts here.")
+
+CAM1C_MSG10			_("ENEMY LZ")
+CAM1C_MSG11			_("Destroy this LZ to prevent enemy landings.")
+
+/* Sub 1.7 Player ident New objectives */
+SUB1_7_MSG4			_("ALPHA BASE INTELLIGENCE REPORT: NEXUS")
+SUB1_7_MSG5			_("New objective.")
+SUB1_7_MSG6			_("We have detected and isolated an intruder program.")
+
+/* Reinforcements available message for 1.4 (now in GenStrings!)*/
+
+/* Map1ca Player ident supplemental */
+SUP_MSG1			_("Supplemental")
+SUP_MSG2			_("The synaptic link technology was at this location but was removed.")
+/*SUP_MSG2			_("The synaptic link technology was present at this structure.")*/
+SUP_MSG3			_("Establish a forward base then continue the search for the synaptic link.")
+
+/* Submap1_4 Player ident */
+SUB1_4A_MSG4			_("INCOMING TRANSMISSION")
+SUB1_4A_MSG5			_("Decoding in progress.....")
+SUB1_4A_MSG6			" "
+
+/* Submap 1_4b - Destroy Enemy Base */
+SUB1_4B_MSG2			_("Commander.")
+SUB1_4B_MSG3			_("We have decoded the incoming message to the New Paradigm...")
+
+/* Submap 1_4b - Player Ident - Destroy Enemy Base */
+SUB1_4B_MSG4			_("Destroy Enemy Base")
+SUB1_4B_MSG5			_("Assemble an attack force and board the transport.")
+SUB1_4B_MSG6			_("Destroy the base and recover any artifacts present.")
+
+/* Map1a-c - Player Ident */
+CAM1A-C_MSG5			_("The synaptic link technology has been recovered!")
+CAM1A-C_MSG6			_("Initial research confirms it will be of great benefit to the Project.")
+
+/* Submap 1_8 - Player Ident */
+SUB1_8_MSG4			_("Base Beta is under heavy attack, they may need assistance.")
+SUB1_8_MSG5			_("We will send further updates as they arrive.") 
+
+/* Cam1d Player ident */
+CAM1D_MSG4			_("This transmission was intercepted a few minutes ago.")
+CAM1D_MSG5			_("It originates from the east.")
+
+/* Cam1b2 power generator */
+CAM1_B2_MSG			_("POWER MODULE ARTIFACT")
+CAM1_B2_MSG2			_("Research the power module artifact.")
+CAM1_B2_MSG3			_("Then use a truck to upgrade your power generator with the module.")
+
+/* sub1_2 scavenger base part2 */
+SUB1_2_MSG4			_("SCAVENGER BASE DETECTED")
+SUB1_2_MSG5			_("Defeat the scavengers and retrieve any artifacts.")
+SUB1_2_MSG6			_("Reinforcements are available.")
+
+/* Campaign 1 outro */
+CAM1OUT_MSG1			_("Congratulations on defeating the New Paradigm, this sector is now secure.")
+CAM1OUT_MSG2			_("The Nexus Intruder Program was in the New Paradigm system.")
+CAM1OUT_MSG3			_("We recorded two conversations with it, extracts follow...")
+
+CAM1OUT_MSG4			" "
+CAM1OUT_MSG5			_("We'll keep you informed of further developments")
+
+CAM1OUT_MSG6			_("Commander you are to assist Team Beta")

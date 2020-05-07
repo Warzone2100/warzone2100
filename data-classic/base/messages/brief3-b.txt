@@ -1,0 +1,3 @@
+MB3_B_MSG,0,1,3,cam3/cam3bpl.ogg,3,CAM3_B_MSG1,CAM3_B_MSG2,CAM3_B_MSG3,0,0000,incomint.ogg,1,INCOM_INT,0,0000,cam3/cam3bg.ogg,0,0,0000
+MB3_B_MSG2,0,1,1,cam3/cam3b.ogg,3,CAM3_B_MSG4,CAM3_B_MSG5,CAM3_B_MSG6,0,0000
+MB3_B_MSG3,0,1,1,cam3/cam3_bn.ogg,0,0,0000

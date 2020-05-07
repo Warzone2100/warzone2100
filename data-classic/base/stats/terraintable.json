@@ -1,0 +1,158 @@
+{
+    "sand": {
+        "id": 0,
+        "comment": "Sand",
+        "speedFactor": {
+            "wheeled": 100,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
+    },
+    "sandybrush": {
+        "id": 1,
+        "comment": "Sandy Brush",
+        "speedFactor": {
+            "wheeled": 100,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
+    },
+    "greenmud": {
+        "id": 2,
+        "comment": "Green Mud",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
+    },
+    "bakedearth": {
+        "id": 3,
+        "comment": "Baked Earth",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 90,
+            "legged": 100,
+            "hover": 100,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 80
+        }
+    },
+    "redbrush": {
+        "id": 4,
+        "comment": "Red Brush",
+        "speedFactor": {
+            "wheeled": 100,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
+    },
+    "pinkrock": {
+        "id": 5,
+        "comment": "Pink Rock",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 100,
+            "legged": 100,
+            "hover": 50,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 90
+        }
+    },
+    "road": {
+        "id": 6,
+        "comment": "Road",
+        "speedFactor": {
+            "wheeled": 150,
+            "tracked": 120,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 135
+        }
+    },
+    "water": {
+        "comment": "Water",
+        "id": 7,
+        "speedFactor": {
+            "wheeled": 60,
+            "tracked": 60,
+            "legged": 60,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 60
+        }
+    },
+    "cliff_face": {
+        "id": 8,
+        "comment": "Cliff Face",
+        "speedFactor": {
+            "wheeled": 60,
+            "tracked": 60,
+            "legged": 60,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 60
+        }
+    },
+    "rubble": {
+        "id": 9,
+        "comment": "Rubble",
+        "speedFactor": {
+            "wheeled": 80,
+            "tracked": 80,
+            "legged": 100,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 50
+        }
+    },
+    "sheetice": {
+        "id": 10,
+        "comment": "Sheet Ice",
+        "speedFactor": {
+            "wheeled": 70,
+            "tracked": 90,
+            "legged": 100,
+            "hover": 150,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 100
+        }
+    },
+    "slush": {
+        "id": 11,
+        "comment": "Slush",
+        "speedFactor": {
+            "wheeled": 60,
+            "tracked": 100,
+            "legged": 75,
+            "hover": 80,
+            "lift": 250,
+            "propellor": 100,
+            "half-tracked": 80
+        }
+    }
+}

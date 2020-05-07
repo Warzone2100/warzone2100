@@ -1,0 +1,153 @@
+/* Campaign 2 Mission Briefing text */
+
+/* Cam2a player indent - Defend and Fortify */
+CAM2A_MSG1			_("BETA BASE MISSION: Eastern Sector")
+CAM2A_MSG2			_("Upon arrival you are to assume command of the base.")
+CAM2A_MSG3			_("You must defend it and hold it.")
+
+/* Cam2a briefing - Defend and Fortify */
+CAM2A_MSG4			_("BETA BASE MISSION: Defend and Fortify")
+CAM2A_MSG5			_("Be sure to fortify the perimeter and establish anti-aircraft defenses.")
+CAM2A_MSG6			_("New technologies are available.")
+
+/* Cam2a player indent - Defend and Fortify */
+CAM2A_MSG7			_("We are currently detecting coded bitstream signals.")
+CAM2A_MSG8			_("Decoding...")
+
+/* Cam2_1 player indent - Transport Down */
+CAM2_1_MSG1			_("TRANSPORT MISSION: Transport Down")
+CAM2_1_MSG2			_("Our transport carrying units from team Alpha Base has been shot down.")
+
+/* Cam2_1 briefing - Transport Down */
+CAM2_1_MSG3			_("TRANSPORT MISSION: Transport Down")
+CAM2_1_MSG4			_("It is under attack from The Collective at this location.")
+CAM2_1_MSG5			_("Assemble a rescue team to recover the transport and its cargo.")
+
+/* Cam2 intro1 - in flight part 1 */
+CAM2_INT_MSG1			_("IN-FLIGHT BRIEFING")
+CAM2_INT_MSG2			_("Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology.")
+CAM2_INT_MSG3			_("It's believed to be at a pre-Collapse airbase in this area.")
+
+/* Cam2 intro1 - in flight part 2 */
+CAM2_INT_MSG4			_("Team Beta under heavy attack")
+CAM2_INT_MSG5			_("Be sure to fortify the perimeter and establish anti-aircraft defenses.")
+CAM2_INT_MSG6			_("New technologies are available.")
+
+/* Cam2_B - Hold at all costs - player ident */
+CAM2_B_MSG1			_("BETA BASE MISSION: Hold at all costs")
+CAM2_B_MSG2			_("We are detecting coded bitstream signals from the Collective.")
+CAM2_B_MSG3			_("Decoding...")
+
+/* Cam2_B - Hold at all costs - briefing*/
+CAM2_B_MSG7			_("BETA BASE MISSION: Hold At All Costs")
+CAM2_B_MSG8			_("We are detecting ground and aerial forces from the north.")
+CAM2_B_MSG9			_("Hold your position and repulse these attacks, then eradicate the enemy's northern base.")
+
+/* Cam2_2 - Intercept convoy */
+CAM2_2_MSG			_("TRANSPORT MISSION: Intercept convoy.")
+CAM2_2_MSG2			_("Data from the Collective's base indicates the presence of the NEXUS intruder program.")
+CAM2_2_MSG3			_("Before NEXUS switched itself off-line we accessed the following.")
+
+CAM2_2_MSG4			_("An enemy commander is collecting a shipment from NEXUS at this location.")		
+CAM2_2_MSG5			_("Once at the LZ, eradicate the enemy commander and recover the shipment.")
+CAM2_2_MSG6			_("Then return to the LZ.")
+
+CAM2_2_MSG7			_("Disturbing news regarding NASDA.")
+
+/* Cam2_3 Search and Destroy - player ident */
+CAM2_3_MSG			_("TRANSPORT MISSION: Search for and Destroy Convoy")
+CAM2_3_MSG2			_("The shipment you recovered was a decoy.")
+CAM2_3_MSG3			_("We have detected another convoy proceeding along the river.")
+
+/* Cam2_3 Search and Destroy - briefing */
+CAM2_3_MSG4			_("TRANSPORT MISSION: Search for and Destroy Convoy")
+CAM2_3_MSG5			_("You are to intercept the convoy and recover its cargo.")
+CAM2_3_MSG6			_("Enemy VTOLs are likely to be flying close escort.")
+
+/* Cam2_4 Rescue civilians from containment camp - player ident */
+CAM2_4_MSG			_("TRANSPORT MISSION: Rescue civilians from Containment Camp")
+CAM2_4_MSG2			_("The Collective are processing and exterminating civilians at this base.")
+
+/* Cam2_4 Rescue civilians from containment camp - briefing */
+CAM2_4_MSG3			_("TRANSPORT MISSION: Rescue civilians from Containment Camp")
+CAM2_4_MSG4			_("You are to rescue the civilians.")
+CAM2_4_MSG5			_("Then destroy the camp.")
+
+/* Cam2_C Destroy Enemy Air Base & Recover VTOLs - player ident part1 */
+CAM2_C_MSG1			_("BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs.")
+CAM2_C_MSG2			_("Analysis of flight paths indicate that The Collective's VTOLs originate from here.")
+
+/* Cam2_C Destroy Enemy Air Base & Recover VTOLs - Briefing part1*/
+CAM2_C_MSG3			_("BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs")
+CAM2_C_MSG4			_("The location of the enemy airbase is here; this is your primary objective.")
+CAM2_C_MSG5			_("Eradicate all Collective forces and recover all artifacts.")
+
+/* Cam2_C Destroy Enemy Air Base & Recover VTOLs - Player Ident part2*/
+CAM2_C_MSG6			_("SECONDARY MISSION: Destroy or Drive Off Enemy Transport")
+CAM2_C_MSG7			_("The Collective are rounding up all civilians in this area.")
+CAM2_C_MSG8			_("They are then flying them to an unknown location.")
+
+/* Cam2_C Destroy Enemy Air Base & Recover VTOLs - Briefing part2*/
+CAM2_C_MSG9			_("SECONDARY MISSION: Destroy or Drive Off Enemy Transport")
+CAM2_C_MSG10			_("Destroy or drive off The Collective's transport.")
+CAM2_C_MSG11			_("Rescue as many civilians as possible.")
+
+/* Cam2_5 Destroy power plant - player ident */
+CAM2_5_MSG			_("TRANSPORT MISSION: Destroy Reactor")
+CAM2_5_MSG2			_("The Collective are searching for knowledge of nuclear reactors.")
+CAM2_5_MSG3			_("They must be stopped.")
+
+/* Cam2_5 Destroy power plant - briefing */
+CAM2_5_MSG4			_("TRANSPORT MISSION: Destroy Reactor")
+CAM2_5_MSG5			_("Proceed from the LZ to the reactor and destroy it.")
+CAM2_5_MSG6			_("Do not allow the Collective to bring the reactor on-line.")
+
+/* Cam2DI Capture NASDA central - briefing */
+CAM2_DI_MSG3			_("BETA BASE MISSION: Capture NASDA Central")
+CAM2_DI_MSG4			_("Capture NASDA central before NEXUS and the Collective can use it.")
+CAM2_DI_MSG5			" "
+
+/* Cam2_6 part2 Satellite Uplink - player ident*/
+CAM2_6_MSG			_("TRANSPORT MISSION: Satellite Uplink Site")
+CAM2_6_MSG2			_("NEXUS is searching for still functioning memory banks.")
+CAM2_6_MSG3			_("Part of its consciousness has moved to a remote NASDA control-site.")
+
+/* Cam2_6 - Brief part1 Satellite Uplink */
+CAM2_6_MSG4			_("TRANSPORT MISSION: Satellite Uplink Site")
+CAM2_6_MSG5			_("We are detecting transmissions from this site that are reaching high orbit.")
+CAM2_6_MSG6			_("NEXUS has now reconnected itself with the NASDA satellites.")
+
+/* Cam2_6 - Brief part2 Satellite Uplink */
+CAM2_6_MSG7			_("TRANSPORT MISSION: Satellite Uplink Site")
+CAM2_6_MSG8			_("Use the transport to carry a strike force to this site.")
+CAM2_6_MSG9			_("Destroy the site and return to your base.")
+
+/* Cam2_7 - Enemy Ground Launch */
+CAM2_7_MSG			_("TRANSPORT MISSION: Destroy Enemy SAM Sites")
+CAM2_7_MSG2			_("If you are to escape, eradicate the surface-to-air missile sites around your base.")
+CAM2_7_MSG3			_("Fly to the LZ, then head overland to destroy the SAM sites.")
+
+/* Cam2_8 - Establish Safe Haven - player */
+CAM2_8_MSG			_("TRANSPORT MISSION: Establish Safe Haven")
+CAM2_8_MSG2			_("We can confirm a missile is heading for Alpha Base.")
+CAM2_8_MSG3			_("You are to establish a safe haven for evacuation of Beta Base.")
+
+/* Cam2_8 - Establish Safe Haven - mission brief */
+CAM2_8_MSG4			_("TRANSPORT MISSION: Establish Safe Haven")
+CAM2_8_MSG5			_("Eradicate any enemy and secure the area.")
+CAM2_8_MSG6			_("Once a safe haven is established, return to the LZ for further orders.")
+
+/* Cam2DII - Air Raid & Evac - player ident */
+CAM2_DII_MSG1			_("BETA BASE MISSION: Evacuate!")
+CAM2_DII_MSG2			_("Commander, we have grave news.")
+CAM2_DII_MSG9			_("Alpha base has been destroyed by nuclear missile attack.")
+
+/* Cam2DII - Air Raid & Evac - mission brief */
+CAM2_DII_MSG3			_("BETA BASE MISSION: Evacuate!")
+CAM2_DII_MSG4			_("The Collective are unaware of the nuclear attack and have air units heading for your base.")
+CAM2_DII_MSG5			_("This message was intercepted a few moments ago...")
+
+/* Cam2DII - Air Raid & Evac - player ident part 2 */
+CAM2_DII_MSG6			_("BETA BASE MISSION: Evacuate!")
+CAM2_DII_MSG7			_("You must transport as many of your forces as possible.")
+CAM2_DII_MSG8			_("Good luck, Commander.")

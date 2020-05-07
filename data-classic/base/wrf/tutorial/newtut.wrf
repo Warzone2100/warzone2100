@@ -1,0 +1,12 @@
+/*
+ * tutorial3.wrf
+ *
+ */
+
+/* Directory for Proximity messages and mission briefs */
+directory	"messages"
+file		SMSG		"proxtut.txt"
+
+/* Directory for javascript files*/
+directory "script"
+file JAVASCRIPT "tutorial.js"

@@ -1,0 +1,9 @@
+//pos		frame	
+//x	y		start	end	Text	
+
+20	432	1.0	7.0	_("Secure the LZ and establish a forward base.")
+0	0	1.0	7.0	_("Then destroy the New Paradigm's base.")
+
+
+
+

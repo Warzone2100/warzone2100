@@ -1,0 +1,12 @@
+/*
+ * cam1Kevlar.wrf
+ *
+ * The data that changes for Cam1C
+ *
+ */
+
+
+directory	"texpages"
+file		TEXPAGE		"page-7-barbarians-kevlar.png"
+
+

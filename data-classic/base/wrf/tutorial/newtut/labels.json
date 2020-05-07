@@ -1,0 +1,22 @@
+{
+	"position_0": {
+		"label": "startPosition",
+		"pos": [3840, 3840]
+	},
+	"position_1": {
+		"label": "mgArtifactPos",
+		"pos": [2304, 4736]
+	},
+	"object_0": {
+		"label": "commandCenter",
+		"id": 51,
+		"player": 0,
+		"type": 1
+	},
+	"object_1": {
+		"label": "mgArtifact",
+		"id": 52,
+		"player": 0,
+		"type": 2
+	}
+}

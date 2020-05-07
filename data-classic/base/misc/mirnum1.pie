@@ -1,0 +1,11 @@
+PIE 2
+TYPE 200
+TEXTURE 0 page-12-player-buildings.png 256 256
+LEVELS 1
+LEVEL 1
+POINTS 3 
+	-64 0 -63 
+	65 0 -63 
+	0 0 66
+POLYGONS 1
+	200 3 2 1 0 26 13 0 26 0 0

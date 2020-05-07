@@ -1,0 +1,42 @@
+{
+    "challenge": {
+        "bases": 2,
+        "map": "Sk-MizaMaze",
+        "maxPlayers": 8,
+        "powerLevel": 1,
+        "scavengers": "false",
+        "version": 2
+    },
+    "player_0": {
+        "team": 0,
+	"ai": "multiplay/skirmish/nb_generic.js"
+    },
+    "player_1": {
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_2": {
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_3": {
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_4": {
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_5": {
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_6": {
+        "difficulty": "Hard",
+        "team": 1
+    },
+    "player_7": {
+        "difficulty": "Hard",
+        "team": 1
+    }
+}

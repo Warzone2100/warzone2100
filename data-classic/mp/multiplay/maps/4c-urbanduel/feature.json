@@ -1,0 +1,2160 @@
+{
+    "feature_0010": {
+        "name": "building12",
+        "position": [
+            4224,
+            6464,
+            452
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0011": {
+        "name": "building3",
+        "position": [
+            4672,
+            6464,
+            482
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0012": {
+        "name": "building3",
+        "position": [
+            3648,
+            7232,
+            482
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0013": {
+        "name": "building12",
+        "position": [
+            5120,
+            7488,
+            425
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0020": {
+        "name": "building1",
+        "position": [
+            5184,
+            5696,
+            434
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0030": {
+        "name": "building10",
+        "position": [
+            7424,
+            3264,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0031": {
+        "name": "building11",
+        "position": [
+            7872,
+            3392,
+            421
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0092": {
+        "name": "building1",
+        "position": [
+            3520,
+            6464,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0102": {
+        "name": "building11",
+        "position": [
+            5696,
+            4416,
+            395
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0103": {
+        "name": "building12",
+        "position": [
+            6016,
+            4032,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0105": {
+        "name": "building2",
+        "position": [
+            5952,
+            5312,
+            434
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0106": {
+        "name": "WreckedSuzukiJeep",
+        "position": [
+            960,
+            4544,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0107": {
+        "name": "Pickup",
+        "position": [
+            832,
+            4544,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0108": {
+        "name": "Chevy",
+        "position": [
+            1088,
+            4672,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0109": {
+        "name": "Chevy",
+        "position": [
+            1600,
+            4544,
+            147
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0110": {
+        "name": "Chevy",
+        "position": [
+            576,
+            3392,
+            421
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0119": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            960,
+            375
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0120": {
+        "name": "Pylon",
+        "position": [
+            7872,
+            960,
+            424
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0121": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            1472,
+            375
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0122": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            1984,
+            375
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0123": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            320,
+            375
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0124": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            2624,
+            375
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0125": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            5440,
+            434
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0126": {
+        "name": "Pylon",
+        "position": [
+            5056,
+            7104,
+            482
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0127": {
+        "name": "Pylon",
+        "position": [
+            4032,
+            7104,
+            467
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0128": {
+        "name": "Pylon",
+        "position": [
+            1472,
+            7104,
+            430
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0129": {
+        "name": "Pylon",
+        "position": [
+            2112,
+            7104,
+            424
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0130": {
+        "name": "WreckedBuilding16",
+        "position": [
+            3392,
+            5696,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0132": {
+        "name": "Chevy",
+        "position": [
+            6848,
+            2880,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0133": {
+        "name": "WaterBuilding3",
+        "position": [
+            7040,
+            4352,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0134": {
+        "name": "WaterBuilding2",
+        "position": [
+            512,
+            7552,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0136": {
+        "name": "building1",
+        "position": [
+            10048,
+            1472,
+            451
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0141": {
+        "name": "building3",
+        "position": [
+            8896,
+            1472,
+            503
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0142": {
+        "name": "building7",
+        "position": [
+            10176,
+            3392,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0144": {
+        "name": "building10",
+        "position": [
+            10752,
+            3520,
+            414
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0146": {
+        "name": "building12",
+        "position": [
+            12288,
+            6464,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0147": {
+        "name": "building3",
+        "position": [
+            13376,
+            6208,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0166": {
+        "name": "building10",
+        "position": [
+            15488,
+            3264,
+            441
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0167": {
+        "name": "building11",
+        "position": [
+            15552,
+            3520,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0225": {
+        "name": "building2",
+        "position": [
+            10048,
+            4288,
+            420
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0226": {
+        "name": "building3",
+        "position": [
+            10048,
+            4800,
+            420
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0228": {
+        "name": "building1",
+        "position": [
+            11712,
+            7232,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0242": {
+        "name": "WreckedSuzukiJeep",
+        "position": [
+            9024,
+            4544,
+            470
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0243": {
+        "name": "Pickup",
+        "position": [
+            8896,
+            4544,
+            460
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0244": {
+        "name": "Chevy",
+        "position": [
+            9152,
+            4672,
+            457
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0245": {
+        "name": "Chevy",
+        "position": [
+            9536,
+            3904,
+            434
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0246": {
+        "name": "Chevy",
+        "position": [
+            8640,
+            3392,
+            420
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0247": {
+        "name": "Pickup",
+        "position": [
+            10560,
+            2752,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0248": {
+        "name": "Pylon",
+        "position": [
+            8512,
+            960,
+            450
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0249": {
+        "name": "Pylon",
+        "position": [
+            9024,
+            960,
+            480
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0250": {
+        "name": "Pylon",
+        "position": [
+            9536,
+            960,
+            463
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0251": {
+        "name": "Pylon",
+        "position": [
+            10688,
+            960,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0252": {
+        "name": "Pylon",
+        "position": [
+            11200,
+            960,
+            440
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0253": {
+        "name": "Pylon",
+        "position": [
+            12864,
+            960,
+            427
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0254": {
+        "name": "Pylon",
+        "position": [
+            14400,
+            960,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0256": {
+        "name": "Pylon",
+        "position": [
+            15936,
+            960,
+            456
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0261": {
+        "name": "Pylon",
+        "position": [
+            15040,
+            5440,
+            430
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0263": {
+        "name": "Pylon",
+        "position": [
+            12096,
+            7104,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0264": {
+        "name": "Pylon",
+        "position": [
+            9536,
+            7104,
+            416
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0268": {
+        "name": "Chevy",
+        "position": [
+            14912,
+            2880,
+            437
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0269": {
+        "name": "WaterBuilding3",
+        "position": [
+            15104,
+            4352,
+            154
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0270": {
+        "name": "WaterBuilding2",
+        "position": [
+            8576,
+            7552,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0272": {
+        "name": "building1",
+        "position": [
+            1984,
+            9664,
+            427
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0277": {
+        "name": "building3",
+        "position": [
+            832,
+            9664,
+            486
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0278": {
+        "name": "building7",
+        "position": [
+            2112,
+            11584,
+            452
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0279": {
+        "name": "building7",
+        "position": [
+            3776,
+            9664,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0280": {
+        "name": "building10",
+        "position": [
+            2688,
+            11712,
+            443
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0282": {
+        "name": "building12",
+        "position": [
+            4224,
+            14656,
+            460
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0283": {
+        "name": "building3",
+        "position": [
+            4672,
+            14656,
+            460
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0284": {
+        "name": "building3",
+        "position": [
+            3648,
+            15424,
+            460
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0285": {
+        "name": "building12",
+        "position": [
+            5120,
+            15680,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0292": {
+        "name": "building1",
+        "position": [
+            5184,
+            13888,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0302": {
+        "name": "building10",
+        "position": [
+            7424,
+            11456,
+            473
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0303": {
+        "name": "building11",
+        "position": [
+            8000,
+            11584,
+            473
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0346": {
+        "name": "building2",
+        "position": [
+            960,
+            14528,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0361": {
+        "name": "building2",
+        "position": [
+            1984,
+            12352,
+            460
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0363": {
+        "name": "building11",
+        "position": [
+            2880,
+            14656,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0375": {
+        "name": "building12",
+        "position": [
+            5760,
+            12480,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0376": {
+        "name": "building10",
+        "position": [
+            5760,
+            12992,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0377": {
+        "name": "building2",
+        "position": [
+            5952,
+            13632,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0378": {
+        "name": "WreckedSuzukiJeep",
+        "position": [
+            960,
+            12736,
+            476
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0379": {
+        "name": "Pickup",
+        "position": [
+            832,
+            12736,
+            476
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0380": {
+        "name": "Chevy",
+        "position": [
+            1088,
+            12864,
+            476
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0381": {
+        "name": "Chevy",
+        "position": [
+            1472,
+            12096,
+            486
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0382": {
+        "name": "Chevy",
+        "position": [
+            576,
+            11584,
+            418
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0383": {
+        "name": "Pickup",
+        "position": [
+            2496,
+            10944,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0384": {
+        "name": "Pylon",
+        "position": [
+            448,
+            9152,
+            460
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0385": {
+        "name": "Pylon",
+        "position": [
+            960,
+            9152,
+            473
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0386": {
+        "name": "Pylon",
+        "position": [
+            1472,
+            9152,
+            427
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0387": {
+        "name": "Pylon",
+        "position": [
+            2624,
+            9152,
+            410
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0388": {
+        "name": "Pylon",
+        "position": [
+            3136,
+            9152,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0389": {
+        "name": "Pylon",
+        "position": [
+            4800,
+            9152,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0392": {
+        "name": "Pylon",
+        "position": [
+            7872,
+            9152,
+            417
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0395": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            8384,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0396": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            10816,
+            473
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0397": {
+        "name": "Pylon",
+        "position": [
+            6976,
+            13632,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0398": {
+        "name": "Pylon",
+        "position": [
+            5056,
+            15296,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0399": {
+        "name": "Pylon",
+        "position": [
+            4032,
+            15296,
+            464
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0400": {
+        "name": "Pylon",
+        "position": [
+            1472,
+            15296,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0401": {
+        "name": "Pylon",
+        "position": [
+            2112,
+            15296,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0404": {
+        "name": "Chevy",
+        "position": [
+            6848,
+            11072,
+            483
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0405": {
+        "name": "WaterBuilding3",
+        "position": [
+            6912,
+            12416,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0406": {
+        "name": "WaterBuilding2",
+        "position": [
+            512,
+            15744,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0413": {
+        "name": "building3",
+        "position": [
+            8512,
+            9664,
+            477
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0417": {
+        "name": "building11",
+        "position": [
+            10944,
+            12992,
+            391
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0418": {
+        "name": "building12",
+        "position": [
+            12288,
+            14656,
+            503
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0429": {
+        "name": "building2",
+        "position": [
+            10816,
+            12352,
+            275
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0437": {
+        "name": "building8",
+        "position": [
+            14400,
+            11584,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0438": {
+        "name": "building10",
+        "position": [
+            15616,
+            11456,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0439": {
+        "name": "building11",
+        "position": [
+            15680,
+            11712,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0482": {
+        "name": "building2",
+        "position": [
+            9152,
+            14528,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0490": {
+        "name": "building11",
+        "position": [
+            12608,
+            12352,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0499": {
+        "name": "building11",
+        "position": [
+            11072,
+            14656,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0510": {
+        "name": "building11",
+        "position": [
+            13760,
+            12352,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0511": {
+        "name": "building12",
+        "position": [
+            13952,
+            12608,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0512": {
+        "name": "building10",
+        "position": [
+            14080,
+            13120,
+            416
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0518": {
+        "name": "Chevy",
+        "position": [
+            8768,
+            11584,
+            452
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0520": {
+        "name": "Pylon",
+        "position": [
+            8640,
+            9152,
+            486
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0521": {
+        "name": "Pylon",
+        "position": [
+            9152,
+            9152,
+            486
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0527": {
+        "name": "Pylon",
+        "position": [
+            15168,
+            9152,
+            425
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0528": {
+        "name": "Pylon",
+        "position": [
+            16064,
+            9152,
+            447
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0529": {
+        "name": "Pylon",
+        "position": [
+            15168,
+            9664,
+            421
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0530": {
+        "name": "Pylon",
+        "position": [
+            15168,
+            10176,
+            420
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0532": {
+        "name": "Pylon",
+        "position": [
+            15168,
+            10816,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0535": {
+        "name": "Pylon",
+        "position": [
+            12224,
+            15296,
+            493
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0536": {
+        "name": "Pylon",
+        "position": [
+            9664,
+            15296,
+            388
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0537": {
+        "name": "Pylon",
+        "position": [
+            10304,
+            15296,
+            415
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "feature_0539": {
+        "name": "Pickup",
+        "position": [
+            13376,
+            12096,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0540": {
+        "name": "Chevy",
+        "position": [
+            15040,
+            11072,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0541": {
+        "name": "WaterBuilding3",
+        "position": [
+            15232,
+            12544,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0542": {
+        "name": "WaterBuilding2",
+        "position": [
+            8704,
+            15744,
+            0
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0545": {
+        "name": "building10",
+        "position": [
+            7424,
+            1472,
+            424
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0546": {
+        "name": "Ruin4",
+        "position": [
+            7488,
+            1984,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0547": {
+        "name": "building8",
+        "position": [
+            7872,
+            2752,
+            369
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0548": {
+        "name": "building12",
+        "position": [
+            7424,
+            2752,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0555": {
+        "name": "building12",
+        "position": [
+            7424,
+            11072,
+            473
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0565": {
+        "name": "building12",
+        "position": [
+            5376,
+            8640,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0570": {
+        "name": "building11",
+        "position": [
+            15552,
+            1472,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0571": {
+        "name": "building12",
+        "position": [
+            15488,
+            2752,
+            441
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0572": {
+        "name": "building1",
+        "position": [
+            15552,
+            2496,
+            441
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0573": {
+        "name": "building2",
+        "position": [
+            15552,
+            5696,
+            437
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0590": {
+        "name": "OilResource",
+        "position": [
+            5312,
+            1984,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0591": {
+        "name": "OilResource",
+        "position": [
+            6336,
+            1984,
+            334
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0653": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            6592,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0654": {
+        "name": "OilResource",
+        "position": [
+            2624,
+            6336,
+            416
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0736": {
+        "name": "OilResource",
+        "position": [
+            9152,
+            13632,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0737": {
+        "name": "OilResource",
+        "position": [
+            9408,
+            13632,
+            426
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0806": {
+        "name": "OilResource",
+        "position": [
+            14144,
+            7232,
+            414
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0807": {
+        "name": "OilResource",
+        "position": [
+            14144,
+            7488,
+            414
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0965": {
+        "name": "OilResource",
+        "position": [
+            7360,
+            960,
+            419
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0975": {
+        "name": "OilResource",
+        "position": [
+            6080,
+            3136,
+            409
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0985": {
+        "name": "OilResource",
+        "position": [
+            3776,
+            5696,
+            416
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_0999": {
+        "name": "OilResource",
+        "position": [
+            4416,
+            7360,
+            466
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1009": {
+        "name": "OilResource",
+        "position": [
+            8000,
+            10688,
+            426
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1023": {
+        "name": "OilResource",
+        "position": [
+            6464,
+            13504,
+            417
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1033": {
+        "name": "OilResource",
+        "position": [
+            11072,
+            8512,
+            388
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1043": {
+        "name": "OilResource",
+        "position": [
+            12864,
+            5184,
+            470
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1053": {
+        "name": "OilResource",
+        "position": [
+            2112,
+            13504,
+            165
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1054": {
+        "name": "OilResource",
+        "position": [
+            5312,
+            10560,
+            135
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1055": {
+        "name": "OilResource",
+        "position": [
+            10560,
+            5568,
+            206
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1056": {
+        "name": "OilResource",
+        "position": [
+            14144,
+            1984,
+            192
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1057": {
+        "name": "OilResource",
+        "position": [
+            7360,
+            7872,
+            415
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1058": {
+        "name": "OilResource",
+        "position": [
+            2752,
+            3648,
+            2
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1059": {
+        "name": "OilResource",
+        "position": [
+            11840,
+            10048,
+            2
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1128": {
+        "name": "building11",
+        "position": [
+            7872,
+            9664,
+            414
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "feature_1129": {
+        "name": "building1",
+        "position": [
+            7872,
+            2112,
+            355
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    }
+}

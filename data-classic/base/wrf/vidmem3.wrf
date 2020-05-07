@@ -1,0 +1,9 @@
+/***********************************************************/
+/*******************   wrf\vidmem3.wrf   *******************/
+/* When you change these, also update cam3/cam3change.wrf  */
+/***********************************************************/
+
+directory	"images"
+file		IMG		"intfac.img"
+directory	"texpages"
+file		TERTILES	"tertilesc3hw"

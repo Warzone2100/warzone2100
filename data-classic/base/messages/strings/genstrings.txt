@@ -1,0 +1,33 @@
+/* General Script Strings */
+
+/* Generic Briefing Stuff */
+TRANS_MSG1			_("Briefing Commences:")
+
+/* Early mission script stuff (may not need?) */
+BARBASE_MSG			_("Scavenger Outpost")
+POWRES_MSG			_("Power Resource")
+ART_MSG				_("Unknown Artifact")
+POWSURGE_MSG			_("Source of Power Surge")
+
+/* LZ stuff */
+LZ_MSG				_("Landing Zone")
+RUINS_MSG			_("Mission Target")
+RUINS_MSG2			_("Pre-Collapse Research Center")
+/* In flight brief TEXT */
+INFLIGHT_MSG1			_("En-route To Mission Site")
+END_MSG1			_("Mission Failed")
+WIN_MSG1			_("Mission Successful")
+
+/* more proximity text */
+LZ_MSG3				_("Enemy Landing Zone")
+ENEMYBASE_MSG			_("Enemy Base")
+MISSIONTARGET_MSG		_("Mission Target")
+
+/* incoming transmission */
+NP_MSG1				_("Incoming transmission")
+
+/* Incoming intelligence report. */
+INCOM_INT		_("Incoming intelligence report.")
+
+/* Additional Messages */
+ADD_MSG42			_("Nuclear Reactor")

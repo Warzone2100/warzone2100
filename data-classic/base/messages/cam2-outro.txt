@@ -1,0 +1,1 @@
+CAM2_OUT,0,1,1,cam2/cam2out.ogg,0,0,0000

@@ -1,0 +1,8 @@
+//these ones are definitely required!
+//video and text sequences for end campaign
+CAM1_END_RPL			"cam1/c001end.ogg"
+CAM1_END_TXT			"cam1/c001end.TXA"
+CAM2_BEG_RPL			"cam2/c002.ogg"
+CAM2_BEG_TXT			"cam2/c002.txa"
+CAM3_BEG_RPL			"cam3/c003.ogg"
+CAM3_BEG_TXT			"cam3/c003.txa"

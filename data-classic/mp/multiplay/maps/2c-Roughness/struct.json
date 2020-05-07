@@ -1,0 +1,2728 @@
+{
+    "structure_0042": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2752,
+            3008,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0043": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2368,
+            3008,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0044": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            2624,
+            3008,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0045": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2368,
+            3392,
+            103
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0046": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2752,
+            3392,
+            103
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0047": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            2368,
+            3648,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_0048": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            2752,
+            3648,
+            101
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0049": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2496,
+            3648,
+            98
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0050": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2624,
+            3648,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0051": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2752,
+            3520,
+            100
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0052": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2368,
+            3520,
+            101
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0053": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            2624,
+            3520,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0054": {
+        "name": "A0BaBaPowerGenerator",
+        "player": "scavenger",
+        "position": [
+            2624,
+            3392,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0056": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            2752,
+            2752,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0057": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2624,
+            2752,
+            105
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0058": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2496,
+            2752,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0059": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            2368,
+            2752,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0060": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2368,
+            2880,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0061": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2752,
+            2880,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0062": {
+        "name": "A0ResourceExtractor",
+        "player": "scavenger",
+        "position": [
+            2496,
+            3008,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0753": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            9408,
+            2368,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0754": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            10304,
+            2624,
+            117
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0755": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9408,
+            2752,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0756": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            9408,
+            3392,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0757": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9408,
+            2880,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0758": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            10048,
+            2368,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0759": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            9280,
+            2880,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0760": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            10176,
+            3776,
+            105
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0761": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            9280,
+            3008,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0762": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10432,
+            2496,
+            115
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0763": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            9280,
+            3520,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0764": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            9408,
+            3008,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0765": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10176,
+            2496,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0766": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10048,
+            2496,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0767": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10304,
+            2496,
+            108
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0768": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            10688,
+            2880,
+            119
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0769": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            9664,
+            3520,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0770": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            10048,
+            3520,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0771": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            10432,
+            2624,
+            127
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0772": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            10048,
+            2624,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0773": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            9536,
+            2752,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0774": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            10432,
+            2880,
+            110
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0775": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            9920,
+            3008,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0776": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            9920,
+            3392,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0777": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            9536,
+            2624,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0778": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            10560,
+            2624,
+            127
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0779": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            10560,
+            3520,
+            101
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0780": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            10560,
+            3776,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0781": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            9920,
+            2368,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0782": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            9536,
+            2368,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0783": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10560,
+            3648,
+            104
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0784": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10688,
+            3520,
+            103
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0785": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10688,
+            2752,
+            121
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0786": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10688,
+            2624,
+            119
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0787": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10688,
+            3392,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0788": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9408,
+            2624,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0789": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            9280,
+            3392,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0790": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            10688,
+            3264,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0791": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            10560,
+            2496,
+            115
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0792": {
+        "name": "A0ResourceExtractor",
+        "player": "scavenger",
+        "position": [
+            10176,
+            3264,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0793": {
+        "name": "A0BaBaFactory",
+        "player": "scavenger",
+        "position": [
+            9984,
+            2880,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0796": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9408,
+            3648,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0799": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9920,
+            2496,
+            103
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_0804": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9408,
+            3776,
+            100
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0805": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9664,
+            3776,
+            100
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0806": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            10432,
+            3648,
+            100
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_0807": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            10688,
+            2496,
+            106
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0808": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9536,
+            2496,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0809": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            10688,
+            3648,
+            100
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_0810": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            9408,
+            2496,
+            99
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0811": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            9664,
+            3648,
+            100
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_0812": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9792,
+            3648,
+            99
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_0813": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            10048,
+            3648,
+            106
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_0814": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            10176,
+            3648,
+            105
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_1015": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9408,
+            9280,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1016": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            9792,
+            9408,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1017": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9792,
+            8640,
+            101
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1018": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9536,
+            9408,
+            105
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1019": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9408,
+            8768,
+            103
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1020": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9792,
+            9280,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1021": {
+        "name": "A0ResourceExtractor",
+        "player": "scavenger",
+        "position": [
+            9664,
+            9152,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1023": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            9408,
+            9408,
+            104
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1024": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9664,
+            8512,
+            98
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1026": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9664,
+            9408,
+            103
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1027": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            9408,
+            8512,
+            101
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1028": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9792,
+            8768,
+            103
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1029": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            9792,
+            8512,
+            102
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_1030": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9536,
+            8512,
+            100
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1031": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            9408,
+            8640,
+            100
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1033": {
+        "name": "A0BaBaPowerGenerator",
+        "player": "scavenger",
+        "position": [
+            9536,
+            8768,
+            103
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1034": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            9536,
+            8640,
+            101
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1035": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9792,
+            9152,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1036": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            9408,
+            9152,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1037": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            9536,
+            9152,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1141": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            2752,
+            9792,
+            100
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1142": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            1856,
+            9536,
+            117
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1143": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2752,
+            9408,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1144": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            2752,
+            8768,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1145": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2752,
+            9280,
+            102
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1146": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            2112,
+            9792,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1147": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            2880,
+            9280,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1148": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            1984,
+            8384,
+            105
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1149": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            2880,
+            9152,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1150": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1728,
+            9664,
+            115
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1151": {
+        "name": "A0BaBaRocketPit",
+        "player": "scavenger",
+        "position": [
+            2880,
+            8640,
+            104
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1152": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            2752,
+            9152,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1153": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1984,
+            9664,
+            101
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1154": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2112,
+            9664,
+            100
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1155": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1856,
+            9664,
+            108
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1156": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            1472,
+            9280,
+            119
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1157": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            2496,
+            8640,
+            101
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1158": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            2112,
+            8640,
+            101
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1159": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            1728,
+            9536,
+            127
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1160": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            2112,
+            9536,
+            101
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1161": {
+        "name": "A0CannonTower",
+        "player": "scavenger",
+        "position": [
+            2624,
+            9408,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1162": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            1728,
+            9280,
+            110
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1163": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            2240,
+            9152,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1164": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            2240,
+            8768,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1165": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            2624,
+            9536,
+            103
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1166": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            1600,
+            9536,
+            127
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1167": {
+        "name": "A0BaBaFlameTower",
+        "player": "scavenger",
+        "position": [
+            1600,
+            8640,
+            101
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1168": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            1600,
+            8384,
+            103
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1169": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            2240,
+            9792,
+            104
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1170": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            2624,
+            9792,
+            103
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1171": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1600,
+            8512,
+            104
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1172": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1472,
+            8640,
+            103
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1173": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1472,
+            9408,
+            121
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1174": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1472,
+            9536,
+            119
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1175": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1472,
+            8768,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1176": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            2752,
+            9536,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1177": {
+        "name": "A0BaBaBunker",
+        "player": "scavenger",
+        "position": [
+            2880,
+            8768,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1178": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            1472,
+            8896,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1179": {
+        "name": "A0BaBaHorizontalWall",
+        "player": "scavenger",
+        "position": [
+            1600,
+            9664,
+            115
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1180": {
+        "name": "A0ResourceExtractor",
+        "player": "scavenger",
+        "position": [
+            1984,
+            8896,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1181": {
+        "name": "A0BaBaFactory",
+        "player": "scavenger",
+        "position": [
+            2176,
+            9280,
+            102
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1184": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2752,
+            8512,
+            102
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1187": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2240,
+            9664,
+            103
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_1192": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2752,
+            8384,
+            100
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1193": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2496,
+            8384,
+            100
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1194": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            1728,
+            8512,
+            100
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_1195": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            1472,
+            9664,
+            106
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1196": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2624,
+            9664,
+            103
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1197": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            1472,
+            8512,
+            100
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ]
+    },
+    "structure_1198": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            2752,
+            9664,
+            99
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1199": {
+        "name": "A0BaBaGunTower",
+        "player": "scavenger",
+        "position": [
+            2496,
+            8512,
+            100
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ]
+    },
+    "structure_1200": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2368,
+            8512,
+            99
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1201": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            2112,
+            8512,
+            106
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ]
+    },
+    "structure_1202": {
+        "name": "A0BaBaGunTowerEND",
+        "player": "scavenger",
+        "position": [
+            1984,
+            8512,
+            105
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ]
+    },
+    "structure_1385": {
+        "name": "A0CommandCentre",
+        "position": [
+            4096,
+            1280,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1386": {
+        "name": "A0CommandCentre",
+        "position": [
+            8064,
+            10880,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1387": {
+        "modules": 2,
+        "name": "A0LightFactory",
+        "position": [
+            8000,
+            10432,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1388": {
+        "modules": 2,
+        "name": "A0LightFactory",
+        "position": [
+            4160,
+            1728,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1389": {
+        "modules": 1,
+        "name": "A0PowerGenerator",
+        "position": [
+            3712,
+            1664,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1390": {
+        "modules": 1,
+        "name": "A0PowerGenerator",
+        "position": [
+            8448,
+            10496,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1391": {
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            8448,
+            10880,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1392": {
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            3712,
+            1280,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1393": {
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            4608,
+            1664,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1394": {
+        "modules": 1,
+        "name": "A0ResearchFacility",
+        "position": [
+            7552,
+            10496,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1396": {
+        "name": "A0CyborgFactory",
+        "position": [
+            4416,
+            1280,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1397": {
+        "name": "A0CyborgFactory",
+        "position": [
+            7744,
+            10880,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1399": {
+        "modules": 2,
+        "name": "A0LightFactory",
+        "position": [
+            3648,
+            832,
+            174
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1400": {
+        "name": "A0CyborgFactory",
+        "position": [
+            4032,
+            896,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1401": {
+        "name": "A0CyborgFactory",
+        "position": [
+            8128,
+            11264,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1402": {
+        "modules": 2,
+        "name": "A0LightFactory",
+        "position": [
+            8512,
+            11328,
+            174
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1403": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            7872,
+            11200,
+            179
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1404": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            7488,
+            10816,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1405": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            6976,
+            10560,
+            179
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1406": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            7744,
+            9664,
+            184
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1407": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            4288,
+            960,
+            179
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1408": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            4672,
+            1344,
+            180
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1409": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            5184,
+            1600,
+            179
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1410": {
+        "name": "A0ResourceExtractor",
+        "position": [
+            4416,
+            2496,
+            184
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1415": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            9024,
+            11072,
+            186
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1416": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            9024,
+            10944,
+            182
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1427": {
+        "name": "WallTower01",
+        "position": [
+            9024,
+            10816,
+            179
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1428": {
+        "name": "WallTower01",
+        "position": [
+            9024,
+            11200,
+            184
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1429": {
+        "name": "WallTower01",
+        "position": [
+            6720,
+            10304,
+            183
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1430": {
+        "name": "WallTower01",
+        "position": [
+            6976,
+            10304,
+            178
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1431": {
+        "name": "WallTower01",
+        "position": [
+            6720,
+            10688,
+            174
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1432": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6848,
+            10304,
+            178
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1433": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6720,
+            10432,
+            177
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1434": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            6720,
+            10560,
+            178
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 1
+    },
+    "structure_1435": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            3136,
+            1088,
+            186
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1436": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            3136,
+            1216,
+            182
+        ],
+        "rotation": [
+            49152,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1442": {
+        "name": "WallTower01",
+        "position": [
+            3136,
+            1344,
+            179
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1443": {
+        "name": "WallTower01",
+        "position": [
+            3136,
+            960,
+            184
+        ],
+        "rotation": [
+            32768,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1448": {
+        "name": "WallTower01",
+        "position": [
+            5440,
+            1472,
+            174
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1449": {
+        "name": "WallTower01",
+        "position": [
+            5440,
+            1856,
+            183
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1450": {
+        "name": "WallTower01",
+        "position": [
+            5184,
+            1856,
+            178
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1451": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            5312,
+            1856,
+            178
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1452": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            5440,
+            1728,
+            177
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1453": {
+        "name": "A0HardcreteMk1Wall",
+        "position": [
+            5440,
+            1600,
+            178
+        ],
+        "rotation": [
+            16384,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1461": {
+        "name": "A0RepairCentre3",
+        "position": [
+            3264,
+            1728,
+            186
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0
+    },
+    "structure_1462": {
+        "name": "A0RepairCentre3",
+        "position": [
+            8896,
+            10432,
+            186
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1
+    }
+}

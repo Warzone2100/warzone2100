@@ -1,0 +1,2 @@
+MB2_7_MSG,0,3,2,brfcom.ogg,1,1,TRANS_MSG1,0,0000,cam2/cam27fmv.ogg,0,0,0,0000
+MB2_7_MSG2,0,1,1,cam2/cam2_7.ogg,3,CAM2_7_MSG,CAM2_7_MSG2,CAM2_7_MSG3,0,0000

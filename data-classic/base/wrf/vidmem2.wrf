@@ -1,0 +1,10 @@
+/***********************************************************/
+/*******************   wrf\vidmem2.wrf   *******************/
+/* When you change these, also update cam2/cam2change.wrf  */
+/***********************************************************/
+
+directory	"images"
+file		IMG		"intfac.img"
+
+directory	"texpages"
+file		TERTILES	"tertilesc2hw"

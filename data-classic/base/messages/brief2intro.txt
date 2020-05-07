@@ -1,0 +1,2 @@
+CAM2_INT,0,1,2,cam2/cam2int1.ogg,0,0,0000,cam2/cam2inta.ogg,0,0,0000
+CAM2_INT2,0,1,2,cam2/cam2int2.ogg,0,0,0000,cam2/cam2intb.ogg,0,0,0000

@@ -1,0 +1,242 @@
+{
+    "droid_0469": {
+        "id": 469,
+        "position": [
+            5845,
+            1616,
+            32
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 5,
+        "template": "ConstructorDroid"
+    },
+    "droid_0470": {
+        "id": 470,
+        "position": [
+            5646,
+            1785,
+            32
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 5,
+        "template": "ConstructorDroid"
+    },
+    "droid_0471": {
+        "id": 471,
+        "position": [
+            2605,
+            6272,
+            26
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2,
+        "template": "ConstructorDroid"
+    },
+    "droid_0472": {
+        "id": 472,
+        "position": [
+            2195,
+            6488,
+            22
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 2,
+        "template": "ConstructorDroid"
+    },
+    "droid_0473": {
+        "id": 473,
+        "position": [
+            7227,
+            4499,
+            22
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0,
+        "template": "ConstructorDroid"
+    },
+    "droid_0474": {
+        "id": 474,
+        "position": [
+            6592,
+            4800,
+            24
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 0,
+        "template": "ConstructorDroid"
+    },
+    "droid_0475": {
+        "id": 475,
+        "position": [
+            3638,
+            8732,
+            26
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 6,
+        "template": "ConstructorDroid"
+    },
+    "droid_0476": {
+        "id": 476,
+        "position": [
+            3459,
+            8877,
+            37
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 6,
+        "template": "ConstructorDroid"
+    },
+    "droid_0477": {
+        "id": 477,
+        "position": [
+            13085,
+            6357,
+            30
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 7,
+        "template": "ConstructorDroid"
+    },
+    "droid_0478": {
+        "id": 478,
+        "position": [
+            12688,
+            6474,
+            32
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 7,
+        "template": "ConstructorDroid"
+    },
+    "droid_0479": {
+        "id": 479,
+        "position": [
+            6720,
+            12937,
+            22
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1,
+        "template": "ConstructorDroid"
+    },
+    "droid_0480": {
+        "id": 480,
+        "position": [
+            6336,
+            12864,
+            26
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 1,
+        "template": "ConstructorDroid"
+    },
+    "droid_0481": {
+        "id": 481,
+        "position": [
+            11072,
+            12736,
+            16
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 4,
+        "template": "ConstructorDroid"
+    },
+    "droid_0482": {
+        "id": 482,
+        "position": [
+            10713,
+            13072,
+            16
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 4,
+        "template": "ConstructorDroid"
+    },
+    "droid_0483": {
+        "id": 483,
+        "position": [
+            15168,
+            7232,
+            22
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3,
+        "template": "ConstructorDroid"
+    },
+    "droid_0484": {
+        "id": 484,
+        "position": [
+            14831,
+            7479,
+            23
+        ],
+        "rotation": [
+            0,
+            0,
+            0
+        ],
+        "startpos": 3,
+        "template": "ConstructorDroid"
+    }
+}
