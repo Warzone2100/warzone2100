@@ -1,5 +1,5 @@
 /*
-	PropertyMatcher - v1.0
+	PropertyMatcher - v1.0.1
 
 	Copyright (c) 2020 past-due (https://github.com/past-due)
 
@@ -168,7 +168,9 @@ struct op_s {
 	int assoc;
 	int unary;
 	bool (*eval)(bool a1, bool a2);
-} ops[]={
+};
+
+static const std::vector<op_s> ops = {
 	{"!", 10, ASSOC_RIGHT, 1, eval_negate},
 	{"||", 8, ASSOC_LEFT, 0, eval_or},
 	{"&&", 5, ASSOC_LEFT, 0, eval_and},
@@ -176,11 +178,10 @@ struct op_s {
 	{")", 0, ASSOC_NONE, 0, nullptr}
 };
 
-struct op_s* getop(const std::string& token)
+static const op_s* getop(const std::string& token)
 {
-	int i;
-	for (i=0; i < sizeof ops / sizeof ops[0]; ++i) {
-		if (ops[i].op == token) return ops+i;
+	for (const auto& op : ops) {
+		if (op.op == token) return &op;
 	}
 	return nullptr;
 }
@@ -193,14 +194,14 @@ bool PropertyMatcher::evaluateConditionString(const std::string& conditionString
 		throw std::runtime_error("Error parsing tokens");
 	}
 
-	std::vector<op_s *> opstack;
+	std::vector<const op_s *> opstack;
 	std::vector<std::unique_ptr<Expression>> output;
 
-	auto push_opstack = [&opstack](struct op_s *op) {
+	auto push_opstack = [&opstack](const op_s *op) {
 		opstack.push_back(op);
 	};
-	auto pop_opstack = [&opstack]() -> op_s * {
-		op_s * result = nullptr;
+	auto pop_opstack = [&opstack]() -> const op_s * {
+		const op_s * result = nullptr;
 		if (!opstack.empty())
 		{
 			result = opstack.back();
@@ -221,27 +222,27 @@ bool PropertyMatcher::evaluateConditionString(const std::string& conditionString
 		return result;
 	};
 
-	auto shunt_op = [&](struct op_s *op)
+	auto shunt_op = [&](const op_s *op)
 	{
-	   struct op_s *pop;
+		const op_s *pop;
 		std::unique_ptr<Expression> exp1, exp2;
-	   if (op->op == "(") {
-		   push_opstack(op);
-		   return;
-	   } else if (op->op == ")") {
-		   while (!opstack.empty() && opstack.back()->op != "(") {
-			   pop = pop_opstack();
-			   exp1 = pop_output();
-			   if (pop->unary) push_output(std::unique_ptr<Expression>(new IdentityExpression(pop->eval(exp1->evaluate(), false))));
-			   else {
-				   exp2 = pop_output();
-				   push_output(std::unique_ptr<Expression>(new IdentityExpression(pop->eval(exp2->evaluate(), exp1->evaluate()))));
-			   }
-		   }
-		   if (!(pop = pop_opstack()) || pop->op != "(") {
-			   throw std::runtime_error("ERROR: Stack error. No matching \'(\'");
-		   }
-		   return;
+		if (op->op == "(") {
+			push_opstack(op);
+			return;
+		} else if (op->op == ")") {
+			while (!opstack.empty() && opstack.back()->op != "(") {
+				pop = pop_opstack();
+				exp1 = pop_output();
+				if (pop->unary) push_output(std::unique_ptr<Expression>(new IdentityExpression(pop->eval(exp1->evaluate(), false))));
+				else {
+					exp2 = pop_output();
+					push_output(std::unique_ptr<Expression>(new IdentityExpression(pop->eval(exp2->evaluate(), exp1->evaluate()))));
+				}
+			}
+			if (!(pop = pop_opstack()) || pop->op != "(") {
+				throw std::runtime_error("ERROR: Stack error. No matching \'(\'");
+			}
+			return;
 	   }
 
 	   if (op->assoc == ASSOC_RIGHT) {
@@ -277,16 +278,16 @@ bool PropertyMatcher::evaluateConditionString(const std::string& conditionString
 		throw std::runtime_error(errMsg.str());
 	}
 
-	struct op_s startop = {"X", 0, ASSOC_NONE, 0, nullptr};	/* Dummy operator to mark start */
-	struct op_s *op = nullptr;
+	const op_s startop = {"XSTARTX", 0, ASSOC_NONE, 0, nullptr};	/* Dummy operator to mark start */
 	std::unique_ptr<Expression> exp1, exp2;
-	struct op_s *lastop = &startop;
+	std::string lastop = startop.op;
 
 	// Use shunting-yard to process tokens + operations
 	for (auto& token : tokens)
 	{
-		if ((op = getop(token))) {
-			if (lastop && (lastop == &startop || lastop->op != ")")) {
+		const op_s *op = getop(token);
+		if (op != nullptr) {
+			if (!lastop.empty() && (lastop == startop.op || lastop != ")")) {
 				if (op->op != "(" && op->op != "!") {
 					std::stringstream errMsg;
 					errMsg << "ERROR: Illegal use of binary operator (" << op->op << ")";
@@ -294,7 +295,7 @@ bool PropertyMatcher::evaluateConditionString(const std::string& conditionString
 				}
 			}
 			shunt_op(op);
-			lastop = op;
+			lastop = op->op;
 		}
 		else
 		{
@@ -315,12 +316,12 @@ bool PropertyMatcher::evaluateConditionString(const std::string& conditionString
 				errMsg << "ERROR: Unknown, invalid, or unexpected token: \"" << token << "\"";
 				throw std::runtime_error(errMsg.str());
 			}
-			lastop = nullptr;
+			lastop.clear();
 		}
 	}
 
 	while (!opstack.empty()) {
-		op = pop_opstack();
+		const op_s *op = pop_opstack();
 		exp1 = pop_output();
 		if (op->unary) push_output(std::unique_ptr<Expression>(new IdentityExpression(op->eval(exp1->evaluate(), false))));
 		else {
