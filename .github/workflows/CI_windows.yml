@@ -321,7 +321,7 @@ jobs:
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
     - name: CMake Build (Portable Build)
       run: |
-        & cmake --build build --config Release --target package
+        & cmake --build build --config Release --target package -- /m
         # Rename the portable installer
         Move-Item -LiteralPath ".\build\warzone2100_portable.exe" -Destination ".\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
         # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
