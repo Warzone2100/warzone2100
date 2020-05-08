@@ -20,6 +20,7 @@ jobs:
     env:
       WZ_MSVC_VER: ${{ matrix.compiler }}
       WZ_TARGET_ARCH: ${{ matrix.architecture }}
+      VSCMD_SKIP_SENDTELEMETRY: 1
     name: '${{ matrix.architecture }} [${{ matrix.compiler }}]'
     runs-on: windows-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
