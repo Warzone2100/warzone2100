@@ -10,11 +10,16 @@
 
 include(FindPackageHandleStandardArgs)
 
-find_package(unofficial-sodium CONFIG QUIET)
-# If we found the vcpkg unofficial-sodium configuration, return with that result
-if(unofficial-sodium_FOUND OR sodium_FOUND)
-	find_package_handle_standard_args(sodium CONFIG_MODE)
-	return()
+if (VCPKG_TOOLCHAIN)
+	find_package(unofficial-sodium CONFIG QUIET)
+	# If we found the vcpkg unofficial-sodium configuration, return with that result
+	if(unofficial-sodium_FOUND)
+		find_package_handle_standard_args(${CMAKE_FIND_PACKAGE_NAME} REQUIRED_VARS sodium_INCLUDE_DIR sodium_LIBRARIES VERSION_VAR sodium_VERSION)
+		message(STATUS "Using vcpkg unofficial-sodium configuration (${sodium_VERSION})")
+		return()
+	else()
+		message(STATUS "Did not find vcpkg unofficial-sodium configuration, reverting to regular check")
+	endif()
 endif()
 
 find_package(PkgConfig)
@@ -56,7 +61,7 @@ else()
 	set(sodium_VERSION "")
 endif()
 
-find_package_handle_standard_args(sodium REQUIRED_VARS sodium_INCLUDE_DIR sodium_LIBRARIES VERSION_VAR sodium_VERSION)
+find_package_handle_standard_args(${CMAKE_FIND_PACKAGE_NAME} REQUIRED_VARS sodium_INCLUDE_DIR sodium_LIBRARIES VERSION_VAR sodium_VERSION)
 
 # Create imported target unofficial-sodium::sodium
 add_library(unofficial-sodium::sodium UNKNOWN IMPORTED)
