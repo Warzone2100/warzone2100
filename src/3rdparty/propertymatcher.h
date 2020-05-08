@@ -1,5 +1,5 @@
 /*
-	PropertyMatcher - v1.0
+	PropertyMatcher - v1.0.1
 
 	Copyright (c) 2020 past-due (https://github.com/past-due)
 
