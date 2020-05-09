@@ -545,13 +545,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-_("Armed with Cyborg Assault Gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 _("Armed with Cyborg assault gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+_("Armed with Cyborg Assault Gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -1074,13 +1074,13 @@ _("Best Targets: Base structures and cyborgs")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB2.text[2]
 _("Best Targets: Base Structures and Defenses")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_BMB1.text[2]
-// data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
-_("Best Targets: Base Structures")  
-// TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 // data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 _("Best Targets: Base structures")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_BMB1.text[2]
+// data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
+_("Best Targets: Base Structures")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -3045,12 +3045,12 @@ _("Improvement in laser optics reduces light dispersal")
 // data/base/messages/resmessages3.json: $.RES_V_EN7.text[2]
 _("Improves vehicle speed")  
 // TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-_("Incendiary howitzer emplacement")  
-// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 _("Incendiary Howitzer Emplacement")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+_("Incendiary howitzer emplacement")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 _("Incendiary Howitzer may be assigned to a sensor")  
@@ -5366,13 +5366,13 @@ _("Synaptic Link Data Analysis Mk2")
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 _("Synaptic Link Data Analysis Mk3")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-// data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-_("Synaptic link data analysis")  
-// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 _("Synaptic Link Data Analysis")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+// data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+_("Synaptic link data analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -5470,14 +5470,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
