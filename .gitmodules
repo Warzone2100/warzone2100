@@ -26,3 +26,7 @@
 	path = data/base/texpages
 	url = https://github.com/Warzone2100/data-texpages.git
 	shallow = true
+[submodule "data/music"]
+	path = data/music
+	url = https://github.com/Warzone2100/data-music.git
+	shallow = true
