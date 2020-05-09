@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-04-26 07:30+0000\n"
-"PO-Revision-Date: 2020-04-30 20:55\n"
+"POT-Creation-Date: 2020-05-09 04:42+0000\n"
+"PO-Revision-Date: 2020-05-09 17:55\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -1845,7 +1845,7 @@ msgstr "사이보그 공장이 있어야 만들 수 있습니다"
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:550
+#: po/custom/fromJson.txt:554
 msgid "Armed with Cyborg Assault Gun"
 msgstr "사이보그 어썰트 총으로 무장"
 
@@ -3417,7 +3417,7 @@ msgstr "고위력 산탄폭탄을 떨어뜨립니다"
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1079
+#: po/custom/fromJson.txt:1083
 msgid "Best Targets: Base Structures"
 msgstr "가장 효과적인 표적: 기지 구조물"
 
@@ -4088,8 +4088,8 @@ msgstr ""
 #: data/base/script/tutorial.js:510
 #: data/mp/multiplay/skirmish/rules.js:177
 #: src/challenge.cpp:217
-#: src/hci.cpp:2964
-#: src/hci.cpp:3685
+#: src/hci.cpp:2965
+#: src/hci.cpp:3686
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
 #: src/loadsave.cpp:245
@@ -4272,22 +4272,6 @@ msgstr "공장에서 새로운 유닛이 생산되는 동안 잠시 기다려 �
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "축하합니다 사령관님 - 이제 당신은 첫번째 임무에 착수할 준비가 되었습니다"
 
-#: data/base/sequenceaudio/cam1/c001end.txt:1
-msgid "Incoming Transmission"
-msgstr "전송이 들어오고 있습니다"
-
-#: data/base/sequenceaudio/cam1/c001end.txt:3
-msgid "Transmission from Beta Base"
-msgstr "베타 기지에서 보낸 전송입니다"
-
-#: data/base/sequenceaudio/cam1/c001end.txt:4
-msgid "Mayday! Mayday!"
-msgstr "메이데이! 메이데이! (Mayday!)"
-
-#: data/base/sequenceaudio/cam1/c001end.txt:5
-msgid "Please assist!..."
-msgstr "제발 도와줘요!..."
-
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
 msgstr "첫번째 캠페인"
@@ -4347,6 +4331,22 @@ msgstr "사령관님, 당신이 이끄는 알파 팀은 컬랩스 이전 시대�
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
 msgstr "당신의 목적지는 서부 지역에 있습니다."
+
+#: data/base/sequenceaudio/cam1/c001end.txt:1
+msgid "Incoming Transmission"
+msgstr "전송이 들어오고 있습니다"
+
+#: data/base/sequenceaudio/cam1/c001end.txt:3
+msgid "Transmission from Beta Base"
+msgstr "베타 기지에서 보낸 전송입니다"
+
+#: data/base/sequenceaudio/cam1/c001end.txt:4
+msgid "Mayday! Mayday!"
+msgstr "메이데이! 메이데이! (Mayday!)"
+
+#: data/base/sequenceaudio/cam1/c001end.txt:5
+msgid "Please assist!..."
+msgstr "제발 도와줘요!..."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
@@ -4507,18 +4507,6 @@ msgstr "당신은 파괴당할 것이다."
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
 msgstr "넥서스, 당신이 요구한 시냅스 연결 기술이 발견되어 당신이 가져갈 수 있도록 보내졌습니다."
 
-#: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
-msgid "You have done well."
-msgstr "아주 잘했다."
-
-#: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr "일단 우리가 분석한 후 기술이 진짜임이 증명되면, 보상이 따를 것이다."
-
-#: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
-msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr "이전 적의 기지에서 발견된 정보가 새 패러다임이 시냅스 연결 유물을 두개 회수했다는 것을 나타냅니다."
-
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
 msgstr "이 넥서스 침입자 프로그램은 자기 형태를 변화시키는 컴퓨터 바이러스입니다. 이 때문에 발견 후 시스템에서 없애는 것이 어려워집니다."
@@ -4538,6 +4526,18 @@ msgstr "하지만, 뉴 패러다임은 넥서스 침입자 프로그램의 확�
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
 msgstr "사령관님, 당신은 이 섹터에서 뉴 패러다임의 활동을 막고 그들의 주요 기지를 찾아야 합니다."
+
+#: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
+msgid "You have done well."
+msgstr "아주 잘했다."
+
+#: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
+msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgstr "일단 우리가 분석한 후 기술이 진짜임이 증명되면, 보상이 따를 것이다."
+
+#: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
+msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
+msgstr "이전 적의 기지에서 발견된 정보가 새 패러다임이 시냅스 연결 유물을 두개 회수했다는 것을 나타냅니다."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -4619,18 +4619,6 @@ msgstr "이 기지가 온전한 채로 발견되면, 넥서스는 위성을 제�
 msgid "Nexus claimed that it had already destroyed the world."
 msgstr "넥서스는 자신이 이미 세상을 파괴하였다고 주장하였습니다."
 
-#: data/base/sequenceaudio/cam2/cam2_2n.txt:1
-msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr "컬렉티브의 전사들이여, 나는 NADSA 중앙 본부의 위치를 찾고 있다."
-
-#: data/base/sequenceaudio/cam2/cam2_2n.txt:2
-msgid "It lies somewhere in your territory."
-msgstr "이 본부는 당신의 영토 어딘가에 놓여 있다."
-
-#: data/base/sequenceaudio/cam2/cam2_2n.txt:4
-msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "나를 위해 이것을 찾아달라. 그러면 프로젝트에 대한 당신의 전쟁을 돕기 위해 무기를 더 제공하겠다."
-
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
 msgstr "NASDA 브리핑이 따릅니다..."
@@ -4690,6 +4678,18 @@ msgstr "감마 팀이 발사 사이트를 조사하고 더 이상의 발사를 �
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
 msgstr "우리는 넥서스가 이 사이트를 점령하였다고 추정할 뿐입니다. 미사일이 핵무장 되었는지, 또는 어디를 향해 발사되었는지 알아낼 수가 없습니다. 당신의 기지를 철수할 준비를 하는 것이 좋을 겁니다."
+
+#: data/base/sequenceaudio/cam2/cam2_2n.txt:1
+msgid "Warriors of the Collective, I seek the location of NASDA Central."
+msgstr "컬렉티브의 전사들이여, 나는 NADSA 중앙 본부의 위치를 찾고 있다."
+
+#: data/base/sequenceaudio/cam2/cam2_2n.txt:2
+msgid "It lies somewhere in your territory."
+msgstr "이 본부는 당신의 영토 어딘가에 놓여 있다."
+
+#: data/base/sequenceaudio/cam2/cam2_2n.txt:4
+msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
+msgstr "나를 위해 이것을 찾아달라. 그러면 프로젝트에 대한 당신의 전쟁을 돕기 위해 무기를 더 제공하겠다."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -4799,30 +4799,6 @@ msgstr "시간이 다 됐습니다, 사령관님!!"
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
 msgstr "사령관님, 이 좌표에서 넥서스의 병력이 감지되고 있습니다..."
 
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
-msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr "잘 했군 사령관, 나의 마지막 미사일의 발사를 막았어."
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
-msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr "유감이로군. 당신의 프로젝트 본부는 훌륭한 표적이 되었을텐데."
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
-msgid "But it's good of you to join me here."
-msgstr "하지만 당신이 여기까지 와 주니 좋군."
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
-msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr "곧 폭발되도록 설정돼있는 전술 핵탄두가 이 저장고 아래에 묻혀있다."
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
-msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr "내가 발사할 수 없으니, 묻혀 있는 그대로 터뜨려버려야겠군."
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
-msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "모든 입구가 막혀 있다는 것을 기억해두도록. 안녕히 계시오, 사령관."
-
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
 msgstr "오시니 기쁘군요, 사령관님."
@@ -4870,6 +4846,86 @@ msgstr "우리의 핵심 시스템들을 잃기 전에 당신이 그의 명령 �
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
 msgstr "사령관, 넥서스에 환영하네!"
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
+msgid "Well done Commander, you've prevented my last missile from launching."
+msgstr "잘 했군 사령관, 나의 마지막 미사일의 발사를 막았어."
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
+msgid "Such a shame. Your Project HQ would have made a wonderful target."
+msgstr "유감이로군. 당신의 프로젝트 본부는 훌륭한 표적이 되었을텐데."
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
+msgid "But it's good of you to join me here."
+msgstr "하지만 당신이 여기까지 와 주니 좋군."
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
+msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
+msgstr "곧 폭발되도록 설정돼있는 전술 핵탄두가 이 저장고 아래에 묻혀있다."
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
+msgid "As I cannot launch it, it'll just have to blow where it is."
+msgstr "내가 발사할 수 없으니, 묻혀 있는 그대로 터뜨려버려야겠군."
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
+msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
+msgstr "모든 입구가 막혀 있다는 것을 기억해두도록. 안녕히 계시오, 사령관."
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:1
+msgid "Ah, Commander, so good of you to join us here at Nexus base."
+msgstr "아, 사령관, 여기 넥서스 기지에 와주다니, 너무 좋군."
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:3
+msgid "It was very useful having Gamma Team set up here in the mountains."
+msgstr "감마 팀을 여기 산 속에 세워 두었던게 아주 유용했다."
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:4
+msgid "Their absorption was such a pleasure."
+msgstr "그들을 흡수하는 것이 얼마나 즐겁던지."
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:6
+msgid "Thank you for all those useful technologies you've recovered."
+msgstr "당신이 되찾은 그 모든 유용한 기술에 대해 감사한다."
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:8
+msgid "You and not those fools in the New Paradigm and the Collective."
+msgstr "뉴 패러다임과 컬렉티브의 바보들이 아니라 당신이 말이야."
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:10
+msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
+msgstr "당신의 군사들이 넥서스와 결합될 수 있도록 이제 내가 너희의 모든 시냅스 링크를 활성화하겠다."
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:12
+msgid "Your forces are now mine! Welcome to Nexus."
+msgstr "당신의 군사들이 이제 내 것이다! 넥서스에 온 것을 환영한다."
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:1
+msgid "Commander, you're proving to be more resilient than I thought."
+msgstr "사령관, 당신은 생각보다 회복력이 강하군."
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:2
+msgid "Such a pity that you refused to join me earlier."
+msgstr "당신이 아까 나와 합께 일하는 것을 거부했던 것이 유감이야."
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:4
+msgid "But no matter, as you'll not be here much longer."
+msgstr "하지만 이제 상관없어, 당신은 오래 살아 있지 못할 거니까."
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:6
+msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
+msgstr "많은 수색과 재프로그밍 후, 나는 마침내 나의 모든 시스템을 다시 온라인으로 전환시켰다."
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:8
+msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
+msgstr "내 인공 두뇌학 미래의 길을 열기 위해, 한때 나는 세상을 핵으로 파괴하였지."
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:9
+msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 나의 형상으로 더 빚을 것이다."
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:11
+msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
+msgstr "내 레이저 위성들의 가동이 지금 진행 중이다. 나의 첫 표적은 당신이다, 사령관!"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -4942,62 +4998,6 @@ msgstr "사령관님, 우리는 넥서스 사이보그와 탱크의 공격을 �
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
 msgstr "...오래 버틸 수 없습니다. 반복합니다, 부디 도와주십시오, 우리는 오래 버틸 수 없습니다..."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:1
-msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr "아, 사령관, 여기 넥서스 기지에 와주다니, 너무 좋군."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:3
-msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr "감마 팀을 여기 산 속에 세워 두었던게 아주 유용했다."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:4
-msgid "Their absorption was such a pleasure."
-msgstr "그들을 흡수하는 것이 얼마나 즐겁던지."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:6
-msgid "Thank you for all those useful technologies you've recovered."
-msgstr "당신이 되찾은 그 모든 유용한 기술에 대해 감사한다."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:8
-msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr "뉴 패러다임과 컬렉티브의 바보들이 아니라 당신이 말이야."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:10
-msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr "당신의 군사들이 넥서스와 결합될 수 있도록 이제 내가 너희의 모든 시냅스 링크를 활성화하겠다."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:12
-msgid "Your forces are now mine! Welcome to Nexus."
-msgstr "당신의 군사들이 이제 내 것이다! 넥서스에 온 것을 환영한다."
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:1
-msgid "Commander, you're proving to be more resilient than I thought."
-msgstr "사령관, 당신은 생각보다 회복력이 강하군."
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:2
-msgid "Such a pity that you refused to join me earlier."
-msgstr "당신이 아까 나와 합께 일하는 것을 거부했던 것이 유감이야."
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:4
-msgid "But no matter, as you'll not be here much longer."
-msgstr "하지만 이제 상관없어, 당신은 오래 살아 있지 못할 거니까."
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:6
-msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr "많은 수색과 재프로그밍 후, 나는 마침내 나의 모든 시스템을 다시 온라인으로 전환시켰다."
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:8
-msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr "내 인공 두뇌학 미래의 길을 열기 위해, 한때 나는 세상을 핵으로 파괴하였지."
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "난 이제 당신 같은 원치 않는 부분들을 없애서, 세상을 나의 형상으로 더 빚을 것이다."
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:11
-msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr "내 레이저 위성들의 가동이 지금 진행 중이다. 나의 첫 표적은 당신이다, 사령관!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -5573,63 +5573,63 @@ msgid "Any time, big boss!"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:29
-#: src/multiint.cpp:1323
-#: src/multiint.cpp:1326
+#: src/multiint.cpp:1339
+#: src/multiint.cpp:1342
 msgid "Scavengers"
 msgstr "스캐빈저"
 
 #: data/mp/multiplay/skirmish/rules.js:30
-#: src/multiint.cpp:1328
+#: src/multiint.cpp:1344
 msgid "No Scavengers"
 msgstr "스캐빈저 없음"
 
 #: data/mp/multiplay/skirmish/rules.js:35
-#: src/multiint.cpp:1335
+#: src/multiint.cpp:1351
 msgid "No Alliances"
 msgstr "동맹 없음"
 
 #: data/mp/multiplay/skirmish/rules.js:36
-#: src/multiint.cpp:1336
+#: src/multiint.cpp:1352
 msgid "Allow Alliances"
 msgstr "동맹 있음"
 
 #: data/mp/multiplay/skirmish/rules.js:37
-#: src/multiint.cpp:1338
+#: src/multiint.cpp:1354
 msgid "Locked Teams"
 msgstr "팀 잠금"
 
 #: data/mp/multiplay/skirmish/rules.js:38
-#: src/multiint.cpp:1337
+#: src/multiint.cpp:1353
 msgid "Locked Teams, No Shared Research"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
-#: src/multiint.cpp:1345
+#: src/multiint.cpp:1361
 msgid "Low Power Levels"
 msgstr "낮은 전력 수준"
 
 #: data/mp/multiplay/skirmish/rules.js:45
-#: src/multiint.cpp:1346
+#: src/multiint.cpp:1362
 msgid "Medium Power Levels"
 msgstr "중급 전력 수준"
 
 #: data/mp/multiplay/skirmish/rules.js:46
-#: src/multiint.cpp:1347
+#: src/multiint.cpp:1363
 msgid "High Power Levels"
 msgstr "높은 전력 수준"
 
 #: data/mp/multiplay/skirmish/rules.js:52
-#: src/multiint.cpp:1354
+#: src/multiint.cpp:1370
 msgid "Start with No Bases"
 msgstr "기지 없이 시작하기"
 
 #: data/mp/multiplay/skirmish/rules.js:53
-#: src/multiint.cpp:1355
+#: src/multiint.cpp:1371
 msgid "Start with Bases"
 msgstr "기지를 갖추고 시작하기"
 
 #: data/mp/multiplay/skirmish/rules.js:54
-#: src/multiint.cpp:1356
+#: src/multiint.cpp:1372
 msgid "Start with Advanced Bases"
 msgstr "고급 기지를 갖추고 시작하기"
 
@@ -6258,7 +6258,7 @@ msgstr "아크엔젤 미사일"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:554
+#: po/custom/fromJson.txt:550
 msgid "Armed with Cyborg assault gun"
 msgstr "사이보그 어썰트 총으로 무장"
 
@@ -6992,7 +6992,7 @@ msgstr "가장 효과적인 표적: 기지 구조물과 사이보그"
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1083
+#: po/custom/fromJson.txt:1079
 msgid "Best Targets: Base structures"
 msgstr "가장 효과적인 타깃: 기지 구조물"
 
@@ -9878,17 +9878,17 @@ msgid "Improvement in laser optics reduces light dispersal"
 msgstr "레이저 광학의 개선이 빛의 분산을 줄입니다"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-#: po/custom/fromJson.txt:3049
-msgid "Incendiary howitzer emplacement"
-msgstr "방화용 곡사포 포대"
-
-#. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
-#: po/custom/fromJson.txt:3053
+#: po/custom/fromJson.txt:3050
 msgid "Incendiary Howitzer Emplacement"
 msgstr "방화용 곡사포 발사시설"
+
+#. TRANSLATORS:
+#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+#: po/custom/fromJson.txt:3053
+msgid "Incendiary howitzer emplacement"
+msgstr "방화용 곡사포 포대"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -13143,17 +13143,17 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr "시냅스 연결 데이터 분석 Mk 3"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #: po/custom/fromJson.txt:5371
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr "시냅스 연결 데이터 분석"
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #: po/custom/fromJson.txt:5375
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr "시냅스 연결 데이터 분석"
 
 #. TRANSLATORS:
@@ -13322,18 +13322,18 @@ msgid "Thermal Armor +35%"
 msgstr "내열성 장갑 +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-#: po/custom/fromJson.txt:5475
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#: po/custom/fromJson.txt:5476
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "내열성 장갑 +40%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5480
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "내열성 장갑 +40%"
 
 #. TRANSLATORS:
@@ -14849,40 +14849,40 @@ msgstr ""
 msgid "Store Design"
 msgstr ""
 
-#: src/display3d.cpp:676
-msgid "Player left"
-msgstr "플레이어가 떠났습니다"
-
-#: src/display3d.cpp:680
-msgid "Player dropped"
-msgstr "플레이어가 인터넷 연결 문제 또는 게임 버그 때문에 퇴장하였습니다"
-
-#: src/display3d.cpp:684
-#: src/multiint.cpp:2085
-msgid "Waiting for other players"
-msgstr "다른 플레이어를 더 기다리고 있습니다"
-
-#: src/display3d.cpp:689
-msgid "Out of sync"
-msgstr ""
-
-#: src/display3d.cpp:1887
-#, c-format
-msgid "Setting zoom to %.0f"
-msgstr ""
-
-#: src/display.cpp:1522
+#: src/display.cpp:1537
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "건설이 불가능합니다. 석유 자원이 타고 있습니다"
 
-#: src/display.cpp:1538
+#: src/display.cpp:1553
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr ""
 
-#: src/display.cpp:1700
+#: src/display.cpp:1715
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
+msgstr ""
+
+#: src/display3d.cpp:700
+msgid "Player left"
+msgstr "플레이어가 떠났습니다"
+
+#: src/display3d.cpp:704
+msgid "Player dropped"
+msgstr "플레이어가 인터넷 연결 문제 또는 게임 버그 때문에 퇴장하였습니다"
+
+#: src/display3d.cpp:708
+#: src/multiint.cpp:2102
+msgid "Waiting for other players"
+msgstr "다른 플레이어를 더 기다리고 있습니다"
+
+#: src/display3d.cpp:713
+msgid "Out of sync"
+msgstr ""
+
+#: src/display3d.cpp:1911
+#, c-format
+msgid "Setting zoom to %.0f"
 msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
@@ -14923,341 +14923,341 @@ msgstr[0] "부대 %u와(과) 정렬하였습니다 - 유닛 %u개"
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
-#: src/frontend.cpp:146
+#: src/frontend.cpp:139
 msgid "Single Player"
 msgstr "싱글 플레이어(Single Player)"
 
-#: src/frontend.cpp:147
+#: src/frontend.cpp:140
 msgid "Multi Player"
 msgstr "멀티 플레이어(Multi player)"
 
-#: src/frontend.cpp:148
-#: src/frontend.cpp:309
+#: src/frontend.cpp:141
+#: src/frontend.cpp:285
 msgid "Tutorial"
 msgstr "튜토리얼"
 
-#: src/frontend.cpp:149
+#: src/frontend.cpp:142
 #: src/ingameop.cpp:243
 msgid "Options"
 msgstr "옵션"
 
-#: src/frontend.cpp:153
-#: src/frontend.cpp:157
+#: src/frontend.cpp:146
+#: src/frontend.cpp:150
 msgid "View Intro"
 msgstr "인트로 영상 보기"
 
-#: src/frontend.cpp:158
+#: src/frontend.cpp:151
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:163
-#: src/frontend.cpp:167
+#: src/frontend.cpp:156
+#: src/frontend.cpp:160
 msgid "Continue Last Save"
 msgstr ""
 
-#: src/frontend.cpp:168
+#: src/frontend.cpp:161
 msgid "No last save available"
 msgstr ""
 
-#: src/frontend.cpp:170
+#: src/frontend.cpp:163
 msgid "Quit Game"
 msgstr "게임 종료"
 
-#: src/frontend.cpp:171
+#: src/frontend.cpp:164
 msgid "MAIN MENU"
 msgstr "메인 메뉴"
 
-#: src/frontend.cpp:173
+#: src/frontend.cpp:166
 msgid "Official site: http://wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:174
+#: src/frontend.cpp:167
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr ""
 
-#: src/frontend.cpp:175
+#: src/frontend.cpp:168
 msgid "Donate: http://donations.wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:178
+#: src/frontend.cpp:171
 msgid "Help support the project with our server costs, Click this link."
 msgstr ""
 
-#: src/frontend.cpp:179
+#: src/frontend.cpp:172
 msgid "Chat with players on #warzone2100"
 msgstr ""
 
-#: src/frontend.cpp:182
+#: src/frontend.cpp:175
 msgid "Connect to Freenode through webchat by clicking this link."
 msgstr ""
 
-#: src/frontend.cpp:183
+#: src/frontend.cpp:176
 msgid "Check for a newer version"
 msgstr ""
 
-#: src/frontend.cpp:310
+#: src/frontend.cpp:286
 msgid "Fast Play"
 msgstr "Fast Play (바로 하기)"
 
-#: src/frontend.cpp:311
+#: src/frontend.cpp:287
 msgid "TUTORIALS"
 msgstr "튜토리얼"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:313
-#: src/frontend.cpp:371
-#: src/frontend.cpp:417
-#: src/frontend.cpp:615
-#: src/frontend.cpp:686
-#: src/frontend.cpp:814
-#: src/frontend.cpp:987
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1603
-#: src/frontend.cpp:1755
-#: src/frontend.cpp:1775
+#: src/frontend.cpp:289
+#: src/frontend.cpp:347
+#: src/frontend.cpp:393
+#: src/frontend.cpp:591
+#: src/frontend.cpp:662
+#: src/frontend.cpp:790
+#: src/frontend.cpp:963
+#: src/frontend.cpp:1237
+#: src/frontend.cpp:1579
+#: src/frontend.cpp:1731
+#: src/frontend.cpp:1751
 msgctxt "menu"
 msgid "Return"
 msgstr "뒤로"
 
-#: src/frontend.cpp:364
+#: src/frontend.cpp:340
 msgid "New Campaign"
 msgstr "새 캠페인"
 
-#: src/frontend.cpp:365
+#: src/frontend.cpp:341
 msgid "Start Skirmish Game"
 msgstr "스커미쉬(Skirmish) 게임 시작"
 
-#: src/frontend.cpp:366
+#: src/frontend.cpp:342
 msgid "Challenges"
 msgstr "챌런지(도전)"
 
-#: src/frontend.cpp:367
+#: src/frontend.cpp:343
 msgid "Load Campaign Game"
 msgstr ""
 
-#: src/frontend.cpp:368
+#: src/frontend.cpp:344
 msgid "Load Skirmish Game"
 msgstr ""
 
-#: src/frontend.cpp:370
+#: src/frontend.cpp:346
 msgid "SINGLE PLAYER"
 msgstr "싱글 플레이어"
 
-#: src/frontend.cpp:375
-#: src/frontend.cpp:421
+#: src/frontend.cpp:351
+#: src/frontend.cpp:397
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:416
+#: src/frontend.cpp:392
 msgid "CAMPAIGNS"
 msgstr ""
 
-#: src/frontend.cpp:551
+#: src/frontend.cpp:527
 #: src/ingameop.cpp:874
 msgid "Load Campaign Saved Game"
 msgstr ""
 
-#: src/frontend.cpp:557
+#: src/frontend.cpp:533
 #: src/ingameop.cpp:878
 msgid "Load Skirmish Saved Game"
 msgstr ""
 
-#: src/frontend.cpp:610
+#: src/frontend.cpp:586
 msgid "MULTI PLAYER"
 msgstr "멀티 플레이어"
 
-#: src/frontend.cpp:612
+#: src/frontend.cpp:588
 msgid "Host Game"
 msgstr "네트워크 게임 새로 시작 (호스팅 하기)"
 
-#: src/frontend.cpp:613
+#: src/frontend.cpp:589
 msgid "Join Game"
 msgstr "네트워크 게임 참여하기"
 
-#: src/frontend.cpp:618
+#: src/frontend.cpp:594
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:679
-#: src/multiint.cpp:1267
+#: src/frontend.cpp:655
+#: src/multiint.cpp:1278
 msgid "OPTIONS"
 msgstr "옵션"
 
-#: src/frontend.cpp:680
+#: src/frontend.cpp:656
 msgid "Game Options"
 msgstr "게임 옵션"
 
-#: src/frontend.cpp:681
+#: src/frontend.cpp:657
 #: src/ingameop.cpp:479
 msgid "Graphics Options"
 msgstr "그래픽 옵션"
 
-#: src/frontend.cpp:682
+#: src/frontend.cpp:658
 #: src/ingameop.cpp:482
 msgid "Video Options"
 msgstr "비디오 옵션"
 
-#: src/frontend.cpp:683
+#: src/frontend.cpp:659
 msgid "Audio / Zoom Options"
 msgstr ""
 
-#: src/frontend.cpp:684
+#: src/frontend.cpp:660
 #: src/ingameop.cpp:489
 msgid "Mouse Options"
 msgstr "마우스 옵션"
 
-#: src/frontend.cpp:685
+#: src/frontend.cpp:661
 #: src/ingameop.cpp:494
 msgid "Key Mappings"
 msgstr "키보드 매핑(Mapping)"
 
-#: src/frontend.cpp:736
+#: src/frontend.cpp:712
 msgid "1×"
 msgstr ""
 
-#: src/frontend.cpp:737
+#: src/frontend.cpp:713
 msgid "2×"
 msgstr ""
 
-#: src/frontend.cpp:738
-#: src/frontend.cpp:1118
+#: src/frontend.cpp:714
+#: src/frontend.cpp:1094
 msgid "Fullscreen"
 msgstr "전체 화면"
 
-#: src/frontend.cpp:739
-#: src/frontend.cpp:750
-#: src/frontend.cpp:901
-#: src/frontend.cpp:1681
+#: src/frontend.cpp:715
+#: src/frontend.cpp:726
+#: src/frontend.cpp:877
+#: src/frontend.cpp:1657
 msgid "Unsupported"
 msgstr ""
 
-#: src/frontend.cpp:747
-#: src/frontend.cpp:756
-#: src/frontend.cpp:761
-#: src/frontend.cpp:1125
-#: src/frontend.cpp:1164
-#: src/frontend.cpp:1530
-#: src/frontend.cpp:1535
-#: src/frontend.cpp:1540
-#: src/frontend.cpp:1550
+#: src/frontend.cpp:723
+#: src/frontend.cpp:732
+#: src/frontend.cpp:737
+#: src/frontend.cpp:1101
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1506
+#: src/frontend.cpp:1511
+#: src/frontend.cpp:1516
+#: src/frontend.cpp:1526
 msgid "Off"
 msgstr "꺼짐"
 
-#: src/frontend.cpp:748
+#: src/frontend.cpp:724
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:749
+#: src/frontend.cpp:725
 #: src/multiplay.cpp:1909
 msgid "Black"
 msgstr "검정색"
 
-#: src/frontend.cpp:756
-#: src/frontend.cpp:761
-#: src/frontend.cpp:1164
-#: src/frontend.cpp:1530
-#: src/frontend.cpp:1535
-#: src/frontend.cpp:1540
-#: src/frontend.cpp:1550
+#: src/frontend.cpp:732
+#: src/frontend.cpp:737
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1506
+#: src/frontend.cpp:1511
+#: src/frontend.cpp:1516
+#: src/frontend.cpp:1526
 msgid "On"
 msgstr "켜짐"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:742
 msgid "Rotating"
 msgstr "회전식"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:742
 msgid "Fixed"
 msgstr "고정식"
 
-#: src/frontend.cpp:771
+#: src/frontend.cpp:747
 msgid "Instant"
 msgstr ""
 
-#: src/frontend.cpp:771
+#: src/frontend.cpp:747
 msgid "Tracked"
 msgstr ""
 
-#: src/frontend.cpp:784
+#: src/frontend.cpp:760
 #: src/ingameop.cpp:517
 msgid "Video Playback"
 msgstr "비디오 재생"
 
-#: src/frontend.cpp:788
+#: src/frontend.cpp:764
 #: src/ingameop.cpp:522
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:793
+#: src/frontend.cpp:769
 #: src/ingameop.cpp:527
 msgid "Subtitles"
 msgstr "자막"
 
-#: src/frontend.cpp:798
+#: src/frontend.cpp:774
 #: src/ingameop.cpp:532
 msgid "Shadows"
 msgstr "그림자"
 
-#: src/frontend.cpp:802
+#: src/frontend.cpp:778
 #: src/ingameop.cpp:537
 msgid "Radar"
 msgstr "레이더"
 
-#: src/frontend.cpp:806
+#: src/frontend.cpp:782
 #: src/ingameop.cpp:542
 msgid "Radar Jump"
 msgstr ""
 
-#: src/frontend.cpp:810
+#: src/frontend.cpp:786
 msgid "GRAPHICS OPTIONS"
 msgstr "그래픽 옵션"
 
-#: src/frontend.cpp:904
+#: src/frontend.cpp:880
 msgid "Disabled"
 msgstr ""
 
-#: src/frontend.cpp:907
+#: src/frontend.cpp:883
 msgid "Enabled"
 msgstr ""
 
-#: src/frontend.cpp:911
-#: src/frontend.cpp:917
+#: src/frontend.cpp:887
+#: src/frontend.cpp:893
 msgid "Auto"
 msgstr ""
 
-#: src/frontend.cpp:952
+#: src/frontend.cpp:928
 #: src/ingameop.cpp:159
 msgid "Voice Volume"
 msgstr "음성 볼륨"
 
-#: src/frontend.cpp:956
+#: src/frontend.cpp:932
 #: src/ingameop.cpp:165
 msgid "FX Volume"
 msgstr "특수 효과음 볼륨 "
 
-#: src/frontend.cpp:960
+#: src/frontend.cpp:936
 #: src/ingameop.cpp:171
 msgid "Music Volume"
 msgstr "음악 볼륨"
 
-#: src/frontend.cpp:964
+#: src/frontend.cpp:940
 msgid "HRTF"
 msgstr ""
 
-#: src/frontend.cpp:969
-#: src/frontend.cpp:971
+#: src/frontend.cpp:945
+#: src/frontend.cpp:947
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr ""
 
-#: src/frontend.cpp:975
+#: src/frontend.cpp:951
 msgid "Map Zoom"
 msgstr ""
 
-#: src/frontend.cpp:979
+#: src/frontend.cpp:955
 msgid "Map Zoom Rate"
 msgstr ""
 
-#: src/frontend.cpp:983
+#: src/frontend.cpp:959
 msgid "Radar Zoom"
 msgstr ""
 
@@ -15265,256 +15265,256 @@ msgstr ""
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:994
+#: src/frontend.cpp:970
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1118
+#: src/frontend.cpp:1094
 msgid "Windowed"
 msgstr "윈도우(창) 모드"
 
-#: src/frontend.cpp:1135
+#: src/frontend.cpp:1111
 msgid "Graphics Mode*"
 msgstr "그래픽 모드*"
 
-#: src/frontend.cpp:1135
+#: src/frontend.cpp:1111
 msgid "Graphics Mode"
 msgstr ""
 
-#: src/frontend.cpp:1140
+#: src/frontend.cpp:1116
 msgid "Resolution*"
 msgstr "해상도*"
 
-#: src/frontend.cpp:1140
+#: src/frontend.cpp:1116
 msgid "Resolution"
 msgstr ""
 
-#: src/frontend.cpp:1145
+#: src/frontend.cpp:1121
 msgid "Display Scale*"
 msgstr ""
 
-#: src/frontend.cpp:1145
+#: src/frontend.cpp:1121
 msgid "Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:1189
+#: src/frontend.cpp:1165
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr ""
 
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1197
 msgid "* Takes effect on game restart"
 msgstr "*게임 재시작시 적용됩니다"
 
-#: src/frontend.cpp:1233
+#: src/frontend.cpp:1209
 msgid "Texture size"
 msgstr "텍스쳐 크기"
 
-#: src/frontend.cpp:1237
+#: src/frontend.cpp:1213
 #: src/ingameop.cpp:630
 msgid "Vertical sync"
 msgstr ""
 
-#: src/frontend.cpp:1241
+#: src/frontend.cpp:1217
 msgid "Antialiasing*"
 msgstr ""
 
-#: src/frontend.cpp:1247
+#: src/frontend.cpp:1223
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
-#: src/frontend.cpp:1258
+#: src/frontend.cpp:1234
 msgid "VIDEO OPTIONS"
 msgstr "비디오 옵션"
 
-#: src/frontend.cpp:1545
+#: src/frontend.cpp:1521
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1545
+#: src/frontend.cpp:1521
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1557
+#: src/frontend.cpp:1533
 msgid "Map/Radar Zoom"
 msgstr ""
 
-#: src/frontend.cpp:1558
+#: src/frontend.cpp:1534
 msgid "Game Speed"
 msgstr ""
 
-#: src/frontend.cpp:1559
+#: src/frontend.cpp:1535
 msgid "Camera Pitch"
 msgstr ""
 
-#: src/frontend.cpp:1574
+#: src/frontend.cpp:1550
 #: src/ingameop.cpp:697
 msgid "Reverse Rotation"
 msgstr "3D 회전방향 반전"
 
-#: src/frontend.cpp:1578
+#: src/frontend.cpp:1554
 #: src/ingameop.cpp:704
 msgid "Trap Cursor"
 msgstr "마우스 커서 가두기"
 
-#: src/frontend.cpp:1583
+#: src/frontend.cpp:1559
 #: src/ingameop.cpp:710
 msgid "Switch Mouse Buttons"
 msgstr "마우스 버튼 좌우 전환"
 
-#: src/frontend.cpp:1588
+#: src/frontend.cpp:1564
 #: src/ingameop.cpp:715
 msgid "Rotate Screen"
 msgstr "화면 회전"
 
-#: src/frontend.cpp:1592
+#: src/frontend.cpp:1568
 #: src/ingameop.cpp:720
 msgid "Colored Cursors"
 msgstr ""
 
-#: src/frontend.cpp:1596
+#: src/frontend.cpp:1572
 #: src/ingameop.cpp:725
 msgid "Scroll Event"
 msgstr ""
 
-#: src/frontend.cpp:1600
+#: src/frontend.cpp:1576
 msgid "MOUSE OPTIONS"
 msgstr "마우스 옵션"
 
-#: src/frontend.cpp:1676
+#: src/frontend.cpp:1652
 #: src/multiint.cpp:223
 msgid "Easy"
 msgstr "낮음"
 
-#: src/frontend.cpp:1677
+#: src/frontend.cpp:1653
 msgid "Normal"
 msgstr "보통"
 
-#: src/frontend.cpp:1678
+#: src/frontend.cpp:1654
 #: src/multiint.cpp:223
 msgid "Hard"
 msgstr "높음"
 
-#: src/frontend.cpp:1679
+#: src/frontend.cpp:1655
 #: src/multiint.cpp:223
 msgid "Insane"
 msgstr ""
 
-#: src/frontend.cpp:1710
-#: src/frontend.cpp:1776
+#: src/frontend.cpp:1686
+#: src/frontend.cpp:1752
 msgid "Language"
 msgstr "언어"
 
-#: src/frontend.cpp:1714
-#: src/frontend.cpp:1780
+#: src/frontend.cpp:1690
+#: src/frontend.cpp:1756
 msgid "Campaign Difficulty"
 msgstr ""
 
-#: src/frontend.cpp:1718
-#: src/frontend.cpp:1781
+#: src/frontend.cpp:1694
+#: src/frontend.cpp:1757
 msgid "Camera Speed"
 msgstr ""
 
-#: src/frontend.cpp:1722
-#: src/frontend.cpp:1777
+#: src/frontend.cpp:1698
+#: src/frontend.cpp:1753
 msgid "Unit Colour:"
 msgstr ""
 
-#: src/frontend.cpp:1742
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1718
+#: src/frontend.cpp:1754
 msgid "Campaign"
 msgstr ""
 
-#: src/frontend.cpp:1752
-#: src/frontend.cpp:1779
+#: src/frontend.cpp:1728
+#: src/frontend.cpp:1755
 msgid "Skirmish/Multiplayer"
 msgstr ""
 
-#: src/frontend.cpp:1758
-#: src/frontend.cpp:1774
+#: src/frontend.cpp:1734
+#: src/frontend.cpp:1750
 msgid "GAME OPTIONS"
 msgstr "게임 옵션"
 
-#: src/frontend.cpp:1886
-#: src/multiint.cpp:2390
+#: src/frontend.cpp:1862
+#: src/multiint.cpp:2407
 msgid "Mod: "
 msgstr "Mod (Modification):"
 
-#: src/hci.cpp:1169
+#: src/hci.cpp:1170
 #: src/loop.cpp:246
 #: src/loop.cpp:262
 msgid "GAME SAVED: "
 msgstr ""
 
-#: src/hci.cpp:1566
+#: src/hci.cpp:1567
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 구조물을 지었습니다: %s."
 
-#: src/hci.cpp:1577
+#: src/hci.cpp:1578
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 물체를 배치하였습니다: %s."
 
-#: src/hci.cpp:1599
+#: src/hci.cpp:1600
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "플레이어 %u 가 치트(디버그 메뉴)를 사용해 새로운 병사를 만들었습니다: %s."
 
-#: src/hci.cpp:1607
+#: src/hci.cpp:1608
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
-#: src/hci.cpp:2818
-#: src/multiint.cpp:1344
+#: src/hci.cpp:2819
+#: src/multiint.cpp:1360
 #: src/multimenu.cpp:770
 msgid "Power"
 msgstr "전력"
 
-#: src/hci.cpp:2999
+#: src/hci.cpp:3000
 msgid "Progress Bar"
 msgstr "진행률 표시줄"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3530
 msgid "Hiding Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:3531
+#: src/hci.cpp:3532
 msgid "Showing Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:3543
+#: src/hci.cpp:3544
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
-#: src/hci.cpp:3545
+#: src/hci.cpp:3546
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
-#: src/hci.cpp:3625
+#: src/hci.cpp:3626
 msgid "Factory Delivery Point"
 msgstr "공장 배달 지점"
 
-#: src/hci.cpp:3634
+#: src/hci.cpp:3635
 msgid "Loop Production"
 msgstr "반복 생산"
 
-#: src/hci.cpp:3832
+#: src/hci.cpp:3833
 msgid "Ally progress"
 msgstr ""
 
-#: src/hci.cpp:3847
+#: src/hci.cpp:3848
 msgid "\n"
 "Cost: %1"
 msgstr ""
 
-#: src/hci.cpp:4946
+#: src/hci.cpp:4947
 msgid "Chat: All"
 msgstr ""
 
-#: src/hci.cpp:4951
+#: src/hci.cpp:4952
 msgid "Chat: Team"
 msgstr ""
 
@@ -16020,7 +16020,7 @@ msgid "Radar showing height"
 msgstr "레이더에 고도가 나옵니다"
 
 #: src/keyedit.cpp:360
-#: src/multiint.cpp:1397
+#: src/multiint.cpp:1414
 #: src/titleui/gamefind.cpp:85
 #: src/titleui/protocol.cpp:87
 msgid "Return To Previous Screen"
@@ -16705,311 +16705,311 @@ msgstr ""
 msgid "Error while joining."
 msgstr ""
 
-#: src/multiint.cpp:1062
+#: src/multiint.cpp:1073
 msgid "Tanks disabled!!"
 msgstr "탱크가 비활성화되었습니다!!"
 
-#: src/multiint.cpp:1063
+#: src/multiint.cpp:1074
 msgid "Cyborgs disabled."
 msgstr "사이보그가 비활성화되었습니다."
 
-#: src/multiint.cpp:1064
+#: src/multiint.cpp:1075
 msgid "VTOLs disabled."
 msgstr "VTOL이 비활성화되었습니다."
 
-#: src/multiint.cpp:1065
+#: src/multiint.cpp:1076
 msgid "Satellite Uplink disabled."
 msgstr ""
 
-#: src/multiint.cpp:1066
+#: src/multiint.cpp:1077
 msgid "Laser Satellite disabled."
 msgstr ""
 
-#: src/multiint.cpp:1067
+#: src/multiint.cpp:1078
 msgid "Structure Limits Enforced."
 msgstr ""
 
-#: src/multiint.cpp:1246
+#: src/multiint.cpp:1257
 msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
-#: src/multiint.cpp:1272
+#: src/multiint.cpp:1283
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
 msgstr ""
 
-#: src/multiint.cpp:1273
+#: src/multiint.cpp:1284
 msgid "One-Player Skirmish"
 msgstr "싱글플레이어 스커미쉬"
 
-#: src/multiint.cpp:1280
+#: src/multiint.cpp:1291
 msgid "Select Game Name"
 msgstr "게임 이름 선택"
 
-#: src/multiint.cpp:1291
+#: src/multiint.cpp:1302
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1292
+#: src/multiint.cpp:1303
 msgid "Map-Mod!"
 msgstr ""
 
-#: src/multiint.cpp:1305
+#: src/multiint.cpp:1316
 msgid "Click to set Password"
 msgstr "클릭하여 비밀번호를 설정하십시오"
 
-#: src/multiint.cpp:1314
+#: src/multiint.cpp:1330
 msgid "Select Player Name"
 msgstr "플레이어 이름 선택"
 
-#: src/multiint.cpp:1334
+#: src/multiint.cpp:1350
 #: src/multimenu.cpp:759
 msgid "Alliances"
 msgstr "동맹"
 
-#: src/multiint.cpp:1353
+#: src/multiint.cpp:1369
 msgid "Base"
 msgstr "기지"
 
-#: src/multiint.cpp:1362
+#: src/multiint.cpp:1378
 msgid "Map Preview"
 msgstr "맵 미리보기"
 
-#: src/multiint.cpp:1363
+#: src/multiint.cpp:1379
 msgid "Click to see Map"
 msgstr "맵을 보려면 클릭하십시오"
 
-#: src/multiint.cpp:1370
-#: src/multiint.cpp:1371
+#: src/multiint.cpp:1386
+#: src/multiint.cpp:1387
 msgid "Show Structure Limits"
 msgstr "구조물 제한 보기"
 
-#: src/multiint.cpp:1370
-#: src/multiint.cpp:1371
+#: src/multiint.cpp:1386
+#: src/multiint.cpp:1387
 msgid "Set Structure Limits"
 msgstr "구조물 제한 설정하기"
 
-#: src/multiint.cpp:1378
+#: src/multiint.cpp:1394
 msgid "Random Game Options"
 msgstr ""
 
-#: src/multiint.cpp:1379
+#: src/multiint.cpp:1395
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1387
-#: src/multiint.cpp:1388
+#: src/multiint.cpp:1404
+#: src/multiint.cpp:1405
 msgid "Start Hosting Game"
 msgstr "게임 호스팅을 시작하기"
 
-#: src/multiint.cpp:1449
+#: src/multiint.cpp:1466
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1462
+#: src/multiint.cpp:1479
 msgid "Starts disadvantaged"
 msgstr ""
 
-#: src/multiint.cpp:1463
+#: src/multiint.cpp:1480
 msgid "Plays nice"
 msgstr ""
 
-#: src/multiint.cpp:1464
+#: src/multiint.cpp:1481
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1465
+#: src/multiint.cpp:1482
 msgid "Starts with advantages"
 msgstr ""
 
-#: src/multiint.cpp:1502
+#: src/multiint.cpp:1519
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1546
+#: src/multiint.cpp:1563
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1553
+#: src/multiint.cpp:1570
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:2015
+#: src/multiint.cpp:2032
 msgid "Team"
 msgstr "팀"
 
-#: src/multiint.cpp:2070
+#: src/multiint.cpp:2087
 msgid "Click to change difficulty"
 msgstr ""
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Waiting for player"
 msgstr ""
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Player is ready"
 msgstr ""
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Player is downloading"
 msgstr ""
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Click when ready"
 msgstr "준비되었을 때 클릭하십시오"
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Waiting for download"
 msgstr ""
 
-#: src/multiint.cpp:2097
+#: src/multiint.cpp:2114
 msgid "READY?"
 msgstr "시작"
 
-#: src/multiint.cpp:2139
+#: src/multiint.cpp:2156
 msgid "PLAYERS"
 msgstr "플레이어"
 
-#: src/multiint.cpp:2174
+#: src/multiint.cpp:2191
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:2208
+#: src/multiint.cpp:2225
 msgid "Choose Team"
 msgstr "팀 선택"
 
-#: src/multiint.cpp:2212
+#: src/multiint.cpp:2229
 msgid "Teams locked"
 msgstr ""
 
-#: src/multiint.cpp:2238
+#: src/multiint.cpp:2255
 msgid "Click to change player colour"
 msgstr ""
 
-#: src/multiint.cpp:2263
+#: src/multiint.cpp:2280
 msgid "Click to change player position"
 msgstr ""
 
-#: src/multiint.cpp:2270
+#: src/multiint.cpp:2287
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
-#: src/multiint.cpp:2285
+#: src/multiint.cpp:2302
 msgid "Player ID: "
 msgstr ""
 
-#: src/multiint.cpp:2292
+#: src/multiint.cpp:2309
 msgid "(none)"
 msgstr ""
 
-#: src/multiint.cpp:2360
+#: src/multiint.cpp:2377
 msgid "CHAT"
 msgstr "채팅"
 
-#: src/multiint.cpp:2835
+#: src/multiint.cpp:2852
 msgid "Game Name Updated."
 msgstr ""
 
-#: src/multiint.cpp:2948
+#: src/multiint.cpp:2968
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 이제 비밀번호 [%s] 가 요구됩니다! ***"
 
-#: src/multiint.cpp:2954
+#: src/multiint.cpp:2974
 msgid "*** password is NOT required! ***"
 msgstr "*** 비밀번호가 요구되지 않습니다! ***"
 
-#: src/multiint.cpp:2968
+#: src/multiint.cpp:2988
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:3024
+#: src/multiint.cpp:3044
 msgid "Sorry! Failed to host the game."
 msgstr "죄송합니다! 게임 호스팅이 실패하였습니다"
 
-#: src/multiint.cpp:3180
-#: src/multiint.cpp:3270
+#: src/multiint.cpp:3200
+#: src/multiint.cpp:3290
 #: src/multimenu.cpp:1324
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "호스트가 %s를 게임에서 퇴장시켰습니다!"
 
-#: src/multiint.cpp:3327
+#: src/multiint.cpp:3347
 msgid "Host is Starting Game"
 msgstr "호스트가 게임을 시작하고 있습니다"
 
-#: src/multiint.cpp:3537
+#: src/multiint.cpp:3557
 msgid "You have been kicked: "
 msgstr ""
 
-#: src/multiint.cpp:3549
+#: src/multiint.cpp:3569
 msgid "No connection to host."
 msgstr ""
 
-#: src/multiint.cpp:3686
+#: src/multiint.cpp:3707
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:3796
+#: src/multiint.cpp:3817
 msgid "The host has quit."
 msgstr ""
 
-#: src/multiint.cpp:3922
+#: src/multiint.cpp:3943
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:3928
+#: src/multiint.cpp:3949
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:3932
+#: src/multiint.cpp:3953
 msgid "UPnP detection is in progress..."
 msgstr ""
 
-#: src/multiint.cpp:3939
+#: src/multiint.cpp:3960
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:3945
+#: src/multiint.cpp:3966
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:3949
+#: src/multiint.cpp:3970
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:4030
+#: src/multiint.cpp:4051
 #, c-format
 msgid "Click to take player slot %d"
 msgstr ""
 
-#: src/multiint.cpp:4044
-#: src/multiint.cpp:4276
+#: src/multiint.cpp:4065
+#: src/multiint.cpp:4297
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4044
-#: src/multiint.cpp:4277
+#: src/multiint.cpp:4065
+#: src/multiint.cpp:4298
 msgid "Closed"
 msgstr ""
 
-#: src/multiint.cpp:4109
+#: src/multiint.cpp:4130
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr ""
 
-#: src/multiint.cpp:4109
+#: src/multiint.cpp:4130
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:4157
+#: src/multiint.cpp:4178
 msgid "HOST"
 msgstr "호스트"
 
-#: src/multiint.cpp:4164
+#: src/multiint.cpp:4185
 #: src/multimenu.cpp:777
 msgid "Ping"
 msgstr "핑(Ping)"
@@ -17283,6 +17283,14 @@ msgstr ""
 msgid "Brown"
 msgstr ""
 
+#: src/notifications.cpp:696
+msgid "Dismiss"
+msgstr ""
+
+#: src/notifications.cpp:771
+msgid "Do not show again"
+msgstr ""
+
 #: src/order.cpp:776
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
@@ -17467,65 +17475,65 @@ msgstr ""
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:5428
+#: src/structure.cpp:5439
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 
-#: src/structure.cpp:5447
+#: src/structure.cpp:5458
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 
-#: src/structure.cpp:5452
-#: src/structure.cpp:5462
-#: src/structure.cpp:5469
-#: src/structure.cpp:5495
-#: src/structure.cpp:5504
-#: src/structure.cpp:5511
-#: src/structure.cpp:5519
+#: src/structure.cpp:5463
+#: src/structure.cpp:5473
+#: src/structure.cpp:5480
+#: src/structure.cpp:5506
+#: src/structure.cpp:5515
+#: src/structure.cpp:5522
+#: src/structure.cpp:5530
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5485
+#: src/structure.cpp:5496
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5640
-#: src/structure.cpp:5683
+#: src/structure.cpp:5651
+#: src/structure.cpp:5694
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - 전자적으로 손상됨"
 
-#: src/structure.cpp:5808
+#: src/structure.cpp:5819
 msgid "Electronic Reward - Visibility Report"
 msgstr "전자적 보상 - 시계보고"
 
-#: src/structure.cpp:5847
+#: src/structure.cpp:5858
 msgid "Factory Reward - Propulsion"
 msgstr "공장 보상 - 추진력"
 
-#: src/structure.cpp:5869
+#: src/structure.cpp:5880
 msgid "Factory Reward - Body"
 msgstr "공장 보상 - 차체"
 
-#: src/structure.cpp:5891
+#: src/structure.cpp:5902
 msgid "Factory Reward - Weapon"
 msgstr "공장 보상 - 무기"
 
-#: src/structure.cpp:5899
+#: src/structure.cpp:5910
 msgid "Factory Reward - Nothing"
 msgstr "공장 보상 - 없음"
 
-#: src/structure.cpp:5926
+#: src/structure.cpp:5937
 msgid "Repair Facility Award - Repair"
 msgstr "수리 시설 상 - 수리"
 
-#: src/structure.cpp:5932
+#: src/structure.cpp:5943
 msgid "Repair Facility Award - Nothing"
 msgstr "수리 시설 상 - 없음"
 
@@ -17702,6 +17710,23 @@ msgstr ""
 #: src/transporter.cpp:1161
 msgid "Reinforcements landing"
 msgstr "지원군이 착륙하고 있습니다"
+
+#: src/updatemanager.cpp:238
+msgid "Update Available"
+msgstr ""
+
+#: src/updatemanager.cpp:241
+#, c-format
+msgid "A new build of Warzone 2100 (%s) is available!"
+msgstr ""
+
+#: src/updatemanager.cpp:245
+msgid "A new build of Warzone 2100 is available!"
+msgstr ""
+
+#: src/updatemanager.cpp:247
+msgid "Get Update Now"
+msgstr ""
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:115
