@@ -30,6 +30,7 @@ COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/base.wz"
 		"texpages"
 		"tileset"
 		"wrf"
+	IGNORE_GIT
 	QUIET
 )
 
@@ -49,6 +50,7 @@ COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 		"stats"
 		"structs"
 		"wrf"
+	IGNORE_GIT
 	QUIET
 )
 
@@ -64,13 +66,7 @@ install(FILES ${DATA_FILES}
 	COMPONENT Data
 )
 
-set(DATA_MUSIC_FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/music/menu.ogg"
-	"${CMAKE_CURRENT_SOURCE_DIR}/music/track1.ogg"
-	"${CMAKE_CURRENT_SOURCE_DIR}/music/track2.ogg"
-	"${CMAKE_CURRENT_SOURCE_DIR}/music/track3.ogg"
-	"${CMAKE_CURRENT_SOURCE_DIR}/music/music.wpl"
-)
+file(GLOB DATA_MUSIC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/music/*.ogg" "${CMAKE_CURRENT_SOURCE_DIR}/music/music.wpl")
 install(FILES ${DATA_MUSIC_FILES}
 	DESTINATION "${WZ_DATADIR}/music"
 	COMPONENT Data
