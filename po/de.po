@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-27 21:05\n"
+"POT-Creation-Date: 2020-04-26 07:30+0000\n"
+"PO-Revision-Date: 2020-04-30 20:55\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -14391,7 +14391,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6153
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Elite"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14455,12 +14455,13 @@ msgstr "Geübter"
 #: po/custom/fromJson.txt:6185
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veteran"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
+msgstr "Copyright © 1999-2004 Eidos Interaktive.\n"
+"Copyright © 2005-2020 Das Warzone 2100 Projekt"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -14485,7 +14486,7 @@ msgstr "Warzone-2100-Global-Moddatei"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14688,7 +14689,7 @@ msgstr "Test"
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
-msgstr ""
+msgstr "Letztes gespeichertes Spiel laden"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -14881,16 +14882,16 @@ msgstr "Synchronisierung verloren"
 msgid "Setting zoom to %.0f"
 msgstr "Setze Zoom auf %.0f"
 
-#: src/display.cpp:1511
+#: src/display.cpp:1522
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Bau nicht möglich. Ölquelle brennt."
 
-#: src/display.cpp:1527
+#: src/display.cpp:1538
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - Trefferpunkte %d/%d - Erfahrung %.1f, %s"
 
-#: src/display.cpp:1689
+#: src/display.cpp:1700
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Verbündet - Trefferpunkte %d/%d - Erfahrung %d, %s"
