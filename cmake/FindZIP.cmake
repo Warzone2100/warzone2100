@@ -12,10 +12,10 @@
 # specifying various options. COMPRESS_ZIP supports all of the above detected ZIP_EXECUTABLE possibilities.
 #
 #
-# Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2020 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2019-01-11a
+# Script Version: 2020-05-09a
 #
 
 cmake_minimum_required(VERSION 3.3)
@@ -66,6 +66,7 @@ MARK_AS_ADVANCED(ZIP_EXECUTABLE)
 #			   [COMPRESSION_LEVEL <0 | 1 | 3 | 5 | 7 | 9>]
 #			   [WORKING_DIRECTORY dir]
 #			   PATHS file1 ...  fileN
+#			   [IGNORE_GIT]
 #			   [QUIET])
 #
 # Compress a list of files / folders into a ZIP file, named <outputFile>.
@@ -83,7 +84,7 @@ function(COMPRESS_ZIP _outputFile)
 		message ( FATAL_ERROR "Unable to find zip executable. Unable to zip." )
 	endif()
 
-	set(_options ALL QUIET)
+	set(_options ALL IGNORE_GIT QUIET)
 	set(_oneValueArgs COMPRESSION_LEVEL WORKING_DIRECTORY)
 	set(_multiValueArgs PATHS)
 
@@ -120,6 +121,9 @@ function(COMPRESS_ZIP _outputFile)
 				list(APPEND _additionalOptions "-bb0")
 			endif()
 		endif()
+		if(_parsedArguments_IGNORE_GIT)
+			list(APPEND _additionalOptions "-xr!.git*")
+		endif()
 
 		add_custom_command(
 			OUTPUT "${_outputFile}"
@@ -136,6 +140,9 @@ function(COMPRESS_ZIP _outputFile)
 		endif()
 		if(_parsedArguments_QUIET)
 			list(APPEND _additionalOptions "-q")
+		endif()
+		if(_parsedArguments_IGNORE_GIT)
+			list(APPEND _additionalOptions "--exclude='*/.git*'")
 		endif()
 
 		add_custom_command(
