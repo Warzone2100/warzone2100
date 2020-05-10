@@ -52,6 +52,11 @@ void main()
 	vec4 diffuseMap = texture2D(Texture, texCoord);
 	#endif
 
+	if (alphaTest && (diffuseMap.a <= 0.5))
+	{
+		discard;
+	}
+
 	// Normal map implementations
 	vec3 N = normal;
 	if (normalmap != 0)
@@ -144,11 +149,6 @@ void main()
 
 		// Return fragment color
 		fragColour = mix(fogColor, fragColour, fogFactor);
-	}
-
-	if (!alphaTest && (diffuseMap.a <= 0.5))
-	{
-		discard;
 	}
 
 	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
