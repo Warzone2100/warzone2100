@@ -83,7 +83,7 @@ public:
 	GFX& operator=( const GFX& ) = delete; // non copyable
 
 	/// Load texture data from file, allocate space for it, and put it on the GPU
-	void loadTexture(const char *filename);
+	void loadTexture(const char *filename, int maxWidth = -1, int maxHeight = -1);
 
 	/// Allocate space on the GPU for texture of given parameters. If image is non-NULL,
 	/// then that memory buffer is uploaded to the GPU.

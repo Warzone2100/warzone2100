@@ -30,6 +30,24 @@
 
 #include <algorithm>
 
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wcast-align"
+#endif
+#if defined(__GNUC__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wcast-qual"
+#endif
+
+#include "3rdparty/stb_image_resize.h"
+
+#if defined(__GNUC__)
+#  pragma GCC diagnostic pop
+#endif
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#endif
+
 //*************************************************************************
 
 struct iTexPage
@@ -160,6 +178,40 @@ void pie_MakeTexPageTCMaskName(char *filename)
 	}
 }
 
+bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
+{
+	if ((maxWidth <= 0 || s->width <= maxWidth) && (maxHeight <= 0 || s->height <= maxHeight))
+	{
+		return false;
+	}
+
+	double scalingRatio;
+	double widthRatio = (double)maxWidth / (double)s->width;
+	double heightRatio = (double)maxHeight / (double)s->height;
+	if (maxWidth > 0 && maxHeight > 0)
+	{
+		scalingRatio = std::min<double>(widthRatio, heightRatio);
+	}
+	else
+	{
+		scalingRatio = (maxWidth > 0) ? widthRatio : heightRatio;
+	}
+
+	int output_w = static_cast<int>(s->width * scalingRatio);
+	int output_h = static_cast<int>(s->height * scalingRatio);
+
+	unsigned char *output_pixels = (unsigned char *)malloc(output_w * output_h * s->depth);
+	stbir_resize_uint8(s->bmp, s->width, s->height, 0,
+					   output_pixels, output_w, output_h, 0,
+					   s->depth);
+	free(s->bmp);
+	s->width = output_w;
+	s->height = output_h;
+	s->bmp = output_pixels;
+
+	return true;
+}
+
 /** Retrieve the texture number for a given texture resource.
  *
  *  @note We keep textures in a separate data structure _TEX_PAGE apart from the
@@ -167,11 +219,13 @@ void pie_MakeTexPageTCMaskName(char *filename)
  *
  *  @param filename The filename of the texture page to search for.
  *  @param compression If we need to load it, should we use texture compression?
+ *  @param maxWidth If we need to load it, should we limit the texture width? (Resizes and preserves the texture image's aspect ratio)
+ *  @param maxHeight If we need to load it, should we limit the texture height? (Resizes and preserves the texture image's aspect ratio)
  *
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-int iV_GetTexture(const char *filename, bool compression)
+int iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	iV_Image sSprite;
 	char path[PATH_MAX];
@@ -195,6 +249,7 @@ int iV_GetTexture(const char *filename, bool compression)
 		debug(LOG_ERROR, "Failed to load %s", path);
 		return -1;
 	}
+	scaleImageMaxSize(&sSprite, maxWidth, maxHeight);
 	sstrcpy(path, filename);
 	pie_MakeTexPageName(path);
 	return pie_AddTexPage(&sSprite, path, compression);

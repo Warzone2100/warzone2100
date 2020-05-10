@@ -73,7 +73,7 @@ GFX::GFX(GFXTYPE type, int coordsPerVertex) : mType(type), mCoordsPerVertex(coor
 {
 }
 
-void GFX::loadTexture(const char *filename)
+void GFX::loadTexture(const char *filename, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	const char *extension = strrchr(filename, '.'); // determine the filetype
@@ -85,6 +85,7 @@ void GFX::loadTexture(const char *filename)
 	}
 	if (iV_loadImage_PNG(filename, &image))
 	{
+		scaleImageMaxSize(&image, maxWidth, maxHeight);
 		makeTexture(image.width, image.height, iV_getPixelFormat(&image), image.bmp);
 		iV_unloadImage(&image);
 	}

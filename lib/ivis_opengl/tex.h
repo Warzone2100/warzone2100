@@ -38,7 +38,9 @@ void pie_AssignTexture(int page, gfx_api::texture* texture);
 
 //*************************************************************************
 
-int iV_GetTexture(const char *filename, bool compression = true);
+bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight);
+
+int iV_GetTexture(const char *filename, bool compression = true, int maxWidth = -1, int maxHeight = -1);
 void iV_unloadImage(iV_Image *image);
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
