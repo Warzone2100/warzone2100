@@ -1504,7 +1504,6 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 #  pragma GCC diagnostic ignored "-Wcast-qual"
 #endif
 
-#define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "3rdparty/stb_image_resize.h"
 
 #if defined(__GNUC__)

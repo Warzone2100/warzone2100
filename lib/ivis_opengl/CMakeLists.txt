@@ -22,6 +22,7 @@ file(GLOB HEADERS
 	"screen.h"
 	"tex.h"
 	"textdraw.h"
+	"3rdparty/stb_image_resize.h"
 )
 
 file(GLOB SRC
@@ -43,6 +44,7 @@ file(GLOB SRC
 	"screen.cpp"
 	"tex.cpp"
 	"textdraw.cpp"
+	"3rdparty/stb_image_resize.cpp"
 )
 
 find_package(PNG 1.2 REQUIRED)
