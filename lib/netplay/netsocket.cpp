@@ -1462,7 +1462,7 @@ char const *getSocketTextAddress(Socket const *sock)
 SocketAddress *resolveHost(const char *host, unsigned int port)
 {
 	struct addrinfo *results;
-	char *service;
+	std::string service;
 	struct addrinfo hint;
 	int error, flags = 0;
 
@@ -1481,12 +1481,12 @@ SocketAddress *resolveHost(const char *host, unsigned int port)
 	hint.ai_canonname = nullptr;
 	hint.ai_next      = nullptr;
 
-	sasprintf(&service, "%u", port);
+	service = astringf("%u", port);
 
-	error = getaddrinfo(host, service, &hint, &results);
+	error = getaddrinfo(host, service.c_str(), &hint, &results);
 	if (error != 0)
 	{
-		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service, gai_strerror(error));
+		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service.c_str(), gai_strerror(error));
 		return nullptr;
 	}
 
