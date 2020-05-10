@@ -3195,10 +3195,8 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		{
 			if (mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
 			{
-				char *msg;
-
-				sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(player));
-				sendTextMessage(msg, true);
+				std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player));
+				sendTextMessage(msg.c_str(), true);
 				kickPlayer(player, "you are unwanted by the host.", ERROR_KICKED);
 				resetReadyStatus(true);		//reset and send notification to all clients
 			}
@@ -3285,11 +3283,9 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 	if (id == MULTIOP_TEAMCHOOSER_KICK)
 	{
-		char *msg;
-
-		sasprintf(&msg, _("The host has kicked %s from the game!"), getPlayerName(teamChooserUp));
+		std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(teamChooserUp));
 		kickPlayer(teamChooserUp, "you are unwanted by the host.", ERROR_KICKED);
-		sendTextMessage(msg, true);
+		sendTextMessage(msg.c_str(), true);
 		resetReadyStatus(true);		//reset and send notification to all clients
 		closeTeamChooser();
 	}

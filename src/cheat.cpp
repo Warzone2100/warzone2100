@@ -26,6 +26,7 @@
 #include "lib/framework/frame.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/netplay/netplay.h"
+#include "lib/framework/string_ext.h"
 
 #include "cheat.h"
 #include "keybind.h"
@@ -158,16 +159,16 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	processDebugMappings(queue.index, val);
 	bool newDebugMode = getDebugMappingStatus();
 
-	char *cmsg;
+	std::string cmsg;
 	if (val)
 	{
-		sasprintf(&cmsg, _("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		cmsg = astringf(_("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
 	}
 	else
 	{
-		sasprintf(&cmsg, _("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		cmsg = astringf(_("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
 	}
-	addConsoleMessage(cmsg, DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+	addConsoleMessage(cmsg.c_str(), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 
 	if (!oldDebugMode && newDebugMode)
 	{
