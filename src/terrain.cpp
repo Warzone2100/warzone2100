@@ -1107,6 +1107,8 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
+#define MIN_TERRAIN_TEXTURE_SIZE 512
+
 static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
 {
 	const auto &renderState = getCurrentRenderState();
@@ -1123,6 +1125,9 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	gfx_api::context::get().bind_index_buffer(*textureIndexVBO, gfx_api::index_type::u32);
 	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
 
+	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
+	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
+
 	// draw each layer separately
 	for (int layer = 0; layer < numGroundTypes; layer++)
 	{
@@ -1132,7 +1137,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 		// load the texture
-		int texPage = iV_GetTexture(psGroundTypes[layer].textureName);
+		int texPage = iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
 		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage), lightmap_tex_num);
 
 		// load the color buffer
