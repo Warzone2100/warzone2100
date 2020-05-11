@@ -1211,11 +1211,11 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		{
 			int texpage_mask;
 
-			pie_MakeTexPageTCMaskName(texfile);
-			sstrcat(texfile, ".png");
-			texpage_mask = iV_GetTexture(texfile);
+			std::string tcmask_name = pie_MakeTexPageTCMaskName(texfile);
+			tcmask_name += ".png";
+			texpage_mask = iV_GetTexture(tcmask_name.c_str());
 
-			ASSERT_OR_RETURN(, texpage_mask >= 0, "%s could not load tcmask %s", filename.toUtf8().c_str(), texfile);
+			ASSERT_OR_RETURN(, texpage_mask >= 0, "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
 
 			// Propagate settings through levels
 			for (iIMDShape *psShape = shape; psShape != nullptr; psShape = psShape->next)

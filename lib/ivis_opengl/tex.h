@@ -48,8 +48,8 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile);
 int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page = -1);
 void pie_TexInit();
 
-void pie_MakeTexPageName(char *filename);
-void pie_MakeTexPageTCMaskName(char *filename);
+std::string pie_MakeTexPageName(const std::string& filename);
+std::string pie_MakeTexPageTCMaskName(const std::string& filename);
 
 //*************************************************************************
 
