@@ -1178,10 +1178,10 @@ void urlSelectSSLBackend()
 	}
 	else
 	{
-		debug(LOG_ERROR, "cURL has no available thread-safe SSL backends to configure");
+		debug(LOG_INFO, "cURL has no available thread-safe SSL backends to configure");
 		for (const auto& ignoredBackend : ignoredBackends)
 		{
-			debug(LOG_ERROR, "(Ignored backend: %d (build did not permit thread-safe configuration)", ignoredBackend);
+			debug(LOG_INFO, "(Ignored backend: %d (build did not permit thread-safe configuration)", ignoredBackend);
 		}
 	}
 #else
