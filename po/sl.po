@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-09 04:42+0000\n"
-"PO-Revision-Date: 2020-05-10 17:55\n"
+"PO-Revision-Date: 2020-05-12 18:07\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Slovenian\n"
 "Language: sl_SI\n"
@@ -16751,7 +16751,7 @@ msgstr "Laserski satelit onemogočen."
 
 #: src/multiint.cpp:1078
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Omejitve zgradb uveljavljene."
 
 #: src/multiint.cpp:1257
 msgid "Not enough votes to randomize or change the map."
@@ -16817,12 +16817,12 @@ msgstr "Nastavi gradbene meje"
 
 #: src/multiint.cpp:1394
 msgid "Random Game Options"
-msgstr ""
+msgstr "Naključne možnosti za igro"
 
 #: src/multiint.cpp:1395
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Naključne možnosti za igro se lahko blokira z glasovi igralcev"
 
 #: src/multiint.cpp:1404
 #: src/multiint.cpp:1405
@@ -17074,7 +17074,7 @@ msgstr "Za igro obstaja posodobitev, prosimo obiščite http://wz2100.net za pre
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:144
 msgid "LIMITS"
-msgstr "OMEJITVE"
+msgstr "MEJE"
 
 #: src/multilimit.cpp:157
 msgid "Map Can Exceed Limits"
