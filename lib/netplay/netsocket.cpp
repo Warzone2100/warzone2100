@@ -1454,9 +1454,79 @@ void socketArrayClose(Socket **sockets, size_t maxSockets)
 	std::fill(sockets, sockets + maxSockets, (Socket *)nullptr);      // Set the pointers to NULL.
 }
 
+WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
+{
+	return sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET;
+}
+
+WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock)
+{
+	return sock->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET;
+}
+
 char const *getSocketTextAddress(Socket const *sock)
 {
 	return sock->textAddress;
+}
+
+std::vector<unsigned char> ipv4_AddressString_To_NetBinary(const std::string& ipv4Address)
+{
+	std::vector<unsigned char> binaryForm(sizeof(struct in_addr), 0);
+	if (inet_pton(AF_INET, ipv4Address.c_str(), binaryForm.data()) <= 0)
+	{
+		// inet_pton failed
+		binaryForm.clear();
+	}
+	return binaryForm;
+}
+
+#ifndef INET_ADDRSTRLEN
+# define INET_ADDRSTRLEN 16
+#endif
+
+std::string ipv4_NetBinary_To_AddressString(const std::vector<unsigned char>& ip4NetBinaryForm)
+{
+	if (ip4NetBinaryForm.size() != sizeof(struct in_addr))
+	{
+		return "";
+	}
+	std::string ipv4Address;
+	ipv4Address.resize(INET_ADDRSTRLEN);
+	if (inet_ntop(AF_INET, ip4NetBinaryForm.data(), &ipv4Address[0], ipv4Address.size()) == nullptr)
+	{
+		return "";
+	}
+	return ipv4Address;
+}
+
+std::vector<unsigned char> ipv6_AddressString_To_NetBinary(const std::string& ipv6Address)
+{
+	std::vector<unsigned char> binaryForm(sizeof(struct in6_addr), 0);
+	if (inet_pton(AF_INET6, ipv6Address.c_str(), binaryForm.data()) <= 0)
+	{
+		// inet_pton failed
+		binaryForm.clear();
+	}
+	return binaryForm;
+}
+
+#ifndef INET6_ADDRSTRLEN
+# define INET6_ADDRSTRLEN 46
+#endif
+
+std::string ipv6_NetBinary_To_AddressString(const std::vector<unsigned char>& ip6NetBinaryForm)
+{
+	if (ip6NetBinaryForm.size() != sizeof(struct in_addr))
+	{
+		return "";
+	}
+	std::string ipv6Address;
+	ipv6Address.resize(INET6_ADDRSTRLEN);
+	if (inet_ntop(AF_INET6, ip6NetBinaryForm.data(), &ipv6Address[0], ipv6Address.size()) == nullptr)
+	{
+		return "";
+	}
+	return ipv6Address;
 }
 
 SocketAddress *resolveHost(const char *host, unsigned int port)
