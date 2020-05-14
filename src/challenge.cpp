@@ -25,6 +25,7 @@
 
 #include <physfs.h>
 #include <ctime>
+#include <string>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -72,6 +73,7 @@ static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
+std::string challengeName;
 
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -81,6 +83,15 @@ static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
 	pie_BoxFill(x + 2, y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
+}
+
+const char* currentChallengeName()
+{
+	if (challengeActive)
+	{
+		return challengeName.c_str();
+	}
+	return nullptr;
 }
 
 // quite the hack, game name is stored in global sRequestResult
@@ -396,6 +407,7 @@ bool runChallenges()
 				assert(data != nullptr);
 				assert(data->filename != nullptr);
 				sstrcpy(sRequestResult, data->filename);
+				challengeName = psWidget->pText.toStdString();
 			}
 			else
 			{

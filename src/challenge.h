@@ -32,6 +32,8 @@ void updateChallenge(bool gameWon);
 extern bool challengesUp;
 extern bool challengeActive;
 
+const char* currentChallengeName();
+
 void challengesScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 
 #endif // __INCLUDED_SRC_CHALLENGE_H__
