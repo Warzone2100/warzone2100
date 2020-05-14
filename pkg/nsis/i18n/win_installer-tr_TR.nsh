@@ -1,8 +1,8 @@
-${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText "Warzone 2100 kurulumuna hoşgeldiniz!\r\n\r\nBu uygulama Warzone 2100 kurulumu sırasında size rehberlik edecektir.\r\n\r\nKuruluma başlamadan önce diğer uygulamaları kapatmanız önerilir. böylece bilgisayarınızı yeniden başlatmak zorunda bırakmadan sistem dosyalarını güncelleyebiliriz.\r\n\r\nWarzone 2100 Açık kaynak olmasıyla beraber tamamen ücretsizdir.\r\n\r\nDevam etmek için tıklayın."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "Warzone 2100 portatif kurulumuna hoşgeldiniz.\r\n\r\nBu sihirbaz size Warzone 2100 portatif kurulum boyunca rehberlik edecektir.\r\n\r\nBu kurulum bağımsızdır ve bulunduğu dosyalarını silerek programı tamamen kaldırabilirsiniz.\r\n\r\nWarzone 2100 Açık kaynaktır ve %100 ücretsizdir.\r\n\r\nDevam etmek için tıklayınız."
 
-${LangFileString} WZ_GPL_NEXT "Next"
+${LangFileString} WZ_GPL_NEXT "Devam"
 
 ${LangFileString} TEXT_SecBase "Çekirdek dosyalar"
 ${LangFileString} DESC_SecBase "Çekirdek dosyaları Warzone 2100 çalıştırmak için gereklidir."
