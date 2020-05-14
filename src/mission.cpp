@@ -3126,6 +3126,37 @@ UDWORD	getCampaignNumber()
 	return camNumber;
 }
 
+std::vector<CAMPAIGN_FILE> readCampaignFiles()
+{
+	static std::vector<CAMPAIGN_FILE> result;
+	if (!result.empty())
+	{
+		return result;
+	}
+
+	char **files = PHYSFS_enumerateFiles("campaigns");
+	for (char **i = files; *i != nullptr; ++i)
+	{
+		CAMPAIGN_FILE c;
+		WzString filename("campaigns/");
+		filename += *i;
+		if (!filename.endsWith(".json"))
+		{
+			continue;
+		}
+		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+		c.name = ini.value("name").toWzString();
+		c.level = ini.value("level").toWzString();
+		c.package = ini.value("package").toWzString();
+		c.loading = ini.value("loading").toWzString();
+		c.video = ini.value("video").toWzString();
+		c.captions = ini.value("captions").toWzString();
+		result.push_back(c);
+	}
+	PHYSFS_freeList(files);
+	return result;
+}
+
 /*deals with any selectedPlayer's transporters that are flying in when the
 mission ends. bOffWorld is true if the Mission is currently offWorld*/
 void emptyTransporters(bool bOffWorld)

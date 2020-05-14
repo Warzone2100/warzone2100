@@ -70,16 +70,6 @@
 #include "titleui/titleui.h"
 #include "urlhelpers.h"
 
-struct CAMPAIGN_FILE
-{
-	WzString name;
-	WzString level;
-	WzString video;
-	WzString captions;
-	WzString package;
-	WzString loading;
-};
-
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
 
@@ -350,32 +340,6 @@ void startSinglePlayerMenu()
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
 	}
-}
-
-static std::vector<CAMPAIGN_FILE> readCampaignFiles()
-{
-	std::vector<CAMPAIGN_FILE> result;
-	char **files = PHYSFS_enumerateFiles("campaigns");
-	for (char **i = files; *i != nullptr; ++i)
-	{
-		CAMPAIGN_FILE c;
-		WzString filename("campaigns/");
-		filename += *i;
-		if (!filename.endsWith(".json"))
-		{
-			continue;
-		}
-		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-		c.name = ini.value("name").toWzString();
-		c.level = ini.value("level").toWzString();
-		c.package = ini.value("package").toWzString();
-		c.loading = ini.value("loading").toWzString();
-		c.video = ini.value("video").toWzString();
-		c.captions = ini.value("captions").toWzString();
-		result.push_back(c);
-	}
-	PHYSFS_freeList(files);
-	return result;
 }
 
 void startCampaignSelector()
