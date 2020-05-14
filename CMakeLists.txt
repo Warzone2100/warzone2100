@@ -153,7 +153,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		message( WARNING "WindowsStore builds are not currently supported" )
 		add_definitions(-D_WIN32_WINNT=0x0A00) # Windows 10+
 	else()
-		add_definitions(-D_WIN32_WINNT=0x0501) # Windows XP+
+		add_definitions(-D_WIN32_WINNT=0x0600) # Windows Vista+
 	endif()
 endif()
 
