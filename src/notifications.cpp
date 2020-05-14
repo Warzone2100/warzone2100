@@ -439,6 +439,10 @@ std::unique_ptr<WZ_Queued_Notification> popNextQueuedNotification()
 		{
 			// ignore this notification - remove from the list
 			debug(LOG_GUI, "Ignoring notification: %s", request->notification.displayOptions.uniqueNotificationIdentifier().c_str());
+			if (request->notification.onIgnored)
+			{
+				request->notification.onIgnored(request->notification);
+			}
 			it = notificationQueue.erase(it);
 			continue;
 		}

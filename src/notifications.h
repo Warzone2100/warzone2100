@@ -135,6 +135,8 @@ public:
 	// Called when the notification is dismissed *without* pressing the "Action" button
 	// (i.e. by pressing the "Dismiss" button or dragging it upwards)
 	std::function<void (const WZ_Notification&, bool wasProgrammaticallyDismissed)> onDismissed;
+	// Called if an ignorable notification is ignored / not displayed
+	std::function<void (const WZ_Notification&)> onIgnored;
 public:
 	bool isIgnorable() const { return !displayOptions.uniqueNotificationIdentifier().empty(); }
 };
