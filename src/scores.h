@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_SCORES_H__
 #define __INCLUDED_SRC_SCORES_H__
 
+#include <vector>
+
 class WIDGET;
 
 enum DATA_INDEX
@@ -68,6 +70,14 @@ struct STAT_BAR
 	UDWORD	number;			// %d string for the associated text string.
 };
 
+struct END_GAME_STATS_DATA
+{
+	MISSION_DATA missionData;
+	uint32_t maxDroidsPerLevel = 0;
+	std::vector<uint32_t> numDroidsPerLevel = {0};
+	uint32_t numUnits = 0;
+};
+
 enum
 {
 	STAT_UNIT_LOST,
@@ -106,6 +116,7 @@ struct ScoreDataToScreenCache {
 bool scoreInitSystem();
 void scoreUpdateVar(DATA_INDEX var);
 void scoreDataToConsole();
+END_GAME_STATS_DATA	collectEndGameStatsData();
 void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache);
 void getAsciiTime(char *psText, unsigned time);
 bool readScoreData(const char *fileName);
