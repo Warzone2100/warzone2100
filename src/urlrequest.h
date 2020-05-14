@@ -39,6 +39,7 @@ struct MemoryStruct {
 enum URLRequestFailureType {
 	INITIALIZE_REQUEST_ERROR,
 	TRANSFER_FAILED,
+	CANCELLED,
 	CANCELLED_BY_SHUTDOWN
 };
 
@@ -75,10 +76,18 @@ private:
 typedef std::function<void (const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails)> UrlRequestFailure;
 typedef std::function<void (const std::string& url, int64_t dltotal, int64_t dlnow)> UrlProgressCallback;
 
+enum class InternetProtocol {
+	IP_ANY,
+	IPv4,
+	IPv6
+};
+
 struct URLRequestBase
 {
 public:
 	std::string url;
+	InternetProtocol protocol = InternetProtocol::IP_ANY;
+	bool noProxy = false;
 
 	// MARK: callbacks
 	// IMPORTANT:
@@ -130,18 +139,30 @@ struct URLFileDownloadRequest : public URLRequestBase
 	UrlDownloadFileSuccess onSuccess;
 };
 
+struct AsyncRequest
+{
+public:
+	virtual ~AsyncRequest();
+};
+
+typedef std::shared_ptr<AsyncRequest> AsyncURLRequestHandle;
+
 // Request data from a URL (stores the response in memory)
 // Generally, you should define both onSuccess and onFailure callbacks
 // If you want to actually process the response, you *must* define an onSuccess callback
 //
 // IMPORTANT: Callbacks will be called on a background thread
-void urlRequestData(const URLDataRequest& request);
+AsyncURLRequestHandle urlRequestData(const URLDataRequest& request);
 
 // Download a file (stores the response in the outFilePath)
 // Generally, you should define both onSuccess and onFailure callbacks
 //
 // IMPORTANT: Callbacks will be called on a background thread
-void urlDownloadFile(const URLFileDownloadRequest& request);
+AsyncURLRequestHandle urlDownloadFile(const URLFileDownloadRequest& request);
+
+// Sets a flag that will cancel an asynchronous url request
+// NOTE: It is possible that the request will finish successfully before it is cancelled.
+void urlRequestSetCancelFlag(AsyncURLRequestHandle requestHandle);
 
 void urlRequestInit();
 void urlRequestOutputDebugInfo();

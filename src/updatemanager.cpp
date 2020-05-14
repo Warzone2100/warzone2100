@@ -448,14 +448,14 @@ void WzUpdateManager::initUpdateCheck()
 		{
 			case URLRequestFailureType::INITIALIZE_REQUEST_ERROR:
 				wzAsyncExecOnMainThread([]{
-					debug(LOG_ERROR, "Failed to initialize request for update check");
+					debug(LOG_WARNING, "Failed to initialize request for update check");
 				});
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
 				if (!transferDetails.has_value())
 				{
 					wzAsyncExecOnMainThread([]{
-						debug(LOG_ERROR, "Update check request failed - but no transfer failure details provided!");
+						debug(LOG_WARNING, "Update check request failed - but no transfer failure details provided!");
 					});
 				}
 				else
@@ -463,13 +463,18 @@ void WzUpdateManager::initUpdateCheck()
 					CURLcode result = transferDetails->curlResult();
 					long httpStatusCode = transferDetails->httpStatusCode();
 					wzAsyncExecOnMainThread([result, httpStatusCode]{
-						debug(LOG_ERROR, "Update check request failed with error %d, and HTTP response code: %ld", result, httpStatusCode);
+						debug(LOG_WARNING, "Update check request failed with error %d, and HTTP response code: %ld", result, httpStatusCode);
 					});
 				}
 				break;
+			case URLRequestFailureType::CANCELLED:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_INFO, "Update check was cancelled");
+				});
+				break;
 			case URLRequestFailureType::CANCELLED_BY_SHUTDOWN:
 				wzAsyncExecOnMainThread([url]{
-					debug(LOG_ERROR, "Update check was cancelled by application shutdown");
+					debug(LOG_WARNING, "Update check was cancelled by application shutdown");
 				});
 				break;
 		}
