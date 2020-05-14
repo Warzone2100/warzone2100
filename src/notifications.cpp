@@ -1236,6 +1236,11 @@ void finishedProcessingNotificationRequest(WZ_Queued_Notification* request, bool
 		notificationPrefs->doNotShowNotificationAgain(request->notification.displayOptions.uniqueNotificationIdentifier());
 	}
 
+	if (request->notification.onDismissed)
+	{
+		request->notification.onDismissed(request->notification, request->wasProgrammaticallyDismissed());
+	}
+
 	// finished with this notification
 	currentNotification.reset(); // at this point request is no longer valid!
 	lastNotificationClosed = realTime;
