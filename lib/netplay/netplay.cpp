@@ -906,9 +906,8 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 	}
 	if (failed)
 	{
-		SocketSet_DelSocket(socket_set, tcp_socket);  // mark it invalid
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
+		// caller handles invalidating and closing tcp_socket
+		return false;
 	}
 
 	// Now dump the data into the game struct
