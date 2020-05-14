@@ -103,6 +103,7 @@ MemoryStruct::~MemoryStruct()
 
 HTTPResponseHeaders::~HTTPResponseHeaders() { }
 HTTPResponseDetails::~HTTPResponseDetails() { }
+AsyncRequest::~AsyncRequest() { }
 
 bool URLRequestBase::setRequestHeader(const std::string& name, const std::string& value)
 {
@@ -111,6 +112,13 @@ bool URLRequestBase::setRequestHeader(const std::string& name, const std::string
 	requestHeaders[name] = value;
 	return true;
 }
+
+struct AsyncRequestImpl : public AsyncRequest
+{
+public:
+	// **MUST** be accessed while holding the urlRequestMutex
+	bool cancelFlag = false;
+};
 
 // MARK: - Handle thread-safety for cURL
 
@@ -400,8 +408,13 @@ class URLTransferRequest
 public:
 	CURL *handle = nullptr;
 	struct myprogress progress;
+	std::shared_ptr<AsyncRequestImpl> requestHandle;
 
 public:
+	URLTransferRequest(const std::shared_ptr<AsyncRequestImpl>& requestHandle)
+	: requestHandle(requestHandle)
+	{ }
+
 	virtual ~URLTransferRequest() {
 		if (request_header_list != nullptr)
 		{
@@ -410,6 +423,8 @@ public:
 	}
 
 	virtual const std::string& url() const = 0;
+	virtual InternetProtocol protocol() const = 0;
+	virtual bool noProxy() const = 0;
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const = 0;
 	virtual curl_off_t maxDownloadSize() const { return MAXIMUM_DOWNLOAD_SIZE; }
 
@@ -423,6 +438,46 @@ public:
 			return nullptr;
 		}
 		curl_easy_setopt(handle, CURLOPT_URL, url().c_str());
+
+#if LIBCURL_VERSION_NUM >= 0x070A08 // CURLOPT_IPRESOLVE is available since cURL 7.10.8
+		switch (protocol())
+		{
+			case InternetProtocol::IP_ANY:
+				// default - do nothing
+				break;
+			case InternetProtocol::IPv4:
+				curl_easy_setopt(handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+				break;
+			case InternetProtocol::IPv6:
+				const curl_version_info_data * info = curl_version_info(CURLVERSION_NOW);
+				if (info && ((info->features & CURL_VERSION_IPV6) != CURL_VERSION_IPV6))
+				{
+					// cURL was not compiled with IPv6 support - fail out
+					curl_easy_cleanup(handle);
+					handle = nullptr;
+					return nullptr;
+				}
+				curl_easy_setopt(handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V6);
+				break;
+		}
+#endif
+		if (noProxy())
+		{
+#if LIBCURL_VERSION_NUM >= 0x071304	// cURL 7.19.4+
+			CURLcode proxyResult = curl_easy_setopt(handle, CURLOPT_NOPROXY, "*");
+			if (proxyResult != CURLE_OK)
+			{
+				// Failed to disable proxy
+				wzAsyncExecOnMainThread([proxyResult]{
+					debug(LOG_NET, "cURL: Failed to set CURLOPT_NOPROXY: %d", static_cast<int>(proxyResult));
+				});
+			}
+#else
+			wzAsyncExecOnMainThread([]{
+				debug(LOG_NET, "cURL: CURLOPT_NOPROXY is not supported");
+			});
+#endif
+		}
 
 		const auto& _requestHeaders = requestHeaders();
 		for (auto it : _requestHeaders)
@@ -611,12 +666,23 @@ class RunningURLTransferRequestBase : public URLTransferRequest
 public:
 	virtual const URLRequestBase& getBaseRequest() const = 0;
 public:
-	RunningURLTransferRequestBase()
+	RunningURLTransferRequestBase(const std::shared_ptr<AsyncRequestImpl>& requestHandle)
+	: URLTransferRequest(requestHandle)
 	{ }
 
 	virtual const std::string& url() const override
 	{
 		return getBaseRequest().url;
+	}
+
+	virtual InternetProtocol protocol() const override
+	{
+		return getBaseRequest().protocol;
+	}
+
+	virtual bool noProxy() const override
+	{
+		return getBaseRequest().noProxy;
 	}
 
 	virtual const std::unordered_map<std::string, std::string>& requestHeaders() const override
@@ -689,6 +755,11 @@ private:
 					});
 				}
 				break;
+			case URLRequestFailureType::CANCELLED:
+				wzAsyncExecOnMainThread([url]{
+					debug(LOG_NET, "cURL: Request for (%s) was cancelled", url.c_str());
+				});
+				break;
 			case URLRequestFailureType::CANCELLED_BY_SHUTDOWN:
 				wzAsyncExecOnMainThread([url]{
 					debug(LOG_NET, "cURL: Request for (%s) was cancelled by application shutdown", url.c_str());
@@ -712,8 +783,9 @@ private:
 	curl_off_t _maxDownloadSize = MAXIMUM_IN_MEMORY_DOWNLOAD_SIZE; // 512 MB, default max download limit
 
 public:
-	RunningURLDataRequest(const URLDataRequest& request)
-	: request(request)
+	RunningURLDataRequest(const URLDataRequest& request, const std::shared_ptr<AsyncRequestImpl>& requestHandle)
+	: RunningURLTransferRequestBase(requestHandle)
+	, request(request)
 	{
 		chunk = std::make_shared<MemoryStruct>();
 		if (request.maxDownloadSizeLimit > 0)
@@ -769,8 +841,9 @@ public:
 	URLFileDownloadRequest request;
 	FILE *outFile;
 
-	RunningURLFileDownloadRequest(const URLFileDownloadRequest& request)
-	: request(request)
+	RunningURLFileDownloadRequest(const URLFileDownloadRequest& request, const std::shared_ptr<AsyncRequestImpl>& requestHandle)
+	: RunningURLTransferRequestBase(requestHandle)
+	, request(request)
 	{
 #if defined(WZ_OS_WIN)
 		// On Windows, path strings passed to fopen() are interpreted using the ANSI or OEM codepage
@@ -957,6 +1030,25 @@ static int urlRequestThreadFunc(void *)
 		}
 		newUrlRequests.clear();
 
+		// cancel any requests that have been signaled to cancel
+		auto it = runningTransfers.begin();
+		while (it != runningTransfers.end())
+		{
+			URLTransferRequest* runningTransfer = *it;
+			if (runningTransfer->requestHandle->cancelFlag) // must be checked while holding the urlRequestMutex
+			{
+				curl_multi_remove_handle(multi_handle, runningTransfer->handle);
+				runningTransfer->requestFailedToFinish(URLRequestFailureType::CANCELLED);
+				curl_easy_cleanup(runningTransfer->handle);
+				delete runningTransfer;
+				it = runningTransfers.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+
 		wzMutexUnlock(urlRequestMutex); // when performing / waiting on curl requests, unlock the mutex
 
 		performTransfers();
@@ -1009,11 +1101,12 @@ static int urlRequestThreadFunc(void *)
 	return 0;
 }
 
-void urlRequestData(const URLDataRequest& request)
+AsyncURLRequestHandle urlRequestData(const URLDataRequest& request)
 {
-	ASSERT_OR_RETURN(, !request.url.empty(), "A valid request must specify a URL");
-	ASSERT_OR_RETURN(, request.maxDownloadSizeLimit <= (curl_off_t)MAXIMUM_IN_MEMORY_DOWNLOAD_SIZE, "Requested maxDownloadSizeLimit exceeds maximum in-memory download size limit %zu", (size_t)MAXIMUM_IN_MEMORY_DOWNLOAD_SIZE);
-	RunningURLDataRequest *pNewRequest = new RunningURLDataRequest(request);
+	ASSERT_OR_RETURN(nullptr, !request.url.empty(), "A valid request must specify a URL");
+	ASSERT_OR_RETURN(nullptr, request.maxDownloadSizeLimit <= (curl_off_t)MAXIMUM_IN_MEMORY_DOWNLOAD_SIZE, "Requested maxDownloadSizeLimit exceeds maximum in-memory download size limit %zu", (size_t)MAXIMUM_IN_MEMORY_DOWNLOAD_SIZE);
+	std::shared_ptr<AsyncRequestImpl> requestHandle = std::make_shared<AsyncRequestImpl>();
+	RunningURLDataRequest *pNewRequest = new RunningURLDataRequest(request, requestHandle);
 	wzMutexLock(urlRequestMutex);
 	bool isFirstJob = newUrlRequests.empty();
 	newUrlRequests.push_back(pNewRequest);
@@ -1023,15 +1116,17 @@ void urlRequestData(const URLDataRequest& request)
 	{
 		wzSemaphorePost(urlRequestSemaphore);  // Wake up processing thread.
 	}
+	return requestHandle;
 }
 
-void urlDownloadFile(const URLFileDownloadRequest& request)
+AsyncURLRequestHandle urlDownloadFile(const URLFileDownloadRequest& request)
 {
-	ASSERT_OR_RETURN(, !request.url.empty(), "A valid request must specify a URL");
-	ASSERT_OR_RETURN(, !request.outFilePath.empty(), "A valid request must specify an output filepath");
+	ASSERT_OR_RETURN(nullptr, !request.url.empty(), "A valid request must specify a URL");
+	ASSERT_OR_RETURN(nullptr, !request.outFilePath.empty(), "A valid request must specify an output filepath");
 	RunningURLFileDownloadRequest *pNewRequest = nullptr;
+	std::shared_ptr<AsyncRequestImpl> requestHandle = std::make_shared<AsyncRequestImpl>();
 	try {
-		pNewRequest = new RunningURLFileDownloadRequest(request);
+		pNewRequest = new RunningURLFileDownloadRequest(request, requestHandle);
 	}
 	catch (const std::exception &e)
 	{
@@ -1040,7 +1135,7 @@ void urlDownloadFile(const URLFileDownloadRequest& request)
 		{
 			request.onFailure(request.url, URLRequestFailureType::INITIALIZE_REQUEST_ERROR, nullopt);
 		}
-		return;
+		return nullptr;
 	}
 	wzMutexLock(urlRequestMutex);
 	bool isFirstJob = newUrlRequests.empty();
@@ -1050,6 +1145,18 @@ void urlDownloadFile(const URLFileDownloadRequest& request)
 	if (isFirstJob)
 	{
 		wzSemaphorePost(urlRequestSemaphore);  // Wake up processing thread.
+	}
+	return requestHandle;
+}
+
+void urlRequestSetCancelFlag(AsyncURLRequestHandle requestHandle)
+{
+	std::shared_ptr<AsyncRequestImpl> pRequestImpl = std::dynamic_pointer_cast<AsyncRequestImpl>(requestHandle);
+	if (pRequestImpl)
+	{
+		wzMutexLock(urlRequestMutex);
+		pRequestImpl->cancelFlag = true;
+		wzMutexUnlock(urlRequestMutex);
 	}
 }
 
