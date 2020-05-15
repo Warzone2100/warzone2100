@@ -26,7 +26,7 @@ ${LangFileString} TEXT_SecNLS "Dil dosyaları"
 ${LangFileString} DESC_SecNLS "İngilizce dışındaki diller için destek."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
-${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+${LangFileString} DESC_SecNLS_WinFonts "Arama yoluna Windows Fonts dosyasını ekleyin. Eğer config dosyasında farklı bir yazı tipi kullanmak istiyorsanız etkinleştirin. Vista ve sonrakilerinde yavaş olabilir!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} TEXT_SecMSSysLibraries "Önemli Microsoft Runtime DLL dosyaları"
+${LangFileString} DESC_SecMSSysLibraries "Bazı bileşenleri çalıştırmak için Microsoft's Visual C++ redistributable sistem kütüphanesini indirin ve yükleyin (veya güncelleyin)."
