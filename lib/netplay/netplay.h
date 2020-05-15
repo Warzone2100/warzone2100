@@ -351,7 +351,8 @@ std::vector<uint8_t> NET_getHumanPlayers(void);
 
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
-void NETregisterServer(int state);
+bool NETregisterServer(int state);
+bool NETprocessQueuedServerUpdates();
 void NETsetPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);    ///< Cumulative, except that CONNECTIONSTATUS_NORMAL resets.
 bool NETcheckPlayerConnectionStatus(CONNECTION_STATUS status, unsigned player);  ///< True iff connection status icon hasn't expired for this player. CONNECTIONSTATUS_NORMAL means any status, NET_ALL_PLAYERS means all players.
 
