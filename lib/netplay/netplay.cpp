@@ -70,6 +70,7 @@
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
+static bool bJoinPrefTryIPv6First = true;
 
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
@@ -3212,6 +3213,23 @@ void NETsetGameserverPort(unsigned int port)
 unsigned int NETgetGameserverPort()
 {
 	return gameserver_port;
+}
+
+/*!
+* Set the join preference for IPv6
+* \param bTryIPv6First Whether to attempt IPv6 first when joining, before IPv4.
+*/
+void NETsetJoinPreferenceIPv6(bool bTryIPv6First)
+{
+	bJoinPrefTryIPv6First = bTryIPv6First;
+}
+
+/**
+* @return Whether joining a game that advertises both IPv6 and IPv4 should attempt IPv6 first.
+*/
+bool NETgetJoinPreferenceIPv6()
+{
+	return bJoinPrefTryIPv6First;
 }
 
 
