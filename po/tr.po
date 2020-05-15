@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-09 04:42+0000\n"
-"PO-Revision-Date: 2020-05-13 18:06\n"
+"PO-Revision-Date: 2020-05-15 18:10\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -8604,7 +8604,8 @@ msgstr "Lazer enerjisi üretir ve düşmana atar"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Sahip olur ~ Her petrol kuyusundan %100 daha fazla güç\n"
+"Savunma yapıları ve petrol kuyuları ile başlar"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8613,7 +8614,9 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Sahip olur ~ her petrol kuyusundan %100 daha fazla güç\n"
+"Ağır plazma fırlatıcı ve EMP havanı kullanır\n"
+"Savunma yapıları ve petrol kuyuları ile başlar"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8623,7 +8626,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2205
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Sahip olur ~ Her petrol kuyusundan %25 daha az güç"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8631,7 +8634,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "Sahip olur ~ Her petrol kuyusundan %25 daha az güç\n"
+"komuta hızı daha yavaştır"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
