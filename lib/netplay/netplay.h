@@ -332,6 +332,8 @@ void NETsetMasterserverPort(unsigned int port);
 unsigned int NETgetMasterserverPort();
 void NETsetGameserverPort(unsigned int port);
 unsigned int NETgetGameserverPort();
+void NETsetJoinPreferenceIPv6(bool bTryIPv6First);
+bool NETgetJoinPreferenceIPv6();
 
 bool NETsetupTCPIP(const char *machine);
 void NETsetGamePassword(const char *password);
