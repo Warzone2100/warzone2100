@@ -3649,6 +3649,12 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 				NETenum(&KICK_TYPE);
 				NETend();
 
+				if (player_id >= MAX_PLAYERS)
+				{
+					debug(LOG_ERROR, "NET_KICK message with invalid player_id: (%" PRIu32")", player_id);
+					break;
+				}
+
 				playerVotes[player_id] = 0;
 
 				if (player_id == NET_HOST_ONLY)
