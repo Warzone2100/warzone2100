@@ -1878,6 +1878,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	{
 		NETfixPlayerCount();
 		NETallowJoining();
+		NETprocessQueuedServerUpdates();
 		NETcheckPlayers();		// make sure players are still alive & well
 	}
 
@@ -2162,14 +2163,24 @@ error:
 	return SOCKET_ERROR;
 }
 
-void NETregisterServer(int state)
+static uint32_t lastServerUpdate = 0;
+static bool queuedServerUpdate = false;
+#define SERVER_UPDATE_MIN_INTERVAL 7 * GAME_TICKS_PER_SEC
+
+static inline bool canSendServerUpdateNow()
+{
+	return (lastServerUpdate < realTime - SERVER_UPDATE_MIN_INTERVAL);
+}
+
+bool NETregisterServer(int state)
 {
 	static Socket *rs_socket = nullptr;
 	static int registered = 0;
+	bool bProcessingConnectOrDisconnectThisCall = false;
 
 	if (server_not_there)
 	{
-		return;
+		return bProcessingConnectOrDisconnectThisCall;
 	}
 
 	if (state != registered)
@@ -2179,10 +2190,27 @@ void NETregisterServer(int state)
 		// Update player counts
 		case WZ_SERVER_UPDATE:
 			{
-				if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
+				if (rs_socket == nullptr)
 				{
-					socketClose(rs_socket);
-					rs_socket = nullptr;
+					queuedServerUpdate = false;
+					return bProcessingConnectOrDisconnectThisCall;
+				}
+
+				if (canSendServerUpdateNow())
+				{
+					if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
+					{
+						socketClose(rs_socket);
+						rs_socket = nullptr;
+					}
+					lastServerUpdate = realTime;
+					queuedServerUpdate = false;
+				}
+				else
+				{
+					// queue future update
+					debug(LOG_NET, "Queueing server update");
+					queuedServerUpdate = true;
 				}
 			}
 			break;
@@ -2190,6 +2218,7 @@ void NETregisterServer(int state)
 		// Register a game with the lobby
 		case WZ_SERVER_CONNECT:
 			{
+				bProcessingConnectOrDisconnectThisCall = true;
 				uint32_t gameId = 0;
 				SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
 
@@ -2202,7 +2231,7 @@ void NETregisterServer(int state)
 						NetPlay.MOTD = nullptr;
 					}
 					server_not_there = true;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				// Close an existing socket.
@@ -2227,7 +2256,7 @@ void NETregisterServer(int state)
 						NetPlay.MOTD = nullptr;
 					}
 					server_not_there = true;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				// Get a game ID
@@ -2245,7 +2274,7 @@ void NETregisterServer(int state)
 					socketClose(rs_socket);
 					rs_socket = nullptr;
 					server_not_there = true;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				gamestruct.gameId = ntohl(gameId);
@@ -2260,15 +2289,17 @@ void NETregisterServer(int state)
 					socketClose(rs_socket);
 					server_not_there = true;
 					rs_socket = nullptr;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
+				lastServerUpdate = realTime;
+				queuedServerUpdate = false;
 
 				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 				{
 					socketClose(rs_socket);
 					server_not_there = true;
 					rs_socket = nullptr;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				// Preserves another register
@@ -2279,6 +2310,7 @@ void NETregisterServer(int state)
 		// Unregister the game (close the socket)
 		case WZ_SERVER_DISCONNECT:
 			{
+				bProcessingConnectOrDisconnectThisCall = true;
 				if (rs_socket != nullptr)
 				{
 					// we don't need this anymore, so clean up
@@ -2287,12 +2319,31 @@ void NETregisterServer(int state)
 					server_not_there = true;
 				}
 
+				queuedServerUpdate = false;
+
 				// Preserves another unregister
 				registered = state;
 			}
 			break;
 		}
 	}
+
+	return bProcessingConnectOrDisconnectThisCall;
+}
+
+bool NETprocessQueuedServerUpdates()
+{
+	if (!queuedServerUpdate)
+	{
+		return false;
+	}
+	if (!canSendServerUpdateNow())
+	{
+		return false;
+	}
+	queuedServerUpdate = false;
+	NETregisterServer(WZ_SERVER_UPDATE);
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////
