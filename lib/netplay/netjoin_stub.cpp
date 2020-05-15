@@ -25,10 +25,9 @@
 #include "lib/framework/frame.h"
 #include "netplay.h"
 
-int32_t NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag)
+int32_t NETgetGameFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag)
 {
-	ASSERT(gameid < ARRAY_SIZE(NetPlay.games), "Out of range gameid: %u", gameid);
-	ASSERT(flag < ARRAY_SIZE(NetPlay.games[gameid].desc.dwUserFlags), "Out of range flag number: %u", flag);
+	ASSERT_OR_RETURN(0, flag < ARRAY_SIZE(game.desc.dwUserFlags), "Out of range flag number: %u", flag);
 
-	return NetPlay.games[gameid].desc.dwUserFlags[flag];
+	return game.desc.dwUserFlags[flag];
 }
