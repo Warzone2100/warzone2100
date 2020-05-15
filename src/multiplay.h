@@ -32,6 +32,7 @@
 #include "stringdef.h"
 #include "messagedef.h"
 #include <vector>
+#include <string>
 
 class DROID_GROUP;
 struct BASE_OBJECT;
@@ -197,7 +198,25 @@ bool multiShutdown();
 bool sendLeavingMsg();
 
 bool hostCampaign(char *sGame, char *sPlayer);
-bool joinGame(const char *host, uint32_t port);
+struct JoinConnectionDescription
+{
+public:
+	JoinConnectionDescription() { }
+	JoinConnectionDescription(const std::string& host, uint32_t port)
+	: host(host)
+	, port(port)
+	{ }
+public:
+	std::string host;
+	uint32_t port = 0;
+};
+enum class JoinGameResult {
+	FAILED,
+	JOINED,
+	PENDING_PASSWORD
+};
+JoinGameResult joinGame(const char *host, uint32_t port);
+JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list);
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();

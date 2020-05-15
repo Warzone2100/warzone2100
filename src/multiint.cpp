@@ -837,10 +837,52 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 	}
 }
 
-static bool joinGameInternal(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI);
 
-bool joinGame(const char *host, uint32_t port) {
-	return joinGameInternal(host, port, wzTitleUICurrent);
+static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI);
+static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI);
+
+JoinGameResult joinGame(const char *host, uint32_t port)
+{
+	std::string hostStr = (host != nullptr) ? std::string(host) : std::string();
+	return joinGame(std::vector<JoinConnectionDescription>({JoinConnectionDescription(hostStr, port)}));
+}
+
+JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list) {
+	return joinGameInternal(connection_list, wzTitleUICurrent);
+}
+
+static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI){
+
+	if (connection_list.size() > 1)
+	{
+		// sort the list, based on NETgetJoinPreferenceIPv6
+		// preserve the original relative order amongst each class of IPv4/IPv6 addresses
+		bool bSortIPv6First = NETgetJoinPreferenceIPv6();
+		std::stable_sort(connection_list.begin(), connection_list.end(), [bSortIPv6First](const JoinConnectionDescription& a, const JoinConnectionDescription& b) -> bool {
+			bool a_isIPv6 = a.host.find(":") != std::string::npos; // this is a very simplistic test - if the host contains ":" we treat it as IPv6
+			bool b_isIPv6 = b.host.find(":") != std::string::npos;
+			return (bSortIPv6First) ? (a_isIPv6 && !b_isIPv6) : (!a_isIPv6 && b_isIPv6);
+		});
+	}
+
+	for (const auto& connDesc : connection_list)
+	{
+		JoinGameResult result = joinGameInternalConnect(connDesc.host.c_str(), connDesc.port, oldUI);
+		switch (result)
+		{
+			case JoinGameResult::FAILED:
+				continue;
+			case JoinGameResult::PENDING_PASSWORD:
+				return result;
+			case JoinGameResult::JOINED:
+				return result;
+		}
+	}
+
+	// Failed to connect to all IPs / options in list
+	// Change to an error display.
+	changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Error while joining.")), wzTitleUICurrent));
+	return JoinGameResult::FAILED;
 }
 
 /**
@@ -849,14 +891,14 @@ bool joinGame(const char *host, uint32_t port) {
  *  doesn't turn into the parent of the next connection attempt.
  * Any other barriers/auth methods/whatever would presumably benefit in the same way.
  */
-static bool joinGameInternal(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI)
+static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI)
 {
 	// oldUI may get captured for use in the password dialog, among other things.
 	PLAYERSTATS	playerStats;
 
 	if (ingame.localJoiningInProgress)
 	{
-		return false;
+		return JoinGameResult::FAILED;
 	}
 
 	if (!NETjoinGame(host, port, (char *)sPlayer))	// join
@@ -874,18 +916,17 @@ static bool joinGameInternal(const char *host, uint32_t port, std::shared_ptr<Wz
 						changeTitleUI(oldUI);
 					} else {
 						NETsetGamePassword(pass);
-						joinGameInternal(capturedHost.c_str(), port, oldUI);
+						JoinConnectionDescription conn(capturedHost, port);
+						joinGameInternal({conn}, oldUI);
 					}
 				}));
-				return false;
+				return JoinGameResult::PENDING_PASSWORD;
 			}
 		default:
 			break;
 		}
 
-		// Change to an error display.
-		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Error while joining.")), oldUI));
-		return false;
+		return JoinGameResult::FAILED;
 	}
 	ingame.localJoiningInProgress	= true;
 
@@ -900,7 +941,7 @@ static bool joinGameInternal(const char *host, uint32_t port, std::shared_ptr<Wz
 		SendColourRequest(selectedPlayer, war_getMPcolour());
 	}
 
-	return true;
+	return JoinGameResult::JOINED;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
