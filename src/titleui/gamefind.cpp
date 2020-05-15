@@ -61,8 +61,12 @@ static DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 
 // find games
 static void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static std::vector<GAMESTRUCT> gamesList;
 
 WzGameFindTitleUI::WzGameFindTitleUI() {
+}
+WzGameFindTitleUI::~WzGameFindTitleUI() {
+	gamesList.clear();
 }
 
 // This is what starts the lobby screen
@@ -99,7 +103,7 @@ void WzGameFindTitleUI::start()
 	}
 
 	addConsoleBox();
-	if (!NETfindGame())
+	if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))
 	{
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 	}
@@ -124,12 +128,12 @@ TITLECODE WzGameFindTitleUI::run()
 		addConsoleBox();
 		if (safeSearch)
 		{
-			if (!NETfindGame())						// find games synchronously
+			if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))	// find games synchronously
 			{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			}
 		}
-		addGames();									//redraw list
+		addGames();	//redraw list
 	}
 
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
@@ -153,7 +157,7 @@ TITLECODE WzGameFindTitleUI::run()
 		}
 		ingame.localOptionsReceived = true;
 		addConsoleBox();
-		if (!NETfindGame())							// find games synchronously
+		if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))	// find games synchronously
 		{
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
@@ -169,8 +173,8 @@ TITLECODE WzGameFindTitleUI::run()
 
 		// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 		ingame.localOptionsReceived = false;					// note, we are awaiting options
-		sstrcpy(game.name, NetPlay.games[gameNumber].name);		// store name
-		joinGame(NetPlay.games[gameNumber].desc.host, 0);
+		sstrcpy(game.name, gamesList[gameNumber].name);		// store name
+		joinGame(gamesList[gameNumber].desc.host, 0);
 		return TITLECODE_CONTINUE;
 	}
 
@@ -240,17 +244,11 @@ void WzGameFindTitleUI::addConsoleBox()
 
 void WzGameFindTitleUI::addGames()
 {
-	int i, gcount = 0, added = 0;
+	size_t added = 0;
 	static const char *wrongVersionTip = _("Your version of Warzone is incompatible with this game.");
 
 	//count games to see if need two columns.
-	for (i = 0; i < MaxGames; i++)
-	{
-		if (NetPlay.games[i].desc.dwSize != 0)
-		{
-			gcount++;
-		}
-	}
+	size_t gcount = gamesList.size();
 
 	W_BUTINIT sButInit;
 	sButInit.formID = FRONTEND_BOTFORM;
@@ -265,12 +263,12 @@ void WzGameFindTitleUI::addGames()
 	};
 
 	// we want the old games deleted, and only list games when we should
+	for (size_t i = 0; i < MaxGames; i++)
+	{
+		widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old widget
+	}
 	if (getLobbyError() || !gcount)
 	{
-		for (i = 0; i < MaxGames; i++)
-		{
-			widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old widget
-		}
 		gcount = 0;
 	}
 	// in case they refresh, and a game becomes available.
@@ -279,57 +277,47 @@ void WzGameFindTitleUI::addGames()
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
 	{
-		for (i = 0; i < MaxGames; i++)							// draw games
+		for (size_t i = 0; i < gamesList.size(); i++)				// draw games
 		{
-			widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old icon.
-
-			if (NetPlay.games[i].desc.dwSize != 0)
+			if (gamesList[i].desc.dwSize != 0)
 			{
-				// either display all games, or games that are the client's specific version
-				if (toggleFilter)
-				{
-					if ((NetPlay.games[i].game_version_major != (unsigned)NETGetMajorVersion()) || (NetPlay.games[i].game_version_minor != (unsigned)NETGetMinorVersion()))
-					{
-						continue;
-					}
-				}
 				added++;
 				sButInit.id = GAMES_GAMESTART + i;
 				sButInit.x = 20;
 				sButInit.y = (UWORD)(45 + ((5 + GAMES_GAMEHEIGHT) * i));
 
 				// display the correct tooltip message.
-				if (!NETisCorrectVersion(NetPlay.games[i].game_version_major, NetPlay.games[i].game_version_minor))
+				if (!NETisCorrectVersion(gamesList[i].game_version_major, gamesList[i].game_version_minor))
 				{
 					sButInit.pTip = wrongVersionTip;
 				}
 				else
 				{
 					WzString flags;
-					if (NetPlay.games[i].privateGame)
+					if (gamesList[i].privateGame)
 					{
 						flags += " "; flags += _("[Password required]");
 					}
-					if (NetPlay.games[i].limits & NO_TANKS)
+					if (gamesList[i].limits & NO_TANKS)
 					{
 						flags += " "; flags += _("[No Tanks]");
 					}
-					if (NetPlay.games[i].limits & NO_BORGS)
+					if (gamesList[i].limits & NO_BORGS)
 					{
 						flags += " "; flags += _("[No Cyborgs]");
 					}
-					if (NetPlay.games[i].limits & NO_VTOLS)
+					if (gamesList[i].limits & NO_VTOLS)
 					{
 						flags += " "; flags += _("[No VTOLs]");
 					}
 					char tooltipbuffer[256];
 					if (flags.isEmpty())
 					{
-						ssprintf(tooltipbuffer, _("Hosted by %s"), NetPlay.games[i].hostname);
+						ssprintf(tooltipbuffer, _("Hosted by %s"), gamesList[i].hostname);
 					}
 					else
 					{
-						ssprintf(tooltipbuffer, _("Hosted by %s —%s"), NetPlay.games[i].hostname, flags.toUtf8().c_str());
+						ssprintf(tooltipbuffer, _("Hosted by %s —%s"), gamesList[i].hostname, flags.toUtf8().c_str());
 					}
 					// this is an std::string
 					sButInit.pTip = tooltipbuffer;
@@ -475,9 +463,9 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	PIELIGHT textColor = WZCOL_TEXT_DARK;
 
 	// As long as they got room, and mods are the same then we process the button(s)
-	if (NETisCorrectVersion(NetPlay.games[gameID].game_version_major, NetPlay.games[gameID].game_version_minor))
+	if (NETisCorrectVersion(gamesList[gameID].game_version_major, gamesList[gameID].game_version_minor))
 	{
-		if (NetPlay.games[gameID].desc.dwCurrentPlayers >= NetPlay.games[gameID].desc.dwMaxPlayers)
+		if (gamesList[gameID].desc.dwCurrentPlayers >= gamesList[gameID].desc.dwMaxPlayers)
 		{
 			// If game is full.
 			statusStart = IMAGE_NOJOIN_FULL;
@@ -490,33 +478,33 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			lamp = IMAGE_LAMP_GREEN;
 			disableButton = false;
 
-			if (NetPlay.games[gameID].privateGame)  // check to see if it is a private game
+			if (gamesList[gameID].privateGame)  // check to see if it is a private game
 			{
 				statusStart = IMAGE_LOCKED_NOBG;
 				lamp = IMAGE_LAMP_AMBER;
 			}
-			else if (NetPlay.games[gameID].modlist[0] != '\0')
+			else if (gamesList[gameID].modlist[0] != '\0')
 			{
 				statusStart = IMAGE_MOD_OVER;
 			}
 		}
 
-		ssprintf(tmp, "%d/%d", NetPlay.games[gameID].desc.dwCurrentPlayers, NetPlay.games[gameID].desc.dwMaxPlayers);
+		ssprintf(tmp, "%d/%d", gamesList[gameID].desc.dwCurrentPlayers, gamesList[gameID].desc.dwMaxPlayers);
 		cache.wzText_CurrentVsMaxNumPlayers.setText(tmp, font_regular);
 		cache.wzText_CurrentVsMaxNumPlayers.render(x + GAMES_PLAYERS_START + 4 , y + 18, textColor);
 
 		// see what host limits are... then draw them.
-		if (NetPlay.games[gameID].limits)
+		if (gamesList[gameID].limits)
 		{
-			if (NetPlay.games[gameID].limits & NO_TANKS)
+			if (gamesList[gameID].limits & NO_TANKS)
 			{
 				iV_DrawImage(FrontImages, IMAGE_NO_TANK, x + GAMES_STATUS_START + 37, y + 2);
 			}
-			if (NetPlay.games[gameID].limits & NO_BORGS)
+			if (gamesList[gameID].limits & NO_BORGS)
 			{
 				iV_DrawImage(FrontImages, IMAGE_NO_CYBORG, x + GAMES_STATUS_START + (37 * 2), y + 2);
 			}
-			if (NetPlay.games[gameID].limits & NO_VTOLS)
+			if (gamesList[gameID].limits & NO_VTOLS)
 			{
 				iV_DrawImage(FrontImages, IMAGE_NO_VTOL, x + GAMES_STATUS_START + (37 * 3) , y + 2);
 			}
@@ -531,11 +519,11 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	//draw game name, chop when we get a too long name
-	sstrcpy(name, NetPlay.games[gameID].name);
+	sstrcpy(name, gamesList[gameID].name);
 	cache.wzText_GameName.setTruncatableText(name, font_regular, (GAMES_MAPNAME_START - GAMES_GAMENAME_START - 4));
 	cache.wzText_GameName.render(x + GAMES_GAMENAME_START, y + 12, textColor);
 
-	if (NetPlay.games[gameID].pureMap)
+	if (gamesList[gameID].pureMap)
 	{
 		textColor = WZCOL_RED;
 	}
@@ -544,17 +532,17 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		textColor = WZCOL_FORM_TEXT;
 	}
 	// draw map name, chop when we get a too long name
-	sstrcpy(name, NetPlay.games[gameID].mapname);
+	sstrcpy(name, gamesList[gameID].mapname);
 	cache.wzText_MapName.setTruncatableText(name, font_regular, (GAMES_PLAYERS_START - GAMES_MAPNAME_START - 4));
 	cache.wzText_MapName.render(x + GAMES_MAPNAME_START, y + 12, textColor);
 
 	textColor = WZCOL_FORM_TEXT;
 	// draw mod name (if any)
-	if (strlen(NetPlay.games[gameID].modlist))
+	if (strlen(gamesList[gameID].modlist))
 	{
 		// FIXME: we really don't have enough space to list all mods
 		char tmp[300];
-		ssprintf(tmp, _("Mods: %s"), NetPlay.games[gameID].modlist);
+		ssprintf(tmp, _("Mods: %s"), gamesList[gameID].modlist);
 		tmp[StringSize] = '\0';
 		sstrcpy(name, tmp);
 	}
@@ -566,7 +554,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	cache.wzText_ModNames.render(x + GAMES_MODNAME_START, y + 24, textColor);
 
 	// draw version string
-	ssprintf(name, _("Version: %s"), NetPlay.games[gameID].versionstring);
+	ssprintf(name, _("Version: %s"), gamesList[gameID].versionstring);
 	cache.wzText_VersionString.setTruncatableText(name, font_small, (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4));
 	cache.wzText_VersionString.render(x + GAMES_GAMENAME_START + 6, y + 24, textColor);
 

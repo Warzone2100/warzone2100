@@ -30,6 +30,7 @@
 #include "nettypes.h"
 #include <physfs.h>
 #include <vector>
+#include <functional>
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -251,7 +252,6 @@ struct PLAYER
 // all the luvly Netplay info....
 struct NETPLAY
 {
-	GAMESTRUCT	games[MaxGames];	///< The collection of games
 	PLAYER		players[MAX_PLAYERS];	///< The array of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
@@ -312,10 +312,12 @@ void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 
 // from netjoin.c
 SDWORD NETgetGameFlags(UDWORD flag);			// return one of the four flags(dword) about the game.
-int32_t NETgetGameFlagsUnjoined(unsigned int gameid, unsigned int flag);	// return one of the four flags(dword) about the game.
+int32_t NETgetGameFlagsUnjoined(const GAMESTRUCT& game, unsigned int flag);	// return one of the four flags(dword) about the game.
 bool NETsetGameFlags(UDWORD flag, SDWORD value);	// set game flag(1-4) to value.
 bool NEThaltJoining();				// stop new players joining this game
-bool NETfindGame();		// find games being played(uses GAME_GUID);
+bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc);
+bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion = false);
+bool NETfindGame(uint32_t gameId, GAMESTRUCT& output);
 bool NETjoinGame(const char *host, uint32_t port, const char *playername); // join game given with playername
 bool NEThostGame(const char *SessionName, const char *PlayerName,// host a game
                  SDWORD one, SDWORD two, SDWORD three, SDWORD four, UDWORD plyrs);

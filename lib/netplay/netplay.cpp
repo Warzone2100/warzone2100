@@ -1155,7 +1155,6 @@ int NETinit(bool bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
-		memset(&NetPlay.games, 0, sizeof(NetPlay.games));
 		// NOTE NetPlay.isUPNP is already set in configuration.c!
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
@@ -2787,7 +2786,7 @@ bool NEThaltJoining()
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-bool NETfindGame()
+bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
 {
 	SocketAddress *hosts;
 	unsigned int gamecount = 0;
@@ -2800,10 +2799,6 @@ bool NETfindGame()
 		return false;
 	}
 	setLobbyError(ERROR_NOERROR);
-
-	NetPlay.games[0].desc.dwSize = 0;
-	NetPlay.games[0].desc.dwCurrentPlayers = 0;
-	NetPlay.games[0].desc.dwMaxPlayers = 0;
 
 	if (!NetPlay.bComms)
 	{
@@ -2859,7 +2854,7 @@ bool NETfindGame()
 	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
 	    && (result = readAll(tcp_socket, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
 	{
-		gamesavailable = MIN(ntohl(gamesavailable), ARRAY_SIZE(NetPlay.games));
+		gamesavailable = ntohl(gamesavailable);
 	}
 	else
 	{
@@ -2882,13 +2877,12 @@ bool NETfindGame()
 
 	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
 
-	// Clear old games from list.
-	memset(NetPlay.games, 0x00, sizeof(NetPlay.games));
-
 	while (gamecount < gamesavailable)
 	{
 		// Attempt to receive a game description structure
-		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
+		GAMESTRUCT game;
+		memset(&game, 0x00, sizeof(game));
+		if (!NETrecvGAMESTRUCT(&game))
 		{
 			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
 			// If we fail, success depends on the amount of games that we've read already
@@ -2898,20 +2892,32 @@ bool NETfindGame()
 			return gamecount;
 		}
 
-		if (NetPlay.games[gamecount].desc.host[0] == '\0')
+		if (game.desc.host[0] == '\0')
 		{
-			memset(NetPlay.games[gamecount].desc.host, 0, sizeof(NetPlay.games[gamecount].desc.host));
-			strncpy(NetPlay.games[gamecount].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gamecount].desc.host) - 1);
+			memset(game.desc.host, 0, sizeof(game.desc.host));
+			strncpy(game.desc.host, getSocketTextAddress(tcp_socket), sizeof(game.desc.host) - 1);
 		}
 
-		int Vmgr = (NetPlay.games[gamecount].future4 & 0xFFFF0000) >> 16;
-		int Vmnr = (NetPlay.games[gamecount].future4 & 0x0000FFFF);
+		int Vmgr = (game.future4 & 0xFFFF0000) >> 16;
+		int Vmnr = (game.future4 & 0x0000FFFF);
 
 		if (Vmgr > NETCODE_VERSION_MAJOR || Vmnr > NETCODE_VERSION_MINOR)
 		{
 			debug(LOG_NET, "Version update %d:%d", Vmgr, Vmnr);
 			NetPlay.HaveUpgrade = true;
 		}
+
+		if (game.desc.dwSize != 0)
+		{
+			if (!handleEnumerateGameFunc(game))
+			{
+				// stop enumerating
+				// note: this may mess up retrieving the lobby response below...
+				// we really need a protocol replacement
+				break;
+			}
+		}
+
 		++gamecount;
 	}
 
@@ -2927,6 +2933,51 @@ bool NETfindGame()
 	tcp_socket = nullptr;
 
 	return true;
+}
+
+bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion /*= false*/)
+{
+	size_t gamecount = 0;
+	results.clear();
+	bool success = NETenumerateGames([&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &game) -> bool {
+		if (gamecount++ < startingIndex)
+		{
+			// skip this item, continue
+			return true;
+		}
+		if ((resultsLimit > 0) && (results.size() >= resultsLimit))
+		{
+			// stop processing games
+			return false;
+		}
+		if ((onlyMatchingLocalVersion) && ((game.game_version_major != (unsigned)NETGetMajorVersion()) || (game.game_version_minor != (unsigned)NETGetMinorVersion())))
+		{
+			// skip this non-matching version, continue
+			return true;
+		}
+		results.push_back(game);
+		return true;
+	});
+
+	return success;
+}
+
+bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
+{
+	bool foundMatch = false;
+	GAMESTRUCT result;
+	memset(&result, 0x00, sizeof(result));
+	NETenumerateGames([&foundMatch, &result, gameId](const GAMESTRUCT &game) -> bool {
+		if (game.gameId != gameId)
+		{
+			// not a match - continue enumerating
+			return true;
+		}
+		result = game;
+		foundMatch = true;
+		return false; // stop searching
+	});
+	return foundMatch;
 }
 
 // ////////////////////////////////////////////////////////////////////////
