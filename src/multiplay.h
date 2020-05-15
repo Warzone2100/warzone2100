@@ -210,6 +210,7 @@ public:
 	std::string host;
 	uint32_t port = 0;
 };
+std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId);
 enum class JoinGameResult {
 	FAILED,
 	JOINED,

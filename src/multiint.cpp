@@ -837,6 +837,83 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 	}
 }
 
+std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
+{
+	WzString originalLobbyServerName = WzString::fromUtf8(NETgetMasterserverName());
+	unsigned int originalLobbyServerPort = NETgetMasterserverPort();
+
+	if (!lobbyAddress.empty())
+	{
+		if (lobbyPort == 0)
+		{
+			debug(LOG_ERROR, "Invalid lobby port #");
+			return {};
+		}
+		NETsetMasterserverName(lobbyAddress.c_str());
+		NETsetMasterserverPort(lobbyPort);
+	}
+
+	auto cleanup = [&]() {
+		NETsetMasterserverName(originalLobbyServerName.toUtf8().c_str());
+		NETsetMasterserverPort(originalLobbyServerPort);
+	};
+
+	if (getLobbyError() != ERROR_INVALID)
+	{
+		setLobbyError(ERROR_NOERROR);
+	}
+
+	GAMESTRUCT game;
+	memset(&game, 0x00, sizeof(game));
+	if (!NETfindGame(lobbyGameId, game))
+	{
+		// failed to get list of games from lobby server
+		debug(LOG_ERROR, "Failed to retrieve list of games from lobby server");
+		cleanup();
+		return {};
+	}
+
+	if (getLobbyError())
+	{
+		debug(LOG_ERROR, "Failed to retrieve list of games from lobby server: %d", (int)getLobbyError());
+		cleanup();
+		return {};
+	}
+
+	if (game.desc.dwSize == 0)
+	{
+		debug(LOG_ERROR, "Invalid game struct");
+		cleanup();
+		return {};
+	}
+
+	if (game.gameId != lobbyGameId)
+	{
+		ASSERT(game.gameId == lobbyGameId, "NETfindGame returned a non-matching game"); // logic error
+		cleanup();
+		return {};
+	}
+
+	// found the game id, but is it compatible?
+
+	if (!NETisCorrectVersion(game.game_version_major, game.game_version_minor))
+	{
+		// incompatible version
+		debug(LOG_ERROR, "Failed to find a matching + compatible game in the lobby server");
+		cleanup();
+		return {};
+	}
+
+	// found the game
+	if (strlen(game.desc.host) == 0)
+	{
+		debug(LOG_ERROR, "Found the game, but no host details available");
+		cleanup();
+		return {};
+	}
+	std::string host = game.desc.host;
+	return {JoinConnectionDescription(host, 0)};
+}
 
 static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI);
 static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI);
