@@ -614,6 +614,8 @@ static void NETplayerDropped(UDWORD index)
  */
 void NETplayerKicked(UDWORD index)
 {
+	ASSERT_OR_RETURN(, index < MAX_PLAYERS, "NETplayerKicked invalid player_id: (%" PRIu32")", index);
+
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
