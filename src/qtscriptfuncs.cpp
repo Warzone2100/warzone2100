@@ -2750,6 +2750,33 @@ static QScriptValue js_terrainType(QScriptContext *context, QScriptEngine *)
 	return QScriptValue(terrainType(mapTile(x, y)));
 }
 
+//-- ## mapTile(x, y)
+//--
+//-- Returns the map tile of the given position, attributes are:
+//-- terrainType,
+//-- object (object on this tile (DROID, STRUCTURE, etc. or undefined if
+//-- there is none)),
+//-- height (z-coordinate of the top-left of the tile),
+//-- hoverContinent (For hover type propulsions),
+//-- limitedContinent (For land or sea limited propulsion types)
+//--
+static QScriptValue js_mapTile(QScriptContext *context, QScriptEngine *engine)
+{
+	int x = context->argument(0).toInt32();
+	int y = context->argument(1).toInt32();
+	MAPTILE* map_tile = mapTile(x, y);
+	QScriptValue value = engine->newObject();
+	if (map_tile->psObject)
+	{
+		value.setProperty("object", map_tile->psObject->type, QScriptValue::ReadOnly);
+	}
+	value.setProperty("height", map_tile->height, QScriptValue::ReadOnly);
+	value.setProperty("terrainType", terrainType(map_tile), QScriptValue::ReadOnly);
+	value.setProperty("hoverContinent", map_tile->hoverContinent, QScriptValue::ReadOnly);
+	value.setProperty("limitedContinent", map_tile->limitedContinent, QScriptValue::ReadOnly);
+	return value;
+}
+
 //-- ## orderDroid(droid, order)
 //--
 //-- Give a droid an order to do something. (3.2+ only)
@@ -6226,6 +6253,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach));
 	engine->globalObject().setProperty("propulsionCanReach", engine->newFunction(js_propulsionCanReach));
 	engine->globalObject().setProperty("terrainType", engine->newFunction(js_terrainType));
+	engine->globalObject().setProperty("mapTile", engine->newFunction(js_mapTile));
 	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild));
 	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj));
 	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid));
