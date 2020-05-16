@@ -403,6 +403,33 @@ public:
 	ResponseHeaderContainer responseHeaders;
 };
 
+#if LIBCURL_VERSION_NUM >= 0x071000	// cURL 7.16.0+
+static int sockopt_callback(void *clientp, curl_socket_t curlfd,
+							curlsocktype purpose)
+{
+#if defined(WZ_OS_UNIX)
+	// Set FD_CLOEXEC flag
+	int sockopts = fcntl(curlfd, F_SETFD);
+	if (sockopts != -1)
+	{
+		sockopts |= FD_CLOEXEC;
+		if (fcntl(curlfd, F_SETFD, sockopts) == -1)
+		{
+			// Failed to set FD_CLOEXEC
+			// Ignore and continue
+		}
+	}
+#elif defined(WZ_OS_WIN)
+	if (::SetHandleInformation((HANDLE)curlfd, HANDLE_FLAG_INHERIT, 0) == 0)
+	{
+		// Failed to set HANDLE_FLAG_INHERIT to 0
+		// Ignore and continue
+	}
+#endif
+	return CURL_SOCKOPT_OK;
+}
+#endif // LIBCURL_VERSION_NUM >= 0x071000	// cURL 7.16.0+
+
 class URLTransferRequest
 {
 public:
@@ -438,6 +465,10 @@ public:
 			return nullptr;
 		}
 		curl_easy_setopt(handle, CURLOPT_URL, url().c_str());
+
+#if LIBCURL_VERSION_NUM >= 0x071000	// cURL 7.16.0+
+		curl_easy_setopt(handle, CURLOPT_SOCKOPTFUNCTION, sockopt_callback);
+#endif
 
 #if LIBCURL_VERSION_NUM >= 0x070A08 // CURLOPT_IPRESOLVE is available since cURL 7.10.8
 		switch (protocol())
