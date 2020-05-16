@@ -200,6 +200,11 @@ int NETGetMinorVersion()
 	return NETCODE_VERSION_MINOR;
 }
 
+bool NETGameIsLocked()
+{
+	return NetPlay.GamePassworded;
+}
+
 //	Sets if the game is password protected or not
 void NETGameLocked(bool flag)
 {
@@ -239,6 +244,7 @@ void NETsetGamePassword(const char *password)
 {
 	sstrcpy(NetPlay.gamePassword, password);
 	debug(LOG_NET, "Password entered is: [%s]", NetPlay.gamePassword);
+	NETGameLocked(true);
 }
 
 //	Resets the game password
