@@ -349,6 +349,7 @@ uint8_t NET_numHumanPlayers(void);
 void NETsetLobbyOptField(const char *Value, const NET_LOBBY_OPT_FIELD Field);
 std::vector<uint8_t> NET_getHumanPlayers(void);
 
+bool NETGameIsLocked();
 void NETGameLocked(bool flag);
 void NETresetGamePassword();
 bool NETregisterServer(int state);

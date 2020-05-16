@@ -3092,7 +3092,6 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 					ssprintf(buf, "%s", _("*** password is NOT required! ***"));
 					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 				}
-				NETGameLocked(willSet);
 			}
 			break;
 		}
