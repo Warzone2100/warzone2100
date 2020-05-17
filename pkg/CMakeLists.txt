@@ -181,11 +181,14 @@ set(CPACK_RPM_PACKAGE_DESCRIPTION "Warzone 2100 was one of the first 3D RTS game
 #####################
 # DEB Settings
 
+set(CPACK_DEBIAN_PACKAGE_NAME "warzone2100")
 set(CPACK_DEBIAN_PACKAGE_SECTION  "games")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://wz2100.net/")
 
 set(CPACK_DEBIAN_ENABLE_COMPONENT_DEPENDS ON)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Innovative 3D real-time strategy\n Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studios in 1999, and released in 2004 under the GPL.\n Development is continued by the Warzone 2100 Project to produce this improved version.")
 
 #####################
 # Package Source

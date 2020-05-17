@@ -51,10 +51,56 @@ jobs:
         cd docker/ubuntu-18.04/
         docker build -t ubuntu .
         cd ../..
+    - name: Compute build variables
+      run: |
+        . .ci/githubactions/export_build_output_desc.sh
+        echo "::set-env name=WZ_BUILD_DESC_IS_TAG::${WZ_BUILD_DESC_IS_TAG}"
+        echo "::set-env name=WZ_BUILD_DESC_PREFIX::${WZ_BUILD_DESC_PREFIX}"
+        WZ_OUTPUT_NAME_SUFFIX=""
+        WZ_NAME_SUFFIX=""
+        if [ "$WZ_BUILD_DESC_IS_TAG" == "false" ]; then
+          WZ_OUTPUT_NAME_SUFFIX="_$(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9\.]/_/g')"
+          WZ_NAME_SUFFIX=" ($(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9\.]/_/g'))"
+        fi
+        echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "::set-env name=WZ_OUTPUT_NAME_SUFFIX::${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "::set-env name=WZ_NAME_SUFFIX::${WZ_NAME_SUFFIX}"
+
+        WZ_DISTRIBUTOR="UNKNOWN"
+        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+          WZ_DISTRIBUTOR="wz2100.net"
+        fi
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
+        echo "::set-env name=WZ_DISTRIBUTOR::${WZ_DISTRIBUTOR}"
     - name: CMake Configure
-      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
+      run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
     - name: CMake Build
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
+    - name: Package .DEB
+      run: |
+        WZ_PACKAGE_VAR_OVERRIDES=""
+        WZ_SHORT_SHA=$(echo "${GITHUB_SHA}" | head -c 7)
+        if [ "$WZ_BUILD_DESC_IS_TAG" == "false" ]; then
+          DEB_VERSION_SAFE_DESC_PREFIX=$(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9]/~/g')
+          WZ_PACKAGE_VAR_OVERRIDES="-D CPACK_DEBIAN_PACKAGE_VERSION=1.${DEB_VERSION_SAFE_DESC_PREFIX}.${WZ_SHORT_SHA} -D WZ_DEVELOPMENT_BUILD=ON"
+        fi
+        WZ_DEB_ARCH="amd64"
+        WZ_DEB_PACKAGE_NAME=$(echo "warzone2100${WZ_OUTPUT_NAME_SUFFIX}" | sed 's/[^a-zA-Z0-9\.\+\-]/-/g')
+        docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cpack --config "build/CPackConfig.cmake" -G DEB -D CPACK_DEBIAN_PACKAGE_MAINTAINER="${WZ_DISTRIBUTOR}" -D CPACK_DEB_COMPONENT_INSTALL=OFF -D CPACK_MONOLITHIC_INSTALL=1 -D CPACK_DEBIAN_PACKAGE_NAME="${WZ_DEB_PACKAGE_NAME}" -D CPACK_DEBIAN_FILE_NAME="warzone2100_ubuntu_${WZ_DEB_ARCH}.deb" ${WZ_PACKAGE_VAR_OVERRIDES}
+        OUTPUT_DIR="${HOME}/output"
+        echo "OUTPUT_DIR=${OUTPUT_DIR}"
+        echo "::set-env name=OUTPUT_DIR::${OUTPUT_DIR}"
+        mkdir -p "${OUTPUT_DIR}"
+        OUTPUT_FILE_NAME="warzone2100_ubuntu_${WZ_DEB_ARCH}.deb"
+        cp "warzone2100_ubuntu_${WZ_DEB_ARCH}.deb" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+        echo "Generated .deb: \"${OUTPUT_FILE_NAME}\""
+        echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+        echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+    - uses: actions/upload-artifact@v1
+      if: success()
+      with:
+        name: "warzone2100_ubuntu_amd64_deb"
+        path: ${{ env.OUTPUT_DIR }}
 
   package-source:
     name: Package Source (Ubuntu 18.04, CMake) [GCC]
