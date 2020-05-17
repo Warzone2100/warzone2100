@@ -398,7 +398,7 @@ public:
 	bool dismissNotification(float animationSpeed = 1.0f);
 private:
 	bool calculateNotificationWidgetPos();
-	gfx_api::texture* loadImage(const std::string& filename);
+	gfx_api::texture* loadImage(const WZ_Notification_Image& image);
 	void internalDismissNotification(float animationSpeed = 1.0f);
 public:
 	WzCheckboxButton *pOnDoNotShowAgainCheckbox = nullptr;
@@ -647,9 +647,9 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	psNotificationOverlayScreen->psForm->attach(psNewNotificationForm);
 
 	// Load the image, if specified
-	if (!request->notification.largeIconPath.empty())
+	if (!request->notification.largeIcon.empty())
 	{
-		pImageTexture = loadImage(request->notification.largeIconPath);
+		pImageTexture = loadImage(request->notification.largeIcon);
 	}
 
 	const int notificationWidth = width();
@@ -821,21 +821,41 @@ gfx_api::texture* makeTexture(int width, int height, const gfx_api::pixel_format
 	return mTexture;
 }
 
-gfx_api::texture* W_NOTIFICATION::loadImage(const std::string &filename)
+gfx_api::texture* W_NOTIFICATION::loadImage(const WZ_Notification_Image& image)
 {
 	gfx_api::texture* pTexture = nullptr;
-	const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
-	iV_Image image;
-	if (!extension || strcmp(extension, ".png") != 0)
+	iV_Image ivImage;
+	if (!image.imagePath().empty())
 	{
-		debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
+		const std::string& filename = image.imagePath();
+		const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
+
+		if (!extension || strcmp(extension, ".png") != 0)
+		{
+			debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
+			return nullptr;
+		}
+		if (!iV_loadImage_PNG(filename.c_str(), &ivImage))
+		{
+			return nullptr;
+		}
+	}
+	else if (!image.memoryBuffer().empty())
+	{
+		auto result = iV_loadImage_PNG(image.memoryBuffer(), &ivImage);
+		if (!result.noError())
+		{
+			debug(LOG_ERROR, "Failed to load image from memory buffer: %s", result.text.c_str());
+			return nullptr;
+		}
+	}
+	else
+	{
+		// empty or unhandled case
 		return nullptr;
 	}
-	if (iV_loadImage_PNG(filename.c_str(), &image))
-	{
-		pTexture = makeTexture(image.width, image.height, iV_getPixelFormat(&image), image.bmp);
-		iV_unloadImage(&image);
-	}
+	pTexture = makeTexture(ivImage.width, ivImage.height, iV_getPixelFormat(&ivImage), ivImage.bmp);
+	iV_unloadImage(&ivImage);
 	return pTexture;
 }
 

@@ -253,7 +253,7 @@ WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json
 								}
 							});
 						});
-						notification.largeIconPath = "images/warzone2100.png";
+						notification.largeIcon = WZ_Notification_Image("images/warzone2100.png");
 						if (notificationInfo.is_object())
 						{
 							const auto& notificationBase = notificationInfo["base"];
