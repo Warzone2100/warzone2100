@@ -34,9 +34,25 @@ IMGSaveError IMGSaveError::None = IMGSaveError();
 // PNG callbacks
 static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 {
-	PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(ctx);
-
-	WZ_PHYSFS_readBytes(fileHandle, area, size);
+	if (ctx != nullptr)
+	{
+		PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(ctx);
+		if (fileHandle != nullptr)
+		{
+			PHYSFS_sint64 result = WZ_PHYSFS_readBytes(fileHandle, area, size);
+			if (result > -1)
+			{
+				size_t byteCountRead = static_cast<size_t>(result);
+				if (byteCountRead == size)
+				{
+					return;
+				}
+				png_error(ctx, "Attempt to read beyond end of data");
+			}
+			png_error(ctx, "readBytes failure");
+		}
+		png_error(ctx, "Invalid memory read");
+	}
 }
 
 static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
