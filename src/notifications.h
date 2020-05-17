@@ -26,6 +26,7 @@
 #include <list>
 #include <memory>
 #include <functional>
+#include <vector>
 
 class WZ_Notification_Display_Options
 {
@@ -87,6 +88,43 @@ private:
 	bool _isOneTimeNotification = false;
 };
 
+class WZ_Notification_Image
+{
+public:
+	enum class ImageType {
+		PNG
+	};
+public:
+	WZ_Notification_Image()
+	: _type(ImageType::PNG)
+	{ }
+
+	explicit WZ_Notification_Image(const char* imagePath, const ImageType& imageType = ImageType::PNG)
+	: _imagePath(imagePath)
+	, _type(imageType)
+	{ }
+	explicit WZ_Notification_Image(const std::string& imagePath, const ImageType& imageType = ImageType::PNG)
+	: _imagePath(imagePath)
+	, _type(imageType)
+	{ }
+	explicit WZ_Notification_Image(const std::vector<unsigned char>& memoryBuffer, const ImageType& imageType = ImageType::PNG)
+	: _memoryBuffer(memoryBuffer)
+	, _type(imageType)
+	{ }
+public:
+	bool empty() const
+	{
+		return _imagePath.empty() && _memoryBuffer.empty();
+	}
+	const std::string& imagePath() const { return _imagePath; }
+	const std::vector<unsigned char>& memoryBuffer() const { return _memoryBuffer; }
+	ImageType imageType() const { return _type; }
+private:
+	std::string _imagePath;
+	std::vector<unsigned char> _memoryBuffer;
+	ImageType _type;
+};
+
 class WZ_Notification; // forward-declare
 
 class WZ_Notification_Action
@@ -122,9 +160,10 @@ public:
 
 	// [Optional properties]:
 
-	// The path to a PNG to be displayed on the right side of the notification.
+	// A PNG to be displayed on the right side of the notification.
 	// (Suggestion: Make sure the PNG is *at least* 72x72 pixels to ensure sharper display on higher resolution screens.)
-	std::string largeIconPath;
+	WZ_Notification_Image largeIcon;
+
 	// Displays an Action button on the notification which calls the handler when clicked.
 	WZ_Notification_Action action;
 	// See: WZ_Notification_Display_Options
