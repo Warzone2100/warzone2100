@@ -164,3 +164,11 @@ if(CPACK_GENERATOR STREQUAL "RPM")
 	set(CPACK_RPM_DATAGROUP_PACKAGE_ARCHITECTURE "noarch")
 
 endif()
+
+if (WZ_DEVELOPMENT_BUILD)
+	string(TIMESTAMP _current_date "%Y-%m-%d" UTC)
+	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Innovative 3D real-time strategy (development build)")
+	set(CPACK_RPM_PACKAGE_SUMMARY "Innovative 3D real-time strategy (development build)")
+	set(CPACK_RPM_PACKAGE_DESCRIPTION "Development build of Warzone 2100 (Built: ${_current_date})\nFor more information, and the latest development (and release!) builds, please see: https://github.com/Warzone2100/warzone2100")
+	set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Innovative 3D real-time strategy (development build)\n Development build of Warzone 2100 (Built: ${_current_date})\n .\n For more information, and the latest development (and release!) builds, please see: https://github.com/Warzone2100/warzone2100")
+endif()
