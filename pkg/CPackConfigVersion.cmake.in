@@ -9,7 +9,7 @@ function(setDefault var defaultValue)
 	if(NOT DEFINED ${var})
 		set(${var} "${defaultValue}" PARENT_SCOPE)
 	else()
-		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++\"${var}\"=\"${{var}}\" (ignoring default: \"${defaultValue}\")")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++\"${var}\"=\"${${var}}\" (ignoring default: \"${defaultValue}\")")
 	endif()
 endfunction()
 
