@@ -63,9 +63,9 @@ if(NOT DEFINED WZ_DATADIR)
 	if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/data")
 	elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100") # not used on macOS (macOS always creates an app bundle)
+		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}") # not used on macOS (macOS always creates an app bundle)
 	else()
-		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100")
+		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}")
 	endif()
 endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -589,7 +589,7 @@ include_directories("3rdparty/date/include")
 
 SET(STDC_HEADERS ON)
 
-SET(PACKAGE "warzone2100")
+SET(PACKAGE "warzone2100${WZ_OUTPUT_NAME_SUFFIX}")
 SET(PACKAGE_BUGREPORT "http://wz2100.net/")
 SET(PACKAGE_NAME "Warzone 2100")
 SET(PACKAGE_TARNAME "warzone2100")
@@ -728,7 +728,7 @@ endif()
 foreach(rfile ${wz2100_ROOT_FILES})
 	install(FILES ${rfile}
 			COMPONENT Info
-			DESTINATION "${CMAKE_INSTALL_DOCDIR}"
+			DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}"
 	)
 endforeach()
 

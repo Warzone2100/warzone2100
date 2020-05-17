@@ -226,27 +226,37 @@ endif()
 
 include(GNUInstallDirs)
 if(wz2100_doc_IMAGES_FILES)
-	install(FILES ${wz2100_doc_IMAGES_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}/images" COMPONENT Docs)
+	install(FILES ${wz2100_doc_IMAGES_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}/images" COMPONENT Docs)
 endif()
-install(FILES ${wz2100_doc_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}" COMPONENT Docs)
+install(FILES ${wz2100_doc_FILES} DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}" COMPONENT Docs)
 
 if(UNIX)
 	# Man-page gzip and installation
 
 	find_program(GZIP_BIN NAMES gzip PATHS /bin /usr/bin /usr/local/bin)
 	if (GZIP_BIN)
-		set(_warzone2100_6_uncompressed "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6")
+		set(_warzone2100_6_uncompressed_orig "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.6")
+		set(_warzone2100_6_uncompressed "${CMAKE_CURRENT_BINARY_DIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}.6")
 		set(_warzone2100_6_compressed "${_warzone2100_6_uncompressed}.gz")
 
 		add_custom_target(wz2100_manpages ALL)
 		set_property(TARGET wz2100_manpages PROPERTY FOLDER "doc")
 		add_dependencies(wz2100_manpages wz2100_doc)
 
-		add_custom_command(
-			TARGET wz2100_manpages
-			COMMAND ${GZIP_BIN} -n -c ${_warzone2100_6_uncompressed} > ${_warzone2100_6_compressed}
-			VERBATIM
-		)
+		if (NOT "${_warzone2100_6_uncompressed_orig}" STREQUAL "${_warzone2100_6_uncompressed}")
+			add_custom_command(
+				TARGET wz2100_manpages
+				COMMAND ${CMAKE_COMMAND} -E copy "${_warzone2100_6_uncompressed_orig}" "${_warzone2100_6_uncompressed}"
+				COMMAND ${GZIP_BIN} -n -c ${_warzone2100_6_uncompressed} > ${_warzone2100_6_compressed}
+				VERBATIM
+			)
+		else()
+			add_custom_command(
+				TARGET wz2100_manpages
+				COMMAND ${GZIP_BIN} -n -c ${_warzone2100_6_uncompressed} > ${_warzone2100_6_compressed}
+				VERBATIM
+			)
+		endif()
 
 		install(FILES "${_warzone2100_6_compressed}" DESTINATION "${CMAKE_INSTALL_MANDIR}/man6" COMPONENT Manpages)
 	else()

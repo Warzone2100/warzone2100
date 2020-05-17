@@ -127,7 +127,7 @@ endfunction()
 
 # Must be set to warzone2100.pot, as the filename (without its extension) is used later
 # to form the install .gmo file name (warzone2100.gmo) in each locale directory
-set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.pot")
+set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}.pot")
 
 # Read in `POTFILES.in` to build a list of dependency paths in the same order.
 set(_potfiles_in_path "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")

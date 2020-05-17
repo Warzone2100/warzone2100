@@ -673,34 +673,34 @@ static void scanDataDirs()
 
 		if (!PHYSFS_exists("gamedesc.lev"))
 		{
-			// Relocation for AutoPackage (<prefix>/share/warzone2100/)
-			tmpstr = prefix + dirSeparator + "share" + dirSeparator + "warzone2100" + dirSeparator;
-			registerSearchPath(tmpstr.c_str(), 4);
+			// Program dir
+			registerSearchPath(PHYSFS_getBaseDir(), 4);
 			rebuildSearchPath(mod_multiplay, true);
 
 			if (!PHYSFS_exists("gamedesc.lev"))
 			{
-				// Program dir
-				registerSearchPath(PHYSFS_getBaseDir(), 5);
-				rebuildSearchPath(mod_multiplay, true);
+				// Guessed fallback default datadir on Unix
+				std::string wzDataDir = WZ_DATADIR;
+				if(!wzDataDir.empty())
+				{
+				#ifndef WZ_DATADIR_ISABSOLUTE
+					// Treat WZ_DATADIR as a relative path - append to the install PREFIX
+					tmpstr = prefix + dirSeparator + wzDataDir;
+					registerSearchPath(tmpstr.c_str(), 5);
+					rebuildSearchPath(mod_multiplay, true);
+				#else
+					// Treat WZ_DATADIR as an absolute path, and use directly
+					registerSearchPath(wzDataDir.c_str(), 5);
+					rebuildSearchPath(mod_multiplay, true);
+				#endif
+				}
 
 				if (!PHYSFS_exists("gamedesc.lev"))
 				{
-					// Guessed fallback default datadir on Unix
-					std::string wzDataDir = WZ_DATADIR;
-					if(!wzDataDir.empty())
-					{
-					#ifndef WZ_DATADIR_ISABSOLUTE
-						// Treat WZ_DATADIR as a relative path - append to the install PREFIX
-						tmpstr = prefix + dirSeparator + wzDataDir;
-						registerSearchPath(tmpstr.c_str(), 6);
-						rebuildSearchPath(mod_multiplay, true);
-					#else
-						// Treat WZ_DATADIR as an absolute path, and use directly
-						registerSearchPath(wzDataDir.c_str(), 6);
-						rebuildSearchPath(mod_multiplay, true);
-					#endif
-					}
+					// Relocation for AutoPackage (<prefix>/share/warzone2100/)
+					tmpstr = prefix + dirSeparator + "share" + dirSeparator + "warzone2100" + dirSeparator;
+					registerSearchPath(tmpstr.c_str(), 6);
+					rebuildSearchPath(mod_multiplay, true);
 
 					if (!PHYSFS_exists("gamedesc.lev"))
 					{
