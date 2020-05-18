@@ -25,6 +25,8 @@ set(CPACK_PACKAGE_NAME			"Warzone 2100")
 set(CPACK_PACKAGE_VENDOR		"Warzone 2100 Project")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_CHECKSUM		SHA256)
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Description.txt")
+set(CPACK_PACKAGE_HOMEPAGE_URL  "https://wz2100.net")
 
 #########################
 # Default components that are added to package
@@ -187,8 +189,6 @@ set(CPACK_RPM_PACKAGE_GROUP     "Amusements/Games")
 set(CPACK_RPM_PACKAGE_LICENSE   "GPLv2+ and CC-BY-SA")
 set(CPACK_RPM_PACKAGE_URL       "https://wz2100.net/")
 
-set(CPACK_RPM_PACKAGE_DESCRIPTION "Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studios in 1999, and released in 2004 under the GPL. Development is continued by the Warzone 2100 Project to produce this improved version.")
-
 #####################
 # DEB Settings
 
@@ -199,7 +199,7 @@ set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://wz2100.net/")
 set(CPACK_DEBIAN_ENABLE_COMPONENT_DEPENDS ON)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Innovative 3D real-time strategy\n Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studios in 1999, and released in 2004 under the GPL.\n Development is continued by the Warzone 2100 Project to produce this improved version.")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Innovative 3D real-time strategy\n In Warzone 2100 you command the forces of “The Project” in a battle to rebuild the world after mankind has been nearly destroyed by nuclear missiles.\n .\n The game offers campaign, tutorial, multi-player and single-player skirmish modes. An extensive tech tree with over 400 different technologies, combined with the unit design system, allows for a wide variety of possible units and tactics. Play versus AI bots in local skirmishes (or as added teammates / enemies in multiplayer), and practice your skills with endless replayability.\n .\n Warzone 2100 was originally created by Pumpkin Studios and published by Eidos Interactive, and was open-sourced in 2004. It has been developed, maintained, and improved by the community ever since, under the banner of the “Warzone 2100 Project”.\n .\n This package does not include the campaign video sequences - please see the Warzone 2100 website for details on how to download and install them.")
 
 #####################
 # Package Source
