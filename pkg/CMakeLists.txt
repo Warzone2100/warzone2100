@@ -144,8 +144,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(CPACK_NSIS_COMPONENT_INSTALL ON)
 
 	# Additional information
-	set(CPACK_NSIS_HELP_LINK "http://wz2100.net")
-	set(CPACK_NSIS_URL_INFO_ABOUT "http://wz2100.net")
+	set(CPACK_NSIS_HELP_LINK "https://wz2100.net")
+	set(CPACK_NSIS_URL_INFO_ABOUT "https://wz2100.net")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	# macOS builds
@@ -174,7 +174,7 @@ endif()
 set(CPACK_RPM_PACKAGE_SUMMARY   "Innovative 3D real-time strategy")
 set(CPACK_RPM_PACKAGE_GROUP     "Amusements/Games")
 set(CPACK_RPM_PACKAGE_LICENSE   "GPLv2+ and CC-BY-SA")
-set(CPACK_RPM_PACKAGE_URL       "http://wz2100.net/")
+set(CPACK_RPM_PACKAGE_URL       "https://wz2100.net/")
 
 set(CPACK_RPM_PACKAGE_DESCRIPTION "Warzone 2100 was one of the first 3D RTS games ever. It was released commercially by Pumpkin Studios in 1999, and released in 2004 under the GPL. Development is continued by the Warzone 2100 Project to produce this improved version.")
 
@@ -183,7 +183,7 @@ set(CPACK_RPM_PACKAGE_DESCRIPTION "Warzone 2100 was one of the first 3D RTS game
 
 set(CPACK_DEBIAN_PACKAGE_NAME "warzone2100")
 set(CPACK_DEBIAN_PACKAGE_SECTION  "games")
-set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "http://wz2100.net/")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://wz2100.net/")
 
 set(CPACK_DEBIAN_ENABLE_COMPONENT_DEPENDS ON)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
