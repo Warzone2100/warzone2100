@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0054 NEW)
 
+#########################
+# Generator-specific components
+
+install(FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/debian/copyright"
+  DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}"
+  COMPONENT DebianInfo
+)
+
+#########################
+
 function(copyFileToDir _file _destDir)
 	get_filename_component(_filename "${_file}" NAME)
 	configure_file(
