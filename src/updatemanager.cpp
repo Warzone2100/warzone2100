@@ -132,7 +132,7 @@ bool WzUpdateManager::isValidExpiry(const json& updateData)
 {
 	if (!updateData.is_object())
 	{
-		wzAsyncExecOnMainThread([]{ debug(LOG_ERROR, "Update data is not an object"); });
+		wzAsyncExecOnMainThread([]{ debug(LOG_WARNING, "Update data is not an object"); });
 		return false;
 	}
 	if (!updateData.contains("validThru")) { return false; }
@@ -158,13 +158,13 @@ WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json
 {
 	if (!updateData.is_object())
 	{
-		wzAsyncExecOnMainThread([]{ debug(LOG_ERROR, "Update data is not an object"); });
+		wzAsyncExecOnMainThread([]{ debug(LOG_WARNING, "Update data is not an object"); });
 		return ProcessResult::INVALID_JSON;
 	}
 	const auto& channels = updateData["channels"];
 	if (!channels.is_array())
 	{
-		wzAsyncExecOnMainThread([]{ debug(LOG_ERROR, "Channels should be an array"); });
+		wzAsyncExecOnMainThread([]{ debug(LOG_WARNING, "Channels should be an array"); });
 		return ProcessResult::INVALID_JSON;
 	}
 	BuildPropertyProvider buildPropProvider;
@@ -232,7 +232,7 @@ WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json
 					updateLink = configureUpdateLinkURL(updateLink, buildPropProvider);
 					// submit notification (on main thread)
 					wzAsyncExecOnMainThread([validSignature, channelNameStr, releaseVersionStr, notificationInfo, updateLink]{
-						debug(LOG_ERROR, "Found an available update (%s) in channel (%s)", releaseVersionStr.c_str(), channelNameStr.c_str());
+						debug(LOG_INFO, "Found an available update (%s) in channel (%s)", releaseVersionStr.c_str(), channelNameStr.c_str());
 						WZ_Notification notification;
 						notification.duration = 0;
 						notification.contentTitle = _("Update Available");
@@ -387,7 +387,7 @@ void WzUpdateManager::initUpdateCheck()
 		if (httpStatusCode != 200)
 		{
 			wzAsyncExecOnMainThread([httpStatusCode]{
-				debug(LOG_ERROR, "Update check returned HTTP status code: %ld", httpStatusCode);
+				debug(LOG_WARNING, "Update check returned HTTP status code: %ld", httpStatusCode);
 			});
 			return;
 		}
