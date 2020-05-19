@@ -2756,7 +2756,7 @@ static QScriptValue js_terrainType(QScriptContext *context, QScriptEngine *)
 //-- terrainType,
 //-- object (object on this tile (DROID, STRUCTURE, etc. or undefined if
 //-- there is none)),
-//-- height (z-coordinate of the top-left of the tile),
+//-- height
 //-- hoverContinent (For hover type propulsions),
 //-- limitedContinent (For land or sea limited propulsion types)
 //--
