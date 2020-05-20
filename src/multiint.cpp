@@ -249,6 +249,8 @@ static void sendRoomChatMessage(char const *text);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
+static const char *factionList[] = { N_("Normal"), N_("NEXUS"), N_("Collective") };
+
 static const char *difficultyList[] = { N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
 static const AIDifficulty difficultyValue[] = { AIDifficulty::EASY, AIDifficulty::MEDIUM, AIDifficulty::HARD, AIDifficulty::INSANE };
 static struct
@@ -3108,6 +3110,17 @@ static void loadMapPlayerSettings(WzConfig& ini)
 				if (strcasecmp(difficultyList[j], value.toUtf8().c_str()) == 0)
 				{
 					NetPlay.players[i].difficulty = difficultyValue[j];
+				}
+			}
+		}
+		if (ini.contains("faction"))
+		{
+			WzString value = ini.value("faction", "Normal").toWzString();
+			for (unsigned j = 0; j < ARRAY_SIZE(factionList); ++j)
+			{
+				if (strcasecmp(factionList[j], value.toUtf8().c_str()) == 0)
+				{
+					NetPlay.players[i].faction = j;
 				}
 			}
 		}
