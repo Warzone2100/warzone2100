@@ -62,6 +62,7 @@
 #include "src/warzoneconfig.h"
 #include "src/version.h"
 #include "src/loadsave.h"
+#include "src/activity.h"
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -215,6 +216,10 @@ void NETGameLocked(bool flag)
 	{
 		debug(LOG_NET, "Updating game locked status.");
 		NETregisterServer(WZ_SERVER_UPDATE);
+	}
+	if (flagChanged)
+	{
+		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	}
 	NETlogEntry("Password is", SYNC_FLAG, NetPlay.GamePassworded);
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE");
@@ -432,6 +437,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETuint8_t(&game.skDiff[index[n]]);  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
 	}
 	NETend();
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
 static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
@@ -1691,8 +1697,12 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			// data to all other clients as well.
 			if (NetPlay.isHost && !error)
 			{
-				NETBroadcastPlayerInfo(index);
+				NETBroadcastPlayerInfo(index); // ultimately triggers updateMultiplayGameData inside NETSendNPlayerInfoTo
 				NETfixDuplicatePlayerNames();
+			}
+			else if (!error)
+			{
+				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 			}
 			netPlayersUpdated = true;
 			break;
@@ -2399,7 +2409,26 @@ static void NETallowJoining()
 	}
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
 
-	NETregisterServer(WZ_SERVER_CONNECT);
+	bool bFirstTimeConnect = NETregisterServer(WZ_SERVER_CONNECT);
+	if (bFirstTimeConnect)
+	{
+		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+		ActivitySink::ListeningInterfaces listeningInterfaces;
+		if (tcp_socket != nullptr)
+		{
+			listeningInterfaces.IPv4 = socketHasIPv4(tcp_socket);
+			if (listeningInterfaces.IPv4)
+			{
+				listeningInterfaces.ipv4_port = NETgetGameserverPort();
+			}
+			listeningInterfaces.IPv6 = socketHasIPv6(tcp_socket);
+			if (listeningInterfaces.IPv6)
+			{
+				listeningInterfaces.ipv6_port = NETgetGameserverPort();
+			}
+		}
+		ActivityManager::instance().hostGame(gamestruct.name, NetPlay.players[0].name, NETgetMasterserverName(), NETgetMasterserverPort(), listeningInterfaces, gamestruct.gameId);
+	}
 
 	// This is here since we need to get the status, before we can show the info.
 	// FIXME: find better location to stick this?

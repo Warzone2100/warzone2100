@@ -56,6 +56,7 @@
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "titleui/titleui.h"
+#include "activity.h"
 #include "nethelpers.h"
 
 #include <type_traits>
@@ -76,6 +77,9 @@ bool loadConfig()
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
 		return false;
 	}
+
+	ActivityManager::instance().beginLoadingSettings();
+
 	debug(LOG_WZ, "Reading configuration from %s", ini.fileName().toUtf8().constData());
 	if (ini.contains("voicevol"))
 	{
@@ -236,6 +240,8 @@ bool loadConfig()
 		pie_SetVideoBufferDepth(ini.value("bpp").toInt());
 	}
 	setFavoriteStructs(ini.value("favoriteStructs").toString().toUtf8().constData());
+
+	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
 

@@ -40,6 +40,7 @@
 #include "../warzoneconfig.h"
 #include "../frend.h"
 #include "../loadsave.h"			// for blueboxes.
+#include "../activity.h"
 
 struct DisplayRemoteGameHeaderCache
 {
@@ -171,10 +172,13 @@ TITLECODE WzGameFindTitleUI::run()
 	{
 		UDWORD gameNumber = id - GAMES_GAMESTART;
 
+		std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, 0)};
+		ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
+
 		// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 		ingame.localOptionsReceived = false;					// note, we are awaiting options
 		sstrcpy(game.name, gamesList[gameNumber].name);		// store name
-		joinGame(gamesList[gameNumber].desc.host, 0);
+		joinGame(connectionDesc);
 		return TITLECODE_CONTINUE;
 	}
 

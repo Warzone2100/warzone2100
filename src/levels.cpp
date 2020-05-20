@@ -52,6 +52,7 @@
 #include "multiint.h"
 #include "qtscript.h"
 #include "wrappers.h"
+#include "activity.h"
 
 extern int lev_get_lineno();
 extern char *lev_get_text();
@@ -1043,6 +1044,8 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
 		}
 	}
+
+	ActivityManager::instance().loadedLevel(psCurrLevel->type, mapNameWithoutTechlevel(getLevelName()));
 
 	return true;
 }

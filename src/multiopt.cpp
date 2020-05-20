@@ -60,6 +60,7 @@
 #include "multiint.h"
 #include "multirecv.h"
 #include "template.h"
+#include "activity.h"
 
 // send complete game info set!
 void sendOptions()
@@ -131,6 +132,8 @@ void sendOptions()
 	NETuint8_t(&ingame.flags);
 
 	NETend();
+
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -308,6 +311,8 @@ void recvOptions(NETQUEUE queue)
 	{
 		loadMapPreview(false);
 	}
+
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
 

@@ -77,6 +77,7 @@
 #include "warzoneconfig.h"
 #include "combat.h"
 #include "qtscript.h"
+#include "activity.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -2382,6 +2383,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 
 bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
+	ActivityManager::instance().completedMission(result, collectEndGameStatsData(), Cheated);
 	return _intAddMissionResult(result, bPlaySuccess, showBackDrop);
 }
 
@@ -3124,6 +3126,18 @@ void	setCampaignNumber(UDWORD number)
 UDWORD	getCampaignNumber()
 {
 	return camNumber;
+}
+
+std::string getCampaignName()
+{
+	UDWORD campaignNum = getCampaignNumber();
+	std::string campaignName;
+	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
+	if (list.size() >= campaignNum)
+	{
+		campaignName = list[campaignNum - 1].name.toStdString();
+	}
+	return campaignName;
 }
 
 std::vector<CAMPAIGN_FILE> readCampaignFiles()

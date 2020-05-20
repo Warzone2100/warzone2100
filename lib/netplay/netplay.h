@@ -252,7 +252,7 @@ struct PLAYER
 // all the luvly Netplay info....
 struct NETPLAY
 {
-	PLAYER		players[MAX_PLAYERS];	///< The array of players.
+	std::vector<PLAYER>	players;	///< The array of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
 	uint32_t	bComms;			///< Actually do the comms?
@@ -268,6 +268,11 @@ struct NETPLAY
 	bool HaveUpgrade;					// game updates available
 	char MOTDbuffer[255];				// buffer for MOTD
 	char *MOTD;
+
+	NETPLAY()
+	{
+		players.resize(MAX_PLAYERS);
+	}
 };
 
 struct PLAYER_IP
