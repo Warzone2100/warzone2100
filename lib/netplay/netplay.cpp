@@ -1642,7 +1642,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			for (n = 0; n < indexLen; ++n)
 			{
 				bool wasAllocated = false;
-				char oldName[sizeof(NetPlay.players[index].name)];
+				std::string oldName;
 
 				// Retrieve the player's ID
 				NETuint32_t(&index);
@@ -1660,8 +1660,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbool(&NetPlay.players[index].allocated);
 				NETbool(&NetPlay.players[index].heartbeat);
 				NETbool(&NetPlay.players[index].kick);
-				memset(oldName, 0, sizeof(oldName));
-				strncpy(oldName, NetPlay.players[index].name, sizeof(oldName) - 1);
+				oldName.clear();
+				oldName = NetPlay.players[index].name;
 				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 				NETuint32_t(&NetPlay.players[index].heartattacktime);
 				NETint32_t(&colour);
@@ -1687,9 +1687,9 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				// update the color to the local array
 				setPlayerColour(index, NetPlay.players[index].colour);
 
-				if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
+				if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName.c_str(), NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
 				{
-					printConsoleNameChange(oldName, NetPlay.players[index].name);
+					printConsoleNameChange(oldName.c_str(), NetPlay.players[index].name);
 				}
 			}
 			NETend();
