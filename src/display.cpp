@@ -732,7 +732,7 @@ CURSOR processMouseClickInput()
 	{
 		cancelDeliveryRepos();
 	}
-	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging)
+	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging && !getRadarTrackingStatus())
 	{
 		rotInitial = (player.r.y % 65536) / DEG(1.0f); // negative values caused problems with float conversion
 		rotInitialUp = player.r.x;
