@@ -45,6 +45,7 @@ noinst_HEADERS = \
 	3rdparty/propertymatcher.h \
 	action.h \
 	actiondef.h \
+	activity.h \
 	advvis.h \
 	ai.h \
 	astar.h \
@@ -171,6 +172,7 @@ nodist_COMMONSOURCES = \
 COMMONSOURCES = \
 	3rdparty/propertymatcher.cpp \
 	action.cpp \
+	activity.cpp \
 	advvis.cpp \
 	ai.cpp \
 	astar.cpp \

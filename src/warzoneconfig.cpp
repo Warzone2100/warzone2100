@@ -33,6 +33,7 @@
 #include "display.h"
 #include "keybind.h"
 #include "radar.h"
+#include "activity.h"
 
 /***************************************************************************/
 
@@ -79,6 +80,7 @@ void war_SetSPcolor(int color)
 	}
 	warGlobs.SPcolor = color;
 	setPlayerColour(0, color);
+	ActivityManager::instance().changedSetting("SPcolor", std::to_string(color));
 }
 
 int8_t war_GetSPcolor()
@@ -89,6 +91,7 @@ int8_t war_GetSPcolor()
 void war_setMPcolour(int colour)
 {
 	warGlobs.MPcolour = colour;
+	ActivityManager::instance().changedSetting("MPcolour", std::to_string(colour));
 }
 
 int war_getMPcolour()
@@ -113,6 +116,7 @@ void war_setAntialiasing(int antialiasing)
 		debug(LOG_WARNING, "Antialising set to value > 16, which can cause crashes.");
 	}
 	warGlobs.antialiasing = antialiasing;
+	ActivityManager::instance().changedSetting("antialiasing", std::to_string(antialiasing));
 }
 
 int war_getAntialiasing()
@@ -123,6 +127,7 @@ int war_getAntialiasing()
 void war_SetTrapCursor(bool b)
 {
 	warGlobs.trapCursor = b;
+	ActivityManager::instance().changedSetting("trapCursor", std::to_string(b));
 }
 
 bool war_GetTrapCursor()
@@ -148,6 +153,7 @@ unsigned int war_GetDisplayScale()
 void war_SetDisplayScale(unsigned int scale)
 {
 	warGlobs.displayScale = scale;
+	ActivityManager::instance().changedSetting("displayScale", std::to_string(scale));
 }
 
 void war_SetWidth(UDWORD width)
@@ -205,6 +211,7 @@ SCANLINE_MODE war_getScanlineMode()
 void war_SetPauseOnFocusLoss(bool enabled)
 {
 	warGlobs.pauseOnFocusLoss = enabled;
+	ActivityManager::instance().changedSetting("pauseOnFocusLoss", std::to_string(enabled));
 }
 
 bool war_GetPauseOnFocusLoss()
@@ -215,6 +222,7 @@ bool war_GetPauseOnFocusLoss()
 void war_SetColouredCursor(bool enabled)
 {
 	warGlobs.ColouredCursor = enabled;
+	ActivityManager::instance().changedSetting("ColouredCursor", std::to_string(enabled));
 }
 
 bool war_GetColouredCursor()
@@ -225,6 +233,7 @@ bool war_GetColouredCursor()
 void war_setSoundEnabled(bool soundEnabled)
 {
 	warGlobs.soundEnabled = soundEnabled;
+	ActivityManager::instance().changedSetting("soundEnabled", std::to_string(soundEnabled));
 }
 
 bool war_getSoundEnabled()
@@ -240,6 +249,7 @@ bool war_GetMusicEnabled()
 void war_SetMusicEnabled(bool enabled)
 {
 	warGlobs.MusicEnabled = enabled;
+	ActivityManager::instance().changedSetting("musicEnabled", std::to_string(enabled));
 }
 
 HRTFMode war_GetHRTFMode()
@@ -250,6 +260,7 @@ HRTFMode war_GetHRTFMode()
 void war_SetHRTFMode(HRTFMode mode)
 {
 	warGlobs.hrtfMode = mode;
+	ActivityManager::instance().changedSetting("hrtfMode", std::to_string(static_cast<typename std::underlying_type<HRTFMode>::type>(mode)));
 }
 
 int war_GetMapZoom()
@@ -262,6 +273,7 @@ void war_SetMapZoom(int mapZoom)
 	if (mapZoom % MAP_ZOOM_RATE_MIN == 0 && ! (mapZoom < MINDISTANCE_CONFIG || mapZoom > MAXDISTANCE))
 	{
 		warGlobs.mapZoom = mapZoom;
+		ActivityManager::instance().changedSetting("mapZoom", std::to_string(mapZoom));
 	}
 }
 
@@ -275,6 +287,7 @@ void war_SetMapZoomRate(int mapZoomRate)
 	if (mapZoomRate % MAP_ZOOM_RATE_STEP == 0 && ! (mapZoomRate < MAP_ZOOM_RATE_MIN || mapZoomRate > MAP_ZOOM_RATE_MAX))
 	{
 		warGlobs.mapZoomRate = mapZoomRate;
+		ActivityManager::instance().changedSetting("mapZoomRate", std::to_string(mapZoomRate));
 	}
 }
 
@@ -288,6 +301,7 @@ void war_SetRadarZoom(int radarZoom)
 	if (radarZoom % RADARZOOM_STEP == 0 && ! (radarZoom < MIN_RADARZOOM || radarZoom > MAX_RADARZOOM))
 	{
 		warGlobs.radarZoom = radarZoom;
+		ActivityManager::instance().changedSetting("radarZoom", std::to_string(radarZoom));
 	}
 }
 
@@ -301,6 +315,7 @@ void war_SetCameraSpeed(int cameraSpeed)
 	if (cameraSpeed % CAMERASPEED_STEP == 0 && ! (cameraSpeed < CAMERASPEED_MIN || cameraSpeed > CAMERASPEED_MAX))
 	{
 		warGlobs.cameraSpeed = cameraSpeed;
+		ActivityManager::instance().changedSetting("cameraSpeed", std::to_string(cameraSpeed));
 	}
 }
 
@@ -322,4 +337,5 @@ bool war_GetRadarJump()
 void war_SetRadarJump(bool radarJump)
 {
 	warGlobs.radarJump = radarJump;
+	ActivityManager::instance().changedSetting("radarJump", std::to_string(radarJump));
 }

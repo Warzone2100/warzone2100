@@ -34,6 +34,7 @@
 #include "multiplay.h"
 #include "qtscript.h"
 #include "template.h"
+#include "activity.h"
 
 struct CHEAT_ENTRY
 {
@@ -89,7 +90,7 @@ static CHEAT_ENTRY cheatCodes[] =
 
 };
 
-bool attemptCheatCode(const char *cheat_name)
+bool _attemptCheatCode(const char *cheat_name)
 {
 	const CHEAT_ENTRY *curCheat;
 	static const CHEAT_ENTRY *const EndCheat = &cheatCodes[ARRAY_SIZE(cheatCodes)];
@@ -139,6 +140,16 @@ bool attemptCheatCode(const char *cheat_name)
 	}
 
 	return false;
+}
+
+bool attemptCheatCode(const char *cheat_name)
+{
+	bool result = _attemptCheatCode(cheat_name);
+	if (result)
+	{
+		ActivityManager::instance().cheatUsed(cheat_name);
+	}
+	return result;
 }
 
 void sendProcessDebugMappings(bool val)

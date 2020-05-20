@@ -190,6 +190,8 @@ void resetMissionWidgets();
 UDWORD	getCampaignNumber();
 void	setCampaignNumber(UDWORD number);
 
+std::string getCampaignName();
+
 struct CAMPAIGN_FILE
 {
 	WzString name;

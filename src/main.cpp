@@ -88,6 +88,7 @@
 #include <LaunchInfo.h>
 #include <sodium.h>
 #include "updatemanager.h"
+#include "activity.h"
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -827,6 +828,8 @@ static void startGameLoop()
 {
 	SetGameMode(GS_NORMAL);
 
+	ActivityManager::instance().startingGame();
+
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
 	{
@@ -912,6 +915,7 @@ static bool initSaveGameLoad()
 	// NOTE: always setGameMode correctly before *any* loading routines!
 	SetGameMode(GS_NORMAL);
 	screen_RestartBackDrop();
+
 	// load up a save game
 	if (!loadGameInit(saveGameName))
 	{
@@ -926,6 +930,8 @@ static bool initSaveGameLoad()
 		SetGameMode(GS_TITLE_SCREEN);
 		return false;
 	}
+
+	ActivityManager::instance().startingSavedGame();
 
 	screen_StopBackDrop();
 	closeLoadingScreen();
@@ -957,6 +963,7 @@ static void runGameLoop()
 		break;
 	case GAMECODE_QUITGAME:
 		debug(LOG_MAIN, "GAMECODE_QUITGAME");
+		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
 		stopGameLoop();
 		startTitleLoop(); // Restart into titleloop
 		break;
@@ -1469,6 +1476,8 @@ int realmain(int argc, char *argv[])
 		}
 	}
 
+	ActivityManager::instance().initialize();
+
 	if (!wzMainScreenSetup(war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
 	{
 		return EXIT_FAILURE;
@@ -1556,6 +1565,7 @@ int realmain(int argc, char *argv[])
 #endif
 	debug(LOG_MAIN, "Entering main loop");
 	wzMainEventLoop();
+	ActivityManager::instance().preSystemShutdown();
 	saveConfig();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
@@ -1566,6 +1576,7 @@ int realmain(int argc, char *argv[])
 	}
 	free(utfargv);
 #endif
+	ActivityManager::instance().shutdown();
 	wzShutdown();
 	urlRequestShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");

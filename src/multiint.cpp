@@ -111,6 +111,7 @@
 #include "levels.h"
 #include "wrappers.h"
 
+#include "activity.h"
 #include <algorithm>
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
@@ -952,6 +953,7 @@ static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> co
 			case JoinGameResult::PENDING_PASSWORD:
 				return result;
 			case JoinGameResult::JOINED:
+				ActivityManager::instance().joinGameSucceeded(connDesc.host.c_str(), connDesc.port);
 				return result;
 		}
 	}
@@ -959,6 +961,7 @@ static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> co
 	// Failed to connect to all IPs / options in list
 	// Change to an error display.
 	changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("Error while joining.")), wzTitleUICurrent));
+	ActivityManager::instance().joinGameFailed(connection_list);
 	return JoinGameResult::FAILED;
 }
 
@@ -2469,6 +2472,8 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	debug(LOG_NET, "Kicking player %u (%s).",
 	      (unsigned int)player_id, getPlayerName(player_id));
 
+	ActivityManager::instance().hostKickPlayer(NetPlay.players[player_id], type, reason);
+
 	NETplayerKicked(player_id);
 }
 
@@ -2566,6 +2571,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		sendLeavingMsg();								// say goodbye
 		NETclose();										// quit running game.
 		bHosted = false;								// stop host mode.
+		ActivityManager::instance().hostLobbyQuit();
 		changeTitleUI(wzTitleUICurrent);				// refresh options screen.
 		ingame.localJoiningInProgress = false;
 		return;
@@ -2590,6 +2596,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 			NetPlay.isHost = false;
 		}
 
+		ActivityManager::instance().joinedLobbyQuit();
 		changeTitleMode(MULTI);
 
 		selectedPlayer = 0;
@@ -2597,6 +2604,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		return;
 	}
 	debug(LOG_NET, "We have stopped joining.");
+	ActivityManager::instance().joinedLobbyQuit();
 	changeTitleUI(parent);
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
@@ -3235,6 +3243,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		closeAiChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
 		resetReadyStatus(false);
+		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	}
 
 	if (id >= MULTIOP_DIFFICULTY_CHOOSE_START && id <= MULTIOP_DIFFICULTY_CHOOSE_END && difficultyChooserUp != -1)
@@ -3258,6 +3267,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		closeAiChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
 		resetReadyStatus(false);
+		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	}
 
 	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
@@ -3675,6 +3685,7 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 					setLobbyError(KICK_TYPE);
 					stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")) + reason, parent));
 					debug(LOG_ERROR, "You have been kicked, because %s ", reason);
+					ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
 				}
 				else
 				{
