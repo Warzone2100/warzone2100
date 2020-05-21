@@ -444,10 +444,19 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 		modelMatrix *= glm::translate(glm::vec3(0.f, -world_coord(1) / 2.3f, 0.f));
 	}
 
+	int propulsionFrame;
 	iIMDShape *psShapeProp = (leftFirst ? getLeftPropulsionIMD(psDroid) : getRightPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		if (pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix))
+		if(psShapeProp->numFrames > 0)
+		{
+			propulsionFrame = getModularScaledGraphicsTime(psDroid->sMove.speed, psShapeProp->numFrames);
+		}
+		else
+		{
+			propulsionFrame = 0;
+		}
+		if (pie_Draw3DShape(psShapeProp, propulsionFrame, colour, brightness, pieFlag, iPieData, viewMatrix * modelMatrix))
 		{
 			didDrawSomething = true;
 		}
@@ -772,7 +781,15 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	psShapeProp = (leftFirst ? getRightPropulsionIMD(psDroid) : getLeftPropulsionIMD(psDroid));
 	if (psShapeProp)
 	{
-		if (pie_Draw3DShape(psShapeProp, 0, colour, brightness, pieFlag, iPieData, viewModelMatrix)) // Safe to use viewModelMatrix because modelView has not been changed since it was calculated
+		if(psShapeProp->numFrames > 0)
+		{
+			propulsionFrame = getModularScaledGraphicsTime(psDroid->sMove.speed, psShapeProp->numFrames);
+		}
+		else
+		{
+			propulsionFrame = 0;
+		}
+		if (pie_Draw3DShape(psShapeProp, propulsionFrame, colour, brightness, pieFlag, iPieData, viewModelMatrix)) // Safe to use viewModelMatrix because modelView has not been changed since it was calculated
 		{
 			didDrawSomething = true;
 		}
