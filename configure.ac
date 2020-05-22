@@ -79,6 +79,12 @@ AC_CHECK_HEADERS(alloca.h sys/ucontext.h)
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.17])
 
+# Check for libcurl
+LIBCURL_CHECK_CONFIG([yes], [7.10.1], , [AC_MSG_ERROR([Missing required libcurl >= 7.10.1])])
+
+# Check for libsodium
+WZ_FIND_SODIUM
+
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
 AC_PROG_VERSION_CHECK([pkg-config], [0.9])
@@ -485,6 +491,12 @@ WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/glm"
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/miniupnp"
 # launchinfo
 WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/launchinfo/include"
+# EmbeddedJSONSignature
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/EmbeddedJSONSignature/include"
+# re2
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/re2"
+# date
+WZ_CPPFLAGS="${WZ_CPPFLAGS} -I\$(top_srcdir)/3rdparty/date/include"
 
 AC_SUBST([WZ_CPPFLAGS], [${WZ_CPPFLAGS}])
 AC_SUBST([WZ_CFLAGS], [${WZ_CFLAGS}])

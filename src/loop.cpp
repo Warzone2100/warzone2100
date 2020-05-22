@@ -141,7 +141,6 @@ static GAMECODE renderLoop()
 	wzShowMouse(true);
 
 	INT_RETVAL intRetVal = INT_NONE;
-	CURSOR cursor = CURSOR_DEFAULT;
 	if (!paused)
 	{
 		/* Run the in game interface and see if it grabbed any mouse clicks */
@@ -195,7 +194,7 @@ static GAMECODE renderLoop()
 		}
 		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP)
 		{
-			cursor = scroll();
+			scroll();
 			zoom();
 		}
 	}
@@ -206,7 +205,7 @@ static GAMECODE renderLoop()
 
 		if (dragBox3D.status != DRAG_DRAGGING)
 		{
-			cursor = scroll();
+			scroll();
 			zoom();
 		}
 
@@ -307,8 +306,7 @@ static GAMECODE renderLoop()
 			//no key clicks or in Intelligence Screen
 			if (!isMouseOverRadar() && !isDraggingInGameNotification() && intRetVal == INT_NONE && !InGameOpUp && !isInGamePopupUp)
 			{
-				CURSOR cursor2 = processMouseClickInput();
-				cursor = cursor2 == CURSOR_DEFAULT? cursor : cursor2;
+				processMouseClickInput();
 			}
 			bRender3DOnly = false;
 			displayWorld();
@@ -332,8 +330,6 @@ static GAMECODE renderLoop()
 		pie_SetFogStatus(true);
 		wzPerfEnd(PERF_GUI);
 	}
-
-	wzSetCursor(cursor);
 
 	pie_GetResetCounts(&loopPieCount, &loopPolyCount);
 

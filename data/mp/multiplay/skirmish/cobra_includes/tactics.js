@@ -54,7 +54,7 @@ function returnClosestEnemyFactory(enemyNumber)
 		return undefined;
 	}
 
-	return cacheThis(uncached, [enemyNumber]);
+	return cacheThis(uncached, [enemyNumber], "returnClosestEnemyFactory" + enemyNumber, 8000);
 }
 
 //Should the vtol attack when ammo is high enough?
@@ -100,7 +100,7 @@ function repairDroid(droidID, force)
 	const SAFE_EXTREME_OIL_IGNORE_NUM = 100;
 	var highOil = highOilMap();
 
-	var forceRepairPercent = highOil ? 50 : 66; //Be more brave on super high oil maps.
+	var forceRepairPercent = highOil ? 45 : 55; //Be more brave on super high oil maps.
 	const EXPERIENCE_DIVISOR = 26;
 	const HEALTH_TO_REPAIR = forceRepairPercent + Math.floor(droid.experience / EXPERIENCE_DIVISOR);
 
@@ -179,7 +179,7 @@ function findNearestEnemyDroid(enemy)
 		return undefined;
 	}
 
-	return cacheThis(uncached, [enemy], enemy, 16000);
+	return cacheThis(uncached, [enemy], "findNearestEnemyDroid" + enemy, 5000);
 }
 
 //Return information about the closest structure of an enemy. Returns undefined otherwise.
@@ -207,7 +207,7 @@ function findNearestEnemyStructure(enemy)
 		return undefined;
 	}
 
-	return cacheThis(uncached, [enemy], enemy, 16000);
+	return cacheThis(uncached, [enemy], "findNearestEnemyStructure" + enemy, 5000);
 }
 
 //Sensors know all your secrets. They will observe what is closest to Cobra base.
@@ -353,10 +353,9 @@ function repairDroidTactics()
 	}
 }
 
-// Make Cobra focus on this player if asked. Chat command only.
+// Make Cobra focus on this player if asked.
 function targetPlayer(playerNumber)
 {
-	const INC = 100;
 	const PREVIOUS_TARGET = getMostHarmfulPlayer();
 	if (isDefined(scavengerPlayer) && ((playerNumber === scavengerPlayer) || (PREVIOUS_TARGET === scavengerPlayer)))
 	{
@@ -365,10 +364,8 @@ function targetPlayer(playerNumber)
 
 	if (playerNumber !== PREVIOUS_TARGET)
 	{
-		if ((grudgeCount[playerNumber] + INC) < MAX_GRUDGE)
-		{
-			grudgeCount[playerNumber] = grudgeCount[PREVIOUS_TARGET] + INC;
-		}
+		const INC = 400;
+		grudgeCount[playerNumber] = grudgeCount[PREVIOUS_TARGET] + INC;
 	}
 }
 
@@ -543,15 +540,18 @@ function shouldCobraAttack()
 //Controls how long localized group retreat happens. See also eventAttacked.
 function retreatTactics()
 {
-	const SCAN_RADIUS = 8;
+	const SCAN_RADIUS = subPersonalities[personality].retreatScanRange;
 	var droids = enumGroup(retreatGroup);
 
 	//Flee!
 	for (var i = 0, len = droids.length; i < len; ++i)
 	{
 		var droid = droids[i];
+		var friends = enumRange(droid.x, droid.y, SCAN_RADIUS, ALLIES, false).filter(function(obj) {
+			return obj.type === DROID;
+		});
 
-		if (enumRange(droid.x, droid.y, SCAN_RADIUS, ENEMIES, true).length !== 0)
+		if (enumRange(droid.x, droid.y, SCAN_RADIUS, ENEMIES, true).length > friends.length)
 		{
 			orderDroidLoc(droid, DORDER_MOVE, MY_BASE.x, MY_BASE.y);
 		}

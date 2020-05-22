@@ -26,14 +26,6 @@
 
 #include "lib/framework/wzapp.h"
 
-#if defined(WZ_OS_WIN)
-#  include <shellapi.h> /* For ShellExecute  */
-#endif
-
-#if defined(WZ_OS_MAC)
-#  include "lib/framework/cocoa_wrapper.h" /* For cocoaOpenURL */
-#endif // WZ_OS_MAC
-
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/physfs_ext.h"
@@ -76,16 +68,7 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 #include "titleui/titleui.h"
-
-struct CAMPAIGN_FILE
-{
-	WzString name;
-	WzString level;
-	WzString video;
-	WzString captions;
-	WzString package;
-	WzString loading;
-};
+#include "urlhelpers.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -183,49 +166,32 @@ void startTitleMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 }
 
-static void runLink(char const *link)
-{
-	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
-#if defined(WZ_OS_WIN)
-	wchar_t  wszDest[250] = {'\0'};
-	MultiByteToWideChar(CP_UTF8, 0, link, -1, wszDest, 250);
-
-	ShellExecuteW(NULL, L"open", wszDest, NULL, NULL, SW_SHOWNORMAL);
-#elif defined (WZ_OS_MAC)
-	cocoaOpenURL(link);
-#else
-	// for linux
-	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "xdg-open %s &", link);
-	int stupidWarning = system(lbuf);
-	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
-#endif
-}
-
 static void runUpgrdHyperlink()
 {
 	std::string link = "http://gamecheck.wz2100.net/";
 	std::string version = version_getVersionString();
+	std::string versionStr;
 	for (char ch : version)
 	{
-		link += ch == ' '? '_' : ch;
+		versionStr += (ch == ' ') ? '_' : ch;
 	}
-	runLink(link.c_str());
+	link += urlEncode(versionStr.c_str());
+	openURLInBrowser(link.c_str());
 }
 
 static void runHyperlink()
 {
-	runLink("http://wz2100.net/");
+	openURLInBrowser("http://wz2100.net/");
 }
 
 static void rundonatelink()
 {
-	runLink("http://donations.wz2100.net/");
+	openURLInBrowser("http://donations.wz2100.net/");
 }
 
 static void runchatlink()
 {
-	runLink("http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4");
+	openURLInBrowser("http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4");
 }
 
 void runContinue()
@@ -374,32 +340,6 @@ void startSinglePlayerMenu()
 	{
 		addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Campaign videos are missing! Get them from http://wz2100.net"), 0);
 	}
-}
-
-static std::vector<CAMPAIGN_FILE> readCampaignFiles()
-{
-	std::vector<CAMPAIGN_FILE> result;
-	char **files = PHYSFS_enumerateFiles("campaigns");
-	for (char **i = files; *i != nullptr; ++i)
-	{
-		CAMPAIGN_FILE c;
-		WzString filename("campaigns/");
-		filename += *i;
-		if (!filename.endsWith(".json"))
-		{
-			continue;
-		}
-		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-		c.name = ini.value("name").toWzString();
-		c.level = ini.value("level").toWzString();
-		c.package = ini.value("package").toWzString();
-		c.loading = ini.value("loading").toWzString();
-		c.video = ini.value("video").toWzString();
-		c.captions = ini.value("captions").toWzString();
-		result.push_back(c);
-	}
-	PHYSFS_freeList(files);
-	return result;
 }
 
 void startCampaignSelector()

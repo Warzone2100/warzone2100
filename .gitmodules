@@ -7,12 +7,26 @@
 [submodule "3rdparty/miniupnp"]
 	path = 3rdparty/miniupnp
 	url = https://github.com/miniupnp/miniupnp.git
-[submodule "3rdparty/sha"]
-	path = 3rdparty/sha
-	url = https://github.com/BrianGladman/sha.git
 [submodule "3rdparty/utfcpp"]
 	path = 3rdparty/utfcpp
 	url = https://github.com/nemtrif/utfcpp.git
 [submodule "3rdparty/launchinfo"]
 	path = 3rdparty/launchinfo
 	url = https://github.com/past-due/launchinfo.git
+[submodule "3rdparty/re2"]
+	path = 3rdparty/re2
+	url = https://github.com/google/re2.git
+[submodule "3rdparty/EmbeddedJSONSignature"]
+	path = 3rdparty/EmbeddedJSONSignature
+	url = https://github.com/past-due/EmbeddedJSONSignature.git
+[submodule "3rdparty/date"]
+	path = 3rdparty/date
+	url = https://github.com/HowardHinnant/date.git
+[submodule "data/base/texpages"]
+	path = data/base/texpages
+	url = https://github.com/Warzone2100/data-texpages.git
+	shallow = true
+[submodule "data/music"]
+	path = data/music
+	url = https://github.com/Warzone2100/data-music.git
+	shallow = true

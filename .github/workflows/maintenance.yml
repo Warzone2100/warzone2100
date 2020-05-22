@@ -1,0 +1,56 @@
+name: Maintenance
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-base-translations:
+    name: Update Base Translations
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: master
+        path: master
+        fetch-depth: 1
+        submodules: recursive
+    - name: Install gettext
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: sudo apt-get -y install gettext
+    - name: Generate POTFILES.in
+      working-directory: '${{ github.workspace }}/master/po'
+      run: |
+        echo "Generate POTFILES.in"
+        ./update-po.sh
+    - name: Generate warzone2100.pot
+      working-directory: '${{ github.workspace }}/master'
+      run: |
+        echo "Generate warzone2100.pot"
+        potfiles_in_path="${GITHUB_WORKSPACE}/master/po/POTFILES.in"
+        potFile_inRepo="${GITHUB_WORKSPACE}/master/po/warzone2100.pot"
+        temp_dir="${GITHUB_WORKSPACE}/temp/po"
+        mkdir -p "${temp_dir}"
+        cmake "-DPOTFILES_IN=${potfiles_in_path}" "-DOUTPUT_FILE=${potFile_inRepo}" "-DTEMP_DIR=${temp_dir}" -P "${GITHUB_WORKSPACE}/master/po/WZ_build_po_template.cmake"
+    - name: Create Pull Request to update base files (if needed)
+      if: (github.repository == 'Warzone2100/warzone2100')
+      id: cpr
+      uses: past-due/create-pull-request@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: 'master'
+        commit-message: Update base translations
+        title: 'Update base translations'
+        body: |
+          Update base string / translation files in the `master` branch
+          - Auto-generated
+        labels: automated pr
+        draft: false
+        branch: update_base_translations
+    - name: Check outputs
+      if: ${{ success() }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pr_number }}"

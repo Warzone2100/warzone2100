@@ -50,7 +50,22 @@ How to get the latest macOS development builds:
    Click it to view the build artifacts.
 3. Download the `warzone2100_macOS` artifact (a download icon will appear to the right side of the row when you mouse-over).
 
-### Linux
+### Ubuntu 18.04+
+
+How to get the latest Ubuntu development builds:
+1. View the **[latest successful Ubuntu builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush+is%3Asuccess)**.
+2. Select the latest workflow run in the table / list.
+   This should display a list of **Artifacts** from the run.
+3. Download the `warzone2100_ubuntu_amd64_deb` artifact.
+> Note: A free GitHub account is currently required to download the artifacts.
+4. Extract the contents of the downloaded .zip (`warzone2100_ubuntu_amd64.deb`) to your Desktop.
+5. Execute the following commands in Terminal:
+```
+cd ~/Desktop
+sudo apt install ./warzone2100_ubuntu_amd64.deb
+```
+
+### Linux (from source)
 
 Clone this Git repo and build, following the instructions under:
 [How to Build](#how-to-build)

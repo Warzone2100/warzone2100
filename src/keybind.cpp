@@ -364,7 +364,6 @@ void	kf_DebugDroidInfo()
 void kf_CloneSelected(int limit)
 {
 	DROID_TEMPLATE	*sTemplate = nullptr;
-	char *msg;
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -408,8 +407,8 @@ void kf_CloneSelected(int limit)
 					debug(LOG_ERROR, "Cloning has failed for template:%s id:%d", getID(sTemplate), sTemplate->multiPlayerID);
 				}
 			}
-			sasprintf(&msg, _("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, psDroid->aName);
-			sendTextMessage(msg, true);
+			std::string msg = astringf(_("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, psDroid->aName);
+			sendTextMessage(msg.c_str(), true);
 			Cheated = true;
 			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
 			return;
@@ -496,8 +495,6 @@ void kf_ToggleTeamChat()
 // --------------------------------------------------------------------------
 void	kf_BifferBaker()
 {
-	char *cmsg;
-
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
@@ -507,9 +504,9 @@ void	kf_BifferBaker()
 
 	// player deals far more damage, and the enemy far less
 	setDamageModifiers(999, 1);
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Hard as nails!!!"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 // --------------------------------------------------------------------------
 void	kf_SetEasyLevel()
@@ -528,8 +525,6 @@ void	kf_SetEasyLevel()
 // --------------------------------------------------------------------------
 void	kf_UpThePower()
 {
-	char *cmsg;
-
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
@@ -537,16 +532,14 @@ void	kf_UpThePower()
 		return;
 	}
 	addPower(selectedPlayer, 1000);
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("1000 big ones!!!"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 
 // --------------------------------------------------------------------------
 void	kf_MaxPower()
 {
-	char *cmsg;
-
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
@@ -554,9 +547,9 @@ void	kf_MaxPower()
 		return;
 	}
 	setPower(selectedPlayer, 100000);
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Power overwhelming"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 
 // --------------------------------------------------------------------------
@@ -588,8 +581,6 @@ void	kf_SetHardLevel()
 // --------------------------------------------------------------------------
 void	kf_DoubleUp()
 {
-	char *cmsg;
-
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
 	{
@@ -597,9 +588,9 @@ void	kf_DoubleUp()
 		return;
 	}
 	setDamageModifiers(100, 50); // enemy damage halved
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Twice as nice!"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 // --------------------------------------------------------------------------
 void kf_ToggleFPS() //This shows *just FPS* and is always visible (when active) -Q.
@@ -656,7 +647,6 @@ void	kf_FrameRate()
 void kf_ShowNumObjects()
 {
 	int droids, structures, features;
-	char *cmsg;
 
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -666,9 +656,9 @@ void kf_ShowNumObjects()
 	}
 
 	objCount(&droids, &structures, &features);
-	sasprintf(&cmsg, _("(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"),
+	std::string cmsg = astringf(_("(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"),
 	          selectedPlayer, droids, structures, features);
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 
 // --------------------------------------------------------------------------
@@ -684,8 +674,6 @@ void	kf_ToggleRadar()
 /* Toggles infinite power on/off */
 void	kf_TogglePower()
 {
-	char *cmsg;
-
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -701,9 +689,9 @@ void	kf_TogglePower()
 		powerCalc(true);
 	}
 
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, powerCalculated ? _("Infinite power disabled") : _("Infinite power enabled"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 
 // --------------------------------------------------------------------------
@@ -728,8 +716,6 @@ void	kf_ScreenDump()
 /* Make all functions available */
 void	kf_AllAvailable()
 {
-	char *cmsg;
-
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
 	if (runningMultiplayer())
@@ -740,9 +726,9 @@ void	kf_AllAvailable()
 #endif
 
 	makeAllAvailable();
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All items made available"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 
 // --------------------------------------------------------------------------
@@ -773,7 +759,6 @@ void	kf_TileInfo()
 void	kf_ToggleFog()
 {
 	static bool fogEnabled = false;
-	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -796,9 +781,9 @@ void	kf_ToggleFog()
 		pie_EnableFog(fogEnabled);
 	}
 
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, fogEnabled ? _("Fog on") : _("Fog off"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 
 // --------------------------------------------------------------------------
@@ -1257,7 +1242,6 @@ void	kf_ToggleDebugMappings()
 
 void	kf_ToggleGodMode()
 {
-	char *cmsg;
 	static bool pastReveal = true;
 
 #ifndef DEBUG
@@ -1307,9 +1291,9 @@ void	kf_ToggleGodMode()
 		setRevealStatus(true); // view the entire map
 	}
 
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, godMode ? _("God Mode ON") : _("God Mode OFF"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 // --------------------------------------------------------------------------
 /* Aligns the view to north - some people can't handle the world spinning */
@@ -1341,12 +1325,11 @@ void kf_CameraRight() {
 
 void kf_toggleTrapCursor()
 {
-	char *msg;
 	bool trap = !war_GetTrapCursor();
 	war_SetTrapCursor(trap);
 	(trap ? wzGrabMouse : wzReleaseMouse)();
-	sasprintf(&msg, _("Trap cursor %s"), trap ? "ON" : "OFF");
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+	std::string msg = astringf(_("Trap cursor %s"), trap ? "ON" : "OFF");
+	addConsoleMessage(msg.c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 
@@ -1403,7 +1386,6 @@ void	kf_TogglePauseMode()
 void	kf_FinishAllResearch()
 {
 	UDWORD	j;
-	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1430,9 +1412,9 @@ void	kf_FinishAllResearch()
 			}
 		}
 	}
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Researched EVERYTHING for you!"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 }
 
 void kf_Reload()
@@ -1465,7 +1447,6 @@ void kf_Reload()
 void	kf_FinishResearch()
 {
 	STRUCTURE	*psCurr;
-	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1496,8 +1477,8 @@ void	kf_FinishResearch()
 				{
 					researchResult(rindex, selectedPlayer, true, psCurr, true);
 				}
-				sasprintf(&cmsg, _("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject));
-				sendTextMessage(cmsg, true);
+				std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject));
+				sendTextMessage(cmsg.c_str(), true);
 				intResearchFinished(psCurr);
 			}
 		}
@@ -1533,11 +1514,9 @@ void	kf_ToggleEnergyBars()
 // --------------------------------------------------------------------------
 void	kf_ChooseOptions()
 {
-	char *cmsg;
-
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Debug menu is Open"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 	jsShowDebug();
 }
 
@@ -1827,7 +1806,6 @@ void	kf_KillEnemy()
 	UDWORD		player;
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
-	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1840,9 +1818,9 @@ void	kf_KillEnemy()
 
 	debug(LOG_DEATH, "Destroying enemy droids and structures");
 	CONPRINTF("%s", _("Warning! This can have drastic consequences if used incorrectly in missions."));
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All enemies destroyed by cheating!"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 	Cheated = true;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
@@ -1870,7 +1848,6 @@ void kf_KillSelected()
 {
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
-	char *cmsg;
 
 #ifndef DEBUG
 	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
@@ -1881,9 +1858,9 @@ void kf_KillSelected()
 	}
 #endif
 
-	sasprintf(&cmsg, _("(Player %u) is using cheat :%s"),
+	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Destroying selected droids and structures!"));
-	sendTextMessage(cmsg, true);
+	sendTextMessage(cmsg.c_str(), true);
 
 	debug(LOG_DEATH, "Destroying selected droids and structures");
 	audio_PlayTrack(ID_SOUND_COLL_DIE);

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-04-05 12:49+0000\n"
-"PO-Revision-Date: 2020-04-27 21:05\n"
+"POT-Creation-Date: 2020-04-26 07:30+0000\n"
+"PO-Revision-Date: 2020-05-05 03:24\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -282,7 +282,7 @@ msgstr "La technologie du lien synaptique était localisée à cet endroit mais 
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Vous devez établir un poste avancé et continuer à la rechercher."
+msgstr "Vous devez établir un poste avancé et continuer rechercher le lien synaptique."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -306,7 +306,7 @@ msgstr "Vous devez détruire la base ennemie coûte-que-coûte."
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr "Assemblez une force d'attaque dans le transporteur."
+msgstr "Rassemblez une force d'attaque dans le transporteur."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
@@ -322,7 +322,7 @@ msgstr "Les premières recherches confirment que ce sera une grande avancée pou
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "La base Beta est attaquée, ils ont besoin de renforts."
+msgstr "La base Beta est attaquée, ils ont certainement besoin de renforts."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
@@ -401,7 +401,7 @@ msgstr "OPÉRATION BASE BETA : Défendre et fortifier."
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr "Assurez-vous de fortifier le périmètre et d'établir des défenses anti-aériennes."
+msgstr "Assurez-vous de bien fortifier le périmètre et d'établir des défenses anti-aériennes."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
@@ -411,7 +411,7 @@ msgstr "De nouvelles technologies sont à votre disposition."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr "Nos détectons actuellement des flux de signaux binaires cryptés."
+msgstr "Nous détectons actuellement des flux de signaux binaires cryptés."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
@@ -433,7 +433,7 @@ msgstr "Il subit des attaques du Collectif sur les lieux du crash."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "Assemblez une équipe de secours pour aller récupérer le transporteur et sa cargaison."
+msgstr "Rassemblez une équipe de secours pour aller récupérer le transporteur et sa cargaison."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
@@ -489,7 +489,7 @@ msgstr "Un commandant ennemi livre une cargaison de NEXUS à cet endroit."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr "Une fois arrivé à la ZA, éliminez le commandant et retrouvez la cargaison."
+msgstr "Une fois arrivé à la ZA, éliminez le commandant et récupérez la cargaison."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
@@ -514,11 +514,11 @@ msgstr "Nous avons détecté un autre convoi en déplacement le long de la rivi�
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr "Vous devez l'intercepter et retrouver sa cargaison."
+msgstr "Vous devez l'intercepter et récupérer sa cargaison."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr "Des VTOLs ennemis semblent voler en formation sérée."
+msgstr "Des VTOLs ennemis semblent voler en formation rapprochée."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
@@ -555,7 +555,7 @@ msgstr "La base aérienne ennemie se trouve ici. C'est votre objectif principal.
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Supprimez-en toutes les forces du Collectif et récupérez chaque artefact que vous y trouverez."
+msgstr "Anéantissez toutes les forces du Collectif et récupérez chaque artefact que vous y trouverez."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
@@ -568,7 +568,7 @@ msgstr "Le Collectif capture tout les civils dans cette zone."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr "Puis elle les emmène en transporteur vers un endroit inconnu."
+msgstr "Puis il les emmène en transporteur vers un endroit inconnu."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
@@ -615,15 +615,15 @@ msgstr "OPÉRATION AÉROTRANSPORTÉE : Site de télécommunications satellite."
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr "Le NEXUS est à la recherche de banques de données toujours en état de marche."
+msgstr "Le NEXUS est à la recherche de banques de données encore en état de marche."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr "Une bonne partie de son attention est fixée vers une base de contrôle à distance de la NASDA."
+msgstr "Une bonne partie de son attention est fixée sur une base de contrôle à distance de la NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr "Nous détectons des transmissions émises de de cet endroit qui atteignent la stratosphère."
+msgstr "Nous détectons des transmissions émises de cet endroit qui atteignent la stratosphère."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
@@ -635,7 +635,7 @@ msgstr "Utilisez le transporteur pour amener une force d'attaque vers ce site."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr "Réduisez tout ce qui s'y trouve à l'état de cendres puis retournez à la base."
+msgstr "Anéantissez le site puis retournez à la base."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
@@ -668,7 +668,7 @@ msgstr "Éradiquez l'ennemi et sécurisez le secteur."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr "Une fois le refuge établi, retournez à la ZA pour les ordres à suivre."
+msgstr "Une fois qu'un refuge est établi, retournez à la ZA pour les ordres à venir."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
@@ -846,7 +846,7 @@ msgstr "Vérifiez si les survivants sont bien de la Division Alpha. Si tel est l
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr "Ce groupe fait partie de la Division Alpha. Ramenez en autant que possible à la ZA."
+msgstr "Ce groupe fait partie de la Division Alpha. Ramenez-en autant que possible à la ZA."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
@@ -858,7 +858,7 @@ msgstr "Le transfert de l'énergie de l'équipe Alpha est en cours."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr "Commandant, après que vous ayez quitté le secteur est, nous avons trouvé un artefact."
+msgstr "Commandant, après que vous ayez quitté le secteur Est, nous avons trouvé un artefact."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -886,7 +886,7 @@ msgstr "Commandant, vos actions décisives ont stoppé l'expansion de NEXUS !"
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Avant que le virus de NEXUS n'aie été éradiqué de nos systèmes, nous avons intercepté ce message - Décryptage terminé."
+msgstr "Avant que le virus de NEXUS n'ait été éradiqué de nos systèmes, nous avons intercepté ce message - Décryptage terminé."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -942,7 +942,7 @@ msgstr "Réception d'une transmission..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr "Les éléments de la Division Gamma nous ont contactés."
+msgstr "Des éléments de la Division Gamma nous ont contactés."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
@@ -1192,7 +1192,7 @@ msgstr "Démolition"
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:3926
 msgid "Naval"
-msgstr ""
+msgstr "Naval"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -1274,12 +1274,12 @@ msgstr "Tourelle de DCA Tornade"
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:288
 msgid "Proximity Bomb Turret"
-msgstr ""
+msgstr "Tourelle à mines de proximité"
 
 #: data/base/messages/strings/names.txt:248
 #: data/mp/messages/strings/names.txt:289
 msgid "Proximity Superbomb Turret"
-msgstr ""
+msgstr "Tourelle à super-mines de proximité"
 
 #: data/base/messages/strings/names.txt:287
 #: data/mp/messages/strings/names.txt:370
@@ -1292,7 +1292,7 @@ msgstr "Aérocyborg anti-bunker"
 
 #: data/base/messages/strings/names.txt:290
 msgid "Jump Heavy Gunner"
-msgstr "Aérocyborg à canon"
+msgstr "Aérocyborg à canon lourd"
 
 #: data/base/messages/strings/names.txt:291
 msgid "Jump Lancer"
@@ -1524,12 +1524,12 @@ msgstr "Amélioration des radars de CB"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "Amélioration des radars de CB Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "Amélioration des radars de CB Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1539,12 +1539,12 @@ msgstr "Amélioration des radars de CB pour VTOLs"
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "Amélioration des radars de CB pour VTOLs Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "Amélioration des radars de CB pour VTOLs Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -3241,7 +3241,7 @@ msgstr "Mitrailleuse anti-aérienne de 30mm"
 #: data/mp/messages/strings/resstrings.txt:307
 #: po/custom/fromJson.txt:4522
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Mitrailleuse anti-aérienne quadritube de 30mm"
+msgstr "Quadruple Mitrailleuse anti-aérienne de 30mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[0]
@@ -3357,7 +3357,7 @@ msgstr "Augmente la cadence de tir des armes de DCA"
 #: data/mp/messages/strings/resstrings.txt:331
 #: po/custom/fromJson.txt:4108
 msgid "New Proximity Bomb Turret Available"
-msgstr "Nouvelle tourelle lanceuse de mines de proximité disponible"
+msgstr "Nouvelle tourelle à mines de proximité disponible"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
@@ -3388,7 +3388,7 @@ msgstr "Efficace contre : bâtiments et défenses"
 #: data/mp/messages/strings/resstrings.txt:332
 #: po/custom/fromJson.txt:5287
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr "Une super-mine a explosée à proximité d'un ennemi"
+msgstr "Une super-mine a explosé à proximité d'un ennemi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB1.text[0]
@@ -3521,7 +3521,7 @@ msgstr "Nouvelle tourelle d'armement disponible"
 #: data/mp/messages/strings/resstrings.txt:352
 #: po/custom/fromJson.txt:2936
 msgid "Hyper-velocity automatic-cannon firing 88mm rounds"
-msgstr "Canon tirant des munitions de 88mm à vitesse d'impact élevée"
+msgstr "Canon à vitesse d'impact élevée tirant des munitions de 88mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -3552,7 +3552,7 @@ msgstr "Remplace le canon moyen"
 #: data/mp/messages/strings/resstrings.txt:357
 #: po/custom/fromJson.txt:32
 msgid "76mm hyper-velocity quad-barrel automatic-cannon"
-msgstr "Canon automatique haute-vitesse quadritube tirant des munitions de 76mm"
+msgstr "Quadruple Canon automatique haute-vitesse de 76mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[3]
@@ -4040,7 +4040,7 @@ msgstr "Recherche (F2)"
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "Recherche - Construisez d'abord un centre de recherche"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4057,7 +4057,7 @@ msgstr "Construction (F3)"
 #: data/base/script/tutorial.js:513
 #: data/mp/multiplay/skirmish/rules.js:130
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Construction - Construisez d'abord des constructeurs droïdes"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
@@ -4070,7 +4070,7 @@ msgstr "Conception (F4)"
 #: data/base/script/tutorial.js:514
 #: data/mp/multiplay/skirmish/rules.js:158
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "Conception - Construisez un QG d'abord"
 
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/skirmish/rules.js:167
@@ -4081,7 +4081,7 @@ msgstr "Commandants (F6)"
 #: data/base/script/tutorial.js:516
 #: data/mp/multiplay/skirmish/rules.js:171
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Commandants - Construisez des commandants d'abord"
 
 #: data/base/script/rules.js:191
 #: data/base/script/tutorial.js:251
@@ -4109,7 +4109,7 @@ msgstr "Panneau d'informations (F5)"
 
 #: data/base/script/tutorial.js:28
 msgid "In this training session you'll learn how to build an effective base"
-msgstr "Dans cet session d'entraînement, vous apprendrez à construire une base."
+msgstr "Dans cette session d'entraînement, vous apprendrez à construire une base"
 
 #: data/base/script/tutorial.js:29
 msgid "Oil resources are key to your success"
@@ -4129,7 +4129,7 @@ msgstr "Le puits de pétrole est actuellement inactif. Construisez un générate
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "Cliquez sur le bouton construction clignotant"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -4170,7 +4170,7 @@ msgstr "Vous devez construire un centre de recherche pour effectuer des recherch
 #: data/base/script/tutorial.js:46
 #: data/base/script/tutorial.js:65
 msgid "Left click the flashing BUILD icon"
-msgstr "Cliquez sur le bouton CONSTRUCTION clignotant."
+msgstr "Cliquez sur le bouton CONSTRUCTION clignotant"
 
 #: data/base/script/tutorial.js:47
 msgid "Now left click the research facility and position it at your base"
@@ -4238,7 +4238,7 @@ msgstr "Choisissez un emplacement pour votre usine et construisez-la."
 
 #: data/base/script/tutorial.js:68
 msgid "The delivery point is indicated by the number 1"
-msgstr "Le point de ralliement des nouvelles unités produites est indiqué par le numéro de l'usine (ici 1)."
+msgstr "Le point de livraison des nouvelles unités produites est indiqué par le numéro de l'usine (ici 1)"
 
 #: data/base/script/tutorial.js:69
 msgid "All new units will drive to this location once built"
@@ -4246,7 +4246,7 @@ msgstr "Toutes les nouvelles unités se dirigeront vers cet endroit quand elles 
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Vous pouvez déplacer le point de ralliement n'importe où et n'importe quand en cliquant dessus,"
+msgstr "Vous pouvez déplacer le point de livraison n'importe où et n'importe quand en cliquant dessus"
 
 #: data/base/script/tutorial.js:71
 msgid "Now click where you want to position the delivery point"
@@ -4625,7 +4625,7 @@ msgstr "Combattants du Collectif, je cherche l'emplacement de la centrale de la 
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
-msgstr "Elle se trouve quelque-part sur votre territoire."
+msgstr "Elle se trouve quelque part sur votre territoire."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
@@ -4689,7 +4689,7 @@ msgstr "La Division Gamma envoie un groupe pour investir le site et empêcher de
 
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
-msgstr "Nous pouvons juste affirmer que NEXUS a pris le contrôle de ce site. Nous de sommes pas en mesure de déterminer si le missile est armé avec une charge nucléaire ou non, ni quelle est sa future cible. Vous devez commencer les préparatifs pour l'évacuation de votre base."
+msgstr "Nous pouvons juste affirmer que NEXUS a pris le contrôle de ce site. Nous ne sommes pas en mesure de déterminer si le missile est armé avec une charge nucléaire ou non, ni quelle est sa future cible. Vous devez commencer les préparatifs pour l'évacuation de votre base."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -4805,11 +4805,11 @@ msgstr "Félicitations Commandant, vous avez empêché mon dernier missile de d�
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr "C'est vraiment dommage. Votre Projet aurait fait une excellente cible."
+msgstr "C'est vraiment dommage. Votre QG du Projet aurait fait une excellente cible."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
-msgstr "Mais c'est quand-même gentil de votre part d'être venu jusqu'ici."
+msgstr "Mais c'est quand même gentil de votre part d'être venu jusqu'ici."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
 msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
@@ -4833,7 +4833,7 @@ msgstr "Les tours de contrôle ennemies nous ont repérés. Nous avons réussi �
 
 #: data/base/sequenceaudio/cam3/cam32a2.txt:7
 msgid "Can you try and reach us with anti-aircraft units?"
-msgstr "Pouvez-vous essayer et nous rejoindre avec des unités anti-aériennes?"
+msgstr "Pouvez-vous essayer de nous rejoindre avec des unités anti-aériennes?"
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
@@ -4885,7 +4885,7 @@ msgstr "Son but cette fois était de permettre la transcription de la conscience
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr "A nouveau soutenu par l'armée, le Dr Reed commença à travailler sur virus informatique NEXUS. Après trois ans durant lesquels le projet n'avançait pas, l'armée abandonna le NEXUS et coupa les fonds au Dr Reed."
+msgstr "A nouveau soutenu par l'armée, le Dr Reed commença à travailler sur le virus informatique NEXUS. Après trois ans durant lesquels le projet n'avançait pas, l'armée abandonna le NEXUS et coupa les fonds au Dr Reed."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
@@ -4993,11 +4993,11 @@ msgstr "J'ai détruit de monde avec le feu nucléaire pour libérer le voie à m
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:9
 msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "J'ai maintenant pour projet de reconstruire le monde à mon image, notamment en retirant les cancers naissants que sont les gens comme vous."
+msgstr "J'ai maintenant pour projet de reconstruire le monde à mon image, notamment en retirant les excroissances indésirables telles que vous."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:11
 msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr "Mes satellites laser sont maintenant opérationnels. Vous avez l'honneur d'être ma cible pour les premiers tests, Commandant!"
+msgstr "Mes satellites laser sont maintenant opérationnels. J'ai l'intention de les tester sur vous d'abord, Commandant!"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -5190,7 +5190,7 @@ msgstr "CAM1 DÉFENSES"
 
 #: data/mp/messages/strings/names.txt:341
 msgid "CAM1 STRUCTURES"
-msgstr ""
+msgstr "CAM1 STRUCTURES"
 
 #: data/mp/messages/strings/names.txt:342
 msgid "CAM2 RESEARCH"
@@ -5202,7 +5202,7 @@ msgstr "CAM2 VÉHICULES"
 
 #: data/mp/messages/strings/names.txt:344
 msgid "CAM2 CYBORGS"
-msgstr ""
+msgstr "CAM2 CYBORGS"
 
 #: data/mp/messages/strings/names.txt:345
 msgid "CAM2 WEAPONS"
@@ -5218,7 +5218,7 @@ msgstr "CAM2 DÉFENSES"
 
 #: data/mp/messages/strings/names.txt:348
 msgid "CAM2 STRUCTURES"
-msgstr ""
+msgstr "CAM2 STRUCTURES"
 
 #: data/mp/messages/strings/names.txt:350
 msgid "CAM3 RESEARCH"
@@ -5250,7 +5250,7 @@ msgstr "Codes de programmation des missiles Niveau 3"
 #: data/mp/messages/strings/names.txt:371
 #: po/custom/fromJson.txt:2534
 msgid "Heavy Gunner Cyborg"
-msgstr "Cyborg à canon"
+msgstr "Cyborg à canon lourd"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Flamer.name
@@ -5663,7 +5663,7 @@ msgstr "Port %s correctement configuré sur %s\n"
 
 #: lib/netplay/netplay.cpp:1856
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
+msgstr "Aucun périphérique UPnP trouvé, veuillez configurer manuellement votre routeur/pare-feu pour ouvrir le port 2100!"
 
 #: lib/netplay/netplay.cpp:2201
 #, c-format
@@ -5878,7 +5878,7 @@ msgstr "Détecteur thermique pour DCA"
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
 #: po/custom/fromJson.txt:157
 msgid "Adaptive AI with multiple personalities"
-msgstr ""
+msgstr "IA adaptative avec de multiples personnalités"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials08.name
@@ -6028,7 +6028,7 @@ msgstr "Production aéronautique avancée"
 #. data/base/stats/features.json: $.Advmaterialslab.name
 #: po/custom/fromJson.txt:250
 msgid "Advancedmaterialslab"
-msgstr "Laboratiore de matériaux avancés"
+msgstr "Laboratoire de matériaux avancés"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[1]
@@ -6150,7 +6150,7 @@ msgstr "Campagne Alpha"
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:482
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -7070,7 +7070,7 @@ msgstr "Campagne Beta"
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1159
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7397,7 +7397,7 @@ msgstr "Chargeur chaîné éliminant les blocages et améliorant la performance 
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[1]
 #: po/custom/fromJson.txt:1384
 msgid "Chaingun mechanism replaces belt-feed"
-msgstr "Les chargeurs à chaîne remplacent les chargeurs à bande"
+msgstr "Les chargeurs à chaîne remplacent les chargeurs à courroie"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF01.name
@@ -7452,14 +7452,14 @@ msgstr "Véhicule de construction Cobra"
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1415
 msgid "Cobra"
-msgstr ""
+msgstr "Cobra"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
 #: po/custom/fromJson.txt:1419
 msgid "Collapsing Plutonium kinetic energy bullets"
-msgstr "Balles superdenses au plutonium à haute énergie cinétique"
+msgstr "Balles à haute énergie cinétique superdenses au plutonium"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveCWall.name
@@ -7552,7 +7552,7 @@ msgstr "Tourelle de commandement Scorpion chenilles"
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
 #: po/custom/fromJson.txt:1484
 msgid "Command Turret Upgrade"
-msgstr ""
+msgstr "Tourelle de commandement améliorée"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
@@ -7675,7 +7675,7 @@ msgstr "Unité de construction"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #: po/custom/fromJson.txt:1556
 msgid "Controls up to ten commanders"
-msgstr ""
+msgstr "Contrôle jusqu'à dix commandants"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -8025,7 +8025,7 @@ msgstr "Transporteur abattu"
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:1817
 msgid "Dragon"
-msgstr ""
+msgstr "Dragon"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
@@ -8244,7 +8244,7 @@ msgstr "Usine"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
 #: po/custom/fromJson.txt:1963
 msgid "Farther range compared to other sensors"
-msgstr ""
+msgstr "Portée supérieure comparée aux autres radars"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
@@ -8439,7 +8439,7 @@ msgstr "Cyborg à laser Flashlight"
 #. data/mp/stats/templates.json: $.MP-Cyb-Laser1-GRD.name
 #: po/custom/fromJson.txt:2100
 msgid "Flashlight Gunner"
-msgstr "Cyborg à laser Flashlight"
+msgstr "Mitrailleur Flashlight"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-PulseLas.name
@@ -8459,7 +8459,7 @@ msgstr "Laser Flashlight Châtiment aéroglisseur"
 #. data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 #: po/custom/fromJson.txt:2111
 msgid "Flashlight"
-msgstr "Cyborg à laser Flashlight"
+msgstr "Flashlight"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine02.name
@@ -8494,7 +8494,7 @@ msgstr "Campagne gamma"
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2131
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -8670,14 +8670,14 @@ msgstr "Fait un bon véhicule d'éclairage"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2233
 msgid "Grenadier"
-msgstr ""
+msgstr "Grenadier"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
 #. data/mp/stats/weapons.json: $.Howitzer150Mk1.name
 #: po/custom/fromJson.txt:2243
 msgid "Ground Shaker"
-msgstr ""
+msgstr "Ground Shaker"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
@@ -9333,7 +9333,7 @@ msgstr "Hélicoptère"
 #. data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 #: po/custom/fromJson.txt:2668
 msgid "Hellstorm"
-msgstr ""
+msgstr "Hellstorm"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -10129,7 +10129,7 @@ msgstr "Inferno Python aéroglisseur"
 #. data/mp/stats/weapons.json: $.Flame2.name
 #: po/custom/fromJson.txt:3309
 msgid "Inferno"
-msgstr ""
+msgstr "Inferno"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[2]
@@ -10162,7 +10162,7 @@ msgstr "Tourelle brouilleuse"
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3327
 msgid "Jeep"
-msgstr ""
+msgstr "Jeep"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[3]
@@ -10317,7 +10317,7 @@ msgstr "Grand châssis super lourd"
 #. data/mp/stats/research.json: $.R-Wpn-Laser01.name
 #: po/custom/fromJson.txt:3424
 msgid "Laser - Flashlight"
-msgstr ""
+msgstr "Laser - Flashlight"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[0]
@@ -10626,7 +10626,7 @@ msgstr "Blindage et résistance maximaux"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
 #: po/custom/fromJson.txt:3649
 msgid "May be assigned to follow units"
-msgstr ""
+msgstr "Peut être affecté pour suivre des unités"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[1]
@@ -11335,7 +11335,7 @@ msgstr "Nouveau système disponible"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4154
 msgid "New Systems Sensor Available"
-msgstr ""
+msgstr "Nouveau système de radar disponible"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
@@ -11471,7 +11471,7 @@ msgstr "Mur Nexus"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4249
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11489,13 +11489,13 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
 #: po/custom/fromJson.txt:4261
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "Les objets deviennent difficiles à déceler près de lui"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ResourceExtractor.name
@@ -11822,7 +11822,7 @@ msgstr "Gel d'oxyde de propylène traité pour brûler à plus hautes températu
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.tip
 #: po/custom/fromJson.txt:4470
 msgid "Prototypical AI focusing on rockets/missiles"
-msgstr ""
+msgstr "IA protoype spécialisée en roquettes/missiles"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PulseLas.name
@@ -11908,13 +11908,13 @@ msgstr "Canon lourd Python chenilles"
 #. data/mp/stats/body.json: $.Body11ABT.name
 #: po/custom/fromJson.txt:4517
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:4525
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Mitrailleuse anti-aérienne quadritube de calibre 80mm"
+msgstr "Quadruple Mitrailleuse anti-aérienne de calibre 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -11927,7 +11927,7 @@ msgstr "Galerie de missiles permettant d'accélérer le rechargement"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[2]
 #: po/custom/fromJson.txt:4536
 msgid "Radar detector detects enemy sensors"
-msgstr ""
+msgstr "Tour radar détectant les radars ennemis"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
@@ -12641,7 +12641,7 @@ msgstr "Bus scolaire"
 #. data/mp/stats/body.json: $.Body8MBT.name
 #: po/custom/fromJson.txt:5012
 msgid "Scorpion"
-msgstr ""
+msgstr "Scorpion"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
@@ -12758,7 +12758,7 @@ msgstr "Production de véhicules par auto-réplication"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13438,7 +13438,7 @@ msgstr "Béton renforcé au titane"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
 #: po/custom/fromJson.txt:5544
 msgid "Tower wars AI, based on NullBot"
-msgstr ""
+msgstr "IA attaquant avec des tours, basée sur NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Tracks.name
@@ -13660,7 +13660,7 @@ msgstr "Mitrailleuses rotatives rapides jumelées"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5686
 msgid "Two-faced"
-msgstr ""
+msgstr "A deux faces"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -13818,7 +13818,7 @@ msgstr "Canon électrique lourd Vengeance chenilles"
 #. data/mp/stats/body.json: $.Body10MBT.name
 #: po/custom/fromJson.txt:5801
 msgid "Vengeance"
-msgstr ""
+msgstr "Vengeance"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text[1]
@@ -14066,13 +14066,13 @@ msgstr "Canon hypersonique VTOL"
 #. data/base/stats/propulsion.json: $.V-Tol02.name
 #: po/custom/fromJson.txt:5951
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:5954
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14176,7 +14176,7 @@ msgstr "Plateforme de réarmement"
 #. data/mp/messages/resmessagesall.json: $.RES_ST_VF.text[2]
 #: po/custom/fromJson.txt:6016
 msgid "VTOL rearming pads required to keep VTOLs flying"
-msgstr "Des plateformes de réarment sont nécessaires pour maintenir les VTOL en état de vol"
+msgstr "Des plateformes de réarmement sont nécessaires pour maintenir les VTOL en état de vol"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Missile-VTOL-AT.name
@@ -14248,7 +14248,7 @@ msgstr "Mitrailleuses jumelées VTOL"
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6070
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -14351,25 +14351,25 @@ msgstr "Carcasse"
 #. data/base/stats/features.json: $.WreckedBridge.name
 #: po/custom/fromJson.txt:6137
 msgid "Wrecked Bridge"
-msgstr "Ruines de pont"
+msgstr "Pont en ruine"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedTankerV.name
 #: po/custom/fromJson.txt:6140
 msgid "Wrecked Tanker"
-msgstr "Épave de camion-citerne"
+msgstr "Camion-citerne en ruine"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedVertCampVan.name
 #: po/custom/fromJson.txt:6143
 msgid "Wrecked Van"
-msgstr "Carcasse de camionnette"
+msgstr "Camionnette en ruine"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedSuzukiJeep.name
 #: po/custom/fromJson.txt:6146
 msgid "Wrecked Vehicle"
-msgstr "Carcasse de voiture"
+msgstr "Voiture en ruine"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.Body13SUP.name
@@ -14383,7 +14383,7 @@ msgstr "Vouivre"
 #: po/custom/fromJson.txt:6153
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Élite"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14399,7 +14399,7 @@ msgstr "Deuxième classe"
 #: po/custom/fromJson.txt:6161
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Héros"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14407,7 +14407,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6165
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "Professionnel"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14415,7 +14415,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6169
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "Régulier"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14423,7 +14423,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6173
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Bleu"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14431,7 +14431,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6177
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Spécial"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14439,7 +14439,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6181
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Première classe"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14447,7 +14447,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6185
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Vétéran"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -14457,7 +14457,7 @@ msgstr ""
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14477,7 +14477,7 @@ msgstr "Fichier mode global pour Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14549,7 +14549,7 @@ msgstr "Fichier"
 
 #: src/clparse.cpp:262
 msgid "Flush all debug output written to stderr"
-msgstr "Effacer toutes les sorties du débogueur écrites dans stderr"
+msgstr "Evacuer toutes les sorties de débogage écrites dans stderr"
 
 #: src/clparse.cpp:263
 msgid "Play in fullscreen mode"
@@ -14565,11 +14565,11 @@ msgstr "Nom du niveau"
 
 #: src/clparse.cpp:265
 msgid "Show options and exit"
-msgstr "Affiche les options et quitte"
+msgstr "Afficher les options et quitter"
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
-msgstr "Active un mode global"
+msgstr "Activer un mode global"
 
 #: src/clparse.cpp:266
 #: src/clparse.cpp:267
@@ -14781,12 +14781,12 @@ msgstr "Consommation d'énergie"
 
 #: src/design.cpp:1081
 msgid "Hydra "
-msgstr "Hydra"
+msgstr "Hydre "
 
 #: src/design.cpp:1252
 #: src/design.cpp:1272
 msgid "Sensor Range"
-msgstr "Portée des détecteurs"
+msgstr "Portée des radars"
 
 #: src/design.cpp:1292
 #: src/design.cpp:1308
@@ -14871,18 +14871,18 @@ msgstr "Désynchronisé"
 #: src/display3d.cpp:1887
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr ""
+msgstr "Régler le zoom à %.0f"
 
-#: src/display.cpp:1511
+#: src/display.cpp:1522
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Construction impossible pour le moment. Le gisement de pétrole est en feu."
 
-#: src/display.cpp:1527
+#: src/display.cpp:1538
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - Points de vie : %d/%d - Expérience %.1f, %s"
 
-#: src/display.cpp:1689
+#: src/display.cpp:1700
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Allié - Points de vie : %d/%d - Expérience %d, %s"
@@ -14891,7 +14891,7 @@ msgstr "%s - Allié - Points de vie : %d/%d - Expérience %d, %s"
 #: src/droid.cpp:248
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s Perdu!"
 
 #: src/droid.cpp:1143
 msgid "Structure Restored"
@@ -14945,7 +14945,7 @@ msgstr "Tutoriel"
 #: src/frontend.cpp:149
 #: src/ingameop.cpp:243
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #: src/frontend.cpp:153
 #: src/frontend.cpp:157
@@ -14991,11 +14991,11 @@ msgstr "Pour participer aux frais de location du serveur et supporter le projet,
 
 #: src/frontend.cpp:179
 msgid "Chat with players on #warzone2100"
-msgstr ""
+msgstr "Chattez avec les joueurs sur #warzone2100"
 
 #: src/frontend.cpp:182
 msgid "Connect to Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Se connecter à Freenode par webchat en cliquant sur ce lien."
 
 #: src/frontend.cpp:183
 msgid "Check for a newer version"
@@ -15087,7 +15087,7 @@ msgstr "Le port TCP 2100 doit être ouvert dans votre pare-feu/routeur pour pouv
 #: src/frontend.cpp:679
 #: src/multiint.cpp:1267
 msgid "OPTIONS"
-msgstr ""
+msgstr "OPTIONS"
 
 #: src/frontend.cpp:680
 msgid "Game Options"
@@ -15105,7 +15105,7 @@ msgstr "Options vidéo"
 
 #: src/frontend.cpp:683
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "Options audio ou de Zoom"
 
 #: src/frontend.cpp:684
 #: src/ingameop.cpp:489
@@ -15151,7 +15151,7 @@ msgstr "Désactivé"
 
 #: src/frontend.cpp:748
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:749
 #: src/multiplay.cpp:1909
@@ -15178,7 +15178,7 @@ msgstr "Fixe"
 
 #: src/frontend.cpp:771
 msgid "Instant"
-msgstr ""
+msgstr "Instantané"
 
 #: src/frontend.cpp:771
 msgid "Tracked"
@@ -15207,12 +15207,12 @@ msgstr "Ombres"
 #: src/frontend.cpp:802
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr "Mini-map"
+msgstr "Mini-carte"
 
 #: src/frontend.cpp:806
 #: src/ingameop.cpp:542
 msgid "Radar Jump"
-msgstr ""
+msgstr "Saut Mini-carte"
 
 #: src/frontend.cpp:810
 msgid "GRAPHICS OPTIONS"
@@ -15257,7 +15257,7 @@ msgstr ""
 
 #: src/frontend.cpp:975
 msgid "Map Zoom"
-msgstr ""
+msgstr "Zoom de carte"
 
 #: src/frontend.cpp:979
 msgid "Map Zoom Rate"
@@ -15285,7 +15285,7 @@ msgstr "Mode d'affichage*"
 
 #: src/frontend.cpp:1135
 msgid "Graphics Mode"
-msgstr ""
+msgstr "Mode d'affichage"
 
 #: src/frontend.cpp:1140
 msgid "Resolution*"
@@ -15293,7 +15293,7 @@ msgstr "Résolution*"
 
 #: src/frontend.cpp:1140
 msgid "Resolution"
-msgstr ""
+msgstr "Résolution"
 
 #: src/frontend.cpp:1145
 msgid "Display Scale*"
@@ -15305,7 +15305,7 @@ msgstr ""
 
 #: src/frontend.cpp:1189
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Vous pouvez changer la résolution en redimensionnant la fenêtre normalement. (Essayez de tirer un coin ou bord.)"
 
 #: src/frontend.cpp:1221
 msgid "* Takes effect on game restart"
@@ -15322,11 +15322,11 @@ msgstr "Synchronisation verticale"
 
 #: src/frontend.cpp:1241
 msgid "Antialiasing*"
-msgstr ""
+msgstr "Anticrénelage*"
 
 #: src/frontend.cpp:1247
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Attention: l'Anticrénelage peut provoquer des crashs, surtout avec des valeurs > 16"
 
 #: src/frontend.cpp:1258
 msgid "VIDEO OPTIONS"
@@ -15334,7 +15334,7 @@ msgstr "OPTIONS VIDÉO"
 
 #: src/frontend.cpp:1545
 msgid "Middle Mouse"
-msgstr "Roulette"
+msgstr "Molette"
 
 #: src/frontend.cpp:1545
 msgid "Right Mouse"
@@ -15342,15 +15342,15 @@ msgstr "Bouton droit"
 
 #: src/frontend.cpp:1557
 msgid "Map/Radar Zoom"
-msgstr ""
+msgstr "Zoom de carte/radar"
 
 #: src/frontend.cpp:1558
 msgid "Game Speed"
-msgstr ""
+msgstr "Vitesse de jeu"
 
 #: src/frontend.cpp:1559
 msgid "Camera Pitch"
-msgstr ""
+msgstr "Angle de caméra"
 
 #: src/frontend.cpp:1574
 #: src/ingameop.cpp:697
@@ -15380,7 +15380,7 @@ msgstr "Curseurs colorés"
 #: src/frontend.cpp:1596
 #: src/ingameop.cpp:725
 msgid "Scroll Event"
-msgstr ""
+msgstr "Evènement de défilement"
 
 #: src/frontend.cpp:1600
 msgid "MOUSE OPTIONS"
@@ -15408,7 +15408,7 @@ msgstr "Démént"
 #: src/frontend.cpp:1710
 #: src/frontend.cpp:1776
 msgid "Language"
-msgstr "Langage"
+msgstr "Langue"
 
 #: src/frontend.cpp:1714
 #: src/frontend.cpp:1780
@@ -15418,7 +15418,7 @@ msgstr "Difficulté de la campagne"
 #: src/frontend.cpp:1718
 #: src/frontend.cpp:1781
 msgid "Camera Speed"
-msgstr ""
+msgstr "Vitesse de Camera"
 
 #: src/frontend.cpp:1722
 #: src/frontend.cpp:1777
@@ -15543,17 +15543,17 @@ msgstr "Avertissement : Vous êtes l'hôte. Si vous quittez, la partie finit pou
 #: src/ingameop.cpp:133
 #: src/ingameop.cpp:271
 msgid "Host Quit"
-msgstr ""
+msgstr "Quitter l'hôte"
 
 #: src/ingameop.cpp:181
 #: src/ingameop.cpp:909
 msgid "Tactical UI (Target Origin Icon): Show"
-msgstr ""
+msgstr "IHM tactique: Montrer"
 
 #: src/ingameop.cpp:186
 #: src/ingameop.cpp:913
 msgid "Tactical UI (Target Origin Icon): Hide"
-msgstr ""
+msgstr "IHM tactique: Cacher"
 
 #: src/ingameop.cpp:251
 #: src/ingameop.cpp:260
@@ -15628,11 +15628,11 @@ msgstr "PAS ASSEZ D'ENERGIE !"
 #: src/intelmap.cpp:239
 #: src/keybind.cpp:1379
 msgid "PAUSED"
-msgstr "PAUSE"
+msgstr "EN PAUSE"
 
 #: src/intelmap.cpp:321
 msgid "Research Update"
-msgstr "Améliorarion de la recherche"
+msgstr "Amélioration de la recherche"
 
 #: src/intelmap.cpp:325
 msgid "Project Goals"
@@ -15759,35 +15759,35 @@ msgstr "Désolé, ce code de triche est désactivé pour les parties multijoueur
 
 #: src/keybind.cpp:156
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr "Attention ! Ce code de triche est buggé. Nous vous recommandons de ne PAS l'utiliser."
+msgstr "Attention! Ce code de triche est buggé. Nous vous recommandons de ne PAS l'utiliser."
 
 #: src/keybind.cpp:218
 msgid "Ouch! Droid's health is down 20%!"
-msgstr "Ouch ! La résistance des unités baisse de 20% !"
+msgstr "Ouch! La résistance des unités baisse de 20%!"
 
 #: src/keybind.cpp:234
 msgid "Ouch! Structure's health is down 20%!"
-msgstr "Ouch ! La résistance des structures baisse de 20% !"
+msgstr "Ouch! La résistance des structures baisse de 20%!"
 
 #: src/keybind.cpp:290
 msgid "Lets us see what you see!"
-msgstr "Voyons voir ce que tu vois !"
+msgstr "Voyons voir ce que tu vois!"
 
 #: src/keybind.cpp:294
 msgid "Fine, weapon & sensor display is off!"
-msgstr "C'est bon, je désactive l'affichage des détecteurs et de la portée de tir !"
+msgstr "C'est bon, je désactive l'affichage des détecteurs et de la portée de tir!"
 
 #: src/keybind.cpp:326
 msgid "View Aligned to South"
-msgstr ""
+msgstr "Point de vue réorienté vers le Sud"
 
 #: src/keybind.cpp:336
 msgid "View Aligned to East"
-msgstr ""
+msgstr "Point de vue réorienté vers l'Est"
 
 #: src/keybind.cpp:346
 msgid "View Aligned to West"
-msgstr ""
+msgstr "Point de vue réorienté vers l'Ouest"
 
 #: src/keybind.cpp:411
 #, c-format
@@ -15808,11 +15808,11 @@ msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle
 #: src/keybind.cpp:1884
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr "Le joueur %u utilise un code de triche : %s"
+msgstr "(Le joueur %u) utilise un code de triche : %s"
 
 #: src/keybind.cpp:511
 msgid "Hard as nails!!!"
-msgstr "Prends-toi ça dans les dents !!!"
+msgstr "Prends-toi ça dans les dents!!!"
 
 #: src/keybind.cpp:525
 msgid "Takings thing easy!"
@@ -15840,16 +15840,16 @@ msgstr "Deux fois mieux !"
 
 #: src/keybind.cpp:612
 msgid "FPS display is enabled."
-msgstr "L'affichage du nombre de frames par seconde est activé"
+msgstr "L'affichage du nombre de frames par seconde est activé."
 
 #: src/keybind.cpp:616
 msgid "FPS display is disabled."
-msgstr "L'affichage du nombre de frames par seconde est désactivé"
+msgstr "L'affichage du nombre de frames par seconde est désactivé."
 
 #: src/keybind.cpp:669
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "Le joueur %u utilise une tricherie : Unités : %d  Structures : %d  Features : %d"
+msgstr "(Le joueur %u) utilise une tricherie : Unités : %d  Structures : %d  Features : %d"
 
 #: src/keybind.cpp:705
 msgid "Infinite power disabled"
@@ -15875,7 +15875,7 @@ msgstr "Brouillard désactivé"
 #: src/keybind.cpp:922
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "Réglage du zoom de radar à %u"
 
 #: src/keybind.cpp:1311
 msgid "God Mode ON"
@@ -15896,16 +15896,16 @@ msgstr "Piéger le curseur %s"
 
 #: src/keybind.cpp:1434
 msgid "Researched EVERYTHING for you!"
-msgstr "Nous avons fait toutes les recherches pour vous !"
+msgstr "Nous avons fait toutes les recherches pour vous!"
 
 #: src/keybind.cpp:1458
 msgid "Selected buildings instantly recharged!"
-msgstr "Bâtiments sélectionnés rechargés !"
+msgstr "Bâtiments sélectionnés rechargés!"
 
 #: src/keybind.cpp:1499
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr "Le joueur %u utilise un code de triche : %s %s"
+msgstr "(Le joueur %u) utilise un code de triche : %s %s"
 
 #: src/keybind.cpp:1499
 msgid "Researched"
@@ -15933,43 +15933,43 @@ msgstr "Impossible de localiser le moindre puits de pétrole!"
 
 #: src/keybind.cpp:1738
 msgid "Oh, the weather outside is frightful... SNOW"
-msgstr "Brrr... Il fait si froid... Il neige."
+msgstr "Brrr... Il fait si froid... Il neige"
 
 #: src/keybind.cpp:1744
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
-msgstr "Singing in the rain, I'm singing in the rain... Il pleut."
+msgstr "Singing in the rain, I'm singing in the rain... Il pleut"
 
 #: src/keybind.cpp:1750
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
-msgstr "Prévisions météo : ciel dégagé dans toute la région... Aucune intempérie."
+msgstr "Prévisions météo : ciel dégagé dans toute la région... Aucune intempérie"
 
 #: src/keybind.cpp:1842
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
-msgstr "Attention ! Ceci peut avoir des conséquences désastreuses si mal utilisé dans les missions."
+msgstr "Attention! Ceci peut avoir des conséquences désastreuses si mal utilisé dans les missions."
 
 #: src/keybind.cpp:1844
 msgid "All enemies destroyed by cheating!"
-msgstr "Tous les ennemis ont été détruits par un TRICHEUR !"
+msgstr "Tous les ennemis ont été détruits par un TRICHEUR!"
 
 #: src/keybind.cpp:1885
 msgid "Destroying selected droids and structures!"
-msgstr "Destruction des unités et les structures sélectionnées !"
+msgstr "Destruction des unités et les structures sélectionnées!"
 
 #: src/keybind.cpp:2313
 msgid "Reveal OFF"
-msgstr ""
+msgstr "Révélation OFF"
 
 #: src/keybind.cpp:2318
 msgid "Reveal ON"
-msgstr ""
+msgstr "Révélation ON"
 
 #: src/keybind.cpp:2399
 msgid "Centered on player HQ, direction NORTH"
-msgstr "Vue centrée sur le quartier général, direction Nord."
+msgstr "Vue centrée sur le quartier général, direction Nord"
 
 #: src/keybind.cpp:2411
 msgid "Unable to locate HQ!"
-msgstr "Impossible de localiser le Quartier Général !"
+msgstr "Impossible de localiser le Quartier Général!"
 
 #: src/keybind.cpp:2418
 msgid "Formation speed limiting has been removed from the game due to bugs."
@@ -16004,27 +16004,27 @@ msgstr "Vitesse du jeu réduite à %s"
 
 #: src/keybind.cpp:2625
 msgid "Radar showing friend-foe colors"
-msgstr "Mini-map bicolore ami/ennemi"
+msgstr "Mini-carte bicolore ami/ennemi"
 
 #: src/keybind.cpp:2629
 msgid "Radar showing player colors"
-msgstr "Mini-map montrant les couleurs des joueurs"
+msgstr "Mini-carte montrant les couleurs des joueurs"
 
 #: src/keybind.cpp:2644
 msgid "Radar showing only objects"
-msgstr "Mini-map ne montrant que les objets"
+msgstr "Mini-carte ne montrant que les objets"
 
 #: src/keybind.cpp:2647
 msgid "Radar blending terrain and height"
-msgstr "Mini-map mélangeant terrain et relief"
+msgstr "Mini-carte mélangeant terrain et relief"
 
 #: src/keybind.cpp:2650
 msgid "Radar showing terrain"
-msgstr "Mini-map montrant le terrain"
+msgstr "Mini-carte montrant le terrain"
 
 #: src/keybind.cpp:2653
 msgid "Radar showing height"
-msgstr "Mini-map montrant le relief"
+msgstr "Mini-carte montrant le relief"
 
 #: src/keyedit.cpp:360
 #: src/multiint.cpp:1397
@@ -16072,7 +16072,7 @@ msgstr ""
 
 #: src/keymap.cpp:308
 msgid "Toggle Radar"
-msgstr "Active/désactive l'affichage de la mini-map"
+msgstr "Active/désactive l'affichage de la mini-carte"
 
 #: src/keymap.cpp:309
 msgid "QuickLoad"
@@ -16256,11 +16256,11 @@ msgstr "Afficher les options du jeu"
 
 #: src/keymap.cpp:368
 msgid "Zoom Radar Out"
-msgstr "Dézoomer la mini-map"
+msgstr "Dézoomer la mini-carte"
 
 #: src/keymap.cpp:369
 msgid "Zoom Radar In"
-msgstr "Zoomer la mini-map"
+msgstr "Zoomer la mini-carte"
 
 #: src/keymap.cpp:370
 msgid "Zoom In"
@@ -16488,7 +16488,7 @@ msgstr "Sélectionner toutes les unités radar"
 
 #: src/keymap.cpp:452
 msgid "Select all Trucks"
-msgstr "Sélectionner tous les véhicules"
+msgstr "Sélectionner tous les véhicules de construction"
 
 #: src/keymap.cpp:456
 msgid "Select next Factory"
@@ -16508,7 +16508,7 @@ msgstr "Sélectionner l'usine à Cyborgs suivante"
 
 #: src/keymap.cpp:462
 msgid "Toggle Debug Mappings"
-msgstr ""
+msgstr "Activer/désactiver Debug Mappings"
 
 #: src/keymap.cpp:463
 msgid "Toggle display of droid path"
@@ -16756,7 +16756,8 @@ msgstr "Définissez le nom de la partie"
 #: src/multiint.cpp:1291
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Sélectionnez la carte\n"
+"Peut être bloquée par le vote des joueurs"
 
 #: src/multiint.cpp:1292
 msgid "Map-Mod!"
@@ -16777,7 +16778,7 @@ msgstr ""
 
 #: src/multiint.cpp:1353
 msgid "Base"
-msgstr ""
+msgstr "Base"
 
 #: src/multiint.cpp:1362
 msgid "Map Preview"
@@ -16873,7 +16874,7 @@ msgstr "Attente de la fin du téléchargement"
 
 #: src/multiint.cpp:2097
 msgid "READY?"
-msgstr "PRÊT ?"
+msgstr "PRÊT?"
 
 #: src/multiint.cpp:2139
 msgid "PLAYERS"
@@ -16913,7 +16914,7 @@ msgstr "(aucun)"
 
 #: src/multiint.cpp:2360
 msgid "CHAT"
-msgstr ""
+msgstr "CHAT"
 
 #: src/multiint.cpp:2835
 msgid "Game Name Updated."
@@ -16965,11 +16966,11 @@ msgstr ""
 
 #: src/multiint.cpp:3922
 msgid "UPnP has been enabled."
-msgstr "UPnP activé"
+msgstr "UPnP activé."
 
 #: src/multiint.cpp:3928
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr ""
+msgstr "La détection UPnP a échoué, veuillez configurer votre routeur manuellement."
 
 #: src/multiint.cpp:3932
 msgid "UPnP detection is in progress..."
@@ -17019,7 +17020,7 @@ msgstr "HOTE"
 #: src/multiint.cpp:4164
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -17056,7 +17057,7 @@ msgstr "Une mise à jour du jeu est disponible, veuillez visiter http://wz2100.n
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:144
 msgid "LIMITS"
-msgstr ""
+msgstr "LIMITES"
 
 #: src/multilimit.cpp:157
 msgid "Map Can Exceed Limits"
@@ -17103,12 +17104,12 @@ msgstr "Tout nombre de joueurs"
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "1 joueur"
+msgstr[0] "%d joueur"
 msgstr[1] "%d joueurs"
 
 #: src/multimenu.cpp:761
 msgid "Score"
-msgstr ""
+msgstr "Score"
 
 #: src/multimenu.cpp:763
 msgid "Kills"
@@ -17211,15 +17212,15 @@ msgstr "[invalide]"
 
 #: src/multiplay.cpp:1605
 msgid "Map was requested: SENDING MAP!"
-msgstr "Carte requise : envoi en cours"
+msgstr "Carte requise: envoi en cours!"
 
 #: src/multiplay.cpp:1621
 msgid "Mod was requested: SENDING MOD!"
-msgstr "Mode requis : envoi en cours"
+msgstr "Mode requis: envoi en cours!"
 
 #: src/multiplay.cpp:1684
 msgid "FILE SENT!"
-msgstr "Fichier envoyé"
+msgstr "Fichier envoyé!"
 
 #: src/multiplay.cpp:1749
 #, c-format
@@ -17237,7 +17238,7 @@ msgstr "Vert"
 
 #: src/multiplay.cpp:1907
 msgid "Orange"
-msgstr ""
+msgstr "Orange"
 
 #: src/multiplay.cpp:1908
 msgid "Grey"
@@ -17257,7 +17258,7 @@ msgstr "Rose"
 
 #: src/multiplay.cpp:1913
 msgid "Cyan"
-msgstr ""
+msgstr "Cyan"
 
 #: src/multiplay.cpp:1914
 msgid "Yellow"
@@ -17285,7 +17286,7 @@ msgstr "Infrarouge"
 
 #: src/multiplay.cpp:1920
 msgid "Ultraviolet"
-msgstr ""
+msgstr "Ultraviolet"
 
 #: src/multiplay.cpp:1921
 msgid "Brown"
@@ -17404,11 +17405,11 @@ msgstr "Héros : %u"
 
 #: src/scores.cpp:291
 msgid "Unit Losses"
-msgstr "Unités perdues :"
+msgstr "Unités perdues"
 
 #: src/scores.cpp:293
 msgid "Structure Losses"
-msgstr "Bâtiments perdus :"
+msgstr "Bâtiments perdus"
 
 #: src/scores.cpp:295
 msgid "Force Information"
@@ -17464,23 +17465,23 @@ msgstr ""
 #: src/structure.cpp:2505
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
-msgstr ""
+msgstr "Impossible de produire \"%s\" sans un Relais de Commandement - Arrêt de la production"
 
 #: src/structure.cpp:2510
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
-msgstr ""
+msgstr "Impossible de produire \"%s\", limite de commandants atteinte - Arrêt de la production"
 
 #: src/structure.cpp:2518
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Impossible de produire plus de \"%s\", limite d'Unités de Construction atteinte - Arrêt de la production"
 
 #: src/structure.cpp:5428
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Unité assignée - Points de vie %d/%d"
+msgstr[0] "%s - %u Unités assignées - Points de vie %d/%d"
 msgstr[1] "%s - %u Unités assignées - Points de vie %d/%d"
 
 #: src/structure.cpp:5447
@@ -17566,7 +17567,7 @@ msgstr "Connexion à l'antichambre..."
 
 #: src/titleui/gamefind.cpp:244
 msgid "Your version of Warzone is incompatible with this game."
-msgstr "Votre version de Warzone est incompatible avec cette partie"
+msgstr "Votre version de Warzone est incompatible avec cette partie."
 
 #: src/titleui/gamefind.cpp:311
 msgid "[Password required]"
@@ -17596,7 +17597,7 @@ msgstr "Hébergé par %s - %s"
 
 #: src/titleui/gamefind.cpp:361
 msgid "Can't find any games for your version."
-msgstr "Aucune partie disponible pour votre version du jeu"
+msgstr "Aucune partie disponible pour votre version du jeu."
 
 #: src/titleui/gamefind.cpp:378
 msgid "There appears to be a game update available!"
@@ -17649,7 +17650,7 @@ msgstr "Modes : %s"
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
-msgstr "Modes : aucun"
+msgstr "Modes : aucun!"
 
 #: src/titleui/gamefind.cpp:569
 #, c-format
@@ -17678,7 +17679,7 @@ msgstr "Entrez le mot de passe :"
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:177
@@ -17695,7 +17696,7 @@ msgstr "Antichambre"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:188
 msgid "IP Address or Machine Name"
@@ -17730,5 +17731,5 @@ msgstr ""
 #: src/version.cpp:131
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Version: %s,%s Construit: %s%s"
 

@@ -77,6 +77,7 @@
 #include "warzoneconfig.h"
 #include "combat.h"
 #include "qtscript.h"
+#include "activity.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -2382,6 +2383,7 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 
 bool intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDrop)
 {
+	ActivityManager::instance().completedMission(result, collectEndGameStatsData(), Cheated);
 	return _intAddMissionResult(result, bPlaySuccess, showBackDrop);
 }
 
@@ -3124,6 +3126,49 @@ void	setCampaignNumber(UDWORD number)
 UDWORD	getCampaignNumber()
 {
 	return camNumber;
+}
+
+std::string getCampaignName()
+{
+	UDWORD campaignNum = getCampaignNumber();
+	std::string campaignName;
+	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
+	if (list.size() >= campaignNum)
+	{
+		campaignName = list[campaignNum - 1].name.toStdString();
+	}
+	return campaignName;
+}
+
+std::vector<CAMPAIGN_FILE> readCampaignFiles()
+{
+	static std::vector<CAMPAIGN_FILE> result;
+	if (!result.empty())
+	{
+		return result;
+	}
+
+	char **files = PHYSFS_enumerateFiles("campaigns");
+	for (char **i = files; *i != nullptr; ++i)
+	{
+		CAMPAIGN_FILE c;
+		WzString filename("campaigns/");
+		filename += *i;
+		if (!filename.endsWith(".json"))
+		{
+			continue;
+		}
+		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
+		c.name = ini.value("name").toWzString();
+		c.level = ini.value("level").toWzString();
+		c.package = ini.value("package").toWzString();
+		c.loading = ini.value("loading").toWzString();
+		c.video = ini.value("video").toWzString();
+		c.captions = ini.value("captions").toWzString();
+		result.push_back(c);
+	}
+	PHYSFS_freeList(files);
+	return result;
 }
 
 /*deals with any selectedPlayer's transporters that are flying in when the

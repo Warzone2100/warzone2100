@@ -92,12 +92,7 @@ struct DisplayStructureBarCache {
 static inline void freeLimitSet()
 {
 	// Free the old set if required
-	if (ingame.numStructureLimits)
-	{
-		free(ingame.pStructureLimits);
-		ingame.numStructureLimits = 0;
-		ingame.pStructureLimits = nullptr;
-	}
+	ingame.structureLimits.clear();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -313,8 +308,7 @@ TITLECODE WzMultiLimitTitleUI::run()
 // ////////////////////////////////////////////////////////////////////////////
 void createLimitSet()
 {
-	UDWORD			numchanges = 0, bufSize, idx = 0;
-	MULTISTRUCTLIMITS	*pEntry = nullptr;
+	UDWORD			numchanges = 0;
 
 	debug(LOG_NET, "LimitSet created");
 	// free old limiter structure
@@ -339,25 +333,18 @@ void createLimitSet()
 	if (numchanges > 0)
 	{
 		// Allocate some memory for the changes
-		bufSize = numchanges * sizeof(MULTISTRUCTLIMITS);
-		pEntry = (MULTISTRUCTLIMITS *)malloc(bufSize);
-		memset(pEntry, 255, bufSize);
+		ingame.structureLimits.reserve(numchanges);
 
 		// Prepare chunk
 		for (unsigned i = 0; i < numStructureStats; i++)
 		{
 			if (asStructureStats[i].upgrade[0].limit != LOTS_OF)
 			{
-				ASSERT_OR_RETURN(, idx < numchanges, "Bad number of changed limits");
-				pEntry[idx].id		= i;
-				pEntry[idx].limit	= asStructureStats[i].upgrade[0].limit;
-				idx++;
+				ASSERT_OR_RETURN(, ingame.structureLimits.size() < numchanges, "Bad number of changed limits");
+				ingame.structureLimits.push_back(MULTISTRUCTLIMITS { i, asStructureStats[i].upgrade[0].limit });
 			}
 		}
 	}
-
-	ingame.numStructureLimits	= numchanges;
-	ingame.pStructureLimits		= pEntry;
 
 	if (bHosted)
 	{
@@ -368,24 +355,23 @@ void createLimitSet()
 // ////////////////////////////////////////////////////////////////////////////
 void applyLimitSet()
 {
-	if (ingame.numStructureLimits == 0)
+	if (ingame.structureLimits.empty())
 	{
 		return;
 	}
 
 	// Get the limits and decode
-	const MULTISTRUCTLIMITS *pEntry = ingame.pStructureLimits;
 	UBYTE flags = ingame.flags & MPFLAGS_FORCELIMITS;
-	for (int i = 0; i < ingame.numStructureLimits; ++i)
+	for (const auto& structLimit : ingame.structureLimits)
 	{
-		int id = pEntry[i].id;
+		int id = structLimit.id;
 
 		// So long as the ID is valid
 		if (id < numStructureStats)
 		{
 			for (int player = 0; player < MAX_PLAYERS; player++)
 			{
-				asStructureStats[id].upgrade[player].limit = pEntry[i].limit;
+				asStructureStats[id].upgrade[player].limit = structLimit.limit;
 
 				if (ingame.flags & MPFLAGS_FORCELIMITS)
 				{
@@ -403,19 +389,19 @@ void applyLimitSet()
 					}
 				}
 			}
-			if (asStructureStats[id].type == REF_VTOL_FACTORY && pEntry[i].limit == 0)
+			if (asStructureStats[id].type == REF_VTOL_FACTORY && structLimit.limit == 0)
 			{
 				flags |= MPFLAGS_NO_VTOLS;
 			}
-			if (asStructureStats[id].type == REF_CYBORG_FACTORY && pEntry[i].limit == 0)
+			if (asStructureStats[id].type == REF_CYBORG_FACTORY && structLimit.limit == 0)
 			{
 				flags |= MPFLAGS_NO_CYBORGS;
 			}
-			if (asStructureStats[id].type == REF_LASSAT && pEntry[i].limit == 0)
+			if (asStructureStats[id].type == REF_LASSAT && structLimit.limit == 0)
 			{
 				flags |= MPFLAGS_NO_LASSAT;
 			}
-			if (asStructureStats[id].type == REF_SAT_UPLINK && pEntry[i].limit == 0)
+			if (asStructureStats[id].type == REF_SAT_UPLINK && structLimit.limit == 0)
 			{
 				flags |= MPFLAGS_NO_UPLINK;
 			}

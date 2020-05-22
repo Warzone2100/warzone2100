@@ -56,6 +56,8 @@
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "titleui/titleui.h"
+#include "activity.h"
+#include "nethelpers.h"
 
 #include <type_traits>
 
@@ -75,6 +77,9 @@ bool loadConfig()
 		debug(LOG_ERROR, "Could not open configuration file \"%s\"", fileName);
 		return false;
 	}
+
+	ActivityManager::instance().beginLoadingSettings();
+
 	debug(LOG_WZ, "Reading configuration from %s", ini.fileName().toUtf8().constData());
 	if (ini.contains("voicevol"))
 	{
@@ -154,6 +159,9 @@ bool loadConfig()
 	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
 	NETsetMasterserverPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
 	NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
+	NETsetJoinPreferenceIPv6(ini.value("prefer_ipv6", true).toBool());
+	setPublicIPv4LookupService(ini.value("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).toString().toStdString(), ini.value("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).toString().toStdString());
+	setPublicIPv6LookupService(ini.value("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).toString().toStdString(), ini.value("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).toString().toStdString());
 	war_SetFMVmode((FMV_MODE)ini.value("FMVmode", FMV_FULLSCREEN).toInt());
 	war_setScanlineMode((SCANLINE_MODE)ini.value("scanlines", SCANLINES_OFF).toInt());
 	seq_SetSubtitles(ini.value("subtitles", true).toBool());
@@ -232,6 +240,8 @@ bool loadConfig()
 		pie_SetVideoBufferDepth(ini.value("bpp").toInt());
 	}
 	setFavoriteStructs(ini.value("favoriteStructs").toString().toUtf8().constData());
+
+	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
 
@@ -294,6 +304,11 @@ bool saveConfig()
 	ini.setValue("masterserver_port", NETgetMasterserverPort());
 	ini.setValue("server_name", mpGetServerName());
 	ini.setValue("gameserver_port", NETgetGameserverPort());
+	ini.setValue("prefer_ipv6", NETgetJoinPreferenceIPv6());
+	ini.setValue("publicIPv4LookupService_Url", getPublicIPv4LookupServiceUrl().c_str());
+	ini.setValue("publicIPv4LookupService_JSONKey", getPublicIPv4LookupServiceJSONKey().c_str());
+	ini.setValue("publicIPv6LookupService_Url", getPublicIPv6LookupServiceUrl().c_str());
+	ini.setValue("publicIPv6LookupService_JSONKey", getPublicIPv6LookupServiceJSONKey().c_str());
 	if (!bMultiPlayer)
 	{
 		ini.setValue("colour", getPlayerColour(0));			// favourite colour.

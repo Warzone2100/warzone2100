@@ -7,7 +7,7 @@ function needPowerGenerator()
 		return ((countStruct(structures.derricks) - (countStruct(structures.gens) * 4)) > 0);
 	}
 
-	return cacheThis(uncached, [], undefined, 8000);
+	return cacheThis(uncached, [], "needPowerGenerator1", 8000);
 }
 
 function minTruckCount()
@@ -17,7 +17,7 @@ function minTruckCount()
 		return (highOilMap() ? 3 : 2) * MIN_TRUCKS_PER_GROUP;
 	}
 
-	return cacheThis(uncached, [], undefined, Infinity);
+	return cacheThis(uncached, [], "minTruckCount1", Infinity);
 }
 
 //Determine if this is a constructor droid. Specify and optional second paramter
@@ -76,6 +76,7 @@ function conCanHelp(mydroidID, bx, by)
 		return false;
 	}
 	return (mydroid.order !== DORDER_BUILD &&
+		mydroid.order !== DORDER_HELPBUILD &&
 		mydroid.order !== DORDER_LINEBUILD &&
 		mydroid.order !== DORDER_RECYCLE &&
 		!repairDroid(mydroidID) &&
@@ -129,7 +130,7 @@ function protectUnguardedDerricks(droid)
 {
 	var derrs = enumStruct(me, structures.derricks);
 	const LEN = derrs.length;
-	const MAX_BLOCKING = 4;
+	const MAX_BLOCKING = 8;
 
 	if (droid)
 	{
@@ -187,7 +188,7 @@ function protectUnguardedDerricks(droid)
 //around what is passed to it.
 function buildStructure(droid, stat, defendThis, blocking)
 {
-	if (!isStructureAvailable(stat, me))
+	if (!isDefined(stat) || !isStructureAvailable(stat, me))
 	{
 		return false;
 	}
@@ -229,6 +230,11 @@ function buildStructure(droid, stat, defendThis, blocking)
 //Build some object. Builds modules on structures also.
 function buildStuff(struc, module, defendThis, blocking, group)
 {
+	if (!isDefined(struc))
+	{
+		return false;
+	}
+
 	if (!isDefined(blocking))
 	{
 		blocking = 0;
@@ -316,9 +322,7 @@ function lookForOil()
 	var droids = enumGroup(oilGrabberGroup);
 	var oils = enumFeature(-1, OIL_RES).sort(distanceToBase);
 
-	var manyOils = highOilMap();
-
-	if (!manyOils && countStruct(structures.derricks) > 4)
+	if (random(100) < 40 && countStruct(structures.derricks) > 4)
 	{
 		protectUnguardedDerricks();
 	}
@@ -347,11 +351,6 @@ function lookForOil()
 			orderDroidBuild(bestDroid, DORDER_BUILD, structures.derricks, oil.x, oil.y);
 			return true;
 		}
-	}
-
-	if (manyOils)
-	{
-		protectUnguardedDerricks();
 	}
 
 	return false;
@@ -414,7 +413,7 @@ function returnDefense(type)
 	var standardDefenses = subPersonalities[personality].primaryWeapon.defenses;
 	var artilleryDefenses = subPersonalities[personality].artillery.defenses;
 	var defenses = (type === 0) ? artilleryDefenses.concat(standardDefenses) : standardDefenses.concat(artilleryDefenses);
-	var bestDefense = "Emplacement-MortarEMP"; //default
+	var bestDefense;
 
 	//Choose a random electronic warfare defense if possible.
 	if (random(100) < ELECTRONIC_CHANCE)
@@ -450,9 +449,14 @@ function returnDefense(type)
 		}
 	}
 
-	if (!isStructureAvailable(bestDefense))
+	if (!isDefined(bestDefense))
 	{
-		return "GuardTower1"; //hmg tower
+		if (isStructureAvailable("GuardTower1"))
+		{
+			return "GuardTower1"; //hmg tower
+		}
+
+		return undefined;
 	}
 
 	return bestDefense;
@@ -470,7 +474,7 @@ function buildDefenseNearTruck(truck, type)
 
 	if (isDefined(defense))
 	{
-		const MAX_BLOCKING = 4;
+		const MAX_BLOCKING = 8;
 		var tempTruckPos = randomOffsetLocation({x: truck.x, y: truck.y});
 		var result = pickStructLocation(truck, defense, tempTruckPos.x, tempTruckPos.y, MAX_BLOCKING);
 		if (result)
@@ -492,7 +496,7 @@ function defendRandomDerrick()
 
 	if (derrs.length > 0)
 	{
-		const MAX_BLOCKING = 1;
+		const MAX_BLOCKING = 8;
 
 		if (buildStuff(returnDefense(), undefined, derrs[random(derrs.length)], MAX_BLOCKING, oilGrabberGroup))
 		{
@@ -613,7 +617,11 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (GOOD_POWER_LEVEL && !researchComplete && countAndBuild(structures.labs, 3))
+		if (GOOD_POWER_LEVEL && !researchComplete && countAndBuild(structures.labs, 2))
+		{
+			return true;
+		}
+		if (GOOD_POWER_LEVEL && countAndBuild(FACTORY, 3))
 		{
 			return true;
 		}
@@ -625,7 +633,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (GOOD_POWER_LEVEL && countAndBuild(FACTORY, 3))
+		if (!researchComplete && countAndBuild(structures.labs, 3))
 		{
 			return true;
 		}
@@ -637,6 +645,11 @@ function buildBaseStructures()
 		{
 			return true;
 		}
+	}
+
+	if (getMultiTechLevel() > 1 && countStruct(VTOL_FACTORY) > 0 && countAndBuild(structures.vtolPads, 3))
+	{
+		return true;
 	}
 
 	return false;
@@ -661,11 +674,11 @@ function factoryBuildOrder()
 		var facNum = countStruct(fac);
 		var allowedAmount = 0;
 
-		if (derrNum >= 18)
+		if (derrNum >= 20)
 		{
 			allowedAmount = 5;
 		}
-		else if (derrNum >= 14)
+		else if (derrNum >= 16)
 		{
 			allowedAmount = 4;
 		}
@@ -680,11 +693,6 @@ function factoryBuildOrder()
 		else
 		{
 			allowedAmount = MIN_FACTORY_COUNT;
-		}
-
-		if (allowedAmount >= 3 && getRealPower() < MIN_POWER)
-		{
-			allowedAmount = 2;
 		}
 
 		if (facNum < allowedAmount && facNum < MAX_FACTORY_COUNT && countAndBuild(fac, allowedAmount))
@@ -822,6 +830,7 @@ function buildOrders()
 
 	var isNTW = highOilMap();
 	var skip = false;
+	var allowFastHighTechBuild = ((gameTime > 240000) || (getRealPower() > 600));
 
 	if (findIdleTrucks(constructGroup).length === 0 && (!isNTW || findIdleTrucks(constructGroupNTWExtra).length === 0)) { return; }
 
@@ -835,10 +844,10 @@ function buildOrders()
 	if (isNTW && maintenance(constructGroupNTWExtra)) { skip = true; }
 	if (skip) { return; }
 
-	if (buildSpecialStructures()) { return; }
+	if (allowFastHighTechBuild && buildSpecialStructures()) { return; }
 	if (buildBaseStructures2()) { return; }
-	if (random(100) < 33 && buildAAForPersonality()) { return; }
-	if (buildExtras()) { return; }
+	if (allowFastHighTechBuild && random(100) < 33 && buildAAForPersonality()) { return; }
+	if (allowFastHighTechBuild && buildExtras()) { return; }
 
 	buildDefenses(undefined, false);
 }
@@ -857,6 +866,7 @@ function maintenance(group)
 
 	var isNTW = highOilMap();
 	var goodNTWPower = getRealPower() > 250;
+	var minModulePower = (getMultiTechLevel() === 1) ? -50 : -200;
 
 	var modList;
 	var struct = null;
@@ -877,7 +887,6 @@ function maintenance(group)
 			{"mod": "A0PowMod1", "amount": 1, "structure": structures.gens},
 			{"mod": "A0FacMod1", "amount": 1, "structure": FACTORY},
 			{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.labs},
-			{"mod": "A0FacMod1", "amount": 1, "structure": VTOL_FACTORY},
 			{"mod": "A0FacMod1", "amount": 2, "structure": FACTORY},
 			{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY},
 		];
@@ -905,7 +914,7 @@ function maintenance(group)
 				continue;
 			}
 
-			var structList = isNTW ? enumStruct(me, modObj.structure).sort(distanceToBase) : enumStruct(me, modObj.structure).sort(distanceToBase).reverse();
+			var structList = enumStruct(me, modObj.structure).sort(distanceToBase);
 			for (var c = 0, s = structList.length; c < s; ++c)
 			{
 				if (structList[c].modules < modObj.amount)
@@ -922,7 +931,10 @@ function maintenance(group)
 		}
 	}
 
-	if (((getRealPower() > SUPER_LOW_POWER) || (module === "A0PowMod1") || (module === modList[0].mod)) &&
+	if (((getRealPower() > minModulePower) ||
+		(getMultiTechLevel() > 1 && gameTime > 300000) ||
+		(module === "A0PowMod1") ||
+		(module === modList[0].mod)) &&
 		struct &&
 		buildStuff(struct, module, undefined, 0, group))
 	{

@@ -645,14 +645,12 @@ UDWORD getTargetType()
 }
 
 //don't want to do any of these whilst in the Intelligence Screen
-CURSOR processMouseClickInput()
+void processMouseClickInput()
 {
 	UDWORD	i;
 	SELECTION_TYPE	selection;
 	MOUSE_TARGET	item = MT_NOTARGET;
 	bool OverRadar = OverRadarAndNotDragging();
-
-	CURSOR cursor = CURSOR_DEFAULT;
 
 	ignoreOrder = CheckFinishedFindPosition();
 
@@ -665,7 +663,7 @@ CURSOR processMouseClickInput()
 	if (isMouseOverScreenOverlayChild(mouseX(), mouseY()))
 	{
 		// ignore clicks
-		return cursor;
+		return;
 	}
 
 	if (mouseReleased(MOUSE_LMB) && !OverRadar && dragBox3D.status != DRAG_RELEASED && !ignoreOrder && !mouseOverConsole && !bDisplayMultiJoiningStatus)
@@ -680,7 +678,6 @@ CURSOR processMouseClickInput()
 			{
 				// Never, *ever* let user control the transport in SP games--it breaks the scripts!
 				ASSERT(game.type == CAMPAIGN, "Game type was set incorrectly!");
-				return cursor;
 			}
 			else
 			{
@@ -732,7 +729,7 @@ CURSOR processMouseClickInput()
 	{
 		cancelDeliveryRepos();
 	}
-	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging)
+	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging && !getRadarTrackingStatus())
 	{
 		rotInitial = (player.r.y % 65536) / DEG(1.0f); // negative values caused problems with float conversion
 		rotInitialUp = player.r.x;
@@ -745,17 +742,17 @@ CURSOR processMouseClickInput()
 
 	if (gamePaused())
 	{
-		cursor = CURSOR_DEFAULT;
+		wzSetCursor(CURSOR_DEFAULT);
 	}
 	if (buildState == BUILD3D_VALID)
 	{
 		// special casing for building
-		cursor = CURSOR_BUILD;
+		wzSetCursor(CURSOR_BUILD);
 	}
 	else if (buildState == BUILD3D_POS)
 	{
 		// special casing for building - can't build here
-		cursor = CURSOR_NOTPOSSIBLE;
+		wzSetCursor(CURSOR_NOTPOSSIBLE);
 	}
 	else if (selection != SC_INVALID)
 	{
@@ -919,29 +916,29 @@ CURSOR processMouseClickInput()
 			    arnMPointers[item][selection] == CURSOR_MOVE && bMultiPlayer)
 			{
 				// Alt+move = disembark transporter
-				cursor = CURSOR_DISEMBARK;
+				wzSetCursor(CURSOR_DISEMBARK);
 			}
 			else if (specialOrderKeyDown() && selection == SC_DROID_DIRECT &&
 			         arnMPointers[item][selection] == CURSOR_MOVE)
 			{
 				// Alt+move = scout
-				cursor = CURSOR_SCOUT;
+				wzSetCursor(CURSOR_SCOUT);
 			}
 			else if (arnMPointers[item][selection] == CURSOR_NOTPOSSIBLE &&
 			         ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
 			         ObjUnderMouse->type == OBJ_STRUCTURE && ((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat &&
 			         (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 			{
-				cursor = CURSOR_SELECT; // Special casing for LasSat
+				wzSetCursor(CURSOR_SELECT); // Special casing for LasSat
 			}
 			else
 			{
-				cursor = arnMPointers[item][selection];
+				wzSetCursor(arnMPointers[item][selection]);
 			}
 		}
 		else
 		{
-			cursor = CURSOR_DEFAULT;
+			wzSetCursor(CURSOR_DEFAULT);
 		}
 	}
 	else
@@ -956,22 +953,22 @@ CURSOR processMouseClickInput()
 			if (item == MT_ENEMYDROID || item == MT_ENEMYSTR || item == MT_DAMFEATURE)
 			{
 				//display attack cursor
-				cursor = CURSOR_ATTACK;
+				wzSetCursor(CURSOR_ATTACK);
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && (ObjUnderMouse->type == OBJ_DROID ||
 			         (ObjUnderMouse->type == OBJ_STRUCTURE && lasSatStructSelected((STRUCTURE *)ObjUnderMouse))))
 			{
 				// Special casing for selectables
-				cursor = CURSOR_SELECT;
+				wzSetCursor(CURSOR_SELECT);
 			}
 			else if (ObjUnderMouse && ObjUnderMouse->player == selectedPlayer && ObjUnderMouse->type == OBJ_STRUCTURE)
 			{
-				cursor = CURSOR_DEFAULT;
+				wzSetCursor(CURSOR_DEFAULT);
 			}
 			else
 			{
 				//display block cursor
-				cursor = CURSOR_NOTPOSSIBLE;
+				wzSetCursor(CURSOR_NOTPOSSIBLE);
 			}
 		}
 		else if (ObjUnderMouse && (ObjUnderMouse->player == selectedPlayer) &&
@@ -979,12 +976,11 @@ CURSOR processMouseClickInput()
 		           && (asWeaponStats[((STRUCTURE *)ObjUnderMouse)->asWeaps[0].nStat].weaponSubClass == WSC_LAS_SAT))
 		          || ObjUnderMouse->type == OBJ_DROID))
 		{
-			cursor = CURSOR_SELECT; // Special casing for LasSat or own unit
+			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit
 		}
 	}
 
 	CurrentItemUnderMouse = item;
-	return cursor;
 }
 
 static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
@@ -1031,7 +1027,7 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	*y += *dydt * dt;
 }
 
-CURSOR scroll()
+void scroll()
 {
 	SDWORD	xDif, yDif;
 	uint32_t timeDiff;
@@ -1040,11 +1036,9 @@ CURSOR scroll()
 	float scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2);
 	float scaled_accel = scaled_max_scroll_speed / 2;
 
-	CURSOR cursor = CURSOR_DEFAULT;
-
 	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
-		return cursor;
+		return;
 	}
 
 	if (mouseScroll && wzMouseInWindow())
@@ -1052,21 +1046,21 @@ CURSOR scroll()
 		if (mouseY() < BOUNDARY_Y)
 		{
 			scrollDirUpDown++;
-			cursor = CURSOR_UARROW;
+			wzSetCursor(CURSOR_UARROW);
 		}
 		if (mouseY() > (pie_GetVideoBufferHeight() - BOUNDARY_Y))
 		{
 			scrollDirUpDown--;
-			cursor = CURSOR_DARROW;
+			wzSetCursor(CURSOR_DARROW);
 		}
 		if (mouseX() < BOUNDARY_X)
 		{
-			cursor = CURSOR_LARROW;
+			wzSetCursor(CURSOR_LARROW);
 			scrollDirLeftRight--;
 		}
 		if (mouseX() > (pie_GetVideoBufferWidth() - BOUNDARY_X))
 		{
-			cursor = CURSOR_RARROW;
+			wzSetCursor(CURSOR_RARROW);
 			scrollDirLeftRight++;
 		}
 	}
@@ -1102,8 +1096,6 @@ CURSOR scroll()
 	// Reset scroll directions
 	scrollDirLeftRight = 0;
 	scrollDirUpDown = 0;
-
-	return cursor;
 }
 
 /*

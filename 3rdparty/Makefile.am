@@ -4,26 +4,13 @@ AM_CPPFLAGS = $(WZ_CPPFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS) $(WZ_C99FLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
-# sha2
-
-sha_libsha2_a_CFLAGS = $(WZ_CFLAGS) -Wno-cast-align
-
-noinst_LIBRARIES = sha/libsha2.a
-noinst_HEADERS = \
-	sha/brg_endian.h \
-	sha/brg_types.h \
-	sha/sha2.h
-
-sha_libsha2_a_SOURCES = \
-	sha/sha2.c
-
 
 # utf8proc
 
 utf8proc_libutf8proc_a_CFLAGS = $(WZ_CFLAGS) -fPIC -std=c99 -Wall -pedantic -I$(srcdir)/utf8proc -DUTF8PROC_EXPORTS $(UTF8PROC_DEFINES)
 
-noinst_LIBRARIES += utf8proc/libutf8proc.a
-noinst_HEADERS += \
+noinst_LIBRARIES = utf8proc/libutf8proc.a
+noinst_HEADERS = \
 	utf8proc/utf8proc.h
 
 utf8proc_libutf8proc_a_SOURCES = \
@@ -40,6 +27,18 @@ noinst_HEADERS += \
 
 launchinfo_liblaunchinfo_a_SOURCES = \
 	launchinfo/src/LaunchInfo.cpp
+
+
+# EmbeddedJSONSignature
+
+EmbeddedJSONSignature_libembeddedjsonsignature_a_CXXFLAGS = $(WZ_CXXFLAGS)
+
+noinst_LIBRARIES += EmbeddedJSONSignature/libembeddedjsonsignature.a
+noinst_HEADERS += \
+	EmbeddedJSONSignature/include/EmbeddedJSONSignature.h
+
+EmbeddedJSONSignature_libembeddedjsonsignature_a_SOURCES = \
+	EmbeddedJSONSignature/src/EmbeddedJSONSignature.cpp
 
 
 # miniupnpc
@@ -98,6 +97,16 @@ miniupnp_libminiupnpc_a_SOURCES = \
 nodist_miniupnp_libminiupnpc_a_SOURCES = $(builddir)/miniupnp/miniupnpc/miniupnpcstrings.h
 
 
+# re2
+
+all-local:
+	cd re2 && $(MAKE) $(AM_MAKEFLAGS) all
+check-local:
+	cd re2 && $(MAKE) $(AM_MAKEFLAGS) test
+clean-local:
+	cd re2 && $(MAKE) $(AM_MAKEFLAGS) clean
+
 EXTRA_DIST = \
 	utf8proc \
-	miniupnp
+	miniupnp \
+	re2

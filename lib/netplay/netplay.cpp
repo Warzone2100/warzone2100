@@ -62,6 +62,7 @@
 #include "src/warzoneconfig.h"
 #include "src/version.h"
 #include "src/loadsave.h"
+#include "src/activity.h"
 
 #ifdef WZ_OS_LINUX
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -70,6 +71,7 @@
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
+static bool bJoinPrefTryIPv6First = true;
 
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
@@ -199,6 +201,11 @@ int NETGetMinorVersion()
 	return NETCODE_VERSION_MINOR;
 }
 
+bool NETGameIsLocked()
+{
+	return NetPlay.GamePassworded;
+}
+
 //	Sets if the game is password protected or not
 void NETGameLocked(bool flag)
 {
@@ -209,6 +216,10 @@ void NETGameLocked(bool flag)
 	{
 		debug(LOG_NET, "Updating game locked status.");
 		NETregisterServer(WZ_SERVER_UPDATE);
+	}
+	if (flagChanged)
+	{
+		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	}
 	NETlogEntry("Password is", SYNC_FLAG, NetPlay.GamePassworded);
 	debug(LOG_NET, "Passworded game is %s", NetPlay.GamePassworded ? "TRUE" : "FALSE");
@@ -238,6 +249,7 @@ void NETsetGamePassword(const char *password)
 {
 	sstrcpy(NetPlay.gamePassword, password);
 	debug(LOG_NET, "Password entered is: [%s]", NetPlay.gamePassword);
+	NETGameLocked(true);
 }
 
 //	Resets the game password
@@ -425,6 +437,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETuint8_t(&game.skDiff[index[n]]);  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
 	}
 	NETend();
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
 static void NETSendPlayerInfoTo(uint32_t index, unsigned to)
@@ -613,6 +626,8 @@ static void NETplayerDropped(UDWORD index)
  */
 void NETplayerKicked(UDWORD index)
 {
+	ASSERT_OR_RETURN(, index < MAX_PLAYERS, "NETplayerKicked invalid player_id: (%" PRIu32")", index);
+
 	// kicking a player counts as "leaving nicely", since "nicely" in this case
 	// simply means "there wasn't a connection error."
 	debug(LOG_INFO, "Player %u was kicked.", index);
@@ -906,9 +921,8 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 	}
 	if (failed)
 	{
-		SocketSet_DelSocket(socket_set, tcp_socket);  // mark it invalid
-		socketClose(tcp_socket);
-		tcp_socket = nullptr;
+		// caller handles invalidating and closing tcp_socket
+		return false;
 	}
 
 	// Now dump the data into the game struct
@@ -1156,7 +1170,6 @@ int NETinit(bool bFirstCall)
 	{
 		debug(LOG_NET, "NETPLAY: Init called, MORNIN'");
 
-		memset(&NetPlay.games, 0, sizeof(NetPlay.games));
 		// NOTE NetPlay.isUPNP is already set in configuration.c!
 		NetPlay.bComms = true;
 		NetPlay.GamePassworded = false;
@@ -1629,7 +1642,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			for (n = 0; n < indexLen; ++n)
 			{
 				bool wasAllocated = false;
-				char oldName[sizeof(NetPlay.players[index].name)];
+				std::string oldName;
 
 				// Retrieve the player's ID
 				NETuint32_t(&index);
@@ -1647,8 +1660,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbool(&NetPlay.players[index].allocated);
 				NETbool(&NetPlay.players[index].heartbeat);
 				NETbool(&NetPlay.players[index].kick);
-				memset(oldName, 0, sizeof(oldName));
-				strncpy(oldName, NetPlay.players[index].name, sizeof(oldName) - 1);
+				oldName.clear();
+				oldName = NetPlay.players[index].name;
 				NETstring(NetPlay.players[index].name, sizeof(NetPlay.players[index].name));
 				NETuint32_t(&NetPlay.players[index].heartattacktime);
 				NETint32_t(&colour);
@@ -1674,9 +1687,9 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				// update the color to the local array
 				setPlayerColour(index, NetPlay.players[index].colour);
 
-				if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName, NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
+				if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName.c_str(), NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
 				{
-					printConsoleNameChange(oldName, NetPlay.players[index].name);
+					printConsoleNameChange(oldName.c_str(), NetPlay.players[index].name);
 				}
 			}
 			NETend();
@@ -1684,8 +1697,12 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			// data to all other clients as well.
 			if (NetPlay.isHost && !error)
 			{
-				NETBroadcastPlayerInfo(index);
+				NETBroadcastPlayerInfo(index); // ultimately triggers updateMultiplayGameData inside NETSendNPlayerInfoTo
 				NETfixDuplicatePlayerNames();
+			}
+			else if (!error)
+			{
+				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 			}
 			netPlayersUpdated = true;
 			break;
@@ -1879,6 +1896,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	{
 		NETfixPlayerCount();
 		NETallowJoining();
+		NETprocessQueuedServerUpdates();
 		NETcheckPlayers();		// make sure players are still alive & well
 	}
 
@@ -2163,14 +2181,24 @@ error:
 	return SOCKET_ERROR;
 }
 
-void NETregisterServer(int state)
+static uint32_t lastServerUpdate = 0;
+static bool queuedServerUpdate = false;
+#define SERVER_UPDATE_MIN_INTERVAL 7 * GAME_TICKS_PER_SEC
+
+static inline bool canSendServerUpdateNow()
+{
+	return (lastServerUpdate < realTime - SERVER_UPDATE_MIN_INTERVAL);
+}
+
+bool NETregisterServer(int state)
 {
 	static Socket *rs_socket = nullptr;
 	static int registered = 0;
+	bool bProcessingConnectOrDisconnectThisCall = false;
 
 	if (server_not_there)
 	{
-		return;
+		return bProcessingConnectOrDisconnectThisCall;
 	}
 
 	if (state != registered)
@@ -2180,10 +2208,27 @@ void NETregisterServer(int state)
 		// Update player counts
 		case WZ_SERVER_UPDATE:
 			{
-				if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
+				if (rs_socket == nullptr)
 				{
-					socketClose(rs_socket);
-					rs_socket = nullptr;
+					queuedServerUpdate = false;
+					return bProcessingConnectOrDisconnectThisCall;
+				}
+
+				if (canSendServerUpdateNow())
+				{
+					if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
+					{
+						socketClose(rs_socket);
+						rs_socket = nullptr;
+					}
+					lastServerUpdate = realTime;
+					queuedServerUpdate = false;
+				}
+				else
+				{
+					// queue future update
+					debug(LOG_NET, "Queueing server update");
+					queuedServerUpdate = true;
 				}
 			}
 			break;
@@ -2191,6 +2236,7 @@ void NETregisterServer(int state)
 		// Register a game with the lobby
 		case WZ_SERVER_CONNECT:
 			{
+				bProcessingConnectOrDisconnectThisCall = true;
 				uint32_t gameId = 0;
 				SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
 
@@ -2203,7 +2249,7 @@ void NETregisterServer(int state)
 						NetPlay.MOTD = nullptr;
 					}
 					server_not_there = true;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				// Close an existing socket.
@@ -2228,7 +2274,7 @@ void NETregisterServer(int state)
 						NetPlay.MOTD = nullptr;
 					}
 					server_not_there = true;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				// Get a game ID
@@ -2246,7 +2292,7 @@ void NETregisterServer(int state)
 					socketClose(rs_socket);
 					rs_socket = nullptr;
 					server_not_there = true;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				gamestruct.gameId = ntohl(gameId);
@@ -2261,15 +2307,17 @@ void NETregisterServer(int state)
 					socketClose(rs_socket);
 					server_not_there = true;
 					rs_socket = nullptr;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
+				lastServerUpdate = realTime;
+				queuedServerUpdate = false;
 
 				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 				{
 					socketClose(rs_socket);
 					server_not_there = true;
 					rs_socket = nullptr;
-					return;
+					return bProcessingConnectOrDisconnectThisCall;
 				}
 
 				// Preserves another register
@@ -2280,6 +2328,7 @@ void NETregisterServer(int state)
 		// Unregister the game (close the socket)
 		case WZ_SERVER_DISCONNECT:
 			{
+				bProcessingConnectOrDisconnectThisCall = true;
 				if (rs_socket != nullptr)
 				{
 					// we don't need this anymore, so clean up
@@ -2288,12 +2337,31 @@ void NETregisterServer(int state)
 					server_not_there = true;
 				}
 
+				queuedServerUpdate = false;
+
 				// Preserves another unregister
 				registered = state;
 			}
 			break;
 		}
 	}
+
+	return bProcessingConnectOrDisconnectThisCall;
+}
+
+bool NETprocessQueuedServerUpdates()
+{
+	if (!queuedServerUpdate)
+	{
+		return false;
+	}
+	if (!canSendServerUpdateNow())
+	{
+		return false;
+	}
+	queuedServerUpdate = false;
+	NETregisterServer(WZ_SERVER_UPDATE);
+	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -2341,7 +2409,26 @@ static void NETallowJoining()
 	}
 	ASSERT(NetPlay.isHost, "Cannot receive joins if not host!");
 
-	NETregisterServer(WZ_SERVER_CONNECT);
+	bool bFirstTimeConnect = NETregisterServer(WZ_SERVER_CONNECT);
+	if (bFirstTimeConnect)
+	{
+		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+		ActivitySink::ListeningInterfaces listeningInterfaces;
+		if (tcp_socket != nullptr)
+		{
+			listeningInterfaces.IPv4 = socketHasIPv4(tcp_socket);
+			if (listeningInterfaces.IPv4)
+			{
+				listeningInterfaces.ipv4_port = NETgetGameserverPort();
+			}
+			listeningInterfaces.IPv6 = socketHasIPv6(tcp_socket);
+			if (listeningInterfaces.IPv6)
+			{
+				listeningInterfaces.ipv6_port = NETgetGameserverPort();
+			}
+		}
+		ActivityManager::instance().hostGame(gamestruct.name, NetPlay.players[0].name, NETgetMasterserverName(), NETgetMasterserverPort(), listeningInterfaces, gamestruct.gameId);
+	}
 
 	// This is here since we need to get the status, before we can show the info.
 	// FIXME: find better location to stick this?
@@ -2788,7 +2875,7 @@ bool NEThaltJoining()
 
 // ////////////////////////////////////////////////////////////////////////
 // find games on open connection
-bool NETfindGame()
+bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
 {
 	SocketAddress *hosts;
 	unsigned int gamecount = 0;
@@ -2801,10 +2888,6 @@ bool NETfindGame()
 		return false;
 	}
 	setLobbyError(ERROR_NOERROR);
-
-	NetPlay.games[0].desc.dwSize = 0;
-	NetPlay.games[0].desc.dwCurrentPlayers = 0;
-	NetPlay.games[0].desc.dwMaxPlayers = 0;
 
 	if (!NetPlay.bComms)
 	{
@@ -2860,7 +2943,7 @@ bool NETfindGame()
 	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
 	    && (result = readAll(tcp_socket, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
 	{
-		gamesavailable = MIN(ntohl(gamesavailable), ARRAY_SIZE(NetPlay.games));
+		gamesavailable = ntohl(gamesavailable);
 	}
 	else
 	{
@@ -2883,13 +2966,12 @@ bool NETfindGame()
 
 	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
 
-	// Clear old games from list.
-	memset(NetPlay.games, 0x00, sizeof(NetPlay.games));
-
 	while (gamecount < gamesavailable)
 	{
 		// Attempt to receive a game description structure
-		if (!NETrecvGAMESTRUCT(&NetPlay.games[gamecount]))
+		GAMESTRUCT game;
+		memset(&game, 0x00, sizeof(game));
+		if (!NETrecvGAMESTRUCT(&game))
 		{
 			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
 			// If we fail, success depends on the amount of games that we've read already
@@ -2899,20 +2981,32 @@ bool NETfindGame()
 			return gamecount;
 		}
 
-		if (NetPlay.games[gamecount].desc.host[0] == '\0')
+		if (game.desc.host[0] == '\0')
 		{
-			memset(NetPlay.games[gamecount].desc.host, 0, sizeof(NetPlay.games[gamecount].desc.host));
-			strncpy(NetPlay.games[gamecount].desc.host, getSocketTextAddress(tcp_socket), sizeof(NetPlay.games[gamecount].desc.host) - 1);
+			memset(game.desc.host, 0, sizeof(game.desc.host));
+			strncpy(game.desc.host, getSocketTextAddress(tcp_socket), sizeof(game.desc.host) - 1);
 		}
 
-		int Vmgr = (NetPlay.games[gamecount].future4 & 0xFFFF0000) >> 16;
-		int Vmnr = (NetPlay.games[gamecount].future4 & 0x0000FFFF);
+		int Vmgr = (game.future4 & 0xFFFF0000) >> 16;
+		int Vmnr = (game.future4 & 0x0000FFFF);
 
 		if (Vmgr > NETCODE_VERSION_MAJOR || Vmnr > NETCODE_VERSION_MINOR)
 		{
 			debug(LOG_NET, "Version update %d:%d", Vmgr, Vmnr);
 			NetPlay.HaveUpgrade = true;
 		}
+
+		if (game.desc.dwSize != 0)
+		{
+			if (!handleEnumerateGameFunc(game))
+			{
+				// stop enumerating
+				// note: this may mess up retrieving the lobby response below...
+				// we really need a protocol replacement
+				break;
+			}
+		}
+
 		++gamecount;
 	}
 
@@ -2928,6 +3022,51 @@ bool NETfindGame()
 	tcp_socket = nullptr;
 
 	return true;
+}
+
+bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t resultsLimit, bool onlyMatchingLocalVersion /*= false*/)
+{
+	size_t gamecount = 0;
+	results.clear();
+	bool success = NETenumerateGames([&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &game) -> bool {
+		if (gamecount++ < startingIndex)
+		{
+			// skip this item, continue
+			return true;
+		}
+		if ((resultsLimit > 0) && (results.size() >= resultsLimit))
+		{
+			// stop processing games
+			return false;
+		}
+		if ((onlyMatchingLocalVersion) && ((game.game_version_major != (unsigned)NETGetMajorVersion()) || (game.game_version_minor != (unsigned)NETGetMinorVersion())))
+		{
+			// skip this non-matching version, continue
+			return true;
+		}
+		results.push_back(game);
+		return true;
+	});
+
+	return success;
+}
+
+bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
+{
+	bool foundMatch = false;
+	GAMESTRUCT result;
+	memset(&result, 0x00, sizeof(result));
+	NETenumerateGames([&foundMatch, &result, gameId](const GAMESTRUCT &game) -> bool {
+		if (game.gameId != gameId)
+		{
+			// not a match - continue enumerating
+			return true;
+		}
+		result = game;
+		foundMatch = true;
+		return false; // stop searching
+	});
+	return foundMatch;
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -3162,6 +3301,23 @@ void NETsetGameserverPort(unsigned int port)
 unsigned int NETgetGameserverPort()
 {
 	return gameserver_port;
+}
+
+/*!
+* Set the join preference for IPv6
+* \param bTryIPv6First Whether to attempt IPv6 first when joining, before IPv4.
+*/
+void NETsetJoinPreferenceIPv6(bool bTryIPv6First)
+{
+	bJoinPrefTryIPv6First = bTryIPv6First;
+}
+
+/**
+* @return Whether joining a game that advertises both IPv6 and IPv4 should attempt IPv6 first.
+*/
+bool NETgetJoinPreferenceIPv6()
+{
+	return bJoinPrefTryIPv6First;
 }
 
 

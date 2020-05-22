@@ -79,23 +79,6 @@ WZ_DECL_NONNULL(3) int wz_snprintf(char *str, size_t size, const char *format, .
 #endif
 
 
-// A stack-allocating variant of sprintf
-#define sasprintf(strp, format, ...) \
-	do { \
-		/* Make sure to evaluate "format" just once */ \
-		const char* fmt = format; \
-		/* Determine the size of the string we're going to produce */ \
-		size_t size = snprintf(NULL, 0, fmt, __VA_ARGS__); \
-		\
-		/* Let the compiler perform some static type-checking */ \
-		char** var = strp; \
-		\
-		/* Allocate a buffer large enough to hold our string on the stack*/ \
-		*var = (char*)alloca(size + 1); \
-		/* Print into our newly created string-buffer */ \
-		sprintf(*var, fmt,  __VA_ARGS__); \
-	} while(0)
-
 /// Equivalent to vasprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.
 WZ_DECL_NONNULL(1, 2) int vasprintfNull(char **strp, const char *format, va_list ap);
 /// Equivalent to asprintf, except that strp is NULL instead of undefined, if the function returns -1. Does not give compiler warnings/-Werrors if not checking the return value.

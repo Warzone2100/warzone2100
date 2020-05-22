@@ -5,7 +5,8 @@ const COBRA_RULESETS = "/multiplay/skirmish/cobra_rulesets/";
 //Rulesets here.
 include(COBRA_RULESETS + "CobraStandard.js");
 
-const MAX_GRUDGE = 50000;
+const LOG_RESEARCH_PATH = false;
+
 const MIN_ATTACK_DROIDS = 4;
 const FACTORY = "A0LightFactory";
 const CYBORG_FACTORY = "A0CyborgFactory";
@@ -39,11 +40,12 @@ const ESSENTIALS = [
 	"R-Wpn-MG-Damage02",
 	"R-Struc-PowerModuleMk1",
 	"R-Struc-Research-Upgrade01",
+	"R-Vehicle-Prop-Halftracks",
 	"R-Vehicle-Metals01",
 	"R-Cyborg-Metals01",
+	"R-Vehicle-Body05",
 ];
 const ESSENTIALS_2 = [
-	"R-Vehicle-Prop-Halftracks",
 	"R-Struc-RprFac-Upgrade01",
 	"R-Vehicle-Body11",
 	"R-Sys-Sensor-Upgrade01",
@@ -93,8 +95,11 @@ const VTOL_ESSENTIALS = [
 	"R-Wpn-Bomb01",
 ];
 const VTOL_RES = [
-	"R-Struc-VTOLPad-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade03",
 	"R-Wpn-Bomb02",
+	"R-Wpn-Bomb03",
+	"R-Wpn-Bomb04",
+	"R-Struc-VTOLPad-Upgrade06",
 	"R-Wpn-Bomb-Accuracy03",
 	"R-Wpn-Bomb05",
 	"R-Wpn-Bomb06",
@@ -153,14 +158,16 @@ var subPersonalities =
 		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
 		"defensePriority": 30,
 		"vtolPriority": 20,
-		"alloyPriority": 20,
+		"alloyPriority": 40,
 		"useLasers": true,
-		"cyborgThreatPercentage": 0.20,
+		"cyborgThreatPercentage": 0.08,
+		"retreatScanRange": 12,
 		"resPath": "generic",
 		"res": [
 			"R-Wpn-Cannon-Damage02",
 			"R-Wpn-Cannon-ROF02",
 		],
+		"canPlayBySelf": true,
 	},
 	AR:
 	{
@@ -171,14 +178,16 @@ var subPersonalities =
 		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
 		"defensePriority": 20,
 		"vtolPriority": 40,
-		"alloyPriority": 25,
+		"alloyPriority": 35,
 		"useLasers": true,
 		"cyborgThreatPercentage": 0.40,
+		"retreatScanRange": 5,
 		"resPath": "offensive",
 		"res": [
 			"R-Wpn-Flamer-Damage03",
 			"R-Wpn-Flamer-ROF01",
 		],
+		"canPlayBySelf": false,
 	},
 	AB:
 	{
@@ -189,13 +198,15 @@ var subPersonalities =
 		"factoryOrder": [VTOL_FACTORY, FACTORY, CYBORG_FACTORY],
 		"defensePriority": 10,
 		"vtolPriority": 50,
-		"alloyPriority": 10,
+		"alloyPriority": 30,
 		"useLasers": true,
 		"resPath": "offensive",
+		"retreatScanRange": 12,
 		"cyborgThreatPercentage": 0.10,
 		"res": [
 			"R-Wpn-Rocket02-MRL",
 		],
+		"canPlayBySelf": true,
 	},
 	AM:
 	{
@@ -206,13 +217,15 @@ var subPersonalities =
 		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
 		"defensePriority": 50,
 		"vtolPriority": 40,
-		"alloyPriority": 15,
+		"alloyPriority": 35,
 		"useLasers": true,
 		"resPath": "generic",
+		"retreatScanRange": 12,
 		"cyborgThreatPercentage": 100,
 		"res": [
 			"R-Wpn-MG2Mk1",
 		],
+		"canPlayBySelf": true,
 	},
 	AA:
 	{
@@ -223,16 +236,18 @@ var subPersonalities =
 		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
 		"defensePriority": 70,
 		"vtolPriority": 15,
-		"alloyPriority": 15,
+		"alloyPriority": 35,
 		"useLasers": true,
 		"resPath": "offensive",
-		"cyborgThreatPercentage": 0.30,
+		"retreatScanRange": 12,
+		"cyborgThreatPercentage": 0.15,
 		"res": [
 			"R-Wpn-Mortar02Hvy",
 			"R-Wpn-Mortar-ROF02",
 			"R-Wpn-Mortar-Acc01",
 			"R-Wpn-Mortar-Damage03",
 		],
+		"canPlayBySelf": false,
 	},
 	AL:
 	{
@@ -243,14 +258,15 @@ var subPersonalities =
 		"factoryOrder": [VTOL_FACTORY, FACTORY, CYBORG_FACTORY],
 		"defensePriority": 10,
 		"vtolPriority": 100,
-		"alloyPriority": 10,
+		"alloyPriority": 30,
 		"useLasers": true,
 		"cyborgThreatPercentage": 0.10,
-		"resPath": "air",
+		"retreatScanRange": 12,
+		"resPath": "generic",
 		"res": [
-			"R-Wpn-Laser01",
-			"R-Wpn-Mortar-Incenediary",
+			"R-Wpn-MG3Mk1",
 		],
+		"canPlayBySelf": false,
 	},
 };
 

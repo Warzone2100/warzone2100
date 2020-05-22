@@ -32,6 +32,15 @@
 /* Define to 1 if you have the `setenv' function. */
 #cmakedefine HAVE_SETENV @HAVE_SETENV@
 
+/* Define to 1 if you have the `posix_spawn' function. */
+#cmakedefine HAVE_POSIX_SPAWN @HAVE_POSIX_SPAWN@
+
+/* Define to 1 if you have the `posix_spawnp' function. */
+#cmakedefine HAVE_POSIX_SPAWNP @HAVE_POSIX_SPAWNP@
+
+/* Define to 1 if you have the `environ' declaration. */
+#cmakedefine HAVE_ENVIRON_DECL @HAVE_ENVIRON_DECL@
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H @HAVE_STDINT_H@
 

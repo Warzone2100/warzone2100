@@ -825,6 +825,47 @@ void SocketSet_DelSocket(SocketSet *set, Socket *socket)
 	}
 }
 
+#if !defined(SOCK_CLOEXEC)
+static bool setSocketInheritable(SOCKET fd, bool inheritable)
+{
+#if   defined(WZ_OS_UNIX)
+	int sockopts = fcntl(fd, F_SETFD);
+	if (sockopts == SOCKET_ERROR)
+	{
+		debug(LOG_NET, "Failed to retrieve current socket options: %s", strSockError(getSockErr()));
+		return false;
+	}
+
+	// Set or clear FD_CLOEXEC flag
+	if (inheritable)
+	{
+		sockopts &= ~FD_CLOEXEC;
+	}
+	else
+	{
+		sockopts |= FD_CLOEXEC;
+	}
+
+	if (fcntl(fd, F_SETFD, sockopts) == SOCKET_ERROR)
+	{
+		debug(LOG_NET, "Failed to set socket %sinheritable: %s", (inheritable ? "" : "non-"), strSockError(getSockErr()));
+		return false;
+	}
+#elif defined(WZ_OS_WIN)
+	DWORD dwFlags = (inheritable) ? HANDLE_FLAG_INHERIT : 0;
+	if (::SetHandleInformation((HANDLE)fd, HANDLE_FLAG_INHERIT, dwFlags) == 0)
+	{
+		DWORD dwErr = GetLastError();
+		debug(LOG_NET, "Failed to set socket %sinheritable: %s", (inheritable ? "" : "non-"), std::to_string(dwErr).c_str());
+		return false;
+	}
+#endif
+
+	debug(LOG_NET, "Socket is set to %sinheritable.", (inheritable ? "" : "non-"));
+	return true;
+}
+#endif // !defined(SOCK_CLOEXEC)
+
 static bool setSocketBlocking(const SOCKET fd, bool blocking)
 {
 #if   defined(WZ_OS_UNIX)
@@ -1115,6 +1156,14 @@ Socket *socketAccept(Socket *sock)
 				return nullptr;
 			}
 
+#if !defined(SOCK_CLOEXEC)
+			if (!setSocketInheritable(newConn, false))
+			{
+				debug(LOG_NET, "Couldn't set socket (%p) inheritable status (false). Ignoring...", static_cast<void *>(conn));
+				// ignore and continue
+			}
+#endif
+
 			debug(LOG_NET, "setting socket (%p) blocking status (false).", static_cast<void *>(conn));
 			if (!setSocketBlocking(newConn, false))
 			{
@@ -1188,6 +1237,14 @@ Socket *socketOpen(const SocketAddress *addr, unsigned timeout)
 		socketClose(conn);
 		return nullptr;
 	}
+
+#if !defined(SOCK_CLOEXEC)
+	if (!setSocketInheritable(conn->fd[SOCK_CONNECTION], false))
+	{
+		debug(LOG_NET, "Couldn't set socket (%p) inheritable status (false). Ignoring...", static_cast<void *>(conn));
+		// ignore and continue
+	}
+#endif
 
 	debug(LOG_NET, "setting socket (%p) blocking status (false).", static_cast<void *>(conn));
 	if (!setSocketBlocking(conn->fd[SOCK_CONNECTION], false))
@@ -1364,6 +1421,14 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
 	{
+#if !defined(SOCK_CLOEXEC)
+		if (!setSocketInheritable(conn->fd[SOCK_IPV4_LISTEN], false))
+		{
+			debug(LOG_NET, "Couldn't set socket (%p) inheritable status (false). Ignoring...", static_cast<void *>(conn));
+			// ignore and continue
+		}
+#endif
+
 		if (setsockopt(conn->fd[SOCK_IPV4_LISTEN], SOL_SOCKET, SO_REUSEADDR, (const char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_WARNING, "Failed to set SO_REUSEADDR on IPv4 socket. Error: %s", strSockError(getSockErr()));
@@ -1386,6 +1451,14 @@ Socket *socketListen(unsigned int port)
 
 	if (conn->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
 	{
+#if !defined(SOCK_CLOEXEC)
+		if (!setSocketInheritable(conn->fd[SOCK_IPV6_LISTEN], false))
+		{
+			debug(LOG_NET, "Couldn't set socket (%p) inheritable status (false). Ignoring...", static_cast<void *>(conn));
+			// ignore and continue
+		}
+#endif
+
 		if (setsockopt(conn->fd[SOCK_IPV6_LISTEN], SOL_SOCKET, SO_REUSEADDR, (const char *)&so_reuseaddr, sizeof(so_reuseaddr)) == SOCKET_ERROR)
 		{
 			debug(LOG_INFO, "Failed to set SO_REUSEADDR on IPv6 socket. Error: %s", strSockError(getSockErr()));
@@ -1454,15 +1527,85 @@ void socketArrayClose(Socket **sockets, size_t maxSockets)
 	std::fill(sockets, sockets + maxSockets, (Socket *)nullptr);      // Set the pointers to NULL.
 }
 
+WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
+{
+	return sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET;
+}
+
+WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock)
+{
+	return sock->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET;
+}
+
 char const *getSocketTextAddress(Socket const *sock)
 {
 	return sock->textAddress;
 }
 
+std::vector<unsigned char> ipv4_AddressString_To_NetBinary(const std::string& ipv4Address)
+{
+	std::vector<unsigned char> binaryForm(sizeof(struct in_addr), 0);
+	if (inet_pton(AF_INET, ipv4Address.c_str(), binaryForm.data()) <= 0)
+	{
+		// inet_pton failed
+		binaryForm.clear();
+	}
+	return binaryForm;
+}
+
+#ifndef INET_ADDRSTRLEN
+# define INET_ADDRSTRLEN 16
+#endif
+
+std::string ipv4_NetBinary_To_AddressString(const std::vector<unsigned char>& ip4NetBinaryForm)
+{
+	if (ip4NetBinaryForm.size() != sizeof(struct in_addr))
+	{
+		return "";
+	}
+	std::string ipv4Address;
+	ipv4Address.resize(INET_ADDRSTRLEN);
+	if (inet_ntop(AF_INET, ip4NetBinaryForm.data(), &ipv4Address[0], ipv4Address.size()) == nullptr)
+	{
+		return "";
+	}
+	return ipv4Address;
+}
+
+std::vector<unsigned char> ipv6_AddressString_To_NetBinary(const std::string& ipv6Address)
+{
+	std::vector<unsigned char> binaryForm(sizeof(struct in6_addr), 0);
+	if (inet_pton(AF_INET6, ipv6Address.c_str(), binaryForm.data()) <= 0)
+	{
+		// inet_pton failed
+		binaryForm.clear();
+	}
+	return binaryForm;
+}
+
+#ifndef INET6_ADDRSTRLEN
+# define INET6_ADDRSTRLEN 46
+#endif
+
+std::string ipv6_NetBinary_To_AddressString(const std::vector<unsigned char>& ip6NetBinaryForm)
+{
+	if (ip6NetBinaryForm.size() != sizeof(struct in_addr))
+	{
+		return "";
+	}
+	std::string ipv6Address;
+	ipv6Address.resize(INET6_ADDRSTRLEN);
+	if (inet_ntop(AF_INET6, ip6NetBinaryForm.data(), &ipv6Address[0], ipv6Address.size()) == nullptr)
+	{
+		return "";
+	}
+	return ipv6Address;
+}
+
 SocketAddress *resolveHost(const char *host, unsigned int port)
 {
 	struct addrinfo *results;
-	char *service;
+	std::string service;
 	struct addrinfo hint;
 	int error, flags = 0;
 
@@ -1481,12 +1624,12 @@ SocketAddress *resolveHost(const char *host, unsigned int port)
 	hint.ai_canonname = nullptr;
 	hint.ai_next      = nullptr;
 
-	sasprintf(&service, "%u", port);
+	service = astringf("%u", port);
 
-	error = getaddrinfo(host, service, &hint, &results);
+	error = getaddrinfo(host, service.c_str(), &hint, &results);
 	if (error != 0)
 	{
-		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service, gai_strerror(error));
+		debug(LOG_NET, "getaddrinfo failed for %s:%s: %s", host, service.c_str(), gai_strerror(error));
 		return nullptr;
 	}
 

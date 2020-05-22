@@ -31,6 +31,8 @@
 #include "orderdef.h"
 #include "stringdef.h"
 #include "messagedef.h"
+#include <vector>
+#include <string>
 
 class DROID_GROUP;
 struct BASE_OBJECT;
@@ -79,8 +81,7 @@ struct MULTIPLAYERINGAME
 	int32_t				TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
 	UDWORD				startTime;
-	UDWORD				numStructureLimits;					// number of limits
-	MULTISTRUCTLIMITS	*pStructureLimits;					// limits chunk.
+	std::vector<MULTISTRUCTLIMITS> structureLimits;
 	uint8_t				flags;  ///< Bitmask, shows which structures are disabled.
 #define MPFLAGS_NO_TANKS	0x01  		///< Flag for tanks disabled
 #define MPFLAGS_NO_CYBORGS	0x02  		///< Flag for cyborgs disabled
@@ -197,7 +198,26 @@ bool multiShutdown();
 bool sendLeavingMsg();
 
 bool hostCampaign(char *sGame, char *sPlayer);
-bool joinGame(const char *host, uint32_t port);
+struct JoinConnectionDescription
+{
+public:
+	JoinConnectionDescription() { }
+	JoinConnectionDescription(const std::string& host, uint32_t port)
+	: host(host)
+	, port(port)
+	{ }
+public:
+	std::string host;
+	uint32_t port = 0;
+};
+std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId);
+enum class JoinGameResult {
+	FAILED,
+	JOINED,
+	PENDING_PASSWORD
+};
+JoinGameResult joinGame(const char *host, uint32_t port);
+JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list);
 void playerResponding();
 bool multiGameInit();
 bool multiGameShutdown();

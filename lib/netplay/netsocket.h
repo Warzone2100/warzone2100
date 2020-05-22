@@ -22,6 +22,8 @@
 #define _net_socket_h
 
 #include "lib/framework/types.h"
+#include <string>
+#include <vector>
 
 #if   defined(WZ_OS_UNIX)
 # include <arpa/inet.h>
@@ -100,8 +102,14 @@ WZ_DECL_NONNULL(1) void socketClose(Socket *sock);                      ///< Des
 Socket *socketOpenAny(const SocketAddress *addr, unsigned timeout);     ///< Opens a Socket, using the first address that works in addr.
 size_t socketArrayOpen(Socket **sockets, size_t maxSockets, const SocketAddress *addr, unsigned timeout);  ///< Opens up to maxSockets Sockets, of the types listed in addr.
 void socketArrayClose(Socket **sockets, size_t maxSockets);             ///< Closes all Sockets in the array.
+WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock);
+WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock);
 
 WZ_DECL_NONNULL(1) char const *getSocketTextAddress(Socket const *sock); ///< Gets a string with the socket address.
+std::vector<unsigned char> ipv4_AddressString_To_NetBinary(const std::string& ipv4Address);
+std::vector<unsigned char> ipv6_AddressString_To_NetBinary(const std::string& ipv6Address);
+std::string ipv4_NetBinary_To_AddressString(const std::vector<unsigned char>& ip4NetBinaryForm);
+std::string ipv6_NetBinary_To_AddressString(const std::vector<unsigned char>& ip6NetBinaryForm);
 WZ_DECL_NONNULL(1) bool socketReadReady(Socket const *sock);            ///< Returns if checkSockets found data to read from this Socket.
 WZ_DECL_NONNULL(1, 2)
 ssize_t readNoInt(Socket *sock, void *buf, size_t max_size, size_t *rawByteCount = nullptr);  ///< Reads up to max_size bytes from the Socket. Raw count of bytes (after compression) returned in rawByteCount.

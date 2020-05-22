@@ -55,6 +55,8 @@
 #include "lib/sound/audio_id.h"
 #include "intimage.h"
 
+#include <algorithm>
+
 #define	BAR_CRAWL_TIME	(GAME_TICKS_PER_SEC*3)
 
 #define MT_Y_POS	(MISSIONRES_TITLE_Y  + D_H + 80)
@@ -173,7 +175,7 @@ STAT_BAR	infoBars[] =
 };
 
 // --------------------------------------------------------------------
-static void fillUpStats();
+static void fillUpStats(const END_GAME_STATS_DATA& stats);
 // --------------------------------------------------------------------
 
 /* The present mission data */
@@ -271,6 +273,23 @@ void getAsciiTime(char *psText, unsigned time)
 	}
 }
 
+END_GAME_STATS_DATA	collectEndGameStatsData()
+{
+	END_GAME_STATS_DATA fullStats;
+	fullStats.missionData = missionData;
+
+	for (size_t i = 0; i < DROID_LEVELS; i++)
+	{
+		fullStats.numDroidsPerLevel.push_back(getNumDroidsForLevel(i));
+	}
+
+	fullStats.numUnits = 0;
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
+	for (DROID *psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, fullStats.numUnits++) {}
+
+	return fullStats;
+}
+
 void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 {
 	int index, x, y, width, height;
@@ -283,7 +302,7 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 	}
 
-	fillUpStats();
+	fillUpStats(collectEndGameStatsData());
 
 	pie_UniTransBoxFill(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256 + 16, WZCOL_SCORE_BOX);
 	iV_Box(16 + D_W, MT_Y_POS - 16, pie_GetVideoBufferWidth() - D_W - 16, MT_Y_POS + 256 + 16, WZCOL_SCORE_BOX_BORDER);
@@ -395,23 +414,17 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 }
 
 // -----------------------------------------------------------------------------------
-void	fillUpStats()
+void	fillUpStats(const END_GAME_STATS_DATA& stats)
 {
 	UDWORD	i;
-	UDWORD	maxi, num;
+	UDWORD	maxi;
 	float	scaleFactor;
 	UDWORD	length;
-	UDWORD	numUnits;
-	DROID	*psDroid;
 
 	/* Do rankings first cos they're easier */
 	for (i = 0, maxi = 0; i < DROID_LEVELS; i++)
 	{
-		num = getNumDroidsForLevel(i);
-		if (num > maxi)
-		{
-			maxi = num;
-		}
+		maxi = std::max(maxi, stats.numDroidsPerLevel[i]);
 	}
 
 	/* Make sure we got something */
@@ -427,14 +440,14 @@ void	fillUpStats()
 	/* Scale for percent */
 	for (i = 0; i < DROID_LEVELS; i++)
 	{
-		length = scaleFactor * getNumDroidsForLevel(i);
+		length = scaleFactor * stats.numDroidsPerLevel[i];
 		infoBars[STAT_ROOKIE + i].percent = PERCENT(length, RANK_BAR_WIDTH);
-		infoBars[STAT_ROOKIE + i].number = getNumDroidsForLevel(i);
+		infoBars[STAT_ROOKIE + i].number = stats.numDroidsPerLevel[i];
 	}
 
 	/* Now do the other stuff... */
 	/* Units killed and lost... */
-	maxi = MAX(missionData.unitsLost, missionData.unitsKilled);
+	maxi = MAX(stats.missionData.unitsLost, stats.missionData.unitsKilled);
 	if (maxi == 0)
 	{
 		scaleFactor = 0.f;
@@ -444,13 +457,13 @@ void	fillUpStats()
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = scaleFactor * missionData.unitsLost;
+	length = scaleFactor * stats.missionData.unitsLost;
 	infoBars[STAT_UNIT_LOST].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * missionData.unitsKilled;
+	length = scaleFactor * stats.missionData.unitsKilled;
 	infoBars[STAT_UNIT_KILLED].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Now do the structure losses */
-	maxi = MAX(missionData.strLost, missionData.strKilled);
+	maxi = MAX(stats.missionData.strLost, stats.missionData.strKilled);
 	if (maxi == 0)
 	{
 		scaleFactor = 0.f;
@@ -460,18 +473,15 @@ void	fillUpStats()
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = scaleFactor * missionData.strLost;
+	length = scaleFactor * stats.missionData.strLost;
 	infoBars[STAT_STR_LOST].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * missionData.strKilled;
+	length = scaleFactor * stats.missionData.strKilled;
 	infoBars[STAT_STR_BLOWN_UP].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Finally the force information - need amount of droids as well*/
-	for (psDroid = apsDroidLists[selectedPlayer], numUnits = 0; psDroid; psDroid = psDroid->psNext, numUnits++) {}
 
-	for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
-
-	maxi = MAX(missionData.unitsBuilt, missionData.strBuilt);
-	maxi = MAX(maxi, numUnits);
+	maxi = MAX(stats.missionData.unitsBuilt, stats.missionData.strBuilt);
+	maxi = MAX(maxi, stats.numUnits);
 
 	if (maxi == 0)
 	{
@@ -482,21 +492,21 @@ void	fillUpStats()
 		scaleFactor = (float)STAT_BAR_WIDTH / maxi;
 	}
 
-	length = scaleFactor * missionData.unitsBuilt;
+	length = scaleFactor * stats.missionData.unitsBuilt;
 	infoBars[STAT_UNITS_BUILT].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * numUnits;
+	length = scaleFactor * stats.numUnits;
 	infoBars[STAT_UNITS_NOW].percent = PERCENT(length, STAT_BAR_WIDTH);
-	length = scaleFactor * missionData.strBuilt;
+	length = scaleFactor * stats.missionData.strBuilt;
 	infoBars[STAT_STR_BUILT].percent = PERCENT(length, STAT_BAR_WIDTH);
 
 	/* Finally the numbers themselves */
-	infoBars[STAT_UNIT_LOST].number = missionData.unitsLost;
-	infoBars[STAT_UNIT_KILLED].number = missionData.unitsKilled;
-	infoBars[STAT_STR_LOST].number = missionData.strLost;
-	infoBars[STAT_STR_BLOWN_UP].number = missionData.strKilled;
-	infoBars[STAT_UNITS_BUILT].number =	missionData.unitsBuilt;
-	infoBars[STAT_UNITS_NOW].number = numUnits;
-	infoBars[STAT_STR_BUILT].number = missionData.strBuilt;
+	infoBars[STAT_UNIT_LOST].number = stats.missionData.unitsLost;
+	infoBars[STAT_UNIT_KILLED].number = stats.missionData.unitsKilled;
+	infoBars[STAT_STR_LOST].number = stats.missionData.strLost;
+	infoBars[STAT_STR_BLOWN_UP].number = stats.missionData.strKilled;
+	infoBars[STAT_UNITS_BUILT].number =	stats.missionData.unitsBuilt;
+	infoBars[STAT_UNITS_NOW].number = stats.numUnits;
+	infoBars[STAT_STR_BUILT].number = stats.missionData.strBuilt;
 }
 
 // -----------------------------------------------------------------------------------

@@ -19,6 +19,9 @@ endif()
 # Disallow in-source builds
 include(DisallowInSourceBuilds)
 
+# Disable CTest targets
+set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
+
 if(WZ_ENABLE_WARNINGS)
 	set(WZ_Wno_ "-Wno-error=")
 else()
@@ -60,9 +63,9 @@ if(NOT DEFINED WZ_DATADIR)
 	if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/data")
 	elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100") # not used on macOS (macOS always creates an app bundle)
+		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}") # not used on macOS (macOS always creates an app bundle)
 	else()
-		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100")
+		set(WZ_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}")
 	endif()
 endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -150,7 +153,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		message( WARNING "WindowsStore builds are not currently supported" )
 		add_definitions(-D_WIN32_WINNT=0x0A00) # Windows 10+
 	else()
-		add_definitions(-D_WIN32_WINNT=0x0501) # Windows XP+
+		add_definitions(-D_WIN32_WINNT=0x0600) # Windows Vista+
 	endif()
 endif()
 
@@ -582,10 +585,11 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories(".")
 include_directories("3rdparty")
 include_directories(SYSTEM "3rdparty/glm")
+include_directories("3rdparty/date/include")
 
 SET(STDC_HEADERS ON)
 
-SET(PACKAGE "warzone2100")
+SET(PACKAGE "warzone2100${WZ_OUTPUT_NAME_SUFFIX}")
 SET(PACKAGE_BUGREPORT "http://wz2100.net/")
 SET(PACKAGE_NAME "Warzone 2100")
 SET(PACKAGE_TARNAME "warzone2100")
@@ -643,6 +647,9 @@ CHECK_CXX_SYMBOL_EXISTS(strlcat "string.h" HAVE_VALID_STRLCAT)
 CHECK_CXX_SYMBOL_EXISTS(strlcpy "string.h" HAVE_VALID_STRLCPY)
 CHECK_CXX_SYMBOL_EXISTS(putenv "stdlib.h" HAVE_PUTENV)
 CHECK_CXX_SYMBOL_EXISTS(setenv "stdlib.h" HAVE_SETENV)
+CHECK_CXX_SYMBOL_EXISTS(posix_spawn "spawn.h" HAVE_POSIX_SPAWN)
+CHECK_CXX_SYMBOL_EXISTS(posix_spawnp "spawn.h" HAVE_POSIX_SPAWNP)
+CHECK_CXX_SYMBOL_EXISTS(environ "unistd.h" HAVE_ENVIRON_DECL)
 cmake_reset_check_state()
 
 set(WZ_BINDIR "${CMAKE_INSTALL_BINDIR}")
@@ -721,7 +728,7 @@ endif()
 foreach(rfile ${wz2100_ROOT_FILES})
 	install(FILES ${rfile}
 			COMPONENT Info
-			DESTINATION "${CMAKE_INSTALL_DOCDIR}"
+			DESTINATION "${CMAKE_INSTALL_DOCDIR}${WZ_OUTPUT_NAME_SUFFIX}"
 	)
 endforeach()
 

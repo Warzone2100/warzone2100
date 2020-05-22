@@ -85,6 +85,7 @@ win32/packages
 *moc.h
 *moc.cpp
 /src/titleui/.dirstamp
+/src/3rdparty/.dirstamp
 
 /doc/quickstartguide.html
 /doc/quickstartguide.pdf

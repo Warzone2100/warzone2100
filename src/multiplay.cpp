@@ -73,6 +73,7 @@
 #include "cheat.h"
 #include "main.h"								// for gamemode
 #include "multiint.h"
+#include "activity.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -838,6 +839,7 @@ bool recvMessage()
 				{
 					debug(LOG_ERROR, "You were kicked because %s", reason);
 					setPlayerHasLost(true);
+					ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
 				}
 				else
 				{

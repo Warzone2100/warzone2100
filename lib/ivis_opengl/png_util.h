@@ -22,6 +22,7 @@
 #define _LIBIVIS_COMMON_PNG_H_
 
 #include "pietypes.h"
+#include <vector>
 
 struct IMGSaveError
 {
@@ -49,6 +50,15 @@ struct IMGSaveError
  * \return true on success, false otherwise
  */
 bool iV_loadImage_PNG(const char *fileName, iV_Image *image);
+
+/*!
+ * Load a PNG from a memory buffer into an image
+ *
+ * \param memoryBuffer input memory buffer to load from
+ * \param image Sprite to read into
+ * \return true on success, false otherwise
+ */
+IMGSaveError iV_loadImage_PNG(const std::vector<unsigned char>& memoryBuffer, iV_Image *image);
 
 /*!
  * Save a PNG from image into file

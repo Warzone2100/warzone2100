@@ -139,6 +139,7 @@ class WzGameFindTitleUI: public WzTitleUI
 {
 public:
 	WzGameFindTitleUI();
+	~WzGameFindTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
 private:

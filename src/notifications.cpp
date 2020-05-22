@@ -59,6 +59,7 @@ public:
 	bool canShowNotification(const WZ_Notification& notification) const;
 
 	void clearAllNotificationPreferences();
+	bool removeNotificationPreferencesIf(const std::function<bool (const std::string& uniqueNotificationIdentifier)>& matchIdentifierFunc);
 
 	bool savePreferences();
 
@@ -180,6 +181,31 @@ bool WZ_Notification_Preferences::getDoNotShowNotificationValue(const std::strin
 void WZ_Notification_Preferences::clearAllNotificationPreferences()
 {
 	mRoot["notifications"] = json::object();
+}
+
+bool WZ_Notification_Preferences::removeNotificationPreferencesIf(const std::function<bool (const std::string& uniqueNotificationIdentifier)>& matchIdentifierFunc)
+{
+	ASSERT_OR_RETURN(false, mRoot.contains("notifications"), "root missing notifications object");
+	json notificationsObjCopy = mRoot.at("notifications");
+	std::vector<std::string> identifiersToRemove;
+	for (auto it : notificationsObjCopy.items())
+	{
+		const auto& uniqueNotificationIdentifier = it.key();
+		if (matchIdentifierFunc(uniqueNotificationIdentifier))
+		{
+			identifiersToRemove.push_back(uniqueNotificationIdentifier);
+		}
+	}
+	if (identifiersToRemove.empty())
+	{
+		return false;
+	}
+	for (const auto& uniqueNotificationIdentifier : identifiersToRemove)
+	{
+		notificationsObjCopy.erase(uniqueNotificationIdentifier);
+	}
+	mRoot["notifications"] = notificationsObjCopy;
+	return true;
 }
 
 bool WZ_Notification_Preferences::savePreferences()
@@ -372,7 +398,7 @@ public:
 	bool dismissNotification(float animationSpeed = 1.0f);
 private:
 	bool calculateNotificationWidgetPos();
-	gfx_api::texture* loadImage(const std::string& filename);
+	gfx_api::texture* loadImage(const WZ_Notification_Image& image);
 	void internalDismissNotification(float animationSpeed = 1.0f);
 public:
 	WzCheckboxButton *pOnDoNotShowAgainCheckbox = nullptr;
@@ -413,6 +439,10 @@ std::unique_ptr<WZ_Queued_Notification> popNextQueuedNotification()
 		{
 			// ignore this notification - remove from the list
 			debug(LOG_GUI, "Ignoring notification: %s", request->notification.displayOptions.uniqueNotificationIdentifier().c_str());
+			if (request->notification.onIgnored)
+			{
+				request->notification.onIgnored(request->notification);
+			}
 			it = notificationQueue.erase(it);
 			continue;
 		}
@@ -617,9 +647,9 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	psNotificationOverlayScreen->psForm->attach(psNewNotificationForm);
 
 	// Load the image, if specified
-	if (!request->notification.largeIconPath.empty())
+	if (!request->notification.largeIcon.empty())
 	{
-		pImageTexture = loadImage(request->notification.largeIconPath);
+		pImageTexture = loadImage(request->notification.largeIcon);
 	}
 
 	const int notificationWidth = width();
@@ -791,21 +821,41 @@ gfx_api::texture* makeTexture(int width, int height, const gfx_api::pixel_format
 	return mTexture;
 }
 
-gfx_api::texture* W_NOTIFICATION::loadImage(const std::string &filename)
+gfx_api::texture* W_NOTIFICATION::loadImage(const WZ_Notification_Image& image)
 {
 	gfx_api::texture* pTexture = nullptr;
-	const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
-	iV_Image image;
-	if (!extension || strcmp(extension, ".png") != 0)
+	iV_Image ivImage;
+	if (!image.imagePath().empty())
 	{
-		debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
+		const std::string& filename = image.imagePath();
+		const char *extension = strrchr(filename.c_str(), '.'); // determine the filetype
+
+		if (!extension || strcmp(extension, ".png") != 0)
+		{
+			debug(LOG_ERROR, "Bad image filename: %s", filename.c_str());
+			return nullptr;
+		}
+		if (!iV_loadImage_PNG(filename.c_str(), &ivImage))
+		{
+			return nullptr;
+		}
+	}
+	else if (!image.memoryBuffer().empty())
+	{
+		auto result = iV_loadImage_PNG(image.memoryBuffer(), &ivImage);
+		if (!result.noError())
+		{
+			debug(LOG_ERROR, "Failed to load image from memory buffer: %s", result.text.c_str());
+			return nullptr;
+		}
+	}
+	else
+	{
+		// empty or unhandled case
 		return nullptr;
 	}
-	if (iV_loadImage_PNG(filename.c_str(), &image))
-	{
-		pTexture = makeTexture(image.width, image.height, iV_getPixelFormat(&image), image.bmp);
-		iV_unloadImage(&image);
-	}
+	pTexture = makeTexture(ivImage.width, ivImage.height, iV_getPixelFormat(&ivImage), ivImage.bmp);
+	iV_unloadImage(&ivImage);
 	return pTexture;
 }
 
@@ -1089,13 +1139,19 @@ bool notificationsInitialize()
 
 void notificationsShutDown()
 {
-	notificationPrefs->savePreferences();
-	delete notificationPrefs;
-	notificationPrefs = nullptr;
+	if (notificationPrefs)
+	{
+		notificationPrefs->savePreferences();
+		delete notificationPrefs;
+		notificationPrefs = nullptr;
+	}
 
-	widgRemoveOverlayScreen(psNotificationOverlayScreen);
-	delete psNotificationOverlayScreen;
-	psNotificationOverlayScreen = nullptr;
+	if (psNotificationOverlayScreen)
+	{
+		widgRemoveOverlayScreen(psNotificationOverlayScreen);
+		delete psNotificationOverlayScreen;
+		psNotificationOverlayScreen = nullptr;
+	}
 }
 
 bool isDraggingInGameNotification()
@@ -1204,6 +1260,11 @@ void finishedProcessingNotificationRequest(WZ_Queued_Notification* request, bool
 		notificationPrefs->doNotShowNotificationAgain(request->notification.displayOptions.uniqueNotificationIdentifier());
 	}
 
+	if (request->notification.onDismissed)
+	{
+		request->notification.onDismissed(request->notification, request->wasProgrammaticallyDismissed());
+	}
+
 	// finished with this notification
 	currentNotification.reset(); // at this point request is no longer valid!
 	lastNotificationClosed = realTime;
@@ -1227,6 +1288,12 @@ void addNotification(const WZ_Notification& notification, const WZ_Notification_
 
 	// Add the notification to the notification system's queue
 	notificationQueue.push_back(std::unique_ptr<WZ_Queued_Notification>(new WZ_Queued_Notification(notification, WZ_Notification_Status(realTime), trigger)));
+}
+
+bool removeNotificationPreferencesIf(const std::function<bool (const std::string& uniqueNotificationIdentifier)>& matchIdentifierFunc)
+{
+	ASSERT_OR_RETURN(false, notificationPrefs, "notificationPrefs is null");
+	return notificationPrefs->removeNotificationPreferencesIf(matchIdentifierFunc);
 }
 
 // Whether one or more notifications with the specified tag (exact match) are currently-displayed or queued

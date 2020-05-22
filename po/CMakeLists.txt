@@ -127,7 +127,7 @@ endfunction()
 
 # Must be set to warzone2100.pot, as the filename (without its extension) is used later
 # to form the install .gmo file name (warzone2100.gmo) in each locale directory
-set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.pot")
+set(_potFile "${CMAKE_CURRENT_BINARY_DIR}/warzone2100${WZ_OUTPUT_NAME_SUFFIX}.pot")
 
 # Read in `POTFILES.in` to build a list of dependency paths in the same order.
 set(_potfiles_in_path "${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in")
@@ -153,7 +153,7 @@ ADD_CUSTOM_TARGET(pot_file ALL
 	DEPENDS ${_potFile})
 set_property(TARGET pot_file PROPERTY FOLDER "po")
 
-# Update the in-source warzone2100.pot (should run every build)
+# Update the in-source warzone2100.pot (Should only run when explicitly built, ex. by CI)
 set(_potFile_inRepo "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.pot")
 ADD_CUSTOM_COMMAND(
 	OUTPUT
@@ -165,15 +165,10 @@ ADD_CUSTOM_COMMAND(
 	COMMENT "Extract translatable messages to in-repo template file: ${_potFile_inRepo}"
 	VERBATIM
 )
-ADD_CUSTOM_TARGET(update_po_template_in_repo ALL
+ADD_CUSTOM_TARGET(update_po_template_in_repo
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/__in_repo_po_template__shouldnotexist.pot
 )
 set_property(TARGET update_po_template_in_repo PROPERTY FOLDER "po")
-if(NOT TARGET translations)
-	add_custom_target(translations)
-	set_property(TARGET translations PROPERTY FOLDER "po")
-endif()
-add_dependencies(translations update_po_template_in_repo)
 
 set(wz2100_translations_LOCALE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/locale")
 

@@ -870,9 +870,9 @@ void autoSave()
 	char savedate[PATH_MAX];
 	strftime(savedate, sizeof(savedate), "%F_%H%M%S", timeinfo);
 
-	char *withoutTechlevel = mapNameWithoutTechlevel(getLevelName());
+	std::string withoutTechlevel = mapNameWithoutTechlevel(getLevelName());
 	char savefile[PATH_MAX];
-	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, withoutTechlevel, savedate);
+	snprintf(savefile, sizeof(savefile), "%s/%s_%s.gam", dir, withoutTechlevel.c_str(), savedate);
 	if (saveGame(savefile, GTYPE_SAVE_MIDMISSION))
 	{
 		console("AutoSave %s", savefile);

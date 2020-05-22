@@ -190,7 +190,7 @@ _global.weaponStatsToResList = function(path, objType) {
 			statsToResList(path.defenses),
 			statsToResList(path.vtols)
 		);
-	ret.concat(path.extras);
+	ret = ret.concat(path.extras);
 	return ret;
 }
 
