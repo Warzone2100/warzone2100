@@ -1,0 +1,9 @@
+arizona_enum,8
+a_water
+a_cliff
+a_concrete
+a_mud
+a_green
+a_red
+a_yellow
+a_sand

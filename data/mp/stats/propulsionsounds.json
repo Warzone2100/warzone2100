@@ -1,4 +1,12 @@
 {
+    "Half-Tracked": {
+        "szHiss": -1,
+        "szIdle": -1,
+        "szMove": "tread.ogg",
+        "szMoveOff": -1,
+        "szShutDown": "con-shut-down.ogg",
+        "szStart": -1
+    },
     "Hover": {
         "szHiss": -1,
         "szIdle": -1,
