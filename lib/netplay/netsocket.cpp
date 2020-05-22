@@ -1529,7 +1529,25 @@ void socketArrayClose(Socket **sockets, size_t maxSockets)
 
 WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
 {
-	return sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET;
+	if (sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
+	{
+		return true;
+	}
+	else
+	{
+#if defined(IPV6_V6ONLY)
+		if (sock->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
+		{
+			int ipv6_v6only = 1;
+			socklen_t len = sizeof(ipv6_v6only);
+			if (getsockopt(sock->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6_v6only, &len) == 0)
+			{
+				return ipv6_v6only == 0;
+			}
+		}
+#endif
+		return false;
+	}
 }
 
 WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock)
