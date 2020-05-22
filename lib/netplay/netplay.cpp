@@ -356,6 +356,7 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 		NetPlay.players[i].ai = 0;			// default AI
 	}
 	NetPlay.players[i].difficulty = 1;		// normal
+	NetPlay.players[i].faction = 0;		// normal
 	NetPlay.players[i].wzFiles.clear();
 	ingame.JoiningInProgress[i] = false;
 }
@@ -422,6 +423,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETbool(&NetPlay.players[index[n]].ready);
 		NETint8_t(&NetPlay.players[index[n]].ai);
 		NETint8_t(&NetPlay.players[index[n]].difficulty);
+		NETint8_t(&NetPlay.players[index[n]].faction);
 		NETuint8_t(&game.skDiff[index[n]]);  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
 	}
 	NETend();
@@ -1614,6 +1616,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			int32_t team = 0;
 			int8_t ai = 0;
 			int8_t difficulty = 0;
+			int8_t faction = 0;
 			uint8_t skDiff = 0;
 			bool error = false;
 
@@ -1657,6 +1660,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbool(&NetPlay.players[index].ready);
 				NETint8_t(&ai);
 				NETint8_t(&difficulty);
+				NETint8_t(&faction);
 				NETuint8_t(&skDiff);
 
 				// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
@@ -1667,6 +1671,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NetPlay.players[index].team = team;
 					NetPlay.players[index].ai = ai;
 					NetPlay.players[index].difficulty = difficulty;
+					NetPlay.players[index].faction = faction;
 					game.skDiff[index] = skDiff;  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
 				}
 
