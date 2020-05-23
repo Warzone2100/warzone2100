@@ -473,7 +473,14 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const
 		}
 		else
 		{
-			++numAIBotPlayers;
+			if (!p.allocated)
+			{
+				++numAIBotPlayers;
+			}
+			else
+			{
+				++numHumanPlayers;
+			}
 		}
 	}
 
