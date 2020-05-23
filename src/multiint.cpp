@@ -107,6 +107,7 @@
 #include "init.h"
 #include "levels.h"
 #include "wrappers.h"
+#include "faction.h"
 
 #include "activity.h"
 #include <algorithm>
@@ -248,8 +249,6 @@ static void sendRoomChatMessage(char const *text);
 
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
-
-static const char *factionList[] = { N_("Normal"), N_("NEXUS"), N_("Collective") };
 
 static const char *difficultyList[] = { N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
 static const AIDifficulty difficultyValue[] = { AIDifficulty::EASY, AIDifficulty::MEDIUM, AIDifficulty::HARD, AIDifficulty::INSANE };
@@ -3116,10 +3115,11 @@ static void loadMapPlayerSettings(WzConfig& ini)
 		if (ini.contains("faction"))
 		{
 			WzString value = ini.value("faction", "Normal").toWzString();
-			for (unsigned j = 0; j < ARRAY_SIZE(factionList); ++j)
+			for (unsigned j = 0; j < NUM_FACTIONS; ++j)
 			{
-				if (strcasecmp(factionList[j], value.toUtf8().c_str()) == 0)
+				if (factions[j].name == value)
 				{
+					debug(LOG_INFO, "faction of player %i is %i", i, j); // TODO: delete before factions PR is merged
 					NetPlay.players[i].faction = j;
 				}
 			}
