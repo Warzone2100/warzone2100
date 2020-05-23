@@ -1581,12 +1581,13 @@ std::string ipv4_NetBinary_To_AddressString(const std::vector<unsigned char>& ip
 	{
 		return "";
 	}
-	std::string ipv4Address;
-	ipv4Address.resize(INET_ADDRSTRLEN);
-	if (inet_ntop(AF_INET, ip4NetBinaryForm.data(), &ipv4Address[0], ipv4Address.size()) == nullptr)
+
+	char buf[INET_ADDRSTRLEN] = {0};
+	if (inet_ntop(AF_INET, ip4NetBinaryForm.data(), buf, sizeof(buf)) == nullptr)
 	{
 		return "";
 	}
+	std::string ipv4Address = buf;
 	return ipv4Address;
 }
 
@@ -1607,16 +1608,17 @@ std::vector<unsigned char> ipv6_AddressString_To_NetBinary(const std::string& ip
 
 std::string ipv6_NetBinary_To_AddressString(const std::vector<unsigned char>& ip6NetBinaryForm)
 {
-	if (ip6NetBinaryForm.size() != sizeof(struct in_addr))
+	if (ip6NetBinaryForm.size() != sizeof(struct in6_addr))
 	{
 		return "";
 	}
-	std::string ipv6Address;
-	ipv6Address.resize(INET6_ADDRSTRLEN);
-	if (inet_ntop(AF_INET6, ip6NetBinaryForm.data(), &ipv6Address[0], ipv6Address.size()) == nullptr)
+
+	char buf[INET6_ADDRSTRLEN] = {0};
+	if (inet_ntop(AF_INET6, ip6NetBinaryForm.data(), buf, sizeof(buf)) == nullptr)
 	{
 		return "";
 	}
+	std::string ipv6Address = buf;
 	return ipv6Address;
 }
 
