@@ -364,6 +364,7 @@ bool hostCampaign(char *sGame, char *sPlayer)
 		}
 	}
 
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	return true;
 }
 
