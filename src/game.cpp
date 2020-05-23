@@ -442,6 +442,7 @@ static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlay
 	        && WZ_PHYSFS_writeBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	        && WZ_PHYSFS_writeBytes(fileHandle, getAIName(player), MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
 	        && PHYSFS_writeSBE8(fileHandle, serializePlayer->difficulty)
+	        && PHYSFS_writeSBE8(fileHandle, serializePlayer->faction)
 	        && PHYSFS_writeUBE8(fileHandle, (uint8_t)serializePlayer->allocated)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
@@ -458,6 +459,7 @@ static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, 
 	          && WZ_PHYSFS_readBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	          && WZ_PHYSFS_readBytes(fileHandle, aiName, MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
 	          && PHYSFS_readSBE8(fileHandle, &serializePlayer->difficulty)
+	          && PHYSFS_readSBE8(fileHandle, &serializePlayer->faction)
 	          && PHYSFS_readUBE8(fileHandle, &allocated)
 	          && PHYSFS_readUBE32(fileHandle, &colour)
 	          && PHYSFS_readUBE32(fileHandle, &team));
@@ -1807,6 +1809,7 @@ static void allocatePlayers()
 	{
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
+		NetPlay.players[i].faction = saveGameData.sNetPlay.players[i].faction;
 		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
 		if (saveGameData.sGame.skDiff[i] == UBYTE_MAX || (game.type == CAMPAIGN && i == 0))
 		{
