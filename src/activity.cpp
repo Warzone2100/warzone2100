@@ -436,7 +436,10 @@ void ActivityManager::joinedLobbyQuit()
 {
 	if (currentMode != ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
-		debug(LOG_ACTIVITY, "Unexpected call to joinedLobbyQuit - currentMode (%u) - ignoring", (unsigned int)currentMode);
+		if (currentMode != ActivitySink::GameMode::MENUS)
+		{
+			debug(LOG_ACTIVITY, "Unexpected call to joinedLobbyQuit - currentMode (%u) - ignoring", (unsigned int)currentMode);
+		}
 		return;
 	}
 	currentMode = ActivitySink::GameMode::MENUS;
