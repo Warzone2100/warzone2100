@@ -288,6 +288,7 @@ public:
 	WZ_Notification_Status status;
 	WZ_Notification_Trigger trigger;
 private:
+	bool bWasInitiallyShown = false;
 	bool bWasFullyShown = false;
 	bool bWasProgrammaticallyDismissed = false;
 	friend class W_NOTIFICATION;
@@ -305,6 +306,17 @@ void WZ_Queued_Notification::setState(WZ_Notification_Status::NotificationState 
 			notificationPrefs->incrementNotificationRuns(notification.displayOptions.uniqueNotificationIdentifier());
 		}
 		bWasFullyShown = true;
+	}
+	else if (newState == WZ_Notification_Status::NotificationState::shown)
+	{
+		if (!bWasInitiallyShown)
+		{
+			bWasInitiallyShown = true;
+			if (notification.onDisplay)
+			{
+				notification.onDisplay(notification);
+			}
+		}
 	}
 }
 
