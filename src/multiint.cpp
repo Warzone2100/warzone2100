@@ -869,14 +869,14 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 	if (!NETfindGame(lobbyGameId, game))
 	{
 		// failed to get list of games from lobby server
-		debug(LOG_ERROR, "Failed to retrieve list of games from lobby server");
+		debug(LOG_ERROR, "Failed to find gameId in lobby server");
 		cleanup();
 		return {};
 	}
 
 	if (getLobbyError())
 	{
-		debug(LOG_ERROR, "Failed to retrieve list of games from lobby server: %d", (int)getLobbyError());
+		debug(LOG_ERROR, "Lobby error: %d", (int)getLobbyError());
 		cleanup();
 		return {};
 	}
