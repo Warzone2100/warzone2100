@@ -177,6 +177,7 @@ static void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayFaction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -218,6 +219,7 @@ static bool		safeToUseColour(UDWORD player, UDWORD col);
 bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
+static int factionIcon(int difficulty);
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -2259,6 +2261,22 @@ void addPlayerBox(bool players)
 			sColInit.UserData = i;
 			widgAddButton(psWScreen, &sColInit);
 
+			// draw player faction
+			W_BUTINIT sFacInit;
+			sFacInit.formID = MULTIOP_PLAYERS;
+			sFacInit.id = MULTIOP_FACTION_START+i;
+			sFacInit.x = 7 + MULTIOP_TEAMSWIDTH+MULTIOP_COLOUR_WIDTH;
+			sFacInit.y = playerBoxHeight(i);
+			sFacInit.width = MULTIOP_FACTION_WIDTH;
+			sFacInit.height = MULTIOP_PLAYERHEIGHT;
+			if (selectedPlayer == i || NetPlay.isHost)
+			{
+				sFacInit.pTip = _("Click to change player faction");
+			}
+			sFacInit.pDisplay = displayFaction;
+			sFacInit.UserData = i;
+			widgAddButton(psWScreen, &sFacInit);
+
 			if (ingame.localOptionsReceived)
 			{
 				// do not draw "Ready" button if all players are on the same team,
@@ -2272,9 +2290,9 @@ void addPlayerBox(bool players)
 				W_BUTINIT sButInit;
 				sButInit.formID = MULTIOP_PLAYERS;
 				sButInit.id = MULTIOP_PLAYER_START + i;
-				sButInit.x = 7 + MULTIOP_TEAMSWIDTH + MULTIOP_COLOUR_WIDTH;
+				sButInit.x = 7 + MULTIOP_TEAMSWIDTH + MULTIOP_COLOUR_WIDTH + MULTIOP_FACTION_WIDTH;
 				sButInit.y = playerBoxHeight(i);
-				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH;
+				sButInit.width = MULTIOP_PLAYERWIDTH - MULTIOP_TEAMSWIDTH - MULTIOP_READY_WIDTH - MULTIOP_COLOUR_WIDTH - MULTIOP_FACTION_WIDTH;
 				sButInit.height = MULTIOP_PLAYERHEIGHT;
 				if ((selectedPlayer == i || NetPlay.isHost) && NetPlay.players[i].allocated && !locked.position)
 				{
@@ -4090,6 +4108,17 @@ static int difficultyIcon(int difficulty)
 	}
 }
 
+static int factionIcon(int faction)
+{
+	switch (faction)
+	{
+	case 0: return IMAGE_FACTION_NORMAL;
+	case 1: return IMAGE_FACTION_NEXUS;
+	case 2: return IMAGE_FACTION_COLLECTIVE;
+	default: return IMAGE_NO;	/// what??
+	}
+}
+
 static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayDifficulty must have its pUserData initialized to a (DisplayDifficultyCache*)
@@ -4324,6 +4353,20 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);
 		iV_DrawImageTc(FrontImages, IMAGE_PLAYERN, IMAGE_PLAYERN_TC, x + 7, y + 9, pal_GetTeamColour(player));
+	}
+}
+
+void displayFaction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	const int x = xOffset + psWidget->x();
+	const int y = yOffset + psWidget->y();
+	const int j = psWidget->UserData;
+
+	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	if (NetPlay.players[j].wzFiles.empty() && game.skDiff[j])
+	{
+		int faction = NetPlay.players[j].faction;
+		iV_DrawImage(FrontImages, factionIcon(faction), x + 5, y + 8);
 	}
 }
 

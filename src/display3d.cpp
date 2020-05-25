@@ -84,6 +84,7 @@
 #include "cmddroid.h"
 #include "terrain.h"
 #include "warzoneconfig.h"
+#include "faction.h"
 
 /********************  Prototypes  ********************/
 
@@ -2289,7 +2290,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	bool bHitByElectronic = false;
 	bool defensive = false;
 	iIMDShape *strImd = psStructure->sDisplay.imd;
-	MAPTILE	*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
@@ -2495,7 +2496,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	/* Actually render it */
 	if (psStructure->status == SS_BEING_BUILT)
 	{
-		pie_Draw3DShape(psStructure->sDisplay.imd, 0, getPlayerColour(psStructure->player),
+		pie_Draw3DShape(getFactionIMD(psStructure->player, psStructure->sDisplay.imd), 0, getPlayerColour(psStructure->player),
 		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, structHeightScale(psStructure) * pie_RAISE_SCALE, viewMatrix * modelMatrix);
 	}
 	else
@@ -2514,7 +2515,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 		iIMDShape *imd = psStructure->sDisplay.imd;
 		while (imd)
 		{
-			pie_Draw3DShape(imd, 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix);
+			pie_Draw3DShape(getFactionIMD(psStructure->player, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix);
 			imd = imd->next;
 		}
 	}

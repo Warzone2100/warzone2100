@@ -31,6 +31,7 @@
 #include <functional>
 #include <vector>
 #include "lib/framework/wzstring.h"
+#include "faction.h"
 
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
@@ -301,6 +302,10 @@ void resetVoteData();
 #define MULTIOP_COLOUR_START		10332
 #define MULTIOP_COLOUR_END		(MULTIOP_COLOUR_START + MAX_PLAYERS)
 #define MULTIOP_COLOUR_WIDTH		31
+
+#define MULTIOP_FACTION_START		(MULTIOP_COLOUR_START + MAX_PLAYERS)
+#define MULTIOP_FACTION_END		(MULTIOP_COLOUR_START + MAX_PLAYERS + NUM_FACTIONS)
+#define MULTIOP_FACTION_WIDTH		31
 
 #define MULTIOP_AI_FORM			(MULTIOP_COLOUR_END + 1)
 #define MULTIOP_AI_START		(MULTIOP_AI_FORM + 1)
