@@ -188,7 +188,7 @@ jobs:
       artifact: ${{ parameters.artifact }}
   - task: GithubRelease@1
     displayName: 'Upload to GitHub Release'
-    condition: and(eq('${{ parameters.uploadArtifactToGitHubReleases }}', true), ne('${{ parameters.gitHubConnection }}', ''), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+    condition: and(succeeded(), eq('${{ parameters.uploadArtifactToGitHubReleases }}', true), ne('${{ parameters.gitHubConnection }}', ''), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
     inputs:
       gitHubConnection: ${{ parameters.gitHubConnection }}
       action: edit
