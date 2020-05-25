@@ -135,17 +135,20 @@ TBD
 Create the tag for the new release
 ----------------------------------
 
-Since everything works (since you tested it), it is time to make the tag. Verify you are on the appropriate branch + commit, then tag it:
+Since everything works (since you tested it), it is time to make the **annotated** tag. Verify you are on the appropriate branch + commit, then tag it:
 
     git tag -a 3.3.0
     git push
-    git push origin --tags
+    git push origin 3.3.0
 
 Where `3.3.0` is the name of the tag.
 
 > ### Always forwards
 > _Do **NOT** re-use an existing tag / tag that was previously used!_
 > If you make a mistake, or a bug is found, (etc), increment the version _again_.
+
+> ### Annotated tags ONLY
+> You must use `git tag -a <version>` to create an annotated tag. Lightweight tags will not work correctly.
 
 GitHub will then **automatically**:
 - create a Draft release in **[GitHub Releases](https://github.com/Warzone2100/warzone2100/releases)** for the new tag
