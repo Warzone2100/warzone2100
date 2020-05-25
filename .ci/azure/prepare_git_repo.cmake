@@ -16,6 +16,10 @@ macro(create_all_branches)
 					 OUTPUT_VARIABLE build_head
 					 OUTPUT_STRIP_TRAILING_WHITESPACE )
 
+	# ensure all tags are fetched
+	# "git fetch --tags -f"
+	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --tags -f)
+
 	# checkout master to ensure that a local master branch exists
 	# "git checkout -qf master"
 	execute_process(COMMAND ${GIT_EXECUTABLE} checkout -qf master)
