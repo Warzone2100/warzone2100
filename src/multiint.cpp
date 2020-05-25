@@ -1570,6 +1570,7 @@ void WzMultiplayerOptionsTitleUI::closeAllChoosers()
 {
 	closeColourChooser();
 	closeTeamChooser();
+	closeFactionChooser();
 	closePositionChooser();
 
 	// AiChooser and DifficultyChooser currently use the same form, so to avoid a double-delete-later, do it once explicitly here
@@ -1587,6 +1588,7 @@ void WzMultiplayerOptionsTitleUI::initInlineChooser(uint32_t player)
 	widgDelete(psWScreen, MULTIOP_TEAMS_START + player);
 	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
 	widgDelete(psWScreen, MULTIOP_COLOUR_START + player);
+	widgDelete(psWScreen, MULTIOP_FACTION_START + player);
 
 	// remove any choosers already up
 	closeAllChoosers();
@@ -1952,7 +1954,7 @@ void WzMultiplayerOptionsTitleUI::openColourChooser(uint32_t player)
 	// add form.
 	auto psParentForm = (W_FORM *)widgGetFromID(psWScreen, MULTIOP_PLAYERS);
 	addInlineChooserBlueForm(psInlineChooserOverlayScreen, psParentForm, MULTIOP_COLCHOOSER_FORM, "",
-		8,
+		7,
 		playerBoxHeight(player),
 		MULTIOP_ROW_WIDTH, MULTIOP_PLAYERHEIGHT);
 
@@ -1983,7 +1985,7 @@ void WzMultiplayerOptionsTitleUI::openColourChooser(uint32_t player)
 		};
 
 		addMultiButWithClickHandler(psInlineChooserOverlayScreen, MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER + getPlayerColour(i),
-			i * (flagW * spaceDiv + space) / spaceDiv + 7, 4, // x, y
+			i * (flagW * spaceDiv + space) / spaceDiv + 4, 4, // x, y
 			flagW, flagH,  // w, h
 			getPlayerColourName(i), IMAGE_PLAYERN, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, onClickHandler, getPlayerColour(i)
 		);
@@ -2011,6 +2013,13 @@ void WzMultiplayerOptionsTitleUI::closeTeamChooser()
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 }
 
+void WzMultiplayerOptionsTitleUI::closeFactionChooser()
+{
+	inlineChooserUp = -1;
+	widgDeleteLater(psInlineChooserOverlayScreen, MULTIOP_FACCHOOSER_FORM);
+	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
+}
+
 void WzMultiplayerOptionsTitleUI::closeAiChooser()
 {
 	// AiChooser and DifficultyChooser currently use the same formID
@@ -2028,6 +2037,59 @@ void WzMultiplayerOptionsTitleUI::closeDifficultyChooser()
 void WzMultiplayerOptionsTitleUI::closePositionChooser()
 {
 	positionChooserUp = -1;
+}
+
+void WzMultiplayerOptionsTitleUI::openFactionChooser(uint32_t player)
+{
+	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player number");
+	initInlineChooser(player);
+
+	// add form.
+	auto psParentForm = (W_FORM *)widgGetFromID(psWScreen, MULTIOP_PLAYERS);
+	addInlineChooserBlueForm(psInlineChooserOverlayScreen, psParentForm, MULTIOP_FACCHOOSER_FORM, "",
+		7,
+		playerBoxHeight(player),
+		MULTIOP_ROW_WIDTH, MULTIOP_PLAYERHEIGHT);
+
+	// add the flags
+	int flagW = iV_GetImageWidth(FrontImages, IMAGE_FACTION_NORMAL) + 4;
+	int flagH = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
+	int space = MULTIOP_ROW_WIDTH - 0 - flagW * NUM_FACTIONS;
+	int spaceDiv = NUM_FACTIONS;
+	space = std::min(space, 5 * spaceDiv);
+
+	auto psWeakTitleUI = std::weak_ptr<WzMultiplayerOptionsTitleUI>(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
+
+	for (unsigned int i = 0; i < NUM_FACTIONS; i++)
+	{
+		auto onClickHandler = [player, psWeakTitleUI](W_BUTTON &button) {
+			UDWORD id = button.id;
+			auto pStrongPtr = psWeakTitleUI.lock();
+			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+
+			STATIC_ASSERT(MULTIOP_FACCHOOSER + NUM_FACTIONS - 1 <= MULTIOP_FACCHOOSER_END);
+			if (id >= MULTIOP_FACCHOOSER && id <= MULTIOP_FACCHOOSER + NUM_FACTIONS -1)
+			{
+				int idx = id - MULTIOP_FACCHOOSER;
+				NetPlay.players[player].faction = idx;
+				NETBroadcastPlayerInfo(player);
+				pStrongPtr->closeFactionChooser();
+				pStrongPtr->addPlayerBox(true);
+				resetReadyStatus(false);
+
+				debug(LOG_INFO, "click on faction %i", id-MULTIOP_FACCHOOSER);
+			}
+		};
+
+//		int player_faction = NetPlay.players[player].faction;
+		addMultiButWithClickHandler(psInlineChooserOverlayScreen, MULTIOP_FACCHOOSER_FORM, MULTIOP_FACCHOOSER + i,
+			i * (flagW * spaceDiv + space) / spaceDiv + 7,  4, // x, y
+			flagW, flagH,  // w, h
+			nullptr, IMAGE_FACTION_NORMAL+i, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, onClickHandler
+		);
+	}
+
+	inlineChooserUp = player;
 }
 
 static void changeTeam(UBYTE player, UBYTE team)
@@ -3842,6 +3904,15 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	{
 		openDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
 		addPlayerBox(true);
+	}
+
+	// clicked on faction chooser button
+	if (id >= MULTIOP_FACTION_START && id <= MULTIOP_FACTION_END && (id - MULTIOP_FACTION_START == selectedPlayer || NetPlay.isHost))
+	{
+		if (positionChooserUp < 0)		// not choosing something else already
+		{
+			openFactionChooser(id - MULTIOP_FACTION_START);
+		}
 	}
 }
 

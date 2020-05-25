@@ -41,6 +41,9 @@ public:
 	void openDifficultyChooser(uint32_t playerIndex);
 	void closeDifficultyChooser();
 
+	void openFactionChooser(uint32_t playerIndex);
+	void closeFactionChooser();
+
 	void openAiChooser(uint32_t playerIndex);
 	void closeAiChooser();
 
