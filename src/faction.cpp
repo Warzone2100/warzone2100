@@ -2,12 +2,18 @@
 #include "lib/netplay/netplay.h"
 
 const struct FACTION factions[NUM_FACTIONS] = {
-	{ "Normal", {} },
+	{ "Normal",
+		{
+		}
+	},
 	{
 		"NEXUS",
 		{
 			{"blwallc1.pie", "blwallc3.pie"},
 			{"blwallh.pie", "blwall3.pie"},
+			{"blhq.pie", "blhq3.pie"},
+			{"blguard1.pie", "blguard3.pie"},
+			{"blguardr.pie", "blgrdnex.pie"},
 		}
 	},
 	{
@@ -15,6 +21,9 @@ const struct FACTION factions[NUM_FACTIONS] = {
 		{
 			{"blwallc1.pie", "blwallc2.pie"},
 			{"blwallh.pie", "blwall2.pie"},
+			{"blhq.pie", "blhq4.pie"},
+			{"blguard1.pie", "blguard2.pie"},
+			{"blguardr.pie", "blguardn.pie"},
 		}
 	}
 };
@@ -27,14 +36,13 @@ iIMDShape* getFactionIMD(uint8_t player, iIMDShape* imd)
 
 	WzString name = WzString::fromUtf8(modelName(imd));
 	auto pos = replaceIMD->find(name);
+	debug(LOG_INFO, "render struct of player_%i in faction %s (%i): %s", player,
+		factions[faction].name.toUtf8().c_str(), faction, name.toUtf8().c_str()
+	);
 	if (pos == replaceIMD->end())
 	{
 		return imd;
 	} else {
-		debug(LOG_INFO, "render struct of player_%i in faction %s (%i)", player,
-			factions[faction].name.toUtf8().c_str(), faction
-		);
-		debug(LOG_INFO, "replace imd %s", name.toUtf8().c_str());
 		return modelGet(pos->second);
 	}
 }
