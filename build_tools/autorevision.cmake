@@ -601,6 +601,20 @@ elseif(Git_FOUND AND _currentDirectoryIsInGitRepo)
 			message( STATUS "Gathered revision data from Git" )
 		endif()
 	endif()
+	# If we're on a tag
+	if(NOT VCS_TAG STREQUAL "")
+		# Verify that the tag is an annotated tag, otherwise the autorevision data will be incorrect
+		execute_process( COMMAND ${GIT_EXECUTABLE} cat-file -t ${VCS_TAG}
+						 RESULT_VARIABLE exstatus
+						 OUTPUT_VARIABLE _tag_type
+						 OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+		if((NOT exstatus EQUAL 0) OR (_tag_type STREQUAL ""))
+			message( FATAL_ERROR "git cat-file -t ${VCS_TAG} failed to determine type" )
+		endif()
+		if(NOT _tag_type STREQUAL "tag")
+			message( FATAL_ERROR "Tag ${VCS_TAG} is of type: ${_tag_type}. Tags MUST be annotated tags. Lightweight tags are not supported." )
+		endif()
+	endif()
 elseif(EXISTS "${CACHEFILE}")
 	# We are not in a repo; try to use a previously generated cache to populate our symbols.
 	_importCache("${CACHEFILE}" ${LOGGING_QUIET})
