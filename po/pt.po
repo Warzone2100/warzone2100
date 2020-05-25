@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-09 04:42+0000\n"
-"PO-Revision-Date: 2020-05-14 18:09\n"
+"PO-Revision-Date: 2020-05-25 16:25\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -866,7 +866,7 @@ msgstr "Os benefícios da sua investigação podem ser vastos."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr "Forças enimigas estão ....... destas coordenadas."
+msgstr "Forças inimigas estão ....... destas coordenadas."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
@@ -882,11 +882,11 @@ msgstr "MISSÃO DE TRANSPORTE: Emboscada a Forças de NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Comandante, as suas acções decisivas pararam o alastramento de NEXUS."
+msgstr "Comandante, as suas acções decisivas evitaram o alastramento de NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr "Antes de NEXUS ser expelido, interceptamos esta mensagem - Descodificação completa."
+msgstr "Antes de NEXUS ser expulso, interceptamos esta mensagem - Descodificação completa."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
@@ -894,7 +894,7 @@ msgstr "Uma força de NEXUS dirige-se para estas coordenadas."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr "Tem uma oportunidade para destruir NEXUS antes de eles chegarem lá"
+msgstr "Tem uma oportunidade para destruir NEXUS antes de eles lá chegarem."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
@@ -958,7 +958,7 @@ msgstr "MISSÃO SECTOR NORTE: Satélites Laser"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr "Estamos a detectar fortes picos de energia vindos de órbita."
+msgstr "Estamos a detectar fortes picos de energia em órbita."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
@@ -1011,7 +1011,7 @@ msgstr "Comandante, estão mísseis presentes nos silos."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "NEXUS está a impedir-nos o nosso acesso ao código de controlo do míssil."
+msgstr "NEXUS está a impedir-nos de aceder ao código de controlo dos mísseis."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
@@ -1027,7 +1027,7 @@ msgstr "Designe esta tarefa a um Centro de Pesquisa."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr "Forças de NEXUS detectadas nestas localizações."
+msgstr "Forças de NEXUS detectadas nestes locais."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
@@ -1262,7 +1262,7 @@ msgstr "Plataforma de Bombarda"
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
 msgid "Pepperpot Emplacement"
-msgstr "Plataforma de Pepperpot"
+msgstr "Plataforma Pepperpot"
 
 #: data/base/messages/strings/names.txt:237
 #: data/base/messages/strings/names.txt:405
@@ -1438,7 +1438,7 @@ msgstr "Aperfeiçoamento de Instalações de Reparação Avançadas Mk3"
 #: data/base/messages/strings/names.txt:347
 #: data/mp/messages/strings/names.txt:441
 msgid "Robotic VTOL Rearming Mk4"
-msgstr "Rearmamento de VTOL Robótico Mk4"
+msgstr "Rearmamento de VTOL Robotizado Mk4"
 
 #: data/base/messages/strings/names.txt:349
 #: data/mp/messages/strings/names.txt:449
@@ -12360,7 +12360,7 @@ msgstr "Produção de Fábrica Robotizada"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4831
 msgid "Robotic loading system feeds rounds into breech"
-msgstr "Sistema de carregamento robótico coloca balas na culatra"
+msgstr "Sistema de carregamento robótico introduz os projécteis na culatra"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade04.name
