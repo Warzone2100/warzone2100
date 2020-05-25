@@ -1703,7 +1703,7 @@ static void addFactionChooser(UDWORD player)
 		addMultiBut(psWScreen, MULTIOP_FACCHOOSER_FORM, MULTIOP_FACCHOOSER + i,
 		            i * (flagW * spaceDiv + space) / spaceDiv + 7,  4, // x, y
 		            flagW, flagH,  // w, h
-		            nullptr, IMAGE_FACTION_NORMAL+i, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI);
+		            nullptr, IMAGE_FACTION_NORMAL+i, IMAGE_FACTION_NORMAL_HI+i, IMAGE_FACTION_NORMAL_HI+i);
 	}
 
 	factionChooserUp = player;
