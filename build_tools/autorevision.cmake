@@ -614,6 +614,13 @@ elseif(Git_FOUND AND _currentDirectoryIsInGitRepo)
 		if(NOT _tag_type STREQUAL "tag")
 			message( FATAL_ERROR "Tag ${VCS_TAG} is of type: ${_tag_type}. Tags MUST be annotated tags. Lightweight tags are not supported." )
 		endif()
+
+		# Verify that tag is proper version # format
+		extractVersionNumberFromGitTag("${VCS_TAG}")
+		if(NOT DID_EXTRACT_VERSION)
+			# Current tag does not look like a version number
+			message( FATAL_ERROR "Current tag \"${VCS_TAG}\" does not match expected version number format." )
+		endif()
 	endif()
 elseif(EXISTS "${CACHEFILE}")
 	# We are not in a repo; try to use a previously generated cache to populate our symbols.
