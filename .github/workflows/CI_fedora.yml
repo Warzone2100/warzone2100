@@ -4,6 +4,9 @@ on:
   push:
     branches-ignore:
       - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - '*'
   pull_request:
     # Match all pull requests
 
