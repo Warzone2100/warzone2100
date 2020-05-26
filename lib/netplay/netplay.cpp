@@ -3054,15 +3054,14 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
 {
 	bool foundMatch = false;
-	GAMESTRUCT result;
-	memset(&result, 0x00, sizeof(result));
-	NETenumerateGames([&foundMatch, &result, gameId](const GAMESTRUCT &game) -> bool {
+	memset(&output, 0x00, sizeof(output));
+	NETenumerateGames([&foundMatch, &output, gameId](const GAMESTRUCT &game) -> bool {
 		if (game.gameId != gameId)
 		{
 			// not a match - continue enumerating
 			return true;
 		}
-		result = game;
+		output = game;
 		foundMatch = true;
 		return false; // stop searching
 	});
