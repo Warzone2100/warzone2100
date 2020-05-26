@@ -35,8 +35,8 @@ macro(create_all_branches)
 	# also fetch the tags
 	# echo "travis_fold:start:git.fetch.tags"
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "travis_fold:start:git.fetch.tags")
-	# "git fetch --tags"
-	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --tags)
+	# "git fetch --tags -f"
+	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --tags -f)
 	# echo "travis_fold:end:git.fetch.tags"
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "travis_fold:end:git.fetch.tags")
 
