@@ -2,12 +2,12 @@ ${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nT
 
 ${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
 
-${LangFileString} WZ_GPL_NEXT "Next"
+${LangFileString} WZ_GPL_NEXT "Siguiente"
 
 ${LangFileString} TEXT_SecBase "Core files"
 ${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
 
-${LangFileString} TEXT_SecFMVs "Videos"
+${LangFileString} TEXT_SecFMVs "Vídeos"
 ${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
