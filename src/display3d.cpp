@@ -2148,7 +2148,6 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 	// flags for drawing weapons
 	if (structureIsBlueprint(psStructure))
 	{
-		pieFlag = pie_TRANSLUCENT;
 		pieFlagData = BLUEPRINT_OPACITY;
 	}
 	else
@@ -2156,6 +2155,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 		pieFlag = pie_SHADOW | ecmFlag;
 		pieFlagData = 0;
 	}
+	pieFlag |= pie_TRANSLUCENT;
 
 	// draw Weapon / ECM / Sensor for structure
 	for (int i = 0; i < psStructure->numWeaps || i == 0; i++)
