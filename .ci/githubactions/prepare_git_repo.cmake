@@ -21,8 +21,8 @@ macro(create_all_branches)
 	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --prune --progress)
 
 	# also fetch the tags
-	# "git fetch --tags"
-	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --tags)
+	# "git fetch --tags -f"
+	execute_process(COMMAND ${GIT_EXECUTABLE} fetch --tags -f)
 
 	# checkout master to ensure that a local master branch exists
 	# "git checkout -qf master"

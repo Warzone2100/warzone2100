@@ -66,6 +66,7 @@ matrix:
         # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
         # To do this, append the following to the pertinent lines after —rm:
         # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake -P "/code/.ci/travis/prepare_git_repo.cmake"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
 
@@ -88,6 +89,7 @@ matrix:
         # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
         # To do this, append the following to the pertinent lines after —rm:
         # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
+        - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake -P "/code/.ci/travis/prepare_git_repo.cmake"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
         - docker run --rm -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
 
@@ -110,6 +112,7 @@ matrix:
         # Must supply the TRAVIS environment variables to the docker container so autorevision properly receives the revision info from Travis
         # To do this, append the following to the pertinent lines after —rm:
         # -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG
+        - docker run --rm -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake -P "/code/.ci/travis/prepare_git_repo.cmake"
         - docker run --rm -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
         - docker run --rm -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e CI -e TRAVIS -e "TRAVIS_BUILD_DIR=/code" -e TRAVIS_BRANCH -e TRAVIS_COMMIT -e TRAVIS_PULL_REQUEST_BRANCH -e TRAVIS_TAG -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
 

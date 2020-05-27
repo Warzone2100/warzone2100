@@ -256,6 +256,7 @@ To properly build the game, either:
   ```
   git clone https://github.com/Warzone2100/warzone2100.git
   cd warzone2100
+  git fetch --tags
   git submodule update --init --recursive
   ```
   > Note: Initializing submodules is required.

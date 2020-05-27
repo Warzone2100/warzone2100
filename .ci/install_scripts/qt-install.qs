@@ -246,11 +246,16 @@ Controller.prototype.StartMenuDirectoryPageCallback = function() {
 // qt online installer 3.2.1: open source users must now accept the open
 // source obligations.
 // https://www.qt.io/blog/qt-online-installer-3.2.1-released
+// https://www.qt.io/blog/qt-online-installer-3.2.3-released
 Controller.prototype.ObligationsPageCallback = function()
 {
     log("ObligationsPageCallback");
     var page = gui.pageWidgetByObjectName("ObligationsPage");
     page.obligationsAgreement.setChecked(true);
+    var individualCheckbox = gui.findChild(page, "IndividualPerson");
+    if (individualCheckbox) {
+        individualCheckbox.checked = true;
+    }
     page.completeChanged();
     gui.clickButton(buttons.NextButton);
     // There appears to be a second page we need to click "Next" on...

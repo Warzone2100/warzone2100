@@ -181,11 +181,6 @@ static void normalsOnTile(unsigned int tileX, unsigned int tileY, unsigned int q
 
 static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 {
-	/* The number or normals that we got is in numNormals*/
-	Vector3f finalVector(0.0f, 0.0f, 0.0f);
-	unsigned int i, val;
-	int dotProduct;
-
 	unsigned int numNormals = 0; // How many normals have we got?
 	Vector3f normals[8]; // Maximum 8 possible normals
 
@@ -216,23 +211,38 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	/* Do quadrant 3 - tile that's down and left*/
 	normalsOnTile(tileX - 1, tileY, 3, &numNormals, normals);
 
-	for (i = 0; i < numNormals; i++)
+	// The number or normals that we got is in numNormals
+	Vector3f finalVector(0.0f, 0.0f, 0.0f);
+	for (unsigned i = 0; i < numNormals; i++)
 	{
-		finalVector = finalVector + normals[i];
+		finalVector += normals[i];
 	}
 
-	dotProduct = glm::dot(normalise(finalVector), theSun_ForTileIllumination);
+	float dotProduct = glm::dot(normalise(finalVector), theSun_ForTileIllumination)/16;
 
-	val = abs(dotProduct) / 16;
-	if (val == 0)
-	{
-		val = 1;
+	// Primitive ambient occlusion calculation.
+	float ao = 0;
+	const int cx = world_coord(tileX), cy = world_coord(tileY), maxX = world_coord(mapWidth), maxY = world_coord(mapHeight);
+	float height = map_Height(clip(cx, 0, maxX), clip(cy, 0, maxY));
+	constexpr float I = 100;
+	constexpr float H = I*0.70710678118654752440f;  // √½
+	constexpr int Dirs = 8;
+	constexpr float dx[Dirs] = {0, H, I,  H,  0, -H, -I, -H};  // I sin(2π dir/Dirs)
+	constexpr float dy[Dirs] = {I, H, 0, -H, -I, -H,  0,  H};  // I cos(2π dir/Dirs)
+
+	for (int dir = 0; dir < Dirs; ++dir) {
+		float maxTangent = 0;
+		for (int dist = 1; dist < 9; ++dist) {
+			float tangent = (map_Height(clip(cx + dx[dir]*dist, 0, maxX), clip(cy + dy[dir]*dist, 0, maxY)) - height)/(I*dist);
+			maxTangent = std::max(maxTangent, tangent);
+		}
+		// Ambient light in this direction is proportional to the integral from tan(φ) = tangent to tan(φ) = ∞ of dφ cos(φ).
+		// Indefinite integral is sin(φ), so definite integral is 1 - sin(atan(tangent)) = 1 - tangent/√(tangent² + 1).
+		ao += 1 - maxTangent/sqrtf(maxTangent*maxTangent + 1);
 	}
-	if (val > 254)
-	{
-		val = 254;
-	}
-	mapTile(tileX, tileY)->illumination = val;
+	ao *= 1.f/Dirs;
+
+	mapTile(tileX, tileY)->illumination = clip(abs(dotProduct*ao), 1, 254);
 }
 
 static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)
