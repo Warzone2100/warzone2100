@@ -30,3 +30,7 @@
 	path = data/music
 	url = https://github.com/Warzone2100/data-music.git
 	shallow = true
+[submodule "3rdparty/discord-rpc"]
+	path = 3rdparty/discord-rpc
+	url = https://github.com/past-due/discord-rpc.git
+	shallow = true

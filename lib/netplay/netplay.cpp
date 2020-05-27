@@ -2896,10 +2896,8 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 
 	if (!NetPlay.bComms)
 	{
-		selectedPlayer	= NET_HOST_ONLY;		// Host is always 0
-		NetPlay.isHost		= true;
-		NetPlay.hostPlayer	= NET_HOST_ONLY;
-		return true;
+		debug(LOG_ERROR, "Likely missing NETinit(true) - this won't return any results");
+		return false;
 	}
 	if ((hosts = resolveHost(masterserver_name, masterserver_port)) == nullptr)
 	{
