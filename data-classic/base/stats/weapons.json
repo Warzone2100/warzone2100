@@ -3448,7 +3448,7 @@
         "weaponEffect": "ANTI PERSONNEL",
         "weaponSubClass": "ELECTRONIC",
         "weaponWav": "rotlsr.ogg",
-        "weight": 200,
+        "weight": 200
     },
     "Superweapon": {
         "buildPoints": 50,
