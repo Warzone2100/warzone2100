@@ -508,10 +508,11 @@ static int NET_CreatePlayer(char const *name)
 	return index;
 }
 
-static void NET_DestroyPlayer(unsigned int index)
+static void NET_DestroyPlayer(unsigned int index, bool suppressActivityUpdates = false)
 {
 	debug(LOG_NET, "Freeing slot %u for a new player", index);
 	NETlogEntry("Freeing slot for a new player.", SYNC_FLAG, index);
+	bool wasAllocated = NetPlay.players[index].allocated;
 	if (NetPlay.players[index].allocated)
 	{
 		NetPlay.players[index].allocated = false;
@@ -525,6 +526,10 @@ static void NET_DestroyPlayer(unsigned int index)
 		}
 	}
 	NET_InitPlayer(index, false);  // reinitialize
+	if (wasAllocated && !suppressActivityUpdates)
+	{
+		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
+	}
 }
 
 /**
@@ -1247,7 +1252,7 @@ int NETclose()
 			socketClose(connected_bsocket[i]);
 			connected_bsocket[i] = nullptr;
 		}
-		NET_DestroyPlayer(i);
+		NET_DestroyPlayer(i, true);
 	}
 
 	if (tmp_socket_set)
