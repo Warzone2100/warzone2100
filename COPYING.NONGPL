@@ -11,6 +11,8 @@ data/base/texpages/page-25-sky-urban.png
 	- CC0, original work by cybersphinx
 3rdparty/date/*
 	- MIT, Various Authors, See: https://github.com/HowardHinnant/date/blob/master/include/date/date.h
+3rdparty/discord-rpc/*
+	- MIT, Copyright 2017 Discord, Inc.
 3rdparty/json/*
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
 3rdparty/micro-ecc/*
@@ -42,5 +44,10 @@ data/base/components/prop/prllwhl1.pie
 data/base/components/prop/prhrwhl1.pie
 data/base/components/prop/prhlwhl1.pie
 	- CC BY SA 3.0 - Copyright (c) 2008 <Mysteryem>
+data/base/images/notifications/connect_wait.png
+data/base/images/notifications/exclamation_triangle.png
+data/base/images/notifications/shield_questionmark.png
+data/base/images/notifications/user_questionmark.png
+	- CC BY 4.0 - Font Awesome Free by @fontawesome (https://fontawesome.com/license/free)
 lib/exceptionhandler/3rdparty/StackWalker.*
 	- BSD 3-Clause License - Copyright (c) 2005 - 2017, Jochen Kalmbach (https://github.com/JochenKalmbach/StackWalker)

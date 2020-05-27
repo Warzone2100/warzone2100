@@ -23,3 +23,8 @@ set_property(TARGET re2 PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-missing-fi
 
 add_subdirectory(EmbeddedJSONSignature)
 set_property(TARGET EmbeddedJSONSignature PROPERTY FOLDER "3rdparty")
+
+if(ENABLE_DISCORD)
+	add_subdirectory(discord-rpc EXCLUDE_FROM_ALL)
+	set_property(TARGET discord-rpc PROPERTY FOLDER "3rdparty")
+endif()

@@ -85,8 +85,8 @@ if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
 
-file(GLOB HEADERS "*.h" "*/*.h")
-file(GLOB SRC "*.cpp" "*/*.cpp")
+file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h")
+file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp")
 qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
 
 set(_additionalSourceFiles)
@@ -202,6 +202,17 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
   else()
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group")
   endif()
+endif()
+
+if(ENABLE_DISCORD)
+	if (TARGET discord-rpc)
+		target_include_directories(warzone2100 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/discord-rpc/include")
+		target_link_libraries(warzone2100 discord-rpc)
+		target_sources(warzone2100 PRIVATE "integrations/wzdiscordrpc.h" "integrations/wzdiscordrpc.cpp")
+		target_compile_definitions(warzone2100 PRIVATE "ENABLE_DISCORD")
+	else()
+		message(WARNING "Missing target: discord-rpc")
+	endif()
 endif()
 
 ############################

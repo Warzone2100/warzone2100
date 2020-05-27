@@ -838,6 +838,7 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type)
 	}
 }
 
+// NOTE: Must call NETinit(true); before this will actually work
 std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId)
 {
 	WzString originalLobbyServerName = WzString::fromUtf8(NETgetMasterserverName());
