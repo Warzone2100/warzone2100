@@ -761,6 +761,7 @@ bool recvMessage()
 				{
 					MultiPlayerLeave(player_id);		// get rid of their stuff
 					NET_InitPlayer(player_id, false);
+					ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 				}
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 				break;

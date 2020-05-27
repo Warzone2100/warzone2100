@@ -59,6 +59,7 @@
 #include "wrappers.h"
 #include "intimage.h"
 #include "data.h"
+#include "activity.h"
 
 #include "multimenu.h"
 #include "multiplay.h"
@@ -289,6 +290,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
 // ////////////////////////////////////////////////////////////////////////////

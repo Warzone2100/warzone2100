@@ -3591,6 +3591,7 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 				NET_InitPlayer(player_id, false);           // sets index player's array to false
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 				playerVotes[player_id] = 0;
+				ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 				if (player_id == NetPlay.hostPlayer || player_id == selectedPlayer)	// if host quits or we quit, abort out
 				{
 					stopJoining(parent);
