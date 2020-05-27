@@ -2344,7 +2344,6 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		{
 			if (structureIsBlueprint(psStructure))
 			{
-				pieFlag = pie_TRANSLUCENT;
 				pieFlagData = BLUEPRINT_OPACITY;
 			}
 			else
@@ -2352,6 +2351,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 				pieFlag = pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
+			pieFlag |= pie_TRANSLUCENT;
 			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData,
 				viewMatrix * modelMatrix);
 		}
