@@ -450,7 +450,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	{
 		if(psShapeProp->numFrames > 0)
 		{
-			propulsionFrame = getModularScaledGraphicsTime(psDroid->sMove.speed, psShapeProp->numFrames);
+			propulsionFrame = getModularScaledGraphicsTime(psDroid->sMove.speed * 0.5, psShapeProp->numFrames);
 		}
 		else
 		{
@@ -783,7 +783,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	{
 		if(psShapeProp->numFrames > 0)
 		{
-			propulsionFrame = getModularScaledGraphicsTime(psDroid->sMove.speed, psShapeProp->numFrames);
+			propulsionFrame = getModularScaledGraphicsTime(psDroid->sMove.speed * 0.5, psShapeProp->numFrames);
 		}
 		else
 		{
