@@ -1671,6 +1671,13 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
 			int imdIndex = std::min<int>(psBuilding->capacity * 2, IMDs.size() - 1) - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules, and we want just the module since we cache the fully-built part of the building in psBuilding->prebuiltImd.
+			if (imdIndex < 0)
+			{
+				// Looks like we don't have a model for this structure's upgrade
+				// Log it and default to the base model (to avoid a crash)
+				debug(LOG_ERROR, "No upgraded structure model to draw.");
+				imdIndex = 0;
+			}
 			psBuilding->prebuiltImd = psBuilding->sDisplay.imd;
 			psBuilding->sDisplay.imd = IMDs[imdIndex];
 
