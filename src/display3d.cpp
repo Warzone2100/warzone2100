@@ -2281,7 +2281,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 /// Draw the structures
 void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
-	int colour, pieFlag, pieFlagData, ecmFlag = 0;
+	int colour, pieFlagData, ecmFlag = 0, pieFlag = 0;
 	PIELIGHT buildingBrightness;
 	const Vector3i dv = Vector3i(psStructure->pos.x - player.p.x, psStructure->pos.z, -(psStructure->pos.y - player.p.z));
 	bool bHitByElectronic = false;
@@ -2342,7 +2342,6 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		{
 			if (structureIsBlueprint(psStructure))
 			{
-				pieFlag = pie_TRANSLUCENT;
 				pieFlagData = BLUEPRINT_OPACITY;
 			}
 			else
@@ -2350,7 +2349,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 				pieFlag = pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData,
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
 				viewMatrix * modelMatrix);
 		}
 
