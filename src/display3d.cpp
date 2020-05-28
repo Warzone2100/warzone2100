@@ -2283,7 +2283,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 /// Draw the structures
 void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
-	int colour, pieFlag, pieFlagData, ecmFlag = 0;
+	int colour, pieFlagData, ecmFlag = 0, pieFlag = 0;
 	PIELIGHT buildingBrightness;
 	const Vector3i dv = Vector3i(psStructure->pos.x - player.p.x, psStructure->pos.z, -(psStructure->pos.y - player.p.z));
 	bool bHitByElectronic = false;
