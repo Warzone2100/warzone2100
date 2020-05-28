@@ -3422,11 +3422,6 @@ static void trackHeight()
 
 	if(referenceTime == 0)
 	{
-		if(scrollSpeedLeftRight != 0 || scrollStepLeftRight != 0)
-		{
-			return;
-		}
-
 		referenceTime = graphicsTime;
 		referenceHeight = std::max(player.p.y, 1);
 		targetHeight = calculatedHeight;
@@ -3446,7 +3441,8 @@ static void trackHeight()
 		return;
 	}
 
-	t = t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; // easing in/out
+    float tt = t * t;
+    t = tt / (2.0f * (tt - t) + 1.0f); // "parametric function"
 
 	player.p.y = referenceHeight + delta * t;
 }
