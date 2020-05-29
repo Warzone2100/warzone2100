@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-04-26 07:30+0000\n"
-"PO-Revision-Date: 2020-04-30 20:55\n"
+"POT-Creation-Date: 2020-05-09 04:42+0000\n"
+"PO-Revision-Date: 2020-05-29 17:07\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1524,12 +1524,12 @@ msgstr "反炮兵雷达升级"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "雷达升级二型"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "雷达升级三型"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1845,7 +1845,7 @@ msgstr "需要生化人工厂才能生产"
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:550
+#: po/custom/fromJson.txt:554
 msgid "Armed with Cyborg Assault Gun"
 msgstr "装备有突击枪之生化人步兵"
 
@@ -3417,7 +3417,7 @@ msgstr "投掷高爆性集束炸弹"
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1079
+#: po/custom/fromJson.txt:1083
 msgid "Best Targets: Base Structures"
 msgstr "最佳目标：基本建筑物"
 
@@ -4088,8 +4088,8 @@ msgstr ""
 #: data/base/script/tutorial.js:510
 #: data/mp/multiplay/skirmish/rules.js:177
 #: src/challenge.cpp:217
-#: src/hci.cpp:2964
-#: src/hci.cpp:3685
+#: src/hci.cpp:2965
+#: src/hci.cpp:3686
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
 #: src/loadsave.cpp:245
@@ -4272,22 +4272,6 @@ msgstr "请稍待片刻"
 msgid "Congratulations commander - you are ready for your first mission"
 msgstr "恭喜你指挥官！！你已经完成了你的第一个任务！"
 
-#: data/base/sequenceaudio/cam1/c001end.txt:1
-msgid "Incoming Transmission"
-msgstr "信号传入"
-
-#: data/base/sequenceaudio/cam1/c001end.txt:3
-msgid "Transmission from Beta Base"
-msgstr "由Beta基地传来了讯息"
-
-#: data/base/sequenceaudio/cam1/c001end.txt:4
-msgid "Mayday! Mayday!"
-msgstr "救命！救命！"
-
-#: data/base/sequenceaudio/cam1/c001end.txt:5
-msgid "Please assist!..."
-msgstr "请帮帮我"
-
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
 msgstr "战役一"
@@ -4347,6 +4331,22 @@ msgstr "指挥官，由你来指挥三支被the Project 送出的远征军之一
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
 msgstr "你的目的地在西部区域"
+
+#: data/base/sequenceaudio/cam1/c001end.txt:1
+msgid "Incoming Transmission"
+msgstr "信号传入"
+
+#: data/base/sequenceaudio/cam1/c001end.txt:3
+msgid "Transmission from Beta Base"
+msgstr "由Beta基地传来了讯息"
+
+#: data/base/sequenceaudio/cam1/c001end.txt:4
+msgid "Mayday! Mayday!"
+msgstr "救命！救命！"
+
+#: data/base/sequenceaudio/cam1/c001end.txt:5
+msgid "Please assist!..."
+msgstr "请帮帮我"
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
@@ -4507,18 +4507,6 @@ msgstr "你将被摧毁。"
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
 msgstr "NEXUS，寻获突触连结科技并已经采集发送！"
 
-#: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
-msgid "You have done well."
-msgstr "你做得很好。"
-
-#: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
-msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr "一旦此技术得到分析和认证，我们随后就会给予你报酬。"
-
-#: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
-msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr "前军人基地获得的信息显示New Paradigm重新获得了两个突触连接的人工产品。"
-
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:4
 msgid "This Nexus Intruder Program is a self-mutating computer parasite. This makes it difficult to eradicate from systems once it has been identified."
 msgstr "Nexus入侵者系统是一个自变异的计算机寄生虫。这就使得在发现时想要将其从系统清除是十分困难的。"
@@ -4538,6 +4526,18 @@ msgstr "然而，New Paradigm没有检查Nexus入侵程序的速度。我们需�
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
 msgstr "指挥官，本章你的任务是缩短 New Paradigm 的活动并且定位它们的主要基地。"
+
+#: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
+msgid "You have done well."
+msgstr "你做得很好。"
+
+#: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
+msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
+msgstr "一旦此技术得到分析和认证，我们随后就会给予你报酬。"
+
+#: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
+msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
+msgstr "前军人基地获得的信息显示New Paradigm重新获得了两个突触连接的人工产品。"
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -4619,18 +4619,6 @@ msgstr "如果中心发现完好无损，NEXUS 会获得对卫星的控制。"
 msgid "Nexus claimed that it had already destroyed the world."
 msgstr "Nexus 声称它已经摧毁了地球。"
 
-#: data/base/sequenceaudio/cam2/cam2_2n.txt:1
-msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr "集团中的战士们，我已定位了NEXUS 中心。"
-
-#: data/base/sequenceaudio/cam2/cam2_2n.txt:2
-msgid "It lies somewhere in your territory."
-msgstr "它在你们领地的某个地发。"
-
-#: data/base/sequenceaudio/cam2/cam2_2n.txt:4
-msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "为我找到它，我会为你提供更多能在战斗中帮助你的武器。"
-
 #: data/base/sequenceaudio/cam2/cam22pl2.txt:1
 msgid "NASDA Briefing follows..."
 msgstr "NASDA 简报如下："
@@ -4690,6 +4678,18 @@ msgstr "Gamma队派遣了一个小分队去探索发射区域以防止进一步�
 #: data/base/sequenceaudio/cam2/cam27fmv.txt:5
 msgid "We can only assume that Nexus has gained control of this site. We cannot determine whether the missile is nuclear-armed or where it is targeted. You are advised to begin preparations for the evacuation of your base."
 msgstr "我们只能假设Nexus控制了这个网站。我们无法确定导弹是否是核武器装备的以及他的目标是那里。建议你为重新评估你的基地开始准备。"
+
+#: data/base/sequenceaudio/cam2/cam2_2n.txt:1
+msgid "Warriors of the Collective, I seek the location of NASDA Central."
+msgstr "集团中的战士们，我已定位了NEXUS 中心。"
+
+#: data/base/sequenceaudio/cam2/cam2_2n.txt:2
+msgid "It lies somewhere in your territory."
+msgstr "它在你们领地的某个地发。"
+
+#: data/base/sequenceaudio/cam2/cam2_2n.txt:4
+msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
+msgstr "为我找到它，我会为你提供更多能在战斗中帮助你的武器。"
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -4799,30 +4799,6 @@ msgstr "指挥官，时间到啦！！"
 msgid "Commander, we are detecting NEXUS forces from these coordinates..."
 msgstr "指挥官，我们在这个坐标区域侦测到了Nexus敌军"
 
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
-msgid "Well done Commander, you've prevented my last missile from launching."
-msgstr "做得好指挥官，你成功的阻止了我的最后的导弹发射。"
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
-msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr "真是可耻。你的项目总部会是一个美妙的目标。"
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
-msgid "But it's good of you to join me here."
-msgstr "但是加入我无疑是对你有好处的。"
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
-msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
-msgstr "在这个简仓下埋葬着一个战术核弹头，马上就要爆炸。"
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
-msgid "As I cannot launch it, it'll just have to blow where it is."
-msgstr "不能将其发射，只能在其所在地进行击打。"
-
-#: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
-msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "请注意该复杂地下结构的所有入口都被封闭了。再见吧，指挥官。"
-
 #: data/base/sequenceaudio/cam3/cam32a2.txt:1
 msgid "Glad you could make it, Commander."
 msgstr "指挥官，很高兴你做到了。"
@@ -4870,6 +4846,86 @@ msgstr "在我们失去关键系统的控制前，你放必需摧毁他的指挥
 #: data/base/sequenceaudio/cam3/cam34mu2.txt:1
 msgid "Commander, welcome to NEXUS!"
 msgstr "指挥官，欢迎来到NEXUS"
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:1
+msgid "Well done Commander, you've prevented my last missile from launching."
+msgstr "做得好指挥官，你成功的阻止了我的最后的导弹发射。"
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
+msgid "Such a shame. Your Project HQ would have made a wonderful target."
+msgstr "真是可耻。你的项目总部会是一个美妙的目标。"
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
+msgid "But it's good of you to join me here."
+msgstr "但是加入我无疑是对你有好处的。"
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:6
+msgid "Buried beneath this silo is a tactical nuclear warhead that is set to go off soon."
+msgstr "在这个简仓下埋葬着一个战术核弹头，马上就要爆炸。"
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:9
+msgid "As I cannot launch it, it'll just have to blow where it is."
+msgstr "不能将其发射，只能在其所在地进行击打。"
+
+#: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
+msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
+msgstr "请注意该复杂地下结构的所有入口都被封闭了。再见吧，指挥官。"
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:1
+msgid "Ah, Commander, so good of you to join us here at Nexus base."
+msgstr "呀，指挥官，你在Nexus基地中加入我们真是太好啦。"
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:3
+msgid "It was very useful having Gamma Team set up here in the mountains."
+msgstr "有Gamma队在山地位置真是太有用啦。"
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:4
+msgid "Their absorption was such a pleasure."
+msgstr "它们的吸收真有趣。"
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:6
+msgid "Thank you for all those useful technologies you've recovered."
+msgstr "真是太感谢你可以重新获得这些有用的技术。"
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:8
+msgid "You and not those fools in the New Paradigm and the Collective."
+msgstr "你并不是那些在New Paradigm 和 Collective 出现的傻瓜。"
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:10
+msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
+msgstr "我没有取得你的全部突触连接，因此你可以将你的部队与Nexus进行融合"
+
+#: data/base/sequenceaudio/cam3/cam3_bn.txt:12
+msgid "Your forces are now mine! Welcome to Nexus."
+msgstr "你的部队现在全部属于我啦！欢迎来到Nexus。"
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:1
+msgid "Commander, you're proving to be more resilient than I thought."
+msgstr "指挥官，你证明了自己比我想象的还要灵活。"
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:2
+msgid "Such a pity that you refused to join me earlier."
+msgstr "真可惜你之前没答应加入我们。"
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:4
+msgid "But no matter, as you'll not be here much longer."
+msgstr "但是这是无关紧要的，因为你即将从这里消失。"
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:6
+msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
+msgstr "在搜索和重编程后，我终于将程序重新上线。"
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:8
+msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
+msgstr "一旦我用原子之火为我所控制的未来开路。"
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:9
+msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
+msgstr "我将要进一步根据我的想象塑造这个世界，把像你一样的不如意的杂草，用外科手术般的方法除掉。"
+
+#: data/base/sequenceaudio/cam3/cam3_cn.txt:11
+msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
+msgstr "我方的激光卫星现已增强力量。报告指挥官，可以为你进行第一次测试1"
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
@@ -4942,62 +4998,6 @@ msgstr "指挥官，我们受到Nexus半机器人和坦克的攻击。请帮我�
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
 msgstr "...坚持不住了。重复，请求救援，我们坚持不住了..."
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:1
-msgid "Ah, Commander, so good of you to join us here at Nexus base."
-msgstr "呀，指挥官，你在Nexus基地中加入我们真是太好啦。"
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:3
-msgid "It was very useful having Gamma Team set up here in the mountains."
-msgstr "有Gamma队在山地位置真是太有用啦。"
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:4
-msgid "Their absorption was such a pleasure."
-msgstr "它们的吸收真有趣。"
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:6
-msgid "Thank you for all those useful technologies you've recovered."
-msgstr "真是太感谢你可以重新获得这些有用的技术。"
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:8
-msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr "你并不是那些在New Paradigm 和 Collective 出现的傻瓜。"
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:10
-msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
-msgstr "我没有取得你的全部突触连接，因此你可以将你的部队与Nexus进行融合"
-
-#: data/base/sequenceaudio/cam3/cam3_bn.txt:12
-msgid "Your forces are now mine! Welcome to Nexus."
-msgstr "你的部队现在全部属于我啦！欢迎来到Nexus。"
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:1
-msgid "Commander, you're proving to be more resilient than I thought."
-msgstr "指挥官，你证明了自己比我想象的还要灵活。"
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:2
-msgid "Such a pity that you refused to join me earlier."
-msgstr "真可惜你之前没答应加入我们。"
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:4
-msgid "But no matter, as you'll not be here much longer."
-msgstr "但是这是无关紧要的，因为你即将从这里消失。"
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:6
-msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr "在搜索和重编程后，我终于将程序重新上线。"
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:8
-msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
-msgstr "一旦我用原子之火为我所控制的未来开路。"
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:9
-msgid "I now intend to further shape the world into my own image, by  surgically removing unwanted growths like yourself."
-msgstr "我将要进一步根据我的想象塑造这个世界，把像你一样的不如意的杂草，用外科手术般的方法除掉。"
-
-#: data/base/sequenceaudio/cam3/cam3_cn.txt:11
-msgid "My Laser Satellites are now powering up. I intend to test them on you first, Commander!"
-msgstr "我方的激光卫星现已增强力量。报告指挥官，可以为你进行第一次测试1"
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
@@ -5498,23 +5498,23 @@ msgstr "指挥塔 IV"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "简单"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "中等"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "困难"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "疯狂"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
-msgstr ""
+msgstr "个性化更改成功。"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
@@ -5573,63 +5573,63 @@ msgid "Any time, big boss!"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:29
-#: src/multiint.cpp:1323
-#: src/multiint.cpp:1326
+#: src/multiint.cpp:1339
+#: src/multiint.cpp:1342
 msgid "Scavengers"
 msgstr "清洁工"
 
 #: data/mp/multiplay/skirmish/rules.js:30
-#: src/multiint.cpp:1328
+#: src/multiint.cpp:1344
 msgid "No Scavengers"
 msgstr "没有清洁工"
 
 #: data/mp/multiplay/skirmish/rules.js:35
-#: src/multiint.cpp:1335
+#: src/multiint.cpp:1351
 msgid "No Alliances"
 msgstr "不允许同盟"
 
 #: data/mp/multiplay/skirmish/rules.js:36
-#: src/multiint.cpp:1336
+#: src/multiint.cpp:1352
 msgid "Allow Alliances"
 msgstr "允许同盟"
 
 #: data/mp/multiplay/skirmish/rules.js:37
-#: src/multiint.cpp:1338
+#: src/multiint.cpp:1354
 msgid "Locked Teams"
 msgstr "锁定同盟模式"
 
 #: data/mp/multiplay/skirmish/rules.js:38
-#: src/multiint.cpp:1337
+#: src/multiint.cpp:1353
 msgid "Locked Teams, No Shared Research"
 msgstr ""
 
 #: data/mp/multiplay/skirmish/rules.js:44
-#: src/multiint.cpp:1345
+#: src/multiint.cpp:1361
 msgid "Low Power Levels"
 msgstr "生产能源速度：慢"
 
 #: data/mp/multiplay/skirmish/rules.js:45
-#: src/multiint.cpp:1346
+#: src/multiint.cpp:1362
 msgid "Medium Power Levels"
 msgstr "生产能源速度：中"
 
 #: data/mp/multiplay/skirmish/rules.js:46
-#: src/multiint.cpp:1347
+#: src/multiint.cpp:1363
 msgid "High Power Levels"
 msgstr "生产能源速度：快"
 
 #: data/mp/multiplay/skirmish/rules.js:52
-#: src/multiint.cpp:1354
+#: src/multiint.cpp:1370
 msgid "Start with No Bases"
 msgstr "开始时无基地"
 
 #: data/mp/multiplay/skirmish/rules.js:53
-#: src/multiint.cpp:1355
+#: src/multiint.cpp:1371
 msgid "Start with Bases"
 msgstr "开始时有基地"
 
 #: data/mp/multiplay/skirmish/rules.js:54
-#: src/multiint.cpp:1356
+#: src/multiint.cpp:1372
 msgid "Start with Advanced Bases"
 msgstr "开始时具规模基地"
 
@@ -6263,7 +6263,7 @@ msgstr "大天使导弹"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:554
+#: po/custom/fromJson.txt:550
 msgid "Armed with Cyborg assault gun"
 msgstr "装备有突击枪之生化人步兵"
 
@@ -6997,7 +6997,7 @@ msgstr "最佳目标：基本建筑物与生化人步兵"
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1083
+#: po/custom/fromJson.txt:1079
 msgid "Best Targets: Base structures"
 msgstr "最佳目标：基本建筑物"
 
@@ -9883,16 +9883,16 @@ msgid "Improvement in laser optics reduces light dispersal"
 msgstr "改善激光系统的光学结构使之不易发散"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-#: po/custom/fromJson.txt:3049
-msgid "Incendiary howitzer emplacement"
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
+#: po/custom/fromJson.txt:3050
+msgid "Incendiary Howitzer Emplacement"
 msgstr "燃烧榴弹炮炮台"
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
+#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
 #: po/custom/fromJson.txt:3053
-msgid "Incendiary Howitzer Emplacement"
+msgid "Incendiary howitzer emplacement"
 msgstr "燃烧榴弹炮炮台"
 
 #. TRANSLATORS:
@@ -13148,18 +13148,18 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突触连结资料分析三型"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#: po/custom/fromJson.txt:5371
-msgid "Synaptic link data analysis"
-msgstr "突触连结资料分析"
-
-#. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#: po/custom/fromJson.txt:5375
+#: po/custom/fromJson.txt:5371
 msgid "Synaptic Link Data Analysis"
 msgstr "突触连结资料分析一型"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#: po/custom/fromJson.txt:5375
+msgid "Synaptic link data analysis"
+msgstr "突触连结资料分析"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -13327,19 +13327,19 @@ msgid "Thermal Armor +35%"
 msgstr "热能装甲 +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-#: po/custom/fromJson.txt:5475
-#, no-c-format
-msgid "Thermal armor +40%"
-msgstr "热能装甲 +40%"
-
-#. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 #. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
-#: po/custom/fromJson.txt:5480
+#: po/custom/fromJson.txt:5476
 #, no-c-format
 msgid "Thermal Armor +40%"
 msgstr "热能装甲 +40% "
+
+#. TRANSLATORS:
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#: po/custom/fromJson.txt:5480
+#, no-c-format
+msgid "Thermal armor +40%"
+msgstr "热能装甲 +40%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
@@ -14855,40 +14855,40 @@ msgstr ""
 msgid "Store Design"
 msgstr ""
 
-#: src/display3d.cpp:676
-msgid "Player left"
-msgstr "玩家已经离开"
-
-#: src/display3d.cpp:680
-msgid "Player dropped"
-msgstr "玩家已经掉线"
-
-#: src/display3d.cpp:684
-#: src/multiint.cpp:2085
-msgid "Waiting for other players"
-msgstr "等待其他玩家"
-
-#: src/display3d.cpp:689
-msgid "Out of sync"
-msgstr "不同步"
-
-#: src/display3d.cpp:1887
-#, c-format
-msgid "Setting zoom to %.0f"
-msgstr ""
-
-#: src/display.cpp:1522
+#: src/display.cpp:1537
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃烧中，无法建筑钻油井"
 
-#: src/display.cpp:1538
+#: src/display.cpp:1553
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr ""
 
-#: src/display.cpp:1700
+#: src/display.cpp:1715
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
+msgstr ""
+
+#: src/display3d.cpp:700
+msgid "Player left"
+msgstr "玩家已经离开"
+
+#: src/display3d.cpp:704
+msgid "Player dropped"
+msgstr "玩家已经掉线"
+
+#: src/display3d.cpp:708
+#: src/multiint.cpp:2102
+msgid "Waiting for other players"
+msgstr "等待其他玩家"
+
+#: src/display3d.cpp:713
+msgid "Out of sync"
+msgstr "不同步"
+
+#: src/display3d.cpp:1911
+#, c-format
+msgid "Setting zoom to %.0f"
 msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
@@ -14929,341 +14929,341 @@ msgstr[0] "Aligning with Group %u - %u 单位"
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
-#: src/frontend.cpp:146
+#: src/frontend.cpp:139
 msgid "Single Player"
 msgstr "单人游戏"
 
-#: src/frontend.cpp:147
+#: src/frontend.cpp:140
 msgid "Multi Player"
 msgstr "多人游戏"
 
-#: src/frontend.cpp:148
-#: src/frontend.cpp:309
+#: src/frontend.cpp:141
+#: src/frontend.cpp:285
 msgid "Tutorial"
 msgstr "教学模式"
 
-#: src/frontend.cpp:149
+#: src/frontend.cpp:142
 #: src/ingameop.cpp:243
 msgid "Options"
 msgstr "选项"
 
-#: src/frontend.cpp:153
-#: src/frontend.cpp:157
+#: src/frontend.cpp:146
+#: src/frontend.cpp:150
 msgid "View Intro"
 msgstr "影片介绍"
 
-#: src/frontend.cpp:158
+#: src/frontend.cpp:151
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr "战役视频丢失！从 http://wz2100.net 获取"
 
-#: src/frontend.cpp:163
-#: src/frontend.cpp:167
+#: src/frontend.cpp:156
+#: src/frontend.cpp:160
 msgid "Continue Last Save"
 msgstr ""
 
-#: src/frontend.cpp:168
+#: src/frontend.cpp:161
 msgid "No last save available"
 msgstr ""
 
-#: src/frontend.cpp:170
+#: src/frontend.cpp:163
 msgid "Quit Game"
 msgstr "离开游戏"
 
-#: src/frontend.cpp:171
+#: src/frontend.cpp:164
 msgid "MAIN MENU"
 msgstr "主菜单"
 
-#: src/frontend.cpp:173
+#: src/frontend.cpp:166
 msgid "Official site: http://wz2100.net/"
 msgstr "官方网址：http://wz2100.net/"
 
-#: src/frontend.cpp:174
+#: src/frontend.cpp:167
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr "来参观我们的论坛并且查看新闻，点击这个连接！"
 
-#: src/frontend.cpp:175
+#: src/frontend.cpp:168
 msgid "Donate: http://donations.wz2100.net/"
 msgstr "捐助：http://donations.wz2100.net/"
 
-#: src/frontend.cpp:178
+#: src/frontend.cpp:171
 msgid "Help support the project with our server costs, Click this link."
 msgstr "帮助支持数据中心的运作，点击这个连接"
 
-#: src/frontend.cpp:179
+#: src/frontend.cpp:172
 msgid "Chat with players on #warzone2100"
 msgstr ""
 
-#: src/frontend.cpp:182
+#: src/frontend.cpp:175
 msgid "Connect to Freenode through webchat by clicking this link."
 msgstr ""
 
-#: src/frontend.cpp:183
+#: src/frontend.cpp:176
 msgid "Check for a newer version"
 msgstr "检查更新"
 
-#: src/frontend.cpp:310
+#: src/frontend.cpp:286
 msgid "Fast Play"
 msgstr "快速游戏"
 
-#: src/frontend.cpp:311
+#: src/frontend.cpp:287
 msgid "TUTORIALS"
 msgstr "教学模式"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:313
-#: src/frontend.cpp:371
-#: src/frontend.cpp:417
-#: src/frontend.cpp:615
-#: src/frontend.cpp:686
-#: src/frontend.cpp:814
-#: src/frontend.cpp:987
-#: src/frontend.cpp:1261
-#: src/frontend.cpp:1603
-#: src/frontend.cpp:1755
-#: src/frontend.cpp:1775
+#: src/frontend.cpp:289
+#: src/frontend.cpp:347
+#: src/frontend.cpp:393
+#: src/frontend.cpp:591
+#: src/frontend.cpp:662
+#: src/frontend.cpp:790
+#: src/frontend.cpp:963
+#: src/frontend.cpp:1237
+#: src/frontend.cpp:1579
+#: src/frontend.cpp:1731
+#: src/frontend.cpp:1751
 msgctxt "menu"
 msgid "Return"
 msgstr "返回"
 
-#: src/frontend.cpp:364
+#: src/frontend.cpp:340
 msgid "New Campaign"
 msgstr "新的任务"
 
-#: src/frontend.cpp:365
+#: src/frontend.cpp:341
 msgid "Start Skirmish Game"
 msgstr "单人战役模式"
 
-#: src/frontend.cpp:366
+#: src/frontend.cpp:342
 msgid "Challenges"
 msgstr "挑战"
 
-#: src/frontend.cpp:367
+#: src/frontend.cpp:343
 msgid "Load Campaign Game"
 msgstr "载入情节游戏"
 
-#: src/frontend.cpp:368
+#: src/frontend.cpp:344
 msgid "Load Skirmish Game"
 msgstr "加载练习游戏"
 
-#: src/frontend.cpp:370
+#: src/frontend.cpp:346
 msgid "SINGLE PLAYER"
 msgstr "单人游戏"
 
-#: src/frontend.cpp:375
-#: src/frontend.cpp:421
+#: src/frontend.cpp:351
+#: src/frontend.cpp:397
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "战役视频丢失！从 http://wz2100.net 获取"
 
-#: src/frontend.cpp:416
+#: src/frontend.cpp:392
 msgid "CAMPAIGNS"
 msgstr ""
 
-#: src/frontend.cpp:551
+#: src/frontend.cpp:527
 #: src/ingameop.cpp:874
 msgid "Load Campaign Saved Game"
 msgstr "载入已储存的情节游戏"
 
-#: src/frontend.cpp:557
+#: src/frontend.cpp:533
 #: src/ingameop.cpp:878
 msgid "Load Skirmish Saved Game"
 msgstr "载入已储存的练习游戏"
 
-#: src/frontend.cpp:610
+#: src/frontend.cpp:586
 msgid "MULTI PLAYER"
 msgstr "多人游戏"
 
-#: src/frontend.cpp:612
+#: src/frontend.cpp:588
 msgid "Host Game"
 msgstr "开启游戏"
 
-#: src/frontend.cpp:613
+#: src/frontend.cpp:589
 msgid "Join Game"
 msgstr "加入游戏"
 
-#: src/frontend.cpp:618
+#: src/frontend.cpp:594
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "在你的防火墙或主机游戏中必需打开TCP端口2100"
 
-#: src/frontend.cpp:679
-#: src/multiint.cpp:1267
+#: src/frontend.cpp:655
+#: src/multiint.cpp:1278
 msgid "OPTIONS"
 msgstr "选项"
 
-#: src/frontend.cpp:680
+#: src/frontend.cpp:656
 msgid "Game Options"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:681
+#: src/frontend.cpp:657
 #: src/ingameop.cpp:479
 msgid "Graphics Options"
 msgstr "图形选项"
 
-#: src/frontend.cpp:682
+#: src/frontend.cpp:658
 #: src/ingameop.cpp:482
 msgid "Video Options"
 msgstr "显示选项"
 
-#: src/frontend.cpp:683
+#: src/frontend.cpp:659
 msgid "Audio / Zoom Options"
 msgstr ""
 
-#: src/frontend.cpp:684
+#: src/frontend.cpp:660
 #: src/ingameop.cpp:489
 msgid "Mouse Options"
 msgstr "滑鼠选项"
 
-#: src/frontend.cpp:685
+#: src/frontend.cpp:661
 #: src/ingameop.cpp:494
 msgid "Key Mappings"
 msgstr "键盘配置"
 
-#: src/frontend.cpp:736
+#: src/frontend.cpp:712
 msgid "1×"
 msgstr ""
 
-#: src/frontend.cpp:737
+#: src/frontend.cpp:713
 msgid "2×"
 msgstr ""
 
-#: src/frontend.cpp:738
-#: src/frontend.cpp:1118
+#: src/frontend.cpp:714
+#: src/frontend.cpp:1094
 msgid "Fullscreen"
 msgstr "全萤幕"
 
-#: src/frontend.cpp:739
-#: src/frontend.cpp:750
-#: src/frontend.cpp:901
-#: src/frontend.cpp:1681
+#: src/frontend.cpp:715
+#: src/frontend.cpp:726
+#: src/frontend.cpp:877
+#: src/frontend.cpp:1657
 msgid "Unsupported"
 msgstr "不支持的"
 
-#: src/frontend.cpp:747
-#: src/frontend.cpp:756
-#: src/frontend.cpp:761
-#: src/frontend.cpp:1125
-#: src/frontend.cpp:1164
-#: src/frontend.cpp:1530
-#: src/frontend.cpp:1535
-#: src/frontend.cpp:1540
-#: src/frontend.cpp:1550
+#: src/frontend.cpp:723
+#: src/frontend.cpp:732
+#: src/frontend.cpp:737
+#: src/frontend.cpp:1101
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1506
+#: src/frontend.cpp:1511
+#: src/frontend.cpp:1516
+#: src/frontend.cpp:1526
 msgid "Off"
 msgstr "关闭"
 
-#: src/frontend.cpp:748
+#: src/frontend.cpp:724
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:749
+#: src/frontend.cpp:725
 #: src/multiplay.cpp:1909
 msgid "Black"
 msgstr "黑色"
 
-#: src/frontend.cpp:756
-#: src/frontend.cpp:761
-#: src/frontend.cpp:1164
-#: src/frontend.cpp:1530
-#: src/frontend.cpp:1535
-#: src/frontend.cpp:1540
-#: src/frontend.cpp:1550
+#: src/frontend.cpp:732
+#: src/frontend.cpp:737
+#: src/frontend.cpp:1140
+#: src/frontend.cpp:1506
+#: src/frontend.cpp:1511
+#: src/frontend.cpp:1516
+#: src/frontend.cpp:1526
 msgid "On"
 msgstr "开启"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:742
 msgid "Rotating"
 msgstr "旋转"
 
-#: src/frontend.cpp:766
+#: src/frontend.cpp:742
 msgid "Fixed"
 msgstr "已修复"
 
-#: src/frontend.cpp:771
+#: src/frontend.cpp:747
 msgid "Instant"
 msgstr ""
 
-#: src/frontend.cpp:771
+#: src/frontend.cpp:747
 msgid "Tracked"
 msgstr ""
 
-#: src/frontend.cpp:784
+#: src/frontend.cpp:760
 #: src/ingameop.cpp:517
 msgid "Video Playback"
 msgstr "播放影片"
 
-#: src/frontend.cpp:788
+#: src/frontend.cpp:764
 #: src/ingameop.cpp:522
 msgid "Scanlines"
 msgstr "扫描线"
 
-#: src/frontend.cpp:793
+#: src/frontend.cpp:769
 #: src/ingameop.cpp:527
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/frontend.cpp:798
+#: src/frontend.cpp:774
 #: src/ingameop.cpp:532
 msgid "Shadows"
 msgstr "影子"
 
-#: src/frontend.cpp:802
+#: src/frontend.cpp:778
 #: src/ingameop.cpp:537
 msgid "Radar"
 msgstr "雷达"
 
-#: src/frontend.cpp:806
+#: src/frontend.cpp:782
 #: src/ingameop.cpp:542
 msgid "Radar Jump"
 msgstr ""
 
-#: src/frontend.cpp:810
+#: src/frontend.cpp:786
 msgid "GRAPHICS OPTIONS"
 msgstr "图形选项"
 
-#: src/frontend.cpp:904
+#: src/frontend.cpp:880
 msgid "Disabled"
 msgstr ""
 
-#: src/frontend.cpp:907
+#: src/frontend.cpp:883
 msgid "Enabled"
 msgstr ""
 
-#: src/frontend.cpp:911
-#: src/frontend.cpp:917
+#: src/frontend.cpp:887
+#: src/frontend.cpp:893
 msgid "Auto"
 msgstr ""
 
-#: src/frontend.cpp:952
+#: src/frontend.cpp:928
 #: src/ingameop.cpp:159
 msgid "Voice Volume"
 msgstr "语音音量"
 
-#: src/frontend.cpp:956
+#: src/frontend.cpp:932
 #: src/ingameop.cpp:165
 msgid "FX Volume"
 msgstr "音效音量"
 
-#: src/frontend.cpp:960
+#: src/frontend.cpp:936
 #: src/ingameop.cpp:171
 msgid "Music Volume"
 msgstr "背景音乐音量"
 
-#: src/frontend.cpp:964
+#: src/frontend.cpp:940
 msgid "HRTF"
 msgstr ""
 
-#: src/frontend.cpp:969
-#: src/frontend.cpp:971
+#: src/frontend.cpp:945
+#: src/frontend.cpp:947
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr ""
 
-#: src/frontend.cpp:975
+#: src/frontend.cpp:951
 msgid "Map Zoom"
 msgstr ""
 
-#: src/frontend.cpp:979
+#: src/frontend.cpp:955
 msgid "Map Zoom Rate"
 msgstr ""
 
-#: src/frontend.cpp:983
+#: src/frontend.cpp:959
 msgid "Radar Zoom"
 msgstr ""
 
@@ -15271,256 +15271,256 @@ msgstr ""
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:994
+#: src/frontend.cpp:970
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1118
+#: src/frontend.cpp:1094
 msgid "Windowed"
 msgstr "视窗模式"
 
-#: src/frontend.cpp:1135
+#: src/frontend.cpp:1111
 msgid "Graphics Mode*"
 msgstr "图形模式*"
 
-#: src/frontend.cpp:1135
+#: src/frontend.cpp:1111
 msgid "Graphics Mode"
 msgstr ""
 
-#: src/frontend.cpp:1140
+#: src/frontend.cpp:1116
 msgid "Resolution*"
 msgstr "解析度*"
 
-#: src/frontend.cpp:1140
+#: src/frontend.cpp:1116
 msgid "Resolution"
 msgstr ""
 
-#: src/frontend.cpp:1145
+#: src/frontend.cpp:1121
 msgid "Display Scale*"
 msgstr ""
 
-#: src/frontend.cpp:1145
+#: src/frontend.cpp:1121
 msgid "Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:1189
+#: src/frontend.cpp:1165
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr ""
 
-#: src/frontend.cpp:1221
+#: src/frontend.cpp:1197
 msgid "* Takes effect on game restart"
 msgstr "*重启游戏后生效"
 
-#: src/frontend.cpp:1233
+#: src/frontend.cpp:1209
 msgid "Texture size"
 msgstr "贴图精细度"
 
-#: src/frontend.cpp:1237
+#: src/frontend.cpp:1213
 #: src/ingameop.cpp:630
 msgid "Vertical sync"
 msgstr "垂直同步*"
 
-#: src/frontend.cpp:1241
+#: src/frontend.cpp:1217
 msgid "Antialiasing*"
 msgstr ""
 
-#: src/frontend.cpp:1247
+#: src/frontend.cpp:1223
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
-#: src/frontend.cpp:1258
+#: src/frontend.cpp:1234
 msgid "VIDEO OPTIONS"
 msgstr "视屏选项"
 
-#: src/frontend.cpp:1545
+#: src/frontend.cpp:1521
 msgid "Middle Mouse"
 msgstr "鼠标中键"
 
-#: src/frontend.cpp:1545
+#: src/frontend.cpp:1521
 msgid "Right Mouse"
 msgstr "鼠标右键"
 
-#: src/frontend.cpp:1557
+#: src/frontend.cpp:1533
 msgid "Map/Radar Zoom"
 msgstr ""
 
-#: src/frontend.cpp:1558
+#: src/frontend.cpp:1534
 msgid "Game Speed"
 msgstr ""
 
-#: src/frontend.cpp:1559
+#: src/frontend.cpp:1535
 msgid "Camera Pitch"
 msgstr ""
 
-#: src/frontend.cpp:1574
+#: src/frontend.cpp:1550
 #: src/ingameop.cpp:697
 msgid "Reverse Rotation"
 msgstr "反向旋转"
 
-#: src/frontend.cpp:1578
+#: src/frontend.cpp:1554
 #: src/ingameop.cpp:704
 msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
-#: src/frontend.cpp:1583
+#: src/frontend.cpp:1559
 #: src/ingameop.cpp:710
 msgid "Switch Mouse Buttons"
 msgstr "交换鼠标按钮"
 
-#: src/frontend.cpp:1588
+#: src/frontend.cpp:1564
 #: src/ingameop.cpp:715
 msgid "Rotate Screen"
 msgstr "旋转屏幕"
 
-#: src/frontend.cpp:1592
+#: src/frontend.cpp:1568
 #: src/ingameop.cpp:720
 msgid "Colored Cursors"
 msgstr ""
 
-#: src/frontend.cpp:1596
+#: src/frontend.cpp:1572
 #: src/ingameop.cpp:725
 msgid "Scroll Event"
 msgstr ""
 
-#: src/frontend.cpp:1600
+#: src/frontend.cpp:1576
 msgid "MOUSE OPTIONS"
 msgstr "鼠标选项"
 
-#: src/frontend.cpp:1676
+#: src/frontend.cpp:1652
 #: src/multiint.cpp:223
 msgid "Easy"
 msgstr "容易"
 
-#: src/frontend.cpp:1677
+#: src/frontend.cpp:1653
 msgid "Normal"
 msgstr "普通"
 
-#: src/frontend.cpp:1678
+#: src/frontend.cpp:1654
 #: src/multiint.cpp:223
 msgid "Hard"
 msgstr "困难"
 
-#: src/frontend.cpp:1679
+#: src/frontend.cpp:1655
 #: src/multiint.cpp:223
 msgid "Insane"
 msgstr "疯狂的"
 
-#: src/frontend.cpp:1710
-#: src/frontend.cpp:1776
+#: src/frontend.cpp:1686
+#: src/frontend.cpp:1752
 msgid "Language"
 msgstr "语言"
 
-#: src/frontend.cpp:1714
-#: src/frontend.cpp:1780
+#: src/frontend.cpp:1690
+#: src/frontend.cpp:1756
 msgid "Campaign Difficulty"
 msgstr ""
 
-#: src/frontend.cpp:1718
-#: src/frontend.cpp:1781
+#: src/frontend.cpp:1694
+#: src/frontend.cpp:1757
 msgid "Camera Speed"
 msgstr ""
 
-#: src/frontend.cpp:1722
-#: src/frontend.cpp:1777
+#: src/frontend.cpp:1698
+#: src/frontend.cpp:1753
 msgid "Unit Colour:"
 msgstr "势力颜色"
 
-#: src/frontend.cpp:1742
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1718
+#: src/frontend.cpp:1754
 msgid "Campaign"
 msgstr "情节"
 
-#: src/frontend.cpp:1752
-#: src/frontend.cpp:1779
+#: src/frontend.cpp:1728
+#: src/frontend.cpp:1755
 msgid "Skirmish/Multiplayer"
 msgstr "练习/多人"
 
-#: src/frontend.cpp:1758
-#: src/frontend.cpp:1774
+#: src/frontend.cpp:1734
+#: src/frontend.cpp:1750
 msgid "GAME OPTIONS"
 msgstr "游戏选项"
 
-#: src/frontend.cpp:1886
-#: src/multiint.cpp:2390
+#: src/frontend.cpp:1862
+#: src/multiint.cpp:2407
 msgid "Mod: "
 msgstr "Mod："
 
-#: src/hci.cpp:1169
+#: src/hci.cpp:1170
 #: src/loop.cpp:246
 #: src/loop.cpp:262
 msgid "GAME SAVED: "
 msgstr "游戏已储存"
 
-#: src/hci.cpp:1566
+#: src/hci.cpp:1567
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "玩家%u 利用作弊（除错）模式建立了一个新建筑物: %s."
 
-#: src/hci.cpp:1577
+#: src/hci.cpp:1578
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "玩家%u 利用作弊（除错）模式建立了一个新功能: %s."
 
-#: src/hci.cpp:1599
+#: src/hci.cpp:1600
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "玩家%u 利用作弊（除错）模式建立了一个新droid: %s."
 
-#: src/hci.cpp:1607
+#: src/hci.cpp:1608
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "玩家%u 利用作弊（除错）模式建立了一个新机器人"
 
-#: src/hci.cpp:2818
-#: src/multiint.cpp:1344
+#: src/hci.cpp:2819
+#: src/multiint.cpp:1360
 #: src/multimenu.cpp:770
 msgid "Power"
 msgstr "能源"
 
-#: src/hci.cpp:2999
+#: src/hci.cpp:3000
 msgid "Progress Bar"
 msgstr "进度条"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3530
 msgid "Hiding Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:3531
+#: src/hci.cpp:3532
 msgid "Showing Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:3543
+#: src/hci.cpp:3544
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
-#: src/hci.cpp:3545
+#: src/hci.cpp:3546
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
-#: src/hci.cpp:3625
+#: src/hci.cpp:3626
 msgid "Factory Delivery Point"
 msgstr "工厂单位产出点"
 
-#: src/hci.cpp:3634
+#: src/hci.cpp:3635
 msgid "Loop Production"
 msgstr "循环生产"
 
-#: src/hci.cpp:3832
+#: src/hci.cpp:3833
 msgid "Ally progress"
 msgstr "盟友进程"
 
-#: src/hci.cpp:3847
+#: src/hci.cpp:3848
 msgid "\n"
 "Cost: %1"
 msgstr ""
 
-#: src/hci.cpp:4946
+#: src/hci.cpp:4947
 msgid "Chat: All"
 msgstr ""
 
-#: src/hci.cpp:4951
+#: src/hci.cpp:4952
 msgid "Chat: Team"
 msgstr ""
 
@@ -16026,7 +16026,7 @@ msgid "Radar showing height"
 msgstr "雷达显示高度"
 
 #: src/keyedit.cpp:360
-#: src/multiint.cpp:1397
+#: src/multiint.cpp:1414
 #: src/titleui/gamefind.cpp:85
 #: src/titleui/protocol.cpp:87
 msgid "Return To Previous Screen"
@@ -16711,311 +16711,311 @@ msgstr ""
 msgid "Error while joining."
 msgstr ""
 
-#: src/multiint.cpp:1062
+#: src/multiint.cpp:1073
 msgid "Tanks disabled!!"
 msgstr "坦克被禁用"
 
-#: src/multiint.cpp:1063
+#: src/multiint.cpp:1074
 msgid "Cyborgs disabled."
 msgstr "生化人培养皿损坏"
 
-#: src/multiint.cpp:1064
+#: src/multiint.cpp:1075
 msgid "VTOLs disabled."
 msgstr "能见度低，VTOL 无法作用"
 
-#: src/multiint.cpp:1065
+#: src/multiint.cpp:1076
 msgid "Satellite Uplink disabled."
 msgstr "卫星上传受到干扰"
 
-#: src/multiint.cpp:1066
+#: src/multiint.cpp:1077
 msgid "Laser Satellite disabled."
 msgstr "激光卫星损坏"
 
-#: src/multiint.cpp:1067
+#: src/multiint.cpp:1078
 msgid "Structure Limits Enforced."
 msgstr ""
 
-#: src/multiint.cpp:1246
+#: src/multiint.cpp:1257
 msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
-#: src/multiint.cpp:1272
+#: src/multiint.cpp:1283
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
 msgstr ""
 
-#: src/multiint.cpp:1273
+#: src/multiint.cpp:1284
 msgid "One-Player Skirmish"
 msgstr "单人战役模式 "
 
-#: src/multiint.cpp:1280
+#: src/multiint.cpp:1291
 msgid "Select Game Name"
 msgstr "选择游戏名称"
 
-#: src/multiint.cpp:1291
+#: src/multiint.cpp:1302
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1292
+#: src/multiint.cpp:1303
 msgid "Map-Mod!"
 msgstr "地图-模式"
 
-#: src/multiint.cpp:1305
+#: src/multiint.cpp:1316
 msgid "Click to set Password"
 msgstr "点击设置密码"
 
-#: src/multiint.cpp:1314
+#: src/multiint.cpp:1330
 msgid "Select Player Name"
 msgstr "选择玩家名称"
 
-#: src/multiint.cpp:1334
+#: src/multiint.cpp:1350
 #: src/multimenu.cpp:759
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.cpp:1353
+#: src/multiint.cpp:1369
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.cpp:1362
+#: src/multiint.cpp:1378
 msgid "Map Preview"
 msgstr "预览地图"
 
-#: src/multiint.cpp:1363
+#: src/multiint.cpp:1379
 msgid "Click to see Map"
 msgstr "按一下看地图"
 
-#: src/multiint.cpp:1370
-#: src/multiint.cpp:1371
+#: src/multiint.cpp:1386
+#: src/multiint.cpp:1387
 msgid "Show Structure Limits"
 msgstr "显示建筑物数量限制"
 
-#: src/multiint.cpp:1370
-#: src/multiint.cpp:1371
+#: src/multiint.cpp:1386
+#: src/multiint.cpp:1387
 msgid "Set Structure Limits"
 msgstr "设定建筑物数量限制"
 
-#: src/multiint.cpp:1378
+#: src/multiint.cpp:1394
 msgid "Random Game Options"
 msgstr ""
 
-#: src/multiint.cpp:1379
+#: src/multiint.cpp:1395
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1387
-#: src/multiint.cpp:1388
+#: src/multiint.cpp:1404
+#: src/multiint.cpp:1405
 msgid "Start Hosting Game"
 msgstr "开始游戏"
 
-#: src/multiint.cpp:1449
+#: src/multiint.cpp:1466
 msgid "DIFFICULTY"
 msgstr "难度"
 
-#: src/multiint.cpp:1462
+#: src/multiint.cpp:1479
 msgid "Starts disadvantaged"
 msgstr ""
 
-#: src/multiint.cpp:1463
+#: src/multiint.cpp:1480
 msgid "Plays nice"
 msgstr "玩得好"
 
-#: src/multiint.cpp:1464
+#: src/multiint.cpp:1481
 msgid "No holds barred"
 msgstr "没有技巧限制的比赛"
 
-#: src/multiint.cpp:1465
+#: src/multiint.cpp:1482
 msgid "Starts with advantages"
 msgstr "开始时具规模基地"
 
-#: src/multiint.cpp:1502
+#: src/multiint.cpp:1519
 msgid "CHOOSE AI"
 msgstr "选择AI"
 
-#: src/multiint.cpp:1546
+#: src/multiint.cpp:1563
 msgid "Allow human players to join in this slot"
 msgstr "允许人类玩家加入"
 
-#: src/multiint.cpp:1553
+#: src/multiint.cpp:1570
 msgid "Leave this slot unused"
 msgstr "保持这个位置不被使用"
 
-#: src/multiint.cpp:2015
+#: src/multiint.cpp:2032
 msgid "Team"
 msgstr "队伍"
 
-#: src/multiint.cpp:2070
+#: src/multiint.cpp:2087
 msgid "Click to change difficulty"
 msgstr "点击这里更改难度"
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Waiting for player"
 msgstr "等待其他玩家"
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Player is ready"
 msgstr "玩家已准备"
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Player is downloading"
 msgstr ""
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Click when ready"
 msgstr "按一下开始"
 
-#: src/multiint.cpp:2085
+#: src/multiint.cpp:2102
 msgid "Waiting for download"
 msgstr ""
 
-#: src/multiint.cpp:2097
+#: src/multiint.cpp:2114
 msgid "READY?"
 msgstr "准备好了吗？"
 
-#: src/multiint.cpp:2139
+#: src/multiint.cpp:2156
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.cpp:2174
+#: src/multiint.cpp:2191
 msgid "Click to change to this slot"
 msgstr "点击这里跳到这个槽槽"
 
-#: src/multiint.cpp:2208
+#: src/multiint.cpp:2225
 msgid "Choose Team"
 msgstr "选择队伍"
 
-#: src/multiint.cpp:2212
+#: src/multiint.cpp:2229
 msgid "Teams locked"
 msgstr ""
 
-#: src/multiint.cpp:2238
+#: src/multiint.cpp:2255
 msgid "Click to change player colour"
 msgstr "点击这里更改玩家颜色"
 
-#: src/multiint.cpp:2263
+#: src/multiint.cpp:2280
 msgid "Click to change player position"
 msgstr "点击这里更改玩家位置"
 
-#: src/multiint.cpp:2270
+#: src/multiint.cpp:2287
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
-#: src/multiint.cpp:2285
+#: src/multiint.cpp:2302
 msgid "Player ID: "
 msgstr ""
 
-#: src/multiint.cpp:2292
+#: src/multiint.cpp:2309
 msgid "(none)"
 msgstr ""
 
-#: src/multiint.cpp:2360
+#: src/multiint.cpp:2377
 msgid "CHAT"
 msgstr "通讯"
 
-#: src/multiint.cpp:2835
+#: src/multiint.cpp:2852
 msgid "Game Name Updated."
 msgstr ""
 
-#: src/multiint.cpp:2948
+#: src/multiint.cpp:2968
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** 密码[%s]现在需要！***"
 
-#: src/multiint.cpp:2954
+#: src/multiint.cpp:2974
 msgid "*** password is NOT required! ***"
 msgstr "*** 不需要密码 ***"
 
-#: src/multiint.cpp:2968
+#: src/multiint.cpp:2988
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "这是一个模式地图，它可能不同于你以前的体验"
 
-#: src/multiint.cpp:3024
+#: src/multiint.cpp:3044
 msgid "Sorry! Failed to host the game."
 msgstr "对不起！本机无法作为游戏主要服务器"
 
-#: src/multiint.cpp:3180
-#: src/multiint.cpp:3270
+#: src/multiint.cpp:3200
+#: src/multiint.cpp:3290
 #: src/multimenu.cpp:1324
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "%s Was the winner of this war times ago,ignore."
 
-#: src/multiint.cpp:3327
+#: src/multiint.cpp:3347
 msgid "Host is Starting Game"
 msgstr "/Incoming Message/:Morning,force B,you should get out there,or you will be destroyed/Message Ends/"
 
-#: src/multiint.cpp:3537
+#: src/multiint.cpp:3557
 msgid "You have been kicked: "
 msgstr ""
 
-#: src/multiint.cpp:3549
+#: src/multiint.cpp:3569
 msgid "No connection to host."
 msgstr ""
 
-#: src/multiint.cpp:3686
+#: src/multiint.cpp:3707
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:3796
+#: src/multiint.cpp:3817
 msgid "The host has quit."
 msgstr ""
 
-#: src/multiint.cpp:3922
+#: src/multiint.cpp:3943
 msgid "UPnP has been enabled."
 msgstr "热插热拔网络设备被启用"
 
-#: src/multiint.cpp:3928
+#: src/multiint.cpp:3949
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:3932
+#: src/multiint.cpp:3953
 msgid "UPnP detection is in progress..."
 msgstr "热插热拔网络设备检测取得进展..."
 
-#: src/multiint.cpp:3939
+#: src/multiint.cpp:3960
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "热插热拔网络设备检测被禁用，自动化配置2100端口将不可用"
 
-#: src/multiint.cpp:3945
+#: src/multiint.cpp:3966
 msgid "Hit the ready box to begin your challenge!"
 msgstr "猛击方框开始你的挑战"
 
-#: src/multiint.cpp:3949
+#: src/multiint.cpp:3970
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "按下开始按钮来举行游戏"
 
-#: src/multiint.cpp:4030
+#: src/multiint.cpp:4051
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "点击这里获取玩家位置%d"
 
-#: src/multiint.cpp:4044
-#: src/multiint.cpp:4276
+#: src/multiint.cpp:4065
+#: src/multiint.cpp:4297
 msgid "Open"
 msgstr "打开"
 
-#: src/multiint.cpp:4044
-#: src/multiint.cpp:4277
+#: src/multiint.cpp:4065
+#: src/multiint.cpp:4298
 msgid "Closed"
 msgstr "关闭"
 
-#: src/multiint.cpp:4109
+#: src/multiint.cpp:4130
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "发送地图：%u%%"
 
-#: src/multiint.cpp:4109
+#: src/multiint.cpp:4130
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "地图：%u%%下载完成"
 
-#: src/multiint.cpp:4157
+#: src/multiint.cpp:4178
 msgid "HOST"
 msgstr "主玩家"
 
-#: src/multiint.cpp:4164
+#: src/multiint.cpp:4185
 #: src/multimenu.cpp:777
 msgid "Ping"
 msgstr ""
@@ -17289,6 +17289,14 @@ msgstr "紫外光"
 msgid "Brown"
 msgstr "棕色"
 
+#: src/notifications.cpp:696
+msgid "Dismiss"
+msgstr ""
+
+#: src/notifications.cpp:771
+msgid "Do not show again"
+msgstr ""
+
 #: src/order.cpp:776
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "无法进行此项操作！在使用Cyborg运输时必需作为Cyborg单位。"
@@ -17473,65 +17481,65 @@ msgstr ""
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:5428
+#: src/structure.cpp:5439
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 
-#: src/structure.cpp:5447
+#: src/structure.cpp:5458
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 
-#: src/structure.cpp:5452
-#: src/structure.cpp:5462
-#: src/structure.cpp:5469
-#: src/structure.cpp:5495
-#: src/structure.cpp:5504
-#: src/structure.cpp:5511
-#: src/structure.cpp:5519
+#: src/structure.cpp:5463
+#: src/structure.cpp:5473
+#: src/structure.cpp:5480
+#: src/structure.cpp:5506
+#: src/structure.cpp:5515
+#: src/structure.cpp:5522
+#: src/structure.cpp:5530
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5485
+#: src/structure.cpp:5496
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5640
-#: src/structure.cpp:5683
+#: src/structure.cpp:5651
+#: src/structure.cpp:5694
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s -电子伤害"
 
-#: src/structure.cpp:5808
+#: src/structure.cpp:5819
 msgid "Electronic Reward - Visibility Report"
 msgstr "电子回馈—可检视报告"
 
-#: src/structure.cpp:5847
+#: src/structure.cpp:5858
 msgid "Factory Reward - Propulsion"
 msgstr "工厂奖励—推进动力"
 
-#: src/structure.cpp:5869
+#: src/structure.cpp:5880
 msgid "Factory Reward - Body"
 msgstr "工厂奖励—车身"
 
-#: src/structure.cpp:5891
+#: src/structure.cpp:5902
 msgid "Factory Reward - Weapon"
 msgstr "工厂奖励—武器"
 
-#: src/structure.cpp:5899
+#: src/structure.cpp:5910
 msgid "Factory Reward - Nothing"
 msgstr "工厂奖励—无"
 
-#: src/structure.cpp:5926
+#: src/structure.cpp:5937
 msgid "Repair Facility Award - Repair"
 msgstr "修理中心奖励—修理"
 
-#: src/structure.cpp:5932
+#: src/structure.cpp:5943
 msgid "Repair Facility Award - Nothing"
 msgstr "修理工厂回馈—无"
 
@@ -17708,6 +17716,23 @@ msgstr "运输空间不足！"
 #: src/transporter.cpp:1161
 msgid "Reinforcements landing"
 msgstr "援军已降落"
+
+#: src/updatemanager.cpp:238
+msgid "Update Available"
+msgstr ""
+
+#: src/updatemanager.cpp:241
+#, c-format
+msgid "A new build of Warzone 2100 (%s) is available!"
+msgstr ""
+
+#: src/updatemanager.cpp:245
+msgid "A new build of Warzone 2100 is available!"
+msgstr ""
+
+#: src/updatemanager.cpp:247
+msgid "Get Update Now"
+msgstr ""
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:115
