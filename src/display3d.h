@@ -28,7 +28,7 @@
 #include "objectdef.h"
 #include "message.h"
 
-#define HEIGHT_TRACK_INCREMENTS (250)
+#define HEIGHT_TRACK_INCREMENTS (50)
 
 /*!
  * Special tile types
