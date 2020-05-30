@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-09 04:42+0000\n"
-"PO-Revision-Date: 2020-05-29 17:06\n"
+"PO-Revision-Date: 2020-05-30 16:10\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -28,7 +28,7 @@ msgstr "Establece una base, después busca una estructura anterior al Colapso."
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Esta estructura contiene tecnología vital para el éxito del Proyecto"
+msgstr "Esta estructura contiene tecnología vital para el éxito del Proyecto."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -318,7 +318,7 @@ msgstr "¡La tecnología de enlace sináptico ha sido recuperada!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Investigaciones iniciales confirman que será un gran beneficio para el Proyecto"
+msgstr "Investigaciones iniciales confirman que será un gran beneficio para el Proyecto."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -342,7 +342,7 @@ msgstr "ARTEFACTO DE MÓDULO DE ENERGÍA"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr "investigar el artefacto de módulo de energía."
+msgstr "Investigar el artefacto de módulo de energía."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
@@ -473,7 +473,7 @@ msgstr "Mantén las posiciones y repele estos ataques, después erradica la base
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr "MISIÓN DE TRANSPORTE: Interceptar el convoy"
+msgstr "MISIÓN DE TRANSPORTE: Interceptar el convoy."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
@@ -523,7 +523,7 @@ msgstr "Probablemente habrá ADVs enemigos volando escoltando cerca."
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "MISIÓN DE TRANPORTE: Rescatar civiles del Campo de Concentración."
+msgstr "MISIÓN DE TRANPORTE: Rescatar civiles del Campo de Concentración"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
@@ -611,7 +611,7 @@ msgstr "Captura la central de ADENA antes de que NEXUS y el Colectivo puedan usa
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "MISIÓN DE TRANSPORTE: Lugar del Enlace al Satélite."
+msgstr "MISIÓN DE TRANSPORTE: Lugar del Enlace al Satélite"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -1192,7 +1192,7 @@ msgstr "Demoler"
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:3926
 msgid "Naval"
-msgstr ""
+msgstr "Naval"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -1539,12 +1539,12 @@ msgstr "Mejora de ADV CB"
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "Mejora de CB ADV Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "Mejora de CB ADV Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -4027,7 +4027,7 @@ msgstr "Fabricación (F1)"
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/skirmish/rules.js:91
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Fabricación - construye una fábrica"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
@@ -4040,7 +4040,7 @@ msgstr "Investigación (F2)"
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "Investigación - construye una instalación de investigación"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4129,7 +4129,7 @@ msgstr "La torre de perforación está actualmente parada. Construye un generado
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "Haz click izquierdo en el icono de construcción parpadeante"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -4302,7 +4302,7 @@ msgstr "En vuelo hacia el Sector Oeste"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr "El Equipo Alfa se aproxima a su destino."
+msgstr "El Equipo Alfa se aproxima a su destino"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4346,7 +4346,7 @@ msgstr "Mayday! Maybay!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr "¡Ayuda, por favor!"
+msgstr "¡Ayuda, por favor!..."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
@@ -4368,7 +4368,7 @@ msgstr "Tus ataques hacia nosotros no quedarán sin castigo."
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr "Estás en contra del Nuevo Paradigma"
+msgstr "Estás en contra del Nuevo Paradigma."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -4376,7 +4376,7 @@ msgstr "Todos los grupos de ataque, comenzad el ataque al enemigo."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr "Ellos están en contra del Nuevo Paradigma"
+msgstr "Ellos están en contra del Nuevo Paradigma."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
@@ -4388,7 +4388,7 @@ msgstr "Asegura la ZA y establece una base avanzada."
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
-msgstr "Y entonces destruir la base del Nuevo Paradigma"
+msgstr "Y entonces destruir la base del Nuevo Paradigma."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
@@ -4473,7 +4473,7 @@ msgstr "Lo que es más importante, el desarrollo del enlace sináptico, hizo pos
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:12
 msgid "The synaptic link allowed soldiers to be placed in power suits that they controlled as easily as their own bodies. Power suits allowed infantry to function effectively on the battlefields of the 21st Century."
-msgstr "El enlace sináptico permitió a los soldados ser colocados en tecno-armaduras que controlaron casi tan fácilmente como sus propios cuerpos. Los tecno-trajes permitieron a la infantería actuar de forma efectiva en los campos de batalla del siglo XXI"
+msgstr "El enlace sináptico permitió a los soldados ser colocados en tecno-armaduras que controlaron casi tan fácilmente como sus propios cuerpos. Los tecno-trajes permitieron a la infantería actuar de forma efectiva en los campos de batalla del siglo XXI."
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
 msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
@@ -4581,7 +4581,7 @@ msgstr "Estás para iniciar la inmediata evacuación de la Base Beta al refugio.
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:1
 msgid "NASDA is the North American Strategic Defense Agency."
-msgstr "La ADENA es la Agencia de Defensa Estratégica de Norte América"
+msgstr "La ADENA es la Agencia de Defensa Estratégica de Norte América."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:3
 msgid "NASDA was formed in 2076 to defend North America from conventional and nuclear attack. The construction of a satellite defense system began in 2081 and was completed in 2082."
@@ -5102,7 +5102,7 @@ msgstr "Ahora, es tiempo de usarlas para reconstruir el mundo."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
-msgstr "Lentamente, fuera de los escombros, nos levantaremos de nuevo"
+msgstr "Lentamente, fuera de los escombros, nos levantaremos de nuevo..."
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtMGWheels.name
@@ -5502,7 +5502,7 @@ msgstr "FÁCIL"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "MEDIO"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
@@ -5514,11 +5514,11 @@ msgstr "INSANO"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
-msgstr ""
+msgstr "Cambio de personalidad exitoso."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:91
 msgid "No such personality! Try one of these:"
-msgstr ""
+msgstr "¡No existe esa personalidad! Prueba las siguientes:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:97
 msgid "Forced research cleared, will research anything I want now."
@@ -5526,39 +5526,39 @@ msgstr "Investigación forzosa liberada, investigaré lo que quiera ahora."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Investigación bloqueada, no investigaré nada."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Investigando tecnología fundamental."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr ""
+msgstr "Investigando "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
-msgstr ""
+msgstr "¡No existe esa investigación! Prueba las siguientes:"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Lo siento, no tengo camiones."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
-msgstr ""
+msgstr "Puedes usar este."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:127
 msgid "Sorry, droid transfer failed."
-msgstr ""
+msgstr "Lo siento, falló la transferencia de drone."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "Energía transferida."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
-msgstr ""
+msgstr "¡Por favor pon una baliza!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
@@ -5566,7 +5566,7 @@ msgstr "¡En camino!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "Lo siento, ¡no tengo fuerzas disponibles para ayudar!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
@@ -5601,7 +5601,7 @@ msgstr "Equipos Fijos"
 #: data/mp/multiplay/skirmish/rules.js:38
 #: src/multiint.cpp:1353
 msgid "Locked Teams, No Shared Research"
-msgstr ""
+msgstr "Equipos Bloqueados, Sin Investigación Compartida"
 
 #: data/mp/multiplay/skirmish/rules.js:44
 #: src/multiint.cpp:1361
@@ -5663,7 +5663,7 @@ msgstr "Puerto (%s) configurado correctamente en (%s)\n"
 
 #: lib/netplay/netplay.cpp:1856
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
+msgstr "Dispositivo UPnP no encontrado. ¡Configura to router/cortafuegos para abrir el puerto 2100!"
 
 #: lib/netplay/netplay.cpp:2201
 #, c-format
@@ -6958,7 +6958,7 @@ msgstr "Volvemos a lo Básico"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1047
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "basado en la IA original, para principiantes"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -10170,7 +10170,7 @@ msgstr "Torreta de Interferencia"
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3327
 msgid "Jeep"
-msgstr ""
+msgstr "Jeep"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[3]
@@ -10394,13 +10394,13 @@ msgstr "Mejora Láser"
 #. data/base/stats/features.json: $.Laseropticslab.name
 #: po/custom/fromJson.txt:3463
 msgid "Laseropticslab"
-msgstr ""
+msgstr "Laboratorio De Óptica Láser"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3466
 msgid "LasSat"
-msgstr ""
+msgstr "Satélite Láser"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -10609,7 +10609,7 @@ msgstr "Le hace un excelente vehículo de exploración"
 #. data/mp/stats/body.json: $.Body12SUP.name
 #: po/custom/fromJson.txt:3624
 msgid "Mantis"
-msgstr ""
+msgstr "Mantis"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MassDriver.name
@@ -10634,7 +10634,7 @@ msgstr "Armadura y puntos estructurales máximos"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
 #: po/custom/fromJson.txt:3649
 msgid "May be assigned to follow units"
-msgstr ""
+msgstr "Se puede asignar para seguir a unidades"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[1]
@@ -11073,7 +11073,7 @@ msgstr "Multi-cañón, ametralladora de fuego rápido"
 #. data/base/stats/features.json: $.Nanolab.name
 #: po/custom/fromJson.txt:3920
 msgid "Nanolab"
-msgstr ""
+msgstr "Nanolaboratorio"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
@@ -11343,7 +11343,7 @@ msgstr "Nuevo Sistema Disponible"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4154
 msgid "New Systems Sensor Available"
-msgstr ""
+msgstr "Nuevo Sistema de Sensor Disponible"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
@@ -11485,25 +11485,25 @@ msgstr ""
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4252
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Sin Lugar Para Esconderse"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4255
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Sin trampas. Difícil. Divertido ¡Aplastar!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
 #: po/custom/fromJson.txt:4261
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "Los objetos se vuelven difíciles de detectar cerca suyo"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ResourceExtractor.name
@@ -11566,13 +11566,13 @@ msgstr "Ordena al fuego indirecto asignado disparar a las baterías enemigas"
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4308
 msgid "Original Campaign"
-msgstr ""
+msgstr "Campaña Original"
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
 #: po/custom/fromJson.txt:4311
 msgid "Original Skirmish"
-msgstr ""
+msgstr "Escaramuza Original"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body6SUPP.name
@@ -11595,7 +11595,7 @@ msgstr "Foso Pepperpot"
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4325
 msgid "Pepperpot"
-msgstr ""
+msgstr "Pepperpot"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -11789,7 +11789,7 @@ msgstr "Poderosa arma de Pulsos Electromagnéticos"
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4432
 msgid "Powerlab"
-msgstr ""
+msgstr "Laboratorio de Energía"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -11803,14 +11803,14 @@ msgstr "Produce Cyborgs"
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 #: po/custom/fromJson.txt:4450
 msgid "Project Heavy Body"
-msgstr ""
+msgstr "Proyecto de Cuerpo Pesado"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[0]
 #: po/custom/fromJson.txt:4454
 msgid "Project Light Body"
-msgstr ""
+msgstr "Proyecto de Cuerpo Ligero"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[0]
@@ -11830,7 +11830,7 @@ msgstr "Gel Óxido de Propileno tratado para arder a temperaturas más altas"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.tip
 #: po/custom/fromJson.txt:4470
 msgid "Prototypical AI focusing on rockets/missiles"
-msgstr ""
+msgstr "AI Prototipo enfocada en cohetes/misiles"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PulseLas.name
@@ -11935,7 +11935,7 @@ msgstr "Lanzamisiles que permiten recarga rápida"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[2]
 #: po/custom/fromJson.txt:4536
 msgid "Radar detector detects enemy sensors"
-msgstr ""
+msgstr "Radar que detecta sensores enemigos"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
@@ -12128,7 +12128,7 @@ msgstr "Materiales Estructurales Reforzados"
 #. data/mp/stats/ecm.json: $.RepairCentre.name
 #: po/custom/fromJson.txt:4664
 msgid "Repair Center Turret"
-msgstr ""
+msgstr "Torreta de Reparación"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12545,7 +12545,7 @@ msgstr "Mortero Rotatorio - Pepperpot"
 #. data/base/stats/features.json: $.Rotarywepslab.name
 #: po/custom/fromJson.txt:4949
 msgid "Rotaryweaponslab"
-msgstr ""
+msgstr "Laboratorio de Armas Rotatorias"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbTechRuin.name
@@ -12733,7 +12733,7 @@ msgstr "Torreta de Interferencia"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5060
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "IA naval, basada en NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -12766,7 +12766,7 @@ msgstr "Producción Auto-Replicante"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -12883,13 +12883,13 @@ msgstr "Más lento que Pitón"
 #. data/base/stats/features.json: $.WallCornerSmashed.name
 #: po/custom/fromJson.txt:5167
 msgid "Smashedcornerwall"
-msgstr ""
+msgstr "Esquina derribada"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallSmashed.name
 #: po/custom/fromJson.txt:5170
 msgid "Smashedwall"
-msgstr ""
+msgstr "Muro Derribado"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[2]
@@ -13446,7 +13446,7 @@ msgstr "Hormigón reforzado con Titanio"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
 #: po/custom/fromJson.txt:5544
 msgid "Tower wars AI, based on NullBot"
-msgstr ""
+msgstr "IA de Torres, basada en NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Tracks.name
@@ -13500,7 +13500,7 @@ msgstr "Transporte"
 #. data/mp/stats/templates.json: $.BarbarianTrike.name
 #: po/custom/fromJson.txt:5576
 msgid "Trike"
-msgstr ""
+msgstr "Triciclo"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
@@ -13568,7 +13568,7 @@ msgstr "Motor Turbo Mk3"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.name
 #: po/custom/fromJson.txt:5624
 msgid "Turtle AI"
-msgstr ""
+msgstr "IA Tortuga"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG2MK1.text[1]
@@ -13668,7 +13668,7 @@ msgstr "Doble Ametralladora de fuego rápido Multi-cañón"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5686
 msgid "Two-faced"
-msgstr ""
+msgstr "Doble-cara"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -13723,7 +13723,7 @@ msgstr "Usa la Consola de Comandos para enviar unidades a reparar"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[1]
 #: po/custom/fromJson.txt:5717
 msgid "Uses advanced cannon technology"
-msgstr "usa tecnología avanzada de cañón"
+msgstr "Usa tecnología avanzada de cañón"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text[1]
@@ -13747,7 +13747,7 @@ msgstr "Usa tecnología avanzada de cohetes"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
 #: po/custom/fromJson.txt:5729
 msgid "Uses the Heavy Plasma Launcher"
-msgstr ""
+msgstr "Utiliza el Lanzador de Plasma Pesado"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
@@ -14262,13 +14262,13 @@ msgstr "ADV"
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6079
 msgid "Wall"
-msgstr ""
+msgstr "Muro"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
 #: po/custom/fromJson.txt:6082
 msgid "Wallcorner"
-msgstr ""
+msgstr "Esquina de Muro"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbWarehouse1.name
@@ -14415,7 +14415,7 @@ msgstr "Héroe"
 #: po/custom/fromJson.txt:6165
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "Profesional"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14423,7 +14423,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6169
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "Regular"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14431,7 +14431,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6173
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Novato"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14439,7 +14439,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6177
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Especial"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14447,7 +14447,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6181
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Entrenado"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14455,7 +14455,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6185
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veterano"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -14466,7 +14466,7 @@ msgstr "Copyright © 1999-2004 Eidos Interactive.\n"
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14486,7 +14486,7 @@ msgstr "Archivo Mod Global Warzone2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14522,7 +14522,7 @@ msgstr "¡El modo de depuración está desactivado!"
 #: src/clparse.cpp:86
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "Uso: %s [OPCION...]\n"
 
 #: src/clparse.cpp:258
 msgid "Set configuration directory"
@@ -14566,15 +14566,15 @@ msgstr "Jugar en modo a pantalla completa"
 
 #: src/clparse.cpp:264
 msgid "Load a specific game mode"
-msgstr ""
+msgstr "Cargar un modo de juego específico"
 
 #: src/clparse.cpp:264
 msgid "level name"
-msgstr ""
+msgstr "nombre de nivel"
 
 #: src/clparse.cpp:265
 msgid "Show options and exit"
-msgstr ""
+msgstr "Mostrar opciones y salir"
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -14584,7 +14584,7 @@ msgstr "Habilitar mod global"
 #: src/clparse.cpp:267
 #: src/clparse.cpp:268
 msgid "mod"
-msgstr ""
+msgstr "mod"
 
 #: src/clparse.cpp:267
 msgid "Enable a campaign only mod"
@@ -14604,7 +14604,7 @@ msgstr "Provoca una colisión para probar el cliente de colisiones"
 
 #: src/clparse.cpp:271
 msgid "Load a saved skirmish game"
-msgstr ""
+msgstr "Cargar una partida de escaramuza"
 
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
@@ -14613,7 +14613,7 @@ msgstr ""
 
 #: src/clparse.cpp:272
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "Cargar una partida de campaña"
 
 #: src/clparse.cpp:273
 msgid "Play in windowed mode"
@@ -14653,7 +14653,7 @@ msgstr "Conectar por IP directa/hostname"
 
 #: src/clparse.cpp:280
 msgid "host"
-msgstr "Dominio"
+msgstr "anfitrión"
 
 #: src/clparse.cpp:281
 msgid "Go directly to host screen"
@@ -14669,7 +14669,7 @@ msgstr "Desactivar compresión de texturas"
 
 #: src/clparse.cpp:284
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "Ejecutar partidas automáticas para testear"
 
 #: src/clparse.cpp:285
 msgid "Immediately save game and quit"
@@ -14677,15 +14677,15 @@ msgstr "Guardar partida inmediatamente y salir"
 
 #: src/clparse.cpp:285
 msgid "save name"
-msgstr ""
+msgstr "nombre de guardado"
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "Iniciar escaramuza con fichero de configuración"
 
 #: src/clparse.cpp:286
 msgid "test"
-msgstr ""
+msgstr "test"
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
@@ -14693,11 +14693,11 @@ msgstr "Continuar la última partida guardada"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
-msgstr ""
+msgstr "Hostear partida con fichero de configuración"
 
 #: src/clparse.cpp:288
 msgid "autohost"
-msgstr ""
+msgstr "autohost"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14858,7 +14858,7 @@ msgstr "No Guardar Diseño"
 
 #: src/design.cpp:4288
 msgid "Store Design"
-msgstr ""
+msgstr "Guardar Diseño"
 
 #: src/display.cpp:1537
 msgid "Cannot Build. Oil Resource Burning."
@@ -14894,7 +14894,7 @@ msgstr "Desincronizado"
 #: src/display3d.cpp:1911
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr ""
+msgstr "Fijando Zoom a %.0f"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:248
@@ -14936,7 +14936,7 @@ msgstr[1] "Alineando con el Grupo %u - %u Unidades"
 
 #: src/droid.cpp:3055
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "Transferencia de unidad fallida -- límite de unidades excedido"
 
 #: src/frontend.cpp:139
 msgid "Single Player"
@@ -14949,7 +14949,7 @@ msgstr "Juego Multijugador"
 #: src/frontend.cpp:141
 #: src/frontend.cpp:285
 msgid "Tutorial"
-msgstr ""
+msgstr "Tutorial"
 
 #: src/frontend.cpp:142
 #: src/ingameop.cpp:243
@@ -14963,7 +14963,7 @@ msgstr "Ver Intro"
 
 #: src/frontend.cpp:151
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr ""
+msgstr "Faltan los vídeos, descárgalos de http://wz2100.net"
 
 #: src/frontend.cpp:156
 #: src/frontend.cpp:160
@@ -14972,7 +14972,7 @@ msgstr "Continuar último guardado"
 
 #: src/frontend.cpp:161
 msgid "No last save available"
-msgstr ""
+msgstr "No hay último guardado"
 
 #: src/frontend.cpp:163
 msgid "Quit Game"
@@ -15187,7 +15187,7 @@ msgstr "Fijo"
 
 #: src/frontend.cpp:747
 msgid "Instant"
-msgstr ""
+msgstr "Instantáneo"
 
 #: src/frontend.cpp:747
 msgid "Tracked"
@@ -15216,12 +15216,12 @@ msgstr "Sombras"
 #: src/frontend.cpp:778
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.cpp:782
 #: src/ingameop.cpp:542
 msgid "Radar Jump"
-msgstr ""
+msgstr "Salto de Radar"
 
 #: src/frontend.cpp:786
 msgid "GRAPHICS OPTIONS"
@@ -15266,15 +15266,15 @@ msgstr "Tu dispositivo / sistema / librería OpenAL no soporta HRTF"
 
 #: src/frontend.cpp:951
 msgid "Map Zoom"
-msgstr ""
+msgstr "Zoom de Mapa"
 
 #: src/frontend.cpp:955
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "Ratio de Zoom de Mapa"
 
 #: src/frontend.cpp:959
 msgid "Radar Zoom"
-msgstr ""
+msgstr "Zoom de Radar"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15302,7 +15302,7 @@ msgstr "Resolución*"
 
 #: src/frontend.cpp:1116
 msgid "Resolution"
-msgstr ""
+msgstr "Resolución"
 
 #: src/frontend.cpp:1121
 msgid "Display Scale*"
@@ -15314,7 +15314,7 @@ msgstr "Escalado de Interfaz"
 
 #: src/frontend.cpp:1165
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
-msgstr ""
+msgstr "Puedes cambiar la resolución redimensionando la ventana. (Prueba arrastrar una esquina / borde.)"
 
 #: src/frontend.cpp:1197
 msgid "* Takes effect on game restart"
@@ -15335,7 +15335,7 @@ msgstr "Antialias*"
 
 #: src/frontend.cpp:1223
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr ""
+msgstr "Atención: El antialias puede causar crashes, especialmente con valores > 16"
 
 #: src/frontend.cpp:1234
 msgid "VIDEO OPTIONS"
@@ -15351,7 +15351,7 @@ msgstr "Botón derecho"
 
 #: src/frontend.cpp:1533
 msgid "Map/Radar Zoom"
-msgstr ""
+msgstr "Zoom de Mapa/Radar"
 
 #: src/frontend.cpp:1534
 msgid "Game Speed"
@@ -15389,7 +15389,7 @@ msgstr "Cursores Coloreados"
 #: src/frontend.cpp:1572
 #: src/ingameop.cpp:725
 msgid "Scroll Event"
-msgstr ""
+msgstr "Desplazar Evento"
 
 #: src/frontend.cpp:1576
 msgid "MOUSE OPTIONS"
@@ -15402,7 +15402,7 @@ msgstr "Fácil"
 
 #: src/frontend.cpp:1653
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: src/frontend.cpp:1654
 #: src/multiint.cpp:223
@@ -15432,7 +15432,7 @@ msgstr "Velocidad de Cámara"
 #: src/frontend.cpp:1698
 #: src/frontend.cpp:1753
 msgid "Unit Colour:"
-msgstr "Color de las unidades"
+msgstr "Color de las unidades:"
 
 #: src/frontend.cpp:1718
 #: src/frontend.cpp:1754
@@ -15452,7 +15452,7 @@ msgstr "OPCIONES DE JUEGO"
 #: src/frontend.cpp:1862
 #: src/multiint.cpp:2407
 msgid "Mod: "
-msgstr "Mod:"
+msgstr "Mod: "
 
 #: src/hci.cpp:1170
 #: src/loop.cpp:246
@@ -15496,17 +15496,19 @@ msgstr "Ocultando Tecnología Obsoleta"
 
 #: src/hci.cpp:3532
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Mostrando Tecnología Obsoleta"
 
 #: src/hci.cpp:3544
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Mostrando Toda la Tecnología\n"
+"Click derecho para añadir a favoritos"
 
 #: src/hci.cpp:3546
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Mostrando Solo la Tecnología Favorita\n"
+"Click derecho para quitar de favoritos"
 
 #: src/hci.cpp:3626
 msgid "Factory Delivery Point"
@@ -15584,7 +15586,7 @@ msgstr "¡El anfitrión ha abandonado la partida!"
 
 #: src/ingameop.cpp:348
 msgid "The game can't continue without the host."
-msgstr "La partida no puede continuar sin el anfitrión"
+msgstr "La partida no puede continuar sin el anfitrión."
 
 #: src/ingameop.cpp:354
 msgid "-->  QUIT  <--"
@@ -15596,7 +15598,7 @@ msgstr "Opciones de Audio"
 
 #: src/ingameop.cpp:494
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Ver Mapeos de Teclas"
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
@@ -15787,20 +15789,20 @@ msgstr "¡Excelente, la pantalla del sensor está apagada!"
 
 #: src/keybind.cpp:326
 msgid "View Aligned to South"
-msgstr ""
+msgstr "Vista Alineada al Sur"
 
 #: src/keybind.cpp:336
 msgid "View Aligned to East"
-msgstr ""
+msgstr "Vista Alineada al Este"
 
 #: src/keybind.cpp:346
 msgid "View Aligned to West"
-msgstr ""
+msgstr "Vista Alineada al Oeste"
 
 #: src/keybind.cpp:411
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr ""
+msgstr "Jugador %u está haciendo trampas con ejército de: %d x %s."
 
 #: src/keybind.cpp:510
 #: src/keybind.cpp:540
@@ -15883,7 +15885,7 @@ msgstr "Niebla desactivada"
 #: src/keybind.cpp:922
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr ""
+msgstr "Fijado zoom de radar a %u"
 
 #: src/keybind.cpp:1311
 msgid "God Mode ON"
@@ -15908,7 +15910,7 @@ msgstr "¡Investigado TODO para ti!"
 
 #: src/keybind.cpp:1458
 msgid "Selected buildings instantly recharged!"
-msgstr ""
+msgstr "¡Edificios seleccionados recargados instantáneamente!"
 
 #: src/keybind.cpp:1499
 #, c-format
@@ -15965,11 +15967,11 @@ msgstr "¡Destruyendo los droides y estructuras seleccionados!"
 
 #: src/keybind.cpp:2313
 msgid "Reveal OFF"
-msgstr ""
+msgstr "Mostrar APAGADO"
 
 #: src/keybind.cpp:2318
 msgid "Reveal ON"
-msgstr ""
+msgstr "Mostrar ENCENDIDO"
 
 #: src/keybind.cpp:2399
 msgid "Centered on player HQ, direction NORTH"
@@ -16076,7 +16078,7 @@ msgstr "Comandantes"
 
 #: src/keymap.cpp:307
 msgid "QuickSave"
-msgstr ""
+msgstr "Guardado Rápido"
 
 #: src/keymap.cpp:308
 msgid "Toggle Radar"
@@ -16084,7 +16086,7 @@ msgstr "Alternar Radar"
 
 #: src/keymap.cpp:309
 msgid "QuickLoad"
-msgstr ""
+msgstr "Carga Rápida"
 
 #: src/keymap.cpp:310
 msgid "Toggle Console Display"
@@ -16236,19 +16238,19 @@ msgstr "Opciones Multijugador / Ventana de alianzas"
 
 #: src/keymap.cpp:361
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Mover Cámara Arriba"
 
 #: src/keymap.cpp:362
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Mover Cámara Abajo"
 
 #: src/keymap.cpp:363
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Mover Cámara a la Derecha"
 
 #: src/keymap.cpp:364
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Mover Cámara a la Izquierda"
 
 #: src/keymap.cpp:365
 msgid "Snap View to North"
@@ -16356,11 +16358,11 @@ msgstr "Alternar Capas"
 
 #: src/keymap.cpp:391
 msgid "Toggle Console History "
-msgstr ""
+msgstr "Mostrar Historial de Consola "
 
 #: src/keymap.cpp:392
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Mostrar Historial de Chat de Equipo"
 
 #: src/keymap.cpp:395
 msgid "Center View on HQ"
@@ -16380,15 +16382,15 @@ msgstr "Volver al CG"
 
 #: src/keymap.cpp:408
 msgid "Stop Droid"
-msgstr ""
+msgstr "Detener Droide"
 
 #: src/keymap.cpp:411
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "Enviar Mensaje de Texto Global"
 
 #: src/keymap.cpp:412
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "Enviar Mensaje de Texto de Equipo"
 
 #: src/keymap.cpp:413
 msgid "Drop a beacon"
@@ -16412,7 +16414,7 @@ msgstr "Cambiar a radar aliado-enemigo"
 
 #: src/keymap.cpp:419
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Mostrar todos los mapeos de teclas"
 
 #: src/keymap.cpp:428
 msgid "Select all Combat Units"
@@ -16452,7 +16454,7 @@ msgstr "Seleccionar todos los ADVs"
 
 #: src/keymap.cpp:438
 msgid "Select all fully-armed VTOLs"
-msgstr ""
+msgstr "Seleccionar todos los VTOL rearmados"
 
 #: src/keymap.cpp:439
 msgid "Select all Wheels"
@@ -16464,7 +16466,7 @@ msgstr "Mostrar FPS"
 
 #: src/keymap.cpp:441
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Seleccionar todas las unidades con los mismos componentes"
 
 #: src/keymap.cpp:445
 msgid "Select all Combat Cyborgs"
@@ -16524,7 +16526,7 @@ msgstr "Mostrar ruta de droide"
 
 #: src/keymap.cpp:464
 msgid "Toggle display of gateways"
-msgstr "Mostrar "
+msgstr "Mostrar entradas"
 
 #: src/keymap.cpp:465
 msgid "Toggle visibility"
@@ -16552,7 +16554,7 @@ msgstr "Invertir triángulo de terreno"
 
 #: src/keymap.cpp:471
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "Hacer un muestreo de rendimiento"
 
 #: src/keymap.cpp:474
 msgid "Make all items available"
@@ -16576,15 +16578,15 @@ msgstr "Completar la siguiente investigación"
 
 #: src/keymap.cpp:479
 msgid "Reveal map at mouse position"
-msgstr ""
+msgstr "Descubrir mapa en posición del ratón"
 
 #: src/keymap.cpp:480
 msgid "Trace a game object"
-msgstr "Rastrear un objeto del juego."
+msgstr "Rastrear un objeto del juego"
 
 #: src/loadsave.cpp:311
 msgid "Parent directory"
-msgstr ""
+msgstr "Directorio Padre"
 
 #: src/loadsave.cpp:316
 msgid "Autosave directory"
@@ -16641,7 +16643,7 @@ msgstr "PARTIDA GUARDADA :"
 #: src/move.cpp:1981
 #, c-format
 msgid "You found %u power in an oil drum."
-msgstr "Encontraste %u de energía en un barril de petróleo"
+msgstr "Encontraste %u de energía en un barril de petróleo."
 
 #: src/multigifts.cpp:221
 #, c-format
@@ -16705,11 +16707,11 @@ msgstr "Comandante"
 
 #: src/multiint.cpp:748
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "FALTA NOMBRE DE IA"
 
 #: src/multiint.cpp:773
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "FALTA DESCRIPCION DE IA"
 
 #: src/multiint.cpp:787
 #, c-format
@@ -16742,11 +16744,11 @@ msgstr "Satélite Láser Deshabilitado."
 
 #: src/multiint.cpp:1078
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Forzando Límites de Estructuras."
 
 #: src/multiint.cpp:1257
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "No hay suficientes votos para aleatorizar o cambiar mapa."
 
 #: src/multiint.cpp:1283
 #: src/titleui/gamefind.cpp:579
@@ -16764,11 +16766,12 @@ msgstr "Elegir Nombre de la Partida"
 #: src/multiint.cpp:1302
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Selección de Mapa\n"
+"Puede ser bloqueado por votación de los jugadores"
 
 #: src/multiint.cpp:1303
 msgid "Map-Mod!"
-msgstr ""
+msgstr "¡Mod de Mapa!"
 
 #: src/multiint.cpp:1316
 msgid "Click to set Password"
@@ -16807,12 +16810,13 @@ msgstr "Fijar Límites de Estructuras"
 
 #: src/multiint.cpp:1394
 msgid "Random Game Options"
-msgstr ""
+msgstr "Opciones de Juego Aleatorias"
 
 #: src/multiint.cpp:1395
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Opciones de Juego Aleatorias\n"
+"Puede ser bloqueado por votación de los jugadores"
 
 #: src/multiint.cpp:1404
 #: src/multiint.cpp:1405
@@ -16825,7 +16829,7 @@ msgstr "DIFICULTAD"
 
 #: src/multiint.cpp:1479
 msgid "Starts disadvantaged"
-msgstr ""
+msgstr "Comienza en desventaja"
 
 #: src/multiint.cpp:1480
 msgid "Plays nice"
@@ -16869,7 +16873,7 @@ msgstr "El Jugador está listo"
 
 #: src/multiint.cpp:2102
 msgid "Player is downloading"
-msgstr ""
+msgstr "El Jugador está descargando"
 
 #: src/multiint.cpp:2102
 msgid "Click when ready"
@@ -16877,7 +16881,7 @@ msgstr "Click cuando esté listo"
 
 #: src/multiint.cpp:2102
 msgid "Waiting for download"
-msgstr ""
+msgstr "Esperando descarga"
 
 #: src/multiint.cpp:2114
 msgid "READY?"
@@ -16897,7 +16901,7 @@ msgstr "Elegir equipo"
 
 #: src/multiint.cpp:2229
 msgid "Teams locked"
-msgstr ""
+msgstr "Equipos bloqueados"
 
 #: src/multiint.cpp:2255
 msgid "Click to change player colour"
@@ -16913,7 +16917,7 @@ msgstr "Clic para cambiar IA, clic derecho para distribuír la elección"
 
 #: src/multiint.cpp:2302
 msgid "Player ID: "
-msgstr ""
+msgstr "ID Jugador: "
 
 #: src/multiint.cpp:2309
 msgid "(none)"
@@ -16938,11 +16942,11 @@ msgstr "*** ¡contraseña NO requerida! ***"
 
 #: src/multiint.cpp:2988
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
+msgstr "Este es un mod, ¡puede cambiar tu experiencia de juego!"
 
 #: src/multiint.cpp:3044
 msgid "Sorry! Failed to host the game."
-msgstr "¡Lo sentimos! No se pudo hospedar la partida"
+msgstr "¡Lo sentimos! No se pudo hospedar la partida."
 
 #: src/multiint.cpp:3200
 #: src/multiint.cpp:3290
@@ -16957,11 +16961,11 @@ msgstr "Anfitrión Comenzando Partida"
 
 #: src/multiint.cpp:3557
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Has sido expulsado: "
 
 #: src/multiint.cpp:3569
 msgid "No connection to host."
-msgstr ""
+msgstr "Sin conexión al anfitrión."
 
 #: src/multiint.cpp:3707
 msgid "Cannot change to a map with too few slots for all players."
@@ -16969,7 +16973,7 @@ msgstr "No se puede cambiar a un mapa con espacios insuficientes para todos los 
 
 #: src/multiint.cpp:3817
 msgid "The host has quit."
-msgstr ""
+msgstr "El Anfitrión abandonó."
 
 #: src/multiint.cpp:3943
 msgid "UPnP has been enabled."
@@ -16977,7 +16981,7 @@ msgstr "UPnP ha sido habilitado."
 
 #: src/multiint.cpp:3949
 msgid "UPnP detection failed. You must manually configure router yourself."
-msgstr ""
+msgstr "Detección UPnP fallida. Debes configurar el router manualmente."
 
 #: src/multiint.cpp:3953
 msgid "UPnP detection is in progress..."
@@ -17013,7 +17017,7 @@ msgstr "Cerrado"
 #: src/multiint.cpp:4130
 #, c-format
 msgid "Sending Map: %u%% "
-msgstr "Enviando Mapa: %u%%"
+msgstr "Enviando Mapa: %u%% "
 
 #: src/multiint.cpp:4130
 #, c-format
@@ -17027,7 +17031,7 @@ msgstr "ANFITRIÓN"
 #: src/multiint.cpp:4185
 #: src/multimenu.cpp:777
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multijoin.cpp:111
 msgid "Players Still Joining"
@@ -17059,16 +17063,16 @@ msgstr "Mensaje del servidor:"
 
 #: src/multijoin.cpp:508
 msgid "There is an update to the game, please visit http://wz2100.net to download new version."
-msgstr ""
+msgstr "Hay una actualización, por favor visita http://wz2100.net para descargar la nueva versión."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:144
 msgid "LIMITS"
-msgstr ""
+msgstr "LÍMITES"
 
 #: src/multilimit.cpp:157
 msgid "Map Can Exceed Limits"
-msgstr ""
+msgstr "El Mapa Puede Exceder los Límites"
 
 #: src/multilimit.cpp:163
 msgid "Force Limits at Start"
@@ -17101,7 +17105,7 @@ msgstr "Nivel Tecnológico 3"
 
 #: src/multimenu.cpp:593
 msgid "Max technology level"
-msgstr ""
+msgstr "Nivel tecnológico máximo"
 
 #: src/multimenu.cpp:599
 msgid "Any number of players"
@@ -17180,17 +17184,17 @@ msgstr "Dar Energía al Jugador"
 #: src/multimenu.cpp:1326
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
-msgstr "Expulsado %s: %s de la partida, y añadido a la lista de baneo!"
+msgstr "expulsado %s: %s de la partida, y añadido a la lista de baneo!"
 
 #: src/multiopt.cpp:304
 #: src/multiplay.cpp:1718
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "Atención, este es un mod, puede alterar el juego normal."
 
 #: src/multiopt.cpp:305
 #: src/multiplay.cpp:1722
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr ""
+msgstr "Atención, ¡el ANFITRIÓN alteró el código del juego, y puede no ser fiable!"
 
 #: src/multiplay.cpp:264
 #, c-format
@@ -17219,11 +17223,11 @@ msgstr "[inválido]"
 
 #: src/multiplay.cpp:1605
 msgid "Map was requested: SENDING MAP!"
-msgstr ""
+msgstr "Mapa solicitado: ¡ENVIANDO MAPA!"
 
 #: src/multiplay.cpp:1621
 msgid "Mod was requested: SENDING MOD!"
-msgstr ""
+msgstr "Mod solicitado: ¡ENVIANDO MOD!"
 
 #: src/multiplay.cpp:1684
 msgid "FILE SENT!"
@@ -17391,7 +17395,7 @@ msgstr "Entrenado: %u"
 #: src/scores.cpp:109
 #, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "Regular: %u"
 
 #: src/scores.cpp:110
 #, c-format
@@ -17570,7 +17574,7 @@ msgstr "Filtrar Lista de Partidas"
 
 #: src/titleui/gamefind.cpp:160
 msgid "Refreshing..."
-msgstr ""
+msgstr "Refrescando..."
 
 #: src/titleui/gamefind.cpp:180
 msgid "Searching"
@@ -17582,7 +17586,7 @@ msgstr "Conectando al vestíbulo..."
 
 #: src/titleui/gamefind.cpp:244
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Tu versión de Warzone es incompatible con esta partida."
 
 #: src/titleui/gamefind.cpp:311
 msgid "[Password required]"
@@ -17616,11 +17620,11 @@ msgstr "No se encontraron partidas para tu versión."
 
 #: src/titleui/gamefind.cpp:378
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "¡Parece haber una actualización del juego disponible!"
 
 #: src/titleui/gamefind.cpp:382
 msgid "No games are available for your version"
-msgstr ""
+msgstr "No hay partidas disponibles para tu versión"
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -17636,7 +17640,7 @@ msgstr "¡Versión del juego errónea!"
 
 #: src/titleui/gamefind.cpp:396
 msgid "You have an incompatible mod."
-msgstr "Tienes un mod incompatible"
+msgstr "Tienes un mod incompatible."
 
 #: src/titleui/gamefind.cpp:400
 msgid "Host couldn't send file?"
@@ -17661,7 +17665,7 @@ msgstr "¡No se pudo conectar al vestíbulo!"
 #: src/titleui/gamefind.cpp:557
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Mods: %s"
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
@@ -17674,7 +17678,7 @@ msgstr "Versión: %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
-msgstr ""
+msgstr "Nombre de Mapa"
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
@@ -17682,7 +17686,7 @@ msgstr "Jugadores"
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
@@ -17694,7 +17698,7 @@ msgstr "Introducir Contraseña:"
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:177
@@ -17763,5 +17767,5 @@ msgstr " - DEPURACIÓN"
 #: src/version.cpp:131
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Versión: %s,%s Build: %s%s"
 
