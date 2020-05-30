@@ -94,7 +94,7 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix);
 static void displayFeatures(const glm::mat4 &viewMatrix);
 static UDWORD	getTargettingGfx();
 static void	drawDroidGroupNumber(DROID *psDroid);
-static void	trackHeight(float desiredHeight);
+static void	trackHeight(int desiredHeight);
 static void	renderSurroundings(const glm::mat4 &viewMatrix);
 static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
@@ -3394,17 +3394,25 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 }
 
 /// Smoothly adjust player height to match the desired height
-static void trackHeight(float desiredHeight)
+static void trackHeight(int desiredHeight)
 {
-	desiredHeight = std::ceil(desiredHeight / HEIGHT_TRACK_INCREMENTS) * HEIGHT_TRACK_INCREMENTS;
 	static float heightSpeed = 0.0f;
+
+	desiredHeight = static_cast<int>(std::ceil(static_cast<float>(desiredHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS;
+
+	if ((desiredHeight == player.p.y) && ((heightSpeed > -5.f) && (heightSpeed < 5.f)))
+	{
+		heightSpeed = 0.0f;
+		return;
+	}
+
 	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
 
 	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
 	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, realTimeAdjustedIncrement(1));
 
 	/* Adjust the height accordingly */
-	player.p.y = desiredHeight - separation;
+	player.p.y = desiredHeight - static_cast<int>(std::trunc(separation));
 }
 
 /// Select the next energy bar display mode
