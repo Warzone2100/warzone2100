@@ -2,7 +2,7 @@ ${LangFileString} WZWelcomeText "Dieser Wizard wird Sie durch die Warzone-2100-I
 
 ${LangFileString} WZWelcomeText_Portable "Willkommen im portablen Warzone 2100 Installer!\r\n\r\nDieser Assistent führt Sie durch die Installation der portablen Version von Warzone 2100.\r\n\r\nDie Installation ist komplett eigenständig und Sie können das Programm jederzeit deinstallieren, indem Sie das Verzeichnis löschen.\r\n\r\nWarzone 2100 ist 100% kostenlos und komplett Open Source! \r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
 
-${LangFileString} WZ_GPL_NEXT "nächste"
+${LangFileString} WZ_GPL_NEXT "Weiter"
 
 ${LangFileString} TEXT_SecBase "Kerndateien"
 ${LangFileString} DESC_SecBase "Die Kerndateien, die für Warzone 2100 benötigt werden."
