@@ -1086,17 +1086,17 @@ _("Best Targets: Base Structures")
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 _("Best Targets: Base Structures, bunkers")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
-// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
-// ... + 4 refs
-_("Best Targets: Base Structures, infantry, wheeled vehicles")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_M3.text[2]
 // ... + 4 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
+// ... + 4 refs
+_("Best Targets: Base Structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
@@ -1182,16 +1182,16 @@ _("Body Points: Low")
 // ... + 75 refs
 _("Body Points: Medium")  
 // TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
+_("Body Points: Very low")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
 // data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[3]
 // ... + 28 refs
 _("Body Points: Very Low")  
-// TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-_("Body Points: Very low")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_BAC1.text[2]
 // data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[2]
