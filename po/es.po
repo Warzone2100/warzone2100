@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-30 18:44+0000\n"
-"PO-Revision-Date: 2020-05-31 16:15\n"
+"PO-Revision-Date: 2020-06-01 16:17\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -6939,14 +6939,14 @@ msgstr "Coste energético y producción medios"
 #. data/mp/stats/propulsion.json: $.BaBaLegs.name
 #: po/custom/fromJson.txt:1037
 msgid "BaBaLegs"
-msgstr ""
+msgstr "BaBaLegs"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.BaBaProp.name
 #. data/mp/stats/propulsion.json: $.BaBaProp.name
 #: po/custom/fromJson.txt:1041
 msgid "BaBaProp"
-msgstr ""
+msgstr "BaBaProp"
 
 #. TRANSLATORS:
 #. data/mp/challenges/b2basics.json: $.challenge.name
@@ -11449,7 +11449,7 @@ msgstr "Carrocería Media NEXUS"
 #. data/base/stats/structure.json: $.NX-ANTI-SATSite.name
 #: po/custom/fromJson.txt:4231
 msgid "Nexus Missile Silo"
-msgstr ""
+msgstr "Silo de Misiles Nexo"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade02.name
@@ -11479,7 +11479,7 @@ msgstr "Muro NEXUS"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4249
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -14609,7 +14609,7 @@ msgstr "Cargar una partida de escaramuza"
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
 msgid "savegame"
-msgstr ""
+msgstr "partida guardada"
 
 #: src/clparse.cpp:272
 msgid "Load a saved campaign game"
@@ -15128,11 +15128,11 @@ msgstr "Atajos de Teclado"
 
 #: src/frontend.cpp:676
 msgid "1×"
-msgstr ""
+msgstr "1x"
 
 #: src/frontend.cpp:677
 msgid "2×"
-msgstr ""
+msgstr "2x"
 
 #: src/frontend.cpp:678
 #: src/frontend.cpp:1058
@@ -15191,7 +15191,7 @@ msgstr "Instantáneo"
 
 #: src/frontend.cpp:711
 msgid "Tracked"
-msgstr ""
+msgstr "Oruga"
 
 #: src/frontend.cpp:724
 #: src/ingameop.cpp:517
@@ -15525,7 +15525,8 @@ msgstr "Progreso aliado"
 #: src/hci.cpp:3845
 msgid "\n"
 "Cost: %1"
-msgstr ""
+msgstr "\n"
+"Coste: %1"
 
 #: src/hci.cpp:4944
 msgid "Chat: All"
@@ -15637,165 +15638,165 @@ msgstr "¡Recursos escasos!"
 
 #: src/integrations/wzdiscordrpc.cpp:201
 msgid "Discord: Can't Join Game"
-msgstr ""
+msgstr "Discord: No se puede Unir a la Partida"
 
 #: src/integrations/wzdiscordrpc.cpp:202
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr ""
+msgstr "No puedes unirte a una partida mientras estés en otra partida. Por favor, guarda / cierra tu juego actual, sal al menú principal e inténtalo de nuevo."
 
 #: src/integrations/wzdiscordrpc.cpp:232
 msgid "Discord: Finding & Connecting to Game"
-msgstr ""
+msgstr "Discord: Buscando y Conectando a la Partida"
 
 #: src/integrations/wzdiscordrpc.cpp:233
 msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr ""
+msgstr "Intentando buscar y conectar a la partida especificada por la invitación de Discord."
 
 #: src/integrations/wzdiscordrpc.cpp:235
 msgid "This may take a moment..."
-msgstr ""
+msgstr "Esto puede tardar unos momentos..."
 
 #: src/integrations/wzdiscordrpc.cpp:260
 msgid "Failed to find game in the lobby server: "
-msgstr ""
+msgstr "No se pudo encontrar el juego en el servidor de la sala: "
 
 #: src/integrations/wzdiscordrpc.cpp:262
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
+msgstr "Es posible que la partida ya haya comenzado, o que el anfitrión haya disuelto la sala del juego."
 
 #: src/integrations/wzdiscordrpc.cpp:265
 msgid "Failed to Find Game"
-msgstr ""
+msgstr "No se pudo Encontrar la Partida"
 
 #: src/integrations/wzdiscordrpc.cpp:293
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr ""
+msgstr "Error al unirse a la partida desde el enlace de invitación especificado, con error:"
 
 #: src/integrations/wzdiscordrpc.cpp:297
 msgid "Failed to Join Game"
-msgstr ""
+msgstr "Fallo al Unirse a la Partida"
 
 #: src/integrations/wzdiscordrpc.cpp:364
 msgid "The invite link you have followed specifies a non-default lobby server:"
-msgstr ""
+msgstr "El enlace de invitación que has seguido especifica un servidor de vestíbulo no predeterminado:"
 
 #: src/integrations/wzdiscordrpc.cpp:367
 msgid "Do you wish to trust this lobby server, and continue?"
-msgstr ""
+msgstr "¿Desea confiar en el servidor de esta sala y continuar?"
 
 #: src/integrations/wzdiscordrpc.cpp:371
 msgid "Discord: Connect to Untrusted Lobby?"
-msgstr ""
+msgstr "Discord: ¿Conectar a sala no confiable?"
 
 #: src/integrations/wzdiscordrpc.cpp:373
 #: src/integrations/wzdiscordrpc.cpp:447
 msgid "Trust & Connect"
-msgstr ""
+msgstr "Confiar y Conectar"
 
 #: src/integrations/wzdiscordrpc.cpp:438
 msgid "The invite link you have followed specifies a direct connection."
-msgstr ""
+msgstr "El enlace de invitación que has seguido especifica una conexión directa."
 
 #: src/integrations/wzdiscordrpc.cpp:439
 msgid "It has not been vetted / verified by a lobby server."
-msgstr ""
+msgstr "No ha sido examinado/verificado por un servidor del lobby."
 
 #: src/integrations/wzdiscordrpc.cpp:441
 msgid "Do you wish to trust this direct connection invite?"
-msgstr ""
+msgstr "¿Desea confiar en esta invitación de conexión directa?"
 
 #: src/integrations/wzdiscordrpc.cpp:445
 msgid "Discord: Direct Connection Invite"
-msgstr ""
+msgstr "Discord: Invitación de Conexión Directa"
 
 #: src/integrations/wzdiscordrpc.cpp:479
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
-msgstr ""
+msgstr "El enlace de invitación que has seguido no está soportado por esta versión de Warzone 2100."
 
 #: src/integrations/wzdiscordrpc.cpp:480
 msgid "A newer version of Warzone 2100 may be required, if available."
-msgstr ""
+msgstr "Puede requerir una versión más reciente de Warzone 2100, si está disponible."
 
 #: src/integrations/wzdiscordrpc.cpp:483
 msgid "Discord: Unsupported / Invalid Invite"
-msgstr ""
+msgstr "Discord: No soportado / Invitación inválida"
 
 #: src/integrations/wzdiscordrpc.cpp:549
 msgid "Playing: Campaign"
-msgstr ""
+msgstr "Jugando: Campaña"
 
 #: src/integrations/wzdiscordrpc.cpp:574
 msgid "Playing: Challenge"
-msgstr ""
+msgstr "Jugando: Desafío"
 
 #: src/integrations/wzdiscordrpc.cpp:592
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "Jugando: Escaramuza"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:597
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "Jugando: %s Escaramuza"
 
 #: src/integrations/wzdiscordrpc.cpp:600
 #: src/integrations/wzdiscordrpc.cpp:836
 msgid "Map:"
-msgstr ""
+msgstr "Mapa:"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:603
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Bots:"
-msgstr ""
+msgstr "Bots:"
 
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "En Sala Multijugador"
 
 #: src/integrations/wzdiscordrpc.cpp:652
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "En Partida Multijugador"
 
 #: src/integrations/wzdiscordrpc.cpp:848
 #, c-format
 msgid "Game Name: \"%s\" by %s"
-msgstr ""
+msgstr "Nombre de Partida: \"%s\" por %s"
 
 #. TRANSLATORS: "No:" to signify limits - example usage: "No: Tanks,VTOLs"
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:895
 msgid "No:"
-msgstr ""
+msgstr "No:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:911
 msgid "Alliances:"
-msgstr ""
+msgstr "Alianzas:"
 
 #: src/integrations/wzdiscordrpc.cpp:927
 msgid "In Menu"
-msgstr ""
+msgstr "En el Menú"
 
 #: src/integrations/wzdiscordrpc.cpp:1076
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "El usuario de Discord \"%s\" desea unirse a tu partida."
 
 #: src/integrations/wzdiscordrpc.cpp:1078
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "¿Permitir que este jugador se una a tu partida?"
 
 #: src/integrations/wzdiscordrpc.cpp:1082
 #, c-format
 msgid "Join Request from %s"
-msgstr ""
+msgstr "Solicitud de incorporación de %s"
 
 #: src/integrations/wzdiscordrpc.cpp:1084
 msgid "Allow"
-msgstr ""
+msgstr "Permitir"
 
 #: src/intelmap.cpp:239
 #: src/keybind.cpp:1362
@@ -17467,11 +17468,11 @@ msgstr "Marrón"
 
 #: src/notifications.cpp:712
 msgid "Dismiss"
-msgstr ""
+msgstr "Denegar"
 
 #: src/notifications.cpp:787
 msgid "Do not show again"
-msgstr ""
+msgstr "No volver a mostrar"
 
 #: src/order.cpp:776
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -17898,20 +17899,20 @@ msgstr "Refuerzos aterrizando"
 
 #: src/updatemanager.cpp:238
 msgid "Update Available"
-msgstr ""
+msgstr "Actualización Disponible"
 
 #: src/updatemanager.cpp:241
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "¡Una nueva versión de Warzone 2100 (%s) está disponible!"
 
 #: src/updatemanager.cpp:245
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "¡Una nueva versión de Warzone 2100 está disponible!"
 
 #: src/updatemanager.cpp:247
 msgid "Get Update Now"
-msgstr ""
+msgstr "Actualizar Ahora"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:115
