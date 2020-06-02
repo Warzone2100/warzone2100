@@ -1106,6 +1106,8 @@ void resetScroll()
 	scrollRefTime = wzGetTicks();
 	scrollSpeedUpDown = 0.0f;
 	scrollSpeedLeftRight = 0.0f;
+	scrollDirLeftRight = 0;
+	scrollDirUpDown = 0;
 }
 
 // Check a coordinate is within the scroll limits, SDWORD version.
