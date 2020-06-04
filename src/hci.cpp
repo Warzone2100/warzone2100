@@ -3053,7 +3053,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sAllyResearch.id = IDOBJ_ALLYRESEARCHSTART;
 	sAllyResearch.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
 	sAllyResearch.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
-	sAllyResearch.y = 10;
+	sAllyResearch.y = 5;
 	sAllyResearch.pDisplay = intDisplayAllyIcon;
 
 	for (auto psObj : apsObjectList)
@@ -3164,7 +3164,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 				for (unsigned ii = 0; ii < numResearches; ++ii)
 				{
 					sAllyResearch.formID = nextObjButtonId;
-					sAllyResearch.x = STAT_BUTWIDTH  - (sAllyResearch.width + 2) * ii - sAllyResearch.width - 2;
+					sAllyResearch.x = STAT_BUTWIDTH  - (sAllyResearch.width + 2) * ii - sAllyResearch.width - 5;
 					sAllyResearch.UserData = PACKDWORD(Stat->ref - REF_RESEARCH_START, ii);
 					sAllyResearch.pTip = getPlayerName(researches[ii].player);
 					widgAddLabel(psWScreen, &sAllyResearch);
@@ -3806,8 +3806,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 					sLabInit.id = IDSTAT_ALLYSTART + allyResearchIconCount;
 					sLabInit.width = iV_GetImageWidth(IntImages, IMAGE_ALLY_RESEARCH);
 					sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
-					sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2) * ii - sLabInit.width - 2;
-					sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
+					sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2) * ii - sLabInit.width - 6;
+					sLabInit.y = STAT_BUTHEIGHT - sLabInit.height + 6 - STAT_PROGBARHEIGHT;
 					sLabInit.UserData = PACKDWORD(Stat->ref - REF_RESEARCH_START, ii);
 					sLabInit.pTip = getPlayerName(researches[ii].player);
 					sLabInit.pDisplay = intDisplayAllyIcon;
