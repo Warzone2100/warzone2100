@@ -139,6 +139,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	bLoadSaveMode = savemode;
 	savedTitle = title;
 	UDWORD			slotCount;
+
+	// Static as these are assigned to the widget buttons by reference
 	static char	sSlotCaps[totalslots][totalslotspace];
 	static char	sSlotTips[totalslots][totalslotspace];
 	char **i, **files;
@@ -323,12 +325,19 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	// add savegame filenames minus extensions to buttons
 	files = PHYSFS_enumerateFiles(NewSaveGamePath);
+
+	struct SaveGameNamesAndTimes
+	{
+		char* name;
+		time_t savetime;
+	};
+
+	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
+
 	for (i = files; *i != nullptr; ++i)
 	{
-		W_BUTTON *button;
 		char savefile[256];
 		time_t savetime;
-		struct tm *timeinfo;
 
 		// See if this filename contains the extension we're looking for
 		if (!strstr(*i, sExt))
@@ -337,29 +346,41 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 			continue;
 		}
 
-		button = (W_BUTTON *)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
-
 		debug(LOG_SAVE, "We found [%s]", *i);
 
 		/* Figure save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
-		timeinfo = localtime(&savetime);
-		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", timeinfo);
 
-		/* Set the button-text */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
-		sstrcpy(sSlotCaps[slotCount], *i);  //store it!
 
-		/* Add button */
-		button->pTip = sSlotTips[slotCount];
-		button->pText = WzString::fromUtf8(sSlotCaps[slotCount]);
-		slotCount++;		// goto next but...
-		if (slotCount == totalslots)
-		{
-			break;
-		}
+		SaveGameNamesAndTimes saveGameNameAndTime{ *i, savetime };
+		saveGameNamesAndTimes.push_back(saveGameNameAndTime);
 	}
+
+	// Sort the save games so that the most recent one appears first
+	std::sort(saveGameNamesAndTimes.begin(),
+			  saveGameNamesAndTimes.end(),
+			  [](SaveGameNamesAndTimes& a, SaveGameNamesAndTimes& b) { return a.savetime > b.savetime; });
+
+	// Now store the sorted save game names to the buttons
+	slotCount = 1;
+	(void)std::all_of(saveGameNamesAndTimes.begin(), saveGameNamesAndTimes.end(), [&](SaveGameNamesAndTimes& saveGameNameAndTime)
+		{
+			/* Set the button-text and tip text (the save time) into static storage */
+			sstrcpy(sSlotCaps[slotCount], saveGameNameAndTime.name);
+			strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", localtime(& (saveGameNameAndTime.savetime)));
+
+			/* Add a button that references the static strings */
+			W_BUTTON* button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
+			button->pTip = sSlotTips[slotCount];
+			button->pText = WzString::fromUtf8(sSlotCaps[slotCount]);
+			slotCount++;
+
+			return (slotCount < totalslots);
+		}
+	);
+
 	PHYSFS_freeList(files);
 
 	bLoadSaveUp = true;
