@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-30 18:44+0000\n"
-"PO-Revision-Date: 2020-05-31 16:15\n"
+"PO-Revision-Date: 2020-06-05 17:54\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2527,7 +2527,7 @@ msgstr "Исследование завершено"
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:1737
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "Углублённый анализ синаптической связи"
+msgstr "Углублённый анализ нейросвязи"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[2]
@@ -5658,8 +5658,8 @@ msgstr "Вы должны вручную настроить маршрутиза
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr "Игровой порт настроен правильно (% s) на (% s)\n"
-"Ваш внешний IP% s"
+msgstr "Игровой порт настроен правильно (%s) на (%s)\n"
+"Ваш внешний IP %s"
 
 #: lib/netplay/netplay.cpp:1878
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
