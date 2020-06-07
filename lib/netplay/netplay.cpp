@@ -892,7 +892,7 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
  *
  * @see GAMESTRUCT,NETsendGAMESTRUCT
  */
-static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
+static bool NETrecvGAMESTRUCT(Socket *sock, GAMESTRUCT *ourgamestruct)
 {
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
@@ -912,7 +912,7 @@ static bool NETrecvGAMESTRUCT(GAMESTRUCT *ourgamestruct)
 	};
 
 	// Read a GAMESTRUCT from the connection
-	result = readAll(tcp_socket, buf, sizeof(buf), NET_TIMEOUT_DELAY);
+	result = readAll(sock, buf, sizeof(buf), NET_TIMEOUT_DELAY);
 	bool failed = false;
 	if (result == SOCKET_ERROR)
 	{
@@ -2186,6 +2186,72 @@ error:
 	return SOCKET_ERROR;
 }
 
+bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
+{
+	unsigned int gamecount = 0;
+	uint32_t gamesavailable = 0;
+	int result = 0;
+
+	if ((result = readAll(sock, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
+	{
+		gamesavailable = ntohl(gamesavailable);
+	}
+	else
+	{
+		if (result == SOCKET_ERROR)
+		{
+			debug(LOG_NET, "Server socket encountered error: %s", strSockError(getSockErr()));
+		}
+		else
+		{
+			debug(LOG_NET, "Server didn't respond (timeout)");
+		}
+		return false;
+	}
+
+	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
+
+	while (gamecount < gamesavailable)
+	{
+		// Attempt to receive a game description structure
+		GAMESTRUCT game;
+		memset(&game, 0x00, sizeof(game));
+		if (!NETrecvGAMESTRUCT(sock, &game))
+		{
+			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
+			return false;
+		}
+
+		if (game.desc.host[0] == '\0')
+		{
+			memset(game.desc.host, 0, sizeof(game.desc.host));
+			strncpy(game.desc.host, getSocketTextAddress(sock), sizeof(game.desc.host) - 1);
+		}
+
+		int Vmgr = (game.future4 & 0xFFFF0000) >> 16;
+		int Vmnr = (game.future4 & 0x0000FFFF);
+
+		if (Vmgr > NETCODE_VERSION_MAJOR || Vmnr > NETCODE_VERSION_MINOR)
+		{
+			debug(LOG_NET, "Version update %d:%d", Vmgr, Vmnr);
+			NetPlay.HaveUpgrade = true;
+		}
+
+		if (game.desc.dwSize != 0)
+		{
+			if (!handleEnumerateGameFunc(game))
+			{
+				// stop enumerating
+				break;
+			}
+		}
+
+		++gamecount;
+	}
+
+	return true;
+}
+
 static uint32_t lastServerUpdate = 0;
 static bool queuedServerUpdate = false;
 #define SERVER_UPDATE_MIN_INTERVAL 7 * GAME_TICKS_PER_SEC
@@ -2883,8 +2949,6 @@ bool NEThaltJoining()
 bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handleEnumerateGameFunc)
 {
 	SocketAddress *hosts;
-	unsigned int gamecount = 0;
-	uint32_t gamesavailable;
 	int result = 0;
 	debug(LOG_NET, "Looking for games...");
 
@@ -2943,21 +3007,9 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 
 	debug(LOG_NET, "Sending list cmd");
 
-	if (writeAll(tcp_socket, "list", sizeof("list")) != SOCKET_ERROR
-	    && (result = readAll(tcp_socket, &gamesavailable, sizeof(gamesavailable), NET_TIMEOUT_DELAY)) == sizeof(gamesavailable))
+	if (writeAll(tcp_socket, "list", sizeof("list")) == SOCKET_ERROR)
 	{
-		gamesavailable = ntohl(gamesavailable);
-	}
-	else
-	{
-		if (result == SOCKET_ERROR)
-		{
-			debug(LOG_NET, "Server socket encountered error: %s", strSockError(getSockErr()));
-		}
-		else
-		{
-			debug(LOG_NET, "Server didn't respond (timeout)");
-		}
+		debug(LOG_NET, "Server socket encountered error: %s", strSockError(getSockErr()));
 		SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
 		socketClose(tcp_socket);
 		tcp_socket = nullptr;
@@ -2967,59 +3019,101 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		return false;
 	}
 
-	debug(LOG_NET, "receiving info on %u game(s)", (unsigned int)gamesavailable);
+	// Retrieve the first batch of game structs
+	// Earlier versions (and earlier lobby servers) restricted this to no more than 11
+	std::vector<GAMESTRUCT> initialBatchOfGameStructs;
 
-	while (gamecount < gamesavailable)
+	if (!readGameStructsList(tcp_socket, NET_TIMEOUT_DELAY, [&initialBatchOfGameStructs](const GAMESTRUCT &game) -> bool {
+		initialBatchOfGameStructs.push_back(game);
+		return true; // continue enumerating
+	}))
 	{
-		// Attempt to receive a game description structure
-		GAMESTRUCT game;
-		memset(&game, 0x00, sizeof(game));
-		if (!NETrecvGAMESTRUCT(&game))
-		{
-			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
-			// If we fail, success depends on the amount of games that we've read already
-			SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
-			socketClose(tcp_socket);
-			tcp_socket = nullptr;
-			return gamecount;
-		}
+		SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
+		socketClose(tcp_socket);
+		tcp_socket = nullptr;
 
-		if (game.desc.host[0] == '\0')
-		{
-			memset(game.desc.host, 0, sizeof(game.desc.host));
-			strncpy(game.desc.host, getSocketTextAddress(tcp_socket), sizeof(game.desc.host) - 1);
-		}
-
-		int Vmgr = (game.future4 & 0xFFFF0000) >> 16;
-		int Vmnr = (game.future4 & 0x0000FFFF);
-
-		if (Vmgr > NETCODE_VERSION_MAJOR || Vmnr > NETCODE_VERSION_MINOR)
-		{
-			debug(LOG_NET, "Version update %d:%d", Vmgr, Vmnr);
-			NetPlay.HaveUpgrade = true;
-		}
-
-		if (game.desc.dwSize != 0)
-		{
-			if (!handleEnumerateGameFunc(game))
-			{
-				// stop enumerating
-				// note: this may mess up retrieving the lobby response below...
-				// we really need a protocol replacement
-				break;
-			}
-		}
-
-		++gamecount;
+		setLobbyError(ERROR_CONNECTION);
+		return false;
 	}
 
+	// read the lobby response
 	if (readLobbyResponse(tcp_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
 	{
 		socketClose(tcp_socket);
 		tcp_socket = nullptr;
 		addConsoleMessage(_("Failed to get a lobby response!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		return true;		// while there was a problem, this isn't fatal for the function
+
+		// treat as fatal error
+		setLobbyError(ERROR_CONNECTION);
+		return false;
 	}
+
+	// Backwards-compatible protocol enhancement, to raise game limit
+	// Expects a uint32_t to determine whether to ignore the first batch of game structs
+	// Earlier lobby servers will not provide anything, or may null-pad the lobby response / MOTD string
+	// Hence as long as we don't treat "0" as signifying any change in behavior, this should be safe + backwards-compatible
+	#define IGNORE_FIRST_BATCH 1
+	uint32_t responseParameters = 0;
+	if ((result = readAll(tcp_socket, &responseParameters, sizeof(responseParameters), NET_TIMEOUT_DELAY)) == sizeof(responseParameters))
+	{
+		responseParameters = ntohl(responseParameters);
+
+		bool requestSecondBatch = true;
+		bool ignoreFirstBatch = ((responseParameters & IGNORE_FIRST_BATCH) == IGNORE_FIRST_BATCH);
+		if (!ignoreFirstBatch)
+		{
+			// pass the first batch to the handleEnumerateGameFunc
+			for (const auto& game : initialBatchOfGameStructs)
+			{
+				if (!handleEnumerateGameFunc(game))
+				{
+					// stop enumerating
+					requestSecondBatch = false;
+					break;
+				}
+			}
+		}
+
+		if (requestSecondBatch)
+		{
+			if (!readGameStructsList(tcp_socket, NET_TIMEOUT_DELAY, handleEnumerateGameFunc))
+			{
+				// we failed to read a second list of game structs
+
+				if (!ignoreFirstBatch)
+				{
+					// just log and treat the error as non-fatal
+					debug(LOG_NET, "Second readGameStructsList call failed - ignoring");
+				}
+				else
+				{
+					// if ignoring the first batch, treat this as a fatal error
+					debug(LOG_NET, "Second readGameStructsList call failed");
+
+					SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid
+					socketClose(tcp_socket);
+					tcp_socket = nullptr;
+
+					// when we fail to receive a game count, bail out
+					setLobbyError(ERROR_CONNECTION);
+					return false;
+				}
+			}
+		}
+	}
+	else
+	{
+		// to support earlier lobby servers that don't provide this additional second batch (and optional parameter), just process the first batch
+		for (const auto& game : initialBatchOfGameStructs)
+		{
+			if (!handleEnumerateGameFunc(game))
+			{
+				// stop enumerating
+				break;
+			}
+		}
+	}
+
 	SocketSet_DelSocket(socket_set, tcp_socket);		// mark it invalid (we are done with it)
 	socketClose(tcp_socket);
 	tcp_socket = nullptr;
