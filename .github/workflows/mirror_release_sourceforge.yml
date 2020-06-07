@@ -1,0 +1,156 @@
+name: Mirror To SourceForge
+
+on:
+  release:
+    types:
+      - published
+      - edited
+      - deleted
+      - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
+
+jobs:
+  mirror-to-sourceforge:
+    # For this job to work, the following secrets must be set:
+    # SF_SSH_KEY
+    # SF_FRS_USERNAME
+    # SF_RELEASES_API_KEY
+    env:
+      SF_PROJECT_NAME: 'warzone2100'
+      SF_BASE_PATH: 'releases'
+      RELEASE_CONTEXT: ${{ toJson(github.event.release) }}
+    name: 'Mirror to SourceForge'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Process Release Event
+      id: settings
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      working-directory: '${{ github.workspace }}'
+      run: |
+        RELEASE_TAG="${GITHUB_REF##*/}"
+        echo "GITHUB_REPOSITORY is: ${GITHUB_REPOSITORY}"
+        echo "GITHUB_REF is: ${GITHUB_REF}"
+        echo "Release tag is: ${RELEASE_TAG}"
+        echo "Release Event Action: ${{ github.event.action }}"
+
+        echo "RELEASE_CONTEXT is:\n${RELEASE_CONTEXT}";
+
+        if [[ $RELEASE_TAG == *..* ]]; then
+          # Reject any release tags with two ".." in a row
+          echo "::error ::Invalid RELEASE_TAG value - aborting."
+          exit 1
+        fi
+        if [ -z "${RELEASE_TAG}" ]; then
+          echo "::error ::RELEASE_TAG variable is empty. Aborting."
+          exit 1
+        fi
+
+        # Get information for this tagged release
+        tagged_release_id="${{ github.event.release.id }}"
+        echo "tagged_release_id=${tagged_release_id}"
+        echo "::set-output name=tagged_release_id::${tagged_release_id}"
+
+        SF_FILE_PATH=""
+        if [ ! -z "${SF_BASE_PATH}" ]; then
+          SF_FILE_PATH="${SF_BASE_PATH}/"
+        fi
+        SF_FILE_PATH="${SF_FILE_PATH}${RELEASE_TAG}"
+        echo "SF_FILE_PATH=${SF_FILE_PATH}"
+        echo "::set-output name=SF_FILE_PATH::${SF_FILE_PATH}"
+
+        # Prepare release_assets directory
+        mkdir -p "release_assets/${SF_FILE_PATH}"
+    - name: Download All Release Assets
+      if: (github.event.action != 'deleted')
+      id: download
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SF_FILE_PATH: ${{ steps.settings.outputs.SF_FILE_PATH }}
+      working-directory: '${{ github.workspace }}/release_assets/${{ steps.settings.outputs.SF_FILE_PATH }}'
+      run: |
+        # Download all release assets
+        echo "${RELEASE_CONTEXT}" | jq -r '.assets[] | "\(.name)\n\(.url)"' | xargs -r -n2 sh -c 'curl -H "Accept: application/octet-stream" -H "Authorization: token ${GITHUB_TOKEN}" -Lf -o "$1" "$2"' sh
+        # Output list of downloaded files
+        ls -al
+        echo "Done."
+    - name: Get Latest Release Info
+      id: latestrelease
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "Get Latest Release info for repo: ${GITHUB_REPOSITORY}"
+        latest_release_id="$(curl -H "Accept: application/vnd.github.v3.raw" -H "Authorization: token ${GITHUB_TOKEN}" -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | jq '.id')"
+        echo "latest_release_id=${latest_release_id}"
+        echo "::set-output name=latest_release_id::${latest_release_id}"
+    - name: Set up SourceForge known_hosts
+      run: |
+        mkdir -p ~/.ssh/
+        # May need updating on occasion. See: https://sourceforge.net/p/forge/documentation/SSH%20Key%20Fingerprints/
+        # Output of: `ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts`
+        cat >> ~/.ssh/known_hosts << 'EOF'
+        frs.sourceforge.net ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQD35Ujalhh+JJkPvMckDlhu4dS7WH6NsOJ15iGCJLC
+        frs.sourceforge.net ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA2uifHZbNexw6cXbyg1JnzDitL5VhYs0E65Hk/tLAPmcmm5GuiGeUoI/B0eUSNFsbqzwgwrttjnzKMKiGLN5CWVmlN1IXGGAfLYsQwK6wAu7kYFzkqP4jcwc5Jr9UPRpJdYIK733tSEmzab4qc5Oq8izKQKIaxXNe7FgmL15HjSpatFt9w/ot/CHS78FUAr3j3RwekHCm/jhPeqhlMAgC+jUgNJbFt3DlhDaRMa0NYamVzmX8D47rtmBbEDU3ld6AezWBPUR5Lh7ODOwlfVI58NAf/aYNlmvl2TZiauBCTa7OPYSyXJnIPbQXg6YQlDknNCr0K769EjeIlAfY87Z4tw==
+        frs.sourceforge.net ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCwsY6sZT4MTTkHfpRzYjxG7mnXrGL74RCT2cO/NFvRrZVNB5XNwKNn7G5fHbYLdJ6UzpURDRae1eMg92JG0+yo=
+        EOF
+    - name: Set up SSH Agent
+      env:
+        SF_KEY: ${{ secrets.SF_SSH_KEY }}
+      run: |
+        eval "$(ssh-agent -s)"
+        set +x
+
+        # Add the private key to SSH agent
+        mkdir -p ~/.ssh/
+        echo ${SF_KEY} | base64 --decode > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-add ~/.ssh/id_ed25519
+
+        # Create a public key file
+        ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
+    - name: Mirror Release Assets to SourceForge
+      id: upload
+      env:
+        SF_FRS_USERNAME: ${{ secrets.SF_FRS_USERNAME }}
+        SF_FILE_PATH: ${{ steps.settings.outputs.SF_FILE_PATH }}
+      working-directory: '${{ github.workspace }}/release_assets'
+      run: |
+        if [ -z "${SF_FILE_PATH}" ]; then
+          echo "::error ::SF_FILE_PATH variable is empty. Aborting this step."
+          exit 1
+        fi
+
+        # Upload all release assets
+        rsync -e ssh -rvh --relative "${SF_FILE_PATH}/" "${SF_FRS_USERNAME}@frs.sourceforge.net:/home/frs/project/${SF_PROJECT_NAME}/" --delete
+        echo "Done."
+    - name: Set Default SourceForge Downloads
+      if: ((github.event.action == 'published') || (github.event.action == 'edited') || (github.event.action == 'released')) && (steps.settings.outputs.tagged_release_id == steps.latestrelease.outputs.latest_release_id)
+      env:
+        SF_RELEASES_API_KEY: ${{ secrets.SF_RELEASES_API_KEY }}
+        SF_FILE_PATH: ${{ steps.settings.outputs.SF_FILE_PATH }}
+      working-directory: '${{ github.workspace }}/release_assets'
+      run: |
+        echo "The provided tagged release is, in fact, the latest release. Updating default downloads:"
+
+        if [ -z "${SF_RELEASES_API_KEY}" ]; then
+          echo "::error ::SF_RELEASES_API_KEY secret was not set. Aborting this step."
+          exit 1
+        fi
+
+        # User-defined function
+        set_sf_default_if_present(){
+          local filename="$1"
+          local sf_default_string="$2"
+          if [ -f "${SF_FILE_PATH}/$filename" ]; then
+            echo "Setting: \"${SF_FILE_PATH}/${filename}\" as: ${sf_default_string}"
+            curl -H "Accept: application/json" -X PUT -d "${sf_default_string}" -d "api_key=${SF_RELEASES_API_KEY}" -s "https://sourceforge.net/projects/${SF_PROJECT_NAME}/files/${SF_FILE_PATH}/${filename}"
+          else
+            echo "::warning ::Did not find file: ${filename}"
+          fi
+        }
+
+        # Set default platform downloads for SourceForge
+        set_sf_default_if_present "warzone2100_win_x86_portable.exe" "default=windows"
+        set_sf_default_if_present "warzone2100_macOS.zip" "default=mac"
+        set_sf_default_if_present "warzone2100_src.tar.xz" "default=linux&default=bsd&default=solaris&default=others"
+
+        echo "Done."
