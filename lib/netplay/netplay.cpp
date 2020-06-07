@@ -2255,10 +2255,16 @@ bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function
 static uint32_t lastServerUpdate = 0;
 static bool queuedServerUpdate = false;
 #define SERVER_UPDATE_MIN_INTERVAL 7 * GAME_TICKS_PER_SEC
+#define SERVER_UPDATE_MAX_INTERVAL 25 * GAME_TICKS_PER_SEC
 
 static inline bool canSendServerUpdateNow()
 {
-	return (lastServerUpdate < realTime - SERVER_UPDATE_MIN_INTERVAL);
+	return (realTime - lastServerUpdate >= SERVER_UPDATE_MIN_INTERVAL);
+}
+
+static inline bool shouldSendServerKeepAliveNow()
+{
+	return (realTime - lastServerUpdate >= SERVER_UPDATE_MAX_INTERVAL);
 }
 
 bool NETregisterServer(int state)
@@ -2276,6 +2282,24 @@ bool NETregisterServer(int state)
 	{
 		switch (state)
 		{
+		// Inform lobby server that we're still here, hosting a game lobby, waiting on players
+		case WZ_SERVER_KEEPALIVE:
+			{
+				if (rs_socket == nullptr)
+				{
+					return bProcessingConnectOrDisconnectThisCall;
+				}
+				if (writeAll(rs_socket, "keep", sizeof("keep")) == SOCKET_ERROR)
+				{
+					// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
+					socketClose(rs_socket);
+					rs_socket = nullptr;
+					server_not_there = true;
+					return bProcessingConnectOrDisconnectThisCall;
+				}
+				lastServerUpdate = realTime;
+			}
+			break;
 		// Update player counts
 		case WZ_SERVER_UPDATE:
 			{
@@ -2424,6 +2448,11 @@ bool NETprocessQueuedServerUpdates()
 {
 	if (!queuedServerUpdate)
 	{
+		if (allow_joining && shouldSendServerKeepAliveNow())
+		{
+			// ensure that the lobby server knows we're still alive by sending a no-op "keep-alive"
+			NETregisterServer(WZ_SERVER_KEEPALIVE);
+		}
 		return false;
 	}
 	if (!canSendServerUpdateNow())
