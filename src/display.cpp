@@ -1528,8 +1528,10 @@ bool ctrlShiftDown()
 
 void AddDerrickBurningMessage()
 {
-	addConsoleMessage(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-	audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+	if (addConsoleMessageDebounced(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, CANNOT_BUILD_BURNING))
+	{
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+	}
 }
 
 static void printDroidClickInfo(DROID *psDroid)

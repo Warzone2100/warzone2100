@@ -40,6 +40,7 @@
 #include <istream>
 #include <sstream>
 #include <deque>
+#include <chrono>
 
 // FIXME: When we switch over to full JS, use class version of this file
 
@@ -166,6 +167,27 @@ void	toggleConsoleDrop()
 		// play closing sound
 		audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 		bConsoleDropped = false;
+	}
+}
+
+bool addConsoleMessageDebounced(const char * Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, const DEBOUNCED_MESSAGE & message, bool team, UDWORD duration)
+{
+	// Messages are debounced individually - one debounced message won't stop a different one from appearing
+	static std::map<const DEBOUNCED_MESSAGE *, std::chrono::milliseconds> nextAllowedMessageTimes;
+
+	const std::chrono::milliseconds DEBOUNCE_TIME(message.debounceTime);
+	const std::chrono::milliseconds now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch());
+
+	const auto nextAllowedMessageTime = nextAllowedMessageTimes.find(&message);
+
+	if (nextAllowedMessageTime == nextAllowedMessageTimes.end() || now > nextAllowedMessageTime->second)
+	{
+		nextAllowedMessageTimes[&message] = now + DEBOUNCE_TIME;
+		return addConsoleMessage(Text, jusType, player, team, duration);
+	}
+	else
+	{
+		return false;
 	}
 }
 
