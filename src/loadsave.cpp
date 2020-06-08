@@ -109,7 +109,22 @@ char				sRequestResult[PATH_MAX];   // filename returned;
 bool				bRequestLoad = false;
 LOADSAVE_MODE		bLoadSaveMode;
 static const char *savedTitle;
-static const char *sExt = ".gam";
+static const char *sSaveGameExtension = ".gam";
+
+// ////////////////////////////////////////////////////////////////////////////
+// return whether the specified filename looks like a saved game file, i.e. ends with .gam
+bool isASavedGamefile(const char* filename)
+{
+	static const size_t saveGameExtensionLength = strlen(sSaveGameExtension);
+
+	if (nullptr == filename)
+	{
+		return false;
+	}
+
+	return 0 == strcmp(filename + strlen(filename) - saveGameExtensionLength, sSaveGameExtension);
+}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
@@ -330,8 +345,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		time_t savetime;
 		struct tm *timeinfo;
 
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -458,8 +472,7 @@ static bool findLastSaveFrom(const char *path)
 		char savefile[PATH_MAX];
 		time_t savetime;
 
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -561,7 +574,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			if (!slotButton->pText.isEmpty())
 			{
-				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), sExt);
+				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), sSaveGameExtension);
 			}
 			else
 			{
@@ -586,7 +599,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 				if (!slotButton->pText.isEmpty())
 				{
-					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().c_str(), sExt);
+					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().c_str(), sSaveGameExtension);
 				}
 				else
 				{
@@ -648,7 +661,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 			removeWildcards(sTemp);
-			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath, sTemp, sExt);
+			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath, sTemp, sSaveGameExtension);
 			if (strlen(sDelete) != 0)
 			{
 				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
@@ -815,8 +828,7 @@ static void freeAutoSaveSlot(const char *path)
 	int nfiles = 0;
 	for (i = files; *i != nullptr; ++i)
 	{
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -836,8 +848,7 @@ static void freeAutoSaveSlot(const char *path)
 	{
 		char savefile[PATH_MAX];
 
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
