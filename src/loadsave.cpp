@@ -122,7 +122,13 @@ bool isASavedGamefile(const char* filename)
 		return false;
 	}
 
-	return 0 == strcmp(filename + strlen(filename) - saveGameExtensionLength, sSaveGameExtension);
+	size_t filenameLength = strlen(filename);
+	if (filenameLength <= saveGameExtensionLength)
+	{
+		// reject filename of insufficient length to contain "<anything>.gam"
+		return false;
+	}
+	return 0 == strcmp(filename + filenameLength - saveGameExtensionLength, sSaveGameExtension);
 }
 
 
