@@ -503,11 +503,19 @@ void ShowMOTD()
 	char buf[250] = { '\0' };
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("Server message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	if (NetPlay.MOTD)
+	{
+		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	}
+	else
+	{
+		ssprintf(buf, "%s", "Null message");
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	}
 	if (NetPlay.HaveUpgrade)
 	{
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		ssprintf(buf, "%s", _("There is an update to the game, please visit http://wz2100.net to download new version."));
+		ssprintf(buf, "%s", _("There is an update to the game, please visit https://wz2100.net to download new version."));
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 	else

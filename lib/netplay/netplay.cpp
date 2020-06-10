@@ -2158,6 +2158,8 @@ static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
 
 	default:
 		debug(LOG_ERROR, "Lobby error (%u): %s", (unsigned int)lobbyStatusCode, NetPlay.MOTD);
+		// ensure if the lobby returns an error, we are prepared to display it (once)
+		NetPlay.ShowedMOTD = false;
 		break;
 	}
 
@@ -2171,6 +2173,7 @@ error:
 		{
 			NetPlay.MOTD = nullptr;
 		}
+		NetPlay.ShowedMOTD = false;
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 	else
@@ -2180,6 +2183,7 @@ error:
 		{
 			NetPlay.MOTD = nullptr;
 		}
+		NetPlay.ShowedMOTD = false;
 		debug(LOG_ERROR, "%s", NetPlay.MOTD);
 	}
 
@@ -2295,9 +2299,9 @@ bool NETregisterServer(int state)
 					socketClose(rs_socket);
 					rs_socket = nullptr;
 					server_not_there = true;
-					return bProcessingConnectOrDisconnectThisCall;
 				}
 				lastServerUpdate = realTime;
+				return bProcessingConnectOrDisconnectThisCall;
 			}
 			break;
 		// Update player counts
@@ -2318,6 +2322,14 @@ bool NETregisterServer(int state)
 					}
 					lastServerUpdate = realTime;
 					queuedServerUpdate = false;
+					// newer lobby server will return a lobby response / status after each update call
+					if (rs_socket && readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+					{
+						socketClose(rs_socket);
+						server_not_there = true;
+						rs_socket = nullptr;
+						return bProcessingConnectOrDisconnectThisCall;
+					}
 				}
 				else
 				{
