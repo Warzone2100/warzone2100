@@ -365,6 +365,8 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 StructureBounds getStructureBounds(const STRUCTURE *object);
 StructureBounds getStructureBounds(const STRUCTURE_STATS *stats, Vector2i pos, uint16_t direction);
 
+bool canStructureHaveAModuleAdded(const STRUCTURE* const structure);
+
 static inline int structSensorRange(const STRUCTURE *psObj)
 {
 	return objSensorRange((const BASE_OBJECT *)psObj);
@@ -511,5 +513,4 @@ static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
 
 WzString getFavoriteStructs();
 void setFavoriteStructs(WzString list);
-
 #endif // __INCLUDED_SRC_STRUCTURE_H__
