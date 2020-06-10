@@ -33,6 +33,7 @@
 #include "loop.h"
 #include "map.h"
 #include "miscimd.h"
+#include "lib/gamelib/gtime.h"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -261,8 +262,14 @@ void atmosUpdateSystem()
 			}
 		}
 
-		/* This bit below needs to go into a "precipitation function" */
-		numberToAdd = ((weather == WT_SNOWING) ? 2 : 4);
+		// The original code added a fixed number of particles per tick. To take into account game speed
+		// we have to accumulate a fractional number of particles to add them at a slower or faster rate.
+		static double accumulatedParticlesToAdd = 0.0;
+
+		accumulatedParticlesToAdd += ((weather == WT_SNOWING) ? 2.0 : 4.0) * gameTimeGetMod().asDouble();
+
+		numberToAdd = accumulatedParticlesToAdd;
+		accumulatedParticlesToAdd -= numberToAdd;
 
 		/* Temporary stuff - just adds a few particles! */
 		for (i = 0; i < numberToAdd; i++)

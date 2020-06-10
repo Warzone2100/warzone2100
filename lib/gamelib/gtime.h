@@ -25,10 +25,10 @@
 #define _gtime_h
 
 #include "lib/framework/vector.h"
+#include "lib/framework/rational.h"
 
 
 struct NETQUEUE;
-struct Rational;
 
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
