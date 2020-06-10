@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-30 18:44+0000\n"
-"PO-Revision-Date: 2020-06-09 19:34\n"
+"PO-Revision-Date: 2020-06-10 19:34\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -23,7 +23,7 @@ msgstr "Ziel: Finden und bergen Sie die Technologie für neurale Synapsen"
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Errichten Sie eine Basis, suchen Sie dann nach Gebäuden aus der Zeit vor dem Kollaps."
+msgstr "Errichten Sie eine Basis, suchen Sie dann nach Gebäuden aus der Zeit vor dem Kollaps"
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -294,11 +294,11 @@ msgstr "Entschlüsselung läuft....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr "Kommandant."
+msgstr "Commander."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "Wir haben die eintreffende Nachricht an das New Paradigm entschlüsselt ..."
+msgstr "Wir haben die eintreffende Nachricht an das New Paradigm entschlüsselt..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
@@ -370,7 +370,7 @@ msgstr "Wir haben zwei Gespräche mit ihm aufgezeichnet, Auszüge folgen..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr "Wir halten Sie über die weitere Entwicklung auf dem Laufenden."
+msgstr "Wir halten Sie über die weiteren Entwicklungen auf dem Laufenden"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
@@ -449,7 +449,7 @@ msgstr "Wir vermuten sie in einem Luftstützpunkt aus der Zeit vor dem Kollaps i
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr "Team Beta steht unter schwerem Beschuss."
+msgstr "Team Beta steht unter schwerem Beschuss"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
@@ -473,7 +473,7 @@ msgstr "Halten Sie die Stellung und schlagen Sie die Angriffe zurück, löschen 
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr "TRANSPORTERMISSION: Konvoi aufhalten"
+msgstr "TRANSPORTERMISSION: Konvoi aufhalten."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
@@ -870,7 +870,7 @@ msgstr "Die feindlichen Truppen kommen .... von diesen Koordinaten."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr "Verteidigen Sie die Basis ... die ...."
+msgstr "Verteidigen Sie die Basis und ... die ...."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
@@ -1011,7 +1011,7 @@ msgstr "Commander, in den Silos befinden sich Raketen."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr "NEXUS hindert uns daran auf die Raketenabschusscodes zuzugreifen."
+msgstr "NEXUS hindert uns daran, auf die Raketenabschusscodes zuzugreifen."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
@@ -4246,7 +4246,7 @@ msgstr "Alle neuen Einheiten werden zu diesem Punkt fahren, nachdem sie produzie
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Sie können den Auslieferungspunkt jederzeit verschieben, indem Sie mit der linken Maustaste darauf klicken."
+msgstr "Sie können den Auslieferungspunkt jederzeit verschieben, indem Sie mit der linken Maustaste darauf klicken"
 
 #: data/base/script/tutorial.js:71
 msgid "Now click where you want to position the delivery point"
@@ -4437,7 +4437,7 @@ msgstr "Ihr mögt mich hier besiegen, aber ich werde wieder auferstehen."
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "So wie ich einst die Welt mit Feuer gereinigt habe, werde ich Euch und Euer lächerliches Projekt zerstören."
+msgstr "So wie ich einst die Welt mit Feuer gereinigt habe, werde ich Euch und Euer lächerliches Projekt zerstören!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -4781,7 +4781,7 @@ msgstr "Die Letzte Begegnung"
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
 msgid "Briefing Commences"
-msgstr "Besprechung beginnt:"
+msgstr "Besprechung beginnt"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
@@ -4993,7 +4993,7 @@ msgstr "Sie haben fünf Minuten Bedenkzeit, danach gibt's ein Grillfest!"
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:1
 msgid "Commander, we are under attack by NEXUS cyborgs and tanks. Please help as we...."
-msgstr "Commander, wir werden von NEXUS' Cyborgs und Panzern angegriffen. Erbitten Unterstützung, da wir ..."
+msgstr "Commander, wir werden von NEXUS' Cyborgs und Panzern angegriffen. Erbitten Unterstützung, da wir...."
 
 #: data/base/sequenceaudio/cam3/cam3bg.txt:3
 msgid "...cannot hold out much longer.  Repeat, please help, we cannot hold out much longer...."
@@ -7149,14 +7149,14 @@ msgstr "Verbundene metallische Schichtstoffe für Mauern und Verteidigungsanlage
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1238
 msgid "BoneCrusher!"
-msgstr "Knochenbrecher!"
+msgstr "BoneCrusher!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
 #. data/mp/stats/body.json: $.Body4ABT.name
 #: po/custom/fromJson.txt:1242
 msgid "Bug"
-msgstr "Käfer"
+msgstr "Bug"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianBuggy.name
@@ -7178,7 +7178,7 @@ msgstr "Integrierte Diagnose- und Reparatursysteme"
 #. data/mp/stats/templates.json: $.Sk-CobraBBHover.name
 #: po/custom/fromJson.txt:1255
 msgid "Bunker Buster Cobra Hover"
-msgstr "Bunkerbrecher Kobra Luftkissen"
+msgstr "Bunker Buster Cobra Hover"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraBBTracks.name
@@ -7222,7 +7222,7 @@ msgstr "Bunker Buster Scorpion Ketten"
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-BB.name
 #: po/custom/fromJson.txt:1278
 msgid "Bunker Buster Scorpion VTOL"
-msgstr "Bunkerbrecher Skorpion VTOL"
+msgstr "Bunker Buster Scorpion VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperBBWheels.name
@@ -7235,7 +7235,7 @@ msgstr "Bunker Buster Viper Räder"
 #. data/mp/stats/weapons.json: $.Rocket-BB.name
 #: po/custom/fromJson.txt:1285
 msgid "Bunker Buster"
-msgstr "Bunkerbrecher"
+msgstr "Bunker Buster"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[2]
@@ -7455,7 +7455,7 @@ msgstr "Cobra LKW"
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1415
 msgid "Cobra"
-msgstr "Kobra"
+msgstr "Cobra"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -8455,14 +8455,14 @@ msgstr "Aufhängung mit Flashlight"
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
 #: po/custom/fromJson.txt:2107
 msgid "Flashlight Retribution Hover"
-msgstr "Blitzlicht Vergeltung Luftkissen"
+msgstr "Flashlight Retribution Hover"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAMMk1.name
 #. data/mp/stats/weapons.json: $.Laser3BEAMMk1.name
 #: po/custom/fromJson.txt:2111
 msgid "Flashlight"
-msgstr "Blitzlicht"
+msgstr "Flashlight"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Engine02.name
@@ -8614,7 +8614,7 @@ msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr "Erhält ~ 100% mehr Leistung von jedem Bohrturm\n"
-"Verwendet die Schweren Plasmawerfer und EMP-Mörser\n"
+"Verwendet den Schweren Plasmawerfer und EMP-Mörser\n"
 "Beginnt mit Verteidigungsanlagen und Bohrtürmen"
 
 #. TRANSLATORS:
@@ -13747,7 +13747,7 @@ msgstr "Verwendet fortschrittliche Raketentechnologie"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
 #: po/custom/fromJson.txt:5729
 msgid "Uses the Heavy Plasma Launcher"
-msgstr ""
+msgstr "Verwendet den schweren Plasmawerfer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
