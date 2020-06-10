@@ -1396,9 +1396,69 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
-		// moving to a location to build a structure
+		else
+		{
+			// Determine if the droid can still build or help to build the ordered structure at the specified location
+			const STRUCTURE_STATS* const desiredStructure = order->psStats;
+			const STRUCTURE* const structureAtBuildPosition = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+
+			if (nullptr != structureAtBuildPosition)
+			{
+				bool droidCannotBuild = false;
+
+				if (!aiCheckAlliances(structureAtBuildPosition->player, psDroid->player))
+				{
+					// Not our structure
+					droidCannotBuild = true;
+				}
+				else
+				// There's an allied structure already there.  Is it a wall, and can the droid upgrade it to a defence or gate?
+				if (isWall(structureAtBuildPosition->pStructureType->type) &&
+					(desiredStructure->type == REF_DEFENSE || desiredStructure->type == REF_GATE))
+				{
+					// It's always valid to upgrade a wall to a defence or gate
+					droidCannotBuild = false; // Just to avoid an empty branch
+				}
+				else
+				if ((structureAtBuildPosition->pStructureType != desiredStructure) && // ... it's not the exact same type as the droid was ordered to build
+					(structureAtBuildPosition->pStructureType->type == REF_WALLCORNER && desiredStructure->type != REF_WALL)) // and not a wall corner when the droid wants to build a wall
+				{
+					// And so the droid can't build or help with building this structure
+					droidCannotBuild = true;
+				}
+				else
+				// So it's a structure that the droid could help to build, but is it already complete?
+				if (structureAtBuildPosition->status == SS_BUILT &&
+					(!IsStatExpansionModule(desiredStructure) || !canStructureHaveAModuleAdded(structureAtBuildPosition)))
+				{
+					// The building is complete and the droid hasn't been told to add a module, or can't add one, so can't help with that.
+					droidCannotBuild = true;
+				}
+
+				if (droidCannotBuild)
+				{
+					if (order->type == DORDER_LINEBUILD && map_coord(psDroid->order.pos) != map_coord(psDroid->order.pos2))
+					{
+						// The droid is doing a line build, and there's more to build. This will force the droid to move to the next structure in the line build
+						objTrace(psDroid->id, "DACTION_MOVETOBUILD: line target is already built, or can't be built - moving to next structure in line");
+						psDroid->action = DACTION_NONE;
+					}
+					else
+					{
+						// Cancel the current build order. This will move the truck onto the next order, if it has one, or halt in place.
+						objTrace(psDroid->id, "DACTION_MOVETOBUILD: target is already built, or can't be built - executing next order or halting");
+						cancelBuild(psDroid);
+					}
+
+					break;
+				}
+			}
+		} // End of check for whether the droid can still succesfully build the ordered structure
+
+		// The droid can still build or help with a build, and is moving to a location to do so - are we there yet, are we there yet, are we there yet?
 		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, order->direction, order->psStats))
 		{
+			// We're there, go ahead and build or help to build the structure
 			bool buildPosEmpty = actionRemoveDroidsFromBuildPos(psDroid->player, psDroid->actionPos, order->direction, order->psStats);
 			if (!buildPosEmpty)
 			{

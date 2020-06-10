@@ -7100,3 +7100,26 @@ void setFavoriteStructs(WzString list)
 {
 	favoriteStructs = list;
 }
+
+// This follows the logic in droid.cpp nextModuleToBuild()
+bool canStructureHaveAModuleAdded(const STRUCTURE* const structure)
+{
+	if (nullptr == structure || nullptr == structure->pStructureType || structure->status != SS_BUILT)
+	{
+		return false;
+	}
+
+	switch (structure->pStructureType->type)
+	{
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+			return structure->capacity < NUM_FACTORY_MODULES;
+
+		case REF_POWER_GEN:
+		case REF_RESEARCH:
+			return structure->capacity == 0;
+
+		default:
+			return false;
+	}
+}
