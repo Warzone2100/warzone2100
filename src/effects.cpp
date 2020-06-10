@@ -2282,7 +2282,7 @@ bool readFXData(const char *fileName)
 		curEffect->birthTime    = ini.value("birthTime").toInt();
 		curEffect->lastFrame    = ini.value("lastFrame").toInt();
 		curEffect->frameDelay   = ini.value("frameDelay").toInt();
-		curEffect->lifeSpan     = ini.value("lifeSpan").toInt();
+		curEffect->lifeSpan     = ini.value("lifeSpan").toInt(); // this is the original duration of the efect, not the time remaining
 		curEffect->radius       = ini.value("radius").toInt();
 		if (ini.contains("imd_name"))
 		{
@@ -2295,6 +2295,20 @@ bool readFXData(const char *fileName)
 		else
 		{
 			curEffect->imd = nullptr;
+		}
+
+		// For fire effects, set the tile as being on fire so that (e.g.) burning oil resources can't
+		// immediately be built on
+		if (EFFECT_FIRE == curEffect->group)
+		{
+			const int timeThatEffectHasBeenRunning = curEffect->lastFrame - curEffect->birthTime;
+			const int timeLeftToRun = curEffect->lifeSpan - timeThatEffectHasBeenRunning;
+
+			// Sanity check - don't allow a negative time to wrap to a huge positive unsigned value.
+			if (timeLeftToRun > 0)
+			{
+				tileSetFire(curEffect->position.x, curEffect->position.z, (unsigned int)timeLeftToRun);
+			}
 		}
 
 		// Move on to reading the next effect
