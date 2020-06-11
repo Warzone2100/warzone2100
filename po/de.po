@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-05-30 18:44+0000\n"
-"PO-Revision-Date: 2020-06-10 19:34\n"
+"PO-Revision-Date: 2020-06-11 19:34\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -6952,7 +6952,7 @@ msgstr "BaBaAntrieb"
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1044
 msgid "Back to Basics"
-msgstr "Zurück zu den Grundlagen!"
+msgstr "Zurück zu den Grundlagen"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -7995,7 +7995,7 @@ msgstr "Maschinengewehrprojektile aus abgereichertem Uran"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1795
 msgid "Designed for shared research team battles"
-msgstr "Konzipiert für Kämpfe mit gemeinsamer Forschung"
+msgstr "Konzipiert für Teamkämpfe mit gemeinsamer Forschung"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8685,7 +8685,7 @@ msgstr "Grenadier"
 #. data/mp/stats/weapons.json: $.Howitzer150Mk1.name
 #: po/custom/fromJson.txt:2243
 msgid "Ground Shaker"
-msgstr ""
+msgstr "Ground Shaker"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
@@ -9341,7 +9341,7 @@ msgstr "Helikopter"
 #. data/mp/stats/weapons.json: $.Howitzer03-Rot.name
 #: po/custom/fromJson.txt:2668
 msgid "Hellstorm"
-msgstr ""
+msgstr "Hellstorm"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage05.name
@@ -9521,25 +9521,25 @@ msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelges
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2802
 msgid "HMG Bunker"
-msgstr ""
+msgstr "Bunker mit Schwerem Maschinengewehr"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2805
 msgid "Hover AI"
-msgstr ""
+msgstr "Hover KI"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
 #: po/custom/fromJson.txt:2808
 msgid "Hover II"
-msgstr ""
+msgstr "Hover II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
 #: po/custom/fromJson.txt:2811
 msgid "Hover III"
-msgstr ""
+msgstr "Hover III"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
@@ -9553,7 +9553,7 @@ msgstr "Hoverantrieb"
 #. data/mp/stats/propulsion.json: $.hover01.name
 #: po/custom/fromJson.txt:2822
 msgid "Hover"
-msgstr ""
+msgstr "Hover"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
@@ -10110,7 +10110,7 @@ msgstr "Inferno Cobra Halbketten"
 #. data/mp/stats/templates.json: $.CobraInfernoHover.name
 #: po/custom/fromJson.txt:3294
 msgid "Inferno Cobra Hover"
-msgstr ""
+msgstr "Inferno Cobra Hover"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyFlamer.name
@@ -10130,14 +10130,14 @@ msgstr "Aufhängung mit Inferno-Flammenwerfer"
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
 #: po/custom/fromJson.txt:3305
 msgid "Inferno Python Hover"
-msgstr ""
+msgstr "Inferno Python Hover"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Flame2.name
 #. data/mp/stats/weapons.json: $.Flame2.name
 #: po/custom/fromJson.txt:3309
 msgid "Inferno"
-msgstr ""
+msgstr "Inferno-Flammenwerfer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[2]
@@ -10170,7 +10170,7 @@ msgstr "Aufbau mit Störsender"
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3327
 msgid "Jeep"
-msgstr ""
+msgstr "Jeep"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[3]
@@ -10290,7 +10290,7 @@ msgstr "Lancer Scorpion Ketten"
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-Lancer.name
 #: po/custom/fromJson.txt:3399
 msgid "Lancer Scorpion VTOL"
-msgstr ""
+msgstr "Lancer Scorpion VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperTrkLancer.name
@@ -10312,7 +10312,7 @@ msgstr "Lancer Viper Räder"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:3417
 msgid "Lancer"
-msgstr ""
+msgstr "Lancer"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[0]
@@ -10325,7 +10325,7 @@ msgstr "Großer superschwerer Rumpf"
 #. data/mp/stats/research.json: $.R-Wpn-Laser01.name
 #: po/custom/fromJson.txt:3424
 msgid "Laser - Flashlight"
-msgstr ""
+msgstr "Laser - Flashlight"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[0]
@@ -10416,7 +10416,7 @@ msgstr "Geschichtete Mischlegierungen und energieabsorbierende Fasern"
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3482
 msgid "Leopard"
-msgstr ""
+msgstr "Leopard"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -10609,7 +10609,7 @@ msgstr "Hervorragendes Erkundungsfahrzeug"
 #. data/mp/stats/body.json: $.Body12SUP.name
 #: po/custom/fromJson.txt:3624
 msgid "Mantis"
-msgstr ""
+msgstr "Mantis"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MassDriver.name
@@ -11479,7 +11479,7 @@ msgstr "NEXUS-Mauer"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4249
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11491,13 +11491,13 @@ msgstr "Kein Platz zum Verstecken"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4255
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Non-Cheating. Hard. Fun. Crush!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
@@ -11579,7 +11579,7 @@ msgstr "Originalgeplänkel"
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4315
 msgid "Panther"
-msgstr ""
+msgstr "Panther"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -11595,7 +11595,7 @@ msgstr "Pepperpot-Grube"
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4325
 msgid "Pepperpot"
-msgstr ""
+msgstr "Pepperpot"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -11830,7 +11830,7 @@ msgstr "Behandeltes Propylenoxidgel brennt heißer"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.tip
 #: po/custom/fromJson.txt:4470
 msgid "Prototypical AI focusing on rockets/missiles"
-msgstr ""
+msgstr "Prototypische KI, fokussiert auf Raketen/Lenkraketen"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PulseLas.name
@@ -11916,7 +11916,7 @@ msgstr "Python Schwere Kanone Ketten"
 #. data/mp/stats/body.json: $.Body11ABT.name
 #: po/custom/fromJson.txt:4517
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
@@ -12289,14 +12289,14 @@ msgstr "Forschungsgeschwindigkeit +85%"
 #. data/mp/stats/body.json: $.Body3MBT.name
 #: po/custom/fromJson.txt:4785
 msgid "Retaliation"
-msgstr ""
+msgstr "Retaliation"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body7ABT.name
 #. data/mp/stats/body.json: $.Body7ABT.name
 #: po/custom/fromJson.txt:4789
 msgid "Retribution"
-msgstr ""
+msgstr "Retribution"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-IDFRocket.name
@@ -12635,7 +12635,7 @@ msgstr "Scavenger-Raketengrube"
 #. data/mp/stats/templates.json: $.BaBaPeople.name
 #: po/custom/fromJson.txt:5004
 msgid "Scavenger"
-msgstr ""
+msgstr "Scavenger"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaBusCan.name
@@ -12649,7 +12649,7 @@ msgstr "Schulbus"
 #. data/mp/stats/body.json: $.Body8MBT.name
 #: po/custom/fromJson.txt:5012
 msgid "Scorpion"
-msgstr ""
+msgstr "Scorpion"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
@@ -12661,7 +12661,7 @@ msgstr "Scourge-Cyborg"
 #. data/mp/stats/templates.json: $.Scourge-Mantis-H.name
 #: po/custom/fromJson.txt:5018
 msgid "Scourge Mantis Hover"
-msgstr ""
+msgstr "Scourge Mantis Hover"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisScourgeTracks.name
@@ -12766,7 +12766,7 @@ msgstr "Selbstreplizierende Fertigung"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -14701,7 +14701,7 @@ msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
-msgstr "Commander braucht höheren Rang, um mehr Einheiten befehligen zu können."
+msgstr "Commander braucht höheren Rang, um mehr Einheiten befehligen zu können"
 
 #: src/configuration.cpp:171
 msgid "My Game"
@@ -14963,7 +14963,7 @@ msgstr "Intro zeigen"
 
 #: src/frontend.cpp:141
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "Videos fehlen, laden Sie sie von http://wz2100.net/ herunter."
+msgstr "Videos fehlen, laden Sie sie von http://wz2100.net herunter"
 
 #: src/frontend.cpp:146
 #: src/frontend.cpp:150
@@ -15008,7 +15008,7 @@ msgstr "Verbinden Sie sich mit Freenode über den Webchat durch Klicken dieses L
 
 #: src/frontend.cpp:166
 msgid "Check for a newer version"
-msgstr "Nach neuer Version suchen."
+msgstr "Nach neuer Version suchen"
 
 #: src/frontend.cpp:276
 msgid "Fast Play"
@@ -17620,7 +17620,7 @@ msgstr "Kann keine Reparatureinheit finden!"
 
 #: src/selection.cpp:355
 msgid "Unable to locate any Trucks!"
-msgstr "Kann keinen LKW finden!"
+msgstr "Kann keine LKW finden!"
 
 #: src/selection.cpp:358
 msgid "Unable to locate any Sensor Units!"
