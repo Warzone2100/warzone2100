@@ -16,10 +16,10 @@ if(("${CPACK_GENERATOR}" IN_LIST CPACK_SOURCE_GENERATOR) OR ("${CPACK_GENERATOR}
 		return()
 	endif()
 
-	# When packaging source, generate (and include) src/autorevision.cache
+	# When packaging source, generate (and include) build_tools/autorevision.cache
 
-	set(OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/src/autorevision.cache")
-	set(CACHEFILE "@PROJECT_SOURCE_DIR@/src/autorevision.cache")
+	set(OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/build_tools/autorevision.cache")
+	set(CACHEFILE "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cache")
 
 	execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CACHEFILE} -DOUTPUT_TYPE=sh -DOUTPUT_FILE=${OUTPUT_FILE} -DSKIPUPDATECACHE="1" -P "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cmake"
 		WORKING_DIRECTORY "@PROJECT_SOURCE_DIR@")
