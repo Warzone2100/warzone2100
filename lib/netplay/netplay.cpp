@@ -184,7 +184,7 @@ unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
 **/
 static char const *versionString = version_getVersionString();
 
-#include "netplay_config.h"
+#include "lib/netplay/netplay_config.h"
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
