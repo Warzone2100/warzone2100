@@ -2299,6 +2299,7 @@ bool NETregisterServer(int state)
 					socketClose(rs_socket);
 					rs_socket = nullptr;
 					server_not_there = true;
+					ActivityManager::instance().hostGameLobbyServerDisconnect();
 				}
 				lastServerUpdate = realTime;
 				return bProcessingConnectOrDisconnectThisCall;
@@ -2319,6 +2320,7 @@ bool NETregisterServer(int state)
 					{
 						socketClose(rs_socket);
 						rs_socket = nullptr;
+						ActivityManager::instance().hostGameLobbyServerDisconnect();
 					}
 					lastServerUpdate = realTime;
 					queuedServerUpdate = false;
@@ -2328,6 +2330,7 @@ bool NETregisterServer(int state)
 						socketClose(rs_socket);
 						server_not_there = true;
 						rs_socket = nullptr;
+						ActivityManager::instance().hostGameLobbyServerDisconnect();
 						return bProcessingConnectOrDisconnectThisCall;
 					}
 				}

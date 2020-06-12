@@ -169,6 +169,7 @@ public:
 	// called when a joinable multiplayer game is hosted
 	// lobbyGameId is 0 if the lobby can't be contacted / the game is not registered with the lobby
 	void hostGame(const char *SessionName, const char *PlayerName, const char* lobbyAddress, unsigned int lobbyPort, const ActivitySink::ListeningInterfaces& listeningInterfaces, uint32_t lobbyGameId = 0);
+	void hostGameLobbyServerDisconnect();
 	void hostLobbyQuit();
 	// called when attempting to join a lobby game
 	void willAttemptToJoinLobbyGame(const std::string& lobbyAddress, unsigned int lobbyPort, uint32_t lobbyGameId, const std::vector<JoinConnectionDescription>& connections);
