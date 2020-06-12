@@ -27,7 +27,7 @@
 #include "lib/framework/wzstring.h"
 
 #include "version.h"
-#include "src/autorevision.h"  // Must add the "src/" so make doesn't needlessly recompile version.cpp every time.
+#include "build_tools/autorevision.h"
 
 #include <LaunchInfo.h>
 

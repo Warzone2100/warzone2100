@@ -694,6 +694,7 @@ add_subdirectory(3rdparty)
 set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
 
 CONFIGURE_WZ_COMPILER_WARNINGS()
+add_subdirectory(build_tools)
 add_subdirectory(lib)
 add_subdirectory(data)
 add_subdirectory(doc)

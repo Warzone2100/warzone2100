@@ -5,31 +5,9 @@ include(GNUInstallDirs)
 ############################
 # Versioning (autorevision)
 
-# Autorevision target that will run *every* build
-add_custom_target(autorevision ALL
-    DEPENDS
-        "${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"
-)
-set_property(TARGET autorevision PROPERTY FOLDER "_WZBuildProcessTargets")
-
-# Autorevision command that will run *every* build
-set(_autorevision_cache_tarball_src_input "${CMAKE_CURRENT_SOURCE_DIR}/autorevision.cache")
-set(_autorevision_cache_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache")
-set(_autorevision_h_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h")
-add_custom_command(
-    OUTPUT
-		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"  # fake - ensure we run
-		"${_autorevision_h_file}"
-		"${_autorevision_cache_file}"
-	# Copy autorevision.cache from the src directory (if present)
-	# This supports proper versioning from distribution source archives
-	COMMAND ${CMAKE_COMMAND} -DINPUT_FILE=${_autorevision_cache_tarball_src_input} -DOUTPUT_FILE=${_autorevision_cache_file} -DSKIP_IF_INPUT_MISSING=ON -DSKIP_IF_OUTPUT_EXISTS=ON -P ${CMAKE_SOURCE_DIR}/cmake/CopyFileHelper.cmake
-	# Autorevision.cmake
-	# this command must generate: ${CMAKE_CURRENT_BINARY_DIR}/autorevision.h
-	COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DOUTPUT_TYPE=h -DOUTPUT_FILE=${_autorevision_h_file} -P ${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake
-	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	VERBATIM
-)
+# IMPORTANT: Must set GENERATED property at this directory level for autorevision.h
+set_source_files_properties("${wz2100_autorevision_cache_file}" PROPERTIES GENERATED TRUE)
+set_source_files_properties("${wz2100_autorevision_h_file}" PROPERTIES GENERATED TRUE)
 
 # On Windows, configure warzone2100.rc and the .manifest with updated version info
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -38,9 +16,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_manifest_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest")
 	add_custom_command(
 		OUTPUT "${_manifest_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_manifest_template_file} -DOUTPUT_FILE=${_manifest_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_manifest_template_file} -DOUTPUT_FILE=${_manifest_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_manifest_template_file}" "${_autorevision_cache_file}"
+		DEPENDS "${_manifest_template_file}" "${wz2100_autorevision_cache_file}"
 		VERBATIM
 	)
 
@@ -49,11 +27,19 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_rc_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 	add_custom_command(
 		OUTPUT "${_rc_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_rc_template_file} -DOUTPUT_FILE=${_rc_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_rc_template_file} -DOUTPUT_FILE=${_rc_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_rc_template_file}" "${_autorevision_cache_file}" "${_manifest_output_file}"
+		DEPENDS "${_rc_template_file}" "${wz2100_autorevision_cache_file}" "${_manifest_output_file}"
 		VERBATIM
 	)
+
+	add_custom_target(autorevision_winver ALL
+		DEPENDS
+			"${_manifest_output_file}"
+			"${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc"
+	)
+	set_property(TARGET autorevision_winver PROPERTY FOLDER "_WZBuildProcessTargets")
+	add_dependencies(autorevision_winver autorevision) # Ensure ordering and non-concurrency
 endif()
 
 # On macOS, generate the Info.plist file with updated version info at *build-time*
@@ -62,9 +48,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(_info_plist_output_file "${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist")
 	add_custom_command(
 		OUTPUT "${_info_plist_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_info_plist_template_file}" "${_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake"
+		DEPENDS "${_info_plist_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake"
 		VERBATIM
 	)
 
@@ -73,7 +59,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 			"${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist"
 	)
 	set_property(TARGET autorevision_infoplist PROPERTY FOLDER "_WZBuildProcessTargets")
-
 	add_dependencies(autorevision_infoplist autorevision) # Ensure ordering and non-concurrency
 
 endif()
@@ -94,7 +79,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_additionalSourceFiles "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 endif()
 
-add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" ${_additionalSourceFiles})
+add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
