@@ -15,54 +15,14 @@ We currently do releases off git master.
     git pull origin master
 
 
-Bump version numbers
+Update the changelog
 --------------------
-The following files _need editing_ to have the _correct version_.
+The following files should be edited prior to release:
 
 ### ChangeLog
 
 Edit the `ChangeLog` to be in sync with the latest changes. Also make sure to put the correct date and version there (the date that you make the release of course).
 
-### configure.ac
-
-Make sure to put the correct version number in the second parameter of AC_INIT.
-The AC_INIT directive should be somewhere at the top of the file.
-In this case, we use `3.3.0` for this release. It can be `4.3_beta 1` or whatever.
-
-    AC_INIT([Warzone 2100],[3.3.0],[http://wz2100.net/],[warzone2100])
-
-Make it default to _release_ builds.
-
-    # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
-    AC_ARG_ENABLE([debug],
-    AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/no]],[Compile debug version [[yes]]]),
-    [ enable_debug=${enableval} ], [ enable_debug=yes ])
-
-change it to:
-
-    [ enable_debug=${enableval} ], [ enable_debug=no ])
-    ...
-    AC_MSG_CHECKING([whether to compile in debug mode])
-    AC_MSG_RESULT([${enable_debug}])
-
-### lib/netplay/netplay_config.h
-
-Every release should increment at least `NETCODE_VERSION_MINOR` by 1, to prevent any issues with data or code changes.
-It is very important that this number is in sequential order from the last release, as the lobby server needs sane data to identify versions.
-
-`NETCODE_VERSION_MAJOR` is used the following way.
- * master will have this set to `0x1000`
- * bugfixes will have this set to `0xB00`
- * 3.1 will have this set to `0x2000`
- * releases based off branch master will be `0x10A0`
- * releases based off branch bugfixes will be `0xBA0`
- * releases based off branch 3.1 will be `0x20A0`
- * new branches will be `+0x1000` higher than the original value.
-
-```c
-static int NETCODE_VERSION_MAJOR = 6;                // major netcode version, used for compatibility check
-static int NETCODE_VERSION_MINOR = 0x22;             // minor netcode version, used for compatibility check
-```
 
 Commit the (above) changes to master
 
@@ -212,10 +172,6 @@ Once you have verified all the release assets:
 This will automatically:
 * Make the new release available on GitHub
 * Trigger automatic mirroring of the new release to SourceForge
-
-### Revert the changes to configure.ac
-
-Then you should revert the changes you made to `configure.ac` and `lib/netplay/netplay_config.h`, so that git master again becomes git master.
 
 
 Post-Release checklist
