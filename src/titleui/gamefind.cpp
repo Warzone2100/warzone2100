@@ -118,21 +118,25 @@ TITLECODE WzGameFindTitleUI::run()
 	screen_disableMapPreview();
 
 	static UDWORD lastupdate = 0;
+	static UDWORD lastFetchRealTime = 0;
 
 	if (lastupdate > gameTime)
 	{
 		lastupdate = 0;
 	}
-	if (gameTime - lastupdate > 6000)
+	bool handleUserRefreshRequest = queuedRefreshOfGamesList && ((realTime - lastFetchRealTime) >= (GAME_TICKS_PER_SEC));
+	if (handleUserRefreshRequest || (gameTime - lastupdate > 6000))
 	{
 		lastupdate = gameTime;
 		addConsoleBox();
-		if (safeSearch)
+		if (safeSearch || handleUserRefreshRequest)
 		{
 			if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))	// find games synchronously
 			{
 				pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 			}
+			lastFetchRealTime = realTime;
+			queuedRefreshOfGamesList = false;
 		}
 		addGames();	//redraw list
 	}
@@ -158,12 +162,11 @@ TITLECODE WzGameFindTitleUI::run()
 		}
 		ingame.localOptionsReceived = true;
 		addConsoleBox();
-		if (!NETfindGames(gamesList, 0, MaxGames, toggleFilter))	// find games synchronously
+		if (!queuedRefreshOfGamesList)
 		{
-			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+			addConsoleMessage(_("Refreshing..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			queuedRefreshOfGamesList = true;
 		}
-		addConsoleMessage(_("Refreshing..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-		addGames();									//redraw list.
 	}
 
 	// below is when they hit a game box to connect to--ideally this would be where
