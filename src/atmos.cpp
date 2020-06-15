@@ -268,7 +268,7 @@ void atmosUpdateSystem()
 		static double accumulatedParticlesToAdd = 0.0;
 
 		double gameTimeModVal = gameTimeGetMod().asDouble();
-		if (!isnan(gameTimeModVal))
+		if (!std::isnan(gameTimeModVal))
 		{
 			accumulatedParticlesToAdd += ((weather == WT_SNOWING) ? 2.0 : 4.0) * gameTimeModVal;
 		}
