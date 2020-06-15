@@ -38,9 +38,12 @@ enum CONSOLE_TEXT_JUSTIFICATION
 #define NOTIFY_MESSAGE				(-2)	// mainly used for lobby & error messages
 #define INFO_MESSAGE				(-3)	// This type is not stored, it is used for simple messages
 
+#define MAX_CONSOLE_MESSAGE_DURATION	((UDWORD)-1)
+#define DEFAULT_CONSOLE_MESSAGE_DURATION	0
+
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false);
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false, UDWORD duration = DEFAULT_CONSOLE_MESSAGE_DURATION);
 void updateConsoleMessages();
 void initConsoleMessages();
 void removeTopConsoleMessage();
