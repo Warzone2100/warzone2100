@@ -34,7 +34,7 @@
 #include "map.h"
 #include "miscimd.h"
 #include "lib/gamelib/gtime.h"
-#include <math.h>
+#include <cmath>
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
