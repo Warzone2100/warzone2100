@@ -3396,9 +3396,19 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 /// Smoothly adjust player height to match the desired height
 static void trackHeight(int desiredHeight)
 {
+	static const uint32_t minTrackHeightInterval = GAME_TICKS_PER_SEC / 60;
+	static uint32_t lastHeightAdjustmentRealTime = 0;
 	static float heightSpeed = 0.0f;
 
 	desiredHeight = static_cast<int>(std::ceil(static_cast<float>(desiredHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS;
+
+	uint32_t deltaTrackHeightRealTime = realTime - lastHeightAdjustmentRealTime;
+	if (deltaTrackHeightRealTime < minTrackHeightInterval)
+	{
+		// avoid processing this too rapidly, such as when vsync is disabled
+		return;
+	}
+	lastHeightAdjustmentRealTime = realTime;
 
 	if ((desiredHeight == player.p.y) && ((heightSpeed > -5.f) && (heightSpeed < 5.f)))
 	{
@@ -3409,7 +3419,7 @@ static void trackHeight(int desiredHeight)
 	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
 
 	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
-	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, realTimeAdjustedIncrement(1));
+	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, (float) deltaTrackHeightRealTime / (float) GAME_TICKS_PER_SEC);
 
 	/* Adjust the height accordingly */
 	player.p.y = desiredHeight - static_cast<int>(std::trunc(separation));
