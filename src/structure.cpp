@@ -7113,6 +7113,7 @@ bool canStructureHaveAModuleAdded(const STRUCTURE* const structure)
 	{
 		case REF_FACTORY:
 		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
 			return structure->capacity < NUM_FACTORY_MODULES;
 
 		case REF_POWER_GEN:
