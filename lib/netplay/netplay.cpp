@@ -191,6 +191,11 @@ bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_mino
 	return (uint32_t)NETCODE_VERSION_MAJOR == game_version_major && (uint32_t)NETCODE_VERSION_MINOR == game_version_minor;
 }
 
+bool NETisGreaterVersion(uint32_t game_version_major, uint32_t game_version_minor)
+{
+	return (game_version_major > NETCODE_VERSION_MAJOR) || ((game_version_major == NETCODE_VERSION_MAJOR) && (game_version_minor > NETCODE_VERSION_MINOR));
+}
+
 int NETGetMajorVersion()
 {
 	return NETCODE_VERSION_MAJOR;
@@ -2235,7 +2240,7 @@ bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function
 		uint32_t Vmgr = (game.future4 & 0xFFFF0000) >> 16;
 		uint32_t Vmnr = (game.future4 & 0x0000FFFF);
 
-		if (Vmgr > NETCODE_VERSION_MAJOR || Vmnr > NETCODE_VERSION_MINOR)
+		if (NETisGreaterVersion(Vmgr, Vmnr))
 		{
 			debug(LOG_NET, "Version update %d:%d", Vmgr, Vmnr);
 			NetPlay.HaveUpgrade = true;
