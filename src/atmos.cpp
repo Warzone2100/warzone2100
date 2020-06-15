@@ -34,6 +34,7 @@
 #include "map.h"
 #include "miscimd.h"
 #include "lib/gamelib/gtime.h"
+#include <math.h>
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
@@ -266,7 +267,11 @@ void atmosUpdateSystem()
 		// we have to accumulate a fractional number of particles to add them at a slower or faster rate.
 		static double accumulatedParticlesToAdd = 0.0;
 
-		accumulatedParticlesToAdd += ((weather == WT_SNOWING) ? 2.0 : 4.0) * gameTimeGetMod().asDouble();
+		double gameTimeModVal = gameTimeGetMod().asDouble();
+		if (!isnan(gameTimeModVal))
+		{
+			accumulatedParticlesToAdd += ((weather == WT_SNOWING) ? 2.0 : 4.0) * gameTimeModVal;
+		}
 
 		numberToAdd = accumulatedParticlesToAdd;
 		accumulatedParticlesToAdd -= numberToAdd;
