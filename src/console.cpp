@@ -64,15 +64,17 @@ struct CONSOLE_MESSAGE
 {
 	WzText display;
 	UDWORD	timeAdded;		// When was it added to our list?
+	UDWORD	duration;
 	CONSOLE_TEXT_JUSTIFICATION JustifyType;	// text justification
 	int		player;			// Player who sent this message or SYSTEM_MESSAGE
-	CONSOLE_MESSAGE(const std::string &text, iV_fonts fontID, UDWORD time, CONSOLE_TEXT_JUSTIFICATION justify, int plr)
-	                : display(text, fontID), timeAdded(time), JustifyType(justify), player(plr) {}
+	CONSOLE_MESSAGE(const std::string &text, iV_fonts fontID, UDWORD time, UDWORD duration, CONSOLE_TEXT_JUSTIFICATION justify, int plr)
+	                : display(text, fontID), timeAdded(time), duration(duration), JustifyType(justify), player(plr) {}
 
 	CONSOLE_MESSAGE& operator =(CONSOLE_MESSAGE&& input)
 	{
 		display = std::move(input.display);
 		timeAdded = input.timeAdded;
+		duration = input.duration;
 		JustifyType = input.JustifyType;
 		player = input.player;
 		return *this;
@@ -168,7 +170,7 @@ void	toggleConsoleDrop()
 }
 
 /** Add a string to the console. */
-bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team)
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team, UDWORD duration)
 {
 	if (!allowNewMessages)
 	{
@@ -196,18 +198,20 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 
 		debug(LOG_CONSOLE, "(to player %d): %s", (int)player, FitText.c_str());
 
+		UDWORD newMsgDuration = (duration != DEFAULT_CONSOLE_MESSAGE_DURATION) ? duration : messageDuration;
+
 		if (player == INFO_MESSAGE)
 		{
-			InfoMessages.emplace_back(FitText, font_regular, realTime, jusType, player);
+			InfoMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);
 		}
 		else
 		{
-			ActiveMessages.emplace_back(FitText, font_regular, realTime, jusType, player);	// everything gets logged here for a specific period of time
+			ActiveMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// everything gets logged here for a specific period of time
 			if (team)
 			{
-				TeamMessages.emplace_back(FitText, font_regular, realTime, jusType, player);	// persistent team specific logs
+				TeamMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// persistent team specific logs
 			}
-			HistoryMessages.emplace_back(FitText, font_regular, realTime, jusType, player);	// persistent messages (all types)
+			HistoryMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// persistent messages (all types)
 		}
 	}
 	return true;
@@ -231,7 +235,7 @@ void	updateConsoleMessages()
 	}
 	for (auto i = InfoMessages.begin(); i != InfoMessages.end();)
 	{
-		if (realTime - i->timeAdded > messageDuration)
+		if ((i->duration != MAX_CONSOLE_MESSAGE_DURATION) && (realTime - i->timeAdded > i->duration))
 		{
 			i = InfoMessages.erase(i);
 		}
@@ -243,7 +247,7 @@ void	updateConsoleMessages()
 	// Time to kill all expired ones
 	for (auto i = ActiveMessages.begin(); i != ActiveMessages.end();)
 	{
-		if (realTime - i->timeAdded > messageDuration)
+		if ((i->duration != MAX_CONSOLE_MESSAGE_DURATION) && (realTime - i->timeAdded > i->duration))
 		{
 			i = ActiveMessages.erase(i);
 		}
