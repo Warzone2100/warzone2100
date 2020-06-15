@@ -137,8 +137,8 @@ TITLECODE WzGameFindTitleUI::run()
 			}
 			lastFetchRealTime = realTime;
 			queuedRefreshOfGamesList = false;
+			addGames();	//redraw list
 		}
-		addGames();	//redraw list
 	}
 
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
@@ -146,6 +146,7 @@ TITLECODE WzGameFindTitleUI::run()
 
 	if (id == CON_CANCEL)								// ok
 	{
+		clearActiveConsole();
 		changeTitleUI(std::make_shared<WzProtocolTitleUI>());
 	}
 
@@ -164,6 +165,7 @@ TITLECODE WzGameFindTitleUI::run()
 		addConsoleBox();
 		if (!queuedRefreshOfGamesList)
 		{
+			clearActiveConsole();
 			addConsoleMessage(_("Refreshing..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 			queuedRefreshOfGamesList = true;
 		}
@@ -177,6 +179,8 @@ TITLECODE WzGameFindTitleUI::run()
 
 		std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, 0)};
 		ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
+
+		clearActiveConsole();
 
 		// joinGame is quite capable of asking the user for a password, & is decoupled from lobby, so let it take over
 		ingame.localOptionsReceived = false;					// note, we are awaiting options
@@ -434,7 +438,7 @@ void WzGameFindTitleUI::addGames()
 	if (strlen(NetPlay.MOTD))
 	{
 		permitNewConsoleMessages(true);
-		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
 	}
 	setConsolePermanence(false, false);
 	updateConsoleMessages();
