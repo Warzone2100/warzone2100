@@ -56,6 +56,7 @@ private:
 	static bool isValidExpiry(const json& updateData);
 	static ProcessResult processUpdateJSONFile(const json& updateData, bool validSignature, bool validExpiry);
 	static std::string configureUpdateLinkURL(const std::string& url, BuildPropertyProvider& propProvider);
+	static void fetchUpdateData(const std::vector<std::string> &updateDataUrls);
 };
 
 const std::string WZ_UPDATES_VERIFY_KEY = "5d9P+Z1SirsWSsYICZAr7QFlPB01s6tzXkhPZ+X/FQ4=";
@@ -378,10 +379,26 @@ void WzUpdateManager::initUpdateCheck()
 	}
 
 	// Fall-back to URL request for the latest data
+	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100.json", "https://warzone2100.github.io/update-data/wz2100.json"};
+	WzUpdateManager::fetchUpdateData(updateDataUrls);
+}
+
+// May be called from a background thread
+void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateDataUrls)
+{
+	if (updateDataUrls.empty())
+	{
+		// No urls to check
+		wzAsyncExecOnMainThread([]{
+			debug(LOG_WARNING, "No more URLs to fetch - failed update check");
+		});
+		return;
+	}
 
 	URLDataRequest* pRequest = new URLDataRequest();
-	pRequest->url = "https://warzone2100.github.io/update-data/wz2100.json";
-	pRequest->onSuccess = [](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	pRequest->url = updateDataUrls.front();
+	std::vector<std::string> additionalUrls(updateDataUrls.begin() + 1, updateDataUrls.end());
+	pRequest->onSuccess = [additionalUrls](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
 
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
@@ -389,6 +406,7 @@ void WzUpdateManager::initUpdateCheck()
 			wzAsyncExecOnMainThread([httpStatusCode]{
 				debug(LOG_WARNING, "Update check returned HTTP status code: %ld", httpStatusCode);
 			});
+			WzUpdateManager::fetchUpdateData(additionalUrls);
 			return;
 		}
 
@@ -406,11 +424,22 @@ void WzUpdateManager::initUpdateCheck()
 			wzAsyncExecOnMainThread([url, errorStr]{
 				debug(LOG_NET, "%s; %s", errorStr.c_str(), url.c_str());
 			});
+			WzUpdateManager::fetchUpdateData(additionalUrls);
 			return;
 		}
 
 		// Determine if the JSON is still valid (note: requires accurate system clock)
 		bool validExpiry = isValidExpiry(updateData);
+
+		if ((!validSignature || !validExpiry) && !additionalUrls.empty())
+		{
+			// signature is invalid, or data is expired, and there are further urls to try to fetch
+			// instead of proceeding, try the next url
+			WzUpdateManager::fetchUpdateData(additionalUrls);
+			return;
+		}
+
+		// Otherwise,
 		// Do not immediately fail if the validThru date doesn't check out - pass this status to processUpdateJSONFile
 		// so it can decide how to trust the parts of the data
 
@@ -443,13 +472,15 @@ void WzUpdateManager::initUpdateCheck()
 			}
 		}
 	};
-	pRequest->onFailure = [](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	pRequest->onFailure = [additionalUrls](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+		bool tryNextUrl = false;
 		switch (type)
 		{
 			case URLRequestFailureType::INITIALIZE_REQUEST_ERROR:
 				wzAsyncExecOnMainThread([]{
 					debug(LOG_WARNING, "Failed to initialize request for update check");
 				});
+				tryNextUrl = true;
 				break;
 			case URLRequestFailureType::TRANSFER_FAILED:
 				if (!transferDetails.has_value())
@@ -466,6 +497,7 @@ void WzUpdateManager::initUpdateCheck()
 						debug(LOG_WARNING, "Update check request failed with error %d, and HTTP response code: %ld", result, httpStatusCode);
 					});
 				}
+				tryNextUrl = true;
 				break;
 			case URLRequestFailureType::CANCELLED:
 				wzAsyncExecOnMainThread([url]{
@@ -477,6 +509,10 @@ void WzUpdateManager::initUpdateCheck()
 					debug(LOG_WARNING, "Update check was cancelled by application shutdown");
 				});
 				break;
+		}
+		if (tryNextUrl)
+		{
+			WzUpdateManager::fetchUpdateData(additionalUrls);
 		}
 	};
 	pRequest->maxDownloadSizeLimit = WZ_UPDATES_JSON_MAX_SIZE; // 32 MB (the response should never be this big)
