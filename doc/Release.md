@@ -167,34 +167,34 @@ Edit & Publish the Release
 Once you have verified all the release assets:
 - [x] Click the "Edit" button next to the draft GitHub Release.
 - [x] Remove the top text block from the release notes / description (as it instructs).
+- [x] If this is a beta release, ensure that "This is a pre-release" is **checked**.
+- [x] If this is **NOT** a beta release, ensure that "This is a pre-release" is **unchecked**.
 - [x] Click the green "Publish Release" button.
 
-This will automatically:
-* Make the new release available on GitHub
-* Trigger automatic mirroring of the new release to SourceForge
+That's it! Now just...
 
+Sit Back and Watch the Magic
+----------------------------
+
+The release automation process will then:
+* Make the new release available on GitHub
+* Mirror the new release to SourceForge
+   - (see: [/.github/workflows/mirror_release_sourceforge.yml](/.github/workflows/mirror_release_sourceforge.yml))
+* Update the website
+   - (see: [/.github/workflows/release.yml](/.github/workflows/release.yml#L12), wz2100.net repo's [fetch_latest_release_info.yml](https://github.com/Warzone2100/wz2100.net/blob/master/.github/workflows/fetch_latest_release_info.yml))
+* Update the update-data
+   - (see: [/.github/workflows/release.yml](/.github/workflows/release.yml#L25), update-data repo's [generate_updates_json.yml](https://github.com/Warzone2100/update-data/blob/master/.github/workflows/generate_updates_json.yml))
+* Inform the lobby server of the new version
+   - (see: the bottom of update-data repo's [generate_updates_json.yml](https://github.com/Warzone2100/update-data/blob/master/.github/workflows/generate_updates_json.yml))
 
 Post-Release checklist
 ----------------------
- * Add a new milestone to https://github.com/Warzone2100/warzone2100/milestones
- * (See below for details) Update the lobby server for the new release. See ~lobby/wzlobbyserver-ng/wzlobby/protocol/protocol3.py and ~lobby/wzlobbyserver-ng/wzlobby/settings.py and ~lobby/wzlobbyserver-ng/wzlobby/gamedb.py and then restart the lobby via Monit.
- * (See below for details) Update /home/lobby/gamecheck.wz2100.net/gamechecker/bottle/app.py -- the game version checker -- to include the version you have just created. Restart it with «uwsgi --reload /var/run/gamecheck.wz2100.net-master.pid».
- * Tell everyone about it in the forums. You can use the build_tools/changelog2bbcode.sh script to massage the changelog into BBCode.
- * Send mail about it on the developer mailing list.
- * Change the title on our IRC channels about the new release.
- * Ask for a raise for doing all this work that nobody else wanted to do, and you got suckered into doing it.
+- [x] Add a new milestone to https://github.com/Warzone2100/warzone2100/milestones
+- [x] Tell everyone about it in the forums. You can use the build_tools/changelog2bbcode.sh script to massage the changelog into BBCode.
+- [x] Send mail about it on the developer mailing list.
+- [x] Change the title on our IRC channels about the new release.
+- [x] Ask for a raise for doing all this work that nobody else wanted to do, and you got suckered into doing it.
 
 And, I am sure that people will spread the word about this new release at the following sites & others.
- * [ModDb](http://www.moddb.com/games/275/warzone-2100), [Softonic](http://warzone-2100.en.softonic.com/), [Gamershell](http://www.gamershell.com/news), [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6), [Reddit](www.reddit.com/r/warzone2100)
-
-### Updating the version numbers on the server
-
-    sudo su - lobby
-    workon wzlobby
-    cd ~
-    nano -w wzlobbyserver-ng/wzlobby/protocol/protocol3.py
-    nano -w wzlobbyserver-ng/wzlobby/settings.py
-    nano -w wzlobbyserver-ng/wzlobby/gamedb.py
-    nano -w gamecheck.wz2100.net/gamechecker/bottle/app.py
-
-Then use monit to restart the lobby server.
+ * [Reddit](https://www.reddit.com/r/warzone2100)
+ * [ModDb](http://www.moddb.com/games/275/warzone-2100), [Softonic](http://warzone-2100.en.softonic.com/), [Gamershell](http://www.gamershell.com/news), [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6)
