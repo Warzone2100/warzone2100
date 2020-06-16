@@ -199,6 +199,8 @@ std::string urlEncode(const char* urlFragment)
 # endif
 	std::string result = urlEscaped;
 	curl_free(urlEscaped);
+# if LIBCURL_VERSION_NUM >= 0x070F04	// cURL 7.15.4+
 	curl_easy_cleanup(curl);
+# endif
 	return result;
 }
