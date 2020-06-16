@@ -288,6 +288,9 @@ QScriptValue mapJsonToQScriptValue(QScriptEngine *engine, const nlohmann::json &
 		case json::value_t::string	: return engine->toScriptValue(QString::fromUtf8(instance.get<WzString>().toUtf8().c_str()));
 		case json::value_t::array : return mapJsonArrayToQScriptValue(engine, instance, flags);
 		case json::value_t::object : return mapJsonObjectToQScriptValue(engine, instance, flags);
+		case json::value_t::binary :
+			debug(LOG_ERROR, "Unexpected binary value type");
+			return QScriptValue::UndefinedValue;
 		case json::value_t::discarded : return QScriptValue::UndefinedValue;
 	}
 	return QScriptValue::UndefinedValue; // should never be reached
