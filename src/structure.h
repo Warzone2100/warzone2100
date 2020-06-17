@@ -350,8 +350,8 @@ bool IsStatExpansionModule(const STRUCTURE_STATS *psStats);
 bool structureIsBlueprint(const STRUCTURE *psStructure);
 bool isBlueprint(const BASE_OBJECT *psObject);
 
-/*returns the power cost to build this structure*/
-UDWORD structPowerToBuild(const STRUCTURE *psStruct);
+/*returns the power cost to build this structure, or to add its next module */
+UDWORD structPowerToBuildOrAddNextModule(const STRUCTURE *psStruct);
 
 // check whether a factory of a certain number and type exists
 bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);

@@ -760,7 +760,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	if (psStruct->currentBuildPts <= 0 && buildPoints > 0)
 	{
 		// Just starting to build structure, need power for it.
-		bool haveEnoughPower = requestPowerFor(psStruct, structPowerToBuild(psStruct));
+		bool haveEnoughPower = requestPowerFor(psStruct, structPowerToBuildOrAddNextModule(psStruct));
 		if (!haveEnoughPower)
 		{
 			buildPoints = 0;  // No power to build.
@@ -876,11 +876,19 @@ static bool structureHasModules(const STRUCTURE *psStruct)
 	return psStruct->capacity != 0;
 }
 
-// Power returned on demolish. Not sure why it is done this way. FIXME.
+// Power returned on demolish, which is half the power taken to build the structure and any modules
 static int structureTotalReturn(const STRUCTURE *psStruct)
 {
-	int power = structPowerToBuild(psStruct);
-	return psStruct->capacity ? power : power / 2;
+	int power = psStruct->pStructureType->powerToBuild;
+
+	const STRUCTURE_STATS* const moduleStats = getModuleStat(psStruct);
+
+	if (nullptr != moduleStats)
+	{
+		power += psStruct->capacity * moduleStats->powerToBuild;
+	}
+
+	return power / 2;
 }
 
 void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
@@ -6950,8 +6958,8 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	return psNewStruct;
 }
 
-/*returns the power cost to build this structure*/
-UDWORD structPowerToBuild(const STRUCTURE *psStruct)
+/*returns the power cost to build this structure, or to add its next module */
+UDWORD structPowerToBuildOrAddNextModule(const STRUCTURE *psStruct)
 {
 	if (psStruct->capacity)
 	{
