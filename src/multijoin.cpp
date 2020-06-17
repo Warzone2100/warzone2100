@@ -180,8 +180,15 @@ void clearPlayer(UDWORD player, bool quietly)
 
 	for (i = 0; i < MAX_PLAYERS; i++)				// remove alliances
 	{
-		alliances[player][i]	= ALLIANCE_BROKEN;
-		alliances[i][player]	= ALLIANCE_BROKEN;
+		// Never remove a player's self-alliance, as the player can be selected and units added via the debug menu
+		// even after they have left, and this would lead to them firing on each other.
+		if (i != player)
+		{
+			alliances[player][i] = ALLIANCE_BROKEN;
+			alliances[i][player] = ALLIANCE_BROKEN;
+			alliancebits[i] &= ~(1 << player);
+			alliancebits[player] &= ~(1 << i);
+		}
 	}
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
@@ -471,17 +478,9 @@ bool recvDataCheck(NETQUEUE queue)
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
 {
-	UDWORD i;
-
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
-
-	for (i = 0; i < MAX_PLAYERS; i++)				// Set all alliances to broken
-	{
-		alliances[selectedPlayer][i] = ALLIANCE_BROKEN;
-		alliances[i][selectedPlayer] = ALLIANCE_BROKEN;
-	}
 
 	resetMultiVisibility(player);						// set visibility flags.
 
