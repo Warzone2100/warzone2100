@@ -544,14 +544,13 @@ bool _imd_load_connectors(const char **ppFileData, iIMDShape &s)
 // performance hack
 static std::vector<gfx_api::gfxFloat> vertices;
 static std::vector<gfx_api::gfxFloat> normals;
-static std::vector<Vector3f> pie_level_normals;
 static std::vector<gfx_api::gfxFloat> texcoords;
 static std::vector<gfx_api::gfxFloat> tangents;
 static std::vector<gfx_api::gfxFloat> bitangents;
 static std::vector<uint16_t> indices; // size is npolys * 3 * numFrames
 static uint16_t vertexCount = 0;
 
-static bool ReadNormals(const char **ppFileData)
+static bool ReadNormals(const char **ppFileData, std::vector<Vector3f> &pie_level_normals)
 {
    const char *pFileData = *ppFileData;
    int dataCnt;
@@ -571,12 +570,12 @@ static bool ReadNormals(const char **ppFileData)
    return true;
 }
 
-static bool _imd_load_normals(const char **ppFileData, int num_normal_lines)
+static bool _imd_load_normals(const char **ppFileData, std::vector<Vector3f> &pie_level_normals, int num_normal_lines)
 {
    // We only support triangles!
    pie_level_normals.resize(static_cast<size_t>(num_normal_lines * 3));
 
-   if (ReadNormals(ppFileData) == false)
+   if (ReadNormals(ppFileData, pie_level_normals) == false)
    {
 	   pie_level_normals.clear();
 	   return false;
@@ -585,17 +584,18 @@ static bool _imd_load_normals(const char **ppFileData, int num_normal_lines)
    return true;
 }
 
-static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int frameidx, size_t polyIdx)
+static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int frameidx, size_t polyIdx, std::vector<Vector3f> &pie_level_normals)
 {
 	// if texture animation flag is present, fetch animation coordinates for this polygon
 	// otherwise just show the first set of texel coordinates
 	int frame = (p->flags & iV_IMD_TEXANIM) ? frameidx : 0;
 
-	const Vector3f* normal(pie_level_normals.empty() ? &p->normal : &pie_level_normals[polyIdx * 3 + i]);
+	const Vector3f* normal;
 
  	// Do not weld for for models with normals, those are presumed to be correct. Otherwise, it will break tangents
  	if (pie_level_normals.empty())
  	{
+		normal = &p->normal;
 		// See if we already have this defined, if so, return reference to it.
 		for (uint16_t j = 0; j < vertexCount; j++)
 		{
@@ -611,6 +611,10 @@ static inline uint16_t addVertex(iIMDShape &s, size_t i, const iIMDPoly *p, int 
  				return j;
  			}
 		}
+	}
+	else
+	{
+		normal = &pie_level_normals[polyIdx * 3 + i];
 	}
 
 	// We don't have it, add it.
@@ -778,10 +782,12 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	}
 	pFileData += cnt;
 
+	std::vector<Vector3f> pie_level_normals;
+
 	// It could be optional normals directive
  	if (strcmp(buffer, "NORMALS") == 0)
  	{
- 		_imd_load_normals(&pFileData, npolys);
+ 		_imd_load_normals(&pFileData, pie_level_normals, npolys);
 
  		// Attemps to read polys again
  		if (sscanf(pFileData, "%255s %d%n", buffer, &npolys, &cnt) != 2)
@@ -789,6 +795,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  			debug(LOG_ERROR, "_imd_load_level(3a): file corrupt");
  			return nullptr;
  		}
+		debug(LOG_3D, "imd[_load_level] = normals %d", static_cast<int>(pie_level_normals.size()));
  		pFileData += cnt;
  	}
 
@@ -879,9 +886,9 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		{
 			const iIMDPoly& p = s.polys[npol];
 			// Do we already have the vertex data for this polygon?
-			indices.emplace_back(addVertex(s, 0, &p, k, npol));
- 			indices.emplace_back(addVertex(s, 1, &p, k, npol));
- 			indices.emplace_back(addVertex(s, 2, &p, k, npol));
+			indices.emplace_back(addVertex(s, 0, &p, k, npol, pie_level_normals));
+ 			indices.emplace_back(addVertex(s, 1, &p, k, npol, pie_level_normals));
+ 			indices.emplace_back(addVertex(s, 2, &p, k, npol, pie_level_normals));
 		}
 	}
 
@@ -927,7 +934,6 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	normals.resize(0);
 	tangents.resize(0);
 	bitangents.resize(0);
-	pie_level_normals.clear();
 
 	*ppFileData = pFileData;
 
