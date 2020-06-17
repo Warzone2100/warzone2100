@@ -1,4 +1,4 @@
-${LangFileString} WZWelcomeText "Dieser Wizard wird Sie durch die Warzone-2100-Installation führen.\r\n\r\nEs wird empfohlen sämtliche anderen Anwendungen zu schließen, bevor Sie das Setup starten. Dies ermöglicht es relevante Systemdateien zu aktualisieren, ohne neustarten zu müssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafür gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
+${LangFileString} WZWelcomeText "Willkommen beim Warzone 2100 Installer!\r\n\r\nDieser Assistent wird Sie durch die Warzone 2100-Installation führen.\r\n\r\nEs wird empfohlen, sämtliche anderen Anwendungen zu schließen, bevor Sie das Setup starten. Dies ermöglicht es, relevante Systemdateien zu aktualisieren, ohne Ihren Computer neu starten zu müssen.\r\n\r\nWarzone 2100 ist zu 100% kostenlos, falls Sie dafür gezahlt haben, lassen Sie es uns wissen!\r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
 
 ${LangFileString} WZWelcomeText_Portable "Willkommen im portablen Warzone 2100 Installer!\r\n\r\nDieser Assistent führt Sie durch die Installation der portablen Version von Warzone 2100.\r\n\r\nDie Installation ist komplett eigenständig und Sie können das Programm jederzeit deinstallieren, indem Sie das Verzeichnis löschen.\r\n\r\nWarzone 2100 ist 100% kostenlos und komplett Open Source! \r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
 
@@ -28,5 +28,5 @@ ${LangFileString} DESC_SecNLS "Unterstützung für Sprachen außer Englisch (Deu
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
 ${LangFileString} DESC_SecNLS_WinFonts "Den Windows-Schriftarten-Ordner in den Suchpfad aufnehmen. Nutzen Sie dies, falls Sie später eigene Schriftarten in der Konfigurationsdatei eingeben wollen oder es zu Problemen mit der Standardschriftart kommt. Kann unter Vista und später langsam sein!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Wichtige Microsoft Laufzeit-DLLs"
+${LangFileString} TEXT_SecMSSysLibraries "Wichtige Microsoft Runtime DLLs"
 ${LangFileString} DESC_SecMSSysLibraries "Downloaden und installieren (oder updaten) von Microsofts Visual C++ Redistributable System-Bibliotheken, die einige Komponenten benötigen, um zu funktionieren."
