@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-05-30 18:44+0000\n"
-"PO-Revision-Date: 2020-05-31 16:16\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2020-06-16 19:27+0000\n"
+"PO-Revision-Date: 2020-06-17 20:17\n"
+"Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Project-ID: 354665\n"
 "X-Crowdin-Language: ro\n"
 "X-Crowdin-File: /master/po/warzone2100.pot\n"
+"X-Crowdin-File-ID: 72\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1845,7 +1847,7 @@ msgstr "Necesită Fabrică de Cyborgi pentru a fi produs"
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:554
+#: po/custom/fromJson.txt:550
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Înarmat cu Mitralieră de Asalt pentru Cyborgi"
 
@@ -3661,7 +3663,7 @@ msgstr "Obuzierul de 105mm poate fi asociat unui senzor"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1099
+#: po/custom/fromJson.txt:1093
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Ținta ideală: Clădiri, infanterie, vehicule cu roți"
 
@@ -3864,7 +3866,7 @@ msgstr "Poate fi asociat unui senzor"
 #. ... + 4 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1093
+#: po/custom/fromJson.txt:1099
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Ținte Ideale: Clădiri, infanterie, unități cu roți"
 
@@ -4092,7 +4094,7 @@ msgstr "Comandanți - fabrică mai întâi comandanți"
 #: src/hci.cpp:3683
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
-#: src/loadsave.cpp:245
+#: src/loadsave.cpp:268
 #: src/multimenu.cpp:475
 #: src/multimenu.cpp:1205
 #: src/transporter.cpp:201
@@ -5638,38 +5640,38 @@ msgstr "Pornire cu baze avansate"
 msgid "System locale"
 msgstr "Limba sistemului"
 
-#: lib/netplay/netplay.cpp:258
-#: lib/netplay/netplay.cpp:1186
+#: lib/netplay/netplay.cpp:263
+#: lib/netplay/netplay.cpp:1191
 msgid "Enter password here"
 msgstr "Introdu parola aici"
 
-#: lib/netplay/netplay.cpp:1089
+#: lib/netplay/netplay.cpp:1094
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr "Nu s-a putut deschide portul necesar (%s) la (%s)"
 
-#: lib/netplay/netplay.cpp:1093
+#: lib/netplay/netplay.cpp:1098
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr "Trebuie să vă configurați manual routerul și firewall-ul pentru\n"
 " a deschide portul 2100 înainte de a putea găzdui un joc."
 
-#: lib/netplay/netplay.cpp:1103
+#: lib/netplay/netplay.cpp:1108
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1878
+#: lib/netplay/netplay.cpp:1883
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr "Nu s-a găsit niciun dispozitiv UPnP. Configureaza-ți routerul/firewall-ul pentru a deschide portul 2100!"
 
-#: lib/netplay/netplay.cpp:2252
+#: lib/netplay/netplay.cpp:2362
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Nu s-a putut găsi numele server-ului (%s)!"
 
-#: lib/netplay/netplay.cpp:2276
+#: lib/netplay/netplay.cpp:2386
 #, c-format
 msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
@@ -5680,7 +5682,7 @@ msgstr "Eroare de conectare la server: %s.\n"
 "Dacă utilizați un router configurați-l pentru a utiliza UPnP\n"
 " sau pentru a redirecționa portul către sistemul dvs."
 
-#: lib/netplay/netplay.cpp:3020
+#: lib/netplay/netplay.cpp:3093
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -6262,7 +6264,7 @@ msgstr "Rachetă Arhanghel"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:550
+#: po/custom/fromJson.txt:554
 msgid "Armed with Cyborg assault gun"
 msgstr ""
 
@@ -7001,20 +7003,20 @@ msgid "Best Targets: Base structures"
 msgstr "Ținta ideală: Clădiri"
 
 #. TRANSLATORS:
+#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1103
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Ținta ideală: buncăre și blocuri"
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #. ... + 4 refs
-#: po/custom/fromJson.txt:1105
+#: po/custom/fromJson.txt:1109
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Ținta ideală: Buncăre și puncte fortificate"
-
-#. TRANSLATORS:
-#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#: po/custom/fromJson.txt:1109
-msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Ținta ideală: buncăre și blocuri"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -9882,17 +9884,17 @@ msgid "Improvement in laser optics reduces light dispersal"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
-#: po/custom/fromJson.txt:3050
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Amplasament pentru howitzer incendiar"
-
-#. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-#: po/custom/fromJson.txt:3053
+#: po/custom/fromJson.txt:3049
 msgid "Incendiary howitzer emplacement"
 msgstr "Amplasament cu obuzier incendiar"
+
+#. TRANSLATORS:
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
+#: po/custom/fromJson.txt:3053
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Amplasament pentru howitzer incendiar"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -13147,18 +13149,18 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Analiza datelor prin legătura sinaptică Mk3"
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#: po/custom/fromJson.txt:5371
-msgid "Synaptic Link Data Analysis"
-msgstr "Analiza datelor prin legătura sinaptică"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#: po/custom/fromJson.txt:5375
+#: po/custom/fromJson.txt:5371
 msgid "Synaptic link data analysis"
 msgstr "Analiza datelor prin legătură sinaptică"
+
+#. TRANSLATORS:
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#: po/custom/fromJson.txt:5375
+msgid "Synaptic Link Data Analysis"
+msgstr "Analiza datelor prin legătura sinaptică"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -13326,19 +13328,19 @@ msgid "Thermal Armor +35%"
 msgstr "Armură termală +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
-#: po/custom/fromJson.txt:5476
-#, no-c-format
-msgid "Thermal Armor +40%"
-msgstr "Armură termală +40%"
-
-#. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-#: po/custom/fromJson.txt:5480
+#: po/custom/fromJson.txt:5475
 #, no-c-format
 msgid "Thermal armor +40%"
 msgstr "Blindaj Termal +40%"
+
+#. TRANSLATORS:
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#: po/custom/fromJson.txt:5480
+#, no-c-format
+msgid "Thermal Armor +40%"
+msgstr "Armură termală +40%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
@@ -14854,16 +14856,16 @@ msgstr ""
 msgid "Store Design"
 msgstr ""
 
-#: src/display.cpp:1529
+#: src/display.cpp:1531
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Nu se poate construi. Puțul de petrol e în flăcări."
 
-#: src/display.cpp:1545
+#: src/display.cpp:1547
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - Puncte de viață %d/%d - Experiență %.1f, %s"
 
-#: src/display.cpp:1707
+#: src/display.cpp:1709
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Aliat - Puncte de viață %d/%d - Experiență %d, %s"
@@ -14885,22 +14887,22 @@ msgstr "Așteptare pentru alți jucători"
 msgid "Out of sync"
 msgstr "Desincronizat"
 
-#: src/display3d.cpp:1908
+#: src/display3d.cpp:1915
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
-#: src/droid.cpp:248
+#: src/droid.cpp:251
 #, c-format
 msgid "%s Lost!"
 msgstr ""
 
-#: src/droid.cpp:1143
+#: src/droid.cpp:1146
 msgid "Structure Restored"
 msgstr "Clădire reconstruită"
 
-#: src/droid.cpp:1922
+#: src/droid.cpp:1925
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -14908,7 +14910,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:1931
+#: src/droid.cpp:1934
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -14916,7 +14918,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:1942
+#: src/droid.cpp:1945
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -14924,7 +14926,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:1946
+#: src/droid.cpp:1949
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -14932,7 +14934,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/droid.cpp:3055
+#: src/droid.cpp:3058
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -14997,11 +14999,11 @@ msgid "Help support the project with our server costs, Click this link."
 msgstr "Ajută la susținerea proiectului nostru cu costurile serverului, faceți click pe acest link."
 
 #: src/frontend.cpp:162
-msgid "Chat with players on #warzone2100"
+msgid "Chat with players on Discord or IRC"
 msgstr ""
 
 #: src/frontend.cpp:165
-msgid "Connect to Freenode through webchat by clicking this link."
+msgid "Connect to Discord or Freenode through webchat by clicking this link."
 msgstr ""
 
 #: src/frontend.cpp:166
@@ -15453,8 +15455,8 @@ msgid "Mod: "
 msgstr "Mod: "
 
 #: src/hci.cpp:1170
-#: src/loop.cpp:245
-#: src/loop.cpp:261
+#: src/loop.cpp:244
+#: src/loop.cpp:260
 msgid "GAME SAVED: "
 msgstr ""
 
@@ -15972,8 +15974,8 @@ msgstr ""
 #: src/keybind.cpp:1294
 #: src/keybind.cpp:1415
 #: src/keybind.cpp:1517
-#: src/keybind.cpp:1821
-#: src/keybind.cpp:1861
+#: src/keybind.cpp:1815
+#: src/keybind.cpp:1855
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Jucătorul %u) trișeaza :%s"
@@ -16095,102 +16097,102 @@ msgstr "Afișează întotdeauna barele de energie pentru unități și structuri
 msgid "Debug menu is Open"
 msgstr "Meniul de depanare deschis"
 
-#: src/keybind.cpp:1553
+#: src/keybind.cpp:1547
 msgid "Unable to locate any oil derricks!"
 msgstr ""
 
-#: src/keybind.cpp:1717
+#: src/keybind.cpp:1711
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr ""
 
-#: src/keybind.cpp:1723
+#: src/keybind.cpp:1717
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr ""
 
-#: src/keybind.cpp:1729
+#: src/keybind.cpp:1723
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr ""
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1814
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Atenție! Acest lucru poate avea consecințe drastice dacă este folosit incorect în misiuni."
 
-#: src/keybind.cpp:1822
+#: src/keybind.cpp:1816
 msgid "All enemies destroyed by cheating!"
 msgstr "Toți inamicii distruși prin trișare!"
 
-#: src/keybind.cpp:1862
+#: src/keybind.cpp:1856
 msgid "Destroying selected droids and structures!"
 msgstr ""
 
-#: src/keybind.cpp:2290
+#: src/keybind.cpp:2284
 msgid "Reveal OFF"
 msgstr "Dezvăluire DEZACTIVATĂ"
 
-#: src/keybind.cpp:2295
+#: src/keybind.cpp:2289
 msgid "Reveal ON"
 msgstr "Dezvăluire ACTIVATĂ"
 
-#: src/keybind.cpp:2376
+#: src/keybind.cpp:2370
 msgid "Centered on player HQ, direction NORTH"
 msgstr ""
 
-#: src/keybind.cpp:2388
+#: src/keybind.cpp:2382
 msgid "Unable to locate HQ!"
 msgstr ""
 
-#: src/keybind.cpp:2395
+#: src/keybind.cpp:2389
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr ""
 
-#: src/keybind.cpp:2444
+#: src/keybind.cpp:2438
 msgid "Vertical rotation direction: Normal"
 msgstr "Direcție de rotație verticală: Normală"
 
-#: src/keybind.cpp:2449
+#: src/keybind.cpp:2443
 msgid "Vertical rotation direction: Flipped"
 msgstr "Direcție de rotație verticală: Răsturnată"
 
-#: src/keybind.cpp:2501
+#: src/keybind.cpp:2495
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr ""
 
-#: src/keybind.cpp:2536
-#: src/keybind.cpp:2590
+#: src/keybind.cpp:2530
+#: src/keybind.cpp:2584
 msgid "Game Speed Reset"
 msgstr "Resetarea Vitezei Jocului"
 
-#: src/keybind.cpp:2540
+#: src/keybind.cpp:2534
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Viteza Jocului Mărită la %s"
 
-#: src/keybind.cpp:2544
+#: src/keybind.cpp:2538
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Viteza Jocului Redusă la %s"
 
-#: src/keybind.cpp:2602
+#: src/keybind.cpp:2596
 msgid "Radar showing friend-foe colors"
 msgstr "Radarul arată culorile prieten/inamic"
 
-#: src/keybind.cpp:2606
+#: src/keybind.cpp:2600
 msgid "Radar showing player colors"
 msgstr "Radarul arată culorile jucătorilor"
 
-#: src/keybind.cpp:2621
+#: src/keybind.cpp:2615
 msgid "Radar showing only objects"
 msgstr "Radarul arată doar obiecte"
 
-#: src/keybind.cpp:2624
+#: src/keybind.cpp:2618
 msgid "Radar blending terrain and height"
 msgstr "Radarul combină terenul și înălțimea"
 
-#: src/keybind.cpp:2627
+#: src/keybind.cpp:2621
 msgid "Radar showing terrain"
 msgstr "Radarul arată terenul"
 
-#: src/keybind.cpp:2630
+#: src/keybind.cpp:2624
 msgid "Radar showing height"
 msgstr "Radarul arată înălțimea"
 
@@ -16742,20 +16744,20 @@ msgstr "Dezvăluie harta la poziția mouse-ului"
 msgid "Trace a game object"
 msgstr ""
 
-#: src/loadsave.cpp:311
+#: src/loadsave.cpp:334
 msgid "Parent directory"
 msgstr ""
 
-#: src/loadsave.cpp:316
+#: src/loadsave.cpp:339
 msgid "Autosave directory"
 msgstr ""
 
-#: src/loadsave.cpp:316
+#: src/loadsave.cpp:339
 msgid "Autosave directory (not allowed for saving)"
 msgstr ""
 
-#: src/loop.cpp:252
-#: src/loop.cpp:268
+#: src/loop.cpp:251
+#: src/loop.cpp:267
 msgid "Could not save game!"
 msgstr "Nu s-a putut salva jocul!"
 
@@ -16909,7 +16911,7 @@ msgid "Not enough votes to randomize or change the map."
 msgstr "Nu sunt suficiente voturi pentru a alege aleator sau schimba harta."
 
 #: src/multiint.cpp:1405
-#: src/titleui/gamefind.cpp:571
+#: src/titleui/gamefind.cpp:578
 msgid "Game Name"
 msgstr "Numele Jocului"
 
@@ -17218,9 +17220,9 @@ msgstr "%s se alătură jocului"
 msgid "Server message:"
 msgstr "Mesaj server:"
 
-#: src/multijoin.cpp:510
-msgid "There is an update to the game, please visit http://wz2100.net to download new version."
-msgstr "Există o actualizare a jocului, te rugăm să vizitezi http://wz2100.net pentru a descărca versiunea nouă."
+#: src/multijoin.cpp:518
+msgid "There is an update to the game, please visit https://wz2100.net to download new version."
+msgstr ""
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
@@ -17473,11 +17475,11 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:3124
+#: src/qtscriptfuncs.cpp:3127
 msgid "YOU ARE VICTORIOUS!"
 msgstr "AI OBȚINUT VICTORIA!"
 
-#: src/qtscriptfuncs.cpp:3129
+#: src/qtscriptfuncs.cpp:3132
 msgid "YOU WERE DEFEATED!"
 msgstr "AI FOST ÎNFRÂNT!"
 
@@ -17494,120 +17496,120 @@ msgstr "Cercetare completă"
 msgid "Research Award"
 msgstr "Răsplată de Cercetare"
 
-#: src/scores.cpp:99
+#: src/scores.cpp:98
 #, c-format
 msgid "Own Units: %u"
 msgstr "Unități proprii: %u"
 
-#: src/scores.cpp:100
+#: src/scores.cpp:99
 #, c-format
 msgid "Enemy Units: %u"
 msgstr "Unități inamice: %u"
 
-#: src/scores.cpp:101
+#: src/scores.cpp:100
 #, c-format
 msgid "Own Structures: %u"
 msgstr "Clădiri proprii: %u"
 
-#: src/scores.cpp:102
+#: src/scores.cpp:101
 #, c-format
 msgid "Enemy Structures: %u"
 msgstr "Clădiri inamice: %u"
 
-#: src/scores.cpp:103
+#: src/scores.cpp:102
 #, c-format
 msgid "Units Manufactured: %u"
 msgstr "Unități produse: %u"
 
-#: src/scores.cpp:104
+#: src/scores.cpp:103
 #, c-format
 msgid "Total Units: %u"
 msgstr "Total unități: %u"
 
-#: src/scores.cpp:105
+#: src/scores.cpp:104
 #, c-format
 msgid "Structures Built: %u"
 msgstr "Clădiri construite: %u"
 
-#: src/scores.cpp:106
+#: src/scores.cpp:105
 #, c-format
 msgid "Total Structures: %u"
 msgstr "Total clădiri: %u"
 
-#: src/scores.cpp:108
+#: src/scores.cpp:107
 #, c-format
 msgid "Rookie: %u"
 msgstr "Recrut: %u"
 
-#: src/scores.cpp:109
+#: src/scores.cpp:108
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Verde: %u"
 
-#: src/scores.cpp:110
+#: src/scores.cpp:109
 #, c-format
 msgid "Trained: %u"
 msgstr "Antrenat: %u"
 
-#: src/scores.cpp:111
+#: src/scores.cpp:110
 #, c-format
 msgid "Regular: %u"
 msgstr "Armată regulată: %u"
 
-#: src/scores.cpp:112
+#: src/scores.cpp:111
 #, c-format
 msgid "Professional: %u"
 msgstr "Profesionist: %u"
 
-#: src/scores.cpp:113
+#: src/scores.cpp:112
 #, c-format
 msgid "Veteran: %u"
 msgstr "Veteran: %u"
 
-#: src/scores.cpp:114
+#: src/scores.cpp:113
 #, c-format
 msgid "Elite: %u"
 msgstr "Elită: %u"
 
-#: src/scores.cpp:115
+#: src/scores.cpp:114
 #, c-format
 msgid "Special: %u"
 msgstr "Special: %u"
 
-#: src/scores.cpp:116
+#: src/scores.cpp:115
 #, c-format
 msgid "Hero: %u"
 msgstr "Erou: %u"
 
-#: src/scores.cpp:310
+#: src/scores.cpp:309
 msgid "Unit Losses"
 msgstr "Pierderi de unități"
 
-#: src/scores.cpp:312
+#: src/scores.cpp:311
 msgid "Structure Losses"
 msgstr "Pierderi de clădiri"
 
-#: src/scores.cpp:314
+#: src/scores.cpp:313
 msgid "Force Information"
 msgstr "Informații despre forță"
 
-#: src/scores.cpp:391
+#: src/scores.cpp:390
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr "ARTEFACTE RECUPERATE: %d"
 
-#: src/scores.cpp:397
+#: src/scores.cpp:396
 #, c-format
 msgid "Mission Time - %s"
 msgstr "Timp de misiune - %s"
 
-#: src/scores.cpp:403
+#: src/scores.cpp:402
 #, c-format
 msgid "Total Game Time - %s"
 msgstr "Timp total de joc - %s"
 
-#: src/scores.cpp:410
+#: src/scores.cpp:409
 msgid "You cheated!"
 msgstr "Ai trișat!"
 
@@ -17733,119 +17735,119 @@ msgstr "Reîmprospătează lista de jocuri"
 msgid "Filter Games List"
 msgstr "Filtrează Lista de Jocuri"
 
-#: src/titleui/gamefind.cpp:165
+#: src/titleui/gamefind.cpp:169
 msgid "Refreshing..."
 msgstr "Se reîmprospătează..."
 
-#: src/titleui/gamefind.cpp:188
+#: src/titleui/gamefind.cpp:195
 msgid "Searching"
 msgstr "Căutare"
 
-#: src/titleui/gamefind.cpp:241
+#: src/titleui/gamefind.cpp:248
 msgid "Connecting to the lobby server..."
 msgstr "Conectare la server..."
 
-#: src/titleui/gamefind.cpp:252
+#: src/titleui/gamefind.cpp:259
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "Versiunea ta de Warzone este incompatibilă cu acest joc."
 
-#: src/titleui/gamefind.cpp:303
+#: src/titleui/gamefind.cpp:310
 msgid "[Password required]"
 msgstr "[Parolă necesară]"
 
-#: src/titleui/gamefind.cpp:307
+#: src/titleui/gamefind.cpp:314
 msgid "[No Tanks]"
 msgstr "[Fără Tancuri]"
 
-#: src/titleui/gamefind.cpp:311
+#: src/titleui/gamefind.cpp:318
 msgid "[No Cyborgs]"
 msgstr "[Fără Cyborgi]"
 
-#: src/titleui/gamefind.cpp:315
+#: src/titleui/gamefind.cpp:322
 msgid "[No VTOLs]"
 msgstr "[Fără DAV]"
 
-#: src/titleui/gamefind.cpp:320
+#: src/titleui/gamefind.cpp:327
 #, c-format
 msgid "Hosted by %s"
 msgstr "Găzduit de %s"
 
-#: src/titleui/gamefind.cpp:324
+#: src/titleui/gamefind.cpp:331
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr "Găzduit de %s —%s"
 
-#: src/titleui/gamefind.cpp:353
+#: src/titleui/gamefind.cpp:360
 msgid "Can't find any games for your version."
 msgstr "Nu s-a găsit nici un joc pentru versiunea ta."
 
-#: src/titleui/gamefind.cpp:370
+#: src/titleui/gamefind.cpp:377
 msgid "There appears to be a game update available!"
 msgstr "Se pare că este disponibilă o actualizare a jocului!"
 
-#: src/titleui/gamefind.cpp:374
+#: src/titleui/gamefind.cpp:381
 msgid "No games are available for your version"
 msgstr "Nu sunt jocuri disponibile pentru versiunea ta"
 
-#: src/titleui/gamefind.cpp:378
+#: src/titleui/gamefind.cpp:385
 msgid "Game is full"
 msgstr "Jocul este plin"
 
-#: src/titleui/gamefind.cpp:382
+#: src/titleui/gamefind.cpp:389
 msgid "You were kicked!"
 msgstr "Ai fost eliminat!"
 
-#: src/titleui/gamefind.cpp:385
+#: src/titleui/gamefind.cpp:392
 msgid "Wrong Game Version!"
 msgstr "Versiune de joc greșită!"
 
-#: src/titleui/gamefind.cpp:388
+#: src/titleui/gamefind.cpp:395
 msgid "You have an incompatible mod."
 msgstr "Ai un mod incompatibil."
 
-#: src/titleui/gamefind.cpp:392
+#: src/titleui/gamefind.cpp:399
 msgid "Host couldn't send file?"
 msgstr "Gazda nu a putut transmite fișierul?"
 
-#: src/titleui/gamefind.cpp:396
+#: src/titleui/gamefind.cpp:403
 msgid "Incorrect Password!"
 msgstr "Parolă incorectă!"
 
-#: src/titleui/gamefind.cpp:399
+#: src/titleui/gamefind.cpp:406
 msgid "Host has dropped connection!"
 msgstr "Gazda a întrerupt conexiunea!"
 
-#: src/titleui/gamefind.cpp:403
+#: src/titleui/gamefind.cpp:410
 msgid "Connection Error"
 msgstr "Eroare de conexiune"
 
-#: src/titleui/gamefind.cpp:454
+#: src/titleui/gamefind.cpp:461
 msgid "Can't connect to lobby server!"
 msgstr "Nu se poate realiza conexiunea la server!"
 
-#: src/titleui/gamefind.cpp:549
+#: src/titleui/gamefind.cpp:556
 #, c-format
 msgid "Mods: %s"
 msgstr "Moduri: %s"
 
-#: src/titleui/gamefind.cpp:555
+#: src/titleui/gamefind.cpp:562
 msgid "Mods: None!"
 msgstr "Moduri: Nici unul!"
 
-#: src/titleui/gamefind.cpp:561
+#: src/titleui/gamefind.cpp:568
 #, c-format
 msgid "Version: %s"
 msgstr "Versiune: %s"
 
-#: src/titleui/gamefind.cpp:574
+#: src/titleui/gamefind.cpp:581
 msgid "Map Name"
 msgstr "Nume Hartă"
 
-#: src/titleui/gamefind.cpp:577
+#: src/titleui/gamefind.cpp:584
 msgid "Players"
 msgstr "Jucători"
 
-#: src/titleui/gamefind.cpp:580
+#: src/titleui/gamefind.cpp:587
 msgid "Status"
 msgstr "Stare"
 
@@ -17895,20 +17897,20 @@ msgstr "Nu există suficient spațiu în Transport!"
 msgid "Reinforcements landing"
 msgstr "Întăririle aterizează"
 
-#: src/updatemanager.cpp:238
+#: src/updatemanager.cpp:239
 msgid "Update Available"
 msgstr ""
 
-#: src/updatemanager.cpp:241
+#: src/updatemanager.cpp:242
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
 msgstr ""
 
-#: src/updatemanager.cpp:245
+#: src/updatemanager.cpp:246
 msgid "A new build of Warzone 2100 is available!"
 msgstr ""
 
-#: src/updatemanager.cpp:247
+#: src/updatemanager.cpp:248
 msgid "Get Update Now"
 msgstr ""
 
