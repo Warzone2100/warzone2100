@@ -1519,6 +1519,19 @@ static void addGameOptions()
 		optionsList->addWidgetToLayout(randomButton);
 	}
 
+	if (ingame.bHostSetup && bHosted && !challengeActive)
+	{
+		//Out of room for the GUI so show this after hosting
+		MultichoiceWidget *TechnologyChoice = new MultichoiceWidget(optionsList, game.techLevel);
+		TechnologyChoice->id = MULTIOP_TECHLEVEL;
+		TechnologyChoice->setLabel(_("Tech"));
+		TechnologyChoice->addButton(TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
+		TechnologyChoice->addButton(TECH_2, Image(FrontImages, IMAGE_TECHMED), Image(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
+		TechnologyChoice->addButton(TECH_3, Image(FrontImages, IMAGE_TECHHI), Image(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
+		TechnologyChoice->addButton(TECH_4, Image(FrontImages, IMAGE_COMPUTER_Y), Image(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
+		optionsList->addWidgetToLayout(TechnologyChoice);
+	}
+
 	if (ingame.bHostSetup && !bHosted && !challengeActive)
 	{
 		MultibuttonWidget *hostButton = new MultibuttonWidget(optionsList);
@@ -2833,7 +2846,7 @@ static void randomizeOptions()
 		if (!bHosted || !(bMultiPlayer && NetPlay.bComms != 0))
 		{
 			// Pick a map for a number of players and tech level
-			game.techLevel = current_tech = (rand() % 4) + 1;
+			game.techLevel = (rand() % 4) + 1;
 			LEVEL_LIST levels;
 			do
 			{
@@ -2946,6 +2959,8 @@ static void randomizeOptions()
 
 		if (bHosted)
 		{
+			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_TECHLEVEL))->choose(game.techLevel);
+			
 			disableMultiButs();
 			resetReadyStatus(true);
 		}
@@ -2988,7 +3003,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			widgDelete(psWScreen, FRONTEND_SIDETEXT2);  // del text too,
 
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0, widgGetString(psWScreen, MULTIOP_MAP));
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 0, widgGetString(psWScreen, MULTIOP_MAP));
 
 			widgSetString(psWScreen, MULTIOP_MAP + 1 , game.map); //What a horrible hack! FIX ME! (See addBlueForm())
 			widgReveal(psWScreen, MULTIOP_MAP_MOD);
@@ -2999,7 +3014,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			widgDelete(psWScreen, FRONTEND_SIDETEXT2);					// del text too,
 
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
-			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, current_numplayers);
+			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_numplayers);
 
 			if (NetPlay.isHost && bHosted && NetPlay.bComms)
 			{
@@ -3057,6 +3072,18 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 		case MULTIOP_POWER:  // set power level
 			game.power = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->currentValue();
+
+			resetReadyStatus(false);
+
+			if (bHosted)
+			{
+				sendOptions();
+			}
+			break;
+
+		case MULTIOP_TECHLEVEL:
+			game.techLevel = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_TECHLEVEL))->currentValue();
+			addGameOptions(); //refresh to see the proper tech level in the map name
 
 			resetReadyStatus(false);
 
@@ -3151,7 +3178,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		widgDelete(psWScreen, MULTIOP_PLAYERS);
 		widgDelete(psWScreen, FRONTEND_SIDETEXT2);					// del text too,
 
-		addMultiRequest(MultiPlayersPath, ".sta", MULTIOP_PNAME, 0, 0);
+		addMultiRequest(MultiPlayersPath, ".sta", MULTIOP_PNAME, 0);
 		break;
 
 	case MULTIOP_HOST:
@@ -3966,7 +3993,7 @@ static bool loadSettings(const WzString &filename)
 	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
 	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
-	game.techLevel = current_tech = ini.value("techLevel", game.techLevel).toInt();
+	game.techLevel = ini.value("techLevel", game.techLevel).toInt();
 	ini.endGroup();
 	return true;
 }
