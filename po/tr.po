@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-16 19:27+0000\n"
-"PO-Revision-Date: 2020-06-17 20:17\n"
+"PO-Revision-Date: 2020-06-18 14:55\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -15003,11 +15003,11 @@ msgstr "Projeye sunucu masraflarımızı karşılayarak yardım edin. Bu bağlan
 
 #: src/frontend.cpp:162
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Oyuncularla Discord veya IRC üzerinden sohbet et"
 
 #: src/frontend.cpp:165
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Bu bağlantıya tıklayarak Discord veya Freenode web sohbetine bağlan."
 
 #: src/frontend.cpp:166
 msgid "Check for a newer version"
@@ -17229,7 +17229,7 @@ msgstr "Sunucu iletisi:"
 
 #: src/multijoin.cpp:518
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "Oyunda bir güncelleme var, lütfen yeni sürümü indirmek için https://wz2100.net adresini ziyaret edin."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
