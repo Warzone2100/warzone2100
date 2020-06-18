@@ -136,6 +136,11 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define LEV_MED					1
 #define LEV_HI					2
 
+#define TECH_1					1
+#define TECH_2					2
+#define TECH_3					3
+#define TECH_4					4
+
 #define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 
 #define MAX_KICK_REASON			80			// max array size for the reason your kicking someone

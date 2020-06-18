@@ -71,7 +71,6 @@ extern char	MultiCustomMapsPath[PATH_MAX];
 
 bool	MultiMenuUp			= false;
 static UDWORD	context = 0;
-UDWORD	current_tech = 1;
 UDWORD	current_numplayers = 4;
 static std::string current_searchString;
 
@@ -108,11 +107,6 @@ static std::string current_searchString;
 /// requester stuff.
 #define M_REQUEST_CLOSE (MULTIMENU+49)
 #define M_REQUEST		(MULTIMENU+50)
-
-#define M_REQUEST_C1	(MULTIMENU+61)
-#define M_REQUEST_C2	(MULTIMENU+62)
-#define M_REQUEST_C3	(MULTIMENU+63)
-#define M_REQUEST_C4	(MULTIMENU+64)
 
 #define M_REQUEST_AP	(MULTIMENU+70)
 #define M_REQUEST_2P	(MULTIMENU+71)
@@ -302,36 +296,6 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 
-struct DisplayCamTypeButCache {
-	WzText wzText;
-};
-
-static void displayCamTypeBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	char buffer[8];
-
-	// Any widget using displayCamTypeBut must have its pUserData initialized to a (DisplayCamTypeButCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayCamTypeButCache& cache = *static_cast<DisplayCamTypeButCache *>(psWidget->pUserData);
-
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	sprintf(buffer, "T%i", (int)(psWidget->UserData));
-
-	PIELIGHT colour;
-	if ((unsigned int)(psWidget->UserData) == current_tech)
-	{
-		colour = WZCOL_TEXT_BRIGHT;
-	}
-	else
-	{
-		colour = WZCOL_TEXT_MEDIUM;
-	}
-	cache.wzText.setText(buffer, font_regular);
-	cache.wzText.render(x + 2, y + 12, colour);
-}
-
 struct DisplayNumPlayersButCache {
 	WzText wzText;
 };
@@ -431,7 +395,7 @@ void multiMenuScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight,
  *  \param mode (purpose unknown)
  *  \param numPlayers (purpose unknown)
  */
-void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mode, UBYTE mapCam, UBYTE numPlayers, std::string const &searchString)
+void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mode, UBYTE numPlayers, std::string const &searchString)
 {
 	const unsigned int extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
@@ -440,10 +404,8 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	if (mode == MULTIOP_MAP)
 	{
 		// only save these when they select MAP button
-		current_tech = mapCam;
 		current_numplayers = numPlayers;
 		current_searchString = searchString;
-		game.techLevel = current_tech;
 	}
 	char **fileList = PHYSFS_enumerateFiles(searchDir);
 
@@ -521,7 +483,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 	if (mode == MULTIOP_MAP)
 	{
-		LEVEL_LIST levels = enumerateMultiMaps(mapCam, numPlayers);
+		LEVEL_LIST levels = enumerateMultiMaps(game.techLevel, numPlayers);
 		using Pair = std::pair<int, W_BUTTON *>;
 		std::vector<Pair> buttons;
 
@@ -555,40 +517,9 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		// if it's map select then add the cam style buttons.
 		sButInit = W_BUTINIT();
 		sButInit.formID		= M_REQUEST;
-		sButInit.id		= M_REQUEST_C1;
 		sButInit.x              = 3;
-		sButInit.y              = 254;
 		sButInit.width		= 17;
 		sButInit.height		= 17;
-		sButInit.UserData	= 1;
-		sButInit.pTip		= _("Technology level 1");
-		sButInit.pDisplay	= displayCamTypeBut;
-		sButInit.initPUserDataFunc = []() -> void * { return new DisplayCamTypeButCache(); };
-		sButInit.onDelete = [](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayCamTypeButCache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
-		};
-
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_C2;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 2;
-		sButInit.pTip		= _("Technology level 2");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_C3;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 3;
-		sButInit.pTip		= _("Technology level 3");
-		widgAddButton(psRScreen, &sButInit);
-
-		sButInit.id		= M_REQUEST_C4;
-		sButInit.y		+= 22;
-		sButInit.UserData	= 4;
-		sButInit.pTip		= _("Max technology level");
-		widgAddButton(psRScreen, &sButInit);
 
 		sButInit.id		= M_REQUEST_AP;
 		sButInit.y		= 17;
@@ -679,25 +610,9 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 
 	switch (id)
 	{
-	case M_REQUEST_C1:
-		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 1, current_numplayers, current_searchString);
-		break;
-	case M_REQUEST_C2:
-		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 2, current_numplayers, current_searchString);
-		break;
-	case M_REQUEST_C3:
-		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 3, current_numplayers, current_searchString);
-		break;
-	case M_REQUEST_C4:
-		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 4, current_numplayers, current_searchString);
-		break;
 	case M_REQUEST_AP:
 		closeMultiRequester();
-		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, 0, current_searchString);
+		addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, 0, current_searchString);
 		break;
 	default:
 		for (unsigned numPlayers = 2; numPlayers <= MAX_PLAYERS_IN_GUI; ++numPlayers)
@@ -705,7 +620,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 			if (id == M_REQUEST_NP[numPlayers - 2])
 			{
 				closeMultiRequester();
-				addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_tech, numPlayers, current_searchString);
+				addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, numPlayers, current_searchString);
 				break;
 			}
 		}
