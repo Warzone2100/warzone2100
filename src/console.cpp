@@ -173,16 +173,16 @@ void	toggleConsoleDrop()
 bool addConsoleMessageDebounced(const char * Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, const DEBOUNCED_MESSAGE & message, bool team, UDWORD duration)
 {
 	// Messages are debounced individually - one debounced message won't stop a different one from appearing
-	static std::map<const DEBOUNCED_MESSAGE *, std::chrono::milliseconds> nextAllowedMessageTimes;
+	static std::map<const DEBOUNCED_MESSAGE *, std::chrono::steady_clock::time_point> lastAllowedMessageTimes;
 
 	const std::chrono::milliseconds DEBOUNCE_TIME(message.debounceTime);
-	const std::chrono::milliseconds now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch());
+	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
-	const auto nextAllowedMessageTime = nextAllowedMessageTimes.find(&message);
+	const auto lastAllowedMessageTime = lastAllowedMessageTimes.find(&message);
 
-	if (nextAllowedMessageTime == nextAllowedMessageTimes.end() || now > nextAllowedMessageTime->second)
+	if (lastAllowedMessageTime == lastAllowedMessageTimes.end() || std::chrono::duration_cast<std::chrono::milliseconds>(now - lastAllowedMessageTime->second) >= DEBOUNCE_TIME)
 	{
-		nextAllowedMessageTimes[&message] = now + DEBOUNCE_TIME;
+		lastAllowedMessageTimes[&message] = now;
 		return addConsoleMessage(Text, jusType, player, team, duration);
 	}
 	else
