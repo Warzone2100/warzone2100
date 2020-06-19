@@ -458,12 +458,6 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		psWidget->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
 	}));
 
-	// Add the button list.
-	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
-	requestList->setChildSize(R_BUT_W, R_BUT_H);
-	requestList->setChildSpacing(4, 4);
-	requestList->setGeometry(2 + buttonsX, 2, M_REQUEST_W - buttonsX, M_REQUEST_H - 4);
-
 	// Add the close button.
 	W_BUTINIT sButInit;
 	sButInit.formID = M_REQUEST;
@@ -476,6 +470,12 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
 	widgAddButton(psRScreen, &sButInit);
+
+	// Add the button list.
+	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
+	requestList->setChildSize(R_BUT_W, R_BUT_H);
+	requestList->setChildSpacing(4, 4);
+	requestList->setGeometry(2 + buttonsX, 2, M_REQUEST_W - buttonsX, M_REQUEST_H - 4);
 
 	// Put the buttons on it.
 	int nextButtonId = M_REQUEST_BUT;
