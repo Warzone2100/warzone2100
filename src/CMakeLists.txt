@@ -267,7 +267,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${_wz_entitlements_file}")
 
 	# To properly bundle the resources, they must be built before the app
-	add_dependencies(warzone2100 data wz2100_doc translations)
+	add_dependencies(warzone2100 data translations)
+	if(ENABLE_DOCS)
+		add_dependencies(warzone2100 wz2100_doc)
+	endif()
 
 	# Bundle the Data resources
 	set_property(
@@ -317,16 +320,18 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		# Uses the wzlocal lproj files + config/LangDis to determine what to copy - should we replicate?
 
 	# Bundle the docs
-	set_property(
-		SOURCE ${wz2100_doc_FILES}
-		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs")
-	set_property(
-		SOURCE ${wz2100_doc_IMAGES_FILES}
-		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs/images")
-	set_source_files_properties(
-		${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES}
-		PROPERTIES GENERATED TRUE)
-	target_sources(warzone2100 PRIVATE ${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES})
+	if(ENABLE_DOCS)
+		set_property(
+			SOURCE ${wz2100_doc_FILES}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs")
+		set_property(
+			SOURCE ${wz2100_doc_IMAGES_FILES}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs/images")
+		set_source_files_properties(
+			${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES}
+			PROPERTIES GENERATED TRUE)
+		target_sources(warzone2100 PRIVATE ${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES})
+	endif()
 
 	# Bundle the wz2100_ROOT_FILES (COPYING, README, etc)
 	if (wz2100_ROOT_FILES)
