@@ -285,7 +285,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [Qt5 Script](https://doc.qt.io/qt-5/qtscript-index.html) ≥ 5.6
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
-
 * **Installing prerequisites:**
    * Ubuntu 18.04+:
    ```
@@ -300,7 +299,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    sudo dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel glew-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel
    ```
 * **Building from the command-line:**
-   1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a sibling build directory:
+   1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
       ```
       mkdir build
       ```
