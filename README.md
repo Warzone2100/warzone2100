@@ -266,10 +266,57 @@ To properly build the game, either:
 Do **not** use GitHub's "Download Zip" option, as it does not contain submodules or the Git-based autorevision information.
 
 ### Linux
-See http://developer.wz2100.net/wiki/CompileGuideLinux
 
-### Windows Cross compile
-See http://developer.wz2100.net/wiki/CompileGuideWindows/Cross
+* Prerequisites
+   * Compiling tools (ex. CMake, GCC/G++/Clang, ninja-build)
+   * Archiving tools (ex. zip, p7zip)
+   * Various libraries:
+      * [SDL](https://www.libsdl.org) ≥ 2.0.5 _(strongly recommended: ≥ 2.0.8)_
+      * [PhysicsFS](https://icculus.org/physfs/) ≥ 2.0.3-3 _(strongly recommended: ≥ 3.0.2)_
+      * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
+      * [libtheora](https://theora.org)
+      * [libvorbis](https://xiph.org/vorbis)
+      * [GLEW](https://glew.sourceforge.net/) ≥ 1.5.2
+      * [Freetype](https://www.freetype.org/)
+      * [Harfbuzz](https://github.com/harfbuzz/harfbuzz) ≥ 1.0
+      * [OpenAL-Soft](https://openal-soft.org)
+      * [libcurl](https://curl.haxx.se/libcurl/) _(strongly recommended: ≥ 7.58.0)_
+      * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.13
+      * [Qt5 Script](https://doc.qt.io/qt-5/qtscript-index.html) ≥ 5.6
+   * For language support: [Gettext](https://www.gnu.org/software/gettext/)
+   * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
+* **Installing prerequisites:**
+   * Ubuntu 18.04+:
+   ```
+   sudo apt-get -u update
+   sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
+   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libglew-dev libxrandr-dev qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev
+   ```
+   * Fedora:
+   ```
+   sudo dnf -y update && dnf clean all
+   sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
+   sudo dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel glew-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel
+   ```
+* **Building from the command-line:**
+   1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
+      ```
+      mkdir build
+      ```
+   2. Change directory into the sibling `build` directory:
+      ```
+      cd build
+      ```
+   3. Run CMake configure to generate the build files:
+      ```
+      cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=~/wz/install -GNinja ../warzone2100
+      ```
+      > - [Modify the `CMAKE_INSTALL_PREFIX` parameter value as desired](https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_PREFIX.html) to configure the base installation path.
+      > - The `../warzone2100` path at the end should point to the warzone2100 source directory.
+   4. Run CMake build:
+      ```
+      cmake --build . --target install
+      ```
 
 ### Windows using MSVC
 
