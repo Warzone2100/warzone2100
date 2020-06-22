@@ -267,9 +267,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${_wz_entitlements_file}")
 
 	# To properly bundle the resources, they must be built before the app
-	add_dependencies(warzone2100 data translations)
+	add_dependencies(warzone2100 data)
 	if(ENABLE_DOCS)
 		add_dependencies(warzone2100 wz2100_doc)
+	endif()
+	if(ENABLE_NLS)
+		add_dependencies(warzone2100 translations)
 	endif()
 
 	# Bundle the Data resources
@@ -308,16 +311,18 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	target_sources(warzone2100 PRIVATE ${wz2100_fonts_FILES})
 
 	# Bundle the translations
-	set_source_files_properties(
-		"${wz2100_translations_LOCALE_FOLDER}"
-		PROPERTIES
-		MACOSX_PACKAGE_LOCATION "Resources"
-		GENERATED TRUE
-		XCODE_LAST_KNOWN_FILE_TYPE "folder"
-	)
-	target_sources(warzone2100 PRIVATE "${wz2100_translations_LOCALE_FOLDER}")
-		# See xcodeproj "i18n" stage
-		# Uses the wzlocal lproj files + config/LangDis to determine what to copy - should we replicate?
+	if(ENABLE_NLS)
+		set_source_files_properties(
+			"${wz2100_translations_LOCALE_FOLDER}"
+			PROPERTIES
+			MACOSX_PACKAGE_LOCATION "Resources"
+			GENERATED TRUE
+			XCODE_LAST_KNOWN_FILE_TYPE "folder"
+		)
+		target_sources(warzone2100 PRIVATE "${wz2100_translations_LOCALE_FOLDER}")
+			# See xcodeproj "i18n" stage
+			# Uses the wzlocal lproj files + config/LangDis to determine what to copy - should we replicate?
+	endif()
 
 	# Bundle the docs
 	if(ENABLE_DOCS)
