@@ -58,6 +58,7 @@
 #include "keybind.h"
 #include "keymap.h"
 #include "qtscript.h"
+#include "clparse.h"
 
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
@@ -895,8 +896,8 @@ static void freeAutoSaveSlot(const char *path)
 
 void autoSave()
 {
-	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating
-	if (runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated)
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
+	if (runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated || autogame_enabled())
 	{
 		return;
 	}
