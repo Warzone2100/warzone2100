@@ -128,7 +128,13 @@ jobs:
         echo "BUILD_ARTIFACTSTAGINGDIRECTORY=${BUILD_ARTIFACTSTAGINGDIRECTORY}"
         OUTPUT_DIR="${BUILD_ARTIFACTSTAGINGDIRECTORY}"
 
-        cat "build/src/autorevision.h"
+        echo "[autorevision.h]:"
+        cat "build/build_tools/autorevision.h"
+        echo "==============================="
+
+        echo "[netplay_config.h]:"
+        cat "build/lib/netplay/netplay_config.h"
+        echo "==============================="
 
         # Verify "warzone2100.zip" was created
         BUILT_WARZONE_ZIP="build/warzone2100.zip"
