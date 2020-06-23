@@ -1950,6 +1950,12 @@ void resetReadyStatus(bool bSendOptions)
 	{
 		for (unsigned int i = 0; i < game.maxPlayers; ++i)
 		{
+			//Ignore for autohost launch option.
+			if (selectedPlayer == i && hostlaunch == 3)
+			{
+				continue;
+			}
+
 			if (isHumanPlayer(i) && ingame.JoiningInProgress[i])
 			{
 				changeReadyStatus(i, false);
