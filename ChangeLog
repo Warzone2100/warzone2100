@@ -1,4 +1,4 @@
-20XX-YY-ZZ: Version 3.3.1
+2020-YY-ZZ: Version 3.4.0
  * General:
    * Add: Frontend "continue last save" option (commit:54536b3bb2f919de5250698ea00317c0b174c797, #408)
    * Add: Shortcut to quit to main-menu after victory (commit:9beabb55a7444c5cb02ab9992f22dd51ded7fe43, #518)
@@ -17,19 +17,29 @@
    * Add: Support in-game notification popups (commit:0d9a0e6736ee830b29811bf27eacf79f693f8ab5, #679)
    * Add: keybindings for camera pan added (commit:6fb19e8a053a9a5de2138fe6afa6c1ea6d7e0c6f, #739)
    * Add: Discord rich presence / join support (commit:9c59dd3b15a7d14b4a11244daecaf9fa45d7aac7, #876)
+   * Add: Unit / kill count gui feature (commit:ff8c56612a1e3afd597f88fb6cd2ae56142e5206, #943)
    * Change: Challenge layout updates (commit:93db639e1f83ea1819139bf6b85f70b1287a094e, #524)
    * Change: Pressing the key 'M' now shows the key mappings (commit:0bc1b68c862f85146b0693e9c29509ddf63fd5ad, #661)
+   * Change: Sort saved games so that recent ones appear first (commit:2d35022fd58193fe6995c6df7806bf6d1a77bd55, #902)
+   * Change: Simplify technology level selection (commit:e448c8a4f3b865957aab58d8718f6da1c2bf87eb, #949)
    * Fix: Not initializing the random number generators at application start (commit:925cb7ca4614930ad40d0932c6d957e7986090ac, #539)
    * Fix: Enemy hover units turning invisible when over certain depths of water tiles trying to be seen by other hover units (commit:8242c25a2436b817fdf0662bf295ac467ecde59f, #576)
    * Fix: Fast-play should not create net logs (commit:e2f3dc9e40247cf0065fb20fd080a00a0dbd9946, #599)
    * Fix: Production queue was broken after loading saves (commit:25f2970f5f73128df9ed0d87c0bdf032f7a10aaa, #664, ticket:2983)
    * Fix: Units dropping out of the sky when produced from factories (commit:6b869f9e02fa21cbc7f0f0902d5d7ee9f6d77d2b, #719)
+   * Fix: Game falls into infinite loop when you load a damaged save (commit:10ca85b2ebfb86ab7dcbf14b16b461e8f3490312, #906)
+   * Fix: Tile burning flag is not restored on load (commit:384c7228621c0f0b98910ffb767425e541d7123d, #912)
+   * Fix: Trucks should stop mid-way if structure becomes finished (commit:312c7869f908f00484d6184221fa6ab0d37f1832, #914)
+   * Fix: Moduled building demolishing power return (commit:91ce267100564a1d7ec0edb54294bd46a14d938e, #940)
+   * Fix: "Cannot build. Resource burning" will pop up for each selected truck (commit:ee555f790f9e2363f71e1199aa99b3e2f072f145, #907)
+   * Fix: Production procedure aborting power refund (commit:2e1711f3e004bbeee6c0dc11f7db765d1f9a9c43, #953)
  * Graphics:
    * Add: Allow shadows with these feature objects: artifact, boulder, and vehicle (commit:0e502341f099f78f2a0d81b158e0c0d225a54cdf, #635)
    * Add: Interpolate frames in animation (commit:b399fc362dcb202e341d7ddb73ea9e782b64e79a, #748)
    * Add: Occlude terrain ambiently (commit:ba0b8ce41712c146cab142c771fc796838ac0a96, #764)
    * Change: Replace little cyborg walking animation with super cyborg walking animation (commit:98582506106a76e6a1d11c0f874ea84c25f2a712, #819)
    * Change: Allow transparency for structure bases (commit:7a5a14c43ad83ba0eb0da56fe3301b9d921496df, #883)
+   * Fix: Atmospheric effects should respect game time slowdown (commit:41c72f127d9b130c4fe9df901519728a7a1634d0, #913)
  * Campaign:
    * Add: Make campaign use dark unexplored tiles like before 3.1.1 (commit:15a032e9de9179f678dd3063151a040bd9e362c3, commit:5dd63b5fcd8dbffaea5087b5c89f88551b655937, #447, #529)
    * Change: Slow down factory production timers on Alpha 12 (commit:9fa9b8ca09e257cb96cc86a4ad937c3f8a1adfe7, #678)
@@ -82,6 +92,7 @@
    * Change: Smoother mouse rotation (commit:7316d8103dc2390cd34ca95fdaf201a1d68f90d1, #734)
    * Change: Smoother zooming (commit:8a943d9470b8538599006fd5c067237e6595cc50, commit:3314483a92b9e595299df0ff76c45e3160242f55, #733, #751)
    * Change: Redo the drag box pulse effect (commit:524271d5f49c4811850019c319d4c3e86f56dc73, #749)
+   * Change: Adjust height tracking logic (too many commits, #892)
    * Fix: Map zoom config limits are now higher to prevent the camera starting too far zoomed in (commit:098d2eb74640cf87f54736967102681a02330bea, #537)
    * Fix: Derricks now emit sound again (commit:e307e88e97ff05ef7a54139922b2247aa9763143, #543, ticket:4766)
    * Fix: Scanlines config option is no longer switched off if a video can not by played with scanlines (commit:4d4f955f35776d27f997ea90fe2d00125969c145, #581)
@@ -94,6 +105,8 @@
    * Fix: Prevent some graphical responses from the reticule buttons when the game is paused (commit:234fe01a0f12c178689e2b3bfcf8f5e84c12bac8, #792)
    * Fix: Fix radar jump rotation bug (commit:2d5c88b7b61492c2edc117b27ddc7c255caaeb4a, #856)
    * Fix: Crash when upgrading structures without upgraded models available (commit:f4350b9becd0128b5a272dd8692897300e39a18b, #887)
+   * Fix: Prevent the radar viewing window staying green when switching from Gamma to skirmish/multiplayer games (commit:35505527dd8d0571beb809f484f571544b76b372, #891)
+   * Fix: Reset scroll direction / speed on new game start (commit:4626a62fbca70e50f093b5884ea8963b68f11251, commit:ff527f66fbb03738b2a73376f09b8600437fe657, #898)
    * Remove: Disable cursor swapping when moving the camera via keys (commit:284a168a90dba3b1aab288f8c661ecbe71157b65, #772)
  * Balance:
    * Change: Increase multiplayer Bunker-Buster weapon ROFs to hopefully increase their usefulness, according to mp community players (commit:58449ecb36f0283e9c31a68c6d35b0aafc31caff, #531, ticket:4861)
