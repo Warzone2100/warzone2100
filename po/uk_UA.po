@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-05-30 18:44+0000\n"
-"PO-Revision-Date: 2020-05-31 16:15\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2020-06-16 19:27+0000\n"
+"PO-Revision-Date: 2020-06-17 20:17\n"
+"Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "X-Crowdin-Project: warzone2100\n"
+"X-Crowdin-Project-ID: 354665\n"
 "X-Crowdin-Language: uk\n"
 "X-Crowdin-File: /master/po/warzone2100.pot\n"
+"X-Crowdin-File-ID: 72\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
@@ -1845,7 +1847,7 @@ msgstr "Необхідна Фабрика Кіборгів для виробни
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:554
+#: po/custom/fromJson.txt:550
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Кіборг озброєний Штурмовим Кулеметом"
 
@@ -3661,7 +3663,7 @@ msgstr "105мм Гаубиця може бути закріплена за се�
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1099
+#: po/custom/fromJson.txt:1093
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Найкращу Уражає: Будівлі бази, піхоту, колісну техніку"
 
@@ -3864,7 +3866,7 @@ msgstr "Може бути закріплена за сенсором"
 #. ... + 4 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1093
+#: po/custom/fromJson.txt:1099
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Найкраще Уражає: Будівлі бази, Піхоту, Колісну техніку"
 
@@ -4092,7 +4094,7 @@ msgstr ""
 #: src/hci.cpp:3683
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
-#: src/loadsave.cpp:245
+#: src/loadsave.cpp:268
 #: src/multimenu.cpp:475
 #: src/multimenu.cpp:1205
 #: src/transporter.cpp:201
@@ -5638,37 +5640,37 @@ msgstr "Старт з Розвиненими Базами"
 msgid "System locale"
 msgstr "Мова локалізації системи"
 
-#: lib/netplay/netplay.cpp:258
-#: lib/netplay/netplay.cpp:1186
+#: lib/netplay/netplay.cpp:263
+#: lib/netplay/netplay.cpp:1191
 msgid "Enter password here"
 msgstr "Визначте Пароль"
 
-#: lib/netplay/netplay.cpp:1089
+#: lib/netplay/netplay.cpp:1094
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1093
+#: lib/netplay/netplay.cpp:1098
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1103
+#: lib/netplay/netplay.cpp:1108
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:1878
+#: lib/netplay/netplay.cpp:1883
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2252
+#: lib/netplay/netplay.cpp:2362
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Неможливо отримати ім'я основного сервера (%s)!"
 
-#: lib/netplay/netplay.cpp:2276
+#: lib/netplay/netplay.cpp:2386
 #, c-format
 msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
@@ -5676,7 +5678,7 @@ msgid "Error connecting to the lobby server: %s.\n"
 " or to forward the port to your system."
 msgstr ""
 
-#: lib/netplay/netplay.cpp:3020
+#: lib/netplay/netplay.cpp:3093
 msgid "Failed to get a lobby response!"
 msgstr ""
 
@@ -6258,7 +6260,7 @@ msgstr "ПУ 'Архангел'"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:550
+#: po/custom/fromJson.txt:554
 msgid "Armed with Cyborg assault gun"
 msgstr "Кіборг озброєний Штурмовим Кулеметом"
 
@@ -6997,20 +6999,20 @@ msgid "Best Targets: Base structures"
 msgstr "Найкраще Уражає: Будівлі бази"
 
 #. TRANSLATORS:
+#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1103
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Найкраще Уражає: Бункери та укріплення"
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #. ... + 4 refs
-#: po/custom/fromJson.txt:1105
+#: po/custom/fromJson.txt:1109
 msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Найкраще Уражає: Бункери та Вогневі позиції"
-
-#. TRANSLATORS:
-#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#: po/custom/fromJson.txt:1109
-msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Найкраще Уражає: Бункери та укріплення"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -9878,17 +9880,17 @@ msgid "Improvement in laser optics reduces light dispersal"
 msgstr "Вдосконалення лазерної оптики зменшує дисперсію світла"
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
-#: po/custom/fromJson.txt:3050
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Вогнева Позиція Фугасної Гаубиці"
-
-#. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-#: po/custom/fromJson.txt:3053
+#: po/custom/fromJson.txt:3049
 msgid "Incendiary howitzer emplacement"
 msgstr "Вогнева позиція Фугасної Мортири"
+
+#. TRANSLATORS:
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
+#: po/custom/fromJson.txt:3053
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Вогнева Позиція Фугасної Гаубиці"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -13143,18 +13145,18 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Аналіз Даних Синаптичного Зв'язку Мк3"
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#: po/custom/fromJson.txt:5371
-msgid "Synaptic Link Data Analysis"
-msgstr "Аналіз Даних Синаптичного Зв'язку"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#: po/custom/fromJson.txt:5375
+#: po/custom/fromJson.txt:5371
 msgid "Synaptic link data analysis"
 msgstr "Аналіз даних Синаптичного Зв'язку"
+
+#. TRANSLATORS:
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#: po/custom/fromJson.txt:5375
+msgid "Synaptic Link Data Analysis"
+msgstr "Аналіз Даних Синаптичного Зв'язку"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -13322,18 +13324,18 @@ msgid "Thermal Armor +35%"
 msgstr "Термальна Броня +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
-#: po/custom/fromJson.txt:5476
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#: po/custom/fromJson.txt:5475
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Термальна Броня +40%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 #: po/custom/fromJson.txt:5480
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Термальна Броня +40%"
 
 #. TRANSLATORS:
@@ -14849,16 +14851,16 @@ msgstr ""
 msgid "Store Design"
 msgstr ""
 
-#: src/display.cpp:1529
+#: src/display.cpp:1531
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Будівництво Неможливе. Через пожежу на Нафтовому Родовищі"
 
-#: src/display.cpp:1545
+#: src/display.cpp:1547
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr ""
 
-#: src/display.cpp:1707
+#: src/display.cpp:1709
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr ""
@@ -14880,22 +14882,22 @@ msgstr "Чекаємо інших гравців"
 msgid "Out of sync"
 msgstr ""
 
-#: src/display3d.cpp:1908
+#: src/display3d.cpp:1915
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
-#: src/droid.cpp:248
+#: src/droid.cpp:251
 #, c-format
 msgid "%s Lost!"
 msgstr ""
 
-#: src/droid.cpp:1143
+#: src/droid.cpp:1146
 msgid "Structure Restored"
 msgstr "Будівлю Відновлено"
 
-#: src/droid.cpp:1922
+#: src/droid.cpp:1925
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -14904,7 +14906,7 @@ msgstr[1] "Групу %u обрано - %u Підрозділів"
 msgstr[2] "Групу %u обрано - %u Підрозділів"
 msgstr[3] "Групу %u обрано - %u Підрозділів"
 
-#: src/droid.cpp:1931
+#: src/droid.cpp:1934
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -14913,7 +14915,7 @@ msgstr[1] "%u підрозділів призначено у Групу %u"
 msgstr[2] "%u підрозділів призначено у Групу %u"
 msgstr[3] "%u підрозділів призначено у Групу %u"
 
-#: src/droid.cpp:1942
+#: src/droid.cpp:1945
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -14922,7 +14924,7 @@ msgstr[1] "Центр екрану на Групі %u - %u Підрозділі�
 msgstr[2] "Центр екрану на Групі %u - %u Підрозділів"
 msgstr[3] "Центр екрану на Групі %u - %u Підрозділів"
 
-#: src/droid.cpp:1946
+#: src/droid.cpp:1949
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -14931,7 +14933,7 @@ msgstr[1] "Вирівнювання з Групою %u - %u Підрозділі
 msgstr[2] "Вирівнювання з Групою %u - %u Підрозділів"
 msgstr[3] "Вирівнювання з Групою %u - %u Підрозділів"
 
-#: src/droid.cpp:3055
+#: src/droid.cpp:3058
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -14996,11 +14998,11 @@ msgid "Help support the project with our server costs, Click this link."
 msgstr ""
 
 #: src/frontend.cpp:162
-msgid "Chat with players on #warzone2100"
+msgid "Chat with players on Discord or IRC"
 msgstr ""
 
 #: src/frontend.cpp:165
-msgid "Connect to Freenode through webchat by clicking this link."
+msgid "Connect to Discord or Freenode through webchat by clicking this link."
 msgstr ""
 
 #: src/frontend.cpp:166
@@ -15452,8 +15454,8 @@ msgid "Mod: "
 msgstr ", моди: "
 
 #: src/hci.cpp:1170
-#: src/loop.cpp:245
-#: src/loop.cpp:261
+#: src/loop.cpp:244
+#: src/loop.cpp:260
 msgid "GAME SAVED: "
 msgstr "ГРУ ЗБЕРЕЖЕНО:"
 
@@ -15971,8 +15973,8 @@ msgstr ""
 #: src/keybind.cpp:1294
 #: src/keybind.cpp:1415
 #: src/keybind.cpp:1517
-#: src/keybind.cpp:1821
-#: src/keybind.cpp:1861
+#: src/keybind.cpp:1815
+#: src/keybind.cpp:1855
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Гравець %u) застосовує шахрайство :%s"
@@ -16094,102 +16096,102 @@ msgstr "Завжди показуються стрічки енергії під
 msgid "Debug menu is Open"
 msgstr "Меню налагодження Відкрито"
 
-#: src/keybind.cpp:1553
+#: src/keybind.cpp:1547
 msgid "Unable to locate any oil derricks!"
 msgstr ""
 
-#: src/keybind.cpp:1717
+#: src/keybind.cpp:1711
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Ох, погода на дворі жахлива... СНІГ"
 
-#: src/keybind.cpp:1723
+#: src/keybind.cpp:1717
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Дощику, дощику... зварю тобі борщику... ДОЩ"
 
-#: src/keybind.cpp:1729
+#: src/keybind.cpp:1723
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Прогноз погоди : Ясне небо у всіх районах... ЖОДНИХ ЗМІН ПОГОДИ"
 
-#: src/keybind.cpp:1820
+#: src/keybind.cpp:1814
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Обережно! Це може призвести до непередбачуваних наслідків при неправильному застосуванні на місіях."
 
-#: src/keybind.cpp:1822
+#: src/keybind.cpp:1816
 msgid "All enemies destroyed by cheating!"
 msgstr "Всіх ворогів знищено за допомогою шахрайства!"
 
-#: src/keybind.cpp:1862
+#: src/keybind.cpp:1856
 msgid "Destroying selected droids and structures!"
 msgstr "Обрані підрозділи та будівлі буде знищено!"
 
-#: src/keybind.cpp:2290
+#: src/keybind.cpp:2284
 msgid "Reveal OFF"
 msgstr ""
 
-#: src/keybind.cpp:2295
+#: src/keybind.cpp:2289
 msgid "Reveal ON"
 msgstr ""
 
-#: src/keybind.cpp:2376
+#: src/keybind.cpp:2370
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Вид відцентровано на Штабі гравця у північному напрямку"
 
-#: src/keybind.cpp:2388
+#: src/keybind.cpp:2382
 msgid "Unable to locate HQ!"
 msgstr "Не вдалося знайти Штаб!"
 
-#: src/keybind.cpp:2395
+#: src/keybind.cpp:2389
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Обмеження швижкості формації було видалено з гри через баги."
 
-#: src/keybind.cpp:2444
+#: src/keybind.cpp:2438
 msgid "Vertical rotation direction: Normal"
 msgstr "Напрямок вертикального обертання: Нормальний"
 
-#: src/keybind.cpp:2449
+#: src/keybind.cpp:2443
 msgid "Vertical rotation direction: Flipped"
 msgstr "Напрямок вертикального обертання: Обернений"
 
-#: src/keybind.cpp:2501
+#: src/keybind.cpp:2495
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "На жаль, швидкість гри не можу бути змінена у мультиплеєрі."
 
-#: src/keybind.cpp:2536
-#: src/keybind.cpp:2590
+#: src/keybind.cpp:2530
+#: src/keybind.cpp:2584
 msgid "Game Speed Reset"
 msgstr "Швидкість Гри Нормалізовано"
 
-#: src/keybind.cpp:2540
+#: src/keybind.cpp:2534
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr ""
 
-#: src/keybind.cpp:2544
+#: src/keybind.cpp:2538
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr ""
 
-#: src/keybind.cpp:2602
+#: src/keybind.cpp:2596
 msgid "Radar showing friend-foe colors"
 msgstr "Радар показує кольори свій-чужий"
 
-#: src/keybind.cpp:2606
+#: src/keybind.cpp:2600
 msgid "Radar showing player colors"
 msgstr "Радар показує кольори гравців"
 
-#: src/keybind.cpp:2621
+#: src/keybind.cpp:2615
 msgid "Radar showing only objects"
 msgstr "Радар показує лише об’єкти"
 
-#: src/keybind.cpp:2624
+#: src/keybind.cpp:2618
 msgid "Radar blending terrain and height"
 msgstr "Радар відображає місцевість та рельєф"
 
-#: src/keybind.cpp:2627
+#: src/keybind.cpp:2621
 msgid "Radar showing terrain"
 msgstr "Радар показує місцевість"
 
-#: src/keybind.cpp:2630
+#: src/keybind.cpp:2624
 msgid "Radar showing height"
 msgstr "Радар показує рельєф"
 
@@ -16741,20 +16743,20 @@ msgstr ""
 msgid "Trace a game object"
 msgstr ""
 
-#: src/loadsave.cpp:311
+#: src/loadsave.cpp:334
 msgid "Parent directory"
 msgstr ""
 
-#: src/loadsave.cpp:316
+#: src/loadsave.cpp:339
 msgid "Autosave directory"
 msgstr ""
 
-#: src/loadsave.cpp:316
+#: src/loadsave.cpp:339
 msgid "Autosave directory (not allowed for saving)"
 msgstr ""
 
-#: src/loop.cpp:252
-#: src/loop.cpp:268
+#: src/loop.cpp:251
+#: src/loop.cpp:267
 msgid "Could not save game!"
 msgstr "Не вдалося зберегти гру!"
 
@@ -16908,7 +16910,7 @@ msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
 #: src/multiint.cpp:1405
-#: src/titleui/gamefind.cpp:571
+#: src/titleui/gamefind.cpp:578
 msgid "Game Name"
 msgstr ""
 
@@ -17216,8 +17218,8 @@ msgstr ""
 msgid "Server message:"
 msgstr ""
 
-#: src/multijoin.cpp:510
-msgid "There is an update to the game, please visit http://wz2100.net to download new version."
+#: src/multijoin.cpp:518
+msgid "There is an update to the game, please visit https://wz2100.net to download new version."
 msgstr ""
 
 #. TRANSLATORS: Sidetext of structure limits screen
@@ -17472,11 +17474,11 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/qtscriptfuncs.cpp:3124
+#: src/qtscriptfuncs.cpp:3127
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ВИ ПЕРЕМОГЛИ!"
 
-#: src/qtscriptfuncs.cpp:3129
+#: src/qtscriptfuncs.cpp:3132
 msgid "YOU WERE DEFEATED!"
 msgstr "ВИ ЗАЗНАЛИ ПОРАЗКИ!"
 
@@ -17493,120 +17495,120 @@ msgstr "Дослідження Завершено"
 msgid "Research Award"
 msgstr "Винагорода Досліджень"
 
-#: src/scores.cpp:99
+#: src/scores.cpp:98
 #, c-format
 msgid "Own Units: %u"
 msgstr "Власних Підрозділів: %u"
 
-#: src/scores.cpp:100
+#: src/scores.cpp:99
 #, c-format
 msgid "Enemy Units: %u"
 msgstr "Ворожих Підрозділів: %u"
 
-#: src/scores.cpp:101
+#: src/scores.cpp:100
 #, c-format
 msgid "Own Structures: %u"
 msgstr "Власних Будівель: %u"
 
-#: src/scores.cpp:102
+#: src/scores.cpp:101
 #, c-format
 msgid "Enemy Structures: %u"
 msgstr "Ворожих Будівель: %u"
 
-#: src/scores.cpp:103
+#: src/scores.cpp:102
 #, c-format
 msgid "Units Manufactured: %u"
 msgstr "Підрозділів Виготовлено: %u"
 
-#: src/scores.cpp:104
+#: src/scores.cpp:103
 #, c-format
 msgid "Total Units: %u"
 msgstr "Всього Підрозділів: %u"
 
-#: src/scores.cpp:105
+#: src/scores.cpp:104
 #, c-format
 msgid "Structures Built: %u"
 msgstr "Будівель Збудовано: %u"
 
-#: src/scores.cpp:106
+#: src/scores.cpp:105
 #, c-format
 msgid "Total Structures: %u"
 msgstr "Всього Будівель: %u"
 
-#: src/scores.cpp:108
+#: src/scores.cpp:107
 #, c-format
 msgid "Rookie: %u"
 msgstr "Новобранець: %u"
 
-#: src/scores.cpp:109
+#: src/scores.cpp:108
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
 msgstr "Зелений: %u"
 
-#: src/scores.cpp:110
+#: src/scores.cpp:109
 #, c-format
 msgid "Trained: %u"
 msgstr "Рекрут:  %u"
 
-#: src/scores.cpp:111
+#: src/scores.cpp:110
 #, c-format
 msgid "Regular: %u"
 msgstr "Досвідчений: %u"
 
-#: src/scores.cpp:112
+#: src/scores.cpp:111
 #, c-format
 msgid "Professional: %u"
 msgstr "Професіонал: %u"
 
-#: src/scores.cpp:113
+#: src/scores.cpp:112
 #, c-format
 msgid "Veteran: %u"
 msgstr "Ветеран: %u"
 
-#: src/scores.cpp:114
+#: src/scores.cpp:113
 #, c-format
 msgid "Elite: %u"
 msgstr "Елітний: %u"
 
-#: src/scores.cpp:115
+#: src/scores.cpp:114
 #, c-format
 msgid "Special: %u"
 msgstr "Особливий: %u"
 
-#: src/scores.cpp:116
+#: src/scores.cpp:115
 #, c-format
 msgid "Hero: %u"
 msgstr "Герой: %u"
 
-#: src/scores.cpp:310
+#: src/scores.cpp:309
 msgid "Unit Losses"
 msgstr "Втрачено підрозділів"
 
-#: src/scores.cpp:312
+#: src/scores.cpp:311
 msgid "Structure Losses"
 msgstr "Втрачено споруд"
 
-#: src/scores.cpp:314
+#: src/scores.cpp:313
 msgid "Force Information"
 msgstr "Дані про Сили"
 
-#: src/scores.cpp:391
+#: src/scores.cpp:390
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
 msgstr "ЗІБРАНО АРТЕФАКТІВ: %d"
 
-#: src/scores.cpp:397
+#: src/scores.cpp:396
 #, c-format
 msgid "Mission Time - %s"
 msgstr "Час Місії - %s"
 
-#: src/scores.cpp:403
+#: src/scores.cpp:402
 #, c-format
 msgid "Total Game Time - %s"
 msgstr "Повний Час Гри - %s"
 
-#: src/scores.cpp:410
+#: src/scores.cpp:409
 msgid "You cheated!"
 msgstr "Ви застосували шахрайство!"
 
@@ -17735,119 +17737,119 @@ msgstr "Оновити Список Ігор"
 msgid "Filter Games List"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:165
+#: src/titleui/gamefind.cpp:169
 msgid "Refreshing..."
 msgstr ""
 
-#: src/titleui/gamefind.cpp:188
+#: src/titleui/gamefind.cpp:195
 msgid "Searching"
 msgstr "Пошук"
 
-#: src/titleui/gamefind.cpp:241
+#: src/titleui/gamefind.cpp:248
 msgid "Connecting to the lobby server..."
 msgstr ""
 
-#: src/titleui/gamefind.cpp:252
+#: src/titleui/gamefind.cpp:259
 msgid "Your version of Warzone is incompatible with this game."
 msgstr ""
 
-#: src/titleui/gamefind.cpp:303
+#: src/titleui/gamefind.cpp:310
 msgid "[Password required]"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:307
+#: src/titleui/gamefind.cpp:314
 msgid "[No Tanks]"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:311
+#: src/titleui/gamefind.cpp:318
 msgid "[No Cyborgs]"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:315
+#: src/titleui/gamefind.cpp:322
 msgid "[No VTOLs]"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:320
+#: src/titleui/gamefind.cpp:327
 #, c-format
 msgid "Hosted by %s"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:324
+#: src/titleui/gamefind.cpp:331
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:353
+#: src/titleui/gamefind.cpp:360
 msgid "Can't find any games for your version."
 msgstr ""
 
-#: src/titleui/gamefind.cpp:370
+#: src/titleui/gamefind.cpp:377
 msgid "There appears to be a game update available!"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:374
+#: src/titleui/gamefind.cpp:381
 msgid "No games are available for your version"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:378
+#: src/titleui/gamefind.cpp:385
 msgid "Game is full"
 msgstr "Гра повна"
 
-#: src/titleui/gamefind.cpp:382
+#: src/titleui/gamefind.cpp:389
 msgid "You were kicked!"
 msgstr "Вас викинуто!"
 
-#: src/titleui/gamefind.cpp:385
+#: src/titleui/gamefind.cpp:392
 msgid "Wrong Game Version!"
 msgstr "Невірна Версія Гри!"
 
-#: src/titleui/gamefind.cpp:388
+#: src/titleui/gamefind.cpp:395
 msgid "You have an incompatible mod."
 msgstr "У вас несумісний мод."
 
-#: src/titleui/gamefind.cpp:392
+#: src/titleui/gamefind.cpp:399
 msgid "Host couldn't send file?"
 msgstr "Хост не зміг відправити файл?"
 
-#: src/titleui/gamefind.cpp:396
+#: src/titleui/gamefind.cpp:403
 msgid "Incorrect Password!"
 msgstr "Невірний Пароль!"
 
-#: src/titleui/gamefind.cpp:399
+#: src/titleui/gamefind.cpp:406
 msgid "Host has dropped connection!"
 msgstr "Хост обірвав з'єднання!"
 
-#: src/titleui/gamefind.cpp:403
+#: src/titleui/gamefind.cpp:410
 msgid "Connection Error"
 msgstr "Помилка З’єднання"
 
-#: src/titleui/gamefind.cpp:454
+#: src/titleui/gamefind.cpp:461
 msgid "Can't connect to lobby server!"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:549
+#: src/titleui/gamefind.cpp:556
 #, c-format
 msgid "Mods: %s"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:555
+#: src/titleui/gamefind.cpp:562
 msgid "Mods: None!"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:561
+#: src/titleui/gamefind.cpp:568
 #, c-format
 msgid "Version: %s"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:574
+#: src/titleui/gamefind.cpp:581
 msgid "Map Name"
 msgstr ""
 
-#: src/titleui/gamefind.cpp:577
+#: src/titleui/gamefind.cpp:584
 msgid "Players"
 msgstr "Гравці"
 
-#: src/titleui/gamefind.cpp:580
+#: src/titleui/gamefind.cpp:587
 msgid "Status"
 msgstr ""
 
@@ -17897,20 +17899,20 @@ msgstr ""
 msgid "Reinforcements landing"
 msgstr "Висаджується  Підкріплення."
 
-#: src/updatemanager.cpp:238
+#: src/updatemanager.cpp:239
 msgid "Update Available"
 msgstr ""
 
-#: src/updatemanager.cpp:241
+#: src/updatemanager.cpp:242
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
 msgstr ""
 
-#: src/updatemanager.cpp:245
+#: src/updatemanager.cpp:246
 msgid "A new build of Warzone 2100 is available!"
 msgstr ""
 
-#: src/updatemanager.cpp:247
+#: src/updatemanager.cpp:248
 msgid "Get Update Now"
 msgstr ""
 
