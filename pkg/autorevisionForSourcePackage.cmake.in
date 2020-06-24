@@ -18,10 +18,10 @@ if(("${CPACK_GENERATOR}" IN_LIST CPACK_SOURCE_GENERATOR) OR ("${CPACK_GENERATOR}
 
 	# When packaging source, generate (and include) build_tools/autorevision.cache
 
-	set(OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/build_tools/autorevision.cache")
+	set(AUTOREVISION_OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/build_tools/autorevision.cache")
 	set(CACHEFILE "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cache")
 
-	execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CACHEFILE} -DOUTPUT_TYPE=sh -DOUTPUT_FILE=${OUTPUT_FILE} -DSKIPUPDATECACHE="1" -P "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cmake"
+	execute_process(COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${CACHEFILE} -DOUTPUT_TYPE=sh -DOUTPUT_FILE=${AUTOREVISION_OUTPUT_FILE} -DSKIPUPDATECACHE="1" -P "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cmake"
 		WORKING_DIRECTORY "@PROJECT_SOURCE_DIR@")
 
 	# Also generate (and include) lib/netplay/netplay_config.gen
@@ -29,7 +29,7 @@ if(("${CPACK_GENERATOR}" IN_LIST CPACK_SOURCE_GENERATOR) OR ("${CPACK_GENERATOR}
 	# (without running their own CMake build to generate netplay_config.h)
 
 	set(OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/lib/netplay/netplay_config.gen")
-	set(CACHEFILE "@PROJECT_SOURCE_DIR@/build_tools/autorevision.cache")
+	set(CACHEFILE "${AUTOREVISION_OUTPUT_FILE}")
 	set(_netplay_config_template_file "@PROJECT_SOURCE_DIR@/lib/netplay/netplay_config.h.in")
 	set(_project_root "@PROJECT_SOURCE_DIR@")
 
