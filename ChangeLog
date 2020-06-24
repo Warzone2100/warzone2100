@@ -1,4 +1,4 @@
-2020-YY-ZZ: Version 3.4.0
+2020-06-24: Version 3.4.0
  * General:
    * Add: Frontend "continue last save" option (commit:54536b3bb2f919de5250698ea00317c0b174c797, #408)
    * Add: Shortcut to quit to main-menu after victory (commit:9beabb55a7444c5cb02ab9992f22dd51ded7fe43, #518)
