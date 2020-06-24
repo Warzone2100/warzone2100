@@ -6090,22 +6090,6 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 	return nullptr;
 }
 
-static void cancelBuildInProgressAndRefundPower(FACTORY* const psFactory, const uint8_t playerNumber)
-{
-	if (psFactory->psSubject)
-	{
-		if (psFactory->buildPointsRemaining < calcTemplateBuild(psFactory->psSubject))
-		{
-			// We started building, so give the power back that was used.
-			addPower(playerNumber, calcTemplatePower(psFactory->psSubject));
-		}
-
-		//clear the factory's subject
-		psFactory->psSubject = nullptr;
-	}
-
-}
-
 
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
@@ -6136,7 +6120,18 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 		return;
 	}
 
-	cancelBuildInProgressAndRefundPower(psFactory, psBuilding->player);
+	//check its the correct factory
+	if (psFactory->psSubject)
+	{
+		if (psFactory->buildPointsRemaining < calcTemplateBuild(psFactory->psSubject))
+		{
+			// We started building, so give the power back that was used.
+			addPower(psBuilding->player, calcTemplatePower(psFactory->psSubject));
+		}
+
+		//clear the factory's subject
+		psFactory->psSubject = nullptr;
+	}
 
 	delPowerRequest(psBuilding);
 }
@@ -6321,8 +6316,6 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 		if (entry->quantity <= 0 || entry->quantity > MAX_IN_RUN)
 		{
 			productionRun.erase(entry);  // Entry empty, so get rid of it.
-
-			cancelBuildInProgressAndRefundPower(psFactory, psStructure->player);
 		}
 	}
 	else
