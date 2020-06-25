@@ -32,6 +32,7 @@
    * Fix: Trucks should stop mid-way if structure becomes finished (commit:312c7869f908f00484d6184221fa6ab0d37f1832, #914)
    * Fix: Moduled building demolishing power return (commit:91ce267100564a1d7ec0edb54294bd46a14d938e, #940)
    * Fix: "Cannot build. Resource burning" will pop up for each selected truck (commit:ee555f790f9e2363f71e1199aa99b3e2f072f145, #907)
+   * Fix: Production procedure aborting power refund (commit:2e1711f3e004bbeee6c0dc11f7db765d1f9a9c43, #953)
  * Graphics:
    * Add: Allow shadows with these feature objects: artifact, boulder, and vehicle (commit:0e502341f099f78f2a0d81b158e0c0d225a54cdf, #635)
    * Add: Interpolate frames in animation (commit:b399fc362dcb202e341d7ddb73ea9e782b64e79a, #748)
