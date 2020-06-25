@@ -840,7 +840,7 @@ bool loadScriptStates(const char *filename)
 				// IMPORTANT: "null" JSON values *MUST* map to QScriptValue::UndefinedValue.
 				//			  If they are set to QScriptValue::NullValue, it causes issues for libcampaign.js. (As the values become "defined".)
 				//			  (mapJsonToQScriptValue handles this properly.)
-				engine->globalObject().setProperty(QString::fromUtf8(keys.at(j).toUtf8().c_str()), mapJsonToQScriptValue(engine, ini.json(keys.at(j)), 0));
+				engine->globalObject().setProperty(QString::fromUtf8(keys.at(j).toUtf8().c_str()), mapJsonToQScriptValue(engine, ini.json(keys.at(j)), QScriptValue::PropertyFlags()));
 			}
 		}
 		else if (engine && list[i].startsWith("groups_"))
