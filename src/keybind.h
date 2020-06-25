@@ -24,9 +24,9 @@
 #include "console.h"
 #include "lib/framework/fixedpoint.h"
 
-#define	MAP_ZOOM_RATE_MAX	(500)
-#define	MAP_ZOOM_RATE_MIN	(50)
-#define	MAP_ZOOM_RATE_DEFAULT	(250)
+#define	MAP_ZOOM_RATE_MAX	(1000)
+#define	MAP_ZOOM_RATE_MIN	(200)
+#define	MAP_ZOOM_RATE_DEFAULT	(500)
 #define	MAP_ZOOM_RATE_STEP	(50)
 
 #define MAP_PITCH_RATE		(SPIN_SCALING/SECS_PER_SPIN)
