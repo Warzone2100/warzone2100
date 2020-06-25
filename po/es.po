@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-25 02:55\n"
+"PO-Revision-Date: 2020-06-25 14:50\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -11431,7 +11431,7 @@ msgstr "Carrocería ligera NEXUS"
 #. data/mp/stats/structure.json: $.Sys-SpyTower.name
 #: po/custom/fromJson.txt:4220
 msgid "Nexus Link Tower"
-msgstr "Torreta de Enlace Nexus"
+msgstr "Torre de Enlace Nexus"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-SpyTurret.name
@@ -15002,11 +15002,11 @@ msgstr "Ayuda al proyecto con los costes de servidor. Pulsa el siguiente enlace.
 
 #: src/frontend.cpp:162
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Chatea con jugadores en Discord o IRC"
 
 #: src/frontend.cpp:165
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Conéctate a Discord o Freenode mediante webchat haciendo clic en este enlace."
 
 #: src/frontend.cpp:166
 msgid "Check for a newer version"
@@ -15448,7 +15448,7 @@ msgstr "Escaramuza/Multijugador"
 
 #: src/frontend.cpp:1699
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Clic para abrir la página."
 
 #: src/frontend.cpp:1702
 #: src/frontend.cpp:1721
@@ -16027,11 +16027,11 @@ msgstr "Visor de FPS desactivado."
 
 #: src/keybind.cpp:617
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "Recuento de unidades activo."
 
 #: src/keybind.cpp:621
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "Recuento de unidades inactivo."
 
 #: src/keybind.cpp:673
 #, c-format
@@ -16997,23 +16997,23 @@ msgstr "Opciones de Juego Aleatorias\n"
 
 #: src/multiint.cpp:1527
 msgid "Tech"
-msgstr ""
+msgstr "Tecnología"
 
 #: src/multiint.cpp:1528
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Nivel Tecnológico 1"
 
 #: src/multiint.cpp:1529
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Nivel Tecnológico 2"
 
 #: src/multiint.cpp:1530
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Nivel Tecnológico 3"
 
 #: src/multiint.cpp:1531
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Nivel Tecnológico 4"
 
 #: src/multiint.cpp:1539
 #: src/multiint.cpp:1540
@@ -17260,7 +17260,7 @@ msgstr "Mensaje del servidor:"
 
 #: src/multijoin.cpp:517
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "Hay una actualización para el juego, por favor visite https://wz2100.net para descargar la nueva versión."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
