@@ -2491,6 +2491,20 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	NETplayerKicked(player_id);
 }
 
+class ChatBoxWidget : public IntFormAnimated
+{
+public:
+	ChatBoxWidget(WIDGET *parent, bool openAnimate = true)
+	: IntFormAnimated(parent, openAnimate)
+	{ }
+
+	virtual void display(int xOffset, int yOffset) override
+	{
+		IntFormAnimated::display(xOffset, yOffset);
+		displayConsoleMessages();
+	}
+};
+
 static void addChatBox(bool preserveOldChat)
 {
 	if (widgGetFromID(psWScreen, FRONTEND_TOPFORM))
@@ -2505,7 +2519,7 @@ static void addChatBox(bool preserveOldChat)
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *chatBox = new IntFormAnimated(parent);
+	ChatBoxWidget *chatBox = new ChatBoxWidget(parent);
 	chatBox->id = MULTIOP_CHATBOX;
 	chatBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, MULTIOP_CHATBOXH);
@@ -3959,11 +3973,6 @@ TITLECODE WzMultiOptionTitleUI::run()
 	if (multiRequestUp)
 	{
 		widgDisplayScreen(psRScreen);								// show the Requester running
-	}
-
-	if (widgGetFromID(psWScreen, MULTIOP_CHATBOX))
-	{
-		displayConsoleMessages();									// draw the chatbox
 	}
 
 	if (CancelPressed())
