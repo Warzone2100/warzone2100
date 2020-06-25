@@ -1936,7 +1936,7 @@ const char *getPlayerColourName(int player)
 }
 
 /* Reset ready status for all players */
-void resetReadyStatus(bool bSendOptions)
+void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 {
 	// notify all clients if needed
 	if (bSendOptions)
@@ -1946,7 +1946,7 @@ void resetReadyStatus(bool bSendOptions)
 	netPlayersUpdated = true;
 
 	//Really reset ready status
-	if (NetPlay.isHost)
+	if (NetPlay.isHost && !ignoreReadyReset)
 	{
 		for (unsigned int i = 0; i < game.maxPlayers; ++i)
 		{

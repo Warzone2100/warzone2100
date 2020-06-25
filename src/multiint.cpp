@@ -2072,7 +2072,7 @@ bool recvColourRequest(NETQUEUE queue)
 		return false;
 	}
 
-	resetReadyStatus(false);
+	resetReadyStatus(false, true);
 
 	return changeColour(player, col, false);
 }
@@ -3430,7 +3430,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 	STATIC_ASSERT(MULTIOP_COLCHOOSER + MAX_PLAYERS - 1 <= MULTIOP_COLCHOOSER_END);
 	if (id >= MULTIOP_COLCHOOSER && id < MULTIOP_COLCHOOSER + MAX_PLAYERS - 1)  // chose a new colour.
 	{
-		resetReadyStatus(false);		// will reset only locally if not a host
+		resetReadyStatus(false, true);		// will reset only locally if not a host
 		SendColourRequest(colourChooserUp, id - MULTIOP_COLCHOOSER);
 		closeColourChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);

@@ -241,7 +241,7 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 
 bool multiplayPlayersReady(bool bNotifyStatus);
 void startMultiplayerGame();
-void resetReadyStatus(bool bSendOptions);
+void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset = false);
 
 STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned index);
 
