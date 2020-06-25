@@ -944,7 +944,8 @@ AUDIO_STREAM *sound_PlayStream(PHYSFS_file *fileHandle, float volume, void (*onF
 AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(const void *), const void *user_data, size_t streamBufferSize, unsigned int buffer_count)
 {
 	AUDIO_STREAM *stream;
-	ALuint       *buffers = (ALuint *)alloca(sizeof(ALuint) * buffer_count);
+	ALuint       *buffers = nullptr;
+	bool freeBuffers = false;
 	ALint error;
 	unsigned int i;
 
@@ -1001,6 +1002,16 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 #endif
 
 	// Create some OpenAL buffers to store the decoded data in
+	if (buffer_count <= (1024 / sizeof(ALuint))) // See CMakeLists.txt for value of -Walloca-larger-than=<N>
+	{
+		buffers = (ALuint *)alloca(buffer_count * sizeof(ALuint));
+	}
+	else
+	{
+		// Too many buffers - don't allocate on the stack!
+		buffers = (ALuint *)malloc(buffer_count * sizeof(ALuint));
+		freeBuffers = true;
+	}
 	alGenBuffers(buffer_count, buffers);
 	sound_GetError();
 
@@ -1053,6 +1064,12 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 		// Free allocated memory
 		free(stream);
 
+		if(freeBuffers)
+		{
+			free(buffers);
+		}
+		buffers = nullptr;
+
 		return nullptr;
 	}
 
@@ -1073,6 +1090,12 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 	// Prepend this stream to the linked list
 	stream->next = active_streams;
 	active_streams = stream;
+
+	if(freeBuffers)
+	{
+		free(buffers);
+	}
+	buffers = nullptr;
 
 	return stream;
 }
