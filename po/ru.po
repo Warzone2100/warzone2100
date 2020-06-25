@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-25 02:54\n"
+"PO-Revision-Date: 2020-06-25 14:50\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -15249,7 +15249,7 @@ msgstr "Включено"
 #: src/frontend.cpp:851
 #: src/frontend.cpp:857
 msgid "Auto"
-msgstr "Автоматически"
+msgstr "Авто"
 
 #: src/frontend.cpp:892
 #: src/ingameop.cpp:159
@@ -15457,7 +15457,7 @@ msgstr "Сражение"
 
 #: src/frontend.cpp:1699
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Открыть веб страницу."
 
 #: src/frontend.cpp:1702
 #: src/frontend.cpp:1721
@@ -16034,11 +16034,11 @@ msgstr "Отображение FPS выключено."
 
 #: src/keybind.cpp:617
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "Отображение количества единиц включено."
 
 #: src/keybind.cpp:621
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "Отображение количества единиц отключено."
 
 #: src/keybind.cpp:673
 #, c-format
@@ -17003,23 +17003,23 @@ msgstr ""
 
 #: src/multiint.cpp:1527
 msgid "Tech"
-msgstr ""
+msgstr "Технологии"
 
 #: src/multiint.cpp:1528
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Технологический Уровень 1"
 
 #: src/multiint.cpp:1529
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Технологический Уровень 2"
 
 #: src/multiint.cpp:1530
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Технологический Уровень 3"
 
 #: src/multiint.cpp:1531
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Технологический Уровень 4"
 
 #: src/multiint.cpp:1539
 #: src/multiint.cpp:1540
