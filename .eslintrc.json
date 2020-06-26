@@ -6,7 +6,7 @@
     "ecmaFeatures": {
       "jsx": false,
       "globalReturn": false
-    },
+    }
   },
   "rules": {
     "no-undef": "off",
