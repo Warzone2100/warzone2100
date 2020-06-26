@@ -42,6 +42,7 @@
 #include "keyedit.h"
 
 #include <algorithm>
+#include <unordered_map>
 
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 static KEY_CODE getQwertyKey();
@@ -81,7 +82,59 @@ static KEY_CODE	lastMetaKey, lastSubKey;
 // ----------------------------------------------------------------------------------
 // Adding a mapped function ? add a save pointer! Thank AlexL.
 
-static KeyMapSaveEntry const keyMapSaveTable[] =
+class KeyMapSaveTable {
+public:
+	KeyMapSaveTable(std::initializer_list<KeyMapSaveEntry> items)
+	: ordered_list(items)
+	{
+		for (size_t i = 0; i < ordered_list.size(); ++i)
+		{
+			functionpt_to_index_map[ordered_list[i].function] = i;
+			name_to_index_map[ordered_list[i].name] = i;
+		}
+	}
+public:
+	KeyMapSaveEntry const *keymapEntryByFunction(void (*function)()) const
+	{
+		auto it = functionpt_to_index_map.find(function);
+		if (it != functionpt_to_index_map.end()) {
+			return &ordered_list[it->second];
+		}
+		return nullptr;
+	}
+
+	KeyMapSaveEntry const *keymapEntryByName(std::string const &name) const
+	{
+		auto it = name_to_index_map.find(name);
+		if (it != name_to_index_map.end()) {
+			return &ordered_list[it->second];
+		}
+		return nullptr;
+	}
+
+	bool sortKeyMappingFunc(const KEY_MAPPING& a, const KEY_MAPPING& b) const
+	{
+		auto it_a = functionpt_to_index_map.find(a.function);
+		auto it_b = functionpt_to_index_map.find(b.function);
+		if (it_a == functionpt_to_index_map.end())
+		{
+			debug(LOG_ERROR, "Failed to find KEY_MAPPING a (%s)", a.name.c_str());
+			return &a < &b;
+		}
+		if (it_b == functionpt_to_index_map.end())
+		{
+			debug(LOG_ERROR, "Failed to find KEY_MAPPING b (%s)", b.name.c_str());
+			return &a < &b;
+		}
+		return it_a->second < it_b->second;
+	}
+private:
+	std::vector<KeyMapSaveEntry> ordered_list;
+	std::unordered_map<void (*)(), size_t> functionpt_to_index_map;
+	std::unordered_map<std::string, size_t> name_to_index_map;
+};
+
+static KeyMapSaveTable const keyMapSaveTable(
 {
 	{kf_ChooseManufacture, "ChooseManufacture"},
 	{kf_ChooseResearch, "ChooseResearch"},
@@ -263,26 +316,16 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_FinishResearch, "FinishResearch"},
 	{kf_RevealMapAtPos, "RevealMapAtPos"},
 	{kf_TraceObject, "TraceObject"},
-};
+});
 
 KeyMapSaveEntry const *keymapEntryByFunction(void (*function)())
 {
-	for (auto &entry : keyMapSaveTable) {
-		if (entry.function == function) {
-			return &entry;
-		}
-	}
-	return nullptr;
+	return keyMapSaveTable.keymapEntryByFunction(function);
 }
 
 KeyMapSaveEntry const *keymapEntryByName(std::string const &name)
 {
-	for (auto &entry : keyMapSaveTable) {
-		if (entry.name == name) {
-			return &entry;
-		}
-	}
-	return nullptr;
+	return keyMapSaveTable.keymapEntryByName(name);
 }
 
 // ----------------------------------------------------------------------------------
