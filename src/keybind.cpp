@@ -1917,6 +1917,11 @@ void kf_ShowGridInfo()
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTeamMessage()
 {
+	if (!getWidgetsStatus())
+	{
+		return;
+	}
+
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
@@ -1934,6 +1939,11 @@ void kf_SendTeamMessage()
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendGlobalMessage()
 {
+	if (!getWidgetsStatus())
+	{
+		return;
+	}
+
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
