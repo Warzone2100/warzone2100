@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-25 14:50\n"
+"PO-Revision-Date: 2020-06-26 16:06\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -17885,7 +17885,7 @@ msgstr "Статус"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Продолжить"
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
