@@ -26,11 +26,62 @@
 #include "stringdef.h"
 
 #include <algorithm>
+#include <vector>
+#include <regex>
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 #include "build_tools/autorevision.h"
 
 static const char vcs_branch_cstr[] = VCS_BRANCH;
 static const char vcs_tag[] = VCS_TAG;
+
+struct TagVer
+{
+	std::string major;
+	std::string minor;
+	std::string revision;
+};
+
+static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
+{
+	std::string tagStr = tag;
+
+	// Remove "v/" or "v" prefix (as in "v3.2.2"), if present
+	const std::vector<std::string> prefixesToRemove = {"v/", "v"};
+	for (const auto& prefix : prefixesToRemove)
+	{
+		if (tagStr.rfind(prefix, 0) == 0) {
+			tagStr = tagStr.substr(prefix.size());
+		}
+	}
+
+	TagVer result;
+	std::smatch base_match;
+	const std::regex semver_regex("^([0-9]+)(.[0-9]+)?(.[0-9]+)?");
+	if (std::regex_match(tagStr, base_match, semver_regex))
+	{
+		// base_match[0] is the whole string
+		const size_t matchCount = base_match.size();
+		switch (matchCount)
+		{
+			case 4:
+				result.revision = base_match[3].str().substr(1); // remove the "." prefix
+				// fallthrough
+			case 3:
+				result.minor = base_match[2].str().substr(1); // remove the "." prefix
+				result.major = base_match[1].str();
+				break;
+			default:
+				// failure
+				return nullopt;
+				break;
+		}
+	}
+
+	return result;
+}
 
 /** Obtain the versioned application-data / config writedir folder name
  *  If on a tag, this is "Warzone 2100 <tag>" / "warzone2100-<tag>"
@@ -49,7 +100,27 @@ std::string version_getVersionedAppDirFolderName()
 
 	if (strlen(vcs_tag))
 	{
-		versionedWriteDirFolderName += vcs_tag;
+		optional<TagVer> tagVersion = extractVersionNumberFromTag(vcs_tag);
+		if (tagVersion.has_value())
+		{
+			// If tag is actually a version number (which it should be!)
+			// Use only MAJOR.MINOR (ignoring revision) for the appdir folder name
+			if (tagVersion.value().major == "3" && tagVersion.value().minor == "4")
+			{
+				// EXCEPTION: Use "3.4.0" for any 3.4.x release, for compatibility with 3.4.0 (which did not have this code)
+				versionedWriteDirFolderName += "3.4.0";
+			}
+			else
+			{
+				// Normal case - use only "MAJOR.MINOR"
+				versionedWriteDirFolderName += tagVersion.value().major + "." + tagVersion.value().minor;
+			}
+		}
+		else
+		{
+			// vcs_tag does not resemble a version number - just use it directly
+			versionedWriteDirFolderName += vcs_tag;
+		}
 	}
 	else if (strlen(vcs_branch_cstr))
 	{
