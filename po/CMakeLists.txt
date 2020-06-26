@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 
+if(NOT ENABLE_NLS)
+	message(STATUS "Skipping translations generation / native language support")
+	return()
+endif()
+
 find_package(Gettext 0.18)
 if(NOT GETTEXT_FOUND)
 	message( WARNING "Gettext is not found. Skipping language file generation. (Only the default language, English, will be available.)" )

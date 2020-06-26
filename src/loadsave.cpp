@@ -58,6 +58,7 @@
 #include "keybind.h"
 #include "keymap.h"
 #include "qtscript.h"
+#include "clparse.h"
 
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
@@ -109,7 +110,28 @@ char				sRequestResult[PATH_MAX];   // filename returned;
 bool				bRequestLoad = false;
 LOADSAVE_MODE		bLoadSaveMode;
 static const char *savedTitle;
-static const char *sExt = ".gam";
+static const char *sSaveGameExtension = ".gam";
+
+// ////////////////////////////////////////////////////////////////////////////
+// return whether the specified filename looks like a saved game file, i.e. ends with .gam
+bool isASavedGamefile(const char* filename)
+{
+	static const size_t saveGameExtensionLength = strlen(sSaveGameExtension);
+
+	if (nullptr == filename)
+	{
+		return false;
+	}
+
+	size_t filenameLength = strlen(filename);
+	if (filenameLength <= saveGameExtensionLength)
+	{
+		// reject filename of insufficient length to contain "<anything>.gam"
+		return false;
+	}
+	return 0 == strcmp(filename + filenameLength - saveGameExtensionLength, sSaveGameExtension);
+}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // return whether the save screen was displayed in the mission results screen
@@ -139,6 +161,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	bLoadSaveMode = savemode;
 	savedTitle = title;
 	UDWORD			slotCount;
+
+	// Static as these are assigned to the widget buttons by reference
 	static char	sSlotCaps[totalslots][totalslotspace];
 	static char	sSlotTips[totalslots][totalslotspace];
 	char **i, **files;
@@ -323,43 +347,61 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	// add savegame filenames minus extensions to buttons
 	files = PHYSFS_enumerateFiles(NewSaveGamePath);
+
+	struct SaveGameNamesAndTimes
+	{
+		char* name;
+		time_t savetime;
+	};
+
+	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
+
 	for (i = files; *i != nullptr; ++i)
 	{
-		W_BUTTON *button;
 		char savefile[256];
 		time_t savetime;
-		struct tm *timeinfo;
 
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
 		}
-
-		button = (W_BUTTON *)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
 
 		debug(LOG_SAVE, "We found [%s]", *i);
 
 		/* Figure save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
-		timeinfo = localtime(&savetime);
-		strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", timeinfo);
 
-		/* Set the button-text */
 		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
-		sstrcpy(sSlotCaps[slotCount], *i);  //store it!
 
-		/* Add button */
-		button->pTip = sSlotTips[slotCount];
-		button->pText = WzString::fromUtf8(sSlotCaps[slotCount]);
-		slotCount++;		// goto next but...
-		if (slotCount == totalslots)
-		{
-			break;
-		}
+		SaveGameNamesAndTimes saveGameNameAndTime{ *i, savetime };
+		saveGameNamesAndTimes.push_back(saveGameNameAndTime);
 	}
+
+	// Sort the save games so that the most recent one appears first
+	std::sort(saveGameNamesAndTimes.begin(),
+			  saveGameNamesAndTimes.end(),
+			  [](SaveGameNamesAndTimes& a, SaveGameNamesAndTimes& b) { return a.savetime > b.savetime; });
+
+	// Now store the sorted save game names to the buttons
+	slotCount = 1;
+	(void)std::all_of(saveGameNamesAndTimes.begin(), saveGameNamesAndTimes.end(), [&](SaveGameNamesAndTimes& saveGameNameAndTime)
+		{
+			/* Set the button-text and tip text (the save time) into static storage */
+			sstrcpy(sSlotCaps[slotCount], saveGameNameAndTime.name);
+			strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", localtime(& (saveGameNameAndTime.savetime)));
+
+			/* Add a button that references the static strings */
+			W_BUTTON* button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
+			button->pTip = sSlotTips[slotCount];
+			button->pText = WzString::fromUtf8(sSlotCaps[slotCount]);
+			slotCount++;
+
+			return (slotCount < totalslots);
+		}
+	);
+
 	PHYSFS_freeList(files);
 
 	bLoadSaveUp = true;
@@ -458,8 +500,7 @@ static bool findLastSaveFrom(const char *path)
 		char savefile[PATH_MAX];
 		time_t savetime;
 
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -561,7 +602,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			if (!slotButton->pText.isEmpty())
 			{
-				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), sExt);
+				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), sSaveGameExtension);
 			}
 			else
 			{
@@ -586,7 +627,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 				if (!slotButton->pText.isEmpty())
 				{
-					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().c_str(), sExt);
+					ssprintf(sDelete, "%s%s%s", NewSaveGamePath, slotButton->pText.toUtf8().c_str(), sSaveGameExtension);
 				}
 				else
 				{
@@ -648,7 +689,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		{
 			sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 			removeWildcards(sTemp);
-			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath, sTemp, sExt);
+			snprintf(sRequestResult, sizeof(sRequestResult), "%s%s%s", NewSaveGamePath, sTemp, sSaveGameExtension);
 			if (strlen(sDelete) != 0)
 			{
 				deleteSaveGame(sDelete);	//only delete game if a new game fills the slot
@@ -815,8 +856,7 @@ static void freeAutoSaveSlot(const char *path)
 	int nfiles = 0;
 	for (i = files; *i != nullptr; ++i)
 	{
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -836,8 +876,7 @@ static void freeAutoSaveSlot(const char *path)
 	{
 		char savefile[PATH_MAX];
 
-		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, sExt))
+		if (!isASavedGamefile(*i))
 		{
 			// If it doesn't, move on to the next filename
 			continue;
@@ -857,8 +896,8 @@ static void freeAutoSaveSlot(const char *path)
 
 void autoSave()
 {
-	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating
-	if (runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated)
+	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
+	if (runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated || autogame_enabled())
 	{
 		return;
 	}

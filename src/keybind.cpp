@@ -607,6 +607,20 @@ void kf_ToggleFPS() //This shows *just FPS* and is always visible (when active) 
 		CONPRINTF("%s", _("FPS display is disabled."));
 	}
 }
+void kf_ToggleUnitCount()		// Display units built / lost / produced counter
+{
+	// Toggle the boolean value of showUNITCOUNT
+	showUNITCOUNT = !showUNITCOUNT;
+
+	if (showUNITCOUNT)
+	{
+		CONPRINTF("%s", _("Unit count display is enabled."));
+	}
+	else
+	{
+		CONPRINTF("%s", _("Unit count display is disabled."));
+	}
+}
 void kf_ToggleSamples() //Displays number of sound sample in the sound queues & lists.
 {
 	// Toggle the boolean value of showSAMPLES
@@ -1528,8 +1542,6 @@ void	kf_ToggleProximitys()
 // --------------------------------------------------------------------------
 void	kf_JumpToResourceExtractor()
 {
-	int xJump, yJump;
-
 	if (psOldRE && (STRUCTURE *)psOldRE->psNextFunc)
 	{
 		psOldRE = psOldRE->psNextFunc;
@@ -1541,10 +1553,6 @@ void	kf_JumpToResourceExtractor()
 
 	if (psOldRE)
 	{
-		xJump = psOldRE->pos.x;
-		yJump = psOldRE->pos.y;
-		player.p.x = xJump;
-		player.p.z = yJump;
 		player.r.y = 0; // face north
 		setViewPos(map_coord(psOldRE->pos.x), map_coord(psOldRE->pos.y), true);
 	}

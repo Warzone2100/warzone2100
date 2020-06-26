@@ -1,10 +1,16 @@
 cmake_minimum_required(VERSION 3.5)
 project(warzone2100)
 
+OPTION(ENABLE_DOCS "Enable documentation generation" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)
 OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
+	# Only supported on Windows, macOS, and Linux
+	OPTION(ENABLE_DISCORD "Enable Discord presence / join integration" ON)
+endif()
 
 set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")
 
@@ -30,6 +36,9 @@ endif()
 
 # CXX Standard
 if(MSVC)
+	# MSVC doesn't support enforcing c++11 - the minimum it will allow is c++14
+	# See https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version
+	# However, avoid using any features not supported by c++11 or the build will fail on other platforms.
 	set(CMAKE_CXX_STANDARD 14)
 else()
 	set(CMAKE_CXX_STANDARD 11)
@@ -689,6 +698,7 @@ add_subdirectory(3rdparty)
 set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
 
 CONFIGURE_WZ_COMPILER_WARNINGS()
+add_subdirectory(build_tools)
 add_subdirectory(lib)
 add_subdirectory(data)
 add_subdirectory(doc)

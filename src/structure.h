@@ -350,8 +350,8 @@ bool IsStatExpansionModule(const STRUCTURE_STATS *psStats);
 bool structureIsBlueprint(const STRUCTURE *psStructure);
 bool isBlueprint(const BASE_OBJECT *psObject);
 
-/*returns the power cost to build this structure*/
-UDWORD structPowerToBuild(const STRUCTURE *psStruct);
+/*returns the power cost to build this structure, or to add its next module */
+UDWORD structPowerToBuildOrAddNextModule(const STRUCTURE *psStruct);
 
 // check whether a factory of a certain number and type exists
 bool checkFactoryExists(UDWORD player, UDWORD factoryType, UDWORD inc);
@@ -364,6 +364,8 @@ void cbNewDroid(STRUCTURE *psFactory, DROID *psDroid);
 
 StructureBounds getStructureBounds(const STRUCTURE *object);
 StructureBounds getStructureBounds(const STRUCTURE_STATS *stats, Vector2i pos, uint16_t direction);
+
+bool canStructureHaveAModuleAdded(const STRUCTURE* const structure);
 
 static inline int structSensorRange(const STRUCTURE *psObj)
 {
@@ -511,5 +513,4 @@ static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
 
 WzString getFavoriteStructs();
 void setFavoriteStructs(WzString list);
-
 #endif // __INCLUDED_SRC_STRUCTURE_H__

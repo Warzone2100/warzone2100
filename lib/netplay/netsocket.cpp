@@ -1529,7 +1529,25 @@ void socketArrayClose(Socket **sockets, size_t maxSockets)
 
 WZ_DECL_NONNULL(1) bool socketHasIPv4(Socket *sock)
 {
-	return sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET;
+	if (sock->fd[SOCK_IPV4_LISTEN] != INVALID_SOCKET)
+	{
+		return true;
+	}
+	else
+	{
+#if defined(IPV6_V6ONLY)
+		if (sock->fd[SOCK_IPV6_LISTEN] != INVALID_SOCKET)
+		{
+			int ipv6_v6only = 1;
+			socklen_t len = sizeof(ipv6_v6only);
+			if (getsockopt(sock->fd[SOCK_IPV6_LISTEN], IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6_v6only, &len) == 0)
+			{
+				return ipv6_v6only == 0;
+			}
+		}
+#endif
+		return false;
+	}
 }
 
 WZ_DECL_NONNULL(1) bool socketHasIPv6(Socket *sock)
@@ -1563,12 +1581,13 @@ std::string ipv4_NetBinary_To_AddressString(const std::vector<unsigned char>& ip
 	{
 		return "";
 	}
-	std::string ipv4Address;
-	ipv4Address.resize(INET_ADDRSTRLEN);
-	if (inet_ntop(AF_INET, ip4NetBinaryForm.data(), &ipv4Address[0], ipv4Address.size()) == nullptr)
+
+	char buf[INET_ADDRSTRLEN] = {0};
+	if (inet_ntop(AF_INET, ip4NetBinaryForm.data(), buf, sizeof(buf)) == nullptr)
 	{
 		return "";
 	}
+	std::string ipv4Address = buf;
 	return ipv4Address;
 }
 
@@ -1589,16 +1608,17 @@ std::vector<unsigned char> ipv6_AddressString_To_NetBinary(const std::string& ip
 
 std::string ipv6_NetBinary_To_AddressString(const std::vector<unsigned char>& ip6NetBinaryForm)
 {
-	if (ip6NetBinaryForm.size() != sizeof(struct in_addr))
+	if (ip6NetBinaryForm.size() != sizeof(struct in6_addr))
 	{
 		return "";
 	}
-	std::string ipv6Address;
-	ipv6Address.resize(INET6_ADDRSTRLEN);
-	if (inet_ntop(AF_INET6, ip6NetBinaryForm.data(), &ipv6Address[0], ipv6Address.size()) == nullptr)
+
+	char buf[INET6_ADDRSTRLEN] = {0};
+	if (inet_ntop(AF_INET6, ip6NetBinaryForm.data(), buf, sizeof(buf)) == nullptr)
 	{
 		return "";
 	}
+	std::string ipv6Address = buf;
 	return ipv6Address;
 }
 

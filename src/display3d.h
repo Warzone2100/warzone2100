@@ -28,6 +28,8 @@
 #include "objectdef.h"
 #include "message.h"
 
+#define HEIGHT_TRACK_INCREMENTS (50)
+
 /*!
  * Special tile types
  */
@@ -54,6 +56,7 @@ struct iView
 };
 
 extern bool showFPS;
+extern bool showUNITCOUNT;
 extern bool showSAMPLES;
 extern bool showORDERS;
 

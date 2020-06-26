@@ -290,6 +290,7 @@ po/custom/mac-infoplist.txt
 po/custom/warzone2100.desktop.txt
 src/3rdparty/propertymatcher.cpp
 src/action.cpp
+src/activity.cpp
 src/advvis.cpp
 src/ai.cpp
 src/astar.cpp
@@ -324,6 +325,7 @@ src/hci.cpp
 src/ingameop.cpp
 src/init.cpp
 src/intdisplay.cpp
+src/integrations/wzdiscordrpc.cpp
 src/intelmap.cpp
 src/intimage.cpp
 src/intorder.cpp
@@ -355,6 +357,7 @@ src/multiplay.cpp
 src/multistat.cpp
 src/multistruct.cpp
 src/multisync.cpp
+src/nethelpers.cpp
 src/notifications.cpp
 src/objects.cpp
 src/objmem.cpp

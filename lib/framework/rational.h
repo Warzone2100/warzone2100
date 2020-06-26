@@ -26,7 +26,7 @@
 #define RATIONAL_H
 
 #include <algorithm>
-
+#include <cmath>
 
 static inline int gcd(int a, int b)
 {
@@ -116,6 +116,17 @@ struct Rational
 	int ceil() const
 	{
 		return n >= 0 ? (n + (d - 1)) / d : n / d;
+	}
+
+	// We can't do this with a operator as it ambiguates the comparison operators
+	double asDouble() const
+	{
+		if (0 == d)
+		{
+			return nan("");
+		}
+
+		return (double)n / (double)d;
 	}
 
 	// If int16_t isn't big enough, the comparison operations might overflow.

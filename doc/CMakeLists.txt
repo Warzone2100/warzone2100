@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 
+if(NOT ENABLE_DOCS)
+	message(STATUS "Skipping documentation generation")
+	return()
+endif()
+
 add_custom_target(wz2100_doc ALL)
 set_property(TARGET wz2100_doc PROPERTY FOLDER "doc")
 

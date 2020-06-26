@@ -58,4 +58,6 @@ void recvMultiStats(NETQUEUE queue);
 std::map<std::string, EcKey::Key> const &getKnownPlayers();
 void addKnownPlayer(std::string const &name, EcKey const &key, bool override = false);
 
+uint32_t getSelectedPlayerUnitsKilled();
+
 #endif // __INCLUDED_SRC_MULTISTATS_H__

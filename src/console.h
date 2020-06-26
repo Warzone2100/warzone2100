@@ -33,14 +33,29 @@ enum CONSOLE_TEXT_JUSTIFICATION
 	CENTRE_JUSTIFY
 };
 
+// Declare any messages that you want to be debounced here, along with their debounce time.
+// This has to be done as a 1-member struct rather than an enum to allow distinguishing
+// between different mesages with the same bounce time.
+struct DEBOUNCED_MESSAGE
+{
+	unsigned int debounceTime;
+};
+
+const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING({2500});
+
+
 /* ID to use for addConsoleMessage() in case of a system message */
 #define	SYSTEM_MESSAGE				(-1)
 #define NOTIFY_MESSAGE				(-2)	// mainly used for lobby & error messages
 #define INFO_MESSAGE				(-3)	// This type is not stored, it is used for simple messages
 
+#define MAX_CONSOLE_MESSAGE_DURATION	((UDWORD)-1)
+#define DEFAULT_CONSOLE_MESSAGE_DURATION	0
+
 extern char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];
 
-bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false);
+bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team = false, UDWORD duration = DEFAULT_CONSOLE_MESSAGE_DURATION);
+bool addConsoleMessageDebounced(const char* Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, const DEBOUNCED_MESSAGE & debouncedMessage, bool team = false, UDWORD duration = DEFAULT_CONSOLE_MESSAGE_DURATION);
 void updateConsoleMessages();
 void initConsoleMessages();
 void removeTopConsoleMessage();

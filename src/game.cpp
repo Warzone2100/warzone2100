@@ -3785,6 +3785,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		playerBuiltHQ = save.value("playerBuiltHQ").toBool();
 	}
+	if (save.contains("techLevel"))
+	{
+		game.techLevel = save.value("techLevel").toInt();
+	}
 
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
@@ -3928,6 +3932,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("bComms", NetPlay.bComms);
 	save.setValue("modList", getModList().c_str());
 	save.setValue("playerBuiltHQ", playerBuiltHQ);
+	save.setValue("techLevel", game.techLevel);
 
 	return true;
 }

@@ -32,7 +32,6 @@
 #include "lib/framework/file.h"
 #include "lib/framework/crc.h"
 #include "lib/framework/physfs_ext.h"
-#include "lib/framework/rational.h"
 #include "lib/gamelib/gtime.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "clparse.h"

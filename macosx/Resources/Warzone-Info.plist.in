@@ -28,6 +28,19 @@
 	<string>@MAC_VERSION_NUMBER@</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).discordLaunch</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>discord-505520727521361941</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>@MAC_BUILD_NUMBER@</string>
 	<key>LSApplicationCategoryType</key>

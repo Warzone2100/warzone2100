@@ -89,6 +89,9 @@
 #include <sodium.h>
 #include "updatemanager.h"
 #include "activity.h"
+#if defined(ENABLE_DISCORD)
+#include "integrations/wzdiscordrpc.h"
+#endif
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -1077,6 +1080,9 @@ void mainLoop()
 
 	wzApplyCursor();
 	runNotifications();
+#if defined(ENABLE_DISCORD)
+	discordRPCPerFrame();
+#endif
 }
 
 bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ_DECL_UNUSED) // explicitely pass by reference
@@ -1559,6 +1565,9 @@ int realmain(int argc, char *argv[])
 	}
 
 	WzInfoManager::initialize();
+#if defined(ENABLE_DISCORD)
+	discordRPCInitialize();
+#endif
 
 #if defined(WZ_CC_MSVC) && defined(DEBUG)
 	debug_MEMSTATS();
@@ -1567,6 +1576,9 @@ int realmain(int argc, char *argv[])
 	wzMainEventLoop();
 	ActivityManager::instance().preSystemShutdown();
 	saveConfig();
+#if defined(ENABLE_DISCORD)
+	discordRPCShutdown();
+#endif
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
 	for (int i = 0; i < argc; i++)

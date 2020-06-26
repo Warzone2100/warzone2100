@@ -230,7 +230,7 @@ list (APPEND CPACK_SOURCE_IGNORE_FILES "/data/sequences.wz")
 
 # Ignore any autorevision.cache file in the src directory
 # (the install script below handles generating a fresh one)
-list (APPEND CPACK_SOURCE_IGNORE_FILES "/src/autorevision.cache")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/build_tools/autorevision.cache")
 
 # The macosx build directories
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/macosx/build/")

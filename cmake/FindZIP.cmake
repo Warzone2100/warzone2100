@@ -15,7 +15,7 @@
 # Copyright © 2018-2020 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2020-05-09a
+# Script Version: 2020-06-03a
 #
 
 cmake_minimum_required(VERSION 3.3)
@@ -127,7 +127,7 @@ function(COMPRESS_ZIP _outputFile)
 
 		add_custom_command(
 			OUTPUT "${_outputFile}"
-			COMMAND ${ZIP_EXECUTABLE} a -tzip ${_additionalOptions} ${_outputFile} ${_parsedArguments_PATHS}
+			COMMAND ${CMAKE_COMMAND} -E env LC_ALL=C LC_COLLATE=C ${ZIP_EXECUTABLE} a -tzip -mtc=off ${_additionalOptions} ${_outputFile} ${_parsedArguments_PATHS}
 			DEPENDS ${_depends_PATHS}
 			WORKING_DIRECTORY "${_workingDirectory}"
 			VERBATIM
@@ -147,7 +147,7 @@ function(COMPRESS_ZIP _outputFile)
 
 		add_custom_command(
 			OUTPUT "${_outputFile}"
-			COMMAND ${ZIP_EXECUTABLE} -r ${_additionalOptions} ${_outputFile} ${_parsedArguments_PATHS}
+			COMMAND ${CMAKE_COMMAND} -E env LC_ALL=C LC_COLLATE=C ${ZIP_EXECUTABLE} -X -r ${_additionalOptions} ${_outputFile} ${_parsedArguments_PATHS}
 			DEPENDS ${_depends_PATHS}
 			WORKING_DIRECTORY "${_workingDirectory}"
 			VERBATIM

@@ -180,7 +180,7 @@ void setZoom(float speed, float target)
 		zoom_reference = getViewDistance();
 		zoom_current = getViewDistance();
 		zoom_target = getViewDistance();
-		zoom_time = graphicsTime;
+		zoom_time = realTime;
 		is_zooming = true;
 	}
 	else if((target < zoom_current && zoom_target > zoom_current) || (target > zoom_current && zoom_target < zoom_current)) // switched directions "mid-air"
@@ -202,7 +202,7 @@ void zoom()
 	float delta = zoom_target - zoom_reference;
 	float current = zoom_current - zoom_reference;
 
-	float acceleration = std::fmin((graphicsTime - zoom_time) / zoom_full_acceleration_time_millis, 1);
+	float acceleration = std::fmin((realTime - zoom_time) / zoom_full_acceleration_time_millis, 1);
 	acceleration = acceleration * acceleration; // quadratic ease in
 
 	float zoom_full_deceleration_distance = zoom_velocity_units_per_sec / 1000 * zoom_full_deceleration_time_millis;
@@ -212,7 +212,7 @@ void zoom()
 
 	float speed = std::fmin(acceleration, deceleration);
 
-	zoom_current += speed * graphicsTimeAdjustedIncrement(zoom_velocity_units_per_sec) * direction;
+	zoom_current += speed * realTimeAdjustedIncrement(zoom_velocity_units_per_sec) * direction;
 
 	if((direction == 1 && zoom_current > zoom_target - 1) || (direction == -1 && zoom_current < zoom_target + 1))
 	{
@@ -1106,6 +1106,8 @@ void resetScroll()
 	scrollRefTime = wzGetTicks();
 	scrollSpeedUpDown = 0.0f;
 	scrollSpeedLeftRight = 0.0f;
+	scrollDirLeftRight = 0;
+	scrollDirUpDown = 0;
 }
 
 // Check a coordinate is within the scroll limits, SDWORD version.
@@ -1526,8 +1528,10 @@ bool ctrlShiftDown()
 
 void AddDerrickBurningMessage()
 {
-	addConsoleMessage(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-	audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+	if (addConsoleMessageDebounced(_("Cannot Build. Oil Resource Burning."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE, CANNOT_BUILD_BURNING))
+	{
+		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+	}
 }
 
 static void printDroidClickInfo(DROID *psDroid)

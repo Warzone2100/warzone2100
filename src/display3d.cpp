@@ -84,6 +84,7 @@
 #include "cmddroid.h"
 #include "terrain.h"
 #include "warzoneconfig.h"
+#include "multistat.h"
 
 /********************  Prototypes  ********************/
 
@@ -94,7 +95,7 @@ static void displayStaticObjects(const glm::mat4 &viewMatrix);
 static void displayFeatures(const glm::mat4 &viewMatrix);
 static UDWORD	getTargettingGfx();
 static void	drawDroidGroupNumber(DROID *psDroid);
-static void	trackHeight(float desiredHeight);
+static void	trackHeight(int desiredHeight);
 static void	renderSurroundings(const glm::mat4 &viewMatrix);
 static void	locateMouse();
 static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatrix);
@@ -129,6 +130,7 @@ static WzText txtLevelName;
 static WzText txtDebugStatus;
 static WzText txtCurrentTime;
 static WzText txtShowFPS;
+static WzText txtUnits;
 // show Samples text
 static WzText txtShowSamples_Que;
 static WzText txtShowSamples_Lst;
@@ -228,6 +230,10 @@ static unsigned int rubbleTile = BLOCKING_RUBBLE_TILE;
 bool showFPS = false;       //
 /** Show how many samples we are rendering per second
  * default OFF, turn ON via console command 'showsamples'
+ */
+bool showUNITCOUNT = false;
+/** Show how many kills/deaths (produced units) made
+ * default OFF, turn ON via console command 'showunits'
  */
 bool showSAMPLES = false;
 /**  Show the current selected units order / action
@@ -841,8 +847,16 @@ void draw3DScene()
 		std::string fps = astringf("FPS: %d", frameRate());
 		txtShowFPS.setText(fps, font_regular);
 		const unsigned width = txtShowFPS.width() + 10;
-		const unsigned height = txtShowFPS.height();
+		const unsigned height = 9; //txtShowFPS.height();
 		txtShowFPS.render(pie_GetVideoBufferWidth() - width, pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
+	}
+	if (showUNITCOUNT)
+	{
+		std::string killdiff = astringf("Units: %u lost / %u built / %u killed", missionData.unitsLost, missionData.unitsBuilt, getSelectedPlayerUnitsKilled());
+		txtUnits.setText(killdiff, font_regular);
+		const unsigned width = txtUnits.width() + 10;
+		const unsigned height = 9; //txtUnits.height();
+		txtUnits.render(pie_GetVideoBufferWidth() - width - ((showFPS) ? txtShowFPS.width() + 10 : 0), pie_GetVideoBufferHeight() - height, WZCOL_TEXT_BRIGHT);
 	}
 	if (showORDERS)
 	{
@@ -1871,6 +1885,13 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 	player.p.x = world_coord(x);
 	player.p.z = world_coord(y);
 	player.r.z = 0;
+	
+	calcAverageTerrainHeight(&player);
+
+	if(player.p.y < averageCentreTerrainHeight)
+	{
+		player.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
+	}
 
 	if (getWarCamStatus())
 	{
@@ -2281,7 +2302,7 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 /// Draw the structures
 void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
-	int colour, pieFlag, pieFlagData, ecmFlag = 0;
+	int colour, pieFlagData, ecmFlag = 0, pieFlag = 0;
 	PIELIGHT buildingBrightness;
 	const Vector3i dv = Vector3i(psStructure->pos.x - player.p.x, psStructure->pos.z, -(psStructure->pos.y - player.p.z));
 	bool bHitByElectronic = false;
@@ -2342,7 +2363,6 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		{
 			if (structureIsBlueprint(psStructure))
 			{
-				pieFlag = pie_TRANSLUCENT;
 				pieFlagData = BLUEPRINT_OPACITY;
 			}
 			else
@@ -2350,7 +2370,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 				pieFlag = pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag, pieFlagData,
+			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
 				viewMatrix * modelMatrix);
 		}
 
@@ -3388,16 +3408,35 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 }
 
 /// Smoothly adjust player height to match the desired height
-static void trackHeight(float desiredHeight)
+static void trackHeight(int desiredHeight)
 {
+	static const uint32_t minTrackHeightInterval = GAME_TICKS_PER_SEC / 60;
+	static uint32_t lastHeightAdjustmentRealTime = 0;
 	static float heightSpeed = 0.0f;
+
+	desiredHeight = static_cast<int>(std::ceil(static_cast<float>(desiredHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS;
+
+	uint32_t deltaTrackHeightRealTime = realTime - lastHeightAdjustmentRealTime;
+	if (deltaTrackHeightRealTime < minTrackHeightInterval)
+	{
+		// avoid processing this too rapidly, such as when vsync is disabled
+		return;
+	}
+	lastHeightAdjustmentRealTime = realTime;
+
+	if ((desiredHeight == player.p.y) && ((heightSpeed > -5.f) && (heightSpeed < 5.f)))
+	{
+		heightSpeed = 0.0f;
+		return;
+	}
+
 	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
 
 	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
-	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, realTimeAdjustedIncrement(1));
+	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, (float) deltaTrackHeightRealTime / (float) GAME_TICKS_PER_SEC);
 
 	/* Adjust the height accordingly */
-	player.p.y = desiredHeight - separation;
+	player.p.y = desiredHeight - static_cast<int>(std::trunc(separation));
 }
 
 /// Select the next energy bar display mode

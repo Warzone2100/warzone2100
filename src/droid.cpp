@@ -115,6 +115,9 @@ void cancelBuild(DROID *psDroid)
 		psDroid->order = DroidOrder(DORDER_NONE);
 		setDroidActionTarget(psDroid, nullptr, 0);
 
+		// The droid has no more build orders, so halt in place rather than clumping around the build objective
+		moveStopDroid(psDroid);
+
 		triggerEventDroidIdle(psDroid);
 	}
 }

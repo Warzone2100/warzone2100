@@ -43,6 +43,7 @@
 #include "main.h"
 #include "mission.h" // for cheats
 #include "multistat.h"
+#include "activity.h"
 #include <utility>
 
 
@@ -362,3 +363,26 @@ void addKnownPlayer(std::string const &name, EcKey const &key, bool override)
 	knownPlayersIni->setValue(QString::fromUtf8(name.c_str()), base64Encode(key.toBytes(EcKey::Public)).c_str());
 	knownPlayersIni->sync();
 }
+
+uint32_t getSelectedPlayerUnitsKilled()
+{
+	if (ActivityManager::instance().getCurrentGameMode() != ActivitySink::GameMode::CAMPAIGN)
+	{
+		// Let's use the real score for MP games
+		// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+		if (NetPlay.bComms)
+		{
+			return getMultiStats(selectedPlayer).recentKills;
+		}
+		else
+		{
+			// estimated kills
+			return static_cast<uint32_t>(ingame.skScores[selectedPlayer][1]);
+		}
+	}
+	else
+	{
+		return missionData.unitsKilled;
+	}
+}
+

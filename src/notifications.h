@@ -171,6 +171,8 @@ public:
 	// An optional string tag that can be filtered on to cancel / dismiss existing notifications
 	// Multiple notifications can share the same tag, if they ought to be "grouped" for this purpose
 	std::string tag;
+	// Called when the notification is initially (fully) displayed
+	std::function<void (const WZ_Notification&)> onDisplay;
 	// Called when the notification is dismissed *without* pressing the "Action" button
 	// (i.e. by pressing the "Dismiss" button or dragging it upwards)
 	std::function<void (const WZ_Notification&, bool wasProgrammaticallyDismissed)> onDismissed;

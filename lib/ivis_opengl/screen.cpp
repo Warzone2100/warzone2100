@@ -526,6 +526,18 @@ void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 	}
 	PHYSFS_freeList(rc);
 
+	if (names.empty())
+	{
+		std::string searchPath = dirname;
+		if (!searchPath.empty() && searchPath.back() != '/')
+		{
+			searchPath += "/";
+		}
+		debug(LOG_FATAL, "Missing files: \"%s%s*\" - data files / folders may be corrupt.", searchPath.c_str(), basename);
+		abort();
+		return;
+	}
+
 	// pick a random name from our vector of names
 	int ran = rand() % names.size();
 	std::string full_path = std::string(dirname) + names[ran];

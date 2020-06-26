@@ -220,14 +220,20 @@ function setupGame()
 	//Use light fog for multiplayer
 	setRevealStatus(true);
 
-	if (tilesetType == "URBAN")
+	if (tilesetType == "ARIZONA")
 	{
+		setCampaignNumber(1);
+	}
+	else if (tilesetType == "URBAN")
+	{
+		setCampaignNumber(2);
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-urban.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-urban.png");
 		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-urban.png");
 	}
 	else if (tilesetType == "ROCKIES")
 	{
+		setCampaignNumber(3);
 		replaceTexture("page-8-player-buildings-bases.png", "page-8-player-buildings-bases-rockies.png");
 		replaceTexture("page-9-player-buildings-bases.png", "page-9-player-buildings-bases-rockies.png");
 		replaceTexture("page-7-barbarians-arizona.png", "page-7-barbarians-kevlar.png");

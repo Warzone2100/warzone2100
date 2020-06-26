@@ -59,6 +59,7 @@
 #include "wrappers.h"
 #include "intimage.h"
 #include "data.h"
+#include "activity.h"
 
 #include "multimenu.h"
 #include "multiplay.h"
@@ -179,8 +180,15 @@ void clearPlayer(UDWORD player, bool quietly)
 
 	for (i = 0; i < MAX_PLAYERS; i++)				// remove alliances
 	{
-		alliances[player][i]	= ALLIANCE_BROKEN;
-		alliances[i][player]	= ALLIANCE_BROKEN;
+		// Never remove a player's self-alliance, as the player can be selected and units added via the debug menu
+		// even after they have left, and this would lead to them firing on each other.
+		if (i != player)
+		{
+			alliances[player][i] = ALLIANCE_BROKEN;
+			alliances[i][player] = ALLIANCE_BROKEN;
+			alliancebits[i] &= ~(1 << player);
+			alliancebits[player] &= ~(1 << i);
+		}
 	}
 
 	debug(LOG_DEATH, "killing off all droids for player %d", player);
@@ -289,6 +297,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
 
 	debug(LOG_INFO, "** player %u has dropped, in-game!", playerIndex);
+	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -469,17 +478,9 @@ bool recvDataCheck(NETQUEUE queue)
 // Setup Stuff for a new player.
 void setupNewPlayer(UDWORD player)
 {
-	UDWORD i;
-
 	ingame.PingTimes[player] = 0;					// Reset ping time
 	ingame.JoiningInProgress[player] = true;			// Note that player is now joining
 	ingame.DataIntegrity[player] = false;
-
-	for (i = 0; i < MAX_PLAYERS; i++)				// Set all alliances to broken
-	{
-		alliances[selectedPlayer][i] = ALLIANCE_BROKEN;
-		alliances[i][selectedPlayer] = ALLIANCE_BROKEN;
-	}
 
 	resetMultiVisibility(player);						// set visibility flags.
 
@@ -501,11 +502,19 @@ void ShowMOTD()
 	char buf[250] = { '\0' };
 	// when HOST joins the game, show server MOTD message first
 	addConsoleMessage(_("Server message:"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-	addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	if (NetPlay.MOTD)
+	{
+		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	}
+	else
+	{
+		ssprintf(buf, "%s", "Null message");
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	}
 	if (NetPlay.HaveUpgrade)
 	{
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-		ssprintf(buf, "%s", _("There is an update to the game, please visit http://wz2100.net to download new version."));
+		ssprintf(buf, "%s", _("There is an update to the game, please visit https://wz2100.net to download new version."));
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	}
 	else

@@ -375,6 +375,31 @@ void ActivityManager::hostGame(const char *SessionName, const char *PlayerName, 
 	for (auto sink : activitySinks) { sink->hostingMultiplayerGame(currentMultiplayGameInfo); }
 }
 
+void ActivityManager::hostGameLobbyServerDisconnect()
+{
+	if (currentMode != ActivitySink::GameMode::HOSTING_IN_LOBBY)
+	{
+		debug(LOG_ACTIVITY, "Unexpected call to hostGameLobbyServerDisconnect - currentMode (%u) - ignoring", (unsigned int)currentMode);
+		return;
+	}
+
+	if (currentMultiplayGameInfo.lobbyGameId == 0)
+	{
+		debug(LOG_ACTIVITY, "Unexpected call to hostGameLobbyServerDisconnect - prior lobbyGameId is %u - ignoring", currentMultiplayGameInfo.lobbyGameId);
+		return;
+	}
+
+	// The lobby server has disconnected the host (us)
+	// Hence any prior lobbyGameId, etc is now invalid
+	currentMultiplayGameInfo.lobbyAddress.clear();
+	currentMultiplayGameInfo.lobbyPort = 0;
+	currentMultiplayGameInfo.lobbyGameId = 0;
+
+	// Inform the ActivitySinks
+	// Trigger a new hostingMultiplayerGame event
+	for (auto sink : activitySinks) { sink->hostingMultiplayerGame(currentMultiplayGameInfo); }
+}
+
 void ActivityManager::hostLobbyQuit()
 {
 	if (currentMode != ActivitySink::GameMode::HOSTING_IN_LOBBY)
@@ -436,7 +461,10 @@ void ActivityManager::joinedLobbyQuit()
 {
 	if (currentMode != ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{
-		debug(LOG_ACTIVITY, "Unexpected call to joinedLobbyQuit - currentMode (%u) - ignoring", (unsigned int)currentMode);
+		if (currentMode != ActivitySink::GameMode::MENUS)
+		{
+			debug(LOG_ACTIVITY, "Unexpected call to joinedLobbyQuit - currentMode (%u) - ignoring", (unsigned int)currentMode);
+		}
 		return;
 	}
 	currentMode = ActivitySink::GameMode::MENUS;
@@ -473,7 +501,14 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const
 		}
 		else
 		{
-			++numAIBotPlayers;
+			if (!p.allocated)
+			{
+				++numAIBotPlayers;
+			}
+			else
+			{
+				++numHumanPlayers;
+			}
 		}
 	}
 

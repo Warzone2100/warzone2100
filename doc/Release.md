@@ -15,54 +15,14 @@ We currently do releases off git master.
     git pull origin master
 
 
-Bump version numbers
+Update the changelog
 --------------------
-The following files _need editing_ to have the _correct version_.
+The following files should be edited prior to release:
 
 ### ChangeLog
 
 Edit the `ChangeLog` to be in sync with the latest changes. Also make sure to put the correct date and version there (the date that you make the release of course).
 
-### configure.ac
-
-Make sure to put the correct version number in the second parameter of AC_INIT.
-The AC_INIT directive should be somewhere at the top of the file.
-In this case, we use `3.3.0` for this release. It can be `4.3_beta 1` or whatever.
-
-    AC_INIT([Warzone 2100],[3.3.0],[http://wz2100.net/],[warzone2100])
-
-Make it default to _release_ builds.
-
-    # Add later for stricter checking: -Wextra -Wmissing-declarations -Wstrict-prototypes
-    AC_ARG_ENABLE([debug],
-    AS_HELP_STRING([--enable-debug[=yes/relaxed/profile/debugprofile/no]],[Compile debug version [[yes]]]),
-    [ enable_debug=${enableval} ], [ enable_debug=yes ])
-
-change it to:
-
-    [ enable_debug=${enableval} ], [ enable_debug=no ])
-    ...
-    AC_MSG_CHECKING([whether to compile in debug mode])
-    AC_MSG_RESULT([${enable_debug}])
-
-### lib/netplay/netplay.cpp
-
-Every release should increment at least `NETCODE_VERSION_MINOR` by 1, to prevent any issues with data or code changes.
-It is very important that this number is in sequential order from the last release, as the lobby server needs sane data to identify versions.
-
-`NETCODE_VERSION_MAJOR` is used the following way.
- * master will have this set to `0x1000`
- * bugfixes will have this set to `0xB00`
- * 3.1 will have this set to `0x2000`
- * releases based off branch master will be `0x10A0`
- * releases based off branch bugfixes will be `0xBA0`
- * releases based off branch 3.1 will be `0x20A0`
- * new branches will be `+0x1000` higher than the original value.
-
-```c
-static int NETCODE_VERSION_MAJOR = 6;                // major netcode version, used for compatibility check
-static int NETCODE_VERSION_MINOR = 0x22;             // minor netcode version, used for compatibility check
-```
 
 Commit the (above) changes to master
 
@@ -207,38 +167,34 @@ Edit & Publish the Release
 Once you have verified all the release assets:
 - [x] Click the "Edit" button next to the draft GitHub Release.
 - [x] Remove the top text block from the release notes / description (as it instructs).
+- [x] If this is a beta release, ensure that "This is a pre-release" is **checked**.
+- [x] If this is **NOT** a beta release, ensure that "This is a pre-release" is **unchecked**.
 - [x] Click the green "Publish Release" button.
 
-This will automatically:
+That's it! Now just...
+
+Sit Back and Watch the Magic
+----------------------------
+
+The release automation process will then:
 * Make the new release available on GitHub
-* Trigger automatic mirroring of the new release to SourceForge
-
-### Revert the changes to configure.ac
-
-Then you should revert the changes you made to `configure.ac` and `lib/netplay/netplay.cpp`, so that git master again becomes git master.
-
+* Mirror the new release to SourceForge
+   - (see: [/.github/workflows/mirror_release_sourceforge.yml](/.github/workflows/mirror_release_sourceforge.yml))
+* Update the website
+   - (see: [/.github/workflows/release.yml](/.github/workflows/release.yml#L12), wz2100.net repo's [fetch_latest_release_info.yml](https://github.com/Warzone2100/wz2100.net/blob/master/.github/workflows/fetch_latest_release_info.yml))
+* Update the update-data
+   - (see: [/.github/workflows/release.yml](/.github/workflows/release.yml#L25), update-data repo's [generate_updates_json.yml](https://github.com/Warzone2100/update-data/blob/master/.github/workflows/generate_updates_json.yml))
+* Inform the lobby server of the new version
+   - (see: the bottom of update-data repo's [generate_updates_json.yml](https://github.com/Warzone2100/update-data/blob/master/.github/workflows/generate_updates_json.yml))
 
 Post-Release checklist
 ----------------------
- * Add a new milestone to https://github.com/Warzone2100/warzone2100/milestones
- * (See below for details) Update the lobby server for the new release. See ~lobby/wzlobbyserver-ng/wzlobby/protocol/protocol3.py and ~lobby/wzlobbyserver-ng/wzlobby/settings.py and ~lobby/wzlobbyserver-ng/wzlobby/gamedb.py and then restart the lobby via Monit.
- * (See below for details) Update /home/lobby/gamecheck.wz2100.net/gamechecker/bottle/app.py -- the game version checker -- to include the version you have just created. Restart it with «uwsgi --reload /var/run/gamecheck.wz2100.net-master.pid».
- * Tell everyone about it in the forums. You can use the build_tools/changelog2bbcode.sh script to massage the changelog into BBCode.
- * Send mail about it on the developer mailing list.
- * Change the title on our IRC channels about the new release.
- * Ask for a raise for doing all this work that nobody else wanted to do, and you got suckered into doing it.
+- [x] Add a new milestone to https://github.com/Warzone2100/warzone2100/milestones
+- [x] Tell everyone about it in the forums. You can use the build_tools/changelog2bbcode.sh script to massage the changelog into BBCode.
+- [x] Send mail about it on the developer mailing list.
+- [x] Change the title on our IRC channels about the new release.
+- [x] Ask for a raise for doing all this work that nobody else wanted to do, and you got suckered into doing it.
 
 And, I am sure that people will spread the word about this new release at the following sites & others.
- * [ModDb](http://www.moddb.com/games/275/warzone-2100), [Softonic](http://warzone-2100.en.softonic.com/), [Gamershell](http://www.gamershell.com/news), [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6), [Reddit](www.reddit.com/r/warzone2100)
-
-### Updating the version numbers on the server
-
-    sudo su - lobby
-    workon wzlobby
-    cd ~
-    nano -w wzlobbyserver-ng/wzlobby/protocol/protocol3.py
-    nano -w wzlobbyserver-ng/wzlobby/settings.py
-    nano -w wzlobbyserver-ng/wzlobby/gamedb.py
-    nano -w gamecheck.wz2100.net/gamechecker/bottle/app.py
-
-Then use monit to restart the lobby server.
+ * [Reddit](https://www.reddit.com/r/warzone2100)
+ * [ModDb](http://www.moddb.com/games/275/warzone-2100), [Softonic](http://warzone-2100.en.softonic.com/), [Gamershell](http://www.gamershell.com/news), [Gamedev](http://www.gamedev.net/community/forums/forum.asp?forum_id=6)

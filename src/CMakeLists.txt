@@ -5,31 +5,9 @@ include(GNUInstallDirs)
 ############################
 # Versioning (autorevision)
 
-# Autorevision target that will run *every* build
-add_custom_target(autorevision ALL
-    DEPENDS
-        "${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"
-)
-set_property(TARGET autorevision PROPERTY FOLDER "_WZBuildProcessTargets")
-
-# Autorevision command that will run *every* build
-set(_autorevision_cache_tarball_src_input "${CMAKE_CURRENT_SOURCE_DIR}/autorevision.cache")
-set(_autorevision_cache_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.cache")
-set(_autorevision_h_file "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h")
-add_custom_command(
-    OUTPUT
-		"${CMAKE_CURRENT_BINARY_DIR}/__shouldnotexist.h"  # fake - ensure we run
-		"${_autorevision_h_file}"
-		"${_autorevision_cache_file}"
-	# Copy autorevision.cache from the src directory (if present)
-	# This supports proper versioning from distribution source archives
-	COMMAND ${CMAKE_COMMAND} -DINPUT_FILE=${_autorevision_cache_tarball_src_input} -DOUTPUT_FILE=${_autorevision_cache_file} -DSKIP_IF_INPUT_MISSING=ON -DSKIP_IF_OUTPUT_EXISTS=ON -P ${CMAKE_SOURCE_DIR}/cmake/CopyFileHelper.cmake
-	# Autorevision.cmake
-	# this command must generate: ${CMAKE_CURRENT_BINARY_DIR}/autorevision.h
-	COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DOUTPUT_TYPE=h -DOUTPUT_FILE=${_autorevision_h_file} -P ${CMAKE_SOURCE_DIR}/build_tools/autorevision.cmake
-	WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-	VERBATIM
-)
+# IMPORTANT: Must set GENERATED property at this directory level for autorevision.h
+set_source_files_properties("${wz2100_autorevision_cache_file}" PROPERTIES GENERATED TRUE)
+set_source_files_properties("${wz2100_autorevision_h_file}" PROPERTIES GENERATED TRUE)
 
 # On Windows, configure warzone2100.rc and the .manifest with updated version info
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -38,9 +16,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_manifest_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.manifest")
 	add_custom_command(
 		OUTPUT "${_manifest_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_manifest_template_file} -DOUTPUT_FILE=${_manifest_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_manifest_template_file} -DOUTPUT_FILE=${_manifest_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_manifest_template_file}" "${_autorevision_cache_file}"
+		DEPENDS "${_manifest_template_file}" "${wz2100_autorevision_cache_file}"
 		VERBATIM
 	)
 
@@ -49,11 +27,19 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_rc_output_file "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 	add_custom_command(
 		OUTPUT "${_rc_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_rc_template_file} -DOUTPUT_FILE=${_rc_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_rc_template_file} -DOUTPUT_FILE=${_rc_output_file} -P ${CMAKE_SOURCE_DIR}/win32/autorevision_rc.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_rc_template_file}" "${_autorevision_cache_file}" "${_manifest_output_file}"
+		DEPENDS "${_rc_template_file}" "${wz2100_autorevision_cache_file}" "${_manifest_output_file}"
 		VERBATIM
 	)
+
+	add_custom_target(autorevision_winver ALL
+		DEPENDS
+			"${_manifest_output_file}"
+			"${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc"
+	)
+	set_property(TARGET autorevision_winver PROPERTY FOLDER "_WZBuildProcessTargets")
+	add_dependencies(autorevision_winver autorevision) # Ensure ordering and non-concurrency
 endif()
 
 # On macOS, generate the Info.plist file with updated version info at *build-time*
@@ -62,9 +48,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(_info_plist_output_file "${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist")
 	add_custom_command(
 		OUTPUT "${_info_plist_output_file}"
-		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake
+		COMMAND ${CMAKE_COMMAND} -DCACHEFILE=${wz2100_autorevision_cache_file} -DPROJECT_ROOT=${PROJECT_SOURCE_DIR} -DTEMPLATE_FILE=${_info_plist_template_file} -DOUTPUT_FILE=${_info_plist_output_file} -P ${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake
 		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-		DEPENDS "${_info_plist_template_file}" "${_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake"
+		DEPENDS "${_info_plist_template_file}" "${wz2100_autorevision_cache_file}" "${CMAKE_SOURCE_DIR}/macosx/cmake/autorevision_infoplist.cmake"
 		VERBATIM
 	)
 
@@ -73,7 +59,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 			"${CMAKE_CURRENT_BINARY_DIR}/Warzone-Info.plist"
 	)
 	set_property(TARGET autorevision_infoplist PROPERTY FOLDER "_WZBuildProcessTargets")
-
 	add_dependencies(autorevision_infoplist autorevision) # Ensure ordering and non-concurrency
 
 endif()
@@ -85,8 +70,8 @@ if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()
 
-file(GLOB HEADERS "*.h" "*/*.h")
-file(GLOB SRC "*.cpp" "*/*.cpp")
+file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h")
+file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp")
 qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
 
 set(_additionalSourceFiles)
@@ -94,7 +79,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_additionalSourceFiles "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 endif()
 
-add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${CMAKE_CURRENT_BINARY_DIR}/autorevision.h" ${_additionalSourceFiles})
+add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
@@ -204,6 +189,17 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
   endif()
 endif()
 
+if(ENABLE_DISCORD)
+	if (TARGET discord-rpc)
+		target_include_directories(warzone2100 PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/discord-rpc/include")
+		target_link_libraries(warzone2100 discord-rpc)
+		target_sources(warzone2100 PRIVATE "integrations/wzdiscordrpc.h" "integrations/wzdiscordrpc.cpp")
+		target_compile_definitions(warzone2100 PRIVATE "ENABLE_DISCORD")
+	else()
+		message(WARNING "Missing target: discord-rpc")
+	endif()
+endif()
+
 ############################
 # Main App install location
 
@@ -271,7 +267,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${_wz_entitlements_file}")
 
 	# To properly bundle the resources, they must be built before the app
-	add_dependencies(warzone2100 data wz2100_doc translations)
+	add_dependencies(warzone2100 data)
+	if(ENABLE_DOCS)
+		add_dependencies(warzone2100 wz2100_doc)
+	endif()
+	if(ENABLE_NLS)
+		add_dependencies(warzone2100 translations)
+	endif()
 
 	# Bundle the Data resources
 	set_property(
@@ -309,28 +311,32 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	target_sources(warzone2100 PRIVATE ${wz2100_fonts_FILES})
 
 	# Bundle the translations
-	set_source_files_properties(
-		"${wz2100_translations_LOCALE_FOLDER}"
-		PROPERTIES
-		MACOSX_PACKAGE_LOCATION "Resources"
-		GENERATED TRUE
-		XCODE_LAST_KNOWN_FILE_TYPE "folder"
-	)
-	target_sources(warzone2100 PRIVATE "${wz2100_translations_LOCALE_FOLDER}")
-		# See xcodeproj "i18n" stage
-		# Uses the wzlocal lproj files + config/LangDis to determine what to copy - should we replicate?
+	if(ENABLE_NLS)
+		set_source_files_properties(
+			"${wz2100_translations_LOCALE_FOLDER}"
+			PROPERTIES
+			MACOSX_PACKAGE_LOCATION "Resources"
+			GENERATED TRUE
+			XCODE_LAST_KNOWN_FILE_TYPE "folder"
+		)
+		target_sources(warzone2100 PRIVATE "${wz2100_translations_LOCALE_FOLDER}")
+			# See xcodeproj "i18n" stage
+			# Uses the wzlocal lproj files + config/LangDis to determine what to copy - should we replicate?
+	endif()
 
 	# Bundle the docs
-	set_property(
-		SOURCE ${wz2100_doc_FILES}
-		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs")
-	set_property(
-		SOURCE ${wz2100_doc_IMAGES_FILES}
-		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs/images")
-	set_source_files_properties(
-		${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES}
-		PROPERTIES GENERATED TRUE)
-	target_sources(warzone2100 PRIVATE ${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES})
+	if(ENABLE_DOCS)
+		set_property(
+			SOURCE ${wz2100_doc_FILES}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs")
+		set_property(
+			SOURCE ${wz2100_doc_IMAGES_FILES}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/docs/images")
+		set_source_files_properties(
+			${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES}
+			PROPERTIES GENERATED TRUE)
+		target_sources(warzone2100 PRIVATE ${wz2100_doc_FILES} ${wz2100_doc_IMAGES_FILES})
+	endif()
 
 	# Bundle the wz2100_ROOT_FILES (COPYING, README, etc)
 	if (wz2100_ROOT_FILES)

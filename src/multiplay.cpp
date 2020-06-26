@@ -761,6 +761,7 @@ bool recvMessage()
 				{
 					MultiPlayerLeave(player_id);		// get rid of their stuff
 					NET_InitPlayer(player_id, false);
+					ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 				}
 				NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, player_id);
 				break;
@@ -1935,7 +1936,7 @@ const char *getPlayerColourName(int player)
 }
 
 /* Reset ready status for all players */
-void resetReadyStatus(bool bSendOptions)
+void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 {
 	// notify all clients if needed
 	if (bSendOptions)
@@ -1945,10 +1946,16 @@ void resetReadyStatus(bool bSendOptions)
 	netPlayersUpdated = true;
 
 	//Really reset ready status
-	if (NetPlay.isHost)
+	if (NetPlay.isHost && !ignoreReadyReset)
 	{
 		for (unsigned int i = 0; i < game.maxPlayers; ++i)
 		{
+			//Ignore for autohost launch option.
+			if (selectedPlayer == i && hostlaunch == 3)
+			{
+				continue;
+			}
+
 			if (isHumanPlayer(i) && ingame.JoiningInProgress[i])
 			{
 				changeReadyStatus(i, false);

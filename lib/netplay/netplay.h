@@ -126,6 +126,7 @@ enum MESSAGE_TYPES
 #define WZ_SERVER_DISCONNECT 0
 #define WZ_SERVER_CONNECT    1
 #define WZ_SERVER_UPDATE     3
+#define WZ_SERVER_KEEPALIVE  4
 
 // Constants
 // @NOTE / FIXME: We need a way to detect what should happen if the msg buffer exceeds this.

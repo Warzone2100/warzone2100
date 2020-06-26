@@ -159,16 +159,16 @@ void startTitleMenu()
 	// fix-up right-aligned link's positioning (based on size of text)
 	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 1), pRightAlignedButton->y());
 	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
-	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on #warzone2100"), 0);
+	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on Discord or IRC"), 0);
 	// fix-up right-aligned link's positioning (based on size of text)
 	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 6), pRightAlignedButton->y());
-	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Freenode through webchat by clicking this link."));
+	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Discord or Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 }
 
 static void runUpgrdHyperlink()
 {
-	std::string link = "http://gamecheck.wz2100.net/";
+	std::string link = "https://wz2100.net/versioncheck/?ver=";
 	std::string version = version_getVersionString();
 	std::string versionStr;
 	for (char ch : version)
@@ -181,7 +181,7 @@ static void runUpgrdHyperlink()
 
 static void runHyperlink()
 {
-	openURLInBrowser("http://wz2100.net/");
+	openURLInBrowser("https://wz2100.net/");
 }
 
 static void rundonatelink()
@@ -191,7 +191,7 @@ static void rundonatelink()
 
 static void runchatlink()
 {
-	openURLInBrowser("http://webchat.freenode.net?channels=%23warzone2100%2C%23warzone2100-games&uio=d4");
+	openURLInBrowser("https://wz2100.net/webchat/");
 }
 
 void runContinue()
@@ -1694,6 +1694,10 @@ void startGameOptionsMenu()
 	// Quit
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
+	// "Help Us Translate" link
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, "Help us improve translations of Warzone 2100: https://translate.wz2100.net", 0);
+	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Click to open webpage."));
+
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GAME OPTIONS"));
 }
@@ -1705,6 +1709,9 @@ bool runGameOptionsMenu()
 
 	switch (id)
 	{
+	case FRONTEND_HYPERLINK:
+		openURLInBrowser("https://translate.wz2100.net");
+		break;
 	case FRONTEND_LANGUAGE:
 	case FRONTEND_LANGUAGE_R:
 

@@ -956,6 +956,7 @@ bool stageOneInitialise()
 
 	gameTimeInit();
 	transitionInit();
+	resetScroll();
 
 	return true;
 }

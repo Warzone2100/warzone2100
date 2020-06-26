@@ -760,7 +760,7 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	if (psStruct->currentBuildPts <= 0 && buildPoints > 0)
 	{
 		// Just starting to build structure, need power for it.
-		bool haveEnoughPower = requestPowerFor(psStruct, structPowerToBuild(psStruct));
+		bool haveEnoughPower = requestPowerFor(psStruct, structPowerToBuildOrAddNextModule(psStruct));
 		if (!haveEnoughPower)
 		{
 			buildPoints = 0;  // No power to build.
@@ -876,11 +876,19 @@ static bool structureHasModules(const STRUCTURE *psStruct)
 	return psStruct->capacity != 0;
 }
 
-// Power returned on demolish. Not sure why it is done this way. FIXME.
+// Power returned on demolish, which is half the power taken to build the structure and any modules
 static int structureTotalReturn(const STRUCTURE *psStruct)
 {
-	int power = structPowerToBuild(psStruct);
-	return psStruct->capacity ? power : power / 2;
+	int power = psStruct->pStructureType->powerToBuild;
+
+	const STRUCTURE_STATS* const moduleStats = getModuleStat(psStruct);
+
+	if (nullptr != moduleStats)
+	{
+		power += psStruct->capacity * moduleStats->powerToBuild;
+	}
+
+	return power / 2;
 }
 
 void structureDemolish(STRUCTURE *psStruct, DROID *psDroid, int buildPoints)
@@ -1671,6 +1679,13 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		{
 			std::vector<iIMDShape *> &IMDs = psBuilding->pStructureType->pIMD;
 			int imdIndex = std::min<int>(psBuilding->capacity * 2, IMDs.size() - 1) - 1;  // *2-1 because even-numbered IMDs are structures, odd-numbered IMDs are just the modules, and we want just the module since we cache the fully-built part of the building in psBuilding->prebuiltImd.
+			if (imdIndex < 0)
+			{
+				// Looks like we don't have a model for this structure's upgrade
+				// Log it and default to the base model (to avoid a crash)
+				debug(LOG_ERROR, "No upgraded structure model to draw.");
+				imdIndex = 0;
+			}
 			psBuilding->prebuiltImd = psBuilding->sDisplay.imd;
 			psBuilding->sDisplay.imd = IMDs[imdIndex];
 
@@ -6943,8 +6958,8 @@ STRUCTURE *giftSingleStructure(STRUCTURE *psStructure, UBYTE attackPlayer, bool 
 	return psNewStruct;
 }
 
-/*returns the power cost to build this structure*/
-UDWORD structPowerToBuild(const STRUCTURE *psStruct)
+/*returns the power cost to build this structure, or to add its next module */
+UDWORD structPowerToBuildOrAddNextModule(const STRUCTURE *psStruct)
 {
 	if (psStruct->capacity)
 	{
@@ -7092,4 +7107,28 @@ WzString getFavoriteStructs()
 void setFavoriteStructs(WzString list)
 {
 	favoriteStructs = list;
+}
+
+// This follows the logic in droid.cpp nextModuleToBuild()
+bool canStructureHaveAModuleAdded(const STRUCTURE* const structure)
+{
+	if (nullptr == structure || nullptr == structure->pStructureType || structure->status != SS_BUILT)
+	{
+		return false;
+	}
+
+	switch (structure->pStructureType->type)
+	{
+		case REF_FACTORY:
+		case REF_CYBORG_FACTORY:
+		case REF_VTOL_FACTORY:
+			return structure->capacity < NUM_FACTORY_MODULES;
+
+		case REF_POWER_GEN:
+		case REF_RESEARCH:
+			return structure->capacity == 0;
+
+		default:
+			return false;
+	}
 }
