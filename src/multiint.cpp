@@ -2590,6 +2590,8 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 
 	debug(LOG_NET, "player %u (Host is %s) stopping.", selectedPlayer, NetPlay.isHost ? "true" : "false");
 
+	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+
 	if (bHosted)											// cancel a hosted game.
 	{
 		// annouce we are leaving...
@@ -2636,8 +2638,6 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	changeTitleUI(parent);
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
-
-	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 }
 
 static void resetPlayerPositions()
