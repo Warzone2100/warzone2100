@@ -114,8 +114,6 @@ static KeyMapSaveEntry const keyMapSaveTable[] =
 	{kf_SelectGrouping_8, "SelectGrouping_8"},
 	{kf_SelectGrouping_9, "SelectGrouping_9"},
 	{kf_addMultiMenu, "addMultiMenu"},
-	{kf_multiAudioStart, "multiAudioStart"},
-	{kf_multiAudioStop, "multiAudioStop"},
 	{kf_CameraUp, "CameraUp"},
 	{kf_CameraDown, "CameraDown"},
 	{kf_CameraLeft, "CameraLeft"},

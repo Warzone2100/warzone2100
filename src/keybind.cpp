@@ -862,14 +862,6 @@ void	kf_LowerTile()
 }
 
 // --------------------------------------------------------------------------
-
-/* Quick game exit */
-void	kf_SystemClose()
-{
-
-}
-
-// --------------------------------------------------------------------------
 /* Zooms out from display */
 void	kf_ZoomOut()
 {
@@ -1206,17 +1198,6 @@ void	kf_addMultiMenu()
 	{
 		intAddMultiMenu();
 	}
-}
-
-// --------------------------------------------------------------------------
-// start/stop capturing audio for multiplayer
-
-void kf_multiAudioStart()
-{
-}
-
-void kf_multiAudioStop()
-{
 }
 
 // --------------------------------------------------------------------------
@@ -2348,13 +2329,6 @@ void	kf_TriggerRayCast()
 //		getBlockHeightDirToEdgeOfGrid(psOther->pos.x,psOther->pos.y,psOther->direction,&height,&dist);
 //		getBlockHeightDirToEdgeOfGrid(mouseTileX*TILE_UNITS,mouseTileY*TILE_UNITS,getTestAngle(),&height,&dist);
 	}
-}
-
-// --------------------------------------------------------------------------
-void	kf_ScatterDroids()
-{
-	// to be written!
-	addConsoleMessage("Scatter droids - not written yet!", LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------
