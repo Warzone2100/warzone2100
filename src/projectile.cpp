@@ -1479,6 +1479,11 @@ ObjectShape establishTargetShape(BASE_OBJECT *psTarget)
 structure strength*/
 UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *psTarget)
 {
+	if (baseDamage == 0)
+	{
+		return 0;
+	}
+
 	UDWORD	damage = baseDamage * 100;
 
 	if (psTarget->type == OBJ_STRUCTURE)
@@ -1493,13 +1498,8 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
 		damage += baseDamage * (asWeaponModifierBody[weaponEffect][body] - 100);
 	}
 
-	// A little fail safe!
-	if (damage == 0 && baseDamage != 0)
-	{
-		return 1;
-	}
-
-	return damage / 100;
+	//Always do at least one damage.
+	return MAX(damage / 100, 1);
 }
 
 /*
