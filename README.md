@@ -281,7 +281,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [Harfbuzz](https://github.com/harfbuzz/harfbuzz) ≥ 1.0
       * [OpenAL-Soft](https://openal-soft.org)
       * [libcurl](https://curl.haxx.se/libcurl/) _(strongly recommended: ≥ 7.58.0)_
-      * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.13
+      * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
       * [Qt5 Script](https://doc.qt.io/qt-5/qtscript-index.html) ≥ 5.6
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
