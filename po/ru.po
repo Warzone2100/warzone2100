@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-26 16:06\n"
+"PO-Revision-Date: 2020-06-27 04:13\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -16999,7 +16999,8 @@ msgstr "Случайные настройки игры"
 #: src/multiint.cpp:1517
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Случайные настройки игры\n"
+"Может быть заблокировано голосами игроков"
 
 #: src/multiint.cpp:1527
 msgid "Tech"
