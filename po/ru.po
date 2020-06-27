@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-27 04:13\n"
+"PO-Revision-Date: 2020-06-27 16:13\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -15516,12 +15516,14 @@ msgstr "Отобразить устаревшее технологии"
 #: src/hci.cpp:3541
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Показаны все технологии\n"
+"Клик правой кнопкой мыши, чтобы добавить в избранное"
 
 #: src/hci.cpp:3543
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Показаны только избранные технологии\n"
+"Клик правой кнопкой мыши для удаления из избранного"
 
 #: src/hci.cpp:3623
 msgid "Factory Delivery Point"
