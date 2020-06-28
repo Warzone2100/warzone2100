@@ -628,9 +628,7 @@ void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 			if (psTransporter->psGroup && psTransporter->psGroup->refCount > 1)
 			{
 				// Remove map information from previous map
-				free(psTransporter->watchedTiles);
-				psTransporter->watchedTiles = nullptr;
-				psTransporter->numWatchedTiles = 0;
+				psTransporter->watchedTiles.clear();
 
 				// Remove out of stored list and add to current Droid list
 				if (droidRemove(psTransporter, mission.apsDroidLists))
