@@ -1871,14 +1871,10 @@ static int dangerThreadFunc(WZ_DECL_UNUSED void *data)
 
 static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool ground, bool air)
 {
-	int i;
-
 	if (psObj->visible[player] || psObj->born == 2)
 	{
-		for (i = 0; i < psObj->numWatchedTiles; i++)
+		for (TILEPOS pos : psObj->watchedTiles)
 		{
-			const TILEPOS pos = psObj->watchedTiles[i];
-
 			if (ground)
 			{
 				auxSet(pos.x, pos.y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_THREAT);	// set ground threat for this tile
