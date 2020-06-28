@@ -1650,6 +1650,41 @@ void actionUpdateDroid(DROID *psDroid)
 			psDroid->action = DACTION_NONE;
 			break;
 		}
+		else
+		{
+			const STRUCTURE* structureAtPos = getTileStructure(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+
+			if (structureAtPos == nullptr)
+			{
+				//No structure located at desired position. Move on.
+				psDroid->action = DACTION_NONE;
+				break;
+			}
+			else if (order->type != DORDER_RESTORE)
+			{
+				bool cantDoRepairLikeAction = false;
+
+				if (!aiCheckAlliances(structureAtPos->player, psDroid->player))
+				{
+					cantDoRepairLikeAction = true;
+				}
+				else if (order->type == DORDER_REPAIR && structureAtPos->body == structureBody(structureAtPos))
+				{
+					cantDoRepairLikeAction = true;
+				}
+				else if (order->type == DORDER_DEMOLISH && structureAtPos->player != psDroid->player)
+				{
+					cantDoRepairLikeAction = true;
+				}
+
+				if (cantDoRepairLikeAction)
+				{
+					psDroid->action = DACTION_NONE;
+					break;
+				}
+			}
+		}
+
 		// see if the droid is at the edge of what it is moving to
 		if (actionReachedBuildPos(psDroid, psDroid->actionPos.x, psDroid->actionPos.y, ((STRUCTURE *)psDroid->psActionTarget[0])->rot.direction, order->psStats))
 		{
