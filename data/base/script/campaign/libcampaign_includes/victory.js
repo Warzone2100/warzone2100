@@ -334,12 +334,22 @@ function __camVictoryOffworld()
 	{
 		if (elimBases)
 		{
-			var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
-				return obj.type === DROID;
-			}).length;
-			if (!enemyDroids && camAllEnemyBasesEliminated())
+			if (camAllEnemyBasesEliminated())
 			{
-				__camGameWon();
+				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
+					return obj.type === DROID;
+				}).length;
+
+
+				if (!enemyDroids)
+				{
+					__camGameWon();
+					return;
+				}
+				else
+				{
+					__camTriggerLastAttack();
+				}
 			}
 		}
 		else
