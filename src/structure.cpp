@@ -2564,15 +2564,12 @@ static bool checkHaltOnMaxUnitsReached(STRUCTURE *psStructure, bool isMission)
 
 static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 {
-	UDWORD				pointsToAdd;//, iPower;
-	RESEARCH			*pResearch;
 	UDWORD				structureMode = 0;
 	DROID				*psDroid;
 	BASE_OBJECT			*psChosenObjs[MAX_WEAPONS] = {nullptr};
 	BASE_OBJECT			*psChosenObj = nullptr;
 	FACTORY				*psFactory;
 	REPAIR_FACILITY		*psRepairFac = nullptr;
-	RESEARCH_FACILITY	*psResFacility;
 	Vector3i iVecEffect;
 	bool				bDroidPlaced = false;
 	WEAPON_STATS		*psWStats;
@@ -3085,7 +3082,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 		//if subject is research...
 		if (structureMode == REF_RESEARCH)
 		{
-			psResFacility = &psStructure->pFunctionality->researchFacility;
+			RESEARCH_FACILITY *psResFacility = &psStructure->pFunctionality->researchFacility;
 
 			//if on hold don't do anything
 			if (psResFacility->timeStartHold)
@@ -3106,15 +3103,22 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 			//check research has not already been completed by another structure
 			if (!IsResearchCompleted(pPlayerRes))
 			{
-				pResearch = (RESEARCH *)pSubject;
+				RESEARCH *pResearch = (RESEARCH *)pSubject;
 
-				pointsToAdd = gameTimeAdjustedAverage(getBuildingResearchPoints(psStructure));
+				unsigned pointsToAdd = gameTimeAdjustedAverage(getBuildingResearchPoints(psStructure));
 				pointsToAdd = MIN(pointsToAdd, pResearch->researchPoints - pPlayerRes->currentPoints);
+
+				unsigned shareProgress = pPlayerRes->currentPoints;  // Share old research progress instead of new one, so it doesn't get sped up by multiple players researching.
+				bool shareIsFinished = false;
 
 				if (pointsToAdd > 0 && pPlayerRes->currentPoints == 0)
 				{
 					bool haveEnoughPower = requestPowerFor(psStructure, pResearch->researchPower);
-					if (!haveEnoughPower)
+					if (haveEnoughPower)
+					{
+						shareProgress = 1;  // Share research payment, to avoid double payment even if starting research in the same game tick.
+					}
+					else
 					{
 						pointsToAdd = 0;
 					}
@@ -3147,23 +3151,31 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					intResearchFinished(psStructure);
 					researchResult(researchIndex, psStructure->player, true, psStructure, true);
 
-					// Update allies research accordingly
-					if (game.type == SKIRMISH && alliancesSharedResearch(game.alliance))
+					shareIsFinished = true;
+
+					//check if this result has enabled another topic
+					intNotifyResearchButton(prevState);
+				}
+
+				// Update allies research accordingly
+				if (game.type == SKIRMISH && alliancesSharedResearch(game.alliance))
+				{
+					for (i = 0; i < MAX_PLAYERS; i++)
 					{
-						for (i = 0; i < MAX_PLAYERS; i++)
+						if (alliances[i][psStructure->player] == ALLIANCE_FORMED)
 						{
-							if (alliances[i][psStructure->player] == ALLIANCE_FORMED)
+							if (!IsResearchCompleted(&asPlayerResList[i][researchIndex]))
 							{
-								if (!IsResearchCompleted(&asPlayerResList[i][researchIndex]))
+								// Share the research for that player.
+								auto &allyProgress = asPlayerResList[i][researchIndex].currentPoints;
+								allyProgress = std::max(allyProgress, shareProgress);
+								if (shareIsFinished)
 								{
-									// Do the research for that player
 									researchResult(researchIndex, i, false, nullptr, true);
 								}
 							}
 						}
 					}
-					//check if this result has enabled another topic
-					intNotifyResearchButton(prevState);
 				}
 			}
 			else
@@ -3368,7 +3380,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					psReArmPad->timeStarted = gameTime;
 					psReArmPad->timeLastUpdated = gameTime;
 				}
-				pointsToAdd = getBuildingRearmPoints(psStructure) * (gameTime - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
+				unsigned pointsToAdd = getBuildingRearmPoints(psStructure) * (gameTime - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
 				pointsAlreadyAdded = getBuildingRearmPoints(psStructure) * (psReArmPad->timeLastUpdated - psReArmPad->timeStarted) / GAME_TICKS_PER_SEC;
 				if (pointsToAdd >= psDroid->weight) // amount required is a factor of the droid weight
 				{
