@@ -910,11 +910,25 @@ void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate)
 	psStruct->body = clip(psStruct->body + repairAmount, 0, structureBody(psStruct));
 }
 
+static void refundFactoryBuildPower(STRUCTURE *psBuilding)
+{
+	ASSERT_OR_RETURN(, StructIsFactory(psBuilding), "structure not a factory");
+	FACTORY *psFactory = &psBuilding->pFunctionality->factory;
+
+	if (psFactory->psSubject)
+	{
+		if (psFactory->buildPointsRemaining < (int)calcTemplateBuild(psFactory->psSubject))
+		{
+			// We started building, so give the power back that was used.
+			addPower(psBuilding->player, calcTemplatePower(psFactory->psSubject));
+		}
+
+	}
+}
+
 /* Set the type of droid for a factory to build */
 bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode)
 {
-	FACTORY *psFact;
-
 	CHECK_STRUCTURE(psStruct);
 
 	ASSERT_OR_RETURN(false, StructIsFactory(psStruct), "structure not a factory");
@@ -925,7 +939,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	                 || psStruct->player == scavengerPlayer() || !bMultiPlayer,
 	                 "Wrong template for player %d factory, type %d.", psStruct->player, psStruct->pStructureType->type);
 
-	psFact = &psStruct->pFunctionality->factory;
+	FACTORY *psFact = &psStruct->pFunctionality->factory;
 
 	if (mode == ModeQueue)
 	{
@@ -935,6 +949,7 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 	}
 
 	//assign it to the Factory
+	refundFactoryBuildPower(psStruct);
 	psFact->psSubject = psTempl;
 
 	//set up the start time and build time
@@ -6090,7 +6105,6 @@ STRUCTURE	*findDeliveryFactory(FLAG_POSITION *psDelPoint)
 	return nullptr;
 }
 
-
 /*cancels the production run for the factory and returns any power that was
 accrued but not used*/
 void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProductionRun)
@@ -6120,19 +6134,9 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 		return;
 	}
 
-	//check its the correct factory
-	if (psFactory->psSubject)
-	{
-		if (psFactory->buildPointsRemaining < calcTemplateBuild(psFactory->psSubject))
-		{
-			// We started building, so give the power back that was used.
-			addPower(psBuilding->player, calcTemplatePower(psFactory->psSubject));
-		}
-
-		//clear the factory's subject
-		psFactory->psSubject = nullptr;
-	}
-
+	//clear the factory's subject
+	refundFactoryBuildPower(psBuilding);
+	psFactory->psSubject = nullptr;
 	delPowerRequest(psBuilding);
 }
 
