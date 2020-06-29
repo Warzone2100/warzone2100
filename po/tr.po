@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-25 02:54\n"
+"PO-Revision-Date: 2020-06-29 02:13\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -15449,7 +15449,7 @@ msgstr "Çatışma/Çok oyunculu"
 
 #: src/frontend.cpp:1699
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Web sayfasını açmak için tıkla."
 
 #: src/frontend.cpp:1702
 #: src/frontend.cpp:1721
@@ -16028,11 +16028,11 @@ msgstr "FPS gösterimi devre dışı."
 
 #: src/keybind.cpp:617
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "Birim sayısı ekranı etkin."
 
 #: src/keybind.cpp:621
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "Birim sayısı ekranı devre dışı."
 
 #: src/keybind.cpp:673
 #, c-format
@@ -16998,23 +16998,23 @@ msgstr "Rastgele Oyun Seçenekleri\n"
 
 #: src/multiint.cpp:1527
 msgid "Tech"
-msgstr ""
+msgstr "Tekn."
 
 #: src/multiint.cpp:1528
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Teknoloji Seviyesi 1"
 
 #: src/multiint.cpp:1529
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Teknoloji Seviyesi 2"
 
 #: src/multiint.cpp:1530
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Teknoloji Seviyesi 3"
 
 #: src/multiint.cpp:1531
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Teknoloji Seviyesi 4"
 
 #: src/multiint.cpp:1539
 #: src/multiint.cpp:1540
