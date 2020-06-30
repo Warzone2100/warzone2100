@@ -1980,7 +1980,7 @@ void updateMaxRepairStats(UWORD maxValue)
 
 void updateMaxECMStats(UWORD maxValue)
 {
-	int currentMaxValue = getMaxECMRange();
+	UDWORD currentMaxValue = getMaxECMRange();
 
 	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
 	{
