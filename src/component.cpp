@@ -388,7 +388,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 	SDWORD				pieFlag, iPieData;
 	PIELIGHT			brightness;
 	UDWORD				colour;
-	UBYTE	i;
+	size_t	i = 0;
 	bool				didDrawSomething = false;
 
 	glm::mat4 modelMatrix(1.f);

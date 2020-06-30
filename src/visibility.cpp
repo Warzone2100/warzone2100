@@ -465,7 +465,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 /*reveals all the terrain in the map*/
 void revealAll(UBYTE player)
 {
-	UWORD   i, j;
+	SDWORD   i, j;
 	MAPTILE	*psTile;
 
 	//reveal all tiles
