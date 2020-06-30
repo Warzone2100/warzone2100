@@ -521,12 +521,16 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 	if (!repeated)
 	{
 		time_t rawtime;
-		struct tm *timeinfo;
+		struct tm timeinfo = {};
 		char ourtime[15];		//HH:MM:SS
 
 		time(&rawtime);
-		timeinfo = localtime(&rawtime);
-		strftime(ourtime, 15, "%H:%M:%S", timeinfo);
+#if defined(WZ_OS_WIN)
+		localtime_s(&timeinfo, &rawtime);
+#else
+		localtime_r(&rawtime, &timeinfo);
+#endif
+		strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
 
 		// Assemble the outputBuffer:
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
