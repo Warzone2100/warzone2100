@@ -703,10 +703,36 @@ static bool checkQwertyKeys()
 	return aquired;
 }
 
+// ----------------------------------------------------------------------------------
+/* allows checking if mapping should currently be ignored in keyProcessMappings */
+static bool isIgnoredMapping(const bool bExclude, const KEY_MAPPING& mapping)
+{
+	if (bExclude && mapping.status != KEYMAP_ALWAYS_PROCESS)
+	{
+		return true;
+	}
+
+	if (mapping.subKeyCode == (KEY_CODE)KEY_MAXSCAN)
+	{
+		return true;
+	}
+
+	if (mapping.function == nullptr)
+	{
+		return true;
+	}
+
+	const bool bIsDebugMapping = mapping.status == KEYMAP__DEBUG;
+	if (bIsDebugMapping && !getDebugMappingStatus()) {
+		return true;
+	}
+
+	return false;
+}
 
 // ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
-void	keyProcessMappings(bool bExclude)
+void keyProcessMappings(bool bExclude)
 {
 	/* Bomb out if there are none */
 	if (keyMappings.empty())
@@ -726,23 +752,51 @@ void	keyProcessMappings(bool bExclude)
 	for (auto keyToProcess = keyMappings.begin(); keyToProcess != keyMappings.end(); ++keyToProcess)
 	{
 		/* Skip inappropriate ones when necessary */
-		if (bExclude && keyToProcess->status != KEYMAP_ALWAYS_PROCESS)
-		{
-			break;
-		}
-
-		if (keyToProcess->subKeyCode == (KEY_CODE)KEY_MAXSCAN)
+		if (isIgnoredMapping(bExclude, *keyToProcess))
 		{
 			continue;
 		}
 
-		if (keyToProcess->function == nullptr)
-		{
-			continue;
+		// Check if there exists another keybinding, with the same subKeyCode, but with meta- or altMetaKeyCode
+		// and which has its respective meta key currently down. If any are found, then we want to completely skip
+		// any bindings without meta, as the keybind with meta (being more specific) should take precedence. This
+		// allows e.g. having camera movement in arrow keys and alignment in arrow keys + ctrl
+		const bool bIsKeyCombination = keyToProcess->metaKeyCode != KEY_IGNORE;
+		if (bMetaKeyDown && !bIsKeyCombination) {
+			bool bOverridingCombinationExists = false;
+			for (auto otherKey = keyMappings.begin(); otherKey != keyMappings.end(); ++otherKey)
+			{
+				/* Skip inappropriate ones when necessary */
+				if (isIgnoredMapping(bExclude, *keyToProcess))
+				{
+					continue;
+				}
+
+				/* Only match agaist keys with the same subKeyCode */
+				if (otherKey->subKeyCode != keyToProcess->subKeyCode)
+				{
+					continue;
+				}
+
+				bool bIsKeyCombination = otherKey->metaKeyCode != KEY_IGNORE;
+				if (bIsKeyCombination && keyPressed(otherKey->subKeyCode))
+				{
+					bool bHasAlt = otherKey->altMetaKeyCode != KEY_IGNORE;
+					if (keyDown(otherKey->metaKeyCode) || (bHasAlt && keyDown(otherKey->altMetaKeyCode)))
+					{
+						bOverridingCombinationExists = true;
+						break;
+					}
+				}
+			}
+
+			if (bOverridingCombinationExists) {
+				continue;
+			}
 		}
 
-		if (keyToProcess->metaKeyCode == KEY_IGNORE && !bMetaKeyDown &&
-		    !(keyToProcess->status == KEYMAP__DEBUG && !getDebugMappingStatus()))
+		/* Process simple ones (single keys) */
+		if (!bIsKeyCombination)
 		{
 			switch (keyToProcess->action)
 			{
@@ -781,20 +835,24 @@ void	keyProcessMappings(bool bExclude)
 				break;
 			}
 		}
-		/* Process the combi ones */
-		if ((keyToProcess->metaKeyCode != KEY_IGNORE && bMetaKeyDown) &&
-		    !(keyToProcess->status == KEYMAP__DEBUG && !getDebugMappingStatus()))
+		/* Process the combination ones */
+		else
 		{
-			/* It's a combo keypress - one held down and the other pressed */
-			if (keyDown(keyToProcess->metaKeyCode) && keyPressed(keyToProcess->subKeyCode))
+			/* It's a combo keypress - meta held down and the sub pressed */
+			bool bSubKeyIsPressed = keyPressed(keyToProcess->subKeyCode);
+			if (bSubKeyIsPressed)
 			{
-				lastMetaKey = keyToProcess->metaKeyCode;
-				lastSubKey = keyToProcess->subKeyCode;
-				keyToProcess->function();
-			}
-			else if (keyToProcess->altMetaKeyCode != KEY_IGNORE)
-			{
-				if (keyDown(keyToProcess->altMetaKeyCode) && keyPressed(keyToProcess->subKeyCode))
+				bool bHasAlt = keyToProcess->altMetaKeyCode != KEY_IGNORE;
+
+				/* First, try the meta key */
+				if (keyDown(keyToProcess->metaKeyCode))
+				{
+					lastMetaKey = keyToProcess->metaKeyCode;
+					lastSubKey = keyToProcess->subKeyCode;
+					keyToProcess->function();
+				}
+				/* Meta key not held, check if we have alternative and try that */
+				else if (bHasAlt && keyDown(keyToProcess->altMetaKeyCode))
 				{
 					lastMetaKey = keyToProcess->metaKeyCode;
 					lastSubKey = keyToProcess->subKeyCode;
