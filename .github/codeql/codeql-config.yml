@@ -1,0 +1,10 @@
+name: "WZ CodeQL config"
+
+# Interpreted languages scanning configuration (ex. JavaScript/TypeScript)
+paths:
+  - data
+
+paths-ignore: 
+  - 3rdparty
+  - tests
+  - tools
