@@ -4007,9 +4007,24 @@ static bool loadSettings(const WzString &filename)
 	game.power = ini.value("powerLevel", game.power).toInt();
 	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
 	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
-	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
 	game.techLevel = ini.value("techLevel", game.techLevel).toInt();
+
+	// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
+	//             Keeping it around in case mods use it
+	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
 	ini.endGroup();
+
+	ini.beginGroup("locked");
+	locked.ai = ini.value("ai", locked.ai).toBool();
+	locked.alliances = ini.value("alliances", locked.alliances).toBool();
+	locked.bases = ini.value("bases", locked.bases).toBool();
+	locked.difficulty = ini.value("difficulty", locked.difficulty).toBool();
+	locked.position = ini.value("position", locked.position).toBool();
+	locked.power = ini.value("power", locked.power).toBool();
+	locked.scavengers = ini.value("scavengers", locked.scavengers).toBool();
+	locked.teams = ini.value("teams", locked.teams).toBool();
+	ini.endGroup();
+
 	return true;
 }
 
