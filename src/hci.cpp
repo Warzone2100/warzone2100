@@ -1027,8 +1027,7 @@ static void intProcessEditStats(UDWORD id)
 	{
 		/* Clicked on a stat button - need to look for a location for it */
 		psPositionStats = ppsStatsList[id - IDSTAT_START];
-		if (psPositionStats->ref >= REF_TEMPLATE_START &&
-		    psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
+		if (psPositionStats->hasType(STAT_TEMPLATE))
 		{
 			FLAG_POSITION debugMenuDroidDeliveryPoint;
 			// Placing a droid from the debug menu, set up the flag. (This would probably be safe to do, even if we're placing something else.)
@@ -1564,7 +1563,7 @@ INT_RETVAL intRunWidgets()
 							Cheated = true;
 						}
 					}
-					else if (psPositionStats->typeIs(REF_FEATURE_START))
+					else if (psPositionStats->hasType(STAT_FEATURE))
 					{
 						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
 						std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new feature: %s."),
@@ -1575,7 +1574,7 @@ INT_RETVAL intRunWidgets()
 						//sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
 						sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->ref, pos.x, pos.y, generateNewObjectId());
 					}
-					else if (psPositionStats->typeIs(REF_TEMPLATE_START))
+					else if (psPositionStats->hasType(STAT_TEMPLATE))
 					{
 						std::string msg;
 						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
@@ -1642,21 +1641,18 @@ static void intRunPower()
 	if (statID >= IDSTAT_START && statID <= IDSTAT_END)
 	{
 		psStat = ppsStatsList[statID - IDSTAT_START];
-		if (psStat->ref >= REF_STRUCTURE_START && psStat->ref <
-		    REF_STRUCTURE_START + REF_RANGE)
+		if (psStat->hasType(STAT_STRUCTURE))
 		{
 			//get the structure build points
 			quantity = ((STRUCTURE_STATS *)apsStructStatsList[statID -
 			            IDSTAT_START])->powerToBuild;
 		}
-		else if (psStat->ref >= REF_TEMPLATE_START &&
-		         psStat->ref < REF_TEMPLATE_START + REF_RANGE)
+		else if (psStat->hasType(STAT_TEMPLATE))
 		{
 			//get the template build points
 			quantity = calcTemplatePower(apsTemplateList[statID - IDSTAT_START]);
 		}
-		else if (psStat->ref >= REF_RESEARCH_START &&
-		         psStat->ref < REF_RESEARCH_START + REF_RANGE)
+		else if (psStat->hasType(STAT_RESEARCH))
 		{
 			//get the research points
 			psResearch = (RESEARCH *)ppResearchList[statID - IDSTAT_START];
@@ -3158,7 +3154,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 				{
 					sAllyResearch.formID = nextObjButtonId;
 					sAllyResearch.x = STAT_BUTWIDTH  - (sAllyResearch.width + 2) * ii - sAllyResearch.width - 2;
-					sAllyResearch.UserData = PACKDWORD(Stat->ref - REF_RESEARCH_START, ii);
+					sAllyResearch.UserData = PACKDWORD(Stat->ref - STAT_RESEARCH, ii);
 					sAllyResearch.pTip = getPlayerName(researches[ii].player);
 					widgAddLabel(psWScreen, &sAllyResearch);
 
@@ -3723,8 +3719,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		WzString tipString = getName(ppsStatsList[i]);
 		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
-		if (Stat->ref >= REF_STRUCTURE_START &&
-		    Stat->ref < REF_STRUCTURE_START + REF_RANGE)  		// It's a structure.
+		if (Stat->hasType(STAT_STRUCTURE))  // It's a structure.
 		{
 			powerCost = ((STRUCTURE_STATS *)Stat)->powerToBuild;
 			sBarInit.size = powerCost / POWERPOINTS_DROIDDIV;
@@ -3738,8 +3733,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
 		}
-		else if (Stat->ref >= REF_TEMPLATE_START &&
-		         Stat->ref < REF_TEMPLATE_START + REF_RANGE)  	// It's a droid.
+		else if (Stat->hasType(STAT_TEMPLATE))  // It's a droid.
 		{
 			powerCost = calcTemplatePower((DROID_TEMPLATE *)Stat);
 			sBarInit.size = powerCost / POWERPOINTS_DROIDDIV;
@@ -3762,8 +3756,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			}
 			sLabInit.id++;
 		}
-		else if (Stat->ref >= REF_RESEARCH_START &&
-		         Stat->ref < REF_RESEARCH_START + REF_RANGE)				// It's a Research topic.
+		else if (Stat->hasType(STAT_RESEARCH))  // It's a Research topic.
 		{
 			sLabInit = W_LABINIT();
 			sLabInit.formID = nextButtonId;
@@ -3801,7 +3794,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 					sLabInit.height = iV_GetImageHeight(IntImages, IMAGE_ALLY_RESEARCH);
 					sLabInit.x = STAT_BUTWIDTH  - (sLabInit.width + 2) * ii - sLabInit.width - 2;
 					sLabInit.y = STAT_BUTHEIGHT - sLabInit.height - 3 - STAT_PROGBARHEIGHT;
-					sLabInit.UserData = PACKDWORD(Stat->ref - REF_RESEARCH_START, ii);
+					sLabInit.UserData = PACKDWORD(Stat->ref - STAT_RESEARCH, ii);
 					sLabInit.pTip = getPlayerName(researches[ii].player);
 					sLabInit.pDisplay = intDisplayAllyIcon;
 					widgAddLabel(psWScreen, &sLabInit);
@@ -3819,7 +3812,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 					progress.height = STAT_PROGBARHEIGHT;
 					progress.x = STAT_TIMEBARX;
 					progress.y = STAT_TIMEBARY;
-					progress.UserData = Stat->ref - REF_RESEARCH_START;
+					progress.UserData = Stat->ref - STAT_RESEARCH;
 					progress.pTip = _("Ally progress");
 					progress.pDisplay = intDisplayAllyBar;
 					W_BARGRAPH *bar = widgAddBarGraph(psWScreen, &progress);
@@ -4024,7 +4017,7 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 		if (pResearch != nullptr)
 		{
 			// Say that we want to do research [sic].
-			sendResearchStatus(psBuilding, pResearch->ref - REF_RESEARCH_START, selectedPlayer, true);
+			sendResearchStatus(psBuilding, pResearch->ref - STAT_RESEARCH, selectedPlayer, true);
 			setStatusPendingStart(*psResFacilty, pResearch);  // Tell UI that we are going to research.
 		}
 		else
@@ -4042,7 +4035,7 @@ static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 	//set up the player_research
 	if (pResearch != nullptr)
 	{
-		count = pResearch->ref - REF_RESEARCH_START;
+		count = pResearch->ref - STAT_RESEARCH;
 		//meant to still be in the list but greyed out
 		pPlayerRes = &asPlayerResList[selectedPlayer][count];
 

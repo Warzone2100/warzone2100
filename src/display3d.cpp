@@ -1689,8 +1689,8 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 	blueprints.clear();  // Delete old blueprints and draw new ones.
 
 	if ((buildState == BUILD3D_VALID || buildState == BUILD3D_POS) &&
-	    sBuildDetails.x > 0 && sBuildDetails.x < mapWidth &&
-	    sBuildDetails.y > 0 && sBuildDetails.y < mapHeight)
+	    sBuildDetails.x > 0 && sBuildDetails.x < (int)mapWidth &&
+	    sBuildDetails.y > 0 && sBuildDetails.y < (int)mapHeight)
 	{
 		STRUCT_STATES state;
 		if (buildState == BUILD3D_VALID)
@@ -1702,8 +1702,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 			state = SS_BLUEPRINT_INVALID;
 		}
 		// we are placing a building or a delivery point
-		if (sBuildDetails.psStats->ref >= REF_STRUCTURE_START
-		    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+		if (sBuildDetails.psStats->hasType(STAT_STRUCTURE))
 		{
 			// it's a building
 			if (wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
@@ -1733,7 +1732,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 	}
 
 	// now we draw the blueprints for all ordered buildings
-	for (int player = 0; player < MAX_PLAYERS; ++player)
+	for (unsigned player = 0; player < MAX_PLAYERS; ++player)
 	{
 		if (!hasSharedVision(selectedPlayer, player))
 		{

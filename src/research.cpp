@@ -125,7 +125,7 @@ bool loadResearch(WzConfig &ini)
 		//check the name hasn't been used already
 		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getName(&research));
 
-		research.ref = REF_RESEARCH_START + inc;
+		research.ref = STAT_RESEARCH + inc;
 
 		research.results = ini.json("results", nlohmann::json::array());
 
@@ -1131,20 +1131,16 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 {
 	UDWORD topicIndex = 0, researchPoints = 0, rewardID = 0;
-	STRUCTURE			*psStruct;
-	RESEARCH_FACILITY	*psFacility;
 
 	//look through the losing players structures to find a research facility
-	for (psStruct = apsStructLists[losingPlayer]; psStruct != nullptr; psStruct =
-	         psStruct->psNext)
+	for (STRUCTURE *psStruct = apsStructLists[losingPlayer]; psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH)
 		{
-			psFacility = (RESEARCH_FACILITY *)psStruct->pFunctionality;
+			RESEARCH_FACILITY *psFacility = (RESEARCH_FACILITY *)psStruct->pFunctionality;
 			if (psFacility->psBestTopic)
 			{
-				topicIndex = ((RESEARCH *)psFacility->psBestTopic)->ref -
-				             REF_RESEARCH_START;
+				topicIndex = ((RESEARCH *)psFacility->psBestTopic)->ref - STAT_RESEARCH;
 				if (topicIndex)
 				{
 					//if it cost more - it is better (or should be)

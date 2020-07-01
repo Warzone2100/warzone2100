@@ -1011,7 +1011,7 @@ STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned inde
 	{
 		if (psBuilding->pStructureType->type == REF_RESEARCH
 		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
-		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index)
+		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - STAT_RESEARCH == index)
 		{
 			return psBuilding;
 		}

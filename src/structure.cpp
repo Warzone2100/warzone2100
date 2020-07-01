@@ -442,7 +442,7 @@ bool loadStructureStats(WzConfig &ini)
 		STRUCTURE_STATS *psStats = &asStructureStats[inc];
 		loadStats(ini, psStats, inc);
 
-		psStats->ref = REF_STRUCTURE_START + inc;
+		psStats->ref = STAT_STRUCTURE + inc;
 
 		// set structure type
 		WzString type = ini.value("type", "").toWzString();
@@ -3100,7 +3100,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				return;
 			}
 
-			int researchIndex = pSubject->ref - REF_RESEARCH_START;
+			int researchIndex = pSubject->ref - STAT_RESEARCH;
 
 			PLAYER_RESEARCH *pPlayerRes = &asPlayerResList[psStructure->player][researchIndex];
 			//check research has not already been completed by another structure
@@ -4817,25 +4817,19 @@ bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status
 stat type*/
 bool checkSpecificStructExists(UDWORD structInc, UDWORD player)
 {
-	STRUCTURE	*psStructure;
-	bool		found = false;
-
 	ASSERT_OR_RETURN(false, structInc < numStructureStats, "Invalid structure inc");
 
-	for (psStructure = apsStructLists[player]; psStructure != nullptr;
-	     psStructure = psStructure->psNext)
+	for (STRUCTURE *psStructure = apsStructLists[player]; psStructure != nullptr; psStructure = psStructure->psNext)
 	{
 		if (psStructure->status == SS_BUILT)
 		{
-			if ((psStructure->pStructureType->ref - REF_STRUCTURE_START) ==
-			    structInc)
+			if (psStructure->pStructureType->ref - STAT_STRUCTURE == structInc)
 			{
-				found = true;
-				break;
+				return true;
 			}
 		}
 	}
-	return found;
+	return false;
 }
 
 

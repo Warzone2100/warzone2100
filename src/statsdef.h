@@ -253,22 +253,22 @@ enum TRAVEL_MEDIUM
 // What number the ref numbers start at for each type of stat
 enum StatType
 {
-	REF_BODY_START       = 0x010000,
-	REF_BRAIN_START      = 0x020000,
-	REF_PROPULSION_START = 0x040000,
-	REF_SENSOR_START     = 0x050000,
-	REF_ECM_START        = 0x060000,
-	REF_REPAIR_START     = 0x080000,
-	REF_WEAPON_START     = 0x0a0000,
-	REF_RESEARCH_START   = 0x0b0000,
-	REF_TEMPLATE_START   = 0x0c0000,
-	REF_STRUCTURE_START  = 0x0d0000,
-	REF_FUNCTION_START   = 0x0e0000,
-	REF_CONSTRUCT_START  = 0x0f0000,
-	REF_FEATURE_START    = 0x100000,
+	STAT_BODY       = 0x010000,
+	STAT_BRAIN      = 0x020000,
+	STAT_PROPULSION = 0x040000,
+	STAT_SENSOR     = 0x050000,
+	STAT_ECM        = 0x060000,
+	STAT_REPAIR     = 0x080000,
+	STAT_WEAPON     = 0x0a0000,
+	STAT_RESEARCH   = 0x0b0000,
+	STAT_TEMPLATE   = 0x0c0000,
+	STAT_STRUCTURE  = 0x0d0000,
+	STAT_FUNCTION   = 0x0e0000,
+	STAT_CONSTRUCT  = 0x0f0000,
+	STAT_FEATURE    = 0x100000,
 
 /* The maximum number of refs for a type of stat */
-	REF_RANGE            = 0x010000
+	STAT_MASK       = 0xffff0000
 };
 
 /* Stats common to all stats structs */
@@ -277,7 +277,7 @@ struct BASE_STATS
 	BASE_STATS(unsigned ref = 0) : ref(ref) {}
 	virtual ~BASE_STATS() = default;
 
-	bool typeIs(StatType type) const { return (ref & -REF_RANGE) == type; }
+	bool hasType(StatType type) const { return (ref & STAT_MASK) == type; }
 
 	WzString id;    ///< Text id (i.e. short language-independent name)
 	WzString name;  ///< Full / real name of the item
