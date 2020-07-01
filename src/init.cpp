@@ -464,10 +464,21 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 	return true;
 }
 
-typedef std::vector<std::string> MapFileList;
+struct MapFileListPath
+{
+public:
+	MapFileListPath(const std::string& platformIndependentNotation, const std::string& platformDependentNotation)
+	: platformIndependent(platformIndependentNotation)
+	, platformDependent(platformDependentNotation)
+	{ }
+	std::string platformIndependent;
+	std::string platformDependent;
+};
+typedef std::vector<MapFileListPath> MapFileList;
 static MapFileList listMapFiles()
 {
-	MapFileList ret, filtered, oldSearchPath;
+	MapFileList ret, filtered;
+	std::vector<std::string> oldSearchPath;
 
 	char **subdirlist = PHYSFS_enumerateFiles("maps");
 
@@ -479,8 +490,9 @@ static MapFileList listMapFiles()
 			continue;
 		}
 
-		std::string realFileName = std::string("maps/") + *i;
-		ret.push_back(realFileName);
+		std::string realFileName_platformIndependent = std::string("maps") + "/" + *i;
+		std::string realFileName_platformDependent = std::string("maps") + PHYSFS_getDirSeparator() + *i;
+		ret.push_back(MapFileListPath(realFileName_platformIndependent, realFileName_platformDependent));
 	}
 	PHYSFS_freeList(subdirlist);
 	// save our current search path(s)
@@ -496,7 +508,7 @@ static MapFileList listMapFiles()
 
 	for (const auto &realFileName : ret)
 	{
-		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName;
+		std::string realFilePathAndName = PHYSFS_getWriteDir() + realFileName.platformDependent;
 		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND))
 		{
 			int unsafe = 0;
@@ -635,7 +647,7 @@ bool buildMapList()
 	{
 		bool mapmod = false;
 		struct WZmaps CurrentMap;
-		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName.c_str()) + realFileName;
+		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName.platformIndependent.c_str()) + realFileName.platformDependent;
 
 		PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND);
 
@@ -646,12 +658,12 @@ bool buildMapList()
 			size_t len = strlen(*file);
 			if (len > 10 && !strcasecmp(*file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
 			{
-				loadLevFile(*file, mod_multiplay, true, realFileName.c_str());
+				loadLevFile(*file, mod_multiplay, true, realFileName.platformIndependent.c_str());
 			}
 			// add support for X player maps using a new name to prevent conflicts.
 			if (len > 13 && !strcasecmp(*file + (len - 13), ".xplayers.lev"))
 			{
-				loadLevFile(*file, mod_multiplay, true, realFileName.c_str());
+				loadLevFile(*file, mod_multiplay, true, realFileName.platformIndependent.c_str());
 			}
 		}
 		PHYSFS_freeList(filelist);
@@ -667,7 +679,7 @@ bool buildMapList()
 			mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
 		}
 
-		CurrentMap.MapName = realFileName;
+		CurrentMap.MapName = realFileName.platformIndependent;
 		CurrentMap.isMapMod = mapmod;
 		WZ_Maps.push_back(CurrentMap);
 	}
