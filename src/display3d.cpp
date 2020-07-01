@@ -1632,26 +1632,19 @@ static bool tileHasIncompatibleStructure(MAPTILE const *tile, STRUCTURE_STATS co
 	return true;
 }
 
-static void drawLineBuild(STRUCTURE_STATS const *psStats, int left, int right, int up, int down, uint16_t direction, STRUCT_STATES state)
+static void drawLineBuild(STRUCTURE_STATS const *psStats, Vector2i pos, Vector2i pos2, uint16_t direction, STRUCT_STATES state)
 {
-	if (left != right && up != down)
-	{
-		// not a line, so don't draw
-		return;
-	}
+	auto lb = calcLineBuild(psStats, direction, pos, pos2);
 
-	for (int i = left; i <= right; ++i)
+	for (int i = 0; i < lb.count; ++i)
 	{
-		for (int j = up; j <= down; ++j)
+		Vector2i cur = lb[i];
+		if (tileHasIncompatibleStructure(worldTile(cur), psStats, 0))
 		{
-			if (tileHasIncompatibleStructure(mapTile(i, j), psStats, 0))
-			{
-				continue; // construction has started
-			}
-			Vector2i pos(world_coord(i) + world_coord(1) / 2, world_coord(j) + world_coord(1) / 2);
-			Blueprint blueprint(psStats, pos, direction, 0, state);
-			blueprints.push_back(blueprint);
+			continue;  // construction has started
 		}
+		Blueprint blueprint(psStats, cur, direction, 0, state);
+		blueprints.push_back(blueprint);
 	}
 }
 
@@ -1682,15 +1675,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 	//draw the current build site if its a line of structures
 	if (order.type == DORDER_LINEBUILD)
 	{
-		int left, right, up, down;
-		// a wall (or something like that)
-
-		left = MIN(map_coord(pos.x), map_coord(order.pos2.x));
-		right = MAX(map_coord(pos.x), map_coord(order.pos2.x));
-		up = MIN(map_coord(pos.y), map_coord(order.pos2.y));
-		down = MAX(map_coord(pos.y), map_coord(order.pos2.y));
-
-		drawLineBuild(stats, left, right, up, down, order.direction, state);
+		drawLineBuild(stats, pos, order.pos2, order.direction, state);
 	}
 	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(pos)), stats, order.index))
 	{
@@ -1723,15 +1708,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 			// it's a building
 			if (wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
 			{
-				int left, right, up, down;
-				// a wall (or something like that)
-
-				left = MIN(wallDrag.x1, wallDrag.x2);
-				right = MAX(wallDrag.x1, wallDrag.x2);
-				up = MIN(wallDrag.y1, wallDrag.y2);
-				down = MAX(wallDrag.y1, wallDrag.y2);
-
-				drawLineBuild((STRUCTURE_STATS *)sBuildDetails.psStats, left, right, up, down, (player.r.y + 0x2000) & 0xC000, state);
+				drawLineBuild((STRUCTURE_STATS *)sBuildDetails.psStats, wallDrag.pos, wallDrag.pos2, (player.r.y + 0x2000) & 0xC000, state);
 			}
 			else
 			{

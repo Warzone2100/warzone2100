@@ -1529,9 +1529,7 @@ void actionUpdateDroid(DROID *psDroid)
 					psDroid->actionPoints = 0;
 				}
 			}
-			else if ((order->type == DORDER_LINEBUILD || order->type == DORDER_BUILD)
-			         && (psStructStats->type == REF_WALL || psStructStats->type == REF_WALLCORNER || psStructStats->type == REF_GATE ||
-			             psStructStats->type == REF_DEFENSE || psStructStats->type == REF_REARM_PAD))
+			else if (order->type == DORDER_LINEBUILD || order->type == DORDER_BUILD)
 			{
 				// building a wall.
 				MAPTILE *const psTile = worldTile(psDroid->actionPos);

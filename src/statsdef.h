@@ -250,10 +250,33 @@ enum TRAVEL_MEDIUM
 
 /* Elements common to all stats structures */
 
+// What number the ref numbers start at for each type of stat
+enum StatType
+{
+	REF_BODY_START       = 0x010000,
+	REF_BRAIN_START      = 0x020000,
+	REF_PROPULSION_START = 0x040000,
+	REF_SENSOR_START     = 0x050000,
+	REF_ECM_START        = 0x060000,
+	REF_REPAIR_START     = 0x080000,
+	REF_WEAPON_START     = 0x0a0000,
+	REF_RESEARCH_START   = 0x0b0000,
+	REF_TEMPLATE_START   = 0x0c0000,
+	REF_STRUCTURE_START  = 0x0d0000,
+	REF_FUNCTION_START   = 0x0e0000,
+	REF_CONSTRUCT_START  = 0x0f0000,
+	REF_FEATURE_START    = 0x100000,
+
+/* The maximum number of refs for a type of stat */
+	REF_RANGE            = 0x010000
+};
+
 /* Stats common to all stats structs */
 struct BASE_STATS
 {
 	BASE_STATS(unsigned ref = 0) : ref(ref) {}
+
+	bool typeIs(StatType type) const { return (ref & -REF_RANGE) == type; }
 
 	WzString id;    ///< Text id (i.e. short language-independent name)
 	WzString name;  ///< Full / real name of the item

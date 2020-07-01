@@ -879,7 +879,8 @@ void orderUpdateDroid(DROID *psDroid)
 		    (psDroid->action == DACTION_BUILD && psDroid->order.psObj == nullptr))
 		{
 			// finished building the current structure
-			if (map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2))
+			auto lb = calcLineBuild(psDroid->order.psStats, psDroid->order.direction, psDroid->order.pos, psDroid->order.pos2);
+			if (lb.count <= 1)
 			{
 				// finished all the structures - done
 				psDroid->order = DroidOrder(DORDER_NONE);
@@ -887,35 +888,7 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 
 			// update the position for another structure
-			if (map_coord(psDroid->order.pos.x) == map_coord(psDroid->order.pos2.x))
-			{
-				// still got building to do - working vertically
-				if (psDroid->order.pos.y < psDroid->order.pos2.y)
-				{
-					psDroid->order.pos.y += TILE_UNITS;
-				}
-				else
-				{
-					psDroid->order.pos.y -= TILE_UNITS;
-				}
-			}
-			else if (map_coord(psDroid->order.pos.y) == map_coord(psDroid->order.pos2.y))
-			{
-				// still got building to do - working horizontally
-				if (psDroid->order.pos.x < psDroid->order.pos2.x)
-				{
-					psDroid->order.pos.x += TILE_UNITS;
-				}
-				else
-				{
-					psDroid->order.pos.x -= TILE_UNITS;
-				}
-			}
-			else
-			{
-				ASSERT(false, "orderUpdateUnit: LINEBUILD order on diagonal line");
-				break;
-			}
+			psDroid->order.pos = lb[1];
 
 			// build another structure
 			setDroidTarget(psDroid, nullptr);
@@ -2006,7 +1979,6 @@ void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS
 {
 	ASSERT(psDroid != nullptr,	"Invalid unit pointer");
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
-	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
 
 	DroidOrder sOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction);
 	if (mode == ModeQueue && bMultiPlayer)
@@ -2027,7 +1999,6 @@ void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, STRUCTURE_ST
 {
 	ASSERT(psDroid != nullptr, "Invalid unit pointer");
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
-	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
 
 	sendDroidInfo(psDroid, DroidOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction), true);
 }
