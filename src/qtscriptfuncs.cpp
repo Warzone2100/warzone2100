@@ -5778,8 +5778,8 @@ QScriptValue register_common(QScriptEngine *engine, COMPONENT_STATS *psStats)
 	v.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	v.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	v.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("HitPoints", psStats->pBase->hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("HitPointPct", psStats->pBase->hitpointPct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("HitPoints", psStats->getBase().hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("HitPointPct", psStats->getBase().hitpointPct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	return v;
 }
 

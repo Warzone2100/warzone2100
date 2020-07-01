@@ -621,8 +621,8 @@ QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *
 	key->appendRow(QStandardItemList{ new QStandardItem("^Power"), new QStandardItem(QString::number(psStats->buildPower)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Build Points"), new QStandardItem(QString::number(psStats->buildPoints)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Weight"), new QStandardItem(QString::number(psStats->weight)) });
-	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points"), new QStandardItem(QString::number(psStats->pUpgrade[player]->hitpoints)) });
-	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points +% of total"), new QStandardItem(QString::number(psStats->pUpgrade[player]->hitpointPct)) });
+	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points"), new QStandardItem(QString::number(psStats->getUpgrade(player).hitpoints)) });
+	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points +% of total"), new QStandardItem(QString::number(psStats->getUpgrade(player).hitpointPct)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Designable"), new QStandardItem(QString::number(psStats->designable)) });
 	if (psStats->compType == COMP_BODY)
 	{
