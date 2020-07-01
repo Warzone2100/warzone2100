@@ -351,6 +351,7 @@ bool hostCampaign(char *sGame, char *sPlayer)
 	}
 
 	NetPlay.players[selectedPlayer].ready = false;
+	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
@@ -360,19 +361,6 @@ bool hostCampaign(char *sGame, char *sPlayer)
 	loadMultiStats(sPlayer, &playerStats);				// stats stuff
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
-
-	// load AI values of challenge files for getAIName()
-	setupChallengeAIs();
-
-	// ensure all players have a name in One Player Skirmish games
-	if (!NetPlay.bComms)
-	{
-		sstrcpy(NetPlay.players[0].name, sPlayer);
-		for (unsigned i = 1; i < MAX_PLAYERS; ++i)
-		{
-		    sstrcpy(NetPlay.players[i].name, getAIName(i));
-		}
-	}
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	return true;

@@ -305,47 +305,6 @@ int getNextAIAssignment(const char *name)
 	return AI_NOT_FOUND;
 }
 
-void setupChallengeAIs()
-{
-	if(challengeActive)
-	{
-		WzConfig ini(sRequestResult, WzConfig::ReadOnly);
-		for (unsigned i = 0; i < MAX_PLAYERS; ++i)
-		{
-			// set ai property for all players, so that getAIName() can name them accordingly
-			ini.beginGroup("player_" + WzString::number(i));
-			if (ini.contains("ai"))
-			{
-				WzString val = ini.value("ai").toWzString();
-				ini.endGroup();
-				if (val.compare("null") == 0)
-				{
-					continue; // no AI
-				}
-
-				// strip given path down to filename
-				WzString filename(QFileInfo(QString::fromUtf8(val.toUtf8().c_str())).fileName().toUtf8().constData());
-
-				// look up AI value in vector of known skirmish AIs
-				for (int ai = 0; ai < aidata.size(); ++ai)
-				{
-					if (filename == aidata[ai].js)
-					{
-						NetPlay.players[i].ai = ai;
-						break;
-					}
-					else
-					{
-						NetPlay.players[i].ai = AI_CUSTOM; // for custom AIs
-					}
-				}
-				continue;
-			}
-			ini.endGroup();
-		}
-	}
-}
-
 void loadMultiScripts()
 {
 	bool defaultRules = true;
@@ -2695,31 +2654,8 @@ static void loadMapSettings0(LEVEL_DATASET *mapData)
 	widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 }
 
-static void loadMapSettings1()
+static void loadMapChallengeSettings(WzConfig& ini)
 {
-	char aFileName[256];
-	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
-
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
-	sstrcat(aFileName, ".json");
-
-	WzString ininame = challengeActive ? sRequestResult : aFileName;
-	if (hostlaunch == 2)
-	{
-		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
-	}
-	if (hostlaunch == 3)
-	{
-		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
-	}
-	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
-	{
-		return;
-	}
-	WzConfig ini(ininame, WzConfig::ReadOnly);
-
 	ini.beginGroup("locked"); // GUI lockdown
 	locked.power = ini.value("power", challengeActive).toBool();
 	locked.alliances = ini.value("alliances", challengeActive).toBool();
@@ -2742,31 +2678,33 @@ static void loadMapSettings1()
 	ini.endGroup();
 }
 
-static void loadMapSettings2()
+
+static void resolveAIForPlayer(int player, WzString& aiValue)
 {
-	char aFileName[256];
-	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
-
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
-	sstrcat(aFileName, ".json");
-
-	WzString ininame = challengeActive ? sRequestResult : aFileName;
-	if (hostlaunch == 2)
-	{
-		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
-	}
-	if (hostlaunch == 3)
-	{
-		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
-	}
-	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
+	if (aiValue.compare("null") == 0)
 	{
 		return;
 	}
-	WzConfig ini(ininame, WzConfig::ReadOnly);
 
+	// strip given path down to filename
+	WzString filename(QFileInfo(QString::fromUtf8(aiValue.toUtf8().c_str())).fileName().toUtf8().constData());
+
+	// look up AI value in vector of known skirmish AIs
+	for (unsigned ai = 0; ai < aidata.size(); ++ai)
+	{
+		if (filename == aidata[ai].js)
+		{
+			NetPlay.players[player].ai = ai;
+			return;
+		}
+	}
+
+	// did not find from known skirmish AIs, assume custom AI
+	NetPlay.players[player].ai = AI_CUSTOM;
+}
+
+static void loadMapPlayerSettings(WzConfig& ini)
+{
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		ini.beginGroup("player_" + WzString::number(i));
@@ -2778,10 +2716,26 @@ static void loadMapSettings2()
 		{
 			NetPlay.players[i].ai = AI_CLOSED;
 		}
+
 		if (ini.contains("name"))
 		{
 			sstrcpy(NetPlay.players[i].name, ini.value("name").toWzString().toUtf8().c_str());
 		}
+		else
+		{
+			/* Load pre-configured AIs */
+			if (ini.contains("ai"))
+			{
+				resolveAIForPlayer(i, ini.value("ai").toWzString());
+			}
+
+			/* For single player skirmish, copy AI names for AI players */
+			if (!NetPlay.bComms && i != selectedPlayer)
+			{
+				sstrcpy(NetPlay.players[i].name, getAIName(i));
+			}
+		}
+
 		NetPlay.players[i].position = MAX_PLAYERS;  // Invalid value, fix later.
 		if (ini.contains("position"))
 		{
@@ -2829,6 +2783,57 @@ static void loadMapSettings2()
 			NetPlay.players[i].position = pos;
 			++pos;
 		}
+	}
+}
+
+/**
+ * Loads challenge and player configurations from level/autohost/test .json-files. Calling with skipPlayers false when players have not been set up is an error.
+ *
+ * \param skipChallenge allows skipping loading challenge settings. This is required when starting the host, as there we do not want to override user selections
+ * \param skipPlayers	allows skipping loading player settings. This is required when changing map with existing player slot selections
+ */
+static void loadMapChallengeAndPlayerSettings(bool skipChallenge, bool skipPlayers)
+{
+	char aFileName[256];
+	LEVEL_DATASET* psLevel = levFindDataSet(game.map, &game.hash);
+
+	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
+	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
+	aFileName[std::max<size_t>(strlen(aFileName), 4) - 4] = '\0';
+	sstrcat(aFileName, ".json");
+
+	WzString ininame = challengeActive ? sRequestResult : aFileName;
+	if (hostlaunch == 2)
+	{
+		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
+	}
+	if (hostlaunch == 3)
+	{
+		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
+	}
+	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
+	{
+		/* ensure all players have a name in One Player Skirmish games */
+		if (!NetPlay.bComms) {
+			for (int i = 0; i < MAX_PLAYERS; ++i) {
+				if (i != selectedPlayer) {
+					sstrcpy(NetPlay.players[i].name, getAIName(i));
+				}
+			}
+		}
+
+		return;
+	}
+	WzConfig ini(ininame, WzConfig::ReadOnly);
+
+	if (!skipChallenge)
+	{
+		loadMapChallengeSettings(ini);
+	}
+
+	if (!skipPlayers)
+	{
+		loadMapPlayerSettings(ini);
 	}
 }
 
@@ -2888,9 +2893,8 @@ static void randomizeOptions()
 				}
 			}
 			loadMapSettings0(mapData);
-			loadMapSettings1();
 			loadMapPreview(false);
-			loadMapSettings2();
+			loadMapChallengeAndPlayerSettings(false, false);
 		}
 
 		// Reset and randomize player positions, also to guard
@@ -3213,7 +3217,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			break;
 		}
 		bHosted = true;
-		loadMapSettings2();
+		loadMapChallengeAndPlayerSettings(true, false);
 
 		widgDelete(psWScreen, MULTIOP_REFRESH);
 		widgDelete(psWScreen, MULTIOP_HOST);
@@ -3836,6 +3840,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 
 	// widget handling
 
+	/* Map or player selection is open */
 	if (multiRequestUp)
 	{
 		WidgetTriggers const &triggers = widgRunScreen(psRScreen);
@@ -3911,10 +3916,11 @@ TITLECODE WzMultiOptionTitleUI::run()
 					}
 					else
 					{
-						loadMapSettings1();
+						loadMapChallengeAndPlayerSettings(false, true);
 					}
 
 					//Reset player slots if it's a smaller map.
+					// FIXME: This should also reset (without sending messages) the slots when setting up a skirmish game. Currently it does not.
 					if (NetPlay.isHost && NetPlay.bComms && bHosted && !isHoverPreview && oldMaxPlayers > game.maxPlayers)
 					{
 						resetPlayerPositions();
@@ -3953,6 +3959,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 			}
 		}
 	}
+	/* Map/Player selection (multi-requester) is closed */
 	else
 	{
 		if (hideTime != 0)
@@ -4097,8 +4104,7 @@ void WzMultiOptionTitleUI::start()
 		}
 		bHosted = true;
 
-		loadMapSettings1();
-		loadMapSettings2();
+		loadMapChallengeAndPlayerSettings(false, false);
 
 		loadSettings(sRequestResult);
 		netPlayersUpdated = true;
