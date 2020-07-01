@@ -2602,7 +2602,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	UDWORD weapon1Body     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].upgrade[plr].hitpoints;
 	UDWORD weapon2Body     = asWeaponStats[sCurrDesign.numWeaps >= 2 ? sCurrDesign.asWeaps[1] : 0].upgrade[plr].hitpoints;
 	UDWORD weapon3Body     = asWeaponStats[sCurrDesign.numWeaps >= 3 ? sCurrDesign.asWeaps[2] : 0].upgrade[plr].hitpoints;
-	UDWORD newComponentHP = psStats->pUpgrade[plr]->hitpoints;
+	UDWORD newComponentHP = psStats->getUpgrade(plr).hitpoints;
 
 	UDWORD hitPointPct;
 	UDWORD bodyPct        = asBodyStats[sCurrDesign.asParts[COMP_BODY]].upgrade[plr].hitpointPct - 100;
@@ -2615,7 +2615,7 @@ static void intSetTemplateBodyShadowStats(COMPONENT_STATS *psStats)
 	UDWORD weapon1Pct     = asWeaponStats[sCurrDesign.numWeaps ? sCurrDesign.asWeaps[0] : 0].upgrade[plr].hitpointPct - 100;
 	UDWORD weapon2Pct     = asWeaponStats[sCurrDesign.numWeaps >= 2 ? sCurrDesign.asWeaps[1] : 0].upgrade[plr].hitpointPct - 100;
 	UDWORD weapon3Pct     = asWeaponStats[sCurrDesign.numWeaps >= 3 ? sCurrDesign.asWeaps[2] : 0].upgrade[plr].hitpointPct - 100;
-	UDWORD newComponentPct = psStats->pUpgrade[plr]->hitpointPct - 100;
+	UDWORD newComponentPct = psStats->getUpgrade(plr).hitpointPct - 100;
 
 	UDWORD psPropPctBody = asPropulsionStats[sCurrDesign.asParts[COMP_PROPULSION]].upgrade[plr].hitpointPctOfBody / 100;
 

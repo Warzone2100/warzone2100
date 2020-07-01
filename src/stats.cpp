@@ -281,8 +281,8 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index
 	psStats->buildPoints = json.value("buildPoints", 0).toUInt();
 	psStats->designable = json.value("designable", false).toBool();
 	psStats->weight = json.value("weight", 0).toUInt();
-	psStats->pBase->hitpoints = json.value("hitpoints", 0).toUInt();
-	psStats->pBase->hitpointPct = json.value("hitpointPct", 100).toUInt();
+	psStats->getBase().hitpoints = json.value("hitpoints", 0).toUInt();
+	psStats->getBase().hitpointPct = json.value("hitpointPct", 100).toUInt();
 
 	WzString dtype = json.value("droidType", "DROID").toWzString();
 	psStats->droidTypeOverride = DROID_ANY;
