@@ -977,15 +977,6 @@ void intResetScreen(bool NoAnim)
 	IntRefreshPending = false;
 }
 
-// calulate the center world coords for a structure stat given
-// top left tile coords
-static void intCalcStructCenter(const STRUCTURE_STATS *psStats, UDWORD tilex, UDWORD tiley, uint16_t direction, UDWORD *pcx, UDWORD *pcy)
-{
-	const Vector2i size = psStats->size(direction) * TILE_UNITS;
-	*pcx = tilex * TILE_UNITS + size.x / 2;
-	*pcy = tiley * TILE_UNITS + size.y / 2;
-}
-
 void intOpenDebugMenu(OBJECT_TYPE id)
 {
 	switch (id)
@@ -1110,7 +1101,6 @@ static void reticuleCallback(int retbut)
 INT_RETVAL intRunWidgets()
 {
 	bool			quitting = false;
-	UDWORD			structX, structY, structX2, structY2;
 
 	intDoScreenRefresh();
 
@@ -1438,29 +1428,22 @@ INT_RETVAL intRunWidgets()
 		if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 		{
 			// See if a position for the structure has been found
-			if (found3DBuildLocTwo(&structX, &structY, &structX2, &structY2))
+			Vector2i pos, pos2;
+			if (found3DBuildLocTwo(pos, pos2))
 			{
-				// check if it's a straight line.
-				if ((structX == structX2) || (structY == structY2))
-				{
-					// Send the droid off to build the structure assuming the droid
-					// can get to the location chosen
-					structX = world_coord(structX) + TILE_UNITS / 2;
-					structY = world_coord(structY) + TILE_UNITS / 2;
-					structX2 = world_coord(structX2) + TILE_UNITS / 2;
-					structY2 = world_coord(structY2) + TILE_UNITS / 2;
+				// Send the droid off to build the structure assuming the droid
+				// can get to the location chosen
 
-					// Set the droid order
-					if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
-					    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-					    && psObjSelected != nullptr && isConstructionDroid(psObjSelected))
-					{
-						orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ModeQueue);
-					}
-					else
-					{
-						orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, structX2, structY2, player.r.y, ctrlShiftDown());
-					}
+				// Set the droid order
+				if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
+					&& intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
+					&& psObjSelected != nullptr && isConstructionDroid(psObjSelected))
+				{
+					orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, pos2.x, pos2.y, player.r.y, ModeQueue);
+				}
+				else
+				{
+					orderSelectedStatsTwoLocDir(selectedPlayer, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, pos2.x, pos2.y, player.r.y, ctrlShiftDown());
 				}
 				if (!quickQueueMode)
 				{
@@ -1469,39 +1452,33 @@ INT_RETVAL intRunWidgets()
 				}
 
 			}
-			else if (found3DBuilding(&structX, &structY))	//found building
+			else if (found3DBuilding(pos))	//found building
 			{
 				//check droid hasn't died
 				if ((psObjSelected == nullptr) ||
 				    !psObjSelected->died)
 				{
-					bool CanBuild = true;
-
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
-					intCalcStructCenter((STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, &structX, &structY);
 
 					// Don't allow derrick to be built on burning ground.
 					if (((STRUCTURE_STATS *)psPositionStats)->type == REF_RESOURCE_EXTRACTOR)
 					{
-						if (fireOnLocation(structX, structY))
+						if (fireOnLocation(pos.x, pos.y))
 						{
 							AddDerrickBurningMessage();
 						}
 					}
-					if (CanBuild)
+					// Set the droid order
+					if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
+						&& intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
+						&& psObjSelected != nullptr)
 					{
-						// Set the droid order
-						if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
-						    && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-						    && psObjSelected != nullptr)
-						{
-							orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ModeQueue);
-						}
-						else
-						{
-							orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, structX, structY, player.r.y, ctrlShiftDown());
-						}
+						orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, player.r.y, ModeQueue);
+					}
+					else
+					{
+						orderSelectedStatsLocDir(selectedPlayer, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, player.r.y, ctrlShiftDown());
 					}
 				}
 
@@ -1519,49 +1496,41 @@ INT_RETVAL intRunWidgets()
 		else if (intMode == INT_EDITSTAT && editPosMode == IED_POS)
 		{
 			/* Directly positioning some type of object */
-			unsigned structX1 = INT32_MAX;
-			unsigned structY1 = INT32_MAX;
 			FLAG_POSITION flag;
-			structX2 = INT32_MAX - 1;
-			structY2 = INT32_MAX - 1;
-			if (sBuildDetails.psStats && (found3DBuilding(&structX1, &structY1) || found3DBuildLocTwo(&structX1, &structY1, &structX2, &structY2)))
+			Vector2i pos = {INT32_MAX, INT32_MAX}, pos2 = {INT32_MAX, INT32_MAX};
+			Vector2i size = {1, 1};
+			STRUCTURE_TYPE type = REF_WALL;
+			if (sBuildDetails.psStats && (found3DBuildLocTwo(pos, pos2) || found3DBuilding(pos)))
 			{
-				if (structX2 == INT32_MAX - 1)
+				if (auto stats = castStructureStats(sBuildDetails.psStats))
 				{
-					structX2 = structX1;
-					structY2 = structY1;
+					size = stats->size(player.r.y);
+					type = stats->type;
 				}
-				if (structX1 > structX2)
+				if (pos2.x == INT32_MAX)
 				{
-					std::swap(structX1, structX2);
-				}
-				if (structY1 > structY2)
-				{
-					std::swap(structY1, structY2);
+					pos2 = pos;
 				}
 			}
 			else if (deliveryReposFinished(&flag))
 			{
-				structX2 = structX1 = map_coord(flag.coords.x);
-				structY2 = structY1 = map_coord(flag.coords.y);
+				pos2 = pos = flag.coords;
 			}
 
-			for (unsigned j = structY1; j <= structY2; ++j)
-				for (unsigned i = structX1; i <= structX2; ++i)
+			if (pos.x != INT32_MAX)
+			{
+				auto lb = calcLineBuild(size, type, pos, pos2);
+				for (int i = 0; i < lb.count; ++i)
 				{
-					structX = i;
-					structY = j;
+					pos = lb[i];
 					/* See what type of thing is being put down */
-					if (psPositionStats->ref >= REF_STRUCTURE_START
-					    && psPositionStats->ref < REF_STRUCTURE_START + REF_RANGE)
+					if (auto psBuilding = castStructureStats(psPositionStats))
 					{
-						STRUCTURE_STATS *psBuilding = (STRUCTURE_STATS *)psPositionStats;
 						STRUCTURE tmp(0, selectedPlayer);
 
-						intCalcStructCenter(psBuilding, structX, structY, player.r.y, &structX, &structY);
 						if (psBuilding->type == REF_DEMOLISH)
 						{
-							MAPTILE *psTile = mapTile(map_coord(structX), map_coord(structY));
+							MAPTILE *psTile = mapTile(map_coord(pos.x), map_coord(pos.y));
 							FEATURE *psFeature = (FEATURE *)psTile->psObject;
 							STRUCTURE *psStructure = (STRUCTURE *)psTile->psObject;
 
@@ -1580,9 +1549,7 @@ INT_RETVAL intRunWidgets()
 							STRUCTURE *psStructure = &tmp;
 							tmp.id = generateNewObjectId();
 							tmp.pStructureType = (STRUCTURE_STATS *)psPositionStats;
-							tmp.pos.x = structX;
-							tmp.pos.y = structY;
-							tmp.pos.z = map_Height(structX, structY) + world_coord(1) / 10;
+							tmp.pos = {pos.x, pos.y, map_Height(pos.x, pos.y) + world_coord(1) / 10};
 
 							// In multiplayer games be sure to send a message to the
 							// other players, telling them a new structure has been
@@ -1592,29 +1559,26 @@ INT_RETVAL intRunWidgets()
 							// the fact that we're cheating ourselves a new
 							// structure.
 							std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new structure: %s."),
-							          selectedPlayer, getName(psStructure->pStructureType));
+										selectedPlayer, getName(psStructure->pStructureType));
 							sendTextMessage(msg.c_str(), true);
 							Cheated = true;
 						}
 					}
-					else if (psPositionStats->ref >= REF_FEATURE_START && psPositionStats->ref < REF_FEATURE_START + REF_RANGE)
+					else if (psPositionStats->typeIs(REF_FEATURE_START))
 					{
 						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
 						std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new feature: %s."),
-						          selectedPlayer, getName(psPositionStats));
+									selectedPlayer, getName(psPositionStats));
 						sendTextMessage(msg.c_str(), true);
 						Cheated = true;
 						// Notify the other hosts that we've just built ourselves a feature
 						//sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
-						sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->ref, world_coord(structX), world_coord(structY), generateNewObjectId());
+						sendMultiPlayerFeature(((FEATURE_STATS *)psPositionStats)->ref, pos.x, pos.y, generateNewObjectId());
 					}
-					else if (psPositionStats->ref >= REF_TEMPLATE_START &&
-					         psPositionStats->ref < REF_TEMPLATE_START + REF_RANGE)
+					else if (psPositionStats->typeIs(REF_TEMPLATE_START))
 					{
 						std::string msg;
-						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats,
-						                     world_coord(structX) + TILE_UNITS / 2, world_coord(structY) + TILE_UNITS / 2,
-						                     selectedPlayer, false, nullptr);
+						DROID *psDroid = buildDroid((DROID_TEMPLATE *)psPositionStats, pos.x, pos.y, selectedPlayer, false, nullptr);
 						cancelDeliveryRepos();
 						if (psDroid)
 						{
@@ -1640,6 +1604,7 @@ INT_RETVAL intRunWidgets()
 						editPosMode = IED_NOPOS;
 					}
 				}
+			}
 		}
 	}
 

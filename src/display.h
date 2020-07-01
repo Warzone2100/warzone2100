@@ -75,24 +75,33 @@ void displayWorld();
 
 // Illumination value for standard light level "as the artist drew it" ... not darker, not lighter
 
-#define DRAG_INACTIVE 0
-#define DRAG_DRAGGING 1
-#define DRAG_RELEASED 2
-#define DRAG_PLACING  3
+enum DragState
+{
+	DRAG_INACTIVE,
+	DRAG_DRAGGING,
+	DRAG_RELEASED,
+	DRAG_PLACING
+};
 
-#define BOX_PULSE_SPEED	50
-
-struct	_dragBox
+struct DragBox3D
 {
 	int x1;
 	int y1;
 	int x2;
 	int y2;
-	UDWORD status;
+	DragState status;
 	float pulse = 0;
 };
 
-extern struct	_dragBox dragBox3D, wallDrag;
+struct WallDrag
+{
+	Vector2i pos;
+	Vector2i pos2;
+	DragState status;
+};
+
+extern DragBox3D dragBox3D;
+extern WallDrag wallDrag;
 
 enum MOUSE_POINTER
 {

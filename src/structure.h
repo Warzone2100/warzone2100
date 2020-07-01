@@ -513,4 +513,18 @@ static inline int getBuildingRearmPoints(STRUCTURE *psStruct)
 
 WzString getFavoriteStructs();
 void setFavoriteStructs(WzString list);
+
+struct LineBuild
+{
+	Vector2i back() const { return (*this)[count - 1]; }
+	Vector2i operator [](int i) const { return begin + i*step; }
+
+	Vector2i begin = {0, 0};
+	Vector2i step = {0, 0};
+	int count = 0;
+};
+
+LineBuild calcLineBuild(Vector2i size, STRUCTURE_TYPE type, Vector2i pos, Vector2i pos2);
+LineBuild calcLineBuild(STRUCTURE_STATS const *stats, uint16_t direction, Vector2i pos, Vector2i pos2);
+
 #endif // __INCLUDED_SRC_STRUCTURE_H__

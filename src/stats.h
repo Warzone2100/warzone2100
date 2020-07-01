@@ -60,25 +60,6 @@ extern UDWORD		numWeaponStats;
 extern UDWORD		numConstructStats;
 extern UDWORD		numTerrainTypes;
 
-/* What number the ref numbers start at for each type of stat */
-#define REF_BODY_START			0x010000
-#define REF_BRAIN_START			0x020000
-#define REF_PROPULSION_START	0x040000
-#define REF_SENSOR_START		0x050000
-#define REF_ECM_START			0x060000
-#define REF_REPAIR_START		0x080000
-#define REF_WEAPON_START		0x0a0000
-#define REF_RESEARCH_START		0x0b0000
-#define REF_TEMPLATE_START		0x0c0000
-#define REF_STRUCTURE_START		0x0d0000
-#define REF_FUNCTION_START		0x0e0000
-#define REF_CONSTRUCT_START		0x0f0000
-#define REF_FEATURE_START		0x100000
-
-/* The maximum number of refs for a type of stat */
-#define REF_RANGE				0x010000
-
-
 //stores for each players component states - see below
 extern UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 

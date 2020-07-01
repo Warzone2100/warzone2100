@@ -4023,48 +4023,7 @@ bool isBlueprintTooClose(STRUCTURE_STATS const *stats1, Vector2i pos1, uint16_t 
 
 bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsigned player, bool bCheckBuildQueue)
 {
-	STRUCTURE_STATS        *psBuilding = nullptr;
-	DROID_TEMPLATE         *psTemplate = nullptr;
-
 	StructureBounds b = getStructureBounds(psStats, pos, direction);
-
-	if (psStats->ref >= REF_STRUCTURE_START && psStats->ref < REF_STRUCTURE_START + REF_RANGE)
-	{
-		psBuilding = (STRUCTURE_STATS *)psStats;  // Is a structure.
-	}
-	if (psStats->ref >= REF_TEMPLATE_START && psStats->ref < REF_TEMPLATE_START + REF_RANGE)
-	{
-		psTemplate = (DROID_TEMPLATE *)psStats;  // Is a template.
-	}
-
-	if (psBuilding != nullptr)
-	{
-		//if we're dragging the wall/defense we need to check along the current dragged size
-		if (wallDrag.status != DRAG_INACTIVE && bCheckBuildQueue
-		    && (psBuilding->type == REF_WALL || psBuilding->type == REF_DEFENSE || psBuilding->type == REF_REARM_PAD ||  psBuilding->type == REF_GATE)
-		    && !isLasSat(psBuilding))
-		{
-			wallDrag.x2 = mouseTileX;  // Why must this be done here? If not doing it here, dragging works almost normally, except it suddenly stops working if the drag becomes invalid.
-			wallDrag.y2 = mouseTileY;
-
-			int dx = abs(wallDrag.x2 - wallDrag.x1);
-			int dy = abs(wallDrag.y2 - wallDrag.y1);
-			if (dx >= dy)
-			{
-				//build in x direction
-				wallDrag.y2 = wallDrag.y1;
-			}
-			else
-			{
-				//build in y direction
-				wallDrag.x2 = wallDrag.x1;
-			}
-			b.map.x = std::min(wallDrag.x1, wallDrag.x2);
-			b.map.y = std::min(wallDrag.y1, wallDrag.y2);
-			b.size.x = std::max(wallDrag.x1, wallDrag.x2) + 1 - b.map.x;
-			b.size.y = std::max(wallDrag.y1, wallDrag.y2) + 1 - b.map.y;
-		}
-	}
 
 	//make sure we are not too near map edge and not going to go over it
 	if (b.map.x < scrollMinX + TOO_NEAR_EDGE || b.map.x + b.size.x > scrollMaxX - TOO_NEAR_EDGE ||
@@ -4087,6 +4046,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 		}
 	}
 
+	STRUCTURE_STATS *psBuilding = castStructureStats(psStats);
+	DROID_TEMPLATE *psTemplate = castDroidTemplate(psStats);
 	if (psBuilding != nullptr)
 	{
 		for (int j = 0; j < b.size.y; ++j)
@@ -7150,4 +7111,46 @@ bool canStructureHaveAModuleAdded(const STRUCTURE* const structure)
 		default:
 			return false;
 	}
+}
+
+LineBuild calcLineBuild(Vector2i size, STRUCTURE_TYPE type, Vector2i worldPos, Vector2i worldPos2)
+{
+	ASSERT_OR_RETURN({}, size.x > 0 && size.y > 0, "Zero-size building");
+
+	bool packed = type == REF_RESOURCE_EXTRACTOR || baseStructureTypePackability(type) <= PACKABILITY_DEFENSE;
+	Vector2i tile = {TILE_UNITS, TILE_UNITS};
+	Vector2i padding = packed? Vector2i{0, 0} : Vector2i{1, 1};
+	Vector2i paddedSize = size + padding;
+	Vector2i worldSize = world_coord(size);
+	Vector2i worldPaddedSize = world_coord(paddedSize);
+
+	LineBuild lb;
+	lb.begin = round_to_nearest_tile(worldPos - worldSize/2) + worldSize/2;
+
+	Vector2i delta = worldPos2 - lb.begin;
+	Vector2i count = (abs(delta) + worldPaddedSize/2)/paddedSize + tile;
+	lb.count = map_coord(std::max(count.x, count.y));
+	if (lb.count <= 1)
+	{
+		lb.step = {0, 0};
+	}
+	else if (count.x > count.y)
+	{
+		lb.step.x = delta.x < 0? -worldPaddedSize.x : worldPaddedSize.x;
+		lb.step.y = round_to_nearest_tile(delta.y/(lb.count - 1));
+	}
+	else
+	{
+		lb.step.x = round_to_nearest_tile(delta.x/(lb.count - 1));
+		lb.step.y = delta.y < 0? -worldPaddedSize.y : worldPaddedSize.y;
+	}
+
+	//debug(LOG_INFO, "calcLineBuild(size: [%d, %d], packed: %d, worldPos: [%d, %d], worldPos2: [%d, %d]) -> {begin: [%d, %d], step: [%d, %d], count: %d}", size.x, size.y, packed, worldPos.x, worldPos.y, worldPos2.x, worldPos2.y, lb.begin.x, lb.begin.y, lb.step.x, lb.step.y, lb.count);
+
+	return lb;
+}
+
+LineBuild calcLineBuild(STRUCTURE_STATS const *stats, uint16_t direction, Vector2i pos, Vector2i pos2)
+{
+	return calcLineBuild(stats->size(direction), stats->type, pos, pos2);
 }

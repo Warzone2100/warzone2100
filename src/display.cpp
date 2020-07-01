@@ -78,7 +78,8 @@
 #include "warzoneconfig.h"
 #include "lib/ivis_opengl/piematrix.h"
 
-struct	_dragBox dragBox3D, wallDrag;
+DragBox3D dragBox3D;
+WallDrag wallDrag;
 
 #define POSSIBLE_SELECTIONS		14
 #define POSSIBLE_TARGETS		23
@@ -483,14 +484,9 @@ static void CheckFinishedDrag()
 				    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
 				    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 				{
-					if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
-					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
-					     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
-					    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
+					if (canLineBuild())
 					{
-						wallDrag.x2 = mouseTileX;
-						wallDrag.y2 = mouseTileY;
+						wallDrag.pos2 = mousePos;
 						wallDrag.status = DRAG_RELEASED;
 					}
 				}
@@ -524,14 +520,9 @@ static void CheckStartWallDrag()
 		    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
 		    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
 		{
-			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
-			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
+			if (canLineBuild())
 			{
-				wallDrag.x1 = wallDrag.x2 = mouseTileX;
-				wallDrag.y1 = wallDrag.y2 = mouseTileY;
+				wallDrag.pos = wallDrag.pos2 = mousePos;
 				wallDrag.status = DRAG_PLACING;
 				debug(LOG_NEVER, "Start Wall Drag\n");
 			}
@@ -560,31 +551,9 @@ static bool CheckFinishedFindPosition()
 		}
 		else if (buildState == BUILD3D_VALID)
 		{
-			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE)
-			    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
-			    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE)
-			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
+			if (sBuildDetails.psStats->typeIs(REF_STRUCTURE_START) && canLineBuild())
 			{
-				int dx, dy;
-
-				wallDrag.x2 = mouseTileX;
-				wallDrag.y2 = mouseTileY;
-
-				dx = abs(mouseTileX - wallDrag.x1);
-				dy = abs(mouseTileY - wallDrag.y1);
-
-				if (dx >= dy)
-				{
-					wallDrag.y2 = wallDrag.y1;
-				}
-				else if (dx < dy)
-				{
-					wallDrag.x2 = wallDrag.x1;
-				}
-
+				wallDrag.pos2 = mousePos;
 				wallDrag.status = DRAG_RELEASED;
 			}
 			debug(LOG_NEVER, "BUILD3D_FINISHED\n");
@@ -608,33 +577,10 @@ static void HandleDrag()
 		dragBox3D.y2 = mouseY();
 		dragBox3D.status = DRAG_DRAGGING;
 
-		if (buildState == BUILD3D_VALID)
+		if (buildState == BUILD3D_VALID && canLineBuild())
 		{
-			if ((((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_WALL
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_GATE
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_DEFENSE
-			     || ((STRUCTURE_STATS *)sBuildDetails.psStats)->type == REF_REARM_PAD)
-			    && !isLasSat((STRUCTURE_STATS *)sBuildDetails.psStats))
-			{
-				int dx, dy;
-
-				wallDrag.x2 = mouseTileX;
-				wallDrag.y2 = mouseTileY;
-
-				dx = abs(mouseTileX - wallDrag.x1);
-				dy = abs(mouseTileY - wallDrag.y1);
-
-				if (dx >= dy)
-				{
-					wallDrag.y2 = wallDrag.y1;
-				}
-				else if (dx < dy)
-				{
-					wallDrag.x2 = wallDrag.x1;
-				}
-
-				wallDrag.status = DRAG_DRAGGING;
-			}
+			wallDrag.pos2 = mousePos;
+			wallDrag.status = DRAG_DRAGGING;
 		}
 	}
 }
