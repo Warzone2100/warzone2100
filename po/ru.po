@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-27 16:13\n"
+"PO-Revision-Date: 2020-07-01 04:13\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -17179,7 +17179,7 @@ msgstr ""
 
 #: src/multiint.cpp:3976
 msgid "The host has quit."
-msgstr ""
+msgstr "Хост вышел."
 
 #: src/multiint.cpp:4097
 msgid "UPnP has been enabled."
