@@ -2446,7 +2446,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 				pieFlag = pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(psStructure->pStructureType->pBaseIMD, 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
+			pie_Draw3DShape(getFactionIMD(player, psStructure->pStructureType->pBaseIMD), 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
 				viewMatrix * modelMatrix);
 		}
 
