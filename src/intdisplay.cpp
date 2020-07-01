@@ -1838,14 +1838,12 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 
 bool StatIsStructure(BASE_STATS const *Stat)
 {
-	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref <
-	        REF_STRUCTURE_START + REF_RANGE);
+	return Stat->hasType(STAT_STRUCTURE);
 }
 
 bool StatIsFeature(BASE_STATS const *Stat)
 {
-	return (Stat->ref >= REF_FEATURE_START && Stat->ref <
-	        REF_FEATURE_START + REF_RANGE);
+	return Stat->hasType(STAT_FEATURE);
 }
 
 iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
@@ -1856,61 +1854,23 @@ iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
 
 bool StatIsTemplate(BASE_STATS *Stat)
 {
-	return (Stat->ref >= REF_TEMPLATE_START &&
-	        Stat->ref < REF_TEMPLATE_START + REF_RANGE);
+	return Stat->hasType(STAT_TEMPLATE);
 }
 
-SDWORD StatIsComponent(BASE_STATS *Stat)
+COMPONENT_TYPE StatIsComponent(BASE_STATS *Stat)
 {
-	if (Stat->ref >= REF_BODY_START &&
-	    Stat->ref < REF_BODY_START + REF_RANGE)
+	switch (StatType(Stat->ref & STAT_MASK))
 	{
-		return COMP_BODY;
+		case STAT_BODY: return COMP_BODY;
+		case STAT_BRAIN: return COMP_BRAIN;
+		case STAT_PROPULSION: return COMP_PROPULSION;
+		case STAT_WEAPON: return COMP_WEAPON;
+		case STAT_SENSOR: return COMP_SENSOR;
+		case STAT_ECM: return COMP_ECM;
+		case STAT_CONSTRUCT: return COMP_CONSTRUCT;
+		case STAT_REPAIR: return COMP_REPAIRUNIT;
+		default: return COMP_NUMCOMPONENTS;
 	}
-
-	if (Stat->ref >= REF_BRAIN_START &&
-	    Stat->ref < REF_BRAIN_START + REF_RANGE)
-	{
-		return COMP_BRAIN;
-	}
-
-	if (Stat->ref >= REF_PROPULSION_START &&
-	    Stat->ref < REF_PROPULSION_START + REF_RANGE)
-	{
-		return COMP_PROPULSION;
-	}
-
-	if (Stat->ref >= REF_WEAPON_START &&
-	    Stat->ref < REF_WEAPON_START + REF_RANGE)
-	{
-		return COMP_WEAPON;
-	}
-
-	if (Stat->ref >= REF_SENSOR_START &&
-	    Stat->ref < REF_SENSOR_START + REF_RANGE)
-	{
-		return COMP_SENSOR;
-	}
-
-	if (Stat->ref >= REF_ECM_START &&
-	    Stat->ref < REF_ECM_START + REF_RANGE)
-	{
-		return COMP_ECM;
-	}
-
-	if (Stat->ref >= REF_CONSTRUCT_START &&
-	    Stat->ref < REF_CONSTRUCT_START + REF_RANGE)
-	{
-		return COMP_CONSTRUCT;
-	}
-
-	if (Stat->ref >= REF_REPAIR_START &&
-	    Stat->ref < REF_REPAIR_START + REF_RANGE)
-	{
-		return COMP_REPAIRUNIT;
-	}
-
-	return COMP_NUMCOMPONENTS;
 }
 
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD)
@@ -1971,8 +1931,7 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 
 bool StatIsResearch(BASE_STATS *Stat)
 {
-	return (Stat->ref >= REF_RESEARCH_START && Stat->ref <
-	        REF_RESEARCH_START + REF_RANGE);
+	return Stat->hasType(STAT_RESEARCH);
 }
 
 static void StatGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon)
@@ -2374,7 +2333,7 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	UDWORD		x = Label->x() + xOffset;
 	UDWORD		y = Label->y() + yOffset;
 
-	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + REF_RESEARCH_START;
+	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + STAT_RESEARCH;
 	unsigned num = UNPACKDWORD_LOW(psWidget->UserData);
 
 	std::vector<AllyResearch> const &researches = listAllyResearch(ref);

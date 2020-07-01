@@ -78,12 +78,12 @@ struct DROID_TEMPLATE : public BASE_STATS
 
 static inline DROID_TEMPLATE *castDroidTemplate(BASE_STATS *stats)
 {
-	return stats != nullptr && stats->typeIs(REF_TEMPLATE_START)? static_cast<DROID_TEMPLATE *>(stats) : nullptr;
+	return stats != nullptr && stats->hasType(STAT_TEMPLATE)? static_cast<DROID_TEMPLATE *>(stats) : nullptr;
 }
 
 static inline DROID_TEMPLATE const *castDroidTemplate(BASE_STATS const *stats)
 {
-	return stats != nullptr && stats->typeIs(REF_TEMPLATE_START)? static_cast<DROID_TEMPLATE const *>(stats) : nullptr;
+	return stats != nullptr && stats->hasType(STAT_TEMPLATE)? static_cast<DROID_TEMPLATE const *>(stats) : nullptr;
 }
 
 class DROID_GROUP;

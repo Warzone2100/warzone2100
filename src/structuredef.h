@@ -158,12 +158,12 @@ struct STRUCTURE_STATS : public BASE_STATS
 
 static inline STRUCTURE_STATS *castStructureStats(BASE_STATS *stats)
 {
-	return stats != nullptr && stats->typeIs(REF_STRUCTURE_START)? static_cast<STRUCTURE_STATS *>(stats) : nullptr;
+	return stats != nullptr && stats->hasType(STAT_STRUCTURE)? static_cast<STRUCTURE_STATS *>(stats) : nullptr;
 }
 
 static inline STRUCTURE_STATS const *castStructureStats(BASE_STATS const *stats)
 {
-	return stats != nullptr && stats->typeIs(REF_STRUCTURE_START)? static_cast<STRUCTURE_STATS const *>(stats) : nullptr;
+	return stats != nullptr && stats->hasType(STAT_STRUCTURE)? static_cast<STRUCTURE_STATS const *>(stats) : nullptr;
 }
 
 enum STRUCT_STATES

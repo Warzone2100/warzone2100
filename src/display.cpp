@@ -481,8 +481,7 @@ static void CheckFinishedDrag()
 			{
 				//if invalid location keep looking for a valid one
 				if ((buildState == BUILD3D_VALID || buildState == BUILD3D_FINISHED)
-				    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
-				    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+				    && sBuildDetails.psStats->hasType(STAT_STRUCTURE))
 				{
 					if (canLineBuild())
 					{
@@ -517,8 +516,7 @@ static void CheckStartWallDrag()
 		// You can start dragging walls from invalid locations so check for
 		// BUILD3D_POS or BUILD3D_VALID, used tojust check for BUILD3D_VALID.
 		if ((buildState == BUILD3D_POS || buildState == BUILD3D_VALID)
-		    && sBuildDetails.psStats->ref >= REF_STRUCTURE_START
-		    && sBuildDetails.psStats->ref < (REF_STRUCTURE_START + REF_RANGE))
+		    && sBuildDetails.psStats->hasType(STAT_STRUCTURE))
 		{
 			if (canLineBuild())
 			{
@@ -551,7 +549,7 @@ static bool CheckFinishedFindPosition()
 		}
 		else if (buildState == BUILD3D_VALID)
 		{
-			if (sBuildDetails.psStats->typeIs(REF_STRUCTURE_START) && canLineBuild())
+			if (sBuildDetails.psStats->hasType(STAT_STRUCTURE) && canLineBuild())
 			{
 				wallDrag.pos2 = mousePos;
 				wallDrag.status = DRAG_RELEASED;

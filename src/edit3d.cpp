@@ -126,19 +126,19 @@ void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData)
 	sBuildDetails.CallBack = CallBack;
 	sBuildDetails.UserData = UserData;
 
-	if (psStats->typeIs(REF_STRUCTURE_START))
+	if (psStats->hasType(STAT_STRUCTURE))
 	{
 		sBuildDetails.width = ((STRUCTURE_STATS *)psStats)->baseWidth;
 		sBuildDetails.height = ((STRUCTURE_STATS *)psStats)->baseBreadth;
 		sBuildDetails.psStats = psStats;
 	}
-	else if (psStats->typeIs(REF_FEATURE_START))
+	else if (psStats->hasType(STAT_FEATURE))
 	{
 		sBuildDetails.width = ((FEATURE_STATS *)psStats)->baseWidth;
 		sBuildDetails.height = ((FEATURE_STATS *)psStats)->baseBreadth;
 		sBuildDetails.psStats = psStats;
 	}
-	else /*if (psStats->typeIs(REF_TEMPLATE_START))*/
+	else /*if (psStats->hasType(STAT_TEMPLATE))*/
 	{
 		sBuildDetails.width = 1;
 		sBuildDetails.height = 1;
@@ -183,7 +183,7 @@ bool process3DBuilding()
 	if (buildState != BUILD3D_FINISHED)
 	{
 		bool isValid = true;
-		if (wallDrag.status != DRAG_INACTIVE && sBuildDetails.psStats->typeIs(REF_STRUCTURE_START) && canLineBuild())
+		if (wallDrag.status != DRAG_INACTIVE && sBuildDetails.psStats->hasType(STAT_STRUCTURE) && canLineBuild())
 		{
 			wallDrag.pos2 = mousePos;  // Why must this be done here? If not doing it here, dragging works almost normally, except it suddenly stops working if the drag becomes invalid.
 

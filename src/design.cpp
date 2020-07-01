@@ -1258,7 +1258,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 	sLabInit.pDisplay = intDisplayImage;
 
 	/* See what type of system stats we've got */
-	if (psStats->ref >= REF_SENSOR_START && psStats->ref < REF_SENSOR_START + REF_RANGE)
+	if (psStats->hasType(STAT_SENSOR))
 	{
 		/* Add the bar graphs*/
 		sBarInit.id = IDDES_SENSORRANGE;
@@ -1298,7 +1298,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_ECM_START && psStats->ref < REF_ECM_START + REF_RANGE)
+	else if (psStats->hasType(STAT_ECM))
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_ECMPOWER;
@@ -1334,7 +1334,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_CONSTRUCT_START && psStats->ref < REF_CONSTRUCT_START + REF_RANGE)
+	else if (psStats->hasType(STAT_CONSTRUCT))
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_CONSTPOINTS;
@@ -1370,7 +1370,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_REPAIR_START && psStats->ref < REF_REPAIR_START + REF_RANGE)
+	else if (psStats->hasType(STAT_REPAIR))
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_REPAIRPOINTS;
@@ -1406,7 +1406,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 			return false;
 		}
 	}
-	else if (psStats->ref >= REF_WEAPON_START && psStats->ref < REF_WEAPON_START + REF_RANGE)
+	else if (psStats->hasType(STAT_WEAPON))
 	{
 		/* Add the bar graphs */
 		sBarInit.id = IDDES_WEAPRANGE;
@@ -1811,62 +1811,40 @@ static bool intAddSystemButtons(DES_COMPMODE mode)
 /* Add the component buttons to the main tab of the component form */
 static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psStats, unsigned size, const UBYTE *aAvailable, unsigned numEntries, unsigned compID)
 {
-	UDWORD				i, maxComponents;
-	COMPONENT_STATS		*psCurrStats;
-	PROPULSION_STATS	*psPropStats;
-	bool				bVTol, bWeapon;
 	int bodysize = SIZE_NUM;
 
 	/* Set up the button struct */
 	int nextButtonId = IDDES_COMPSTART;
 
+	bool bWeapon = psStats->hasType(STAT_WEAPON);
+
 	//need to set max number of buttons possible
-	if (psStats->ref >= REF_WEAPON_START && psStats->ref < REF_WEAPON_START + REF_RANGE)
-	{
-		maxComponents = MAX_SYSTEM_COMPONENTS;
-	}
-	else
-	{
-		maxComponents = MAX_DESIGN_COMPONENTS;
-	}
+	unsigned maxComponents = bWeapon? MAX_SYSTEM_COMPONENTS : MAX_DESIGN_COMPONENTS;
 
 	/*if adding weapons - need to check if the propulsion is a VTOL*/
-	bVTol = false;
-
-	if (psStats->ref >= REF_WEAPON_START && psStats->ref < REF_WEAPON_START + REF_RANGE)
-	{
-		bWeapon = true;
-	}
-	else
-	{
-		bWeapon = false;
-	}
+	bool bVTOL = false;
 
 	if (bWeapon)
 	{
 		//check if the current Template propulsion has been set
 		if (sCurrDesign.asParts[COMP_PROPULSION])
 		{
-			psPropStats = asPropulsionStats + sCurrDesign.
-			              asParts[COMP_PROPULSION];
+			PROPULSION_STATS *psPropStats = asPropulsionStats + sCurrDesign.asParts[COMP_PROPULSION];
 			ASSERT_OR_RETURN(false, psPropStats != nullptr, "invalid propulsion stats pointer");
 
-			if (asPropulsionTypes[psPropStats->propulsionType].travel == AIR)
-			{
-				bVTol = true;
-			}
+			bVTOL |= asPropulsionTypes[psPropStats->propulsionType].travel == AIR;
 		}
 		if (sCurrDesign.asParts[COMP_BODY])
 		{
-			bodysize = (asBodyStats + sCurrDesign.asParts[COMP_BODY])->size;
+			bodysize = asBodyStats[sCurrDesign.asParts[COMP_BODY]].size;
 		}
 	}
 
 	/* Add each button */
 	desCompID = 0;
 	numComponent = 0;
-	psCurrStats = psStats;
-	for (i = 0; i < numEntries; i++)
+	COMPONENT_STATS *psCurrStats = psStats;
+	for (unsigned i = 0; i < numEntries; ++i)
 	{
 		/* If we are out of space in the list - stop */
 		if (numComponent >= maxComponents)
@@ -1886,7 +1864,7 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 		if (bWeapon)
 		{
 			WEAPON_STATS *psWeapon = (WEAPON_STATS *)psCurrStats;
-			if ((psWeapon->vtolAttackRuns > 0) != bVTol
+			if ((psWeapon->vtolAttackRuns > 0) != bVTOL
 			    || (psWeapon->weaponSize == WEAPON_SIZE_LIGHT && bodysize != SIZE_LIGHT)
 			    || (psWeapon->weaponSize == WEAPON_SIZE_HEAVY && bodysize == SIZE_LIGHT))
 			{
@@ -2178,8 +2156,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 static void intSetSensorStats(SENSOR_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, (psStats->ref >= REF_SENSOR_START) &&
-	                 (psStats->ref < REF_SENSOR_START + REF_RANGE), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_SENSOR), "stats ref is out of range");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_SENSORRANGE, sensorRange(psStats, selectedPlayer));
@@ -2190,10 +2167,7 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 /* Set the shadow bar graphs for the sensor stats */
 static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 {
-	ASSERT(psStats == nullptr ||
-	       ((psStats->ref >= REF_SENSOR_START) &&
-	        (psStats->ref < REF_SENSOR_START + REF_RANGE)),
-	       "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_SENSOR), "stats ref is out of range");
 
 	if (psStats)
 	{
@@ -2216,8 +2190,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 static void intSetECMStats(ECM_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, (psStats->ref >= REF_ECM_START) &&
-	                 (psStats->ref < REF_ECM_START + REF_RANGE), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_ECM), "stats ref is out of range");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, selectedPlayer));
@@ -2228,10 +2201,7 @@ static void intSetECMStats(ECM_STATS *psStats)
 /* Set the shadow bar graphs for the ECM stats */
 static void intSetECMShadowStats(ECM_STATS *psStats)
 {
-	ASSERT(psStats == nullptr ||
-	       ((psStats->ref >= REF_ECM_START) &&
-	        (psStats->ref < REF_ECM_START + REF_RANGE)),
-	       "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_ECM), "stats ref is out of range");
 
 	if (psStats)
 	{
@@ -2253,8 +2223,7 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, (psStats->ref >= REF_CONSTRUCT_START) &&
-	                 (psStats->ref < REF_CONSTRUCT_START + REF_RANGE), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_CONSTRUCT), "stats ref is out of range");
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_CONSTPOINTS,
@@ -2267,10 +2236,7 @@ static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 /* Set the shadow bar graphs for the Constructor stats */
 static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 {
-	ASSERT(psStats == nullptr ||
-	       ((psStats->ref >= REF_CONSTRUCT_START) &&
-	        (psStats->ref < REF_CONSTRUCT_START + REF_RANGE)),
-	       "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_CONSTRUCT), "stats ref is out of range");
 
 	if (psStats)
 	{
@@ -2292,8 +2258,7 @@ static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 static void intSetRepairStats(REPAIR_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, (psStats->ref >= REF_REPAIR_START) &&
-	                 (psStats->ref < REF_REPAIR_START + REF_RANGE), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_REPAIR), "stats ref is out of range");
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_REPAIRPOINTS,
@@ -2306,10 +2271,7 @@ static void intSetRepairStats(REPAIR_STATS *psStats)
 /* Set the shadow bar graphs for the Repair stats */
 static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 {
-	ASSERT(psStats == nullptr ||
-	       ((psStats->ref >= REF_REPAIR_START) &&
-	        (psStats->ref < REF_REPAIR_START + REF_RANGE)),
-	       "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_REPAIR), "stats ref is out of range");
 
 	if (psStats)
 	{
@@ -2332,8 +2294,7 @@ static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 static void intSetWeaponStats(WEAPON_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, (psStats->ref >= REF_WEAPON_START) &&
-	                 (psStats->ref < REF_WEAPON_START + REF_RANGE), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_WEAPON), "stats ref is out of range");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats, selectedPlayer));
@@ -2349,10 +2310,7 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 /* Set the shadow bar graphs for the Weapon stats */
 static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 {
-	ASSERT(psStats == nullptr ||
-	       ((psStats->ref >= REF_WEAPON_START) &&
-	        (psStats->ref < REF_WEAPON_START + REF_RANGE)),
-	       "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_WEAPON), "stats ref is out of range");
 
 	if (psStats)
 	{
@@ -2382,9 +2340,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 	W_FORM	*psForm;
 
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, (psStats->ref >= REF_BODY_START) &&
-	                 (psStats->ref < REF_BODY_START + REF_RANGE),
-	                 "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_BODY), "stats ref is out of range");
 
 	/* set form tip to stats string */
 	widgSetTip(psWScreen, IDDES_BODYFORM, getName(psStats));
@@ -2410,10 +2366,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 /* Set the shadow bar graphs for the Body stats */
 static void intSetBodyShadowStats(BODY_STATS *psStats)
 {
-	ASSERT(psStats == nullptr ||
-	       ((psStats->ref >= REF_BODY_START) &&
-	        (psStats->ref < REF_BODY_START + REF_RANGE)),
-	       "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_BODY), "stats ref is out of range");
 
 	if (psStats)
 	{
@@ -2783,8 +2736,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	UDWORD      weight;
 
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, (psStats->ref >= REF_PROPULSION_START) &&
-	                 (psStats->ref < REF_PROPULSION_START + REF_RANGE), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_PROPULSION), "stats ref is out of range");
 
 	/* set form tip to stats string */
 	widgSetTip(psWScreen, IDDES_PROPFORM, getName(psStats));
@@ -2836,10 +2788,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 {
 	UDWORD      weight;
 
-	ASSERT(psStats == nullptr ||
-	       ((psStats->ref >= REF_PROPULSION_START) &&
-	        (psStats->ref < REF_PROPULSION_START + REF_RANGE)),
-	       "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_PROPULSION), "stats ref is out of range");
 
 	/* Only set the shadow stats if they are the right type */
 	if (psStats &&
@@ -3040,7 +2989,7 @@ bool intValidTemplate(DROID_TEMPLATE *psTempl, const char *newName, bool complai
 		psTempl->asParts[COMP_REPAIRUNIT] = aDefaultRepair[player];
 	}
 
-	psTempl->ref = REF_TEMPLATE_START;
+	psTempl->ref = STAT_TEMPLATE;
 
 	//set the droidtype
 	psTempl->droidType = droidTemplateType(psTempl);
@@ -4124,7 +4073,7 @@ static bool saveTemplate()
 		sCurrDesign.multiPlayerID = generateNewObjectId();
 		apsTemplateList.push_back(psTempl);
 
-		psTempl->ref = REF_TEMPLATE_START;
+		psTempl->ref = STAT_TEMPLATE;
 
 		/* set button render routines to highlight, not flash */
 		intSetButtonFlash(IDDES_SYSTEMBUTTON, false);
