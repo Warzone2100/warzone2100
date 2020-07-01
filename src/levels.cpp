@@ -753,7 +753,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			if (psBaseData->apDataFiles[i])
 			{
 				// load the data
-				debug(LOG_WZ, "Loading [directory: %s] %s ...", PHYSFS_getRealDir(psBaseData->apDataFiles[i]), psBaseData->apDataFiles[i]);
+				debug(LOG_WZ, "Loading [directory: %s] %s ...", WZ_PHYSFS_getRealDir_String(psBaseData->apDataFiles[i]).c_str(), psBaseData->apDataFiles[i]);
 				if (!resLoad(psBaseData->apDataFiles[i], i))
 				{
 					debug(LOG_ERROR, "Failed resLoad(%s)!", psBaseData->apDataFiles[i]);

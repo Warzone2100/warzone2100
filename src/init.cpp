@@ -647,7 +647,13 @@ bool buildMapList()
 	{
 		bool mapmod = false;
 		struct WZmaps CurrentMap;
-		std::string realFilePathAndName = PHYSFS_getRealDir(realFileName.platformIndependent.c_str()) + realFileName.platformDependent;
+		const char * pRealDirStr = PHYSFS_getRealDir(realFileName.platformIndependent.c_str());
+		if (!pRealDirStr)
+		{
+			debug(LOG_ERROR, "Failed to find realdir for: %s", realFileName.platformIndependent.c_str());
+			continue; // skip
+		}
+		std::string realFilePathAndName = pRealDirStr + realFileName.platformDependent;
 
 		PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND);
 

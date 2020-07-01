@@ -1638,7 +1638,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 		abort();
 	}
 
-	debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(filename.c_str()), filename.c_str(), player);
+	debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", WZ_PHYSFS_getRealDir_String(filename.c_str()).c_str(), filename.c_str(), player);
 
 	PHYSFS_sint64 fileSize_64 = PHYSFS_fileLength(pFileHandle);
 	ASSERT_OR_RETURN(false, fileSize_64 <= 0xFFFFFFFF, "File too big!");

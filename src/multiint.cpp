@@ -45,6 +45,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/physfs_ext.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/bitimage.h"
@@ -564,7 +565,7 @@ void loadMapPreview(bool hideInterface)
 	}
 	else
 	{
-		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, PHYSFS_getRealDir(psLevel->realFileName), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
+		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);

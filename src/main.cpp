@@ -752,7 +752,7 @@ static void scanDataDirs()
 
 	if (PHYSFS_exists("gamedesc.lev"))
 	{
-		debug(LOG_WZ, "gamedesc.lev found at %s", PHYSFS_getRealDir("gamedesc.lev"));
+		debug(LOG_WZ, "gamedesc.lev found at %s", WZ_PHYSFS_getRealDir_String("gamedesc.lev").c_str());
 	}
 	else
 	{
