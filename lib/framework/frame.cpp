@@ -141,7 +141,7 @@ bool getMouseWarp()
 PHYSFS_file *openLoadFile(const char *fileName, bool hard_fail)
 {
 	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
-	debug(LOG_NEVER, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
+	debug(LOG_NEVER, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
 	if (!fileHandle)
 	{
 		if (hard_fail)
@@ -296,7 +296,7 @@ bool saveFile(const char *pFileName, const char *pFileData, UDWORD fileSize)
 	}
 	else
 	{
-		debug(LOG_WZ, "Successfully wrote to %s%s with %d bytes", PHYSFS_getRealDir(pFileName), pFileName, size);
+		debug(LOG_WZ, "Successfully wrote to %s%s with %d bytes", WZ_PHYSFS_getRealDir_String(pFileName).c_str(), pFileName, size);
 	}
 	return true;
 }

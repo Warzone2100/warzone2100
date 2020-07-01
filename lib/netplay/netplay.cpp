@@ -3883,7 +3883,7 @@ static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned p
 	WZ_PHYSFS_writeBytes(fp, buf, bufLen);
 	PHYSFS_close(fp);
 
-	debug(LOG_ERROR, "Dumped player %u's sync error at gameTime %u to file: %s%s", player, time, PHYSFS_getRealDir(fname), fname);
+	debug(LOG_ERROR, "Dumped player %u's sync error at gameTime %u to file: %s%s", player, time, WZ_PHYSFS_getRealDir_String(fname).c_str(), fname);
 }
 
 static void sendDebugSync(uint8_t *buf, uint32_t bufLen, uint32_t time)
