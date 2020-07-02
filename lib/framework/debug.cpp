@@ -34,9 +34,9 @@
 #include <map>
 #include <string>
 
-#ifdef WZ_OS_LINUX
+#if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
-#endif //WZ_OS_LINUX
+#endif // defined(WZ_OS_LINUX) && defined(__GLIBC__)
 
 #if defined(WZ_OS_UNIX)
 # include <fcntl.h>
@@ -607,7 +607,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 
 void _debugBacktrace(code_part part)
 {
-#ifdef WZ_OS_LINUX
+#if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 	void *btv[20];
 	unsigned num = backtrace(btv, sizeof(btv) / sizeof(*btv));
 	char **btc = backtrace_symbols(btv, num);

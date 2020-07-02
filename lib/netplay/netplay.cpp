@@ -64,9 +64,9 @@
 #include "src/loadsave.h"
 #include "src/activity.h"
 
-#ifdef WZ_OS_LINUX
+#if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
-#endif //WZ_OS_LINUX
+#endif // defined(WZ_OS_LINUX) && defined(__GLIBC__)
 
 // WARNING !!! This is initialised via configuration.c !!!
 char masterserver_name[255] = {'\0'};
@@ -3815,7 +3815,7 @@ void _syncDebugBacktrace(const char *function)
 
 	uint32_t backupCrc = syncDebugLog[syncDebugNext].getCrc();  // Ignore CRC changes from _syncDebug(), since identical backtraces can be printed differently.
 
-#ifdef WZ_OS_LINUX
+#if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 	void *btv[20];
 	unsigned num = backtrace(btv, sizeof(btv) / sizeof(*btv));
 	char **btc = backtrace_symbols(btv, num);
