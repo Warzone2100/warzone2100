@@ -328,10 +328,10 @@ function eventGameInit()
 	applyLimitSet();	// set limit options
 
 	const cleanTech = 1;
-	const timeBaseTech = 4.5*60;	
-	const timeAdvancedBaseTech = 7.9*60;
-	const timeT2= 17*60;
-	const timeT3= 25*60;
+	const timeBaseTech = 4.5*60;		// after Power Module
+	const timeAdvancedBaseTech = 7.9*60;	// after Mortar and Repair Facility
+	const timeT2 = 17*60;
+	const timeT3 = 26*60;			// after Needle Gun and Scourge Missile 
 
 	for (var playnum = 0; playnum < maxPlayers; playnum++)
 	{
