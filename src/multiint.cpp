@@ -2726,7 +2726,8 @@ static void loadMapPlayerSettings(WzConfig& ini)
 			/* Load pre-configured AIs */
 			if (ini.contains("ai"))
 			{
-				resolveAIForPlayer(i, ini.value("ai").toWzString());
+				WzString val = ini.value("ai").toWzString();
+				resolveAIForPlayer(i, val);
 			}
 
 			/* For single player skirmish, copy AI names for AI players */
@@ -4017,19 +4018,8 @@ static bool loadSettings(const WzString &filename)
 	game.techLevel = ini.value("techLevel", game.techLevel).toInt();
 
 	// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
-	//             Keeping it around in case mods use it
+	//             Keeping it around in case mods use it.
 	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
-	ini.endGroup();
-
-	ini.beginGroup("locked");
-	locked.ai = ini.value("ai", locked.ai).toBool();
-	locked.alliances = ini.value("alliances", locked.alliances).toBool();
-	locked.bases = ini.value("bases", locked.bases).toBool();
-	locked.difficulty = ini.value("difficulty", locked.difficulty).toBool();
-	locked.position = ini.value("position", locked.position).toBool();
-	locked.power = ini.value("power", locked.power).toBool();
-	locked.scavengers = ini.value("scavengers", locked.scavengers).toBool();
-	locked.teams = ini.value("teams", locked.teams).toBool();
 	ini.endGroup();
 
 	return true;
@@ -4037,6 +4027,47 @@ static bool loadSettings(const WzString &filename)
 
 WzMultiOptionTitleUI::WzMultiOptionTitleUI(std::shared_ptr<WzTitleUI> parent) : parent(parent)
 {
+}
+
+static void printHostHelpMessagesToConsole()
+{
+	char buf[512] = { '\0' };
+	if (NetPlay.bComms)
+	{
+		if (NetPlay.isUPNP)
+		{
+			if (NetPlay.isUPNP_CONFIGURED)
+			{
+				ssprintf(buf, "%s", _("UPnP has been enabled."));
+			}
+			else
+			{
+				if (NetPlay.isUPNP_ERROR)
+				{
+					ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
+				}
+				else
+				{
+					ssprintf(buf, "%s", _("UPnP detection is in progress..."));
+				}
+			}
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		}
+		else
+		{
+			ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
+			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		}
+	}
+	if (challengeActive)
+	{
+		ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
+	}
+	else if (!bHosted)
+	{
+		ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
+	}
+	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 }
 
 void WzMultiOptionTitleUI::start()
@@ -4065,6 +4096,7 @@ void WzMultiOptionTitleUI::start()
 		ingame.structureLimits.clear();
 	}
 
+	/* Entering the first time */
 	if (!bReenter)
 	{
 		memset(&locked, 0, sizeof(locked)); // nothing is locked by default
@@ -4093,6 +4125,8 @@ void WzMultiOptionTitleUI::start()
 
 		loadMultiStats((char *)sPlayer, &nullStats);
 	}
+
+	/* Entering the first time with challenge */
 	if (!bReenter && challengeActive)
 	{
 		resetReadyStatus(false);
@@ -4115,6 +4149,7 @@ void WzMultiOptionTitleUI::start()
 		disableMultiButs();
 		addPlayerBox(true);
 	}
+	/* Re-entering or entering without a challenge */
 	else
 	{
 		addPlayerBox(false);								// Players
@@ -4123,43 +4158,7 @@ void WzMultiOptionTitleUI::start()
 
 		if (ingame.bHostSetup)
 		{
-			char buf[512] = {'\0'};
-			if (NetPlay.bComms)
-			{
-				if (NetPlay.isUPNP)
-				{
-					if (NetPlay.isUPNP_CONFIGURED)
-					{
-						ssprintf(buf, "%s", _("UPnP has been enabled."));
-					}
-					else
-					{
-						if (NetPlay.isUPNP_ERROR)
-						{
-							ssprintf(buf, "%s", _("UPnP detection failed. You must manually configure router yourself."));
-						}
-						else
-						{
-							ssprintf(buf, "%s", _("UPnP detection is in progress..."));
-						}
-					}
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-				}
-				else
-				{
-					ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
-				}
-			}
-			if (challengeActive)
-			{
-				ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
-			}
-			else if (!bHosted)
-			{
-				ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
-			}
-			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			printHostHelpMessagesToConsole();
 		}
 	}
 	// going back to multiop after setting limits up..
@@ -4172,6 +4171,8 @@ void WzMultiOptionTitleUI::start()
 
 	if (autogame_enabled() || hostlaunch == 3)
 	{
+		loadMapChallengeAndPlayerSettings(false, false);
+
 		if (hostlaunch == 3)
 		{
 			loadSettings("autohost/" + WzString::fromUtf8(wz_skirmish_test()));

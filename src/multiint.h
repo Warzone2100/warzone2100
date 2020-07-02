@@ -102,12 +102,7 @@ int getNextAIAssignment(const char *name);
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
-void intProcessConnection(UDWORD id);
-
 void updateLimitFlags();
-
-void runMultiOptions();
-bool startMultiOptions(bool bReenter);
 
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
