@@ -1,6 +1,12 @@
 cmake_minimum_required (VERSION 3.5)
 project (sdl-backend CXX)
 
+if(NOT (CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin"))
+	# Temporary workaround for systems with broken SDL2 CMake config (ex. imported target does not exist in "SDL2Targets.cmake")
+	# Can be manually set to "ON" to avoid using the CONFIG mode
+	OPTION(WZ_FINDSDL2_NOCONFIG "Disable trying to find SDL2 using CONFIG mode" OFF)
+endif()
+
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
@@ -42,7 +48,9 @@ endfunction()
 # Prefer finding SDL2 using CMake Config, to properly include any dependencies / linked libraries (with complete, imported targets)
 # - This should work for vcpkg-installed SDL2, as well as other installs that generate a full (proper) CMake Config,
 # - and is required to properly link with a static SDL2 library (at least on Windows and macOS)
-find_package(SDL2 ${SDL2_MIN_VERSION} CONFIG QUIET)
+if(NOT DEFINED WZ_FINDSDL2_NOCONFIG OR NOT WZ_FINDSDL2_NOCONFIG)
+	find_package(SDL2 ${SDL2_MIN_VERSION} CONFIG QUIET)
+endif()
 if(SDL2_FOUND)
 	if (TARGET SDL2::SDL2-static)
 		test_link_to_sdl_target(SDL2::SDL2-static LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
