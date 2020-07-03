@@ -1,18 +1,21 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 5,
+    "ecmaVersion": 6,
     "sourceType": "script",
     "ecmaFeatures": {
       "jsx": false,
       "globalReturn": false
     }
   },
+  "env": {
+	"es6": true
+  },
   "rules": {
     "no-undef": "off",
     "no-fallthrough": "off",
     "no-mixed-spaces-and-tabs": "off",
-    "no-console": "off",
+    "no-console": "error",
     "indent": "off",
     "semi": "off",
     "no-tabs": "off",
@@ -25,7 +28,6 @@
     "no-with": "off",
     "no-prototype-builtins": "off",
     "no-misleading-character-class": "off",
-    "no-async-promise-executor": "off",
     "no-unused-vars": "off",
     "no-cond-assign": ["error", "always"]
   },
