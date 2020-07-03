@@ -2156,7 +2156,7 @@ static void intSetSystemShadowStats(COMPONENT_STATS *psStats)
 static void intSetSensorStats(SENSOR_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, psStats->hasType(STAT_SENSOR), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_SENSOR), "stats have wrong type");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_SENSORRANGE, sensorRange(psStats, selectedPlayer));
@@ -2167,7 +2167,7 @@ static void intSetSensorStats(SENSOR_STATS *psStats)
 /* Set the shadow bar graphs for the sensor stats */
 static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 {
-	ASSERT(psStats == nullptr || psStats->hasType(STAT_SENSOR), "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_SENSOR), "stats have wrong type");
 
 	if (psStats)
 	{
@@ -2190,7 +2190,7 @@ static void intSetSensorShadowStats(SENSOR_STATS *psStats)
 static void intSetECMStats(ECM_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, psStats->hasType(STAT_ECM), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_ECM), "stats have wrong type");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_ECMPOWER, ecmRange(psStats, selectedPlayer));
@@ -2201,7 +2201,7 @@ static void intSetECMStats(ECM_STATS *psStats)
 /* Set the shadow bar graphs for the ECM stats */
 static void intSetECMShadowStats(ECM_STATS *psStats)
 {
-	ASSERT(psStats == nullptr || psStats->hasType(STAT_ECM), "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_ECM), "stats have wrong type");
 
 	if (psStats)
 	{
@@ -2223,7 +2223,7 @@ static void intSetECMShadowStats(ECM_STATS *psStats)
 static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, psStats->hasType(STAT_CONSTRUCT), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_CONSTRUCT), "stats have wrong type");
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_CONSTPOINTS,
@@ -2236,7 +2236,7 @@ static void intSetConstructStats(CONSTRUCT_STATS *psStats)
 /* Set the shadow bar graphs for the Constructor stats */
 static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 {
-	ASSERT(psStats == nullptr || psStats->hasType(STAT_CONSTRUCT), "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_CONSTRUCT), "stats have wrong type");
 
 	if (psStats)
 	{
@@ -2258,7 +2258,7 @@ static void intSetConstructShadowStats(CONSTRUCT_STATS *psStats)
 static void intSetRepairStats(REPAIR_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, psStats->hasType(STAT_REPAIR), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_REPAIR), "stats have wrong type");
 
 	/* power */
 	widgSetBarSize(psWScreen, IDDES_REPAIRPOINTS,
@@ -2271,7 +2271,7 @@ static void intSetRepairStats(REPAIR_STATS *psStats)
 /* Set the shadow bar graphs for the Repair stats */
 static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 {
-	ASSERT(psStats == nullptr || psStats->hasType(STAT_REPAIR), "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_REPAIR), "stats have wrong type");
 
 	if (psStats)
 	{
@@ -2294,7 +2294,7 @@ static void intSetRepairShadowStats(REPAIR_STATS *psStats)
 static void intSetWeaponStats(WEAPON_STATS *psStats)
 {
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, psStats->hasType(STAT_WEAPON), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_WEAPON), "stats have wrong type");
 
 	/* range */
 	widgSetBarSize(psWScreen, IDDES_WEAPRANGE, proj_GetLongRange(psStats, selectedPlayer));
@@ -2310,7 +2310,7 @@ static void intSetWeaponStats(WEAPON_STATS *psStats)
 /* Set the shadow bar graphs for the Weapon stats */
 static void intSetWeaponShadowStats(WEAPON_STATS *psStats)
 {
-	ASSERT(psStats == nullptr || psStats->hasType(STAT_WEAPON), "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_WEAPON), "stats have wrong type");
 
 	if (psStats)
 	{
@@ -2340,7 +2340,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 	W_FORM	*psForm;
 
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, psStats->hasType(STAT_BODY), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_BODY), "stats have wrong type");
 
 	/* set form tip to stats string */
 	widgSetTip(psWScreen, IDDES_BODYFORM, getName(psStats));
@@ -2366,7 +2366,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 /* Set the shadow bar graphs for the Body stats */
 static void intSetBodyShadowStats(BODY_STATS *psStats)
 {
-	ASSERT(psStats == nullptr || psStats->hasType(STAT_BODY), "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_BODY), "stats have wrong type");
 
 	if (psStats)
 	{
@@ -2736,7 +2736,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	UDWORD      weight;
 
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
-	ASSERT_OR_RETURN(, psStats->hasType(STAT_PROPULSION), "stats ref is out of range");
+	ASSERT_OR_RETURN(, psStats->hasType(STAT_PROPULSION), "stats have wrong type");
 
 	/* set form tip to stats string */
 	widgSetTip(psWScreen, IDDES_PROPFORM, getName(psStats));
@@ -2788,7 +2788,7 @@ static void intSetPropulsionShadowStats(PROPULSION_STATS *psStats)
 {
 	UDWORD      weight;
 
-	ASSERT(psStats == nullptr || psStats->hasType(STAT_PROPULSION), "stats ref is out of range");
+	ASSERT(psStats == nullptr || psStats->hasType(STAT_PROPULSION), "stats have wrong type");
 
 	/* Only set the shadow stats if they are the right type */
 	if (psStats &&
