@@ -57,7 +57,6 @@ struct MULTIPLAYERGAME
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/locked
-	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
 	bool		mapHasScavengers;
 	bool		isMapMod;					// if a map has mods
 	uint32_t	techLevel;					// what technology level is being used
@@ -130,7 +129,7 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define PING_LIMIT                              4000                    // If ping is bigger than this, then worry and panic, and don't even try showing the ping.
+#define PING_LIMIT				4000		// If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
 #define LEV_LOW					0
 #define LEV_MED					1
@@ -140,8 +139,6 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define TECH_2					2
 #define TECH_3					3
 #define TECH_4					4
-
-#define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 
 #define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
 // functions

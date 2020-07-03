@@ -322,7 +322,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	{
 		sendPlayerLeft(playerIndex);
 	}
-	game.skDiff[playerIndex] = 0;
+	NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 
 	if (!NetPlay.players[playerIndex].wzFiles.empty())
 	{

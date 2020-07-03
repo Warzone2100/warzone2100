@@ -6380,10 +6380,10 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("SAT_UPLINK", REF_SAT_UPLINK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("GATE", REF_GATE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND_CONTROL", REF_COMMAND_CONTROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("EASY", DIFFICULTY_EASY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("MEDIUM", DIFFICULTY_MEDIUM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("HARD", DIFFICULTY_HARD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("INSANE", DIFFICULTY_INSANE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("EASY", static_cast<int8_t>(AIDifficulty::EASY), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("MEDIUM", static_cast<int8_t>(AIDifficulty::MEDIUM), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("HARD", static_cast<int8_t>(AIDifficulty::HARD), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INSANE", static_cast<int8_t>(AIDifficulty::INSANE), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("STRUCTURE", OBJ_STRUCTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID", OBJ_DROID, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -6425,7 +6425,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	{
 		QScriptValue vector = engine->newObject();
 		vector.setProperty("name", QString(NetPlay.players[i].name), QScriptValue::ReadOnly | QScriptValue::Undeletable);  // QString cast to work around bug in Qt5 QScriptValue(char *) constructor.
-		vector.setProperty("difficulty", NetPlay.players[i].difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("difficulty", static_cast<int8_t>(NetPlay.players[i].difficulty), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("colour", NetPlay.players[i].colour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("position", NetPlay.players[i].position, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("team", NetPlay.players[i].team, QScriptValue::ReadOnly | QScriptValue::Undeletable);

@@ -416,8 +416,6 @@ void SPinit()
 {
 	uint8_t playercolor;
 
-	// clear out the skDiff array
-	memset(game.skDiff, 0x0, sizeof(game.skDiff));
 	NetPlay.bComms = false;
 	bMultiPlayer = false;
 	bMultiMessages = false;
@@ -425,7 +423,7 @@ void SPinit()
 	NET_InitPlayers();
 	NetPlay.players[0].allocated = true;
 	NetPlay.players[0].autoGame = false;
-	game.skDiff[0] = UBYTE_MAX;
+	NetPlay.players[0].difficulty = AIDifficulty::HUMAN;
 	game.maxPlayers = MAX_PLAYERS -1;	// Currently, 0 - 10 for a total of MAX_PLAYERS
 	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 	playercolor = war_GetSPcolor();

@@ -98,9 +98,10 @@ void sendOptions()
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
 
+	// FIXME: is this required?
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		NETuint8_t(&game.skDiff[i]);
+		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));
 	}
 
 	// Send the list of who is still joining
@@ -130,7 +131,7 @@ void sendOptions()
 		NETuint32_t(&structLimit.id);
 		NETuint32_t(&structLimit.limit);
 	}
-	updateLimitFlags();
+	updateStructureDisabledFlags();
 	NETuint8_t(&ingame.flags);
 
 	NETend();
@@ -170,7 +171,7 @@ void recvOptions(NETQUEUE queue)
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		NETuint8_t(&game.skDiff[i]);
+		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));
 	}
 
 	// Send the list of who is still joining
@@ -213,14 +214,6 @@ void recvOptions(NETQUEUE queue)
 
 	NETend();
 
-	// Do the skirmish slider settings if they are up
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		if (widgGetFromID(psWScreen, MULTIOP_SKSLIDE + i))
-		{
-			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
-		}
-	}
 	debug(LOG_INFO, "Rebuilding map list");
 	// clear out the old level list.
 	levShutDown();
@@ -330,9 +323,6 @@ void recvOptions(NETQUEUE queue)
 // Host Campaign.
 bool hostCampaign(char *sGame, char *sPlayer)
 {
-	PLAYERSTATS playerStats;
-	UDWORD		i;
-
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
 	freeMessages();
@@ -342,11 +332,11 @@ bool hostCampaign(char *sGame, char *sPlayer)
 		return false;
 	}
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		if (NetPlay.bComms)
 		{
-			game.skDiff[i] = 0;     	// disable AI
+			NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
 		}
 	}
 
@@ -358,7 +348,8 @@ bool hostCampaign(char *sGame, char *sPlayer)
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
-	loadMultiStats(sPlayer, &playerStats);				// stats stuff
+	PLAYERSTATS playerStats;
+	loadMultiStats(sPlayer, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
@@ -407,17 +398,11 @@ static bool gameInit()
 	for (player = 1; player < MAX_PLAYERS; player++)
 	{
 		// we want to remove disabled AI & all the other players that don't belong
-		if ((game.skDiff[player] == 0 || player >= game.maxPlayers) && player != scavengerPlayer())
+		if ((NetPlay.players[player].difficulty == AIDifficulty::DISABLED || player >= game.maxPlayers) && player != scavengerPlayer())
 		{
 			clearPlayer(player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
-	}
-
-	if (game.scavengers)	// FIXME - not sure if we still need this hack - Per
-	{
-		// ugly hack for now
-		game.skDiff[scavengerPlayer()] = DIFF_SLIDER_STOPS / 2;
 	}
 
 	unsigned playerCount = 0;

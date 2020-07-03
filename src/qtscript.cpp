@@ -614,7 +614,7 @@ bool updateScripts()
 	return true;
 }
 
-QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty)
+QScriptEngine *loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
@@ -656,7 +656,7 @@ QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty
 	//== ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
 	if (game.type == SKIRMISH)
 	{
-		engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		engine->globalObject().setProperty("difficulty", static_cast<int8_t>(difficulty), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	else // campaign
 	{
@@ -740,7 +740,7 @@ QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty
 
 bool loadGlobalScript(WzString path)
 {
-	return loadPlayerScript(std::move(path), selectedPlayer, 0);
+	return loadPlayerScript(std::move(path), selectedPlayer, AIDifficulty::DISABLED);
 }
 
 bool saveScriptStates(const char *filename)
@@ -972,7 +972,7 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text)
 
 void jsAutogameSpecific(const WzString &name, int player)
 {
-	QScriptEngine *engine = loadPlayerScript(name, player, DIFFICULTY_MEDIUM);
+	QScriptEngine *engine = loadPlayerScript(name, player, AIDifficulty::MEDIUM);
 	if (!engine)
 	{
 		console("Failed to load selected AI! Check your logs to see why.");

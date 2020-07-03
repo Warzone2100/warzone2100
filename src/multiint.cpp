@@ -223,7 +223,7 @@ static int difficultyIcon(int difficulty);
 // map previews..
 
 static const char *difficultyList[] = { N_("Easy"), N_("Medium"), N_("Hard"), N_("Insane") };
-static const int difficultyValue[] = { 1, 10, 15, 20 };
+static const AIDifficulty difficultyValue[] = { AIDifficulty::EASY, AIDifficulty::MEDIUM, AIDifficulty::HARD, AIDifficulty::INSANE };
 static struct
 {
 	bool scavengers;
@@ -415,7 +415,7 @@ void loadMultiScripts()
 	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
 		debug(LOG_SAVE, "Loading scavenger AI for player %d", scavengerPlayer());
-		loadPlayerScript("multiplay/script/scavfact.js", scavengerPlayer(), DIFFICULTY_EASY);
+		loadPlayerScript("multiplay/script/scavfact.js", scavengerPlayer(), AIDifficulty::EASY);
 	}
 
 	// Restore data hashes, since AI and scavenger scripts aren't run on all clients.
@@ -1160,18 +1160,18 @@ static const LimitIcon limitIcons[] =
 	{nullptr,  N_("Structure Limits Enforced."),  IMAGE_DARK_LOCKED},
 };
 
-void updateLimitFlags()
+void updateStructureDisabledFlags()
 {
-	unsigned i;
-	unsigned flags = ingame.flags & MPFLAGS_FORCELIMITS;
-
+	// The host works out the flags.
 	if (!ingame.bHostSetup)
 	{
-		return;  // The host works out the flags.
+		return;
 	}
 
+	unsigned flags = ingame.flags & MPFLAGS_FORCELIMITS;
+
 	assert(MPFLAGS_FORCELIMITS == (1 << (ARRAY_SIZE(limitIcons) - 1)));
-	for (i = 0; i < ARRAY_SIZE(limitIcons) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
+	for (unsigned i = 0; i < ARRAY_SIZE(limitIcons) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
 	{
 		int stat = getStructStatFromName(limitIcons[i].stat);
 		bool disabled = stat >= 0 && asStructureStats[stat].upgrade[0].limit == 0;
@@ -1185,22 +1185,22 @@ static void updateLimitIcons()
 {
 	widgDelete(psWScreen, MULTIOP_NO_SOMETHING);
 	int y = 2;
-	bool skip = false;
+	bool formBackgroundAdded = false;
 	for (int i = 0; i < ARRAY_SIZE(limitIcons); ++i)
 	{
 		if ((ingame.flags & 1 << i) != 0)
 		{
-			if (!skip)
+			// only add the background once. Must be added *before* the "icons" as the form acts as their parent
+			if (!formBackgroundAdded)
 			{
-				// only add this once.
 				addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, MULTIOP_ICON_LIMITS_X2, MULTIOP_ICON_LIMITS_Y2);
+				formBackgroundAdded = true;
 			}
 
 			addMultiBut(psWScreen, MULTIOP_NO_SOMETHING, MULTIOP_NO_SOMETHINGY + i, MULTIOP_NO_SOMETHINGX, y,
 			            35, 28, _(limitIcons[i].desc),
 			            limitIcons[i].icon, limitIcons[i].icon, limitIcons[i].icon);
 			y += 28 + 3;
-			skip = true;
 		}
 	}
 }
@@ -1509,7 +1509,7 @@ static void addGameOptions()
 	            _("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// Add any relevant factory disabled icons.
-	updateLimitFlags();
+	updateStructureDisabledFlags();
 	updateLimitIcons();
 }
 
@@ -2168,8 +2168,8 @@ static void drawReadyButton(UDWORD player)
 
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
 	{
-		int icon = difficultyIcon(NetPlay.players[player].difficulty);
-		int playerDifficulty = NetPlay.players[player].difficulty;
+		int playerDifficulty = static_cast<int8_t>(NetPlay.players[player].difficulty);
+		int icon = difficultyIcon(playerDifficulty);
 		char tooltip[128 + 255];
 		sstrcpy(tooltip, _(difficultyList[playerDifficulty]));
 		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[playerDifficulty];
@@ -2257,7 +2257,7 @@ void addPlayerBox(bool players)
 
 		for (int i = 0; i < game.maxPlayers; i++)
 		{
-			if (game.skDiff[i] || isHumanPlayer(i))
+			if (NetPlay.players[i].difficulty != AIDifficulty::DISABLED || isHumanPlayer(i))
 			{
 				int myTeam = getPlayerTeam(i);
 				if (team == -1)
@@ -2635,7 +2635,7 @@ static unsigned int repositionHumanSlots()
 	return pos;
 }
 
-static void loadMapSettings0(LEVEL_DATASET *mapData)
+static void updateMapWidgets(LEVEL_DATASET *mapData)
 {
 	sstrcpy(game.map, mapData->pName);
 	game.hash = levGetFileHash(mapData);
@@ -2650,7 +2650,7 @@ static void loadMapSettings0(LEVEL_DATASET *mapData)
 		widgHide(psWScreen, MULTIOP_MAP_MOD);
 	}
 
-	WzString name = formatGameName(mapData->pName);
+	WzString name = formatGameName(game.map);
 	widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 }
 
@@ -2749,8 +2749,7 @@ static void loadMapPlayerSettings(WzConfig& ini)
 			{
 				if (strcasecmp(difficultyList[j], value.toUtf8().c_str()) == 0)
 				{
-					game.skDiff[i] = difficultyValue[j];
-					NetPlay.players[i].difficulty = j;
+					NetPlay.players[i].difficulty = difficultyValue[j];
 				}
 			}
 		}
@@ -2832,8 +2831,10 @@ static void loadMapChallengeAndPlayerSettings(bool skipChallenge, bool skipPlaye
 		loadMapChallengeSettings(ini);
 	}
 
-	if (!skipPlayers)
+	const bool bIsOnline = NetPlay.bComms && bHosted;
+	if (!skipPlayers && !bIsOnline)
 	{
+		
 		loadMapPlayerSettings(ini);
 	}
 }
@@ -2884,16 +2885,9 @@ static void randomizeOptions()
 			while (levels.empty()); // restart when there are no maps for a random number of players
 
 			int pickedLevel = rand() % levels.size();
-			LEVEL_DATASET *mapData = nullptr;
-			for (LEVEL_LIST::iterator it = levels.begin(); it != levels.end(); ++it, --pickedLevel)
-			{
-				if (pickedLevel <= 0)
-				{
-					mapData = *it;
-					break;
-				}
-			}
-			loadMapSettings0(mapData);
+			LEVEL_DATASET *mapData = levels[pickedLevel];
+
+			updateMapWidgets(mapData);
 			loadMapPreview(false);
 			loadMapChallengeAndPlayerSettings(false, false);
 		}
@@ -2951,7 +2945,7 @@ static void randomizeOptions()
 		}
 		createLimitSet();
 		applyLimitSet();
-		updateLimitFlags();
+		updateStructureDisabledFlags();
 		updateLimitIcons();
 
 		// Game options
@@ -3218,6 +3212,9 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			break;
 		}
 		bHosted = true;
+		// FIXME: Load the player settings with the map behind-the-scenes?
+		// - requires resetting players on each map change (if host is not active yet)
+		// - requires bypassing resetting the players during `hostCampaign()`
 		loadMapChallengeAndPlayerSettings(true, false);
 
 		widgDelete(psWScreen, MULTIOP_REFRESH);
@@ -3286,7 +3283,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 	if (id == MULTIOP_AI_CLOSED || id == MULTIOP_AI_OPEN)		// common code
 	{
-		game.skDiff[aiChooserUp] = 0;   // disable AI for this slot
+		NetPlay.players[difficultyChooserUp].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
@@ -3297,8 +3294,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 	if (id >= MULTIOP_DIFFICULTY_CHOOSE_START && id <= MULTIOP_DIFFICULTY_CHOOSE_END && difficultyChooserUp != -1)
 	{
 		int idx = id - MULTIOP_DIFFICULTY_CHOOSE_START;
-		NetPlay.players[difficultyChooserUp].difficulty = idx;
-		game.skDiff[difficultyChooserUp] = difficultyValue[idx];
+		NetPlay.players[difficultyChooserUp].difficulty = difficultyValue[idx];
 		NETBroadcastPlayerInfo(difficultyChooserUp);
 		closeDifficultyChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
@@ -3310,7 +3306,6 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		int idx = id - MULTIOP_AI_START;
 		NetPlay.players[aiChooserUp].ai = idx;
 		sstrcpy(NetPlay.players[aiChooserUp].name, getAIName(aiChooserUp));
-		game.skDiff[aiChooserUp] = difficultyValue[NetPlay.players[aiChooserUp].difficulty];    // set difficulty, in case re-enabled
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
 		addPlayerBox(!ingame.bHostSetup || bHosted);
@@ -3426,7 +3421,6 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 						NetPlay.players[i].ai = NetPlay.players[player].ai;
 						NetPlay.players[i].difficulty = NetPlay.players[player].difficulty;
 						sstrcpy(NetPlay.players[i].name, getAIName(player));
-						game.skDiff[i] = game.skDiff[player];
 						NETBroadcastPlayerInfo(i);
 					}
 				}
@@ -3783,8 +3777,6 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 TITLECODE WzMultiOptionTitleUI::run()
 {
 	static UDWORD	lastrefresh = 0;
-	char                    oldGameMap[128];
-	int                     oldMaxPlayers;
 	PLAYERSTATS		playerStats;
 	W_CONTEXT		context;
 
@@ -3852,9 +3844,6 @@ TITLECODE WzMultiOptionTitleUI::run()
 		WzString sTemp;
 		if (runMultiRequester(id, &id, &sTemp, &mapData, &isHoverPreview))
 		{
-			Sha256 oldGameHash;
-			bool oldGameIsMapMod;
-
 			switch (id)
 			{
 			case MULTIOP_PNAME:
@@ -3879,7 +3868,30 @@ TITLECODE WzMultiOptionTitleUI::run()
 				break;
 			case MULTIOP_MAP:
 				{
-					if (NetPlay.bComms && bHosted && !isHoverPreview)
+					if (isHoverPreview)
+					{
+						char oldGameMap[128];
+
+						sstrcpy(oldGameMap, game.map);
+						Sha256 oldGameHash = game.hash;
+						bool oldGameIsMapMod = game.isMapMod;
+						uint8_t oldMaxPlayers = game.maxPlayers;
+
+						sstrcpy(game.map, mapData->pName);
+						game.hash = levGetFileHash(mapData);
+						game.maxPlayers = mapData->players;
+						game.isMapMod = CheckForMod(mapData->realFileName);
+						loadMapPreview(!isHoverPreview);
+
+						/* Change game info to match the previous selection if hover preview was displayed */
+						sstrcpy(game.map, oldGameMap);
+						game.hash = oldGameHash;
+						game.maxPlayers = oldMaxPlayers;
+						game.isMapMod = oldGameIsMapMod;
+						break;
+					}
+
+					if (NetPlay.bComms && bHosted)
 					{
 						uint8_t numHumans = NET_numHumanPlayers();
 						if (numHumans > mapData->players)
@@ -3897,37 +3909,30 @@ TITLECODE WzMultiOptionTitleUI::run()
 							break;
 						}
 					}
-					sstrcpy(oldGameMap, game.map);
-					oldGameHash = game.hash;
-					oldMaxPlayers = game.maxPlayers;
-					oldGameIsMapMod = game.isMapMod;
 
+					uint8_t oldMaxPlayers = game.maxPlayers;
+
+					// TODO: Helper method for loading and previewing the map?
 					sstrcpy(game.map, mapData->pName);
 					game.hash = levGetFileHash(mapData);
 					game.maxPlayers = mapData->players;
 					game.isMapMod = CheckForMod(mapData->realFileName);
 					loadMapPreview(!isHoverPreview);
+					loadMapChallengeAndPlayerSettings(false, false);
 
-					if (isHoverPreview)
-					{
-						sstrcpy(game.map, oldGameMap);
-						game.hash = oldGameHash;
-						game.maxPlayers = oldMaxPlayers;
-						game.isMapMod = oldGameIsMapMod;
-					}
-					else
-					{
-						loadMapChallengeAndPlayerSettings(false, true);
-					}
+					WzString name = formatGameName(game.map);
+					widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
+
 
 					//Reset player slots if it's a smaller map.
-					// FIXME: This should also reset (without sending messages) the slots when setting up a skirmish game. Currently it does not.
-					if (NetPlay.isHost && NetPlay.bComms && bHosted && !isHoverPreview && oldMaxPlayers > game.maxPlayers)
+					// FIXME: This should also reset (without sending messages (?)) the slots when setting up a skirmish game. Currently it does not. (?)
+					//        (need to make sure this is correct)
+					if (NetPlay.isHost && NetPlay.bComms && bHosted && oldMaxPlayers > game.maxPlayers)
 					{
 						resetPlayerPositions();
 						repositionHumanSlots();
 
-						const std::vector<uint8_t> &humans = NET_getHumanPlayers();
+						const std::vector<uint8_t>& humans = NET_getHumanPlayers();
 						size_t playerInc = 0;
 
 						for (uint8_t slotInc = 0; slotInc < game.maxPlayers && playerInc < humans.size(); ++slotInc)
@@ -3937,19 +3942,16 @@ TITLECODE WzMultiOptionTitleUI::run()
 						}
 					}
 
-					WzString name = formatGameName(game.map);
-					widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
 					addGameOptions();
 
-					if (NetPlay.isHost && bHosted && NetPlay.bComms && !isHoverPreview)
+					if (NetPlay.isHost && bHosted && NetPlay.bComms)
 					{
 						sendOptions();
 						NETsetLobbyOptField(game.map, NET_LOBBY_OPT_FIELD::MAPNAME);
 						NETregisterServer(WZ_SERVER_UPDATE);
 					}
-
-					break;
 				}
+				break;
 			default:
 				loadMapPreview(false);  // Restore the preview of the old map.
 				break;
@@ -4106,10 +4108,12 @@ void WzMultiOptionTitleUI::start()
 		difficultyChooserUp = -1;
 		positionChooserUp = -1;
 		colourChooserUp = -1;
+
+		/* Reset player difficulties and colors */
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
-			game.skDiff[i] = (DIFF_SLIDER_STOPS / 2);	// reset AI (turn it on again)
-			setPlayerColour(i, i);						//reset all colors as well
+			NetPlay.players[i].difficulty = AIDifficulty::MEDIUM;
+			setPlayerColour(i, i);
 		}
 		game.isMapMod = false;			// reset map-mod status
 		game.mapHasScavengers = true; // FIXME, should default to false
@@ -4221,7 +4225,7 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
 
-	if (game.skDiff[i])
+	if (NetPlay.players[i].difficulty != AIDifficulty::DISABLED)
 	{
 		iV_DrawImage(FrontImages, IMAGE_TEAM0 + NetPlay.players[i].team, x + 2, y + 8);
 	}
@@ -4466,7 +4470,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				}
 			}
 		}
-		game.skDiff[j] = UBYTE_MAX;	// set AI difficulty to 0xFF (i.e. not an AI)
+		NetPlay.players[j].difficulty = AIDifficulty::HUMAN;
 	}
 	else	// AI
 	{
@@ -4501,7 +4505,7 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int j = psWidget->UserData;
 
 	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	if (NetPlay.players[j].wzFiles.empty() && game.skDiff[j])
+	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED)
 	{
 		int player = getPlayerColour(j);
 		STATIC_ASSERT(MAX_PLAYERS <= 16);

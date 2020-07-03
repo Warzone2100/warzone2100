@@ -35,6 +35,7 @@
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
 #define AI_OPEN           -2
+#define AI_DEFAULT		   0
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
 
@@ -102,7 +103,10 @@ int getNextAIAssignment(const char *name);
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
-void updateLimitFlags();
+/**
+ * Updates structure limit "flags". Flags indicate which structures are disabled.
+ */
+void updateStructureDisabledFlags();
 
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
@@ -176,7 +180,7 @@ void resetVoteData();
 #define MULTIOP_PLAYERS			10231
 #define MULTIOP_PLAYERSX		360
 #define MULTIOP_PLAYERSY		1
-#define MULTIOP_PLAYER_START		10232		//list of players
+#define MULTIOP_PLAYER_START	10232		//list of players
 #define MULTIOP_PLAYER_END		10249
 #define MULTIOP_PLAYERSW		263
 #define MULTIOP_PLAYERSH		380
@@ -191,13 +195,13 @@ void resetVoteData();
 
 #define MULTIOP_TEAMCHOOSER_FORM	102800
 #define MULTIOP_TEAMCHOOSER			102810
-#define MULTIOP_TEAMCHOOSER_END         102841
+#define MULTIOP_TEAMCHOOSER_END     102841
 #define MULTIOP_TEAMCHOOSER_KICK	10289
 
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
-#define MULTIOP_READY_START             (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
-#define	MULTIOP_READY_END               (MULTIOP_READY_START + MAX_PLAYERS - 1)
+#define MULTIOP_READY_START         (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
+#define	MULTIOP_READY_END           (MULTIOP_READY_START + MAX_PLAYERS - 1)
 #define MULTIOP_READY_WIDTH			41
 #define MULTIOP_READY_HEIGHT		38
 
@@ -277,9 +281,6 @@ void resetVoteData();
 #define MULTIOP_RANDOM			10299
 #define MULTIOP_BASETYPE		10300
 #define MULTIOP_TECHLEVEL		10301
-
-#define MULTIOP_SKSLIDE			102842 //10313
-#define MULTIOP_SKSLIDE_END		102873 //10320
 
 #define MULTIOP_MAP_PREVIEW 920000
 

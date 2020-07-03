@@ -241,7 +241,6 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 	int row = 0;
 	m.setRowCount(0);
 	m.setHorizontalHeaderLabels({"Key", "Value"});
-	KEYVAL("game.skDiff", QString::number(game.skDiff[i]));
 	KEYVAL("ingame.skScores score", QString::number(ingame.skScores[i][0]));
 	KEYVAL("ingame.skScores kills", QString::number(ingame.skScores[i][1]));
 	KEYVAL("NetPlay.players.name", NetPlay.players[i].name);
@@ -250,7 +249,7 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 	KEYVAL("NetPlay.players.allocated", QString::number(NetPlay.players[i].allocated));
 	KEYVAL("NetPlay.players.team", QString::number(NetPlay.players[i].team));
 	KEYVAL("NetPlay.players.ai", QString::number(NetPlay.players[i].ai));
-	KEYVAL("NetPlay.players.difficulty", QString::number(NetPlay.players[i].difficulty));
+	KEYVAL("NetPlay.players.difficulty", QString::number(static_cast<int8_t>(NetPlay.players[i].difficulty)));
 	KEYVAL("NetPlay.players.autoGame", QString::number(NetPlay.players[i].autoGame));
 	KEYVAL("NetPlay.players.IPtextAddress", NetPlay.players[i].IPtextAddress);
 	KEYVAL("Current power", QString::number(getPower(i)));

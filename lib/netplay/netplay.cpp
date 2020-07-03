@@ -382,9 +382,9 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 	}
 	else
 	{
-		NetPlay.players[i].ai = 0;			// default AI
+		NetPlay.players[i].ai = AI_DEFAULT;
 	}
-	NetPlay.players[i].difficulty = 1;		// normal
+	NetPlay.players[i].difficulty = AIDifficulty::DEFAULT;
 	NetPlay.players[i].wzFiles.clear();
 	ingame.JoiningInProgress[i] = false;
 }
@@ -415,9 +415,7 @@ std::vector<uint8_t> NET_getHumanPlayers(void)
 
 void NET_InitPlayers(bool initTeams)
 {
-	unsigned int i;
-
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NET_InitPlayer(i, true, initTeams);
 		NetPlay.players[i].name[0] = '\0';
@@ -450,8 +448,8 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint32_t(&NetPlay.players[index[n]].team);
 		NETbool(&NetPlay.players[index[n]].ready);
 		NETint8_t(&NetPlay.players[index[n]].ai);
-		NETint8_t(&NetPlay.players[index[n]].difficulty);
-		NETuint8_t(&game.skDiff[index[n]]);  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
+		int8_t difficulty = static_cast<int8_t>(NetPlay.players[index[n]].difficulty);
+		NETint8_t(&difficulty);
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -1701,8 +1699,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NetPlay.players[index].position = position;
 					NetPlay.players[index].team = team;
 					NetPlay.players[index].ai = ai;
-					NetPlay.players[index].difficulty = difficulty;
-					game.skDiff[index] = skDiff;  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
+					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
@@ -3050,8 +3047,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
                  SDWORD one, SDWORD two, SDWORD three, SDWORD four,
                  UDWORD plyrs)	// # of players.
 {
-	unsigned int i;
-
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
@@ -3100,7 +3095,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 		return false;
 	}
 	// allocate socket storage for all possible players
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		connected_bsocket[i] = nullptr;
 		NETinitQueue(NETnetQueue(i));

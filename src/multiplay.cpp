@@ -1275,7 +1275,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 			{
 				sstrcat(display, ", ");
 			}
-			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && game.skDiff[i])))
+			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED)))
 			{
 				sstrcat(display, getPlayerName(posTable[curStr[0] - '0']));
 				sendto[i] = true;

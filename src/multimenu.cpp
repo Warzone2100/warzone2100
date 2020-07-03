@@ -1103,7 +1103,7 @@ bool intAddMultiMenu()
 	// add any players
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && game.skDiff[i]))
+		if (isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED))
 		{
 			addMultiPlayer(i, NetPlay.players[i].position);
 		}

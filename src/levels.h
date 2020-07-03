@@ -73,7 +73,7 @@ struct LEVEL_DATASET
 	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
 };
 
-typedef std::list<LEVEL_DATASET *> LEVEL_LIST;
+typedef std::vector<LEVEL_DATASET *> LEVEL_LIST;
 
 LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 
