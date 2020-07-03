@@ -1350,7 +1350,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 
 		psBuilding->pos.x = x;
 		psBuilding->pos.y = y;
-		psBuilding->rot.direction = (direction + 0x2000) & 0xC000;
+		psBuilding->rot.direction = snapDirection(direction);
 		psBuilding->rot.pitch = 0;
 		psBuilding->rot.roll = 0;
 
@@ -1744,7 +1744,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getName(psStats));
 
 	Vector3i pos(xy, INT32_MIN);
-	Rotation rot((direction + 0x2000) & 0xC000, 0, 0); // Round direction to nearest 90°.
+	Rotation rot(snapDirection(direction), 0, 0); // Round direction to nearest 90°.
 
 	StructureBounds b = getStructureBounds(psStats, xy, direction);
 	for (int j = 0; j <= b.size.y; ++j)
@@ -1829,7 +1829,7 @@ static Vector2i defaultAssemblyPointPos(STRUCTURE *psBuilding)
 {
 	const Vector2i size = psBuilding->size() + Vector2i(1, 1);  // Adding Vector2i(1, 1) to select the middle of the tile outside the building instead of the corner.
 	Vector2i pos = psBuilding->pos;
-	switch ((psBuilding->rot.direction + 0x2000) & 0xC000)
+	switch (snapDirection(psBuilding->rot.direction))
 	{
 	case 0x0000: return pos + TILE_UNITS/2 * Vector2i( size.x,  size.y);
 	case 0x4000: return pos + TILE_UNITS/2 * Vector2i( size.x, -size.y);
@@ -2160,7 +2160,7 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	}
 
 	/* Round direction to nearest 90°. */
-	uint16_t direction = (psStructure->rot.direction + 0x2000) & 0xC000;
+	uint16_t direction = snapDirection(psStructure->rot.direction);
 
 	/* We sort all adjacent tiles by their Manhattan distance to the
 	target droid exit tile, misplaced by (1/3, 1/4) tiles.

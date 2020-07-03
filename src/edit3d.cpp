@@ -203,7 +203,7 @@ bool process3DBuilding()
 
 	sBuildDetails.x = buildSite.xTL = map_coord(bv.x - worldSize.x/2);
 	sBuildDetails.y = buildSite.yTL = map_coord(bv.y - worldSize.y/2);
-	if (((player.r.y + 0x2000) & 0x4000) == 0)
+	if ((snapDirection(player.r.y) & 0x4000) == 0)
 	{
 		buildSite.xBR = buildSite.xTL + sBuildDetails.width - 1;
 		buildSite.yBR = buildSite.yTL + sBuildDetails.height - 1;
@@ -270,8 +270,7 @@ bool found3DBuildLocTwo(Vector2i &pos, Vector2i &pos2)
 
 	wallDrag.status = DRAG_INACTIVE;
 	STRUCTURE_STATS *stats = (STRUCTURE_STATS *)sBuildDetails.psStats;
-	uint16_t direction = (player.r.y + 0x2000) & 0xC000;
-	LineBuild lb = calcLineBuild(stats, direction, wallDrag.pos, wallDrag.pos2);
+	LineBuild lb = calcLineBuild(stats, player.r.y, wallDrag.pos, wallDrag.pos2);
 	pos = lb.begin;
 	pos2 = lb.back();
 

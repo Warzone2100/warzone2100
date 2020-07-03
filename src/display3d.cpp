@@ -1702,17 +1702,18 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 			state = SS_BLUEPRINT_INVALID;
 		}
 		// we are placing a building or a delivery point
-		if (sBuildDetails.psStats->hasType(STAT_STRUCTURE))
+		if (STRUCTURE_STATS *stats = castStructureStats(sBuildDetails.psStats))
 		{
 			// it's a building
+			uint16_t direction = snapDirection(player.r.y);
 			if (wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
 			{
-				drawLineBuild((STRUCTURE_STATS *)sBuildDetails.psStats, wallDrag.pos, wallDrag.pos2, (player.r.y + 0x2000) & 0xC000, state);
+				drawLineBuild(stats, wallDrag.pos, wallDrag.pos2, direction, state);
 			}
 			else
 			{
 				unsigned width, height;
-				if (((player.r.y + 0x2000) & 0x4000) == 0)
+				if ((direction & 0x4000) == 0)
 				{
 					width  = sBuildDetails.width;
 					height = sBuildDetails.height;
@@ -1725,7 +1726,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 				}
 				// a single building
 				Vector2i pos(world_coord(sBuildDetails.x) + world_coord(width) / 2, world_coord(sBuildDetails.y) + world_coord(height) / 2);
-				Blueprint blueprint((STRUCTURE_STATS *)sBuildDetails.psStats, pos, (player.r.y + 0x2000) & 0xC000, 0, state);
+				Blueprint blueprint(stats, pos, direction, 0, state);
 				blueprints.push_back(blueprint);
 			}
 		}
