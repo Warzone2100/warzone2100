@@ -424,6 +424,10 @@ function eventDestroyed(obj){
 }
 
 function eventChat(sender, to, message) {
+	
+	if (!running) return;
+
+	
 //	debugMsg('from: '+sender+', to: '+to+', msg: '+message, 'chat')
 //	debug("'"+message+"', "+sender);
 	if(!release)

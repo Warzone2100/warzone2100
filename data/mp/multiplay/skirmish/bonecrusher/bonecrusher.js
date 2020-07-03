@@ -154,7 +154,7 @@ var bc_ally=[]; //Союзные ИИ BoneCrusher-ы
 
 var avail_research = [];	//Массив возможных исследований, заполняется в функции doResearch();
 
-var scavengerPlayer = -1;
+//var scavengerPlayer = -1;
 
 var buildersMain = newGroup();
 var buildersHunters = newGroup();
@@ -374,7 +374,7 @@ function init(){
 	debugMsg("Warzone2100 "+version, "init");
 	
 	//Определяем мусорщиков
-	scavengerPlayer = (scavengers) ? Math.max(7,maxPlayers) : -1;
+//	scavengerPlayer = (scavengers) ? Math.max(7,maxPlayers) : -1;
 	if(scavengers)debugMsg("На карте присудствуют гопники! {"+scavengerPlayer+"}", "init");
 	else debugMsg("На карте отсутствуют гопники", "init");
 	
@@ -520,6 +520,7 @@ function init(){
 	if(policy['build'] == 'rich'){
 
 		research_way.unshift(
+			["R-Wpn-MG1Mk1"],
 			["R-Sys-Engineering01"],
 			["R-Struc-Research-Module"],
 			["R-Struc-Factory-Cyborg"],
