@@ -26,7 +26,7 @@ jobs:
     - name: Build the Docker image
       run: |
         cd docker/fedora-latest/
-        docker build -t fedora .
+        docker build . --pull --no-cache -t fedora
         cd ../..
     - name: CMake Configure
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
@@ -48,7 +48,7 @@ jobs:
     - name: Build the Docker image
       run: |
         cd docker/fedora-latest-m32/
-        docker build -t fedora .
+        docker build . --pull --no-cache -t fedora
         cd ../..
     - name: CMake Configure
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code fedora cmake '-H.' -Bbuild -DCMAKE_TOOLCHAIN_FILE=.ci/cmake/Toolchain-Linux-cross-m32.cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
