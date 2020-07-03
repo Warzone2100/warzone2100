@@ -169,6 +169,7 @@ const research_green = [
 "R-Defense-WallTower02", //защита лёгкая пушка
 "R-Struc-Power-Upgrade03a",
 "R-Struc-Research-Upgrade09",
+"R-Vehicle-Prop-Hover",
 "R-Sys-MobileRepairTurretHvy",
 "R-Sys-Autorepair-General",             //Автопочинка
 //"R-Sys-ECM-Upgrade01",	//Глушилка
@@ -210,6 +211,7 @@ const research_yellow = [
 "R-Wpn-Flamer01Mk1",
 "R-Struc-PowerModuleMk1",
 "R-Struc-Power-Upgrade03a",
+"R-Vehicle-Prop-Hover",
 "R-Defense-MortarPit-Incenediary",
 "R-Struc-Factory-Cyborg",
 "R-Wpn-Flamer-ROF03",
@@ -262,6 +264,7 @@ const research_orange = [
 "R-Struc-VTOLPad",
 "R-Wpn-Bomb04",
 "R-Struc-Power-Upgrade03a",
+"R-Vehicle-Prop-Hover",
 //"R-Sys-ECM-Upgrade02",	//Глушилка
 "R-Vehicle-Body05",				//Средняя начальная броня
 "R-Cyborg-Metals09",
@@ -307,6 +310,7 @@ const research_red = [
 "R-Sys-MobileRepairTurret01",   //Паяльник
 "R-Wpn-MG-Damage08",			//Depleted Uranium MG Bullets
 "R-Wpn-Rocket01-LtAT",
+"R-Vehicle-Prop-Hover",
 "R-Vehicle-Body05",				//Средняя начальная броня
 "R-Struc-Research-Upgrade09",
 "R-Sys-MobileRepairTurretHvy",
