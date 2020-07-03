@@ -113,7 +113,34 @@ chatting['loose'] = [
 	'How dare you!',
 	'wtf?.. lol, gg',
 	'nice cheat man.. bye'
+];
 
+chatting['berserk'] = [
+'Time to kick someone\'s ..',
+'You made me angry',
+'You\'re clearly pissing me off',
+'You just got a problem',
+'I have a great deal on oil, and what\'s your trump card?',
+'Who needs oil. Oil for suckers'
+];
+
+chatting['seer'] = [
+'You\'re a leather bag of brains, and I\'m just a cheater.',
+'Leather bag, aren\'t you afraid?',
+'I can see everything.',
+'Tons of oil - check, see the entire map - check.'
+];
+
+chatting['no'] = [
+'I\'m sorry, I can\'t do this.',
+'No, I\'m not ready for that',
+'Sorry, but no.',
+'Unfortunately, no',
+'No, no, and no again',
+'No',
+'Nope',
+'I would love to, but no.',
+'Well, whatever you say.. but.. wait, no!'
 ];
 
 chatting['dev'] = ['This is dev version, dont use it! Данная версия бота не является релизом и может содержать баги! Не используйте её!'];

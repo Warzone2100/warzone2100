@@ -1091,6 +1091,8 @@ function addPrimaryWay(){
 		debugMsg("research_primary strict", 'research');
 		return true;
 	}
+	//Oh shi... desync ahead.
+	/*
 	if(researchStrategy == "Random"){
 		shuffle(research_primary);
 		for(i in research_primary){
@@ -1099,6 +1101,7 @@ function addPrimaryWay(){
 		debugMsg("research_primary random", 'research');
 		return true;
 	}
+	*/
 	return false;
 }
 
@@ -1251,6 +1254,8 @@ var isFixVTOL = function(obj) {
 }
 
 //from: http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+//Oh shi... desync ahead.
+/*
 function shuffle(a) {
 	var j, x, i;
 	for (i = a.length; i; i--) {
@@ -1260,6 +1265,7 @@ function shuffle(a) {
 		a[j] = x;
 	}
 }
+*/
 
 function posRnd(pos, axis){
 	var p=pos+Math.round(Math.random()*2-1);

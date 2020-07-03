@@ -1,5 +1,5 @@
-const vernum    = "1.01";
-const verdate   = "08.12.2019";
+const vernum    = "1.02";
+const verdate   = "03.07.2020";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
 const release	= true;
@@ -733,6 +733,7 @@ function letsRockThisFxxxingWorld(init){
 			reactWarriorsTimer = 2000;
 			func_buildersOrder_timer = 5000+me*100;
 			
+			/* NO Cheat Anymore!
 			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
 				berserk = true;
 				debugMsg('Berserk activated', 'init');
@@ -750,7 +751,7 @@ function letsRockThisFxxxingWorld(init){
 					seer = true;
 				}
 			}
-			
+			*/
 		}
 	
 		if(!release){
