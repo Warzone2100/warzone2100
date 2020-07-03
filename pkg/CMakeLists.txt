@@ -218,6 +218,16 @@ list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.svn")
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.hg/")
 list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.bzr/")
 
+# Ignore various CI / Github-config related files
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.ci/")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.github/")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.cirrus.yml")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.lgtm.yml")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\.travis.yml")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\appveyor.yml")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\azure-pipelines.yml")
+list (APPEND CPACK_SOURCE_IGNORE_FILES "/\\\\crowdin.yml")
+
 # Ignore development / runtime created files
 list (APPEND CPACK_SOURCE_IGNORE_FILES "~$")
 list (APPEND CPACK_SOURCE_IGNORE_FILES "\\\\.DS_Store$")
