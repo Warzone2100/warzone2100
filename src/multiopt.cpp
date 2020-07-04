@@ -476,7 +476,6 @@ bool multiGameShutdown()
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
 
 	sendLeavingMsg();							// say goodbye
-	updateMultiStatsGames();					// update games played.
 
 	st = getMultiStats(selectedPlayer);	// save stats
 

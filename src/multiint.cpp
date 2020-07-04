@@ -4366,7 +4366,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		PLAYERSTATS stat = getMultiStats(j);
-		if (stat.wins + stat.losses < 5)
+		if (stat.played < 5)
 		{
 			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
 		}
@@ -4389,8 +4389,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 3);
 			}
 
-			// star 2 games played (Cannot use stat.played, since that's just the number of times the player exited via the game menu, not the number of games played.)
-			eval = stat.wins + stat.losses;
+			// star 2 games played
+			eval = stat.played;
 			if (eval > 200)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 13);
