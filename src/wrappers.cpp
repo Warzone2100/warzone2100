@@ -303,6 +303,8 @@ bool displayGameOver(bool bDidit, bool showBackDrop)
 	}
 	if (bMultiPlayer)
 	{
+		updateMultiStatsGames(); // update games played.
+
 		PLAYERSTATS st = getMultiStats(selectedPlayer);
 		saveMultiStats(getPlayerName(selectedPlayer), getPlayerName(selectedPlayer), &st);
 	}
