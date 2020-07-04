@@ -76,7 +76,7 @@ function cam_eventChat(from, to, message)
 	}
 	if (message === "research available")
 	{
-		while (true)
+		while (true) // eslint-disable-line no-constant-condition
 		{
 			var research = enumResearch();
 			if (research.length === 0)
