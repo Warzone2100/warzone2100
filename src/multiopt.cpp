@@ -29,6 +29,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/wzapp.h"
 
+#include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/ivis_opengl/piestate.h"
 
 #include "map.h"
@@ -245,6 +246,7 @@ void recvOptions(NETQUEUE queue)
 		}
 		else
 		{
+			pal_Init(); // Palette could be modded.
 			return false;  // Have the file already.
 		}
 
