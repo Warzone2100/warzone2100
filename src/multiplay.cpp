@@ -29,6 +29,7 @@
 #include <chrono>
 
 #include "lib/framework/frame.h"
+#include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/physfs_ext.h"
@@ -1707,6 +1708,7 @@ bool recvMapFileData(NETQUEUE queue)
 		levShutDown();
 		levInitialise();
 		rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
+		pal_Init(); //Update palettes.
 		if (!buildMapList())
 		{
 			return false;
