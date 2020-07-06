@@ -263,7 +263,7 @@ TITLECODE WzMultiLimitTitleUI::run()
 				ingame.flags &= ~MPFLAGS_FORCELIMITS;
 			}
 			//inform others
-			if (bHosted)
+			if (NetPlay.isHost)
 			{
 				sendOptions();
 			}
@@ -346,7 +346,7 @@ void createLimitSet()
 		}
 	}
 
-	if (bHosted)
+	if (NetPlay.isHost)
 	{
 		sendOptions();
 	}

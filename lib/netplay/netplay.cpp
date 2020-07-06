@@ -151,6 +151,7 @@ static GAMESTRUCT	gamestruct;
 // update flags
 bool netPlayersUpdated;
 
+
 /**
  * Socket used for these purposes:
  *  * Host a game, be a server.
@@ -417,6 +418,7 @@ void NET_InitPlayers(bool initTeams)
 {
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
+		// FIXME: Do not reset the player team, name, ai, position or difficulty here. Do it when the level changes, before loading player info
 		NET_InitPlayer(i, true, initTeams);
 		NetPlay.players[i].name[0] = '\0';
 		NETinitQueue(NETnetQueue(i));
@@ -448,8 +450,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint32_t(&NetPlay.players[index[n]].team);
 		NETbool(&NetPlay.players[index[n]].ready);
 		NETint8_t(&NetPlay.players[index[n]].ai);
-		int8_t difficulty = static_cast<int8_t>(NetPlay.players[index[n]].difficulty);
-		NETint8_t(&difficulty);
+		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -509,6 +510,7 @@ static int NET_CreatePlayer(char const *name)
 		NETlogEntry("Could not find a place for player!", SYNC_FLAG, index);
 		return -1;
 	}
+	debug(LOG_INFO, "Creating player with ID: %d", index);
 
 	char buf[250] = {'\0'};
 
@@ -1647,11 +1649,11 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			int32_t team = 0;
 			int8_t ai = 0;
 			int8_t difficulty = 0;
-			uint8_t skDiff = 0;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 			NETuint32_t(&indexLen);
+			debug(LOG_ERROR, "Receiving %u players", indexLen);
 			if (indexLen > MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
 			{
 				debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated: %u", indexLen);
@@ -1690,7 +1692,6 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbool(&NetPlay.players[index].ready);
 				NETint8_t(&ai);
 				NETint8_t(&difficulty);
-				NETuint8_t(&skDiff);
 
 				// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
 				if (playerQueue.index == NetPlay.hostPlayer)

@@ -301,6 +301,14 @@ extern PLAYER_IP	*IPlist;
 extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
 
+#define ASSERT_HOST_ONLY(failAction) \
+	if (!NetPlay.isHost) \
+	{ \
+		ASSERT(false, "Host only routine detected for client!"); \
+		failAction; \
+	}
+
+
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.
 int NETinit(bool bFirstCall);

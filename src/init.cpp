@@ -394,7 +394,12 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add global and multiplay mods
 				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
-				if (NetPlay.isHost || !NetPlay.bComms || ingame.bHostSetup)
+
+				// FIXME: It should be enough to check that the side is host? The !NetPlay.bComms should be unnecessary too,
+				//        as side == HOST is true in skirmish/challenge, too (?)
+				const bool bIsHosting = NetPlay.isHost || ingame.side == InGameSide::HOST_OR_SINGLEPLAYER;
+				const bool bIsSinglePlayer = !NetPlay.bComms;
+				if (bIsSinglePlayer || bIsHosting)
 				{
 					addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
 					addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);

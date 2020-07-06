@@ -429,7 +429,7 @@ failure:
 success:
 	closeChallenges();
 	challengeActive = true;
-	ingame.bHostSetup = true;
+	ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 	return true;
 }

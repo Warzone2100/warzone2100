@@ -152,7 +152,6 @@ extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern bool bSendingMap;			// used to indicate we are sending a map
 
-bool						bHosted			= false;				//we have set up a game
 char						sPlayer[128];							// player name (to be used)
 bool multiintDisableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
 
@@ -215,7 +214,6 @@ static void		closeAiChooser();
 static void		closeDifficultyChooser();
 static bool		SendColourRequest(UBYTE player, UBYTE col);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
-static bool		safeToUseColour(UDWORD player, UDWORD col);
 bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
@@ -1163,7 +1161,7 @@ static const LimitIcon limitIcons[] =
 void updateStructureDisabledFlags()
 {
 	// The host works out the flags.
-	if (!ingame.bHostSetup)
+	if (ingame.side != InGameSide::HOST_OR_SINGLEPLAYER)
 	{
 		return;
 	}
@@ -1229,15 +1227,11 @@ static void sendVoteData(uint8_t currentVote)
 
 static uint8_t getVoteTotal()
 {
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return true;
-	}
+	ASSERT_HOST_ONLY(return true);
 
 	uint8_t total = 0;
 
-	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (isHumanPlayer(i))
 		{
@@ -1259,11 +1253,7 @@ static uint8_t getVoteTotal()
 
 static bool recvVote(NETQUEUE queue)
 {
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return true;
-	}
+	ASSERT_HOST_ONLY(return true);
 
 	uint8_t newVote;
 	uint32_t player;
@@ -1314,11 +1304,7 @@ static void setupVoteChoice()
 
 static bool canChangeMapOrRandomize()
 {
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return true;
-	}
+	ASSERT_HOST_ONLY(return true);
 
 	uint8_t numHumans = NET_numHumanPlayers();
 	bool allowed = (static_cast<float>(getVoteTotal()) / static_cast<float>(numHumans)) > 0.5f;
@@ -1393,7 +1379,7 @@ static void addGameOptions()
 		widgSetButtonState(psWScreen, MULTIOP_MAP_ICON, WBUT_DISABLE);
 	}
 	// password box
-	if (ingame.bHostSetup && NetPlay.bComms)
+	if (NetPlay.bComms && ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
 		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
 		auto *pPasswordButton = dynamic_cast<WzMultiButton*>(widgGetFromID(psWScreen, MULTIOP_PASSWORD_BUT));
@@ -1461,44 +1447,48 @@ static void addGameOptions()
 	mapPreviewButton->addButton(0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
 	optionsList->addWidgetToLayout(mapPreviewButton);
 
-	if (ingame.bHostSetup)
+	/* Add additional controls if we are (or going to be) hosting the game */
+	if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
 		MultibuttonWidget *structLimitsButton = new MultibuttonWidget(optionsList);
 		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
 		structLimitsButton->setLabel(challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
 		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
 		optionsList->addWidgetToLayout(structLimitsButton);
-	}
-	if (ingame.bHostSetup && !challengeActive)
-	{
-		MultibuttonWidget *randomButton = new MultibuttonWidget(optionsList);
-		randomButton->id = MULTIOP_RANDOM;
-		randomButton->setLabel(_("Random Game Options"));
-		randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
-		randomButton->setButtonMinClickInterval(GAME_TICKS_PER_SEC / 2);
-		optionsList->addWidgetToLayout(randomButton);
-	}
 
-	if (ingame.bHostSetup && bHosted && !challengeActive)
-	{
-		//Out of room for the GUI so show this after hosting
-		MultichoiceWidget *TechnologyChoice = new MultichoiceWidget(optionsList, game.techLevel);
-		TechnologyChoice->id = MULTIOP_TECHLEVEL;
-		TechnologyChoice->setLabel(_("Tech"));
-		TechnologyChoice->addButton(TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
-		TechnologyChoice->addButton(TECH_2, Image(FrontImages, IMAGE_TECHMED), Image(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
-		TechnologyChoice->addButton(TECH_3, Image(FrontImages, IMAGE_TECHHI), Image(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
-		TechnologyChoice->addButton(TECH_4, Image(FrontImages, IMAGE_COMPUTER_Y), Image(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
-		optionsList->addWidgetToLayout(TechnologyChoice);
-	}
+		/* ...and even more controls if we are not starting a challenge */
+		if (!challengeActive)
+		{
+			MultibuttonWidget *randomButton = new MultibuttonWidget(optionsList);
+			randomButton->id = MULTIOP_RANDOM;
+			randomButton->setLabel(_("Random Game Options"));
+			randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
+			randomButton->setButtonMinClickInterval(GAME_TICKS_PER_SEC / 2);
+			optionsList->addWidgetToLayout(randomButton);
 
-	if (ingame.bHostSetup && !bHosted && !challengeActive)
-	{
-		MultibuttonWidget *hostButton = new MultibuttonWidget(optionsList);
-		hostButton->id = MULTIOP_HOST;
-		hostButton->setLabel(_("Start Hosting Game"));
-		hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
-		optionsList->addWidgetToLayout(hostButton);
+			/* Add the tech level choice if we have already started hosting. The only real reason this is displayed only after
+			   starting the host is due to the fact that there is not enough room before the "Host Game" button is hidden.		*/
+			if (NetPlay.isHost)
+			{
+				MultichoiceWidget* TechnologyChoice = new MultichoiceWidget(optionsList, game.techLevel);
+				TechnologyChoice->id = MULTIOP_TECHLEVEL;
+				TechnologyChoice->setLabel(_("Tech"));
+				TechnologyChoice->addButton(TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
+				TechnologyChoice->addButton(TECH_2, Image(FrontImages, IMAGE_TECHMED), Image(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
+				TechnologyChoice->addButton(TECH_3, Image(FrontImages, IMAGE_TECHHI), Image(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
+				TechnologyChoice->addButton(TECH_4, Image(FrontImages, IMAGE_COMPUTER_Y), Image(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
+				optionsList->addWidgetToLayout(TechnologyChoice);
+			}
+			/* If not hosting (yet), add the button for starting the host. */
+			else
+			{
+				MultibuttonWidget *hostButton = new MultibuttonWidget(optionsList);
+				hostButton->id = MULTIOP_HOST;
+				hostButton->setLabel(_("Start Hosting Game"));
+				hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
+				optionsList->addWidgetToLayout(hostButton);
+			}
+		}
 	}
 
 	// cancel
@@ -1792,15 +1782,11 @@ static bool SendTeamRequest(UBYTE player, UBYTE chosenTeam)
 
 bool recvTeamRequest(NETQUEUE queue)
 {
-	UBYTE	player, team;
-
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return true;
-	}
+	ASSERT_HOST_ONLY(return true);
 
 	NETbeginDecode(queue, NET_TEAMREQUEST);
+
+	UBYTE player, team;
 	NETuint8_t(&player);
 	NETuint8_t(&team);
 	NETend();
@@ -1847,16 +1833,12 @@ static bool SendReadyRequest(UBYTE player, bool bReady)
 
 bool recvReadyRequest(NETQUEUE queue)
 {
-	UBYTE	player;
-	bool	bReady = false;
-
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return true;
-	}
+	ASSERT_HOST_ONLY(return true);
 
 	NETbeginDecode(queue, NET_READY_REQUEST);
+
+	UBYTE player;
+	bool bReady = false;
 	NETuint8_t(&player);
 	NETbool(&bReady);
 	NETend();
@@ -2006,15 +1988,11 @@ static bool SendPositionRequest(UBYTE player, UBYTE position)
 
 bool recvColourRequest(NETQUEUE queue)
 {
-	UBYTE	player, col;
-
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return true;
-	}
+	ASSERT_HOST_ONLY(return true);
 
 	NETbeginDecode(queue, NET_COLOURREQUEST);
+
+	UBYTE player, col;
 	NETuint8_t(&player);
 	NETuint8_t(&col);
 	NETend();
@@ -2039,15 +2017,11 @@ bool recvColourRequest(NETQUEUE queue)
 
 bool recvPositionRequest(NETQUEUE queue)
 {
-	UBYTE	player, position;
-
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client!");
-		return true;
-	}
+	ASSERT_HOST_ONLY(return true);
 
 	NETbeginDecode(queue, NET_POSITIONREQUEST);
+
+	UBYTE	player, position;
 	NETuint8_t(&player);
 	NETuint8_t(&position);
 	NETend();
@@ -2552,7 +2526,7 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 
 	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 
-	if (bHosted)											// cancel a hosted game.
+	if (NetPlay.isHost) // cancel a hosted game.
 	{
 		// annouce we are leaving...
 		debug(LOG_NET, "Host is quitting game...");
@@ -2560,7 +2534,6 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		NETend();
 		sendLeavingMsg();								// say goodbye
 		NETclose();										// quit running game.
-		bHosted = false;								// stop host mode.
 		ActivityManager::instance().hostLobbyQuit();
 		changeTitleUI(wzTitleUICurrent);				// refresh options screen.
 		ingame.localJoiningInProgress = false;
@@ -2581,7 +2554,9 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		NetPlay.wzFiles.clear();
 		ingame.localJoiningInProgress = false;			// reset local flags
 		ingame.localOptionsReceived = false;
-		if (!ingame.bHostSetup && NetPlay.isHost)			// joining and host was transferred.
+
+		// joining and host was transferred.
+		if (ingame.side == InGameSide::MULTIPLAYER_CLIENT && NetPlay.isHost)
 		{
 			NetPlay.isHost = false;
 		}
@@ -2657,25 +2632,49 @@ static void updateMapWidgets(LEVEL_DATASET *mapData)
 static void loadMapChallengeSettings(WzConfig& ini)
 {
 	ini.beginGroup("locked"); // GUI lockdown
-	locked.power = ini.value("power", challengeActive).toBool();
-	locked.alliances = ini.value("alliances", challengeActive).toBool();
-	locked.teams = ini.value("teams", challengeActive).toBool();
-	locked.difficulty = ini.value("difficulty", challengeActive).toBool();
-	locked.ai = ini.value("ai", challengeActive).toBool();
-	locked.scavengers = ini.value("scavengers", challengeActive).toBool();
-	locked.position = ini.value("position", challengeActive).toBool();
-	locked.bases = ini.value("bases", challengeActive).toBool();
-	ini.endGroup();
-
-	ini.beginGroup("defaults");
-	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
-	game.base = ini.value("bases", game.base).toInt();
-	game.alliance = ini.value("alliances", game.alliance).toInt();
-	if (ini.contains("powerLevel"))
 	{
-		game.power = ini.value("powerLevel", game.power).toInt();
+		locked.power = ini.value("power", challengeActive).toBool();
+		locked.alliances = ini.value("alliances", challengeActive).toBool();
+		locked.teams = ini.value("teams", challengeActive).toBool();
+		locked.difficulty = ini.value("difficulty", challengeActive).toBool();
+		locked.ai = ini.value("ai", challengeActive).toBool();
+		locked.scavengers = ini.value("scavengers", challengeActive).toBool();
+		locked.position = ini.value("position", challengeActive).toBool();
+		locked.bases = ini.value("bases", challengeActive).toBool();
 	}
 	ini.endGroup();
+
+	if (hostlaunch == 3)
+	{
+		ini.beginGroup("challenge");
+		{
+			sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
+			game.hash = levGetMapNameHash(game.map);
+			game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+			game.scavengers = ini.value("scavengers", game.scavengers).toBool();
+			game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
+			game.power = ini.value("powerLevel", game.power).toInt();
+			game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
+			sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
+			game.techLevel = ini.value("techLevel", game.techLevel).toInt();
+
+			// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
+			//             Keeping it around in case mods use it.
+			locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
+		}
+		ini.endGroup();
+	}
+	else
+	{
+		ini.beginGroup("defaults");
+		{
+			game.scavengers = ini.value("scavengers", game.scavengers).toBool();
+			game.base = ini.value("bases", game.base).toInt();
+			game.alliance = ini.value("alliances", game.alliance).toInt();
+			game.power = ini.value("powerLevel", game.power).toInt();
+		}
+		ini.endGroup();
+	}
 }
 
 
@@ -2813,6 +2812,8 @@ static void loadMapChallengeAndPlayerSettings(bool skipChallenge, bool skipPlaye
 	}
 	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
+		// TODO: Reset players here (?)
+
 		/* ensure all players have a name in One Player Skirmish games */
 		if (!NetPlay.bComms) {
 			for (int i = 0; i < MAX_PLAYERS; ++i) {
@@ -2831,7 +2832,8 @@ static void loadMapChallengeAndPlayerSettings(bool skipChallenge, bool skipPlaye
 		loadMapChallengeSettings(ini);
 	}
 
-	const bool bIsOnline = NetPlay.bComms && bHosted;
+	// TODO: Could this be isHostingOnlineGame() (for consistency)
+	const bool bIsOnline = NetPlay.bComms && NetPlay.isHost;
 	if (!skipPlayers && !bIsOnline)
 	{
 		
@@ -2855,129 +2857,127 @@ static void randomizeLimit(const char *name)
 /* Generate random options */
 static void randomizeOptions()
 {
-	if (NetPlay.bComms && bHosted && !canChangeMapOrRandomize())
+	RUN_ONLY_ON_SIDE(InGameSide::HOST_OR_SINGLEPLAYER)
+
+	if (NetPlay.bComms && NetPlay.isHost && !canChangeMapOrRandomize())
 	{
 		return;
 	}
 
-	if (ingame.bHostSetup)
+	resetPlayerPositions();
+
+	// Don't randomize the map once hosting for true multiplayer has started
+	if (!NetPlay.isHost || !(bMultiPlayer && NetPlay.bComms != 0))
 	{
-		resetPlayerPositions();
-
-		// Don't randomize the map once hosting for true multiplayer has started
-		if (!bHosted || !(bMultiPlayer && NetPlay.bComms != 0))
+		// Pick a map for a number of players and tech level
+		game.techLevel = (rand() % 4) + 1;
+		LEVEL_LIST levels;
+		do
 		{
-			// Pick a map for a number of players and tech level
-			game.techLevel = (rand() % 4) + 1;
-			LEVEL_LIST levels;
-			do
+			// don't kick out already joined players because of randomize
+			int players = NET_numHumanPlayers();
+			int minimumPlayers = std::max(players, 2);
+			current_numplayers = minimumPlayers;
+			if (minimumPlayers < MAX_PLAYERS_IN_GUI)
 			{
-				// don't kick out already joined players because of randomize
-				int players = NET_numHumanPlayers();
-				int minimumPlayers = std::max(players, 2);
-				current_numplayers = minimumPlayers;
-				if (minimumPlayers < MAX_PLAYERS_IN_GUI)
-				{
-					current_numplayers += (rand() % (MAX_PLAYERS_IN_GUI - minimumPlayers));
-				}
-				levels = enumerateMultiMaps(game.techLevel, current_numplayers);
+				current_numplayers += (rand() % (MAX_PLAYERS_IN_GUI - minimumPlayers));
 			}
-			while (levels.empty()); // restart when there are no maps for a random number of players
-
-			int pickedLevel = rand() % levels.size();
-			LEVEL_DATASET *mapData = levels[pickedLevel];
-
-			updateMapWidgets(mapData);
-			loadMapPreview(false);
-			loadMapChallengeAndPlayerSettings(false, false);
+			levels = enumerateMultiMaps(game.techLevel, current_numplayers);
 		}
+		while (levels.empty()); // restart when there are no maps for a random number of players
 
-		// Reset and randomize player positions, also to guard
-		// against case where in the previous map some players
-		// took slots, which aren't available anymore
+		int pickedLevel = rand() % levels.size();
+		LEVEL_DATASET *mapData = levels[pickedLevel];
 
-		unsigned int pos = repositionHumanSlots();
+		updateMapWidgets(mapData);
+		loadMapPreview(false);
+		loadMapChallengeAndPlayerSettings(false, false);
+	}
 
-		// Fill with AIs if places remain
-		for (int i = 0; i < current_numplayers; i++)
+	// Reset and randomize player positions, also to guard
+	// against case where in the previous map some players
+	// took slots, which aren't available anymore
+
+	unsigned pos = repositionHumanSlots();
+
+	// Fill with AIs if places remain
+	for (int i = 0; i < current_numplayers; i++)
+	{
+		if (!isHumanPlayer(i) && !(game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot()))
 		{
-			if (!isHumanPlayer(i) && !(game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot()))
+			// Skip the scavenger slot
+			if (game.mapHasScavengers && pos == scavengerSlot())
 			{
-				// Skip the scavenger slot
-				if (game.mapHasScavengers && pos == scavengerSlot())
-				{
-					pos++;
-				}
-				NetPlay.players[i].position = pos;
-				NETBroadcastPlayerInfo(i);
 				pos++;
 			}
+			NetPlay.players[i].position = pos;
+			NETBroadcastPlayerInfo(i);
+			pos++;
 		}
+	}
 
-		// Randomize positions
-		for (int i = 0; i < current_numplayers; i++)
-		{
-			SendPositionRequest(i, NetPlay.players[rand() % current_numplayers].position);
-		}
+	// Randomize positions
+	for (int i = 0; i < current_numplayers; i++)
+	{
+		SendPositionRequest(i, NetPlay.players[rand() % current_numplayers].position);
+	}
 
-		// Structure limits are simply 0 or max, only for NO_TANK, NO_CYBORG, NO_VTOL, NO_UPLINK, NO_LASSAT.
-		if (!bLimiterLoaded || !asStructureStats)
+	// Structure limits are simply 0 or max, only for NO_TANK, NO_CYBORG, NO_VTOL, NO_UPLINK, NO_LASSAT.
+	if (!bLimiterLoaded || !asStructureStats)
+	{
+		initLoadingScreen(true);
+		if (resLoad("wrf/limiter_data.wrf", 503))
 		{
-			initLoadingScreen(true);
-			if (resLoad("wrf/limiter_data.wrf", 503))
-			{
-				bLimiterLoaded = true;
-			}
-			closeLoadingScreen();
+			bLimiterLoaded = true;
 		}
-		resetLimits();
-		for (int i = 0; i < ARRAY_SIZE(limitIcons) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
-		{
-			randomizeLimit(limitIcons[i].stat);
-		}
-		if (rand() % 2 == 0)
-		{
-			ingame.flags |= MPFLAGS_FORCELIMITS;
-		}
-		else
-		{
-			ingame.flags &= ~MPFLAGS_FORCELIMITS;
-		}
-		createLimitSet();
-		applyLimitSet();
-		updateStructureDisabledFlags();
-		updateLimitIcons();
+		closeLoadingScreen();
+	}
+	resetLimits();
+	for (int i = 0; i < ARRAY_SIZE(limitIcons) - 1; ++i)	// skip last item, MPFLAGS_FORCELIMITS
+	{
+		randomizeLimit(limitIcons[i].stat);
+	}
+	if (rand() % 2 == 0)
+	{
+		ingame.flags |= MPFLAGS_FORCELIMITS;
+	}
+	else
+	{
+		ingame.flags &= ~MPFLAGS_FORCELIMITS;
+	}
+	createLimitSet();
+	applyLimitSet();
+	updateStructureDisabledFlags();
+	updateLimitIcons();
 
-		// Game options
-		if (!locked.scavengers && game.mapHasScavengers)
-		{
-			game.scavengers = rand() % 2;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->choose(game.scavengers);
-		}
+	// Game options
+	if (!locked.scavengers && game.mapHasScavengers)
+	{
+		game.scavengers = rand() % 2;
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->choose(game.scavengers);
+	}
 
-		if (!locked.alliances)
-		{
-			game.alliance = rand() % 4;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->choose(game.alliance);
-		}
-		if (!locked.power)
-		{
-			game.power = rand() % 3;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->choose(game.power);
-		}
-		if (!locked.bases)
-		{
-			game.base = rand() % 3;
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->choose(game.base);
-		}
+	if (!locked.alliances)
+	{
+		game.alliance = rand() % 4;
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_ALLIANCES))->choose(game.alliance);
+	}
+	if (!locked.power)
+	{
+		game.power = rand() % 3;
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_POWER))->choose(game.power);
+	}
+	if (!locked.bases)
+	{
+		game.base = rand() % 3;
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->choose(game.base);
+	}
 
-		if (bHosted)
-		{
-			((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_TECHLEVEL))->choose(game.techLevel);
-			
-			disableMultiButs();
-			resetReadyStatus(true);
-		}
+	if (NetPlay.isHost)
+	{
+		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_TECHLEVEL))->choose(game.techLevel);
+
+		resetReadyStatus(true);
 	}
 }
 
@@ -2990,7 +2990,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 	PLAYERSTATS playerStats;
 
 	// host, who is setting up the game
-	if (ingame.bHostSetup)
+	if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
 		switch (id)												// Options buttons
 		{
@@ -3030,7 +3030,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			debug(LOG_WZ, "processMultiopWidgets[MULTIOP_MAP_ICON]: %s.wrf", MultiCustomMapsPath);
 			addMultiRequest(MultiCustomMapsPath, ".wrf", MULTIOP_MAP, current_numplayers);
 
-			if (NetPlay.isHost && bHosted && NetPlay.bComms)
+			if (NetPlay.isHost && NetPlay.bComms)
 			{
 				sendOptions();
 
@@ -3046,14 +3046,14 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 	}
 
 	// host who is setting up or has hosted
-	if (ingame.bHostSetup) // || NetPlay.isHost) // FIXME Was: if(ingame.bHostSetup);{} ??? Note the ; !
+	if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
 		switch (id)
 		{
 		case MULTIOP_GAMETYPE:
 			game.scavengers = ((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->currentValue();
 			resetReadyStatus(false);
-			if (bHosted)
+			if (NetPlay.isHost)
 			{
 				sendOptions();
 			}
@@ -3065,10 +3065,9 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 			resetReadyStatus(false);
 
-			if (bHosted)
+			if (NetPlay.isHost)
 			{
 				sendOptions();
-				disableMultiButs();
 			}
 			break;
 
@@ -3078,7 +3077,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			resetReadyStatus(false);
 			netPlayersUpdated = true;
 
-			if (bHosted)
+			if (NetPlay.isHost)
 			{
 				sendOptions();
 			}
@@ -3089,7 +3088,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 			resetReadyStatus(false);
 
-			if (bHosted)
+			if (NetPlay.isHost)
 			{
 				sendOptions();
 			}
@@ -3101,7 +3100,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 			resetReadyStatus(false);
 
-			if (bHosted)
+			if (NetPlay.isHost)
 			{
 				sendOptions();
 			}
@@ -3179,7 +3178,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		setMultiStats(selectedPlayer, playerStats, true);
 		netPlayersUpdated = true;
 
-		if (NetPlay.isHost && bHosted && NetPlay.bComms)
+		if (NetPlay.isHost && NetPlay.bComms)
 		{
 			sendOptions();
 			NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
@@ -3211,11 +3210,6 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 			break;
 		}
-		bHosted = true;
-		// FIXME: Load the player settings with the map behind-the-scenes?
-		// - requires resetting players on each map change (if host is not active yet)
-		// - requires bypassing resetting the players during `hostCampaign()`
-		loadMapChallengeAndPlayerSettings(true, false);
 
 		widgDelete(psWScreen, MULTIOP_REFRESH);
 		widgDelete(psWScreen, MULTIOP_HOST);
@@ -3223,12 +3217,12 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 		ingame.localOptionsReceived = true;
 
-		addGameOptions();									// update game options box.
+		addGameOptions(); // update game options box.
 		addChatBox();
 
 		disableMultiButs();
 
-		addPlayerBox(!ingame.bHostSetup || bHosted);	//to make sure host can't skip player selection menu (sets game.skdiff to UBYTE_MAX for humans)
+		addPlayerBox(true);
 		break;
 
 	case MULTIOP_RANDOM:
@@ -3251,10 +3245,10 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		if (!challengeActive)
 		{
-			if (NetPlay.bComms && !NetPlay.isHost && !bHosted && !ingame.bHostSetup)
+			if (NetPlay.bComms && ingame.side == InGameSide::MULTIPLAYER_CLIENT && !NetPlay.isHost)
 			{
-				uint8_t vote = 0;
-				sendVoteData(vote); //remove a potential "allow" vote if we gracefully leave
+				// remove a potential "allow" vote if we gracefully leave
+				sendVoteData(0);
 			}
 			NETGameLocked(false);		// reset status on a cancel
 			stopJoining(parent);
@@ -3262,7 +3256,6 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		else
 		{
 			NETclose();
-			bHosted = false;
 			ingame.localJoiningInProgress = false;
 			changeTitleMode(SINGLE);
 			addChallenges();
@@ -3283,10 +3276,10 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 	if (id == MULTIOP_AI_CLOSED || id == MULTIOP_AI_OPEN)		// common code
 	{
-		NetPlay.players[difficultyChooserUp].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
+		NetPlay.players[aiChooserUp].difficulty = AIDifficulty::DISABLED; // disable AI for this slot
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
-		addPlayerBox(!ingame.bHostSetup || bHosted);
+		addPlayerBox(true);
 		resetReadyStatus(false);
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	}
@@ -3297,7 +3290,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		NetPlay.players[difficultyChooserUp].difficulty = difficultyValue[idx];
 		NETBroadcastPlayerInfo(difficultyChooserUp);
 		closeDifficultyChooser();
-		addPlayerBox(!ingame.bHostSetup || bHosted);
+		addPlayerBox(true);
 		resetReadyStatus(false);
 	}
 
@@ -3306,9 +3299,10 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		int idx = id - MULTIOP_AI_START;
 		NetPlay.players[aiChooserUp].ai = idx;
 		sstrcpy(NetPlay.players[aiChooserUp].name, getAIName(aiChooserUp));
+		NetPlay.players[aiChooserUp].difficulty = AIDifficulty::MEDIUM;
 		NETBroadcastPlayerInfo(aiChooserUp);
 		closeAiChooser();
-		addPlayerBox(!ingame.bHostSetup || bHosted);
+		addPlayerBox(true);
 		resetReadyStatus(false);
 		ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	}
@@ -3340,7 +3334,9 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		debug(LOG_WZ, "Changed team for player %d to %d", teamChooserUp, NetPlay.players[teamChooserUp].team);
 
 		closeTeamChooser();
-		addPlayerBox(!ingame.bHostSetup || bHosted);	//restore initial options screen
+
+		// restore player list
+		addPlayerBox(true);
 	}
 
 	// 'ready' button
@@ -3397,7 +3393,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		else if (positionChooserUp == player)
 		{
 			closePositionChooser();	// changed his mind
-			addPlayerBox(!ingame.bHostSetup || bHosted);
+			addPlayerBox(true);
 		}
 		else if (positionChooserUp >= 0)
 		{
@@ -3405,7 +3401,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			resetReadyStatus(false);		// will reset only locally if not a host
 			SendPositionRequest(positionChooserUp, NetPlay.players[player].position);
 			closePositionChooser();
-			addPlayerBox(!ingame.bHostSetup || bHosted);
+			addPlayerBox(true);
 		}
 		else if (!NetPlay.players[player].allocated && !locked.ai && NetPlay.isHost
 		         && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
@@ -3424,7 +3420,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 						NETBroadcastPlayerInfo(i);
 					}
 				}
-				addPlayerBox(!ingame.bHostSetup || bHosted);
+				addPlayerBox(true);
 				resetReadyStatus(false);
 			}
 			else
@@ -3438,7 +3434,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 	    && !locked.difficulty && NetPlay.isHost && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 	{
 		addDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
-		addPlayerBox(!ingame.bHostSetup || bHosted);
+		addPlayerBox(true);
 	}
 
 	STATIC_ASSERT(MULTIOP_COLCHOOSER + MAX_PLAYERS - 1 <= MULTIOP_COLCHOOSER_END);
@@ -3447,7 +3443,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		resetReadyStatus(false, true);		// will reset only locally if not a host
 		SendColourRequest(colourChooserUp, id - MULTIOP_COLCHOOSER);
 		closeColourChooser();
-		addPlayerBox(!ingame.bHostSetup || bHosted);
+		addPlayerBox(true);
 	}
 
 	if (id == MULTIOP_TEAMCHOOSER_KICK)
@@ -3463,11 +3459,12 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 /* Start a multiplayer or skirmish game */
 void startMultiplayerGame()
 {
-	if (!bHosted)
+	if (!NetPlay.isHost)
 	{
-		debug(LOG_ERROR, "Multiple start requests received when we already started.");
+		debug(LOG_ERROR, "Tried to start game when host was already started!");
 		return;
 	}
+
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
 	bMultiMessages = true;
@@ -3505,8 +3502,6 @@ void startMultiplayerGame()
 	debug(LOG_NET, "title mode STARTGAME is set--Starting Game!");
 	changeTitleMode(STARTGAME);
 
-	bHosted = false;
-
 	if (NetPlay.isHost)
 	{
 		sendTextMessage(_("Host is Starting Game"), true);
@@ -3540,13 +3535,9 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 				break;
 			}
 
-		case NET_FILE_CANCELLED:					// host only routine
+		case NET_FILE_CANCELLED:
 			{
-				if (!NetPlay.isHost)				// only host should act
-				{
-					ASSERT(false, "Host only routine detected for client!");
-					break;
-				}
+				ASSERT_HOST_ONLY(break);
 
 				Sha256 hash;
 				hash.setZero();
@@ -3593,7 +3584,7 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 			recvReadyRequest(queue);
 
 			// If hosting and game not yet started, try to start the game if everyone is ready.
-			if (NetPlay.isHost && bHosted && multiplayPlayersReady(false))
+			if (NetPlay.isHost && multiplayPlayersReady(false))
 			{
 				startMultiplayerGame();
 			}
@@ -3680,7 +3671,6 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 				bMultiPlayer = true;
 				bMultiMessages = true;
 				changeTitleMode(STARTGAME);
-				bHosted = false;
 
 				// Start the game before processing more messages.
 				NETpop(queue);
@@ -3792,7 +3782,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 	{
 		netPlayersUpdated = false;
 		lastrefresh = gameTime;
-		if (!multiRequestUp && (bHosted || ingame.localJoiningInProgress))
+		if (!multiRequestUp && (NetPlay.isHost || ingame.localJoiningInProgress))
 		{
 			addPlayerBox(true);				// update the player box.
 			loadMapPreview(false);
@@ -3859,7 +3849,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 				setMultiStats(selectedPlayer, playerStats, false);
 				setMultiStats(selectedPlayer, playerStats, true);
 				netPlayersUpdated = true;
-				if (NetPlay.isHost && bHosted && NetPlay.bComms)
+				if (NetPlay.isHost && NetPlay.bComms)
 				{
 					sendOptions();
 					NETsetLobbyOptField(NetPlay.players[selectedPlayer].name, NET_LOBBY_OPT_FIELD::HOSTNAME);
@@ -3891,7 +3881,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 						break;
 					}
 
-					if (NetPlay.bComms && bHosted)
+					if (NetPlay.bComms && NetPlay.isHost)
 					{
 						uint8_t numHumans = NET_numHumanPlayers();
 						if (numHumans > mapData->players)
@@ -3927,7 +3917,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 					//Reset player slots if it's a smaller map.
 					// FIXME: This should also reset (without sending messages (?)) the slots when setting up a skirmish game. Currently it does not. (?)
 					//        (need to make sure this is correct)
-					if (NetPlay.isHost && NetPlay.bComms && bHosted && oldMaxPlayers > game.maxPlayers)
+					if (NetPlay.isHost && NetPlay.bComms && oldMaxPlayers > game.maxPlayers)
 					{
 						resetPlayerPositions();
 						repositionHumanSlots();
@@ -3944,7 +3934,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 
 					addGameOptions();
 
-					if (NetPlay.isHost && bHosted && NetPlay.bComms)
+					if (NetPlay.isHost && NetPlay.bComms)
 					{
 						sendOptions();
 						NETsetLobbyOptField(game.map, NET_LOBBY_OPT_FIELD::MAPNAME);
@@ -3958,7 +3948,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 			}
 			if (!isHoverPreview)
 			{
-				addPlayerBox(!ingame.bHostSetup);
+				addPlayerBox(ingame.side != InGameSide::HOST_OR_SINGLEPLAYER);
 			}
 		}
 	}
@@ -3995,7 +3985,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 	{
 		processMultiopWidgets(CON_CANCEL);  // "Press" the cancel button to clean up net connections and stuff.
 	}
-	if (!NetPlay.isHostAlive && !ingame.bHostSetup)
+	if (!NetPlay.isHostAlive && ingame.side == InGameSide::MULTIPLAYER_CLIENT)
 	{
 		cancelOrDismissNotificationsWithTag(VOTE_TAG);
 		changeTitleUI(std::make_shared<WzMsgBoxTitleUI>(WzString(_("The host has quit.")), parent));
@@ -4003,28 +3993,6 @@ TITLECODE WzMultiOptionTitleUI::run()
 	}
 
 	return TITLECODE_CONTINUE;
-}
-
-static bool loadSettings(const WzString &filename)
-{
-	WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
-	ini.beginGroup("challenge");
-	sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
-	game.hash = levGetMapNameHash(game.map);
-	game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
-	game.scavengers = ini.value("scavengers", game.scavengers).toBool();
-	game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
-	game.power = ini.value("powerLevel", game.power).toInt();
-	game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
-	sstrcpy(game.name, ini.value("name").toWzString().toUtf8().c_str());
-	game.techLevel = ini.value("techLevel", game.techLevel).toInt();
-
-	// DEPRECATED: This seems to have been odd workaround for not having the locked group handled.
-	//             Keeping it around in case mods use it.
-	locked.position = !ini.value("allowPositionChange", !locked.position).toBool();
-	ini.endGroup();
-
-	return true;
 }
 
 WzMultiOptionTitleUI::WzMultiOptionTitleUI(std::shared_ptr<WzTitleUI> parent) : parent(parent)
@@ -4065,7 +4033,7 @@ static void printHostHelpMessagesToConsole()
 	{
 		ssprintf(buf, "%s", _("Hit the ready box to begin your challenge!"));
 	}
-	else if (!bHosted)
+	else if (!NetPlay.isHost)
 	{
 		ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
 	}
@@ -4074,13 +4042,8 @@ static void printHostHelpMessagesToConsole()
 
 void WzMultiOptionTitleUI::start()
 {
-	bool bReenter = performedFirstStart;
-
-	PLAYERSTATS		nullStats;
-	UBYTE i;
-
+	const bool bReenter = performedFirstStart;
 	performedFirstStart = true;
-
 	netPlayersUpdated = true;
 
 	addBackdrop();
@@ -4090,12 +4053,6 @@ void WzMultiOptionTitleUI::start()
 	if (getLobbyError() != ERROR_INVALID)
 	{
 		setLobbyError(ERROR_NOERROR);
-	}
-
-	// free limiter structure
-	if (!bReenter || challengeActive)
-	{
-		ingame.structureLimits.clear();
 	}
 
 	/* Entering the first time */
@@ -4110,13 +4067,13 @@ void WzMultiOptionTitleUI::start()
 		colourChooserUp = -1;
 
 		/* Reset player difficulties and colors */
-		for (i = 0; i < MAX_PLAYERS; i++)
+		for (unsigned i = 0; i < MAX_PLAYERS; i++)
 		{
 			NetPlay.players[i].difficulty = AIDifficulty::MEDIUM;
 			setPlayerColour(i, i);
 		}
 		game.isMapMod = false;			// reset map-mod status
-		game.mapHasScavengers = true; // FIXME, should default to false
+		game.mapHasScavengers = true;	// FIXME, should default to false
 		if (!NetPlay.bComms)			// force skirmish if no comms.
 		{
 			game.type = SKIRMISH;
@@ -4127,48 +4084,50 @@ void WzMultiOptionTitleUI::start()
 
 		ingame.localOptionsReceived = false;
 
-		loadMultiStats((char *)sPlayer, &nullStats);
-	}
+		PLAYERSTATS	nullStats;
+		loadMultiStats((char*)sPlayer, &nullStats);
 
-	/* Entering the first time with challenge */
-	if (!bReenter && challengeActive)
-	{
-		resetReadyStatus(false);
-		removeWildcards((char *)sPlayer);
-		if (!hostCampaign((char *)game.name, (char *)sPlayer))
+		/* Entering the first time with challenge */
+		if (challengeActive)
 		{
-			debug(LOG_ERROR, "Failed to host the challenge.");
-			return;
+			loadMapChallengeAndPlayerSettings(false, false);
+
+			resetReadyStatus(false);
+			removeWildcards((char*)sPlayer);
+			if (!hostCampaign((char*)game.name, (char*)sPlayer))
+			{
+				debug(LOG_ERROR, "Failed to host the challenge.");
+				return;
+			}
+
+			loadMapChallengeAndPlayerSettings(false, false);
+			netPlayersUpdated = true;
+
+			ingame.localOptionsReceived = true;
+			addGameOptions();									// update game options box.
+			addChatBox();
+			disableMultiButs();
+			addPlayerBox(true);
 		}
-		bHosted = true;
-
-		loadMapChallengeAndPlayerSettings(false, false);
-
-		loadSettings(sRequestResult);
-		netPlayersUpdated = true;
-
-		ingame.localOptionsReceived = true;
-		addGameOptions();									// update game options box.
-		addChatBox();
-		disableMultiButs();
-		addPlayerBox(true);
-	}
-	/* Re-entering or entering without a challenge */
-	else
-	{
-		addPlayerBox(false);								// Players
-		addGameOptions();
-		addChatBox(bReenter);
-
-		if (ingame.bHostSetup)
+		/* Re-entering or entering without a challenge */
+		else
 		{
-			printHostHelpMessagesToConsole();
+			addPlayerBox(false);
+			addGameOptions();
+			addChatBox(bReenter);
+
+			if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
+			{
+				printHostHelpMessagesToConsole();
+			}
 		}
 	}
-	// going back to multiop after setting limits up..
-	if (bReenter && bHosted)
+
+	/* Only reset limits if we are not re-entering */
+	if (!bReenter || challengeActive)
 	{
-		disableMultiButs();
+		ingame.structureLimits.clear();
+		resetLimits();
 	}
 
 	loadMapPreview(false);
@@ -4177,11 +4136,6 @@ void WzMultiOptionTitleUI::start()
 	{
 		loadMapChallengeAndPlayerSettings(false, false);
 
-		if (hostlaunch == 3)
-		{
-			loadSettings("autohost/" + WzString::fromUtf8(wz_skirmish_test()));
-		}
-
 		if (!ingame.localJoiningInProgress)
 		{
 			processMultiopWidgets(MULTIOP_HOST);
@@ -4189,7 +4143,6 @@ void WzMultiOptionTitleUI::start()
 		SendReadyRequest(selectedPlayer, true);
 		if (hostlaunch == 2)
 		{
-			loadSettings("tests/" + WzString::fromUtf8(wz_skirmish_test()));
 			startMultiplayerGame();
 			// reset flag in case people dropped/quit on join screen
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_NORMAL, NET_ALL_PLAYERS);

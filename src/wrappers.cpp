@@ -147,7 +147,7 @@ TITLECODE titleLoop()
 				NETdiscoverUPnPDevices();
 			}
 			bMultiPlayer = true;
-			ingame.bHostSetup = true;
+			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			game.type = SKIRMISH;
 			// Ensure the game has a place to return to
 			changeTitleMode(TITLE);

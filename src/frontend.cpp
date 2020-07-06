@@ -497,7 +497,7 @@ bool runSinglePlayerMenu()
 
 		case FRONTEND_SKIRMISH:
 			SPinit();
-			ingame.bHostSetup = true;
+			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 			break;
 
@@ -568,7 +568,7 @@ bool runMultiPlayerMenu()
 		NetPlay.bComms = true; // use network = true
 		NetPlay.isUPNP_CONFIGURED = false;
 		NetPlay.isUPNP_ERROR = false;
-		ingame.bHostSetup = true;
+		ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 		bMultiPlayer = true;
 		bMultiMessages = true;
 		NETinit(true);
@@ -578,7 +578,7 @@ bool runMultiPlayerMenu()
 		break;
 	case FRONTEND_JOIN:
 		NETinit(true);
-		ingame.bHostSetup = false;
+		ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 		if (getLobbyError() != ERROR_INVALID)
 		{
 			setLobbyError(ERROR_NOERROR);

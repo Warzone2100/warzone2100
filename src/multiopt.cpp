@@ -67,13 +67,7 @@
 // send complete game info set!
 void sendOptions()
 {
-	unsigned int i;
-
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client or not hosting yet!");
-		return;
-	}
+	ASSERT_HOST_ONLY(return);
 
 	game.modHashes = getModHashList();
 
@@ -99,23 +93,21 @@ void sendOptions()
 	NETuint32_t(&game.techLevel);
 
 	// FIXME: is this required?
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));
 	}
 
 	// Send the list of who is still joining
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
 	}
 
 	// Same goes for the alliances
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		unsigned int j;
-
-		for (j = 0; j < MAX_PLAYERS; j++)
+		for (unsigned j = 0; j < MAX_PLAYERS; j++)
 		{
 			NETuint8_t(&alliances[i][j]);
 		}
@@ -332,9 +324,9 @@ bool hostCampaign(char *sGame, char *sPlayer)
 		return false;
 	}
 
-	for (unsigned i = 0; i < MAX_PLAYERS; i++)
+	if (NetPlay.bComms)
 	{
-		if (NetPlay.bComms)
+		for (unsigned i = 0; i < MAX_PLAYERS; i++)
 		{
 			NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
 		}
@@ -479,7 +471,7 @@ bool multiGameShutdown()
 
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
-	ingame.bHostSetup = false;	// Dont attempt a host
+	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 	ingame.TimeEveryoneIsInGame = 0;
 	ingame.startTime = 0;
 	NetPlay.isHost					= false;

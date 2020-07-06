@@ -68,6 +68,14 @@ struct MULTISTRUCTLIMITS
 	uint32_t        limit;
 };
 
+// The side we are *configured* as. Used to indicate whether we are the server or the client. Note that when
+// playing singleplayer, we are running as a host, not a client. Values are booleans as this replaces the old
+// `bool bHostSetup`.
+enum class InGameSide : bool {
+	HOST_OR_SINGLEPLAYER = true,
+	MULTIPLAYER_CLIENT = false
+};
+
 // info used inside games.
 struct MULTIPLAYERINGAME
 {
@@ -76,7 +84,7 @@ struct MULTIPLAYERINGAME
 	bool				localJoiningInProgress;				// used before we know our player number.
 	bool				JoiningInProgress[MAX_PLAYERS];
 	bool				DataIntegrity[MAX_PLAYERS];
-	bool				bHostSetup;
+	InGameSide			side;
 	int32_t				TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
 	UDWORD				startTime;
@@ -112,6 +120,13 @@ extern bool bMultiPlayer;				// true when more than 1 player.
 extern bool bMultiMessages;				// == bMultiPlayer unless multi messages are disabled
 extern bool openchannels[MAX_PLAYERS];
 extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
+
+#define RUN_ONLY_ON_SIDE(_side) \
+	if (ingame.side != _side) \
+	{ \
+		return; \
+	}
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
