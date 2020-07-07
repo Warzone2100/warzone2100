@@ -391,7 +391,6 @@ void wzDelay(unsigned int delay)
 	SDL_Delay(delay);
 }
 
-#if !defined(WZ_OS_MAC)
 void wzSetSwapInterval(int interval)
 {
 	if (SDL_GL_SetSwapInterval(interval) != 0)
@@ -405,7 +404,6 @@ int wzGetSwapInterval()
 {
 	return SDL_GL_GetSwapInterval();
 }
-#endif
 
 /**************************/
 /***    Thread support  ***/
