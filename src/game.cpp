@@ -3507,7 +3507,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		return false;
 	}
 
-	debug(LOG_SAVE, "Savegame is of type: %u", saveGameData.sGame.type);
+	debug(LOG_SAVE, "Savegame is of type: %u", static_cast<uint8_t>(saveGameData.sGame.type));
 	game.type = saveGameData.sGame.type;
 	/* Test mod list */
 	if (version >= VERSION_38)

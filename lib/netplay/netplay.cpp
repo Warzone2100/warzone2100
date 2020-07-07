@@ -357,13 +357,31 @@ static int playersPerTeam()
 	return 1;
 }
 
+/**
+ * Resets network properties of a player to safe defaults. Player slots should always be in this state
+ * before attemtping to assign a connectign player to it.
+ *
+ * Used to reset the player slot in NET_InitPlayer and to reset players slot without modifying ai/team/
+ * position configuration for the players.
+ */
+static void initPlayerNetworkProps(int playerIndex)
+{
+	NetPlay.players[playerIndex].allocated = false;
+	NetPlay.players[playerIndex].autoGame = false;
+	NetPlay.players[playerIndex].heartattacktime = 0;
+	NetPlay.players[playerIndex].heartbeat = true;  // we always start with a heartbeat
+	NetPlay.players[playerIndex].kick = false;
+	NetPlay.players[playerIndex].ready = false;
+
+	NetPlay.players[playerIndex].wzFiles.clear();
+	ingame.JoiningInProgress[playerIndex] = false;
+}
+
 void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 {
-	NetPlay.players[i].allocated = false;
-	NetPlay.players[i].autoGame = false;
-	NetPlay.players[i].heartattacktime = 0;
-	NetPlay.players[i].heartbeat = true;  // we always start with a heartbeat
-	NetPlay.players[i].kick = false;
+	initPlayerNetworkProps(i);
+
+	NetPlay.players[i].difficulty = AIDifficulty::DEFAULT;
 	if (ingame.localJoiningInProgress)
 	{
 		// only clear name outside of games.
@@ -376,7 +394,6 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = initTeams && i < game.maxPlayers? i/playersPerTeam() : i;
 	}
-	NetPlay.players[i].ready = false;
 	if (NetPlay.bComms)
 	{
 		NetPlay.players[i].ai = AI_OPEN;
@@ -385,10 +402,6 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 	{
 		NetPlay.players[i].ai = 0;
 	}
-
-	NetPlay.players[i].difficulty = AIDifficulty::DEFAULT;
-	NetPlay.players[i].wzFiles.clear();
-	ingame.JoiningInProgress[i] = false;
 }
 
 uint8_t NET_numHumanPlayers(void)
@@ -419,7 +432,6 @@ void NET_InitPlayers(bool initTeams)
 {
 	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
-		// FIXME: Do not reset the player team, name, ai, position or difficulty here. Do it when the level changes, before loading player info
 		NET_InitPlayer(i, true, initTeams);
 		NetPlay.players[i].name[0] = '\0';
 		NETinitQueue(NETnetQueue(i));
@@ -511,7 +523,6 @@ static int NET_CreatePlayer(char const *name)
 		NETlogEntry("Could not find a place for player!", SYNC_FLAG, index);
 		return -1;
 	}
-	debug(LOG_INFO, "Creating player with ID: %d", index);
 
 	char buf[250] = {'\0'};
 
@@ -1654,7 +1665,6 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
 			NETuint32_t(&indexLen);
-			debug(LOG_ERROR, "Receiving %u players", indexLen);
 			if (indexLen > MAX_PLAYERS || (playerQueue.index != NET_HOST_ONLY && indexLen > 1))
 			{
 				debug(LOG_ERROR, "MSG_PLAYER_INFO: Bad number of players updated: %u", indexLen);
@@ -3054,7 +3064,10 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 
 	netPlayersUpdated = true;
 
-	NET_InitPlayers(true);
+	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; ++playerIndex)
+	{
+		initPlayerNetworkProps(playerIndex);
+	}
 	for (unsigned n = 0; n < MAX_PLAYERS_IN_GUI; ++n)
 	{
 		changeColour(n, rand() % (n + 1), true); // Put colours in random order.

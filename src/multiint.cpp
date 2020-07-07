@@ -2787,12 +2787,43 @@ static void loadMapPlayerSettings(WzConfig& ini)
 }
 
 /**
- * Loads challenge and player configurations from level/autohost/test .json-files. Calling with skipPlayers false when players have not been set up is an error.
- *
- * \param skipChallenge allows skipping loading challenge settings. This is required when starting the host, as there we do not want to override user selections
- * \param skipPlayers	allows skipping loading player settings. This is required when changing map with existing player slot selections
+ * Resets all player difficulties, positions, teams and colors etc.
  */
-static void loadMapChallengeAndPlayerSettings(bool skipChallenge, bool skipPlayers)
+static void resetPlayerConfiguration()
+{
+	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+	{
+		/* Never touch the local player */
+		if (playerIndex == selectedPlayer)
+		{
+			continue;
+		}
+
+		NetPlay.players[playerIndex].position = playerIndex;
+		NetPlay.players[playerIndex].team = playerIndex;
+		NetPlay.players[playerIndex].name[0] = '\0';
+		setPlayerColour(playerIndex, playerIndex);
+
+		if (NetPlay.bComms)
+		{
+			NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
+			NetPlay.players[playerIndex].ai = AI_OPEN;
+		}
+		else
+		{
+			NetPlay.players[playerIndex].difficulty = AIDifficulty::DEFAULT;
+			NetPlay.players[playerIndex].ai = 0;
+
+			/* ensure all players have a name in One Player Skirmish games */
+			sstrcpy(NetPlay.players[playerIndex].name, getAIName(playerIndex));
+		}
+	}
+}
+
+/**
+ * Loads challenge and player configurations from level/autohost/test .json-files.
+ */
+static void loadMapChallengeAndPlayerSettings()
 {
 	char aFileName[256];
 	LEVEL_DATASET* psLevel = levFindDataSet(game.map, &game.hash);
@@ -2811,30 +2842,23 @@ static void loadMapChallengeAndPlayerSettings(bool skipChallenge, bool skipPlaye
 	{
 		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
 	}
+
+	const bool bIsOnline = NetPlay.bComms && NetPlay.isHost;
 	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
-		// TODO: Reset players here (?)
-
-		/* ensure all players have a name in One Player Skirmish games */
-		if (!NetPlay.bComms) {
-			for (int i = 0; i < MAX_PLAYERS; ++i) {
-				if (i != selectedPlayer) {
-					sstrcpy(NetPlay.players[i].name, getAIName(i));
-				}
-			}
+		/* Just reset the players if config is not found and host is not started yet */
+		if (!bIsOnline) {
+			resetPlayerConfiguration();
 		}
 
 		return;
 	}
 	WzConfig ini(ininame, WzConfig::ReadOnly);
 
-	if (!skipChallenge)
-	{
-		loadMapChallengeSettings(ini);
-	}
+	loadMapChallengeSettings(ini);
 
-	const bool bIsOnline = NetPlay.bComms && NetPlay.isHost;
-	if (!skipPlayers && !bIsOnline)
+	/* Do not load player settings if we are already hosting an online match */
+	if (!bIsOnline)
 	{
 		loadMapPlayerSettings(ini);
 	}
@@ -2890,7 +2914,7 @@ static void randomizeOptions()
 
 		updateMapWidgets(mapData);
 		loadMapPreview(false);
-		loadMapChallengeAndPlayerSettings(false, false);
+		loadMapChallengeAndPlayerSettings();
 	}
 
 	// Reset and randomize player positions, also to guard
@@ -3906,7 +3930,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 					game.maxPlayers = mapData->players;
 					game.isMapMod = CheckForMod(mapData->realFileName);
 					loadMapPreview(true);
-					loadMapChallengeAndPlayerSettings(false, false);
+					loadMapChallengeAndPlayerSettings();
 
 					WzString name = formatGameName(game.map);
 					widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
@@ -4062,12 +4086,9 @@ void WzMultiOptionTitleUI::start()
 		positionChooserUp = -1;
 		colourChooserUp = -1;
 
-		/* Reset player difficulties and colors */
-		for (unsigned i = 0; i < MAX_PLAYERS; i++)
-		{
-			NetPlay.players[i].difficulty = AIDifficulty::MEDIUM;
-			setPlayerColour(i, i);
-		}
+		resetPlayerConfiguration();
+		loadMapChallengeAndPlayerSettings();
+
 		game.isMapMod = false;			// reset map-mod status
 		game.mapHasScavengers = true;	// FIXME, should default to false
 
@@ -4079,8 +4100,6 @@ void WzMultiOptionTitleUI::start()
 		/* Entering the first time with challenge */
 		if (challengeActive)
 		{
-			loadMapChallengeAndPlayerSettings(false, false);
-
 			resetReadyStatus(false);
 			removeWildcards((char*)sPlayer);
 			if (!hostCampaign((char*)game.name, (char*)sPlayer))
@@ -4125,7 +4144,7 @@ void WzMultiOptionTitleUI::start()
 
 	if (autogame_enabled() || hostlaunch == 3)
 	{
-		loadMapChallengeAndPlayerSettings(false, false);
+		loadMapChallengeAndPlayerSettings();
 
 		if (!ingame.localJoiningInProgress)
 		{
