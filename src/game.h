@@ -112,8 +112,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 so can be called in levLoadData when starting a game from a load save game*/
 bool loadGameInit(const char *fileName);
 
-bool loadMissionExtras(const char *pGameToLoad, SWORD levelType);
-
 // load the script state given a .gam name
 bool loadScriptState(char *pFileName);
 
@@ -125,11 +123,10 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType);
 // Get the campaign number for loadGameInit game
 UDWORD getCampaign(const char *fileName);
 
-/*calls windows find file tree*/
-bool getSaveGameName(char *pName);
-
 /*returns the current type of save game being loaded*/
-UDWORD getSaveGameType();
+GAME_TYPE getSaveGameType();
+
+UDWORD getSaveGameVersion();
 
 bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
 

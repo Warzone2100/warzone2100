@@ -383,8 +383,9 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 	}
 	else
 	{
-		NetPlay.players[i].ai = AI_DEFAULT;
+		NetPlay.players[i].ai = 0;
 	}
+
 	NetPlay.players[i].difficulty = AIDifficulty::DEFAULT;
 	NetPlay.players[i].wzFiles.clear();
 	ingame.JoiningInProgress[i] = false;

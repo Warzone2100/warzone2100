@@ -74,7 +74,7 @@ void sendOptions()
 	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
 	// First send information about the game
-	NETuint8_t(&game.type);
+	NETuint8_t(reinterpret_cast<uint8_t*>(&game.type));
 	NETstring(game.map, 128);
 	NETbin(game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize = game.modHashes.size();
@@ -141,7 +141,7 @@ void recvOptions(NETQUEUE queue)
 	NETbeginDecode(queue, NET_OPTIONS);
 
 	// Get general information about the game
-	NETuint8_t(&game.type);
+	NETuint8_t(reinterpret_cast<uint8_t*>(&game.type));
 	NETstring(game.map, 128);
 	NETbin(game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize;
@@ -319,7 +319,7 @@ bool hostCampaign(char *sGame, char *sPlayer)
 
 	freeMessages();
 
-	if (!NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(sGame, sPlayer, static_cast<SDWORD>(game.type), 0, 0, 0, game.maxPlayers))
 	{
 		return false;
 	}

@@ -188,16 +188,16 @@ static	UDWORD	camNumber = 1;
 //returns true if on an off world mission
 bool missionIsOffworld()
 {
-	return ((mission.type == LDS_MKEEP)
-	        || (mission.type == LDS_MCLEAR)
-	        || (mission.type == LDS_MKEEP_LIMBO)
+	return ((mission.type == LEVEL_TYPE::LDS_MKEEP)
+	        || (mission.type == LEVEL_TYPE::LDS_MCLEAR)
+	        || (mission.type == LEVEL_TYPE::LDS_MKEEP_LIMBO)
 	       );
 }
 
 //returns true if the correct type of mission for reinforcements
 bool missionForReInforcements()
 {
-	if (mission.type == LDS_CAMSTART || missionIsOffworld() || mission.type == LDS_CAMCHANGE)
+	if (mission.type == LEVEL_TYPE::LDS_CAMSTART || missionIsOffworld() || mission.type == LEVEL_TYPE::LDS_CAMCHANGE)
 	{
 		return true;
 	}
@@ -223,14 +223,14 @@ bool missionCanReEnforce()
 //returns true if the mission is a Limbo Expand mission
 bool missionLimboExpand()
 {
-	return (mission.type == LDS_EXPAND_LIMBO);
+	return (mission.type == LEVEL_TYPE::LDS_EXPAND_LIMBO);
 }
 
 // mission initialisation game code
 void initMission()
 {
 	debug(LOG_SAVE, "*** Init Mission ***");
-	mission.type = LDS_NONE;
+	mission.type = LEVEL_TYPE::LDS_NONE;
 	for (int inc = 0; inc < MAX_PLAYERS; inc++)
 	{
 		mission.apsStructLists[inc] = nullptr;
@@ -335,7 +335,7 @@ bool missionShutDown()
 	}
 
 	// sorry if this breaks something - but it looks like it's what should happen - John
-	mission.type = LDS_NONE;
+	mission.type = LEVEL_TYPE::LDS_NONE;
 
 	return true;
 }
@@ -394,7 +394,7 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 	// this inits the flag so that 'reinforcements have arrived' message isn't played for the first transporter load
 	initFirstTransporterFlag();
 
-	if (mission.type != LDS_NONE)
+	if (mission.type != LEVEL_TYPE::LDS_NONE)
 	{
 		/*mission type gets set to none when you have returned from a mission
 		so don't want to go another mission when already on one! - so ignore*/
@@ -405,7 +405,7 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 	initEffectsSystem();
 
 	//load the game file for all types of mission except a Between Mission
-	if (missionType != LDS_BETWEEN)
+	if (missionType != LEVEL_TYPE::LDS_BETWEEN)
 	{
 		loadGameInit(pGame);
 	}
@@ -415,45 +415,45 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 
 	switch (missionType)
 	{
-	case LDS_CAMSTART:
+	case LEVEL_TYPE::LDS_CAMSTART:
 		if (!startMissionCampaignStart(pGame))
 		{
 			loaded = false;
 		}
 		break;
-	case LDS_MKEEP:
-	case LDS_MKEEP_LIMBO:
+	case LEVEL_TYPE::LDS_MKEEP:
+	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
 		if (!startMissionOffKeep(pGame))
 		{
 			loaded = false;
 		}
 		break;
-	case LDS_BETWEEN:
+	case LEVEL_TYPE::LDS_BETWEEN:
 		//do anything?
 		if (!startMissionBetween())
 		{
 			loaded = false;
 		}
 		break;
-	case LDS_CAMCHANGE:
+	case LEVEL_TYPE::LDS_CAMCHANGE:
 		if (!startMissionCampaignChange(pGame))
 		{
 			loaded = false;
 		}
 		break;
-	case LDS_EXPAND:
+	case LEVEL_TYPE::LDS_EXPAND:
 		if (!startMissionCampaignExpand(pGame))
 		{
 			loaded = false;
 		}
 		break;
-	case LDS_EXPAND_LIMBO:
+	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
 		if (!startMissionCampaignExpandLimbo(pGame))
 		{
 			loaded = false;
 		}
 		break;
-	case LDS_MCLEAR:
+	case LEVEL_TYPE::LDS_MCLEAR:
 		if (!startMissionOffClear(pGame))
 		{
 			loaded = false;
@@ -496,7 +496,7 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 
 
 // initialise the mission stuff for a save game
-bool startMissionSave(SDWORD missionType)
+bool startMissionSave(LEVEL_TYPE missionType)
 {
 	mission.type = missionType;
 
@@ -816,10 +816,10 @@ void restoreMissionData()
 	freeAllStructs();
 	freeAllFeatures();
 	gwShutDown();
-	if (game.type != CAMPAIGN)
+	if (game.type != LEVEL_TYPE::CAMPAIGN)
 	{
 		ASSERT(false, "game type isn't campaign, but we are in a campaign game!");
-		game.type = CAMPAIGN;	// fix the issue, since it is obviously a bug
+		game.type = LEVEL_TYPE::CAMPAIGN;	// fix the issue, since it is obviously a bug
 	}
 	//restore the game pointers
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
@@ -1381,7 +1381,7 @@ void swapMissionPointers()
 
 void endMission()
 {
-	if (mission.type == LDS_NONE)
+	if (mission.type == LEVEL_TYPE::LDS_NONE)
 	{
 		//can't go back any further!!
 		debug(LOG_SAVE, "Already returned from mission");
@@ -1390,7 +1390,7 @@ void endMission()
 
 	switch (mission.type)
 	{
-	case LDS_CAMSTART:
+	case LEVEL_TYPE::LDS_CAMSTART:
 		//any transporters that are flying in need to be emptied
 		emptyTransporters(false);
 		//when loading in a save game mid cam2a or cam3a it is loaded as a camstart
@@ -1399,34 +1399,34 @@ void endMission()
 			This is called at the end of every campaign mission
 		*/
 		break;
-	case LDS_MKEEP:
+	case LEVEL_TYPE::LDS_MKEEP:
 		//any transporters that are flying in need to be emptied
 		emptyTransporters(true);
 		endMissionOffKeep();
 		break;
-	case LDS_EXPAND:
-	case LDS_BETWEEN:
+	case LEVEL_TYPE::LDS_EXPAND:
+	case LEVEL_TYPE::LDS_BETWEEN:
 		/*
 			This is called at the end of every campaign mission
 		*/
 
 		break;
-	case LDS_CAMCHANGE:
+	case LEVEL_TYPE::LDS_CAMCHANGE:
 		//any transporters that are flying in need to be emptied
 		emptyTransporters(false);
 		endMissionCamChange();
 		break;
 	/* left in so can skip the mission for testing...*/
-	case LDS_EXPAND_LIMBO:
+	case LEVEL_TYPE::LDS_EXPAND_LIMBO:
 		//shouldn't be any transporters on this mission but...who knows?
 		endMissionExpandLimbo();
 		break;
-	case LDS_MCLEAR:
+	case LEVEL_TYPE::LDS_MCLEAR:
 		//any transporters that are flying in need to be emptied
 		emptyTransporters(true);
 		endMissionOffClear();
 		break;
-	case LDS_MKEEP_LIMBO:
+	case LEVEL_TYPE::LDS_MKEEP_LIMBO:
 		//any transporters that are flying in need to be emptied
 		emptyTransporters(true);
 		endMissionOffKeepLimbo();
@@ -1456,7 +1456,7 @@ void endMission()
 
 
 	//mission.type = MISSION_NONE;
-	mission.type = LDS_NONE;
+	mission.type = LEVEL_TYPE::LDS_NONE;
 
 	// reset the transporters
 	initTransporters();
@@ -1515,7 +1515,7 @@ void resetLimboMission()
 	//add the units that were moved into the mission list at the start of the mission
 	restoreMissionLimboData();
 	//set the mission type to plain old expand...
-	mission.type = LDS_EXPAND;
+	mission.type = LEVEL_TYPE::LDS_EXPAND;
 }
 
 /* The update routine for all droids left back at home base
@@ -2433,10 +2433,10 @@ void intRunMissionResult()
 
 static void missionContineButtonPressed()
 {
-	if (nextMissionType == LDS_CAMSTART
-	    || nextMissionType == LDS_BETWEEN
-	    || nextMissionType == LDS_EXPAND
-	    || nextMissionType == LDS_EXPAND_LIMBO)
+	if (nextMissionType == LEVEL_TYPE::LDS_CAMSTART
+	    || nextMissionType == LEVEL_TYPE::LDS_BETWEEN
+	    || nextMissionType == LEVEL_TYPE::LDS_EXPAND
+	    || nextMissionType == LEVEL_TYPE::LDS_EXPAND_LIMBO)
 	{
 		launchMission();
 	}
@@ -2529,7 +2529,7 @@ DROID *buildMissionDroid(DROID_TEMPLATE *psTempl, UDWORD x, UDWORD y, UDWORD pla
 void launchMission()
 {
 	//if (mission.type == MISSION_NONE)
-	if (mission.type == LDS_NONE)
+	if (mission.type == LEVEL_TYPE::LDS_NONE)
 	{
 		// tell the loop that a new level has to be loaded up
 		loopMissionState = LMS_NEWLEVEL;
@@ -2542,7 +2542,7 @@ void launchMission()
 
 
 //sets up the game to start a new mission
-bool setUpMission(UDWORD type)
+bool setUpMission(LEVEL_TYPE type)
 {
 	// Close the interface
 	intResetScreen(true);
@@ -2556,7 +2556,7 @@ bool setUpMission(UDWORD type)
 		return false;
 	}
 
-	if (type == LDS_CAMSTART)
+	if (type == LEVEL_TYPE::LDS_CAMSTART)
 	{
 		// Another one of those lovely hacks!!
 		bool    bPlaySuccess = true;
@@ -2573,9 +2573,9 @@ bool setUpMission(UDWORD type)
 		}
 		loopMissionState = LMS_SAVECONTINUE;
 	}
-	else if (type == LDS_MKEEP
-	         || type == LDS_MCLEAR
-	         || type == LDS_MKEEP_LIMBO)
+	else if (type == LEVEL_TYPE::LDS_MKEEP
+	         || type == LEVEL_TYPE::LDS_MCLEAR
+	         || type == LEVEL_TYPE::LDS_MKEEP_LIMBO)
 	{
 		launchMission();
 	}

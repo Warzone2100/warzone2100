@@ -31,6 +31,7 @@
 #include "orderdef.h"
 #include "stringdef.h"
 #include "messagedef.h"
+#include "levels.h"
 #include <vector>
 #include <string>
 
@@ -47,7 +48,7 @@ struct STRUCTURE;
 // Also used for skirmish games. And sometimes for campaign. Should be moved somewhere else.
 struct MULTIPLAYERGAME
 {
-	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
+	LEVEL_TYPE	type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
 	bool		scavengers;					// whether scavengers are on or off
 	char		map[128];					// name of multiplayer map being used.
 	uint8_t		maxPlayers;					// max players to allow

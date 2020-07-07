@@ -3158,7 +3158,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 
 				// Update allies research accordingly
-				if (game.type == SKIRMISH && alliancesSharedResearch(game.alliance))
+				if (game.type == LEVEL_TYPE::SKIRMISH && alliancesSharedResearch(game.alliance))
 				{
 					for (i = 0; i < MAX_PLAYERS; i++)
 					{
@@ -4166,7 +4166,7 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 				STRUCTURE_PACKABILITY packThis = baseStructureTypePackability(psBuilding->type);
 
 				// skirmish AIs don't build nondefensives next to anything. (route hack)
-				if (packThis == PACKABILITY_NORMAL && bMultiPlayer && game.type == SKIRMISH && !isHumanPlayer(player))
+				if (packThis == PACKABILITY_NORMAL && bMultiPlayer && game.type == LEVEL_TYPE::SKIRMISH && !isHumanPlayer(player))
 				{
 					packThis = PACKABILITY_REPAIR;
 				}

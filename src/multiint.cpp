@@ -378,7 +378,7 @@ void loadMultiScripts()
 			NetPlay.players[i].ai = 0;  // For autogames.
 		}
 		// The i == selectedPlayer hack is to enable autogames
-		if (bMultiPlayer && game.type == SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
+		if (bMultiPlayer && game.type == LEVEL_TYPE::SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
 		    && (NetPlay.players[i].ai >= 0 || hostlaunch == 2) && myResponsibility(i))
 		{
 			if (PHYSFS_exists(ininame.toUtf8().c_str())) // challenge file may override AI
@@ -1450,10 +1450,11 @@ static void addGameOptions()
 	/* Add additional controls if we are (or going to be) hosting the game */
 	if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
+		auto structureLimitsLabel = challengeActive ? _("Show Structure Limits") : _("Set Structure Limits");
 		MultibuttonWidget *structLimitsButton = new MultibuttonWidget(optionsList);
 		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
-		structLimitsButton->setLabel(challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
-		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), challengeActive ? _("Show Structure Limits") : _("Set Structure Limits"));
+		structLimitsButton->setLabel(structureLimitsLabel);
+		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), structureLimitsLabel);
 		optionsList->addWidgetToLayout(structLimitsButton);
 
 		/* ...and even more controls if we are not starting a challenge */
@@ -2644,13 +2645,13 @@ static void loadMapChallengeSettings(WzConfig& ini)
 	}
 	ini.endGroup();
 
-	if (hostlaunch == 3)
+	if (challengeActive || hostlaunch == 3)
 	{
 		ini.beginGroup("challenge");
 		{
 			sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
 			game.hash = levGetMapNameHash(game.map);
-			game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// TODO, read from map itself, not here!!
+			game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// FIXME: Choose as max(ini.value(...), maxPlayersForMap)
 			game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 			game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
 			game.power = ini.value("powerLevel", game.power).toInt();
@@ -2832,11 +2833,9 @@ static void loadMapChallengeAndPlayerSettings(bool skipChallenge, bool skipPlaye
 		loadMapChallengeSettings(ini);
 	}
 
-	// TODO: Could this be isHostingOnlineGame() (for consistency)
 	const bool bIsOnline = NetPlay.bComms && NetPlay.isHost;
 	if (!skipPlayers && !bIsOnline)
 	{
-		
 		loadMapPlayerSettings(ini);
 	}
 }
@@ -3871,7 +3870,7 @@ TITLECODE WzMultiOptionTitleUI::run()
 						game.hash = levGetFileHash(mapData);
 						game.maxPlayers = mapData->players;
 						game.isMapMod = CheckForMod(mapData->realFileName);
-						loadMapPreview(!isHoverPreview);
+						loadMapPreview(false);
 
 						/* Change game info to match the previous selection if hover preview was displayed */
 						sstrcpy(game.map, oldGameMap);
@@ -3902,12 +3901,11 @@ TITLECODE WzMultiOptionTitleUI::run()
 
 					uint8_t oldMaxPlayers = game.maxPlayers;
 
-					// TODO: Helper method for loading and previewing the map?
 					sstrcpy(game.map, mapData->pName);
 					game.hash = levGetFileHash(mapData);
 					game.maxPlayers = mapData->players;
 					game.isMapMod = CheckForMod(mapData->realFileName);
-					loadMapPreview(!isHoverPreview);
+					loadMapPreview(true);
 					loadMapChallengeAndPlayerSettings(false, false);
 
 					WzString name = formatGameName(game.map);
@@ -3915,8 +3913,6 @@ TITLECODE WzMultiOptionTitleUI::run()
 
 
 					//Reset player slots if it's a smaller map.
-					// FIXME: This should also reset (without sending messages (?)) the slots when setting up a skirmish game. Currently it does not. (?)
-					//        (need to make sure this is correct)
 					if (NetPlay.isHost && NetPlay.bComms && oldMaxPlayers > game.maxPlayers)
 					{
 						resetPlayerPositions();
@@ -4074,13 +4070,6 @@ void WzMultiOptionTitleUI::start()
 		}
 		game.isMapMod = false;			// reset map-mod status
 		game.mapHasScavengers = true;	// FIXME, should default to false
-		if (!NetPlay.bComms)			// force skirmish if no comms.
-		{
-			game.type = SKIRMISH;
-			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
-			game.hash = levGetMapNameHash(game.map);
-			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
-		}
 
 		ingame.localOptionsReceived = false;
 
@@ -4100,26 +4089,26 @@ void WzMultiOptionTitleUI::start()
 				return;
 			}
 
-			loadMapChallengeAndPlayerSettings(false, false);
 			netPlayersUpdated = true;
 
 			ingame.localOptionsReceived = true;
-			addGameOptions();									// update game options box.
+			addGameOptions();
 			addChatBox();
 			disableMultiButs();
 			addPlayerBox(true);
 		}
-		/* Re-entering or entering without a challenge */
-		else
-		{
-			addPlayerBox(false);
-			addGameOptions();
-			addChatBox(bReenter);
+	}
 
-			if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
-			{
-				printHostHelpMessagesToConsole();
-			}
+	/* Re-entering or entering without a challenge */
+	if (bReenter || !challengeActive)
+	{
+		addPlayerBox(false);
+		addGameOptions();
+		addChatBox(bReenter);
+
+		if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
+		{
+			printHostHelpMessagesToConsole();
 		}
 	}
 
@@ -4128,6 +4117,8 @@ void WzMultiOptionTitleUI::start()
 	{
 		ingame.structureLimits.clear();
 		resetLimits();
+		updateStructureDisabledFlags();
+		updateLimitIcons();
 	}
 
 	loadMapPreview(false);

@@ -34,7 +34,7 @@
 #define LEVEL_MAXFILES	9
 
 /// types of level datasets
-enum LEVEL_TYPE
+enum class LEVEL_TYPE : uint8_t
 {
 	LDS_COMPLETE,		// all data required for a stand alone level
 	LDS_CAMPAIGN,		// the data set for a campaign (no map data)

@@ -52,7 +52,7 @@ struct LANDING_ZONE
 //storage structure for values that need to be kept between missions
 struct MISSION
 {
-	UDWORD				type;							//defines which start and end functions to use - see levels_type in levels.h
+	LEVEL_TYPE			type;							//defines which start and end functions to use - see levels_type in levels.h
 	MAPTILE				*psMapTiles;					//the original mapTiles
 	int32_t                         mapWidth;                       //the original mapWidth
 	int32_t                         mapHeight;                      //the original mapHeight

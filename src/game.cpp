@@ -365,7 +365,7 @@ static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERG
 {
 	const char *dummy8c = "DUMMYSTRING";
 
-	if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->type)
+	if (!PHYSFS_writeUBE8(fileHandle, static_cast<uint8_t>(serializeMulti->type))
 	    || WZ_PHYSFS_writeBytes(fileHandle, serializeMulti->map, 128) != 128
 	    || WZ_PHYSFS_writeBytes(fileHandle, dummy8c, 8) != 8
 	    || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
@@ -396,7 +396,7 @@ static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME 
 
 	serializeMulti->hash.setZero();
 
-	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
+	if (!PHYSFS_readUBE8(fileHandle, reinterpret_cast<uint8_t*>(&serializeMulti->type))
 	    || WZ_PHYSFS_readBytes(fileHandle, serializeMulti->map, 128) != 128
 	    || WZ_PHYSFS_readBytes(fileHandle, dummy8c, 8) != 8
 	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
@@ -1579,11 +1579,11 @@ static UDWORD			saveGameVersion = 0;
 static bool				saveGameOnMission = false;
 static SAVE_GAME		saveGameData;
 
-static UDWORD	savedGameTime;
-static UDWORD	savedObjId;
-static SDWORD	startX, startY;
-static UDWORD   width, height;
-static UDWORD	gameType;
+static UDWORD		savedGameTime;
+static UDWORD		savedObjId;
+static SDWORD		startX, startY;
+static UDWORD		width, height;
+static GAME_TYPE	gameType;
 static bool IsScenario;
 
 /***************************************************************************/
@@ -1627,7 +1627,6 @@ static bool writeStructTypeListFile(const char *pFileName);
 static bool loadSaveResearch(const char *pFileName);
 static bool writeResearchFile(char *pFileName);
 
-static bool loadSaveMessage(const char *pFileName, SWORD levelType);
 static bool writeMessageFile(const char *pFileName);
 
 static bool loadSaveStructLimits(const char *pFileName);
@@ -1662,42 +1661,6 @@ bool loadGameInit(const char *fileName)
 		gameTimeStart();
 
 		return false;
-	}
-
-	return true;
-}
-
-
-// -----------------------------------------------------------------------------------------
-// Load a file from a save game into the psx.
-// This is divided up into 2 parts ...
-//
-// if it is a level loaded up from CD then UserSaveGame will by false
-// UserSaveGame ... Extra stuff to load after scripts
-bool loadMissionExtras(const char *pGameToLoad, SWORD levelType)
-{
-	char			aFileName[256];
-	UDWORD			fileExten;
-
-	sstrcpy(aFileName, pGameToLoad);
-	fileExten = strlen(pGameToLoad) - 3;
-	aFileName[fileExten - 1] = '\0';
-	strcat(aFileName, "/");
-
-	if (saveGameVersion >= VERSION_11)
-	{
-		//if user save game then load up the messages AFTER any droids or structures are loaded
-		if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
-		{
-			//load in the message list file
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "messtate.json");
-			if (!loadSaveMessage(aFileName, levelType))
-			{
-				debug(LOG_ERROR, "Failed to load mission extras from %s", aFileName);
-				return false;
-			}
-		}
 	}
 
 	return true;
@@ -1790,7 +1753,7 @@ static void allocatePlayers()
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
 		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
-		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == CAMPAIGN && i == 0))
+		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && i == 0))
 		{
 			NetPlay.players[i].allocated = true;
 			//processDebugMappings ensures game does not start in DEBUG mode
@@ -1904,7 +1867,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		startY = saveGameData.ScrollMinY;
 		width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
 		height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
-		gameType = saveGameData.GameType;
+		gameType = static_cast<GAME_TYPE>(saveGameData.GameType);
 
 		if (saveGameVersion >= VERSION_14)
 		{
@@ -2579,7 +2542,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		if (mission.apsDroidLists[selectedPlayer] == nullptr)
 		{
 			//set the mission type
-			startMissionSave(LDS_EXPAND);
+			startMissionSave(LEVEL_TYPE::LDS_EXPAND);
 		}
 	}
 
@@ -3307,7 +3270,7 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 	startY = saveGame.ScrollMinY;
 	width = saveGame.ScrollMaxX - saveGame.ScrollMinX;
 	height = saveGame.ScrollMaxY - saveGame.ScrollMinY;
-	gameType = saveGame.GameType;
+	gameType = static_cast<GAME_TYPE>(saveGame.GameType);
 	//set IsScenario to true if not a user saved game
 	if (gameType == GTYPE_SAVE_START)
 	{
@@ -3331,10 +3294,10 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 		}
 		//check to see whether mission automatically starts
 		//shouldn't be able to be any other value at the moment!
-		if (psNewLevel->type == LDS_CAMSTART
-		    || psNewLevel->type == LDS_BETWEEN
-		    || psNewLevel->type == LDS_EXPAND
-		    || psNewLevel->type == LDS_EXPAND_LIMBO)
+		if (psNewLevel->type == LEVEL_TYPE::LDS_CAMSTART
+		    || psNewLevel->type == LEVEL_TYPE::LDS_BETWEEN
+		    || psNewLevel->type == LEVEL_TYPE::LDS_EXPAND
+		    || psNewLevel->type == LEVEL_TYPE::LDS_EXPAND_LIMBO)
 		{
 			launchMission();
 		}
@@ -3584,7 +3547,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	startY = saveGameData.ScrollMinY;
 	width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
 	height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
-	gameType = saveGameData.GameType;
+	gameType = static_cast<GAME_TYPE>(saveGameData.GameType);
 
 	if (version >= VERSION_11)
 	{
@@ -4083,7 +4046,7 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	//version 38
 	sstrcpy(saveGame.modList, getModList().c_str());
 	// Attempt to see if we have a corrupted game structure in campaigns.
-	if (saveGame.sGame.type == CAMPAIGN)
+	if (saveGame.sGame.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		// player 0 is always a human in campaign games
 		for (int i = 1; i < MAX_PLAYERS; i++)
@@ -4201,7 +4164,7 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 {
 	int i;
 
-	if (game.type == CAMPAIGN)		// don't remap for SP games
+	if (game.type == LEVEL_TYPE::CAMPAIGN)		// don't remap for SP games
 	{
 		return OldNumber;
 	}
@@ -4262,8 +4225,8 @@ static bool skipForDifficulty(WzConfig &ini, int player)
 	if (ini.contains("difficulty")) // optionally skip this object
 	{
 		int difficulty = ini.value("difficulty").toInt();
-		if ((game.type == CAMPAIGN && difficulty > (int)getDifficultyLevel())
-		    || (game.type == SKIRMISH && difficulty > static_cast<int8_t>(NetPlay.players[player].difficulty)))
+		if ((game.type == LEVEL_TYPE::CAMPAIGN && difficulty > (int)getDifficultyLevel())
+		    || (game.type == LEVEL_TYPE::SKIRMISH && difficulty > static_cast<int8_t>(NetPlay.players[player].difficulty)))
 		{
 			return true;
 		}
@@ -6198,139 +6161,6 @@ static bool writeResearchFile(char *pFileName)
 	return true;
 }
 
-
-// -----------------------------------------------------------------------------------------
-// load up saved message file
-bool loadSaveMessage(const char *pFileName, SWORD levelType)
-{
-	// Only clear the messages if its a mid save game
-	if (gameType == GTYPE_SAVE_MIDMISSION)
-	{
-		freeMessages();
-	}
-	else if (gameType == GTYPE_SAVE_START)
-	{
-		// If we are loading in a CamStart or a CamChange then we are not interested in any saved messages
-		if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
-		{
-			return true;
-		}
-	}
-
-	WzConfig ini(pFileName, WzConfig::ReadOnly);
-	std::vector<WzString> list = ini.childGroups();
-	for (size_t i = 0; i < list.size(); ++i)
-	{
-		ini.beginGroup(list[i]);
-		MESSAGE_TYPE type = (MESSAGE_TYPE)ini.value("type").toInt();
-		bool bObj = ini.contains("obj/id");
-		int player = ini.value("player").toInt();
-		int id = ini.value("id").toInt();
-		int dataType = ini.value("dataType").toInt();
-
-		if (type == MSG_PROXIMITY)
-		{
-			//only load proximity if a mid-mission save game
-			if (gameType == GTYPE_SAVE_MIDMISSION)
-			{
-				if (bObj)
-				{
-					// Proximity object so create get the obj from saved idy
-					int objId = ini.value("obj/id").toInt();
-					int objPlayer = ini.value("obj/player").toInt();
-					OBJECT_TYPE objType = (OBJECT_TYPE)ini.value("obj/type").toInt();
-					MESSAGE *psMessage = addMessage(type, true, player);
-					if (psMessage)
-					{
-						psMessage->psObj = getBaseObjFromData(objId, objPlayer, objType);
-						ASSERT(psMessage->psObj, "Viewdata object id %d not found for message %d", objId, id);
-					}
-					else
-					{
-						debug(LOG_ERROR, "Proximity object could not be created (type=%d, player=%d, message=%d)",
-						      type, player, id);
-					}
-				}
-				else
-				{
-					VIEWDATA *psViewData = nullptr;
-
-					// Proximity position so get viewdata pointer from the name
-					MESSAGE *psMessage = addMessage(type, false, player);
-
-					if (psMessage)
-					{
-						if (dataType == MSG_DATA_BEACON)
-						{
-							//See addBeaconMessage(). psMessage->dataType is wrong here because
-							//addMessage() calls createMessage() which defaults dataType to MSG_DATA_DEFAULT.
-							//Later when findBeaconMsg() attempts to find a placed beacon it can't because
-							//the dataType is wrong.
-							psMessage->dataType = MSG_DATA_BEACON;
-							Vector2i pos = ini.vector2i("position");
-							int sender = ini.value("sender").toInt();
-							psViewData = CreateBeaconViewData(sender, pos.x, pos.y);
-							ASSERT(psViewData, "Could not create view data for message %d", id);
-							if (psViewData == nullptr)
-							{
-								// Skip this message
-								removeMessage(psMessage, player);
-								continue;
-							}
-						}
-						else if (ini.contains("name"))
-						{
-							psViewData = getViewData(ini.value("name").toWzString());
-							ASSERT(psViewData, "Failed to find view data for proximity position - skipping message %d", id);
-							if (psViewData == nullptr)
-							{
-								// Skip this message
-								removeMessage(psMessage, player);
-								continue;
-							}
-						}
-						else
-						{
-							debug(LOG_ERROR, "Proximity position with empty name skipped (message %d)", id);
-							removeMessage(psMessage, player);
-							continue;
-						}
-
-						psMessage->pViewData = psViewData;
-						// Check the z value is at least the height of the terrain
-						const int height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x, ((VIEW_PROXIMITY *)psViewData->pData)->y);
-						if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
-						{
-							((VIEW_PROXIMITY *)psViewData->pData)->z = height;
-						}
-					}
-					else
-					{
-						debug(LOG_ERROR, "Proximity position could not be created (type=%d, player=%d, message=%d)", type, player, id);
-					}
-				}
-			}
-		}
-		else
-		{
-			// Only load Campaign/Mission messages if a mid-mission save game; always load research messages
-			if (type == MSG_RESEARCH || gameType == GTYPE_SAVE_MIDMISSION)
-			{
-				MESSAGE *psMessage = addMessage(type, false, player);
-				ASSERT(psMessage, "Could not create message %d", id);
-				if (psMessage)
-				{
-					psMessage->pViewData = getViewData(ini.value("name").toWzString());
-					ASSERT(psMessage->pViewData, "Failed to find view data for message %d", id);
-				}
-			}
-		}
-		ini.endGroup();
-	}
-	jsDebugMessageUpdate();
-	return true;
-}
-
 // -----------------------------------------------------------------------------------------
 // Write out the current messages per player
 static bool writeMessageFile(const char *pFileName)
@@ -6589,9 +6419,14 @@ static void setMapScroll()
 
 // -----------------------------------------------------------------------------------------
 /*returns the current type of save game being loaded*/
-UDWORD getSaveGameType()
+GAME_TYPE getSaveGameType()
 {
 	return gameType;
+}
+
+UDWORD getSaveGameVersion()
+{
+	return saveGameVersion;
 }
 
 static void plotBackdropPixel(char *backDropSprite, int xx, int yy, PIELIGHT const &colour)

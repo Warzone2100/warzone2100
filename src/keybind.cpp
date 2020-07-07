@@ -134,7 +134,7 @@ void kf_AutoGame()
 		return;
 	}
 #endif
-	if (game.type == CAMPAIGN)
+	if (game.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		CONPRINTF("%s", "Not possible with the campaign!");
 		return;

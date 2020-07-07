@@ -754,7 +754,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	PIELIGHT playerTextColor = GetPlayerTextColor(alliances[selectedPlayer][player], player);
 
-	if (isHuman || (game.type == SKIRMISH && player < game.maxPlayers))
+	if (isHuman || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers))
 	{
 		ssprintf(str, "%d: %s", NetPlay.players[player].position, getPlayerName(player));
 
@@ -905,7 +905,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// clean up widgets if player leaves while menu is up.
-	if (!isHuman && !(game.type == SKIRMISH && player < game.maxPlayers))
+	if (!isHuman && !(game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers))
 	{
 		if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + player) != nullptr)
 		{
@@ -1103,7 +1103,7 @@ bool intAddMultiMenu()
 	// add any players
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED))
+		if (isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED))
 		{
 			addMultiPlayer(i, NetPlay.players[i].position);
 		}

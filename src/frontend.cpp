@@ -196,16 +196,11 @@ static void runchatlink()
 
 void runContinue()
 {
-	SPinit();
+	SPinit(bMultiPlayer ? LEVEL_TYPE::SKIRMISH : LEVEL_TYPE::CAMPAIGN);
 	sstrcpy(saveGameName, lastSavePath);
 	bMultiPlayer = lastSaveMP;
-	if (bMultiPlayer)
+	if (!bMultiPlayer)
 	{
-		game.type = SKIRMISH;
-	}
-	else
-	{
-		game.type = CAMPAIGN;
 		int campaign = getCampaign(lastSavePath);
 		setCampaignNumber(campaign);
 	}
@@ -287,13 +282,13 @@ bool runTutorialMenu()
 	switch (id)
 	{
 	case FRONTEND_TUTORIAL:
-		SPinit();
+		SPinit(LEVEL_TYPE::CAMPAIGN);
 		sstrcpy(aLevelName, TUTORIAL_LEVEL);
 		changeTitleMode(STARTGAME);
 		break;
 
 	case FRONTEND_FASTPLAY:
-		SPinit();
+		SPinit(LEVEL_TYPE::CAMPAIGN);
 		sstrcpy(aLevelName, "FASTPLAY");
 		changeTitleMode(STARTGAME);
 		break;
@@ -412,19 +407,19 @@ static void loadOK()
 	}
 }
 
-void SPinit()
+void SPinit(LEVEL_TYPE gameType)
 {
 	uint8_t playercolor;
 
 	NetPlay.bComms = false;
 	bMultiPlayer = false;
 	bMultiMessages = false;
-	game.type = CAMPAIGN;
+	game.type = gameType;
 	NET_InitPlayers();
 	NetPlay.players[0].allocated = true;
 	NetPlay.players[0].autoGame = false;
 	NetPlay.players[0].difficulty = AIDifficulty::HUMAN;
-	game.maxPlayers = MAX_PLAYERS -1;	// Currently, 0 - 10 for a total of MAX_PLAYERS
+	game.maxPlayers = MAX_PLAYERS - 1;	// Currently, 0 - 10 for a total of MAX_PLAYERS
 	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 	playercolor = war_GetSPcolor();
 
@@ -446,7 +441,7 @@ bool runCampaignSelector()
 	}
 	else if (id >= FRONTEND_CAMPAIGN_1 && id <= FRONTEND_CAMPAIGN_6) // chose a campaign
 	{
-		SPinit();
+		SPinit(LEVEL_TYPE::CAMPAIGN);
 		frontEndNewGame(id - FRONTEND_CAMPAIGN_1);
 	}
 
@@ -485,18 +480,22 @@ bool runSinglePlayerMenu()
 			break;
 
 		case FRONTEND_LOADGAME_MISSION:
-			SPinit();
+			SPinit(LEVEL_TYPE::CAMPAIGN);
 			addLoadSave(LOAD_FRONTEND_MISSION, _("Load Campaign Saved Game"));	// change mode when loadsave returns
 			break;
 
 		case FRONTEND_LOADGAME_SKIRMISH:
-			SPinit();
+			SPinit(LEVEL_TYPE::SKIRMISH);
 			bMultiPlayer = true;
 			addLoadSave(LOAD_FRONTEND_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
 			break;
 
 		case FRONTEND_SKIRMISH:
-			SPinit();
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
+			game.hash = levGetMapNameHash(game.map);
+			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
+
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 			break;
@@ -506,7 +505,7 @@ bool runSinglePlayerMenu()
 			break;
 
 		case FRONTEND_CHALLENGES:
-			SPinit();
+			SPinit(LEVEL_TYPE::CAMPAIGN);
 			addChallenges();
 			break;
 
@@ -573,7 +572,7 @@ bool runMultiPlayerMenu()
 		bMultiMessages = true;
 		NETinit(true);
 		NETdiscoverUPnPDevices();
-		game.type = SKIRMISH;		// needed?
+		game.type = LEVEL_TYPE::SKIRMISH;		// needed?
 		changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
 		break;
 	case FRONTEND_JOIN:

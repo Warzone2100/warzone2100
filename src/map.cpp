@@ -1967,7 +1967,7 @@ void mapInit()
 
 	// Start danger thread (not used for campaign for now - mission map swaps too icky)
 	ASSERT(dangerSemaphore == nullptr && dangerThread == nullptr, "Map data not cleaned up before starting!");
-	if (game.type == SKIRMISH)
+	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
@@ -2003,7 +2003,7 @@ void mapUpdate()
 			}
 		}
 
-	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == SKIRMISH)
+	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		syncDebug("Do danger maps.");
 		lastDangerUpdate = gameTime;

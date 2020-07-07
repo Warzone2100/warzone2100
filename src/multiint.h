@@ -35,7 +35,6 @@
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
 #define AI_OPEN           -2
-#define AI_DEFAULT		   0
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
 

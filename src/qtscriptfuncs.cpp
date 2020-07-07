@@ -6403,7 +6403,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("CAMP_MSG", MSG_CAMPAIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MISS_MSG", MSG_MISSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RES_MSG", MSG_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("LDS_EXPAND_LIMBO", LDS_EXPAND_LIMBO, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("LDS_EXPAND_LIMBO", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	/// Place to store group sizes
 	//== * ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will

@@ -654,7 +654,7 @@ QScriptEngine *loadPlayerScript(const WzString& path, int player, AIDifficulty d
 
 	//== * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
 	//== ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
-	if (game.type == SKIRMISH)
+	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		engine->globalObject().setProperty("difficulty", static_cast<int8_t>(difficulty), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}

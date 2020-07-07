@@ -85,7 +85,7 @@ private:
 class WzMultiOptionTitleUI: public WzTitleUI
 {
 public:
-	WzMultiOptionTitleUI(std::shared_ptr<WzTitleUI> parent/*, bool online*/); // <-- add the online flag and set NetPlay.bComms etc. in ctor. Take the side, too? Might not be in scope of UI responsibilities, think about it a bit first!
+	WzMultiOptionTitleUI(std::shared_ptr<WzTitleUI> parent);
 	virtual void start() override;
 	virtual TITLECODE run() override;
 	void frontendMultiMessages(bool running);

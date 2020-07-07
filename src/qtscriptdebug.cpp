@@ -205,8 +205,10 @@ static void fillMainModel(QStandardItemModel &m)
 #define B2Q(_b) (_b ? QString("true") : QString("false"))
 #define KEYVAL(_key, _val) m.setItem(row, 0, new QStandardItem(_key)); m.setItem(row, 1, new QStandardItem(_val)); row++;
 
-	ASSERT(game.type < lev_type.size() && (int)game.type != 13 && (int)game.type != 15 && (int)game.type != 16 && (int)game.type != 17, "Bad LEVEL_TYPE for game.type");
-	KEYVAL("game.type", lev_type.at(game.type));
+	int8_t gameType = static_cast<int8_t>(game.type);
+	int8_t missionType = static_cast<int8_t>(mission.type);
+	ASSERT(gameType < lev_type.size() && gameType != 13 && gameType != 15 && gameType != 16 && gameType != 17, "Bad LEVEL_TYPE for game.type");
+	KEYVAL("game.type", lev_type.at(gameType));
 	KEYVAL("game.scavengers", B2Q(game.scavengers));
 	KEYVAL("game.map", QString(game.map));
 	KEYVAL("game.maxPlayers", QString::number(game.maxPlayers));
@@ -214,8 +216,8 @@ static void fillMainModel(QStandardItemModel &m)
 	KEYVAL("missionIsOffworld", B2Q(missionIsOffworld()));
 	KEYVAL("missionCanReEnforce", B2Q(missionCanReEnforce()));
 	KEYVAL("missionForReInforcements", B2Q(missionForReInforcements()));
-	ASSERT(mission.type < lev_type.size() && (int)mission.type != 13 && (int)mission.type != 15 && (int)mission.type != 16 && (int)mission.type != 17, "Bad LEVEL_TYPE for mission.type");
-	KEYVAL("mission.type", lev_type.at(mission.type));
+	ASSERT(missionType < lev_type.size() && missionType != 13 && missionType != 15 && missionType != 16 && missionType != 17, "Bad LEVEL_TYPE for mission.type");
+	KEYVAL("mission.type", lev_type.at(missionType));
 	KEYVAL("getDroidsToSafetyFlag", B2Q(getDroidsToSafetyFlag()));
 	KEYVAL("scavengerSlot", QString::number(scavengerSlot()));
 	KEYVAL("scavengerPlayer", QString::number(scavengerPlayer()));

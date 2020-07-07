@@ -135,7 +135,7 @@ TITLECODE titleLoop()
 		{
 			if (hostlaunch == 2)
 			{
-				SPinit();
+				SPinit(LEVEL_TYPE::SKIRMISH);
 			}
 			else // single player
 			{
@@ -148,7 +148,7 @@ TITLECODE titleLoop()
 			}
 			bMultiPlayer = true;
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
-			game.type = SKIRMISH;
+			game.type = LEVEL_TYPE::SKIRMISH;
 			// Ensure the game has a place to return to
 			changeTitleMode(TITLE);
 			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
