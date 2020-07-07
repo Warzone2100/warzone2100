@@ -473,7 +473,7 @@ void loadMapPreview(bool hideInterface)
 	char			*pFileData = nullptr;
 	LEVEL_DATASET	*psLevel = nullptr;
 	PIELIGHT		plCliffL, plCliffH, plWater, plRoadL, plRoadH, plGroundL, plGroundH;
-	UDWORD			x, y, height;
+	UDWORD			height;
 	UBYTE			col;
 	MAPTILE			*psTile, *WTile;
 	UDWORD oursize;
@@ -525,8 +525,18 @@ void loadMapPreview(bool hideInterface)
 	// load the map data
 	ptr = strrchr(aFileName, '/');
 	ASSERT_OR_RETURN(, ptr, "this string was supposed to contain a /");
-	strcpy(ptr, "/game.map");
-	if (!mapLoad(aFileName, true))
+	strcpy(ptr, "/game.js");
+	bool haveScript = PHYSFS_exists(aFileName);
+	ScriptMapData data;
+	if (haveScript)
+	{
+		data = runMapScript(aFileName, rand(), true);
+	}
+	else
+	{
+		strcpy(ptr, "/game.map");
+	}
+	if (haveScript? !mapLoadFromScriptData(data, true) : !mapLoad(aFileName, true))
 	{
 		debug(LOG_ERROR, "Failed to load map");
 		return;
@@ -577,10 +587,10 @@ void loadMapPreview(bool hideInterface)
 	memset(ptr, 0, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
 	psTile = psMapTiles;
 
-	for (y = 0; y < mapHeight; y++)
+	for (int y = 0; y < mapHeight; ++y)
 	{
 		WTile = psTile;
-		for (x = 0; x < mapWidth; x++)
+		for (int x = 0; x < mapWidth; ++x)
 		{
 			char *const p = imageData + (3 * (y * BACKDROP_HACK_WIDTH + x));
 			height = WTile->height / ELEVATION_SCALE;
@@ -619,7 +629,14 @@ void loadMapPreview(bool hideInterface)
 		playerpos[i] = Vector2i(0x77777777, 0x77777777);
 	}
 	// color our texture with clancolors @ correct position
-	plotStructurePreview16(imageData, playerpos);
+	if (haveScript)
+	{
+		plotStructurePreviewScript(data, imageData, playerpos);
+	}
+	else
+	{
+		plotStructurePreview16(imageData, playerpos);
+	}
 
 	screen_enableMapPreview(mapWidth, mapHeight, playerpos);
 

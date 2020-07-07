@@ -427,7 +427,9 @@ static inline void clip_world_offmap(int *worldX, int *worldY)
 bool mapShutdown();
 
 /* Load the map data */
-bool mapLoad(char *filename, bool preview);
+bool mapLoad(char const *filename, bool preview);
+struct ScriptMapData;
+bool mapLoadFromScriptData(ScriptMapData const &, bool preview);
 
 /* Save the map data */
 bool mapSave(char **ppFileData, UDWORD *pFileSize);

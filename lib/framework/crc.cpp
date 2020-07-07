@@ -51,8 +51,19 @@ uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen)
 {
 	while (dataLen-- > 0)
 	{
-		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(*data >> 8)];
-		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t) * data++];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data++)];
+	}
+
+	return crc;
+}
+
+uint32_t crcSumI16(uint32_t crc, const int16_t *data, size_t dataLen)
+{
+	while (dataLen-- > 0)
+	{
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data++)];
 	}
 
 	return crc;

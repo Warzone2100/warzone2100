@@ -61,6 +61,8 @@ UDWORD getCampaign(const char *fileName);
 /*returns the current type of save game being loaded*/
 GAME_TYPE getSaveGameType();
 
+struct ScriptMapData;
+bool plotStructurePreviewScript(ScriptMapData const &data, char *backDropSprite, Vector2i playeridpos[]);
 bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);

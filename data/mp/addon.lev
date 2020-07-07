@@ -347,3 +347,9 @@ players 6
 type    14
 dataset MULTI_CAM_3
 game    "multiplay/maps/6c-Melting.gam"
+
+level   Entropy
+players 6
+type    14
+dataset MULTI_CAM_3
+game    "multiplay/maps/6c-Entropy.gam"
