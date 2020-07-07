@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-25 02:54\n"
+"PO-Revision-Date: 2020-07-07 18:35\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -15448,7 +15448,7 @@ msgstr "Multijogador"
 
 #: src/frontend.cpp:1699
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Clique para abrir a página web."
 
 #: src/frontend.cpp:1702
 #: src/frontend.cpp:1721
@@ -16027,11 +16027,11 @@ msgstr "Mostrar FPS: Desactivado."
 
 #: src/keybind.cpp:617
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "Contador de unidades está activo."
 
 #: src/keybind.cpp:621
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "Contador de unidades está desactivado."
 
 #: src/keybind.cpp:673
 #, c-format
@@ -16997,23 +16997,23 @@ msgstr "Opções de Jogo Aleatório\n"
 
 #: src/multiint.cpp:1527
 msgid "Tech"
-msgstr ""
+msgstr "Tecnologia"
 
 #: src/multiint.cpp:1528
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Nível Tecnológico 1"
 
 #: src/multiint.cpp:1529
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Nível Tecnológico 2"
 
 #: src/multiint.cpp:1530
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Nível Tecnológico 3"
 
 #: src/multiint.cpp:1531
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Nível Tecnológico 4"
 
 #: src/multiint.cpp:1539
 #: src/multiint.cpp:1540
