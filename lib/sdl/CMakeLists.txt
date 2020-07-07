@@ -11,7 +11,7 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	list(APPEND SRC "cocoa_sdl_helpers.mm" "swapinterval.mm" "cocoa_wz_menus.mm")
+	list(APPEND SRC "cocoa_sdl_helpers.mm" "cocoa_wz_menus.mm")
 endif()
 
 set(SDL2_MIN_VERSION "2.0.5")
