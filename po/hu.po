@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-25 02:55\n"
+"PO-Revision-Date: 2020-07-08 20:39\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -25,7 +25,7 @@ msgstr "CÉLKITŰZÉS: keresse és szerezze meg a neurális szinapszis technoló
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Biztosítsa a bázist, aztán keresse meg a összeomlás elötti építményt."
+msgstr "Biztosítsa a bázist, aztán keresse meg a összeomlás előtti építményt."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -10413,7 +10413,7 @@ msgstr "Rétegelt kompozit ötvözetek és energiaelnyelő szálak"
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3482
 msgid "Leopard"
-msgstr ""
+msgstr "Leopárd"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -10606,7 +10606,7 @@ msgstr "Kiváló felderítő járművet készít"
 #. data/mp/stats/body.json: $.Body12SUP.name
 #: po/custom/fromJson.txt:3624
 msgid "Mantis"
-msgstr ""
+msgstr "Sáska"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MassDriver.name
@@ -11563,7 +11563,7 @@ msgstr "Kijelölt egységeknek általános tűzparancs az ellenséges ütegekre"
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4308
 msgid "Original Campaign"
-msgstr ""
+msgstr "Eredeti hadjárat"
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
@@ -11576,7 +11576,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4315
 msgid "Panther"
-msgstr ""
+msgstr "Párduc"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -11827,7 +11827,7 @@ msgstr "Propilén-oxid kezelése a magasabb égési hőmérséklet eléréséhez
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.tip
 #: po/custom/fromJson.txt:4470
 msgid "Prototypical AI focusing on rockets/missiles"
-msgstr ""
+msgstr "Rakétákra fókuszáló prototípus MI"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-PulseLas.name
@@ -11913,7 +11913,7 @@ msgstr "Python lánctalpas nehéz ágyú"
 #. data/mp/stats/body.json: $.Body11ABT.name
 #: po/custom/fromJson.txt:4517
 msgid "Python"
-msgstr ""
+msgstr "Piton"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
@@ -11932,7 +11932,7 @@ msgstr "Keretes rakéta adagoló, lehetővé teszi a gyors újratöltés"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[2]
 #: po/custom/fromJson.txt:4536
 msgid "Radar detector detects enemy sensors"
-msgstr ""
+msgstr "A radar ellenséges érzőkelőket észlel"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
@@ -12730,7 +12730,7 @@ msgstr "Kódoló torony"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5060
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "MI tengeri térképekhez, a NullBot alapján"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -12763,7 +12763,7 @@ msgstr "Önreprodukáló gyártás"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13430,7 +13430,7 @@ msgstr "Hő újrahasznosító"
 #. data/mp/stats/body.json: $.Body9REC.name
 #: po/custom/fromJson.txt:5537
 msgid "Tiger"
-msgstr ""
+msgstr "Tigris"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -13443,7 +13443,7 @@ msgstr "Titán erősítésű vasbeton"
 #. data/mp/multiplay/skirmish/nb_turtle.json: $.AI.tip
 #: po/custom/fromJson.txt:5544
 msgid "Tower wars AI, based on NullBot"
-msgstr ""
+msgstr "Toronyharc MI, a NullBot alapján"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Tracks.name
@@ -14077,7 +14077,7 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:5954
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14253,7 +14253,7 @@ msgstr "VTOL iker gépfegyver"
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6070
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -14380,7 +14380,7 @@ msgstr "Roncs jármű"
 #. data/mp/stats/body.json: $.Body13SUP.name
 #: po/custom/fromJson.txt:6149
 msgid "Wyvern"
-msgstr ""
+msgstr "Sárkánygyík"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[6]
@@ -14388,7 +14388,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6153
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Elit"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14404,7 +14404,7 @@ msgstr "Zöldfülű"
 #: po/custom/fromJson.txt:6161
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Hős"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14412,7 +14412,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6165
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "Profi"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14420,7 +14420,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6169
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "Hivatásos"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14428,7 +14428,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6173
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Újonc"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14436,7 +14436,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6177
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Különleges"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14444,7 +14444,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6181
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Edzett"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14452,7 +14452,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6185
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veterán"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -14463,7 +14463,7 @@ msgstr "Copyright © 1999-2004 Eidos Interaktív.\n"
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14483,7 +14483,7 @@ msgstr "Warzone 2100 Globális Mód fájl"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14519,7 +14519,7 @@ msgstr "Hibakeresés menü nyitva"
 #: src/clparse.cpp:86
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "Használat: %s [KAPCSOLÓ…]\n"
 
 #: src/clparse.cpp:258
 msgid "Set configuration directory"
@@ -14531,7 +14531,7 @@ msgstr "konfigurációs könyvtár"
 
 #: src/clparse.cpp:259
 msgid "Add data directory"
-msgstr ""
+msgstr "Adatkönyvtár hozzáadása"
 
 #: src/clparse.cpp:259
 msgid "data directory"
@@ -14563,15 +14563,15 @@ msgstr "Lejátszás teljesképernyős módba"
 
 #: src/clparse.cpp:264
 msgid "Load a specific game mode"
-msgstr ""
+msgstr "Egy adott játékmód betöltése"
 
 #: src/clparse.cpp:264
 msgid "level name"
-msgstr ""
+msgstr "szint neve"
 
 #: src/clparse.cpp:265
 msgid "Show options and exit"
-msgstr ""
+msgstr "Kapcsolók megjelenítése és kilépés"
 
 #: src/clparse.cpp:266
 msgid "Enable a global mod"
@@ -14670,11 +14670,11 @@ msgstr "Játékok futtatása automatikus tesztelésre"
 
 #: src/clparse.cpp:285
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "Azonnali mentés és kilépés"
 
 #: src/clparse.cpp:285
 msgid "save name"
-msgstr ""
+msgstr "mentés neve"
 
 #: src/clparse.cpp:286
 msgid "Start skirmish game with given settings file"
@@ -14686,7 +14686,7 @@ msgstr ""
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
-msgstr ""
+msgstr "Az utolsó mentett játék folytatása"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -14891,13 +14891,13 @@ msgstr "Szinkronizációból kilépett"
 #: src/display3d.cpp:1929
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr ""
+msgstr "Nagyítás beállítása erre: %.0f"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:251
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s elveszett!"
 
 #: src/droid.cpp:1146
 msgid "Structure Restored"
@@ -14965,11 +14965,11 @@ msgstr "Küldetés videók hiányoznak és töltsd le a a http://wz2100.net olda
 #: src/frontend.cpp:146
 #: src/frontend.cpp:150
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Utolsó mentés folytatása"
 
 #: src/frontend.cpp:151
 msgid "No last save available"
-msgstr ""
+msgstr "Utolsó mentés nem érhető el"
 
 #: src/frontend.cpp:153
 msgid "Quit Game"
@@ -14997,11 +14997,11 @@ msgstr "Segítsd támogatni a projektet a mi szerver költségeinket. Kattints e
 
 #: src/frontend.cpp:162
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Csevegés a játékosokkal Discordon vagy IRC-n"
 
 #: src/frontend.cpp:165
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Kapcsolódás a Discordhoz vagy Freenode-hoz webchat segítségével a hivatkozásra kattintva."
 
 #: src/frontend.cpp:166
 msgid "Check for a newer version"
@@ -15111,7 +15111,7 @@ msgstr "Video beállítás"
 
 #: src/frontend.cpp:623
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "Hang / nagyítási beállítások"
 
 #: src/frontend.cpp:624
 #: src/ingameop.cpp:489
@@ -15125,11 +15125,11 @@ msgstr "Billentyűzet beállítása"
 
 #: src/frontend.cpp:676
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:677
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:678
 #: src/frontend.cpp:1058
@@ -15157,7 +15157,7 @@ msgstr "Ki"
 
 #: src/frontend.cpp:688
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:689
 #: src/multiplay.cpp:1912
@@ -15184,11 +15184,11 @@ msgstr "Rögzített"
 
 #: src/frontend.cpp:711
 msgid "Instant"
-msgstr ""
+msgstr "Azonnali"
 
 #: src/frontend.cpp:711
 msgid "Tracked"
-msgstr ""
+msgstr "Lánctalpas"
 
 #: src/frontend.cpp:724
 #: src/ingameop.cpp:517
@@ -15213,7 +15213,7 @@ msgstr "Árnyékok"
 #: src/frontend.cpp:742
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.cpp:746
 #: src/ingameop.cpp:542
@@ -15235,7 +15235,7 @@ msgstr ""
 #: src/frontend.cpp:851
 #: src/frontend.cpp:857
 msgid "Auto"
-msgstr ""
+msgstr "Automatikus"
 
 #: src/frontend.cpp:892
 #: src/ingameop.cpp:159
@@ -15254,24 +15254,24 @@ msgstr "Zenei hang"
 
 #: src/frontend.cpp:904
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
 #: src/frontend.cpp:909
 #: src/frontend.cpp:911
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "A HRTF nem támogatott az eszközön / rendszeren / OpenAL programkönyvtárban"
 
 #: src/frontend.cpp:915
 msgid "Map Zoom"
-msgstr ""
+msgstr "Térkép nagyítása"
 
 #: src/frontend.cpp:919
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "Térkép nagyítási aránya"
 
 #: src/frontend.cpp:923
 msgid "Radar Zoom"
-msgstr ""
+msgstr "Radar nagyítása"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15279,7 +15279,7 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:934
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "HANG- / NAGYÍTÁSI BEÁLLÍTÁSOK"
 
 #: src/frontend.cpp:1058
 msgid "Windowed"
@@ -15291,7 +15291,7 @@ msgstr "Grafikus Mód*"
 
 #: src/frontend.cpp:1075
 msgid "Graphics Mode"
-msgstr ""
+msgstr "Grafikus mód"
 
 #: src/frontend.cpp:1080
 msgid "Resolution*"
@@ -15299,7 +15299,7 @@ msgstr "Felbontás*"
 
 #: src/frontend.cpp:1080
 msgid "Resolution"
-msgstr ""
+msgstr "Felbontás"
 
 #: src/frontend.cpp:1085
 msgid "Display Scale*"
@@ -15757,45 +15757,45 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:652
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "Többjátékos játékban"
 
 #: src/integrations/wzdiscordrpc.cpp:848
 #, c-format
 msgid "Game Name: \"%s\" by %s"
-msgstr ""
+msgstr "Játék neve: „%s”, létrehozó: %s"
 
 #. TRANSLATORS: "No:" to signify limits - example usage: "No: Tanks,VTOLs"
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:895
 msgid "No:"
-msgstr ""
+msgstr "Nincs:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:911
 msgid "Alliances:"
-msgstr ""
+msgstr "Szövetségek:"
 
 #: src/integrations/wzdiscordrpc.cpp:927
 msgid "In Menu"
-msgstr ""
+msgstr "Menüben"
 
 #: src/integrations/wzdiscordrpc.cpp:1076
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "„%s” Discord felhasználó csatlakozni szeretne a játékhoz."
 
 #: src/integrations/wzdiscordrpc.cpp:1078
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "Engedélyezi, hogy csatlakozzon a játékhoz?"
 
 #: src/integrations/wzdiscordrpc.cpp:1082
 #, c-format
 msgid "Join Request from %s"
-msgstr ""
+msgstr "Csatlakozási kérés tőle: %s"
 
 #: src/integrations/wzdiscordrpc.cpp:1084
 msgid "Allow"
-msgstr ""
+msgstr "Engedélyezés"
 
 #: src/intelmap.cpp:239
 #: src/keybind.cpp:1376
@@ -15951,15 +15951,15 @@ msgstr "Bírság, fegyver és érzékelő kijelző kikapcsolva!"
 
 #: src/keybind.cpp:326
 msgid "View Aligned to South"
-msgstr ""
+msgstr "Délre állított nézet"
 
 #: src/keybind.cpp:336
 msgid "View Aligned to East"
-msgstr ""
+msgstr "Keletre állított nézet"
 
 #: src/keybind.cpp:346
 msgid "View Aligned to West"
-msgstr ""
+msgstr "Nyugatra állított nézet"
 
 #: src/keybind.cpp:410
 #, c-format
@@ -16020,11 +16020,11 @@ msgstr "FPS kijelző kikapcsolva"
 
 #: src/keybind.cpp:617
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "Egységszámkijelzés engedélyezve."
 
 #: src/keybind.cpp:621
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "Egységszámkijelzés letiltva."
 
 #: src/keybind.cpp:673
 #, c-format
@@ -16248,7 +16248,7 @@ msgstr "Parancsnokok"
 
 #: src/keymap.cpp:307
 msgid "QuickSave"
-msgstr ""
+msgstr "Gyors mentés"
 
 #: src/keymap.cpp:308
 msgid "Toggle Radar"
@@ -16256,7 +16256,7 @@ msgstr "Radar váltás"
 
 #: src/keymap.cpp:309
 msgid "QuickLoad"
-msgstr ""
+msgstr "Gyors betöltés"
 
 #: src/keymap.cpp:310
 msgid "Toggle Console Display"
@@ -16992,19 +16992,19 @@ msgstr ""
 
 #: src/multiint.cpp:1528
 msgid "Technology Level 1"
-msgstr ""
+msgstr "1. technológiai szint"
 
 #: src/multiint.cpp:1529
 msgid "Technology Level 2"
-msgstr ""
+msgstr "2. technológiai szint"
 
 #: src/multiint.cpp:1530
 msgid "Technology Level 3"
-msgstr ""
+msgstr "3. technológiai szint"
 
 #: src/multiint.cpp:1531
 msgid "Technology Level 4"
-msgstr ""
+msgstr "4. technológiai szint"
 
 #: src/multiint.cpp:1539
 #: src/multiint.cpp:1540
@@ -17061,7 +17061,7 @@ msgstr "Játékos kiszállt"
 
 #: src/multiint.cpp:2237
 msgid "Player is downloading"
-msgstr ""
+msgstr "A játékos letölt"
 
 #: src/multiint.cpp:2237
 msgid "Click when ready"
@@ -17069,7 +17069,7 @@ msgstr "Kattintson, ha kész"
 
 #: src/multiint.cpp:2237
 msgid "Waiting for download"
-msgstr ""
+msgstr "Várakozás a letöltésre"
 
 #: src/multiint.cpp:2249
 msgid "READY?"
@@ -17917,11 +17917,11 @@ msgstr ""
 
 #: src/updatemanager.cpp:246
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "A Warzone 2100 új összeállítása érhető el!"
 
 #: src/updatemanager.cpp:248
 msgid "Get Update Now"
-msgstr ""
+msgstr "Frissítés beszerzése most"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:115
@@ -17939,5 +17939,5 @@ msgstr " - HIBAKERESÉS"
 #: src/version.cpp:131
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Verzió: %s,%s Összeállítva: %s%s"
 
