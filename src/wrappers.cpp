@@ -151,7 +151,7 @@ TITLECODE titleLoop()
 			game.type = LEVEL_TYPE::SKIRMISH;
 			// Ensure the game has a place to return to
 			changeTitleMode(TITLE);
-			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 		}
 		else if (strlen(iptoconnect))
 		{

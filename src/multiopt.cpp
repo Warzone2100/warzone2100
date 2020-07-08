@@ -92,7 +92,6 @@ void sendOptions()
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
 
-	// FIXME: is this required?
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));

@@ -96,7 +96,7 @@ static inline void freeLimitSet()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-WzMultiLimitTitleUI::WzMultiLimitTitleUI(std::shared_ptr<WzMultiOptionTitleUI> parent) : parent(parent)
+WzMultiLimitTitleUI::WzMultiLimitTitleUI(std::shared_ptr<WzMultiplayerOptionsTitleUI> parent) : parent(parent)
 {
 
 }

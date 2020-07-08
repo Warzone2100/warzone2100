@@ -497,7 +497,7 @@ bool runSinglePlayerMenu()
 			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
 
 			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
-			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 			break;
 
 		case FRONTEND_QUIT:
@@ -573,7 +573,7 @@ bool runMultiPlayerMenu()
 		NETinit(true);
 		NETdiscoverUPnPDevices();
 		game.type = LEVEL_TYPE::SKIRMISH;		// needed?
-		changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+		changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 		break;
 	case FRONTEND_JOIN:
 		NETinit(true);

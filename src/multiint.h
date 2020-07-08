@@ -31,6 +31,7 @@
 #include <functional>
 #include <vector>
 #include "lib/framework/wzstring.h"
+#include "titleui/multiplayer.h"
 
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
@@ -90,7 +91,7 @@ public:
 	MultichoiceWidget(WIDGET *parent, int value = -1);
 };
 
-// WzMultiOptionTitleUI is in titleui.h to prevent dependency explosions
+// WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
@@ -103,7 +104,7 @@ LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
 /**
- * Updates structure limit "flags". Flags indicate which structures are disabled.
+ * Updates structure limit flags. Flags indicate which structures are disabled.
  */
 void updateStructureDisabledFlags();
 
@@ -117,7 +118,6 @@ extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
-void addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
 bool changeReadyStatus(UBYTE player, bool bReady);

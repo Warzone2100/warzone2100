@@ -152,14 +152,9 @@ extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern bool bSendingMap;			// used to indicate we are sending a map
 
-char						sPlayer[128];							// player name (to be used)
-bool multiintDisableLobbyRefresh = false;	// if we allow lobby to be refreshed or not.
+char sPlayer[128]; // player name (to be used)
+bool multiintDisableLobbyRefresh = false; // if we allow lobby to be refreshed or not.
 
-static int					colourChooserUp = -1;
-static int					teamChooserUp = -1;
-static int					aiChooserUp = -1;
-static int					difficultyChooserUp = -1;
-static int					positionChooserUp = -1;
 static UDWORD hideTime = 0;
 static uint8_t playerVotes[MAX_PLAYERS];
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
@@ -207,11 +202,6 @@ static	void	SendFireUp();
 
 static	void	decideWRF();
 
-static void		closeColourChooser();
-static void		closeTeamChooser();
-static void		closePositionChooser();
-static void		closeAiChooser();
-static void		closeDifficultyChooser();
 static bool		SendColourRequest(UBYTE player, UBYTE col);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 bool changeReadyStatus(UBYTE player, bool bReady);
@@ -973,7 +963,7 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 
-	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(oldUI));
+	changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(oldUI));
 
 	if (war_getMPcolour() >= 0)
 	{
@@ -1513,37 +1503,77 @@ static bool safeToUseColour(unsigned player, unsigned otherPlayer)
 	return player == otherPlayer || NetPlay.isHost || !isHumanPlayer(otherPlayer);
 }
 
-static void initChooser(int player)
+static int getPlayerTeam(int i)
 {
-	// delete that players box,
+	return alliancesSetTeamsBeforeGame(game.alliance) ? NetPlay.players[i].team : i;
+}
+
+/**
+ * Checks if all players are on the same team. If so, return that team; if not, return -1;
+ * if there are no players, return team MAX_PLAYERS.
+ */
+static int allPlayersOnSameTeam(int except)
+{
+	int minTeam = MAX_PLAYERS, maxTeam = 0, numPlayers = 0;
+	for (unsigned i = 0; i < game.maxPlayers; ++i)
+	{
+		if (i != except && (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0))
+		{
+			int team = getPlayerTeam(i);
+			minTeam = std::min(minTeam, team);
+			maxTeam = std::max(maxTeam, team);
+			++numPlayers;
+		}
+	}
+	if (minTeam == MAX_PLAYERS || minTeam == maxTeam)
+	{
+		return minTeam;  // Players all on same team.
+	}
+	return -1;  // Players not all on same team.
+}
+
+static int playerBoxHeight(int player)
+{
+	int gap = MULTIOP_PLAYERSH - MULTIOP_TEAMSHEIGHT * game.maxPlayers;
+	int gapDiv = game.maxPlayers - 1;
+	gap = std::min(gap, 5 * gapDiv);
+	STATIC_ASSERT(MULTIOP_TEAMSHEIGHT == MULTIOP_PLAYERHEIGHT);  // Why are these different defines?
+	return (MULTIOP_TEAMSHEIGHT * gapDiv + gap) * NetPlay.players[player].position / gapDiv;
+}
+
+void WzMultiplayerOptionsTitleUI::closeAllChoosers()
+{
+	closeColourChooser();
+	closeTeamChooser();
+	closePositionChooser();
+	closeAiChooser();
+	closeDifficultyChooser();
+}
+
+void WzMultiplayerOptionsTitleUI::initInlineChooser(uint32_t player)
+{
+	// delete everything on that player's row,
 	widgDelete(psWScreen, MULTIOP_PLAYER_START + player);
-
-	// delete team chooser button
 	widgDelete(psWScreen, MULTIOP_TEAMS_START + player);
-
-	// delete 'ready' button
 	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
-
-	// delete 'colour' button
 	widgDelete(psWScreen, MULTIOP_COLOUR_START + player);
 
 	// remove any choosers already up
-	closeColourChooser();
-	closeTeamChooser();
+	closeAllChoosers();
 }
 
-static void addDifficultyChooser(int player)
+void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 {
-	closeColourChooser();
-	closeTeamChooser();
+	closeAllChoosers();
+
 	widgDelete(psWScreen, MULTIOP_AI_FORM);
 	widgDelete(psWScreen, MULTIOP_PLAYERS);
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	difficultyChooserUp = player;
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	WIDGET *chooserParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *aiForm = new IntFormAnimated(parent, false);
+	IntFormAnimated *aiForm = new IntFormAnimated(chooserParent, false);
 	aiForm->id = MULTIOP_AI_FORM;
 	aiForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -1585,18 +1615,17 @@ static void addDifficultyChooser(int player)
 	}
 }
 
-static void addAiChooser(int player)
+void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 {
-	closeColourChooser();
-	closeTeamChooser();
+	closeAllChoosers();
 	widgDelete(psWScreen, MULTIOP_AI_FORM);
 	widgDelete(psWScreen, MULTIOP_PLAYERS);
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	aiChooserUp = player;
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	WIDGET *chooserParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *aiForm = new IntFormAnimated(parent, false);
+	IntFormAnimated *aiForm = new IntFormAnimated(chooserParent, false);
 	aiForm->id = MULTIOP_AI_FORM;
 	aiForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -1676,55 +1705,68 @@ static void addAiChooser(int player)
 	}
 }
 
-static void closeAiChooser()
-{
-	widgDelete(psWScreen, MULTIOP_AI_FORM);
-	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
-	aiChooserUp = -1;
-}
-
-static void closeDifficultyChooser()
-{
-	widgDelete(psWScreen, MULTIOP_AI_FORM);
-	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
-	difficultyChooserUp = -1;
-}
-
-static void closePositionChooser()
-{
-	positionChooserUp = -1;
-}
-
-static int playerBoxHeight(int player)
-{
-	int gap = MULTIOP_PLAYERSH - MULTIOP_TEAMSHEIGHT * game.maxPlayers;
-	int gapDiv = game.maxPlayers - 1;
-	gap = std::min(gap, 5 * gapDiv);
-	STATIC_ASSERT(MULTIOP_TEAMSHEIGHT == MULTIOP_PLAYERHEIGHT);  // Why are these different defines?
-	return (MULTIOP_TEAMSHEIGHT * gapDiv + gap) * NetPlay.players[player].position / gapDiv;
-}
-
-static void addPositionChooser(int player)
+void WzMultiplayerOptionsTitleUI::openPositionChooser(uint32_t player)
 {
 	closeColourChooser();
 	closeTeamChooser();
 	closePositionChooser();
 	closeAiChooser();
 	closeDifficultyChooser();
+
 	positionChooserUp = player;
 	addPlayerBox(true);
 }
 
-static void addColourChooser(UDWORD player)
+void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
+{
+	UDWORD i;
+	int disallow = allPlayersOnSameTeam(player);
+
+	debug(LOG_NET, "Opened team chooser for %d, current team: %d", player, NetPlay.players[player].team);
+
+	initInlineChooser(player);
+
+	// add form.
+	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 8, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
+
+	int teamW = iV_GetImageWidth(FrontImages, IMAGE_TEAM0);
+	int teamH = iV_GetImageHeight(FrontImages, IMAGE_TEAM0);
+	int space = MULTIOP_ROW_WIDTH - 4 - teamW * (game.maxPlayers + 1);
+	int spaceDiv = game.maxPlayers;
+	space = std::min(space, 3 * spaceDiv);
+
+	// add the teams, skipping the one we CAN'T be on (if applicable)
+	for (i = 0; i < game.maxPlayers; i++)
+	{
+		if (i != disallow)
+		{
+			addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (teamW * spaceDiv + space) / spaceDiv + 3, 6, teamW, teamH, _("Team"), IMAGE_TEAM0 + i, IMAGE_TEAM0_HI + i, IMAGE_TEAM0_HI + i);
+		}
+		// may want to add some kind of 'can't do' icon instead of being blank?
+	}
+
+	// add a kick button
+	if (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated)
+	{
+		const int imgwidth = iV_GetImageWidth(FrontImages, IMAGE_NOJOIN);
+		const int imgheight = iV_GetImageHeight(FrontImages, IMAGE_NOJOIN);
+		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK, MULTIOP_ROW_WIDTH - imgwidth - 4, 8, imgwidth, imgheight,
+			("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
+	}
+
+	teamChooserUp = player;
+}
+
+void WzMultiplayerOptionsTitleUI::openColourChooser(uint32_t player)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player number");
-	initChooser(player);
+	initInlineChooser(player);
 
 	// add form.
 	addBlueForm(MULTIOP_PLAYERS, MULTIOP_COLCHOOSER_FORM, "",
-	            8,
-	            playerBoxHeight(player),
-	            MULTIOP_ROW_WIDTH, MULTIOP_PLAYERHEIGHT);
+		8,
+		playerBoxHeight(player),
+		MULTIOP_ROW_WIDTH, MULTIOP_PLAYERHEIGHT);
 
 	// add the flags
 	int flagW = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
@@ -1732,12 +1774,12 @@ static void addColourChooser(UDWORD player)
 	int space = MULTIOP_ROW_WIDTH - 0 - flagW * MAX_PLAYERS_IN_GUI;
 	int spaceDiv = MAX_PLAYERS_IN_GUI;
 	space = std::min(space, 5 * spaceDiv);
-	for (unsigned int i = 0; i < MAX_PLAYERS_IN_GUI; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS_IN_GUI; i++)
 	{
 		addMultiBut(psWScreen, MULTIOP_COLCHOOSER_FORM, MULTIOP_COLCHOOSER + getPlayerColour(i),
-		            i * (flagW * spaceDiv + space) / spaceDiv + 7,  4, // x, y
-		            flagW, flagH,  // w, h
-		            getPlayerColourName(i), IMAGE_PLAYERN, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, getPlayerColour(i));
+			i * (flagW * spaceDiv + space) / spaceDiv + 7, 4, // x, y
+			flagW, flagH,  // w, h
+			getPlayerColourName(i), IMAGE_PLAYERN, IMAGE_PLAYERN_HI, IMAGE_PLAYERN_HI, getPlayerColour(i));
 
 		if (!safeToUseColour(selectedPlayer, i))
 		{
@@ -1748,10 +1790,35 @@ static void addColourChooser(UDWORD player)
 	colourChooserUp = player;
 }
 
-static void closeColourChooser()
+void WzMultiplayerOptionsTitleUI::closeColourChooser()
 {
 	colourChooserUp = -1;
 	widgDelete(psWScreen, MULTIOP_COLCHOOSER_FORM);
+}
+
+void WzMultiplayerOptionsTitleUI::closeTeamChooser()
+{
+	teamChooserUp = -1;
+	widgDelete(psWScreen, MULTIOP_TEAMCHOOSER_FORM);
+}
+
+void WzMultiplayerOptionsTitleUI::closeAiChooser()
+{
+	widgDelete(psWScreen, MULTIOP_AI_FORM);
+	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
+	aiChooserUp = -1;
+}
+
+void WzMultiplayerOptionsTitleUI::closeDifficultyChooser()
+{
+	widgDelete(psWScreen, MULTIOP_AI_FORM);
+	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
+	difficultyChooserUp = -1;
+}
+
+void WzMultiplayerOptionsTitleUI::closePositionChooser()
+{
+	positionChooserUp = -1;
 }
 
 static void changeTeam(UBYTE player, UBYTE team)
@@ -2046,84 +2113,6 @@ bool recvPositionRequest(NETQUEUE queue)
 	return changePosition(player, position);
 }
 
-static int getPlayerTeam(int i)
-{
-	return alliancesSetTeamsBeforeGame(game.alliance) ? NetPlay.players[i].team : i;
-}
-
-// If so, return that team; if not, return -1; if there are no players, return team MAX_PLAYERS.
-static int allPlayersOnSameTeam(int except)
-{
-	int minTeam = MAX_PLAYERS, maxTeam = 0, numPlayers = 0;
-	for (int i = 0; i < game.maxPlayers; ++i)
-	{
-		if (i != except && (NetPlay.players[i].allocated || NetPlay.players[i].ai >= 0))
-		{
-			int team = getPlayerTeam(i);
-			minTeam = std::min(minTeam, team);
-			maxTeam = std::max(maxTeam, team);
-			++numPlayers;
-		}
-	}
-	if (minTeam == MAX_PLAYERS || minTeam == maxTeam)
-	{
-		return minTeam;  // Players all on same team.
-	}
-	return -1;  // Players not all on same team.
-}
-
-/*
- * Opens a menu for a player to choose a team
- * 'player' is a player id of the player who will get a new team assigned
- */
-static void addTeamChooser(UDWORD player)
-{
-	UDWORD i;
-	int disallow = allPlayersOnSameTeam(player);
-
-	debug(LOG_NET, "Opened team chooser for %d, current team: %d", player, NetPlay.players[player].team);
-
-	initChooser(player);
-
-	// add form.
-	addBlueForm(MULTIOP_PLAYERS, MULTIOP_TEAMCHOOSER_FORM, "", 8, playerBoxHeight(player), MULTIOP_ROW_WIDTH, MULTIOP_TEAMSHEIGHT);
-
-	int teamW = iV_GetImageWidth(FrontImages, IMAGE_TEAM0);
-	int teamH = iV_GetImageHeight(FrontImages, IMAGE_TEAM0);
-	int space = MULTIOP_ROW_WIDTH - 4 - teamW * (game.maxPlayers + 1);
-	int spaceDiv = game.maxPlayers;
-	space = std::min(space, 3 * spaceDiv);
-
-	// add the teams, skipping the one we CAN'T be on (if applicable)
-	for (i = 0; i < game.maxPlayers; i++)
-	{
-		if (i != disallow)
-		{
-			addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER + i, i * (teamW * spaceDiv + space) / spaceDiv + 3, 6, teamW, teamH, _("Team"), IMAGE_TEAM0 + i , IMAGE_TEAM0_HI + i, IMAGE_TEAM0_HI + i);
-		}
-		// may want to add some kind of 'can't do' icon instead of being blank?
-	}
-
-	// add a kick button
-	if (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated)
-	{
-		const int imgwidth = iV_GetImageWidth(FrontImages, IMAGE_NOJOIN);
-		const int imgheight = iV_GetImageHeight(FrontImages, IMAGE_NOJOIN);
-		addMultiBut(psWScreen, MULTIOP_TEAMCHOOSER_FORM, MULTIOP_TEAMCHOOSER_KICK, MULTIOP_ROW_WIDTH - imgwidth - 4, 8, imgwidth, imgheight,
-		            ("Kick player"), IMAGE_NOJOIN, IMAGE_NOJOIN, IMAGE_NOJOIN);
-	}
-
-	teamChooserUp = player;
-}
-
-/*
- * Closes Team Chooser dialog box, if there was any open
- */
-static void closeTeamChooser()
-{
-	teamChooserUp = -1;
-	widgDelete(psWScreen, MULTIOP_TEAMCHOOSER_FORM);	//only once!
-}
 
 static void drawReadyButton(UDWORD player)
 {
@@ -2192,7 +2181,7 @@ static bool canChooseTeamFor(int i)
 // ////////////////////////////////////////////////////////////////////////////
 // box for players.
 
-void addPlayerBox(bool players)
+void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 {
 	// if background isn't there, then return since were not ready to draw the box yet!
 	if (widgGetFromID(psWScreen, FRONTEND_BACKDROP) == nullptr)
@@ -2205,19 +2194,19 @@ void addPlayerBox(bool players)
 
 	if (aiChooserUp >= 0)
 	{
-		addAiChooser(aiChooserUp);
+		openAiChooser(aiChooserUp);
 		return;
 	}
 	else if (difficultyChooserUp >= 0)
 	{
-		addDifficultyChooser(difficultyChooserUp);
+		openDifficultyChooser(difficultyChooserUp);
 		return;
 	}
 
 	// draw player window
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	WIDGET *widgetParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *playersForm = new IntFormAnimated(parent, false);
+	IntFormAnimated *playersForm = new IntFormAnimated(widgetParent, false);
 	playersForm->id = MULTIOP_PLAYERS;
 	playersForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -2272,12 +2261,12 @@ void addPlayerBox(bool players)
 			}
 			else if (i == colourChooserUp)
 			{
-				addColourChooser(i);
+				openColourChooser(i);
 				continue;
 			}
 			else if (i == teamChooserUp)
 			{
-				addTeamChooser(i);
+				openTeamChooser(i);
 				continue;
 			}
 			else if (ingame.localOptionsReceived)
@@ -2303,7 +2292,7 @@ void addPlayerBox(bool players)
 
 				if (teamChooserUp == i && colourChooserUp < 0)
 				{
-					addTeamChooser(i);
+					openTeamChooser(i);
 				}
 				else if (alliancesSetTeamsBeforeGame(game.alliance))
 				{
@@ -2651,7 +2640,12 @@ static void loadMapChallengeSettings(WzConfig& ini)
 		{
 			sstrcpy(game.map, ini.value("map", game.map).toWzString().toUtf8().c_str());
 			game.hash = levGetMapNameHash(game.map);
-			game.maxPlayers = ini.value("maxPlayers", game.maxPlayers).toInt();	// FIXME: Choose as max(ini.value(...), maxPlayersForMap)
+
+			LEVEL_DATASET* mapData = levFindDataSet(game.map, &game.hash);
+			game.maxPlayers = mapData->players;
+
+			uint8_t configuredMaxPlayers = ini.value("maxPlayers", game.maxPlayers).toUInt();
+			game.maxPlayers = std::min(std::max((uint8_t)1u, configuredMaxPlayers), game.maxPlayers);
 			game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 			game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
 			game.power = ini.value("powerLevel", game.power).toInt();
@@ -2995,20 +2989,46 @@ static void randomizeOptions()
 		game.base = rand() % 3;
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_BASETYPE))->choose(game.base);
 	}
-
 	if (NetPlay.isHost)
 	{
+		game.techLevel = rand() % 4;
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_TECHLEVEL))->choose(game.techLevel);
 
 		resetReadyStatus(true);
 	}
 }
 
+bool WzMultiplayerOptionsTitleUI::startHost()
+{
+	resetReadyStatus(false);
+	removeWildcards((char*)sPlayer);
+
+	if (!hostCampaign((char*)game.name, (char*)sPlayer))
+	{
+		addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		return false;
+	}
+
+	widgDelete(psWScreen, MULTIOP_REFRESH);
+	widgDelete(psWScreen, MULTIOP_HOST);
+	widgDelete(psWScreen, MULTIOP_FILTER_TOGGLE);
+
+	ingame.localOptionsReceived = true;
+
+	addGameOptions(); // update game options box.
+	addChatBox();
+
+	disableMultiButs();
+	addPlayerBox(true);
+
+	return true;
+}
+
 /*
  * Process click events on the multiplayer/skirmish options screen
  * 'id' is id of the button that was pressed
  */
-void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
+void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 {
 	PLAYERSTATS playerStats;
 
@@ -3179,7 +3199,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		break;
 
 	case MULTIOP_STRUCTLIMITS:
-		changeTitleUI(std::make_shared<WzMultiLimitTitleUI>(std::dynamic_pointer_cast<WzMultiOptionTitleUI>(wzTitleUICurrent)));
+		changeTitleUI(std::make_shared<WzMultiLimitTitleUI>(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent)));
 		break;
 
 	case MULTIOP_PNAME:
@@ -3219,35 +3239,14 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 
 	case MULTIOP_HOST:
 		debug(LOG_NET, "MULTIOP_HOST enabled");
-		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));	// game name
-		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));	// pname
+		sstrcpy(game.name, widgGetString(psWScreen, MULTIOP_GNAME));
+		sstrcpy(sPlayer, widgGetString(psWScreen, MULTIOP_PNAME));
 
 		resetVoteData();
-
-		resetReadyStatus(false);
 		resetDataHash();
-		removeWildcards((char *)sPlayer);
 
-		if (!hostCampaign((char *)game.name, (char *)sPlayer))
-		{
-			addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-			break;
-		}
-
-		widgDelete(psWScreen, MULTIOP_REFRESH);
-		widgDelete(psWScreen, MULTIOP_HOST);
-		widgDelete(psWScreen, MULTIOP_FILTER_TOGGLE);
-
-		ingame.localOptionsReceived = true;
-
-		addGameOptions(); // update game options box.
-		addChatBox();
-
-		disableMultiButs();
-
-		addPlayerBox(true);
+		startHost();
 		break;
-
 	case MULTIOP_RANDOM:
 		randomizeOptions();
 		break;
@@ -3338,7 +3337,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		//make sure team chooser is not up before adding new one for another player
 		if (teamChooserUp < 0 && colourChooserUp < 0 && canChooseTeamFor(clickedMenuID) && positionChooserUp < 0)
 		{
-			addTeamChooser(clickedMenuID);
+			openTeamChooser(clickedMenuID);
 		}
 	}
 
@@ -3396,7 +3395,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 	{
 		if (teamChooserUp < 0 && positionChooserUp < 0 && colourChooserUp < 0)		// not choosing something else already
 		{
-			addColourChooser(id - MULTIOP_COLOUR_START);
+			openColourChooser(id - MULTIOP_COLOUR_START);
 		}
 	}
 
@@ -3411,7 +3410,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 		if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
 		    && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 		{
-			addPositionChooser(player);
+			openPositionChooser(player);
 		}
 		else if (positionChooserUp == player)
 		{
@@ -3448,7 +3447,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 			}
 			else
 			{
-				addAiChooser(player);
+				openAiChooser(player);
 			}
 		}
 	}
@@ -3456,7 +3455,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 	if (id >= MULTIOP_DIFFICULTY_INIT_START && id <= MULTIOP_DIFFICULTY_INIT_END
 	    && !locked.difficulty && NetPlay.isHost && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 	{
-		addDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
+		openDifficultyChooser(id - MULTIOP_DIFFICULTY_INIT_START);
 		addPlayerBox(true);
 	}
 
@@ -3482,11 +3481,7 @@ void WzMultiOptionTitleUI::processMultiopWidgets(UDWORD id)
 /* Start a multiplayer or skirmish game */
 void startMultiplayerGame()
 {
-	if (!NetPlay.isHost)
-	{
-		debug(LOG_ERROR, "Tried to start game when host was already started!");
-		return;
-	}
+	ASSERT_HOST_ONLY(return);
 
 	decideWRF();										// set up swrf & game.map
 	bMultiPlayer = true;
@@ -3534,7 +3529,7 @@ void startMultiplayerGame()
 // ////////////////////////////////////////////////////////////////////////////
 // Net message handling
 
-void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
+void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 {
 	NETQUEUE queue;
 	uint8_t type;
@@ -3579,7 +3574,7 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 			recvOptions(queue);
 			ingame.localOptionsReceived = true;
 
-			if (std::dynamic_pointer_cast<WzMultiOptionTitleUI>(wzTitleUICurrent))
+			if (std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent))
 			{
 				addGameOptions();
 				disableMultiButs();
@@ -3787,7 +3782,7 @@ void WzMultiOptionTitleUI::frontendMultiMessages(bool running)
 	}
 }
 
-TITLECODE WzMultiOptionTitleUI::run()
+TITLECODE WzMultiplayerOptionsTitleUI::run()
 {
 	static UDWORD	lastrefresh = 0;
 	PLAYERSTATS		playerStats;
@@ -4015,7 +4010,13 @@ TITLECODE WzMultiOptionTitleUI::run()
 	return TITLECODE_CONTINUE;
 }
 
-WzMultiOptionTitleUI::WzMultiOptionTitleUI(std::shared_ptr<WzTitleUI> parent) : parent(parent)
+WzMultiplayerOptionsTitleUI::WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitleUI> parent)
+	: parent(parent)
+	, colourChooserUp(-1)
+	, teamChooserUp(-1)
+	, aiChooserUp(-1)
+	, difficultyChooserUp(-1)
+	, positionChooserUp(-1)
 {
 }
 
@@ -4060,14 +4061,13 @@ static void printHostHelpMessagesToConsole()
 	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 }
 
-void WzMultiOptionTitleUI::start()
+void WzMultiplayerOptionsTitleUI::start()
 {
 	const bool bReenter = performedFirstStart;
 	performedFirstStart = true;
 	netPlayersUpdated = true;
 
 	addBackdrop();
-	loadMapPreview(false);
 	addTopForm(true);
 
 	if (getLobbyError() != ERROR_INVALID)
@@ -4078,7 +4078,11 @@ void WzMultiOptionTitleUI::start()
 	/* Entering the first time */
 	if (!bReenter)
 	{
-		memset(&locked, 0, sizeof(locked)); // nothing is locked by default
+		resetPlayerConfiguration();
+		memset(&locked, 0, sizeof(locked));
+		loadMapChallengeAndPlayerSettings();
+		game.isMapMod = false;
+		game.mapHasScavengers = true; // FIXME, should default to false
 
 		teamChooserUp = -1;
 		aiChooserUp = -1;
@@ -4086,37 +4090,20 @@ void WzMultiOptionTitleUI::start()
 		positionChooserUp = -1;
 		colourChooserUp = -1;
 
-		resetPlayerConfiguration();
-		loadMapChallengeAndPlayerSettings();
-
-		game.isMapMod = false;			// reset map-mod status
-		game.mapHasScavengers = true;	// FIXME, should default to false
-
 		ingame.localOptionsReceived = false;
 
 		PLAYERSTATS	nullStats;
 		loadMultiStats((char*)sPlayer, &nullStats);
 
-		/* Entering the first time with challenge */
-		if (challengeActive)
+		/* Entering the first time with challenge, immediately start the host */
+		if (challengeActive && !startHost())
 		{
-			resetReadyStatus(false);
-			removeWildcards((char*)sPlayer);
-			if (!hostCampaign((char*)game.name, (char*)sPlayer))
-			{
-				debug(LOG_ERROR, "Failed to host the challenge.");
-				return;
-			}
-
-			netPlayersUpdated = true;
-
-			ingame.localOptionsReceived = true;
-			addGameOptions();
-			addChatBox();
-			disableMultiButs();
-			addPlayerBox(true);
+			debug(LOG_ERROR, "Failed to host the challenge.");
+			return;
 		}
 	}
+
+	loadMapPreview(false);
 
 	/* Re-entering or entering without a challenge */
 	if (bReenter || !challengeActive)
@@ -4131,21 +4118,16 @@ void WzMultiOptionTitleUI::start()
 		}
 	}
 
-	/* Only reset limits if we are not re-entering */
+	/* Reset structure limits if we are entering the first time or if we have a challenge */
 	if (!bReenter || challengeActive)
 	{
-		ingame.structureLimits.clear();
 		resetLimits();
 		updateStructureDisabledFlags();
 		updateLimitIcons();
 	}
 
-	loadMapPreview(false);
-
 	if (autogame_enabled() || hostlaunch == 3)
 	{
-		loadMapChallengeAndPlayerSettings();
-
 		if (!ingame.localJoiningInProgress)
 		{
 			processMultiopWidgets(MULTIOP_HOST);

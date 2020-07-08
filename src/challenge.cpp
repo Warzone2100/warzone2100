@@ -43,6 +43,7 @@
 #include "multiplay.h"
 #include "mission.h"
 #include "titleui/titleui.h"
+#include "titleui/multiplayer.h"
 
 #define totalslots 36			// challenge slots
 #define slotsInColumn 12		// # of slots in a column
@@ -430,7 +431,7 @@ success:
 	closeChallenges();
 	challengeActive = true;
 	ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
-	changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+	changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 	return true;
 }
 

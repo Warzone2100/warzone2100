@@ -359,7 +359,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 	{
 		if (!multiRequestUp && (NetPlay.isHost || ingame.localJoiningInProgress))
 		{
-			addPlayerBox(true);	// update the player box.
+			netPlayersUpdated = true;	// update the player box.
 		}
 	}
 
