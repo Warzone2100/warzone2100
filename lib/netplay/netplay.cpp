@@ -47,7 +47,14 @@
 #include "netsocket.h"
 
 #include <miniupnpc/miniwget.h>
+#if (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <miniupnpc/miniupnpc.h>
+#if (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER)
+# pragma GCC diagnostic pop
+#endif
 #include <miniupnpc/upnpcommands.h>
 
 // Enforce minimum MINIUPNPC_API_VERSION
