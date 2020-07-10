@@ -9,6 +9,10 @@ var maxDifference = 192;
 
 var mapSize = mapWidth*mapHeight;
 
+var verbose = false;
+
+
+// Divides map into small regions, giving the centre-of-mass of each region and a matrix saying the size of the border between pairs of regions.
 function genFields() {
 	var fields = [];
 	var fieldSizes = [];
@@ -108,25 +112,30 @@ function genFields() {
 		}
 	}
 
+	if (verbose) log('Field count = ' + count);
+
 	return {region: simpleFields, count: count, avg: avg, con: connectivityMatrix};
 }
 
 var SAND = [0x00, 0x01, 0x22, 0x23, 0x26, 0x59];
 var SANDYBRUSH = [0x14, 0x1b, 0x1c, 0x24, 0x31, 0x32, 0x33, 0x34, 0x35, 0x48];
-var BAKEDEARTH = [0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x0b, 0x15, 0x3a, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58];
+var BAKEDEARTH = [0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x0b, 0x15, /*0x3a,*/ 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58];
 var PINKROCK = [0x28, 0x2b, 0x39];
-var WATER = [0x0e, 0x0f, 0x10, 0x11, 0x1f, 0x20, 0x21];
+var WATER = [0x11];  //[0x0e, 0x0f, 0x10, 0x11, 0x1f, 0x20, 0x21];
 var CLIFFFACE = [0x12, 0x1d, 0x1e, 0x36, 0x3d, 0x3f, 0x44, 0x45, 0x47, 0x4c, 0x4d, 0x4e];
-var textureTypes = [SAND, SAND, SAND, SAND, SANDYBRUSH, SANDYBRUSH, SANDYBRUSH, SANDYBRUSH, BAKEDEARTH, BAKEDEARTH, BAKEDEARTH, BAKEDEARTH, PINKROCK, PINKROCK, PINKROCK, PINKROCK, WATER];
+var textureTypes = [SAND, SAND, SANDYBRUSH, SANDYBRUSH, BAKEDEARTH, BAKEDEARTH, PINKROCK, PINKROCK, WATER];
 
+// Pick random element of array.
 function sample(array) {
 	return array[gameRand(array.length)];
 }
 
-var fields = genFields();
-
-function genRegions() {
+// Assigns each region a texture distribution and a height.
+function genRegions(fields) {
+	var tries = 0;
 	while (true) {
+		++tries;
+
 		// Assign regions.
 		var regions = [];
 		for (var i = 0; i < fields.count; ++i) {
@@ -137,9 +146,9 @@ function genRegions() {
 
 		// Check if most of the map is connected (without needing hover), and without needing narrow passages less than 5 tiles wide.
 		var visit = [];
-		var next = [gameRand(fields.count)];
+		var next = [];
 		function queue(i) {
-			if (!visit[i] && regions[i].texture != WATER) {
+			if (!visit[i] && regions[i].texture !== WATER) {
 				visit[i] = true;
 				next.push(i);
 				regions[i].reachable = true;
@@ -157,6 +166,7 @@ function genRegions() {
 				for (var j = 0; j < fields.count; ++j) {
 					if (fields.con[i][j] >= 5 && Math.abs(iHeight - regions[j].height) <= maxDifference) {
 						queue(j);
+						//log('Connect ' + i + ' → ' + j);
 					}
 				}
 			}
@@ -164,14 +174,19 @@ function genRegions() {
 
 		// Accept region configuration, if it makes at least ¾ of the map reachable, else retry.
 		if (4*reachableArea >= mapSize*3) {
+			if (verbose) log('Region assignment tries = ' + tries + ', reachable area = ' + Math.round(reachableArea/mapSize*100) + '%');
 			return regions;
 		}
 	}
 }
-var regions = genRegions();
+
+var fields = genFields();
+var regions = genRegions(fields);
 
 var texture = [];
 var height = [];
+
+// Assign textures and assign a map height which is smooth except through cliffs.
 var smoothDirs = [];  // 1, 2, 4, 8 = right, down, left, up
 var isCliffOrWater = [];
 for (var y = 0; y < mapHeight; ++y) {
@@ -223,20 +238,27 @@ doSmooth(.5);
 doSmooth(1);
 doSmooth(2);
 
-var occupied = [];
-for (var y = 0; y < mapHeight; ++y) {
-	for (var x = 0; x < mapWidth; ++x) {
-		var i00 = mapWidth*y + x, i01 = i00 + 1, i10 = i00 + mapWidth, i11 = i01 + i10 - i00;
-		if (x < 3 || x >= mapWidth - 3 || y < 3 || y >= mapWidth - 3) {
-			occupied[i00] = 2;
-			continue;
+// Mark tiles occupied, if structures shouldn't be placed on them.
+function makeOccupied() {
+	var occupied = [];
+	for (var y = 0; y < mapHeight; ++y) {
+		for (var x = 0; x < mapWidth; ++x) {
+			var i00 = mapWidth*y + x, i01 = i00 + 1, i10 = i00 + mapWidth, i11 = i01 + i10 - i00;
+			if (x < 3 || x >= mapWidth - 3 || y < 3 || y >= mapWidth - 3) {
+				occupied[i00] = 2;
+				continue;
+			}
+			var minHeight = Math.min(height[i00], height[i01], height[i10], height[i11]);
+			var maxHeight = Math.max(height[i00], height[i01], height[i10], height[i11]);
+			occupied[i00] = maxHeight - minHeight > 16 || isCliffOrWater[i00]? 2 : 0;
 		}
-		var minHeight = Math.min(height[i00], height[i01], height[i10], height[i11]);
-		var maxHeight = Math.max(height[i00], height[i01], height[i10], height[i11]);
-		occupied[i00] = maxHeight - minHeight > 16 || isCliffOrWater[i00]? 2 : 0;
 	}
+	return occupied;
 }
 
+var occupied;
+
+// Find if a structure can be placed at [x, y], and if so, mark it occupied and return the location in world coords.
 function placeAt(x, y, w, h, pad) {
 	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
 		return null;
@@ -267,7 +289,10 @@ function placeAt(x, y, w, h, pad) {
 	}
 	return [x*128, y*128];
 }
+
+// Find if a structure can be placed somewhere near [x, y], and if so, mark it occupied and return where in world coords.
 var visit = [], visitC = 0;
+var placeNearFailed;
 function placeNear(x, y, w, h, pad, scatter) {
 	x = Math.round(x - w/2) + w/2;
 	y = Math.round(y - h/2) + h/2;
@@ -315,11 +340,13 @@ function placeNear(x, y, w, h, pad, scatter) {
 			queue(cx, cy - 1, fromCW);
 		}
 	}
-	//log('placeNear(' + x + ', ' + y + ', ' + w + ', ' + h + ', ' + pad + ', ' + scatter + ') couldn\'t find spot.');
+	if (verbose) log('placeNear(' + x + ', ' + y + ', ' + w + ', ' + h + ', ' + pad + ', ' + scatter + ') couldn\'t find spot.');
+	placeNearFailed = true;
 	return null;
 }
 
-function genStartPos() {
+// Pick random starting positions, which aren't too close.
+function genStartPos(fields, regions) {
 	function randPos() {
 		var x, y, i;
 		do {
@@ -333,69 +360,143 @@ function genStartPos() {
 	for (var player = 0; player < players; ++player) {
 		startPos[player] = randPos();
 	}
-	for (var i = 0; i < 100; ++i) {
+	for (var iter = 0; iter < 400; ++iter) {
 		var player = gameRand(players);
 		var newPos = randPos();
-		var deltaScore = 0;
-		for (var b = 0; b < players; ++b) {
-			if (b !== player) {
-				var dx = startPos[b][0] - startPos[player][0], dy = startPos[b][1] - startPos[player][1];
-				var ndx = startPos[b][0] - newPos[0], ndy = startPos[b][1] - newPos[1];
-				var dist2 = dx*dx + dy*dy;
-				var ndist2 = ndx*ndx + ndy*ndy;
-				deltaScore += 1/dist2 - 1/ndist2;
+		// Based on very rough slightly-asymmetric pathfinding approximation.
+		function scoreAt(pos) {
+			var next = []
+			var visit = [];
+			function queue(i, pos, dist) {
+				if (regions[i].texture === WATER) {
+					return;
+				}
+				if (!visit[i]) {
+					//log('visiting i = ' + i);
+					next.push(i);
+					visit[i] = [pos, dist];
+				} else if (visit[i][1] > dist) {
+					visit[i] = [pos, dist];
+				}
 			}
+			queue(fields.region[mapWidth*pos[1] + pos[0]], pos, 0);
+			while (next.length) {
+				var cur = next;
+				next = [];
+				for (var n = 0; n < cur.length; ++n) {
+					var i = cur[n];
+					//log('from i = ' + i);
+					var iPos = regions[i].avg;
+					var iHeight = regions[i].height;
+					var oldPos = visit[i][0];
+					var dx = iPos[0] - oldPos[0], dy = iPos[1] - oldPos[1];
+					var newDist = Math.sqrt(dx*dx + dy*dy) + visit[i][1];
+					for (var j = 0; j < fields.count; ++j) {
+						if (i !== j && fields.con[i][j] > 0 && Math.abs(iHeight - regions[j].height) <= maxDifference) {
+							queue(j, iPos, newDist);
+						}
+					}
+				}
+			}
+			var score = 0;
+			for (var b = 0; b < players; ++b) {
+				if (b !== player) {
+					var r = fields.region[mapWidth*startPos[b][1] + startPos[b][0]];
+					//log('r = ' + r + ', visit[r] = ' + visit[r] + ', regions[r].reachable = ' + regions[r].reachable);
+					var nearPos = visit[r][0], nearDist = visit[r][1];
+					var tdx = startPos[b][0] - nearPos[0], tdy = startPos[b][1] - nearPos[1];
+					var tankDist = Math.sqrt(tdx*tdx + tdy*tdy) + nearDist;
+					var vdx = startPos[b][0] - pos[0], vdy = startPos[b][1] - pos[1];
+					var vtolDist2 = vdx*vdx + vdy*vdy;
+					// Being 10 tiles further away as the tank drives is as important as being 1 tile further away as the VTOL flies.
+					score -= 10/(tankDist*tankDist*tankDist*tankDist) + 1/(vtolDist2*vtolDist2);
+				}
+			}
+			return score;
 		}
+		var newScore = scoreAt(newPos), oldScore = scoreAt(startPos[player]);
+		var deltaScore = newScore - oldScore;
 		if (deltaScore >= 0) {
 			startPos[player] = newPos;
 		}
+		//if (verbose) log('score[' + player + '] from ' + oldScore + ' → ' + newScore + ': ' + (deltaScore >= 0? 'accept' : 'reject'));
 	}
 	return startPos;
 }
-var startPos = genStartPos();
 
-var structures = [];
-var droids = [];
-var features = [];
-for (var q = 0; q < regions.length; ++q) {
-	var r = regions[q];
-	features.push({name: "OilResource", position: placeNear(r.avg[0], r.avg[1], 1, 1, true), direction: 0});
-}
-for (var player = 0; player < players; ++player) {
-	//var q = gameRand(regions.length);
-	//var r = regions[q];
-	//var x = r.avg[0], y = r.avg[1];
-	var x = startPos[player][0], y = startPos[player][1];
-	structures.push({name: "A0CommandCentre", position: placeNear(x, y, 2, 2, true), direction: 0x4000*gameRand(4), modules: 0, player: player});
-	structures.push({name: "A0LightFactory", position: placeNear(x, y, 3, 3, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
-	structures.push({name: "A0ResearchFacility", position: placeNear(x, y, 2, 2, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
-	structures.push({name: "A0ResearchFacility", position: placeNear(x, y, 2, 2, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
-	structures.push({name: "A0PowerGenerator", position: placeNear(x, y, 2, 2, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
-	structures.push({name: "A0LightFactory", position: placeNear(x, y, 3, 3, true, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
-	var gr = gameRand(4);
-	structures.push({name: "A0CyborgFactory", position: placeNear(x, y, 1 + gr%2, 2 - gr%2, true, 4), direction: 0x4000*gr, modules: 0, player: player});
-	structures.push({name: "A0RepairCentre3", position: placeNear(x, y, 1, 1, true, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
-	for (var n = 0; n < 3; ++n) {
-		var oilPos = placeNear(x, y, 1, 1, true, 20);
-		features.push({name: "OilResource", position: oilPos, direction: 0});
-		structures.push({name: "A0ResourceExtractor", position: oilPos, direction: 0x4000*gameRand(4), modules: 0, player: player});
-		structures.push({name: "WallTower01", position: placeNear(oilPos[0]/128, oilPos[1]/128, 1, 1, false, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
+// Place stuff on map, including a base at each starting position.
+function placeStuff(regions, startPos) {
+	var structures = [];
+	var droids = [];
+	var features = [];
+	for (var q = 0; q < regions.length; ++q) {
+		var r = regions[q];
+		features.push({name: "OilResource", position: placeNear(r.avg[0], r.avg[1], 1, 1, true), direction: 0});
 	}
-	droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
-	droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
-}
-var featureTypes = ["Tree1", "Tree2", "Tree3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
-for (var i = 0; i < 150; ++i) {
-	features.push({name: sample(featureTypes), position: placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true), direction: gameRand(0x10000)});
+	placeNearFailed = false;
+	for (var player = 0; player < players && !placeNearFailed; ++player) {
+		//var q = gameRand(regions.length);
+		//var r = regions[q];
+		//var x = r.avg[0], y = r.avg[1];
+		var x = startPos[player][0], y = startPos[player][1];
+		structures.push({name: "A0CommandCentre", position: placeNear(x, y, 2, 2, true), direction: 0x4000*gameRand(4), modules: 0, player: player});
+		structures.push({name: "A0LightFactory", position: placeNear(x, y, 3, 3, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
+		structures.push({name: "A0ResearchFacility", position: placeNear(x, y, 2, 2, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
+		structures.push({name: "A0ResearchFacility", position: placeNear(x, y, 2, 2, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
+		structures.push({name: "A0PowerGenerator", position: placeNear(x, y, 2, 2, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
+		structures.push({name: "A0LightFactory", position: placeNear(x, y, 3, 3, true, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
+		var gr = gameRand(4);
+		structures.push({name: "A0CyborgFactory", position: placeNear(x, y, 1 + gr%2, 2 - gr%2, true, 4), direction: 0x4000*gr, modules: 0, player: player});
+		structures.push({name: "A0RepairCentre3", position: placeNear(x, y, 1, 1, true, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
+		for (var n = 0; n < 3; ++n) {
+			var oilPos = placeNear(x, y, 1, 1, true, 20);
+			if (oilPos === null) {  // Unlikely to be null, if so placeNearFailed is true.
+				break;
+			}
+			features.push({name: "OilResource", position: oilPos, direction: 0});
+			structures.push({name: "A0ResourceExtractor", position: oilPos, direction: 0x4000*gameRand(4), modules: 0, player: player});
+			structures.push({name: "WallTower01", position: placeNear(oilPos[0]/128, oilPos[1]/128, 1, 1, false, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
+		}
+		droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
+		droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
+	}
+	if (placeNearFailed) {
+		if (verbose) log('Base placement failed!');
+		return null;  // Failed to place something important.
+	}
+	var featureTypes = ["Tree1", "Tree2", "Tree3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
+	for (var i = 0; i < 150; ++i) {
+		features.push({name: sample(featureTypes), position: placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true), direction: gameRand(0x10000)});
+	}
+
+	// Skip unimportant features which couldn't be placed anywhere, maybe was trying to place them in water far from land.
+	for (var f = 0; f < features.length; ++f) {
+		if (features[f].position === null) {
+			features[f] = features[features.length - 1];
+			--features.length;
+			--f;
+		}
+	}
+
+	return {structures: structures, droids: droids, features: features};
 }
 
-// Skip features which couldn't be placed anywhere, maybe was trying to place them in water far from land.
-for (var f = 0; f < features.length; ++f) {
-	if (features[f].position === null) {
-		features[f] = features[features.length - 1];
-		--features.length;
-		--f;
+var stuff = null;
+while (stuff === null) {
+	occupied = makeOccupied();
+	var startPos = genStartPos(fields, regions);
+	stuff = placeStuff(regions, startPos);
+}
+
+// Mark oil resources with craters.
+for (var f = 0; f < stuff.features.length; ++f) {
+	if (stuff.features[f].name === 'OilResource') {
+		var pos = stuff.features[f].position;
+		var x = (pos[0] - 64)/128, y = (pos[1] - 64)/128;
+		texture[mapWidth*y + x] = 0x38;
 	}
 }
 
-setMapData(mapWidth, mapHeight, texture, height, structures, droids, features);
+// Done.
+if (verbose) log('Done.');
+setMapData(mapWidth, mapHeight, texture, height, stuff.structures, stuff.droids, stuff.features);

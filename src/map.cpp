@@ -784,7 +784,7 @@ bool mapLoad(char const *filename, bool preview)
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = (MAPTILE *)calloc(width * height, sizeof(MAPTILE));
+	psMapTiles = (MAPTILE *)calloc((size_t)width * height, sizeof(MAPTILE));
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
@@ -882,7 +882,7 @@ bool mapLoadFromScriptData(ScriptMapData const &data, bool preview)
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoadFromScriptData()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = (MAPTILE *)calloc(data.mapWidth * data.mapHeight, sizeof(MAPTILE));
+	psMapTiles = (MAPTILE *)calloc((size_t)data.mapWidth * data.mapHeight, sizeof(MAPTILE));
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = data.mapWidth;
