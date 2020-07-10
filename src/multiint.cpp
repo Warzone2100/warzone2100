@@ -3913,7 +3913,21 @@ TITLECODE WzMultiOptionTitleUI::run()
 					if (NetPlay.isHost && NetPlay.bComms && bHosted && !isHoverPreview && oldMaxPlayers > game.maxPlayers)
 					{
 						resetPlayerPositions();
-						repositionHumanSlots();
+						unsigned int pos = repositionHumanSlots();
+
+						for (int i = 0; i < game.maxPlayers; i++)
+						{
+							if (!isHumanPlayer(i) && !(game.mapHasScavengers && NetPlay.players[i].position == scavengerSlot()))
+							{
+								if (game.mapHasScavengers && pos == scavengerSlot())
+								{
+									pos++;
+								}
+								NetPlay.players[i].position = pos;
+								NETBroadcastPlayerInfo(i);
+								pos++;
+							}
+						}
 
 						const std::vector<uint8_t> &humans = NET_getHumanPlayers();
 						size_t playerInc = 0;
