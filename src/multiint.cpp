@@ -2711,24 +2711,21 @@ static void loadMapPlayerSettings(WzConfig& ini)
 			NetPlay.players[i].ai = AI_CLOSED;
 		}
 
+		/* Load pre-configured AIs */
+		if (ini.contains("ai"))
+		{
+			WzString val = ini.value("ai").toWzString();
+			resolveAIForPlayer(i, val);
+		}
+
+		/* Try finding a name field, if not found use AI names for AI players if in SP skirmish */
 		if (ini.contains("name"))
 		{
 			sstrcpy(NetPlay.players[i].name, ini.value("name").toWzString().toUtf8().c_str());
 		}
-		else
+		else if (!NetPlay.bComms && i != selectedPlayer)
 		{
-			/* Load pre-configured AIs */
-			if (ini.contains("ai"))
-			{
-				WzString val = ini.value("ai").toWzString();
-				resolveAIForPlayer(i, val);
-			}
-
-			/* For single player skirmish, copy AI names for AI players */
-			if (!NetPlay.bComms && i != selectedPlayer)
-			{
-				sstrcpy(NetPlay.players[i].name, getAIName(i));
-			}
+			sstrcpy(NetPlay.players[i].name, getAIName(i));
 		}
 
 		NetPlay.players[i].position = MAX_PLAYERS;  // Invalid value, fix later.
@@ -2738,6 +2735,12 @@ static void loadMapPlayerSettings(WzConfig& ini)
 		}
 		if (ini.contains("difficulty"))
 		{
+			/* If difficulty is set, but we have no AI, use default */
+			if (!ini.contains("ai"))
+			{
+				NetPlay.players[i].ai = 0;
+			}
+
 			WzString value = ini.value("difficulty", "Medium").toWzString();
 			for (unsigned j = 0; j < ARRAY_SIZE(difficultyList); ++j)
 			{
@@ -2800,7 +2803,7 @@ static void resetPlayerConfiguration()
 
 		if (NetPlay.bComms)
 		{
-			NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
+			NetPlay.players[playerIndex].difficulty =  AIDifficulty::DISABLED;
 			NetPlay.players[playerIndex].ai = AI_OPEN;
 		}
 		else
@@ -2817,7 +2820,7 @@ static void resetPlayerConfiguration()
 /**
  * Loads challenge and player configurations from level/autohost/test .json-files.
  */
-static void loadMapChallengeAndPlayerSettings()
+static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 {
 	char aFileName[256];
 	LEVEL_DATASET* psLevel = levFindDataSet(game.map, &game.hash);
@@ -2852,7 +2855,7 @@ static void loadMapChallengeAndPlayerSettings()
 	loadMapChallengeSettings(ini);
 
 	/* Do not load player settings if we are already hosting an online match */
-	if (!bIsOnline)
+	if (!bIsOnline || forceLoadPlayers)
 	{
 		loadMapPlayerSettings(ini);
 	}
@@ -3003,7 +3006,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	resetReadyStatus(false);
 	removeWildcards((char*)sPlayer);
 
-	if (!hostCampaign((char*)game.name, (char*)sPlayer))
+	if (!hostCampaign((char*)game.name, (char*)sPlayer, hostlaunch == 3))
 	{
 		addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		return false;
@@ -3282,6 +3285,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			changeTitleMode(SINGLE);
 			addChallenges();
 		}
+		hostlaunch = 0; // Dont load the autohost file on subsequent hosts
 		break;
 	case MULTIOP_MAP_PREVIEW:
 		loadMapPreview(true);
@@ -3402,12 +3406,12 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	// clicked on a player
 	STATIC_ASSERT(MULTIOP_PLAYER_START + MAX_PLAYERS - 1 <= MULTIOP_PLAYER_END);
 	if (id >= MULTIOP_PLAYER_START && id <= MULTIOP_PLAYER_START + MAX_PLAYERS - 1
-	    && !locked.position
 	    && (id - MULTIOP_PLAYER_START == selectedPlayer || NetPlay.isHost
 	        || (positionChooserUp >= 0 && !isHumanPlayer(id - MULTIOP_PLAYER_START))))
 	{
 		int player = id - MULTIOP_PLAYER_START;
 		if ((player == selectedPlayer || (NetPlay.players[player].allocated && NetPlay.isHost))
+			&& !locked.position
 		    && positionChooserUp < 0 && teamChooserUp < 0 && colourChooserUp < 0)
 		{
 			openPositionChooser(player);
@@ -4080,7 +4084,7 @@ void WzMultiplayerOptionsTitleUI::start()
 	{
 		resetPlayerConfiguration();
 		memset(&locked, 0, sizeof(locked));
-		loadMapChallengeAndPlayerSettings();
+		loadMapChallengeAndPlayerSettings(true);
 		game.isMapMod = false;
 		game.mapHasScavengers = true; // FIXME, should default to false
 

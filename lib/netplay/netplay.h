@@ -241,21 +241,21 @@ enum class NET_LOBBY_OPT_FIELD
 // currently controlled player.
 struct PLAYER
 {
-	char			name[StringSize];	///< Player name
-	int32_t			position;			///< Map starting position
-	int32_t			colour;				///< Which colour slot this player is using
-	bool			allocated;			///< Allocated as a human player
-	uint32_t		heartattacktime;	///< Time cardiac arrest started
-	bool			heartbeat;			///< If we are still alive or not
-	bool			kick;				///< If we should kick them
-	int32_t			connection;			///< Index into connection list
-	int32_t			team;				///< Which team we are on
-	bool			ready;				///< player ready to start?
-	int8_t			ai;					///< index into sorted list of AIs, zero is always default AI
-	AIDifficulty	difficulty;			///< difficulty level of AI
-	bool			autoGame;			// if we are running a autogame (AI controls us)
-	std::vector<WZFile> wzFiles;		///< for each player, we keep track of map/mod download progress
-	char		IPtextAddress[40];		///< IP of this player
+	char                name[StringSize];   ///< Player name
+	int32_t             position;           ///< Map starting position
+	int32_t             colour;             ///< Which colour slot this player is using
+	bool                allocated;          ///< Allocated as a human player
+	uint32_t            heartattacktime;    ///< Time cardiac arrest started
+	bool                heartbeat;          ///< If we are still alive or not
+	bool                kick;               ///< If we should kick them
+	int32_t             connection;         ///< Index into connection list
+	int32_t             team;               ///< Which team we are on
+	bool                ready;              ///< player ready to start?
+	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
+	AIDifficulty        difficulty;         ///< difficulty level of AI
+	bool                autoGame;           ///< if we are running a autogame (AI controls us)
+	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
+	char                IPtextAddress[40];  ///< IP of this player
 };
 
 // ////////////////////////////////////////////////////////////////////////

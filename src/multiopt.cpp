@@ -312,7 +312,7 @@ void recvOptions(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Host Campaign.
-bool hostCampaign(char *sGame, char *sPlayer)
+bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 {
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
@@ -323,7 +323,8 @@ bool hostCampaign(char *sGame, char *sPlayer)
 		return false;
 	}
 
-	if (NetPlay.bComms)
+	/* Skip resetting AIs if we are doing autohost */
+	if (NetPlay.bComms && !skipResetAIs)
 	{
 		for (unsigned i = 0; i < MAX_PLAYERS; i++)
 		{
