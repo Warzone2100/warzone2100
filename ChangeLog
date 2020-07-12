@@ -25,7 +25,7 @@
    * Add: Account for Repair/Demolish construction queue mid-way stopping.  (commit:588c84c9a42f9de8e841322468b9574c0d4a7811, #989)
    * Add: macOS: Video sequences app bundle packaging (commit:880352481ad60c61b120a3f59893b3d8c2668eec, #1018)
    * Change: Set new map zoom rate limits (commit:5d212ce31693585cae5f0c68331d7eae7e7f6dfb, #939)
-   * Change: Point revisions use the same app directory (commit:22dab1a7069bc86acf5a1c161bd3f18252d29c56, #976)
+   * Change: Point revisions use the same app configuration / save directory (commit:22dab1a7069bc86acf5a1c161bd3f18252d29c56, #976)
    * Fix: Damage calculation must always return at least 1 thus fixing Nexus Link damage against tracked units (commit: 7b41dd69c63cbdc3c5ef53b89a3ea717e06ad9c8, #981)
 
 2020-06-24: Version 3.4.0
