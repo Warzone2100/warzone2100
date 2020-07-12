@@ -3881,6 +3881,11 @@ TITLECODE WzMultiOptionTitleUI::run()
 							addConsoleMessage(_("Cannot change to a map with too few slots for all players."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 							break;
 						}
+						if (mapData->players < game.maxPlayers)
+						{
+							addConsoleMessage(_("Cannot change to a map with fewer slots."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							break;
+						}
 						if (!canChangeMapOrRandomize())
 						{
 							break;
