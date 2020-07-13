@@ -54,21 +54,22 @@ const struct FACTION factions[NUM_FACTIONS] = {
 	}
 };
 
-iIMDShape* getFactionIMD(uint8_t player, iIMDShape* imd)
+iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
 {
-	uint8_t faction = NetPlay.players[player].faction;
-
-	const std::map<WzString, WzString> *replaceIMD = &factions[faction].replaceIMD;
-
 	WzString name = WzString::fromUtf8(modelName(imd));
-	auto pos = replaceIMD->find(name);
+	auto pos = faction->replaceIMD.find(name);
 //	debug(LOG_INFO, "render struct of player_%i in faction %s (%i): %s", player,
 //		factions[faction].name.toUtf8().c_str(), faction, name.toUtf8().c_str()
 //	);
-	if (pos == replaceIMD->end())
+	if (pos == faction->replaceIMD.end())
 	{
 		return imd;
 	} else {
 		return modelGet(pos->second);
 	}
+}
+
+const FACTION* getPlayerFaction(uint8_t player)
+{
+	return &(factions[NetPlay.players[player].faction]);
 }
