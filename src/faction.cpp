@@ -30,7 +30,12 @@ const struct FACTION factions[NUM_FACTIONS] = {
 			{"factory_module2.pie", "factory_module2_nex.pie"},
 			{"blfact2.pie", "blfact2_nex.pie"},
 			{"blbfact.pie", "blbfact_nex.pie"},
-			{"bldrdcm0.pie", "bldrdcm0_nex.pie"}
+			{"bldrdcm0.pie", "bldrdcm0_nex.pie"},
+			{"blcfact1.pie", "blcfact1_nex.pie"},
+			{"blbcfact.pie", "blbcfact_nex.pie"},
+			{"blcanpil.pie", "blcanpil_nex.pie"},
+			{"blhowmnt.pie", "blhowmnt_nex.pie"},
+			{"blguardm.pie", "blguardm_nex.pie"}
 		}
 	},
 	{
