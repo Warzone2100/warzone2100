@@ -445,7 +445,7 @@ static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlay
 	        && WZ_PHYSFS_writeBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	        && WZ_PHYSFS_writeBytes(fileHandle, getAIName(player), MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
 	        && PHYSFS_writeSBE8(fileHandle, static_cast<int8_t>(serializePlayer->difficulty))
-	        && PHYSFS_writeSBE8(fileHandle, serializePlayer->faction)
+	        && PHYSFS_writeUBE8(fileHandle, static_cast<uint8_t>(serializePlayer->faction))
 	        && PHYSFS_writeUBE8(fileHandle, (uint8_t)serializePlayer->allocated)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
@@ -462,7 +462,7 @@ static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, 
 	          && WZ_PHYSFS_readBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	          && WZ_PHYSFS_readBytes(fileHandle, aiName, MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
 	          && PHYSFS_readSBE8(fileHandle, reinterpret_cast<int8_t*>(&serializePlayer->difficulty))
-	          && PHYSFS_readSBE8(fileHandle, &serializePlayer->faction)
+	          && PHYSFS_readUBE8(fileHandle,  reinterpret_cast<uint8_t *>(&serializePlayer->faction))
 	          && PHYSFS_readUBE8(fileHandle, &allocated)
 	          && PHYSFS_readUBE32(fileHandle, &colour)
 	          && PHYSFS_readUBE32(fileHandle, &team));

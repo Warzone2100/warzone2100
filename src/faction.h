@@ -41,4 +41,10 @@ iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd);
 
 const FACTION* getPlayerFaction(uint8_t player);
 
+enum FactionID : uint8_t {
+	FACTION_NORMAL = 0,
+	FACTION_NEXUS = 1,
+	FACTION_COLLECTIVE = 2
+};
+
 #endif
