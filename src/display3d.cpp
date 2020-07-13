@@ -2384,7 +2384,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	bool defensive = false;
 	iIMDShape *strImd = psStructure->sDisplay.imd;
 	MAPTILE *psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
-	int player = psStructure->player;
+	const FACTION *faction = getPlayerFaction(psStructure->player);
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psStructure->rot.direction), glm::vec3(0.f, 1.f, 0.f));
 
@@ -2398,7 +2398,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	if (psStructure->visible[selectedPlayer] < UBYTE_MAX && psStructure->visible[selectedPlayer] > 0)
 	{
 		int frame = graphicsTime / BLIP_ANIM_DURATION + psStructure->id % 8192;  // de-sync the blip effect, but don't overflow the int
-		pie_Draw3DShape(getFactionIMD(player, getImdFromIndex(MI_BLIP)), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2,
+		pie_Draw3DShape(getFactionIMD(faction, getImdFromIndex(MI_BLIP)), frame, 0, WZCOL_WHITE, pie_ADDITIVE, psStructure->visible[selectedPlayer] / 2,
 			viewMatrix * glm::translate(glm::vec3(dv)));
 		return;
 	}
@@ -2446,7 +2446,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 				pieFlag = pie_FORCE_FOG | ecmFlag;
 				pieFlagData = 255;
 			}
-			pie_Draw3DShape(getFactionIMD(player, psStructure->pStructureType->pBaseIMD), 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
+			pie_Draw3DShape(getFactionIMD(faction, psStructure->pStructureType->pBaseIMD), 0, colour, buildingBrightness, pieFlag | pie_TRANSLUCENT, pieFlagData,
 				viewMatrix * modelMatrix);
 		}
 
@@ -2470,10 +2470,10 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		if (psStructure->prebuiltImd != nullptr)
 		{
 			// strImd is a module, so render the already-built part at full height.
-			pie_Draw3DShape(getFactionIMD(player, psStructure->prebuiltImd), 0, colour, buildingBrightness, pie_SHADOW, 0,
+			pie_Draw3DShape(getFactionIMD(faction, psStructure->prebuiltImd), 0, colour, buildingBrightness, pie_SHADOW, 0,
 				viewModelMatrix);
 		}
-		pie_Draw3DShape(getFactionIMD(player, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, viewModelMatrix);
+		pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, viewModelMatrix);
 		setScreenDisp(&psStructure->sDisplay, viewModelMatrix);
 		return;
 	}
@@ -2502,11 +2502,11 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 		{
 			pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 		}
-		drawShape(psStructure, getFactionIMD(player, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix);
+		drawShape(psStructure, getFactionIMD(faction, strImd), colour, buildingBrightness, pieFlag, pieFlagData, viewModelMatrix);
 		pie_SetShaderStretchDepth(0);
 		if (psStructure->sDisplay.imd->nconnectors > 0)
 		{
-			renderStructureTurrets(psStructure, getFactionIMD(player, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewModelMatrix);
+			renderStructureTurrets(psStructure, getFactionIMD(faction, strImd), buildingBrightness, pieFlag, pieFlagData, ecmFlag, viewModelMatrix);
 		}
 		strImd = strImd->next;
 	}
@@ -2566,6 +2566,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	Vector3i			dv;
 	int				pieFlag, pieFlagData;
 	MAPTILE			*psTile = worldTile(psStructure->pos.x, psStructure->pos.y);
+	const FACTION *faction = getPlayerFaction(psStructure->player);
 
 	if (!psStructure->visible[selectedPlayer])
 	{
@@ -2594,7 +2595,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	/* Actually render it */
 	if (psStructure->status == SS_BEING_BUILT)
 	{
-		pie_Draw3DShape(getFactionIMD(psStructure->player, psStructure->sDisplay.imd), 0, getPlayerColour(psStructure->player),
+		pie_Draw3DShape(getFactionIMD(faction, psStructure->sDisplay.imd), 0, getPlayerColour(psStructure->player),
 		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, structHeightScale(psStructure) * pie_RAISE_SCALE, viewMatrix * modelMatrix);
 	}
 	else
@@ -2613,7 +2614,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 		iIMDShape *imd = psStructure->sDisplay.imd;
 		while (imd)
 		{
-			pie_Draw3DShape(getFactionIMD(psStructure->player, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix);
+			pie_Draw3DShape(getFactionIMD(faction, imd), 0, getPlayerColour(psStructure->player), brightness, pieFlag | ecmFlag, pieFlagData, viewMatrix * modelMatrix);
 			imd = imd->next;
 		}
 	}

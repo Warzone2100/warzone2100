@@ -37,6 +37,8 @@ struct FACTION {
 
 extern const struct FACTION factions[NUM_FACTIONS];
 
-iIMDShape* getFactionIMD(uint8_t player, iIMDShape* imd);
+iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd);
+
+const FACTION* getPlayerFaction(uint8_t player);
 
 #endif
