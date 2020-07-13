@@ -8,6 +8,7 @@
    * Fix: Fix simple keybinds not firing when a meta key is held down (commit:92979bab768e0fba7666c944883885017e8ddcc8, #993)
    * Fix: Refund factory power better with queued templates (commit:43b48a7a8552615787a07ee808a9693e0f8bf7b7, #990)
    * Fix: Minimized/occluded window causing a huge spike in CPU activity on macOS due to vsync issue (commit:17fb3cc2db07cd063886ef6d180a5b8be65e7654, #1020)
+   * Fix: Prevent softlock when opening reticule menus while keymap is open in multiplayer (commit:7a268d18fbff99ff09eb639db2b6cb940fa33dd7, #1030)
  * Campaign:
    * Change: Victory condition "eliminate bases" now triggers a last attack from the AI like the other conditions do (commit:215f6f255621138b745ef364052d2890282f41f0, #988)
    * Fix: Failing at the start of cam3-c if no trucks were present at the end of the cam3-1 mission (commit:46fe92bfecbed112af1bef5f0ade117039650ff7, #1021)
@@ -22,7 +23,7 @@
  * Balance:
    * Change: Make Scourge available at start in T3 (commit:ab9a5f3d5b861c84023df8cc3bc19ca548b61557, #999)
  * Other:
-   * Add: Account for Repair/Demolish construction queue mid-way stopping.  (commit:588c84c9a42f9de8e841322468b9574c0d4a7811, #989)
+   * Add: Account for Repair/Demolish construction queue mid-way stopping (commit:588c84c9a42f9de8e841322468b9574c0d4a7811, #989)
    * Add: macOS: Video sequences app bundle packaging (commit:880352481ad60c61b120a3f59893b3d8c2668eec, #1018)
    * Change: Set new map zoom rate limits (commit:5d212ce31693585cae5f0c68331d7eae7e7f6dfb, #939)
    * Change: Point revisions use the same app configuration / save directory (commit:22dab1a7069bc86acf5a1c161bd3f18252d29c56, #976)
