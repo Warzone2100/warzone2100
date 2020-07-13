@@ -25,6 +25,7 @@
 
 #include "lib/framework/wzstring.h"
 #include "lib/ivis_opengl/imd.h"
+#include "src/factionid.h"
 #include "structure.h"
 #include <map>
 
@@ -35,16 +36,8 @@ struct FACTION {
 	std::map<WzString, WzString> replaceIMD;
 };
 
-extern const struct FACTION factions[NUM_FACTIONS];
-
 iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd);
 
 const FACTION* getPlayerFaction(uint8_t player);
-
-enum FactionID : uint8_t {
-	FACTION_NORMAL = 0,
-	FACTION_NEXUS = 1,
-	FACTION_COLLECTIVE = 2
-};
-
+const FACTION* getFactionByID(FactionID faction);
 #endif

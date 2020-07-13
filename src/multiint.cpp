@@ -3194,12 +3194,13 @@ static void loadMapPlayerSettings(WzConfig& ini)
 		if (ini.contains("faction"))
 		{
 			WzString value = ini.value("faction", "Normal").toWzString();
-			for (uint8_t faction = 0; faction < NUM_FACTIONS; ++faction)
+			for (uint8_t f_id = 0; f_id < NUM_FACTIONS; ++f_id)
 			{
-				if (factions[faction].name == value)
+				const FACTION* faction = getFactionByID(static_cast<FactionID>(f_id));
+				if (faction->name == value)
 				{
-					debug(LOG_INFO, "faction of player %i is %i", i, faction); // TODO: delete before factions PR is merged
-					NetPlay.players[i].faction = static_cast<FactionID>(faction);
+					debug(LOG_INFO, "faction of player %i is %i", i, f_id); // TODO: delete before factions PR is merged
+					NetPlay.players[i].faction = static_cast<FactionID>(f_id);
 				}
 			}
 		}
