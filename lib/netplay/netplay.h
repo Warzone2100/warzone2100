@@ -27,7 +27,7 @@
 #define _netplay_h
 
 #include "lib/framework/crc.h"
-#include "src/faction.h"
+#include "src/factionid.h"
 #include "nettypes.h"
 #include <physfs.h>
 #include <vector>

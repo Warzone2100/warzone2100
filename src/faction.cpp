@@ -1,7 +1,7 @@
 #include "faction.h"
 #include "lib/netplay/netplay.h"
 
-const struct FACTION factions[NUM_FACTIONS] = {
+static const struct FACTION factions[NUM_FACTIONS] = {
 	{ "Normal",
 		{
 		}
@@ -72,4 +72,9 @@ iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
 const FACTION* getPlayerFaction(uint8_t player)
 {
 	return &(factions[NetPlay.players[player].faction]);
+}
+
+const FACTION* getFactionByID(FactionID faction)
+{
+	return &(factions[(uint8_t)faction]);
 }
