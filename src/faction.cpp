@@ -9,20 +9,20 @@ static const struct FACTION factions[NUM_FACTIONS] = {
 	{
 		"NEXUS",
 		{
-			{"blwallc1.pie", "blwallc3.pie"}, //rename
-			{"blwallh.pie", "blwall3.pie"}, //rename
-			{"blhq.pie", "blhq_nex.pie"}, // rename
-			{"blguard1.pie", "blguard3.pie"}, // rename
-			{"blguardr.pie", "blgrdnex.pie"}, // rename
+			{"blwallc1.pie", "blwallc_nex.pie"},
+			{"blwallh.pie", "blwallh_nex.pie"},
+			{"blhq.pie", "blhq_nex.pie"},
+			{"blguard1.pie", "blguard_nex.pie"},
+			{"blguardr.pie", "blguardr_nex.pie"},
 			{"blresch0.pie", "blresch0_nex.pie"},
 			{"blresch4.pie", "blresch4_nex.pie"},
 			{"research_module4.pie", "research_module4_nex.pie"},
 			{"blbresch.pie", "blbresch_nex.pie"},
-			{"blbpower.pie", "blbpower3.pie"},  // rename
+			{"blbpower.pie", "blbpower_nex.pie"},
 			{"blbhq.pie",  "blbhq_nex.pie"},
-			{"blbdrdcm.pie", "blbdrdcm_3.pie"},  //rename
-			{"blpower0.pie", "blpower0_3.pie"},  // rename
-			{"blpower4.pie", "blpower4_3.pie"}, // rename
+			{"blbdrdcm.pie", "blbdrdcm_nex.pie"},
+			{"blpower0.pie", "blpower0_nex.pie"},
+			{"blpower4.pie", "blpower4_nex.pie"},
 			{"blpilbox.pie", "blpilbox_nex.pie"},
 			{"blfact0.pie", "blfact0_nex.pie"},
 			{"factory_module1.pie", "factory_module1_nex.pie"},
@@ -41,11 +41,11 @@ static const struct FACTION factions[NUM_FACTIONS] = {
 	{
 		"Collective",
 		{
-			{"blwallc1.pie", "blwallc2.pie"},
-			{"blwallh.pie", "blwall2.pie"}, // rename
+			{"blwallc1.pie", "blwallc_col.pie"},
+			{"blwallh.pie", "blwall_col.pie"},
 			{"blhq.pie", "blhq4.pie"},
-			{"blguard1.pie", "blguard2.pie"}, // rename
-			{"blguardr.pie", "blguardn.pie"},
+			{"blguard1.pie", "blguard_col.pie"},
+			{"blguardr.pie", "blguardr_col.pie"},
 			{"blresch0.pie", "blresch0_col.pie"},
 			{"blresch4.pie", "blresch4_col.pie"},
 			{"research_module4.pie", "research_module4_col.pie"},
