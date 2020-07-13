@@ -37,6 +37,7 @@ extern bool hostQuitConfirmation;
 // status bools.
 extern bool	InGameOpUp;
 extern bool isInGamePopupUp;
+extern bool isKeyMapEditorUp;
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 

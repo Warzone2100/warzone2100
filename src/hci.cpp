@@ -1256,6 +1256,10 @@ INT_RETVAL intRunWidgets()
 		/*****************  Reticule buttons  *****************/
 
 		case IDRET_COMMAND:
+			if (isKeyMapEditorUp)
+			{
+				break;
+			}
 			intResetScreen(false);
 			widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
 			intAddCommand(nullptr);
@@ -1263,6 +1267,10 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_BUILD:
+			if (isKeyMapEditorUp)
+			{
+				break;
+			}
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
 			intAddBuild(nullptr);
@@ -1270,6 +1278,10 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_MANUFACTURE:
+			if (isKeyMapEditorUp)
+			{
+				break;
+			}
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
 			intAddManufacture(nullptr);
@@ -1277,6 +1289,10 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_RESEARCH:
+			if (isKeyMapEditorUp)
+			{
+				break;
+			}
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
 			(void)intAddResearch(nullptr);
@@ -1284,6 +1300,10 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_INTEL_MAP:
+			if (isKeyMapEditorUp)
+			{
+				break;
+			}
 			// check if RMB was clicked
 			if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
 			{
@@ -1300,6 +1320,10 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_DESIGN:
+			if (isKeyMapEditorUp)
+			{
+				break;
+			}
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_DESIGN, WBUT_CLICKLOCK);
 			/*add the power bar - for looks! */
@@ -1311,6 +1335,10 @@ INT_RETVAL intRunWidgets()
 			break;
 
 		case IDRET_CANCEL:
+			if (isKeyMapEditorUp)
+			{
+				break;
+			}
 			intResetScreen(false);
 			psCurrentMsg = nullptr;
 			reticuleCallback(RETBUT_CANCEL);
@@ -4415,7 +4443,12 @@ void stopReticuleButtonFlash(UDWORD buttonID)
 // show selected widget from reticule menu
 void intShowWidget(int buttonID)
 {
-switch (buttonID)
+	if (isKeyMapEditorUp)
+	{
+		return;
+	}
+
+	switch (buttonID)
 	{
 	case RETBUT_FACTORY:
 		intResetScreen(true);
