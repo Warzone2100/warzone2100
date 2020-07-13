@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-06-16 19:27+0000\n"
-"PO-Revision-Date: 2020-06-17 20:17\n"
+"POT-Creation-Date: 2020-06-24 17:56+0000\n"
+"PO-Revision-Date: 2020-06-25 02:55\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -3419,7 +3419,7 @@ msgstr "Ρίπτει Βόμβες Διασποράς Υψηλής Εκρηκτι
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1083
+#: po/custom/fromJson.txt:1079
 msgid "Best Targets: Base Structures"
 msgstr "Προτιμώμενοι Στόχοι: Δομές Βάσης"
 
@@ -3663,7 +3663,7 @@ msgstr "Οβιδοβόλο 105χιλ, μπορεί να ανατεθεί σε α
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1093
+#: po/custom/fromJson.txt:1099
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Προτιμώμενοι Στόχοι: Κατασκευές βάσης, πεζικό, τροχοφόρα"
 
@@ -3866,7 +3866,7 @@ msgstr "Μπορεί να ανατεθεί σε έναν αισθητήρα"
 #. ... + 4 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1099
+#: po/custom/fromJson.txt:1093
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Προτιμώμενοι Στόχοι: Κατασκευές βάσης, πεζικό, τροχοφόρα"
 
@@ -4094,9 +4094,9 @@ msgstr "Διοικητές - παρήγαγε, πρώτα, διοικητές"
 #: src/hci.cpp:3683
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
-#: src/loadsave.cpp:268
-#: src/multimenu.cpp:475
-#: src/multimenu.cpp:1205
+#: src/loadsave.cpp:269
+#: src/multimenu.cpp:431
+#: src/multimenu.cpp:1120
 #: src/transporter.cpp:201
 #: src/transporter.cpp:261
 #: src/transporter.cpp:540
@@ -5329,7 +5329,7 @@ msgstr "Πλέγμα Πρόγραμμα Εισβολής"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 #: data/mp/messages/strings/names.txt:490
-#: po/custom/fromJson.txt:4240
+#: po/custom/fromJson.txt:4243
 msgid "Nexus Resistance Circuits"
 msgstr "Κυκλώματα Αντίστασης στο Πλέγμα"
 
@@ -7000,7 +7000,7 @@ msgstr "Προτιμώμενοι στόχοι: Δομές Βάσης και Αν
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1079
+#: po/custom/fromJson.txt:1083
 msgid "Best Targets: Base structures"
 msgstr "Προτιμώμενοι Στόχοι: Δομές Βάσης"
 
@@ -11468,7 +11468,7 @@ msgstr "Κυκλώματα Αντίστασης στο ΠΛΕΓΜΑ, τύπος3
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
-#: po/custom/fromJson.txt:4243
+#: po/custom/fromJson.txt:4240
 msgid "NEXUS Resistance Circuits"
 msgstr "Κυκλώματα Αντίστασης στο ΠΛΕΓΜΑ"
 
@@ -13335,18 +13335,18 @@ msgid "Thermal Armor +35%"
 msgstr "Θερμική Θωράκιση +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-#: po/custom/fromJson.txt:5475
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#: po/custom/fromJson.txt:5476
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Θερμική Θωράκιση +40%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5480
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Θερμική Θωράκιση +40%"
 
 #. TRANSLATORS:
@@ -14503,21 +14503,21 @@ msgstr "Παιχνίδι στρατηγικής πραγματικού χρόν�
 msgid "Strategy Game"
 msgstr "Παιχνίδι Στρατηγικής"
 
-#: src/cheat.cpp:176
+#: src/cheat.cpp:182
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
 msgstr "Ο %s επιθυμεί να ενεργοποιήσει την κατάσταση λειτουργίας αποσφαλμάτωσης. Ενεργοποιήθηκε: %s, Απενεργοποιήθηκε: %s."
 
-#: src/cheat.cpp:180
+#: src/cheat.cpp:186
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
 msgstr "Ο %s επιθυμεί να απενεργοποιήσει την κατάσταση λειτουργίας αποσφαλμάτωσης. Ενεργοποιήθηκε: %s, Απενεργοποιήθηκε: %s."
 
-#: src/cheat.cpp:186
+#: src/cheat.cpp:192
 msgid "Debug mode now enabled!"
 msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λειτουργίας αποσφαλμάτωσης"
 
-#: src/cheat.cpp:192
+#: src/cheat.cpp:198
 msgid "Debug mode now disabled!"
 msgstr "Τώρα, έχει ενεργοποιηθεί η κατάσταση λειτουργίας αποσφαλμάτωσης."
 
@@ -14706,12 +14706,12 @@ msgstr "αυτόματη-φιλοξενία"
 msgid "Commander needs a higher level to command more units"
 msgstr "Απαιτείται υψηλότερο επίπεδο για το διοικητή, ώστε να διοικεί περισσότερες μονάδες"
 
-#: src/configuration.cpp:171
+#: src/configuration.cpp:172
 msgid "My Game"
 msgstr "Το Παιχνίδι Μου"
 
-#: src/configuration.cpp:172
-#: src/multistat.cpp:178
+#: src/configuration.cpp:173
+#: src/multistat.cpp:179
 msgid "Player"
 msgstr "Παίκτης"
 
@@ -14867,34 +14867,34 @@ msgstr "Αποθήκευση του Σχεδίου"
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Αδύνατο το Χτίσιμο. Η Πηγή Πετρελαίου Καίγεται."
 
-#: src/display.cpp:1547
+#: src/display.cpp:1549
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s"
 msgstr "%s - Ακεραιότητα %d/%d - Εμπειρία %.1f, %s"
 
-#: src/display.cpp:1709
+#: src/display.cpp:1711
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Συμμάχων - Ακεραιότητα %d/%d - Εμπειρία %d, %s"
 
-#: src/display3d.cpp:700
+#: src/display3d.cpp:706
 msgid "Player left"
 msgstr "Ο παίχτης έφηγε"
 
-#: src/display3d.cpp:704
+#: src/display3d.cpp:710
 msgid "Player dropped"
 msgstr "Ο παίχτης αποσυνδέθηκε"
 
-#: src/display3d.cpp:708
-#: src/multiint.cpp:2224
+#: src/display3d.cpp:714
+#: src/multiint.cpp:2237
 msgid "Waiting for other players"
 msgstr "Αναμονή για άλλους παίχτες"
 
-#: src/display3d.cpp:713
+#: src/display3d.cpp:719
 msgid "Out of sync"
 msgstr "Εκτός συγχρονισμού"
 
-#: src/display3d.cpp:1915
+#: src/display3d.cpp:1929
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr "Ορισμός της εστίασης στα %.0f"
@@ -15032,7 +15032,7 @@ msgstr "ΕΚΜΑΘΗΣΗ"
 #: src/frontend.cpp:1201
 #: src/frontend.cpp:1543
 #: src/frontend.cpp:1695
-#: src/frontend.cpp:1715
+#: src/frontend.cpp:1722
 msgctxt "menu"
 msgid "Return"
 msgstr "Επιστροφή"
@@ -15418,42 +15418,46 @@ msgid "Insane"
 msgstr "εξωφρενικό"
 
 #: src/frontend.cpp:1650
-#: src/frontend.cpp:1716
+#: src/frontend.cpp:1723
 msgid "Language"
 msgstr "γλώσσα"
 
 #: src/frontend.cpp:1654
-#: src/frontend.cpp:1720
+#: src/frontend.cpp:1727
 msgid "Campaign Difficulty"
 msgstr "δυσκολία εκστρατείας"
 
 #: src/frontend.cpp:1658
-#: src/frontend.cpp:1721
+#: src/frontend.cpp:1728
 msgid "Camera Speed"
 msgstr "Ταχύτητα της Κάμερας"
 
 #: src/frontend.cpp:1662
-#: src/frontend.cpp:1717
+#: src/frontend.cpp:1724
 msgid "Unit Colour:"
 msgstr "χρώμα μονάδας:"
 
 #: src/frontend.cpp:1682
-#: src/frontend.cpp:1718
+#: src/frontend.cpp:1725
 msgid "Campaign"
 msgstr "εκστρατεία"
 
 #: src/frontend.cpp:1692
-#: src/frontend.cpp:1719
+#: src/frontend.cpp:1726
 msgid "Skirmish/Multiplayer"
 msgstr "ατομικό / ομαδικό"
 
-#: src/frontend.cpp:1698
-#: src/frontend.cpp:1714
+#: src/frontend.cpp:1699
+msgid "Click to open webpage."
+msgstr ""
+
+#: src/frontend.cpp:1702
+#: src/frontend.cpp:1721
 msgid "GAME OPTIONS"
 msgstr "ΕΠΙΛΟΓΕΣ ΠΑΙΧΝΙΔΙΟΥ"
 
-#: src/frontend.cpp:1826
-#: src/multiint.cpp:2531
+#: src/frontend.cpp:1833
+#: src/multiint.cpp:2544
 msgid "Mod: "
 msgstr "διασκευή: "
 
@@ -15485,7 +15489,7 @@ msgstr "Ο παίχτης %u , με ζαβολιά (κατάλογος αποσ�
 
 #: src/hci.cpp:2816
 #: src/multiint.cpp:1482
-#: src/multimenu.cpp:767
+#: src/multimenu.cpp:682
 msgid "Power"
 msgstr "Ισχύς"
 
@@ -15802,7 +15806,7 @@ msgid "Allow"
 msgstr ""
 
 #: src/intelmap.cpp:239
-#: src/keybind.cpp:1362
+#: src/keybind.cpp:1376
 msgid "PAUSED"
 msgstr "ΠΑΥΜΕΝΟ"
 
@@ -15974,14 +15978,14 @@ msgstr "Ο παίχτης %u , με ζαβολιά, απέκτησε ένα νέ
 #: src/keybind.cpp:535
 #: src/keybind.cpp:550
 #: src/keybind.cpp:591
-#: src/keybind.cpp:692
-#: src/keybind.cpp:729
-#: src/keybind.cpp:784
-#: src/keybind.cpp:1294
-#: src/keybind.cpp:1415
-#: src/keybind.cpp:1517
-#: src/keybind.cpp:1815
-#: src/keybind.cpp:1855
+#: src/keybind.cpp:706
+#: src/keybind.cpp:743
+#: src/keybind.cpp:798
+#: src/keybind.cpp:1308
+#: src/keybind.cpp:1429
+#: src/keybind.cpp:1531
+#: src/keybind.cpp:1829
+#: src/keybind.cpp:1869
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Ο Παίχτης %u) χρησιμοποιεί κλεψιά :%s"
@@ -16022,188 +16026,196 @@ msgstr "Έχει ενεργοποιηθεί η προβολή των Καρέ Α
 msgid "FPS display is disabled."
 msgstr "Έχει απενεργοποιηθεί η προβολή των Καρέ Ανά Δευτερόλεπτο."
 
-#: src/keybind.cpp:659
+#: src/keybind.cpp:617
+msgid "Unit count display is enabled."
+msgstr ""
+
+#: src/keybind.cpp:621
+msgid "Unit count display is disabled."
+msgstr ""
+
+#: src/keybind.cpp:673
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
 msgstr "(Ο παίχτης %u) χρησιμοποιεί ζαβολιά :Πλήθος Ανθρωπομηχανών: %d  Πλήθος Κατασκευών: %d  Πλήθος Χαρακτηριστικών: %d"
 
-#: src/keybind.cpp:693
+#: src/keybind.cpp:707
 msgid "Infinite power disabled"
 msgstr "Η απεριόριστη ενέργεια είναι απενεργοποιημένη"
 
-#: src/keybind.cpp:693
+#: src/keybind.cpp:707
 msgid "Infinite power enabled"
 msgstr "Η απεριόριστη ενέργεια είναι ενεργοποιημένη"
 
-#: src/keybind.cpp:730
+#: src/keybind.cpp:744
 msgid "All items made available"
 msgstr "Όλα τα αντικείμενα έχουν γίνει διαθέσιμα"
 
-#: src/keybind.cpp:785
+#: src/keybind.cpp:799
 msgid "Fog on"
 msgstr "Ενεργοποιημένη η Ομίχλη"
 
-#: src/keybind.cpp:785
+#: src/keybind.cpp:799
 msgid "Fog off"
 msgstr "Απενεργοποιημένη η Ομίχλη"
 
-#: src/keybind.cpp:894
-#: src/keybind.cpp:907
+#: src/keybind.cpp:908
+#: src/keybind.cpp:921
 #, c-format
 msgid "Setting radar zoom to %u"
 msgstr "Ορισμός της εστίασης του ραδιοεντοπιστή στα %u"
 
-#: src/keybind.cpp:1295
+#: src/keybind.cpp:1309
 msgid "God Mode ON"
 msgstr "Ενεργοποιημένη της Λειτουργίας Θεού"
 
-#: src/keybind.cpp:1295
+#: src/keybind.cpp:1309
 msgid "God Mode OFF"
 msgstr "Απενεργοποιημένη της Λειτουργίας Θεού"
 
-#: src/keybind.cpp:1307
+#: src/keybind.cpp:1321
 msgid "View Aligned to North"
 msgstr "Η Προβολή Ευθυγραμμισμένη στο Βορρά"
 
-#: src/keybind.cpp:1331
+#: src/keybind.cpp:1345
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Σύλληψη του δείκτη %s"
 
-#: src/keybind.cpp:1416
+#: src/keybind.cpp:1430
 msgid "Researched EVERYTHING for you!"
 msgstr "Ερεύνησε και εξέλιξε τα ΠΑΝΤΑ για λογαριασμό σου."
 
-#: src/keybind.cpp:1440
+#: src/keybind.cpp:1454
 msgid "Selected buildings instantly recharged!"
 msgstr "Τα επιλεγμένα κτίρια επαναφορτίστηκαν αμέσως!"
 
-#: src/keybind.cpp:1480
+#: src/keybind.cpp:1494
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Ο παίχτης %u) χρησιμοποιεί κλεψιά :%s %s"
 
-#: src/keybind.cpp:1480
+#: src/keybind.cpp:1494
 msgid "Researched"
 msgstr "Ερευνήθηκε"
 
-#: src/keybind.cpp:1501
+#: src/keybind.cpp:1515
 msgid "Only displaying energy bars when selected"
 msgstr "Πάντα εμφάνιση των ενδείξεων ενέργειας κατά την επιλογή"
 
-#: src/keybind.cpp:1504
+#: src/keybind.cpp:1518
 msgid "Always displaying energy bars for units"
 msgstr "Πάντα εμφάνιση των ενδείξεων ενέργειας για τις μονάδες"
 
-#: src/keybind.cpp:1507
+#: src/keybind.cpp:1521
 msgid "Always displaying energy bars for units and structures"
 msgstr "Πάντα εμφάνιση των ενδείξεων ενέργειας για τις μονάδες και τις δομές"
 
-#: src/keybind.cpp:1518
+#: src/keybind.cpp:1532
 msgid "Debug menu is Open"
 msgstr "Το μενού αποσφαλμάτωσης είναι Ανοιχτό"
 
-#: src/keybind.cpp:1547
+#: src/keybind.cpp:1561
 msgid "Unable to locate any oil derricks!"
 msgstr "Αδυναμία εντοπισμού οποιασδήποτε αντλίας πετρελαίου."
 
-#: src/keybind.cpp:1711
+#: src/keybind.cpp:1725
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Δυστυχώς έξω ο καιρός είναι φοβερός... ΧΙΟΝΙ"
 
-#: src/keybind.cpp:1717
+#: src/keybind.cpp:1731
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Τραγουδώντας στη βροχή... Τραγουδάω στη βροχή... ΒΡΟΧΗ"
 
-#: src/keybind.cpp:1723
+#: src/keybind.cpp:1737
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Πρόβλεψη Καιρού: Καθαροί ουρανοί σε όλες τις περιοχές... ΧΩΡΙΣ ΚΑΙΡΙΚΑ ΦΑΙΝΟΜΕΝΑ"
 
-#: src/keybind.cpp:1814
+#: src/keybind.cpp:1828
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "ΠΡΟΣΟΧΗ: Αυτό, αν χρησιμοποιηθεί εσφαλμένα στην αποστολή, μπορεί να φέρει δραστικά αποτελέσματα."
 
-#: src/keybind.cpp:1816
+#: src/keybind.cpp:1830
 msgid "All enemies destroyed by cheating!"
 msgstr "Όλοι οι εχθροί έχουν εξοντωθεί, χάρη σε κλεψιά."
 
-#: src/keybind.cpp:1856
+#: src/keybind.cpp:1870
 msgid "Destroying selected droids and structures!"
 msgstr "Καταστρέφονται οι επιλεγμένες ανθρωπομηχανές και οι κατασκευές."
 
-#: src/keybind.cpp:2284
+#: src/keybind.cpp:2298
 msgid "Reveal OFF"
 msgstr "Αποκάλυψη ΑΝΕΝΕΡΓΗ"
 
-#: src/keybind.cpp:2289
+#: src/keybind.cpp:2303
 msgid "Reveal ON"
 msgstr "Αποκάλυψη ΕΝΕΡΓΗ"
 
-#: src/keybind.cpp:2370
+#: src/keybind.cpp:2384
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Κεντράρισμα στο Αρχηγείο του παίχτη, με κατεύθυνση ΒΟΡΕΙΑ."
 
-#: src/keybind.cpp:2382
+#: src/keybind.cpp:2396
 msgid "Unable to locate HQ!"
 msgstr "Αδυναμία εντοπισμού του Αρχηγείου"
 
-#: src/keybind.cpp:2389
+#: src/keybind.cpp:2403
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "Ο περιορισμός της ταχύτητας των σχηματισμών έχει αφαιρεθεί από το παιχνίδι λόγω δυσλειτουργιών."
 
-#: src/keybind.cpp:2438
+#: src/keybind.cpp:2452
 msgid "Vertical rotation direction: Normal"
 msgstr "Κατεύθυνση κάθετης περιστροφής: Κανονική"
 
-#: src/keybind.cpp:2443
+#: src/keybind.cpp:2457
 msgid "Vertical rotation direction: Flipped"
 msgstr "Κατεύθυνση κάθετης περιστροφής: Ανάστροφη"
 
-#: src/keybind.cpp:2495
+#: src/keybind.cpp:2509
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "Λυπάμαι... Η ταχύτητα του παιχνιδιού δεν αλλάζει στο ομαδικό παιχνίδι."
 
-#: src/keybind.cpp:2530
-#: src/keybind.cpp:2584
+#: src/keybind.cpp:2544
+#: src/keybind.cpp:2598
 msgid "Game Speed Reset"
 msgstr "Επαναφέρθηκε η Ταχύτητα του Παιχνιδιού"
 
-#: src/keybind.cpp:2534
+#: src/keybind.cpp:2548
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Η Ταχύτητα του Παιχνιδιού Αυξήθηκε στα %s"
 
-#: src/keybind.cpp:2538
+#: src/keybind.cpp:2552
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Η Ταχύτητα του Παιχνιδιού Μειώθηκε στα %s"
 
-#: src/keybind.cpp:2596
+#: src/keybind.cpp:2610
 msgid "Radar showing friend-foe colors"
 msgstr "Ο ραδιοεντοπιστής δείχνει τα χρώματα φίλου ή εχθρού"
 
-#: src/keybind.cpp:2600
+#: src/keybind.cpp:2614
 msgid "Radar showing player colors"
 msgstr "Ο ραδιοεντοπιστής δείχνει τα χρώματα των παιχτών"
 
-#: src/keybind.cpp:2615
+#: src/keybind.cpp:2629
 msgid "Radar showing only objects"
 msgstr "Ο ραδιοεντοπιστής καταδεικνύει μόνο αντικείμενα"
 
-#: src/keybind.cpp:2618
+#: src/keybind.cpp:2632
 msgid "Radar blending terrain and height"
 msgstr "Ο ραδιοεντοπιστής αναμειγνύει διαμόρφωση εδάφους και ύψος"
 
-#: src/keybind.cpp:2621
+#: src/keybind.cpp:2635
 msgid "Radar showing terrain"
 msgstr "Ο ραδιοεντοπιστή δείχνει τη διαμόρφωση του εδάφους"
 
-#: src/keybind.cpp:2624
+#: src/keybind.cpp:2638
 msgid "Radar showing height"
 msgstr "Ο ραδιοεντοπιστή δείχνει το ύψος"
 
 #: src/keyedit.cpp:360
-#: src/multiint.cpp:1536
+#: src/multiint.cpp:1549
 #: src/titleui/gamefind.cpp:90
 #: src/titleui/protocol.cpp:87
 msgid "Return To Previous Screen"
@@ -16750,15 +16762,15 @@ msgstr "Αποκάλυψη του χάρτη στη θέση του ποντικ
 msgid "Trace a game object"
 msgstr "Εντόπισε ένα αντικείμενο του παιχνιδιού"
 
-#: src/loadsave.cpp:334
+#: src/loadsave.cpp:335
 msgid "Parent directory"
 msgstr "Γονικός κατάλογος"
 
-#: src/loadsave.cpp:339
+#: src/loadsave.cpp:340
 msgid "Autosave directory"
 msgstr "Κατάλογος αυτόματης αποθήκευσης"
 
-#: src/loadsave.cpp:339
+#: src/loadsave.cpp:340
 msgid "Autosave directory (not allowed for saving)"
 msgstr ""
 
@@ -16948,7 +16960,7 @@ msgid "Select Player Name"
 msgstr "Επέλεξε το Όνομα του Παίχτη"
 
 #: src/multiint.cpp:1472
-#: src/multimenu.cpp:756
+#: src/multimenu.cpp:671
 msgid "Alliances"
 msgstr "Συμμαχίες"
 
@@ -16984,218 +16996,238 @@ msgid "Random Game Options\n"
 msgstr "Επιλογές Τυχαίου Παιχνιδιού\n"
 "Μπορεί να μπλοκαριστεί με τις ψήφους των παικτών"
 
-#: src/multiint.cpp:1526
 #: src/multiint.cpp:1527
+msgid "Tech"
+msgstr ""
+
+#: src/multiint.cpp:1528
+msgid "Technology Level 1"
+msgstr ""
+
+#: src/multiint.cpp:1529
+msgid "Technology Level 2"
+msgstr ""
+
+#: src/multiint.cpp:1530
+msgid "Technology Level 3"
+msgstr ""
+
+#: src/multiint.cpp:1531
+msgid "Technology Level 4"
+msgstr ""
+
+#: src/multiint.cpp:1539
+#: src/multiint.cpp:1540
 msgid "Start Hosting Game"
 msgstr "Φιλοξενία του Παιχνιδιού"
 
-#: src/multiint.cpp:1588
+#: src/multiint.cpp:1601
 msgid "DIFFICULTY"
 msgstr "ΔΥΣΚΟΛΙΑ"
 
-#: src/multiint.cpp:1601
+#: src/multiint.cpp:1614
 msgid "Starts disadvantaged"
 msgstr "Ξεκινά με μειονεκτήματα"
 
-#: src/multiint.cpp:1602
+#: src/multiint.cpp:1615
 msgid "Plays nice"
 msgstr "Παίζει σωστά"
 
-#: src/multiint.cpp:1603
+#: src/multiint.cpp:1616
 msgid "No holds barred"
 msgstr "Χωρίς περιορισμούς"
 
-#: src/multiint.cpp:1604
+#: src/multiint.cpp:1617
 msgid "Starts with advantages"
 msgstr "Ξεκινά με πλεονεκτήματα"
 
-#: src/multiint.cpp:1641
+#: src/multiint.cpp:1654
 msgid "CHOOSE AI"
 msgstr "ΕΠΕΛΕΞΕ ΤΕΧΝ. ΝΟΗΜ."
 
-#: src/multiint.cpp:1685
+#: src/multiint.cpp:1698
 msgid "Allow human players to join in this slot"
 msgstr "Επέτρεψε παίχτες ανθρώπους να πάρουν αυτή τη υποδοχή"
 
-#: src/multiint.cpp:1692
+#: src/multiint.cpp:1705
 msgid "Leave this slot unused"
 msgstr "Άφησε αυτή την υποδοχή αχρησιμοποίητη"
 
-#: src/multiint.cpp:2154
+#: src/multiint.cpp:2167
 msgid "Team"
 msgstr "Ομάδα"
 
-#: src/multiint.cpp:2209
+#: src/multiint.cpp:2222
 msgid "Click to change difficulty"
 msgstr "Κλίκαρε για να αλλάξεις την δυσκολία"
 
-#: src/multiint.cpp:2224
+#: src/multiint.cpp:2237
 msgid "Waiting for player"
 msgstr "Αναμονή για ένα παίχτη"
 
-#: src/multiint.cpp:2224
+#: src/multiint.cpp:2237
 msgid "Player is ready"
 msgstr "Ο παίχτης είναι έτοιμος"
 
-#: src/multiint.cpp:2224
+#: src/multiint.cpp:2237
 msgid "Player is downloading"
 msgstr "Ο παίχτης λαμβάνει αρχεία"
 
-#: src/multiint.cpp:2224
+#: src/multiint.cpp:2237
 msgid "Click when ready"
 msgstr "Όταν είσαι έτοιμος, κλίκαρε εδώ"
 
-#: src/multiint.cpp:2224
+#: src/multiint.cpp:2237
 msgid "Waiting for download"
 msgstr "Αναμονή για κατέβασμα αρχείων"
 
-#: src/multiint.cpp:2236
+#: src/multiint.cpp:2249
 msgid "READY?"
 msgstr "ΕΤΟΙΜΟΣ;"
 
-#: src/multiint.cpp:2278
+#: src/multiint.cpp:2291
 msgid "PLAYERS"
 msgstr "ΠΑΙΧΤΕΣ"
 
-#: src/multiint.cpp:2313
+#: src/multiint.cpp:2326
 msgid "Click to change to this slot"
 msgstr "Κλίκαρε για να αλλάξεις αυτή την υποδοχή"
 
-#: src/multiint.cpp:2347
+#: src/multiint.cpp:2360
 msgid "Choose Team"
 msgstr "Διάλεξε Ομάδα"
 
-#: src/multiint.cpp:2351
+#: src/multiint.cpp:2364
 msgid "Teams locked"
 msgstr "Κλειδωμένες οι Ομάδες"
 
-#: src/multiint.cpp:2377
+#: src/multiint.cpp:2390
 msgid "Click to change player colour"
 msgstr "Κλίκαρε για να αλλάξεις το χρώμα του παίχτη"
 
-#: src/multiint.cpp:2402
+#: src/multiint.cpp:2415
 msgid "Click to change player position"
 msgstr "Κλίκαρε για να αλλάξεις τη θέση του παίχτη"
 
-#: src/multiint.cpp:2409
+#: src/multiint.cpp:2422
 msgid "Click to change AI, right click to distribute choice"
 msgstr "Κλίκαρε για να επιλέξεις Τεχνητή Νοημοσύνη· δεξί κλικάρισμα για να διανείμεις την επιλογή"
 
-#: src/multiint.cpp:2424
+#: src/multiint.cpp:2437
 msgid "Player ID: "
 msgstr "Ταυτότητα Παίκτη: "
 
-#: src/multiint.cpp:2431
+#: src/multiint.cpp:2444
 msgid "(none)"
 msgstr "(κανένα)"
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2514
 msgid "CHAT"
 msgstr "ΣΥΖΗΤΗΣΗ"
 
-#: src/multiint.cpp:2979
+#: src/multiint.cpp:2994
 msgid "Game Name Updated."
 msgstr "Ενημερώθηκε το Όνομα του Παιχνιδιού."
 
-#: src/multiint.cpp:3095
+#: src/multiint.cpp:3122
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** τώρα απαιτείται ο κωδικός πρόσβασης [%s] ***"
 
-#: src/multiint.cpp:3101
+#: src/multiint.cpp:3128
 msgid "*** password is NOT required! ***"
 msgstr "*** ΔΕΝ απαιτείται κωδικός πρόσβασης ***"
 
-#: src/multiint.cpp:3114
+#: src/multiint.cpp:3141
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "Αυτή είναι μια διασκευή χάρτη· μπορεί να αλλάξει την αίσθηση του παιχνιδιού."
 
-#: src/multiint.cpp:3170
+#: src/multiint.cpp:3197
 msgid "Sorry! Failed to host the game."
 msgstr "Συγνώμη... Αδυναμία φιλοξενίας του παιχνιδιού."
 
-#: src/multiint.cpp:3326
-#: src/multiint.cpp:3414
-#: src/multimenu.cpp:1321
+#: src/multiint.cpp:3353
+#: src/multiint.cpp:3441
+#: src/multimenu.cpp:1236
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Ο οικοδεσπότης έδιωξε τον %s από το παιχνίδι."
 
-#: src/multiint.cpp:3471
+#: src/multiint.cpp:3498
 msgid "Host is Starting Game"
 msgstr "Ο οικοδεσπότης Ξεκινά το Παιχνίδι"
 
-#: src/multiint.cpp:3688
+#: src/multiint.cpp:3715
 msgid "You have been kicked: "
 msgstr "Σε πέταξαν έξω: "
 
-#: src/multiint.cpp:3701
+#: src/multiint.cpp:3728
 msgid "No connection to host."
 msgstr "Καμία σύνδεση προς τον οικοδεσπότη."
 
-#: src/multiint.cpp:3839
+#: src/multiint.cpp:3866
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:3949
+#: src/multiint.cpp:3976
 msgid "The host has quit."
 msgstr "Ο οικοδεσπότης το 'κλεισε το μαγαζί."
 
-#: src/multiint.cpp:4070
+#: src/multiint.cpp:4097
 msgid "UPnP has been enabled."
 msgstr "Έχει ενεργοποιηθεί το UPnP."
 
-#: src/multiint.cpp:4076
+#: src/multiint.cpp:4103
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "Αποτυχία εντοπισμού του UPnP. Θα πρέπει να ρυθμίσεις το ρούτερ, χειροκίνητα, εσύ ο ίδιος."
 
-#: src/multiint.cpp:4080
+#: src/multiint.cpp:4107
 msgid "UPnP detection is in progress..."
 msgstr "Σε εξέλιξη η ανίχνευση του UPnP..."
 
-#: src/multiint.cpp:4087
+#: src/multiint.cpp:4114
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "Η ανίχνευση UPnP είναι απενεργοποιημένη από τον χρήστη. Δεν θα γίνει αυτόματη ρύθμιση της θύρας 2100."
 
-#: src/multiint.cpp:4093
+#: src/multiint.cpp:4120
 msgid "Hit the ready box to begin your challenge!"
 msgstr "Κλίκαρε το κουτί ετοιμότητας για να ξεκινήσει η πρόκλησή σου"
 
-#: src/multiint.cpp:4097
+#: src/multiint.cpp:4124
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Κλίκαρε το κουμπί φιλοξενίας για να ξεκινήσει η φιλοξενία του παιχνιδιού."
 
-#: src/multiint.cpp:4178
+#: src/multiint.cpp:4205
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Κλίκαρε για να καταλάβεις την %d υποδοχή παίχτη"
 
-#: src/multiint.cpp:4192
-#: src/multiint.cpp:4424
+#: src/multiint.cpp:4219
+#: src/multiint.cpp:4451
 msgid "Open"
 msgstr "Ανοιχτό"
 
-#: src/multiint.cpp:4192
-#: src/multiint.cpp:4425
+#: src/multiint.cpp:4219
+#: src/multiint.cpp:4452
 msgid "Closed"
 msgstr "Κλεισμένο"
 
-#: src/multiint.cpp:4257
+#: src/multiint.cpp:4284
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Αποστέλνεται ο Χάρτης: %u%% "
 
-#: src/multiint.cpp:4257
+#: src/multiint.cpp:4284
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "Χάρτης: λήφθηκαν %u%%"
 
-#: src/multiint.cpp:4305
+#: src/multiint.cpp:4332
 msgid "HOST"
 msgstr "ΟΙΚΟΔΕΣΠΟΤΗΣ"
 
-#: src/multiint.cpp:4312
-#: src/multimenu.cpp:774
+#: src/multiint.cpp:4339
+#: src/multimenu.cpp:689
 msgid "Ping"
 msgstr "Ανάκρουση"
 
@@ -17203,31 +17235,31 @@ msgstr "Ανάκρουση"
 msgid "Players Still Joining"
 msgstr "Ακόμη Προσέρχονται οι Παίχτες"
 
-#: src/multijoin.cpp:266
+#: src/multijoin.cpp:273
 #, c-format
 msgid "%s has Left the Game"
 msgstr "Ο %s Έφυγε από το Παιχνίδι"
 
-#: src/multijoin.cpp:324
+#: src/multijoin.cpp:331
 #, c-format
 msgid "File transfer has been aborted for %d."
 msgstr "Εγκαταλείφθηκε η μεταφορά αρχείου για το %d."
 
-#: src/multijoin.cpp:452
+#: src/multijoin.cpp:459
 #, c-format
 msgid "%s (%u) has an incompatible mod, and has been kicked."
 msgstr "Ο %s (%u) είχε ασύμβατη Μετατροπή, και διώχτηκε."
 
-#: src/multijoin.cpp:493
+#: src/multijoin.cpp:492
 #, c-format
 msgid "%s is joining the game"
 msgstr "Ο %s συμμετέχει στο παιχνίδι"
 
-#: src/multijoin.cpp:505
+#: src/multijoin.cpp:504
 msgid "Server message:"
 msgstr "Μήνυμα διακομιστή:"
 
-#: src/multijoin.cpp:518
+#: src/multijoin.cpp:517
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
 msgstr ""
 
@@ -17257,97 +17289,81 @@ msgstr "Αποδοχή των Ρυθμίσεων"
 msgid "Limits reset to default values"
 msgstr "Τα όρια επανήλθαν στις προκαθορισμένες τιμές"
 
-#: src/multimenu.cpp:564
-msgid "Technology level 1"
-msgstr "Τεχνολογικό επίπεδο 1"
-
-#: src/multimenu.cpp:578
-msgid "Technology level 2"
-msgstr "Τεχνολογικό επίπεδο 2"
-
-#: src/multimenu.cpp:584
-msgid "Technology level 3"
-msgstr "Τεχνολογικό επίπεδο 3"
-
-#: src/multimenu.cpp:590
-msgid "Max technology level"
-msgstr "Μέγιστο επίπεδο της τεχνολογίας"
-
-#: src/multimenu.cpp:596
+#: src/multimenu.cpp:527
 msgid "Any number of players"
 msgstr "Οποιοδήποτε πλήθος παιχτών"
 
-#: src/multimenu.cpp:613
+#: src/multimenu.cpp:544
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d παίχτης"
 msgstr[1] "%d παίχτες"
 
-#: src/multimenu.cpp:758
+#: src/multimenu.cpp:673
 msgid "Score"
 msgstr "Βαθμολογία"
 
-#: src/multimenu.cpp:760
+#: src/multimenu.cpp:675
 msgid "Kills"
 msgstr "Φόνοι"
 
-#: src/multimenu.cpp:762
+#: src/multimenu.cpp:677
 msgid "Units"
 msgstr "Μονάδες"
 
-#: src/multimenu.cpp:778
+#: src/multimenu.cpp:693
 msgid "Structs"
 msgstr "Χτίσματα"
 
-#: src/multimenu.cpp:790
+#: src/multimenu.cpp:705
 msgid "Sent/Received per sec —"
 msgstr "Απεστάλησαν/Ελήφθησαν, ανά δευτερόλεπτο —"
 
-#: src/multimenu.cpp:790
+#: src/multimenu.cpp:705
 msgid "Total Sent/Received —"
 msgstr "Σύνολο Απεσταλμένων/Ληφθέντων —"
 
-#: src/multimenu.cpp:795
+#: src/multimenu.cpp:710
 #, c-format
 msgid "Traf: %u/%u"
 msgstr "Κίνηση: %u/%u"
 
-#: src/multimenu.cpp:799
+#: src/multimenu.cpp:714
 #, c-format
 msgid "Uncompressed: %u/%u"
 msgstr "Ασυμπίεστα: %u/%u"
 
-#: src/multimenu.cpp:803
+#: src/multimenu.cpp:718
 #, c-format
 msgid "Pack: %u/%u"
 msgstr "Πακεταρισμένα: %u/%u"
 
-#: src/multimenu.cpp:1103
+#: src/multimenu.cpp:1018
 msgid "Channel"
 msgstr "Κανάλι"
 
-#: src/multimenu.cpp:1117
+#: src/multimenu.cpp:1032
 msgid "Toggle Alliance State"
 msgstr "Εναλλαγή της Κατάστασης Συμμαχιών"
 
-#: src/multimenu.cpp:1136
+#: src/multimenu.cpp:1051
 msgid "Give Visibility Report"
 msgstr "Δώσε Αναφορά Ορατότητας"
 
-#: src/multimenu.cpp:1142
+#: src/multimenu.cpp:1057
 msgid "Leak Technology Documents"
 msgstr "Διαρροή Εγγράφων Τεχνολογίας "
 
-#: src/multimenu.cpp:1149
+#: src/multimenu.cpp:1064
 msgid "Hand Over Selected Units"
 msgstr "Παράδοση των Επιλεγμένων Μονάδων"
 
-#: src/multimenu.cpp:1155
+#: src/multimenu.cpp:1070
 msgid "Give Power To Player"
 msgstr "Μεταβίβαση Ενέργειας στον Παίχτη"
 
-#: src/multimenu.cpp:1323
+#: src/multimenu.cpp:1238
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "εκδιώχθηκε ο %s : %s από το παιχνίδι, και προστέθηκαν στον κατάλογο των ανεπιθύμητων."
@@ -17643,86 +17659,86 @@ msgid_plural "%u units selected"
 msgstr[0] "Επικλέχτηκε %u μονάδα"
 msgstr[1] "Επιλέχτηκαν %u μονάδες"
 
-#: src/structure.cpp:2504
+#: src/structure.cpp:2512
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:2512
+#: src/structure.cpp:2520
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:2517
+#: src/structure.cpp:2525
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:2525
+#: src/structure.cpp:2533
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:5446
+#: src/structure.cpp:5454
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - Ανατέθηκε %u μονάδα - Ακεραιότητα %d/%d"
 msgstr[1] "%s - Ανατέθηκαν %u μονάδες - Σημεία %d/%d"
 
-#: src/structure.cpp:5465
+#: src/structure.cpp:5473
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Μονάδα ανατέθηκε - Φθορά %d/%d"
 msgstr[1] "%s - %u Μονάδες ανατέθηκαν - Ακεραιότητα %d/%d"
 
-#: src/structure.cpp:5470
-#: src/structure.cpp:5480
-#: src/structure.cpp:5487
-#: src/structure.cpp:5513
-#: src/structure.cpp:5522
-#: src/structure.cpp:5529
+#: src/structure.cpp:5478
+#: src/structure.cpp:5488
+#: src/structure.cpp:5495
+#: src/structure.cpp:5521
+#: src/structure.cpp:5530
 #: src/structure.cpp:5537
+#: src/structure.cpp:5545
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr "%s - Ακεραιότητα %d/%d"
 
-#: src/structure.cpp:5503
+#: src/structure.cpp:5511
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr "%s - Συνδέθηκαν %u από %u - Ακεραιότητα %d/%d"
 
-#: src/structure.cpp:5658
-#: src/structure.cpp:5701
+#: src/structure.cpp:5666
+#: src/structure.cpp:5709
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Αλλοιώθηκε Ηλεκτρονικά"
 
-#: src/structure.cpp:5826
+#: src/structure.cpp:5834
 msgid "Electronic Reward - Visibility Report"
 msgstr "Ηλεκτρονική Ανταμοιβή - Αναφορά Ορατότητας"
 
-#: src/structure.cpp:5865
+#: src/structure.cpp:5873
 msgid "Factory Reward - Propulsion"
 msgstr "Βραβείο Εργοστασίου - Πρόωση"
 
-#: src/structure.cpp:5887
+#: src/structure.cpp:5895
 msgid "Factory Reward - Body"
 msgstr "Βραβείο Εργοστασίου - Αμάξωμα"
 
-#: src/structure.cpp:5909
+#: src/structure.cpp:5917
 msgid "Factory Reward - Weapon"
 msgstr "Βραβείο Εργοστασίου - όπλο"
 
-#: src/structure.cpp:5917
+#: src/structure.cpp:5925
 msgid "Factory Reward - Nothing"
 msgstr "Βραβείο Εργοστασίου - Τίποτα"
 
-#: src/structure.cpp:5944
+#: src/structure.cpp:5952
 msgid "Repair Facility Award - Repair"
 msgstr "Βραβείο Εγκατάστασης Επισκευών - Επισκευή"
 
-#: src/structure.cpp:5950
+#: src/structure.cpp:5958
 msgid "Repair Facility Award - Nothing"
 msgstr "Βραβείο Εγκατάστασης Επισκευών - Τίποτα"
 
