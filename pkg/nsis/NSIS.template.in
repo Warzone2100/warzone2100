@@ -470,7 +470,7 @@ ${EndIf}
 !ifndef INSTALLVIDS
 SectionGroup $(TEXT_SecFMVs) SecFMVs
 
-Section /o $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
+Section $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
   SetOutPath "$INSTDIR\${WZ_DATADIR_APPEND}"
   IfFileExists "sequences.wz" +5
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"               "sequences.wz"
@@ -547,9 +547,12 @@ Function .onInit
   IntOp $0 $0 | ${SF_RO}
   SectionSetFlags ${SecFMVs} $0
 
-  ;FIXME: Select default video sub-component
-  ; Default is still set to standard instead of high, since there is a ~450MB difference
-  StrCpy $5 ${SecFMVs_Eng}
+  ;Select default video sub-component
+  StrCpy $5 ${SecFMVs_EngHi}
+  !insertmacro SelectSection ${SecFMVs_EngHi}
+  !insertmacro UnSelectSection ${SecFMVs_Eng}
+  !insertmacro UnSelectSection ${SecFMVs_EngLo}
+;    !insertmacro UnSelectSection ${SecFMVs_Ger}
 
   ; Determine whether Microsoft system libraries are installed
   !ifdef MSVCRUNTIME
@@ -626,6 +629,17 @@ FunctionEnd
 
 !ifndef INSTALLVIDS
 Function .onSelChange
+
+SectionGetFlags ${SecFMVs} $R0
+IntOp $R0 $R0 & ${SF_SELECTED}
+
+${If} $R0 == ${SF_SELECTED}
+    !insertmacro SelectSection ${SecFMVs_EngHi}
+    !insertmacro UnSelectSection ${SecFMVs_Eng}
+    !insertmacro UnSelectSection ${SecFMVs_EngLo}
+;    !insertmacro UnSelectSection ${SecFMVs_Ger}
+${EndIf}
+
 ${If} ${SectionIsSelected} ${SecFMVs_Eng}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngHi}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
