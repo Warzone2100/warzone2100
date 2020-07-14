@@ -40,7 +40,10 @@ static const struct FACTION factions[NUM_FACTIONS] = {
 			{"blvfact1.pie", "blvfact1_nex.pie"},
 			{"blvfact2.pie", "blvfact2_nex.pie"},
 			{"vtolfactory_module1.pie", "vtolfactory_module1_nex.pie"},
-			{"vtolfactory_module2.pie", "vtolfactory_module2_nex.pie"}
+			{"vtolfactory_module2.pie", "vtolfactory_module2_nex.pie"},
+			{"blderik_anim.pie", "blderik_anim_nex.pie"},
+			{"blderik.pie", "blderik_nex.pie"},
+			{"blmrtpit.pie", "blmrtpit_nex.pie"}
 		}
 	},
 	{
