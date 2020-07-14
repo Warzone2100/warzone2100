@@ -3199,7 +3199,6 @@ static void loadMapPlayerSettings(WzConfig& ini)
 				const FACTION* faction = getFactionByID(static_cast<FactionID>(f_id));
 				if (faction->name == value)
 				{
-					debug(LOG_INFO, "faction of player %i is %i", i, f_id); // TODO: delete before factions PR is merged
 					NetPlay.players[i].faction = static_cast<FactionID>(f_id);
 				}
 			}
