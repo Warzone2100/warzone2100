@@ -1,6 +1,7 @@
 const research_test = ["R-Wpn-MG1Mk1"];
 
 var research_primary = [
+"R-Wpn-MG1Mk1",
 "R-Wpn-MG-Damage02",			//APDSB MG Bullets
 "R-Defense-Tower01",			//Оборонная вышка / пулемётная башня (старт)
 "R-Wpn-MG2Mk1",					//Спаренный лёгкий пулемёт
@@ -23,6 +24,7 @@ var research_primary = [
 
 
 const research_way_1 = [
+"R-Wpn-MG1Mk1",
 //"R-Struc-VTOLFactory",			//Авиазавод(temp)
 "R-Sys-Engineering01",			//Инженерия
 "R-Struc-PowerModuleMk1",
@@ -81,6 +83,7 @@ if(version != "3.1"){
 */
 
 const research_way_2 = [
+"R-Wpn-MG1Mk1",
 //"R-Struc-Factory-Cyborg",		//Казармы
 "R-Struc-PowerModuleMk1",		//Модуль на генератор
 "R-Sys-MobileRepairTurret01",	//Паяльник

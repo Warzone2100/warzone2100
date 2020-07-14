@@ -102,7 +102,7 @@ bool strresLoad(STR_RES *psRes, const char *fileName)
 
 	input.type = LEXINPUT_PHYSFS;
 	input.input.physfsfile = PHYSFS_openRead(fileName);
-	debug(LOG_WZ, "Reading...[directory %s] %s", PHYSFS_getRealDir(fileName), fileName);
+	debug(LOG_WZ, "Reading...[directory %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
 	if (!input.input.physfsfile)
 	{
 		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());

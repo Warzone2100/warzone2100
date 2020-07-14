@@ -217,6 +217,16 @@ function __camPlayerDead()
 		//A construction unit is currently on the map.
 		dead = false;
 	}
+	else if (__camNextLevel === "CAM3A-D1")
+	{
+		const GAMMA_PLAYER = 1;
+
+		//Care about all units and not just trucks at the start of cam3-c.
+		if (allianceExistsBetween(GAMMA_PLAYER, NEXUS) && enumDroid(CAM_HUMAN_PLAYER).length > 0)
+		{
+			dead = false;
+		}
+	}
 	else
 	{
 		//Check the transporter.
@@ -334,12 +344,22 @@ function __camVictoryOffworld()
 	{
 		if (elimBases)
 		{
-			var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
-				return obj.type === DROID;
-			}).length;
-			if (!enemyDroids && camAllEnemyBasesEliminated())
+			if (camAllEnemyBasesEliminated())
 			{
-				__camGameWon();
+				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
+					return obj.type === DROID;
+				}).length;
+
+
+				if (!enemyDroids)
+				{
+					__camGameWon();
+					return;
+				}
+				else
+				{
+					__camTriggerLastAttack();
+				}
 			}
 		}
 		else

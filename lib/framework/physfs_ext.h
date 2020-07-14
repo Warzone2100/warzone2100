@@ -102,6 +102,17 @@ static inline int WZ_PHYSFS_isDirectory (const char * fname)
 #endif
 }
 
+static inline std::string WZ_PHYSFS_getRealDir_String(const char *filename)
+{
+	// PHYSFS_getRealDir can return null
+	const char* pResultStr = PHYSFS_getRealDir(filename);
+	if (!pResultStr)
+	{
+		return std::string();
+	}
+	return std::string(pResultStr);
+}
+
 static inline bool PHYSFS_exists(const WzString &filename)
 {
 	return PHYSFS_exists(filename.toUtf8().c_str());

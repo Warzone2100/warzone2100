@@ -1,5 +1,5 @@
-const vernum    = "1.01";
-const verdate   = "08.12.2019";
+const vernum    = "1.02";
+const verdate   = "03.07.2020";
 const vername   = "WZ-BoneCrusher!";
 const shortname = "wzbc";
 const release	= true;
@@ -154,7 +154,7 @@ var bc_ally=[]; //Союзные ИИ BoneCrusher-ы
 
 var avail_research = [];	//Массив возможных исследований, заполняется в функции doResearch();
 
-var scavengerPlayer = -1;
+//var scavengerPlayer = -1;
 
 var buildersMain = newGroup();
 var buildersHunters = newGroup();
@@ -374,7 +374,7 @@ function init(){
 	debugMsg("Warzone2100 "+version, "init");
 	
 	//Определяем мусорщиков
-	scavengerPlayer = (scavengers) ? Math.max(7,maxPlayers) : -1;
+//	scavengerPlayer = (scavengers) ? Math.max(7,maxPlayers) : -1;
 	if(scavengers)debugMsg("На карте присудствуют гопники! {"+scavengerPlayer+"}", "init");
 	else debugMsg("На карте отсутствуют гопники", "init");
 	
@@ -520,6 +520,7 @@ function init(){
 	if(policy['build'] == 'rich'){
 
 		research_way.unshift(
+			["R-Wpn-MG1Mk1"],
 			["R-Sys-Engineering01"],
 			["R-Struc-Research-Module"],
 			["R-Struc-Factory-Cyborg"],
@@ -733,6 +734,7 @@ function letsRockThisFxxxingWorld(init){
 			reactWarriorsTimer = 2000;
 			func_buildersOrder_timer = 5000+me*100;
 			
+			/* NO Cheat Anymore!
 			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
 				berserk = true;
 				debugMsg('Berserk activated', 'init');
@@ -750,7 +752,7 @@ function letsRockThisFxxxingWorld(init){
 					seer = true;
 				}
 			}
-			
+			*/
 		}
 	
 		if(!release){

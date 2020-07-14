@@ -424,7 +424,12 @@ function eventDestroyed(obj){
 }
 
 function eventChat(sender, to, message) {
+	
+	if (!running) return;
+
+	
 //	debugMsg('from: '+sender+', to: '+to+', msg: '+message, 'chat')
+//	debug("'"+message+"', "+sender);
 	if(!release)
 	switch (message){
 		case "disable buildersOrder":
@@ -437,77 +442,110 @@ function eventChat(sender, to, message) {
 			break;
 	}
 	
-	if(sender != me)
-	if(allianceExistsBetween(me, sender))
-	if(message.substr(0,3) == "bc ")
-	switch (message.substr(3)){
-		case "wgr":
-			setResearchWay("Green");
-			chat(sender, "Goind to Green way");
-			break;
-		case "wor":
-			setResearchWay("Orange");
-			chat(sender, "Goind to Orange way");
-			break;
-		case "wyl":
-			setResearchWay("Yellow");
-			chat(sender, "Goind to Yellow way");
-			break;
-		case "wrd":
-			setResearchWay("Red");
-			chat(sender, "Goind to Red way");
-			break;
-		case "btm":
-			chat(sender, "My position base to you at "+startPositions[sender].x+"x"+startPositions[sender].y);
-			base.x = startPositions[sender].x;
-			base.y = startPositions[sender].y;
-			break;
-		case "gmn":
-			chat(sender, "I have "+playerPower(me));
-			if(playerPower(me)>500){
-				donatePower(Math.floor(playerPower(me)/2), sender);
-				chat(sender, "Remained "+playerPower(me)+" power");
+	if(sender != me){
+		if(allianceExistsBetween(me, sender))
+		if(message.substr(0,3) == "bc ")
+		switch (message.substr(3)){
+			/*
+			case "wgr":
+				setResearchWay("Green");
+				chat(sender, "Goind to Green way");
+				break;
+			case "wor":
+				setResearchWay("Orange");
+				chat(sender, "Goind to Orange way");
+				break;
+			case "wyl":
+				setResearchWay("Yellow");
+				chat(sender, "Goind to Yellow way");
+				break;
+			case "wrd":
+				setResearchWay("Red");
+				chat(sender, "Goind to Red way");
+				break;
+			*/
+			case "btm":
+				chat(sender, "My position base to you at "+startPositions[sender].x+"x"+startPositions[sender].y);
+				base.x = startPositions[sender].x;
+				base.y = startPositions[sender].y;
+				break;
+			case "gmp":
+				chat(sender, "I have "+playerPower(me));
+				if(playerPower(me)>500){
+					donatePower(Math.floor(playerPower(me)/2), sender);
+					chat(sender, "Remained "+playerPower(me)+" power");
+				}
+				else
+					chat(sender, "My power is to low");
+				break;
+			case "gtn":
+				if(groupSize(buildersMain) == 0)
+					chat(sender, "I do not have free Trucks");
+				else{
+					chat(sender, "Here my new shiny Truck");
+					var truck = enumGroup(buildersMain)[0];
+					donateObject(truck, sender);
+				}
+				break;
+			case "gaa":
+				armyToPlayer = sender;
+				chat(sender, "All my new shiny army for you.");
+				chat(sender, "Say \"bc caa\" to cancel this");
+				break;
+			case "caa":
+				armyToPlayer = false;
+				chat(sender, "Army is mine now.");
+				break;
+			case "gav":
+				vtolToPlayer = sender;
+				chat(sender, "All my new shiny VTOLs for you.");
+				break;
+			case "cav":
+				vtolToPlayer = false;
+				chat(sender, "VTOLs is mine now.");
+				break;
+			case "dbg":
+				debugMsg("DEBUG: avail_research", 'dbg');
+				for(var i in avail_research){
+					debugMsg(avail_research[i].name, 'dbg');
+				}
+				debugMsg("<==-==>", 'dbg');
+				debugMsg("DEBUG: research_way", 'dbg');
+				for(var i in research_way){
+					debugMsg(research_way[i], 'dbg');
+				}
+				break;
+			case "ver":
+				chat(sender, "Version: "+vernum+" ("+verdate+")");
+				break;
+		}
+	
+		if(message.substr(0,8) == "cheat me"){
+			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
+				berserk = true;
+				debugMsg('Berserk activated', 'init');
+				chat(sender, ' from '+debugName+': '+chatting('berserk'));
+			}else{
+				chat(sender, ' from '+debugName+': '+chatting('no'));
 			}
-			else
-				chat(sender, "My power is to low");
-			break;
-		case "gtn":
-			if(groupSize(buildersMain) == 0)
-				chat(sender, "I do not have free Trucks");
-			else{
-				chat(sender, "Here my new shiny Truck");
-				var truck = enumGroup(buildersMain)[0];
-				donateObject(truck, sender);
+		}
+		
+		if(message.substr(0,13) == "cheat me hard"){
+			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
+				debugMsg('Big army activated', 'init');
+				minPartisans = 20;
+				maxPartisans = 25;
+				minRegular = 30;
+				maxRegular = 70;
+				minCyborgs = 40;
+				maxCyborgs = 50;
+				seer = true;
+				debugMsg('Seer activated', 'init');
+				chat(sender, ' from '+debugName+': '+chatting('seer'));
+			}else{
+				chat(sender, ' from '+debugName+': '+chatting('no'));
 			}
-			break;
-		case "gaa":
-			armyToPlayer = sender;
-			chat(sender, "All my new shiny army for you.");
-			chat(sender, "Say \"bc caa\" to cancel this");
-			break;
-		case "caa":
-			armyToPlayer = false;
-			chat(sender, "Army is mine now.");
-			break;
-		case "gav":
-			vtolToPlayer = sender;
-			chat(sender, "All my new shiny VTOLs for you.");
-			break;
-		case "cav":
-			vtolToPlayer = false;
-			chat(sender, "VTOLs is mine now.");
-			break;
-		case "dbg":
-			debugMsg("DEBUG: avail_research", 'dbg');
-			for(var i in avail_research){
-				debugMsg(avail_research[i].name, 'dbg');
-			}
-			debugMsg("<==-==>", 'dbg');
-			debugMsg("DEBUG: research_way", 'dbg');
-			for(var i in research_way){
-				debugMsg(research_way[i], 'dbg');
-			}
-			break;
+		}
 	}
 //	else
 //	chat(sender, "You say: "+message+", what?");

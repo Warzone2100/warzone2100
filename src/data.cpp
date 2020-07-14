@@ -594,7 +594,7 @@ static bool dataAudioCfgLoad(const char *fileName, void **ppData)
 	{
 		return true;
 	}
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(fileName), fileName);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(fileName).c_str(), fileName);
 	fileHandle = PHYSFS_openRead(fileName);
 
 	if (fileHandle == nullptr)

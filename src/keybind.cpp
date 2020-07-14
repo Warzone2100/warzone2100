@@ -862,14 +862,6 @@ void	kf_LowerTile()
 }
 
 // --------------------------------------------------------------------------
-
-/* Quick game exit */
-void	kf_SystemClose()
-{
-
-}
-
-// --------------------------------------------------------------------------
 /* Zooms out from display */
 void	kf_ZoomOut()
 {
@@ -1206,17 +1198,6 @@ void	kf_addMultiMenu()
 	{
 		intAddMultiMenu();
 	}
-}
-
-// --------------------------------------------------------------------------
-// start/stop capturing audio for multiplayer
-
-void kf_multiAudioStart()
-{
-}
-
-void kf_multiAudioStop()
-{
 }
 
 // --------------------------------------------------------------------------
@@ -1936,6 +1917,11 @@ void kf_ShowGridInfo()
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTeamMessage()
 {
+	if (!getWidgetsStatus())
+	{
+		return;
+	}
+
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
@@ -1953,6 +1939,11 @@ void kf_SendTeamMessage()
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendGlobalMessage()
 {
+	if (!getWidgetsStatus())
+	{
+		return;
+	}
+
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
@@ -2348,13 +2339,6 @@ void	kf_TriggerRayCast()
 //		getBlockHeightDirToEdgeOfGrid(psOther->pos.x,psOther->pos.y,psOther->direction,&height,&dist);
 //		getBlockHeightDirToEdgeOfGrid(mouseTileX*TILE_UNITS,mouseTileY*TILE_UNITS,getTestAngle(),&height,&dist);
 	}
-}
-
-// --------------------------------------------------------------------------
-void	kf_ScatterDroids()
-{
-	// to be written!
-	addConsoleMessage("Scatter droids - not written yet!", LEFT_JUSTIFY, SYSTEM_MESSAGE);
 }
 
 // --------------------------------------------------------------------------

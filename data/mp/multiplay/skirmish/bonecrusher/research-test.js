@@ -5,6 +5,7 @@ const research_test = [
 ];
 
 const research_blue = [
+"R-Wpn-MG1Mk1",
 "R-Sys-Engineering01",
 "R-Defense-Tower01",
 "R-Vehicle-Prop-Halftracks",	//Полугусенецы
@@ -28,9 +29,9 @@ const research_blue = [
 ];
 
 const research_rich = [
+"R-Wpn-MG1Mk1",
 "R-Sys-Engineering01",		// #1  Engineering
 "R-Sys-Sensor-Turret01",		// #3  Sensor Turret
-"R-Wpn-MG1Mk1",		// #0  Machinegun
 "R-Wpn-MG-Damage01",		// #2  Hardened MG Bullets
 "R-Wpn-Cannon1Mk1",		// #4  Light Cannon
 "R-Vehicle-Engine01",		// #5  Fuel Injection Engine
@@ -169,6 +170,7 @@ const research_green = [
 "R-Defense-WallTower02", //защита лёгкая пушка
 "R-Struc-Power-Upgrade03a",
 "R-Struc-Research-Upgrade09",
+"R-Vehicle-Prop-Hover",
 "R-Sys-MobileRepairTurretHvy",
 "R-Sys-Autorepair-General",             //Автопочинка
 //"R-Sys-ECM-Upgrade01",	//Глушилка
@@ -201,6 +203,7 @@ const research_green = [
 ];
 
 const research_yellow = [
+"R-Wpn-MG1Mk1",
 "R-Defense-Tower01",
 "R-Sys-Engineering01",
 "R-Struc-Research-Module",
@@ -210,6 +213,7 @@ const research_yellow = [
 "R-Wpn-Flamer01Mk1",
 "R-Struc-PowerModuleMk1",
 "R-Struc-Power-Upgrade03a",
+"R-Vehicle-Prop-Hover",
 "R-Defense-MortarPit-Incenediary",
 "R-Struc-Factory-Cyborg",
 "R-Wpn-Flamer-ROF03",
@@ -242,6 +246,7 @@ const research_yellow = [
 
 //Flamer-cannon-vtols
 const research_orange = [
+"R-Wpn-MG1Mk1",
 "R-Defense-Tower01",
 "R-Sys-Engineering01",
 "R-Vehicle-Prop-Halftracks",	//Полугусенецы
@@ -262,6 +267,7 @@ const research_orange = [
 "R-Struc-VTOLPad",
 "R-Wpn-Bomb04",
 "R-Struc-Power-Upgrade03a",
+"R-Vehicle-Prop-Hover",
 //"R-Sys-ECM-Upgrade02",	//Глушилка
 "R-Vehicle-Body05",				//Средняя начальная броня
 "R-Cyborg-Metals09",
@@ -307,6 +313,7 @@ const research_red = [
 "R-Sys-MobileRepairTurret01",   //Паяльник
 "R-Wpn-MG-Damage08",			//Depleted Uranium MG Bullets
 "R-Wpn-Rocket01-LtAT",
+"R-Vehicle-Prop-Hover",
 "R-Vehicle-Body05",				//Средняя начальная броня
 "R-Struc-Research-Upgrade09",
 "R-Sys-MobileRepairTurretHvy",
@@ -328,6 +335,7 @@ const research_red = [
 
 //cyborg_cannons
 const research_black = [
+"R-Wpn-MG1Mk1",
 "R-Sys-Engineering01",		// #0  Engineering
 "R-Struc-Factory-Cyborg",		// #1  Cyborg Factory
 "R-Vehicle-Engine01",		// #2  Fuel Injection Engine

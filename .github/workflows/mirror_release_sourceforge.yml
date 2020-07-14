@@ -9,7 +9,19 @@ on:
       - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
 
 jobs:
+  # Wait for up to 10 minutes for previous workflow run to complete, abort if not done by then
+  pre-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 'Block Concurrent Executions'
+        uses: past-due/turnstyle@v1
+        with:
+          poll-interval-seconds: 30
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   mirror-to-sourceforge:
+    needs: pre-ci
     # For this job to work, the following secrets must be set:
     # SF_SSH_KEY
     # SF_FRS_USERNAME

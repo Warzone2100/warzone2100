@@ -1,0 +1,47 @@
+name: Alpine
+
+on:
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - '*'
+  pull_request:
+    # Match all pull requests
+
+jobs:
+  alpine-latest:
+    strategy:
+      matrix:
+        include:
+          - name: ":LATEST (CMake) [GCC]"
+            cc: '/usr/bin/gcc'
+            cxx: '/usr/bin/g++'
+      fail-fast: false
+    name: '${{ matrix.name }}'
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+    - name: Init Git Submodules
+      run: git submodule update --init --recursive
+    - name: Build the Docker image
+      run: |
+        cd docker/alpine-latest/
+        docker build -t alpine .
+        cd ../..
+    - name: CMake Configure
+      env:
+        CC: ${{ matrix.cc }}
+        CXX: ${{ matrix.cxx }}
+      run: docker run --rm -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code alpine cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=OFF -DWZ_FINDSDL2_NOCONFIG:BOOL=ON
+    - name: CMake Build
+      env:
+        CC: ${{ matrix.cc }}
+        CXX: ${{ matrix.cxx }}
+      run: docker run --rm -e CC -e CXX -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code alpine cmake --build build

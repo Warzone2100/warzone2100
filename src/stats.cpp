@@ -43,6 +43,8 @@
 
 #define WEAPON_TIME		100
 
+#define DEFAULT_DROID_RESISTANCE	150
+
 /* The stores for the different stats */
 BODY_STATS		*asBodyStats;
 BRAIN_STATS		*asBrainStats;
@@ -589,7 +591,7 @@ bool loadBodyStats(WzConfig &ini)
 		psStats->base.thermal = ini.value("armourHeat").toInt();
 		psStats->base.armour = ini.value("armourKinetic").toInt();
 		psStats->base.power = ini.value("powerOutput").toInt();
-		psStats->base.resistance = ini.value("resistance", 30).toInt();
+		psStats->base.resistance = ini.value("resistance", DEFAULT_DROID_RESISTANCE).toInt();
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
 			psStats->upgrade[j] = psStats->base;
@@ -771,6 +773,8 @@ bool getPropulsionType(const char *typeName, PROPULSION_TYPE *type)
 	{
 		debug(LOG_ERROR, "getPropulsionType: Invalid Propulsion type %s - assuming Hover", typeName);
 		*type = PROPULSION_TYPE_HOVER;
+
+		return false;
 	}
 
 	return true;
@@ -1976,7 +1980,7 @@ void updateMaxRepairStats(UWORD maxValue)
 
 void updateMaxECMStats(UWORD maxValue)
 {
-	int currentMaxValue = getMaxECMRange();
+	UDWORD currentMaxValue = getMaxECMRange();
 
 	if (currentMaxValue < (currentMaxValue + currentMaxValue * maxValue / 100))
 	{

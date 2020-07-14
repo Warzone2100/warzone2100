@@ -24,9 +24,9 @@
 #include "console.h"
 #include "lib/framework/fixedpoint.h"
 
-#define	MAP_ZOOM_RATE_MAX	(500)
-#define	MAP_ZOOM_RATE_MIN	(50)
-#define	MAP_ZOOM_RATE_DEFAULT	(250)
+#define	MAP_ZOOM_RATE_MAX	(1000)
+#define	MAP_ZOOM_RATE_MIN	(200)
+#define	MAP_ZOOM_RATE_DEFAULT	(500)
 #define	MAP_ZOOM_RATE_STEP	(50)
 
 #define MAP_PITCH_RATE		(SPIN_SCALING/SECS_PER_SPIN)
@@ -59,7 +59,6 @@ void kf_ToggleCamera();
 void kf_RaiseTile();
 void kf_LowerTile();
 void kf_MapCheck();
-void kf_SystemClose();
 void kf_ZoomOut();
 void kf_ZoomOutStep();
 void kf_ZoomIn();
@@ -99,8 +98,6 @@ void kf_ToggleDroidInfo();
 void kf_addInGameOptions();
 void kf_NewPlayerPower();
 void kf_addMultiMenu();
-void kf_multiAudioStart();
-void kf_multiAudioStop();
 void kf_JumpToMapMarker();
 void kf_TogglePowerBar();
 void kf_ToggleDebugMappings();
@@ -180,7 +177,6 @@ void kf_SetDroidReturnToBase();
 void kf_SetDroidGoToTransport();
 void kf_SetDroidGoForRepair();
 void kf_SetDroidRecycle();
-void kf_ScatterDroids();
 void kf_CentreOnBase();
 void kf_ToggleFog();
 void kf_MoveToLastMessagePos();

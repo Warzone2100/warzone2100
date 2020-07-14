@@ -28,7 +28,9 @@
 
 #include "lib/framework/file.h"
 #include "lib/framework/wzapp.h"
+#include "lib/framework/physfs_ext.h"
 
+#include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/ivis_opengl/piestate.h"
 
 #include "map.h"
@@ -245,10 +247,18 @@ void recvOptions(NETQUEUE queue)
 		}
 		else
 		{
+			pal_Init(); // Palette could be modded.
 			return false;  // Have the file already.
 		}
 
-		NetPlay.wzFiles.emplace_back(PHYSFS_openWrite(filename), hash);
+		PHYSFS_file *pFileHandle = PHYSFS_openWrite(filename);
+		if (pFileHandle == nullptr)
+		{
+			debug(LOG_ERROR, "Failed to open %s for writing: %s", filename, WZ_PHYSFS_getLastError());
+			return false;
+		}
+
+		NetPlay.wzFiles.emplace_back(pFileHandle, filename, hash);
 
 		// Request the map/mod from the host
 		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FILE_REQUESTED);
@@ -476,7 +486,6 @@ bool multiGameShutdown()
 	debug(LOG_NET, "%s is shutting down.", getPlayerName(selectedPlayer));
 
 	sendLeavingMsg();							// say goodbye
-	updateMultiStatsGames();					// update games played.
 
 	st = getMultiStats(selectedPlayer);	// save stats
 

@@ -29,6 +29,7 @@
 #include <chrono>
 
 #include "lib/framework/frame.h"
+#include "lib/ivis_opengl/piepalette.h" // for pal_Init()
 #include "lib/framework/input.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/physfs_ext.h"
@@ -1638,13 +1639,15 @@ bool recvMapFileRequested(NETQUEUE queue)
 		abort();
 	}
 
-	debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", PHYSFS_getRealDir(filename.c_str()), filename.c_str(), player);
-
 	PHYSFS_sint64 fileSize_64 = PHYSFS_fileLength(pFileHandle);
-	ASSERT_OR_RETURN(false, fileSize_64 <= 0xFFFFFFFF, "File too big!");
+	ASSERT_OR_RETURN(false, fileSize_64 <= 0xFFFFFFFF, "File is too big!");
+	ASSERT_OR_RETURN(false, fileSize_64 >= 0, "Filesize < 0; can't be determined");
+	uint32_t fileSize_u32 = (uint32_t)fileSize_64;
+	ASSERT_OR_RETURN(false, fileSize_u32 <= MAX_NET_TRANSFERRABLE_FILE_SIZE, "Filesize is too large; (size: %" PRIu32")", fileSize_u32);
 
 	// Schedule file to be sent.
-	files.emplace_back(pFileHandle, hash, (uint32_t)fileSize_64);
+	debug(LOG_INFO, "File is valid, sending [directory: %s] %s to client %u", WZ_PHYSFS_getRealDir_String(filename.c_str()).c_str(), filename.c_str(), player);
+	files.emplace_back(pFileHandle, filename, hash, fileSize_u32);
 
 	return true;
 }
@@ -1707,6 +1710,7 @@ bool recvMapFileData(NETQUEUE queue)
 		levShutDown();
 		levInitialise();
 		rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
+		pal_Init(); //Update palettes.
 		if (!buildMapList())
 		{
 			return false;

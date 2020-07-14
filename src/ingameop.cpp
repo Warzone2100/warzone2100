@@ -64,7 +64,7 @@ bool 	isInGamePopupUp = false;
 static bool 	isGraphicsOptionsUp = false;
 static bool 	isVideoOptionsUp = false;
 static bool 	isMouseOptionsUp = false;
-static bool	isKeyMapEditorUp = false;
+bool	isKeyMapEditorUp = false;
 // ////////////////////////////////////////////////////////////////////////////
 // functions
 

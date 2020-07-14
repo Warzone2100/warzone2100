@@ -190,7 +190,7 @@ struct PathfindContext
 			map.clear();  // There are no values of iteration guaranteed not to exist in map, so clear the map.
 			iteration = 0;
 		}
-		map.resize(mapWidth * mapHeight);  // Allocate space for map, if needed.
+		map.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));  // Allocate space for map, if needed.
 	}
 
 	PathCoord       tileS;                // Start tile for pathfinding. (May be either source or target tile.)
@@ -520,7 +520,7 @@ ASR_RETVAL fpathAStarRoute(MOVE_CONTROL *psMove, PATHJOB *psJob)
 	for (Vector2i p(world_coord(endCoord.x) + TILE_UNITS / 2, world_coord(endCoord.y) + TILE_UNITS / 2); true; p = newP)
 	{
 		ASSERT_OR_RETURN(ASR_FAILED, worldOnMap(p.x, p.y), "Assigned XY coordinates (%d, %d) not on map!", (int)p.x, (int)p.y);
-		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (unsigned)mapWidth * mapHeight, "Pathfinding got in a loop.");
+		ASSERT_OR_RETURN(ASR_FAILED, path.size() < (static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight)), "Pathfinding got in a loop.");
 
 		path.push_back(p);
 
@@ -627,7 +627,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		// blockMap now points to an empty map with no data. Fill the map.
 		blockMap->type = type;
 		std::vector<bool> &map = blockMap->map;
-		map.resize(mapWidth * mapHeight);
+		map.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));
 		uint32_t checksumMap = 0, checksumDangerMap = 0, factor = 0;
 		for (int y = 0; y < mapHeight; ++y)
 			for (int x = 0; x < mapWidth; ++x)
@@ -638,7 +638,7 @@ void fpathSetBlockingMap(PATHJOB *psJob)
 		if (!isHumanPlayer(type.owner) && type.moveType == FMT_MOVE)
 		{
 			std::vector<bool> &dangerMap = blockMap->dangerMap;
-			dangerMap.resize(mapWidth * mapHeight);
+			dangerMap.resize(static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight));
 			for (int y = 0; y < mapHeight; ++y)
 				for (int x = 0; x < mapWidth; ++x)
 				{

@@ -1,3 +1,34 @@
+2020-07-xx: Version 3.4.1
+ * General:
+   * Fix: Zoom speed tied to game speed (commit:22a7855b4ca5262f75b48625ea1a2fd14e6e3d2d, #939)
+   * Fix: Chatbox text drawn over tooltips (commit:605969d3196d56d7fbcc9057b776d168630a9634, #965)
+   * Fix: End game stat bars having an off by one error (commit:ef02b1256619e15b0b08a7d8fbe36b4a60994204, #973)
+   * Fix: Improve keymap default logic (commit:79518b0b19396c48ffc607183353dbe252578291, commit:8d764e53c31909f12d46ab8194d64be460988618, #977)
+   * Fix: Chatbox related softlock (commit:a12b1a9cf305054317630664492dc8816acefada, #978)
+   * Fix: Fix simple keybinds not firing when a meta key is held down (commit:92979bab768e0fba7666c944883885017e8ddcc8, #993)
+   * Fix: Refund factory power better with queued templates (commit:43b48a7a8552615787a07ee808a9693e0f8bf7b7, #990)
+   * Fix: Minimized/occluded window causing a huge spike in CPU activity on macOS due to vsync issue (commit:17fb3cc2db07cd063886ef6d180a5b8be65e7654, #1020)
+   * Fix: Prevent softlock when opening reticule menus while keymap is open in multiplayer (commit:7a268d18fbff99ff09eb639db2b6cb940fa33dd7, #1030)
+ * Campaign:
+   * Change: Victory condition "eliminate bases" now triggers a last attack from the AI like the other conditions do (commit:215f6f255621138b745ef364052d2890282f41f0, #988)
+   * Fix: Failing at the start of cam3-c if no trucks were present at the end of the cam3-1 mission (commit:46fe92bfecbed112af1bef5f0ade117039650ff7, #1021)
+ * Multiplayer:
+   * Fix: Changing flag color should not reset ready status (commit:cd1c0be79a6698d8db6e2110a8899239e08e9a91, #966)
+   * Fix: Fix map preview sticking to kicked players (commit:a411fddbc629829c7010503e0c85ca274006b98d, #974)
+   * Fix: Player stat "played" not representing actual completed games played (commit:ca27273228e8f04df5e5c7e1bde45950b3be1e8f, #1013)
+   * Fix: Reload palette file after mod downloads (commit:4a8f98d4b5f9a72b0dd09b4241a7d60646d69505, #1015)
+   * Remove: Prevent ability to change to smaller maps after hosting has started (commit:c56ad15e34ed1cdd52d885b1b3b6d751a2c1a1ff, #1027)
+ * AI:
+   * Change: Improvements to BoneCrusher! AI (commit:e02323c2665da6f6ce09f7417c47f00e71439498, commit:9902035e1d4600c246b553f52e526f8a126bb2f6, commit:38a44a163ad2af9d628f0a8875f5eb8594d3ad95, #1007)
+ * Balance:
+   * Change: Make Scourge available at start in T3 (commit:ab9a5f3d5b861c84023df8cc3bc19ca548b61557, #999)
+ * Other:
+   * Add: Account for Repair/Demolish construction queue mid-way stopping (commit:588c84c9a42f9de8e841322468b9574c0d4a7811, #989)
+   * Add: macOS: Video sequences app bundle packaging (commit:880352481ad60c61b120a3f59893b3d8c2668eec, #1018)
+   * Change: Set new map zoom rate limits (commit:5d212ce31693585cae5f0c68331d7eae7e7f6dfb, #939)
+   * Change: Point revisions use the same app configuration / save directory (commit:22dab1a7069bc86acf5a1c161bd3f18252d29c56, #976)
+   * Fix: Damage calculation must always return at least 1 thus fixing Nexus Link damage against tracked units (commit: 7b41dd69c63cbdc3c5ef53b89a3ea717e06ad9c8, #981)
+
 2020-06-24: Version 3.4.0
  * General:
    * Add: Frontend "continue last save" option (commit:54536b3bb2f919de5250698ea00317c0b174c797, #408)

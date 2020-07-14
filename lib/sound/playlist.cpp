@@ -71,7 +71,7 @@ bool PlayList_Read(const char *path)
 
 	// Attempt to open the playlist file
 	fileHandle = PHYSFS_openRead(listName);
-	debug(LOG_WZ, "Reading...[directory: %s] %s", PHYSFS_getRealDir(listName), listName);
+	debug(LOG_WZ, "Reading...[directory: %s] %s", WZ_PHYSFS_getRealDir_String(listName).c_str(), listName);
 	if (fileHandle == nullptr)
 	{
 		debug(LOG_INFO, "PHYSFS_openRead(\"%s\") failed with error: %s\n", listName, WZ_PHYSFS_getLastError());

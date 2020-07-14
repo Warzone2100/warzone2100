@@ -37,8 +37,16 @@
 
 #include <sodium.h>
 #include <re2/re2.h>
+
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && ((4 < __GNUC__) || ((4 == __GNUC__) && (7 <= __GNUC_MINOR__)))
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wmaybe-uninitialized" // Ignore on GCC 4.7+
+#endif
 #define ONLY_C_LOCALE 1
 #include <date/date.h>
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && ((4 < __GNUC__) || ((4 == __GNUC__) && (7 <= __GNUC_MINOR__)))
+# pragma GCC diagnostic pop
+#endif
 
 #include <3rdparty/json/json.hpp>
 using json = nlohmann::json;

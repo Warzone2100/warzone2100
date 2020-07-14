@@ -45,6 +45,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/file.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/physfs_ext.h"
 
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/bitimage.h"
@@ -564,7 +565,7 @@ void loadMapPreview(bool hideInterface)
 	}
 	else
 	{
-		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, PHYSFS_getRealDir(psLevel->realFileName), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
+		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName);
 	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
@@ -2590,6 +2591,8 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 
 	debug(LOG_NET, "player %u (Host is %s) stopping.", selectedPlayer, NetPlay.isHost ? "true" : "false");
 
+	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+
 	if (bHosted)											// cancel a hosted game.
 	{
 		// annouce we are leaving...
@@ -2636,8 +2639,6 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	changeTitleUI(parent);
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
-
-	pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 }
 
 static void resetPlayerPositions()
@@ -3880,6 +3881,11 @@ TITLECODE WzMultiOptionTitleUI::run()
 							addConsoleMessage(_("Cannot change to a map with too few slots for all players."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 							break;
 						}
+						if (mapData->players < game.maxPlayers)
+						{
+							addConsoleMessage(_("Cannot change to a map with fewer slots."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							break;
+						}
 						if (!canChangeMapOrRandomize())
 						{
 							break;
@@ -4365,7 +4371,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		PLAYERSTATS stat = getMultiStats(j);
-		if (stat.wins + stat.losses < 5)
+		if (stat.played < 5)
 		{
 			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
 		}
@@ -4388,8 +4394,8 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK3, x + 4, y + 3);
 			}
 
-			// star 2 games played (Cannot use stat.played, since that's just the number of times the player exited via the game menu, not the number of games played.)
-			eval = stat.wins + stat.losses;
+			// star 2 games played
+			eval = stat.played;
 			if (eval > 200)
 			{
 				iV_DrawImage(FrontImages, IMAGE_MULTIRANK1, x + 4, y + 13);

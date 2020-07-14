@@ -34,9 +34,9 @@
 #include <map>
 #include <string>
 
-#ifdef WZ_OS_LINUX
+#if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
-#endif //WZ_OS_LINUX
+#endif // defined(WZ_OS_LINUX) && defined(__GLIBC__)
 
 #if defined(WZ_OS_UNIX)
 # include <fcntl.h>
@@ -521,12 +521,16 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 	if (!repeated)
 	{
 		time_t rawtime;
-		struct tm *timeinfo;
+		struct tm timeinfo = {};
 		char ourtime[15];		//HH:MM:SS
 
 		time(&rawtime);
-		timeinfo = localtime(&rawtime);
-		strftime(ourtime, 15, "%H:%M:%S", timeinfo);
+#if defined(WZ_OS_WIN)
+		localtime_s(&timeinfo, &rawtime);
+#else
+		localtime_r(&rawtime, &timeinfo);
+#endif
+		strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
 
 		// Assemble the outputBuffer:
 		ssprintf(outputBuffer, "%-8s|%s: %s", code_part_names[part], ourtime, useInputBuffer1 ? inputBuffer[1] : inputBuffer[0]);
@@ -603,7 +607,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 
 void _debugBacktrace(code_part part)
 {
-#ifdef WZ_OS_LINUX
+#if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 	void *btv[20];
 	unsigned num = backtrace(btv, sizeof(btv) / sizeof(*btv));
 	char **btc = backtrace_symbols(btv, num);

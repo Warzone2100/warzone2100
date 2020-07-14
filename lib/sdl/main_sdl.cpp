@@ -59,6 +59,7 @@
 #include <map>
 #include <locale.h>
 #include <atomic>
+#include <chrono>
 
 // This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
 #if defined(QT_STATICPLUGIN)
@@ -198,6 +199,9 @@ static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 bool GetTextEvents = false;
+
+bool vsyncIsEnabled = true;
+
 /**************************/
 /***     Misc support   ***/
 /**************************/
@@ -326,9 +330,56 @@ void wzDisplayDialog(DialogType type, const char *title, const char *message)
 	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
+bool wzIsMinimized()
+{
+	assert(WZwindow != nullptr);
+	Uint32 flags = SDL_GetWindowFlags(WZwindow);
+	if (flags & SDL_WINDOW_MINIMIZED)
+	{
+		return true;
+	}
+	return false;
+}
+
 void wzScreenFlip()
 {
+#if defined(WZ_OS_MAC)
+	// Workaround for OpenGL on macOS (see below)
+	const uint32_t swapStartTime = SDL_GetTicks();
+#endif
+
 	SDL_GL_SwapWindow(WZwindow);
+
+#if defined(WZ_OS_MAC)
+	// Workaround for OpenGL on macOS
+	// - If the OpenGL window is minimized (or occluded), SwapWindow may not wait for the vertical blanking interval
+	// - To workaround this, detect when we seem to be spinning without any wait, and sleep for a bit
+	static uint32_t numFramesNoVsync = 0;
+	static uint32_t lastSwapEndTime = 0;
+	const bool isMinimized = wzIsMinimized();
+	const uint32_t minFrameInterval = 1000 / ((isMinimized) ? 60 : 120);
+	const uint32_t minSwapEndTick = swapStartTime + 2;
+	uint32_t swapEndTime = SDL_GetTicks();
+	const uint32_t frameTime = swapEndTime - lastSwapEndTime;
+	if ((vsyncIsEnabled || isMinimized) && !SDL_TICKS_PASSED(swapEndTime, minSwapEndTick) && (frameTime < minFrameInterval))
+	{
+		const uint32_t leewayFramesBeforeThrottling = (isMinimized) ? 2 : 4;
+		if (leewayFramesBeforeThrottling < numFramesNoVsync)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(minFrameInterval - frameTime));
+			swapEndTime = SDL_GetTicks();
+		}
+		else
+		{
+			++numFramesNoVsync;
+		}
+	}
+	else if (0 < numFramesNoVsync)
+	{
+		--numFramesNoVsync;
+	}
+	lastSwapEndTime = swapEndTime;
+#endif
 }
 
 void wzToggleFullscreen()
@@ -391,7 +442,6 @@ void wzDelay(unsigned int delay)
 	SDL_Delay(delay);
 }
 
-#if !defined(WZ_OS_MAC)
 void wzSetSwapInterval(int interval)
 {
 	if (SDL_GL_SetSwapInterval(interval) != 0)
@@ -399,13 +449,13 @@ void wzSetSwapInterval(int interval)
 		debug(LOG_ERROR, "Error: SDL_GL_SetSwapInterval(%d) failed (%s).", interval, SDL_GetError());
 		return;
 	}
+	vsyncIsEnabled = interval != 0;
 }
 
 int wzGetSwapInterval()
 {
 	return SDL_GL_GetSwapInterval();
 }
-#endif
 
 /**************************/
 /***    Thread support  ***/

@@ -74,7 +74,7 @@ struct END_GAME_STATS_DATA
 {
 	MISSION_DATA missionData;
 	uint32_t maxDroidsPerLevel = 0;
-	std::vector<uint32_t> numDroidsPerLevel = {0};
+	std::vector<uint32_t> numDroidsPerLevel;
 	uint32_t numUnits = 0;
 };
 
