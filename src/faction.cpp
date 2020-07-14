@@ -63,9 +63,6 @@ iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
 {
 	WzString name = WzString::fromUtf8(modelName(imd));
 	auto pos = faction->replaceIMD.find(name);
-//	debug(LOG_INFO, "render struct of player_%i in faction %s (%i): %s", player,
-//		factions[faction].name.toUtf8().c_str(), faction, name.toUtf8().c_str()
-//	);
 	if (pos == faction->replaceIMD.end())
 	{
 		return imd;
