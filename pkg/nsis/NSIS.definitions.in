@@ -9,7 +9,7 @@
 !define WZ_DATADIR_APPEND "@NSIS_WZ_DATADIR_APPEND@"
 !if "@NSIS_MSVCRUNTIME@" == "ON"
   !define MSVCRUNTIME "ON"
-  !define MSVCRT14_BLD_MINIMUM 28127 ; (14.24.28127.4)
+  !define MSVCRT14_BLD_MINIMUM 28720 ; (14.26.28720.3)
 
   !if "@CMAKE_VS_PLATFORM_NAME@" == "Win32"
     ; AppLocal (for portable version)
