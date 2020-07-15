@@ -229,9 +229,9 @@ struct AIDATA
 	AIDATA() : assigned(0) {}
 	char name[MAX_LEN_AI_NAME];
 	char js[MAX_LEN_AI_NAME];
-	char tip[255 + 128]; // may contain optional AI tournament data
-	char difficultyTips[4][255]; // optional difficulty level info
-	int assigned;	///< How many AIs have we assigned of this type
+	char tip[255 + 128];            ///< may contain optional AI tournament data
+	char difficultyTips[4][255];    ///< optional difficulty level info
+	int assigned;                   ///< How many AIs have we assigned of this type
 };
 static std::vector<AIDATA> aidata;
 
@@ -359,42 +359,33 @@ void loadMultiScripts()
 	uint32_t oldHash1 = DataHash[DATA_SCRIPT];
 	uint32_t oldHash2 = DataHash[DATA_SCRIPTVAL];
 
-	// Load AI players
+	// Load AI players for skirmish games
 	resForceBaseDir("multiplay/skirmish/");
-	for (unsigned i = 0; i < game.maxPlayers; i++)
+	if (bMultiPlayer && game.type == LEVEL_TYPE::SKIRMISH)
 	{
-		if (NetPlay.players[i].ai < 0 && i == selectedPlayer)
+		for (unsigned i = 0; i < game.maxPlayers; i++)
 		{
-			NetPlay.players[i].ai = 0;  // For autogames.
-		}
-		// The i == selectedPlayer hack is to enable autogames
-		if (bMultiPlayer && game.type == LEVEL_TYPE::SKIRMISH && (!NetPlay.players[i].allocated || i == selectedPlayer)
-		    && (NetPlay.players[i].ai >= 0 || hostlaunch == 2) && myResponsibility(i))
-		{
-			if (PHYSFS_exists(ininame.toUtf8().c_str())) // challenge file may override AI
+			// Skip human players. Do not skip local player for autogames
+			const bool bIsLocalPlayer = i == selectedPlayer;
+			const bool bShouldSkipThisPlayer = !bIsLocalPlayer || !autogame_enabled();
+			if (NetPlay.players[i].allocated && bShouldSkipThisPlayer)
 			{
-				WzConfig ini(ininame, WzConfig::ReadOnly);
-				ini.beginGroup("player_" + WzString::number(i));
-				if (ini.contains("ai"))
-				{
-					WzString val = ini.value("ai").toWzString();
-					ini.endGroup();
-					if (val.compare("null") == 0)
-					{
-						continue; // no AI
-					}
-					loadPlayerScript(val, i, NetPlay.players[i].difficulty);
-
-					debug(LOG_WZ, "AI %s loaded for player %u", val.toUtf8().c_str(), i);
-					continue;
-				}
-				ini.endGroup();
+				continue;
 			}
-			// autogames are to be implemented differently for qtscript, do not start for human players yet
-			if (!NetPlay.players[i].allocated && aidata[NetPlay.players[i].ai].js[0] != '\0')
+
+			// Make sure local player has an AI in autogames
+			if (NetPlay.players[i].ai < 0 && bIsLocalPlayer && autogame_enabled())
 			{
-				debug(LOG_SAVE, "Loading javascript AI for player %d", i);
-				loadPlayerScript(WzString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
+				NetPlay.players[i].ai = 0;
+			}
+
+			if (NetPlay.players[i].ai >= 0 && myResponsibility(i))
+			{
+				if (aidata[NetPlay.players[i].ai].js[0] != '\0')
+				{
+					debug(LOG_SAVE, "Loading javascript AI for player %d", i);
+					loadPlayerScript(WzString("multiplay/skirmish/") + aidata[NetPlay.players[i].ai].js, i, NetPlay.players[i].difficulty);
+				}
 			}
 		}
 	}
@@ -2634,7 +2625,8 @@ static void loadMapChallengeSettings(WzConfig& ini)
 	}
 	ini.endGroup();
 
-	if (challengeActive || hostlaunch == 3)
+	const bool bIsAutoHostOrAutoGame = hostlaunch == 3 || hostlaunch == 2;
+	if (challengeActive || bIsAutoHostOrAutoGame)
 	{
 		ini.beginGroup("challenge");
 		{
@@ -3006,7 +2998,8 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	resetReadyStatus(false);
 	removeWildcards((char*)sPlayer);
 
-	if (!hostCampaign((char*)game.name, (char*)sPlayer, hostlaunch == 3))
+	const bool bIsAutoHostOrAutoGame = hostlaunch == 3 || hostlaunch == 2;
+	if (!hostCampaign((char*)game.name, (char*)sPlayer, bIsAutoHostOrAutoGame))
 	{
 		addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		return false;
