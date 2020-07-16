@@ -5110,6 +5110,14 @@ bool loadScriptStructure(ScriptMapData const &data)
 			}
 		}
 		buildingComplete(psStructure);
+		if (psStructure->pStructureType->type == REF_HQ)
+		{
+			scriptSetStartPos(player, psStructure->pos.x, psStructure->pos.y);
+		}
+		else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+		{
+			scriptSetDerrickPos(psStructure->pos.x, psStructure->pos.y);
+		}
 	}
 
 	return true;

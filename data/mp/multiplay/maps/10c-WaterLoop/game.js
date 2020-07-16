@@ -388,9 +388,6 @@ function placeStuff(terrain) {
 	}
 	spaceFinder.resetError();
 	for (var player = 0; player < players && !spaceFinder.checkError(); ++player) {
-		//var q = gameRand(regions.length);
-		//var r = regions[q];
-		//var x = r.avg[0], y = r.avg[1];
 		var x = terrain.startPos[player][0], y = terrain.startPos[player][1];
 		structures.push({name: "A0CommandCentre", position: placeNear(x, y, 2, 2, true), direction: 0x4000*gameRand(4), modules: 0, player: player});
 		structures.push({name: "A0LightFactory", position: placeNear(x, y, 3, 3, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
