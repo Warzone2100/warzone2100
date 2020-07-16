@@ -117,17 +117,37 @@ function genFields() {
 	return {region: simpleFields, count: count, avg: avg, con: connectivityMatrix};
 }
 
-var SAND = [0x00, 0x01, 0x22, 0x23, 0x26, 0x59];
-var SANDYBRUSH = [0x14, 0x1b, 0x1c, 0x24, 0x31, 0x32, 0x33, 0x34, 0x35, 0x48];
-var BAKEDEARTH = [0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x0b, 0x15, /*0x3a,*/ 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58];
-var PINKROCK = [0x28, 0x2b, 0x39];
-var WATER = [0x11];  //[0x0e, 0x0f, 0x10, 0x11, 0x1f, 0x20, 0x21];
-var CLIFFFACE = [0x12, 0x1d, 0x1e, 0x36, 0x3d, 0x3f, 0x44, 0x45, 0x47, 0x4c, 0x4d, 0x4e];
-var textureTypes = [SAND, SAND, SANDYBRUSH, SANDYBRUSH, BAKEDEARTH, BAKEDEARTH, PINKROCK, PINKROCK, WATER];
+//var ttyp = [[0,1,25,34,35,38,74,89],[8,20,27,28,36,49,50,51,52,53,72],[2,3,4,5,6,7,11,21,58,80,81,82,83,84,85,86,87,88],[],[39],[40,43,57],[13,19,22,37,59,60,79],[14,15,16,17,31,32,33],[9,18,29,30,42,44,45,46,54,61,63,68,69,71,76,77,78],[55,56,62],[64,65,70,73,75],[10,12,23,24,26,41,47,48,66,67]];
+
+var TERRAIN0 = [19,22];  // Tiles.
+var TERRAIN1 = [40,57,40,57,40,57,40,57,40,57,40, 43];  // Dirt or rocks or something, with occasional white spots.
+var TERRAIN2 = [39,39,39,39,39,39,39,39,39,39,39,39,39,39,39, 55];  // Maybe rock or something, with an occasional green spot.
+var TERRAIN3 = [2,4,5,7];  // More rocks or dirt or something.
+var TERRAIN4 = [3,3,3,3,3,3,3,3,3, 2,82];  // Grass with occasional rocks or dirt.
+var TERRAIN5 = [82];  // White rocks.
+var TERRAIN6 = [20,36,49,52,53,20,36,49,52,53,20,36,49,52,53,20,36,49,52,53, 8,27,28,50,51,72];  // Dirt with occasional rocks or tracks or white spots.
+var TERRAIN7 = [0,25,0,25,0,25,0,25,0,25,0,25,0,25,0,25, 1,34,74];  // Grass with some dirt and spots.
+var TERRAIN8 = [64,65,70,64,65,70,64,65,70,64,65,70,64,65,70, 73,75];  // Snow with occasional grass/dirt showing through.
+TERRAIN8.isSnow = true;
+var TERRAIN9 = [10,12,23,24,26,41,48,66,10,12,23,24,26,41,48,66, 47,67];  // Light snow on grass/dirt with spots with less/more snow.
+TERRAIN9.isSnow = true;
+var WATER = [17];
+WATER.isWater = true;
+var CLIFFFACE = [30];
+CLIFFFACE.isCliff = true;
+var SNOWCLIFFFACE = [69];
+SNOWCLIFFFACE.isCliff = true;
+SNOWCLIFFFACE.isSnow = true;
+var textureTypes = [TERRAIN0, TERRAIN1, TERRAIN2, TERRAIN3, TERRAIN4, TERRAIN5, TERRAIN6, TERRAIN7, TERRAIN8, TERRAIN9, WATER, WATER];
 
 // Pick random element of array.
 function sample(array) {
 	return array[gameRand(array.length)];
+}
+
+// Pick randomly rotated texture from array.
+function sampleTexture(array) {
+	return sample(array) | gameRand()&0xf800;
 }
 
 // Assigns each region a texture distribution and a height.
@@ -140,7 +160,7 @@ function genRegions(fields) {
 		var regions = [];
 		for (var i = 0; i < fields.count; ++i) {
 			var textureType = textureTypes[gameRand(textureTypes.length)];
-			var height = textureType === WATER? 0 : gameRand(500) + 12;
+			var height = textureType.isWater? 0 : gameRand(500) + 12;
 			regions.push({texture: textureType, height: height, avg: fields.avg[i], reachable: false});
 		}
 
@@ -148,7 +168,7 @@ function genRegions(fields) {
 		var visit = [];
 		var next = [];
 		function queue(i) {
-			if (!visit[i] && regions[i].texture !== WATER) {
+			if (!visit[i] && !regions[i].texture.isWater) {
 				visit[i] = true;
 				next.push(i);
 				regions[i].reachable = true;
@@ -164,7 +184,7 @@ function genRegions(fields) {
 				var iHeight = regions[i].height;
 				reachableArea += regions[i].avg[2];
 				for (var j = 0; j < fields.count; ++j) {
-					if (fields.con[i][j] >= 5 && Math.abs(iHeight - regions[j].height) <= maxDifference) {
+					if (fields.con[i][j] >= 10 && Math.abs(iHeight - regions[j].height) <= maxDifference) {
 						queue(j);
 						//log('Connect ' + i + ' → ' + j);
 					}
@@ -189,6 +209,7 @@ var height = [];
 // Assign textures and assign a map height which is smooth except through cliffs.
 var smoothDirs = [];  // 1, 2, 4, 8 = right, down, left, up
 var isCliffOrWater = [];
+var isSnow = [];
 for (var y = 0; y < mapHeight; ++y) {
 	for (var x = 0; x < mapWidth; ++x) {
 		var i00 = mapWidth*y + x, i01 = i00 + (x < mapWidth - 1), i10 = i00 + mapWidth*(y < mapHeight - 1), i11 = i01 + i10 - i00;
@@ -197,17 +218,20 @@ for (var y = 0; y < mapHeight; ++y) {
 		var maxHeight = Math.max(reg00.height, reg01.height, reg10.height, reg11.height);
 		if (maxHeight - minHeight > maxDifference) {
 			// Corners have very different heights, so make tile a cliff.
-			texture[i00] = sample(CLIFFFACE);
+			var nearSnow = !!(reg00.texture.isSnow || reg01.texture.isSnow || reg10.texture.isSnow || reg11.texture.isSnow);
+			texture[i00] = sample(nearSnow? SNOWCLIFFFACE : CLIFFFACE);
 			isCliffOrWater[i00] = true;
+			isSnow[i00] = nearSnow;
 		} else {
 			// Pick randomly from the corners to set the tile texture.
 			var reg = sample([reg00, reg01, reg10, reg11])
-			texture[i00] = sample(reg.texture);
+			texture[i00] = sampleTexture(reg.texture);
 			smoothDirs[i00] |= 3;
 			smoothDirs[i01] |= 6;
 			smoothDirs[i10] |= 9;
 			smoothDirs[i11] |= 12;
-			isCliffOrWater[i00] = reg.texture === WATER;
+			isCliffOrWater[i00] = !!reg.texture.isWater;
+			isSnow[i00] = !!reg.texture.isSnow;
 		}
 		height[i00] = reg00.height;
 	}
@@ -464,9 +488,15 @@ function placeStuff(regions, startPos) {
 		if (verbose) log('Base placement failed!');
 		return null;  // Failed to place something important.
 	}
-	var featureTypes = ["Tree1", "Tree2", "Tree3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
+	var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
+	var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
 	for (var i = 0; i < 150; ++i) {
-		features.push({name: sample(featureTypes), position: placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true), direction: gameRand(0x10000)});
+		var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
+		if (pos !== null) {
+			var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
+			var snow = isSnow[mapWidth*y + x];
+			features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
+		}
 	}
 
 	// Skip unimportant features which couldn't be placed anywhere, maybe was trying to place them in water far from land.
@@ -493,7 +523,7 @@ for (var f = 0; f < stuff.features.length; ++f) {
 	if (stuff.features[f].name === 'OilResource') {
 		var pos = stuff.features[f].position;
 		var x = (pos[0] - 64)/128, y = (pos[1] - 64)/128;
-		texture[mapWidth*y + x] = 0x38;
+		texture[mapWidth*y + x] = 0x38 | gameRand()&0xf800;
 	}
 }
 

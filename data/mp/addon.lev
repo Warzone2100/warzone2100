@@ -353,3 +353,9 @@ players 6
 type    14
 dataset MULTI_CAM_3
 game    "multiplay/maps/6c-Entropy.gam"
+
+level   WaterLoop
+players 10
+type    14
+dataset MULTI_CAM_1
+game    "multiplay/maps/10c-WaterLoop.gam"
