@@ -395,8 +395,8 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
 
-				// Only load if we are host
-				if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
+				// Only load if we are host or singleplayer (Initial mod load relies on this, too)
+				if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER || !NetPlay.bComms)
 				{
 					addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
 					addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
