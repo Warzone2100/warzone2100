@@ -1732,6 +1732,11 @@ bool recvMapFileData(NETQUEUE queue)
 			game.isMapMod = true;
 			widgReveal(psWScreen, MULTIOP_MAP_MOD);
 		}
+		if (mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]))
+		{
+			game.isRandom = true;
+			widgReveal(psWScreen, MULTIOP_MAP_RANDOM);
+		}
 
 		loadMapPreview(false);
 		return true;

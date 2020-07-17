@@ -300,6 +300,7 @@ void recvOptions(NETQUEUE queue)
 		addConsoleMessage(str, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		game.isMapMod = true;
 	}
+	game.isRandom = mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
 
 	if (mapData)
 	{

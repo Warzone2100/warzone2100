@@ -60,6 +60,7 @@ struct MULTIPLAYERGAME
 	uint8_t		alliance;					// no/yes/locked
 	bool		mapHasScavengers;
 	bool		isMapMod;					// if a map has mods
+	bool        isRandom;                   // If a map is non-static.
 	uint32_t	techLevel;					// what technology level is being used
 };
 

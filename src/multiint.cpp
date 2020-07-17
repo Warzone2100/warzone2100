@@ -1367,9 +1367,14 @@ static void addGameOptions()
 	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, formatGameName(game.map), MCOL0, MROW3, MULTIOP_EDITBOXW + MULTIOP_EDITBOXH, MULTIOP_EDITBOXH);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MULTIOP_EDITBOXW + 2, 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, _("Select Map\nCan be blocked by players' votes"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MULTIOP_EDITBOXW - 14, 1, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
+	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_RANDOM, MULTIOP_EDITBOXW - 24, 15, 12, 12, _("Random map!"), IMAGE_WEE_DIE, IMAGE_WEE_DIE, false);
 	if (!game.isMapMod)
 	{
 		widgHide(psWScreen, MULTIOP_MAP_MOD);
+	}
+	if (!game.isRandom)
+	{
+		widgHide(psWScreen, MULTIOP_MAP_RANDOM);
 	}
 	// disable for challenges
 	if (challengeActive)
@@ -2611,6 +2616,7 @@ static void updateMapWidgets(LEVEL_DATASET *mapData)
 	game.hash = levGetFileHash(mapData);
 	game.maxPlayers = mapData->players;
 	game.isMapMod = CheckForMod(mapData->realFileName);
+	game.isRandom = CheckForRandom(mapData->realFileName, mapData->pName);
 	if (game.isMapMod)
 	{
 		widgReveal(psWScreen, MULTIOP_MAP_MOD);
@@ -2619,6 +2625,7 @@ static void updateMapWidgets(LEVEL_DATASET *mapData)
 	{
 		widgHide(psWScreen, MULTIOP_MAP_MOD);
 	}
+	(game.isRandom? widgReveal : widgHide)(psWScreen, MULTIOP_MAP_RANDOM);
 
 	WzString name = formatGameName(game.map);
 	widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
@@ -3075,6 +3082,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 
 			widgSetString(psWScreen, MULTIOP_MAP + 1 , game.map); //What a horrible hack! FIX ME! (See addBlueForm())
 			widgReveal(psWScreen, MULTIOP_MAP_MOD);
+			widgReveal(psWScreen, MULTIOP_MAP_RANDOM);
 			break;
 
 		case MULTIOP_MAP_ICON:
@@ -3206,6 +3214,11 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	case MULTIOP_MAP_MOD:
 		char buf[256];
 		ssprintf(buf, "%s", _("This is a map-mod, it can change your playing experience!"));
+		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		break;
+
+	case MULTIOP_MAP_RANDOM:
+		ssprintf(buf, "%s", _("This is a random map, it can vary your playing experience!"));
 		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
 		break;
 
@@ -3895,13 +3908,15 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 
 						sstrcpy(oldGameMap, game.map);
 						Sha256 oldGameHash = game.hash;
-						bool oldGameIsMapMod = game.isMapMod;
 						uint8_t oldMaxPlayers = game.maxPlayers;
+						bool oldGameIsMapMod = game.isMapMod;
+						bool oldGameIsRandom = game.isRandom;
 
 						sstrcpy(game.map, mapData->pName);
 						game.hash = levGetFileHash(mapData);
 						game.maxPlayers = mapData->players;
 						game.isMapMod = CheckForMod(mapData->realFileName);
+						game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
 						loadMapPreview(false);
 
 						/* Change game info to match the previous selection if hover preview was displayed */
@@ -3909,6 +3924,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 						game.hash = oldGameHash;
 						game.maxPlayers = oldMaxPlayers;
 						game.isMapMod = oldGameIsMapMod;
+						game.isRandom = oldGameIsRandom;
 						break;
 					}
 
@@ -3937,12 +3953,12 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 					game.hash = levGetFileHash(mapData);
 					game.maxPlayers = mapData->players;
 					game.isMapMod = CheckForMod(mapData->realFileName);
+					game.isRandom = CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]);
 					loadMapPreview(true);
 					loadMapChallengeAndPlayerSettings();
 
 					WzString name = formatGameName(game.map);
 					widgSetString(psWScreen, MULTIOP_MAP + 1, name.toUtf8().c_str()); //What a horrible, horrible way to do this! FIX ME! (See addBlueForm)
-
 
 					//Reset player slots if it's a smaller map.
 					if (NetPlay.isHost && NetPlay.bComms && oldMaxPlayers > game.maxPlayers)
@@ -4095,6 +4111,7 @@ void WzMultiplayerOptionsTitleUI::start()
 		memset(&locked, 0, sizeof(locked));
 		loadMapChallengeAndPlayerSettings(true);
 		game.isMapMod = false;
+		game.isRandom = false;
 		game.mapHasScavengers = true; // FIXME, should default to false
 
 		teamChooserUp = -1;

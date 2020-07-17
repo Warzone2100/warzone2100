@@ -246,7 +246,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	if (!data.cache.canUseCachedText(butString, psWidget->width()))
 	{
 		std::string fullButString = butString;
-		while (iV_GetTextWidth(butString, font_regular) > psWidget->width() - 10)
+		while ((int)iV_GetTextWidth(butString, font_regular) > psWidget->width() - 10)
 		{
 			butString[strlen(butString) - 1] = '\0';
 		}
@@ -273,7 +273,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			if (hash != data.cache.hash)
 			{
 				sstrcpy(butString, hash.toString().c_str());
-				while (iV_GetTextWidth(butString, font_small) > psWidget->width() - 10 - (8 + mapData->players * 6))
+				while ((int)iV_GetTextWidth(butString, font_small) > psWidget->width() - 10 - (8 + mapData->players * 6))
 				{
 					butString[strlen(butString) - 1] = '\0';
 				}
@@ -289,6 +289,10 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		for (int count = 0; count < mapData->players; ++count)
 		{
 			iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 6 * count + 6, y + 16);
+		}
+		if (CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]))
+		{
+			iV_DrawImage(FrontImages, IMAGE_WEE_DIE, x + 80 + 6, y + 15);
 		}
 	}
 }

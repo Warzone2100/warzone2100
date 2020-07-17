@@ -238,6 +238,7 @@ void resetVoteData();
 #define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
 #define MULTIOP_MAP_MOD			21013	// Warning, do not use sequential numbers until code is fixed.
+#define MULTIOP_MAP_RANDOM      21014
 
 #define MULTIOP_REFRESH			10275
 
