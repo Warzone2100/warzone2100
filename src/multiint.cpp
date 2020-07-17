@@ -1988,9 +1988,7 @@ bool changeColour(unsigned player, int col, bool isHost)
 			debug(LOG_NET, "Swapping colours between players %d(%d) and %d(%d)",
 			      player, getPlayerColour(player), i, getPlayerColour(i));
 			setPlayerColour(i, getPlayerColour(player));
-			NetPlay.players[i].colour = getPlayerColour(player);
 			setPlayerColour(player, col);
-			NetPlay.players[player].colour = col;
 			NETBroadcastTwoPlayerInfo(player, i);
 			netPlayersUpdated = true;
 			return true;
@@ -2002,7 +2000,6 @@ bool changeColour(unsigned player, int col, bool isHost)
 		// Colours were corrupted. Attempt to fix.
 		debug(LOG_NET, "corrupted colours: player (%u) new colour (%u) old colour (%d)", player, col, NetPlay.players[player].colour);
 		setPlayerColour(player, col);
-		NetPlay.players[player].colour = col;
 		NETBroadcastPlayerInfo(player);
 		netPlayersUpdated = true;
 		return true;
@@ -2782,6 +2779,8 @@ static void resetPlayerConfiguration()
 {
 	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
 	{
+		setPlayerColour(playerIndex, playerIndex);
+
 		/* Never touch the local player */
 		if (playerIndex == selectedPlayer)
 		{
@@ -2791,7 +2790,6 @@ static void resetPlayerConfiguration()
 		NetPlay.players[playerIndex].position = playerIndex;
 		NetPlay.players[playerIndex].team = playerIndex;
 		NetPlay.players[playerIndex].name[0] = '\0';
-		setPlayerColour(playerIndex, playerIndex);
 
 		if (NetPlay.bComms)
 		{
@@ -3261,6 +3259,8 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 
 	case CON_CANCEL:
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
+		hostlaunch = 0; // Dont load the autohost file on subsequent hosts
+		performedFirstStart = false; // Reset everything
 		if (!challengeActive)
 		{
 			if (NetPlay.bComms && ingame.side == InGameSide::MULTIPLAYER_CLIENT && !NetPlay.isHost)
@@ -3278,7 +3278,6 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			changeTitleMode(SINGLE);
 			addChallenges();
 		}
-		hostlaunch = 0; // Dont load the autohost file on subsequent hosts
 		break;
 	case MULTIOP_MAP_PREVIEW:
 		loadMapPreview(true);

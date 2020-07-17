@@ -389,8 +389,7 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 	}
 	if (initPosition)
 	{
-		NetPlay.players[i].colour = i;
-		setPlayerColour(i, i);  // PlayerColour[] in component.c must match this! Why is this in more than one place??!
+		setPlayerColour(i, i);
 		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = initTeams && i < game.maxPlayers? i/playersPerTeam() : i;
 	}
@@ -1707,7 +1706,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
 				if (playerQueue.index == NetPlay.hostPlayer)
 				{
-					NetPlay.players[index].colour = colour;
+					setPlayerColour(index, colour);
 					NetPlay.players[index].position = position;
 					NetPlay.players[index].team = team;
 					NetPlay.players[index].ai = ai;
@@ -1715,8 +1714,6 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
-				// update the color to the local array
-				setPlayerColour(index, NetPlay.players[index].colour);
 
 				if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName.c_str(), NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
 				{
