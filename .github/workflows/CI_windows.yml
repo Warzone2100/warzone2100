@@ -302,6 +302,7 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\portable"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\installer"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
     - name: Build vcpkg + dependencies
       working-directory: '${{ github.workspace }}\build'
       run: |
@@ -362,6 +363,12 @@ jobs:
         Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_portable.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
         Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_installer.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
         Write-Host ""
+    - name: Archive .ZIP of Regular build
+      working-directory: '${{ github.workspace }}\build'
+      run: |
+        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=OFF -G ZIP -C "Release"
+        # Rename the archive
+        Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
     #####################################################
     # Upload build artifacts
     #####################################################
@@ -383,6 +390,12 @@ jobs:
       with:
         name: warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
+    - name: 'Upload Artifact - (Archive)'
+      uses: actions/upload-artifact@v1
+      if: success() && startsWith(github.ref, 'refs/tags/') && (steps.settings.outputs.WZ_DEPLOY_RELEASE == 'true') && (github.repository == 'Warzone2100/warzone2100')
+      with:
+        name: warzone2100_win_${{ matrix.architecture }}_archive
+        path: '${{ github.workspace }}\output\archive'
     #####################################################
     # Upload Release assets (if a release tag)
     #####################################################
@@ -395,6 +408,7 @@ jobs:
           ${{ github.workspace }}\output\portable\*.exe
           ${{ github.workspace }}\output\installer\*.exe
           ${{ github.workspace }}\output\debugsymbols\*.7z
+          ${{ github.workspace }}\output\archive\*.zip
         draft: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
