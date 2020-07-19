@@ -303,6 +303,7 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\installer"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\error_logs"
     - name: Build vcpkg + dependencies
       working-directory: '${{ github.workspace }}\build'
       run: |
@@ -330,6 +331,20 @@ jobs:
         Move-Item -LiteralPath ".\build\warzone2100_portable.exe" -Destination ".\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
         # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
         cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off ".\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "$($pwd)\build\src\*.pdb" "$($pwd)\build\src\*.sym"
+    - name: Collect Failure Logs
+      if: failure()
+      run: |
+        $NSIS_Log = "build\_CPack_Packages\win32\NSIS\NSISOutput.log"
+        if (Test-Path $NSIS_Log -PathType Leaf)
+        {
+          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
+        }
+    - name: Upload Failure Logs Artifact
+      uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: win_${{ matrix.architecture }}_error_logs
+        path: '${{ github.workspace }}\output\error_logs'
     - name: CMake Configure (Regular Installer)
       working-directory: '${{ github.workspace }}\build'
       run: |
