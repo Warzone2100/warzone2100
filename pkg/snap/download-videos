@@ -1,0 +1,58 @@
+#!/bin/bash
+
+ME="$0"
+URL=""
+STAMPFILE="$HOME/.downloaded-video-format"
+WARZONEDIR="$HOME/.local/share/warzone2100-$SNAP_VERSION"
+VIDEOTYPE=""
+VIDEOFILE="$WARZONEDIR/sequences.wz"
+CURRENTVIDEOTYPE="$(cat "$STAMPFILE")"
+
+usage() {
+	echo -ne "Warzone 2100 Video Pack Download\n"
+	echo -ne "--------------------------------\n\n"
+
+	if [ -n "$1" ]; then
+		echo -ne "Error: $1\n\n"
+	fi
+
+	echo -ne "USAGE:  $ME { FORMAT } [--force]\n\n"
+	echo -ne "  FORMAT may be any one of the following:\n"
+	echo -ne "    [ low-en  ] : Low quality re-encoded English videos  (162MB)\n"
+	echo -ne "    [ std-de  ] : Original quality German videos         (476MB)\n"
+	echo -ne "    [ std-en  ] : Original quality English videos        (545MB)\n"
+	echo -ne "    [ high-en ] : High quality re-encoded English videos (920MB)\n\n"
+	echo -ne "  --force: Always download the video pack, even if you already have the same pack.\n\n"
+}
+
+case $1 in
+	low|low-en)
+		VIDEOTYPE="low-en"
+		URL="https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/low-quality-en/sequences.wz/download"
+		;;
+	high|high-en)
+		VIDEOTYPE="high-en"
+		URL="https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/high-quality-en/sequences.wz/download"
+		;;
+	std|std-en|en)
+		VIDEOTYPE="std-en"
+		URL="https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/standard-quality-en/sequences.wz/download"
+		;;
+	std-de|de)
+		VIDEOTYPE="std-de"
+		URL="https://sourceforge.net/projects/warzone2100/files/warzone2100/Videos/standard-quality-de/sequences.wz/download"
+		;;
+esac
+
+if [ -z "$VIDEOTYPE" ]; then
+	usage "You need to choose a video format"
+	exit
+fi
+
+if [ -z "$CURRENTVIDEOTYPE" ] || [ "$VIDEOTYPE" != "$CURRENTVIDEOTYPE" ] || [ "$2" = "--force" ]; then
+	[ -e "$VIDEOFILE" ] && rm -f "$VIDEOFILE"
+	mkdir -p "$(dirname "$VIDEOFILE")"
+	curl -L -o "$VIDEOFILE" "$URL" && echo "$VIDEOTYPE" > "$STAMPFILE"
+else
+	echo -ne "You already have this video pack. Skipping redownload."
+fi
