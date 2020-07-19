@@ -43,6 +43,8 @@
 #include "warzoneconfig.h"
 #include "wrappers.h"
 
+#include <cwchar>
+
 //////
 // Our fine replacement for the popt abomination follows
 
@@ -98,7 +100,9 @@ static void poptPrintHelp(poptContext ctx, FILE *output)
 		// calculate number of terminal columns required to print
 		// for languages with multibyte characters
 		const size_t txtSize = strlen(txt) + 1;
-		int txtOffset = (int) mbstowcs(nullptr, txt, txtSize) + 1 - txtSize;
+		std::mbstate_t state = std::mbstate_t();
+		const char *pTxt = txt;
+		int txtOffset = (int) std::mbsrtowcs(nullptr, &pTxt, 0, &state) + 1 - txtSize;
 		// CJK characters take up two columns
 		char language[3]; // stores ISO 639-1 code
 		strlcpy(language, setlocale(LC_MESSAGES, nullptr), sizeof(language));
