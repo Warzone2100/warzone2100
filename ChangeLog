@@ -1,4 +1,4 @@
-2020-07-xx: Version 3.4.1
+2020-07-19: Version 3.4.1
  * General:
    * Fix: Zoom speed tied to game speed (commit:22a7855b4ca5262f75b48625ea1a2fd14e6e3d2d, #939)
    * Fix: Chatbox text drawn over tooltips (commit:605969d3196d56d7fbcc9057b776d168630a9634, #965)
