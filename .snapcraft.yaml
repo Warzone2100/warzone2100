@@ -124,7 +124,7 @@ parts:
 
   warzone2100:
     after: [desktop-qt5, sdl]
-    source: https://github.com/Warzone2100/warzone2100.git
+    source: .
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
       # and icon. Use the installed path relative to the Snap's root
