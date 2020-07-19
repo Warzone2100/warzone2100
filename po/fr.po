@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2020-06-24 17:56+0000\n"
-"PO-Revision-Date: 2020-06-25 02:55\n"
+"POT-Creation-Date: 2020-07-18 22:12+0000\n"
+"PO-Revision-Date: 2020-07-19 10:25\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4014,7 +4014,7 @@ msgstr "Augmente les dégâts des roquettes"
 msgid "All rockets upgraded automatically"
 msgstr "Amélioration automatique de toutes les roquettes"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:394
+#: data/base/script/campaign/libcampaign_includes/victory.js:414
 msgid "Return to LZ"
 msgstr "Revenez à la ZA"
 
@@ -4090,8 +4090,8 @@ msgstr "Commandants - Construisez des commandants d'abord"
 #: data/base/script/tutorial.js:510
 #: data/mp/multiplay/skirmish/rules.js:177
 #: src/challenge.cpp:228
-#: src/hci.cpp:2962
-#: src/hci.cpp:3683
+#: src/hci.cpp:2990
+#: src/hci.cpp:3711
 #: src/intelmap.cpp:400
 #: src/intorder.cpp:608
 #: src/loadsave.cpp:269
@@ -5575,63 +5575,63 @@ msgid "Any time, big boss!"
 msgstr "Quand vous voudrez chef !"
 
 #: data/mp/multiplay/skirmish/rules.js:29
-#: src/multiint.cpp:1461
-#: src/multiint.cpp:1464
+#: src/multiint.cpp:1462
+#: src/multiint.cpp:1465
 msgid "Scavengers"
 msgstr "Pillards"
 
 #: data/mp/multiplay/skirmish/rules.js:30
-#: src/multiint.cpp:1466
+#: src/multiint.cpp:1467
 msgid "No Scavengers"
 msgstr "Aucun pillard"
 
 #: data/mp/multiplay/skirmish/rules.js:35
-#: src/multiint.cpp:1473
+#: src/multiint.cpp:1474
 msgid "No Alliances"
 msgstr "Pas d'alliances"
 
 #: data/mp/multiplay/skirmish/rules.js:36
-#: src/multiint.cpp:1474
+#: src/multiint.cpp:1475
 msgid "Allow Alliances"
 msgstr "Autoriser les alliances"
 
 #: data/mp/multiplay/skirmish/rules.js:37
-#: src/multiint.cpp:1476
+#: src/multiint.cpp:1477
 msgid "Locked Teams"
 msgstr "Verrouiller les équipes"
 
 #: data/mp/multiplay/skirmish/rules.js:38
-#: src/multiint.cpp:1475
+#: src/multiint.cpp:1476
 msgid "Locked Teams, No Shared Research"
 msgstr "Equipes vérouillées, recherches non partagées"
 
 #: data/mp/multiplay/skirmish/rules.js:44
-#: src/multiint.cpp:1483
+#: src/multiint.cpp:1484
 msgid "Low Power Levels"
 msgstr "Niveau d'énergie faible"
 
 #: data/mp/multiplay/skirmish/rules.js:45
-#: src/multiint.cpp:1484
+#: src/multiint.cpp:1485
 msgid "Medium Power Levels"
 msgstr "Niveau d'énergie moyen"
 
 #: data/mp/multiplay/skirmish/rules.js:46
-#: src/multiint.cpp:1485
+#: src/multiint.cpp:1486
 msgid "High Power Levels"
 msgstr "Niveau d'énergie élevé"
 
 #: data/mp/multiplay/skirmish/rules.js:52
-#: src/multiint.cpp:1492
+#: src/multiint.cpp:1493
 msgid "Start with No Bases"
 msgstr "Commencer sans base"
 
 #: data/mp/multiplay/skirmish/rules.js:53
-#: src/multiint.cpp:1493
+#: src/multiint.cpp:1494
 msgid "Start with Bases"
 msgstr "Commencer avec une petite base"
 
 #: data/mp/multiplay/skirmish/rules.js:54
-#: src/multiint.cpp:1494
+#: src/multiint.cpp:1495
 msgid "Start with Advanced Bases"
 msgstr "Commencer avec une base avancée"
 
@@ -5640,39 +5640,39 @@ msgstr "Commencer avec une base avancée"
 msgid "System locale"
 msgstr "Langage du système"
 
-#: lib/netplay/netplay.cpp:263
-#: lib/netplay/netplay.cpp:1191
+#: lib/netplay/netplay.cpp:275
+#: lib/netplay/netplay.cpp:1203
 msgid "Enter password here"
 msgstr "Entrez le mot de passe ici"
 
-#: lib/netplay/netplay.cpp:1094
+#: lib/netplay/netplay.cpp:1106
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
 msgstr "Impossible d'ouvrir le port (%s) sur (%s)"
 
-#: lib/netplay/netplay.cpp:1098
+#: lib/netplay/netplay.cpp:1110
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
 msgstr "Veuillez configurer manuellement votre routeur/pare-feu pour\n"
 " ouvrir le port 2100 avant d'héberger une partie."
 
-#: lib/netplay/netplay.cpp:1108
+#: lib/netplay/netplay.cpp:1120
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr "Port %s correctement configuré sur %s\n"
 "Votre IP externe est %s"
 
-#: lib/netplay/netplay.cpp:1883
+#: lib/netplay/netplay.cpp:1895
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr "Aucun périphérique UPnP trouvé, veuillez configurer manuellement votre routeur/pare-feu pour ouvrir le port 2100!"
 
-#: lib/netplay/netplay.cpp:2362
+#: lib/netplay/netplay.cpp:2555
 #, c-format
 msgid "Could not resolve masterserver name (%s)!"
 msgstr "Impossible de résoudre le DNS du serveur maître (%s)!"
 
-#: lib/netplay/netplay.cpp:2386
+#: lib/netplay/netplay.cpp:2579
 #, c-format
 msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
@@ -5680,7 +5680,7 @@ msgid "Error connecting to the lobby server: %s.\n"
 " or to forward the port to your system."
 msgstr "Une erreur est survenue lors de la connexion à l'antichambre : %s. Assurez-vous que le port %d peut être connecté. Si vous utilisez un routeur, configurez-le pour qu'il utilise UPnP, ou pour qu'il se connecte au port de votre ordinateur."
 
-#: lib/netplay/netplay.cpp:3093
+#: lib/netplay/netplay.cpp:3286
 msgid "Failed to get a lobby response!"
 msgstr "L'antichambre le répond pas !"
 
@@ -14876,7 +14876,7 @@ msgid "Player dropped"
 msgstr "Le joueur a perdu"
 
 #: src/display3d.cpp:714
-#: src/multiint.cpp:2237
+#: src/multiint.cpp:2238
 msgid "Waiting for other players"
 msgstr "Attente des autres joueurs"
 
@@ -15087,7 +15087,7 @@ msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "Le port TCP 2100 doit être ouvert dans votre pare-feu/routeur pour pouvoir héberger des parties !"
 
 #: src/frontend.cpp:619
-#: src/multiint.cpp:1400
+#: src/multiint.cpp:1401
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
@@ -15156,7 +15156,7 @@ msgid "50%"
 msgstr "50%"
 
 #: src/frontend.cpp:689
-#: src/multiplay.cpp:1912
+#: src/multiplay.cpp:1916
 msgid "Black"
 msgstr "Noir"
 
@@ -15389,7 +15389,7 @@ msgid "MOUSE OPTIONS"
 msgstr "OPTIONS SOURIS"
 
 #: src/frontend.cpp:1616
-#: src/multiint.cpp:224
+#: src/multiint.cpp:225
 msgid "Easy"
 msgstr "Facile"
 
@@ -15398,12 +15398,12 @@ msgid "Normal"
 msgstr "Normale"
 
 #: src/frontend.cpp:1618
-#: src/multiint.cpp:224
+#: src/multiint.cpp:225
 msgid "Hard"
 msgstr "Difficile"
 
 #: src/frontend.cpp:1619
-#: src/multiint.cpp:224
+#: src/multiint.cpp:225
 msgid "Insane"
 msgstr "Démént"
 
@@ -15447,7 +15447,7 @@ msgid "GAME OPTIONS"
 msgstr "OPTIONS"
 
 #: src/frontend.cpp:1833
-#: src/multiint.cpp:2544
+#: src/multiint.cpp:2559
 msgid "Mod: "
 msgstr "Mode(s) : "
 
@@ -15457,77 +15457,77 @@ msgstr "Mode(s) : "
 msgid "GAME SAVED: "
 msgstr "PARTIE SAUVEGARDÉE !"
 
-#: src/hci.cpp:1566
+#: src/hci.cpp:1594
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Le joueur %u triche (Il se sert du menu debug pour se construire un nouveau bâtiment : %s.)"
 
-#: src/hci.cpp:1575
+#: src/hci.cpp:1603
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Le joueur %u triche (Il se sert du menu debug pour obtenir une nouvelle technologie : %s.)"
 
-#: src/hci.cpp:1597
+#: src/hci.cpp:1625
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Le joueur %u Triche (Il se sert du menu debug pour se faire une nouvelle unité : %s.)"
 
-#: src/hci.cpp:1605
+#: src/hci.cpp:1633
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle unité)"
 
-#: src/hci.cpp:2816
-#: src/multiint.cpp:1482
+#: src/hci.cpp:2844
+#: src/multiint.cpp:1483
 #: src/multimenu.cpp:682
 msgid "Power"
 msgstr "Énergie"
 
-#: src/hci.cpp:2997
+#: src/hci.cpp:3025
 msgid "Progress Bar"
 msgstr "Barre de progression"
 
-#: src/hci.cpp:3527
+#: src/hci.cpp:3555
 msgid "Hiding Obsolete Tech"
 msgstr "Cacher les technologies obsolètes"
 
-#: src/hci.cpp:3529
+#: src/hci.cpp:3557
 msgid "Showing Obsolete Tech"
 msgstr "Montrer les technologies obsolètes"
 
-#: src/hci.cpp:3541
+#: src/hci.cpp:3569
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
-#: src/hci.cpp:3543
+#: src/hci.cpp:3571
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
-#: src/hci.cpp:3623
+#: src/hci.cpp:3651
 msgid "Factory Delivery Point"
 msgstr "Point de livraison"
 
-#: src/hci.cpp:3632
+#: src/hci.cpp:3660
 msgid "Loop Production"
 msgstr "Production en boucle"
 
-#: src/hci.cpp:3830
+#: src/hci.cpp:3858
 msgid "Ally progress"
 msgstr "Progression des alliés"
 
-#: src/hci.cpp:3845
+#: src/hci.cpp:3873
 msgid "\n"
 "Cost: %1"
 msgstr "\n"
 "Coût : %1"
 
-#: src/hci.cpp:4944
+#: src/hci.cpp:4977
 msgid "Chat: All"
 msgstr "Chat : Tous"
 
-#: src/hci.cpp:4949
+#: src/hci.cpp:4982
 msgid "Chat: Team"
 msgstr "Chat : équipe"
 
@@ -15794,7 +15794,7 @@ msgid "Allow"
 msgstr ""
 
 #: src/intelmap.cpp:239
-#: src/keybind.cpp:1376
+#: src/keybind.cpp:1357
 msgid "PAUSED"
 msgstr "EN PAUSE"
 
@@ -15815,32 +15815,32 @@ msgid "New Intelligence Report"
 msgstr "Nouveau rapport du Bureau Central"
 
 #: src/intorder.cpp:166
-#: src/keymap.cpp:404
+#: src/keymap.cpp:475
 msgid "Short Range"
 msgstr "Courte portée"
 
 #: src/intorder.cpp:167
-#: src/keymap.cpp:410
+#: src/keymap.cpp:481
 msgid "Long Range"
 msgstr "Longue portée"
 
 #: src/intorder.cpp:168
-#: src/keymap.cpp:403
+#: src/keymap.cpp:474
 msgid "Optimum Range"
 msgstr "Portée optimale"
 
 #: src/intorder.cpp:169
-#: src/keymap.cpp:422
+#: src/keymap.cpp:493
 msgid "Retreat at Medium Damage"
 msgstr "Fuir à dégâts moyens"
 
 #: src/intorder.cpp:170
-#: src/keymap.cpp:423
+#: src/keymap.cpp:494
 msgid "Retreat at Heavy Damage"
 msgstr "Fuir à dégâts élevés"
 
 #: src/intorder.cpp:171
-#: src/keymap.cpp:424
+#: src/keymap.cpp:495
 msgid "Do or Die!"
 msgstr "Jusqu'à la mort !"
 
@@ -15849,37 +15849,37 @@ msgid "Fire-At-Will"
 msgstr "Feu à volonté"
 
 #: src/intorder.cpp:173
-#: src/keymap.cpp:398
+#: src/keymap.cpp:469
 msgid "Return Fire"
 msgstr "Riposter"
 
 #: src/intorder.cpp:174
-#: src/keymap.cpp:396
+#: src/keymap.cpp:467
 msgid "Hold Fire"
 msgstr "Ne pas tirer"
 
 #: src/intorder.cpp:175
-#: src/keymap.cpp:406
+#: src/keymap.cpp:477
 msgid "Patrol"
 msgstr "Patrouiller"
 
 #: src/intorder.cpp:176
-#: src/keymap.cpp:405
+#: src/keymap.cpp:476
 msgid "Pursue"
 msgstr "Poursuivre l'ennemi"
 
 #: src/intorder.cpp:177
-#: src/keymap.cpp:400
+#: src/keymap.cpp:471
 msgid "Guard Position"
 msgstr "Défendre sa position"
 
 #: src/intorder.cpp:178
-#: src/keymap.cpp:402
+#: src/keymap.cpp:473
 msgid "Hold Position"
 msgstr "Rester en position"
 
 #: src/intorder.cpp:179
-#: src/keymap.cpp:407
+#: src/keymap.cpp:478
 msgid "Return For Repair"
 msgstr "Retour pour réparation"
 
@@ -15888,12 +15888,12 @@ msgid "Return To HQ"
 msgstr "Retour au QG"
 
 #: src/intorder.cpp:181
-#: src/keymap.cpp:409
+#: src/keymap.cpp:480
 msgid "Go to Transport"
 msgstr "Embarquer dans le transporteur"
 
 #: src/intorder.cpp:182
-#: src/keymap.cpp:433
+#: src/keymap.cpp:504
 msgid "Return for Recycling"
 msgstr "Retour pour recyclage"
 
@@ -15969,11 +15969,11 @@ msgstr "Le joueur %u triche (Il se sert du menu debug pour se faire une nouvelle
 #: src/keybind.cpp:706
 #: src/keybind.cpp:743
 #: src/keybind.cpp:798
-#: src/keybind.cpp:1308
-#: src/keybind.cpp:1429
-#: src/keybind.cpp:1531
-#: src/keybind.cpp:1829
-#: src/keybind.cpp:1869
+#: src/keybind.cpp:1289
+#: src/keybind.cpp:1410
+#: src/keybind.cpp:1512
+#: src/keybind.cpp:1810
+#: src/keybind.cpp:1850
 #, c-format
 msgid "(Player %u) is using cheat :%s"
 msgstr "(Le joueur %u) utilise un code de triche : %s"
@@ -16047,163 +16047,163 @@ msgstr "Brouillard activé"
 msgid "Fog off"
 msgstr "Brouillard désactivé"
 
-#: src/keybind.cpp:908
-#: src/keybind.cpp:921
+#: src/keybind.cpp:900
+#: src/keybind.cpp:913
 #, c-format
 msgid "Setting radar zoom to %u"
 msgstr "Réglage du zoom de radar à %u"
 
-#: src/keybind.cpp:1309
+#: src/keybind.cpp:1290
 msgid "God Mode ON"
 msgstr "Mode dieu-tout-puissant activé"
 
-#: src/keybind.cpp:1309
+#: src/keybind.cpp:1290
 msgid "God Mode OFF"
 msgstr "Mode dieu-tout-puissant désactivé"
 
-#: src/keybind.cpp:1321
+#: src/keybind.cpp:1302
 msgid "View Aligned to North"
 msgstr "Point de vue réorienté vers le Nord"
 
-#: src/keybind.cpp:1345
+#: src/keybind.cpp:1326
 #, c-format
 msgid "Trap cursor %s"
 msgstr "Piéger le curseur %s"
 
-#: src/keybind.cpp:1430
+#: src/keybind.cpp:1411
 msgid "Researched EVERYTHING for you!"
 msgstr "Nous avons fait toutes les recherches pour vous!"
 
-#: src/keybind.cpp:1454
+#: src/keybind.cpp:1435
 msgid "Selected buildings instantly recharged!"
 msgstr "Bâtiments sélectionnés rechargés!"
 
-#: src/keybind.cpp:1494
+#: src/keybind.cpp:1475
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
 msgstr "(Le joueur %u) utilise un code de triche : %s %s"
 
-#: src/keybind.cpp:1494
+#: src/keybind.cpp:1475
 msgid "Researched"
 msgstr "Recherché"
 
-#: src/keybind.cpp:1515
+#: src/keybind.cpp:1496
 msgid "Only displaying energy bars when selected"
 msgstr "Afficher seulement les barres de vie des unités sélectionnées"
 
-#: src/keybind.cpp:1518
+#: src/keybind.cpp:1499
 msgid "Always displaying energy bars for units"
 msgstr "Toujours afficher les barres de vie des unités"
 
-#: src/keybind.cpp:1521
+#: src/keybind.cpp:1502
 msgid "Always displaying energy bars for units and structures"
 msgstr "Toujours afficher les barres de vie des unités et des bâtiments"
 
-#: src/keybind.cpp:1532
+#: src/keybind.cpp:1513
 msgid "Debug menu is Open"
 msgstr "Le menu de débogage est ouvert"
 
-#: src/keybind.cpp:1561
+#: src/keybind.cpp:1542
 msgid "Unable to locate any oil derricks!"
 msgstr "Impossible de localiser le moindre puits de pétrole!"
 
-#: src/keybind.cpp:1725
+#: src/keybind.cpp:1706
 msgid "Oh, the weather outside is frightful... SNOW"
 msgstr "Brrr... Il fait si froid... Il neige"
 
-#: src/keybind.cpp:1731
+#: src/keybind.cpp:1712
 msgid "Singing in the rain, I'm singing in the rain... RAIN"
 msgstr "Singing in the rain, I'm singing in the rain... Il pleut"
 
-#: src/keybind.cpp:1737
+#: src/keybind.cpp:1718
 msgid "Forecast : Clear skies for all areas... NO WEATHER"
 msgstr "Prévisions météo : ciel dégagé dans toute la région... Aucune intempérie"
 
-#: src/keybind.cpp:1828
+#: src/keybind.cpp:1809
 msgid "Warning! This can have drastic consequences if used incorrectly in missions."
 msgstr "Attention! Ceci peut avoir des conséquences désastreuses si mal utilisé dans les missions."
 
-#: src/keybind.cpp:1830
+#: src/keybind.cpp:1811
 msgid "All enemies destroyed by cheating!"
 msgstr "Tous les ennemis ont été détruits par un TRICHEUR!"
 
-#: src/keybind.cpp:1870
+#: src/keybind.cpp:1851
 msgid "Destroying selected droids and structures!"
 msgstr "Destruction des unités et les structures sélectionnées!"
 
-#: src/keybind.cpp:2298
+#: src/keybind.cpp:2289
 msgid "Reveal OFF"
 msgstr "Révélation OFF"
 
-#: src/keybind.cpp:2303
+#: src/keybind.cpp:2294
 msgid "Reveal ON"
 msgstr "Révélation ON"
 
-#: src/keybind.cpp:2384
+#: src/keybind.cpp:2368
 msgid "Centered on player HQ, direction NORTH"
 msgstr "Vue centrée sur le quartier général, direction Nord"
 
-#: src/keybind.cpp:2396
+#: src/keybind.cpp:2380
 msgid "Unable to locate HQ!"
 msgstr "Impossible de localiser le Quartier Général!"
 
-#: src/keybind.cpp:2403
+#: src/keybind.cpp:2387
 msgid "Formation speed limiting has been removed from the game due to bugs."
 msgstr "La limite de vitesse en formation a été retirée du jeu à cause de bugs."
 
-#: src/keybind.cpp:2452
+#: src/keybind.cpp:2436
 msgid "Vertical rotation direction: Normal"
 msgstr "Sens de rotation vertical : normal"
 
-#: src/keybind.cpp:2457
+#: src/keybind.cpp:2441
 msgid "Vertical rotation direction: Flipped"
 msgstr "Sens de rotation vertical : inversé"
 
-#: src/keybind.cpp:2509
+#: src/keybind.cpp:2493
 msgid "Sorry, but game speed cannot be changed in multiplayer."
 msgstr "La vitesse de jeu ne peut pas être modifiée pendant les parties multijoueurs."
 
-#: src/keybind.cpp:2544
-#: src/keybind.cpp:2598
+#: src/keybind.cpp:2528
+#: src/keybind.cpp:2582
 msgid "Game Speed Reset"
 msgstr "Réinitialisation de la vitesse de jeu"
 
-#: src/keybind.cpp:2548
+#: src/keybind.cpp:2532
 #, c-format
 msgid "Game Speed Increased to %s"
 msgstr "Vitesse du jeu augmentée à %s"
 
-#: src/keybind.cpp:2552
+#: src/keybind.cpp:2536
 #, c-format
 msgid "Game Speed Reduced to %s"
 msgstr "Vitesse du jeu réduite à %s"
 
-#: src/keybind.cpp:2610
+#: src/keybind.cpp:2594
 msgid "Radar showing friend-foe colors"
 msgstr "Mini-carte bicolore ami/ennemi"
 
-#: src/keybind.cpp:2614
+#: src/keybind.cpp:2598
 msgid "Radar showing player colors"
 msgstr "Mini-carte montrant les couleurs des joueurs"
 
-#: src/keybind.cpp:2629
+#: src/keybind.cpp:2613
 msgid "Radar showing only objects"
 msgstr "Mini-carte ne montrant que les objets"
 
-#: src/keybind.cpp:2632
+#: src/keybind.cpp:2616
 msgid "Radar blending terrain and height"
 msgstr "Mini-carte mélangeant terrain et relief"
 
-#: src/keybind.cpp:2635
+#: src/keybind.cpp:2619
 msgid "Radar showing terrain"
 msgstr "Mini-carte montrant le terrain"
 
-#: src/keybind.cpp:2638
+#: src/keybind.cpp:2622
 msgid "Radar showing height"
 msgstr "Mini-carte montrant le relief"
 
 #: src/keyedit.cpp:360
-#: src/multiint.cpp:1549
+#: src/multiint.cpp:1550
 #: src/titleui/gamefind.cpp:90
 #: src/titleui/protocol.cpp:87
 msgid "Return To Previous Screen"
@@ -16218,535 +16218,535 @@ msgstr "Par défaut"
 msgid "KEY MAPPING"
 msgstr "RACOURCIS CLAVIER"
 
-#: src/keymap.cpp:301
+#: src/keymap.cpp:372
 msgid "Manufacture"
 msgstr "Menu assemblage"
 
-#: src/keymap.cpp:302
+#: src/keymap.cpp:373
 msgid "Research"
 msgstr "Menu recherche"
 
-#: src/keymap.cpp:303
+#: src/keymap.cpp:374
 msgid "Build"
 msgstr "Menu construction"
 
-#: src/keymap.cpp:304
+#: src/keymap.cpp:375
 msgid "Design"
 msgstr "Menu conception"
 
-#: src/keymap.cpp:305
+#: src/keymap.cpp:376
 msgid "Intelligence Display"
 msgstr "Panneau d'informations"
 
-#: src/keymap.cpp:306
+#: src/keymap.cpp:377
 msgid "Commanders"
 msgstr "Commandants"
 
-#: src/keymap.cpp:307
+#: src/keymap.cpp:378
 msgid "QuickSave"
 msgstr ""
 
-#: src/keymap.cpp:308
+#: src/keymap.cpp:379
 msgid "Toggle Radar"
 msgstr "Active/désactive l'affichage de la mini-carte"
 
-#: src/keymap.cpp:309
+#: src/keymap.cpp:380
 msgid "QuickLoad"
 msgstr ""
 
-#: src/keymap.cpp:310
+#: src/keymap.cpp:381
 msgid "Toggle Console Display"
 msgstr "Active/désactive l'affichage de la console"
 
-#: src/keymap.cpp:311
+#: src/keymap.cpp:382
 msgid "Toggle Damage Bars On/Off"
 msgstr "Active/désactive l'affichage des barres de vie"
 
-#: src/keymap.cpp:312
+#: src/keymap.cpp:383
 msgid "Take Screen Shot"
 msgstr "Prendre une capture d'écran"
 
-#: src/keymap.cpp:313
+#: src/keymap.cpp:384
 msgid "Toggle Formation Speed Limiting"
 msgstr "Active/désactive la limite de vitesse en formation"
 
-#: src/keymap.cpp:314
+#: src/keymap.cpp:385
 msgid "View Location of Previous Message"
 msgstr "Voir la provenance du dernier message reçu"
 
-#: src/keymap.cpp:315
+#: src/keymap.cpp:386
 msgid "Toggle Sensor display"
 msgstr "Active/désactive l'affichage de la portée de tir/de détection"
 
-#: src/keymap.cpp:319
+#: src/keymap.cpp:390
 msgid "Assign Group 0"
 msgstr "Assigner au groupe 0"
 
-#: src/keymap.cpp:320
+#: src/keymap.cpp:391
 msgid "Assign Group 1"
 msgstr "Assigner au groupe 1"
 
-#: src/keymap.cpp:321
+#: src/keymap.cpp:392
 msgid "Assign Group 2"
 msgstr "Assigner au groupe 2"
 
-#: src/keymap.cpp:322
+#: src/keymap.cpp:393
 msgid "Assign Group 3"
 msgstr "Assigner au groupe 3"
 
-#: src/keymap.cpp:323
+#: src/keymap.cpp:394
 msgid "Assign Group 4"
 msgstr "Assigner au groupe 4"
 
-#: src/keymap.cpp:324
+#: src/keymap.cpp:395
 msgid "Assign Group 5"
 msgstr "Assigner au groupe 5"
 
-#: src/keymap.cpp:325
+#: src/keymap.cpp:396
 msgid "Assign Group 6"
 msgstr "Assigner au groupe 6"
 
-#: src/keymap.cpp:326
+#: src/keymap.cpp:397
 msgid "Assign Group 7"
 msgstr "Assigner au groupe 7"
 
-#: src/keymap.cpp:327
+#: src/keymap.cpp:398
 msgid "Assign Group 8"
 msgstr "Assigner au groupe 8"
 
-#: src/keymap.cpp:328
+#: src/keymap.cpp:399
 msgid "Assign Group 9"
 msgstr "Assigner au groupe 9"
 
-#: src/keymap.cpp:332
+#: src/keymap.cpp:403
 msgid "Select Group 0"
 msgstr "Sélectionner le groupe 0"
 
-#: src/keymap.cpp:333
+#: src/keymap.cpp:404
 msgid "Select Group 1"
 msgstr "Sélectionner le groupe 1"
 
-#: src/keymap.cpp:334
+#: src/keymap.cpp:405
 msgid "Select Group 2"
 msgstr "Sélectionner le groupe 2"
 
-#: src/keymap.cpp:335
+#: src/keymap.cpp:406
 msgid "Select Group 3"
 msgstr "Sélectionner le groupe 3"
 
-#: src/keymap.cpp:336
+#: src/keymap.cpp:407
 msgid "Select Group 4"
 msgstr "Sélectionner le groupe 4"
 
-#: src/keymap.cpp:337
+#: src/keymap.cpp:408
 msgid "Select Group 5"
 msgstr "Sélectionner le groupe 5"
 
-#: src/keymap.cpp:338
+#: src/keymap.cpp:409
 msgid "Select Group 6"
 msgstr "Sélectionner le groupe 6"
 
-#: src/keymap.cpp:339
+#: src/keymap.cpp:410
 msgid "Select Group 7"
 msgstr "Sélectionner le groupe 7"
 
-#: src/keymap.cpp:340
+#: src/keymap.cpp:411
 msgid "Select Group 8"
 msgstr "Sélectionner le groupe 8"
 
-#: src/keymap.cpp:341
+#: src/keymap.cpp:412
 msgid "Select Group 9"
 msgstr "Sélectionner le groupe 9"
 
-#: src/keymap.cpp:345
+#: src/keymap.cpp:416
 msgid "Select Commander 0"
 msgstr "Sélectionner le commandant 0"
 
-#: src/keymap.cpp:346
+#: src/keymap.cpp:417
 msgid "Select Commander 1"
 msgstr "Sélectionner le commandant 1"
 
-#: src/keymap.cpp:347
+#: src/keymap.cpp:418
 msgid "Select Commander 2"
 msgstr "Sélectionner le commandant 2"
 
-#: src/keymap.cpp:348
+#: src/keymap.cpp:419
 msgid "Select Commander 3"
 msgstr "Sélectionner le commandant 3"
 
-#: src/keymap.cpp:349
+#: src/keymap.cpp:420
 msgid "Select Commander 4"
 msgstr "Sélectionner le commandant 4"
 
-#: src/keymap.cpp:350
+#: src/keymap.cpp:421
 msgid "Select Commander 5"
 msgstr "Sélectionner le commandant 5"
 
-#: src/keymap.cpp:351
+#: src/keymap.cpp:422
 msgid "Select Commander 6"
 msgstr "Sélectionner le commandant 6"
 
-#: src/keymap.cpp:352
+#: src/keymap.cpp:423
 msgid "Select Commander 7"
 msgstr "Sélectionner le commandant 7"
 
-#: src/keymap.cpp:353
+#: src/keymap.cpp:424
 msgid "Select Commander 8"
 msgstr "Sélectionner le commandant 8"
 
-#: src/keymap.cpp:354
+#: src/keymap.cpp:425
 msgid "Select Commander 9"
 msgstr "Sélectionner le commandant 9"
 
-#: src/keymap.cpp:358
+#: src/keymap.cpp:429
 msgid "Multiplayer Options / Alliance dialog"
 msgstr "Options multijoueurs / dialogue des alliances"
 
-#: src/keymap.cpp:361
+#: src/keymap.cpp:432
 msgid "Move Camera Up"
 msgstr ""
 
-#: src/keymap.cpp:362
+#: src/keymap.cpp:433
 msgid "Move Camera Down"
 msgstr ""
 
-#: src/keymap.cpp:363
+#: src/keymap.cpp:434
 msgid "Move Camera Right"
 msgstr ""
 
-#: src/keymap.cpp:364
+#: src/keymap.cpp:435
 msgid "Move Camera Left"
 msgstr ""
 
-#: src/keymap.cpp:365
+#: src/keymap.cpp:436
 msgid "Snap View to North"
 msgstr "Bloquer la vue vers le Nord"
 
-#: src/keymap.cpp:366
+#: src/keymap.cpp:437
 msgid "Toggle Tracking Camera"
 msgstr "Active/désactive la caméra traqueuse"
 
-#: src/keymap.cpp:367
+#: src/keymap.cpp:438
 msgid "Display In-Game Options"
 msgstr "Afficher les options du jeu"
 
-#: src/keymap.cpp:368
+#: src/keymap.cpp:439
 msgid "Zoom Radar Out"
 msgstr "Dézoomer la mini-carte"
 
-#: src/keymap.cpp:369
+#: src/keymap.cpp:440
 msgid "Zoom Radar In"
 msgstr "Zoomer la mini-carte"
 
-#: src/keymap.cpp:370
+#: src/keymap.cpp:441
 msgid "Zoom In"
 msgstr "Zoomer la vue"
 
-#: src/keymap.cpp:371
+#: src/keymap.cpp:442
 msgid "Zoom Out"
 msgstr "Dézoomer la vue"
 
-#: src/keymap.cpp:372
+#: src/keymap.cpp:443
 msgid "Pitch Forward"
 msgstr "Angle de la caméra : vue du dessus"
 
-#: src/keymap.cpp:373
+#: src/keymap.cpp:444
 msgid "Rotate Left"
 msgstr "Rotation du point de vue vers la gauche"
 
-#: src/keymap.cpp:374
+#: src/keymap.cpp:445
 msgid "Reset Pitch"
 msgstr "Réinitialiser l'angle de la caméra"
 
-#: src/keymap.cpp:375
+#: src/keymap.cpp:446
 msgid "Rotate Right"
 msgstr "Rotation du point de vue vers la droite"
 
-#: src/keymap.cpp:376
+#: src/keymap.cpp:447
 msgid "Pitch Back"
 msgstr "Angle de la caméra : vue de côté"
 
-#: src/keymap.cpp:377
+#: src/keymap.cpp:448
 msgid "Orders Menu"
 msgstr "Menu des ordres"
 
-#: src/keymap.cpp:378
+#: src/keymap.cpp:449
 msgid "Decrease Game Speed"
 msgstr "Diminuer la vitesse du jeu"
 
-#: src/keymap.cpp:379
+#: src/keymap.cpp:450
 msgid "Increase Game Speed"
 msgstr "Augmenter la vitesse du jeu"
 
-#: src/keymap.cpp:380
+#: src/keymap.cpp:451
 msgid "Reset Game Speed"
 msgstr "Réinitialiser la vitesse du jeu"
 
-#: src/keymap.cpp:381
+#: src/keymap.cpp:452
 msgid "View North"
 msgstr "Vue vers le Nord"
 
-#: src/keymap.cpp:382
+#: src/keymap.cpp:453
 msgid "View South"
 msgstr "Vue vers le Sud"
 
-#: src/keymap.cpp:383
+#: src/keymap.cpp:454
 msgid "View East"
 msgstr "Vue vers l'Est"
 
-#: src/keymap.cpp:384
+#: src/keymap.cpp:455
 msgid "View West"
 msgstr "Vue vers l'Ouest"
 
-#: src/keymap.cpp:385
+#: src/keymap.cpp:456
 msgid "View next Oil Derrick"
 msgstr "Voir le puits de pétrole suivant"
 
-#: src/keymap.cpp:386
+#: src/keymap.cpp:457
 msgid "View next Repair Unit"
 msgstr "Voir l'unité de réparation suivante"
 
-#: src/keymap.cpp:387
+#: src/keymap.cpp:458
 msgid "View next Truck"
 msgstr "Voir le véhicule de construction suivant"
 
-#: src/keymap.cpp:388
+#: src/keymap.cpp:459
 msgid "View next Sensor Unit"
 msgstr "Voir l'unité radar suivante"
 
-#: src/keymap.cpp:389
+#: src/keymap.cpp:460
 msgid "View next Commander"
 msgstr "Voir le commandant suivant"
 
-#: src/keymap.cpp:390
+#: src/keymap.cpp:461
 msgid "Toggle Overlays"
 msgstr "Active/désactive l'affichage des panneaux de commande"
 
-#: src/keymap.cpp:391
+#: src/keymap.cpp:462
 msgid "Toggle Console History "
 msgstr "Active/désactive l'historique de la console"
 
-#: src/keymap.cpp:392
+#: src/keymap.cpp:463
 msgid "Toggle Team Chat History"
 msgstr "Active/désactive l'historique du chat d'équipe"
 
-#: src/keymap.cpp:395
+#: src/keymap.cpp:466
 msgid "Center View on HQ"
 msgstr "Centrer la vue sur le Quartier Général"
 
-#: src/keymap.cpp:397
+#: src/keymap.cpp:468
 msgid "View Unassigned Units"
 msgstr "Voir les unités non assignées"
 
-#: src/keymap.cpp:399
+#: src/keymap.cpp:470
 msgid "Fire at Will"
 msgstr "Tirer à vue"
 
-#: src/keymap.cpp:401
+#: src/keymap.cpp:472
 msgid "Return to HQ"
 msgstr "Retour au QG"
 
-#: src/keymap.cpp:408
+#: src/keymap.cpp:479
 msgid "Stop Droid"
 msgstr "Stopper l'unité"
 
-#: src/keymap.cpp:411
+#: src/keymap.cpp:482
 msgid "Send Global Text Message"
 msgstr "Envoyer un message global"
 
-#: src/keymap.cpp:412
+#: src/keymap.cpp:483
 msgid "Send Team Text Message"
 msgstr "Envoyer un message à l'équipe"
 
-#: src/keymap.cpp:413
+#: src/keymap.cpp:484
 msgid "Drop a beacon"
 msgstr "Larguer une balise"
 
-#: src/keymap.cpp:415
+#: src/keymap.cpp:486
 msgid "Toggles shadows"
 msgstr "Active/désactive les ombres"
 
-#: src/keymap.cpp:416
+#: src/keymap.cpp:487
 msgid "Trap cursor"
 msgstr "Piéger le curseur"
 
-#: src/keymap.cpp:417
+#: src/keymap.cpp:488
 msgid "Toggle radar terrain"
 msgstr "Active/désactive l'affichage du terrain"
 
-#: src/keymap.cpp:418
+#: src/keymap.cpp:489
 msgid "Toggle ally-enemy radar view"
 msgstr "Active/désactive l'affichage ami/ennemi"
 
-#: src/keymap.cpp:419
+#: src/keymap.cpp:490
 msgid "Show all keyboard mappings"
 msgstr ""
 
-#: src/keymap.cpp:428
+#: src/keymap.cpp:499
 msgid "Select all Combat Units"
 msgstr "Sélectionner toutes les unités de combat"
 
-#: src/keymap.cpp:429
+#: src/keymap.cpp:500
 msgid "Select all Cyborgs"
 msgstr "Sélectionner tous les Cyborgs"
 
-#: src/keymap.cpp:430
+#: src/keymap.cpp:501
 msgid "Select all Heavily Damaged Units"
 msgstr "Sélectionner toutes les unités sévèrement endommagées"
 
-#: src/keymap.cpp:431
+#: src/keymap.cpp:502
 msgid "Select all Half-tracks"
 msgstr "Sélectionner tous les véhicules à autochenilles"
 
-#: src/keymap.cpp:432
+#: src/keymap.cpp:503
 msgid "Select all Hovers"
 msgstr "Sélectionner tous les aéroglisseurs"
 
-#: src/keymap.cpp:434
+#: src/keymap.cpp:505
 msgid "Select all Units on Screen"
 msgstr "Sélectionner toutes les unités à l'écran"
 
-#: src/keymap.cpp:435
+#: src/keymap.cpp:506
 msgid "Select all Tracks"
 msgstr "Sélectionner tous les véhicules à chenilles"
 
-#: src/keymap.cpp:436
+#: src/keymap.cpp:507
 msgid "Select EVERY unit"
 msgstr "Sélectionner TOUTES les unités"
 
-#: src/keymap.cpp:437
+#: src/keymap.cpp:508
 msgid "Select all VTOLs"
 msgstr "Sélectionner tous les VTOLs"
 
-#: src/keymap.cpp:438
+#: src/keymap.cpp:509
 msgid "Select all fully-armed VTOLs"
 msgstr "Sélectionner tous les VTOLs rechargés"
 
-#: src/keymap.cpp:439
+#: src/keymap.cpp:510
 msgid "Select all Wheels"
 msgstr "Sélectionner tous les véhicules à roues"
 
-#: src/keymap.cpp:440
+#: src/keymap.cpp:511
 msgid "Show frame rate"
 msgstr "Afficher la fréquence de rafraîchissement de l'écran"
 
-#: src/keymap.cpp:441
+#: src/keymap.cpp:512
 msgid "Select all units with the same components"
 msgstr ""
 
-#: src/keymap.cpp:445
+#: src/keymap.cpp:516
 msgid "Select all Combat Cyborgs"
 msgstr "Sélectionner tous les Cyborgs de combat"
 
-#: src/keymap.cpp:446
+#: src/keymap.cpp:517
 msgid "Select all Engineers"
 msgstr "Sélectionner toutes les unités de construction"
 
-#: src/keymap.cpp:447
+#: src/keymap.cpp:518
 msgid "Select all Land Combat Units"
 msgstr "Sélectionner toutes les unités de combat au sol"
 
-#: src/keymap.cpp:448
+#: src/keymap.cpp:519
 msgid "Select all Mechanics"
 msgstr "Sélectionner toutes les Cyborgs mécaniciens"
 
-#: src/keymap.cpp:449
+#: src/keymap.cpp:520
 msgid "Select all Transporters"
 msgstr "Sélectionner tous les transporteurs"
 
-#: src/keymap.cpp:450
+#: src/keymap.cpp:521
 msgid "Select all Repair Tanks"
 msgstr "Sélectionner tous les véhicules de réparation"
 
-#: src/keymap.cpp:451
+#: src/keymap.cpp:522
 msgid "Select all Sensor Units"
 msgstr "Sélectionner toutes les unités radar"
 
-#: src/keymap.cpp:452
+#: src/keymap.cpp:523
 msgid "Select all Trucks"
 msgstr "Sélectionner tous les véhicules de construction"
 
-#: src/keymap.cpp:456
+#: src/keymap.cpp:527
 msgid "Select next Factory"
 msgstr "Sélectionner l'usine suivante"
 
-#: src/keymap.cpp:457
+#: src/keymap.cpp:528
 msgid "Select next Research Facility"
 msgstr "Sélectionner le centre de recherche suivant"
 
-#: src/keymap.cpp:458
+#: src/keymap.cpp:529
 msgid "Select next Power Generator"
 msgstr "Sélectionner le générateur d'énergie suivant"
 
-#: src/keymap.cpp:459
+#: src/keymap.cpp:530
 msgid "Select next Cyborg Factory"
 msgstr "Sélectionner l'usine à Cyborgs suivante"
 
-#: src/keymap.cpp:462
+#: src/keymap.cpp:533
 msgid "Toggle Debug Mappings"
 msgstr "Activer/désactiver Debug Mappings"
 
-#: src/keymap.cpp:463
+#: src/keymap.cpp:534
 msgid "Toggle display of droid path"
 msgstr "Active/désactive l'affichage des parcours des unités"
 
-#: src/keymap.cpp:464
+#: src/keymap.cpp:535
 msgid "Toggle display of gateways"
 msgstr "Active/désactive l'affichage des passerelles"
 
-#: src/keymap.cpp:465
+#: src/keymap.cpp:536
 msgid "Toggle visibility"
 msgstr "Active/désactive la visibilité"
 
-#: src/keymap.cpp:466
+#: src/keymap.cpp:537
 msgid "Raise tile height"
 msgstr "Augmenter l'altitude de la tuile"
 
-#: src/keymap.cpp:467
+#: src/keymap.cpp:538
 msgid "Lower tile height"
 msgstr "Diminuer l'altitude de la tuile"
 
-#: src/keymap.cpp:468
+#: src/keymap.cpp:539
 msgid "Toggles All fog"
 msgstr "Active/désactive le brouillard"
 
-#: src/keymap.cpp:469
+#: src/keymap.cpp:540
 msgid "Trigger some weather"
 msgstr "Déclencher une météo"
 
-#: src/keymap.cpp:470
+#: src/keymap.cpp:541
 msgid "Flip terrain triangle"
 msgstr "Changer l'orientation des triangles du terrain"
 
-#: src/keymap.cpp:471
+#: src/keymap.cpp:542
 msgid "Make a performance measurement sample"
 msgstr "Faire un test de performances"
 
-#: src/keymap.cpp:474
+#: src/keymap.cpp:545
 msgid "Make all items available"
 msgstr "Rend tous les éléments disponibles"
 
-#: src/keymap.cpp:475
+#: src/keymap.cpp:546
 msgid "Kill Selected Unit(s)"
 msgstr "Eliminer les unités sélectionnées"
 
-#: src/keymap.cpp:476
+#: src/keymap.cpp:547
 msgid "Toggle god Mode Status"
 msgstr "Active/désactive le mode dieu-tout-puissant"
 
-#: src/keymap.cpp:477
+#: src/keymap.cpp:548
 msgid "Display Options Screen"
 msgstr "Afficher les options"
 
-#: src/keymap.cpp:478
+#: src/keymap.cpp:549
 msgid "Complete current research"
 msgstr "Termine la recherche courante"
 
-#: src/keymap.cpp:479
+#: src/keymap.cpp:550
 msgid "Reveal map at mouse position"
 msgstr "Révéler la carte autour de la souris"
 
-#: src/keymap.cpp:480
+#: src/keymap.cpp:551
 msgid "Trace a game object"
 msgstr "Tracer un objet de jeu"
 
@@ -16862,358 +16862,362 @@ msgstr "%s s'allie avec %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Vous avez trouvé des plans pour %s"
 
-#: src/multiint.cpp:224
+#: src/multiint.cpp:225
 msgid "Medium"
 msgstr "Moyen"
 
-#: src/multiint.cpp:282
-#: src/multiplay.cpp:469
+#: src/multiint.cpp:283
+#: src/multiplay.cpp:470
 msgid "Commander"
 msgstr "Commandant"
 
-#: src/multiint.cpp:749
+#: src/multiint.cpp:750
 msgid "MISSING AI NAME"
 msgstr ""
 
-#: src/multiint.cpp:774
+#: src/multiint.cpp:775
 msgid "MISSING AI DESCRIPTION"
 msgstr ""
 
-#: src/multiint.cpp:788
+#: src/multiint.cpp:789
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr ""
 
-#: src/multiint.cpp:964
+#: src/multiint.cpp:965
 msgid "Error while joining."
 msgstr ""
 
-#: src/multiint.cpp:1195
+#: src/multiint.cpp:1196
 msgid "Tanks disabled!!"
 msgstr "Tanks désactivés."
 
-#: src/multiint.cpp:1196
+#: src/multiint.cpp:1197
 msgid "Cyborgs disabled."
 msgstr "Cyborgs désactivés."
 
-#: src/multiint.cpp:1197
+#: src/multiint.cpp:1198
 msgid "VTOLs disabled."
 msgstr "VTOLs désactivés."
 
-#: src/multiint.cpp:1198
+#: src/multiint.cpp:1199
 msgid "Satellite Uplink disabled."
 msgstr "Site de télécommunications satellite désactivé."
 
-#: src/multiint.cpp:1199
+#: src/multiint.cpp:1200
 msgid "Laser Satellite disabled."
 msgstr "Poste de commande pour satellite laser désactivé."
 
-#: src/multiint.cpp:1200
+#: src/multiint.cpp:1201
 msgid "Structure Limits Enforced."
 msgstr ""
 
-#: src/multiint.cpp:1379
+#: src/multiint.cpp:1380
 msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
-#: src/multiint.cpp:1405
+#: src/multiint.cpp:1406
 #: src/titleui/gamefind.cpp:578
 msgid "Game Name"
 msgstr "Nom de la partie"
 
-#: src/multiint.cpp:1406
+#: src/multiint.cpp:1407
 msgid "One-Player Skirmish"
 msgstr "Escarmouche un joueur"
 
-#: src/multiint.cpp:1413
+#: src/multiint.cpp:1414
 msgid "Select Game Name"
 msgstr "Définissez le nom de la partie"
 
-#: src/multiint.cpp:1424
+#: src/multiint.cpp:1425
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr "Sélectionnez la carte\n"
 "Peut être bloquée par le vote des joueurs"
 
-#: src/multiint.cpp:1425
+#: src/multiint.cpp:1426
 msgid "Map-Mod!"
 msgstr "Carte-mode !"
 
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1439
 msgid "Click to set Password"
 msgstr "Cliquez pour définir un mot de passe"
 
-#: src/multiint.cpp:1452
+#: src/multiint.cpp:1453
 msgid "Select Player Name"
 msgstr "Choisir le nom du joueur"
 
-#: src/multiint.cpp:1472
+#: src/multiint.cpp:1473
 #: src/multimenu.cpp:671
 msgid "Alliances"
 msgstr ""
 
-#: src/multiint.cpp:1491
+#: src/multiint.cpp:1492
 msgid "Base"
 msgstr "Base"
 
-#: src/multiint.cpp:1500
+#: src/multiint.cpp:1501
 msgid "Map Preview"
 msgstr "Prévisualiser la carte"
 
-#: src/multiint.cpp:1501
+#: src/multiint.cpp:1502
 msgid "Click to see Map"
 msgstr "Cliquez pour voir la carte"
 
-#: src/multiint.cpp:1508
 #: src/multiint.cpp:1509
+#: src/multiint.cpp:1510
 msgid "Show Structure Limits"
 msgstr "Afficher des limites de construction"
 
-#: src/multiint.cpp:1508
 #: src/multiint.cpp:1509
+#: src/multiint.cpp:1510
 msgid "Set Structure Limits"
 msgstr "Limites de construction"
 
-#: src/multiint.cpp:1516
+#: src/multiint.cpp:1517
 msgid "Random Game Options"
 msgstr ""
 
-#: src/multiint.cpp:1517
+#: src/multiint.cpp:1518
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1527
+#: src/multiint.cpp:1528
 msgid "Tech"
 msgstr ""
 
-#: src/multiint.cpp:1528
+#: src/multiint.cpp:1529
 msgid "Technology Level 1"
 msgstr ""
 
-#: src/multiint.cpp:1529
+#: src/multiint.cpp:1530
 msgid "Technology Level 2"
 msgstr ""
 
-#: src/multiint.cpp:1530
+#: src/multiint.cpp:1531
 msgid "Technology Level 3"
 msgstr ""
 
-#: src/multiint.cpp:1531
+#: src/multiint.cpp:1532
 msgid "Technology Level 4"
 msgstr ""
 
-#: src/multiint.cpp:1539
 #: src/multiint.cpp:1540
+#: src/multiint.cpp:1541
 msgid "Start Hosting Game"
 msgstr "Démarrer le serveur"
 
-#: src/multiint.cpp:1601
+#: src/multiint.cpp:1602
 msgid "DIFFICULTY"
 msgstr "DIFFICULTÉ"
 
-#: src/multiint.cpp:1614
+#: src/multiint.cpp:1615
 msgid "Starts disadvantaged"
 msgstr "Commence avec un handicap"
 
-#: src/multiint.cpp:1615
+#: src/multiint.cpp:1616
 msgid "Plays nice"
 msgstr "Joue gentiment"
 
-#: src/multiint.cpp:1616
+#: src/multiint.cpp:1617
 msgid "No holds barred"
 msgstr "Pas de quartier"
 
-#: src/multiint.cpp:1617
+#: src/multiint.cpp:1618
 msgid "Starts with advantages"
 msgstr "Commence avec des avantages"
 
-#: src/multiint.cpp:1654
+#: src/multiint.cpp:1655
 msgid "CHOOSE AI"
 msgstr "CHOISIR L'IA"
 
-#: src/multiint.cpp:1698
+#: src/multiint.cpp:1699
 msgid "Allow human players to join in this slot"
 msgstr "Autorise des joueurs humains à prendre cette position"
 
-#: src/multiint.cpp:1705
+#: src/multiint.cpp:1706
 msgid "Leave this slot unused"
 msgstr "Laisser cette position inoccupée"
 
-#: src/multiint.cpp:2167
+#: src/multiint.cpp:2168
 msgid "Team"
 msgstr "Équipe"
 
-#: src/multiint.cpp:2222
+#: src/multiint.cpp:2223
 msgid "Click to change difficulty"
 msgstr "Cliquer pour changer la difficulté"
 
-#: src/multiint.cpp:2237
+#: src/multiint.cpp:2238
 msgid "Waiting for player"
 msgstr "Attente des autres joueurs"
 
-#: src/multiint.cpp:2237
+#: src/multiint.cpp:2238
 msgid "Player is ready"
 msgstr "Le joueur est prêt"
 
-#: src/multiint.cpp:2237
+#: src/multiint.cpp:2238
 msgid "Player is downloading"
 msgstr "Le joueur est en train de télécharger"
 
-#: src/multiint.cpp:2237
+#: src/multiint.cpp:2238
 msgid "Click when ready"
 msgstr "Cliquez une fois prêt"
 
-#: src/multiint.cpp:2237
+#: src/multiint.cpp:2238
 msgid "Waiting for download"
 msgstr "Attente de la fin du téléchargement"
 
-#: src/multiint.cpp:2249
+#: src/multiint.cpp:2250
 msgid "READY?"
 msgstr "PRÊT?"
 
-#: src/multiint.cpp:2291
+#: src/multiint.cpp:2292
 msgid "PLAYERS"
 msgstr "JOUEURS"
 
-#: src/multiint.cpp:2326
+#: src/multiint.cpp:2327
 msgid "Click to change to this slot"
 msgstr "Cliquez pour prendre cette position"
 
-#: src/multiint.cpp:2360
+#: src/multiint.cpp:2361
 msgid "Choose Team"
 msgstr "Choisir l'équipe"
 
-#: src/multiint.cpp:2364
+#: src/multiint.cpp:2365
 msgid "Teams locked"
 msgstr "Equipes vérouillées"
 
-#: src/multiint.cpp:2390
+#: src/multiint.cpp:2391
 msgid "Click to change player colour"
 msgstr "Cliquez pour changer la couleur du joueur"
 
-#: src/multiint.cpp:2415
+#: src/multiint.cpp:2416
 msgid "Click to change player position"
 msgstr "Cliquez pour changer la position du joueur"
 
-#: src/multiint.cpp:2422
+#: src/multiint.cpp:2423
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
-#: src/multiint.cpp:2437
+#: src/multiint.cpp:2438
 msgid "Player ID: "
 msgstr "ID du joueur :"
 
-#: src/multiint.cpp:2444
+#: src/multiint.cpp:2445
 msgid "(none)"
 msgstr "(aucun)"
 
-#: src/multiint.cpp:2514
+#: src/multiint.cpp:2529
 msgid "CHAT"
 msgstr "CHAT"
 
-#: src/multiint.cpp:2994
+#: src/multiint.cpp:3009
 msgid "Game Name Updated."
 msgstr ""
 
-#: src/multiint.cpp:3122
+#: src/multiint.cpp:3137
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** Un mot de passe [%s] est désormais requis ***"
 
-#: src/multiint.cpp:3128
+#: src/multiint.cpp:3143
 msgid "*** password is NOT required! ***"
 msgstr "*** Mot de passe NON requis ***"
 
-#: src/multiint.cpp:3141
+#: src/multiint.cpp:3156
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "Ceci est une carte-mode, l'expérience de jeu peut être altérée"
 
-#: src/multiint.cpp:3197
+#: src/multiint.cpp:3212
 msgid "Sorry! Failed to host the game."
 msgstr "Désolé ! Impossible d'héberger la partie."
 
-#: src/multiint.cpp:3353
-#: src/multiint.cpp:3441
+#: src/multiint.cpp:3368
+#: src/multiint.cpp:3456
 #: src/multimenu.cpp:1236
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'hôte a exclu %s de la partie !"
 
-#: src/multiint.cpp:3498
+#: src/multiint.cpp:3513
 msgid "Host is Starting Game"
 msgstr "L'hôte démarre la partie"
 
-#: src/multiint.cpp:3715
+#: src/multiint.cpp:3730
 msgid "You have been kicked: "
 msgstr ""
 
-#: src/multiint.cpp:3728
+#: src/multiint.cpp:3743
 msgid "No connection to host."
 msgstr ""
 
-#: src/multiint.cpp:3866
+#: src/multiint.cpp:3881
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:3976
+#: src/multiint.cpp:3886
+msgid "Cannot change to a map with fewer slots."
+msgstr ""
+
+#: src/multiint.cpp:3991
 msgid "The host has quit."
 msgstr ""
 
-#: src/multiint.cpp:4097
+#: src/multiint.cpp:4112
 msgid "UPnP has been enabled."
 msgstr "UPnP activé."
 
-#: src/multiint.cpp:4103
+#: src/multiint.cpp:4118
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "La détection UPnP a échoué, veuillez configurer votre routeur manuellement."
 
-#: src/multiint.cpp:4107
+#: src/multiint.cpp:4122
 msgid "UPnP detection is in progress..."
 msgstr "Détection UPnP en cours..."
 
-#: src/multiint.cpp:4114
+#: src/multiint.cpp:4129
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "La détection UPnP est désactivée. La configuration auto. du port 2100 ne sera pas possible."
 
-#: src/multiint.cpp:4120
+#: src/multiint.cpp:4135
 msgid "Hit the ready box to begin your challenge!"
 msgstr "Cliquez sur la case Prêt pour lancer votre challenge !"
 
-#: src/multiint.cpp:4124
+#: src/multiint.cpp:4139
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Appuyez sur le bouton Démarrer la partie pour créer le serveur"
 
-#: src/multiint.cpp:4205
+#: src/multiint.cpp:4220
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Cliquez pour prendre la position %d"
 
-#: src/multiint.cpp:4219
-#: src/multiint.cpp:4451
+#: src/multiint.cpp:4234
+#: src/multiint.cpp:4466
 msgid "Open"
 msgstr "Ouvert"
 
-#: src/multiint.cpp:4219
-#: src/multiint.cpp:4452
+#: src/multiint.cpp:4234
+#: src/multiint.cpp:4467
 msgid "Closed"
 msgstr "Fermé"
 
-#: src/multiint.cpp:4284
+#: src/multiint.cpp:4299
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Envoi de la carte : %u%% "
 
-#: src/multiint.cpp:4284
+#: src/multiint.cpp:4299
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "Carte %u%% téléchargée"
 
-#: src/multiint.cpp:4332
+#: src/multiint.cpp:4347
 msgid "HOST"
 msgstr "HOTE"
 
-#: src/multiint.cpp:4339
+#: src/multiint.cpp:4354
 #: src/multimenu.cpp:689
 msgid "Ping"
 msgstr "Ping"
@@ -17355,120 +17359,120 @@ msgstr "Donner de l'énergie au joueur"
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "%s : %s a été exclu du jeu et inscrit sur la liste des indésirables !"
 
-#: src/multiopt.cpp:304
-#: src/multiplay.cpp:1721
+#: src/multiopt.cpp:314
+#: src/multiplay.cpp:1725
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr "Attention, ceci est une carte mod, l'expérience de jeu pourra être altérée."
 
-#: src/multiopt.cpp:305
-#: src/multiplay.cpp:1725
+#: src/multiopt.cpp:315
+#: src/multiplay.cpp:1729
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "Attention, l'hôte a modifié le code du jeu, et ne peut être digne de confiance !"
 
-#: src/multiplay.cpp:265
+#: src/multiplay.cpp:266
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Le joueur %s a été exclu car il a essayé de contourner le contrôle d'intégrité des données !"
 
-#: src/multiplay.cpp:1161
+#: src/multiplay.cpp:1162
 msgid " (Ally)"
 msgstr ""
 
-#: src/multiplay.cpp:1165
+#: src/multiplay.cpp:1166
 msgid " (Global)"
 msgstr ""
 
-#: src/multiplay.cpp:1263
+#: src/multiplay.cpp:1264
 msgid "(allies"
 msgstr "(alliés"
 
-#: src/multiplay.cpp:1271
+#: src/multiplay.cpp:1272
 msgid "(private to "
 msgstr "(privé à "
 
-#: src/multiplay.cpp:1284
+#: src/multiplay.cpp:1285
 msgid "[invalid]"
 msgstr "[invalide]"
 
-#: src/multiplay.cpp:1608
+#: src/multiplay.cpp:1609
 msgid "Map was requested: SENDING MAP!"
 msgstr "Carte requise: envoi en cours!"
 
-#: src/multiplay.cpp:1624
+#: src/multiplay.cpp:1625
 msgid "Mod was requested: SENDING MOD!"
 msgstr "Mode requis: envoi en cours!"
 
-#: src/multiplay.cpp:1687
+#: src/multiplay.cpp:1690
 msgid "FILE SENT!"
 msgstr "Fichier envoyé!"
 
-#: src/multiplay.cpp:1752
+#: src/multiplay.cpp:1756
 #, c-format
 msgid "Beacon %d"
 msgstr "Balise %d"
 
-#: src/multiplay.cpp:1858
+#: src/multiplay.cpp:1862
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Balise reçue de %s !"
 
-#: src/multiplay.cpp:1909
+#: src/multiplay.cpp:1913
 msgid "Green"
 msgstr "Vert"
 
-#: src/multiplay.cpp:1910
+#: src/multiplay.cpp:1914
 msgid "Orange"
 msgstr "Orange"
 
-#: src/multiplay.cpp:1911
+#: src/multiplay.cpp:1915
 msgid "Grey"
 msgstr "Gris"
 
-#: src/multiplay.cpp:1913
+#: src/multiplay.cpp:1917
 msgid "Red"
 msgstr "Rouge"
 
-#: src/multiplay.cpp:1914
+#: src/multiplay.cpp:1918
 msgid "Blue"
 msgstr "Bleu"
 
-#: src/multiplay.cpp:1915
+#: src/multiplay.cpp:1919
 msgid "Pink"
 msgstr "Rose"
 
-#: src/multiplay.cpp:1916
+#: src/multiplay.cpp:1920
 msgid "Cyan"
 msgstr "Cyan"
 
-#: src/multiplay.cpp:1917
+#: src/multiplay.cpp:1921
 msgid "Yellow"
 msgstr "Jaune"
 
-#: src/multiplay.cpp:1918
+#: src/multiplay.cpp:1922
 msgid "Purple"
 msgstr "Violet"
 
-#: src/multiplay.cpp:1919
+#: src/multiplay.cpp:1923
 msgid "White"
 msgstr "Blanc"
 
-#: src/multiplay.cpp:1920
+#: src/multiplay.cpp:1924
 msgid "Bright blue"
 msgstr "Bleu clair"
 
-#: src/multiplay.cpp:1921
+#: src/multiplay.cpp:1925
 msgid "Neon green"
 msgstr "Vert néon"
 
-#: src/multiplay.cpp:1922
+#: src/multiplay.cpp:1926
 msgid "Infrared"
 msgstr "Infrarouge"
 
-#: src/multiplay.cpp:1923
+#: src/multiplay.cpp:1927
 msgid "Ultraviolet"
 msgstr "Ultraviolet"
 
-#: src/multiplay.cpp:1924
+#: src/multiplay.cpp:1928
 msgid "Brown"
 msgstr "Marron"
 
@@ -17646,86 +17650,86 @@ msgid_plural "%u units selected"
 msgstr[0] "%u unité sélectionnée"
 msgstr[1] "%u unités sélectionnées"
 
-#: src/structure.cpp:2512
+#: src/structure.cpp:2527
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:2520
+#: src/structure.cpp:2535
 #, c-format
 msgid "Can't build \"%s\" without a Command Relay Center — Production Halted"
 msgstr "Impossible de produire \"%s\" sans un Relais de Commandement - Arrêt de la production"
 
-#: src/structure.cpp:2525
+#: src/structure.cpp:2540
 #, c-format
 msgid "Can't build \"%s\", Commander Limit Reached — Production Halted"
 msgstr "Impossible de produire \"%s\", limite de commandants atteinte - Arrêt de la production"
 
-#: src/structure.cpp:2533
+#: src/structure.cpp:2548
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr "Impossible de produire plus de \"%s\", limite d'Unités de Construction atteinte - Arrêt de la production"
 
-#: src/structure.cpp:5454
+#: src/structure.cpp:5469
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] "%s - %u Unités assignées - Points de vie %d/%d"
 msgstr[1] "%s - %u Unités assignées - Points de vie %d/%d"
 
-#: src/structure.cpp:5473
+#: src/structure.cpp:5488
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.cpp:5478
-#: src/structure.cpp:5488
-#: src/structure.cpp:5495
-#: src/structure.cpp:5521
-#: src/structure.cpp:5530
-#: src/structure.cpp:5537
+#: src/structure.cpp:5493
+#: src/structure.cpp:5503
+#: src/structure.cpp:5510
+#: src/structure.cpp:5536
 #: src/structure.cpp:5545
+#: src/structure.cpp:5552
+#: src/structure.cpp:5560
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr "%s - Points de vie : %d/%d"
 
-#: src/structure.cpp:5511
+#: src/structure.cpp:5526
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr "%s - %u connexions établies sur %u - Points de vie : %d/%d"
 
-#: src/structure.cpp:5666
-#: src/structure.cpp:5709
+#: src/structure.cpp:5681
+#: src/structure.cpp:5724
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Électroniquement endommagé(e)"
 
-#: src/structure.cpp:5834
+#: src/structure.cpp:5849
 msgid "Electronic Reward - Visibility Report"
 msgstr "Récompense électronique - Rapport de visibilité"
 
-#: src/structure.cpp:5873
+#: src/structure.cpp:5888
 msgid "Factory Reward - Propulsion"
 msgstr "Butin d'usine - Propulsion"
 
-#: src/structure.cpp:5895
+#: src/structure.cpp:5910
 msgid "Factory Reward - Body"
 msgstr "Butin d'usine - Châssis"
 
-#: src/structure.cpp:5917
+#: src/structure.cpp:5932
 msgid "Factory Reward - Weapon"
 msgstr "Butin d'usine - Armes"
 
-#: src/structure.cpp:5925
+#: src/structure.cpp:5940
 msgid "Factory Reward - Nothing"
 msgstr "Butin d'usine - Rien"
 
-#: src/structure.cpp:5952
+#: src/structure.cpp:5967
 msgid "Repair Facility Award - Repair"
 msgstr "Butin de centre de réparation - Réparation"
 
-#: src/structure.cpp:5958
+#: src/structure.cpp:5973
 msgid "Repair Facility Award - Nothing"
 msgstr "Butin de centre de réparation - Rien"
 
@@ -17903,37 +17907,37 @@ msgstr "Il n'y a plus assez de place dans le transporteur !"
 msgid "Reinforcements landing"
 msgstr "Les renforts sont arrivés !"
 
-#: src/updatemanager.cpp:239
+#: src/updatemanager.cpp:247
 msgid "Update Available"
 msgstr ""
 
-#: src/updatemanager.cpp:242
+#: src/updatemanager.cpp:250
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
 msgstr ""
 
-#: src/updatemanager.cpp:246
+#: src/updatemanager.cpp:254
 msgid "A new build of Warzone 2100 is available!"
 msgstr ""
 
-#: src/updatemanager.cpp:248
+#: src/updatemanager.cpp:256
 msgid "Get Update Now"
 msgstr ""
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
-#: src/version.cpp:115
+#: src/version.cpp:186
 msgid " (modified locally)"
 msgstr " (modifié localement)"
 
 #. TRANSLATORS: Printed in Debug builds
-#: src/version.cpp:122
+#: src/version.cpp:193
 msgid " - DEBUG"
 msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:131
+#: src/version.cpp:202
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Version: %s,%s Construit: %s%s"
