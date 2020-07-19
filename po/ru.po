@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-07-19 10:25\n"
+"PO-Revision-Date: 2020-07-19 22:24\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -17179,7 +17179,7 @@ msgstr ""
 
 #: src/multiint.cpp:3886
 msgid "Cannot change to a map with fewer slots."
-msgstr ""
+msgstr "Невозможно изменить на карту на меньшую."
 
 #: src/multiint.cpp:3991
 msgid "The host has quit."
