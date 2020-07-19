@@ -154,7 +154,6 @@ parts:
 
       # Include the icon's path in the desktop file, not just the name.
       sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' icons/warzone2100.desktop.in
-    source-type: git
     plugin: cmake
     configflags:
       - -DCMAKE_INSTALL_PREFIX=/usr
