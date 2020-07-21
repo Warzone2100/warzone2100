@@ -1128,7 +1128,7 @@ void orderUpdateDroid(DROID *psDroid)
 	if (psDroid->selected)
 	{
 		// Tell us what the droid is doing.
-		sprintf(DROIDDOING, "%.12s,id(%d) order(%d):%s action(%d):%s secondary:%x move:%s", droidGetName(psDroid), psDroid->id,
+		snprintf(DROIDDOING, sizeof(DROIDDOING), "%.12s,id(%d) order(%d):%s action(%d):%s secondary:%x move:%s", droidGetName(psDroid), psDroid->id,
 		        psDroid->order.type, getDroidOrderName(psDroid->order.type), psDroid->action, getDroidActionName(psDroid->action), psDroid->secondaryOrder,
 		        moveDescription(psDroid->sMove.Status));
 	}

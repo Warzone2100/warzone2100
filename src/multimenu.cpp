@@ -703,19 +703,19 @@ static void displayExtraGubbins(UDWORD height, ExtraGubbinsCache& cache)
 		bool isTotal = q != 0;
 
 		char const *srText[2] = {_("Sent/Received per sec —"), _("Total Sent/Received —")};
-		sprintf(str, "%s", srText[q]);
+		snprintf(str, sizeof(str), "%s", srText[q]);
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 		xPos += iV_GetTextWidth(str, font_small) + 20;
 
-		sprintf(str, _("Traf: %u/%u"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
+		snprintf(str, sizeof(str), _("Traf: %u/%u"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 		xPos += iV_GetTextWidth(str, font_small) + 20;
 
-		sprintf(str, _("Uncompressed: %u/%u"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
+		snprintf(str, sizeof(str), _("Uncompressed: %u/%u"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 		xPos += iV_GetTextWidth(str, font_small) + 20;
 
-		sprintf(str, _("Pack: %u/%u"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
+		snprintf(str, sizeof(str), _("Pack: %u/%u"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 	}
 #endif
