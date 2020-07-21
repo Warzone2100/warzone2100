@@ -95,6 +95,7 @@ jobs:
       if: success()
       with:
         name: ${{ steps.snapcraft.outputs.snap }}
+        path: '${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}'
     - name: Upload artifact to release
       if: success() && startsWith(github.ref, 'refs/tags/')
       uses: past-due/action-gh-release@v1
