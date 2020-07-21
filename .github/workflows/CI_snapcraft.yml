@@ -77,6 +77,7 @@ jobs:
         WZ_SNAP_PACKAGE_NAME="$WZ_SNAP_PACKAGE_NAME"
         EOENV
     - name: Build .SNAP
+      id: snapcraft
       uses: snapcore/action-build@v1
     - name: Gather .SNAP
       run: |
@@ -85,7 +86,7 @@ jobs:
         echo "::set-env name=OUTPUT_DIR::${OUTPUT_DIR}"
         mkdir -p "${OUTPUT_DIR}"
         OUTPUT_FILE_NAME="warzone2100_${{ matrix.arch }}.snap"
-        cp "warzone2100_*.snap" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+        cp "${{ steps.snapcraft.outputs.snap }}" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
         echo "Generated .snap: \"${OUTPUT_FILE_NAME}\""
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
@@ -93,7 +94,7 @@ jobs:
     - uses: actions/upload-artifact@v1
       if: success()
       with:
-        name: "warzone2100_${{ matrix.arch }}.snap"
+        name: ${{ steps.snapcraft.outputs.snap }}
     - name: Upload artifact to release
       if: success() && startsWith(github.ref, 'refs/tags/')
       uses: past-due/action-gh-release@v1
