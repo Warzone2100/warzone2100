@@ -1073,17 +1073,14 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 		return aCurrName;
 	}
 
-	// For cyborgs, we don't need to get the default droid name. We don't need to add the body name nor the propulsion name either.
-	// Just add "Cyborg" to the end of the name and exit the function.
+	// For cyborgs, we don't need to add the body name nor the propulsion name. We can just use the template name.
 	if (psTemplate->droidType == DROID_CYBORG ||
 		psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
 		psTemplate->droidType == DROID_CYBORG_REPAIR ||
 		psTemplate->droidType == DROID_CYBORG_SUPER)
 	{
-		const char *cyborgName = psTemplate->name.toUtf8().c_str();
-		checkStringLength(cyborgName, _(" Cyborg"));
+		const char *cyborgName = _(psTemplate->name.toUtf8().c_str());
 		sstrcpy(aCurrName, cyborgName);
-		sstrcat(aCurrName, _(" Cyborg"));
 		return aCurrName;
 	}
 
