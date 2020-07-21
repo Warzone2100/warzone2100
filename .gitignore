@@ -206,6 +206,12 @@ commit-*
 /pkg/dpkg/warzone2100.substvars
 /pkg/dpkg/warzone2100/
 
+#Snapcraft Stuff
+/prime
+/stage
+/parts
+/.snapenv
+
 #Mac Stuff
 .DS_Store
 *.pbxuser

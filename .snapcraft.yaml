@@ -124,6 +124,7 @@ parts:
 
   warzone2100:
     after: [desktop-qt5, sdl]
+    plugin: cmake
     source: .
     parse-info:
       # Parse this appdata/metainfo file for summary, description,
@@ -131,34 +132,17 @@ parts:
       - usr/share/metainfo/warzone2100.appdata.xml
     override-pull: |
       snapcraftctl pull
-
-      last_committed_tag="$(git tag -l --sort=version:refname | grep -E -e '^[1-9]+(\.[0-9]+){2,}' | grep -E -v '[-_](beta([0-9]+)?)' | tail -n 1)"
-      echo "last_committed_tag: $last_committed_tag"
-      last_released_tag="$(snap info warzone2100 | awk '$1 == "latest/beta:" { print $2 }')"
-      echo "last_released_tag: $last_released_tag"
-      # If the latest tag from the upstream project has not been released to
-      # beta, build that tag instead of master.
-      if [ "${last_committed_tag}" != "${last_released_tag}" ]; then
-        echo "git submodule deinit --all"
-        git submodule deinit --all
-        echo "git fetch ..."
-        git fetch
-        echo "git checkout $last_committed_tag ..."
-        git checkout "${last_committed_tag}"
-        echo "git submodule update"
-        git submodule update --init
-        snapcraftctl set-version "$last_committed_tag"
-      else
-        snapcraftctl set-version "$(git describe --always)"
-      fi
+      snapcraftctl set-version "$(git describe --always)"
+      git submodule update --init
 
       # Include the icon's path in the desktop file, not just the name.
       sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' icons/warzone2100.desktop.in
-    plugin: cmake
-    configflags:
-      - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DWZ_DISTRIBUTOR=Snapcraft
+    override-build: |
+      if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
+      if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
+      cmake -S "$SNAPCRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
+      cmake --build . -- -j$SNAPCRAFT_PARALLEL_BUILD_COUNT
+      DESTDIR=$SNAPCRAFT_PART_INSTALL cmake --build . -- install
     build-packages:
       - asciidoctor
       - g++
@@ -179,6 +163,7 @@ parts:
       - libcurl4-gnutls-dev
       - libgnutls28-dev
       - libsodium-dev
+      - ninja-build
       - unzip
       - zip
     stage-packages:
