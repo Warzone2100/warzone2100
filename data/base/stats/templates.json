@@ -611,7 +611,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Atmiss-GROUND",
-        "name": "Scourge",
+        "name": "Scourge Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -622,7 +622,7 @@
         "available": false,
         "body": "CyborgLightBody",
         "id": "Cyb-Cannon-GROUND",
-        "name": "Heavy Gunner",
+        "name": "Heavy Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -633,7 +633,7 @@
         "available": false,
         "body": "CyborgLightBody",
         "id": "Cyb-Chain-GROUND",
-        "name": "Machinegunner",
+        "name": "Machinegunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -644,7 +644,7 @@
         "available": false,
         "body": "CyborgLightBody",
         "id": "Cyb-Flamer-GROUND",
-        "name": "Cyborg Flamer",
+        "name": "Flamer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -655,7 +655,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Cannon-GROUND",
-        "name": "Heavy Gunner",
+        "name": "Heavy Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -666,7 +666,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Chain-GROUND",
-        "name": "Machinegunner",
+        "name": "Machinegunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -677,7 +677,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Flamer-GROUND",
-        "name": "Cyborg Flamer",
+        "name": "Flamer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -688,7 +688,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Laser1-GROUND",
-        "name": "Flashlight Gunner",
+        "name": "Flashlight Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -699,7 +699,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Rail1-GROUND",
-        "name": "Needle Gunner",
+        "name": "Needle Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -710,7 +710,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Rocket-GROUND",
-        "name": "Lancer",
+        "name": "Lancer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -721,7 +721,7 @@
         "available": false,
         "body": "CyborgLightBody",
         "id": "Cyb-Rocket-GROUND",
-        "name": "Lancer",
+        "name": "Lancer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -732,7 +732,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-RotMG-GROUND",
-        "name": "Assault Gunner",
+        "name": "Assault Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
