@@ -1039,6 +1039,19 @@ intChooseSystemStats(DROID_TEMPLATE *psTemplate)
 	return psStats;
 }
 
+/**
+ * Checks if concatenating two `char[]` will exceed `MAX_STR_LENGTH`. If the concatenated length exceeds `MAX_STR_LENGTH`, this function will log an error.
+ * @param string0 The `char[]` that `string1` will concatenate.
+ * @param string1 The `char[]` to concatenate.
+ */
+void checkStringLength(const char *string0, const char *string1) {
+	if (strlen(string0) + strlen(string1) > MAX_STR_LENGTH)
+	{
+		debug(LOG_ERROR, "Name string too long %s+%s > %u", string0, string1, MAX_STR_LENGTH);
+		debug(LOG_ERROR, "Please report what language you are using in the bug report!");
+	}
+}
+
 const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 {
 	// NOTE:	At this time, savegames can support a max of 60. We are using MAX_STR_LENGTH (currently 256) for display
@@ -1057,6 +1070,20 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	if (psTemplate->droidType == DROID_SUPERTRANSPORTER)
 	{
 		sstrcpy(aCurrName, _("Super Transport"));
+		return aCurrName;
+	}
+
+	// For cyborgs, we don't need to get the default droid name. We don't need to add the body name nor the propulsion name either.
+	// Just add "Cyborg" to the end of the name and exit the function.
+	if (psTemplate->droidType == DROID_CYBORG ||
+		psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
+		psTemplate->droidType == DROID_CYBORG_REPAIR ||
+		psTemplate->droidType == DROID_CYBORG_SUPER)
+	{
+		const char *cyborgName = psTemplate->name.toUtf8().c_str();
+		checkStringLength(cyborgName, _(" Cyborg"));
+		sstrcpy(aCurrName, cyborgName);
+		sstrcat(aCurrName, _(" Cyborg"));
 		return aCurrName;
 	}
 
@@ -1086,12 +1113,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
 	if (psTemplate->asParts[COMP_BODY] != 0)
 	{
-		if (strlen(aCurrName) + psStats->name.size() > MAX_STR_LENGTH)
-		{
-			debug(LOG_ERROR, "Name string too long %s+%s > %u", aCurrName, getName(psStats), MAX_STR_LENGTH);
-			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
-		}
-
+		checkStringLength(aCurrName, getName(psStats));
 		sstrcat(aCurrName, getName(psStats));
 		sstrcat(aCurrName, " ");
 	}
@@ -1101,12 +1123,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asPropulsionStats + compIndex);
 	if (psTemplate->asParts[COMP_PROPULSION] != 0)
 	{
-		if (strlen(aCurrName) + psStats->name.size() > MAX_STR_LENGTH)
-		{
-			debug(LOG_ERROR, "Name string too long %s+%s", aCurrName, getName(psStats));
-			debug(LOG_ERROR, "Please report what language you are using in the bug report!");
-		}
-
+		checkStringLength(aCurrName, getName(psStats));
 		sstrcat(aCurrName, getName(psStats));
 	}
 

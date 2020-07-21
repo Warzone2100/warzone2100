@@ -716,7 +716,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Flamer-GROUND",
-        "name": "Cyborg Flamer",
+        "name": "Flamer",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -738,7 +738,7 @@
         "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-A-T",
-        "name": "Super Scourge Cyborg",
+        "name": "Super Scourge",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_SUPER",
         "weapons": [
@@ -749,7 +749,7 @@
         "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-Acannon",
-        "name": "Super Auto-Cannon Cyborg",
+        "name": "Super Auto-Cannon",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_SUPER",
         "weapons": [
@@ -760,7 +760,7 @@
         "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-HPV",
-        "name": "Super HPV Cyborg",
+        "name": "Super HPV",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_SUPER",
         "weapons": [
@@ -782,7 +782,7 @@
         "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-PulseLsr",
-        "name": "Super Pulse Laser Cyborg",
+        "name": "Super Pulse Laser",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_SUPER",
         "weapons": [
@@ -804,7 +804,7 @@
         "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-TK",
-        "name": "Super Tank-Killer Cyborg",
+        "name": "Super Tank-Killer",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_SUPER",
         "weapons": [
@@ -826,7 +826,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Mechanic",
-        "name": "Cyborg Mechanic",
+        "name": "Mechanic",
         "propulsion": "CyborgLegs",
         "repair": "CyborgRepair",
         "type": "CYBORG_REPAIR"
