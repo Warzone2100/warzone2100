@@ -362,7 +362,7 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 				}
 			}
 			/* Now render the text by the bar */
-			sprintf(text, getDescription((MR_STRING)infoBars[index].stringID), infoBars[index].number);
+			snprintf(text, sizeof(text), getDescription((MR_STRING)infoBars[index].stringID), infoBars[index].number);
 			if (index >= cache.wzInfoBarText.size())
 			{
 				cache.wzInfoBarText.resize(index + 1);
@@ -387,26 +387,26 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 	/* We now need to display the mission time, game time, average unit experience level an number of artefacts found */
 
 	/* Firstly, top of the screen, number of artefacts found */
-	sprintf(text, _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound);
+	snprintf(text, sizeof(text), _("ARTIFACTS RECOVERED: %d"), missionData.artefactsFound);
 	cache.wzInfoText_ArtifactsFound.setText(text, font_regular);
 	cache.wzInfoText_ArtifactsFound.render((pie_GetVideoBufferWidth() - cache.wzInfoText_ArtifactsFound.width()) / 2, 300 + D_H, WZCOL_FORM_TEXT);
 
 	/* Get the mission result time in a string - and write it out */
 	getAsciiTime((char *)&text2, gameTime - missionData.missionStarted);
-	sprintf(text, _("Mission Time - %s"), text2);
+	snprintf(text, sizeof(text), _("Mission Time - %s"), text2);
 	cache.wzInfoText_MissionTime.setText(text, font_regular);
 	cache.wzInfoText_MissionTime.render((pie_GetVideoBufferWidth() - cache.wzInfoText_MissionTime.width()) / 2, 320 + D_H, WZCOL_FORM_TEXT);
 
 	/* Write out total game time so far */
 	getAsciiTime((char *)&text2, gameTime);
-	sprintf(text, _("Total Game Time - %s"), text2);
+	snprintf(text, sizeof(text), _("Total Game Time - %s"), text2);
 	cache.wzInfoText_TotalGameTime.setText(text, font_regular);
 	cache.wzInfoText_TotalGameTime.render((pie_GetVideoBufferWidth() - cache.wzInfoText_TotalGameTime.width()) / 2, 340 + D_H, WZCOL_FORM_TEXT);
 	if (Cheated)
 	{
 		// A quick way to flash the text
 		PIELIGHT cheatedTextColor = ((realTime / 250) % 2) ? WZCOL_RED : WZCOL_YELLOW;
-		sprintf(text, "%s", _("You cheated!"));
+		snprintf(text, sizeof(text), "%s", _("You cheated!"));
 		cache.wzInfoText_Cheated.setText(text, font_regular);
 		cache.wzInfoText_Cheated.render((pie_GetVideoBufferWidth() - cache.wzInfoText_Cheated.width()) / 2, 360 + D_H, cheatedTextColor);
 	}

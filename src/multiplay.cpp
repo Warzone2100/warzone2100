@@ -263,7 +263,7 @@ bool multiPlayerLoop()
 					{
 						char msg[256] = {'\0'};
 
-						sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
+						snprintf(msg, sizeof(msg), _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
 						sendTextMessage(msg, true);
 						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						NETlogEntry(msg, SYNC_FLAG, index);
@@ -1753,7 +1753,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	psViewData = new VIEWDATA;
 
 	//store name
-	sprintf(name, _("Beacon %d"), sender);
+	snprintf(name, sizeof(name), _("Beacon %d"), sender);
 	psViewData->name = name;
 
 	//store text message, hardcoded for now

@@ -1709,7 +1709,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 				sendResearchStatus(psStruct, cur->index, player, true);
 #if defined (DEBUG)
 				char sTemp[128];
-				sprintf(sTemp, "player:%d starts topic from script: %s", player, getID(cur));
+				snprintf(sTemp, sizeof(sTemp), "player:%d starts topic from script: %s", player, getID(cur));
 				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
 				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player,
