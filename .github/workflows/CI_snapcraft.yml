@@ -1,0 +1,105 @@
+name: Snapcraft
+
+on:
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - '*'
+  pull_request:
+    # Match all pull requests
+
+jobs:
+  snapcraft:
+    strategy:
+      matrix:
+        include:
+          - name: "Snapcraft"
+            arch: "amd64"
+    name: '${{ matrix.name }}'
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Prepare Git Repo for autorevision
+      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+    - name: Init Git Submodules
+      run: git submodule update --init --recursive
+    - name: Compute build variables
+      run: |
+        . .ci/githubactions/export_build_output_desc.sh
+        echo "::set-env name=WZ_BUILD_DESC_IS_TAG::${WZ_BUILD_DESC_IS_TAG}"
+        echo "::set-env name=WZ_BUILD_DESC_PREFIX::${WZ_BUILD_DESC_PREFIX}"
+        WZ_OUTPUT_NAME_SUFFIX=""
+        WZ_NAME_SUFFIX=""
+        if [ "$WZ_BUILD_DESC_IS_TAG" == "false" ]; then
+          WZ_OUTPUT_NAME_SUFFIX="_$(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9\.]/_/g')"
+          WZ_NAME_SUFFIX=" ($(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9\.]/_/g'))"
+        fi
+        echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "::set-env name=WZ_OUTPUT_NAME_SUFFIX::${WZ_OUTPUT_NAME_SUFFIX}"
+        echo "::set-env name=WZ_NAME_SUFFIX::${WZ_NAME_SUFFIX}"
+
+        WZ_DISTRIBUTOR="UNKNOWN"
+        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+          WZ_DISTRIBUTOR="wz2100.net"
+        fi
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
+        echo "::set-env name=WZ_DISTRIBUTOR::${WZ_DISTRIBUTOR}"
+
+    - name: Prepare to build .SNAP
+      run: |
+        WZ_PACKAGE_VAR_OVERRIDES=""
+        WZ_SHORT_SHA=$(echo "${GITHUB_SHA}" | head -c 7)
+        if [ "$WZ_BUILD_DESC_IS_TAG" == "false" ]; then
+          SNAP_VERSION_SAFE_DESC_PREFIX=$(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9]/~/g')
+          WZ_PACKAGE_VAR_OVERRIDES="-D WZ_DEVELOPMENT_BUILD=ON"
+        fi
+        WZ_SNAP_PACKAGE_NAME=$(echo "warzone2100${WZ_OUTPUT_NAME_SUFFIX}" | sed 's/[^a-zA-Z0-9\.\+\-]/-/g')
+        
+        cat > .snapenv <<EOENV
+        CI=true
+        GITHUB_WORKFLOW="$GITHUB_WORKFLOW"
+        GITHUB_ACTIONS="$GITHUB_ACTIONS"
+        GITHUB_REPOSITORY="$GITHUB_REPOSITORY"
+        GITHUB_WORKSPACE="$GITHUB_WORKSPACE"
+        GITHUB_SHA="$GITHUB_SHA"
+        GITHUB_REF="$GITHUB_REF"
+        GITHUB_HEAD_REF="$GITHUB_HEAD_REF"
+        GITHUB_BASE_REF="$GITHUB_BASE_REF"
+        MAKEFLAGS="$MAKEFLAGS"
+        SNAP_VERSION_SAFE_DESC_PREFIX="$SNAP_VERSION_SAFE_DESC_PREFIX"
+        WZ_SHORT_SHA="$WZ_SHORT_SHA"
+        WZ_PACKAGE_VAR_OVERRIDES="$WZ_PACKAGE_VAR_OVERRIDES"
+        WZ_SNAP_PACKAGE_NAME="$WZ_SNAP_PACKAGE_NAME"
+        EOENV
+    - name: Build .SNAP
+      uses: snapcore/action-build@v1
+    - name: Gather .SNAP
+      run: |
+        OUTPUT_DIR="${HOME}/output"
+        echo "OUTPUT_DIR=${OUTPUT_DIR}"
+        echo "::set-env name=OUTPUT_DIR::${OUTPUT_DIR}"
+        mkdir -p "${OUTPUT_DIR}"
+        OUTPUT_FILE_NAME="warzone2100_${{ matrix.arch }}.snap"
+        cp "warzone2100_*.snap" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+        echo "Generated .snap: \"${OUTPUT_FILE_NAME}\""
+        echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+        echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
+        echo "::set-env name=WZ_FULL_OUTPUT_SNAP_PATH::${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+    - uses: actions/upload-artifact@v1
+      if: success()
+      with:
+        name: "warzone2100_${{ matrix.arch }}.snap"
+    - name: Upload artifact to release
+      if: success() && startsWith(github.ref, 'refs/tags/')
+      uses: past-due/action-gh-release@v1
+      with:
+        # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
+        files: ${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}
+        draft: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
