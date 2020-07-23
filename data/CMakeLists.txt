@@ -61,19 +61,27 @@ COMPRESS_ZIP("${CMAKE_CURRENT_BINARY_DIR}/mp.wz"
 if(WZ_INCLUDE_VIDEOS)
 	set(_download_script_path "${PROJECT_SOURCE_DIR}/cmake/FetchURLRetry.cmake")
 	set(_sequences_dl_filename "sequences.wz")
-	set(_sequences_dl_url "https://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz")
+	set(_sequences_dl_urls "https://github.com/Warzone2100/wz-sequences/releases/download/v3/standard-quality-en-sequences.wz" "https://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz")
 	set(_sequences_dl_sha256 "142ae905be288cca33357a49f42b884c190e828fc0b1b1773ded5dff774f41a3")
 	set(_sequences_output_dir "${CMAKE_CURRENT_BINARY_DIR}")
-	execute_process(
-		COMMAND ${CMAKE_COMMAND}
-				-DFILENAME=${_sequences_dl_filename}
-				-DURL=${_sequences_dl_url}
-				-DEXPECTED_SHA256=${_sequences_dl_sha256}
-				-DOUT_DIR=${_sequences_output_dir}
-				-P ${_download_script_path}
-		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-		RESULT_VARIABLE _exstatus
-	)
+	set(_exstatus 1)
+	foreach(_sequences_dl_url "${_sequences_dl_urls}")
+		execute_process(
+			COMMAND ${CMAKE_COMMAND}
+					-DFILENAME=${_sequences_dl_filename}
+					-DURL=${_sequences_dl_url}
+					-DEXPECTED_SHA256=${_sequences_dl_sha256}
+					-DOUT_DIR=${_sequences_output_dir}
+					-P ${_download_script_path}
+			WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+			RESULT_VARIABLE _exstatus
+		)
+		if(_exstatus EQUAL 0)
+			# Success downloading
+			message(STATUS "Downloaded sequences.wz (campaign videos)")
+			break()
+		endif()
+	endforeach()
 	if(NOT _exstatus EQUAL 0)
 		message(FATAL_ERROR "Failed to download sequences.wz (campaign videos)")
 	endif()
