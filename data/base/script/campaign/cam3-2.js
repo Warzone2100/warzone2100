@@ -255,6 +255,8 @@ function alphaTeamAlive()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Rescue Alpha team from Nexus"));
+
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	var tent = getObject("transporterEntry");

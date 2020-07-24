@@ -27,6 +27,8 @@ const COLLECTIVE_RES = [
 //by destroying the air base or crossing the base3Trigger area.
 function videoTrigger()
 {
+	camSetExtraObjectiveMessage(_("Rescue the civilians from The Collective before too many are captured"));
+
 	setMissionTime(getMissionTime() + camChangeOnDiff(camMinutesToSeconds(30)));
 	civilianOrders();
 	captureCivilians();

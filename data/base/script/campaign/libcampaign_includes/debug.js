@@ -154,14 +154,6 @@ function __camLetMeWin()
 	__camGameWon();
 }
 
-function __camWinInfo()
-{
-	console("Picked up", __camNumArtifacts,
-	        "artifacts out of", Object.keys(__camArtifacts).length);
-	console("Eliminated", __camNumEnemyBases,
-	        "enemy bases out of", Object.keys(__camEnemyBases).length);
-}
-
 function __camGenericDebug(flag, func, args, err, bt)
 {
 	if (camDef(bt) && bt)

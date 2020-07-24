@@ -134,6 +134,8 @@ function sendTransport()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Destroy all New Paradigm reinforcements"));
+
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_7S", {
 		callback: "extraVictoryCondition"
 	});
