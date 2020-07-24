@@ -1,0 +1,164 @@
+name: 'Snap Stable Config'
+on:
+  # Needs several triggers:
+    # On tag push, this should run to "verify only" (i.e. *without* pushing it to the snap-stable-build repo)
+    # On regular push, this should run to "verify only" - if pertinent files are changed
+    # On release publish event, this should run *and* push to the snap-stable-build repo
+    # Permit manual triggering (that pushes to the snap-stable-build repo), in case snap config for the latest tagged release needs an update
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+    paths: # Path filters are not evaluated for pushes to tags.
+      - '.github/workflows/generate_snap_stable_config.yml'
+      - '.ci/snap/**'
+      - '.snapcraft.yaml'
+      - 'pkg/snap/**'
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - '*'
+  pull_request:
+    paths:
+      - '.github/workflows/generate_snap_stable_config.yml'
+      - '.ci/snap/**'
+      - '.snapcraft.yaml'
+      - 'pkg/snap/**'
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Git Ref of Snapcraft Config (Optional)    
+        required: false
+
+jobs:
+  # Wait for up to 20 minutes for previous workflow run to complete, abort if not done by then
+  pre-ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: 'Block Concurrent'
+        uses: softprops/turnstyle@v1
+        with:
+          poll-interval-seconds: 30
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  generate_stable_snap_config:
+    needs: pre-ci
+    name: 'Generate Snap Stable Config'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Config
+        id: config
+        env:
+          GH_EVENT_NAME: '${{ github.event_name }}'
+          GH_EVENT_ACTION: '${{ github.event.action }}'
+        run: |
+          PUBLISH_CONFIG="false"
+          if [[ "${GH_EVENT_NAME}" == "release" ]] || [[ "${GH_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            PUBLISH_CONFIG="true"
+          fi
+          echo "::set-output name=PUBLISH_CONFIG::${PUBLISH_CONFIG}"
+          echo "::set-env name=PUBLISH_CONFIG::${PUBLISH_CONFIG}"
+      - name: Install Prereqs
+        run: |
+          sudo snap install yq
+      - name: Create working directories
+        id: preparefolders
+        run: |
+          mkdir -p "$HOME/data/github_releases_info"
+          echo "::set-output name=RELEASES_DATA::$HOME/data/github_releases_info"
+          mkdir -p "$HOME/temp/github_releases_info"
+          echo "::set-output name=RELEASES_TEMP::$HOME/temp/github_releases_info"
+      - name: Fetch latest GitHub Release info
+        uses: past-due/fetch-release-info@master
+        with:
+          github_repo: 'Warzone2100/warzone2100'
+          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          calculate_asset_info: false
+          output_directory: '_dl/data/github_releases_info'
+          cache_directory: '_dl/temp/github_releases_info'
+      - name: Move Release info
+        run: |
+          cp -r --preserve=mode _dl/. $HOME/
+          sudo rm -rf _dl/
+      - name: Checkout (Latest)
+        if: github.event.inputs.git-ref == ''
+        uses: actions/checkout@v2
+        with:
+          path: warzone2100
+          submodules: recursive
+          persist-credentials: false
+      - name: Checkout (Custom Ref)
+        if: github.event.inputs.git-ref != ''
+        uses: actions/checkout@v2
+        with:
+          path: warzone2100
+          submodules: recursive
+          persist-credentials: false
+          ref: '${{ github.event.inputs.git-ref }}'
+      - name: Checkout snap-stable-build@master
+        uses: actions/checkout@v2
+        with:
+          repository: 'Warzone2100/snap-stable-build'
+          ref: master
+          path: snap-stable-build
+          ssh-key: '${{ secrets.SNAP_STABLE_BUILD_REPO_GH_DEPLOY_KEY }}'
+      - name: Generate Snap Stable Config
+        run: |
+          BASE_SNAPCRAFT_YAML=".snapcraft.yaml"
+          SNAPCRAFT_STABLE_OVERRIDES_YAML=".ci/snap/snapcraft-stable-overrides.yaml"
+          # Verify that required files / folders exist in main repo
+          cd "${GITHUB_WORKSPACE}/warzone2100"
+          if [[ ! -f "${BASE_SNAPCRAFT_YAML}" ]]; then
+            echo "Missing expected .snapcraft.yaml in warzone2100 repo"
+            exit 1
+          fi
+          if [ ! -d "pkg/snap" ]; then
+            echo "Missing expected pkg/snap folder in warzone2100 repo"
+            exit 1
+          fi
+          
+          # Generate stable repo snapcraft.yml (that uses tags directly) from main repo snapcraft.yml via yq merge
+          yq m -x "${BASE_SNAPCRAFT_YAML}" "${SNAPCRAFT_STABLE_OVERRIDES_YAML}" > "${GITHUB_WORKSPACE}/snap-stable-build/.snapcraft.yaml"
+          
+          # Write .stable_tag file that contains the desired published tag
+          LATEST_GITHUB_RELEASE_TAG=$(cat "${{ steps.preparefolders.outputs.RELEASES_DATA }}/latest.json" | jq --raw-output '.tag_name')
+          echo "LATEST_GITHUB_RELEASE_TAG=${LATEST_GITHUB_RELEASE_TAG}"
+          if [ -z "${LATEST_GITHUB_RELEASE_TAG}" ]; then
+            echo "Failed - empty LATEST_GITHUB_RELEASE_TAG"
+            exit 1
+          fi
+          echo "${LATEST_GITHUB_RELEASE_TAG}" > "${GITHUB_WORKSPACE}/snap-stable-build/.stable_tag"
+          echo "::set-env name=LATEST_GITHUB_RELEASE_TAG::${LATEST_GITHUB_RELEASE_TAG}"
+          
+          # Copy pkg/snap directory to pkg/snap in dest repo (overwriting old version)
+          rm -rf "${GITHUB_WORKSPACE}/snap-stable-build/pkg/snap"
+          mkdir -p "${GITHUB_WORKSPACE}/snap-stable-build/pkg/snap"
+          cp -r pkg/snap/. "${GITHUB_WORKSPACE}/snap-stable-build/pkg/snap"
+      - name: Commit changes to snap-stable-build
+        id: commit-snap-changes
+        working-directory: "${{ github.workspace }}/snap-stable-build"
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add -A
+          timestamp=$(date -u)
+          git commit -m "Snap stable build config for ${LATEST_GITHUB_RELEASE_TAG}" || { echo "::set-output name=PROCESS_DEPLOYMENT::false" && exit 0; }
+          echo "::set-output name=PROCESS_DEPLOYMENT::true"
+          exit 0
+      - name: Attempt Snap build using stable config
+        if: success() && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
+        uses: snapcore/action-build@v1
+        with:
+          path: ${{ github.workspace }}/snap-stable-build
+      - name: Push config to snap-stable-build
+        if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true') && (steps.config.outputs.PUBLISH_CONFIG == 'true')
+        id: push-snap-changes
+        working-directory: "${{ github.workspace }}/snap-stable-build"
+        run: |
+          #git pull --rebase
+          # Push the new commit to the snap-stable-build repo
+          git push
+          echo "Done."
+          exit 0
