@@ -213,6 +213,8 @@ function checkMissileSilos()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Secure a missile silo"));
+
 	var siloZone = getObject("missileSilos");
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");

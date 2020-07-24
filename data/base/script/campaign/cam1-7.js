@@ -232,6 +232,8 @@ function eventPickup(feature, droid)
 //Mission setup stuff
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Destroy all New Paradigm units"));
+
 	enemyHasArtifact = false;
 	enemyStoleArtifact = false;
 	var startpos = getObject("startPosition");

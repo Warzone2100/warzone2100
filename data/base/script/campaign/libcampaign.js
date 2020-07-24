@@ -187,6 +187,8 @@ var __camRTLZTicker;
 var __camLZCompromisedTicker;
 var __camLastAttackTriggered;
 var __camLevelEnded;
+var __camExtraObjectiveMessage;
+var __camVictoryMessageThrottle;
 
 //video
 var __camVideoSequences;

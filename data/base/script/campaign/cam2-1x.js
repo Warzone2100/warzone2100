@@ -111,6 +111,8 @@ function checkCrashedTeam()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Locate and rescue your units from the shot down transporter"));
+
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "CAM_2B", {
 		area: "RTLZ",
 		message: "C21_LZ",

@@ -44,6 +44,10 @@ function cam_eventCheatMode(entered)
 
 function cam_eventChat(from, to, message)
 {
+	if (message === "win info")
+	{
+		__camShowVictoryConditions(true);
+	}
 	if (!__camCheatMode)
 	{
 		return;
@@ -52,10 +56,6 @@ function cam_eventChat(from, to, message)
 	if (message === "let me win" && __camNextLevel !== "SUB_1_1")
 	{
 		__camLetMeWin();
-	}
-	if (message === "win info")
-	{
-		__camWinInfo();
 	}
 	if (message === "make cc")
 	{
@@ -129,12 +129,14 @@ function cam_eventStartLevel()
 	__camSaveLoading = false;
 	__camNeverGroupDroids = [];
 	__camNumTransporterExits = 0;
+	__camVictoryMessageThrottle = 0;
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	__camAiPowerReset(); //grant power to the AI
 	setTimer("__checkEnemyFactoryProductionTick", camSecondsToMilliseconds(0.8));
 	setTimer("__camTick", camSecondsToMilliseconds(1)); // campaign pollers
 	setTimer("__camTruckTick", camSecondsToMilliseconds(40) + camSecondsToMilliseconds(0.1)); // some slower campaign pollers
 	setTimer("__camAiPowerReset", camMinutesToMilliseconds(3)); //reset AI power every so often
+	setTimer("__camShowVictoryConditions", camMinutesToMilliseconds(5));
 	queue("__camTacticsTick", camSecondsToMilliseconds(0.1)); // would re-queue itself
 	queue("__camGrantSpecialResearch", camSecondsToMilliseconds(6));
 }

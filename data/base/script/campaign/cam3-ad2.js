@@ -268,6 +268,8 @@ function checkMissileSilos()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Protect the missile silos and research for the missile codes"));
+
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	mapLimit = 137.0;
