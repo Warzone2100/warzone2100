@@ -134,15 +134,16 @@ parts:
       snapcraftctl pull
       snapcraftctl set-version "$(git describe --always)"
       git submodule update --init
-
-      # Include the icon's path in the desktop file, not just the name.
-      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' icons/warzone2100.desktop.in
     override-build: |
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
       cmake -S "$SNAPCRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
       cmake --build . -- -j$SNAPCRAFT_PARALLEL_BUILD_COUNT
       DESTDIR=$SNAPCRAFT_PART_INSTALL cmake --build . -- install
+      
+      # Include the icon's path in the desktop file, not just the name.
+      # This needs to happen post-build or the build versioning will show as "modified locally"
+      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $SNAPCRAFT_PART_INSTALL/usr/share/applications/warzone2100.desktop
     build-packages:
       - asciidoctor
       - g++
