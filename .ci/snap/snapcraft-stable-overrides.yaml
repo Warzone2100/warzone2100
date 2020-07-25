@@ -24,9 +24,6 @@ parts:
       echo "git submodule update"
       git submodule update --init
       snapcraftctl set-version "$TAG_REF"
-
-      # Include the icon's path in the desktop file, not just the name.
-      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' icons/warzone2100.desktop.in
       
       # Write out important release config environment variables
       cat > .snapenv <<EOENV
