@@ -5,6 +5,13 @@ confinement: strict
 grade: stable
 base: core18
 
+plugs:
+  wz2100-sequences:
+    interface: content
+    content: wz2100-sequences
+    target: $SNAP/usr/share/warzone2100/sequences
+    default-provider: warzone2100-videos
+
 apps:
   warzone2100:
     command: usr/bin/warzone2100
