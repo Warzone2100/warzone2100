@@ -79,6 +79,7 @@
 #include "qtscript.h"
 #include "multigifts.h"
 #include "loadsave.h"
+#include "game.h"
 
 /*
 	KeyBind.c

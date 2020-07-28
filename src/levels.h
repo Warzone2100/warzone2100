@@ -26,7 +26,7 @@
 
 #include "lib/framework/crc.h"
 #include "init.h"
-#include "game.h"
+#include "gamedef.h"
 
 #include <list>
 

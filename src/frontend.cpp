@@ -69,6 +69,7 @@
 #include "wrappers.h"
 #include "titleui/titleui.h"
 #include "urlhelpers.h"
+#include "game.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables

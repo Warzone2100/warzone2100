@@ -93,6 +93,7 @@
 #include "mission.h"
 #include "modding.h"
 #include "version.h"
+#include "game.h"
 
 #include <set>
 #include <utility>
