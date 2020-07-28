@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-07-19 10:25\n"
+"PO-Revision-Date: 2020-07-28 22:14\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "OBJECTIF : Localiser et récupérer la technologie neuro-synaptique."
+msgstr "OBJECTIF: Localiser et récupérer la technologie neuro-synaptique"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
@@ -34,7 +34,7 @@ msgstr "Ces bâtiments abritent des technologies vitales pour le succès du Proj
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "OPÉRATION BASE ALPHA : Les Pillards."
+msgstr "OPÉRATION BASE ALPHA: Les Pillards"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
