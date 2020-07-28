@@ -54,9 +54,9 @@ var nexusBranch =
                "R-Wpn-Rocket-ROF03",
           ],
           "factoryPreference": [
-               BASE_STRUCTURES.factories,
-               BASE_STRUCTURES.templateFactories,
-               BASE_STRUCTURES.vtolFactories,
+               FACTORY,
+               CYBORG_FACTORY,
+               VTOL_FACTORY,
           ],
           //The minimum amount of certain base structures this personality will build, in order.
           "buildOrder": [
@@ -116,9 +116,9 @@ var nexusBranch =
                "R-Vehicle-Body08",
           ],
           "factoryPreference": [
-               BASE_STRUCTURES.vtolFactories,
-               BASE_STRUCTURES.templateFactories,
-               BASE_STRUCTURES.factories,
+               VTOL_FACTORY,
+               CYBORG_FACTORY,
+               FACTORY,
           ],
           "buildOrder": [
                {stat: "V", count: 2},
