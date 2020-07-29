@@ -90,20 +90,20 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 	switch(kind)
 	{
 		case CAM_VICTORY_STANDARD:
-			__camWinLossCallback = "__camVictoryStandard";
+			__camWinLossCallback = CAM_VICTORY_STANDARD;
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_PRE_OFFWORLD:
-			__camWinLossCallback = "__camVictoryPreOffworld";
+			__camWinLossCallback = CAM_VICTORY_PRE_OFFWORLD;
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = true;
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_OFFWORLD:
-			__camWinLossCallback = "__camVictoryOffworld";
+			__camWinLossCallback = CAM_VICTORY_OFFWORLD;
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
@@ -112,7 +112,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_TIMEOUT:
-			__camWinLossCallback = "__camVictoryTimeout";
+			__camWinLossCallback = CAM_VICTORY_TIMEOUT;
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = false;
 			__camVictoryData = data;
@@ -253,7 +253,7 @@ function __camPlayerDead()
 		}
 	}
 
-	if (__camWinLossCallback === "__camVictoryTimeout")
+	if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
 	{
 		//Make the mission fail if no units are alive on map while having no factories.
 		var droidCount = 0;
@@ -469,7 +469,7 @@ function __camShowVictoryConditions(forceMessage)
 		{
 			return; // fastplay / tutorial. Should be a better identifier for this.
 		}
-		if (__camWinLossCallback === "__camVictoryPreOffworld")
+		if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
 		{
 			return; // do not need this on these missions.
 		}
@@ -496,7 +496,7 @@ function __camShowVictoryConditions(forceMessage)
 	console(unitsOnMap + " " + _("Enemy units remaining"));
 	console(structuresOnMap + " " + _("Enemy structures remaining"));
 
-	if (__camWinLossCallback === "__camVictoryOffworld")
+	if (__camWinLossCallback === CAM_VICTORY_OFFWORLD)
 	{
 		if (camDef(__camVictoryData.retlz) && __camVictoryData.retlz)
 		{
@@ -513,11 +513,11 @@ function __camShowVictoryConditions(forceMessage)
 			console(_("Destroy all enemy units and bases"));
 		}
 	}
-	else if (__camWinLossCallback === "__camVictoryTimeout")
+	else if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
 	{
 		console(_("Survive until the timer reaches zero"));
 	}
-	else if (__camWinLossCallback === "__camVictoryStandard")
+	else if (__camWinLossCallback === CAM_VICTORY_STANDARD)
 	{
 		console(ANNIHILATE_MESSAGE);
 	}

@@ -174,10 +174,10 @@ var __camTransporterMessage;
 var __camTruckInfo;
 
 //victory
-const CAM_VICTORY_STANDARD = 0;
-const CAM_VICTORY_PRE_OFFWORLD = 1;
-const CAM_VICTORY_OFFWORLD = 2;
-const CAM_VICTORY_TIMEOUT = 3;
+const CAM_VICTORY_STANDARD = "__camVictoryStandard";
+const CAM_VICTORY_PRE_OFFWORLD = "__camVictoryPreOffworld";
+const CAM_VICTORY_OFFWORLD = "__camVictoryOffworld";
+const CAM_VICTORY_TIMEOUT = "__camVictoryTimeout";
 var __camWinLossCallback;
 var __camNextLevel;
 var __camNeedBonusTime;
