@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-07-28 22:14\n"
+"PO-Revision-Date: 2020-07-29 10:16\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -47,7 +47,7 @@ msgstr "Défendez vos positions et détruisez leurs campements."
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "OPÉRATION BASE ALPHA : Impulsion d'énergie détectée."
+msgstr "OPÉRATION BASE ALPHA: Impulsion d'énergie détectée"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
@@ -59,7 +59,7 @@ msgstr "Investissez et sécurisez le secteur."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "OPÉRATION BASE ALPHA : Le Nouveau Paradigme."
+msgstr "OPÉRATION BASE ALPHA : Le Nouveau Paradigme"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -71,7 +71,7 @@ msgstr "Ils doivent sûrement être en possession de la technologie du lien Syna
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Localisez et récupérez des artefacts."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Localisez et récupérez des artefacts"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -83,7 +83,7 @@ msgstr "À l'atterrissage, explorez les ruines et récupérez tout artefact qui 
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Investissez le centre de recherche."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Investissez le centre de recherche"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -96,7 +96,7 @@ msgstr "Renforts à disposition."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Signaux codés détectés."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Signaux codés détectés"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
@@ -108,7 +108,7 @@ msgstr "Utilisez vos véhicules de construction pour installer des structures d�
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Transmission ennemie détectée."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Transmission ennemie détectée"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
@@ -120,7 +120,7 @@ msgstr "Rejoignez la ZA n°2. N'engagez pas l'ennemi tout de suite."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Emplacement du Lien Synaptique."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Emplacement du Lien Synaptique"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -132,7 +132,7 @@ msgstr "Assemblez un groupe d'assaut et récupérez-la."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Nouveaux Objectifs."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Nouveaux Objectifs"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -144,7 +144,7 @@ msgstr "Interceptez-les ! Ne les laissez surtout pas s'enfuir !"
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Base ennemie en construction."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Base ennemie en construction"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
@@ -156,7 +156,7 @@ msgstr "Détruisez cette base et sécurisez la zone."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "OPÉRATION BASE ALPHA : Établir un poste avancé."
+msgstr "OPÉRATION BASE ALPHA : Établir un poste avancé"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
@@ -168,7 +168,7 @@ msgstr "Ajoutez-y des structures défensives."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "OPÉRATION BASE ALPHA : Contre-attaque."
+msgstr "OPÉRATION BASE ALPHA : Contre-attaque"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -200,7 +200,7 @@ msgstr "Nous avons une autre tâche pour vous."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "OPÉRATION BASE ALPHA : Localisez et récupérez des artefacts."
+msgstr "OPÉRATION BASE ALPHA : Localisez et récupérez des artefacts"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
@@ -208,11 +208,11 @@ msgstr "Les deux premières zones sont maintenant sécurisées."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr "MISE À JOUR : RAPPORTS DES CORPS EXPÉDITIONNAIRES DU PROJET."
+msgstr "MISE À JOUR : RAPPORTS DES CORPS EXPÉDITIONNAIRES DU PROJET"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr "MISE À JOUR : RAPPORT DU GROUPE BETA."
+msgstr "MISE À JOUR : RAPPORT DU GROUPE BETA"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -224,7 +224,7 @@ msgstr "Il y a une force bien mieux équipée que nous en opération dans cette 
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr "MISE À JOUR : RAPPORT DU GROUPE GAMMA."
+msgstr "MISE À JOUR : RAPPORT DU GROUPE GAMMA"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -288,7 +288,7 @@ msgstr "Vous devez établir un poste avancé et continuer rechercher le lien syn
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr "RÉCEPTION D'UNE TRANSMISSION."
+msgstr "RÉCEPTION D'UNE TRANSMISSION"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
@@ -360,7 +360,7 @@ msgstr "Vous devez vaincre ces pillards et ramasser les artefacts que vous trouv
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr "Félicitations pour avoir vaincu le Nouveau Paragigme, le secteur est maintenant sécurisé !"
+msgstr "Félicitations pour avoir vaincu le Nouveau Paradigme, le secteur est maintenant sécurisé !"
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
@@ -397,7 +397,7 @@ msgstr "Vous devez la défendre et tenir le coup !"
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr "OPÉRATION BASE BETA : Défendre et fortifier."
+msgstr "OPÉRATION BASE BETA : Défendre et fortifier"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
@@ -423,7 +423,7 @@ msgstr "Décryptage..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Transporteur perdu."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Transporteur perdu"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -443,7 +443,7 @@ msgstr "BRIEFING EN VOL"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "L'équipe Beta est actuellement à la recherche de la technologie du Vertical Takeoff and Landing (VTOL)"
+msgstr "L'équipe Beta est actuellement à la recherche de la technologie du Vertical Takeoff and Landing (VTOL)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
@@ -455,7 +455,7 @@ msgstr "La Division Beta subit des attaques sévères..."
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr "OPÉRATION BASE BETA : Tenir coûte que coûte."
+msgstr "OPÉRATION BASE BETA : Tenir coûte que coûte"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
@@ -463,7 +463,7 @@ msgstr "Nous détectons des signaux cryptés du Collectif."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr "OPÉRATION BASE BETA : Tenir coûte que coûte."
+msgstr "OPÉRATION BASE BETA : Tenir coûte que coûte"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
@@ -504,7 +504,7 @@ msgstr "Nous avons des nouvelles préoccupantes au sujet de la NASDA."
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Rechercher et détruire le convoi."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Rechercher et détruire le convoi"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
@@ -525,7 +525,7 @@ msgstr "Des VTOLs ennemis semblent voler en formation rapprochée."
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Sauvez les civils des camps de concentration."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Sauvez les civils des camps de concentration"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
@@ -549,7 +549,7 @@ msgstr "L'analyse des couloirs aériens indique que les VTOLs du Collectif provi
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "OPÉRATION BASE BETA : Détruire la base aérienne ennemie et récupérer la technologie des VTOLs."
+msgstr "OPÉRATION BASE BETA : Détruire la base aérienne ennemie et récupérer la technologie des VTOLs"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -562,7 +562,7 @@ msgstr "Anéantissez toutes les forces du Collectif et récupérez chaque artefa
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr "MISSION SECONDAIRE : Détruire ou faire fuir les transporteurs ennemis."
+msgstr "MISSION SECONDAIRE : Détruire ou faire fuir les transporteurs ennemis"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
@@ -583,7 +583,7 @@ msgstr "Sauvez autant de civils que possible."
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Détruire le réacteur."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Détruire le réacteur"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
@@ -603,7 +603,7 @@ msgstr "Ne laissez surtout pas le Collectif mettre le réacteur en fonction !"
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr "OPÉRATION BASE BETA : Capturer la centrale de la NASDA."
+msgstr "OPÉRATION BASE BETA : Capturer la centrale de la NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
@@ -613,7 +613,7 @@ msgstr "Vous devez capturer la centrale de la NASDA avant que le NEXUS et le Col
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "OPÉRATION AÉROTRANSPORTÉE : Site de télécommunications satellite."
+msgstr "OPÉRATION AÉROTRANSPORTÉE : Site de télécommunications satellite"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -707,7 +707,7 @@ msgstr "Bonne chance, Commandant."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "MISSION LONGUE DISTANCE : Le secteur nord."
+msgstr "MISSION LONGUE DISTANCE : Le secteur nord"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
@@ -735,7 +735,7 @@ msgstr "La Division Gamma prendra contact avec vous là bas."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr "MISSION LONGUE DISTANCE : Établir un poste avancé."
+msgstr "MISSION LONGUE DISTANCE : Établir un poste avancé"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
@@ -749,7 +749,7 @@ msgstr "Sécurisez la ZA puis établissez un poste avancé."
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "MISSION LONGUE DISTANCE : Coordonnées du site de lancement des missiles."
+msgstr "MISSION LONGUE DISTANCE : Coordonnées du site de lancement des missiles"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -776,7 +776,7 @@ msgstr "Sécurisez votre ZA puis allez détruire ces installations de lancement.
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr "EXPÉDITION DANS LE SECTEUR NORD : L'explosion nucléaire."
+msgstr "EXPÉDITION DANS LE SECTEUR NORD : L'explosion nucléaire"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
@@ -836,7 +836,7 @@ msgstr "Nous captons à l'instant cette transmission."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr "MISSION À DISTANCE : Division Alpha localisée."
+msgstr "MISSION À DISTANCE : Division Alpha localisée"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -956,7 +956,7 @@ msgstr "Téléchargement des coordonnées de la base en cours."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr "OPÉRATION SECTEUR NORD : Satellites laser."
+msgstr "OPÉRATION SECTEUR NORD : Satellites laser"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
@@ -1166,7 +1166,7 @@ msgstr "Réception d'une transmission"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
-msgstr "Réception du rapport du Bureau Central"
+msgstr "Réception du rapport du Bureau Central."
 
 #: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
@@ -4029,7 +4029,7 @@ msgstr "Assemblage (F1)"
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/skirmish/rules.js:91
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Fabrication - construire une usine en premier"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
@@ -4344,7 +4344,7 @@ msgstr "Réception d'un message de la Division Beta."
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
-msgstr ""
+msgstr "Mayday! Mayday!"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
@@ -6431,7 +6431,7 @@ msgstr "Bunker à roquettes anti-char"
 #. data/mp/messages/resmessages1.json: $.RES_PB_LC.text[1]
 #: po/custom/fromJson.txt:657
 msgid "Armored bunker with Light Cannon"
-msgstr "Bunker à canon léger "
+msgstr "Bunker à canon léger"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[1]
@@ -6550,7 +6550,7 @@ msgstr "Pont défensif à lance-roquettes anti-char"
 #. data/mp/messages/resmessages1.json: $.RES_WT2_LC.text[1]
 #: po/custom/fromJson.txt:738
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Pont défensif à canon léger "
+msgstr "Pont défensif à canon léger"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT3_MC.text[1]
@@ -6957,7 +6957,7 @@ msgstr "Retour aux bases"
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
 #: po/custom/fromJson.txt:1047
 msgid "based off the original AI, now for beginners"
-msgstr ""
+msgstr "basé sur l'IA d'origine, maintenant pour les débutants"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[1]
@@ -7148,7 +7148,7 @@ msgstr "Feuilles métalliques laminées intégrées aux murs et défenses"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1238
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "BriseMoelle!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
@@ -7994,7 +7994,7 @@ msgstr "Balles à uranium appauvri pour mitrailleuses"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1795
 msgid "Designed for shared research team battles"
-msgstr ""
+msgstr "Conçu pour des batailles en équipes avec recherche commune"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8602,7 +8602,8 @@ msgstr "Génère des décharges d'énergie laser concentrées"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Obtient ~ 100% de puissance en plus pour chaque derrick de pétrole\n"
+"Commence avec des structures défensives et des derricks de pétrole"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8611,7 +8612,9 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Obtient ~ 100% de puissance en plus pour chaque derrick de pétrole\n"
+"Utilise le Lanceur de Plasma Lourd et le Mortier EMP\n"
+"Commence avec des structures défensives et des derricks de pétrole"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8621,7 +8624,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2205
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Obtient ~ 25% de puissance en moins de chaque derrick de pétrole"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8629,7 +8632,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "Obtient ~ 25% de puissance en moins de chaque derrick de pétrole\n"
+"La prise de décisions de base est plus lente"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8638,7 +8642,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "Obtient ~ 25% de puissance en moins de chaque derrick de pétrole\n"
+"La recherche ne se concentre pas sur une branche d'arme spécifique"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -9515,7 +9520,7 @@ msgstr "Obus perforant haute vitesse à sabot détachable stabilisé par ailette
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2802
 msgid "HMG Bunker"
-msgstr ""
+msgstr "HMG Bunker"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
@@ -10461,7 +10466,7 @@ msgstr "Châssis léger vulnérable face aux armes lourdes"
 #. data/mp/stats/structure.json: $.PillBox4.name
 #: po/custom/fromJson.txt:3512
 msgid "Light Cannon Bunker"
-msgstr "Bunker à canon léger "
+msgstr "Bunker à canon léger"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraLtCnTrks.name
@@ -10484,7 +10489,7 @@ msgstr "Canon léger tirant des munitions de 40mm"
 #. data/mp/stats/structure.json: $.WallTower02.name
 #: po/custom/fromJson.txt:3526
 msgid "Light Cannon Hardpoint"
-msgstr "Pont défensif à canon léger "
+msgstr "Pont défensif à canon léger"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
@@ -10520,7 +10525,7 @@ msgstr "Canon léger Vipère roues"
 #. data/mp/stats/weapons.json: $.Cannon1Mk1.name
 #: po/custom/fromJson.txt:3547
 msgid "Light Cannon"
-msgstr "Canon léger "
+msgstr "Canon léger"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.LookOutTower.name
@@ -11485,7 +11490,7 @@ msgstr "Nulle part où se cacher"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4255
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Non-tricheur. Difficile. Fun. Brise!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
@@ -12727,7 +12732,7 @@ msgstr "Tourelle brouilleuse"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5060
 msgid "Sea map AI, based on NullBot"
-msgstr ""
+msgstr "Carte marine de l'IA, basé sur NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -12965,7 +12970,7 @@ msgstr "Laser DCA Stormbringer"
 #. data/mp/stats/structure.json: $.P0-AASite-Laser.name
 #: po/custom/fromJson.txt:5216
 msgid "Stormbringer Emplacement"
-msgstr "Emplacement à DCA Strombringer"
+msgstr "Emplacement à DCA Stormbringer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTW1.text[3]
@@ -13741,7 +13746,7 @@ msgstr "Utilise la technologie des roquettes à un niveau avancé"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
 #: po/custom/fromJson.txt:5729
 msgid "Uses the Heavy Plasma Launcher"
-msgstr ""
+msgstr "Utilise le Lanceur Plasma Lourd"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
@@ -14454,7 +14459,8 @@ msgstr "Vétéran"
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
+msgstr "Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2020 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
@@ -14515,7 +14521,7 @@ msgstr "Le mode débogage est maintenant désactivé !"
 #: src/clparse.cpp:86
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "Utilisation: %s [OPTION...]\n"
 
 #: src/clparse.cpp:258
 msgid "Set configuration directory"
@@ -14678,11 +14684,11 @@ msgstr "Démarrer l'escarmouche avec le fichier de paramètres sélectionné"
 
 #: src/clparse.cpp:286
 msgid "test"
-msgstr ""
+msgstr "test"
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
-msgstr ""
+msgstr "Continuer la dernière partie sauvegardée"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -14961,11 +14967,11 @@ msgstr "Les vidéos sont manquantes, téléchargez-les sur http://wz2100.net"
 #: src/frontend.cpp:146
 #: src/frontend.cpp:150
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Continuer la dernière sauvegarde"
 
 #: src/frontend.cpp:151
 msgid "No last save available"
-msgstr ""
+msgstr "Aucune sauvegarde disponible"
 
 #: src/frontend.cpp:153
 msgid "Quit Game"
@@ -14993,11 +14999,11 @@ msgstr "Pour participer aux frais de location du serveur et supporter le projet,
 
 #: src/frontend.cpp:162
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Discutez avec les joueurs sur Discord ou IRC"
 
 #: src/frontend.cpp:165
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Connectez-vous à Discord ou Freenode en cliquant sur ce lien."
 
 #: src/frontend.cpp:166
 msgid "Check for a newer version"
@@ -15222,16 +15228,16 @@ msgstr "OPTIONS GRAPHIQUES"
 
 #: src/frontend.cpp:844
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivé"
 
 #: src/frontend.cpp:847
 msgid "Enabled"
-msgstr ""
+msgstr "Activé"
 
 #: src/frontend.cpp:851
 #: src/frontend.cpp:857
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #: src/frontend.cpp:892
 #: src/ingameop.cpp:159
@@ -15250,12 +15256,12 @@ msgstr "Volume de la musique"
 
 #: src/frontend.cpp:904
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
 #: src/frontend.cpp:909
 #: src/frontend.cpp:911
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "HRTF n'est pas supporter sur votre appareil / système / OpenAL library"
 
 #: src/frontend.cpp:915
 msgid "Map Zoom"
@@ -15263,11 +15269,11 @@ msgstr "Zoom de carte"
 
 #: src/frontend.cpp:919
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "Vitesse de zoom de la carte"
 
 #: src/frontend.cpp:923
 msgid "Radar Zoom"
-msgstr ""
+msgstr "Zoom de radar"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15275,7 +15281,7 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:934
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "OPTIONS AUDIO / ZOOM"
 
 #: src/frontend.cpp:1058
 msgid "Windowed"
@@ -15299,11 +15305,11 @@ msgstr "Résolution"
 
 #: src/frontend.cpp:1085
 msgid "Display Scale*"
-msgstr ""
+msgstr "Échelle D'Affichage*"
 
 #: src/frontend.cpp:1085
 msgid "Display Scale"
-msgstr ""
+msgstr "Échelle d'affichage"
 
 #: src/frontend.cpp:1129
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15439,7 +15445,7 @@ msgstr "Escarmouche/Multijoueurs"
 
 #: src/frontend.cpp:1699
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Cliquez pour ouvrir la page web."
 
 #: src/frontend.cpp:1702
 #: src/frontend.cpp:1721
@@ -15498,12 +15504,14 @@ msgstr "Montrer les technologies obsolètes"
 #: src/hci.cpp:3569
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Affichage de toutes les technologies\n"
+"Clic droit pour ajouter aux favoris"
 
 #: src/hci.cpp:3571
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Afficher uniquement les technologies préférées\n"
+"Clic droit pour supprimer des Favoris"
 
 #: src/hci.cpp:3651
 msgid "Factory Delivery Point"
@@ -15594,7 +15602,7 @@ msgstr "Options audio"
 
 #: src/ingameop.cpp:494
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Raccourcis clavier"
 
 #: src/ingameop.cpp:882
 msgid "Save Campaign Game"
@@ -15633,64 +15641,64 @@ msgstr "PAS ASSEZ D'ENERGIE !"
 
 #: src/integrations/wzdiscordrpc.cpp:201
 msgid "Discord: Can't Join Game"
-msgstr ""
+msgstr "Discord: Impossible de rejoindre la partie"
 
 #: src/integrations/wzdiscordrpc.cpp:202
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr ""
+msgstr "Vous ne pouvez pas rejoindre une partie pendant que vous êtes dans une partie. Veuillez sauvegarder / quitter votre jeu actuel, retourner au menu principal, puis réessayer."
 
 #: src/integrations/wzdiscordrpc.cpp:232
 msgid "Discord: Finding & Connecting to Game"
-msgstr ""
+msgstr "Discord: Recherche et connection à la partie"
 
 #: src/integrations/wzdiscordrpc.cpp:233
 msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr ""
+msgstr "Tentative de recherche et de connexion au jeu spécifié par l'invitation Discord."
 
 #: src/integrations/wzdiscordrpc.cpp:235
 msgid "This may take a moment..."
-msgstr ""
+msgstr "Cette opération peut prendre quelques instants..."
 
 #: src/integrations/wzdiscordrpc.cpp:260
 msgid "Failed to find game in the lobby server: "
-msgstr ""
+msgstr "Impossible de trouver le jeu dans le serveur du lobby: "
 
 #: src/integrations/wzdiscordrpc.cpp:262
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
+msgstr "Cette partie a peut-être déjà commencé, ou l'hôte a peut-être dissous le lobby du jeu."
 
 #: src/integrations/wzdiscordrpc.cpp:265
 msgid "Failed to Find Game"
-msgstr ""
+msgstr "Impossible de trouver la partie"
 
 #: src/integrations/wzdiscordrpc.cpp:293
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr ""
+msgstr "Impossible de rejoindre la partie à partir du lien d'invitation spécifié avec l'erreur:"
 
 #: src/integrations/wzdiscordrpc.cpp:297
 msgid "Failed to Join Game"
-msgstr ""
+msgstr "Impossible de rejoindre la partie"
 
 #: src/integrations/wzdiscordrpc.cpp:364
 msgid "The invite link you have followed specifies a non-default lobby server:"
-msgstr ""
+msgstr "Le lien d'invitation que vous avez suivi spécifie un serveur de lobby non par défaut :"
 
 #: src/integrations/wzdiscordrpc.cpp:367
 msgid "Do you wish to trust this lobby server, and continue?"
-msgstr ""
+msgstr "Voulez-vous faire confiance à ce serveur de lobby et continuer?"
 
 #: src/integrations/wzdiscordrpc.cpp:371
 msgid "Discord: Connect to Untrusted Lobby?"
-msgstr ""
+msgstr "Discord: Se connecter au Lobby non fiable?"
 
 #: src/integrations/wzdiscordrpc.cpp:373
 #: src/integrations/wzdiscordrpc.cpp:447
 msgid "Trust & Connect"
-msgstr ""
+msgstr "Faire confiance et connexion"
 
 #: src/integrations/wzdiscordrpc.cpp:438
 msgid "The invite link you have followed specifies a direct connection."
-msgstr ""
+msgstr "Le lien d'invitation que vous avez suivi spécifie une connexion directe."
 
 #: src/integrations/wzdiscordrpc.cpp:439
 msgid "It has not been vetted / verified by a lobby server."
