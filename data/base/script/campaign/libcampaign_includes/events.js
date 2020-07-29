@@ -193,9 +193,9 @@ function cam_eventTransporterExit(transport)
 		//assumes the player can bring in reinforcements immediately after the first
 		//transporter leaves the map. Mission scripts can handle special situations.
 		if (__camNumTransporterExits === 1 &&
-			((__camWinLossCallback === "__camVictoryOffworld" &&
+			((__camWinLossCallback === CAM_VICTORY_OFFWORLD &&
 			__camVictoryData.reinforcements > -1) ||
-			__camWinLossCallback === "__camVictoryStandard"))
+			__camWinLossCallback === CAM_VICTORY_STANDARD))
 		{
 			const REINFORCEMENTS_AVAILABLE_SOUND = "pcv440.ogg";
 			playSound(REINFORCEMENTS_AVAILABLE_SOUND);
@@ -203,7 +203,7 @@ function cam_eventTransporterExit(transport)
 	}
 
 	if (transport.player !== CAM_HUMAN_PLAYER ||
-		(__camWinLossCallback === "__camVictoryStandard" &&
+		(__camWinLossCallback === CAM_VICTORY_STANDARD &&
 		transport.player === CAM_HUMAN_PLAYER))
 	{
 		// allow the next transport to enter
@@ -212,7 +212,7 @@ function cam_eventTransporterExit(transport)
 			delete __camIncomingTransports[transport.player];
 		}
 	}
-	else if (__camWinLossCallback === "__camVictoryPreOffworld")
+	else if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
 	{
 		camTrace("Transporter is away.");
 		__camGameWon();
