@@ -21,6 +21,7 @@
 #define __INCLUDED_QTSCRIPT_H__
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
 
 class QScriptEngine;
 class QString;
@@ -87,7 +88,7 @@ bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
 bool loadGlobalScript(WzString path);
-QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty);
+QScriptEngine *loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.

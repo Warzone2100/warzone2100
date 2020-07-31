@@ -947,7 +947,7 @@ static bool recvResearch(NETQUEUE queue)
 	}
 
 	// Update allies research accordingly
-	if (game.type == SKIRMISH)
+	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -1275,7 +1275,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 			{
 				sstrcat(display, ", ");
 			}
-			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && game.skDiff[i])))
+			if ((isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED)))
 			{
 				sstrcat(display, getPlayerName(posTable[curStr[0] - '0']));
 				sendto[i] = true;

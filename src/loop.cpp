@@ -126,7 +126,7 @@ static SDWORD videoMode = 0;
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
 // this is set by scrStartMission to say what type of new level is to be started
-LEVEL_TYPE nextMissionType = LDS_NONE;
+LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 
 static GAMECODE renderLoop()
 {
@@ -365,7 +365,7 @@ static GAMECODE renderLoop()
 		// just wait for this to be changed when the new mission starts
 		break;
 	case LMS_NEWLEVEL:
-		nextMissionType = LDS_NONE;
+		nextMissionType = LEVEL_TYPE::LDS_NONE;
 		return GAMECODE_NEWLEVEL;
 		break;
 	case LMS_LOADGAME:

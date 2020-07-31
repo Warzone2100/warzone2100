@@ -22,6 +22,7 @@
 #define __INCLUDED_SRC_FRONTEND_H__
 
 #include "lib/widget/widgbase.h"
+#include "levels.h"
 
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 enum tMode
@@ -301,6 +302,6 @@ enum
 
 };
 
-void SPinit();
+void SPinit(LEVEL_TYPE gameType);
 
 #endif // __INCLUDED_SRC_FRONTEND_H__

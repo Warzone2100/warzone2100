@@ -390,7 +390,7 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 
 			ASSERT(pos.type < 2, "Invalid visibility type %d", (int)pos.type);
 			uint8_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
-			if (visionType[psObj->player] == 0 && game.type == CAMPAIGN)	// hack
+			if (visionType[psObj->player] == 0 && game.type == LEVEL_TYPE::CAMPAIGN)	// hack
 			{
 				continue;
 			}

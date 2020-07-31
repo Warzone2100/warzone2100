@@ -67,20 +67,14 @@
 // send complete game info set!
 void sendOptions()
 {
-	unsigned int i;
-
-	if (!NetPlay.isHost || !bHosted)  // Only host should act, and only if the game hasn't started yet.
-	{
-		ASSERT(false, "Host only routine detected for client or not hosting yet!");
-		return;
-	}
+	ASSERT_HOST_ONLY(return);
 
 	game.modHashes = getModHashList();
 
 	NETbeginEncode(NETbroadcastQueue(), NET_OPTIONS);
 
 	// First send information about the game
-	NETuint8_t(&game.type);
+	NETuint8_t(reinterpret_cast<uint8_t*>(&game.type));
 	NETstring(game.map, 128);
 	NETbin(game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize = game.modHashes.size();
@@ -98,23 +92,21 @@ void sendOptions()
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		NETuint8_t(&game.skDiff[i]);
+		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));
 	}
 
 	// Send the list of who is still joining
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		NETbool(&ingame.JoiningInProgress[i]);
 	}
 
 	// Same goes for the alliances
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		unsigned int j;
-
-		for (j = 0; j < MAX_PLAYERS; j++)
+		for (unsigned j = 0; j < MAX_PLAYERS; j++)
 		{
 			NETuint8_t(&alliances[i][j]);
 		}
@@ -130,7 +122,7 @@ void sendOptions()
 		NETuint32_t(&structLimit.id);
 		NETuint32_t(&structLimit.limit);
 	}
-	updateLimitFlags();
+	updateStructureDisabledFlags();
 	NETuint8_t(&ingame.flags);
 
 	NETend();
@@ -148,7 +140,7 @@ void recvOptions(NETQUEUE queue)
 	NETbeginDecode(queue, NET_OPTIONS);
 
 	// Get general information about the game
-	NETuint8_t(&game.type);
+	NETuint8_t(reinterpret_cast<uint8_t*>(&game.type));
 	NETstring(game.map, 128);
 	NETbin(game.hash.bytes, game.hash.Bytes);
 	uint32_t modHashesSize;
@@ -170,7 +162,7 @@ void recvOptions(NETQUEUE queue)
 
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		NETuint8_t(&game.skDiff[i]);
+		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[i].difficulty));
 	}
 
 	// Send the list of who is still joining
@@ -213,14 +205,6 @@ void recvOptions(NETQUEUE queue)
 
 	NETend();
 
-	// Do the skirmish slider settings if they are up
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		if (widgGetFromID(psWScreen, MULTIOP_SKSLIDE + i))
-		{
-			widgSetSliderPos(psWScreen, MULTIOP_SKSLIDE + i, game.skDiff[i]);
-		}
-	}
 	debug(LOG_INFO, "Rebuilding map list");
 	// clear out the old level list.
 	levShutDown();
@@ -328,51 +312,38 @@ void recvOptions(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Host Campaign.
-bool hostCampaign(char *sGame, char *sPlayer)
+bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 {
-	PLAYERSTATS playerStats;
-	UDWORD		i;
-
 	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
 
 	freeMessages();
 
-	if (!NEThostGame(sGame, sPlayer, game.type, 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(sGame, sPlayer, static_cast<SDWORD>(game.type), 0, 0, 0, game.maxPlayers))
 	{
 		return false;
 	}
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	/* Skip resetting AIs if we are doing autohost */
+	if (NetPlay.bComms && !skipResetAIs)
 	{
-		if (NetPlay.bComms)
+		for (unsigned i = 0; i < MAX_PLAYERS; i++)
 		{
-			game.skDiff[i] = 0;     	// disable AI
+			NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
 		}
 	}
 
 	NetPlay.players[selectedPlayer].ready = false;
+	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
 	bMultiPlayer = true;
 	bMultiMessages = true; // enable messages
 
-	loadMultiStats(sPlayer, &playerStats);				// stats stuff
+	PLAYERSTATS playerStats;
+	loadMultiStats(sPlayer, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
-
-	// load AI values of challenge files for getAIName()
-	setupChallengeAIs();
-
-	// ensure all players have a name in One Player Skirmish games
-	if (!NetPlay.bComms)
-	{
-		sstrcpy(NetPlay.players[0].name, sPlayer);
-		for (unsigned i = 1; i < MAX_PLAYERS; ++i)
-		{
-		    sstrcpy(NetPlay.players[i].name, getAIName(i));
-		}
-	}
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	return true;
@@ -419,17 +390,11 @@ static bool gameInit()
 	for (player = 1; player < MAX_PLAYERS; player++)
 	{
 		// we want to remove disabled AI & all the other players that don't belong
-		if ((game.skDiff[player] == 0 || player >= game.maxPlayers) && player != scavengerPlayer())
+		if ((NetPlay.players[player].difficulty == AIDifficulty::DISABLED || player >= game.maxPlayers) && player != scavengerPlayer())
 		{
 			clearPlayer(player, true);			// do this quietly
 			debug(LOG_NET, "removing disabled AI (%d) from map.", player);
 		}
-	}
-
-	if (game.scavengers)	// FIXME - not sure if we still need this hack - Per
-	{
-		// ugly hack for now
-		game.skDiff[scavengerPlayer()] = DIFF_SLIDER_STOPS / 2;
 	}
 
 	unsigned playerCount = 0;
@@ -506,7 +471,7 @@ bool multiGameShutdown()
 
 	ingame.localJoiningInProgress = false; // Clean up
 	ingame.localOptionsReceived = false;
-	ingame.bHostSetup = false;	// Dont attempt a host
+	ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 	ingame.TimeEveryoneIsInGame = 0;
 	ingame.startTime = 0;
 	NetPlay.isHost					= false;

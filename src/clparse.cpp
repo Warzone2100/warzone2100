@@ -501,7 +501,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			bMultiMessages = false;
 			for (int i = 0; i < MAX_PLAYERS; i++)
 			{
-				NET_InitPlayer(i, true, false);
+				NET_InitPlayer(i, true);
 			}
 
 			//NET_InitPlayer deallocates Player 0, who must be allocated so that a later invocation of processDebugMappings does not trigger DEBUG mode
@@ -509,11 +509,11 @@ bool ParseCommandLine(int argc, const char * const *argv)
 
 			if (!strcmp(token, "CAM_1A") || !strcmp(token, "CAM_2A") || !strcmp(token, "CAM_3A"))
 			{
-				game.type = CAMPAIGN;
+				game.type = LEVEL_TYPE::CAMPAIGN;
 			}
 			else
 			{
-				game.type = SKIRMISH; // tutorial is skirmish for some reason
+				game.type = LEVEL_TYPE::SKIRMISH; // tutorial is skirmish for some reason
 			}
 			sstrcpy(aLevelName, token);
 			SetGameMode(GS_NORMAL);
@@ -590,9 +590,8 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			snprintf(saveGameName, sizeof(saveGameName), "%s/skirmish/%s.gam", SaveGamePath, token);
 			sstrcpy(sRequestResult, saveGameName); // hack to avoid crashes
-			SPinit();
+			SPinit(LEVEL_TYPE::SKIRMISH);
 			bMultiPlayer = true;
-			game.type = SKIRMISH; // tutorial is skirmish for some reason
 			SetGameMode(GS_SAVEGAMELOAD);
 			break;
 		case CLI_LOADCAMPAIGN:
@@ -603,7 +602,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Unrecognised campaign savegame name");
 			}
 			snprintf(saveGameName, sizeof(saveGameName), "%s/campaign/%s.gam", SaveGamePath, token);
-			SPinit();
+			SPinit(LEVEL_TYPE::CAMPAIGN);
 			SetGameMode(GS_SAVEGAMELOAD);
 			break;
 		case CLI_CONTINUE:

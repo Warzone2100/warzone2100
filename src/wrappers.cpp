@@ -135,7 +135,7 @@ TITLECODE titleLoop()
 		{
 			if (hostlaunch == 2)
 			{
-				SPinit();
+				SPinit(LEVEL_TYPE::SKIRMISH);
 			}
 			else // single player
 			{
@@ -147,11 +147,11 @@ TITLECODE titleLoop()
 				NETdiscoverUPnPDevices();
 			}
 			bMultiPlayer = true;
-			ingame.bHostSetup = true;
-			game.type = SKIRMISH;
+			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
+			game.type = LEVEL_TYPE::SKIRMISH;
 			// Ensure the game has a place to return to
 			changeTitleMode(TITLE);
-			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 		}
 		else if (strlen(iptoconnect))
 		{

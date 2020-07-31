@@ -79,6 +79,7 @@
 #include "qtscript.h"
 #include "multigifts.h"
 #include "loadsave.h"
+#include "game.h"
 
 /*
 	KeyBind.c
@@ -134,7 +135,7 @@ void kf_AutoGame()
 		return;
 	}
 #endif
-	if (game.type == CAMPAIGN)
+	if (game.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		CONPRINTF("%s", "Not possible with the campaign!");
 		return;

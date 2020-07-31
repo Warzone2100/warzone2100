@@ -677,7 +677,7 @@ void processMouseClickInput()
 			if (!bMultiPlayer  && (establishSelection(selectedPlayer) == SC_DROID_TRANSPORTER || establishSelection(selectedPlayer) == SC_DROID_SUPERTRANSPORTER))
 			{
 				// Never, *ever* let user control the transport in SP games--it breaks the scripts!
-				ASSERT(game.type == CAMPAIGN, "Game type was set incorrectly!");
+				ASSERT(game.type == LEVEL_TYPE::CAMPAIGN, "Game type was set incorrectly!");
 			}
 			else
 			{

@@ -205,11 +205,11 @@ ActivitySink::GameMode currentGameTypeToMode()
 	{
 		mode = ActivitySink::GameMode::CHALLENGE;
 	}
-	else if (game.type == SKIRMISH)
+	else if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		mode = (NetPlay.bComms) ? ActivitySink::GameMode::MULTIPLAYER : ActivitySink::GameMode::SKIRMISH;
 	}
-	else if (game.type == CAMPAIGN)
+	else if (game.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		mode = ActivitySink::GameMode::CAMPAIGN;
 	}

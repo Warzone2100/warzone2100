@@ -26,7 +26,7 @@
 
 #include "lib/framework/crc.h"
 #include "init.h"
-#include "game.h"
+#include "gamedef.h"
 
 #include <list>
 
@@ -34,7 +34,7 @@
 #define LEVEL_MAXFILES	9
 
 /// types of level datasets
-enum LEVEL_TYPE
+enum class LEVEL_TYPE : uint8_t
 {
 	LDS_COMPLETE,		// all data required for a stand alone level
 	LDS_CAMPAIGN,		// the data set for a campaign (no map data)
@@ -73,7 +73,7 @@ struct LEVEL_DATASET
 	Sha256          realFileHash;                   ///< Use levGetFileHash() to read this value. SHA-256 hash of the file containing the level, or 0x00×32 if the level is built in or not yet calculated.
 };
 
-typedef std::list<LEVEL_DATASET *> LEVEL_LIST;
+typedef std::vector<LEVEL_DATASET *> LEVEL_LIST;
 
 LEVEL_LIST enumerateMultiMaps(int camToUse, int numPlayers);
 
