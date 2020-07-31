@@ -9,11 +9,10 @@
         "powerLevel": 2,
         "scavengers": "false",
         "version": 0,
-        "techLevel": 1,
-	"allowPositionChange": "true"
+        "techLevel": 1
     },
     "locked": {
-        "position": "false"
+        "position": "true"
     },
     "player_0": {
         "team": 0
