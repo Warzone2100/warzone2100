@@ -144,6 +144,7 @@ struct NET_PLAYER_DATA
 
 NETPLAY	NetPlay;
 PLAYER_IP	*IPlist = nullptr;
+static int IPlistLast = 0;
 static bool		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
@@ -1240,6 +1241,7 @@ int NETshutdown()
 		free(IPlist);
 	}
 	IPlist = nullptr;
+	IPlistLast = 0;
 	if (NetPlay.MOTD)
 	{
 		free(NetPlay.MOTD);
@@ -3144,6 +3146,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	{
 		free(IPlist);
 		IPlist = nullptr;
+		IPlistLast = 0;
 	}
 	NETloadBanList();
 	sstrcpy(gamestruct.name, SessionName);
@@ -4305,8 +4308,6 @@ static bool onBanList(const char *ip)
  */
 static void addToBanList(const char *ip, const char *name)
 {
-	static int numBans = 0;
-
 	if (!IPlist)
 	{
 		IPlist = (PLAYER_IP *)malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
@@ -4315,16 +4316,16 @@ static void addToBanList(const char *ip, const char *name)
 			debug(LOG_FATAL, "Out of memory!");
 			abort();
 		}
-		numBans = 0;
+		IPlistLast = 0;
 	}
 	memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
-	sstrcpy(IPlist[numBans].IPAddress, ip);
-	sstrcpy(IPlist[numBans].pname, name);
-	numBans++;
+	sstrcpy(IPlist[IPlistLast].IPAddress, ip);
+	sstrcpy(IPlist[IPlistLast].pname, name);
+	IPlistLast++;
 	sync_counter.banned++;
-	if (numBans > MAX_BANS)
+	if (IPlistLast > MAX_BANS)
 	{
 		debug(LOG_INFO, "We have exceeded %d bans, resetting to 0", MAX_BANS);
-		numBans = 0;
+		IPlistLast = 0;
 	}
 }
