@@ -3052,6 +3052,31 @@ static void NETallowJoining()
 	}
 }
 
+void NETloadBanList() {
+	char BanListPath[4096] = {0};
+	strncpy(BanListPath, PHYSFS_getWriteDir(), 4095);
+	size_t BanListAppendFname = strlen(BanListPath);
+	strncpy(BanListPath+BanListAppendFname, "/banlist.txt", 4095-BanListAppendFname);
+	FILE* f = fopen(BanListPath, "r");
+	if(f == NULL) {
+		return;
+	}
+	debug(LOG_INFO, "Reading banlist file: [%s]\n", BanListPath);
+	char BanStringBuf[2048] = {0};
+	char ToBanIP[256] = {0};
+	char ToBanName[256] = {0};
+	while(fgets(BanStringBuf, sizeof(BanStringBuf)-1, f)) {
+		if(sscanf(BanStringBuf, "%255s %255[^\n]", ToBanIP, ToBanName) != 2) {
+			if(strlen(BanStringBuf) > 2) {
+				debug(LOG_ERROR, "Error reading banlist file!\n");
+			}
+		} else {
+			addToBanList(ToBanIP, ToBanName);
+		}
+	}
+	return;
+}
+
 bool NEThostGame(const char *SessionName, const char *PlayerName,
                  SDWORD one, SDWORD two, SDWORD three, SDWORD four,
                  UDWORD plyrs)	// # of players.
@@ -3120,6 +3145,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 		free(IPlist);
 		IPlist = nullptr;
 	}
+	NETloadBanList();
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
