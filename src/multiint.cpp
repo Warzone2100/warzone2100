@@ -2796,6 +2796,18 @@ static void loadMapPlayerSettings(WzConfig& ini)
 	}
 }
 
+static int playersPerTeam()
+{
+	for (unsigned numTeams = game.maxPlayers - 1; numTeams > 1; --numTeams)
+	{
+		if (game.maxPlayers % numTeams == 0)
+		{
+			return numTeams;
+		}
+	}
+	return 1;
+}
+
 /**
  * Resets all player difficulties, positions, teams and colors etc.
  */
@@ -2811,7 +2823,7 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 		}
 
 		NetPlay.players[playerIndex].position = playerIndex;
-		NetPlay.players[playerIndex].team = playerIndex;
+		NetPlay.players[playerIndex].team = playerIndex / playersPerTeam();
 		NetPlay.players[playerIndex].name[0] = '\0';
 
 		if (NetPlay.bComms)
