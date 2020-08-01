@@ -2799,14 +2799,13 @@ static void loadMapPlayerSettings(WzConfig& ini)
 /**
  * Resets all player difficulties, positions, teams and colors etc.
  */
-static void resetPlayerConfiguration()
+static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 {
 	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
 	{
 		setPlayerColour(playerIndex, playerIndex);
 
-		/* Never touch the local player */
-		if (playerIndex == selectedPlayer)
+		if (!bShouldResetLocal && playerIndex == selectedPlayer)
 		{
 			continue;
 		}
@@ -4107,7 +4106,7 @@ void WzMultiplayerOptionsTitleUI::start()
 	/* Entering the first time */
 	if (!bReenter)
 	{
-		resetPlayerConfiguration();
+		resetPlayerConfiguration(true);
 		memset(&locked, 0, sizeof(locked));
 		loadMapChallengeAndPlayerSettings(true);
 		game.isMapMod = false;
