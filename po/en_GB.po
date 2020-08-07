@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-07-19 10:24\n"
+"PO-Revision-Date: 2020-08-07 09:46\n"
 "Last-Translator: \n"
 "Language-Team: English, United Kingdom\n"
 "Language: en_GB\n"
@@ -25,7 +25,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "Establish a base, then search for a Pre-Collapse structure."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
@@ -38,11 +38,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Scavenger raiders are approaching our base."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Defend the base, then destroy the Scavenger camps."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
@@ -51,7 +51,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "A power surge has been detected to the south of our position."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
@@ -75,7 +75,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Load an attack force into the transport."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
@@ -92,7 +92,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Reinforcements are available."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "Use your trucks to build defenses at your LZ."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "Scout the designated area for enemy research facilities."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
