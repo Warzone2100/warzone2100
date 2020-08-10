@@ -60,6 +60,7 @@
 #include "intimage.h"
 #include "data.h"
 #include "activity.h"
+#include "main.h"					// for GetGameMode
 
 #include "multimenu.h"
 #include "multiplay.h"
@@ -340,7 +341,10 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	}
 
 	// fire script callback to reassign skirmish players.
-	triggerEventPlayerLeft(playerIndex);
+	if (GetGameMode() == GS_NORMAL)
+	{
+		triggerEventPlayerLeft(playerIndex);
+	}
 
 	netPlayersUpdated = true;
 	return true;
