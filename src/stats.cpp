@@ -709,12 +709,12 @@ bool loadBrainStats(WzConfig &ini)
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)
 		{
-			psStats->rankNames.push_back(v);
+			psStats->rankNames.push_back(v.get<std::string>());
 		}
 		auto rankThresholds = ini.json("thresholds");
 		for (const auto& v : rankThresholds)
 		{
-			psStats->base.rankThresholds.push_back(v);
+			psStats->base.rankThresholds.push_back(v.get<int>());
 		}
 		psStats->ref = REF_BRAIN_START + i;
 
