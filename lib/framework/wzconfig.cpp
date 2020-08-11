@@ -236,9 +236,9 @@ Vector3f WzConfig::vector3f(const WzString &name)
 	auto v = it.value();
 	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 	try {
-		r.x = v[0];
-		r.y = v[1];
-		r.z = v[2];
+		r.x = v[0].get<float>();
+		r.y = v[1].get<float>();
+		r.z = v[2].get<float>();
 	}
 	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
@@ -265,9 +265,9 @@ Vector3i WzConfig::vector3i(const WzString &name)
 	auto v = it.value();
 	ASSERT(v.size() == 3, "%s: Bad list of %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str());
 	try {
-		r.x = v[0];
-		r.y = v[1];
-		r.z = v[2];
+		r.x = v[0].get<int>();
+		r.y = v[1].get<int>();
+		r.z = v[2].get<int>();
 	}
 	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
@@ -294,8 +294,8 @@ Vector2i WzConfig::vector2i(const WzString &name)
 	auto v = it.value();
 	ASSERT(v.size() == 2, "Bad list of %s", name.toUtf8().c_str());
 	try {
-		r.x = v[0];
-		r.y = v[1];
+		r.x = v[0].get<int>();
+		r.y = v[1].get<int>();
 	}
 	catch (const std::exception &e) {
 		ASSERT(false, "%s: Bad list of %s; exception: %s", mFilename.toUtf8().c_str(), name.toUtf8().c_str(), e.what());
