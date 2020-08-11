@@ -30,11 +30,12 @@ camAreaEvent("cybAttackers", function(droid)
 		fallback: camMakePos("SWBaseRetreat")
 	});
 
-	camManageGroup(camMakeGroup("NEDefenderGroup"), CAM_ORDER_DEFEND, {
+	camManageGroup(camMakeGroup("NEDefenderGroup"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("genericasAssembly"),
 			camMakePos("northFacAssembly"),
 		],
+		interval: camMinutesToMilliseconds(1),
 		regroup: true,
 	});
 });
@@ -324,19 +325,14 @@ function eventStartLevel()
 		},
 		"NXcybFac-b4": {
 			assembly: "NXcybFac-b4Assembly",
-			order: CAM_ORDER_PATROL,
+			order: CAM_ORDER_ATTACK,
 			data: {
-				pos: [
-					camMakePos("genericasAssembly"),
-					camMakePos("northFacAssembly"),
-				],
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
-			group: camMakeGroup("NEDefenderGroup"),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 	});
