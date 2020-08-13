@@ -1825,7 +1825,21 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t 
 	return blueprint;
 }
 
-static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
+static Vector2i defaultAssemblyPointPos(STRUCTURE *psBuilding)
+{
+	const Vector2i size = psBuilding->size() + Vector2i(1, 1);  // Adding Vector2i(1, 1) to select the middle of the tile outside the building instead of the corner.
+	Vector2i pos = psBuilding->pos;
+	switch ((psBuilding->rot.direction + 0x2000) & 0xC000)
+	{
+	case 0x0000: return pos + TILE_UNITS/2 * Vector2i( size.x,  size.y);
+	case 0x4000: return pos + TILE_UNITS/2 * Vector2i( size.x, -size.y);
+	case 0x8000: return pos + TILE_UNITS/2 * Vector2i(-size.x, -size.y);
+	case 0xC000: return pos + TILE_UNITS/2 * Vector2i(-size.x,  size.y);
+	}
+	return {};  // Unreachable.
+}
+
+static bool setFunctionality(STRUCTURE *psBuilding, STRUCTURE_TYPE functionType)
 {
 	ASSERT_OR_RETURN(false, psBuilding != nullptr, "Invalid pointer");
 	CHECK_STRUCTURE(psBuilding);
@@ -1859,7 +1873,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 	case REF_VTOL_FACTORY:
 		{
 			FACTORY *psFactory = &psBuilding->pFunctionality->factory;
-			unsigned int x, y;
 
 			psFactory->psSubject = nullptr;
 
@@ -1872,13 +1885,9 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 				return false;
 			}
 
-			// initialise the assembly point position
-			const Vector2i size = psBuilding->size();
-			x = map_coord(psBuilding->pos.x + (size.x + 1) * TILE_UNITS / 2);
-			y = map_coord(psBuilding->pos.y + (size.y + 1) * TILE_UNITS / 2);
-
 			// Set the assembly point
-			setAssemblyPoint(psFactory->psAssemblyPoint, world_coord(x), world_coord(y), psBuilding->player, true);
+			Vector2i pos = defaultAssemblyPointPos(psBuilding);
+			setAssemblyPoint(psFactory->psAssemblyPoint, pos.x, pos.y, psBuilding->player, true);
 
 			// Add the flag to the list
 			addFlagPosition(psFactory->psAssemblyPoint);
@@ -1915,7 +1924,6 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 	case REF_REPAIR_FACILITY:
 		{
 			REPAIR_FACILITY *psRepairFac = &psBuilding->pFunctionality->repairFacility;
-			unsigned int x, y;
 
 			psRepairFac->psObj = nullptr;
 			psRepairFac->droidQueue = 0;
@@ -1930,14 +1938,9 @@ static bool setFunctionality(STRUCTURE	*psBuilding, STRUCTURE_TYPE functionType)
 				return false;
 			}
 
-			// Initialise the assembly point
-			const Vector2i size = psBuilding->size();
-			x = map_coord(psBuilding->pos.x + (size.x + 1) * TILE_UNITS / 2);
-			y = map_coord(psBuilding->pos.y + (size.y + 1) * TILE_UNITS / 2);
-
 			// Set the assembly point
-			setAssemblyPoint(psRepairFac->psDeliveryPoint, world_coord(x),
-			                 world_coord(y), psBuilding->player, true);
+			Vector2i pos = defaultAssemblyPointPos(psBuilding);
+			setAssemblyPoint(psRepairFac->psDeliveryPoint, pos.x, pos.y, psBuilding->player, true);
 
 			// Add the flag (triangular marker on the ground) at the delivery point
 			addFlagPosition(psRepairFac->psDeliveryPoint);
@@ -2294,7 +2297,7 @@ static bool structPlaceDroid(STRUCTURE *psStructure, DROID_TEMPLATE *psTempl, DR
 		//create a droid near to the structure
 		syncDebug("Placing new droid at (%d,%d)", x, y);
 		turnOffMultiMsg(true);
-		psNewDroid = buildDroid(psTempl, x, y, psStructure->player, false, &initialOrders);
+		psNewDroid = buildDroid(psTempl, x, y, psStructure->player, false, &initialOrders, psStructure->rot);
 		turnOffMultiMsg(false);
 		if (!psNewDroid)
 		{

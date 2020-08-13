@@ -44,6 +44,7 @@
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/pietypes.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/geometry.h"
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/piematrix.h"
@@ -67,6 +68,7 @@
 
 #include "multiplay.h"
 #include "component.h"
+
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
@@ -2179,7 +2181,7 @@ static void effectStructureUpdates()
 				*/
 				if (psStructure->sDisplay.imd->nconnectors == 1)
 				{
-					Vector3i eventPos = psStructure->pos.xzy() + Vector3i(
+					Vector3i eventPos = psStructure->pos.xzy() + Affine3F().RotY(psStructure->rot.direction)*Vector3i(
 					                        psStructure->sDisplay.imd->connectors->x,
 					                        psStructure->sDisplay.imd->connectors->z,
 					                        -psStructure->sDisplay.imd->connectors->y
