@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-08-09 04:34\n"
+"PO-Revision-Date: 2020-08-13 02:56\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -34,7 +34,7 @@ msgstr "Essa estrutura contém tecnologia vital para o sucesso do Projeto."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISSÃO-BASE ALFA: Invasores Catadores"
+msgstr "MISSÃO DA BASE ALFA: Invasores Catadores"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
@@ -47,7 +47,7 @@ msgstr "Defenda a base e destrua as bases dos Catadores."
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "MISSÃO-BASE ALFA: Foco de Energia Detectado"
+msgstr "MISSÃO DA BASE ALFA: Foco de Energia Detectado"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
@@ -59,7 +59,7 @@ msgstr "Investigue e assegure a área."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "MISSÃO-BASE ALFA: O Novo Paradigma"
+msgstr "MISSÃO DA BASE ALFA: O Novo Paradigma"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -71,7 +71,7 @@ msgstr "Eles podem estar em posse da tecnologia da conexão neural, é vital que
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "MISSÃO-TRANSPORTE: Localizar e Recuperar Artefatos"
+msgstr "MISSÃO DE TRANSPORTE: Localizar e Recuperar Artefatos"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -83,7 +83,7 @@ msgstr "Ao pousar, explore as ruínas e recupere qualquer artefato."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "MISSÃO-TRANSPORTE: Investigar Centro de Pesquisas"
+msgstr "MISSÃO DE TRANSPORTE: Investigar Centro de Pesquisas"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -96,7 +96,7 @@ msgstr "Reforços estão disponíveis."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "MISSÃO-TRANSPORTE: Sinais Codificados Detectados"
+msgstr "MISSÃO DE TRANSPORTE: Sinais Codificados Detectados"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
@@ -108,7 +108,7 @@ msgstr "Use caminhões para construir defesas na AP."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "MISSÃO-TRANSPORTE: Transmissões Inimigas Detectadas"
+msgstr "MISSÃO DE TRANSPORTE: Transmissões Inimigas Detectadas"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
@@ -120,7 +120,7 @@ msgstr "Proceda para a AP#2. Não entre em conflito com o inimigo."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "MISSÃO-TRANSPORTE: Localizada Tecnologia da Conexão Sináptica"
+msgstr "MISSÃO DE TRANSPORTE: Localização da Tecnologia de Conexão Sináptica"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
@@ -132,7 +132,7 @@ msgstr "Designe uma força de ataque e recupere a tecnologia de conexão sinápt
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "MISSÃO-TRANSPORTE: Novos Objetivos"
+msgstr "MISSÃO DE TRANSPORTE: Novos Objetivos"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -144,7 +144,7 @@ msgstr "Intercepte-os. Não deixe nenhum inimigo escapar dessa área."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "MISSÃO-TRANSPORTE: Base Inimiga Em Construção"
+msgstr "MISSÃO DE TRANSPORTE: Base Inimiga Em Construção"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
@@ -156,7 +156,7 @@ msgstr "Erradique a base e assegure a área."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "MISSÃO-BASE ALFA: Estabeleça uma Base Avançada"
+msgstr "MISSÃO DA BASE ALFA: Estabeleça uma Base Avançada"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
@@ -168,7 +168,7 @@ msgstr "Construa estruturas defensivas."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "MISSÃO-BASE ALFA: Contra-Ataque"
+msgstr "MISSÃO DA BASE ALFA: Contra-Ataque"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -180,7 +180,7 @@ msgstr "Defenda as bases de todos os ataques."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr "MISSÃO-BASE ALFA: Transmissão Chegando"
+msgstr "MISSÃO DA BASE ALFA: Transmissão Chegando"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
@@ -383,7 +383,7 @@ msgstr "Comandante, você foi designado para ajudar o Time Beta"
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr "MISSÃO-BASE BETA: Setor Leste"
+msgstr "MISSÃO DA BASE BETA: Setor Leste"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
@@ -397,7 +397,7 @@ msgstr "Você deve defendê-la e repelir ataques."
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr "MISSÃO-BASE BETA: Defender e Fortificar"
+msgstr "MISSÃO DA BASE BETA: Defender e Fortificar"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
@@ -423,7 +423,7 @@ msgstr "Decodificando..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "MISSÃO-TRANSPORTE: Transporte Atingido"
+msgstr "MISSÃO DE TRANSPORTE: Transporte Atingido"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -455,7 +455,7 @@ msgstr "Time Beta está sob ataque pesado"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr "MISSÃO-BASE BETA: Defenda a todo o custo"
+msgstr "MISSÃO DA BASE BETA: Defenda a todo o custo"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
@@ -463,7 +463,7 @@ msgstr "Estamos detectando uma transmissão codificada da Coletividade."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr "MISSÃO-BASE BETA: Defenda a Todo Custo"
+msgstr "MISSÃO DA BASE BETA: Defenda a Todo Custo"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
@@ -475,7 +475,7 @@ msgstr "Mantenha sua posição e defenda-se dos ataques, em seguida, erradique a
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr "MISSÃO-TRANSPORTE: Interceptar comboio."
+msgstr "MISSÃO DA TRANSPORTE: Interceptar comboio."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
@@ -504,7 +504,7 @@ msgstr "Notícias preocupantes em relação à NASDA."
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr "MISSÃO-TRANSPORTE: Procure e Destrua o Comboio"
+msgstr "MISSÃO DE TRANSPORTE: Procure e Destrua o Comboio"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
@@ -525,7 +525,7 @@ msgstr "Há a alta probabilidade de VTOL's inimigos estarem escoltando."
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr "MISSÃO-TRANSPORTE: Resgate os civis do Campo de Contenção"
+msgstr "MISSÃO DE TRANSPORTE: Resgate os civis do Campo de Contenção"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
@@ -541,7 +541,7 @@ msgstr "Então, destrua o campo."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar VTOL's."
+msgstr "MISSÃO DA BASE BETA: Destruir a Base Aérea Inimiga e Recuperar VTOL's."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
@@ -549,7 +549,7 @@ msgstr "A análise das rotas de vôo indicam que os VTOL's da Coletividade vêm 
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr "MISSÃO-BASE BETA: Destruir Base Aérea Inimiga e Recuperar VTOL's"
+msgstr "MISSÃO DA BASE BETA: Destruir a Base Aérea Inimiga e Recuperar VTOL's"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
@@ -583,7 +583,7 @@ msgstr "Resgate o máximo de civis possível."
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr "MISSÃO-TRANSPORTE: Destruir Reator"
+msgstr "MISSÃO DE TRANSPORTE: Destruir Reator"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
@@ -603,7 +603,7 @@ msgstr "Não permita que a Coletividade reative o reator."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr "MISSÃO-BASE BETA: Capturar Central da NASDA"
+msgstr "MISSÃO DA BASE BETA: Capturar Central da NASDA"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
@@ -613,7 +613,7 @@ msgstr "Capture a central da NASDA antes que NEXUS e a Coletividade possam usá-
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr "MISSÃO-TRANSPORTE: Localização da Atena de Satélite"
+msgstr "MISSÃO DE TRANSPORTE: Localização da Antena de Satélite"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
@@ -641,7 +641,7 @@ msgstr "Destrua a base e retorne à sua base."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr "MISSÃO-TRANSPORTE: Destruir Defesas MTA"
+msgstr "MISSÃO DE TRANSPORTE: Destruir Defesas MTA"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
@@ -654,7 +654,7 @@ msgstr "Voe para a AP, e siga para o terreno mais alto para destruir as defesas 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr "MISSÃO-TRANSPORTE: Estabelecer um Refúgio Seguro"
+msgstr "MISSÃO DE TRANSPORTE: Estabelecer um Refúgio Seguro"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
@@ -676,7 +676,7 @@ msgstr "Assim que o refúgio for estabelecido, retorne à AP, e aguarde novas or
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Evacuate!"
-msgstr "MISSÃO-BASE BETA: Evacuar!"
+msgstr "MISSÃO DA BASE BETA: Evacuar!"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
@@ -707,7 +707,7 @@ msgstr "Boa sorte, Comandante."
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr "MISSÃO-TRANSPORTE: Setor Norte"
+msgstr "MISSÃO DE TRANSPORTE: Setor Norte"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
@@ -735,7 +735,7 @@ msgstr "Time Gama irá contatá-lo lá."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr "MISSÃO-TRANSPORTE: Estabeleça Uma Base Avançada"
+msgstr "MISSÃO DE TRANSPORTE: Estabeleça Uma Base Avançada"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
@@ -749,7 +749,7 @@ msgstr "Assegure uma AP, e estabeleça uma base avançada."
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr "MISSÃO-TRANSPORTE: Coordenadas do Local de Lançamento dos Mísseis"
+msgstr "MISSÃO DE TRANSPORTE: Coordenadas do Local de Lançamento dos Mísseis"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
@@ -776,7 +776,7 @@ msgstr "Assegure sua AP, e então siga para a destruição dos silos dos míssei
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr "MISSÃO-SETOR NORTE: Explosão Nuclear"
+msgstr "MISSÃO DO SETOR NORTE: Explosão Nuclear"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
@@ -808,7 +808,7 @@ msgstr "A última transmissão indicava que estavam retornando à base."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr "MISSÃO-SETOR NORTE: Assistência ao Time Gama"
+msgstr "MISSÃO DO SETOR NORTE: Assistência ao Time Gama"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
@@ -836,7 +836,7 @@ msgstr "Estamos recebendo essa transmissão."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr "MISSÃO-TRANSPORTE: Time Alfa Detectado"
+msgstr "MISSÃO DE TRANSPORTE: Time Alfa Detectado"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -852,7 +852,7 @@ msgstr "Esse grupo é parte do Time Alfa. Resgate-os e escolte-os de volta à AP
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr "MISSÃO-SETOR NORTE: Avaliação do Time Alfa"
+msgstr "MISSÃO DO SETOR NORTE: Avaliação do Time Alfa"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
@@ -880,7 +880,7 @@ msgstr "Procure e destrua ..........."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr "MISSÃO-TRANSPORTE: Armadilha para as forças de NEXUS"
+msgstr "MISSÃO DE TRANSPORTE: Embosque as forças do NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
@@ -904,7 +904,7 @@ msgstr "Designe uma força de ataque e faça uma armadilha para as forças de NE
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr "MISSÃO-TRANSPORTE: Grupo Avançado"
+msgstr "MISSÃO DE TRANSPORTE: Grupo Avançado"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
@@ -3308,7 +3308,7 @@ msgstr "Melhoria do Flak AA"
 #: data/mp/messages/strings/resstrings.txt:317
 #: po/custom/fromJson.txt:2733
 msgid "High Explosive Flak shards"
-msgstr "Munição Flak AE"
+msgstr "Munição Flak Altamente Explosiva"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -3574,7 +3574,7 @@ msgstr "Pontos de Vida: Altos"
 #: data/mp/messages/strings/resstrings.txt:362
 #: po/custom/fromJson.txt:2527
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr "Lança-Chamas Pesado de Gel de Óxido Propileno"
+msgstr "Lança-Chamas Pesado de Gel de Óxido de Propileno"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[2]
@@ -4599,7 +4599,7 @@ msgstr "Também haviam locais de lançamento em terra. Muitos desses foram destr
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr "Os satélites NASDA também continham pulsos laser feitos para abater mísseis contra a América do Norte."
+msgstr "Os satélites da NASDA também continham pulsos laser feitos para abater mísseis contra a América do Norte."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
@@ -4975,7 +4975,7 @@ msgstr "Vamos começar ativando o NEXUS nos seus sistemas centrais e ver o que a
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:1
 msgid "Commander, we are experiencing interference with our equipment."
-msgstr "Comandante, estamos sofrento interferência em nossos equipamentos."
+msgstr "Comandante, estamos sofrendo interferência em nossos equipamentos."
 
 #: data/base/sequenceaudio/cam3/cam3abpl.txt:2
 msgid "Normal service will be restored as soon as possible."
@@ -8119,7 +8119,7 @@ msgstr "Permite a resistência à tecnologia da Conexão NEXUS"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ASTRUC.text[3]
 #: po/custom/fromJson.txt:1875
 msgid "Enables self-repair in all base structures"
-msgstr "Permite o auto-reparo em todos as Estruturas"
+msgstr "Permite o auto-reparo em todas as Estruturas"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
@@ -8133,7 +8133,7 @@ msgstr "Permite o auto-reparo em todos os Ciborgues"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #: po/custom/fromJson.txt:1883
 msgid "Enables self-repair in all defenses"
-msgstr "Permite o auto-reparo em todos as Defesas"
+msgstr "Permite o auto-reparo em todas as Defesas"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
@@ -8354,7 +8354,7 @@ msgstr "Dispara salvas de mini-foguetes"
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[1]
 #: po/custom/fromJson.txt:2023
 msgid "Flame-thrower firing Propylene Oxide gel"
-msgstr "Lança-Chamas de Gel de Óxido Propileno"
+msgstr "Lança-Chamas de Gel de Óxido de Propileno"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF02.name
@@ -8605,7 +8605,7 @@ msgstr "Gera e concentra energia a laser"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr "Recebe ~ 100% extra de energia de cada poço de petróleo\n"
+msgstr "Recebe ~ 100% de energia extra de cada poço de petróleo\n"
 "Começa com estruturas defensivas e poços de petróleo"
 
 #. TRANSLATORS:
@@ -8627,7 +8627,7 @@ msgstr "Recebe ~ 100% extra de energia de cada poço de petróleo\n"
 #: po/custom/fromJson.txt:2205
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr "Recebe menos ~ 25% de energia de cada poço de petróleo"
+msgstr "Recebe ~ 25% a menos de energia de cada poço de petróleo"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8635,7 +8635,7 @@ msgstr "Recebe menos ~ 25% de energia de cada poço de petróleo"
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr "Recebe menos ~ 25% de energia de cada poço de petróleo\n"
+msgstr "Recebe ~ 25% a menos de energia de cada poço de petróleo\n"
 "A tomada de decisões básicas é mais lenta"
 
 #. TRANSLATORS:
@@ -8862,19 +8862,19 @@ msgstr "Munição de Obus AE"
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2349
 msgid "HE Mini-Rockets Mk2"
-msgstr "Mini-Foguetes AP Mk2"
+msgstr "Mini-Foguetes AE Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2352
 msgid "HE Mini-Rockets Mk3"
-msgstr "Mini-Foguetes AP Mk3"
+msgstr "Mini-Foguetes AE Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2355
 msgid "HE Mini-Rockets"
-msgstr "Mini-Foguetes AP"
+msgstr "Mini-Foguetes AE"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage02.name
@@ -9308,7 +9308,7 @@ msgstr "Aerobarco Reparos Pesado Escorpião"
 #. data/mp/stats/templates.json: $.CobraHRepairHover.name
 #: po/custom/fromJson.txt:2635
 msgid "Heavy Repair Turret Cobra Hover"
-msgstr "Aerobarco Torrete de Reparos Pesado Cobra"
+msgstr "Torrete de Reparos Pesado Aerobarco Cobra"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Super-Rocket.name
@@ -9694,7 +9694,7 @@ msgstr "Metralhadora de Hiper Velocidade"
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2916
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Defesa reforçaca de Canhão de Hiper Velocidade"
+msgstr "Defesa reforçada de Canhão de Hiper Velocidade"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
@@ -11924,7 +11924,7 @@ msgstr "Píton"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:4525
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Metralhadora quádrupla Anti-Aérea de 80mm"
+msgstr "Metralhadora Quádrupla Anti-Aérea de 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12136,7 +12136,7 @@ msgstr "Torreta de Centro de Reparos"
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
 #: po/custom/fromJson.txt:4667
 msgid "Repair Cobra Tracks"
-msgstr "Tanque Torrete de Reparos Cobra"
+msgstr "Torrete de Reparos Tanque Cobra"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RepairFacility.name
@@ -12151,7 +12151,7 @@ msgstr "Centro de Reparos"
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
 #: po/custom/fromJson.txt:4682
 msgid "Repair Scorpion Tracks"
-msgstr "Tanque Torrete de Reparos Escorpião"
+msgstr "Torrete de Reparos Tanque Escorpião"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RFU1.text[2]
@@ -12167,32 +12167,32 @@ msgstr "Velocidade de reparo +100%"
 #. data/mp/stats/templates.json: $.A-Rep-Cobra-Trk.name
 #: po/custom/fromJson.txt:4692
 msgid "Repair Turret Cobra Tracks"
-msgstr "Tanque Torrete de Reparos Cobra"
+msgstr "Torrete de Reparos Tanque Cobra"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Rep-Mantis-Trk.name
 #: po/custom/fromJson.txt:4695
 msgid "Repair Turret Mantis Tracks"
-msgstr "Tanque Torrete de Reparos Mantis"
+msgstr "Torrete de Reparos Tanque Mantis"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4698
 msgid "Repair Turret Viper Half-track"
-msgstr "Híbrido Torrete de Reparo Víbora"
+msgstr "Torrete de Reparos Híbrido Víbora"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4701
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Híbrido Torrete de Reparo Víbora"
+msgstr "Torrete de Reparos Híbrido Víbora"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairWheels.name
 #. data/mp/stats/templates.json: $.ViperRepairWheels.name
 #: po/custom/fromJson.txt:4705
 msgid "Repair Turret Viper Wheels"
-msgstr "4x4 Torrete de Reparos Víbora"
+msgstr "Torrete de Reparos 4x4 Víbora"
 
 #. TRANSLATORS:
 #. data/base/stats/repair.json: $.LightRepair1.name
@@ -12756,7 +12756,7 @@ msgstr "Selecione novos alvos para continuar os bombardeios"
 #. data/mp/messages/resmessages3.json: $.RES_W_M_AC3.text[1]
 #: po/custom/fromJson.txt:5081
 msgid "Self-guided rocket-powered shells"
-msgstr "Munição auto-propulsionada auto-guiada"
+msgstr "Munição auto-guiada movida a foguetes"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade09.name
@@ -12801,14 +12801,14 @@ msgstr "Alcance de Sensor +25%"
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5111
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Híbrido Torrete de Sensor Cobra"
+msgstr "Torrete de Sensor Híbrido Cobra"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperSensorWheels.name
 #. data/mp/stats/templates.json: $.ViperSensorWheels.name
 #: po/custom/fromJson.txt:5115
 msgid "Sensor Turret Viper Wheels"
-msgstr "4x4 Torrete de Sensor Víbora"
+msgstr "Torrete de Sensor 4x4 Víbora"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Turret01.name
@@ -13297,7 +13297,7 @@ msgstr "Munição de Morteiros com Aquisição de Alvos"
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy03.name
 #: po/custom/fromJson.txt:5452
 msgid "Target Prediction Artillery Shells"
-msgstr "Munição de Artilharia Aquisidora de Alvos Mk3"
+msgstr "Munição de Artilharia Preditora de Alvos Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
@@ -13928,7 +13928,7 @@ msgstr "VTOL Arrasa-Defesas Escorpião"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-BB.name
 #: po/custom/fromJson.txt:5859
 msgid "VTOL Bunker Buster"
-msgstr "Arrasa-Defesas VTOL"
+msgstr "VTOL Arrasa-Defesas"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon1-VTOL.name
@@ -14480,11 +14480,11 @@ msgstr "Arquivo de Mod de Campanha do Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Arquivo de Mod Multiplayer de Warzone 2100"
+msgstr "Arquivo de Mods Multiplayers de Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
-msgstr "Arquivo de Mod Global de Warzone 2100"
+msgstr "Arquivo de Mods Globais de Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
@@ -14492,7 +14492,7 @@ msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
-msgstr "Arquivo de Música do Warzone 2100"
+msgstr "Arquivo de Músicas do Warzone 2100"
 
 #: po/custom/warzone2100.desktop.txt:1
 msgid "Postnuclear realtime strategy"
@@ -14560,7 +14560,7 @@ msgstr "arquivo"
 
 #: src/clparse.cpp:262
 msgid "Flush all debug output written to stderr"
-msgstr "Relatar o processo de debug para stderr"
+msgstr "Relatar o processo de depuração para stderr"
 
 #: src/clparse.cpp:263
 msgid "Play in fullscreen mode"
@@ -14691,7 +14691,7 @@ msgstr "teste"
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
-msgstr "Continuar o último jogo gravado"
+msgstr "Continuar o último jogo salvo"
 
 #: src/clparse.cpp:288
 msgid "Start host game with given settings file"
@@ -14902,7 +14902,7 @@ msgstr "Config. de zoom para %.0f"
 #: src/droid.cpp:251
 #, c-format
 msgid "%s Lost!"
-msgstr "%s Destruído!"
+msgstr "%s Perdido!"
 
 #: src/droid.cpp:1146
 msgid "Structure Restored"
@@ -15077,7 +15077,7 @@ msgstr "Carregar Jogo de Campanha Salvo"
 #: src/frontend.cpp:497
 #: src/ingameop.cpp:878
 msgid "Load Skirmish Saved Game"
-msgstr "Carregar Jogo Salvo vs. Computador"
+msgstr "Carregar Jogo vs. Computador Salvo"
 
 #: src/frontend.cpp:550
 msgid "MULTI PLAYER"
@@ -15755,7 +15755,7 @@ msgstr "Mapa:"
 #: src/integrations/wzdiscordrpc.cpp:603
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Bots:"
-msgstr "Robôs:"
+msgstr "Bots:"
 
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
@@ -15789,7 +15789,7 @@ msgstr "No Menu"
 #: src/integrations/wzdiscordrpc.cpp:1076
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr "O utilizador do Discord \"%s\" gostaria de entrar na sua partida."
+msgstr "O usuário do Discord \"%s\" gostaria de entrar na sua partida."
 
 #: src/integrations/wzdiscordrpc.cpp:1078
 msgid "Allow this player to join your game?"
