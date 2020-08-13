@@ -1690,7 +1690,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	return psDroid;
 }
 
-DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders)
+DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders, Rotation rot)
 {
 	// ajl. droid will be created, so inform others
 	if (bMultiMessages)
@@ -1701,7 +1701,7 @@ DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, 
 	}
 	else
 	{
-		return reallyBuildDroid(pTemplate, Position(x, y, 0), player, onMission);
+		return reallyBuildDroid(pTemplate, Position(x, y, 0), player, onMission, rot);
 	}
 }
 

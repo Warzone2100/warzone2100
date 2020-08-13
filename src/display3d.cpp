@@ -499,6 +499,24 @@ void clearBlueprints()
 	blueprints.clear();
 }
 
+static PIELIGHT selectionBrightness()
+{
+	int brightVar;
+	if (!gamePaused())
+	{
+		brightVar = getModularScaledGraphicsTime(990, 110);
+		if (brightVar > 55)
+		{
+			brightVar = 110 - brightVar;
+		}
+	}
+	else
+	{
+		brightVar = 55;
+	}
+	return pal_SetBrightness(200 + brightVar);
+}
+
 static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 {
 	PIELIGHT buildingBrightness;
@@ -514,21 +532,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 		/* If it's selected, then it's brighter */
 		if (psStructure->selected)
 		{
-			SDWORD brightVar;
-
-			if (!gamePaused())
-			{
-				brightVar = getModularScaledGraphicsTime(990, 110);
-				if (brightVar > 55)
-				{
-					brightVar = 110 - brightVar;
-				}
-			}
-			else
-			{
-				brightVar = 55;
-			}
-			buildingBrightness = pal_SetBrightness(200 + brightVar);
+			buildingBrightness = selectionBrightness();
 		}
 		if (!getRevealStatus())
 		{
@@ -2468,6 +2472,11 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 	{
 		pieFlag |= pie_FORCE_FOG;
 		colour = WZCOL_WHITE;
+		STRUCTURE *structure = findDeliveryFactory(psPosition);
+		if (structure != nullptr && structure->selected)
+		{
+			colour = selectionBrightness();
+		}
 	}
 	pie_Draw3DShape(pAssemblyPointIMDs[psPosition->factoryType][psPosition->factoryInc], 0, 0, colour, pieFlag, pieFlagData, viewMatrix * modelMatrix);
 
