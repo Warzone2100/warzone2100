@@ -35,6 +35,7 @@
 
 #include "../framework/frame.h"
 #include "netplay.h"
+#include "netreplay.h"
 #include "nettypes.h"
 #include "netqueue.h"
 #include "netlog.h"
@@ -788,4 +789,26 @@ void NETnetMessage(NetMessage const **message)
 		*message = m;
 		return;
 	}
+}
+
+// TODO Call this function somewhere.
+bool NETloadReplay(std::string const &filename)
+{
+	if (!NETreplayLoadStart(filename))
+	{
+		return false;
+	}
+	std::unique_ptr<NetMessage> message;
+	uint8_t player;
+	while (NETreplayLoadNetMessage(message, player))
+	{
+		if (player >= MAX_PLAYERS || gameQueues[player] == nullptr)
+		{
+			debug(LOG_ERROR, "Skipping message to player %d in replay.", player);
+			continue;
+		}
+		gameQueues[player]->pushMessage(*message);
+	}
+	NETreplayLoadStop();
+	return true;
 }

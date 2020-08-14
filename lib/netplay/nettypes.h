@@ -171,4 +171,6 @@ static inline void NETauto(Vector2i *vp)
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
+bool NETloadReplay(std::string const &filename);
+
 #endif

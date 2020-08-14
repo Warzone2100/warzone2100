@@ -24,8 +24,13 @@
 
 #include "netplay.h"
 
+
 bool NETreplaySaveStart();
 bool NETreplaySaveStop();
-void NETreplaySaveNetMessage(NetMessage const *message, unsigned player);
+void NETreplaySaveNetMessage(NetMessage const *message, uint8_t player);
+
+bool NETreplayLoadStart(std::string const &filename);
+bool NETreplayLoadNetMessage(std::unique_ptr<NetMessage> &message, uint8_t &player);
+bool NETreplayLoadStop();
 
 #endif // _NETREPLAY_H
