@@ -1602,7 +1602,7 @@ int realmain(int argc, char *argv[])
 	PHYSFS_mkdir("savegames/skirmish");		// skirmish save games
 	PHYSFS_mkdir("savegames/skirmish/auto");	// skirmish autosave games
 
-	make_dir(SaveGamePath, "replay", nullptr);  // replays
+	make_dir(ReplayPath, "replay", nullptr);  // replays
 	PHYSFS_mkdir("replay/skirmish");
 
 	make_dir(ScreenDumpPath, "screenshots", nullptr);	// for screenshots

@@ -120,20 +120,15 @@ static const char *sSaveReplayExtension = ".wzrp";
 // return whether the specified filename looks like a saved game file, i.e. ends with .gam
 static bool isASavedGamefile(const char *filename, const char *extension)
 {
-	static const size_t saveGameExtensionLength = strlen(extension);
-
 	if (nullptr == filename)
 	{
 		return false;
 	}
 
 	size_t filenameLength = strlen(filename);
-	if (filenameLength <= saveGameExtensionLength)
-	{
-		// reject filename of insufficient length to contain "<anything>.gam"
-		return false;
-	}
-	return 0 == strcmp(filename + filenameLength - saveGameExtensionLength, extension);
+	size_t extensionLength = strlen(extension);
+	// reject filename of insufficient length to contain "<anything>.gam"
+	return extensionLength < filenameLength && 0 == strcmp(filename + filenameLength - extensionLength, extension);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -658,27 +653,11 @@ bool runLoadSave(bool bResetMissionWidgets)
 		runLoadSaveCleanup(bResetMissionWidgets, true);
 		return true;
 	}
-	if (bMultiPlayer)
 	{
-		if (bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO)
-		{
-			ssprintf(NewSaveGamePath, "%s%s/auto/", SaveGamePath, "skirmish");
-		}
-		else
-		{
-			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "skirmish");
-		}
-	}
-	else
-	{
-		if (bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO)
-		{
-			ssprintf(NewSaveGamePath, "%s%s/auto/", SaveGamePath, "campaign");
-		}
-		else
-		{
-			ssprintf(NewSaveGamePath, "%s%s/", SaveGamePath, "campaign");
-		}
+		char const *skcamtype = bMultiPlayer? "skirmish" : "campaign";
+		char const *autotype = bLoadSaveMode >= LOAD_FRONTEND_MISSION_AUTO? "/auto" : "";
+		char const *savetype = modeReplay? ReplayPath : SaveGamePath;
+		ssprintf(NewSaveGamePath, "%s%s%s/", savetype, skcamtype, autotype);
 	}
 	if (id == LOADENTRY_START && modeLoad) // [auto] or [..], ignore click for saves
 	{
@@ -695,14 +674,11 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 		if (modeLoad)								// Loading, return that entry.
 		{
-			if (!slotButton->pText.isEmpty())
+			if (slotButton->pText.isEmpty())
 			{
-				ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), sSaveGameExtension);
+				return false;  // clicked on an empty box
 			}
-			else
-			{
-				return false;				// clicked on an empty box
-			}
+			ssprintf(sRequestResult, "%s%s%s", NewSaveGamePath, ((W_BUTTON *)widgGetFromID(psRequestScreen, id))->pText.toUtf8().c_str(), modeReplay? sSaveReplayExtension : sSaveGameExtension);
 
 			runLoadCleanup();
 			return true;

@@ -199,4 +199,6 @@ static inline void NETauto(T (&ar)[N])
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 
+bool NETloadReplay(std::string const &filename);
+
 #endif
