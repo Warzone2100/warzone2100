@@ -164,7 +164,7 @@ DROID_TYPE droidType(DROID *psDroid);
 /* Return the type of a droid from it's template */
 DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
 
-void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
+void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
 
 bool activateGroup(UDWORD playerNumber, UDWORD groupNumber);
 
