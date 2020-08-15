@@ -166,6 +166,19 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_AssignGrouping_9, "AssignGrouping_9"},
 	// **********************************
 	// **********************************
+	// ADD TO GROUP
+	{kf_AddGrouping_0, "AddGrouping_0"},
+	{kf_AddGrouping_1, "AddGrouping_1"},
+	{kf_AddGrouping_2, "AddGrouping_2"},
+	{kf_AddGrouping_3, "AddGrouping_3"},
+	{kf_AddGrouping_4, "AddGrouping_4"},
+	{kf_AddGrouping_5, "AddGrouping_5"},
+	{kf_AddGrouping_6, "AddGrouping_6"},
+	{kf_AddGrouping_7, "AddGrouping_7"},
+	{kf_AddGrouping_8, "AddGrouping_8"},
+	{kf_AddGrouping_9, "AddGrouping_9"},
+	// **********************************
+	// **********************************
 	// SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
 	{kf_SelectGrouping_0, "SelectGrouping_0"},
 	{kf_SelectGrouping_1, "SelectGrouping_1"},
@@ -386,7 +399,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE,     KEY_LSHIFT, KEY_F12, KEYMAP_PRESSED, kf_ToggleSensorDisplay,          N_("Toggle Sensor display"), bForceDefaults) || didAdd; //Which key should we use? --Re enabled see below! -Q 5-10-05
 	//                                **********************************
 	//                                **********************************
-	//										ASSIGN GROUPS
+	//	ASSIGN GROUPS - Will create or replace the existing group
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_0, KEYMAP_PRESSED, kf_AssignGrouping_0, N_("Assign Group 0"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_1, KEYMAP_PRESSED, kf_AssignGrouping_1, N_("Assign Group 1"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_2, KEYMAP_PRESSED, kf_AssignGrouping_2, N_("Assign Group 2"), bForceDefaults) || didAdd;
@@ -397,6 +410,17 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_7, KEYMAP_PRESSED, kf_AssignGrouping_7, N_("Assign Group 7"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_8, KEYMAP_PRESSED, kf_AssignGrouping_8, N_("Assign Group 8"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_9, KEYMAP_PRESSED, kf_AssignGrouping_9, N_("Assign Group 9"), bForceDefaults) || didAdd;
+	//	ADD TO GROUPS - Will add the selected units to the group
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_0, KEYMAP_PRESSED, kf_AddGrouping_0, N_("Add to Group 0"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_1, KEYMAP_PRESSED, kf_AddGrouping_1, N_("Add to Group 1"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_2, KEYMAP_PRESSED, kf_AddGrouping_2, N_("Add to Group 2"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_3, KEYMAP_PRESSED, kf_AddGrouping_3, N_("Add to Group 3"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_4, KEYMAP_PRESSED, kf_AddGrouping_4, N_("Add to Group 4"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_5, KEYMAP_PRESSED, kf_AddGrouping_5, N_("Add to Group 5"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_6, KEYMAP_PRESSED, kf_AddGrouping_6, N_("Add to Group 6"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_7, KEYMAP_PRESSED, kf_AddGrouping_7, N_("Add to Group 7"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_8, KEYMAP_PRESSED, kf_AddGrouping_8, N_("Add to Group 8"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_9, KEYMAP_PRESSED, kf_AddGrouping_9, N_("Add to Group 9"), bForceDefaults) || didAdd;
 	//                                **********************************
 	//                                **********************************
 	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected

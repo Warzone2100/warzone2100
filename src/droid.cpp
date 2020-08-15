@@ -1785,7 +1785,7 @@ void templateSetParts(const DROID *psDroid, DROID_TEMPLATE *psTemplate)
 }
 
 /* Make all the droids for a certain player a member of a specific group */
-void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber)
+void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup)
 {
 	DROID	*psDroid;
 	bool	bAtLeastOne = false;
@@ -1797,7 +1797,7 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber)
 		for (psDroid = apsDroidLists[playerNumber]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
 			/* Clear out the old ones */
-			if (psDroid->group == groupNumber)
+			if (clearGroup && psDroid->group == groupNumber)
 			{
 				psDroid->group = UBYTE_MAX;
 			}

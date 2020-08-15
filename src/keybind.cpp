@@ -1149,7 +1149,10 @@ void	kf_SelectGrouping(UDWORD	groupNumber)
 		kf_SelectGrouping(x); \
 	} \
 	void	kf_AssignGrouping_##x( void ) { \
-		assignDroidsToGroup(selectedPlayer, x); \
+		assignDroidsToGroup(selectedPlayer, x, true); \
+	} \
+	void	kf_AddGrouping_##x( void ) { \
+		assignDroidsToGroup(selectedPlayer, x, false); \
 	} \
 	void	kf_SelectCommander_##x( void ) { \
 		selCommander(x); \
