@@ -692,6 +692,12 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 {
 	if (fromPlayer < MAX_PLAYERS && bMultiPlayer)
 	{
+		if (toPlayer == selectedPlayer && toPlayer == fromPlayer)
+		{
+			audio_QueueTrack(ID_SOUND_ARTIFACT_RECOVERED);
+			return true;
+		}
+
 		for (int topic = asResearch.size() - 1; topic >= 0; topic--)
 		{
 			if (IsResearchCompleted(&asPlayerResList[fromPlayer][topic])
