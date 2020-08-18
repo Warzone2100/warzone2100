@@ -239,7 +239,10 @@ bool found3DBuilding(Vector2i &pos)
 		return false;
 	}
 
-	pos = world_coord({sBuildDetails.x, sBuildDetails.y}) + world_coord({sBuildDetails.width, sBuildDetails.height})/2;
+	pos = world_coord({sBuildDetails.x, sBuildDetails.y}) + world_coord(
+		(snapDirection(player.r.y) & 0x4000) == 0?
+			Vector2i{sBuildDetails.width, sBuildDetails.height} : Vector2i{sBuildDetails.height, sBuildDetails.width}
+	)/2;
 
 	if (ctrlShiftDown())
 	{
