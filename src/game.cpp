@@ -5697,6 +5697,7 @@ bool loadSaveFeature2(const char *pFileName)
 			pFeature->id = generateSynchronisedObjectId();
 		}
 		pFeature->rot = ini.vector3i("rotation");
+		pFeature->player = ini.value("player", PLAYER_FEATURE).toInt();
 
 		// common BASE_OBJECT info
 		loadSaveObject(ini, pFeature);
