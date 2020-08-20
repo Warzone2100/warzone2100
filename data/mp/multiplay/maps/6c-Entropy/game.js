@@ -154,7 +154,7 @@ function sampleTexture(array) {
 // Assigns each region a texture distribution and a height.
 function genRegions(fields) {
 	var tries = 0;
-	while (true) {
+	while (true) {  // eslint-disable-line no-constant-condition
 		++tries;
 
 		// Assign regions.
@@ -168,7 +168,7 @@ function genRegions(fields) {
 		// Check if most of the map is connected (without needing hover), and without needing narrow passages less than 5 tiles wide.
 		var visit = [];
 		var next = [];
-		function queue(i) {
+		function queue(i) {  // eslint-disable-line no-inner-declarations
 			if (!visit[i] && !regions[i].texture.isWater) {
 				visit[i] = true;
 				next.push(i);
@@ -354,8 +354,8 @@ function placeNear(x, y, w, h, pad, scatter) {
 		next = [];
 		for (var i = 0; i < cur.length; ++i) {
 			var cx = cur[i][0], cy = cur[i][1];
-			var xy;
-			if (xy = consider(cx, cy)) {
+			var xy = consider(cx, cy);
+			if (xy) {
 				return xy;
 			}
 			var fromCW = isCliffOrWater[mapWidth*(cy | 0) + (cx | 0)];
@@ -389,7 +389,7 @@ function genStartPos(fields, regions) {
 		var player = gameRand(players);
 		var newPos = randPos();
 		// Based on very rough slightly-asymmetric pathfinding approximation.
-		function scoreAt(pos) {
+		function scoreAt(pos) {  // eslint-disable-line no-inner-declarations
 			var next = []
 			var visit = [];
 			function queue(i, pos, dist) {

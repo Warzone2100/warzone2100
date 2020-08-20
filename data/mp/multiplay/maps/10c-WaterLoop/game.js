@@ -19,7 +19,7 @@ var RAVG = RMAX/2;
 // Random vector with max length maxR.
 function randVec(maxR) {
 	var s = maxR/RAVG;
-	while (true) {
+	while (true) {  // eslint-disable-line no-constant-condition
 		var x = s*(gameRand() - RAVG);
 		var y = s*(gameRand() - RAVG);
 		if (x*x + y*y <= maxR*maxR) {
@@ -338,8 +338,8 @@ SpaceFinder.prototype = {
 			next = [];
 			for (var i = 0; i < cur.length; ++i) {
 				var cx = cur[i][0], cy = cur[i][1];
-				var xy;
-				if (xy = this.consider(cx, cy, w, h, pad, scatter)) {
+				var xy = this.consider(cx, cy, w, h, pad, scatter);
+				if (xy) {
 					return xy;
 				}
 				var fromCW = isCliffOrWater[mapWidth*(cy | 0) + (cx | 0)];
