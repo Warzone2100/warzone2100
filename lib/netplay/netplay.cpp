@@ -4317,8 +4317,8 @@ static void addToBanList(const char *ip, const char *name)
 			abort();
 		}
 		IPlistLast = 0;
+		memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
 	}
-	memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
 	sstrcpy(IPlist[IPlistLast].IPAddress, ip);
 	sstrcpy(IPlist[IPlistLast].pname, name);
 	IPlistLast++;
