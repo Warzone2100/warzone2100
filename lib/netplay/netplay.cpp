@@ -381,7 +381,7 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 {
 	initPlayerNetworkProps(i);
 
-	NetPlay.players[i].difficulty = AIDifficulty::DEFAULT;
+	NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
 	if (ingame.localJoiningInProgress)
 	{
 		// only clear name outside of games.
