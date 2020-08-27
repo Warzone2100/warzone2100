@@ -128,6 +128,22 @@ TITLECODE WzProtocolTitleUI::run()
 		}
 		hasWaitingIP = true;
 		closeIPDialog();
+		if (strchr(serverName, '[') == NULL || strchr(serverName, ']') == NULL) // shure that it is not IPv6. For more see rfc3986 section-3.2.2
+		{
+			char* ddch = strchr(serverName, ':');
+			if(ddch != NULL)
+			{
+				uint32_t serverPort = atoi(ddch+1);
+				char serverIP[16] = {'\0'};
+				for (size_t i = 0; i<15 && serverName[i] != ':'; i++)
+				{
+					serverIP[i] = serverName[i];
+				}
+				debug(LOG_INFO, "Connecting to ip [%s] port %d (%ld)", serverIP, serverPort, 15-(ddch-serverName));
+				joinGame(serverIP, serverPort);
+				break;
+			}
+		}
 		joinGame(serverName, 0);
 		break;
 	case CON_IP_CANCEL:
