@@ -55,6 +55,11 @@ function returnArtilleryAlias()
 	return subPersonalities[personality].artillery.alias;
 }
 
+function personalityIsRocketMain()
+{
+	return ((returnPrimaryAlias() === "rkt") || (returnSecondaryAlias() === "rkt"));
+}
+
 //Distance between an object and the Cobra base.
 function distanceToBase(obj1, obj2)
 {
@@ -176,7 +181,7 @@ function findLivingEnemies()
 		return alive;
 	}
 
-	return cacheThis(uncached, [], "findLivingEnemies1", 8000);
+	return cacheThis(uncached, [], "findLivingEnemies + me", 8000);
 }
 
 //The enemy of which Cobra is focusing on.
@@ -221,7 +226,7 @@ function getMostHarmfulPlayer()
 		return mostHarmful;
 	}
 
-	return cacheThis(uncached, [], "getMostHarmfulPlayer1", 5000);
+	return cacheThis(uncached, [], "getMostHarmfulPlayer" + me, 5000);
 }
 
 //Set the initial grudge counter to target a random enemy.
@@ -360,6 +365,14 @@ function initCobraVars()
 	useArti = true;
 	useVtol = true;
 	lastAttackedByScavs = 0;
+	beacon = {
+		x: 0,
+		y: 0,
+		startTime: 0,
+		endTime: 0,
+		wasVtol: false,
+		disabled: false,
+	};
 }
 
 //Attempt to workaround a bug with pickStructLocation() failing to find valid locations
@@ -393,5 +406,5 @@ function randomOffsetLocation(location)
 		return {x: newValueX, y: newValueY};
 	}
 
-	return cacheThis(uncached, [location], "randomOffsetLocation1", 2000);
+	return cacheThis(uncached, [location], "randomOffsetLocation" + me, 2000);
 }

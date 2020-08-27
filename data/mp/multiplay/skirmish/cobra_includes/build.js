@@ -4,10 +4,10 @@ function needPowerGenerator()
 {
 	function uncached()
 	{
-		return ((countStruct(structures.derricks) - (countStruct(structures.gens) * 4)) > 0);
+		return ((countStruct(structures.derrick) - (countStruct(structures.gen) * 4)) > 0);
 	}
 
-	return cacheThis(uncached, [], "needPowerGenerator1", 8000);
+	return cacheThis(uncached, [], "needPowerGenerator" + me, 8000);
 }
 
 function minTruckCount()
@@ -17,7 +17,7 @@ function minTruckCount()
 		return (highOilMap() ? 3 : 2) * MIN_TRUCKS_PER_GROUP;
 	}
 
-	return cacheThis(uncached, [], "minTruckCount1", Infinity);
+	return cacheThis(uncached, [], "minTruckCount" + me, Infinity);
 }
 
 //Determine if this is a constructor droid. Specify and optional second paramter
@@ -128,7 +128,7 @@ function countAndBuild(stat, count)
 //Find the closest derrick that is not guarded a defense.
 function protectUnguardedDerricks(droid)
 {
-	var derrs = enumStruct(me, structures.derricks);
+	var derrs = enumStruct(me, structures.derrick);
 	const LEN = derrs.length;
 	const MAX_BLOCKING = 8;
 
@@ -322,7 +322,7 @@ function lookForOil()
 	var droids = enumGroup(oilGrabberGroup);
 	var oils = enumFeature(-1, OIL_RES).sort(distanceToBase);
 
-	if (random(100) < 40 && countStruct(structures.derricks) > 4)
+	if (random(100) < 40 && countStruct(structures.derrick) > 4)
 	{
 		protectUnguardedDerricks();
 	}
@@ -348,7 +348,7 @@ function lookForOil()
 
 		if (bestDroid && !stopExecution("oil" + oil.y * mapWidth * oil.x, 50000))
 		{
-			orderDroidBuild(bestDroid, DORDER_BUILD, structures.derricks, oil.x, oil.y);
+			orderDroidBuild(bestDroid, DORDER_BUILD, structures.derrick, oil.x, oil.y);
 			return true;
 		}
 	}
@@ -490,7 +490,7 @@ function buildDefenseNearTruck(truck, type)
 function defendRandomDerrick()
 {
 	const MAX_DIST = 30;
-	var derrs = enumStruct(me, structures.derricks).filter(function(obj) {
+	var derrs = enumStruct(me, structures.derrick).filter(function(obj) {
 		return distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, obj.x, obj.y) > MAX_DIST;
 	});
 
@@ -546,7 +546,7 @@ function buildBaseStructures()
 {
 	const GOOD_POWER_LEVEL = getRealPower() > 250;
 
-	if (forceHover && GOOD_POWER_LEVEL && countAndBuild(structures.labs, 1))
+	if (forceHover && GOOD_POWER_LEVEL && countAndBuild(structures.lab, 1))
 	{
 		return true;
 	}
@@ -557,7 +557,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if ((!GOOD_POWER_LEVEL || getMultiTechLevel() > 1) && countAndBuild(structures.gens, 1))
+		if ((!GOOD_POWER_LEVEL || getMultiTechLevel() > 1) && countAndBuild(structures.gen, 1))
 		{
 			return true;
 		}
@@ -565,23 +565,23 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (!researchComplete && countAndBuild(structures.labs, 2))
+		if (!researchComplete && countAndBuild(structures.lab, 2))
 		{
 			return true;
 		}
-		if (countAndBuild(structures.gens, 2))
+		if (countAndBuild(structures.gen, 2))
 		{
 			return true;
 		}
-		if (countAndBuild(structures.hqs, 1))
+		if (countAndBuild(structures.hq, 1))
 		{
 			return true;
 		}
-		if (!researchComplete && countAndBuild(structures.labs, 3))
+		if (!researchComplete && countAndBuild(structures.lab, 3))
 		{
 			return true;
 		}
-		if (needPowerGenerator() && countAndBuild(structures.gens, countStruct(structures.gens) + 1))
+		if (needPowerGenerator() && countAndBuild(structures.gen, countStruct(structures.gen) + 1))
 		{
 			return true;
 		}
@@ -594,7 +594,7 @@ function buildBaseStructures()
 			return true;
 		}
 		//Build 1 repair facility
-		if (countAndBuild(structures.extras[0], 1))
+		if (countAndBuild(structures.repair, 1))
 		{
 			return true;
 		}
@@ -605,7 +605,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (GOOD_POWER_LEVEL && !researchComplete && countAndBuild(structures.labs, 1))
+		if (GOOD_POWER_LEVEL && !researchComplete && countAndBuild(structures.lab, 1))
 		{
 			return true;
 		}
@@ -613,11 +613,15 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(structures.gens, 1))
+		if (countAndBuild(structures.gen, 1))
 		{
 			return true;
 		}
-		if (GOOD_POWER_LEVEL && !researchComplete && countAndBuild(structures.labs, 2))
+		if (GOOD_POWER_LEVEL && !researchComplete && countAndBuild(structures.lab, 3))
+		{
+			return true;
+		}
+		if (countAndBuild(structures.gen, 2))
 		{
 			return true;
 		}
@@ -625,15 +629,15 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(structures.gens, 3))
+		if (countAndBuild(structures.gen, 3))
 		{
 			return true;
 		}
-		if (countAndBuild(structures.hqs, 1))
+		if (countAndBuild(structures.hq, 1))
 		{
 			return true;
 		}
-		if (!researchComplete && countAndBuild(structures.labs, 3))
+		if (!researchComplete && countAndBuild(structures.lab, 4))
 		{
 			return true;
 		}
@@ -647,7 +651,7 @@ function buildBaseStructures()
 		}
 	}
 
-	if (getMultiTechLevel() > 1 && countStruct(VTOL_FACTORY) > 0 && countAndBuild(structures.vtolPads, 3))
+	if (getMultiTechLevel() > 1 && countStruct(VTOL_FACTORY) > 0 && countAndBuild(structures.vtolPad, 3))
 	{
 		return true;
 	}
@@ -670,7 +674,7 @@ function factoryBuildOrder()
 			continue;
 		}
 
-		var derrNum = countStruct(structures.derricks);
+		var derrNum = countStruct(structures.derrick);
 		var facNum = countStruct(fac);
 		var allowedAmount = 0;
 
@@ -706,14 +710,14 @@ function factoryBuildOrder()
 
 function researchBuildOrder()
 {
-	var labs = countStruct(structures.labs);
+	var labs = countStruct(structures.lab);
 	var seaMap = turnOffCyborgs || forceHover;
 	const MAX_LAB_COUNT = 5;
 
 	if (!researchComplete && labs < MAX_LAB_COUNT)
 	{
 		var amount = 3;
-		var derrCount = countStruct(structures.derricks);
+		var derrCount = countStruct(structures.derrick);
 
 		if (derrCount >= 10)
 		{
@@ -724,7 +728,7 @@ function researchBuildOrder()
 			amount = 4;
 		}
 
-		if (labs < amount && countAndBuild(structures.labs, amount))
+		if (labs < amount && countAndBuild(structures.lab, amount))
 		{
 			return true;
 		}
@@ -736,7 +740,7 @@ function researchBuildOrder()
 //Build minimum requirements of base structures.
 function buildBaseStructures2()
 {
-	if (!countStruct(structures.gens))
+	if (!countStruct(structures.gen))
 	{
 		return true;
 	}
@@ -757,12 +761,13 @@ function buildBaseStructures2()
 //Laser satellite/uplink center
 function buildSpecialStructures()
 {
-	for (var i = 1, l = structures.extras.length; i < l; ++i)
+	if (countAndBuild(structures.uplink, 1))
 	{
-		if (countAndBuild(structures.extras[i], 1))
-		{
-			return true;
-		}
+		return true;
+	}
+	if (countAndBuild(structures.lassat, 1))
+	{
+		return true;
 	}
 
 	return false;
@@ -771,14 +776,14 @@ function buildSpecialStructures()
 //Build the minimum repairs and any vtol pads.
 function buildExtras()
 {
-	var gens = countStruct(structures.gens);
-	if (getRealPower() > SUPER_LOW_POWER && countStruct(structures.extras[0]) < 5 && countAndBuild(structures.extras[0], gens + 1))
+	var gens = countStruct(structures.gen);
+	if (getRealPower() > SUPER_LOW_POWER && countStruct(structures.repair) < 5 && countAndBuild(structures.repair, gens + 1))
 	{
 		return true;
 	}
 
-	var needVtolPads = Math.floor(1.5 * countStruct(structures.vtolPads)) < enumGroup(vtolGroup).length;
-	if (needVtolPads && buildStuff(structures.vtolPads))
+	var needVtolPads = Math.floor(1.5 * countStruct(structures.vtolPad)) < enumGroup(vtolGroup).length;
+	if (needVtolPads && buildStuff(structures.vtolPad))
 	{
 		return true;
 	}
@@ -788,7 +793,7 @@ function buildExtras()
 
 function buildNTWPhase2()
 {
-	if (needPowerGenerator() && countAndBuild(structures.gens, 6))
+	if (needPowerGenerator() && countAndBuild(structures.gen, 6))
 	{
 		return true;
 	}
@@ -796,7 +801,7 @@ function buildNTWPhase2()
 	{
 		return true;
 	}
-	if (!researchComplete && countAndBuild(structures.labs, 5))
+	if (!researchComplete && countAndBuild(structures.lab, 5))
 	{
 		return true;
 	}
@@ -804,17 +809,17 @@ function buildNTWPhase2()
 	{
 		return true;
 	}
-	if (needPowerGenerator() && countAndBuild(structures.gens, 8))
+	if (needPowerGenerator() && countAndBuild(structures.gen, 8))
 	{
 		return true;
 	}
-	if (countAndBuild(structures.extras[0], 3))
+	if (countAndBuild(structures.repair, 3))
 	{
 		return true;
 	}
 
 	// Ignore spam building gens early game on true 40 oil maps
-	if (needPowerGenerator() && countAndBuild(structures.gens, countStruct(structures.gens) + 1))
+	if (needPowerGenerator() && countAndBuild(structures.gen, countStruct(structures.gen) + 1))
 	{
 		return true;
 	}
@@ -855,7 +860,7 @@ function buildOrders()
 //Check if a building has modules to be built
 function maintenance(group)
 {
-	if (!countStruct(structures.gens) || (countStruct(structures.derricks) < 4))
+	if (!countStruct(structures.gen) || (countStruct(structures.derrick) < 4))
 	{
 		return false;
 	}
@@ -865,7 +870,7 @@ function maintenance(group)
 	}
 
 	var isNTW = highOilMap();
-	var goodNTWPower = getRealPower() > 250;
+	var goodNTWPower = getRealPower() > 125;
 	var minModulePower = (getMultiTechLevel() === 1) ? -50 : -200;
 
 	var modList;
@@ -874,8 +879,8 @@ function maintenance(group)
 	if (isNTW)
 	{
 		modList = [
-			{"mod": "A0PowMod1", "amount": 1, "structure": structures.gens},
-			{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.labs},
+			{"mod": "A0PowMod1", "amount": 1, "structure": structures.gen},
+			{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.lab},
 			{"mod": "A0FacMod1", "amount": 1, "structure": FACTORY},
 			{"mod": "A0FacMod1", "amount": 2, "structure": FACTORY},
 			{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY},
@@ -884,9 +889,9 @@ function maintenance(group)
 	else
 	{
 		modList = [
-			{"mod": "A0PowMod1", "amount": 1, "structure": structures.gens},
+			{"mod": "A0PowMod1", "amount": 1, "structure": structures.gen},
 			{"mod": "A0FacMod1", "amount": 1, "structure": FACTORY},
-			{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.labs},
+			{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.lab},
 			{"mod": "A0FacMod1", "amount": 2, "structure": FACTORY},
 			{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY},
 		];
@@ -909,7 +914,7 @@ function maintenance(group)
 				//researched yet (from some maps).
 				continue;
 			}
-			if (isNTW && (modObj.structure === structures.gens) && goodNTWPower && (group !== constructGroupNTWExtra))
+			if (isNTW && (modObj.structure === structures.gen) && goodNTWPower && (group !== constructGroupNTWExtra))
 			{
 				continue;
 			}
