@@ -269,6 +269,7 @@ function eventStartLevel()
 		"NXBeamTowerArti": { tech: "R-Wpn-Laser01" },
 		"gammaResLabArti": { tech: "R-Wpn-Mortar-Acc03" },
 		"gammaCommandArti": { tech: "R-Vehicle-Body03" }, //retalitation
+		"gammaFactory": { tech: "R-Wpn-Cannon-ROF04" },
 	});
 
 	camSetEnemyBases({
