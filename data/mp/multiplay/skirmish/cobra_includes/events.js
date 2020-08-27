@@ -49,7 +49,7 @@ function eventStructureBuilt(structure, droid)
 
 		if (nearbyOils.length > 0)
 		{
-			orderDroidBuild(droid, DORDER_BUILD, structures.derricks, nearbyOils[0].x, nearbyOils[0].y);
+			orderDroidBuild(droid, DORDER_BUILD, structures.derrick, nearbyOils[0].x, nearbyOils[0].y);
 		}
 		else
 		{
@@ -146,7 +146,9 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
+	const SCAV_ATTACKER = isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer);
 	const GROUP_SCAN_RADIUS = subPersonalities[personality].retreatScanRange;
+
 	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter(function(obj) {
 		return obj.type === DROID;
 	});
@@ -155,7 +157,7 @@ function eventAttacked(victim, attacker)
 	if (victim.type === DROID && victim.player === me)
 	{
 		var nearbyScavs = 0;
-		var nearbyEnemies = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ENEMIES, false);
+		var nearbyEnemies = enumRange(victim.x, victim.y, SCAV_ATTACKER ? (GROUP_SCAN_RADIUS * 0.75) : GROUP_SCAN_RADIUS, ENEMIES, false);
 		if (isVTOL(victim))
 		{
 			droidReady(victim.id);
@@ -169,13 +171,13 @@ function eventAttacked(victim, attacker)
 			var run = true;
 
 			//Be more aggressive with scavenger stuff
-			if (isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer))
+			if (SCAV_ATTACKER)
 			{
 				nearbyEnemies.forEach(function(obj) {
 					nearbyScavs += (obj.player === scavengerPlayer);
 				});
 
-				if (Math.floor(nearbyUnits.length * 1.5) > nearbyScavs)
+				if (Math.floor(nearbyUnits.length * 2) > nearbyScavs)
 				{
 					run = false;
 				}
@@ -189,7 +191,7 @@ function eventAttacked(victim, attacker)
 		}
 	}
 
-	if (isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer))
+	if (SCAV_ATTACKER)
 	{
 		lastAttackedByScavs = gameTime;
 		return;
@@ -200,7 +202,7 @@ function eventAttacked(victim, attacker)
 		grudgeCount[attacker.player] += (victim.type === STRUCTURE) ? 20 : 5;
 
 		//Check if a droid needs repair.
-		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(structures.extras[0]))
+		if ((victim.type === DROID) && !isVTOL(victim) && countStruct(structures.repair))
 		{
 			repairDroid(victim.id);
 		}
@@ -258,27 +260,49 @@ function eventObjectTransfer(obj, from)
 //Basic Laser Satellite support.
 function eventStructureReady(structure)
 {
+	const RETRY_TIME = 10000;
+
 	if (!structure)
 	{
-		const LASER = enumStruct(me, structures.extras[2]);
+		const LASER = enumStruct(me, structures.lassat);
 		if (LASER.length > 0)
 		{
 			structure = LASER[0];
 		}
 		else
 		{
-			queue("eventStructureReady", 10000);
+			queue("eventStructureReady", RETRY_TIME);
 			return;
 		}
 	}
 
-	var fac = returnClosestEnemyFactory();
-	if (fac)
+	var obj = returnClosestEnemyFactory();
+	//Find something that exists, if possible.
+	if (!isDefined(obj))
 	{
-		activateStructure(structure, getObject(fac.typeInfo, fac.playerInfo, fac.idInfo));
+		obj = rangeStep();
+	}
+
+	if (obj)
+	{
+		activateStructure(structure, getObject(obj.typeInfo, obj.playerInfo, obj.idInfo));
 	}
 	else
 	{
-		queue("eventStructureReady", 10000, structure);
+		queue("eventStructureReady", RETRY_TIME, structure);
 	}
+}
+
+function eventBeacon(x, y, from, to, message)
+{
+	if (!allianceExistsBetween(from, me))
+	{
+		return;
+	}
+
+	beacon.x = x;
+	beacon.y = y;
+	beacon.startTime = gameTime;
+	beacon.endTime = gameTime + 60000;
+	beacon.wasVtol = isDefined(message) && (message === BEACON_VTOL_ALARM);
 }

@@ -21,7 +21,7 @@ function switchOffMG()
 
 function useLasersForCyborgControl()
 {
-	return (componentAvailable("Body12SUP") || isStructureAvailable(structures.vtolPads));
+	return getResearch("R-Struc-Research-Upgrade08").done;
 }
 
 function playerCyborgRatio(player)
@@ -81,6 +81,21 @@ function playerVtolRatio(player)
 	return cacheThis(uncached, [player], "playerVtolRatio" + player, 6000);
 }
 
+function playerStructureUnitRatio(player)
+{
+	if (!isDefined(player))
+	{
+		player = getMostHarmfulPlayer();
+	}
+
+	function uncached(player)
+	{
+		return enumStruct(player).length / (enumDroid(player).length + 1);
+	}
+
+	return cacheThis(uncached, [player], "playerStructureUnitRatio" + player, 30000);
+}
+
 
 //Choose the personality as described in the global subPersonalities.
 //When called from chat it will switch to that one directly.
@@ -122,7 +137,6 @@ function adaptToMap()
 			"AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB",
 			"AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC",
 			"AA", "AA", "AA",
-			"AL", "AL", "AL", "AL", "AL", "AL",
 		];
 	}
 	else
@@ -133,7 +147,6 @@ function adaptToMap()
 			"AB", "AB", "AB", "AB", "AB", "AB", "AB",
 			"AC", "AC", "AC", "AC", "AC", "AC", "AC",
 			"AA", "AA",
-			"AL", "AL", "AL", "AL",
 		];
 	}
 

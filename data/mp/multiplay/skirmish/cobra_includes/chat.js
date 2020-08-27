@@ -28,8 +28,7 @@ function eventChat(from, to, message)
 		message === "AR" ||
 		message === "AB" ||
 		message === "AM" ||
-		message === "AA" ||
-		message === "AL")
+		message === "AA")
 	{
 		if (personality !== message)
 		{
@@ -83,6 +82,10 @@ function eventChat(from, to, message)
 		prevResPath = subPersonalities[personality].resPath;
 		subPersonalities[personality].resPath = pth;
 		sendChatMessage("research path changed to: " + pth, ALLIES);
+	}
+	else if (message === "toggle beacon")
+	{
+		beacon.disabled = !beacon.disabled;
 	}
 
 
