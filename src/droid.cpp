@@ -738,7 +738,7 @@ void droidUpdate(DROID *psDroid)
 
 			emissionInterval = CALC_DROID_SMOKE_INTERVAL(percentDamage);
 
-			int effectTime = std::max(gameTime - deltaGameTime + 1, psDroid->lastEmission + emissionInterval);
+			uint32_t effectTime = std::max(gameTime - deltaGameTime + 1, psDroid->lastEmission + emissionInterval);
 			if (gameTime >= effectTime)
 			{
 				dv.x = psDroid->pos.x + DROID_DAMAGE_SPREAD;
@@ -823,39 +823,21 @@ void droidUpdate(DROID *psDroid)
 }
 
 /* See if a droid is next to a structure */
-static bool droidNextToStruct(DROID *psDroid, BASE_OBJECT *psStruct)
+static bool droidNextToStruct(DROID *psDroid, STRUCTURE *psStruct)
 {
-	SDWORD	minX, maxX, maxY, x, y;
-
 	CHECK_DROID(psDroid);
 
-	minX = map_coord(psDroid->pos.x) - 1;
-	y = map_coord(psDroid->pos.y) - 1;
-	maxX = minX + 2;
-	maxY = y + 2;
-	if (minX < 0)
+	auto pos = map_coord(psDroid->pos);
+	int minX = std::max(pos.x - 1, 0);
+	int minY = std::max(pos.y - 1, 0);
+	int maxX = std::min(pos.x + 1, mapWidth);
+	int maxY = std::min(pos.y + 1, mapHeight);
+	for (int y = minY; y <= maxY; ++y)
 	{
-		minX = 0;
-	}
-	if (maxX >= (SDWORD)mapWidth)
-	{
-		maxX = (SDWORD)mapWidth;
-	}
-	if (y < 0)
-	{
-		y = 0;
-	}
-	if (maxY >= (SDWORD)mapHeight)
-	{
-		maxY = (SDWORD)mapHeight;
-	}
-	for (; y <= maxY; y++)
-	{
-		for (x = minX; x <= maxX; x++)
+		for (int x = minX; x <= maxX; ++x)
 		{
-			if (TileHasStructure(mapTile((UWORD)x, (UWORD)y)) &&
-			    getTileStructure(x, y) == (STRUCTURE *)psStruct)
-
+			if (TileHasStructure(mapTile(x, y)) &&
+			    getTileStructure(x, y) == psStruct)
 			{
 				return true;
 			}
@@ -882,12 +864,7 @@ static bool droidBuildStartAudioCallback(void *psObj)
 {
 	auto psDroid = (DROID *)psObj;
 
-	if (psDroid == nullptr)
-	{
-		return true;
-	}
-
-	if (psDroid->visible[selectedPlayer])
+	if (psDroid != nullptr && psDroid->visible[selectedPlayer])
 	{
 		audio_PlayObjDynamicTrack(psDroid, ID_SOUND_CONSTRUCTION_LOOP, droidCheckBuildStillInProgress);
 	}
@@ -987,9 +964,7 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 
 static void droidAddWeldSound(Vector3i iVecEffect)
 {
-	SDWORD		iAudioID;
-
-	iAudioID = ID_SOUND_CONSTRUCTION_1 + (rand() % 4);
+	int iAudioID = ID_SOUND_CONSTRUCTION_1 + (rand() % 4);
 
 	audio_PlayStaticTrack(iVecEffect.x, iVecEffect.z, iAudioID);
 }
@@ -1015,8 +990,6 @@ static void addConstructorEffect(STRUCTURE *psStruct)
    returns true while building continues */
 bool droidUpdateBuild(DROID *psDroid)
 {
-	UDWORD		pointsToAdd, constructPoints;
-
 	CHECK_DROID(psDroid);
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_BUILD, "%s (order %s) has wrong action for construction: %s",
 	                 droidGetName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action));
@@ -1059,10 +1032,10 @@ bool droidUpdateBuild(DROID *psDroid)
 		return false;
 	}
 
-	constructPoints = constructorPoints(asConstructStats + psDroid->
+	unsigned constructPoints = constructorPoints(asConstructStats + psDroid->
 	                                    asBits[COMP_CONSTRUCT], psDroid->player);
 
-	pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
+	unsigned pointsToAdd = constructPoints * (gameTime - psDroid->actionStarted) /
 	              GAME_TICKS_PER_SEC;
 
 	structureBuild(psStruct, psDroid, pointsToAdd - psDroid->actionPoints, constructPoints);
@@ -1104,28 +1077,23 @@ void droidStartAction(DROID *psDroid)
 /*continue restoring a structure*/
 bool droidUpdateRestore(DROID *psDroid)
 {
-	STRUCTURE		*psStruct;
-	UDWORD			pointsToAdd, restorePoints;
-	WEAPON_STATS	*psStats;
-	int compIndex;
-
 	CHECK_DROID(psDroid);
 
 	ASSERT_OR_RETURN(false, psDroid->action == DACTION_RESTORE, "Unit is not restoring");
-	psStruct = (STRUCTURE *)psDroid->order.psObj;
+	STRUCTURE *psStruct = (STRUCTURE *)psDroid->order.psObj;
 	ASSERT_OR_RETURN(false, psStruct->type == OBJ_STRUCTURE, "Target is not a structure");
 	ASSERT_OR_RETURN(false, psDroid->asWeaps[0].nStat > 0, "Droid doesn't have any weapons");
 
-	compIndex = psDroid->asWeaps[0].nStat;
-	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %d > %d", compIndex, numWeaponStats);
-	psStats = asWeaponStats + compIndex;
+	unsigned compIndex = psDroid->asWeaps[0].nStat;
+	ASSERT_OR_RETURN(false, compIndex < numWeaponStats, "Invalid range referenced for numWeaponStats, %u > %u", compIndex, numWeaponStats);
+	WEAPON_STATS *psStats = &asWeaponStats[compIndex];
 
 	ASSERT_OR_RETURN(false, psStats->weaponSubClass == WSC_ELECTRONIC, "unit's weapon is not EW");
 
-	restorePoints = calcDamage(weaponDamage(psStats, psDroid->player),
+	unsigned restorePoints = calcDamage(weaponDamage(psStats, psDroid->player),
 	                           psStats->weaponEffect, (BASE_OBJECT *)psStruct);
 
-	pointsToAdd = restorePoints * (gameTime - psDroid->actionStarted) /
+	unsigned pointsToAdd = restorePoints * (gameTime - psDroid->actionStarted) /
 	              GAME_TICKS_PER_SEC;
 
 	psStruct->resistance = (SWORD)(psStruct->resistance + (pointsToAdd - psDroid->actionPoints));
@@ -1255,12 +1223,7 @@ bool idfDroid(DROID *psDroid)
 		return false;
 	}
 
-	if (proj_Direct(psDroid->asWeaps[0].nStat + asWeaponStats))
-	{
-		return false;
-	}
-
-	return true;
+	return !proj_Direct(psDroid->asWeaps[0].nStat + asWeaponStats);
 }
 
 /* Return the type of a droid */
@@ -1317,73 +1280,117 @@ DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate)
 	return type;
 }
 
+template <typename F, typename G>
+static unsigned calcSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, uint32_t (&asWeaps)[MAX_WEAPONS], F func, G propulsionFunc)
+{
+	unsigned sum =
+		func(asBodyStats     [asParts[COMP_BODY]]) +
+		func(asBrainStats    [asParts[COMP_BRAIN]]) +
+		func(asSensorStats   [asParts[COMP_SENSOR]]) +
+		func(asECMStats      [asParts[COMP_ECM]]) +
+		func(asRepairStats   [asParts[COMP_REPAIRUNIT]]) +
+		func(asConstructStats[asParts[COMP_CONSTRUCT]]) +
+		propulsionFunc(asPropulsionStats[asParts[COMP_PROPULSION]], asBodyStats[asParts[COMP_BODY]]);
+	for (int i = 0; i < numWeaps; ++i)
+	{
+		sum += func(asWeaponStats[asWeaps[i]]);
+	}
+	return sum;
+}
+
+template <typename F, typename G>
+static unsigned calcUpgradeSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, uint32_t (&asWeaps)[MAX_WEAPONS], int player, F func, G propulsionFunc)
+{
+	unsigned sum =
+		func(asBodyStats     [asParts[COMP_BODY]].upgrade[player]) +
+		func(asBrainStats    [asParts[COMP_BRAIN]].upgrade[player]) +
+		func(asSensorStats   [asParts[COMP_SENSOR]].upgrade[player]) +
+		func(asECMStats      [asParts[COMP_ECM]].upgrade[player]) +
+		func(asRepairStats   [asParts[COMP_REPAIRUNIT]].upgrade[player]) +
+		func(asConstructStats[asParts[COMP_CONSTRUCT]].upgrade[player]) +
+		propulsionFunc(asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player], asBodyStats[asParts[COMP_BODY]].upgrade[player]);
+	for (int i = 0; i < numWeaps; ++i)
+	{
+		// asWeaps[i] > 0 check only needed for droids, not templates.
+		if (asWeaps[i] > 0)
+		{
+			sum += func(asWeaponStats[asWeaps[i]].upgrade[player]);
+		}
+	}
+	return sum;
+}
+
+struct FilterDroidWeaps
+{
+	FilterDroidWeaps(unsigned numWeaps, WEAPON (&asWeaps)[MAX_WEAPONS])
+	{
+		std::transform(asWeaps, asWeaps + numWeaps, this->asWeaps, [](WEAPON &weap) {
+			return weap.nStat;
+		});
+		this->numWeaps = std::remove_if(this->asWeaps, this->asWeaps + numWeaps, [](uint32_t stat) {
+			return stat == 0;
+		}) - this->asWeaps;
+	}
+
+	unsigned numWeaps;
+	uint32_t asWeaps[MAX_WEAPONS];
+};
+
+template <typename F, typename G>
+static unsigned calcSum(DROID_TEMPLATE *psTemplate, F func, G propulsionFunc)
+{
+	return calcSum(psTemplate->asParts, psTemplate->numWeaps, psTemplate->asWeaps, func, propulsionFunc);
+}
+
+template <typename F, typename G>
+static unsigned calcSum(DROID *psDroid, F func, G propulsionFunc)
+{
+	FilterDroidWeaps f = {psDroid->numWeaps, psDroid->asWeaps};
+	return calcSum(psDroid->asBits, f.numWeaps, f.asWeaps, func, propulsionFunc);
+}
+
+template <typename F, typename G>
+static unsigned calcUpgradeSum(DROID_TEMPLATE *psTemplate, int player, F func, G propulsionFunc)
+{
+	return calcUpgradeSum(psTemplate->asParts, psTemplate->numWeaps, psTemplate->asWeaps, player, func, propulsionFunc);
+}
+
+template <typename F, typename G>
+static unsigned calcUpgradeSum(DROID *psDroid, int player, F func, G propulsionFunc)
+{
+	FilterDroidWeaps f = {psDroid->numWeaps, psDroid->asWeaps};
+	return calcUpgradeSum(psDroid->asBits, f.numWeaps, f.asWeaps, player, func, propulsionFunc);
+}
+
 /* Calculate the weight of a droid from it's template */
 UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 {
-	UDWORD weight, i;
-
-	/* Get the basic component weight */
-	weight =
-	    (asBodyStats + psTemplate->asParts[COMP_BODY])->weight +
-	    (asBrainStats + psTemplate->asParts[COMP_BRAIN])->weight +
-	    //(asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->weight +
-	    (asSensorStats + psTemplate->asParts[COMP_SENSOR])->weight +
-	    (asECMStats + psTemplate->asParts[COMP_ECM])->weight +
-	    (asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->weight +
-	    (asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->weight;
-
-	/* propulsion weight is a percentage of the body weight */
-	weight += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->weight *
-	            (asBodyStats + psTemplate->asParts[COMP_BODY])->weight) / 100);
-
-	/* Add the weapon weight */
-	for (i = 0; i < psTemplate->numWeaps; i++)
-	{
-		weight += (asWeaponStats + psTemplate->asWeaps[i])->weight;
-	}
-
-	return weight;
+	return calcSum(psTemplate, [](COMPONENT_STATS const &stat) {
+		return stat.weight;
+	}, [](PROPULSION_STATS const &propStat, BODY_STATS const &bodyStat) {
+		// Propulsion weight is a percentage of the body weight.
+		return propStat.weight * (100 + bodyStat.weight) / 100;
+	});
 }
 
-static uint32_t calcDroidOrTemplateBody(uint8_t (&asParts)[DROID_MAXCOMP], unsigned numWeaps, uint32_t (&asWeaps)[MAX_WEAPONS], unsigned player)
+template <typename T>
+static uint32_t calcBody(T *obj, int player)
 {
-	const auto &bodyStats = asBodyStats[asParts[COMP_BODY]];
+	int hitpoints = calcUpgradeSum(obj, player, [](COMPONENT_STATS::UPGRADE const &upgrade) {
+		return upgrade.hitpoints;
+	}, [](PROPULSION_STATS::UPGRADE const &propUpgrade, BODY_STATS::UPGRADE const &bodyUpgrade) {
+		// propulsion hitpoints can be a percentage of the body's hitpoints
+		return propUpgrade.hitpoints + bodyUpgrade.hitpoints * (100 + propUpgrade.hitpointPctOfBody) / 100;
+	});
 
-	// Get the basic component body points
-	int hitpoints =
-	    bodyStats.upgrade[player].hitpoints +
-	    asBrainStats[asParts[COMP_BRAIN]].upgrade[player].hitpoints +
-	    asSensorStats[asParts[COMP_SENSOR]].upgrade[player].hitpoints +
-	    asECMStats[asParts[COMP_ECM]].upgrade[player].hitpoints +
-	    asRepairStats[asParts[COMP_REPAIRUNIT]].upgrade[player].hitpoints +
-	    asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player].hitpoints +
-	    asConstructStats[asParts[COMP_CONSTRUCT]].upgrade[player].hitpoints;
-
-	int hitpointpct =
-	    bodyStats.upgrade[player].hitpointPct - 100 +
-	    asBrainStats[asParts[COMP_BRAIN]].upgrade[player].hitpointPct - 100 +
-	    asSensorStats[asParts[COMP_SENSOR]].upgrade[player].hitpointPct - 100 +
-	    asECMStats[asParts[COMP_ECM]].upgrade[player].hitpointPct - 100 +
-	    asRepairStats[asParts[COMP_REPAIRUNIT]].upgrade[player].hitpointPct - 100 +
-	    asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player].hitpointPct - 100 +
-	    asConstructStats[asParts[COMP_CONSTRUCT]].upgrade[player].hitpointPct - 100;
-
-	// propulsion hitpoints can be a percentage of the body's hitpoints
-	hitpoints += bodyStats.upgrade[player].hitpoints * asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player].hitpointPctOfBody / 100;
-
-	// Add the weapon body points
-	ASSERT(numWeaps <= MAX_WEAPONS, "numWeaps (%u) exceeds MAX_WEAPONS (%d)", numWeaps, MAX_WEAPONS);
-	for (unsigned i = 0; i < numWeaps; ++i)
-	{
-		if (asWeaps[i] > 0)
-		{
-			hitpoints += asWeaponStats[asWeaps[i]].upgrade[player].hitpoints;
-			hitpointpct += asWeaponStats[asWeaps[i]].upgrade[player].hitpointPct - 100;
-		}
-	}
+	int hitpointPct = calcUpgradeSum(obj, player, [](COMPONENT_STATS::UPGRADE const &upgrade) {
+		return upgrade.hitpointPct - 100;
+	}, [](PROPULSION_STATS::UPGRADE const &propUpgrade, BODY_STATS::UPGRADE const &bodyUpgrade) {
+		return propUpgrade.hitpointPct - 100 + bodyUpgrade.hitpointPct - 100;
+	});
 
 	// Final adjustment based on the hitpoint modifier
-	return (hitpoints * (100 + hitpointpct)) / 100;
+	return hitpoints * (100 + hitpointPct) / 100;
 }
 
 // Calculate the body points of a droid from its template
@@ -1395,56 +1402,37 @@ UDWORD calcTemplateBody(DROID_TEMPLATE *psTemplate, UBYTE player)
 		return 0;
 	}
 
-	return calcDroidOrTemplateBody(psTemplate->asParts, psTemplate->numWeaps, psTemplate->asWeaps, player);
+	return calcBody(psTemplate, player);
 }
 
 // Calculate the base body points of a droid with upgrades
 static UDWORD calcDroidBaseBody(DROID *psDroid)
 {
-	uint32_t asWeaps[MAX_WEAPONS];
-	std::transform(std::begin(psDroid->asWeaps), std::end(psDroid->asWeaps), asWeaps, [](WEAPON &weap) {
-		return weap.nStat;
-	});
-	return calcDroidOrTemplateBody(psDroid->asBits, psDroid->numWeaps, asWeaps, psDroid->player);
+	return calcBody(psDroid, psDroid->player);
 }
 
 
 /* Calculate the base speed of a droid from it's template */
 UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE player)
 {
-	UDWORD	speed;
-
-	if (psTemplate->droidType == DROID_CYBORG ||
-	    psTemplate->droidType == DROID_CYBORG_SUPER ||
-	    psTemplate->droidType == DROID_CYBORG_CONSTRUCT ||
-	    psTemplate->droidType == DROID_CYBORG_REPAIR)
-	{
-		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
-		                            asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
-		         bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], player)) / MAX(1, weight);
-	}
-	else
-	{
-		speed = (asPropulsionTypes[(asPropulsionStats + psTemplate->
-		                            asParts[COMP_PROPULSION])->propulsionType].powerRatioMult *
-		         bodyPower(asBodyStats + psTemplate->asParts[COMP_BODY], player)) / MAX(1, weight);
-	}
+	unsigned speed = asPropulsionTypes[asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType].powerRatioMult *
+		         bodyPower(&asBodyStats[psTemplate->asParts[COMP_BODY]], player) / MAX(1, weight);
 
 	// reduce the speed of medium/heavy VTOLs
 	if (asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT)
 	{
-		if ((asBodyStats + psTemplate->asParts[COMP_BODY])->size == SIZE_HEAVY)
+		if (asBodyStats[psTemplate->asParts[COMP_BODY]].size == SIZE_HEAVY)
 		{
 			speed /= 4;
 		}
-		else if ((asBodyStats + psTemplate->asParts[COMP_BODY])->size == SIZE_MEDIUM)
+		else if (asBodyStats[psTemplate->asParts[COMP_BODY]].size == SIZE_MEDIUM)
 		{
-			speed = 3 * speed / 4;
+			speed = speed * 3 / 4;
 		}
 	}
 
 	// applies the engine output bonus if output > weight
-	if ((asBodyStats + psTemplate->asParts[COMP_BODY])->base.power > weight)
+	if (asBodyStats[psTemplate->asParts[COMP_BODY]].base.power > weight)
 	{
 		speed = speed * 3 / 2;
 	}
@@ -1456,133 +1444,65 @@ UDWORD calcDroidBaseSpeed(DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE playe
 /* Calculate the speed of a droid over a terrain */
 UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UDWORD level)
 {
-	PROPULSION_STATS	*propulsion = asPropulsionStats + propIndex;
-	UDWORD				speed;
+	PROPULSION_STATS const &propulsion = asPropulsionStats[propIndex];
 
-	speed  = baseSpeed;
 	// Factor in terrain
-	speed *= getSpeedFactor(terrainType, propulsion->propulsionType);
-	speed /= 100;
+	unsigned speed = baseSpeed * getSpeedFactor(terrainType, propulsion.propulsionType) / 100;
 
 	// Need to ensure doesn't go over the max speed possible for this propulsion
-	if (speed > propulsion->maxSpeed)
-	{
-		speed = propulsion->maxSpeed;
-	}
+	speed = std::min(speed, propulsion.maxSpeed);
 
 	// Factor in experience
-	speed *= (100 + EXP_SPEED_BONUS * level);
+	speed *= 100 + EXP_SPEED_BONUS * level;
 	speed /= 100;
 
 	return speed;
 }
 
+template <typename T>
+static uint32_t calcBuild(T *obj)
+{
+	return calcSum(obj, [](COMPONENT_STATS const &stat) {
+		return stat.buildPoints;
+	}, [](PROPULSION_STATS const &propStat, BODY_STATS const &bodyStat) {
+		// Propulsion power points are a percentage of the body's build points.
+		return bodyStat.buildPoints * (100 + propStat.buildPoints) / 100;
+	});
+}
+
 /* Calculate the points required to build the template - used to calculate time*/
 UDWORD calcTemplateBuild(DROID_TEMPLATE *psTemplate)
 {
-	UDWORD	build, i;
-
-	build = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints +
-	        (asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPoints +
-	        (asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPoints +
-	        (asECMStats + psTemplate->asParts[COMP_ECM])->buildPoints +
-	        (asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPoints +
-	        (asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPoints;
-
-	/* propulsion build points are a percentage of the bodys' build points */
-	build += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPoints *
-	           (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPoints) / 100);
-
-	//add weapon power
-	for (i = 0; i < psTemplate->numWeaps; i++)
-	{
-		// FIX ME:
-		ASSERT(psTemplate->asWeaps[i] < numWeaponStats,
-		       //"Invalid Template weapon for %s", psTemplate->pName );
-		       "Invalid Template weapon for %s", getName(psTemplate));
-		build += (asWeaponStats + psTemplate->asWeaps[i])->buildPoints;
-	}
-
-	return build;
-}
-
-
-/* Calculate the power points required to build/maintain a template */
-UDWORD	calcTemplatePower(DROID_TEMPLATE *psTemplate)
-{
-	UDWORD power, i;
-
-	//get the component power
-	power = (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower;
-	power += (asBrainStats + psTemplate->asParts[COMP_BRAIN])->buildPower;
-	power += (asSensorStats + psTemplate->asParts[COMP_SENSOR])->buildPower;
-	power += (asECMStats + psTemplate->asParts[COMP_ECM])->buildPower;
-	power += (asRepairStats + psTemplate->asParts[COMP_REPAIRUNIT])->buildPower;
-	power += (asConstructStats + psTemplate->asParts[COMP_CONSTRUCT])->buildPower;
-
-	/* propulsion power points are a percentage of the bodys' power points */
-	power += (((asPropulsionStats + psTemplate->asParts[COMP_PROPULSION])->buildPower *
-	           (asBodyStats + psTemplate->asParts[COMP_BODY])->buildPower) / 100);
-
-	//add weapon power
-	for (i = 0; i < psTemplate->numWeaps; i++)
-	{
-		power += (asWeaponStats + psTemplate->asWeaps[i])->buildPower;
-	}
-
-	return power;
-}
-
-
-/* Calculate the power points required to build/maintain a droid */
-UDWORD	calcDroidPower(DROID *psDroid)
-{
-	//re-enabled i
-	UDWORD      power, i;
-
-	//get the component power
-	power = (asBodyStats + psDroid->asBits[COMP_BODY])->buildPower +
-	        (asBrainStats + psDroid->asBits[COMP_BRAIN])->buildPower +
-	        (asSensorStats + psDroid->asBits[COMP_SENSOR])->buildPower +
-	        (asECMStats + psDroid->asBits[COMP_ECM])->buildPower +
-	        (asRepairStats + psDroid->asBits[COMP_REPAIRUNIT])->buildPower +
-	        (asConstructStats + psDroid->asBits[COMP_CONSTRUCT])->buildPower;
-
-	/* propulsion power points are a percentage of the bodys' power points */
-	power += (((asPropulsionStats + psDroid->asBits[COMP_PROPULSION])->buildPower *
-	           (asBodyStats + psDroid->asBits[COMP_BODY])->buildPower) / 100);
-
-	//add weapon power
-	for (i = 0; i < psDroid->numWeaps; i++)
-	{
-		if (psDroid->asWeaps[i].nStat > 0)
-		{
-			power += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPower;
-		}
-	}
-
-	return power;
+	return calcBuild(psTemplate);
 }
 
 UDWORD calcDroidPoints(DROID *psDroid)
 {
-	unsigned int i;
-	int points;
+	return calcBuild(psDroid);
+}
 
-	points  = getBodyStats(psDroid)->buildPoints;
-	points += getBrainStats(psDroid)->buildPoints;
-	points += getPropulsionStats(psDroid)->buildPoints;
-	points += getSensorStats(psDroid)->buildPoints;
-	points += getECMStats(psDroid)->buildPoints;
-	points += getRepairStats(psDroid)->buildPoints;
-	points += getConstructStats(psDroid)->buildPoints;
+template <typename T>
+static uint32_t calcPower(T *obj)
+{
+	return calcSum(obj, [](COMPONENT_STATS const &stat) {
+		return stat.buildPower;
+	}, [](PROPULSION_STATS const &propStat, BODY_STATS const &bodyStat) {
+		// Propulsion power points are a percentage of the body's power points.
+		return bodyStat.buildPower * (100 + propStat.buildPower) / 100;
+	});
+}
 
-	for (i = 0; i < psDroid->numWeaps; i++)
-	{
-		points += (asWeaponStats + psDroid->asWeaps[i].nStat)->buildPoints;
-	}
+/* Calculate the power points required to build/maintain a template */
+UDWORD calcTemplatePower(DROID_TEMPLATE *psTemplate)
+{
+	return calcPower(psTemplate);
+}
 
-	return points;
+
+/* Calculate the power points required to build/maintain a droid */
+UDWORD calcDroidPower(DROID *psDroid)
+{
+	return calcPower(psDroid);
 }
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
