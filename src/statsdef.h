@@ -328,7 +328,7 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 	unsigned deceleration = 0;
 	unsigned acceleration = 0;
 
-	struct : UPGRADE
+	struct UPGRADE : COMPONENT_STATS::UPGRADE
 	{
 		/// Increase hitpoints by this percentage of the body's hitpoints
 		int hitpointPctOfBody = 0;
@@ -495,7 +495,7 @@ struct BODY_STATS : public COMPONENT_STATS
 	std::vector<iIMDShape *> ppStillIMDList;///< list of IMDs to use when droid is still - up to numPropulsionStats
 	WzString         bodyClass;		///< rules hint to script about its classification
 
-	struct : UPGRADE
+	struct UPGRADE : COMPONENT_STATS::UPGRADE
 	{
 		unsigned power = 0;           ///< this is the engine output of the body
 		unsigned armour = 0;          ///< A measure of how much protection the armour provides
