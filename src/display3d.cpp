@@ -2436,7 +2436,7 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 	//quick check for invalid data
 	ASSERT_OR_RETURN(, psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
 
-	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::scale(glm::vec3(.5f));
+	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::scale(glm::vec3(.5f)) * glm::rotate(-UNDEG(player.r.y), glm::vec3(0,1,0));
 
 	pieFlag = pie_TRANSLUCENT;
 	pieFlagData = BLUEPRINT_OPACITY;
