@@ -108,7 +108,8 @@ STRUCTSTRENGTH_MODIFIER		asStructStrengthModifier[WE_NUMEFFECTS][NUM_STRUCT_STRE
 static std::vector<bool>       factoryNumFlag[MAX_PLAYERS][NUM_FLAG_TYPES];
 
 // the number of different (types of) droids that can be put into a production run
-#define MAX_IN_RUN		9
+#define MAX_IN_RUN		99
+#define PRODUCTION_RUN_BIG_STEP		5
 
 //the list of what to build - only for selectedPlayer
 std::vector<ProductionRun> asProductionRun[NUM_FACTORY_TYPES];
@@ -6273,7 +6274,7 @@ DROID_TEMPLATE *factoryProdUpdate(STRUCTURE *psStructure, DROID_TEMPLATE *psTemp
 
 
 //adjust the production run for this template type
-void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool add)
+void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool add, bool bigStep)
 {
 	CHECK_STRUCTURE(psStructure);
 	ASSERT_OR_RETURN(, psStructure->player == productionPlayer, "called for incorrect player");
@@ -6289,6 +6290,8 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	//see if the template is already in the list
 	ProductionRun::iterator entry = std::find(productionRun.begin(), productionRun.end(), psTemplate);
 
+	int step = bigStep ? PRODUCTION_RUN_BIG_STEP : 1;
+	
 	if (entry != productionRun.end())
 	{
 		if (psFactory->productionLoops == 0)
@@ -6297,7 +6300,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 		}
 
 		//adjust the prod run
-		entry->quantity += add ? 1 : -1;
+		entry->quantity += add ? step : -step;
 		entry->built = std::min(entry->built, entry->quantity);
 
 		// Allows us to queue up more units up to MAX_IN_RUN instead of ignoring how many we have built from that queue
@@ -6312,7 +6315,7 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 		//start off a new template
 		ProductionRunEntry entry;
 		entry.psTemplate = psTemplate;
-		entry.quantity = add ? 1 : MAX_IN_RUN; //wrap around to max value
+		entry.quantity = add ? step : MAX_IN_RUN; //wrap around to max value
 		entry.built = 0;
 		productionRun.push_back(entry);
 	}

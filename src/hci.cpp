@@ -2105,7 +2105,7 @@ static void intProcessStats(UDWORD id)
 					DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
 
 					//increase the production
-					factoryProdAdjust(psStructure, psNext, true);
+					factoryProdAdjust(psStructure, psNext, true, keyDown(KEY_LSHIFT));
 
 					//need to check if this was the template that was mid-production
 					if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
@@ -4207,7 +4207,7 @@ static void intStatsRMBPressed(UDWORD id)
 			DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
 
 			//decrease the production
-			factoryProdAdjust(psStructure, psNext, false);
+			factoryProdAdjust(psStructure, psNext, false, keyDown(KEY_LSHIFT));
 
 			//need to check if this was the template that was mid-production
 			if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
