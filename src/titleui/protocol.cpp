@@ -134,13 +134,10 @@ TITLECODE WzProtocolTitleUI::run()
 			if(ddch != NULL)
 			{
 				uint32_t serverPort = atoi(ddch+1);
-				char serverIP[16] = {'\0'};
-				for (size_t i = 0; i<15 && serverName[i] != ':'; i++)
-				{
-					serverIP[i] = serverName[i];
-				}
-				debug(LOG_NET, "Connecting to ip [%s] port %d", serverIP, serverPort);
-				joinGame(serverIP, serverPort);
+				std::string serverIP = "";
+				serverIP.assign(serverName, ddch - serverName);
+				debug(LOG_INFO, "Connecting to ip [%s] port %d", serverIP.c_str(), serverPort);
+				joinGame(serverIP.c_str(), serverPort);
 				break;
 			}
 		}
