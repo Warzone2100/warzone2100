@@ -22,7 +22,7 @@ const droidTypes = new Array(
 
 var droidOrders = new Array(
     "DORDER_NONE",            /**< no order set. */
-    
+
     "DORDER_STOP",            /**< stop the current order. */
     "DORDER_MOVE",            /**< 2 - move to a location. */
     "DORDER_ATTACK",          /**< attack an enemy. */
@@ -34,7 +34,7 @@ var droidOrders = new Array(
     "DORDER_OBSERVE",         /**< keep a target in sensor view. */
     "DORDER_FIRESUPPORT",     /**< 10 - attack whatever the linked sensor droid attacks. */
     "DORDER_RETREAT",         /**< return to the players retreat position. */
-    "DORDER_UNUSED_2",        
+    "DORDER_UNUSED_2",
     "DORDER_RTB",             /**< return to base. */
     "DORDER_RTR",             /**< 14 - return to repair at any repair facility. */
     "DORDER_RUN",             /**< run away after moral failure. */
@@ -52,7 +52,7 @@ var droidOrders = new Array(
     "DORDER_RESTORE",         /**< restore resistance points for a structure. */
     "DORDER_SCOUT",           /**< 28 - same as move, but stop if an enemy is seen. */
     "DORDER_UNUSED_3",
-    "DORDER_UNUSED",          
+    "DORDER_UNUSED",
     "DORDER_PATROL",          /**< move between two way points. */
     "DORDER_REARM",           /**< 32 - order a vtol to rearming pad. */
     "DORDER_RECOVER",         /**< pick up an artifact. */
@@ -530,7 +530,7 @@ const research_name = {
 "R-Cyborg-Hvywpn-RailGunner" : "Super Rail-Gunner",
 "R-Cyborg-Hvywpn-A-T" : "Super Scourge Cyborg",
 "R-Sys-SpyTower" : "Nexus Link Tower",
-"R-Defense-EMPCannon" : "EMP Cannon Tower",
+"R-Defense-EMPCannon" : "EMP Cannon Hardpoint",
 "R-Wpn-EMPCannon" : "EMP Cannon",
 "R-Defense-MassDriver" : "Mass Driver Fortress",
 "R-Defense-Super-Cannon" : "Cannon Fortress",
@@ -538,9 +538,9 @@ const research_name = {
 "R-Defense-Super-Missile" : "Missile Fortress",
 "R-Vehicle-Body13" : "Heavy Body - Wyvern",
 "R-Vehicle-Body14" : "Multi Turret Body - Dragon",
-"R-Wpn-Flamer-Damage07" : "Superhot Plasmite gel",
-"R-Wpn-Flamer-Damage08" : "Superhot Plasmite gel Mk2",
-"R-Wpn-Flamer-Damage09" : "Superhot Plasmite gel Mk3",
+"R-Wpn-Flamer-Damage07" : "Superhot Plasmite Gel",
+"R-Wpn-Flamer-Damage08" : "Superhot Plasmite Gel Mk2",
+"R-Wpn-Flamer-Damage09" : "Superhot Plasmite Gel Mk3",
 "R-Wpn-MortarEMP" : "EMP Mortar",
 "R-Defense-EMPMortar" : "EMP Mortar Pit",
 "R-Defense-AA-Laser" : "Stormbringer Emplacement",

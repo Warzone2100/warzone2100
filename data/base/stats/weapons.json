@@ -337,7 +337,7 @@
         "buildPower": 10,
         "damage": 20,
         "effectSize": 50,
-        "explosionWav": "rocket.ogg",
+        "explosionWav": "smlexpl.ogg",
         "facePlayer": 1,
         "firePause": 1,
         "flightGfx": "FXMFLARE.PIE",

@@ -2130,7 +2130,7 @@
         "height": 2,
         "hitpoints": 800,
         "id": "WallTower-EMP",
-        "name": "EMP Cannon Tower",
+        "name": "EMP Cannon Hardpoint",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
         "strength": "HARD",

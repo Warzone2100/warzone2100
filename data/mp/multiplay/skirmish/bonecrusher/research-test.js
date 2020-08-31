@@ -317,7 +317,7 @@ const research_red = [
 "R-Vehicle-Body05",				//Средняя начальная броня
 "R-Struc-Research-Upgrade09",
 "R-Sys-MobileRepairTurretHvy",
-"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал) 
+"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал)
 "R-Sys-Autorepair-General",		//Автопочинка
 //"R-Sys-ECM-Upgrade02",	//Глушилка
 "R-Wpn-MG5",					//Twin Assault Gun
@@ -456,9 +456,9 @@ const research_black = [
 "R-Struc-Power-Upgrade03a",		// #116  Vapor Turbine Generator Mk3
 "R-Wpn-Plasmite-Flamer",		// #117  Plasmite Flamer
 "R-Wpn-Flamer-Damage06",		// #118  Superhot Flamer Gel Mk3
-"R-Wpn-Flamer-Damage07",		// #119  Superhot Plasmite gel
-"R-Wpn-Flamer-Damage08",		// #120  Superhot Plasmite gel Mk2
-"R-Wpn-Flamer-Damage09",		// #121  Superhot Plasmite gel Mk3
+"R-Wpn-Flamer-Damage07",		// #119  Superhot Plasmite Gel
+"R-Wpn-Flamer-Damage08",		// #120  Superhot Plasmite Gel Mk2
+"R-Wpn-Flamer-Damage09",		// #121  Superhot Plasmite Gel Mk3
 "R-Struc-Research-Upgrade09",		// #122  Neural Synapse Research Brain Mk3
 "R-Sys-Autorepair-General",		// #123  Auto-Repair
 "R-Wpn-Cannon-Damage08",		// #124  HVAPFSDS Cannon Rounds Mk2
@@ -521,7 +521,7 @@ const research_black = [
 "R-Sys-Autorepair-General",		//Автопочинка
 "R-Wpn-Cannon-Damage09",
 "R-Wpn-Cannon-Accuracy02",
-"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал) 
+"R-Vehicle-Metals09",			//Superdense Composite Alloys Mk3 (финал)
 "R-Vehicle-Engine09",
 */
 ];
@@ -540,7 +540,7 @@ function chooseResearch(){
 		debugMsg("bc_ally="+bc_ally.length, 'research');
 		if(bc_ally.length > 1){
 			_r=bc_ally.indexOf(me)%_w.length;
-			debugMsg("way="+_r, 'research_way');	
+			debugMsg("way="+_r, 'research_way');
 		}else{
 			_r=Math.floor(Math.random()*_w.length);
 		}
@@ -584,7 +584,7 @@ function setResearchWay(way){
 		debugMsg("Использую тестовый путь исследований "+way, 'init');
 		return;
 	}
-	
+
 	if(way == "Blue"){
 		research_primary = research_blue;
 		//	researchStrategy = 'Strict';
@@ -603,5 +603,3 @@ function setResearchWay(way){
 //2:0
 //Green - Standart
 //0:2
-
-
