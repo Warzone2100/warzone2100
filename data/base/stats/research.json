@@ -1738,8 +1738,7 @@
         "msgName": "RES_ST_RM1",
         "name": "Research Module",
         "requiredResearch": [
-            "R-Struc-CommandRelay",
-            "R-Comp-SynapticLink"
+            "R-Struc-CommandRelay"
         ],
         "researchPoints": 1200,
         "researchPower": 37,
@@ -1752,11 +1751,11 @@
         "iconID": "IMAGE_RES_COMPUTERTECH",
         "id": "R-Struc-Research-Upgrade01",
         "imdName": "blresch4.PIE",
-        "keyTopic": 1,
         "msgName": "RES_ST_RU1",
         "name": "Synaptic Link Data Analysis",
         "requiredResearch": [
-            "R-Struc-Research-Module"
+            "R-Struc-Research-Module",
+            "R-Comp-SynapticLink"
         ],
         "researchPoints": 1200,
         "researchPower": 37,
