@@ -2686,6 +2686,34 @@ bool NETprocessQueuedServerUpdates()
 }
 
 // ////////////////////////////////////////////////////////////////////////
+//  Handle http stuff if we have any.
+void NETprocessPossibleHttpRequest(Socket *sock) {
+    debug(LOG_INFO, "We are entering HTTP stuff");
+    // char* nextbuf = (char*)malloc(4096);
+    // memcpy(nextbuf, "GET /gr/", 8); // fill what we have
+    // readAll(sock, nextbuf+8, 2, 1200);
+    // if(r < 1) {
+    //  debug(LOG_ERROR, "Some read shit");
+    //  free(nextbuf);
+    //  return;
+    // }
+
+    // if(nextbuf[9] == '\r') {
+        // debug(LOG_INFO, "Request to /gr/");
+        const char* resp = "HTTP/1.1 200 OK\r\n\
+Server: WZ2100\r\n\
+Content-Type: text/html; charset=UTF-8\r\n\
+Connection: close\r\n\
+Content-Length: 21\r\n\
+\r\n\
+<h1>Hello world!</h1>";
+        writeAll(sock, resp, strlen(resp));
+    // }
+    // free(nextbuf);
+    return;
+}
+
+// ////////////////////////////////////////////////////////////////////////
 //  Check player "slots" & update player count if needed.
 void NETfixPlayerCount()
 {
@@ -2804,6 +2832,10 @@ static void NETallowJoining()
 			std::string rIP = "Incoming connection from:";
 			rIP.append(getSocketTextAddress(tmp_socket[i]));
 			NETlogEntry(rIP.c_str(), SYNC_FLAG, i);
+			if(strncmp(buffer, "GET /gr/", 8) == 0) {
+				NETprocessPossibleHttpRequest(tmp_socket[i]);
+				connectFailed = true;
+			}
 			// A 2.3.7 client sends a "list" command first, just drop the connection.
 			if (strcmp(buffer, "list") == 0)
 			{
