@@ -5066,7 +5066,8 @@
         "researchPoints": 9000,
         "researchPower": 281,
         "resultComponents": [
-            "Cannon5VulcanMk1"
+            "Cannon5VulcanMk1",
+            "Cannon5Vulcan-VTOL"
         ],
         "statID": "Cannon5VulcanMk1"
     },
