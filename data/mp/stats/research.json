@@ -295,7 +295,7 @@
         "name": "Super Auto-Cannon Cyborg",
         "requiredResearch": [
             "R-Wpn-Cannon5",
-            "R-Cyborg-Hvywpn-HPV"
+            "R-Cyborg-Hvywpn-Mcannon"
         ],
         "researchPoints": 4000,
         "researchPower": 125,
@@ -376,8 +376,8 @@
             "R-Cyborg-Metals04",
             "R-Wpn-Rocket07-Tank-Killer"
         ],
-        "researchPoints": 5000,
-        "researchPower": 156,
+        "researchPoints": 4500,
+        "researchPower": 141,
         "resultComponents": [
             "Cyb-Hvywpn-TK"
         ],
@@ -754,7 +754,7 @@
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-EMPCannon",
         "msgName": "RES_DEF_EMP",
-        "name": "EMP Cannon Hardpoint",
+        "name": "EMP Cannon Tower",
         "requiredResearch": [
             "R-Wpn-EMPCannon"
         ],
@@ -763,7 +763,8 @@
         "resultStructures": [
             "WallTower-EMP"
         ],
-        "statID": "WallTower-EMP"
+        "statID": "WallTower-EMP",
+        "subgroupIconID": "IMAGE_RES_GRPUPG"
     },
     "R-Defense-EMPMortar": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -778,7 +779,8 @@
         "resultStructures": [
             "Emplacement-MortarEMP"
         ],
-        "statID": "Emplacement-MortarEMP"
+        "statID": "Emplacement-MortarEMP",
+        "subgroupIconID": "IMAGE_RES_GRPUPG"
     },
     "R-Defense-Emplacement-HPVcannon": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -979,7 +981,7 @@
         "resultStructures": [
             "Emplacement-Howitzer150"
         ],
-        "statID": "Emplacement-Howitzer150"
+        "statID": "Emplacement-Howitzer105"
     },
     "R-Defense-HvyMor": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -998,7 +1000,7 @@
         "resultStructures": [
             "Emplacement-MortarPit02"
         ],
-        "statID": "Emplacement-MortarPit02"
+        "statID": "Emplacement-MortarPit01"
     },
     "R-Defense-IDFRocket": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -1763,7 +1765,8 @@
         "resultStructures": [
             "WallTower06"
         ],
-        "statID": "WallTower06"
+        "statID": "WallTower06",
+        "subgroupIconID": "IMAGE_RES_GRPACC"
     },
     "R-Defense-WallUpgrade01": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -1859,7 +1862,6 @@
         "msgName": "RES_DF_WU4",
         "name": "Supercrete",
         "requiredResearch": [
-            "R-Sys-Engineering02",
             "R-Struc-Research-Upgrade04",
             "R-Defense-WallUpgrade03"
         ],
@@ -1948,8 +1950,7 @@
         "msgName": "RES_DF_WU7",
         "name": "Plascrete",
         "requiredResearch": [
-            "R-Defense-WallUpgrade06",
-            "R-Sys-Engineering03"
+            "R-Defense-WallUpgrade06"
         ],
         "researchPoints": 12000,
         "researchPower": 375,
@@ -2918,7 +2919,7 @@
             {
                 "class": "Building",
                 "parameter": "RepairPoints",
-                "value": 50
+                "value": 100
             }
         ],
         "statID": "A0RepairCentre3",
@@ -2938,7 +2939,7 @@
             {
                 "class": "Building",
                 "parameter": "RepairPoints",
-                "value": 50
+                "value": 150
             }
         ],
         "statID": "A0RepairCentre3",
@@ -3256,10 +3257,10 @@
         "msgName": "RES_REPTUHVY",
         "name": "Heavy Repair Turret",
         "requiredResearch": [
-            "R-Sys-Engineering02"
+            "R-Sys-MobileRepairTurret01"
         ],
-        "researchPoints": 600,
-        "researchPower": 18,
+        "researchPoints": 1200,
+        "researchPower": 37,
         "resultComponents": [
             "HeavyRepair"
         ],
@@ -3990,7 +3991,7 @@
         "name": "Heavy Body - Mantis",
         "requiredResearch": [
             "R-Vehicle-Body08",
-            "R-Vehicle-Engine04"
+            "R-Vehicle-Engine03"
         ],
         "researchPoints": 3600,
         "researchPower": 112,
@@ -5929,7 +5930,8 @@
         "resultComponents": [
             "EMP-Cannon"
         ],
-        "statID": "EMP-Cannon"
+        "statID": "EMP-Cannon",
+        "subgroupIconID": "IMAGE_RES_GRPUPG"
     },
     "R-Wpn-Energy-Accuracy01": {
         "iconID": "IMAGE_RES_WEAPONTECH",
@@ -6335,7 +6337,7 @@
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Flamer-Damage07",
         "msgName": "RES_W_FL_D7",
-        "name": "Superhot Plasmite Gel",
+        "name": "Superhot Plasmite gel",
         "requiredResearch": [
             "R-Wpn-Flamer-Damage06",
             "R-Wpn-Plasmite-Flamer"
@@ -6364,7 +6366,7 @@
     "R-Wpn-Flamer-Damage08": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Flamer-Damage08",
-        "name": "Superhot Plasmite Gel Mk2",
+        "name": "Superhot Plasmite gel Mk2",
         "requiredResearch": [
             "R-Wpn-Flamer-Damage07"
         ],
@@ -6393,7 +6395,7 @@
     "R-Wpn-Flamer-Damage09": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Flamer-Damage09",
-        "name": "Superhot Plasmite Gel Mk3",
+        "name": "Superhot Plasmite gel Mk3",
         "requiredResearch": [
             "R-Wpn-Flamer-Damage08"
         ],
@@ -7361,22 +7363,22 @@
         "requiredResearch": [
             "R-Wpn-MG-ROF02"
         ],
-        "researchPoints": 6800,
-        "researchPower": 212,
+        "researchPoints": 6000,
+        "researchPower": 187,
         "results": [
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "MACHINE GUN",
                 "parameter": "FirePause",
-                "value": -8
+                "value": -12
             },
             {
                 "class": "Weapon",
                 "filterParameter": "ImpactClass",
                 "filterValue": "MACHINE GUN",
                 "parameter": "ReloadTime",
-                "value": -8
+                "value": -12
             }
         ],
         "statID": "MG1Mk1",
@@ -7470,11 +7472,11 @@
             "MG4ROTARYMk1"
         ],
         "requiredResearch": [
-            "R-Struc-Research-Upgrade07",
+            "R-Struc-Research-Upgrade06",
             "R-Wpn-MG4"
         ],
-        "researchPoints": 15000,
-        "researchPower": 450,
+        "researchPoints": 12000,
+        "researchPower": 375,
         "resultComponents": [
             "MG5TWINROTARY"
         ],
@@ -7855,7 +7857,6 @@
         "msgName": "RES_W_M_AC3",
         "name": "Target Acquisition Mortar Shells",
         "requiredResearch": [
-            "R-Struc-Research-Upgrade08",
             "R-Wpn-Mortar-Acc02"
         ],
         "researchPoints": 9200,
@@ -8276,11 +8277,10 @@
             "Mortar1Mk1"
         ],
         "requiredResearch": [
-            "R-Wpn-Mortar02Hvy",
-            "R-Wpn-Mortar-ROF03"
+            "R-Wpn-Mortar-ROF01"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 8800,
+        "researchPower": 275,
         "resultComponents": [
             "Mortar3ROTARYMk1"
         ],
@@ -8327,10 +8327,10 @@
         ],
         "requiredResearch": [
             "R-Wpn-Flame2",
-            "R-Struc-Research-Upgrade07"
+            "R-Struc-Research-Upgrade06"
         ],
-        "researchPoints": 7200,
-        "researchPower": 225,
+        "researchPoints": 12000,
+        "researchPower": 375,
         "resultComponents": [
             "PlasmiteFlamer"
         ],
@@ -9104,8 +9104,8 @@
             "R-Wpn-RocketSlow-Accuracy01",
             "R-Wpn-Rocket-Damage06"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 8400,
+        "researchPower": 262,
         "resultComponents": [
             "Rocket-HvyA-T",
             "Rocket-VTOL-HvyA-T"
