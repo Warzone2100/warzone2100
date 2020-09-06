@@ -52,21 +52,25 @@
 // ////////////////////////////////////////////////////////////////////////////
 static PLAYERSTATS playerStats[MAX_PLAYERS];
 
-PLAYERSTATS::PLAYERSTATS()
-	: played(0)
-	, wins(0)
-	, losses(0)
-	, totalKills(0)
-	, totalScore(0)
-	, recentKills(0)
-	, recentScore(0)
-{}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
 PLAYERSTATS const &getMultiStats(UDWORD player)
 {
 	return playerStats[player];
+}
+
+static void NETauto(PLAYERSTATS::Autorating &ar)
+{
+	NETauto(ar.valid);
+	if (ar.valid)
+	{
+		NETauto(ar.dummy);
+		NETauto(ar.star);
+		NETauto(ar.medal);
+		NETauto(ar.level);
+		NETauto(ar.elo);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -89,6 +93,19 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		// Send the ID of the player's stats we're updating
 		NETuint32_t(&playerIndex);
 
+		playerStats[playerIndex].autorating.valid = false;
+
+		/*playerStats[playerIndex].autorating.valid = true;
+		playerStats[playerIndex].autorating.dummy = false;
+		playerStats[playerIndex].autorating.star[0] = 1;
+		playerStats[playerIndex].autorating.star[1] = 2;
+		playerStats[playerIndex].autorating.star[2] = 3;
+		playerStats[playerIndex].autorating.medal = 3;
+		playerStats[playerIndex].autorating.level = 3;
+		playerStats[playerIndex].autorating.elo = "Elo: 1433 — W/L: 30/2";*/
+
+		NETauto(playerStats[playerIndex].autorating);
+
 		// Send over the actual stats
 		NETuint32_t(&playerStats[playerIndex].played);
 		NETuint32_t(&playerStats[playerIndex].wins);
@@ -97,6 +114,7 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+
 		EcKey::Key identity;
 		if (!playerStats[playerIndex].identity.empty())
 		{
@@ -132,6 +150,8 @@ void recvMultiStats(NETQUEUE queue)
 		return;
 	}
 
+	NETauto(playerStats[playerIndex].autorating);
+
 	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 	if (!myResponsibility(playerIndex))
 	{
@@ -143,6 +163,7 @@ void recvMultiStats(NETQUEUE queue)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+
 		EcKey::Key identity;
 		NETbytes(&identity);
 		EcKey::Key prevIdentity;
