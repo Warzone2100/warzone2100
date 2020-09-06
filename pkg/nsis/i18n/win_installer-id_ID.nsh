@@ -1,32 +1,32 @@
-${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText "Selamat datang di Warzone 2100 installer!\r\n\r\nWizard ini akan memandu Anda sepanjang penginstalan dari Warzone 2100.\r\n\r\nDisarankan agar Anda menutup semua aplikasi sebelum melanjutkan penginstalan ini. Hal ini akan memungkinkan untuk mengupdate file sistem yang terkait tanpa harus me-reboot komputer Anda.\r\n\r\nWarzone 2100 ini adalah program yang sepenuhnya sumber terbuka dan 100% gratis! \r\n\r\nKlik untuk melanjutkan."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "Selamat datang di Warzone 2100 portable installer!\r\n\r\nWizard ini akan memandu Anda sepanjang penginstalan dari Warzone 2100 versi portable.\r\n\r\nPenginstalan ini sepenuhnya dilakukan sendiri dan Anda dapat meng-uninstall program ini kapan pun dengan menghapus direktori.\r\n\r\nWarzone 2100 ini adalah program yang sepenuhnya sumber terbuka dan 100% gratis! \r\n\r\nKlik untuk melanjutkan."
 
 ${LangFileString} WZ_GPL_NEXT "Berikutnya"
 
 ${LangFileString} TEXT_SecBase "File Inti"
-${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
+${LangFileString} DESC_SecBase "File inti diperlukan untuk menjalankan Warzone 2100."
 
 ${LangFileString} TEXT_SecFMVs "Video"
 ${LangFileString} DESC_SecFMVs "Unduh dan install cutscene dalam-game."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "Inggris (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_EngHi "Unduh dan install cutscene dalam-game berbahasa Inggris dengan kualitas lebih tinggi."
 
 ${LangFileString} TEXT_SecFMVs_Eng "Inggris"
-${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_Eng "Unduh dan install cutscene dalam-game bahasa Inggris."
 
 ${LangFileString} TEXT_SecFMVs_EngLo "Inggris (LQ)"
-${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
+${LangFileString} DESC_SecFMVs_EngLo "Unduh dan install cutscene dalam-game berbahasa Inggris dengan kualitas lebih rendah."
 
 ${LangFileString} TEXT_SecFMVs_Ger "Jerman"
-${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
+${LangFileString} DESC_SecFMVs_Ger "Unduh dan install cutscene dalam-game bahasa Jerman."
 
 ${LangFileString} TEXT_SecNLS "File Bahasa"
 ${LangFileString} DESC_SecNLS "Mendukung bahasa selain Inggris."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
-${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+${LangFileString} DESC_SecNLS_WinFonts "Sertakan folder Font Windows ke path pencarian. Aktifkan jika Anda ingin mengkustomisasi font di file config atau memiliki masalah dengan font standar. Bisa lebih lambat di Vista atau yang lebih lama!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLL"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} DESC_SecMSSysLibraries "Unduh dan install (atau update) Microsoft's Visual C++ redistributable system libraries, yang beberapa komponennya diperlukan agar dapat dimainkan."
