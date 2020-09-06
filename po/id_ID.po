@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-08-08 16:35\n"
+"PO-Revision-Date: 2020-09-06 19:15\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "LZ MUSUH"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
@@ -1187,14 +1187,14 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:218
 msgid "Demolish"
-msgstr ""
+msgstr "Hancurkan"
 
 #. TRANSLATORS:
 #. data/mp/stats/propulsion.json: $.Naval.name
 #: data/base/messages/strings/names.txt:156
 #: po/custom/fromJson.txt:3926
 msgid "Naval"
-msgstr ""
+msgstr "Pasukan Laut"
 
 #: data/base/messages/strings/names.txt:183
 #: data/base/messages/strings/names.txt:558
@@ -1631,7 +1631,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:588
 msgid "Bridge"
-msgstr ""
+msgstr "Jembatan"
 
 #: data/base/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:595
@@ -4101,7 +4101,7 @@ msgstr ""
 #: src/transporter.cpp:261
 #: src/transporter.cpp:540
 msgid "Close"
-msgstr ""
+msgstr "Tutup"
 
 #: data/base/script/rules.js:196
 #: data/base/script/tutorial.js:515
@@ -4483,7 +4483,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Peringatan!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -4727,7 +4727,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
-msgstr ""
+msgstr "Serang!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
@@ -5036,7 +5036,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:14
 msgid "Safety"
-msgstr ""
+msgstr "Keamanan"
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
@@ -5500,19 +5500,19 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
-msgstr ""
+msgstr "MUDAH"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:73
 msgid "MEDIUM"
-msgstr ""
+msgstr "MEDIUM"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:74
 msgid "HARD"
-msgstr ""
+msgstr "SULIT"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:75
 msgid "INSANE"
-msgstr ""
+msgstr "GILA"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:87
 msgid "Personality change successful."
@@ -5564,7 +5564,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:140
 msgid "Coming!"
-msgstr ""
+msgstr "Hadir!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
@@ -6138,7 +6138,7 @@ msgstr ""
 #. data/mp/tests/miza.json: $.player_2.name
 #: po/custom/fromJson.txt:476
 msgid "Ally"
-msgstr ""
+msgstr "Sekutu"
 
 #. TRANSLATORS:
 #. data/base/campaigns/alpha.json: $.name
@@ -6150,7 +6150,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:482
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -6641,7 +6641,7 @@ msgstr ""
 #. data/base/stats/features.json: $.Crate.name
 #: po/custom/fromJson.txt:823
 msgid "Artifact"
-msgstr ""
+msgstr "Artefak"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_MdAM.text[1]
@@ -6936,14 +6936,14 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.BaBaLegs.name
 #: po/custom/fromJson.txt:1037
 msgid "BaBaLegs"
-msgstr ""
+msgstr "BaBaLegs"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.BaBaProp.name
 #. data/mp/stats/propulsion.json: $.BaBaProp.name
 #: po/custom/fromJson.txt:1041
 msgid "BaBaProp"
-msgstr ""
+msgstr "BaBaProp"
 
 #. TRANSLATORS:
 #. data/mp/challenges/b2basics.json: $.challenge.name
@@ -7070,7 +7070,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1159
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7127,7 +7127,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Mortar2Mk1.name
 #: po/custom/fromJson.txt:1223
 msgid "Bombard"
-msgstr ""
+msgstr "Bombardir"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BAC3.text[1]
@@ -7153,14 +7153,14 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body4ABT.name
 #: po/custom/fromJson.txt:1242
 msgid "Bug"
-msgstr ""
+msgstr "Bug"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianBuggy.name
 #. data/mp/stats/templates.json: $.BarbarianBuggy.name
 #: po/custom/fromJson.txt:1246
 msgid "Buggy"
-msgstr ""
+msgstr "Buggy"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[2]
@@ -7376,7 +7376,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-CB-Tower01.name
 #: po/custom/fromJson.txt:1372
 msgid "CB Tower"
-msgstr ""
+msgstr "Menara CB"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Turret01.name
@@ -7411,7 +7411,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BaBaCivilian.name
 #: po/custom/fromJson.txt:1392
 msgid "Civilian"
-msgstr ""
+msgstr "Warga Sipil"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb01.name
@@ -7452,7 +7452,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1415
 msgid "Cobra"
-msgstr ""
+msgstr "Cobra"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -8025,7 +8025,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:1817
 msgid "Dragon"
-msgstr ""
+msgstr "Naga"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
@@ -8150,7 +8150,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1896
 msgid "Enemy"
-msgstr ""
+msgstr "Musuh"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -8238,7 +8238,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0LightFactory.name
 #: po/custom/fromJson.txt:1960
 msgid "Factory"
-msgstr ""
+msgstr "Pabrik"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
@@ -8425,7 +8425,7 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2086
 msgid "Flamer"
-msgstr ""
+msgstr "Flamer"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
@@ -8494,7 +8494,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2131
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -9519,13 +9519,13 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2805
 msgid "Hover AI"
-msgstr ""
+msgstr "Hover AI"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
 #: po/custom/fromJson.txt:2808
 msgid "Hover II"
-msgstr ""
+msgstr "Hover II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
@@ -9545,7 +9545,7 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.hover01.name
 #: po/custom/fromJson.txt:2822
 msgid "Hover"
-msgstr ""
+msgstr "Melayang"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
@@ -9605,7 +9605,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
 #: po/custom/fromJson.txt:2870
 msgid "Howitzer"
-msgstr ""
+msgstr "Howitzer"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
@@ -9649,7 +9649,7 @@ msgstr ""
 #. data/base/stats/features.json: $.BarbHUT.name
 #: po/custom/fromJson.txt:2896
 msgid "Hut"
-msgstr ""
+msgstr "Pondok"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage08.name
@@ -10129,7 +10129,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Flame2.name
 #: po/custom/fromJson.txt:3309
 msgid "Inferno"
-msgstr ""
+msgstr "Inferno"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU1.text[2]
@@ -10162,7 +10162,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3327
 msgid "Jeep"
-msgstr ""
+msgstr "Jip"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[3]
@@ -10304,7 +10304,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:3417
 msgid "Lancer"
-msgstr ""
+msgstr "Lancer"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[0]
@@ -10392,7 +10392,7 @@ msgstr ""
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3466
 msgid "LasSat"
-msgstr ""
+msgstr "LasSat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -10408,7 +10408,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3482
 msgid "Leopard"
-msgstr ""
+msgstr "Leopard"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -10601,7 +10601,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body12SUP.name
 #: po/custom/fromJson.txt:3624
 msgid "Mantis"
-msgstr ""
+msgstr "Mantis"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MassDriver.name
@@ -11040,7 +11040,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Mortar1Mk1.name
 #: po/custom/fromJson.txt:3907
 msgid "Mortar"
-msgstr ""
+msgstr "Mortar"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
@@ -11065,7 +11065,7 @@ msgstr ""
 #. data/base/stats/features.json: $.Nanolab.name
 #: po/custom/fromJson.txt:3920
 msgid "Nanolab"
-msgstr ""
+msgstr "Nanolab"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[3]
@@ -11471,7 +11471,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4249
 msgid "Nexus"
-msgstr ""
+msgstr "Nexus"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11489,7 +11489,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
@@ -11508,7 +11508,7 @@ msgstr ""
 #. data/base/stats/features.json: $.OilDrum.name
 #: po/custom/fromJson.txt:4268
 msgid "Oil Drum"
-msgstr ""
+msgstr "Drum Oli"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.OilResource.name
@@ -11571,7 +11571,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4315
 msgid "Panther"
-msgstr ""
+msgstr "Panther"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -11705,7 +11705,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Defense-WallUpgrade10.name
 #: po/custom/fromJson.txt:4389
 msgid "Plasteel"
-msgstr ""
+msgstr "Plasteel"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[3]
@@ -11781,7 +11781,7 @@ msgstr ""
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4432
 msgid "Powerlab"
-msgstr ""
+msgstr "Powerlab"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -11908,7 +11908,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body11ABT.name
 #: po/custom/fromJson.txt:4517
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
@@ -12035,7 +12035,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.RailGun2Mk1.name
 #: po/custom/fromJson.txt:4599
 msgid "Rail Gun"
-msgstr ""
+msgstr "Rail Gun"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
@@ -12641,7 +12641,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body8MBT.name
 #: po/custom/fromJson.txt:5012
 msgid "Scorpion"
-msgstr ""
+msgstr "Scorpion"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-ATMiss.name
@@ -12712,7 +12712,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.MP-Cyb-ATmiss-GRD.name
 #: po/custom/fromJson.txt:5053
 msgid "Scourge"
-msgstr ""
+msgstr "Scourge"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-SpyTurret.name
@@ -12758,7 +12758,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5087
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13425,7 +13425,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body9REC.name
 #: po/custom/fromJson.txt:5537
 msgid "Tiger"
-msgstr ""
+msgstr "Harimau"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_DF_HCW1.text[1]
@@ -13471,7 +13471,7 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.tracked01.name
 #: po/custom/fromJson.txt:5565
 msgid "Tracks"
-msgstr ""
+msgstr "Jejak"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.TransporterBody.name
@@ -13492,7 +13492,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BarbarianTrike.name
 #: po/custom/fromJson.txt:5576
 msgid "Trike"
-msgstr ""
+msgstr "Trike"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
@@ -13519,7 +13519,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:5591
 msgid "Truck"
-msgstr ""
+msgstr "Truk"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage06.name
@@ -13885,7 +13885,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body1REC.name
 #: po/custom/fromJson.txt:5841
 msgid "Viper"
-msgstr ""
+msgstr "Viper"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
@@ -14066,13 +14066,13 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.V-Tol02.name
 #: po/custom/fromJson.txt:5951
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:5954
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14248,13 +14248,13 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6070
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6079
 msgid "Wall"
-msgstr ""
+msgstr "Dinding"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
@@ -14300,7 +14300,7 @@ msgstr ""
 #. data/mp/stats/propulsion.json: $.wheeled01.name
 #: po/custom/fromJson.txt:6107
 msgid "Wheels"
-msgstr ""
+msgstr "Roda"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadRotMg.name
@@ -14345,7 +14345,7 @@ msgstr ""
 #. data/base/stats/features.json: $.WreckedDroidHub.name
 #: po/custom/fromJson.txt:6134
 msgid "Wreck"
-msgstr ""
+msgstr "Rusak"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WreckedBridge.name
@@ -14375,7 +14375,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body13SUP.name
 #: po/custom/fromJson.txt:6149
 msgid "Wyvern"
-msgstr ""
+msgstr "Wyvern"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[6]
@@ -14383,7 +14383,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6153
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Elit"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14391,7 +14391,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6157
 msgctxt "rank"
 msgid "Green"
-msgstr ""
+msgstr "Hijau"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[8]
@@ -14399,7 +14399,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6161
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Hero"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14415,7 +14415,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6169
 msgctxt "rank"
 msgid "Regular"
-msgstr ""
+msgstr "Regular"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[0]
@@ -14423,7 +14423,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6173
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "Rookie"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14431,7 +14431,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6177
 msgctxt "rank"
 msgid "Special"
-msgstr ""
+msgstr "Spesial"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[2]
@@ -14439,7 +14439,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6181
 msgctxt "rank"
 msgid "Trained"
-msgstr ""
+msgstr "Terlatih"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[5]
@@ -14447,7 +14447,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6185
 msgctxt "rank"
 msgid "Veteran"
-msgstr ""
+msgstr "Veteran"
 
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
@@ -14477,7 +14477,7 @@ msgstr ""
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14545,7 +14545,7 @@ msgstr ""
 
 #: src/clparse.cpp:261
 msgid "file"
-msgstr ""
+msgstr "file"
 
 #: src/clparse.cpp:262
 msgid "Flush all debug output written to stderr"
@@ -14575,7 +14575,7 @@ msgstr ""
 #: src/clparse.cpp:267
 #: src/clparse.cpp:268
 msgid "mod"
-msgstr ""
+msgstr "mod"
 
 #: src/clparse.cpp:267
 msgid "Enable a campaign only mod"
@@ -14600,7 +14600,7 @@ msgstr ""
 #: src/clparse.cpp:271
 #: src/clparse.cpp:272
 msgid "savegame"
-msgstr ""
+msgstr "savegame"
 
 #: src/clparse.cpp:272
 msgid "Load a saved campaign game"
@@ -14644,7 +14644,7 @@ msgstr ""
 
 #: src/clparse.cpp:280
 msgid "host"
-msgstr ""
+msgstr "host"
 
 #: src/clparse.cpp:281
 msgid "Go directly to host screen"
@@ -14676,7 +14676,7 @@ msgstr ""
 
 #: src/clparse.cpp:286
 msgid "test"
-msgstr ""
+msgstr "tes"
 
 #: src/clparse.cpp:287
 msgid "Continue the last saved game"
@@ -14688,7 +14688,7 @@ msgstr ""
 
 #: src/clparse.cpp:288
 msgid "autohost"
-msgstr ""
+msgstr "autohost"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14696,12 +14696,12 @@ msgstr ""
 
 #: src/configuration.cpp:172
 msgid "My Game"
-msgstr ""
+msgstr "Game Ku"
 
 #: src/configuration.cpp:173
 #: src/multistat.cpp:179
 msgid "Player"
-msgstr ""
+msgstr "Pemain"
 
 #: src/design.cpp:375
 #: src/design.cpp:386
@@ -14762,7 +14762,7 @@ msgstr ""
 #: src/design.cpp:1652
 #: src/design.cpp:1685
 msgid "Weight"
-msgstr ""
+msgstr "Berat"
 
 #: src/design.cpp:682
 #: src/design.cpp:703
@@ -14781,7 +14781,7 @@ msgstr ""
 
 #: src/design.cpp:1081
 msgid "Hydra "
-msgstr ""
+msgstr "Hydra "
 
 #: src/design.cpp:1252
 #: src/design.cpp:1272
@@ -14803,12 +14803,12 @@ msgstr ""
 #: src/design.cpp:1400
 #: src/design.cpp:1436
 msgid "Range"
-msgstr ""
+msgstr "Jangkauan"
 
 #: src/design.cpp:1412
 #: src/design.cpp:1444
 msgid "Damage"
-msgstr ""
+msgstr "Damage"
 
 #: src/design.cpp:1420
 #: src/design.cpp:1452
@@ -14837,11 +14837,11 @@ msgstr ""
 
 #: src/design.cpp:1746
 msgid "Weapons"
-msgstr ""
+msgstr "Senjata"
 
 #: src/design.cpp:1765
 msgid "Systems"
-msgstr ""
+msgstr "Sistem"
 
 #: src/design.cpp:4283
 msgid "Do Not Store Design"
@@ -14891,7 +14891,7 @@ msgstr ""
 #: src/droid.cpp:251
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "%s Kalah!"
 
 #: src/droid.cpp:1146
 msgid "Structure Restored"
@@ -14936,12 +14936,12 @@ msgstr ""
 #: src/frontend.cpp:131
 #: src/frontend.cpp:275
 msgid "Tutorial"
-msgstr ""
+msgstr "Tutorial"
 
 #: src/frontend.cpp:132
 #: src/ingameop.cpp:243
 msgid "Options"
-msgstr ""
+msgstr "Opsi"
 
 #: src/frontend.cpp:136
 #: src/frontend.cpp:140
@@ -15019,7 +15019,7 @@ msgstr ""
 #: src/frontend.cpp:1722
 msgctxt "menu"
 msgid "Return"
-msgstr ""
+msgstr "Kembali"
 
 #: src/frontend.cpp:330
 msgid "New Campaign"
@@ -15083,7 +15083,7 @@ msgstr ""
 #: src/frontend.cpp:619
 #: src/multiint.cpp:1401
 msgid "OPTIONS"
-msgstr ""
+msgstr "OPSI"
 
 #: src/frontend.cpp:620
 msgid "Game Options"
@@ -15115,11 +15115,11 @@ msgstr ""
 
 #: src/frontend.cpp:676
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:677
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:678
 #: src/frontend.cpp:1058
@@ -15143,16 +15143,16 @@ msgstr ""
 #: src/frontend.cpp:1480
 #: src/frontend.cpp:1490
 msgid "Off"
-msgstr ""
+msgstr "Mati"
 
 #: src/frontend.cpp:688
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:689
 #: src/multiplay.cpp:1916
 msgid "Black"
-msgstr ""
+msgstr "Hitam"
 
 #: src/frontend.cpp:696
 #: src/frontend.cpp:701
@@ -15162,7 +15162,7 @@ msgstr ""
 #: src/frontend.cpp:1480
 #: src/frontend.cpp:1490
 msgid "On"
-msgstr ""
+msgstr "Di"
 
 #: src/frontend.cpp:706
 msgid "Rotating"
@@ -15170,15 +15170,15 @@ msgstr ""
 
 #: src/frontend.cpp:706
 msgid "Fixed"
-msgstr ""
+msgstr "Tetap"
 
 #: src/frontend.cpp:711
 msgid "Instant"
-msgstr ""
+msgstr "Instan"
 
 #: src/frontend.cpp:711
 msgid "Tracked"
-msgstr ""
+msgstr "Terlacak"
 
 #: src/frontend.cpp:724
 #: src/ingameop.cpp:517
@@ -15198,12 +15198,12 @@ msgstr ""
 #: src/frontend.cpp:738
 #: src/ingameop.cpp:532
 msgid "Shadows"
-msgstr ""
+msgstr "Bayangan"
 
 #: src/frontend.cpp:742
 #: src/ingameop.cpp:537
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #: src/frontend.cpp:746
 #: src/ingameop.cpp:542
@@ -15220,12 +15220,12 @@ msgstr ""
 
 #: src/frontend.cpp:847
 msgid "Enabled"
-msgstr ""
+msgstr "Diaktifkan"
 
 #: src/frontend.cpp:851
 #: src/frontend.cpp:857
 msgid "Auto"
-msgstr ""
+msgstr "Otomatis"
 
 #: src/frontend.cpp:892
 #: src/ingameop.cpp:159
@@ -15244,7 +15244,7 @@ msgstr ""
 
 #: src/frontend.cpp:904
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
 #: src/frontend.cpp:909
 #: src/frontend.cpp:911
@@ -15385,21 +15385,21 @@ msgstr ""
 #: src/frontend.cpp:1616
 #: src/multiint.cpp:225
 msgid "Easy"
-msgstr ""
+msgstr "Mudah"
 
 #: src/frontend.cpp:1617
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: src/frontend.cpp:1618
 #: src/multiint.cpp:225
 msgid "Hard"
-msgstr ""
+msgstr "Sulit"
 
 #: src/frontend.cpp:1619
 #: src/multiint.cpp:225
 msgid "Insane"
-msgstr ""
+msgstr "Gila"
 
 #: src/frontend.cpp:1650
 #: src/frontend.cpp:1723
@@ -15443,7 +15443,7 @@ msgstr ""
 #: src/frontend.cpp:1833
 #: src/multiint.cpp:2559
 msgid "Mod: "
-msgstr ""
+msgstr "Mod:"
 
 #: src/hci.cpp:1170
 #: src/loop.cpp:244
@@ -15475,7 +15475,7 @@ msgstr ""
 #: src/multiint.cpp:1483
 #: src/multimenu.cpp:682
 msgid "Power"
-msgstr ""
+msgstr "Daya"
 
 #: src/hci.cpp:3025
 msgid "Progress Bar"
@@ -15567,7 +15567,7 @@ msgstr ""
 
 #: src/ingameop.cpp:275
 msgid "Quit"
-msgstr ""
+msgstr "Keluar"
 
 #: src/ingameop.cpp:342
 msgid "Host has quit the game!"
@@ -15729,14 +15729,14 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:600
 #: src/integrations/wzdiscordrpc.cpp:836
 msgid "Map:"
-msgstr ""
+msgstr "Peta:"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:603
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Bots:"
-msgstr ""
+msgstr "Bot:"
 
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
@@ -15756,7 +15756,7 @@ msgstr ""
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:895
 msgid "No:"
-msgstr ""
+msgstr "No:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:911
@@ -15765,7 +15765,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:927
 msgid "In Menu"
-msgstr ""
+msgstr "Dalam Menu"
 
 #: src/integrations/wzdiscordrpc.cpp:1076
 #, c-format
@@ -15783,12 +15783,12 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:1084
 msgid "Allow"
-msgstr ""
+msgstr "Izinkan"
 
 #: src/intelmap.cpp:239
 #: src/keybind.cpp:1357
 msgid "PAUSED"
-msgstr ""
+msgstr "DIJEDA"
 
 #: src/intelmap.cpp:321
 msgid "Research Update"
@@ -15853,12 +15853,12 @@ msgstr ""
 #: src/intorder.cpp:175
 #: src/keymap.cpp:477
 msgid "Patrol"
-msgstr ""
+msgstr "Patroli"
 
 #: src/intorder.cpp:176
 #: src/keymap.cpp:476
 msgid "Pursue"
-msgstr ""
+msgstr "Kejar"
 
 #: src/intorder.cpp:177
 #: src/keymap.cpp:471
@@ -15891,7 +15891,7 @@ msgstr ""
 
 #: src/intorder.cpp:183
 msgid "Recycle"
-msgstr ""
+msgstr "Daur Ulang"
 
 #: src/intorder.cpp:184
 msgid "Assign Factory Production"
@@ -15911,7 +15911,7 @@ msgstr ""
 
 #: src/intorder.cpp:188
 msgid "Circle"
-msgstr ""
+msgstr "Lingkaran"
 
 #: src/keybind.cpp:123
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -16033,11 +16033,11 @@ msgstr ""
 
 #: src/keybind.cpp:799
 msgid "Fog on"
-msgstr ""
+msgstr "Kabut nyala"
 
 #: src/keybind.cpp:799
 msgid "Fog off"
-msgstr ""
+msgstr "Kabut mati"
 
 #: src/keybind.cpp:900
 #: src/keybind.cpp:913
@@ -16220,11 +16220,11 @@ msgstr ""
 
 #: src/keymap.cpp:374
 msgid "Build"
-msgstr ""
+msgstr "Bangun"
 
 #: src/keymap.cpp:375
 msgid "Design"
-msgstr ""
+msgstr "Desain"
 
 #: src/keymap.cpp:376
 msgid "Intelligence Display"
@@ -16432,7 +16432,7 @@ msgstr ""
 
 #: src/keymap.cpp:441
 msgid "Zoom In"
-msgstr ""
+msgstr "Zoom In"
 
 #: src/keymap.cpp:442
 msgid "Zoom Out"
@@ -16856,7 +16856,7 @@ msgstr ""
 
 #: src/multiint.cpp:225
 msgid "Medium"
-msgstr ""
+msgstr "Medium"
 
 #: src/multiint.cpp:283
 #: src/multiplay.cpp:470
@@ -16945,7 +16945,7 @@ msgstr ""
 
 #: src/multiint.cpp:1492
 msgid "Base"
-msgstr ""
+msgstr "Markas"
 
 #: src/multiint.cpp:1501
 msgid "Map Preview"
@@ -16976,7 +16976,7 @@ msgstr ""
 
 #: src/multiint.cpp:1528
 msgid "Tech"
-msgstr ""
+msgstr "Teknologi"
 
 #: src/multiint.cpp:1529
 msgid "Technology Level 1"
@@ -17033,7 +17033,7 @@ msgstr ""
 
 #: src/multiint.cpp:2168
 msgid "Team"
-msgstr ""
+msgstr "Tim"
 
 #: src/multiint.cpp:2223
 msgid "Click to change difficulty"
@@ -17061,11 +17061,11 @@ msgstr ""
 
 #: src/multiint.cpp:2250
 msgid "READY?"
-msgstr ""
+msgstr "SIAP?"
 
 #: src/multiint.cpp:2292
 msgid "PLAYERS"
-msgstr ""
+msgstr "PEMAIN"
 
 #: src/multiint.cpp:2327
 msgid "Click to change to this slot"
@@ -17097,11 +17097,11 @@ msgstr ""
 
 #: src/multiint.cpp:2445
 msgid "(none)"
-msgstr ""
+msgstr "(tidak ada)"
 
 #: src/multiint.cpp:2529
 msgid "CHAT"
-msgstr ""
+msgstr "CHAT"
 
 #: src/multiint.cpp:3009
 msgid "Game Name Updated."
@@ -17187,12 +17187,12 @@ msgstr ""
 #: src/multiint.cpp:4234
 #: src/multiint.cpp:4466
 msgid "Open"
-msgstr ""
+msgstr "Buka"
 
 #: src/multiint.cpp:4234
 #: src/multiint.cpp:4467
 msgid "Closed"
-msgstr ""
+msgstr "Ditutup"
 
 #: src/multiint.cpp:4299
 #, c-format
@@ -17206,12 +17206,12 @@ msgstr ""
 
 #: src/multiint.cpp:4347
 msgid "HOST"
-msgstr ""
+msgstr "HOST"
 
 #: src/multiint.cpp:4354
 #: src/multimenu.cpp:689
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multijoin.cpp:112
 msgid "Players Still Joining"
@@ -17248,7 +17248,7 @@ msgstr ""
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
 msgid "LIMITS"
-msgstr ""
+msgstr "BATAS"
 
 #: src/multilimit.cpp:152
 msgid "Map Can Exceed Limits"
@@ -17283,19 +17283,19 @@ msgstr[0] ""
 
 #: src/multimenu.cpp:673
 msgid "Score"
-msgstr ""
+msgstr "Skor"
 
 #: src/multimenu.cpp:675
 msgid "Kills"
-msgstr ""
+msgstr "Bunuh"
 
 #: src/multimenu.cpp:677
 msgid "Units"
-msgstr ""
+msgstr "Unit"
 
 #: src/multimenu.cpp:693
 msgid "Structs"
-msgstr ""
+msgstr "Struktur"
 
 #: src/multimenu.cpp:705
 msgid "Sent/Received per sec —"
@@ -17322,7 +17322,7 @@ msgstr ""
 
 #: src/multimenu.cpp:1018
 msgid "Channel"
-msgstr ""
+msgstr "Saluran"
 
 #: src/multimenu.cpp:1032
 msgid "Toggle Alliance State"
@@ -17366,7 +17366,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1162
 msgid " (Ally)"
-msgstr ""
+msgstr " (Sekutu)"
 
 #: src/multiplay.cpp:1166
 msgid " (Global)"
@@ -17374,7 +17374,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1264
 msgid "(allies"
-msgstr ""
+msgstr "(sekutu"
 
 #: src/multiplay.cpp:1272
 msgid "(private to "
@@ -17408,43 +17408,43 @@ msgstr ""
 
 #: src/multiplay.cpp:1913
 msgid "Green"
-msgstr ""
+msgstr "Hijau"
 
 #: src/multiplay.cpp:1914
 msgid "Orange"
-msgstr ""
+msgstr "Oranye"
 
 #: src/multiplay.cpp:1915
 msgid "Grey"
-msgstr ""
+msgstr "Abu-abu"
 
 #: src/multiplay.cpp:1917
 msgid "Red"
-msgstr ""
+msgstr "Merah"
 
 #: src/multiplay.cpp:1918
 msgid "Blue"
-msgstr ""
+msgstr "Biru"
 
 #: src/multiplay.cpp:1919
 msgid "Pink"
-msgstr ""
+msgstr "Pink"
 
 #: src/multiplay.cpp:1920
 msgid "Cyan"
-msgstr ""
+msgstr "Cyan"
 
 #: src/multiplay.cpp:1921
 msgid "Yellow"
-msgstr ""
+msgstr "Kuning"
 
 #: src/multiplay.cpp:1922
 msgid "Purple"
-msgstr ""
+msgstr "Ungu"
 
 #: src/multiplay.cpp:1923
 msgid "White"
-msgstr ""
+msgstr "Putih"
 
 #: src/multiplay.cpp:1924
 msgid "Bright blue"
@@ -17464,11 +17464,11 @@ msgstr ""
 
 #: src/multiplay.cpp:1928
 msgid "Brown"
-msgstr ""
+msgstr "Coklat"
 
 #: src/notifications.cpp:712
 msgid "Dismiss"
-msgstr ""
+msgstr "Bubar"
 
 #: src/notifications.cpp:787
 msgid "Do not show again"
@@ -17722,7 +17722,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:87
 msgid "GAMES"
-msgstr ""
+msgstr "GAME"
 
 #: src/titleui/gamefind.cpp:95
 msgid "Refresh Games List"
@@ -17842,11 +17842,11 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:584
 msgid "Players"
-msgstr ""
+msgstr "Pemain"
 
 #: src/titleui/gamefind.cpp:587
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
@@ -17858,12 +17858,12 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:177
 msgid "Cancel"
-msgstr ""
+msgstr "Batal"
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -17871,11 +17871,11 @@ msgstr ""
 
 #: src/titleui/protocol.cpp:89
 msgid "Lobby"
-msgstr ""
+msgstr "Lobi"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:188
 msgid "IP Address or Machine Name"
