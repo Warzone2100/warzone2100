@@ -170,14 +170,14 @@ unsigned int cmdDroidMaxGroup(const DROID *psCommander)
 	return getDroidLevel(psCommander) * psStats->upgrade[psCommander->player].maxDroidsMult + psStats->upgrade[psCommander->player].maxDroids;
 }
 
-/** This function adds experience to the command droid of the psKiller's command group.*/
-void cmdDroidUpdateKills(DROID *psKiller, uint32_t experienceInc)
+/** This function adds experience to the command droid of the psShooter's command group.*/
+void cmdDroidUpdateExperience(DROID *psShooter, uint32_t experienceInc)
 {
-	ASSERT_OR_RETURN(, psKiller != nullptr, "invalid Unit pointer");
+	ASSERT_OR_RETURN(, psShooter != nullptr, "invalid Unit pointer");
 
-	if (hasCommander(psKiller))
+	if (hasCommander(psShooter))
 	{
-		DROID *psCommander = psKiller->psGroup->psCommander;
+		DROID *psCommander = psShooter->psGroup->psCommander;
 		psCommander->experience += MIN(experienceInc, UINT32_MAX - psCommander->experience);
 	}
 }

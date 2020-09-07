@@ -4612,6 +4612,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->body = healthValue(ini, psDroid->originalBody);
 		ASSERT(psDroid->body != 0, "%s : %d has zero hp!", pFileName, i);
 		psDroid->experience = ini.value("experience", 0).toInt();
+		psDroid->kills = ini.value("kills", 0).toInt();
 		psDroid->secondaryOrder = ini.value("secondaryOrder", psDroid->secondaryOrder).toInt();
 		psDroid->secondaryOrderPending = psDroid->secondaryOrder;
 		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
@@ -4759,6 +4760,10 @@ static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counte
 	if (psCurr->experience > 0)
 	{
 		ini.setValue("experience", psCurr->experience);
+	}
+	if (psCurr->kills > 0)
+	{
+		ini.setValue("kills", psCurr->kills);
 	}
 
 	setIniDroidOrder(ini, "order", psCurr->order);

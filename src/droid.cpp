@@ -1630,6 +1630,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	{
 		psDroid->experience = 0;
 	}
+	psDroid->kills = 0;
 
 	droidSetBits(pTemplate, psDroid);
 
