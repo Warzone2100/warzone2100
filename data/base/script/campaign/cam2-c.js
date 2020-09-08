@@ -128,7 +128,7 @@ function truckDefense()
 		queue("truckDefense", camSecondsToMilliseconds(160));
 	}
 
-	const LIST = ["WallTower06", "PillBox1", "WallTower03"];
+	const LIST = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
 	camQueueBuilding(THE_COLLECTIVE, LIST[camRand(LIST.length)]);
 }
 

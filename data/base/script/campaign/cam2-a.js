@@ -178,7 +178,7 @@ function truckDefense()
 {
 	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
 	{
-		const DEFENSES = ["WallTower06", "PillBox1", "WallTower03"];
+		const DEFENSES = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
 		camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
 
 		queue("truckDefense", camSecondsToMilliseconds(160));
