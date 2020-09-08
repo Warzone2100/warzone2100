@@ -112,7 +112,7 @@ static void	proj_ImpactFunc(PROJECTILE *psObj);
 static void	proj_PostImpactFunc(PROJECTILE *psObj);
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
 
-static int32_t objectDamage(DAMAGE *damage);
+static int32_t objectDamage(DAMAGE *psDamage);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -1547,44 +1547,44 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamageDispatch(DAMAGE *damage)
+static int32_t objectDamageDispatch(DAMAGE *psDamage)
 {
-	switch (damage->psDest->type)
+	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)damage->psDest, damage->damage, damage->weaponClass, damage->weaponSubClass, damage->impactTime, damage->isDamagePerSecond, damage->minDamage);
+		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)damage->psDest, damage->damage, damage->weaponClass, damage->weaponSubClass, damage->impactTime, damage->isDamagePerSecond, damage->minDamage);
+		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
 		break;
 
 	case OBJ_FEATURE:
-		return featureDamage((FEATURE *)damage->psDest, damage->damage, damage->weaponClass, damage->weaponSubClass, damage->impactTime, damage->isDamagePerSecond, damage->minDamage);
+		return featureDamage((FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
 		break;
 
 	case OBJ_PROJECTILE:
-		ASSERT(!"invalid object type: bullet", "invalid object type: OBJ_PROJECTILE (id=%d)", damage->psDest->id);
+		ASSERT(!"invalid object type: bullet", "invalid object type: OBJ_PROJECTILE (id=%d)", psDamage->psDest->id);
 		break;
 
 	case OBJ_TARGET:
-		ASSERT(!"invalid object type: target", "invalid object type: OBJ_TARGET (id=%d)", damage->psDest->id);
+		ASSERT(!"invalid object type: target", "invalid object type: OBJ_TARGET (id=%d)", psDamage->psDest->id);
 		break;
 
 	default:
-		ASSERT(!"unknown object type", "unknown object type %d, id=%d", damage->psDest->type, damage->psDest->id);
+		ASSERT(!"unknown object type", "unknown object type %d, id=%d", psDamage->psDest->type, psDamage->psDest->id);
 	}
 	return 0;
 }
 
-static bool isFriendlyFire(DAMAGE* sDamage)
+static bool isFriendlyFire(DAMAGE* psDamage)
 {
-	return sDamage->psProjectile->psDest && sDamage->psProjectile->psSource->player == sDamage->psProjectile->psDest->player;
+	return psDamage->psProjectile->psDest && psDamage->psProjectile->psSource->player == psDamage->psProjectile->psDest->player;
 }
 
-static bool shouldIncreaseExperience(DAMAGE *sDamage)
+static bool shouldIncreaseExperience(DAMAGE *psDamage)
 {
-	return sDamage->psProjectile->psSource && !isFeature(sDamage->psProjectile->psDest) && !isFriendlyFire(sDamage);
+	return psDamage->psProjectile->psSource && !isFeature(psDamage->psProjectile->psDest) && !isFriendlyFire(psDamage);
 }
 
 static void updateKills(DAMAGE* psDamage)
