@@ -2687,29 +2687,64 @@ bool NETprocessQueuedServerUpdates()
 
 // ////////////////////////////////////////////////////////////////////////
 //  Handle http stuff if we have any.
+char* sprcatr(char* str, const char* format, ...) {
+	const size_t chunksize = 4096*2;
+	size_t origlenth = 0;
+	if(str != NULL)
+	{
+		origlenth = strlen(str);
+	}
+	char tmpbuf[chunksize] = {0};
+	va_list args;
+	va_start(args, format);
+	size_t used = vsnprintf(tmpbuf, chunksize-1, format, args);
+	va_end(args);
+	if(used == chunksize-1)
+	{
+		debug(LOG_ERROR, "Panic not enouth tmp buffer on sprcatr!");
+	}
+	char* newstr = (char*)realloc(str, origlenth+used+1);
+	if(newstr == NULL) {
+		debug(LOG_ERROR, "No enouth memory! (realloc sprcatr fail)");
+		return str;
+	}
+	memcpy(newstr+origlenth, tmpbuf, used);
+	newstr[origlenth+used] = '\0';
+	return newstr;
+}
 void NETprocessPossibleHttpRequest(Socket *sock) {
     debug(LOG_INFO, "We are entering HTTP stuff");
-    // char* nextbuf = (char*)malloc(4096);
-    // memcpy(nextbuf, "GET /gr/", 8); // fill what we have
-    // readAll(sock, nextbuf+8, 2, 1200);
-    // if(r < 1) {
-    //  debug(LOG_ERROR, "Some read shit");
-    //  free(nextbuf);
-    //  return;
-    // }
-
-    // if(nextbuf[9] == '\r') {
-        // debug(LOG_INFO, "Request to /gr/");
-        const char* resp = "HTTP/1.1 200 OK\r\n\
-Server: WZ2100\r\n\
-Content-Type: text/html; charset=UTF-8\r\n\
-Connection: close\r\n\
-Content-Length: 21\r\n\
-\r\n\
-<h1>Hello world!</h1>";
-        writeAll(sock, resp, strlen(resp));
-    // }
-    // free(nextbuf);
+	char* outdata = NULL;
+	if(NetPlay.GamePassworded)
+	{
+		outdata = sprcatr(outdata, "Room under a password.\r\n");
+	}
+	else
+	{
+		outdata = sprcatr(outdata, "Room %s<br>\r\n", game.name);
+		outdata = sprcatr(outdata, "By %s<br>\r\n", NetPlay.players[NetPlay.hostPlayer].name);
+		outdata = sprcatr(outdata, "Map %s (%s)<br>\r\n", game.map, game.hash.toString().c_str());
+		outdata = sprcatr(outdata, "Players:<br>\r\n");
+		for(int j=0; j<MAX_PLAYERS; j++) {
+			if(NetPlay.players[j].allocated) {
+				struct PLAYERSTATS ps = getMultiStats(NetPlay.players[j].position);
+				outdata = sprcatr(outdata, "%d %d %s %s<br>\r\n",
+				NetPlay.players[j].position,
+				NetPlay.players[j].team, /// don't ask what a hell is the string below
+				sha256Sum(&ps.identity.toBytes(EcKey::Public)[0], ps.identity.toBytes(EcKey::Public).size()).toString().substr(0, 20).c_str(),
+				NetPlay.players[j].name);
+			}
+		}
+	}
+	char* resp = NULL;
+	resp = sprcatr(resp, "HTTP/1.1 200 OK\r\n");
+	resp = sprcatr(resp, "Server: WZ2100\r\n");
+	resp = sprcatr(resp, "Content-Type: text/html; charset=UTF-8\r\n");
+	resp = sprcatr(resp, "Connection: close\r\n");
+	resp = sprcatr(resp, "Content-Length: %d\r\n\r\n%s", strlen(outdata), outdata);
+    writeAll(sock, resp, strlen(resp));
+	free(resp);
+	free(outdata);
     return;
 }
 
