@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-09-07 07:12\n"
+"PO-Revision-Date: 2020-09-10 14:50\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -30,56 +30,56 @@ msgstr "Bangun markas, lalu cari struktur Pra-Runtuh."
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "Struktur ini berisi teknologi penting bagi kesuksesan Projek ini."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "MISI MARKAS ALPHA: Perampok"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Perampok mendekati markas kita."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Lindungi markas lalu hancurkan kamp para Perampok."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "MISI MARKAS ALPHA: Lonjakan Listrik Terdeteksi"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "Sebuah lonjakan listrik telah terdeteksi di sebelah selatan dari posisi kita."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Selidiki dan amankan area."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "MISI MARKAS ALPHA: Paradigma Baru"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "Paradigma Baru mengendalikan teknologi senjata superior."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "Mereka mungkin memiliki teknologi Synaptic Link, sangat penting agar kita mengambilnya."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "MISI TRANSPORT: Temukan dan Ambil Artefak"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Penuhi pasukan penyerang ke transport."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "Saat mendarat, jelajahi reruntuhan dan ambil semua artefak."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
