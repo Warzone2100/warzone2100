@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-09-11 06:48\n"
+"PO-Revision-Date: 2020-09-11 18:46\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -16930,7 +16930,7 @@ msgstr "Лазерный Спутник Отключён."
 
 #: src/multiint.cpp:1201
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Применен лимит строений."
 
 #: src/multiint.cpp:1380
 msgid "Not enough votes to randomize or change the map."
@@ -17175,7 +17175,7 @@ msgstr ""
 
 #: src/multiint.cpp:3881
 msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
+msgstr "Нельзя изменить карту, слишком мало слотов для всех игроков."
 
 #: src/multiint.cpp:3886
 msgid "Cannot change to a map with fewer slots."
@@ -17282,7 +17282,7 @@ msgstr "ПРЕДЕЛЫ"
 
 #: src/multilimit.cpp:152
 msgid "Map Can Exceed Limits"
-msgstr ""
+msgstr "Карта может превышать лимиты"
 
 #: src/multilimit.cpp:158
 msgid "Force Limits at Start"
