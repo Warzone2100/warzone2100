@@ -5798,6 +5798,11 @@ UDWORD	structureResistance(const STRUCTURE_STATS *psStats, UBYTE player)
 been attacked*/
 bool electronicReward(STRUCTURE *psStructure, UBYTE attackPlayer)
 {
+	if (!bMultiPlayer)
+	{
+		return false; //campaign should not give rewards (especially to the player)
+	}
+
 	bool    bRewarded = false;
 
 	switch (psStructure->pStructureType->type)
