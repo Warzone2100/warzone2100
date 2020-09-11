@@ -20,7 +20,7 @@
         "mountModel": "TRLSNSR1.PIE",
         "name": "*CC Sensor*",
         "power": 1000,
-        "range": 3072,
+        "range": 2304,
         "sensorModel": "misensor.PIE",
         "type": "STANDARD",
         "weight": 1
