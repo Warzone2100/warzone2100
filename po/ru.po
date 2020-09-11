@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-07-20 10:27\n"
+"PO-Revision-Date: 2020-09-11 06:48\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -17286,7 +17286,7 @@ msgstr ""
 
 #: src/multilimit.cpp:158
 msgid "Force Limits at Start"
-msgstr ""
+msgstr "Принудительное ограничение при старте"
 
 #: src/multilimit.cpp:180
 msgid "Apply Defaults and Return To Previous Screen"
