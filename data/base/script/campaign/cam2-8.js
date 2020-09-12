@@ -75,9 +75,10 @@ function enableFactories()
 
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
-		queue("truckDefense", camMinutesToMilliseconds(2));
+		removeTimer("truckDefense");
+		return;
 	}
 
 	var list = ["AASite-QuadBof", "CO-WallTower-HvCan", "CO-Tower-RotMG"];
@@ -187,4 +188,5 @@ function eventStartLevel()
 	queue("setupLandGroups", camSecondsToMilliseconds(50));
 	queue("vtolAttack", camMinutesToMilliseconds(1));
 	queue("enableFactories", camChangeOnDiff(camMinutesToMilliseconds(1.5)));
+	setTimer("truckDefense", camMinutesToMilliseconds(2));
 }

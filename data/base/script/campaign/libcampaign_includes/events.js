@@ -119,7 +119,6 @@ function cam_eventStartLevel()
 	__camVtolStartPosition = {};
 	__camVtolTemplates = {};
 	__camVtolExitPosition = {};
-	__camVtolTimer = 0;
 	__camVtolSpawnActive = false;
 	__camVtolExtras = {};
 	__camLastNexusAttack = 0;
@@ -137,7 +136,7 @@ function cam_eventStartLevel()
 	setTimer("__camTruckTick", camSecondsToMilliseconds(40) + camSecondsToMilliseconds(0.1)); // some slower campaign pollers
 	setTimer("__camAiPowerReset", camMinutesToMilliseconds(3)); //reset AI power every so often
 	setTimer("__camShowVictoryConditions", camMinutesToMilliseconds(5));
-	queue("__camTacticsTick", camSecondsToMilliseconds(0.1)); // would re-queue itself
+	setTimer("__camTacticsTick", camSecondsToMilliseconds(0.1));
 	queue("__camGrantSpecialResearch", camSecondsToMilliseconds(6));
 }
 

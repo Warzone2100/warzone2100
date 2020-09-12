@@ -95,9 +95,10 @@ function vtolAttack()
 
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
-		queue("truckDefense", camSecondsToMilliseconds(160));
+		removeTimer("truckDefense");
+		return;
 	}
 
 	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-Tower-MdCan", "CO-Tower-LtATRkt"];
@@ -243,4 +244,5 @@ function eventStartLevel()
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	queue("activateBase1Defenders2", camChangeOnDiff(camMinutesToMilliseconds(20)));
 	queue("activateBase1Defenders", camChangeOnDiff(camMinutesToMilliseconds(30)));
+	setTimer("truckDefense", camSecondsToMilliseconds(160));
 }

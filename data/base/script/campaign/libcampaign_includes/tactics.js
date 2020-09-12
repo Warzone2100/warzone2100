@@ -304,7 +304,9 @@ function __camTacticsTick()
 		queue("__camTacticsTickForGroup", dt, group);
 		dt += CAM_TICKS_PER_FRAME;
 	}
-	queue("__camTacticsTick", dt);
+	//Emulate a queue...
+	removeTimer("__camTacticsTick");
+	setTimer("__camTacticsTick", dt);
 }
 
 //Return the range (in tiles) a droid will scout for stuff to attack around it.
