@@ -308,6 +308,10 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_SelectNextResearch, "SelectNextResearch"},
 	{kf_SelectNextPowerStation, "SelectNextPowerStation"},
 	{kf_SelectNextCyborgFactory, "SelectNextCyborgFactory"},
+	{kf_JumpNextFactory, "JumpNextFactory"},
+	{kf_JumpNextResearch, "JumpNextResearch"},
+	{kf_JumpNextPowerStation, "JumpNextPowerStation"},
+	{kf_JumpNextCyborgFactory, "JumpNextCyborgFactory"},
 	//
 	// Debug options
 	{kf_ToggleDebugMappings, "ToggleDebugMappings"},
@@ -552,6 +556,10 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      N_("Select next Research Facility"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  N_("Select next Power Generator"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Select next Cyborg Factory"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextFactory,       N_("Jump to next Factory"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextResearch,      N_("Jump to next Research Facility"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextPowerStation,  N_("Jump to next Power Generator"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextCyborgFactory, N_("Jump to next Cyborg Factory"), bForceDefaults) || didAdd;
 
 	// Debug options
 	didAdd = keyAddDefaultMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, N_("Toggle Debug Mappings"), bForceDefaults) || didAdd;
