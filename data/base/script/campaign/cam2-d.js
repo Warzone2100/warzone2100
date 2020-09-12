@@ -32,9 +32,10 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
-		queue("truckDefense", camSecondsToMilliseconds(160));
+		removeTimer("truckDefense");
+		return;
 	}
 
 	var list = ["AASite-QuadBof", "CO-WallTower-HvCan", "CO-Tower-RotMG", "CO-Tower-HvFlame"];
@@ -152,4 +153,5 @@ function eventStartLevel()
 	camEnableFactory("COSouthCyborgFactory");
 
 	queue("vtolAttack", camMinutesToMilliseconds(2));
+	setTimer("truckDefense", camSecondsToMilliseconds(160));
 }

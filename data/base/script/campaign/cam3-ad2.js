@@ -95,8 +95,6 @@ function phantomFactorySpawn()
 			data: { regroup: false, count: -1, },
 		});
 	}
-
-	queue("phantomFactorySpawn", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }
 
 //Choose a target to fire the LasSat at. Automatically increases the limits
@@ -155,7 +153,10 @@ function vaporizeTarget()
 			mapLimit = mapLimit + 0.33; //sector clear; move closer
 		}
 		laserSatFuzzyStrike(target);
-		queue("vaporizeTarget", camSecondsToMilliseconds(10));
+	}
+	else
+	{
+		removeTimer("vaporizeTarget");
 	}
 }
 
@@ -242,12 +243,12 @@ function checkTime()
 	{
 		camPlayVideos("MB3_AD2_MSG2");
 		setMissionTime(camHoursToSeconds(1));
+
 		phantomFactorySpawn();
 		queue("vaporizeTarget", camSecondsToMilliseconds(2));
-	}
-	else
-	{
-		queue("checkTime", camSecondsToMilliseconds(0.2));
+		setTimer("vaporizeTarget", camSecondsToMilliseconds(10));
+		setTimer("phantomFactorySpawn", camChangeOnDiff(camMinutesToMilliseconds(5)));
+		removeTimer("checkTime");
 	}
 }
 
@@ -305,6 +306,6 @@ function eventStartLevel()
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	camPlayVideos("MB3_AD2_MSG");
 
-	queue("checkTime", camSecondsToMilliseconds(0.2));
+	setTimer("checkTime", camSecondsToMilliseconds(0.2));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

@@ -198,7 +198,6 @@ var __camVtolPlayer;
 var __camVtolStartPosition;
 var __camVtolTemplates;
 var __camVtolExitPosition;
-var __camVtolTimer;
 var __camVtolSpawnActive;
 var __camVtolSpawnStopObject;
 var __camVtolExtras;

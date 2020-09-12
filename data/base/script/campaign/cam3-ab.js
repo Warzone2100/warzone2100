@@ -57,7 +57,6 @@ function sendEdgeMapDroids()
 	);
 
 	edgeMapCounter += 1;
-	queue("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 //Setup Nexus VTOL hit and runners. NOTE: These do not go away in this mission.
@@ -188,11 +187,13 @@ function eventResearched(research, structure, player)
 
 function hackPlayer()
 {
-	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
-	if (camGetNexusState())
+	if (!camGetNexusState())
 	{
-		queue("hackPlayer", camSecondsToMilliseconds(5));
+		removeTimer("hackPlayer");
+		return;
 	}
+
+	camHackIntoPlayer(CAM_HUMAN_PLAYER, NEXUS);
 }
 
 function synapticsSound()
@@ -241,9 +242,10 @@ function eventStartLevel()
 
 	queue("powerTransfer", camSecondsToMilliseconds(0.8));
 	queue("synapticsSound", camSecondsToMilliseconds(2.5));
-	queue("hackPlayer", camSecondsToMilliseconds(8));
 	queue("sendEdgeMapDroids", camSecondsToMilliseconds(15));
 
 	setTimer("truckDefense", camSecondsToMilliseconds(2));
+	setTimer("hackPlayer", camSecondsToMilliseconds(8));
 	setTimer("nexusManufacture", camSecondsToMilliseconds(10));
+	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

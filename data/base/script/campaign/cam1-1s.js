@@ -1,6 +1,7 @@
 include("script/campaign/libcampaign.js");
 
 var cheat;
+var powModVideoPlayed;
 
 function eventChat(from, to, message)
 {
@@ -13,6 +14,7 @@ function eventChat(from, to, message)
 //Video if player does not yet have power module built
 function resPowModVideo()
 {
+	powModVideoPlayed = true;
 	camPlayVideos("MB1_B2_MSG");
 }
 
@@ -44,10 +46,11 @@ function checkForPowerModule()
 		camSetupTransporter(11, 52, 1, 32);
 		setMissionTime(camChangeOnDiff(camMinutesToSeconds(15))); // 15 min for offworld
 		secondVideo();
-	}
-	else
-	{
-		queue("checkForPowerModule", camSecondsToMilliseconds(3));
+
+		if (powModVideoPlayed)
+		{
+			removeTimer("checkForPowerModule");
+		}
 	}
 }
 
@@ -58,10 +61,12 @@ function eventStartLevel()
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10))); // 10 min for building module.
 	camSetStandardWinLossConditions(CAM_VICTORY_PRE_OFFWORLD, "SUB_1_1");
 	cheat = false;
+	powModVideoPlayed = false;
 
 	if (!powerModuleBuilt())
 	{
 		resPowModVideo();
+		setTimer("checkForPowerModule", camSecondsToMilliseconds(3));
 	}
 
 	checkForPowerModule();
