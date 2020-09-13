@@ -1792,6 +1792,31 @@ void	kf_SelectNextCyborgFactory()
 }
 
 // --------------------------------------------------------------------------
+void	kf_SelectNextVTOLFactory()
+{
+	// STRUCTURE	*psCurr;
+
+	selNextSpecifiedBuilding(REF_VTOL_FACTORY, false);
+
+	// //deselect factories of other types
+	// for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	// {
+	// 	if (psCurr->selected &&
+	// 	    ((psCurr->pStructureType->type == REF_FACTORY) ||
+	// 	     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
+	// 	{
+	// 		psCurr->selected = false;
+	// 	}
+	// } // idk not selecting at all with this
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
 void	kf_JumpNextFactory()
 {
 	STRUCTURE	*psCurr;
@@ -1851,6 +1876,31 @@ void	kf_JumpNextCyborgFactory()
 			psCurr->selected = false;
 		}
 	}
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
+void	kf_JumpNextVTOLFactory()
+{
+	// STRUCTURE	*psCurr;
+
+	selNextSpecifiedBuilding(REF_VTOL_FACTORY, true);
+
+	// //deselect factories of other types
+	// for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	// {
+	// 	if (psCurr->selected &&
+	// 	    ((psCurr->pStructureType->type == REF_FACTORY) ||
+	// 	     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
+	// 	{
+	// 		psCurr->selected = false;
+	// 	}
+	// } // idk not selecting at all with this
 
 	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
 	{
