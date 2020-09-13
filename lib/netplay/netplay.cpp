@@ -2724,15 +2724,16 @@ void NETprocessPossibleHttpRequest(Socket *sock) {
 		outdata = sprcatr(outdata, "Room %s<br>\r\n", game.name);
 		outdata = sprcatr(outdata, "By %s<br>\r\n", NetPlay.players[NetPlay.hostPlayer].name);
 		outdata = sprcatr(outdata, "Map %s (%s)<br>\r\n", game.map, game.hash.toString().c_str());
+		outdata = sprcatr(outdata, "Settings: %d %d %d %d<br>\r\n", game.scavengers, game.alliance, game.power, game.base);
 		outdata = sprcatr(outdata, "Players:<br>\r\n");
 		for(int j=0; j<MAX_PLAYERS; j++) {
 			if(NetPlay.players[j].allocated) {
 				struct PLAYERSTATS ps = getMultiStats(NetPlay.players[j].position);
 				outdata = sprcatr(outdata, "%d %d %s %s<br>\r\n",
-				NetPlay.players[j].position,
-				NetPlay.players[j].team, /// don't ask what a hell is the string below
-				sha256Sum(&ps.identity.toBytes(EcKey::Public)[0], ps.identity.toBytes(EcKey::Public).size()).toString().substr(0, 20).c_str(),
-				NetPlay.players[j].name);
+							NetPlay.players[j].position,
+							NetPlay.players[j].team, /// don't ask what a hell is the string below
+							ps.identity.empty() ? "" : sha256Sum(&ps.identity.toBytes(EcKey::Public)[0], ps.identity.toBytes(EcKey::Public).size()).toString().substr(0, 20).c_str(),
+							NetPlay.players[j].name);
 			}
 		}
 	}
@@ -2867,12 +2868,11 @@ static void NETallowJoining()
 			std::string rIP = "Incoming connection from:";
 			rIP.append(getSocketTextAddress(tmp_socket[i]));
 			NETlogEntry(rIP.c_str(), SYNC_FLAG, i);
-			if(strncmp(buffer, "GET /gr/", 8) == 0) {
+			if(strncmp(buffer, "GET /", 5) == 0) {
 				NETprocessPossibleHttpRequest(tmp_socket[i]);
 				connectFailed = true;
 			}
-			// A 2.3.7 client sends a "list" command first, just drop the connection.
-			if (strcmp(buffer, "list") == 0)
+			else if (strcmp(buffer, "list") == 0) // A 2.3.7 client sends a "list" command first, just drop the connection.
 			{
 				debug(LOG_INFO, "An old client tried to connect, closing the socket.");
 				NETlogEntry("Dropping old client.", SYNC_FLAG, i);
