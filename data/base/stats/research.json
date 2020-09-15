@@ -7400,12 +7400,13 @@
     "R-Wpn-Bomb04": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Bomb04",
-        "keyTopic": 1,
         "imdName": "trmvtlin.PIE",
         "msgName": "RES_W_BMB4",
         "name": "Thermite Bomb Bay",
         "requiredResearch": [
-			"R-Wpn-Flamer-Damage05"
+			"R-Wpn-Flamer-Damage05",
+            "R-Wpn-Bomb03",
+            "R-Wpn-Bomb02"
         ],
         "researchPoints": 9200,
         "researchPower": 287,

@@ -45,7 +45,7 @@ function truckDefense()
 //Attacks every 2 minutes until HQ is destroyed.
 function vtolAttack()
 {
-	var list = [cTempl.colatv];
+	var list = [cTempl.colatv, cTempl.commorvt];
 	camSetVtolData(THE_COLLECTIVE, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), "COCommandCenter");
 }
 

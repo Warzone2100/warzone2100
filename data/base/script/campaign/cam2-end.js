@@ -86,7 +86,7 @@ function vtolAttack()
 	];
 	var vtolRemovePos = {"x": 127, "y": 64};
 
-	var list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat];
+	var list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat, cTempl.commorvt];
 	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(camSecondsToMilliseconds(30)));
 }
 

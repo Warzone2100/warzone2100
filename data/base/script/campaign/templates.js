@@ -87,6 +87,7 @@ cohaaq: { body: "Body9REC", prop: "tracked01", weap: "QuadRotAAGun" },
 
 // CAM_2_D
 comhltat: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-HvyA-T" },
+commorvt: { body: "Body6SUPP", prop: "V-Tol", weap: "Bomb4-VTOL-HvyINC" },
 
 // CAM_2_6
 cohact: { body: "Body9REC", prop: "tracked01", weap: "Cannon5VulcanMk1" },
