@@ -84,7 +84,7 @@ const BETA_TECH = [
 	"Cannon4AUTO-VTOL", "Cannon4AUTOMk1", "Cannon5Vulcan-VTOL", "Cannon5VulcanMk1",
 	"Flame2", "Howitzer105Mk1", "Howitzer150Mk1", "MG4ROTARY-VTOL", "MG4ROTARYMk1",
 	"Mortar3ROTARYMk1", "Rocket-HvyA-T", "Rocket-IDF", "Rocket-VTOL-HvyA-T",
-	"QuadRotAAGun",
+	"QuadRotAAGun", "Bomb4-VTOL-HvyINC",
 ];
 
 const STRUCTS_GAMMA = [
@@ -127,7 +127,7 @@ const PLAYER_RES_GAMMA = [
 	"R-Cyborg-Wpn-RotMG", "R-Defense-AASite-QuadRotMg", "R-Defense-Emplacement-HPVcannon",
 	"R-Defense-Howitzer", "R-Defense-HvyFlamer", "R-Defense-RotMG", "R-Defense-Wall-VulcanCan",
 	"R-Defense-WallTower-HPVcannon", "R-Defense-HvyHowitzer", "R-Defense-Wall-RotMg",
-	"R-Defense-IDFRocket",
+	"R-Defense-IDFRocket", "R-Wpn-Bomb04",
 ];
 
 //This is used for giving allies in Gamma technology (3-b/3-2/3-c)
