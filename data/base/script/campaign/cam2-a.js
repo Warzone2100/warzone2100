@@ -265,7 +265,10 @@ function eventTransporterLanded(transport)
 //Warn that something bad happened to the fifth transport
 function reallyDownTransporter()
 {
-	removeTimer("sendPlayerTransporter");
+	if (startedFromMenu)
+	{
+		removeTimer("sendPlayerTransporter");
+	}
 	setReinforcementTime(LZ_COMPROMISED_TIME);
 	playSound("pcv443.ogg");
 }
