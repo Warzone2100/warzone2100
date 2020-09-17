@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-09-10 14:50\n"
+"PO-Revision-Date: 2020-09-17 03:34\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "OBJEKTIF: Temukan dan kembalika teknologi sinapsis syaraf"
+msgstr "OBJEKTIF: Temukan dan kembalikan teknologi sinapsis syaraf"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
