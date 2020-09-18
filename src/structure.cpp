@@ -2133,33 +2133,16 @@ static bool comparePlacementPoints(Vector2i a, Vector2i b)
 /* Find a location near to a structure to start the droid of */
 bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 {
-
 	CHECK_STRUCTURE(psStructure);
 
-	/* Find the four corners of the square */
+	// Find the four corners of the square
 	StructureBounds bounds = getStructureBounds(psStructure);
-	int xmin = bounds.map.x - 1;
-	int xmax = bounds.map.x + bounds.size.x;
-	int ymin = bounds.map.y - 1;
-	int ymax = bounds.map.y + bounds.size.y;
-	if (xmin < 0)
-	{
-		xmin = 0;
-	}
-	if (xmax > (SDWORD)mapWidth)
-	{
-		xmax = (SWORD)mapWidth;
-	}
-	if (ymin < 0)
-	{
-		ymin = 0;
-	}
-	if (ymax > (SDWORD)mapHeight)
-	{
-		ymax = (SWORD)mapHeight;
-	}
+	int xmin = std::max(bounds.map.x - 1, 0);
+	int xmax = std::min(bounds.map.x + bounds.size.x, mapWidth);
+	int ymin = std::max(bounds.map.y - 1, 0);
+	int ymax = std::min(bounds.map.y + bounds.size.y, mapHeight);
 
-	/* Round direction to nearest 90°. */
+	// Round direction to nearest 90°.
 	uint16_t direction = snapDirection(psStructure->rot.direction);
 
 	/* We sort all adjacent tiles by their Manhattan distance to the
@@ -2191,9 +2174,9 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	}
 
 	std::vector<Vector2i> tiles;
-	for (int x = xmin; x <= xmax; ++x)
+	for (int y = ymin; y <= ymax; ++y)
 	{
-		for (int y = ymin; y <= ymax; ++y)
+		for (int x = xmin; x <= xmax; ++x)
 		{
 			if (structClearTile(x, y))
 			{
@@ -2221,19 +2204,19 @@ bool placeDroid(STRUCTURE *psStructure, UDWORD *droidX, UDWORD *droidY)
 	For simplicity, round to grid vertices. */
 	if (2 * sx <= xmin + xmax)
 	{
-		wx += TILE_UNITS / 2;
+		wx += TILE_UNITS / 2 - 1;
 	}
 	if (2 * sx >= xmin + xmax)
 	{
-		wx -= TILE_UNITS / 2;
+		wx -= TILE_UNITS / 2 - 1;
 	}
 	if (2 * sy <= ymin + ymax)
 	{
-		wy += TILE_UNITS / 2;
+		wy += TILE_UNITS / 2 - 1;
 	}
 	if (2 * sy >= ymin + ymax)
 	{
-		wy -= TILE_UNITS / 2;
+		wy -= TILE_UNITS / 2 - 1;
 	}
 
 	*droidX = wx;
@@ -3259,15 +3242,15 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 					bDroidPlaced = structPlaceDroid(psStructure, (DROID_TEMPLATE *)pSubject, &psDroid);
 				}
 
-				//reset the start time
-				psFactory->timeStarted = ACTION_START_TIME;
-				psFactory->psSubject = nullptr;
-
-				doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
-
 				//script callback, must be called after factory was flagged as idle
 				if (bDroidPlaced)
 				{
+					//reset the start time
+					psFactory->timeStarted = ACTION_START_TIME;
+					psFactory->psSubject = nullptr;
+
+					doNextProduction(psStructure, (DROID_TEMPLATE *)pSubject, ModeImmediate);
+
 					cbNewDroid(psStructure, psDroid);
 				}
 			}
