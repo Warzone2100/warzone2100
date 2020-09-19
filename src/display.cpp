@@ -1482,16 +1482,16 @@ static void printDroidClickInfo(DROID *psDroid)
 {
 	if (getDebugMappingStatus()) // cheating on, so output debug info
 	{
-		console("%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u",
+		console("%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u - kills %d",
 		        droidGetName(psDroid), psDroid->body, psDroid->originalBody, psDroid->id,
 		        psDroid->experience / 65536.f, getDroidLevelName(psDroid), getDroidOrderName(psDroid->order.type), getDroidActionName(psDroid->action),
-		        droidSensorRange(psDroid), objJammerPower(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime);
+		        droidSensorRange(psDroid), objJammerPower(psDroid), UNDEG(psDroid->rot.pitch), psDroid->lastFrustratedTime, psDroid->kills);
 		FeedbackOrderGiven();
 	}
 	else if (!psDroid->selected)
 	{
-		console(_("%s - Hitpoints %d/%d - Experience %.1f, %s"), droidGetName(psDroid), psDroid->body, psDroid->originalBody,
-		        psDroid->experience / 65536.f, _(getDroidLevelName(psDroid)));
+		console(_("%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"), droidGetName(psDroid), psDroid->body, psDroid->originalBody,
+		        psDroid->experience / 65536.f, _(getDroidLevelName(psDroid)), psDroid->kills);
 		FeedbackOrderGiven();
 	}
 	clearSelection();

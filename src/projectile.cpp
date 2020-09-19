@@ -76,6 +76,18 @@ struct INTERVAL
 	int begin, end;  // Time 1 = 0, time 2 = 1024. Or begin >= end if empty.
 };
 
+struct DAMAGE
+{
+	PROJECTILE *psProjectile;
+	BASE_OBJECT *psDest;
+	unsigned damage;
+	WEAPON_CLASS weaponClass;
+	WEAPON_SUBCLASS weaponSubClass;
+	unsigned impactTime;
+	bool isDamagePerSecond;
+	int minDamage;
+};
+
 // Watermelon:they are from droid.c
 /* The range for neighbouring objects */
 #define PROJ_NEIGHBOUR_RANGE (TILE_UNITS*4)
@@ -100,7 +112,7 @@ static void	proj_ImpactFunc(PROJECTILE *psObj);
 static void	proj_PostImpactFunc(PROJECTILE *psObj);
 static void proj_checkPeriodicalDamage(PROJECTILE *psProj);
 
-static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage);
+static int32_t objectDamage(DAMAGE *psDamage);
 
 
 static inline void setProjectileDestination(PROJECTILE *psProj, BASE_OBJECT *psObj)
@@ -259,28 +271,23 @@ int getExpGain(int player)
 	return experienceGain[player];
 }
 
-// update the kills after a target is damaged/destroyed
-static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
+DROID *getDesignatorAttackingObject(int player, BASE_OBJECT *target)
+{
+	DROID* psCommander = cmdDroidGetDesignator(player);
+
+	return psCommander != nullptr && psCommander->action == DACTION_ATTACK && psCommander->psActionTarget[0] == target
+		? psCommander
+		: nullptr;
+}
+
+
+// update the source experience after a target is damaged/destroyed
+static void proj_UpdateExperience(PROJECTILE *psObj, uint32_t experienceInc)
 {
 	DROID	        *psDroid;
 	BASE_OBJECT     *psSensor;
 
 	CHECK_PROJECTILE(psObj);
-
-	if (psObj->psSource == nullptr || (psObj->psDest && psObj->psDest->type == OBJ_FEATURE)
-	    || (psObj->psDest && psObj->psSource->player == psObj->psDest->player))	// no exp for friendly fire
-	{
-		return;
-	}
-
-	// If experienceInc is negative then the target was killed
-	if (bMultiPlayer && experienceInc < 0)
-	{
-		updateMultiStatsKills(psObj->psDest, psObj->psSource->player);
-	}
-
-	// Since we are no longer interested if it was killed or not, abs it
-	experienceInc = abs(experienceInc) * getExpGain(psObj->psSource->player) / 100;
 
 	if (psObj->psSource->type == OBJ_DROID)			/* update droid kills */
 	{
@@ -296,10 +303,10 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 			experienceInc = (uint64_t)experienceInc * qualityFactor(psDroid, (DROID *)psObj->psDest) / 65536;
 		}
 
-		ASSERT_OR_RETURN(, 0 <= experienceInc && experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
+		ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
 
 		psDroid->experience += experienceInc;
-		cmdDroidUpdateKills(psDroid, experienceInc);
+		cmdDroidUpdateExperience(psDroid, experienceInc);
 
 		psSensor = orderStateObj(psDroid, DORDER_FIRESUPPORT);
 		if (psSensor
@@ -310,14 +317,11 @@ static void proj_UpdateKills(PROJECTILE *psObj, int32_t experienceInc)
 	}
 	else if (psObj->psSource->type == OBJ_STRUCTURE)
 	{
-		ASSERT_OR_RETURN(, 0 <= experienceInc && experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
+		ASSERT_OR_RETURN(, experienceInc < (int)(2.1 * 65536), "Experience increase out of range");
 
-		// See if there was a command droid designating this target
-		psDroid = cmdDroidGetDesignator(psObj->psSource->player);
+		psDroid = getDesignatorAttackingObject(psObj->psSource->player, psObj->psDest);
 
-		if (psDroid != nullptr
-		    && psDroid->action == DACTION_ATTACK
-		    && psDroid->psActionTarget[0] == psObj->psDest)
+		if (psDroid != nullptr)
 		{
 			psDroid->experience += experienceInc;
 		}
@@ -1123,11 +1127,19 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			debug(LOG_NEVER, "Damage to object %d, player %d\n",
 			      psObj->psDest->id, psObj->psDest->player);
 
-			// Damage the object
-			relativeDamage = objectDamage(psObj->psDest, damage, psStats->weaponClass, psStats->weaponSubClass,
-			                              psObj->time, false, psStats->upgrade[psObj->player].minimumDamage);
+			struct DAMAGE sDamage = {
+				psObj,
+				psObj->psDest,
+				damage,
+				psStats->weaponClass,
+				psStats->weaponSubClass,
+				psObj->time,
+				false,
+				(int)psStats->upgrade[psObj->player].minimumDamage
+			};
 
-			proj_UpdateKills(psObj, relativeDamage);
+			// Damage the object
+			relativeDamage = objectDamage(&sDamage);
 
 			if (relativeDamage >= 0)	// So long as the target wasn't killed
 			{
@@ -1215,9 +1227,19 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			{
 				updateMultiStatsDamage(psObj->psSource->player, psCurr->player, damage);
 			}
-			int relativeDamage = objectDamage(psCurr, damage, psStats->weaponClass, psStats->weaponSubClass,
-			                                  psObj->time, false, psStats->upgrade[psObj->player].minimumDamage);
-			proj_UpdateKills(psObj, relativeDamage);
+
+			struct DAMAGE sDamage = {
+				psObj,
+				psCurr,
+				damage,
+				psStats->weaponClass,
+				psStats->weaponSubClass,
+				psObj->time,
+				false,
+				(int)psStats->upgrade[psObj->player].minimumDamage
+			};
+
+			objectDamage(&sDamage);
 		}
 	}
 
@@ -1383,10 +1405,18 @@ static void proj_checkPeriodicalDamage(PROJECTILE *psProj)
 		unsigned damageRate = calcDamage(weaponPeriodicalDamage(psStats, psProj->player), psStats->periodicalDamageWeaponEffect, psCurr);
 		debug(LOG_NEVER, "Periodical damage of %d per second to object %d, player %d\n", damageRate, psCurr->id, psCurr->player);
 
-		int relativeDamage = objectDamage(psCurr, damageRate, psStats->periodicalDamageWeaponClass,
-		                                  psStats->periodicalDamageWeaponSubClass, gameTime - deltaGameTime / 2 + 1, true,
-		                                  psStats->upgrade[psProj->player].minimumDamage);
-		proj_UpdateKills(psProj, relativeDamage);
+		struct DAMAGE sDamage = {
+			psProj,
+			psCurr,
+			damageRate,
+			psStats->periodicalDamageWeaponClass,
+			psStats->periodicalDamageWeaponSubClass,
+			gameTime - deltaGameTime / 2 + 1,
+			true,
+			(int)psStats->upgrade[psProj->player].minimumDamage
+		};
+
+		objectDamage(&sDamage);
 	}
 }
 
@@ -1517,34 +1547,90 @@ UDWORD	calcDamage(UDWORD baseDamage, WEAPON_EFFECT weaponEffect, BASE_OBJECT *ps
  *    multiplied by -1, resulting in a negative number. Killed features do not
  *    result in negative numbers.
  */
-static int32_t objectDamage(BASE_OBJECT *psObj, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
+static int32_t objectDamageDispatch(DAMAGE *psDamage)
 {
-	switch (psObj->type)
+	switch (psDamage->psDest->type)
 	{
 	case OBJ_DROID:
-		return droidDamage((DROID *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond, minDamage);
+		return droidDamage((DROID *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
 		break;
 
 	case OBJ_STRUCTURE:
-		return structureDamage((STRUCTURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond, minDamage);
+		return structureDamage((STRUCTURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
 		break;
 
 	case OBJ_FEATURE:
-		return featureDamage((FEATURE *)psObj, damage, weaponClass, weaponSubClass, impactTime, isDamagePerSecond, minDamage);
+		return featureDamage((FEATURE *)psDamage->psDest, psDamage->damage, psDamage->weaponClass, psDamage->weaponSubClass, psDamage->impactTime, psDamage->isDamagePerSecond, psDamage->minDamage);
 		break;
 
 	case OBJ_PROJECTILE:
-		ASSERT(!"invalid object type: bullet", "invalid object type: OBJ_PROJECTILE (id=%d)", psObj->id);
+		ASSERT(!"invalid object type: bullet", "invalid object type: OBJ_PROJECTILE (id=%d)", psDamage->psDest->id);
 		break;
 
 	case OBJ_TARGET:
-		ASSERT(!"invalid object type: target", "invalid object type: OBJ_TARGET (id=%d)", psObj->id);
+		ASSERT(!"invalid object type: target", "invalid object type: OBJ_TARGET (id=%d)", psDamage->psDest->id);
 		break;
 
 	default:
-		ASSERT(!"unknown object type", "unknown object type %d, id=%d", psObj->type, psObj->id);
+		ASSERT(!"unknown object type", "unknown object type %d, id=%d", psDamage->psDest->type, psDamage->psDest->id);
 	}
 	return 0;
+}
+
+static bool isFriendlyFire(DAMAGE* psDamage)
+{
+	return psDamage->psProjectile->psDest && psDamage->psProjectile->psSource->player == psDamage->psProjectile->psDest->player;
+}
+
+static bool shouldIncreaseExperience(DAMAGE *psDamage)
+{
+	return psDamage->psProjectile->psSource && !isFeature(psDamage->psProjectile->psDest) && !isFriendlyFire(psDamage);
+}
+
+static void updateKills(DAMAGE* psDamage)
+{
+	if (bMultiPlayer)
+	{
+		updateMultiStatsKills(psDamage->psDest, psDamage->psProjectile->psSource->player);
+	}
+
+	if (psDamage->psProjectile->psSource->type == OBJ_DROID)
+	{
+		DROID *psDroid = (DROID *) psDamage->psProjectile->psSource;
+
+		psDroid->kills++;
+
+		if (hasCommander(psDroid))
+		{
+			DROID *psCommander = psDroid->psGroup->psCommander;
+			psCommander->kills++;
+		}
+	}
+	else if (psDamage->psProjectile->psSource->type == OBJ_STRUCTURE)
+	{
+		DROID *psCommander = getDesignatorAttackingObject(psDamage->psProjectile->psSource->player, psDamage->psProjectile->psDest);
+
+		if (psCommander != nullptr) {
+			psCommander->kills++;
+		}
+	}
+}
+
+static int32_t objectDamage(DAMAGE *psDamage)
+{
+	int32_t relativeDamage = objectDamageDispatch(psDamage);
+
+	if (shouldIncreaseExperience(psDamage)) {
+		proj_UpdateExperience(psDamage->psProjectile, abs(relativeDamage) * getExpGain(psDamage->psProjectile->psSource->player) / 100);
+
+		bool isTargetDestroyed = relativeDamage < 0;
+
+		if (isTargetDestroyed) {
+			updateKills(psDamage);
+		}
+	}
+
+	return relativeDamage;
 }
 
 /* Returns true if an object has just been hit by an electronic warfare weapon*/
