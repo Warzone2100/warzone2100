@@ -309,13 +309,13 @@ void loadMultiScripts()
 	WzString ininame = challengeActive ? sRequestResult : aFileName;
 	WzString path = challengeActive ? "challenges/" : aPathName;
 
-	if (hostlaunch == 2)
+	if (hostlaunch == HostLaunch::Skirmish)
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "tests/";
 	}
 
-	if (hostlaunch == 3)
+	if (hostlaunch == HostLaunch::Autohost)
 	{
 		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "autohost/";
@@ -2368,16 +2368,9 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 					{
 						sButInit.pTip += "\n";
 					}
-					EcKey::Key bytes = getMultiStats(i).identity.toBytes(EcKey::Public);
+					std::string hash = getMultiStats(i).identity.publicHashString();
 					sButInit.pTip += _("Player ID: ");
-					if (!bytes.empty())
-					{
-						sButInit.pTip += sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
-					}
-					else
-					{
-						sButInit.pTip += _("(none)");
-					}
+					sButInit.pTip += hash.empty()? _("(none)") : hash;
 				}
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
@@ -2647,7 +2640,7 @@ static void loadMapChallengeSettings(WzConfig& ini)
 	}
 	ini.endGroup();
 
-	const bool bIsAutoHostOrAutoGame = hostlaunch == 3 || hostlaunch == 2;
+	const bool bIsAutoHostOrAutoGame = hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost;
 	if (challengeActive || bIsAutoHostOrAutoGame)
 	{
 		ini.beginGroup("challenge");
@@ -2857,11 +2850,11 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 	sstrcat(aFileName, ".json");
 
 	WzString ininame = challengeActive ? sRequestResult : aFileName;
-	if (hostlaunch == 2)
+	if (hostlaunch == HostLaunch::Skirmish)
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 	}
-	if (hostlaunch == 3)
+	if (hostlaunch == HostLaunch::Autohost)
 	{
 		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
 	}
@@ -3032,7 +3025,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	resetReadyStatus(false);
 	removeWildcards((char*)sPlayer);
 
-	const bool bIsAutoHostOrAutoGame = hostlaunch == 3 || hostlaunch == 2;
+	const bool bIsAutoHostOrAutoGame = hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost;
 	if (!hostCampaign((char*)game.name, (char*)sPlayer, bIsAutoHostOrAutoGame))
 	{
 		addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
@@ -3301,7 +3294,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 
 	case CON_CANCEL:
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-		hostlaunch = 0; // Dont load the autohost file on subsequent hosts
+		hostlaunch = HostLaunch::Normal; // Dont load the autohost file on subsequent hosts
 		performedFirstStart = false; // Reset everything
 		if (!challengeActive)
 		{
@@ -4168,14 +4161,14 @@ void WzMultiplayerOptionsTitleUI::start()
 		updateLimitIcons();
 	}
 
-	if (autogame_enabled() || hostlaunch == 3)
+	if (autogame_enabled() || hostlaunch == HostLaunch::Autohost)
 	{
 		if (!ingame.localJoiningInProgress)
 		{
 			processMultiopWidgets(MULTIOP_HOST);
 		}
 		SendReadyRequest(selectedPlayer, true);
-		if (hostlaunch == 2)
+		if (hostlaunch == HostLaunch::Skirmish)
 		{
 			startMultiplayerGame();
 			// reset flag in case people dropped/quit on join screen
@@ -4392,7 +4385,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			ar.star[2] = stat.wins > 80? 1 : stat.wins > 40? 2 : stat.wins > 10? 3 : 0;
 
 			// medals.
-			ar.medal = stat.wins >= 24 && stat.wins > 8 * stat.losses? 3 : stat.wins >= 12 && stat.wins > 4 * stat.losses? 2 : stat.wins >= 6 && stat.wins > 2 * stat.losses? 1 : 0;
+			ar.medal = stat.wins >= 24 && stat.wins > 8 * stat.losses? 1 : stat.wins >= 12 && stat.wins > 4 * stat.losses? 2 : stat.wins >= 6 && stat.wins > 2 * stat.losses? 3 : 0;
 
 			ar.level = 0;
 			ar.elo.clear();
@@ -4425,7 +4418,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			{
 				iV_DrawImage(FrontImages, starImgs[ar.star[2]], x + 4, y + 23);
 			}
-			constexpr int medalImgs[4] = {0, IMAGE_MEDAL_BRONZE, IMAGE_MEDAL_SILVER, IMAGE_MEDAL_GOLD};
+			constexpr int medalImgs[4] = {0, IMAGE_MEDAL_GOLD, IMAGE_MEDAL_SILVER, IMAGE_MEDAL_BRONZE};
 			if (1 <= ar.medal && ar.medal < ARRAY_SIZE(medalImgs))
 			{
 				iV_DrawImage(FrontImages, medalImgs[ar.star[2]], x + 16 - 2*(ar.level != 0), y + 11);

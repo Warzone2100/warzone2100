@@ -81,6 +81,7 @@ typedef struct _poptContext
 static bool wz_autogame = false;
 static std::string wz_saveandquit;
 static std::string wz_test;
+static std::string wz_autoratingUrl;
 
 static void poptPrintHelp(poptContext ctx, FILE *output)
 {
@@ -156,7 +157,7 @@ static int poptGetNextOpt(poptContext ctx)
 
 	sstrcpy(match, ctx->argv[ctx->current]);
 	ctx->current++;
-	pparam = strrchr(match, '=');
+	pparam = strchr(match, '=');
 	if (pparam)									// option's got a parameter
 	{
 		*pparam++ = '\0';							// split option from parameter and increment past '='
@@ -253,6 +254,7 @@ typedef enum
 	CLI_SKIRMISH,
 	CLI_CONTINUE,
 	CLI_AUTOHOST,
+	CLI_AUTORATING,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -290,6 +292,7 @@ static const struct poptOption *getOptionsTable()
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
+		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url (containing \"{HASH}\"), when hosting"), N_("autorating") },
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -484,7 +487,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.
-			hostlaunch = 1;
+			hostlaunch = HostLaunch::Host;
 			break;
 		case CLI_GAME:
 			// retrieve the game name
@@ -655,7 +658,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_SKIRMISH:
-			hostlaunch = 2;
+			hostlaunch = HostLaunch::Skirmish;
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
@@ -665,7 +668,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_AUTOHOST:
-			hostlaunch = 3;
+			hostlaunch = HostLaunch::Autohost;
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
@@ -673,6 +676,15 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			wz_test = token;
 			break;
+
+		case CLI_AUTORATING:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad autorating server");
+			}
+			wz_autoratingUrl = token;
+			debug(LOG_INFO, "Using \"%s\" for ratings.", wz_autoratingUrl.c_str());
 		};
 	}
 
@@ -692,4 +704,14 @@ const std::string &saveandquit_enabled()
 const std::string &wz_skirmish_test()
 {
 	return wz_test;
+}
+
+std::string autoratingUrl(std::string const &hash) {
+	auto url = wz_autoratingUrl;
+	auto h = wz_autoratingUrl.find_first_of("{HASH}");
+	if (h != std::string::npos)
+	{
+		url.replace(h, 6, hash);
+	}
+	return url;
 }

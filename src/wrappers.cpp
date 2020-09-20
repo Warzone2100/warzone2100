@@ -57,7 +57,7 @@ static bool		bPlayerHasLost = false;
 static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-int hostlaunch = 0;				// used to detect if we are hosting a game via command line option.
+HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are hosting a game via command line option.
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -131,9 +131,9 @@ TITLECODE titleLoop()
 		firstcall = false;
 		// First check to see if --host was given as a command line option, if not,
 		// then check --join and if neither, run the normal game menu.
-		if (hostlaunch)
+		if (hostlaunch != HostLaunch::Normal)
 		{
-			if (hostlaunch == 2)
+			if (hostlaunch == HostLaunch::Skirmish)
 			{
 				SPinit(LEVEL_TYPE::SKIRMISH);
 			}

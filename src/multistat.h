@@ -26,6 +26,7 @@
 #define __INCLUDED_SRC_MULTISTATS_H__
 
 #include "lib/netplay/netplay.h"
+#include <3rdparty/json/json.hpp>
 #include <map>
 
 struct PLAYERSTATS
@@ -41,6 +42,9 @@ struct PLAYERSTATS
 
 	struct Autorating
 	{
+		Autorating() = default;
+		Autorating(nlohmann::json const &json);
+
 		bool valid = false;
 		bool dummy = false;
 		uint8_t star[3] = {0, 0, 0};

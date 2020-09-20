@@ -86,6 +86,8 @@ public:
 
 	static EcKey generate();
 
+	std::string publicHashString() const;
+
 private:
 	void *vKey;
 	static const int curveId;
