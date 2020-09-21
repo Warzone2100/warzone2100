@@ -1002,8 +1002,11 @@ static bool camTrackCamera()
 		/*	This will ensure we come to a rest and terminate the tracking
 			routine once we're close enough
 		*/
-		if (glm::dot(trackingCamera.velocity, trackingCamera.velocity) + glm::dot(trackingCamera.acceleration, trackingCamera.acceleration) < 1.f &&
-		    glm::dot(trackingCamera.rotVel, trackingCamera.rotVel)     + glm::dot(trackingCamera.rotAccel, trackingCamera.rotAccel)         < 1.f)
+		auto separation = Vector3f(trackingCamera.target->pos.xzy()) - trackingCamera.position;
+		separation.z = 0;
+		auto distanceSquared = glm::dot(separation, separation);
+		auto rotationFactor = glm::dot(trackingCamera.rotVel, trackingCamera.rotVel) + glm::dot(trackingCamera.rotAccel, trackingCamera.rotAccel);
+		if (distanceSquared < 30.f && rotationFactor < 1.f)
 		{
 			setWarCamActive(false);
 		}
