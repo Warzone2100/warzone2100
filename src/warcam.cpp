@@ -570,6 +570,18 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 	}
 }
 
+static bool shouldDecelerateQuickly(const Vector3i target, const Vector3f separation, const Vector3f acceleration)
+{
+	auto accelerationLength = glm::length(acceleration);
+	auto timeToFullStop = glm::length(trackingCamera.velocity) / accelerationLength;
+	auto positionAtFullStop = trackingCamera.position + trackingCamera.velocity * timeToFullStop - (accelerationLength * timeToFullStop * timeToFullStop) / 2;
+	auto separationAtFullStop = Vector3f(target) - positionAtFullStop;
+
+	// if the angle between separation and separationAtFullStop is > 90°, then the point where the full stop
+	// will happen (with the current acceleration) is after the target destination, which means that the
+	// camera is not slowing down fast enough.
+	return glm::dot(separation, separationAtFullStop) < 0;
+}
 
 //-----------------------------------------------------------------------------------
 /* How this all works */
@@ -669,6 +681,11 @@ static void updateCameraAcceleration(UBYTE update)
 	{
 		separation.y /= 2.0f;
 		acceleration = separation * (ACCEL_CONSTANT * 4) - trackingCamera.velocity * (VELOCITY_CONSTANT * 2);
+	}
+
+	if (shouldDecelerateQuickly(concern, separation, acceleration)) {
+		auto decelerationTime = glm::length(separation) / (1.5f * glm::length(trackingCamera.velocity));
+		acceleration = decelerationTime < 0.01 ? -trackingCamera.velocity: -trackingCamera.velocity / decelerationTime;
 	}
 
 	if (update & X_UPDATE)
