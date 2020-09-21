@@ -5,7 +5,7 @@ include("script/campaign/templates.js");
 const warning = "pcv632.ogg"; // Collective commander escaping
 const COLLEVTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials04",
-	"R-Struc-Factory-Upgrade04", "R-Struc-Factory-Cyborg-Upgrade04",
+	"R-Struc-Factory-Upgrade04",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 	"R-Wpn-Cannon-ROF02", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
@@ -14,7 +14,7 @@ const COLLEVTIVE_RES = [
 	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 	"R-Wpn-RocketSlow-Damage04", "R-Sys-Sensor-Upgrade01",
-	"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
+	"R-Struc-VTOLPad-Upgrade01",
 	"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy01",
 	"R-Wpn-Howitzer-Damage01", "R-Wpn-RocketSlow-ROF01",
 ];

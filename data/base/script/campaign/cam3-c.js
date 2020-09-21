@@ -5,7 +5,6 @@ include("script/campaign/transitionTech.js");
 const GAMMA = 1; //Gamma is player one.
 const NEXUS_RES = [
 	"R-Defense-WallUpgrade09", "R-Struc-Materials09", "R-Struc-Factory-Upgrade06",
-	"R-Struc-Factory-Cyborg-Upgrade06", "R-Struc-VTOLFactory-Upgrade06",
 	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals08",
 	"R-Cyborg-Metals08", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
 	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
@@ -152,7 +151,7 @@ function eventStartLevel()
 	camSetArtifacts({
 		"NXbase1HeavyFacArti": { tech: "R-Vehicle-Body07" }, //retribution
 		"NXcybFacArti": { tech: "R-Wpn-RailGun01" },
-		"NXvtolFacArti": { tech: "R-Struc-VTOLFactory-Upgrade04" },
+		"NXvtolFacArti": { tech: "R-Struc-VTOLPad-Upgrade04" },
 		"NXcommandCenter": { tech: "R-Wpn-Missile-LtSAM" },
 	});
 
