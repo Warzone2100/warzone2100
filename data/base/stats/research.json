@@ -78,9 +78,6 @@
         "keyTopic": 1,
         "msgName": "RES_V_P_V2",
         "name": "VTOL Propulsion II",
-        "requiredResearch": [
-            "R-Struc-VTOLFactory-Upgrade04"
-        ],
         "researchPoints": 14400,
         "researchPower": 450,
         "resultComponents": [
@@ -1466,47 +1463,6 @@
             "A0CyborgFactory"
         ],
         "statID": "A0CyborgFactory"
-    },
-    "R-Struc-Factory-Cyborg-Upgrade01": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-Factory-Cyborg-Upgrade01",
-        "imdName": "blcfact1.pie",
-        "msgName": "RES_ST_FCY01",
-        "name": "Automated Cyborg Production",
-        "requiredResearch": [
-            "R-Struc-Factory-Module",
-            "R-Struc-Factory-Cyborg"
-        ],
-        "researchPoints": 2400,
-        "researchPower": 75,
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
-    "R-Struc-Factory-Cyborg-Upgrade02": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-Factory-Cyborg-Upgrade02",
-        "imdName": "blcfact1.pie",
-        "name": "Automated Cyborg Production Mk2",
-        "requiredResearch": [
-            "R-Struc-Factory-Cyborg-Upgrade01"
-        ],
-        "researchPoints": 4800,
-        "researchPower": 150,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
-    },
-    "R-Struc-Factory-Cyborg-Upgrade03": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-Factory-Cyborg-Upgrade03",
-        "imdName": "blcfact1.pie",
-        "keyTopic": 1,
-        "name": "Automated Cyborg Production Mk3",
-        "requiredResearch": [
-            "R-Struc-Factory-Cyborg-Upgrade02"
-        ],
-        "researchPoints": 7200,
-        "researchPower": 225,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
     },
     "R-Struc-Factory-Module": {
         "iconID": "IMAGE_RES_STRUCTURETECH",
@@ -3692,46 +3648,6 @@
         "subgroupIconID": "IMAGE_RES_GRPUPG",
         "techCode": 1
     },
-    "R-Struc-Factory-Cyborg-Upgrade04": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-Factory-Cyborg-Upgrade04",
-        "imdName": "blcfact1.pie",
-        "msgName": "RES_ST_FCY4",
-        "name": "Robotic Cyborg Production",
-        "requiredResearch": [
-			"R-Struc-Factory-Upgrade04",
-			"R-Struc-Factory-Cyborg-Upgrade03"
-        ],
-        "researchPoints": 9200,
-        "researchPower": 287,
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
-    "R-Struc-Factory-Cyborg-Upgrade05": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-Factory-Cyborg-Upgrade05",
-        "imdName": "blcfact1.pie",
-        "name": "Robotic Cyborg Production Mk2",
-        "requiredResearch": [
-			"R-Struc-Factory-Cyborg-Upgrade04"
-        ],
-        "researchPoints": 11200,
-        "researchPower": 350,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
-    },
-    "R-Struc-Factory-Cyborg-Upgrade06": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-Factory-Cyborg-Upgrade06",
-        "imdName": "blcfact1.pie",
-        "name": "Robotic Cyborg Production Mk3",
-        "requiredResearch": [
-			"R-Struc-Factory-Cyborg-Upgrade05"
-        ],
-        "researchPoints": 13200,
-        "researchPower": 412,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
-    },
     "R-Struc-Factory-Upgrade04": {
         "iconID": "IMAGE_RES_STRUCTURETECH",
         "id": "R-Struc-Factory-Upgrade04",
@@ -4040,45 +3956,6 @@
             "A0VTolFactory1"
         ],
         "statID": "A0VTolFactory1"
-    },
-    "R-Struc-VTOLFactory-Upgrade01": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-VTOLFactory-Upgrade01",
-        "imdName": "blvfact0.pie",
-        "msgName": "RES_ST_VFU1",
-        "name": "Robotic VTOL Production",
-        "requiredResearch": [
-            "R-Struc-VTOLPad"
-        ],
-        "researchPoints": 2400,
-        "researchPower": 75,
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
-    "R-Struc-VTOLFactory-Upgrade02": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-VTOLFactory-Upgrade02",
-        "imdName": "blvfact0.pie",
-        "name": "Robotic VTOL Production Mk2",
-        "requiredResearch": [
-            "R-Struc-VTOLFactory-Upgrade01"
-        ],
-        "researchPoints": 3600,
-        "researchPower": 112,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
-    },
-    "R-Struc-VTOLFactory-Upgrade03": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-VTOLFactory-Upgrade03",
-        "imdName": "blvfact0.pie",
-        "name": "Robotic VTOL Production Mk3",
-        "requiredResearch": [
-            "R-Struc-VTOLFactory-Upgrade02"
-        ],
-        "researchPoints": 4800,
-        "researchPower": 150,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
     },
     "R-Struc-VTOLPad": {
         "iconID": "IMAGE_RES_STRUCTURETECH",
@@ -6783,53 +6660,13 @@
         "subgroupIconID": "IMAGE_RES_GRPUPG",
         "techCode": 1
     },
-    "R-Struc-VTOLFactory-Upgrade04": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-VTOLFactory-Upgrade04",
-        "imdName": "blvfact0.pie",
-        "keyTopic": 1,
-        "msgName": "RES_ST_VFU4",
-        "name": "Advanced VTOL Production",
-        "requiredResearch": [
-			"R-Struc-VTOLFactory-Upgrade03"
-        ],
-        "researchPoints": 6000,
-        "researchPower": 187,
-        "subgroupIconID": "IMAGE_RES_GRPUPG"
-    },
-    "R-Struc-VTOLFactory-Upgrade05": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-VTOLFactory-Upgrade05",
-        "imdName": "blvfact0.pie",
-        "name": "Advanced VTOL Production Mk2",
-        "requiredResearch": [
-            "R-Struc-VTOLFactory-Upgrade04"
-        ],
-        "researchPoints": 8000,
-        "researchPower": 250,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
-    },
-    "R-Struc-VTOLFactory-Upgrade06": {
-        "iconID": "IMAGE_RES_STRUCTURETECH",
-        "id": "R-Struc-VTOLFactory-Upgrade06",
-        "imdName": "blvfact0.pie",
-        "name": "Advanced VTOL Production Mk3",
-        "requiredResearch": [
-            "R-Struc-VTOLFactory-Upgrade05"
-        ],
-        "researchPoints": 10000,
-        "researchPower": 312,
-        "subgroupIconID": "IMAGE_RES_GRPUPG",
-        "techCode": 1
-    },
     "R-Struc-VTOLPad-Upgrade04": {
         "iconID": "IMAGE_RES_STRUCTURETECH",
         "id": "R-Struc-VTOLPad-Upgrade04",
+        "keyTopic": 1,
         "msgName": "RES_ST_VPU4",
         "name": "Robotic VTOL Rearming",
         "requiredResearch": [
-            "R-Struc-VTOLFactory-Upgrade04",
 			"R-Struc-VTOLPad-Upgrade03"
         ],
         "researchPoints": 10000,

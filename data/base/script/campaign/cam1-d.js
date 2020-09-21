@@ -5,7 +5,7 @@ include("script/campaign/templates.js");
 const NEW_PARADIGM_RES = [
 	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade03",
 	"R-Struc-Materials03", "R-Struc-Factory-Upgrade03",
-	"R-Struc-Factory-Cyborg-Upgrade03", "R-Vehicle-Engine03",
+	"R-Vehicle-Engine03",
 	"R-Vehicle-Metals03", "R-Cyborg-Metals03", "R-Wpn-Cannon-Accuracy01",
 	"R-Wpn-Cannon-Damage03", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
 	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-Acc01", "R-Wpn-Rocket-Accuracy01",

@@ -8,8 +8,7 @@ var shepardGroup; //Enemy group that protects civilians.
 var lastSoundTime; //Only play the "civilian rescued" sound every so often.
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials04",
-	"R-Struc-Factory-Upgrade04", "R-Struc-VTOLFactory-Upgrade01",
-	"R-Struc-VTOLPad-Upgrade01", "R-Struc-Factory-Cyborg-Upgrade04",
+	"R-Struc-Factory-Upgrade04", "R-Struc-VTOLPad-Upgrade01",
 	"R-Vehicle-Engine04", "R-Vehicle-Metals05", "R-Cyborg-Metals05",
 	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
@@ -18,7 +17,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
 	"R-Wpn-RocketSlow-Damage05", "R-Sys-Sensor-Upgrade01",
-	"R-Struc-VTOLFactory-Upgrade01", "R-Struc-VTOLPad-Upgrade01",
+	"R-Struc-VTOLPad-Upgrade01",
 	"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy02",
 	"R-Wpn-Howitzer-Damage02", "R-Wpn-RocketSlow-ROF02",
 ];
