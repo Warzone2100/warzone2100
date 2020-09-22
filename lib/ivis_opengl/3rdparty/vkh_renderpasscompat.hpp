@@ -1,8 +1,8 @@
 //
 // VkhRenderPassCompat
-// Version: 0.9.1
+// Version: 0.9.2
 //
-// Copyright (c) 2019 past-due
+// Copyright (c) 2019-2020 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
@@ -26,6 +26,8 @@
 
 #include <vector>
 #include <memory>
+#include <algorithm>
+#include <iterator>
 
 struct VkhRenderPassCompat
 {
