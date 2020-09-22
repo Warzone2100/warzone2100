@@ -48,6 +48,10 @@
 #include <unordered_set>
 #include <map>
 
+#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
+#pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
+#endif
+
 #if defined(DEBUG)
 // For debug builds, limit to the minimum that should be supported by this backend (which is Vulkan 1.0, see above)
 const uint32_t maxRequestableInstanceVulkanVersion = VK_API_VERSION_1_0;
@@ -1234,7 +1238,15 @@ VkPSO::VkPSO(vk::Device _dev,
 		.setPMultisampleState(&multisampleState)
 		.setRenderPass(rp);
 
-	object = dev.createGraphicsPipeline(vk::PipelineCache(), pso, nullptr, *pVkDynLoader); // may throw
+	vk::ResultValue<vk::Pipeline> result = dev.createGraphicsPipeline(vk::PipelineCache(), pso, nullptr, *pVkDynLoader);
+	switch (result.result)
+	{
+		case vk::Result::eSuccess:
+			object = std::move(result.value);
+			break;
+		default:
+			throwResultException(result.result, "createGraphicsPipeline");
+	}
 }
 
 VkPSO::~VkPSO()
@@ -3484,7 +3496,7 @@ std::map<std::string, std::string> VkRoot::getBackendGameInfo()
 	backendGameInfo["vulkan_vendor"] = std::to_string(physDeviceProps.vendorID);
 	backendGameInfo["vulkan_deviceID"] = std::to_string(physDeviceProps.deviceID);
 	backendGameInfo["vulkan_deviceType"] = to_string(physDeviceProps.deviceType);
-	backendGameInfo["vulkan_deviceName"] = physDeviceProps.deviceName;
+	backendGameInfo["vulkan_deviceName"] = static_cast<const char*>(physDeviceProps.deviceName);
 	backendGameInfo["vulkan_apiversion"] = VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion);
 	backendGameInfo["vulkan_driverversion"] = std::to_string(physDeviceProps.driverVersion);
 	return backendGameInfo;
@@ -3497,7 +3509,7 @@ const std::string& VkRoot::getFormattedRendererInfoString() const
 
 std::string VkRoot::calculateFormattedRendererInfoString() const
 {
-	return std::string("Vulkan ") + VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion) + " (" + physDeviceProps.deviceName + ")";
+	return std::string("Vulkan ") + VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion) + " (" + static_cast<const char*>(physDeviceProps.deviceName) + ")";
 }
 
 bool VkRoot::getScreenshot(iV_Image &output)

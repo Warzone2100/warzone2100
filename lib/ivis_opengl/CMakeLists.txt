@@ -62,14 +62,14 @@ target_include_directories(ivis-opengl PRIVATE ${HARFBUZZ_INCLUDE_DIRS} ${FREETY
 target_link_libraries(ivis-opengl PRIVATE framework PNG::PNG ${HARFBUZZ_LIBRARIES} ${FREETYPE_LIBRARIES})
 target_link_libraries(ivis-opengl PUBLIC glad)
 if(WZ_ENABLE_BACKEND_VULKAN)
-	find_package(VulkanHeaders 108) # minimum supported version of the Vulkan headers is 108
+	find_package(VulkanHeaders 148) # minimum supported version of the Vulkan headers is 148
 	if((NOT VulkanHeaders_FOUND AND NOT ${CMAKE_VERSION} VERSION_LESS "3.11.0") AND (NOT WZ_DISABLE_FETCHCONTENT_GIT_CLONE))
 		# Fetch newer Vulkan headers (using FetchContent, which requires CMake 3.11+)
 		include(FetchContent)
 		FetchContent_Declare(
 			vulkan_headers
 			GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers.git
-			GIT_TAG        v1.1.114
+			GIT_TAG        sdk-1.2.148.0
 		)
 		FetchContent_GetProperties(vulkan_headers)
 		if(NOT vulkan_headers_POPULATED)

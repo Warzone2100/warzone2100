@@ -1,6 +1,6 @@
 //
 // VkhInfo
-// Version: 1.3
+// Version: 1.3.1
 //
 // Copyright (c) 2019-2020 past-due
 //
@@ -20,7 +20,14 @@
 #ifndef NOMINMAX
     #define NOMINMAX // For windows.h
 #endif
+#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
+#endif
 #include <vulkan/vulkan.hpp>
+#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
+#pragma GCC diagnostic pop
+#endif
 #if defined( _MSC_VER )
 #pragma warning( pop )
 #endif
