@@ -5,6 +5,14 @@ confinement: strict
 grade: stable
 base: core18
 
+layout:
+  /usr/share/vulkan:
+    symlink: $SNAP/usr/share/vulkan
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_intel.so:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_intel.so
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_radeon.so:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvulkan_radeon.so
+
 plugs:
   wz2100-sequences:
     interface: content
@@ -142,6 +150,12 @@ parts:
       snapcraftctl set-version "$(git describe --always)"
       git submodule update --init
     override-build: |
+      # Install Vulkan SDK
+      wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add -
+      wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list https://packages.lunarg.com/vulkan/1.2.148/lunarg-vulkan-1.2.148-bionic.list
+      apt update
+      apt install --yes vulkan-sdk
+
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
       cmake -S "$SNAPCRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
@@ -173,6 +187,7 @@ parts:
       - libsodium-dev
       - ninja-build
       - unzip
+      - wget
       - zip
     stage-packages:
       - libfontconfig1
@@ -191,8 +206,10 @@ parts:
       - libvorbis0a
       - libvorbisenc2
       - libvorbisfile3
+      - libvulkan1
       - libcurl3-gnutls
       - libsodium23
       - libglu1-mesa
+      - mesa-vulkan-drivers
       - unzip
       - zip
