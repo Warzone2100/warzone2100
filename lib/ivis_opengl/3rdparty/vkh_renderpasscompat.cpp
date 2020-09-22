@@ -1,6 +1,6 @@
 //
 // VkhRenderPassCompat
-// Version: 0.9.2
+// Version: 0.9.3
 //
 // Copyright (c) 2019-2020 past-due
 //
