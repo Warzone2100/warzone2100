@@ -483,18 +483,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 				list(APPEND _vulkan_dylibs "${_vulkan_library_realpath}")
 			endif()
 
-			# For SDL's automatic libvulkan detection, libvulkan.1.dylib is required
-			# NOTE: Should not be needed once SDL 2.0.10 is released
-			# See: https://hg.libsdl.org/SDL/rev/4a089aa4ff81
-			get_filename_component(_vulkan_library_name "${Vulkan_LIBRARY}" NAME)
-			get_filename_component(_vulkan_library_realpath_name "${_vulkan_library_realpath}" NAME)
-			if ((NOT _vulkan_library_name STREQUAL "libvulkan.1.dylib") AND (NOT _vulkan_library_realpath_name STREQUAL "libvulkan.1.dylib"))
-				if(NOT EXISTS "${VulkanSDK_LIB_DIR}/libvulkan.1.dylib")
-					message(FATAL_ERROR "Missing expected libvulkan.1.dylib at: ${VulkanSDK_LIB_DIR}/libvulkan.1.dylib")
-				endif()
-				list(APPEND _vulkan_dylibs "${VulkanSDK_LIB_DIR}/libvulkan.1.dylib")
-			endif()
-
 			# MoltenVK dylib
 			if(EXISTS "${VulkanSDK_LIB_DIR}/libMoltenVK.dylib")
 				list(APPEND _vulkan_dylibs "${VulkanSDK_LIB_DIR}/libMoltenVK.dylib")
@@ -512,8 +500,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 					"${_dylib}" PROPERTIES
 					MACOSX_PACKAGE_LOCATION "Frameworks"
 					XCODE_LAST_KNOWN_FILE_TYPE "compiled.mach-o.dylib"
-					XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
 				)
+				if(NOT IS_SYMLINK "${_dylib}")
+					set_source_files_properties(
+						"${_dylib}" PROPERTIES
+						XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
+					)
+				endif()
 				if(NOT CMAKE_GENERATOR STREQUAL "Xcode")
 					# Other generators will need a custom-command equivalent of setting the "Code Sign on Copy" Xcode attribute to ON
 					message( WARNING "The generator \"${CMAKE_GENERATOR}\" does not currently handle code-signing: \"${_dylib}\"" )
@@ -523,18 +516,18 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 			set(_vulkan_resources "")
 			get_filename_component(_VulkanSDK_parent "${VulkanSDK_LIB_DIR}" DIRECTORY)
-			set(VulkanSDK_ETC_VULKAN_DIR "${_VulkanSDK_parent}/etc/vulkan")
-			if (NOT IS_DIRECTORY "${VulkanSDK_ETC_VULKAN_DIR}")
-				message( FATAL_ERROR "Unable to find /etc/vulkan at: ${VulkanSDK_ETC_VULKAN_DIR}" )
+			set(VulkanSDK_SHARE_VULKAN_DIR "${_VulkanSDK_parent}/share/vulkan")
+			if (NOT IS_DIRECTORY "${VulkanSDK_SHARE_VULKAN_DIR}")
+				message( FATAL_ERROR "Unable to find /share/vulkan at: ${VulkanSDK_SHARE_VULKAN_DIR}" )
 			endif()
 
 			# Vulkan JSON files (explicit_layer.d, icd.d)
-			file(GLOB _vulkan_json LIST_DIRECTORIES false "${VulkanSDK_ETC_VULKAN_DIR}/explicit_layer.d/*.json" "${VulkanSDK_ETC_VULKAN_DIR}/icd.d/*.json")
+			file(GLOB _vulkan_json LIST_DIRECTORIES false "${VulkanSDK_SHARE_VULKAN_DIR}/explicit_layer.d/*.json" "${VulkanSDK_SHARE_VULKAN_DIR}/icd.d/*.json")
 
 			# Fix up each Vulkan JSON file
 			foreach(_jsonFile ${_vulkan_json})
 				get_filename_component(_jsonFile_Name "${_jsonFile}" NAME)
-				string(REGEX REPLACE "^${VulkanSDK_ETC_VULKAN_DIR}/" "" _jsonFile_SubPath "${_jsonFile}")
+				string(REGEX REPLACE "^${VulkanSDK_SHARE_VULKAN_DIR}/" "" _jsonFile_SubPath "${_jsonFile}")
 				get_filename_component(_jsonFile_SubPath "${_jsonFile_SubPath}" DIRECTORY)
 				CopyVulkanLayerJSON("${_jsonFile}" "${CMAKE_CURRENT_BINARY_DIR}/generated_resources/vulkan/${_jsonFile_SubPath}/${_jsonFile_Name}" "../../../Frameworks/")
 			endforeach()

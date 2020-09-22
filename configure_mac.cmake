@@ -13,16 +13,17 @@ cmake_minimum_required(VERSION 3.5)
 set(VCPKG_COMMIT_SHA "14514508d8d30bdbd645b2bec89696aec25497f1")
 
 # WZ macOS dependencies (for vcpkg install)
-set(VCPKG_INSTALL_DEPENDENCIES physfs harfbuzz libogg libtheora libvorbis libpng sdl2[vulkan] freetype gettext zlib openal-soft curl[sectransp] libsodium)
+# NOTE: This is missing SDL, which is added to the list later (either with Vulkan enabled or disabled)
+set(VCPKG_INSTALL_DEPENDENCIES physfs harfbuzz libogg libtheora libvorbis libpng freetype gettext zlib openal-soft curl[sectransp] libsodium)
 
 # WZ minimum supported macOS deployment target (this is 10.10 because of Qt 5.9.x)
 set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.10")
 
 # Vulkan SDK
-set(VULKAN_SDK_VERSION "1.1.108.0")
-set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.tar.gz")
+set(VULKAN_SDK_VERSION "1.2.148.1")
+set(VULKAN_SDK_DL_FILENAME "vulkansdk-macos-${VULKAN_SDK_VERSION}.dmg")
 set(VULKAN_SDK_DL_URL "https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/mac/${VULKAN_SDK_DL_FILENAME}?Human=true")
-set(VULKAN_SDK_DL_SHA256 "f493b0e9abc73e80a29fa24ef9bae3c2311513df973ade6ffc56008c30eaf60d")
+set(VULKAN_SDK_DL_SHA256 "b76c58d086486b803405522183a46a16928356449db229afadecb995b624ffa0")
 
 ########################################################
 
@@ -58,30 +59,45 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ CMAKE_HOST_SYSTEM_NAME (${C
 # 1.) Download & extract Vulkan SDK
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Download Vulkan SDK...")
 
-set(_vulkan_sdk_out_dir "vulkansdk-macos")
+if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREATER_EQUAL "18.0"))
 
-execute_process(
-	COMMAND ${CMAKE_COMMAND}
-			-DFILENAME=${VULKAN_SDK_DL_FILENAME}
-			-DURL=${VULKAN_SDK_DL_URL}
-			-DEXPECTED_SHA256=${VULKAN_SDK_DL_SHA256}
-			-DOUT_DIR=${_vulkan_sdk_out_dir}
-			-P ${_repoBase}/macosx/configs/FetchPrebuilt.cmake
-	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-	RESULT_VARIABLE _exstatus
-)
-if(NOT _exstatus EQUAL 0)
-	message(FATAL_ERROR "Failed to download Vulkan SDK")
-endif()
+	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Download Vulkan SDK...")
+
+	set(_vulkan_sdk_out_dir "vulkansdk-macos")
+
+	execute_process(
+		COMMAND ${CMAKE_COMMAND}
+				-DFILENAME=${VULKAN_SDK_DL_FILENAME}
+				-DURL=${VULKAN_SDK_DL_URL}
+				-DEXPECTED_SHA256=${VULKAN_SDK_DL_SHA256}
+				-DOUT_DIR=${_vulkan_sdk_out_dir}
+				-P ${_repoBase}/macosx/configs/FetchPrebuilt.cmake
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+		RESULT_VARIABLE _exstatus
+	)
+	if(NOT _exstatus EQUAL 0)
+		message(FATAL_ERROR "Failed to download Vulkan SDK")
+	endif()
 
 
-# Set VULKAN_SDK environment variable, so vcpkg and CMake pick up the appropriate location
-set(ENV{VULKAN_SDK} "${CMAKE_CURRENT_SOURCE_DIR}/macosx/external/${_vulkan_sdk_out_dir}/macOS")
-message(STATUS "VULKAN_SDK=$ENV{VULKAN_SDK}")
-if(NOT IS_DIRECTORY "$ENV{VULKAN_SDK}")
-	message(FATAL_ERROR "Something went wrong - expected Vulkan SDK output directory does not exist: $ENV{VULKAN_SDK}")
+	# Set VULKAN_SDK environment variable, so vcpkg and CMake pick up the appropriate location
+	set(ENV{VULKAN_SDK} "${CMAKE_CURRENT_SOURCE_DIR}/macosx/external/${_vulkan_sdk_out_dir}/macOS")
+	message(STATUS "VULKAN_SDK=$ENV{VULKAN_SDK}")
+	if(NOT IS_DIRECTORY "$ENV{VULKAN_SDK}")
+		message(FATAL_ERROR "Something went wrong - expected Vulkan SDK output directory does not exist: $ENV{VULKAN_SDK}")
+	endif()
+
+	# Add SDL (with Vulkan component enabled)
+	list(APPEND VCPKG_INSTALL_DEPENDENCIES sdl2[vulkan])
+
+else()
+
+	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "-- Skipping Vulkan SDK download (compilation tools require macOS 10.14+)...")
+
+	# Add SDL (without Vulkan component)
+	list(APPEND VCPKG_INSTALL_DEPENDENCIES sdl2)
+
 endif()
 
 ########################################################
