@@ -1,8 +1,8 @@
 //
 // VkhRenderPassCompat
-// Version: 0.9.1
+// Version: 0.9.2
 //
-// Copyright (c) 2019 past-due
+// Copyright (c) 2019-2020 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
@@ -12,8 +12,6 @@
 
 #define VULKAN_HPP_TYPESAFE_CONVERSION 1
 #include "vkh_renderpasscompat.hpp"
-
-#include <algorithm>
 
 VkhRenderPassCompat::VkhRenderPassCompat(const vk::RenderPassCreateInfo& createInfo)
 {
