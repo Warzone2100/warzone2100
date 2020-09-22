@@ -284,6 +284,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [Qt5 Script](https://doc.qt.io/qt-5/qtscript-index.html) ≥ 5.6
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
+   * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
 * **Installing prerequisites:**
    * Ubuntu 18.04+:
    ```
@@ -330,6 +331,8 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
      - Required components to install: MSVC 2015, Qt Script (even though it's labelled as deprecated). The MSVC 2015 components will work on MSVC 2017 / 2019, and 32-bit versions work on 64-bit platforms.
    * **Git** (if not building from a release source archive)
    * **7-Zip** (http://www.7-zip.org)
+   * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
+      - Required only if you want to build with Vulkan support.
 * **Preparing to build:**
    Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
    * Run the `get-dependencies_win.ps1` script from powershell in order to download and build the dependencies.
