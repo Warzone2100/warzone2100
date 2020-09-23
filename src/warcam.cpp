@@ -57,6 +57,7 @@
 #include "intdisplay.h"
 #include "display3d.h"
 #include "selection.h"
+#include "animation.h"
 
 /* Storage for old viewnagles etc */
 struct WARCAM
@@ -88,16 +89,13 @@ static	SDWORD	warCamLogoRotation;
 
 /* Used to animate radar jump */
 struct RADAR_JUMP {
-	UDWORD animationStartTime;
-	Vector3f separation;
-	float animationLength;
+	Animation<Vector3f> animation;
 	BASE_OBJECT target;
 };
 
-static RADAR_JUMP radarJump = {
-	0,
-	{0, 0, 0},
-	0,
+static RADAR_JUMP radarJump
+{
+	Animation<Vector3f>(&graphicsTime, EASE_IN_OUT),
 	{OBJ_TARGET, 0, 0}
 };
 
@@ -316,6 +314,10 @@ static void setUpRadarTarget(SDWORD x, SDWORD y)
 		radarJump.target.pos.z = map_Height(x, y) + CAMERA_PIVOT_HEIGHT;
 	}
 
+	auto initial = Vector3f(player.p);
+	auto target = Vector3f(radarJump.target.pos.xzy());
+	radarJump.animation.start(initial, target);
+	radarJump.animation.setDuration(glm::log(glm::length(target - initial)) * 100);
 	radarJump.target.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
 	radarJump.target.rot.pitch = 0;
 	radarJump.target.rot.roll = 0;
@@ -333,10 +335,6 @@ static BASE_OBJECT *camFindTarget()
 	{
 		setUpRadarTarget(radarX, radarY);
 		bRadarTrackingRequested = false;
-
-		radarJump.animationStartTime = graphicsTime;
-		radarJump.separation = Vector3f(radarJump.target.pos.xzy() - player.p);
-		radarJump.animationLength = glm::log(glm::length(radarJump.separation)) * GAME_TICKS_PER_SEC * 0.1;
 		return (&radarJump.target);
 	}
 
@@ -940,9 +938,8 @@ static bool camTrackCamera()
 			bFlying = true;
 		}
 	} else {
-		auto progress = glm::max(0.f, glm::min(1.f, (graphicsTime - radarJump.animationStartTime) / radarJump.animationLength));
-		float ease = (sin((progress - 0.5) * 3.14159265)) / 2 + 0.5;
-		trackingCamera.position = Vector3f(radarJump.target.pos.xzy()) - Vector3f(radarJump.separation) * (1 - ease);
+		radarJump.animation.update();
+		trackingCamera.position = radarJump.animation.getCurrent();
 	}
 
 	if (bRadarAlign || trackingCamera.target->type == OBJ_DROID)
@@ -1003,10 +1000,8 @@ static bool camTrackCamera()
 		/*	This will ensure we come to a rest and terminate the tracking
 			routine once we're close enough
 		*/
-		auto separation = Vector3f(trackingCamera.target->pos.xzy()) - trackingCamera.position;
-		auto distanceSquared = glm::dot(separation, separation);
 		auto rotationFactor = glm::dot(trackingCamera.rotVel, trackingCamera.rotVel) + glm::dot(trackingCamera.rotAccel, trackingCamera.rotAccel);
-		if (distanceSquared < 1.f && rotationFactor < 1.f)
+		if (radarJump.animation.isFinished() && rotationFactor < 1.f)
 		{
 			setWarCamActive(false);
 		}
