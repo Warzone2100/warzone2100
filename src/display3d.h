@@ -140,4 +140,6 @@ extern bool tuiTargetOrigin;
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
 bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix);
 
+int calculateCameraHeightAt(int tileX, int tileY);
+
 #endif // __INCLUDED_SRC_DISPLAY3D_H__
