@@ -86,8 +86,20 @@ static	WARCAM	trackingCamera;
 /* Present rotation for the 3d camera logo */
 static	SDWORD	warCamLogoRotation;
 
-/* The fake target that we track when jumping to a new location on the radar */
-static BASE_OBJECT radarTarget(OBJ_TARGET, 0, 0);
+/* Used to animate radar jump */
+struct RADAR_JUMP {
+	UDWORD animationStartTime;
+	Vector3f separation;
+	float animationLength;
+	BASE_OBJECT target;
+};
+
+static RADAR_JUMP radarJump = {
+	0,
+	{0, 0, 0},
+	0,
+	{OBJ_TARGET, 0, 0}
+};
 
 /* Do we trun to face when doing a radar jump? */
 static	bool	bRadarAlign;
@@ -292,21 +304,21 @@ static void processLeaderSelection()
 /* Sets up the dummy target for the camera */
 static void setUpRadarTarget(SDWORD x, SDWORD y)
 {
-	radarTarget.pos.x = x;
-	radarTarget.pos.y = y;
-
+	radarJump.target.pos.x = x;
+	radarJump.target.pos.y = y;
 	if ((x < 0) || (y < 0) || (x > world_coord(mapWidth - 1))
 	    || (y > world_coord(mapHeight - 1)))
 	{
-		radarTarget.pos.z = world_coord(1) * ELEVATION_SCALE + CAMERA_PIVOT_HEIGHT;
+		radarJump.target.pos.z = world_coord(1) * ELEVATION_SCALE + CAMERA_PIVOT_HEIGHT;
 	}
 	else
 	{
-		radarTarget.pos.z = map_Height(x, y) + CAMERA_PIVOT_HEIGHT;
+		radarJump.target.pos.z = map_Height(x, y) + CAMERA_PIVOT_HEIGHT;
 	}
-	radarTarget.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
-	radarTarget.rot.pitch = 0;
-	radarTarget.rot.roll = 0;
+
+	radarJump.target.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
+	radarJump.target.rot.pitch = 0;
+	radarJump.target.rot.roll = 0;
 }
 
 
@@ -321,7 +333,11 @@ static BASE_OBJECT *camFindTarget()
 	{
 		setUpRadarTarget(radarX, radarY);
 		bRadarTrackingRequested = false;
-		return (&radarTarget);
+
+		radarJump.animationStartTime = graphicsTime;
+		radarJump.separation = Vector3f(radarJump.target.pos.xzy() - player.p);
+		radarJump.animationLength = glm::log(glm::length(radarJump.separation)) * GAME_TICKS_PER_SEC * 0.1;
+		return (&radarJump.target);
 	}
 
 	return camFindDroidTarget();
@@ -570,19 +586,6 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 	}
 }
 
-static bool shouldDecelerateQuickly(const Vector3i target, const Vector3f separation, const Vector3f acceleration)
-{
-	auto accelerationLength = glm::length(acceleration);
-	auto timeToFullStop = glm::length(trackingCamera.velocity) / accelerationLength;
-	auto positionAtFullStop = trackingCamera.position + trackingCamera.velocity * timeToFullStop - (accelerationLength * timeToFullStop * timeToFullStop) / 2;
-	auto separationAtFullStop = Vector3f(target) - positionAtFullStop;
-
-	// if the angle between separation and separationAtFullStop is > 90°, then the point where the full stop
-	// will happen (with the current acceleration) is after the target destination, which means that the
-	// camera is not slowing down fast enough.
-	return glm::dot(separation, separationAtFullStop) < 0;
-}
-
 //-----------------------------------------------------------------------------------
 /* How this all works */
 /*
@@ -681,11 +684,6 @@ static void updateCameraAcceleration(UBYTE update)
 	{
 		separation.y /= 2.0f;
 		acceleration = separation * (ACCEL_CONSTANT * 4) - trackingCamera.velocity * (VELOCITY_CONSTANT * 2);
-	}
-
-	if (shouldDecelerateQuickly(concern, separation, acceleration)) {
-		auto decelerationTime = glm::length(separation) / (1.5f * glm::length(trackingCamera.velocity));
-		acceleration = decelerationTime < 0.01 ? -trackingCamera.velocity: -trackingCamera.velocity / decelerationTime;
 	}
 
 	if (update & X_UPDATE)
@@ -924,11 +922,6 @@ static bool camTrackCamera()
 		return (false);
 	}
 
-	/* Update the acceleration,velocity and position of the camera for movement */
-	updateCameraAcceleration(CAM_ALL);
-	updateCameraVelocity(CAM_ALL);
-	updateCameraPosition(CAM_ALL);
-
 	/* Update the acceleration,velocity and rotation of the camera for rotation */
 	/*	You can track roll as well (z axis) but it makes you ill and looks
 		like a flight sim, so for now just pitch and orientation */
@@ -936,12 +929,20 @@ static bool camTrackCamera()
 
 	if (trackingCamera.target->type == OBJ_DROID)
 	{
+		updateCameraAcceleration(CAM_ALL);
+		updateCameraVelocity(CAM_ALL);
+		updateCameraPosition(CAM_ALL);
+
 		psDroid = (DROID *)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			bFlying = true;
 		}
+	} else {
+		auto progress = glm::max(0.f, glm::min(1.f, (graphicsTime - radarJump.animationStartTime) / radarJump.animationLength));
+		float ease = (sin((progress - 0.5) * 3.14159265)) / 2 + 0.5;
+		trackingCamera.position = Vector3f(radarJump.target.pos.xzy()) - Vector3f(radarJump.separation) * (1 - ease);
 	}
 
 	if (bRadarAlign || trackingCamera.target->type == OBJ_DROID)
@@ -1003,10 +1004,9 @@ static bool camTrackCamera()
 			routine once we're close enough
 		*/
 		auto separation = Vector3f(trackingCamera.target->pos.xzy()) - trackingCamera.position;
-		separation.z = 0;
 		auto distanceSquared = glm::dot(separation, separation);
 		auto rotationFactor = glm::dot(trackingCamera.rotVel, trackingCamera.rotVel) + glm::dot(trackingCamera.rotAccel, trackingCamera.rotAccel);
-		if (distanceSquared < 30.f && rotationFactor < 1.f)
+		if (distanceSquared < 1.f && rotationFactor < 1.f)
 		{
 			setWarCamActive(false);
 		}
