@@ -30,7 +30,12 @@ void Animation<AnimatableData>::setDuration(uint32_t durationMilliseconds)
 template <class AnimatableData>
 void Animation<AnimatableData>::update()
 {
-    this->progress = MAX(0, MIN(UINT16_MAX, ((int32_t)UINT16_MAX * (*this->time - this->startTime)) / this->duration));
+    if (this->duration > 0) {
+        this->progress = MAX(0, MIN(UINT16_MAX, ((int32_t)UINT16_MAX * (*this->time - this->startTime)) / this->duration));
+    } else {
+        this->progress = UINT16_MAX;
+    }
+
 	auto easedProgress = calculateEasing(this->easingType, this->progress);
     this->currentData = this->initialData + (this->finalData - this->initialData) * (easedProgress / (float)UINT16_MAX);
 }
