@@ -90,6 +90,7 @@ static	SDWORD	warCamLogoRotation;
 /* Used to animate radar jump */
 struct RADAR_JUMP {
 	Animation<Vector3f> animation;
+	/* This object is used ONLY to check the "type" of tracking. Ideally the logic should be changed so that we don't need it */
 	BASE_OBJECT target;
 };
 
@@ -302,20 +303,8 @@ static void processLeaderSelection()
 /* Sets up the dummy target for the camera */
 static void setUpRadarTarget(SDWORD x, SDWORD y)
 {
-	radarJump.target.pos.x = x;
-	radarJump.target.pos.y = y;
-	if ((x < 0) || (y < 0) || (x > world_coord(mapWidth - 1))
-	    || (y > world_coord(mapHeight - 1)))
-	{
-		radarJump.target.pos.z = world_coord(1) * ELEVATION_SCALE + CAMERA_PIVOT_HEIGHT;
-	}
-	else
-	{
-		radarJump.target.pos.z = map_Height(x, y) + CAMERA_PIVOT_HEIGHT;
-	}
-
 	auto initial = Vector3f(player.p);
-	auto target = Vector3f(radarJump.target.pos.xzy());
+	auto target = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
 	radarJump.animation.start(initial, target);
 	radarJump.animation.setDuration(glm::log(glm::length(target - initial)) * 100);
 	radarJump.target.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
