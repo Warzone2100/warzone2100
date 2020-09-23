@@ -31,7 +31,8 @@ template <class AnimatableData>
 void Animation<AnimatableData>::update()
 {
     if (this->duration > 0) {
-        this->progress = MAX(0, MIN(UINT16_MAX, ((int32_t)UINT16_MAX * (*this->time - this->startTime)) / this->duration));
+        auto deltaTime = *this->time - (int64_t)this->startTime;
+        this->progress = MAX(0, MIN(UINT16_MAX, UINT16_MAX * deltaTime / this->duration));
     } else {
         this->progress = UINT16_MAX;
     }
