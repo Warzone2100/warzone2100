@@ -118,7 +118,9 @@ static void	drawDroidCmndNo(DROID *psDroid);
 static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
-static void	calcAverageTerrainHeight(iView *player);
+static	int	calcAverageTerrainHeight(int tileX, int tileZ);
+static	int	calculateCameraHeight(int height);
+static void	updatePlayerAverageCentreTerrainHeight();
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
@@ -908,8 +910,8 @@ void draw3DScene()
 	if (!getWarCamStatus())
 	{
 		/* Move the autonomous camera if necessary */
-		calcAverageTerrainHeight(&player);
-		trackHeight(averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT);
+		updatePlayerAverageCentreTerrainHeight();
+		trackHeight(calculateCameraHeight(averageCentreTerrainHeight));
 	}
 	else
 	{
@@ -969,44 +971,49 @@ void	setProximityDraw(bool val)
 }
 /***************************************************************************/
 /// Calculate the average terrain height for the area directly below the player
-static void calcAverageTerrainHeight(iView *player)
+static int calcAverageTerrainHeight(int tileX, int tileZ)
 {
 	int numTilesAveraged = 0;
 
 	/*	We track the height here - so make sure we get the average heights
 		of the tiles directly underneath us
 	*/
-	averageCentreTerrainHeight = 0;
+	int result = 0;
 	for (int i = -4; i <= 4; i++)
 	{
 		for (int j = -4; j <= 4; j++)
 		{
-			if (tileOnMap(playerXTile + j, playerZTile + i))
+			if (tileOnMap(tileX + j, tileZ + i))
 			{
 				/* Get a pointer to the tile at this location */
-				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
+				MAPTILE *psTile = mapTile(tileX + j, tileZ + i);
 
-				averageCentreTerrainHeight += psTile->height;
+				result += psTile->height;
 				numTilesAveraged++;
 			}
 		}
 	}
 	/* Work out the average height. We use this information to keep the player camera
 	 * above the terrain. */
-	if (numTilesAveraged) // might not be if off map
+	if (numTilesAveraged == 0) // might not be if off map
 	{
-		MAPTILE *psTile = mapTile(playerXTile, playerZTile);
+		result = ELEVATION_SCALE * TILE_UNITS;
+	} else {
+		MAPTILE *psTile = mapTile(tileX, tileZ);
 
-		averageCentreTerrainHeight /= numTilesAveraged;
-		if (averageCentreTerrainHeight < psTile->height)
+		result /= numTilesAveraged;
+		if (result < psTile->height)
 		{
-			averageCentreTerrainHeight = psTile->height;
+			result = psTile->height;
 		}
 	}
-	else
-	{
-		averageCentreTerrainHeight = ELEVATION_SCALE * TILE_UNITS;
-	}
+
+	return result;
+}
+
+static void updatePlayerAverageCentreTerrainHeight()
+{
+	averageCentreTerrainHeight = calcAverageTerrainHeight(playerXTile, playerZTile);
 }
 
 inline bool quadIntersectsWithScreen(const QUAD & quad)
@@ -1876,8 +1883,8 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 	player.p.x = world_coord(x);
 	player.p.z = world_coord(y);
 	player.r.z = 0;
-	
-	calcAverageTerrainHeight(&player);
+
+	updatePlayerAverageCentreTerrainHeight();
 
 	if(player.p.y < averageCentreTerrainHeight)
 	{
@@ -3395,14 +3402,22 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, player.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(UNDEG(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
+static int calculateCameraHeight(int mapHeight)
+{
+	return static_cast<int>(std::ceil(static_cast<float>(mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
+}
+
+int calculateCameraHeightAt(int tileX, int tileY)
+{
+	return calculateCameraHeight(calcAverageTerrainHeight(tileX, tileY));
+}
+
 /// Smoothly adjust player height to match the desired height
 static void trackHeight(int desiredHeight)
 {
 	static const uint32_t minTrackHeightInterval = GAME_TICKS_PER_SEC / 60;
 	static uint32_t lastHeightAdjustmentRealTime = 0;
 	static float heightSpeed = 0.0f;
-
-	desiredHeight = static_cast<int>(std::ceil(static_cast<float>(desiredHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS;
 
 	uint32_t deltaTrackHeightRealTime = realTime - lastHeightAdjustmentRealTime;
 	if (deltaTrackHeightRealTime < minTrackHeightInterval)
