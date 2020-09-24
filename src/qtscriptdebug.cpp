@@ -594,7 +594,6 @@ static const char *getObjType(const BASE_OBJECT *psObj)
 	case OBJ_STRUCTURE: return "Structure";
 	case OBJ_FEATURE: return "Feature";
 	case OBJ_PROJECTILE: return "Projectile";
-	case OBJ_TARGET: return "Target";
 	default: break;
 	}
 	return "Unknown";

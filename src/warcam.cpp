@@ -89,15 +89,14 @@ static	SDWORD	warCamLogoRotation;
 
 /* Used to animate radar jump */
 struct RADAR_JUMP {
-	Animation<Vector3f> animation;
-	/* This object is used ONLY to check the "type" of tracking. Ideally the logic should be changed so that we don't need it */
-	BASE_OBJECT target;
+	Animation<Vector3f> position;
+	Animation<Vector3f> rotation;
 };
 
-static RADAR_JUMP radarJump
+static RADAR_JUMP radarJumpAnimation
 {
 	Animation<Vector3f>(&graphicsTime, EASE_IN_OUT),
-	{OBJ_TARGET, 0, 0}
+	Animation<Vector3f>(&graphicsTime, EASE_IN_OUT)
 };
 
 static SDWORD	presAvAngle = 0;
@@ -114,14 +113,9 @@ static SDWORD	presAvAngle = 0;
 /* How much info do you want when tracking a droid - this toggles full stat info */
 static	bool bFullInfo = false;
 
-/* Are we requesting a new track to start that is a radar (location) track? */
-static	bool bRadarTrackingRequested = false;
-
-/* World coordinates for a radar track/jump */
-static  float	 radarX, radarY;
-
 // Prototypes
 static bool camTrackCamera();
+static void camRadarJump();
 
 //-----------------------------------------------------------------------------------
 /* Sets the camera to inactive to begin with */
@@ -133,23 +127,6 @@ void	initWarCam()
 	/* Logo setup */
 	warCamLogoRotation = 0;
 }
-
-
-/* Static function that switches off tracking - and might not be desirable? - Jim?*/
-static void camSwitchOff()
-{
-	/* Restore the angles */
-//	player.r.x = trackingCamera.oldView.r.x;
-	player.r.z = trackingCamera.oldView.r.z;
-
-	/* And height */
-	/* Is this desirable??? */
-//	player.p.y = trackingCamera.oldView.p.y;
-
-	/* Restore distance */
-	setViewDistance(trackingCamera.oldDistance);
-}
-
 
 #define	LEADER_LEFT			1
 #define	LEADER_RIGHT		2
@@ -296,57 +273,21 @@ static void processLeaderSelection()
 	}
 }
 
-
-/* Sets up the dummy target for the camera */
-static void setUpRadarTarget(SDWORD x, SDWORD y)
-{
-	auto initial = Vector3f(player.p);
-	auto target = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
-	radarJump.animation.start(initial, target);
-	radarJump.animation.setDuration(glm::log(glm::length(target - initial)) * 100);
-	radarJump.target.rot.direction = calcDirection(player.p.x, player.p.z, x, y);
-	radarJump.target.rot.pitch = 0;
-	radarJump.target.rot.roll = 0;
-}
-
-
-/* Attempts to find the target for the camera to track */
-static BASE_OBJECT *camFindTarget()
-{
-	/*	See if we can find a selected droid. If there's more than one
-		droid selected for the present player, then we track the oldest
-		one. */
-
-	if (bRadarTrackingRequested)
-	{
-		setUpRadarTarget(radarX, radarY);
-		bRadarTrackingRequested = false;
-		return (&radarJump.target);
-	}
-
-	return camFindDroidTarget();
-}
-
-
 /* Updates the camera position/angle along with the object movement */
-bool	processWarCam()
+void	processWarCam()
 {
 	BASE_OBJECT *foundTarget;
-	bool Status = true;
-
-	/* Get out if the camera isn't active */
-	if (trackingCamera.status == CAM_INACTIVE)
-	{
-		return (true);
-	}
 
 	/* Ensure that the camera only ever flips state within this routine! */
 	switch (trackingCamera.status)
 	{
+	case CAM_INACTIVE:
+		break;
+
 	case CAM_REQUEST:
 
 		/* See if we can find the target to follow */
-		foundTarget = camFindTarget();
+		foundTarget = camFindDroidTarget();
 
 		if (foundTarget && !foundTarget->died)
 		{
@@ -378,7 +319,7 @@ bool	processWarCam()
 				Camera track came back false, either because droid died or is
 				no longer selected, so reset to old values
 			*/
-			foundTarget = camFindTarget();
+			foundTarget = camFindDroidTarget();
 			if (foundTarget && !foundTarget->died)
 			{
 				trackingCamera.status = CAM_REQUEST;
@@ -392,25 +333,16 @@ bool	processWarCam()
 		processLeaderSelection();
 
 		break;
+
+	case CAM_RADAR_JUMP:
+		camRadarJump();
+		break;
+
 	case CAM_RESET:
-		/* Reset camera to pre-droid tracking status */
-		if ((trackingCamera.target == nullptr)
-		    || (trackingCamera.target->type != OBJ_TARGET))
-		{
-			camSwitchOff();
-		}
 		/* Switch to inactive mode */
 		trackingCamera.status = CAM_INACTIVE;
-		Status = false;
-		break;
-	case CAM_INACTIVE:
-	case CAM_TRACK_OBJECT:
-	case CAM_TRACK_LOCATION:
-		ASSERT(false, "Unexpected status for tracking camera");
 		break;
 	}
-
-	return Status;
 }
 
 //-----------------------------------------------------------------------------------
@@ -427,14 +359,7 @@ void	setWarCamActive(bool status)
 		/* We're tracking a droid */
 		if (trackingCamera.status != CAM_INACTIVE)
 		{
-			if (bRadarTrackingRequested)
-			{
-				trackingCamera.status = CAM_REQUEST;
-			}
-			else
-			{
-				return;
-			}
+			return;
 		}
 		else
 		{
@@ -906,30 +831,22 @@ static bool camTrackCamera()
 		return (false);
 	}
 
+	updateCameraAcceleration(CAM_ALL);
+	updateCameraVelocity(CAM_ALL);
+	updateCameraPosition(CAM_ALL);
+
 	/* Update the acceleration,velocity and rotation of the camera for rotation */
 	/*	You can track roll as well (z axis) but it makes you ill and looks
 		like a flight sim, so for now just pitch and orientation */
-
-
 	if (trackingCamera.target->type == OBJ_DROID)
 	{
-		updateCameraAcceleration(CAM_ALL);
-		updateCameraVelocity(CAM_ALL);
-		updateCameraPosition(CAM_ALL);
-
 		psDroid = (DROID *)trackingCamera.target;
 		psPropStats = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		if (psPropStats->propulsionType == PROPULSION_TYPE_LIFT)
 		{
 			bFlying = true;
 		}
-	} else {
-		radarJump.animation.update();
-		trackingCamera.position = radarJump.animation.getCurrent();
-	}
 
-	if (trackingCamera.target->type == OBJ_DROID)
-	{
 		if (bFlying)
 		{
 			updateCameraRotationAcceleration(CAM_ALL);
@@ -980,20 +897,23 @@ static bool camTrackCamera()
 		}
 	}
 
-	/* Switch off if we're jumping to a new location and we've got there */
-	if (getRadarTrackingStatus())
-	{
-		/*	This will ensure we come to a rest and terminate the tracking
-			routine once we're close enough
-		*/
-		auto rotationFactor = glm::dot(trackingCamera.rotVel, trackingCamera.rotVel) + glm::dot(trackingCamera.rotAccel, trackingCamera.rotAccel);
-		if (radarJump.animation.isFinished() && rotationFactor < 1.f)
-		{
-			setWarCamActive(false);
-		}
-	}
 	return (true);
 }
+
+/* Updates the viewpoint animation to jump to the location pointed at the radar */
+static void camRadarJump()
+{
+	radarJumpAnimation.position.update();
+	radarJumpAnimation.rotation.update();
+	player.p = radarJumpAnimation.position.getCurrent();
+	player.r = radarJumpAnimation.rotation.getCurrent();
+
+	if (radarJumpAnimation.position.isFinished() && radarJumpAnimation.rotation.isFinished())
+	{
+		trackingCamera.status = CAM_INACTIVE;
+	}
+}
+
 //-----------------------------------------------------------------------------------
 DROID *getTrackingDroid()
 {
@@ -1069,37 +989,47 @@ void	camToggleInfo()
 	bFullInfo = !bFullInfo;
 }
 
-/* Informs the tracking camera that we want to start tracking to a new radar target */
-void	requestRadarTrack(SDWORD x, SDWORD y)
+/**
+ * Find the angle equivalent to `from` in the interval between `to - 180°` and to `to + 180°`.
+ *
+ * For example:
+ * - if `from` is `10°` and `to` is `350°`, it will return `370°`.
+ * - if `from` is `350°` and `to` is `0°`, it will return `-10°`.
+ *
+ * Useful while animating a rotation, to always animate the shortest angle delta.
+ */
+int32_t calculateRelativeAngle(uint16_t from, uint16_t to)
 {
-	radarX = (SWORD)x;
-	radarY = (SWORD)y;
-	bRadarTrackingRequested = true;
-	trackingCamera.status = CAM_REQUEST;
-	processWarCam();
+	return to + (int16_t)(from - to);
+}
+
+/* Informs the tracking camera that we want to start tracking to a new radar target */
+void requestRadarTrack(SDWORD x, SDWORD y)
+{
+	auto initialPosition = Vector3f(player.p);
+	auto targetPosition = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
+	auto animationDuration = glm::log(glm::length(targetPosition - initialPosition)) * 100;
+
+	auto targetRotationTemp = trackingCamera.status == CAM_TRACKING ? trackingCamera.oldView.r : player.r;
+	auto targetRotation = Vector3i((uint16_t)targetRotationTemp.x, (uint16_t)targetRotationTemp.y, (uint16_t)0);
+
+	auto initialRotation = Vector3f(
+		calculateRelativeAngle(player.r.x, targetRotation.x),
+		calculateRelativeAngle(player.r.y, targetRotation.y),
+		calculateRelativeAngle(player.r.z, targetRotation.z)
+	);
+
+	radarJumpAnimation.position.start(initialPosition, targetPosition);
+	radarJumpAnimation.rotation.start(initialRotation, targetRotation);
+	radarJumpAnimation.position.setDuration(animationDuration);
+	radarJumpAnimation.rotation.setDuration(animationDuration);
+	trackingCamera.status = CAM_RADAR_JUMP;
 }
 
 /* Returns whether we're presently tracking to a new _location_ */
 bool	getRadarTrackingStatus()
 {
-	bool retVal;
-
-	if (trackingCamera.status == CAM_INACTIVE)
-	{
-		retVal = false;
-	}
-	else
-	{
-		if (trackingCamera.target && trackingCamera.target->type == OBJ_TARGET)
-		{
-			retVal = true;
-		}
-		else
-		{
-			retVal = false;
-		}
-	}
-	return (retVal);
+	return trackingCamera.status == CAM_RADAR_JUMP;
 }
 
 void	camInformOfRotation(Vector3i *rotation)

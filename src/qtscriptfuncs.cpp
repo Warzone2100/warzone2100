@@ -322,7 +322,6 @@ static void updateLabelModel()
 		case SCRIPT_PLAYER:
 		case SCRIPT_RESEARCH:
 		case OBJ_PROJECTILE:
-		case OBJ_TARGET:
 		case SCRIPT_COUNT: c = "ERROR"; break;
 		}
 		labelModel->setItem(nextRow, 1, new QStandardItem(QString(c)));

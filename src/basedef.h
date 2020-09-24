@@ -41,7 +41,6 @@ enum OBJECT_TYPE
 	OBJ_STRUCTURE,  ///< All Buildings
 	OBJ_FEATURE,    ///< Things like roads, trees, bridges, fires
 	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
-	OBJ_TARGET,     ///< for the camera tracking
 	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
 };
 
@@ -176,7 +175,7 @@ static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *p
 	return objPosDiffSq(pos1->pos, pos2->pos);
 }
 
-// True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
+// True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_NUM_TYPES.
 static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)
 {
 	return psObject != nullptr && psObject->type != OBJ_PROJECTILE;

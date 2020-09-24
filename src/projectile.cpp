@@ -1567,10 +1567,6 @@ static int32_t objectDamageDispatch(DAMAGE *psDamage)
 		ASSERT(!"invalid object type: bullet", "invalid object type: OBJ_PROJECTILE (id=%d)", psDamage->psDest->id);
 		break;
 
-	case OBJ_TARGET:
-		ASSERT(!"invalid object type: target", "invalid object type: OBJ_TARGET (id=%d)", psDamage->psDest->id);
-		break;
-
 	default:
 		ASSERT(!"unknown object type", "unknown object type %d, id=%d", psDamage->psDest->type, psDamage->psDest->id);
 	}
