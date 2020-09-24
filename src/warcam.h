@@ -59,7 +59,6 @@ bool processWarCam();
 void camToggleInfo();
 void requestRadarTrack(SDWORD x, SDWORD y);
 bool getRadarTrackingStatus();
-void toggleRadarAlignment();
 void camInformOfRotation(Vector3i *rotation);
 BASE_OBJECT *camFindDroidTarget();
 DROID *getTrackingDroid();
