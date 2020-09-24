@@ -45,9 +45,8 @@ enum WARSTATUS
 	CAM_INACTIVE,
 	CAM_REQUEST,
 	CAM_TRACKING,
-	CAM_RESET,
-	CAM_TRACK_OBJECT,
-	CAM_TRACK_LOCATION
+	CAM_RADAR_JUMP,
+	CAM_RESET
 };
 
 /* Externally referenced functions */
@@ -55,7 +54,7 @@ void initWarCam();
 void setWarCamActive(bool status);
 bool getWarCamStatus();
 void camToggleStatus();
-bool processWarCam();
+void processWarCam();
 void camToggleInfo();
 void requestRadarTrack(SDWORD x, SDWORD y);
 bool getRadarTrackingStatus();

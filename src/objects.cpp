@@ -99,9 +99,6 @@ const char *objInfo(const BASE_OBJECT *psObj)
 	case OBJ_PROJECTILE:
 		sstrcpy(info, "Projectile");	// TODO
 		break;
-	case OBJ_TARGET:
-		sstrcpy(info, "Target");	// TODO
-		break;
 	default:
 		sstrcpy(info, "Unknown object type");
 		break;

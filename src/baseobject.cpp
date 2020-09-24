@@ -146,7 +146,6 @@ void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_descr
 		break;
 
 	case OBJ_FEATURE:
-	case OBJ_TARGET:
 		break;
 
 	default:
