@@ -1164,7 +1164,7 @@ VkPSO::VkPSO(vk::Device _dev,
 		.setSetLayoutCount(layout_desc.size())
 		, nullptr, *pVkDynLoader);
 
-	const auto dynamicStates = std::array<vk::DynamicState, 4>{vk::DynamicState::eScissor, vk::DynamicState::eViewport, vk::DynamicState::eDepthBias};
+	const auto dynamicStates = std::array<vk::DynamicState, 3>{vk::DynamicState::eScissor, vk::DynamicState::eViewport, vk::DynamicState::eDepthBias};
 	const auto multisampleState = vk::PipelineMultisampleStateCreateInfo()
 		.setRasterizationSamples(rasterizationSamples);
 	const auto dynamicS = vk::PipelineDynamicStateCreateInfo()
