@@ -970,14 +970,15 @@ void	setProximityDraw(bool val)
 	bDrawProximitys = val;
 }
 /***************************************************************************/
-/// Calculate the average terrain height for the area directly below the player
+/// Calculate the average terrain height for the area directly below the tile
 static int calcAverageTerrainHeight(int tileX, int tileZ)
 {
 	int numTilesAveraged = 0;
 
-	/*	We track the height here - so make sure we get the average heights
-		of the tiles directly underneath us
-	*/
+	/**
+	 * We track the height here - so make sure we get the average heights
+	 * of the tiles directly underneath us
+	 */
 	int result = 0;
 	for (int i = -4; i <= 4; i++)
 	{
@@ -993,19 +994,21 @@ static int calcAverageTerrainHeight(int tileX, int tileZ)
 			}
 		}
 	}
-	/* Work out the average height. We use this information to keep the player camera
-	 * above the terrain. */
-	if (numTilesAveraged == 0) // might not be if off map
+	if (numTilesAveraged == 0) // might be if off map
 	{
-		result = ELEVATION_SCALE * TILE_UNITS;
-	} else {
-		MAPTILE *psTile = mapTile(tileX, tileZ);
+		return ELEVATION_SCALE * TILE_UNITS;
+	}
 
-		result /= numTilesAveraged;
-		if (result < psTile->height)
-		{
-			result = psTile->height;
-		}
+	/**
+	 * Work out the average height.
+	 * We use this information to keep the player camera above the terrain.
+	 */
+	MAPTILE *psTile = mapTile(tileX, tileZ);
+
+	result /= numTilesAveraged;
+	if (result < psTile->height)
+	{
+		result = psTile->height;
 	}
 
 	return result;
