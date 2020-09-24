@@ -432,13 +432,13 @@ class ScreenshotSaveRequest {
 public:
 	typedef std::function<void (const ScreenshotSaveRequest&)> onDeleteFunc;
 
-	std::string fileName;
-	iV_Image image;
+	WzString fileName;
+	std::unique_ptr<iV_Image> image;
 	onDeleteFunc onDelete;
 
-	ScreenshotSaveRequest(const std::string & fileName, iV_Image image, const onDeleteFunc & onDelete)
+	ScreenshotSaveRequest(const WzString & fileName, std::unique_ptr<iV_Image>&& image, const onDeleteFunc & onDelete)
 	: fileName(fileName)
-	, image(image)
+	, image(std::move(image))
 	, onDelete(onDelete)
 	{ }
 
@@ -453,8 +453,8 @@ static int saveScreenshotThreadFunc(void * saveRequest)
 {
 	assert(saveRequest != nullptr);
 	ScreenshotSaveRequest * pSaveRequest = static_cast<ScreenshotSaveRequest *>(saveRequest);
-	
-	IMGSaveError pngerror = iV_saveImage_PNG(pSaveRequest->fileName.c_str(), &(pSaveRequest->image));
+
+	IMGSaveError pngerror = iV_saveImage_PNG(pSaveRequest->fileName.toUtf8().c_str(), pSaveRequest->image.get());
 
 //	//iV_saveImage_JPEG is *NOT* thread-safe, and cannot be safely called from another thread
 //	iV_saveImage_JPEG(fileName, &image);
@@ -472,10 +472,10 @@ static int saveScreenshotThreadFunc(void * saveRequest)
 	{
 		// display message to user about screenshot
 		// this must be dispatched back to the main thread
-		std::string fileName = pSaveRequest->fileName;
+		WzString fileName = pSaveRequest->fileName;
 		wzAsyncExecOnMainThread([fileName]
 		   {
-			   snprintf(ConsoleString, sizeof(ConsoleString), "Screenshot %s saved!", fileName.c_str());
+			   snprintf(ConsoleString, sizeof(ConsoleString), "Screenshot %s saved!", fileName.toUtf8().c_str());
 			   addConsoleMessage(ConsoleString, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 		   }
 		);
@@ -497,48 +497,57 @@ static int saveScreenshotThreadFunc(void * saveRequest)
  */
 void screenDoDumpToDiskIfRequired()
 {
-	const char *fileName = screendump_filename;
-	iV_Image image = { 0, 0, 8, nullptr };
+	WzString fileName = screendump_filename;
+//	iV_Image image = { 0, 0, 8, nullptr };
 
 	if (!screendump_required)
 	{
 		return;
 	}
-	debug(LOG_3D, "Saving screenshot %s", fileName);
+	debug(LOG_3D, "Saving screenshot %s", fileName.toUtf8().c_str());
 	screendump_required = false;
 
-	if (!gfx_api::context::get().getScreenshot(image))
+	bool bSentRequest = gfx_api::context::get().getScreenshot([=](std::unique_ptr<iV_Image> image)
 	{
-		// Failed to get screenshot
-		debug(LOG_3D, "Failed to get screenshot %s", fileName);
-		return;
-	}
+		if (!image)
+		{
+			debug(LOG_3D, "Failed to get screenshot %s", fileName.toUtf8().c_str());
+			return;
+		}
 
-	// Dispatch encoding and saving screenshot to a background thread (since this is fairly costly)
-	snprintf(ConsoleString, sizeof(ConsoleString), "Saving screenshot %s ...", fileName);
-	addConsoleMessage(ConsoleString, LEFT_JUSTIFY, INFO_MESSAGE);
-	ScreenshotSaveRequest * pSaveRequest =
-		new ScreenshotSaveRequest(
-			fileName,
-			image,
-			[](const ScreenshotSaveRequest& request)
-			{
-				if (request.image.bmp)
+		// Dispatch encoding and saving screenshot to a background thread (since this is fairly costly)
+		snprintf(ConsoleString, sizeof(ConsoleString), "Saving screenshot %s ...", fileName.toUtf8().c_str());
+		addConsoleMessage(ConsoleString, LEFT_JUSTIFY, INFO_MESSAGE);
+		ScreenshotSaveRequest * pSaveRequest =
+			new ScreenshotSaveRequest(
+				fileName,
+				std::move(image),
+				[](const ScreenshotSaveRequest& request)
 				{
-					free(request.image.bmp);
+					if (request.image->bmp)
+					{
+						free(request.image->bmp);
+					}
 				}
-			}
-		);
-	WZ_THREAD * pSaveThread = wzThreadCreate(saveScreenshotThreadFunc, pSaveRequest);
-	if (pSaveThread == nullptr)
+			);
+		WZ_THREAD * pSaveThread = wzThreadCreate(saveScreenshotThreadFunc, pSaveRequest);
+		if (pSaveThread == nullptr)
+		{
+			debug(LOG_ERROR, "Failed to create thread for PNG encoding");
+			delete pSaveRequest;
+		}
+		else
+		{
+			wzThreadDetach(pSaveThread);
+			// the thread handles deleting pSaveRequest
+		}
+	});
+
+	if (!bSentRequest)
 	{
-		debug(LOG_ERROR, "Failed to create thread for PNG encoding");
-		delete pSaveRequest;
-	}
-	else
-	{
-		wzThreadDetach(pSaveThread);
-		// the thread handles deleting pSaveRequest
+		// Backend / system does not support saving a screenshot (yet)
+		debug(LOG_3D, "Failed to save screenshot %s", fileName.toUtf8().c_str());
+		return;
 	}
 }
 

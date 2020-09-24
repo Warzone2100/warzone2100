@@ -3512,9 +3512,10 @@ std::string VkRoot::calculateFormattedRendererInfoString() const
 	return std::string("Vulkan ") + VkhInfo::vulkan_apiversion_to_string(physDeviceProps.apiVersion) + " (" + static_cast<const char*>(physDeviceProps.deviceName) + ")";
 }
 
-bool VkRoot::getScreenshot(iV_Image &output)
+bool VkRoot::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback)
 {
-	// TODO: Implement
+	// TODO: Implement - save the callback, and trigger a screenshot save at the next opportunity
+	// saveScreenshotCallback = callback;
 	return false;
 }
 

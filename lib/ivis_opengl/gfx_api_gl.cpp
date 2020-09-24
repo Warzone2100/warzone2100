@@ -1654,7 +1654,7 @@ std::string gl_context::calculateFormattedRendererInfoString() const
 
 static const unsigned int channelsPerPixel = 3;
 
-bool gl_context::getScreenshot(iV_Image &image)
+bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback)
 {
 	// IMPORTANT: Must get the size of the viewport directly from the viewport, to account for
 	//            high-DPI / display scaling factors (or only a sub-rect of the full viewport
@@ -1663,13 +1663,16 @@ bool gl_context::getScreenshot(iV_Image &image)
 	GLint m_viewport[4];
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 
-	image.width = m_viewport[2];
-	image.height = m_viewport[3];
-	image.depth = 8;
-	image.bmp = (unsigned char *)malloc((size_t)channelsPerPixel * (size_t)image.width * (size_t)image.height);
+	auto image = std::unique_ptr<iV_Image>(new iV_Image());
+	image->width = m_viewport[2];
+	image->height = m_viewport[3];
+	image->depth = 8;
+	image->bmp = (unsigned char *)malloc((size_t)channelsPerPixel * (size_t)image->width * (size_t)image->height);
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.bmp);
+	glReadPixels(0, 0, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->bmp);
+
+	callback(std::move(image));
 
 	return true;
 }
