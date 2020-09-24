@@ -24,6 +24,7 @@
 #include <map>
 #include <vector>
 #include <tuple>
+#include <functional>
 
 #include "lib/framework/frame.h"
 #include "screen.h"
@@ -296,7 +297,7 @@ namespace gfx_api
 		virtual uint64_t debugGetPerfValue(PERF_POINT pp) = 0;
 		virtual std::map<std::string, std::string> getBackendGameInfo() = 0;
 		virtual const std::string& getFormattedRendererInfoString() const = 0;
-		virtual bool getScreenshot(iV_Image &output) = 0;
+		virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) = 0;
 		virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) = 0;
 		virtual void shutdown() = 0;
 		virtual const size_t& current_FrameNum() const = 0;

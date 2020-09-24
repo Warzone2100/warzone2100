@@ -231,7 +231,7 @@ struct gl_context final : public gfx_api::context
 	virtual uint64_t debugGetPerfValue(PERF_POINT pp) override;
 	virtual std::map<std::string, std::string> getBackendGameInfo() override;
 	virtual const std::string& getFormattedRendererInfoString() const override;
-	virtual bool getScreenshot(iV_Image &output) override;
+	virtual bool getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback) override;
 	virtual void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 	virtual void shutdown() override;
 	virtual const size_t& current_FrameNum() const override;
