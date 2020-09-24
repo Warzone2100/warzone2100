@@ -2942,9 +2942,16 @@ bool VkRoot::createAllocator()
 	vulkanFunctions.vkCreateImage = vkDynLoader.vkCreateImage;
 	vulkanFunctions.vkDestroyImage = vkDynLoader.vkDestroyImage;
 	vulkanFunctions.vkCmdCopyBuffer = vkDynLoader.vkCmdCopyBuffer;
-#if VMA_DEDICATED_ALLOCATION
+#if VMA_DEDICATED_ALLOCATION || VMA_VULKAN_VERSION >= 1001000
 	vulkanFunctions.vkGetBufferMemoryRequirements2KHR = vkDynLoader.vkGetBufferMemoryRequirements2KHR;
 	vulkanFunctions.vkGetImageMemoryRequirements2KHR = vkDynLoader.vkGetImageMemoryRequirements2KHR;
+#endif
+#if VMA_BIND_MEMORY2 || VMA_VULKAN_VERSION >= 1001000
+	vulkanFunctions.vkBindBufferMemory2KHR = vkDynLoader.vkBindBufferMemory2KHR;
+	vulkanFunctions.vkBindImageMemory2KHR = vkDynLoader.vkBindImageMemory2KHR;
+#endif
+#if VMA_MEMORY_BUDGET || VMA_VULKAN_VERSION >= 1001000
+	vulkanFunctions.vkGetPhysicalDeviceMemoryProperties2KHR = vkDynLoader.vkGetPhysicalDeviceMemoryProperties2KHR;
 #endif
 
 	VmaAllocatorCreateInfo allocatorInfo = {};
