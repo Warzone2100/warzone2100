@@ -44,7 +44,7 @@ enum WARSTATUS
 {
 	CAM_INACTIVE,
 	CAM_REQUEST,
-	CAM_TRACKING,
+	CAM_TRACK_DROID,
 	CAM_RADAR_JUMP,
 	CAM_RESET
 };
@@ -59,10 +59,10 @@ void camToggleInfo();
 void requestRadarTrack(SDWORD x, SDWORD y);
 bool getRadarTrackingStatus();
 void camInformOfRotation(Vector3i *rotation);
-BASE_OBJECT *camFindDroidTarget();
+DROID *camFindDroidTarget();
 DROID *getTrackingDroid();
 SDWORD getPresAngle();
 UDWORD getNumDroidsSelected();
-void camAlignWithTarget(BASE_OBJECT *psTarget);
+void camAlignWithTarget(DROID *psDroid);
 
 #endif // __INCLUDED_SRC_WARCAM_H__
