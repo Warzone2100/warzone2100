@@ -100,9 +100,6 @@ static RADAR_JUMP radarJump
 	{OBJ_TARGET, 0, 0}
 };
 
-/* Do we trun to face when doing a radar jump? */
-static	bool	bRadarAlign;
-
 static SDWORD	presAvAngle = 0;
 
 /*	These are the DEFAULT offsets that make us track _behind_ a droid and allow
@@ -931,7 +928,7 @@ static bool camTrackCamera()
 		trackingCamera.position = radarJump.animation.getCurrent();
 	}
 
-	if (bRadarAlign || trackingCamera.target->type == OBJ_DROID)
+	if (trackingCamera.target->type == OBJ_DROID)
 	{
 		if (bFlying)
 		{
@@ -1103,11 +1100,6 @@ bool	getRadarTrackingStatus()
 		}
 	}
 	return (retVal);
-}
-
-void	toggleRadarAlignment()
-{
-	bRadarAlign = !bRadarAlign;
 }
 
 void	camInformOfRotation(Vector3i *rotation)
