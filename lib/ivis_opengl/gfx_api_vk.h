@@ -57,7 +57,21 @@ using nonstd::optional;
 #endif
 #include "3rdparty/vkh_renderpasscompat.hpp"
 #include "3rdparty/vkh_info.hpp"
+#if defined(__clang__)
+# pragma clang diagnostic push
+#  if defined(__has_warning)
+#    if __has_warning("-Wnullability-extension")
+#      pragma clang diagnostic ignored "-Wnullability-extension"
+#    endif
+#    if __has_warning("-Wnullability-completeness")
+#      pragma clang diagnostic ignored "-Wnullability-completeness"
+#    endif
+#  endif
+#endif
 #include "3rdparty/vk_mem_alloc.h"
+#if defined(__clang__)
+# pragma clang diagnostic pop
+#endif
 #if defined( _MSC_VER )
 #pragma warning( pop )
 #endif

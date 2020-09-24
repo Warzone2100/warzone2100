@@ -24,6 +24,15 @@
 # pragma clang diagnostic ignored "-Wunused-private-field"
 #  if defined(__APPLE__)
 #    pragma clang diagnostic ignored "-Wcast-align" // Warning triggered on Xcode 8.x
+#    pragma clang diagnostic ignored "-Wnullability-completeness" // Warning triggered on newer Xcode
+#  endif
+#  if defined(__has_warning)
+#    if __has_warning("-Wnullability-extension")
+#      pragma clang diagnostic ignored "-Wnullability-extension"
+#    endif
+#    if __has_warning("-Wnullability-completeness")
+#      pragma clang diagnostic ignored "-Wnullability-completeness"
+#    endif
 #  endif
 #elif defined(__GNUC__)
 # pragma GCC diagnostic push
@@ -38,6 +47,7 @@
 
 #define VMA_IMPLEMENTATION
 #define VMA_STATIC_VULKAN_FUNCTIONS 0
+#define VMA_DYNAMIC_VULKAN_FUNCTIONS 0
 #define VMA_ASSERT(expr) assert(expr)
 #include "vk_mem_alloc.h"
 
