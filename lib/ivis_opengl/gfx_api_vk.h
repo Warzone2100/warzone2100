@@ -47,7 +47,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "3rdparty/optional.hpp"
+#include <optional-lite/optional.hpp>
 using nonstd::optional;
 
 #if defined( _MSC_VER )
