@@ -90,6 +90,7 @@
 #include "ingameop.h"
 #include "qtscript.h"
 #include "template.h"
+#include "activity.h"
 
 #include <algorithm>
 
@@ -1284,6 +1285,11 @@ bool stageThreeInitialise()
 	// Re-inititialise some static variables.
 
 	bInTutorial = false;
+
+	if (fromSave && ActivityManager::instance().getCurrentGameMode() == ActivitySink::GameMode::CHALLENGE)
+	{
+		challengeActive = true;
+	}
 
 	resizeRadar();
 
