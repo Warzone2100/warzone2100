@@ -67,6 +67,18 @@ Copyright: 1992-2007 Trolltech ASA.
            2005-2020 Warzone 2100 Project
 License: GPL-2+
 
+Files: lib/ivis_opengl/3rdparty/stb_image_resize.h
+Copyright: 2017 Sean Barrett
+License: Expat
+
+Files: lib/ivis_opengl/3rdparty/vk_mem_alloc.h
+Copyright: 2017-2020 Advanced Micro Devices, Inc.
+License: Expat
+
+Files: lib/ivis_opengl/3rdparty/vkh_*.*
+Copyright: 2019-2020 past-due
+License: Expat
+
 Files: lib/sequence/sequence.cpp
 Copyright: 2008-2013 Warzone 2100 Project
            2002-2007 Xiph.org Foundation
