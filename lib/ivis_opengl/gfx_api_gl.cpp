@@ -1567,6 +1567,49 @@ uint64_t gl_context::debugGetPerfValue(PERF_POINT pp)
 	return count;
 }
 
+// Returns a space-separated list of OpenGL extensions
+static std::string getGLExtensions()
+{
+	std::string extensions;
+	if (GLAD_GL_VERSION_3_0)
+	{
+		// OpenGL 3.0+
+		if (!glGetIntegerv || !glGetStringi)
+		{
+			return extensions;
+		}
+
+		GLint ext_count = 0;
+		glGetIntegerv(GL_NUM_EXTENSIONS, &ext_count);
+		if (ext_count < 0)
+		{
+			ext_count = 0;
+		}
+		for (GLint i = 0; i < ext_count; i++)
+		{
+			const char *pGLStr = (const char*) glGetStringi(GL_EXTENSIONS, i);
+			if (pGLStr != nullptr)
+			{
+				if (!extensions.empty())
+				{
+					extensions += " ";
+				}
+				extensions += pGLStr;
+			}
+		}
+	}
+	else
+	{
+		// OpenGL < 3.0
+		const char *pExtensionsStr = (const char *) glGetString(GL_EXTENSIONS);
+		if (pExtensionsStr != nullptr)
+		{
+			extensions = std::string(pExtensionsStr);
+		}
+	}
+	return extensions;
+}
+
 std::map<std::string, std::string> gl_context::getBackendGameInfo()
 {
 	std::map<std::string, std::string> backendGameInfo;
@@ -1574,12 +1617,7 @@ std::map<std::string, std::string> gl_context::getBackendGameInfo()
 	backendGameInfo["openGL_renderer"] = opengl.renderer;
 	backendGameInfo["openGL_version"] = opengl.version;
 	backendGameInfo["openGL_GLSL_version"] = opengl.GLSLversion;
-	// NOTE: deprecated for GL 3+. Needed this to check what extensions some chipsets support for the openGL hacks
-	const char *pExtensionsStr = (const char *) glGetString(GL_EXTENSIONS);
-	if (pExtensionsStr != nullptr)
-	{
-		backendGameInfo["GL_EXTENSIONS"] = std::string(pExtensionsStr);
-	}
+	backendGameInfo["GL_EXTENSIONS"] = getGLExtensions();
 	return backendGameInfo;
 }
 
@@ -1808,17 +1846,13 @@ bool gl_context::initGLContext()
 
 	khr_debug = GLAD_GL_KHR_debug;
 
-	GLubyte const *extensionsBegin = glGetString(GL_EXTENSIONS);
-	if (extensionsBegin == nullptr)
-	{
-		static GLubyte const emptyString[] = "";
-		extensionsBegin = emptyString;
-	}
-	GLubyte const *extensionsEnd = extensionsBegin + strlen((char const *)extensionsBegin);
+	std::string extensionsStr = getGLExtensions();
+	const char *extensionsBegin = extensionsStr.data();
+	const char *extensionsEnd = extensionsBegin + strlen(extensionsBegin);
 	std::vector<std::string> glExtensions;
-	for (GLubyte const *i = extensionsBegin; i < extensionsEnd;)
+	for (const char *i = extensionsBegin; i < extensionsEnd;)
 	{
-		GLubyte const *j = std::find(i, extensionsEnd, ' ');
+		const char *j = std::find(i, extensionsEnd, ' ');
 		glExtensions.push_back(std::string(i, j));
 		i = j + 1;
 	}
