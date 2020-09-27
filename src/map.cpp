@@ -1611,6 +1611,8 @@ bool writeVisibilityData(const char *fileName)
 		return false;
 	}
 
+	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
+
 	fileHeader.aFileType[0] = 'v';
 	fileHeader.aFileType[1] = 'i';
 	fileHeader.aFileType[2] = 's';

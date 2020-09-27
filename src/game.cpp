@@ -3963,6 +3963,8 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 		return false;
 	}
 
+	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
+
 	fileHeader.aFileType[0] = 'g';
 	fileHeader.aFileType[1] = 'a';
 	fileHeader.aFileType[2] = 'm';
