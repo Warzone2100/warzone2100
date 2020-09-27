@@ -96,7 +96,46 @@ const uint32_t minRequired_BoundDescriptorSets = 2;
 const uint32_t minRequired_Viewports = 1;
 const uint32_t minRequired_ColorAttachments = 1;
 
+#if defined(WZ_OS_WIN)
+#  define _vkl_env_text(x) L##x
+#  define _vkl_env_text_type std::wstring
+void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
+{
+	if (SetEnvironmentVariableW(name.c_str(), value.c_str()) == 0)
+	{
+		// Failed to set environment variable
+		DWORD lastError = GetLastError();
+		debug(LOG_ERROR, "SetEnvironmentVariableW failed with error: %d", lastError);
+	}
+}
+#else
+#  define _vkl_env_text(x) x
+#  define _vkl_env_text_type std::string
+void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
+{
+#  if defined HAVE_SETENV
+	setenv(name.c_str(), value.c_str(), 1);
+#  else
+#    warning "No supported method to set environment variables"
+#  endif
+}
+#endif
+
+const std::vector<std::pair<_vkl_env_text_type, _vkl_env_text_type>> vulkan_implicit_layer_environment_variables = {
+	{_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_overlay_1"), _vkl_env_text("1")}
+	, {_vkl_env_text("DISABLE_VK_LAYER_VALVE_steam_fossilize_1"), _vkl_env_text("1")}
+};
+
+
 // MARK: General helper functions
+
+void SetVKImplicitLayerEnvironmentVariables()
+{
+	for (const auto &it : vulkan_implicit_layer_environment_variables)
+	{
+		_vk_setenv(it.first, it.second);
+	}
+}
 
 template <typename VKType, typename F, typename... Args>
 std::vector<VKType> GetVectorFromVKFuncWithExplicitInit(F &&func, VKType init, Args &&... args)
@@ -2598,6 +2637,8 @@ bool VkRoot::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t anti
 
 	frameNum = 1;
 	swapMode = requestedSwapMode;
+
+	SetVKImplicitLayerEnvironmentVariables();
 
 	// obtain backend_Vulkan_Impl from impl
 	backend_impl = impl.createVulkanBackendImpl();
