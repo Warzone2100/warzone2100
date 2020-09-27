@@ -118,6 +118,35 @@ static inline bool PHYSFS_exists(const WzString &filename)
 	return PHYSFS_exists(filename.toUtf8().c_str());
 }
 
+#if defined(WZ_PHYSFS_2_1_OR_GREATER)
+static inline PHYSFS_ErrorCode _WZ_PHYSFS_setBuffer(PHYSFS_File *fileHandle, PHYSFS_uint64 bufsize)
+{
+	// Check for PHYSFS >= 3.0.2, because it includes this important fix: https://hg.icculus.org/icculus/physfs/rev/c17f025e7a92
+	PHYSFS_Version linked;
+	PHYSFS_getLinkedVersion(&linked);
+	if (linked.major > 3 || (linked.major == 3 && (linked.minor > 0 || (linked.minor == 0 && linked.patch >= 2))))
+	{
+		if (PHYSFS_setBuffer(fileHandle, bufsize) == 0)
+		{
+			// Failed to set up buffered write handle, so call again to definitively disable
+			PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
+			PHYSFS_setBuffer(fileHandle, 0);
+			return err;
+		}
+		return PHYSFS_ERR_OK;
+	}
+	return PHYSFS_ERR_UNSUPPORTED;
+}
+#define WZ_PHYSFS_SETBUFFER(fileHandle, bufsize) \
+	PHYSFS_ErrorCode err = _WZ_PHYSFS_setBuffer(fileHandle, bufsize); \
+	if (err != PHYSFS_ERR_OK && err != PHYSFS_ERR_UNSUPPORTED) \
+	{ \
+		debug(LOG_ERROR, "PHYSFS_setBuffer failed with error code: %d", (int)err); \
+	}
+#else
+#define WZ_PHYSFS_SETBUFFER(fileHandle, bufsize)	// no-op
+#endif
+
 // Older wrappers
 
 static inline bool PHYSFS_writeSLE8(PHYSFS_file *file, int8_t val)
