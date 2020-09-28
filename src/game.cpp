@@ -1754,13 +1754,14 @@ static void getIniDroidOrder(WzConfig &ini, WzString const &key, DroidOrder &ord
 	getIniStructureStats(ini, key + "/stats", order.psStats);
 }
 
-static void setIniBaseObject(WzConfig &ini, WzString const &key, BASE_OBJECT const *object)
+static void setIniBaseObject(nlohmann::json &json, WzString const &key, BASE_OBJECT const *object)
 {
 	if (object != nullptr && object->died <= 1)
 	{
-		ini.setValue(key + "/id", object->id);
-		ini.setValue(key + "/player", object->player);
-		ini.setValue(key + "/type", object->type);
+		const auto& keyStr = key.toStdString();
+		json[keyStr + "/id"] = object->id;
+		json[keyStr + "/player"] = object->player;
+		json[keyStr + "/type"] = object->type;
 #ifdef DEBUG
 		//ini.setValue(key + "/debugfunc", WzString::fromUtf8(psCurr->targetFunc));
 		//ini.setValue(key + "/debugline", psCurr->targetLine);
@@ -1768,22 +1769,23 @@ static void setIniBaseObject(WzConfig &ini, WzString const &key, BASE_OBJECT con
 	}
 }
 
-static void setIniStructureStats(WzConfig &ini, WzString const &key, STRUCTURE_STATS const *stats)
+static inline void setIniStructureStats(nlohmann::json &jsonObj, WzString const &key, STRUCTURE_STATS const *stats)
 {
 	if (stats != nullptr)
 	{
-		ini.setValue(key, stats->id);
+		jsonObj[key.toStdString()] = stats->id;
 	}
 }
 
-static void setIniDroidOrder(WzConfig &ini, WzString const &key, DroidOrder const &order)
+static inline void setIniDroidOrder(nlohmann::json &jsonObj, WzString const &key, DroidOrder const &order)
 {
-	ini.setValue(key + "/type", order.type);
-	ini.setVector2i(key + "/pos", order.pos);
-	ini.setVector2i(key + "/pos2", order.pos2);
-	ini.setValue(key + "/direction", order.direction);
-	setIniBaseObject(ini, key + "/obj", order.psObj);
-	setIniStructureStats(ini, key + "/stats", order.psStats);
+	const auto& keyStr = key.toStdString();
+	jsonObj[keyStr + "/type"] = order.type;
+	jsonObj[keyStr + "/pos"] = order.pos;
+	jsonObj[keyStr + "/pos2"] = order.pos2;
+	jsonObj[keyStr + "/direction"] = order.direction;
+	setIniBaseObject(jsonObj, key + "/obj", order.psObj);
+	setIniStructureStats(jsonObj, key + "/stats", order.psStats);
 }
 
 static void allocatePlayers()
@@ -4290,6 +4292,18 @@ static void setPlayer(WzConfig &ini, int player)
 	}
 }
 
+static inline void setPlayerJSON(nlohmann::json &jsonObj, int player)
+{
+	if (scavengerSlot() == player)
+	{
+		jsonObj["player"] = "scavenger";
+	}
+	else
+	{
+		jsonObj["player"] = player;
+	}
+}
+
 static bool skipForDifficulty(WzConfig &ini, int player)
 {
 	if (ini.contains("difficulty")) // optionally skip this object
@@ -4471,6 +4485,56 @@ static void writeSaveObject(WzConfig &ini, BASE_OBJECT *psObj)
 		if (psObj->visible[i])
 		{
 			ini.setValue("visible/" + WzString::number(i), psObj->visible[i]);
+		}
+	}
+}
+
+static void writeSaveObjectJSON(nlohmann::json &jsonObj, BASE_OBJECT *psObj)
+{
+	jsonObj["id"] = psObj->id;
+	setPlayerJSON(jsonObj, psObj->player);
+	jsonObj["health"] = psObj->body;
+	jsonObj["position"] = psObj->pos;
+	jsonObj["rotation"] = toVector(psObj->rot);
+	if (psObj->timeAnimationStarted)
+	{
+		jsonObj["timeAnimationStarted"] = psObj->timeAnimationStarted;
+	}
+	if (psObj->animationEvent)
+	{
+		jsonObj["animationEvent"] = psObj->animationEvent;
+	}
+	jsonObj["selected"] = psObj->selected;	// third kind of group
+	if (psObj->lastEmission)
+	{
+		jsonObj["lastEmission"] = psObj->lastEmission;
+	}
+	if (psObj->periodicalDamageStart > 0)
+	{
+		jsonObj["periodicalDamageStart"] = psObj->periodicalDamageStart;
+	}
+	if (psObj->periodicalDamage > 0)
+	{
+		jsonObj["periodicalDamage"] = psObj->periodicalDamage;
+	}
+	jsonObj["born"] = psObj->born;
+	if (psObj->died > 0)
+	{
+		jsonObj["died"] = psObj->died;
+	}
+	if (psObj->timeLastHit != UDWORD_MAX)
+	{
+		jsonObj["timeLastHit"] = psObj->timeLastHit;
+	}
+	if (psObj->selected)
+	{
+		jsonObj["selected"] = psObj->selected;
+	}
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		if (psObj->visible[i])
+		{
+			jsonObj["visible/" + WzString::number(i).toStdString()] = psObj->visible[i];
 		}
 	}
 }
@@ -4732,123 +4796,123 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 /*
 Writes the linked list of droids for each player to a file
 */
-static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counter)
+static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
 {
-	ini.beginGroup("droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
-	ini.setValue("name", psCurr->aName);
+	nlohmann::json droidObj = nlohmann::json::object();
+	droidObj["name"] = psCurr->aName;
 
 	// write common BASE_OBJECT info
-	writeSaveObject(ini, psCurr);
+	writeSaveObjectJSON(droidObj, psCurr);
 
 	for (int i = 0; i < psCurr->numWeaps; i++)
 	{
 		if (psCurr->asWeaps[i].nStat > 0)
 		{
-			ini.setValue("ammo/" + WzString::number(i), psCurr->asWeaps[i].ammo);
-			ini.setValue("lastFired/" + WzString::number(i), psCurr->asWeaps[i].lastFired);
-			ini.setValue("shotsFired/" + WzString::number(i), psCurr->asWeaps[i].shotsFired);
-			ini.setVector3i("rotation/" + WzString::number(i), toVector(psCurr->asWeaps[i].rot));
+			const std::string& numStr = WzString::number(i).toStdString();
+			droidObj["ammo/" + numStr] = psCurr->asWeaps[i].ammo;
+			droidObj["lastFired/" + numStr] = psCurr->asWeaps[i].lastFired;
+			droidObj["shotsFired/" + numStr] = psCurr->asWeaps[i].shotsFired;
+			droidObj["rotation/" + numStr] = toVector(psCurr->asWeaps[i].rot);
 		}
 	}
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		setIniBaseObject(ini, "actionTarget/" + WzString::number(i), psCurr->psActionTarget[i]);
+		setIniBaseObject(droidObj, "actionTarget/" + WzString::number(i), psCurr->psActionTarget[i]);
 	}
 	if (psCurr->lastFrustratedTime > 0)
 	{
-		ini.setValue("lastFrustratedTime", psCurr->lastFrustratedTime);
+		droidObj["lastFrustratedTime"] = psCurr->lastFrustratedTime;
 	}
 	if (psCurr->experience > 0)
 	{
-		ini.setValue("experience", psCurr->experience);
+		droidObj["experience"] = psCurr->experience;
 	}
 	if (psCurr->kills > 0)
 	{
-		ini.setValue("kills", psCurr->kills);
+		droidObj["kills"] = psCurr->kills;
 	}
 
-	setIniDroidOrder(ini, "order", psCurr->order);
-	ini.setValue("orderList/size", psCurr->listSize);
+	setIniDroidOrder(droidObj, "order", psCurr->order);
+	droidObj["orderList/size"] = psCurr->listSize;
 	for (int i = 0; i < psCurr->listSize; ++i)
 	{
-		setIniDroidOrder(ini, "orderList/" + WzString::number(i), psCurr->asOrderList[i]);
+		setIniDroidOrder(droidObj, "orderList/" + WzString::number(i), psCurr->asOrderList[i]);
 	}
 	if (psCurr->timeLastHit != UDWORD_MAX)
 	{
-		ini.setValue("timeLastHit", psCurr->timeLastHit);
+		droidObj["timeLastHit"] = psCurr->timeLastHit;
 	}
-	ini.setValue("secondaryOrder", psCurr->secondaryOrder);
-	ini.setValue("action", psCurr->action);
-	ini.setValue("actionString", getDroidActionName(psCurr->action)); // future-proofing
-	ini.setVector2i("action/pos", psCurr->actionPos);
-	ini.setValue("actionStarted", psCurr->actionStarted);
-	ini.setValue("actionPoints", psCurr->actionPoints);
+	droidObj["secondaryOrder"] = psCurr->secondaryOrder;
+	droidObj["action"] = psCurr->action;
+	droidObj["actionString"] = getDroidActionName(psCurr->action); // future-proofing
+	droidObj["action/pos"] = psCurr->actionPos;
+	droidObj["actionStarted"] = psCurr->actionStarted;
+	droidObj["actionPoints"] = psCurr->actionPoints;
 	if (psCurr->psBaseStruct != nullptr)
 	{
-		ini.setValue("baseStruct/id", psCurr->psBaseStruct->id);
-		ini.setValue("baseStruct/player", psCurr->psBaseStruct->player);	// always ours, but for completeness
-		ini.setValue("baseStruct/type", psCurr->psBaseStruct->type);		// always a building, but for completeness
+		droidObj["baseStruct/id"] = psCurr->psBaseStruct->id;
+		droidObj["baseStruct/player"] = psCurr->psBaseStruct->player;	// always ours, but for completeness
+		droidObj["baseStruct/type"] = psCurr->psBaseStruct->type;		// always a building, but for completeness
 	}
 	if (psCurr->psGroup)
 	{
-		ini.setValue("aigroup", psCurr->psGroup->id);	// AI and commander/transport group
-		ini.setValue("aigroup/type", psCurr->psGroup->type);
+		droidObj["aigroup"] = psCurr->psGroup->id;	// AI and commander/transport group
+		droidObj["aigroup/type"] = psCurr->psGroup->type;
 	}
-	ini.setValue("group", psCurr->group);	// different kind of group. of course.
+	droidObj["group"] = psCurr->group;	// different kind of group. of course.
 	if (hasCommander(psCurr) && psCurr->psGroup->psCommander->died <= 1)
 	{
-		ini.setValue("commander", psCurr->psGroup->psCommander->id);
+		droidObj["commander"] = psCurr->psGroup->psCommander->id;
 	}
 	if (psCurr->resistance > 0)
 	{
-		ini.setValue("resistance", psCurr->resistance);
+		droidObj["resistance"] = psCurr->resistance;
 	}
-	ini.setValue("droidType", psCurr->droidType);
-	ini.setValue("weapons", psCurr->numWeaps);
-	ini.beginGroup("parts");
-	ini.setValue("body", (asBodyStats + psCurr->asBits[COMP_BODY])->id);
-	ini.setValue("propulsion", (asPropulsionStats + psCurr->asBits[COMP_PROPULSION])->id);
-	ini.setValue("brain", (asBrainStats + psCurr->asBits[COMP_BRAIN])->id);
-	ini.setValue("repair", (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->id);
-	ini.setValue("ecm", (asECMStats + psCurr->asBits[COMP_ECM])->id);
-	ini.setValue("sensor", (asSensorStats + psCurr->asBits[COMP_SENSOR])->id);
-	ini.setValue("construct", (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->id);
+	droidObj["droidType"] = psCurr->droidType;
+	droidObj["weapons"] = psCurr->numWeaps;
+	nlohmann::json partsObj = nlohmann::json::object();
+	partsObj["body"] = (asBodyStats + psCurr->asBits[COMP_BODY])->id;
+	partsObj["propulsion"] = (asPropulsionStats + psCurr->asBits[COMP_PROPULSION])->id;
+	partsObj["brain"] = (asBrainStats + psCurr->asBits[COMP_BRAIN])->id;
+	partsObj["repair"] = (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->id;
+	partsObj["ecm"] = (asECMStats + psCurr->asBits[COMP_ECM])->id;
+	partsObj["sensor"] = (asSensorStats + psCurr->asBits[COMP_SENSOR])->id;
+	partsObj["construct"] = (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->id;
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		ini.setValue("weapon/" + WzString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->id);
+		partsObj["weapon/" + WzString::number(j + 1).toStdString()] = (asWeaponStats + psCurr->asWeaps[j].nStat)->id;
 	}
-	ini.endGroup();
-	ini.setValue("moveStatus", psCurr->sMove.Status);
-	ini.setValue("pathIndex", psCurr->sMove.pathIndex);
-	ini.setValue("pathLength", psCurr->sMove.asPath.size());
+	droidObj["parts"] = partsObj;
+	droidObj["moveStatus"] = psCurr->sMove.Status;
+	droidObj["pathIndex"] = psCurr->sMove.pathIndex;
+	droidObj["pathLength"] = psCurr->sMove.asPath.size();
 	for (unsigned i = 0; i < psCurr->sMove.asPath.size(); i++)
 	{
-		ini.setVector2i("pathNode/" + WzString::number(i), psCurr->sMove.asPath[i]);
+		droidObj["pathNode/" + WzString::number(i).toStdString()] = psCurr->sMove.asPath[i];
 	}
-	ini.setVector2i("moveDestination", psCurr->sMove.destination);
-	ini.setVector2i("moveSource", psCurr->sMove.src);
-	ini.setVector2i("moveTarget", psCurr->sMove.target);
-	ini.setValue("moveSpeed", psCurr->sMove.speed);
-	ini.setValue("moveDirection", psCurr->sMove.moveDir);
-	ini.setValue("bumpDir", psCurr->sMove.bumpDir);
-	ini.setValue("vertSpeed", psCurr->sMove.iVertSpeed);
-	ini.setValue("bumpTime", psCurr->sMove.bumpTime);
-	ini.setValue("shuffleStart", psCurr->sMove.shuffleStart);
+	droidObj["moveDestination"] = psCurr->sMove.destination;
+	droidObj["moveSource"] = psCurr->sMove.src;
+	droidObj["moveTarget"] = psCurr->sMove.target;
+	droidObj["moveSpeed"] = psCurr->sMove.speed;
+	droidObj["moveDirection"] = psCurr->sMove.moveDir;
+	droidObj["bumpDir"] = psCurr->sMove.bumpDir;
+	droidObj["vertSpeed"] = psCurr->sMove.iVertSpeed;
+	droidObj["bumpTime"] = psCurr->sMove.bumpTime;
+	droidObj["shuffleStart"] = psCurr->sMove.shuffleStart;
 	for (int i = 0; i < MAX_WEAPONS; ++i)
 	{
-		ini.setValue("attackRun/" + WzString::number(i), psCurr->asWeaps[i].usedAmmo);
+		droidObj["attackRun/" + WzString::number(i).toStdString()] = psCurr->asWeaps[i].usedAmmo;
 	}
-	ini.setValue("lastBump", psCurr->sMove.lastBump);
-	ini.setValue("pauseTime", psCurr->sMove.pauseTime);
-	ini.setVector2i("bumpPosition", psCurr->sMove.bumpPos.xy());
-	ini.setValue("onMission", onMission);
-	ini.endGroup();
-	return true;
+	droidObj["lastBump"] = psCurr->sMove.lastBump;
+	droidObj["pauseTime"] = psCurr->sMove.pauseTime;
+	droidObj["bumpPosition"] = psCurr->sMove.bumpPos.xy();
+	droidObj["onMission"] = onMission;
+	return droidObj;
 }
 
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
-	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
+	nlohmann::json mRoot = nlohmann::json::object();
 	int counter = 0;
 	bool onMission = (ppsCurrentDroidLists[0] == mission.apsDroidLists[0]);
 
@@ -4856,24 +4920,33 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 	{
 		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			writeDroid(ini, psCurr, onMission, counter);
+			auto droidKey = "droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10));  // Zero padded so that alphabetical sort works.
+			mRoot[droidKey.toStdString()] = writeDroid(psCurr, onMission, counter);
 			if (isTransporter(psCurr))	// if transporter save any droids in the grp
 			{
 				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
 				{
 					if (psTrans != psCurr)
 					{
-						writeDroid(ini, psTrans, onMission, counter);
+						droidKey = "droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10));  // Zero padded so that alphabetical sort works.
+						mRoot[droidKey.toStdString()] = writeDroid(psTrans, onMission, counter);
 					}
 				}
 				//always save transporter droids that are in the mission list with an invalid value
 				if (ppsCurrentDroidLists[player] == mission.apsDroidLists[player])
 				{
-					ini.setVector3i("position", Vector3i(-1, -1, -1)); // was INVALID_XY
+					mRoot[droidKey.toStdString()]["position"] = Vector3i(-1, -1, -1); // was INVALID_XY
 				}
 			}
 		}
 	}
+
+	std::ostringstream stream;
+	stream << mRoot.dump(4) << std::endl;
+	std::string jsonString = stream.str();
+	saveFile(pFileName, jsonString.c_str(), jsonString.size());
+	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
+
 	return true;
 }
 
