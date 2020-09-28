@@ -96,31 +96,28 @@ matrix:
         - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
       # do not deploy
 
-    # # Build for macOS (CMake)
-    # # (This also deploys the macOS build to the buildbot)
-    # - name: "macOS (CMake) [Xcode 9.4, macOS 10.13 SDK]"
-    #   language: objective-c
-    #   os: osx
-    #   osx_image: xcode9.4
-    #   env:
-    #     - MACOSX_DEPLOYMENT_TARGET=10.10
-    #   before_install:
-    #     - brew update
-    #     - if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
-    #     - brew install gettext
-    #     # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
-    #     - gem install asciidoctor -v 2.0.10 --no-document
-    #     # gcc6+ is currently required to bootstrap vcpkg on macOS
-    #     - brew install gcc || brew link --overwrite gcc
-    #     - bundle install --gemfile="macosx/BuildBot/Gemfile"
-    #     - cmake --version
-    #   script:
-    #     - source .ci/travis/export_build_output_desc.sh
-    #     - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
-    #   after_success:
-    #     - export DEPLOY_UPLOAD_PATH="${DEPLOY_UPLOAD_PATH}/${WZ_BUILD_DESC_PREFIX}/macOS/"
-    #     - .ci/travis/travis_deploy.sh "tmp/wz_upload" "warzone2100-${WZ_BUILD_DESC_PREFIX}-*_macOS.zip" --cleanold
-    #
+    # Build for macOS (CMake)
+    - name: "macOS (CMake) [Xcode 9.4, macOS 10.13 SDK]"
+      language: objective-c
+      os: osx
+      osx_image: xcode9.4
+      env:
+        - MACOSX_DEPLOYMENT_TARGET=10.10
+      before_install:
+        - brew update
+        - if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
+        - brew install gettext
+        # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
+        - gem install asciidoctor -v 2.0.10 --no-document
+        # gcc6+ is currently required to bootstrap vcpkg on macOS
+        - brew install gcc || brew link --overwrite gcc
+        - bundle install --gemfile="macosx/BuildBot/Gemfile"
+        - cmake --version
+      script:
+        - source .ci/travis/export_build_output_desc.sh
+        - macosx/BuildBot/travis_cmake_build.sh "${WZ_BUILD_DESC_PREFIX}-" "tmp/wz_upload"
+      # do not deploy
+
     # # Build for macOS (CMake)
     # - name: "macOS (CMake) [Xcode 10.3, macOS 10.14 SDK]"
     #   language: objective-c
