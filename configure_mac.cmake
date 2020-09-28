@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.5)
 ########################################################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "14514508d8d30bdbd645b2bec89696aec25497f1")
+set(VCPKG_COMMIT_SHA "fdcfd8e5d79a9551249b60251edb81733fd227db")
 
 # WZ macOS dependencies (for vcpkg install)
 # NOTE: This is missing SDL, which is added to the list later (either with Vulkan enabled or disabled)
@@ -136,7 +136,7 @@ else()
 	endif()
 endif()
 
-if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_LESS "18.0"))
+if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_LESS "17.0"))
 	# Workaround an issue with vcpkg's updated ninja on older versions of macOS
 	set(VCPKG_COMMIT_SHA "5c415ff8a0aad831ee90ee4327f26992d5fe3fb3")
 endif()
