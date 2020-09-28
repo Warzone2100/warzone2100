@@ -175,6 +175,52 @@ inline void from_json(const json& j, WzString& p) {
 	p = WzString::fromUtf8(str.c_str());
 }
 
+namespace glm
+{
+// Vector2i
+inline void to_json(json& j, const ivec2 &v)
+{
+	j = nlohmann::json::array({ v.x, v.y });
+}
+
+inline void from_json(const json& j, ivec2& r)
+{
+	ASSERT(j.size() == 2, "Bad Vector2i list");
+	try {
+		r.x = j.at(0).get<int>();
+		r.y = j.at(1).get<int>();
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Bad Vector2i list; exception: %s", e.what());
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception encountered reading Vector2i");
+	}
+}
+
+// Vector3i
+inline void to_json(json& j, const ivec3 &v)
+{
+	j = nlohmann::json::array({ v.x, v.y, v.z });
+}
+
+inline void from_json(const json& j, ivec3& r)
+{
+	ASSERT(j.size() == 3, "Bad Vector3i list");
+	try {
+		r.x = j.at(0).get<int>();
+		r.y = j.at(1).get<int>();
+		r.z = j.at(2).get<int>();
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Bad Vector3i list; exception: %s", e.what());
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception encountered in Vector3i");
+	}
+}
+} // namespace glm
+
 // Convenience methods to retrieve a json_variant from any json object
 json_variant json_getValue(const nlohmann::json& json, const WzString &key, const json_variant &defaultValue = json_variant());
 json_variant json_getValue(const nlohmann::json& json, nlohmann::json::size_type idx, const json_variant &defaultValue = json_variant());
