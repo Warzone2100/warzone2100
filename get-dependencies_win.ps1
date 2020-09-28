@@ -5,7 +5,7 @@ param([string]$VCPKG_BUILD_TYPE = "")
 ############################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-$VCPKG_COMMIT_SHA = "14514508d8d30bdbd645b2bec89696aec25497f1";
+$VCPKG_COMMIT_SHA = "fdcfd8e5d79a9551249b60251edb81733fd227db";
 
 # WZ Windows dependencies (for vcpkg install)
 $VCPKG_INSTALL_DEPENDENCIES = @("physfs", "harfbuzz", "libiconv", "libogg", "libtheora", "libvorbis", "libpng", "openal-soft", "freetype", "gettext", "zlib", "curl[winssl]", "libsodium", "angle")
