@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Lint Code Base
-      uses: docker://github/super-linter:v3.3.2
+      uses: docker://ghcr.io/github/super-linter:v3.11.0
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: master
