@@ -273,7 +273,7 @@ bool cbSensorDroid(const DROID *psDroid);
 bool standardSensorDroid(const DROID *psDroid);
 
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
- DROID *giftSingleDroid(DROID *psD, UDWORD to);
+ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic = false);
 
 /// Calculates the electronic resistance of a droid based on its experience level
 SWORD droidResistance(const DROID *psDroid);

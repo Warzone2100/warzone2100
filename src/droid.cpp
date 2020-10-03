@@ -2957,11 +2957,8 @@ bool standardSensorDroid(const DROID *psDroid)
 // Give a droid from one player to another - used in Electronic Warfare and multiplayer.
 // Got to destroy the droid and build another since there are too many complications otherwise.
 // Returns the droid created.
-DROID *giftSingleDroid(DROID *psD, UDWORD to)
+DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic)
 {
-	DROID_TEMPLATE sTemplate;
-	DROID *psNewDroid;
-
 	CHECK_DROID(psD);
 	ASSERT_OR_RETURN(nullptr, !isDead(psD), "Cannot gift dead unit");
 	ASSERT_OR_RETURN(psD, psD->player != to, "Cannot gift to self");
@@ -2980,29 +2977,157 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to)
 		}
 		return nullptr;
 	}
-	templateSetParts(psD, &sTemplate);	// create a template based on the droid
-	sTemplate.name = WzString::fromUtf8(psD->aName);	// copy the name across
-	// only play the nexus sound if unit being taken over is selectedPlayer's but not going to the selectedPlayer
-	if (psD->player == selectedPlayer && to != selectedPlayer && !bMultiPlayer)
+
+	// electronic or campaign will destroy and recreate the droid.
+	if (electronic || !bMultiPlayer)
 	{
-		scoreUpdateVar(WD_UNITS_LOST);
+		DROID_TEMPLATE sTemplate;
+		DROID *psNewDroid;
+
+		templateSetParts(psD, &sTemplate);	// create a template based on the droid
+		sTemplate.name = WzString::fromUtf8(psD->aName);	// copy the name across
+		// update score
+		if (psD->player == selectedPlayer && to != selectedPlayer && !bMultiPlayer)
+		{
+			scoreUpdateVar(WD_UNITS_LOST);
+		}
+		// make the old droid vanish (but is not deleted until next tick)
+		adjustDroidCount(psD, -1);
+		vanishDroid(psD);
+		// create a new droid
+		psNewDroid = reallyBuildDroid(&sTemplate, Position(psD->pos.x, psD->pos.y, 0), to, false, psD->rot);
+		ASSERT_OR_RETURN(nullptr, psNewDroid, "Unable to build unit");
+
+		addDroid(psNewDroid, apsDroidLists);
+		adjustDroidCount(psNewDroid, 1);
+
+		psNewDroid->body = clip((psD->body*psNewDroid->originalBody + psD->originalBody/2)/std::max(psD->originalBody, 1u), 1u, psNewDroid->originalBody);
+		psNewDroid->experience = psD->experience;
+		psNewDroid->kills = psD->kills;
+
+		if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || isTransporter(psNewDroid)))
+		{
+			updateDroidOrientation(psNewDroid);
+		}
+
+		triggerEventObjectTransfer(psNewDroid, psD->player);
+		return psNewDroid;
 	}
-	// make the old droid vanish (but is not deleted until next tick)
+
+	int oldPlayer = psD->player;
+
+	// reset the assigned state of units attached to a leader
+	for (DROID *psCurr = apsDroidLists[oldPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
+	{
+		BASE_OBJECT	*psLeader;
+
+		if (hasCommander(psCurr))
+		{
+			psLeader = (BASE_OBJECT *)psCurr->psGroup->psCommander;
+		}
+		else
+		{
+			//psLeader can be either a droid or a structure
+			psLeader = orderStateObj(psCurr, DORDER_FIRESUPPORT);
+		}
+
+		if (psLeader && psLeader->id == psD->id)
+		{
+			psCurr->selected = false;
+			orderDroid(psCurr, DORDER_STOP, ModeQueue);
+		}
+	}
+
+	visRemoveVisibility((BASE_OBJECT *)psD);
+	psD->selected = false;
 	adjustDroidCount(psD, -1);
-	vanishDroid(psD);
-	// create a new droid
-	psNewDroid = reallyBuildDroid(&sTemplate, Position(psD->pos.x, psD->pos.y, 0), to, false, psD->rot);
-	ASSERT_OR_RETURN(nullptr, psNewDroid, "Unable to build unit");
-	addDroid(psNewDroid, apsDroidLists);
-	adjustDroidCount(psNewDroid, 1);
-	psNewDroid->body = clip((psD->body*psNewDroid->originalBody + psD->originalBody/2)/std::max(psD->originalBody, 1u), 1u, psNewDroid->originalBody);
-	psNewDroid->experience = psD->experience;
-	if (!(psNewDroid->droidType == DROID_PERSON || cyborgDroid(psNewDroid) || isTransporter(psNewDroid)))
+
+	if (droidRemove(psD, apsDroidLists))
 	{
-		updateDroidOrientation(psNewDroid);
+		psD->player	= to;
+
+		addDroid(psD, apsDroidLists);
+		adjustDroidCount(psD, 1);
+
+		// the new player may have different default sensor/ecm/repair components
+		if ((asSensorStats + psD->asBits[COMP_SENSOR])->location == LOC_DEFAULT)
+		{
+			if (psD->asBits[COMP_SENSOR] != aDefaultSensor[psD->player])
+			{
+				psD->asBits[COMP_SENSOR] = aDefaultSensor[psD->player];
+			}
+		}
+		if ((asECMStats + psD->asBits[COMP_ECM])->location == LOC_DEFAULT)
+		{
+			if (psD->asBits[COMP_ECM] != aDefaultECM[psD->player])
+			{
+				psD->asBits[COMP_ECM] = aDefaultECM[psD->player];
+			}
+		}
+		if ((asRepairStats + psD->asBits[COMP_REPAIRUNIT])->location == LOC_DEFAULT)
+		{
+			if (psD->asBits[COMP_REPAIRUNIT] != aDefaultRepair[psD->player])
+			{
+				psD->asBits[COMP_REPAIRUNIT] = aDefaultRepair[psD->player];
+			}
+		}
 	}
-	triggerEventObjectTransfer(psNewDroid, psD->player);
-	return psNewDroid;
+	else
+	{
+		// if we couldn't remove it, then get rid of it.
+		return nullptr;
+	}
+
+	// Update visibility
+	visTilesUpdate((BASE_OBJECT*)psD);
+
+	// check through the players, and our allies, list of droids to see if any are targetting it
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!aiCheckAlliances(i, to))
+		{
+			continue;
+		}
+
+		for (DROID *psCurr = apsDroidLists[i]; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			if (psCurr->order.psObj == psD || psCurr->psActionTarget[0] == psD)
+			{
+				orderDroid(psCurr, DORDER_STOP, ModeQueue);
+				break;
+			}
+			for (unsigned i = 0; i < psCurr->numWeaps; ++i)
+			{
+				if (psCurr->psActionTarget[i] == psD)
+				{
+					orderDroid(psCurr, DORDER_STOP, ModeImmediate);
+					break;
+				}
+			}
+			// check through order list
+			orderClearTargetFromDroidList(psCurr, (BASE_OBJECT *)psD);
+		}
+	}
+
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (!aiCheckAlliances(i, to))
+		{
+			continue;
+		}
+
+		// check through the players list, and our allies, of structures to see if any are targetting it
+		for (STRUCTURE *psStruct = apsStructLists[i]; psStruct != nullptr; psStruct = psStruct->psNext)
+		{
+			if (psStruct->psTarget[0] == psD)
+			{
+				setStructureTarget(psStruct, nullptr, 0, ORIGIN_UNKNOWN);
+			}
+		}
+	}
+
+	triggerEventObjectTransfer(psD, oldPlayer);
+	return psD;
 }
 
 /*calculates the electronic resistance of a droid based on its experience level*/
