@@ -256,7 +256,7 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 	if (psDroid)
 	{
 		syncDebugDroid(psDroid, '<');
-		giftSingleDroid(psDroid, to);
+		giftSingleDroid(psDroid, to, false);
 		syncDebugDroid(psDroid, '>');
 		if (to == selectedPlayer)
 		{

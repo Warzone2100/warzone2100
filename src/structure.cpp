@@ -5726,7 +5726,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_FLAMETHROWER, false, nullptr, 0, gameTime - deltaGameTime);
 					}
 				}
-				if (!giftSingleDroid(psDroid, attackPlayer) && !isDead(psDroid))
+				if (!isDead(psDroid) && !giftSingleDroid(psDroid, attackPlayer, true))
 				{
 					// droid limit reached, recycle
 					// don't check for transporter/mission coz multiplayer only issue.
