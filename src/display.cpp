@@ -2618,7 +2618,7 @@ bool cyborgDroidSelected(UDWORD player)
 }
 
 /* Clear the selection flag for a player */
-void clearSel()
+void clearSelection()
 {
 	DROID			*psCurrDroid;
 	STRUCTURE		*psStruct;
@@ -2642,11 +2642,6 @@ void clearSel()
 	intRefreshScreen();
 
 	triggerEventSelected();
-}
-
-void clearSelection()
-{
-	clearSel();
 }
 
 //access function for bSensorAssigned variable

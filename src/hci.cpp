@@ -973,7 +973,7 @@ void intResetScreen(bool NoAnim)
 	}
 	SecondaryWindowUp = false;
 	intMode = INT_NORMAL;
-	//clearSel() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
+	//clearSelelection() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
 	IntRefreshPending = false;
 }
 
@@ -4735,7 +4735,7 @@ static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 		{
 			if (psStruct != CurrentStruct)
 			{
-				clearSel();
+				clearSelection();
 				psStruct->selected = true;
 				CurrentStruct = psStruct;
 				Found = true;
@@ -4753,7 +4753,7 @@ static STRUCTURE *intGotoNextStructureType(UDWORD structType)
 			{
 				if (psStruct != CurrentStruct)
 				{
-					clearSel();
+					clearSelection();
 					psStruct->selected = true;
 					jsDebugSelected(psStruct);
 					CurrentStruct = psStruct;
@@ -4826,7 +4826,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 		{
 			if (psDroid != CurrentDroid)
 			{
-				clearSel();
+				clearSelection();
 				SelectDroid(psDroid);
 				CurrentDroid = psDroid;
 				Found = true;
@@ -4846,7 +4846,7 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 			{
 				if (psDroid != CurrentDroid)
 				{
-					clearSel();
+					clearSelection();
 					SelectDroid(psDroid);
 					CurrentDroid = psDroid;
 					Found = true;
