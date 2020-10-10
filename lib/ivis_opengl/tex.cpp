@@ -19,6 +19,7 @@
 */
 
 #include "lib/framework/frame.h"
+#include "lib/framework/frameresource.h"
 
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piestate.h"
@@ -259,7 +260,9 @@ int iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/,
 		return -1;
 	}
 	scaleImageMaxSize(&sSprite, maxWidth, maxHeight);
-	return pie_AddTexPage(&sSprite, path.c_str(), compression);
+	int page = pie_AddTexPage(&sSprite, path.c_str(), compression);
+	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
+	return page;
 }
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile)

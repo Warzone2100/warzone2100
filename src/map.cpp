@@ -802,6 +802,12 @@ bool mapLoad(char const *filename, bool preview)
 		goto failure;
 	}
 
+	if (!preview)
+	{
+		//preload the terrain textures
+		loadTerrainTextures();
+	}
+
 	//load in the map data itself
 
 	/* Load in the map data */
@@ -898,6 +904,12 @@ bool mapLoadFromScriptData(ScriptMapData const &data, bool preview)
 	if (!mapLoadGroundTypes())
 	{
 		return false;
+	}
+
+	if (!preview)
+	{
+		//preload the terrain textures
+		loadTerrainTextures();
 	}
 
 	//load in the map data itself
