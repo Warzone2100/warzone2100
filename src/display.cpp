@@ -110,7 +110,7 @@ static void	dealWithLMBDClick();
 static void	dealWithRMB();
 static void	handleDeselectionClick();
 static bool	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
-static OBJECT_POSITION *checkMouseLoc();
+static FLAG_POSITION *findMouseDeliveryPoint();
 
 void finishDeliveryPosition();
 
@@ -1868,7 +1868,6 @@ static void dealWithLMBObject(BASE_OBJECT *psClickedOn)
 void	dealWithLMB()
 {
 	BASE_OBJECT         *psClickedOn;
-	OBJECT_POSITION     *psLocation;
 	STRUCTURE			*psStructure;
 
 	/* Don't process if in game options are on screen */
@@ -1886,60 +1885,47 @@ void	dealWithLMB()
 		return;
 	}
 
-	/*Check for a Delivery Point or a Proximity Message*/
-	psLocation = checkMouseLoc();
-	if (psLocation == nullptr || selNumSelected(selectedPlayer))
+	if (auto deliveryPoint = findMouseDeliveryPoint())
 	{
-		// now changed to use the multiple order stuff
-		// clicked on a destination.
-		orderSelectedLoc(selectedPlayer, mousePos.x, mousePos.y, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
-		/* Otherwise send them all */
-		if (getNumDroidsSelected())
-		{
-			assignDestTarget();
-			audio_PlayTrack(ID_SOUND_SELECT);
-		}
-
-		if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
-		{
-			MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
-			uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
-
-			console("%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d",
-			        tileIsExplored(psTile) ? "Explored" : "Unexplored",
-			        mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
-			        (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
-			        aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
-			        (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer]);
-		}
-
-		return;
-	}
-
-	switch (psLocation->type)
-	{
-	case POS_DELIVERY:
-		if (psLocation->player == selectedPlayer)
-		{
+		if (selNumSelected(selectedPlayer) == 0) {
 			if (bRightClickOrders)
 			{
 				//centre the view on the owning Factory
-				psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
+				psStructure = findDeliveryFactory(deliveryPoint);
 				if (psStructure)
 				{
-					setViewPos(map_coord(psStructure->pos.x),
-					           map_coord(psStructure->pos.y),
-					           true);
+					setViewPos(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), true);
 				}
 			}
 			else
 			{
-				startDeliveryPosition((FLAG_POSITION *)psLocation);
+				startDeliveryPosition(deliveryPoint);
 			}
+			return;
 		}
-		break;
-	default:
-		ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc");
+	}
+
+	// now changed to use the multiple order stuff
+	// clicked on a destination.
+	orderSelectedLoc(selectedPlayer, mousePos.x, mousePos.y, ctrlShiftDown());  // ctrlShiftDown() = ctrl clicked a destination, add an order
+	/* Otherwise send them all */
+	if (getNumDroidsSelected())
+	{
+		assignDestTarget();
+		audio_PlayTrack(ID_SOUND_SELECT);
+	}
+
+	if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
+	{
+		MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
+		uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);
+
+		console("%s tile %d, %d [%d, %d] continent(l%d, h%d) level %g illum %d %s %s w=%d s=%d j=%d",
+		        tileIsExplored(psTile) ? "Explored" : "Unexplored",
+		        mouseTileX, mouseTileY, world_coord(mouseTileX), world_coord(mouseTileY),
+		        (int)psTile->limitedContinent, (int)psTile->hoverContinent, psTile->level, (int)psTile->illumination,
+		        aux & AUXBITS_DANGER ? "danger" : "", aux & AUXBITS_THREAT ? "threat" : "",
+		        (int)psTile->watchers[selectedPlayer], (int)psTile->sensors[selectedPlayer], (int)psTile->jammers[selectedPlayer]);
 	}
 }
 
@@ -2004,33 +1990,30 @@ static void dealWithLMBDClick()
 	}
 }
 
-/*This checks to see if the mouse was over a delivery point or a proximity message
-when the mouse button was pressed */
-static OBJECT_POSITION 	*checkMouseLoc()
+/**
+ * Find a delivery point, owned by `selectedPlayer`, pointed by the mouse.
+ */
+static FLAG_POSITION *findMouseDeliveryPoint()
 {
-	FLAG_POSITION		*psPoint;
-	UDWORD				i;
-	UDWORD				dispX, dispY, dispR;
-
-	// First have a look through the DeliveryPoint lists
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (auto psPoint = apsFlagPosLists[selectedPlayer]; psPoint; psPoint = psPoint->psNext)
 	{
-		//new way, handles multiple points.
-		for (psPoint = apsFlagPosLists[i]; psPoint; psPoint = psPoint->psNext)
+		if (psPoint->type != POS_DELIVERY) {
+			continue;
+		}
+
+		auto dispX = psPoint->screenX;
+		auto dispY = psPoint->screenY;
+		auto dispR = psPoint->screenR;
+		if (DrawnInLastFrame(psPoint->frameNumber) == true)	// Only check DP's that are on screen
 		{
-			dispX = psPoint->screenX;
-			dispY = psPoint->screenY;
-			dispR = psPoint->screenR;
-			if (DrawnInLastFrame(psPoint->frameNumber) == true)	// Only check DP's that are on screen
+			if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
 			{
-				if (mouseInBox(dispX - dispR, dispY - dispR, dispX + dispR, dispY + dispR))
-				{
-					// We HAVE clicked on DP!
-					return psPoint;
-				}
+				// We HAVE clicked on DP!
+				return psPoint;
 			}
 		}
 	}
+
 	return nullptr;
 }
 
@@ -2184,36 +2167,20 @@ static void dealWithRMB()
 	}
 	else
 	{
-		/*Check for a Delivery Point*/
-		OBJECT_POSITION *psLocation = checkMouseLoc();
-
-		if (psLocation)
+		if (auto deliveryPoint = findMouseDeliveryPoint())
 		{
-			switch (psLocation->type)
+			if (bRightClickOrders)
 			{
-			case POS_DELIVERY:
-				if (psLocation->player == selectedPlayer)
+				startDeliveryPosition(deliveryPoint);
+			}
+			else
+			{
+				//centre the view on the owning Factory
+				psStructure = findDeliveryFactory(deliveryPoint);
+				if (psStructure)
 				{
-					if (bRightClickOrders)
-					{
-						startDeliveryPosition((FLAG_POSITION *)psLocation);
-					}
-					else
-					{
-						//centre the view on the owning Factory
-						psStructure = findDeliveryFactory((FLAG_POSITION *)psLocation);
-						if (psStructure)
-						{
-							setViewPos(map_coord(psStructure->pos.x),
-							           map_coord(psStructure->pos.y),
-							           true);
-						}
-					}
+					setViewPos(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), true);
 				}
-				break;
-
-			default:
-				ASSERT(!"unknown object position type", "Unknown type from checkMouseLoc");
 			}
 		}
 		else
