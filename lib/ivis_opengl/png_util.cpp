@@ -117,6 +117,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 	// Open file
 	PHYSFS_file *fileHandle = PHYSFS_openRead(fileName);
 	ASSERT_OR_RETURN(false, fileHandle != nullptr, "Could not open %s: %s", fileName, WZ_PHYSFS_getLastError());
+	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
 
 	// Read PNG header from file
 	readSize = WZ_PHYSFS_readBytes(fileHandle, PNGheader, PNG_BYTES_TO_CHECK);

@@ -108,6 +108,7 @@ bool strresLoad(STR_RES *psRes, const char *fileName)
 		debug(LOG_ERROR, "strresLoadFile: PHYSFS_openRead(\"%s\") failed with error: %s\n", fileName, WZ_PHYSFS_getLastError());
 		return false;
 	}
+	WZ_PHYSFS_SETBUFFER(input.input.physfsfile, 4096)//;
 
 	strres_set_extra(&input);
 	retval = (strres_parse(psRes) == 0);
