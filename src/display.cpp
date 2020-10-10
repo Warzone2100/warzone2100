@@ -108,6 +108,7 @@ static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer);
 static void	dealWithLMB();
 static void	dealWithLMBDClick();
 static void	dealWithRMB();
+static void	handleDeselectionClick();
 static bool	mouseInBox(SDWORD x0, SDWORD y0, SDWORD x1, SDWORD y1);
 static OBJECT_POSITION *checkMouseLoc();
 
@@ -2100,10 +2101,14 @@ static void dealWithRMB()
 					}
 				}
 			}
-			else if (bMultiPlayer && isHumanPlayer(psDroid->player))
+			else
 			{
-				console("%s", droidGetName(psDroid));
-				FeedbackOrderGiven();
+				handleDeselectionClick();
+				if (bMultiPlayer && isHumanPlayer(psDroid->player))
+				{
+					console("%s", droidGetName(psDroid));
+					FeedbackOrderGiven();
+				}
 			}
 		}	// end if its a droid
 		else if (psClickedOn->type == OBJ_STRUCTURE)
@@ -2166,10 +2171,13 @@ static void dealWithRMB()
 						intObjectSelected((BASE_OBJECT *)psStructure);
 					}
 				}
+			} else {
+				handleDeselectionClick();
 			}
 		}	// end if its a structure
 		else
 		{
+			handleDeselectionClick();
 			/* And if it's not a feature, then we're in trouble! */
 			ASSERT(psClickedOn->type == OBJ_FEATURE, "Weird selection from RMB - type of clicked object is %d", (int)psClickedOn->type);
 		}
@@ -2210,9 +2218,7 @@ static void dealWithRMB()
 		}
 		else
 		{
-			clearSelection();
-			intObjectSelected(nullptr);
-			memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
+			handleDeselectionClick();
 		}
 	}
 }
@@ -2624,6 +2630,8 @@ void clearSelection()
 	STRUCTURE		*psStruct;
 	FLAG_POSITION	*psFlagPos;
 
+	memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
+
 	for (psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid; psCurrDroid = psCurrDroid->psNext)
 	{
 		psCurrDroid->selected = false;
@@ -2642,6 +2650,12 @@ void clearSelection()
 	intRefreshScreen();
 
 	triggerEventSelected();
+}
+
+static void handleDeselectionClick()
+{
+	clearSelection();
+	intObjectSelected(nullptr);
 }
 
 //access function for bSensorAssigned variable
