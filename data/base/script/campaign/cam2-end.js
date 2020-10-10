@@ -51,12 +51,23 @@ function playLastVideo()
 	camPlayVideos("CAM2_OUT");
 }
 
-//Allow a win if a transporter was launched.
-function eventTransporterLaunch(transport)
+//Allow a win if a transporter was launched with a construction droid.
+function eventTransporterLaunch(transporter)
 {
-	if (transport.player === CAM_HUMAN_PLAYER)
+	if (!allowWin && transporter.player === CAM_HUMAN_PLAYER)
 	{
-		allowWin = true;
+		var cargoDroids = enumCargo(transporter);
+
+		for (var i = 0, len = cargoDroids.length; i < len; ++i)
+		{
+			var virDroid = cargoDroids[i];
+
+			if (virDroid && virDroid.droidType === DROID_CONSTRUCT)
+			{
+				allowWin = true;
+				break;
+			}
+		}
 	}
 }
 
