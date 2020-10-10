@@ -132,6 +132,8 @@ GLsizei dreCount;
 /// Are we actually drawing something using the DrawRangeElements functions?
 bool drawRangeElementsStarted = false;
 
+#define MIN_TERRAIN_TEXTURE_SIZE 512
+
 /// Pass all remaining triangles to OpenGL
 template<typename PSO>
 static void finishDrawRangeElements()
@@ -565,6 +567,21 @@ void markTileDirty(int i, int j)
 		{
 			sectors[(x - 1)*ySectors + (y - 1)].dirty = true;
 		}
+	}
+}
+
+void loadTerrainTextures()
+{
+	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
+
+	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
+	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
+
+	// for each terrain layer
+	for (int layer = 0; layer < numGroundTypes; layer++)
+	{
+		// pre-load the texture
+		iV_GetTexture(psGroundTypes[layer].textureName, true, maxTerrainTextureSize, maxTerrainTextureSize);
 	}
 }
 
@@ -1106,8 +1123,6 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::TerrainDepth::get().unbind_vertex_buffers(geometryVBO);
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
-
-#define MIN_TERRAIN_TEXTURE_SIZE 512
 
 static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
 {

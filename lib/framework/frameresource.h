@@ -78,6 +78,9 @@ struct RES_TYPE
 /** Set the function to call when loading files with resloadfile. */
 void resSetLoadCallback(RESLOAD_CALLBACK funcToCall);
 
+/* do the callback for the resload display function */
+void resDoResLoadCallback();
+
 /** Initialise the resource module. */
 bool resInitialise();
 
