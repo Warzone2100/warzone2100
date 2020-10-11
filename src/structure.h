@@ -97,6 +97,8 @@ void structureDemolish(STRUCTURE *psStructure, DROID *psDroid, int buildPoints);
 void structureRepair(STRUCTURE *psStruct, DROID *psDroid, int buildRate);
 /* Set the type of droid for a factory to build */
 bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MODE mode);
+uint32_t structureBuildPointsToCompletion(const STRUCTURE & structure);
+float structureCompletionProgress(const STRUCTURE & structure);
 
 //temp test function for creating structures at the start of the game
 void createTestStructures();

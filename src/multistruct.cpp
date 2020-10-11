@@ -103,7 +103,7 @@ bool recvBuildFinished(NETQUEUE queue)
 	if (psStruct)
 	{
 		// make it complete.
-		psStruct->currentBuildPts = psStruct->pStructureType->buildPoints + 1;
+		psStruct->currentBuildPts = structureBuildPointsToCompletion(*psStruct) + 1;
 
 		if (psStruct->status != SS_BUILT)
 		{
