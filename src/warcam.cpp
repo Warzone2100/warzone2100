@@ -95,8 +95,8 @@ struct RADAR_JUMP {
 
 static RADAR_JUMP radarJumpAnimation
 {
-	Animation<Vector3f>(&graphicsTime, EASE_IN_OUT),
-	Animation<Vector3f>(&graphicsTime, EASE_IN_OUT)
+	Animation<Vector3f>(graphicsTime, EASE_IN_OUT),
+	Animation<Vector3f>(graphicsTime, EASE_IN_OUT)
 };
 
 static SDWORD	presAvAngle = 0;
@@ -877,7 +877,7 @@ static void camRadarJump()
 	player.p = radarJumpAnimation.position.getCurrent();
 	player.r = radarJumpAnimation.rotation.getCurrent();
 
-	if (radarJumpAnimation.position.isFinished() && radarJumpAnimation.rotation.isFinished())
+	if (!radarJumpAnimation.position.isActive() && !radarJumpAnimation.rotation.isActive())
 	{
 		trackingCamera.status = CAM_INACTIVE;
 	}
@@ -984,10 +984,18 @@ void requestRadarTrack(SDWORD x, SDWORD y)
 		calculateRelativeAngle(player.r.z, targetRotation.z)
 	);
 
-	radarJumpAnimation.position.start(initialPosition, targetPosition);
-	radarJumpAnimation.rotation.start(initialRotation, targetRotation);
-	radarJumpAnimation.position.setDuration(animationDuration);
-	radarJumpAnimation.rotation.setDuration(animationDuration);
+	radarJumpAnimation.position
+		.setInitialData(initialPosition)
+		.setFinalData(targetPosition)
+		.setDuration(animationDuration)
+		.start();
+
+	radarJumpAnimation.rotation
+		.setInitialData(initialRotation)
+		.setFinalData(targetRotation)
+		.setDuration(animationDuration)
+		.start();
+
 	trackingCamera.status = CAM_RADAR_JUMP;
 }
 
