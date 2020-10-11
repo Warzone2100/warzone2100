@@ -864,30 +864,9 @@ void	kf_LowerTile()
 
 // --------------------------------------------------------------------------
 /* Zooms out from display */
-void	kf_ZoomOut()
+void kf_ZoomOut()
 {
-	if (getDebugMappingStatus())
-	{
-		setViewDistance(getViewDistance() + realTimeAdjustedIncrement(war_GetMapZoomRate()));
-	}
-	else
-	{
-		setViewDistance(std::min<int>(getViewDistance() + realTimeAdjustedIncrement(war_GetMapZoomRate()), MAXDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
-}
-
-void kf_ZoomOutStep()
-{
-	if (getDebugMappingStatus())
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, (getViewDistance() + war_GetMapZoomRate()));
-	}
-	else
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, std::min<int>(getViewDistance() + war_GetMapZoomRate(), MAXDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
+	incrementViewDistance(war_GetMapZoomRate());
 }
 
 // --------------------------------------------------------------------------
@@ -919,30 +898,9 @@ void	kf_RadarZoomOut()
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 /* Zooms in the map */
-void	kf_ZoomIn()
+void kf_ZoomIn()
 {
-	if (getDebugMappingStatus())
-	{
-		setViewDistance(getViewDistance() - realTimeAdjustedIncrement(war_GetMapZoomRate()));
-	}
-	else
-	{
-		setViewDistance(std::max<int>(getViewDistance() - realTimeAdjustedIncrement(war_GetMapZoomRate()), MINDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
-}
-
-void kf_ZoomInStep()
-{
-	if (getDebugMappingStatus())
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, getViewDistance() - war_GetMapZoomRate());
-	}
-	else
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, std::max<int>(getViewDistance() - war_GetMapZoomRate(), MINDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
+	incrementViewDistance(-war_GetMapZoomRate());
 }
 
 // --------------------------------------------------------------------------

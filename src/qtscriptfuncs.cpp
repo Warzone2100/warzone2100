@@ -4750,9 +4750,9 @@ static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *)
 //--
 static QScriptValue js_cameraZoom(QScriptContext *context, QScriptEngine *)
 {
-	float z = context->argument(0).toNumber();
+	float viewDistance = context->argument(0).toNumber();
 	float speed = context->argument(1).toNumber();
-	setZoom(speed, z);
+	animateToViewDistance(viewDistance, speed);
 	return QScriptValue();
 }
 
