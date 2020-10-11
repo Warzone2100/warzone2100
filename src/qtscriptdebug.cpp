@@ -774,7 +774,7 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		setPair(row, selectedModel, "Foundation depth", QString::number(psStruct->foundationDepth));
 		setPair(row, selectedModel, "Capacity", QString::number(psStruct->capacity));
 		setPair(row, selectedModel, "^Type", QString::number(psStruct->pStructureType->type));
-		setPair(row, selectedModel, "^Build points", QString::number(psStruct->pStructureType->buildPoints));
+		setPair(row, selectedModel, "^Build points", QString::number(structureBuildPointsToCompletion(*psStruct)));
 		setPair(row, selectedModel, "^Power points", QString::number(psStruct->pStructureType->powerToBuild));
 		setPair(row, selectedModel, "^Height", QString::number(psStruct->pStructureType->height));
 		setPair(row, selectedModel, componentToString("ECM", psStruct->pStructureType->pECM, psObj->player));

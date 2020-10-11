@@ -209,7 +209,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				//show progress of build
 				if (Structure->currentBuildPts != 0)
 				{
-					formatTime(BarGraph, Structure->currentBuildPts, Structure->pStructureType->buildPoints, Structure->lastBuildRate, _("Build Progress"));
+					formatTime(BarGraph, Structure->currentBuildPts, structureBuildPointsToCompletion(*Structure), Structure->lastBuildRate, _("Build Progress"));
 				}
 				else
 				{

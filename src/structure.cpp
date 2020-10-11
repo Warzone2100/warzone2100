@@ -139,6 +139,7 @@ static void resetResistanceLag(STRUCTURE *psBuilding);
 static int structureTotalReturn(const STRUCTURE *psStruct);
 static void parseFavoriteStructs();
 static void packFavoriteStructs();
+static bool structureHasModules(const STRUCTURE *psStruct);
 
 // last time the maximum units message was displayed
 static UDWORD	lastMaxUnitMessage;
@@ -725,6 +726,24 @@ int32_t getStructureDamage(const STRUCTURE *psStructure)
 	return 65536 - health;
 }
 
+uint32_t structureBuildPointsToCompletion(const STRUCTURE & structure)
+{
+	if (structureHasModules(&structure)) {
+		auto moduleStat = getModuleStat(&structure);
+
+		if (moduleStat != nullptr) {
+			return moduleStat->buildPoints;
+		}
+	}
+
+	return structure.pStructureType->buildPoints;
+}
+
+float structureCompletionProgress(const STRUCTURE & structure)
+{
+	return MIN(1, structure.currentBuildPts / (float)structureBuildPointsToCompletion(structure));
+}
+
 /// Add buildPoints to the structures currentBuildPts, due to construction work by the droid
 /// Also can deconstruct (demolish) a building if passed negative buildpoints
 void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int buildRate)
@@ -768,8 +787,8 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	}
 
 	int newBuildPoints = psStruct->currentBuildPts + buildPoints;
-	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
-	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
+	ASSERT(newBuildPoints <= 1 + 3 * (int)structureBuildPointsToCompletion(*psStruct), "unsigned int underflow?");
+	CLIP(newBuildPoints, 0, structureBuildPointsToCompletion(*psStruct));
 
 	if (psStruct->currentBuildPts > 0 && newBuildPoints <= 0)
 	{
@@ -777,15 +796,15 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		addPower(psStruct->player, structureTotalReturn(psStruct));
 	}
 
-	ASSERT(newBuildPoints <= 1 + 3 * (int)psStruct->pStructureType->buildPoints, "unsigned int underflow?");
-	CLIP(newBuildPoints, 0, psStruct->pStructureType->buildPoints);
+	ASSERT(newBuildPoints <= 1 + 3 * (int)structureBuildPointsToCompletion(*psStruct), "unsigned int underflow?");
+	CLIP(newBuildPoints, 0, structureBuildPointsToCompletion(*psStruct));
 
-	int deltaBody = quantiseFraction(9 * structureBody(psStruct), 10 * psStruct->pStructureType->buildPoints, newBuildPoints, psStruct->currentBuildPts);
+	int deltaBody = quantiseFraction(9 * structureBody(psStruct), 10 * structureBuildPointsToCompletion(*psStruct), newBuildPoints, psStruct->currentBuildPts);
 	psStruct->currentBuildPts = newBuildPoints;
 	psStruct->body = std::max<int>(psStruct->body + deltaBody, 1);
 
 	//check if structure is built
-	if (buildPoints > 0 && psStruct->currentBuildPts >= psStruct->pStructureType->buildPoints)
+	if (buildPoints > 0 && psStruct->currentBuildPts >= structureBuildPointsToCompletion(*psStruct))
 	{
 		buildingComplete(psStruct);
 
@@ -3669,7 +3688,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 			if (psBuilding->pStructureType->powerToBuild == 0)
 			{
 				// Building is free, and not currently being built, so deconstruct slowly over 1 minute.
-				psBuilding->currentBuildPts -= std::min<int>(psBuilding->currentBuildPts, gameTimeAdjustedAverage(psBuilding->pStructureType->buildPoints, 60));
+				psBuilding->currentBuildPts -= std::min<int>(psBuilding->currentBuildPts, gameTimeAdjustedAverage(structureBuildPointsToCompletion(*psBuilding), 60));
 			}
 
 			if (psBuilding->currentBuildPts == 0)
@@ -4606,7 +4625,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	unsigned burnDuration = bMinor ? burnDurationWall : bDerrick ? burnDurationOilWell : burnDurationOther;
 	if (psDel->status == SS_BEING_BUILT)
 	{
-		burnDuration = burnDuration * psDel->currentBuildPts / psDel->pStructureType->buildPoints;
+		burnDuration = burnDuration * structureCompletionProgress(*psDel);
 	}
 
 	/* Only add if visible */
@@ -5293,7 +5312,7 @@ void buildingComplete(STRUCTURE *psBuilding)
 		prevState = intGetResearchState();
 	}
 
-	psBuilding->currentBuildPts = psBuilding->pStructureType->buildPoints;
+	psBuilding->currentBuildPts = structureBuildPointsToCompletion(*psBuilding);
 	psBuilding->status = SS_BUILT;
 
 	visTilesUpdate(psBuilding);
@@ -5753,7 +5772,7 @@ unsigned structureBodyBuilt(const STRUCTURE *psStructure)
 	{
 		// Calculate the body points the structure would have, if not damaged.
 		unsigned unbuiltBody = (maxBody + 9) / 10;  // See droidStartBuild() in droid.cpp.
-		unsigned deltaBody = (uint64_t)9 * maxBody * psStructure->currentBuildPts / (10 * psStructure->pStructureType->buildPoints);  // See structureBuild() in structure.cpp.
+		unsigned deltaBody = maxBody * 9 * structureCompletionProgress(*psStructure) / 10;  // See structureBuild() in structure.cpp.
 		maxBody = unbuiltBody + deltaBody;
 	}
 
@@ -6510,9 +6529,7 @@ void factoryLoopAdjust(STRUCTURE *psStruct, bool add)
 /*Used for determining how much of the structure to draw as being built or demolished*/
 float structHeightScale(const STRUCTURE *psStruct)
 {
-	float retVal = (float)psStruct->currentBuildPts / (float)psStruct->pStructureType->buildPoints;
-
-	return MAX(retVal, 0.05f);
+	return MAX(structureCompletionProgress(*psStruct), 0.05f);
 }
 
 
