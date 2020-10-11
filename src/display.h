@@ -40,7 +40,6 @@ void processInput();
 /*don't want to do any of these whilst in the Intelligence Screen*/
 void processMouseClickInput();
 
-void scroll();
 void resetScroll();
 void setMouseScroll(bool);
 
@@ -225,10 +224,11 @@ bool ctrlShiftDown();
 
 UDWORD getTargetType();
 
-#define	DEFAULT_ZOOM_SPEED (5000)
+#define	DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED (5000)
 
-void setZoom(float zoomSpeed, float zoomTarget);
-void zoom();
+void animateToViewDistance(float target, float speed = DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED);
+void incrementViewDistance(float amount);
+void displayRenderLoop();
 bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
 bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
 

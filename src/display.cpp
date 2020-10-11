@@ -77,6 +77,7 @@
 #include "qtscript.h"
 #include "warzoneconfig.h"
 #include "lib/ivis_opengl/piematrix.h"
+#include "animation.h"
 
 DragBox3D dragBox3D;
 WallDrag wallDrag;
@@ -154,84 +155,44 @@ static bool bLasSatStruct;
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
 
-static const float zoom_velocity_units_per_sec = 5000;
-static const float zoom_full_acceleration_time_millis = 200;
-static const float zoom_full_deceleration_time_millis = 100;
-static bool is_zooming = false;
-static float zoom_reference = 0;
-static float zoom_current = 0;
-static float zoom_target = 0;
-static UDWORD zoom_time = 0;
+static auto viewDistanceAnimation = Animation<float>(realTime);
+static uint32_t viewDistanceIncrementCooldownTime = 0;
 
-void setZoom(float speed, float target)
+void animateToViewDistance(float target, float speed)
 {
-	if(speed == 0) // we can't use speed. but if it's 0, it's immediate.
-	{
-		is_zooming = false;
-		zoom_reference = 0;
-		zoom_current = 0;
-		zoom_target = 0;
-		zoom_time = 0;
-		setViewDistance(target);
-		UpdateFogDistance(target);
-		return;
-	}
-
-	if(!is_zooming)
-	{
-		zoom_reference = getViewDistance();
-		zoom_current = getViewDistance();
-		zoom_target = getViewDistance();
-		zoom_time = realTime;
-		is_zooming = true;
-	}
-	else if((target < zoom_current && zoom_target > zoom_current) || (target > zoom_current && zoom_target < zoom_current)) // switched directions "mid-air"
-	{
-		zoom_reference = zoom_target; // we should probably calculate this but it seems this works good enough.
-	}
-
-	zoom_target = target;
+	viewDistanceAnimation
+		.setInitialData(getViewDistance())
+		.setFinalData(target)
+		.setEasing(viewDistanceAnimation.isActive() ? EASE_OUT : EASE_IN_OUT)
+		.setDuration(speed <= 0 ? 0 : glm::log(std::abs(target - getViewDistance())) * 100 * DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED / speed)
+		.start();
 }
 
-void zoom()
+void incrementViewDistance(float amount)
 {
-	if(!is_zooming)
+	if (realTime < viewDistanceIncrementCooldownTime)
 	{
 		return;
 	}
 
-	int direction = zoom_target > zoom_reference ? 1 : -1;
-	float delta = zoom_target - zoom_reference;
-	float current = zoom_current - zoom_reference;
-
-	float acceleration = std::fmin((realTime - zoom_time) / zoom_full_acceleration_time_millis, 1);
-	acceleration = acceleration * acceleration; // quadratic ease in
-
-	float zoom_full_deceleration_distance = zoom_velocity_units_per_sec / 1000 * zoom_full_deceleration_time_millis;
-
-	float deceleration = std::fmin(fabs(delta - current) / zoom_full_deceleration_distance, 1);
-	deceleration = deceleration * (2 - deceleration); // quadratic ease out
-
-	float speed = std::fmin(acceleration, deceleration);
-
-	zoom_current += speed * realTimeAdjustedIncrement(zoom_velocity_units_per_sec) * direction;
-
-	if((direction == 1 && zoom_current > zoom_target - 1) || (direction == -1 && zoom_current < zoom_target + 1))
+	viewDistanceIncrementCooldownTime = realTime + GAME_TICKS_PER_SEC / 50;
+	auto target = (viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance()) + amount;
+	if (!getDebugMappingStatus())
 	{
-		setViewDistance(zoom_target);
-		UpdateFogDistance(zoom_target);
-
-		zoom_reference = 0;
-		zoom_current = 0;
-		zoom_target = 0;
-		zoom_time = 0;
-		is_zooming = false;
-
-		return;
+		CLIP(target, MINDISTANCE, MAXDISTANCE);
 	}
 
-	setViewDistance(zoom_current);
-	UpdateFogDistance(zoom_current);
+	animateToViewDistance(target);
+}
+
+static void updateViewDistanceAnimation()
+{
+	if (viewDistanceAnimation.isActive())
+	{
+		viewDistanceAnimation.update();
+		setViewDistance(viewDistanceAnimation.getCurrent());
+		UpdateFogDistance(viewDistanceAnimation.getCurrent());
+	}
 }
 
 bool isMouseOverRadar()
@@ -425,7 +386,7 @@ void processInput()
 		{
 		    switch(war_GetScrollEvent())
 		    {
-			case 0: kf_ZoomInStep(); break;
+			case 0: kf_ZoomIn(); break;
 			case 1: kf_SpeedUp(); break;
 			case 2: kf_PitchForward(); break;
 		    }
@@ -442,7 +403,7 @@ void processInput()
 		{
 			switch(war_GetScrollEvent())
 			{
-			    case 0: kf_ZoomOutStep(); break;
+			    case 0: kf_ZoomOut(); break;
 			    case 1: kf_SlowDown(); break;
 			    case 2: kf_PitchBack(); break;
 			}
@@ -972,7 +933,7 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	*y += *dydt * dt;
 }
 
-void scroll()
+static void handleCameraScrolling()
 {
 	SDWORD	xDif, yDif;
 	uint32_t timeDiff;
@@ -1041,6 +1002,12 @@ void scroll()
 	// Reset scroll directions
 	scrollDirLeftRight = 0;
 	scrollDirUpDown = 0;
+}
+
+void displayRenderLoop()
+{
+	handleCameraScrolling();
+	updateViewDistanceAnimation();
 }
 
 /*
