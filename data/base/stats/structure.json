@@ -415,7 +415,7 @@
     "A0FacMod1": {
         "armour": 10,
         "breadth": 3,
-        "buildPoints": 250,
+        "buildPoints": 500,
         "buildPower": 100,
         "ecmID": "ZNULLECM",
         "height": 2,
@@ -504,7 +504,7 @@
     "A0PowMod1": {
         "armour": 10,
         "breadth": 2,
-        "buildPoints": 250,
+        "buildPoints": 500,
         "ecmID": "ZNULLECM",
         "height": 2,
         "hitpoints": 500,
@@ -595,7 +595,7 @@
     "A0ResearchModule1": {
         "armour": 10,
         "breadth": 2,
-        "buildPoints": 250,
+        "buildPoints": 500,
         "buildPower": 100,
         "ecmID": "ZNULLECM",
         "height": 2,
