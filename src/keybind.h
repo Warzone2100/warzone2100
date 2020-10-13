@@ -65,6 +65,8 @@ void kf_ShrinkScreen();
 void kf_ExpandScreen();
 void kf_RotateLeft();
 void kf_RotateRight();
+void kf_RotateBuildingCW();
+void kf_RotateBuildingACW();
 void kf_PitchBack();
 void kf_PitchForward();
 void kf_ResetPitch();

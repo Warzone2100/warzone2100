@@ -241,6 +241,8 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_ToggleOverlays, "ToggleOverlays"},
 	{kf_ToggleConsoleDrop, "ToggleConsoleDrop"},
 	{kf_ToggleTeamChat, "ToggleTeamChat"},
+	{kf_RotateBuildingCW, "RotateBuildingClockwise"},
+	{kf_RotateBuildingACW, "RotateBuildingAnticlockwise"},
 	// **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
 	{kf_CentreOnBase, "CentreOnBase"},
@@ -491,6 +493,8 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_TAB,               KEYMAP_PRESSED, kf_ToggleOverlays,          N_("Toggle Overlays"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleConsoleDrop,       N_("Toggle Console History "), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleTeamChat,          N_("Toggle Team Chat History"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingCW,        N_("Rotate Building Clockwise"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingACW,       N_("Rotate Building Anticlockwise"), bForceDefaults) || didAdd;
 	//                                **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_B,      KEYMAP_PRESSED, kf_CentreOnBase,          N_("Center View on HQ"), bForceDefaults) || didAdd;

@@ -176,7 +176,7 @@ bool process3DBuilding()
 	/* Need to update the building locations if we're building */
 	int border = 5*TILE_UNITS/2;
 	Vector2i bv = {clip(mousePos.x, border, mapWidth*TILE_UNITS - border), clip(mousePos.y, border, mapHeight*TILE_UNITS - border)};
-	Vector2i size = getStatsSize(sBuildDetails.psStats, player.r.y);
+	Vector2i size = getStatsSize(sBuildDetails.psStats, getBuildingDirection());
 	Vector2i worldSize = world_coord(size);
 	bv = round_to_nearest_tile(bv - worldSize/2) + worldSize/2;
 
@@ -187,15 +187,15 @@ bool process3DBuilding()
 		{
 			wallDrag.pos2 = mousePos;  // Why must this be done here? If not doing it here, dragging works almost normally, except it suddenly stops working if the drag becomes invalid.
 
-			auto lb = calcLineBuild(static_cast<STRUCTURE_STATS *>(sBuildDetails.psStats), player.r.y, wallDrag.pos, wallDrag.pos2);
+			auto lb = calcLineBuild(static_cast<STRUCTURE_STATS *>(sBuildDetails.psStats), getBuildingDirection(), wallDrag.pos, wallDrag.pos2);
 			for (int i = 0; i < lb.count && isValid; ++i)
 			{
-				isValid &= validLocation(sBuildDetails.psStats, lb[i], player.r.y, selectedPlayer, true);
+				isValid &= validLocation(sBuildDetails.psStats, lb[i], getBuildingDirection(), selectedPlayer, true);
 			}
 		}
 		else
 		{
-			isValid = validLocation(sBuildDetails.psStats, bv, player.r.y, selectedPlayer, true);
+			isValid = validLocation(sBuildDetails.psStats, bv, getBuildingDirection(), selectedPlayer, true);
 		}
 
 		buildState = isValid? BUILD3D_VALID : BUILD3D_POS;
@@ -203,7 +203,7 @@ bool process3DBuilding()
 
 	sBuildDetails.x = buildSite.xTL = map_coord(bv.x - worldSize.x/2);
 	sBuildDetails.y = buildSite.yTL = map_coord(bv.y - worldSize.y/2);
-	if ((snapDirection(player.r.y) & 0x4000) == 0)
+	if ((getBuildingDirection() & 0x4000) == 0)
 	{
 		buildSite.xBR = buildSite.xTL + sBuildDetails.width - 1;
 		buildSite.yBR = buildSite.yTL + sBuildDetails.height - 1;
@@ -230,6 +230,15 @@ bool process3DBuilding()
 	return false;
 }
 
+void incrementBuildingDirection(uint16_t amount)
+{
+	sBuildDetails.directionShift += amount;
+}
+
+uint16_t getBuildingDirection()
+{
+	return snapDirection(player.r.y + sBuildDetails.directionShift);
+}
 
 /* See if a structure location has been found */
 bool found3DBuilding(Vector2i &pos)
@@ -240,7 +249,7 @@ bool found3DBuilding(Vector2i &pos)
 	}
 
 	pos = world_coord({sBuildDetails.x, sBuildDetails.y}) + world_coord(
-		(snapDirection(player.r.y) & 0x4000) == 0?
+		(getBuildingDirection() & 0x4000) == 0?
 			Vector2i{sBuildDetails.width, sBuildDetails.height} : Vector2i{sBuildDetails.height, sBuildDetails.width}
 	)/2;
 
@@ -273,7 +282,7 @@ bool found3DBuildLocTwo(Vector2i &pos, Vector2i &pos2)
 
 	wallDrag.status = DRAG_INACTIVE;
 	STRUCTURE_STATS *stats = (STRUCTURE_STATS *)sBuildDetails.psStats;
-	LineBuild lb = calcLineBuild(stats, player.r.y, wallDrag.pos, wallDrag.pos2);
+	LineBuild lb = calcLineBuild(stats, getBuildingDirection(), wallDrag.pos, wallDrag.pos2);
 	pos = lb.begin;
 	pos2 = lb.back();
 
