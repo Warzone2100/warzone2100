@@ -971,6 +971,20 @@ void	kf_RotateRight()
 }
 
 // --------------------------------------------------------------------------
+/* Rotate editing building direction clockwise */
+void kf_RotateBuildingCW()
+{
+	incrementBuildingDirection(DEG(-90));
+}
+
+// --------------------------------------------------------------------------
+/* Rotate editing building direction anticlockwise */
+void kf_RotateBuildingACW()
+{
+	incrementBuildingDirection(DEG(90));
+}
+
+// --------------------------------------------------------------------------
 /* Pitches camera back */
 void	kf_PitchBack()
 {

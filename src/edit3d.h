@@ -36,6 +36,8 @@ bool found3DBuildLocTwo(Vector2i &pos, Vector2i &pos2);
 void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData);
 void kill3DBuilding();
 bool process3DBuilding();
+void incrementBuildingDirection(uint16_t amount);
+uint16_t getBuildingDirection();
 
 void adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
 void raiseTile(int tile3dX, int tile3dY);
@@ -63,10 +65,11 @@ extern HIGHLIGHT	buildSite;
 struct BUILDDETAILS
 {
 	BUILDCALLBACK	CallBack;
-	void 			*UserData;  //this holds the OBJECT_POSITION pointer for a Deliv Point
-	UDWORD			x, y;
-	UDWORD			width, height;
-	BASE_STATS		*psStats;
+	void         	*UserData;  //this holds the OBJECT_POSITION pointer for a Deliv Point
+	UDWORD       	x, y;
+	UDWORD       	width, height;
+	BASE_STATS   	*psStats;
+	uint16_t     	directionShift;
 };
 
 extern BUILDDETAILS	sBuildDetails;

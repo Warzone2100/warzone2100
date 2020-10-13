@@ -1725,7 +1725,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 		if (STRUCTURE_STATS *stats = castStructureStats(sBuildDetails.psStats))
 		{
 			// it's a building
-			uint16_t direction = snapDirection(player.r.y);
+			uint16_t direction = getBuildingDirection();
 			if (wallDrag.status == DRAG_PLACING || wallDrag.status == DRAG_DRAGGING)
 			{
 				drawLineBuild(stats, wallDrag.pos, wallDrag.pos2, direction, state);
