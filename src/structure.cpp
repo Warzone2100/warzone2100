@@ -5153,6 +5153,22 @@ void checkForResExtractors(STRUCTURE *psBuilding)
 	}
 }
 
+uint16_t countPlayerUnusedDerricks()
+{
+	uint16_t total = 0;
+
+	for (STRUCTURE *psStruct = apsExtractorLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (psStruct->status == SS_BUILT && psStruct->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+		{
+			if (!psStruct->pFunctionality->resourceExtractor.psPowerGen) {
+				total++;
+			}
+		}
+	}
+
+	return total;
+}
 
 /*Looks through the list of structures to see if there are any Power Gens
 with available slots for the new Res Ext*/
