@@ -85,6 +85,7 @@
 #include "warzoneconfig.h"
 #include "multistat.h"
 #include "animation.h"
+#include "flowfield.h"
 
 /********************  Prototypes  ********************/
 
@@ -1215,6 +1216,10 @@ static void drawTiles(iView *player)
 	gfx_api::context::get().debugStringMarker("Draw 3D scene - blueprints");
 	displayBlueprints(viewMatrix);
 
+	if(isFlowfieldEnabled()){
+		debugDrawFlowfields(viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
+	}
+	
 	pie_RemainingPasses(currentGameFrame); // draws shadows and transparent shapes
 
 	if (!gamePaused())

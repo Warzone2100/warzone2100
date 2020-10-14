@@ -39,6 +39,7 @@
 #include "astar.h"
 
 #include "fpath.h"
+#include "flowfield.h"
 
 // If the path finding system is shutdown or not
 static volatile bool fpathQuit = false;
@@ -448,6 +449,24 @@ FPATH_RETVAL fpathDroidRoute(DROID *psDroid, SDWORD tX, SDWORD tY, FPATH_MOVETYP
 		acceptNearest = true;
 		break;
 	}
+	
+	if (isFlowfieldEnabled()) {
+		unsigned int flowfieldId;
+
+		if(tryGetFlowfieldForTarget(tX, tY, psPropStats->propulsionType, flowfieldId))
+		{
+			psDroid->sMove.pathIndex = 0;
+			psDroid->sMove.Status = MOVENAVIGATE;
+			psDroid->sMove.flowfield = flowfieldId;
+			psDroid->sMove.asPath = { { tX, tY } };
+
+			return FPR_OK;
+		} else {
+			calculateFlowfieldAsync(tX, tY, psPropStats->propulsionType);
+			return FPR_WAIT;
+		}
+	}
+
 	return fpathRoute(&psDroid->sMove, psDroid->id, startPos.x, startPos.y, endPos.x, endPos.y, psPropStats->propulsionType,
 	                  psDroid->droidType, moveType, psDroid->player, acceptNearest, dstStructure);
 }

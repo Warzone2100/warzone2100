@@ -57,6 +57,7 @@
 #include "edit3d.h"
 #include "effects.h"
 #include "fpath.h"
+#include "flowfield.h"
 #include "frend.h"
 #include "frontend.h"
 #include "game.h"
@@ -816,6 +817,8 @@ void systemShutdown()
 	notificationsShutDown();
 	widgShutDown();
 	fpathShutdown();
+	ffpathShutdown();
+	flowfieldDestroy();
 	mapShutdown();
 	debug(LOG_MAIN, "shutting down everything else");
 	pal_ShutDown();		// currently unused stub
@@ -1165,6 +1168,11 @@ bool stageTwoInitialise()
 	{
 		return false;
 	}
+	if (!ffpathInitialise())
+	{
+		return false;
+	}
+    flowfieldInit();
 
 	debug(LOG_MAIN, "stageTwoInitialise: done");
 
@@ -1180,6 +1188,8 @@ bool stageTwoShutDown()
 	debug(LOG_WZ, "== stageTwoShutDown ==");
 
 	fpathShutdown();
+	ffpathShutdown();
+    flowfieldDestroy();
 
 	cdAudio_Stop();
 
@@ -1272,6 +1282,11 @@ bool stageThreeInitialise()
 	{
 		return false;
 	}
+	if (!ffpathInitialise())
+	{
+		return false;
+	}
+	flowfieldInit();
 
 	mapInit();
 	gridReset();
