@@ -205,6 +205,8 @@ void buildingComplete(STRUCTURE *psBuilding);
 void checkForResExtractors(STRUCTURE *psPowerGen);
 void checkForPowerGen(STRUCTURE *psPowerGen);
 
+uint16_t countPlayerUnusedDerricks();
+
 // Set the command droid that factory production should go to struct _command_droid;
 void assignFactoryCommandDroid(STRUCTURE *psStruct, struct DROID *psCommander);
 

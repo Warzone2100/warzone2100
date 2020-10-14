@@ -663,25 +663,34 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	imageDrawBatch.draw(true);
 
-	PIELIGHT colour;
-	if (Avail < 0)
+	PIELIGHT colour = WZCOL_TEXT_BRIGHT;
+	auto unusedDerricks = countPlayerUnusedDerricks();
+
+	auto showNeedMessage = true;
+	if (unusedDerricks > 0)
 	{
-		const char *need = _("Need more resources!");
-		cache.wzNeedText.setText(need, font_small);
-		if ((realTime / 1250) % 5 == 0)
-		{
-			cache.wzNeedText.render(iX + 102, iY - 1, WZCOL_BLACK);
-		}
-		else
-		{
-			cache.wzNeedText.render(iX + 102, iY - 1, WZCOL_RED);
-		}
+		char unusedText[50];
+		ssprintf(unusedText, _("%d derrick(s) inactive"), unusedDerricks);
+		cache.wzNeedText.setText(unusedText, font_small);
+	}
+	else if (Avail < 0)
+	{
+		cache.wzNeedText.setText(_("Need more resources!"), font_small);
 		colour = WZCOL_RED;
 	}
 	else
 	{
-		colour = WZCOL_TEXT_BRIGHT;
+		showNeedMessage = false;
 	}
+
+	if (showNeedMessage)
+	{
+		auto needTextWidth = cache.wzNeedText.width();
+		auto textX = iX + (BarGraph->width() - needTextWidth) / 2;
+		pie_UniTransBoxFill(textX - 3, y0 + 1, textX + needTextWidth + 3, y0 + BarGraph->height() - 1, WZCOL_TRANSPARENT_BOX);
+		cache.wzNeedText.render(textX, iY - 1, (realTime / 1250) % 5 ? WZCOL_WHITE: WZCOL_RED);
+	}
+
 	// draw text value
 	cache.wzText.render(iX, iY, colour);
 }
