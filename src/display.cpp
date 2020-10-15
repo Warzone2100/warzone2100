@@ -361,7 +361,7 @@ void processInput()
 
 	if (InGameOpUp || isInGamePopupUp)
 	{
-		dragBox3D.status = DRAG_RELEASED;	// disengage the dragging since it stops menu input
+		dragBox3D.status = DRAG_INACTIVE;	// disengage the dragging since it stops menu input
 	}
 
 	if (CoordInBuild(mouseX(), mouseY()))
