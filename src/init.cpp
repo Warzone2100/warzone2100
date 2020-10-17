@@ -1285,6 +1285,7 @@ bool stageThreeInitialise()
 	// Re-inititialise some static variables.
 
 	bInTutorial = false;
+	rangeOnScreen = false;
 
 	if (fromSave && ActivityManager::instance().getCurrentGameMode() == ActivitySink::GameMode::CHALLENGE)
 	{
