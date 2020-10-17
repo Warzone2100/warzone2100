@@ -115,6 +115,11 @@ public:
 
 	bool contains(int x, int y) const { return contains(glm::ivec2(x, y)); }
 
+	bool contains(const WzRect& other) const
+	{
+		return contains(other._topLeft) && contains(other._bottomRight.x - 1, other._bottomRight.y - 1);
+	}
+
 	int width(void) const
 	{
 		return _bottomRight.x - _topLeft.x;
