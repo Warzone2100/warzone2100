@@ -35,6 +35,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/audio_id.h"
 #include "lib/widget/button.h"
+#include "lib/widget/scrollablelist.h"
 
 #include "frend.h"
 #include "frontend.h"
@@ -347,11 +348,13 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 
 	IntFormAnimated *kmForm = new IntFormAnimated(parent, false);
 	kmForm->id = KM_FORM;
+	ScrollableListWidget *kmList = new ScrollableListWidget(kmForm);
 	if (!ingame)
 	{
 		kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);
-				}));
+		}));
+		kmList->setGeometry(52, 10, KM_ENTRYW, 26 * KM_ENTRYH);
 
 		addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
 			    8, 5,
@@ -371,7 +374,8 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 		// Text versions for in-game where image resources are not available
 		kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H + 10);
-				}));
+		}));
+		kmList->setGeometry(52, 10, KM_ENTRYW, 24 * KM_ENTRYH);
 
 		W_BUTINIT sButInit;
 
@@ -405,12 +409,6 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 		}
 	}
 
-	// add tab form..
-	IntListTabWidget *kmList = new IntListTabWidget(kmForm);
-	kmList->setChildSize(KM_ENTRYW, KM_ENTRYH);
-	kmList->setChildSpacing(3, 3);
-	kmList->setGeometry(52, 10, KM_ENTRYW, KM_H - 10 - 25);
-
 	//Put the buttons on it
 	std::vector<KEY_MAPPING *> mappings;
 	for (KEY_MAPPING &m : keyMappings)
@@ -427,7 +425,9 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 	/* Now add the others... */
 	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
 	{
-		W_BUTTON *button = new W_BUTTON(kmList);
+		W_BUTINIT emptyInit;
+		W_BUTTON *button = new W_BUTTON(&emptyInit);
+		button->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
 		button->id = KM_START + (i - mappings.begin());
 		button->displayFunction = displayKeyMap;
 		button->pUserData = new DisplayKeyMapData(*i);
@@ -436,7 +436,7 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 			delete static_cast<DisplayKeyMapData *>(psWidget->pUserData);
 			psWidget->pUserData = nullptr;
 		});
-		kmList->addWidgetToLayout(button);
+		kmList->addItem(button);
 	}
 
 	/* Stop when the right number or when alphabetically last - not sure...! */
