@@ -224,3 +224,40 @@ std::string urlEncode(const char* urlFragment)
 # endif
 	return result;
 }
+
+bool openFolderInDefaultFileManager(const char* path)
+{
+#if defined(WZ_OS_WIN)
+	std::vector<wchar_t> wPath;
+	if (!utf8ToUtf16(path, wPath))
+	{
+		return false;
+	}
+
+	HRESULT coInitResult = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+	SHELLEXECUTEINFOW ShExecInfo = {0};
+	ShExecInfo.cbSize = sizeof(ShExecInfo);
+	ShExecInfo.fMask = SEE_MASK_NOASYNC;
+	ShExecInfo.hwnd = nullptr;
+	ShExecInfo.lpVerb = L"explore";
+	ShExecInfo.lpFile = wPath.data();
+	ShExecInfo.nShow = SW_SHOW;
+	bool bShellExecuteFailure = false;
+	if (!::ShellExecuteExW(&ShExecInfo))
+	{
+		DWORD dwError = ::GetLastError();
+		debug(LOG_ERROR, "ShellExecuteEx failed with error: %d", dwError);
+		bShellExecuteFailure = true;
+	}
+	if (coInitResult == S_OK || coInitResult == S_FALSE)
+	{
+		::CoUninitialize();
+	}
+	return !bShellExecuteFailure;
+#elif defined (WZ_OS_MAC)
+	return cocoaSelectFolderInFinder(path);
+#else
+	return xdg_open(path);
+#endif
+	return false;
+}
