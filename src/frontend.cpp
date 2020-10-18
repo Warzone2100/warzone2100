@@ -622,6 +622,9 @@ void startOptionsMenu()
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	char DirpathStr[2048] = {0};
+	snprintf(DirpathStr, 2048, "%s%s", _("Configuration directory: "), PHYSFS_getWriteDir());
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, DirpathStr, 0);
 }
 
 bool runOptionsMenu()
@@ -652,6 +655,22 @@ bool runOptionsMenu()
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
 		break;
+	case FRONTEND_HYPERLINK:
+		{
+			char cmdrun[2048] = {0};
+			#ifdef WZ_OS_LINUX
+			snprintf(cmdrun, 2048, "xdg-open %s", PHYSFS_getWriteDir());
+			system(cmdrun);
+			#endif
+			#ifdef WZ_OS_WIN32
+			snprintf(cmdrun, 2048, "explorer %s", PHYSFS_getWriteDir());
+			system(cmdrun);
+			#endif
+			#ifdef WZ_OS_MAC
+			snprintf(cmdrun, 2048, "open %s", PHYSFS_getWriteDir());
+			system(cmdrun);
+			#endif
+		}
 	default:
 		break;
 	}
