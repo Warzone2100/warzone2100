@@ -74,6 +74,53 @@ bool urlHasHTTPorHTTPSPrefix(char const *url)
 	return bValidLinkPrefix;
 }
 
+#if defined(WZ_OS_WIN)
+bool utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr)
+{
+	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
+	if (wstr_len <= 0)
+	{
+		DWORD dwError = GetLastError();
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", dwError, str);
+		return false;
+	}
+	outputWStr = std::vector<wchar_t>(wstr_len, L'\0');
+	if (MultiByteToWideChar(CP_UTF8, 0, str, -1, &outputWStr[0], wstr_len) == 0)
+	{
+		DWORD dwError = GetLastError();
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", dwError, str);
+		return false;
+	}
+	return true;
+}
+#endif
+
+#if !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC)
+bool xdg_open(const char *url)
+{
+// for linux
+# if defined(HAVE_POSIX_SPAWNP)
+	char progName[] = "xdg-open";
+	char *urlCopy = strdup(url);
+	char *argv[3] = { progName, urlCopy, nullptr };
+	pid_t pid = 0;
+	int spawnResult = posix_spawnp(&pid, progName, nullptr, nullptr, argv, environ);
+	if (spawnResult == 0)
+	{
+		waitpid(pid, nullptr, 0);
+	}
+	free(urlCopy);
+	return spawnResult == 0;
+# else
+	char lbuf[250] = {'\0'};
+	ssprintf(lbuf, "xdg-open %s &", url);
+	int stupidWarning = system(lbuf);
+	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
+	return true;
+# endif
+}
+#endif
+
 bool openURLInBrowser(char const *url)
 {
 	if (!url || !*url) return false;
@@ -88,18 +135,9 @@ bool openURLInBrowser(char const *url)
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
 
 #if defined(WZ_OS_WIN)
-	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, url, -1, NULL, 0);
-	if (wstr_len <= 0)
+	std::vector<wchar_t> wUrl;
+	if (!utf8ToUtf16(url, wUrl))
 	{
-		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", dwError, url);
-		return false;
-	}
-	std::vector<wchar_t> wUrl(wstr_len, L'\0');
-	if (MultiByteToWideChar(CP_UTF8, 0, url, -1, &wUrl[0], wstr_len) == 0)
-	{
-		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", dwError, url);
 		return false;
 	}
 
@@ -150,25 +188,7 @@ bool openURLInBrowser(char const *url)
 	return cocoaOpenURL(url);
 #else
 	// for linux
-# if defined(HAVE_POSIX_SPAWNP)
-	char progName[] = "xdg-open";
-	char *urlCopy = strdup(url);
-	char *argv[3] = { progName, urlCopy, nullptr };
-	pid_t pid = 0;
-	int spawnResult = posix_spawnp(&pid, progName, nullptr, nullptr, argv, environ);
-	if (spawnResult == 0)
-	{
-		waitpid(pid, nullptr, 0);
-	}
-	free(urlCopy);
-	return spawnResult == 0;
-# else
-	char lbuf[250] = {'\0'};
-	ssprintf(lbuf, "xdg-open %s &", url);
-	int stupidWarning = system(lbuf);
-	(void)stupidWarning;  // Why is system() a warn_unused_result function..?
-	return true;
-# endif
+	return xdg_open(url);
 #endif
 }
 
