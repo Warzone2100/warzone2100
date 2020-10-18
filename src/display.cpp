@@ -170,7 +170,7 @@ void animateToViewDistance(float target, float speed)
 
 void incrementViewDistance(float amount)
 {
-	if (realTime < viewDistanceIncrementCooldownTime)
+	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp || realTime < viewDistanceIncrementCooldownTime)
 	{
 		return;
 	}
