@@ -622,6 +622,7 @@ void startOptionsMenu()
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Open Configuration Directory"), 0);
 }
 
 bool runOptionsMenu()
@@ -651,6 +652,22 @@ bool runOptionsMenu()
 		break;
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
+		break;
+	case FRONTEND_HYPERLINK:
+		if (!openFolderInDefaultFileManager(PHYSFS_getWriteDir()))
+		{
+			// Failed to open write dir in default filesystem browser
+			std::string configErrorMessage = _("Failed to open configuration directory in system default file browser.");
+			configErrorMessage += "\n\n";
+			configErrorMessage += _("Configuration directory is reported as:");
+			configErrorMessage += "\n";
+			configErrorMessage += PHYSFS_getWriteDir();
+			configErrorMessage += "\n\n";
+			configErrorMessage += _("If running inside a container / isolated environment, this may differ from the actual path on disk.");
+			configErrorMessage += "\n";
+			configErrorMessage += _("Please see the documentation for more information on how to locate it manually.");
+			wzDisplayDialog(Dialog_Warning, _("Failed to open configuration directory"), configErrorMessage.c_str());
+		}
 		break;
 	default:
 		break;
