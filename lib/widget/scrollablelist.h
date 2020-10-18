@@ -36,6 +36,7 @@ public:
 	void initializeLayout();
 	void run(W_CONTEXT *psContext) override;
 	void addItem(WIDGET *widget);
+	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 
 protected:
 	void geometryChanged() override;
