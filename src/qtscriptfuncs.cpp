@@ -1872,6 +1872,14 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 		#define wrap_(wzapi_function, context, engine) \
 		wrap__(wzapi_function, #wzapi_function, context, engine)
 
+		#define JS_FUNC_IMPL_NAME(func_name) js_##func_name
+
+		#define IMPL_JS_FUNC(func_name, wrapped_func) \
+			static QScriptValue JS_FUNC_IMPL_NAME(func_name)(QScriptContext *context, QScriptEngine *engine) \
+			{ \
+				return wrap_(wrapped_func, context, engine); \
+			}
+
 		template <typename T>
 		void append_value_list(QScriptValueList &list, T t, QScriptEngine* engine) { list += box(std::forward<T>(t), engine); }
 
@@ -2631,40 +2639,28 @@ static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *eng
 //-- be a specific player to watch for, or ALL_PLAYERS by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
 //--
-static QScriptValue js_resetLabel(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::resetLabel, context, engine);
-}
+IMPL_JS_FUNC(resetLabel, scripting_engine::resetLabel)
 
 //-- ## enumLabels([filter])
 //--
 //-- Returns a string list of labels that exist for this map. The optional filter
 //-- parameter can be used to only return labels of one specific type. (3.2+ only)
 //--
-static QScriptValue js_enumLabels(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::enumLabels, context, engine);
-}
+IMPL_JS_FUNC(enumLabels, scripting_engine::enumLabels)
 
 //-- ## addLabel(object, label)
 //--
 //-- Add a label to a game object. If there already is a label by that name, it is overwritten.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 //--
-static QScriptValue js_addLabel(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::addLabel, context, engine);
-}
+IMPL_JS_FUNC(addLabel, scripting_engine::addLabel)
 
 //-- ## removeLabel(label)
 //--
 //-- Remove a label from the game. Returns the number of labels removed, which should normally be
 //-- either 1 (label found) or 0 (label not found). (3.2+ only)
 //--
-static QScriptValue js_removeLabel(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::removeLabel, context, engine);
-}
+IMPL_JS_FUNC(removeLabel, scripting_engine::removeLabel)
 
 //-- ## getLabel(object)
 //--
@@ -2672,10 +2668,7 @@ static QScriptValue js_removeLabel(QScriptContext *context, QScriptEngine *engin
 //-- label found will be returned. If the object has no labels, null is returned.
 //-- This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
 //--
-static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::getLabelJS, context, engine);
-}
+IMPL_JS_FUNC(getLabel, scripting_engine::getLabelJS)
 
 //-- ## getObject(label | x, y | type, player, id)
 //--
@@ -2696,10 +2689,7 @@ static QScriptValue js_getLabel(QScriptContext *context, QScriptEngine *engine)
 //-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
 //-- operation of O(n) algorithmic complexity. (3.2+ only)
 //--
-static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::getObject, context, engine);
-}
+IMPL_JS_FUNC(getObject, scripting_engine::getObject)
 
 //-- ## enumBlips(player)
 //--
@@ -2707,19 +2697,13 @@ static QScriptValue js_getObject(QScriptContext *context, QScriptEngine *engine)
 //-- can see. This includes sensors revealed by radar detectors, as well as ECM jammers.
 //-- It does not include units going out of view.
 //--
-static QScriptValue js_enumBlips(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumBlips, context, engine);
-}
+IMPL_JS_FUNC(enumBlips, wzapi::enumBlips)
 
 //-- ## enumSelected()
 //--
 //-- Return an array containing all game objects currently selected by the host player. (3.2+ only)
 //--
-QScriptValue js_enumSelected(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumSelected, context, engine);
-}
+IMPL_JS_FUNC(enumSelected, wzapi::enumSelected)
 
 //-- ## enumGateways()
 //--
@@ -2763,40 +2747,28 @@ static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *eng
 //--
 //-- Return an array containing all the members of a given group.
 //--
-static QScriptValue js_enumGroup(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::enumGroup, context, engine);
-}
+IMPL_JS_FUNC(enumGroup, scripting_engine::enumGroup)
 
 //-- ## newGroup()
 //--
 //-- Allocate a new group. Returns its numerical ID. Deprecated since 3.2 - you should now
 //-- use your own number scheme for groups.
 //--
-static QScriptValue js_newGroup(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::newGroup, context, engine);
-}
+IMPL_JS_FUNC(newGroup, scripting_engine::newGroup)
 
 //-- ## activateStructure(structure, [target[, ability]])
 //--
 //-- Activate a special ability on a structure. Currently only works on the lassat.
 //-- The lassat needs a target.
 //--
-static QScriptValue js_activateStructure(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::activateStructure, context, engine);
-}
+IMPL_JS_FUNC(activateStructure, wzapi::activateStructure)
 
 //-- ## findResearch(research, [player])
 //--
 //-- Return list of research items remaining to be researched for the given research item. (3.2+ only)
 //-- (Optional second argument 3.2.3+ only)
 //--
-static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::findResearch, context, engine);
-}
+IMPL_JS_FUNC(findResearch, wzapi::findResearch)
 
 //-- ## pursueResearch(lab, research)
 //--
@@ -2806,49 +2778,34 @@ static QScriptValue js_findResearch(QScriptContext *context, QScriptEngine *engi
 //-- The second parameter may also be an array of such strings. The first technology that has
 //-- not yet been researched in that list will be pursued.
 //--
-static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::pursueResearch, context, engine);
-}
+IMPL_JS_FUNC(pursueResearch, wzapi::pursueResearch)
 
 //-- ## getResearch(research[, player])
 //--
 //-- Fetch information about a given technology item, given by a string that matches
 //-- its definition in "research.json". If not found, returns null.
 //--
-static QScriptValue js_getResearch(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::getResearch, context, engine);
-}
+IMPL_JS_FUNC(getResearch, wzapi::getResearch)
 
 //-- ## enumResearch()
 //--
 //-- Returns an array of all research objects that are currently and immediately available for research.
 //--
-static QScriptValue js_enumResearch(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumResearch, context, engine);
-}
+IMPL_JS_FUNC(enumResearch, wzapi::enumResearch)
 
 //-- ## componentAvailable([component type,] component name)
 //--
 //-- Checks whether a given component is available to the current player. The first argument is
 //-- optional and deprecated.
 //--
-static QScriptValue js_componentAvailable(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::componentAvailable, context, engine);
-}
+IMPL_JS_FUNC(componentAvailable, wzapi::componentAvailable)
 
 //-- ## addFeature(name, x, y)
 //--
 //-- Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
 //-- Returns the created game object on success, null otherwise. (3.2+ only)
 //--
-static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::addFeature, context, engine);
-}
+IMPL_JS_FUNC(addFeature, wzapi::addFeature)
 
 //-- ## addDroid(player, x, y, name, body, propulsion, reserved, reserved, turrets...)
 //--
@@ -2858,10 +2815,7 @@ static QScriptValue js_addFeature(QScriptContext *context, QScriptEngine *engine
 //-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
 //-- pass -1 as both x and y.
 //--
-static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::addDroid, context, engine);
-}
+IMPL_JS_FUNC(addDroid, wzapi::addDroid)
 
 //-- ## addDroidToTransporter(transporter, droid)
 //--
@@ -2869,10 +2823,7 @@ static QScriptValue js_addDroid(QScriptContext *context, QScriptEngine *engine)
 //-- into a transporter, which is also currently on the campaign off-world mission list.
 //-- (3.2+ only)
 //--
-static QScriptValue js_addDroidToTransporter(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::addDroidToTransporter, context, engine);
-}
+IMPL_JS_FUNC(addDroidToTransporter, wzapi::addDroidToTransporter)
 
 //-- ## makeTemplate(player, name, body, propulsion, reserved, turrets...)
 //--
@@ -2880,10 +2831,7 @@ static QScriptValue js_addDroidToTransporter(QScriptContext *context, QScriptEng
 //-- of droids before putting them into production, for instance. Will fail and return null if template
 //-- could not possibly be built using current research. (3.2+ only)
 //--
-static QScriptValue js_makeTemplate(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::makeTemplate, context, engine);
-}
+IMPL_JS_FUNC(makeTemplate, wzapi::makeTemplate)
 
 //-- ## buildDroid(factory, name, body, propulsion, reserved, reserved, turrets...)
 //--
@@ -2894,10 +2842,7 @@ static QScriptValue js_makeTemplate(QScriptContext *context, QScriptEngine *engi
 //-- It is now unused and in 3.2+ should be passed "", while in 3.1 it should be the
 //-- droid type to be built. Returns a boolean that is true if production was started.
 //--
-static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::buildDroid, context, engine);
-}
+IMPL_JS_FUNC(buildDroid, wzapi::buildDroid)
 
 //-- ## enumStruct([player[, structure type[, looking player]]])
 //--
@@ -2908,10 +2853,7 @@ static QScriptValue js_buildDroid(QScriptContext *context, QScriptEngine *engine
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
-static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumStruct, context, engine);
-}
+IMPL_JS_FUNC(enumStruct, wzapi::enumStruct)
 
 //-- ## enumStructOffWorld([player[, structure type[, looking player]]])
 //--
@@ -2922,10 +2864,7 @@ static QScriptValue js_enumStruct(QScriptContext *context, QScriptEngine *engine
 //-- The third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
-static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumStructOffWorld, context, engine);
-}
+IMPL_JS_FUNC(enumStructOffWorld, wzapi::enumStructOffWorld)
 
 //-- ## enumFeature(player[, name])
 //--
@@ -2933,19 +2872,13 @@ static QScriptValue js_enumStructOffWorld(QScriptContext *context, QScriptEngine
 //-- If player is ```ALL_PLAYERS```, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
 //--
-static QScriptValue js_enumFeature(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumFeature, context, engine);
-}
+IMPL_JS_FUNC(enumFeature, wzapi::enumFeature)
 
 //-- ## enumCargo(transport droid)
 //--
 //-- Returns an array of droid objects inside given transport. (3.2+ only)
 //--
-static QScriptValue js_enumCargo(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumCargo, context, engine);
-}
+IMPL_JS_FUNC(enumCargo, wzapi::enumCargo)
 
 //-- ## enumDroid([player[, droid type[, looking player]]])
 //--
@@ -2954,10 +2887,7 @@ static QScriptValue js_enumCargo(QScriptContext *context, QScriptEngine *engine)
 //-- is the name of the droid type. The third parameter can be used to filter by
 //-- visibility - the default is not to filter.
 //--
-static QScriptValue js_enumDroid(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumDroid, context, engine);
-}
+IMPL_JS_FUNC(enumDroid, wzapi::enumDroid)
 
 void dumpScriptLog(const WzString &scriptName, int me, const std::string &info)
 {
@@ -3028,196 +2958,133 @@ static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
 //-- Pick a location for constructing a certain type of building near some given position.
 //-- Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
 //--
-static QScriptValue js_pickStructLocation(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::pickStructLocation, context, engine);
-}
+IMPL_JS_FUNC(pickStructLocation, wzapi::pickStructLocation)
 
 //-- ## structureIdle(structure)
 //--
 //-- Is given structure idle?
 //--
-static QScriptValue js_structureIdle(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::structureIdle, context, engine);
-}
+IMPL_JS_FUNC(structureIdle, wzapi::structureIdle)
 
 //-- ## removeStruct(structure)
 //--
 //-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
 //-- No special effects are applied. Deprecated since 3.2.
 //--
-static QScriptValue js_removeStruct(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::removeStruct, context, engine);
-}
+IMPL_JS_FUNC(removeStruct, wzapi::removeStruct)
 
 //-- ## removeObject(game object[, special effects?])
 //--
 //-- Remove the given game object with special effects. Returns a boolean that is true on success.
 //-- A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
 //--
-static QScriptValue js_removeObject(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::removeObject, context, engine);
-}
+IMPL_JS_FUNC(removeObject, wzapi::removeObject)
 
 //-- ## clearConsole()
 //--
 //-- Clear the console. (3.3+ only)
 //--
-static QScriptValue js_clearConsole(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::clearConsole, context, engine);
-}
+IMPL_JS_FUNC(clearConsole, wzapi::clearConsole)
 
 //-- ## console(strings...)
 //--
 //-- Print text to the player console.
 //--
 // TODO, should cover scrShowConsoleText, scrAddConsoleText, scrTagConsoleText and scrConsole
-static QScriptValue js_console(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::console, context, engine);
-}
+IMPL_JS_FUNC(console, wzapi::console)
 
 //-- ## groupAddArea(group, x1, y1, x2, y2)
 //--
 //-- Add any droids inside the given area to the given group. (3.2+ only)
 //--
-static QScriptValue js_groupAddArea(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::groupAddArea, context, engine);
-}
+IMPL_JS_FUNC(groupAddArea, scripting_engine::groupAddArea)
 
 //-- ## groupAddDroid(group, droid)
 //--
 //-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
 //--
-static QScriptValue js_groupAddDroid(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::groupAddDroid, context, engine);
-}
+IMPL_JS_FUNC(groupAddDroid, scripting_engine::groupAddDroid)
 
 //-- ## groupAdd(group, object)
 //--
 //-- Add given game object to the given group.
 //--
-static QScriptValue js_groupAdd(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::groupAdd, context, engine);
-}
+IMPL_JS_FUNC(groupAdd, scripting_engine::groupAdd)
 
 //-- ## distBetweenTwoPoints(x1, y1, x2, y2)
 //--
 //-- Return distance between two points.
 //--
-static QScriptValue js_distBetweenTwoPoints(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::distBetweenTwoPoints, context, engine);
-}
+IMPL_JS_FUNC(distBetweenTwoPoints, wzapi::distBetweenTwoPoints)
 
 //-- ## groupSize(group)
 //--
 //-- Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
 //--
-static QScriptValue js_groupSize(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::groupSize, context, engine);
-}
+IMPL_JS_FUNC(groupSize, scripting_engine::groupSize)
 
 //-- ## droidCanReach(droid, x, y)
 //--
 //-- Return whether or not the given droid could possibly drive to the given position. Does
 //-- not take player built blockades into account.
 //--
-static QScriptValue js_droidCanReach(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::droidCanReach, context, engine);
-}
+IMPL_JS_FUNC(droidCanReach, wzapi::droidCanReach)
 
 //-- ## propulsionCanReach(propulsion, x1, y1, x2, y2)
 //--
 //-- Return true if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
 //-- Does not take player built blockades into account. (3.2+ only)
 //--
-static QScriptValue js_propulsionCanReach(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::propulsionCanReach, context, engine);
-}
+IMPL_JS_FUNC(propulsionCanReach, wzapi::propulsionCanReach)
 
 //-- ## terrainType(x, y)
 //--
 //-- Returns tile type of a given map tile, such as TER_WATER for water tiles or TER_CLIFFFACE for cliffs.
 //-- Tile types regulate which units may pass through this tile. (3.2+ only)
 //--
-static QScriptValue js_terrainType(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::terrainType, context, engine);
-}
+IMPL_JS_FUNC(terrainType, wzapi::terrainType)
 
 //-- ## orderDroid(droid, order)
 //--
 //-- Give a droid an order to do something. (3.2+ only)
 //--
-static QScriptValue js_orderDroid(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::orderDroid, context, engine);
-}
+IMPL_JS_FUNC(orderDroid, wzapi::orderDroid)
 
 //-- ## orderDroidObj(droid, order, object)
 //--
 //-- Give a droid an order to do something to something.
 //--
-static QScriptValue js_orderDroidObj(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::orderDroidObj, context, engine);
-}
+IMPL_JS_FUNC(orderDroidObj, wzapi::orderDroidObj)
 
 //-- ## orderDroidBuild(droid, order, structure type, x, y[, direction])
 //--
 //-- Give a droid an order to build something at the given position. Returns true if allowed.
 //--
-static QScriptValue js_orderDroidBuild(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::orderDroidBuild, context, engine);
-}
+IMPL_JS_FUNC(orderDroidBuild, wzapi::orderDroidBuild)
 
 //-- ## orderDroidLoc(droid, order, x, y)
 //--
 //-- Give a droid an order to do something at the given location.
 //--
-static QScriptValue js_orderDroidLoc(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::orderDroidLoc, context, engine);
-}
+IMPL_JS_FUNC(orderDroidLoc, wzapi::orderDroidLoc)
 
 //-- ## setMissionTime(time)
 //--
 //-- Set mission countdown in seconds.
 //--
-static QScriptValue js_setMissionTime(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setMissionTime, context, engine);
-}
+IMPL_JS_FUNC(setMissionTime, wzapi::setMissionTime)
 
 //-- ## getMissionTime()
 //--
 //-- Get time remaining on mission countdown in seconds. (3.2+ only)
 //--
-static QScriptValue js_getMissionTime(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::getMissionTime, context, engine);
-}
+IMPL_JS_FUNC(getMissionTime, wzapi::getMissionTime)
 
 //-- ## setTransporterExit(x, y, player)
 //--
 //-- Set the exit position for the mission transporter. (3.2+ only)
 //--
-static QScriptValue js_setTransporterExit(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setTransporterExit, context, engine);
-}
+IMPL_JS_FUNC(setTransporterExit, wzapi::setTransporterExit)
 
 //-- ## startTransporterEntry(x, y, player)
 //--
@@ -3226,10 +3093,7 @@ static QScriptValue js_setTransporterExit(QScriptContext *context, QScriptEngine
 //-- The transport needs to be set up with the mission droids, and the first transport
 //-- found will be used. (3.2+ only)
 //--
-static QScriptValue js_startTransporterEntry(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::startTransporterEntry, context, engine);
-}
+IMPL_JS_FUNC(startTransporterEntry, wzapi::startTransporterEntry)
 
 //-- ## useSafetyTransport(flag)
 //--
@@ -3237,20 +3101,14 @@ static QScriptValue js_startTransporterEntry(QScriptContext *context, QScriptEng
 //-- setReinforcementTime() is be used to hide it before coming back after the set time
 //-- which is handled by the campaign library in the victory data section (3.3+ only).
 //--
-static QScriptValue js_useSafetyTransport(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::useSafetyTransport, context, engine);
-}
+IMPL_JS_FUNC(useSafetyTransport, wzapi::useSafetyTransport)
 
 //-- ## restoreLimboMissionData()
 //--
 //-- Swap mission type and bring back units previously stored at the start
 //-- of the mission (see cam3-c mission). (3.3+ only).
 //--
-static QScriptValue js_restoreLimboMissionData(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::restoreLimboMissionData, context, engine);
-}
+IMPL_JS_FUNC(restoreLimboMissionData, wzapi::restoreLimboMissionData)
 
 //-- ## setReinforcementTime(time)
 //--
@@ -3260,55 +3118,37 @@ static QScriptValue js_restoreLimboMissionData(QScriptContext *context, QScriptE
 //-- is set to "--:--" and reinforcements are suppressed until this function is called
 //-- again with a regular time value.
 //--
-static QScriptValue js_setReinforcementTime(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setReinforcementTime, context, engine);
-}
+IMPL_JS_FUNC(setReinforcementTime, wzapi::setReinforcementTime)
 
 //-- ## setStructureLimits(structure type, limit[, player])
 //--
 //-- Set build limits for a structure.
 //--
-static QScriptValue js_setStructureLimits(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setStructureLimits, context, engine);
-}
+IMPL_JS_FUNC(setStructureLimits, wzapi::setStructureLimits)
 
 //-- ## centreView(x, y)
 //--
 //-- Center the player's camera at the given position.
 //--
-static QScriptValue js_centreView(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::centreView, context, engine);
-}
+IMPL_JS_FUNC(centreView, wzapi::centreView)
 
 //-- ## hackPlayIngameAudio()
 //--
 //-- (3.3+ only)
 //--
-static QScriptValue js_hackPlayIngameAudio(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackPlayIngameAudio, context, engine);
-}
+IMPL_JS_FUNC(hackPlayIngameAudio, wzapi::hackPlayIngameAudio)
 
 //-- ## hackStopIngameAudio()
 //--
 //-- (3.3+ only)
 //--
-static QScriptValue js_hackStopIngameAudio(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackStopIngameAudio, context, engine);
-}
+IMPL_JS_FUNC(hackStopIngameAudio, wzapi::hackStopIngameAudio)
 
 //-- ## playSound(sound[, x, y, z])
 //--
 //-- Play a sound, optionally at a location.
 //--
-static QScriptValue js_playSound(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::playSound, context, engine);
-}
+IMPL_JS_FUNC(playSound, wzapi::playSound)
 
 //-- ## gameOverMessage(won, showBackDrop, showOutro)
 //--
@@ -3326,120 +3166,81 @@ static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *e
 //-- Finish a research for the given player.
 //-- forceResearch will allow a research topic to be researched again. 3.3+
 //--
-static QScriptValue js_completeResearch(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::completeResearch, context, engine);
-}
+IMPL_JS_FUNC(completeResearch, wzapi::completeResearch)
 
 //-- ## completeAllResearch([player])
 //--
 //-- Finish all researches for the given player.
 //--
-static QScriptValue js_completeAllResearch(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::completeAllResearch, context, engine);
-}
+IMPL_JS_FUNC(completeAllResearch, wzapi::completeAllResearch)
 
 //-- ## enableResearch(research[, player])
 //--
 //-- Enable a research for the given player, allowing it to be researched.
 //--
-static QScriptValue js_enableResearch(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enableResearch, context, engine);
-}
+IMPL_JS_FUNC(enableResearch, wzapi::enableResearch)
 
 //-- ## extraPowerTime(time, player)
 //--
 //-- Increase a player's power as if that player had power income equal to current income
 //-- over the given amount of extra time. (3.2+ only)
 //--
-static QScriptValue js_extraPowerTime(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::extraPowerTime, context, engine);
-}
+IMPL_JS_FUNC(extraPowerTime, wzapi::extraPowerTime)
 
 //-- ## setPower(power[, player])
 //--
 //-- Set a player's power directly. (Do not use this in an AI script.)
 //--
-static QScriptValue js_setPower(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setPower, context, engine);
-}
+IMPL_JS_FUNC(setPower, wzapi::setPower)
 
 //-- ## setPowerModifier(power[, player])
 //--
 //-- Set a player's power modifier percentage. (Do not use this in an AI script.) (3.2+ only)
 //--
-static QScriptValue js_setPowerModifier(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setPowerModifier, context, engine);
-}
+IMPL_JS_FUNC(setPowerModifier, wzapi::setPowerModifier)
 
 //-- ## setPowerStorageMaximum(maximum[, player])
 //--
 //-- Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ only)
 //--
-static QScriptValue js_setPowerStorageMaximum(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setPowerStorageMaximum, context, engine);
-}
+IMPL_JS_FUNC(setPowerStorageMaximum, wzapi::setPowerStorageMaximum)
 
 //-- ## enableStructure(structure type[, player])
 //--
 //-- The given structure type is made available to the given player. It will appear in the
 //-- player's build list.
 //--
-static QScriptValue js_enableStructure(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enableStructure, context, engine);
-}
+IMPL_JS_FUNC(enableStructure, wzapi::enableStructure)
 
 //-- ## setTutorialMode(bool)
 //--
 //-- Sets a number of restrictions appropriate for tutorial if set to true.
 //--
-static QScriptValue js_setTutorialMode(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setTutorialMode, context, engine);
-}
+IMPL_JS_FUNC(setTutorialMode, wzapi::setTutorialMode)
 
 //-- ## setMiniMap(bool)
 //--
 //-- Turns visible minimap on or off in the GUI.
 //--
-static QScriptValue js_setMiniMap(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setMiniMap, context, engine);
-}
+IMPL_JS_FUNC(setMiniMap, wzapi::setMiniMap)
 
 //-- ## setDesign(bool)
 //--
 //-- Whether to allow player to design stuff.
 //--
-static QScriptValue js_setDesign(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setDesign, context, engine);
-}
+IMPL_JS_FUNC(setDesign, wzapi::setDesign)
 
 //-- ## enableTemplate(template name)
 //--
 //-- Enable a specific template (even if design is disabled).
 //--
-static QScriptValue js_enableTemplate(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enableTemplate, context, engine);
-}
+IMPL_JS_FUNC(enableTemplate, wzapi::enableTemplate)
 
 //-- ## removeTemplate(template name)
 //--
 //-- Remove a template.
 //--
-static QScriptValue js_removeTemplate(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::removeTemplate, context, engine);
-}
+IMPL_JS_FUNC(removeTemplate, wzapi::removeTemplate)
 
 //-- ## setReticuleButton(id, tooltip, filename, filenameHigh, callback)
 //--
@@ -3448,46 +3249,31 @@ static QScriptValue js_removeTemplate(QScriptContext *context, QScriptEngine *en
 //-- you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
 //-- for such changes to take effect. (3.2+ only)
 //--
-static QScriptValue js_setReticuleButton(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setReticuleButton, context, engine);
-}
+IMPL_JS_FUNC(setReticuleButton, wzapi::setReticuleButton)
 
 //-- ## showReticuleWidget(id)
 //--
 //-- Open the reticule menu widget. (3.3+ only)
 //--
-static QScriptValue js_showReticuleWidget(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::showReticuleWidget, context, engine);
-}
+IMPL_JS_FUNC(showReticuleWidget, wzapi::showReticuleWidget)
 
 //-- ## setReticuleFlash(id, flash)
 //--
 //-- Set reticule flash on or off. (3.2.3+ only)
 //--
-static QScriptValue js_setReticuleFlash(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setReticuleFlash, context, engine);
-}
+IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 
 //-- ## showInterface()
 //--
 //-- Show user interface. (3.2+ only)
 //--
-static QScriptValue js_showInterface(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::showInterface, context, engine);
-}
+IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 
 //-- ## hideInterface()
 //--
 //-- Hide user interface. (3.2+ only)
 //--
-static QScriptValue js_hideInterface(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hideInterface, context, engine);
-}
+IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
 
 //-- ## removeReticuleButton(button type)
 //--
@@ -3502,93 +3288,63 @@ static QScriptValue js_removeReticuleButton(QScriptContext *context, QScriptEngi
 //--
 //-- Mix user set limits with script set limits and defaults.
 //--
-static QScriptValue js_applyLimitSet(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::applyLimitSet, context, engine);
-}
+IMPL_JS_FUNC(applyLimitSet, wzapi::applyLimitSet)
 
 //-- ## enableComponent(component, player)
 //--
 //-- The given component is made available for research for the given player.
 //--
-static QScriptValue js_enableComponent(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enableComponent, context, engine);
-}
+IMPL_JS_FUNC(enableComponent, wzapi::enableComponent)
 
 //-- ## makeComponentAvailable(component, player)
 //--
 //-- The given component is made available to the given player. This means the player can
 //-- actually build designs with it.
 //--
-static QScriptValue js_makeComponentAvailable(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::makeComponentAvailable, context, engine);
-}
+IMPL_JS_FUNC(makeComponentAvailable, wzapi::makeComponentAvailable)
 
 //-- ## allianceExistsBetween(player, player)
 //--
 //-- Returns true if an alliance exists between the two players, or they are the same player.
 //--
-static QScriptValue js_allianceExistsBetween(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::allianceExistsBetween, context, engine);
-}
+IMPL_JS_FUNC(allianceExistsBetween, wzapi::allianceExistsBetween)
 
 //-- ## _(string)
 //--
 //-- Mark string for translation.
 //--
-static QScriptValue js_translate(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::translate, context, engine);
-}
+IMPL_JS_FUNC(translate, wzapi::translate)
 
 //-- ## playerPower(player)
 //--
 //-- Return amount of power held by the given player.
 //--
-static QScriptValue js_playerPower(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::playerPower, context, engine);
-}
+IMPL_JS_FUNC(playerPower, wzapi::playerPower)
 
 //-- ## queuedPower(player)
 //--
 //-- Return amount of power queued up for production by the given player. (3.2+ only)
 //--
-static QScriptValue js_queuedPower(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::queuedPower, context, engine);
-}
+IMPL_JS_FUNC(queuedPower, wzapi::queuedPower)
 
 //-- ## isStructureAvailable(structure type[, player])
 //--
 //-- Returns true if given structure can be built. It checks both research and unit limits.
 //--
-static QScriptValue js_isStructureAvailable(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::isStructureAvailable, context, engine);
-}
+IMPL_JS_FUNC(isStructureAvailable, wzapi::isStructureAvailable)
 
 //-- ## isVTOL(droid)
 //--
 //-- Returns true if given droid is a VTOL (not including transports).
 //--
-static QScriptValue js_isVTOL(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::isVTOL, context, engine);
-}
+IMPL_JS_FUNC(isVTOL, wzapi::isVTOL)
 
 //-- ## hackGetObj(type, player, id)
 //--
 //-- Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
 //-- Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
 //--
-static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackGetObj, context, engine);
-}
+IMPL_JS_FUNC(hackGetObj, wzapi::hackGetObj)
 
 //-- ## hackChangeMe(player)
 //--
@@ -3597,28 +3353,19 @@ static QScriptValue js_hackGetObj(QScriptContext *context, QScriptEngine *engine
 //--
 // This is only intended for use in campaign scripts until we get a way to add
 // scripts for each player. (3.2+ only)
-static QScriptValue js_hackChangeMe(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackChangeMe, context, engine);
-}
+IMPL_JS_FUNC(hackChangeMe, wzapi::hackChangeMe)
 
 //-- ## receiveAllEvents(bool)
 //--
 //-- Make the current script receive all events, even those not meant for 'me'. (3.2+ only)
 //--
-static QScriptValue js_receiveAllEvents(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::receiveAllEvents, context, engine);
-}
+IMPL_JS_FUNC(receiveAllEvents, wzapi::receiveAllEvents)
 
 //-- ## hackAssert(condition, message...)
 //--
 //-- Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
 //--
-static QScriptValue js_hackAssert(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackAssert, context, engine);
-}
+IMPL_JS_FUNC(hackAssert, wzapi::hackAssert)
 
 //-- ## objFromId(fake game object)
 //--
@@ -3638,10 +3385,7 @@ static QScriptValue js_objFromId(QScriptContext *context, QScriptEngine *engine)
 //--
 //-- Set the amount of experience a droid has. Experience is read using floating point precision.
 //--
-static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setDroidExperience, context, engine);
-}
+IMPL_JS_FUNC(setDroidExperience, wzapi::setDroidExperience)
 
 //-- ## donateObject(object, to)
 //--
@@ -3649,29 +3393,20 @@ static QScriptValue js_setDroidExperience(QScriptContext *context, QScriptEngine
 //-- donation was successful. May return false if this donation would push the receiving player
 //-- over unit limits. (3.2+ only)
 //--
-static QScriptValue js_donateObject(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::donateObject, context, engine);
-}
+IMPL_JS_FUNC(donateObject, wzapi::donateObject)
 
 //-- ## donatePower(amount, to)
 //--
 //-- Donate power to another player. Returns true. (3.2+ only)
 //--
-static QScriptValue js_donatePower(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::donatePower, context, engine);
-}
+IMPL_JS_FUNC(donatePower, wzapi::donatePower)
 
 //-- ## safeDest(player, x, y)
 //--
 //-- Returns true if given player is safe from hostile fire at the given location, to
 //-- the best of that player's map knowledge. Does not work in campaign at the moment.
 //--
-static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::safeDest, context, engine);
-}
+IMPL_JS_FUNC(safeDest, wzapi::safeDest)
 
 //-- ## addStructure(structure id, player, x, y)
 //--
@@ -3679,29 +3414,20 @@ static QScriptValue js_safeDest(QScriptContext *context, QScriptEngine *engine)
 //-- Position uses world coordinates, if you want use position based on Map Tiles, then
 //-- use as addStructure(structure id, players, x*128, y*128)
 //--
-static QScriptValue js_addStructure(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::addStructure, context, engine);
-}
+IMPL_JS_FUNC(addStructure, wzapi::addStructure)
 
 //-- ## getStructureLimit(structure type[, player])
 //--
 //-- Returns build limits for a structure.
 //--
-static QScriptValue js_getStructureLimit(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::getStructureLimit, context, engine);
-}
+IMPL_JS_FUNC(getStructureLimit, wzapi::getStructureLimit)
 
 //-- ## countStruct(structure type[, player])
 //--
 //-- Count the number of structures of a given type.
 //-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
 //--
-static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::countStruct, context, engine);
-}
+IMPL_JS_FUNC(countStruct, wzapi::countStruct)
 
 //-- ## countDroid([droid type[, player]])
 //--
@@ -3709,10 +3435,7 @@ static QScriptValue js_countStruct(QScriptContext *context, QScriptEngine *engin
 //-- DROID_ANY, DROID_COMMAND or DROID_CONSTRUCT.
 //-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
 //--
-static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::countDroid, context, engine);
-}
+IMPL_JS_FUNC(countDroid, wzapi::countDroid)
 
 //-- ## setNoGoArea(x1, y1, x2, y2, player)
 //--
@@ -3720,19 +3443,13 @@ static QScriptValue js_countDroid(QScriptContext *context, QScriptEngine *engine
 //-- then landing lights are placed. If player is -1, then a limbo landing zone
 //-- is created and limbo droids placed.
 //--
-static QScriptValue js_setNoGoArea(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setNoGoArea, context, engine);
-}
+IMPL_JS_FUNC(setNoGoArea, wzapi::setNoGoArea)
 
 //-- ## setScrollLimits(x1, y1, x2, y2)
 //--
 //-- Limit the scrollable area of the map to the given rectangle. (3.2+ only)
 //--
-static QScriptValue js_setScrollLimits(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setScrollLimits, context, engine);
-}
+IMPL_JS_FUNC(setScrollLimits, wzapi::setScrollLimits)
 
 //-- ## getScrollLimits()
 //--
@@ -3753,19 +3470,13 @@ static QScriptValue js_getScrollLimits(QScriptContext *context, QScriptEngine *e
 //--
 //-- Load the level with the given name.
 //--
-static QScriptValue js_loadLevel(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::loadLevel, context, engine);
-}
+IMPL_JS_FUNC(loadLevel, wzapi::loadLevel)
 
 //-- ## autoSave()
 //--
 //-- Perform automatic save
 //--
-static QScriptValue js_autoSave(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::autoSave, context, engine);
-}
+IMPL_JS_FUNC(autoSave, wzapi::autoSave)
 
 //-- ## enumRange(x, y, range[, filter[, seen]])
 //--
@@ -3775,10 +3486,7 @@ static QScriptValue js_autoSave(QScriptContext *context, QScriptEngine *engine)
 //-- returned; by default only visible objects are returned. Calling this function is much faster than
 //-- iterating over all game objects using other enum functions. (3.2+ only)
 //--
-static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::enumRange, context, engine);
-}
+IMPL_JS_FUNC(enumRange, wzapi::enumRange)
 
 //-- ## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
 //--
@@ -3789,20 +3497,14 @@ static QScriptValue js_enumRange(QScriptContext *context, QScriptEngine *engine)
 //-- positions or a label to an AREA. Calling this function is much faster than iterating over all
 //-- game objects using other enum functions. (3.2+ only)
 //--
-static QScriptValue js_enumArea(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(scripting_engine::enumAreaJS, context, engine);
-}
+IMPL_JS_FUNC(enumArea, scripting_engine::enumAreaJS)
 
 //-- ## addBeacon(x, y, target player[, message])
 //--
 //-- Send a beacon message to target player. Target may also be ```ALLIES```.
 //-- Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
 //--
-static QScriptValue js_addBeacon(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::addBeacon, context, engine);
-}
+IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
 //-- ## removeBeacon(target player)
 //--
@@ -3824,65 +3526,44 @@ static QScriptValue js_removeBeacon(QScriptContext *context, QScriptEngine *engi
 //-- Send a message to target player. Target may also be ```ALL_PLAYERS``` or ```ALLIES```.
 //-- Returns a boolean that is true on success. (3.2+ only)
 //--
-static QScriptValue js_chat(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::chat, context, engine);
-}
+IMPL_JS_FUNC(chat, wzapi::chat)
 
 //-- ## setAlliance(player1, player2, value)
 //--
 //-- Set alliance status between two players to either true or false. (3.2+ only)
 //--
-static QScriptValue js_setAlliance(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setAlliance, context, engine);
-}
+IMPL_JS_FUNC(setAlliance, wzapi::setAlliance)
 
 //-- ## sendAllianceRequest(player)
 //--
 //-- Send an alliance request to a player. (3.3+ only)
 //--
-static QScriptValue js_sendAllianceRequest(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::sendAllianceRequest, context, engine);
-}
+IMPL_JS_FUNC(sendAllianceRequest, wzapi::sendAllianceRequest)
 
 //-- ## setAssemblyPoint(structure, x, y)
 //--
 //-- Set the assembly point droids go to when built for the specified structure. (3.2+ only)
 //--
-static QScriptValue js_setAssemblyPoint(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setAssemblyPoint, context, engine);
-}
+IMPL_JS_FUNC(setAssemblyPoint, wzapi::setAssemblyPoint)
 
 //-- ## hackNetOff()
 //--
 //-- Turn off network transmissions. FIXME - find a better way.
 //--
-static QScriptValue js_hackNetOff(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackNetOff, context, engine);
-}
+IMPL_JS_FUNC(hackNetOff, wzapi::hackNetOff)
 
 //-- ## hackNetOn()
 //--
 //-- Turn on network transmissions. FIXME - find a better way.
 //--
-static QScriptValue js_hackNetOn(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackNetOn, context, engine);
-}
+IMPL_JS_FUNC(hackNetOn, wzapi::hackNetOn)
 
 //-- ## getDroidProduction(factory)
 //--
 //-- Return droid in production in given factory. Note that this droid is fully
 //-- virtual, and should never be passed anywhere. (3.2+ only)
 //--
-static QScriptValue js_getDroidProduction(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::getDroidProduction, context, engine);
-}
+IMPL_JS_FUNC(getDroidProduction, wzapi::getDroidProduction)
 
 //-- ## getDroidLimit([player[, unit type]])
 //--
@@ -3892,28 +3573,19 @@ static QScriptValue js_getDroidProduction(QScriptContext *context, QScriptEngine
 //-- is passed, the limit for this unit type is returned, which may be different from
 //-- the general unit limit (eg for commanders and construction droids). (3.2+ only)
 //--
-static QScriptValue js_getDroidLimit(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::getDroidLimit, context, engine);
-}
+IMPL_JS_FUNC(getDroidLimit, wzapi::getDroidLimit)
 
 //-- ## getExperienceModifier(player)
 //--
 //-- Get the percentage of experience this player droids are going to gain. (3.2+ only)
 //--
-static QScriptValue js_getExperienceModifier(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::getExperienceModifier, context, engine);
-}
+IMPL_JS_FUNC(getExperienceModifier, wzapi::getExperienceModifier)
 
 //-- ## setExperienceModifier(player, percent)
 //--
 //-- Set the percentage of experience this player droids are going to gain. (3.2+ only)
 //--
-static QScriptValue js_setExperienceModifier(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setExperienceModifier, context, engine);
-}
+IMPL_JS_FUNC(setExperienceModifier, wzapi::setExperienceModifier)
 
 //-- ## setDroidLimit(player, value[, droid type])
 //--
@@ -3922,10 +3594,7 @@ static QScriptValue js_setExperienceModifier(QScriptContext *context, QScriptEng
 //-- for droids in general, DROID_CONSTRUCT for constructors, or DROID_COMMAND
 //-- for commanders. (3.2+ only)
 //--
-static QScriptValue js_setDroidLimit(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setDroidLimit, context, engine);
-}
+IMPL_JS_FUNC(setDroidLimit, wzapi::setDroidLimit)
 
 //-- ## setCommanderLimit(player, value)
 //--
@@ -3979,47 +3648,32 @@ static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine 
 //--
 //-- Move the position of the Sun, which in turn moves where shadows are cast. (3.2+ only)
 //--
-static QScriptValue js_setSunPosition(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setSunPosition, context, engine);
-}
+IMPL_JS_FUNC(setSunPosition, wzapi::setSunPosition)
 
 //-- ## setSunIntensity(ambient r, g, b, diffuse r, g, b, specular r, g, b)
 //--
 //-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source. (3.2+ only)
 //--
-static QScriptValue js_setSunIntensity(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setSunIntensity, context, engine);
-}
+IMPL_JS_FUNC(setSunIntensity, wzapi::setSunIntensity)
 
 //-- ## setWeather(weather type)
 //--
 //-- Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR. (3.2+ only)
 //--
-static QScriptValue js_setWeather(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setWeather, context, engine);
-}
+IMPL_JS_FUNC(setWeather, wzapi::setWeather)
 
 //-- ## setSky(texture file, wind speed, skybox scale)
 //--
 //-- Change the skybox. (3.2+ only)
 //--
-static QScriptValue js_setSky(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setSky, context, engine);
-}
+IMPL_JS_FUNC(setSky, wzapi::setSky)
 
 //-- ## hackDoNotSave(name)
 //--
 //-- Do not save the given global given by name to savegames. Must be
 //-- done again each time game is loaded, since this too is not saved.
 //--
-static QScriptValue js_hackDoNotSave(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackDoNotSave, context, engine);
-}
+IMPL_JS_FUNC(hackDoNotSave, wzapi::hackDoNotSave)
 
 //-- ## hackMarkTiles([label | x, y[, x2, y2]])
 //--
@@ -4027,47 +3681,32 @@ static QScriptValue js_hackDoNotSave(QScriptContext *context, QScriptEngine *eng
 //-- or a tile x, y position, or four positions for a square area. If no parameter
 //-- is given, all marked tiles are cleared. (3.2+ only)
 //--
-static QScriptValue js_hackMarkTiles(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::hackMarkTiles, context, engine);
-}
+IMPL_JS_FUNC(hackMarkTiles, wzapi::hackMarkTiles)
 
 //-- ## cameraSlide(x, y)
 //--
 //-- Slide the camera over to the given position on the map. (3.2+ only)
 //--
-static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::cameraSlide, context, engine);
-}
+IMPL_JS_FUNC(cameraSlide, wzapi::cameraSlide)
 
 //-- ## cameraZoom(z, speed)
 //--
 //-- Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000. (3.2+ only)
 //--
-static QScriptValue js_cameraZoom(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::cameraZoom, context, engine);
-}
+IMPL_JS_FUNC(cameraZoom, wzapi::cameraZoom)
 
 //-- ## cameraTrack(droid)
 //--
 //-- Make the camera follow the given droid object around. Pass in a null object to stop. (3.2+ only)
 //--
-static QScriptValue js_cameraTrack(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::cameraTrack, context, engine);
-}
+IMPL_JS_FUNC(cameraTrack, wzapi::cameraTrack)
 
 //-- ## setHealth(object, health)
 //--
 //-- Change the health of the given game object, in percentage. Does not take care of network sync, so for multiplayer games,
 //-- needs wrapping in a syncRequest. (3.2.3+ only.)
 //--
-static QScriptValue js_setHealth(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setHealth, context, engine);
-}
+IMPL_JS_FUNC(setHealth, wzapi::setHealth)
 
 //-- ## setObjectFlag(object, flag, value)
 //--
@@ -4075,10 +3714,7 @@ static QScriptValue js_setHealth(QScriptContext *context, QScriptEngine *engine)
 //-- needs wrapping in a syncRequest. (3.3+ only.)
 //-- Recognized object flags: OBJECT_FLAG_UNSELECTABLE - makes object unavailable for selection from player UI.
 //--
-static QScriptValue js_setObjectFlag(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setObjectFlag, context, engine);
-}
+IMPL_JS_FUNC(setObjectFlag, wzapi::setObjectFlag)
 
 //-- ## addSpotter(x, y, player, range, type, expiry)
 //--
@@ -4087,19 +3723,13 @@ static QScriptValue js_setObjectFlag(QScriptContext *context, QScriptEngine *eng
 //-- by ECM jammers. ```expiry```, if non-zero, is the game time at which the spotter shall automatically be
 //-- removed. The function returns a unique ID that can be used to remove the spotter with ```removeSpotter```. (3.2+ only)
 //--
-static QScriptValue js_addSpotter(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::addSpotter, context, engine);
-}
+IMPL_JS_FUNC(addSpotter, wzapi::addSpotter)
 
 //-- ## removeSpotter(id)
 //--
 //-- Remove a spotter given its unique ID. (3.2+ only)
 //--
-static QScriptValue js_removeSpotter(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::removeSpotter, context, engine);
-}
+IMPL_JS_FUNC(removeSpotter, wzapi::removeSpotter)
 
 //-- ## syncRandom(limit)
 //--
@@ -4107,10 +3737,7 @@ static QScriptValue js_removeSpotter(QScriptContext *context, QScriptEngine *eng
 //-- run on all network peers in the same game frame. If it is called on just one peer (such as would be
 //-- the case for AIs, for instance), then game sync will break. (3.2+ only)
 //--
-static QScriptValue js_syncRandom(QScriptContext *context, QScriptEngine * engine)
-{
-	return wrap_(wzapi::syncRandom, context, engine);
-}
+IMPL_JS_FUNC(syncRandom, wzapi::syncRandom)
 
 //-- ## syncRequest(req_id, x, y[, obj[, obj2]])
 //--
@@ -4118,20 +3745,14 @@ static QScriptValue js_syncRandom(QScriptContext *context, QScriptEngine * engin
 //-- Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
 //-- take care only to define sync requests that can be validated against cheating. (3.2+ only)
 //--
-static QScriptValue js_syncRequest(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::syncRequest, context, engine);
-}
+IMPL_JS_FUNC(syncRequest, wzapi::syncRequest)
 
 //-- ## replaceTexture(old_filename, new_filename)
 //--
 //-- Replace one texture with another. This can be used to for example give buildings on a specific tileset different
 //-- looks, or to add variety to the looks of droids in campaign missions. (3.2+ only)
 //--
-static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::replaceTexture, context, engine);
-}
+IMPL_JS_FUNC(replaceTexture, wzapi::replaceTexture)
 
 //-- ## fireWeaponAtLoc(weapon, x, y[, player])
 //--
@@ -4139,47 +3760,32 @@ static QScriptValue js_replaceTexture(QScriptContext *context, QScriptEngine *en
 //-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
 //-- may have different friendly fire logic for a few weapons (like the lassat).
 //--
-static QScriptValue js_fireWeaponAtLoc(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::fireWeaponAtLoc, context, engine);
-}
+IMPL_JS_FUNC(fireWeaponAtLoc, wzapi::fireWeaponAtLoc)
 
 //-- ## fireWeaponAtObj(weapon, game object[, player])
 //--
 //-- Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
 //--
-static QScriptValue js_fireWeaponAtObj(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::fireWeaponAtObj, context, engine);
-}
+IMPL_JS_FUNC(fireWeaponAtObj, wzapi::fireWeaponAtObj)
 
 //-- ## changePlayerColour(player, colour)
 //--
 //-- Change a player's colour slot. The current player colour can be read from the ```playerData``` array. There are as many
 //-- colour slots as the maximum number of players. (3.2.3+ only)
 //--
-static QScriptValue js_changePlayerColour(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::changePlayerColour, context, engine);
-}
+IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
 
 //-- ## getMultiTechLevel()
 //--
 //-- Returns the current multiplayer tech level. (3.3+ only)
 //--
-static QScriptValue js_getMultiTechLevel(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::getMultiTechLevel, context, engine);
-}
+IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
 
 //-- ## setCampaignNumber(num)
 //--
 //-- Set the campaign number. (3.3+ only)
 //--
-static QScriptValue js_setCampaignNumber(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setCampaignNumber, context, engine);
-}
+IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
 
 //-- ## getMissionType()
 //--
@@ -4202,10 +3808,7 @@ static QScriptValue js_getRevealStatus(QScriptContext *context, QScriptEngine *)
 //-- ## setRevealStatus(bool)
 //--
 //-- Set the fog reveal status. (3.3+ only)
-static QScriptValue js_setRevealStatus(QScriptContext *context, QScriptEngine *engine)
-{
-	return wrap_(wzapi::setRevealStatus, context, engine);
-}
+IMPL_JS_FUNC(setRevealStatus, wzapi::setRevealStatus)
 
 
 QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
@@ -4303,6 +3906,12 @@ QScriptValue constructUpgradesQScriptValue(QScriptEngine *engine)
 	return upgrades;
 }
 
+#define JS_REGISTER_FUNC(js_func_name) \
+	engine->globalObject().setProperty(#js_func_name, engine->newFunction(JS_FUNC_IMPL_NAME(js_func_name)));
+
+#define JS_REGISTER_FUNC_NAME(js_func_name, full_impl_handler_func_name) \
+	engine->globalObject().setProperty(#js_func_name, engine->newFunction(full_impl_handler_func_name));
+
 bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 {
 	debug(LOG_WZ, "Loading functions for engine %p, script %s", static_cast<void *>(engine), scriptName.toUtf8().constData());
@@ -4319,169 +3928,169 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	engine->globalObject().setProperty("Upgrades", upgrades, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Register functions to the script engine here
-	engine->globalObject().setProperty("_", engine->newFunction(js_translate)); // WZAPI
-	engine->globalObject().setProperty("dump", engine->newFunction(js_dump));
-	engine->globalObject().setProperty("syncRandom", engine->newFunction(js_syncRandom)); // WZAPI
-	engine->globalObject().setProperty("label", engine->newFunction(js_getObject)); // deprecated // scripting_engine
-	engine->globalObject().setProperty("getObject", engine->newFunction(js_getObject)); // scripting_engine
-	engine->globalObject().setProperty("addLabel", engine->newFunction(js_addLabel)); // scripting_engine
-	engine->globalObject().setProperty("removeLabel", engine->newFunction(js_removeLabel)); // scripting_engine
-	engine->globalObject().setProperty("getLabel", engine->newFunction(js_getLabel)); // scripting_engine
-	engine->globalObject().setProperty("enumLabels", engine->newFunction(js_enumLabels)); // scripting_engine
-	engine->globalObject().setProperty("enumGateways", engine->newFunction(js_enumGateways));
-	engine->globalObject().setProperty("enumTemplates", engine->newFunction(js_enumTemplates));
-	engine->globalObject().setProperty("makeTemplate", engine->newFunction(js_makeTemplate)); // WZAPI
-	engine->globalObject().setProperty("setAlliance", engine->newFunction(js_setAlliance)); // WZAPI
-	engine->globalObject().setProperty("sendAllianceRequest", engine->newFunction(js_sendAllianceRequest)); // WZAPI
-	engine->globalObject().setProperty("setAssemblyPoint", engine->newFunction(js_setAssemblyPoint)); // WZAPI
-	engine->globalObject().setProperty("setSunPosition", engine->newFunction(js_setSunPosition)); // WZAPI
-	engine->globalObject().setProperty("setSunIntensity", engine->newFunction(js_setSunIntensity)); // WZAPI
-	engine->globalObject().setProperty("setWeather", engine->newFunction(js_setWeather)); // WZAPI
-	engine->globalObject().setProperty("setSky", engine->newFunction(js_setSky)); // WZAPI
-	engine->globalObject().setProperty("cameraSlide", engine->newFunction(js_cameraSlide)); // WZAPI
-	engine->globalObject().setProperty("cameraTrack", engine->newFunction(js_cameraTrack)); // WZAPI
-	engine->globalObject().setProperty("cameraZoom", engine->newFunction(js_cameraZoom)); // WZAPI
-	engine->globalObject().setProperty("resetArea", engine->newFunction(js_resetLabel)); // deprecated // scripting_engine
-	engine->globalObject().setProperty("resetLabel", engine->newFunction(js_resetLabel)); // scripting_engine
-	engine->globalObject().setProperty("addSpotter", engine->newFunction(js_addSpotter)); // WZAPI
-	engine->globalObject().setProperty("removeSpotter", engine->newFunction(js_removeSpotter)); // WZAPI
-	engine->globalObject().setProperty("syncRequest", engine->newFunction(js_syncRequest)); // WZAPI
-	engine->globalObject().setProperty("replaceTexture", engine->newFunction(js_replaceTexture)); // WZAPI
-	engine->globalObject().setProperty("changePlayerColour", engine->newFunction(js_changePlayerColour)); // WZAPI
-	engine->globalObject().setProperty("setHealth", engine->newFunction(js_setHealth)); // WZAPI
-	engine->globalObject().setProperty("useSafetyTransport", engine->newFunction(js_useSafetyTransport)); // WZAPI
-	engine->globalObject().setProperty("restoreLimboMissionData", engine->newFunction(js_restoreLimboMissionData)); // WZAPI
-	engine->globalObject().setProperty("getMultiTechLevel", engine->newFunction(js_getMultiTechLevel)); // WZAPI
-	engine->globalObject().setProperty("setCampaignNumber", engine->newFunction(js_setCampaignNumber)); // WZAPI
-	engine->globalObject().setProperty("getMissionType", engine->newFunction(js_getMissionType));
-	engine->globalObject().setProperty("getRevealStatus", engine->newFunction(js_getRevealStatus));
-	engine->globalObject().setProperty("setRevealStatus", engine->newFunction(js_setRevealStatus)); // WZAPI
-	engine->globalObject().setProperty("autoSave", engine->newFunction(js_autoSave)); // WZAPI
+	JS_REGISTER_FUNC_NAME(_, JS_FUNC_IMPL_NAME(translate)); // WZAPI
+	JS_REGISTER_FUNC(dump);
+	JS_REGISTER_FUNC(syncRandom); // WZAPI
+	JS_REGISTER_FUNC_NAME(label, JS_FUNC_IMPL_NAME(getObject)); // deprecated // scripting_engine
+	JS_REGISTER_FUNC(getObject); // scripting_engine
+	JS_REGISTER_FUNC(addLabel); // scripting_engine
+	JS_REGISTER_FUNC(removeLabel); // scripting_engine
+	JS_REGISTER_FUNC(getLabel); // scripting_engine
+	JS_REGISTER_FUNC(enumLabels); // scripting_engine
+	JS_REGISTER_FUNC(enumGateways);
+	JS_REGISTER_FUNC(enumTemplates);
+	JS_REGISTER_FUNC(makeTemplate); // WZAPI
+	JS_REGISTER_FUNC(setAlliance); // WZAPI
+	JS_REGISTER_FUNC(sendAllianceRequest); // WZAPI
+	JS_REGISTER_FUNC(setAssemblyPoint); // WZAPI
+	JS_REGISTER_FUNC(setSunPosition); // WZAPI
+	JS_REGISTER_FUNC(setSunIntensity); // WZAPI
+	JS_REGISTER_FUNC(setWeather); // WZAPI
+	JS_REGISTER_FUNC(setSky); // WZAPI
+	JS_REGISTER_FUNC(cameraSlide); // WZAPI
+	JS_REGISTER_FUNC(cameraTrack); // WZAPI
+	JS_REGISTER_FUNC(cameraZoom); // WZAPI
+	JS_REGISTER_FUNC_NAME(resetArea, JS_FUNC_IMPL_NAME(resetLabel)); // deprecated // scripting_engine
+	JS_REGISTER_FUNC(resetLabel); // scripting_engine
+	JS_REGISTER_FUNC(addSpotter); // WZAPI
+	JS_REGISTER_FUNC(removeSpotter); // WZAPI
+	JS_REGISTER_FUNC(syncRequest); // WZAPI
+	JS_REGISTER_FUNC(replaceTexture); // WZAPI
+	JS_REGISTER_FUNC(changePlayerColour); // WZAPI
+	JS_REGISTER_FUNC(setHealth); // WZAPI
+	JS_REGISTER_FUNC(useSafetyTransport); // WZAPI
+	JS_REGISTER_FUNC(restoreLimboMissionData); // WZAPI
+	JS_REGISTER_FUNC(getMultiTechLevel); // WZAPI
+	JS_REGISTER_FUNC(setCampaignNumber); // WZAPI
+	JS_REGISTER_FUNC(getMissionType);
+	JS_REGISTER_FUNC(getRevealStatus);
+	JS_REGISTER_FUNC(setRevealStatus); // WZAPI
+	JS_REGISTER_FUNC(autoSave); // WZAPI
 
 	// horrible hacks follow -- do not rely on these being present!
-	engine->globalObject().setProperty("hackNetOff", engine->newFunction(js_hackNetOff)); // WZAPI
-	engine->globalObject().setProperty("hackNetOn", engine->newFunction(js_hackNetOn)); // WZAPI
-	engine->globalObject().setProperty("hackAddMessage", engine->newFunction(js_hackAddMessage)); // WZAPI
-	engine->globalObject().setProperty("hackRemoveMessage", engine->newFunction(js_hackRemoveMessage)); // WZAPI
-	engine->globalObject().setProperty("objFromId", engine->newFunction(js_objFromId));
-	engine->globalObject().setProperty("hackGetObj", engine->newFunction(js_hackGetObj)); // WZAPI
-	engine->globalObject().setProperty("hackChangeMe", engine->newFunction(js_hackChangeMe)); // WZAPI
-	engine->globalObject().setProperty("hackAssert", engine->newFunction(js_hackAssert)); // WZAPI
-	engine->globalObject().setProperty("hackMarkTiles", engine->newFunction(js_hackMarkTiles)); // WZAPI
-	engine->globalObject().setProperty("receiveAllEvents", engine->newFunction(js_receiveAllEvents)); // WZAPI
-	engine->globalObject().setProperty("hackDoNotSave", engine->newFunction(js_hackDoNotSave)); // WZAPI
-	engine->globalObject().setProperty("hackPlayIngameAudio", engine->newFunction(js_hackPlayIngameAudio)); // WZAPI
-	engine->globalObject().setProperty("hackStopIngameAudio", engine->newFunction(js_hackStopIngameAudio)); // WZAPI
+	JS_REGISTER_FUNC(hackNetOff); // WZAPI
+	JS_REGISTER_FUNC(hackNetOn); // WZAPI
+	JS_REGISTER_FUNC(hackAddMessage); // WZAPI
+	JS_REGISTER_FUNC(hackRemoveMessage); // WZAPI
+	JS_REGISTER_FUNC(objFromId);
+	JS_REGISTER_FUNC(hackGetObj); // WZAPI
+	JS_REGISTER_FUNC(hackChangeMe); // WZAPI
+	JS_REGISTER_FUNC(hackAssert); // WZAPI
+	JS_REGISTER_FUNC(hackMarkTiles); // WZAPI
+	JS_REGISTER_FUNC(receiveAllEvents); // WZAPI
+	JS_REGISTER_FUNC(hackDoNotSave); // WZAPI
+	JS_REGISTER_FUNC(hackPlayIngameAudio); // WZAPI
+	JS_REGISTER_FUNC(hackStopIngameAudio); // WZAPI
 
 	// General functions -- geared for use in AI scripts
-	engine->globalObject().setProperty("debug", engine->newFunction(js_debug));
-	engine->globalObject().setProperty("console", engine->newFunction(js_console)); // WZAPI
-	engine->globalObject().setProperty("clearConsole", engine->newFunction(js_clearConsole)); // WZAPI
-	engine->globalObject().setProperty("structureIdle", engine->newFunction(js_structureIdle)); // WZAPI
-	engine->globalObject().setProperty("enumStruct", engine->newFunction(js_enumStruct)); // WZAPI
-	engine->globalObject().setProperty("enumStructOffWorld", engine->newFunction(js_enumStructOffWorld)); // WZAPI
-	engine->globalObject().setProperty("enumDroid", engine->newFunction(js_enumDroid)); // WZAPI
-	engine->globalObject().setProperty("enumGroup", engine->newFunction(js_enumGroup)); // scripting_engine
-	engine->globalObject().setProperty("enumFeature", engine->newFunction(js_enumFeature)); // WZAPI
-	engine->globalObject().setProperty("enumBlips", engine->newFunction(js_enumBlips)); // WZAPI
-	engine->globalObject().setProperty("enumSelected", engine->newFunction(js_enumSelected)); // WZAPI
-	engine->globalObject().setProperty("enumResearch", engine->newFunction(js_enumResearch)); // WZAPI
-	engine->globalObject().setProperty("enumRange", engine->newFunction(js_enumRange)); // WZAPI
-	engine->globalObject().setProperty("enumArea", engine->newFunction(js_enumArea)); // scripting_engine
-	engine->globalObject().setProperty("getResearch", engine->newFunction(js_getResearch)); // WZAPI
-	engine->globalObject().setProperty("pursueResearch", engine->newFunction(js_pursueResearch)); // WZAPI
-	engine->globalObject().setProperty("findResearch", engine->newFunction(js_findResearch)); // WZAPI
-	engine->globalObject().setProperty("distBetweenTwoPoints", engine->newFunction(js_distBetweenTwoPoints)); // WZAPI
-	engine->globalObject().setProperty("newGroup", engine->newFunction(js_newGroup)); // scripting_engine
-	engine->globalObject().setProperty("groupAddArea", engine->newFunction(js_groupAddArea)); // scripting_engine
-	engine->globalObject().setProperty("groupAddDroid", engine->newFunction(js_groupAddDroid)); // scripting_engine
-	engine->globalObject().setProperty("groupAdd", engine->newFunction(js_groupAdd)); // scripting_engine
-	engine->globalObject().setProperty("groupSize", engine->newFunction(js_groupSize)); // scripting_engine
-	engine->globalObject().setProperty("orderDroidLoc", engine->newFunction(js_orderDroidLoc)); // WZAPI
-	engine->globalObject().setProperty("playerPower", engine->newFunction(js_playerPower)); // WZAPI
-	engine->globalObject().setProperty("queuedPower", engine->newFunction(js_queuedPower)); // WZAPI
-	engine->globalObject().setProperty("isStructureAvailable", engine->newFunction(js_isStructureAvailable)); // WZAPI
-	engine->globalObject().setProperty("pickStructLocation", engine->newFunction(js_pickStructLocation)); // WZAPI
-	engine->globalObject().setProperty("droidCanReach", engine->newFunction(js_droidCanReach)); // WZAPI
-	engine->globalObject().setProperty("propulsionCanReach", engine->newFunction(js_propulsionCanReach)); // WZAPI
-	engine->globalObject().setProperty("terrainType", engine->newFunction(js_terrainType)); // WZAPI
-	engine->globalObject().setProperty("orderDroidBuild", engine->newFunction(js_orderDroidBuild)); // WZAPI
-	engine->globalObject().setProperty("orderDroidObj", engine->newFunction(js_orderDroidObj)); // WZAPI
-	engine->globalObject().setProperty("orderDroid", engine->newFunction(js_orderDroid)); // WZAPI
-	engine->globalObject().setProperty("buildDroid", engine->newFunction(js_buildDroid)); // WZAPI
-	engine->globalObject().setProperty("addDroid", engine->newFunction(js_addDroid)); // WZAPI
-	engine->globalObject().setProperty("addDroidToTransporter", engine->newFunction(js_addDroidToTransporter)); // WZAPI
-	engine->globalObject().setProperty("addFeature", engine->newFunction(js_addFeature)); // WZAPI
-	engine->globalObject().setProperty("componentAvailable", engine->newFunction(js_componentAvailable)); // WZAPI
-	engine->globalObject().setProperty("isVTOL", engine->newFunction(js_isVTOL)); // WZAPI
-	engine->globalObject().setProperty("safeDest", engine->newFunction(js_safeDest)); // WZAPI
-	engine->globalObject().setProperty("activateStructure", engine->newFunction(js_activateStructure)); // WZAPI
-	engine->globalObject().setProperty("chat", engine->newFunction(js_chat)); // WZAPI
-	engine->globalObject().setProperty("addBeacon", engine->newFunction(js_addBeacon)); // WZAPI
-	engine->globalObject().setProperty("removeBeacon", engine->newFunction(js_removeBeacon)); // WZAPI
-	engine->globalObject().setProperty("getDroidProduction", engine->newFunction(js_getDroidProduction)); // WZAPI
-	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit)); // WZAPI
-	engine->globalObject().setProperty("getExperienceModifier", engine->newFunction(js_getExperienceModifier)); // WZAPI
-	engine->globalObject().setProperty("setDroidLimit", engine->newFunction(js_setDroidLimit)); // WZAPI
-	engine->globalObject().setProperty("setCommanderLimit", engine->newFunction(js_setCommanderLimit)); // deprecated!!
-	engine->globalObject().setProperty("setConstructorLimit", engine->newFunction(js_setConstructorLimit)); // deprecated!!
-	engine->globalObject().setProperty("setExperienceModifier", engine->newFunction(js_setExperienceModifier)); // WZAPI
-	engine->globalObject().setProperty("getWeaponInfo", engine->newFunction(js_getWeaponInfo)); // deprecated!!
-	engine->globalObject().setProperty("enumCargo", engine->newFunction(js_enumCargo)); // WZAPI
+	JS_REGISTER_FUNC(debug);
+	JS_REGISTER_FUNC(console); // WZAPI
+	JS_REGISTER_FUNC(clearConsole); // WZAPI
+	JS_REGISTER_FUNC(structureIdle); // WZAPI
+	JS_REGISTER_FUNC(enumStruct); // WZAPI
+	JS_REGISTER_FUNC(enumStructOffWorld); // WZAPI
+	JS_REGISTER_FUNC(enumDroid); // WZAPI
+	JS_REGISTER_FUNC(enumGroup); // scripting_engine
+	JS_REGISTER_FUNC(enumFeature); // WZAPI
+	JS_REGISTER_FUNC(enumBlips); // WZAPI
+	JS_REGISTER_FUNC(enumSelected); // WZAPI
+	JS_REGISTER_FUNC(enumResearch); // WZAPI
+	JS_REGISTER_FUNC(enumRange); // WZAPI
+	JS_REGISTER_FUNC(enumArea); // scripting_engine
+	JS_REGISTER_FUNC(getResearch); // WZAPI
+	JS_REGISTER_FUNC(pursueResearch); // WZAPI
+	JS_REGISTER_FUNC(findResearch); // WZAPI
+	JS_REGISTER_FUNC(distBetweenTwoPoints); // WZAPI
+	JS_REGISTER_FUNC(newGroup); // scripting_engine
+	JS_REGISTER_FUNC(groupAddArea); // scripting_engine
+	JS_REGISTER_FUNC(groupAddDroid); // scripting_engine
+	JS_REGISTER_FUNC(groupAdd); // scripting_engine
+	JS_REGISTER_FUNC(groupSize); // scripting_engine
+	JS_REGISTER_FUNC(orderDroidLoc); // WZAPI
+	JS_REGISTER_FUNC(playerPower); // WZAPI
+	JS_REGISTER_FUNC(queuedPower); // WZAPI
+	JS_REGISTER_FUNC(isStructureAvailable); // WZAPI
+	JS_REGISTER_FUNC(pickStructLocation); // WZAPI
+	JS_REGISTER_FUNC(droidCanReach); // WZAPI
+	JS_REGISTER_FUNC(propulsionCanReach); // WZAPI
+	JS_REGISTER_FUNC(terrainType); // WZAPI
+	JS_REGISTER_FUNC(orderDroidBuild); // WZAPI
+	JS_REGISTER_FUNC(orderDroidObj); // WZAPI
+	JS_REGISTER_FUNC(orderDroid); // WZAPI
+	JS_REGISTER_FUNC(buildDroid); // WZAPI
+	JS_REGISTER_FUNC(addDroid); // WZAPI
+	JS_REGISTER_FUNC(addDroidToTransporter); // WZAPI
+	JS_REGISTER_FUNC(addFeature); // WZAPI
+	JS_REGISTER_FUNC(componentAvailable); // WZAPI
+	JS_REGISTER_FUNC(isVTOL); // WZAPI
+	JS_REGISTER_FUNC(safeDest); // WZAPI
+	JS_REGISTER_FUNC(activateStructure); // WZAPI
+	JS_REGISTER_FUNC(chat); // WZAPI
+	JS_REGISTER_FUNC(addBeacon); // WZAPI
+	JS_REGISTER_FUNC(removeBeacon); // WZAPI
+	JS_REGISTER_FUNC(getDroidProduction); // WZAPI
+	JS_REGISTER_FUNC(getDroidLimit); // WZAPI
+	JS_REGISTER_FUNC(getExperienceModifier); // WZAPI
+	JS_REGISTER_FUNC(setDroidLimit); // WZAPI
+	JS_REGISTER_FUNC(setCommanderLimit); // deprecated!!
+	JS_REGISTER_FUNC(setConstructorLimit); // deprecated!!
+	JS_REGISTER_FUNC(setExperienceModifier); // WZAPI
+	JS_REGISTER_FUNC(getWeaponInfo); // deprecated!!
+	JS_REGISTER_FUNC(enumCargo); // WZAPI
 
 	// Functions that operate on the current player only
-	engine->globalObject().setProperty("centreView", engine->newFunction(js_centreView)); // WZAPI
-	engine->globalObject().setProperty("playSound", engine->newFunction(js_playSound)); // WZAPI
-	engine->globalObject().setProperty("gameOverMessage", engine->newFunction(js_gameOverMessage)); // WZAPI
+	JS_REGISTER_FUNC(centreView); // WZAPI
+	JS_REGISTER_FUNC(playSound); // WZAPI
+	JS_REGISTER_FUNC(gameOverMessage); // WZAPI
 
 	// Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
-	engine->globalObject().setProperty("setStructureLimits", engine->newFunction(js_setStructureLimits)); // WZAPI
-	engine->globalObject().setProperty("applyLimitSet", engine->newFunction(js_applyLimitSet)); // WZAPI
-	engine->globalObject().setProperty("setMissionTime", engine->newFunction(js_setMissionTime)); // WZAPI
-	engine->globalObject().setProperty("getMissionTime", engine->newFunction(js_getMissionTime)); // WZAPI
-	engine->globalObject().setProperty("setReinforcementTime", engine->newFunction(js_setReinforcementTime)); // WZAPI
-	engine->globalObject().setProperty("completeResearch", engine->newFunction(js_completeResearch)); // WZAPI
-	engine->globalObject().setProperty("completeAllResearch", engine->newFunction(js_completeAllResearch)); // WZAPI
-	engine->globalObject().setProperty("enableResearch", engine->newFunction(js_enableResearch)); // WZAPI
-	engine->globalObject().setProperty("setPower", engine->newFunction(js_setPower)); // WZAPI
-	engine->globalObject().setProperty("setPowerModifier", engine->newFunction(js_setPowerModifier)); // WZAPI
-	engine->globalObject().setProperty("setPowerStorageMaximum", engine->newFunction(js_setPowerStorageMaximum)); // WZAPI
-	engine->globalObject().setProperty("extraPowerTime", engine->newFunction(js_extraPowerTime)); // WZAPI
-	engine->globalObject().setProperty("setTutorialMode", engine->newFunction(js_setTutorialMode)); // WZAPI
-	engine->globalObject().setProperty("setDesign", engine->newFunction(js_setDesign)); // WZAPI
-	engine->globalObject().setProperty("enableTemplate", engine->newFunction(js_enableTemplate)); // WZAPI
-	engine->globalObject().setProperty("removeTemplate", engine->newFunction(js_removeTemplate)); // WZAPI
-	engine->globalObject().setProperty("setMiniMap", engine->newFunction(js_setMiniMap)); // WZAPI
-	engine->globalObject().setProperty("setReticuleButton", engine->newFunction(js_setReticuleButton)); // WZAPI
-	engine->globalObject().setProperty("setReticuleFlash", engine->newFunction(js_setReticuleFlash)); // WZAPI
-	engine->globalObject().setProperty("showReticuleWidget", engine->newFunction(js_showReticuleWidget)); // WZAPI
-	engine->globalObject().setProperty("showInterface", engine->newFunction(js_showInterface)); // WZAPI
-	engine->globalObject().setProperty("hideInterface", engine->newFunction(js_hideInterface)); // WZAPI
-	engine->globalObject().setProperty("addReticuleButton", engine->newFunction(js_removeReticuleButton)); // deprecated!!
-	engine->globalObject().setProperty("removeReticuleButton", engine->newFunction(js_removeReticuleButton)); // deprecated!!
-	engine->globalObject().setProperty("enableStructure", engine->newFunction(js_enableStructure)); // WZAPI
-	engine->globalObject().setProperty("makeComponentAvailable", engine->newFunction(js_makeComponentAvailable)); // WZAPI
-	engine->globalObject().setProperty("enableComponent", engine->newFunction(js_enableComponent)); // WZAPI
-	engine->globalObject().setProperty("allianceExistsBetween", engine->newFunction(js_allianceExistsBetween)); // WZAPI
-	engine->globalObject().setProperty("removeStruct", engine->newFunction(js_removeStruct)); // WZAPI // deprecated!!
-	engine->globalObject().setProperty("removeObject", engine->newFunction(js_removeObject)); // WZAPI
-	engine->globalObject().setProperty("setScrollParams", engine->newFunction(js_setScrollLimits)); // deprecated!!
-	engine->globalObject().setProperty("setScrollLimits", engine->newFunction(js_setScrollLimits)); // WZAPI
-	engine->globalObject().setProperty("getScrollLimits", engine->newFunction(js_getScrollLimits));
-	engine->globalObject().setProperty("addStructure", engine->newFunction(js_addStructure)); // WZAPI
-	engine->globalObject().setProperty("getStructureLimit", engine->newFunction(js_getStructureLimit)); // WZAPI
-	engine->globalObject().setProperty("countStruct", engine->newFunction(js_countStruct)); // WZAPI
-	engine->globalObject().setProperty("countDroid", engine->newFunction(js_countDroid)); // WZAPI
-	engine->globalObject().setProperty("loadLevel", engine->newFunction(js_loadLevel)); // WZAPI
-	engine->globalObject().setProperty("setDroidExperience", engine->newFunction(js_setDroidExperience)); // WZAPI
-	engine->globalObject().setProperty("donateObject", engine->newFunction(js_donateObject)); // WZAPI
-	engine->globalObject().setProperty("donatePower", engine->newFunction(js_donatePower)); // WZAPI
-	engine->globalObject().setProperty("setNoGoArea", engine->newFunction(js_setNoGoArea)); // WZAPI
-	engine->globalObject().setProperty("startTransporterEntry", engine->newFunction(js_startTransporterEntry)); // WZAPI
-	engine->globalObject().setProperty("setTransporterExit", engine->newFunction(js_setTransporterExit)); // WZAPI
-	engine->globalObject().setProperty("setObjectFlag", engine->newFunction(js_setObjectFlag)); // WZAPI
-	engine->globalObject().setProperty("fireWeaponAtLoc", engine->newFunction(js_fireWeaponAtLoc)); // WZAPI
-	engine->globalObject().setProperty("fireWeaponAtObj", engine->newFunction(js_fireWeaponAtObj)); // WZAPI
+	JS_REGISTER_FUNC(setStructureLimits); // WZAPI
+	JS_REGISTER_FUNC(applyLimitSet); // WZAPI
+	JS_REGISTER_FUNC(setMissionTime); // WZAPI
+	JS_REGISTER_FUNC(getMissionTime); // WZAPI
+	JS_REGISTER_FUNC(setReinforcementTime); // WZAPI
+	JS_REGISTER_FUNC(completeResearch); // WZAPI
+	JS_REGISTER_FUNC(completeAllResearch); // WZAPI
+	JS_REGISTER_FUNC(enableResearch); // WZAPI
+	JS_REGISTER_FUNC(setPower); // WZAPI
+	JS_REGISTER_FUNC(setPowerModifier); // WZAPI
+	JS_REGISTER_FUNC(setPowerStorageMaximum); // WZAPI
+	JS_REGISTER_FUNC(extraPowerTime); // WZAPI
+	JS_REGISTER_FUNC(setTutorialMode); // WZAPI
+	JS_REGISTER_FUNC(setDesign); // WZAPI
+	JS_REGISTER_FUNC(enableTemplate); // WZAPI
+	JS_REGISTER_FUNC(removeTemplate); // WZAPI
+	JS_REGISTER_FUNC(setMiniMap); // WZAPI
+	JS_REGISTER_FUNC(setReticuleButton); // WZAPI
+	JS_REGISTER_FUNC(setReticuleFlash); // WZAPI
+	JS_REGISTER_FUNC(showReticuleWidget); // WZAPI
+	JS_REGISTER_FUNC(showInterface); // WZAPI
+	JS_REGISTER_FUNC(hideInterface); // WZAPI
+	JS_REGISTER_FUNC_NAME(addReticuleButton, JS_FUNC_IMPL_NAME(removeReticuleButton)); // deprecated!!
+	JS_REGISTER_FUNC(removeReticuleButton); // deprecated!!
+	JS_REGISTER_FUNC(enableStructure); // WZAPI
+	JS_REGISTER_FUNC(makeComponentAvailable); // WZAPI
+	JS_REGISTER_FUNC(enableComponent); // WZAPI
+	JS_REGISTER_FUNC(allianceExistsBetween); // WZAPI
+	JS_REGISTER_FUNC(removeStruct); // WZAPI // deprecated!!
+	JS_REGISTER_FUNC(removeObject); // WZAPI
+	JS_REGISTER_FUNC_NAME(setScrollParams, JS_FUNC_IMPL_NAME(setScrollLimits)); // deprecated!!
+	JS_REGISTER_FUNC(setScrollLimits); // WZAPI
+	JS_REGISTER_FUNC(getScrollLimits);
+	JS_REGISTER_FUNC(addStructure); // WZAPI
+	JS_REGISTER_FUNC(getStructureLimit); // WZAPI
+	JS_REGISTER_FUNC(countStruct); // WZAPI
+	JS_REGISTER_FUNC(countDroid); // WZAPI
+	JS_REGISTER_FUNC(loadLevel); // WZAPI
+	JS_REGISTER_FUNC(setDroidExperience); // WZAPI
+	JS_REGISTER_FUNC(donateObject); // WZAPI
+	JS_REGISTER_FUNC(donatePower); // WZAPI
+	JS_REGISTER_FUNC(setNoGoArea); // WZAPI
+	JS_REGISTER_FUNC(startTransporterEntry); // WZAPI
+	JS_REGISTER_FUNC(setTransporterExit); // WZAPI
+	JS_REGISTER_FUNC(setObjectFlag); // WZAPI
+	JS_REGISTER_FUNC(fireWeaponAtLoc); // WZAPI
+	JS_REGISTER_FUNC(fireWeaponAtObj); // WZAPI
 
 	// Set some useful constants
 	setSpecifiedGlobalVariables(wzapi::getUsefulConstants());
