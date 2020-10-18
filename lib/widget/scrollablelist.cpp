@@ -1,4 +1,5 @@
 #include "scrollablelist.h"
+#include "lib/framework/input.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
 static const auto SCROLLBAR_WIDTH = 15;
@@ -69,4 +70,10 @@ void ScrollableListWidget::updateLayout()
 		child->setGeometry(0, currentTop, listView.width(), child->height());
 		currentTop += child->height();
 	}
+}
+
+bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+{
+	scrollBar.incrementPosition(-getMouseWheelSpeed().y * 20);
+	return WIDGET::processClickRecursive(psContext, key, wasPressed);
 }

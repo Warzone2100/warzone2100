@@ -36,6 +36,13 @@ uint16_t ScrollBarWidget::position() const
 	return slider->pos;
 }
 
+void ScrollBarWidget::incrementPosition(int32_t amount)
+{
+	auto pos = amount + slider->pos;
+	CLIP(pos, 0, slider->numStops);
+	slider->pos = pos;
+}
+
 void ScrollBarWidget::setScrollableSize(uint16_t value)
 {
 	scrollableSize = value;

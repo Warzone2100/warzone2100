@@ -35,6 +35,7 @@ public:
 	uint16_t position() const;
 	void setScrollableSize(uint16_t value);
 	void setViewSize(uint16_t value);
+	void incrementPosition(int32_t amount);
 
 protected:
 	void geometryChanged() override;

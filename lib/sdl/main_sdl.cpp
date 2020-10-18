@@ -159,6 +159,7 @@ static INPUT_STATE aKeyState[KEY_MAXSCAN];		// NOTE: SDL_NUM_SCANCODES is the ma
 /* The current location of the mouse */
 static Uint16 mouseXPos = 0;
 static Uint16 mouseYPos = 0;
+static Vector2i mouseWheelSpeed;
 static bool mouseInWindow = true;
 
 /* How far the mouse has to move to start a drag */
@@ -877,6 +878,7 @@ void inputNewFrame(void)
 		}
 	}
 	mousePresses.clear();
+	mouseWheelSpeed = Vector2i(0, 0);
 }
 
 /*!
@@ -931,6 +933,11 @@ Uint16 mouseY(void)
 bool wzMouseInWindow()
 {
 	return mouseInWindow;
+}
+
+Vector2i const& getMouseWheelSpeed()
+{
+	return mouseWheelSpeed;
 }
 
 Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code)
@@ -1133,6 +1140,8 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
  */
 static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 {
+	mouseWheelSpeed += Vector2i(wheel->x, wheel->y);
+
 	if (wheel->x > 0 || wheel->y > 0)
 	{
 		aMouseState[MOUSE_WUP].state = KEY_PRESSED;
