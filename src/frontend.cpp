@@ -658,18 +658,20 @@ bool runOptionsMenu()
 	case FRONTEND_HYPERLINK:
 		{
 			char cmdrun[2048] = {0};
+			int retcode = -1;
 			#ifdef WZ_OS_LINUX
 			snprintf(cmdrun, 2048, "xdg-open %s", PHYSFS_getWriteDir());
-			system(cmdrun);
+			retcode = system(cmdrun);
 			#endif
 			#ifdef WZ_OS_WIN32
 			snprintf(cmdrun, 2048, "explorer %s", PHYSFS_getWriteDir());
-			system(cmdrun);
+			retcode = system(cmdrun);
 			#endif
 			#ifdef WZ_OS_MAC
 			snprintf(cmdrun, 2048, "open %s", PHYSFS_getWriteDir());
-			system(cmdrun);
+			retcode = system(cmdrun);
 			#endif
+			debug(LOG_NEVER, "Opened configuration directory [%s], exited with code %d", cmdrun, retcode);
 		}
 	default:
 		break;
