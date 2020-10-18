@@ -843,10 +843,18 @@ static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
+void drawBlueBoxInset(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
+{
+	pie_BoxFill(x, y, x + w, y + h, WZCOL_MENU_BORDER);
+	pie_BoxFill(x + 1, y + 1, x + w - 1, y + h - 1, WZCOL_MENU_BACKGROUND);
+}
+
+/**
+ * Same as drawBlueBoxInset, but the rectangle is overflown by one pixel.
+ */
 void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 {
-	pie_BoxFill(x - 1, y - 1, x + w + 1, y + h + 1, WZCOL_MENU_BORDER);
-	pie_BoxFill(x, y , x + w, y + h, WZCOL_MENU_BACKGROUND);
+	drawBlueBoxInset(x - 1, y - 1, w + 2, h + 2);
 }
 
 static void freeAutoSaveSlot(const char *path)

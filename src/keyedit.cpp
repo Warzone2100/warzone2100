@@ -85,6 +85,7 @@ struct DisplayKeyMapData {
 // variables
 
 static KEY_MAPPING	*selectedKeyMap;
+static bool maxKeyMapNameWidthDirty = true;
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -164,6 +165,7 @@ static bool pushedKeyCombo(KEY_CODE subkey)
 		psMapping->altMetaKeyCode = alt;
 	}
 	selectedKeyMap = nullptr;	// unhighlight selected .
+	maxKeyMapNameWidthDirty = true;
 	return true;
 }
 
@@ -208,6 +210,7 @@ bool runInGameKeyMapEditor(unsigned id)
 		keyInitMappings(true);
 		widgDelete(psWScreen, KM_FORM); // readd the widgets
 		startInGameKeyMapEditor(false);
+		maxKeyMapNameWidthDirty = true;
 	}
 	else if (id >= KM_START && id <= KM_END)
 	{
@@ -292,6 +295,41 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 	return true;
 }
 
+std::vector<KEY_MAPPING *> getVisibleMappings()
+{
+	std::vector<KEY_MAPPING *> mappings;
+	for (KEY_MAPPING &mapping : keyMappings)
+	{
+		if (mapping.status != KEYMAP__DEBUG && mapping.status != KEYMAP___HIDE)
+		{
+			mappings.push_back(&mapping);
+		}
+	}
+
+	return mappings;
+}
+
+static uint16_t getMaxKeyMapNameWidth()
+{
+	static uint16_t max = 0;
+
+	if (maxKeyMapNameWidthDirty) {
+		max = 0;
+		WzText displayText;
+		char sKey[MAX_STR_LENGTH];
+
+		for (auto mapping: getVisibleMappings()) {
+			keyMapToString(sKey, mapping);
+			displayText.setText(sKey, font_regular);
+			max = MAX(max, displayText.width());
+		}
+
+		maxKeyMapNameWidthDirty = false;
+	}
+
+	return max;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
 static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -318,7 +356,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 	else
 	{
-		drawBlueBox(x, y, w, h);
+		drawBlueBoxInset(x, y, w, h);
 	}
 
 	// draw name
@@ -332,10 +370,9 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
 	{
 		bindingTextColor = WZCOL_YELLOW;
-		sstrcat(sKey, " (numpad)");
 	}
 	data.cache.wzBindingText.setText(sKey, font_regular);
-	data.cache.wzBindingText.render(x + 364, y + (psWidget->height() / 2) + 3, bindingTextColor);
+	data.cache.wzBindingText.render(x + psWidget->width() - getMaxKeyMapNameWidth() - 2, y + (psWidget->height() / 2) + 3, bindingTextColor);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -410,14 +447,8 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 	}
 
 	//Put the buttons on it
-	std::vector<KEY_MAPPING *> mappings;
-	for (KEY_MAPPING &m : keyMappings)
-	{
-		if (m.status != KEYMAP__DEBUG && m.status != KEYMAP___HIDE)  // if it's not a debug mapping..
-		{
-			mappings.push_back(&m);
-		}
-	}
+	auto mappings = getVisibleMappings();
+
 	std::sort(mappings.begin(), mappings.end(), [](KEY_MAPPING *a, KEY_MAPPING *b) {
 		return a->name < b->name;
 	});
