@@ -21,7 +21,7 @@ function switchOffMG()
 
 function useLasersForCyborgControl()
 {
-	return getResearch("R-Struc-Research-Upgrade08").done;
+	return getResearch("R-Struc-Research-Upgrade07").done;
 }
 
 function playerCyborgRatio(player)
@@ -125,14 +125,14 @@ function adaptToMap()
 {
 	const HIGH_TECH_LEVEL = getMultiTechLevel() >= 2;
 	const FRIEND_COUNT = playerAlliance(true).length;
+	var highOil = highOilMap();
 	var personal;
 	var chosen;
 
 	//Map to allow a higher chance for a specific personality to be chosen.
-	if (HIGH_TECH_LEVEL || highOilMap())
+	if (HIGH_TECH_LEVEL || highOil)
 	{
 		personal = [
-			"AM", "AM",
 			"AR", "AR", "AR", "AR", "AR",
 			"AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB", "AB",
 			"AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC", "AC",
@@ -156,6 +156,17 @@ function adaptToMap()
 	while ((subPersonalities[chosen].canPlayBySelf === false) && (FRIEND_COUNT === 0))
 	{
 		chosen = personal[random(personal.length)];
+	}
+
+	//Offensive is better for high oil
+	if (highOil)
+	{
+		subPersonalities[chosen].resPath = "offensive";
+
+		if ((HIGH_TECH_LEVEL || (baseType >= CAMP_BASE)) && random(100) < 33)
+		{
+			subPersonalities[chosen].resPath = "air";
+		}
 	}
 
 	return chosen;

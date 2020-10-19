@@ -371,8 +371,12 @@ function initCobraVars()
 		startTime: 0,
 		endTime: 0,
 		wasVtol: false,
-		disabled: false,
+		disabled: !highOilMap(), //disabled by default unless it's a high oil map
 	};
+	enemyUsedElectronicWarfare = false;
+	startAttacking = false;
+	lastShuffleTime = 0;
+	forceDerrickBuildDefense = false;
 }
 
 //Attempt to workaround a bug with pickStructLocation() failing to find valid locations

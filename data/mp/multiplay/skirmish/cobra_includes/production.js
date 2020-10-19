@@ -335,7 +335,7 @@ function buildAttacker(id)
 			//This helps keep things competitive among a player rushing with small/medium bodies.
 
 			var body;
-			var bodySwitchTime = highOilMap() ? 600000 : 900000;
+			var bodySwitchTime = 900000;
 			if (gameTime < bodySwitchTime && random(100) < 75)
 			{
 				if (!(getRealPower() >= PRODUCTION_POWER + 200) && random(100) < 60)
@@ -512,8 +512,8 @@ function attackerCountsGood(recycle)
 		recycle = false;
 	}
 
-	var highOilExtras = highOilMap() ? 10 : 0;
-	var recycleExtras = recycle ? 8 : 0;
+	var highOilExtras = highOilMap() ? 15 : 0;
+	var recycleExtras = recycle ? 20 : 0;
 
 	var amountOfAttackers = groupSize(attackGroup) + groupSize(artilleryGroup) + groupSize(vtolGroup);
 
