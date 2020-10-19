@@ -82,6 +82,7 @@ const weaponStats =
 		// Extra things to research on this path, even if they don't lead to any new stuff
 		extras: [
 			"R-Wpn-MG-Damage08",
+			"R-Wpn-MG-ROF03",
 		],
 	},
 	flamers:
@@ -151,6 +152,7 @@ const weaponStats =
 		extras: [
 			"R-Wpn-Cannon-Damage03",
 			"R-Wpn-Cannon-ROF01",
+			"R-Wpn-Cannon-Damage05",
 			"R-Wpn-Cannon-Accuracy01",
 			"R-Wpn-Cannon-ROF02",
 			"R-Wpn-Cannon-Accuracy02",
@@ -202,6 +204,7 @@ const weaponStats =
 		extras: [
 			"R-Wpn-Cannon-Damage03",
 			"R-Wpn-Cannon-ROF01",
+			"R-Wpn-Cannon-Damage05",
 			"R-Wpn-Cannon-Accuracy01",
 			"R-Wpn-Cannon-ROF02",
 			"R-Wpn-Cannon-Accuracy02",
@@ -347,13 +350,13 @@ const weaponStats =
 			{ res: "R-Cyborg-Hvywpn-A-T", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-A-T", ] }, // scourge super
 		],
 		extras: [
-			"R-Wpn-Rocket-Accuracy01",
 			"R-Wpn-Rocket-ROF02",
 			"R-Wpn-Rocket-Damage03",
+			"R-Wpn-Rocket-Accuracy01",
 			"R-Wpn-Rocket-ROF03",
+			"R-Wpn-Rocket-Damage09",
 			"R-Wpn-Rocket-Accuracy02",
 			"R-Wpn-RocketSlow-Accuracy02",
-			"R-Wpn-Rocket-Damage09",
 			"R-Wpn-Missile-Damage01",
 			"R-Wpn-Missile-ROF01",
 			"R-Wpn-Missile-Accuracy02",
@@ -410,13 +413,13 @@ const weaponStats =
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-Rocket-Accuracy01",
 			"R-Wpn-Rocket-ROF02",
 			"R-Wpn-Rocket-Damage03",
+			"R-Wpn-Rocket-Accuracy01",
 			"R-Wpn-Rocket-ROF03",
+			"R-Wpn-Rocket-Damage09",
 			"R-Wpn-Rocket-Accuracy02",
 			"R-Wpn-RocketSlow-Accuracy02",
-			"R-Wpn-Rocket-Damage09",
 			"R-Wpn-Missile-Damage01",
 			"R-Wpn-Missile-ROF01",
 			"R-Wpn-Missile-Accuracy02",
@@ -481,13 +484,13 @@ const weaponStats =
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-Rocket-Accuracy01",
 			"R-Wpn-Rocket-ROF02",
 			"R-Wpn-Rocket-Damage03",
+			"R-Wpn-Rocket-Accuracy01",
 			"R-Wpn-Rocket-ROF03",
+			"R-Wpn-Rocket-Damage09",
 			"R-Wpn-Rocket-Accuracy02",
 			"R-Wpn-RocketSlow-Accuracy02",
-			"R-Wpn-Rocket-Damage09",
 			"R-Wpn-Missile-Damage01",
 			"R-Wpn-Missile-ROF01",
 			"R-Wpn-Missile-Accuracy02",
@@ -519,9 +522,9 @@ const weaponStats =
 			{ res: "R-Cyborg-Hvywpn-PulseLsr", body: "CyborgHeavyBody", prop: "CyborgLegs", weapons: [ "Cyb-Hvywpn-PulseLsr", ] }, // pulse super
 		],
 		extras: [
-			"R-Wpn-Energy-Accuracy01",
 			"R-Wpn-Energy-ROF01",
 			"R-Wpn-Energy-Damage01",
+			"R-Wpn-Energy-Accuracy01",
 			"R-Wpn-Energy-ROF03",
 			"R-Wpn-Energy-Damage03",
 		],
@@ -553,8 +556,11 @@ const weaponStats =
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-Cannon-ROF02",
 			"R-Wpn-Cannon-Damage03",
+			"R-Wpn-Cannon-ROF01",
+			"R-Wpn-Cannon-Damage05",
+			"R-Wpn-Cannon-Accuracy01",
+			"R-Wpn-Cannon-ROF02",
 			"R-Wpn-Cannon-Accuracy02",
 			"R-Wpn-Cannon-ROF06",
 			"R-Wpn-Cannon-Damage09",
@@ -638,9 +644,9 @@ const weaponStats =
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-Energy-Accuracy01",
 			"R-Wpn-Energy-ROF01",
 			"R-Wpn-Energy-Damage01",
+			"R-Wpn-Energy-Accuracy01",
 			"R-Wpn-Energy-ROF03",
 			"R-Wpn-Energy-Damage03",
 		],

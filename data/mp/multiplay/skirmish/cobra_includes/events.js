@@ -51,10 +51,15 @@ function eventStructureBuilt(structure, droid)
 		{
 			orderDroidBuild(droid, DORDER_BUILD, structures.derrick, nearbyOils[0].x, nearbyOils[0].y);
 		}
-		else
+		else if (getRealPower() > -SUPER_LOW_POWER)
 		{
+			var high = highOilMap();
 			//Probably most oils are close to base anyway on high oil maps
-			if ((getRealPower() < Math.floor(SUPER_LOW_POWER / 2)) || (highOilMap() && (gameTime < 240000)))
+			if (high && (gameTime < 240000))
+			{
+				return;
+			}
+			if (!high && !forceDerrickBuildDefense && countStruct(structures.derrick) < (averageOilPerPlayer() - 4))
 			{
 				return;
 			}
@@ -95,6 +100,10 @@ function eventDroidBuilt(droid, struct)
 		if (!isEngineer && baseType === CAMP_CLEAN && getMultiTechLevel() > 1 && enumGroup(oilGrabberGroup).length === 0)
 		{
 			groupAdd(oilGrabberGroup, droid); //Fix for crazy T2/T3/T4 no-bases config
+		}
+		else if (!isEngineer && (gameTime < 120000) && !highOilMap() && enumGroup(constructGroup).length >= 2 && enumGroup(oilGrabberGroup).length < 2)
+		{
+			groupAdd(oilGrabberGroup, droid); //Get oil faster
 		}
 		else if (enumGroup(constructGroup).length < MIN_TRUCKS_PER_GROUP)
 		{
@@ -197,6 +206,12 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
+	if ((gameTime > 420000) || !highOilMap())
+	{
+		startAttacking = true; //well, they want to play so...
+	}
+
+
 	if (attacker.player !== me && !allianceExistsBetween(attacker.player, victim.player))
 	{
 		grudgeCount[attacker.player] += (victim.type === STRUCTURE) ? 20 : 5;
@@ -215,6 +230,7 @@ function eventAttacked(victim, attacker)
 		var units = nearbyUnits.filter(function(dr) {
 			return (dr.id !== victim.id &&
 				dr.group !== retreatGroup &&
+				!isConstruct(dr.id, false) &&
 				((isVTOL(dr) && droidReady(dr.id)) ||
 				(!repairDroid(dr.id)) && droidCanReach(dr, attacker.x, attacker.y))
 			);
@@ -254,6 +270,10 @@ function eventObjectTransfer(obj, from)
 				eventDroidBuilt(obj, null);
 			}
 		}
+	}
+	else if (!allianceExistsBetween(obj.player, me))
+	{
+		enemyUsedElectronicWarfare = true;
 	}
 }
 
@@ -295,14 +315,23 @@ function eventStructureReady(structure)
 
 function eventBeacon(x, y, from, to, message)
 {
+	if (beacon.disabled)
+	{
+		return;
+	}
 	if (!allianceExistsBetween(from, me))
 	{
 		return;
 	}
 
+	if (from !== me)
+	{
+		startAttacking = true; // might as well attack now
+	}
+
 	beacon.x = x;
 	beacon.y = y;
 	beacon.startTime = gameTime;
-	beacon.endTime = gameTime + 60000;
+	beacon.endTime = gameTime + 50000;
 	beacon.wasVtol = isDefined(message) && (message === BEACON_VTOL_ALARM);
 }

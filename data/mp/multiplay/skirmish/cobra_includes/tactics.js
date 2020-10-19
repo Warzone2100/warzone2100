@@ -23,6 +23,19 @@ function isPlasmaCannon(weaponName)
 	return isDefined(weaponName) && (weaponName.name === "Laser4-PlasmaCannon");
 }
 
+//Check if the area around the active beacon has anything worth investigating.
+function beaconAreaHasEnemies()
+{
+	if (beacon.disabled || (beacon.endTime < gameTime))
+	{
+		return false;
+	}
+
+	const MAX_SCAN_RANGE = 15;
+
+	return enumRange(beacon.x, beacon.y, MAX_SCAN_RANGE, ENEMIES, false).length !== 0;
+}
+
 //Modified from Nullbot.
 //Returns true if the VTOL has ammo. False if empty.
 //NOTE: Expects the .armed property being passed.
@@ -97,10 +110,16 @@ function repairDroid(droidID, force)
 		return true; //pretend it is busy
 	}
 
-	const SAFE_EXTREME_OIL_IGNORE_NUM = 100;
 	var highOil = highOilMap();
 
-	var forceRepairPercent = highOil ? 45 : 55; //Be more brave on super high oil maps.
+	if (droid.health < 15 || (highOil && gameTime < 600000))
+	{
+		return false;
+	}
+
+	const SAFE_EXTREME_OIL_IGNORE_NUM = 80;
+
+	var forceRepairPercent = 50;
 	const EXPERIENCE_DIVISOR = 26;
 	const HEALTH_TO_REPAIR = forceRepairPercent + Math.floor(droid.experience / EXPERIENCE_DIVISOR);
 
@@ -241,7 +260,9 @@ function artilleryTactics()
 			for (var i = 0; i < ARTI_LEN; ++i)
 			{
 				//Send artillery to help at beacon, if possible
-				if ((beacon.endTime > gameTime) && (i < Math.floor(ARTI_LEN * subPersonalities[personality].beaconArtilleryPercentage)))
+				if ((beacon.endTime > gameTime) &&
+					beaconAreaHasEnemies() &&
+					(i < Math.floor(ARTI_LEN * subPersonalities[personality].beaconArtilleryPercentage)))
 				{
 					if (!beacon.wasVtol || (beacon.wasVtol && ARTILLERY_UNITS[i].weapons[0].canHitAir))
 					{
@@ -303,7 +324,9 @@ function groundTactics()
 				var id = UNITS[i].id;
 
 				//Send most of army to beacon explicitly
-				if ((beacon.endTime > gameTime) && (i < Math.floor(UNITS.length * subPersonalities[personality].beaconArmyPercentage)))
+				if ((beacon.endTime > gameTime) &&
+					beaconAreaHasEnemies() &&
+					(i < Math.floor(UNITS.length * subPersonalities[personality].beaconArmyPercentage)))
 				{
 					if (!beacon.wasVtol || (beacon.wasVtol && UNITS[i].weapons[0].canHitAir))
 					{
@@ -347,6 +370,10 @@ function recycleForHover()
 	if (currently_dead || !attackerCountsGood(true))
 	{
 		return;
+	}
+	if (highOilMap() && (!startAttacking || (gameTime < 900000) || (countDroid(DROID_ANY, me) < 75)))
+	{
+		return; //wait
 	}
 
 	const MIN_FACTORY = 1;
@@ -543,10 +570,17 @@ function enemyUnitsInBase()
 	//most harmful player anyway so this should suffice for defense.
 	if (enemyUnits.length > 0)
 	{
+		if (!startAttacking &&
+			enemyUnits[0].droidType !== DROID_CONSTRUCT &&
+			enemyUnits[0].droidType !== DROID_SENSOR)
+		{
+			startAttacking = enemyUnits[0].player !== scavengerPlayer;
+		}
+
 		targetPlayer(enemyUnits[0].player); //play rough.
 
 		//Send a beacon that enemies are in my base area! Allied Cobra AI can interpret and help friends through this drop.
-		if (beacon.endTime < gameTime)
+		if (!beacon.disabled && (beacon.endTime < gameTime))
 		{
 			var mes = isVTOL(enemyUnits[0]) ? BEACON_VTOL_ALARM : undefined;
 			addBeacon(enemyUnits[0].x, enemyUnits[0].y, ALLIES, mes);
@@ -560,7 +594,7 @@ function enemyUnitsInBase()
 	return false;
 }
 
-//Donate my power to allies if I have too much.
+//Donate my power to allies if I have too much. Only to other AI.
 function donateSomePower()
 {
 	if (currently_dead)
@@ -572,69 +606,132 @@ function donateSomePower()
 		return;
 	}
 
-	const ALLY_PLAYERS = playerAlliance(true);
+	const ALLY_PLAYERS = playerAlliance(true).filter(function(player) { return playerData[player].isAI; });
 	const LEN = ALLY_PLAYERS.length;
 	const ALIVE_ENEMIES = findLivingEnemies().length;
 
 	if (LEN > 0 && ALIVE_ENEMIES > 0)
 	{
 		var ally = ALLY_PLAYERS[random(LEN)];
-		if (getRealPower() > 100 && (getRealPower() > Math.floor(1.5 * getRealPower(ally))))
+		if (getRealPower() > 300 && (getRealPower() > Math.floor(1.5 * getRealPower(ally))))
 		{
 			donatePower(playerPower(me) / 2, ally);
 		}
 	}
 }
 
-//Does Cobra believe it is winning or could win?
-function confidenceThreshold()
+//Have Cobra sit and wait and build up a small army before starting attack tactics.
+function haveEnoughUnitsForFirstAttack()
 {
-	if (gameTime < 480000)
+	if (!startAttacking)
 	{
-		return true;
+		var amountOfAttackers = groupSize(attackGroup) + groupSize(artilleryGroup) + groupSize(vtolGroup);
+		// These amounts of units will build up in base if unprovoked
+		startAttacking = amountOfAttackers >= (highOilMap() ? 120 : 20);
 	}
 
-	const DERR_COUNT = countStruct(structures.derrick);
-	const DROID_COUNT = countDroid(DROID_ANY);
-	var points = 0;
+	return startAttacking;
+}
 
-	points += DERR_COUNT >= Math.floor(countStruct(structures.derrick, getMostHarmfulPlayer()) / 2) ? 2 : -2;
-	points += countDroid(DROID_ANY, getMostHarmfulPlayer()) < DROID_COUNT + 16 ? 2 : -2;
-
-	if ((DROID_COUNT < 20 && (countDroid(DROID_ANY, getMostHarmfulPlayer()) > DROID_COUNT + 5)))
+function baseShuffleDefensePattern()
+{
+	if (gameTime < lastShuffleTime + 20000)
 	{
-		points -= 3;
+		return; //Prevent the dreadful jitter movement defense pattern.
 	}
 
-	if (points < 0 && random(100) < 25)
+	var attackers = enumGroup(attackGroup).concat(enumGroup(artilleryGroup)).concat(enumGroup(vtolGroup));
+	if (attackers.length === 0)
 	{
-		points = -points;
+		return;
 	}
 
-	return points > -1;
+	var area = cobraBaseArea();
+	var quad = [
+		{x1: area.x1, x2: area.x2, y1: area.y1, y2: area.y1 + 20,},
+		{x1: area.x1, x2: area.x2 + 20, y1: area.y1, y2: area.y2,},
+		{x1: area.x2 - 20, x2: area.x2, y1: area.y1, y2: area.y2,},
+		{x1: area.x1, x2: area.x2, y1: area.y2 - 20, y2: area.y2,},
+	];
+	var sector = quad[random(quad.length)];
+	var x = sector.x1 + random(sector.x2);
+	var y = sector.y1 + random(sector.y2);
+
+	if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, x, y))
+	{
+		return;
+	}
+
+	if (x <= 2)
+	{
+		x = 2;
+	}
+	else if (x >= mapWidth - 2)
+	{
+		x = mapWidth - 2;
+	}
+	if (y <= 2)
+	{
+		y = 2;
+	}
+	else if (y >= mapHeight - 2)
+	{
+		y = mapHeight - 2;
+	}
+	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
+	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
+	for (var i = 0, len = attackers.length; i < len; ++i)
+	{
+		orderDroidLoc(attackers[i], DORDER_SCOUT, x, y);
+	}
+
+	lastShuffleTime = gameTime;
+}
+
+function lowOilDefensePattern()
+{
+	if (gameTime < lastShuffleTime + 40000)
+	{
+		return; //visit a derrick for a bit... maybe
+	}
+
+	var derricks = enumStruct(me, structures.derrick);
+	if (derricks.length === 0)
+	{
+		return;
+	}
+
+	var attackers = enumGroup(attackGroup).concat(enumGroup(artilleryGroup)).concat(enumGroup(vtolGroup));
+	if (attackers.length === 0)
+	{
+		return;
+	}
+
+	for (var i = 0, len = attackers.length; i < len; ++i)
+	{
+		var derr = derricks[random(derricks.length)];
+		orderDroidLoc(attackers[i], DORDER_SCOUT, derr.x, derr.y);
+	}
+
+	lastShuffleTime = gameTime;
 }
 
 //Check if our forces are large enough to take on the most harmful player.
-//If it thinks it is losing it will go to a defensive research path.
 function shouldCobraAttack()
 {
-	if (enemyUnitsInBase() || confidenceThreshold())
+	if (enemyUnitsInBase() || haveEnoughUnitsForFirstAttack())
 	{
-		//Ok, restore the previous research path if necessary
-		if (isDefined(prevResPath))
-		{
-			subPersonalities[personality].resPath = prevResPath;
-			prevResPath = undefined;
-		}
-
 		return true;
 	}
-	else
+	else if (!startAttacking)
 	{
-		if (subPersonalities[personality].resPath !== "defensive")
+		if (highOilMap())
 		{
-			prevResPath = subPersonalities[personality].resPath;
-			subPersonalities[personality].resPath = "defensive";
+			baseShuffleDefensePattern();
+		}
+		else
+		{
+			lowOilDefensePattern();
 		}
 	}
 
@@ -655,7 +752,7 @@ function retreatTactics()
 			return obj.type === DROID;
 		});
 
-		if (enumRange(droid.x, droid.y, SCAN_RADIUS, ENEMIES, true).length > friends.length)
+		if (enumRange(droid.x, droid.y, SCAN_RADIUS, ENEMIES, !highOilMap()).length > friends.length)
 		{
 			orderDroidLoc(droid, DORDER_MOVE, MY_BASE.x, MY_BASE.y);
 		}
