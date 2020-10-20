@@ -663,7 +663,6 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	imageDrawBatch.draw(true);
 
-	PIELIGHT colour = WZCOL_TEXT_BRIGHT;
 	auto unusedDerricks = countPlayerUnusedDerricks();
 
 	auto showNeedMessage = true;
@@ -676,7 +675,6 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	else if (Avail < 0)
 	{
 		cache.wzNeedText.setText(_("Need more resources!"), font_small);
-		colour = WZCOL_RED;
 	}
 	else
 	{
@@ -692,7 +690,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// draw text value
-	cache.wzText.render(iX, iY, colour);
+	cache.wzText.render(iX, iY, Avail < 0 ? WZCOL_RED : WZCOL_TEXT_BRIGHT);
 }
 
 IntFancyButton::IntFancyButton(WIDGET *parent)
