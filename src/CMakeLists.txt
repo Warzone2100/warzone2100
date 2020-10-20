@@ -655,7 +655,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 				endif()
 			endif()
 			install(CODE "
-				if(\"\${CMAKE_BUILD_TYPE}\" STREQUAL \"Debug\")
+				if(\"\${CMAKE_INSTALL_CONFIG_NAME}\" MATCHES \"^([Dd][Ee][Bb][Uu][Gg])$\")
 					set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/debug/bin/\")
 				else()
 					set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/bin/\")
