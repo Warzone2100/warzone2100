@@ -19,8 +19,8 @@
 
 #if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
 
+#include "gfx_api_vk_sdl.h" // Must be prior to frame.h include
 #include "lib/framework/frame.h"
-#include "gfx_api_vk_sdl.h"
 #include <SDL_vulkan.h>
 #include <SDL_version.h>
 
