@@ -880,8 +880,8 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 		}
 		setProjectileDestination(psProj, closestCollisionObject);  // We hit something.
 
-		// Buildings and terrain cannot be penetrated and we need a penetrating weapon, and projectile should not have already travelled further than maximum range.
-		if (closestCollisionObject != nullptr && closestCollisionObject->type == OBJ_DROID && psStats->penetrate && currentDistance < proj_GetLongRange(psStats, psProj->player))
+		// Buildings and terrain cannot be penetrated and we need a penetrating weapon, and projectile should not have already travelled further than 1.25 * maximum range.
+		if (closestCollisionObject != nullptr && closestCollisionObject->type == OBJ_DROID && psStats->penetrate && currentDistance < static_cast<int>(1.25 * proj_GetLongRange(psStats, psProj->player)))
 		{
 			WEAPON asWeap;
 			asWeap.nStat = psStats - asWeaponStats;
