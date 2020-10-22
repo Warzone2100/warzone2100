@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-07-19 10:24\n"
+"PO-Revision-Date: 2020-10-22 05:04\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -1526,12 +1526,12 @@ msgstr "CB érzékelő fejlesztés"
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade Mk2"
-msgstr ""
+msgstr "CB érzékelő fejlesztés Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk3"
-msgstr ""
+msgstr "CB érzékelő fejlesztés Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
@@ -1541,12 +1541,12 @@ msgstr "VTOL CB fejlesztés"
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade Mk2"
-msgstr ""
+msgstr "VTOL CB fejlesztés Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk3"
-msgstr ""
+msgstr "VTOL CB fejlesztés Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
@@ -4029,7 +4029,7 @@ msgstr "Gyártás (F1)"
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/skirmish/rules.js:91
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Gyártás – előbb építsen gyárat"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
@@ -4042,7 +4042,7 @@ msgstr "Kutatás (F2)"
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/skirmish/rules.js:118
 msgid "Research - build research facility first"
-msgstr ""
+msgstr "Kutatás – előbb építsen kutatólétesítményt"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -4059,7 +4059,7 @@ msgstr "Építés (F3)"
 #: data/base/script/tutorial.js:513
 #: data/mp/multiplay/skirmish/rules.js:130
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "Építés – előbb gyártson gyártódroidokat"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
@@ -4072,7 +4072,7 @@ msgstr "Tervezés (F4)"
 #: data/base/script/tutorial.js:514
 #: data/mp/multiplay/skirmish/rules.js:158
 msgid "Design - construct HQ first"
-msgstr ""
+msgstr "Tervezés – előbb építsen főhadiszállást"
 
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/skirmish/rules.js:167
@@ -4083,7 +4083,7 @@ msgstr "Parancsnokok (F6)"
 #: data/base/script/tutorial.js:516
 #: data/mp/multiplay/skirmish/rules.js:171
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "Parancsnokok – előbb gyártson parancsnokokat"
 
 #: data/base/script/rules.js:191
 #: data/base/script/tutorial.js:251
@@ -4131,7 +4131,7 @@ msgstr "A olajkút jelenleg nem termel. Építsen erőművet az olaj villamos en
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "Bal kattintás a villogó építés ikonra"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -4304,7 +4304,7 @@ msgstr "Repülés a Nyugati Szektorba"
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr "Alfa csapat közeledik a célja felé."
+msgstr "Az alfa csapat közeledik a célja felé"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4312,7 +4312,7 @@ msgstr "Szállítási célok a következők:"
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr "Alfa - Nyugati szektor..."
+msgstr "Alfa – Nyugati szektor…"
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
@@ -5532,7 +5532,7 @@ msgstr "Kutatási blokkolt, nem kutatunk semmit."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Alapvető technológia kutatása."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
@@ -5648,7 +5648,7 @@ msgstr "Jelszó begépelés"
 #: lib/netplay/netplay.cpp:1106
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr ""
+msgstr "A szükséges port (%s) nem nyitható ki ezen: (%s)"
 
 #: lib/netplay/netplay.cpp:1110
 msgid "You must manually configure your router & firewall to\n"
@@ -5665,7 +5665,7 @@ msgstr "Játék konfigurált port (%s) korrigálva (%s)\n"
 
 #: lib/netplay/netplay.cpp:1895
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
+msgstr "Nem található UPnP eszköz. Állítsa be a routerét/tűzfalát, hogy kinyissa a 2100-as portot."
 
 #: lib/netplay/netplay.cpp:2555
 #, c-format
@@ -5883,7 +5883,7 @@ msgstr "Légvédelmi hőkép érzékelő"
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
 #: po/custom/fromJson.txt:157
 msgid "Adaptive AI with multiple personalities"
-msgstr ""
+msgstr "Adaptív MI több személyiséggel"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials08.name
@@ -6040,7 +6040,7 @@ msgstr "Fejlett hadviselés"
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[1]
 #: po/custom/fromJson.txt:260
 msgid "Aerodynamic Jump Pack"
-msgstr ""
+msgstr "Aerodinamikai ugrócsomag"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Aerodynamicslab.name
@@ -6155,7 +6155,7 @@ msgstr "Alfa küldetés"
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:482
 msgid "Alpha"
-msgstr ""
+msgstr "Alfa"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
