@@ -111,12 +111,12 @@ struct BUTOFFSET
 static BUTOFFSET ReticuleOffsets[NUMRETBUTS] =  	// Reticule button form relative positions.
 {
 	{43, 47},	// RETBUT_CANCEL,
-	{48, 16},	// RETBUT_FACTORY,
-	{82, 34},	// RETBUT_RESEARCH,
-	{82, 69},	// RETBUT_BUILD,
-	{48, 87},	// RETBUT_DESIGN,
-	{14, 69},	// RETBUT_INTELMAP,
-	{14, 34},	// RETBUT_COMMAND,
+	{47, 15},	// RETBUT_FACTORY,
+	{81, 33},	// RETBUT_RESEARCH,
+	{81, 69},	// RETBUT_BUILD,
+	{47, 87},	// RETBUT_DESIGN,
+	{13, 69},	// RETBUT_INTELMAP,
+	{13, 33},	// RETBUT_COMMAND,
 };
 
 static BUTSTATE ReticuleEnabled[NUMRETBUTS] =  	// Reticule button enable states.
@@ -407,7 +407,7 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 	if (image)
 	{
 		// set the button width/height based on the "normal" image dimensions (preserving the current x, y)
-		button.setGeometry(button.x(), button.y(), image->Width, image->Height);
+		button.setGeometry(button.x(), button.y(), image->Width / 2, image->Height / 2);
 
 		// add a custom hit-testing function that uses a tighter bounding ellipse
 		button.setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool {
@@ -486,11 +486,11 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	{
 		if (psWidget->UserData != RETBUT_CANCEL)
 		{
-			iV_DrawImage(IntImages, IMAGE_RETICULE_GREY, x, y);
+			iV_DrawImage2("image_reticule_grey.png", x, y, psWidget->width(), psWidget->height());
 		}
 		else
 		{
-			iV_DrawImage(IntImages, IMAGE_CANCEL_DOWN, x, y);
+			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
 		}
 		return;
 	}
@@ -502,11 +502,11 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	{
 		if ((DownTime < 1) && (psWidget->UserData != RETBUT_CANCEL))
 		{
-			iV_DrawImage(IntImages, IMAGE_RETICULE_BUTDOWN, x, y);
+			iV_DrawImage2("image_reticule_butdown.png", x, y, psWidget->width(), psWidget->height());
 		}
 		else
 		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y);
+			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
 		}
 		DownTime++;
 		flashing = false;	// stop the reticule from flashing if it was
@@ -517,18 +517,18 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 		{
 			if (((realTime / 250) % 2) != 0)
 			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y);
+				iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
 				flashTime = 0;
 			}
 			else
 			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y);
+				iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
 			}
 			flashTime++;
 		}
 		else
 		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y);
+			iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
 			DownTime = 0;
 		}
 	}
@@ -536,11 +536,11 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	{
 		if (psWidget->UserData == RETBUT_CANCEL)
 		{
-			iV_DrawImage(IntImages, IMAGE_CANCEL_HILIGHT, x, y);
+			iV_DrawImage2("image_cancel_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
 		}
 		else
 		{
-			iV_DrawImage(IntImages, IMAGE_RETICULE_HILIGHT, x, y);
+			iV_DrawImage2("image_reticule_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
 		}
 	}
 	retbutstats[psWidget->UserData].flashTime = flashTime;
