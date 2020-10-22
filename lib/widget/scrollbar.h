@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file
- *  Definitions for scroll bar functions.
+/**
+ * @file
+ * Definitions for scroll bar functions.
  */
 
 #ifndef __INCLUDED_LIB_WIDGET_SCROLLBAR_H__

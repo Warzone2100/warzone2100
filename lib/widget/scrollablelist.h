@@ -17,8 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-/** @file
- *  Definitions for scrollable list functions.
+/**
+ * @file
+ * Definitions for scrollable list functions.
  */
 
 #ifndef __INCLUDED_LIB_WIDGET_SCROLLABLELIST_H__
