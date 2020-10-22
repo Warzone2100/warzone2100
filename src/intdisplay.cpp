@@ -1150,7 +1150,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		break;
 
 	case WIDG_SLIDER:
-		if (((W_SLIDER *)psWidget)->state & SLD_HILITE)
+		if (((W_SLIDER *)psWidget)->isHighlighted())
 		{
 			Hilight = true;
 		}
@@ -2297,7 +2297,7 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_SLIDER *Slider = (W_SLIDER *)psWidget;
 
-	if (Slider->state & SLD_HILITE)
+	if (Slider->isHighlighted())
 	{
 		if (keyDown(KEY_LEFTARROW))
 		{
