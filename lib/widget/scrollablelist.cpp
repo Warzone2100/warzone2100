@@ -101,3 +101,13 @@ bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KE
 	scrollBar.incrementPosition(-getMouseWheelSpeed().y * 20);
 	return WIDGET::processClickRecursive(psContext, key, wasPressed);
 }
+
+void ScrollableListWidget::enableScroll()
+{
+	scrollBar.enable();
+}
+
+void ScrollableListWidget::disableScroll()
+{
+	scrollBar.disable();
+}
