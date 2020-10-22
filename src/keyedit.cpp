@@ -66,6 +66,17 @@
 #define KM_ENTRYW			(FRONTEND_BOTFORMW - 80)
 #define KM_ENTRYH			(16)
 
+class KeyMapForm : public IntFormAnimated
+{
+public:
+	KeyMapForm(WIDGET *parent, bool ingame);
+	void checkPushedKeyCombo();
+	bool pushedKeyCombo(KEY_CODE subkey);
+
+private:
+	ScrollableListWidget *keyMapList;
+	void unhighlightSelected();
+};
 
 struct DisplayKeyMapCache {
 	WzText wzNameText;
@@ -89,86 +100,6 @@ static bool maxKeyMapNameWidthDirty = true;
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
-
-static bool pushedKeyMap(UDWORD key)
-{
-	selectedKeyMap = static_cast<DisplayKeyMapData *>(widgGetFromID(psWScreen, key)->pUserData)->psMapping;
-	if (selectedKeyMap && selectedKeyMap->status != KEYMAP_ASSIGNABLE)
-	{
-		selectedKeyMap = nullptr;
-		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-
-	}
-
-	return true;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-static bool pushedKeyCombo(KEY_CODE subkey)
-{
-	KEY_CODE	metakey = KEY_IGNORE;
-	KEY_MAPPING	*pExist;
-	KEY_MAPPING	*psMapping;
-	KEY_CODE	alt;
-
-	// check for
-	// alt
-	alt = (KEY_CODE)0;
-	if (keyDown(KEY_RALT) || keyDown(KEY_LALT))
-	{
-		metakey = KEY_LALT;
-		alt = KEY_RALT;
-	}
-	// ctrl
-	else if (keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL))
-	{
-		metakey = KEY_LCTRL;
-		alt = KEY_RCTRL;
-	}
-	// shift
-	else if (keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT))
-	{
-		metakey = KEY_LSHIFT;
-		alt = KEY_RSHIFT;
-	}
-	// meta (cmd)
-	else if (keyDown(KEY_RMETA) || keyDown(KEY_LMETA))
-	{
-		metakey = KEY_LMETA;
-		alt = KEY_RMETA;
-	}
-
-	// check if bound to a fixed combo.
-	pExist = keyFindMapping(metakey,  subkey);
-	if (pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
-	{
-		selectedKeyMap = nullptr;	// unhighlight selected.
-		return false;
-	}
-
-	/* Clear down mappings using these keys... But only if it isn't unassigned */
-	keyReAssignMapping(metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN);
-
-	/* Try and see if its there already - damn well should be! */
-	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);
-
-	/* Cough if it's not there */
-	ASSERT_OR_RETURN(false, psMapping != nullptr, "Trying to patch a non-existent function mapping - whoop whoop!!!");
-
-	/* Now alter it to the new values */
-	psMapping->metaKeyCode = metakey;
-	psMapping->subKeyCode = subkey;
-	// was "=="
-	psMapping->status = KEYMAP_ASSIGNABLE; //must be
-	if (alt)
-	{
-		psMapping->altMetaKeyCode = alt;
-	}
-	selectedKeyMap = nullptr;	// unhighlight selected .
-	maxKeyMapNameWidthDirty = true;
-	return true;
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 static KEY_CODE scanKeyBoardForBinding()
 {
@@ -212,18 +143,10 @@ bool runInGameKeyMapEditor(unsigned id)
 		startInGameKeyMapEditor(false);
 		maxKeyMapNameWidthDirty = true;
 	}
-	else if (id >= KM_START && id <= KM_END)
-	{
-		pushedKeyMap(id);
-	}
 
-	if (selectedKeyMap)
+	if (auto kmForm = (KeyMapForm *)widgGetFromID(psWScreen, KM_FORM))
 	{
-		KEY_CODE kc = scanKeyBoardForBinding();
-		if (kc)
-		{
-			pushedKeyCombo(kc);
-		}
+		kmForm->checkPushedKeyCombo();
 	}
 	return false;
 }
@@ -246,18 +169,10 @@ bool runKeyMapEditor()
 		widgDelete(psWScreen, FRONTEND_BACKDROP); // readd the widgets
 		startKeyMapEditor(false);
 	}
-	else if (id >= KM_START && id <= KM_END)
-	{
-		pushedKeyMap(id);
-	}
 
-	if (selectedKeyMap)
+	if (auto kmForm = (KeyMapForm *)widgGetFromID(psWScreen, KM_FORM))
 	{
-		KEY_CODE kc = scanKeyBoardForBinding();
-		if (kc)
-		{
-			pushedKeyCombo(kc);
-		}
+		kmForm->checkPushedKeyCombo();
 	}
 
 	widgDisplayScreen(psWScreen);				// show the widgets currently running
@@ -383,92 +298,7 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 		loadKeyMap();									// get the current mappings.
 	}
 
-	IntFormAnimated *kmForm = new IntFormAnimated(parent, false);
-	kmForm->id = KM_FORM;
-	ScrollableListWidget *kmList = new ScrollableListWidget(kmForm);
-	if (!ingame)
-	{
-		kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);
-		}));
-		kmList->setGeometry(52, 10, KM_ENTRYW, 26 * KM_ENTRYH);
-
-		addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
-			    8, 5,
-			    iV_GetImageWidth(FrontImages, IMAGE_RETURN),
-			    iV_GetImageHeight(FrontImages, IMAGE_RETURN),
-			    _("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-
-		addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
-			    11, 45,
-			    iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
-			    iV_GetImageHeight(FrontImages, IMAGE_KEYMAP_DEFAULT),
-			    _("Select Default"),
-			    IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
-	}
-	else
-	{
-		// Text versions for in-game where image resources are not available
-		kmForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H + 10);
-		}));
-		kmList->setGeometry(52, 10, KM_ENTRYW, 24 * KM_ENTRYH);
-
-		W_BUTINIT sButInit;
-
-		sButInit.formID		= KM_FORM;
-		sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
-		sButInit.width		= 600;
-		sButInit.FontID		= font_regular;
-		sButInit.x		= 0;
-		sButInit.height		= 10;
-		sButInit.pDisplay	= displayTextOption;
-		sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-		sButInit.onDelete = [](WIDGET *psWidget) {
-					    assert(psWidget->pUserData != nullptr);
-					    delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-					    psWidget->pUserData = nullptr;
-				    };
-
-		sButInit.id			= KM_RETURN;
-		sButInit.y			= KM_H - 32;
-		sButInit.pText		= _("Resume Game");
-
-		widgAddButton(psWScreen, &sButInit);
-
-		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
-		{
-			sButInit.id			= KM_DEFAULT;
-			sButInit.y			= KM_H - 8;
-			sButInit.pText		= _("Select Default");
-
-			widgAddButton(psWScreen, &sButInit);
-		}
-	}
-
-	//Put the buttons on it
-	auto mappings = getVisibleMappings();
-
-	std::sort(mappings.begin(), mappings.end(), [](KEY_MAPPING *a, KEY_MAPPING *b) {
-		return a->name < b->name;
-	});
-	/* Add our first mapping to the form */
-	/* Now add the others... */
-	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
-	{
-		W_BUTINIT emptyInit;
-		W_BUTTON *button = new W_BUTTON(&emptyInit);
-		button->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
-		button->id = KM_START + (i - mappings.begin());
-		button->displayFunction = displayKeyMap;
-		button->pUserData = new DisplayKeyMapData(*i);
-		button->setOnDelete([](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayKeyMapData *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
-		});
-		kmList->addItem(button);
-	}
+	new KeyMapForm(parent, ingame);
 
 	/* Stop when the right number or when alphabetically last - not sure...! */
 	/* Go home... */
@@ -559,4 +389,189 @@ bool loadKeyMap()
 	}
 	ini.endArray();
 	return true;
+}
+
+KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, false)
+{
+	id = KM_FORM;
+
+	keyMapList = new ScrollableListWidget(this);
+	if (!ingame)
+	{
+		setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);
+		}));
+		keyMapList->setGeometry(52, 10, KM_ENTRYW, 26 * KM_ENTRYH);
+
+		addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
+				8, 5,
+				iV_GetImageWidth(FrontImages, IMAGE_RETURN),
+				iV_GetImageHeight(FrontImages, IMAGE_RETURN),
+				_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+
+		addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
+				11, 45,
+				iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
+				iV_GetImageHeight(FrontImages, IMAGE_KEYMAP_DEFAULT),
+				_("Select Default"),
+				IMAGE_KEYMAP_DEFAULT, IMAGE_KEYMAP_DEFAULT_HI, IMAGE_KEYMAP_DEFAULT_HI);	// default.
+	}
+	else
+	{
+		// Text versions for in-game where image resources are not available
+		setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+			psWidget->setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H + 10);
+		}));
+		keyMapList->setGeometry(52, 10, KM_ENTRYW, 24 * KM_ENTRYH);
+
+		W_BUTINIT sButInit;
+
+		sButInit.formID		= KM_FORM;
+		sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
+		sButInit.width		= KM_W;
+		sButInit.FontID		= font_regular;
+		sButInit.x		= 0;
+		sButInit.height		= 10;
+		sButInit.pDisplay	= displayTextOption;
+		sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
+		sButInit.onDelete = [](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		};
+
+		sButInit.id			= KM_RETURN;
+		sButInit.y			= KM_H - 32;
+		sButInit.pText		= _("Resume Game");
+
+		widgAddButton(psWScreen, &sButInit);
+
+		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
+		{
+			sButInit.id			= KM_DEFAULT;
+			sButInit.y			= KM_H - 8;
+			sButInit.pText		= _("Select Default");
+
+			widgAddButton(psWScreen, &sButInit);
+		}
+	}
+
+	//Put the buttons on it
+	auto mappings = getVisibleMappings();
+
+	std::sort(mappings.begin(), mappings.end(), [](KEY_MAPPING *a, KEY_MAPPING *b) {
+		return a->name < b->name;
+	});
+	/* Add our first mapping to the form */
+	/* Now add the others... */
+	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
+	{
+		W_BUTINIT emptyInit;
+		W_BUTTON *button = new W_BUTTON(&emptyInit);
+		button->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
+		button->id = KM_START + (i - mappings.begin());
+		button->displayFunction = displayKeyMap;
+		button->pUserData = new DisplayKeyMapData(*i);
+		button->setOnDelete([](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayKeyMapData *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		});
+		button->addOnClickHandler([=](W_BUTTON& clickedButton) {
+			auto clickedMapping = static_cast<DisplayKeyMapData *>(clickedButton.pUserData)->psMapping;
+			if (!clickedMapping || clickedMapping->status != KEYMAP_ASSIGNABLE)
+			{
+				audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			} else if (selectedKeyMap == clickedMapping) {
+				unhighlightSelected();
+			} else {
+				keyMapList->disableScroll();
+				selectedKeyMap = clickedMapping;
+			}
+		});
+		keyMapList->addItem(button);
+	}
+}
+
+void KeyMapForm::checkPushedKeyCombo()
+{
+	if (selectedKeyMap)
+	{
+		KEY_CODE kc = scanKeyBoardForBinding();
+		if (kc)
+		{
+			pushedKeyCombo(kc);
+		}
+	}
+}
+
+bool KeyMapForm::pushedKeyCombo(KEY_CODE subkey)
+{
+	KEY_CODE	metakey = KEY_IGNORE;
+	KEY_MAPPING	*pExist;
+	KEY_MAPPING	*psMapping;
+	KEY_CODE	alt;
+
+	// check for
+	// alt
+	alt = (KEY_CODE)0;
+	if (keyDown(KEY_RALT) || keyDown(KEY_LALT))
+	{
+		metakey = KEY_LALT;
+		alt = KEY_RALT;
+	}
+	// ctrl
+	else if (keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL))
+	{
+		metakey = KEY_LCTRL;
+		alt = KEY_RCTRL;
+	}
+	// shift
+	else if (keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT))
+	{
+		metakey = KEY_LSHIFT;
+		alt = KEY_RSHIFT;
+	}
+	// meta (cmd)
+	else if (keyDown(KEY_RMETA) || keyDown(KEY_LMETA))
+	{
+		metakey = KEY_LMETA;
+		alt = KEY_RMETA;
+	}
+
+	// check if bound to a fixed combo.
+	pExist = keyFindMapping(metakey,  subkey);
+	if (pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
+	{
+		unhighlightSelected();
+		return false;
+	}
+
+	/* Clear down mappings using these keys... But only if it isn't unassigned */
+	keyReAssignMapping(metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN);
+
+	/* Try and see if its there already - damn well should be! */
+	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);
+
+	/* Cough if it's not there */
+	ASSERT_OR_RETURN(false, psMapping != nullptr, "Trying to patch a non-existent function mapping - whoop whoop!!!");
+
+	/* Now alter it to the new values */
+	psMapping->metaKeyCode = metakey;
+	psMapping->subKeyCode = subkey;
+	// was "=="
+	psMapping->status = KEYMAP_ASSIGNABLE; //must be
+	if (alt)
+	{
+		psMapping->altMetaKeyCode = alt;
+	}
+	unhighlightSelected();
+	maxKeyMapNameWidthDirty = true;
+	return true;
+}
+
+void KeyMapForm::unhighlightSelected()
+{
+	keyMapList->enableScroll();
+	selectedKeyMap = nullptr;
 }
