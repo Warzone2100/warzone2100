@@ -36,7 +36,7 @@ static void displayScrollBar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	iV_TransBoxFill(x0, y0, x0 + slider->width(), y0 + slider->height());
 
 	auto sliderY = (slider->height() - slider->barSize) * slider->pos / slider->numStops;
-	pie_UniTransBoxFill(x0, y0 + sliderY, x0 + slider->width(), y0 + sliderY + slider->barSize, WZCOL_LBLUE);
+	pie_UniTransBoxFill(x0, y0 + sliderY, x0 + slider->width(), y0 + sliderY + slider->barSize, slider->isEnabled() ? WZCOL_LBLUE : WZCOL_FORM_DISABLE);
 }
 
 ScrollBarWidget::ScrollBarWidget(WIDGET *parent) : WIDGET(parent)
@@ -62,9 +62,11 @@ uint16_t ScrollBarWidget::position() const
 
 void ScrollBarWidget::incrementPosition(int32_t amount)
 {
-	auto pos = amount + slider->pos;
-	CLIP(pos, 0, slider->numStops);
-	slider->pos = pos;
+	if (isEnabled()) {
+		auto pos = amount + slider->pos;
+		CLIP(pos, 0, slider->numStops);
+		slider->pos = pos;
+	}
 }
 
 void ScrollBarWidget::setScrollableSize(uint16_t value)
@@ -83,4 +85,19 @@ void ScrollBarWidget::updateSlider()
 {
 	slider->barSize = viewSize * height() / scrollableSize;
 	slider->numStops = scrollableSize - viewSize;
+}
+
+void ScrollBarWidget::enable()
+{
+	slider->enable();
+}
+
+void ScrollBarWidget::disable()
+{
+	slider->disable();
+}
+
+bool ScrollBarWidget::isEnabled() const
+{
+	return slider->isEnabled();
 }

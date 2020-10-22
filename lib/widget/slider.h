@@ -39,7 +39,10 @@ public:
 	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
 	void setTip(std::string string) override;
+	void enable();
+	void disable();
 	bool isHighlighted() const;
+	bool isEnabled() const;
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider

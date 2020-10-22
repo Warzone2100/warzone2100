@@ -34,7 +34,10 @@ enum SliderState
 	SLD_DRAG = 1 << 0,
 
 	// Slider is hilited
-	SLD_HILITE = 1 << 1
+	SLD_HILITE = 1 << 1,
+
+	// Slider is disabled
+	SLD_DISABLED = 1 << 2
 };
 
 void sliderEnableDrag(bool Enable)
@@ -205,7 +208,7 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 
 void W_SLIDER::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 {
-	if (DragEnabled && geometry().contains(psContext->mx, psContext->my))
+	if (isEnabled() && DragEnabled && geometry().contains(psContext->mx, psContext->my))
 	{
 		dirty = true;
 		state |= SLD_DRAG;
@@ -236,7 +239,22 @@ void W_SLIDER::display(int xOffset, int yOffset)
 	ASSERT(false, "No default implementation exists for sliders");
 }
 
+void W_SLIDER::enable()
+{
+	state &= ~SLD_DISABLED;
+}
+
+void W_SLIDER::disable()
+{
+	state |= SLD_DISABLED;
+}
+
 bool W_SLIDER::isHighlighted() const
 {
 	return (state & SLD_HILITE) != 0;
+}
+
+bool W_SLIDER::isEnabled() const
+{
+	return (state & SLD_DISABLED) == 0;
 }

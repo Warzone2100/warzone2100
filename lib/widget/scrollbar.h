@@ -37,6 +37,9 @@ public:
 	void setScrollableSize(uint16_t value);
 	void setViewSize(uint16_t value);
 	void incrementPosition(int32_t amount);
+	void enable();
+	void disable();
+	bool isEnabled() const;
 
 protected:
 	void geometryChanged() override;

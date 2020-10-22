@@ -38,6 +38,8 @@ public:
 	void run(W_CONTEXT *psContext) override;
 	void addItem(WIDGET *widget);
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	void enableScroll();
+	void disableScroll();
 
 protected:
 	void geometryChanged() override;
