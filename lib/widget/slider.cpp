@@ -28,6 +28,15 @@
 
 static bool DragEnabled = true;
 
+enum SliderState
+{
+	// Slider is being dragged
+	SLD_DRAG = 1 << 0,
+
+	// Slider is hilited
+	SLD_HILITE = 1 << 1
+};
+
 void sliderEnableDrag(bool Enable)
 {
 	DragEnabled = Enable;
@@ -225,4 +234,9 @@ void W_SLIDER::setTip(std::string string)
 void W_SLIDER::display(int xOffset, int yOffset)
 {
 	ASSERT(false, "No default implementation exists for sliders");
+}
+
+bool W_SLIDER::isHighlighted() const
+{
+	return (state & SLD_HILITE) != 0;
 }
