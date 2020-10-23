@@ -30,9 +30,6 @@
 // Utility conversion functions
 BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
 
-/// Dump script-relevant log info to separate file
-void dumpScriptLog(const WzString &scriptName, int me, const std::string &info);
-
 /// Clear all map markers (used by label marking, for instance)
 void clearMarks();
 
