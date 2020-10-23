@@ -155,6 +155,19 @@ public:
 
 	void setSpecifiedGlobalVariables(const nlohmann::json& variables, wzapi::GlobalVariableFlags flags = wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave) override;
 
+	void setSpecifiedGlobalVariable(const std::string& name, const nlohmann::json& value, wzapi::GlobalVariableFlags flags = wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave) override;
+
+private:
+	inline QScriptValue::PropertyFlags toQScriptPropertyFlags(wzapi::GlobalVariableFlags flags)
+	{
+		QScriptValue::PropertyFlags propertyFlags = QScriptValue::Undeletable;
+		if ((flags & wzapi::GlobalVariableFlags::ReadOnly) == wzapi::GlobalVariableFlags::ReadOnly)
+		{
+			propertyFlags |= QScriptValue::ReadOnly;
+		}
+		return propertyFlags;
+	}
+
 public:
 	QScriptEngine * getQScriptEngine() { return engine; }
 
@@ -550,40 +563,6 @@ public:
 #define ALL_PLAYERS -1
 #define ALLIES -2
 #define ENEMIES -3
-
-Vector2i positions[MAX_PLAYERS];
-std::vector<Vector2i> derricks;
-
-void scriptSetStartPos(int position, int x, int y)
-{
-	positions[position].x = x;
-	positions[position].y = y;
-	debug(LOG_SCRIPT, "Setting start position %d to (%d, %d)", position, x, y);
-}
-
-void scriptSetDerrickPos(int x, int y)
-{
-	Vector2i pos(x, y);
-	derricks.push_back(pos);
-}
-
-bool scriptInit()
-{
-	int i;
-
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		scriptSetStartPos(i, 0, 0);
-	}
-	derricks.clear();
-	derricks.reserve(8 * MAX_PLAYERS);
-	return true;
-}
-
-Vector2i getPlayerStartPosition(int player)
-{
-	return positions[player];
-}
 
 // private qtscript bureaucracy
 
@@ -1750,6 +1729,16 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 			return QScriptValue();
 		}
 
+		QScriptValue box(GATEWAY* psGateway, QScriptEngine* engine)
+		{
+			QScriptValue v = engine->newObject();
+			v.setProperty("x1", psGateway->x1, QScriptValue::ReadOnly);
+			v.setProperty("y1", psGateway->y1, QScriptValue::ReadOnly);
+			v.setProperty("x2", psGateway->x2, QScriptValue::ReadOnly);
+			v.setProperty("y2", psGateway->y2, QScriptValue::ReadOnly);
+			return v;
+		}
+
 		template<typename VectorType>
 		QScriptValue box(const std::vector<VectorType>& value, QScriptEngine* engine)
 		{
@@ -1758,6 +1747,19 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 			{
 				VectorType item = value.at(i);
 				result.setProperty(i, box(item, engine));
+			}
+			return result;
+		}
+
+		template<typename ContainedType>
+		QScriptValue box(const std::list<ContainedType>& value, QScriptEngine* engine)
+		{
+			QScriptValue result = engine->newArray(value.size());
+			size_t i = 0;
+			for (auto item : value)
+			{
+				result.setProperty(i, box(item, engine));
+				i++;
 			}
 			return result;
 		}
@@ -1807,6 +1809,11 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 			{
 				return QScriptValue::NullValue;
 			}
+		}
+
+		QScriptValue box(nlohmann::json results, QScriptEngine* engine)
+		{
+			return mapJsonToQScriptValue(engine, results, QScriptValue::PropertyFlags());
 		}
 
 		#include <cstddef>
@@ -1878,6 +1885,14 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 			static QScriptValue JS_FUNC_IMPL_NAME(func_name)(QScriptContext *context, QScriptEngine *engine) \
 			{ \
 				return wrap_(wrapped_func, context, engine); \
+			}
+
+		#define IMPL_JS_FUNC_DEBUGMSGUPDATE(func_name, wrapped_func) \
+			static QScriptValue JS_FUNC_IMPL_NAME(func_name)(QScriptContext *context, QScriptEngine *engine) \
+			{ \
+				QScriptValue retVal = wrap_(wrapped_func, context, engine); \
+				jsDebugMessageUpdate(); \
+				return retVal; \
 			}
 
 		template <typename T>
@@ -2501,11 +2516,7 @@ void qtscript_scripting_instance::setSpecifiedGlobalVariables(const nlohmann::js
 		ASSERT(false, "setSpecifiedGlobalVariables expects a JSON object");
 		return;
 	}
-	QScriptValue::PropertyFlags propertyFlags = QScriptValue::Undeletable;
-	if ((flags & wzapi::GlobalVariableFlags::ReadOnly) == wzapi::GlobalVariableFlags::ReadOnly)
-	{
-		propertyFlags |= QScriptValue::ReadOnly;
-	}
+	QScriptValue::PropertyFlags propertyFlags = toQScriptPropertyFlags(flags);
 	bool markGlobalAsInternal = (flags & wzapi::GlobalVariableFlags::DoNotSave) == wzapi::GlobalVariableFlags::DoNotSave;
 	for (auto it : variables.items())
 	{
@@ -2519,6 +2530,22 @@ void qtscript_scripting_instance::setSpecifiedGlobalVariables(const nlohmann::js
 		{
 			internalNamespace.insert(it.key());
 		}
+	}
+}
+
+void qtscript_scripting_instance::setSpecifiedGlobalVariable(const std::string& name, const nlohmann::json& value, wzapi::GlobalVariableFlags flags /*= GlobalVariableFlags::ReadOnly | GlobalVariableFlags::DoNotSave*/)
+{
+	ASSERT(!name.empty(), "Empty key");
+	QScriptValue::PropertyFlags propertyFlags = toQScriptPropertyFlags(flags);
+	bool markGlobalAsInternal = (flags & wzapi::GlobalVariableFlags::DoNotSave) == wzapi::GlobalVariableFlags::DoNotSave;
+	engine->globalObject().setProperty(
+		QString::fromStdString(name),
+		mapJsonToQScriptValue(engine, value, propertyFlags),
+		propertyFlags
+	);
+	if (markGlobalAsInternal)
+	{
+		internalNamespace.insert(name);
 	}
 }
 
@@ -2606,125 +2633,17 @@ IMPL_EVENT_HANDLER(eventKeyPressed, int, int)
 //
 // All script functions should be prefixed with "js_" then followed by same name as in script.
 
-//-- ## getWeaponInfo(weapon id)
-//--
-//-- Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
-//--
-static QScriptValue js_getWeaponInfo(QScriptContext *context, QScriptEngine *engine)
-{
-	QString id = context->argument(0).toString();
-	int idx = getCompFromName(COMP_WEAPON, QStringToWzString(id));
-	SCRIPT_ASSERT(context, idx >= 0, "No such weapon: %s", id.toUtf8().constData());
-	WEAPON_STATS *psStats = asWeaponStats + idx;
-	QScriptValue info = engine->newObject();
-	info.setProperty("id", id);
-	info.setProperty("name", WzStringToQScriptValue(engine, psStats->name));
-	info.setProperty("impactClass", psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT");
-	info.setProperty("damage", psStats->base.damage);
-	info.setProperty("firePause", psStats->base.firePause);
-	info.setProperty("fireOnMove", psStats->fireOnMove);
-	return QScriptValue(info);
-}
-
-//-- ## resetLabel(label[, filter])
-//--
-//-- Reset the trigger on an label. Next time a unit enters the area, it will trigger
-//-- an area event. Next time an object or a group is seen, it will trigger a seen event.
-//-- Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ALL_PLAYERS by default.
-//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-//-- ## resetArea(label[, filter])
-//-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
-//-- an area event. Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ALL_PLAYERS by default.
-//-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
-//--
+IMPL_JS_FUNC(getWeaponInfo, wzapi::getWeaponInfo)
 IMPL_JS_FUNC(resetLabel, scripting_engine::resetLabel)
-
-//-- ## enumLabels([filter])
-//--
-//-- Returns a string list of labels that exist for this map. The optional filter
-//-- parameter can be used to only return labels of one specific type. (3.2+ only)
-//--
 IMPL_JS_FUNC(enumLabels, scripting_engine::enumLabels)
-
-//-- ## addLabel(object, label)
-//--
-//-- Add a label to a game object. If there already is a label by that name, it is overwritten.
-//-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-//--
 IMPL_JS_FUNC(addLabel, scripting_engine::addLabel)
-
-//-- ## removeLabel(label)
-//--
-//-- Remove a label from the game. Returns the number of labels removed, which should normally be
-//-- either 1 (label found) or 0 (label not found). (3.2+ only)
-//--
 IMPL_JS_FUNC(removeLabel, scripting_engine::removeLabel)
-
-//-- ## getLabel(object)
-//--
-//-- Get a label string belonging to a game object. If the object has multiple labels, only the first
-//-- label found will be returned. If the object has no labels, null is returned.
-//-- This is a relatively slow operation of O(n) algorithmic complexity. (3.2+ only)
-//--
 IMPL_JS_FUNC(getLabel, scripting_engine::getLabelJS)
-
-//-- ## getObject(label | x, y | type, player, id)
-//--
-//-- Fetch something denoted by a label, a map position or its object ID. A label refers to an area,
-//-- a position or a **game object** on the map defined using the map editor and stored
-//-- together with the map. In this case, the only argument is a text label. The function
-//-- returns an object that has a type variable defining what it is (in case this is
-//-- unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA, GROUP or POSITION.
-//-- The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only defined 'x' and 'y'.
-//-- The GROUP type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
-//-- This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
-//-- undefined value is returned. If whatever object the label should point at no longer exists,
-//-- a null value is returned.
-//--
-//-- You can also fetch a STRUCTURE or FEATURE type game object from a given map position (if any).
-//-- This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
-//-- manner, since they do not have a unique placement on map tiles. Finally, you can fetch an object using
-//-- its ID, in which case you need to pass its type, owner and unique object ID. This is an
-//-- operation of O(n) algorithmic complexity. (3.2+ only)
-//--
 IMPL_JS_FUNC(getObject, scripting_engine::getObject)
 
-//-- ## enumBlips(player)
-//--
-//-- Return an array containing all the non-transient radar blips that the given player
-//-- can see. This includes sensors revealed by radar detectors, as well as ECM jammers.
-//-- It does not include units going out of view.
-//--
 IMPL_JS_FUNC(enumBlips, wzapi::enumBlips)
-
-//-- ## enumSelected()
-//--
-//-- Return an array containing all game objects currently selected by the host player. (3.2+ only)
-//--
 IMPL_JS_FUNC(enumSelected, wzapi::enumSelected)
-
-//-- ## enumGateways()
-//--
-//-- Return an array containing all the gateways on the current map. The array contains object with the properties
-//-- x1, y1, x2 and y2. (3.2+ only)
-//--
-static QScriptValue js_enumGateways(QScriptContext *, QScriptEngine *engine)
-{
-	QScriptValue result = engine->newArray(gwNumGateways());
-	int i = 0;
-	for (auto psGateway : gwGetGateways())
-	{
-		QScriptValue v = engine->newObject();
-		v.setProperty("x1", psGateway->x1, QScriptValue::ReadOnly);
-		v.setProperty("y1", psGateway->y1, QScriptValue::ReadOnly);
-		v.setProperty("x2", psGateway->x2, QScriptValue::ReadOnly);
-		v.setProperty("y2", psGateway->y2, QScriptValue::ReadOnly);
-		result.setProperty(i++, v);
-	}
-	return result;
-}
+IMPL_JS_FUNC(enumGateways, wzapi::enumGateways)
 
 //-- ## enumTemplates(player)
 //--
@@ -2743,536 +2662,75 @@ static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *eng
 	return result;
 }
 
-//-- ## enumGroup(group)
-//--
-//-- Return an array containing all the members of a given group.
-//--
 IMPL_JS_FUNC(enumGroup, scripting_engine::enumGroup)
-
-//-- ## newGroup()
-//--
-//-- Allocate a new group. Returns its numerical ID. Deprecated since 3.2 - you should now
-//-- use your own number scheme for groups.
-//--
 IMPL_JS_FUNC(newGroup, scripting_engine::newGroup)
-
-//-- ## activateStructure(structure, [target[, ability]])
-//--
-//-- Activate a special ability on a structure. Currently only works on the lassat.
-//-- The lassat needs a target.
-//--
-IMPL_JS_FUNC(activateStructure, wzapi::activateStructure)
-
-//-- ## findResearch(research, [player])
-//--
-//-- Return list of research items remaining to be researched for the given research item. (3.2+ only)
-//-- (Optional second argument 3.2.3+ only)
-//--
-IMPL_JS_FUNC(findResearch, wzapi::findResearch)
-
-//-- ## pursueResearch(lab, research)
-//--
-//-- Start researching the first available technology on the way to the given technology.
-//-- First parameter is the structure to research in, which must be a research lab. The
-//-- second parameter is the technology to pursue, as a text string as defined in "research.json".
-//-- The second parameter may also be an array of such strings. The first technology that has
-//-- not yet been researched in that list will be pursued.
-//--
-IMPL_JS_FUNC(pursueResearch, wzapi::pursueResearch)
-
-//-- ## getResearch(research[, player])
-//--
-//-- Fetch information about a given technology item, given by a string that matches
-//-- its definition in "research.json". If not found, returns null.
-//--
-IMPL_JS_FUNC(getResearch, wzapi::getResearch)
-
-//-- ## enumResearch()
-//--
-//-- Returns an array of all research objects that are currently and immediately available for research.
-//--
-IMPL_JS_FUNC(enumResearch, wzapi::enumResearch)
-
-//-- ## componentAvailable([component type,] component name)
-//--
-//-- Checks whether a given component is available to the current player. The first argument is
-//-- optional and deprecated.
-//--
-IMPL_JS_FUNC(componentAvailable, wzapi::componentAvailable)
-
-//-- ## addFeature(name, x, y)
-//--
-//-- Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
-//-- Returns the created game object on success, null otherwise. (3.2+ only)
-//--
-IMPL_JS_FUNC(addFeature, wzapi::addFeature)
-
-//-- ## addDroid(player, x, y, name, body, propulsion, reserved, reserved, turrets...)
-//--
-//-- Create and place a droid at the given x, y position as belonging to the given player, built with
-//-- the given components. Currently does not support placing droids in multiplayer, doing so will
-//-- cause a desync. Returns the created droid on success, otherwise returns null. Passing "" for
-//-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
-//-- pass -1 as both x and y.
-//--
-IMPL_JS_FUNC(addDroid, wzapi::addDroid)
-
-//-- ## addDroidToTransporter(transporter, droid)
-//--
-//-- Load a droid, which is currently located on the campaign off-world mission list,
-//-- into a transporter, which is also currently on the campaign off-world mission list.
-//-- (3.2+ only)
-//--
-IMPL_JS_FUNC(addDroidToTransporter, wzapi::addDroidToTransporter)
-
-//-- ## makeTemplate(player, name, body, propulsion, reserved, turrets...)
-//--
-//-- Create a template (virtual droid) with the given components. Can be useful for calculating the cost
-//-- of droids before putting them into production, for instance. Will fail and return null if template
-//-- could not possibly be built using current research. (3.2+ only)
-//--
-IMPL_JS_FUNC(makeTemplate, wzapi::makeTemplate)
-
-//-- ## buildDroid(factory, name, body, propulsion, reserved, reserved, turrets...)
-//--
-//-- Start factory production of new droid with the given name, body, propulsion and turrets.
-//-- The reserved parameter should be passed **null** for now. The components can be
-//-- passed as ordinary strings, or as a list of strings. If passed as a list, the first available
-//-- component in the list will be used. The second reserved parameter used to be a droid type.
-//-- It is now unused and in 3.2+ should be passed "", while in 3.1 it should be the
-//-- droid type to be built. Returns a boolean that is true if production was started.
-//--
-IMPL_JS_FUNC(buildDroid, wzapi::buildDroid)
-
-//-- ## enumStruct([player[, structure type[, looking player]]])
-//--
-//-- Returns an array of structure objects. If no parameters given, it will
-//-- return all of the structures for the current player. The second parameter
-//-- can be either a string with the name of the structure type as defined in
-//-- "structures.json", or a stattype as defined in ```Structure```. The
-//-- third parameter can be used to filter by visibility, the default is not
-//-- to filter.
-//--
-IMPL_JS_FUNC(enumStruct, wzapi::enumStruct)
-
-//-- ## enumStructOffWorld([player[, structure type[, looking player]]])
-//--
-//-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
-//-- If no parameters given, it will return all of the structures for the current player.
-//-- The second parameter can be either a string with the name of the structure type as defined
-//-- in "structures.json", or a stattype as defined in ```Structure```.
-//-- The third parameter can be used to filter by visibility, the default is not
-//-- to filter.
-//--
-IMPL_JS_FUNC(enumStructOffWorld, wzapi::enumStructOffWorld)
-
-//-- ## enumFeature(player[, name])
-//--
-//-- Returns an array of all features seen by player of given name, as defined in "features.json".
-//-- If player is ```ALL_PLAYERS```, it will return all features irrespective of visibility to any player. If
-//-- name is empty, it will return any feature.
-//--
-IMPL_JS_FUNC(enumFeature, wzapi::enumFeature)
-
-//-- ## enumCargo(transport droid)
-//--
-//-- Returns an array of droid objects inside given transport. (3.2+ only)
-//--
-IMPL_JS_FUNC(enumCargo, wzapi::enumCargo)
-
-//-- ## enumDroid([player[, droid type[, looking player]]])
-//--
-//-- Returns an array of droid objects. If no parameters given, it will
-//-- return all of the droids for the current player. The second, optional parameter
-//-- is the name of the droid type. The third parameter can be used to filter by
-//-- visibility - the default is not to filter.
-//--
-IMPL_JS_FUNC(enumDroid, wzapi::enumDroid)
-
-void dumpScriptLog(const WzString &scriptName, int me, const std::string &info)
-{
-	WzString path = PHYSFS_getWriteDir();
-	path += WzString("/logs/") + scriptName + "." + WzString::number(me) + ".log";
-	FILE *fp = fopen(path.toUtf8().c_str(), "a"); // TODO: This will fail for unicode paths on Windows. Should use PHYSFS to open / write files
-	if (fp)
-	{
-		fputs(info.c_str(), fp);
-		fclose(fp);
-	}
-}
-
-//-- ## dump(string...)
-//--
-//-- Output text to a debug file. (3.2+ only)
-//--
-static QScriptValue js_dump(QScriptContext *context, QScriptEngine *engine)
-{
-	std::string result;
-	for (int i = 0; i < context->argumentCount(); ++i)
-	{
-		if (i != 0)
-		{
-			result.append(" ");
-		}
-		QString qStr = context->argument(i).toString();
-		if (context->state() == QScriptContext::ExceptionState)
-		{
-			break;
-		}
-		result.append(qStr.toStdString());
-	}
-	result += "\n";
-
-	WzString scriptName = QStringToWzString(engine->globalObject().property("scriptName").toString());
-	int me = engine->globalObject().property("me").toInt32();
-	dumpScriptLog(scriptName, me, result);
-	return QScriptValue();
-}
-
-//-- ## debug(string...)
-//--
-//-- Output text to the command line.
-//--
-static QScriptValue js_debug(QScriptContext *context, QScriptEngine *engine)
-{
-	QString result;
-	for (int i = 0; i < context->argumentCount(); ++i)
-	{
-		if (i != 0)
-		{
-			result.append(QLatin1String(" "));
-		}
-		QString s = context->argument(i).toString();
-		if (context->state() == QScriptContext::ExceptionState)
-		{
-			break;
-		}
-		result.append(s);
-	}
-	qWarning("%s", result.toUtf8().constData());
-	return QScriptValue();
-}
-
-//-- ## pickStructLocation(droid, structure type, x, y)
-//--
-//-- Pick a location for constructing a certain type of building near some given position.
-//-- Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
-//--
-IMPL_JS_FUNC(pickStructLocation, wzapi::pickStructLocation)
-
-//-- ## structureIdle(structure)
-//--
-//-- Is given structure idle?
-//--
-IMPL_JS_FUNC(structureIdle, wzapi::structureIdle)
-
-//-- ## removeStruct(structure)
-//--
-//-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
-//-- No special effects are applied. Deprecated since 3.2.
-//--
-IMPL_JS_FUNC(removeStruct, wzapi::removeStruct)
-
-//-- ## removeObject(game object[, special effects?])
-//--
-//-- Remove the given game object with special effects. Returns a boolean that is true on success.
-//-- A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
-//--
-IMPL_JS_FUNC(removeObject, wzapi::removeObject)
-
-//-- ## clearConsole()
-//--
-//-- Clear the console. (3.3+ only)
-//--
-IMPL_JS_FUNC(clearConsole, wzapi::clearConsole)
-
-//-- ## console(strings...)
-//--
-//-- Print text to the player console.
-//--
-// TODO, should cover scrShowConsoleText, scrAddConsoleText, scrTagConsoleText and scrConsole
-IMPL_JS_FUNC(console, wzapi::console)
-
-//-- ## groupAddArea(group, x1, y1, x2, y2)
-//--
-//-- Add any droids inside the given area to the given group. (3.2+ only)
-//--
 IMPL_JS_FUNC(groupAddArea, scripting_engine::groupAddArea)
-
-//-- ## groupAddDroid(group, droid)
-//--
-//-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
-//--
 IMPL_JS_FUNC(groupAddDroid, scripting_engine::groupAddDroid)
-
-//-- ## groupAdd(group, object)
-//--
-//-- Add given game object to the given group.
-//--
 IMPL_JS_FUNC(groupAdd, scripting_engine::groupAdd)
-
-//-- ## distBetweenTwoPoints(x1, y1, x2, y2)
-//--
-//-- Return distance between two points.
-//--
-IMPL_JS_FUNC(distBetweenTwoPoints, wzapi::distBetweenTwoPoints)
-
-//-- ## groupSize(group)
-//--
-//-- Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
-//--
 IMPL_JS_FUNC(groupSize, scripting_engine::groupSize)
 
-//-- ## droidCanReach(droid, x, y)
-//--
-//-- Return whether or not the given droid could possibly drive to the given position. Does
-//-- not take player built blockades into account.
-//--
+IMPL_JS_FUNC(activateStructure, wzapi::activateStructure)
+IMPL_JS_FUNC(findResearch, wzapi::findResearch)
+IMPL_JS_FUNC(pursueResearch, wzapi::pursueResearch)
+IMPL_JS_FUNC(getResearch, wzapi::getResearch)
+IMPL_JS_FUNC(enumResearch, wzapi::enumResearch)
+IMPL_JS_FUNC(componentAvailable, wzapi::componentAvailable)
+IMPL_JS_FUNC(addFeature, wzapi::addFeature)
+IMPL_JS_FUNC(addDroid, wzapi::addDroid)
+IMPL_JS_FUNC(addDroidToTransporter, wzapi::addDroidToTransporter)
+IMPL_JS_FUNC(makeTemplate, wzapi::makeTemplate)
+IMPL_JS_FUNC(buildDroid, wzapi::buildDroid)
+IMPL_JS_FUNC(enumStruct, wzapi::enumStruct)
+IMPL_JS_FUNC(enumStructOffWorld, wzapi::enumStructOffWorld)
+IMPL_JS_FUNC(enumFeature, wzapi::enumFeature)
+IMPL_JS_FUNC(enumCargo, wzapi::enumCargo)
+IMPL_JS_FUNC(enumDroid, wzapi::enumDroid)
+IMPL_JS_FUNC(dump, wzapi::dump)
+IMPL_JS_FUNC(debug, wzapi::debugOutputStrings)
+IMPL_JS_FUNC(pickStructLocation, wzapi::pickStructLocation)
+IMPL_JS_FUNC(structureIdle, wzapi::structureIdle)
+IMPL_JS_FUNC(removeStruct, wzapi::removeStruct)
+IMPL_JS_FUNC(removeObject, wzapi::removeObject)
+IMPL_JS_FUNC(clearConsole, wzapi::clearConsole)
+IMPL_JS_FUNC(console, wzapi::console)
+IMPL_JS_FUNC(distBetweenTwoPoints, wzapi::distBetweenTwoPoints)
 IMPL_JS_FUNC(droidCanReach, wzapi::droidCanReach)
-
-//-- ## propulsionCanReach(propulsion, x1, y1, x2, y2)
-//--
-//-- Return true if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
-//-- Does not take player built blockades into account. (3.2+ only)
-//--
 IMPL_JS_FUNC(propulsionCanReach, wzapi::propulsionCanReach)
-
-//-- ## terrainType(x, y)
-//--
-//-- Returns tile type of a given map tile, such as TER_WATER for water tiles or TER_CLIFFFACE for cliffs.
-//-- Tile types regulate which units may pass through this tile. (3.2+ only)
-//--
 IMPL_JS_FUNC(terrainType, wzapi::terrainType)
-
-//-- ## orderDroid(droid, order)
-//--
-//-- Give a droid an order to do something. (3.2+ only)
-//--
 IMPL_JS_FUNC(orderDroid, wzapi::orderDroid)
-
-//-- ## orderDroidObj(droid, order, object)
-//--
-//-- Give a droid an order to do something to something.
-//--
 IMPL_JS_FUNC(orderDroidObj, wzapi::orderDroidObj)
-
-//-- ## orderDroidBuild(droid, order, structure type, x, y[, direction])
-//--
-//-- Give a droid an order to build something at the given position. Returns true if allowed.
-//--
 IMPL_JS_FUNC(orderDroidBuild, wzapi::orderDroidBuild)
-
-//-- ## orderDroidLoc(droid, order, x, y)
-//--
-//-- Give a droid an order to do something at the given location.
-//--
 IMPL_JS_FUNC(orderDroidLoc, wzapi::orderDroidLoc)
-
-//-- ## setMissionTime(time)
-//--
-//-- Set mission countdown in seconds.
-//--
 IMPL_JS_FUNC(setMissionTime, wzapi::setMissionTime)
-
-//-- ## getMissionTime()
-//--
-//-- Get time remaining on mission countdown in seconds. (3.2+ only)
-//--
 IMPL_JS_FUNC(getMissionTime, wzapi::getMissionTime)
-
-//-- ## setTransporterExit(x, y, player)
-//--
-//-- Set the exit position for the mission transporter. (3.2+ only)
-//--
 IMPL_JS_FUNC(setTransporterExit, wzapi::setTransporterExit)
-
-//-- ## startTransporterEntry(x, y, player)
-//--
-//-- Set the entry position for the mission transporter, and make it start flying in
-//-- reinforcements. If you want the camera to follow it in, use cameraTrack() on it.
-//-- The transport needs to be set up with the mission droids, and the first transport
-//-- found will be used. (3.2+ only)
-//--
 IMPL_JS_FUNC(startTransporterEntry, wzapi::startTransporterEntry)
-
-//-- ## useSafetyTransport(flag)
-//--
-//-- Change if the mission transporter will fetch droids in non offworld missions
-//-- setReinforcementTime() is be used to hide it before coming back after the set time
-//-- which is handled by the campaign library in the victory data section (3.3+ only).
-//--
 IMPL_JS_FUNC(useSafetyTransport, wzapi::useSafetyTransport)
-
-//-- ## restoreLimboMissionData()
-//--
-//-- Swap mission type and bring back units previously stored at the start
-//-- of the mission (see cam3-c mission). (3.3+ only).
-//--
 IMPL_JS_FUNC(restoreLimboMissionData, wzapi::restoreLimboMissionData)
-
-//-- ## setReinforcementTime(time)
-//--
-//-- Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
-//-- is removed and the timer stopped. Time is in seconds.
-//-- If time equals to the magic LZ_COMPROMISED_TIME constant, reinforcement GUI ticker
-//-- is set to "--:--" and reinforcements are suppressed until this function is called
-//-- again with a regular time value.
-//--
 IMPL_JS_FUNC(setReinforcementTime, wzapi::setReinforcementTime)
-
-//-- ## setStructureLimits(structure type, limit[, player])
-//--
-//-- Set build limits for a structure.
-//--
 IMPL_JS_FUNC(setStructureLimits, wzapi::setStructureLimits)
-
-//-- ## centreView(x, y)
-//--
-//-- Center the player's camera at the given position.
-//--
 IMPL_JS_FUNC(centreView, wzapi::centreView)
-
-//-- ## hackPlayIngameAudio()
-//--
-//-- (3.3+ only)
-//--
 IMPL_JS_FUNC(hackPlayIngameAudio, wzapi::hackPlayIngameAudio)
-
-//-- ## hackStopIngameAudio()
-//--
-//-- (3.3+ only)
-//--
 IMPL_JS_FUNC(hackStopIngameAudio, wzapi::hackStopIngameAudio)
-
-//-- ## playSound(sound[, x, y, z])
-//--
-//-- Play a sound, optionally at a location.
-//--
 IMPL_JS_FUNC(playSound, wzapi::playSound)
-
-//-- ## gameOverMessage(won, showBackDrop, showOutro)
-//--
-//-- End game in victory or defeat.
-//--
-static QScriptValue js_gameOverMessage(QScriptContext *context, QScriptEngine *engine)
-{
-	QScriptValue retVal = wrap_(wzapi::gameOverMessage, context, engine);
-	jsDebugMessageUpdate();
-	return retVal;
-}
-
-//-- ## completeResearch(research[, player [, forceResearch]])
-//--
-//-- Finish a research for the given player.
-//-- forceResearch will allow a research topic to be researched again. 3.3+
-//--
+IMPL_JS_FUNC_DEBUGMSGUPDATE(gameOverMessage, wzapi::gameOverMessage)
 IMPL_JS_FUNC(completeResearch, wzapi::completeResearch)
-
-//-- ## completeAllResearch([player])
-//--
-//-- Finish all researches for the given player.
-//--
 IMPL_JS_FUNC(completeAllResearch, wzapi::completeAllResearch)
-
-//-- ## enableResearch(research[, player])
-//--
-//-- Enable a research for the given player, allowing it to be researched.
-//--
 IMPL_JS_FUNC(enableResearch, wzapi::enableResearch)
-
-//-- ## extraPowerTime(time, player)
-//--
-//-- Increase a player's power as if that player had power income equal to current income
-//-- over the given amount of extra time. (3.2+ only)
-//--
 IMPL_JS_FUNC(extraPowerTime, wzapi::extraPowerTime)
-
-//-- ## setPower(power[, player])
-//--
-//-- Set a player's power directly. (Do not use this in an AI script.)
-//--
 IMPL_JS_FUNC(setPower, wzapi::setPower)
-
-//-- ## setPowerModifier(power[, player])
-//--
-//-- Set a player's power modifier percentage. (Do not use this in an AI script.) (3.2+ only)
-//--
 IMPL_JS_FUNC(setPowerModifier, wzapi::setPowerModifier)
-
-//-- ## setPowerStorageMaximum(maximum[, player])
-//--
-//-- Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ only)
-//--
 IMPL_JS_FUNC(setPowerStorageMaximum, wzapi::setPowerStorageMaximum)
-
-//-- ## enableStructure(structure type[, player])
-//--
-//-- The given structure type is made available to the given player. It will appear in the
-//-- player's build list.
-//--
 IMPL_JS_FUNC(enableStructure, wzapi::enableStructure)
-
-//-- ## setTutorialMode(bool)
-//--
-//-- Sets a number of restrictions appropriate for tutorial if set to true.
-//--
 IMPL_JS_FUNC(setTutorialMode, wzapi::setTutorialMode)
-
-//-- ## setMiniMap(bool)
-//--
-//-- Turns visible minimap on or off in the GUI.
-//--
 IMPL_JS_FUNC(setMiniMap, wzapi::setMiniMap)
-
-//-- ## setDesign(bool)
-//--
-//-- Whether to allow player to design stuff.
-//--
 IMPL_JS_FUNC(setDesign, wzapi::setDesign)
-
-//-- ## enableTemplate(template name)
-//--
-//-- Enable a specific template (even if design is disabled).
-//--
 IMPL_JS_FUNC(enableTemplate, wzapi::enableTemplate)
-
-//-- ## removeTemplate(template name)
-//--
-//-- Remove a template.
-//--
 IMPL_JS_FUNC(removeTemplate, wzapi::removeTemplate)
-
-//-- ## setReticuleButton(id, tooltip, filename, filenameHigh, callback)
-//--
-//-- Add reticule button. id is which button to change, where zero is zero is the middle button, then going clockwise from the
-//-- uppermost button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when
-//-- you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
-//-- for such changes to take effect. (3.2+ only)
-//--
 IMPL_JS_FUNC(setReticuleButton, wzapi::setReticuleButton)
-
-//-- ## showReticuleWidget(id)
-//--
-//-- Open the reticule menu widget. (3.3+ only)
-//--
 IMPL_JS_FUNC(showReticuleWidget, wzapi::showReticuleWidget)
-
-//-- ## setReticuleFlash(id, flash)
-//--
-//-- Set reticule flash on or off. (3.2.3+ only)
-//--
 IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
-
-//-- ## showInterface()
-//--
-//-- Show user interface. (3.2+ only)
-//--
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
-
-//-- ## hideInterface()
-//--
-//-- Hide user interface. (3.2+ only)
-//--
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
 
 //-- ## removeReticuleButton(button type)
@@ -3284,87 +2742,18 @@ static QScriptValue js_removeReticuleButton(QScriptContext *context, QScriptEngi
 	return QScriptValue();
 }
 
-//-- ## applyLimitSet()
-//--
-//-- Mix user set limits with script set limits and defaults.
-//--
 IMPL_JS_FUNC(applyLimitSet, wzapi::applyLimitSet)
-
-//-- ## enableComponent(component, player)
-//--
-//-- The given component is made available for research for the given player.
-//--
 IMPL_JS_FUNC(enableComponent, wzapi::enableComponent)
-
-//-- ## makeComponentAvailable(component, player)
-//--
-//-- The given component is made available to the given player. This means the player can
-//-- actually build designs with it.
-//--
 IMPL_JS_FUNC(makeComponentAvailable, wzapi::makeComponentAvailable)
-
-//-- ## allianceExistsBetween(player, player)
-//--
-//-- Returns true if an alliance exists between the two players, or they are the same player.
-//--
 IMPL_JS_FUNC(allianceExistsBetween, wzapi::allianceExistsBetween)
-
-//-- ## _(string)
-//--
-//-- Mark string for translation.
-//--
 IMPL_JS_FUNC(translate, wzapi::translate)
-
-//-- ## playerPower(player)
-//--
-//-- Return amount of power held by the given player.
-//--
 IMPL_JS_FUNC(playerPower, wzapi::playerPower)
-
-//-- ## queuedPower(player)
-//--
-//-- Return amount of power queued up for production by the given player. (3.2+ only)
-//--
 IMPL_JS_FUNC(queuedPower, wzapi::queuedPower)
-
-//-- ## isStructureAvailable(structure type[, player])
-//--
-//-- Returns true if given structure can be built. It checks both research and unit limits.
-//--
 IMPL_JS_FUNC(isStructureAvailable, wzapi::isStructureAvailable)
-
-//-- ## isVTOL(droid)
-//--
-//-- Returns true if given droid is a VTOL (not including transports).
-//--
 IMPL_JS_FUNC(isVTOL, wzapi::isVTOL)
-
-//-- ## hackGetObj(type, player, id)
-//--
-//-- Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
-//-- Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
-//--
 IMPL_JS_FUNC(hackGetObj, wzapi::hackGetObj)
-
-//-- ## hackChangeMe(player)
-//--
-//-- Change the 'me' who owns this script to the given player. This needs to be run
-//-- first in ```eventGameInit``` to make sure things do not get out of control.
-//--
-// This is only intended for use in campaign scripts until we get a way to add
-// scripts for each player. (3.2+ only)
 IMPL_JS_FUNC(hackChangeMe, wzapi::hackChangeMe)
-
-//-- ## receiveAllEvents(bool)
-//--
-//-- Make the current script receive all events, even those not meant for 'me'. (3.2+ only)
-//--
 IMPL_JS_FUNC(receiveAllEvents, wzapi::receiveAllEvents)
-
-//-- ## hackAssert(condition, message...)
-//--
-//-- Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
-//--
 IMPL_JS_FUNC(hackAssert, wzapi::hackAssert)
 
 //-- ## objFromId(fake game object)
@@ -3381,136 +2770,23 @@ static QScriptValue js_objFromId(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(convMax(psObj, engine));
 }
 
-//-- ## setDroidExperience(droid, experience)
-//--
-//-- Set the amount of experience a droid has. Experience is read using floating point precision.
-//--
 IMPL_JS_FUNC(setDroidExperience, wzapi::setDroidExperience)
-
-//-- ## donateObject(object, to)
-//--
-//-- Donate a game object (restricted to droids before 3.2.3) to another player. Returns true if
-//-- donation was successful. May return false if this donation would push the receiving player
-//-- over unit limits. (3.2+ only)
-//--
 IMPL_JS_FUNC(donateObject, wzapi::donateObject)
-
-//-- ## donatePower(amount, to)
-//--
-//-- Donate power to another player. Returns true. (3.2+ only)
-//--
 IMPL_JS_FUNC(donatePower, wzapi::donatePower)
-
-//-- ## safeDest(player, x, y)
-//--
-//-- Returns true if given player is safe from hostile fire at the given location, to
-//-- the best of that player's map knowledge. Does not work in campaign at the moment.
-//--
 IMPL_JS_FUNC(safeDest, wzapi::safeDest)
-
-//-- ## addStructure(structure id, player, x, y)
-//--
-//-- Create a structure on the given position. Returns the structure on success, null otherwise.
-//-- Position uses world coordinates, if you want use position based on Map Tiles, then
-//-- use as addStructure(structure id, players, x*128, y*128)
-//--
 IMPL_JS_FUNC(addStructure, wzapi::addStructure)
-
-//-- ## getStructureLimit(structure type[, player])
-//--
-//-- Returns build limits for a structure.
-//--
 IMPL_JS_FUNC(getStructureLimit, wzapi::getStructureLimit)
-
-//-- ## countStruct(structure type[, player])
-//--
-//-- Count the number of structures of a given type.
-//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
-//--
 IMPL_JS_FUNC(countStruct, wzapi::countStruct)
-
-//-- ## countDroid([droid type[, player]])
-//--
-//-- Count the number of droids that a given player has. Droid type must be either
-//-- DROID_ANY, DROID_COMMAND or DROID_CONSTRUCT.
-//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
-//--
 IMPL_JS_FUNC(countDroid, wzapi::countDroid)
-
-//-- ## setNoGoArea(x1, y1, x2, y2, player)
-//--
-//-- Creates an area on the map on which nothing can be built. If player is zero,
-//-- then landing lights are placed. If player is -1, then a limbo landing zone
-//-- is created and limbo droids placed.
-//--
 IMPL_JS_FUNC(setNoGoArea, wzapi::setNoGoArea)
-
-//-- ## setScrollLimits(x1, y1, x2, y2)
-//--
-//-- Limit the scrollable area of the map to the given rectangle. (3.2+ only)
-//--
 IMPL_JS_FUNC(setScrollLimits, wzapi::setScrollLimits)
-
-//-- ## getScrollLimits()
-//--
-//-- Get the limits of the scrollable area of the map as an area object. (3.2+ only)
-//--
-static QScriptValue js_getScrollLimits(QScriptContext *context, QScriptEngine *engine)
-{
-	QScriptValue ret = engine->newObject();
-	ret.setProperty("x", scrollMinX, QScriptValue::ReadOnly);
-	ret.setProperty("y", scrollMinY, QScriptValue::ReadOnly);
-	ret.setProperty("x2", scrollMaxX, QScriptValue::ReadOnly);
-	ret.setProperty("y2", scrollMaxY, QScriptValue::ReadOnly);
-	ret.setProperty("type", SCRIPT_AREA, QScriptValue::ReadOnly);
-	return ret;
-}
-
-//-- ## loadLevel(level name)
-//--
-//-- Load the level with the given name.
-//--
+IMPL_JS_FUNC(getScrollLimits, wzapi::getScrollLimits)
 IMPL_JS_FUNC(loadLevel, wzapi::loadLevel)
-
-//-- ## autoSave()
-//--
-//-- Perform automatic save
-//--
 IMPL_JS_FUNC(autoSave, wzapi::autoSave)
-
-//-- ## enumRange(x, y, range[, filter[, seen]])
-//--
-//-- Returns an array of game objects seen within range of given position that passes the optional filter
-//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
-//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
-//-- returned; by default only visible objects are returned. Calling this function is much faster than
-//-- iterating over all game objects using other enum functions. (3.2+ only)
-//--
 IMPL_JS_FUNC(enumRange, wzapi::enumRange)
-
-//-- ## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
-//--
-//-- Returns an array of game objects seen within the given area that passes the optional filter
-//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
-//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
-//-- returned; by default only visible objects are returned. The label can either be actual
-//-- positions or a label to an AREA. Calling this function is much faster than iterating over all
-//-- game objects using other enum functions. (3.2+ only)
-//--
 IMPL_JS_FUNC(enumArea, scripting_engine::enumAreaJS)
-
-//-- ## addBeacon(x, y, target player[, message])
-//--
-//-- Send a beacon message to target player. Target may also be ```ALLIES```.
-//-- Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
-//--
 IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
-//-- ## removeBeacon(target player)
-//--
-//-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
-//-- Returns a boolean that is true on success. (3.2+ only)
-//--
 static QScriptValue js_removeBeacon(QScriptContext *context, QScriptEngine *engine)
 {
 	QScriptValue retVal = wrap_(wzapi::removeBeacon, context, engine);
@@ -3521,293 +2797,44 @@ static QScriptValue js_removeBeacon(QScriptContext *context, QScriptEngine *engi
 	return retVal;
 }
 
-//-- ## chat(target player, message)
-//--
-//-- Send a message to target player. Target may also be ```ALL_PLAYERS``` or ```ALLIES```.
-//-- Returns a boolean that is true on success. (3.2+ only)
-//--
 IMPL_JS_FUNC(chat, wzapi::chat)
-
-//-- ## setAlliance(player1, player2, value)
-//--
-//-- Set alliance status between two players to either true or false. (3.2+ only)
-//--
 IMPL_JS_FUNC(setAlliance, wzapi::setAlliance)
-
-//-- ## sendAllianceRequest(player)
-//--
-//-- Send an alliance request to a player. (3.3+ only)
-//--
 IMPL_JS_FUNC(sendAllianceRequest, wzapi::sendAllianceRequest)
-
-//-- ## setAssemblyPoint(structure, x, y)
-//--
-//-- Set the assembly point droids go to when built for the specified structure. (3.2+ only)
-//--
 IMPL_JS_FUNC(setAssemblyPoint, wzapi::setAssemblyPoint)
-
-//-- ## hackNetOff()
-//--
-//-- Turn off network transmissions. FIXME - find a better way.
-//--
 IMPL_JS_FUNC(hackNetOff, wzapi::hackNetOff)
-
-//-- ## hackNetOn()
-//--
-//-- Turn on network transmissions. FIXME - find a better way.
-//--
 IMPL_JS_FUNC(hackNetOn, wzapi::hackNetOn)
-
-//-- ## getDroidProduction(factory)
-//--
-//-- Return droid in production in given factory. Note that this droid is fully
-//-- virtual, and should never be passed anywhere. (3.2+ only)
-//--
 IMPL_JS_FUNC(getDroidProduction, wzapi::getDroidProduction)
-
-//-- ## getDroidLimit([player[, unit type]])
-//--
-//-- Return maximum number of droids that this player can produce. This limit is usually
-//-- fixed throughout a game and the same for all players. If no arguments are passed,
-//-- returns general unit limit for the current player. If a second, unit type argument
-//-- is passed, the limit for this unit type is returned, which may be different from
-//-- the general unit limit (eg for commanders and construction droids). (3.2+ only)
-//--
 IMPL_JS_FUNC(getDroidLimit, wzapi::getDroidLimit)
-
-//-- ## getExperienceModifier(player)
-//--
-//-- Get the percentage of experience this player droids are going to gain. (3.2+ only)
-//--
 IMPL_JS_FUNC(getExperienceModifier, wzapi::getExperienceModifier)
-
-//-- ## setExperienceModifier(player, percent)
-//--
-//-- Set the percentage of experience this player droids are going to gain. (3.2+ only)
-//--
 IMPL_JS_FUNC(setExperienceModifier, wzapi::setExperienceModifier)
-
-//-- ## setDroidLimit(player, value[, droid type])
-//--
-//-- Set the maximum number of droids that this player can produce. If a third
-//-- parameter is added, this is the droid type to limit. It can be DROID_ANY
-//-- for droids in general, DROID_CONSTRUCT for constructors, or DROID_COMMAND
-//-- for commanders. (3.2+ only)
-//--
 IMPL_JS_FUNC(setDroidLimit, wzapi::setDroidLimit)
-
-//-- ## setCommanderLimit(player, value)
-//--
-//-- Set the maximum number of commanders that this player can produce.
-//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
-//--
-static QScriptValue js_setCommanderLimit(QScriptContext *context, QScriptEngine *)
-{
-	int player = context->argument(0).toInt32();
-	int value = context->argument(1).toInt32();
-	setMaxCommanders(player, value);
-	return QScriptValue();
-}
-
-//-- ## setConstructorLimit(player, value)
-//--
-//-- Set the maximum number of constructors that this player can produce.
-//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
-//--
-static QScriptValue js_setConstructorLimit(QScriptContext *context, QScriptEngine *)
-{
-	int player = context->argument(0).toInt32();
-	int value = context->argument(1).toInt32();
-	setMaxConstructors(player, value);
-	return QScriptValue();
-}
-
-//-- ## hackAddMessage(message, type, player, immediate)
-//--
-//-- See wzscript docs for info, to the extent any exist. (3.2+ only)
-//--
-static QScriptValue js_hackAddMessage(QScriptContext *context, QScriptEngine *engine)
-{
-	QScriptValue retVal = wrap_(wzapi::hackAddMessage, context, engine);
-	jsDebugMessageUpdate();
-	return retVal;
-}
-
-//-- ## hackRemoveMessage(message, type, player)
-//--
-//-- See wzscript docs for info, to the extent any exist. (3.2+ only)
-//--
-static QScriptValue js_hackRemoveMessage(QScriptContext *context, QScriptEngine *engine)
-{
-	QScriptValue retVal = wrap_(wzapi::hackRemoveMessage, context, engine);
-	jsDebugMessageUpdate();
-	return retVal;
-}
-
-//-- ## setSunPosition(x, y, z)
-//--
-//-- Move the position of the Sun, which in turn moves where shadows are cast. (3.2+ only)
-//--
+IMPL_JS_FUNC(setCommanderLimit, wzapi::setCommanderLimit)
+IMPL_JS_FUNC(setConstructorLimit, wzapi::setConstructorLimit)
+IMPL_JS_FUNC_DEBUGMSGUPDATE(hackAddMessage, wzapi::hackAddMessage);
+IMPL_JS_FUNC_DEBUGMSGUPDATE(hackRemoveMessage, wzapi::hackRemoveMessage);
 IMPL_JS_FUNC(setSunPosition, wzapi::setSunPosition)
-
-//-- ## setSunIntensity(ambient r, g, b, diffuse r, g, b, specular r, g, b)
-//--
-//-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source. (3.2+ only)
-//--
 IMPL_JS_FUNC(setSunIntensity, wzapi::setSunIntensity)
-
-//-- ## setWeather(weather type)
-//--
-//-- Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR. (3.2+ only)
-//--
 IMPL_JS_FUNC(setWeather, wzapi::setWeather)
-
-//-- ## setSky(texture file, wind speed, skybox scale)
-//--
-//-- Change the skybox. (3.2+ only)
-//--
 IMPL_JS_FUNC(setSky, wzapi::setSky)
-
-//-- ## hackDoNotSave(name)
-//--
-//-- Do not save the given global given by name to savegames. Must be
-//-- done again each time game is loaded, since this too is not saved.
-//--
 IMPL_JS_FUNC(hackDoNotSave, wzapi::hackDoNotSave)
-
-//-- ## hackMarkTiles([label | x, y[, x2, y2]])
-//--
-//-- Mark the given tile(s) on the map. Either give a POSITION or AREA label,
-//-- or a tile x, y position, or four positions for a square area. If no parameter
-//-- is given, all marked tiles are cleared. (3.2+ only)
-//--
 IMPL_JS_FUNC(hackMarkTiles, wzapi::hackMarkTiles)
-
-//-- ## cameraSlide(x, y)
-//--
-//-- Slide the camera over to the given position on the map. (3.2+ only)
-//--
 IMPL_JS_FUNC(cameraSlide, wzapi::cameraSlide)
-
-//-- ## cameraZoom(z, speed)
-//--
-//-- Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000. (3.2+ only)
-//--
 IMPL_JS_FUNC(cameraZoom, wzapi::cameraZoom)
-
-//-- ## cameraTrack(droid)
-//--
-//-- Make the camera follow the given droid object around. Pass in a null object to stop. (3.2+ only)
-//--
 IMPL_JS_FUNC(cameraTrack, wzapi::cameraTrack)
-
-//-- ## setHealth(object, health)
-//--
-//-- Change the health of the given game object, in percentage. Does not take care of network sync, so for multiplayer games,
-//-- needs wrapping in a syncRequest. (3.2.3+ only.)
-//--
 IMPL_JS_FUNC(setHealth, wzapi::setHealth)
-
-//-- ## setObjectFlag(object, flag, value)
-//--
-//-- Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
-//-- needs wrapping in a syncRequest. (3.3+ only.)
-//-- Recognized object flags: OBJECT_FLAG_UNSELECTABLE - makes object unavailable for selection from player UI.
-//--
 IMPL_JS_FUNC(setObjectFlag, wzapi::setObjectFlag)
-
-//-- ## addSpotter(x, y, player, range, type, expiry)
-//--
-//-- Add an invisible viewer at a given position for given player that shows map in given range. ```type```
-//-- is zero for vision reveal, or one for radar reveal. The difference is that a radar reveal can be obstructed
-//-- by ECM jammers. ```expiry```, if non-zero, is the game time at which the spotter shall automatically be
-//-- removed. The function returns a unique ID that can be used to remove the spotter with ```removeSpotter```. (3.2+ only)
-//--
 IMPL_JS_FUNC(addSpotter, wzapi::addSpotter)
-
-//-- ## removeSpotter(id)
-//--
-//-- Remove a spotter given its unique ID. (3.2+ only)
-//--
 IMPL_JS_FUNC(removeSpotter, wzapi::removeSpotter)
-
-//-- ## syncRandom(limit)
-//--
-//-- Generate a synchronized random number in range 0...(limit - 1) that will be the same if this function is
-//-- run on all network peers in the same game frame. If it is called on just one peer (such as would be
-//-- the case for AIs, for instance), then game sync will break. (3.2+ only)
-//--
 IMPL_JS_FUNC(syncRandom, wzapi::syncRandom)
-
-//-- ## syncRequest(req_id, x, y[, obj[, obj2]])
-//--
-//-- Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
-//-- Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
-//-- take care only to define sync requests that can be validated against cheating. (3.2+ only)
-//--
 IMPL_JS_FUNC(syncRequest, wzapi::syncRequest)
-
-//-- ## replaceTexture(old_filename, new_filename)
-//--
-//-- Replace one texture with another. This can be used to for example give buildings on a specific tileset different
-//-- looks, or to add variety to the looks of droids in campaign missions. (3.2+ only)
-//--
 IMPL_JS_FUNC(replaceTexture, wzapi::replaceTexture)
-
-//-- ## fireWeaponAtLoc(weapon, x, y[, player])
-//--
-//-- Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
-//-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
-//-- may have different friendly fire logic for a few weapons (like the lassat).
-//--
 IMPL_JS_FUNC(fireWeaponAtLoc, wzapi::fireWeaponAtLoc)
-
-//-- ## fireWeaponAtObj(weapon, game object[, player])
-//--
-//-- Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
-//--
 IMPL_JS_FUNC(fireWeaponAtObj, wzapi::fireWeaponAtObj)
-
-//-- ## changePlayerColour(player, colour)
-//--
-//-- Change a player's colour slot. The current player colour can be read from the ```playerData``` array. There are as many
-//-- colour slots as the maximum number of players. (3.2.3+ only)
-//--
 IMPL_JS_FUNC(changePlayerColour, wzapi::changePlayerColour)
-
-//-- ## getMultiTechLevel()
-//--
-//-- Returns the current multiplayer tech level. (3.3+ only)
-//--
 IMPL_JS_FUNC(getMultiTechLevel, wzapi::getMultiTechLevel)
-
-//-- ## setCampaignNumber(num)
-//--
-//-- Set the campaign number. (3.3+ only)
-//--
 IMPL_JS_FUNC(setCampaignNumber, wzapi::setCampaignNumber)
-
-//-- ## getMissionType()
-//--
-//-- Return the current mission type. (3.3+ only)
-//--
-static QScriptValue js_getMissionType(QScriptContext *context, QScriptEngine *)
-{
-	return (int)mission.type;
-}
-
-//-- ## getRevealStatus()
-//--
-//-- Return the current fog reveal status. (3.3+ only)
-//--
-static QScriptValue js_getRevealStatus(QScriptContext *context, QScriptEngine *)
-{
-	return QScriptValue(getRevealStatus());
-}
-
-//-- ## setRevealStatus(bool)
-//--
-//-- Set the fog reveal status. (3.3+ only)
+IMPL_JS_FUNC(getMissionType, wzapi::getMissionType)
+IMPL_JS_FUNC(getRevealStatus, wzapi::getRevealStatus)
 IMPL_JS_FUNC(setRevealStatus, wzapi::setRevealStatus)
 
 
@@ -3827,7 +2854,7 @@ QScriptValue js_stats(QScriptContext *context, QScriptEngine *engine)
 	return mapJsonToQScriptValue(engine, wzapi::getUpgradeStats(execution_context, player, name.toStdString(), type, index), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, const QString& name, int player, int type, int index)
+static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, const QString& name, int player, int type, unsigned index)
 {
 	QScriptValue v = engine->newFunction(js_stats);
 	base.setProperty(name, v, QScriptValue::PropertyGetter | QScriptValue::PropertySetter);
@@ -3835,40 +2862,6 @@ static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, const QStrin
 	v.setProperty("type", type, QScriptValue::SkipInEnumeration | QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	v.setProperty("index", index, QScriptValue::SkipInEnumeration | QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	v.setProperty("name", name, QScriptValue::SkipInEnumeration | QScriptValue::ReadOnly | QScriptValue::Undeletable);
-}
-
-nlohmann::json scripting_engine::constructDerrickPositions()
-{
-	// Static map knowledge about start positions
-	//== * ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
-	//== object containing the x and y variables for a derrick.
-	nlohmann::json derrickPositions = nlohmann::json::array(); //engine->newArray(derricks.size());
-	for (int i = 0; i < derricks.size(); i++)
-	{
-		nlohmann::json vector = nlohmann::json::object();
-		vector["x"] = map_coord(derricks[i].x);
-		vector["y"] = map_coord(derricks[i].y);
-		vector["type"] = SCRIPT_POSITION;
-		derrickPositions.push_back(vector);
-	}
-	return derrickPositions;
-}
-
-nlohmann::json scripting_engine::constructStartPositions()
-{
-	// Static map knowledge about start positions
-	//== * ```startPositions``` An array of player start positions on the current map. Each item in the array is an
-	//== object containing the x and y variables for a player start position.
-	nlohmann::json startPositions = nlohmann::json::array(); //engine->newArray(game.maxPlayers);
-	for (int i = 0; i < game.maxPlayers; i++)
-	{
-		nlohmann::json vector = nlohmann::json::object();
-		vector["x"] = map_coord(positions[i].x);
-		vector["y"] = map_coord(positions[i].y);
-		vector["type"] = SCRIPT_POSITION;
-		startPositions.push_back(vector);
-	}
-	return startPositions;
 }
 
 QScriptValue constructUpgradesQScriptValue(QScriptEngine *engine)
@@ -3916,10 +2909,6 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 {
 	debug(LOG_WZ, "Loading functions for engine %p, script %s", static_cast<void *>(engine), scriptName.toUtf8().constData());
 
-	// Register 'Stats' object. It is a read-only representation of basic game component states.
-	nlohmann::json stats = wzapi::constructStatsObject();
-	engine->globalObject().setProperty("Stats", mapJsonToQScriptValue(engine, stats, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
 	//== * ```Upgrades``` A special array containing per-player rules information for game entity types,
 	//== which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
 	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
@@ -3937,7 +2926,7 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	JS_REGISTER_FUNC(removeLabel); // scripting_engine
 	JS_REGISTER_FUNC(getLabel); // scripting_engine
 	JS_REGISTER_FUNC(enumLabels); // scripting_engine
-	JS_REGISTER_FUNC(enumGateways);
+	JS_REGISTER_FUNC(enumGateways); // WZAPI
 	JS_REGISTER_FUNC(enumTemplates);
 	JS_REGISTER_FUNC(makeTemplate); // WZAPI
 	JS_REGISTER_FUNC(setAlliance); // WZAPI
@@ -3962,8 +2951,8 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	JS_REGISTER_FUNC(restoreLimboMissionData); // WZAPI
 	JS_REGISTER_FUNC(getMultiTechLevel); // WZAPI
 	JS_REGISTER_FUNC(setCampaignNumber); // WZAPI
-	JS_REGISTER_FUNC(getMissionType);
-	JS_REGISTER_FUNC(getRevealStatus);
+	JS_REGISTER_FUNC(getMissionType); // WZAPI
+	JS_REGISTER_FUNC(getRevealStatus); // WZAPI
 	JS_REGISTER_FUNC(setRevealStatus); // WZAPI
 	JS_REGISTER_FUNC(autoSave); // WZAPI
 
@@ -4035,7 +3024,7 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	JS_REGISTER_FUNC(setCommanderLimit); // deprecated!!
 	JS_REGISTER_FUNC(setConstructorLimit); // deprecated!!
 	JS_REGISTER_FUNC(setExperienceModifier); // WZAPI
-	JS_REGISTER_FUNC(getWeaponInfo); // deprecated!!
+	JS_REGISTER_FUNC(getWeaponInfo); // WZAPI // deprecated!!
 	JS_REGISTER_FUNC(enumCargo); // WZAPI
 
 	// Functions that operate on the current player only
@@ -4076,7 +3065,7 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	JS_REGISTER_FUNC(removeObject); // WZAPI
 	JS_REGISTER_FUNC_NAME(setScrollParams, JS_FUNC_IMPL_NAME(setScrollLimits)); // deprecated!!
 	JS_REGISTER_FUNC(setScrollLimits); // WZAPI
-	JS_REGISTER_FUNC(getScrollLimits);
+	JS_REGISTER_FUNC(getScrollLimits); // WZAPI
 	JS_REGISTER_FUNC(addStructure); // WZAPI
 	JS_REGISTER_FUNC(getStructureLimit); // WZAPI
 	JS_REGISTER_FUNC(countStruct); // WZAPI
@@ -4091,27 +3080,6 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	JS_REGISTER_FUNC(setObjectFlag); // WZAPI
 	JS_REGISTER_FUNC(fireWeaponAtLoc); // WZAPI
 	JS_REGISTER_FUNC(fireWeaponAtObj); // WZAPI
-
-	// Set some useful constants
-	setSpecifiedGlobalVariables(wzapi::getUsefulConstants());
-
-	/// Place to store group sizes
-	//== * ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
-	//== be undefined.
-	engine->globalObject().setProperty("groupSizes", engine->newObject());
-
-	// Static knowledge about players
-	nlohmann::json playerData = wzapi::constructStaticPlayerData();
-	engine->globalObject().setProperty("playerData", mapJsonToQScriptValue(engine, playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-	// Static map knowledge about start positions
-	nlohmann::json startPositions = scripting_engine::instance().constructStartPositions();
-	nlohmann::json derrickPositions = scripting_engine::instance().constructDerrickPositions();
-	engine->globalObject().setProperty("derrickPositions", mapJsonToQScriptValue(engine, derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("startPositions", mapJsonToQScriptValue(engine, startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-	// Clear previous log file
-	PHYSFS_delete(QString("logs/" + scriptName + ".log").toUtf8().constData());
 
 	return true;
 }

@@ -118,6 +118,21 @@ wzapi::scripting_instance::scripting_instance(int player, const std::string& scr
 { }
 wzapi::scripting_instance::~scripting_instance()
 { }
+void wzapi::scripting_instance::dumpScriptLog(const std::string &info)
+{
+	dumpScriptLog(info, player());
+}
+void wzapi::scripting_instance::dumpScriptLog(const std::string &info, int me)
+{
+	WzString path = PHYSFS_getWriteDir();
+	path += WzString("/logs/") + WzString::fromUtf8(scriptName()) + "." + WzString::number(me) + ".log";
+	FILE *fp = fopen(path.toUtf8().c_str(), "a"); // TODO: This will fail for unicode paths on Windows. Should use PHYSFS to open / write files
+	if (fp)
+	{
+		fputs(info.c_str(), fp);
+		fclose(fp);
+	}
+}
 
 wzapi::object_request::object_request()
 : requestType(wzapi::object_request::RequestType::INVALID_REQUEST)
@@ -532,9 +547,28 @@ bool wzapi::setCampaignNumber(WZAPI_PARAMS(int num))
 	return true;
 }
 
+//-- ## getMissionType()
+//--
+//-- Return the current mission type. (3.3+ only)
+//--
+int32_t wzapi::getMissionType(WZAPI_NO_PARAMS)
+{
+	return (int32_t)mission.type;
+}
+
+//-- ## getRevealStatus()
+//--
+//-- Return the current fog reveal status. (3.3+ only)
+//--
+bool wzapi::getRevealStatus(WZAPI_NO_PARAMS)
+{
+	return ::getRevealStatus();
+}
+
 //-- ## setRevealStatus(bool)
 //--
 //-- Set the fog reveal status. (3.3+ only)
+//--
 bool wzapi::setRevealStatus(WZAPI_PARAMS(bool status))
 {
 	::setRevealStatus(status);
@@ -781,6 +815,49 @@ wzapi::no_return_value wzapi::hackMarkTiles(WZAPI_PARAMS(optional<wzapi::label_o
 
 // MARK: - General functions -- geared for use in AI scripts
 
+//-- ## dump(string...)
+//--
+//-- Output text to a debug file. (3.2+ only)
+//--
+wzapi::no_return_value wzapi::dump(WZAPI_PARAMS(va_list_treat_as_strings strings))
+{
+	std::string result;
+	for (size_t idx = 0; idx < strings.strings.size(); idx++)
+	{
+		if (idx != 0)
+		{
+			result.append(" ");
+		}
+		result.append(strings.strings[idx].c_str());
+	}
+	result += "\n";
+
+	int me = context.player();
+	context.currentInstance()->dumpScriptLog(result, me);
+	return {};
+}
+
+//-- ## debug(string...)
+//--
+//-- Output text to the command line.
+//--
+wzapi::no_return_value wzapi::debugOutputStrings(WZAPI_PARAMS(wzapi::va_list_treat_as_strings strings))
+{
+	for (size_t idx = 0; idx < strings.strings.size(); idx++)
+	{
+		if (idx != 0)
+		{
+			fprintf(stderr, " %s", strings.strings[idx].c_str());
+		}
+		else
+		{
+			fprintf(stderr, "%s", strings.strings[idx].c_str());
+		}
+	}
+	fprintf(stderr, "\n");
+	return {};
+}
+
 //-- ## console(strings...)
 //--
 //-- Print text to the player console.
@@ -1017,6 +1094,16 @@ std::vector<const BASE_OBJECT *> wzapi::enumSelected(WZAPI_NO_PARAMS_NO_CONTEXT)
 	return matches;
 }
 
+//-- ## enumGateways()
+//--
+//-- Return an array containing all the gateways on the current map. The array contains object with the properties
+//-- x1, y1, x2 and y2. (3.2+ only)
+//--
+GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
+{
+	return gwGetGateways();
+}
+
 //-- ## getResearch(research[, player])
 //--
 //-- Fetch information about a given technology item, given by a string that matches
@@ -1201,6 +1288,7 @@ wzapi::researchResults wzapi::findResearch(WZAPI_PARAMS(std::string resName, opt
 	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psTarget->index];
 	if (IsResearchStartedPending(plrRes) || IsResearchCompleted(plrRes))
 	{
+		debug(LOG_SCRIPT, "Find reqs for %s for player %d - research pending or completed", resName.c_str(), player);
 		return result; // return empty array
 	}
 	debug(LOG_SCRIPT, "Find reqs for %s for player %d", resName.c_str(), player);
@@ -2020,6 +2108,30 @@ bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int value, optional<int> _dro
 	return true;
 }
 
+//-- ## setCommanderLimit(player, value)
+//--
+//-- Set the maximum number of commanders that this player can produce.
+//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
+//--
+bool wzapi::setCommanderLimit(WZAPI_PARAMS(int player, int value))
+{
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	setMaxCommanders(player, value);
+	return true;
+}
+
+//-- ## setConstructorLimit(player, value)
+//--
+//-- Set the maximum number of constructors that this player can produce.
+//-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
+//--
+bool wzapi::setConstructorLimit(WZAPI_PARAMS(int player, int value))
+{
+	SCRIPT_ASSERT_PLAYER(false, context, player);
+	setMaxConstructors(player, value);
+	return true;
+}
+
 //-- ## setExperienceModifier(player, percent)
 //--
 //-- Set the percentage of experience this player droids are going to gain. (3.2+ only)
@@ -2049,6 +2161,25 @@ std::vector<const DROID *> wzapi::enumCargo(WZAPI_PARAMS(const DROID *psDroid))
 			result.push_back(psCurr);
 		}
 	}
+	return result;
+}
+
+//-- ## getWeaponInfo(weapon id)
+//--
+//-- Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
+//--
+nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponID)) WZAPI_DEPRECATED
+{
+	int idx = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponID));
+	SCRIPT_ASSERT(nlohmann::json(), context, idx >= 0, "No such weapon: %s", weaponID.c_str());
+	WEAPON_STATS *psStats = asWeaponStats + idx;
+	nlohmann::json result = nlohmann::json::object();
+	result["id"] = weaponID;
+	result["name"] = psStats->name;
+	result["impactClass"] = psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
+	result["damage"] = psStats->base.damage;
+	result["firePause"] = psStats->base.firePause;
+	result["fireOnMove"] = psStats->fireOnMove;
 	return result;
 }
 
@@ -2705,9 +2836,25 @@ wzapi::no_return_value wzapi::setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x
 	return {};
 }
 
-//-- ## addStructure(structure type, player, x, y)
+//-- ## getScrollLimits()
+//--
+//-- Get the limits of the scrollable area of the map as an area object. (3.2+ only)
+//--
+scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
+{
+	scr_area limits;
+	limits.x1 = scrollMinX;
+	limits.y1 = scrollMinY;
+	limits.x2 = scrollMaxX;
+	limits.y2 = scrollMaxY;
+	return limits;
+}
+
+//-- ## addStructure(structure id, player, x, y)
 //--
 //-- Create a structure on the given position. Returns the structure on success, null otherwise.
+//-- Position uses world coordinates, if you want use position based on Map Tiles, then
+//-- use as addStructure(structure id, players, x*128, y*128)
 //--
 const STRUCTURE * wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y))
 {
@@ -3720,7 +3867,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Body``` Droid bodies
 		GameEntityRuleContainer bodybase;
-		for (int j = 0; j < numBodyStats; j++)
+		for (unsigned j = 0; j < numBodyStats; j++)
 		{
 			BODY_STATS *psStats = asBodyStats + j;
 			GameEntityRules body(i, j, {
@@ -3737,7 +3884,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Sensor``` Sensor turrets
 		GameEntityRuleContainer sensorbase;
-		for (int j = 0; j < numSensorStats; j++)
+		for (unsigned j = 0; j < numSensorStats; j++)
 		{
 			SENSOR_STATS *psStats = asSensorStats + j;
 			GameEntityRules sensor(i, j, {
@@ -3751,7 +3898,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Propulsion``` Propulsions
 		GameEntityRuleContainer propbase;
-		for (int j = 0; j < numPropulsionStats; j++)
+		for (unsigned j = 0; j < numPropulsionStats; j++)
 		{
 			PROPULSION_STATS *psStats = asPropulsionStats + j;
 			GameEntityRules v(i, j, {
@@ -3765,7 +3912,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
 		GameEntityRuleContainer ecmbase;
-		for (int j = 0; j < numECMStats; j++)
+		for (unsigned j = 0; j < numECMStats; j++)
 		{
 			ECM_STATS *psStats = asECMStats + j;
 			GameEntityRules ecm(i, j, {
@@ -3779,7 +3926,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
 		GameEntityRuleContainer repairbase;
-		for (int j = 0; j < numRepairStats; j++)
+		for (unsigned j = 0; j < numRepairStats; j++)
 		{
 			REPAIR_STATS *psStats = asRepairStats + j;
 			GameEntityRules repair(i, j, {
@@ -3793,7 +3940,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Construct``` Constructor turrets (eg for trucks)
 		GameEntityRuleContainer conbase;
-		for (int j = 0; j < numConstructStats; j++)
+		for (unsigned j = 0; j < numConstructStats; j++)
 		{
 			CONSTRUCT_STATS *psStats = asConstructStats + j;
 			GameEntityRules con(i, j, {
@@ -3811,7 +3958,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 		//== kills are required for this brain to level up to the next rank. To alter this from scripts, you must
 		//== set the entire array at once. Setting each item in the array will not work at the moment.
 		GameEntityRuleContainer brainbase;
-		for (int j = 0; j < numBrainStats; j++)
+		for (unsigned j = 0; j < numBrainStats; j++)
 		{
 			BRAIN_STATS *psStats = asBrainStats + j;
 			GameEntityRules br(i, j, {
@@ -3827,7 +3974,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Weapon``` Weapon turrets
 		GameEntityRuleContainer wbase;
-		for (int j = 0; j < numWeaponStats; j++)
+		for (unsigned j = 0; j < numWeaponStats; j++)
 		{
 			WEAPON_STATS *psStats = asWeaponStats + j;
 			GameEntityRules weap(i, j, {
@@ -3855,7 +4002,7 @@ std::vector<wzapi::PerPlayerUpgrades> wzapi::getUpgradesObject()
 
 		//==   * ```Building``` Buildings
 		GameEntityRuleContainer structbase;
-		for (int j = 0; j < numStructureStats; j++)
+		for (unsigned j = 0; j < numStructureStats; j++)
 		{
 			STRUCTURE_STATS *psStats = asStructureStats + j;
 			GameEntityRules strct(i, j, {
