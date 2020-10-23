@@ -27,22 +27,24 @@
 
 static const auto SCROLLBAR_WIDTH = 15;
 
-ScrollableListWidget::ScrollableListWidget(WIDGET *parent) : WIDGET(parent), scrollBar(this), listView(this)
+ScrollableListWidget::ScrollableListWidget(WIDGET *parent) : WIDGET(parent)
 {
-	scrollBar.show(false);
+	scrollBar = new ScrollBarWidget(this);
+	listView = new ClipRectWidget(this);
+	scrollBar->show(false);
 }
 
 void ScrollableListWidget::geometryChanged()
 {
-	scrollBar.setGeometry(width() - SCROLLBAR_WIDTH, 0, SCROLLBAR_WIDTH, height());
-	scrollBar.setViewSize(height());
+	scrollBar->setGeometry(width() - SCROLLBAR_WIDTH, 0, SCROLLBAR_WIDTH, height());
+	scrollBar->setViewSize(height());
 	layoutDirty = true;
 }
 
 void ScrollableListWidget::run(W_CONTEXT *psContext)
 {
 	updateLayout();
-	listView.setTopOffset(snapOffset ? snappedOffset() : scrollBar.position());
+	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
 }
 
 /**
@@ -52,9 +54,9 @@ void ScrollableListWidget::run(W_CONTEXT *psContext)
  */
 uint16_t ScrollableListWidget::snappedOffset()
 {
-	for (auto child : listView.children())
+	for (auto child : listView->children())
 	{
-		if (child->y() + child->height() / 2 > scrollBar.position())
+		if (child->y() + child->height() / 2 > scrollBar->position())
 		{
 			return child->y();
 		}
@@ -65,7 +67,7 @@ uint16_t ScrollableListWidget::snappedOffset()
 
 void ScrollableListWidget::addItem(WIDGET *item)
 {
-	listView.attach(item);
+	listView->attach(item);
 	layoutDirty = true;
 }
 
@@ -78,35 +80,35 @@ void ScrollableListWidget::updateLayout()
 	layoutDirty = false;
 
 	scrollableHeight = 0;
-	for (auto child : listView.children())
+	for (auto child : listView->children())
 	{
 		scrollableHeight += child->height();
 	}
 
-	scrollBar.show(scrollableHeight > height());
-	scrollBar.setScrollableSize(scrollableHeight);
-	listView.setGeometry(0, 0, width() - (scrollBar.visible() ? scrollBar.width() + 1 : 0), height());
+	scrollBar->show(scrollableHeight > height());
+	scrollBar->setScrollableSize(scrollableHeight);
+	listView->setGeometry(0, 0, width() - (scrollBar->visible() ? scrollBar->width() + 1 : 0), height());
 
 	auto currentTop = 0;
-	for (auto child : listView.children())
+	for (auto child : listView->children())
 	{
-		child->setGeometry(0, currentTop, listView.width(), child->height());
+		child->setGeometry(0, currentTop, listView->width(), child->height());
 		currentTop += child->height();
 	}
 }
 
 bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
-	scrollBar.incrementPosition(-getMouseWheelSpeed().y * 20);
+	scrollBar->incrementPosition(-getMouseWheelSpeed().y * 20);
 	return WIDGET::processClickRecursive(psContext, key, wasPressed);
 }
 
 void ScrollableListWidget::enableScroll()
 {
-	scrollBar.enable();
+	scrollBar->enable();
 }
 
 void ScrollableListWidget::disableScroll()
 {
-	scrollBar.disable();
+	scrollBar->disable();
 }

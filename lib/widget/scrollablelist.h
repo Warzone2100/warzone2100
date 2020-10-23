@@ -44,8 +44,8 @@ protected:
 	void geometryChanged() override;
 
 private:
-	ScrollBarWidget scrollBar;
-	ClipRectWidget listView;
+	ScrollBarWidget *scrollBar;
+	ClipRectWidget *listView;
 	uint16_t scrollableHeight = 0;
 	bool snapOffset = true;
 	bool layoutDirty = false;
