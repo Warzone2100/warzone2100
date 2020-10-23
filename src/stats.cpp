@@ -257,6 +257,10 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 			}
 			value = obj[key2.toUtf8()];
 		}
+		if(value.is_null())
+		{
+			return nullptr;
+		}
 		WzString filename = json_variant(value).toWzString();
 		retval = modelGet(filename);
 		ASSERT(retval != nullptr, "Cannot find the PIE model %s for stat %s in %s",
@@ -390,6 +394,8 @@ bool loadWeaponStats(WzConfig &ini)
 		psStats->maxElevation = ini.value("maxElevation").toInt();
 		psStats->recoilValue = ini.value("recoilValue").toUInt();
 		psStats->effectSize = ini.value("effectSize").toUInt();
+		psStats->effectType = ini.value("effectType").toWzString().compare("smoketrail") == 0 ? WET_SMOKETRAIL : WET_NONE;
+		psStats->effectTime = ini.value("effectTime").toUInt();
 		std::vector<WzString> flags_raw = ini.value("flags", 0).toWzStringList();
 		// convert flags entries to lowercase
 		std::transform(

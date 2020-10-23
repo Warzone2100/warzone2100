@@ -36,6 +36,7 @@
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <array>
 
 static GFX *skyboxGfx = nullptr;
@@ -124,6 +125,129 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 	gfx_api::TransColouredTrianglePSO::get().bind_constants({ pie_PerspectiveGet() * modelViewMatrix, glm::vec2(0), glm::vec2(0), color });
 	gfx_api::context::get().bind_streamed_vertex_buffers(vrt.data(), 3 * sizeof(Vector3f));
 	gfx_api::TransColouredTrianglePSO::get().draw(3, 0);
+	gfx_api::context::get().disable_all_vertex_buffers();
+}
+
+float getSmokeTrailSegmentCameraAngle(float deltaY, float deltaX)
+{
+	float startCameraAngle = std::atan2(deltaY, deltaX);
+
+	// the following logic is because otherwise, half of the angles will show the segment turning towards its invisible side
+	if(startCameraAngle > glm::radians(0.f) && startCameraAngle < glm::radians(90.f))
+	{
+		startCameraAngle = glm::radians(180.f) -startCameraAngle;
+	}
+	else if(startCameraAngle > glm::radians(-90.f) && startCameraAngle < glm::radians(0.f))
+	{
+		startCameraAngle = -glm::radians(180.f) - startCameraAngle;
+	}
+
+	startCameraAngle += glm::radians(90.f); // why? because otherwise it's 90 degrees off
+
+	return startCameraAngle;
+}
+
+std::array<Vector3f, 4> drawSmokeTrailSegment(SMOKETRAIL_SEGMENT segment, const glm::mat4 &viewMatrix, float radius)
+{
+	glm::vec3 camera = glm::inverse(viewMatrix) * glm::vec4(0, 0, 0, 1);
+	float startCameraAngle = getSmokeTrailSegmentCameraAngle(camera.x - segment.start.x, camera.z - segment.start.z);
+	float endCameraAngle = getSmokeTrailSegmentCameraAngle(camera.x - segment.end.x, camera.z - segment.end.z);
+
+	float length = glm::length(segment.end - segment.start);
+
+	float yaw = std::atan2(segment.start.x - segment.end.x, segment.start.z - segment.end.z);
+	float pitch = std::atan2(segment.end.y - segment.start.y, length);
+
+	Vector3f v1a = glm::translate(glm::mat4(1), segment.start) * glm::rotate(pitch, glm::vec3(1, 0, 0)) * glm::rotate(yaw, glm::vec3(0, 1, 0)) * glm::toMat4(glm::angleAxis(startCameraAngle, glm::vec3(0, 0, 1))) * glm::vec4(Vector3f(0, 0 + radius, 0), 1);
+	Vector3f v1b = glm::translate(glm::mat4(1), segment.start) * glm::rotate(pitch, glm::vec3(1, 0, 0)) * glm::rotate(yaw, glm::vec3(0, 1, 0)) * glm::toMat4(glm::angleAxis(startCameraAngle, glm::vec3(0, 0, 1))) * glm::vec4(Vector3f(0, 0 - radius, 0), 1);
+	Vector3f v2a = glm::translate(glm::mat4(1), segment.start) * glm::rotate(pitch, glm::vec3(1, 0, 0)) * glm::rotate(yaw, glm::vec3(0, 1, 0)) * glm::toMat4(glm::angleAxis(endCameraAngle, glm::vec3(0, 0, 1))) * glm::vec4(Vector3f(0, 0 + radius, -length), 1);
+	Vector3f v2b = glm::translate(glm::mat4(1), segment.start) * glm::rotate(pitch, glm::vec3(1, 0, 0)) * glm::rotate(yaw, glm::vec3(0, 1, 0)) * glm::toMat4(glm::angleAxis(endCameraAngle, glm::vec3(0, 0, 1))) * glm::vec4(Vector3f(0, 0 - radius, -length), 1);
+
+	return { v1a, v1b, v2a, v2b };
+}
+
+void pie_SmokeTrail(const SMOKETRAIL &trail, Vector3i position, Vector3i rotation, float distance, glm::mat4 perspective)
+{
+	const glm::mat4 &viewMatrix =
+		glm::translate(glm::vec3(0.f, 0.f, distance)) *
+		glm::scale(glm::vec3(pie_GetResScalingFactor() / 100.f)) *
+		glm::rotate(rotation.z * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 0.f, 1.f)) *
+		glm::rotate(rotation.x * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(rotation.y * (360.f / 65536.0f) * (3.141592f / 180.0f), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::translate(glm::vec3(-position.x, -position.y, position.z));
+
+	std::vector<float> vertexCoordinates;
+	std::vector<unsigned int> indices;
+	std::array<Vector3f, 4> lastSegmentPoints;
+	std::array<Vector3f, 4> points;
+	float t = 0;
+
+	for(int i = 0; i < trail.segments.size(); i++) {
+		t = glm::clamp((graphicsTime - trail.segments[i].startTime) / (float)trail.effectTime, 0.0f, 1.0f);
+		points = drawSmokeTrailSegment(trail.segments[i], viewMatrix, t * trail.effectSize / 2);
+
+		if(i > 0)
+		{
+			points[0] = lastSegmentPoints[2];
+			points[1] = lastSegmentPoints[3];
+		}
+
+		vertexCoordinates.push_back(points[0].x);
+		vertexCoordinates.push_back(points[0].y);
+		vertexCoordinates.push_back(points[0].z);
+		vertexCoordinates.push_back(0);
+		vertexCoordinates.push_back(1);
+		vertexCoordinates.push_back(t);
+
+		vertexCoordinates.push_back(points[1].x);
+		vertexCoordinates.push_back(points[1].y);
+		vertexCoordinates.push_back(points[1].z);
+		vertexCoordinates.push_back(0);
+		vertexCoordinates.push_back(0);
+		vertexCoordinates.push_back(t);
+
+		vertexCoordinates.push_back(points[2].x);
+		vertexCoordinates.push_back(points[2].y);
+		vertexCoordinates.push_back(points[2].z);
+		vertexCoordinates.push_back(1);
+		vertexCoordinates.push_back(1);
+		vertexCoordinates.push_back(t);
+
+		vertexCoordinates.push_back(points[1].x);
+		vertexCoordinates.push_back(points[1].y);
+		vertexCoordinates.push_back(points[1].z);
+		vertexCoordinates.push_back(0);
+		vertexCoordinates.push_back(0);
+		vertexCoordinates.push_back(t);
+
+		vertexCoordinates.push_back(points[3].x);
+		vertexCoordinates.push_back(points[3].y);
+		vertexCoordinates.push_back(points[3].z);
+		vertexCoordinates.push_back(1);
+		vertexCoordinates.push_back(0);
+		vertexCoordinates.push_back(t);
+
+		vertexCoordinates.push_back(points[2].x);
+		vertexCoordinates.push_back(points[2].y);
+		vertexCoordinates.push_back(points[2].z);
+		vertexCoordinates.push_back(1);
+		vertexCoordinates.push_back(1);
+		vertexCoordinates.push_back(t);
+
+		lastSegmentPoints = points;
+	}
+
+	static gfx_api::buffer* vertexCoordinatesBuffer = nullptr;
+	if (!vertexCoordinatesBuffer)
+		vertexCoordinatesBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+	vertexCoordinatesBuffer->upload(vertexCoordinates.size() * sizeof(float), &vertexCoordinates[0]);
+	vertexCoordinatesBuffer->bind();
+
+	gfx_api::SmokeTrailPSO::get().bind();
+	gfx_api::SmokeTrailPSO::get().bind_textures(&pie_Texture(iV_GetTexture("smoke-trail.png")));
+	gfx_api::SmokeTrailPSO::get().bind_constants({ perspective * viewMatrix });
+	gfx_api::context::get().bind_streamed_vertex_buffers(vertexCoordinatesBuffer, 3 * sizeof(Vector3f));
+	gfx_api::SmokeTrailPSO::get().draw(vertexCoordinates.size() / 6, 0);
 	gfx_api::context::get().disable_all_vertex_buffers();
 }
 

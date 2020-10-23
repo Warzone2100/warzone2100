@@ -305,7 +305,9 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
 	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
-		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" } })
+		{ "transformationMatrix", "tuv_offset", "tuv_scale", "color", "texture" } }),
+	std::make_pair(SHADER_SMOKETRAIL, program_data{ "Smoketrail program", "shaders/smoketrail.vert", "shaders/smoketrail.frag",
+		{ "ModelViewProjectionMatrix" } }),
 };
 
 enum SHADER_VERSION
@@ -551,7 +553,8 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_GFX_TEXT>(),
 		uniform_binding_entry<SHADER_GENERIC_COLOR>(),
 		uniform_binding_entry<SHADER_LINE>(),
-		uniform_binding_entry<SHADER_TEXT>()
+		uniform_binding_entry<SHADER_TEXT>(),
+		uniform_binding_entry<SHADER_SMOKETRAIL>(),
 	};
 
 	uniform_bind_function = uniforms_bind_table.at(shader);
@@ -1197,10 +1200,17 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(4, cbuf.texture);
 }
 
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SMOKETRAIL>& cbuf)
+{
+	setUniforms(0, cbuf.ModelViewProjectionMatrix);
+}
+
 size_t get_size(const gfx_api::vertex_attribute_type& type)
 {
 	switch (type)
 	{
+		case gfx_api::vertex_attribute_type::float1:
+			return 1;
 		case gfx_api::vertex_attribute_type::float2:
 			return 2;
 		case gfx_api::vertex_attribute_type::float3:
@@ -1217,6 +1227,7 @@ GLenum get_type(const gfx_api::vertex_attribute_type& type)
 {
 	switch (type)
 	{
+		case gfx_api::vertex_attribute_type::float1:
 		case gfx_api::vertex_attribute_type::float2:
 		case gfx_api::vertex_attribute_type::float3:
 		case gfx_api::vertex_attribute_type::float4:
@@ -1232,6 +1243,7 @@ GLboolean get_normalisation(const gfx_api::vertex_attribute_type& type)
 {
 	switch (type)
 	{
+		case gfx_api::vertex_attribute_type::float1:
 		case gfx_api::vertex_attribute_type::float2:
 		case gfx_api::vertex_attribute_type::float3:
 		case gfx_api::vertex_attribute_type::float4:

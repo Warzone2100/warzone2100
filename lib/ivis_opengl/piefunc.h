@@ -33,7 +33,24 @@
 #include "lib/ivis_opengl/piedef.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include <array>
+#include <vector>
 
+struct SMOKETRAIL_SEGMENT
+{
+	glm::vec3 start;
+	glm::vec3 end;
+	UDWORD startTime;
+};
+
+struct SMOKETRAIL
+{
+	std::vector<SMOKETRAIL_SEGMENT> segments;
+	UDWORD timeLastSegment;
+	uint16_t effectTime;
+	uint16_t effectSize;
+};
+
+void pie_SmokeTrail(const SMOKETRAIL &trail, Vector3i position, Vector3i rotation, float distance, glm::mat4 perspective);
 void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, const glm::mat4 &modelViewMatrix);
 
 void pie_SetViewingWindow(Vector3i *v, PIELIGHT colour);

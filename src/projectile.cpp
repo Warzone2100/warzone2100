@@ -906,7 +906,7 @@ static void proj_InFlightFunc(PROJECTILE *psProj)
 	}
 
 	/* Paint effects if visible */
-	if (gfxVisible(psProj))
+	if (gfxVisible(psProj) && psProj->psWStats->effectType == WET_NONE)
 	{
 		uint32_t effectTime;
 		for (effectTime = ((psProj->prevSpacetime.time + 31) & ~31); effectTime < psProj->time; effectTime += 32)

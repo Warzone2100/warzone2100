@@ -207,6 +207,15 @@ enum WEAPON_EFFECT
 };
 
 /**
+ * Used to select special effects - currently only for smoke trails.
+ */
+enum WEAPON_EFFECT_TYPE
+{
+	WET_NONE,
+	WET_SMOKETRAIL,
+};
+
+/**
  * Defines the left and right sides for propulsion IMDs
  */
 enum PROP_SIDE
@@ -419,6 +428,8 @@ struct WEAPON_STATS : public COMPONENT_STATS
 	short maxElevation = 0;				///< max amount the turret can be elevated up
 	short minElevation = 0;				///< min amount the turret can be elevated down
 	uint16_t effectSize = 0;			///< size of the effect 100 = normal, 50 = half etc
+	WEAPON_EFFECT_TYPE effectType = WET_NONE;
+	uint16_t effectTime = 0;
 	short vtolAttackRuns = 0;			///< number of attack runs a VTOL droid can do with this weapon
 	UBYTE facePlayer = 0;				///< flag to make the (explosion) effect face the player when drawn
 	UBYTE faceInFlight = 0;				///< flag to make the inflight effect face the player when drawn

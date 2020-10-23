@@ -178,6 +178,7 @@ private:
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_LINE>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TEXT>& cbuf);
+	void set_constants(const gfx_api::constant_buffer_type<SHADER_SMOKETRAIL>& cbuf);
 };
 
 struct gl_context final : public gfx_api::context

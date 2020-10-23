@@ -101,6 +101,7 @@ static bool	renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 static void	drawDragBox();
 static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const glm::mat4 &modelViewMatrix);
 static void	drawTiles(iView *player);
+static void display3DProjectileSmokeTrails(Vector3i position, Vector3i rotation, float distance);
 static void	display3DProjectiles(const glm::mat4 &viewMatrix);
 static void	drawDroidSelections();
 static void	drawStructureSelections();
@@ -1200,6 +1201,8 @@ static void drawTiles(iView *player)
 
 	pie_RemainingPasses(currentGameFrame); // draws shadows and transparent shapes
 
+	display3DProjectileSmokeTrails(player->p, player->r, distance);
+
 	if (!gamePaused())
 	{
 		doConstructionLines(viewMatrix);
@@ -1433,6 +1436,85 @@ static void	calcFlagPosScreenCoords(SDWORD *pX, SDWORD *pY, SDWORD *pR, const gl
 	*pX = center2d.x;
 	*pY = center2d.y;
 	*pR = radius;
+}
+
+static std::map<UDWORD, SMOKETRAIL> projectileSmokeTrails;
+
+static void display3DProjectileSmokeTrails(Vector3i position, Vector3i rotation, float distance)
+{
+	Spacetime st;
+	SMOKETRAIL *trail;
+	SMOKETRAIL_SEGMENT newSegment;
+	for (PROJECTILE *psObj = proj_GetFirst(); psObj != nullptr; psObj = proj_GetNext())
+	{
+		if (psObj->psWStats->effectType != WET_SMOKETRAIL)
+		{
+			continue;
+		}
+
+		if(!projectileSmokeTrails.count(psObj->id))
+		{
+			projectileSmokeTrails[psObj->id] = SMOKETRAIL();
+			projectileSmokeTrails[psObj->id].effectSize = psObj->psWStats->effectSize;
+			projectileSmokeTrails[psObj->id].effectTime = psObj->psWStats->effectTime;
+		}
+
+		if(psObj->state != PROJ_INFLIGHT)
+		{
+			continue;
+		}
+
+		if (graphicsTime < psObj->prevSpacetime.time || graphicsTime > psObj->time)
+		{
+			continue;
+		}
+
+		if(!gfxVisible(psObj))
+		{
+			continue;
+		}
+
+		st = interpolateObjectSpacetime(psObj, graphicsTime);
+		trail = &projectileSmokeTrails[psObj->id];
+
+		if(trail->segments.size() == 0 || graphicsTime > trail->timeLastSegment + trail->effectTime / 5)
+		{
+			newSegment = SMOKETRAIL_SEGMENT();
+
+			if(trail->segments.size() > 0)
+			{
+				newSegment.start = trail->segments[trail->segments.size() - 1].end;
+			}
+			else
+			{
+				newSegment.start = glm::vec3(st.pos.x, st.pos.z, -st.pos.y);
+			}
+			newSegment.startTime = graphicsTime;
+
+			trail->segments.push_back(newSegment);
+			trail->timeLastSegment = graphicsTime;
+		}
+
+		trail->segments[trail->segments.size() - 1].end = glm::vec3(st.pos.x, st.pos.z, -st.pos.y);
+	}
+
+	std::vector<UDWORD> trailsToDelete;
+	auto perspective = pie_PerspectiveGet();
+
+	for (std::map<UDWORD, SMOKETRAIL>::iterator iterator = projectileSmokeTrails.begin(); iterator != projectileSmokeTrails.end(); iterator++ ) {
+		if(graphicsTime > iterator->second.timeLastSegment + iterator->second.effectTime)
+		{
+			trailsToDelete.push_back(iterator->first);
+			continue;
+		}
+
+		pie_SmokeTrail(iterator->second, position, rotation, distance, perspective);
+	}
+
+	for(std::vector<UDWORD>::iterator iterator = trailsToDelete.begin(); iterator != trailsToDelete.end(); iterator++)
+	{
+		projectileSmokeTrails.erase(*iterator);
+	}
 }
 
 /// Decide whether to render a projectile, and make sure it will be drawn

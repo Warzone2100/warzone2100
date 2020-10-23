@@ -106,7 +106,8 @@ enum SHADER_MODE
 	SHADER_GENERIC_COLOR,
 	SHADER_LINE,
 	SHADER_TEXT,
-	SHADER_MAX
+	SHADER_MAX,
+	SHADER_SMOKETRAIL,
 };
 
 //*************************************************************************

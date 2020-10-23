@@ -238,6 +238,7 @@ void statsInitVars();
 
 bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect);
 bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass);
+void getEffectType(const WzString& effectTypeStr, WEAPON_EFFECT_TYPE *effectType);
 
 /* Wrappers */
 

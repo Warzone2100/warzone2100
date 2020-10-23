@@ -185,6 +185,7 @@ namespace gfx_api
 
 	enum class vertex_attribute_type
 	{
+		float1,
 		float2,
 		float3,
 		float4,
@@ -772,6 +773,21 @@ namespace gfx_api
 	std::tuple<
 	vertex_buffer_description<4, vertex_attribute_description<position, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
 	>, notexture, SHADER_LINE>;
+
+	template<>
+	struct constant_buffer_type<SHADER_SMOKETRAIL>
+	{
+		glm::mat4 ModelViewProjectionMatrix;
+	};
+
+	using SmokeTrailPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MODE::REND_ADDITIVE, DEPTH_MODE::DEPTH_CMP_ALWAYS_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::none>, primitive_type::triangles, index_type::u16,
+	std::tuple<
+	vertex_buffer_description<6 * sizeof(float), 
+		vertex_attribute_description<0, gfx_api::vertex_attribute_type::float3, 0 * sizeof(float)>,
+		vertex_attribute_description<1, gfx_api::vertex_attribute_type::float2, 3 * sizeof(float)>,
+		vertex_attribute_description<2, gfx_api::vertex_attribute_type::float1, 5 * sizeof(float)>
+	>
+	>, std::tuple<texture_description<0, sampler_type::bilinear>>, SHADER_SMOKETRAIL>;
 }
 
 static inline int to_int(gfx_api::context::swap_interval_mode mode)
