@@ -19,23 +19,23 @@ function throttleThis(throttleThis, time)
           time = 2000;
      }
 
-     if (!defined(arguments.callee.caller.throttleTimes))
+     if (!defined(debugGetCallerFuncObject().throttleTimes))
      {
-          arguments.callee.caller.throttleTimes = {};
+          debugGetCallerFuncObject().throttleTimes = {};
      }
 
-	if (!defined(arguments.callee.caller.throttleTimes[throttleThis]))
+	if (!defined(debugGetCallerFuncObject().throttleTimes[throttleThis]))
      {
-		arguments.callee.caller.throttleTimes[throttleThis] = gameTime;
+		debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
 		return false;
 	}
 
-	if (gameTime - arguments.callee.caller.throttleTimes[throttleThis] < time)
+	if (gameTime - debugGetCallerFuncObject().throttleTimes[throttleThis] < time)
      {
           return true;
      }
 
-	arguments.callee.caller.throttleTimes[throttleThis] = gameTime;
+	debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
 
 	return false;
 }
