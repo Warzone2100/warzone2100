@@ -59,7 +59,7 @@ function camUnmarkTiles(label)
 function camDebug()
 {
 	__camGenericDebug("DEBUG",
-	                  arguments.callee.caller.name,
+	                  debugGetCallerFuncName(),
 	                  arguments,
 	                  true,
 	                  __camBacktrace());
@@ -72,14 +72,14 @@ function camDebug()
 //;;
 function camDebugOnce()
 {
-	var str = arguments.callee.caller.name + ": " + Array.prototype.join.call(arguments, " ");
+	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
 	if (camDef(__camDebuggedOnce[str]))
 	{
 		return;
 	}
 	__camDebuggedOnce[str] = true;
 	__camGenericDebug("DEBUG",
-	                  arguments.callee.caller.name,
+	                  debugGetCallerFuncName(),
 	                  arguments,
 	                  true,
 	                  __camBacktrace());
@@ -98,7 +98,7 @@ function camTrace()
 		return;
 	}
 	__camGenericDebug("TRACE",
-	                  arguments.callee.caller.name,
+	                  debugGetCallerFuncName(),
 	                  arguments);
 }
 
@@ -113,14 +113,14 @@ function camTraceOnce()
 	{
 		return;
 	}
-	var str = arguments.callee.caller.name + ": " + Array.prototype.join.call(arguments, " ");
+	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
 	if (camDef(__camTracedOnce[str]))
 	{
 		return;
 	}
 	__camTracedOnce[str] = true;
 	__camGenericDebug("TRACE",
-	                  arguments.callee.caller.name,
+	                  debugGetCallerFuncName(),
 	                  arguments);
 }
 
@@ -177,19 +177,5 @@ function __camGenericDebug(flag, func, args, err, bt)
 
 function __camBacktrace()
 {
-	var func = arguments.callee.caller;
-	var list = [];
-	while (camDef(func) && func)
-	{
-		if (func.name)
-		{
-			list.push(func.name);
-		}
-		else
-		{
-			list.push("<anonymous>");
-		}
-		func = func.caller;
-	}
-	return list;
+	return debugGetBacktrace();
 }

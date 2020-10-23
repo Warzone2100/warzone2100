@@ -32,6 +32,7 @@
 #include <QtScript/QScriptValue>
 #include <QtScript/QScriptValueIterator>
 #include <QtScript/QScriptSyntaxCheckResult>
+#include <QtScript/QScriptContextInfo>
 #include <QtCore/QStringList>
 #include <QtCore/QJsonArray>
 #include <QtGui/QStandardItemModel>
@@ -2206,6 +2207,63 @@ static QScriptValue js_namespace(QScriptContext *context, QScriptEngine *engine)
 	return QScriptValue(true);
 }
 
+static QScriptValue debugGetCallerFuncObject(QScriptContext *context, QScriptEngine *engine)
+{
+	QScriptContext *psContext = context;
+	size_t levels = 0;
+	for(; levels < 2; psContext = psContext->parentContext())
+	{
+		if (psContext == NULL)
+		{
+			return context->throwError(QScriptContext::ReferenceError, "Unable to get caller function object");
+		}
+		levels++;
+	}
+	return psContext->callee();
+}
+
+//-- ## debugGetCallerFuncName()
+//-- Returns the function name of the caller of the current context as a string (if available).
+//-- ex.
+//-- ```javascript
+//--   function FuncA() {
+//--     var callerFuncName = debugGetCallerFuncName();
+//--     debug(callerFuncName);
+//--   }
+//--   function FuncB() {
+//--     FuncA();
+//--   }
+//--   FuncB();
+//-- ```
+//-- Will output: "FuncB"
+//-- Useful for debug logging.
+//--
+static QScriptValue debugGetCallerFuncName(QScriptContext *context, QScriptEngine *engine)
+{
+	return debugGetCallerFuncObject(context, engine).property("name").toString();
+}
+
+static QScriptValue debugGetBacktrace(QScriptContext *context, QScriptEngine *engine)
+{
+	QStringList list;
+	QScriptContext *psContext = context;
+	while (psContext)
+	{
+		QScriptContextInfo contextInfo(psContext);
+		QScriptValue name = contextInfo.functionName();
+		if (name.isValid() && name.isString())
+		{
+			list.append(name.toString());
+		}
+		else
+		{
+			list.append("<anonymous>");
+		}
+		psContext = psContext->parentContext();
+	}
+	return qScriptValueFromSequence(engine, list);
+}
+
 ScriptMapData runMapScript_QtScript(WzString const &path, uint64_t seed, bool preview)
 {
 	ScriptMapData data;
@@ -2361,6 +2419,9 @@ bool qtscript_scripting_instance::loadScript(const WzString& path, int player, i
 	engine->globalObject().setProperty("profile", engine->newFunction(js_profile)); // JS-specific implementation
 	engine->globalObject().setProperty("include", engine->newFunction(js_include)); // backend-specific (a scripting_instance can't directly include a different type of script)
 	engine->globalObject().setProperty("namespace", engine->newFunction(js_namespace)); // JS-specific implementation
+	engine->globalObject().setProperty("debugGetCallerFuncObject", engine->newFunction(debugGetCallerFuncObject)); // backend-specific
+	engine->globalObject().setProperty("debugGetCallerFuncName", engine->newFunction(debugGetCallerFuncName)); // backend-specific
+	engine->globalObject().setProperty("debugGetBacktrace", engine->newFunction(debugGetBacktrace)); // backend-specific
 
 	// Regular functions
 	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));

@@ -20,29 +20,29 @@ function cacheThis(func, funcParameters, cachedItem, time)
           funcParameters = [];
      }
 
-     if ((time === Infinity) && isDefined(arguments.callee.caller.cachedValues))
+     if ((time === Infinity) && isDefined(debugGetCallerFuncObject().cachedValues))
      {
-          return arguments.callee.caller.cachedValues[cachedItem];
+          return debugGetCallerFuncObject().cachedValues[cachedItem];
      }
 
-     if (!isDefined(arguments.callee.caller.cachedTimes))
+     if (!isDefined(debugGetCallerFuncObject().cachedTimes))
      {
-		arguments.callee.caller.cachedTimes = {};
-		arguments.callee.caller.cachedValues = {};
+		debugGetCallerFuncObject().cachedTimes = {};
+		debugGetCallerFuncObject().cachedValues = {};
 	}
 
-	var t = arguments.callee.caller.cachedTimes[cachedItem];
-     var obj = arguments.callee.caller.cachedValues[cachedItem];
+	var t = debugGetCallerFuncObject().cachedTimes[cachedItem];
+     var obj = debugGetCallerFuncObject().cachedValues[cachedItem];
      var def = isDefined(obj);
 	if (!def ||
           (isDefined(obj.typeInfo) && (getObject(obj.typeInfo, obj.playerInfo, obj.idInfo) === null)) ||
           ((gameTime - t) >= REFRESH_TIME))
      {
-		arguments.callee.caller.cachedValues[cachedItem] = callFuncWithArgs(func, funcParameters);
-		arguments.callee.caller.cachedTimes[cachedItem] = gameTime;
+		debugGetCallerFuncObject().cachedValues[cachedItem] = callFuncWithArgs(func, funcParameters);
+		debugGetCallerFuncObject().cachedTimes[cachedItem] = gameTime;
 	}
 
-     return arguments.callee.caller.cachedValues[cachedItem];
+     return debugGetCallerFuncObject().cachedValues[cachedItem];
 }
 
 //A simple throttle function to make sure something is not executed too much.
@@ -53,23 +53,23 @@ function stopExecution(throttleThis, time)
           time = 2000;
      }
 
-     if (!isDefined(arguments.callee.caller.throttleTimes))
+     if (!isDefined(debugGetCallerFuncObject().throttleTimes))
      {
-          arguments.callee.caller.throttleTimes = {};
+          debugGetCallerFuncObject().throttleTimes = {};
      }
 
-	if (!isDefined(arguments.callee.caller.throttleTimes[throttleThis]))
+	if (!isDefined(debugGetCallerFuncObject().throttleTimes[throttleThis]))
      {
-		arguments.callee.caller.throttleTimes[throttleThis] = gameTime;
+		debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
 		return false;
 	}
 
-	if (gameTime - arguments.callee.caller.throttleTimes[throttleThis] < time)
+	if (gameTime - debugGetCallerFuncObject().throttleTimes[throttleThis] < time)
      {
           return true;
      }
 
-	arguments.callee.caller.throttleTimes[throttleThis] = gameTime;
+	debugGetCallerFuncObject().throttleTimes[throttleThis] = gameTime;
 	return false;
 }
 

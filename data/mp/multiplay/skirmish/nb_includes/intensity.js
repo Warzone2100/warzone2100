@@ -17,15 +17,15 @@
 // NOTE: it won't work if the function repeatedly dies and gets created again, eg.
 // a function defined inside forEach(function(...){...}) can't be throttled
 _global.throttled = function(interval, notes) {
-	if (!defined(arguments.callee.caller.throttleTimes))
-		arguments.callee.caller.throttleTimes = {};
-	if (!defined(arguments.callee.caller.throttleTimes[notes])) {
-		arguments.callee.caller.throttleTimes[notes] = gameTime;
+	if (!defined(debugGetCallerFuncObject().throttleTimes))
+		debugGetCallerFuncObject().throttleTimes = {};
+	if (!defined(debugGetCallerFuncObject().throttleTimes[notes])) {
+		debugGetCallerFuncObject().throttleTimes[notes] = gameTime;
 		return false;
 	}
-	if (gameTime - arguments.callee.caller.throttleTimes[notes] < interval)
+	if (gameTime - debugGetCallerFuncObject().throttleTimes[notes] < interval)
 		return true;
-	arguments.callee.caller.throttleTimes[notes] = gameTime;
+	debugGetCallerFuncObject().throttleTimes[notes] = gameTime;
 	return false;
 }
 
@@ -42,16 +42,16 @@ _global.throttled = function(interval, notes) {
 // NOTE: it won't work if the function repeatedly dies and gets created again, eg.
 // a function defined inside forEach(function(...){...}) can't have caching inside
 _global.cached = function(whatToCall, interval, notes) {
-	if (!defined(arguments.callee.caller.cachedTimes)) {
-		arguments.callee.caller.cachedTimes = {};
-		arguments.callee.caller.cachedValues = {};
+	if (!defined(debugGetCallerFuncObject().cachedTimes)) {
+		debugGetCallerFuncObject().cachedTimes = {};
+		debugGetCallerFuncObject().cachedValues = {};
 	}
-	var t = arguments.callee.caller.cachedTimes[notes];
+	var t = debugGetCallerFuncObject().cachedTimes[notes];
 	if (!defined(t) || gameTime - t >= interval) {
-		arguments.callee.caller.cachedValues[notes] = whatToCall();
-		arguments.callee.caller.cachedTimes[notes] = gameTime;
+		debugGetCallerFuncObject().cachedValues[notes] = whatToCall();
+		debugGetCallerFuncObject().cachedTimes[notes] = gameTime;
 	}
-	return arguments.callee.caller.cachedValues[notes];
+	return debugGetCallerFuncObject().cachedValues[notes];
 }
 
 // if you actually want your script to send debug messages, consider using this function.
