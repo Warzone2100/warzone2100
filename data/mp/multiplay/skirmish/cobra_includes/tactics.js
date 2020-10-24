@@ -383,7 +383,7 @@ function recycleForHover()
 	var unfinished = unfinishedStructures();
 	const NON_HOVER_SYSTEMS = systems.length;
 
-	if ((countStruct(FACTORY) > MIN_FACTORY) && componentAvailable("hover01"))
+	if ((countStruct(structures.factory) > MIN_FACTORY) && componentAvailable("hover01"))
 	{
 		if (!unfinished.length && NON_HOVER_SYSTEMS)
 		{

@@ -211,14 +211,14 @@ function research()
 			{
 				found = pursueResearch(lab, "R-Vehicle-Metals03");
 
-				if (!found && !turnOffCyborgs && countStruct(CYBORG_FACTORY))
+				if (!found && !turnOffCyborgs && countStruct(structures.cyborgFactory))
 					found = pursueResearch(lab, "R-Cyborg-Metals03");
 
 				if (gameTime > timeToResearchAdvancedBody())
 				{
 					if (!found && (random(100) < subPersonalities[personality].alloyPriority))
 					{
-						if (!turnOffCyborgs && countStruct(CYBORG_FACTORY) && random(100) < 50)
+						if (!turnOffCyborgs && countStruct(structures.cyborgFactory) && random(100) < 50)
 							found = evalResearch(lab, CYBORG_ARMOR);
 						if (!found)
 							found = evalResearch(lab, TANK_ARMOR);

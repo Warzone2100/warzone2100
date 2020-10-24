@@ -547,9 +547,9 @@ function produce()
 	{
 		var facType = subPersonalities[personality].factoryOrder[i];
 		var fac = enumStruct(me, facType);
-		if (!((facType === CYBORG_FACTORY) && !forceHover && turnOffCyborgs))
+		if (!((facType === structures.cyborgFactory) && !forceHover && turnOffCyborgs))
 		{
-			if (facType === VTOL_FACTORY && !countDroid(DROID_CONSTRUCT))
+			if (facType === structures.vtolFactory && !countDroid(DROID_CONSTRUCT))
 			{
 				continue;
 			}
@@ -570,7 +570,7 @@ function produce()
 					continue;
 				}
 
-				if (facType === FACTORY)
+				if (facType === structures.factory)
 				{
 					if (buildTrucks &&
 						(attackerCountsGood(false) ||
@@ -604,7 +604,7 @@ function produce()
 				}
 				else
 				{
-					var cyb = (facType === CYBORG_FACTORY);
+					var cyb = (facType === structures.cyborgFactory);
 					//In some circumstances the bot could be left with no generators and no factories
 					//but still needs to produce combat engineers to, maybe, continue surviving.
 					if (countStruct(structures.gen) || (cyb && useCybEngineer && (gameTime > 480000)))
@@ -619,7 +619,7 @@ function produce()
 						}
 						else
 						{
-							if (useVtol && facType === VTOL_FACTORY && countStruct(structures.derrick))
+							if (useVtol && facType === structures.vtolFactory && countStruct(structures.derrick))
 							{
 								buildVTOL(FC.id);
 							}

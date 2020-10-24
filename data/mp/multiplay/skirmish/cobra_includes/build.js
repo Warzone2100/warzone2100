@@ -562,7 +562,7 @@ function buildBaseStructures()
 
 	if (!highOilMap())
 	{
-		if (GOOD_POWER_LEVEL && countAndBuild(FACTORY, 1))
+		if (GOOD_POWER_LEVEL && countAndBuild(structures.factory, 1))
 		{
 			return true;
 		}
@@ -570,7 +570,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(FACTORY, 2))
+		if (countAndBuild(structures.factory, 2))
 		{
 			return true;
 		}
@@ -594,11 +594,11 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(CYBORG_FACTORY, 1))
+		if (countAndBuild(structures.cyborgFactory, 1))
 		{
 			return true;
 		}
-		if (countAndBuild(VTOL_FACTORY, 1))
+		if (countAndBuild(structures.vtolFactory, 1))
 		{
 			return true;
 		}
@@ -616,7 +616,7 @@ function buildBaseStructures()
 		{
 			return true; //a little fail-safe
 		}
-		if (countAndBuild(FACTORY, 2))
+		if (countAndBuild(structures.factory, 2))
 		{
 			return true;
 		}
@@ -628,7 +628,7 @@ function buildBaseStructures()
 		{
 			return true; //a little fail-safe
 		}
-		if (countAndBuild(FACTORY, 3))
+		if (countAndBuild(structures.factory, 3))
 		{
 			return true;
 		}
@@ -636,7 +636,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(CYBORG_FACTORY, 3))
+		if (countAndBuild(structures.cyborgFactory, 3))
 		{
 			return true;
 		}
@@ -648,7 +648,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(FACTORY, 5))
+		if (countAndBuild(structures.factory, 5))
 		{
 			return true;
 		}
@@ -656,7 +656,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(CYBORG_FACTORY, 5))
+		if (countAndBuild(structures.cyborgFactory, 5))
 		{
 			return true;
 		}
@@ -666,7 +666,7 @@ function buildBaseStructures()
 		}
 	}
 
-	if (getMultiTechLevel() > 1 && countStruct(VTOL_FACTORY) > 0 && countAndBuild(structures.vtolPad, 3))
+	if (getMultiTechLevel() > 1 && countStruct(structures.vtolFactory) > 0 && countAndBuild(structures.vtolPad, 3))
 	{
 		return true;
 	}
@@ -684,11 +684,11 @@ function factoryBuildOrder()
 	{
 		var fac = subPersonalities[personality].factoryOrder[i];
 
-		if ((fac === VTOL_FACTORY && !useVtol) || (fac === CYBORG_FACTORY && (turnOffCyborgs || forceHover)))
+		if ((fac === structures.vtolFactory && !useVtol) || (fac === structures.cyborgFactory && (turnOffCyborgs || forceHover)))
 		{
 			continue;
 		}
-		if (fac === VTOL_FACTORY && !getResearch("R-Struc-VTOLPad-Upgrade01").done)
+		if (fac === structures.vtolFactory && !getResearch("R-Struc-VTOLPad-Upgrade01").done)
 		{
 			continue; //wait until the pads are better (at least for high oil)
 		}
@@ -812,7 +812,7 @@ function buildExtras()
 
 function buildNTWPhase2()
 {
-	if (countAndBuild(CYBORG_FACTORY, 5))
+	if (countAndBuild(structures.cyborgFactory, 5))
 	{
 		return true;
 	}
@@ -886,8 +886,8 @@ function maintenance(group)
 		modList = [
 			{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.lab},
 			{"mod": "A0PowMod1", "amount": 1, "structure": structures.gen},
-			{"mod": "A0FacMod1", "amount": 2, "structure": FACTORY},
-			{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY},
+			{"mod": "A0FacMod1", "amount": 2, "structure": structures.factory},
+			{"mod": "A0FacMod1", "amount": 2, "structure": structures.vtolFactory},
 		];
 	}
 	else
@@ -896,10 +896,10 @@ function maintenance(group)
 		{
 			modList = [
 				{"mod": "A0PowMod1", "amount": 1, "structure": structures.gen},
-				{"mod": "A0FacMod1", "amount": 1, "structure": FACTORY},
+				{"mod": "A0FacMod1", "amount": 1, "structure": structures.factory},
 				{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.lab},
-				{"mod": "A0FacMod1", "amount": 2, "structure": FACTORY},
-				{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY},
+				{"mod": "A0FacMod1", "amount": 2, "structure": structures.factory},
+				{"mod": "A0FacMod1", "amount": 2, "structure": structures.vtolFactory},
 			];
 		}
 		else
@@ -907,8 +907,8 @@ function maintenance(group)
 			modList = [
 				{"mod": "A0PowMod1", "amount": 1, "structure": structures.gen},
 				{"mod": "A0ResearchModule1", "amount": 1, "structure": structures.lab},
-				{"mod": "A0FacMod1", "amount": 2, "structure": FACTORY},
-				{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY},
+				{"mod": "A0FacMod1", "amount": 2, "structure": structures.factory},
+				{"mod": "A0FacMod1", "amount": 2, "structure": structures.vtolFactory},
 			];
 		}
 	}
@@ -924,7 +924,7 @@ function maintenance(group)
 
 		if (isStructureAvailable(modObj.mod))
 		{
-			if (modObj.structure === VTOL_FACTORY && !componentAvailable("V-Tol"))
+			if (modObj.structure === structures.vtolFactory && !componentAvailable("V-Tol"))
 			{
 				//Stop wasting power on upgrading VTOL factories if we don't have them
 				//researched yet (from some maps).

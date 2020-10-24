@@ -8,9 +8,6 @@ include(COBRA_RULESETS + "CobraStandard.js");
 const LOG_RESEARCH_PATH = false;
 
 const MIN_ATTACK_DROIDS = 4;
-const FACTORY = "A0LightFactory";
-const CYBORG_FACTORY = "A0CyborgFactory";
-const VTOL_FACTORY = "A0VTolFactory1";
 const MY_BASE = startPositions[me];
 const OIL_RES = "OilResource";
 const MIN_POWER = 150;
@@ -157,7 +154,7 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.gauss,
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
 		"defensePriority": 5,
 		"vtolPriority": 40,
 		"alloyPriority": 33,
@@ -180,7 +177,7 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.gauss,
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
 		"defensePriority": 5,
 		"vtolPriority": 50,
 		"alloyPriority": 35,
@@ -203,7 +200,7 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.gauss,
 		"artillery": weaponStats.rockets_Arty,
 		"antiAir": weaponStats.rockets_AA,
-		"factoryOrder": [VTOL_FACTORY, FACTORY, CYBORG_FACTORY],
+		"factoryOrder": [structures.vtolFactory, structures.factory, structures.cyborgFactory],
 		"defensePriority": 7,
 		"vtolPriority": 50,
 		"alloyPriority": 25,
@@ -225,7 +222,7 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.lasers,
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
 		"defensePriority": 5,
 		"vtolPriority": 80,
 		"alloyPriority": 35,
@@ -247,7 +244,7 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.AS,
 		"artillery": weaponStats.fireMortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
 		"defensePriority": 15,
 		"vtolPriority": 66,
 		"alloyPriority": 10,
