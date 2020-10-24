@@ -249,9 +249,6 @@ void kf_ToggleReopenBuildMenu();
 void kf_ToggleShowGateways();
 void kf_ToggleShowPath();
 
-// dirty but necessary
-extern char sTextToSend[MAX_CONSOLE_STRING_LENGTH];
-
 void kf_FaceNorth();
 void kf_FaceSouth();
 void kf_FaceEast();
