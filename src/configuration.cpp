@@ -183,15 +183,6 @@ bool loadConfig()
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 	game.scavengers = ini.value("scavengers", false).toBool();
-	memset(&ingame.phrases, 0, sizeof(ingame.phrases));
-	for (int i = 1; i < 5; i++)
-	{
-		QString key("phrase" + QString::number(i));
-		if (ini.contains(key))
-		{
-			sstrcpy(ingame.phrases[i], ini.value(key).toString().toUtf8().constData());
-		}
-	}
 	bEnemyAllyRadarColor = ini.value("radarObjectMode").toBool();
 	radarDrawMode = (RADAR_DRAW_MODE)ini.value("radarTerrainMode", RADAR_MODE_DEFAULT).toInt();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values

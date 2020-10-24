@@ -92,7 +92,6 @@ extern char	ScreenDumpPath[];
 
 bool	bMovePause = false;
 bool		bAllowOtherKeyPresses = true;
-char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
 static STRUCTURE	*psOldRE = nullptr;
@@ -2019,7 +2018,6 @@ void kf_SendTeamMessage()
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
-		sstrcpy(sTextToSend, "");
 		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
 		chatDialog(CHAT_TEAM);						// throw up the dialog
@@ -2041,7 +2039,6 @@ void kf_SendGlobalMessage()
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
-		sstrcpy(sTextToSend, "");
 		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
 		chatDialog(CHAT_GLOB);						// throw up the dialog
@@ -2049,73 +2046,6 @@ void kf_SendGlobalMessage()
 	else
 	{
 		bAllowOtherKeyPresses = true;
-	}
-
-	// macro store stuff
-	if (keyPressed(KEY_F1))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[0], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[0]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F2))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[1], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[1]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F3))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[2], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[2]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F4))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[3], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[3]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F5))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[4], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[4]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
 	}
 }
 

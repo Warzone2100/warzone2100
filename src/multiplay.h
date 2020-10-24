@@ -100,7 +100,6 @@ struct MULTIPLAYERINGAME
 #define MPFLAGS_FORCELIMITS	0x20  		///< Flag to force structure limits
 #define MPFLAGS_MAX		0x3f
 	SDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
-	char		phrases[5][255];					// 5 favourite text messages.
 };
 
 enum STRUCTURE_INFO
