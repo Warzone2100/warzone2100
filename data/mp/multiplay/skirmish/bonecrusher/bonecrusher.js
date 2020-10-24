@@ -114,7 +114,6 @@ var func_buildersOrder_trigger = 0;
 
 //Отсутствующие переменные
 const DORDER_NONE = 0;
-const DORDER_RECOVER = 33;
 
 
 // --- TRIGGERS --- \\
