@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-10-22 05:04\n"
+"PO-Revision-Date: 2020-10-24 17:39\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -7075,7 +7075,7 @@ msgstr "Béta küldetés"
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1159
 msgid "Beta"
-msgstr ""
+msgstr "Béta"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7151,7 +7151,7 @@ msgstr "Ragaszással rétegelt fémerősítés a falakba és a védművekbe"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.name
 #: po/custom/fromJson.txt:1238
 msgid "BoneCrusher!"
-msgstr ""
+msgstr "Csonttörő!"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body4ABT.name
@@ -7457,7 +7457,7 @@ msgstr "Cobra munkagép"
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1415
 msgid "Cobra"
-msgstr ""
+msgstr "Kobra"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -7680,7 +7680,7 @@ msgstr "Építő egység"
 #. data/mp/messages/resmessages1.json: $.RES_ST_CR1.text[3]
 #: po/custom/fromJson.txt:1556
 msgid "Controls up to ten commanders"
-msgstr ""
+msgstr "Legfeljebb tíz parancsnokot irányít"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[3]
@@ -8499,7 +8499,7 @@ msgstr "Gamma küldetés"
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2131
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
