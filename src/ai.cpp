@@ -36,6 +36,7 @@
 #include "projectile.h"
 #include "objmem.h"
 #include "order.h"
+#include "drive.h"
 
 /* Weights used for target selection code,
  * target distance is used as 'common currency'
@@ -1077,6 +1078,11 @@ void aiUpdateDroid(DROID *psDroid)
 	}
 
 	if (psDroid->droidType != DROID_SENSOR && psDroid->numWeaps == 0)
+	{
+		return;
+	}
+	
+	if (isDrivingDroid(psDroid))
 	{
 		return;
 	}

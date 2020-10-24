@@ -55,6 +55,7 @@ void kf_ToggleDistanceFog();
 void kf_ToggleMistFog();
 void kf_ToggleFog();
 void kf_ToggleShadows();
+void kf_ToggleDriveMode();
 void kf_ToggleCamera();
 void kf_RaiseTile();
 void kf_LowerTile();

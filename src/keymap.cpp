@@ -214,6 +214,7 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_CameraRight, "CameraRight"},
 	{kf_CameraLeft, "CameraLeft"},
 	{kf_SeekNorth, "SeekNorth"},
+	{kf_ToggleDriveMode, "ToggleDriveMode"},
 	{kf_ToggleCamera, "ToggleCamera"},
 	{kf_addInGameOptions, "addInGameOptions"},
 	{kf_RadarZoomOut, "RadarZoomOut"},
@@ -467,6 +468,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_LEFTARROW,         KEYMAP_DOWN,    kf_CameraLeft,              N_("Move Camera Left"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKSPACE,         KEYMAP_PRESSED, kf_SeekNorth,               N_("Snap View to North"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_SPACE,             KEYMAP_PRESSED, kf_ToggleCamera,            N_("Toggle Tracking Camera"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_SPACE,             KEYMAP_PRESSED, kf_ToggleDriveMode,            N_("Toggle Drive Mode"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_ESC,               KEYMAP_PRESSED, kf_addInGameOptions,        N_("Display In-Game Options"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_MINUS,             KEYMAP_PRESSED, kf_RadarZoomOut,            N_("Zoom Radar Out"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_EQUALS,            KEYMAP_PRESSED, kf_RadarZoomIn,             N_("Zoom Radar In"), bForceDefaults) || didAdd;

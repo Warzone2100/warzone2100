@@ -113,6 +113,7 @@ bool anyBlueprintTooClose(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t d
 void clearBlueprints();
 
 void display3dScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
+void locate2DCoordsIn3D(const Vector2i pt, Vector2i &pos);
 
 extern SDWORD mouseTileX, mouseTileY;
 extern Vector2i mousePos;
@@ -142,6 +143,9 @@ extern bool tuiTargetOrigin;
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
 bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix);
 
+int calculateCameraHeight(int mapHeight);
 int calculateCameraHeightAt(int tileX, int tileY);
+/// The average terrain height for the center of the area the camera is looking at
+extern int averageCentreTerrainHeight;
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

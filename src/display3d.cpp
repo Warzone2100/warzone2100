@@ -65,6 +65,7 @@
 #include "feature.h"
 #include "hci.h"
 #include "display.h"
+#include "drive.h"
 #include "intdisplay.h"
 #include "radar.h"
 #include "display3d.h"
@@ -119,7 +120,6 @@ static void	drawDroidOrder(const DROID *psDroid);
 static void	drawDroidRank(DROID *psDroid);
 static void	drawDroidSensorLock(DROID *psDroid);
 static	int	calcAverageTerrainHeight(int tileX, int tileZ);
-static	int	calculateCameraHeight(int height);
 static void	updatePlayerAverageCentreTerrainHeight();
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
@@ -264,7 +264,7 @@ char DROIDDOING[512];
 static const int geoOffset = 192;
 
 /// The average terrain height for the center of the area the camera is looking at
-static int averageCentreTerrainHeight;
+int averageCentreTerrainHeight;
 
 /** The time at which a sensor target was last assigned
  * Used to draw a visual effect.
@@ -784,9 +784,13 @@ void draw3DScene()
 	}
 
 	pie_BeginInterface();
-	drawDroidSelections();
 
-	drawStructureSelections();
+	if(isDriving()){
+		drawDriveModeBoxes();
+	} else {
+		drawDroidSelections();
+		drawStructureSelections();
+	}
 
 	if (!bRender3DOnly)
 	{
@@ -906,16 +910,20 @@ void draw3DScene()
 		player.r.y -= DEG(360);
 	}
 
-	/* If we don't have an active camera track, then track terrain height! */
-	if (!getWarCamStatus())
+	updatePlayerAverageCentreTerrainHeight();
+
+	if (getWarCamStatus())
 	{
-		/* Move the autonomous camera if necessary */
-		updatePlayerAverageCentreTerrainHeight();
-		trackHeight(calculateCameraHeight(averageCentreTerrainHeight));
+		processWarCam();
+	}
+	else if(isDriving())
+	{
+		processDriving();
 	}
 	else
 	{
-		processWarCam();
+		/* If we don't have an active camera track, then track terrain height! */
+		trackHeight(calculateCameraHeight(averageCentreTerrainHeight));
 	}
 
 	processSensorTarget();
@@ -3310,13 +3318,8 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	psDroid->sDisplay.screenR = radius;
 }
 
-/**
- * Find the tile the mouse is currently over
- * \todo This is slow - speed it up
- */
-static void locateMouse()
+void locate2DCoordsIn3D(const Vector2i pt, Vector2i &pos)
 {
-	const Vector2i pt(mouseX(), mouseY());
 	int nearestZ = INT_MAX;
 
 	// Intentionally not the same range as in drawTiles()
@@ -3345,29 +3348,26 @@ static void locateMouse()
 				/* We've got a match for our mouse coords */
 				if (inQuad(&pt, &quad))
 				{
-					mousePos.x = player.p.x + world_coord(j);
-					mousePos.y = player.p.z + world_coord(i);
-					mousePos += positionInQuad(pt, quad);
+					pos.x = player.p.x + world_coord(j);
+					pos.y = player.p.z + world_coord(i);
+					pos += positionInQuad(pt, quad);
 
-					if (mousePos.x < 0)
+					if (pos.x < 0)
 					{
-						mousePos.x = 0;
+						pos.x = 0;
 					}
-					else if (mousePos.x > world_coord(mapWidth - 1))
+					else if (pos.x > world_coord(mapWidth - 1))
 					{
-						mousePos.x = world_coord(mapWidth - 1);
+						pos.x = world_coord(mapWidth - 1);
 					}
-					if (mousePos.y < 0)
+					if (pos.y < 0)
 					{
-						mousePos.y = 0;
+						pos.y = 0;
 					}
-					else if (mousePos.y > world_coord(mapHeight - 1))
+					else if (pos.y > world_coord(mapHeight - 1))
 					{
-						mousePos.y = world_coord(mapHeight - 1);
+						pos.y = world_coord(mapHeight - 1);
 					}
-
-					mouseTileX = map_coord(mousePos.x);
-					mouseTileY = map_coord(mousePos.y);
 
 					/* Store away z value */
 					nearestZ = tileZ;
@@ -3375,6 +3375,20 @@ static void locateMouse()
 			}
 		}
 	}
+}
+
+/**
+ * Find the tile the mouse is currently over
+ * \todo This is slow - speed it up
+ */
+static void locateMouse()
+{
+	const Vector2i pt(mouseX(), mouseY());
+
+	locate2DCoordsIn3D(pt, mousePos);
+
+	mouseTileX = map_coord(mousePos.x);
+	mouseTileY = map_coord(mousePos.y);
 }
 
 /// Render the sky and surroundings
@@ -3391,7 +3405,7 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, player.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(UNDEG(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
-static int calculateCameraHeight(int mapHeight)
+int calculateCameraHeight(int mapHeight)
 {
 	return static_cast<int>(std::ceil(static_cast<float>(mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
 }

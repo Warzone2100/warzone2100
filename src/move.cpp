@@ -36,6 +36,7 @@
 
 #include "move.h"
 
+#include "drive.h"
 #include "objects.h"
 #include "visibility.h"
 #include "map.h"
@@ -114,6 +115,7 @@ const char *moveDescription(MOVE_STATUS status)
 	case MOVEPOINTTOPOINT : return "P2P";
 	case MOVETURNTOTARGET : return "Turn2target";
 	case MOVEHOVER : return "Hover";
+	case MOVEDRIVE : return "Drive";
 	case MOVEWAITROUTE : return "Waitroute";
 	case MOVESHUFFLE : return "Shuffle";
 	}
@@ -2224,6 +2226,11 @@ void moveUpdateDroid(DROID *psDroid)
 		break;
 	case MOVEHOVER:
 		moveDescending(psDroid);
+		break;
+	// Driven around by the player.
+	case MOVEDRIVE:
+		moveSpeed = driveGetMoveSpeed();
+		moveDir = DEG(driveGetMoveDir());
 		break;
 
 	default:

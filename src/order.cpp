@@ -34,6 +34,7 @@
 #include "objects.h"
 #include "order.h"
 #include "action.h"
+#include "drive.h"
 #include "map.h"
 #include "projectile.h"
 #include "effects.h"	// for waypoint display
@@ -332,6 +333,11 @@ void orderUpdateDroid(DROID *psDroid)
 	orderCheckList(psDroid);
 
 	if (isDead(psDroid))
+	{
+		return;
+	}
+
+	if (isDrivingDroid(psDroid))
 	{
 		return;
 	}
@@ -2951,6 +2957,12 @@ SECONDARY_STATE secondaryGetState(DROID *psDroid, SECONDARY_ORDER sec, QUEUE_MOD
 		return (SECONDARY_STATE)(state & DSS_REPLEV_MASK);
 		break;
 	case DSO_ATTACK_LEVEL:
+	
+		if(isDrivingDroid(psDroid))
+		{
+			return DSS_ALEV_NEVER;
+		}
+
 		return (SECONDARY_STATE)(state & DSS_ALEV_MASK);
 		break;
 	case DSO_ASSIGN_PRODUCTION:

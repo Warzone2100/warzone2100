@@ -43,6 +43,7 @@
 #include "loop.h"
 #include "objects.h"
 #include "display.h"
+#include "drive.h"
 #include "map.h"
 #include "hci.h"
 #include "ingameop.h"
@@ -553,6 +554,12 @@ static void gameStateUpdate()
 
 	// update the command droids
 	cmdDroidUpdate();
+
+	// process driving. needs to be here because of firing, which doesn't work if deltaGameTime is 0 (which would be the case if we would do it in display3d.cpp)
+	if(isDriving())
+	{
+		driveModeClickUpdate();
+	}
 
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{

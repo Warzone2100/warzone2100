@@ -24,6 +24,7 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/rational.h"
 #include "objects.h"
+#include "drive.h"
 #include "levels.h"
 #include "basedef.h"
 #include "map.h"
@@ -318,6 +319,10 @@ void	kf_FaceNorth()
 // --------------------------------------------------------------------------
 void	kf_FaceSouth()
 {
+	if(isDriving()){
+		return;
+	}
+	
 	player.r.y = DEG(180);
 	if (getWarCamStatus())
 	{
@@ -328,6 +333,10 @@ void	kf_FaceSouth()
 // --------------------------------------------------------------------------
 void	kf_FaceEast()
 {
+	if(isDriving()){
+		return;
+	}
+	
 	player.r.y = DEG(90);
 	if (getWarCamStatus())
 	{
@@ -338,6 +347,10 @@ void	kf_FaceEast()
 // --------------------------------------------------------------------------
 void	kf_FaceWest()
 {
+	if(isDriving()){
+		return;
+	}
+	
 	player.r.y = DEG(270);
 	if (getWarCamStatus())
 	{
@@ -802,9 +815,25 @@ void	kf_ToggleFog()
 
 // --------------------------------------------------------------------------
 
+void kf_ToggleDriveMode()
+{
+	if(isDriving())
+	{
+		stopDriving();
+	}
+	else
+	{
+		startDriving();
+	}
+}
+
 /* Toggle camera on/off */
 void	kf_ToggleCamera()
 {
+	if(isDriving()){
+		return;
+	}
+
 	camToggleStatus();
 }
 
@@ -1179,6 +1208,9 @@ void	kf_addMultiMenu()
 
 void	kf_JumpToMapMarker()
 {
+	if(isDriving()){
+		return;
+	}
 
 	KEY_CODE	entry;
 	if (!getRadarTrackingStatus())
@@ -1269,6 +1301,10 @@ void	kf_ToggleGodMode()
 /* Aligns the view to north - some people can't handle the world spinning */
 void	kf_SeekNorth()
 {
+	if(isDriving()){
+		return;
+	}
+	
 	player.r.y = 0;
 	if (getWarCamStatus())
 	{
@@ -2368,6 +2404,10 @@ void	kf_TriggerRayCast()
 // --------------------------------------------------------------------------
 void	kf_CentreOnBase()
 {
+	if(isDriving()){
+		return;
+	}
+
 	STRUCTURE	*psStruct;
 	bool		bGotHQ;
 	UDWORD		xJump = 0, yJump = 0;
