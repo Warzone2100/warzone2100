@@ -297,7 +297,7 @@ function removeThisTimer(timer)
 //Check if Cobra is "alive". If not, the script is put in a very low perf impact state.
 function checkIfDead()
 {
-	if (!(countDroid(DROID_ANY) || countStruct(FACTORY) || countStruct(CYBORG_FACTORY)))
+	if (!(countDroid(DROID_ANY) || countStruct(structures.factory) || countStruct(structures.cyborgFactory)))
 	{
 		currently_dead = true;
 
