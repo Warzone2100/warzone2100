@@ -1172,6 +1172,28 @@ static void printchatmsg(const char *text, int from, bool team = false)
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);	// display
 }
 
+struct NetworkTextMessage
+{
+	uint32_t sender;
+	char text[MAX_CONSOLE_STRING_LENGTH];
+	bool teamSpecific = false;
+
+	NetworkTextMessage(uint32_t messageSender, char const *messageText)
+	{
+		sender = messageSender;
+		sstrcpy(text, messageText);
+	}
+
+	void enqueue(NETQUEUE queue)
+	{
+		NETbeginEncode(queue, NET_TEXTMSG);
+		NETuint32_t(&sender);
+		NETbool(&teamSpecific);
+		NETstring(text, MAX_CONSOLE_STRING_LENGTH);
+		NETend();
+	}
+};
+
 /**
  * Multi-purpose text message.
  *
@@ -1182,53 +1204,34 @@ static void printchatmsg(const char *text, int from, bool team = false)
  * - for room system messages (player joined/kicked, game starting, map downloaded, settings changed, etc.)
  * - for game system messages (player is using cheat)
  */
-bool sendTextMessage(const char *pStr, uint32_t from)
+void sendTextMessage(const char *text, uint32_t sender)
 {
-	bool				team = false;
-	bool				sendto[MAX_PLAYERS];
-	int					posTable[MAX_PLAYERS];
-	UDWORD				i;
-	char				display[MAX_CONSOLE_STRING_LENGTH];
-	char				msg[MAX_CONSOLE_STRING_LENGTH];
-	const char			*curStr = pStr;
-
-	memset(display, 0x0, sizeof(display));	//clear buffer
-	memset(msg, 0x0, sizeof(msg));		//clear buffer
-	memset(sendto, 0x0, sizeof(sendto));		//clear private flag
-	memset(posTable, 0x0, sizeof(posTable));		//clear buffer
-	sstrcpy(msg, curStr);
+	NetworkTextMessage message(sender, text);
 
 	// This is for local display
-	if (from == selectedPlayer)
-	{
-		printchatmsg(curStr, from);
-	}
+	printchatmsg(message.text, sender);
 
-	triggerEventChat(from, from, pStr); // send to self
+	triggerEventChat(sender, sender, message.text); // send to self
 
-	NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
-	NETuint32_t(&from);		// who this msg is from
-	NETbool(&team);			// team specific?
-	NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
-	NETend();
-	for (i = 0; i < MAX_PLAYERS; i++)
+	message.enqueue(NETbroadcastQueue());
+
+	for (auto receiver = 0; receiver < MAX_PLAYERS; receiver++)
 	{
-		if (i == selectedPlayer && from != i)
-		{
-			sstrcat(display, curStr);
-			printchatmsg(display, from); // also display it
+		if (receiver == sender || isHumanPlayer(receiver)) {
+			continue;
 		}
-		if (i != from && !isHumanPlayer(i) && myResponsibility(i))
+
+		if (myResponsibility(receiver))
 		{
-			triggerEventChat(from, i, msg);
+			// I'm the host and I'm sending a message to an AI
+			triggerEventChat(sender, receiver, message.text);
 		}
-		else if (i != from && !isHumanPlayer(i) && !myResponsibility(i))
+		else
 		{
-			sendAIMessage(msg, from, i);
+			// I'm not the host, so the message I'm sending to the AI needs to be sent through the network
+			sendAIMessage(message.text, sender, receiver);
 		}
 	}
-
-	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
