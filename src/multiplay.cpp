@@ -1234,7 +1234,7 @@ bool sendTextMessage(const char *pStr, uint32_t from)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between team.
-void sendTeamMessage(const char *pStr, uint32_t from)
+void sendChatTeamMessage(const char *pStr, uint32_t from)
 {
 	char	display[MAX_CONSOLE_STRING_LENGTH];
 	bool team = true;

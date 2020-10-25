@@ -184,7 +184,7 @@ bool recvMessage();
 bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
 bool sendTextMessage(const char *pStr, uint32_t from = selectedPlayer);
-void sendTeamMessage(const char *pStr, uint32_t from = selectedPlayer);
+void sendChatTeamMessage(const char *pStr, uint32_t from = selectedPlayer);
 bool sendChatMessage(const char *pStr, uint32_t from = selectedPlayer);
 void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
