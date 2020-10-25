@@ -3288,8 +3288,8 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			break;
 		}
 
-		sendTextMessage(widgGetString(psWScreen, MULTIOP_CHATEDIT), true);					//send
-		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");										// clear box
+		sendTextMessage(widgGetString(psWScreen, MULTIOP_CHATEDIT));
+		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");
 		break;
 
 	case CON_CANCEL:
@@ -3415,7 +3415,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			if (mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
 			{
 				std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player));
-				sendTextMessage(msg.c_str(), true);
+				sendTextMessage(msg.c_str());
 				kickPlayer(player, "you are unwanted by the host.", ERROR_KICKED);
 				resetReadyStatus(true);		//reset and send notification to all clients
 			}
@@ -3503,7 +3503,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	{
 		std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(teamChooserUp));
 		kickPlayer(teamChooserUp, "you are unwanted by the host.", ERROR_KICKED);
-		sendTextMessage(msg.c_str(), true);
+		sendTextMessage(msg.c_str());
 		resetReadyStatus(true);		//reset and send notification to all clients
 		closeTeamChooser();
 	}
@@ -3553,7 +3553,7 @@ void startMultiplayerGame()
 
 	if (NetPlay.isHost)
 	{
-		sendTextMessage(_("Host is Starting Game"), true);
+		sendTextMessage(_("Host is Starting Game"));
 	}
 }
 

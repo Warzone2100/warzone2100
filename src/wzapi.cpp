@@ -1927,16 +1927,16 @@ bool wzapi::chat(WZAPI_PARAMS(int target, std::string message))
 	SCRIPT_ASSERT(false, context, target >= 0 || target == ALL_PLAYERS || target == ALLIES, "Message to invalid player %d", target);
 	if (target == ALL_PLAYERS) // all
 	{
-		return sendTextMessage(message.c_str(), true, player);
+		return sendChatMessage(message.c_str(), player);
 	}
 	else if (target == ALLIES) // allies
 	{
-		return sendTextMessage((std::string(". ") + message).c_str(), false, player);
+		return sendChatMessage((std::string(". ") + message).c_str(), player);
 	}
 	else // specific player
 	{
 		WzString tmp = WzString::number(NetPlay.players[target].position) + WzString::fromUtf8(message);
-		return sendTextMessage(tmp.toUtf8().c_str(), false, player);
+		return sendChatMessage(tmp.toUtf8().c_str(), player);
 	}
 }
 
