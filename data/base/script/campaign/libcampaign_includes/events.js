@@ -94,7 +94,7 @@ function cam_eventChat(from, to, message)
 
 function cam_eventStartLevel()
 {
-	isReceivingAllEvents = true;
+	receiveAllEvents(true);
 	// Variables initialized here are the ones that should not be
 	// re-initialized on save-load. Otherwise, they are initialized
 	// on the global scope (or wherever necessary).
@@ -289,7 +289,7 @@ function cam_eventAttacked(victim, attacker)
 //Work around some things that break on save-load.
 function cam_eventGameLoaded()
 {
-	isReceivingAllEvents = true;
+	receiveAllEvents(true);
 	__camSaveLoading = true;
 	const SCAV_KEVLAR_MISSIONS = [
 		"CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",
