@@ -1359,7 +1359,7 @@ INT_RETVAL intRunWidgets()
 					attemptCheatCode(msg2);		// parse the message
 					if (mode == CHAT_TEAM)
 					{
-						sendTeamMessage(msg2);
+						sendChatTeamMessage(msg2);
 					}
 					else
 					{
