@@ -1237,42 +1237,35 @@ void sendTextMessage(const char *text, uint32_t sender)
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between team.
-void sendChatTeamMessage(const char *pStr, uint32_t from)
+void sendChatTeamMessage(const char *text, uint32_t sender)
 {
-	char	display[MAX_CONSOLE_STRING_LENGTH];
-	bool team = true;
+	NetworkTextMessage message(sender, text);
+	message.teamSpecific = true;
 
-	sstrcpy(display, pStr);
 	// This is for local display
-	if (from == selectedPlayer)
+	if (sender == selectedPlayer || aiCheckAlliances(sender, selectedPlayer))
 	{
-		printchatmsg(display, from, team);
+		printchatmsg(message.text, sender, message.teamSpecific);
 	}
 
-	for (int i = 0; i < game.maxPlayers; i++)
+	for (int receiver = 0; receiver < game.maxPlayers; receiver++)
 	{
-		if (i != from && aiCheckAlliances(from, i))
+		if (receiver == sender || !aiCheckAlliances(sender, receiver))
 		{
-			if (i == selectedPlayer)
-			{
-				printchatmsg(display, from); // also display it
-			}
-			if (isHumanPlayer(i))
-			{
-				NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
-				NETuint32_t(&from);				// who this msg is from
-				NETbool(&team);
-				NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
-				NETend();
-			}
-			else if (myResponsibility(i))
-			{
-				triggerEventChat(from, i, display);
-			}
-			else	//also send to AIs now (non-humans), needed for AI
-			{
-				sendAIMessage(display, from, i);
-			}
+			continue;
+		}
+
+		if (isHumanPlayer(receiver))
+		{
+			message.enqueue(NETnetQueue(receiver));
+		}
+		else if (myResponsibility(receiver))
+		{
+			triggerEventChat(sender, receiver, message.text);
+		}
+		else	//also send to AIs now (non-humans), needed for AI
+		{
+			sendAIMessage(message.text, sender, receiver);
 		}
 	}
 }
