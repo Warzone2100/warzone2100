@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-10-24 17:39\n"
+"PO-Revision-Date: 2020-10-25 05:34\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -4284,7 +4284,7 @@ msgstr "NYUGATI SZEKTOR"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr "2100 július 4, pirkadat"
+msgstr "2100. július 4., pirkadat"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
@@ -8605,7 +8605,8 @@ msgstr "Generálja és koncentrálja a kitörő lézer energiáját"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "~ 100%-kal több energiát nyer ki minden egyes fúrótoronyból\n"
+"Védelmi épületekkel és fúrótornyokkal kezd"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8614,7 +8615,9 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "~ 100%-kal több energiát nyer ki minden egyes fúrótoronyból\n"
+"Használja a nehéz plazmavetőt és az EMI mozsárágyút\n"
+"Védelmi épületekkel és fúrótornyokkal kezd"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8624,7 +8627,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2205
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8632,7 +8635,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
+"Az alapvető döntéshozás lassabb"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8641,7 +8645,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "~ 25%-kal kevesebb energiát nyer ki minden egyes fúrótoronyból\n"
+"A kutatás nem konkrét fegyver ágra fókuszál"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -8682,7 +8687,7 @@ msgstr "Gránátos"
 #. data/mp/stats/weapons.json: $.Howitzer150Mk1.name
 #: po/custom/fromJson.txt:2243
 msgid "Ground Shaker"
-msgstr ""
+msgstr "Földrengető"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
@@ -9518,7 +9523,7 @@ msgstr "Nagy sebességű, leváló köpenyes, szárnystabilizált, űrméret ala
 #. data/mp/stats/structure.json: $.PillBox3.name
 #: po/custom/fromJson.txt:2802
 msgid "HMG Bunker"
-msgstr ""
+msgstr "Nehézgéppuskás bunker"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
@@ -10631,7 +10636,7 @@ msgstr "Maximum páncél és karosszéria érték."
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
 #: po/custom/fromJson.txt:3649
 msgid "May be assigned to follow units"
-msgstr ""
+msgstr "Egységek követésére rendelhető"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[1]
@@ -11340,7 +11345,7 @@ msgstr "Új rendszer áll rendelkezésre."
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[0]
 #: po/custom/fromJson.txt:4154
 msgid "New Systems Sensor Available"
-msgstr ""
+msgstr "Új rendszerérzékelő érhető el"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_UP.text[0]
@@ -11488,19 +11493,19 @@ msgstr "Nincs hely elrejteni"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4255
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Nem csal, nehéz, szórakoztató. Zúzz!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4258
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
 #: po/custom/fromJson.txt:4261
 msgid "Objects become difficult to locate near it"
-msgstr ""
+msgstr "A közelében lévő objektumok nehezen lokalizálhatók"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ResourceExtractor.name
@@ -11800,14 +11805,14 @@ msgstr "Cyborgokat gyárt"
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 #: po/custom/fromJson.txt:4450
 msgid "Project Heavy Body"
-msgstr ""
+msgstr "Nehéz karosszéria terv"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[0]
 #: po/custom/fromJson.txt:4454
 msgid "Project Light Body"
-msgstr ""
+msgstr "Könnyű karosszéria terv"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[0]
