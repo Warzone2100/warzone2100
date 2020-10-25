@@ -277,7 +277,7 @@ TITLECODE WzMultiLimitTitleUI::run()
 			}
 			else
 			{
-				sendTextMessage("Limits Reset To Default Values", true);
+				sendTextMessage("Limits Reset To Default Values");
 			}
 
 			resetReadyStatus(false);

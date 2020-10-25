@@ -1363,7 +1363,7 @@ INT_RETVAL intRunWidgets()
 					}
 					else
 					{
-						sendTextMessage(msg2, false);
+						sendChatMessage(msg2);
 					}
 				}
 				inputLoseFocus();
@@ -1557,7 +1557,7 @@ INT_RETVAL intRunWidgets()
 							// structure.
 							std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new structure: %s."),
 										selectedPlayer, getName(psStructure->pStructureType));
-							sendTextMessage(msg.c_str(), true);
+							sendTextMessage(msg.c_str());
 							Cheated = true;
 						}
 					}
@@ -1566,7 +1566,7 @@ INT_RETVAL intRunWidgets()
 						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
 						std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new feature: %s."),
 									selectedPlayer, getName(psPositionStats));
-						sendTextMessage(msg.c_str(), true);
+						sendTextMessage(msg.c_str());
 						Cheated = true;
 						// Notify the other hosts that we've just built ourselves a feature
 						//sendMultiPlayerFeature(result->psStats->subType, result->pos.x, result->pos.y, result->id);
@@ -1593,7 +1593,7 @@ INT_RETVAL intRunWidgets()
 							// the fact that we're cheating ourselves a new droid.
 							msg = astringf(_("Player %u is cheating (debug menu) him/herself a new droid."), selectedPlayer);
 						}
-						sendTextMessage(msg.c_str(), true);
+						sendTextMessage(msg.c_str());
 						Cheated = true;
 					}
 					if (!quickQueueMode)

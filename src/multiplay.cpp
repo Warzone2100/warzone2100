@@ -264,7 +264,7 @@ bool multiPlayerLoop()
 						char msg[256] = {'\0'};
 
 						snprintf(msg, sizeof(msg), _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
-						sendTextMessage(msg, true);
+						sendTextMessage(msg);
 						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						NETlogEntry(msg, SYNC_FLAG, index);
 
@@ -892,7 +892,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 	if (NetPlay.isHost)
 	{
 		ssprintf(buf, "Auto kicking player %s, invalid command received.", NetPlay.players[actual].name);
-		sendTextMessage(buf, true);
+		sendTextMessage(buf);
 		kickPlayer(actual, buf, KICK_TYPE);
 	}
 }
@@ -1172,6 +1172,65 @@ static void printchatmsg(const char *text, int from, bool team = false)
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);	// display
 }
 
+/**
+ * Multi-purpose text message.
+ *
+ * This function needs to be splitted in different functions, one for each usage it has.
+ *
+ * This is currently used:
+ * - for players to send messages using the chat box in the game room
+ * - for room system messages (player joined/kicked, game starting, map downloaded, settings changed, etc.)
+ * - for game system messages (player is using cheat)
+ */
+bool sendTextMessage(const char *pStr, uint32_t from)
+{
+	bool				team = false;
+	bool				sendto[MAX_PLAYERS];
+	int					posTable[MAX_PLAYERS];
+	UDWORD				i;
+	char				display[MAX_CONSOLE_STRING_LENGTH];
+	char				msg[MAX_CONSOLE_STRING_LENGTH];
+	const char			*curStr = pStr;
+
+	memset(display, 0x0, sizeof(display));	//clear buffer
+	memset(msg, 0x0, sizeof(msg));		//clear buffer
+	memset(sendto, 0x0, sizeof(sendto));		//clear private flag
+	memset(posTable, 0x0, sizeof(posTable));		//clear buffer
+	sstrcpy(msg, curStr);
+
+	// This is for local display
+	if (from == selectedPlayer)
+	{
+		printchatmsg(curStr, from);
+	}
+
+	triggerEventChat(from, from, pStr); // send to self
+
+	NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
+	NETuint32_t(&from);		// who this msg is from
+	NETbool(&team);			// team specific?
+	NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
+	NETend();
+	for (i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (i == selectedPlayer && from != i)
+		{
+			sstrcat(display, curStr);
+			printchatmsg(display, from); // also display it
+		}
+		if (i != from && !isHumanPlayer(i) && myResponsibility(i))
+		{
+			triggerEventChat(from, i, msg);
+		}
+		else if (i != from && !isHumanPlayer(i) && !myResponsibility(i))
+		{
+			sendAIMessage(msg, from, i);
+		}
+	}
+
+	return true;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
 // Text Messaging between team.
@@ -1215,9 +1274,21 @@ void sendTeamMessage(const char *pStr, uint32_t from)
 	}
 }
 
-// Text Messaging between players. proceed string with players to send to.
-// eg "123hi there" sends "hi there" to players 1,2 and 3.
-bool sendTextMessage(const char *pStr, bool all, uint32_t from)
+/**
+ * In game chat message between players.
+ *
+ * This function should be splitted between "parsing" options and actually sending the message.
+ * Splitting will simplify the code in qtscriptfuncs.cpp.
+ *
+ * Messages prefixed with "." are interpreted as messages to allies.
+ * Messages prefixed with 1 or more digits (0-9) are interpreted as private messages to players.
+ *
+ * Examples:
+ * - ".hi allies" sends "hi allies" to all allies.
+ * - "123hi there" sends "hi there" to players 1, 2 and 3.
+ * - ".123hi there" sends "hi there" to allies and players 1, 2 and 3.
+ **/
+bool sendChatMessage(const char *pStr, uint32_t from)
 {
 	bool				normal = true, team = false;
 	bool				sendto[MAX_PLAYERS];
@@ -1241,89 +1312,62 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 
 	triggerEventChat(from, from, pStr); // send to self
 
-	if (!all)
+
+	// create a position table
+	for (i = 0; i < game.maxPlayers; i++)
 	{
-		// create a position table
+		posTable[NetPlay.players[i].position] = i;
+	}
+
+	if (curStr[0] == '.')
+	{
+		curStr++;
 		for (i = 0; i < game.maxPlayers; i++)
 		{
-			posTable[NetPlay.players[i].position] = i;
-		}
-
-		if (curStr[0] == '.')
-		{
-			curStr++;
-			for (i = 0; i < game.maxPlayers; i++)
+			if (i != from && aiCheckAlliances(from, i))
 			{
-				if (i != from && aiCheckAlliances(from, i))
-				{
-					sendto[i] = true;
-				}
-			}
-			normal = false;
-			if (!all)
-			{
-				sstrcpy(display, _("(allies"));
-			}
-		}
-		for (; curStr[0] >= '0' && curStr[0] <= '9'; ++curStr)  // for each 0..9 numeric char encountered
-		{
-			i = posTable[curStr[0] - '0'];
-			if (normal)
-			{
-				sstrcpy(display, _("(private to "));
-			}
-			else
-			{
-				sstrcat(display, ", ");
-			}
-			if ((isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED)))
-			{
-				sstrcat(display, getPlayerName(posTable[curStr[0] - '0']));
 				sendto[i] = true;
 			}
-			else
-			{
-				sstrcat(display, _("[invalid]"));
-			}
-			normal = false;
 		}
-
-		if (!normal)	// lets user know it is a private message
-		{
-			if (curStr[0] == ' ')
-			{
-				curStr++;
-			}
-			sstrcat(display, ") ");
-			sstrcat(display, curStr);
-		}
+		normal = false;
+		sstrcpy(display, _("(allies"));
 	}
 
-	if (all)	//broadcast
+	for (; curStr[0] >= '0' && curStr[0] <= '9'; ++curStr)  // for each 0..9 numeric char encountered
 	{
-		NETbeginEncode(NETbroadcastQueue(), NET_TEXTMSG);
-		NETuint32_t(&from);		// who this msg is from
-		NETbool(&team);			// team specific?
-		NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
-		NETend();
-		for (i = 0; i < MAX_PLAYERS; i++)
+		i = posTable[curStr[0] - '0'];
+		if (normal)
 		{
-			if (i == selectedPlayer && from != i)
-			{
-				sstrcat(display, curStr);
-				printchatmsg(display, from); // also display it
-			}
-			if (i != from && !isHumanPlayer(i) && myResponsibility(i))
-			{
-				triggerEventChat(from, i, msg);
-			}
-			else if (i != from && !isHumanPlayer(i) && !myResponsibility(i))
-			{
-				sendAIMessage(msg, from, i);
-			}
+			sstrcpy(display, _("(private to "));
 		}
+		else
+		{
+			sstrcat(display, ", ");
+		}
+		if ((isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED)))
+		{
+			sstrcat(display, getPlayerName(posTable[curStr[0] - '0']));
+			sendto[i] = true;
+		}
+		else
+		{
+			sstrcat(display, _("[invalid]"));
+		}
+		normal = false;
 	}
-	else if (normal)
+
+	if (!normal)	// lets user know it is a private message
+	{
+		if (curStr[0] == ' ')
+		{
+			curStr++;
+		}
+		sstrcat(display, ") ");
+		sstrcat(display, curStr);
+	}
+
+
+	if (normal)
 	{
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -1704,7 +1748,7 @@ bool recvMapFileData(NETQUEUE queue)
 	{
 		netPlayersUpdated = true;  // Remove download icon from ourselves.
 		addConsoleMessage("MAP DOWNLOADED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		sendTextMessage("MAP DOWNLOADED", true);					//send
+		sendTextMessage("MAP DOWNLOADED");
 		debug(LOG_INFO, "=== File has been received. ===");
 
 		// clear out the old level list.
