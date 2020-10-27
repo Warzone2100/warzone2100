@@ -562,7 +562,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	//== * ```selectedPlayer``` The player controlled by the client on which the script runs.
 	globalVars["selectedPlayer"] = selectedPlayer;
 	//== * ```gameTime``` The current game time. Updated before every invokation of a script.
-	globalVars["gameTime"] = gameTime;
+	pNewInstance->setSpecifiedGlobalVariable("gameTime", gameTime, wzapi::GlobalVariableFlags::ReadOnlyUpdatedFromApp | wzapi::GlobalVariableFlags::DoNotSave);
 	//== * ```modList``` The current loaded mods.
 	globalVars["modList"] = getModList();
 
@@ -612,13 +612,11 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["scavengerPlayer"] = scavengerSlot();
 	//== * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
 	globalVars["isMultiplayer"] = NetPlay.bComms;
-	// un-documented placeholder variable
-	globalVars["isReceivingAllEvents"] = false;
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVars, wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
 	// Register 'Stats' object. It is a read-only representation of basic game component states.
-	pNewInstance->setSpecifiedGlobalVariable("Stats", wzapi::constructStatsObject());
+	pNewInstance->setSpecifiedGlobalVariable("Stats", wzapi::constructStatsObject(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
 	// Set some useful constants
 	pNewInstance->setSpecifiedGlobalVariables(wzapi::getUsefulConstants(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
