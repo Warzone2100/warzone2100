@@ -134,6 +134,21 @@ void wzapi::scripting_instance::dumpScriptLog(const std::string &info, int me)
 	}
 }
 
+wzapi::execution_context::~execution_context()
+{ }
+int wzapi::execution_context::player() const
+{
+	return currentInstance()->player();
+}
+void wzapi::execution_context::set_isReceivingAllEvents(bool value) const
+{
+	return currentInstance()->setReceiveAllEvents(value);
+}
+bool wzapi::execution_context::get_isReceivingAllEvents() const
+{
+	return currentInstance()->isReceivingAllEvents();
+}
+
 wzapi::object_request::object_request()
 : requestType(wzapi::object_request::RequestType::INVALID_REQUEST)
 {}
@@ -677,20 +692,6 @@ const BASE_OBJECT * wzapi::hackGetObj(WZAPI_PARAMS(int _type, int player, int id
 	OBJECT_TYPE type = (OBJECT_TYPE)_type;
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	return IdToObject(type, id, player);
-}
-
-//-- ## hackChangeMe(player)
-//--
-//-- Change the 'me' who owns this script to the given player. This needs to be run
-//-- first in ```eventGameInit``` to make sure things do not get out of control.
-//--
-// This is only intended for use in campaign scripts until we get a way to add
-// scripts for each player. (3.2+ only)
-wzapi::no_return_value wzapi::hackChangeMe(WZAPI_PARAMS(int player))
-{
-	SCRIPT_ASSERT_PLAYER({}, context, player);
-	context.hack_setMe(player);
-	return {};
 }
 
 //-- ## hackAssert(condition, message...)

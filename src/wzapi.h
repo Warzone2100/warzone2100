@@ -497,7 +497,8 @@ namespace wzapi
 	{
 		None = 0,
 		ReadOnly = 1 << 0, // binary 0001
-		DoNotSave = 1 << 1, // binary 0010
+		ReadOnlyUpdatedFromApp = 1 << 1, // binary 0010
+		DoNotSave = 1 << 2, // binary 0100
 	};
 	inline GlobalVariableFlags operator | (GlobalVariableFlags lhs, GlobalVariableFlags rhs)
 	{
@@ -535,7 +536,8 @@ namespace wzapi
 //		virtual const wzapi::execution_context& getContext() = 0;
 
 	public:
-		virtual bool isReceivingAllEvents() const { return false; }
+		inline void setReceiveAllEvents(bool value) { m_isReceivingAllEvents = value; }
+		inline bool isReceivingAllEvents() const { return m_isReceivingAllEvents; }
 
 	public:
 		// event handling
@@ -586,20 +588,20 @@ namespace wzapi
 	private:
 		int m_player;
 		std::string m_scriptName;
+		bool m_isReceivingAllEvents = false;
 	};
 
 	class execution_context
 	{
 	public:
-		virtual ~execution_context() { };
+		virtual ~execution_context();
 	public:
-		virtual  wzapi::scripting_instance* currentInstance() const = 0;
-		virtual int player() const = 0;
+		virtual wzapi::scripting_instance* currentInstance() const = 0;
+		int player() const;
+		void set_isReceivingAllEvents(bool value) const;
+		bool get_isReceivingAllEvents() const;
 		virtual void throwError(const char *expr, int line, const char *function) const = 0;
 		virtual playerCallbackFunc getNamedScriptCallback(const WzString& func) const = 0;
-		virtual void hack_setMe(int player) const = 0;
-		virtual void set_isReceivingAllEvents(bool value) const = 0;
-		virtual bool get_isReceivingAllEvents() const = 0;
 		virtual void doNotSaveGlobal(const std::string &global) const = 0;
 	};
 
@@ -887,7 +889,6 @@ namespace wzapi
 	no_return_value hackAddMessage(WZAPI_PARAMS(std::string message, int type, int player, bool immediate));
 	no_return_value hackRemoveMessage(WZAPI_PARAMS(std::string message, int type, int player));
 	const BASE_OBJECT * hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED;
-	no_return_value hackChangeMe(WZAPI_PARAMS(int player));
 	no_return_value hackAssert(WZAPI_PARAMS(bool condition, va_list_treat_as_strings message));
 	bool receiveAllEvents(WZAPI_PARAMS(optional<bool> enabled));
 	no_return_value hackDoNotSave(WZAPI_PARAMS(std::string name));

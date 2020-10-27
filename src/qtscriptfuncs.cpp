@@ -128,12 +128,6 @@ private:
 	bool registerFunctions(const QString& scriptName);
 
 public:
-	virtual bool isReceivingAllEvents() const override
-	{
-		return (engine->globalObject().property("isReceivingAllEvents")).toBool();
-	}
-
-public:
 	// save / restore state
 	virtual bool saveScriptGlobals(nlohmann::json &result) override;
 	virtual bool loadScriptGlobals(const nlohmann::json &result) override;
@@ -162,9 +156,10 @@ private:
 	inline QScriptValue::PropertyFlags toQScriptPropertyFlags(wzapi::GlobalVariableFlags flags)
 	{
 		QScriptValue::PropertyFlags propertyFlags = QScriptValue::Undeletable;
-		if ((flags & wzapi::GlobalVariableFlags::ReadOnly) == wzapi::GlobalVariableFlags::ReadOnly)
+		if (((flags & wzapi::GlobalVariableFlags::ReadOnly) == wzapi::GlobalVariableFlags::ReadOnly)
+			|| ((flags & wzapi::GlobalVariableFlags::ReadOnlyUpdatedFromApp) == wzapi::GlobalVariableFlags::ReadOnlyUpdatedFromApp))
 		{
-			propertyFlags |= QScriptValue::ReadOnly;
+			propertyFlags |= QScriptValue::ReadOnly; // for QtScript, this is apparently just "advisory", and doesn't actually prevent the app from updating / resetting the value
 		}
 		return propertyFlags;
 	}
@@ -1114,11 +1109,6 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 			return engineToInstanceMap.at(engine);
 		}
 
-		virtual int player() const override
-		{
-			return engine->globalObject().property("me").toInt32();
-		}
-
 		virtual void throwError(const char *expr, int line, const char *function) const override
 		{
 			context->throwError(QScriptContext::ReferenceError, QString(expr) +  " failed in " + QString(function) + " at line " + QString::number(line));
@@ -1132,21 +1122,6 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 				args += QScriptValue(player);
 				callFunction(pEngine, QString::fromUtf8(func.toUtf8().c_str()), args);
 			};
-		}
-
-		virtual void hack_setMe(int player) const override
-		{
-			engine->globalObject().setProperty("me", player);
-		}
-
-		virtual void set_isReceivingAllEvents(bool value) const override
-		{
-			engine->globalObject().setProperty("isReceivingAllEvents", value, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-		}
-
-		virtual bool get_isReceivingAllEvents() const override
-		{
-			return (engine->globalObject().property("isReceivingAllEvents")).toBool();
 		}
 
 		virtual void doNotSaveGlobal(const std::string &name) const override
@@ -2813,7 +2788,6 @@ IMPL_JS_FUNC(queuedPower, wzapi::queuedPower)
 IMPL_JS_FUNC(isStructureAvailable, wzapi::isStructureAvailable)
 IMPL_JS_FUNC(isVTOL, wzapi::isVTOL)
 IMPL_JS_FUNC(hackGetObj, wzapi::hackGetObj)
-IMPL_JS_FUNC(hackChangeMe, wzapi::hackChangeMe)
 IMPL_JS_FUNC(receiveAllEvents, wzapi::receiveAllEvents)
 IMPL_JS_FUNC(hackAssert, wzapi::hackAssert)
 
@@ -3024,7 +2998,6 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	JS_REGISTER_FUNC(hackRemoveMessage); // WZAPI
 	JS_REGISTER_FUNC(objFromId);
 	JS_REGISTER_FUNC(hackGetObj); // WZAPI
-	JS_REGISTER_FUNC(hackChangeMe); // WZAPI
 	JS_REGISTER_FUNC(hackAssert); // WZAPI
 	JS_REGISTER_FUNC(hackMarkTiles); // WZAPI
 	JS_REGISTER_FUNC(receiveAllEvents); // WZAPI
