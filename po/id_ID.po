@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-07-18 22:12+0000\n"
-"PO-Revision-Date: 2020-09-17 03:34\n"
+"PO-Revision-Date: 2020-10-27 09:19\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -83,20 +83,20 @@ msgstr "Saat mendarat, jelajahi reruntuhan dan ambil semua artefak."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "MISI TRANSPORTASI: Menyelidiki Pusat Penelitian"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Selidiki area tersebut dan pulihkan artefak yang ada."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Bala bantuan tersedia."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "MISI TRANSPORTASI: Sinyal Tersandi Terdeteksi"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
