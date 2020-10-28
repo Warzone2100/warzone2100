@@ -28,7 +28,14 @@
 #include <inttypes.h>
 #include <string.h>
 #include <assert.h>
+#if !defined(QUICKJS_HAVE_SYS_TIME_H)
+  #if defined(__linux__) || defined(__APPLE__)
+    #define QUICKJS_HAVE_SYS_TIME_H
+  #endif
+#endif
+#if defined(QUICKJS_HAVE_SYS_TIME_H)
 #include <sys/time.h>
+#endif
 #include <time.h>
 #include <fenv.h>
 #include <math.h>
@@ -48,7 +55,7 @@
 
 #define OPTIMIZE         1
 #define SHORT_OPCODES    1
-#if defined(EMSCRIPTEN)
+#if defined(EMSCRIPTEN) || defined(_MSC_VER)
 #define DIRECT_DISPATCH  0
 #else
 #define DIRECT_DISPATCH  1
@@ -1564,17 +1571,39 @@ static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
     return FALSE;
 }
 #else
+
+#if !defined(__has_builtin)
+  #define __has_builtin(x) 0
+#endif
+
+#if defined(__GNUC__) || __has_builtin(__builtin_frame_address)
 /* Note: OS and CPU dependent */
 static inline uint8_t *js_get_stack_pointer(void)
 {
     return __builtin_frame_address(0);
 }
+#elif defined(_MSC_VER)
+static inline uint8_t *js_get_stack_pointer(void)
+{
+    return _AddressOfReturnAddress();
+}
+#else
+static inline uint8_t *js_get_stack_pointer(void)
+{
+    return NULL;
+}
+#define NO_VALID_STACK_POINTER
+#endif
 
 static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
 {
+#if defined(NO_VALID_STACK_POINTER)
+    return FALSE;
+#else
     ptrdiff_t size;
     size = rt->stack_top - js_get_stack_pointer();
     return unlikely((size + (ptrdiff_t)alloca_size) > (ptrdiff_t)rt->stack_size);
+#endif
 }
 #endif
 
@@ -10164,7 +10193,11 @@ static JSValue js_atof(JSContext *ctx, const char *str, const char **pp,
             } else
 #endif
             {
+#if defined(HUGE_VAL) || defined(_MSC_VER)
+                double d = HUGE_VAL;
+#else
                 double d = 1.0 / 0.0;
+#endif
                 if (is_neg)
                     d = -d;
                 val = JS_NewFloat64(ctx, d);
@@ -41345,7 +41378,11 @@ static JSValue js_math_min_max(JSContext *ctx, JSValueConst this_val,
     uint32_t tag;
 
     if (unlikely(argc == 0)) {
+#if defined(HUGE_VAL) || defined(_MSC_VER)
+        return __JS_NewFloat64(ctx, is_max ? -HUGE_VAL : HUGE_VAL);
+#else
         return __JS_NewFloat64(ctx, is_max ? -1.0 / 0.0 : 1.0 / 0.0);
+#endif
     }
 
     tag = JS_VALUE_GET_TAG(argv[0]);
@@ -41516,6 +41553,11 @@ static JSValue js_math_random(JSContext *ctx, JSValueConst this_val,
     u.u64 = ((uint64_t)0x3ff << 52) | (v >> 12);
     return __JS_NewFloat64(ctx, u.d - 1.0);
 }
+
+#if defined(_MSC_VER)
+  #pragma function (ceil)	// Fix MSVC error C2099: initializer is not a constant
+  #pragma function (floor)	// Fix MSVC error C2099: initializer is not a constant
+#endif
 
 static const JSCFunctionListEntry js_math_funcs[] = {
     JS_CFUNC_MAGIC_DEF("min", 2, js_math_min_max, 0 ),
@@ -47458,7 +47500,11 @@ static const JSCFunctionListEntry js_global_funcs[] = {
     JS_CFUNC_MAGIC_DEF("encodeURIComponent", 1, js_global_encodeURI, 1 ),
     JS_CFUNC_DEF("escape", 1, js_global_escape ),
     JS_CFUNC_DEF("unescape", 1, js_global_unescape ),
+#if defined(HUGE_VAL) || defined(_MSC_VER)
+    JS_PROP_DOUBLE_DEF("Infinity", HUGE_VAL, 0 ),
+#else
     JS_PROP_DOUBLE_DEF("Infinity", 1.0 / 0.0, 0 ),
+#endif
     JS_PROP_DOUBLE_DEF("NaN", NAN, 0 ),
     JS_PROP_UNDEFINED_DEF("undefined", 0 ),
 
