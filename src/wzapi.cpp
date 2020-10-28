@@ -71,6 +71,7 @@
 #include "loadsave.h"
 #include "wzapi.h"
 #include "order.h"
+#include "chat.h"
 
 #include <list>
 
@@ -1925,19 +1926,18 @@ bool wzapi::chat(WZAPI_PARAMS(int target, std::string message))
 {
 	int player = context.player();
 	SCRIPT_ASSERT(false, context, target >= 0 || target == ALL_PLAYERS || target == ALLIES, "Message to invalid player %d", target);
-	if (target == ALL_PLAYERS) // all
+	auto chatMessage = InGameChatMessage(player, message.c_str());
+	if (target == ALLIES) // allies
 	{
-		return sendChatMessage(message.c_str(), player);
+		chatMessage.toAllies = true;
 	}
-	else if (target == ALLIES) // allies
+	else if (target != ALL_PLAYERS) // specific player
 	{
-		return sendChatMessage((std::string(". ") + message).c_str(), player);
+		chatMessage.addPlayerByPosition(target);
 	}
-	else // specific player
-	{
-		WzString tmp = WzString::number(NetPlay.players[target].position) + WzString::fromUtf8(message);
-		return sendChatMessage(tmp.toUtf8().c_str(), player);
-	}
+
+	chatMessage.send();
+	return true;
 }
 
 //-- ## addBeacon(x, y, target player[, message])
