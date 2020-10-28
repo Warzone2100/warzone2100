@@ -129,7 +129,7 @@ if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(sdl-backend PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
 
-target_link_libraries(sdl-backend PRIVATE framework ivis-opengl)
+target_link_libraries(sdl-backend PRIVATE framework ivis-opengl imgui)
 set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 message( STATUS "Linking to SDL2 library: ${_sdl2_library}" )
 target_link_libraries(sdl-backend PRIVATE ${_sdl2_library})

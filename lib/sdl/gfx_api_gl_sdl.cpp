@@ -24,6 +24,9 @@
 #include <SDL_hints.h>
 #include <thread>
 #include <chrono>
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_impl_opengl3.h"
 
 bool vsyncIsEnabled = true;
 
@@ -220,7 +223,7 @@ bool sdl_OpenGL_Impl::createGLContext()
 		debug(LOG_3D, "Failed to get value for SDL_GL_DEPTH_SIZE (%s)", SDL_GetError());
 	}
 	debug(LOG_3D, "Current value for SDL_GL_DEPTH_SIZE: (%d)", value);
-	
+
 	if (SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &value) != 0)
 	{
 		debug(LOG_3D, "Failed to get value for SDL_GL_STENCIL_SIZE (%s)", SDL_GetError());
@@ -230,6 +233,15 @@ bool sdl_OpenGL_Impl::createGLContext()
 	int windowWidth, windowHeight = 0;
 	SDL_GetWindowSize(window, &windowWidth, &windowHeight);
 	debug(LOG_WZ, "Logical Window Size: %d x %d", windowWidth, windowHeight);
+
+	debug(LOG_INFO, "Imgui init start");
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& IMio = ImGui::GetIO();
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL2_InitForOpenGL(window, WZglcontext);
+	ImGui_ImplOpenGL3_Init("#version 130");
+	debug(LOG_INFO, "Imgui init done");
 
 	return true;
 }
@@ -336,4 +348,3 @@ gfx_api::context::swap_interval_mode sdl_OpenGL_Impl::getSwapInterval() const
 	int interval = SDL_GL_GetSwapInterval();
 	return from_sdl_swap_interval(interval);
 }
-

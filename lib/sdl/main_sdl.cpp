@@ -67,6 +67,11 @@
 #include <atomic>
 #include <chrono>
 
+
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_impl_opengl3.h"
+
 // This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
 #if defined(QT_STATICPLUGIN)
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
@@ -2302,6 +2307,7 @@ void wzMainEventLoop(void)
 		/* Deal with any windows messages */
 		while (SDL_PollEvent(&event))
 		{
+			ImGui_ImplSDL2_ProcessEvent(&event);
 			switch (event.type)
 			{
 			case SDL_KEYUP:
@@ -2363,6 +2369,11 @@ void wzMainEventLoop(void)
 		processScreenSizeChangeNotificationIfNeeded();
 		mainLoop();				// WZ does its thing
 		inputNewFrame();			// reset input states
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplSDL2_NewFrame(WZwindow);
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow();
 	}
 }
 
