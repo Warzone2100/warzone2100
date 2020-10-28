@@ -81,6 +81,7 @@
 #include "keybind.h"
 #include "qtscript.h"
 #include "frend.h"
+#include "chat.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 // Do not highlight buttons while paused.
@@ -354,6 +355,8 @@ static STRUCTURE *intCheckForStructure(UDWORD structType);
 
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
+
+static void parseChatMessageModifiers(InGameChatMessage &message);
 
 
 /***************************GAME CODE ****************************/
@@ -1352,20 +1355,23 @@ INT_RETVAL intRunWidgets()
 		// process our chatbox
 		case CHAT_EDITBOX:
 			{
-				const char *msg2 = widgGetString(psWScreen, CHAT_EDITBOX);
-				int mode = (int) widgGetUserData2(psWScreen, CHAT_EDITBOX);
-				if (strlen(msg2))
+				auto message = InGameChatMessage(selectedPlayer, widgGetString(psWScreen, CHAT_EDITBOX));
+				attemptCheatCode(message.text);		// parse the message
+
+				if ((int) widgGetUserData2(psWScreen, CHAT_EDITBOX) == CHAT_TEAM)
 				{
-					attemptCheatCode(msg2);		// parse the message
-					if (mode == CHAT_TEAM)
-					{
-						sendChatTeamMessage(msg2);
-					}
-					else
-					{
-						sendChatMessage(msg2);
-					}
+					message.toAllies = true;
 				}
+				else
+				{
+					parseChatMessageModifiers(message);
+				}
+
+				if (strlen(message.text))
+				{
+					message.send();
+				}
+
 				inputLoseFocus();
 				bAllowOtherKeyPresses = true;
 				widgDelete(psWScreen, CHAT_CONSOLEBOX);
@@ -4958,4 +4964,29 @@ bool isChatUp()
 bool isSecondaryWindowUp()
 {
 	return SecondaryWindowUp;
+}
+
+/**
+ * Parse what the player types in the chat box.
+ *
+ * Messages prefixed with "." are interpreted as messages to allies.
+ * Messages prefixed with 1 or more digits (0-9) are interpreted as private messages to players.
+ *
+ * Examples:
+ * - ".hi allies" sends "hi allies" to all allies.
+ * - "123hi there" sends "hi there" to players 1, 2 and 3.
+ * - ".123hi there" sends "hi there" to allies and players 1, 2 and 3.
+ **/
+static void parseChatMessageModifiers(InGameChatMessage &message)
+{
+	if (*message.text == '.')
+	{
+		message.toAllies = true;
+		message.text++;
+	}
+
+	for (; *message.text >= '0' && *message.text <= '9'; ++message.text)  // for each 0..9 numeric char encountered
+	{
+		message.addPlayerByPosition(*message.text - '0');
+	}
 }

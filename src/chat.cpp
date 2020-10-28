@@ -1,0 +1,185 @@
+/*
+	This file is part of Warzone 2100.
+	Copyright (C) 2020  Warzone 2100 Project
+
+	Warzone 2100 is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	Warzone 2100 is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Warzone 2100; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+*/
+
+#include "chat.h"
+#include "ai.h"
+#include "lib/netplay/netplay.h"
+#include "qtscript.h"
+
+/**
+ * This function could be useful somewhere else, and could be moved to a more appropriate module.
+ **/
+static struct tm getTimeInfo()
+{
+	time_t current_time;
+	time(&current_time);
+	struct tm time_info;
+#if defined(WZ_OS_WIN)
+	gmtime_s(&time_info, &current_time);
+#else
+	gmtime_r(&current_time, &time_info);
+#endif
+
+	return time_info;
+}
+
+InGameChatMessage::InGameChatMessage(uint32_t messageSender, char const *messageText)
+{
+	sender = messageSender;
+	text = messageText;
+}
+
+bool InGameChatMessage::isGlobal() const
+{
+	return !toAllies && toPlayers.empty();
+}
+
+bool InGameChatMessage::shouldReceive(uint32_t playerIndex) const
+{
+	return isGlobal() || toPlayers.find(playerIndex) != toPlayers.end() || (toAllies && aiCheckAlliances(sender, playerIndex));
+}
+
+std::vector<uint32_t> InGameChatMessage::getReceivers() const
+{
+	std::vector<uint32_t> receivers;
+
+	for (auto playerIndex = 0; playerIndex < game.maxPlayers; playerIndex++)
+	{
+		if (shouldReceive(playerIndex) && openchannels[playerIndex])
+		{
+			receivers.push_back(playerIndex);
+		}
+	}
+
+	return receivers;
+}
+
+std::string InGameChatMessage::formatReceivers() const
+{
+	if (isGlobal()) {
+		return _("Global");
+	}
+
+	if (toAllies && toPlayers.empty()) {
+		return _("Allies");
+	}
+
+	auto directs = toPlayers.begin();
+	std::stringstream ss;
+	if (toAllies) {
+		ss << _("Allies");
+	} else {
+		ss << _("private to ");
+		ss << getPlayerName(*directs++);
+	}
+
+	while (directs != toPlayers.end())
+	{
+		auto nextName = getPlayerName(*directs++);
+		ss << (directs == toPlayers.end() ? _(" and ") : ", ");
+		ss << nextName;
+	}
+
+	return ss.str();
+}
+
+void InGameChatMessage::sendToHumanPlayers(char const *formatted)
+{
+	auto message = NetworkTextMessage(sender, formatted);
+	message.teamSpecific = toAllies && toPlayers.empty();
+
+	if (isGlobal()) {
+		message.enqueue(NETbroadcastQueue());
+		return;
+	}
+
+	for (auto receiver: getReceivers())
+	{
+		if (isHumanPlayer(receiver))
+		{
+			message.enqueue(NETnetQueue(receiver));
+		}
+	}
+}
+
+void InGameChatMessage::sendToAiPlayer(uint32_t receiver)
+{
+	if (!ingame.localOptionsReceived)
+	{
+		return;
+	}
+
+	uint32_t responsiblePlayer = whosResponsible(receiver);
+
+	if (responsiblePlayer >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "sendToAiPlayer() - responsiblePlayer >= MAX_PLAYERS");
+		return;
+	}
+
+	if (!isHumanPlayer(responsiblePlayer))
+	{
+		debug(LOG_ERROR, "sendToAiPlayer() - responsiblePlayer is not human.");
+		return;
+	}
+
+	NETbeginEncode(NETnetQueue(responsiblePlayer), NET_AITEXTMSG);
+	NETuint32_t(&sender);
+	NETuint32_t(&receiver);
+	NETstring(text, MAX_CONSOLE_STRING_LENGTH);
+	NETend();
+}
+
+void InGameChatMessage::sendToAiPlayers()
+{
+	for (auto receiver: getReceivers())
+	{
+		if (!isHumanPlayer(receiver))
+		{
+			if (myResponsibility(receiver))
+			{
+				triggerEventChat(sender, receiver, text);
+			}
+			else
+			{
+				sendToAiPlayer(receiver);
+			}
+		}
+	}
+}
+
+void InGameChatMessage::addPlayerByPosition(uint32_t position)
+{
+	toPlayers.insert(findPlayerIndexByPosition(position));
+}
+
+void InGameChatMessage::send()
+{
+	char formatted[MAX_CONSOLE_STRING_LENGTH];
+	struct tm time_info = getTimeInfo();
+
+	ssprintf(formatted, "[%02d:%02d] %s (%s): %s", time_info.tm_hour, time_info.tm_min, getPlayerName(sender), formatReceivers().c_str(), text);
+
+	if (sender == selectedPlayer || shouldReceive(selectedPlayer)) {
+		addConsoleMessage(formatted, DEFAULT_JUSTIFY, sender, toAllies);
+	}
+
+	sendToHumanPlayers(formatted);
+	sendToAiPlayers();
+}

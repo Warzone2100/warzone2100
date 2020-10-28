@@ -28,10 +28,12 @@
 #include "lib/framework/types.h"
 #include "lib/framework/vector.h"
 #include "lib/framework/crc.h"
+#include "lib/netplay/nettypes.h"
 #include "orderdef.h"
 #include "stringdef.h"
 #include "messagedef.h"
 #include "levels.h"
+#include "console.h"
 #include <vector>
 #include <string>
 
@@ -184,8 +186,7 @@ bool recvMessage();
 bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
 void sendTextMessage(const char *text, uint32_t sender = selectedPlayer);
-void sendChatTeamMessage(const char *text, uint32_t sender = selectedPlayer);
-bool sendChatMessage(const char *pStr, uint32_t from = selectedPlayer);
+int32_t findPlayerIndexByPosition(uint32_t position);
 void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
 void turnOffMultiMsg(bool bDoit);
@@ -267,4 +268,13 @@ bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
+struct NetworkTextMessage
+{
+	uint32_t sender;
+	char text[MAX_CONSOLE_STRING_LENGTH];
+	bool teamSpecific = false;
+
+	NetworkTextMessage(uint32_t messageSender, char const *messageText);
+	void enqueue(NETQUEUE queue);
+};
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

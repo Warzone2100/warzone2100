@@ -95,7 +95,6 @@ char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player
 
 static bool recvBeacon(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
-static bool sendAIMessage(const char *pStr, UDWORD player, UDWORD to);
 
 bool multiplayPlayersReady(bool bNotifyStatus);
 void startMultiplayerGame();
@@ -1172,27 +1171,20 @@ static void printchatmsg(const char *text, int from, bool team = false)
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);	// display
 }
 
-struct NetworkTextMessage
+NetworkTextMessage::NetworkTextMessage(uint32_t messageSender, char const *messageText)
 {
-	uint32_t sender;
-	char text[MAX_CONSOLE_STRING_LENGTH];
-	bool teamSpecific = false;
+	sender = messageSender;
+	sstrcpy(text, messageText);
+}
 
-	NetworkTextMessage(uint32_t messageSender, char const *messageText)
-	{
-		sender = messageSender;
-		sstrcpy(text, messageText);
-	}
-
-	void enqueue(NETQUEUE queue)
-	{
-		NETbeginEncode(queue, NET_TEXTMSG);
-		NETuint32_t(&sender);
-		NETbool(&teamSpecific);
-		NETstring(text, MAX_CONSOLE_STRING_LENGTH);
-		NETend();
-	}
-};
+void NetworkTextMessage::enqueue(NETQUEUE queue)
+{
+	NETbeginEncode(queue, NET_TEXTMSG);
+	NETuint32_t(&sender);
+	NETbool(&teamSpecific);
+	NETstring(text, MAX_CONSOLE_STRING_LENGTH);
+	NETend();
+}
 
 /**
  * Multi-purpose text message.
@@ -1208,221 +1200,9 @@ void sendTextMessage(const char *text, uint32_t sender)
 {
 	NetworkTextMessage message(sender, text);
 
-	// This is for local display
 	printchatmsg(message.text, sender);
 
-	triggerEventChat(sender, sender, message.text); // send to self
-
 	message.enqueue(NETbroadcastQueue());
-
-	for (auto receiver = 0; receiver < MAX_PLAYERS; receiver++)
-	{
-		if (receiver == sender || isHumanPlayer(receiver)) {
-			continue;
-		}
-
-		if (myResponsibility(receiver))
-		{
-			// I'm the host and I'm sending a message to an AI
-			triggerEventChat(sender, receiver, message.text);
-		}
-		else
-		{
-			// I'm not the host, so the message I'm sending to the AI needs to be sent through the network
-			sendAIMessage(message.text, sender, receiver);
-		}
-	}
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-// Text Messaging between team.
-void sendChatTeamMessage(const char *text, uint32_t sender)
-{
-	NetworkTextMessage message(sender, text);
-	message.teamSpecific = true;
-
-	// This is for local display
-	if (sender == selectedPlayer || aiCheckAlliances(sender, selectedPlayer))
-	{
-		printchatmsg(message.text, sender, message.teamSpecific);
-	}
-
-	for (int receiver = 0; receiver < game.maxPlayers; receiver++)
-	{
-		if (receiver == sender || !aiCheckAlliances(sender, receiver))
-		{
-			continue;
-		}
-
-		if (isHumanPlayer(receiver))
-		{
-			message.enqueue(NETnetQueue(receiver));
-		}
-		else if (myResponsibility(receiver))
-		{
-			triggerEventChat(sender, receiver, message.text);
-		}
-		else	//also send to AIs now (non-humans), needed for AI
-		{
-			sendAIMessage(message.text, sender, receiver);
-		}
-	}
-}
-
-/**
- * In game chat message between players.
- *
- * This function should be splitted between "parsing" options and actually sending the message.
- * Splitting will simplify the code in qtscriptfuncs.cpp.
- *
- * Messages prefixed with "." are interpreted as messages to allies.
- * Messages prefixed with 1 or more digits (0-9) are interpreted as private messages to players.
- *
- * Examples:
- * - ".hi allies" sends "hi allies" to all allies.
- * - "123hi there" sends "hi there" to players 1, 2 and 3.
- * - ".123hi there" sends "hi there" to allies and players 1, 2 and 3.
- **/
-bool sendChatMessage(const char *pStr, uint32_t from)
-{
-	bool				normal = true, team = false;
-	bool				sendto[MAX_PLAYERS];
-	int					posTable[MAX_PLAYERS];
-	UDWORD				i;
-	char				display[MAX_CONSOLE_STRING_LENGTH];
-	char				msg[MAX_CONSOLE_STRING_LENGTH];
-	const char			*curStr = pStr;
-
-	memset(display, 0x0, sizeof(display));	//clear buffer
-	memset(msg, 0x0, sizeof(msg));		//clear buffer
-	memset(sendto, 0x0, sizeof(sendto));		//clear private flag
-	memset(posTable, 0x0, sizeof(posTable));		//clear buffer
-	sstrcpy(msg, curStr);
-
-	// This is for local display
-	if (from == selectedPlayer)
-	{
-		printchatmsg(curStr, from);
-	}
-
-	triggerEventChat(from, from, pStr); // send to self
-
-
-	// create a position table
-	for (i = 0; i < game.maxPlayers; i++)
-	{
-		posTable[NetPlay.players[i].position] = i;
-	}
-
-	if (curStr[0] == '.')
-	{
-		curStr++;
-		for (i = 0; i < game.maxPlayers; i++)
-		{
-			if (i != from && aiCheckAlliances(from, i))
-			{
-				sendto[i] = true;
-			}
-		}
-		normal = false;
-		sstrcpy(display, _("(allies"));
-	}
-
-	for (; curStr[0] >= '0' && curStr[0] <= '9'; ++curStr)  // for each 0..9 numeric char encountered
-	{
-		i = posTable[curStr[0] - '0'];
-		if (normal)
-		{
-			sstrcpy(display, _("(private to "));
-		}
-		else
-		{
-			sstrcat(display, ", ");
-		}
-		if ((isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED)))
-		{
-			sstrcat(display, getPlayerName(posTable[curStr[0] - '0']));
-			sendto[i] = true;
-		}
-		else
-		{
-			sstrcat(display, _("[invalid]"));
-		}
-		normal = false;
-	}
-
-	if (!normal)	// lets user know it is a private message
-	{
-		if (curStr[0] == ' ')
-		{
-			curStr++;
-		}
-		sstrcat(display, ") ");
-		sstrcat(display, curStr);
-	}
-
-
-	if (normal)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (i != from && openchannels[i])
-			{
-				if (i == selectedPlayer)
-				{
-					printchatmsg(curStr, from); // also display it
-				}
-				if (isHumanPlayer(i))
-				{
-					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
-					NETuint32_t(&from);		// who this msg is from
-					NETbool(&team);			// team specific?
-					NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// the message to send
-					NETend();
-				}
-				else if (myResponsibility(i))
-				{
-					triggerEventChat(from, i, msg);
-				}
-				else	// send to AIs on different host
-				{
-					sendAIMessage(msg, from, i);
-				}
-			}
-		}
-	}
-	else	//private msg
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			if (sendto[i])
-			{
-				if (i == selectedPlayer)
-				{
-					printchatmsg(display, from); // also display it
-				}
-				if (isHumanPlayer(i))
-				{
-					NETbeginEncode(NETnetQueue(i), NET_TEXTMSG);
-					NETuint32_t(&from);				// who this msg is from
-					NETbool(&team); // team specific?
-					NETstring(display, MAX_CONSOLE_STRING_LENGTH);	// the message to send
-					NETend();
-				}
-				else if (myResponsibility(i))
-				{
-					triggerEventChat(from, i, curStr);
-				}
-				else	//also send to AIs now (non-humans), needed for AI
-				{
-					sendAIMessage(curStr, from, i);
-				}
-			}
-		}
-	}
-
-	return true;
 }
 
 void printConsoleNameChange(const char *oldName, const char *newName)
@@ -1435,42 +1215,6 @@ void printConsoleNameChange(const char *oldName, const char *newName)
 	sstrcat(msg, newName);  // New name.
 
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);  // display
-}
-
-
-//AI multiplayer message, send from a certain player index to another player index
-static bool sendAIMessage(const char *pStr, UDWORD player, UDWORD to)
-{
-	UDWORD	sendPlayer;
-
-	if (!ingame.localOptionsReceived)
-	{
-		return true;
-	}
-
-	// find machine that is hosting this human or AI
-	sendPlayer = whosResponsible(to);
-
-	if (sendPlayer >= MAX_PLAYERS)
-	{
-		debug(LOG_ERROR, "sendAIMessage() - sendPlayer >= MAX_PLAYERS");
-		return false;
-	}
-
-	if (!isHumanPlayer(sendPlayer))		//NETsend can't send to non-humans
-	{
-		debug(LOG_ERROR, "sendAIMessage() - player is not human.");
-		return false;
-	}
-
-	//send to the player who is hosting 'to' player (might be himself if human and not AI)
-	NETbeginEncode(NETnetQueue(sendPlayer), NET_AITEXTMSG);
-	NETuint32_t(&player);			//save the actual sender
-	//save the actual player that is to get this msg on the source machine (source can host many AIs)
-	NETuint32_t(&to);				//save the actual receiver (might not be the same as the one we are actually sending to, in case of AIs)
-	NETstring(pStr, MAX_CONSOLE_STRING_LENGTH);		// copy message in.
-	NETend();
-	return true;
 }
 
 //
@@ -1486,7 +1230,7 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 
 	if (sendPlayer >= MAX_PLAYERS)
 	{
-		debug(LOG_ERROR, "sendAIMessage() - whosResponsible() failed.");
+		debug(LOG_ERROR, "sendBeacon() - whosResponsible() failed.");
 		return false;
 	}
 
@@ -1511,16 +1255,16 @@ bool recvTextMessage(NETQUEUE queue)
 {
 	UDWORD	playerIndex;
 	char	msg[MAX_CONSOLE_STRING_LENGTH];
-	char newmsg[MAX_CONSOLE_STRING_LENGTH];
+	//char newmsg[MAX_CONSOLE_STRING_LENGTH];
 	bool team = false;
 
 	memset(msg, 0x0, sizeof(msg));
-	memset(newmsg, 0x0, sizeof(newmsg));
+	//memset(newmsg, 0x0, sizeof(newmsg));
 
 	NETbeginDecode(queue, NET_TEXTMSG);
 	NETuint32_t(&playerIndex);	// Who this msg is from
 	NETbool(&team);	// team specific?
-	NETstring(newmsg, MAX_CONSOLE_STRING_LENGTH);	// The message to receive
+	NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// The message to receive
 	NETend();
 
 	if (whosResponsible(playerIndex) != queue.index)
@@ -1533,11 +1277,11 @@ bool recvTextMessage(NETQUEUE queue)
 		return false;
 	}
 
-	sstrcpy(msg, NetPlay.players[playerIndex].name);
+	//sstrcpy(msg, NetPlay.players[playerIndex].name);
 	// Seperator
-	sstrcat(msg, ": ");
+	//sstrcat(msg, ": ");
 	// Add message
-	sstrcat(msg, newmsg);
+	//sstrcat(msg, newmsg);
 
 	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex, team);
 
@@ -2012,4 +1756,16 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 			}
 		}
 	}
+}
+
+int32_t findPlayerIndexByPosition(uint32_t position)
+{
+	for (auto playerIndex = 0; playerIndex < game.maxPlayers; playerIndex++)
+	{
+		if (NetPlay.players[playerIndex].position == position) {
+			return playerIndex;
+		}
+	}
+
+	return -1;
 }
