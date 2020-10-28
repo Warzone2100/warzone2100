@@ -67,7 +67,7 @@
 
 /* define to include Atomics.* operations which depend on the OS
    threads */
-#if !defined(EMSCRIPTEN)
+#if !defined(EMSCRIPTEN) && !defined(QUICKJS_DISABLE_ATOMICS)
 #define CONFIG_ATOMICS
 #endif
 
