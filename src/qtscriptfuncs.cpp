@@ -2845,8 +2845,8 @@ IMPL_JS_FUNC(setExperienceModifier, wzapi::setExperienceModifier)
 IMPL_JS_FUNC(setDroidLimit, wzapi::setDroidLimit)
 IMPL_JS_FUNC(setCommanderLimit, wzapi::setCommanderLimit)
 IMPL_JS_FUNC(setConstructorLimit, wzapi::setConstructorLimit)
-IMPL_JS_FUNC_DEBUGMSGUPDATE(hackAddMessage, wzapi::hackAddMessage);
-IMPL_JS_FUNC_DEBUGMSGUPDATE(hackRemoveMessage, wzapi::hackRemoveMessage);
+IMPL_JS_FUNC_DEBUGMSGUPDATE(hackAddMessage, wzapi::hackAddMessage)
+IMPL_JS_FUNC_DEBUGMSGUPDATE(hackRemoveMessage, wzapi::hackRemoveMessage)
 IMPL_JS_FUNC(setSunPosition, wzapi::setSunPosition)
 IMPL_JS_FUNC(setSunIntensity, wzapi::setSunIntensity)
 IMPL_JS_FUNC(setWeather, wzapi::setWeather)
