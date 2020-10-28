@@ -688,7 +688,10 @@ bool scripting_engine::saveScriptStates(const char *filename)
 		wzapi::scripting_instance* instance = scripts.at(i);
 
 		nlohmann::json globalsResult = nlohmann::json::object();
-		instance->saveScriptGlobals(globalsResult); // we save 'scriptName' and 'me' implicitly
+		instance->saveScriptGlobals(globalsResult);
+		// 'scriptName' and 'me' should be saved implicitly by the backend's saveScriptGlobals
+		ASSERT(globalsResult.contains("me"), "Missing required global \"me\"");
+		ASSERT(globalsResult.contains("scriptName"), "Missing required global \"scriptName\"");
 		ini.setValue("globals_" + WzString::number(i), globalsResult);
 
 		// we have to save 'scriptName' and 'me' explicitly
@@ -794,9 +797,12 @@ bool scripting_engine::loadScriptStates(const char *filename)
 		}
 		else if (instance && list[i].startsWith("globals_"))
 		{
-			const nlohmann::json &result = ini.currentJsonValue();
+			nlohmann::json result = ini.currentJsonValue();
 			debug(LOG_SAVE, "Loading script globals for player %d, script %s -- found %zu values",
 				  instance->player(), instance->scriptName().c_str(), result.size());
+			// filter out "scriptName" and "me" variables
+			result.erase("me");
+			result.erase("scriptName");
 			instance->loadScriptGlobals(result);
 		}
 		else if (instance && list[i].startsWith("groups_"))
