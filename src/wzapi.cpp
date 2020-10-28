@@ -22,22 +22,6 @@
  * New scripting system -- script functions
  */
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtScript/QScriptValue>
-#include <QtCore/QStringList>
-#include <QtCore/QJsonArray>
-#include <QtGui/QStandardItemModel>
-#include <QtCore/QPointer>
-
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/fixedpoint.h"
@@ -1463,7 +1447,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	return false;
 }
 
-//-- ## pickStructLocation(droid, structure type, x, y)
+//-- ## pickStructLocation(droid, structure type, x, y[, maxBlockingTiles])
 //--
 //-- Pick a location for constructing a certain type of building near some given position.
 //-- Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
@@ -1550,11 +1534,6 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 endstructloc:
 	if (found)
 	{
-//		QScriptValue retval = engine->newObject();
-//		retval.setProperty("x", x + map_coord(offset.x), QScriptValue::ReadOnly);
-//		retval.setProperty("y", y + map_coord(offset.y), QScriptValue::ReadOnly);
-//		retval.setProperty("type", SCRIPT_POSITION, QScriptValue::ReadOnly);
-//		return retval;
 		return optional<scr_position>({x + map_coord(offset.x), y + map_coord(offset.y)});
 	}
 	else
