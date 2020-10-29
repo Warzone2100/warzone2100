@@ -29,9 +29,6 @@
 
 // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtCore/QHash>
-#include <QtScript/QScriptEngine>
-#include <QtScript/QScriptValue>
-#include <QtScript/QScriptValueIterator>
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
