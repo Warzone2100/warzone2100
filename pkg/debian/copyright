@@ -89,6 +89,10 @@ Copyright: 2010 by Chris Robinson
            2020 Warzone 2100 Project
 License: Expat
 
+Files: src/3rdparty/gsl_finally.h
+Copyright: 2015 Microsoft Corporation
+License: Expat
+
 Files: src/3rdparty/integer_sequence.hpp
 Copyright: 2017 by Simon Brand
 License: CC0
