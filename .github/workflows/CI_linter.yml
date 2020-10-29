@@ -20,7 +20,7 @@ jobs:
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: master
-        FILTER_REGEX_EXCLUDE: '.eslintrc.json' # because it allows non-standard comments
+        FILTER_REGEX_EXCLUDE: '.eslintrc.json|3rdparty/.*' # .eslintrc.json allows non-standard comments
         LINTER_RULES_PATH: '.'
         VALIDATE_YAML: true
         VALIDATE_JSON: true
