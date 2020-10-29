@@ -4210,4 +4210,3 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	}
 	return playerData;
 }
-

@@ -410,6 +410,10 @@ public:
 
 // MARK: wzapi functions
 public:
+	// Used for retrieving information to set up script instance environments
+	nlohmann::json constructDerrickPositions();
+	nlohmann::json constructStartPositions();
+public:
 	// Label functions
 	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string label, optional<int> filter));
 	static std::vector<std::string> enumLabels(WZAPI_PARAMS(optional<int> filterLabelType));

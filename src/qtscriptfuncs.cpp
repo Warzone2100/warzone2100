@@ -988,9 +988,9 @@ QScriptValue convObj(const BASE_OBJECT *psObj, QScriptEngine *engine)
 	value.setProperty("name", objInfo(psObj), QScriptValue::ReadOnly);
 	value.setProperty("born", psObj->born, QScriptValue::ReadOnly);
 	scripting_engine::GROUPMAP *psMap = scripting_engine::instance().getGroupMap(engineToInstanceMap.at(engine));
-	if (psMap != nullptr && psMap->map().count(psObj) > 0)
+	if (psMap != nullptr && psMap->map().count(psObj) > 0) // FIXME:
 	{
-		int group = psMap->map().at(psObj);
+		int group = psMap->map().at(psObj); // FIXME:
 		value.setProperty("group", group, QScriptValue::ReadOnly);
 	}
 	else
@@ -4234,7 +4234,7 @@ static void setStatsFunc(QScriptValue &base, QScriptEngine *engine, const QStrin
 	v.setProperty("name", name, QScriptValue::SkipInEnumeration | QScriptValue::ReadOnly | QScriptValue::Undeletable);
 }
 
-nlohmann::json constructDerrickPositions()
+nlohmann::json scripting_engine::constructDerrickPositions()
 {
 	// Static map knowledge about start positions
 	//== * ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
@@ -4251,7 +4251,7 @@ nlohmann::json constructDerrickPositions()
 	return derrickPositions;
 }
 
-nlohmann::json constructStartPositions()
+nlohmann::json scripting_engine::constructStartPositions()
 {
 	// Static map knowledge about start positions
 	//== * ```startPositions``` An array of player start positions on the current map. Each item in the array is an
@@ -4423,10 +4423,10 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	engine->globalObject().setProperty("getDroidLimit", engine->newFunction(js_getDroidLimit)); // WZAPI
 	engine->globalObject().setProperty("getExperienceModifier", engine->newFunction(js_getExperienceModifier)); // WZAPI
 	engine->globalObject().setProperty("setDroidLimit", engine->newFunction(js_setDroidLimit)); // WZAPI
-	engine->globalObject().setProperty("setCommanderLimit", engine->newFunction(js_setCommanderLimit));
-	engine->globalObject().setProperty("setConstructorLimit", engine->newFunction(js_setConstructorLimit));
+	engine->globalObject().setProperty("setCommanderLimit", engine->newFunction(js_setCommanderLimit)); // deprecated!!
+	engine->globalObject().setProperty("setConstructorLimit", engine->newFunction(js_setConstructorLimit)); // deprecated!!
 	engine->globalObject().setProperty("setExperienceModifier", engine->newFunction(js_setExperienceModifier)); // WZAPI
-	engine->globalObject().setProperty("getWeaponInfo", engine->newFunction(js_getWeaponInfo));
+	engine->globalObject().setProperty("getWeaponInfo", engine->newFunction(js_getWeaponInfo)); // deprecated!!
 	engine->globalObject().setProperty("enumCargo", engine->newFunction(js_enumCargo)); // WZAPI
 
 	// Functions that operate on the current player only
@@ -4496,8 +4496,8 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	engine->globalObject().setProperty("playerData", mapJsonToQScriptValue(engine, playerData, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	// Static map knowledge about start positions
-	nlohmann::json startPositions = constructStartPositions();
-	nlohmann::json derrickPositions = constructDerrickPositions();
+	nlohmann::json startPositions = scripting_engine::instance().constructStartPositions();
+	nlohmann::json derrickPositions = scripting_engine::instance().constructDerrickPositions();
 	engine->globalObject().setProperty("derrickPositions", mapJsonToQScriptValue(engine, derrickPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("startPositions", mapJsonToQScriptValue(engine, startPositions, QScriptValue::ReadOnly | QScriptValue::Undeletable), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
