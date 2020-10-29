@@ -250,6 +250,7 @@ typedef enum
 	CLI_NOTEXTURECOMPRESSION,
 	CLI_GFXBACKEND,
 	CLI_GFXDEBUG,
+	CLI_JSBACKEND,
 	CLI_AUTOGAME,
 	CLI_SAVEANDQUIT,
 	CLI_SKIRMISH,
@@ -299,6 +300,12 @@ static const struct poptOption *getOptionsTable()
 			")"
 		},
 		{ "gfxdebug", POPT_ARG_NONE, CLI_GFXDEBUG, N_("Use gfx backend debug"), nullptr },
+		{ "jsbackend", POPT_ARG_STRING, CLI_JSBACKEND, N_("Set JS backend"),
+					"("
+					"quickjs"
+					", qtscript"
+					")"
+		},
 		{ "autogame", POPT_ARG_NONE, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr },
 		{ "saveandquit", POPT_ARG_STRING, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name") },
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
@@ -679,6 +686,26 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_GFXDEBUG:
 			uses_gfx_debug = true;
 			break;
+
+		case CLI_JSBACKEND:
+			{
+				// retrieve the backend
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Unrecognised backend");
+				}
+				JS_BACKEND jsBackend;
+				if (js_backend_from_str(token, jsBackend))
+				{
+					war_setJSBackend(jsBackend);
+				}
+				else
+				{
+					qFatal("Unsupported / invalid jsbackend value");
+				}
+				break;
+			}
 
 		case CLI_AUTOGAME:
 			wz_autogame = true;

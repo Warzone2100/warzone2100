@@ -27,6 +27,7 @@
 #include "lib/framework/frame.h"
 #include "lib/sequence/sequence.h"
 #include "lib/sound/sounddefs.h"
+#include <string>
 
 #define	CAMERASPEED_MAX		(5000)
 #define	CAMERASPEED_MIN		(100)
@@ -45,6 +46,16 @@ enum FMV_MODE
 	FMV_2X,
 	FMV_MAX
 };
+
+enum class JS_BACKEND
+{
+	quickjs,
+	qtscript,
+	num_backends // Must be last!
+};
+
+bool js_backend_from_str(const char *str, JS_BACKEND &output_backend);
+std::string to_string(JS_BACKEND backend);
 
 /***************************************************************************/
 /*
@@ -102,6 +113,8 @@ void war_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE war_getScanlineMode();
 video_backend war_getGfxBackend();
 void war_setGfxBackend(video_backend backend);
+JS_BACKEND war_getJSBackend();
+void war_setJSBackend(JS_BACKEND backend);
 
 /**
  * Enable or disable sound initialization

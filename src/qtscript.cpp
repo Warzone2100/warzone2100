@@ -76,6 +76,7 @@
 #include "modding.h"
 #include "version.h"
 #include "game.h"
+#include "warzoneconfig.h"
 
 #include <set>
 #include <memory>
@@ -86,6 +87,7 @@
 
 #include "qtscriptdebug.h"
 #include "qtscriptfuncs.h"
+#include "quickjs_backend.h"
 
 #define ATTACK_THROTTLE 1000
 
@@ -525,13 +527,27 @@ ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview)
 
 ScriptMapData scripting_engine::runMapScript(WzString const &path, uint64_t seed, bool preview)
 {
-	// TODO: Further refactoring
-	return runMapScript_QtScript(path, seed, preview);
+	return runMapScript_QuickJS(path, seed, preview);
 }
 
 wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
 {
 	return scripting_engine::instance().loadPlayerScript(path, player, difficulty);
+}
+
+static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path, int player, int realDifficulty)
+{
+	// JS scripts:
+	switch (war_getJSBackend())
+	{
+		case JS_BACKEND::quickjs:
+			return createQuickJSScriptInstance(path, player, realDifficulty);
+		case JS_BACKEND::qtscript:
+			return createQtScriptInstance(path, player, realDifficulty);
+		case JS_BACKEND::num_backends:
+			debug(LOG_ERROR, "Invalid js backend value"); // should not happen
+	}
+	return nullptr;
 }
 
 wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
@@ -550,7 +566,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 		realDifficulty = (int)getDifficultyLevel();
 	}
 
-	wzapi::scripting_instance* pNewInstance = createQtScriptInstance(path, player, realDifficulty);
+	wzapi::scripting_instance* pNewInstance = loadPlayerScriptByBackend(path, player, realDifficulty);
 	if (!pNewInstance)
 	{
 		// failed to create new scripting instance
