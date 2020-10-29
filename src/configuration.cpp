@@ -247,6 +247,15 @@ bool loadConfig()
 		gfxBackend = wzGetDefaultGfxBackendForCurrentSystem();
 	}
 	war_setGfxBackend(gfxBackend);
+	auto js_backend = war_getJSBackend();
+	if (ini.contains("jsbackend"))
+	{
+		if (!js_backend_from_str(ini.value("jsbackend").toString().toUtf8().constData(), js_backend))
+		{
+			js_backend = (JS_BACKEND)0; // use the first available option, whatever it is
+			debug(LOG_WARNING, "Unsupported / invalid jsbackend value: %s; defaulting to: %s", ini.value("js_backend").toString().toUtf8().constData(), to_string(js_backend).c_str());
+		}
+	}
 
 	ActivityManager::instance().endLoadingSettings();
 	return true;
@@ -342,6 +351,7 @@ bool saveConfig()
 	ini.setValue("colourMP", war_getMPcolour());
 	ini.setValue("favoriteStructs", getFavoriteStructs().toUtf8().c_str());
 	ini.setValue("gfxbackend", to_string(war_getGfxBackend()).c_str());
+	ini.setValue("jsbackend", to_string(war_getJSBackend()).c_str());
 	ini.sync();
 	return true;
 }
