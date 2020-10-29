@@ -44,3 +44,29 @@ add_library(glad STATIC ${GLAD_HEADERS} ${GLAD_SOURCES})
 set_property(TARGET glad PROPERTY FOLDER "3rdparty")
 target_link_libraries(glad PRIVATE ${CMAKE_DL_LIBS})
 target_include_directories(glad PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/glad/include")
+
+# quickjs library
+
+set(QUICKJS_HEADERS
+	quickjs/cutils.h
+	quickjs/libbf.h
+	quickjs/libregexp.h
+	quickjs/libunicode.h
+	quickjs/list.h
+	quickjs/quickjs.h
+)
+
+set(QUICKJS_SOURCES
+	quickjs/cutils.c
+	quickjs/libbf.c
+	quickjs/libregexp.c
+	quickjs/libunicode.c
+	quickjs/quickjs.c
+)
+
+add_library(quickjs STATIC ${QUICKJS_HEADERS} ${QUICKJS_SOURCES})
+set_property(TARGET quickjs PROPERTY FOLDER "3rdparty")
+target_include_directories(quickjs PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/quickjs")
+target_compile_definitions(quickjs PRIVATE
+	CONFIG_VERSION="2020-09-06"
+)

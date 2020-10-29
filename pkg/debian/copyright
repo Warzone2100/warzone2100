@@ -138,6 +138,11 @@ Files: 3rdparty/optional-lite/*
 Copyright: 2014-2018 Martin Moene
 License: BSL-1.0
 
+Files: 3rdparty/quickjs/*
+Copyright: 2017-2020 Fabrice Bellard
+           2017-2020 Charlie Gordon
+License: Expat
+
 Files: 3rdparty/re2/*
 Copyright: 2009 The RE2 Authors
 License: BSD-3-clause-re2

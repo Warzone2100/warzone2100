@@ -112,6 +112,8 @@ if(ENABLE_NLS)
 	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
 endif()
 
+target_link_libraries(warzone2100 quickjs)
+
 include(IncludeFindCurl)
 target_link_libraries(warzone2100 CURL::libcurl)
 target_link_libraries(warzone2100 re2::re2)

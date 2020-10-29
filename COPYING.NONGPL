@@ -23,6 +23,8 @@ data/base/texpages/page-25-sky-urban.png
 	- BSD, Copyright (c) 2005-2017, Thomas BERNARD (http://miniupnp.free.fr)
 3rdparty/optional-lite/*
 	- Boost Software License 1.0, Copyright (c) 2014-2018 Martin Moene (https://github.com/martinmoene/optional-lite)
+3rdparty/quickjs/*
+	- MIT, Copyright (c) 2017-2020 Fabrice Bellard, Copyright (c) 2017-2020 Charlie Gordon (https://bellard.org/quickjs/)
 3rdparty/re2/*
 	- BSD-style license, Copyright (c) 2009 The RE2 Authors (https://github.com/google/re2)
 3rdparty/utf8proc/*
