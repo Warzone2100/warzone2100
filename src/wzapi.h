@@ -82,7 +82,7 @@ typedef std::function<void (uniqueTimerID, BASE_OBJECT*, timerAdditionalData *)>
 
 enum timerType
 {
-	TIMER_REPEAT, TIMER_ONESHOT_READY, TIMER_ONESHOT_DONE
+	TIMER_REPEAT, TIMER_ONESHOT_READY, TIMER_ONESHOT_DONE, TIMER_REMOVED
 };
 
 struct scr_radius

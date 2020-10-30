@@ -25,6 +25,7 @@
 #include "random.h"
 #include "wzapi.h"
 #include <chrono>
+#include <memory>
 
 class QString;
 class QStandardItemModel;
@@ -322,9 +323,9 @@ private:
 	/// List of timer events for scripts. Before running them, we sort the list then run as many as we have time for.
 	/// In this way, we implement load balancing of events and keep frame rates tidy for users. Since scripts run on the
 	/// host, we do not need to worry about each peer simulating the world differently.
-	std::list<timerNode> timers;
+	std::list<std::shared_ptr<timerNode>> timers;
 	uniqueTimerID lastTimerID = 0;
-	std::unordered_map<uniqueTimerID, std::list<timerNode>::iterator> timerIDMap; // a map from uniqueTimerID -> entry in the timers list
+	std::unordered_map<uniqueTimerID, std::list<std::shared_ptr<timerNode>>::iterator> timerIDMap; // a map from uniqueTimerID -> entry in the timers list
 private:
 	scripting_engine() { }
 public:
@@ -370,10 +371,11 @@ public:
 	std::vector<uniqueTimerID> removeTimersIf(UnaryPredicate _pred)
 	{
 		std::vector<uniqueTimerID> removedTimerIDs;
-		timers.remove_if([_pred, &removedTimerIDs](const timerNode& node) {
-			if (_pred(node))
+		timers.remove_if([_pred, &removedTimerIDs](const std::shared_ptr<timerNode>& node) {
+			if (_pred(*node))
 			{
-				removedTimerIDs.push_back(node.timerID);
+				node->type = TIMER_REMOVED; // in case a timer is removed while running timers
+				removedTimerIDs.push_back(node->timerID);
 				return true;
 			}
 			return false;
@@ -402,7 +404,7 @@ private:
 	void logFunctionPerformance(wzapi::scripting_instance *instance, const std::string &function, int ticks);
 	uniqueTimerID getNextAvailableTimerID();
 	// internal-only function that adds a Timer node (used for restoring saved games)
-	void addTimerNode(timerNode&& node);
+	void addTimerNode(std::shared_ptr<timerNode>&& node);
 
 // MARK: triggering events (from wz game code)
 public:
