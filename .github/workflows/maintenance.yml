@@ -38,7 +38,7 @@ jobs:
     - name: Create Pull Request to update base files (if needed)
       if: (github.repository == 'Warzone2100/warzone2100')
       id: cpr
-      uses: past-due/create-pull-request@v2
+      uses: past-due/create-pull-request@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         path: 'master'
@@ -48,9 +48,10 @@ jobs:
           Update base string / translation files in the `master` branch
           - Auto-generated
         labels: automated pr
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         draft: false
         branch: update_base_translations
     - name: Check outputs
       if: ${{ success() }}
       run: |
-        echo "Pull Request Number - ${{ steps.cpr.outputs.pr_number }}"
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
