@@ -31,8 +31,8 @@ jobs:
     - name: Compute build variables
       run: |
         . .ci/githubactions/export_build_output_desc.sh
-        echo "::set-env name=WZ_BUILD_DESC_IS_TAG::${WZ_BUILD_DESC_IS_TAG}"
-        echo "::set-env name=WZ_BUILD_DESC_PREFIX::${WZ_BUILD_DESC_PREFIX}"
+        echo "WZ_BUILD_DESC_IS_TAG=${WZ_BUILD_DESC_IS_TAG}" >> $GITHUB_ENV
+        echo "WZ_BUILD_DESC_PREFIX=${WZ_BUILD_DESC_PREFIX}" >> $GITHUB_ENV
         WZ_OUTPUT_NAME_SUFFIX=""
         WZ_NAME_SUFFIX=""
         if [ "$WZ_BUILD_DESC_IS_TAG" == "false" ]; then
@@ -40,15 +40,15 @@ jobs:
           WZ_NAME_SUFFIX=" ($(echo "${WZ_BUILD_DESC_PREFIX}" | sed 's/[^a-zA-Z0-9\.]/_/g'))"
         fi
         echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}"
-        echo "::set-env name=WZ_OUTPUT_NAME_SUFFIX::${WZ_OUTPUT_NAME_SUFFIX}"
-        echo "::set-env name=WZ_NAME_SUFFIX::${WZ_NAME_SUFFIX}"
+        echo "WZ_OUTPUT_NAME_SUFFIX=${WZ_OUTPUT_NAME_SUFFIX}" >> $GITHUB_ENV
+        echo "WZ_NAME_SUFFIX=${WZ_NAME_SUFFIX}" >> $GITHUB_ENV
 
         WZ_DISTRIBUTOR="UNKNOWN"
         if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
           WZ_DISTRIBUTOR="wz2100.net"
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
-        echo "::set-env name=WZ_DISTRIBUTOR::${WZ_DISTRIBUTOR}"
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
 
     - name: Prepare to build .SNAP
       run: |
@@ -83,14 +83,14 @@ jobs:
       run: |
         OUTPUT_DIR="${HOME}/output"
         echo "OUTPUT_DIR=${OUTPUT_DIR}"
-        echo "::set-env name=OUTPUT_DIR::${OUTPUT_DIR}"
+        echo "OUTPUT_DIR=${OUTPUT_DIR}" >> $GITHUB_ENV
         mkdir -p "${OUTPUT_DIR}"
         OUTPUT_FILE_NAME="warzone2100_linux_${{ matrix.arch }}.snap"
         cp "${{ steps.snapcraft.outputs.snap }}" "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
         echo "Generated .snap: \"${OUTPUT_FILE_NAME}\""
         echo "  -> SHA512: $(sha512sum "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
-        echo "::set-env name=WZ_FULL_OUTPUT_SNAP_PATH::${OUTPUT_DIR}/${OUTPUT_FILE_NAME}"
+        echo "WZ_FULL_OUTPUT_SNAP_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
     - uses: actions/upload-artifact@v1
       if: success()
       with:
