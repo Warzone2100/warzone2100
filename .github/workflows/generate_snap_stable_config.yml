@@ -59,7 +59,7 @@ jobs:
             PUBLISH_CONFIG="true"
           fi
           echo "::set-output name=PUBLISH_CONFIG::${PUBLISH_CONFIG}"
-          echo "::set-env name=PUBLISH_CONFIG::${PUBLISH_CONFIG}"
+          echo "PUBLISH_CONFIG=${PUBLISH_CONFIG}" >> $GITHUB_ENV
       - name: Install Prereqs
         run: |
           sudo snap install yq
@@ -130,7 +130,7 @@ jobs:
             exit 1
           fi
           echo "${LATEST_GITHUB_RELEASE_TAG}" > "${GITHUB_WORKSPACE}/snap-stable-build/.stable_tag"
-          echo "::set-env name=LATEST_GITHUB_RELEASE_TAG::${LATEST_GITHUB_RELEASE_TAG}"
+          echo "LATEST_GITHUB_RELEASE_TAG=${LATEST_GITHUB_RELEASE_TAG}" >> $GITHUB_ENV
           
           # Copy pkg/snap directory to pkg/snap in dest repo (overwriting old version)
           rm -rf "${GITHUB_WORKSPACE}/snap-stable-build/pkg/snap"
