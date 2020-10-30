@@ -1698,11 +1698,15 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 			}
 				break;
 			default:
+				if (p.isNull())
+				{
+					return QScriptValue::NullValue;
+				}
 				debug(LOG_SCRIPT, "Unsupported object label type: %d", type);
 				break;
 			}
 
-			return QScriptValue();
+			return QScriptValue::NullValue;
 		}
 
 		QScriptValue box(GATEWAY* psGateway, QScriptEngine* engine)
