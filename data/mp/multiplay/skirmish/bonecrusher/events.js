@@ -521,7 +521,7 @@ function eventChat(sender, to, message) {
 		}
 	
 		if(message.substr(0,8) == "cheat me"){
-			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
+			if(!getIsMultiplayer() && ( !isHumanAlly() || !release ) ){
 				berserk = true;
 				debugMsg('Berserk activated', 'init');
 				chat(sender, ' from '+debugName+': '+chatting('berserk'));
@@ -531,7 +531,7 @@ function eventChat(sender, to, message) {
 		}
 		
 		if(message.substr(0,13) == "cheat me hard"){
-			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
+			if(!getIsMultiplayer() && ( !isHumanAlly() || !release ) ){
 				debugMsg('Big army activated', 'init');
 				minPartisans = 20;
 				maxPartisans = 25;

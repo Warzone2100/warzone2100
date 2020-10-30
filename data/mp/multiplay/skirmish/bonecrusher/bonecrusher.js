@@ -385,7 +385,7 @@ function init(){
 	if(technology.length) debugMsg("Доступных исследований: "+technology.length, "init");
 	else debugMsg("ВНИМАНИЕ: Нет доступных исследований", "init");
 	
-	debugMsg('Is Multiplayer: '+isMultiplayer(), 'init');
+	debugMsg('Is Multiplayer: '+getIsMultiplayer(), 'init');
 	debugMsg('Is Human in Ally: '+isHumanAlly(), 'init');
 	debugMsg('Num Enemies: '+getNumEnemies(), 'init');
 	
@@ -734,7 +734,7 @@ function letsRockThisFxxxingWorld(init){
 			func_buildersOrder_timer = 5000+me*100;
 			
 			/* NO Cheat Anymore!
-			if(!isMultiplayer() && ( !isHumanAlly() || !release ) ){
+			if(!getIsMultiplayer() && ( !isHumanAlly() || !release ) ){
 				berserk = true;
 				debugMsg('Berserk activated', 'init');
 				if(getNumEnemies() > 1){

@@ -863,7 +863,7 @@ function getNumEnemies(){
 	return enemies;
 }
 
-function isMultiplayer(){
+function getIsMultiplayer(){
 	var humans = 0;
 	for ( var e = 0; e < maxPlayers; ++e ) {
 		if(playerData[e].isHuman) humans++;
