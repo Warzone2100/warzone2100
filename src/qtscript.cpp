@@ -191,25 +191,25 @@ uniqueTimerID scripting_engine::getNextAvailableTimerID()
 uniqueTimerID scripting_engine::setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName /*= ""*/, const BASE_OBJECT * obj /*= nullptr*/, timerType type /*= TIMER_REPEAT*/, timerAdditionalData* additionalParam /*= nullptr*/)
 {
 	uniqueTimerID newTimerID = getNextAvailableTimerID();
-	timerNode node(caller, timerFunc, timerName, player, milliseconds, additionalParam);
+	std::shared_ptr<timerNode> node = std::make_shared<timerNode>(caller, timerFunc, timerName, player, milliseconds, additionalParam);
 	if (obj != nullptr)
 	{
-		node.baseobj = obj->id;
-		node.baseobjtype = obj->type;
+		node->baseobj = obj->id;
+		node->baseobjtype = obj->type;
 	}
-	node.type = type;
-	node.timerID = newTimerID;
+	node->type = type;
+	node->timerID = newTimerID;
 	auto inserted_iter = timers.emplace(timers.end(), std::move(node));
 	timerIDMap[newTimerID] = inserted_iter;
 	return newTimerID;
 }
 
 // internal-only function that adds a Timer node (used for restoring saved games)
-void scripting_engine::addTimerNode(scripting_engine::timerNode&& node)
+void scripting_engine::addTimerNode(std::shared_ptr<scripting_engine::timerNode>&& node)
 {
-	ASSERT(timerIDMap.count(node.timerID) == 0, "Duplicate timerID found: %s", WzString::number(node.timerID).toUtf8().c_str());
+	ASSERT(timerIDMap.count(node->timerID) == 0, "Duplicate timerID found: %s", WzString::number(node->timerID).toUtf8().c_str());
 	auto inserted_iter = timers.emplace(timers.end(), std::move(node));
-	timerIDMap[inserted_iter->timerID] = inserted_iter;
+	timerIDMap[(*inserted_iter)->timerID] = inserted_iter;
 }
 
 /// Scripting engine (what others call the scripting context, but QtScript's nomenclature is different).
@@ -329,6 +329,7 @@ bool scripting_engine::removeTimer(uniqueTimerID timerID)
 	auto it = timerIDMap.find(timerID);
 	if (it != timerIDMap.end())
 	{
+		(*it->second)->type = TIMER_REMOVED; // in case a timer is removed while running timers
 		timers.erase(it->second);
 		timerIDMap.erase(it);
 		return true;
@@ -446,22 +447,29 @@ bool scripting_engine::updateScripts()
 	});
 	// Check for timers, and run them if applicable.
 	// TODO - load balancing
-	std::vector<timerNode*> runlist; // make a new list here, since we might trample all over the timer list during execution
+	std::vector<std::shared_ptr<timerNode>> runlist; // make a new list here, since we might trample all over the timer list during execution
 	for (auto &node : timers)
 	{
-		if (node.frameTime <= gameTime)
+		if (node->frameTime <= gameTime)
 		{
-			node.frameTime = node.ms + gameTime;	// update for next invokation
-			if (node.type == TIMER_ONESHOT_READY)
+			node->frameTime = node->ms + gameTime;	// update for next invokation
+			if (node->type == TIMER_ONESHOT_READY)
 			{
-				node.type = TIMER_ONESHOT_DONE; // unless there is none
+				node->type = TIMER_ONESHOT_DONE; // unless there is none
 			}
-			node.calls++;
-			runlist.push_back(&node);
+			node->calls++;
+			runlist.push_back(node);
 		}
 	}
+
 	for (auto &node : runlist)
 	{
+		// IMPORTANT: A queued function can delete a timer that is in the runlist!
+		// So we must verify that the node is not one of the deleted ones.
+		if (node->type == TIMER_REMOVED)
+		{
+			continue; // skip
+		}
 		node->function(node->timerID, IdToObject(node->baseobjtype, node->baseobj, node->player), node->additionalTimerFuncParam);
 	}
 
@@ -705,21 +713,21 @@ bool scripting_engine::saveScriptStates(const char *filename)
 	for (const auto& node : timers)
 	{
 		nlohmann::json nodeInfo = nlohmann::json::object();
-		nodeInfo["timerID"] = node.timerID;
-		nodeInfo["timerName"] = node.timerName;
+		nodeInfo["timerID"] = node->timerID;
+		nodeInfo["timerName"] = node->timerName;
 		// we have to save 'scriptName' and 'me' explicitly
-		nodeInfo["me"] = node.player;
-		nodeInfo["scriptName"] = node.instance->scriptName();
-		nodeInfo["functionRestoreInfo"] = node.instance->saveTimerFunction(node.timerID, node.timerName, node.additionalTimerFuncParam);
-		if (node.baseobj >= 0)
+		nodeInfo["me"] = node->player;
+		nodeInfo["scriptName"] = node->instance->scriptName();
+		nodeInfo["functionRestoreInfo"] = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam);
+		if (node->baseobj >= 0)
 		{
-			nodeInfo["object"] = node.baseobj;
-			nodeInfo["objectType"] = (int)node.baseobjtype;
+			nodeInfo["object"] = node->baseobj;
+			nodeInfo["objectType"] = (int)node->baseobjtype;
 		}
-		nodeInfo["frame"] = node.frameTime;
-		nodeInfo["ms"] = node.ms;
-		nodeInfo["calls"] = node.calls;
-		nodeInfo["type"] = (int)node.type;
+		nodeInfo["frame"] = node->frameTime;
+		nodeInfo["ms"] = node->ms;
+		nodeInfo["calls"] = node->calls;
+		nodeInfo["type"] = (int)node->type;
 
 		ini.setValue("triggers_" + WzString::number(timerIdx), nodeInfo);
 		++timerIdx;
@@ -763,19 +771,19 @@ bool scripting_engine::loadScriptStates(const char *filename)
 		wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 		if (instance && list[i].startsWith("triggers_"))
 		{
-			timerNode node;
-			node.timerID = ini.value("timerID").toInt();
-			node.timerName = ini.value("timerName").toWzString().toStdString();
-			node.instance = instance;
+			std::shared_ptr<timerNode> node = std::make_shared<timerNode>();;
+			node->timerID = ini.value("timerID").toInt();
+			node->timerName = ini.value("timerName").toWzString().toStdString();
+			node->instance = instance;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
 			      i, player, scriptName.toUtf8().c_str());
-			node.baseobj = ini.value("baseobj", -1).toInt();
-			node.baseobjtype = (OBJECT_TYPE)ini.value("objectType", (int)OBJ_NUM_TYPES).toInt();
-			node.frameTime = ini.value("frame").toInt();
-			node.ms = ini.value("ms").toInt();
-			node.player = player;
-			node.calls = ini.value("calls").toInt();
-			node.type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
+			node->baseobj = ini.value("baseobj", -1).toInt();
+			node->baseobjtype = (OBJECT_TYPE)ini.value("objectType", (int)OBJ_NUM_TYPES).toInt();
+			node->frameTime = ini.value("frame").toInt();
+			node->ms = ini.value("ms").toInt();
+			node->player = player;
+			node->calls = ini.value("calls").toInt();
+			node->type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
 
 			std::tuple<TimerFunc, timerAdditionalData *> restoredTimerInfo;
 			try
@@ -788,10 +796,10 @@ bool scripting_engine::loadScriptStates(const char *filename)
 				continue;
 			}
 
-			node.function = std::get<0>(restoredTimerInfo);
-			node.additionalTimerFuncParam = std::get<1>(restoredTimerInfo);
+			node->function = std::get<0>(restoredTimerInfo);
+			node->additionalTimerFuncParam = std::get<1>(restoredTimerInfo);
 
-			maxRestoredTimerID = std::max<uniqueTimerID>(maxRestoredTimerID, node.timerID);
+			maxRestoredTimerID = std::max<uniqueTimerID>(maxRestoredTimerID, node->timerID);
 
 			addTimerNode(std::move(node));
 		}
@@ -876,25 +884,25 @@ void scripting_engine::updateGlobalModels()
 	{
 		int nextRow = m->rowCount();
 		m->setRowCount(nextRow);
-		m->setItem(nextRow, 0, new QStandardItem(QString::number(node.timerID)));
-		m->setItem(nextRow, 1, new QStandardItem(QString::fromStdString(node.timerName)));
-		QString scriptName = QString::fromStdString(node.instance->scriptName());
-		m->setItem(nextRow, 2, new QStandardItem(scriptName + ":" + QString::number(node.player)));
-		if (node.baseobj >= 0)
+		m->setItem(nextRow, 0, new QStandardItem(QString::number(node->timerID)));
+		m->setItem(nextRow, 1, new QStandardItem(QString::fromStdString(node->timerName)));
+		QString scriptName = QString::fromStdString(node->instance->scriptName());
+		m->setItem(nextRow, 2, new QStandardItem(scriptName + ":" + QString::number(node->player)));
+		if (node->baseobj >= 0)
 		{
-			m->setItem(nextRow, 3, new QStandardItem(QString::number(node.baseobj)));
+			m->setItem(nextRow, 3, new QStandardItem(QString::number(node->baseobj)));
 		}
 		else
 		{
 			m->setItem(nextRow, 3, new QStandardItem("-"));
 		}
-		m->setItem(nextRow, 4, new QStandardItem(QString::number(node.frameTime)));
-		m->setItem(nextRow, 5, new QStandardItem(QString::number(node.ms)));
-		if (node.type == TIMER_ONESHOT_READY)
+		m->setItem(nextRow, 4, new QStandardItem(QString::number(node->frameTime)));
+		m->setItem(nextRow, 5, new QStandardItem(QString::number(node->ms)));
+		if (node->type == TIMER_ONESHOT_READY)
 		{
 			m->setItem(nextRow, 6, new QStandardItem("Oneshot"));
 		}
-		else if (node.type == TIMER_ONESHOT_DONE)
+		else if (node->type == TIMER_ONESHOT_DONE)
 		{
 			m->setItem(nextRow, 6, new QStandardItem("Done"));
 		}
@@ -902,7 +910,7 @@ void scripting_engine::updateGlobalModels()
 		{
 			m->setItem(nextRow, 6, new QStandardItem("Repeat"));
 		}
-		m->setItem(nextRow, 7, new QStandardItem(QString::number(node.calls)));
+		m->setItem(nextRow, 7, new QStandardItem(QString::number(node->calls)));
 	}
 }
 
