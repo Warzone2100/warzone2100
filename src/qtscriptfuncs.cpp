@@ -97,6 +97,7 @@
 #include <unordered_set>
 #include "lib/framework/file.h"
 #include <unordered_map>
+#include "3rdparty/integer_sequence.hpp"
 
 void to_json(nlohmann::json& j, const QVariant& value); // forward-declare
 
@@ -1837,6 +1838,48 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 			>::value>::apply(::std::forward<F>(f), ::std::forward<T>(t));
 		}
 
+		template<typename...T> struct UnboxTupleIndex;
+		template<size_t...I, typename...T>
+		struct UnboxTupleIndex<tl::index_sequence<I...>, T...>
+		{
+		public:
+			typedef std::tuple<const wzapi::execution_context&, T...> tuple_type;
+			typedef std::tuple<const wzapi::execution_context&, T&...> tuple_ref_type;
+
+			UnboxTupleIndex(const wzapi::execution_context& execution_context, size_t& idx, QScriptContext *ctx, QScriptEngine *engine, const char *function)
+				: impl(idx, ctx, engine, function),
+				value(execution_context, (static_cast<UnboxedValueWrapper<I, T>&>(impl)).value...)
+			{ }
+
+			explicit operator tuple_type() const { return value; }
+			tuple_ref_type operator()() const { return value; }
+
+		private:
+			// Index differentiates wrappers of the same UnboxedType from one another
+			template<size_t Index, typename UnboxedType>
+			struct UnboxedValueWrapper
+			{
+				UnboxedType value;
+				UnboxedValueWrapper(size_t& idx, WZ_DECL_UNUSED QScriptContext *ctx, WZ_DECL_UNUSED QScriptEngine *engine, WZ_DECL_UNUSED const char *function)
+					: value(unbox<UnboxedType>{}(idx, ctx, engine, function))
+				{ }
+			};
+
+			// The UnboxedImpl class derives from all of the value wrappers
+			// (Base classes are guaranteed to be constructed in-order)
+			struct UnboxedImpl : UnboxedValueWrapper<I, T>...
+			{
+				UnboxedImpl(size_t& idx, WZ_DECL_UNUSED QScriptContext *ctx, WZ_DECL_UNUSED QScriptEngine *engine, WZ_DECL_UNUSED const char *function)
+					: UnboxedValueWrapper<I, T>(idx, ctx, engine, function)...
+				{}
+			};
+
+			UnboxedImpl impl;
+			tuple_ref_type value;
+		};
+
+		template<typename...T> using UnboxTuple = UnboxTupleIndex<tl::make_index_sequence<sizeof...(T)>, T...>;
+
 		MSVC_PRAGMA(warning( push )) // see matching "pop" below
 		MSVC_PRAGMA(warning( disable : 4189 )) // disable "warning C4189: 'idx': local variable is initialized but not referenced"
 		
@@ -1845,7 +1888,7 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 		{
 			size_t idx WZ_DECL_UNUSED = 0; // unused when Args... is empty
 			qtscript_execution_context execution_context(context, engine);
-			return box(apply(f, std::tuple<const wzapi::execution_context&, Args...>{static_cast<const wzapi::execution_context&>(execution_context), unbox<Args>{}(idx, context, engine, wrappedFunctionName)...}), engine);
+			return box(apply(f, UnboxTuple<Args...>(execution_context, idx, context, engine, wrappedFunctionName)()), engine);
 		}
 
 		template<typename R, typename...Args>
