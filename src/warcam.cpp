@@ -90,13 +90,13 @@ static	SDWORD	warCamLogoRotation;
 /* Used to animate radar jump */
 struct RADAR_JUMP {
 	Animation<Vector3f> position;
-	Animation<Vector3f> rotation;
+	RotationAnimation rotation;
 };
 
 static RADAR_JUMP radarJumpAnimation
 {
 	Animation<Vector3f>(graphicsTime, EASE_IN_OUT),
-	Animation<Vector3f>(graphicsTime, EASE_IN_OUT)
+	RotationAnimation(graphicsTime, EASE_IN_OUT)
 };
 
 static SDWORD	presAvAngle = 0;
@@ -954,35 +954,14 @@ void	camToggleInfo()
 	bFullInfo = !bFullInfo;
 }
 
-/**
- * Find the angle equivalent to `from` in the interval between `to - 180°` and to `to + 180°`.
- *
- * For example:
- * - if `from` is `10°` and `to` is `350°`, it will return `370°`.
- * - if `from` is `350°` and `to` is `0°`, it will return `-10°`.
- *
- * Useful while animating a rotation, to always animate the shortest angle delta.
- */
-int32_t calculateRelativeAngle(uint16_t from, uint16_t to)
-{
-	return to + (int16_t)(from - to);
-}
-
 /* Informs the tracking camera that we want to start tracking to a new radar target */
 void requestRadarTrack(SDWORD x, SDWORD y)
 {
 	auto initialPosition = Vector3f(player.p);
 	auto targetPosition = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
 	auto animationDuration = glm::log(glm::length(targetPosition - initialPosition)) * 100;
-
-	auto targetRotationTemp = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : player.r;
-	auto targetRotation = Vector3i((uint16_t)targetRotationTemp.x, (uint16_t)targetRotationTemp.y, (uint16_t)0);
-
-	auto initialRotation = Vector3f(
-		calculateRelativeAngle(player.r.x, targetRotation.x),
-		calculateRelativeAngle(player.r.y, targetRotation.y),
-		calculateRelativeAngle(player.r.z, targetRotation.z)
-	);
+	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : player.r;
+	finalRotation.z = 0;
 
 	radarJumpAnimation.position
 		.setInitialData(initialPosition)
@@ -991,8 +970,8 @@ void requestRadarTrack(SDWORD x, SDWORD y)
 		.start();
 
 	radarJumpAnimation.rotation
-		.setInitialData(initialRotation)
-		.setFinalData(targetRotation)
+		.setInitialData(player.r)
+		.setFinalData(finalRotation)
 		.setDuration(animationDuration)
 		.start();
 

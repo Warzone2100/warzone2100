@@ -40,7 +40,8 @@ class Animation
 {
 public:
 	Animation(uint32_t const &time, EasingType easingType = LINEAR, uint16_t duration = 0) : time(time), easingType(easingType), duration(duration) {}
-	void start();
+	virtual ~Animation() {}
+	virtual void start();
 	void update();
 	bool isActive() const;
 	const AnimatableData &getCurrent() const;
@@ -50,7 +51,7 @@ public:
 	Animation<AnimatableData> &setEasing(EasingType easing);
 	Animation<AnimatableData> &setDuration(uint32_t durationMilliseconds);
 
-private:
+protected:
 	uint16_t getEasedProgress() const;
 
 	uint32_t const &time;
@@ -61,6 +62,13 @@ private:
 	AnimatableData initialData;
 	AnimatableData finalData;
 	AnimatableData currentData;
+};
+
+class RotationAnimation: public Animation<Vector3f>
+{
+public:
+	RotationAnimation(uint32_t const &time, EasingType easingType = LINEAR, uint16_t duration = 0): Animation(time, easingType, duration) {}
+	void start() override;
 };
 
 #endif // __INCLUDED_SRC_ANIMATION_H__
