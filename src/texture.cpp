@@ -49,8 +49,8 @@
 /* Texture page and coordinates for each tile */
 TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
-static int firstPage; // the last used page before we start adding terrain textures
-int terrainPage; // texture ID of the terrain page
+static size_t firstPage; // the last used page before we start adding terrain textures
+size_t terrainPage; // texture ID of the terrain page
 static int mipmap_max, mipmap_levels;
 static int maxTextureSize = 2048; ///< the maximum size texture we will create
 
@@ -71,9 +71,9 @@ int getTextureSize()
 }
 
 // Generate a new texture page both in the texture page table, and on the graphics card
-static int newPage(const char *name, int level, int width, int height, int count)
+static size_t newPage(const char *name, int level, int width, int height, int count)
 {
-	int texPage = firstPage + ((count + 1) / TILES_IN_PAGE);
+	size_t texPage = firstPage + ((count + 1) / TILES_IN_PAGE);
 
 	if (texPage == pie_NumberOfPages())
 	{

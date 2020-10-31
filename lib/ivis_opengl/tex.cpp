@@ -81,53 +81,40 @@ std::unordered_map<std::string, size_t> _NAME_TO_TEX_PAGE_MAP;
 
 //*************************************************************************
 
-gfx_api::texture& pie_Texture(int page)
+gfx_api::texture& pie_Texture(size_t page)
 {
 	return *(_TEX_PAGE[page].id);
 }
 
-int pie_NumberOfPages()
+size_t pie_NumberOfPages()
 {
 	return _TEX_PAGE.size();
 }
 
 // Add a new texture page to the list
-int pie_ReserveTexture(const char *name, const size_t& width, const size_t& height)
+size_t pie_ReserveTexture(const char *name, const size_t& width, const size_t& height)
 {
 	iTexPage tex;
 	tex.name = name;
 	_TEX_PAGE.push_back(std::move(tex));
-	int page = _TEX_PAGE.size() - 1;
+	size_t page = _TEX_PAGE.size() - 1;
 	_NAME_TO_TEX_PAGE_MAP[name] = page;
 	return page;
 }
 
-void pie_AssignTexture(int page, gfx_api::texture* texture)
+void pie_AssignTexture(size_t page, gfx_api::texture* texture)
 {
 	if (_TEX_PAGE[page].id)
 		delete _TEX_PAGE[page].id;
 	_TEX_PAGE[page].id = texture;
 }
 
-int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page)
+static size_t pie_AddTexPage_Impl(iV_Image *s, const char *filename, bool gameTexture, size_t page)
 {
 	ASSERT(s && filename, "Bad input parameter");
 
-	if (page < 0)
-	{
-		ASSERT(_NAME_TO_TEX_PAGE_MAP.count(filename) == 0, "tex page %s already exists", filename);
-		iTexPage tex;
-		page = _TEX_PAGE.size();
-		tex.name = filename;
-		_TEX_PAGE.push_back(std::move(tex));
-	}
-	else // replace
-	{
-		_NAME_TO_TEX_PAGE_MAP.erase(_TEX_PAGE[page].name);
-		_TEX_PAGE[page].name = filename;
-	}
 	_NAME_TO_TEX_PAGE_MAP[filename] = page;
-	debug(LOG_TEXTURE, "%s page=%d", filename, page);
+	debug(LOG_TEXTURE, "%s page=%zu", filename, page);
 
 	if (gameTexture) // this is a game texture, use texture compression
 	{
@@ -152,6 +139,29 @@ int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page
 
 	/* Send back the texpage number so we can store it in the IMD */
 	return page;
+}
+
+size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture)
+{
+	ASSERT(s && filename, "Bad input parameter");
+	ASSERT(_NAME_TO_TEX_PAGE_MAP.count(filename) == 0, "tex page %s already exists", filename);
+	iTexPage tex;
+	size_t page = _TEX_PAGE.size();
+	tex.name = filename;
+	_TEX_PAGE.push_back(std::move(tex));
+
+	return pie_AddTexPage_Impl(s, filename, gameTexture, page);
+}
+
+size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, size_t page)
+{
+	ASSERT(s && filename, "Bad input parameter");
+
+	// replace
+	_NAME_TO_TEX_PAGE_MAP.erase(_TEX_PAGE[page].name);
+	_TEX_PAGE[page].name = filename;
+
+	return pie_AddTexPage_Impl(s, filename, gameTexture, page);
 }
 
 /*!
@@ -238,7 +248,7 @@ bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-int iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+optional<size_t> iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(filename != nullptr, "filename must not be null");
 	iV_Image sSprite;
@@ -257,12 +267,12 @@ int iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/,
 	if (!iV_loadImage_PNG(loadPath.c_str(), &sSprite))
 	{
 		debug(LOG_ERROR, "Failed to load %s", loadPath.c_str());
-		return -1;
+		return nullopt;
 	}
 	scaleImageMaxSize(&sSprite, maxWidth, maxHeight);
-	int page = pie_AddTexPage(&sSprite, path.c_str(), compression);
+	size_t page = pie_AddTexPage(&sSprite, path.c_str(), compression);
 	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
-	return page;
+	return optional<size_t>(page);
 }
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile)

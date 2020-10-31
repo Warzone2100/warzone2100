@@ -40,7 +40,7 @@ struct TILE_TEX_INFO
 #define MAX_TILES		TILES_IN_PAGE
 
 extern TILE_TEX_INFO	tileTexInfo[MAX_TILES];
-extern int terrainPage;
+extern size_t terrainPage;
 
 void setTextureSize(int texSize);
 int getTextureSize();

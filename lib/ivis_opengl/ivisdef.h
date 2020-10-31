@@ -114,10 +114,10 @@ struct iIMDShape
 	Vector3i min = Vector3i(0, 0, 0);
 	Vector3i max = Vector3i(0, 0, 0);
 	unsigned int flags = 0;
-	int texpage = iV_TEX_INVALID;
-	int tcmaskpage = iV_TEX_INVALID;
-	int normalpage = iV_TEX_INVALID;
-	int specularpage = iV_TEX_INVALID;
+	size_t texpage = iV_TEX_INVALID;
+	size_t tcmaskpage = iV_TEX_INVALID;
+	size_t normalpage = iV_TEX_INVALID;
+	size_t specularpage = iV_TEX_INVALID;
 	int sradius = 0;
 	int radius = 0;
 

@@ -1183,50 +1183,48 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 	// load texture page if specified
 	if (bTextured)
 	{
-		int texpage = iV_GetTexture(texfile);
-		int normalpage = iV_TEX_INVALID;
-		int specpage = iV_TEX_INVALID;
+		optional<size_t> texpage = iV_GetTexture(texfile);
+		optional<size_t> normalpage;
+		optional<size_t> specpage;
 
-		ASSERT_OR_RETURN(, texpage >= 0, "%s could not load tex page %s", filename.toUtf8().c_str(), texfile);
+		ASSERT_OR_RETURN(, texpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), texfile);
 
 		if (normalfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading normal map %s for %s", normalfile, filename.toUtf8().c_str());
 			normalpage = iV_GetTexture(normalfile, false);
-			ASSERT_OR_RETURN(, normalpage >= 0, "%s could not load tex page %s", filename.toUtf8().c_str(), normalfile);
+			ASSERT_OR_RETURN(, normalpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), normalfile);
 		}
 
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, filename.toUtf8().c_str());
 			specpage = iV_GetTexture(specfile, false);
-			ASSERT_OR_RETURN(, specpage >= 0, "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
+			ASSERT_OR_RETURN(, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
 		}
 
 		// assign tex pages and flags to all levels
 		for (iIMDShape *psShape = shape; psShape != nullptr; psShape = psShape->next)
 		{
-			psShape->texpage = texpage;
-			psShape->normalpage = normalpage;
-			psShape->specularpage = specpage;
+			psShape->texpage = texpage.value();
+			psShape->normalpage = (normalpage.has_value()) ? normalpage.value() : iV_TEX_INVALID;
+			psShape->specularpage = (specpage.has_value()) ? specpage.value() : iV_TEX_INVALID;
 			psShape->flags = imd_flags;
 		}
 
 		// check if model should use team colour mask
 		if (imd_flags & iV_IMD_TCMASK)
 		{
-			int texpage_mask;
-
 			std::string tcmask_name = pie_MakeTexPageTCMaskName(texfile);
 			tcmask_name += ".png";
-			texpage_mask = iV_GetTexture(tcmask_name.c_str());
+			optional<size_t> texpage_mask = iV_GetTexture(tcmask_name.c_str());
 
-			ASSERT_OR_RETURN(, texpage_mask >= 0, "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
+			ASSERT_OR_RETURN(, texpage_mask.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
 
 			// Propagate settings through levels
 			for (iIMDShape *psShape = shape; psShape != nullptr; psShape = psShape->next)
 			{
-				psShape->tcmaskpage = texpage_mask;
+				psShape->tcmaskpage = (texpage_mask.has_value()) ? texpage_mask.value() : iV_TEX_INVALID;
 			}
 		}
 	}
