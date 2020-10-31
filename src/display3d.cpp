@@ -2786,7 +2786,6 @@ static void drawStructureBuildProgress(STRUCTURE *psStruct)
 static void	drawStructureSelections()
 {
 	STRUCTURE	*psStruct;
-	SDWORD		scrX, scrY;
 	UDWORD		i;
 	BASE_OBJECT	*psClickedOn;
 	bool		bMouseOverStructure = false;
@@ -2803,6 +2802,14 @@ static void	drawStructureSelections()
 	}
 	pie_SetFogStatus(false);
 
+	const glm::mat4 &viewMatrix =
+		glm::translate(glm::vec3(0.f, 0.f, distance)) *
+		glm::scale(glm::vec3(pie_GetResScalingFactor() / 100.f)) *
+		glm::rotate(UNDEG(player.r.z), glm::vec3(0.f, 0.f, 1.f)) *
+		glm::rotate(UNDEG(player.r.x), glm::vec3(1.f, 0.f, 0.f)) *
+		glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::translate(glm::vec3(-player.p.x, -player.p.y, player.p.z));
+
 	/* Go thru' all the buildings */
 	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
@@ -2814,7 +2821,27 @@ static void	drawStructureSelections()
 			    (bMouseOverOwnStructure && psStruct == (STRUCTURE *)psClickedOn)
 			   )
 			{
+
 				drawStructureHealth(psStruct);
+
+				if(psStruct->selected){
+					Vector3i position(psStruct->pos.x, psStruct->pos.z, -psStruct->pos.y);
+					Vector2i coordinate(0, 0);
+
+					pie_RotateProject(&position, viewMatrix, &coordinate);
+
+					printf("Player (%i, %i, %i) (%i, %i, %i)\n", player.p.x, player.p.y, player.p.z, psStruct->pos.x, psStruct->pos.z, psStruct->pos.y);
+
+					auto scrR = 10;
+					auto scrX = coordinate.x;
+					auto scrY = coordinate.y;
+					std::vector<PIERECT_DrawRequest> rectsToDraw; // batch rect drawing
+					rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR - 7, scrX - scrR + 1, scrY + scrR, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR, scrX - scrR + 7, scrY + scrR + 1, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR - 7, scrY + scrR, scrX + scrR, scrY + scrR + 1, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR, scrY + scrR - 7, scrX + scrR + 1, scrY + scrR + 1, WZCOL_WHITE));
+					pie_DrawMultiRect(rectsToDraw);
+				}
 
 				for (i = 0; i < psStruct->numWeaps; i++)
 				{
@@ -2838,9 +2865,7 @@ static void	drawStructureSelections()
 			if (psStruct->flags.test(OBJECT_FLAG_TARGETED)
 			    && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
-				scrX = psStruct->sDisplay.screenX;
-				scrY = psStruct->sDisplay.screenY;
-				iV_DrawImage(IntImages, getTargettingGfx(), scrX, scrY);
+				iV_DrawImage(IntImages, getTargettingGfx(), psStruct->sDisplay.screenX, psStruct->sDisplay.screenY);
 			}
 		}
 	}
