@@ -48,6 +48,9 @@
 #include <unordered_set>
 #include <map>
 
+// Fix #define MemoryBarrier coming from winnt.h
+#undef MemoryBarrier
+
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
 #pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
 #endif
