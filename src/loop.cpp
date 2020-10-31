@@ -128,6 +128,12 @@ LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 // this is set by scrStartMission to say what type of new level is to be started
 LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 
+
+
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_impl_opengl3.h"
+
 static GAMECODE renderLoop()
 {
 	if (bMultiPlayer && !NetPlay.isHostAlive && NetPlay.bComms && !NetPlay.isHost)

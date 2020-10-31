@@ -2026,8 +2026,15 @@ bool gl_context::initGLContext()
 	return true;
 }
 
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_impl_opengl3.h"
+
 void gl_context::flip(int clearMode)
 {
+
+	debug(LOG_INFO, "imgui render");
+	ImGui::Render();
 	frameNum = std::max<size_t>(frameNum + 1, 1);
 	backend_impl->swapWindow();
 	glUseProgram(0);
