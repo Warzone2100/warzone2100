@@ -726,7 +726,7 @@ void droidUpdate(DROID *psDroid)
 	if ((psDroid->visible[selectedPlayer]) && psDroid->droidType != DROID_PERSON)
 	{
 		// need to clip this value to prevent overflow condition
-		percentDamage = 100 - clip(PERCENT(psDroid->body, psDroid->originalBody), 0, 100);
+		percentDamage = 100 - clip<UDWORD>(PERCENT(psDroid->body, psDroid->originalBody), 0, 100);
 
 		// Is there any damage?
 		if (percentDamage >= 25)
@@ -1179,7 +1179,7 @@ static bool droidUpdateDroidRepairBase(DROID *psRepairDroid, DROID *psDroidToRep
 
 	int iPointsToAdd = gameTimeAdjustedAverage(iRepairRateNumerator, iRepairRateDenominator);
 
-	psDroidToRepair->body = clip(psDroidToRepair->body + iPointsToAdd, 0, psDroidToRepair->originalBody);
+	psDroidToRepair->body = clip<UDWORD>(psDroidToRepair->body + iPointsToAdd, 0, psDroidToRepair->originalBody);
 
 	/* add plasma repair effect whilst being repaired */
 	if ((ONEINFIVE) && (psDroidToRepair->visible[selectedPlayer]))

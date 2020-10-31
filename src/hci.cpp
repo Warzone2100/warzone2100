@@ -710,7 +710,7 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 //
 static void intDoScreenRefresh()
 {
-	UWORD           objMajor = 0, statMajor = 0;
+	size_t          objMajor = 0, statMajor = 0;
 	FLAG_POSITION	*psFlag;
 
 	if (IntRefreshPending)
@@ -1702,7 +1702,7 @@ static void intRunStats()
 static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 {
 	BASE_STATS		*psStats;
-	UWORD               statMajor = 0;
+	size_t          statMajor = 0;
 	UDWORD			i, j, index;
 	UDWORD			count;
 	SDWORD			iconNumber, entryIN;
@@ -1711,7 +1711,7 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	intStopStructPosition();
 
 	/* Get the current tab pos */
-	int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
+	size_t objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
 
 	// Store the tab positions.
 	if (intMode == INT_STAT)

@@ -178,7 +178,7 @@ void tipDisplay()
 			th = topGap * 2 + lineHeight * static_cast<int32_t>(pTip.size()) + iV_GetTextBelowBase(FontID);
 
 			/* Position the tip box */
-			tx = clip(wx + ww / 2, 0, screenWidth - tw - 1);
+			tx = clip<SDWORD>(wx + ww / 2, 0, screenWidth - tw - 1);
 			ty = std::max(wy + wh + TIP_VGAP, 0);
 			if (ty + th >= (int)screenHeight)
 			{

@@ -104,7 +104,8 @@ static inline WZ_DECL_CONST float hypotf(float x, float y)
  * \param min Lower bound
  * \param max Upper bound
  */
-static inline WZ_DECL_CONST int clip(int x, int min, int max)
+template<typename T>
+static inline WZ_DECL_CONST T clip(T x, T min, T max)
 {
 	// std::min and std::max not constexpr until C++14.
 	return x < min ? min : x > max ? max : x;

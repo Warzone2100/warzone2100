@@ -223,7 +223,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	// Primitive ambient occlusion calculation.
 	float ao = 0;
 	const int cx = world_coord(tileX), cy = world_coord(tileY), maxX = world_coord(mapWidth), maxY = world_coord(mapHeight);
-	float height = map_Height(clip(cx, 0, maxX), clip(cy, 0, maxY));
+	float height = map_Height(clip<int>(cx, 0, maxX), clip<int>(cy, 0, maxY));
 	constexpr float I = 100;
 	constexpr float H = I*0.70710678118654752440f;  // √½
 	constexpr int Dirs = 8;
@@ -233,7 +233,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	for (int dir = 0; dir < Dirs; ++dir) {
 		float maxTangent = 0;
 		for (int dist = 1; dist < 9; ++dist) {
-			float tangent = (map_Height(clip(cx + dx[dir]*dist, 0, maxX), clip(cy + dy[dir]*dist, 0, maxY)) - height)/(I*dist);
+			float tangent = (map_Height(clip<int>(cx + dx[dir]*dist, 0, maxX), clip<int>(cy + dy[dir]*dist, 0, maxY)) - height)/(I*dist);
 			maxTangent = std::max(maxTangent, tangent);
 		}
 		// Ambient light in this direction is proportional to the integral from tan(φ) = tangent to tan(φ) = ∞ of dφ cos(φ).
@@ -242,7 +242,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	}
 	ao *= 1.f/Dirs;
 
-	mapTile(tileX, tileY)->illumination = clip(abs(dotProduct*ao), 1, 254);
+	mapTile(tileX, tileY)->illumination = static_cast<uint8_t>(clip<int>(abs(dotProduct*ao), 1, 254));
 }
 
 static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)

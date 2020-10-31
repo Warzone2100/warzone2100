@@ -113,7 +113,7 @@ static	UDWORD			g_iLaunchTime = 0;
 //used for audio message for reinforcements
 static  bool            bFirstTransporter;
 //the tab positions of the DroidsAvail window
-static  UWORD           objMajor = 0;
+static  size_t          objMajor = 0;
 // Last time the transporter is full message was displayed
 static UDWORD lastTransportIsFullMsgTime = 0;
 
