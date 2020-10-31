@@ -1116,7 +1116,7 @@ static void inputHandleKeyEvent(SDL_KeyboardEvent *keyEvent)
 */
 void inputhandleText(SDL_TextInputEvent *Tevent)
 {
-	int size = SDL_strlen(Tevent->text);
+	size_t size = SDL_strlen(Tevent->text);
 	if (size)
 	{
 		if (utf8Buf)
@@ -1268,7 +1268,7 @@ void wzMain(int &argc, char **argv)
 	// Create copies of argc and arv (for later use initializing QApplication for the script engine)
 	copied_argv = new char*[argc+1];
 	for(int i=0; i < argc; i++) {
-		int len = strlen(argv[i]) + 1;
+		size_t len = strlen(argv[i]) + 1;
 		copied_argv[i] = new char[len];
 		memcpy(copied_argv[i], argv[i], len);
 	}

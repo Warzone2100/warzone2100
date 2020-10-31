@@ -425,15 +425,16 @@ public:
 	ShapingResult shapeText(const TextRun& text, FTFace &face)
 	{
 		hb_buffer_reset(m_buffer);
-		size_t length = text.text.size();
+		size_t length = std::min(text.text.size(), static_cast<size_t>(std::numeric_limits<int>::max()));
+		int textLength = static_cast<int>(length);
 
-		hb_buffer_add_utf8(m_buffer, text.text.c_str(), length, 0, length);
+		hb_buffer_add_utf8(m_buffer, text.text.c_str(), textLength, 0, textLength);
 		hb_buffer_guess_segment_properties(m_buffer);
 		hb_buffer_set_flags(m_buffer, (hb_buffer_flags_t)(HB_BUFFER_FLAG_BOT | HB_BUFFER_FLAG_EOT));
 
 		// harfbuzz shaping
 		std::array<hb_feature_t, 3> features = { {HBFeature::KerningOn, HBFeature::LigatureOn, HBFeature::CligOn} };
-		hb_shape(face.m_font, m_buffer, features.data(), features.size());
+		hb_shape(face.m_font, m_buffer, features.data(), static_cast<unsigned int>(features.size()));
 
 		unsigned int glyphCount;
 		hb_glyph_info_t *glyphInfo = hb_buffer_get_glyph_infos(m_buffer, &glyphCount);

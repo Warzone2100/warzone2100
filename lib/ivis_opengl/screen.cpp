@@ -125,7 +125,8 @@ void wzPerfWriteOut(const std::vector<PERF_STORE> &perfList, const WzString &out
 				line += ", " + WzString::number(perfList[i].counters[j]);
 			}
 			line += "\n";
-			if (WZ_PHYSFS_writeBytes(fileHandle, line.toUtf8().c_str(), line.toUtf8().length()) != line.toUtf8().length())
+			ASSERT(line.toUtf8().length() <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "Line length exceeds PHYSFS_uint32::max");
+			if (WZ_PHYSFS_writeBytes(fileHandle, line.toUtf8().c_str(), static_cast<PHYSFS_uint32>(line.toUtf8().length())) != line.toUtf8().length())
 			{
 				// Failed to write line to file
 				debug(LOG_ERROR, "wzPerfWriteOut: could not line to %s; PHYSFS error: %s", outfile.toUtf8().c_str(), WZ_PHYSFS_getLastError());
