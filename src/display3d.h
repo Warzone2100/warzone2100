@@ -84,6 +84,7 @@ void debugToggleSensorDisplay();
 
 void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix);
 ENERGY_BAR toggleEnergyBars();
+void drawDroidSelection(DROID *psDroid, bool drawBox);
 
 bool doWeDrawProximitys();
 void setProximityDraw(bool val);

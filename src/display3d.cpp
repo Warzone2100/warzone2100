@@ -2903,11 +2903,79 @@ bool	eitherSelected(DROID *psDroid)
 	return retVal;
 }
 
+void drawDroidSelection(DROID *psDroid, bool drawBox){
+	if (psDroid->sDisplay.frameNumber != currentGameFrame)
+	{
+		return;  // Not visible, anyway. Don't bother with health bars.
+	}
+
+	UDWORD damage = PERCENT(psDroid->body, psDroid->originalBody);
+
+	PIELIGHT powerCol = WZCOL_BLACK;
+	PIELIGHT powerColShadow = WZCOL_BLACK;
+
+	if (damage > REPAIRLEV_HIGH)
+	{
+		powerCol = WZCOL_HEALTH_HIGH;
+		powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
+	}
+	else if (damage > REPAIRLEV_LOW)
+	{
+		powerCol = WZCOL_HEALTH_MEDIUM;
+		powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
+	}
+	else
+	{
+		powerCol = WZCOL_HEALTH_LOW;
+		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
+	}
+
+	damage = (float)psDroid->body / (float)psDroid->originalBody * (float)psDroid->sDisplay.screenR;
+	if (damage > psDroid->sDisplay.screenR)
+	{
+		damage = psDroid->sDisplay.screenR;
+	}
+
+	damage *= 2;
+
+	std::vector<PIERECT_DrawRequest> rectsToDraw;
+	if (drawBox)
+	{
+		rectsToDraw.push_back(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - 7, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR, WZCOL_WHITE));
+		rectsToDraw.push_back(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + 7, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 1, WZCOL_WHITE));
+		rectsToDraw.push_back(PIERECT_DrawRequest(psDroid->sDisplay.screenX + psDroid->sDisplay.screenR - 7, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 1, WZCOL_WHITE));
+		rectsToDraw.push_back(PIERECT_DrawRequest(psDroid->sDisplay.screenX + psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR - 7, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 1, WZCOL_WHITE));
+	}
+
+	/* Power bars */
+	rectsToDraw.push_back(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR - 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 2, psDroid->sDisplay.screenX + psDroid->sDisplay.screenR + 1, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 6, WZCOL_RELOAD_BACKGROUND));
+	rectsToDraw.push_back(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 3, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, powerCol));
+	rectsToDraw.push_back(PIERECT_DrawRequest(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 4, psDroid->sDisplay.screenX - psDroid->sDisplay.screenR + damage, psDroid->sDisplay.screenY + psDroid->sDisplay.screenR + 5, powerColShadow));
+
+	pie_DrawMultiRect(rectsToDraw);
+
+
+	/* Write the droid rank out */
+	if ((psDroid->sDisplay.screenX + psDroid->sDisplay.screenR) > 0
+		&&	(psDroid->sDisplay.screenX - psDroid->sDisplay.screenR) < pie_GetVideoBufferWidth()
+		&&	(psDroid->sDisplay.screenY + psDroid->sDisplay.screenR) > 0
+		&&	(psDroid->sDisplay.screenY - psDroid->sDisplay.screenR) < pie_GetVideoBufferHeight())
+	{
+		drawDroidRank(psDroid);
+		drawDroidSensorLock(psDroid);
+		drawDroidCmndNo(psDroid);
+		drawDroidGroupNumber(psDroid);
+	}
+
+	for (int i = 0; i < psDroid->numWeaps; i++)
+	{
+		drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
+	}
+}
+
 /// Draw the selection graphics for selected droids
 static void	drawDroidSelections()
 {
-	UDWORD			scrX, scrY, scrR;
-	UDWORD			damage;
 	PIELIGHT		powerCol = WZCOL_BLACK, powerColShadow = WZCOL_BLACK;
 	PIELIGHT		boxCol;
 	BASE_OBJECT		*psClickedOn;
@@ -2926,15 +2994,9 @@ static void	drawDroidSelections()
 		}
 	}
 
-	std::vector<PIERECT_DrawRequest> rectsToDraw; // batch rect drawing
 	pie_SetFogStatus(false);
 	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (psDroid->sDisplay.frameNumber != currentGameFrame)
-		{
-			continue;  // Not visible, anyway. Don't bother with health bars.
-		}
-
 		/* If it's selected and on screen or it's the one the mouse is over */
 		if (eitherSelected(psDroid) ||
 		    (bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn) ||
@@ -2942,70 +3004,7 @@ static void	drawDroidSelections()
 		    barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES
 		   )
 		{
-			rectsToDraw.clear();
-			damage = PERCENT(psDroid->body, psDroid->originalBody);
-
-			if (damage > REPAIRLEV_HIGH)
-			{
-				powerCol = WZCOL_HEALTH_HIGH;
-				powerColShadow = WZCOL_HEALTH_HIGH_SHADOW;
-			}
-			else if (damage > REPAIRLEV_LOW)
-			{
-				powerCol = WZCOL_HEALTH_MEDIUM;
-				powerColShadow = WZCOL_HEALTH_MEDIUM_SHADOW;
-			}
-			else
-			{
-				powerCol = WZCOL_HEALTH_LOW;
-				powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
-			}
-			mulH = (float)psDroid->body / (float)psDroid->originalBody;
-			damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
-			if (damage > psDroid->sDisplay.screenR)
-			{
-				damage = psDroid->sDisplay.screenR;
-			}
-
-			damage *= 2;
-			scrX = psDroid->sDisplay.screenX;
-			scrY = psDroid->sDisplay.screenY;
-			scrR = psDroid->sDisplay.screenR;
-
-			boxCol = WZCOL_WHITE;
-
-			if (psDroid->selected)
-			{
-				rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR - 7, scrX - scrR + 1, scrY + scrR, boxCol));
-				rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR, scrX - scrR + 7, scrY + scrR + 1, boxCol));
-				rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR - 7, scrY + scrR, scrX + scrR, scrY + scrR + 1, boxCol));
-				rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR, scrY + scrR - 7, scrX + scrR + 1, scrY + scrR + 1, boxCol));
-			}
-
-			/* Power bars */
-			rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR - 1, scrY + scrR + 2, scrX + scrR + 1, scrY + scrR + 6, WZCOL_RELOAD_BACKGROUND));
-			rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 3, scrX - scrR + damage, scrY + scrR + 4, powerCol));
-			rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR + 4, scrX - scrR + damage, scrY + scrR + 5, powerColShadow));
-
-			pie_DrawMultiRect(rectsToDraw);
-
-
-			/* Write the droid rank out */
-			if ((scrX + scrR) > 0
-			    &&	(scrX - scrR) < pie_GetVideoBufferWidth()
-			    &&	(scrY + scrR) > 0
-			    &&	(scrY - scrR) < pie_GetVideoBufferHeight())
-			{
-				drawDroidRank(psDroid);
-				drawDroidSensorLock(psDroid);
-				drawDroidCmndNo(psDroid);
-				drawDroidGroupNumber(psDroid);
-			}
-
-			for (int i = 0; i < psDroid->numWeaps; i++)
-			{
-				drawWeaponReloadBar((BASE_OBJECT *)psDroid, &psDroid->asWeaps[i], i);
-			}
+			drawDroidSelection(psDroid, psDroid->selected);
 		}
 	}
 
@@ -3017,6 +3016,7 @@ static void	drawDroidSelections()
 			if (psClickedOn->player != selectedPlayer && psClickedOn->sDisplay.frameNumber == currentGameFrame)
 			{
 				DROID *psDroid = (DROID *)psClickedOn;
+				UDWORD damage;
 				//show resistance values if CTRL/SHIFT depressed
 				if (ctrlShiftDown())
 				{
@@ -3072,9 +3072,9 @@ static void	drawDroidSelections()
 					damage = psDroid->sDisplay.screenR;
 				}
 				damage *= 2;
-				scrX = psDroid->sDisplay.screenX;
-				scrY = psDroid->sDisplay.screenY;
-				scrR = psDroid->sDisplay.screenR;
+				auto scrX = psDroid->sDisplay.screenX;
+				auto scrY = psDroid->sDisplay.screenY;
+				auto scrR = psDroid->sDisplay.screenR;
 
 				/* Three DFX clips properly right now - not sure if software does */
 				if ((scrX + scrR) > 0
@@ -3107,10 +3107,8 @@ static void	drawDroidSelections()
 				/* If it's selected */
 				if (psDroid->flags.test(OBJECT_FLAG_TARGETED) && psDroid->visible[selectedPlayer] == UBYTE_MAX)
 				{
-					scrX = psDroid->sDisplay.screenX;
-					scrY = psDroid->sDisplay.screenY;
 					index = IMAGE_BLUE1 + getModularScaledRealTime(1020, 5);
-					iV_DrawImage(IntImages, index, scrX, scrY);
+					iV_DrawImage(IntImages, index, psDroid->sDisplay.screenX, psDroid->sDisplay.screenY);
 				}
 			}
 		}
@@ -3122,13 +3120,10 @@ static void	drawDroidSelections()
 		{
 			if (psFeature->flags.test(OBJECT_FLAG_TARGETED))
 			{
-				scrX = psFeature->sDisplay.screenX;
-				scrY = psFeature->sDisplay.screenY;
-				iV_DrawImage(IntImages, getTargettingGfx(), scrX, scrY);
+				iV_DrawImage(IntImages, getTargettingGfx(), psFeature->sDisplay.screenX, psFeature->sDisplay.screenY);
 			}
 		}
 	}
-
 }
 
 /* ---------------------------------------------------------------------------- */
