@@ -115,5 +115,30 @@ Animation<AnimatableData> &Animation<AnimatableData>::setDuration(uint32_t durat
 	return *this;
 }
 
+/**
+ * Find the angle equivalent to `from` in the interval between `to - 180°` and to `to + 180°`.
+ *
+ * For example:
+ * - if `from` is `10°` and `to` is `350°`, it will return `370°`.
+ * - if `from` is `350°` and `to` is `0°`, it will return `-10°`.
+ *
+ * Useful while animating a rotation, to always animate the shortest angle delta.
+ */
+int32_t calculateRelativeAngle(uint16_t from, uint16_t to)
+{
+	return to + (int16_t)(from - to);
+}
+
+void RotationAnimation::start()
+{
+	finalData = Vector3f((uint16_t)finalData.x, (uint16_t)finalData.y, (uint16_t)finalData.z);
+	initialData = Vector3f(
+		calculateRelativeAngle(initialData.x, finalData.x),
+		calculateRelativeAngle(initialData.y, finalData.y),
+		calculateRelativeAngle(initialData.z, finalData.z)
+	);
+	Animation::start();
+}
+
 template class Animation<Vector3f>;
 template class Animation<float>;
