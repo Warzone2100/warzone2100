@@ -1332,8 +1332,8 @@ void processDeliveryRepos()
 		return;
 	}
 
-	int bX = clip(mouseTileX, 2, mapWidth - 3);
-	int bY = clip(mouseTileY, 2, mapHeight - 3);
+	int bX = clip<int>(mouseTileX, 2, mapWidth - 3);
+	int bY = clip<int>(mouseTileY, 2, mapHeight - 3);
 
 	flagPos.coords = Vector3i(world_coord(Vector2i(bX, bY)) + Vector2i(TILE_UNITS / 2, TILE_UNITS / 2), map_TileHeight(bX, bY) + 2 * ASSEMBLY_POINT_Z_PADDING);
 }

@@ -253,8 +253,8 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 #endif
 
 	// old safety code -- still necessary?
-	sPosX = clip(sPosX, scrollMinX, scrollMaxX -1);
-	sPosY = clip(sPosY, scrollMinY, scrollMaxY -1);
+	sPosX = clip<int>(sPosX, scrollMinX, scrollMaxX -1);
+	sPosY = clip<int>(sPosY, scrollMinY, scrollMaxY -1);
 
 	*PosX = sPosX;
 	*PosY = sPosY;

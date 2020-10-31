@@ -54,19 +54,19 @@ public:
 	void setHeight(int height);
 	void addStyle(TabSelectionStyle const &tabStyle);
 
-	int tabs() const
+	size_t tabs() const
 	{
 		return tabButtons.size();
 	}
 
 	/* The optional "onTabChanged" callback function */
-	typedef std::function<void (TabSelectionWidget& widget, int currentTab)> W_TABSELECTION_ON_TAB_CHANGED_FUNC;
+	typedef std::function<void (TabSelectionWidget& widget, size_t currentTab)> W_TABSELECTION_ON_TAB_CHANGED_FUNC;
 
 	void addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHANGED_FUNC& onTabChangedFunc);
 
 public:
-	void setTab(int tab);
-	void setNumberOfTabs(int tabs);
+	void setTab(size_t tab);
+	void setNumberOfTabs(size_t tabs);
 
 private:
 	void prevTabPage();
@@ -76,8 +76,8 @@ private:
 	void doLayoutAll();
 
 	std::vector<TabSelectionStyle> styles;
-	unsigned currentTab;
-	unsigned tabsAtOnce;
+	size_t currentTab;
+	size_t tabsAtOnce;
 	std::vector<W_BUTTON *> tabButtons;
 	W_BUTTON *prevTabPageButton;
 	W_BUTTON *nextTabPageButton;
@@ -99,42 +99,42 @@ public:
 	void setOrder(Order order);  ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
 	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
 
-	int currentPage() const
+	size_t currentPage() const
 	{
 		return currentPage_;
 	}
-	int pages() const
+	size_t pages() const
 	{
-		return std::max(((int)myChildren.size() - 1) / widgetsPerPage(), 0) + 1;
+		return myChildren.empty() ? 1 : ((myChildren.size() - 1) / widgetsPerPage()) + 1;
 	}
 
 	/* The optional "onCurrentPageChanged" callback function */
-	typedef std::function<void (ListWidget& psWidget, int currentPage)> W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC;
+	typedef std::function<void (ListWidget& psWidget, size_t currentPage)> W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC;
 
 	/* The optional "onNumberOfPagesChanged" callback function */
-	typedef std::function<void (ListWidget& psWidget, int numberOfPages)> W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC;
+	typedef std::function<void (ListWidget& psWidget, size_t numberOfPages)> W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC;
 
 	void addOnCurrentPageChangedHandler(const W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC& handlerFunc);
 	void addOnNumberOfPagesChangedHandler(const W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC& handlerFunc);
 
 public:
-	void setCurrentPage(int page);
+	void setCurrentPage(size_t page);
 
 private:
 	void doLayoutAll();
-	void doLayout(int num);
+	void doLayout(size_t num);
 
-	int widgetsPerPage() const
+	size_t widgetsPerPage() const
 	{
 		return widgetsPerRow() * widgetsPerColumn();
 	}
-	int widgetsPerRow() const
+	size_t widgetsPerRow() const
 	{
-		return std::max((width() + spacing.width()) / widgetSkipX(), 1);
+		return static_cast<size_t>(std::max((width() + spacing.width()) / widgetSkipX(), 1));
 	}
-	int widgetsPerColumn() const
+	size_t widgetsPerColumn() const
 	{
-		return std::max((height() + spacing.height()) / widgetSkipY(), 1);
+		return static_cast<size_t>(std::max((height() + spacing.height()) / widgetSkipY(), 1));
 	}
 	int widgetSkipX() const
 	{
@@ -147,7 +147,7 @@ private:
 
 	WzSize childSize;
 	WzSize spacing;
-	unsigned currentPage_;
+	size_t currentPage_;
 	std::vector<WIDGET *> myChildren;
 	Order order;
 	std::vector<W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC> onCurrentPageChangedHandlers;
@@ -177,16 +177,16 @@ public:
 		widgets->setOrder(order);    ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
 	}
 	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
-	bool setCurrentPage(int page)
+	bool setCurrentPage(size_t page)
 	{
 		widgets->setCurrentPage(page);
 		return widgets->currentPage() == page;
 	}
-	int currentPage() const
+	size_t currentPage() const
 	{
 		return widgets->currentPage();
 	}
-	int pages() const
+	size_t pages() const
 	{
 		return widgets->pages();
 	}

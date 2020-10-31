@@ -347,7 +347,7 @@ static void updateLatency()
 
 	// We want the chosen latency to increase by how much our update was delayed waiting for others, or to decrease by how long after we got the messages from others that it was time to tick. Plus a tiny 10ms buffer.
 	// We will send this number to others.
-	wantedLatency = clip((int)(discreteChosenLatency + updateReadyTime - updateWantedTime + 10), 0, UINT16_MAX);
+	wantedLatency = static_cast<uint16_t>(clip<int>((int)(discreteChosenLatency + updateReadyTime - updateWantedTime + 10), 0, UINT16_MAX));
 
 	// Reset the times, ready to be set again.
 	updateReadyTime = 0;
