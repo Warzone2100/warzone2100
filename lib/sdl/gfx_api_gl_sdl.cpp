@@ -233,21 +233,13 @@ bool sdl_OpenGL_Impl::createGLContext()
 	int windowWidth, windowHeight = 0;
 	SDL_GetWindowSize(window, &windowWidth, &windowHeight);
 	debug(LOG_WZ, "Logical Window Size: %d x %d", windowWidth, windowHeight);
-
 	debug(LOG_INFO, "Imgui init start");
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& IMio = ImGui::GetIO();
 	ImGui::StyleColorsDark();
 	ImGui_ImplSDL2_InitForOpenGL(window, WZglcontext);
-	ImGui_ImplOpenGL3_Init("#version 130");
 	debug(LOG_INFO, "Imgui init done");
-	debug(LOG_INFO, "imgui new frame");
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(window);
-	ImGui::NewFrame();
-	ImGui::ShowDemoWindow();
-	debug(LOG_INFO, "imgui new frame end");
 
 	return true;
 }
@@ -259,13 +251,6 @@ void sdl_OpenGL_Impl::swapWindow()
 	const uint32_t swapStartTime = SDL_GetTicks();
 #endif
 	SDL_GL_SwapWindow(window);
-
-		debug(LOG_INFO, "imgui new frame");
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplSDL2_NewFrame(window);
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
-		debug(LOG_INFO, "imgui new frame end");
 
 #if defined(WZ_OS_MAC)
 	// Workaround for OpenGL on macOS

@@ -23,7 +23,6 @@ file(GLOB SRC
 find_package(OpenGL REQUIRED)
 find_package(GLEW 1.5.2 REQUIRED)
 
-add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLEW)
 add_library(imgui ${HEADERS} ${SRC})
 set_property(TARGET imgui PROPERTY FOLDER "lib")
 target_link_libraries(imgui PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} GLEW::GLEW)
