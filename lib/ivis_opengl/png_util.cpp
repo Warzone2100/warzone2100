@@ -39,7 +39,7 @@ static void wzpng_read_data(png_structp ctx, png_bytep area, png_size_t size)
 		PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(ctx);
 		if (fileHandle != nullptr)
 		{
-			PHYSFS_sint64 result = WZ_PHYSFS_readBytes(fileHandle, area, size);
+			PHYSFS_sint64 result = WZ_PHYSFS_readBytes(fileHandle, area, static_cast<PHYSFS_uint32>(size));
 			if (result > -1)
 			{
 				size_t byteCountRead = static_cast<size_t>(result);
@@ -59,7 +59,7 @@ static void wzpng_write_data(png_structp png_ptr, png_bytep data, png_size_t len
 {
 	PHYSFS_file *fileHandle = (PHYSFS_file *)png_get_io_ptr(png_ptr);
 
-	WZ_PHYSFS_writeBytes(fileHandle, data, length);
+	WZ_PHYSFS_writeBytes(fileHandle, data, static_cast<PHYSFS_uint32>(length));
 }
 
 static void wzpng_flush_data(png_structp png_ptr)

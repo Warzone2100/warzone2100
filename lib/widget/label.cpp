@@ -60,7 +60,7 @@ int W_LABEL::setFormattedString(WzString string, uint32_t MaxWidth, iV_fonts fon
 	if (!aTextLines.empty())
 	{
 		requiredHeight = aTextLines.back().offset.y + iV_GetTextLineSize(fontID);
-		requiredHeight += ((aTextLines.size() - 1) * lineSpacing);
+		requiredHeight += ((static_cast<int>(aTextLines.size()) - 1) * lineSpacing);
 	}
 
 	maxLineWidth = 0;

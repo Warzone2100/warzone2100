@@ -175,7 +175,7 @@ void tipDisplay()
 				fw = std::max<int>(fw, displayCache.wzTip[n].width());
 			}
 			tw = fw + TIP_HGAP * 2;
-			th = topGap * 2 + lineHeight * pTip.size() + iV_GetTextBelowBase(FontID);
+			th = topGap * 2 + lineHeight * static_cast<int32_t>(pTip.size()) + iV_GetTextBelowBase(FontID);
 
 			/* Position the tip box */
 			tx = clip(wx + ww / 2, 0, screenWidth - tw - 1);
@@ -188,7 +188,7 @@ void tipDisplay()
 
 			/* Position the text */
 			fx = tx + TIP_HGAP;
-			fy = ty + (th - lineHeight * pTip.size()) / 2 - iV_GetTextAboveBase(FontID);
+			fy = ty + (th - lineHeight * static_cast<int32_t>(pTip.size())) / 2 - iV_GetTextAboveBase(FontID);
 
 			/* Note the time */
 			startTime = wzGetTicks();
@@ -209,7 +209,7 @@ void tipDisplay()
 			size_t n = 0;
 			for (auto it = displayCache.wzTip.begin(); it != displayCache.wzTip.end(); ++it)
 			{
-				it->render(fx, fy + lineHeight * n, TipColour);
+				it->render(fx, fy + lineHeight * static_cast<int32_t>(n), TipColour);
 				++n;
 			}
 		}

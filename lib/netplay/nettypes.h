@@ -175,7 +175,7 @@ static inline void NETauto(Vector2i &vp)
 }
 static inline void NETauto(std::string &s, uint32_t maxLen = 65536)
 {
-	uint32_t len = std::min<size_t>(s.size(), maxLen);
+	uint32_t len = static_cast<uint32_t>(std::min<size_t>(s.size(), maxLen));
 	NETauto(len);
 	len = std::min(len, maxLen);
 	s.resize(len);
