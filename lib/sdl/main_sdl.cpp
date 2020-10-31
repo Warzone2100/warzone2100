@@ -2367,13 +2367,13 @@ void wzMainEventLoop(void)
 		appPtr->processEvents();		// Qt needs to do its stuff
 #endif
 		processScreenSizeChangeNotificationIfNeeded();
+		ImGui_ImplSDL2_NewFrame(WZwindow);
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow();
 		mainLoop();				// WZ does its thing
 		inputNewFrame();			// reset input states
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplSDL2_NewFrame(WZwindow);
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
 	}
 }
 
