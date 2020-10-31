@@ -23,6 +23,43 @@
 
 #include "animation.h"
 
+AngleAnimation* AngleAnimation::setInitial(Vector3i value){
+	this->initialX = (UWORD)value.x;
+	this->initialY = (UWORD)value.y;
+	this->initialZ = (UWORD)value.z;
+	return this;
+}
+AngleAnimation* AngleAnimation::setDuration(int milliseconds){
+	this->duration = milliseconds;
+	return this;
+}
+AngleAnimation* AngleAnimation::startNow(){
+	this->startTime = graphicsTime;
+	return this;
+}
+AngleAnimation* AngleAnimation::setTarget(int x, int y, int z){
+	this->targetX = (UWORD)x;
+	this->targetY = (UWORD)y;
+	this->targetZ = (UWORD)z;
+	return this;
+}
+AngleAnimation* AngleAnimation::update(){
+	float t = (graphicsTime - this->startTime) / (float)this->duration;
+
+	t = t < 0.5 ? 2 * t * t : t * (4 - 2 * t) - 1;
+
+	// the SWORD here is the secret juice. It takes the target delta
+	// (target minus initial) and makes it wrap to the other side if > 180.
+	this->currentX = (this->initialX + (SWORD)(this->targetX - this->initialX) * t);
+	this->currentY = (this->initialY + (SWORD)(this->targetY - this->initialY) * t);
+	this->currentZ = (this->initialZ + (SWORD)(this->targetZ - this->initialZ) * t);
+
+	return this;
+}
+Vector3i AngleAnimation::getCurrent(){
+	return { this->currentX, this->currentY, this->currentZ };
+}
+
 static uint16_t calculateEasing(EasingType easingType, uint16_t progress)
 {
 	switch (easingType)

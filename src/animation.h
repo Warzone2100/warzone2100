@@ -27,6 +27,33 @@
 #ifndef __INCLUDED_SRC_ANIMATION_H__
 #define __INCLUDED_SRC_ANIMATION_H__
 
+/// Helper class for linearly interpolating angles, with support for wrapping.
+class AngleAnimation {
+    private:
+    UDWORD startTime;
+    int duration;
+
+    int initialX;
+    int initialY;
+    int initialZ;
+
+    int currentX;
+    int currentY;
+    int currentZ;
+
+    int targetX;
+    int targetY;
+    int targetZ;
+
+    public:
+    AngleAnimation* setInitial(Vector3i value);
+    AngleAnimation* setDuration(int milliseconds);
+    AngleAnimation* startNow();
+    AngleAnimation* setTarget(int x, int y, int z);
+    AngleAnimation* update();
+    Vector3i getCurrent();
+};
+
 enum EasingType
 {
 	LINEAR,
