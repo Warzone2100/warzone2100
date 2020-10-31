@@ -1151,7 +1151,7 @@ static void printchatmsg(const char *text, int from, bool team = false)
 	gmtime_r(&current_time, &time_info);
 #endif
 	char time_str[9];
-	ssprintf(time_str, "[%d:%d] ", time_info.tm_hour, time_info.tm_min);
+	ssprintf(time_str, "[%02d:%02d] ", time_info.tm_hour, time_info.tm_min);
 
 	sstrcpy(msg, time_str);
 	sstrcat(msg, getPlayerName(from));
