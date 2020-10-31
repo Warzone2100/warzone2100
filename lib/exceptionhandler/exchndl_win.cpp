@@ -166,11 +166,11 @@ int __cdecl rprintf(HANDLE hReportFile, const TCHAR *format, ...)
 
 // The GetModuleBase function retrieves the base address of the module that contains the specified address.
 static
-DWORD GetModuleBase(DWORD dwAddress)
+PVOID GetModuleBase(LPCVOID dwAddress)
 {
 	MEMORY_BASIC_INFORMATION Buffer;
 
-	return VirtualQuery((LPCVOID)dwAddress, &Buffer, sizeof(Buffer)) ? (DWORD)Buffer.AllocationBase : 0;
+	return VirtualQuery(dwAddress, &Buffer, sizeof(Buffer)) ? Buffer.AllocationBase : 0;
 }
 
 // Generate a MiniDump
@@ -404,8 +404,8 @@ void GenerateExceptionReport(HANDLE hReportFile, PEXCEPTION_POINTERS pExceptionI
 	}
 
 	// Now print information about where the fault occurred
-	rprintf(hReportFile, _T(" at location %08x"), (DWORD) pExceptionRecord->ExceptionAddress);
-	if ((hModule = (HMODULE) GetModuleBase((DWORD) pExceptionRecord->ExceptionAddress)) && GetModuleFileName(hModule, szModule, sizeof(szModule)))
+	rprintf(hReportFile, _T(" at location 0x%" PRIXPTR ""), (uintptr_t)pExceptionRecord->ExceptionAddress);
+	if ((hModule = (HMODULE) GetModuleBase(pExceptionRecord->ExceptionAddress)) && GetModuleFileName(hModule, szModule, sizeof(szModule)))
 	{
 		rprintf(hReportFile, _T(" in module %s"), szModule);
 	}
