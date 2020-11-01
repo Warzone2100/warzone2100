@@ -2802,14 +2802,6 @@ static void	drawStructureSelections()
 	}
 	pie_SetFogStatus(false);
 
-	const glm::mat4 &viewMatrix =
-		glm::translate(glm::vec3(0.f, 0.f, distance)) *
-		glm::scale(glm::vec3(pie_GetResScalingFactor() / 100.f)) *
-		glm::rotate(UNDEG(player.r.z), glm::vec3(0.f, 0.f, 1.f)) *
-		glm::rotate(UNDEG(player.r.x), glm::vec3(1.f, 0.f, 0.f)) *
-		glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::translate(glm::vec3(-player.p.x, -player.p.y, player.p.z));
-
 	/* Go thru' all the buildings */
 	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
@@ -2825,21 +2817,36 @@ static void	drawStructureSelections()
 				drawStructureHealth(psStruct);
 
 				if(psStruct->selected){
-					Vector3i position(psStruct->pos.x, psStruct->pos.z, -psStruct->pos.y);
-					Vector2i coordinate(0, 0);
+					Vector2i position = {
+						psStruct->pos.x - world_coord(psStruct->pStructureType->baseWidth) / 2,
+						psStruct->pos.y - world_coord(psStruct->pStructureType->baseBreadth) / 2
+					};
+					
+					int mapX = map_coord(position.x - player.p.x) + visibleTiles.x / 2;
+					int mapY = map_coord(position.y - player.p.z) + visibleTiles.y / 2;
+					if (mapX < 0 || mapY < 0)
+					{
+						continue;
+					}
+					if (mapX > visibleTiles.x || mapY > visibleTiles.y)
+					{
+						continue;
+					}
 
-					pie_RotateProject(&position, viewMatrix, &coordinate);
+					auto aa = tileScreenInfo[mapY][mapX];
+					auto ba = tileScreenInfo[mapY][mapX + psStruct->pStructureType->baseWidth];
+					auto ab = tileScreenInfo[mapY + psStruct->pStructureType->baseBreadth][mapX];
+					auto bb = tileScreenInfo[mapY + psStruct->pStructureType->baseBreadth][mapX + psStruct->pStructureType->baseWidth];
 
-					printf("Player (%i, %i, %i) (%i, %i, %i)\n", player.p.x, player.p.y, player.p.z, psStruct->pos.x, psStruct->pos.z, psStruct->pos.y);
+					auto left = glm::min(aa.x, glm::min(ba.x, glm::min(ab.x, bb.x)));
+					auto right = glm::max(aa.x, glm::max(ba.x, glm::max(ab.x, bb.x)));
+					auto bottom = glm::max(aa.y, glm::max(ba.y, glm::max(ab.y, bb.y)));
 
-					auto scrR = 10;
-					auto scrX = coordinate.x;
-					auto scrY = coordinate.y;
 					std::vector<PIERECT_DrawRequest> rectsToDraw; // batch rect drawing
-					rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR - 7, scrX - scrR + 1, scrY + scrR, WZCOL_WHITE));
-					rectsToDraw.push_back(PIERECT_DrawRequest(scrX - scrR, scrY + scrR, scrX - scrR + 7, scrY + scrR + 1, WZCOL_WHITE));
-					rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR - 7, scrY + scrR, scrX + scrR, scrY + scrR + 1, WZCOL_WHITE));
-					rectsToDraw.push_back(PIERECT_DrawRequest(scrX + scrR, scrY + scrR - 7, scrX + scrR + 1, scrY + scrR + 1, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(left, bottom - 7, left + 1, bottom, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(left, bottom, left + 7, bottom + 1, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(right - 7, bottom, right, bottom + 1, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(right, bottom - 7, right + 1, bottom + 1, WZCOL_WHITE));
 					pie_DrawMultiRect(rectsToDraw);
 				}
 
