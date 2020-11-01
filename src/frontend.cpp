@@ -345,7 +345,8 @@ void startCampaignSelector()
 	addBottomForm();
 
 	std::vector<CAMPAIGN_FILE> list = readCampaignFiles();
-	for (size_t i = 0; i < list.size(); i++)
+	ASSERT(list.size() <= static_cast<size_t>(std::numeric_limits<UDWORD>::max()), "list.size() (%zu) exceeds UDWORD max", list.size());
+	for (UDWORD i = 0; i < static_cast<UDWORD>(list.size()); i++)
 	{
 		addTextButton(FRONTEND_CAMPAIGN_1 + i, FRONTEND_POS1X, FRONTEND_POS2Y + FRONTEND_BUTHEIGHT * i, gettext(list[i].name.toUtf8().c_str()), WBUT_TXTCENTRE);
 	}

@@ -139,7 +139,7 @@ protected:
 	virtual void OnOutput(LPCSTR szText)
 	{
 		DWORD cbWritten = 0;
-		size_t len = strlen(szText);
+		DWORD len = static_cast<DWORD>(std::min<size_t>(strlen(szText), std::numeric_limits<DWORD>::max()));
 		WriteFile(hOutputFile, szText, len * sizeof(char), &cbWritten, 0);
 	}
 

@@ -64,7 +64,8 @@ static void dumpstr(const DumpFileHandle file, const char *const str, std::size_
 {
 #if defined(WZ_OS_WIN)
 	DWORD lNumberOfBytesWritten;
-	WriteFile(file, str, size, &lNumberOfBytesWritten, nullptr);
+	DWORD len = static_cast<DWORD>(std::min<size_t>(size, std::numeric_limits<DWORD>::max()));
+	WriteFile(file, str, len, &lNumberOfBytesWritten, nullptr);
 #else
 	std::size_t written = 0;
 	while (written < size)
@@ -178,9 +179,11 @@ static std::string getProgramPath(const char *programCommand)
 #if defined(WZ_OS_WIN)
 	std::vector<wchar_t> wbuff(PATH_MAX + 1, 0);
 	DWORD moduleFileNameLen = 0;
-	while ((moduleFileNameLen = GetModuleFileNameW(nullptr, &wbuff[0], wbuff.size() - 1)) == (wbuff.size() - 1))
+	DWORD bufferLen = static_cast<DWORD>(std::min<size_t>(wbuff.size(), std::numeric_limits<DWORD>::max()));
+	while ((moduleFileNameLen = GetModuleFileNameW(nullptr, &wbuff[0], bufferLen - 1)) == (bufferLen - 1))
 	{
-		wbuff.resize(wbuff.size() * 2);
+		bufferLen = bufferLen * 2;
+		wbuff.resize(bufferLen);
 	}
 	// Because Windows XP's GetModuleFileName does not guarantee null-termination,
 	// always append a null-terminator

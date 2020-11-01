@@ -1709,7 +1709,7 @@ void scripting_engine::updateLabelModel()
 		return;
 	}
 	labelModel->setRowCount(0);
-	labelModel->setRowCount(labels.size());
+	labelModel->setRowCount(static_cast<int>(labels.size()));
 	int nextRow = 0;
 	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
 	{

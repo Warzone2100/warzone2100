@@ -164,7 +164,7 @@ void TabSelectionWidget::doLayoutAll()
 	nextTabPageButton->show(currentTab / tabsAtOnce < (tabs() - 1) / tabsAtOnce);
 	for (size_t n = 0; n < tabButtons.size(); ++n)
 	{
-		tabButtons[n]->setGeometry(scrollSpace + n % tabsAtOnce * (tabStyle.tabSize.width() + tabStyle.tabGap), 0, tabStyle.tabSize.width(), tabStyle.tabSize.height());
+		tabButtons[n]->setGeometry(scrollSpace + static_cast<int>(n % tabsAtOnce) * (tabStyle.tabSize.width() + tabStyle.tabGap), 0, tabStyle.tabSize.width(), tabStyle.tabSize.height());
 		tabButtons[n]->setImages(tabStyle.tabImage, tabStyle.tabImageDown, tabStyle.tabImageHighlight);
 		tabButtons[n]->show(currentTab / tabsAtOnce == n / tabsAtOnce);
 		tabButtons[n]->setState(n == currentTab ? WBUT_LOCK : 0);

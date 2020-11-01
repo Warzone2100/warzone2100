@@ -329,7 +329,7 @@ void NETremRedirects();
 void NETdiscoverUPnPDevices();
 
 enum NetStatisticType {NetStatisticRawBytes, NetStatisticUncompressedBytes, NetStatisticPackets};
-unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
+size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal = false);     // Return some statistic. Call regularly for good results.
 
 void NETplayerKicked(UDWORD index);			// Cleanup after player has been kicked
 

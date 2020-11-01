@@ -637,7 +637,7 @@ perFrameResources_t::perFrameResources_t(vk::Device& _dev, const VmaAllocator& a
 		vk::DescriptorPoolCreateInfo()
 		.setMaxSets(10000)
 		.setPPoolSizes(descriptorSize.data())
-		.setPoolSizeCount(descriptorSize.size())
+		.setPoolSizeCount(static_cast<uint32_t>(descriptorSize.size()))
 		, nullptr, *pVkDynLoader
 	);
 	pool = dev.createCommandPool(
@@ -1185,7 +1185,7 @@ VkPSO::VkPSO(vk::Device _dev,
 
 		textures_layout_desc.emplace_back(
 			vk::DescriptorSetLayoutBinding()
-				.setBinding(texture.id)
+				.setBinding(static_cast<uint32_t>(texture.id))
 				.setDescriptorCount(1)
 				.setDescriptorType(vk::DescriptorType::eCombinedImageSampler)
 				.setPImmutableSamplers(&samplers.back())
@@ -1194,7 +1194,7 @@ VkPSO::VkPSO(vk::Device _dev,
 	}
 	textures_set_layout = dev.createDescriptorSetLayout(
 		vk::DescriptorSetLayoutCreateInfo()
-			.setBindingCount(textures_layout_desc.size())
+			.setBindingCount(static_cast<uint32_t>(textures_layout_desc.size()))
 			.setPBindings(textures_layout_desc.data())
 		, nullptr, *pVkDynLoader);
 
@@ -1203,14 +1203,14 @@ VkPSO::VkPSO(vk::Device _dev,
 
 	layout = dev.createPipelineLayout(vk::PipelineLayoutCreateInfo()
 		.setPSetLayouts(layout_desc.data())
-		.setSetLayoutCount(layout_desc.size())
+		.setSetLayoutCount(static_cast<uint32_t>(layout_desc.size()))
 		, nullptr, *pVkDynLoader);
 
 	const auto dynamicStates = std::array<vk::DynamicState, 3>{vk::DynamicState::eScissor, vk::DynamicState::eViewport, vk::DynamicState::eDepthBias};
 	const auto multisampleState = vk::PipelineMultisampleStateCreateInfo()
 		.setRasterizationSamples(rasterizationSamples);
 	const auto dynamicS = vk::PipelineDynamicStateCreateInfo()
-		.setDynamicStateCount(dynamicStates.size())
+		.setDynamicStateCount(static_cast<uint32_t>(dynamicStates.size()))
 		.setPDynamicStates(dynamicStates.data());
 	const auto viewportState = vk::PipelineViewportStateCreateInfo()
 		.setViewportCount(1)
@@ -1220,7 +1220,7 @@ VkPSO::VkPSO(vk::Device _dev,
 	const auto iassembly = vk::PipelineInputAssemblyStateCreateInfo()
 		.setTopology(to_vk(primitive));
 
-	std::size_t buffer_id = 0;
+	uint32_t buffer_id = 0;
 	std::vector<vk::VertexInputBindingDescription> buffers;
 	std::vector<vk::VertexInputAttributeDescription> attributes;
 	for (const auto& buffer : attribute_descriptions)
@@ -1229,7 +1229,7 @@ VkPSO::VkPSO(vk::Device _dev,
 		buffers.emplace_back(
 			vk::VertexInputBindingDescription()
 			.setBinding(buffer_id)
-			.setStride(buffer.stride)
+			.setStride(static_cast<uint32_t>(buffer.stride))
 			.setInputRate(vk::VertexInputRate::eVertex)
 		);
 		for (const auto& attribute : buffer.attributes)
@@ -1239,8 +1239,8 @@ VkPSO::VkPSO(vk::Device _dev,
 				vk::VertexInputAttributeDescription()
 				.setBinding(buffer_id)
 				.setFormat(to_vk(attribute.type))
-				.setOffset(attribute.offset)
-				.setLocation(attribute.id)
+				.setOffset(static_cast<uint32_t>(attribute.offset))
+				.setLocation(static_cast<uint32_t>(attribute.id))
 			);
 		}
 		buffer_id++;
@@ -1250,13 +1250,13 @@ VkPSO::VkPSO(vk::Device _dev,
 
 	const auto vertex_desc = vk::PipelineVertexInputStateCreateInfo()
 		.setPVertexBindingDescriptions(buffers.data())
-		.setVertexBindingDescriptionCount(buffers.size())
+		.setVertexBindingDescriptionCount(static_cast<uint32_t>(buffers.size()))
 		.setPVertexAttributeDescriptions(attributes.data())
-		.setVertexAttributeDescriptionCount(attributes.size());
+		.setVertexAttributeDescriptionCount(static_cast<uint32_t>(attributes.size()));
 
 	const auto color_blend_attachments = to_vk(state_desc.blend_state, state_desc.output_mask);
 	const auto color_blend_state = vk::PipelineColorBlendStateCreateInfo()
-		.setAttachmentCount(color_blend_attachments.size())
+		.setAttachmentCount(static_cast<uint32_t>(color_blend_attachments.size()))
 		.setPAttachments(color_blend_attachments.data());
 
 	const auto depthStencilState = to_vk(state_desc.depth_mode, state_desc.stencil);
@@ -1384,7 +1384,7 @@ void VkBuf::update(const size_t & start, const size_t & size, const void * data,
 
 	auto& frameResources = buffering_mechanism::get_current_resources();
 
-	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(size, 2);
+	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(size), 2);
 	const auto mappedMem = frameResources.stagingBufferAllocator.mapMemory(stagingMemory);
 	ASSERT(mappedMem != nullptr, "Failed to map memory");
 	memcpy(mappedMem, data, size);
@@ -1431,12 +1431,15 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 	: dev(root.dev), internal_format(_internal_format), mipmap_levels(mipmap_count), root(&root)
 {
 	ASSERT(width > 0 && height > 0, "0 width/height textures are unsupported");
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
+	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mipmap_count (%zu) exceeds uint32_t max", mipmap_count);
 
 	auto imageCreateInfo = vk::ImageCreateInfo()
 	.setArrayLayers(1)
-	.setExtent(vk::Extent3D(width, height, 1))
+	.setExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	.setImageType(vk::ImageType::e2D)
-	.setMipLevels(mipmap_count)
+	.setMipLevels(static_cast<uint32_t>(mipmap_count))
 	.setTiling(vk::ImageTiling::eOptimal)
 	.setFormat(internal_format)
 	.setUsage(vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled)
@@ -1459,7 +1462,7 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 		.setViewType(vk::ImageViewType::e2D)
 		.setFormat(internal_format)
 		.setComponents(vk::ComponentMapping())
-		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, mipmap_count, 0, 1));
+		.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, static_cast<uint32_t>(mipmap_count), 0, 1));
 
 	view = dev.createImageViewUnique(imageViewCreateInfo, nullptr, root.vkDynLoader);
 }
@@ -1478,10 +1481,18 @@ void VkTexture::bind() {}
 void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x, const std::size_t& offset_y, const std::size_t& width, const std::size_t& height, const gfx_api::pixel_format& buffer_format, const void* data)
 {
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
+
+	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "mip_level (%zu) exceeds uint32_t max", mip_level);
+	ASSERT(offset_x <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset_x (%zu) exceeds uint32_t max", offset_x);
+	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset_y (%zu) exceeds uint32_t max", offset_y);
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "width (%zu) exceeds uint32_t max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "height (%zu) exceeds uint32_t max", height);
+
 	size_t dynamicAlignment = std::max(0x4 * format_size(internal_format), static_cast<size_t>(root->physDeviceProps.limits.optimalBufferCopyOffsetAlignment));
 	auto& frameResources = buffering_mechanism::get_current_resources();
 	const size_t stagingBufferSize = width * height * format_size(internal_format);
-	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(stagingBufferSize, dynamicAlignment);
+	ASSERT(stagingBufferSize <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "stagingBufferSize (%zu) exceeds uint32_t max", stagingBufferSize);
+	const auto stagingMemory = frameResources.stagingBufferAllocator.alloc(static_cast<uint32_t>(stagingBufferSize), static_cast<uint32_t>(dynamicAlignment));
 
 	auto* mappedMem = reinterpret_cast<uint8_t*>(frameResources.stagingBufferAllocator.mapMemory(stagingMemory));
 	ASSERT(mappedMem != nullptr, "Failed to map memory");
@@ -1518,7 +1529,7 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 	const auto imageMemoryBarriers_BeforeCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
-			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, mip_level, 1, 0, 1))
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 1, 0, 1))
 			.setOldLayout(vk::ImageLayout::eUndefined)
 			.setNewLayout(vk::ImageLayout::eTransferDstOptimal)
 			.setDstAccessMask(vk::AccessFlagBits::eTransferWrite)
@@ -1529,17 +1540,17 @@ void VkTexture::upload(const std::size_t& mip_level, const std::size_t& offset_x
 	const auto bufferImageCopyRegions = std::array<vk::BufferImageCopy, 1> {
 		vk::BufferImageCopy()
 			.setBufferOffset(stagingMemory.offset)
-			.setBufferImageHeight(height)
-			.setBufferRowLength(width)
-			.setImageOffset(vk::Offset3D(offset_x, offset_y, 0))
-			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, mip_level, 0, 1))
-			.setImageExtent(vk::Extent3D(width, height, 1))
+			.setBufferImageHeight(static_cast<uint32_t>(height))
+			.setBufferRowLength(static_cast<uint32_t>(width))
+			.setImageOffset(vk::Offset3D(static_cast<uint32_t>(offset_x), static_cast<uint32_t>(offset_y), 0))
+			.setImageSubresource(vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 0, 1))
+			.setImageExtent(vk::Extent3D(static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1))
 	};
 	cmdBuffer.copyBufferToImage(stagingMemory.buffer, object, vk::ImageLayout::eTransferDstOptimal, bufferImageCopyRegions, root->vkDynLoader);
 	const auto imageMemoryBarriers_AfterCopy = std::array<vk::ImageMemoryBarrier, 1> {
 		vk::ImageMemoryBarrier()
 			.setImage(object)
-			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, mip_level, 1, 0, 1))
+			.setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, static_cast<uint32_t>(mip_level), 1, 0, 1))
 			.setOldLayout(vk::ImageLayout::eTransferDstOptimal)
 			.setSrcAccessMask(vk::AccessFlagBits::eTransferWrite)
 			.setNewLayout(vk::ImageLayout::eShaderReadOnlyOptimal)
@@ -1572,21 +1583,24 @@ void VkTexture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t
 	// upload initial (full) level
 	upload(0, offset_x, offset_y, width, height, buffer_format, data);
 
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<int>::max()), "width (%zu) exceeds int max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<int>::max()), "height (%zu) exceeds int max", height);
+
 	// generate and upload mipmaps
 	const unsigned char * input_pixels = (const unsigned char*)data;
 	void * prev_input_pixels_malloc = nullptr;
 	size_t components = format_size(buffer_format);
-	size_t input_w = width;
-	size_t input_h = height;
+	int input_w = static_cast<int>(width);
+	int input_h = static_cast<int>(height);
 	for (size_t i = 1; i < mipmap_levels; i++)
 	{
-		int output_w = std::max((size_t)1, input_w >> 1);
-		int output_h = std::max((size_t)1, input_h >> 1);
+		int output_w = std::max(1, input_w >> 1);
+		int output_h = std::max(1, input_h >> 1);
 
 		unsigned char *output_pixels = (unsigned char *)malloc(output_w * output_h * components);
 		stbir_resize_uint8(input_pixels, input_w, input_h, 0,
 						   output_pixels, output_w, output_h, 0,
-						   components);
+						   static_cast<int>(components));
 //		stbir_resize_uint8_generic(input_pixels, input_w, input_h, 0,
 //								   output_pixels, output_w, output_h, 0,
 //								   components, components == 4 ? 3 : STBIR_ALPHA_CHANNEL_NONE, STBIR_FLAG_ALPHA_PREMULTIPLIED,
@@ -1719,7 +1733,7 @@ void VkRoot::createDefaultRenderpass(vk::Format swapchainFormat, vk::Format dept
 		std::array<vk::SubpassDescription, 1> {
 		vk::SubpassDescription()
 			.setPipelineBindPoint(vk::PipelineBindPoint::eGraphics)
-			.setColorAttachmentCount(colorAttachmentRef.size())
+			.setColorAttachmentCount(static_cast<uint32_t>(colorAttachmentRef.size()))
 			.setPColorAttachments(colorAttachmentRef.data())
 			.setPDepthStencilAttachment(&depthStencilAttachmentRef)
 			.setPResolveAttachments((msaaEnabled) ? &colorAttachmentResolveRef : nullptr)
@@ -1761,7 +1775,7 @@ bool VkRoot::createVulkanInstance(uint32_t apiVersion, const std::vector<const c
 	// Now we can make the Vulkan instance
 	instanceCreateInfo = vk::InstanceCreateInfo()
 	  .setPpEnabledLayerNames(_layers.data())
-	  .setEnabledLayerCount(_layers.size())
+	  .setEnabledLayerCount(static_cast<uint32_t>(_layers.size()))
 	  .setPApplicationInfo(&appInfo)
 	  .setPpEnabledExtensionNames(extensions.data())
 	  .setEnabledExtensionCount(static_cast<uint32_t>(extensions.size())
@@ -2578,7 +2592,7 @@ bool VkRoot::createSwapchain()
 					   											: std::vector<vk::ImageView>{imageView, depthStencilView};
 					   return dev.createFramebuffer(
 													vk::FramebufferCreateInfo()
-													.setAttachmentCount(attachments.size())
+													.setAttachmentCount(static_cast<uint32_t>(attachments.size()))
 													.setPAttachments(attachments.data())
 													.setLayers(1)
 													.setWidth(swapchainSize.width)
@@ -3031,12 +3045,16 @@ void VkRoot::getQueues()
 
 void VkRoot::draw(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&)
 {
-	buffering_mechanism::get_current_resources().cmdDraw.draw(count, 1, offset, 0, vkDynLoader);
+	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
+	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
+	buffering_mechanism::get_current_resources().cmdDraw.draw(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset), 0, vkDynLoader);
 }
 
 void VkRoot::draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&)
 {
-	buffering_mechanism::get_current_resources().cmdDraw.drawIndexed(count, 1, offset >> 2, 0, 0, vkDynLoader);
+	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
+	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
+	buffering_mechanism::get_current_resources().cmdDraw.drawIndexed(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset) >> 2, 0, 0, vkDynLoader);
 }
 
 void VkRoot::bind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset)
@@ -3051,7 +3069,8 @@ void VkRoot::bind_vertex_buffers(const std::size_t& first, const std::vector<std
 		buffers.push_back(static_cast<const VkBuf *>(std::get<0>(input))->object);
 		offsets.push_back(std::get<1>(input));
 	}
-	buffering_mechanism::get_current_resources().cmdDraw.bindVertexBuffers(first, buffers, offsets, vkDynLoader);
+	ASSERT(first <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "first (%zu) exceeds uint32_t max", first);
+	buffering_mechanism::get_current_resources().cmdDraw.bindVertexBuffers(static_cast<uint32_t>(first), buffers, offsets, vkDynLoader);
 }
 
 void VkRoot::unbind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset)
@@ -3067,8 +3086,9 @@ void VkRoot::disable_all_vertex_buffers()
 void VkRoot::bind_streamed_vertex_buffers(const void* data, const std::size_t size)
 {
 	ASSERT(size > 0, "bind_streamed_vertex_buffers called with size 0");
+	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
 	auto& frameResources = buffering_mechanism::get_current_resources();
-	const auto streamedMemory = frameResources.streamedVertexBufferAllocator.alloc(size, 16);
+	const auto streamedMemory = frameResources.streamedVertexBufferAllocator.alloc(static_cast<uint32_t>(size), 16);
 	const auto mappedPtr = frameResources.streamedVertexBufferAllocator.mapMemory(streamedMemory);
 	ASSERT(mappedPtr != nullptr, "Failed to map memory");
 	memcpy(mappedPtr, data, size);
@@ -3164,7 +3184,7 @@ std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(vk::DescriptorSetL
 		vk::DescriptorSetAllocateInfo()
 			.setDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool)
 			.setPSetLayouts(descriptorSet.data())
-			.setDescriptorSetCount(descriptorSet.size())
+			.setDescriptorSetCount(static_cast<uint32_t>(descriptorSet.size()))
 	, vkDynLoader);
 }
 
@@ -3206,7 +3226,7 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 			.setImageView(texture != nullptr ? *static_cast<VkTexture*>(texture)->view : *pDefaultTexture->view)
 			.setImageLayout(vk::ImageLayout::eShaderReadOnlyOptimal));
 	}
-	std::size_t i = 0;
+	uint32_t i = 0;
 	auto write_info = std::vector<vk::WriteDescriptorSet>{};
 	for (auto* texture : textures)
 	{
@@ -3227,7 +3247,8 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 
 void VkRoot::set_constants(const void* buffer, const std::size_t& size)
 {
-	const auto stagingMemory = buffering_mechanism::get_current_resources().uniformBufferAllocator.alloc(size, physDeviceProps.limits.minUniformBufferOffsetAlignment);
+	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
+	const auto stagingMemory = buffering_mechanism::get_current_resources().uniformBufferAllocator.alloc(static_cast<uint32_t>(size), physDeviceProps.limits.minUniformBufferOffsetAlignment);
 	void * pDynamicUniformBufferMapped = buffering_mechanism::get_current_resources().uniformBufferAllocator.mapMemory(stagingMemory);
 	memcpy(reinterpret_cast<uint8_t*>(pDynamicUniformBufferMapped), buffer, size);
 
@@ -3351,7 +3372,7 @@ void VkRoot::flip(int clearMode)
 		.setWaitSemaphoreCount(1)
 		.setPWaitSemaphores(&buffering_mechanism::get_current_resources().imageAcquireSemaphore)
 		.setPWaitDstStageMask(&waitStage)
-		.setCommandBufferCount(executableCmdBuffer.size())
+		.setCommandBufferCount(static_cast<uint32_t>(executableCmdBuffer.size()))
 		.setPCommandBuffers(executableCmdBuffer.data());
 
 	auto presentInfo = vk::PresentInfoKHR()
@@ -3431,7 +3452,7 @@ void VkRoot::startRenderPass()
 	buffering_mechanism::get_current_resources().cmdDraw.beginRenderPass(
 		vk::RenderPassBeginInfo()
 		.setFramebuffer(fbo[currentSwapchainIndex])
-		.setClearValueCount(clearValue.size())
+		.setClearValueCount(static_cast<uint32_t>(clearValue.size()))
 		.setPClearValues(clearValue.data())
 		.setRenderPass(rp)
 		.setRenderArea(vk::Rect2D(vk::Offset2D(), swapchainSize)),

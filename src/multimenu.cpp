@@ -401,7 +401,7 @@ void multiMenuScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight,
  */
 void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mode, UBYTE numPlayers, std::string const &searchString)
 {
-	const unsigned int extensionLength = strlen(fileExtension);
+	const size_t extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
 
 	context = mode;
@@ -447,7 +447,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	int nextButtonId = M_REQUEST_BUT;
 	for (char **currFile = fileList; *currFile != nullptr; ++currFile)
 	{
-		const unsigned int fileNameLength = strlen(*currFile);
+		const size_t fileNameLength = strlen(*currFile);
 
 		// Check to see if this file matches the given extension
 		if (fileNameLength <= extensionLength

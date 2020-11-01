@@ -120,7 +120,7 @@ uint8_t *NetMessage::rawDataDup() const
 
 size_t NetMessage::rawLen() const
 {
-	return 1 + encodedlength_uint32_t(data.size()) + data.size();
+	return 1 + static_cast<size_t>(encodedlength_uint32_t(data.size())) + data.size();
 }
 
 NetQueue::NetQueue()

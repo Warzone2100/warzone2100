@@ -51,8 +51,8 @@
  *	Local Variables
  */
 
-static unsigned int pieCount = 0;
-static unsigned int polyCount = 0;
+static size_t pieCount = 0;
+static size_t polyCount = 0;
 static bool shadows = false;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 
@@ -527,7 +527,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 	static std::vector<EDGE> edgelistFiltered;  // Static, to save allocations.
 	EDGE *drawlist = nullptr;
 
-	unsigned edge_count;
+	size_t edge_count;
 	DrawShadowResult result;
 
 	// Find cached data (if available)
@@ -586,7 +586,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 		static std::vector<Vector3f> vertexes;
 		vertexes.clear();
 		vertexes.reserve(edge_count * 6);
-		for (unsigned i = 0; i < edge_count; i++)
+		for (size_t i = 0; i < edge_count; i++)
 		{
 			int a = drawlist[i].from, b = drawlist[i].to;
 
@@ -816,7 +816,7 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	gfx_api::context::get().debugStringMarker("Remaining passes - done");
 }
 
-void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount)
+void pie_GetResetCounts(size_t *pPieCount, size_t *pPolyCount)
 {
 	*pPieCount  = pieCount;
 	*pPolyCount = polyCount;

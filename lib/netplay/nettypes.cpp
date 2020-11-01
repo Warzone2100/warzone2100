@@ -242,19 +242,20 @@ static void queue(const Q &q, Vector2i &v)
 template<class Q, class T>
 static void queue(const Q &q, std::vector<T> &v)
 {
-	uint32_t len = v.size();
+	ASSERT(v.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "v.size() exceeds uint32_t max");
+	uint32_t len = static_cast<uint32_t>(std::min(v.size(), static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
 	queue(q, len);
 	switch (Q::Direction)
 	{
 	case Q::Write:
-		for (unsigned i = 0; i != len; ++i)
+		for (uint32_t i = 0; i != len; ++i)
 		{
 			queue(q, v[i]);
 		}
 		break;
 	case Q::Read:
 		v.clear();
-		for (unsigned i = 0; i != len && q.valid(); ++i)
+		for (uint32_t i = 0; i != len && q.valid(); ++i)
 		{
 			T tmp;
 			queue(q, tmp);
@@ -481,7 +482,7 @@ bool NETend()
 			return true;
 		}
 		queue->pushMessage(message);
-		NETlogPacket(message.type, message.data.size(), false);
+		NETlogPacket(message.type, static_cast<uint32_t>(message.data.size()), false);
 
 		if (queueInfo.queueType == QUEUE_GAME || queueInfo.queueType == QUEUE_GAME_FORCED)
 		{
@@ -688,7 +689,8 @@ void NETwzstring(WzString &str)
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
 		u16_characters = str.toUtf16();
-		len = u16_characters.size();
+		ASSERT(u16_characters.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "u16_characters.size() exceeds uint32_t max");
+		len = static_cast<uint32_t>(std::min(u16_characters.size(), static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
 	}
 
 	queueAuto(len);
@@ -730,7 +732,9 @@ void NETbytes(std::vector<uint8_t> *vec, unsigned maxLen)
 	 * unsigned 16-bit integer, not including \0 termination.
 	 */
 
-	uint32_t len = NETgetPacketDir() == PACKET_ENCODE ? vec->size() : 0;
+	ASSERT((NETgetPacketDir() != PACKET_ENCODE) || vec->size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "vec->size() exceeds uint32_t max");
+	uint32_t vecSize = static_cast<uint32_t>(std::min(vec->size(), static_cast<size_t>(std::numeric_limits<uint32_t>::max())));
+	uint32_t len = NETgetPacketDir() == PACKET_ENCODE ? vecSize : 0;
 	queueAuto(len);
 
 	if (len > maxLen)

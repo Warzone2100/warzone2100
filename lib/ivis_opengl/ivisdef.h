@@ -129,7 +129,7 @@ struct iIMDShape
 	Vector3i *connectors = 0;
 
 	EDGE *shadowEdgeList = nullptr;
-	unsigned int nShadowEdges = 0;
+	size_t nShadowEdges = 0;
 
 	// The old rendering data
 	std::vector<Vector3f> points;
@@ -161,7 +161,7 @@ struct iIMDShape
 
 struct ImageDef
 {
-	unsigned int TPageID;   /**< Which associated file to read our info from */
+	size_t TPageID;   /**< Which associated file to read our info from */
 	unsigned int Tu;        /**< First vertex coordinate */
 	unsigned int Tv;        /**< Second vertex coordinate */
 	unsigned int Width;     /**< Width of image */
@@ -169,7 +169,7 @@ struct ImageDef
 	int XOffset;            /**< X offset into source position */
 	int YOffset;            /**< Y offset into source position */
 
-	int textureId;		///< duplicate of below, fix later
+	size_t textureId;		///< duplicate of below, fix later
 	gfx_api::gfxFloat invTextureSize;
 };
 
@@ -179,7 +179,7 @@ struct IMAGEFILE
 {
 	struct Page
 	{
-		int id;    /// OpenGL texture ID.
+		size_t id;    /// OpenGL texture ID.
 		int size;  /// Size of texture in pixels. (Should be square.)
 	};
 

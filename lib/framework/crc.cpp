@@ -144,8 +144,8 @@ std::string Sha256::toString() const
 void Sha256::fromString(std::string const &s)
 {
 	setZero();
-	unsigned nChars = std::min<unsigned>(Bytes * 2, s.size());
-	for (unsigned n = 0; n < nChars; ++n)
+	size_t nChars = std::min<size_t>(Bytes * 2, s.size());
+	for (size_t n = 0; n < nChars; ++n)
 	{
 		unsigned h;
 		unsigned c = s[n];
@@ -661,7 +661,15 @@ bool EcKey::verify(Sig const &sig, void const *data, size_t dataLen) const
 		return false;
 	}
 
-	int verifyResult = uECC_verify(&(EC_KEY_CAST(vKey)->publicKey[0]), (const uint8_t *)data, dataLen, &sig[0], currentECCurve);
+#if SIZE_MAX > UINT_MAX
+	if (dataLen > std::numeric_limits<unsigned int>::max())
+	{
+		debug(LOG_ERROR, "Attempting to verify signature on data length (%zu) exceeding std::numeric_limits<unsigned int>::max()=(%u)", dataLen, std::numeric_limits<unsigned int>::max());
+		return false;
+	}
+#endif
+
+	int verifyResult = uECC_verify(&(EC_KEY_CAST(vKey)->publicKey[0]), (const uint8_t *)data, static_cast<unsigned int>(dataLen), &sig[0], currentECCurve);
 	if (verifyResult == 0)
 	{
 		debug(LOG_ERROR, "Invalid signature");
@@ -823,7 +831,7 @@ std::string base64Encode(std::vector<uint8_t> const &bytes)
 	std::string str((bytes.size() + 2) / 3 * 4, '\0');
 	for (unsigned n = 0; n * 3 < bytes.size(); ++n)
 	{
-		unsigned rem = bytes.size() - n * 3;
+		unsigned rem = static_cast<unsigned>(bytes.size()) - n * 3;
 		unsigned block = bytes[0 + n * 3] << 16 | (rem > 1 ? bytes[1 + n * 3] : 0) << 8 | (rem > 2 ? bytes[2 + n * 3] : 0);
 		for (unsigned i = 0; i < 4; ++i)
 		{

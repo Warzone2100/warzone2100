@@ -19,7 +19,8 @@
 
 #if defined( _MSC_VER )
 	#pragma warning( disable : 4003 ) // warning C4003: not enough actual parameters for macro 'res_wrap'
-	#pragma warning( disable : 4244 ) // warning C4244: '=': conversion from '<type>' to 'YY_CHAR', possible loss of data 
+	#pragma warning( disable : 4244 ) // warning C4244: '=': conversion from '<type>' to 'YY_CHAR', possible loss of data
+	#pragma warning( disable : 4267 )
 #endif
 #if defined(__clang__)
 	#pragma clang diagnostic ignored "-Wunneeded-internal-declaration" // warning: function 'yyinput' is not needed and will not be emitted
