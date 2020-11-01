@@ -947,6 +947,11 @@ static void handleCameraScrolling()
 		return;
 	}
 
+	if(rotActive){
+		resetScroll();
+		return;
+	}
+
 	if (mouseScroll && wzMouseInWindow())
 	{
 		if (mouseY() < BOUNDARY_Y)
