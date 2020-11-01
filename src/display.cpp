@@ -547,6 +547,37 @@ UDWORD getTargetType()
 	return CurrentItemUnderMouse;
 }
 
+class ValueTracker {
+	private:
+	UDWORD startTime;
+	float initial;
+	float delta;
+	float current;
+	public:
+	void startTracking(int value){
+		this->initial = value;
+		this->current = value;
+		this->startTime = graphicsTime;
+	}
+	ValueTracker* setDelta(int value){
+		this->delta = value;
+		return this;
+	}
+	ValueTracker* update(){
+		this->current = (this->initial + this->delta / CAMERA_ROTATION_SPEED - this->current) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + this->current;
+		return this;
+	}
+	int getCurrent(){
+		return this->current;
+	}
+};
+
+UDWORD panMouseX;
+UDWORD panMouseY;
+std::unique_ptr<ValueTracker> panXTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> panZTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+bool panActive;
+
 //don't want to do any of these whilst in the Intelligence Screen
 void processMouseClickInput()
 {
@@ -637,6 +668,12 @@ void processMouseClickInput()
 		rotationVerticalTracker->startTracking((UWORD)player.r.x);
 		rotationHorizontalTracker->startTracking((UWORD)player.r.y); // negative values caused problems with float conversion
 		rotActive = true;
+	}
+	if (mouseDrag(MOUSE_MMB, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !bRadarDragging && !getRadarTrackingStatus())
+	{
+		panXTracker->startTracking(player.p.x);
+		panZTracker->startTracking(player.p.z);
+		panActive = true;
 	}
 
 	selection = establishSelection(selectedPlayer);
@@ -1081,6 +1118,19 @@ bool CheckScrollLimits()
 void displayWorld()
 {
 	Vector3i pos;
+
+	if (panActive)
+	{
+		if(!mouseDown(MOUSE_MMB)){
+			panActive = false;
+		} else {
+			auto mouseDeltaX = mouseX() - panMouseX;
+			auto mouseDeltaY = mouseY() - panMouseY;
+
+			player.p.x = panXTracker->setDelta(mouseDeltaX * 128)->update()->getCurrent();
+			player.p.z = panZTracker->setDelta(mouseDeltaY * 128)->update()->getCurrent();
+		}
+	}
 
 	if (mouseDown(MOUSE_ROTATE) && rotActive)
 	{
