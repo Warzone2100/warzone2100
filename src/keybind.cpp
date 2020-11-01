@@ -639,11 +639,11 @@ void kf_ToggleOrders()	// Displays orders & action of currently selected unit.
 /* Writes out the frame rate */
 void	kf_FrameRate()
 {
-	CONPRINTF("FPS %d; PIEs %d; polys %d",
+	CONPRINTF("FPS %d; PIEs %zu; polys %zu",
 	                          frameRate(), loopPieCount, loopPolyCount);
 	if (runningMultiplayer())
 	{
-		CONPRINTF("NETWORK:  Bytes: s-%d r-%d  Uncompressed Bytes: s-%d r-%d  Packets: s-%d r-%d",
+		CONPRINTF("NETWORK:  Bytes: s-%zu r-%zu  Uncompressed Bytes: s-%zu r-%zu  Packets: s-%zu r-%zu",
 		                          NETgetStatistic(NetStatisticRawBytes, true),
 		                          NETgetStatistic(NetStatisticRawBytes, false),
 		                          NETgetStatistic(NetStatisticUncompressedBytes, true),

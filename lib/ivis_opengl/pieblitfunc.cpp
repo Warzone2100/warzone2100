@@ -315,7 +315,7 @@ void pie_UniTransBoxFill(float x0, float y0, float x1, float y1, PIELIGHT light)
 static bool assertValidImage(IMAGEFILE *imageFile, unsigned id)
 {
 	ASSERT_OR_RETURN(false, id < imageFile->imageDefs.size(), "Out of range 1: %u/%d", id, (int)imageFile->imageDefs.size());
-	ASSERT_OR_RETURN(false, imageFile->imageDefs[id].TPageID < imageFile->pages.size(), "Out of range 2: %u", imageFile->imageDefs[id].TPageID);
+	ASSERT_OR_RETURN(false, imageFile->imageDefs[id].TPageID < imageFile->pages.size(), "Out of range 2: %zu", imageFile->imageDefs[id].TPageID);
 	return true;
 }
 
@@ -352,7 +352,7 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f o
 static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
-	uint32_t texPage = imageFile->pages[image2.TPageID].id;
+	size_t texPage = imageFile->pages[image2.TPageID].id;
 	gfx_api::gfxFloat invTextureSize = 1.f / (float)imageFile->pages[image2.TPageID].size;
 	float tu = (float)(image2.Tu + textureInset.x) * invTextureSize;
 	float tv = (float)(image2.Tv + textureInset.y) * invTextureSize;
@@ -378,7 +378,7 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 		// but is tweaked to use custom implementation of iv_DrawImageImpl that does not disable the shader after every glDrawArrays call.
 
 		ImageDef const &image2 = request.imageFile->imageDefs[request.ID];
-		uint32_t texPage = request.imageFile->pages[image2.TPageID].id;
+		size_t texPage = request.imageFile->pages[image2.TPageID].id;
 		gfx_api::gfxFloat invTextureSize = 1.f / (float)request.imageFile->pages[image2.TPageID].size;
 		float tu = (float)(image2.Tu + request.textureInset.x) * invTextureSize;
 		float tv = (float)(image2.Tv + request.textureInset.y) * invTextureSize;

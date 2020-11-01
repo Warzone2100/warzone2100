@@ -89,7 +89,9 @@ WzString::WzString(const char * str, int size /*= -1*/)
 	if (str == nullptr) { return; }
 	if (size < 0)
 	{
-		size = strlen(str);
+		size_t strLen = strlen(str);
+		ASSERT_OR_RETURN(, strLen <= static_cast<size_t>(std::numeric_limits<int>::max()), "String length (%zu) exceeds maximum support length: %d", strLen, std::numeric_limits<int>::max());
+		size = static_cast<int>(strLen);
 	}
 	ASSERT(utf8::is_valid(str, str + size), "Input text is not valid UTF-8");
 	try {
@@ -109,7 +111,8 @@ WzString WzString::fromUtf8(const char *str, int size /*= -1*/)
 
 WzString WzString::fromUtf8(const std::string &str)
 {
-	return WzString(str.c_str(), str.length());
+	ASSERT_OR_RETURN(WzString(), str.length() <= static_cast<size_t>(std::numeric_limits<int>::max()), "String length (%zu) exceeds maximum support length: %d", str.length(), std::numeric_limits<int>::max());
+	return WzString(str.c_str(), static_cast<int>(str.length()));
 }
 
 WzString WzString::fromUtf16(const std::vector<uint16_t>& utf16)

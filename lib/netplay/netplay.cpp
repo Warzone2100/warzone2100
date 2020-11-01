@@ -121,8 +121,8 @@ std::atomic_int upnp_status;
 
 struct Statistic
 {
-	unsigned sent;
-	unsigned received;
+	size_t sent;
+	size_t received;
 };
 
 struct NETSTATS  // data regarding the last one second or so.
@@ -1341,9 +1341,9 @@ int NETclose()
 
 // ////////////////////////////////////////////////////////////////////////
 // return bytes of data sent recently.
-unsigned NETgetStatistic(NetStatisticType type, bool sent, bool isTotal)
+size_t NETgetStatistic(NetStatisticType type, bool sent, bool isTotal)
 {
-	unsigned Statistic::*statisticType = sent ? &Statistic::sent : &Statistic::received;
+	size_t Statistic::*statisticType = sent ? &Statistic::sent : &Statistic::received;
 	Statistic NETSTATS::*statsType;
 	switch (type)
 	{
@@ -1557,7 +1557,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				if (sender != selectedPlayer)  // Make sure host didn't send us our own broadcast messages, which shouldn't happen anyway.
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);
-					NETlogPacket(message->type, message->rawLen(), true);
+					NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
 				}
 			}
 			else if (NetPlay.isHost && sender == playerQueue.index)
@@ -1602,7 +1602,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				if (receiver == NET_ALL_PLAYERS)
 				{
 					NETinsertMessageFromNet(NETnetQueue(sender), message);  // Message is also for the host.
-					NETlogPacket(message->type, message->rawLen(), true);
+					NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
 					// Not sure if flushing here can make a difference, maybe it can:
 					//NETflush();  // Send the message to everyone as fast as possible.
 				}
@@ -1635,7 +1635,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETnetMessage(&message);
 
 				NETinsertMessageFromNet(NETgameQueue(player), message);
-				NETlogPacket(message->type, message->rawLen(), true);
+				NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
 
 				delete message;
 				message = nullptr;
@@ -2098,7 +2098,7 @@ bool validateReceivedFile(const WZFile& file)
 	std::vector<unsigned char> fileChunkBuffer(bufferSize, '\0');
 	PHYSFS_sint64 length_read = 0;
 	do {
-		length_read = WZ_PHYSFS_readBytes(fileHandle, fileChunkBuffer.data(), bufferSize);
+		length_read = WZ_PHYSFS_readBytes(fileHandle, fileChunkBuffer.data(), static_cast<PHYSFS_uint32>(bufferSize));
 		if (length_read != bufferSize)
 		{
 			if (length_read < 0 || !PHYSFS_eof(fileHandle))
@@ -2164,7 +2164,7 @@ bool markAsDownloadedFile(const std::string &filename)
 	// Set it to "downloaded from the Internet Zone" (ZoneId 3)
 	const char kWindowsZoneIdentifierADSDataInternetZone[] = "[ZoneTransfer]\r\nZoneId=3\r\n";
 	DWORD dwNumberOfBytesWritten;
-	if (WriteFile(hStream, kWindowsZoneIdentifierADSDataInternetZone, strlen(kWindowsZoneIdentifierADSDataInternetZone), &dwNumberOfBytesWritten, NULL) == 0)
+	if (WriteFile(hStream, kWindowsZoneIdentifierADSDataInternetZone, static_cast<DWORD>(strlen(kWindowsZoneIdentifierADSDataInternetZone)), &dwNumberOfBytesWritten, NULL) == 0)
 	{
 		debug(LOG_ERROR, "Failed to write to stream with error %d: %s\n", GetLastError(), fullFilePath.c_str());
 		CloseHandle(hStream);
@@ -3962,7 +3962,7 @@ struct SyncDebugLog
 	{
 		return ~crc;  // Invert bits, since everyone else seems to do that with CRCs...
 	}
-	unsigned getNumEntries() const
+	size_t getNumEntries() const
 	{
 		return log.size();
 	}
@@ -4109,7 +4109,8 @@ static void dumpDebugSync(uint8_t *buf, size_t bufLen, uint32_t time, unsigned p
 
 	ssprintf(fname, "logs/desync%u_p%u.txt", time, player);
 	fp = openSaveFile(fname);
-	WZ_PHYSFS_writeBytes(fp, buf, bufLen);
+	ASSERT(bufLen <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "bufLen (%zu) exceeds PHYSFS_uint32::max", bufLen);
+	WZ_PHYSFS_writeBytes(fp, buf, static_cast<PHYSFS_uint32>(bufLen));
 	PHYSFS_close(fp);
 
 	debug(LOG_ERROR, "Dumped player %u's sync error at gameTime %u to file: %s%s", player, time, WZ_PHYSFS_getRealDir_String(fname).c_str(), fname);
@@ -4180,17 +4181,17 @@ bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc)
 
 	size_t bufIndex = 0;
 	// Dump our version, and also erase it, so we only dump it at most once.
-	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version has %u entries, CRC = 0x%08X.", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
-	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== BEGIN gameTime=%u, %u entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	debug(LOG_ERROR, "Inconsistent sync debug at gameTime %u. My version has %zu entries, CRC = 0x%08X.", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== BEGIN gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
 	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 	bufIndex += syncDebugLog[logIndex].snprint((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex);
 	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
-	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== END gameTime=%u, %u entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
+	bufIndex += snprintf((char *)debugSyncTmpBuf + bufIndex, ARRAY_SIZE(debugSyncTmpBuf) - bufIndex, "===== END gameTime=%u, %zu entries, CRC 0x%08X =====\n", syncDebugLog[logIndex].getGameTime(), syncDebugLog[logIndex].getNumEntries(), syncDebugLog[logIndex].getCrc());
 	bufIndex = MIN(bufIndex, ARRAY_SIZE(debugSyncTmpBuf));  // snprintf will not overflow debugSyncTmpBuf, but returns as much as it would have printed if possible.
 	if (syncDebugNumDumps < 2)
 	{
 		++syncDebugNumDumps;
-		sendDebugSync(debugSyncTmpBuf, bufIndex, syncDebugLog[logIndex].getGameTime());
+		sendDebugSync(debugSyncTmpBuf, static_cast<uint32_t>(bufIndex), syncDebugLog[logIndex].getGameTime());
 	}
 
 	// Backup correct CRC for checking against remaining players, even though we erased the logs (which were dumped already).

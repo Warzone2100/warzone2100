@@ -1680,7 +1680,7 @@ bool loadGameInit(const char *fileName)
 bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType)
 {
 	char			aFileName[256];
-	UDWORD			fileExten;
+	size_t			fileExten;
 
 	sstrcpy(aFileName, pGameToLoad);
 	fileExten = strlen(pGameToLoad) - 3;
@@ -1828,7 +1828,8 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	std::map<WzString, DROID **> droidMap;
 	std::map<WzString, STRUCTURE **> structMap;
 	char			aFileName[256];
-	UDWORD			fileExten, fileSize;
+	size_t			fileExten;
+	UDWORD			fileSize;
 	char			*pFileData = nullptr;
 	UDWORD			player, inc, i, j;
 	DROID           *psCurr;
@@ -2651,7 +2652,7 @@ error:
 
 bool saveGame(const char *aFileName, GAME_TYPE saveType)
 {
-	UDWORD			fileExtension;
+	size_t			fileExtension;
 	DROID			*psDroid, *psNext;
 	char			CurrentFileName[PATH_MAX] = {'\0'};
 

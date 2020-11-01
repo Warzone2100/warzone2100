@@ -19,6 +19,7 @@
 
 #if defined( _MSC_VER )
 	#pragma warning( disable : 4244 ) // warning C4244: '=': conversion from 'int' to 'yytype_int16', possible loss of data
+	#pragma warning( disable : 4267 )
 #endif
 
 /* All symbols defined below should begin with yy or YY, to avoid

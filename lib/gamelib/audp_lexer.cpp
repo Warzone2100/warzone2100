@@ -23,6 +23,8 @@
 	#if 7 <= __GNUC__
 		#pragma GCC diagnostic ignored "-Wnull-dereference"
 	#endif
+#elif defined(_MSC_VER)
+	#pragma warning( disable : 4267 )
 #endif
 
 #line 3 "lex.audp_.c"

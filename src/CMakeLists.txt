@@ -100,6 +100,11 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/MANIFEST:NO" CACHED_RESULT_NAME LINK_FLAG_SLASH_MANFIEST_NO_SUPPORTED)
 endif()
 
+if(MSVC)
+	# C4267: 'conversion': conversion from 'type1' to 'type2', possible loss of data // FIXME!!
+	target_compile_options(warzone2100 PRIVATE "/wd4267")
+endif()
+
 target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100
 	Qt5::Core

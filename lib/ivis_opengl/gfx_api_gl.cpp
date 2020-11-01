@@ -170,13 +170,23 @@ void gl_texture::unbind()
 void gl_texture::upload(const size_t& mip_level, const size_t& offset_x, const size_t& offset_y, const size_t & width, const size_t & height, const gfx_api::pixel_format & buffer_format, const void * data)
 {
 	ASSERT(width > 0 && height > 0, "Attempt to upload texture with width or height of 0 (width: %zu, height: %zu)", width, height);
+
+	ASSERT(mip_level <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "mip_level (%zu) exceeds GLint max", mip_level);
+	ASSERT(offset_x <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_x (%zu) exceeds GLint max", offset_x);
+	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_y (%zu) exceeds GLint max", offset_y);
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	bind();
-	glTexSubImage2D(GL_TEXTURE_2D, mip_level, offset_x, offset_y, width, height, std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
+	glTexSubImage2D(GL_TEXTURE_2D, static_cast<GLint>(mip_level), static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
 	unbind();
 }
 
 void gl_texture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t& offset_y, const size_t& width, const size_t& height, const  gfx_api::pixel_format& buffer_format, const void* data)
 {
+	ASSERT(offset_x <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_x (%zu) exceeds GLint max", offset_x);
+	ASSERT(offset_y <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "offset_y (%zu) exceeds GLint max", offset_y);
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	bind();
 	if(!glGenerateMipmap)
 	{
@@ -187,7 +197,7 @@ void gl_texture::upload_and_generate_mipmaps(const size_t& offset_x, const size_
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	}
-	glTexSubImage2D(GL_TEXTURE_2D, 0, offset_x, offset_y, width, height, std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(offset_x), static_cast<GLint>(offset_y), static_cast<GLsizei>(width), static_cast<GLsizei>(height), std::get<1>(to_gl(buffer_format)), GL_UNSIGNED_BYTE, data);
 	if(glGenerateMipmap)
 	{
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -1197,7 +1207,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(4, cbuf.texture);
 }
 
-size_t get_size(const gfx_api::vertex_attribute_type& type)
+GLint get_size(const gfx_api::vertex_attribute_type& type)
 {
 	switch (type)
 	{
@@ -1252,18 +1262,21 @@ gl_context::~gl_context()
 
 gfx_api::texture* gl_context::create_texture(const size_t& mipmap_count, const size_t & width, const size_t & height, const gfx_api::pixel_format & internal_format, const std::string& filename)
 {
+	ASSERT(mipmap_count <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "mipmap_count (%zu) exceeds GLint max", mipmap_count);
+	ASSERT(width <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "width (%zu) exceeds GLsizei max", width);
+	ASSERT(height <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "height (%zu) exceeds GLsizei max", height);
 	auto* new_texture = new gl_texture();
 	new_texture->mip_count = mipmap_count;
 	new_texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, mipmap_count - 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(mipmap_count - 1));
 	if (!filename.empty() && ((/*GLEW_VERSION_4_3 ||*/ GLAD_GL_KHR_debug) && glObjectLabel))
 	{
 		glObjectLabel(GL_TEXTURE, new_texture->id(), -1, filename.c_str());
 	}
-	for (unsigned i = 0, e = mipmap_count; i < e; ++i)
+	for (GLint i = 0, e = static_cast<GLint>(mipmap_count); i < e; ++i)
 	{
-		glTexImage2D(GL_TEXTURE_2D, i, std::get<0>(to_gl(internal_format)), width >> i, height >> i, 0, std::get<1>(to_gl(internal_format)), GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, i, std::get<0>(to_gl(internal_format)), static_cast<GLsizei>(width >> i), static_cast<GLsizei>(height >> i), 0, std::get<1>(to_gl(internal_format)), GL_UNSIGNED_BYTE, nullptr);
 	}
 	return new_texture;
 }
@@ -1324,8 +1337,8 @@ void gl_context::bind_vertex_buffers(const std::size_t& first, const std::vector
 		buffer->bind();
 		for (const auto& attribute : buffer_desc.attributes)
 		{
-			enableVertexAttribArray(attribute.id);
-			glVertexAttribPointer(attribute.id, get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), buffer_desc.stride, reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
+			enableVertexAttribArray(static_cast<GLuint>(attribute.id));
+			glVertexAttribPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), static_cast<GLsizei>(buffer_desc.stride), reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
 		}
 	}
 }
@@ -1337,7 +1350,7 @@ void gl_context::unbind_vertex_buffers(const std::size_t& first, const std::vect
 		const auto& buffer_desc = current_program->vertex_buffer_desc[first + i];
 		for (const auto& attribute : buffer_desc.attributes)
 		{
-			disableVertexAttribArray(attribute.id);
+			disableVertexAttribArray(static_cast<GLuint>(attribute.id));
 		}
 	}
 	glBindBuffer(to_gl(gfx_api::buffer::usage::vertex_buffer), 0);
@@ -1345,7 +1358,7 @@ void gl_context::unbind_vertex_buffers(const std::size_t& first, const std::vect
 
 void gl_context::disable_all_vertex_buffers()
 {
-	for (size_t index = 0; index < enabledVertexAttribIndexes.size(); ++index)
+	for (GLuint index = 0; index < static_cast<GLuint>(enabledVertexAttribIndexes.size()); ++index)
 	{
 		if(enabledVertexAttribIndexes[index])
 		{
@@ -1368,8 +1381,8 @@ void gl_context::bind_streamed_vertex_buffers(const void* data, const std::size_
 	const auto& buffer_desc = current_program->vertex_buffer_desc[0];
 	for (const auto& attribute : buffer_desc.attributes)
 	{
-		enableVertexAttribArray(attribute.id);
-		glVertexAttribPointer(attribute.id, get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), buffer_desc.stride, nullptr);
+		enableVertexAttribArray(static_cast<GLuint>(attribute.id));
+		glVertexAttribPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), static_cast<GLsizei>(buffer_desc.stride), nullptr);
 	}
 }
 
@@ -1391,7 +1404,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 	for (size_t i = 0; i < texture_descriptions.size() && i < textures.size(); ++i)
 	{
 		const auto& desc = texture_descriptions[i];
-		glActiveTexture(GL_TEXTURE0 + desc.id);
+		glActiveTexture(static_cast<GLenum>(GL_TEXTURE0 + desc.id));
 		if (textures[i] == nullptr)
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -1453,12 +1466,15 @@ void gl_context::set_constants(const void* buffer, const size_t& size)
 
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)
 {
-	glDrawArrays(to_gl(primitive), offset, count);
+	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<GLint>::max()), "count (%zu) exceeds GLint max", offset);
+	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
+	glDrawArrays(to_gl(primitive), static_cast<GLint>(offset), static_cast<GLsizei>(count));
 }
 
 void gl_context::draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index)
 {
-	glDrawElements(to_gl(primitive), count, to_gl(index), reinterpret_cast<void*>(offset));
+	ASSERT(count <= static_cast<size_t>(std::numeric_limits<GLsizei>::max()), "count (%zu) exceeds GLsizei max", count);
+	glDrawElements(to_gl(primitive), static_cast<GLsizei>(count), to_gl(index), reinterpret_cast<void*>(offset));
 }
 
 void gl_context::set_polygon_offset(const float& offset, const float& slope)

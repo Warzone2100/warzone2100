@@ -45,7 +45,7 @@ struct iIMDShape;
 /***************************************************************************/
 bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView);
 
-void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount);
+void pie_GetResetCounts(size_t *pPieCount, size_t *pPolyCount);
 
 /** Setup stencil shadows and OpenGL lighting. */
 void pie_BeginLighting(const Vector3f &light);

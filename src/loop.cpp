@@ -95,8 +95,8 @@
 /*
  * Global variables
  */
-unsigned int loopPieCount;
-unsigned int loopPolyCount;
+size_t loopPieCount;
+size_t loopPolyCount;
 
 /*
  * local variables

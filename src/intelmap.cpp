@@ -556,8 +556,8 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 	unsigned cur_y = y0 + iV_GetTextLineSize(font_regular) / 2 + 2 * TEXT_YINDENT;
 
 	/* add each message */
-	unsigned i;
-	unsigned sequence;
+	size_t i;
+	size_t sequence;
 	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->seqList.size(); sequence++)
 	{
 		const SEQ_DISPLAY *psSeqDisplay = &psViewReplay->seqList.at(sequence);

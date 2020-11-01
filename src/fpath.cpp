@@ -500,9 +500,9 @@ PATHRESULT fpathExecute(PATHJOB job)
 }
 
 /** Find the length of the job queue. Function is thread-safe. */
-static int fpathJobQueueLength()
+static size_t fpathJobQueueLength()
 {
-	int count = 0;
+	size_t count = 0;
 
 	wzMutexLock(fpathMutex);
 	count = pathJobs.size();  // O(N) function call for std::list. .empty() is faster, but this function isn't used except in tests.
@@ -512,9 +512,9 @@ static int fpathJobQueueLength()
 
 
 /** Find the length of the result queue, excepting future results. Function is thread-safe. */
-static int fpathResultQueueLength()
+static size_t fpathResultQueueLength()
 {
-	int count = 0;
+	size_t count = 0;
 
 	wzMutexLock(fpathMutex);
 	count = pathResults.size();  // O(N) function call for std::list. .empty() is faster, but this function isn't used except in tests.

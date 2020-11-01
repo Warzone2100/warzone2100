@@ -102,7 +102,7 @@ static void poptPrintHelp(poptContext ctx, FILE *output)
 		const size_t txtSize = strlen(txt) + 1;
 		std::mbstate_t state = std::mbstate_t();
 		const char *pTxt = txt;
-		int txtOffset = (int) std::mbsrtowcs(nullptr, &pTxt, 0, &state) + 1 - txtSize;
+		size_t txtOffset = std::mbsrtowcs(nullptr, &pTxt, 0, &state) + 1 - txtSize;
 		// CJK characters take up two columns
 		char language[3]; // stores ISO 639-1 code
 		strlcpy(language, setlocale(LC_MESSAGES, nullptr), sizeof(language));
@@ -111,7 +111,7 @@ static void poptPrintHelp(poptContext ctx, FILE *output)
 			txtOffset /= 2;
 		}
 
-		fprintf(output, "%-*s", 40 - txtOffset, txt);
+		fprintf(output, "%-*s", static_cast<int>(40 - txtOffset), txt);
 
 		if (ctx->table[i].descrip)
 		{
