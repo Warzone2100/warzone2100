@@ -1284,13 +1284,12 @@ template <typename F, typename G>
 static unsigned calcSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, uint32_t (&asWeaps)[MAX_WEAPONS], F func, G propulsionFunc)
 {
 	unsigned sum =
-		func(asBodyStats     [asParts[COMP_BODY]]) +
 		func(asBrainStats    [asParts[COMP_BRAIN]]) +
 		func(asSensorStats   [asParts[COMP_SENSOR]]) +
 		func(asECMStats      [asParts[COMP_ECM]]) +
 		func(asRepairStats   [asParts[COMP_REPAIRUNIT]]) +
 		func(asConstructStats[asParts[COMP_CONSTRUCT]]) +
-		propulsionFunc(asPropulsionStats[asParts[COMP_PROPULSION]], asBodyStats[asParts[COMP_BODY]]);
+		propulsionFunc(asBodyStats[asParts[COMP_BODY]], asPropulsionStats[asParts[COMP_PROPULSION]]);
 	for (int i = 0; i < numWeaps; ++i)
 	{
 		sum += func(asWeaponStats[asWeaps[i]]);
@@ -1302,13 +1301,12 @@ template <typename F, typename G>
 static unsigned calcUpgradeSum(uint8_t (&asParts)[DROID_MAXCOMP], int numWeaps, uint32_t (&asWeaps)[MAX_WEAPONS], int player, F func, G propulsionFunc)
 {
 	unsigned sum =
-		func(asBodyStats     [asParts[COMP_BODY]].upgrade[player]) +
 		func(asBrainStats    [asParts[COMP_BRAIN]].upgrade[player]) +
 		func(asSensorStats   [asParts[COMP_SENSOR]].upgrade[player]) +
 		func(asECMStats      [asParts[COMP_ECM]].upgrade[player]) +
 		func(asRepairStats   [asParts[COMP_REPAIRUNIT]].upgrade[player]) +
 		func(asConstructStats[asParts[COMP_CONSTRUCT]].upgrade[player]) +
-		propulsionFunc(asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player], asBodyStats[asParts[COMP_BODY]].upgrade[player]);
+		propulsionFunc(asBodyStats[asParts[COMP_BODY]].upgrade[player], asPropulsionStats[asParts[COMP_PROPULSION]].upgrade[player]);
 	for (int i = 0; i < numWeaps; ++i)
 	{
 		// asWeaps[i] > 0 check only needed for droids, not templates.
@@ -1367,9 +1365,9 @@ UDWORD calcDroidWeight(DROID_TEMPLATE *psTemplate)
 {
 	return calcSum(psTemplate, [](COMPONENT_STATS const &stat) {
 		return stat.weight;
-	}, [](PROPULSION_STATS const &propStat, BODY_STATS const &bodyStat) {
+	}, [](BODY_STATS const &bodyStat, PROPULSION_STATS const &propStat) {
 		// Propulsion weight is a percentage of the body weight.
-		return propStat.weight * (100 + bodyStat.weight) / 100;
+		return bodyStat.weight * (100 + propStat.weight) / 100;
 	});
 }
 
@@ -1378,15 +1376,15 @@ static uint32_t calcBody(T *obj, int player)
 {
 	int hitpoints = calcUpgradeSum(obj, player, [](COMPONENT_STATS::UPGRADE const &upgrade) {
 		return upgrade.hitpoints;
-	}, [](PROPULSION_STATS::UPGRADE const &propUpgrade, BODY_STATS::UPGRADE const &bodyUpgrade) {
+	}, [](BODY_STATS::UPGRADE const &bodyUpgrade, PROPULSION_STATS::UPGRADE const &propUpgrade) {
 		// propulsion hitpoints can be a percentage of the body's hitpoints
-		return propUpgrade.hitpoints + bodyUpgrade.hitpoints * (100 + propUpgrade.hitpointPctOfBody) / 100;
+		return bodyUpgrade.hitpoints * (100 + propUpgrade.hitpointPctOfBody) / 100 + propUpgrade.hitpoints;
 	});
 
 	int hitpointPct = calcUpgradeSum(obj, player, [](COMPONENT_STATS::UPGRADE const &upgrade) {
 		return upgrade.hitpointPct - 100;
-	}, [](PROPULSION_STATS::UPGRADE const &propUpgrade, BODY_STATS::UPGRADE const &bodyUpgrade) {
-		return propUpgrade.hitpointPct - 100 + bodyUpgrade.hitpointPct - 100;
+	}, [](BODY_STATS::UPGRADE const &bodyUpgrade, PROPULSION_STATS::UPGRADE const &propUpgrade) {
+		return bodyUpgrade.hitpointPct - 100 + propUpgrade.hitpointPct - 100;
 	});
 
 	// Final adjustment based on the hitpoint modifier
@@ -1464,7 +1462,7 @@ static uint32_t calcBuild(T *obj)
 {
 	return calcSum(obj, [](COMPONENT_STATS const &stat) {
 		return stat.buildPoints;
-	}, [](PROPULSION_STATS const &propStat, BODY_STATS const &bodyStat) {
+	}, [](BODY_STATS const &bodyStat, PROPULSION_STATS const &propStat) {
 		// Propulsion power points are a percentage of the body's build points.
 		return bodyStat.buildPoints * (100 + propStat.buildPoints) / 100;
 	});
@@ -1486,7 +1484,7 @@ static uint32_t calcPower(T *obj)
 {
 	return calcSum(obj, [](COMPONENT_STATS const &stat) {
 		return stat.buildPower;
-	}, [](PROPULSION_STATS const &propStat, BODY_STATS const &bodyStat) {
+	}, [](BODY_STATS const &bodyStat, PROPULSION_STATS const &propStat) {
 		// Propulsion power points are a percentage of the body's power points.
 		return bodyStat.buildPower * (100 + propStat.buildPower) / 100;
 	});
