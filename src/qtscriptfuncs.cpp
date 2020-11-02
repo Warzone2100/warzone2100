@@ -2837,21 +2837,6 @@ IMPL_JS_FUNC(isVTOL, wzapi::isVTOL)
 IMPL_JS_FUNC(hackGetObj, wzapi::hackGetObj)
 IMPL_JS_FUNC(receiveAllEvents, wzapi::receiveAllEvents)
 IMPL_JS_FUNC(hackAssert, wzapi::hackAssert)
-
-//-- ## objFromId(fake game object)
-//--
-//-- Broken function meant to make porting from the old scripting system easier. Do not use for new code.
-//-- Instead, use labels.
-//--
-static QScriptValue js_objFromId(QScriptContext *context, QScriptEngine *engine)
-{
-	QScriptValue droidVal = context->argument(0);
-	int id = droidVal.property("id").toInt32();
-	BASE_OBJECT *psObj = getBaseObjFromId(id);
-	SCRIPT_ASSERT(context, psObj, "No such object id %d", id);
-	return QScriptValue(convMax(psObj, engine));
-}
-
 IMPL_JS_FUNC(setDroidExperience, wzapi::setDroidExperience)
 IMPL_JS_FUNC(donateObject, wzapi::donateObject)
 IMPL_JS_FUNC(donatePower, wzapi::donatePower)
@@ -3043,7 +3028,6 @@ bool qtscript_scripting_instance::registerFunctions(const QString& scriptName)
 	JS_REGISTER_FUNC(hackNetOn); // WZAPI
 	JS_REGISTER_FUNC(hackAddMessage); // WZAPI
 	JS_REGISTER_FUNC(hackRemoveMessage); // WZAPI
-	JS_REGISTER_FUNC(objFromId);
 	JS_REGISTER_FUNC(hackGetObj); // WZAPI
 	JS_REGISTER_FUNC(hackAssert); // WZAPI
 	JS_REGISTER_FUNC(hackMarkTiles); // WZAPI
