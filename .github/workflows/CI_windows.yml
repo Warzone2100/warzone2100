@@ -15,10 +15,7 @@ jobs:
     strategy:
       matrix:
         compiler: ["MSVC_2019"]
-        architecture: ["x86"]
-        ## NOTE: Unfortunately, 64-bit Windows builds are currently broken because of QScript (see: http://developer.wz2100.net/ticket/4763)
-        ## Whenever that ticket is resolved, the following will build 64-bit as well:
-        #architecture: ["x86", "x64"]
+        architecture: ["x86", "x64"]
       fail-fast: false
     env:
       WZ_MSVC_VER: ${{ matrix.compiler }}
