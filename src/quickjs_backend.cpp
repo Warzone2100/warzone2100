@@ -3307,22 +3307,6 @@ IMPL_JS_FUNC(isVTOL, wzapi::isVTOL)
 IMPL_JS_FUNC(hackGetObj, wzapi::hackGetObj)
 IMPL_JS_FUNC(receiveAllEvents, wzapi::receiveAllEvents)
 IMPL_JS_FUNC(hackAssert, wzapi::hackAssert)
-
-//-- ## objFromId(fake game object)
-//--
-//-- Broken function meant to make porting from the old scripting system easier. Do not use for new code.
-//-- Instead, use labels.
-//--
-static JSValue js_objFromId(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
-{
-	SCRIPT_ASSERT(ctx, argc == 1, "Must have one parameter");
-	SCRIPT_ASSERT(ctx, JS_IsObject(argv[0]), "Must be a fake game object");
-	int id = QuickJS_GetInt32(ctx, argv[0], "id");
-	BASE_OBJECT *psObj = getBaseObjFromId(id);
-	SCRIPT_ASSERT(ctx, psObj, "No such object id %d", id);
-	return convMax(psObj, ctx);
-}
-
 IMPL_JS_FUNC(setDroidExperience, wzapi::setDroidExperience)
 IMPL_JS_FUNC(donateObject, wzapi::donateObject)
 IMPL_JS_FUNC(donatePower, wzapi::donatePower)
@@ -3569,7 +3553,6 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(hackNetOn, 0); // WZAPI
 	JS_REGISTER_FUNC(hackAddMessage, 4); // WZAPI
 	JS_REGISTER_FUNC(hackRemoveMessage, 3); // WZAPI
-	JS_REGISTER_FUNC(objFromId, 1);
 	JS_REGISTER_FUNC(hackGetObj, 3); // WZAPI
 	JS_REGISTER_FUNC2(hackAssert, 2, 2 + MAX_JS_VARARGS); // WZAPI
 	JS_REGISTER_FUNC2(hackMarkTiles, 1, 4); // WZAPI
