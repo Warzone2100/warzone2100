@@ -1792,7 +1792,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 					playerBlueprintX->startTracking(pos.x)->setSpeed(20);
 					playerBlueprintY->startTracking(pos.y)->setSpeed(20);
 					playerBlueprintZ->startTracking(z)->setSpeed(20);
-					playerBlueprintDirection->startTracking(direction)->setSpeed(20);
+					playerBlueprintDirection->startTracking(direction)->setSpeed(50);
 				}
 
 				playerBlueprintX->setTarget(pos.x)->update();
