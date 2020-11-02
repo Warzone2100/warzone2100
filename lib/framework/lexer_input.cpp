@@ -35,7 +35,7 @@ int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 		}
 		else
 		{
-			return fread(buf, 1, max_size, input->input.stdiofile);
+			return static_cast<int>(fread(buf, 1, max_size, input->input.stdiofile));
 		}
 		break;
 
@@ -47,7 +47,8 @@ int lexer_input(lexerinput_t *input, char *buf, size_t max_size, int nullvalue)
 		}
 		else
 		{
-			PHYSFS_sint64 result = WZ_PHYSFS_readBytes(input->input.physfsfile, buf, max_size);
+			ASSERT(max_size <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "max_size exceeds PHYSFS_uint32::max");
+			PHYSFS_sint64 result = WZ_PHYSFS_readBytes(input->input.physfsfile, buf, static_cast<PHYSFS_uint32>(max_size));
 			if (result == -1)
 			{
 				buf[0] = EOF;

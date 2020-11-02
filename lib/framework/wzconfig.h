@@ -132,7 +132,7 @@ public:
 	void beginArray(const WzString &name);
 	void nextArrayItem();
 	void endArray();
-	int remainingArrayItems();
+	size_t remainingArrayItems();
 
 	bool beginGroup(const WzString &name);
 	void endGroup();

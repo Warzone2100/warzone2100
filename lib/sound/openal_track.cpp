@@ -37,6 +37,7 @@
 #include "lib/framework/physfs_ext.h"
 #include <string.h>
 #include <math.h>
+#include <limits>
 
 #include "tracklib.h"
 #include "audio.h"
@@ -643,7 +644,8 @@ static inline TRACK *sound_DecodeOggVorbisTrack(TRACK *psTrack, PHYSFS_file *PHY
 	// Create an OpenAL buffer and fill it with the decoded data
 	alGenBuffers(1, &buffer);
 	sound_GetError();
-	alBufferData(buffer, format, soundBuffer->data, soundBuffer->size, soundBuffer->frequency);
+	ASSERT(soundBuffer->size <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "soundBuffer->size (%zu) exceeds ALsizei::max", soundBuffer->size);
+	alBufferData(buffer, format, soundBuffer->data, static_cast<ALsizei>(soundBuffer->size), soundBuffer->frequency);
 	sound_GetError();
 
 	free(soundBuffer);
@@ -1028,7 +1030,8 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 			ALenum format = (soundBuffer->channelCount == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
 
 			// Copy the audio data into one of OpenAL's own buffers
-			alBufferData(buffers[i], format, soundBuffer->data, soundBuffer->size, soundBuffer->frequency);
+			ASSERT(soundBuffer->size <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "soundBuffer->size (%zu) exceeds ALsizei::max", soundBuffer->size);
+			alBufferData(buffers[i], format, soundBuffer->data, static_cast<ALint>(soundBuffer->size), soundBuffer->frequency);
 			sound_GetError();
 
 			// Clean up our memory
@@ -1252,7 +1255,8 @@ static bool sound_UpdateStream(AUDIO_STREAM *stream)
 			ALenum format = (soundBuffer->channelCount == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
 
 			// Insert the data into the buffer
-			alBufferData(buffer, format, soundBuffer->data, soundBuffer->size, soundBuffer->frequency);
+			ASSERT(soundBuffer->size <= static_cast<size_t>(std::numeric_limits<ALsizei>::max()), "soundBuffer->size (%zu) exceeds ALsizei::max", soundBuffer->size);
+			alBufferData(buffer, format, soundBuffer->data, static_cast<ALsizei>(soundBuffer->size), soundBuffer->frequency);
 			sound_GetError();
 
 			// Reattach the buffer to the source

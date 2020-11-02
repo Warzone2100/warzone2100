@@ -36,7 +36,10 @@ WzConfig::~WzConfig()
 		std::ostringstream stream;
 		stream << mRoot.dump(4) << std::endl;
 		std::string jsonString = stream.str();
-		saveFile(mFilename.toUtf8().c_str(), jsonString.c_str(), jsonString.size());
+#if SIZE_MAX >= UDWORD_MAX
+		ASSERT(jsonString.size() <= static_cast<size_t>(std::numeric_limits<UDWORD>::max()), "jsonString.size (%zu) exceeds UDWORD::max", jsonString.size());
+#endif
+		saveFile(mFilename.toUtf8().c_str(), jsonString.c_str(), static_cast<UDWORD>(jsonString.size()));
 	}
 	debug(LOG_SAVE, "%s %s", mWarning == ReadAndWrite? "Saving" : "Closing", mFilename.toUtf8().c_str());
 }
@@ -447,7 +450,7 @@ void WzConfig::nextArrayItem()
 	}
 }
 
-int WzConfig::remainingArrayItems()
+size_t WzConfig::remainingArrayItems()
 {
 	return mArray.size();
 }
