@@ -19,6 +19,7 @@
 
 #include "lib/framework/frame.h"
 #include <physfs.h>
+#include <limits>
 #include "lib/framework/physfs_ext.h"
 
 #include <vorbis/vorbisfile.h>
@@ -87,7 +88,9 @@ static size_t wz_oggVorbis_read(void *ptr, size_t size, size_t nmemb, void *data
 	fileHandle = ((struct OggVorbisDecoderState *)datasource)->fileHandle;
 	ASSERT(fileHandle != nullptr, "Bad PhysicsFS file handle passed in");
 
-	return WZ_PHYSFS_readBytes(fileHandle, ptr, size * nmemb);
+	size_t readLen = size * nmemb;
+	ASSERT(readLen <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "readLen (%zu) exceeds PHYSFS_uint32::max", readLen);
+	return WZ_PHYSFS_readBytes(fileHandle, ptr, static_cast<PHYSFS_uint32>(readLen));
 }
 
 static int wz_oggVorbis_seek(void *datasource, ogg_int64_t offset, int whence)
@@ -303,7 +306,9 @@ soundDataBuffer *sound_DecodeOggVorbis(struct OggVorbisDecoderState *decoder, si
 	{
 		// Decode
 		int section;
-		result = ov_read(&decoder->oggVorbis_stream, &buffer->data[size], bufferSize - size, OGG_ENDIAN, 2, 1, &section);
+		size_t readLen = bufferSize - size;
+		ASSERT(readLen <= static_cast<size_t>(std::numeric_limits<int>::max()), "readLen (%zu) exceeds int::max", readLen);
+		result = ov_read(&decoder->oggVorbis_stream, &buffer->data[size], static_cast<int>(readLen), OGG_ENDIAN, 2, 1, &section);
 
 		if (result < 0)
 		{

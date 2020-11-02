@@ -344,7 +344,7 @@ bool PHYSFS_printf(PHYSFS_file *file, const char *format, ...)
 	vssprintf(vaBuffer, format, ap);
 	va_end(ap);
 
-	return WZ_PHYSFS_writeBytes(file, vaBuffer, strlen(vaBuffer));
+	return WZ_PHYSFS_writeBytes(file, vaBuffer, static_cast<PHYSFS_uint32>(strlen(vaBuffer)));
 }
 
 std::string video_backend_names[] =
