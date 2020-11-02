@@ -1755,28 +1755,20 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 	return psBuilding;
 }
 
-STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector2i xy, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state)
+STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t direction, unsigned moduleIndex, STRUCT_STATES state)
 {
 	STRUCTURE *blueprint;
 
 	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "No blueprint stats");
 	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getName(psStats));
 
-	Vector3i pos(xy, INT32_MIN);
 	Rotation rot(snapDirection(direction), 0, 0); // Round direction to nearest 90°.
-
-	StructureBounds b = getStructureBounds(psStats, xy, direction);
-	for (int j = 0; j <= b.size.y; ++j)
-		for (int i = 0; i <= b.size.x; ++i)
-		{
-			pos.z = std::max(pos.z, map_TileHeight(b.map.x + i, b.map.y + j));
-		}
 
 	int moduleNumber = 0;
 	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
 	if (IsStatExpansionModule(psStats))
 	{
-		STRUCTURE *baseStruct = castStructure(worldTile(xy)->psObject);
+		STRUCTURE *baseStruct = castStructure(worldTile(pos.xy())->psObject);
 		if (baseStruct != nullptr)
 		{
 			if (moduleIndex == 0)

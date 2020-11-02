@@ -285,12 +285,12 @@ struct Blueprint
 {
 	Blueprint()
 		: stats(nullptr)
-		, pos({0,0})
+		, pos({0,0,0})
 		, dir(0)
 		, index(0)
 		, state(SS_BLUEPRINT_INVALID)
 	{}
-	Blueprint(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir, uint32_t index, STRUCT_STATES state)
+	Blueprint(STRUCTURE_STATS const *stats, Vector3i pos, uint16_t dir, uint32_t index, STRUCT_STATES state)
 		: stats(stats)
 		, pos(pos)
 		, dir(dir)
@@ -310,6 +310,10 @@ struct Blueprint
 		if (pos.y != b.pos.y)
 		{
 			return pos.y < b.pos.y ? -1 : 1;
+		}
+		if (pos.z != b.pos.z)
+		{
+			return pos.z < b.pos.z ? -1 : 1;
 		}
 		if (dir != b.dir)
 		{
@@ -348,7 +352,7 @@ struct Blueprint
 	}
 
 	STRUCTURE_STATS const *stats;
-	Vector2i pos;
+	Vector3i pos;
 	uint16_t dir;
 	uint32_t index;
 	STRUCT_STATES state;
@@ -467,7 +471,7 @@ static Blueprint getTileBlueprint(int mapX, int mapY)
 		}
 	}
 
-	return Blueprint(nullptr, Vector2i(), 0, 0, SS_BEING_BUILT);
+	return Blueprint(nullptr, Vector3i(), 0, 0, SS_BEING_BUILT);
 }
 
 STRUCTURE *getTileBlueprintStructure(int mapX, int mapY)
@@ -1671,7 +1675,15 @@ static void drawLineBuild(STRUCTURE_STATS const *psStats, Vector2i pos, Vector2i
 		{
 			continue;  // construction has started
 		}
-		Blueprint blueprint(psStats, cur, direction, 0, state);
+
+		StructureBounds b = getStructureBounds(psStats, cur, direction);
+		int z = 0;
+		for (int j = 0; j <= b.size.y; ++j)
+			for (int i = 0; i <= b.size.x; ++i)
+			{
+				z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
+			}
+		Blueprint blueprint(psStats, Vector3i(cur, z), direction, 0, state);
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1707,7 +1719,14 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 	}
 	if ((order.type == DORDER_BUILD || order.type == DORDER_BUILDMODULE) && !tileHasIncompatibleStructure(mapTile(map_coord(pos)), stats, order.index))
 	{
-		Blueprint blueprint(stats, pos, order.direction, order.index, state);
+		StructureBounds b = getStructureBounds(stats, pos, order.direction);
+		int z = 0;
+		for (int j = 0; j <= b.size.y; ++j)
+			for (int i = 0; i <= b.size.x; ++i)
+			{
+				z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
+			}
+		Blueprint blueprint(stats, Vector3i(pos, z), order.direction, order.index, state);
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1715,6 +1734,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 std::unique_ptr<Blueprint> playerBlueprint = std::unique_ptr<Blueprint>(new Blueprint());
 std::unique_ptr<ValueTracker> playerBlueprintX = std::unique_ptr<ValueTracker>(new ValueTracker());
 std::unique_ptr<ValueTracker> playerBlueprintY = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> playerBlueprintZ = std::unique_ptr<ValueTracker>(new ValueTracker());
 
 void displayBlueprints(const glm::mat4 &viewMatrix)
 {
@@ -1757,7 +1777,15 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 					height = sBuildDetails.width;
 				}
 				// a single building
-				Vector2i volatile pos(world_coord(sBuildDetails.x) + world_coord(width) / 2, world_coord(sBuildDetails.y) + world_coord(height) / 2);
+				Vector2i pos(world_coord(sBuildDetails.x) + world_coord(width) / 2, world_coord(sBuildDetails.y) + world_coord(height) / 2);
+
+				StructureBounds b = getStructureBounds(stats, pos, direction);
+				int z = 0;
+				for (int j = 0; j <= b.size.y; ++j)
+					for (int i = 0; i <= b.size.x; ++i)
+					{
+						z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
+					}
 				
 				if(!playerBlueprintX->isTracking()){
 					playerBlueprintX->startTracking(pos.x)->setSpeed(20);
@@ -1765,12 +1793,16 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 				if(!playerBlueprintY->isTracking()){
 					playerBlueprintY->startTracking(pos.y)->setSpeed(20);
 				}
+				if(!playerBlueprintZ->isTracking()){
+					playerBlueprintZ->startTracking(z)->setSpeed(20);
+				}
 
 				playerBlueprintX->setTarget(pos.x)->update();
 				playerBlueprintY->setTarget(pos.y)->update();
+				playerBlueprintZ->setTarget(z)->update();
 
 				playerBlueprint->stats = stats;
-				playerBlueprint->pos = { std::round(playerBlueprintX->getCurrent()), std::round(playerBlueprintY->getCurrent()) };
+				playerBlueprint->pos = { playerBlueprintX->getCurrent(), playerBlueprintY->getCurrent(), playerBlueprintZ->getCurrent() };
 				playerBlueprint->dir = direction;
 				playerBlueprint->index = 0;
 				playerBlueprint->state = state;
@@ -1781,6 +1813,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 	} else {
 		playerBlueprintX->stopTracking();
 		playerBlueprintY->stopTracking();
+		playerBlueprintZ->stopTracking();
 	}
 
 	// now we draw the blueprints for all ordered buildings
