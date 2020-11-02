@@ -621,7 +621,7 @@ void processMouseClickInput()
 	}
 
 	/* Right mouse click kills a building placement */
-	if (mouseReleased(MOUSE_RMB) &&
+	if (!rotActive && mouseReleased(MOUSE_RMB) &&
 	    (buildState == BUILD3D_POS || buildState == BUILD3D_VALID))
 	{
 		/* Stop the placement */
