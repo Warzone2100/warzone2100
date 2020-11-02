@@ -1,0 +1,352 @@
+diff --git a/cutils.c b/cutils.c
+--- a/cutils.c
++++ b/cutils.c
+@@ -29,6 +29,10 @@
+ 
+ #include "cutils.h"
+ 
++#if defined(_MSC_VER)
++#include "win32-gettimeofday.c"
++#endif
++
+ void pstrcpy(char *buf, int buf_size, const char *str)
+ {
+     int c;
+@@ -297,7 +301,7 @@ int unicode_from_utf8(const uint8_t *p, int max_len, const uint8_t **pp)
+             return -1;
+         c = (c << 6) | (b & 0x3f);
+     }
+-    if (c < utf8_min_code[l - 1])
++    if (c < (int)utf8_min_code[l - 1])
+         return -1;
+     *pp = p;
+     return c;
+diff --git a/cutils.h b/cutils.h
+--- a/cutils.h
++++ b/cutils.h
+@@ -28,14 +28,55 @@
+ #include <stdlib.h>
+ #include <inttypes.h>
+ 
++#if defined(_MSC_VER)
++  #if !defined(NOMINMAX)
++    #define NOMINMAX // For windows.h
++  #endif
++  #include <windows.h>
++  #include <intrin.h>
++#endif
++
+ /* set if CPU is big endian */
+ #undef WORDS_BIGENDIAN
+ 
+-#define likely(x)       __builtin_expect(!!(x), 1)
+-#define unlikely(x)     __builtin_expect(!!(x), 0)
+-#define force_inline inline __attribute__((always_inline))
+-#define no_inline __attribute__((noinline))
+-#define __maybe_unused __attribute__((unused))
++#if defined(__has_attribute)
++  #define QUICKJS_HAS_ATTRIBUTE(x) __has_attribute(x)
++#else
++  #define QUICKJS_HAS_ATTRIBUTE(x) 0
++  #define __attribute__(x) /* not supported */
++  #define __attribute(x) /* not supported */
++#endif
++
++#if QUICKJS_HAS_ATTRIBUTE(__builtin_expect)
++  #define likely(x)       __builtin_expect(!!(x), 1)
++  #define unlikely(x)     __builtin_expect(!!(x), 0)
++#else
++  #define likely(x)       (x)
++  #define unlikely(x)     (x)
++#endif
++#if QUICKJS_HAS_ATTRIBUTE(always_inline)
++  #define force_inline inline __attribute__((always_inline))
++#elif defined(_MSC_VER)
++  #define force_inline __forceinline
++#else
++  #define force_inline /* not supported */
++#endif
++#if QUICKJS_HAS_ATTRIBUTE(noinline)
++  #define no_inline __attribute__((noinline))
++#elif defined(_MSC_VER)
++  #define no_inline __declspec(noinline)
++#else
++  #define no_inline /* not supported */
++#endif
++#if QUICKJS_HAS_ATTRIBUTE(unused)
++  #define __maybe_unused __attribute__((unused))
++#else
++  #define __maybe_unused /* not supported */
++#endif
++#if defined(_MSC_VER)
++  #include <BaseTsd.h>
++  typedef SSIZE_T ssize_t;
++#endif
+ 
+ #define xglue(x, y) x ## y
+ #define glue(x, y) xglue(x, y)
+@@ -58,6 +99,10 @@ enum {
+ };
+ #endif
+ 
++#if defined(_MSC_VER)
++int gettimeofday(struct timeval * tp, struct timezone * tzp);
++#endif
++
+ void pstrcpy(char *buf, int buf_size, const char *str);
+ char *pstrcat(char *buf, int buf_size, const char *s);
+ int strstart(const char *str, const char *val, const char **ptr);
+@@ -114,27 +159,91 @@ static inline int64_t min_int64(int64_t a, int64_t b)
+ /* WARNING: undefined if a = 0 */
+ static inline int clz32(unsigned int a)
+ {
++#if defined(_MSC_VER)
++	unsigned long idx;
++	_BitScanReverse(&idx, a);
++	return 31 ^ idx;
++#else
+     return __builtin_clz(a);
++#endif
+ }
+ 
+ /* WARNING: undefined if a = 0 */
+ static inline int clz64(uint64_t a)
+ {
++#if defined(_MSC_VER)
++	unsigned long where;
++	// BitScanReverse scans from MSB to LSB for first set bit.
++	// Returns 0 if no set bit is found.
++#if INTPTR_MAX >= INT64_MAX // 64-bit
++	if (_BitScanReverse64(&where, a))
++	  return (int)(63 - where);
++#else
++	// Scan the high 32 bits.
++	if (_BitScanReverse(&where, (uint32_t)(a >> 32)))
++		return (int)(63 - (where + 32)); // Create a bit offset from the MSB.
++	// Scan the low 32 bits.
++	if (_BitScanReverse(&where, (uint32_t)(a)))
++		return (int)(63 - where);
++#endif
++	return 64; // Undefined Behavior.
++#else
+     return __builtin_clzll(a);
++#endif
+ }
+ 
+ /* WARNING: undefined if a = 0 */
+ static inline int ctz32(unsigned int a)
+ {
++#if defined(_MSC_VER)
++	unsigned long idx;
++	_BitScanForward(&idx, a);
++	return 31 ^ idx;
++#else
+     return __builtin_ctz(a);
++#endif
+ }
+ 
+ /* WARNING: undefined if a = 0 */
+ static inline int ctz64(uint64_t a)
+ {
++#if defined(_MSC_VER)
++	unsigned long where;
++	// Search from LSB to MSB for first set bit.
++	// Returns zero if no set bit is found.
++#if INTPTR_MAX >= INT64_MAX // 64-bit
++	if (_BitScanForward64(&where, a))
++		return (int)(where);
++#else
++	// Win32 doesn't have _BitScanForward64 so emulate it with two 32 bit calls.
++	// Scan the Low Word.
++	if (_BitScanForward(&where, (uint32_t)(a)))
++		return (int)(where);
++	// Scan the High Word.
++	if (_BitScanForward(&where, (uint32_t)(a >> 32)))
++		return (int)(where + 32); // Create a bit offset from the LSB.
++#endif
++	return 64;
++#else
+     return __builtin_ctzll(a);
++#endif
+ }
+ 
++#if defined(_MSC_VER)
++#pragma pack(push, 1)
++struct packed_u64 {
++	uint64_t v;
++};
++
++struct packed_u32 {
++	uint32_t v;
++};
++
++struct packed_u16 {
++	uint16_t v;
++};
++#pragma pack(pop)
++#else
+ struct __attribute__((packed)) packed_u64 {
+     uint64_t v;
+ };
+@@ -146,6 +255,7 @@ struct __attribute__((packed)) packed_u32 {
+ struct __attribute__((packed)) packed_u16 {
+     uint16_t v;
+ };
++#endif
+ 
+ static inline uint64_t get_u64(const uint8_t *tab)
+ {
+diff --git a/libregexp.c b/libregexp.c
+--- a/libregexp.c
++++ b/libregexp.c
+@@ -465,7 +465,7 @@ static int parse_digits(const uint8_t **pp, BOOL allow_overflow)
+         p++;
+     }
+     *pp = p;
+-    return v;
++    return (int)v;
+ }
+ 
+ static int re_parse_expect(REParseState *s, const uint8_t **pp, int c)
+diff --git a/quickjs.c b/quickjs.c
+--- a/quickjs.c
++++ b/quickjs.c
+@@ -28,7 +28,14 @@
+ #include <inttypes.h>
+ #include <string.h>
+ #include <assert.h>
++#if !defined(QUICKJS_HAVE_SYS_TIME_H)
++  #if defined(__linux__) || defined(__APPLE__)
++    #define QUICKJS_HAVE_SYS_TIME_H
++  #endif
++#endif
++#if defined(QUICKJS_HAVE_SYS_TIME_H)
+ #include <sys/time.h>
++#endif
+ #include <time.h>
+ #include <fenv.h>
+ #include <math.h>
+@@ -48,7 +55,7 @@
+ 
+ #define OPTIMIZE         1
+ #define SHORT_OPCODES    1
+-#if defined(EMSCRIPTEN)
++#if defined(EMSCRIPTEN) || defined(_MSC_VER)
+ #define DIRECT_DISPATCH  0
+ #else
+ #define DIRECT_DISPATCH  1
+@@ -1564,17 +1571,39 @@ static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
+     return FALSE;
+ }
+ #else
++
++#if !defined(__has_builtin)
++  #define __has_builtin(x) 0
++#endif
++
++#if defined(__GNUC__) || __has_builtin(__builtin_frame_address)
+ /* Note: OS and CPU dependent */
+ static inline uint8_t *js_get_stack_pointer(void)
+ {
+     return __builtin_frame_address(0);
+ }
++#elif defined(_MSC_VER)
++static inline uint8_t *js_get_stack_pointer(void)
++{
++    return _AddressOfReturnAddress();
++}
++#else
++static inline uint8_t *js_get_stack_pointer(void)
++{
++    return NULL;
++}
++#define NO_VALID_STACK_POINTER
++#endif
+ 
+ static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
+ {
++#if defined(NO_VALID_STACK_POINTER)
++    return FALSE;
++#else
+     ptrdiff_t size;
+     size = rt->stack_top - js_get_stack_pointer();
+     return unlikely((size + (ptrdiff_t)alloca_size) > (ptrdiff_t)rt->stack_size);
++#endif
+ }
+ #endif
+ 
+@@ -10164,7 +10193,11 @@ static JSValue js_atof(JSContext *ctx, const char *str, const char **pp,
+             } else
+ #endif
+             {
++#if defined(HUGE_VAL) || defined(_MSC_VER)
++                double d = HUGE_VAL;
++#else
+                 double d = 1.0 / 0.0;
++#endif
+                 if (is_neg)
+                     d = -d;
+                 val = JS_NewFloat64(ctx, d);
+@@ -41345,7 +41378,11 @@ static JSValue js_math_min_max(JSContext *ctx, JSValueConst this_val,
+     uint32_t tag;
+ 
+     if (unlikely(argc == 0)) {
++#if defined(HUGE_VAL) || defined(_MSC_VER)
++        return __JS_NewFloat64(ctx, is_max ? -HUGE_VAL : HUGE_VAL);
++#else
+         return __JS_NewFloat64(ctx, is_max ? -1.0 / 0.0 : 1.0 / 0.0);
++#endif
+     }
+ 
+     tag = JS_VALUE_GET_TAG(argv[0]);
+@@ -41517,6 +41554,11 @@ static JSValue js_math_random(JSContext *ctx, JSValueConst this_val,
+     return __JS_NewFloat64(ctx, u.d - 1.0);
+ }
+ 
++#if defined(_MSC_VER)
++  #pragma function (ceil)	// Fix MSVC error C2099: initializer is not a constant
++  #pragma function (floor)	// Fix MSVC error C2099: initializer is not a constant
++#endif
++
+ static const JSCFunctionListEntry js_math_funcs[] = {
+     JS_CFUNC_MAGIC_DEF("min", 2, js_math_min_max, 0 ),
+     JS_CFUNC_MAGIC_DEF("max", 2, js_math_min_max, 1 ),
+@@ -47458,7 +47500,11 @@ static const JSCFunctionListEntry js_global_funcs[] = {
+     JS_CFUNC_MAGIC_DEF("encodeURIComponent", 1, js_global_encodeURI, 1 ),
+     JS_CFUNC_DEF("escape", 1, js_global_escape ),
+     JS_CFUNC_DEF("unescape", 1, js_global_unescape ),
++#if defined(HUGE_VAL) || defined(_MSC_VER)
++    JS_PROP_DOUBLE_DEF("Infinity", HUGE_VAL, 0 ),
++#else
+     JS_PROP_DOUBLE_DEF("Infinity", 1.0 / 0.0, 0 ),
++#endif
+     JS_PROP_DOUBLE_DEF("NaN", NAN, 0 ),
+     JS_PROP_UNDEFINED_DEF("undefined", 0 ),
+ 
+diff --git a/quickjs.h b/quickjs.h
+--- a/quickjs.h
++++ b/quickjs.h
+@@ -40,7 +40,11 @@ extern "C" {
+ #else
+ #define js_likely(x)     (x)
+ #define js_unlikely(x)   (x)
++#if defined(_MSC_VER)
++#define js_force_inline  __forceinline
++#else
+ #define js_force_inline  inline
++#endif
+ #define __js_printf_like(a, b)
+ #endif
+ 
+@@ -517,9 +521,9 @@ static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
+ {
+     JSValue v;
+     if (val == (int32_t)val) {
+-        v = JS_NewInt32(ctx, val);
++        v = JS_NewInt32(ctx, (int32_t)val);
+     } else {
+-        v = __JS_NewFloat64(ctx, val);
++        v = __JS_NewFloat64(ctx, (double)val);
+     }
+     return v;
+ }

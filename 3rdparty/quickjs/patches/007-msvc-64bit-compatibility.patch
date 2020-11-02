@@ -1,0 +1,212 @@
+diff --git a/quickjs.c b/quickjs.c
+--- a/quickjs.c
++++ b/quickjs.c
+@@ -1584,7 +1584,7 @@ static inline uint8_t *js_get_stack_pointer(void)
+ {
+     return __builtin_frame_address(0);
+ }
+-#elif defined(_MSC_VER)
++#elif defined(_MSC_VER) && !defined(_WIN64)
+ static inline uint8_t *js_get_stack_pointer(void)
+ {
+     return _AddressOfReturnAddress();
+@@ -7212,7 +7212,7 @@ static int JS_DefinePrivateField(JSContext *ctx, JSValueConst obj,
+         JS_ThrowTypeErrorNotASymbol(ctx);
+         goto fail;
+     }
+-    prop = js_symbol_to_atom(ctx, (JSValue)name);
++    prop = js_symbol_to_atom(ctx, JS_VALUE_CONST_CAST(name));
+     p = JS_VALUE_GET_OBJ(obj);
+     prs = find_own_property(&pr, p, prop);
+     if (prs) {
+@@ -7243,7 +7243,7 @@ static JSValue JS_GetPrivateField(JSContext *ctx, JSValueConst obj,
+     /* safety check */
+     if (unlikely(JS_VALUE_GET_TAG(name) != JS_TAG_SYMBOL))
+         return JS_ThrowTypeErrorNotASymbol(ctx);
+-    prop = js_symbol_to_atom(ctx, (JSValue)name);
++    prop = js_symbol_to_atom(ctx, JS_VALUE_CONST_CAST(name));
+     p = JS_VALUE_GET_OBJ(obj);
+     prs = find_own_property(&pr, p, prop);
+     if (!prs) {
+@@ -7270,7 +7270,7 @@ static int JS_SetPrivateField(JSContext *ctx, JSValueConst obj,
+         JS_ThrowTypeErrorNotASymbol(ctx);
+         goto fail;
+     }
+-    prop = js_symbol_to_atom(ctx, (JSValue)name);
++    prop = js_symbol_to_atom(ctx, JS_VALUE_CONST_CAST(name));
+     p = JS_VALUE_GET_OBJ(obj);
+     prs = find_own_property(&pr, p, prop);
+     if (!prs) {
+@@ -7360,7 +7360,7 @@ static int JS_CheckBrand(JSContext *ctx, JSValueConst obj, JSValueConst func)
+     if (unlikely(JS_VALUE_GET_TAG(obj) != JS_TAG_OBJECT))
+         goto not_obj;
+     p = JS_VALUE_GET_OBJ(obj);
+-    prs = find_own_property(&pr, p, js_symbol_to_atom(ctx, (JSValue)brand));
++    prs = find_own_property(&pr, p, js_symbol_to_atom(ctx, JS_VALUE_CONST_CAST(brand)));
+     if (!prs) {
+         JS_ThrowTypeError(ctx, "invalid brand on object");
+         return -1;
+@@ -15954,7 +15954,7 @@ static JSValue js_call_c_function(JSContext *ctx, JSValueConst func_obj,
+ #else
+     sf->js_mode = 0;
+ #endif
+-    sf->cur_func = (JSValue)func_obj;
++    sf->cur_func = JS_VALUE_CONST_CAST(func_obj);
+     sf->arg_count = argc;
+     arg_buf = argv;
+ 
+@@ -16198,7 +16198,7 @@ static JSValue JS_CallInternal(JSContext *caller_ctx, JSValueConst func_obj,
+     sf->js_mode = b->js_mode;
+     arg_buf = argv;
+     sf->arg_count = argc;
+-    sf->cur_func = (JSValue)func_obj;
++    sf->cur_func = JS_VALUE_CONST_CAST(func_obj);
+     init_list_head(&sf->var_ref_list);
+     var_refs = p->u.func.var_refs;
+ 
+@@ -38865,8 +38865,8 @@ static int64_t JS_FlattenIntoArray(JSContext *ctx, JSValueConst target,
+         if (!JS_IsUndefined(mapperFunction)) {
+             JSValueConst args[3] = { element, JS_NewInt64(ctx, sourceIndex), source };
+             element = JS_Call(ctx, mapperFunction, thisArg, 3, args);
+-            JS_FreeValue(ctx, (JSValue)args[0]);
+-            JS_FreeValue(ctx, (JSValue)args[1]);
++            JS_FreeValue(ctx, JS_VALUE_CONST_CAST(args[0]));
++            JS_FreeValue(ctx, JS_VALUE_CONST_CAST(args[1]));
+             if (JS_IsException(element))
+                 return -1;
+         }
+@@ -40324,7 +40324,7 @@ static JSValue js_string_match(JSContext *ctx, JSValueConst this_val,
+         str = JS_NewString(ctx, "g");
+         if (JS_IsException(str))
+             goto fail;
+-        args[args_len++] = (JSValueConst)str;
++        args[args_len++] = JS_VALUE_MAKE_CONST(str);
+     }
+     rx = JS_CallConstructor(ctx, ctx->regexp_ctor, args_len, args);
+     JS_FreeValue(ctx, str);
+@@ -45354,7 +45354,7 @@ static JSMapRecord *map_add_record(JSContext *ctx, JSMapState *s,
+     } else {
+         JS_DupValue(ctx, key);
+     }
+-    mr->key = (JSValue)key;
++    mr->key = JS_VALUE_CONST_CAST(key);
+     h = map_hash_key(ctx, key) & (s->hash_size - 1);
+     list_add_tail(&mr->hash_link, &s->hash_table[h]);
+     list_add_tail(&mr->link, &s->records);
+@@ -45576,7 +45576,7 @@ static JSValue js_map_forEach(JSContext *ctx, JSValueConst this_val,
+                 args[0] = args[1];
+             else
+                 args[0] = JS_DupValue(ctx, mr->value);
+-            args[2] = (JSValue)this_val;
++            args[2] = JS_VALUE_CONST_CAST(this_val);
+             ret = JS_Call(ctx, func, this_arg, 3, (JSValueConst *)args);
+             JS_FreeValue(ctx, args[0]);
+             if (!magic)
+@@ -46554,7 +46554,7 @@ static JSValue js_promise_all(JSContext *ctx, JSValueConst this_val,
+                 goto fail_reject;
+             }
+             resolve_element_data[0] = JS_NewBool(ctx, FALSE);
+-            resolve_element_data[1] = (JSValueConst)JS_NewInt32(ctx, index);
++            resolve_element_data[1] = JS_VALUE_MAKE_CONST(JS_NewInt32(ctx, index));
+             resolve_element_data[2] = values;
+             resolve_element_data[3] = resolving_funcs[is_promise_any];
+             resolve_element_data[4] = resolve_element_env;
+@@ -46924,7 +46924,7 @@ static JSValue js_async_from_sync_iterator_unwrap_func_create(JSContext *ctx,
+ {
+     JSValueConst func_data[1];
+ 
+-    func_data[0] = (JSValueConst)JS_NewBool(ctx, done);
++    func_data[0] = JS_VALUE_MAKE_CONST(JS_NewBool(ctx, done));
+     return JS_NewCFunctionData(ctx, js_async_from_sync_iterator_unwrap,
+                                1, 0, 1, func_data);
+ }
+@@ -52279,8 +52279,8 @@ static int js_TA_cmp_generic(const void *a, const void *b, void *opaque) {
+             psc->exception = 1;
+         }
+     done:
+-        JS_FreeValue(ctx, (JSValue)argv[0]);
+-        JS_FreeValue(ctx, (JSValue)argv[1]);
++        JS_FreeValue(ctx, JS_VALUE_CONST_CAST(argv[0]));
++        JS_FreeValue(ctx, JS_VALUE_CONST_CAST(argv[1]));
+     }
+     return cmp;
+ }
+diff --git a/quickjs.h b/quickjs.h
+--- a/quickjs.h
++++ b/quickjs.h
+@@ -105,6 +105,8 @@ typedef struct JSRefCountHeader {
+    for objective C) */
+ typedef struct __JSValue *JSValue;
+ typedef const struct __JSValue *JSValueConst;
++#define JS_VALUE_CONST_CAST(cVal) (JSValue)cVal
++#define JS_VALUE_MAKE_CONST(val) (JSValueConst)val
+ 
+ #define JS_VALUE_GET_TAG(v) (int)((uintptr_t)(v) & 0xf)
+ /* same as JS_VALUE_GET_TAG, but return JS_TAG_FLOAT64 with NaN boxing */
+@@ -136,6 +138,8 @@ static inline JS_BOOL JS_VALUE_IS_NAN(JSValue v)
+ typedef uint64_t JSValue;
+ 
+ #define JSValueConst JSValue
++#define JS_VALUE_CONST_CAST(cVal) cVal
++#define JS_VALUE_MAKE_CONST(val) val
+ 
+ #define JS_VALUE_GET_TAG(v) (int)((v) >> 32)
+ #define JS_VALUE_GET_INT(v) (int)(v)
+@@ -201,7 +205,7 @@ static inline JS_BOOL JS_VALUE_IS_NAN(JSValue v)
+ typedef union JSValueUnion {
+     int32_t int32;
+     double float64;
+-    void *ptr;
++    uintptr_t ptr;
+ } JSValueUnion;
+ 
+ typedef struct JSValue {
+@@ -210,6 +214,8 @@ typedef struct JSValue {
+ } JSValue;
+ 
+ #define JSValueConst JSValue
++#define JS_VALUE_CONST_CAST(cVal) cVal
++#define JS_VALUE_MAKE_CONST(val) val
+ 
+ #define JS_VALUE_GET_TAG(v) ((int32_t)(v).tag)
+ /* same as JS_VALUE_GET_TAG, but return JS_TAG_FLOAT64 with NaN boxing */
+@@ -217,10 +223,10 @@ typedef struct JSValue {
+ #define JS_VALUE_GET_INT(v) ((v).u.int32)
+ #define JS_VALUE_GET_BOOL(v) ((v).u.int32)
+ #define JS_VALUE_GET_FLOAT64(v) ((v).u.float64)
+-#define JS_VALUE_GET_PTR(v) ((v).u.ptr)
++#define JS_VALUE_GET_PTR(v) ((void *)((v).u.ptr))
+ 
+ #define JS_MKVAL(tag, val) (JSValue){ (JSValueUnion){ .int32 = val }, tag }
+-#define JS_MKPTR(tag, p) (JSValue){ (JSValueUnion){ .ptr = p }, tag }
++#define JS_MKPTR(tag, p) (JSValue){ (JSValueUnion){ .ptr = (uintptr_t)(void *)p }, tag }
+ 
+ #if defined(__cplusplus)
+ #undef JS_MKVAL
+@@ -228,7 +234,7 @@ typedef struct JSValue {
+ #define with(T, ...)\
+ 	([&]{ T t{}; __VA_ARGS__; return t; }())
+ #define JS_MKVAL(tag, val) JSValue{ with(JSValueUnion, t.int32 = val), tag }
+-#define JS_MKPTR(tag, p) JSValue{ with(JSValueUnion, t.ptr = p), tag }
++#define JS_MKPTR(tag, p) JSValue{ with(JSValueUnion, t.ptr = (uintptr_t)(void *)p), tag }
+ #endif
+ 
+ #define JS_TAG_IS_FLOAT64(tag) ((unsigned)(tag) == JS_TAG_FLOAT64)
+@@ -675,7 +681,7 @@ static inline JSValue JS_DupValue(JSContext *ctx, JSValueConst v)
+         JSRefCountHeader *p = (JSRefCountHeader *)JS_VALUE_GET_PTR(v);
+         p->ref_count++;
+     }
+-    return (JSValue)v;
++    return JS_VALUE_CONST_CAST(v);
+ }
+ 
+ static inline JSValue JS_DupValueRT(JSRuntime *rt, JSValueConst v)
+@@ -684,7 +690,7 @@ static inline JSValue JS_DupValueRT(JSRuntime *rt, JSValueConst v)
+         JSRefCountHeader *p = (JSRefCountHeader *)JS_VALUE_GET_PTR(v);
+         p->ref_count++;
+     }
+-    return (JSValue)v;
++    return JS_VALUE_CONST_CAST(v);
+ }
+ 
+ int JS_ToBool(JSContext *ctx, JSValueConst val); /* return -1 for JS_EXCEPTION */
