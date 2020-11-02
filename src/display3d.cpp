@@ -1683,7 +1683,7 @@ static void drawLineBuild(STRUCTURE_STATS const *psStats, Vector2i pos, Vector2i
 			{
 				z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
 			}
-		Blueprint blueprint(psStats, Vector3i(cur, z), direction, 0, state);
+		Blueprint blueprint(psStats, Vector3i(cur, z), snapDirection(direction), 0, state); // snapDirection may be unnecessary here
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1726,7 +1726,7 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 			{
 				z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
 			}
-		Blueprint blueprint(stats, Vector3i(pos, z), order.direction, order.index, state);
+		Blueprint blueprint(stats, Vector3i(pos, z), snapDirection(order.direction), order.index, state);
 		blueprints.push_back(blueprint);
 	}
 }
@@ -1735,6 +1735,7 @@ std::unique_ptr<Blueprint> playerBlueprint = std::unique_ptr<Blueprint>(new Blue
 std::unique_ptr<ValueTracker> playerBlueprintX = std::unique_ptr<ValueTracker>(new ValueTracker());
 std::unique_ptr<ValueTracker> playerBlueprintY = std::unique_ptr<ValueTracker>(new ValueTracker());
 std::unique_ptr<ValueTracker> playerBlueprintZ = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> playerBlueprintDirection = std::unique_ptr<ValueTracker>(new ValueTracker());
 
 void displayBlueprints(const glm::mat4 &viewMatrix)
 {
@@ -1789,21 +1790,25 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 				
 				if(!playerBlueprintX->isTracking()){
 					playerBlueprintX->startTracking(pos.x)->setSpeed(20);
-				}
-				if(!playerBlueprintY->isTracking()){
 					playerBlueprintY->startTracking(pos.y)->setSpeed(20);
-				}
-				if(!playerBlueprintZ->isTracking()){
 					playerBlueprintZ->startTracking(z)->setSpeed(20);
+					playerBlueprintDirection->startTracking(direction)->setSpeed(20);
 				}
 
 				playerBlueprintX->setTarget(pos.x)->update();
 				playerBlueprintY->setTarget(pos.y)->update();
 				playerBlueprintZ->setTarget(z)->update();
 
+				if(playerBlueprintDirection->reachedTarget()){
+					playerBlueprintDirection->startTracking(playerBlueprintDirection->getTarget());
+					playerBlueprintDirection->setDelta((SWORD)(direction - playerBlueprintDirection->getTarget()));
+				}
+
+				playerBlueprintDirection->update();
+
 				playerBlueprint->stats = stats;
 				playerBlueprint->pos = { playerBlueprintX->getCurrent(), playerBlueprintY->getCurrent(), playerBlueprintZ->getCurrent() };
-				playerBlueprint->dir = direction;
+				playerBlueprint->dir = playerBlueprintDirection->getCurrent();
 				playerBlueprint->index = 0;
 				playerBlueprint->state = state;
 
@@ -1814,6 +1819,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 		playerBlueprintX->stopTracking();
 		playerBlueprintY->stopTracking();
 		playerBlueprintZ->stopTracking();
+		playerBlueprintDirection->stopTracking();
 	}
 
 	// now we draw the blueprints for all ordered buildings
