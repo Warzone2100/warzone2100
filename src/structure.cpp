@@ -1762,7 +1762,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "No blueprint stats");
 	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getName(psStats));
 
-	Rotation rot(snapDirection(direction), 0, 0); // Round direction to nearest 90°.
+	Rotation rot(direction, 0, 0);
 
 	int moduleNumber = 0;
 	std::vector<iIMDShape *> const *pIMD = &psStats->pIMD;
