@@ -303,3 +303,5 @@ win32/CodeAnalyst
 !/po/warzone2100.pot
 # Do not ignore patches in vcpkg override-ports folder
 !.ci/vcpkg/override-ports/*/*.patch
+# Do not ignore patches in quickjs patches folder
+!3rdparty/quickjs/patches/*.patch

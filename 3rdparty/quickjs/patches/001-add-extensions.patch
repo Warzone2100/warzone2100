@@ -1,0 +1,10 @@
+diff --git a/quickjs.c b/quickjs.c
+--- a/quickjs.c
++++ b/quickjs.c
+@@ -53573,3 +53573,6 @@ void JS_AddIntrinsicTypedArrays(JSContext *ctx)
+     JS_AddIntrinsicAtomics(ctx);
+ #endif
+ }
++
++#include "quickjs-debugger.c"
++#include "quickjs-limitedcontext.c"
