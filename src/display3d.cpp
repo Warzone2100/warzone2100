@@ -84,6 +84,7 @@
 #include "terrain.h"
 #include "warzoneconfig.h"
 #include "multistat.h"
+#include "animation.h"
 
 /********************  Prototypes  ********************/
 
@@ -282,6 +283,13 @@ static UDWORD	destTileX = 0, destTileY = 0;
 
 struct Blueprint
 {
+	Blueprint()
+		: stats(nullptr)
+		, pos({0,0})
+		, dir(0)
+		, index(0)
+		, state(SS_BLUEPRINT_INVALID)
+	{}
 	Blueprint(STRUCTURE_STATS const *stats, Vector2i pos, uint16_t dir, uint32_t index, STRUCT_STATES state)
 		: stats(stats)
 		, pos(pos)
@@ -1704,6 +1712,10 @@ static void renderBuildOrder(DroidOrder const &order, STRUCT_STATES state)
 	}
 }
 
+std::unique_ptr<Blueprint> playerBlueprint = std::unique_ptr<Blueprint>(new Blueprint());
+std::unique_ptr<ValueTracker> playerBlueprintX = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> playerBlueprintY = std::unique_ptr<ValueTracker>(new ValueTracker());
+
 void displayBlueprints(const glm::mat4 &viewMatrix)
 {
 	blueprints.clear();  // Delete old blueprints and draw new ones.
@@ -1745,11 +1757,30 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 					height = sBuildDetails.width;
 				}
 				// a single building
-				Vector2i pos(world_coord(sBuildDetails.x) + world_coord(width) / 2, world_coord(sBuildDetails.y) + world_coord(height) / 2);
-				Blueprint blueprint(stats, pos, direction, 0, state);
-				blueprints.push_back(blueprint);
+				Vector2i volatile pos(world_coord(sBuildDetails.x) + world_coord(width) / 2, world_coord(sBuildDetails.y) + world_coord(height) / 2);
+				
+				if(!playerBlueprintX->isTracking()){
+					playerBlueprintX->startTracking(pos.x)->setSpeed(20);
+				}
+				if(!playerBlueprintY->isTracking()){
+					playerBlueprintY->startTracking(pos.y)->setSpeed(20);
+				}
+
+				playerBlueprintX->setTarget(pos.x)->update();
+				playerBlueprintY->setTarget(pos.y)->update();
+
+				playerBlueprint->stats = stats;
+				playerBlueprint->pos = { std::round(playerBlueprintX->getCurrent()), std::round(playerBlueprintY->getCurrent()) };
+				playerBlueprint->dir = direction;
+				playerBlueprint->index = 0;
+				playerBlueprint->state = state;
+
+				blueprints.push_back(*playerBlueprint);
 			}
 		}
+	} else {
+		playerBlueprintX->stopTracking();
+		playerBlueprintY->stopTracking();
 	}
 
 	// now we draw the blueprints for all ordered buildings
