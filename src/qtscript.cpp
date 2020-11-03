@@ -1495,7 +1495,11 @@ bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from)
 //__
 bool triggerEventChat(int from, int to, const char *message)
 {
-	ASSERT_OR_RETURN(false, scriptsReady, "Scripts not initialized yet");
+	if (!scriptsReady)
+	{
+		// just ignore chat messages before scripts are ready / initialized
+		return false;
+	}
 	ASSERT_OR_RETURN(false, message, "No message provided");
 	for (auto *instance : scripts)
 	{
