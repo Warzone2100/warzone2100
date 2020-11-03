@@ -3556,7 +3556,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(hackGetObj, 3); // WZAPI
 	JS_REGISTER_FUNC2(hackAssert, 2, 2 + MAX_JS_VARARGS); // WZAPI
 	JS_REGISTER_FUNC2(hackMarkTiles, 1, 4); // WZAPI
-	JS_REGISTER_FUNC(receiveAllEvents, 1); // WZAPI
+	JS_REGISTER_FUNC2(receiveAllEvents, 0, 1); // WZAPI
 	JS_REGISTER_FUNC(hackDoNotSave, 1); // WZAPI
 	JS_REGISTER_FUNC(hackPlayIngameAudio, 0); // WZAPI
 	JS_REGISTER_FUNC(hackStopIngameAudio, 0); // WZAPI
