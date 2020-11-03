@@ -399,14 +399,14 @@ public:
 	//__ if the structure was built by a droid. It is not triggered for building theft
 	//__ (check ```eventObjectTransfer``` for that).
 	//__
-	virtual bool handle_eventStructBuilt(const STRUCTURE *psStruct, const DROID *psDroid) override;
+	virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, const DROID *psDroid) override;
 
 	//__ ## eventStructureDemolish(structure[, droid])
 	//__
 	//__ An event that is run every time a structure begins to be demolished. This does
 	//__ not trigger again if the structure is partially demolished.
 	//__
-	virtual bool handle_eventStructDemolish(const STRUCTURE *psStruct, const DROID *psDroid) override;
+	virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, const DROID *psDroid) override;
 
 	//__ ## eventStructureReady(structure)
 	//__
@@ -2678,8 +2678,8 @@ IMPL_EVENT_HANDLER(eventPlayerLeft, int)
 IMPL_EVENT_HANDLER(eventCheatMode, bool)
 IMPL_EVENT_HANDLER(eventDroidIdle, const DROID *)
 IMPL_EVENT_HANDLER(eventDroidBuilt, const DROID *, const STRUCTURE *)
-IMPL_EVENT_HANDLER(eventStructBuilt, const STRUCTURE *, const DROID *)
-IMPL_EVENT_HANDLER(eventStructDemolish, const STRUCTURE *, const DROID *)
+IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, const DROID *)
+IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, const DROID *)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, const STRUCTURE *, int)
