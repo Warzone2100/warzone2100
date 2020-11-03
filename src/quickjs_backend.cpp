@@ -3438,7 +3438,7 @@ static void setStatsFunc(JSValue &base, JSContext *ctx, const std::string& name,
 		QuickJS_DefinePropertyValue(ctx, funcObjects[i], "name", JS_NewStringLen(ctx, name.c_str(), name.length()), 0);
 	}
 
-	JS_DefinePropertyGetSet(ctx, base, atom, getter, setter, js_stats_getter_setter_func[0].prop_flags);
+	JS_DefinePropertyGetSet(ctx, base, atom, getter, setter, js_stats_getter_setter_func[0].prop_flags | JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 
 	JS_FreeAtom(ctx, atom);
 }
@@ -3465,15 +3465,15 @@ JSValue constructUpgradesQuickJSValue(JSContext *ctx)
 				{
 					setStatsFunc(v, ctx, property.first, gameEntityRules.getPlayer(), property.second, gameEntityRules.getIndex());
 				}
-				QuickJS_DefinePropertyValue(ctx, entityBase, gameEntityName.c_str(), v, 0);
+				QuickJS_DefinePropertyValue(ctx, entityBase, gameEntityName.c_str(), v, JS_PROP_ENUMERABLE);
 			}
-			QuickJS_DefinePropertyValue(ctx, node, gameEntityClassName.c_str(), entityBase, 0);
+			QuickJS_DefinePropertyValue(ctx, node, gameEntityClassName.c_str(), entityBase, JS_PROP_ENUMERABLE);
 		}
 
 		// Finally
 		ASSERT(playerUpgrades.getPlayer() >= 0 && playerUpgrades.getPlayer() < MAX_PLAYERS, "Invalid player index");
 //		QuickJS_DefinePropertyValue(ctx, upgrades, std::to_string(playerUpgrades.getPlayer()).c_str(), node, 0);
-		JS_DefinePropertyValueUint32(ctx, upgrades, static_cast<uint32_t>(playerUpgrades.getPlayer()), node, 0);
+		JS_DefinePropertyValueUint32(ctx, upgrades, static_cast<uint32_t>(playerUpgrades.getPlayer()), node, JS_PROP_ENUMERABLE);
 	}
 
 	return upgrades;
@@ -3506,7 +3506,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	//== array contains a subset of the sparse array of rules information in the ```Stats``` global.
 	//== These values are defined:
 	JSValue upgrades = constructUpgradesQuickJSValue(ctx);
-	JS_DefinePropertyValueStr(ctx, global_obj, "Upgrades", upgrades, JS_PROP_ENUMERABLE);
+	JS_DefinePropertyValueStr(ctx, global_obj, "Upgrades", upgrades, JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 
 	// Register functions to the script engine here
 	JS_REGISTER_FUNC_NAME(_, 1, JS_FUNC_IMPL_NAME(translate)); // WZAPI
