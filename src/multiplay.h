@@ -245,7 +245,7 @@ bool sendScoreCheck();							//score check only(frontend)
 bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
-bool sendResearchStatus(STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
+bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
 
 void displayAIMessage(char *pStr, SDWORD from, SDWORD to);  //make AI process a message
 

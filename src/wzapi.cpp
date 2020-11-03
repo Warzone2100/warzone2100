@@ -1222,7 +1222,7 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 			}
 			if (!started) // found relevant item on the path?
 			{
-				sendResearchStatus(const_cast<STRUCTURE *>(psStruct), cur->index, player, true); // FIXME: Remove const_cast
+				sendResearchStatus(psStruct, cur->index, player, true);
 #if defined (DEBUG)
 				char sTemp[128];
 				snprintf(sTemp, sizeof(sTemp), "player:%d starts topic from script: %s", player, getID(cur));

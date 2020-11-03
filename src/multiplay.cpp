@@ -972,7 +972,7 @@ static bool recvResearch(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // New research stuff, so you can see what others are up to!
 // inform others that I'm researching this.
-bool sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart)
+bool sendResearchStatus(const STRUCTURE *psBuilding, uint32_t index, uint8_t player, bool bStart)
 {
 	if (!myResponsibility(player) || gameTime < 5)
 	{
@@ -986,7 +986,8 @@ bool sendResearchStatus(STRUCTURE *psBuilding, uint32_t index, uint8_t player, b
 	// If we know the building researching it then send its ID
 	if (psBuilding)
 	{
-		NETuint32_t(&psBuilding->id);
+		uint32_t buildingID = psBuilding->id;
+		NETuint32_t(&buildingID);
 	}
 	else
 	{
