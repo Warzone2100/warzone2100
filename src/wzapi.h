@@ -335,14 +335,14 @@ namespace wzapi
 		//__ if the structure was built by a droid. It is not triggered for building theft
 		//__ (check ```eventObjectTransfer``` for that).
 		//__
-		virtual bool handle_eventStructBuilt(const STRUCTURE *psStruct, const DROID *psDroid) = 0;
+		virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, const DROID *psDroid) = 0;
 
 		//__ ## eventStructureDemolish(structure[, droid])
 		//__
 		//__ An event that is run every time a structure begins to be demolished. This does
 		//__ not trigger again if the structure is partially demolished.
 		//__
-		virtual bool handle_eventStructDemolish(const STRUCTURE *psStruct, const DROID *psDroid) = 0;
+		virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, const DROID *psDroid) = 0;
 
 		//__ ## eventStructureReady(structure)
 		//__

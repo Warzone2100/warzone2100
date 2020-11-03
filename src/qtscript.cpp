@@ -1287,7 +1287,7 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psStruct->player || receiveAll)
 		{
-			instance->handle_eventStructBuilt(psStruct, psDroid);
+			instance->handle_eventStructureBuilt(psStruct, psDroid);
 		}
 	}
 	return true;
@@ -1307,7 +1307,7 @@ bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
 		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psStruct->player || receiveAll)
 		{
-			instance->handle_eventStructDemolish(psStruct, psDroid);
+			instance->handle_eventStructureDemolish(psStruct, psDroid);
 		}
 	}
 	return true;
