@@ -1851,30 +1851,30 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		JSValue box(const scr_radius& r, JSContext* ctx)
 		{
 			JSValue ret = JS_NewObject(ctx);
-			QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, SCRIPT_RADIUS), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "x", JS_NewInt32(ctx, r.x), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "y", JS_NewInt32(ctx, r.y), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "radius", JS_NewInt32(ctx, r.radius), 0);
+			QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, SCRIPT_RADIUS), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "x", JS_NewInt32(ctx, r.x), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "y", JS_NewInt32(ctx, r.y), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "radius", JS_NewInt32(ctx, r.radius), JS_PROP_C_W_E);
 			return ret;
 		}
 
 		JSValue box(const scr_area& r, JSContext* ctx)
 		{
 			JSValue ret = JS_NewObject(ctx);
-			QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, SCRIPT_AREA), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "x", JS_NewInt32(ctx, r.x1), 0); // TODO: Rename scr_area x1 to x
-			QuickJS_DefinePropertyValue(ctx, ret, "y", JS_NewInt32(ctx, r.y1), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "x2", JS_NewInt32(ctx, r.x2), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "y2", JS_NewInt32(ctx, r.y2), 0);
+			QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, SCRIPT_AREA), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "x", JS_NewInt32(ctx, r.x1), JS_PROP_C_W_E); // TODO: Rename scr_area x1 to x
+			QuickJS_DefinePropertyValue(ctx, ret, "y", JS_NewInt32(ctx, r.y1), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "x2", JS_NewInt32(ctx, r.x2), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "y2", JS_NewInt32(ctx, r.y2), JS_PROP_C_W_E);
 			return ret;
 		}
 
 		JSValue box(const scr_position& p, JSContext* ctx)
 		{
 			JSValue ret = JS_NewObject(ctx);
-			QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, SCRIPT_POSITION), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "x", JS_NewInt32(ctx, p.x), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "y", JS_NewInt32(ctx, p.y), 0);
+			QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, SCRIPT_POSITION), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "x", JS_NewInt32(ctx, p.x), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "y", JS_NewInt32(ctx, p.y), JS_PROP_C_W_E);
 			return ret;
 		}
 
@@ -1895,8 +1895,8 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 			case SCRIPT_GROUP:
 			{
 				JSValue ret = JS_NewObject(ctx);
-				QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, type), 0);
-				QuickJS_DefinePropertyValue(ctx, ret, "id", JS_NewInt32(ctx, p.getGroupId()), 0);
+				QuickJS_DefinePropertyValue(ctx, ret, "type", JS_NewInt32(ctx, type), JS_PROP_C_W_E);
+				QuickJS_DefinePropertyValue(ctx, ret, "id", JS_NewInt32(ctx, p.getGroupId()), JS_PROP_C_W_E);
 				return ret;
 			}
 				break;
@@ -1923,10 +1923,10 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		JSValue box(GATEWAY* psGateway, JSContext* ctx)
 		{
 			JSValue ret = JS_NewObject(ctx);
-			QuickJS_DefinePropertyValue(ctx, ret, "x1", JS_NewInt32(ctx, psGateway->x1), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "y1", JS_NewInt32(ctx, psGateway->y1), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "x2", JS_NewInt32(ctx, psGateway->x2), 0);
-			QuickJS_DefinePropertyValue(ctx, ret, "y2", JS_NewInt32(ctx, psGateway->y2), 0);
+			QuickJS_DefinePropertyValue(ctx, ret, "x1", JS_NewInt32(ctx, psGateway->x1), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "y1", JS_NewInt32(ctx, psGateway->y1), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "x2", JS_NewInt32(ctx, psGateway->x2), JS_PROP_C_W_E);
+			QuickJS_DefinePropertyValue(ctx, ret, "y2", JS_NewInt32(ctx, psGateway->y2), JS_PROP_C_W_E);
 			return ret;
 		}
 
@@ -3389,7 +3389,7 @@ static JSValue js_stats_get(JSContext *ctx, JSValueConst this_val)
 	std::string name = QuickJS_GetStdString(ctx, currentFuncObj, "name");
 	JS_FreeValue(ctx, currentFuncObj);
 	quickjs_execution_context execution_context(ctx);
-	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), 0);
+	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
 
 static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst val)
@@ -3403,7 +3403,7 @@ static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst 
 	quickjs_execution_context execution_context(ctx);
 	wzapi::setUpgradeStats(execution_context, player, name, type, index, JSContextValue{ctx, val});
 	// Now read value and return it
-	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), 0);
+	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
 
 
