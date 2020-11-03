@@ -118,13 +118,10 @@ void finishDeliveryPosition();
 static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
-static const float CAMERA_ROTATION_SMOOTHNESS = 10;
-static const float CAMERA_ROTATION_SPEED = 4;
 static SDWORD	rotX;
 static SDWORD	rotY;
-static float	rotInitial;
-static UDWORD	rotInitialUp;
-static float	rotationY;
+std::unique_ptr<ValueTracker> rotationHorizontalTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> rotationVerticalTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
 static uint32_t scrollRefTime;
 static float	scrollSpeedLeftRight; //use two directions and add them because its simple
 static float	scrollStepLeftRight;
@@ -637,9 +634,8 @@ void processMouseClickInput()
 	}
 	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging && !getRadarTrackingStatus())
 	{
-		rotInitial = (player.r.y % 65536) / DEG(1.0f); // negative values caused problems with float conversion
-		rotInitialUp = player.r.x;
-		rotationY = rotInitial; // instead of player.r.y, will track decimals for us
+		rotationVerticalTracker->startTracking((UWORD)player.r.x);
+		rotationHorizontalTracker->startTracking((UWORD)player.r.y); // negative values caused problems with float conversion
 		rotActive = true;
 	}
 
@@ -1091,18 +1087,14 @@ void displayWorld()
 		float mouseDeltaX = mouseX() - rotX;
 		float mouseDeltaY = mouseY() - rotY;
 
-		// the subtraction and then addition of rotationY is for the bug where wrapping between eg 350-10 degrees didn't work
-		rotationY = (rotInitial - mouseDeltaX / CAMERA_ROTATION_SPEED - rotationY) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + rotationY;
-		player.r.y = DEG(rotationY); // saved in a separate (float) variable in order to keep decimals for smoothness
+		player.r.y = rotationHorizontalTracker->setDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
 		
 		if(bInvertMouse)
 		{
 			mouseDeltaY *= -1;
 		}
 
-		float rotationTargetX = rotInitialUp + DEG(mouseDeltaY) / CAMERA_ROTATION_SPEED;
-		
-		player.r.x = player.r.x + (rotationTargetX - player.r.x) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS);
+		player.r.x = rotationVerticalTracker->setDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
 		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 
 		setDesiredPitch(player.r.x / DEG_1);

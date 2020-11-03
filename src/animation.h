@@ -27,6 +27,42 @@
 #ifndef __INCLUDED_SRC_ANIMATION_H__
 #define __INCLUDED_SRC_ANIMATION_H__
 
+class ValueTracker {
+	private:
+	UDWORD startTime;
+	int initial;
+	int delta;
+	int target;
+	bool _reachedTarget;
+	float current;
+	int speed = 10;
+	public:
+	/// Starts the tracking with the specified initial value.
+	ValueTracker* startTracking(int value);
+	/// Stops tracking
+	ValueTracker* stopTracking();
+	/// Returns true if currently tracking a value.
+	bool isTracking();
+	/// Sets speed/smoothness of the interpolation. 1 is syrup, 100 is instant. Default 10.
+	ValueTracker* setSpeed(int value);
+	/// Sets the target delta value (relative to the initial value)
+	ValueTracker* setDelta(int value);
+	/// Sets the target value
+	ValueTracker* setTarget(int value);
+	/// Update current value
+	ValueTracker* update();
+	/// Get initial value
+	int getInitial();
+	/// Get current value
+	int getCurrent();
+	/// Get target value
+	int getTarget();
+	/// Get delta value
+	int getDelta();
+	/// Returns if the tracker reached its target
+	bool reachedTarget();
+};
+
 enum EasingType
 {
 	LINEAR,
