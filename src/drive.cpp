@@ -520,7 +520,6 @@ void processDrivingCamera()
 	player.p.z = st.pos.y;
 	player.r.x = st.rot.pitch + cameraVertical;
 	player.r.y = st.rot.direction + cameraHorizontal;
-	setViewDistance(CAMERA_DISTANCE);
 }
 
 SDWORD driveGetMoveSpeed(void)
