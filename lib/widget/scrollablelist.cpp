@@ -37,7 +37,7 @@ ScrollableListWidget::ScrollableListWidget(WIDGET *parent) : WIDGET(parent)
 void ScrollableListWidget::geometryChanged()
 {
 	scrollBar->setGeometry(width() - SCROLLBAR_WIDTH, 0, SCROLLBAR_WIDTH, height());
-	scrollBar->setViewSize(height());
+	scrollBar->setViewSize(calculateListViewHeight());
 	layoutDirty = true;
 }
 
@@ -76,25 +76,45 @@ void ScrollableListWidget::updateLayout()
 	if (!layoutDirty) {
 		return;
 	}
-
 	layoutDirty = false;
+
+	auto listViewWidthWithoutScrollBar = calculateListViewWidth();
+	auto listViewWidthWithScrollBar = listViewWidthWithoutScrollBar - scrollBar->width() - 1;
+	auto listViewHeight = calculateListViewHeight();
 
 	scrollableHeight = 0;
 	for (auto child : listView->children())
 	{
+		child->setGeometry(0, scrollableHeight, listViewWidthWithScrollBar, child->height());
 		scrollableHeight += child->height();
 	}
 
-	scrollBar->show(scrollableHeight > height());
-	scrollBar->setScrollableSize(scrollableHeight);
-	listView->setGeometry(0, 0, width() - (scrollBar->visible() ? scrollBar->width() + 1 : 0), height());
+	scrollBar->show(scrollableHeight > listViewHeight);
 
-	auto currentTop = 0;
-	for (auto child : listView->children())
+	if (!scrollBar->visible())
 	{
-		child->setGeometry(0, currentTop, listView->width(), child->height());
-		currentTop += child->height();
+		scrollableHeight = 0;
+		for (auto child : listView->children())
+		{
+			child->setGeometry(0, scrollableHeight, listViewWidthWithoutScrollBar, child->height());
+			scrollableHeight += child->height();
+		}
+		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
+	} else {
+		listView->setGeometry(padding.left, padding.top, listViewWidthWithScrollBar, listViewHeight);
 	}
+
+	scrollBar->setScrollableSize(scrollableHeight);
+}
+
+uint32_t ScrollableListWidget::calculateListViewHeight() const
+{
+	return height() - padding.top - padding.bottom;
+}
+
+uint32_t ScrollableListWidget::calculateListViewWidth() const
+{
+	return width() - padding.left - padding.right;
 }
 
 bool ScrollableListWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
@@ -111,4 +131,26 @@ void ScrollableListWidget::enableScroll()
 void ScrollableListWidget::disableScroll()
 {
 	scrollBar->disable();
+}
+
+void ScrollableListWidget::setStickToBottom(bool value)
+{
+	scrollBar->setStickToBottom(value);
+}
+
+void ScrollableListWidget::setPadding(Padding const &rect)
+{
+	padding = rect;
+	layoutDirty = true;
+}
+
+void ScrollableListWidget::setSnapOffset(bool value)
+{
+	snapOffset = value;
+}
+
+void ScrollableListWidget::displayRecursive(WidgetGraphicsContext const& context)
+{
+	updateLayout();
+	WIDGET::displayRecursive(context);
 }

@@ -35,6 +35,7 @@ public:
 	uint16_t position() const;
 	void setScrollableSize(uint16_t value);
 	void setViewSize(uint16_t value);
+	void setStickToBottom(bool value);
 	void incrementPosition(int32_t amount);
 	void enable();
 	void disable();
@@ -47,6 +48,7 @@ private:
 	W_SLIDER *slider;
 	uint16_t scrollableSize = 1;
 	uint16_t viewSize = 1;
+	bool stickToBottom = false;
 
 	void updateSlider();
 };

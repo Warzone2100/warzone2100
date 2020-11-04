@@ -28,6 +28,14 @@
 #include "scrollbar.h"
 #include "cliprect.h"
 
+struct Padding
+{
+	uint32_t top;
+	uint32_t right;
+	uint32_t bottom;
+	uint32_t left;
+};
+
 class ScrollableListWidget : public WIDGET
 {
 public:
@@ -39,6 +47,12 @@ public:
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void enableScroll();
 	void disableScroll();
+	void setStickToBottom(bool value);
+	void setPadding(Padding const &rect);
+	void setSnapOffset(bool value);
+	uint32_t calculateListViewHeight() const;
+	uint32_t calculateListViewWidth() const;
+	void displayRecursive(WidgetGraphicsContext const& context);
 
 protected:
 	void geometryChanged() override;
@@ -47,8 +61,9 @@ private:
 	ScrollBarWidget *scrollBar;
 	ClipRectWidget *listView;
 	uint16_t scrollableHeight = 0;
-	bool snapOffset = true;
+	bool snapOffset = false;
 	bool layoutDirty = false;
+	Padding padding = {0, 0, 0, 0};
 
 	uint16_t snappedOffset();
 	void updateLayout();
