@@ -396,6 +396,7 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 	id = KM_FORM;
 
 	keyMapList = new ScrollableListWidget(this);
+	keyMapList->setSnapOffset(true);
 	if (!ingame)
 	{
 		setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
