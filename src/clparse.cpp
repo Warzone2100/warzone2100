@@ -25,7 +25,6 @@
  */
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -42,6 +41,8 @@
 #include "version.h"
 #include "warzoneconfig.h"
 #include "wrappers.h"
+
+#include <cwchar>
 
 //////
 // Our fine replacement for the popt abomination follows
@@ -79,6 +80,7 @@ typedef struct _poptContext
 static bool wz_autogame = false;
 static std::string wz_saveandquit;
 static std::string wz_test;
+static std::string wz_autoratingUrl;
 
 static void poptPrintHelp(poptContext ctx, FILE *output)
 {
@@ -98,7 +100,9 @@ static void poptPrintHelp(poptContext ctx, FILE *output)
 		// calculate number of terminal columns required to print
 		// for languages with multibyte characters
 		const size_t txtSize = strlen(txt) + 1;
-		int txtOffset = (int) mbstowcs(nullptr, txt, txtSize) + 1 - txtSize;
+		std::mbstate_t state = std::mbstate_t();
+		const char *pTxt = txt;
+		int txtOffset = (int) std::mbsrtowcs(nullptr, &pTxt, 0, &state) + 1 - txtSize;
 		// CJK characters take up two columns
 		char language[3]; // stores ISO 639-1 code
 		strlcpy(language, setlocale(LC_MESSAGES, nullptr), sizeof(language));
@@ -152,7 +156,7 @@ static int poptGetNextOpt(poptContext ctx)
 
 	sstrcpy(match, ctx->argv[ctx->current]);
 	ctx->current++;
-	pparam = strrchr(match, '=');
+	pparam = strchr(match, '=');
 	if (pparam)									// option's got a parameter
 	{
 		*pparam++ = '\0';							// split option from parameter and increment past '='
@@ -244,11 +248,14 @@ typedef enum
 	CLI_CRASH,
 	CLI_TEXTURECOMPRESSION,
 	CLI_NOTEXTURECOMPRESSION,
+	CLI_GFXBACKEND,
+	CLI_GFXDEBUG,
 	CLI_AUTOGAME,
 	CLI_SAVEANDQUIT,
 	CLI_SKIRMISH,
 	CLI_CONTINUE,
 	CLI_AUTOHOST,
+	CLI_AUTORATING,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -281,11 +288,23 @@ static const struct poptOption *getOptionsTable()
 		{ "host", POPT_ARG_NONE, CLI_HOSTLAUNCH, N_("Go directly to host screen"),        nullptr },
 		{ "texturecompression", POPT_ARG_NONE, CLI_TEXTURECOMPRESSION, N_("Enable texture compression"), nullptr },
 		{ "notexturecompression", POPT_ARG_NONE, CLI_NOTEXTURECOMPRESSION, N_("Disable texture compression"), nullptr },
+		{ "gfxbackend", POPT_ARG_STRING, CLI_GFXBACKEND, N_("Set gfx backend"),
+			"(opengl, opengles"
+#if defined(WZ_VULKAN_ENABLED)
+			", vulkan"
+#endif
+#if defined(WZ_BACKEND_DIRECTX)
+			", directx"
+#endif
+			")"
+		},
+		{ "gfxdebug", POPT_ARG_NONE, CLI_GFXDEBUG, N_("Use gfx backend debug"), nullptr },
 		{ "autogame", POPT_ARG_NONE, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr },
 		{ "saveandquit", POPT_ARG_STRING, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name") },
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
+		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url (containing \"{HASH}\"), when hosting"), N_("autorating") },
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -480,7 +499,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.
-			hostlaunch = 1;
+			hostlaunch = HostLaunch::Host;
 			break;
 		case CLI_GAME:
 			// retrieve the game name
@@ -497,7 +516,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			bMultiMessages = false;
 			for (int i = 0; i < MAX_PLAYERS; i++)
 			{
-				NET_InitPlayer(i, true, false);
+				NET_InitPlayer(i, true);
 			}
 
 			//NET_InitPlayer deallocates Player 0, who must be allocated so that a later invocation of processDebugMappings does not trigger DEBUG mode
@@ -505,11 +524,11 @@ bool ParseCommandLine(int argc, const char * const *argv)
 
 			if (!strcmp(token, "CAM_1A") || !strcmp(token, "CAM_2A") || !strcmp(token, "CAM_3A"))
 			{
-				game.type = CAMPAIGN;
+				game.type = LEVEL_TYPE::CAMPAIGN;
 			}
 			else
 			{
-				game.type = SKIRMISH; // tutorial is skirmish for some reason
+				game.type = LEVEL_TYPE::SKIRMISH; // tutorial is skirmish for some reason
 			}
 			sstrcpy(aLevelName, token);
 			SetGameMode(GS_NORMAL);
@@ -586,9 +605,8 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			snprintf(saveGameName, sizeof(saveGameName), "%s/skirmish/%s.gam", SaveGamePath, token);
 			sstrcpy(sRequestResult, saveGameName); // hack to avoid crashes
-			SPinit();
+			SPinit(LEVEL_TYPE::SKIRMISH);
 			bMultiPlayer = true;
-			game.type = SKIRMISH; // tutorial is skirmish for some reason
 			SetGameMode(GS_SAVEGAMELOAD);
 			break;
 		case CLI_LOADCAMPAIGN:
@@ -599,7 +617,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Unrecognised campaign savegame name");
 			}
 			snprintf(saveGameName, sizeof(saveGameName), "%s/campaign/%s.gam", SaveGamePath, token);
-			SPinit();
+			SPinit(LEVEL_TYPE::CAMPAIGN);
 			SetGameMode(GS_SAVEGAMELOAD);
 			break;
 		case CLI_CONTINUE:
@@ -638,6 +656,30 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			wz_texture_compression = false;
 			break;
 
+		case CLI_GFXBACKEND:
+			{
+				// retrieve the backend
+				token = poptGetOptArg(poptCon);
+				if (token == nullptr)
+				{
+					qFatal("Unrecognised backend");
+				}
+				video_backend gfxBackend;
+				if (video_backend_from_str(token, gfxBackend))
+				{
+					war_setGfxBackend(gfxBackend);
+				}
+				else
+				{
+					qFatal("Unsupported / invalid gfxbackend value");
+				}
+				break;
+			}
+
+		case CLI_GFXDEBUG:
+			uses_gfx_debug = true;
+			break;
+
 		case CLI_AUTOGAME:
 			wz_autogame = true;
 			break;
@@ -652,7 +694,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_SKIRMISH:
-			hostlaunch = 2;
+			hostlaunch = HostLaunch::Skirmish;
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
@@ -662,7 +704,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_AUTOHOST:
-			hostlaunch = 3;
+			hostlaunch = HostLaunch::Autohost;
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
@@ -670,6 +712,15 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			wz_test = token;
 			break;
+
+		case CLI_AUTORATING:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad autorating server");
+			}
+			wz_autoratingUrl = token;
+			debug(LOG_INFO, "Using \"%s\" for ratings.", wz_autoratingUrl.c_str());
 		};
 	}
 
@@ -689,4 +740,14 @@ const std::string &saveandquit_enabled()
 const std::string &wz_skirmish_test()
 {
 	return wz_test;
+}
+
+std::string autoratingUrl(std::string const &hash) {
+	auto url = wz_autoratingUrl;
+	auto h = wz_autoratingUrl.find_first_of("{HASH}");
+	if (h != std::string::npos)
+	{
+		url.replace(h, 6, hash);
+	}
+	return url;
 }

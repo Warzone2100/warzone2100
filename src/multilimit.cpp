@@ -96,7 +96,7 @@ static inline void freeLimitSet()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-WzMultiLimitTitleUI::WzMultiLimitTitleUI(std::shared_ptr<WzMultiOptionTitleUI> parent) : parent(parent)
+WzMultiLimitTitleUI::WzMultiLimitTitleUI(std::shared_ptr<WzMultiplayerOptionsTitleUI> parent) : parent(parent)
 {
 
 }
@@ -263,7 +263,7 @@ TITLECODE WzMultiLimitTitleUI::run()
 				ingame.flags &= ~MPFLAGS_FORCELIMITS;
 			}
 			//inform others
-			if (bHosted)
+			if (NetPlay.isHost)
 			{
 				sendOptions();
 			}
@@ -346,7 +346,7 @@ void createLimitSet()
 		}
 	}
 
-	if (bHosted)
+	if (NetPlay.isHost)
 	{
 		sendOptions();
 	}
@@ -487,9 +487,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 		scale = LARGE_STRUCT_SCALE;
 	}
 
-	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 	displayStructureStatButton(stat, &rotation, &position, scale);
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 
 	// draw name
 	cache.wzNameText.setText(_(getName(stat)), font_regular);

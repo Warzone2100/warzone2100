@@ -81,7 +81,7 @@ function sendCOTransporter()
 	var tPos = getObject("COTransportPos");
 	var nearbyDefense = enumRange(tPos.x, tPos.y, 15, THE_COLLECTIVE, false);
 
-	if (nearbyDefense.length)
+	if (nearbyDefense.length > 0)
 	{
 		var list = getDroidsForCOLZ();
 		camSendReinforcement(THE_COLLECTIVE, camMakePos("COTransportPos"), list,
@@ -90,8 +90,10 @@ function sendCOTransporter()
 				exit: { x: 125, y: 70 }
 			}
 		);
-
-		queue("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	}
+	else
+	{
+		removeTimer("sendCOTransporter");
 	}
 }
 
@@ -110,7 +112,6 @@ function sendPlayerTransporter()
 		return;
 	}
 
-	var ti = (index === (TRANSPORT_LIMIT - 1)) ? camMinutesToMilliseconds(1) : camMinutesToMilliseconds(5);
 	var droids = [];
 	var list = [cTempl.prhct, cTempl.prhct, cTempl.prhct, cTempl.prltat, cTempl.prltat, cTempl.npcybr, cTempl.prrept];
 
@@ -125,8 +126,6 @@ function sendPlayerTransporter()
 			exit: { x: 87, y: 126 }
 		}
 	);
-
-	queue("sendPlayerTransporter", ti);
 }
 
 //Continuously spawns heavy units on the north part of the map every 7 minutes
@@ -142,7 +141,6 @@ function mapEdgeDroids()
 	}
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos("groundUnitPos"), droids, CAM_REINFORCE_GROUND);
-	queue("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
 }
 
 function vtolAttack()
@@ -176,13 +174,14 @@ function groupPatrol()
 //Build defenses around oil resource
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
-		const DEFENSES = ["WallTower06", "PillBox1", "WallTower03"];
-		camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
-
-		queue("truckDefense", camSecondsToMilliseconds(160));
+		removeTimer("truckDefense");
+		return;
 	}
+
+	const DEFENSES = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
+	camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
 }
 
 //Gives starting tech and research.
@@ -266,6 +265,10 @@ function eventTransporterLanded(transport)
 //Warn that something bad happened to the fifth transport
 function reallyDownTransporter()
 {
+	if (startedFromMenu)
+	{
+		removeTimer("sendPlayerTransporter");
+	}
 	setReinforcementTime(LZ_COMPROMISED_TIME);
 	playSound("pcv443.ogg");
 }
@@ -346,6 +349,7 @@ function eventStartLevel()
 	{
 		startedFromMenu = true;
 		sendPlayerTransporter();
+		setTimer("sendPlayerTransporter", camMinutesToMilliseconds(5));
 	}
 	else
 	{
@@ -353,9 +357,9 @@ function eventStartLevel()
 	}
 
 	queue("secondVideo", camSecondsToMilliseconds(12));
-	queue("truckDefense", camSecondsToMilliseconds(15));
 	queue("groupPatrol", camChangeOnDiff(camMinutesToMilliseconds(1)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
-	queue("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
-	queue("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
+	setTimer("truckDefense", camSecondsToMilliseconds(160));
+	setTimer("sendCOTransporter", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("mapEdgeDroids", camChangeOnDiff(camMinutesToMilliseconds(7)));
 }

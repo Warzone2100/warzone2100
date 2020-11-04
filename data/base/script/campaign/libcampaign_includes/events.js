@@ -44,6 +44,10 @@ function cam_eventCheatMode(entered)
 
 function cam_eventChat(from, to, message)
 {
+	if (message === "win info")
+	{
+		__camShowVictoryConditions(true);
+	}
 	if (!__camCheatMode)
 	{
 		return;
@@ -52,10 +56,6 @@ function cam_eventChat(from, to, message)
 	if (message === "let me win" && __camNextLevel !== "SUB_1_1")
 	{
 		__camLetMeWin();
-	}
-	if (message === "win info")
-	{
-		__camWinInfo();
 	}
 	if (message === "make cc")
 	{
@@ -76,7 +76,7 @@ function cam_eventChat(from, to, message)
 	}
 	if (message === "research available")
 	{
-		while (true)
+		while (true) // eslint-disable-line no-constant-condition
 		{
 			var research = enumResearch();
 			if (research.length === 0)
@@ -94,7 +94,7 @@ function cam_eventChat(from, to, message)
 
 function cam_eventStartLevel()
 {
-	isReceivingAllEvents = true;
+	receiveAllEvents(true);
 	// Variables initialized here are the ones that should not be
 	// re-initialized on save-load. Otherwise, they are initialized
 	// on the global scope (or wherever necessary).
@@ -119,7 +119,6 @@ function cam_eventStartLevel()
 	__camVtolStartPosition = {};
 	__camVtolTemplates = {};
 	__camVtolExitPosition = {};
-	__camVtolTimer = 0;
 	__camVtolSpawnActive = false;
 	__camVtolExtras = {};
 	__camLastNexusAttack = 0;
@@ -129,13 +128,15 @@ function cam_eventStartLevel()
 	__camSaveLoading = false;
 	__camNeverGroupDroids = [];
 	__camNumTransporterExits = 0;
+	__camVictoryMessageThrottle = 0;
 	camSetPropulsionTypeLimit(); //disable the propulsion changer by default
 	__camAiPowerReset(); //grant power to the AI
 	setTimer("__checkEnemyFactoryProductionTick", camSecondsToMilliseconds(0.8));
 	setTimer("__camTick", camSecondsToMilliseconds(1)); // campaign pollers
 	setTimer("__camTruckTick", camSecondsToMilliseconds(40) + camSecondsToMilliseconds(0.1)); // some slower campaign pollers
 	setTimer("__camAiPowerReset", camMinutesToMilliseconds(3)); //reset AI power every so often
-	queue("__camTacticsTick", camSecondsToMilliseconds(0.1)); // would re-queue itself
+	setTimer("__camShowVictoryConditions", camMinutesToMilliseconds(5));
+	setTimer("__camTacticsTick", camSecondsToMilliseconds(0.1));
 	queue("__camGrantSpecialResearch", camSecondsToMilliseconds(6));
 }
 
@@ -191,9 +192,9 @@ function cam_eventTransporterExit(transport)
 		//assumes the player can bring in reinforcements immediately after the first
 		//transporter leaves the map. Mission scripts can handle special situations.
 		if (__camNumTransporterExits === 1 &&
-			((__camWinLossCallback === "__camVictoryOffworld" &&
+			((__camWinLossCallback === CAM_VICTORY_OFFWORLD &&
 			__camVictoryData.reinforcements > -1) ||
-			__camWinLossCallback === "__camVictoryStandard"))
+			__camWinLossCallback === CAM_VICTORY_STANDARD))
 		{
 			const REINFORCEMENTS_AVAILABLE_SOUND = "pcv440.ogg";
 			playSound(REINFORCEMENTS_AVAILABLE_SOUND);
@@ -201,7 +202,7 @@ function cam_eventTransporterExit(transport)
 	}
 
 	if (transport.player !== CAM_HUMAN_PLAYER ||
-		(__camWinLossCallback === "__camVictoryStandard" &&
+		(__camWinLossCallback === CAM_VICTORY_STANDARD &&
 		transport.player === CAM_HUMAN_PLAYER))
 	{
 		// allow the next transport to enter
@@ -210,7 +211,7 @@ function cam_eventTransporterExit(transport)
 			delete __camIncomingTransports[transport.player];
 		}
 	}
-	else if (__camWinLossCallback === "__camVictoryPreOffworld")
+	else if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
 	{
 		camTrace("Transporter is away.");
 		__camGameWon();
@@ -288,7 +289,7 @@ function cam_eventAttacked(victim, attacker)
 //Work around some things that break on save-load.
 function cam_eventGameLoaded()
 {
-	isReceivingAllEvents = true;
+	receiveAllEvents(true);
 	__camSaveLoading = true;
 	const SCAV_KEVLAR_MISSIONS = [
 		"CAM_1CA", "SUB_1_4AS", "SUB_1_4A", "SUB_1_5S", "SUB_1_5",

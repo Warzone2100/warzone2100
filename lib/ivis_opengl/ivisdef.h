@@ -94,6 +94,7 @@ enum VBO_TYPE
 	VBO_MINIMAL,
 	VBO_NORMAL = VBO_MINIMAL,
 	VBO_INDEX,
+	VBO_TANGENT,
 	VBO_COUNT
 };
 
@@ -137,6 +138,7 @@ struct iIMDShape
 	// The new rendering data
 	gfx_api::buffer* buffers[VBO_COUNT] = { nullptr };
 	SHADER_MODE shaderProgram = SHADER_NONE; // if using specialized shader for this model
+	uint16_t vertexCount = 0;
 
 	// object animation (animating a level, rather than its texture)
 	std::vector<ANIMFRAME> objanimdata;

@@ -76,6 +76,16 @@ struct DROID_TEMPLATE : public BASE_STATS
 	bool            enabled;                    ///< Has been enabled
 };
 
+static inline DROID_TEMPLATE *castDroidTemplate(BASE_STATS *stats)
+{
+	return stats != nullptr && stats->hasType(STAT_TEMPLATE)? static_cast<DROID_TEMPLATE *>(stats) : nullptr;
+}
+
+static inline DROID_TEMPLATE const *castDroidTemplate(BASE_STATS const *stats)
+{
+	return stats != nullptr && stats->hasType(STAT_TEMPLATE)? static_cast<DROID_TEMPLATE const *>(stats) : nullptr;
+}
+
 class DROID_GROUP;
 struct STRUCTURE;
 
@@ -100,6 +110,7 @@ struct DROID : public BASE_OBJECT
 	UDWORD          baseSpeed;                      ///< the base speed dependent on propulsion type
 	UDWORD          originalBody;                   ///< the original body points
 	uint32_t        experience;
+	uint32_t        kills;
 	UDWORD          lastFrustratedTime;             ///< Set when eg being stuck; used for eg firing indiscriminately at map features to clear the way
 	SWORD           resistance;                     ///< used in Electronic Warfare
 	// The group the droid belongs to

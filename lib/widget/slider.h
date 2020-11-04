@@ -27,11 +27,6 @@
 #include "widget.h"
 #include "widgbase.h"
 
-/* Slider state */
-#define SLD_DRAG		0x0001		// Slider is being dragged
-#define SLD_HILITE		0x0002		// Slider is hilited
-
-
 class W_SLIDER : public WIDGET
 {
 
@@ -43,8 +38,11 @@ public:
 	void highlightLost() override;
 	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
-
 	void setTip(std::string string) override;
+	void enable();
+	void disable();
+	bool isHighlighted() const;
+	bool isEnabled() const;
 
 	WSLD_ORIENTATION orientation;                   // The orientation of the slider
 	UWORD		numStops;			// Number of stop positions on the slider

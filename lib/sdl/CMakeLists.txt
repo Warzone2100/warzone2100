@@ -53,14 +53,18 @@ if(NOT DEFINED WZ_FINDSDL2_NOCONFIG OR NOT WZ_FINDSDL2_NOCONFIG)
 endif()
 if(SDL2_FOUND)
 	if (TARGET SDL2::SDL2-static)
+		# Check for INTERFACE_INCLUDE_DIRECTORIES to ignore the "aliased" target that vcpkg creates
+		get_target_property(_sdl2_include_dir SDL2::SDL2-static INTERFACE_INCLUDE_DIRECTORIES)
 		test_link_to_sdl_target(SDL2::SDL2-static LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
-		if (LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
+		if (_sdl2_include_dir AND LINK_SUCCESS_SDL2_SDL2STATIC_TARGET)
 			set(_sdl2_library SDL2::SDL2-static)
 		endif()
 	endif()
 	if (NOT _sdl2_library AND TARGET SDL2::SDL2)
+		# Check for INTERFACE_INCLUDE_DIRECTORIES to ignore the "aliased" target that vcpkg creates
+		get_target_property(_sdl2_include_dir SDL2::SDL2 INTERFACE_INCLUDE_DIRECTORIES)
 		test_link_to_sdl_target(SDL2::SDL2 LINK_SUCCESS_SDL2_SDL2_TARGET)
-		if (LINK_SUCCESS_SDL2_SDL2_TARGET)
+		if (_sdl2_include_dir AND LINK_SUCCESS_SDL2_SDL2_TARGET)
 			set(_sdl2_library SDL2::SDL2)
 		endif()
 	endif()
@@ -74,8 +78,30 @@ if(SDL2_FOUND)
 	endif()
 
 	if(_sdl2_library)
-		get_target_property(_sdl2_target_include_dir ${_sdl2_library} INTERFACE_INCLUDE_DIRECTORIES)
-		set(_sdl2_include_dir "${_sdl2_target_include_dir}/SDL2") # WORKAROUND
+		if(VCPKG_TOOLCHAIN)
+			# vcpkg workaround to link the Release version of SDL2 on Windows
+			# for MinSizeRel and RelWithDebInfo configs
+			set_target_properties(${_sdl2_library} PROPERTIES
+				MAP_IMPORTED_CONFIG_MINSIZEREL Release
+				MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release
+			)
+			message(STATUS "Mapped imported configs for target: ${_sdl2_library}")
+			if (TARGET SDL2::SDL2main)
+				set_target_properties(SDL2::SDL2main PROPERTIES
+					MAP_IMPORTED_CONFIG_MINSIZEREL Release
+					MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release
+				)
+			endif()
+		endif()
+
+		get_target_property(_sdl2_include_dir ${_sdl2_library} INTERFACE_INCLUDE_DIRECTORIES)
+		if (NOT _sdl2_include_dir)
+			message(WARNING "Failed to find INTERFACE_INCLUDE_DIRECTORIES in SDL2 target: ${_sdl2_library}")
+		endif()
+		get_filename_component(_last_directory "${_sdl2_include_dir}" NAME)
+		if (NOT _last_directory STREQUAL "SDL2")
+			set(_sdl2_include_dir "${_sdl2_include_dir}/SDL2") # WORKAROUND
+		endif()
 	endif()
 endif()
 
@@ -91,16 +117,26 @@ if(NOT _sdl2_library OR NOT SDL2_FOUND)
 	endif()
 endif()
 
+# Check if SDL2's "SDL_vulkan.h" is available (SDL 2.0.6+)
+INCLUDE (CheckIncludeFileCXX)
+set(_prior_CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES}")
+set(CMAKE_REQUIRED_INCLUDES "${_sdl2_include_dir}")
+CHECK_INCLUDE_FILE_CXX("SDL_vulkan.h" HAVE_SDL_VULKAN_H)
+set(CMAKE_REQUIRED_INCLUDES "${_prior_CMAKE_REQUIRED_INCLUDES}")
+
 add_library(sdl-backend ${HEADERS} ${SRC})
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(sdl-backend PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
 
-target_link_libraries(sdl-backend PRIVATE framework)
+target_link_libraries(sdl-backend PRIVATE framework ivis-opengl)
 set_property(TARGET sdl-backend PROPERTY FOLDER "lib")
 message( STATUS "Linking to SDL2 library: ${_sdl2_library}" )
 target_link_libraries(sdl-backend PRIVATE ${_sdl2_library})
 target_include_directories(sdl-backend PRIVATE "${_sdl2_include_dir}")
+if(HAVE_SDL_VULKAN_H)
+	target_compile_definitions(sdl-backend PRIVATE "-DHAVE_SDL_VULKAN_H")
+endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	if("${_sdl2_main_library}" STREQUAL "")

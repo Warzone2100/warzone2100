@@ -133,7 +133,7 @@ void resSetLoadCallback(RESLOAD_CALLBACK funcToCall)
 }
 
 /* do the callback for the resload display function */
-static inline void resDoResLoadCallback()
+void resDoResLoadCallback()
 {
 	if (resLoadCallback)
 	{

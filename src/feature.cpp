@@ -74,7 +74,7 @@ bool loadFeatureStats(WzConfig &ini)
 	for (int i = 0; i < list.size(); ++i)
 	{
 		ini.beginGroup(list[i]);
-		asFeatureStats[i] = FEATURE_STATS(REF_FEATURE_START + i);
+		asFeatureStats[i] = FEATURE_STATS(STAT_FEATURE + i);
 		FEATURE_STATS *p = &asFeatureStats[i];
 		p->name = ini.string(WzString::fromUtf8("name"));
 		p->id = list[i];

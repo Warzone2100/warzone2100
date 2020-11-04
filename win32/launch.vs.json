@@ -1,0 +1,27 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "warzone2100.exe (src\\warzone2100.exe)",
+      "name": "warzone2100.exe (src\\warzone2100.exe)",
+      "args": [ "--gfxdebug" ]
+    },
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "warzone2100.exe (src\\warzone2100.exe)",
+      "name": "warzone2100.exe (Vulkan)",
+      "args": [ "--vulkan", "--gfxdebug" ]
+    },
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "warzone2100.exe (src\\warzone2100.exe)",
+      "name": "warzone2100.exe (Vulkan) [No Validation]",
+      "args": [ "--vulkan" ]
+    }
+  ]
+}

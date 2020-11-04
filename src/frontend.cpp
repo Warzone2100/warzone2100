@@ -69,6 +69,7 @@
 #include "wrappers.h"
 #include "titleui/titleui.h"
 #include "urlhelpers.h"
+#include "game.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -196,16 +197,11 @@ static void runchatlink()
 
 void runContinue()
 {
-	SPinit();
+	SPinit(bMultiPlayer ? LEVEL_TYPE::SKIRMISH : LEVEL_TYPE::CAMPAIGN);
 	sstrcpy(saveGameName, lastSavePath);
 	bMultiPlayer = lastSaveMP;
-	if (bMultiPlayer)
+	if (!bMultiPlayer)
 	{
-		game.type = SKIRMISH;
-	}
-	else
-	{
-		game.type = CAMPAIGN;
 		int campaign = getCampaign(lastSavePath);
 		setCampaignNumber(campaign);
 	}
@@ -287,13 +283,13 @@ bool runTutorialMenu()
 	switch (id)
 	{
 	case FRONTEND_TUTORIAL:
-		SPinit();
+		SPinit(LEVEL_TYPE::CAMPAIGN);
 		sstrcpy(aLevelName, TUTORIAL_LEVEL);
 		changeTitleMode(STARTGAME);
 		break;
 
 	case FRONTEND_FASTPLAY:
-		SPinit();
+		SPinit(LEVEL_TYPE::CAMPAIGN);
 		sstrcpy(aLevelName, "FASTPLAY");
 		changeTitleMode(STARTGAME);
 		break;
@@ -412,21 +408,19 @@ static void loadOK()
 	}
 }
 
-void SPinit()
+void SPinit(LEVEL_TYPE gameType)
 {
 	uint8_t playercolor;
 
-	// clear out the skDiff array
-	memset(game.skDiff, 0x0, sizeof(game.skDiff));
 	NetPlay.bComms = false;
 	bMultiPlayer = false;
 	bMultiMessages = false;
-	game.type = CAMPAIGN;
+	game.type = gameType;
 	NET_InitPlayers();
 	NetPlay.players[0].allocated = true;
 	NetPlay.players[0].autoGame = false;
-	game.skDiff[0] = UBYTE_MAX;
-	game.maxPlayers = MAX_PLAYERS -1;	// Currently, 0 - 10 for a total of MAX_PLAYERS
+	NetPlay.players[0].difficulty = AIDifficulty::HUMAN;
+	game.maxPlayers = MAX_PLAYERS - 1;	// Currently, 0 - 10 for a total of MAX_PLAYERS
 	// make sure we have a valid color choice for our SP game. Valid values are 0, 4-7
 	playercolor = war_GetSPcolor();
 
@@ -448,7 +442,7 @@ bool runCampaignSelector()
 	}
 	else if (id >= FRONTEND_CAMPAIGN_1 && id <= FRONTEND_CAMPAIGN_6) // chose a campaign
 	{
-		SPinit();
+		SPinit(LEVEL_TYPE::CAMPAIGN);
 		frontEndNewGame(id - FRONTEND_CAMPAIGN_1);
 	}
 
@@ -487,20 +481,24 @@ bool runSinglePlayerMenu()
 			break;
 
 		case FRONTEND_LOADGAME_MISSION:
-			SPinit();
+			SPinit(LEVEL_TYPE::CAMPAIGN);
 			addLoadSave(LOAD_FRONTEND_MISSION, _("Load Campaign Saved Game"));	// change mode when loadsave returns
 			break;
 
 		case FRONTEND_LOADGAME_SKIRMISH:
-			SPinit();
+			SPinit(LEVEL_TYPE::SKIRMISH);
 			bMultiPlayer = true;
 			addLoadSave(LOAD_FRONTEND_SKIRMISH, _("Load Skirmish Saved Game"));	// change mode when loadsave returns
 			break;
 
 		case FRONTEND_SKIRMISH:
-			SPinit();
-			ingame.bHostSetup = true;
-			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+			SPinit(LEVEL_TYPE::SKIRMISH);
+			sstrcpy(game.map, DEFAULTSKIRMISHMAP);
+			game.hash = levGetMapNameHash(game.map);
+			game.maxPlayers = DEFAULTSKIRMISHMAPMAXPLAYERS;
+
+			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
+			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 			break;
 
 		case FRONTEND_QUIT:
@@ -508,7 +506,7 @@ bool runSinglePlayerMenu()
 			break;
 
 		case FRONTEND_CHALLENGES:
-			SPinit();
+			SPinit(LEVEL_TYPE::CAMPAIGN);
 			addChallenges();
 			break;
 
@@ -570,17 +568,17 @@ bool runMultiPlayerMenu()
 		NetPlay.bComms = true; // use network = true
 		NetPlay.isUPNP_CONFIGURED = false;
 		NetPlay.isUPNP_ERROR = false;
-		ingame.bHostSetup = true;
+		ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
 		bMultiPlayer = true;
 		bMultiMessages = true;
 		NETinit(true);
 		NETdiscoverUPnPDevices();
-		game.type = SKIRMISH;		// needed?
-		changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+		game.type = LEVEL_TYPE::SKIRMISH;		// needed?
+		changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 		break;
 	case FRONTEND_JOIN:
 		NETinit(true);
-		ingame.bHostSetup = false;
+		ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 		if (getLobbyError() != ERROR_INVALID)
 		{
 			setLobbyError(ERROR_NOERROR);
@@ -624,6 +622,7 @@ void startOptionsMenu()
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Open Configuration Directory"), 0);
 }
 
 bool runOptionsMenu()
@@ -653,6 +652,22 @@ bool runOptionsMenu()
 		break;
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
+		break;
+	case FRONTEND_HYPERLINK:
+		if (!openFolderInDefaultFileManager(PHYSFS_getWriteDir()))
+		{
+			// Failed to open write dir in default filesystem browser
+			std::string configErrorMessage = _("Failed to open configuration directory in system default file browser.");
+			configErrorMessage += "\n\n";
+			configErrorMessage += _("Configuration directory is reported as:");
+			configErrorMessage += "\n";
+			configErrorMessage += PHYSFS_getWriteDir();
+			configErrorMessage += "\n\n";
+			configErrorMessage += _("If running inside a container / isolated environment, this may differ from the actual path on disk.");
+			configErrorMessage += "\n";
+			configErrorMessage += _("Please see the documentation for more information on how to locate it manually.");
+			wzDisplayDialog(Dialog_Warning, _("Failed to open configuration directory"), configErrorMessage.c_str());
+		}
 		break;
 	default:
 		break;
@@ -1099,9 +1114,27 @@ static std::string videoOptionsTextureSizeString()
 	return textureSize;
 }
 
+gfx_api::context::swap_interval_mode getCurrentSwapMode()
+{
+	return to_swap_mode(war_GetVsync());
+}
+
+void saveCurrentSwapMode(gfx_api::context::swap_interval_mode mode)
+{
+	war_SetVsync(to_int(mode));
+}
+
 char const *videoOptionsVsyncString()
 {
-	return war_GetVsync()? _("On") : _("Off");
+	switch (getCurrentSwapMode()) {
+		case gfx_api::context::swap_interval_mode::immediate:
+			return _("Off");
+		case gfx_api::context::swap_interval_mode::vsync:
+			return _("On");
+		case gfx_api::context::swap_interval_mode::adaptive_vsync:
+			return _("Adaptive");
+	}
+	return "n/a";
 }
 
 std::string videoOptionsDisplayScaleString()
@@ -1109,6 +1142,11 @@ std::string videoOptionsDisplayScaleString()
 	char resolution[100];
 	ssprintf(resolution, "%d%%", war_GetDisplayScale());
 	return resolution;
+}
+
+std::string videoOptionsGfxBackendString()
+{
+	return to_display_string(war_getGfxBackend());
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1188,11 +1226,16 @@ void startVideoOptionsMenu()
 	antialiasing_label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
 	// Display Scale
-	if (wzAvailableDisplayScales().size() > 1)
+	const bool showDisplayScale = wzAvailableDisplayScales().size() > 1;
+	if (showDisplayScale)
 	{
-		addTextButton(FRONTEND_DISPLAYSCALE, FRONTEND_POS6X - 35, FRONTEND_POS7Y, videoOptionsDisplayScaleLabel(), WBUT_SECONDARY);
-		addTextButton(FRONTEND_DISPLAYSCALE_R, FRONTEND_POS6M - 55, FRONTEND_POS7Y, videoOptionsDisplayScaleString(), WBUT_SECONDARY);
+		addTextButton(FRONTEND_DISPLAYSCALE, FRONTEND_POS7X - 35, FRONTEND_POS7Y, videoOptionsDisplayScaleLabel(), WBUT_SECONDARY);
+		addTextButton(FRONTEND_DISPLAYSCALE_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, videoOptionsDisplayScaleString(), WBUT_SECONDARY);
 	}
+
+	// Gfx Backend
+	addTextButton(FRONTEND_GFXBACKEND, ((showDisplayScale) ? FRONTEND_POS8X : FRONTEND_POS7X) - 35, ((showDisplayScale) ? FRONTEND_POS8Y : FRONTEND_POS7Y), _("Graphics Backend*"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_GFXBACKEND_R, ((showDisplayScale) ? FRONTEND_POS8M : FRONTEND_POS7M) - 55, ((showDisplayScale) ? FRONTEND_POS8Y : FRONTEND_POS7Y), videoOptionsGfxBackendString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -1223,6 +1266,32 @@ std::vector<unsigned int> availableDisplayScalesSorted()
 	std::vector<unsigned int> displayScales = wzAvailableDisplayScales();
 	std::sort(displayScales.begin(), displayScales.end());
 	return displayScales;
+}
+
+void seqVsyncMode()
+{
+	gfx_api::context::swap_interval_mode currentVsyncMode = getCurrentSwapMode();
+	auto startingVsyncMode = currentVsyncMode;
+	bool success = false;
+
+	do
+	{
+		currentVsyncMode = static_cast<gfx_api::context::swap_interval_mode>(seqCycle(static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(currentVsyncMode), static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(gfx_api::context::min_swap_interval_mode), 1, static_cast<std::underlying_type<gfx_api::context::swap_interval_mode>::type>(gfx_api::context::max_swap_interval_mode)));
+
+		success = gfx_api::context::get().setSwapInterval(currentVsyncMode);
+
+	} while ((!success) && (currentVsyncMode != startingVsyncMode));
+
+	if (currentVsyncMode == startingVsyncMode)
+	{
+		// Failed to change vsync mode - display messagebox
+		wzDisplayDialog(Dialog_Warning, _("Unable to change Vertical Sync"), _("Warzone failed to change the Vertical Sync mode.\nYour system / drivers may not support other modes."));
+	}
+	else if (success)
+	{
+		// succeeded changing vsync mode
+		saveCurrentSwapMode(currentVsyncMode);
+	}
 }
 
 void seqDisplayScale()
@@ -1434,10 +1503,33 @@ bool runVideoOptionsMenu()
 
 	case FRONTEND_VSYNC:
 	case FRONTEND_VSYNC_R:
-		wzSetSwapInterval(!war_GetVsync());
-		war_SetVsync(!war_GetVsync());
-		widgSetString(psWScreen, FRONTEND_VSYNC_R, videoOptionsVsyncString());
+		seqVsyncMode();
+
+		// Update the widget(s)
+		refreshCurrentVideoOptionsValues();
 		break;
+
+	case FRONTEND_GFXBACKEND:
+	case FRONTEND_GFXBACKEND_R:
+		{
+			const std::vector<video_backend> availableBackends = wzAvailableGfxBackends();
+			if (availableBackends.size() >= 1)
+			{
+				auto current = std::find(availableBackends.begin(), availableBackends.end(), war_getGfxBackend());
+				if (current == availableBackends.end())
+				{
+					current = availableBackends.begin();
+				}
+				current = seqCycle(current, availableBackends.begin(), 1, availableBackends.end() - 1);
+				war_setGfxBackend(*current);
+				widgSetString(psWScreen, FRONTEND_GFXBACKEND_R, videoOptionsGfxBackendString().c_str());
+			}
+			else
+			{
+				debug(LOG_ERROR, "There must be at least one valid backend");
+			}
+			break;
+		}
 
 	case FRONTEND_DISPLAYSCALE:
 	case FRONTEND_DISPLAYSCALE_R:
@@ -1818,6 +1910,7 @@ bool runGameOptionsMenu()
 struct TitleBitmapCache {
 	WzText formattedVersionString;
 	WzText modListText;
+	WzText gfxBackend;
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1839,6 +1932,7 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 	cache.formattedVersionString.setText(version_getFormattedVersionString(), font_regular);
 	cache.modListText.setText(modListText, font_regular);
+	cache.gfxBackend.setText(gfx_api::context::get().getFormattedRendererInfoString(), font_small);
 
 	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 9, pie_GetVideoBufferHeight() - 14, WZCOL_GREY, 270.f);
 
@@ -1847,13 +1941,16 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 		cache.modListText.render(9, 14, WZCOL_GREY);
 	}
 
-	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, WZCOL_TEXT_BRIGHT, 270.f);
+	cache.gfxBackend.render(9, pie_GetVideoBufferHeight() - 10, WZCOL_GREY);
 
+	cache.formattedVersionString.render(pie_GetVideoBufferWidth() - 10, pie_GetVideoBufferHeight() - 15, WZCOL_TEXT_BRIGHT, 270.f);
 
 	if (!getModList().empty())
 	{
 		cache.modListText.render(10, 15, WZCOL_TEXT_BRIGHT);
 	}
+
+	cache.gfxBackend.render(10, pie_GetVideoBufferHeight() - 11, WZCOL_TEXT_BRIGHT);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1993,7 +2090,7 @@ void addTopForm(bool wide)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *topForm = new IntFormAnimated(parent, false);
+	IntFormTransparent *topForm = new IntFormTransparent(parent);
 	topForm->id = FRONTEND_TOPFORM;
 	if (wide)
 	{

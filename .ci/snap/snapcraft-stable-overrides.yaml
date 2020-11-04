@@ -1,0 +1,31 @@
+grade: stable
+
+parts:
+  warzone2100:
+    source: https://github.com/Warzone2100/warzone2100.git
+    source-type: git
+    override-pull: |
+      # Obtain the desired tag from the .stable_tag file
+      echo "SNAPCRAFT_PROJECT_DIR=$SNAPCRAFT_PROJECT_DIR"
+      STABLE_TAG_CONFIG="$SNAPCRAFT_PROJECT_DIR/.stable_tag"
+      TAG_REF=$(cat "${STABLE_TAG_CONFIG}")
+      echo "TAG_REF=$TAG_REF"
+
+      snapcraftctl pull
+
+      echo "git submodule deinit --all"
+      git submodule deinit --all
+      echo "git fetch ..."
+      git fetch
+      echo "git fetch --tags -f ..."
+      git fetch --tags -f
+      echo "git checkout $TAG_REF ..."
+      git checkout "${TAG_REF}"
+      echo "git submodule update"
+      git submodule update --init
+      snapcraftctl set-version "$TAG_REF"
+      
+      # Write out important release config environment variables
+      cat > .snapenv <<EOENV
+      WZ_DISTRIBUTOR="Snapcraft"
+      EOENV

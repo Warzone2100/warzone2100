@@ -6,6 +6,7 @@ OPTION(ENABLE_NLS "Native Language Support" ON)
 OPTION(WZ_PORTABLE "Portable (Windows-only)" ON)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
+OPTION(WZ_ENABLE_BACKEND_VULKAN "Enable Vulkan backend" ON)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
 	# Only supported on Windows, macOS, and Linux
@@ -44,6 +45,7 @@ else()
 	set(CMAKE_CXX_STANDARD 11)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF) # Disable compiler-specific extensions
 
 # Support folders (for nicer IDE organization)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -101,9 +103,6 @@ if(IS_ABSOLUTE "${CMAKE_INSTALL_BINDIR}")
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	# Disable compiler-specific extensions for macOS builds
-	set(CMAKE_CXX_EXTENSIONS OFF)
-
 	# Enable macOS-specific find scripts
 	list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/macosx/cmake")
 
@@ -275,6 +274,11 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 	elseif(CMAKE_GENERATOR STREQUAL "Xcode")
 		# Set Xcode generator project-level configuration + warning flags
+
+		# Generate Xcode Schemes (on CMake 3.14+)
+		if((CMAKE_MAJOR_VERSION GREATER 3) OR (CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER 13))
+			set(CMAKE_XCODE_GENERATE_SCHEME TRUE)
+		endif()
 
 		# Enable Objective-C ARC
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES)
@@ -695,12 +699,22 @@ endif()
 
 add_subdirectory(3rdparty)
 
-set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL COPYING COPYING.README README.md)
+# Determine distribution license
+set(WZ_DIST_LICENSE "${CMAKE_CURRENT_BINARY_DIR}/dist/COPYING")
+if(WZ_ENABLE_BACKEND_VULKAN)
+	# If Vulkan is enabled, use the GPL3 license for distribution
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/pkg/licenses/COPYING.gpl3" "${WZ_DIST_LICENSE}" COPYONLY)
+else()
+	# GPLv2
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/COPYING" "${WZ_DIST_LICENSE}" COPYONLY)
+endif()
+
+set(wz2100_ROOT_FILES ChangeLog AUTHORS COPYING.NONGPL "${WZ_DIST_LICENSE}" COPYING.README README.md)
 
 CONFIGURE_WZ_COMPILER_WARNINGS()
 add_subdirectory(build_tools)
-add_subdirectory(lib)
 add_subdirectory(data)
+add_subdirectory(lib)
 add_subdirectory(doc)
 add_subdirectory(icons)
 add_subdirectory(po)

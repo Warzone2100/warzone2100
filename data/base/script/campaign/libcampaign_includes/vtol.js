@@ -13,14 +13,13 @@ function camSetVtolData(player, startPos, exitPos, templates, timer, obj, extras
 	__camVtolStartPosition = startPos;
 	__camVtolExitPosition = camMakePos(exitPos);
 	__camVtolTemplates = templates;
-	__camVtolTimer = timer;
 	__camVtolSpawnStopObject = obj;
 	__camVtolExtras = extras;
 
 	camSetVtolSpawn(true);
-	__checkVtolSpawnObject();
-	__camSpawnVtols();
-	__camRetreatVtols();
+	setTimer("__camRetreatVtols", camSecondsToMilliseconds(0.8));
+	setTimer("__checkVtolSpawnObject", camSecondsToMilliseconds(5));
+	setTimer("__camSpawnVtols", timer);
 }
 
 function camSetVtolSpawn(value)
@@ -37,10 +36,7 @@ function __checkVtolSpawnObject()
 		if (getObject(__camVtolSpawnStopObject) === null)
 		{
 			camSetVtolSpawn(false); //Deactive hit and runner VTOLs.
-		}
-		else
-		{
-			queue("__checkVtolSpawnObject", camSecondsToMilliseconds(5));
+			removeTimer("__checkVtolSpawnObject");
 		}
 	}
 }
@@ -49,6 +45,7 @@ function __camSpawnVtols()
 {
 	if (__camVtolSpawnActive === false)
 	{
+		removeTimer("__camSpawnVtols");
 		return;
 	}
 
@@ -129,8 +126,6 @@ function __camSpawnVtols()
 		order: CAM_ORDER_ATTACK,
 		data: { regroup: false, count: -1 }
 	});
-
-	queue("__camSpawnVtols", __camVtolTimer);
 }
 
 function __camRetreatVtols()
@@ -158,6 +153,4 @@ function __camRetreatVtols()
 			}
 		}
 	}
-
-	queue("__camRetreatVtols", camSecondsToMilliseconds(0.8));
 }

@@ -25,7 +25,7 @@ function havePrimaryOrArtilleryWeapon()
 {
 	var primary = componentAvailable(subPersonalities[personality].primaryWeapon.weapons[0].stat);
 	var artillery = componentAvailable(subPersonalities[personality].artillery.weapons[0].stat);
-	
+
 	return (primary || artillery);
 }
 
@@ -92,7 +92,7 @@ function chooseRandomCyborgWeapon()
 		case 0: weaps = subPersonalities[personality].primaryWeapon; break;
 		case 1: if (subPersonalities[personality].useLasers === true) { weaps = weaponStats.lasers; } break;
 		case 2: weaps = subPersonalities[personality].secondaryWeapon; break;
-		case 3: if(!componentAvailable("Mortar3ROTARYMk1") && useArti) { weaps = subPersonalities[personality].artillery; } break;
+		case 3: if (!componentAvailable("Mortar3ROTARYMk1") && useArti) { weaps = subPersonalities[personality].artillery; } break;
 		default: weaps = subPersonalities[personality].primaryWeapon; break;
 	}
 
@@ -107,12 +107,23 @@ function chooseRandomVTOLWeapon()
 
 	switch (random(5))
 	{
-		case 0: if((returnPrimaryAlias() !== "mg") && (returnPrimaryAlias() !== "fl")) { weaps = subPersonalities[personality].primaryWeapon; } break;
+		case 0: if (returnPrimaryAlias() !== "fl") { weaps = subPersonalities[personality].primaryWeapon; } break;
 		case 1: if (subPersonalities[personality].useLasers === true) { weaps = weaponStats.lasers; } break;
 		case 2: weaps = subPersonalities[personality].secondaryWeapon; break;
 		case 3: weaps = weaponStats.bombs; break;
 		case 4: weaps = weaponStats.empBomb; isEMP = true; break;
 		default: weaps = weaponStats.bombs; break;
+	}
+
+	//Rare chance to make a Sunburst VTOL if we use Rocket AA.
+	if ((returnAntiAirAlias() === "rktaa") && (random(100) < 8) && playerVtolRatio(getMostHarmfulPlayer()) >= 0.25)
+	{
+		weaps = weaponStats.rockets_AA;
+	}
+	//Rare chance to make a bunker buster VTOL if we are a rocket personality.
+	if ((random(100) < 5) && personalityIsRocketMain() && (playerStructureUnitRatio(getMostHarmfulPlayer()) >= 0.08))
+	{
+		weaps = weaponStats.rockets_AS;
 	}
 
 	if (!isDefined(weaps) || (!isEMP && (weaps.vtols.length - 1 <= 0)))
@@ -183,6 +194,21 @@ function choosePersonalityWeapon(type)
  			}
 		}
 
+		// Allow small chance for Bunker Busters if main weapons lines are rockets.
+		if (!skip && ((random(100) < 7) && personalityIsRocketMain() && (playerStructureUnitRatio(getMostHarmfulPlayer()) >= 0.25)))
+		{
+			weaponList = [];
+			skip = true;
+			var bunkerBusters = weaponStats.rockets_AS.weapons;
+
+ 			for (var i = bunkerBusters.length - 1; i >= 0; --i)
+			{
+				var weapObj = bunkerBusters[i];
+ 				weaponList.push(weapObj.stat);
+ 			}
+		}
+
+		// Maybe choose a machinegun.
 		if (!skip && ((!turnOffMG && (random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
 			!havePrimaryOrArtilleryWeapon()))
 		{
@@ -309,7 +335,7 @@ function buildAttacker(id)
 			//This helps keep things competitive among a player rushing with small/medium bodies.
 
 			var body;
-			var bodySwitchTime = highOilMap() ? 600000 : 900000;
+			var bodySwitchTime = 900000;
 			if (gameTime < bodySwitchTime && random(100) < 75)
 			{
 				if (!(getRealPower() >= PRODUCTION_POWER + 200) && random(100) < 60)
@@ -486,8 +512,8 @@ function attackerCountsGood(recycle)
 		recycle = false;
 	}
 
-	var highOilExtras = highOilMap() ? 10 : 0;
-	var recycleExtras = recycle ? 8 : 0;
+	var highOilExtras = highOilMap() ? 15 : 0;
+	var recycleExtras = recycle ? 20 : 0;
 
 	var amountOfAttackers = groupSize(attackGroup) + groupSize(artilleryGroup) + groupSize(vtolGroup);
 
@@ -504,7 +530,7 @@ function produce()
 	}
 	const MIN_SENSORS = 1;
 	const MIN_REPAIRS = 2;
-	var useCybEngineer = !countStruct(structures.factories); //use them if we have no factory
+	var useCybEngineer = !countStruct(structures.factory); //use them if we have no factory
 	var systems = analyzeQueuedSystems();
 
 	var attackers = groupSize(attackGroup);
@@ -521,9 +547,9 @@ function produce()
 	{
 		var facType = subPersonalities[personality].factoryOrder[i];
 		var fac = enumStruct(me, facType);
-		if (!((facType === CYBORG_FACTORY) && !forceHover && turnOffCyborgs))
+		if (!((facType === structures.cyborgFactory) && !forceHover && turnOffCyborgs))
 		{
-			if (facType === VTOL_FACTORY && !countDroid(DROID_CONSTRUCT))
+			if (facType === structures.vtolFactory && !countDroid(DROID_CONSTRUCT))
 			{
 				continue;
 			}
@@ -544,7 +570,7 @@ function produce()
 					continue;
 				}
 
-				if (facType === FACTORY)
+				if (facType === structures.factory)
 				{
 					if (buildTrucks &&
 						(attackerCountsGood(false) ||
@@ -568,7 +594,7 @@ function produce()
 					}
 					else
 					{
-						if (!countStruct(structures.gens) || !countStruct(structures.derricks))
+						if (!countStruct(structures.gen) || !countStruct(structures.derrick))
 						{
 							continue;
 						}
@@ -578,14 +604,14 @@ function produce()
 				}
 				else
 				{
-					var cyb = (facType === CYBORG_FACTORY);
+					var cyb = (facType === structures.cyborgFactory);
 					//In some circumstances the bot could be left with no generators and no factories
 					//but still needs to produce combat engineers to, maybe, continue surviving.
-					if (countStruct(structures.gens) || (cyb && useCybEngineer && (gameTime > 480000)))
+					if (countStruct(structures.gen) || (cyb && useCybEngineer && (gameTime > 480000)))
 					{
 						if (cyb && (!turnOffCyborgs || !forceHover))
 						{
-							if (!useCybEngineer && !countStruct(structures.derricks))
+							if (!useCybEngineer && !countStruct(structures.derrick))
 							{
 								continue; //no derricks while trying to build attack cyborg
 							}
@@ -593,7 +619,7 @@ function produce()
 						}
 						else
 						{
-							if (useVtol && facType === VTOL_FACTORY && countStruct(structures.derricks))
+							if (useVtol && facType === structures.vtolFactory && countStruct(structures.derrick))
 							{
 								buildVTOL(FC.id);
 							}

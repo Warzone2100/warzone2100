@@ -40,15 +40,12 @@ void processInput();
 /*don't want to do any of these whilst in the Intelligence Screen*/
 void processMouseClickInput();
 
-void scroll();
 void resetScroll();
 void setMouseScroll(bool);
 
 bool DrawnInLastFrame(SDWORD Frame);
 
-// Clear all selections.
-void clearSel();
-// Clear all selections and stop driver mode.
+// Clear all selections
 void clearSelection();
 // deal with selecting a droid
 void dealWithDroidSelect(DROID *psDroid, bool bDragBox);
@@ -75,24 +72,33 @@ void displayWorld();
 
 // Illumination value for standard light level "as the artist drew it" ... not darker, not lighter
 
-#define DRAG_INACTIVE 0
-#define DRAG_DRAGGING 1
-#define DRAG_RELEASED 2
-#define DRAG_PLACING  3
+enum DragState
+{
+	DRAG_INACTIVE,
+	DRAG_DRAGGING,
+	DRAG_RELEASED,
+	DRAG_PLACING
+};
 
-#define BOX_PULSE_SPEED	50
-
-struct	_dragBox
+struct DragBox3D
 {
 	int x1;
 	int y1;
 	int x2;
 	int y2;
-	UDWORD status;
+	DragState status;
 	float pulse = 0;
 };
 
-extern struct	_dragBox dragBox3D, wallDrag;
+struct WallDrag
+{
+	Vector2i pos;
+	Vector2i pos2;
+	DragState status;
+};
+
+extern DragBox3D dragBox3D;
+extern WallDrag wallDrag;
 
 enum MOUSE_POINTER
 {
@@ -218,10 +224,11 @@ bool ctrlShiftDown();
 
 UDWORD getTargetType();
 
-#define	DEFAULT_ZOOM_SPEED (5000)
+#define	DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED (5000)
 
-void setZoom(float zoomSpeed, float zoomTarget);
-void zoom();
+void animateToViewDistance(float target, float speed = DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED);
+void incrementViewDistance(float amount);
+void displayRenderLoop();
 bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix);
 bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &viewMatrix);
 

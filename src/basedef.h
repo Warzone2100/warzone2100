@@ -41,7 +41,6 @@ enum OBJECT_TYPE
 	OBJ_STRUCTURE,  ///< All Buildings
 	OBJ_FEATURE,    ///< Things like roads, trees, bridges, fires
 	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
-	OBJ_TARGET,     ///< for the camera tracking
 	OBJ_NUM_TYPES,  ///< number of object types - MUST BE LAST
 };
 
@@ -117,14 +116,13 @@ struct BASE_OBJECT : public SIMPLE_OBJECT
 	UBYTE               selected;                   ///< Whether the object is selected (might want this elsewhere)
 	UBYTE               visible[MAX_PLAYERS];       ///< Whether object is visible to specific player
 	UBYTE               seenThisTick[MAX_PLAYERS];  ///< Whether object has been seen this tick by the specific player.
-	UWORD               numWatchedTiles;            ///< Number of watched tiles, zero for features
 	UDWORD              lastEmission;               ///< When did it last puff out smoke?
 	WEAPON_SUBCLASS     lastHitWeapon;              ///< The weapon that last hit it
 	UDWORD              timeLastHit;                ///< The time the structure was last attacked
 	UDWORD              body;                       ///< Hit points with lame name
 	UDWORD              periodicalDamageStart;                  ///< When the object entered the fire
 	UDWORD              periodicalDamage;                 ///< How much damage has been done since the object entered the fire
-	TILEPOS             *watchedTiles;              ///< Variable size array of watched tiles, NULL for features
+	std::vector<TILEPOS> watchedTiles;              ///< Variable size array of watched tiles, empty for features
 
 	UDWORD              timeAnimationStarted;       ///< Animation start time, zero for do not animate
 	UBYTE               animationEvent;             ///< If animation start time > 0, this points to which animation to run
@@ -177,7 +175,7 @@ static inline int objPosDiffSq(SIMPLE_OBJECT const *pos1, SIMPLE_OBJECT const *p
 	return objPosDiffSq(pos1->pos, pos2->pos);
 }
 
-// True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_TARGET or OBJ_NUM_TYPES.
+// True iff object is a droid, structure or feature (not a projectile). Will incorrectly return true if passed a nonsense object of type OBJ_NUM_TYPES.
 static inline bool isBaseObject(SIMPLE_OBJECT const *psObject)
 {
 	return psObject != nullptr && psObject->type != OBJ_PROJECTILE;

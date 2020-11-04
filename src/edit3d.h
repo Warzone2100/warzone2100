@@ -31,16 +31,28 @@
 typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos, void *UserData);
 
 void Edit3DInitVars();
-bool found3DBuilding(UDWORD *x, UDWORD *y);
-bool found3DBuildLocTwo(UDWORD *px1, UDWORD *py1, UDWORD *px2, UDWORD *py2);
+bool found3DBuilding(Vector2i &pos);
+bool found3DBuildLocTwo(Vector2i &pos, Vector2i &pos2);
 void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData);
 void kill3DBuilding();
 bool process3DBuilding();
+void incrementBuildingDirection(uint16_t amount);
+uint16_t getBuildingDirection();
 
 void adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
 void raiseTile(int tile3dX, int tile3dY);
 void lowerTile(int tile3dX, int tile3dY);
 bool inHighlight(UDWORD realX, UDWORD realY);
+
+enum BuildState
+{
+	BUILD3D_NONE,
+	BUILD3D_POS,
+	BUILD3D_FINISHED,
+	BUILD3D_VALID
+};
+
+extern BuildState buildState;
 
 struct HIGHLIGHT
 {
@@ -50,26 +62,24 @@ struct HIGHLIGHT
 
 extern HIGHLIGHT	buildSite;
 
-
-#define BUILD3D_NONE		99
-#define BUILD3D_POS			100
-#define BUILD3D_FINISHED	101
-#define BUILD3D_VALID		102
-
-
 struct BUILDDETAILS
 {
 	BUILDCALLBACK	CallBack;
-	void 			*UserData;  //this holds the OBJECT_POSITION pointer for a Deliv Point
-	UDWORD			x, y;
-	UDWORD			width, height;
-	BASE_STATS		*psStats;
+	void         	*UserData;  //this holds the OBJECT_POSITION pointer for a Deliv Point
+	UDWORD       	x, y;
+	UDWORD       	width, height;
+	BASE_STATS   	*psStats;
+	uint16_t     	directionShift;
 };
 
 extern BUILDDETAILS	sBuildDetails;
 
-extern UDWORD buildState;
-extern UDWORD temp;
+// May only call if sBuildDetails.psStats points to a STRUCTURE_STATS.
+static inline bool canLineBuild()
+{
+	return ((STRUCTURE_STATS *)sBuildDetails.psStats)->upgrade[selectedPlayer].limit > 1;
+}
+
 extern int brushSize;
 extern bool quickQueueMode;
 

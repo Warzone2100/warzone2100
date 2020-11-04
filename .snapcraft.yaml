@@ -1,0 +1,198 @@
+name: warzone2100 # no spaces, all lower-case
+# summary, description, and icon are parsed from the appdata/metainfo file
+adopt-info: warzone2100
+confinement: strict
+grade: stable
+base: core18
+
+plugs:
+  wz2100-sequences:
+    interface: content
+    content: wz2100-sequences
+    target: $SNAP/usr/share/warzone2100/sequences
+    default-provider: warzone2100-videos
+
+apps:
+  warzone2100:
+    command: usr/bin/warzone2100
+    command-chain: [bin/desktop-launch]
+    common-id: warzone2100 # should match the appdata/metainfo file's <id> field
+    desktop: usr/share/applications/warzone2100.desktop
+    plugs:
+      - audio-playback
+      - desktop
+      - desktop-legacy
+      - network
+      - network-bind
+      - opengl
+      - pulseaudio
+      - unity7
+      - wayland
+      - x11
+
+  download-videos:
+    command: bin/download-videos
+    plugs: [network]
+
+parts:
+  scripts:
+    plugin: dump
+    source: pkg/snap
+    organize:
+      download-videos: bin/download-videos
+    stage-packages:
+      - curl
+
+  desktop-qt5:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    plugin: make
+    make-parameters: ["FLAVOR=qt5"]
+    build-packages:
+      - qtbase5-dev
+      - dpkg-dev
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5 # for loading icon themes which are svg
+      - qtwayland5
+      - try: [appmenu-qt5] # not available on core18
+      - locales-all
+      - libgtk2.0-0
+
+  sdl:
+    source: https://www.libsdl.org/release/SDL2-2.0.12.tar.gz
+    plugin: autotools
+    configflags:
+    - --prefix=/usr
+    - --disable-alsa
+    - --disable-arts
+    - --disable-esd
+    - --disable-nas
+    - --disable-oss
+    override-build: |
+      snapcraftctl build
+      sed -i 's|"/usr"|"'"$SNAPCRAFT_STAGE/usr"'"|g' "$SNAPCRAFT_PART_INSTALL/usr/lib/cmake/SDL2/sdl2-config.cmake"
+    build-packages:
+    - fcitx-libs-dev
+    - libegl1-mesa-dev
+    - libgl1-mesa-dev
+    - libgles2-mesa-dev
+    - libibus-1.0-dev
+    - libjack-dev
+    - libpulse-dev
+    - libsamplerate0-dev
+    - libsndfile1-dev
+    - libts-dev
+    - libvulkan-dev
+    - libwayland-dev
+    - libx11-dev
+    - libxcursor-dev
+    - libxext-dev
+    - libxi-dev
+    - libxinerama-dev
+    - libxkbcommon-dev
+    - libxrandr-dev
+    - libxrender-dev
+    - libxss-dev
+    - libxxf86vm-dev
+    stage-packages:
+    - fcitx-libs
+    - libdrm2
+    - libegl1-mesa
+    - libgl1
+    - libgles2
+    - libibus-1.0-5
+    - libjack0
+    - libpulse0
+    - libsamplerate0
+    - libts0
+    - libsndfile1
+    - libwayland-client0
+    - libwayland-egl1-mesa
+    - libvulkan1
+    - libx11-6
+    - libxcursor1
+    - libxext6
+    - libxi6
+    - libxinerama1
+    - libxkbcommon0
+    - libxrandr2
+    - libxrender1
+    - libxss1
+    - libxxf86vm1
+
+  warzone2100:
+    after: [desktop-qt5, sdl]
+    plugin: cmake
+    source: .
+    parse-info:
+      # Parse this appdata/metainfo file for summary, description,
+      # and icon. Use the installed path relative to the Snap's root
+      - usr/share/metainfo/warzone2100.appdata.xml
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version "$(git describe --always)"
+      git submodule update --init
+    override-build: |
+      if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
+      if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
+      cmake -S "$SNAPCRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
+      cmake --build . -- -j$SNAPCRAFT_PARALLEL_BUILD_COUNT
+      DESTDIR=$SNAPCRAFT_PART_INSTALL cmake --build . -- install
+      
+      # Include the icon's path in the desktop file, not just the name.
+      # This needs to happen post-build or the build versioning will show as "modified locally"
+      sed -i -E 's|Icon=(.*)|Icon=/usr/share/icons/\1.png|' $SNAPCRAFT_PART_INSTALL/usr/share/applications/warzone2100.desktop
+    build-packages:
+      - asciidoctor
+      - g++
+      - gettext
+      - libfontconfig1-dev
+      - libfreetype6-dev
+      - libfribidi-dev
+      - libglc-dev
+      - libglew-dev
+      - libharfbuzz-dev
+      - libopenal-dev
+      - libphysfs-dev
+      - libpng-dev
+      - libtheora-dev
+      - libvorbis-dev
+      - qtbase5-dev
+      - qtscript5-dev
+      - libcurl4-gnutls-dev
+      - libgnutls28-dev
+      - libsodium-dev
+      - ninja-build
+      - unzip
+      - zip
+    stage-packages:
+      - libfontconfig1
+      - libfreetype6
+      - libfribidi0
+      - libglc0
+      - libglew2.0
+      - libharfbuzz0b
+      - libogg0
+      - libopenal1
+      - libphysfs1
+      - libpng16-16
+      - libqt5opengl5
+      - libqt5script5
+      - libtheora0
+      - libvorbis0a
+      - libvorbisenc2
+      - libvorbisfile3
+      - libcurl3-gnutls
+      - libsodium23
+      - libglu1-mesa
+      - unzip
+      - zip

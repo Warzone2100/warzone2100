@@ -64,8 +64,8 @@ void war_SetTrapCursor(bool b);
 bool war_GetTrapCursor();
 bool war_GetColouredCursor();
 void war_SetColouredCursor(bool enabled);
-void war_SetVsync(bool b);
-bool war_GetVsync();
+void war_SetVsync(int value);
+int war_GetVsync();
 void war_SetDisplayScale(unsigned int scale);
 unsigned int war_GetDisplayScale();
 void war_SetWidth(UDWORD width);
@@ -74,6 +74,8 @@ void war_SetScreen(int screen);
 int war_GetScreen();
 void war_SetHeight(UDWORD height);
 UDWORD war_GetHeight();
+void war_SetVideoBufferDepth(UDWORD videoBufferDepth);
+UDWORD war_GetVideoBufferDepth();
 void war_SetPauseOnFocusLoss(bool enabled);
 bool war_GetPauseOnFocusLoss();
 bool war_GetMusicEnabled();
@@ -98,6 +100,8 @@ void war_setMPcolour(int colour);
 int war_getMPcolour();
 void war_setScanlineMode(SCANLINE_MODE mode);
 SCANLINE_MODE war_getScanlineMode();
+video_backend war_getGfxBackend();
+void war_setGfxBackend(video_backend backend);
 
 /**
  * Enable or disable sound initialization

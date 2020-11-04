@@ -4,6 +4,7 @@ file(GLOB HEADERS
 	"bitimage.h"
 	"gfx_api.h"
 	"gfx_api_gl.h"
+	"gfx_api_vk.h"
 	"imd.h"
 	"ivisdef.h"
 	"jpeg_encoder.h"
@@ -21,11 +22,14 @@ file(GLOB HEADERS
 	"screen.h"
 	"tex.h"
 	"textdraw.h"
+	"3rdparty/stb_image_resize.h"
 )
 
 file(GLOB SRC
 	"bitimage.cpp"
+	"gfx_api.cpp"
 	"gfx_api_gl.cpp"
+	"gfx_api_vk.cpp"
 	"imdload.cpp"
 	"jpeg_encoder.cpp"
 	"pieblitfunc.cpp"
@@ -40,13 +44,14 @@ file(GLOB SRC
 	"screen.cpp"
 	"tex.cpp"
 	"textdraw.cpp"
+	"3rdparty/stb_image_resize.cpp"
 )
 
 find_package(PNG 1.2 REQUIRED)
-find_package(OpenGL REQUIRED)
-find_package(GLEW 1.5.2 REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Harfbuzz 1.0 REQUIRED)
+
+include(CheckCXXCompilerFlag)
 
 add_library(ivis-opengl ${HEADERS} ${SRC})
 set_property(TARGET ivis-opengl PROPERTY FOLDER "lib")
@@ -55,13 +60,47 @@ if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 endif()
 target_include_directories(ivis-opengl PRIVATE ${HARFBUZZ_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIR_ft2build})
 target_link_libraries(ivis-opengl PRIVATE framework PNG::PNG ${HARFBUZZ_LIBRARIES} ${FREETYPE_LIBRARIES})
-target_link_libraries(ivis-opengl PUBLIC ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} GLEW::GLEW)
+target_link_libraries(ivis-opengl PUBLIC glad)
+if(WZ_ENABLE_BACKEND_VULKAN)
+	find_package(VulkanHeaders 148) # minimum supported version of the Vulkan headers is 148
+	if((NOT VulkanHeaders_FOUND AND NOT ${CMAKE_VERSION} VERSION_LESS "3.11.0") AND (NOT WZ_DISABLE_FETCHCONTENT_GIT_CLONE))
+		# Fetch newer Vulkan headers (using FetchContent, which requires CMake 3.11+)
+		include(FetchContent)
+		FetchContent_Declare(
+			vulkan_headers
+			GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers.git
+			GIT_TAG        sdk-1.2.148.0
+		)
+		FetchContent_GetProperties(vulkan_headers)
+		if(NOT vulkan_headers_POPULATED)
+			FetchContent_Populate(vulkan_headers)
+		endif()
+		set(VulkanHeaders_FOUND TRUE)
+		set(VulkanHeaders_INCLUDE_DIRS "${vulkan_headers_SOURCE_DIR}/include")
+		message(STATUS "Using fetched Vulkan headers: ${VulkanHeaders_INCLUDE_DIRS}")
+	endif()
+	if(VulkanHeaders_FOUND AND TARGET glsl_compilation)
+		target_compile_definitions(ivis-opengl PUBLIC "-DWZ_VULKAN_ENABLED")
+		message(STATUS "@@ Using VulkanHeaders_INCLUDE_DIRS=${VulkanHeaders_INCLUDE_DIRS}")
+		target_include_directories(ivis-opengl PUBLIC ${VulkanHeaders_INCLUDE_DIRS}) # For now, make the include path public so the backend (ex. SDL) can access type declarations
+		target_sources(ivis-opengl PRIVATE "3rdparty/vkh_renderpasscompat.cpp" "3rdparty/vkh_renderpasscompat.hpp")
+		target_sources(ivis-opengl PRIVATE "3rdparty/vkh_info.cpp" "3rdparty/vkh_info.hpp")
 
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-  if(${CMAKE_CROSSCOMPILING})
-    target_compile_definitions(ivis-opengl PUBLIC "GLEW_STATIC")
-  endif()
+		target_sources(ivis-opengl PRIVATE "3rdparty/vk_mem_alloc.cpp" "3rdparty/vk_mem_alloc.h")
+		CHECK_CXX_COMPILER_FLAG(-Wno-pedantic COMPILER_SUPPORTS_WNO_PEDANTIC)
+		if(COMPILER_SUPPORTS_WNO_PEDANTIC)
+			set_source_files_properties("3rdparty/vk_mem_alloc.cpp" PROPERTIES COMPILE_FLAGS -Wno-pedantic)
+		endif()
+
+		# Do *NOT* link to the Vulkan library - should be loaded dynamically
+
+		add_dependencies(ivis-opengl glsl_compilation)
+	else()
+		if(NOT VulkanHeaders_FOUND)
+			message(STATUS "Vulkan headers not found - disabling Vulkan backend")
+		elseif(NOT TARGET glsl_compilation)
+			message(WARNING "GLSLC shader compiler not found - disabling Vulkan backend")
+		endif()
+	endif()
 endif()
-
-
 

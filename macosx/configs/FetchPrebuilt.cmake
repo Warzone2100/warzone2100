@@ -157,6 +157,66 @@ endif()
 #######################################################################
 # Extracting
 
+function(ExtractDMG filename directory)
+
+	if(NOT CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
+		message(FATAL_ERROR "Extraction of DMG is only supported on macOS")
+	endif()
+
+	# Make file names absolute:
+	#
+	get_filename_component(filename "${filename}" ABSOLUTE)
+	get_filename_component(directory "${directory}" ABSOLUTE)
+
+	find_program(HDIUTIL_COMMAND hdiutil REQUIRED)
+	find_program(RSYNC_COMMAND rsync REQUIRED)
+
+	if(NOT EXISTS "${filename}")
+		message(FATAL_ERROR "error: file to extract does not exist: '${filename}'")
+	endif()
+
+	get_filename_component(_filename_dir "${filename}" DIRECTORY)
+	set(_tmp_dmg_mount_path "${_filename_dir}/.mountedDMGs")
+
+	file(MAKE_DIRECTORY "${_tmp_dmg_mount_path}")
+
+	# mount the DMG to the temp (local) path
+	get_filename_component(_filename_name_only "${filename}" NAME)
+	set(_MountPoint "${_tmp_dmg_mount_path}/${_filename_name_only}")
+
+	message(STATUS "info: Mounting DMG: \"${filename}\" -> \"${_MountPoint}\"")
+	execute_process(
+		COMMAND ${HDIUTIL_COMMAND} attach -mountpoint "${_MountPoint}" "${filename}"
+		OUTPUT_QUIET
+		RESULT_VARIABLE rv
+	)
+
+	if(NOT rv EQUAL 0)
+		message(FATAL_ERROR "error: hdiutil failed to mount the DMG: '${filename}'")
+	endif()
+
+	# copy the contents of the DMG to the expected "extraction" directory
+	# exclude anything beginning with "." in the root directory to avoid errors (ex. ".Trash")
+	message(STATUS "info: Copying DMG contents...")
+	file(MAKE_DIRECTORY "${directory}")
+	execute_process(
+		COMMAND ${RSYNC_COMMAND} -av --exclude='.*' "${_MountPoint}/" "${directory}"
+		OUTPUT_QUIET
+		RESULT_VARIABLE rv
+	)
+
+	message(STATUS "info: Copying DMG contents... done")
+
+	# unmount the DMG
+	execute_process(
+		COMMAND ${HDIUTIL_COMMAND} detach "${_MountPoint}"
+		OUTPUT_QUIET
+	)
+
+	message(STATUS "info: Unmounting DMG... done")
+
+endfunction()
+
 # ExtractFile adapted from: https://github.com/Kitware/CMake/blob/master/Modules/ExternalProject.cmake
 function(ExtractFile filename directory)
 
@@ -238,7 +298,11 @@ function(ExtractFile filename directory)
 
 endfunction()
 
-ExtractFile("${_dl_directory}/${FILENAME}" "${_full_extract_directory}")
+if(FILENAME MATCHES "(\\.|=)dmg$")
+	ExtractDMG("${_dl_directory}/${FILENAME}" "${_full_extract_directory}")
+else()
+	ExtractFile("${_dl_directory}/${FILENAME}" "${_full_extract_directory}")
+endif()
 
 # Save the SHA256
 file(WRITE "${_full_extract_directory}/.SHA256SumLoc" "${EXPECTED_SHA256}")

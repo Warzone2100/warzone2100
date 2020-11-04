@@ -126,7 +126,7 @@ static SDWORD videoMode = 0;
 LOOP_MISSION_STATE		loopMissionState = LMS_NORMAL;
 
 // this is set by scrStartMission to say what type of new level is to be started
-LEVEL_TYPE nextMissionType = LDS_NONE;
+LEVEL_TYPE nextMissionType = LEVEL_TYPE::LDS_NONE;
 
 static GAMECODE renderLoop()
 {
@@ -193,8 +193,7 @@ static GAMECODE renderLoop()
 		}
 		if (!scrollPaused() && dragBox3D.status != DRAG_DRAGGING && intMode != INT_INGAMEOP)
 		{
-			scroll();
-			zoom();
+			displayRenderLoop();
 		}
 	}
 	else  // paused
@@ -204,8 +203,7 @@ static GAMECODE renderLoop()
 
 		if (dragBox3D.status != DRAG_DRAGGING)
 		{
-			scroll();
-			zoom();
+			displayRenderLoop();
 		}
 
 		if (InGameOpUp || isInGamePopupUp)		// ingame options menu up, run it!
@@ -312,7 +310,6 @@ static GAMECODE renderLoop()
 		}
 		wzPerfBegin(PERF_GUI, "User interface");
 		/* Display the in game interface */
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 		pie_SetFogStatus(false);
 
 		if (bMultiPlayer && bDisplayMultiJoiningStatus)
@@ -325,7 +322,6 @@ static GAMECODE renderLoop()
 		{
 			intDisplayWidgets();
 		}
-		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
 		pie_SetFogStatus(true);
 		wzPerfEnd(PERF_GUI);
 	}
@@ -365,7 +361,7 @@ static GAMECODE renderLoop()
 		// just wait for this to be changed when the new mission starts
 		break;
 	case LMS_NEWLEVEL:
-		nextMissionType = LDS_NONE;
+		nextMissionType = LEVEL_TYPE::LDS_NONE;
 		return GAMECODE_NEWLEVEL;
 		break;
 	case LMS_LOADGAME:

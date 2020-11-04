@@ -146,4 +146,10 @@ static inline bool WZ_DECL_PURE Vector3i_InSphere(Vector3i v, Vector3i c, unsign
 	return (unsigned int)dot(delta, delta) < r * r;
 }
 
+// Round direction to nearest axis-aligned direction.
+static inline uint16_t snapDirection(uint16_t direction)
+{
+	return (direction + 0x2000) & 0xC000;
+}
+
 #endif // VECTOR_H

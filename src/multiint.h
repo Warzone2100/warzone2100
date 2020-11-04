@@ -31,6 +31,7 @@
 #include <functional>
 #include <vector>
 #include "lib/framework/wzstring.h"
+#include "titleui/multiplayer.h"
 
 #define MAX_LEN_AI_NAME   40
 #define AI_CUSTOM        127
@@ -90,25 +91,23 @@ public:
 	MultichoiceWidget(WIDGET *parent, int value = -1);
 };
 
-// WzMultiOptionTitleUI is in titleui.h to prevent dependency explosions
+// WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
 void readAIs();	///< step 1, load AI definition files
-void setupChallengeAIs();	///< dirty hack to allow correct display of names from challenges
 void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
 const std::vector<WzString> getAINames();
-int matchAIbyName(const char *name);	///< only run this -after- readAIs() is called
+int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called
+int matchAIbyPath(const char *path);	///< only run this -after- readAIs() is called
 int getNextAIAssignment(const char *name);
 
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);
 
-void intProcessConnection(UDWORD id);
-
-void updateLimitFlags();
-
-void runMultiOptions();
-bool startMultiOptions(bool bReenter);
+/**
+ * Updates structure limit flags. Flags indicate which structures are disabled.
+ */
+void updateStructureDisabledFlags();
 
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
@@ -117,11 +116,9 @@ Image mpwidgetGetFrontHighlightImage(Image image);
 bool changeColour(unsigned player, int col, bool isHost);
 
 extern char sPlayer[128];
-extern bool bHosted;
 extern bool multiintDisableLobbyRefresh; // gamefind
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
-void addPlayerBox(bool);			// players (mid) box
 void loadMapPreview(bool hideInterface);
 
 bool changeReadyStatus(UBYTE player, bool bReady);
@@ -182,7 +179,7 @@ void resetVoteData();
 #define MULTIOP_PLAYERS			10231
 #define MULTIOP_PLAYERSX		360
 #define MULTIOP_PLAYERSY		1
-#define MULTIOP_PLAYER_START		10232		//list of players
+#define MULTIOP_PLAYER_START	10232		//list of players
 #define MULTIOP_PLAYER_END		10249
 #define MULTIOP_PLAYERSW		263
 #define MULTIOP_PLAYERSH		380
@@ -197,13 +194,13 @@ void resetVoteData();
 
 #define MULTIOP_TEAMCHOOSER_FORM	102800
 #define MULTIOP_TEAMCHOOSER			102810
-#define MULTIOP_TEAMCHOOSER_END         102841
+#define MULTIOP_TEAMCHOOSER_END     102841
 #define MULTIOP_TEAMCHOOSER_KICK	10289
 
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
-#define MULTIOP_READY_START             (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
-#define	MULTIOP_READY_END               (MULTIOP_READY_START + MAX_PLAYERS - 1)
+#define MULTIOP_READY_START         (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)
+#define	MULTIOP_READY_END           (MULTIOP_READY_START + MAX_PLAYERS - 1)
 #define MULTIOP_READY_WIDTH			41
 #define MULTIOP_READY_HEIGHT		38
 
@@ -241,6 +238,7 @@ void resetVoteData();
 #define MULTIOP_MAP_ICON		10258
 #define MULTIOP_MAP				10259
 #define MULTIOP_MAP_MOD			21013	// Warning, do not use sequential numbers until code is fixed.
+#define MULTIOP_MAP_RANDOM      21014
 
 #define MULTIOP_REFRESH			10275
 
@@ -283,9 +281,6 @@ void resetVoteData();
 #define MULTIOP_RANDOM			10299
 #define MULTIOP_BASETYPE		10300
 #define MULTIOP_TECHLEVEL		10301
-
-#define MULTIOP_SKSLIDE			102842 //10313
-#define MULTIOP_SKSLIDE_END		102873 //10320
 
 #define MULTIOP_MAP_PREVIEW 920000
 

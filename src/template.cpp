@@ -399,7 +399,7 @@ bool shutdownTemplates()
 }
 
 DROID_TEMPLATE::DROID_TEMPLATE()  // This constructor replaces a memset in scrAssembleWeaponTemplate(), not needed elsewhere.
-	: BASE_STATS(REF_TEMPLATE_START)
+	: BASE_STATS(STAT_TEMPLATE)
 	  //, asParts
 	, numWeaps(0)
 	  //, asWeaps

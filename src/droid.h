@@ -77,7 +77,7 @@ struct INITIAL_DROID_ORDERS
 };
 /*Builds an instance of a Structure - the x/y passed in are in world coords.*/
 /// Sends a GAME_DROID message if bMultiMessages is true, or actually creates it if false. Only uses initialOrders if sending a GAME_DROID message.
-DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders);
+DROID *buildDroid(DROID_TEMPLATE *pTemplate, UDWORD x, UDWORD y, UDWORD player, bool onMission, const INITIAL_DROID_ORDERS *initialOrders, Rotation rot = Rotation());
 /// Creates a droid locally, instead of sending a message, even if the bMultiMessages HACK is set to true.
 DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot = Rotation());
 
@@ -164,7 +164,7 @@ DROID_TYPE droidType(DROID *psDroid);
 /* Return the type of a droid from it's template */
 DROID_TYPE droidTemplateType(DROID_TEMPLATE *psTemplate);
 
-void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber);
+void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
 
 bool activateGroup(UDWORD playerNumber, UDWORD groupNumber);
 
@@ -273,7 +273,7 @@ bool cbSensorDroid(const DROID *psDroid);
 bool standardSensorDroid(const DROID *psDroid);
 
 // give a droid from one player to another - used in Electronic Warfare and multiplayer
- DROID *giftSingleDroid(DROID *psD, UDWORD to);
+ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic = false);
 
 /// Calculates the electronic resistance of a droid based on its experience level
 SWORD droidResistance(const DROID *psDroid);

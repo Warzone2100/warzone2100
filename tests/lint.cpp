@@ -44,7 +44,6 @@ enum OBJECT_TYPE
 	OBJ_STRUCTURE,  ///< All Buildings
 	OBJ_FEATURE,    ///< Things like roads, trees, bridges, fires
 	OBJ_PROJECTILE, ///< Comes out of guns, stupid :-)
-	OBJ_TARGET,     ///< for the camera tracking
 	OBJ_NUM_TYPES,   ///< number of object types
 	POSITION = OBJ_NUM_TYPES,
 	AREA

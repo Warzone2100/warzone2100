@@ -174,10 +174,10 @@ var __camTransporterMessage;
 var __camTruckInfo;
 
 //victory
-const CAM_VICTORY_STANDARD = 0;
-const CAM_VICTORY_PRE_OFFWORLD = 1;
-const CAM_VICTORY_OFFWORLD = 2;
-const CAM_VICTORY_TIMEOUT = 3;
+const CAM_VICTORY_STANDARD = "__camVictoryStandard";
+const CAM_VICTORY_PRE_OFFWORLD = "__camVictoryPreOffworld";
+const CAM_VICTORY_OFFWORLD = "__camVictoryOffworld";
+const CAM_VICTORY_TIMEOUT = "__camVictoryTimeout";
 var __camWinLossCallback;
 var __camNextLevel;
 var __camNeedBonusTime;
@@ -187,6 +187,8 @@ var __camRTLZTicker;
 var __camLZCompromisedTicker;
 var __camLastAttackTriggered;
 var __camLevelEnded;
+var __camExtraObjectiveMessage;
+var __camVictoryMessageThrottle;
 
 //video
 var __camVideoSequences;
@@ -196,7 +198,6 @@ var __camVtolPlayer;
 var __camVtolStartPosition;
 var __camVtolTemplates;
 var __camVtolExitPosition;
-var __camVtolTimer;
 var __camVtolSpawnActive;
 var __camVtolSpawnStopObject;
 var __camVtolExtras;

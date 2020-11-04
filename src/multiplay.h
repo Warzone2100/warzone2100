@@ -31,6 +31,7 @@
 #include "orderdef.h"
 #include "stringdef.h"
 #include "messagedef.h"
+#include "levels.h"
 #include <vector>
 #include <string>
 
@@ -47,7 +48,7 @@ struct STRUCTURE;
 // Also used for skirmish games. And sometimes for campaign. Should be moved somewhere else.
 struct MULTIPLAYERGAME
 {
-	uint8_t		type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
+	LEVEL_TYPE	type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
 	bool		scavengers;					// whether scavengers are on or off
 	char		map[128];					// name of multiplayer map being used.
 	uint8_t		maxPlayers;					// max players to allow
@@ -57,9 +58,9 @@ struct MULTIPLAYERGAME
 	uint32_t    power;						// power level for arena game
 	uint8_t		base;						// clean/base/base&defence
 	uint8_t		alliance;					// no/yes/locked
-	uint8_t		skDiff[MAX_PLAYERS];		// skirmish game difficulty settings. 0x0=OFF 0xff=HUMAN
 	bool		mapHasScavengers;
 	bool		isMapMod;					// if a map has mods
+	bool        isRandom;                   // If a map is non-static.
 	uint32_t	techLevel;					// what technology level is being used
 };
 
@@ -67,6 +68,14 @@ struct MULTISTRUCTLIMITS
 {
 	uint32_t        id;
 	uint32_t        limit;
+};
+
+// The side we are *configured* as. Used to indicate whether we are the server or the client. Note that when
+// playing singleplayer, we are running as a host, not a client. Values are booleans as this replaces the old
+// `bool bHostSetup`.
+enum class InGameSide : bool {
+	HOST_OR_SINGLEPLAYER = true,
+	MULTIPLAYER_CLIENT = false
 };
 
 // info used inside games.
@@ -77,7 +86,7 @@ struct MULTIPLAYERINGAME
 	bool				localJoiningInProgress;				// used before we know our player number.
 	bool				JoiningInProgress[MAX_PLAYERS];
 	bool				DataIntegrity[MAX_PLAYERS];
-	bool				bHostSetup;
+	InGameSide			side;
 	int32_t				TimeEveryoneIsInGame;
 	bool				isAllPlayersDataOK;
 	UDWORD				startTime;
@@ -91,7 +100,6 @@ struct MULTIPLAYERINGAME
 #define MPFLAGS_FORCELIMITS	0x20  		///< Flag to force structure limits
 #define MPFLAGS_MAX		0x3f
 	SDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
-	char		phrases[5][255];					// 5 favourite text messages.
 };
 
 enum STRUCTURE_INFO
@@ -114,6 +122,13 @@ extern bool bMultiMessages;				// == bMultiPlayer unless multi messages are disa
 extern bool openchannels[MAX_PLAYERS];
 extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
+#define RUN_ONLY_ON_SIDE(_side) \
+	if (ingame.side != _side) \
+	{ \
+		return; \
+	}
+
+
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
@@ -130,7 +145,7 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define CAMP_BASE				1
 #define CAMP_WALLS				2
 
-#define PING_LIMIT                              4000                    // If ping is bigger than this, then worry and panic, and don't even try showing the ping.
+#define PING_LIMIT				4000		// If ping is bigger than this, then worry and panic, and don't even try showing the ping.
 
 #define LEV_LOW					0
 #define LEV_MED					1
@@ -140,8 +155,6 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 #define TECH_2					2
 #define TECH_3					3
 #define TECH_4					4
-
-#define DIFF_SLIDER_STOPS		20			//max number of stops for the multiplayer difficulty slider
 
 #define MAX_KICK_REASON			80			// max array size for the reason your kicking someone
 // functions
@@ -202,7 +215,7 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 bool multiShutdown();
 bool sendLeavingMsg();
 
-bool hostCampaign(char *sGame, char *sPlayer);
+bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs);
 struct JoinConnectionDescription
 {
 public:

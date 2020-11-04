@@ -31,6 +31,6 @@
  * define __STDC_LIMIT_MACROS before including stdint.h
  */
 #include "lib/framework/wzglobal.h"
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #endif

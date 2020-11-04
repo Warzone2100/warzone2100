@@ -334,7 +334,7 @@
     "A0FacMod1": {
         "armour": 10,
         "breadth": 3,
-        "buildPoints": 250,
+        "buildPoints": 500,
         "buildPower": 100,
         "height": 2,
         "hitpoints": 500,
@@ -458,7 +458,7 @@
     "A0PowMod1": {
         "armour": 10,
         "breadth": 2,
-        "buildPoints": 250,
+        "buildPoints": 500,
         "height": 2,
         "hitpoints": 1000,
         "id": "A0PowMod1",
@@ -549,7 +549,7 @@
     "A0ResearchModule1": {
         "armour": 10,
         "breadth": 2,
-        "buildPoints": 250,
+        "buildPoints": 500,
         "buildPower": 100,
         "height": 2,
         "hitpoints": 800,
@@ -2130,7 +2130,7 @@
         "height": 2,
         "hitpoints": 800,
         "id": "WallTower-EMP",
-        "name": "EMP Cannon Tower",
+        "name": "EMP Cannon Hardpoint",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
         "strength": "HARD",

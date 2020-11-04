@@ -87,6 +87,7 @@ cohaaq: { body: "Body9REC", prop: "tracked01", weap: "QuadRotAAGun" },
 
 // CAM_2_D
 comhltat: { body: "Body6SUPP", prop: "tracked01", weap: "Rocket-HvyA-T" },
+commorvt: { body: "Body6SUPP", prop: "V-Tol", weap: "Bomb4-VTOL-HvyINC" },
 
 // CAM_2_6
 cohact: { body: "Body9REC", prop: "tracked01", weap: "Cannon5VulcanMk1" },
@@ -106,8 +107,8 @@ nxmreph: { body: "Body7ABT", prop: "hover02", weap: "LightRepair1" },
 nxlsensh: { body: "Body3MBT", prop: "hover02", weap: "SensorTurret1Mk1" },
 nxmrailh: { body: "Body7ABT", prop: "hover02", weap: "RailGun2Mk1" },
 nxmscouh: { body: "Body7ABT", prop: "hover02", weap: "Missile-A-T" },
-nxcyrail: { body: "CyborgLightBody", prop: "CyborgLegs02", weap: "Cyb-Wpn-Rail1" },
-nxcyscou: { body: "CyborgLightBody", prop: "CyborgLegs02", weap: "Cyb-Wpn-Atmiss" },
+nxcyrail: { body: "CybNXRail1Jmp", prop: "CyborgLegs02", weap: "NX-Cyb-Rail1" },
+nxcyscou: { body: "CybNXMissJmp", prop: "CyborgLegs02", weap: "NX-CyborgMiss" },
 nxlneedv: { body: "Body3MBT", prop: "V-Tol02", weap: "RailGun1-VTOL" },
 nxlscouv: { body: "Body3MBT", prop: "V-Tol02", weap: "Missile-VTOL-AT" },
 nxmtherv: { body: "Body7ABT", prop: "V-Tol02", weap: "Bomb4-VTOL-HvyINC" },
@@ -117,7 +118,7 @@ prhaacnt: { body: "Body11ABT", prop: "tracked01", weap: "AAGun2Mk1" },
 
 // CAM_3_1
 nxmcommh: { body: "Body7ABT", prop: "hover02", weap: "CommandTurret1" },
-nxcylas: { body: "CyborgLightBody", prop: "CyborgLegs02", weap: "Cyb-Wpn-Laser" },
+nxcylas: { body: "CybNXPulseLasJmp", prop: "CyborgLegs02", weap: "NX-CyborgPulseLas" },
 
 // CAM_3_B
 nxmlinkh: { body: "Body7ABT", prop: "hover02", weap: "NEXUSlink" },

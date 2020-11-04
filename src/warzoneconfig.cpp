@@ -42,6 +42,7 @@ struct WARZONE_GLOBALS
 	FMV_MODE FMVmode = FMV_FULLSCREEN;
 	UDWORD width = 1024;
 	UDWORD height = 768;
+	UDWORD videoBufferDepth = 32;
 	int displayScale = 100;
 	int screen = 0;
 	int8_t SPcolor = 0;
@@ -50,7 +51,7 @@ struct WARZONE_GLOBALS
 	bool Fullscreen = false;
 	bool soundEnabled = true;
 	bool trapCursor = false;
-	bool vsync = true;
+	int vsync = 1;
 	bool pauseOnFocusLoss = true;
 	bool ColouredCursor = true;
 	bool MusicEnabled = true;
@@ -61,6 +62,7 @@ struct WARZONE_GLOBALS
 	int cameraSpeed = CAMERASPEED_DEFAULT;
 	int scrollEvent = 0; // map/radar zoom
 	bool radarJump = false;
+	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -135,12 +137,12 @@ bool war_GetTrapCursor()
 	return warGlobs.trapCursor;
 }
 
-void war_SetVsync(bool b)
+void war_SetVsync(int value)
 {
-	warGlobs.vsync = b;
+	warGlobs.vsync = value;
 }
 
-bool war_GetVsync()
+int war_GetVsync()
 {
 	return warGlobs.vsync;
 }
@@ -174,6 +176,16 @@ void war_SetHeight(UDWORD height)
 UDWORD war_GetHeight()
 {
 	return warGlobs.height;
+}
+
+void war_SetVideoBufferDepth(UDWORD videoBufferDepth)
+{
+	warGlobs.videoBufferDepth = videoBufferDepth;
+}
+
+UDWORD war_GetVideoBufferDepth()
+{
+	return warGlobs.videoBufferDepth;
 }
 
 void war_SetScreen(int screen)
@@ -338,4 +350,14 @@ void war_SetRadarJump(bool radarJump)
 {
 	warGlobs.radarJump = radarJump;
 	ActivityManager::instance().changedSetting("radarJump", std::to_string(radarJump));
+}
+
+video_backend war_getGfxBackend()
+{
+	return warGlobs.gfxBackend;
+}
+
+void war_setGfxBackend(video_backend backend)
+{
+	warGlobs.gfxBackend = backend;
 }

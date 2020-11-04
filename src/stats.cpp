@@ -140,7 +140,7 @@ static void deallocTerrainTable()
 
 /* Macro to allocate memory for a set of stats */
 #define ALLOC_STATS(numEntries, list, listSize, type) \
-	ASSERT((numEntries) < REF_RANGE, "Number of stats entries too large for " #type);\
+	ASSERT((numEntries) < ~STAT_MASK + 1, "Number of stats entries too large for " #type);\
 	if ((list))	delete [] (list);	\
 	(list) = new type[numEntries]; \
 	(listSize) = (numEntries); \
@@ -281,8 +281,8 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index
 	psStats->buildPoints = json.value("buildPoints", 0).toUInt();
 	psStats->designable = json.value("designable", false).toBool();
 	psStats->weight = json.value("weight", 0).toUInt();
-	psStats->pBase->hitpoints = json.value("hitpoints", 0).toUInt();
-	psStats->pBase->hitpointPct = json.value("hitpointPct", 100).toUInt();
+	psStats->getBase().hitpoints = json.value("hitpoints", 0).toUInt();
+	psStats->getBase().hitpointPct = json.value("hitpointPct", 100).toUInt();
 
 	WzString dtype = json.value("droidType", "DROID").toWzString();
 	psStats->droidTypeOverride = DROID_ANY;
@@ -407,7 +407,7 @@ bool loadWeaponStats(WzConfig &ini)
 
 		ASSERT(psStats->flightSpeed > 0, "Invalid flight speed for %s", list[i].toUtf8().c_str());
 
-		psStats->ref = REF_WEAPON_START + i;
+		psStats->ref = STAT_WEAPON + i;
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
@@ -596,7 +596,7 @@ bool loadBodyStats(WzConfig &ini)
 		{
 			psStats->upgrade[j] = psStats->base;
 		}
-		psStats->ref = REF_BODY_START + i;
+		psStats->ref = STAT_BODY + i;
 		if (!getBodySize(ini.value("size").toWzString(), &psStats->size))
 		{
 			ASSERT(false, "Unknown body size for %s", getName(psStats));
@@ -709,14 +709,14 @@ bool loadBrainStats(WzConfig &ini)
 		ASSERT(rankNames.is_array(), "ranks is not an array");
 		for (const auto& v : rankNames)
 		{
-			psStats->rankNames.push_back(v);
+			psStats->rankNames.push_back(v.get<std::string>());
 		}
 		auto rankThresholds = ini.json("thresholds");
 		for (const auto& v : rankThresholds)
 		{
-			psStats->base.rankThresholds.push_back(v);
+			psStats->base.rankThresholds.push_back(v.get<int>());
 		}
-		psStats->ref = REF_BRAIN_START + i;
+		psStats->ref = STAT_BRAIN + i;
 
 		for (int j = 0; j < MAX_PLAYERS; j++)
 		{
@@ -800,7 +800,7 @@ bool loadPropulsionStats(WzConfig &ini)
 
 		psStats->base.hitpointPctOfBody = ini.value("hitpointPctOfBody", 0).toInt();
 		psStats->maxSpeed = ini.value("speed").toInt();
-		psStats->ref = REF_PROPULSION_START + i;
+		psStats->ref = STAT_PROPULSION + i;
 		psStats->turnSpeed = ini.value("turnSpeed", DEG(1) / 3).toInt();
 		psStats->spinSpeed = ini.value("spinSpeed", DEG(3) / 4).toInt();
 		psStats->spinAngle = ini.value("spinAngle", 180).toInt();
@@ -876,7 +876,7 @@ bool loadSensorStats(WzConfig &ini)
 			psStats->upgrade[j] = psStats->base;
 		}
 
-		psStats->ref = REF_SENSOR_START + i;
+		psStats->ref = STAT_SENSOR + i;
 
 		WzString location = ini.value("location").toWzString();
 		if (location.compare("DEFAULT") == 0)
@@ -962,7 +962,7 @@ bool loadECMStats(WzConfig &ini)
 			psStats->upgrade[j] = psStats->base;
 		}
 
-		psStats->ref = REF_ECM_START + i;
+		psStats->ref = STAT_ECM + i;
 
 		WzString location = ini.value("location").toWzString();
 		if (location.compare("DEFAULT") == 0)
@@ -1019,7 +1019,7 @@ bool loadRepairStats(WzConfig &ini)
 		}
 		psStats->time = ini.value("time", 0).toInt() * WEAPON_TIME;
 
-		psStats->ref = REF_REPAIR_START + i;
+		psStats->ref = STAT_REPAIR + i;
 
 		WzString location = ini.value("location").toWzString();
 		if (location.compare("DEFAULT") == 0)
@@ -1077,7 +1077,7 @@ bool loadConstructStats(WzConfig &ini)
 		{
 			psStats->upgrade[j] = psStats->base;
 		}
-		psStats->ref = REF_CONSTRUCT_START + i;
+		psStats->ref = STAT_CONSTRUCT + i;
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "sensorModel");
@@ -1316,110 +1316,6 @@ UDWORD getSpeedFactor(UDWORD type, UDWORD propulsionType)
 {
 	ASSERT(propulsionType < PROPULSION_TYPE_NUM, "The propulsion type is too large");
 	return asTerrainTable[type * PROPULSION_TYPE_NUM + propulsionType];
-}
-
-//return the type of stat this stat is!
-UDWORD statType(UDWORD ref)
-{
-	if (ref >= REF_BODY_START && ref < REF_BODY_START +
-	    REF_RANGE)
-	{
-		return COMP_BODY;
-	}
-	if (ref >= REF_BRAIN_START && ref < REF_BRAIN_START +
-	    REF_RANGE)
-	{
-		return COMP_BRAIN;
-	}
-	if (ref >= REF_PROPULSION_START && ref <
-	    REF_PROPULSION_START + REF_RANGE)
-	{
-		return COMP_PROPULSION;
-	}
-	if (ref >= REF_SENSOR_START && ref < REF_SENSOR_START +
-	    REF_RANGE)
-	{
-		return COMP_SENSOR;
-	}
-	if (ref >= REF_ECM_START && ref < REF_ECM_START +
-	    REF_RANGE)
-	{
-		return COMP_ECM;
-	}
-	if (ref >= REF_REPAIR_START && ref < REF_REPAIR_START +
-	    REF_RANGE)
-	{
-		return COMP_REPAIRUNIT;
-	}
-	if (ref >= REF_WEAPON_START && ref < REF_WEAPON_START +
-	    REF_RANGE)
-	{
-		return COMP_WEAPON;
-	}
-	if (ref >= REF_CONSTRUCT_START && ref < REF_CONSTRUCT_START +
-	    REF_RANGE)
-	{
-		return COMP_CONSTRUCT;
-	}
-	//else
-	ASSERT(false, "Invalid stat pointer - cannot determine Stat Type");
-	return COMP_NUMCOMPONENTS;
-}
-
-//return the REF_START value of this type of stat
-UDWORD statRefStart(UDWORD stat)
-{
-	UDWORD start;
-
-	switch (stat)
-	{
-	case COMP_BODY:
-		{
-			start = REF_BODY_START;
-			break;
-		}
-	case COMP_BRAIN:
-		{
-			start = REF_BRAIN_START;
-			break;
-		}
-	case COMP_PROPULSION:
-		{
-			start = REF_PROPULSION_START;
-			break;
-		}
-	case COMP_SENSOR:
-		{
-			start = REF_SENSOR_START;
-			break;
-		}
-	case COMP_ECM:
-		{
-			start = REF_ECM_START;
-			break;
-		}
-	case COMP_REPAIRUNIT:
-		{
-			start = REF_REPAIR_START;
-			break;
-		}
-	case COMP_WEAPON:
-		{
-			start = REF_WEAPON_START;
-			break;
-		}
-	case COMP_CONSTRUCT:
-		{
-			start = REF_CONSTRUCT_START;
-			break;
-		}
-	default:
-		{
-			debug(LOG_FATAL, "Invalid stat type");
-			start = 0;
-		}
-	}
-	return start;
 }
 
 int getCompFromName(COMPONENT_TYPE compType, const WzString &name)

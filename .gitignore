@@ -206,6 +206,12 @@ commit-*
 /pkg/dpkg/warzone2100.substvars
 /pkg/dpkg/warzone2100/
 
+#Snapcraft Stuff
+/prime
+/stage
+/parts
+/.snapenv
+
 #Mac Stuff
 .DS_Store
 *.pbxuser
@@ -295,3 +301,5 @@ win32/CodeAnalyst
 # Do not ignore the in-repo template file used for translation integration
 !/po/warzone2100_en.pot
 !/po/warzone2100.pot
+# Do not ignore patches in vcpkg override-ports folder
+!.ci/vcpkg/override-ports/*/*.patch

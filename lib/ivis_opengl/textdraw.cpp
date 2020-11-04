@@ -20,7 +20,6 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/file.h"
-#include "lib/framework/opengl.h"
 #include <stdlib.h>
 #include <string.h>
 #include "lib/framework/string_ext.h"
@@ -526,8 +525,6 @@ static FTFace &getFTFace(iV_fonts FontID)
 
 static gfx_api::texture* textureID = nullptr;
 
-const GLint text_filtering = GL_LINEAR;
-
 void iV_TextInit(float horizScaleFactor, float vertScaleFactor)
 {
 	assert(horizScaleFactor >= 1.0f);
@@ -815,7 +812,6 @@ int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, U
 void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation, iV_fonts fontID)
 {
 	ASSERT_OR_RETURN(, string, "Couldn't render string!");
-	pie_SetTexturePage(TEXPAGE_EXTERN);
 
 	if (rotation != 0.f)
 	{
@@ -833,18 +829,11 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 
 	if (drawResult.text.width > 0 && drawResult.text.height > 0)
 	{
-		pie_SetTexturePage(TEXPAGE_EXTERN);
 		if (textureID)
 			delete textureID;
-		textureID = gfx_api::context::get().create_texture(drawResult.text.width, drawResult.text.height, gfx_api::pixel_format::rgba);
-		textureID->upload(0u, 0u, 0u, drawResult.text.width, drawResult.text.height, gfx_api::pixel_format::rgba, drawResult.text.data.get());
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, text_filtering);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, text_filtering);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glDisable(GL_CULL_FACE);
-		iV_DrawImageText(*textureID, Vector2i(XPos, YPos), Vector2f((float)drawResult.text.offset_x / _horizScaleFactor, (float)drawResult.text.offset_y / _vertScaleFactor), Vector2f((float)drawResult.text.width / _horizScaleFactor, (float)drawResult.text.height / _vertScaleFactor), rotation, REND_TEXT, color);
-		glEnable(GL_CULL_FACE);
+		textureID = gfx_api::context::get().create_texture(1, drawResult.text.width, drawResult.text.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
+		textureID->upload(0u, 0u, 0u, drawResult.text.width, drawResult.text.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, drawResult.text.data.get());
+		iV_DrawImageText(*textureID, Vector2i(XPos, YPos), Vector2f((float)drawResult.text.offset_x / _horizScaleFactor, (float)drawResult.text.offset_y / _vertScaleFactor), Vector2f((float)drawResult.text.width / _horizScaleFactor, (float)drawResult.text.height / _vertScaleFactor), rotation, color);
 	}
 }
 
@@ -946,15 +935,9 @@ void WzText::drawAndCacheText(const std::string &string, iV_fonts fontID)
 
 	if (dimensions.x > 0 && dimensions.y > 0)
 	{
-		pie_SetTexturePage(TEXPAGE_EXTERN);
-		texture = gfx_api::context::get().create_texture(dimensions.x, dimensions.y, gfx_api::pixel_format::rgba);
-		texture->upload(0u, 0u, 0u, dimensions.x , dimensions.y, gfx_api::pixel_format::rgba, drawResult.text.data.get());
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, text_filtering);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, text_filtering);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		texture = gfx_api::context::get().create_texture(1, dimensions.x, dimensions.y, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8);
+		texture->upload(0u, 0u, 0u, dimensions.x , dimensions.y, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, drawResult.text.data.get());
 	}
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void WzText::redrawAndCacheText()
@@ -1036,9 +1019,7 @@ void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
 	{
 		rotation = 180. - rotation;
 	}
-	glDisable(GL_CULL_FACE);
-	iV_DrawImageText(*texture, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f(dimensions.x / mRenderingHorizScaleFactor, dimensions.y / mRenderingVertScaleFactor), rotation, REND_TEXT, colour);
-	glEnable(GL_CULL_FACE);
+	iV_DrawImageText(*texture, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f(dimensions.x / mRenderingHorizScaleFactor, dimensions.y / mRenderingVertScaleFactor), rotation, colour);
 }
 
 // Sets the text, truncating to a desired width limit (in *points*) if needed

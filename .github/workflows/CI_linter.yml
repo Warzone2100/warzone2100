@@ -1,0 +1,29 @@
+name: 'Lint Code Base'
+
+on:
+  push:
+    branches-ignore:
+      - 'master'
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+  pull_request:
+    # Match all pull requests
+
+jobs:
+  lint-code-base:
+    name: 'Lint Code Base'
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Lint Code Base
+      uses: docker://ghcr.io/github/super-linter:v3.11.0
+      env:
+        VALIDATE_ALL_CODEBASE: false
+        DEFAULT_BRANCH: master
+        FILTER_REGEX_EXCLUDE: '.eslintrc.json' # because it allows non-standard comments
+        LINTER_RULES_PATH: '.'
+        VALIDATE_YAML: true
+        VALIDATE_JSON: true
+        VALIDATE_JAVASCRIPT_ES: true
+        JAVASCRIPT_ES_CONFIG_FILE: '.eslintrc.json'
+        VALIDATE_DOCKER: false # .dockerfilelintrc parsing is broken in super-linter

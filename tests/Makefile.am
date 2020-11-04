@@ -1,5 +1,5 @@
 AM_CPPFLAGS = $(SDL_CFLAGS) $(PHYSFS_CFLAGS) $(PNG_CFLAGS) $(OPENGL_CFLAGS) $(WZ_CPPFLAGS) -I$(top_srcdir)/tools \
-	-I. -I$(top_srcdir)/lib/framework $(QT5_CFLAGS) $(OPENGLC_CFLAGS) $(GLEW_CFLAGS)
+	-I. -I$(top_srcdir)/lib/framework $(QT5_CFLAGS) $(OPENGLC_CFLAGS)
 AM_CFLAGS = $(WZ_CFLAGS)
 AM_CXXFLAGS = $(WZ_CXXFLAGS)
 
@@ -25,7 +25,8 @@ ivis_linktest_LDADD =
 ivis_linktest_LDADD += $(top_builddir)/lib/sdl/libsdl.a
 ivis_linktest_LDADD += $(top_builddir)/lib/framework/libframework.a \
 	$(top_builddir)/lib/ivis_opengl/libivis_opengl.a \
-	$(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(QT5_LIBS) $(SDL_LIBS) $(OPENGL_LIBS) $(OPENGLC_LIBS) $(GLEW_LIBS) \
+	$(top_builddir)/3rdparty/glad/libglad.a \
+	$(PHYSFS_LIBS) $(LIBCRYPTO_LIBS) $(QT5_LIBS) $(SDL_LIBS) $(OPENGL_LIBS) $(OPENGLC_LIBS) \
 	$(X_LIBS) $(X_EXTRA_LIBS) $(LDFLAGS) $(PNG_LIBS) $(FONT_LIBS)
 
 modeltest_SOURCES = modeltest.c

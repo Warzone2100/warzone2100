@@ -27,6 +27,7 @@
 
 uint32_t crcSum(uint32_t crc, const void *data, size_t dataLen);
 uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen);
+uint32_t crcSumI16(uint32_t crc, const int16_t *data, size_t dataLen);
 uint32_t crcSumVector2i(uint32_t crc, const Vector2i *data, size_t dataLen);
 
 struct Sha256
@@ -84,6 +85,8 @@ public:
 	void fromBytes(Key const &key, Privacy privacy);
 
 	static EcKey generate();
+
+	std::string publicHashString() const;
 
 private:
 	void *vKey;

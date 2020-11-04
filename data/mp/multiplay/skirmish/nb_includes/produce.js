@@ -49,6 +49,7 @@ function chooseBodyWeaponPair(bodies, weapons) {
 			var b = bodies[j].stat, bw = bodies[j].weight;
 			if (!componentAvailable(b))
 				continue;
+			/* eslint-disable no-unreachable */
 			switch(ww) {
 				case WEIGHT.ULTRALIGHT:
 					if (bw <= WEIGHT.LIGHT)
@@ -70,6 +71,7 @@ function chooseBodyWeaponPair(bodies, weapons) {
 						return {b: b, w: w};
 					break;
 			}
+			/* eslint-enable no-unreachable */
 		}
 	}
 }

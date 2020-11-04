@@ -322,7 +322,6 @@ static void updateLabelModel()
 		case SCRIPT_PLAYER:
 		case SCRIPT_RESEARCH:
 		case OBJ_PROJECTILE:
-		case OBJ_TARGET:
 		case SCRIPT_COUNT: c = "ERROR"; break;
 		}
 		labelModel->setItem(nextRow, 1, new QStandardItem(QString(c)));
@@ -1709,7 +1708,7 @@ static QScriptValue js_pursueResearch(QScriptContext *context, QScriptEngine *en
 				sendResearchStatus(psStruct, cur->index, player, true);
 #if defined (DEBUG)
 				char sTemp[128];
-				sprintf(sTemp, "player:%d starts topic from script: %s", player, getID(cur));
+				snprintf(sTemp, sizeof(sTemp), "player:%d starts topic from script: %s", player, getID(cur));
 				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
 				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player,
@@ -4751,9 +4750,9 @@ static QScriptValue js_cameraSlide(QScriptContext *context, QScriptEngine *)
 //--
 static QScriptValue js_cameraZoom(QScriptContext *context, QScriptEngine *)
 {
-	float z = context->argument(0).toNumber();
+	float viewDistance = context->argument(0).toNumber();
 	float speed = context->argument(1).toNumber();
-	setZoom(speed, z);
+	animateToViewDistance(viewDistance, speed);
 	return QScriptValue();
 }
 
@@ -5778,8 +5777,8 @@ QScriptValue register_common(QScriptEngine *engine, COMPONENT_STATS *psStats)
 	v.setProperty("Weight", psStats->weight, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	v.setProperty("BuildPower", psStats->buildPower, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	v.setProperty("BuildTime", psStats->buildPoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("HitPoints", psStats->pBase->hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	v.setProperty("HitPointPct", psStats->pBase->hitpointPct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("HitPoints", psStats->getBase().hitpoints, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	v.setProperty("HitPointPct", psStats->getBase().hitpointPct, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	return v;
 }
 
@@ -6380,10 +6379,10 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("SAT_UPLINK", REF_SAT_UPLINK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("GATE", REF_GATE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("COMMAND_CONTROL", REF_COMMAND_CONTROL, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("EASY", DIFFICULTY_EASY, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("MEDIUM", DIFFICULTY_MEDIUM, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("HARD", DIFFICULTY_HARD, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("INSANE", DIFFICULTY_INSANE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("EASY", static_cast<int8_t>(AIDifficulty::EASY), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("MEDIUM", static_cast<int8_t>(AIDifficulty::MEDIUM), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("HARD", static_cast<int8_t>(AIDifficulty::HARD), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("INSANE", static_cast<int8_t>(AIDifficulty::INSANE), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("STRUCTURE", OBJ_STRUCTURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("DROID", OBJ_DROID, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("FEATURE", OBJ_FEATURE, QScriptValue::ReadOnly | QScriptValue::Undeletable);
@@ -6403,7 +6402,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	engine->globalObject().setProperty("CAMP_MSG", MSG_CAMPAIGN, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("MISS_MSG", MSG_MISSION, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	engine->globalObject().setProperty("RES_MSG", MSG_RESEARCH, QScriptValue::ReadOnly | QScriptValue::Undeletable);
-	engine->globalObject().setProperty("LDS_EXPAND_LIMBO", LDS_EXPAND_LIMBO, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("LDS_EXPAND_LIMBO", static_cast<int8_t>(LEVEL_TYPE::LDS_EXPAND_LIMBO), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
 	/// Place to store group sizes
 	//== * ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
@@ -6425,7 +6424,7 @@ bool registerFunctions(QScriptEngine *engine, const QString& scriptName)
 	{
 		QScriptValue vector = engine->newObject();
 		vector.setProperty("name", QString(NetPlay.players[i].name), QScriptValue::ReadOnly | QScriptValue::Undeletable);  // QString cast to work around bug in Qt5 QScriptValue(char *) constructor.
-		vector.setProperty("difficulty", NetPlay.players[i].difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		vector.setProperty("difficulty", static_cast<int8_t>(NetPlay.players[i].difficulty), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("colour", NetPlay.players[i].colour, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("position", NetPlay.players[i].position, QScriptValue::ReadOnly | QScriptValue::Undeletable);
 		vector.setProperty("team", NetPlay.players[i].team, QScriptValue::ReadOnly | QScriptValue::Undeletable);

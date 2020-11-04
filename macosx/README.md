@@ -86,6 +86,7 @@ mkdir wz_build
    Where the `../warzone2100/configure_mac.cmake` path should be modified to point to `configure_mac.cmake` inside the Git repo / source code directory.
 
 The `configure_mac.cmake` script will automatically:
+   - Download + extract the Vulkan SDK _(on macOS 10.14+ only - required for Vulkan / Metal support)_
    - Download + build [vcpkg](https://github.com/microsoft/vcpkg)
    - Build required dependencies
    - Run CMake to generate the Xcode project
@@ -114,6 +115,7 @@ The macOS port produces a 64-bit [self-contained application bundle](https://dev
 
 > \* See _Setup & Configuration_ for how to set the minimum deployment target.
 
+If built on macOS 10.14+, the application will support both the OpenGL and Vulkan (Metal) backends on macOS.
 
 ## Additional Information:
 

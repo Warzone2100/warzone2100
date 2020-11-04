@@ -674,7 +674,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Atmiss-GROUND",
-        "name": "Scourge",
+        "name": "Scourge Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -685,7 +685,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Cannon-GROUND",
-        "name": "Heavy Gunner",
+        "name": "Heavy Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -696,7 +696,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Chain-GROUND",
-        "name": "Machinegunner",
+        "name": "Machinegunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -708,7 +708,7 @@
         "body": "CyborgLightBody",
         "construct": "CyborgSpade",
         "id": "Cyb-ComEng",
-        "name": "Combat Engineer",
+        "name": "Combat Engineer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_CONSTRUCT"
     },
@@ -716,7 +716,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Flamer-GROUND",
-        "name": "Cyborg Flamer",
+        "name": "Flamer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -727,7 +727,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Gren",
-        "name": "Grenadier",
+        "name": "Grenadier Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -771,7 +771,7 @@
         "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-Mcannon",
-        "name": "Super Heavy-Gunner",
+        "name": "Super Heavy-Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_SUPER",
         "weapons": [
@@ -793,7 +793,7 @@
         "available": true,
         "body": "CyborgHeavyBody",
         "id": "Cyb-Hvy-RailGunner",
-        "name": "Super Rail-Gunner",
+        "name": "Super Rail-Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG_SUPER",
         "weapons": [
@@ -815,7 +815,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Laser1-GROUND",
-        "name": "Flashlight Gunner",
+        "name": "Flashlight Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -826,7 +826,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Mechanic",
-        "name": "Cyborg Mechanic",
+        "name": "Mechanic Cyborg",
         "propulsion": "CyborgLegs",
         "repair": "CyborgRepair",
         "type": "CYBORG_REPAIR"
@@ -835,7 +835,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Rail1-GROUND",
-        "name": "Needle Gunner",
+        "name": "Needle Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -846,7 +846,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Rocket-GROUND",
-        "name": "Lancer",
+        "name": "Lancer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -857,7 +857,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-RotMG-GROUND",
-        "name": "Assault Gunner",
+        "name": "Assault Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -868,7 +868,7 @@
         "available": true,
         "body": "CyborgLightBody",
         "id": "Cyb-Thermite",
-        "name": "Thermite Flamer",
+        "name": "Thermite Flamer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -878,7 +878,7 @@
     "CyborgCannon01Grd": {
         "body": "CyborgLightBody",
         "id": "CyborgCannon01Grd",
-        "name": "Heavy Gunner",
+        "name": "Heavy Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -888,7 +888,7 @@
     "CyborgChain01Ground": {
         "body": "CyborgLightBody",
         "id": "CyborgChain01Ground",
-        "name": "Machinegunner",
+        "name": "Machinegunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -898,7 +898,7 @@
     "CyborgFlamer01Grd": {
         "body": "CyborgLightBody",
         "id": "CyborgFlamer01Grd",
-        "name": "Flamer",
+        "name": "Flamer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -908,7 +908,7 @@
     "CyborgRkt01Ground": {
         "body": "CyborgLightBody",
         "id": "CyborgRkt01Ground",
-        "name": "Lancer",
+        "name": "Lancer Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -918,7 +918,7 @@
     "CyborgRotMgGround": {
         "body": "CyborgLightBody",
         "id": "CyborgRotMgGround",
-        "name": "Assault Gunner",
+        "name": "Assault Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -989,7 +989,7 @@
     "MP-Cyb-ATmiss-GRD": {
         "body": "CyborgLightBody",
         "id": "MP-Cyb-ATmiss-GRD",
-        "name": "Scourge",
+        "name": "Scourge Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -999,7 +999,7 @@
     "MP-Cyb-Laser1-GRD": {
         "body": "CyborgLightBody",
         "id": "MP-Cyb-Laser1-GRD",
-        "name": "Flashlight Gunner",
+        "name": "Flashlight Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [
@@ -1009,7 +1009,7 @@
     "MP-Cyb-Needle-GRD": {
         "body": "CyborgLightBody",
         "id": "MP-Cyb-Needle-GRD",
-        "name": "Needle Gunner",
+        "name": "Needle Gunner Cyborg",
         "propulsion": "CyborgLegs",
         "type": "CYBORG",
         "weapons": [

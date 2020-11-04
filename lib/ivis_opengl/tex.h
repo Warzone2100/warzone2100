@@ -38,7 +38,9 @@ void pie_AssignTexture(int page, gfx_api::texture* texture);
 
 //*************************************************************************
 
-int iV_GetTexture(const char *filename, bool compression = true);
+bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight);
+
+int iV_GetTexture(const char *filename, bool compression = true, int maxWidth = -1, int maxHeight = -1);
 void iV_unloadImage(iV_Image *image);
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
@@ -46,8 +48,8 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile);
 int pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, int page = -1);
 void pie_TexInit();
 
-void pie_MakeTexPageName(char *filename);
-void pie_MakeTexPageTCMaskName(char *filename);
+std::string pie_MakeTexPageName(const std::string& filename);
+std::string pie_MakeTexPageTCMaskName(const std::string& filename);
 
 //*************************************************************************
 

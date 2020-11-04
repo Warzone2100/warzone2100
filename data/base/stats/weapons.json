@@ -337,7 +337,7 @@
         "buildPower": 10,
         "damage": 20,
         "effectSize": 50,
-        "explosionWav": "rocket.ogg",
+        "explosionWav": "smlexpl.ogg",
         "facePlayer": 1,
         "firePause": 1,
         "flightGfx": "FXMFLARE.PIE",
@@ -566,8 +566,8 @@
         "weight": 500
     },
     "Bomb4-VTOL-HvyINC": {
-        "buildPoints": 1000,
-        "buildPower": 225,
+        "buildPoints": 1200,
+        "buildPower": 350,
         "damage": 400,
         "designable": 1,
         "effectSize": 100,
@@ -577,7 +577,7 @@
         "flightGfx": "Fxmbmbi2.PIE",
         "flightSpeed": 475,
         "hitGfx": "FXLExp.PIE",
-        "hitpoints": 50,
+        "hitpoints": 40,
         "id": "Bomb4-VTOL-HvyINC",
         "lightWorld": 1,
         "longHit": 70,

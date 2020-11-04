@@ -21,6 +21,8 @@
 #define __INCLUDED_QTSCRIPT_H__
 
 #include "lib/framework/frame.h"
+#include "lib/netplay/netplay.h"
+#include "random.h"
 
 class QScriptEngine;
 class QString;
@@ -87,7 +89,7 @@ bool updateScripts();
 
 // Load and evaluate the given script, kept in memory
 bool loadGlobalScript(WzString path);
-QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty);
+QScriptEngine *loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
 
 // Set/write variables in the script's global context, run after loading script,
 // but before triggering any events.
@@ -158,6 +160,49 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to);
 void jsDebugSelected(const BASE_OBJECT *psObj);
 void jsDebugMessageUpdate();
 void jsDebugUpdate();
+
+struct ScriptMapData
+{
+	struct Structure
+	{
+		WzString name;
+		Vector2i position;
+		uint16_t direction;
+		uint8_t modules;
+		int8_t player;  // -1 = scavs
+	};
+	struct Droid
+	{
+		WzString name;
+		Vector2i position;
+		uint16_t direction;
+		int8_t player;  // -1 = scavs
+	};
+	struct Feature
+	{
+		WzString name;
+		Vector2i position;
+		uint16_t direction;
+	};
+
+	uint32_t crcSumStructures(uint32_t crc) const;
+	uint32_t crcSumDroids(uint32_t crc) const;
+	uint32_t crcSumFeatures(uint32_t crc) const;
+
+	bool valid = false;
+	int mapWidth;
+	int mapHeight;
+	//int maxPlayers;
+	std::vector<uint16_t> texture;
+	std::vector<int16_t> height;
+	std::vector<Structure> structures;
+	std::vector<Droid> droids;
+	std::vector<Feature> features;
+
+	MersenneTwister mt;
+};
+
+ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
 
 #define QStringToWzString(_qstring) \
 WzString::fromUtf8((_qstring).toUtf8().constData())

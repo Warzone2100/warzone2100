@@ -40,20 +40,6 @@ struct iIMDShape;
 
 /***************************************************************************/
 /*
- *	Debugging
- */
-/***************************************************************************/
-
-#define GL_DEBUG(_str) \
-	do { \
-		if (GLEW_GREMEDY_string_marker) \
-		{ \
-			glStringMarkerGREMEDY(0, _str); \
-		} \
-	} while(0)
-
-/***************************************************************************/
-/*
  *	Global ProtoTypes
  */
 /***************************************************************************/
@@ -71,7 +57,6 @@ void pie_Lighting0(LIGHTING_TYPE entry, const float value[4]);
 
 void pie_RemainingPasses(uint64_t currentGameFrame);
 
-void pie_SetUp();
 void pie_CleanUp();
 
 #endif // _piedef_h

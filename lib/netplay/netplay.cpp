@@ -144,12 +144,14 @@ struct NET_PLAYER_DATA
 
 NETPLAY	NetPlay;
 PLAYER_IP	*IPlist = nullptr;
+static int IPlistLast = 0;
 static bool		allow_joining = false;
 static	bool server_not_there = false;
 static GAMESTRUCT	gamestruct;
 
 // update flags
 bool netPlayersUpdated;
+
 
 /**
  * Socket used for these purposes:
@@ -356,13 +358,31 @@ static int playersPerTeam()
 	return 1;
 }
 
+/**
+ * Resets network properties of a player to safe defaults. Player slots should always be in this state
+ * before attemtping to assign a connectign player to it.
+ *
+ * Used to reset the player slot in NET_InitPlayer and to reset players slot without modifying ai/team/
+ * position configuration for the players.
+ */
+static void initPlayerNetworkProps(int playerIndex)
+{
+	NetPlay.players[playerIndex].allocated = false;
+	NetPlay.players[playerIndex].autoGame = false;
+	NetPlay.players[playerIndex].heartattacktime = 0;
+	NetPlay.players[playerIndex].heartbeat = true;  // we always start with a heartbeat
+	NetPlay.players[playerIndex].kick = false;
+	NetPlay.players[playerIndex].ready = false;
+
+	NetPlay.players[playerIndex].wzFiles.clear();
+	ingame.JoiningInProgress[playerIndex] = false;
+}
+
 void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 {
-	NetPlay.players[i].allocated = false;
-	NetPlay.players[i].autoGame = false;
-	NetPlay.players[i].heartattacktime = 0;
-	NetPlay.players[i].heartbeat = true;  // we always start with a heartbeat
-	NetPlay.players[i].kick = false;
+	initPlayerNetworkProps(i);
+
+	NetPlay.players[i].difficulty = AIDifficulty::DISABLED;
 	if (ingame.localJoiningInProgress)
 	{
 		// only clear name outside of games.
@@ -370,23 +390,18 @@ void NET_InitPlayer(int i, bool initPosition, bool initTeams)
 	}
 	if (initPosition)
 	{
-		NetPlay.players[i].colour = i;
-		setPlayerColour(i, i);  // PlayerColour[] in component.c must match this! Why is this in more than one place??!
+		setPlayerColour(i, i);
 		NetPlay.players[i].position = i;
 		NetPlay.players[i].team = initTeams && i < game.maxPlayers? i/playersPerTeam() : i;
 	}
-	NetPlay.players[i].ready = false;
 	if (NetPlay.bComms)
 	{
 		NetPlay.players[i].ai = AI_OPEN;
 	}
 	else
 	{
-		NetPlay.players[i].ai = 0;			// default AI
+		NetPlay.players[i].ai = 0;
 	}
-	NetPlay.players[i].difficulty = 1;		// normal
-	NetPlay.players[i].wzFiles.clear();
-	ingame.JoiningInProgress[i] = false;
 }
 
 uint8_t NET_numHumanPlayers(void)
@@ -415,9 +430,7 @@ std::vector<uint8_t> NET_getHumanPlayers(void)
 
 void NET_InitPlayers(bool initTeams)
 {
-	unsigned int i;
-
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		NET_InitPlayer(i, true, initTeams);
 		NetPlay.players[i].name[0] = '\0';
@@ -450,8 +463,7 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint32_t(&NetPlay.players[index[n]].team);
 		NETbool(&NetPlay.players[index[n]].ready);
 		NETint8_t(&NetPlay.players[index[n]].ai);
-		NETint8_t(&NetPlay.players[index[n]].difficulty);
-		NETuint8_t(&game.skDiff[index[n]]);  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
+		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -1229,6 +1241,7 @@ int NETshutdown()
 		free(IPlist);
 	}
 	IPlist = nullptr;
+	IPlistLast = 0;
 	if (NetPlay.MOTD)
 	{
 		free(NetPlay.MOTD);
@@ -1649,7 +1662,6 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			int32_t team = 0;
 			int8_t ai = 0;
 			int8_t difficulty = 0;
-			uint8_t skDiff = 0;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
@@ -1692,22 +1704,18 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbool(&NetPlay.players[index].ready);
 				NETint8_t(&ai);
 				NETint8_t(&difficulty);
-				NETuint8_t(&skDiff);
 
 				// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
 				if (playerQueue.index == NetPlay.hostPlayer)
 				{
-					NetPlay.players[index].colour = colour;
+					setPlayerColour(index, colour);
 					NetPlay.players[index].position = position;
 					NetPlay.players[index].team = team;
 					NetPlay.players[index].ai = ai;
-					NetPlay.players[index].difficulty = difficulty;
-					game.skDiff[index] = skDiff;  // This one might be possible to calculate from the other values.  // TODO game.skDiff should probably be eliminated somehow.
+					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
-				// update the color to the local array
-				setPlayerColour(index, NetPlay.players[index].colour);
 
 				if (wasAllocated && NetPlay.players[index].allocated && strncmp(oldName.c_str(), NetPlay.players[index].name, sizeof(NetPlay.players[index].name)) != 0)
 				{
@@ -3046,18 +3054,44 @@ static void NETallowJoining()
 	}
 }
 
+void NETloadBanList() {
+	char BanListPath[4096] = {0};
+	strncpy(BanListPath, PHYSFS_getWriteDir(), 4095);
+	size_t BanListAppendFname = strlen(BanListPath);
+	strncpy(BanListPath+BanListAppendFname, "/banlist.txt", 4095-BanListAppendFname);
+	FILE* f = fopen(BanListPath, "r");
+	if(f == NULL) {
+		return;
+	}
+	debug(LOG_INFO, "Reading banlist file: [%s]\n", BanListPath);
+	char BanStringBuf[2048] = {0};
+	char ToBanIP[256] = {0};
+	char ToBanName[256] = {0};
+	while(fgets(BanStringBuf, sizeof(BanStringBuf)-1, f)) {
+		if(sscanf(BanStringBuf, "%255s %255[^\n]", ToBanIP, ToBanName) != 2) {
+			if(strlen(BanStringBuf) > 2) {
+				debug(LOG_ERROR, "Error reading banlist file!\n");
+			}
+		} else {
+			addToBanList(ToBanIP, ToBanName);
+		}
+	}
+	return;
+}
+
 bool NEThostGame(const char *SessionName, const char *PlayerName,
                  SDWORD one, SDWORD two, SDWORD three, SDWORD four,
                  UDWORD plyrs)	// # of players.
 {
-	unsigned int i;
-
 	debug(LOG_NET, "NEThostGame(%s, %s, %d, %d, %d, %d, %u)", SessionName, PlayerName,
 	      one, two, three, four, plyrs);
 
 	netPlayersUpdated = true;
 
-	NET_InitPlayers(true);
+	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; ++playerIndex)
+	{
+		initPlayerNetworkProps(playerIndex);
+	}
 	for (unsigned n = 0; n < MAX_PLAYERS_IN_GUI; ++n)
 	{
 		changeColour(n, rand() % (n + 1), true); // Put colours in random order.
@@ -3100,7 +3134,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 		return false;
 	}
 	// allocate socket storage for all possible players
-	for (i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
+	for (unsigned i = 0; i < MAX_CONNECTED_PLAYERS; ++i)
 	{
 		connected_bsocket[i] = nullptr;
 		NETinitQueue(NETnetQueue(i));
@@ -3112,7 +3146,9 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	{
 		free(IPlist);
 		IPlist = nullptr;
+		IPlistLast = 0;
 	}
+	NETloadBanList();
 	sstrcpy(gamestruct.name, SessionName);
 	memset(&gamestruct.desc, 0, sizeof(gamestruct.desc));
 	gamestruct.desc.dwSize = sizeof(gamestruct.desc);
@@ -4272,8 +4308,6 @@ static bool onBanList(const char *ip)
  */
 static void addToBanList(const char *ip, const char *name)
 {
-	static int numBans = 0;
-
 	if (!IPlist)
 	{
 		IPlist = (PLAYER_IP *)malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
@@ -4282,16 +4316,16 @@ static void addToBanList(const char *ip, const char *name)
 			debug(LOG_FATAL, "Out of memory!");
 			abort();
 		}
-		numBans = 0;
+		IPlistLast = 0;
+		memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
 	}
-	memset(IPlist, 0x0, sizeof(PLAYER_IP) * MAX_BANS);
-	sstrcpy(IPlist[numBans].IPAddress, ip);
-	sstrcpy(IPlist[numBans].pname, name);
-	numBans++;
+	sstrcpy(IPlist[IPlistLast].IPAddress, ip);
+	sstrcpy(IPlist[IPlistLast].pname, name);
+	IPlistLast++;
 	sync_counter.banned++;
-	if (numBans > MAX_BANS)
+	if (IPlistLast > MAX_BANS)
 	{
 		debug(LOG_INFO, "We have exceeded %d bans, resetting to 0", MAX_BANS);
-		numBans = 0;
+		IPlistLast = 0;
 	}
 }

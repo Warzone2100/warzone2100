@@ -57,10 +57,10 @@ bool startMission(LEVEL_TYPE missionType, char *pGame);
 void endMission();
 
 /** Initialise the mission stuff for a save game. */
-bool startMissionSave(SDWORD missionType);
+bool startMissionSave(LEVEL_TYPE missionType);
 
 /** Sets up the game to start a new mission. */
-bool setUpMission(UDWORD type);
+bool setUpMission(LEVEL_TYPE type);
 
 /** This causes the new mission data to be loaded up. */
 void launchMission();

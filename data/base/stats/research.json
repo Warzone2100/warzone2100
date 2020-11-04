@@ -1738,8 +1738,7 @@
         "msgName": "RES_ST_RM1",
         "name": "Research Module",
         "requiredResearch": [
-            "R-Struc-CommandRelay",
-            "R-Comp-SynapticLink"
+            "R-Struc-CommandRelay"
         ],
         "researchPoints": 1200,
         "researchPower": 37,
@@ -1752,11 +1751,11 @@
         "iconID": "IMAGE_RES_COMPUTERTECH",
         "id": "R-Struc-Research-Upgrade01",
         "imdName": "blresch4.PIE",
-        "keyTopic": 1,
         "msgName": "RES_ST_RU1",
         "name": "Synaptic Link Data Analysis",
         "requiredResearch": [
-            "R-Struc-Research-Module"
+            "R-Struc-Research-Module",
+            "R-Comp-SynapticLink"
         ],
         "researchPoints": 1200,
         "researchPower": 37,
@@ -3457,7 +3456,7 @@
         "resultStructures": [
             "Emplacement-Howitzer150"
         ],
-        "statID": "Emplacement-Howitzer105"
+        "statID": "Emplacement-Howitzer150"
     },
     "R-Defense-HvyMor": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -3477,7 +3476,7 @@
         "resultStructures": [
             "Emplacement-MortarPit02"
         ],
-        "statID": "Emplacement-MortarPit01"
+        "statID": "Emplacement-MortarPit02"
     },
     "R-Defense-IDFRocket": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -5067,7 +5066,8 @@
         "researchPoints": 9000,
         "researchPower": 281,
         "resultComponents": [
-            "Cannon5VulcanMk1"
+            "Cannon5VulcanMk1",
+            "Cannon5Vulcan-VTOL"
         ],
         "statID": "Cannon5VulcanMk1"
     },
@@ -7400,12 +7400,13 @@
     "R-Wpn-Bomb04": {
         "iconID": "IMAGE_RES_WEAPONTECH",
         "id": "R-Wpn-Bomb04",
-        "keyTopic": 1,
         "imdName": "trmvtlin.PIE",
         "msgName": "RES_W_BMB4",
         "name": "Thermite Bomb Bay",
         "requiredResearch": [
-			"R-Wpn-Flamer-Damage05"
+			"R-Wpn-Flamer-Damage05",
+            "R-Wpn-Bomb03",
+            "R-Wpn-Bomb02"
         ],
         "researchPoints": 9200,
         "researchPower": 287,

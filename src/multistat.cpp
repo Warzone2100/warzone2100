@@ -36,14 +36,18 @@
 # pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
 #endif
 
-#include "lib/framework/frame.h"
 #include "lib/framework/file.h"
+#include "lib/framework/frame.h"
+#include "lib/framework/wzapp.h"
 #include "lib/netplay/nettypes.h"
 
+#include "activity.h"
+#include "clparse.h"
 #include "main.h"
 #include "mission.h" // for cheats
 #include "multistat.h"
-#include "activity.h"
+#include "urlrequest.h"
+
 #include <utility>
 
 
@@ -52,21 +56,98 @@
 // ////////////////////////////////////////////////////////////////////////////
 static PLAYERSTATS playerStats[MAX_PLAYERS];
 
-PLAYERSTATS::PLAYERSTATS()
-	: played(0)
-	, wins(0)
-	, losses(0)
-	, totalKills(0)
-	, totalScore(0)
-	, recentKills(0)
-	, recentScore(0)
-{}
 
 // ////////////////////////////////////////////////////////////////////////////
 // Get Player's stats
 PLAYERSTATS const &getMultiStats(UDWORD player)
 {
 	return playerStats[player];
+}
+
+static void NETauto(PLAYERSTATS::Autorating &ar)
+{
+	NETauto(ar.valid);
+	if (ar.valid)
+	{
+		NETauto(ar.dummy);
+		NETauto(ar.star);
+		NETauto(ar.medal);
+		NETauto(ar.level);
+		NETauto(ar.elo);
+	}
+}
+
+PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
+{
+	try {
+		dummy = (bool)json["dummy"];
+		star[0] = (int)json["star"][0];
+		star[1] = (int)json["star"][1];
+		star[2] = (int)json["star"][2];
+		medal = (int)json["medal"];
+		level = (int)json["level"];
+		elo = (std::string)json["elo"];
+
+		valid = true;
+	} catch (const std::exception &e) {
+		debug(LOG_WARNING, "Error parsing rating JSON: %s", e.what());
+	}
+}
+
+static void lookupRatingAsync(uint32_t playerIndex)
+{
+	if (playerStats[playerIndex].identity.empty())
+	{
+		return;
+	}
+
+	auto hash = playerStats[playerIndex].identity.publicHashString();
+	if (hash.empty())
+	{
+		return;
+	}
+
+	std::string url = autoratingUrl(hash);
+	if (url.empty())
+	{
+		return;
+	}
+
+	URLDataRequest req;
+	req.url = url;
+	debug(LOG_INFO, "Requesting \"%s\"", req.url.c_str());
+	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
+		wzAsyncExecOnMainThread([playerIndex, hash, url, response, data] {
+			if (response.httpStatusCode() != 200 || !data || data->size == 0)
+			{
+				debug(LOG_WARNING, "Failed to retrieve data from \"%s\", got [%ld].", url.c_str(), response.httpStatusCode());
+				return;
+			}
+			if (playerStats[playerIndex].identity.publicHashString() != hash)
+			{
+				debug(LOG_WARNING, "Got data from \"%s\", but player is already gone.", url.c_str());
+				return;
+			}
+			try {
+				playerStats[playerIndex].autorating = nlohmann::json::parse(data->memory, data->memory + data->size);
+				if (playerStats[playerIndex].autorating.valid)
+				{
+					setMultiStats(playerIndex, playerStats[playerIndex], false);
+				}
+			}
+			catch (const std::exception &e) {
+				debug(LOG_WARNING, "JSON document from \"%s\" is invalid: %s", url.c_str(), e.what());
+			}
+			catch (...) {
+				debug(LOG_FATAL, "Unexpected exception parsing JSON \"%s\"", url.c_str());
+			}
+		});
+	};
+	req.onFailure = [](std::string const &url, WZ_DECL_UNUSED URLRequestFailureType type, WZ_DECL_UNUSED optional<HTTPResponseDetails> transferDetails) {
+		debug(LOG_WARNING, "Failure fetching \"%s\".", url.c_str());
+	};
+	req.maxDownloadSizeLimit = 4096;
+	urlRequestData(req);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -89,6 +170,8 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		// Send the ID of the player's stats we're updating
 		NETuint32_t(&playerIndex);
 
+		NETauto(playerStats[playerIndex].autorating);
+
 		// Send over the actual stats
 		NETuint32_t(&playerStats[playerIndex].played);
 		NETuint32_t(&playerStats[playerIndex].wins);
@@ -97,6 +180,7 @@ bool setMultiStats(uint32_t playerIndex, PLAYERSTATS plStats, bool bLocal)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+
 		EcKey::Key identity;
 		if (!playerStats[playerIndex].identity.empty())
 		{
@@ -132,6 +216,8 @@ void recvMultiStats(NETQUEUE queue)
 		return;
 	}
 
+	NETauto(playerStats[playerIndex].autorating);
+
 	// we don't what to update ourselves, we already know our score (FIXME: rewrite setMultiStats())
 	if (!myResponsibility(playerIndex))
 	{
@@ -143,6 +229,7 @@ void recvMultiStats(NETQUEUE queue)
 		NETuint32_t(&playerStats[playerIndex].totalScore);
 		NETuint32_t(&playerStats[playerIndex].recentKills);
 		NETuint32_t(&playerStats[playerIndex].recentScore);
+
 		EcKey::Key identity;
 		NETbytes(&identity);
 		EcKey::Key prevIdentity;
@@ -161,6 +248,11 @@ void recvMultiStats(NETQUEUE queue)
 		}
 	}
 	NETend();
+
+	if (realSelectedPlayer == 0 && !playerStats[playerIndex].autorating.valid)
+	{
+		lookupRatingAsync(playerIndex);
+	}
 }
 
 // ////////////////////////////////////////////////////////////////////////////

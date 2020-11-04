@@ -22,6 +22,7 @@
 #define __INCLUDED_SRC_FRONTEND_H__
 
 #include "lib/widget/widgbase.h"
+#include "levels.h"
 
 // determines which option screen to use. when in GS_TITLE_SCREEN mode.
 enum tMode
@@ -97,6 +98,7 @@ char const *videoOptionsVsyncString();
 std::string videoOptionsDisplayScaleString();
 std::vector<unsigned int> availableDisplayScalesSorted();
 void seqDisplayScale();
+void seqVsyncMode();
 
 // Mouse options, shared for in-game options menu use
 char const *mouseOptionsMflipString();
@@ -281,6 +283,8 @@ enum
 	FRONTEND_FSAA_R,
 	FRONTEND_DISPLAYSCALE,
 	FRONTEND_DISPLAYSCALE_R,
+	FRONTEND_GFXBACKEND,
+	FRONTEND_GFXBACKEND_R,
 
 	FRONTEND_MOUSEOPTIONS = 25000,          // Mouse Options Menu
 	FRONTEND_CURSORMODE,
@@ -301,6 +305,6 @@ enum
 
 };
 
-void SPinit();
+void SPinit(LEVEL_TYPE gameType);
 
 #endif // __INCLUDED_SRC_FRONTEND_H__

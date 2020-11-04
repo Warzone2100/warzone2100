@@ -22,10 +22,6 @@
 [submodule "3rdparty/date"]
 	path = 3rdparty/date
 	url = https://github.com/HowardHinnant/date.git
-[submodule "data/base/texpages"]
-	path = data/base/texpages
-	url = https://github.com/Warzone2100/data-texpages.git
-	shallow = true
 [submodule "data/music"]
 	path = data/music
 	url = https://github.com/Warzone2100/data-music.git

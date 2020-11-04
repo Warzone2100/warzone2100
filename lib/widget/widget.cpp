@@ -91,6 +91,7 @@ void widgReset(void)
 /* Shut down the widget module */
 void widgShutDown(void)
 {
+	tipShutdown();
 }
 
 void widgRegisterOverlayScreen(W_SCREEN* psScreen, uint16_t zOrder)
@@ -1047,7 +1048,6 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	if (debugBoundingBoxes)
 	{
 		debugBoundingBoxesOnly = true;
-		pie_SetRendMode(REND_ALPHA);
 		psScreen->psForm->displayRecursive(0, 0);
 		debugBoundingBoxesOnly = false;
 	}

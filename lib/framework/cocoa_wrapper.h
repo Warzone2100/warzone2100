@@ -38,6 +38,7 @@ int cocoaShowAlert(const char *message, const char *information, unsigned style,
                    const char *buttonTitles, ...) __attribute__((sentinel));
 
 bool cocoaSelectFileInFinder(const char *filename);
+bool cocoaSelectFolderInFinder(const char* path);
 bool cocoaOpenURL(const char *url);
 bool cocoaOpenUserCrashReportFolder();
 

@@ -246,7 +246,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	if (!data.cache.canUseCachedText(butString, psWidget->width()))
 	{
 		std::string fullButString = butString;
-		while (iV_GetTextWidth(butString, font_regular) > psWidget->width() - 10)
+		while ((int)iV_GetTextWidth(butString, font_regular) > psWidget->width() - 10)
 		{
 			butString[strlen(butString) - 1] = '\0';
 		}
@@ -273,7 +273,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			if (hash != data.cache.hash)
 			{
 				sstrcpy(butString, hash.toString().c_str());
-				while (iV_GetTextWidth(butString, font_small) > psWidget->width() - 10 - (8 + mapData->players * 6))
+				while ((int)iV_GetTextWidth(butString, font_small) > psWidget->width() - 10 - (8 + mapData->players * 6))
 				{
 					butString[strlen(butString) - 1] = '\0';
 				}
@@ -289,6 +289,10 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		for (int count = 0; count < mapData->players; ++count)
 		{
 			iV_DrawImage(FrontImages, IMAGE_WEE_GUY, x + 6 * count + 6, y + 16);
+		}
+		if (CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]))
+		{
+			iV_DrawImage(FrontImages, IMAGE_WEE_DIE, x + 80 + 6, y + 15);
 		}
 	}
 }
@@ -703,19 +707,19 @@ static void displayExtraGubbins(UDWORD height, ExtraGubbinsCache& cache)
 		bool isTotal = q != 0;
 
 		char const *srText[2] = {_("Sent/Received per sec —"), _("Total Sent/Received —")};
-		sprintf(str, "%s", srText[q]);
+		snprintf(str, sizeof(str), "%s", srText[q]);
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 		xPos += iV_GetTextWidth(str, font_small) + 20;
 
-		sprintf(str, _("Traf: %u/%u"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
+		snprintf(str, sizeof(str), _("Traf: %u/%u"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 		xPos += iV_GetTextWidth(str, font_small) + 20;
 
-		sprintf(str, _("Uncompressed: %u/%u"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
+		snprintf(str, sizeof(str), _("Uncompressed: %u/%u"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 		xPos += iV_GetTextWidth(str, font_small) + 20;
 
-		sprintf(str, _("Pack: %u/%u"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
+		snprintf(str, sizeof(str), _("Pack: %u/%u"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
 		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
 	}
 #endif
@@ -754,7 +758,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	PIELIGHT playerTextColor = GetPlayerTextColor(alliances[selectedPlayer][player], player);
 
-	if (isHuman || (game.type == SKIRMISH && player < game.maxPlayers))
+	if (isHuman || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers))
 	{
 		ssprintf(str, "%d: %s", NetPlay.players[player].position, getPlayerName(player));
 
@@ -905,7 +909,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// clean up widgets if player leaves while menu is up.
-	if (!isHuman && !(game.type == SKIRMISH && player < game.maxPlayers))
+	if (!isHuman && !(game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers))
 	{
 		if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + player) != nullptr)
 		{
@@ -1103,7 +1107,7 @@ bool intAddMultiMenu()
 	// add any players
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && game.skDiff[i]))
+		if (isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED))
 		{
 			addMultiPlayer(i, NetPlay.players[i].position);
 		}

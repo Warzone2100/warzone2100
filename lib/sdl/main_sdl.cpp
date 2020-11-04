@@ -43,16 +43,22 @@
 
 #include "lib/framework/input.h"
 #include "lib/framework/utf.h"
-#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/pieclip.h"
 #include "lib/ivis_opengl/piemode.h"
 #include "lib/ivis_opengl/screen.h"
+#include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/gamelib/gtime.h"
 #include "src/warzoneconfig.h"
 #include "src/game.h"
+#include "gfx_api_sdl.h"
+#include "gfx_api_gl_sdl.h"
 #include <SDL.h>
 #include <SDL_thread.h>
 #include <SDL_clipboard.h>
+#if defined(HAVE_SDL_VULKAN_H)
+#include <SDL_vulkan.h>
+#endif
+#include <SDL_version.h>
 #include "wz2100icon.h"
 #include "cursors_sdl.h"
 #include <algorithm>
@@ -86,9 +92,9 @@ int main(int argc, char *argv[])
 	return realmain(argc, argv);
 }
 
-// At this time, we only have 1 window and 1 GL context.
+// At this time, we only have 1 window.
 static SDL_Window *WZwindow = nullptr;
-static SDL_GLContext WZglcontext = nullptr;
+static video_backend WZbackend = video_backend::opengl;
 
 // The screen that the game window is on.
 int screenIndex = 0;
@@ -153,6 +159,7 @@ static INPUT_STATE aKeyState[KEY_MAXSCAN];		// NOTE: SDL_NUM_SCANCODES is the ma
 /* The current location of the mouse */
 static Uint16 mouseXPos = 0;
 static Uint16 mouseYPos = 0;
+static Vector2i mouseWheelSpeed;
 static bool mouseInWindow = true;
 
 /* How far the mouse has to move to start a drag */
@@ -199,8 +206,6 @@ static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
 bool GetTextEvents = false;
-
-bool vsyncIsEnabled = true;
 
 /**************************/
 /***     Misc support   ***/
@@ -290,6 +295,64 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
 }
 
+std::vector<video_backend> wzAvailableGfxBackends()
+{
+	std::vector<video_backend> availableBackends;
+	availableBackends.push_back(video_backend::opengl);
+#if !defined(WZ_OS_MAC) // OpenGL ES is not supported on macOS, and WZ doesn't currently ship with an OpenGL ES library on macOS
+	availableBackends.push_back(video_backend::opengles);
+#endif
+#if defined(WZ_VULKAN_ENABLED) && defined(HAVE_SDL_VULKAN_H)
+	availableBackends.push_back(video_backend::vulkan);
+#endif
+#if defined(WZ_BACKEND_DIRECTX)
+	availableBackends.push_back(video_backend::directx);
+#endif
+	return availableBackends;
+}
+
+video_backend wzGetDefaultGfxBackendForCurrentSystem()
+{
+	// SDL backend supports: OpenGL, OpenGLES, Vulkan (if compiled with support), DirectX (on Windows, via LibANGLE)
+
+	// Future TODO examples:
+	//	- Default to Vulkan backend on macOS versions > 10.??, to use Metal via MoltenVK (needs testing - and may require exclusions depending on hardware?)
+	//	- Default to DirectX (via LibANGLE) backend on Windows, depending on Windows version (and possibly hardware? / DirectX-level support?)
+	//	- Check if Vulkan appears to be properly supported on a Windows / Linux system, and default to Vulkan backend?
+
+	// For now, default to OpenGL (which automatically falls back to OpenGL ES if needed) on all platforms
+	return video_backend::opengl;
+}
+
+void SDL_WZBackend_GetDrawableSize(SDL_Window* window,
+								   int*        w,
+								   int*        h)
+{
+	switch (WZbackend)
+	{
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx: // because DirectX is supported via OpenGLES (LibANGLE)
+#endif
+		case video_backend::opengl:
+		case video_backend::opengles:
+			return SDL_GL_GetDrawableSize(window, w, h);
+		case video_backend::vulkan:
+#if defined(HAVE_SDL_VULKAN_H)
+			return SDL_Vulkan_GetDrawableSize(window, w, h);
+#else
+			SDL_version compiled_version;
+			SDL_VERSION(&compiled_version);
+			debug(LOG_FATAL, "The version of SDL used for compilation (%u.%u.%u) did not have the SDL_vulkan.h header", (unsigned int)compiled_version.major, (unsigned int)compiled_version.minor, (unsigned int)compiled_version.patch);
+			if (w) { w = 0; }
+			if (h) { h = 0; }
+			return;
+#endif
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
+			return;
+	}
+}
+
 void setDisplayScale(unsigned int displayScale)
 {
 	ASSERT(displayScale >= 100, "Invalid display scale: %u", displayScale);
@@ -330,76 +393,34 @@ void wzDisplayDialog(DialogType type, const char *title, const char *message)
 	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
-bool wzIsMinimized()
+SDL_WindowFlags getSDLFullscreenMode()
 {
-	assert(WZwindow != nullptr);
-	Uint32 flags = SDL_GetWindowFlags(WZwindow);
-	if (flags & SDL_WINDOW_MINIMIZED)
-	{
-		return true;
-	}
-	return false;
-}
-
-void wzScreenFlip()
-{
-#if defined(WZ_OS_MAC)
-	// Workaround for OpenGL on macOS (see below)
-	const uint32_t swapStartTime = SDL_GetTicks();
-#endif
-
-	SDL_GL_SwapWindow(WZwindow);
-
-#if defined(WZ_OS_MAC)
-	// Workaround for OpenGL on macOS
-	// - If the OpenGL window is minimized (or occluded), SwapWindow may not wait for the vertical blanking interval
-	// - To workaround this, detect when we seem to be spinning without any wait, and sleep for a bit
-	static uint32_t numFramesNoVsync = 0;
-	static uint32_t lastSwapEndTime = 0;
-	const bool isMinimized = wzIsMinimized();
-	const uint32_t minFrameInterval = 1000 / ((isMinimized) ? 60 : 120);
-	const uint32_t minSwapEndTick = swapStartTime + 2;
-	uint32_t swapEndTime = SDL_GetTicks();
-	const uint32_t frameTime = swapEndTime - lastSwapEndTime;
-	if ((vsyncIsEnabled || isMinimized) && !SDL_TICKS_PASSED(swapEndTime, minSwapEndTick) && (frameTime < minFrameInterval))
-	{
-		const uint32_t leewayFramesBeforeThrottling = (isMinimized) ? 2 : 4;
-		if (leewayFramesBeforeThrottling < numFramesNoVsync)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(minFrameInterval - frameTime));
-			swapEndTime = SDL_GetTicks();
-		}
-		else
-		{
-			++numFramesNoVsync;
-		}
-	}
-	else if (0 < numFramesNoVsync)
-	{
-		--numFramesNoVsync;
-	}
-	lastSwapEndTime = swapEndTime;
-#endif
+	return WZ_SDL_FULLSCREEN_MODE;
 }
 
 void wzToggleFullscreen()
 {
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
-	if (flags & WZ_SDL_FULLSCREEN_MODE)
+	if (flags & getSDLFullscreenMode())
 	{
 		SDL_SetWindowFullscreen(WZwindow, 0);
 		wzSetWindowIsResizable(true);
 	}
 	else
 	{
-		SDL_SetWindowFullscreen(WZwindow, WZ_SDL_FULLSCREEN_MODE);
+		SDL_SetWindowFullscreen(WZwindow, getSDLFullscreenMode());
 		wzSetWindowIsResizable(false);
 	}
 }
 
 bool wzIsFullscreen()
 {
-	assert(WZwindow != nullptr);
+	if (WZwindow == nullptr)
+	{
+		// NOTE: Can't use debug(...) to log here or it will risk overwriting fatal error messages,
+		// as `_debug(...)` calls this function
+		return false;
+	}
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
 	if ((flags & SDL_WINDOW_FULLSCREEN) || (flags & SDL_WINDOW_FULLSCREEN_DESKTOP))
 	{
@@ -440,21 +461,6 @@ void wzReleaseMouse()
 void wzDelay(unsigned int delay)
 {
 	SDL_Delay(delay);
-}
-
-void wzSetSwapInterval(int interval)
-{
-	if (SDL_GL_SetSwapInterval(interval) != 0)
-	{
-		debug(LOG_ERROR, "Error: SDL_GL_SetSwapInterval(%d) failed (%s).", interval, SDL_GetError());
-		return;
-	}
-	vsyncIsEnabled = interval != 0;
-}
-
-int wzGetSwapInterval()
-{
-	return SDL_GL_GetSwapInterval();
 }
 
 /**************************/
@@ -872,6 +878,7 @@ void inputNewFrame(void)
 		}
 	}
 	mousePresses.clear();
+	mouseWheelSpeed = Vector2i(0, 0);
 }
 
 /*!
@@ -926,6 +933,11 @@ Uint16 mouseY(void)
 bool wzMouseInWindow()
 {
 	return mouseInWindow;
+}
+
+Vector2i const& getMouseWheelSpeed()
+{
+	return mouseWheelSpeed;
 }
 
 Vector2i mousePressPos_DEPRECATED(MOUSE_KEY_CODE code)
@@ -1128,6 +1140,8 @@ void inputhandleText(SDL_TextInputEvent *Tevent)
  */
 static void inputHandleMouseWheelEvent(SDL_MouseWheelEvent *wheel)
 {
+	mouseWheelSpeed += Vector2i(wheel->x, wheel->y);
+
 	if (wheel->x > 0 || wheel->y > 0)
 	{
 		aMouseState[MOUSE_WUP].state = KEY_PRESSED;
@@ -1304,14 +1318,7 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 
 	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
 
-	// Update the viewport to use the new *drawable* size (which may be greater than the new window size
-	// if SDL's built-in high-DPI support is enabled and functioning).
-	int drawableWidth = 0, drawableHeight = 0;
-	SDL_GL_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
-	debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", screenWidth, screenHeight, drawableWidth, drawableHeight);
-	glViewport(0, 0, drawableWidth, drawableHeight);
-	glCullFace(GL_FRONT);
-	glEnable(GL_CULL_FACE);
+	gfx_api::context::get().handleWindowSizeChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
 
@@ -1572,27 +1579,139 @@ void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *heigh
 	}
 }
 
-// This stage, we handle display mode setting
-bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highDPI)
+static SDL_WindowFlags SDL_backend(const video_backend& backend)
 {
-	// populate with the saved values (if we had any)
+	switch (backend)
+	{
+#if defined(WZ_BACKEND_DIRECTX)
+		case video_backend::directx: // because DirectX is supported via OpenGLES (LibANGLE)
+#endif
+		case video_backend::opengl:
+		case video_backend::opengles:
+			return SDL_WINDOW_OPENGL;
+		case video_backend::vulkan:
+#if SDL_VERSION_ATLEAST(2, 0, 6)
+			return SDL_WINDOW_VULKAN;
+#else
+			debug(LOG_FATAL, "The version of SDL used for compilation does not support SDL_WINDOW_VULKAN");
+			break;
+#endif
+		case video_backend::num_backends:
+			debug(LOG_FATAL, "Should never happen");
+			break;
+	}
+	return SDL_WindowFlags{};
+}
+
+bool shouldResetGfxBackendPrompt(video_backend currentBackend, video_backend newBackend, std::string failedToInitializeObject = "graphics", std::string additionalErrorDetails = "")
+{
+	// Offer to reset to the specified gfx backend
+	std::string resetString = std::string("Reset to ") + to_display_string(newBackend) + "";
+	const SDL_MessageBoxButtonData buttons[] = {
+	   { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, resetString.c_str() },
+	   { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "Not Now" },
+	};
+	std::string titleString = std::string("Warzone: Failed to initialize ") + failedToInitializeObject;
+	std::string messageString = std::string("Failed to initialize ") + failedToInitializeObject + " for backend: " + to_display_string(currentBackend) + ".\n\n";
+	if (!additionalErrorDetails.empty())
+	{
+		messageString += "Error Details: \n\"" + additionalErrorDetails + "\"\n\n";
+	}
+	messageString += "Do you want to reset the graphics backend to: " + to_display_string(newBackend) + "?";
+	const SDL_MessageBoxData messageboxdata = {
+		SDL_MESSAGEBOX_ERROR, /* .flags */
+		WZwindow, /* .window */
+		titleString.c_str(), /* .title */
+		messageString.c_str(), /* .message */
+		SDL_arraysize(buttons), /* .numbuttons */
+		buttons, /* .buttons */
+		nullptr /* .colorScheme */
+	};
+	int buttonid;
+	if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+		// error displaying message box
+		debug(LOG_FATAL, "Failed to display message box");
+		return false;
+	}
+	if (buttonid == 1)
+	{
+		return true;
+	}
+	return false;
+}
+
+void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true)
+{
+	war_setGfxBackend(newBackend);
+	if (displayRestartMessage)
+	{
+		std::string title = std::string("Backend reset to: ") + to_display_string(newBackend);
+		wzDisplayDialog(Dialog_Information, title.c_str(), "(Note: Do not specify a --gfxbackend option, or it will override this new setting.)\n\nPlease restart Warzone 2100 to use the new graphics setting.");
+	}
+}
+
+bool wzSDLOneTimeInit()
+{
+	const Uint32 sdl_init_flags = SDL_INIT_VIDEO | SDL_INIT_TIMER;
+	if (!(SDL_WasInit(sdl_init_flags) == sdl_init_flags))
+	{
+		if (SDL_Init(sdl_init_flags) != 0)
+		{
+			debug(LOG_ERROR, "Error: Could not initialise SDL (%s).", SDL_GetError());
+			return false;
+		}
+	}
+
+	if (wzSDLAppEvent == ((Uint32)-1))
+	{
+		wzSDLAppEvent = SDL_RegisterEvents(1);
+		if (wzSDLAppEvent == ((Uint32)-1))
+		{
+			// Failed to register app-defined event with SDL
+			debug(LOG_ERROR, "Error: Failed to register app-defined SDL event (%s).", SDL_GetError());
+			return false;
+		}
+	}
+
+	return true;
+}
+
+// This stage, we handle display mode setting
+bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, int vsync, bool highDPI)
+{
+	const bool useOpenGLES = (backend == video_backend::opengles)
+#if defined(WZ_BACKEND_DIRECTX)
+		|| (backend == video_backend::directx)
+#endif
+	;
+	const bool useOpenGLESLibrary = false
+#if defined(WZ_BACKEND_DIRECTX)
+		|| (backend == video_backend::directx)
+#endif
+	;
+	const bool usesSDLBackend_OpenGL = useOpenGLES || (backend == video_backend::opengl);
+	const bool usesSDLBackend_Vulkan = (backend == video_backend::vulkan);
+	const auto vsyncMode = to_swap_mode(vsync);
+
+	// Output linked SDL version
+	char buf[512];
+	SDL_version linked_sdl_version;
+	SDL_GetVersion(&linked_sdl_version);
+	ssprintf(buf, "Linked SDL version: %u.%u.%u\n", (unsigned int)linked_sdl_version.major, (unsigned int)linked_sdl_version.minor, (unsigned int)linked_sdl_version.patch);
+	addDumpInfo(buf);
+	debug(LOG_WZ, "%s", buf);
+
+	// populate with the saved configuration values (if we had any)
+	int width = war_GetWidth();
+	int height = war_GetHeight();
+	int bitDepth = war_GetVideoBufferDepth();
 	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
 	// (i.e. not taking into account the game display scale). This function later sets the display system
 	// to the *game screen* width and height (taking into account the display scale).
-	int width = pie_GetVideoBufferWidth();
-	int height = pie_GetVideoBufferHeight();
-	int bitDepth = pie_GetVideoBufferDepth();
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
+	if (!wzSDLOneTimeInit())
 	{
-		debug(LOG_ERROR, "Error: Could not initialise SDL (%s).", SDL_GetError());
-		return false;
-	}
-
-	wzSDLAppEvent = SDL_RegisterEvents(1);
-	if (wzSDLAppEvent == ((Uint32)-1)) {
-		// Failed to register app-defined event with SDL
-		debug(LOG_ERROR, "Error: Failed to register app-defined SDL event (%s).", SDL_GetError());
+		// wzSDLOneTimeInit already logged an error on failure
 		return false;
 	}
 
@@ -1604,25 +1723,49 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	}
 #endif
 
-	// Set the double buffer OpenGL attribute.
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	WZbackend = backend;
 
-	// Enable stencil buffer, needed for shadows to work.
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-	if (antialiasing)
+	if(usesSDLBackend_OpenGL)
 	{
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
-	}
+		// Set OpenGL attributes before creating the SDL Window
 
-#if defined(WZ_USE_OPENGL_3_2_CORE_PROFILE)
-	// SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG is *required* to obtain an OpenGL >= 3 Core Context on macOS
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+		// Set minimum number of bits for the RGB channels of the color buffer
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+#if defined(WZ_OS_WIN)
+		if (useOpenGLES)
+		{
+			// Always force minimum 8-bit color channels when using OpenGL ES on Windows
+			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		}
 #endif
+
+		// Set the double buffer OpenGL attribute.
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+		// Request a 24-bit depth buffer.
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+		// Enable stencil buffer, needed for shadows to work.
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+		if (antialiasing)
+		{
+			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
+		}
+
+		if (!sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary))
+		{
+			// Failed to configure OpenGL context request
+			debug(LOG_FATAL, "Failed to configure OpenGL context request");
+			SDL_Quit();
+			exit(EXIT_FAILURE);
+		}
+	}
 
 	// Populated our resolution list (does all displays now)
 	SDL_DisplayMode	displaymode;
@@ -1742,11 +1885,11 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	}
 
 	//// The flags to pass to SDL_CreateWindow
-	int video_flags  = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+	int video_flags  = SDL_backend(backend) | SDL_WINDOW_SHOWN;
 
 	if (fullscreen)
 	{
-		video_flags |= WZ_SDL_FULLSCREEN_MODE;
+		video_flags |= getSDLFullscreenMode();
 	}
 	else
 	{
@@ -1766,7 +1909,17 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	if (!WZwindow)
 	{
-		debug(LOG_FATAL, "Can't create a window, because: %s", SDL_GetError());
+		std::string createWindowErrorStr = SDL_GetError();
+		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
+		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend, "window", createWindowErrorStr))
+		{
+			resetGfxBackend(defaultBackend);
+			return false; // must return so new configuration will be saved
+		}
+		else
+		{
+			debug(LOG_FATAL, "Can't create a window, because: %s", createWindowErrorStr.c_str());
+		}
 		SDL_Quit();
 		exit(EXIT_FAILURE);
 	}
@@ -1831,65 +1984,6 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 
 	// Set the minimum window size
 	SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
-
-	WZglcontext = SDL_GL_CreateContext(WZwindow);
-	if (!WZglcontext)
-	{
-		debug(LOG_ERROR, "Failed to create a openGL context! [%s]", SDL_GetError());
-		return false;
-	}
-
-	if (highDPI)
-	{
-		// When high-DPI mode is enabled, retrieve the DrawableSize in pixels
-		// for use in the glViewport function - this will be the actual
-		// pixel dimensions, not the window size (which is in points).
-		//
-		// NOTE: Do not do this if high-DPI support is disabled, or the viewport
-		// size may be set inappropriately.
-
-		SDL_GL_GetDrawableSize(WZwindow, &width, &height);
-		debug(LOG_WZ, "Logical Size: %d x %d; Drawable Size: %d x %d", windowWidth, windowHeight, width, height);
-	}
-
-	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
-	debug(LOG_WZ, "Bpp = %d format %s" , bpp, SDL_GetPixelFormatName(SDL_GetWindowPixelFormat(WZwindow)));
-	if (!bpp)
-	{
-		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
-		return false;
-	}
-	switch (bpp)
-	{
-	case 32:
-	case 24:		// all is good...
-		break;
-	case 16:
-		info("Using colour depth of %i instead of a 32/24 bit depth (True color).", bpp);
-		info("You will experience graphics glitches!");
-		break;
-	case 8:
-		debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
-		SDL_Quit();
-		exit(1);
-		break;
-	default:
-		debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
-		exit(1);
-		break;
-	}
-
-	// Enable/disable vsync if requested by the user
-	wzSetSwapInterval(vsync);
-
-	int value = 0;
-	if (SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &value) == -1 || value == 0)
-	{
-		debug(LOG_FATAL, "OpenGL initialization did not give double buffering!");
-		debug(LOG_FATAL, "Double buffering is required for this game!");
-		SDL_Quit();
-		exit(1);
-	}
 
 #if !defined(WZ_OS_MAC) // Do not use this method to set the window icon on macOS.
 
@@ -1957,10 +2051,50 @@ bool wzMainScreenSetup(int antialiasing, bool fullscreen, bool vsync, bool highD
 	cocoaSetupWZMenus();
 #endif
 
-	// FIXME: aspect ratio
-	glViewport(0, 0, width, height);
-	glCullFace(GL_FRONT);
-	glEnable(GL_CULL_FACE);
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES, useOpenGLESLibrary), antialiasing, vsyncMode, usesSDLBackend_Vulkan))
+	{
+		// Failed to initialize desired backend / renderer settings
+		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
+		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend))
+		{
+			resetGfxBackend(defaultBackend);
+			return false; // must return so new configuration will be saved
+		}
+		else
+		{
+			debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend).c_str());
+		}
+
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+
+	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
+	debug(LOG_WZ, "Bpp = %d format %s" , bpp, SDL_GetPixelFormatName(SDL_GetWindowPixelFormat(WZwindow)));
+	if (!bpp)
+	{
+		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
+		return false;
+	}
+	switch (bpp)
+	{
+	case 32:
+	case 24:		// all is good...
+		break;
+	case 16:
+		wz_info("Using colour depth of %i instead of a 32/24 bit depth (True color).", bpp);
+		wz_info("You will experience graphics glitches!");
+		break;
+	case 8:
+		debug(LOG_FATAL, "You don't want to play Warzone with a bit depth of %i, do you?", bpp);
+		SDL_Quit();
+		exit(1);
+		break;
+	default:
+		debug(LOG_FATAL, "Unsupported bit depth: %i", bpp);
+		exit(1);
+		break;
+	}
 
 	return true;
 }
@@ -1982,7 +2116,7 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 
 	// Obtain the window context's drawable size in pixels
 	int drawableWidth, drawableHeight = 0;
-	SDL_GL_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
+	SDL_WZBackend_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
 
 	// Obtain the logical window size (in points)
 	int windowWidth, windowHeight = 0;
@@ -2148,6 +2282,9 @@ static void handleActiveEvent(SDL_Event *event)
 			debug(LOG_WZ, "Window %d closed", event->window.windowID);
 			WZwindow = nullptr;
 			break;
+		case SDL_WINDOWEVENT_TAKE_FOCUS:
+			debug(LOG_WZ, "Window %d is being offered focus", event->window.windowID);
+			break;
 		default:
 			debug(LOG_WZ, "Window %d got unknown event %d", event->window.windowID, event->window.event);
 			break;
@@ -2227,6 +2364,11 @@ void wzMainEventLoop(void)
 		mainLoop();				// WZ does its thing
 		inputNewFrame();			// reset input states
 	}
+}
+
+void wzPumpEventsWhileLoading()
+{
+	SDL_PumpEvents();
 }
 
 void wzShutdown()

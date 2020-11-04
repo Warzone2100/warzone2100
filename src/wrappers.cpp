@@ -57,7 +57,7 @@ static bool		bPlayerHasLost = false;
 static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-int hostlaunch = 0;				// used to detect if we are hosting a game via command line option.
+HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are hosting a game via command line option.
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -120,7 +120,6 @@ TITLECODE titleLoop()
 {
 	TITLECODE RetCode = TITLECODE_CONTINUE;
 
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 	screen_RestartBackDrop();
 	wzShowMouse(true);
@@ -131,11 +130,11 @@ TITLECODE titleLoop()
 		firstcall = false;
 		// First check to see if --host was given as a command line option, if not,
 		// then check --join and if neither, run the normal game menu.
-		if (hostlaunch)
+		if (hostlaunch != HostLaunch::Normal)
 		{
-			if (hostlaunch == 2)
+			if (hostlaunch == HostLaunch::Skirmish)
 			{
-				SPinit();
+				SPinit(LEVEL_TYPE::SKIRMISH);
 			}
 			else // single player
 			{
@@ -147,11 +146,11 @@ TITLECODE titleLoop()
 				NETdiscoverUPnPDevices();
 			}
 			bMultiPlayer = true;
-			ingame.bHostSetup = true;
-			game.type = SKIRMISH;
+			ingame.side = InGameSide::HOST_OR_SINGLEPLAYER;
+			game.type = LEVEL_TYPE::SKIRMISH;
 			// Ensure the game has a place to return to
 			changeTitleMode(TITLE);
-			changeTitleUI(std::make_shared<WzMultiOptionTitleUI>(wzTitleUICurrent));
+			changeTitleUI(std::make_shared<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent));
 		}
 		else if (strlen(iptoconnect))
 		{
@@ -235,6 +234,8 @@ void loadingScreenCallback()
 
 	pie_ScreenFlip(CLEAR_OFF_AND_NO_BUFFER_DOWNLOAD);//loading callback		// don't clear.
 	audio_Update();
+
+	wzPumpEventsWhileLoading();
 }
 
 // fill buffers with the static screen

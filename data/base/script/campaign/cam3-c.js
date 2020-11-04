@@ -124,6 +124,8 @@ function betaAlive()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Reunite a part of Beta team with a Gamma team outpost"));
+
 	var startpos = getObject("startPosition");
 	var limboLZ = getObject("limboDroidLZ");
 	reunited = false;

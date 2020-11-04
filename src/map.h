@@ -386,12 +386,22 @@ static inline float map_coordf(int32_t worldCoord)
 
 static inline Vector2i world_coord(Vector2i const &mapCoord)
 {
-	return Vector2i(world_coord(mapCoord.x), world_coord(mapCoord.y));
+	return {world_coord(mapCoord.x), world_coord(mapCoord.y)};
 }
 
 static inline Vector2i map_coord(Vector2i const &worldCoord)
 {
-	return Vector2i(map_coord(worldCoord.x), map_coord(worldCoord.y));
+	return {map_coord(worldCoord.x), map_coord(worldCoord.y)};
+}
+
+static inline int32_t round_to_nearest_tile(int32_t worldCoord)
+{
+	return (worldCoord + TILE_UNITS/2) & ~TILE_MASK;
+}
+
+static inline Vector2i round_to_nearest_tile(Vector2i const &worldCoord)
+{
+	return {round_to_nearest_tile(worldCoord.x), round_to_nearest_tile(worldCoord.y)};
 }
 
 /* Make sure world coordinates are inside the map */
@@ -417,7 +427,9 @@ static inline void clip_world_offmap(int *worldX, int *worldY)
 bool mapShutdown();
 
 /* Load the map data */
-bool mapLoad(char *filename, bool preview);
+bool mapLoad(char const *filename, bool preview);
+struct ScriptMapData;
+bool mapLoadFromScriptData(ScriptMapData const &, bool preview);
 
 /* Save the map data */
 bool mapSave(char **ppFileData, UDWORD *pFileSize);

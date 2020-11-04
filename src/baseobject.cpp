@@ -95,14 +95,12 @@ SIMPLE_OBJECT::~SIMPLE_OBJECT()
 BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 	: SIMPLE_OBJECT(type, id, player)
 	, selected(false)
-	, numWatchedTiles(0)
 	, lastEmission(0)
 	, lastHitWeapon(WSC_NUM_WEAPON_SUBCLASSES)  // No such weapon.
 	, timeLastHit(UDWORD_MAX)
 	, body(0)
 	, periodicalDamageStart(0)
 	, periodicalDamage(0)
-	, watchedTiles(nullptr)
 	, timeAnimationStarted(0)
 	, animationEvent(ANIM_EVENT_NONE)
 {
@@ -117,7 +115,6 @@ BASE_OBJECT::BASE_OBJECT(OBJECT_TYPE type, uint32_t id, unsigned player)
 BASE_OBJECT::~BASE_OBJECT()
 {
 	visRemoveVisibility(this);
-	free(watchedTiles);
 
 #ifdef DEBUG
 	psNext = this;                                                       // Hopefully this will trigger an infinite loop       if someone uses the freed object.
@@ -149,7 +146,6 @@ void checkObject(const SIMPLE_OBJECT *psObject, const char *const location_descr
 		break;
 
 	case OBJ_FEATURE:
-	case OBJ_TARGET:
 		break;
 
 	default:

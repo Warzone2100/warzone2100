@@ -732,15 +732,15 @@ static void generateRiverbed()
 
 }
 
+static bool afterMapLoad();
+
 /* Initialise the map structure */
-bool mapLoad(char *filename, bool preview)
+bool mapLoad(char const *filename, bool preview)
 {
 	UDWORD		numGw, width, height;
 	char		aFileType[4];
 	UDWORD		version;
-	UDWORD		i, x, y;
 	PHYSFS_file	*fp = PHYSFS_openRead(filename);
-	MersenneTwister mt(12345);  // 12345 = random seed.
 
 	if (!fp)
 	{
@@ -768,7 +768,7 @@ bool mapLoad(char *filename, bool preview)
 		debug(LOG_ERROR, "%s: Undefined save format version %u", filename, version);
 		goto failure;
 	}
-	else if (width * height > MAP_MAXAREA)
+	else if ((uint64_t)width * height > MAP_MAXAREA)
 	{
 		debug(LOG_ERROR, "Map %s too large : %d %d", filename, width, height);
 		goto failure;
@@ -784,7 +784,7 @@ bool mapLoad(char *filename, bool preview)
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = (MAPTILE *)calloc(width * height, sizeof(MAPTILE));
+	psMapTiles = (MAPTILE *)calloc((size_t)width * height, sizeof(MAPTILE));
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
@@ -802,10 +802,16 @@ bool mapLoad(char *filename, bool preview)
 		goto failure;
 	}
 
+	if (!preview)
+	{
+		//preload the terrain textures
+		loadTerrainTextures();
+	}
+
 	//load in the map data itself
 
 	/* Load in the map data */
-	for (i = 0; i < mapWidth * mapHeight; i++)
+	for (int i = 0; i < mapWidth * mapHeight; ++i)
 	{
 		UWORD	texture;
 		UBYTE	height;
@@ -840,7 +846,7 @@ bool mapLoad(char *filename, bool preview)
 		goto failure;
 	}
 
-	for (i = 0; i < numGw; i++)
+	for (unsigned i = 0; i < numGw; i++)
 	{
 		UBYTE	x0, y0, x1, y1;
 
@@ -855,14 +861,95 @@ bool mapLoad(char *filename, bool preview)
 		}
 	}
 
-	if (!mapSetGroundTypes())
+	if (!afterMapLoad())
 	{
 		goto failure;
 	}
 
-	for (y = 0; y < mapHeight; y++)
+ok:
+	PHYSFS_close(fp);
+	return true;
+
+failure:
+	PHYSFS_close(fp);
+	return false;
+}
+
+/* Initialise the map structure */
+bool mapLoadFromScriptData(ScriptMapData const &data, bool preview)
+{
+	if (!data.valid)
 	{
-		for (x = 0; x < mapWidth; x++)
+		debug(LOG_ERROR, "Data not found");
+		return false;
+	}
+
+	/* See if this is the first time a map has been loaded */
+	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoadFromScriptData()!");
+
+	/* Allocate the memory for the map */
+	psMapTiles = (MAPTILE *)calloc((size_t)data.mapWidth * data.mapHeight, sizeof(MAPTILE));
+	ASSERT(psMapTiles != nullptr, "Out of memory");
+
+	mapWidth = data.mapWidth;
+	mapHeight = data.mapHeight;
+
+	// FIXME: the map preview code loads the map without setting the tileset
+	if (!tilesetDir)
+	{
+		tilesetDir = strdup("texpages/tertilesc1hw");
+	}
+
+	// load the ground types
+	if (!mapLoadGroundTypes())
+	{
+		return false;
+	}
+
+	if (!preview)
+	{
+		//preload the terrain textures
+		loadTerrainTextures();
+	}
+
+	//load in the map data itself
+
+	/* Load in the map data */
+	for (int i = 0; i < mapWidth * mapHeight; ++i)
+	{
+		psMapTiles[i].texture = data.texture[i];
+		psMapTiles[i].height = data.height[i];
+
+		// Visibility stuff
+		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
+		memset(psMapTiles[i].sensors, 0, sizeof(psMapTiles[i].sensors));
+		memset(psMapTiles[i].jammers, 0, sizeof(psMapTiles[i].jammers));
+		psMapTiles[i].sensorBits = 0;
+		psMapTiles[i].jammerBits = 0;
+		psMapTiles[i].tileExploredBits = 0;
+	}
+
+	if (preview)
+	{
+		// no need to do anything else for the map preview
+		return true;
+	}
+
+	// Skip gateways, not adding any.
+
+	return afterMapLoad();
+}
+
+static bool afterMapLoad()
+{
+	if (!mapSetGroundTypes())
+	{
+		return false;
+	}
+
+	for (int y = 0; y < mapHeight; ++y)
+	{
+		for (int x = 0; x < mapWidth; ++x)
 		{
 			// FIXME: magic number
 			mapTile(x, y)->waterLevel = mapTile(x, y)->height - world_coord(1) / 3;
@@ -879,15 +966,15 @@ bool mapLoad(char *filename, bool preview)
 	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
 	psBlockMap[AUX_ASTARMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
 	psBlockMap[AUX_DANGERMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
-	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
+	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
 		psAuxMap[x] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
 	}
 
 	// Set our blocking bits
-	for (y = 0; y < mapHeight; y++)
+	for (int y = 0; y < mapHeight; ++y)
 	{
-		for (x = 0; x < mapWidth; x++)
+		for (int x = 0; x < mapWidth; ++x)
 		{
 			MAPTILE *psTile = mapTile(x, y);
 
@@ -916,13 +1003,8 @@ bool mapLoad(char *filename, bool preview)
 
 	/* Set continents. This should ideally be done in advance by the map editor. */
 	mapFloodFillContinents();
-ok:
-	PHYSFS_close(fp);
-	return true;
 
-failure:
-	PHYSFS_close(fp);
-	return false;
+	return true;
 }
 
 /* Save the map data */
@@ -1541,6 +1623,8 @@ bool writeVisibilityData(const char *fileName)
 		return false;
 	}
 
+	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
+
 	fileHeader.aFileType[0] = 'v';
 	fileHeader.aFileType[1] = 'i';
 	fileHeader.aFileType[2] = 's';
@@ -1871,14 +1955,10 @@ static int dangerThreadFunc(WZ_DECL_UNUSED void *data)
 
 static inline void threatUpdateTarget(int player, BASE_OBJECT *psObj, bool ground, bool air)
 {
-	int i;
-
 	if (psObj->visible[player] || psObj->born == 2)
 	{
-		for (i = 0; i < psObj->numWatchedTiles; i++)
+		for (TILEPOS pos : psObj->watchedTiles)
 		{
-			const TILEPOS pos = psObj->watchedTiles[i];
-
 			if (ground)
 			{
 				auxSet(pos.x, pos.y, MAX_PLAYERS + AUX_DANGERMAP, AUXBITS_THREAT);	// set ground threat for this tile
@@ -1971,7 +2051,7 @@ void mapInit()
 
 	// Start danger thread (not used for campaign for now - mission map swaps too icky)
 	ASSERT(dangerSemaphore == nullptr && dangerThread == nullptr, "Map data not cleaned up before starting!");
-	if (game.type == SKIRMISH)
+	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		for (player = 0; player < MAX_PLAYERS; player++)
 		{
@@ -2007,7 +2087,7 @@ void mapUpdate()
 			}
 		}
 
-	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == SKIRMISH)
+	if (gameTime > lastDangerUpdate + GAME_TICKS_FOR_DANGER && game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		syncDebug("Do danger maps.");
 		lastDangerUpdate = gameTime;

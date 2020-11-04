@@ -107,6 +107,8 @@ function vtolTargetLabel() {
 }
 
 function findTarget(gr) {
+	if (enumLivingPlayers().filter(isEnemy).length === 0)
+		return undefined;
 	var obj = safeGetObject(groupMicroTargetLabel(gr));
 	var obj2 = safeGetObject(groupTargetLabel(gr));
 	getGroupInfo(gr);
@@ -408,6 +410,8 @@ _global.dangerLevel = function(loc) {
 }
 
 _global.checkAttack = function() {
+	if (enumLivingPlayers().filter(isEnemy).length === 0)
+		return;
 	for (var i = 0; i < MAX_GROUPS; ++i)
 		if (!throttled(3000, i)) {
 			regroup(i).forEach(attackTarget);

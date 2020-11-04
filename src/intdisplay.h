@@ -216,6 +216,15 @@ protected:
 	BASE_STATS *Stat;
 };
 
+/// Form which only acts as a glass container.
+class IntFormTransparent : public W_FORM
+{
+public:
+	IntFormTransparent(WIDGET *parent);
+
+	virtual void display(int xOffset, int yOffset);
+};
+
 /// Form which animates opening/closing.
 class IntFormAnimated : public W_FORM
 {
@@ -262,7 +271,7 @@ iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player);
 bool StatIsTemplate(BASE_STATS *Stat);
 bool StatIsFeature(BASE_STATS const *Stat);
 
-SDWORD StatIsComponent(BASE_STATS *Stat);
+COMPONENT_TYPE StatIsComponent(BASE_STATS *Stat);
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD);
 
 bool StatIsResearch(BASE_STATS *Stat);

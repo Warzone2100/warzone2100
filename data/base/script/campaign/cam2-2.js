@@ -110,12 +110,13 @@ function vtolAttack()
 //Order the truck to build some defenses.
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
-		queue("truckDefense", camSecondsToMilliseconds(160));
+		removeTimer("truckDefense");
+		return;
 	}
 
-	const list = ["WallTower06", "PillBox1", "WallTower03"];
+	const list = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
@@ -231,4 +232,5 @@ function eventStartLevel()
 	hackAddMessage("C22_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("vtolAttack", camMinutesToMilliseconds(2));
+	setTimer("truckDefense", camSecondsToMilliseconds(160));
 }

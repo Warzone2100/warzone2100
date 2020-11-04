@@ -93,8 +93,10 @@
 #include "mission.h"
 #include "modding.h"
 #include "version.h"
+#include "game.h"
 
 #include <set>
+#include <memory>
 #include <utility>
 
 #include "qtscriptdebug.h"
@@ -614,7 +616,164 @@ bool updateScripts()
 	return true;
 }
 
-QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty)
+uint32_t ScriptMapData::crcSumStructures(uint32_t crc) const
+{
+	for (auto &o : structures)
+	{
+		crc = crcSum(crc, o.name.toUtf8().data(), o.name.toUtf8().length());
+		crc = crcSumVector2i(crc, &o.position, 1);
+		crc = crcSumU16(crc, &o.direction, 1);
+		crc = crcSum(crc, &o.modules, 1);
+		crc = crcSum(crc, &o.player, 1);
+	}
+	return crc;
+}
+
+uint32_t ScriptMapData::crcSumDroids(uint32_t crc) const
+{
+	for (auto &o : droids)
+	{
+		crc = crcSum(crc, o.name.toUtf8().data(), o.name.toUtf8().length());
+		crc = crcSumVector2i(crc, &o.position, 1);
+		crc = crcSumU16(crc, &o.direction, 1);
+		crc = crcSum(crc, &o.player, 1);
+	}
+	return crc;
+}
+
+uint32_t ScriptMapData::crcSumFeatures(uint32_t crc) const
+{
+	for (auto &o : features)
+	{
+		crc = crcSum(crc, o.name.toUtf8().data(), o.name.toUtf8().length());
+		crc = crcSumVector2i(crc, &o.position, 1);
+		crc = crcSumU16(crc, &o.direction, 1);
+	}
+	return crc;
+}
+
+ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview)
+{
+	ScriptMapData data;
+	data.valid = false;
+	data.mt = MersenneTwister(seed);
+
+	auto engine = std::unique_ptr<QScriptEngine>(new QScriptEngine());
+	//auto engine = std::make_unique<QScriptEngine>();
+	engine->setProcessEventsInterval(-1);
+	UDWORD size;
+	char *bytes = nullptr;
+	if (!loadFile(path.toUtf8().c_str(), &bytes, &size))
+	{
+		debug(LOG_ERROR, "Failed to read script file \"%s\"", path.toUtf8().c_str());
+		return data;
+	}
+	QString source = QString::fromUtf8(bytes, size);
+	free(bytes);
+	QScriptSyntaxCheckResult syntax = QScriptEngine::checkSyntax(source);
+	ASSERT_OR_RETURN(data, syntax.state() == QScriptSyntaxCheckResult::Valid, "Syntax error in %s line %d: %s",
+	                 path.toUtf8().c_str(), syntax.errorLineNumber(), syntax.errorMessage().toUtf8().constData());
+	engine->globalObject().setProperty("preview", preview, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("XFLIP", TILE_XFLIP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("YFLIP", TILE_YFLIP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ROTMASK", TILE_ROTMASK, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("ROTSHIFT", TILE_ROTSHIFT, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("TRIFLIP", TILE_TRIFLIP, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	//engine->globalObject().setProperty("players", players, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("gameRand", engine->newFunction([](QScriptContext *context, QScriptEngine *, void *_data) -> QScriptValue {
+		auto &data = *(ScriptMapData *)_data;
+		uint32_t num = data.mt.u32();
+		uint32_t mod = context->argument(0).toUInt32();
+		return mod? num%mod : num;
+	}, &data), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("log", engine->newFunction([](QScriptContext *context, QScriptEngine *, void *_data) -> QScriptValue {
+		auto &data = *(ScriptMapData *)_data;
+		(void)data;
+		auto str = context->argument(0).toString();
+		debug(LOG_INFO, "game.js: \"%s\"", str.toUtf8().constData());
+		return {};
+	}, &data), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+	engine->globalObject().setProperty("setMapData", engine->newFunction([](QScriptContext *context, QScriptEngine *, void *_data) -> QScriptValue {
+		auto &data = *(ScriptMapData *)_data;
+		data.valid = false;
+		auto mapWidth = context->argument(0);
+		auto mapHeight = context->argument(1);
+		auto texture = context->argument(2);
+		auto height = context->argument(3);
+		auto structures = context->argument(4);
+		auto droids = context->argument(5);
+		auto features = context->argument(6);
+		ASSERT_OR_RETURN(false, mapWidth.isNumber(), "mapWidth must be number");
+		ASSERT_OR_RETURN(false, mapHeight.isNumber(), "mapHeight must be number");
+		ASSERT_OR_RETURN(false, texture.isArray(), "texture must be array");
+		ASSERT_OR_RETURN(false, height.isArray(), "height must be array");
+		ASSERT_OR_RETURN(false, structures.isArray(), "structures must be array");
+		ASSERT_OR_RETURN(false, droids.isArray(), "droids must be array");
+		ASSERT_OR_RETURN(false, features.isArray(), "features must be array");
+		data.mapWidth = mapWidth.toInt32();
+		data.mapHeight = mapHeight.toInt32();
+		ASSERT_OR_RETURN(false, data.mapWidth > 1 && data.mapHeight > 1 && (uint64_t)data.mapWidth*data.mapHeight <= 65536, "Map size out of bounds");
+		size_t N = (size_t)data.mapWidth*data.mapHeight;
+		data.texture.resize(N);
+		data.height.resize(N);
+		for (size_t n = 0; n < N; ++n)
+		{
+			data.texture[n] = texture.property(n).toUInt16();
+			data.height[n] = height.property(n).toInt32();
+		}
+		uint16_t structureCount = structures.property("length").toUInt16();
+		for (unsigned i = 0; i < structureCount; ++i) {
+			auto structure = structures.property(i);
+			auto position = structure.property("position");
+			ScriptMapData::Structure sd;
+			sd.name = structure.property("name").toString().toUtf8().constData();
+			sd.position = {position.property(0).toInt32(), position.property(1).toInt32()};
+			sd.direction = structure.property("direction").toInt32();
+			sd.modules = structure.property("modules").toUInt32();
+			sd.player = structure.property("player").toInt32();
+			if (sd.player < -1 || sd.player >= MAX_PLAYERS) {
+				ASSERT(false, "Invalid player");
+				continue;
+			}
+			data.structures.push_back(std::move(sd));
+		}
+		uint16_t droidCount = droids.property("length").toUInt16();
+		for (unsigned i = 0; i < droidCount; ++i) {
+			auto droid = droids.property(i);
+			auto position = droid.property("position");
+			ScriptMapData::Droid sd;
+			sd.name = droid.property("name").toString().toUtf8().constData();
+			sd.position = {position.property(0).toInt32(), position.property(1).toInt32()};
+			sd.direction = droid.property("direction").toInt32();
+			sd.player = droid.property("player").toInt32();
+			if (sd.player < -1 || sd.player >= MAX_PLAYERS) {
+				ASSERT(false, "Invalid player");
+				continue;
+			}
+			data.droids.push_back(std::move(sd));
+		}
+		uint16_t featureCount = features.property("length").toUInt16();
+		for (unsigned i = 0; i < featureCount; ++i) {
+			auto feature = features.property(i);
+			auto position = feature.property("position");
+			ScriptMapData::Feature sd;
+			sd.name = feature.property("name").toString().toUtf8().constData();
+			sd.position = {position.property(0).toInt32(), position.property(1).toInt32()};
+			sd.direction = feature.property("direction").toInt32();
+			data.features.push_back(std::move(sd));
+		}
+		data.valid = true;
+		return true;
+	}, &data), QScriptValue::ReadOnly | QScriptValue::Undeletable);
+
+	QScriptValue result = engine->evaluate(source, QString::fromUtf8(path.toUtf8().c_str()));
+	ASSERT_OR_RETURN(data, !engine->hasUncaughtException(), "Uncaught exception at line %d, file %s: %s",
+	                 engine->uncaughtExceptionLineNumber(), path.toUtf8().c_str(), result.toString().toUtf8().constData());
+
+	return data;
+}
+
+QScriptEngine *loadPlayerScript(WzString const &path, int player, AIDifficulty difficulty)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS, "Player index %d out of bounds", player);
 	QScriptEngine *engine = new QScriptEngine();
@@ -654,9 +813,9 @@ QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty
 
 	//== * ```difficulty``` The currently set campaign difficulty, or the current AI's difficulty setting. It will be one of
 	//== ```EASY```, ```MEDIUM```, ```HARD``` or ```INSANE```.
-	if (game.type == SKIRMISH)
+	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
-		engine->globalObject().setProperty("difficulty", difficulty, QScriptValue::ReadOnly | QScriptValue::Undeletable);
+		engine->globalObject().setProperty("difficulty", static_cast<int8_t>(difficulty), QScriptValue::ReadOnly | QScriptValue::Undeletable);
 	}
 	else // campaign
 	{
@@ -740,7 +899,7 @@ QScriptEngine *loadPlayerScript(const WzString& path, int player, int difficulty
 
 bool loadGlobalScript(WzString path)
 {
-	return loadPlayerScript(std::move(path), selectedPlayer, 0);
+	return loadPlayerScript(std::move(path), selectedPlayer, AIDifficulty::DISABLED);
 }
 
 bool saveScriptStates(const char *filename)
@@ -972,7 +1131,7 @@ bool jsEvaluate(QScriptEngine *engine, const QString &text)
 
 void jsAutogameSpecific(const WzString &name, int player)
 {
-	QScriptEngine *engine = loadPlayerScript(name, player, DIFFICULTY_MEDIUM);
+	QScriptEngine *engine = loadPlayerScript(name, player, AIDifficulty::MEDIUM);
 	if (!engine)
 	{
 		console("Failed to load selected AI! Check your logs to see why.");

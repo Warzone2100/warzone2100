@@ -5,13 +5,58 @@ param([string]$VCPKG_BUILD_TYPE = "")
 ############################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-$VCPKG_COMMIT_SHA = "14514508d8d30bdbd645b2bec89696aec25497f1";
+$VCPKG_COMMIT_SHA = "fdcfd8e5d79a9551249b60251edb81733fd227db";
+
+# WZ Windows dependencies (for vcpkg install)
+$VCPKG_INSTALL_DEPENDENCIES = @("physfs", "harfbuzz", "libiconv", "libogg", "libtheora", "libvorbis", "libpng", "openal-soft", "freetype", "gettext", "zlib", "curl[winssl]", "libsodium", "angle")
+If ((-not ([string]::IsNullOrEmpty($env:VULKAN_SDK))) -and (Test-Path $env:VULKAN_SDK -PathType Container))
+{
+	Write-Output "VULKAN_SDK environment variable detected - using SDL2 with Vulkan support";
+	$VCPKG_INSTALL_DEPENDENCIES += "sdl2[vulkan]"
+}
+Else {
+	Write-Output "VULKAN_SDK not detected - using SDL2 *without* Vulkan support";
+	$VCPKG_INSTALL_DEPENDENCIES += "sdl2"
+}
 
 # To ensure the proper dump_syms.exe is downloaded, specify the commit + hash
 $DUMP_SYMS_EXE_COMMIT = "aebee55695eeb40d788f5421bf32eaaa7227aba0";
 $DUMP_SYMS_EXE_SHA512 = "AA88547EC486077623A9026EFBC39D7B51912781FDB2C7C6AF5A38165110579EFF9EC04E528D4FDBA7F492A039D94A735ACCAE47074B6E0242855403B609E63E";
 
 ############################
+
+function Get-ScriptDirectory
+{
+	$ScriptRoot = ""
+
+	Try
+	{
+		$commandPath = Get-Variable -Name PSCommandPath -ValueOnly -ErrorAction Stop
+		$ScriptRoot = Split-Path -Parent $commandPath
+	}
+	Catch
+	{
+		$scriptInvocation = (Get-Variable MyInvocation -Scope 1).Value
+		$ScriptRoot = Split-Path $scriptInvocation.MyCommand.Path
+	}
+
+	return $ScriptRoot
+}
+
+$ScriptRoot = Get-ScriptDirectory;
+Write-Output "ScriptRoot=$($ScriptRoot)"
+
+# Copy Visual Studio-specific config file templates from "win32" directory to the repo root
+If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "CMakeSettings.json") ) )
+{
+	Write-Output "Copying template: CMakeSettings.json"
+	Copy-Item (Join-Path "$($ScriptRoot)" "win32\CMakeSettings.json") -Destination "$($ScriptRoot)"
+}
+If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "launch.vs.json") ) )
+{
+	Write-Output "Copying template: launch.vs.json"
+	Copy-Item (Join-Path "$($ScriptRoot)" "win32\launch.vs.json") -Destination "$($ScriptRoot)"
+}
 
 # Download & build vcpkg (+ dependencies)
 If ( -not (Test-Path (Join-Path (pwd) vcpkg\.git) -PathType Container) )
@@ -49,7 +94,7 @@ $vcpkg_succeeded = -1;
 $vcpkg_attempts = 0;
 While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
 {
-	.\vcpkg install physfs harfbuzz libiconv libogg libtheora libvorbis libpng openal-soft sdl2 glew freetype gettext zlib curl[winssl] libsodium;
+	& .\vcpkg install $VCPKG_INSTALL_DEPENDENCIES;
 	$vcpkg_succeeded = $LastExitCode;
 	$vcpkg_attempts++;
 }

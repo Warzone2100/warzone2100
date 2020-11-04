@@ -766,7 +766,7 @@ void orderUpdateDroid(DROID *psDroid)
 			DROID *temp = (DROID *)psDroid->order.psObj;	// NOTE: It is possible to have a NULL here
 
 			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
-			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != CAMPAIGN && bMultiPlayer)
+			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != LEVEL_TYPE::CAMPAIGN && bMultiPlayer)
 			{
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
@@ -879,7 +879,8 @@ void orderUpdateDroid(DROID *psDroid)
 		    (psDroid->action == DACTION_BUILD && psDroid->order.psObj == nullptr))
 		{
 			// finished building the current structure
-			if (map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2))
+			auto lb = calcLineBuild(psDroid->order.psStats, psDroid->order.direction, psDroid->order.pos, psDroid->order.pos2);
+			if (lb.count <= 1)
 			{
 				// finished all the structures - done
 				psDroid->order = DroidOrder(DORDER_NONE);
@@ -887,35 +888,7 @@ void orderUpdateDroid(DROID *psDroid)
 			}
 
 			// update the position for another structure
-			if (map_coord(psDroid->order.pos.x) == map_coord(psDroid->order.pos2.x))
-			{
-				// still got building to do - working vertically
-				if (psDroid->order.pos.y < psDroid->order.pos2.y)
-				{
-					psDroid->order.pos.y += TILE_UNITS;
-				}
-				else
-				{
-					psDroid->order.pos.y -= TILE_UNITS;
-				}
-			}
-			else if (map_coord(psDroid->order.pos.y) == map_coord(psDroid->order.pos2.y))
-			{
-				// still got building to do - working horizontally
-				if (psDroid->order.pos.x < psDroid->order.pos2.x)
-				{
-					psDroid->order.pos.x += TILE_UNITS;
-				}
-				else
-				{
-					psDroid->order.pos.x -= TILE_UNITS;
-				}
-			}
-			else
-			{
-				ASSERT(false, "orderUpdateUnit: LINEBUILD order on diagonal line");
-				break;
-			}
+			psDroid->order.pos = lb[1];
 
 			// build another structure
 			setDroidTarget(psDroid, nullptr);
@@ -1128,7 +1101,7 @@ void orderUpdateDroid(DROID *psDroid)
 	if (psDroid->selected)
 	{
 		// Tell us what the droid is doing.
-		sprintf(DROIDDOING, "%.12s,id(%d) order(%d):%s action(%d):%s secondary:%x move:%s", droidGetName(psDroid), psDroid->id,
+		snprintf(DROIDDOING, sizeof(DROIDDOING), "%.12s,id(%d) order(%d):%s action(%d):%s secondary:%x move:%s", droidGetName(psDroid), psDroid->id,
 		        psDroid->order.type, getDroidOrderName(psDroid->order.type), psDroid->action, getDroidActionName(psDroid->action), psDroid->secondaryOrder,
 		        moveDescription(psDroid->sMove.Status));
 	}
@@ -1341,7 +1314,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			break;
 		}
 		//in multiPlayer, cannot move Transporter to blocking tile either
-		if (game.type == SKIRMISH
+		if (game.type == LEVEL_TYPE::SKIRMISH
 		    && isTransporter(psDroid)
 		    && fpathBlockingTile(map_coord(psOrder->pos), getPropulsionStats(psDroid)->propulsionType))
 		{
@@ -1392,7 +1365,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		{
 			//cannot attack a Transporter with EW in multiPlayer
 			// FIXME: Why not ?
-			if (game.type == SKIRMISH && electronicDroid(psDroid)
+			if (game.type == LEVEL_TYPE::SKIRMISH && electronicDroid(psDroid)
 			    && psOrder->psObj->type == OBJ_DROID && isTransporter((DROID *)psOrder->psObj))
 			{
 				break;
@@ -1521,7 +1494,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 				psDroid->order = *psOrder;
 				// Find a place to land for vtols. And Transporters in a multiPlay game.
-				if (isVtolDroid(psDroid) || (game.type == SKIRMISH && isTransporter(psDroid)))
+				if (isVtolDroid(psDroid) || (game.type == LEVEL_TYPE::SKIRMISH && isTransporter(psDroid)))
 				{
 					actionVTOLLandingPos(psDroid, &pos);
 				}
@@ -1605,7 +1578,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			psDroid->order.pos = psRepairFac->pos.xy();
 			/* If in multiPlayer, and the Transporter has been sent to be
 				* repaired, need to find a suitable location to drop down. */
-			if (game.type == SKIRMISH && isTransporter(psDroid))
+			if (game.type == LEVEL_TYPE::SKIRMISH && isTransporter(psDroid))
 			{
 				Vector2i pos = psDroid->order.pos;
 
@@ -2006,7 +1979,6 @@ void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS
 {
 	ASSERT(psDroid != nullptr,	"Invalid unit pointer");
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
-	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
 
 	DroidOrder sOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction);
 	if (mode == ModeQueue && bMultiPlayer)
@@ -2027,7 +1999,6 @@ void orderDroidStatsTwoLocDirAdd(DROID *psDroid, DROID_ORDER order, STRUCTURE_ST
 {
 	ASSERT(psDroid != nullptr, "Invalid unit pointer");
 	ASSERT(order == DORDER_LINEBUILD, "Invalid order for location");
-	ASSERT(x1 == x2 || y1 == y2, "Invalid locations for LINEBUILD");
 
 	sendDroidInfo(psDroid, DroidOrder(order, psStats, Vector2i(x1, y1), Vector2i(x2, y2), direction), true);
 }
@@ -2302,7 +2273,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 	DROID_ORDER		order = DORDER_NONE;
 	PROPULSION_TYPE		propulsion = getPropulsionStats(psDroid)->propulsionType;
 
-	if (isTransporter(psDroid) && game.type == CAMPAIGN)
+	if (isTransporter(psDroid) && game.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		// transports can't be controlled in campaign
 		return DORDER_NONE;
@@ -2331,7 +2302,7 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
 	}
 
 	// and now we want Transporters to fly! - in multiPlayer!!
-	if (isTransporter(psDroid) && game.type == SKIRMISH)
+	if (isTransporter(psDroid) && game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		/* in MultiPlayer - if ALT-key is pressed then need to get the Transporter
 		 * to fly to location and all units disembark */
@@ -2379,7 +2350,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		{
 			// can't use bMultiPlayer since multimsg could be off.
 			// FIXME: Fix this for DROID_SUPERTRANSPORTER when we fix campaign scripts
-			if (psCurr->droidType == DROID_TRANSPORTER && game.type == CAMPAIGN)
+			if (psCurr->droidType == DROID_TRANSPORTER && game.type == LEVEL_TYPE::CAMPAIGN)
 			{
 				// Transport in campaign cannot be controlled by players
 				DeSelectDroid(psCurr);

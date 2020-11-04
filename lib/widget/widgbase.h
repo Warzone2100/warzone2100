@@ -47,6 +47,7 @@ class W_LABEL;
 class W_SLIDER;
 class StateButton;
 class ListWidget;
+class ScrollBarWidget;
 
 /* The display function prototype */
 typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -225,12 +226,12 @@ private:
 	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional hit-testing custom function
 	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
 public:
-	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
+	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
 	void runRecursive(W_CONTEXT *psContext);
 	void processCallbacksRecursive(W_CONTEXT *psContext);
-	void displayRecursive(int xOffset, int yOffset);  ///< Display this widget, and all visible children.
-private:
+	virtual void displayRecursive(int xOffset, int yOffset);  ///< Display this widget, and all visible children.
 
+private:
 	WIDGET                 *parentWidget;           ///< Parent widget.
 	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
 

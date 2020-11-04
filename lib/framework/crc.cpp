@@ -51,8 +51,19 @@ uint32_t crcSumU16(uint32_t crc, const uint16_t *data, size_t dataLen)
 {
 	while (dataLen-- > 0)
 	{
-		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t)(*data >> 8)];
-		crc = crc << 8 ^ crcTable[crc>>24 ^ (uint8_t) * data++];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data++)];
+	}
+
+	return crc;
+}
+
+uint32_t crcSumI16(uint32_t crc, const int16_t *data, size_t dataLen)
+{
+	while (dataLen-- > 0)
+	{
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data >> 8)];
+		crc = crc << 8 ^ crcTable[crc>>24 ^ uint8_t(*data++)];
 	}
 
 	return crc;
@@ -795,6 +806,13 @@ EcKey EcKey::generate()
 	ret.vKey = (void *)key;
 	return ret;
 }
+
+std::string EcKey::publicHashString() const
+{
+	auto bytes = toBytes(EcKey::Public);
+	return bytes.empty()? std::string{} : sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
+}
+
 
 //================================================================================
 // MARK: - Base64

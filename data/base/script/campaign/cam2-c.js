@@ -27,9 +27,11 @@ const COLLECTIVE_RES = [
 //by destroying the air base or crossing the base3Trigger area.
 function videoTrigger()
 {
+	camSetExtraObjectiveMessage(_("Rescue the civilians from The Collective before too many are captured"));
+
 	setMissionTime(getMissionTime() + camChangeOnDiff(camMinutesToSeconds(30)));
-	civilianOrders();
-	captureCivilians();
+	setTimer("civilianOrders", camSecondsToMilliseconds(2));
+	setTimer("captureCivilians", camChangeOnDiff(camSecondsToMilliseconds(10)));
 
 	hackRemoveMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 	camPlayVideos("MB2_C_MSG2");
@@ -121,12 +123,13 @@ function activateGroups()
 
 function truckDefense()
 {
-	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length > 0)
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
 	{
-		queue("truckDefense", camSecondsToMilliseconds(160));
+		removeTimer("truckDefense");
+		return;
 	}
 
-	const LIST = ["WallTower06", "PillBox1", "WallTower03"];
+	const LIST = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
 	camQueueBuilding(THE_COLLECTIVE, LIST[camRand(LIST.length)]);
 }
 
@@ -142,7 +145,7 @@ function captureCivilians()
 	var currPos = getObject(wayPoints[civilianPosIndex]);
 	var shepardDroids = enumGroup(shepardGroup);
 
-	if (shepardDroids.length)
+	if (shepardDroids.length > 0)
 	{
 		//add some civs
 		var i = 0;
@@ -174,7 +177,10 @@ function captureCivilians()
 			queue("sendCOTransporter", camSecondsToMilliseconds(6));
 		}
 		civilianPosIndex = (civilianPosIndex > 6) ? 0 : (civilianPosIndex + 1);
-		queue("captureCivilians", camChangeOnDiff(camSecondsToMilliseconds(10)));
+	}
+	else
+	{
+		removeTimer("captureCivilians");
 	}
 }
 
@@ -208,8 +214,6 @@ function civilianOrders()
 		lastSoundTime = gameTime;
 		playSound(rescueSound);
 	}
-
-	queue("civilianOrders", camSecondsToMilliseconds(2));
 }
 
 //Capture civilans.
@@ -407,4 +411,5 @@ function eventStartLevel()
 	hackAddMessage("C2C_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
 	queue("activateGroups", camChangeOnDiff(camMinutesToMilliseconds(8)));
+	setTimer("truckDefense", camSecondsToMilliseconds(160));
 }

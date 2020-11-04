@@ -303,7 +303,7 @@ static bool setLocaleWindows(USHORT usPrimaryLanguage, USHORT usSubLanguage)
 
 	if (!success)
 	{
-		info("Failed to set locale to \"%d\"", usPrimaryLanguage);
+		wz_info("Failed to set locale to \"%d\"", usPrimaryLanguage);
 	}
 	else
 	{
@@ -351,7 +351,7 @@ static bool setLocaleUnix(const char *locale)
 
 	if (actualLocale == NULL)
 	{
-		info("Failed to set locale to \"%s\"", locale);
+		wz_info("Failed to set locale to \"%s\"", locale);
 #ifdef WZ_OS_MAC
 #  if defined HAVE_SETENV
 		setenv("LANG", prior_LANG.c_str(), 1);

@@ -30,11 +30,12 @@ camAreaEvent("cybAttackers", function(droid)
 		fallback: camMakePos("SWBaseRetreat")
 	});
 
-	camManageGroup(camMakeGroup("NEDefenderGroup"), CAM_ORDER_DEFEND, {
+	camManageGroup(camMakeGroup("NEDefenderGroup"), CAM_ORDER_PATROL, {
 		pos: [
 			camMakePos("genericasAssembly"),
 			camMakePos("northFacAssembly"),
 		],
+		interval: camMinutesToMilliseconds(1),
 		regroup: true,
 	});
 });
@@ -92,6 +93,7 @@ function sendPlayerTransporter()
 
 	if (index === transportLimit)
 	{
+		removeTimer("sendPlayerTransporter");
 		return;
 	}
 
@@ -112,7 +114,6 @@ function sendPlayerTransporter()
 	);
 
 	index = index + 1;
-	queue("sendPlayerTransporter", camMinutesToMilliseconds(5));
 }
 
 //Setup Nexus VTOL hit and runners.
@@ -153,18 +154,6 @@ function groupPatrolNoTrigger()
 	});
 
 	camManageGroup(camMakeGroup("NAmbushCyborgs"), CAM_ORDER_ATTACK);
-}
-
-//Build defenses.
-function truckDefense()
-{
-	if (enumDroid(NEXUS, DROID_CONSTRUCT).length > 0)
-	{
-		queue("truckDefense", camSecondsToMilliseconds(160));
-	}
-
-	const DEFENSE = ["NX-Tower-Rail1", "NX-Tower-ATMiss"];
-	camQueueBuilding(NEXUS, DEFENSE[camRand(DEFENSE.length)]);
 }
 
 //Gives starting tech and research.
@@ -324,25 +313,19 @@ function eventStartLevel()
 		},
 		"NXcybFac-b4": {
 			assembly: "NXcybFac-b4Assembly",
-			order: CAM_ORDER_PATROL,
+			order: CAM_ORDER_ATTACK,
 			data: {
-				pos: [
-					camMakePos("genericasAssembly"),
-					camMakePos("northFacAssembly"),
-				],
 				regroup: false,
 				repair: 40,
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
-			group: camMakeGroup("NEDefenderGroup"),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 	});
 
 	camManageTrucks(NEXUS);
-	truckDefense();
 	camPlayVideos(["MB3A_MSG", "MB3A_MSG2"]);
 	startedFromMenu = false;
 
@@ -352,6 +335,7 @@ function eventStartLevel()
 		startedFromMenu = true;
 		setReinforcementTime(LZ_COMPROMISED_TIME);
 		sendPlayerTransporter();
+		setTimer("sendPlayerTransporter", camMinutesToMilliseconds(5));
 	}
 	else
 	{

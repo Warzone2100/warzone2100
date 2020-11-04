@@ -79,8 +79,14 @@ work anymore.
       libtxc-dxtn handles texture compression, loading is slower with it enabled.
       In-game FPS are also higher though.
 
-The fullscreen/window, resolution,  sound,  and  shadows  settings  are
-stored,  so  they  only  need to be specified once, or when you want to
+*--gfxbackend*='BACKEND'::
+      Change the graphics backend to 'BACKEND'. Possible backends include:
+      'opengl', 'opengles', 'vulkan', 'directx' (Windows only).
+      Not all backend options may be available on every system, depending on OS,
+      driver support, and whether the game was built with support.
+
+The fullscreen/window, resolution,  sound,  gfxbackend,  and  shadows  settings
+are  stored,  so  they  only  need to be specified once, or when you want to
 change them.
 
 EXAMPLES
@@ -94,6 +100,9 @@ EXAMPLES
 'warzone2100'::
       Run the game, with the last used resolution, fullscreen/window, sound and
       shadow settings.
+
+'warzone2100 --gfxbackend=vulkan::
+      Run using the Vulkan backend.
 
 AUTHORS
 -------

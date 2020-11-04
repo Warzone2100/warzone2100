@@ -35,7 +35,14 @@ enum TITLECODE
 #define PLAY_WIN    1
 #define PLAY_LOSE   2
 
-extern int hostlaunch;
+enum class HostLaunch
+{
+	Normal,
+	Host,
+	Skirmish,
+	Autohost,
+};
+extern HostLaunch hostlaunch;
 
 bool frontendInitVars();
 TITLECODE titleLoop();

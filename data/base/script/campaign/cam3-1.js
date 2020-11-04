@@ -160,6 +160,8 @@ function setupNextMission()
 {
 	if (missileSilosDestroyed())
 	{
+		camSetExtraObjectiveMessage(_("Move all units into the valley"));
+
 		camPlayVideos(["labort.ogg", "MB3_1B_MSG", "MB3_1B_MSG2"]);
 
 		setScrollLimits(0, 0, 64, 64); //Reveal the whole map.
@@ -169,10 +171,7 @@ function setupNextMission()
 		hackAddMessage("CM31_HIDE_LOC", PROX_MSG, CAM_HUMAN_PLAYER);
 
 		setReinforcementTime(-1);
-	}
-	else
-	{
-		queue("setupNextMission", camSecondsToMilliseconds(2));
+		removeTimer("setupNextMission");
 	}
 }
 
@@ -210,8 +209,6 @@ function getCountdown()
 			break;
 		}
 	}
-
-	queue("getCountdown", camSecondsToMilliseconds(0.4));
 }
 
 function enableAllFactories()
@@ -246,6 +243,8 @@ function unitsInValley()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Destroy the missile silos"));
+
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
 	var tent = getObject("transporterEntry");
@@ -363,7 +362,8 @@ function eventStartLevel()
 	cyborgAttack();
 	getCountdown();
 
-	queue("setupNextMission", camSecondsToMilliseconds(8));
+	setTimer("getCountdown", camSecondsToMilliseconds(0.4));
+	setTimer("setupNextMission", camSecondsToMilliseconds(2));
 	queue("hoverAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 	queue("vtolAttack", camChangeOnDiff(camMinutesToMilliseconds(5)));
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));

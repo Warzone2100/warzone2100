@@ -71,6 +71,18 @@ bool cocoaSelectFileInFinder(const char *filename)
     return success;
 }
 
+bool cocoaSelectFolderInFinder(const char* path)
+{
+	if (path == nullptr) return false;
+	BOOL success = NO;
+	@autoreleasepool {
+		NSURL *pathURL = [NSURL fileURLWithPath:nsstringify(path) isDirectory:YES];
+		if (pathURL == nil) return false;
+		success = [[NSWorkspace sharedWorkspace] openURL:pathURL];
+	}
+	return success;
+}
+
 bool cocoaOpenURL(const char *url)
 {
     assert(url != nullptr);

@@ -434,7 +434,7 @@ void selNextUnassignedUnit()
 }
 
 // ---------------------------------------------------------------------
-void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
+void selNextSpecifiedBuilding(STRUCTURE_TYPE structType, bool jump)
 {
 	STRUCTURE *psResult = nullptr, *psOldStruct = nullptr, *psFirst = nullptr;
 	bool bLaterInList = false;
@@ -473,7 +473,10 @@ void selNextSpecifiedBuilding(STRUCTURE_TYPE structType)
 		{
 			camToggleStatus();
 		}
-		setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), false);
+		if (jump)
+		{
+			setViewPos(map_coord(psResult->pos.x), map_coord(psResult->pos.y), false);
+		}
 		if (psOldStruct)
 		{
 			psOldStruct->selected = false;

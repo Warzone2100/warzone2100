@@ -124,7 +124,6 @@ function vaporizeTarget()
 		mapLimit = mapLimit + 0.36; //sector clear; move closer
 	}
 	laserSatFuzzyStrike(target);
-	queue("vaporizeTarget", camSecondsToMilliseconds(10));
 }
 
 //A simple way to fire the LasSat with a chance of missing.
@@ -213,6 +212,8 @@ function checkMissileSilos()
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Secure a missile silo"));
+
 	var siloZone = getObject("missileSilos");
 	var startpos = getObject("startPosition");
 	var lz = getObject("landingZone");
@@ -317,4 +318,6 @@ function eventStartLevel()
 	queue("vaporizeTarget", camSecondsToMilliseconds(2));
 	queue("setupGroups", camSecondsToMilliseconds(5));
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
+
+	setTimer("vaporizeTarget", camSecondsToMilliseconds(10));
 }

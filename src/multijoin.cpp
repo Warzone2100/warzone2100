@@ -60,6 +60,7 @@
 #include "intimage.h"
 #include "data.h"
 #include "activity.h"
+#include "main.h"					// for GetGameMode
 
 #include "multimenu.h"
 #include "multiplay.h"
@@ -322,7 +323,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	{
 		sendPlayerLeft(playerIndex);
 	}
-	game.skDiff[playerIndex] = 0;
+	NetPlay.players[playerIndex].difficulty = AIDifficulty::DISABLED;
 
 	if (!NetPlay.players[playerIndex].wzFiles.empty())
 	{
@@ -340,7 +341,10 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	}
 
 	// fire script callback to reassign skirmish players.
-	triggerEventPlayerLeft(playerIndex);
+	if (GetGameMode() == GS_NORMAL)
+	{
+		triggerEventPlayerLeft(playerIndex);
+	}
 
 	netPlayersUpdated = true;
 	return true;
@@ -357,9 +361,9 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 
 	if (widgGetFromID(psWScreen, MULTIOP_PLAYERS))	// if in multimenu.
 	{
-		if (!multiRequestUp && (bHosted || ingame.localJoiningInProgress))
+		if (!multiRequestUp && (NetPlay.isHost || ingame.localJoiningInProgress))
 		{
-			addPlayerBox(true);	// update the player box.
+			netPlayersUpdated = true;	// update the player box.
 		}
 	}
 
@@ -374,10 +378,7 @@ bool MultiPlayerJoin(UDWORD playerIndex)
 
 		// setup data for this player, then broadcast it to the other players.
 		setupNewPlayer(playerIndex);						// setup all the guff for that player.
-		if (bHosted)
-		{
-			sendOptions();
-		}
+		sendOptions();
 		// if skirmish and game full, then kick...
 		if (NetPlay.playercount > game.maxPlayers)
 		{
@@ -456,7 +457,7 @@ bool recvDataCheck(NETQUEUE queue)
 			{
 			}
 
-			sprintf(msg, _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
+			snprintf(msg, sizeof(msg), _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
 			sendTextMessage(msg, true);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 

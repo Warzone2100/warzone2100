@@ -250,7 +250,7 @@ static void findAndJoinLobbyGameImpl(const std::string& lobbyAddress, unsigned i
 		// Obviously this wouldn't be a good idea to do *during* a game, hence the check above to
 		// ensure we're still in the menus...
 		NETinit(true);
-		ingame.bHostSetup = false;
+		ingame.side = InGameSide::MULTIPLAYER_CLIENT;
 		auto joinConnectionDetails = findLobbyGame(lobbyAddress, lobbyPort, lobbyGameId);
 
 		if (joinConnectionDetails.empty())

@@ -24,6 +24,8 @@
 #include <glm/fwd.hpp>
 #include "lib/ivis_opengl/pietypes.h"
 
+void loadTerrainTextures();
+
 bool initTerrain();
 void shutdownTerrain();
 

@@ -209,7 +209,7 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				//show progress of build
 				if (Structure->currentBuildPts != 0)
 				{
-					formatTime(BarGraph, Structure->currentBuildPts, Structure->pStructureType->buildPoints, Structure->lastBuildRate, _("Build Progress"));
+					formatTime(BarGraph, Structure->currentBuildPts, structureBuildPointsToCompletion(*Structure), Structure->lastBuildRate, _("Build Progress"));
 				}
 				else
 				{
@@ -610,7 +610,6 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int x0 = xOffset + BarGraph->x();
 	int y0 = yOffset + BarGraph->y();
 
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	pie_SetFogStatus(false);
 
 	int top_x0 = x0;
@@ -664,27 +663,34 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	imageDrawBatch.draw(true);
 
-	PIELIGHT colour;
-	if (Avail < 0)
+	auto unusedDerricks = countPlayerUnusedDerricks();
+
+	auto showNeedMessage = true;
+	if (unusedDerricks > 0)
 	{
-		const char *need = _("Need more resources!");
-		cache.wzNeedText.setText(need, font_small);
-		if ((realTime / 1250) % 5 == 0)
-		{
-			cache.wzNeedText.render(iX + 102, iY - 1, WZCOL_BLACK);
-		}
-		else
-		{
-			cache.wzNeedText.render(iX + 102, iY - 1, WZCOL_RED);
-		}
-		colour = WZCOL_RED;
+		char unusedText[50];
+		ssprintf(unusedText, _("%d derrick(s) inactive"), unusedDerricks);
+		cache.wzNeedText.setText(unusedText, font_small);
+	}
+	else if (Avail < 0)
+	{
+		cache.wzNeedText.setText(_("Need more resources!"), font_small);
 	}
 	else
 	{
-		colour = WZCOL_TEXT_BRIGHT;
+		showNeedMessage = false;
 	}
+
+	if (showNeedMessage)
+	{
+		auto needTextWidth = cache.wzNeedText.width();
+		auto textX = iX + (BarGraph->width() - needTextWidth) / 2;
+		pie_UniTransBoxFill(textX - 3, y0 + 1, textX + needTextWidth + 3, y0 + BarGraph->height() - 1, WZCOL_TRANSPARENT_BOX);
+		cache.wzNeedText.render(textX, iY - 1, (realTime / 1250) % 5 ? WZCOL_WHITE: WZCOL_RED);
+	}
+
 	// draw text value
-	cache.wzText.render(iX, iY, colour);
+	cache.wzText.render(iX, iY, Avail < 0 ? WZCOL_RED : WZCOL_TEXT_BRIGHT);
 }
 
 IntFancyButton::IntFancyButton(WIDGET *parent)
@@ -1001,6 +1007,15 @@ void IntStatsButton::display(int xOffset, int yOffset)
 	doneDisplay();
 }
 
+IntFormTransparent::IntFormTransparent(WIDGET *parent)
+	: W_FORM(parent)
+{
+}
+
+void IntFormTransparent::display(int xOffset, int yOffset)
+{
+}
+
 IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
 	: W_FORM(parent)
 	, startTime(0)
@@ -1135,7 +1150,7 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		break;
 
 	case WIDG_SLIDER:
-		if (((W_SLIDER *)psWidget)->state & SLD_HILITE)
+		if (((W_SLIDER *)psWidget)->isHighlighted())
 		{
 			Hilight = true;
 		}
@@ -1551,8 +1566,6 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			iV_DrawImage(image, ButXPos + ox, ButYPos + oy);
 		}
 
-		pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-
 		/* all non droid buttons */
 		if (IMDType == IMDTYPE_COMPONENT)
 		{
@@ -1578,8 +1591,6 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 		{
 			displayIMDButton((iIMDShape *)Object, &model.rotation, &model.position, model.scale);
 		}
-
-		pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
 	}
 }
 
@@ -1829,14 +1840,12 @@ DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 
 bool StatIsStructure(BASE_STATS const *Stat)
 {
-	return (Stat->ref >= REF_STRUCTURE_START && Stat->ref <
-	        REF_STRUCTURE_START + REF_RANGE);
+	return Stat->hasType(STAT_STRUCTURE);
 }
 
 bool StatIsFeature(BASE_STATS const *Stat)
 {
-	return (Stat->ref >= REF_FEATURE_START && Stat->ref <
-	        REF_FEATURE_START + REF_RANGE);
+	return Stat->hasType(STAT_FEATURE);
 }
 
 iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
@@ -1847,61 +1856,23 @@ iIMDShape *StatGetStructureIMD(BASE_STATS *Stat, UDWORD Player)
 
 bool StatIsTemplate(BASE_STATS *Stat)
 {
-	return (Stat->ref >= REF_TEMPLATE_START &&
-	        Stat->ref < REF_TEMPLATE_START + REF_RANGE);
+	return Stat->hasType(STAT_TEMPLATE);
 }
 
-SDWORD StatIsComponent(BASE_STATS *Stat)
+COMPONENT_TYPE StatIsComponent(BASE_STATS *Stat)
 {
-	if (Stat->ref >= REF_BODY_START &&
-	    Stat->ref < REF_BODY_START + REF_RANGE)
+	switch (StatType(Stat->ref & STAT_MASK))
 	{
-		return COMP_BODY;
+		case STAT_BODY: return COMP_BODY;
+		case STAT_BRAIN: return COMP_BRAIN;
+		case STAT_PROPULSION: return COMP_PROPULSION;
+		case STAT_WEAPON: return COMP_WEAPON;
+		case STAT_SENSOR: return COMP_SENSOR;
+		case STAT_ECM: return COMP_ECM;
+		case STAT_CONSTRUCT: return COMP_CONSTRUCT;
+		case STAT_REPAIR: return COMP_REPAIRUNIT;
+		default: return COMP_NUMCOMPONENTS;
 	}
-
-	if (Stat->ref >= REF_BRAIN_START &&
-	    Stat->ref < REF_BRAIN_START + REF_RANGE)
-	{
-		return COMP_BRAIN;
-	}
-
-	if (Stat->ref >= REF_PROPULSION_START &&
-	    Stat->ref < REF_PROPULSION_START + REF_RANGE)
-	{
-		return COMP_PROPULSION;
-	}
-
-	if (Stat->ref >= REF_WEAPON_START &&
-	    Stat->ref < REF_WEAPON_START + REF_RANGE)
-	{
-		return COMP_WEAPON;
-	}
-
-	if (Stat->ref >= REF_SENSOR_START &&
-	    Stat->ref < REF_SENSOR_START + REF_RANGE)
-	{
-		return COMP_SENSOR;
-	}
-
-	if (Stat->ref >= REF_ECM_START &&
-	    Stat->ref < REF_ECM_START + REF_RANGE)
-	{
-		return COMP_ECM;
-	}
-
-	if (Stat->ref >= REF_CONSTRUCT_START &&
-	    Stat->ref < REF_CONSTRUCT_START + REF_RANGE)
-	{
-		return COMP_CONSTRUCT;
-	}
-
-	if (Stat->ref >= REF_REPAIR_START &&
-	    Stat->ref < REF_REPAIR_START + REF_RANGE)
-	{
-		return COMP_REPAIRUNIT;
-	}
-
-	return COMP_NUMCOMPONENTS;
 }
 
 bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, iIMDShape **MountIMD)
@@ -1962,8 +1933,7 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 
 bool StatIsResearch(BASE_STATS *Stat)
 {
-	return (Stat->ref >= REF_RESEARCH_START && Stat->ref <
-	        REF_RESEARCH_START + REF_RANGE);
+	return Stat->hasType(STAT_RESEARCH);
 }
 
 static void StatGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon)
@@ -2327,7 +2297,7 @@ void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
 {
 	W_SLIDER *Slider = (W_SLIDER *)psWidget;
 
-	if (Slider->state & SLD_HILITE)
+	if (Slider->isHighlighted())
 	{
 		if (keyDown(KEY_LEFTARROW))
 		{
@@ -2365,7 +2335,7 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	UDWORD		x = Label->x() + xOffset;
 	UDWORD		y = Label->y() + yOffset;
 
-	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + REF_RESEARCH_START;
+	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + STAT_RESEARCH;
 	unsigned num = UNPACKDWORD_LOW(psWidget->UserData);
 
 	std::vector<AllyResearch> const &researches = listAllyResearch(ref);

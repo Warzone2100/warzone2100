@@ -256,7 +256,7 @@ static void recvGiftDroids(uint8_t from, uint8_t to, uint32_t droidID)
 	if (psDroid)
 	{
 		syncDebugDroid(psDroid, '<');
-		giftSingleDroid(psDroid, to);
+		giftSingleDroid(psDroid, to, false);
 		syncDebugDroid(psDroid, '>');
 		if (to == selectedPlayer)
 		{
@@ -692,6 +692,12 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 {
 	if (fromPlayer < MAX_PLAYERS && bMultiPlayer)
 	{
+		if (toPlayer == selectedPlayer && toPlayer == fromPlayer)
+		{
+			audio_QueueTrack(ID_SOUND_ARTIFACT_RECOVERED);
+			return true;
+		}
+
 		for (int topic = asResearch.size() - 1; topic >= 0; topic--)
 		{
 			if (IsResearchCompleted(&asPlayerResList[fromPlayer][topic])
@@ -729,19 +735,17 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 /* Ally team members with each other */
 void createTeamAlliances()
 {
-	int i, j;
-
 	debug(LOG_WZ, "Creating teams");
 
-	for (i = 0; i < MAX_PLAYERS; i++)
+	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
-		for (j = 0; j < MAX_PLAYERS; j++)
+		for (unsigned j = 0; j < MAX_PLAYERS; j++)
 		{
-			if (i != j
-			    && NetPlay.players[i].team == NetPlay.players[j].team	// two different players belonging to the same team
-			    && !aiCheckAlliances(i, j)
-			    && game.skDiff[i]
-			    && game.skDiff[j])	// Not allied and not ignoring teams
+			if (i != j														// two different players
+			    && NetPlay.players[i].team == NetPlay.players[j].team		// ...belonging to the same team
+			    && !aiCheckAlliances(i, j)									// ...not allied and not ignoring teams
+			    && NetPlay.players[i].difficulty != AIDifficulty::DISABLED
+			    && NetPlay.players[j].difficulty != AIDifficulty::DISABLED)	// ...not disabled
 			{
 				// Create silently
 				formAlliance(i, j, false, false, false);

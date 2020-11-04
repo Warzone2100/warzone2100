@@ -78,9 +78,6 @@ public:
 };
 static std::vector<SPOTTER *> apsInvisibleViewers;
 
-// horrible hack because this code is full of them and I ain't rewriting it all - Per
-#define MAX_SEEN_TILES (29*29 * 355/113)  // Increased hack to support 28 tile sensor radius. - Cyp
-
 #define MIN_VIS_HEIGHT 80
 
 struct VisibleObjectHelp_t
@@ -227,9 +224,8 @@ SPOTTER::~SPOTTER()
 
 /* Record all tiles that some object confers visibility to. Only record each tile
  * once. Note that there is both a limit to how many objects can watch any given
- * tile, and a limit to how many tiles each object can watch. Strange but non fatal
- * things will happen if these limits are exceeded. This function uses icky globals. */
-static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAPTILE *psTile, TILEPOS *recordTilePos, int *lastRecordTilePos)
+ * tile. Strange but non fatal things will happen if these limits are exceeded. */
+static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAPTILE *psTile, std::vector<TILEPOS> &watchedTiles)
 {
 	const int rayPlayer = psObj->player;
 	const int xdiff = map_coord(psObj->pos.x) - mapX;
@@ -238,7 +234,7 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 	const bool inRange = (distSq < 16);
 	uint8_t *visionType = inRange ? psTile->watchers : psTile->sensors;
 
-	if (visionType[rayPlayer] < UBYTE_MAX && *lastRecordTilePos < MAX_SEEN_TILES)
+	if (visionType[rayPlayer] < UBYTE_MAX)
 	{
 		TILEPOS tilePos = {uint8_t(mapX), uint8_t(mapY), uint8_t(inRange)};
 
@@ -249,13 +245,12 @@ static inline void visMarkTile(const BASE_OBJECT *psObj, int mapX, int mapY, MAP
 			psTile->jammerBits |= (1 << rayPlayer); // mark it as being jammed
 		}
 		updateTileVis(psTile);
-		recordTilePos[*lastRecordTilePos] = tilePos;    // record having seen it
-		++*lastRecordTilePos;
+		watchedTiles.push_back(tilePos);  // record having seen it
 	}
 }
 
 /* The terrain revealing ray callback */
-static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int *lastRecordTilePos)
+static void doWaveTerrain(BASE_OBJECT *psObj)
 {
 	const int sx = psObj->pos.x;
 	const int sy = psObj->pos.y;
@@ -277,6 +272,7 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 	angles[!readList][writeListPos] = 0;               // Smallest angle.
 	++writeListPos;
 
+	psObj->watchedTiles.clear();
 	for (size_t i = 0; i < size; ++i)
 	{
 		const int mapX = map_coord(sx) + tiles[i].dx;
@@ -332,7 +328,7 @@ static void doWaveTerrain(const BASE_OBJECT *psObj, TILEPOS *recordTilePos, int 
 		{
 			// Can see this tile.
 			psTile->tileExploredBits |= alliancebits[rayPlayer];                        // Share exploration with allies too
-			visMarkTile(psObj, mapX, mapY, psTile, recordTilePos, lastRecordTilePos);   // Mark this tile as seen by our sensor
+			visMarkTile(psObj, mapX, mapY, psTile, psObj->watchedTiles);   // Mark this tile as seen by our sensor
 		}
 	}
 }
@@ -385,17 +381,16 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 /* Remove tile visibility from object */
 void visRemoveVisibility(BASE_OBJECT *psObj)
 {
-	if (psObj->watchedTiles && mapWidth && mapHeight)
+	if (mapWidth && mapHeight)
 	{
-		for (int i = 0; i < psObj->numWatchedTiles; i++)
+		for (TILEPOS pos : psObj->watchedTiles)
 		{
-			const TILEPOS pos = psObj->watchedTiles[i];
 			// FIXME: the mapTile might have been swapped out, see swapMissionPointers()
 			MAPTILE *psTile = mapTile(pos.x, pos.y);
 
 			ASSERT(pos.type < 2, "Invalid visibility type %d", (int)pos.type);
 			uint8_t *visionType = (pos.type == 0) ? psTile->sensors : psTile->watchers;
-			if (visionType[psObj->player] == 0 && game.type == CAMPAIGN)	// hack
+			if (visionType[psObj->player] == 0 && game.type == LEVEL_TYPE::CAMPAIGN)	// hack
 			{
 				continue;
 			}
@@ -414,25 +409,18 @@ void visRemoveVisibility(BASE_OBJECT *psObj)
 			updateTileVis(psTile);
 		}
 	}
-	free(psObj->watchedTiles);
-	psObj->watchedTiles = nullptr;
-	psObj->numWatchedTiles = 0;
+	psObj->watchedTiles.clear();
 	psObj->flags.set(OBJECT_FLAG_JAMMED_TILES, false);
 }
 
 void visRemoveVisibilityOffWorld(BASE_OBJECT *psObj)
 {
-	free(psObj->watchedTiles);
-	psObj->watchedTiles = nullptr;
-	psObj->numWatchedTiles = 0;
+	psObj->watchedTiles.clear();
 }
 
 /* Check which tiles can be seen by an object */
 void visTilesUpdate(BASE_OBJECT *psObj)
 {
-	TILEPOS recordTilePos[MAX_SEEN_TILES];
-	int lastRecordTilePos = 0;
-
 	ASSERT(psObj->type != OBJ_FEATURE, "visTilesUpdate: visibility updates are not for features!");
 
 	// Remove previous map visibility provided by object
@@ -451,15 +439,7 @@ void visTilesUpdate(BASE_OBJECT *psObj)
 
 	// Do the whole circle in ∞ steps. No more pretty moiré patterns.
 	psObj->flags.set(OBJECT_FLAG_JAMMED_TILES, objJammerPower(psObj) > 0);
-	doWaveTerrain(psObj, recordTilePos, &lastRecordTilePos);
-
-	// Record new map visibility provided by object
-	if (lastRecordTilePos > 0)
-	{
-		psObj->watchedTiles = (TILEPOS *)malloc(lastRecordTilePos * sizeof(*psObj->watchedTiles));
-		psObj->numWatchedTiles = lastRecordTilePos;
-		memcpy(psObj->watchedTiles, recordTilePos, lastRecordTilePos * sizeof(*psObj->watchedTiles));
-	}
+	doWaveTerrain(psObj);
 }
 
 /*reveals all the terrain in the map*/

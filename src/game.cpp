@@ -30,7 +30,6 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
-#include "lib/framework/opengl.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/ivisdef.h"
@@ -125,6 +124,7 @@ static const UDWORD NULL_ID = UDWORD_MAX;
 #define SAVEKEY_ONMISSION	0x100
 
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
+static void plotScriptFeature(ScriptMapData const &data, char *backDropSprite);
 static void plotFeature(char *backDropSprite);
 bool writeGameInfo(const char *pFileName);
 
@@ -364,9 +364,8 @@ static bool deserializeLandingZoneData(PHYSFS_file *fileHandle, LANDING_ZONE *se
 static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERGAME *serializeMulti)
 {
 	const char *dummy8c = "DUMMYSTRING";
-	unsigned int i;
 
-	if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->type)
+	if (!PHYSFS_writeUBE8(fileHandle, static_cast<uint8_t>(serializeMulti->type))
 	    || WZ_PHYSFS_writeBytes(fileHandle, serializeMulti->map, 128) != 128
 	    || WZ_PHYSFS_writeBytes(fileHandle, dummy8c, 8) != 8
 	    || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
@@ -384,20 +383,11 @@ static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERG
 		return false;
 	}
 
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE8(fileHandle, serializeMulti->skDiff[i]))
-		{
-			return false;
-		}
-	}
-
 	return true;
 }
 
 static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME *serializeMulti)
 {
-	unsigned int i;
 	int32_t boolFog;
 	uint8_t dummy8;
 	uint16_t dummy16;
@@ -406,7 +396,7 @@ static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME 
 
 	serializeMulti->hash.setZero();
 
-	if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->type)
+	if (!PHYSFS_readUBE8(fileHandle, reinterpret_cast<uint8_t*>(&serializeMulti->type))
 	    || WZ_PHYSFS_readBytes(fileHandle, serializeMulti->map, 128) != 128
 	    || WZ_PHYSFS_readBytes(fileHandle, dummy8c, 8) != 8
 	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
@@ -425,14 +415,6 @@ static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME 
 	}
 	challengeActive = dummy8;	// hack
 
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE8(fileHandle, &serializeMulti->skDiff[i]))
-		{
-			return false;
-		}
-	}
-
 	return true;
 }
 
@@ -441,7 +423,7 @@ static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlay
 	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->position)
 	        && WZ_PHYSFS_writeBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	        && WZ_PHYSFS_writeBytes(fileHandle, getAIName(player), MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
-	        && PHYSFS_writeSBE8(fileHandle, serializePlayer->difficulty)
+	        && PHYSFS_writeSBE8(fileHandle, static_cast<int8_t>(serializePlayer->difficulty))
 	        && PHYSFS_writeUBE8(fileHandle, (uint8_t)serializePlayer->allocated)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
@@ -457,7 +439,7 @@ static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, 
 	retval = (PHYSFS_readUBE32(fileHandle, &position)
 	          && WZ_PHYSFS_readBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	          && WZ_PHYSFS_readBytes(fileHandle, aiName, MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
-	          && PHYSFS_readSBE8(fileHandle, &serializePlayer->difficulty)
+	          && PHYSFS_readSBE8(fileHandle, reinterpret_cast<int8_t*>(&serializePlayer->difficulty))
 	          && PHYSFS_readUBE8(fileHandle, &allocated)
 	          && PHYSFS_readUBE32(fileHandle, &colour)
 	          && PHYSFS_readUBE32(fileHandle, &team));
@@ -1597,11 +1579,11 @@ static UDWORD			saveGameVersion = 0;
 static bool				saveGameOnMission = false;
 static SAVE_GAME		saveGameData;
 
-static UDWORD	savedGameTime;
-static UDWORD	savedObjId;
-static SDWORD	startX, startY;
-static UDWORD   width, height;
-static UDWORD	gameType;
+static UDWORD		savedGameTime;
+static UDWORD		savedObjId;
+static SDWORD		startX, startY;
+static UDWORD		width, height;
+static GAME_TYPE	gameType;
 static bool IsScenario;
 
 /***************************************************************************/
@@ -1619,11 +1601,13 @@ static bool writeMapFile(const char *fileName);
 static bool loadSaveDroidInit(char *pFileData, UDWORD filesize);
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists);
+static bool loadScriptDroid(ScriptMapData const &data);
 static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentDroidLists);
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList);
+static bool loadScriptStructure(ScriptMapData const &data);
 static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
 
@@ -1633,6 +1617,7 @@ static bool writeTemplateFile(const char *pFileName);
 static bool loadSaveFeature(char *pFileData, UDWORD filesize);
 static bool writeFeatureFile(const char *pFileName);
 static bool loadSaveFeature2(const char *pFileName);
+static bool loadScriptFeature(ScriptMapData const &data);
 
 static bool writeTerrainTypeMapFile(char *pFileName);
 
@@ -1645,7 +1630,7 @@ static bool writeStructTypeListFile(const char *pFileName);
 static bool loadSaveResearch(const char *pFileName);
 static bool writeResearchFile(char *pFileName);
 
-static bool loadSaveMessage(const char *pFileName, SWORD levelType);
+static bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType);
 static bool writeMessageFile(const char *pFileName);
 
 static bool loadSaveStructLimits(const char *pFileName);
@@ -1692,7 +1677,7 @@ bool loadGameInit(const char *fileName)
 //
 // if it is a level loaded up from CD then UserSaveGame will by false
 // UserSaveGame ... Extra stuff to load after scripts
-bool loadMissionExtras(const char *pGameToLoad, SWORD levelType)
+bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType)
 {
 	char			aFileName[256];
 	UDWORD			fileExten;
@@ -1769,13 +1754,14 @@ static void getIniDroidOrder(WzConfig &ini, WzString const &key, DroidOrder &ord
 	getIniStructureStats(ini, key + "/stats", order.psStats);
 }
 
-static void setIniBaseObject(WzConfig &ini, WzString const &key, BASE_OBJECT const *object)
+static void setIniBaseObject(nlohmann::json &json, WzString const &key, BASE_OBJECT const *object)
 {
 	if (object != nullptr && object->died <= 1)
 	{
-		ini.setValue(key + "/id", object->id);
-		ini.setValue(key + "/player", object->player);
-		ini.setValue(key + "/type", object->type);
+		const auto& keyStr = key.toStdString();
+		json[keyStr + "/id"] = object->id;
+		json[keyStr + "/player"] = object->player;
+		json[keyStr + "/type"] = object->type;
 #ifdef DEBUG
 		//ini.setValue(key + "/debugfunc", WzString::fromUtf8(psCurr->targetFunc));
 		//ini.setValue(key + "/debugline", psCurr->targetLine);
@@ -1783,22 +1769,23 @@ static void setIniBaseObject(WzConfig &ini, WzString const &key, BASE_OBJECT con
 	}
 }
 
-static void setIniStructureStats(WzConfig &ini, WzString const &key, STRUCTURE_STATS const *stats)
+static inline void setIniStructureStats(nlohmann::json &jsonObj, WzString const &key, STRUCTURE_STATS const *stats)
 {
 	if (stats != nullptr)
 	{
-		ini.setValue(key, stats->id);
+		jsonObj[key.toStdString()] = stats->id;
 	}
 }
 
-static void setIniDroidOrder(WzConfig &ini, WzString const &key, DroidOrder const &order)
+static inline void setIniDroidOrder(nlohmann::json &jsonObj, WzString const &key, DroidOrder const &order)
 {
-	ini.setValue(key + "/type", order.type);
-	ini.setVector2i(key + "/pos", order.pos);
-	ini.setVector2i(key + "/pos2", order.pos2);
-	ini.setValue(key + "/direction", order.direction);
-	setIniBaseObject(ini, key + "/obj", order.psObj);
-	setIniStructureStats(ini, key + "/stats", order.psStats);
+	const auto& keyStr = key.toStdString();
+	jsonObj[keyStr + "/type"] = order.type;
+	jsonObj[keyStr + "/pos"] = order.pos;
+	jsonObj[keyStr + "/pos2"] = order.pos2;
+	jsonObj[keyStr + "/direction"] = order.direction;
+	setIniBaseObject(jsonObj, key + "/obj", order.psObj);
+	setIniStructureStats(jsonObj, key + "/stats", order.psStats);
 }
 
 static void allocatePlayers()
@@ -1808,7 +1795,7 @@ static void allocatePlayers()
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
 		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
-		if (saveGameData.sGame.skDiff[i] == UBYTE_MAX || (game.type == CAMPAIGN && i == 0))
+		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && i == 0))
 		{
 			NetPlay.players[i].allocated = true;
 			//processDebugMappings ensures game does not start in DEBUG mode
@@ -1837,6 +1824,7 @@ static void getPlayerNames()
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
 {
+	ScriptMapData data;  // Only valid if generating from 'game.js'.
 	std::map<WzString, DROID **> droidMap;
 	std::map<WzString, STRUCTURE **> structMap;
 	char			aFileName[256];
@@ -1922,7 +1910,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		startY = saveGameData.ScrollMinY;
 		width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
 		height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
-		gameType = saveGameData.GameType;
+		gameType = static_cast<GAME_TYPE>(saveGameData.GameType);
 
 		if (saveGameVersion >= VERSION_14)
 		{
@@ -2232,11 +2220,26 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		psMapTiles = nullptr;
 		//load in the map file
 		aFileName[fileExten] = '\0';
-		strcat(aFileName, "game.map");
-		if (!mapLoad(aFileName, false))
+		strcat(aFileName, "game.js");
+		bool haveScript = PHYSFS_exists(aFileName);
+		if (haveScript) {
+			data = runMapScript(aFileName, gameRandU32(), true);
+			syncDebug("mapSize = [%d, %d]", data.mapWidth, data.mapHeight);
+			syncDebug("crc(texture) = 0x%08x", crcSumU16(0, data.texture.data(), data.texture.size()));
+			syncDebug("crc(height) = 0x%08x", crcSumI16(0, data.height.data(), data.height.size()));
+			syncDebug("crc(structures) = 0x%08x", data.crcSumStructures(0));
+			syncDebug("crc(droids) = 0x%08x", data.crcSumDroids(0));
+			syncDebug("crc(features) = 0x%08x", data.crcSumFeatures(0));
+		}
+		else
+		{
+			aFileName[fileExten] = '\0';
+			strcat(aFileName, "game.map");
+		}
+		if (haveScript? !mapLoadFromScriptData(data, false) : !mapLoad(aFileName, false))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
-			return (false);
+			return false;
 		}
 	}
 
@@ -2294,7 +2297,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "droid.json");
 
 		//load the data into apsDroidLists
-		if (loadSaveDroid(aFileName, apsDroidLists))
+		if (data.valid && loadScriptDroid(data))
+		{
+			// Nothing to do here.
+		}
+		else if (loadSaveDroid(aFileName, apsDroidLists))
 		{
 			debug(LOG_SAVE, "Loaded new style droids");
 			droidMap[aFileName] = apsDroidLists;	// load pointers later
@@ -2378,7 +2385,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	//load in the features -do before the structures
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "feature.json");
-	if (!loadSaveFeature2(aFileName))
+	if (data.valid && loadScriptFeature(data))
+	{
+		// Nothing to do here.
+	}
+	else if (!loadSaveFeature2(aFileName))
 	{
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "feat.bjo");
@@ -2402,7 +2413,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.json");
-	if (!loadSaveStructure2(aFileName, apsStructLists))
+	if (data.valid && loadScriptStructure(data))
+	{
+		// Nothing to do here.
+	}
+	else if (!loadSaveStructure2(aFileName, apsStructLists))
 	{
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "struct.bjo");
@@ -2597,7 +2612,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		if (mission.apsDroidLists[selectedPlayer] == nullptr)
 		{
 			//set the mission type
-			startMissionSave(LDS_EXPAND);
+			startMissionSave(LEVEL_TYPE::LDS_EXPAND);
 		}
 	}
 
@@ -3325,7 +3340,7 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 	startY = saveGame.ScrollMinY;
 	width = saveGame.ScrollMaxX - saveGame.ScrollMinX;
 	height = saveGame.ScrollMaxY - saveGame.ScrollMinY;
-	gameType = saveGame.GameType;
+	gameType = static_cast<GAME_TYPE>(saveGame.GameType);
 	//set IsScenario to true if not a user saved game
 	if (gameType == GTYPE_SAVE_START)
 	{
@@ -3349,10 +3364,10 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 		}
 		//check to see whether mission automatically starts
 		//shouldn't be able to be any other value at the moment!
-		if (psNewLevel->type == LDS_CAMSTART
-		    || psNewLevel->type == LDS_BETWEEN
-		    || psNewLevel->type == LDS_EXPAND
-		    || psNewLevel->type == LDS_EXPAND_LIMBO)
+		if (psNewLevel->type == LEVEL_TYPE::LDS_CAMSTART
+		    || psNewLevel->type == LEVEL_TYPE::LDS_BETWEEN
+		    || psNewLevel->type == LEVEL_TYPE::LDS_EXPAND
+		    || psNewLevel->type == LEVEL_TYPE::LDS_EXPAND_LIMBO)
 		{
 			launchMission();
 		}
@@ -3562,7 +3577,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		return false;
 	}
 
-	debug(LOG_SAVE, "Savegame is of type: %u", saveGameData.sGame.type);
+	debug(LOG_SAVE, "Savegame is of type: %u", static_cast<uint8_t>(saveGameData.sGame.type));
 	game.type = saveGameData.sGame.type;
 	/* Test mod list */
 	if (version >= VERSION_38)
@@ -3602,7 +3617,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 	startY = saveGameData.ScrollMinY;
 	width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
 	height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
-	gameType = saveGameData.GameType;
+	gameType = static_cast<GAME_TYPE>(saveGameData.GameType);
 
 	if (version >= VERSION_11)
 	{
@@ -3879,14 +3894,13 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 			allies.push_back(alliances[i][j]);
 		}
 		save.set("alliances", allies);
-		save.setValue("difficulty", game.skDiff[i]);
+		save.setValue("difficulty", NetPlay.players[i].difficulty);
 
 		save.setValue("position", NetPlay.players[i].position);
 		save.setValue("colour", NetPlay.players[i].colour);
 		save.setValue("allocated", NetPlay.players[i].allocated);
 		save.setValue("team", NetPlay.players[i].team);
 		save.setValue("ai", NetPlay.players[i].ai);
-		save.setValue("difficultyLevel", NetPlay.players[i].difficulty);
 		save.setValue("autoGame", NetPlay.players[i].autoGame);
 		save.setValue("ip", NetPlay.players[i].IPtextAddress);
 		save.setValue("name", getPlayerName(selectedPlayer));
@@ -3950,6 +3964,8 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 		debug(LOG_ERROR, "openSaveFile(\"%s\") failed", fileName);
 		return false;
 	}
+
+	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
 
 	fileHeader.aFileType[0] = 'g';
 	fileHeader.aFileType[1] = 'a';
@@ -4102,20 +4118,21 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	//version 38
 	sstrcpy(saveGame.modList, getModList().c_str());
 	// Attempt to see if we have a corrupted game structure in campaigns.
-	if (saveGame.sGame.type == CAMPAIGN)
+	if (saveGame.sGame.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		// player 0 is always a human in campaign games
 		for (int i = 1; i < MAX_PLAYERS; i++)
 		{
-			if (saveGame.sGame.skDiff[i] == UBYTE_MAX)
+			if (saveGame.sNetPlay.players[i].difficulty == AIDifficulty::HUMAN)
 			{
 				ASSERT(!"savegame corruption!", "savegame corruption!");
 				debug(LOG_ERROR, "Savegame corruption detected, trying to salvage.  Please Report this issue @ wz2100.net");
-				debug(LOG_ERROR, "skDiff[i] was %d, level %s / %s, ", (int)saveGame.sGame.skDiff[i], saveGame.levelName, saveGame.sGame.map);
-				saveGame.sGame.skDiff[i] = 0;
+				debug(LOG_ERROR, "players[i].difficulty was %d, level %s / %s, ", (int) static_cast<int8_t>(saveGame.sNetPlay.players[i].difficulty), saveGame.levelName, saveGame.sGame.map);
+				saveGame.sNetPlay.players[i].difficulty = AIDifficulty::DISABLED;
 			}
 		}
 	}
+
 	status = serializeSaveGameData(fileHandle, &saveGame);
 
 	// Close the file
@@ -4219,7 +4236,7 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 {
 	int i;
 
-	if (game.type == CAMPAIGN)		// don't remap for SP games
+	if (game.type == LEVEL_TYPE::CAMPAIGN)		// don't remap for SP games
 	{
 		return OldNumber;
 	}
@@ -4275,13 +4292,25 @@ static void setPlayer(WzConfig &ini, int player)
 	}
 }
 
+static inline void setPlayerJSON(nlohmann::json &jsonObj, int player)
+{
+	if (scavengerSlot() == player)
+	{
+		jsonObj["player"] = "scavenger";
+	}
+	else
+	{
+		jsonObj["player"] = player;
+	}
+}
+
 static bool skipForDifficulty(WzConfig &ini, int player)
 {
 	if (ini.contains("difficulty")) // optionally skip this object
 	{
 		int difficulty = ini.value("difficulty").toInt();
-		if ((game.type == CAMPAIGN && difficulty > (int)getDifficultyLevel())
-		    || (game.type == SKIRMISH && difficulty > NetPlay.players[player].difficulty))
+		if ((game.type == LEVEL_TYPE::CAMPAIGN && difficulty > (int)getDifficultyLevel())
+		    || (game.type == LEVEL_TYPE::SKIRMISH && difficulty > static_cast<int8_t>(NetPlay.players[player].difficulty)))
 		{
 			return true;
 		}
@@ -4460,6 +4489,83 @@ static void writeSaveObject(WzConfig &ini, BASE_OBJECT *psObj)
 	}
 }
 
+static void writeSaveObjectJSON(nlohmann::json &jsonObj, BASE_OBJECT *psObj)
+{
+	jsonObj["id"] = psObj->id;
+	setPlayerJSON(jsonObj, psObj->player);
+	jsonObj["health"] = psObj->body;
+	jsonObj["position"] = psObj->pos;
+	jsonObj["rotation"] = toVector(psObj->rot);
+	if (psObj->timeAnimationStarted)
+	{
+		jsonObj["timeAnimationStarted"] = psObj->timeAnimationStarted;
+	}
+	if (psObj->animationEvent)
+	{
+		jsonObj["animationEvent"] = psObj->animationEvent;
+	}
+	jsonObj["selected"] = psObj->selected;	// third kind of group
+	if (psObj->lastEmission)
+	{
+		jsonObj["lastEmission"] = psObj->lastEmission;
+	}
+	if (psObj->periodicalDamageStart > 0)
+	{
+		jsonObj["periodicalDamageStart"] = psObj->periodicalDamageStart;
+	}
+	if (psObj->periodicalDamage > 0)
+	{
+		jsonObj["periodicalDamage"] = psObj->periodicalDamage;
+	}
+	jsonObj["born"] = psObj->born;
+	if (psObj->died > 0)
+	{
+		jsonObj["died"] = psObj->died;
+	}
+	if (psObj->timeLastHit != UDWORD_MAX)
+	{
+		jsonObj["timeLastHit"] = psObj->timeLastHit;
+	}
+	if (psObj->selected)
+	{
+		jsonObj["selected"] = psObj->selected;
+	}
+	for (int i = 0; i < game.maxPlayers; i++)
+	{
+		if (psObj->visible[i])
+		{
+			jsonObj["visible/" + WzString::number(i).toStdString()] = psObj->visible[i];
+		}
+	}
+}
+
+static bool loadScriptDroid(ScriptMapData const &data)
+{
+	ASSERT_OR_RETURN(false, data.valid, "No data.");
+
+	for (auto &droid : data.droids)
+	{
+		unsigned player = droid.player == -1? scavengerPlayer() : droid.player;
+		auto psTemplate = getTemplateFromTranslatedNameNoPlayer(droid.name.toUtf8().c_str());
+		if (psTemplate == nullptr)
+		{
+			debug(LOG_ERROR, "Unable to find template for %s for player %d -- unit skipped", droid.name.toUtf8().c_str(), player);
+			continue;
+		}
+		turnOffMultiMsg(true);
+		auto psDroid = reallyBuildDroid(psTemplate, {droid.position, 0}, player, false, {droid.direction, 0, 0});
+		turnOffMultiMsg(false);
+		if (psDroid == nullptr)
+		{
+			debug(LOG_ERROR, "Failed to build unit %s", droid.name.toUtf8().c_str());
+			continue;
+		}
+		addDroid(psDroid, apsDroidLists);
+	}
+
+	return true;
+}
+
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
 	if (!PHYSFS_exists(pFileName))
@@ -4571,6 +4677,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		psDroid->body = healthValue(ini, psDroid->originalBody);
 		ASSERT(psDroid->body != 0, "%s : %d has zero hp!", pFileName, i);
 		psDroid->experience = ini.value("experience", 0).toInt();
+		psDroid->kills = ini.value("kills", 0).toInt();
 		psDroid->secondaryOrder = ini.value("secondaryOrder", psDroid->secondaryOrder).toInt();
 		psDroid->secondaryOrderPending = psDroid->secondaryOrder;
 		psDroid->action = (DROID_ACTION)ini.value("action", DACTION_NONE).toInt();
@@ -4689,119 +4796,123 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 /*
 Writes the linked list of droids for each player to a file
 */
-static bool writeDroid(WzConfig &ini, DROID *psCurr, bool onMission, int &counter)
+static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
 {
-	ini.beginGroup("droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
-	ini.setValue("name", psCurr->aName);
+	nlohmann::json droidObj = nlohmann::json::object();
+	droidObj["name"] = psCurr->aName;
 
 	// write common BASE_OBJECT info
-	writeSaveObject(ini, psCurr);
+	writeSaveObjectJSON(droidObj, psCurr);
 
 	for (int i = 0; i < psCurr->numWeaps; i++)
 	{
 		if (psCurr->asWeaps[i].nStat > 0)
 		{
-			ini.setValue("ammo/" + WzString::number(i), psCurr->asWeaps[i].ammo);
-			ini.setValue("lastFired/" + WzString::number(i), psCurr->asWeaps[i].lastFired);
-			ini.setValue("shotsFired/" + WzString::number(i), psCurr->asWeaps[i].shotsFired);
-			ini.setVector3i("rotation/" + WzString::number(i), toVector(psCurr->asWeaps[i].rot));
+			const std::string& numStr = WzString::number(i).toStdString();
+			droidObj["ammo/" + numStr] = psCurr->asWeaps[i].ammo;
+			droidObj["lastFired/" + numStr] = psCurr->asWeaps[i].lastFired;
+			droidObj["shotsFired/" + numStr] = psCurr->asWeaps[i].shotsFired;
+			droidObj["rotation/" + numStr] = toVector(psCurr->asWeaps[i].rot);
 		}
 	}
 	for (int i = 0; i < MAX_WEAPONS; i++)
 	{
-		setIniBaseObject(ini, "actionTarget/" + WzString::number(i), psCurr->psActionTarget[i]);
+		setIniBaseObject(droidObj, "actionTarget/" + WzString::number(i), psCurr->psActionTarget[i]);
 	}
 	if (psCurr->lastFrustratedTime > 0)
 	{
-		ini.setValue("lastFrustratedTime", psCurr->lastFrustratedTime);
+		droidObj["lastFrustratedTime"] = psCurr->lastFrustratedTime;
 	}
 	if (psCurr->experience > 0)
 	{
-		ini.setValue("experience", psCurr->experience);
+		droidObj["experience"] = psCurr->experience;
+	}
+	if (psCurr->kills > 0)
+	{
+		droidObj["kills"] = psCurr->kills;
 	}
 
-	setIniDroidOrder(ini, "order", psCurr->order);
-	ini.setValue("orderList/size", psCurr->listSize);
+	setIniDroidOrder(droidObj, "order", psCurr->order);
+	droidObj["orderList/size"] = psCurr->listSize;
 	for (int i = 0; i < psCurr->listSize; ++i)
 	{
-		setIniDroidOrder(ini, "orderList/" + WzString::number(i), psCurr->asOrderList[i]);
+		setIniDroidOrder(droidObj, "orderList/" + WzString::number(i), psCurr->asOrderList[i]);
 	}
 	if (psCurr->timeLastHit != UDWORD_MAX)
 	{
-		ini.setValue("timeLastHit", psCurr->timeLastHit);
+		droidObj["timeLastHit"] = psCurr->timeLastHit;
 	}
-	ini.setValue("secondaryOrder", psCurr->secondaryOrder);
-	ini.setValue("action", psCurr->action);
-	ini.setValue("actionString", getDroidActionName(psCurr->action)); // future-proofing
-	ini.setVector2i("action/pos", psCurr->actionPos);
-	ini.setValue("actionStarted", psCurr->actionStarted);
-	ini.setValue("actionPoints", psCurr->actionPoints);
+	droidObj["secondaryOrder"] = psCurr->secondaryOrder;
+	droidObj["action"] = psCurr->action;
+	droidObj["actionString"] = getDroidActionName(psCurr->action); // future-proofing
+	droidObj["action/pos"] = psCurr->actionPos;
+	droidObj["actionStarted"] = psCurr->actionStarted;
+	droidObj["actionPoints"] = psCurr->actionPoints;
 	if (psCurr->psBaseStruct != nullptr)
 	{
-		ini.setValue("baseStruct/id", psCurr->psBaseStruct->id);
-		ini.setValue("baseStruct/player", psCurr->psBaseStruct->player);	// always ours, but for completeness
-		ini.setValue("baseStruct/type", psCurr->psBaseStruct->type);		// always a building, but for completeness
+		droidObj["baseStruct/id"] = psCurr->psBaseStruct->id;
+		droidObj["baseStruct/player"] = psCurr->psBaseStruct->player;	// always ours, but for completeness
+		droidObj["baseStruct/type"] = psCurr->psBaseStruct->type;		// always a building, but for completeness
 	}
 	if (psCurr->psGroup)
 	{
-		ini.setValue("aigroup", psCurr->psGroup->id);	// AI and commander/transport group
-		ini.setValue("aigroup/type", psCurr->psGroup->type);
+		droidObj["aigroup"] = psCurr->psGroup->id;	// AI and commander/transport group
+		droidObj["aigroup/type"] = psCurr->psGroup->type;
 	}
-	ini.setValue("group", psCurr->group);	// different kind of group. of course.
+	droidObj["group"] = psCurr->group;	// different kind of group. of course.
 	if (hasCommander(psCurr) && psCurr->psGroup->psCommander->died <= 1)
 	{
-		ini.setValue("commander", psCurr->psGroup->psCommander->id);
+		droidObj["commander"] = psCurr->psGroup->psCommander->id;
 	}
 	if (psCurr->resistance > 0)
 	{
-		ini.setValue("resistance", psCurr->resistance);
+		droidObj["resistance"] = psCurr->resistance;
 	}
-	ini.setValue("droidType", psCurr->droidType);
-	ini.setValue("weapons", psCurr->numWeaps);
-	ini.beginGroup("parts");
-	ini.setValue("body", (asBodyStats + psCurr->asBits[COMP_BODY])->id);
-	ini.setValue("propulsion", (asPropulsionStats + psCurr->asBits[COMP_PROPULSION])->id);
-	ini.setValue("brain", (asBrainStats + psCurr->asBits[COMP_BRAIN])->id);
-	ini.setValue("repair", (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->id);
-	ini.setValue("ecm", (asECMStats + psCurr->asBits[COMP_ECM])->id);
-	ini.setValue("sensor", (asSensorStats + psCurr->asBits[COMP_SENSOR])->id);
-	ini.setValue("construct", (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->id);
+	droidObj["droidType"] = psCurr->droidType;
+	droidObj["weapons"] = psCurr->numWeaps;
+	nlohmann::json partsObj = nlohmann::json::object();
+	partsObj["body"] = (asBodyStats + psCurr->asBits[COMP_BODY])->id;
+	partsObj["propulsion"] = (asPropulsionStats + psCurr->asBits[COMP_PROPULSION])->id;
+	partsObj["brain"] = (asBrainStats + psCurr->asBits[COMP_BRAIN])->id;
+	partsObj["repair"] = (asRepairStats + psCurr->asBits[COMP_REPAIRUNIT])->id;
+	partsObj["ecm"] = (asECMStats + psCurr->asBits[COMP_ECM])->id;
+	partsObj["sensor"] = (asSensorStats + psCurr->asBits[COMP_SENSOR])->id;
+	partsObj["construct"] = (asConstructStats + psCurr->asBits[COMP_CONSTRUCT])->id;
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
-		ini.setValue("weapon/" + WzString::number(j + 1), (asWeaponStats + psCurr->asWeaps[j].nStat)->id);
+		partsObj["weapon/" + WzString::number(j + 1).toStdString()] = (asWeaponStats + psCurr->asWeaps[j].nStat)->id;
 	}
-	ini.endGroup();
-	ini.setValue("moveStatus", psCurr->sMove.Status);
-	ini.setValue("pathIndex", psCurr->sMove.pathIndex);
-	ini.setValue("pathLength", psCurr->sMove.asPath.size());
+	droidObj["parts"] = partsObj;
+	droidObj["moveStatus"] = psCurr->sMove.Status;
+	droidObj["pathIndex"] = psCurr->sMove.pathIndex;
+	droidObj["pathLength"] = psCurr->sMove.asPath.size();
 	for (unsigned i = 0; i < psCurr->sMove.asPath.size(); i++)
 	{
-		ini.setVector2i("pathNode/" + WzString::number(i), psCurr->sMove.asPath[i]);
+		droidObj["pathNode/" + WzString::number(i).toStdString()] = psCurr->sMove.asPath[i];
 	}
-	ini.setVector2i("moveDestination", psCurr->sMove.destination);
-	ini.setVector2i("moveSource", psCurr->sMove.src);
-	ini.setVector2i("moveTarget", psCurr->sMove.target);
-	ini.setValue("moveSpeed", psCurr->sMove.speed);
-	ini.setValue("moveDirection", psCurr->sMove.moveDir);
-	ini.setValue("bumpDir", psCurr->sMove.bumpDir);
-	ini.setValue("vertSpeed", psCurr->sMove.iVertSpeed);
-	ini.setValue("bumpTime", psCurr->sMove.bumpTime);
-	ini.setValue("shuffleStart", psCurr->sMove.shuffleStart);
+	droidObj["moveDestination"] = psCurr->sMove.destination;
+	droidObj["moveSource"] = psCurr->sMove.src;
+	droidObj["moveTarget"] = psCurr->sMove.target;
+	droidObj["moveSpeed"] = psCurr->sMove.speed;
+	droidObj["moveDirection"] = psCurr->sMove.moveDir;
+	droidObj["bumpDir"] = psCurr->sMove.bumpDir;
+	droidObj["vertSpeed"] = psCurr->sMove.iVertSpeed;
+	droidObj["bumpTime"] = psCurr->sMove.bumpTime;
+	droidObj["shuffleStart"] = psCurr->sMove.shuffleStart;
 	for (int i = 0; i < MAX_WEAPONS; ++i)
 	{
-		ini.setValue("attackRun/" + WzString::number(i), psCurr->asWeaps[i].usedAmmo);
+		droidObj["attackRun/" + WzString::number(i).toStdString()] = psCurr->asWeaps[i].usedAmmo;
 	}
-	ini.setValue("lastBump", psCurr->sMove.lastBump);
-	ini.setValue("pauseTime", psCurr->sMove.pauseTime);
-	ini.setVector2i("bumpPosition", psCurr->sMove.bumpPos.xy());
-	ini.setValue("onMission", onMission);
-	ini.endGroup();
-	return true;
+	droidObj["lastBump"] = psCurr->sMove.lastBump;
+	droidObj["pauseTime"] = psCurr->sMove.pauseTime;
+	droidObj["bumpPosition"] = psCurr->sMove.bumpPos.xy();
+	droidObj["onMission"] = onMission;
+	return droidObj;
 }
 
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 {
-	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
+	nlohmann::json mRoot = nlohmann::json::object();
 	int counter = 0;
 	bool onMission = (ppsCurrentDroidLists[0] == mission.apsDroidLists[0]);
 
@@ -4809,24 +4920,33 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 	{
 		for (DROID *psCurr = ppsCurrentDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			writeDroid(ini, psCurr, onMission, counter);
+			auto droidKey = "droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10));  // Zero padded so that alphabetical sort works.
+			mRoot[droidKey.toStdString()] = writeDroid(psCurr, onMission, counter);
 			if (isTransporter(psCurr))	// if transporter save any droids in the grp
 			{
 				for (DROID *psTrans = psCurr->psGroup->psList; psTrans != nullptr; psTrans = psTrans->psGrpNext)
 				{
 					if (psTrans != psCurr)
 					{
-						writeDroid(ini, psTrans, onMission, counter);
+						droidKey = "droid_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10));  // Zero padded so that alphabetical sort works.
+						mRoot[droidKey.toStdString()] = writeDroid(psTrans, onMission, counter);
 					}
 				}
 				//always save transporter droids that are in the mission list with an invalid value
 				if (ppsCurrentDroidLists[player] == mission.apsDroidLists[player])
 				{
-					ini.setVector3i("position", Vector3i(-1, -1, -1)); // was INVALID_XY
+					mRoot[droidKey.toStdString()]["position"] = Vector3i(-1, -1, -1); // was INVALID_XY
 				}
 			}
 		}
 	}
+
+	std::ostringstream stream;
+	stream << mRoot.dump(4) << std::endl;
+	std::string jsonString = stream.str();
+	saveFile(pFileName, jsonString.c_str(), jsonString.size());
+	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
+
 	return true;
 }
 
@@ -5010,6 +5130,78 @@ static UDWORD getResearchIdFromName(const WzString &name)
 	return NULL_ID;
 }
 
+bool loadScriptStructure(ScriptMapData const &data)
+{
+	if (!data.valid)
+	{
+		return false;
+	}
+
+	freeAllFlagPositions();  // clear any flags put in during level loads
+
+	for (auto &structure : data.structures) {
+		auto psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats, [&](STRUCTURE_STATS &stat) { return stat.id == structure.name; });
+		if (psStats == asStructureStats + numStructureStats)
+		{
+			debug(LOG_ERROR, "Structure type \"%s\" unknown", structure.name.toStdString().c_str());
+			continue;  // ignore this
+		}
+		//for modules - need to check the base structure exists
+		if (IsStatExpansionModule(psStats))
+		{
+			STRUCTURE *psStructure = getTileStructure(map_coord(structure.position.x), map_coord(structure.position.y));
+			if (psStructure == nullptr)
+			{
+				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", structure.name.toStdString().c_str(), structure.player);
+				continue; // ignore this module
+			}
+		}
+		//check not trying to build too near the edge
+		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > mapWidth - TOO_NEAR_EDGE
+		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > mapHeight - TOO_NEAR_EDGE)
+		{
+			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.toStdString().c_str());
+			continue; // skip it
+		}
+		int player = structure.player;
+		if (player < 0)
+		{
+			game.mapHasScavengers = true;
+			player = scavengerPlayer();
+		}
+		STRUCTURE *psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
+		if (psStructure == nullptr)
+		{
+			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.toStdString().c_str());
+			continue;
+		}
+		if (structure.modules > 0)
+		{
+			auto moduleStat = getModuleStat(psStructure);
+			if (moduleStat == nullptr)
+			{
+				debug(LOG_ERROR, "Structure %s can't have modules.", structure.name.toStdString().c_str());
+				continue;
+			}
+			for (int i = 0; i < structure.modules; ++i)
+			{
+				buildStructure(moduleStat, structure.position.x, structure.position.y, player, true);
+			}
+		}
+		buildingComplete(psStructure);
+		if (psStructure->pStructureType->type == REF_HQ)
+		{
+			scriptSetStartPos(player, psStructure->pos.x, psStructure->pos.y);
+		}
+		else if (psStructure->pStructureType->type == REF_RESOURCE_EXTRACTOR)
+		{
+			scriptSetDerrickPos(psStructure->pos.x, psStructure->pos.y);
+		}
+	}
+
+	return true;
+}
+
 // -----------------------------------------------------------------------------------------
 /* code for versions after version 20 of a save structure */
 static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
@@ -5030,8 +5222,8 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		RESEARCH_FACILITY *psResearch;
 		REPAIR_FACILITY *psRepair;
 		REARM_PAD *psReArmPad;
-		STRUCTURE_STATS *psStats = nullptr, *psModule;
-		int statInc, capacity, found, researchId;
+		STRUCTURE_STATS *psModule;
+		int capacity, researchId;
 		STRUCTURE *psStructure;
 
 		ini.beginGroup(list[i]);
@@ -5042,20 +5234,10 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		WzString name = ini.string("name");
 
 		//get the stats for this structure
-		found = false;
-		for (statInc = 0; statInc < numStructureStats; statInc++)
-		{
-			psStats = asStructureStats + statInc;
-			//loop until find the same name
-			if (name.compare(psStats->id) == 0)
-			{
-				found = true;
-				break;
-			}
-		}
+		auto psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats, [&](STRUCTURE_STATS &stat) { return stat.id == name; });
 		//if haven't found the structure - ignore this record!
-		ASSERT(found, "This structure no longer exists - %s", name.toUtf8().c_str());
-		if (!found)
+		ASSERT(psStats != asStructureStats + numStructureStats, "This structure no longer exists - %s", name.toUtf8().c_str());
+		if (psStats == asStructureStats + numStructureStats)
 		{
 			ini.endGroup();
 			continue;	// ignore this
@@ -5222,7 +5404,7 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 			break;
 		}
 		psStructure->body = healthValue(ini, structureBody(psStructure));
-		psStructure->currentBuildPts = ini.value("currentBuildPts", psStructure->pStructureType->buildPoints).toInt();
+		psStructure->currentBuildPts = ini.value("currentBuildPts", structureBuildPointsToCompletion(*psStructure)).toInt();
 		if (psStructure->status == SS_BUILT)
 		{
 			switch (psStructure->pStructureType->type)
@@ -5290,14 +5472,11 @@ bool writeGameInfo(const char *pFileName)
 	ini.setValue("debug", getDebugMappingStatus());
 	ini.setValue("level/map", getLevelName());
 	ini.setValue("mods", !getModList().empty() ? getModList().c_str() : "None");
-	ini.setValue("openGL_vendor", opengl.vendor);
-	ini.setValue("openGL_renderer", opengl.renderer);
-	ini.setValue("openGL_version", opengl.version);
-	ini.setValue("openGL_GLEW_version", opengl.GLEWversion);
-	ini.setValue("openGL_GLSL_version", opengl.GLSLversion);
-	// NOTE: deprecated for GL 3+. Needed this to check what extensions some chipsets support for the openGL hacks
-	std::string extensions = (const char *) glGetString(GL_EXTENSIONS);
-	ini.setValue("GL_EXTENSIONS", extensions.data());
+	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
+	for (auto& kv : backendInfo)
+	{
+		ini.setValue(WzString::fromUtf8(kv.first), WzString::fromUtf8(kv.second));
+	}
 	ini.endGroup();
 	return true;
 }
@@ -5654,6 +5833,40 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 	return true;
 }
 
+static bool loadScriptFeature(ScriptMapData const &data)
+{
+	if (!data.valid)
+	{
+		return false;
+	}
+
+	for (auto &feature : data.features)
+	{
+		auto psStats = std::find_if(asFeatureStats, asFeatureStats + numFeatureStats, [&](FEATURE_STATS &stat) { return stat.id == feature.name; });
+		if (psStats == asFeatureStats + numFeatureStats)
+		{
+			debug(LOG_ERROR, "Feature type \"%s\" unknown", feature.name.toStdString().c_str());
+			continue;  // ignore this
+		}
+		// Create the Feature
+		auto pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true);
+		if (!pFeature)
+		{
+			debug(LOG_ERROR, "Unable to create feature %s", feature.name.toStdString().c_str());
+			continue;
+		}
+		if (pFeature->psStats->subType == FEAT_OIL_RESOURCE)
+		{
+			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
+		}
+		//restore values
+		pFeature->id = generateSynchronisedObjectId();
+		pFeature->rot.direction = feature.direction;
+	}
+
+	return true;
+}
+
 bool loadSaveFeature2(const char *pFileName)
 {
 	if (!PHYSFS_exists(pFileName))
@@ -5715,6 +5928,7 @@ bool loadSaveFeature2(const char *pFileName)
 			pFeature->id = generateSynchronisedObjectId();
 		}
 		pFeature->rot = ini.vector3i("rotation");
+		pFeature->player = ini.value("player", PLAYER_FEATURE).toInt();
 
 		// common BASE_OBJECT info
 		loadSaveObject(ini, pFeature);
@@ -6219,7 +6433,7 @@ static bool writeResearchFile(char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up saved message file
-bool loadSaveMessage(const char *pFileName, SWORD levelType)
+bool loadSaveMessage(const char* pFileName, LEVEL_TYPE levelType)
 {
 	// Only clear the messages if its a mid save game
 	if (gameType == GTYPE_SAVE_MIDMISSION)
@@ -6229,7 +6443,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 	else if (gameType == GTYPE_SAVE_START)
 	{
 		// If we are loading in a CamStart or a CamChange then we are not interested in any saved messages
-		if (levelType == LDS_CAMSTART || levelType == LDS_CAMCHANGE)
+		if (levelType == LEVEL_TYPE::LDS_CAMSTART || levelType == LEVEL_TYPE::LDS_CAMCHANGE)
 		{
 			return true;
 		}
@@ -6265,16 +6479,15 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 					}
 					else
 					{
-						debug(LOG_ERROR, "Proximity object could not be created (type=%d, player=%d, message=%d)",
-						      type, player, id);
+						debug(LOG_ERROR, "Proximity object could not be created (type=%d, player=%d, message=%d)", type, player, id);
 					}
 				}
 				else
 				{
-					VIEWDATA *psViewData = nullptr;
+					VIEWDATA* psViewData = nullptr;
 
 					// Proximity position so get viewdata pointer from the name
-					MESSAGE *psMessage = addMessage(type, false, player);
+					MESSAGE* psMessage = addMessage(type, false, player);
 
 					if (psMessage)
 					{
@@ -6316,10 +6529,10 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 
 						psMessage->pViewData = psViewData;
 						// Check the z value is at least the height of the terrain
-						const int height = map_Height(((VIEW_PROXIMITY *)psViewData->pData)->x, ((VIEW_PROXIMITY *)psViewData->pData)->y);
-						if (((VIEW_PROXIMITY *)psViewData->pData)->z < height)
+						const int height = map_Height(((VIEW_PROXIMITY*)psViewData->pData)->x, ((VIEW_PROXIMITY*)psViewData->pData)->y);
+						if (((VIEW_PROXIMITY*)psViewData->pData)->z < height)
 						{
-							((VIEW_PROXIMITY *)psViewData->pData)->z = height;
+							((VIEW_PROXIMITY*)psViewData->pData)->z = height;
 						}
 					}
 					else
@@ -6334,7 +6547,7 @@ bool loadSaveMessage(const char *pFileName, SWORD levelType)
 			// Only load Campaign/Mission messages if a mid-mission save game; always load research messages
 			if (type == MSG_RESEARCH || gameType == GTYPE_SAVE_MIDMISSION)
 			{
-				MESSAGE *psMessage = addMessage(type, false, player);
+				MESSAGE* psMessage = addMessage(type, false, player);
 				ASSERT(psMessage, "Could not create message %d", id);
 				if (psMessage)
 				{
@@ -6607,7 +6820,7 @@ static void setMapScroll()
 
 // -----------------------------------------------------------------------------------------
 /*returns the current type of save game being loaded*/
-UDWORD getSaveGameType()
+GAME_TYPE getSaveGameType()
 {
 	return gameType;
 }
@@ -6620,6 +6833,43 @@ static void plotBackdropPixel(char *backDropSprite, int xx, int yy, PIELIGHT con
 	pixel[0] = colour.byte.r;
 	pixel[1] = colour.byte.g;
 	pixel[2] = colour.byte.b;
+}
+
+bool plotStructurePreviewScript(ScriptMapData const &data, char *backDropSprite, Vector2i playeridpos[])
+{
+	ASSERT_OR_RETURN(false, data.valid, "Missing map data");
+
+	for (auto &structure : data.structures)
+	{
+		unsigned player = structure.player == -1? scavengerSlot() : structure.player;
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "Bad player");
+			continue;
+		}
+		bool HQ = structure.name.startsWith("A0CommandCentre");
+		Vector2i pos = map_coord(structure.position);
+		if (HQ)
+		{
+			playeridpos[player] = pos;
+		}
+		unsigned playerid = getPlayerColour(RemapPlayerNumber(player));
+		// kludge to fix black, so you can see it on some maps.
+		PIELIGHT color = playerid == 3? WZCOL_GREY : clanColours[playerid];
+		if (HQ)
+		{
+			// This shows where the HQ is on the map in a special color.
+			// We could do the same for anything else (oil/whatever) also.
+			// Possible future enhancement?
+			color = WZCOL_MAP_PREVIEW_HQ;
+		}
+		// and now we blit the color to the texture
+		plotBackdropPixel(backDropSprite, pos.x, pos.y, color);
+	}
+
+	plotScriptFeature(data, backDropSprite);
+
+	return true;
 }
 
 /**
@@ -6837,6 +7087,30 @@ bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
 	// And now we need to show features.
 	plotFeature(backDropSprite);
 	return true;
+}
+
+static void plotScriptFeature(ScriptMapData const &data, char *backDropSprite) {
+	ASSERT_OR_RETURN(, data.valid, "Missing map data");
+
+	for (auto &feature : data.features)
+	{
+		PIELIGHT colour;
+		if (feature.name.startsWith("OilResource"))
+		{
+			colour = WZCOL_MAP_PREVIEW_OIL;
+		}
+		else if (feature.name.startsWith("OilDrum"))
+		{
+			colour = WZCOL_MAP_PREVIEW_BARREL;
+		}
+		else
+		{
+			continue;
+		}
+		// and now we blit the color to the texture
+		auto pos = map_coord(feature.position);
+		plotBackdropPixel(backDropSprite, pos.x, pos.y, colour);
+	}
 }
 
 // Show location of (at this time) oil on the map preview

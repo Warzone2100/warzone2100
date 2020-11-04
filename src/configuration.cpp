@@ -40,7 +40,6 @@
 #include "lib/sound/mixer.h"
 #include "lib/sound/sounddefs.h"
 #include "lib/ivis_opengl/screen.h"
-#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/pieclip.h"
 
 #include "ai.h"
@@ -58,6 +57,7 @@
 #include "titleui/titleui.h"
 #include "activity.h"
 #include "nethelpers.h"
+#include "lib/framework/wzapp.h"
 
 #include <type_traits>
 
@@ -183,15 +183,6 @@ bool loadConfig()
 	game.base = ini.value("base", CAMP_BASE).toInt();
 	game.alliance = ini.value("alliance", NO_ALLIANCES).toInt();
 	game.scavengers = ini.value("scavengers", false).toBool();
-	memset(&ingame.phrases, 0, sizeof(ingame.phrases));
-	for (int i = 1; i < 5; i++)
-	{
-		QString key("phrase" + QString::number(i));
-		if (ini.contains(key))
-		{
-			sstrcpy(ingame.phrases[i], ini.value(key).toString().toUtf8().constData());
-		}
-	}
 	bEnemyAllyRadarColor = ini.value("radarObjectMode").toBool();
 	radarDrawMode = (RADAR_DRAW_MODE)ini.value("radarTerrainMode", RADAR_MODE_DEFAULT).toInt();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -209,7 +200,7 @@ bool loadConfig()
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
 	war_SetColouredCursor(ini.value("coloredCursor", true).toBool());
 	// this should be enabled on all systems by default
-	war_SetVsync(ini.value("vsync", true).toBool());
+	war_SetVsync(ini.value("vsync", 1).toInt());
 	// the default (and minimum) display scale is 100 (%)
 	unsigned int displayScale = ini.value("displayScale", war_GetDisplayScale()).toUInt();
 	if (displayScale < 100)
@@ -238,9 +229,24 @@ bool loadConfig()
 
 	if (ini.contains("bpp"))
 	{
-		pie_SetVideoBufferDepth(ini.value("bpp").toInt());
+		war_SetVideoBufferDepth(ini.value("bpp").toInt());
 	}
 	setFavoriteStructs(ini.value("favoriteStructs").toString().toUtf8().constData());
+
+	video_backend gfxBackend;
+	if (ini.contains("gfxbackend"))
+	{
+		if (!video_backend_from_str(ini.value("gfxbackend").toString().toUtf8().constData(), gfxBackend))
+		{
+			gfxBackend = wzGetDefaultGfxBackendForCurrentSystem();
+			debug(LOG_WARNING, "Unsupported / invalid gfxbackend value: %s; defaulting to: %s", ini.value("gfxbackend").toString().toUtf8().constData(), to_string(gfxBackend).c_str());
+		}
+	}
+	else
+	{
+		gfxBackend = wzGetDefaultGfxBackendForCurrentSystem();
+	}
+	war_setGfxBackend(gfxBackend);
 
 	ActivityManager::instance().endLoadingSettings();
 	return true;
@@ -270,7 +276,7 @@ bool saveConfig()
 	ini.setValue("width", war_GetWidth());
 	ini.setValue("height", war_GetHeight());
 	ini.setValue("screen", war_GetScreen());
-	ini.setValue("bpp", pie_GetVideoBufferDepth());
+	ini.setValue("bpp", war_GetVideoBufferDepth());
 	ini.setValue("fullscreen", war_getFullscreen());
 	ini.setValue("language", getLanguage());
 	ini.setValue("difficulty", getDifficultyLevel());		// level
@@ -335,6 +341,7 @@ bool saveConfig()
 	}
 	ini.setValue("colourMP", war_getMPcolour());
 	ini.setValue("favoriteStructs", getFavoriteStructs().toUtf8().c_str());
+	ini.setValue("gfxbackend", to_string(war_getGfxBackend()).c_str());
 	ini.sync();
 	return true;
 }

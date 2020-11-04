@@ -250,10 +250,34 @@ enum TRAVEL_MEDIUM
 
 /* Elements common to all stats structures */
 
+// What number the ref numbers start at for each type of stat
+enum StatType
+{
+	STAT_BODY       = 0x010000,
+	STAT_BRAIN      = 0x020000,
+	STAT_PROPULSION = 0x040000,
+	STAT_SENSOR     = 0x050000,
+	STAT_ECM        = 0x060000,
+	STAT_REPAIR     = 0x080000,
+	STAT_WEAPON     = 0x0a0000,
+	STAT_RESEARCH   = 0x0b0000,
+	STAT_TEMPLATE   = 0x0c0000,
+	STAT_STRUCTURE  = 0x0d0000,
+	STAT_FUNCTION   = 0x0e0000,
+	STAT_CONSTRUCT  = 0x0f0000,
+	STAT_FEATURE    = 0x100000,
+
+/* The maximum number of refs for a type of stat */
+	STAT_MASK       = 0xffff0000
+};
+
 /* Stats common to all stats structs */
 struct BASE_STATS
 {
 	BASE_STATS(unsigned ref = 0) : ref(ref) {}
+	virtual ~BASE_STATS() = default;
+
+	bool hasType(StatType type) const { return (ref & STAT_MASK) == type; }
 
 	WzString id;    ///< Text id (i.e. short language-independent name)
 	WzString name;  ///< Full / real name of the item
@@ -277,8 +301,10 @@ struct COMPONENT_STATS : public BASE_STATS
 		int hitpointPct = 100;
 	};
 
-	UPGRADE *pBase = nullptr;
-	UPGRADE *pUpgrade[MAX_PLAYERS] = { nullptr };
+	virtual UPGRADE const &getBase() const = 0;
+	virtual UPGRADE const &getUpgrade(unsigned player) const = 0;
+	UPGRADE &getBase() { return const_cast<UPGRADE &>(const_cast<COMPONENT_STATS const *>(this)->getBase()); }
+
 	iIMDShape *pIMD = nullptr;				/**< The IMD to draw for this component */
 	unsigned buildPower = 0;			/**< Power required to build the component */
 	unsigned buildPoints = 0;		/**< Time required to build the component */
@@ -290,11 +316,8 @@ struct COMPONENT_STATS : public BASE_STATS
 
 struct PROPULSION_STATS : public COMPONENT_STATS
 {
-	PROPULSION_STATS()
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	PROPULSION_TYPE propulsionType = PROPULSION_TYPE_NUM;
 	unsigned maxSpeed = 0;		///< Max speed for the droid
@@ -305,7 +328,7 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 	unsigned deceleration = 0;
 	unsigned acceleration = 0;
 
-	struct : UPGRADE
+	struct UPGRADE : COMPONENT_STATS::UPGRADE
 	{
 		/// Increase hitpoints by this percentage of the body's hitpoints
 		int hitpointPctOfBody = 0;
@@ -314,11 +337,8 @@ struct PROPULSION_STATS : public COMPONENT_STATS
 
 struct SENSOR_STATS : public COMPONENT_STATS
 {
-	SENSOR_STATS()
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	iIMDShape *pMountGraphic = nullptr;     ///< The turret mount to use
 	unsigned location = 0;                  ///< specifies whether the Sensor is default or for the Turret
@@ -332,11 +352,8 @@ struct SENSOR_STATS : public COMPONENT_STATS
 
 struct ECM_STATS : public COMPONENT_STATS
 {
-	ECM_STATS()
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	iIMDShape *pMountGraphic = nullptr;   ///< The turret mount to use
 	unsigned location = 0;                ///< Specifies whether the ECM is default or for the Turret
@@ -349,11 +366,8 @@ struct ECM_STATS : public COMPONENT_STATS
 
 struct REPAIR_STATS : public COMPONENT_STATS
 {
-	REPAIR_STATS()
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	iIMDShape *pMountGraphic = nullptr;	///< The turret mount to use
 	unsigned location = 0;			///< Specifies whether the Repair is default or for the Turret
@@ -367,15 +381,8 @@ struct REPAIR_STATS : public COMPONENT_STATS
 
 struct WEAPON_STATS : public COMPONENT_STATS
 {
-	WEAPON_STATS() : periodicalDamageWeaponClass(WC_NUM_WEAPON_CLASSES),
-	                 periodicalDamageWeaponSubClass(WSC_NUM_WEAPON_SUBCLASSES),
-	                 periodicalDamageWeaponEffect(WE_NUMEFFECTS),
-	                 weaponClass(WC_NUM_WEAPON_CLASSES),
-	                 weaponSubClass(WSC_NUM_WEAPON_SUBCLASSES)
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	struct : UPGRADE
 	{
@@ -396,13 +403,13 @@ struct WEAPON_STATS : public COMPONENT_STATS
 		unsigned minimumDamage = 0;          ///< Minimum amount of damage done, in percentage of damage
 	} base, upgrade[MAX_PLAYERS];
 
-	WEAPON_CLASS	periodicalDamageWeaponClass;	///< Periodical damage weapon class by damage type (KINETIC, HEAT)
-	WEAPON_SUBCLASS	periodicalDamageWeaponSubClass;	///< Periodical damage weapon subclass (research class)
-	WEAPON_EFFECT	periodicalDamageWeaponEffect;	///< Periodical damage weapon effect (propulsion/body damage modifier)
+	WEAPON_CLASS periodicalDamageWeaponClass = WC_NUM_WEAPON_CLASSES;  ///< Periodical damage weapon class by damage type (KINETIC, HEAT)
+	WEAPON_SUBCLASS periodicalDamageWeaponSubClass = WSC_NUM_WEAPON_SUBCLASSES;  ///< Periodical damage weapon subclass (research class)
+	WEAPON_EFFECT periodicalDamageWeaponEffect = WE_NUMEFFECTS;  ///< Periodical damage weapon effect (propulsion/body damage modifier)
 
-	WEAPON_CLASS weaponClass;			///< the class of weapon  (KINETIC, HEAT)
-	WEAPON_SUBCLASS weaponSubClass;			///< the subclass to which the weapon belongs (research class)
-	MOVEMENT_MODEL movementModel = MM_DIRECT;	///< which projectile model to use for the bullet
+	WEAPON_CLASS weaponClass = WC_NUM_WEAPON_CLASSES;  ///< the class of weapon  (KINETIC, HEAT)
+	WEAPON_SUBCLASS weaponSubClass = WSC_NUM_WEAPON_SUBCLASSES;  ///< the subclass to which the weapon belongs (research class)
+	MOVEMENT_MODEL movementModel = MM_DIRECT;  ///< which projectile model to use for the bullet
 	WEAPON_EFFECT weaponEffect = WE_NUMEFFECTS;	///< which type of warhead is associated with the weapon (propulsion/body damage modifier)
 	WEAPON_SIZE weaponSize = WEAPON_SIZE_NUM;	///< eg light weapons can be put on light bodies or as sidearms
 	unsigned flightSpeed = 0;			///< speed ammo travels at
@@ -442,11 +449,8 @@ struct WEAPON_STATS : public COMPONENT_STATS
 
 struct CONSTRUCT_STATS : public COMPONENT_STATS
 {
-	CONSTRUCT_STATS()
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	iIMDShape *pMountGraphic = nullptr;      ///< The turret mount to use
 
@@ -458,11 +462,8 @@ struct CONSTRUCT_STATS : public COMPONENT_STATS
 
 struct BRAIN_STATS : public COMPONENT_STATS
 {
-	BRAIN_STATS()
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	WEAPON_STATS *psWeaponStat = nullptr;  ///< weapon stats associated with this brain - for Command Droids
 
@@ -483,11 +484,8 @@ struct BRAIN_STATS : public COMPONENT_STATS
 
 struct BODY_STATS : public COMPONENT_STATS
 {
-	BODY_STATS()
-	{
-		pBase = &base;
-		for (int i = 0; i < MAX_PLAYERS; i++) pUpgrade[i] = &upgrade[i];
-	}
+	UPGRADE const &getBase() const override { return base; }
+	UPGRADE const &getUpgrade(unsigned player) const override { return upgrade[player]; }
 
 	BODY_SIZE size = SIZE_NUM;      ///< How big the body is - affects how hit
 	unsigned weaponSlots = 0;       ///< The number of weapon slots on the body
@@ -497,7 +495,7 @@ struct BODY_STATS : public COMPONENT_STATS
 	std::vector<iIMDShape *> ppStillIMDList;///< list of IMDs to use when droid is still - up to numPropulsionStats
 	WzString         bodyClass;		///< rules hint to script about its classification
 
-	struct : UPGRADE
+	struct UPGRADE : COMPONENT_STATS::UPGRADE
 	{
 		unsigned power = 0;           ///< this is the engine output of the body
 		unsigned armour = 0;          ///< A measure of how much protection the armour provides

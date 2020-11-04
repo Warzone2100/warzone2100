@@ -35,8 +35,6 @@ function checkEnemyVtolArea()
 			camSafeRemoveObject(vtols[i], false);
 		}
 	}
-
-	queue("checkEnemyVtolArea", camSecondsToMilliseconds(1));
 }
 
 //Play last video sequence and destroy all droids on map.
@@ -53,12 +51,23 @@ function playLastVideo()
 	camPlayVideos("CAM2_OUT");
 }
 
-//Allow a win if a transporter was launched.
-function eventTransporterLaunch(transport)
+//Allow a win if a transporter was launched with a construction droid.
+function eventTransporterLaunch(transporter)
 {
-	if (transport.player === CAM_HUMAN_PLAYER)
+	if (!allowWin && transporter.player === CAM_HUMAN_PLAYER)
 	{
-		allowWin = true;
+		var cargoDroids = enumCargo(transporter);
+
+		for (var i = 0, len = cargoDroids.length; i < len; ++i)
+		{
+			var virDroid = cargoDroids[i];
+
+			if (virDroid && virDroid.droidType === DROID_CONSTRUCT)
+			{
+				allowWin = true;
+				break;
+			}
+		}
 	}
 }
 
@@ -88,7 +97,7 @@ function vtolAttack()
 	];
 	var vtolRemovePos = {"x": 127, "y": 64};
 
-	var list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat];
+	var list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat, cTempl.commorvt];
 	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(camSecondsToMilliseconds(30)));
 }
 
@@ -101,8 +110,6 @@ function cyborgAttack()
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(southCyborgAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
 	});
-
-	queue("cyborgAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
 }
 
 //North road attacker consisting of powerful weaponry.
@@ -118,7 +125,6 @@ function tankAttack()
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1, },
 	});
-	queue("tankAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }
 
 //NOTE: this is only called once from the library's eventMissionTimeout().
@@ -143,6 +149,8 @@ function checkIfLaunched()
 //Everything in this level mostly just requeues itself until the mission ends.
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Send off at least one transporter with a truck and survive The Collective assault"));
+
 	var startpos = {"x": 88, "y": 101};
 	var lz = {"x": 86, "y": 99, "x2": 88, "y2": 101};
 	var tCoords = {"xStart": 87, "yStart": 100, "xOut": 0, "yOut": 55};
@@ -164,9 +172,8 @@ function eventStartLevel()
 	allowWin = false;
 	camPlayVideos(["MB2_DII_MSG", "MB2_DII_MSG2"]);
 
-	//These requeue themselves every so often.
 	vtolAttack();
-	cyborgAttack();
-	tankAttack();
-	checkEnemyVtolArea();
+	setTimer("cyborgAttack", camChangeOnDiff(camMinutesToMilliseconds(4)));
+	setTimer("tankAttack", camChangeOnDiff(camMinutesToMilliseconds(3)));
+	setTimer("checkEnemyVtolArea", camSecondsToMilliseconds(1));
 }

@@ -216,9 +216,15 @@ struct WZFile
 	uint32_t pos;  // Current position, the range [0; currPos[ has been sent or received already.
 };
 
-enum
+enum class AIDifficulty : int8_t
 {
-	DIFFICULTY_EASY, DIFFICULTY_MEDIUM, DIFFICULTY_HARD, DIFFICULTY_INSANE
+	EASY,
+	MEDIUM,
+	HARD,
+	INSANE,
+	DEFAULT = MEDIUM,
+	DISABLED = -1,
+	HUMAN = -2,
 };
 
 enum class NET_LOBBY_OPT_FIELD
@@ -235,21 +241,21 @@ enum class NET_LOBBY_OPT_FIELD
 // currently controlled player.
 struct PLAYER
 {
-	char		name[StringSize];	///< Player name
-	int32_t		position;		///< Map starting position
-	int32_t		colour;			///< Which colour slot this player is using
-	bool		allocated;		///< Allocated as a human player
-	uint32_t	heartattacktime;	///< Time cardiac arrest started
-	bool		heartbeat;		///< If we are still alive or not
-	bool		kick;			///< If we should kick them
-	int32_t		connection;		///< Index into connection list
-	int32_t		team;			///< Which team we are on
-	bool		ready;			///< player ready to start?
-	int8_t		ai;			///< index into sorted list of AIs, zero is always default AI
-	int8_t		difficulty;		///< difficulty level of AI
-	bool		autoGame;		// if we are running a autogame (AI controls us)
-	std::vector<WZFile> wzFiles;    ///< for each player, we keep track of map/mod download progress
-	char		IPtextAddress[40];	///< IP of this player
+	char                name[StringSize];   ///< Player name
+	int32_t             position;           ///< Map starting position
+	int32_t             colour;             ///< Which colour slot this player is using
+	bool                allocated;          ///< Allocated as a human player
+	uint32_t            heartattacktime;    ///< Time cardiac arrest started
+	bool                heartbeat;          ///< If we are still alive or not
+	bool                kick;               ///< If we should kick them
+	int32_t             connection;         ///< Index into connection list
+	int32_t             team;               ///< Which team we are on
+	bool                ready;              ///< player ready to start?
+	int8_t              ai;                 ///< index into sorted list of AIs, zero is always default AI
+	AIDifficulty        difficulty;         ///< difficulty level of AI
+	bool                autoGame;           ///< if we are running a autogame (AI controls us)
+	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
+	char                IPtextAddress[40];  ///< IP of this player
 };
 
 // ////////////////////////////////////////////////////////////////////////
@@ -294,6 +300,14 @@ extern PLAYER_IP	*IPlist;
 // update flags
 extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
+
+#define ASSERT_HOST_ONLY(failAction) \
+	if (!NetPlay.isHost) \
+	{ \
+		ASSERT(false, "Host only routine detected for client!"); \
+		failAction; \
+	}
+
 
 // ////////////////////////////////////////////////////////////////////////
 // functions available to you.

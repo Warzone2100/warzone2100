@@ -124,16 +124,21 @@ function sendTransport()
 
 	if (index === 5)
 	{
+		removeTimer("sendTransport");
 		return;
 	}
-	else
-	{
-		queue("sendTransport", camChangeOnDiff(camMinutesToMilliseconds(1)));
-	}
+}
+
+function startTransporterAttack()
+{
+	sendTransport();
+	setTimer("sendTransport", camChangeOnDiff(camMinutesToMilliseconds(1)));
 }
 
 function eventStartLevel()
 {
+	camSetExtraObjectiveMessage(_("Destroy all New Paradigm reinforcements"));
+
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_7S", {
 		callback: "extraVictoryCondition"
 	});
@@ -158,5 +163,5 @@ function eventStartLevel()
 	index = 0;
 	switchLZ = 0;
 
-	queue("sendTransport", camSecondsToMilliseconds(10));
+	queue("startTransporterAttack", camSecondsToMilliseconds(10));
 }

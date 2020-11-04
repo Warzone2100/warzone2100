@@ -39,10 +39,8 @@
  */
 /***************************************************************************/
 
-bool pie_SetVideoBufferDepth(UDWORD depth);
 bool pie_SetVideoBufferWidth(UDWORD width);
 bool pie_SetVideoBufferHeight(UDWORD height);
-int pie_GetVideoBufferDepth() WZ_DECL_PURE;
 int pie_GetVideoBufferWidth() WZ_DECL_PURE;
 int pie_GetVideoBufferHeight() WZ_DECL_PURE;
 

@@ -428,15 +428,15 @@ function productionMain()
 	{
 		var pref = nexusBranch[branch].factoryPreference[i];
 
-		if (pref === BASE_STRUCTURES.factories)
+		if (pref === FACTORY)
 		{
 			queue("produceGroundUnits", (i + 1) * TICK);
 		}
-		else if (pref === BASE_STRUCTURES.templateFactories)
+		else if (pref === CYBORG_FACTORY)
 		{
 			queue("produceCyborgs", (i + 1) * TICK);
 		}
-		else if (pref === BASE_STRUCTURES.vtolFactories)
+		else if (pref === VTOL_FACTORY)
 		{
 			queue("produceVtols", (i + 1) * TICK);
 		}

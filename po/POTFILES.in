@@ -136,6 +136,8 @@ data/base/sequenceaudio/devastation.txt
 data/base/sequenceaudio/outro.txt
 data/mp/messages/strings/names.txt
 data/mp/messages/strings/resstrings.txt
+data/mp/multiplay/maps/10c-WaterLoop/game.js
+data/mp/multiplay/maps/6c-Entropy/game.js
 data/mp/multiplay/script/camTechEnabler.js
 data/mp/multiplay/script/scavfact.js
 data/mp/multiplay/script/weather.js
@@ -241,8 +243,14 @@ lib/framework/wzconfig.cpp
 lib/framework/wzpaths.cpp
 lib/framework/wzstring.cpp
 lib/gamelib/gtime.cpp
+lib/ivis_opengl/3rdparty/stb_image_resize.cpp
+lib/ivis_opengl/3rdparty/vk_mem_alloc.cpp
+lib/ivis_opengl/3rdparty/vkh_info.cpp
+lib/ivis_opengl/3rdparty/vkh_renderpasscompat.cpp
 lib/ivis_opengl/bitimage.cpp
+lib/ivis_opengl/gfx_api.cpp
 lib/ivis_opengl/gfx_api_gl.cpp
+lib/ivis_opengl/gfx_api_vk.cpp
 lib/ivis_opengl/imdload.cpp
 lib/ivis_opengl/jpeg_encoder.cpp
 lib/ivis_opengl/pieblitfunc.cpp
@@ -264,6 +272,9 @@ lib/netplay/netqueue.cpp
 lib/netplay/netsocket.cpp
 lib/netplay/nettypes.cpp
 lib/sdl/cursors_sdl.cpp
+lib/sdl/gfx_api_gl_sdl.cpp
+lib/sdl/gfx_api_sdl.cpp
+lib/sdl/gfx_api_vk_sdl.cpp
 lib/sdl/main_sdl.cpp
 lib/sequence/sequence.cpp
 lib/sequence/timer.cpp
@@ -278,10 +289,13 @@ lib/sound/playlist.cpp
 lib/sound/track.cpp
 lib/widget/bar.cpp
 lib/widget/button.cpp
+lib/widget/cliprect.cpp
 lib/widget/editbox.cpp
 lib/widget/form.cpp
 lib/widget/label.cpp
 lib/widget/listwidget.cpp
+lib/widget/scrollablelist.cpp
+lib/widget/scrollbar.cpp
 lib/widget/slider.cpp
 lib/widget/tip.cpp
 lib/widget/widget.cpp
@@ -293,6 +307,7 @@ src/action.cpp
 src/activity.cpp
 src/advvis.cpp
 src/ai.cpp
+src/animation.cpp
 src/astar.cpp
 src/atmos.cpp
 src/aud.cpp

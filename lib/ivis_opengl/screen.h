@@ -56,6 +56,7 @@ void screen_Display();
 void screenDumpToDisk(const char *path, const char *level);
 
 extern bool wz_texture_compression;
+extern bool uses_gfx_debug;
 
 void screenDoDumpToDiskIfRequired();
 
@@ -94,13 +95,4 @@ bool wzPerfAvailable();
 void wzSceneBegin(const char *descr);
 void wzSceneEnd(const char *descr);
 
-struct OPENGL_DATA
-{
-	char vendor[256];
-	char renderer[256];
-	char version[256];
-	char GLEWversion[256];
-	char GLSLversion[256];
-};
-extern OPENGL_DATA opengl;
 #endif

@@ -359,7 +359,7 @@ function camBreakAlliances()
 
 function __camGlobalContext()
 {
-	return Function('return this')();
+	return Function('return this')(); // eslint-disable-line no-new-func
 }
 
 function __camFindClusters(list, size)

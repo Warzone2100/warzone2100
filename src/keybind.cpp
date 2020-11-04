@@ -79,6 +79,7 @@
 #include "qtscript.h"
 #include "multigifts.h"
 #include "loadsave.h"
+#include "game.h"
 
 /*
 	KeyBind.c
@@ -91,7 +92,6 @@ extern char	ScreenDumpPath[];
 
 bool	bMovePause = false;
 bool		bAllowOtherKeyPresses = true;
-char	sTextToSend[MAX_CONSOLE_STRING_LENGTH];
 char	beaconMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];		//beacon msg for each player
 
 static STRUCTURE	*psOldRE = nullptr;
@@ -134,7 +134,7 @@ void kf_AutoGame()
 		return;
 	}
 #endif
-	if (game.type == CAMPAIGN)
+	if (game.type == LEVEL_TYPE::CAMPAIGN)
 	{
 		CONPRINTF("%s", "Not possible with the campaign!");
 		return;
@@ -863,30 +863,9 @@ void	kf_LowerTile()
 
 // --------------------------------------------------------------------------
 /* Zooms out from display */
-void	kf_ZoomOut()
+void kf_ZoomOut()
 {
-	if (getDebugMappingStatus())
-	{
-		setViewDistance(getViewDistance() + realTimeAdjustedIncrement(war_GetMapZoomRate()));
-	}
-	else
-	{
-		setViewDistance(std::min<int>(getViewDistance() + realTimeAdjustedIncrement(war_GetMapZoomRate()), MAXDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
-}
-
-void kf_ZoomOutStep()
-{
-	if (getDebugMappingStatus())
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, (getViewDistance() + war_GetMapZoomRate()));
-	}
-	else
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, std::min<int>(getViewDistance() + war_GetMapZoomRate(), MAXDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
+	incrementViewDistance(war_GetMapZoomRate());
 }
 
 // --------------------------------------------------------------------------
@@ -918,30 +897,9 @@ void	kf_RadarZoomOut()
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 /* Zooms in the map */
-void	kf_ZoomIn()
+void kf_ZoomIn()
 {
-	if (getDebugMappingStatus())
-	{
-		setViewDistance(getViewDistance() - realTimeAdjustedIncrement(war_GetMapZoomRate()));
-	}
-	else
-	{
-		setViewDistance(std::max<int>(getViewDistance() - realTimeAdjustedIncrement(war_GetMapZoomRate()), MINDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
-}
-
-void kf_ZoomInStep()
-{
-	if (getDebugMappingStatus())
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, getViewDistance() - war_GetMapZoomRate());
-	}
-	else
-	{
-		setZoom(DEFAULT_ZOOM_SPEED, std::max<int>(getViewDistance() - war_GetMapZoomRate(), MINDISTANCE));
-	}
-	UpdateFogDistance(getViewDistance());
+	incrementViewDistance(-war_GetMapZoomRate());
 }
 
 // --------------------------------------------------------------------------
@@ -1009,6 +967,20 @@ void	kf_RotateRight()
 	{
 		player.r.y += DEG(360);
 	}
+}
+
+// --------------------------------------------------------------------------
+/* Rotate editing building direction clockwise */
+void kf_RotateBuildingCW()
+{
+	incrementBuildingDirection(DEG(-90));
+}
+
+// --------------------------------------------------------------------------
+/* Rotate editing building direction anticlockwise */
+void kf_RotateBuildingACW()
+{
+	incrementBuildingDirection(DEG(90));
 }
 
 // --------------------------------------------------------------------------
@@ -1148,7 +1120,10 @@ void	kf_SelectGrouping(UDWORD	groupNumber)
 		kf_SelectGrouping(x); \
 	} \
 	void	kf_AssignGrouping_##x( void ) { \
-		assignDroidsToGroup(selectedPlayer, x); \
+		assignDroidsToGroup(selectedPlayer, x, true); \
+	} \
+	void	kf_AddGrouping_##x( void ) { \
+		assignDroidsToGroup(selectedPlayer, x, false); \
 	} \
 	void	kf_SelectCommander_##x( void ) { \
 		selCommander(x); \
@@ -1724,7 +1699,7 @@ void	kf_SelectNextFactory()
 {
 	STRUCTURE	*psCurr;
 
-	selNextSpecifiedBuilding(REF_FACTORY);
+	selNextSpecifiedBuilding(REF_FACTORY, false);
 
 	//deselect factories of other types
 	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
@@ -1747,7 +1722,7 @@ void	kf_SelectNextFactory()
 // --------------------------------------------------------------------------
 void	kf_SelectNextResearch()
 {
-	selNextSpecifiedBuilding(REF_RESEARCH);
+	selNextSpecifiedBuilding(REF_RESEARCH, false);
 	if (intCheckReticuleButEnabled(IDRET_RESEARCH))
 	{
 		setKeyButtonMapping(IDRET_RESEARCH);
@@ -1758,7 +1733,7 @@ void	kf_SelectNextResearch()
 // --------------------------------------------------------------------------
 void	kf_SelectNextPowerStation()
 {
-	selNextSpecifiedBuilding(REF_POWER_GEN);
+	selNextSpecifiedBuilding(REF_POWER_GEN, false);
 	triggerEventSelected();
 }
 
@@ -1767,7 +1742,7 @@ void	kf_SelectNextCyborgFactory()
 {
 	STRUCTURE	*psCurr;
 
-	selNextSpecifiedBuilding(REF_CYBORG_FACTORY);
+	selNextSpecifiedBuilding(REF_CYBORG_FACTORY, false);
 
 	//deselect factories of other types
 	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
@@ -1775,6 +1750,124 @@ void	kf_SelectNextCyborgFactory()
 		if (psCurr->selected &&
 		    ((psCurr->pStructureType->type == REF_FACTORY) ||
 		     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
+		{
+			psCurr->selected = false;
+		}
+	}
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
+void	kf_SelectNextVTOLFactory()
+{
+	STRUCTURE	*psCurr;
+
+	selNextSpecifiedBuilding(REF_VTOL_FACTORY, false);
+
+	//deselect factories of other types
+	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	{
+		if (psCurr->selected &&
+		    ((psCurr->pStructureType->type == REF_FACTORY) ||
+		     (psCurr->pStructureType->type == REF_CYBORG_FACTORY)))
+		{
+			psCurr->selected = false;
+		}
+	}
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
+void	kf_JumpNextFactory()
+{
+	STRUCTURE	*psCurr;
+
+	selNextSpecifiedBuilding(REF_FACTORY, true);
+
+	//deselect factories of other types
+	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	{
+		if (psCurr->selected &&
+		    ((psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
+		     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
+		{
+			psCurr->selected = false;
+		}
+	}
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
+void	kf_JumpNextResearch()
+{
+	selNextSpecifiedBuilding(REF_RESEARCH, true);
+	if (intCheckReticuleButEnabled(IDRET_RESEARCH))
+	{
+		setKeyButtonMapping(IDRET_RESEARCH);
+	}
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
+void	kf_JumpNextPowerStation()
+{
+	selNextSpecifiedBuilding(REF_POWER_GEN, true);
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
+void	kf_JumpNextCyborgFactory()
+{
+	STRUCTURE	*psCurr;
+
+	selNextSpecifiedBuilding(REF_CYBORG_FACTORY, true);
+
+	//deselect factories of other types
+	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	{
+		if (psCurr->selected &&
+		    ((psCurr->pStructureType->type == REF_FACTORY) ||
+		     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
+		{
+			psCurr->selected = false;
+		}
+	}
+
+	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
+	{
+		setKeyButtonMapping(IDRET_MANUFACTURE);
+	}
+	triggerEventSelected();
+}
+
+// --------------------------------------------------------------------------
+void	kf_JumpNextVTOLFactory()
+{
+	STRUCTURE	*psCurr;
+
+	selNextSpecifiedBuilding(REF_VTOL_FACTORY, true);
+
+	//deselect factories of other types
+	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
+	{
+		if (psCurr->selected &&
+		    ((psCurr->pStructureType->type == REF_FACTORY) ||
+		     (psCurr->pStructureType->type == REF_CYBORG_FACTORY)))
 		{
 			psCurr->selected = false;
 		}
@@ -1925,7 +2018,6 @@ void kf_SendTeamMessage()
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
-		sstrcpy(sTextToSend, "");
 		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
 		chatDialog(CHAT_TEAM);						// throw up the dialog
@@ -1947,7 +2039,6 @@ void kf_SendGlobalMessage()
 	if (bAllowOtherKeyPresses && !gamePaused())  // just starting.
 	{
 		bAllowOtherKeyPresses = false;
-		sstrcpy(sTextToSend, "");
 		sstrcpy(sCurrentConsoleText, "");			//for beacons
 		inputClearBuffer();
 		chatDialog(CHAT_GLOB);						// throw up the dialog
@@ -1955,73 +2046,6 @@ void kf_SendGlobalMessage()
 	else
 	{
 		bAllowOtherKeyPresses = true;
-	}
-
-	// macro store stuff
-	if (keyPressed(KEY_F1))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[0], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[0]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F2))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[1], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[1]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F3))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[2], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[2]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F4))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[3], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[3]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
-	}
-	if (keyPressed(KEY_F5))
-	{
-		if (keyDown(KEY_LCTRL))
-		{
-			sstrcpy(ingame.phrases[4], sTextToSend);
-		}
-		else
-		{
-			sstrcpy(sTextToSend, ingame.phrases[4]);
-			sendTextMessage(sTextToSend, false);
-			return;
-		}
 	}
 }
 

@@ -141,21 +141,21 @@ jobs:
         # Export Variables
 
         # Export everything important to environment variables (for future steps)
-        echo "::set-env name=WZ_REPO_PATH::${{ github.workspace }}\src"
-        echo "::set-env name=VCPKG_DEFAULT_TRIPLET::${VCPKG_DEFAULT_TRIPLET}"
-        echo "::set-env name=WZ_VC_TARGET_PLATFORMNAME::${WZ_VC_TARGET_PLATFORMNAME}"
-        echo "::set-env name=WZ_BUILD_DESC::${WZ_BUILD_DESC}"
-        echo "::set-env name=QT5DIR::${QT5DIR}"
-        echo "::set-env name=QTCI_ARCH::${QTCI_ARCH}"
+        echo "WZ_REPO_PATH=${{ github.workspace }}\src" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "WZ_VC_TARGET_PLATFORMNAME=${WZ_VC_TARGET_PLATFORMNAME}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "QT5DIR=${QT5DIR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "QTCI_ARCH=${QTCI_ARCH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "::set-output name=QTCI_ARCH::${QTCI_ARCH}"
-        echo "::set-env name=QTCI_PACKAGES::${QTCI_PACKAGES}"
-        echo "::set-env name=QT_DL_URL::${QT_DL_URL}"
-        echo "::set-env name=QT_DL_SHA512::${QT_DL_SHA512}"
-        echo "::set-env name=WZ_VC_GENERATOR::${WZ_VC_GENERATOR}"
-        #echo "::set-env name=WZ_VC_TOOLCHAIN::${WZ_VC_TOOLCHAIN}"
-        echo "::set-env name=WZ_VISUAL_STUDIO_INSTALL_PATH::${WZ_VISUAL_STUDIO_INSTALL_PATH}"
-        echo "::set-env name=VCPKG_VISUAL_STUDIO_PATH::${VCPKG_VISUAL_STUDIO_PATH}"
-        echo "::set-env name=WZ_DISTRIBUTOR::${WZ_DISTRIBUTOR}"
+        echo "QTCI_PACKAGES=${QTCI_PACKAGES}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "QT_DL_URL=${QT_DL_URL}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "QT_DL_SHA512=${QT_DL_SHA512}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "WZ_VC_GENERATOR=${WZ_VC_GENERATOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        #echo "WZ_VC_TOOLCHAIN=${WZ_VC_TOOLCHAIN}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "WZ_VISUAL_STUDIO_INSTALL_PATH=${WZ_VISUAL_STUDIO_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "VCPKG_VISUAL_STUDIO_PATH=${VCPKG_VISUAL_STUDIO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "::set-output name=WZ_DEPLOY_RELEASE::${WZ_DEPLOY_RELEASE}"
     - name: Check Environment for Qt Install
       env:
@@ -166,7 +166,7 @@ jobs:
         {
           # Looks like we don't have access to secrets - might be a pull request, fork, etc
           # So use an alternative method to download + install Qt
-          echo "::set-env name=WZ_USE_ALT_QT_INSTALL_METHOD::true"
+          echo "WZ_USE_ALT_QT_INSTALL_METHOD=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         }
     #####################################################
     # Standard Qt install method
@@ -227,7 +227,7 @@ jobs:
         }
 
         # Output Qt download path for next step
-        echo "::set-env name=QT_DL_PATH::${QT_DL_PATH}"
+        echo "QT_DL_PATH=${QT_DL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Install Qt
       if: env.WZ_USE_ALT_QT_INSTALL_METHOD != 'true'
       env:
@@ -266,7 +266,7 @@ jobs:
         # Clean-up the installer exe
         Remove-Item "${env:QT_DL_PATH}"
         # Output install path for following steps
-        echo "::set-env name=QT_INSTALL_ROOT::${QT_INSTALL_ROOT}"
+        echo "QT_INSTALL_ROOT=${QT_INSTALL_ROOT}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Verify Qt version
       if: env.WZ_USE_ALT_QT_INSTALL_METHOD != 'true'
       run: |
@@ -275,7 +275,7 @@ jobs:
 
         # Add the QT5 \bin dir to PATH (for future steps)
         Write-Host "Adding Qt bin folder to PATH: `"${env:QT_INSTALL_ROOT}\${env:QT5DIR}\bin`""
-        echo "::add-path::${env:QT_INSTALL_ROOT}\${env:QT5DIR}\bin"
+        echo "${env:QT_INSTALL_ROOT}\${env:QT5DIR}\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
     #####################################################
     # Alternative Qt Install method
     # - relies on external action that uses unofficial
@@ -283,7 +283,7 @@ jobs:
     #####################################################
     - name: Install Qt (Alt Method)
       if: env.WZ_USE_ALT_QT_INSTALL_METHOD == 'true'
-      uses: jurplel/install-qt-action@v2.6.2
+      uses: jurplel/install-qt-action@v2.9.0
       with:
         version: 5.9.9
         arch: ${{ steps.settings.outputs.QTCI_ARCH }}
@@ -295,6 +295,59 @@ jobs:
         Write-Host "Qt version:"
         & "qmake" -version
     #####################################################
+    - name: 'Download & Install Vulkan SDK'
+      run: |
+        Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+
+        $VerbosePreference = "Continue"
+        . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
+
+        Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
+
+        $VULKAN_DL_URL = "https://sdk.lunarg.com/sdk/download/1.2.148.1/windows/VulkanSDK-1.2.148.1-Installer.exe?Human=true"
+        $VULKAN_DL_SHA256 = "5dbeafbc75c334811720fb50bd6ed7c9afd42afd31cad6be0b84cd8383aa9472"
+
+        $VK_DL_BASEDIR = "${{ github.workspace }}\dl"
+        $VK_DL_PATH = "${VK_DL_BASEDIR}\vulkan.exe"
+        New-Item -ItemType Directory -Force -Path "$VK_DL_BASEDIR"
+
+        $req = Req -Params @{ 'Method'='GET';'Uri'="$VULKAN_DL_URL";'OutFile'="${VK_DL_PATH}" } -Retries 3 -SecondsDelay 10
+
+        $vulkan_exe_hash = Get-FileHash -LiteralPath "${VK_DL_PATH}" -Algorithm SHA256
+        if ($vulkan_exe_hash.Hash -eq $VULKAN_DL_SHA256) {
+          Write-Host "Successfully downloaded VulkanSDK installer"
+        } Else {
+          Write-Error "The downloaded VulkanSDK installer hash '$($vulkan_exe_hash.Hash)' does not match the expected hash: '$VULKAN_DL_SHA256'"
+        }
+
+        Write-Host "Running Vulkan SDK installer..."
+        Start-Process "${VK_DL_PATH}" -ArgumentList "/S" -Wait
+        Write-Host "Vulkan SDK installer completed"
+
+        $machineEnvironment = [Environment]::GetEnvironmentVariables("Machine")
+        if (-not ($machineEnvironment.Contains("VULKAN_SDK")))
+        {
+          Write-Error "Failed to find updated VULKAN_SDK system environment variable"
+        }
+        Write-Host "New system VULKAN_SDK environment variable: $($machineEnvironment["VULKAN_SDK"])"
+
+        # Ensure future steps pick up the new VULKAN_SDK environment variable
+        echo "VULKAN_SDK=$($machineEnvironment["VULKAN_SDK"])" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    - name: 'Check environment'
+      run: |
+        if ([string]::IsNullOrWhitespace(${env:VULKAN_SDK}))
+        {
+          Write-Error "Missing env:VULKAN_SDK in next step: ${env:VULKAN_SDK}"
+        }
+        else
+        {
+          # Verify the VULKAN_SDK path exists
+          if (-not (Test-Path "${env:VULKAN_SDK}"))
+          {
+            Write-Error "env:VULKAN_SDK path does not exist: `"${env:VULKAN_SDK}`""
+          }
+        }
+        Write-Output "env:VULKAN_SDK configured for the following steps: `"${env:VULKAN_SDK}`""
     - name: Create directories
       run: |
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\build"
@@ -302,6 +355,8 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\portable"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\installer"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\error_logs"
     - name: Build vcpkg + dependencies
       working-directory: '${{ github.workspace }}\build'
       run: |
@@ -316,7 +371,6 @@ jobs:
         # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
-        msbuild .\vcpkg\toolsrc\vcpkg.sln /t:Clean /p:Configuration=Release /p:Platform=x86
     - name: CMake Configure (Portable Build)
       working-directory: '${{ github.workspace }}\build'
       run: |
@@ -329,6 +383,20 @@ jobs:
         Move-Item -LiteralPath ".\build\warzone2100_portable.exe" -Destination ".\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
         # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
         cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off ".\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "$($pwd)\build\src\*.pdb" "$($pwd)\build\src\*.sym"
+    - name: Collect Failure Logs
+      if: failure()
+      run: |
+        $NSIS_Log = "build\_CPack_Packages\win32\NSIS\NSISOutput.log"
+        if (Test-Path $NSIS_Log -PathType Leaf)
+        {
+          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
+        }
+    - name: Upload Failure Logs Artifact
+      uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: win_${{ matrix.architecture }}_error_logs
+        path: '${{ github.workspace }}\output\error_logs'
     - name: CMake Configure (Regular Installer)
       working-directory: '${{ github.workspace }}\build'
       run: |
@@ -362,6 +430,12 @@ jobs:
         Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_portable.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
         Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_installer.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
         Write-Host ""
+    - name: Archive .ZIP of Regular build
+      working-directory: '${{ github.workspace }}\build'
+      run: |
+        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=OFF -G ZIP -C "Release"
+        # Rename the archive
+        Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
     #####################################################
     # Upload build artifacts
     #####################################################
@@ -383,6 +457,12 @@ jobs:
       with:
         name: warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
+    - name: 'Upload Artifact - (Archive)'
+      uses: actions/upload-artifact@v1
+      if: success() && startsWith(github.ref, 'refs/tags/') && (steps.settings.outputs.WZ_DEPLOY_RELEASE == 'true') && (github.repository == 'Warzone2100/warzone2100')
+      with:
+        name: warzone2100_win_${{ matrix.architecture }}_archive
+        path: '${{ github.workspace }}\output\archive'
     #####################################################
     # Upload Release assets (if a release tag)
     #####################################################
@@ -395,6 +475,7 @@ jobs:
           ${{ github.workspace }}\output\portable\*.exe
           ${{ github.workspace }}\output\installer\*.exe
           ${{ github.workspace }}\output\debugsymbols\*.7z
+          ${{ github.workspace }}\output\archive\*.zip
         draft: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

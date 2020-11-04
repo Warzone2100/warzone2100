@@ -84,6 +84,7 @@ void debugToggleSensorDisplay();
 
 void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix);
 ENERGY_BAR toggleEnergyBars();
+void drawDroidSelection(DROID *psDroid, bool drawBox);
 
 bool doWeDrawProximitys();
 void setProximityDraw(bool val);
@@ -94,6 +95,7 @@ bool clipDroidOnScreen(DROID *psDroid, const glm::mat4& viewModelMatrix, int ove
 bool clipStructureOnScreen(STRUCTURE *psStructure, const glm::mat4 &viewModelMatrix, int overdrawScreenPoints = 0);
 
 bool init3DView();
+void shutdown3DView();
 extern iView player;
 extern bool selectAttempt;
 
@@ -139,5 +141,7 @@ extern bool tuiTargetOrigin;
 
 /// Draws using the animation systems. Usually want to use in a while loop to get all model levels.
 bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT buildingBrightness, int pieFlag, int pieFlagData, const glm::mat4& viewMatrix);
+
+int calculateCameraHeightAt(int tileX, int tileY);
 
 #endif // __INCLUDED_SRC_DISPLAY3D_H__

@@ -90,29 +90,29 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 	switch(kind)
 	{
 		case CAM_VICTORY_STANDARD:
-			__camWinLossCallback = "__camVictoryStandard";
+			__camWinLossCallback = CAM_VICTORY_STANDARD;
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_PRE_OFFWORLD:
-			__camWinLossCallback = "__camVictoryPreOffworld";
+			__camWinLossCallback = CAM_VICTORY_PRE_OFFWORLD;
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = true;
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_OFFWORLD:
-			__camWinLossCallback = "__camVictoryOffworld";
+			__camWinLossCallback = CAM_VICTORY_OFFWORLD;
 			__camNeedBonusTime = true;
 			__camDefeatOnTimeout = true;
 			__camVictoryData = data;
 			setReinforcementTime(__camVictoryData.reinforcements);
-			queue("__camSetOffworldLimits", camSecondsToMilliseconds(0.1));
+			__camSetOffworldLimits();
 			useSafetyTransport(false);
 			break;
 		case CAM_VICTORY_TIMEOUT:
-			__camWinLossCallback = "__camVictoryTimeout";
+			__camWinLossCallback = CAM_VICTORY_TIMEOUT;
 			__camNeedBonusTime = false;
 			__camDefeatOnTimeout = false;
 			__camVictoryData = data;
@@ -148,6 +148,13 @@ function camCheckExtraObjective()
 	}
 
 	return extraObjMet;
+}
+
+//Message(s) the mission script can set to further explain specific victory conditions.
+//Allows a single string or an array of strings.
+function camSetExtraObjectiveMessage(message)
+{
+	__camExtraObjectiveMessage = message;
 }
 
 //////////// privates
@@ -246,7 +253,7 @@ function __camPlayerDead()
 		}
 	}
 
-	if (__camWinLossCallback === "__camVictoryTimeout")
+	if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
 	{
 		//Make the mission fail if no units are alive on map while having no factories.
 		var droidCount = 0;
@@ -448,4 +455,89 @@ function __camVictoryOffworld()
 			camUnmarkTiles(lz);
 		}
 	}
+}
+
+function __camShowVictoryConditions(forceMessage)
+{
+	if (!camDef(forceMessage))
+	{
+		if (__camVictoryMessageThrottle + camSecondsToMilliseconds(10) > gameTime)
+		{
+			return;
+		}
+		if (!camDef(__camNextLevel))
+		{
+			return; // fastplay / tutorial. Should be a better identifier for this.
+		}
+		if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
+		{
+			return; // do not need this on these missions.
+		}
+	}
+
+	const ANNIHILATE_MESSAGE = _("Destroy all enemy units and structures");
+
+	var unitsOnMap = 0;
+	var structuresOnMap = 0;
+
+	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach(function(obj) {
+		if (obj.type === DROID)
+		{
+			++unitsOnMap;
+		}
+		else if (obj.type === STRUCTURE)
+		{
+			++structuresOnMap;
+		}
+	});
+
+	console(__camNumArtifacts + "/" + Object.keys(__camArtifacts).length + " " + _("Artifacts collected"));
+	console(__camNumEnemyBases + "/" + Object.keys(__camEnemyBases).length + " " + _("Bases destroyed"));
+	console(unitsOnMap + " " + _("Enemy units remaining"));
+	console(structuresOnMap + " " + _("Enemy structures remaining"));
+
+	if (__camWinLossCallback === CAM_VICTORY_OFFWORLD)
+	{
+		if (camDef(__camVictoryData.retlz) && __camVictoryData.retlz)
+		{
+			console(_("Return to LZ required"));
+		}
+
+		if (camDef(__camVictoryData.annihilate) && __camVictoryData.annihilate)
+		{
+			console(ANNIHILATE_MESSAGE);
+		}
+
+		if (camDef(__camVictoryData.eliminateBases) && __camVictoryData.eliminateBases)
+		{
+			console(_("Destroy all enemy units and bases"));
+		}
+	}
+	else if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
+	{
+		console(_("Survive until the timer reaches zero"));
+	}
+	else if (__camWinLossCallback === CAM_VICTORY_STANDARD)
+	{
+		console(ANNIHILATE_MESSAGE);
+	}
+
+	//More specific messages set through the mission scripts.
+	if (camDef(__camExtraObjectiveMessage))
+	{
+		if (__camExtraObjectiveMessage instanceof Array)
+		{
+			for (var i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
+			{
+				var mes = __camExtraObjectiveMessage[i];
+				console(mes);
+			}
+		}
+		else
+		{
+			console(__camExtraObjectiveMessage);
+		}
+	}
+
+	__camVictoryMessageThrottle = gameTime;
 }

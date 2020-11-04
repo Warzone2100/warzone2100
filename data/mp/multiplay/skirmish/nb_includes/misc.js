@@ -44,7 +44,7 @@ function enumLivingPlayers() {
 				ret.push(i);
 		}
 		return ret;
-	};
+	}
 	return cached(uncached, 30000);
 }
 

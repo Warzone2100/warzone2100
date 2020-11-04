@@ -26,22 +26,35 @@
 #define __INCLUDED_SRC_MULTISTATS_H__
 
 #include "lib/netplay/netplay.h"
+#include <3rdparty/json/json.hpp>
 #include <map>
 
 struct PLAYERSTATS
 {
-	PLAYERSTATS();
+	uint32_t played = 0;  /// propagated stats.
+	uint32_t wins = 0;
+	uint32_t losses = 0;
+	uint32_t totalKills = 0;
+	uint32_t totalScore = 0;
 
-	uint32_t played;						/// propogated stats.
-	uint32_t wins;
-	uint32_t losses;
-	uint32_t totalKills;
-	uint32_t totalScore;
+	uint32_t recentKills = 0;  // score/kills in last game.
+	uint32_t recentScore = 0;
 
-	uint32_t recentKills;				// score/kills in last game.
-	uint32_t recentScore;
+	struct Autorating
+	{
+		Autorating() = default;
+		Autorating(nlohmann::json const &json);
 
-	EcKey    identity;
+		bool valid = false;
+		bool dummy = false;
+		uint8_t star[3] = {0, 0, 0};
+		uint8_t medal = 0;
+		uint8_t level = 0;
+		std::string elo;
+	};
+	Autorating autorating;
+
+	EcKey identity;
 };
 
 bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk

@@ -128,7 +128,7 @@ function finishStructures() {
 			return;
 		if (orderDroidObj(truck, DORDER_HELPBUILD, list[i]))
 			success = true;
-	};
+	}
 	return success;
 }
 
@@ -343,7 +343,7 @@ function listOutdatedDefenses() {
 						return enumStruct(me, list[i]);
 				}
 		}
-	};
+	}
 	return [];
 }
 

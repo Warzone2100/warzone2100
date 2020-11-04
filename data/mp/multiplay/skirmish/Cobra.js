@@ -8,9 +8,6 @@ include(COBRA_RULESETS + "CobraStandard.js");
 const LOG_RESEARCH_PATH = false;
 
 const MIN_ATTACK_DROIDS = 4;
-const FACTORY = "A0LightFactory";
-const CYBORG_FACTORY = "A0CyborgFactory";
-const VTOL_FACTORY = "A0VTolFactory1";
 const MY_BASE = startPositions[me];
 const OIL_RES = "OilResource";
 const MIN_POWER = 150;
@@ -22,6 +19,7 @@ const ELECTRONIC_DEFENSES = [
 	"WallTower-EMP",
 	"Emplacement-MortarEMP",
 ];
+const BEACON_VTOL_ALARM = "vtolSpotted";
 
 //Research constants
 const TANK_ARMOR = [
@@ -32,6 +30,11 @@ const CYBORG_ARMOR = [
 	"R-Cyborg-Metals09",
 	"R-Cyborg-Armor-Heat09",
 ];
+const MODULE_RESEARCH = [
+	"R-Struc-Research-Module",
+	"R-Struc-Factory-Module",
+	"R-Struc-PowerModuleMk1",
+];
 const ESSENTIALS = [
 	"R-Wpn-MG-Damage01",
 	"R-Sys-Engineering01",
@@ -41,21 +44,22 @@ const ESSENTIALS = [
 	"R-Struc-PowerModuleMk1",
 	"R-Struc-Research-Upgrade01",
 	"R-Vehicle-Prop-Halftracks",
-	"R-Vehicle-Metals01",
-	"R-Cyborg-Metals01",
 	"R-Vehicle-Body05",
+	"R-Wpn-MG-Damage03",
 ];
 const ESSENTIALS_2 = [
+	"R-Vehicle-Metals02",
+	"R-Cyborg-Metals02",
 	"R-Struc-RprFac-Upgrade01",
-	"R-Vehicle-Body11",
-	"R-Sys-Sensor-Upgrade01",
-	"R-Vehicle-Prop-Hover",
+	"R-Wpn-MG3Mk1",
+	"R-Sys-Autorepair-General",
+	"R-Struc-Research-Upgrade09",
+	"R-Struc-Power-Upgrade03a",
 	"R-Struc-Factory-Upgrade09",
 ];
 const ESSENTIALS_3 = [
-	"R-Struc-Power-Upgrade03a",
-	"R-Struc-Research-Upgrade09",
-	"R-Sys-Autorepair-General",
+	"R-Vehicle-Prop-Hover",
+	"R-Sys-Sensor-Upgrade01",
 ];
 const SYSTEM_UPGRADES = [
 	"R-Sys-MobileRepairTurretHvy",
@@ -72,35 +76,30 @@ const SENSOR_TECH = [
 	"R-Sys-CBSensor-Tower01",
 	"R-Sys-Sensor-WSTower",
 	"R-Sys-Sensor-UpLink",
+	"R-Wpn-LasSat",
+	"R-Sys-Resistance-Circuits",
 ];
 const DEFENSE_UPGRADES = [
-	"R-Vehicle-Metals05",
-	"R-Cyborg-Metals05",
-	"R-Sys-Resistance-Circuits",
-	"R-Wpn-LasSat",
 	"R-Struc-Materials09",
 	"R-Defense-WallUpgrade12",
 ];
 const BODY_RESEARCH_1 = [
+	"R-Vehicle-Body08",
 	"R-Vehicle-Body12",
-	"R-Vehicle-Body09",
 ];
 const BODY_RESEARCH_2 = [
+	"R-Vehicle-Body09",
 	"R-Vehicle-Body10",
 	"R-Vehicle-Engine09",
 	"R-Vehicle-Body14",
 ];
-const VTOL_ESSENTIALS = [
-	"R-Struc-VTOLPad-Upgrade01",
-	"R-Wpn-Bomb01",
-];
 const VTOL_RES = [
-	"R-Struc-VTOLPad-Upgrade03",
+	"R-Struc-VTOLPad-Upgrade01",
 	"R-Wpn-Bomb02",
-	"R-Wpn-Bomb03",
-	"R-Wpn-Bomb04",
-	"R-Struc-VTOLPad-Upgrade06",
+	"R-Struc-VTOLPad-Upgrade03",
 	"R-Wpn-Bomb-Accuracy03",
+	"R-Struc-VTOLPad-Upgrade06",
+	"R-Wpn-Bomb04",
 	"R-Wpn-Bomb05",
 	"R-Wpn-Bomb06",
 ];
@@ -153,12 +152,12 @@ var subPersonalities =
 	{
 		"primaryWeapon": weaponStats.cannons,
 		"secondaryWeapon": weaponStats.gauss,
-		"artillery": weaponStats.howitzers,
+		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
-		"defensePriority": 30,
-		"vtolPriority": 20,
-		"alloyPriority": 40,
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"defensePriority": 5,
+		"vtolPriority": 40,
+		"alloyPriority": 33,
 		"useLasers": true,
 		"cyborgThreatPercentage": 0.08,
 		"retreatScanRange": 12,
@@ -168,6 +167,9 @@ var subPersonalities =
 			"R-Wpn-Cannon-ROF02",
 		],
 		"canPlayBySelf": true,
+		"beaconArmyPercentage": 60,
+		"beaconArtilleryPercentage": 40,
+		"beaconVtolPercentage": 60,
 	},
 	AR:
 	{
@@ -175,9 +177,9 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.gauss,
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
-		"defensePriority": 20,
-		"vtolPriority": 40,
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"defensePriority": 5,
+		"vtolPriority": 50,
 		"alloyPriority": 35,
 		"useLasers": true,
 		"cyborgThreatPercentage": 0.40,
@@ -188,6 +190,9 @@ var subPersonalities =
 			"R-Wpn-Flamer-ROF01",
 		],
 		"canPlayBySelf": false,
+		"beaconArmyPercentage": 60,
+		"beaconArtilleryPercentage": 40,
+		"beaconVtolPercentage": 60,
 	},
 	AB:
 	{
@@ -195,10 +200,10 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.gauss,
 		"artillery": weaponStats.rockets_Arty,
 		"antiAir": weaponStats.rockets_AA,
-		"factoryOrder": [VTOL_FACTORY, FACTORY, CYBORG_FACTORY],
-		"defensePriority": 10,
+		"factoryOrder": [structures.vtolFactory, structures.factory, structures.cyborgFactory],
+		"defensePriority": 7,
 		"vtolPriority": 50,
-		"alloyPriority": 30,
+		"alloyPriority": 25,
 		"useLasers": true,
 		"resPath": "offensive",
 		"retreatScanRange": 12,
@@ -207,16 +212,19 @@ var subPersonalities =
 			"R-Wpn-Rocket02-MRL",
 		],
 		"canPlayBySelf": true,
+		"beaconArmyPercentage": 50,
+		"beaconArtilleryPercentage": 40,
+		"beaconVtolPercentage": 50,
 	},
 	AM:
 	{
 		"primaryWeapon": weaponStats.machineguns,
-		"secondaryWeapon": weaponStats.machineguns,
+		"secondaryWeapon": weaponStats.lasers,
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
-		"defensePriority": 50,
-		"vtolPriority": 40,
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"defensePriority": 5,
+		"vtolPriority": 80,
 		"alloyPriority": 35,
 		"useLasers": true,
 		"resPath": "generic",
@@ -226,6 +234,9 @@ var subPersonalities =
 			"R-Wpn-MG2Mk1",
 		],
 		"canPlayBySelf": true,
+		"beaconArmyPercentage": 50,
+		"beaconArtilleryPercentage": 50,
+		"beaconVtolPercentage": 40,
 	},
 	AA:
 	{
@@ -233,10 +244,10 @@ var subPersonalities =
 		"secondaryWeapon": weaponStats.AS,
 		"artillery": weaponStats.fireMortars,
 		"antiAir": weaponStats.AA,
-		"factoryOrder": [FACTORY, CYBORG_FACTORY, VTOL_FACTORY],
-		"defensePriority": 70,
-		"vtolPriority": 15,
-		"alloyPriority": 35,
+		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
+		"defensePriority": 15,
+		"vtolPriority": 66,
+		"alloyPriority": 10,
 		"useLasers": true,
 		"resPath": "offensive",
 		"retreatScanRange": 12,
@@ -248,25 +259,9 @@ var subPersonalities =
 			"R-Wpn-Mortar-Damage03",
 		],
 		"canPlayBySelf": false,
-	},
-	AL:
-	{
-		"primaryWeapon": weaponStats.lasers,
-		"secondaryWeapon": weaponStats.gauss,
-		"artillery": weaponStats.fireMortars,
-		"antiAir": weaponStats.AA,
-		"factoryOrder": [VTOL_FACTORY, FACTORY, CYBORG_FACTORY],
-		"defensePriority": 10,
-		"vtolPriority": 100,
-		"alloyPriority": 30,
-		"useLasers": true,
-		"cyborgThreatPercentage": 0.10,
-		"retreatScanRange": 12,
-		"resPath": "generic",
-		"res": [
-			"R-Wpn-MG3Mk1",
-		],
-		"canPlayBySelf": false,
+		"beaconArmyPercentage": 40,
+		"beaconArtilleryPercentage": 40,
+		"beaconVtolPercentage": 70,
 	},
 };
 
@@ -292,8 +287,12 @@ var turnOffMG; //This is only used for when the personalities don't have their w
 var useArti;
 var useVtol;
 var lastAttackedByScavs;
-var prevResPath; // Previous personality research path. Volatile.
 var currently_dead; // Used to detect if Cobra is, basically, dead. If true, the script is put in a very low perf impact state.
+var beacon; //latest friendly beacon location
+var enemyUsedElectronicWarfare; //Detect if an enemy used a Nexus Link against us... if so, research the resistance upgrades
+var startAttacking;
+var lastShuffleTime;
+var forceDerrickBuildDefense;
 
 // -- Weapon research list (initializeResearchLists).
 var techlist;

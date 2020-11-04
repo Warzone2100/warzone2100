@@ -162,7 +162,7 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
   !define MUI_PAGE_CUSTOMFUNCTION_PRE WelcomePageSetupLinkPre
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW WelcomePageSetupLinkShow
   !insertmacro MUI_PAGE_WELCOME
-  !insertmacro MUI_PAGE_LICENSE "${TOP_SRCDIR}\COPYING"
+  !insertmacro MUI_PAGE_LICENSE "@CPACK_RESOURCE_FILE_LICENSE@"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
 !ifndef PORTABLE
@@ -406,6 +406,7 @@ ${EndIf}
   Var MSVCRT16_x64_NotPresent
   Var MSVCRT16_ARM64_NotPresent
   Var Result_MSVCDownload
+  Var MSVCRT16_NeedsReboot
 
   !ifndef PORTABLE
     ; Provide option to download and install missing / outdated system libraries
@@ -417,7 +418,11 @@ ${EndIf}
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x86.exe ..."
-          ExecWait '"$PLUGINSDIR\vc_redist.x86.exe" /q'
+          ExecWait '"$PLUGINSDIR\vc_redist.x86.exe" /q /norestart' $0
+          ${If} $0 <> 0
+            StrCpy $MSVCRT16_NeedsReboot 1
+          ${EndIf}
+          DetailPrint "vc_redist.x86.exe returned: $0"
         ${Else}
           MessageBox MB_OK|MB_ICONSTOP "Download of system library (x86) failed: $Result_MSVCDownload"
         ${EndIf}
@@ -428,7 +433,11 @@ ${EndIf}
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x64.exe ..."
-          ExecWait '"$PLUGINSDIR\vc_redist.x64.exe" /q'
+          ExecWait '"$PLUGINSDIR\vc_redist.x64.exe" /q /norestart' $0
+          ${If} $0 <> 0
+            StrCpy $MSVCRT16_NeedsReboot 1
+          ${EndIf}
+          DetailPrint "vc_redist.x64.exe returned: $0"
         ${Else}
           MessageBox MB_OK|MB_ICONSTOP "Download of system library (x64) failed: $Result_MSVCDownload"
         ${EndIf}
@@ -439,7 +448,11 @@ ${EndIf}
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "VC_redist.arm64.exe ..."
-          ExecWait '"$PLUGINSDIR\VC_redist.arm64.exe" /q'
+          ExecWait '"$PLUGINSDIR\VC_redist.arm64.exe" /q /norestart' $0
+          ${If} $0 <> 0
+            StrCpy $MSVCRT16_NeedsReboot 1
+          ${EndIf}
+          DetailPrint "VC_redist.arm64.exe returned: $0"
         ${Else}
           MessageBox MB_OK|MB_ICONSTOP "Download of system library (ARM64) failed: $Result_MSVCDownload"
         ${EndIf}
@@ -470,7 +483,7 @@ ${EndIf}
 !ifndef INSTALLVIDS
 SectionGroup $(TEXT_SecFMVs) SecFMVs
 
-Section /o $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
+Section $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
   SetOutPath "$INSTDIR\${WZ_DATADIR_APPEND}"
   IfFileExists "sequences.wz" +5
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"               "sequences.wz"
@@ -547,15 +560,19 @@ Function .onInit
   IntOp $0 $0 | ${SF_RO}
   SectionSetFlags ${SecFMVs} $0
 
-  ;FIXME: Select default video sub-component
-  ; Default is still set to standard instead of high, since there is a ~450MB difference
-  StrCpy $5 ${SecFMVs_Eng}
+  ;Select default video sub-component
+  StrCpy $5 ${SecFMVs_EngHi}
+  !insertmacro SelectSection ${SecFMVs_EngHi}
+  !insertmacro UnSelectSection ${SecFMVs_Eng}
+  !insertmacro UnSelectSection ${SecFMVs_EngLo}
+;    !insertmacro UnSelectSection ${SecFMVs_Ger}
 
   ; Determine whether Microsoft system libraries are installed
   !ifdef MSVCRUNTIME
     StrCpy $MSVCRT16_x86_NotPresent 0
     StrCpy $MSVCRT16_x64_NotPresent 0
     StrCpy $MSVCRT16_ARM64_NotPresent 0
+    StrCpy $MSVCRT16_NeedsReboot 0
 
     !ifndef PORTABLE
 
@@ -626,6 +643,17 @@ FunctionEnd
 
 !ifndef INSTALLVIDS
 Function .onSelChange
+
+SectionGetFlags ${SecFMVs} $R0
+IntOp $R0 $R0 & ${SF_SELECTED}
+
+${If} $R0 == ${SF_SELECTED}
+    !insertmacro SelectSection ${SecFMVs_EngHi}
+    !insertmacro UnSelectSection ${SecFMVs_Eng}
+    !insertmacro UnSelectSection ${SecFMVs_EngLo}
+;    !insertmacro UnSelectSection ${SecFMVs_Ger}
+${EndIf}
+
 ${If} ${SectionIsSelected} ${SecFMVs_Eng}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngHi}
 ${OrIf} ${SectionIsSelected} ${SecFMVs_EngLo}
@@ -640,6 +668,20 @@ ${EndIf}
 FunctionEnd
 !endif
 
+Function .onInstSuccess
+  !ifdef MSVCRUNTIME
+    ${If} $MSVCRT16_NeedsReboot <> 0
+      ; Needs a reboot
+      MessageBox MB_YESNO|MB_ICONQUESTION "A reboot is needed to finish the installation. Do you wish to reboot the system now?" IDNO NoReboot
+      Reboot
+      NoReboot:
+    ${EndIf}
+  !endif
+FunctionEnd
+
+Function .onRebootFailed
+  MessageBox MB_OK|MB_ICONSTOP "Reboot failed. Please reboot manually." /SD IDOK
+FunctionEnd
 
 ;--------------------------------
 ;Descriptions

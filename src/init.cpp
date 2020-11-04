@@ -90,6 +90,7 @@
 #include "ingameop.h"
 #include "qtscript.h"
 #include "template.h"
+#include "activity.h"
 
 #include <algorithm>
 
@@ -394,7 +395,9 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 				// Add global and multiplay mods
 				PHYSFS_mount(curSearchPath->path, NULL, PHYSFS_APPEND);
 				addSubdirs(curSearchPath->path, "mods/music", PHYSFS_APPEND, nullptr, false);
-				if (NetPlay.isHost || !NetPlay.bComms || ingame.bHostSetup)
+
+				// Only load if we are host or singleplayer (Initial mod load relies on this, too)
+				if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER || !NetPlay.bComms)
 				{
 					addSubdirs(curSearchPath->path, "mods/global", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
 					addSubdirs(curSearchPath->path, "mods", PHYSFS_APPEND, use_override_mods ? &override_mods : &global_mods, true);
@@ -561,41 +564,58 @@ struct WZmaps
 {
 	std::string MapName;
 	bool isMapMod;
+	bool isRandom;
 };
 
 std::vector<struct WZmaps> WZ_Maps;
 
-struct FindMap
+static std::vector<WZmaps>::iterator findMap(char const *name)
 {
-	const std::string map;
-	FindMap(const std::string &name) : map(name) {};
-	bool operator()(const WZmaps &wzm) const
-	{
-		return wzm.MapName == map;
-	};
-};
+	return name != nullptr? std::find_if(WZ_Maps.begin(), WZ_Maps.end(), [name](WZmaps const &map) { return map.MapName == name; }) : WZ_Maps.end();
+}
 
-bool CheckForMod(char *theMap)
+bool CheckForMod(char const *mapFile)
 {
-	std::vector<struct WZmaps>::iterator it;
-	if (theMap == nullptr)
-	{
-		return false;
-	}
-	it = std::find_if(WZ_Maps.begin(), WZ_Maps.end(), FindMap(theMap));
+	auto it = findMap(mapFile);
 	if (it != WZ_Maps.end())
 	{
 		return it->isMapMod;
 	}
-	debug(LOG_ERROR, "Couldn't find map %s", theMap);
+	if (mapFile != nullptr)
+	{
+		debug(LOG_ERROR, "Couldn't find map %s", mapFile);
+	}
+
+	return false;
+}
+
+bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
+{
+	auto it = findMap(mapFile);
+	if (it != WZ_Maps.end())
+	{
+		return it->isRandom;
+	}
+
+	if (mapFile != nullptr) {
+		debug(LOG_ERROR, "Couldn't find map %s", mapFile);
+	}
+	else if (mapDataFile0 != nullptr && strlen(mapDataFile0) > 4)
+	{
+		std::string fn = mapDataFile0;
+		fn.resize(fn.size() - 4);
+		fn += "/game.js";
+		return PHYSFS_exists(fn.c_str());
+	}
 
 	return false;
 }
 
 // Mount the archive under the mountpoint, and enumerate the archive according to lookin
-static bool CheckInMap(const char *archive, const char *mountpoint, const char *lookin)
+static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpoint, const char *lookin)
 {
 	bool mapmod = false;
+	bool isRandom = false;
 
 	if (!PHYSFS_mount(archive, mountpoint, PHYSFS_APPEND))
 	{
@@ -627,11 +647,24 @@ static bool CheckInMap(const char *archive, const char *mountpoint, const char *
 	}
 	PHYSFS_freeList(filelist);
 
+	std::string maps = checkpath + "/multiplay/maps";
+	filelist = PHYSFS_enumerateFiles(maps.c_str());
+	maps += '/';
+	for (char **file = filelist; *file != nullptr; ++file)
+	{
+		if (WZ_PHYSFS_isDirectory((maps + *file).c_str()) && PHYSFS_exists((maps + *file + "/game.js").c_str()))
+		{
+			isRandom = true;
+			break;
+		}
+	}
+	PHYSFS_freeList(filelist);
+
 	if (!WZ_PHYSFS_unmount(archive))
 	{
 		debug(LOG_ERROR, "Could not unmount %s, %s", archive, WZ_PHYSFS_getLastError());
 	}
-	return mapmod;
+	return {mapmod, isRandom};
 }
 
 bool buildMapList()
@@ -645,7 +678,6 @@ bool buildMapList()
 	MapFileList realFileNames = listMapFiles();
 	for (auto &realFileName : realFileNames)
 	{
-		bool mapmod = false;
 		struct WZmaps CurrentMap;
 		const char * pRealDirStr = PHYSFS_getRealDir(realFileName.platformIndependent.c_str());
 		if (!pRealDirStr)
@@ -679,14 +711,12 @@ bool buildMapList()
 			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
 		}
 
-		mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap");
-		if (!mapmod)
-		{
-			mapmod = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
-		}
+		auto chk = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap");
+		auto chk2 = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
 
 		CurrentMap.MapName = realFileName.platformIndependent;
-		CurrentMap.isMapMod = mapmod;
+		CurrentMap.isMapMod = chk.first || chk2.first;
+		CurrentMap.isRandom = chk.second || chk2.second;
 		WZ_Maps.push_back(CurrentMap);
 	}
 
@@ -755,6 +785,7 @@ void systemShutdown()
 {
 	pie_ShutdownRadar();
 	clearLoadedMods();
+	flushConsoleMessages();
 
 	shutdownEffectsSystem();
 	wzSceneEnd(nullptr);  // Might want to end the "Main menu loop" or "Main game loop".
@@ -790,6 +821,7 @@ void systemShutdown()
 	pal_ShutDown();		// currently unused stub
 	frameShutDown();	// close screen / SDL / resources / cursors / trig
 	screenShutDown();
+	gfx_api::context::get().shutdown();
 	cleanSearchPath();	// clean PHYSFS search paths
 	debug_exit();		// cleanup debug routines
 	PHYSFS_deinit();	// cleanup PHYSFS (If failure, state of PhysFS is undefined, and probably badly screwed up.)
@@ -1184,6 +1216,8 @@ bool stageTwoShutDown()
 		return false;
 	}
 
+	shutdown3DView();
+
 	return true;
 }
 
@@ -1251,6 +1285,12 @@ bool stageThreeInitialise()
 	// Re-inititialise some static variables.
 
 	bInTutorial = false;
+	rangeOnScreen = false;
+
+	if (fromSave && ActivityManager::instance().getCurrentGameMode() == ActivitySink::GameMode::CHALLENGE)
+	{
+		challengeActive = true;
+	}
 
 	resizeRadar();
 
@@ -1313,7 +1353,7 @@ bool stageThreeShutDown()
 {
 	debug(LOG_WZ, "== stageThreeShutDown ==");
 
-	hostlaunch = 0;
+	hostlaunch = HostLaunch::Normal;
 
 	removeSpotters();
 

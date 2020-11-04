@@ -84,6 +84,7 @@ if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
 target_compile_definitions(warzone2100 PRIVATE "YY_NO_UNISTD_H")
+target_compile_definitions(warzone2100 PRIVATE "JSON_USE_IMPLICIT_CONVERSIONS=0")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
 SET_TARGET_PROPERTIES(warzone2100 PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
@@ -200,6 +201,15 @@ if(ENABLE_DISCORD)
 	endif()
 endif()
 
+# Dependencies
+add_dependencies(warzone2100 data)
+if(TARGET wz2100_doc)
+	add_dependencies(warzone2100 wz2100_doc)
+endif()
+if(TARGET translations)
+	add_dependencies(warzone2100 translations)
+endif()
+
 ############################
 # Main App install location
 
@@ -218,6 +228,27 @@ set(WZ_APP_INSTALL_DEST "${CMAKE_INSTALL_BINDIR}")
 # - The appropriate XCODE_LAST_KNOWN_FILE_TYPE is set on non-source files to fix "endless Xcode indexing" issues
 # - A *build-time*-generated Info.plist is used, instead of CMake's default configure-time-generated Info.plist setup
 #   (ensuring that the Info.plist reflects the latest autorevision info)
+
+function(CopyVulkanLayerJSON _input_file _output_file _new_library_path)
+
+	configure_file("${_input_file}" "${_output_file}" COPYONLY)
+
+	file(READ "${_output_file}" _strings_NEW_OUTPUT_FILE
+		ENCODING UTF-8
+	)
+	string(REGEX MATCH "(\"library_path\":[^\"]*)\"([^\"]*)\"" _library_path_match "${_strings_NEW_OUTPUT_FILE}")
+	if(_library_path_match)
+		set(_full_match "${CMAKE_MATCH_0}")
+		set(_library_path_key "${CMAKE_MATCH_1}")
+		if(CMAKE_MATCH_2)
+			get_filename_component(_library_name "${CMAKE_MATCH_2}" NAME)
+			string(REGEX REPLACE "${_full_match}" "${_library_path_key}\"${_new_library_path}${_library_name}\"" _strings_NEW_OUTPUT_FILE "${_strings_NEW_OUTPUT_FILE}")
+		endif()
+		file(WRITE "${_output_file}" "${_strings_NEW_OUTPUT_FILE}")
+	endif()
+	unset(_strings_NEW_OUTPUT_FILE)
+
+endfunction()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
@@ -436,6 +467,86 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	copy_qt5_plugin("Qt5::QCocoaIntegrationPlugin")
 	copy_qt5_plugin("Qt5::QCocoaPrinterSupportPlugin")
 
+	if(WZ_ENABLE_BACKEND_VULKAN)
+		# Vulkan / MoltenVK
+		find_package(Vulkan)
+		if (Vulkan_FOUND)
+			message( STATUS "Vulkan_LIBRARY=${Vulkan_LIBRARY}" )
+			set(_vulkan_dylibs "${Vulkan_LIBRARY}")
+
+			# Use path to Vulkan_LIBRARY to find other dylibs in the Vulkan SDK
+			get_filename_component(VulkanSDK_LIB_DIR "${Vulkan_LIBRARY}" DIRECTORY)
+
+			# Vulkan_LIBRARY realpath (Vulkan_LIBRARY is often a symlink)
+			get_filename_component(_vulkan_library_realpath "${Vulkan_LIBRARY}" REALPATH)
+			if (NOT _vulkan_library_realpath STREQUAL Vulkan_LIBRARY)
+				list(APPEND _vulkan_dylibs "${_vulkan_library_realpath}")
+			endif()
+
+			# MoltenVK dylib
+			if(EXISTS "${VulkanSDK_LIB_DIR}/libMoltenVK.dylib")
+				list(APPEND _vulkan_dylibs "${VulkanSDK_LIB_DIR}/libMoltenVK.dylib")
+			else()
+				message( FATAL_ERROR "Missing expected libMoltenVK.dylib at: ${VulkanSDK_LIB_DIR}/libMoltenVK.dylib" )
+			endif()
+
+			# Vulkan layers
+			file(GLOB _vulkan_layers LIST_DIRECTORIES false "${VulkanSDK_LIB_DIR}/libVkLayer_*.dylib")
+			list(APPEND _vulkan_dylibs ${_vulkan_layers})
+
+			# Copy _vulkan_dylibs to Frameworks folder now (don't wait for CMake install)
+			foreach(_dylib ${_vulkan_dylibs})
+				set_source_files_properties(
+					"${_dylib}" PROPERTIES
+					MACOSX_PACKAGE_LOCATION "Frameworks"
+					XCODE_LAST_KNOWN_FILE_TYPE "compiled.mach-o.dylib"
+				)
+				if(NOT IS_SYMLINK "${_dylib}")
+					set_source_files_properties(
+						"${_dylib}" PROPERTIES
+						XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
+					)
+				endif()
+				if(NOT CMAKE_GENERATOR STREQUAL "Xcode")
+					# Other generators will need a custom-command equivalent of setting the "Code Sign on Copy" Xcode attribute to ON
+					message( WARNING "The generator \"${CMAKE_GENERATOR}\" does not currently handle code-signing: \"${_dylib}\"" )
+				endif()
+				target_sources(warzone2100 PRIVATE "${_dylib}")
+			endforeach()
+
+			set(_vulkan_resources "")
+			get_filename_component(_VulkanSDK_parent "${VulkanSDK_LIB_DIR}" DIRECTORY)
+			set(VulkanSDK_SHARE_VULKAN_DIR "${_VulkanSDK_parent}/share/vulkan")
+			if (NOT IS_DIRECTORY "${VulkanSDK_SHARE_VULKAN_DIR}")
+				message( FATAL_ERROR "Unable to find /share/vulkan at: ${VulkanSDK_SHARE_VULKAN_DIR}" )
+			endif()
+
+			# Vulkan JSON files (explicit_layer.d, icd.d)
+			file(GLOB _vulkan_json LIST_DIRECTORIES false "${VulkanSDK_SHARE_VULKAN_DIR}/explicit_layer.d/*.json" "${VulkanSDK_SHARE_VULKAN_DIR}/icd.d/*.json")
+
+			# Fix up each Vulkan JSON file
+			foreach(_jsonFile ${_vulkan_json})
+				get_filename_component(_jsonFile_Name "${_jsonFile}" NAME)
+				string(REGEX REPLACE "^${VulkanSDK_SHARE_VULKAN_DIR}/" "" _jsonFile_SubPath "${_jsonFile}")
+				get_filename_component(_jsonFile_SubPath "${_jsonFile_SubPath}" DIRECTORY)
+				CopyVulkanLayerJSON("${_jsonFile}" "${CMAKE_CURRENT_BINARY_DIR}/generated_resources/vulkan/${_jsonFile_SubPath}/${_jsonFile_Name}" "../../../Frameworks/")
+			endforeach()
+
+			# Copy Vulkan configuration JSON files to Resources folder of bundle
+			set_source_files_properties(
+				"${CMAKE_CURRENT_BINARY_DIR}/generated_resources/vulkan"
+				PROPERTIES
+				MACOSX_PACKAGE_LOCATION "Resources"
+				GENERATED TRUE
+				XCODE_LAST_KNOWN_FILE_TYPE "folder"
+			)
+			target_sources(warzone2100 PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated_resources/vulkan")
+
+		else(Vulkan_FOUND)
+			message(WARNING "Vulkan backend is enabled, but the Vulkan SDK cannot be found. The macOS app bundle will lack required support libraries.")
+		endif(Vulkan_FOUND)
+	endif(WZ_ENABLE_BACKEND_VULKAN)
+
 	# Set install RPATH for WZ app bundle
 	set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
 
@@ -446,6 +557,22 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(WZ_APP_INSTALL_DEST ".")
 
 endif()
+
+##############################
+# IDE Debug/Run Configuration
+
+# For Visual Studio project generator
+set_target_properties(warzone2100 PROPERTIES
+	VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:warzone2100>"
+	VS_DEBUGGER_COMMAND           "$<TARGET_FILE:warzone2100>"
+	VS_DEBUGGER_COMMAND_ARGUMENTS "--gfxdebug"
+)
+
+# For Xcode project generator
+set_target_properties(warzone2100 PROPERTIES
+	XCODE_GENERATE_SCHEME TRUE
+	XCODE_SCHEME_ARGUMENTS "--gfxdebug"
+)
 
 #######################
 # Hardening / Security
@@ -528,7 +655,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 				endif()
 			endif()
 			install(CODE "
-				if(\"\${CMAKE_BUILD_TYPE}\" STREQUAL \"Debug\")
+				if(\"\${CMAKE_INSTALL_CONFIG_NAME}\" MATCHES \"^([Dd][Ee][Bb][Uu][Gg])$\")
 					set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/debug/bin/\")
 				else()
 					set(dll_source_dirs \"${CMAKE_PREFIX_PATH}/bin/\")
@@ -565,6 +692,44 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			else()
 				message( WARNING "Unable to find windeployqt; installation may not included all required Qt libraries" )
 			endif()
+
+			# Install LibANGLE DLLs (if available, from vcpkg)
+			find_package(unofficial-angle CONFIG)
+			if(unofficial-angle_FOUND)
+				if(TARGET unofficial::angle::libEGL)
+					get_target_property(_libEGL_dll unofficial::angle::libEGL IMPORTED_LOCATION_RELEASE)
+				endif()
+
+				if(TARGET unofficial::angle::libGLESv2)
+					get_target_property(_libGLESv2_dll unofficial::angle::libGLESv2 IMPORTED_LOCATION_RELEASE)
+				endif()
+
+				if(_libEGL_dll AND _libGLESv2_dll)
+					if(EXISTS "${_libEGL_dll}")
+						message( STATUS "LibANGLE (libEGL): ${_libEGL_dll}" )
+						install(FILES
+							"${_libEGL_dll}"
+							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+						)
+					else()
+						message( WARNING "Missing expected libEGL DLL at: ${_libEGL_dll}" )
+					endif()
+					if(EXISTS "${_libGLESv2_dll}")
+						message( STATUS "LibANGLE (libGLESv2): ${_libGLESv2_dll}" )
+						install(FILES
+							"${_libGLESv2_dll}"
+							COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}"
+						)
+					else()
+						message( WARNING "Missing expected libGLESv2 DLL at: ${_libGLESv2_dll}" )
+					endif()
+				else()
+					message( WARNING "Found LibANGLE, but could not find the built DLLs - LibANGLE will *not* be installed." )
+				endif()
+			else()
+				message( WARNING "Could not find LibANGLE - LibANGLE will *not* be installed. (DirectX via LibANGLE will not be supported)" )
+			endif()
+
 		else()
 			message( STATUS "CMAKE_CROSSCOMPILING is defined - skipping BundleUtilities" )
 		endif()

@@ -263,7 +263,7 @@ bool multiPlayerLoop()
 					{
 						char msg[256] = {'\0'};
 
-						sprintf(msg, _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
+						snprintf(msg, sizeof(msg), _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
 						sendTextMessage(msg, true);
 						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						NETlogEntry(msg, SYNC_FLAG, index);
@@ -947,7 +947,7 @@ static bool recvResearch(NETQUEUE queue)
 	}
 
 	// Update allies research accordingly
-	if (game.type == SKIRMISH)
+	if (game.type == LEVEL_TYPE::SKIRMISH)
 	{
 		for (i = 0; i < MAX_PLAYERS; i++)
 		{
@@ -1011,7 +1011,7 @@ STRUCTURE *findResearchingFacilityByResearchIndex(unsigned player, unsigned inde
 	{
 		if (psBuilding->pStructureType->type == REF_RESEARCH
 		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject
-		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - REF_RESEARCH_START == index)
+		    && ((RESEARCH_FACILITY *)psBuilding->pFunctionality)->psSubject->ref - STAT_RESEARCH == index)
 		{
 			return psBuilding;
 		}
@@ -1151,7 +1151,7 @@ static void printchatmsg(const char *text, int from, bool team = false)
 	gmtime_r(&current_time, &time_info);
 #endif
 	char time_str[9];
-	ssprintf(time_str, "[%d:%d] ", time_info.tm_hour, time_info.tm_min);
+	ssprintf(time_str, "[%02d:%02d] ", time_info.tm_hour, time_info.tm_min);
 
 	sstrcpy(msg, time_str);
 	sstrcat(msg, getPlayerName(from));
@@ -1275,7 +1275,7 @@ bool sendTextMessage(const char *pStr, bool all, uint32_t from)
 			{
 				sstrcat(display, ", ");
 			}
-			if ((isHumanPlayer(i) || (game.type == SKIRMISH && i < game.maxPlayers && game.skDiff[i])))
+			if ((isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED)))
 			{
 				sstrcat(display, getPlayerName(posTable[curStr[0] - '0']));
 				sendto[i] = true;
@@ -1732,6 +1732,11 @@ bool recvMapFileData(NETQUEUE queue)
 			game.isMapMod = true;
 			widgReveal(psWScreen, MULTIOP_MAP_MOD);
 		}
+		if (mapData && CheckForRandom(mapData->realFileName, mapData->apDataFiles[0]))
+		{
+			game.isRandom = true;
+			widgReveal(psWScreen, MULTIOP_MAP_RANDOM);
+		}
 
 		loadMapPreview(false);
 		return true;
@@ -1753,7 +1758,7 @@ VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY)
 	psViewData = new VIEWDATA;
 
 	//store name
-	sprintf(name, _("Beacon %d"), sender);
+	snprintf(name, sizeof(name), _("Beacon %d"), sender);
 	psViewData->name = name;
 
 	//store text message, hardcoded for now
@@ -1955,7 +1960,7 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 		for (unsigned int i = 0; i < game.maxPlayers; ++i)
 		{
 			//Ignore for autohost launch option.
-			if (selectedPlayer == i && hostlaunch == 3)
+			if (selectedPlayer == i && hostlaunch == HostLaunch::Autohost)
 			{
 				continue;
 			}

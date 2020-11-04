@@ -25,7 +25,6 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/opengl.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -48,15 +47,6 @@
 #define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
-// Shadow stencil stuff
-static void ss_GL2_1pass();
-static void ss_EXT_1pass();
-static void ss_ATI_1pass();
-static void ss_2pass();
-static void (*ShadowStencilFunc)() = nullptr;
-static GLenum ss_op_depth_pass_front = GL_INCR;
-static GLenum ss_op_depth_pass_back = GL_DECR;
-
 /*
  *	Local Variables
  */
@@ -66,33 +56,6 @@ static unsigned int polyCount = 0;
 static bool shadows = false;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
 
-static std::vector<GLint> enabledAttribArrays;
-
-
-void enableArray(gfx_api::buffer *buffer, GLint loc, GLint size, GLenum type, GLboolean normalised, GLsizei stride, std::size_t offset)
-{
-	ASSERT(buffer, "buffer is NULL");
-	if (loc == -1)
-	{
-		return;
-	}
-
-	buffer->bind();
-	glVertexAttribPointer(loc, size, type, normalised, stride, BUFFER_OFFSET(offset));
-	glEnableVertexAttribArray(loc);
-	enabledAttribArrays.push_back(loc);
-}
-
-void disableArrays()
-{
-	for (GLint loc : enabledAttribArrays)
-	{
-		glDisableVertexAttribArray(loc);
-	}
-
-	enabledAttribArrays.clear();
-}
-
 /*
  *	Source
  */
@@ -101,7 +64,12 @@ void pie_InitLighting()
 {
 	// set scene color, ambient, diffuse and specular light intensities of sun
 	// diffuse lighting is turned off because players dislike it
-	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {{0.0f, 0.0f, 0.0f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f},  {0.0f, 0.0f, 0.0f, 1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}};
+	const gfx_api::gfxFloat defaultLight[LIGHT_MAX][4] = {
+		{0.0f, 0.0f, 0.0f, 1.0f}, // LIGHT_EMISSIVE
+		{0.5f, 0.5f, 0.5f, 1.0f}, // LIGHT_AMBIENT
+		{1.0f, 1.0f, 1.0f, 1.0f}, // LIGHT_DIFFUSE
+		{1.0f, 1.0f, 1.0f, 1.0f}  // LIGHT_SPECULAR
+	};
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
 }
 
@@ -157,27 +125,142 @@ struct SHAPE
 static std::vector<ShadowcastingShape> scshapes;
 static std::vector<SHAPE> tshapes;
 static std::vector<SHAPE> shapes;
+static gfx_api::buffer* pZeroedVertexBuffer = nullptr;
+
+static gfx_api::buffer* getZeroedVertexBuffer(size_t size)
+{
+	static size_t currentSize = 0;
+	if (!pZeroedVertexBuffer || (currentSize < size))
+	{
+		if (pZeroedVertexBuffer)
+		{
+			delete pZeroedVertexBuffer;
+		}
+		pZeroedVertexBuffer = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		std::vector<UBYTE> tempZeroes(size, 0);
+		pZeroedVertexBuffer->upload(size, tempZeroes.data());
+		currentSize = size;
+	}
+	return pZeroedVertexBuffer;
+}
 
 static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::mat4 &matrix)
 {
+	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
+	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
+	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
+
+	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
+
 	const PIELIGHT colour = WZCOL_WHITE;
-	pie_SetDepthBufferStatus(DEPTH_CMP_LEQ_WRT_ON);
-	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(SHADER_BUTTON, shape, teamcolour, colour, matrix, pie_PerspectiveGet(),
-		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f));
-	pie_SetRendMode(REND_OPAQUE);
-	pie_SetTexturePage(shape->texpage);
-	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
-	shape->buffers[VBO_INDEX]->bind();
-	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, nullptr);
-	disableArrays();
+	gfx_api::Draw3DButtonPSO::get().bind();
+	gfx_api::constant_buffer_type<SHADER_BUTTON> cbuf{
+		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), 0.f, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, 0, 0, 0.f, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
+		glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), glm::vec4(0.f), 0.f, 0.f, shape->buffers[VBO_TANGENT] != nullptr };
+	gfx_api::Draw3DButtonPSO::get().bind_constants(cbuf);
+
+	gfx_api::Draw3DButtonPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+	gfx_api::Draw3DButtonPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
+	gfx_api::Draw3DButtonPSO::get().draw_elements(shape->polys.size() * 3, 0);
 	polyCount += shape->polys.size();
-	pie_DeactivateShader();
-	pie_SetDepthBufferStatus(DEPTH_CMP_ALWAYS_WRT_ON);
+	gfx_api::Draw3DButtonPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+	gfx_api::context::get().unbind_index_buffer(*shape->buffers[VBO_INDEX]);
 }
 
-static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix)
+struct templatedState
+{
+	SHADER_MODE shader = SHADER_NONE;
+	const iIMDShape * shape = nullptr;
+	int pieFlag = 0;
+
+	templatedState()
+	: shader(SHADER_NONE), shape(nullptr), pieFlag(0)
+	{ }
+
+	templatedState(SHADER_MODE shader, const iIMDShape * shape, int pieFlag)
+	: shader(shader), shape(shape), pieFlag(pieFlag)
+	{ }
+
+	bool operator==(const templatedState& rhs) const
+	{
+		return (shader == rhs.shader)
+		&& (shape == rhs.shape)
+		&& (pieFlag == rhs.pieFlag);
+	}
+	bool operator!=(const templatedState& rhs) const
+	{
+		return !operator==(rhs);
+	}
+};
+
+template<SHADER_MODE shader, typename AdditivePSO, typename AlphaPSO, typename PremultipliedPSO, typename OpaquePSO>
+static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT &colour, const PIELIGHT &teamcolour, const float& stretch, const int& ecmState, const float& timestate, const glm::mat4 & matrix, glm::vec4 &sceneColor, glm::vec4 &ambient, glm::vec4 &diffuse, glm::vec4 &specular, const iIMDShape * shape, int pieFlag, int frame)
+{
+	templatedState currentState = templatedState(shader, shape, pieFlag);
+
+	auto* tcmask = shape->tcmaskpage != iV_TEX_INVALID ? &pie_Texture(shape->tcmaskpage) : nullptr;
+	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
+	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
+
+	gfx_api::constant_buffer_type<shader> cbuf{
+		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), stretch, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, ecmState, !(pieFlag & pie_PREMULTIPLIED), timestate, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
+		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, glm::vec4(0.f), 0.f, 0.f, shape->buffers[VBO_TANGENT] != nullptr };
+
+	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
+
+	/* Set tranlucency */
+	if (pieFlag & pie_ADDITIVE)
+	{
+		AdditivePSO::get().bind();
+		AdditivePSO::get().bind_constants(cbuf);
+		if (currentState != lastState)
+		{
+			AdditivePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+			AdditivePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+		}
+		AdditivePSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+//		AdditivePSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+	}
+	else if (pieFlag & pie_TRANSLUCENT)
+	{
+		AlphaPSO::get().bind();
+		AlphaPSO::get().bind_constants(cbuf);
+		if (currentState != lastState)
+		{
+			AlphaPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+			AlphaPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+		}
+		AlphaPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+	}
+	else if (pieFlag & pie_PREMULTIPLIED)
+	{
+		PremultipliedPSO::get().bind();
+		PremultipliedPSO::get().bind_constants(cbuf);
+		if (currentState != lastState)
+		{
+			PremultipliedPSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+			PremultipliedPSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+		}
+		PremultipliedPSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+//		PremultipliedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+	}
+	else
+	{
+		OpaquePSO::get().bind();
+		OpaquePSO::get().bind_constants(cbuf);
+		if (currentState != lastState)
+		{
+			OpaquePSO::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
+			OpaquePSO::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
+		}
+		OpaquePSO::get().draw_elements(shape->polys.size() * 3, frame * shape->polys.size() * 3 * sizeof(uint16_t));
+//		OpaquePSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
+	}
+}
+
+static templatedState pie_Draw3DShape2(const templatedState &lastState, const iIMDShape *shape, int frame, PIELIGHT colour, PIELIGHT teamcolour, int pieFlag, int pieFlagData, glm::mat4 const &matrix)
 {
 	bool light = true;
 
@@ -194,29 +277,21 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	/* Set translucency */
 	if (pieFlag & pie_ADDITIVE)
 	{
-		pie_SetRendMode(REND_ADDITIVE);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
 	{
-		pie_SetRendMode(REND_ALPHA);
 		colour.byte.a = (UBYTE)pieFlagData;
 		light = false;
 	}
 	else if (pieFlag & pie_PREMULTIPLIED)
 	{
-		pie_SetRendMode(REND_PREMULTIPLIED);
 		light = false;
-	}
-	else
-	{
-		pie_SetRendMode(REND_OPAQUE);
 	}
 
 	if (pieFlag & pie_ECM)
 	{
-		pie_SetRendMode(REND_ALPHA);
 		light = true;
 		pie_SetShaderEcmEffect(true);
 	}
@@ -226,30 +301,28 @@ static void pie_Draw3DShape2(const iIMDShape *shape, int frame, PIELIGHT colour,
 	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
 	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
 
-	SHADER_MODE mode = shape->shaderProgram == SHADER_NONE ? light ? SHADER_COMPONENT : SHADER_NOLIGHT : shape->shaderProgram;
-	pie_internal::SHADER_PROGRAM &program = pie_ActivateShaderDeprecated(mode, shape, teamcolour, colour, matrix, pie_PerspectiveGet(),
-		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular);
-
-	if (program.locations.size() >= 9)
-		glUniform1i(program.locations[8], (pieFlag & pie_PREMULTIPLIED) == 0);
-
-	pie_SetTexturePage(shape->texpage);
-
 	frame %= std::max<int>(1, shape->numFrames);
 
-	enableArray(shape->buffers[VBO_VERTEX], program.locVertex, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_NORMAL], program.locNormal, 3, GL_FLOAT, false, 0, 0);
-	enableArray(shape->buffers[VBO_TEXCOORD], program.locTexCoord, 2, GL_FLOAT, false, 0, 0);
-	shape->buffers[VBO_INDEX]->bind();
-	glDrawElements(GL_TRIANGLES, shape->polys.size() * 3, GL_UNSIGNED_SHORT, BUFFER_OFFSET(frame * shape->polys.size() * 3 * sizeof(uint16_t)));
-	disableArrays();
+	templatedState currentState = templatedState((light) ? SHADER_COMPONENT : SHADER_NOLIGHT, shape, pieFlag);
+	if (currentState != lastState)
+	{
+		gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
+	}
+
+	if (light)
+	{
+		draw3dShapeTemplated<SHADER_COMPONENT, gfx_api::Draw3DShapeAdditive, gfx_api::Draw3DShapeAlpha, gfx_api::Draw3DShapePremul, gfx_api::Draw3DShapeOpaque>(lastState, colour, teamcolour, pie_GetShaderStretchDepth(), pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+	}
+	else
+	{
+		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, colour, teamcolour, pie_GetShaderStretchDepth(), pie_GetShaderEcmEffect(), pie_GetShaderTime(), matrix, sceneColor, ambient, diffuse, specular, shape, pieFlag, frame);
+	}
 
 	polyCount += shape->polys.size();
 
 	pie_SetShaderEcmEffect(false);
-	// NOTE: Do *not* call pie_DeactivateShader() here, to avoid unecessary state transitions.
-	// Avoiding a call to pie_DeactivateShader() here yields a 10%+ CPU usage reduction overall.
-	// (activateShader handles changing the active shader *if necessary*.)
+
+	return currentState;
 }
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
@@ -545,39 +618,16 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 	return result;
 }
 
-void pie_SetUp()
-{
-	// initialise pie engine
-
-	if (GLEW_EXT_stencil_wrap)
-	{
-		ss_op_depth_pass_front = GL_INCR_WRAP;
-		ss_op_depth_pass_back = GL_DECR_WRAP;
-	}
-
-	if (GLEW_VERSION_2_0)
-	{
-		ShadowStencilFunc = ss_GL2_1pass;
-	}
-	else if (GLEW_EXT_stencil_two_side)
-	{
-		ShadowStencilFunc = ss_EXT_1pass;
-	}
-	else if (GLEW_ATI_separate_stencil)
-	{
-		ShadowStencilFunc = ss_ATI_1pass;
-	}
-	else
-	{
-		ShadowStencilFunc = ss_2pass;
-	}
-}
-
 void pie_CleanUp()
 {
 	tshapes.clear();
 	shapes.clear();
 	scshapes.clear();
+	if (pZeroedVertexBuffer)
+	{
+		delete pZeroedVertexBuffer;
+		pZeroedVertexBuffer = nullptr;
+	}
 }
 
 bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int pieFlag, int pieFlagData, const glm::mat4 &modelView)
@@ -654,10 +704,6 @@ bool pie_Draw3DShape(iIMDShape *shape, int frame, int team, PIELIGHT colour, int
 
 static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 {
-	// Use several buffers and a round-robin algorithm to attempt to avoid implicit synchronization
-	static std::vector<gfx_api::buffer*> buffers(10, nullptr);
-	static size_t currBuffer = 0;
-
 	size_t cachedShadowDraws = 0;
 	size_t uncachedShadowDraws = 0;
 	for (unsigned i = 0; i < scshapes.size(); i++)
@@ -673,35 +719,30 @@ static void pie_ShadowDrawLoop(ShadowCache &shadowCache)
 		}
 	}
 
-	if (!buffers[currBuffer])
-		buffers[currBuffer] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::stream_draw);
-
-	// Draw the shadow volume
 	const auto &premultipliedVertexes = shadowCache.getPremultipliedVertexes();
-	// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
-	// Thus we only need to include the perspective matrix
-	const auto &program = pie_ActivateShader(SHADER_GENERIC_COLOR, pie_PerspectiveGet() /** modelViewMatrix*/, glm::vec4(0.f));
-	buffers[currBuffer]->upload(sizeof(Vector3f) * premultipliedVertexes.size(), premultipliedVertexes.data());
-	buffers[currBuffer]->bind();
-	glVertexAttribPointer(program.locVertex, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(program.locVertex);
-
-	// Batch into glDrawArrays calls of <= SHADOW_BATCH_MAX
-	static const size_t SHADOW_BATCH_MAX = 8192 * 3; // must be divisible by 3
-	size_t vertex_count = premultipliedVertexes.size();
-	for (GLint startingIndex = 0; startingIndex < vertex_count; startingIndex += SHADOW_BATCH_MAX)
+	if (premultipliedVertexes.size() > 0)
 	{
-		glDrawArrays(GL_TRIANGLES, startingIndex, std::min(vertex_count - startingIndex, SHADOW_BATCH_MAX));
+		// Draw the shadow volume
+		gfx_api::DrawStencilShadow::get().bind();
+		// The vertexes returned by shadowCache.getPremultipliedVertexes() are pre-multiplied by the modelViewMatrix
+		// Thus we only need to include the perspective matrix
+		gfx_api::DrawStencilShadow::get().bind_constants({ pie_PerspectiveGet(), glm::vec2(0.f), glm::vec2(0.f), glm::vec4(0.f) });
+		gfx_api::context::get().bind_streamed_vertex_buffers(premultipliedVertexes.data(), sizeof(Vector3f) * premultipliedVertexes.size());
+
+		// Batch into glDrawArrays calls of <= SHADOW_BATCH_MAX
+		static const size_t SHADOW_BATCH_MAX = 8192 * 3; // must be divisible by 3
+		size_t vertex_count = premultipliedVertexes.size();
+		for (size_t startingIndex = 0; startingIndex < vertex_count; startingIndex += SHADOW_BATCH_MAX)
+		{
+			gfx_api::DrawStencilShadow::get().draw(std::min(vertex_count - startingIndex, SHADOW_BATCH_MAX), startingIndex);
+		}
+
+		gfx_api::context::get().disable_all_vertex_buffers();
 	}
 
 	shadowCache.clearPremultipliedVertexes();
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDisableVertexAttribArray(program.locVertex);
-	pie_DeactivateShader();
 //	debug(LOG_INFO, "Cached shadow draws: %lu, uncached shadow draws: %lu", cachedShadowDraws, uncachedShadowDraws);
-	++currBuffer;
-	if (currBuffer >= buffers.size()) { currBuffer = 0; }
 }
 
 static ShadowCache shadowCache;
@@ -712,46 +753,43 @@ static void pie_DrawShadows(uint64_t currentGameFrame)
 	const float height = pie_GetVideoBufferHeight();
 	shadowCache.setCurrentFrame(currentGameFrame);
 
-	pie_SetTexturePage(TEXPAGE_NONE);
+	pie_ShadowDrawLoop(shadowCache);
 
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	glDepthFunc(GL_LESS);
-	glDepthMask(GL_FALSE);
-	glEnable(GL_STENCIL_TEST);
-
-	ShadowStencilFunc();
-
-	glEnable(GL_CULL_FACE);
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-	glStencilMask(~0);
-	glStencilFunc(GL_LESS, 0, ~0);
-
-	glDisable(GL_DEPTH_TEST);
 	PIELIGHT grey;
 	grey.byte = { 0, 0, 0, 128 };
-	pie_BoxFill(0, 0, width, height, grey, REND_ALPHA);
-
-	pie_SetRendMode(REND_OPAQUE);
-	glDisable(GL_STENCIL_TEST);
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
+	pie_BoxFill_alpha(0, 0, width, height, grey);
 
 	scshapes.resize(0);
 	shadowCache.removeUnused();
 }
 
+struct less_than_shape
+{
+	inline bool operator() (const SHAPE& shape1, const SHAPE& shape2)
+	{
+		return (shape1.shape < shape2.shape);
+	}
+};
+
 void pie_RemainingPasses(uint64_t currentGameFrame)
 {
 	// Draw models
-	// TODO, sort list to reduce state changes
-	GL_DEBUG("Remaining passes - opaque models");
+	// sort list to reduce state changes
+	std::sort(shapes.begin(), shapes.end(), less_than_shape());
+	gfx_api::context::get().debugStringMarker("Remaining passes - opaque models");
+	templatedState lastState;
 	for (SHAPE const &shape : shapes)
 	{
 		pie_SetShaderStretchDepth(shape.stretch);
-		pie_Draw3DShape2(shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+		lastState = pie_Draw3DShape2(lastState, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
 	}
-	GL_DEBUG("Remaining passes - shadows");
+	gfx_api::context::get().disable_all_vertex_buffers();
+	if (!shapes.empty())
+	{
+		// unbind last index buffer bound inside pie_Draw3DShape2
+		gfx_api::context::get().unbind_index_buffer(*((shapes.back().shape)->buffers[VBO_INDEX]));
+	}
+	gfx_api::context::get().debugStringMarker("Remaining passes - shadows");
 	// Draw shadows
 	if (shadows)
 	{
@@ -759,17 +797,23 @@ void pie_RemainingPasses(uint64_t currentGameFrame)
 	}
 	// Draw translucent models last
 	// TODO, sort list by Z order to do translucency correctly
-	GL_DEBUG("Remaining passes - translucent models");
+	gfx_api::context::get().debugStringMarker("Remaining passes - translucent models");
+	lastState = templatedState();
 	for (SHAPE const &shape : tshapes)
 	{
 		pie_SetShaderStretchDepth(shape.stretch);
-		pie_Draw3DShape2(shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+		lastState = pie_Draw3DShape2(lastState, shape.shape, shape.frame, shape.colour, shape.teamcolour, shape.flag, shape.flag_data, shape.matrix);
+	}
+	gfx_api::context::get().disable_all_vertex_buffers();
+	if (!tshapes.empty())
+	{
+		// unbind last index buffer bound inside pie_Draw3DShape2
+		gfx_api::context::get().unbind_index_buffer(*((tshapes.back().shape)->buffers[VBO_INDEX]));
 	}
 	pie_SetShaderStretchDepth(0);
-	pie_DeactivateShader();
 	tshapes.clear();
 	shapes.clear();
-	GL_DEBUG("Remaining passes - done");
+	gfx_api::context::get().debugStringMarker("Remaining passes - done");
 }
 
 void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount)
@@ -779,66 +823,4 @@ void pie_GetResetCounts(unsigned int *pPieCount, unsigned int *pPolyCount)
 
 	pieCount = 0;
 	polyCount = 0;
-}
-
-// GL 2.0 1-pass version
-static void ss_GL2_1pass()
-{
-	glDisable(GL_CULL_FACE);
-	glStencilMask(~0);
-	glStencilOpSeparate(GL_BACK, GL_KEEP, GL_KEEP, GL_INCR_WRAP);
-	glStencilOpSeparate(GL_FRONT, GL_KEEP, GL_KEEP, GL_DECR_WRAP);
-	glStencilFunc(GL_ALWAYS, 0, ~0);
-
-	pie_ShadowDrawLoop(shadowCache);
-}
-
-// generic 1-pass version
-static void ss_EXT_1pass()
-{
-	glEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-	glDisable(GL_CULL_FACE);
-	glStencilMask(~0);
-	glActiveStencilFaceEXT(GL_BACK);
-	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
-	glStencilFunc(GL_ALWAYS, 0, ~0);
-	glActiveStencilFaceEXT(GL_FRONT);
-	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
-	glStencilFunc(GL_ALWAYS, 0, ~0);
-
-	pie_ShadowDrawLoop(shadowCache);
-
-	glDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
-}
-
-// ATI-specific 1-pass version
-static void ss_ATI_1pass()
-{
-	glDisable(GL_CULL_FACE);
-	glStencilMask(~0);
-	glStencilOpSeparateATI(GL_BACK, GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
-	glStencilOpSeparateATI(GL_FRONT, GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
-	glStencilFunc(GL_ALWAYS, 0, ~0);
-
-	pie_ShadowDrawLoop(shadowCache);
-}
-
-// generic 2-pass version
-static void ss_2pass()
-{
-	glStencilMask(~0);
-	glStencilFunc(GL_ALWAYS, 0, ~0);
-	glEnable(GL_CULL_FACE);
-
-	// Setup stencil for front-facing polygons
-	glCullFace(GL_BACK);
-	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_front);
-
-	pie_ShadowDrawLoop(shadowCache);
-
-	// Setup stencil for back-facing polygons
-	glCullFace(GL_FRONT);
-	glStencilOp(GL_KEEP, GL_KEEP, ss_op_depth_pass_back);
-
-	pie_ShadowDrawLoop(shadowCache);
 }

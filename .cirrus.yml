@@ -8,14 +8,14 @@ freebsd_build_task:
     # See the list of available FreeBSD image families here: https://cirrus-ci.org/guide/FreeBSD/
     matrix:
       - image_family: freebsd-12-1-snap # FreeBSD 12.1-STABLE
-      - image_family: freebsd-11-3-snap # FreeBSD 11.3-STABLE
+#      - image_family: freebsd-11-3-snap # FreeBSD 11.3-STABLE # currently disabled because of Qt5 port issue
 #    cpu: 4
 #    memory: 8G
 
   install_script:
     - pkg update -f
     - pkg clean -a
-    - pkg install -y git cmake ninja p7zip gettext qt5-core qt5-qmake qt5-buildtools qt5-widgets qt5-script png sdl2 openal-soft physfs libvorbis libtheora glew freetype2 harfbuzz curl libsodium rubygem-asciidoctor
+    - pkg install -y git cmake ninja p7zip gettext qt5-core qt5-qmake qt5-buildtools qt5-widgets qt5-script png sdl2 openal-soft physfs libvorbis libtheora freetype2 harfbuzz curl libsodium rubygem-asciidoctor
 
   init_git_submodules_script: git submodule update --init --recursive
 

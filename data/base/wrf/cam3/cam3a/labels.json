@@ -116,7 +116,7 @@
 	"area_4": {
 		"label": "NEDefenderGroup",
 		"pos1": [4032, 9536],
-		"pos2": [5440, 9920]
+		"pos2": [4480, 10112]
 	},
 	"area_5": {
 		"label": "NEAttackerGroup",

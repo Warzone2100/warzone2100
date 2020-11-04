@@ -1434,7 +1434,7 @@ int realmain(int argc, char *argv[])
 			}
 			else
 			{
-				info("global mod \"%s\" is enabled", iterator->c_str());
+				wz_info("global mod \"%s\" is enabled", iterator->c_str());
 				++iterator;
 			}
 		}
@@ -1455,7 +1455,7 @@ int realmain(int argc, char *argv[])
 			}
 			else
 			{
-				info("campaign mod \"%s\" is enabled", iterator->c_str());
+				wz_info("campaign mod \"%s\" is enabled", iterator->c_str());
 				++iterator;
 			}
 		}
@@ -1476,7 +1476,7 @@ int realmain(int argc, char *argv[])
 			}
 			else
 			{
-				info("multiplay mod \"%s\" is enabled", iterator->c_str());
+				wz_info("multiplay mod \"%s\" is enabled", iterator->c_str());
 				++iterator;
 			}
 		}
@@ -1484,8 +1484,9 @@ int realmain(int argc, char *argv[])
 
 	ActivityManager::instance().initialize();
 
-	if (!wzMainScreenSetup(war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
+	if (!wzMainScreenSetup(war_getGfxBackend(), war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
 	{
+		saveConfig(); // ensure any setting changes are persisted on failure
 		return EXIT_FAILURE;
 	}
 
@@ -1575,6 +1576,22 @@ int realmain(int argc, char *argv[])
 	debug(LOG_MAIN, "Entering main loop");
 	wzMainEventLoop();
 	ActivityManager::instance().preSystemShutdown();
+
+	switch (GetGameMode())
+	{
+		case GS_NORMAL:
+			// if running a game while quitting, stop the game loop
+			// (currently required for some cleanup) (should modelShutdown() be added to systemShutdown?)
+			stopGameLoop();
+			break;
+		case GS_TITLE_SCREEN:
+			// if showing the title / menus while quitting, stop the title loop
+			// (currently required for some cleanup)
+			stopTitleLoop();
+			break;
+		default:
+			break;
+	}
 	saveConfig();
 #if defined(ENABLE_DISCORD)
 	discordRPCShutdown();

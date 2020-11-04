@@ -119,55 +119,79 @@ void NETPosition(Position *vp);
 void NETRotation(Rotation *vp);
 void NETVector2i(Vector2i *vp);
 
-static inline void NETauto(int8_t *ip)
+static inline void NETauto(char &ch)
 {
-	NETint8_t(ip);
+	uint8_t u = ch;
+	NETuint8_t(&u);
+	ch = u;
 }
-static inline void NETauto(uint8_t *ip)
+static inline void NETauto(int8_t &ip)
 {
-	NETuint8_t(ip);
+	NETint8_t(&ip);
 }
-static inline void NETauto(int16_t *ip)
+static inline void NETauto(uint8_t &ip)
 {
-	NETint16_t(ip);
+	NETuint8_t(&ip);
 }
-static inline void NETauto(uint16_t *ip)
+static inline void NETauto(int16_t &ip)
 {
-	NETuint16_t(ip);
+	NETint16_t(&ip);
 }
-static inline void NETauto(int32_t *ip)
+static inline void NETauto(uint16_t &ip)
 {
-	NETint32_t(ip);
+	NETuint16_t(&ip);
 }
-static inline void NETauto(uint32_t *ip)
+static inline void NETauto(int32_t &ip)
 {
-	NETuint32_t(ip);
+	NETint32_t(&ip);
 }
-static inline void NETauto(int64_t *ip)
+static inline void NETauto(uint32_t &ip)
 {
-	NETint64_t(ip);
+	NETuint32_t(&ip);
 }
-static inline void NETauto(uint64_t *ip)
+static inline void NETauto(int64_t &ip)
 {
-	NETuint64_t(ip);
+	NETint64_t(&ip);
 }
-static inline void NETauto(bool *bp)
+static inline void NETauto(uint64_t &ip)
 {
-	NETbool(bp);
+	NETuint64_t(&ip);
 }
-static inline void NETauto(Position *vp)
+static inline void NETauto(bool &bp)
 {
-	NETPosition(vp);
+	NETbool(&bp);
 }
-static inline void NETauto(Rotation *vp)
+static inline void NETauto(Position &vp)
 {
-	NETRotation(vp);
+	NETPosition(&vp);
 }
-static inline void NETauto(Vector2i *vp)
+static inline void NETauto(Rotation &vp)
 {
-	NETVector2i(vp);
+	NETRotation(&vp);
 }
-
+static inline void NETauto(Vector2i &vp)
+{
+	NETVector2i(&vp);
+}
+static inline void NETauto(std::string &s, uint32_t maxLen = 65536)
+{
+	uint32_t len = std::min<size_t>(s.size(), maxLen);
+	NETauto(len);
+	len = std::min(len, maxLen);
+	s.resize(len);
+	for (uint32_t i = 0; i < len; ++i)
+	{
+		NETauto(s[i]);
+	}
+}
+template <typename T, int N>
+static inline void NETauto(T (&ar)[N])
+{
+	for (int i = 0; i < N; ++i)
+	{
+		NETauto(ar[i]);
+	}
+}
 
 void NETnetMessage(NetMessage const **message);  ///< If decoding, must delete the NETMESSAGE.
 

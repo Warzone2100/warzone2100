@@ -166,6 +166,19 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_AssignGrouping_9, "AssignGrouping_9"},
 	// **********************************
 	// **********************************
+	// ADD TO GROUP
+	{kf_AddGrouping_0, "AddGrouping_0"},
+	{kf_AddGrouping_1, "AddGrouping_1"},
+	{kf_AddGrouping_2, "AddGrouping_2"},
+	{kf_AddGrouping_3, "AddGrouping_3"},
+	{kf_AddGrouping_4, "AddGrouping_4"},
+	{kf_AddGrouping_5, "AddGrouping_5"},
+	{kf_AddGrouping_6, "AddGrouping_6"},
+	{kf_AddGrouping_7, "AddGrouping_7"},
+	{kf_AddGrouping_8, "AddGrouping_8"},
+	{kf_AddGrouping_9, "AddGrouping_9"},
+	// **********************************
+	// **********************************
 	// SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
 	{kf_SelectGrouping_0, "SelectGrouping_0"},
 	{kf_SelectGrouping_1, "SelectGrouping_1"},
@@ -205,8 +218,8 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_addInGameOptions, "addInGameOptions"},
 	{kf_RadarZoomOut, "RadarZoomOut"},
 	{kf_RadarZoomIn, "RadarZoomIn"},
-	{kf_ZoomOut, "ZoomOut"},
 	{kf_ZoomIn, "ZoomIn"},
+	{kf_ZoomOut, "ZoomOut"},
 	{kf_PitchForward, "PitchForward"},
 	{kf_RotateLeft, "RotateLeft"},
 	{kf_ResetPitch, "ResetPitch"},
@@ -228,6 +241,8 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_ToggleOverlays, "ToggleOverlays"},
 	{kf_ToggleConsoleDrop, "ToggleConsoleDrop"},
 	{kf_ToggleTeamChat, "ToggleTeamChat"},
+	{kf_RotateBuildingCW, "RotateBuildingClockwise"},
+	{kf_RotateBuildingACW, "RotateBuildingAnticlockwise"},
 	// **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
 	{kf_CentreOnBase, "CentreOnBase"},
@@ -295,6 +310,12 @@ static KeyMapSaveTable const keyMapSaveTable(
 	{kf_SelectNextResearch, "SelectNextResearch"},
 	{kf_SelectNextPowerStation, "SelectNextPowerStation"},
 	{kf_SelectNextCyborgFactory, "SelectNextCyborgFactory"},
+	{kf_SelectNextVTOLFactory, "SelectNextVtolFactory"},
+	{kf_JumpNextFactory, "JumpNextFactory"},
+	{kf_JumpNextResearch, "JumpNextResearch"},
+	{kf_JumpNextPowerStation, "JumpNextPowerStation"},
+	{kf_JumpNextCyborgFactory, "JumpNextCyborgFactory"},
+	{kf_JumpNextVTOLFactory, "JumpNextVtolFactory"},
 	//
 	// Debug options
 	{kf_ToggleDebugMappings, "ToggleDebugMappings"},
@@ -386,7 +407,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE,     KEY_LSHIFT, KEY_F12, KEYMAP_PRESSED, kf_ToggleSensorDisplay,          N_("Toggle Sensor display"), bForceDefaults) || didAdd; //Which key should we use? --Re enabled see below! -Q 5-10-05
 	//                                **********************************
 	//                                **********************************
-	//										ASSIGN GROUPS
+	//	ASSIGN GROUPS - Will create or replace the existing group
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_0, KEYMAP_PRESSED, kf_AssignGrouping_0, N_("Assign Group 0"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_1, KEYMAP_PRESSED, kf_AssignGrouping_1, N_("Assign Group 1"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_2, KEYMAP_PRESSED, kf_AssignGrouping_2, N_("Assign Group 2"), bForceDefaults) || didAdd;
@@ -397,6 +418,17 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_7, KEYMAP_PRESSED, kf_AssignGrouping_7, N_("Assign Group 7"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_8, KEYMAP_PRESSED, kf_AssignGrouping_8, N_("Assign Group 8"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_9, KEYMAP_PRESSED, kf_AssignGrouping_9, N_("Assign Group 9"), bForceDefaults) || didAdd;
+	//	ADD TO GROUPS - Will add the selected units to the group
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_0, KEYMAP_PRESSED, kf_AddGrouping_0, N_("Add to Group 0"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_1, KEYMAP_PRESSED, kf_AddGrouping_1, N_("Add to Group 1"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_2, KEYMAP_PRESSED, kf_AddGrouping_2, N_("Add to Group 2"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_3, KEYMAP_PRESSED, kf_AddGrouping_3, N_("Add to Group 3"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_4, KEYMAP_PRESSED, kf_AddGrouping_4, N_("Add to Group 4"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_5, KEYMAP_PRESSED, kf_AddGrouping_5, N_("Add to Group 5"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_6, KEYMAP_PRESSED, kf_AddGrouping_6, N_("Add to Group 6"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_7, KEYMAP_PRESSED, kf_AddGrouping_7, N_("Add to Group 7"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_8, KEYMAP_PRESSED, kf_AddGrouping_8, N_("Add to Group 8"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_9, KEYMAP_PRESSED, kf_AddGrouping_9, N_("Add to Group 9"), bForceDefaults) || didAdd;
 	//                                **********************************
 	//                                **********************************
 	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
@@ -438,8 +470,8 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ALWAYS,     KEY_IGNORE, KEY_ESC,               KEYMAP_PRESSED, kf_addInGameOptions,        N_("Display In-Game Options"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_MINUS,             KEYMAP_PRESSED, kf_RadarZoomOut,            N_("Zoom Radar Out"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_EQUALS,            KEYMAP_PRESSED, kf_RadarZoomIn,             N_("Zoom Radar In"), bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_MINUS,          KEYMAP_DOWN,    kf_ZoomOut,                 N_("Zoom In"), bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_PLUS,           KEYMAP_DOWN,    kf_ZoomIn,                  N_("Zoom Out"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_PLUS,           KEYMAP_DOWN,    kf_ZoomIn,                  N_("Zoom In"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_MINUS,          KEYMAP_DOWN,    kf_ZoomOut,                 N_("Zoom Out"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_2,              KEYMAP_DOWN,    kf_PitchForward,            N_("Pitch Forward"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_4,              KEYMAP_DOWN,    kf_RotateLeft,              N_("Rotate Left"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_5,              KEYMAP_DOWN,    kf_ResetPitch,              N_("Reset Pitch"), bForceDefaults) || didAdd;
@@ -461,6 +493,8 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_TAB,               KEYMAP_PRESSED, kf_ToggleOverlays,          N_("Toggle Overlays"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleConsoleDrop,       N_("Toggle Console History "), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleTeamChat,          N_("Toggle Team Chat History"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingCW,        N_("Rotate Building Clockwise"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingACW,       N_("Rotate Building Anticlockwise"), bForceDefaults) || didAdd;
 	//                                **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_B,      KEYMAP_PRESSED, kf_CentreOnBase,          N_("Center View on HQ"), bForceDefaults) || didAdd;
@@ -528,6 +562,12 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      N_("Select next Research Facility"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  N_("Select next Power Generator"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, N_("Select next Cyborg Factory"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextVTOLFactory,   N_("Select next VTOL Factory"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextFactory,         N_("Jump to next Factory"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextResearch,        N_("Jump to next Research Facility"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextPowerStation,    N_("Jump to next Power Generator"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextCyborgFactory,   N_("Jump to next Cyborg Factory"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextVTOLFactory,     N_("Jump to next VTOL Factory"), bForceDefaults) || didAdd;
 
 	// Debug options
 	didAdd = keyAddDefaultMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, N_("Toggle Debug Mappings"), bForceDefaults) || didAdd;

@@ -205,8 +205,10 @@ static void fillMainModel(QStandardItemModel &m)
 #define B2Q(_b) (_b ? QString("true") : QString("false"))
 #define KEYVAL(_key, _val) m.setItem(row, 0, new QStandardItem(_key)); m.setItem(row, 1, new QStandardItem(_val)); row++;
 
-	ASSERT(game.type < lev_type.size() && (int)game.type != 13 && (int)game.type != 15 && (int)game.type != 16 && (int)game.type != 17, "Bad LEVEL_TYPE for game.type");
-	KEYVAL("game.type", lev_type.at(game.type));
+	int8_t gameType = static_cast<int8_t>(game.type);
+	int8_t missionType = static_cast<int8_t>(mission.type);
+	ASSERT(gameType < lev_type.size() && gameType != 13 && gameType != 15 && gameType != 16 && gameType != 17, "Bad LEVEL_TYPE for game.type");
+	KEYVAL("game.type", lev_type.at(gameType));
 	KEYVAL("game.scavengers", B2Q(game.scavengers));
 	KEYVAL("game.map", QString(game.map));
 	KEYVAL("game.maxPlayers", QString::number(game.maxPlayers));
@@ -214,8 +216,8 @@ static void fillMainModel(QStandardItemModel &m)
 	KEYVAL("missionIsOffworld", B2Q(missionIsOffworld()));
 	KEYVAL("missionCanReEnforce", B2Q(missionCanReEnforce()));
 	KEYVAL("missionForReInforcements", B2Q(missionForReInforcements()));
-	ASSERT(mission.type < lev_type.size() && (int)mission.type != 13 && (int)mission.type != 15 && (int)mission.type != 16 && (int)mission.type != 17, "Bad LEVEL_TYPE for mission.type");
-	KEYVAL("mission.type", lev_type.at(mission.type));
+	ASSERT(missionType < lev_type.size() && missionType != 13 && missionType != 15 && missionType != 16 && missionType != 17, "Bad LEVEL_TYPE for mission.type");
+	KEYVAL("mission.type", lev_type.at(missionType));
 	KEYVAL("getDroidsToSafetyFlag", B2Q(getDroidsToSafetyFlag()));
 	KEYVAL("scavengerSlot", QString::number(scavengerSlot()));
 	KEYVAL("scavengerPlayer", QString::number(scavengerPlayer()));
@@ -241,7 +243,6 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 	int row = 0;
 	m.setRowCount(0);
 	m.setHorizontalHeaderLabels({"Key", "Value"});
-	KEYVAL("game.skDiff", QString::number(game.skDiff[i]));
 	KEYVAL("ingame.skScores score", QString::number(ingame.skScores[i][0]));
 	KEYVAL("ingame.skScores kills", QString::number(ingame.skScores[i][1]));
 	KEYVAL("NetPlay.players.name", NetPlay.players[i].name);
@@ -250,7 +251,7 @@ static void fillPlayerModel(QStandardItemModel &m, int i)
 	KEYVAL("NetPlay.players.allocated", QString::number(NetPlay.players[i].allocated));
 	KEYVAL("NetPlay.players.team", QString::number(NetPlay.players[i].team));
 	KEYVAL("NetPlay.players.ai", QString::number(NetPlay.players[i].ai));
-	KEYVAL("NetPlay.players.difficulty", QString::number(NetPlay.players[i].difficulty));
+	KEYVAL("NetPlay.players.difficulty", QString::number(static_cast<int8_t>(NetPlay.players[i].difficulty)));
 	KEYVAL("NetPlay.players.autoGame", QString::number(NetPlay.players[i].autoGame));
 	KEYVAL("NetPlay.players.IPtextAddress", NetPlay.players[i].IPtextAddress);
 	KEYVAL("Current power", QString::number(getPower(i)));
@@ -593,7 +594,6 @@ static const char *getObjType(const BASE_OBJECT *psObj)
 	case OBJ_STRUCTURE: return "Structure";
 	case OBJ_FEATURE: return "Feature";
 	case OBJ_PROJECTILE: return "Projectile";
-	case OBJ_TARGET: return "Target";
 	default: break;
 	}
 	return "Unknown";
@@ -620,8 +620,8 @@ QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *
 	key->appendRow(QStandardItemList{ new QStandardItem("^Power"), new QStandardItem(QString::number(psStats->buildPower)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Build Points"), new QStandardItem(QString::number(psStats->buildPoints)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Weight"), new QStandardItem(QString::number(psStats->weight)) });
-	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points"), new QStandardItem(QString::number(psStats->pUpgrade[player]->hitpoints)) });
-	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points +% of total"), new QStandardItem(QString::number(psStats->pUpgrade[player]->hitpointPct)) });
+	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points"), new QStandardItem(QString::number(psStats->getUpgrade(player).hitpoints)) });
+	key->appendRow(QStandardItemList{ new QStandardItem("^Hit points +% of total"), new QStandardItem(QString::number(psStats->getUpgrade(player).hitpointPct)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Designable"), new QStandardItem(QString::number(psStats->designable)) });
 	if (psStats->compType == COMP_BODY)
 	{
@@ -698,7 +698,7 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 	setPair(row, selectedModel, "Born", QString::number(psObj->born));
 	setPair(row, selectedModel, "Died", QString::number(psObj->died));
 	setPair(row, selectedModel, "Group", QString::number(psObj->group));
-	setPair(row, selectedModel, "Watched tiles", QString::number(psObj->numWatchedTiles));
+	setPair(row, selectedModel, "Watched tiles", QString::number(psObj->watchedTiles.size()));
 	setPair(row, selectedModel, "Last hit", QString::number(psObj->timeLastHit));
 	setPair(row, selectedModel, "Hit points", QString::number(psObj->body));
 	setPair(row, selectedModel, "Periodical start", QString::number(psObj->periodicalDamageStart));
@@ -774,7 +774,7 @@ void ScriptDebugger::selected(const BASE_OBJECT *psObj)
 		setPair(row, selectedModel, "Foundation depth", QString::number(psStruct->foundationDepth));
 		setPair(row, selectedModel, "Capacity", QString::number(psStruct->capacity));
 		setPair(row, selectedModel, "^Type", QString::number(psStruct->pStructureType->type));
-		setPair(row, selectedModel, "^Build points", QString::number(psStruct->pStructureType->buildPoints));
+		setPair(row, selectedModel, "^Build points", QString::number(structureBuildPointsToCompletion(*psStruct)));
 		setPair(row, selectedModel, "^Power points", QString::number(psStruct->pStructureType->powerToBuild));
 		setPair(row, selectedModel, "^Height", QString::number(psStruct->pStructureType->height));
 		setPair(row, selectedModel, componentToString("ECM", psStruct->pStructureType->pECM, psObj->player));

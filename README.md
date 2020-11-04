@@ -276,7 +276,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [libpng](https://www.libpng.org/pub/png/libpng.html) ≥ 1.2
       * [libtheora](https://theora.org)
       * [libvorbis](https://xiph.org/vorbis)
-      * [GLEW](https://glew.sourceforge.net/) ≥ 1.5.2
       * [Freetype](https://www.freetype.org/)
       * [Harfbuzz](https://github.com/harfbuzz/harfbuzz) ≥ 1.0
       * [OpenAL-Soft](https://openal-soft.org)
@@ -285,18 +284,19 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [Qt5 Script](https://doc.qt.io/qt-5/qtscript-index.html) ≥ 5.6
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
+   * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
 * **Installing prerequisites:**
    * Ubuntu 18.04+:
    ```
    sudo apt-get -u update
    sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
-   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libglew-dev libxrandr-dev qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev
+   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev
    ```
    * Fedora:
    ```
    sudo dnf -y update && dnf clean all
    sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
-   sudo dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel glew-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel
+   sudo dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel
    ```
 * **Building from the command-line:**
    1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
@@ -331,6 +331,8 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
      - Required components to install: MSVC 2015, Qt Script (even though it's labelled as deprecated). The MSVC 2015 components will work on MSVC 2017 / 2019, and 32-bit versions work on 64-bit platforms.
    * **Git** (if not building from a release source archive)
    * **7-Zip** (http://www.7-zip.org)
+   * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
+      - Required only if you want to build with Vulkan support.
 * **Preparing to build:**
    Build dependencies are provided via [vcpkg](https://github.com/Microsoft/vcpkg) from Microsoft.
    * Run the `get-dependencies_win.ps1` script from powershell in order to download and build the dependencies.
