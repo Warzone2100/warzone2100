@@ -41,6 +41,7 @@
 #include <sstream>
 #include <deque>
 #include <chrono>
+#include <set>
 
 // FIXME: When we switch over to full JS, use class version of this file
 
@@ -99,8 +100,19 @@ static bool	bTextBoxActive = false;				/** Is there a box under the console text
 static bool	bConsoleDisplayEnabled = false;		/** Is the console being displayed? */
 static UDWORD	consoleVisibleLines;			/** How many lines are displayed? */
 static int allowNewMessages;					/** Whether new messages are allowed to be added */
+static std::set<std::shared_ptr<CONSOLE_MESSAGE_LISTENER>> messageListeners;
 
 char ConsoleString[MAX_CONSOLE_TMP_STRING_LENGTH];	/// Globally available string for new console messages.
+
+void consoleAddMessageListener(std::shared_ptr<CONSOLE_MESSAGE_LISTENER> listener)
+{
+	messageListeners.insert(listener);
+}
+
+void consoleRemoveMessageListener(std::shared_ptr<CONSOLE_MESSAGE_LISTENER> listener)
+{
+	messageListeners.erase(listener);
+}
 
 static CONSOLE_CALC_LAYOUT_FUNC calcLayoutFunc;
 
@@ -194,6 +206,12 @@ bool addConsoleMessageDebounced(const char * Text, CONSOLE_TEXT_JUSTIFICATION ju
 /** Add a string to the console. */
 bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDWORD player, bool team, UDWORD duration)
 {
+	ConsoleMessage message = { Text, jusType, player, team, duration };
+	for (auto listener: messageListeners)
+	{
+		(*listener)(message);
+	}
+
 	if (!allowNewMessages)
 	{
 		return false;	// Don't allow it to be added if we've disabled adding of new messages
@@ -236,6 +254,7 @@ bool addConsoleMessage(const char *Text, CONSOLE_TEXT_JUSTIFICATION jusType, SDW
 			HistoryMessages.emplace_back(FitText, font_regular, realTime, newMsgDuration, jusType, player);	// persistent messages (all types)
 		}
 	}
+
 	return true;
 }
 
