@@ -24,7 +24,7 @@
 /* Externally referenced functions */
 
 SDWORD driveGetMoveSpeed(void);
-SDWORD driveGetMoveDir(void);
+UWORD driveGetMoveDir(void);
 void startDriving();
 void processDriving();
 void driveModeClick();
