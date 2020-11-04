@@ -33,10 +33,9 @@ class ClipRectWidget : public WIDGET
 public:
 	ClipRectWidget(WIDGET *parent) : WIDGET(parent) {}
 
-	void display(int xOffset, int yOffset) override;
 	void run(W_CONTEXT *psContext) override;
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
-	void displayRecursive(int xOffset, int yOffset) override;
+	void displayRecursive(WidgetGraphicsContext const &context) override;
 	void setTopOffset(uint16_t value);
 	void setLeftOffset(uint16_t value);
 

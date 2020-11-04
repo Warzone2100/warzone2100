@@ -153,6 +153,14 @@ public:
 	void setX(int x) { _topLeft.x = x; }
 	void setY(int y) { _topLeft.y = y; }
 
+	WzRect intersectionWith(const WzRect &other) const
+	{
+		return {
+			{std::max(_topLeft.x, other._topLeft.x), std::max(_topLeft.y, other._topLeft.y)},
+			{std::min(_bottomRight.x, other._bottomRight.x), std::min(_bottomRight.y, other._bottomRight.y)}
+		};
+	}
+
 	inline bool operator== (const WzRect &rhs) const
 	{
 		return (_topLeft == rhs._topLeft &&

@@ -953,23 +953,25 @@ void W_SCREEN::setReturn(WIDGET *psWidget)
 	retWidgets.push_back(trigger);
 }
 
-void WIDGET::displayRecursive(int xOffset, int yOffset)
+void WIDGET::displayRecursive(WidgetGraphicsContext const &context)
 {
-	if (debugBoundingBoxesOnly)
-	{
-		// Display bounding boxes.
-		PIELIGHT col;
-		col.byte.r = 128 + iSinSR(realTime, 2000, 127); col.byte.g = 128 + iSinSR(realTime + 667, 2000, 127); col.byte.b = 128 + iSinSR(realTime + 1333, 2000, 127); col.byte.a = 128;
-		iV_Box(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, col);
-	}
-	else if (displayFunction)
-	{
-		displayFunction(this, xOffset, yOffset);
-	}
-	else
-	{
-		// Display widget.
-		display(xOffset, yOffset);
+	if (context.clipContains(geometry())) {
+		if (debugBoundingBoxesOnly)
+		{
+			// Display bounding boxes.
+			PIELIGHT col;
+			col.byte.r = 128 + iSinSR(realTime, 2000, 127); col.byte.g = 128 + iSinSR(realTime + 667, 2000, 127); col.byte.b = 128 + iSinSR(realTime + 1333, 2000, 127); col.byte.a = 128;
+			iV_Box(context.getXOffset() + x(), context.getYOffset() + y(), context.getXOffset() + x() + width() - 1, context.getYOffset() + y() + height() - 1, col);
+		}
+		else if (displayFunction)
+		{
+			displayFunction(this, context.getXOffset(), context.getYOffset());
+		}
+		else
+		{
+			// Display widget.
+			display(context.getXOffset(), context.getYOffset());
+		}
 	}
 
 	if (type == WIDG_FORM && ((W_FORM *)this)->disableChildren)
@@ -977,9 +979,7 @@ void WIDGET::displayRecursive(int xOffset, int yOffset)
 		return;
 	}
 
-	// Update the offset from the current widget's position.
-	xOffset += x();
-	yOffset += y();
+	auto childrenContext = context.translatedBy(x(), y());
 
 	// If this is a clickable form, the widgets on it have to move when it's down.
 	if (type == WIDG_FORM && (((W_FORM *)this)->style & WFORM_NOCLICKMOVE) == 0)
@@ -987,23 +987,17 @@ void WIDGET::displayRecursive(int xOffset, int yOffset)
 		if ((((W_FORM *)this)->style & WFORM_CLICKABLE) != 0 &&
 		    (((W_CLICKFORM *)this)->state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0)
 		{
-			++xOffset;
-			++yOffset;
+			childrenContext = childrenContext.translatedBy(1, 1);
 		}
 	}
 
 	// Display the widgets on this widget.
-	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	for (auto const &child: childWidgets)
 	{
-		WIDGET *psCurr = *i;
-
-		// Skip any hidden widgets.
-		if (!psCurr->visible())
+		if (child->visible())
 		{
-			continue;
+			child->displayRecursive(childrenContext);
 		}
-
-		psCurr->displayRecursive(xOffset, yOffset);
 	}
 }
 
@@ -1031,13 +1025,13 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	psScreen->psForm->processCallbacksRecursive(&sContext);
 
 	// Display the widgets.
-	psScreen->psForm->displayRecursive(0, 0);
+	psScreen->psForm->displayRecursive();
 
 	// Always overlays on-top (i.e. draw them last)
 	for (const auto& overlay : overlays)
 	{
 		overlay.psScreen->psForm->processCallbacksRecursive(&sContext);
-		overlay.psScreen->psForm->displayRecursive(0, 0);
+		overlay.psScreen->psForm->displayRecursive();
 	}
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being displayed.
@@ -1048,7 +1042,7 @@ void widgDisplayScreen(W_SCREEN *psScreen)
 	if (debugBoundingBoxes)
 	{
 		debugBoundingBoxesOnly = true;
-		psScreen->psForm->displayRecursive(0, 0);
+		psScreen->psForm->displayRecursive();
 		debugBoundingBoxesOnly = false;
 	}
 }
@@ -1098,4 +1092,36 @@ void setWidgetsStatus(bool var)
 bool getWidgetsStatus()
 {
 	return bWidgetsActive;
+}
+
+bool WidgetGraphicsContext::clipContains(WzRect const& rect) const
+{
+	return !clipped || clipRect.contains({offset.x + rect.x(), offset.y + rect.y(), rect.width(), rect.height()});
+}
+
+WidgetGraphicsContext WidgetGraphicsContext::translatedBy(int32_t x, int32_t y) const
+{
+	WidgetGraphicsContext newContext(*this);
+	newContext.offset.x += x;
+	newContext.offset.y += y;
+	return newContext;
+}
+
+WidgetGraphicsContext WidgetGraphicsContext::clippedBy(WzRect const &newRect) const
+{
+	WidgetGraphicsContext newContext(*this);
+	newContext.clipRect = {
+		offset.x + newRect.x(),
+		offset.y + newRect.y(),
+		newRect.width(),
+		newRect.height()
+	};
+
+	if (clipped) {
+		newContext.clipRect = newContext.clipRect.intersectionWith(clipRect);
+	}
+
+	newContext.clipped = true;
+
+	return newContext;
 }
