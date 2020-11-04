@@ -26,14 +26,6 @@
 #include "cliprect.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 
-void ClipRectWidget::display(int xOffset, int yOffset)
-{
-	int x0 = x() + xOffset;
-	int y0 = y() + yOffset;
-
-	iV_TransBoxFill(x0, y0, x0 + width(), y0 + height());
-}
-
 void ClipRectWidget::run(W_CONTEXT *psContext)
 {
 	W_CONTEXT newContext;
@@ -55,19 +47,22 @@ bool ClipRectWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key,
 	return WIDGET::processClickRecursive(&newContext, key, wasPressed);
 }
 
-void ClipRectWidget::displayRecursive(int xOffset, int yOffset)
+void ClipRectWidget::displayRecursive(const WidgetGraphicsContext &context)
 {
-	display(xOffset, yOffset);
+	if (context.clipContains(geometry()))
+	{
+		display(context.getXOffset(), context.getYOffset());
+	}
 
-	auto visibleRect = WzRect(offset.x, offset.y, width(), height());
-	auto childrenXOffset = xOffset + x();
-	auto childrenYOffset = yOffset + y() - offset.y;
+	auto childrenContext = context
+		.translatedBy(x() - offset.x, + y() - offset.y)
+		.clippedBy(WzRect(offset.x, offset.y, width(), height()));
 
 	for (auto child : children())
 	{
-		if (child->visible() && visibleRect.contains(child->geometry()))
+		if (child->visible())
 		{
-			child->displayRecursive(childrenXOffset, childrenYOffset);
+			child->displayRecursive(childrenContext);
 		}
 	}
 }

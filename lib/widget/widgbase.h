@@ -107,6 +107,31 @@ enum ButtonState
 	WBUT_HIGHLIGHT = 0x20,  ///< Button is highlighted.
 };
 
+class WidgetGraphicsContext
+{
+private:
+	Vector2i offset = {0, 0};
+	WzRect clipRect = {0, 0, 0, 0};
+	bool clipped = false;
+
+public:
+	int32_t getXOffset() const
+	{
+		return offset.x;
+	}
+
+	int32_t getYOffset() const
+	{
+		return offset.y;
+	}
+
+	bool clipContains(WzRect const& rect) const;
+
+	WidgetGraphicsContext translatedBy(int32_t x, int32_t y) const;
+
+	WidgetGraphicsContext clippedBy(WzRect const &newRect) const;
+};
+
 /* The base widget data type */
 class WIDGET
 {
@@ -229,7 +254,12 @@ public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
 	void runRecursive(W_CONTEXT *psContext);
 	void processCallbacksRecursive(W_CONTEXT *psContext);
-	virtual void displayRecursive(int xOffset, int yOffset);  ///< Display this widget, and all visible children.
+	virtual void displayRecursive(WidgetGraphicsContext const &context);  ///< Display this widget, and all visible children.
+	void displayRecursive()
+	{
+		WidgetGraphicsContext context;
+		displayRecursive(context);
+	}
 
 private:
 	WIDGET                 *parentWidget;           ///< Parent widget.
