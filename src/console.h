@@ -21,6 +21,9 @@
 #ifndef __INCLUDED_SRC_CONSOLE_H__
 #define __INCLUDED_SRC_CONSOLE_H__
 
+#include <functional>
+#include <memory>
+
 #define MAX_CONSOLE_MESSAGES			(64)
 #define MAX_CONSOLE_STRING_LENGTH		(255)
 #define MAX_CONSOLE_TMP_STRING_LENGTH	(255)
@@ -39,6 +42,15 @@ enum CONSOLE_TEXT_JUSTIFICATION
 struct DEBOUNCED_MESSAGE
 {
 	unsigned int debounceTime;
+};
+
+struct ConsoleMessage
+{
+	const char *text;
+	CONSOLE_TEXT_JUSTIFICATION justification;
+	int32_t sender;
+	bool team;
+	UDWORD duration;
 };
 
 const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING({2500});
@@ -77,6 +89,10 @@ void permitNewConsoleMessages(bool allow);
 void toggleConsoleDrop();
 void setHistoryMode(bool mode);
 void clearInfoMessages();
+
+typedef std::function<void(ConsoleMessage const &)> CONSOLE_MESSAGE_LISTENER;
+void consoleAddMessageListener(std::shared_ptr<CONSOLE_MESSAGE_LISTENER> listener);
+void consoleRemoveMessageListener(std::shared_ptr<CONSOLE_MESSAGE_LISTENER> listener);
 
 #if defined(DEBUG)
 # define debug_console(...) \
