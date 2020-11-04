@@ -664,7 +664,7 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 		WWidth = 0;
 
 		// Parse through the string, adding words until width is achieved.
-		while (*curChar != 0 && WWidth < MaxWidth && !NewLine)
+		while (*curChar != 0 && (WWidth == 0 || WWidth < MaxWidth) && !NewLine)
 		{
 			const char *startOfWord = curChar;
 			const unsigned int FStringWidth = iV_GetTextWidth(FString.c_str(), fontID);
@@ -673,7 +673,7 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 			i = 0;
 			FWord.clear();
 			for (; *curChar != 0
-			     && *curChar != ASCII_SPACE
+			     && (i == 0 || *curChar != ASCII_SPACE)
 			     && *curChar != ASCII_NEWLINE
 			     && *curChar != '\n';
 			     ++i, ++curChar)
@@ -691,7 +691,7 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 				WWidth = FStringWidth + iV_GetTextWidth(FWord.c_str(), fontID);
 
 				// If this word doesn't fit on the current line then break out
-				if (WWidth > MaxWidth)
+				if (i != 0 && WWidth > MaxWidth)
 				{
 					break;
 				}
