@@ -693,6 +693,8 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 				// If this word doesn't fit on the current line then break out
 				if (i != 0 && WWidth > MaxWidth)
 				{
+					curChar--;
+					FWord.erase(FWord.size() - 1);
 					break;
 				}
 
