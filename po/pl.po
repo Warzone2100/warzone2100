@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-04 18:18\n"
+"PO-Revision-Date: 2020-11-05 06:14\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -4016,23 +4016,23 @@ msgstr "Wszystkie rakiety ulepszone automatycznie"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Zniszcz wszystkie jednostki Nowego Paradygmatu"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Zniszcz wszystkie posiłki Nowego Paradygmatu"
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Zbuduj inne niż ścienne struktury na płaskowyżu i zniszcz wszystkie posiłki Nowego Paradygmatu"
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Znajdź i uratuj swoje jednostki z zestrzelonego transportera"
 
 #: data/base/script/campaign/cam2-c.js:30
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Uratuj cywili od Kolektywu nim zbyt wielu zostanie pochwyconych"
 
 #: data/base/script/campaign/cam2-d.js:77
 msgid "Secure the Uplink from The Collective"
