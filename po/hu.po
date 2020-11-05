@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-04 18:18\n"
+"PO-Revision-Date: 2020-11-05 18:16\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -30,7 +30,7 @@ msgstr "Biztosítsa a bázist, aztán keresse meg a összeomlás előtti építm
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Ez a szerkezet tartalmaza a terv sikeréhez elengedhetetlen technológiát."
+msgstr "Ez az épület tartalmazza a terv sikeréhez elengedhetetlen technológiát."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -4016,11 +4016,11 @@ msgstr "Rakéták automatikusan fejlesztve"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Pusztítsa el az Új Paradigma összes egységét"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Pusztítsa el az Új Paradigma erősítését"
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
