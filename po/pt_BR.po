@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-04 18:18\n"
+"PO-Revision-Date: 2020-11-05 06:14\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -4016,59 +4016,59 @@ msgstr "Todos os foguetes atualizados automaticamente"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Destrua todas as unidades do Novo Paradigma"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Destrua todos os reforços do Novo Paradigma"
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Construa estruturas não-paredes no planalto e destrua todos os reforços do Novo Paradigma"
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Localize e resgate suas unidades do transporte abatido"
 
 #: data/base/script/campaign/cam2-c.js:30
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Resgate os civis da Coletividade antes que muitos sejam capturados"
 
 #: data/base/script/campaign/cam2-d.js:77
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Proteja a Uplink contra a Coletividade"
 
 #: data/base/script/campaign/cam2-end.js:152
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Envie pelo menos um transporte com um caminhão e sobreviva ao ataque da Coletividade"
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Mova todas as unidades para o vale"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Destrua os silos dos mísseis"
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Resgate o time Alfa do Nexus"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Pesquise circuitos de resistência e sobreviva ao ataque do Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:215
 msgid "Secure a missile silo"
-msgstr ""
+msgstr "Proteja um silo de mísseis"
 
 #: data/base/script/campaign/cam3-ad2.js:272
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Proteja os silos de mísseis e pesquise por códigos de mísseis"
 
 #: data/base/script/campaign/cam3-c.js:127
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Junte uma parte da equipe Beta com um posto avançado de time Gamma"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -4076,35 +4076,35 @@ msgstr "Retorne à AP"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Destrua todas as unidades e estruturas inimigas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefatos coletados"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:495
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Bases destruídas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Unidades inimigas restantes"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:497
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Estruturas inimigas restantes"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:503
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Retorno à AP obrigatório"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:513
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Destrua todas as unidades e bases inimigas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:518
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Sobreviva até o cronômetro chegar a zero"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -7573,7 +7573,7 @@ msgstr "Chassis Pesado da Coletividade"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1441
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Ciborgue Engenheiro de Combate"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -8079,7 +8079,7 @@ msgstr "Balas de Metralhadora de Urânio Empobrecido"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1788
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Projetado com foco em pesquisa"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
