@@ -57,13 +57,18 @@
 #include "lib/ivis_opengl/piepalette.h"
 #include "lib/ivis_opengl/screen.h"
 
+#include "lib/sound/audio.h"
+#include "lib/sound/audio_id.h"
+
 #include "lib/gamelib/gtime.h"
 #include "lib/netplay/netplay.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/button.h"
+#include "lib/widget/scrollablelist.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
+#include "lib/widget/paragraph.h"
 
 #include "challenge.h"
 #include "main.h"
@@ -94,6 +99,7 @@
 #include "qtscript.h"
 #include "random.h"
 #include "notifications.h"
+#include "time.h"
 
 #include "multiplay.h"
 #include "multiint.h"
@@ -152,6 +158,18 @@ extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern bool bSendingMap;			// used to indicate we are sending a map
 
+struct RoomMessage
+{
+	int32_t sender;
+	std::string text;
+
+	RoomMessage(int32_t messageSender, std::string messageText)
+	{
+		sender = messageSender;
+		text = messageText;
+	}
+};
+
 char sPlayer[128]; // player name (to be used)
 bool multiintDisableLobbyRefresh = false; // if we allow lobby to be refreshed or not.
 
@@ -208,6 +226,9 @@ static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
 static int difficultyIcon(int difficulty);
+
+static void sendRoomChatMessage(char const *text);
+
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -247,6 +268,44 @@ struct WzMultiButton : public W_BUTTON
 	unsigned doHighlight;
 	unsigned tc;
 };
+
+class ChatBoxWidget : public IntFormAnimated
+{
+public:
+	ChatBoxWidget(WIDGET *parent, bool openAnimate = true);
+	virtual ~ChatBoxWidget();
+	void addMessage(int32_t sender, char const *text);
+	void initializeMessages(bool preserveOldChat);
+
+protected:
+	void geometryChanged() override;
+
+private:
+	ScrollableListWidget *messages;
+	unsigned int lastMessagesSize = UINT32_MAX;
+	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
+
+	static std::vector<RoomMessage> persistentMessageLocalStorage;
+};
+
+std::vector<RoomMessage> ChatBoxWidget::persistentMessageLocalStorage;
+
+void displayRoomMessage(char const *text, uint32_t sender)
+{
+	if (auto chatBox = (ChatBoxWidget *)widgGetFromID(psWScreen, MULTIOP_CHATBOX)) {
+		chatBox->addMessage(sender, text);
+	}
+}
+
+void displayRoomSystemMessage(char const *text)
+{
+	displayRoomMessage(text, SYSTEM_MESSAGE);
+}
+
+void displayRoomNotifyMessage(char const *text)
+{
+	displayRoomMessage(text, NOTIFY_MESSAGE);
+}
 
 const std::vector<WzString> getAINames()
 {
@@ -1321,7 +1380,7 @@ static bool canChangeMapOrRandomize()
 		NETbeginEncode(NETbroadcastQueue(), NET_VOTE_REQUEST);
 		NETend();
 
-		addConsoleMessage(_("Not enough votes to randomize or change the map."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		displayRoomSystemMessage(_("Not enough votes to randomize or change the map."));
 	}
 
 	return allowed;
@@ -1676,7 +1735,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	if (aidata.size() > 9)
 	{
 		debug(LOG_INFO, "You have too many AI's loaded for the GUI to handle.  Only the first 10 will be shown.");
-		addConsoleMessage("You have too many AI's loaded for the GUI to handle.  Only the first 10 will be shown.", DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+		displayRoomNotifyMessage("You have too many AI's loaded for the GUI to handle.  Only the first 10 will be shown.");
 		capAIs = 10;
 	}
 
@@ -2419,19 +2478,72 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	NETplayerKicked(player_id);
 }
 
-class ChatBoxWidget : public IntFormAnimated
+ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(parent, openAnimate)
 {
-public:
-	ChatBoxWidget(WIDGET *parent, bool openAnimate = true)
-	: IntFormAnimated(parent, openAnimate)
-	{ }
+	id = MULTIOP_CHATBOX;
 
-	virtual void display(int xOffset, int yOffset) override
+	messages = new ScrollableListWidget(this);
+	messages->setStickToBottom(true);
+	messages->setPadding({3, 4, 3, 4});
+
+	handleConsoleMessage = std::make_shared<CONSOLE_MESSAGE_LISTENER>([&](ConsoleMessage const &message) -> void
 	{
-		IntFormAnimated::display(xOffset, yOffset);
-		displayConsoleMessages();
+		addMessage(message.sender, message.text);
+	});
+
+	consoleAddMessageListener(handleConsoleMessage);
+}
+
+ChatBoxWidget::~ChatBoxWidget()
+{
+	consoleRemoveMessageListener(handleConsoleMessage);
+}
+
+void ChatBoxWidget::addMessage(int32_t sender, const char *text)
+{
+	W_INIT messageInit;
+	messageInit.width = messages->calculateListViewWidth();
+	auto message = new Paragraph(&messageInit);
+	char formatted[MAX_CONSOLE_STRING_LENGTH];
+	sstrcpy(formatted, text);
+
+	switch (sender)
+	{
+	case SYSTEM_MESSAGE:
+		message->setFontColour(WZCOL_CONS_TEXT_SYSTEM);
+		break;
+	case NOTIFY_MESSAGE:
+		message->setFontColour(WZCOL_YELLOW);
+		break;
+	default:
+		auto timeInfo = getTimeInfo();
+		ssprintf(formatted, "[%02d:%02d] %s: %s", timeInfo.tm_hour, timeInfo.tm_min, getPlayerName(sender), text);
+		message->setFontColour(WZCOL_WHITE);
+		break;
 	}
-};
+
+	message->setString(formatted);
+	messages->addItem(message);
+	ChatBoxWidget::persistentMessageLocalStorage.emplace_back(sender, text);
+}
+
+void ChatBoxWidget::geometryChanged()
+{
+	messages->setGeometry(0, 0, this->width(), this->height() - MULTIOP_CHATEDITH);
+}
+
+void ChatBoxWidget::initializeMessages(bool preserveOldChat)
+{
+	if (preserveOldChat)
+	{
+		for (auto message: ChatBoxWidget::persistentMessageLocalStorage)
+		{
+			addMessage(message.sender, message.text.c_str());
+		}
+	} else {
+		ChatBoxWidget::persistentMessageLocalStorage.clear();
+	}
+}
 
 static void addChatBox(bool preserveOldChat)
 {
@@ -2446,29 +2558,15 @@ static void addChatBox(bool preserveOldChat)
 	}
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
 	ChatBoxWidget *chatBox = new ChatBoxWidget(parent);
-	chatBox->id = MULTIOP_CHATBOX;
 	chatBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, MULTIOP_CHATBOXH);
 	}));
+	chatBox->initializeMessages(preserveOldChat);
 
 	addSideText(FRONTEND_SIDETEXT4, MULTIOP_CHATBOXX - 3, MULTIOP_CHATBOXY, _("CHAT"));
 
-	if (!preserveOldChat)
-	{
-		flushConsoleMessages();  // add the chatbox.
-		initConsoleMessages();
-		setConsoleBackdropStatus(false);
-		setConsoleCalcLayout([]() {
-			setConsoleSizePos(MULTIOP_CHATBOXX + 4 + D_W, MULTIOP_CHATBOXY + 5 + D_H, MULTIOP_CHATBOXW - 4);
-		});
-		setConsolePermanence(true, true);
-		setConsoleLineInfo(5);  // use x lines on chat window
-	}
-	enableConsoleDisplay(true);
-
-	W_EDBINIT sEdInit;                                                                                      // add the edit box
+	W_EDBINIT sEdInit;
 	sEdInit.formID = MULTIOP_CHATBOX;
 	sEdInit.id = MULTIOP_CHATEDIT;
 	sEdInit.x = MULTIOP_CHATEDITX;
@@ -2485,10 +2583,8 @@ static void addChatBox(bool preserveOldChat)
 	{
 		WzString modListMessage = _("Mod: ");
 		modListMessage += getModList().c_str();
-		addConsoleMessage(modListMessage.toUtf8().c_str(), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		displayRoomSystemMessage(modListMessage.toUtf8().c_str());
 	}
-
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -3028,7 +3124,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	const bool bIsAutoHostOrAutoGame = hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost;
 	if (!hostCampaign((char*)game.name, (char*)sPlayer, bIsAutoHostOrAutoGame))
 	{
-		addConsoleMessage(_("Sorry! Failed to host the game."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		displayRoomSystemMessage(_("Sorry! Failed to host the game."));
 		return false;
 	}
 
@@ -3071,7 +3167,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 				sendOptions();
 				NETregisterServer(WZ_SERVER_UPDATE);
 
-				addConsoleMessage(_("Game Name Updated."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				displayRoomSystemMessage(_("Game Name Updated."));
 			}
 			break;
 
@@ -3200,13 +3296,13 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 					NETsetGamePassword(game_password);
 					// say password is now required to join games?
 					ssprintf(buf, _("*** password [%s] is now required! ***"), NetPlay.gamePassword);
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+					displayRoomNotifyMessage(buf);
 				}
 				else
 				{
 					NETresetGamePassword();
 					ssprintf(buf, "%s", _("*** password is NOT required! ***"));
-					addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+					displayRoomNotifyMessage(buf);
 				}
 			}
 			break;
@@ -3219,12 +3315,12 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	case MULTIOP_MAP_MOD:
 		char buf[256];
 		ssprintf(buf, "%s", _("This is a map-mod, it can change your playing experience!"));
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		displayRoomSystemMessage(buf);
 		break;
 
 	case MULTIOP_MAP_RANDOM:
 		ssprintf(buf, "%s", _("This is a random map, it can vary your playing experience!"));
-		addConsoleMessage(buf, DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+		displayRoomSystemMessage(buf);
 		break;
 
 	case MULTIOP_STRUCTLIMITS:
@@ -3288,7 +3384,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			break;
 		}
 
-		sendTextMessage(widgGetString(psWScreen, MULTIOP_CHATEDIT));
+		sendRoomChatMessage(widgGetString(psWScreen, MULTIOP_CHATEDIT));
 		widgSetString(psWScreen, MULTIOP_CHATEDIT, "");
 		break;
 
@@ -3415,7 +3511,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			if (mouseDown(MOUSE_RMB) && player != NetPlay.hostPlayer) // both buttons....
 			{
 				std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player));
-				sendTextMessage(msg.c_str());
+				sendRoomSystemMessage(msg.c_str());
 				kickPlayer(player, "you are unwanted by the host.", ERROR_KICKED);
 				resetReadyStatus(true);		//reset and send notification to all clients
 			}
@@ -3503,7 +3599,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	{
 		std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(teamChooserUp));
 		kickPlayer(teamChooserUp, "you are unwanted by the host.", ERROR_KICKED);
-		sendTextMessage(msg.c_str());
+		sendRoomSystemMessage(msg.c_str());
 		resetReadyStatus(true);		//reset and send notification to all clients
 		closeTeamChooser();
 	}
@@ -3553,7 +3649,7 @@ void startMultiplayerGame()
 
 	if (NetPlay.isHost)
 	{
-		sendTextMessage(_("Host is Starting Game"));
+		sendRoomSystemMessage(_("Host is Starting Game"));
 	}
 }
 
@@ -3786,7 +3882,11 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 		case NET_TEXTMSG:					// Chat message
 			if (ingame.localOptionsReceived)
 			{
-				recvTextMessage(queue);
+				NetworkTextMessage message;
+				if (message.receive(queue)) {
+					displayRoomMessage(message.text, message.sender);
+					audio_PlayTrack(FE_AUDIO_MESSAGEEND);
+				}
 			}
 			break;
 
@@ -3938,12 +4038,12 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 						uint8_t numHumans = NET_numHumanPlayers();
 						if (numHumans > mapData->players)
 						{
-							addConsoleMessage(_("Cannot change to a map with too few slots for all players."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							displayRoomSystemMessage(_("Cannot change to a map with too few slots for all players."));
 							break;
 						}
 						if (mapData->players < game.maxPlayers)
 						{
-							addConsoleMessage(_("Cannot change to a map with fewer slots."), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+							displayRoomSystemMessage(_("Cannot change to a map with fewer slots."));
 							break;
 						}
 						if (!canChangeMapOrRandomize())
@@ -4076,12 +4176,12 @@ static void printHostHelpMessagesToConsole()
 					ssprintf(buf, "%s", _("UPnP detection is in progress..."));
 				}
 			}
-			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			displayRoomNotifyMessage(buf);
 		}
 		else
 		{
 			ssprintf(buf, "%s", _("UPnP detection disabled by user. Autoconfig of port 2100 will not happen."));
-			addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+			displayRoomNotifyMessage(buf);
 		}
 	}
 	if (challengeActive)
@@ -4092,7 +4192,7 @@ static void printHostHelpMessagesToConsole()
 	{
 		ssprintf(buf, "%s", _("Press the start hosting button to begin hosting a game."));
 	}
-	addConsoleMessage(buf, DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
+	displayRoomNotifyMessage(buf);
 }
 
 void WzMultiplayerOptionsTitleUI::start()
@@ -4184,13 +4284,11 @@ void WzMultiplayerOptionsTitleUI::start()
 void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y() - 4;  // 4 is the magic number.
+	int y = yOffset + psWidget->y();
 
 	// draws the line at the bottom of the multiplayer join dialog separating the chat
 	// box from the input box
 	iV_Line(x, y, x + psWidget->width(), y, WZCOL_MENU_SEPARATOR);
-
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -4669,4 +4767,18 @@ bool multiplayPlayersReady(bool bNotifyStatus)
 	}
 
 	return bReady;
+}
+
+void sendRoomSystemMessage(char const *text)
+{
+	NetworkTextMessage message(SYSTEM_MESSAGE, text);
+	displayRoomSystemMessage(text);
+	message.enqueue(NETbroadcastQueue());
+}
+
+static void sendRoomChatMessage(char const *text)
+{
+	NetworkTextMessage message(selectedPlayer, text);
+	displayRoomMessage(text, selectedPlayer);
+	message.enqueue(NETbroadcastQueue());
 }

@@ -124,6 +124,9 @@ void loadMapPreview(bool hideInterface);
 bool changeReadyStatus(UBYTE player, bool bReady);
 WzString formatGameName(WzString name);
 void resetVoteData();
+void sendRoomSystemMessage(char const *text);
+void displayRoomSystemMessage(char const *text);
+void displayRoomNotifyMessage(char const *text);
 
 // ////////////////////////////////////////////////////////////////
 // CONNECTION SCREEN
@@ -266,9 +269,9 @@ void resetVoteData();
 
 #define MULTIOP_CHATEDIT		10279
 #define MULTIOP_CHATEDITX		4
-#define	MULTIOP_CHATEDITY		MULTIOP_CHATBOXH-14
+#define MULTIOP_CHATEDITH		18
+#define	MULTIOP_CHATEDITY		MULTIOP_CHATBOXH-MULTIOP_CHATEDITH
 #define	MULTIOP_CHATEDITW		MULTIOP_CHATBOXW-8
-#define MULTIOP_CHATEDITH		9
 
 #define MULTIOP_COLCHOOSER_FORM         10280
 #define MULTIOP_COLCHOOSER              102711 //10281

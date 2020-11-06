@@ -408,7 +408,7 @@ void kf_CloneSelected(int limit)
 				}
 			}
 			std::string msg = astringf(_("Player %u is cheating a new droid army of: %d × %s."), selectedPlayer, limit, psDroid->aName);
-			sendTextMessage(msg.c_str());
+			sendInGameSystemMessage(msg.c_str());
 			Cheated = true;
 			audio_PlayTrack(ID_SOUND_NEXUS_LAUGH1);
 			return;
@@ -506,7 +506,7 @@ void	kf_BifferBaker()
 	setDamageModifiers(999, 1);
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Hard as nails!!!"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 // --------------------------------------------------------------------------
 void	kf_SetEasyLevel()
@@ -534,7 +534,7 @@ void	kf_UpThePower()
 	addPower(selectedPlayer, 1000);
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("1000 big ones!!!"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 
 // --------------------------------------------------------------------------
@@ -549,7 +549,7 @@ void	kf_MaxPower()
 	setPower(selectedPlayer, 100000);
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Power overwhelming"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 
 // --------------------------------------------------------------------------
@@ -590,7 +590,7 @@ void	kf_DoubleUp()
 	setDamageModifiers(100, 50); // enemy damage halved
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Twice as nice!"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 // --------------------------------------------------------------------------
 void kf_ToggleFPS() //This shows *just FPS* and is always visible (when active) -Q.
@@ -672,7 +672,7 @@ void kf_ShowNumObjects()
 	objCount(&droids, &structures, &features);
 	std::string cmsg = astringf(_("(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"),
 	          selectedPlayer, droids, structures, features);
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 
 // --------------------------------------------------------------------------
@@ -705,7 +705,7 @@ void	kf_TogglePower()
 
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, powerCalculated ? _("Infinite power disabled") : _("Infinite power enabled"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 
 // --------------------------------------------------------------------------
@@ -742,7 +742,7 @@ void	kf_AllAvailable()
 	makeAllAvailable();
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All items made available"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 
 // --------------------------------------------------------------------------
@@ -797,7 +797,7 @@ void	kf_ToggleFog()
 
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, fogEnabled ? _("Fog on") : _("Fog off"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 
 // --------------------------------------------------------------------------
@@ -1263,7 +1263,7 @@ void	kf_ToggleGodMode()
 
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, godMode ? _("God Mode ON") : _("God Mode OFF"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 // --------------------------------------------------------------------------
 /* Aligns the view to north - some people can't handle the world spinning */
@@ -1384,7 +1384,7 @@ void	kf_FinishAllResearch()
 	}
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Researched EVERYTHING for you!"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 }
 
 void kf_Reload()
@@ -1448,7 +1448,7 @@ void	kf_FinishResearch()
 					researchResult(rindex, selectedPlayer, true, psCurr, true);
 				}
 				std::string cmsg = astringf(_("(Player %u) is using cheat :%s %s"), selectedPlayer, _("Researched"), getName(pSubject));
-				sendTextMessage(cmsg.c_str());
+				sendInGameSystemMessage(cmsg.c_str());
 				intResearchFinished(psCurr);
 			}
 		}
@@ -1486,7 +1486,7 @@ void	kf_ChooseOptions()
 {
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Debug menu is Open"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 	jsShowDebug();
 }
 
@@ -1902,7 +1902,7 @@ void	kf_KillEnemy()
 	CONPRINTF("%s", _("Warning! This can have drastic consequences if used incorrectly in missions."));
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("All enemies destroyed by cheating!"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 	Cheated = true;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
@@ -1942,7 +1942,7 @@ void kf_KillSelected()
 
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
 	          selectedPlayer, _("Destroying selected droids and structures!"));
-	sendTextMessage(cmsg.c_str());
+	sendInGameSystemMessage(cmsg.c_str());
 
 	debug(LOG_DEATH, "Destroying selected droids and structures");
 	audio_PlayTrack(ID_SOUND_COLL_DIE);

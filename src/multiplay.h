@@ -34,6 +34,7 @@
 #include "messagedef.h"
 #include "levels.h"
 #include "console.h"
+#include "multirecv.h"
 #include <vector>
 #include <string>
 
@@ -102,6 +103,21 @@ struct MULTIPLAYERINGAME
 #define MPFLAGS_FORCELIMITS	0x20  		///< Flag to force structure limits
 #define MPFLAGS_MAX		0x3f
 	SDWORD		skScores[MAX_PLAYERS][2];			// score+kills for local skirmish players.
+};
+
+struct NetworkTextMessage
+{
+	/**
+	 * Sender can be a player index, SYSTEM_MESSAGE or NOTIFY_MESSAGE.
+	 **/
+	int32_t sender;
+	char text[MAX_CONSOLE_STRING_LENGTH];
+	bool teamSpecific = false;
+
+	NetworkTextMessage() {}
+	NetworkTextMessage(int32_t messageSender, char const *messageText);
+	void enqueue(NETQUEUE queue);
+	bool receive(NETQUEUE queue);
 };
 
 enum STRUCTURE_INFO
@@ -185,7 +201,8 @@ bool multiPlayerLoop();							// for loop.c
 bool recvMessage();
 bool SendResearch(uint8_t player, uint32_t index, bool trigger);
 bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
-void sendTextMessage(const char *text, uint32_t sender = selectedPlayer);
+void printInGameTextMessage(NetworkTextMessage const &message);
+void sendInGameSystemMessage(const char *text);
 int32_t findPlayerIndexByPosition(uint32_t position);
 void printConsoleNameChange(const char *oldName, const char *newName);  ///< Print message to console saying a name changed.
 
@@ -267,13 +284,4 @@ bool sendBeaconToPlayer(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sende
 MESSAGE *findBeaconMsg(UDWORD player, SDWORD sender);
 VIEWDATA *CreateBeaconViewData(SDWORD sender, UDWORD LocX, UDWORD LocY);
 
-struct NetworkTextMessage
-{
-	uint32_t sender;
-	char text[MAX_CONSOLE_STRING_LENGTH];
-	bool teamSpecific = false;
-
-	NetworkTextMessage(uint32_t messageSender, char const *messageText);
-	void enqueue(NETQUEUE queue);
-};
 #endif // __INCLUDED_SRC_MULTIPLAY_H__

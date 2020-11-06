@@ -273,11 +273,11 @@ TITLECODE WzMultiLimitTitleUI::run()
 			// make some noize.
 			if (!ingame.localOptionsReceived)
 			{
-				addConsoleMessage(_("Limits reset to default values"), DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				displayRoomSystemMessage(_("Limits reset to default values"));
 			}
 			else
 			{
-				sendTextMessage("Limits Reset To Default Values");
+				sendRoomSystemMessage(_("Limits Reset To Default Values"));
 			}
 
 			resetReadyStatus(false);

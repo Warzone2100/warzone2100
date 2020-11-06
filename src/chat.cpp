@@ -21,23 +21,7 @@
 #include "ai.h"
 #include "lib/netplay/netplay.h"
 #include "qtscript.h"
-
-/**
- * This function could be useful somewhere else, and could be moved to a more appropriate module.
- **/
-static struct tm getTimeInfo()
-{
-	time_t current_time;
-	time(&current_time);
-	struct tm time_info;
-#if defined(WZ_OS_WIN)
-	gmtime_s(&time_info, &current_time);
-#else
-	gmtime_r(&current_time, &time_info);
-#endif
-
-	return time_info;
-}
+#include "time.h"
 
 InGameChatMessage::InGameChatMessage(uint32_t messageSender, char const *messageText)
 {
@@ -99,10 +83,17 @@ std::string InGameChatMessage::formatReceivers() const
 	return ss.str();
 }
 
-void InGameChatMessage::sendToHumanPlayers(char const *formatted)
+void InGameChatMessage::sendToHumanPlayers()
 {
+	char formatted[MAX_CONSOLE_STRING_LENGTH];
+	ssprintf(formatted, "%s (%s): %s", getPlayerName(sender), formatReceivers().c_str(), text);
+
 	auto message = NetworkTextMessage(sender, formatted);
 	message.teamSpecific = toAllies && toPlayers.empty();
+
+	if (sender == selectedPlayer || shouldReceive(selectedPlayer)) {
+		printInGameTextMessage(message);
+	}
 
 	if (isGlobal()) {
 		message.enqueue(NETbroadcastQueue());
@@ -171,15 +162,6 @@ void InGameChatMessage::addPlayerByPosition(uint32_t position)
 
 void InGameChatMessage::send()
 {
-	char formatted[MAX_CONSOLE_STRING_LENGTH];
-	struct tm time_info = getTimeInfo();
-
-	ssprintf(formatted, "[%02d:%02d] %s (%s): %s", time_info.tm_hour, time_info.tm_min, getPlayerName(sender), formatReceivers().c_str(), text);
-
-	if (sender == selectedPlayer || shouldReceive(selectedPlayer)) {
-		addConsoleMessage(formatted, DEFAULT_JUSTIFY, sender, toAllies);
-	}
-
-	sendToHumanPlayers(formatted);
+	sendToHumanPlayers();
 	sendToAiPlayers();
 }
