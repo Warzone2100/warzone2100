@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-06 08:07\n"
+"PO-Revision-Date: 2020-11-06 20:06\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -104,7 +104,7 @@ msgstr "Vegyen egy felderítő egységet, hogy megvizsgálja ezeket a jeleket."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Landolási ponton használd a munkagépet védművek kiépítésére LZ-nek."
+msgstr "Használja a munkagépeit, hogy védműveket építsen az LZ-nél."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -124,11 +124,11 @@ msgstr "SZÁLLÍTÁSI FELADAT: Szinaptikus kapcsolat helyzete"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "Az Új Paradigma itt elemezte a szinaptikus-kapcsolat technológiát."
+msgstr "Az Új Paradigma itt elemzi a szinaptikus kapcsolat technológiát."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Állítson össze egy támadó csapatot és szerezze vissza a szinaptikus-kapcsolat technológiát."
+msgstr "Állítson össze egy támadócsapatot, és szerezze vissza a szinaptikus kapcsolat technológiát."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
@@ -152,7 +152,7 @@ msgstr "Ellenséges erők előretolt bázist létesítenek ezen a helyszínen."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr "Számolja fel a bázist és biztosítsa  a területet."
+msgstr "Számolja fel a bázist, és biztosítsa a területet."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
@@ -160,7 +160,7 @@ msgstr "ALFA BÁZIS KÜLDETÉS: Létesítsen előretolt bázist"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
-msgstr "Létesítsen előretolt bázist a fensíkon."
+msgstr "Létesítsen előretolt bázist a fennsíkon."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
@@ -216,7 +216,7 @@ msgstr "BÉTA CSAPAT FRISS INFORMÁCIÓK"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr "Visszaszereztünk néhány tárgyi leletet"
+msgstr "Visszaszereztünk néhány leletet."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
@@ -260,7 +260,7 @@ msgstr "ELLENSÉGES LZ"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr "Semmisítse meg a LZ-t, az ellenség landolása elött."
+msgstr "Semmisítse meg az LZ-t, hogy megakadályozza az ellenség landolását."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
@@ -280,11 +280,11 @@ msgstr "Kiegészítő"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr "A szinaptikus-kapcsolat technológia ezen a helyen volt, de eltávolították."
+msgstr "A szinaptikus kapcsolat technológia ezen a helyen volt, de eltávolították."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr "Hozzon létre egy előretolt bázis és kutasson tovább a szinaptikus-kapcsolat után."
+msgstr "Hozzon létre egy előretolt bázist, és kutasson tovább a szinaptikus kapcsolat után."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
@@ -316,7 +316,7 @@ msgstr "Pusztítsa el a bázist és szerezzen vissza minden jelenlévő tárgyi 
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr "Visszaszerezte a szinaptikus-kapcsolat technológiát!"
+msgstr "Visszaszerezte a szinaptikus kapcsolat technológiát!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
@@ -328,7 +328,7 @@ msgstr "Béta bázis súlyos támadás alatt áll, erősítésre van szüksége.
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr "Tovább küldjük a fejlesztéseket, amint meglesznek"
+msgstr "További híreket küldünk, amint megérkeznek."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
@@ -364,7 +364,7 @@ msgstr "Gratulálunk, legyőzte az Új Paradigmát, ez a szektor biztosítva."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr "A NEXUS Behatoló Program az Új Paradigma rendszerében volt."
+msgstr "A Nexus behatoló program az Új Paradigma rendszerében volt."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
@@ -392,7 +392,7 @@ msgstr "Érkezésekor ön átveszi a bázis irányítását."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr "Önnek meg kell védenie és tartania"
+msgstr "Meg kell védenie és tartania."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
@@ -431,7 +431,7 @@ msgstr "Alfa bázis csapatából, lelőtték a szállítást végző egységeink
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr "Ez a hely a Kollektíva támadása alatt áll. "
+msgstr "A Kollektíva támadása alatt áll, ezen a helyen."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
@@ -443,7 +443,7 @@ msgstr "REPÜLÉS KÖZBENI ELIGAZÍTÁS"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Béta csapat kutat a függőleges fel- és leszállási (VTOL) technológia után"
+msgstr "A Béta csapat a függőleges fel- és leszállási (VTOL) technológia után kutat."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
