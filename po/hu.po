@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-05 18:16\n"
+"PO-Revision-Date: 2020-11-06 08:07\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -67,7 +67,7 @@ msgstr "Az új Paradigma kiváló fegyver technológiával rendelkezik."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Náluk lehet a szinaptikus-kapcsolat technológia, létfontosságú visszaszerezni."
+msgstr "Náluk lehet a szinaptikus kapcsolat technológia, létfontosságú visszaszerezni."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
