@@ -52,7 +52,7 @@ public:
 	void setSnapOffset(bool value);
 	uint32_t calculateListViewHeight() const;
 	uint32_t calculateListViewWidth() const;
-	void displayRecursive(WidgetGraphicsContext const& context);
+	void displayRecursive(WidgetGraphicsContext const& context) override;
 
 protected:
 	void geometryChanged() override;

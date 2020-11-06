@@ -282,7 +282,6 @@ protected:
 
 private:
 	ScrollableListWidget *messages;
-	unsigned int lastMessagesSize = UINT32_MAX;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
 
 	static std::vector<RoomMessage> persistentMessageLocalStorage;

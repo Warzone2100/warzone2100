@@ -60,7 +60,6 @@ public:
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 
 private:
-	int textWidth = 0;
 	PIELIGHT fontColour;
 	std::vector<ParagraphLine *> lines;
 	ParagraphState state;
