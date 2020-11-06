@@ -75,6 +75,7 @@
 #include "main.h"								// for gamemode
 #include "multiint.h"
 #include "activity.h"
+#include "time.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////////////////////////
@@ -263,7 +264,7 @@ bool multiPlayerLoop()
 						char msg[256] = {'\0'};
 
 						snprintf(msg, sizeof(msg), _("Kicking player %s, because they tried to bypass data integrity check!"), getPlayerName(index));
-						sendTextMessage(msg);
+						sendInGameSystemMessage(msg);
 						addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 						NETlogEntry(msg, SYNC_FLAG, index);
 
@@ -676,7 +677,7 @@ bool recvMessage()
 				recvDroidInfo(queue);
 				break;
 			case NET_TEXTMSG:					// simple text message
-				recvTextMessage(queue);
+				receiveInGameTextMessage(queue);
 				break;
 			case NET_DATA_CHECK:
 				recvDataCheck(queue);
@@ -891,7 +892,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 	if (NetPlay.isHost)
 	{
 		ssprintf(buf, "Auto kicking player %s, invalid command received.", NetPlay.players[actual].name);
-		sendTextMessage(buf);
+		sendInGameSystemMessage(buf);
 		kickPlayer(actual, buf, KICK_TYPE);
 	}
 }
@@ -1138,40 +1139,7 @@ bool recvResearchStatus(NETQUEUE queue)
 	return true;
 }
 
-static void printchatmsg(const char *text, int from, bool team = false)
-{
-	char msg[MAX_CONSOLE_STRING_LENGTH];
-
-	time_t current_time;
-	time(&current_time);
-	struct tm time_info;
-#if defined(WZ_OS_WIN)
-	gmtime_s(&time_info, &current_time);
-#else
-	gmtime_r(&current_time, &time_info);
-#endif
-	char time_str[9];
-	ssprintf(time_str, "[%02d:%02d] ", time_info.tm_hour, time_info.tm_min);
-
-	sstrcpy(msg, time_str);
-	sstrcat(msg, getPlayerName(from));
-	if (from == selectedPlayer && GetGameMode() == GS_NORMAL)
-	{
-		if (team)
-		{
-			sstrcat(msg, _(" (Ally)"));
-		}
-		else
-		{
-			sstrcat(msg, _(" (Global)"));
-		}
-	}
-	sstrcat(msg, ": ");					// separator
-	sstrcat(msg, text);					// add message
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, from, team);	// display
-}
-
-NetworkTextMessage::NetworkTextMessage(uint32_t messageSender, char const *messageText)
+NetworkTextMessage::NetworkTextMessage(int32_t messageSender, char const *messageText)
 {
 	sender = messageSender;
 	sstrcpy(text, messageText);
@@ -1180,41 +1148,65 @@ NetworkTextMessage::NetworkTextMessage(uint32_t messageSender, char const *messa
 void NetworkTextMessage::enqueue(NETQUEUE queue)
 {
 	NETbeginEncode(queue, NET_TEXTMSG);
-	NETuint32_t(&sender);
+	NETint32_t(&sender);
 	NETbool(&teamSpecific);
 	NETstring(text, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 }
 
-/**
- * Multi-purpose text message.
- *
- * This function needs to be splitted in different functions, one for each usage it has.
- *
- * This is currently used:
- * - for players to send messages using the chat box in the game room
- * - for room system messages (player joined/kicked, game starting, map downloaded, settings changed, etc.)
- * - for game system messages (player is using cheat)
- */
-void sendTextMessage(const char *text, uint32_t sender)
+bool NetworkTextMessage::receive(NETQUEUE queue)
 {
-	NetworkTextMessage message(sender, text);
+	memset(text, 0x0, sizeof(text));
 
-	printchatmsg(message.text, sender);
+	NETbeginDecode(queue, NET_TEXTMSG);
+	NETint32_t(&sender);
+	NETbool(&teamSpecific);
+	NETstring(text, MAX_CONSOLE_STRING_LENGTH);
+	NETend();
 
+	if (whosResponsible(sender) != queue.index)
+	{
+		sender = queue.index;  // Fix corrupted sender.
+	}
+
+	if (sender >= MAX_PLAYERS || (!NetPlay.players[sender].allocated && NetPlay.players[sender].ai == AI_OPEN))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void printInGameTextMessage(NetworkTextMessage const &message)
+{
+	switch (message.sender)
+	{
+	case SYSTEM_MESSAGE:
+	case NOTIFY_MESSAGE:
+		addConsoleMessage(message.text, DEFAULT_JUSTIFY, message.sender, message.teamSpecific);
+		break;
+
+	default:
+		char formatted[MAX_CONSOLE_STRING_LENGTH];
+		struct tm time_info = getTimeInfo();
+		ssprintf(formatted, "[%02d:%02d] %s", time_info.tm_hour, time_info.tm_min, message.text);
+		addConsoleMessage(formatted, DEFAULT_JUSTIFY, message.sender, message.teamSpecific);
+		break;
+	}
+}
+
+void sendInGameSystemMessage(const char *text)
+{
+	NetworkTextMessage message(SYSTEM_MESSAGE, text);
+	printInGameTextMessage(message);
 	message.enqueue(NETbroadcastQueue());
 }
 
 void printConsoleNameChange(const char *oldName, const char *newName)
 {
 	char msg[MAX_CONSOLE_STRING_LENGTH];
-
-	// Player changed name.
-	sstrcpy(msg, oldName);                               // Old name.
-	sstrcat(msg, " → ");                                 // Separator
-	sstrcat(msg, newName);  // New name.
-
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, selectedPlayer);  // display
+	ssprintf(msg, "%s → %s", oldName, newName);
+	displayRoomSystemMessage(msg);
 }
 
 //
@@ -1250,40 +1242,21 @@ bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, c
 	return true;
 }
 
-// Write a message to the console.
-bool recvTextMessage(NETQUEUE queue)
+/**
+ * Read a message from the queue, and write it to the console.
+ *
+ * This message can be:
+ * - In game chat message
+ * - In game system message (player got kicked, player used cheat, etc.)
+ **/
+bool receiveInGameTextMessage(NETQUEUE queue)
 {
-	UDWORD	playerIndex;
-	char	msg[MAX_CONSOLE_STRING_LENGTH];
-	//char newmsg[MAX_CONSOLE_STRING_LENGTH];
-	bool team = false;
-
-	memset(msg, 0x0, sizeof(msg));
-	//memset(newmsg, 0x0, sizeof(newmsg));
-
-	NETbeginDecode(queue, NET_TEXTMSG);
-	NETuint32_t(&playerIndex);	// Who this msg is from
-	NETbool(&team);	// team specific?
-	NETstring(msg, MAX_CONSOLE_STRING_LENGTH);	// The message to receive
-	NETend();
-
-	if (whosResponsible(playerIndex) != queue.index)
-	{
-		playerIndex = queue.index;  // Fix corrupted playerIndex.
-	}
-
-	if (playerIndex >= MAX_PLAYERS || (!NetPlay.players[playerIndex].allocated && NetPlay.players[playerIndex].ai == AI_OPEN))
-	{
+	NetworkTextMessage message;
+	if (!message.receive(queue)) {
 		return false;
 	}
 
-	//sstrcpy(msg, NetPlay.players[playerIndex].name);
-	// Seperator
-	//sstrcat(msg, ": ");
-	// Add message
-	//sstrcat(msg, newmsg);
-
-	addConsoleMessage(msg, DEFAULT_JUSTIFY, playerIndex, team);
+	printInGameTextMessage(message);
 
 	// make some noise!
 	if (GetGameMode() != GS_NORMAL)
@@ -1488,7 +1461,7 @@ bool recvMapFileData(NETQUEUE queue)
 	{
 		netPlayersUpdated = true;  // Remove download icon from ourselves.
 		addConsoleMessage("MAP DOWNLOADED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		sendTextMessage("MAP DOWNLOADED");
+		sendInGameSystemMessage("MAP DOWNLOADED");
 		debug(LOG_INFO, "=== File has been received. ===");
 
 		// clear out the old level list.

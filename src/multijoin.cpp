@@ -458,7 +458,7 @@ bool recvDataCheck(NETQUEUE queue)
 			}
 
 			snprintf(msg, sizeof(msg), _("%s (%u) has an incompatible mod, and has been kicked."), getPlayerName(player), player);
-			sendTextMessage(msg);
+			sendInGameSystemMessage(msg);
 			addConsoleMessage(msg, LEFT_JUSTIFY, NOTIFY_MESSAGE);
 
 			kickPlayer(player, "your data doesn't match the host's!", ERROR_WRONGDATA);

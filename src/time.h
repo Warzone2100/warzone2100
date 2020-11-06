@@ -17,34 +17,11 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_SRC_CHAT_H__
-#define __INCLUDED_SRC_CHAT_H__
+#ifndef __INCLUDED_SRC_TIME_H__
+#define __INCLUDED_SRC_TIME_H__
 
-#include <set>
-#include <vector>
-#include <sstream>
-#include "multiplay.h"
+#include <ctime>
 
-struct InGameChatMessage
-{
-	uint32_t sender;
-	char const *text;
-	bool toAllies = false;
+struct tm getTimeInfo();
 
-	InGameChatMessage(uint32_t messageSender, char const *messageText);
-	void send();
-	void addPlayerByPosition(uint32_t position);
-
-private:
-	std::set<uint32_t> toPlayers;
-
-	bool isGlobal() const;
-	bool shouldReceive(uint32_t playerIndex) const;
-	std::vector<uint32_t> getReceivers() const;
-	std::string formatReceivers() const;
-	void sendToHumanPlayers();
-	void sendToAiPlayers();
-	void sendToAiPlayer(uint32_t receiver);
-};
-
-#endif // __INCLUDED_SRC_CHAT_H__
+#endif // __INCLUDED_SRC_TIME_H__

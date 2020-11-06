@@ -1583,7 +1583,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					char msg[256] = {'\0'};
 
 					ssprintf(msg, "Auto-kicking player %u, lacked the required access level for command(%d).", (unsigned int)sender, (int)message->type);
-					sendTextMessage(msg);
+					sendRoomSystemMessage(msg);
 					NETlogEntry(msg, SYNC_FLAG, sender);
 					addToBanList(NetPlay.players[sender].IPtextAddress, NetPlay.players[sender].name);
 					NETplayerDropped(sender);
