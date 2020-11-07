@@ -833,6 +833,27 @@ static void startGameLoop()
 
 	ActivityManager::instance().startingGame();
 
+	// set up CD audio for game mode
+	auto gameMode = ActivityManager::instance().getCurrentGameMode();
+	switch (gameMode)
+	{
+		case ActivitySink::GameMode::CAMPAIGN:
+			cdAudio_SetGameMode(MusicGameMode::CAMPAIGN);
+			break;
+		case ActivitySink::GameMode::CHALLENGE:
+			cdAudio_SetGameMode(MusicGameMode::CHALLENGE);
+			break;
+		case ActivitySink::GameMode::SKIRMISH:
+			cdAudio_SetGameMode(MusicGameMode::SKIRMISH);
+			break;
+		case ActivitySink::GameMode::MULTIPLAYER:
+			cdAudio_SetGameMode(MusicGameMode::MULTIPLAYER);
+			break;
+		default:
+			debug(LOG_ERROR, "Unhandled started game mode for cd audio: %u", (unsigned int)gameMode);
+			break;
+	}
+
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
 	{
@@ -967,6 +988,7 @@ static void runGameLoop()
 	case GAMECODE_QUITGAME:
 		debug(LOG_MAIN, "GAMECODE_QUITGAME");
 		ActivityManager::instance().quitGame(collectEndGameStatsData(), Cheated);
+		cdAudio_SetGameMode(MusicGameMode::MENUS);
 		stopGameLoop();
 		startTitleLoop(); // Restart into titleloop
 		break;
