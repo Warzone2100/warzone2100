@@ -168,11 +168,16 @@ install(FILES ${DATA_FILES}
 	COMPONENT Data
 )
 
-file(GLOB DATA_MUSIC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/music/*.ogg" "${CMAKE_CURRENT_SOURCE_DIR}/music/music.wpl")
-install(FILES ${DATA_MUSIC_FILES}
-	DESTINATION "${WZ_DATADIR}/music"
-	COMPONENT Data
-)
+file(GLOB DATA_MUSIC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/music/*.ogg" "${CMAKE_CURRENT_SOURCE_DIR}/music/albums/*/*.*")
+foreach(_music_file ${DATA_MUSIC_FILES})
+	file(RELATIVE_PATH _music_file_relative_path "${CMAKE_CURRENT_SOURCE_DIR}/music" "${_music_file}")
+	get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
+	install(FILES ${_music_file}
+		DESTINATION "${WZ_DATADIR}/music/${_music_file_subdir_path}"
+		COMPONENT Data
+	)
+endforeach()
 
 set(DATA_FILES ${DATA_FILES} PARENT_SCOPE)
 set(DATA_MUSIC_FILES ${DATA_MUSIC_FILES} PARENT_SCOPE)
+set(DATA_MUSIC_BASE_SOURCEDIR "${CMAKE_CURRENT_SOURCE_DIR}/music" PARENT_SCOPE)

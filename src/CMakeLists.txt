@@ -317,9 +317,13 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set_property(
 		SOURCE ${DATA_FILES}
 		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data")
-	set_property(
-		SOURCE ${DATA_MUSIC_FILES}
-		PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/music")
+	foreach(_music_file ${DATA_MUSIC_FILES})
+		file(RELATIVE_PATH _music_file_relative_path "${DATA_MUSIC_BASE_SOURCEDIR}" "${_music_file}")
+		get_filename_component(_music_file_subdir_path "${_music_file_relative_path}" DIRECTORY)
+		set_property(
+			SOURCE ${_music_file}
+			PROPERTY MACOSX_PACKAGE_LOCATION "Resources/data/music/${_music_file_subdir_path}")
+	endforeach()
 	set_source_files_properties(
 		${DATA_FILES} ${DATA_MUSIC_FILES} PROPERTIES
 		GENERATED TRUE

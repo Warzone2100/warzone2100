@@ -22,11 +22,22 @@
 #define __INCLUDED_LIB_SOUND_PLAYLIST_H__
 
 #include "lib/framework/types.h"
+#include <memory>
+#include "cdaudio.h"
 
 void PlayList_Init();
 void PlayList_Quit();
 bool PlayList_Read(const char *path);
-const char *PlayList_CurrentSong();
-const char *PlayList_NextSong();
+size_t PlayList_FilterByMusicMode(MusicGameMode currentMode);
+MusicGameMode PlayList_GetCurrentMusicMode();
+
+std::shared_ptr<const WZ_TRACK> PlayList_CurrentSong();
+std::shared_ptr<const WZ_TRACK> PlayList_NextSong();
+bool PlayList_SetCurrentSong(const std::shared_ptr<const WZ_TRACK>& track);
+
+const std::vector<std::shared_ptr<const WZ_TRACK>>& PlayList_GetFullTrackList();
+
+bool PlayList_IsTrackEnabledForMusicMode(const std::shared_ptr<const WZ_TRACK>& track, MusicGameMode mode);
+void PlayList_SetTrackMusicMode(const std::shared_ptr<const WZ_TRACK>& track, MusicGameMode mode, bool enabled);
 
 #endif // __INCLUDED_LIB_SOUND_PLAYLIST_H__
