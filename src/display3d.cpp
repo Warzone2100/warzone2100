@@ -1259,14 +1259,14 @@ bool init3DView()
 
 	atmosInitSystem();
 
-	// Set the initial fog distance
-	UpdateFogDistance(distance);
-
 	// default skybox, will override in script if not satisfactory
 	setSkyBox("texpages/page-25-sky-arizona.png", 0.0f, 10000.0f);
 
 	// distance is not saved, so initialise it now
 	distance = war_GetMapZoom(); // distance
+
+	// Set the initial fog distance
+	UpdateFogDistance(distance);
 
 	playerPos.r.z = 0; // roll
 	playerPos.r.y = 0; // rotation
