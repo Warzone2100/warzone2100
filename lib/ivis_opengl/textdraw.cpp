@@ -638,6 +638,11 @@ void iV_SetTextColour(PIELIGHT colour)
 	font_colour[3] = colour.byte.a / 255.0f;
 }
 
+static bool breaksWord(char const c)
+{
+	return c == ASCII_SPACE || c == ASCII_NEWLINE || c == '\n';
+}
+
 std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines /*= false*/)
 {
 	std::vector<TextLine> lineDrawResults;
@@ -663,6 +668,8 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 
 		WWidth = 0;
 
+		auto indexWithinLine = 0;
+
 		// Parse through the string, adding words until width is achieved.
 		while (*curChar != 0 && (WWidth == 0 || WWidth < MaxWidth) && !NewLine)
 		{
@@ -672,11 +679,11 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 			// Get the next word.
 			i = 0;
 			FWord.clear();
-			for (; *curChar != 0
-			     && (i == 0 || *curChar != ASCII_SPACE)
-			     && *curChar != ASCII_NEWLINE
-			     && *curChar != '\n';
-			     ++i, ++curChar)
+			for (
+				;
+				*curChar && (indexWithinLine == 0 || !breaksWord(*curChar));
+				++i, ++curChar, ++indexWithinLine
+			)
 			{
 				if (*curChar == ASCII_COLOURMODE) // If it's a colour mode toggle char then just add it to the word.
 				{
@@ -686,32 +693,31 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 					continue;
 				}
 
+				FWord.push_back(*curChar);
+
 				// Update this line's pixel width.
 				//WWidth = FStringWidth + iV_GetCountedTextWidth(FWord.c_str(), i + 1, fontID);  // This triggers tonnes of valgrind warnings, if the string contains unicode. Adding lots of trailing garbage didn't help... Using iV_GetTextWidth with a null-terminated string, instead.
 				WWidth = FStringWidth + iV_GetTextWidth(FWord.c_str(), fontID);
 
 				// If this word doesn't fit on the current line then break out
-				if (i != 0 && WWidth > MaxWidth)
+				if (indexWithinLine != 0 && WWidth > MaxWidth)
 				{
-					curChar--;
 					FWord.erase(FWord.size() - 1);
 					break;
 				}
-
-				// If width ok then add this character to the current word.
-				FWord.push_back(*curChar);
 			}
 
 			// Don't forget the space.
 			if (*curChar == ASCII_SPACE)
 			{
-				WWidth += iV_GetCharWidth(' ', fontID);
-				if (WWidth <= MaxWidth)
+				FWord.push_back(' ');
+				++i;
+				++curChar;
+				GotSpace = true;
+				auto spaceWidth = iV_GetCharWidth(' ', fontID);
+				if (WWidth + spaceWidth <= MaxWidth)
 				{
-					FWord.push_back(' ');
-					++i;
-					++curChar;
-					GotSpace = true;
+					WWidth += spaceWidth;
 				}
 			}
 			// Check for new line character.
