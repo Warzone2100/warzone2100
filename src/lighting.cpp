@@ -39,17 +39,12 @@
 #include "lighting.h"
 #include "display3d.h"
 #include "terrain.h"
+#include "warzoneconfig.h"
 
-// These values determine the fog when fully zoomed in
-// Determine these when fully zoomed in
-#define FOG_DEPTH 1000
-#define FOG_END 6500
-
-// These values are multiplied by the camera distance
-// to obtain the optimal settings when fully zoomed out
-// Determine these when fully zoomed out
-#define FOG_BEGIN_SCALE 0.3
-#define FOG_END_SCALE 0.6
+// These magic values determine the fog
+#define FOG_BEGIN 4000
+#define FOG_END 8000
+#define FOG_ALTITUDE_COEFFICIENT 1.3
 
 /*	The vector that holds the sun's lighting direction - planar */
 static Vector3f theSun(0.f, 0.f, 0.f);
@@ -311,7 +306,7 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 /// "popping" tiles
 void UpdateFogDistance(float distance)
 {
-	pie_UpdateFogDistance(FOG_END - FOG_DEPTH + distance * FOG_BEGIN_SCALE, FOG_END + distance * FOG_END_SCALE);
+	pie_UpdateFogDistance(FOG_BEGIN + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT, FOG_END + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT);
 }
 
 
