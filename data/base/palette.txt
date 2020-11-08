@@ -74,7 +74,7 @@ ff,ff,0,ff	// production run text
 0,0,0,18	// game loading bar background
 ff,0,ff,ff	// WZCOL_MAP_PREVIEW_HQ
 ff,ff,00,ff	// WZCOL_MAP_PREVIEW_OIL
-b0,08,5f,ff	// fog colour
+b0,5f,08,ff	// fog colour
 f0,e8,10,ff	// team9 - yellow
 70,00,74,ff	// team10 - purple
 E0,E0,E0,ff	// team11 - white
