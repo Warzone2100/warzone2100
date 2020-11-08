@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-04 18:19\n"
+"PO-Revision-Date: 2020-11-08 23:14\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4016,7 +4016,7 @@ msgstr "Amélioration automatique de toutes les roquettes"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Détruire toutes les nouvelles unités de Paradigme"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
@@ -4028,15 +4028,15 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Trouvez et sauvez vos unités du transporteur abattu"
 
 #: data/base/script/campaign/cam2-c.js:30
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Sauvez les civils du Collectif avant que trop de civils ne soient capturés"
 
 #: data/base/script/campaign/cam2-d.js:77
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Sécurisez la Liaison depuis le Collectif"
 
 #: data/base/script/campaign/cam2-end.js:152
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
