@@ -2545,7 +2545,7 @@ void ChatBoxWidget::addMessage(int32_t sender, const char *text)
 
 void ChatBoxWidget::geometryChanged()
 {
-	messages->setGeometry(0, 0, this->width(), this->height() - MULTIOP_CHATEDITH);
+	messages->setGeometry(1, 1, this->width() - 2, this->height() - MULTIOP_CHATEDITH - 1);
 }
 
 void ChatBoxWidget::initializeMessages(bool preserveOldChat)
