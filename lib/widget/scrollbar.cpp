@@ -84,6 +84,7 @@ void ScrollBarWidget::updateSlider()
 {
 	slider->barSize = viewSize * height() / scrollableSize;
 	slider->numStops = scrollableSize - viewSize;
+	slider->pos = std::min(slider->pos, slider->numStops);
 }
 
 void ScrollBarWidget::enable()
