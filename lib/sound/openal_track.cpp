@@ -1215,6 +1215,11 @@ void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume)
 	sound_GetError();
 }
 
+double sound_GetStreamTotalTime(AUDIO_STREAM *stream)
+{
+	return sound_GetOggVorbisTotalTime(stream->decoder);
+}
+
 /** Update the given stream by making sure its buffers remain full
  *  \param stream the stream to update
  *  \return true when the stream is still playing, false when it has stopped

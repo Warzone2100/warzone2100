@@ -126,5 +126,6 @@ void sound_ResumeStream(AUDIO_STREAM *stream);
 AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, const std::function<void (const void *)>& onFinished, const void *user_data, size_t streamBufferSize, unsigned int buffer_count, bool allowSeeking = false);
 float sound_GetStreamVolume(const AUDIO_STREAM *stream);
 void sound_SetStreamVolume(AUDIO_STREAM *stream, float volume);
+double sound_GetStreamTotalTime(AUDIO_STREAM *stream);
 
 #endif	// __INCLUDED_LIB_SOUND_TRACK_H__
