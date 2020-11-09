@@ -690,6 +690,18 @@ namespace gfx_api
 	};
 
 	template<>
+	struct constant_buffer_type<SHADER_SKYBOX>
+	{
+		glm::mat4 transform_matrix;
+		glm::vec2 offset;
+		glm::vec2 size;
+		glm::vec4 color;
+		int texture;
+		int fog_enabled;
+		glm::vec4 fog_color;
+	};
+
+	template<>
 	struct constant_buffer_type<SHADER_GFX_COLOUR>
 	{
 		glm::mat4 transform_matrix;
@@ -703,7 +715,19 @@ namespace gfx_api
 	using GFX = typename gfx_api::pipeline_state_helper<rasterizer_state<rm, dm, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive, index_type::u16, std::tuple<VTX, Second>, texture, shader>;
 	using VideoPSO = GFX<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::triangle_strip, gfx_vtx2, gfx_tc, SHADER_GFX_TEXT, std::tuple<texture_description<0, gfx_api::sampler_type::bilinear>>>;
 	using BackDropPSO = GFX<REND_OPAQUE, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::triangle_strip, gfx_vtx2, gfx_tc, SHADER_GFX_TEXT, std::tuple<texture_description<0, gfx_api::sampler_type::nearest_clamped>>>;
-	using SkyboxPSO = GFX<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, primitive_type::triangles, gfx_vtx3, gfx_tc, SHADER_GFX_TEXT, std::tuple<texture_description<0, gfx_api::sampler_type::bilinear_repeat>>>;
+	using SkyboxPSO = typename gfx_api::pipeline_state_helper<
+		rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>,
+		primitive_type::triangles,
+		index_type::u16,
+		std::tuple<
+			gfx_vtx3, gfx_tc
+		>,
+		std::tuple<texture_description<0, gfx_api::sampler_type::bilinear_repeat>>,
+		SHADER_SKYBOX
+	>;
+
+
+
 	using RadarPSO = GFX<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::triangle_strip, gfx_vtx2, gfx_tc, SHADER_GFX_TEXT, std::tuple<texture_description<0, gfx_api::sampler_type::nearest_clamped>>>;
 	using RadarViewInsideFillPSO = GFX<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::triangle_strip, gfx_vtx2, gfx_colour, SHADER_GFX_COLOUR, notexture>;
 	using RadarViewOutlinePSO = GFX<REND_ALPHA, DEPTH_CMP_ALWAYS_WRT_OFF, primitive_type::line_strip, gfx_vtx2, gfx_colour, SHADER_GFX_COLOUR, notexture>;

@@ -313,6 +313,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "posMatrix" } }),
 	std::make_pair(SHADER_GFX_TEXT, program_data{ "gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
 		{ "posMatrix", "color", "texture" } }),
+	std::make_pair(SHADER_SKYBOX, program_data{ "skybox program", "shaders/skybox.vert", "shaders/skybox.frag",
+		{ "posMatrix", "color", "texture", "fog_enabled", "fog_color" } }),
 	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
 	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
@@ -560,6 +562,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_TEXRECT>(),
 		uniform_binding_entry<SHADER_GFX_COLOUR>(),
 		uniform_binding_entry<SHADER_GFX_TEXT>(),
+		uniform_binding_entry<SHADER_SKYBOX>(),
 		uniform_binding_entry<SHADER_GENERIC_COLOR>(),
 		uniform_binding_entry<SHADER_LINE>(),
 		uniform_binding_entry<SHADER_TEXT>()
@@ -1183,6 +1186,15 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(0, cbuf.transform_matrix);
 	setUniforms(1, cbuf.color);
 	setUniforms(2, cbuf.texture);
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_SKYBOX>& cbuf)
+{
+	setUniforms(0, cbuf.transform_matrix);
+	setUniforms(1, cbuf.color);
+	setUniforms(2, cbuf.texture);
+	setUniforms(3, cbuf.fog_enabled);
+	setUniforms(4, cbuf.fog_color);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf)
