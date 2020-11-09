@@ -45,6 +45,7 @@ enum tMode
 	VIDEO_OPTIONS,          // 15 video options menu
 	MOUSE_OPTIONS,          // 16 mouse options menu
 	CAMPAIGNS,              // 17 campaign selector
+	MUSIC_MANAGER,			// 18 music manager
 };
 
 #define MAX_LEVEL_NAME_SIZE	(256)
@@ -301,6 +302,9 @@ enum
 	FRONTEND_SCROLLEVENT_R,
 
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
+
+	FRONTEND_MUSICMANAGER   = 27000,	// Music manager menu
+
 	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 
 };
