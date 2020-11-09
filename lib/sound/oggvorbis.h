@@ -43,6 +43,7 @@ struct soundDataBuffer
 struct OggVorbisDecoderState;
 
 struct OggVorbisDecoderState *sound_CreateOggVorbisDecoder(PHYSFS_file *PHYSFS_fileHandle, bool allowSeeking);
+double sound_GetOggVorbisTotalTime(struct OggVorbisDecoderState *decoder);
 void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState *decoder);
 
 soundDataBuffer *sound_DecodeOggVorbis(struct OggVorbisDecoderState *decoder, size_t bufferSize);

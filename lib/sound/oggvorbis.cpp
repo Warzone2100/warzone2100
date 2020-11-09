@@ -46,6 +46,9 @@ struct OggVorbisDecoderState
 
 	// Internal meta data
 	vorbis_info *VorbisInfo;
+
+	// Total time
+	double total_stream_time = 0.0;
 };
 
 static const char *wz_oggVorbis_getErrorStr(int error)
@@ -213,8 +216,18 @@ struct OggVorbisDecoderState *sound_CreateOggVorbisDecoder(PHYSFS_file *PHYSFS_f
 
 	// Aquire some info about the sound data
 	decoder->VorbisInfo = ov_info(&decoder->oggVorbis_stream, -1);
+	if (allowSeeking)
+	{
+		decoder->total_stream_time = ov_time_total(&decoder->oggVorbis_stream, -1);
+	}
 
 	return decoder;
+}
+
+double sound_GetOggVorbisTotalTime(struct OggVorbisDecoderState *decoder)
+{
+	ASSERT(decoder != nullptr, "NULL decoder passed!");
+	return decoder->total_stream_time;
 }
 
 void sound_DestroyOggVorbisDecoder(struct OggVorbisDecoderState *decoder)
