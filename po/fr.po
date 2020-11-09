@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-08 23:14\n"
+"PO-Revision-Date: 2020-11-09 11:17\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -15233,7 +15233,7 @@ msgstr ""
 
 #: src/frontend.cpp:662
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "Le répertoire de configuration est signalé en tant que :"
 
 #: src/frontend.cpp:666
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
@@ -15435,7 +15435,7 @@ msgstr "Échelle d'affichage"
 
 #: src/frontend.cpp:1135
 msgid "Adaptive"
-msgstr ""
+msgstr "Adaptatif"
 
 #: src/frontend.cpp:1167
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
