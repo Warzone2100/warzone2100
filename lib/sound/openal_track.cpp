@@ -53,19 +53,19 @@ static bool openal_initialized = false;
 
 struct AUDIO_STREAM
 {
-	ALuint                  source;        // OpenAL name of the sound source
-	struct OggVorbisDecoderState *decoder;
-	PHYSFS_file *fileHandle;
-	float                   volume;
+	ALuint                  source = -1;        // OpenAL name of the sound source
+	struct OggVorbisDecoderState *decoder = nullptr;
+	PHYSFS_file *fileHandle = nullptr;
+	float                   volume = 0.f;
 
 	// Callbacks
-	void (*onFinished)(const void *);
-	const void              *user_data;
+	std::function<void (const void *)> onFinished;
+	const void              *user_data = nullptr;
 
-	size_t                  bufferSize;
+	size_t                  bufferSize = 0;
 
 	// Linked list pointer
-	AUDIO_STREAM           *next;
+	AUDIO_STREAM           *next = nullptr;
 };
 
 struct SAMPLE_LIST
@@ -943,7 +943,7 @@ AUDIO_STREAM *sound_PlayStream(PHYSFS_file *fileHandle, float volume, void (*onF
  *  \see sound_PlayStream() for details about the rest of the function
  *       parameters and other details.
  */
-AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, void (*onFinished)(const void *), const void *user_data, size_t streamBufferSize, unsigned int buffer_count)
+AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, const std::function<void (const void *)>& onFinished, const void *user_data, size_t streamBufferSize, unsigned int buffer_count, bool allowSeeking)
 {
 	AUDIO_STREAM *stream;
 	ALuint       *buffers = nullptr;
@@ -957,7 +957,7 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 		return nullptr;
 	}
 
-	stream = (AUDIO_STREAM *)malloc(sizeof(AUDIO_STREAM));
+	stream = new AUDIO_STREAM();
 	if (stream == nullptr)
 	{
 		debug(LOG_FATAL, "sound_PlayStream: Out of memory");
@@ -976,17 +976,17 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 	{
 		// Failed to create OpenAL sound source, so bail out...
 		debug(LOG_SOUND, "alGenSources failed, most likely out of sound sources");
-		free(stream);
+		delete stream;
 		return nullptr;
 	}
 
 	stream->fileHandle = fileHandle;
 
-	stream->decoder = sound_CreateOggVorbisDecoder(stream->fileHandle, false);
+	stream->decoder = sound_CreateOggVorbisDecoder(stream->fileHandle, allowSeeking);
 	if (stream->decoder == nullptr)
 	{
 		debug(LOG_ERROR, "sound_PlayStream: Failed to open audio file for decoding");
-		free(stream);
+		delete stream;
 		return nullptr;
 	}
 
@@ -1065,7 +1065,7 @@ AUDIO_STREAM *sound_PlayStreamWithBuf(PHYSFS_file *fileHandle, float volume, voi
 		alDeleteSources(1, &stream->source);
 
 		// Free allocated memory
-		free(stream);
+		delete stream;
 
 		if(freeBuffers)
 		{
@@ -1363,7 +1363,7 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
 	}
 
 	// Free the memory used by this stream
-	free(stream);
+	delete stream;
 }
 
 /** Update all currently running streams and destroy them when they're finished.
