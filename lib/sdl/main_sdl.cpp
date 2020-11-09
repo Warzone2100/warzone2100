@@ -2186,7 +2186,11 @@ void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFac
 
 void wzSetWindowIsResizable(bool resizable)
 {
-	assert(WZwindow != nullptr);
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzSetWindowIsResizable called when window is not available");
+		return;
+	}
 	SDL_bool sdl_resizable = (resizable) ? SDL_TRUE : SDL_FALSE;
 	SDL_SetWindowResizable(WZwindow, sdl_resizable);
 }
