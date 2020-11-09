@@ -38,6 +38,7 @@
 #include "../multiint.h"
 #include "../multilimit.h"
 #include "../multistat.h"
+#include "../musicmanager.h"
 #include "../warzoneconfig.h"
 #include "../frend.h"
 
@@ -100,6 +101,9 @@ void WzOldTitleUI::start()
 	case KEYMAP:
 		startKeyMapEditor(true);
 		break;
+	case MUSIC_MANAGER:
+		startMusicManager();
+		break;
 	case STARTGAME:
 	case QUIT:
 	case LOADSAVEGAME:
@@ -130,6 +134,10 @@ TITLECODE WzOldTitleUI::run()
 		break;
 	case KEYMAP:
 		runKeyMapEditor();
+		break;
+
+	case MUSIC_MANAGER:
+		runMusicManager();
 		break;
 
 	case TITLE:

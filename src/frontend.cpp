@@ -622,6 +622,7 @@ void startOptionsMenu()
 	addTextButton(FRONTEND_AUDIO_AND_ZOOMOPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Audio / Zoom Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MUSICMANAGER, FRONTEND_POS8X, FRONTEND_POS8Y, _("Music Manager"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Open Configuration Directory"), 0);
 }
@@ -650,6 +651,9 @@ bool runOptionsMenu()
 		break;
 	case FRONTEND_KEYMAP:
 		changeTitleMode(KEYMAP);
+		break;
+	case FRONTEND_MUSICMANAGER:
+		changeTitleMode(MUSIC_MANAGER);
 		break;
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);

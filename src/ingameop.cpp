@@ -47,6 +47,7 @@
 #include "keybind.h"
 #include "keyedit.h"
 #include "multiplay.h"
+#include "musicmanager.h"
 #include "ingameop.h"
 #include "mission.h"
 #include "transporter.h"
@@ -65,6 +66,7 @@ static bool 	isGraphicsOptionsUp = false;
 static bool 	isVideoOptionsUp = false;
 static bool 	isMouseOptionsUp = false;
 bool	isKeyMapEditorUp = false;
+bool	isMusicManagerUp = false;
 // ////////////////////////////////////////////////////////////////////////////
 // functions
 
@@ -409,6 +411,11 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 		runInGameKeyMapEditor(KM_RETURN);
 	}
 	isKeyMapEditorUp = false;
+	if (isMusicManagerUp)
+	{
+		runInGameMusicManager(MM_RETURN);
+	}
+	isMusicManagerUp = false;
 
 	if (NetPlay.isHost)
 	{
@@ -467,13 +474,11 @@ static bool startIGOptionsMenu()
 	isVideoOptionsUp = false;
 	isMouseOptionsUp = false;
 	isKeyMapEditorUp = false;
+	isMusicManagerUp = false;
 
 	// add form
 	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(6), INTINGAMEOP_W, INTINGAMEOPAUTO_H(6));
-	}));
 	int row = 1;
 	// Game Options can't be changed during game
 	addIGTextButton(INTINGAMEOP_GRAPHICSOPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Graphics Options"), OPALIGN);
@@ -493,6 +498,13 @@ static bool startIGOptionsMenu()
 	// Key map editor does not allow editing for true multiplayer
 	addIGTextButton(INTINGAMEOP_KEYMAP, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, s? _("View Key Mappings") : _("Key Mappings"), OPALIGN);
 	row++;
+
+	addIGTextButton(INTINGAMEOP_MUSICMANAGER, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Manager"), OPALIGN);
+	row++;
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
@@ -820,6 +832,14 @@ void intProcessInGameOptions(UDWORD id)
 		}
 		return;
 	}
+	else if (isMusicManagerUp)
+	{
+		if (runInGameMusicManager(id))
+		{
+			intCloseInGameOptions(true, true);
+		}
+		return;
+	}
 
 	switch (id)
 	{
@@ -855,6 +875,11 @@ void intProcessInGameOptions(UDWORD id)
 		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 		startInGameKeyMapEditor(false);
 		isKeyMapEditorUp = true;
+		break;
+	case INTINGAMEOP_MUSICMANAGER:
+		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+		startInGameMusicManager();
+		isMusicManagerUp = true;
 		break;
 	case INTINGAMEOP_RESUME:			//resume was pressed.
 		intCloseInGameOptions(false, true);
