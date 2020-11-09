@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2011-2019  Warzone 2100 Project
+	Copyright (C) 2011-2020  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -533,7 +533,6 @@ namespace wzapi
 	public:
 		const std::string& scriptName() const { return m_scriptName; }
 		int player() const { return m_player; }
-//		virtual const wzapi::execution_context& getContext() = 0;
 
 	public:
 		inline void setReceiveAllEvents(bool value) { m_isReceivingAllEvents = value; }
@@ -624,12 +623,6 @@ namespace wzapi
 		int player = -1;
 	};
 
-//	struct string_list
-//	{
-//		const char** strings = nullptr;
-//		size_t count = 0;
-//	};
-
 	struct reservedParam
 	{ };
 
@@ -643,11 +636,6 @@ namespace wzapi
 		std::vector<std::string> strings;
 	};
 
-//	struct va_list_of_string_or_string_list
-//	{
-//		std::vector<string_or_string_list> va_list;
-//	};
-
 	template<typename ContainedType>
 	struct va_list
 	{
@@ -660,11 +648,6 @@ namespace wzapi
 		int x;
 		int y;
 	};
-
-//	struct me
-//	{
-//		int player = -1;
-//	};
 
 	struct specified_player
 	{
@@ -694,7 +677,7 @@ namespace wzapi
 		};
 	public:
 		const std::string& getLabel() const;
-		/*std::tuple<int, int>*/ scr_position getMapPosition() const;
+		scr_position getMapPosition() const;
 		std::tuple<OBJECT_TYPE, int, int> getObjectIDRequest() const;
 	public:
 		const RequestType requestType;
@@ -767,7 +750,6 @@ namespace wzapi
 		, index(index)
 		, propertyNameToTypeMap(nameToTypeMap)
 		{ }
-		//GameEntityRules() { }
 	public:
 		using value_type = nlohmann::json;
 		value_type getPropertyValue(const wzapi::execution_context& context, const std::string& name) const;
