@@ -822,18 +822,8 @@ static void stopTitleLoop()
 	}
 }
 
-
-/*!
- * Preparations before entering the game loop
- * Would start the timer in an event based mainloop
- */
-static void startGameLoop()
+static void setCDAudioForCurrentGameMode()
 {
-	SetGameMode(GS_NORMAL);
-
-	ActivityManager::instance().startingGame();
-
-	// set up CD audio for game mode
 	auto gameMode = ActivityManager::instance().getCurrentGameMode();
 	switch (gameMode)
 	{
@@ -853,6 +843,20 @@ static void startGameLoop()
 			debug(LOG_ERROR, "Unhandled started game mode for cd audio: %u", (unsigned int)gameMode);
 			break;
 	}
+}
+
+/*!
+ * Preparations before entering the game loop
+ * Would start the timer in an event based mainloop
+ */
+static void startGameLoop()
+{
+	SetGameMode(GS_NORMAL);
+
+	ActivityManager::instance().startingGame();
+
+	// set up CD audio for game mode
+	setCDAudioForCurrentGameMode();
 
 	// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
 	if (!levLoadData(aLevelName, &game.hash, nullptr, GTYPE_SCENARIO_START))
@@ -956,6 +960,10 @@ static bool initSaveGameLoad()
 	}
 
 	ActivityManager::instance().startingSavedGame();
+
+	// set up CD audio for game mode
+	// (must come after savegame is loaded so that proper game mode can be determined)
+	setCDAudioForCurrentGameMode();
 
 	screen_StopBackDrop();
 	closeLoadingScreen();

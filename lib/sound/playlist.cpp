@@ -360,9 +360,17 @@ size_t PlayList_SetTrackFilter(const std::function<bool (const std::shared_ptr<c
 
 size_t PlayList_FilterByMusicMode(MusicGameMode currentMode)
 {
-	size_t result = PlayList_SetTrackFilter([currentMode](const std::shared_ptr<const WZ_TRACK>& track) -> bool {
-		return PlayList_IsTrackEnabledForMusicMode(track, currentMode);
-	});
+	size_t result = 0;
+	if (currentMode != MusicGameMode::MENUS)
+	{
+		result = PlayList_SetTrackFilter([currentMode](const std::shared_ptr<const WZ_TRACK>& track) -> bool {
+			return PlayList_IsTrackEnabledForMusicMode(track, currentMode);
+		});
+	}
+	else
+	{
+		currentFilterFunc = nullptr;
+	}
 	if (lastFilteredMode != currentMode)
 	{
 		currentSong = nullopt;
@@ -565,6 +573,7 @@ bool PlayList_Read(const char *path)
 
 static optional<size_t> PlayList_FindNextMatchingTrack(size_t startingSongIdx)
 {
+	if (!currentFilterFunc) { return nullopt; }
 	size_t idx = (startingSongIdx < (fullTrackList.size() - 1)) ? (startingSongIdx + 1) : 0;
 	while (idx != startingSongIdx)
 	{
