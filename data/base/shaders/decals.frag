@@ -32,6 +32,7 @@ void main()
 	#else
 	vec4 fragColor = texture2D(tex, uv_tex) * texture2D(lightmap_tex, uv_lightmap);
 	#endif
+	
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -39,8 +40,9 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColor = mix(fragColor, fogColor, fogFactor);
+		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), fogFactor);
 	}
+
 	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = fragColor;
 	#else
