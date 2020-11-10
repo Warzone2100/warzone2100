@@ -42,7 +42,7 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColor = mix(fragColor, fogColor, fogFactor);
+		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), fogFactor);
 	}
 
 	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
