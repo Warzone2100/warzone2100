@@ -120,7 +120,7 @@ void main()
 	{
 		fragColour.a = 0.66 + 0.66 * graphicsCycle;
 	}
-
+	
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -128,7 +128,7 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColour = mix(fogColor, fragColour, fogFactor);
+		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), fogFactor);
 	}
 
 	FragColor = fragColour;
