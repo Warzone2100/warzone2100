@@ -739,7 +739,9 @@ wzapi::no_return_value wzapi::hackPlayIngameAudio(WZAPI_NO_PARAMS)
 
 //-- ## hackStopIngameAudio()
 //--
-//-- (3.3+ only)
+//-- Stop the in-game music. (3.3+ only)
+//-- This should be called from the eventStartLevel() event (or later).
+//-- Currently only used from the tutorial.
 //--
 wzapi::no_return_value wzapi::hackStopIngameAudio(WZAPI_NO_PARAMS)
 {
