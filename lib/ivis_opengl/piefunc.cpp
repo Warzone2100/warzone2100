@@ -129,65 +129,50 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 
 void pie_Skybox_Init()
 {
-	const int u = 0;
-	const int v = 0;
-	const int w = 1;
-	const int h = 1;
-	const float r = 1.0f; // just because it is shorter than 1.0f
-
 	const Vector3f
-		vertexFront0 = Vector3f(-r, 0, r), // front
-		vertexFront1 = Vector3f(-r, r, r),
-		vertexFront2 = Vector3f(r, 0, r),
-		vertexFront3 = Vector3f(r, r, r),
-		vertexRight0 = Vector3f(r, 0, -r), // right
-		vertexRight1 = Vector3f(r, r, -r),
-		vertexBack0 = Vector3f(-r, 0, -r), // back
-		vertexBack1 = Vector3f(-r, r, -r),
-		vertexLeft0 = Vector3f(-r, 0, r),
-		vertexLeft1 = Vector3f(-r, r, r);
+		northWestBelow = Vector3f(-1, 0, 1), // nw
+		northWestAbove = Vector3f(-1, 1, 1),
+		northEastBelow = Vector3f(1, 0, 1), // ne
+		northEastAbove = Vector3f(1, 1, 1),
+		southEastBelow = Vector3f(1, 0, -1), // se
+		southEastAbove = Vector3f(1, 1, -1),
+		southWestBelow = Vector3f(-1, 0, -1), // sw
+		southWestAbove = Vector3f(-1, 1, -1);
 
 	const std::array<Vector3f, 24> vertex{
-		// Front quad
-		vertexFront0, vertexFront1, vertexFront2,
-		vertexFront3, vertexFront2, vertexFront1,
-		// Right quad
-		vertexFront2, vertexFront3, vertexRight0,
-		vertexRight1, vertexRight0, vertexFront3,
-		// Back quad
-		vertexRight0, vertexRight1, vertexBack0,
-		vertexBack1, vertexBack0, vertexRight1,
-		// Left quad
-		vertexBack0, vertexBack1, vertexLeft0,
-		vertexLeft1, vertexLeft0, vertexBack1,
-
+		// North quad
+		northWestBelow, northWestAbove, northEastBelow,
+		northEastAbove, northEastBelow, northWestAbove,
+		// East quad
+		northEastBelow, northEastAbove, southEastBelow,
+		southEastAbove, southEastBelow, northEastAbove,
+		// South quad
+		southEastBelow, southEastAbove, southWestBelow,
+		southWestAbove, southWestBelow, southEastAbove,
+		// West quad
+		southWestBelow, southWestAbove, northWestBelow,
+		northWestAbove, northWestBelow, southWestAbove,
 	};
 	const Vector2f
-		uvFront0 = Vector2f(u + w * 0, (v + h)),
-		uvFront1 = Vector2f(u + w * 0, v),
-		uvFront2 = Vector2f(u + w * 2, v + h),
-		uvFront3 = Vector2f(u + w * 2, v),
-		uvRight0 = Vector2f(u + w * 4, v + h),
-		uvRight1 = Vector2f(u + w * 4, v),
-		uvBack0 = Vector2f(u + w * 6, v + h),
-		uvBack1 = Vector2f(u + w * 6, v),
-		uvLeft0 = Vector2f(u + w * 8, v + h),
-		uvLeft1 = Vector2f(u + w * 8, v);
+		uvSouthWest = Vector2f(0, 0.99),     // 0.99 avoids an ugly 1px border on the bottom
+		uvNorthWest = Vector2f(0, 0),
+		uvSouthEast = Vector2f(2, 0.99),     // 2 = each side of the skybox contains 2 repeats of the same texture
+		uvNorthEast = Vector2f(2, 0);
 
 	const std::array<Vector2f, 24> texc =
 	{
-		// Front quad
-		uvFront0, uvFront1, uvFront2,
-		uvFront3, uvFront2, uvFront1,
-		// Right quad
-		uvFront2, uvFront3, uvRight0,
-		uvRight1, uvRight0, uvFront3,
-		// Back quad
-		uvRight0, uvRight1, uvBack0,
-		uvBack1, uvBack0, uvRight1,
-		// Left quad
-		uvBack0, uvBack1, uvLeft0,
-		uvLeft1, uvLeft0, uvBack1,
+		// North quad
+		uvSouthWest, uvNorthWest, uvSouthEast,
+		uvNorthEast, uvSouthEast, uvNorthWest,
+		// East quad
+		uvSouthWest, uvNorthWest, uvSouthEast,
+		uvNorthEast, uvSouthEast, uvNorthWest,
+		// West quad
+		uvSouthWest, uvNorthWest, uvSouthEast,
+		uvNorthEast, uvSouthEast, uvNorthWest,
+		// South quad
+		uvSouthWest, uvNorthWest, uvSouthEast,
+		uvNorthEast, uvSouthEast, uvNorthWest,
 	};
 
 	gfx_api::context::get().debugStringMarker("Initializing skybox");
