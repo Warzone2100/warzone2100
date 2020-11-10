@@ -27,6 +27,7 @@ layout(location = 0) out vec4 FragColor;
 void main()
 {
 	vec4 fragColor = color * texture(tex, uv1) * texture(lightmap_tex, uv2);
+	
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -34,7 +35,8 @@ void main()
 		fogFactor = clamp(fogFactor, 0.0, 1.0);
 
 		// Return fragment color
-		fragColor = mix(fragColor, fogColor, fogFactor);
+		fragColor = mix(fragColor, vec4(fogColor.xyz, fragColor.w), fogFactor);
 	}
+	
 	FragColor = fragColor;
 }
