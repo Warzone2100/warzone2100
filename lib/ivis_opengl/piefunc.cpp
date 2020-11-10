@@ -139,7 +139,7 @@ void pie_Skybox_Init()
 		southWestBelow = Vector3f(-1, 0, -1), // sw
 		southWestAbove = Vector3f(-1, 1, -1);
 
-	const std::array<Vector3f, 24> vertex{
+	const std::array<Vector3f, 30> vertex{
 		// North quad
 		northWestBelow, northWestAbove, northEastBelow,
 		northEastAbove, northEastBelow, northWestAbove,
@@ -152,6 +152,9 @@ void pie_Skybox_Init()
 		// West quad
 		southWestBelow, southWestAbove, northWestBelow,
 		northWestAbove, northWestBelow, southWestAbove,
+		// Bottom quad
+		southWestBelow, northWestBelow, northEastBelow,
+		northEastBelow, southEastBelow, southWestBelow,
 	};
 	const Vector2f
 		uvSouthWest = Vector2f(0, 0.99),     // 0.99 avoids an ugly 1px border on the bottom
@@ -159,7 +162,7 @@ void pie_Skybox_Init()
 		uvSouthEast = Vector2f(2, 0.99),     // 2 = each side of the skybox contains 2 repeats of the same texture
 		uvNorthEast = Vector2f(2, 0);
 
-	const std::array<Vector2f, 24> texc =
+	const std::array<Vector2f, 30> texc =
 	{
 		// North quad
 		uvSouthWest, uvNorthWest, uvSouthEast,
@@ -173,11 +176,14 @@ void pie_Skybox_Init()
 		// South quad
 		uvSouthWest, uvNorthWest, uvSouthEast,
 		uvNorthEast, uvSouthEast, uvNorthWest,
+		// Bottom quad
+		uvSouthWest, uvSouthWest, uvSouthWest, // same coordinates in bottom part = blend in with walls.
+		uvSouthWest, uvSouthWest, uvSouthWest,
 	};
 
 	gfx_api::context::get().debugStringMarker("Initializing skybox");
 	skyboxGfx = new GFX(GFX_TEXTURE, 3);
-	skyboxGfx->buffers(24, vertex.data(), texc.data());
+	skyboxGfx->buffers(30, vertex.data(), texc.data());
 }
 
 void pie_Skybox_Texture(const char *filename)
