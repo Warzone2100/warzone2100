@@ -251,7 +251,6 @@ function setupGame()
 	setMainReticule();
 	showInterface();
 	mainReticule = true;
-	hackPlayIngameAudio();
 }
 
 function eventGameLoaded()

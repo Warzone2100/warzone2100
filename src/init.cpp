@@ -1343,6 +1343,9 @@ bool stageThreeInitialise()
 		playerBuiltHQ = structureExists(selectedPlayer, REF_HQ, true, false);
 	}
 
+	// Start / randomize in-game music
+	cdAudio_PlayTrack(SONG_INGAME);
+
 	return true;
 }
 

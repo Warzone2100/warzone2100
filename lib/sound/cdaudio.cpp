@@ -299,7 +299,7 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 				return true;
 			}
 
-			auto nextTrack = PlayList_CurrentSong();
+			auto nextTrack = PlayList_RandomizeCurrentSong();
 
 			if (!nextTrack)
 			{

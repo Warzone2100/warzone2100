@@ -610,6 +610,22 @@ std::shared_ptr<const WZ_TRACK> PlayList_NextSong()
 	return PlayList_CurrentSong();
 }
 
+std::shared_ptr<const WZ_TRACK> PlayList_RandomizeCurrentSong()
+{
+	size_t incrementByNum = ((size_t)rand() % fullTrackList.size());
+	size_t currentSongIdx = currentSong.has_value() ? currentSong.value() : (fullTrackList.size() - 1);
+	for (size_t i = 0; i < incrementByNum; i++)
+	{
+		currentSong = PlayList_FindNextMatchingTrack(currentSongIdx);
+		if (!currentSong.has_value())
+		{
+			break;
+		}
+		currentSongIdx = currentSong.value();
+	}
+	return PlayList_CurrentSong();
+}
+
 bool PlayList_SetCurrentSong(const std::shared_ptr<const WZ_TRACK>& track)
 {
 	if (!track) { return false; }

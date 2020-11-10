@@ -33,6 +33,7 @@ MusicGameMode PlayList_GetCurrentMusicMode();
 
 std::shared_ptr<const WZ_TRACK> PlayList_CurrentSong();
 std::shared_ptr<const WZ_TRACK> PlayList_NextSong();
+std::shared_ptr<const WZ_TRACK> PlayList_RandomizeCurrentSong();
 bool PlayList_SetCurrentSong(const std::shared_ptr<const WZ_TRACK>& track);
 
 const std::vector<std::shared_ptr<const WZ_TRACK>>& PlayList_GetFullTrackList();
