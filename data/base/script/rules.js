@@ -266,7 +266,6 @@ function setupGame()
 
 	setMainReticule();
 	showInterface();
-	hackPlayIngameAudio();
 	mainReticule = true;
 	queue("resetPower", 1000);
 }
