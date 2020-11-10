@@ -203,9 +203,17 @@ static void draw3dShapeTemplated(const templatedState &lastState, const PIELIGHT
 	auto* normalmap = shape->normalpage != iV_TEX_INVALID ? &pie_Texture(shape->normalpage) : nullptr;
 	auto* specularmap = shape->specularpage != iV_TEX_INVALID ? &pie_Texture(shape->specularpage) : nullptr;
 
+	const auto &renderState = getCurrentRenderState();
+	const glm::vec4 fogColor = renderState.fogEnabled ? glm::vec4(
+		renderState.fogColour.vector[0] / 255.f,
+		renderState.fogColour.vector[1] / 255.f,
+		renderState.fogColour.vector[2] / 255.f,
+		renderState.fogColour.vector[3] / 255.f
+	) : glm::vec4(0.f);
+
 	gfx_api::constant_buffer_type<shader> cbuf{
-		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), stretch, tcmask ? 1 : 0, 0, normalmap != nullptr, specularmap != nullptr, ecmState, !(pieFlag & pie_PREMULTIPLIED), timestate, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
-		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, glm::vec4(0.f), 0.f, 0.f, shape->buffers[VBO_TANGENT] != nullptr };
+		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour), stretch, tcmask ? 1 : 0, renderState.fogEnabled, normalmap != nullptr, specularmap != nullptr, ecmState, !(pieFlag & pie_PREMULTIPLIED), timestate, matrix, pie_PerspectiveGet() * matrix, glm::transpose(glm::inverse(matrix)),
+		glm::vec4(currentSunPosition, 0.f), sceneColor, ambient, diffuse, specular, fogColor, renderState.fogBegin, renderState.fogEnd, shape->buffers[VBO_TANGENT] != nullptr };
 
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
