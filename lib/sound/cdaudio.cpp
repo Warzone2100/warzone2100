@@ -43,6 +43,7 @@ static const unsigned int buffer_count = 32;
 static bool		music_initialized = false;
 static bool		stopping = true;
 static bool		is_opening_new_track = false;
+static bool		queued_play_track_while_loading = false;
 static AUDIO_STREAM *cdStream = nullptr;
 
 const char MENU_MUSIC[] = "music/menu.ogg";
@@ -290,6 +291,14 @@ bool cdAudio_PlayTrack(SONG_CONTEXT context)
 
 	case SONG_INGAME:
 		{
+			if (PlayList_GetCurrentMusicMode() == MusicGameMode::MENUS)
+			{
+				// Likely caused by loading a saved game, but we don't (yet) have the full game mode
+				// As a workaround, queue playing the track
+				queued_play_track_while_loading = true;
+				return true;
+			}
+
 			auto nextTrack = PlayList_CurrentSong();
 
 			if (!nextTrack)
@@ -320,15 +329,21 @@ SONG_CONTEXT cdAudio_CurrentSongContext()
 
 void cdAudio_SetGameMode(MusicGameMode mode)
 {
-	if (mode == MusicGameMode::MENUS)
+	auto oldMode = PlayList_GetCurrentMusicMode();
+	if (oldMode != mode)
 	{
-		// do not filter by music mode for menu music
-		return;
-	}
-	if (PlayList_FilterByMusicMode(mode) == 0)
-	{
-		// no music configured for this game mode...
-		debug(LOG_WARNING, "No music configured for current game mode");
+		size_t numTracks = PlayList_FilterByMusicMode(mode);
+		if ((numTracks == 0) && (mode != MusicGameMode::MENUS))
+		{
+			// no music configured for this game mode...
+			debug(LOG_WARNING, "No music configured for current game mode");
+		}
+		if (queued_play_track_while_loading)
+		{
+			// Workaround for lack of proper game type before savegame is fully loaded
+			queued_play_track_while_loading = false;
+			cdAudio_PlayTrack(currentSongContext);
+		}
 	}
 }
 
