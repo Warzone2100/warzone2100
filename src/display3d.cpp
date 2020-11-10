@@ -3458,7 +3458,7 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	{
 		wind = std::remainder(wind + graphicsTimeAdjustedIncrement(windSpeed), 360.0f);
 	}
-	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, player.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(UNDEG(wind), glm::vec3(0.f, 1.f, 0.f)));
+	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, player.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(RADIANS(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
 static int calculateCameraHeight(int mapHeight)
