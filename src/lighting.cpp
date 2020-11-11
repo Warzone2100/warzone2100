@@ -304,7 +304,7 @@ static UDWORD calcDistToTile(UDWORD tileX, UDWORD tileY, Vector3i *pos)
 /// Sets the begin and end distance for the distance fog (mist)
 /// It should provide maximum visibility and minimum
 /// "popping" tiles
-void UpdateFogDistance(float distance)
+void updateFogDistance(float distance)
 {
 	pie_UpdateFogDistance(FOG_BEGIN + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT, FOG_END + (distance - war_GetMapZoom()) * FOG_ALTITUDE_COEFFICIENT);
 }
