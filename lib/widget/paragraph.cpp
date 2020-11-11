@@ -41,7 +41,7 @@ public:
 		text.render(xOffset + x(), yOffset + y() - text.aboveBase(), getParagraph()->fontColour);
 	}
 
-	void setText(std::string newText)
+	void setText(std::string const &newText)
 	{
 		text.setText(newText, font_regular);
 		setGeometry(x(), y(), text.width(), text.lineSize());
