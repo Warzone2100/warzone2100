@@ -50,8 +50,10 @@ public:
 	void setStickToBottom(bool value);
 	void setPadding(Padding const &rect);
 	void setSnapOffset(bool value);
+	void setBackgroundColor(PIELIGHT const &color);
 	uint32_t calculateListViewHeight() const;
 	uint32_t calculateListViewWidth() const;
+	void display(int xOffset, int yOffset) override;
 	void displayRecursive(WidgetGraphicsContext const& context) override;
 
 protected:
@@ -64,6 +66,7 @@ private:
 	bool snapOffset = true;
 	bool layoutDirty = false;
 	Padding padding = {0, 0, 0, 0};
+	PIELIGHT backgroundColor;
 
 	uint16_t snappedOffset();
 	void updateLayout();
