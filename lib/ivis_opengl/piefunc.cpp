@@ -131,51 +131,73 @@ void pie_Skybox_Init()
 {
 	const Vector3f
 		northWestBelow = Vector3f(-1, 0, 1), // nw
+		northWestMiddle = Vector3f(-1, 0.5, 1),
 		northWestAbove = Vector3f(-1, 1, 1),
 		northEastBelow = Vector3f(1, 0, 1), // ne
 		northEastAbove = Vector3f(1, 1, 1),
+		northEastMiddle = Vector3f(1, 0.5, 1),
 		southEastBelow = Vector3f(1, 0, -1), // se
 		southEastAbove = Vector3f(1, 1, -1),
+		southEastMiddle = Vector3f(1, 0.5, -1),
 		southWestBelow = Vector3f(-1, 0, -1), // sw
+		southWestMiddle = Vector3f(-1, 0.5, -1),
 		southWestAbove = Vector3f(-1, 1, -1);
 
-	const std::array<Vector3f, 30> vertex{
-		// North quad
-		northWestBelow, northWestAbove, northEastBelow,
-		northEastAbove, northEastBelow, northWestAbove,
-		// East quad
-		northEastBelow, northEastAbove, southEastBelow,
-		southEastAbove, southEastBelow, northEastAbove,
-		// South quad
-		southEastBelow, southEastAbove, southWestBelow,
-		southWestAbove, southWestBelow, southEastAbove,
-		// West quad
-		southWestBelow, southWestAbove, northWestBelow,
-		northWestAbove, northWestBelow, southWestAbove,
-		// Bottom quad
+	const std::array<Vector3f, 54> vertex{
+		// North quads
+		northWestMiddle, northWestAbove, northEastMiddle,
+		northEastAbove, northEastMiddle, northWestAbove,
+		northWestBelow, northWestMiddle, northEastBelow,
+		northEastMiddle, northEastBelow, northWestMiddle,
+		// East quads
+		northEastMiddle, northEastAbove, southEastMiddle,
+		southEastAbove, southEastMiddle, northEastAbove,
+		northEastBelow, northEastMiddle, southEastBelow,
+		southEastMiddle, southEastBelow, northEastMiddle,
+		// South quads
+		southEastMiddle, southEastAbove, southWestMiddle,
+		southWestAbove, southWestMiddle, southEastAbove,
+		southEastBelow, southEastMiddle, southWestBelow,
+		southWestMiddle, southWestBelow, southEastMiddle,
+		// West quads
+		southWestMiddle, southWestAbove, northWestMiddle,
+		northWestAbove, northWestMiddle, southWestAbove,
+		southWestBelow, southWestMiddle, northWestBelow,
+		northWestMiddle, northWestBelow, southWestMiddle,
+		// Bottom quads
 		southWestBelow, northWestBelow, northEastBelow,
 		northEastBelow, southEastBelow, southWestBelow,
 	};
 	const Vector2f
-		uvSouthWest = Vector2f(0, 0.99),     // 0.99 avoids an ugly 1px border on the bottom
+		uvSouthWest = Vector2f(0, 0.99),     // 0.99 avoids an ugly 1px border
+		uvMidWest = Vector2f(0, 0.5),
 		uvNorthWest = Vector2f(0, 0),
 		uvSouthEast = Vector2f(2, 0.99),     // 2 = each side of the skybox contains 2 repeats of the same texture
+		uvMidEast = Vector2f(2, 0.5),
 		uvNorthEast = Vector2f(2, 0);
 
-	const std::array<Vector2f, 30> texc =
+	const std::array<Vector2f, 54> texc =
 	{
 		// North quad
-		uvSouthWest, uvNorthWest, uvSouthEast,
-		uvNorthEast, uvSouthEast, uvNorthWest,
+		uvMidWest, uvNorthWest, uvMidEast,
+		uvNorthEast, uvMidEast, uvNorthWest,
+		uvSouthWest, uvMidWest, uvSouthEast,
+		uvMidEast, uvSouthEast, uvMidWest,
 		// East quad
-		uvSouthWest, uvNorthWest, uvSouthEast,
-		uvNorthEast, uvSouthEast, uvNorthWest,
+		uvMidWest, uvNorthWest, uvMidEast,
+		uvNorthEast, uvMidEast, uvNorthWest,
+		uvSouthWest, uvMidWest, uvSouthEast,
+		uvMidEast, uvSouthEast, uvMidWest,
 		// West quad
-		uvSouthWest, uvNorthWest, uvSouthEast,
-		uvNorthEast, uvSouthEast, uvNorthWest,
+		uvMidWest, uvNorthWest, uvMidEast,
+		uvNorthEast, uvMidEast, uvNorthWest,
+		uvSouthWest, uvMidWest, uvSouthEast,
+		uvMidEast, uvSouthEast, uvMidWest,
 		// South quad
-		uvSouthWest, uvNorthWest, uvSouthEast,
-		uvNorthEast, uvSouthEast, uvNorthWest,
+		uvMidWest, uvNorthWest, uvMidEast,
+		uvNorthEast, uvMidEast, uvNorthWest,
+		uvSouthWest, uvMidWest, uvSouthEast,
+		uvMidEast, uvSouthEast, uvMidWest,
 		// Bottom quad
 		uvSouthWest, uvSouthWest, uvSouthWest, // same coordinates in bottom part = blend in with walls.
 		uvSouthWest, uvSouthWest, uvSouthWest,
@@ -183,7 +205,7 @@ void pie_Skybox_Init()
 
 	gfx_api::context::get().debugStringMarker("Initializing skybox");
 	skyboxGfx = new GFX(GFX_TEXTURE, 3);
-	skyboxGfx->buffers(30, vertex.data(), texc.data());
+	skyboxGfx->buffers(54, vertex.data(), texc.data());
 }
 
 void pie_Skybox_Texture(const char *filename)
