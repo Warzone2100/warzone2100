@@ -2482,6 +2482,7 @@ ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(
 	id = MULTIOP_CHATBOX;
 
 	messages = new ScrollableListWidget(this);
+	messages->setSnapOffset(false);
 	messages->setStickToBottom(true);
 	messages->setPadding({3, 4, 3, 4});
 
