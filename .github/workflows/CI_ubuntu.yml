@@ -272,9 +272,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download source tarball
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: warzone2100_src
+          path: warzone2100_src
       - name: Upload source tarball to release
         uses: past-due/action-gh-release@master
         with:
