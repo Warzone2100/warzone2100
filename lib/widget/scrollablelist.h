@@ -67,6 +67,7 @@ private:
 
 	uint16_t snappedOffset();
 	void updateLayout();
+	void resizeChildren(uint32_t width);
 };
 
 #endif // __INCLUDED_LIB_WIDGET_SCROLLABLELIST_H__
