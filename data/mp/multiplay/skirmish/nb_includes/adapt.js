@@ -139,43 +139,43 @@ function threatensBase(droid) {
 	return canReachFromBase(droid.propulsion, droid);
 }
 
-// count target structures reachable by land
+// count target structures and construct units reachable by land
 function countLandTargets(player) {
 	function uncached() {
 		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND).last();
 		if (!defined(currProp))
 			return 0;
-		var list = enumStructList(targets, player);
-		return list.filter(function(struct) {
-			return canReachFromBase(currProp, struct);
+		var list = enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT));
+		return list.filter(function(obj) {
+			return canReachFromBase(currProp, obj);
 		}).length;
 	}
 	return cached(uncached, 5000, player);
 }
 
-// count target structures reachable by sea but not by land
+// count target structures and construct units reachable by sea but not by land
 function countSeaTargets(player) {
 	function uncached() {
 		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.HOVER)[0];
 		if (!defined(currProp))
 			return 0;
         var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND)[0];
-		return enumStructList(targets, player).filter(function(struct) {
-			return (!defined(prevProp) || !canReachFromBase(prevProp, struct)) && canReachFromBase(currProp, struct);
+		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter(function(obj) {
+			return (!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj);
 		}).length;
 	}
 	return cached(uncached, 5000, player);
 }
 
-// count target structures reachable by air but not by land or by sea
+// count target structures and construct units reachable by air but not by land or by sea
 function countAirTargets(player) {
 	function uncached() {
 		var currProp = getPropulsionStatsComponents(PROPULSIONUSAGE.VTOL)[0];
 		if (!defined(currProp))
 			return 0;
 		var prevProp = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER)[0];
-		return enumStructList(targets, player).filter(function(struct) {
-			return (!defined(prevProp) || !canReachFromBase(prevProp, struct)) && canReachFromBase(currProp, struct);
+		return enumStructList(targets, player).concat(enumDroid(player, DROID_CONSTRUCT)).filter(function(obj) {
+			return (!defined(prevProp) || !canReachFromBase(prevProp, obj)) && canReachFromBase(currProp, obj);
 		}).length;
 	}
 	return cached(uncached, 5000, player);
