@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-05 06:14\n"
+"PO-Revision-Date: 2020-11-11 14:37\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15240,7 +15240,7 @@ msgstr "Konfigurationsverzeichnis wird angegeben als:"
 
 #: src/frontend.cpp:666
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr "Wenn das Spiel innerhalb eines Containers / einer isolierten Umgebung läuft, kann es daher vom aktuellen Pfad auf der Festplatte abweichen."
+msgstr "Wenn das Spiel innerhalb eines Containers / einer isolierten Umgebung läuft, kann dies daher vom eigentlichen Pfad auf der Festplatte abweichen."
 
 #: src/frontend.cpp:668
 msgid "Please see the documentation for more information on how to locate it manually."
