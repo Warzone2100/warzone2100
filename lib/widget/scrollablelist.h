@@ -61,7 +61,7 @@ private:
 	ScrollBarWidget *scrollBar;
 	ClipRectWidget *listView;
 	uint16_t scrollableHeight = 0;
-	bool snapOffset = false;
+	bool snapOffset = true;
 	bool layoutDirty = false;
 	Padding padding = {0, 0, 0, 0};
 
