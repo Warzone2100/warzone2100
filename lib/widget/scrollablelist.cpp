@@ -82,29 +82,29 @@ void ScrollableListWidget::updateLayout()
 	auto listViewWidthWithScrollBar = listViewWidthWithoutScrollBar - scrollBar->width() - 1;
 	auto listViewHeight = calculateListViewHeight();
 
-	scrollableHeight = 0;
-	for (auto child : listView->children())
-	{
-		child->setGeometry(0, scrollableHeight, listViewWidthWithScrollBar, child->height());
-		scrollableHeight += child->height();
-	}
+	resizeChildren(listViewWidthWithScrollBar);
 
 	scrollBar->show(scrollableHeight > listViewHeight);
 
-	if (!scrollBar->visible())
+	if (scrollBar->visible())
 	{
-		scrollableHeight = 0;
-		for (auto child : listView->children())
-		{
-			child->setGeometry(0, scrollableHeight, listViewWidthWithoutScrollBar, child->height());
-			scrollableHeight += child->height();
-		}
-		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
-	} else {
 		listView->setGeometry(padding.left, padding.top, listViewWidthWithScrollBar, listViewHeight);
+	} else {
+		resizeChildren(listViewWidthWithoutScrollBar);
+		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
 	}
 
 	scrollBar->setScrollableSize(scrollableHeight);
+}
+
+void ScrollableListWidget::resizeChildren(uint32_t width)
+{
+	scrollableHeight = 0;
+	for (auto child : listView->children())
+	{
+		child->setGeometry(0, scrollableHeight, width, child->height());
+		scrollableHeight += child->height();
+	}
 }
 
 uint32_t ScrollableListWidget::calculateListViewHeight() const
