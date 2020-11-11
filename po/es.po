@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-05 06:14\n"
+"PO-Revision-Date: 2020-11-11 02:25\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -4028,7 +4028,7 @@ msgstr "Construye estructuras no pared en la meseta y destruye todos los refuerz
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Localiza y rescata tus unidades del transportador derribado"
 
 #: data/base/script/campaign/cam2-c.js:30
 msgid "Rescue the civilians from The Collective before too many are captured"
@@ -4040,23 +4040,23 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-end.js:152
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Envía al menos un transporte con un camión y sobrevive al asalto del Colectivo"
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Mueve todas las unidades al valle"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Destruir los silos de misiles"
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Rescata al equipo Alfa de Nexus"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Investiga circuitos de resistencia y sobrevive al asalto de Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:215
 msgid "Secure a missile silo"
@@ -4076,7 +4076,7 @@ msgstr "Vuelve a la ZA"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Destruir todas las unidades y estructuras enemigas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
@@ -4084,15 +4084,15 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:495
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Bases destruidas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Unidades enemigas restantes"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:497
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Estructuras enemigas restantes"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:503
 msgid "Return to LZ required"
@@ -4100,11 +4100,11 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:513
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Destruir todas las unidades y bases enemigas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:518
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Sobrevive hasta que el temporizador llegue a cero"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -7573,7 +7573,7 @@ msgstr "Carrocería Pesada Colectivo"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1441
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Ingeniero de Combate Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -8079,7 +8079,7 @@ msgstr "Balas MG Uranio Empobrecido"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1788
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Diseñado con un enfoque en investigación"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8757,7 +8757,7 @@ msgstr "Buen vehículo de exploración"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2227
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Granadero Cyborg"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -10731,7 +10731,7 @@ msgstr "Puede actualizarse usando módulos de fábrica"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3658
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Mecánico Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -13193,19 +13193,19 @@ msgstr "Gel Incendiario Supercaliente"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5332
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Gel de Plasma Supercaliente Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5335
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Gel de Plasma Supercaliente Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5338
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Gel de Plasma Supercaliente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -15228,11 +15228,11 @@ msgstr "Atajos de Teclado"
 
 #: src/frontend.cpp:625
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Abrir Directorio de Configuración"
 
 #: src/frontend.cpp:660
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Error al abrir el directorio de configuración en el navegador de archivos por defecto del sistema."
 
 #: src/frontend.cpp:662
 msgid "Configuration directory is reported as:"
@@ -16475,19 +16475,19 @@ msgstr "Asignar Grupo 9"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Añadir a Grupo 0"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Añadir a Grupo 1"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Añadir a Grupo 2"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Añadir a Grupo 3"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
