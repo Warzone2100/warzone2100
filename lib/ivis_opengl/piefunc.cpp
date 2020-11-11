@@ -131,16 +131,16 @@ void pie_Skybox_Init()
 {
 	const Vector3f
 		northWestBelow = Vector3f(-1, 0, 1), // nw
-		northWestMiddle = Vector3f(-1, 0.85, 1),
+		northWestMiddle = Vector3f(-1, 0.15, 1),
 		northWestAbove = Vector3f(-0.75, 1, 0.75),
 		northEastBelow = Vector3f(1, 0, 1), // ne
 		northEastAbove = Vector3f(0.75, 1, 0.75),
-		northEastMiddle = Vector3f(1, 0.85, 1),
+		northEastMiddle = Vector3f(1, 0.15, 1),
 		southEastBelow = Vector3f(1, 0, -1), // se
 		southEastAbove = Vector3f(0.75, 1, -0.75),
-		southEastMiddle = Vector3f(1, 0.85, -1),
+		southEastMiddle = Vector3f(1, 0.15, -1),
 		southWestBelow = Vector3f(-1, 0, -1), // sw
-		southWestMiddle = Vector3f(-1, 0.85, -1),
+		southWestMiddle = Vector3f(-1, 0.15, -1),
 		southWestAbove = Vector3f(-0.75, 1, -0.75);
 
 	const std::array<Vector3f, 54> vertex{
@@ -170,10 +170,10 @@ void pie_Skybox_Init()
 	};
 	const Vector2f
 		uvSouthWest = Vector2f(0, 0.99),     // 0.99 avoids an ugly 1px border (mipmap bleed)
-		uvMidWest = Vector2f(0, 0.15),
+		uvMidWest = Vector2f(0, 0.85),
 		uvNorthWest = Vector2f(0, 0),
 		uvSouthEast = Vector2f(2, 0.99),     // 2 = each side of the skybox contains 2 repeats of the same texture
-		uvMidEast = Vector2f(2, 0.15),
+		uvMidEast = Vector2f(2, 0.85),
 		uvNorthEast = Vector2f(2, 0);
 
 	const std::array<Vector2f, 54> texc =
