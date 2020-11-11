@@ -235,7 +235,7 @@ diff --git a/quickjs.c b/quickjs.c
  #define DIRECT_DISPATCH  0
  #else
  #define DIRECT_DISPATCH  1
-@@ -1564,17 +1571,39 @@ static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
+@@ -1579,17 +1586,39 @@ static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
      return FALSE;
  }
  #else
@@ -275,7 +275,7 @@ diff --git a/quickjs.c b/quickjs.c
  }
  #endif
  
-@@ -10164,7 +10193,11 @@ static JSValue js_atof(JSContext *ctx, const char *str, const char **pp,
+@@ -10191,7 +10220,11 @@ static JSValue js_atof(JSContext *ctx, const char *str, const char **pp,
              } else
  #endif
              {
@@ -287,7 +287,7 @@ diff --git a/quickjs.c b/quickjs.c
                  if (is_neg)
                      d = -d;
                  val = JS_NewFloat64(ctx, d);
-@@ -41345,7 +41378,11 @@ static JSValue js_math_min_max(JSContext *ctx, JSValueConst this_val,
+@@ -41564,7 +41597,11 @@ static JSValue js_math_min_max(JSContext *ctx, JSValueConst this_val,
      uint32_t tag;
  
      if (unlikely(argc == 0)) {
@@ -299,7 +299,7 @@ diff --git a/quickjs.c b/quickjs.c
      }
  
      tag = JS_VALUE_GET_TAG(argv[0]);
-@@ -41517,6 +41554,11 @@ static JSValue js_math_random(JSContext *ctx, JSValueConst this_val,
+@@ -41736,6 +41773,11 @@ static JSValue js_math_random(JSContext *ctx, JSValueConst this_val,
      return __JS_NewFloat64(ctx, u.d - 1.0);
  }
  
@@ -311,7 +311,7 @@ diff --git a/quickjs.c b/quickjs.c
  static const JSCFunctionListEntry js_math_funcs[] = {
      JS_CFUNC_MAGIC_DEF("min", 2, js_math_min_max, 0 ),
      JS_CFUNC_MAGIC_DEF("max", 2, js_math_min_max, 1 ),
-@@ -47458,7 +47500,11 @@ static const JSCFunctionListEntry js_global_funcs[] = {
+@@ -47671,7 +47713,11 @@ static const JSCFunctionListEntry js_global_funcs[] = {
      JS_CFUNC_MAGIC_DEF("encodeURIComponent", 1, js_global_encodeURI, 1 ),
      JS_CFUNC_DEF("escape", 1, js_global_escape ),
      JS_CFUNC_DEF("unescape", 1, js_global_unescape ),
