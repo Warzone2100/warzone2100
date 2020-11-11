@@ -10,7 +10,7 @@ diff --git a/quickjs.c b/quickjs.c
  #endif
  
  #include "cutils.h"
-@@ -1690,7 +1692,7 @@ static inline size_t js_def_malloc_usable_size(void *ptr)
+@@ -1705,7 +1707,7 @@ static inline size_t js_def_malloc_usable_size(void *ptr)
      return malloc_size(ptr);
  #elif defined(_WIN32)
      return _msize(ptr);
@@ -19,7 +19,7 @@ diff --git a/quickjs.c b/quickjs.c
      return 0;
  #elif defined(__linux__)
      return malloc_usable_size(ptr);
-@@ -1764,7 +1766,7 @@ static const JSMallocFunctions def_malloc_funcs = {
+@@ -1779,7 +1781,7 @@ static const JSMallocFunctions def_malloc_funcs = {
      malloc_size,
  #elif defined(_WIN32)
      (size_t (*)(const void *))_msize,
