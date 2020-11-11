@@ -389,11 +389,12 @@ jobs:
           Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
         }
     - name: Upload Failure Logs Artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: failure()
       with:
         name: win_${{ matrix.architecture }}_error_logs
         path: '${{ github.workspace }}\output\error_logs'
+        if-no-files-found: 'warn'
     - name: CMake Configure (Regular Installer)
       working-directory: '${{ github.workspace }}\build'
       run: |
@@ -437,29 +438,33 @@ jobs:
     # Upload build artifacts
     #####################################################
     - name: 'Upload Artifact - (Portable Build)'
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_win_${{ matrix.architecture }}_portable
         path: '${{ github.workspace }}\output\portable'
+        if-no-files-found: 'error'
     - name: 'Upload Artifact - (Regular Installer)'
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_win_${{ matrix.architecture }}_installer
         path: '${{ github.workspace }}\output\installer'
+        if-no-files-found: 'error'
     - name: 'Upload Artifact - (Debug Symbols)'
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
+        if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       if: success() && startsWith(github.ref, 'refs/tags/') && (steps.settings.outputs.WZ_DEPLOY_RELEASE == 'true') && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_win_${{ matrix.architecture }}_archive
         path: '${{ github.workspace }}\output\archive'
+        if-no-files-found: 'error'
     #####################################################
     # Upload Release assets (if a release tag)
     #####################################################
