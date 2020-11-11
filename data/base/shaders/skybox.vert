@@ -36,6 +36,6 @@ void main()
 	vColour = vertexColor;
 	if(fog_enabled > 0)
 	{
-		fog = vertex.y == 0 ? fog_color : vec4(fog_color.xyz, 0);
+		fog = vertex.y < 0.5 ? fog_color : vec4(fog_color.xyz, 0);
 	}
 }
