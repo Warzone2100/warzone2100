@@ -40,7 +40,11 @@ extern "C" {
 #else
 #define js_likely(x)     (x)
 #define js_unlikely(x)   (x)
+#if defined(_MSC_VER)
+#define js_force_inline  __forceinline
+#else
 #define js_force_inline  inline
+#endif
 #define __js_printf_like(a, b)
 #endif
 
@@ -517,9 +521,9 @@ static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
 {
     JSValue v;
     if (val == (int32_t)val) {
-        v = JS_NewInt32(ctx, val);
+        v = JS_NewInt32(ctx, (int32_t)val);
     } else {
-        v = __JS_NewFloat64(ctx, val);
+        v = __JS_NewFloat64(ctx, (double)val);
     }
     return v;
 }
