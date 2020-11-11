@@ -1266,7 +1266,7 @@ bool init3DView()
 	distance = war_GetMapZoom(); // distance
 
 	// Set the initial fog distance
-	UpdateFogDistance(distance);
+	updateFogDistance(distance);
 
 	playerPos.r.z = 0; // roll
 	playerPos.r.y = 0; // rotation

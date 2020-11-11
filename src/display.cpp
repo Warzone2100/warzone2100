@@ -207,7 +207,7 @@ static void updateViewDistanceAnimation()
 	{
 		viewDistanceAnimation.update();
 		setViewDistance(viewDistanceAnimation.getCurrent());
-		UpdateFogDistance(viewDistanceAnimation.getCurrent());
+		updateFogDistance(viewDistanceAnimation.getCurrent());
 	}
 }
 
