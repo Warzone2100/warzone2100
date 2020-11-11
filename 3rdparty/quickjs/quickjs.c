@@ -53798,3 +53798,6 @@ void JS_AddIntrinsicTypedArrays(JSContext *ctx)
     JS_AddIntrinsicAtomics(ctx);
 #endif
 }
+
+#include "quickjs-debugger.c"
+#include "quickjs-limitedcontext.c"
