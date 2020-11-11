@@ -32,6 +32,7 @@ ScrollableListWidget::ScrollableListWidget(WIDGET *parent) : WIDGET(parent)
 	scrollBar = new ScrollBarWidget(this);
 	listView = new ClipRectWidget(this);
 	scrollBar->show(false);
+	backgroundColor.rgba = 0;
 }
 
 void ScrollableListWidget::geometryChanged()
@@ -79,7 +80,7 @@ void ScrollableListWidget::updateLayout()
 	layoutDirty = false;
 
 	auto listViewWidthWithoutScrollBar = calculateListViewWidth();
-	auto listViewWidthWithScrollBar = listViewWidthWithoutScrollBar - scrollBar->width() - 1;
+	auto listViewWidthWithScrollBar = listViewWidthWithoutScrollBar - scrollBar->width();
 	auto listViewHeight = calculateListViewHeight();
 
 	resizeChildren(listViewWidthWithScrollBar);
@@ -144,9 +145,24 @@ void ScrollableListWidget::setPadding(Padding const &rect)
 	layoutDirty = true;
 }
 
+void ScrollableListWidget::setBackgroundColor(PIELIGHT const &color)
+{
+	backgroundColor = color;
+}
+
 void ScrollableListWidget::setSnapOffset(bool value)
 {
 	snapOffset = value;
+}
+
+void ScrollableListWidget::display(int xOffset, int yOffset)
+{
+	if (backgroundColor.rgba != 0)
+	{
+		int x0 = x() + xOffset;
+		int y0 = y() + yOffset;
+		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+	}
 }
 
 void ScrollableListWidget::displayRecursive(WidgetGraphicsContext const& context)

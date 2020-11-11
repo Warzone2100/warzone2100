@@ -674,6 +674,7 @@ static void addTrackList(WIDGET *parent, bool ingame)
 	}
 
 	ScrollableListWidget *pTracksScrollableList = new ScrollableListWidget(parent);
+	pTracksScrollableList->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
 	pTracksScrollableList->setCalcLayout([ingame](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
 		psWidget->setGeometry(GetTrackListStartXPos(ingame), TL_Y, TL_ENTRYW, GetNumVisibleTracks() * TL_ENTRYH);
 	});

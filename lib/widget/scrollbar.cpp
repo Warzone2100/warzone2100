@@ -32,7 +32,7 @@ static void displayScrollBar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	int x0 = slider->x() + xOffset;
 	int y0 = slider->y() + yOffset;
 
-	iV_TransBoxFill(x0, y0, x0 + slider->width(), y0 + slider->height());
+	pie_UniTransBoxFill(x0, y0, x0 + slider->width(), y0 + slider->height(), WZCOL_DBLUE);
 
 	auto sliderY = slider->numStops > 0 ? (slider->height() - slider->barSize) * slider->pos / slider->numStops: 0;
 	pie_UniTransBoxFill(x0, y0 + sliderY, x0 + slider->width(), y0 + sliderY + slider->barSize, slider->isEnabled() ? WZCOL_LBLUE : WZCOL_FORM_DISABLE);
