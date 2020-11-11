@@ -465,7 +465,7 @@ jobs:
     #####################################################
     - name: Upload Release Assets
       if: startsWith(github.ref, 'refs/tags/') && (steps.settings.outputs.WZ_DEPLOY_RELEASE == 'true') && (github.repository == 'Warzone2100/warzone2100')
-      uses: past-due/action-gh-release@v1
+      uses: past-due/action-gh-release@master
       with:
         # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
         files: |
