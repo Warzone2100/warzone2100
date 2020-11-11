@@ -132,16 +132,16 @@ void pie_Skybox_Init()
 	const Vector3f
 		northWestBelow = Vector3f(-1, 0, 1), // nw
 		northWestMiddle = Vector3f(-1, 0.5, 1),
-		northWestAbove = Vector3f(-1, 1, 1),
+		northWestAbove = Vector3f(-0.75, 1, 0.75),
 		northEastBelow = Vector3f(1, 0, 1), // ne
-		northEastAbove = Vector3f(1, 1, 1),
+		northEastAbove = Vector3f(0.75, 1, 0.75),
 		northEastMiddle = Vector3f(1, 0.5, 1),
 		southEastBelow = Vector3f(1, 0, -1), // se
-		southEastAbove = Vector3f(1, 1, -1),
+		southEastAbove = Vector3f(0.75, 1, -0.75),
 		southEastMiddle = Vector3f(1, 0.5, -1),
 		southWestBelow = Vector3f(-1, 0, -1), // sw
 		southWestMiddle = Vector3f(-1, 0.5, -1),
-		southWestAbove = Vector3f(-1, 1, -1);
+		southWestAbove = Vector3f(-0.75, 1, -0.75);
 
 	const std::array<Vector3f, 54> vertex{
 		// North quads
