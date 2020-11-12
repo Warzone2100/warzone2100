@@ -574,6 +574,7 @@ bool PlayList_Read(const char *path)
 static optional<size_t> PlayList_FindNextMatchingTrack(size_t startingSongIdx)
 {
 	if (!currentFilterFunc) { return nullopt; }
+	if (fullTrackList.empty()) { return nullopt; }
 	size_t idx = (startingSongIdx < (fullTrackList.size() - 1)) ? (startingSongIdx + 1) : 0;
 	while (idx != startingSongIdx)
 	{
@@ -612,6 +613,10 @@ std::shared_ptr<const WZ_TRACK> PlayList_NextSong()
 
 std::shared_ptr<const WZ_TRACK> PlayList_RandomizeCurrentSong()
 {
+	if (fullTrackList.empty())
+	{
+		return nullptr;
+	}
 	size_t incrementByNum = ((size_t)rand() % fullTrackList.size());
 	size_t currentSongIdx = currentSong.has_value() ? currentSong.value() : (fullTrackList.size() - 1);
 	for (size_t i = 0; i < incrementByNum; i++)
