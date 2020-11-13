@@ -66,7 +66,7 @@ private:
 	ParagraphState renderState;
 
 	void updateLayout();
-	void resizeLines(uint32_t size);
+	void resizeLines(size_t size);
 
 	friend class ParagraphLine;
 };
