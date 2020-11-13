@@ -93,7 +93,7 @@ void Paragraph::updateLayout()
 	setGeometry(x(), y(), state.width, requiredHeight);
 }
 
-void Paragraph::resizeLines(uint32_t size)
+void Paragraph::resizeLines(size_t size)
 {
 	while (lines.size() > size)
 	{
