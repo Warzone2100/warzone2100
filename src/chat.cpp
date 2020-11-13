@@ -21,7 +21,6 @@
 #include "ai.h"
 #include "lib/netplay/netplay.h"
 #include "qtscript.h"
-#include "time.h"
 
 InGameChatMessage::InGameChatMessage(uint32_t messageSender, char const *messageText)
 {

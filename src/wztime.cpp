@@ -18,7 +18,7 @@
 */
 
 #include "lib/framework/wzconfig.h"
-#include "time.h"
+#include "wztime.h"
 
 struct tm getTimeInfo()
 {
