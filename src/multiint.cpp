@@ -99,7 +99,7 @@
 #include "qtscript.h"
 #include "random.h"
 #include "notifications.h"
-#include "time.h"
+#include "wztime.h"
 
 #include "multiplay.h"
 #include "multiint.h"
