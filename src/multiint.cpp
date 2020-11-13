@@ -877,6 +877,23 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI);
 static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, std::shared_ptr<WzTitleUI> oldUI);
 
+JoinGameResult joinGame(const char *connectionString)
+{
+	if (strchr(connectionString, '[') == NULL || strchr(connectionString, ']') == NULL) // it is not IPv6. For more see rfc3986 section-3.2.2
+	{
+		const char* ddch = strchr(connectionString, ':');
+		if(ddch != NULL)
+		{
+			uint32_t serverPort = atoi(ddch+1);
+			std::string serverIP = "";
+			serverIP.assign(connectionString, ddch - connectionString);
+			debug(LOG_INFO, "Connecting to ip [%s] port %d", serverIP.c_str(), serverPort);
+			return joinGame(serverIP.c_str(), serverPort);
+		}
+	}
+	return joinGame(connectionString, 0);
+}
+
 JoinGameResult joinGame(const char *host, uint32_t port)
 {
 	std::string hostStr = (host != nullptr) ? std::string(host) : std::string();

@@ -234,6 +234,7 @@ enum class JoinGameResult {
 	JOINED,
 	PENDING_PASSWORD
 };
+JoinGameResult joinGame(const char *connectionString);
 JoinGameResult joinGame(const char *host, uint32_t port);
 JoinGameResult joinGame(const std::vector<JoinConnectionDescription>& connection_list);
 void playerResponding();

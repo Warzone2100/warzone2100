@@ -158,23 +158,7 @@ TITLECODE titleLoop()
 			NETinit(true);
 			// Ensure the joinGame has a place to return to
 			changeTitleMode(TITLE);
-			// Following if copypasted from protocol.cpp (WzProtocolTitleUI : direct ip connection handler)
-			if (strchr(iptoconnect, '[') == NULL || strchr(iptoconnect, ']') == NULL) // it is not IPv6. For more see rfc3986 section-3.2.2
-			{
-				char* ddch = strchr(iptoconnect, ':');
-				if(ddch != NULL)
-				{
-					uint32_t serverPort = atoi(ddch+1);
-					std::string serverIP = "";
-					serverIP.assign(iptoconnect, ddch - iptoconnect);
-					debug(LOG_INFO, "Connecting to ip [%s] port %d", serverIP.c_str(), serverPort);
-					joinGame(serverIP.c_str(), serverPort);
-				} else {
-					joinGame(iptoconnect, 0);
-				}
-			} else {
-				joinGame(iptoconnect, 0);
-			}
+			joinGame(iptoconnect);
 		}
 		else
 		{
