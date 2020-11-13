@@ -145,10 +145,14 @@ void main()
 	{
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
-		fogFactor = clamp(fogFactor, 0.0, 1.0);
+
+		if(fogFactor > 1)
+		{
+			discard;
+		}
 
 		// Return fragment color
-		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), fogFactor);
+		fragColour = mix(fragColour, vec4(fogColor.xyz, fragColour.w), clamp(fogFactor, 0.0, 1.0));
 	}
 
 	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
