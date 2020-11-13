@@ -776,28 +776,31 @@ namespace wzapi
 	{
 	public:
 		typedef std::string GameEntityName;
+		typedef std::pair<GameEntityName, GameEntityRules> GameEntityRulesPair;
 	public:
 		GameEntityRuleContainer()
 		{ }
 		inline void addRules(const GameEntityName& statsName, GameEntityRules&& entityRules)
 		{
-			rules.emplace(statsName, std::move(entityRules));
+			rules.emplace_back(GameEntityRulesPair{statsName, std::move(entityRules)});
+			lookup_table[statsName] = rules.size() - 1;
 		}
 	public:
 		inline GameEntityRules& operator[](const GameEntityName& statsName)
 		{
-			return rules.at(statsName);
+			return rules.at(lookup_table.at(statsName)).second;
 		}
-		inline std::unordered_map<GameEntityName, GameEntityRules>::const_iterator begin() const
+		inline std::vector<GameEntityRulesPair>::const_iterator begin() const
 		{
 			return rules.cbegin();
 		}
-		inline std::unordered_map<GameEntityName, GameEntityRules>::const_iterator end() const
+		inline std::vector<GameEntityRulesPair>::const_iterator end() const
 		{
 			return rules.cend();
 		}
 	private:
-		std::unordered_map<GameEntityName, GameEntityRules> rules;
+		std::vector<GameEntityRulesPair> rules;
+		std::unordered_map<GameEntityName, size_t> lookup_table;
 	};
 
 	class PerPlayerUpgrades
