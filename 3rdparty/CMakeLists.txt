@@ -89,6 +89,14 @@ set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 target_link_libraries(quickjs PRIVATE Threads::Threads)
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+	# GCC 9.3.0+ has been tested to be fine at -O2
+	if((CMAKE_C_COMPILER_VERSION VERSION_LESS 9.3) AND (CMAKE_C_COMPILER_VERSION VERSION_GREATER 7.0))
+		# Avoid SEGFAULT with earlier GCC and fcode-hoisting
+		message(STATUS "QuickJS: Using -fno-code-hoisting (${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION})")
+		target_compile_options(quickjs PRIVATE -fno-code-hoisting)
+	endif()
+endif()
 if(MSVC)
 	# Disable some warnings for QuickJS
 	set(QUICKJS_COMPILE_OPTIONS "")
