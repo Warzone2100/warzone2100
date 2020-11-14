@@ -18,6 +18,7 @@
 */
 
 #include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h"
 #include "widget.h"
 #include "widgint.h"
 #include "paragraph.h"
@@ -26,28 +27,73 @@
 
 #include <algorithm>
 
+class WzCachedText
+{
+public:
+	WzCachedText(std::string text, iV_fonts font, uint32_t cacheDurationMs = 100):
+		text(text),
+		font(font),
+		cacheDurationMs(cacheDurationMs)
+	{}
+
+	void tick()
+	{
+		if (cachedText && cacheExpireAt < realTime)
+		{
+			cachedText = nullptr;
+		}
+	}
+
+	WzText *operator ->()
+	{
+		if (!cachedText)
+		{
+			cachedText = std::unique_ptr<WzText>(new WzText(text, font));
+		}
+
+		cacheExpireAt = realTime + (cacheDurationMs * GAME_TICKS_PER_SEC) / 1000;
+		return cachedText.get();
+	}
+
+private:
+	std::string text;
+	iV_fonts font;
+	uint32_t cacheDurationMs;
+	std::unique_ptr<WzText> cachedText = nullptr;
+	uint32_t cacheExpireAt = 0;
+};
+
 class ParagraphLine: public WIDGET
 {
 public:
-	ParagraphLine(W_INIT *init): WIDGET(init, WIDG_UNSPECIFIED_TYPE) {}
+	ParagraphLine(Paragraph *parent):
+		WIDGET(parent, WIDG_UNSPECIFIED_TYPE),
+		cachedText("", parent->font)
+	{}
+
+	void display(int xOffset, int yOffset) override
+	{
+		cachedText->render(xOffset + x(), yOffset + y() - cachedText->aboveBase(), getParagraph()->fontColour);
+	}
+
+	void setText(std::string const &newText)
+	{
+		cachedText = WzCachedText(newText, getParagraph()->font);
+		setGeometry(x(), y(), iV_GetTextWidth(newText.c_str(), getParagraph()->font), iV_GetTextHeight(newText.c_str(), getParagraph()->font));
+	}
+
+	void run(W_CONTEXT *) override
+	{
+		cachedText.tick();
+	}
+
+private:
+	WzCachedText cachedText;
 
 	Paragraph *getParagraph()
 	{
 		return (Paragraph *)parent();
 	}
-
-	void display(int xOffset, int yOffset)
-	{
-		text.render(xOffset + x(), yOffset + y() - text.aboveBase(), getParagraph()->fontColour);
-	}
-
-	void setText(std::string const &newText)
-	{
-		text.setText(newText, font_regular);
-		setGeometry(x(), y(), text.width(), text.lineSize());
-	}
-
-	WzText text;
 };
 
 Paragraph::Paragraph(W_INIT const *init)
@@ -65,12 +111,12 @@ void Paragraph::updateLayout()
 
 	renderState = state;
 
-	auto aTextLines = iV_FormatText(state.string.toUtf8().c_str(), state.width, FTEXT_LEFTJUSTIFY, font_regular, false);
+	auto aTextLines = iV_FormatText(state.string.toUtf8().c_str(), state.width, FTEXT_LEFTJUSTIFY, font, false);
 
 	int requiredHeight = 0;
 	if (!aTextLines.empty())
 	{
-		requiredHeight = aTextLines.back().offset.y + iV_GetTextLineSize(font_regular);
+		requiredHeight = aTextLines.back().offset.y + iV_GetTextLineSize(font);
 	}
 
 	auto textWidth = 0;
@@ -105,10 +151,7 @@ void Paragraph::resizeLines(size_t size)
 
 	while (lines.size() < size)
 	{
-		W_INIT init;
-		auto newLine = new ParagraphLine(&init);
-		lines.push_back(newLine);
-		attach(newLine);
+		lines.push_back(new ParagraphLine(this));
 	}
 }
 
