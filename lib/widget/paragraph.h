@@ -60,7 +60,8 @@ public:
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 
 private:
-	PIELIGHT fontColour;
+	iV_fonts font = font_regular;
+	PIELIGHT fontColour = WZCOL_WHITE;
 	std::vector<ParagraphLine *> lines;
 	ParagraphState state;
 	ParagraphState renderState;
