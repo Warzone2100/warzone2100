@@ -15,8 +15,10 @@ attribute vec2 vertexTexCoord;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 texCoord;
+out float vertexDistance;
 #else
 varying vec2 texCoord;
+varying float vertexDistance;
 #endif
 
 void main()
@@ -24,6 +26,10 @@ void main()
 	// Pass texture coordinates to fragment shader
 	texCoord = vertexTexCoord;
 
-	// Translate every vertex according to the Model, View and Projection matrices
-	gl_Position = ModelViewProjectionMatrix * vertex;
+	// Translate every vertex according to the Model View and Projection Matrix
+	vec4 gposition = ModelViewProjectionMatrix * vertex;
+	gl_Position = gposition;
+
+	// Remember vertex distance
+	vertexDistance = gposition.z;
 }
