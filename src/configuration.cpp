@@ -58,6 +58,7 @@
 #include "activity.h"
 #include "nethelpers.h"
 #include "lib/framework/wzapp.h"
+#include "display3d.h" // for building animation speed
 
 #include <type_traits>
 
@@ -256,7 +257,7 @@ bool loadConfig()
 			debug(LOG_WARNING, "Unsupported / invalid jsbackend value: %s; defaulting to: %s", ini.value("js_backend").toString().toUtf8().constData(), to_string(js_backend).c_str());
 		}
 	}
-
+	BlueprintTrackAnimationSpeed = ini.value("BlueprintTrackAnimationSpeed", 20).toInt();
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -352,6 +353,7 @@ bool saveConfig()
 	ini.setValue("favoriteStructs", getFavoriteStructs().toUtf8().c_str());
 	ini.setValue("gfxbackend", to_string(war_getGfxBackend()).c_str());
 	ini.setValue("jsbackend", to_string(war_getJSBackend()).c_str());
+	ini.setValue("BlueprintTrackAnimationSpeed", BlueprintTrackAnimationSpeed);
 	ini.sync();
 	return true;
 }

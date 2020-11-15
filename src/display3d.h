@@ -60,6 +60,8 @@ extern bool showUNITCOUNT;
 extern bool showSAMPLES;
 extern bool showORDERS;
 
+extern int BlueprintTrackAnimationSpeed;
+
 float getViewDistance();
 void setViewDistance(float dist);
 extern bool	radarOnScreen;
