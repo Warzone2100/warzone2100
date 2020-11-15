@@ -910,7 +910,6 @@ static void stopGameLoop()
 	{
 		clearBlueprints();
 		initLoadingScreen(true); // returning to f.e. do a loader.render not active
-		pie_EnableFog(false); // don't let the normal loop code set status on
 		if (gameLoopStatus != GAMECODE_LOADGAME)
 		{
 			if (!levReleaseAll())
