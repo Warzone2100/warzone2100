@@ -247,6 +247,11 @@ bool showORDERS = false;
   */
 bool showDROIDcounts = false;
 
+/**  Speed of blueprints animation (moving from one tile to another)
+  * default 20, change in config
+  */
+int BlueprintTrackAnimationSpeed = 20;
+
 /** When we have a connection issue, we will flash a message on screen
 */
 static const char *errorWaiting = nullptr;
@@ -1787,12 +1792,12 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 					{
 						z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
 					}
-				
+
 				if(!playerBlueprintX->isTracking()){
-					playerBlueprintX->startTracking(pos.x)->setSpeed(20);
-					playerBlueprintY->startTracking(pos.y)->setSpeed(20);
-					playerBlueprintZ->startTracking(z)->setSpeed(20);
-					playerBlueprintDirection->startTracking(direction)->setSpeed(50);
+					playerBlueprintX->startTracking(pos.x)->setSpeed(BlueprintTrackAnimationSpeed);
+					playerBlueprintY->startTracking(pos.y)->setSpeed(BlueprintTrackAnimationSpeed);
+					playerBlueprintZ->startTracking(z)->setSpeed(BlueprintTrackAnimationSpeed);
+					playerBlueprintDirection->startTracking(direction)->setSpeed(BlueprintTrackAnimationSpeed+30);
 				}
 
 				playerBlueprintX->setTarget(pos.x)->update();
@@ -2629,7 +2634,7 @@ static void	drawDragBox()
 	int Y2 = MAX(dragBox3D.y1, mouseY());
 
 	// draw static box
-	
+
 	iV_Box(X1, Y1, X2, Y2, WZCOL_UNIT_SELECT_BORDER);
 	pie_UniTransBoxFill(X1, Y1, X2, Y2, WZCOL_UNIT_SELECT_BOX);
 
