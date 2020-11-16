@@ -163,4 +163,5 @@ void InGameChatMessage::send()
 {
 	sendToHumanPlayers();
 	sendToAiPlayers();
+	triggerEventChat(sender, sender, text);
 }
