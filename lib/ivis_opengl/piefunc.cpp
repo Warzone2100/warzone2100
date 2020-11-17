@@ -129,83 +129,126 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 
 void pie_Skybox_Init()
 {
-	const Vector3f
-		northWestBelow = Vector3f(-1, 0, 1), // nw
-		northWestMiddle = Vector3f(-1, 0.15, 1),
-		northWestAbove = Vector3f(-0.75, 1, 0.75),
-		northEastBelow = Vector3f(1, 0, 1), // ne
-		northEastAbove = Vector3f(0.75, 1, 0.75),
-		northEastMiddle = Vector3f(1, 0.15, 1),
-		southEastBelow = Vector3f(1, 0, -1), // se
-		southEastAbove = Vector3f(0.75, 1, -0.75),
-		southEastMiddle = Vector3f(1, 0.15, -1),
-		southWestBelow = Vector3f(-1, 0, -1), // sw
-		southWestMiddle = Vector3f(-1, 0.15, -1),
-		southWestAbove = Vector3f(-0.75, 1, -0.75);
+	float narrowingOfTop = 0.15;
+	float top = 1;
+	float middle = 0.15;
+	float baseline = -0.15;
+	float bottom = -1;
 
-	const std::array<Vector3f, 54> vertex{
+	// Skybox looks like this from the side:
+	//          
+	//             _____      top, slightly narrower to give perspective
+	//            /     .
+	//           /       .
+	//           +-------+    middle
+	//           |       |
+	//           +-------+    baseline of map
+	//           |       |
+	//           +-------+    bottom
+	// bottom cap ---^
+	
+	// The skybox is shown from baseline to top. below the baseline, the color fades to black (if fog enabled - otherwise a color of the skybox bottom).
+	// We extended the skybox downwards to be able to paint more of the screen with fog.
+	
+	float narrowCoordinate = 1 - narrowingOfTop;
+	const Vector3f
+		northWestBottom = Vector3f(-1, bottom, 1), // nw
+		northWestMiddle = Vector3f(-1, middle, 1),
+		northWestBaseline = Vector3f(-1, baseline, 1),
+		northWestTop = Vector3f(-narrowCoordinate, top, narrowCoordinate),
+		northEastBottom = Vector3f(1, bottom, 1), // ne
+		northEastTop = Vector3f(narrowCoordinate, top, narrowCoordinate),
+		northEastMiddle = Vector3f(1, middle, 1),
+		northEastBaseline = Vector3f(1, baseline, 1),
+		southEastBottom = Vector3f(1, bottom, -1), // se
+		southEastTop = Vector3f(narrowCoordinate, top, -narrowCoordinate),
+		southEastMiddle = Vector3f(1, middle, -1),
+		southEastBaseline = Vector3f(1, baseline, -1),
+		southWestBottom = Vector3f(-1, bottom, -1), // sw
+		southWestMiddle = Vector3f(-1, middle, -1),
+		southWestBaseline = Vector3f(-1, baseline, -1),
+		southWestTop = Vector3f(-narrowCoordinate, top, -narrowCoordinate);
+
+	const std::array<Vector3f, 78> vertex{
 		// North quads
-		northWestMiddle, northWestAbove, northEastMiddle,
-		northEastAbove, northEastMiddle, northWestAbove,
-		northWestBelow, northWestMiddle, northEastBelow,
-		northEastMiddle, northEastBelow, northWestMiddle,
+		northWestMiddle, northWestTop, northEastMiddle,
+		northEastTop, northEastMiddle, northWestTop,
+		northWestBaseline, northWestMiddle, northEastBaseline,
+		northEastMiddle, northEastBaseline, northWestMiddle,
+		northWestBottom, northWestBaseline, northEastBottom,
+		northEastBaseline, northEastBottom, northWestBaseline,
 		// East quads
-		northEastMiddle, northEastAbove, southEastMiddle,
-		southEastAbove, southEastMiddle, northEastAbove,
-		northEastBelow, northEastMiddle, southEastBelow,
-		southEastMiddle, southEastBelow, northEastMiddle,
+		northEastMiddle, northEastTop, southEastMiddle,
+		southEastTop, southEastMiddle, northEastTop,
+		northEastBaseline, northEastMiddle, southEastBaseline,
+		southEastMiddle, southEastBaseline, northEastMiddle,
+		northEastBottom, northEastBaseline, southEastBottom,
+		southEastBaseline, southEastBottom, northEastBaseline,
 		// South quads
-		southEastMiddle, southEastAbove, southWestMiddle,
-		southWestAbove, southWestMiddle, southEastAbove,
-		southEastBelow, southEastMiddle, southWestBelow,
-		southWestMiddle, southWestBelow, southEastMiddle,
+		southEastMiddle, southEastTop, southWestMiddle,
+		southWestTop, southWestMiddle, southEastTop,
+		southEastBaseline, southEastMiddle, southWestBaseline,
+		southWestMiddle, southWestBaseline, southEastMiddle,
+		southEastBottom, southEastBaseline, southWestBottom,
+		southWestBaseline, southWestBottom, southEastBaseline,
 		// West quads
-		southWestMiddle, southWestAbove, northWestMiddle,
-		northWestAbove, northWestMiddle, southWestAbove,
-		southWestBelow, southWestMiddle, northWestBelow,
-		northWestMiddle, northWestBelow, southWestMiddle,
+		southWestMiddle, southWestTop, northWestMiddle,
+		northWestTop, northWestMiddle, southWestTop,
+		southWestBaseline, southWestMiddle, northWestBaseline,
+		northWestMiddle, northWestBaseline, southWestMiddle,
+		southWestBottom, southWestBaseline, northWestBottom,
+		northWestBaseline, northWestBottom, southWestBaseline,
 		// Bottom quads
-		southWestBelow, northWestBelow, northEastBelow,
-		northEastBelow, southEastBelow, southWestBelow,
+		southWestBottom, northWestBottom, northEastBottom,
+		northEastBottom, southEastBottom, southWestBottom,
 	};
 	const Vector2f
-		uvSouthWest = Vector2f(0, 0.99),     // 0.99 avoids an ugly 1px border (mipmap bleed)
-		uvMidWest = Vector2f(0, 0.85),
-		uvNorthWest = Vector2f(0, 0),
-		uvSouthEast = Vector2f(2, 0.99),     // 2 = each side of the skybox contains 2 repeats of the same texture
-		uvMidEast = Vector2f(2, 0.85),
-		uvNorthEast = Vector2f(2, 0);
+		uvTopLeft = Vector2f(0, 0.01), // fractions of 0 and 1 to avoid mipmap bleeding
+		uvMiddleLeft = Vector2f(0, 1 - middle),
+		uvBaselineLeft = Vector2f(0, 0.99),
+		uvTopRight = Vector2f(2, 0.01),     // 2 = each side of the skybox contains 2 repeats of the same texture
+		uvMiddleRight = Vector2f(2, 1 - middle),
+		uvBaselineRight = Vector2f(2, 0.99),
+		uvNull = Vector2f(0, 0.99); // = single color, blend in with sides.
 
-	const std::array<Vector2f, 54> texc =
+	const std::array<Vector2f, 78> texc =
 	{
 		// North quad
-		uvMidWest, uvNorthWest, uvMidEast,
-		uvNorthEast, uvMidEast, uvNorthWest,
-		uvSouthWest, uvMidWest, uvSouthEast,
-		uvMidEast, uvSouthEast, uvMidWest,
+		uvMiddleLeft, uvTopLeft, uvMiddleRight,
+		uvTopRight, uvMiddleRight, uvTopLeft,
+		uvBaselineLeft, uvMiddleLeft, uvBaselineRight,
+		uvMiddleRight, uvBaselineRight, uvMiddleLeft,
+		uvNull, uvNull, uvNull, // bottom part has no color.
+		uvNull, uvNull, uvNull,
 		// East quad
-		uvMidWest, uvNorthWest, uvMidEast,
-		uvNorthEast, uvMidEast, uvNorthWest,
-		uvSouthWest, uvMidWest, uvSouthEast,
-		uvMidEast, uvSouthEast, uvMidWest,
+		uvMiddleLeft, uvTopLeft, uvMiddleRight,
+		uvTopRight, uvMiddleRight, uvTopLeft,
+		uvBaselineLeft, uvMiddleLeft, uvBaselineRight,
+		uvMiddleRight, uvBaselineRight, uvMiddleLeft,
+		uvNull, uvNull, uvNull, // bottom part has no color.
+		uvNull, uvNull, uvNull,
 		// West quad
-		uvMidWest, uvNorthWest, uvMidEast,
-		uvNorthEast, uvMidEast, uvNorthWest,
-		uvSouthWest, uvMidWest, uvSouthEast,
-		uvMidEast, uvSouthEast, uvMidWest,
+		uvMiddleLeft, uvTopLeft, uvMiddleRight,
+		uvTopRight, uvMiddleRight, uvTopLeft,
+		uvBaselineLeft, uvMiddleLeft, uvBaselineRight,
+		uvMiddleRight, uvBaselineRight, uvMiddleLeft,
+		uvNull, uvNull, uvNull, // bottom part has no color.
+		uvNull, uvNull, uvNull,
 		// South quad
-		uvMidWest, uvNorthWest, uvMidEast,
-		uvNorthEast, uvMidEast, uvNorthWest,
-		uvSouthWest, uvMidWest, uvSouthEast,
-		uvMidEast, uvSouthEast, uvMidWest,
+		uvMiddleLeft, uvTopLeft, uvMiddleRight,
+		uvTopRight, uvMiddleRight, uvTopLeft,
+		uvBaselineLeft, uvMiddleLeft, uvBaselineRight,
+		uvMiddleRight, uvBaselineRight, uvMiddleLeft,
+		uvNull, uvNull, uvNull, // bottom part has no color.
+		uvNull, uvNull, uvNull,
 		// Bottom quad
-		uvSouthWest, uvSouthWest, uvSouthWest, // same coordinates in bottom part = blend in with walls.
-		uvSouthWest, uvSouthWest, uvSouthWest,
+		uvNull, uvNull, uvNull, // bottom cap has no color
+		uvNull, uvNull, uvNull,
 	};
 
 	gfx_api::context::get().debugStringMarker("Initializing skybox");
 	skyboxGfx = new GFX(GFX_TEXTURE, 3);
-	skyboxGfx->buffers(54, vertex.data(), texc.data());
+	skyboxGfx->buffers(78, vertex.data(), texc.data());
 }
 
 void pie_Skybox_Texture(const char *filename)
