@@ -3015,6 +3015,7 @@ bool VkRoot::createAllocator()
 	VmaAllocatorCreateInfo allocatorInfo = {};
 	allocatorInfo.physicalDevice = physicalDevice;
 	allocatorInfo.device = dev;
+	allocatorInfo.instance = inst;
 	allocatorInfo.pVulkanFunctions = &vulkanFunctions;
 	allocatorInfo.flags |= VMA_ALLOCATOR_CREATE_EXTERNALLY_SYNCHRONIZED_BIT;
 
