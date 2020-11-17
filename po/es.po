@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-11 02:25\n"
+"PO-Revision-Date: 2020-11-17 14:30\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -4032,11 +4032,11 @@ msgstr "Localiza y rescata tus unidades del transportador derribado"
 
 #: data/base/script/campaign/cam2-c.js:30
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Rescata a los civiles de The Collective antes de que muchos sean capturados"
 
 #: data/base/script/campaign/cam2-d.js:77
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Asegure el enlace desde el Colectivo"
 
 #: data/base/script/campaign/cam2-end.js:152
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
@@ -15438,7 +15438,7 @@ msgstr "Escalado de Interfaz"
 
 #: src/frontend.cpp:1135
 msgid "Adaptive"
-msgstr ""
+msgstr "Adaptable"
 
 #: src/frontend.cpp:1167
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -16491,27 +16491,27 @@ msgstr "Añadir a Grupo 3"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Añadir a Grupo 4"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Añadir a Grupo 5"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Añadir a Grupo 6"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Añadir a Grupo 7"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Añadir a Grupo 8"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Añadir a Grupo 9"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
@@ -16887,19 +16887,19 @@ msgstr "Seleccionar Siguiente Fábrica de Cyborgs"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Selecciona siguiente Fábrica VTOL"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Saltar a la siguiente Fábrica"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Saltar al próximo centro de investigación"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Saltar al próximo generador de energía"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
