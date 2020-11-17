@@ -1283,10 +1283,10 @@ void drawWater(const glm::mat4 &viewMatrix)
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
 	const auto &renderState = getCurrentRenderState();
 
-	gfx_api::WaterPSO::get().bind();
 	optional<size_t> water1_texPage = iV_GetTexture("page-80-water-1.png");
 	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png");
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
+	gfx_api::WaterPSO::get().bind();
 	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({ viewMatrix, paramsX, paramsY, paramsX2, paramsY2,
