@@ -3052,6 +3052,7 @@ void VkRoot::draw(const std::size_t& offset, const std::size_t& count, const gfx
 
 void VkRoot::draw_elements(const std::size_t& offset, const std::size_t& count, const gfx_api::primitive_type&, const gfx_api::index_type&)
 {
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(offset <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "offset (%zu) exceeds uint32_t max", offset);
 	ASSERT(count <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "count (%zu) exceeds uint32_t max", count);
 	buffering_mechanism::get_current_resources().cmdDraw.drawIndexed(static_cast<uint32_t>(count), 1, static_cast<uint32_t>(offset) >> 2, 0, 0, vkDynLoader);
@@ -3059,6 +3060,7 @@ void VkRoot::draw_elements(const std::size_t& offset, const std::size_t& count, 
 
 void VkRoot::bind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset)
 {
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	std::vector<vk::Buffer> buffers;
 	std::vector<VkDeviceSize> offsets;
 	for (const auto &input : vertex_buffers_offset)
@@ -3085,6 +3087,7 @@ void VkRoot::disable_all_vertex_buffers()
 
 void VkRoot::bind_streamed_vertex_buffers(const void* data, const std::size_t size)
 {
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(size > 0, "bind_streamed_vertex_buffers called with size 0");
 	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
 	auto& frameResources = buffering_mechanism::get_current_resources();
@@ -3203,6 +3206,7 @@ vk::IndexType VkRoot::to_vk(const gfx_api::index_type& index)
 
 void VkRoot::bind_index_buffer(gfx_api::buffer& index_buffer, const gfx_api::index_type& index)
 {
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	auto& casted_buf = static_cast<VkBuf&>(index_buffer);
 	ASSERT(casted_buf.usage == gfx_api::buffer::usage::index_buffer, "Passed gfx_api::buffer is not an index buffer");
 	buffering_mechanism::get_current_resources().cmdDraw.bindIndexBuffer(casted_buf.object, 0, to_vk(index), vkDynLoader);
@@ -3215,6 +3219,7 @@ void VkRoot::unbind_index_buffer(gfx_api::buffer&)
 
 void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_descriptions, const std::vector<gfx_api::texture*>& textures)
 {
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(textures.size() <= attribute_descriptions.size(), "Received more textures than expected");
 
 	const auto set = allocateDescriptorSets(currentPSO->textures_set_layout);
@@ -3247,6 +3252,7 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 
 void VkRoot::set_constants(const void* buffer, const std::size_t& size)
 {
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
 	const auto stagingMemory = buffering_mechanism::get_current_resources().uniformBufferAllocator.alloc(static_cast<uint32_t>(size), physDeviceProps.limits.minUniformBufferOffsetAlignment);
 	void * pDynamicUniformBufferMapped = buffering_mechanism::get_current_resources().uniformBufferAllocator.mapMemory(stagingMemory);

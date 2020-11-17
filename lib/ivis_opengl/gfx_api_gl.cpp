@@ -1325,6 +1325,7 @@ inline void gl_context::disableVertexAttribArray(GLuint index)
 
 void gl_context::bind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset)
 {
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	for (size_t i = 0, e = vertex_buffers_offset.size(); i < e && (first + i) < current_program->vertex_buffer_desc.size(); ++i)
 	{
 		const auto& buffer_desc = current_program->vertex_buffer_desc[first + i];
@@ -1345,6 +1346,7 @@ void gl_context::bind_vertex_buffers(const std::size_t& first, const std::vector
 
 void gl_context::unbind_vertex_buffers(const std::size_t& first, const std::vector<std::tuple<gfx_api::buffer*, std::size_t>>& vertex_buffers_offset)
 {
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	for (size_t i = 0, e = vertex_buffers_offset.size(); i < e && (first + i) < current_program->vertex_buffer_desc.size(); ++i)
 	{
 		const auto& buffer_desc = current_program->vertex_buffer_desc[first + i];
@@ -1370,6 +1372,7 @@ void gl_context::disable_all_vertex_buffers()
 
 void gl_context::bind_streamed_vertex_buffers(const void* data, const std::size_t size)
 {
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	ASSERT(size > 0, "bind_streamed_vertex_buffers called with size 0");
 	glBindBuffer(GL_ARRAY_BUFFER, scratchbuffer);
 	if (scratchbuffer_size > 0)
@@ -1388,6 +1391,7 @@ void gl_context::bind_streamed_vertex_buffers(const void* data, const std::size_
 
 void gl_context::bind_index_buffer(gfx_api::buffer& _buffer, const gfx_api::index_type&)
 {
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	auto& buffer = static_cast<gl_buffer&>(_buffer);
 	ASSERT(buffer.usage == gfx_api::buffer::usage::index_buffer, "Passed gfx_api::buffer is not an index buffer");
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.buffer);
@@ -1400,6 +1404,7 @@ void gl_context::unbind_index_buffer(gfx_api::buffer&)
 
 void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::texture*>& textures)
 {
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	ASSERT(textures.size() <= texture_descriptions.size(), "Received more textures than expected");
 	for (size_t i = 0; i < texture_descriptions.size() && i < textures.size(); ++i)
 	{
@@ -1461,6 +1466,7 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 
 void gl_context::set_constants(const void* buffer, const size_t& size)
 {
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	current_program->set_constants(buffer);
 }
 
