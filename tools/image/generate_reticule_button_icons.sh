@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# This script combines images in src/ to create the icons for the reticule buttons.
+# This script combines images in data/base/images/src/ to create the icons for the reticule buttons.
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source_dir="$DIR/src"
-target_dir="$DIR/intfac"
+source_dir="$DIR/../../data/base/images/src"
+target_dir="$DIR/../../data/base/images/intfac"
 border_thickness=2
 small_width=76
 small_height=60
