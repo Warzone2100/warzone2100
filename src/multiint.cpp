@@ -282,6 +282,7 @@ protected:
 
 private:
 	ScrollableListWidget *messages;
+	W_EDITBOX *editBox;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
 
 	static std::vector<RoomMessage> persistentMessageLocalStorage;
@@ -2508,6 +2509,14 @@ ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(
 		addMessage(message.sender, message.text);
 	});
 
+	W_EDBINIT sEdInit;
+	sEdInit.formID = MULTIOP_CHATBOX;
+	sEdInit.id = MULTIOP_CHATEDIT;
+	sEdInit.pUserData = nullptr;
+	sEdInit.pBoxDisplay = displayChatEdit;
+	editBox = new W_EDITBOX(&sEdInit);
+	attach(editBox);
+
 	consoleAddMessageListener(handleConsoleMessage);
 }
 
@@ -2546,7 +2555,9 @@ void ChatBoxWidget::addMessage(int32_t sender, const char *text)
 
 void ChatBoxWidget::geometryChanged()
 {
-	messages->setGeometry(1, 1, this->width() - 2, this->height() - MULTIOP_CHATEDITH - 1);
+	auto messagesHeight = height() - MULTIOP_CHATEDITH - 1;
+	messages->setGeometry(1, 1, width() - 2, messagesHeight);
+	editBox->setGeometry(MULTIOP_CHATEDITX, messagesHeight, MULTIOP_CHATEDITW, MULTIOP_CHATEDITH);
 }
 
 void ChatBoxWidget::initializeMessages(bool preserveOldChat)
@@ -2577,24 +2588,11 @@ static void addChatBox(bool preserveOldChat)
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 	ChatBoxWidget *chatBox = new ChatBoxWidget(parent);
 	chatBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, MULTIOP_CHATBOXH);
+		psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, psWidget->parent()->height() - MULTIOP_CHATBOXY);
 	}));
 	chatBox->initializeMessages(preserveOldChat);
 
 	addSideText(FRONTEND_SIDETEXT4, MULTIOP_CHATBOXX - 3, MULTIOP_CHATBOXY, _("CHAT"));
-
-	W_EDBINIT sEdInit;
-	sEdInit.formID = MULTIOP_CHATBOX;
-	sEdInit.id = MULTIOP_CHATEDIT;
-	sEdInit.x = MULTIOP_CHATEDITX;
-	sEdInit.y = MULTIOP_CHATEDITY;
-	sEdInit.width = MULTIOP_CHATEDITW;
-	sEdInit.height = MULTIOP_CHATEDITH;
-
-	sEdInit.pUserData = nullptr;
-	sEdInit.pBoxDisplay = displayChatEdit;
-
-	widgAddEditBox(psWScreen, &sEdInit);
 
 	if (!getModList().empty())
 	{
@@ -4220,6 +4218,18 @@ void WzMultiplayerOptionsTitleUI::start()
 
 	addBackdrop();
 	addTopForm(true);
+
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		auto height = pie_GetVideoBufferHeight() - 80;
+		CLIP(height, HIDDEN_FRONTEND_HEIGHT, HIDDEN_FRONTEND_WIDTH);
+
+		psWidget->setGeometry(
+			((pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2),
+			((pie_GetVideoBufferHeight() - height) / 2),
+			HIDDEN_FRONTEND_WIDTH - 1,
+			height
+		);
+	}));
 
 	if (getLobbyError() != ERROR_INVALID)
 	{
