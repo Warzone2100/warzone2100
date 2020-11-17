@@ -852,6 +852,7 @@ static void setCDAudioForCurrentGameMode()
 static void startGameLoop()
 {
 	SetGameMode(GS_NORMAL);
+	initLoadingScreen(true);
 
 	ActivityManager::instance().startingGame();
 
@@ -866,6 +867,7 @@ static void startGameLoop()
 	}
 
 	screen_StopBackDrop();
+	closeLoadingScreen();
 
 	// Trap the cursor if cursor snapping is enabled
 	if (war_GetTrapCursor())
