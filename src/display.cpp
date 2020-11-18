@@ -547,32 +547,9 @@ UDWORD getTargetType()
 	return CurrentItemUnderMouse;
 }
 
-class ValueTracker {
-	private:
-	UDWORD startTime;
-	float initial;
-	float delta;
-	float current;
-	public:
-	void startTracking(int value){
-		this->initial = value;
-		this->current = value;
-		this->startTime = graphicsTime;
-	}
-	ValueTracker* setDelta(int value){
-		this->delta = value;
-		return this;
-	}
-	ValueTracker* update(){
-		this->current = (this->initial + this->delta / CAMERA_ROTATION_SPEED - this->current) * realTimeAdjustedIncrement(CAMERA_ROTATION_SMOOTHNESS) + this->current;
-		return this;
-	}
-	int getCurrent(){
-		return this->current;
-	}
-};
-
+// Mouse X coordinate at start of panning.
 UDWORD panMouseX;
+// Mouse Y coordinate at start of panning.
 UDWORD panMouseY;
 std::unique_ptr<ValueTracker> panXTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
 std::unique_ptr<ValueTracker> panZTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
@@ -1124,11 +1101,20 @@ void displayWorld()
 		if(!mouseDown(MOUSE_MMB)){
 			panActive = false;
 		} else {
-			auto mouseDeltaX = mouseX() - panMouseX;
-			auto mouseDeltaY = mouseY() - panMouseY;
+			int mouseDeltaX = mouseX() - panMouseX;
+			int mouseDeltaY = mouseY() - panMouseY;
 
-			player.p.x = panXTracker->setDelta(mouseDeltaX * 128)->update()->getCurrent();
-			player.p.z = panZTracker->setDelta(mouseDeltaY * 128)->update()->getCurrent();
+			int panningSpeed = std::min(mapWidth, mapHeight) / 10;
+
+			float horizontalMovement = panXTracker->setTargetDelta(mouseDeltaX * panningSpeed)->update()->getCurrentDelta();
+			float verticalMovement = -1 * panZTracker->setTargetDelta(mouseDeltaY * panningSpeed)->update()->getCurrentDelta();
+
+			player.p.x = panXTracker->getInitial()
+				+ cos(-player.r.y * (M_PI / 32768)) * horizontalMovement
+				+ sin(-player.r.y * (M_PI / 32768)) * verticalMovement;
+			player.p.z = panZTracker->getInitial()
+				+ sin(-player.r.y * (M_PI / 32768)) * horizontalMovement
+				- cos(-player.r.y * (M_PI / 32768)) * verticalMovement;
 		}
 	}
 
@@ -1137,14 +1123,14 @@ void displayWorld()
 		float mouseDeltaX = mouseX() - rotX;
 		float mouseDeltaY = mouseY() - rotY;
 
-		player.r.y = rotationHorizontalTracker->setDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
+		player.r.y = rotationHorizontalTracker->setTargetDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
 		
 		if(bInvertMouse)
 		{
 			mouseDeltaY *= -1;
 		}
 
-		player.r.x = rotationVerticalTracker->setDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
+		player.r.x = rotationVerticalTracker->setTargetDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
 		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 
 		setDesiredPitch(player.r.x / DEG_1);

@@ -23,70 +23,93 @@
 
 #include "animation.h"
 
-ValueTracker* ValueTracker::startTracking(int value){
+ValueTracker* ValueTracker::startTracking(int value)
+{
 	this->initial = value;
 	this->target = value;
-	this->delta = 0;
+	this->targetDelta = 0;
 	this->current = value;
 	this->startTime = graphicsTime;
 	this->_reachedTarget = false;
 	return this;
 }
-ValueTracker* ValueTracker::stopTracking(){
+ValueTracker* ValueTracker::stopTracking()
+{
 	this->initial = 0;
 	this->current = 0;
 	this->startTime = 0;
 	this->_reachedTarget = false;
 	return this;
 }
-bool ValueTracker::isTracking(){
+bool ValueTracker::isTracking()
+{
 	return this->startTime != 0;
 }
-ValueTracker* ValueTracker::setSpeed(int value){
+ValueTracker* ValueTracker::setSpeed(int value)
+{
 	this->speed = value;
 	return this;
 }
-ValueTracker* ValueTracker::setDelta(int value){
-	this->delta = value;
+ValueTracker* ValueTracker::setTargetDelta(int value)
+{
+	this->targetDelta = value;
 	this->target = this->initial + value;
 	this->_reachedTarget = false;
 	return this;
 }
-ValueTracker* ValueTracker::setTarget(int value){
-	this->delta = value - this->initial;
+ValueTracker* ValueTracker::setTarget(int value)
+{
+	this->targetDelta = value - this->initial;
 	this->target = value;
 	this->_reachedTarget = false;
 	return this;
 }
-ValueTracker* ValueTracker::update(){
-	if(this->_reachedTarget){
+ValueTracker* ValueTracker::update()
+{
+	if(this->_reachedTarget)
+	{
 		return this;
 	}
 
-	if(std::abs(this->target - this->current) < 1){
+	if(std::abs(this->target - this->current) < 1)
+	{
 		this->_reachedTarget = true;
 		return this;
 	}
 
-	this->current = (this->initial + this->delta - this->current) * realTimeAdjustedIncrement(this->speed) + this->current;
+	this->current = (this->initial + this->targetDelta - this->current) * realTimeAdjustedIncrement(this->speed) + this->current;
 	return this;
 }
-int ValueTracker::getCurrent(){
-	if(this->_reachedTarget){
+int ValueTracker::getCurrent()
+{
+	if(this->_reachedTarget)
+	{
 		return this->target;
 	}
 	return this->current;
 }
-int ValueTracker::getInitial(){
+int ValueTracker::getCurrentDelta()
+{
+	if(this->_reachedTarget)
+	{
+		return this->targetDelta;
+	}
+	return this->current - this->initial;
+}
+int ValueTracker::getInitial()
+{
 	return this->initial;
 }
-int ValueTracker::getTarget(){
+int ValueTracker::getTarget()
+{
 	return this->target;
 }
-int ValueTracker::getDelta(){
-	return this->delta;
+int ValueTracker::getTargetDelta()
+{
+	return this->targetDelta;
 }
-bool ValueTracker::reachedTarget(){
+bool ValueTracker::reachedTarget()
+{
 	return this->_reachedTarget;
 }
 

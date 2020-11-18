@@ -1806,7 +1806,7 @@ void displayBlueprints(const glm::mat4 &viewMatrix)
 
 				if(playerBlueprintDirection->reachedTarget()){
 					playerBlueprintDirection->startTracking(playerBlueprintDirection->getTarget());
-					playerBlueprintDirection->setDelta((SWORD)(direction - playerBlueprintDirection->getTarget()));
+					playerBlueprintDirection->setTargetDelta((SWORD)(direction - playerBlueprintDirection->getTarget()));
 				}
 
 				playerBlueprintDirection->update();

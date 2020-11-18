@@ -31,8 +31,8 @@ class ValueTracker {
 	private:
 	UDWORD startTime;
 	int initial;
-	int delta;
 	int target;
+	int targetDelta;
 	bool _reachedTarget;
 	float current;
 	int speed = 10;
@@ -45,9 +45,9 @@ class ValueTracker {
 	bool isTracking();
 	/// Sets speed/smoothness of the interpolation. 1 is syrup, 100 is instant. Default 10.
 	ValueTracker* setSpeed(int value);
-	/// Sets the target delta value (relative to the initial value)
-	ValueTracker* setDelta(int value);
-	/// Sets the target value
+	/// Sets the target delta value
+	ValueTracker* setTargetDelta(int value);
+	/// Sets the absolute target value
 	ValueTracker* setTarget(int value);
 	/// Update current value
 	ValueTracker* update();
@@ -55,10 +55,12 @@ class ValueTracker {
 	int getInitial();
 	/// Get current value
 	int getCurrent();
-	/// Get target value
+	/// Get current delta value
+	int getCurrentDelta();
+	/// Get absolute target value
 	int getTarget();
-	/// Get delta value
-	int getDelta();
+	/// Get target delta value
+	int getTargetDelta();
 	/// Returns if the tracker reached its target
 	bool reachedTarget();
 };
