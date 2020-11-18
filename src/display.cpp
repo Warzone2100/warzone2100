@@ -226,6 +226,7 @@ void	setInvertMouseStatus(bool val)
 #define MOUSE_ORDER (bRightClickOrders?MOUSE_RMB:MOUSE_LMB)
 #define MOUSE_SELECT (bRightClickOrders?MOUSE_LMB:MOUSE_RMB)
 #define MOUSE_ROTATE (bMiddleClickRotate?MOUSE_MMB:MOUSE_RMB)
+#define MOUSE_PAN (bMiddleClickRotate?MOUSE_RMB:MOUSE_MMB)
 
 bool	getRightClickOrders()
 {
@@ -547,6 +548,14 @@ UDWORD getTargetType()
 	return CurrentItemUnderMouse;
 }
 
+// Mouse X coordinate at start of panning.
+UDWORD panMouseX;
+// Mouse Y coordinate at start of panning.
+UDWORD panMouseY;
+std::unique_ptr<ValueTracker> panXTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> panZTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+bool panActive;
+
 //don't want to do any of these whilst in the Intelligence Screen
 void processMouseClickInput()
 {
@@ -637,6 +646,12 @@ void processMouseClickInput()
 		rotationVerticalTracker->startTracking((UWORD)player.r.x);
 		rotationHorizontalTracker->startTracking((UWORD)player.r.y); // negative values caused problems with float conversion
 		rotActive = true;
+	}
+	if (mouseDrag(MOUSE_PAN, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !bRadarDragging && !getRadarTrackingStatus())
+	{
+		panXTracker->startTracking(player.p.x);
+		panZTracker->startTracking(player.p.z);
+		panActive = true;
 	}
 
 	selection = establishSelection(selectedPlayer);
@@ -1082,19 +1097,41 @@ void displayWorld()
 {
 	Vector3i pos;
 
+	if (panActive)
+	{
+		if(!mouseDown(MOUSE_PAN)){
+			panActive = false;
+		} else {
+			int mouseDeltaX = mouseX() - panMouseX;
+			int mouseDeltaY = mouseY() - panMouseY;
+
+			int panningSpeed = std::min(mapWidth, mapHeight) / 10;
+
+			float horizontalMovement = panXTracker->setTargetDelta(mouseDeltaX * panningSpeed)->update()->getCurrentDelta();
+			float verticalMovement = -1 * panZTracker->setTargetDelta(mouseDeltaY * panningSpeed)->update()->getCurrentDelta();
+
+			player.p.x = panXTracker->getInitial()
+				+ cos(-player.r.y * (M_PI / 32768)) * horizontalMovement
+				+ sin(-player.r.y * (M_PI / 32768)) * verticalMovement;
+			player.p.z = panZTracker->getInitial()
+				+ sin(-player.r.y * (M_PI / 32768)) * horizontalMovement
+				- cos(-player.r.y * (M_PI / 32768)) * verticalMovement;
+		}
+	}
+
 	if (mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		float mouseDeltaX = mouseX() - rotX;
 		float mouseDeltaY = mouseY() - rotY;
 
-		player.r.y = rotationHorizontalTracker->setDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
+		player.r.y = rotationHorizontalTracker->setTargetDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
 		
 		if(bInvertMouse)
 		{
 			mouseDeltaY *= -1;
 		}
 
-		player.r.x = rotationVerticalTracker->setDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
+		player.r.x = rotationVerticalTracker->setTargetDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
 		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 
 		setDesiredPitch(player.r.x / DEG_1);
