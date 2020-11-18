@@ -52,6 +52,23 @@ function(downloadFile URL OUTPUT_FILENAME RETRY_COUNT RESULT_STATUS_CODE RESULT_
 	set(${RESULT_STATUS_STRING} ${_dl_status_string} PARENT_SCOPE)
 endfunction()
 
+function(downloadFileCalculateHash URL TMP_DIR HASH RETURN_VARIABLE)
+	set(_tmp_dl_path "${TMP_DIR}/_tmpFileDl")
+	downloadFile("${URL}" "${_tmp_dl_path}" 3 _dl_status_code _dl_status_string)
+	if (_dl_status_code EQUAL 0)
+		# Download succeeded - calculate hash
+		file(${HASH} "${_tmp_dl_path}" _result_hash)
+		set(${RETURN_VARIABLE} "${_result_hash}" PARENT_SCOPE)
+	else()
+		message(WARNING "Failed to fetch: ${URL}")
+		set(${RETURN_VARIABLE} FALSE PARENT_SCOPE)
+	endif()
+	# Delete the temporary download file
+	if(EXISTS "${_tmp_dl_path}")
+		file(REMOVE "${_tmp_dl_path}")
+	endif()
+endfunction()
+
 #########################
 
 if(NOT DEFINED WZ_DIST_LICENSE OR NOT EXISTS "${WZ_DIST_LICENSE}")
@@ -191,6 +208,29 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			endif()
 		else()
 			message(WARNING "Failed to fetch: ${_vcredict_dl_url}; error: \"${_dl_status_string}\"")
+		endif()
+		# Determine the latest available AppLocalConfig
+		set(_applocalconfig_buildinfo_dl_url "https://github.com/past-due/applocalconfig/releases/latest/download/BUILD_INFO.md")
+		set(_tmp_applocalconfig_dir "${CMAKE_BINARY_DIR}/_tmp/applocalconfig")
+		set(_tmp_applocalconfig_buildinfo_path "${_tmp_applocalconfig_dir}/BUILD_INFO.md")
+		downloadFile("${_applocalconfig_buildinfo_dl_url}" "${_tmp_applocalconfig_buildinfo_path}" 3 _dl_status_code _dl_status_string)
+		if (_dl_status_code EQUAL 0)
+			# Extract the version from the first line of the BUILD_INFO.md
+			file(STRINGS "${_tmp_applocalconfig_buildinfo_path}" _applocalconfig_build_info_strings LIMIT_COUNT 1)
+			list(GET _applocalconfig_build_info_strings 0 NSIS_APPLOCALCONFIG_VERSION)
+			message(STATUS "NSIS_APPLOCALCONFIG_VERSION: \"${NSIS_APPLOCALCONFIG_VERSION}\"")
+			# Calculate the hashes for the current version
+			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2019-x86.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_x86_sha512)
+			downloadFileCalculateHash("https://github.com/past-due/applocalconfig/releases/download/${NSIS_APPLOCALCONFIG_VERSION}/applocalconfig-vc2019-x64.zip" "${_tmp_applocalconfig_dir}" SHA512 _applocalconfig_x64_sha512)
+			if(NOT _applocalconfig_x86_sha512 OR NOT _applocalconfig_x64_sha512)
+				message(FATAL_ERROR "Unable to fetch / calculate hash for applocalconfig: ${NSIS_APPLOCALCONFIG_VERSION}")
+			endif()
+			set(NSIS_APPLOCALCONFIG_SHA512_X86 "${_applocalconfig_x86_sha512}")
+			set(NSIS_APPLOCALCONFIG_SHA512_X64 "${_applocalconfig_x64_sha512}")
+			message(STATUS "NSIS_APPLOCALCONFIG_SHA512_X86: \"${NSIS_APPLOCALCONFIG_SHA512_X86}\"")
+			message(STATUS "NSIS_APPLOCALCONFIG_SHA512_X64: \"${NSIS_APPLOCALCONFIG_SHA512_X64}\"")
+		else()
+			message(FATAL_ERROR "Failed to fetch: ${_applocalconfig_buildinfo_dl_url}; error: \"${_dl_status_string}\"")
 		endif()
 	else()
 		unset(NSIS_MSVCRUNTIME)

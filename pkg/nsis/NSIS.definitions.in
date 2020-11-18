@@ -18,18 +18,18 @@
 
   !if "@CMAKE_VS_PLATFORM_NAME@" == "Win32"
     ; AppLocal (for portable version)
-    !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.1.1/applocalconfig-vc2019-x86.zip"
-    !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.1.1/applocalconfig-vc2019-x86.zip"
-    !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.1.1/applocalconfig-vc2019-x86.zip"
-    !define MSVCRT_PORTABLE_DL_SHA512 "48849dadfb8691960a12deb924d0137bb1288d69721e18997a914a2642190635795189bb6c10005c4b966b39ea3c30547662239a66adea7c6542a7fb608c2230"
+    !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x86.zip"
+    !define MSVCRT_PORTABLE_DL_SHA512 "@NSIS_APPLOCALCONFIG_SHA512_X86@"
     !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2019-x86.zip"
   !else
     !if "@CMAKE_VS_PLATFORM_NAME@" == "x64"
       ; AppLocal (for portable version)
-      !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/v1.1.1/applocalconfig-vc2019-x64.zip"
-      !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/1.1.1/applocalconfig-vc2019-x64.zip"
-      !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/1.1.1/applocalconfig-vc2019-x64.zip"
-      !define MSVCRT_PORTABLE_DL_SHA512 "1ea42e1de870cbb860eea4db8bb7d356257040ba0a7fa48d4f9cb072b3aa88a3dec6a72179002e26d381d54af6f500ed015ca568678033ab2c848e4120eadf8c"
+      !define MSVCRT_PORTABLE_DL_URL1 "https://github.com/past-due/applocalconfig/releases/download/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL2 "https://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_URL_HTTPALT "http://downloads.sourceforge.net/project/applocalconfig/releases/@NSIS_APPLOCALCONFIG_VERSION@/applocalconfig-vc2019-x64.zip"
+      !define MSVCRT_PORTABLE_DL_SHA512 "@NSIS_APPLOCALCONFIG_SHA512_X64@"
       !define MSVCRT_PORTABLE_DL_CAPTION "Downloading applocalconfig-vc2019-x64.zip"
     !else
       !warning "Missing defines for platform: (@CMAKE_VS_PLATFORM_NAME@) in NSIS.definitions.in"
