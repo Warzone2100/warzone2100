@@ -21,6 +21,39 @@ function(copyFileToDir _file _destDir)
 	)
 endfunction()
 
+function(downloadFile URL OUTPUT_FILENAME RETRY_COUNT RESULT_STATUS_CODE RESULT_STATUS_STRING)
+	set(_dl_attempts 0)
+	message(STATUS "Fetching: ${URL}")
+	while(_dl_attempts LESS ${RETRY_COUNT})
+		if(EXISTS "${OUTPUT_FILENAME}")
+			file(REMOVE "${OUTPUT_FILENAME}")
+		endif()
+		file(
+			DOWNLOAD "${URL}" "${OUTPUT_FILENAME}"
+			INACTIVITY_TIMEOUT 60
+			TLS_VERIFY ON
+			STATUS _dl_status
+			LOG _dl_log
+		)
+		list(GET _dl_status 0 _dl_status_code)
+		list(GET _dl_status 1 _dl_status_string)
+		if (_dl_status_code EQUAL 0)
+			# Download succeeded
+			set(${RESULT_STATUS_CODE} ${_dl_status_code} PARENT_SCOPE)
+			set(${RESULT_STATUS_STRING} ${_dl_status_string} PARENT_SCOPE)
+			return()
+		else()
+			MATH(EXPR _num_attempt "${_dl_attempts}+1")
+			message(STATUS "Error (${_dl_status_code}); Attempt (${_num_attempt})...")
+		endif()
+		MATH(EXPR _dl_attempts "${_dl_attempts}+1")
+	endwhile()
+	set(${RESULT_STATUS_CODE} ${_dl_status_code} PARENT_SCOPE)
+	set(${RESULT_STATUS_STRING} ${_dl_status_string} PARENT_SCOPE)
+endfunction()
+
+#########################
+
 if(NOT DEFINED WZ_DIST_LICENSE OR NOT EXISTS "${WZ_DIST_LICENSE}")
 	message(FATAL_ERROR "This file should be included in the project's root CMakeLists.txt, after WZ_DIST_LICENSE is defined.")
 endif()
@@ -144,6 +177,21 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
 	if(MSVC)
 		set(NSIS_MSVCRUNTIME "on")
+		# Determine the latest available version of the MSVC runtime
+		# Fetch https://aka.ms/vs/16/release/vc_redist.x64.exe
+		set(_vcredict_dl_url "https://aka.ms/vs/16/release/vc_redist.x64.exe")
+		set(_tmp_vcredist_dl_path "${CMAKE_BINARY_DIR}/_tmp/vc_redist.x64.exe")
+		downloadFile("${_vcredict_dl_url}" "${_tmp_vcredist_dl_path}" 3 _dl_status_code _dl_status_string)
+		if (_dl_status_code EQUAL 0)
+			# Download succeeded - extract version info
+			if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+				execute_process(COMMAND powershell -ExecutionPolicy Bypass -Command "(Get-Command \"${_tmp_vcredist_dl_path}\").FileVersionInfo.FileBuildPart" OUTPUT_VARIABLE _dl_vcredist_bld_version OUTPUT_STRIP_TRAILING_WHITESPACE)
+				message(STATUS "Latest vc_redist FileBuildPart: \"${_dl_vcredist_bld_version}\"")
+				set(NSIS_CALCULATED_MSVCRT_BLD_MINIMUM "${_dl_vcredist_bld_version}")
+			endif()
+		else()
+			message(WARNING "Failed to fetch: ${_vcredict_dl_url}; error: \"${_dl_status_string}\"")
+		endif()
 	else()
 		unset(NSIS_MSVCRUNTIME)
 	endif()
