@@ -1185,6 +1185,7 @@ void	kf_JumpToMapMarker()
 	{
 		entry = getLastSubKey();
 //		CONPRINTF("Restoring map position %d:%d",getMarkerX(entry),getMarkerY(entry));
+		resetScroll();
 		player.p.x = getMarkerX(entry);
 		player.p.z = getMarkerY(entry);
 		player.r.y = getMarkerSpin(entry);
@@ -2390,6 +2391,7 @@ void	kf_CentreOnBase()
 	if (bGotHQ)
 	{
 		addConsoleMessage(_("Centered on player HQ, direction NORTH"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
+		resetScroll();
 		player.p.x = xJump;
 		player.p.z = yJump;
 		player.r.y = 0; // face north

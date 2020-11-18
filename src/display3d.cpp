@@ -1958,6 +1958,7 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 /// Sets the player's position and view angle - defaults player rotations as well
 void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 {
+	resetScroll();
 	player.p.x = world_coord(x);
 	player.p.z = world_coord(y);
 	player.r.z = 0;

@@ -274,6 +274,7 @@ void	processWarCam()
 		break;
 
 	case CAM_REQUEST:
+		resetScroll();
 
 		/* See if we can find the target to follow */
 		foundTarget = camFindDroidTarget();
@@ -321,6 +322,7 @@ void	processWarCam()
 		break;
 
 	case CAM_RADAR_JUMP:
+		resetScroll();
 		camRadarJump();
 		break;
 

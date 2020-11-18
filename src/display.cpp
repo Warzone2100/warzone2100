@@ -122,11 +122,6 @@ static SDWORD	rotX;
 static SDWORD	rotY;
 std::unique_ptr<ValueTracker> rotationHorizontalTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
 std::unique_ptr<ValueTracker> rotationVerticalTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
-static uint32_t scrollRefTime;
-static float	scrollSpeedLeftRight; //use two directions and add them because its simple
-static float	scrollStepLeftRight;
-static float	scrollSpeedUpDown;
-static float	scrollStepUpDown;
 static bool	mouseOverRadar = false;
 static bool	mouseOverConsole = false;
 static bool	ignoreOrder = false;
@@ -900,67 +895,33 @@ void processMouseClickInput()
 	CurrentItemUnderMouse = item;
 }
 
-static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
-{
-	double tMid;
-
-	// Stop instantly, if trying to change direction.
-	if (targetVelocity * *dydt < -1e-8f)
-	{
-		*dydt = 0;
-	}
-
-	if (targetVelocity < *dydt)
-	{
-		accel = -accel;
-		decel = -decel;
-	}
-
-	// Decelerate if needed.
-	tMid = (0 - *dydt) / decel;
-	CLIP(tMid, 0, dt);
-	*y += *dydt * tMid + decel / 2 * tMid * tMid;
-	if (cameraAccel)
-	{
-		*dydt += decel * tMid;
-	}
-	dt -= tMid;
-
-	// Accelerate if needed.
-	tMid = (targetVelocity - *dydt) / accel;
-	CLIP(tMid, 0, dt);
-	*y += *dydt * tMid + accel / 2 * tMid * tMid;
-	if (cameraAccel)
-	{
-		*dydt += accel * tMid;
-	}
-	else
-	{
-		*dydt = targetVelocity;
-	}
-	dt -= tMid;
-
-	// Continue at target velocity.
-	*y += *dydt * dt;
-}
+std::unique_ptr<ValueTracker> cameraHorizontalScrollSpeedTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> cameraVerticalScrollSpeedTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> cameraPositionXTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> cameraPositionZTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
 
 static void handleCameraScrolling()
 {
-	SDWORD	xDif, yDif;
-	uint32_t timeDiff;
-	float scroll_zoom_factor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
-
-	float scaled_max_scroll_speed = scroll_zoom_factor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2);
-	float scaled_accel = scaled_max_scroll_speed / 2;
-
 	if (InGameOpUp || bDisplayMultiJoiningStatus || isInGamePopupUp)		// cant scroll when menu up. or when over radar
 	{
 		return;
 	}
 
-	if(rotActive){
+	if(rotActive || panActive){
 		resetScroll();
 		return;
+	}
+
+	if (scrollDirLeftRight != 0 || scrollDirUpDown != 0)
+	{
+		setWarCamActive(false);  // Don't let this thing override the user trying to scroll.
+	}
+
+	if(!cameraHorizontalScrollSpeedTracker->isTracking()){
+		cameraHorizontalScrollSpeedTracker->startTracking(0);
+		cameraVerticalScrollSpeedTracker->startTracking(0);
+		cameraPositionXTracker->startTracking(player.p.x);
+		cameraPositionZTracker->startTracking(player.p.z);
 	}
 
 	if (mouseScroll && wzMouseInWindow())
@@ -989,29 +950,20 @@ static void handleCameraScrolling()
 	CLIP(scrollDirLeftRight, -1, 1);
 	CLIP(scrollDirUpDown,    -1, 1);
 
-	if (scrollDirLeftRight != 0 || scrollDirUpDown != 0)
-	{
-		setWarCamActive(false);  // Don't let this thing override the user trying to scroll.
-	}
+	float scrollZoomFactor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
+	// // TODO: instead of checking cameraAccel here, in setCameraAccel you set cameraScrollSpeed trackers -> speed.
+	float targetScrollSpeed = scrollZoomFactor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2) / 4;
 
-	// Apparently there's stutter if using deltaRealTime, so we have our very own delta time here, just for us.
-	timeDiff = wzGetTicks() - scrollRefTime;
-	scrollRefTime += timeDiff;
-	timeDiff = std::min<unsigned>(timeDiff, 500);  // Since we're using our own time variable, which isn't updated when dragging a box, clamp the time here so releasing the box doesn't scroll to the edge of the map suddenly.
+	float scrollSpeedHorizontal = cameraHorizontalScrollSpeedTracker->setTarget(targetScrollSpeed * scrollDirLeftRight)->update()->getCurrent();
+	float scrollSpeedVertical = cameraVerticalScrollSpeedTracker->setTarget(targetScrollSpeed * scrollDirUpDown)->update()->getCurrent();
 
-	scrollStepLeftRight = 0;
-	scrollStepUpDown = 0;
-	calcScroll(&scrollStepLeftRight, &scrollSpeedLeftRight, scaled_accel, 2 * scaled_accel, scrollDirLeftRight * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
-	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
+	scrollSpeedHorizontal = realTimeAdjustedAverage(scrollSpeedHorizontal);
+	scrollSpeedVertical = realTimeAdjustedAverage(scrollSpeedVertical);
 
-	/* Get x component of movement */
-	xDif = (int) (cos(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-player.r.y * (M_PI / 32768)) * scrollStepUpDown);
-	/* Get y component of movement */
-	yDif = (int) (sin(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-player.r.y * (M_PI / 32768)) * scrollStepUpDown);
-
-	/* Adjust player's position by these components */
-	player.p.x += xDif;
-	player.p.z += yDif;
+	cameraPositionXTracker->addToTarget(cos(-player.r.y * (M_PI / 32768)) * scrollSpeedHorizontal + sin(-player.r.y * (M_PI / 32768)) * scrollSpeedVertical);
+	cameraPositionZTracker->addToTarget(sin(-player.r.y * (M_PI / 32768)) * scrollSpeedHorizontal - cos(-player.r.y * (M_PI / 32768)) * scrollSpeedVertical);
+	player.p.x = cameraPositionXTracker->update()->getCurrent();
+	player.p.z = cameraPositionZTracker->update()->getCurrent();
 
 	CheckScrollLimits();
 
@@ -1031,9 +983,10 @@ void displayRenderLoop()
  */
 void resetScroll()
 {
-	scrollRefTime = wzGetTicks();
-	scrollSpeedUpDown = 0.0f;
-	scrollSpeedLeftRight = 0.0f;
+	cameraHorizontalScrollSpeedTracker->stopTracking();
+	cameraVerticalScrollSpeedTracker->stopTracking();
+	cameraPositionXTracker->stopTracking();
+	cameraPositionZTracker->stopTracking();
 	scrollDirLeftRight = 0;
 	scrollDirUpDown = 0;
 }
@@ -1084,12 +1037,18 @@ bool CheckScrollLimits()
 {
 	SDWORD xp = player.p.x;
 	SDWORD zp = player.p.z;
-	bool ret = CheckInScrollLimits(&xp, &zp);
+
+	if(!CheckInScrollLimits(&xp, &zp))
+	{
+		return false;
+	}
 
 	player.p.x = xp;
 	player.p.z = zp;
+	cameraPositionXTracker->startTracking(player.p.x);
+	cameraPositionZTracker->startTracking(player.p.z);
 
-	return ret;
+	return true;
 }
 
 /* Do the 3D display */

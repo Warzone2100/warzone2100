@@ -23,7 +23,7 @@
 
 #include "animation.h"
 
-ValueTracker* ValueTracker::startTracking(int value)
+ValueTracker* ValueTracker::startTracking(float value)
 {
 	this->initial = value;
 	this->target = value;
@@ -50,17 +50,24 @@ ValueTracker* ValueTracker::setSpeed(int value)
 	this->speed = value;
 	return this;
 }
-ValueTracker* ValueTracker::setTargetDelta(int value)
+ValueTracker* ValueTracker::setTargetDelta(float value)
 {
 	this->targetDelta = value;
 	this->target = this->initial + value;
 	this->_reachedTarget = false;
 	return this;
 }
-ValueTracker* ValueTracker::setTarget(int value)
+ValueTracker* ValueTracker::setTarget(float value)
 {
 	this->targetDelta = value - this->initial;
 	this->target = value;
+	this->_reachedTarget = false;
+	return this;
+}
+ValueTracker* ValueTracker::addToTarget(float value)
+{
+	this->targetDelta += value;
+	this->target += value;
 	this->_reachedTarget = false;
 	return this;
 }
@@ -80,7 +87,7 @@ ValueTracker* ValueTracker::update()
 	this->current = (this->initial + this->targetDelta - this->current) * realTimeAdjustedIncrement(this->speed) + this->current;
 	return this;
 }
-int ValueTracker::getCurrent()
+float ValueTracker::getCurrent()
 {
 	if(this->_reachedTarget)
 	{
@@ -88,7 +95,7 @@ int ValueTracker::getCurrent()
 	}
 	return this->current;
 }
-int ValueTracker::getCurrentDelta()
+float ValueTracker::getCurrentDelta()
 {
 	if(this->_reachedTarget)
 	{
@@ -96,15 +103,15 @@ int ValueTracker::getCurrentDelta()
 	}
 	return this->current - this->initial;
 }
-int ValueTracker::getInitial()
+float ValueTracker::getInitial()
 {
 	return this->initial;
 }
-int ValueTracker::getTarget()
+float ValueTracker::getTarget()
 {
 	return this->target;
 }
-int ValueTracker::getTargetDelta()
+float ValueTracker::getTargetDelta()
 {
 	return this->targetDelta;
 }
