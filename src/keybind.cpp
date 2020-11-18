@@ -776,7 +776,7 @@ void	kf_ToggleFog()
 	{
 		pie_EnableFog(true);
 	}
-	std::string cmsg = astringf(pie_GetFogEnabled() ? _("Fog on") : _("Fog off"));
+	std::string cmsg = pie_GetFogEnabled() ? _("Fog on") : _("Fog off");
 	sendInGameSystemMessage(cmsg.c_str());
 }
 
