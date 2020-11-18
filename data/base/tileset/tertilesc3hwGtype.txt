@@ -1,6 +1,6 @@
 tertilesc3hw,10
 r_grass,page-99-grass-rockies.png,3.0
-r_rock,page-100-rock-earth-rockies.png,5.0
+r_rock,page-100-rock-earth-rockies.png,2.5
 r_cliff,page-101-cliff-rockies.png,9.6
 r_water,page-102-bottom-rockies.png,6.4
 r_tiles,page-103-tiles-rockies.png,5.0
