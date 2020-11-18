@@ -226,6 +226,7 @@ void	setInvertMouseStatus(bool val)
 #define MOUSE_ORDER (bRightClickOrders?MOUSE_RMB:MOUSE_LMB)
 #define MOUSE_SELECT (bRightClickOrders?MOUSE_LMB:MOUSE_RMB)
 #define MOUSE_ROTATE (bMiddleClickRotate?MOUSE_MMB:MOUSE_RMB)
+#define MOUSE_PAN (bMiddleClickRotate?MOUSE_RMB:MOUSE_MMB)
 
 bool	getRightClickOrders()
 {
@@ -646,7 +647,7 @@ void processMouseClickInput()
 		rotationHorizontalTracker->startTracking((UWORD)player.r.y); // negative values caused problems with float conversion
 		rotActive = true;
 	}
-	if (mouseDrag(MOUSE_MMB, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !bRadarDragging && !getRadarTrackingStatus())
+	if (mouseDrag(MOUSE_PAN, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !bRadarDragging && !getRadarTrackingStatus())
 	{
 		panXTracker->startTracking(player.p.x);
 		panZTracker->startTracking(player.p.z);
@@ -1098,7 +1099,7 @@ void displayWorld()
 
 	if (panActive)
 	{
-		if(!mouseDown(MOUSE_MMB)){
+		if(!mouseDown(MOUSE_PAN)){
 			panActive = false;
 		} else {
 			int mouseDeltaX = mouseX() - panMouseX;
