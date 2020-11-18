@@ -1116,6 +1116,7 @@ void displayWorld()
 			player.p.z = panZTracker->getInitial()
 				+ sin(-player.r.y * (M_PI / 32768)) * horizontalMovement
 				- cos(-player.r.y * (M_PI / 32768)) * verticalMovement;
+			CheckScrollLimits();
 		}
 	}
 
