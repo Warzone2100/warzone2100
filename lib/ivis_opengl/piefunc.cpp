@@ -129,10 +129,10 @@ void pie_TransColouredTriangle(const std::array<Vector3f, 3> &vrt, PIELIGHT c, c
 
 void pie_Skybox_Init()
 {
-	float narrowingOfTop = 0.15;
+	float narrowingOfTop = 0.15f;
 	float top = 1;
-	float middle = 0.15;
-	float baseline = -0.15;
+	float middle = 0.15f;
+	float baseline = -0.15f;
 	float bottom = -1;
 
 	// Skybox looks like this from the side:
