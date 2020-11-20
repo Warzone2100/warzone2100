@@ -133,10 +133,10 @@ public:
 	virtual bool saveScriptGlobals(nlohmann::json &result) override;
 	virtual bool loadScriptGlobals(const nlohmann::json &result) override;
 
-	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam) override;
+	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
 
 	// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
-	virtual std::tuple<TimerFunc, timerAdditionalData *> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
+	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
 
 public:
 	// get state for debugging
@@ -2122,7 +2122,7 @@ static QScriptValue js_setTimer(QScriptContext *context, QScriptEngine *engine)
 	}
 	, player, ms.toInt32(), funcName.toStdString(), psObj, TIMER_REPEAT
 	// additionalParams
-	, new qtscript_timer_additionaldata(stringArg));
+	, std::unique_ptr<timerAdditionalData>(new qtscript_timer_additionaldata(stringArg)));
 
 	return QScriptValue();
 }
@@ -2212,7 +2212,7 @@ static QScriptValue js_queue(QScriptContext *context, QScriptEngine *engine)
 	}
 	, player, ms, funcName.toStdString(), psObj, TIMER_ONESHOT_READY
 	// additionalParams
-	, new qtscript_timer_additionaldata(stringArg));
+	, std::unique_ptr<timerAdditionalData>(new qtscript_timer_additionaldata(stringArg)));
 	return QScriptValue();
 }
 
@@ -2499,11 +2499,11 @@ bool qtscript_scripting_instance::loadScriptGlobals(const nlohmann::json &result
 	return true;
 }
 
-nlohmann::json qtscript_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam)
+nlohmann::json qtscript_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)
 {
 	nlohmann::json result = nlohmann::json::object();
 	result["function"] = timerName;
-	qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParam);
+	const qtscript_timer_additionaldata* pData = static_cast<const qtscript_timer_additionaldata*>(additionalParam);
 	if (pData)
 	{
 		result["stringArg"] = (pData->stringArg).toStdString();
@@ -2512,7 +2512,7 @@ nlohmann::json qtscript_scripting_instance::saveTimerFunction(uniqueTimerID time
 }
 
 // recreates timer functions (and additional userdata) based on the information saved by the saveTimer() method
-std::tuple<TimerFunc, timerAdditionalData *> qtscript_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
+std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> qtscript_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
 {
 	QString funcName = QString::fromStdString(json_getValue(savedTimerFuncData, WzString::fromUtf8("function")).toWzString().toStdString());
 	if (funcName.isEmpty())
@@ -2523,7 +2523,7 @@ std::tuple<TimerFunc, timerAdditionalData *> qtscript_scripting_instance::restor
 
 	QScriptEngine* pEngine = engine;
 
-	return std::tuple<TimerFunc, timerAdditionalData *>{
+	return std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>>{
 		// timerFunc
 		[pEngine, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
 			qtscript_timer_additionaldata* pData = static_cast<qtscript_timer_additionaldata*>(additionalParams);
@@ -2539,7 +2539,7 @@ std::tuple<TimerFunc, timerAdditionalData *> qtscript_scripting_instance::restor
 			callFunction(pEngine, funcName, args, true);
 		}
 		// additionalParams
-		, new qtscript_timer_additionaldata(stringArg)
+		, std::unique_ptr<timerAdditionalData>(new qtscript_timer_additionaldata(stringArg))
 	};
 }
 

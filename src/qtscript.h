@@ -289,14 +289,14 @@ public:
 		wzapi::scripting_instance* instance;
 		int baseobj;
 		OBJECT_TYPE baseobjtype;
-		timerAdditionalData* additionalTimerFuncParam;
+		std::unique_ptr<timerAdditionalData> additionalTimerFuncParam;
 		int frameTime;
 		int ms;
 		int player;
 		int calls;
 		timerType type;
 		timerNode() : instance(nullptr), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(nullptr) {}
-		timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, timerAdditionalData* additionalParam = nullptr);
+		timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, std::unique_ptr<timerAdditionalData> additionalParam = nullptr);
 		~timerNode();
 		inline bool operator== (const timerNode &t)
 		{
@@ -364,7 +364,7 @@ public:
 
 // MARK: TIMERS
 public:
-	uniqueTimerID setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName = "", const BASE_OBJECT * obj = nullptr, timerType type = TIMER_REPEAT, timerAdditionalData* additionalParam = nullptr);
+	uniqueTimerID setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName = "", const BASE_OBJECT * obj = nullptr, timerType type = TIMER_REPEAT, std::unique_ptr<timerAdditionalData> additionalParam = nullptr);
 
 	// removes any timer(s) that satisfy _pred
 	template< class UnaryPredicate >
