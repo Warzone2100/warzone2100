@@ -178,10 +178,10 @@ public:
 	virtual bool saveScriptGlobals(nlohmann::json &result) override;
 	virtual bool loadScriptGlobals(const nlohmann::json &result) override;
 
-	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam) override;
+	virtual nlohmann::json saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam) override;
 
 	// recreates timer functions (and additional userdata) based on the information saved by the saveTimerFunction() method
-	virtual std::tuple<TimerFunc, timerAdditionalData *> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
+	virtual std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoreTimerFunction(const nlohmann::json& savedTimerFuncData) override;
 
 public:
 	// get state for debugging
@@ -2334,7 +2334,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 	}
 	, player, ms, funcName, psObj, type
 	// additionalParams
-	, new quickjs_timer_additionaldata(stringArg));
+	, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg)));
 }
 
 //-- ## setTimer(function, milliseconds[, object])
@@ -2961,11 +2961,11 @@ bool quickjs_scripting_instance::loadScriptGlobals(const nlohmann::json &result)
 	return true;
 }
 
-nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, timerAdditionalData* additionalParam)
+nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timerID, std::string timerName, const timerAdditionalData* additionalParam)
 {
 	nlohmann::json result = nlohmann::json::object();
 	result["function"] = timerName;
-	quickjs_timer_additionaldata* pData = static_cast<quickjs_timer_additionaldata*>(additionalParam);
+	const quickjs_timer_additionaldata* pData = static_cast<const quickjs_timer_additionaldata*>(additionalParam);
 	if (pData)
 	{
 		result["stringArg"] = pData->stringArg;
@@ -2974,7 +2974,7 @@ nlohmann::json quickjs_scripting_instance::saveTimerFunction(uniqueTimerID timer
 }
 
 // recreates timer functions (and additional userdata) based on the information saved by the saveTimer() method
-std::tuple<TimerFunc, timerAdditionalData *> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
+std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> quickjs_scripting_instance::restoreTimerFunction(const nlohmann::json& savedTimerFuncData)
 {
 	std::string funcName = json_getValue(savedTimerFuncData, WzString::fromUtf8("function")).toWzString().toStdString();
 	if (funcName.empty())
@@ -2985,7 +2985,7 @@ std::tuple<TimerFunc, timerAdditionalData *> quickjs_scripting_instance::restore
 
 	JSContext* pContext = ctx;
 
-	return std::tuple<TimerFunc, timerAdditionalData *>{
+	return std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>>{
 		// timerFunc
 		[pContext, funcName](uniqueTimerID timerID, BASE_OBJECT* baseObject, timerAdditionalData* additionalParams) {
 			quickjs_timer_additionaldata* pData = static_cast<quickjs_timer_additionaldata*>(additionalParams);
@@ -3002,7 +3002,7 @@ std::tuple<TimerFunc, timerAdditionalData *> quickjs_scripting_instance::restore
 			std::for_each(args.begin(), args.end(), [pContext](JSValue& val) { JS_FreeValue(pContext, val); });
 		}
 		// additionalParams
-		, new quickjs_timer_additionaldata(stringArg)
+		, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg))
 	};
 }
 

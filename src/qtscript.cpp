@@ -133,8 +133,8 @@ optional<scripting_engine::GROUPMAP::groupID> scripting_engine::GROUPMAP::remove
 	return optional<groupID>();
 }
 
-scripting_engine::timerNode::timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, timerAdditionalData* additionalParam /*= nullptr*/)
-: function(func), timerName(timerName), instance(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(additionalParam),
+scripting_engine::timerNode::timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, std::unique_ptr<timerAdditionalData> additionalParam /*= nullptr*/)
+: function(func), timerName(timerName), instance(caller), baseobj(-1), baseobjtype(OBJ_NUM_TYPES), additionalTimerFuncParam(std::move(additionalParam)),
 	frameTime(frame + gameTime), ms(frame), player(plr), calls(0), type(TIMER_REPEAT)
 {}
 
@@ -190,10 +190,10 @@ uniqueTimerID scripting_engine::getNextAvailableTimerID()
 	return lastTimerID;
 }
 
-uniqueTimerID scripting_engine::setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName /*= ""*/, const BASE_OBJECT * obj /*= nullptr*/, timerType type /*= TIMER_REPEAT*/, timerAdditionalData* additionalParam /*= nullptr*/)
+uniqueTimerID scripting_engine::setTimer(wzapi::scripting_instance *caller, const TimerFunc& timerFunc, int player, int milliseconds, std::string timerName /*= ""*/, const BASE_OBJECT * obj /*= nullptr*/, timerType type /*= TIMER_REPEAT*/, std::unique_ptr<timerAdditionalData> additionalParam /*= nullptr*/)
 {
 	uniqueTimerID newTimerID = getNextAvailableTimerID();
-	std::shared_ptr<timerNode> node = std::make_shared<timerNode>(caller, timerFunc, timerName, player, milliseconds, additionalParam);
+	std::shared_ptr<timerNode> node = std::make_shared<timerNode>(caller, timerFunc, timerName, player, milliseconds, std::move(additionalParam));
 	if (obj != nullptr)
 	{
 		node->baseobj = obj->id;
@@ -472,7 +472,7 @@ bool scripting_engine::updateScripts()
 		{
 			continue; // skip
 		}
-		node->function(node->timerID, IdToObject(node->baseobjtype, node->baseobj, node->player), node->additionalTimerFuncParam);
+		node->function(node->timerID, IdToObject(node->baseobjtype, node->baseobj, node->player), node->additionalTimerFuncParam.get());
 	}
 
 	if (globalDialog && doUpdateModels)
@@ -734,7 +734,7 @@ bool scripting_engine::saveScriptStates(const char *filename)
 		// we have to save 'scriptName' and 'me' explicitly
 		nodeInfo["me"] = node->player;
 		nodeInfo["scriptName"] = node->instance->scriptName();
-		nodeInfo["functionRestoreInfo"] = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam);
+		nodeInfo["functionRestoreInfo"] = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam.get());
 		if (node->baseobj >= 0)
 		{
 			nodeInfo["object"] = node->baseobj;
@@ -801,7 +801,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			node->calls = ini.value("calls").toInt();
 			node->type = (timerType)ini.value("type", TIMER_REPEAT).toInt();
 
-			std::tuple<TimerFunc, timerAdditionalData *> restoredTimerInfo;
+			std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoredTimerInfo;
 			try
 			{
 				restoredTimerInfo = instance->restoreTimerFunction(ini.value("functionRestoreInfo").jsonValue());
@@ -813,7 +813,7 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			}
 
 			node->function = std::get<0>(restoredTimerInfo);
-			node->additionalTimerFuncParam = std::get<1>(restoredTimerInfo);
+			node->additionalTimerFuncParam = std::move(std::get<1>(restoredTimerInfo));
 
 			maxRestoredTimerID = std::max<uniqueTimerID>(maxRestoredTimerID, node->timerID);
 
