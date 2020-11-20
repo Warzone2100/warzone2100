@@ -314,7 +314,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_GFX_TEXT, program_data{ "gfx_text program", "shaders/gfx.vert", "shaders/texturedrect.frag",
 		{ "posMatrix", "color", "texture" } }),
 	std::make_pair(SHADER_SKYBOX, program_data{ "skybox program", "shaders/skybox.vert", "shaders/skybox.frag",
-		{ "posMatrix", "color", "texture", "fog_enabled", "fog_color" } }),
+		{ "posMatrix", "color", "fog_color", "fog_enabled" } }),
 	std::make_pair(SHADER_GENERIC_COLOR, program_data{ "generic color program", "shaders/generic.vert", "shaders/rect.frag",{ "ModelViewProjectionMatrix", "color" } }),
 	std::make_pair(SHADER_LINE, program_data{ "line program", "shaders/line.vert", "shaders/rect.frag",{ "from", "to", "color", "ModelViewProjectionMatrix" } }),
 	std::make_pair(SHADER_TEXT, program_data{ "Text program", "shaders/rect.vert", "shaders/text.frag",
@@ -1195,9 +1195,8 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	setUniforms(0, cbuf.transform_matrix);
 	setUniforms(1, cbuf.color);
-	setUniforms(2, cbuf.texture);
+	setUniforms(2, cbuf.fog_color);
 	setUniforms(3, cbuf.fog_enabled);
-	setUniforms(4, cbuf.fog_color);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_GENERIC_COLOR>& cbuf)

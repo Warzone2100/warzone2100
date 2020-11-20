@@ -693,12 +693,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_SKYBOX>
 	{
 		glm::mat4 transform_matrix;
-		glm::vec2 offset;
-		glm::vec2 size;
 		glm::vec4 color;
-		int texture;
-		int fog_enabled;
 		glm::vec4 fog_color;
+		int fog_enabled;
 	};
 
 	template<>
