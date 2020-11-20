@@ -3,21 +3,16 @@
 layout(std140, set = 0, binding = 0) uniform cbuffer
 {
 	mat4 posMatrix;
-	vec2 offset;
-	vec2 size;
 	vec4 color;
-	int theTexture;
-	int fog_enabled;
 	vec4 fog_color;
+	int fog_enabled;
 };
 
 layout(location = 0) in vec4 vertex;
 layout(location = 1) in vec2 vertexTexCoord;
-layout(location = 2) in vec4 vertexColor;
 
 layout(location = 0) out vec2 uv;
-layout(location = 1) out vec4 vColour;
-layout(location = 2) out vec4 fog;
+layout(location = 1) out vec4 fog;
 
 void main()
 {
@@ -25,8 +20,9 @@ void main()
 	uv = vertexTexCoord;
 
 	gl_Position = posMatrix * vertex;
+	gl_Position.y *= -1.;
+	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
 
-	vColour = vertexColor;
 	if(fog_enabled > 0)
 	{
 		fog =

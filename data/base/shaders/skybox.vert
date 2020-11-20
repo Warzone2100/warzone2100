@@ -18,11 +18,9 @@ attribute vec4 vertexColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 uv;
-out vec4 vColour;
 out vec4 fog;
 #else
 varying vec2 uv;
-varying vec4 vColour;
 varying vec4 fog;
 #endif
 
@@ -33,7 +31,6 @@ void main()
 
 	gl_Position = posMatrix * vertex;
 
-	vColour = vertexColor;
 	if(fog_enabled > 0)
 	{
 		fog =
