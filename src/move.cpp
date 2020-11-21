@@ -1552,7 +1552,7 @@ static void moveUpdateGroundModel(DROID *psDroid, SDWORD speed, uint16_t directi
 {
 	int			fPerpSpeed, fNormalSpeed;
 	uint16_t                iDroidDir;
-	uint16_t                slideDir;
+	uint16_t                slideDir = 0;
 	PROPULSION_STATS	*psPropStats;
 	int32_t                 spinSpeed, spinAngle, turnSpeed, dx, dy, bx, by;
 
