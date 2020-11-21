@@ -525,13 +525,26 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 				bottomCost = std::max(topCost, cost);
 			}
 
-			/// if we are up against an impassable wall, the two directions along the wall
-			/// may cause a tie, which needs to be broken.
+			// if we are up against a wall, and the two directions along the wall are equally costly,
+			// a tie will happen if the path isn't perpendicular to the wall:
+			//
+			//     x     <--- target
+			//
+			//   OOOOO   <--- wall
+			//     z     <--- tile where a tie will happen (doesn't know whether to go right or left)
+			//
+			//
+			// The tie will be broken by a semi-random number based on whether x+y is odd or even.
+			// Note that breaking the tie will not need to be done if the target is below.
+			// This is detected by checking if the tieing tiles have lower or greater cost than the z tile.
 
 			bool tieBraker = ((x + y) % 1) == 1;
 
-			// left or right (or both) is a wall, top and bottom have equal cost:
-			if((rightImpassable || leftImpassable) && !topImpassable && !bottomImpassable && topCost == bottomCost){
+			bool rightOrLeftIsImpassable = rightImpassable || leftImpassable;
+			bool topAndBottomIsPassable = !topImpassable && !bottomImpassable;
+			bool topAndBottomHaveEqualCost = topCost == bottomCost;
+
+			if(rightOrLeftIsImpassable && topAndBottomIsPassable && topAndBottomHaveEqualCost && topCost < cost){
 				if(tieBraker) {
 					topCost = 0;
 				} else {
@@ -539,8 +552,11 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 				}
 			}
 
-			// top or bottom (or both) is a wall, right and left have equal cost:
-			if((topImpassable || bottomImpassable) && !leftImpassable && !rightImpassable && leftCost == rightCost){
+			bool topOrBottomIsImpassable = topImpassable || bottomImpassable;
+			bool leftAndRightIsPassable = !leftImpassable && !rightImpassable;
+			bool leftAndRightHaveEqualCost = leftCost == rightCost;
+			
+			if(topOrBottomIsImpassable && leftAndRightIsPassable && leftAndRightHaveEqualCost && leftCost < cost){
 				if(tieBraker) {
 					leftCost = 0;
 				} else {
@@ -553,11 +569,11 @@ void calculateFlowfield(Flowfield* flowField, IntegrationField* integrationField
 			vector.y = topCost - bottomCost;
 			vector.normalize();
 
-			if (std::abs(vector.x) < 0.01f && std::abs(vector.y) < 0.01f) {
-				// Local optima. Tilt the vector in any direction.
-				vector.x = 0.1f;
-				vector.y = 0.1f;
-			}
+			// if (std::abs(vector.x) < 0.01f && std::abs(vector.y) < 0.01f) {
+			// 	// Local optima. Tilt the vector in any direction.
+			// 	vector.x = 0.1f;
+			// 	vector.y = 0.1f; // 6,56
+			// }
 
 			flowField->setVector(x, y, vector);
 		}
