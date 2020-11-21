@@ -952,7 +952,7 @@ static void handleCameraScrolling()
 
 	float scrollZoomFactor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 	// // TODO: instead of checking cameraAccel here, in setCameraAccel you set cameraScrollSpeed trackers -> speed.
-	float targetScrollSpeed = scrollZoomFactor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2) / 4;
+	float targetScrollSpeed = scrollZoomFactor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2) / 2;
 
 	float scrollSpeedHorizontal = cameraHorizontalScrollSpeedTracker->setTarget(targetScrollSpeed * scrollDirLeftRight)->update()->getCurrent();
 	float scrollSpeedVertical = cameraVerticalScrollSpeedTracker->setTarget(targetScrollSpeed * scrollDirUpDown)->update()->getCurrent();
