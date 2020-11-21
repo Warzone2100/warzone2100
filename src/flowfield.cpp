@@ -746,7 +746,7 @@ void debugDrawFlowfield(const glm::mat4 &mvp) {
 				auto startPointX = XA + FF_TILE_SIZE / 2;
 				auto startPointY = ZA + FF_TILE_SIZE / 2;
 
-				auto portalHeight = map_TileHeight(startPointX, startPointY);
+				auto portalHeight = map_TileHeight(x, z);
 
 				// origin
 
