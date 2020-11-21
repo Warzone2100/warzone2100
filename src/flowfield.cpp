@@ -71,9 +71,8 @@ constexpr const unsigned short COST_NOT_PASSABLE = std::numeric_limits<unsigned 
 constexpr const unsigned short COST_MIN = 1;
 
 // Decides how much slopes should be avoided
-constexpr const float SLOPE_COST_BASE = 0.05f;
+constexpr const float SLOPE_COST_BASE = 0.01f;
 // Decides when terrain height delta is considered a slope
-// TODO: I do not have much knowledge about WZ, but why almost every tile has different heights?
 constexpr const unsigned short SLOPE_THRESOLD = 4;
 
 // Propulsion mapping FOR READING DATA ONLY! See below.
