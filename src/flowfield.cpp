@@ -390,13 +390,13 @@ void processFlowfield(FLOWFIELDREQUEST request) {
 
 	IntegrationField* integrationField = new IntegrationField();
 	latestIntegrationField = integrationField;
-	calculateIntegrationField(goals, integrationField, costField); // TODO: measure time
+	calculateIntegrationField(goals, integrationField, costField);
 
 	auto flowfield = new Flowfield();
 	flowfield->id = flowfieldIdIncrementor++;
 	flowfield->goals = { request.goal };
 	flowfieldById.insert(std::make_pair(flowfield->id, flowfield));
-	calculateFlowfield(flowfield, integrationField); // TODO: measure time
+	calculateFlowfield(flowfield, integrationField);
 
 	{
 		std::lock_guard<std::mutex> lock(flowfieldMutex);
