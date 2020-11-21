@@ -641,17 +641,21 @@ void debugDrawFlowfield(const glm::mat4 &mvp) {
 			const float XB = world_coord(x + 1);
 			const float ZA = world_coord(z);
 			const float ZB = world_coord(z + 1);
+			const float YAA = map_TileHeight(x, z);
+			const float YBA = map_TileHeight(x + 1, z);
+			const float YAB = map_TileHeight(x, z + 1);
+			const float YBB = map_TileHeight(x + 1, z + 1);
 			
 			float height = map_TileHeight(x, z);
 
 			// tile
 
 			iV_PolyLine({
-				{ XA, height, -ZA },
-				{ XA, height, -ZB },
-				{ XB, height, -ZB },
-				{ XB, height, -ZA },
-				{ XA, height, -ZA },
+				{ XA, YAA, -ZA },
+				{ XA, YAB, -ZB },
+				{ XB, YBB, -ZB },
+				{ XB, YBA, -ZA },
+				{ XA, YAA, -ZA },
 			}, mvp, WZCOL_GREY);
 
 			// cost
