@@ -3038,7 +3038,9 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic)
 
 	visRemoveVisibility((BASE_OBJECT *)psD);
 	psD->selected = false;
+
 	adjustDroidCount(psD, -1);
+	scriptRemoveObject(psD); //Remove droid from any script groups
 
 	if (droidRemove(psD, apsDroidLists))
 	{
