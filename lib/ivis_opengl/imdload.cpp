@@ -66,6 +66,14 @@ void modelShutdown()
 	models.clear();
 }
 
+void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDShape& model)>& func)
+{
+	for (auto& keyvaluepair : models)
+	{
+		func(keyvaluepair.first, keyvaluepair.second);
+	}
+}
+
 static bool tryLoad(const WzString &path, const WzString &filename)
 {
 	if (PHYSFS_exists(path + filename))

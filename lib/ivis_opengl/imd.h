@@ -21,6 +21,7 @@
 #define _imd_
 
 #include "lib/framework/wzstring.h"
+#include <functional>
 
 struct iIMDShape;
 
@@ -49,6 +50,9 @@ struct iIMDShape;
 //*************************************************************************
 
 void modelShutdown();
+
+// Enumerate over loaded models
+void enumerateLoadedModels(const std::function<void (const std::string& modelName, iIMDShape& model)>& func);
 
 /// Get filename of model pointer. This is really slow, so do not abuse for logging
 /// purposes, for example.
