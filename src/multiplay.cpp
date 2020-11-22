@@ -399,19 +399,16 @@ DROID_TEMPLATE *IdToTemplate(UDWORD tempId, UDWORD player)
 	// FIXME: nuke the ANYPLAYER hack
 	if (player != ANYPLAYER && player < MAX_PLAYERS)
 	{
-		if (droidTemplates[player].count(tempId) > 0)
-		{
-			return droidTemplates[player][tempId];
-		}
-		return nullptr;
+		return findPlayerTemplateById(player, tempId);
 	}
 
 	// It could be a AI template...or that of another player
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (droidTemplates[i].count(tempId) > 0)
+		auto psTempl = findPlayerTemplateById(i, tempId);
+		if (psTempl)
 		{
-			return droidTemplates[i][tempId];
+			return psTempl;
 		}
 	}
 

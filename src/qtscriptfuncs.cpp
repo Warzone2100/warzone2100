@@ -2761,13 +2761,13 @@ IMPL_JS_FUNC(enumGateways, wzapi::enumGateways)
 static QScriptValue js_enumTemplates(QScriptContext *context, QScriptEngine *engine)
 {
 	int player = context->argument(0).toInt32();
-	QScriptValue result = engine->newArray(droidTemplates[player].size());
+	QScriptValue result = engine->newArray(templateCount(player));
 	int count = 0;
-	for (auto &keyvaluepair : droidTemplates[player])
-	{
-		result.setProperty(count, convTemplate(keyvaluepair.second, engine));
+	enumerateTemplates(player, [engine, &result, &count](DROID_TEMPLATE* psTemplate) {
+		result.setProperty(count, convTemplate(psTemplate, engine));
 		count++;
-	}
+		return true;
+	});
 	return result;
 }
 

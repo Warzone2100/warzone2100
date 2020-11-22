@@ -3233,11 +3233,11 @@ static JSValue js_enumTemplates(JSContext *ctx, JSValueConst this_val, int argc,
 
 	JSValue result = JS_NewArray(ctx); //engine->newArray(droidTemplates[player].size());
 	uint32_t count = 0;
-	for (auto &keyvaluepair : droidTemplates[player])
-	{
-		JS_DefinePropertyValueUint32(ctx, result, count, convTemplate(keyvaluepair.second, ctx), 0); // TODO: Check return value?
+	enumerateTemplates(player, [ctx, &result, &count](DROID_TEMPLATE* psTemplate) {
+		JS_DefinePropertyValueUint32(ctx, result, count, convTemplate(psTemplate, ctx), 0); // TODO: Check return value?
 		count++;
-	}
+		return true;
+	});
 	return result;
 }
 

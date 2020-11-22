@@ -1633,9 +1633,9 @@ static int get_first_available_component(int player, int capacity, const wzapi::
 	return -1; // no available component found in list
 }
 
-static DROID_TEMPLATE *makeTemplate(int player, const std::string &templName, const wzapi::string_or_string_list& _body, const wzapi::string_or_string_list& _propulsion, const wzapi::va_list<wzapi::string_or_string_list>& _turrets, int capacity, bool strict)
+static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::string &templName, const wzapi::string_or_string_list& _body, const wzapi::string_or_string_list& _propulsion, const wzapi::va_list<wzapi::string_or_string_list>& _turrets, int capacity, bool strict)
 {
-	DROID_TEMPLATE *psTemplate = new DROID_TEMPLATE;
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE);
 	int numTurrets = _turrets.va_list.size();
 	int result;
 
@@ -1646,7 +1646,6 @@ static DROID_TEMPLATE *makeTemplate(int player, const std::string &templName, co
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s but body types all unavailable",
 		      templName.c_str());
-		delete psTemplate;
 		return nullptr; // no component available
 	}
 	int prop = get_first_available_component(player, capacity, _propulsion, COMP_PROPULSION, strict);
@@ -1654,7 +1653,6 @@ static DROID_TEMPLATE *makeTemplate(int player, const std::string &templName, co
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s but propulsion types all unavailable",
 		      templName.c_str());
-		delete psTemplate;
 		return nullptr; // no component available
 	}
 	psTemplate->asParts[COMP_BODY] = body;
@@ -1672,7 +1670,6 @@ static DROID_TEMPLATE *makeTemplate(int player, const std::string &templName, co
 	if (psComp == nullptr)
 	{
 		debug(LOG_ERROR, "Wanted to build %s but %s does not exist", templName.c_str(), compName.c_str());
-		delete psTemplate;
 		return nullptr;
 	}
 	if (psComp->droidTypeOverride != DROID_ANY)
@@ -1687,7 +1684,6 @@ static DROID_TEMPLATE *makeTemplate(int player, const std::string &templName, co
 			if (result < 0)
 			{
 				debug(LOG_SCRIPT, "Wanted to build %s but no weapon available", templName.c_str());
-				delete psTemplate;
 				return nullptr;
 			}
 			psTemplate->asWeaps[i] = result;
@@ -1704,19 +1700,17 @@ static DROID_TEMPLATE *makeTemplate(int player, const std::string &templName, co
 		if (result < 0)
 		{
 			debug(LOG_SCRIPT, "Wanted to build %s but turret unavailable", templName.c_str());
-			delete psTemplate;
 			return nullptr;
 		}
 		psTemplate->asParts[psComp->compType] = result;
 	}
-	bool valid = intValidTemplate(psTemplate, templName.c_str(), true, player);
+	bool valid = intValidTemplate(psTemplate.get(), templName.c_str(), true, player);
 	if (valid)
 	{
 		return psTemplate;
 	}
 	else
 	{
-		delete psTemplate;
 		debug(LOG_ERROR, "Invalid template %s", templName.c_str());
 		return nullptr;
 	}
@@ -1740,10 +1734,10 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 	int player = psStruct->player;
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	const int capacity = psStruct->capacity; // body size limit
-	DROID_TEMPLATE *psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, capacity, true);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, capacity, true);
 	if (psTemplate)
 	{
-		SCRIPT_ASSERT(false, context, validTemplateForFactory(psTemplate, psStruct, true),
+		SCRIPT_ASSERT(false, context, validTemplateForFactory(psTemplate.get(), psStruct, true),
 		              "Invalid template %s for factory %s",
 		              getStatsName(psTemplate), getStatsName(psStruct->pStructureType));
 		// Delete similar template from existing list before adding this one
@@ -1759,14 +1753,15 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 		// Add to list
 		debug(LOG_SCRIPT, "adding template %s for player %d", getStatsName(psTemplate), player);
 		psTemplate->multiPlayerID = generateNewObjectId();
-		addTemplate(player, psTemplate);
-		if (!structSetManufacture(psStruct, psTemplate, ModeQueue))
+		DROID_TEMPLATE *psAddedTemplate = addTemplate(player, std::move(psTemplate));
+		if (!structSetManufacture(psStruct, psAddedTemplate, ModeQueue))
 		{
 			debug(LOG_ERROR, "Could not produce template %s in %s", getStatsName(psTemplate), objInfo(psStruct));
 			return false;
 		}
+		return true;
 	}
-	return (psTemplate != nullptr);
+	return false;
 }
 
 //-- ## addDroid(player, x, y, name, body, propulsion, reserved, reserved, turrets...)
@@ -1782,7 +1777,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	bool onMission = (x == -1) && (y == -1);
 	SCRIPT_ASSERT(nullptr, context, (onMission || (x >= 0 && y >= 0)), "Invalid coordinates (%d, %d) for droid", x, y);
-	DROID_TEMPLATE *psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, false);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, false);
 	if (psTemplate)
 	{
 		DROID *psDroid = nullptr;
@@ -1790,7 +1785,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 		bMultiMessages = false; // ugh, fixme
 		if (onMission)
 		{
-			psDroid = ::buildMissionDroid(psTemplate, 128, 128, player);
+			psDroid = ::buildMissionDroid(psTemplate.get(), 128, 128, player);
 			if (psDroid)
 			{
 				debug(LOG_LIFE, "Created mission-list droid %s by script for player %d: %u", objInfo(psDroid), player, psDroid->id);
@@ -1802,7 +1797,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 		}
 		else
 		{
-			psDroid = ::buildDroid(psTemplate, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, nullptr);
+			psDroid = ::buildDroid(psTemplate.get(), world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, player, onMission, nullptr);
 			if (psDroid)
 			{
 				addDroid(psDroid, apsDroidLists);
@@ -1814,7 +1809,6 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 			}
 		}
 		bMultiMessages = oldMulti; // ugh
-		delete psTemplate;
 		return psDroid;
 	}
 	return nullptr;
@@ -1829,8 +1823,8 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets))
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
-	DROID_TEMPLATE *psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, true);
-	return std::unique_ptr<const DROID_TEMPLATE>(psTemplate);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, true);
+	return std::unique_ptr<const DROID_TEMPLATE>(std::move(psTemplate));
 }
 
 //-- ## addDroidToTransporter(transporter, droid)
@@ -2529,11 +2523,11 @@ wzapi::no_return_value wzapi::setDesign(WZAPI_PARAMS(bool allowDesign))
 	DROID_TEMPLATE *psCurr;
 	// Switch on or off future templates
 	// FIXME: This dual data structure for templates is just plain insane.
-	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
-	{
-		bool researched = researchedTemplate(keyvaluepair.second, selectedPlayer, true);
-		keyvaluepair.second->enabled = (researched || allowDesign);
-	}
+	enumerateTemplates(selectedPlayer, [allowDesign](DROID_TEMPLATE * psTempl) {
+		bool researched = researchedTemplate(psTempl, selectedPlayer, true);
+		psTempl->enabled = (researched || allowDesign);
+		return true;
+	});
 	for (auto &localTemplate : localTemplates)
 	{
 		psCurr = &localTemplate;
@@ -2553,15 +2547,15 @@ bool wzapi::enableTemplate(WZAPI_PARAMS(std::string _templateName))
 	WzString templateName = WzString::fromUtf8(_templateName);
 	bool found = false;
 	// FIXME: This dual data structure for templates is just plain insane.
-	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
-	{
-		if (templateName.compare(keyvaluepair.second->id) == 0)
+	enumerateTemplates(selectedPlayer, [&templateName, &found](DROID_TEMPLATE * psTempl) {
+		if (templateName.compare(psTempl->id) == 0)
 		{
-			keyvaluepair.second->enabled = true;
+			psTempl->enabled = true;
 			found = true;
-			break;
+			return false; // break;
 		}
-	}
+		return true;
+	});
 	if (!found)
 	{
 		debug(LOG_ERROR, "Template %s was not found!", templateName.toUtf8().c_str());
@@ -2589,15 +2583,15 @@ bool wzapi::removeTemplate(WZAPI_PARAMS(std::string _templateName))
 	WzString templateName = WzString::fromUtf8(_templateName);
 	bool found = false;
 	// FIXME: This dual data structure for templates is just plain insane.
-	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
-	{
-		if (templateName.compare(keyvaluepair.second->id) == 0)
+	enumerateTemplates(selectedPlayer, [&templateName, &found](DROID_TEMPLATE * psTempl) {
+		if (templateName.compare(psTempl->id) == 0)
 		{
-			keyvaluepair.second->enabled = false;
+			psTempl->enabled = false;
 			found = true;
-			break;
+			return false; // break;
 		}
-	}
+		return true;
+	});
 	if (!found)
 	{
 		debug(LOG_ERROR, "Template %s was not found!", templateName.toUtf8().c_str());

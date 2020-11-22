@@ -40,7 +40,7 @@
 #include "main.h"
 
 // Template storage
-std::map<int, DROID_TEMPLATE *> droidTemplates[MAX_PLAYERS];
+std::map<UDWORD, std::unique_ptr<DROID_TEMPLATE>> droidTemplates[MAX_PLAYERS];
 
 bool allowDesign = true;
 bool includeRedundantDesigns = false;
@@ -282,7 +282,7 @@ bool initTemplates()
 		DROID_TEMPLATE *psDestTemplate = nullptr;
 		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 		{
-			psDestTemplate = keyvaluepair.second;
+			psDestTemplate = keyvaluepair.second.get();
 			// Check if template is identical to a loaded template
 			if (psDestTemplate->droidType == design.droidType
 			    && psDestTemplate->name.compare(design.name) == 0
@@ -315,7 +315,7 @@ bool initTemplates()
 	return true;
 }
 
-void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr)
+void saveTemplateCommon(WzConfig &ini, const DROID_TEMPLATE *psCurr)
 {
 	ini.setValue("name", psCurr->name);
 	switch (psCurr->droidType)
@@ -382,7 +382,7 @@ bool storeTemplates()
 	ini.beginArray("templates");
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		DROID_TEMPLATE *psCurr = keyvaluepair.second;
+		const DROID_TEMPLATE *psCurr = keyvaluepair.second.get();
 		if (psCurr->stored)
 		{
 			saveTemplateCommon(ini, psCurr);
@@ -479,22 +479,47 @@ bool loadDroidTemplates(const char *filename)
 
 DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate)
 {
-	DROID_TEMPLATE *dup = new DROID_TEMPLATE(*psTemplate);
-	droidTemplates[player][psTemplate->multiPlayerID] = dup;
-	return dup;
+	std::unique_ptr<DROID_TEMPLATE> dup = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE(*psTemplate));
+	UDWORD multiPlayerID = dup->multiPlayerID;
+	auto result = droidTemplates[player].insert(std::pair<UDWORD, std::unique_ptr<DROID_TEMPLATE>>(multiPlayerID, std::move(dup)));
+	return result.first->second.get();
 }
 
-void addTemplate(int player, DROID_TEMPLATE *psTemplate)
+DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate)
 {
-	droidTemplates[player][psTemplate->multiPlayerID] = psTemplate;
+	UDWORD multiPlayerID = psTemplate->multiPlayerID;
+	auto result = droidTemplates[player].insert(std::pair<UDWORD, std::unique_ptr<DROID_TEMPLATE>>(multiPlayerID, std::move(psTemplate)));
+	return result.first->second.get();
+}
+
+void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func)
+{
+	for (auto &keyvaluepair : droidTemplates[player])
+	{
+		if (!func(keyvaluepair.second.get()))
+		{
+			break;
+		}
+	}
+}
+
+DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId)
+{
+	auto it = droidTemplates[player].find(templateId);
+	if (it != droidTemplates[player].end())
+	{
+		return it->second.get();
+	}
+	return nullptr;
+}
+
+size_t templateCount(int player)
+{
+	return droidTemplates[player].size();
 }
 
 void clearTemplates(int player)
 {
-	for (auto &keyvaluepair : droidTemplates[player])
-	{
-		delete keyvaluepair.second;
-	}
 	droidTemplates[player].clear();
 }
 
@@ -515,7 +540,7 @@ bool droidTemplateShutDown()
  * \param pName Template name
  * \pre pName has to be the unique, untranslated name!
  */
-DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
+const DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 {
 	for (auto &droidTemplate : droidTemplates)
 	{
@@ -523,7 +548,7 @@ DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName)
 		{
 			if (keyvaluepair.second->id.compare(pName) == 0)
 			{
-				return keyvaluepair.second;
+				return keyvaluepair.second.get();
 			}
 		}
 	}
@@ -537,7 +562,7 @@ DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID)
 	{
 		if (droidTemplate.count(multiPlayerID) > 0)
 		{
-			return droidTemplate[multiPlayerID];
+			return droidTemplate[multiPlayerID].get();
 		}
 	}
 	return nullptr;
@@ -629,7 +654,7 @@ void listTemplates()
 {
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
-		DROID_TEMPLATE *t = keyvaluepair.second;
+		DROID_TEMPLATE *t = keyvaluepair.second.get();
 		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getStatsName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
 	}
 }
