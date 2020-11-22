@@ -1754,10 +1754,8 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 			debug(LOG_ERROR, "Could not produce template %s in %s", getName(psTemplate), objInfo(psStruct));
 			return false;
 		}
-		delete psTemplate;
-		return true;
 	}
-	return false;
+	return (psTemplate != nullptr);
 }
 
 //-- ## addDroid(player, x, y, name, body, propulsion, reserved, reserved, turrets...)
