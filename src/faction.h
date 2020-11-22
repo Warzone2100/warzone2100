@@ -28,6 +28,9 @@
 #include "src/factionid.h"
 #include "structure.h"
 #include <map>
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 #define NUM_FACTIONS 3
 
@@ -36,6 +39,7 @@ struct FACTION {
 	std::map<WzString, WzString> replaceIMD;
 };
 
+optional<WzString> getFactionModelName(const FactionID faction, const WzString& normalFactionName);
 iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd);
 
 const FACTION* getPlayerFaction(uint8_t player);
