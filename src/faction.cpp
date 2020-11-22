@@ -62,15 +62,33 @@ static const struct FACTION factions[NUM_FACTIONS] = {
 	}
 };
 
+optional<WzString> getFactionModelName(const FACTION *faction, const WzString& normalFactionName)
+{
+	auto pos = faction->replaceIMD.find(normalFactionName);
+	if (pos == faction->replaceIMD.end())
+	{
+		return nullopt;
+	} else {
+		return pos->second;
+	}
+}
+
+optional<WzString> getFactionModelName(const FactionID faction, const WzString& normalFactionName)
+{
+	return getFactionModelName(getFactionByID(faction), normalFactionName);
+}
+
 iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd)
 {
 	WzString name = WzString::fromUtf8(modelName(imd));
-	auto pos = faction->replaceIMD.find(name);
-	if (pos == faction->replaceIMD.end())
+	auto factionModelName = getFactionModelName(faction, name);
+	if (!factionModelName.has_value())
 	{
 		return imd;
-	} else {
-		return modelGet(pos->second);
+	}
+	else
+	{
+		return modelGet(factionModelName.value());
 	}
 }
 
