@@ -4170,7 +4170,7 @@ bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
 {
 	DROIDINIT_SAVEHEADER		*psHeader;
 	SAVE_DROIDINIT *pDroidInit;
-	DROID_TEMPLATE *psTemplate;
+	const DROID_TEMPLATE *psTemplate;
 	DROID *psDroid;
 	UDWORD i;
 	UDWORD NumberOfSkippedDroids = 0;
@@ -4635,7 +4635,8 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		Position pos = ini.vector3i("position");
 		Rotation rot = ini.vector3i("rotation");
 		bool onMission = ini.value("onMission", false).toBool();
-		DROID_TEMPLATE templ, *psTemplate = &templ;
+		DROID_TEMPLATE templ;
+		const DROID_TEMPLATE *psTemplate = nullptr;
 
 		if (skipForDifficulty(ini, player))
 		{
@@ -4659,20 +4660,21 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		{
 			// Create fake template
 			templ.name = ini.string("name", "UNKNOWN");
-			psTemplate->droidType = (DROID_TYPE)ini.value("droidType").toInt();
-			psTemplate->numWeaps = ini.value("weapons", 0).toInt();
+			templ.droidType = (DROID_TYPE)ini.value("droidType").toInt();
+			templ.numWeaps = ini.value("weapons", 0).toInt();
 			ini.beginGroup("parts");	// the following is copy-pasted from loadSaveTemplate() -- fixme somehow
-			psTemplate->asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toWzString());
-			psTemplate->asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toWzString());
-			psTemplate->asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toWzString());
-			psTemplate->asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toWzString());
-			psTemplate->asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toWzString());
-			psTemplate->asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toWzString());
-			psTemplate->asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toWzString());
-			psTemplate->asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toWzString());
-			psTemplate->asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toWzString());
-			psTemplate->asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toWzString());
+			templ.asParts[COMP_BODY] = getCompFromName(COMP_BODY, ini.value("body", "ZNULLBODY").toWzString());
+			templ.asParts[COMP_BRAIN] = getCompFromName(COMP_BRAIN, ini.value("brain", "ZNULLBRAIN").toWzString());
+			templ.asParts[COMP_PROPULSION] = getCompFromName(COMP_PROPULSION, ini.value("propulsion", "ZNULLPROP").toWzString());
+			templ.asParts[COMP_REPAIRUNIT] = getCompFromName(COMP_REPAIRUNIT, ini.value("repair", "ZNULLREPAIR").toWzString());
+			templ.asParts[COMP_ECM] = getCompFromName(COMP_ECM, ini.value("ecm", "ZNULLECM").toWzString());
+			templ.asParts[COMP_SENSOR] = getCompFromName(COMP_SENSOR, ini.value("sensor", "ZNULLSENSOR").toWzString());
+			templ.asParts[COMP_CONSTRUCT] = getCompFromName(COMP_CONSTRUCT, ini.value("construct", "ZNULLCONSTRUCT").toWzString());
+			templ.asWeaps[0] = getCompFromName(COMP_WEAPON, ini.value("weapon/1", "ZNULLWEAPON").toWzString());
+			templ.asWeaps[1] = getCompFromName(COMP_WEAPON, ini.value("weapon/2", "ZNULLWEAPON").toWzString());
+			templ.asWeaps[2] = getCompFromName(COMP_WEAPON, ini.value("weapon/3", "ZNULLWEAPON").toWzString());
 			ini.endGroup();
+			psTemplate = &templ;
 		}
 
 		// If droid is on a mission, calling with the saved position might cause an assertion. Or something like that.
@@ -6012,7 +6014,7 @@ bool loadSaveTemplate(const char *pFileName)
 		ini.beginArray("templates");
 		while (ini.remainingArrayItems() > 0)
 		{
-			addTemplate(player, new DROID_TEMPLATE(loadTemplate()));
+			addTemplate(player, std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE(loadTemplate())));
 		}
 		ini.endArray();
 		ini.endGroup();
@@ -6030,10 +6032,10 @@ bool loadSaveTemplate(const char *pFileName)
 	else
 	{
 		// Old savegame compatibility, should remove this branch sometime.
-		for (auto &keyvaluepair : droidTemplates[selectedPlayer])
-		{
-			localTemplates.push_back(*keyvaluepair.second);
-		}
+		enumerateTemplates(selectedPlayer, [](DROID_TEMPLATE * psTempl) {
+			localTemplates.push_back(*psTempl);
+			return true;
+		});
 	}
 
 	return true;
@@ -6063,10 +6065,10 @@ bool writeTemplateFile(const char *pFileName)
 		ini.beginGroup("player_" + WzString::number(player));
 		setPlayer(ini, player);
 		ini.beginArray("templates");
-		for (auto &keyvaluepair : droidTemplates[player])
-		{
-			writeTemplate(keyvaluepair.second);
-		}
+		enumerateTemplates(player, [&writeTemplate](DROID_TEMPLATE* psTemplate) {
+			writeTemplate(psTemplate);
+			return true;
+		});
 		ini.endArray();
 		ini.endGroup();
 	}

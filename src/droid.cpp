@@ -1494,7 +1494,7 @@ UDWORD calcDroidPower(const DROID *psDroid)
 }
 
 //Builds an instance of a Droid - the x/y passed in are in world coords.
-DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot)
+DROID *reallyBuildDroid(const DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, bool onMission, Rotation rot)
 {
 	// Don't use this assertion in single player, since droids can finish building while on an away mission
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");

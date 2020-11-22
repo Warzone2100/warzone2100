@@ -1040,9 +1040,7 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 	replaceDroidComponent(apsLimboDroids[player], oldType, oldCompInc, newCompInc);
 
 	//check thru the templates
-	for (auto &keyvaluepair : droidTemplates[player])
-	{
-		DROID_TEMPLATE *psTemplates = keyvaluepair.second;
+	enumerateTemplates(player, [oldType, oldCompInc, newCompInc](DROID_TEMPLATE* psTemplates) {
 		switch (oldType)
 		{
 		case COMP_BODY:
@@ -1069,9 +1067,10 @@ static void replaceComponent(COMPONENT_STATS *pNewComponent, COMPONENT_STATS *pO
 		default:
 			//unknown comp type
 			debug(LOG_ERROR, "Unknown component type - invalid Template");
-			return;
+			return true;
 		}
-	}
+		return true;
+	});
 
 	replaceStructureComponent(apsStructLists[player], oldType, oldCompInc, newCompInc, player);
 	replaceStructureComponent(mission.apsStructLists[player], oldType, oldCompInc, newCompInc, player);

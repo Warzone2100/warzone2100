@@ -379,14 +379,14 @@ void kf_CloneSelected(int limit)
 	{
 		if (psDroid->selected)
 		{
-			for (auto &keyvaluepair : droidTemplates[selectedPlayer])
-			{
-				if (keyvaluepair.second->name.compare(psDroid->aName) == 0)
+			enumerateTemplates(selectedPlayer, [psDroid, &sTemplate](DROID_TEMPLATE * psTempl) {
+				if (psTempl->name.compare(psDroid->aName) == 0)
 				{
-					sTemplate = keyvaluepair.second;
-					break;
+					sTemplate = psTempl;
+					return false; // stop enumerating
 				}
-			}
+				return true;
+			});
 
 			if (!sTemplate)
 			{

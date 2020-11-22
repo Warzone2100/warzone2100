@@ -300,7 +300,7 @@ static void runTemplateShadowStats(UDWORD id);
 
 static bool intCheckValidWeaponForProp(DROID_TEMPLATE *psTemplate);
 
-static bool checkTemplateIsVtol(DROID_TEMPLATE *psTemplate);
+static bool checkTemplateIsVtol(const DROID_TEMPLATE *psTemplate);
 
 /* save the current Template if valid. Return true if stored */
 static bool saveTemplate();
@@ -3840,7 +3840,7 @@ static bool intCheckValidWeaponForProp(DROID_TEMPLATE *psTemplate)
 }
 
 //checks if the template has PROPULSION_TYPE_LIFT propulsion attached - returns true if it does
-bool checkTemplateIsVtol(DROID_TEMPLATE *psTemplate)
+bool checkTemplateIsVtol(const DROID_TEMPLATE *psTemplate)
 {
 	return asPropulsionStats[psTemplate->asParts[COMP_PROPULSION]].propulsionType == PROPULSION_TYPE_LIFT;
 }

@@ -22,9 +22,8 @@
 
 #include "lib/framework/wzconfig.h"
 #include "droiddef.h"
-
-//storage
-extern std::map<int, DROID_TEMPLATE *> droidTemplates[MAX_PLAYERS];
+#include <memory>
+#include <functional>
 
 extern bool allowDesign;
 extern bool includeRedundantDesigns;
@@ -34,10 +33,15 @@ extern bool playerBuiltHQ;
 bool initTemplates();
 
 /// Take ownership of template given by pointer.
-void addTemplate(int player, DROID_TEMPLATE *psTemplate);
+/// Returns a new usable DROID_TEMPLATE *
+DROID_TEMPLATE* addTemplate(int player, std::unique_ptr<DROID_TEMPLATE> psTemplate);
 
 /// Make a duplicate of template given by pointer and store it. Then return pointer to copy.
 DROID_TEMPLATE *copyTemplate(int player, DROID_TEMPLATE *psTemplate);
+
+void enumerateTemplates(int player, const std::function<bool (DROID_TEMPLATE* psTemplate)>& func);
+DROID_TEMPLATE* findPlayerTemplateById(int player, UDWORD templateId);
+size_t templateCount(int player);
 
 void clearTemplates(int player);
 bool shutdownTemplates();
@@ -52,7 +56,7 @@ bool templateIsIDF(DROID_TEMPLATE *psTemplate);
 void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
 
 /* gets a template from its name - relies on the name being unique */
-DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName);
+const DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName);
 
 /*getTemplateFromMultiPlayerID gets template for unique ID  searching all lists */
 DROID_TEMPLATE *getTemplateFromMultiPlayerID(UDWORD multiPlayerID);
@@ -62,7 +66,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 
 void listTemplates();
 
-void saveTemplateCommon(WzConfig &ini, DROID_TEMPLATE *psCurr);
+void saveTemplateCommon(WzConfig &ini, const DROID_TEMPLATE *psCurr);
 bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate);
 
 void checkPlayerBuiltHQ(const STRUCTURE *psStruct);
