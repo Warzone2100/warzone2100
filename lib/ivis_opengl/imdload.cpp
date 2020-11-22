@@ -103,9 +103,10 @@ const std::string &modelName(iIMDShape *model)
 iIMDShape *modelGet(const WzString &filename)
 {
 	WzString name(filename.toLower());
-	if (models.count(name.toStdString()) > 0)
+	auto it = models.find(name.toStdString());
+	if (it != models.end())
 	{
-		return &models.at(name.toStdString()); // cached
+		return &it->second; // cached
 	}
 	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
 	         || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
