@@ -28,6 +28,7 @@
 #include "src/factionid.h"
 #include "structure.h"
 #include <map>
+#include <unordered_set>
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -44,4 +45,7 @@ iIMDShape* getFactionIMD(const FACTION *faction, iIMDShape* imd);
 
 const FACTION* getPlayerFaction(uint8_t player);
 const FACTION* getFactionByID(FactionID faction);
+
+std::unordered_set<FactionID> getEnabledFactions(bool ignoreNormalFaction = false);
+
 #endif

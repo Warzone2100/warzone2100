@@ -101,3 +101,25 @@ const FACTION* getFactionByID(FactionID faction)
 {
 	return &(factions[(uint8_t)faction]);
 }
+
+std::unordered_set<FactionID> getEnabledFactions(bool ignoreNormalFaction /*= false*/)
+{
+	std::unordered_set<FactionID> enabledFactions;
+	for (uint8_t f_id = 0; f_id < NUM_FACTIONS; ++f_id)
+	{
+		const FactionID faction = static_cast<FactionID>(f_id);
+		if (ignoreNormalFaction && (faction == FACTION_NORMAL))
+		{
+			continue;
+		}
+		for (size_t player = 0; player < NetPlay.players.size(); ++player)
+		{
+			if (NetPlay.players[player].faction == faction)
+			{
+				enabledFactions.insert(faction);
+				continue;
+			}
+		}
+	}
+	return enabledFactions;
+}
