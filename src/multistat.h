@@ -47,6 +47,7 @@ struct PLAYERSTATS
 
 		bool valid = false;
 		bool dummy = false;
+		bool autohoster = false;
 		uint8_t star[3] = {0, 0, 0};
 		uint8_t medal = 0;
 		uint8_t level = 0;

@@ -4513,6 +4513,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			ar.medal = stat.wins >= 24 && stat.wins > 8 * stat.losses? 1 : stat.wins >= 12 && stat.wins > 4 * stat.losses? 2 : stat.wins >= 6 && stat.wins > 2 * stat.losses? 3 : 0;
 
 			ar.level = 0;
+			ar.autohoster = false;
 			ar.elo.clear();
 		}
 
@@ -4524,7 +4525,11 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			cache.wzSubText.render(x + nameX, y + 28 - H*!ar.elo.empty(), WZCOL_TEXT_MEDIUM);
 		}
 
-		if (ar.dummy)
+		if (ar.autohoster)
+		{
+			iV_DrawImage(FrontImages, IMAGE_PLAYER_PC, x, y + 11);
+		}
+		else if (ar.dummy)
 		{
 			iV_DrawImage(FrontImages, IMAGE_MEDAL_DUMMY, x + 4, y + 13);
 		}

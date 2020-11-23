@@ -87,7 +87,7 @@ PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 		medal = (int)json["medal"];
 		level = (int)json["level"];
 		elo = (std::string)json["elo"];
-
+		autohoster = (bool)json["autohoster"];
 		valid = true;
 	} catch (const std::exception &e) {
 		debug(LOG_WARNING, "Error parsing rating JSON: %s", e.what());
@@ -477,4 +477,3 @@ uint32_t getSelectedPlayerUnitsKilled()
 		return missionData.unitsKilled;
 	}
 }
-
