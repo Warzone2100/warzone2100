@@ -172,6 +172,9 @@ void clearPlayer(UDWORD player, bool quietly)
 	UDWORD			i;
 	STRUCTURE		*psStruct, *psNext;
 
+	NetPlay.playerReferences[player]->disconnect();
+	NetPlay.playerReferences[player] = std::shared_ptr<PlayerReference>(new PlayerReference(player));
+
 	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true" : "false");
 
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag

@@ -200,6 +200,16 @@ static char const *versionString = version_getVersionString();
 
 #include "lib/netplay/netplay_config.h"
 
+NETPLAY::NETPLAY()
+{
+	players.resize(MAX_PLAYERS);
+	playerReferences.resize(MAX_PLAYERS);
+	for (auto i = 0; i < MAX_PLAYERS; i++)
+	{
+		playerReferences[i] = std::shared_ptr<PlayerReference>(new PlayerReference(i));
+	}
+}
+
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
 	return (uint32_t)NETCODE_VERSION_MAJOR == game_version_major && (uint32_t)NETCODE_VERSION_MINOR == game_version_minor;

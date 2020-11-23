@@ -2525,30 +2525,93 @@ ChatBoxWidget::~ChatBoxWidget()
 	consoleRemoveMessageListener(handleConsoleMessage);
 }
 
+
+class ChatBoxPlayerNameWidget: public WIDGET
+{
+public:
+	ChatBoxPlayerNameWidget(std::shared_ptr<PlayerReference> const &player):
+		WIDGET(WIDG_UNSPECIFIED_TYPE),
+		player(player),
+		font(font_regular),
+		cachedText("", font)
+	{
+		updateLayout();
+	}
+
+	void display(int xOffset, int yOffset) override
+	{
+		auto x0 = xOffset + x();
+		auto y0 = yOffset + y();
+		auto textX = x0 + horizontalPadding;
+		auto textY = y0 - cachedText->aboveBase();
+		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height() - 1, pal_GetTeamColour((*player)->colour));
+		for (int32_t i = -1; i <= 1; i++)
+		{
+			for (int32_t j = -1; j <= 1; j++)
+			{
+				cachedText->render(textX + i, textY + j, {0, 0, 0, 128});
+			}
+		}
+		cachedText->render(textX, textY, WZCOL_WHITE);
+	}
+
+	void run(W_CONTEXT *) override
+	{
+		if (layoutName != (*player)->name)
+		{
+			updateLayout();
+		}
+		cachedText.tick();
+	}
+
+private:
+	std::shared_ptr<PlayerReference> player;
+	iV_fonts font;
+	std::string layoutName;
+	WzCachedText cachedText;
+	int32_t horizontalPadding = 3;
+
+	void updateLayout()
+	{
+		layoutName = (*player)->name;
+		cachedText = WzCachedText(layoutName, font);
+		setGeometry(x(), y(), cachedText->width() + 2 * horizontalPadding, cachedText->lineSize() + 2);
+	}
+};
+
 void ChatBoxWidget::addMessage(int32_t sender, const char *text)
 {
 	W_INIT messageInit;
 	messageInit.width = messages->calculateListViewWidth();
 	auto message = new Paragraph(&messageInit);
-	char formatted[MAX_CONSOLE_STRING_LENGTH];
-	sstrcpy(formatted, text);
 
 	switch (sender)
 	{
 	case SYSTEM_MESSAGE:
 		message->setFontColour(WZCOL_CONS_TEXT_SYSTEM);
+		message->addText(text);
 		break;
 	case NOTIFY_MESSAGE:
 		message->setFontColour(WZCOL_YELLOW);
+		message->addText(text);
 		break;
 	default:
 		auto timeInfo = getTimeInfo();
-		ssprintf(formatted, "[%02d:%02d] %s: %s", timeInfo.tm_hour, timeInfo.tm_min, getPlayerName(sender), text);
+
+		message->setFont(font_small);
+		message->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
+		message->addText(astringf("%02d:%02d ", timeInfo.tm_hour, timeInfo.tm_min));
+
+		message->addWidget(new ChatBoxPlayerNameWidget(NetPlay.playerReferences[sender]), iV_GetTextAboveBase(font_regular));
+
+		message->setFont(font_regular);
+		message->setShadeColour({0, 0, 0, 0});
 		message->setFontColour(WZCOL_WHITE);
+		message->addText(astringf(" %s", text));
+
 		break;
 	}
 
-	message->setString(formatted);
 	messages->addItem(message);
 	ChatBoxWidget::persistentMessageLocalStorage.emplace_back(sender, text);
 }
@@ -2557,7 +2620,7 @@ void ChatBoxWidget::geometryChanged()
 {
 	auto messagesHeight = height() - MULTIOP_CHATEDITH - 1;
 	messages->setGeometry(1, 1, width() - 2, messagesHeight);
-	editBox->setGeometry(MULTIOP_CHATEDITX, messagesHeight, MULTIOP_CHATEDITW, MULTIOP_CHATEDITH);
+	editBox->setGeometry(MULTIOP_CHATEDITX, messages->y() + messagesHeight, MULTIOP_CHATEDITW, MULTIOP_CHATEDITH);
 }
 
 void ChatBoxWidget::initializeMessages(bool preserveOldChat)

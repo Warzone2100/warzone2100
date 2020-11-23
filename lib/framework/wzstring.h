@@ -107,6 +107,7 @@ public:
 	WzString trimmed(const std::locale &loc = std::locale::classic()) const;
 
 	std::vector<WzString> split(const WzString &delimiter) const;
+	WzString substr(size_t start, size_t length) const;
 
 public:
 	// Normalization

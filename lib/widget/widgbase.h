@@ -139,7 +139,8 @@ class WIDGET
 public:
 	typedef std::vector<WIDGET *> Children;
 
-	WIDGET(W_INIT const *init, WIDGET_TYPE type);
+	WIDGET(WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
+	WIDGET(W_INIT const *init, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	WIDGET(WIDGET *parent, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	virtual ~WIDGET();
 
