@@ -39,6 +39,7 @@
 # pragma GCC diagnostic ignored "-Wtype-limits"
 # pragma GCC diagnostic ignored "-Wunused-variable"
 # pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+# pragma GCC diagnostic ignored "-Wmissing-noreturn"
 #elif defined(_MSC_VER)
 # pragma warning( push )
 # pragma warning( disable : 4189 ) // warning C4189: 'identifier' : local variable is initialized but not referenced
