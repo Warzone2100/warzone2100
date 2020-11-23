@@ -895,8 +895,8 @@ void processMouseClickInput()
 	CurrentItemUnderMouse = item;
 }
 
-std::unique_ptr<ValueTracker> cameraHorizontalScrollSpeedTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
-std::unique_ptr<ValueTracker> cameraVerticalScrollSpeedTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
+std::unique_ptr<ValueTracker> cameraHorizontalScrollSpeedTracker = std::unique_ptr<ValueTracker>((new ValueTracker())->setSpeed(20));
+std::unique_ptr<ValueTracker> cameraVerticalScrollSpeedTracker = std::unique_ptr<ValueTracker>((new ValueTracker())->setSpeed(20));
 std::unique_ptr<ValueTracker> cameraPositionXTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
 std::unique_ptr<ValueTracker> cameraPositionZTracker = std::unique_ptr<ValueTracker>(new ValueTracker());
 
@@ -952,7 +952,7 @@ static void handleCameraScrolling()
 
 	float scrollZoomFactor = 1 + 2 * ((getViewDistance() - MINDISTANCE) / ((float)(MAXDISTANCE - MINDISTANCE)));
 	// // TODO: instead of checking cameraAccel here, in setCameraAccel you set cameraScrollSpeed trackers -> speed.
-	float targetScrollSpeed = scrollZoomFactor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2) / 2;
+	float targetScrollSpeed = scrollZoomFactor * (cameraAccel ? war_GetCameraSpeed() : war_GetCameraSpeed() / 2) / 3;
 
 	float scrollSpeedHorizontal = cameraHorizontalScrollSpeedTracker->setTarget(targetScrollSpeed * scrollDirLeftRight)->update()->getCurrent();
 	float scrollSpeedVertical = cameraVerticalScrollSpeedTracker->setTarget(targetScrollSpeed * scrollDirUpDown)->update()->getCurrent();
