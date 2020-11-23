@@ -193,6 +193,16 @@ int WzString::length() const
 	return (int)len_distance;
 }
 
+WzString WzString::substr(size_t start, size_t length) const
+{
+	auto begin = _utf8String.begin();
+	_utf8_advance(begin, start, _utf8String.end());
+
+	auto end = begin;
+	_utf8_advance(end, length, _utf8String.end());
+	return WzString(std::string(begin, end));
+}
+
 const WzUniCodepoint WzString::at(int position) const
 {
 	auto it = _utf8String.begin();

@@ -31,6 +31,7 @@
 #include <physfs.h>
 #include <vector>
 #include <functional>
+#include <memory>
 // Lobby Connection errors
 
 enum LOBBY_ERROR_TYPES
@@ -258,6 +259,8 @@ struct PLAYER
 	char                IPtextAddress[40];  ///< IP of this player
 };
 
+struct PlayerReference;
+
 // ////////////////////////////////////////////////////////////////////////
 // all the luvly Netplay info....
 struct NETPLAY
@@ -279,10 +282,9 @@ struct NETPLAY
 	char MOTDbuffer[255];				// buffer for MOTD
 	char *MOTD;
 
-	NETPLAY()
-	{
-		players.resize(MAX_PLAYERS);
-	}
+	std::vector<std::shared_ptr<PlayerReference>> playerReferences;
+
+	NETPLAY();
 };
 
 struct PLAYER_IP
@@ -401,5 +403,31 @@ typedef uint16_t GameCrcType;  // Truncate CRC of game state to 16 bits, to save
 void resetSyncDebug();                                              ///< Resets the syncDebug, so syncDebug from a previous game doesn't cause a spurious desynch dump.
 GameCrcType nextDebugSync();                                        ///< Returns a CRC corresponding to all syncDebug() calls since the last nextDebugSync() or resetSyncDebug() call.
 bool checkDebugSync(uint32_t checkGameTime, GameCrcType checkCrc);  ///< Dumps all syncDebug() calls from that gameTime, if the CRC doesn't match.
+
+/**
+ * This structure provides read-only access to a player, and can be used to identify players uniquely.
+ *
+ * It holds the player data after the player has disconnected, and it is released automatically by reference counting.
+ **/
+struct PlayerReference
+{
+	PlayerReference(uint32_t index): index(index)
+	{
+	}
+
+	void disconnect()
+	{
+		detached = std::unique_ptr<PLAYER>(new PLAYER(NetPlay.players[index]));
+	}
+
+	PLAYER const *operator ->() const
+	{
+		return detached? detached.get(): &NetPlay.players[index];
+	}
+
+private:
+	std::unique_ptr<PLAYER> detached = nullptr;
+	uint32_t index;
+};
 
 #endif

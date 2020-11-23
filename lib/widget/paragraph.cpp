@@ -17,69 +17,234 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#include <algorithm>
 #include "lib/framework/frame.h"
-#include "lib/gamelib/gtime.h"
+#include "lib/ivis_opengl/pieblitfunc.h"
 #include "widget.h"
 #include "widgint.h"
 #include "paragraph.h"
 #include "form.h"
 #include "tip.h"
 
-#include <algorithm>
-
-class WzCachedText
+class FlowLayoutElementDescriptor
 {
 public:
-	WzCachedText(std::string text, iV_fonts font, uint32_t cacheDurationMs = 100):
-		text(text),
-		font(font),
-		cacheDurationMs(cacheDurationMs)
-	{}
+    virtual ~FlowLayoutElementDescriptor() = default;
+    virtual unsigned int getWidth(size_t position, unsigned int length) const = 0;
+    virtual unsigned int size() const = 0;
+    virtual bool isWhitespace(size_t position) const = 0;
+    virtual bool isLineBreak(size_t position) const = 0;
 
-	void tick()
-	{
-		if (cachedText && cacheExpireAt < realTime)
-		{
-			cachedText = nullptr;
-		}
-	}
-
-	WzText *operator ->()
-	{
-		if (!cachedText)
-		{
-			cachedText = std::unique_ptr<WzText>(new WzText(text, font));
-		}
-
-		cacheExpireAt = realTime + (cacheDurationMs * GAME_TICKS_PER_SEC) / 1000;
-		return cachedText.get();
-	}
-
-private:
-	std::string text;
-	iV_fonts font;
-	uint32_t cacheDurationMs;
-	std::unique_ptr<WzText> cachedText = nullptr;
-	uint32_t cacheExpireAt = 0;
+    virtual bool isWord(size_t position) const
+    {
+        return position < size() && !isWhitespace(position) && !isLineBreak(position);
+    }
 };
 
-class ParagraphLine: public WIDGET
+/**
+ * FlowLayout implements a word wrapping algorithm.
+ *
+ * It doesn't specify how the text should be structured, it only requires that the elements of the text are described
+ * by FlowLayoutElementDescriptor.
+ *
+ * Each element can contain 0 or more words, and a single word can be part of two sequential elements.
+ *
+ * Example:
+ * - Element 1 = "first sec"
+ * - Element 2 = "ond third"
+ *
+ * In the example above, the resulting text is "first second third", so if possible the algorithm will keep
+ * the second word completely in the same line.
+ **/
+struct FlowLayout
+{
+private:
+    bool shouldMergeFragment()
+    {
+        return !currentLine.empty() && !partialWord.empty() && currentLine.back().elementId == partialWord.front().elementId;
+    }
+
+    void endWord()
+    {
+        if (shouldMergeFragment())
+        {
+            auto partialWordFront = &partialWord.front();
+            auto currentLineBack = currentLine.back();
+            currentLine.pop_back();
+            partialWordFront->length = partialWordFront->length + partialWordFront->begin - currentLineBack.begin;
+            partialWordFront->width = partialWordFront->offset + partialWordFront->width - currentLineBack.offset;
+            partialWordFront->begin = currentLineBack.begin;
+            partialWordFront->offset = currentLineBack.offset;
+        }
+
+        for (auto fragment: partialWord)
+        {
+            currentLine.push_back(fragment);
+        }
+
+        nextOffset += partialWordWidth;
+        partialWordWidth = 0;
+        partialWord.clear();
+    }
+
+    void pushFragment(FlowLayoutElementDescriptor const &elementDescriptor, size_t begin, size_t end)
+    {
+        auto width = elementDescriptor.getWidth(begin, end - begin);
+        partialWord.push_back({currentElementId, begin, end - begin, width, nextOffset + partialWordWidth});
+        partialWordWidth += width;
+    }
+
+    void placeLine(FlowLayoutElementDescriptor const &elementDescriptor, size_t begin, size_t end)
+    {
+        auto current = begin;
+
+        while (current < end)
+        {
+            long fragmentFits;
+
+            if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, end - current) > maxWidth)
+            // fragment doesn't fit completely in the current line
+            {
+                fragmentFits = current - 1;
+                size_t fragmentDoesntFit = end;
+                while (fragmentDoesntFit - fragmentFits > 1)
+                {
+                    auto middle = (fragmentFits + fragmentDoesntFit) / 2;
+                    if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, middle - current) > maxWidth)
+                    {
+                        fragmentDoesntFit = middle;
+                    } else {
+                        fragmentFits = middle;
+                    }
+                }
+            }
+            else
+            {
+                fragmentFits = end;
+            }
+
+            auto fragmentEnd = fragmentFits + 1;
+            while ((fragmentEnd >= elementDescriptor.size() || !elementDescriptor.isWhitespace(fragmentEnd - 1)) && fragmentEnd > current)
+            {
+                fragmentEnd--;
+            }
+
+            if (fragmentEnd > current)
+            // the fragment ending with a whitespace fits within the line
+            {
+                pushFragment(elementDescriptor, current, fragmentEnd - 1);
+                endWord();
+                nextOffset += elementDescriptor.getWidth(fragmentEnd - 1, 1);
+                current = fragmentEnd;
+            }
+            else if (fragmentFits == end)
+            // the fragment is a single word, and fits in the line,
+            // but it doesn't end in whitespace and the next element might be part of this word
+            {
+                pushFragment(elementDescriptor, current, fragmentFits);
+                current = fragmentFits;
+            }
+            else if (nextOffset > 0)
+            // word doesn't fit in the current line
+            {
+                 breakLine();
+            }
+            else
+            // word doesn't fit in an empty line
+            {
+                auto end = std::max((size_t)fragmentFits, current + 1);
+                pushFragment(elementDescriptor, current, end);
+                current = end;
+                breakLine();
+            }
+        }
+    }
+
+public:
+    FlowLayout(unsigned int maxWidth): maxWidth(maxWidth)
+    {
+
+    }
+
+    void append(FlowLayoutElementDescriptor const &elementDescriptor)
+    {
+        size_t position = 0;
+        while (position < elementDescriptor.size())
+        {
+            auto lineEnd = position;
+
+            while (lineEnd < elementDescriptor.size() && !elementDescriptor.isLineBreak(lineEnd))
+            {
+                lineEnd++;
+            }
+
+            placeLine(elementDescriptor, position, lineEnd);
+
+            if (lineEnd < elementDescriptor.size())
+            {
+                breakLine();
+            }
+
+            position = lineEnd + 1;
+        }
+
+        currentElementId++;
+    }
+
+    void end()
+    {
+        endWord();
+
+        if (!currentLine.empty()) {
+            breakLine();
+        }
+    }
+
+    void breakLine()
+    {
+        endWord();
+        lines.push_back(currentLine);
+        currentLine.clear();
+        nextOffset = 0;
+    }
+
+    std::vector<std::vector<FlowLayoutFragment>> getLines()
+    {
+        return lines;
+    }
+
+private:
+    std::vector<FlowLayoutFragment> currentLine;
+    std::vector<std::vector<FlowLayoutFragment>> lines;
+    unsigned int maxWidth;
+    unsigned int currentElementId = 0;
+    unsigned int nextOffset = 0;
+    std::vector<FlowLayoutFragment> partialWord;
+    unsigned int partialWordWidth = 0;
+};
+
+/**
+ * Used to render a fragment of text in the paragraph.
+ *
+ * Can be an entire line, or part of a line, but never more than one line.
+ **/
+class ParagraphTextWidget: public WIDGET
 {
 public:
-	ParagraphLine(Paragraph *parent):
-		WIDGET(parent, WIDG_UNSPECIFIED_TYPE),
-		cachedText("", parent->font)
-	{}
+	ParagraphTextWidget(std::string text, ParagraphTextStyle const &textStyle):
+		WIDGET(WIDG_UNSPECIFIED_TYPE),
+		cachedText(text, textStyle.font),
+		textStyle(textStyle)
+	{
+		setGeometry(x(), y(), cachedText->width(), cachedText->lineSize());
+	}
 
 	void display(int xOffset, int yOffset) override
 	{
-		cachedText->render(xOffset + x(), yOffset + y() - cachedText->aboveBase(), getParagraph()->fontColour);
-	}
-
-	void setText(std::string const &newText)
-	{
-		cachedText = WzCachedText(newText, getParagraph()->font);
-		setGeometry(x(), y(), iV_GetTextWidth(newText.c_str(), getParagraph()->font), iV_GetTextHeight(newText.c_str(), getParagraph()->font));
+		auto x0 = xOffset + x();
+		auto y0 = yOffset + y();
+		pie_UniTransBoxFill(x0, y0, x0 + width() - 1, y0 + height() - 1, textStyle.shadeColour);
+		cachedText->render(x0, y0 - cachedText->aboveBase(), textStyle.fontColour);
 	}
 
 	void run(W_CONTEXT *) override
@@ -89,75 +254,256 @@ public:
 
 private:
 	WzCachedText cachedText;
-
-	Paragraph *getParagraph()
-	{
-		return (Paragraph *)parent();
-	}
+	ParagraphTextStyle textStyle;
 };
 
-Paragraph::Paragraph(W_INIT const *init)
-	: WIDGET(init, WIDG_UNSPECIFIED_TYPE)
-	, fontColour(WZCOL_FORM_TEXT)
+/**
+ * Provide information about an element appended to the paragraph.
+ **/
+struct ParagraphElement
 {
-	state.width = init->width;
+	virtual ~ParagraphElement() = default;
+
+	virtual void appendTo(FlowLayout &layout) = 0;
+	virtual WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) = 0;
+	virtual void destroyFragments(Paragraph &paragraph) = 0;
+	virtual bool isLayoutDirty() const = 0;
+	virtual int32_t getAboveBase() const = 0;
+};
+
+class FlowLayoutStringDescriptor : public FlowLayoutElementDescriptor
+{
+    WzString text;
+    std::vector<uint32_t> textUtf32;
+	iV_fonts font;
+
+public:
+    FlowLayoutStringDescriptor(WzString const &newText, iV_fonts newFont): text(newText), textUtf32(newText.toUtf32()), font(newFont) {}
+
+    unsigned int getWidth(size_t position, unsigned int length) const
+    {
+        return iV_GetTextWidth(text.substr(position, length).toUtf8().c_str(), font);
+    }
+
+    unsigned int size() const
+    {
+        return textUtf32.size();
+    }
+
+    bool isWhitespace(size_t position) const
+    {
+		switch (textUtf32[position])
+		{
+		case ' ':
+		case '\t':
+			return true;
+		default:
+			return false;
+		}
+    }
+
+    bool isLineBreak(size_t position) const
+    {
+        return textUtf32[position] == '\n';
+    }
+};
+
+struct ParagraphTextElement: public ParagraphElement
+{
+	ParagraphTextElement(std::string const &newText, ParagraphTextStyle const &style): style(style)
+	{
+		text = WzString::fromUtf8(newText);
+	}
+
+	void appendTo(FlowLayout &layout) override
+	{
+		layout.append(FlowLayoutStringDescriptor(text, style.font));
+	}
+
+	WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
+	{
+		auto widget = new ParagraphTextWidget(text.substr(fragment.begin, fragment.length).toUtf8(), style);
+		paragraph.attach(widget);
+		fragments.push_back(widget);
+		return widget;
+	}
+
+	bool isLayoutDirty() const
+	{
+		return false;
+	}
+
+	void destroyFragments(Paragraph &paragraph)
+	{
+		for (auto fragment: fragments)
+		{
+			paragraph.detach(fragment);
+			delete fragment;
+		}
+
+		fragments.clear();
+	}
+
+	int32_t getAboveBase() const override
+	{
+		return iV_GetTextAboveBase(style.font);
+	}
+
+private:
+	WzString text;
+	ParagraphTextStyle style;
+	std::vector<WIDGET *> fragments;
+};
+
+struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescriptor
+{
+	ParagraphWidgetElement(WIDGET *widget, int32_t aboveBase): widget(widget), aboveBase(aboveBase)
+	{
+	}
+
+    unsigned int getWidth(size_t position, unsigned int length) const
+    {
+        return position == 0 ? widget->width() : 0;
+    }
+
+    unsigned int size() const
+    {
+        return 1;
+    }
+
+    bool isWhitespace(size_t position) const
+    {
+		return false;
+    }
+
+    bool isLineBreak(size_t position) const
+    {
+        return false;
+    }
+
+	void appendTo(FlowLayout &layout) override
+	{
+		layout.append(*this);
+	}
+
+	WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
+	{
+		layoutWidth = widget->width();
+		layoutHeight = widget->height();
+		return widget;
+	}
+
+	void destroyFragments(Paragraph &paragraph)
+	{
+	}
+
+	bool isLayoutDirty() const
+	{
+		return widget->width() != layoutWidth || widget->height() != layoutHeight;
+	}
+
+	int32_t getAboveBase() const override
+	{
+		return aboveBase;
+	}
+
+private:
+	WIDGET *widget;
+	uint32_t layoutWidth = 0;
+	uint32_t layoutHeight = 0;
+	int32_t aboveBase;
+};
+
+Paragraph::Paragraph(W_INIT const *init): WIDGET(init)
+{
+}
+
+bool Paragraph::hasElementWithLayoutDirty() const
+{
+	for (auto &element: elements)
+	{
+		if (element->isLayoutDirty())
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Paragraph::updateLayout()
 {
-	if (state == renderState) {
+	if (!layoutDirty && !hasElementWithLayoutDirty()) {
 		return;
 	}
 
-	renderState = state;
+	layoutDirty = false;
+	layoutWidth = width();
 
-	auto aTextLines = iV_FormatText(state.string.toUtf8().c_str(), state.width, FTEXT_LEFTJUSTIFY, font, false);
-
-	int requiredHeight = 0;
-	if (!aTextLines.empty())
+	for (auto &element: elements)
 	{
-		requiredHeight = aTextLines.back().offset.y + iV_GetTextLineSize(font);
+		element->destroyFragments(*this);
 	}
 
-	auto textWidth = 0;
-	resizeLines(aTextLines.size());
-	auto lineIt = lines.begin();
-	for (const auto& line : aTextLines)
+	auto nextLineOffset = 0;
+	for (const auto& line : calculateLinesLayout())
 	{
-		textWidth = std::max(textWidth, line.dimensions.x);
-		(*lineIt)->setText(line.text);
-		lineIt++;
+		std::vector<WIDGET *> lineFragments;
+		auto aboveBase = 0;
+		auto belowBase = 0;
+		for (auto fragmentDescriptor: line)
+		{
+			auto fragment = elements[fragmentDescriptor.elementId]->createFragmentWidget(*this, fragmentDescriptor);
+			auto fragmentAboveBase = -elements[fragmentDescriptor.elementId]->getAboveBase();
+			aboveBase = std::max(aboveBase, fragmentAboveBase);
+			belowBase = std::max(belowBase, fragment->height() - fragmentAboveBase);
+			fragment->setGeometry(fragmentDescriptor.offset, nextLineOffset - fragmentAboveBase, fragment->width(), fragment->height());
+			lineFragments.push_back(fragment);
+		}
+
+		for (auto fragment: lineFragments)
+		{
+			fragment->setGeometry(fragment->x(), fragment->y() + aboveBase, fragment->width(), fragment->height());
+		}
+
+		nextLineOffset += aboveBase + belowBase;
 	}
 
-	auto currentTop = 0;
-	for (const auto& line : lines)
-	{
-		line->setGeometry(0, currentTop, line->width(), line->height());
-		currentTop += line->height();
-	}
-
-	setGeometry(x(), y(), state.width, requiredHeight);
+	setGeometry(x(), y(), width(), nextLineOffset);
 }
 
-void Paragraph::resizeLines(size_t size)
+std::vector<std::vector<FlowLayoutFragment>> Paragraph::calculateLinesLayout()
 {
-	while (lines.size() > size)
+    FlowLayout flowLayout(width());
+	for (auto &element: elements)
 	{
-		auto last = lines.back();
-		lines.pop_back();
-		detach(last);
-		delete last;
+		element->appendTo(flowLayout);
 	}
+	flowLayout.end();
 
-	while (lines.size() < size)
-	{
-		lines.push_back(new ParagraphLine(this));
-	}
+	return flowLayout.getLines();
+}
+
+void Paragraph::addText(std::string const &text)
+{
+	layoutDirty = true;
+	elements.push_back(std::unique_ptr<ParagraphTextElement>(new ParagraphTextElement(text, textStyle)));
+}
+
+void Paragraph::addWidget(WIDGET *widget, int32_t aboveBase)
+{
+	layoutDirty = true;
+	attach(widget);
+	elements.push_back(std::unique_ptr<ParagraphWidgetElement>(new ParagraphWidgetElement(widget, aboveBase)));
 }
 
 void Paragraph::geometryChanged()
 {
-	state.width = width();
+	if (layoutWidth != width())
+	{
+		layoutDirty = true;
+	}
+
 	updateLayout();
 }
 

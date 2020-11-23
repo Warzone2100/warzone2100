@@ -20,56 +20,106 @@
 #ifndef __INCLUDED_LIB_WIDGET_PARAGRAPH_H__
 #define __INCLUDED_LIB_WIDGET_PARAGRAPH_H__
 
+#include <string>
+#include "lib/ivis_opengl/textdraw.h"
+#include "lib/gamelib/gtime.h"
 #include "widget.h"
 #include "widgbase.h"
-#include "lib/ivis_opengl/textdraw.h"
-#include <string>
 
-struct ParagraphState {
-	int width = 0;
-	WzString string;
+struct ParagraphElement;
 
-	inline bool operator==(ParagraphState const & other) const
-	{
-		return width == other.width && string == other.string;
-	}
+struct ParagraphTextStyle
+{
+	iV_fonts font = font_regular;
+	PIELIGHT shadeColour = {0, 0, 0, 0};
+	PIELIGHT fontColour = WZCOL_BLACK;
 };
 
-class ParagraphLine;
+class WzCachedText
+{
+public:
+	WzCachedText(std::string text, iV_fonts font, uint32_t cacheDurationMs = 100):
+		text(text),
+		font(font),
+		cacheDurationMs(cacheDurationMs)
+	{}
+
+	void tick()
+	{
+		if (cachedText && cacheExpireAt < realTime)
+		{
+			cachedText = nullptr;
+		}
+	}
+
+	WzText *operator ->()
+	{
+		if (!cachedText)
+		{
+			cachedText = std::unique_ptr<WzText>(new WzText(text, font));
+		}
+
+		cacheExpireAt = realTime + (cacheDurationMs * GAME_TICKS_PER_SEC) / 1000;
+		return cachedText.get();
+	}
+
+private:
+	std::string text;
+	iV_fonts font;
+	uint32_t cacheDurationMs;
+	std::unique_ptr<WzText> cachedText = nullptr;
+	uint32_t cacheExpireAt = 0;
+};
+
+struct FlowLayoutFragment
+{
+    size_t elementId;
+    size_t begin;
+    size_t length;
+    unsigned int width;
+    unsigned int offset;
+};
+
 class Paragraph : public WIDGET
 {
 public:
 	Paragraph(W_INIT const *init);
 
-	WzString getString() const override
-	{
-		return state.string;
-	}
+	void addText(std::string const &text);
+	void addWidget(WIDGET *widget, int32_t aboveBase);
 
-	void setString(WzString newString) override
+	void setFont(iV_fonts font)
 	{
-		state.string = newString;
+		textStyle.font = font;
 	}
 
 	void setFontColour(PIELIGHT colour)
 	{
-		fontColour = colour;
+		textStyle.fontColour = colour;
+	}
+
+	void setShadeColour(PIELIGHT colour)
+	{
+		textStyle.shadeColour = colour;
+	}
+
+	ParagraphTextStyle const &getTextStyle() const
+	{
+		return textStyle;
 	}
 
 	void geometryChanged() override;
 	void displayRecursive(WidgetGraphicsContext const &context) override;
 
 private:
-	iV_fonts font = font_regular;
-	PIELIGHT fontColour = WZCOL_WHITE;
-	std::vector<ParagraphLine *> lines;
-	ParagraphState state;
-	ParagraphState renderState;
+	std::vector<std::unique_ptr<ParagraphElement>> elements;
+	bool layoutDirty = true;
+	uint32_t layoutWidth = 0;
+	ParagraphTextStyle textStyle;
 
+	bool hasElementWithLayoutDirty() const;
 	void updateLayout();
-	void resizeLines(size_t size);
-
-	friend class ParagraphLine;
+	std::vector<std::vector<FlowLayoutFragment>> calculateLinesLayout();
 };
 
 #endif // __INCLUDED_LIB_WIDGET_PARAGRAPH_H__

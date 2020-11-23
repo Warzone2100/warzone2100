@@ -191,7 +191,12 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	callCalcLayout();
 }
 
-WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
+WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type): WIDGET(type)
+{
+	parent->attach(this);
+}
+
+WIDGET::WIDGET(WIDGET_TYPE type)
 	: id(0xFFFFEEEEu)
 	, type(type)
 	, style(0)
@@ -207,7 +212,6 @@ WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type)
 	, dim(0, 0, 1, 1)
 	, dirty(true)
 {
-	parent->attach(this);
 }
 
 WIDGET::~WIDGET()
