@@ -51,6 +51,7 @@ public:
 	void setPadding(Padding const &rect);
 	void setSnapOffset(bool value);
 	void setBackgroundColor(PIELIGHT const &color);
+	void setItemSpacing(uint32_t value);
 	uint32_t calculateListViewHeight() const;
 	uint32_t calculateListViewWidth() const;
 	void display(int xOffset, int yOffset) override;
@@ -62,13 +63,14 @@ protected:
 private:
 	ScrollBarWidget *scrollBar;
 	ClipRectWidget *listView;
-	uint16_t scrollableHeight = 0;
+	uint32_t scrollableHeight = 0;
 	bool snapOffset = true;
 	bool layoutDirty = false;
 	Padding padding = {0, 0, 0, 0};
 	PIELIGHT backgroundColor;
+	uint32_t itemSpacing = 0;
 
-	uint16_t snappedOffset();
+	uint32_t snappedOffset();
 	void updateLayout();
 	void resizeChildren(uint32_t width);
 };
