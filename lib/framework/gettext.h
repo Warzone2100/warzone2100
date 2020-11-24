@@ -88,6 +88,13 @@
 # define bind_textdomain_codeset(Domainname, Codeset) \
 	((void) (Domainname), (const char *) (Codeset))
 
+# if LIBINTL_VERSION >= 0x001500 // gettext 0.21+
+#  if defined(_WIN32) && !defined(__CYGWIN__)
+#    define wbindtextdomain(Domainname, Dirname) \
+#      ((void) (Domainname), (const wchar_t *) (Dirname))
+#  endif
+# endif
+
 #endif
 
 /* A pseudo function call that serves as a marker for the automated
