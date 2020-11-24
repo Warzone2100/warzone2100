@@ -31,7 +31,7 @@ struct ParagraphElement;
 struct ParagraphTextStyle
 {
 	iV_fonts font = font_regular;
-	PIELIGHT shadeColour = {0, 0, 0, 0};
+	PIELIGHT shadeColour = pal_RGBA(0, 0, 0, 0);
 	PIELIGHT fontColour = WZCOL_BLACK;
 };
 
