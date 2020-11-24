@@ -80,14 +80,14 @@ static void NETauto(PLAYERSTATS::Autorating &ar)
 PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 {
 	try {
-		dummy = (bool)json["dummy"];
-		star[0] = (int)json["star"][0];
-		star[1] = (int)json["star"][1];
-		star[2] = (int)json["star"][2];
-		medal = (int)json["medal"];
-		level = (int)json["level"];
-		elo = (std::string)json["elo"];
-		autohoster = (bool)json["autohoster"];
+		dummy = json["dummy"].get<bool>();
+		star[0] = json["star"][0].get<uint8_t>();
+		star[1] = json["star"][1].get<uint8_t>();
+		star[2] = json["star"][2].get<uint8_t>();
+		medal = json["medal"].get<uint8_t>();
+		level = json["level"].get<uint8_t>();
+		elo = json["elo"].get<std::string>();
+		autohoster = json["autohoster"].get<bool>();
 		valid = true;
 	} catch (const std::exception &e) {
 		debug(LOG_WARNING, "Error parsing rating JSON: %s", e.what());
