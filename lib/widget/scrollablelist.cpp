@@ -53,11 +53,11 @@ void ScrollableListWidget::run(W_CONTEXT *psContext)
  *
  * This wouldn't be necessary if it were possible to clip the rendering.
  */
-uint16_t ScrollableListWidget::snappedOffset()
+uint32_t ScrollableListWidget::snappedOffset()
 {
 	for (auto child : listView->children())
 	{
-		if (child->y() + child->height() / 2 > scrollBar->position())
+		if (child->y() >= scrollBar->position())
 		{
 			return child->y();
 		}
@@ -101,10 +101,12 @@ void ScrollableListWidget::updateLayout()
 void ScrollableListWidget::resizeChildren(uint32_t width)
 {
 	scrollableHeight = 0;
+	auto nextOffset = 0;
 	for (auto child : listView->children())
 	{
-		child->setGeometry(0, scrollableHeight, width, child->height());
-		scrollableHeight += child->height();
+		child->setGeometry(0, nextOffset, width, child->height());
+		scrollableHeight = nextOffset + child->height();
+		nextOffset = scrollableHeight + itemSpacing;
 	}
 }
 
@@ -153,6 +155,11 @@ void ScrollableListWidget::setBackgroundColor(PIELIGHT const &color)
 void ScrollableListWidget::setSnapOffset(bool value)
 {
 	snapOffset = value;
+}
+
+void ScrollableListWidget::setItemSpacing(uint32_t value)
+{
+	itemSpacing = value;
 }
 
 void ScrollableListWidget::display(int xOffset, int yOffset)
