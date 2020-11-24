@@ -19,6 +19,7 @@
 #include "frame.h"
 
 #include <sstream>
+#include <vector>
 
 #include <locale.h>
 #include <physfs.h>
@@ -416,10 +417,69 @@ void setNextLanguage(bool prev)
 	}
 }
 
+std::string wzBindTextDomain(const char *domainname, const char *dirname)
+{
+#if (LIBINTL_VERSION >= 0x001500) && defined(_WIN32) && !defined(__CYGWIN__)
+	// gettext 0.21+ provides a wbindtextdomain function on native Windows platforms
+	// that properly supports Unicode paths
+
+	// convert the dirname from UTF-8 to UTF-16
+	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, dirname, -1, NULL, 0);
+	if (wstr_len <= 0)
+	{
+		DWORD dwError = GetLastError();
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", dwError, dirname);
+		return std::string();
+	}
+	auto wstr_dirname = std::vector<wchar_t>(wstr_len, L'\0');
+	if (MultiByteToWideChar(CP_UTF8, 0, dirname, -1, &wstr_dirname[0], wstr_len) == 0)
+	{
+		DWORD dwError = GetLastError();
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", dwError, dirname);
+		return std::string();
+	}
+
+	// and call wbindtextdomain
+	wchar_t *pResult = wbindtextdomain(domainname, wstr_dirname.data());
+	if (!pResult)
+	{
+		debug(LOG_ERROR, "wbindtextdomain failed");
+		return std::string();
+	}
+
+	// convert the result back to UTF-8
+	std::vector<char> utf8Buffer;
+	int utf8Len = WideCharToMultiByte(CP_UTF8, 0, pResult, -1, NULL, 0, NULL, NULL);
+	if ( utf8Len <= 0 )
+	{
+		// Encoding conversion error
+		DWORD dwError = GetLastError();
+		debug(LOG_ERROR, "Could not not convert string to UTF-8; WideCharToMultiByte failed with error %d\n", dwError);
+		return std::string();
+	}
+	utf8Buffer.resize(utf8Len, 0);
+	if ( (utf8Len = WideCharToMultiByte(CP_UTF8, 0, pResult, -1, &utf8Buffer[0], utf8Len, NULL, NULL)) <= 0 )
+	{
+		// Encoding conversion error
+		DWORD dwError = GetLastError();
+		debug(LOG_ERROR, "Could not not convert string to UTF-8; WideCharToMultiByte[2] failed with error %d\n", dwError);
+		return std::string();
+	}
+	return std::string(utf8Buffer.data(), utf8Len - 1);
+#else
+	// call the normal bindtextdomain function
+	char * pResult = bindtextdomain(domainname, dirname);
+	if (!pResult)
+	{
+		return std::string();
+	}
+	return std::string(pResult);
+#endif
+}
 
 void initI18n()
 {
-	const char *textdomainDirectory = nullptr;
+	std::string textdomainDirectory;
 
 	if (!setLanguage("")) // set to system default
 	{
@@ -433,7 +493,7 @@ void initI18n()
 		if (CFURLGetFileSystemRepresentation(resourceURL, true, (UInt8 *) resourcePath, PATH_MAX))
 		{
 			sstrcat(resourcePath, "/locale");
-			textdomainDirectory = bindtextdomain(PACKAGE, resourcePath);
+			textdomainDirectory = wzBindTextDomain(PACKAGE, resourcePath);
 		}
 		else
 		{
@@ -455,17 +515,17 @@ void initI18n()
 	const std::string prefixDir = getWZInstallPrefix();
 	const std::string dirSeparator(PHYSFS_getDirSeparator());
 	std::string localeDir = prefixDir + dirSeparator + WZ_LOCALEDIR;
-	textdomainDirectory = bindtextdomain(PACKAGE, localeDir.c_str());
+	textdomainDirectory = wzBindTextDomain(PACKAGE, localeDir.c_str());
 	#else
 	// Treat WZ_LOCALEDIR as an absolute path, and use directly
-	textdomainDirectory = bindtextdomain(PACKAGE, WZ_LOCALEDIR);
+	textdomainDirectory = wzBindTextDomain(PACKAGE, WZ_LOCALEDIR);
 	#endif
 # else
 	// Old locale-dir setup (autotools)
-	textdomainDirectory = bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomainDirectory = wzBindTextDomain(PACKAGE, LOCALEDIR);
 # endif
 #endif // ifdef WZ_OS_MAC
-	if (!textdomainDirectory)
+	if (textdomainDirectory.empty())
 	{
 		debug(LOG_ERROR, "initI18n: bindtextdomain failed!");
 	}
