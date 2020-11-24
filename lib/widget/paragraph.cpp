@@ -30,8 +30,8 @@ class FlowLayoutElementDescriptor
 {
 public:
     virtual ~FlowLayoutElementDescriptor() = default;
-    virtual unsigned int getWidth(size_t position, unsigned int length) const = 0;
-    virtual unsigned int size() const = 0;
+    virtual unsigned int getWidth(size_t position, size_t length) const = 0;
+    virtual size_t size() const = 0;
     virtual bool isWhitespace(size_t position) const = 0;
     virtual bool isLineBreak(size_t position) const = 0;
 
@@ -280,12 +280,12 @@ class FlowLayoutStringDescriptor : public FlowLayoutElementDescriptor
 public:
     FlowLayoutStringDescriptor(WzString const &newText, iV_fonts newFont): text(newText), textUtf32(newText.toUtf32()), font(newFont) {}
 
-    unsigned int getWidth(size_t position, unsigned int length) const
+    unsigned int getWidth(size_t position, size_t length) const
     {
         return iV_GetTextWidth(text.substr(position, length).toUtf8().c_str(), font);
     }
 
-    unsigned int size() const
+    size_t size() const
     {
         return textUtf32.size();
     }
@@ -361,12 +361,12 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 	{
 	}
 
-    unsigned int getWidth(size_t position, unsigned int length) const override
+    unsigned int getWidth(size_t position, size_t length) const override
     {
         return position == 0 ? widget->width() : 0;
     }
 
-    unsigned int size() const override
+    size_t size() const override
     {
         return 1;
     }
