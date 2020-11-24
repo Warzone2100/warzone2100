@@ -20,8 +20,11 @@
 #ifndef __INCLUDED_SRC_TIME_H__
 #define __INCLUDED_SRC_TIME_H__
 
-#include <ctime>
-
-struct tm getTimeInfo();
+/**
+ * Examples of formats:
+ * - "%H:%M:%S"
+ * - "%Y-%m-%d"
+ **/
+std::string const formatLocalDateTime(char const *format);
 
 #endif // __INCLUDED_SRC_TIME_H__
