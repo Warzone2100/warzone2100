@@ -2500,9 +2500,10 @@ ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(
 	id = MULTIOP_CHATBOX;
 
 	messages = new ScrollableListWidget(this);
-	messages->setSnapOffset(false);
+	messages->setSnapOffset(true);
 	messages->setStickToBottom(true);
 	messages->setPadding({3, 4, 3, 4});
+	messages->setItemSpacing(1);
 
 	handleConsoleMessage = std::make_shared<CONSOLE_MESSAGE_LISTENER>([&](ConsoleMessage const &message) -> void
 	{
@@ -2540,11 +2541,12 @@ public:
 
 	void display(int xOffset, int yOffset) override
 	{
-		auto x0 = xOffset + x();
-		auto y0 = yOffset + y();
-		auto textX = x0 + horizontalPadding;
-		auto textY = y0 - cachedText->aboveBase();
-		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height() - 1, pal_GetTeamColour((*player)->colour));
+		auto left = xOffset + x();
+		auto top = yOffset + y();
+		auto marginLeft = left + leftMargin;
+		auto textX = marginLeft + horizontalPadding;
+		auto textY = top - cachedText->aboveBase();
+		pie_UniTransBoxFill(marginLeft, top, left + width(), top + height(), pal_GetTeamColour((*player)->colour));
 		for (int32_t i = -1; i <= 1; i++)
 		{
 			for (int32_t j = -1; j <= 1; j++)
@@ -2570,12 +2572,13 @@ private:
 	std::string layoutName;
 	WzCachedText cachedText;
 	int32_t horizontalPadding = 3;
+	int32_t leftMargin = 3;
 
 	void updateLayout()
 	{
 		layoutName = (*player)->name;
 		cachedText = WzCachedText(layoutName, font);
-		setGeometry(x(), y(), cachedText->width() + 2 * horizontalPadding, cachedText->lineSize() + 2);
+		setGeometry(x(), y(), cachedText->width() + leftMargin + 2 * horizontalPadding, cachedText->lineSize());
 	}
 };
 
