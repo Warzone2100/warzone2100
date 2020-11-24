@@ -21,10 +21,14 @@
 #include <iomanip>
 #include <sstream>
 
+std::string const formatLocalDateTime(char const *format, std::time_t const &time)
+{
+	std::stringstream ss;
+	ss << std::put_time(std::localtime(&time), format);
+	return ss.str();
+}
+
 std::string const formatLocalDateTime(char const *format)
 {
-	std::time_t currentTime = std::time(nullptr);
-	std::stringstream ss;
-	ss << std::put_time(std::localtime(&currentTime), format);
-	return ss.str();
+	return formatLocalDateTime(format, std::time(nullptr));
 }
