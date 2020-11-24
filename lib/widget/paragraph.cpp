@@ -446,6 +446,7 @@ void Paragraph::updateLayout()
 	}
 
 	auto nextLineOffset = 0;
+	auto totalHeight = 0;
 	for (const auto& line : calculateLinesLayout())
 	{
 		std::vector<WIDGET *> lineFragments;
@@ -466,10 +467,11 @@ void Paragraph::updateLayout()
 			fragment->setGeometry(fragment->x(), fragment->y() + aboveBase, fragment->width(), fragment->height());
 		}
 
-		nextLineOffset += aboveBase + belowBase;
+		totalHeight = nextLineOffset + aboveBase + belowBase;
+		nextLineOffset = totalHeight + lineSpacing;
 	}
 
-	setGeometry(x(), y(), width(), nextLineOffset);
+	setGeometry(x(), y(), width(), totalHeight);
 }
 
 std::vector<std::vector<FlowLayoutFragment>> Paragraph::calculateLinesLayout()

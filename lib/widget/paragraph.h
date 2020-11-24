@@ -103,6 +103,12 @@ public:
 		textStyle.shadeColour = colour;
 	}
 
+	void setLineSpacing(uint32_t newLineSpacing)
+	{
+		lineSpacing = newLineSpacing;
+		layoutDirty = true;
+	}
+
 	ParagraphTextStyle const &getTextStyle() const
 	{
 		return textStyle;
@@ -116,6 +122,7 @@ private:
 	bool layoutDirty = true;
 	uint32_t layoutWidth = 0;
 	ParagraphTextStyle textStyle;
+	uint32_t lineSpacing = 0;
 
 	bool hasElementWithLayoutDirty() const;
 	void updateLayout();
