@@ -17,19 +17,14 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "lib/framework/wzconfig.h"
-#include "wztime.h"
+#include <ctime>
+#include <iomanip>
+#include <sstream>
 
-struct tm getTimeInfo()
+std::string const formatLocalDateTime(char const *format)
 {
-	time_t current_time;
-	time(&current_time);
-	struct tm time_info;
-#if defined(WZ_OS_WIN)
-	gmtime_s(&time_info, &current_time);
-#else
-	gmtime_r(&current_time, &time_info);
-#endif
-
-	return time_info;
+	std::time_t currentTime = std::time(nullptr);
+	std::stringstream ss;
+	ss << std::put_time(std::localtime(&currentTime), format);
+	return ss.str();
 }

@@ -2596,11 +2596,9 @@ void ChatBoxWidget::addMessage(int32_t sender, const char *text)
 		message->addText(text);
 		break;
 	default:
-		auto timeInfo = getTimeInfo();
-
 		message->setFont(font_small);
 		message->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
-		message->addText(astringf("%02d:%02d ", timeInfo.tm_hour, timeInfo.tm_min));
+		message->addText(formatLocalDateTime("%H:%M"));
 
 		message->addWidget(new ChatBoxPlayerNameWidget(NetPlay.playerReferences[sender]), iV_GetTextAboveBase(font_regular));
 

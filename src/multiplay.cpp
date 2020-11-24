@@ -1188,8 +1188,7 @@ void printInGameTextMessage(NetworkTextMessage const &message)
 
 	default:
 		char formatted[MAX_CONSOLE_STRING_LENGTH];
-		struct tm time_info = getTimeInfo();
-		ssprintf(formatted, "[%02d:%02d] %s", time_info.tm_hour, time_info.tm_min, message.text);
+		ssprintf(formatted, "[%s] %s", formatLocalDateTime("%H:%M").c_str(), message.text);
 		addConsoleMessage(formatted, DEFAULT_JUSTIFY, message.sender, message.teamSpecific);
 		break;
 	}
