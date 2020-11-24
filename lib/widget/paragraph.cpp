@@ -328,12 +328,12 @@ struct ParagraphTextElement: public ParagraphElement
 		return widget;
 	}
 
-	bool isLayoutDirty() const
+	bool isLayoutDirty() const override
 	{
 		return false;
 	}
 
-	void destroyFragments(Paragraph &paragraph)
+	void destroyFragments(Paragraph &paragraph) override
 	{
 		for (auto fragment: fragments)
 		{
@@ -361,22 +361,22 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 	{
 	}
 
-    unsigned int getWidth(size_t position, unsigned int length) const
+    unsigned int getWidth(size_t position, unsigned int length) const override
     {
         return position == 0 ? widget->width() : 0;
     }
 
-    unsigned int size() const
+    unsigned int size() const override
     {
         return 1;
     }
 
-    bool isWhitespace(size_t position) const
+    bool isWhitespace(size_t position) const override
     {
 		return false;
     }
 
-    bool isLineBreak(size_t position) const
+    bool isLineBreak(size_t position) const override
     {
         return false;
     }
@@ -393,11 +393,11 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 		return widget;
 	}
 
-	void destroyFragments(Paragraph &paragraph)
+	void destroyFragments(Paragraph &paragraph) override
 	{
 	}
 
-	bool isLayoutDirty() const
+	bool isLayoutDirty() const override
 	{
 		return widget->width() != layoutWidth || widget->height() != layoutHeight;
 	}
