@@ -162,11 +162,13 @@ struct RoomMessage
 {
 	int32_t sender;
 	std::string text;
+	std::time_t time;
 
-	RoomMessage(int32_t messageSender, std::string messageText)
+	RoomMessage(int32_t messageSender, std::string messageText, std::time_t messageTime)
 	{
 		sender = messageSender;
 		text = messageText;
+		time = messageTime;
 	}
 };
 
@@ -284,6 +286,7 @@ private:
 	ScrollableListWidget *messages;
 	W_EDITBOX *editBox;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
+	void displayMessage(RoomMessage const &message);
 
 	static std::vector<RoomMessage> persistentMessageLocalStorage;
 };
@@ -2584,37 +2587,8 @@ private:
 
 void ChatBoxWidget::addMessage(int32_t sender, const char *text)
 {
-	W_INIT messageInit;
-	messageInit.width = messages->calculateListViewWidth();
-	auto message = new Paragraph(&messageInit);
-
-	switch (sender)
-	{
-	case SYSTEM_MESSAGE:
-		message->setFontColour(WZCOL_CONS_TEXT_SYSTEM);
-		message->addText(text);
-		break;
-	case NOTIFY_MESSAGE:
-		message->setFontColour(WZCOL_YELLOW);
-		message->addText(text);
-		break;
-	default:
-		message->setFont(font_small);
-		message->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
-		message->addText(formatLocalDateTime("%H:%M"));
-
-		message->addWidget(new ChatBoxPlayerNameWidget(NetPlay.playerReferences[sender]), iV_GetTextAboveBase(font_regular));
-
-		message->setFont(font_regular);
-		message->setShadeColour({0, 0, 0, 0});
-		message->setFontColour(WZCOL_WHITE);
-		message->addText(astringf(" %s", text));
-
-		break;
-	}
-
-	messages->addItem(message);
-	ChatBoxWidget::persistentMessageLocalStorage.emplace_back(sender, text);
+	ChatBoxWidget::persistentMessageLocalStorage.emplace_back(sender, text, std::time(nullptr));
+	displayMessage(ChatBoxWidget::persistentMessageLocalStorage.back());
 }
 
 void ChatBoxWidget::geometryChanged()
@@ -2630,11 +2604,45 @@ void ChatBoxWidget::initializeMessages(bool preserveOldChat)
 	{
 		for (auto message: ChatBoxWidget::persistentMessageLocalStorage)
 		{
-			addMessage(message.sender, message.text.c_str());
+			displayMessage(message);
 		}
 	} else {
 		ChatBoxWidget::persistentMessageLocalStorage.clear();
 	}
+}
+
+void ChatBoxWidget::displayMessage(RoomMessage const &message)
+{
+	W_INIT paragraphInit;
+	paragraphInit.width = messages->calculateListViewWidth();
+	auto paragraph = new Paragraph(&paragraphInit);
+
+	switch (message.sender)
+	{
+	case SYSTEM_MESSAGE:
+		paragraph->setFontColour(WZCOL_CONS_TEXT_SYSTEM);
+		paragraph->addText(message.text);
+		break;
+	case NOTIFY_MESSAGE:
+		paragraph->setFontColour(WZCOL_YELLOW);
+		paragraph->addText(message.text);
+		break;
+	default:
+		paragraph->setFont(font_small);
+		paragraph->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
+		paragraph->addText(formatLocalDateTime("%H:%M", message.time));
+
+		paragraph->addWidget(new ChatBoxPlayerNameWidget(NetPlay.playerReferences[message.sender]), iV_GetTextAboveBase(font_regular));
+
+		paragraph->setFont(font_regular);
+		paragraph->setShadeColour({0, 0, 0, 0});
+		paragraph->setFontColour(WZCOL_WHITE);
+		paragraph->addText(astringf(" %s", message.text.c_str()));
+
+		break;
+	}
+
+	messages->addItem(paragraph);
 }
 
 static void addChatBox(bool preserveOldChat)
