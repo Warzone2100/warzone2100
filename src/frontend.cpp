@@ -2068,7 +2068,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 // common widgets.
 
-void addBackdrop()
+W_FORM *addBackdrop(W_SCREEN *screen)
 {
 	W_FORMINIT sFormInit;                              // Backdrop
 	sFormInit.formID = 0;
@@ -2087,7 +2087,8 @@ void addBackdrop()
 		delete ((TitleBitmapCache *)psWidget->pUserData);
 		psWidget->pUserData = nullptr;
 	};
-	widgAddForm(psWScreen, &sFormInit);
+
+	return widgAddForm(screen ? screen : psWScreen, &sFormInit);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -71,7 +71,7 @@ void runContinue();
 
 void addTopForm(bool wide);
 void addBottomForm();
-void addBackdrop();
+W_FORM *addBackdrop(W_SCREEN *screen = nullptr);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
 void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);

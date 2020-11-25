@@ -4210,26 +4210,27 @@ static void printHostHelpMessagesToConsole()
 	displayRoomNotifyMessage(buf);
 }
 
+void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget, unsigned int, unsigned int, unsigned int newScreenWidth, unsigned int newScreenHeight)
+{
+	auto height = newScreenHeight - 80;
+	CLIP(height, HIDDEN_FRONTEND_HEIGHT, HIDDEN_FRONTEND_WIDTH);
+
+	psWidget->setGeometry(
+		((newScreenWidth - HIDDEN_FRONTEND_WIDTH) / 2),
+		((newScreenHeight - height) / 2),
+		HIDDEN_FRONTEND_WIDTH - 1,
+		height
+	);
+}
+
 void WzMultiplayerOptionsTitleUI::start()
 {
 	const bool bReenter = performedFirstStart;
 	performedFirstStart = true;
 	netPlayersUpdated = true;
 
-	addBackdrop();
+	addBackdrop()->setCalcLayout(calcBackdropLayoutForMultiplayerOptionsTitleUI);
 	addTopForm(true);
-
-	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		auto height = pie_GetVideoBufferHeight() - 80;
-		CLIP(height, HIDDEN_FRONTEND_HEIGHT, HIDDEN_FRONTEND_WIDTH);
-
-		psWidget->setGeometry(
-			((pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2),
-			((pie_GetVideoBufferHeight() - height) / 2),
-			HIDDEN_FRONTEND_WIDTH - 1,
-			height
-		);
-	}));
 
 	if (getLobbyError() != ERROR_INVALID)
 	{
