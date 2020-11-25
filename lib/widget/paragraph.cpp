@@ -123,19 +123,19 @@ private:
                 fragmentFits = end;
             }
 
-            auto fragmentEnd = fragmentFits + 1;
-            while ((fragmentEnd >= elementDescriptor.size() || !elementDescriptor.isWhitespace(fragmentEnd - 1)) && fragmentEnd > current)
+            auto whitespacePosition = fragmentFits + 1;
+            while ((whitespacePosition >= elementDescriptor.size() || !elementDescriptor.isWhitespace(whitespacePosition - 1)) && whitespacePosition > current)
             {
-                fragmentEnd--;
+                whitespacePosition--;
             }
 
-            if (fragmentEnd > current)
+            if (whitespacePosition > current)
             // the fragment ending with a whitespace fits within the line
             {
-                pushFragment(elementDescriptor, current, fragmentEnd - 1);
+                pushFragment(elementDescriptor, current, whitespacePosition - 1);
                 endWord();
-                nextOffset += elementDescriptor.getWidth(fragmentEnd - 1, 1);
-                current = fragmentEnd;
+                nextOffset += elementDescriptor.getWidth(whitespacePosition - 1, 1);
+                current = whitespacePosition;
             }
             else if (fragmentFits == end)
             // the fragment is a single word, and fits in the line,
@@ -152,9 +152,9 @@ private:
             else
             // word doesn't fit in an empty line
             {
-                auto end = std::max((size_t)fragmentFits, current + 1);
-                pushFragment(elementDescriptor, current, end);
-                current = end;
+                auto fragmentEnd = std::max((size_t)fragmentFits, current + 1);
+                pushFragment(elementDescriptor, current, fragmentEnd);
+                current = fragmentEnd;
                 breakLine();
             }
         }
