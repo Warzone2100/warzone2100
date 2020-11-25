@@ -52,9 +52,9 @@ jobs:
 - template: .ci/azure/templates/macos-build-pipeline-template.yml
   parameters:
     name: macOS_Xcode_11
-    displayName: 'macOS [Xcode 11.5, macOS 10.15 SDK]'  # friendly name to display in the UI
+    displayName: 'macOS [Xcode 11.7, macOS 10.15 SDK]'  # friendly name to display in the UI
     vmImage: 'macOS-10.15'
-    xcodeDeveloperDir: '/Applications/Xcode_11.5.app/Contents/Developer'
+    xcodeDeveloperDir: '/Applications/Xcode_11.7.app/Contents/Developer'
     publishArtifact: false
 - template: .ci/azure/templates/macos-build-pipeline-template.yml
   parameters:
