@@ -25,7 +25,7 @@
  * - "%H:%M:%S"
  * - "%Y-%m-%d"
  **/
-std::string const formatLocalDateTime(char const *format, std::time_t const &time);
+std::string const formatLocalDateTime(char const *format, std::time_t const &timer);
 std::string const formatLocalDateTime(char const *format);
 
 #endif // __INCLUDED_SRC_TIME_H__

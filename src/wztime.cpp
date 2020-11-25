@@ -18,13 +18,26 @@
 */
 
 #include <ctime>
+#include <time.h>
 #include <iomanip>
 #include <sstream>
 
-std::string const formatLocalDateTime(char const *format, std::time_t const &time)
+static tm getLocalTime(std::time_t const &timer)
+{
+	struct tm timeinfo = {};
+#if defined(WZ_OS_WIN)
+	localtime_s(&timeinfo, &timer);
+#else
+	localtime_r(&timer, &timeinfo);
+#endif
+	return timeinfo;
+}
+
+std::string const formatLocalDateTime(char const *format, std::time_t const &timer)
 {
 	std::stringstream ss;
-	ss << std::put_time(std::localtime(&time), format);
+	auto timeinfo = getLocalTime(timer);
+	ss << std::put_time(&timeinfo, format);
 	return ss.str();
 }
 
