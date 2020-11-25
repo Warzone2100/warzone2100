@@ -93,6 +93,7 @@ public:
 
 // WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
+void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int);
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called

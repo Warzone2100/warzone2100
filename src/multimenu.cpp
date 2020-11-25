@@ -415,13 +415,14 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 	psRScreen = new W_SCREEN; ///< move this to intinit or somewhere like that.. (close too.)
 
-	WIDGET *parent = psRScreen->psForm;
+	auto backdrop = addBackdrop(psRScreen);
+	backdrop->setCalcLayout(calcBackdropLayoutForMultiplayerOptionsTitleUI);
 
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *requestForm = new IntFormAnimated(parent);
+	IntFormAnimated *requestForm = new IntFormAnimated(backdrop);
 	requestForm->id = M_REQUEST;
 	requestForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(M_REQUEST_X + D_W, M_REQUEST_Y + D_H, M_REQUEST_W, M_REQUEST_H);
+		psWidget->setGeometry(M_REQUEST_X, M_REQUEST_Y, M_REQUEST_W, M_REQUEST_H);
 	}));
 
 	// Add the close button.
