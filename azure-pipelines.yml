@@ -17,16 +17,17 @@ jobs:
     name: macOS_Xcode_9_4_1
     displayName: 'macOS [Xcode 9.4.1, macOS 10.13 SDK]'  # friendly name to display in the UI
     vmImage: 'macOS-10.14'
-    xcodeDeveloperDir: '/Applications/Xcode_9.4.1.app'
-    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app'
+    xcodeDeveloperDir: '/Applications/Xcode_9.4.1.app/Contents/Developer'
+    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
+    vcpkgInstallXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
     publishArtifact: false
 - template: .ci/azure/templates/macos-build-pipeline-template.yml
   parameters:
     name: macOS_Xcode_10_3_novideos
     displayName: 'macOS [Xcode 10.3, macOS 10.14 SDK] - no videos'  # friendly name to display in the UI
     vmImage: 'macOS-10.14'
-    xcodeDeveloperDir: '/Applications/Xcode_10.3.app' # Set default Xcode to Xcode 10.3 on macOS 10.14
-    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app'
+    xcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer' # Set default Xcode to Xcode 10.3 on macOS 10.14
+    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
     includeVideos: false
     publishArtifact: true
     artifact: 'warzone2100_macOS_novideos'
@@ -39,8 +40,8 @@ jobs:
     name: macOS_Xcode_10_3
     displayName: 'macOS [Xcode 10.3, macOS 10.14 SDK] - full'  # friendly name to display in the UI
     vmImage: 'macOS-10.14'
-    xcodeDeveloperDir: '/Applications/Xcode_10.3.app' # Set default Xcode to Xcode 10.3 on macOS 10.14
-    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app'
+    xcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer' # Set default Xcode to Xcode 10.3 on macOS 10.14
+    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
     includeVideos: true
     publishArtifact: true
     artifact: 'warzone2100_macOS'
@@ -53,7 +54,7 @@ jobs:
     name: macOS_Xcode_11
     displayName: 'macOS [Xcode 11.5, macOS 10.15 SDK]'  # friendly name to display in the UI
     vmImage: 'macOS-10.15'
-    xcodeDeveloperDir: '/Applications/Xcode_11.5.app'
+    xcodeDeveloperDir: '/Applications/Xcode_11.5.app/Contents/Developer'
     publishArtifact: false
 - template: .ci/azure/templates/macos-build-pipeline-template.yml
   parameters:
