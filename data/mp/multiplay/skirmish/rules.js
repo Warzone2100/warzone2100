@@ -253,6 +253,93 @@ function setupGame()
 	mainReticule = true;
 }
 
+function initialCleanup(player)
+{
+	var structs = enumStruct(player);
+
+	for (var i = 0, len = structs.length; i < len; ++i)
+	{
+		var s = structs[i];
+
+		if (baseType === CAMP_CLEAN)
+		{
+			if (playerData[player].difficulty !== INSANE ||
+				(s.stattype !== WALL &&
+				s.stattype !== DEFENSE &&
+				s.stattype !== GATE &&
+				s.stattype !== RESOURCE_EXTRACTOR))
+			{
+				removeObject(s, false);
+			}
+		}
+		else if (baseType === CAMP_BASE)
+		{
+			if ((playerData[player].difficulty !== INSANE &&
+				(s.stattype === WALL || s.stattype === DEFENSE)) ||
+				s.stattype === GATE)
+			{
+				removeObject(s, false);
+			}
+		}
+	}
+}
+
+// This function MUST run AFTER initial research lists have been researched.
+function standardizeBase(player)
+{
+	// Initial cleanup for no base or regular base.
+	initialCleanup(player);
+
+	var structures = enumStruct(player);
+	var t1Tech = getMultiTechLevel() === 1;
+	var insaneAI = playerData[player].difficulty === INSANE;
+
+	for (var i = 0, len = structures.length; i < len; ++i)
+	{
+		var s = structures[i];
+		var loc = {x: s.x * 128, y: s.y * 128};
+		var statID = Stats["Building"][s.name]["Id"];
+
+		var overLimit = countStruct(statID, player) > getStructureLimit(statID, player);
+
+		if (baseType === CAMP_WALLS)
+		{
+			// Advanced bases keeps all structures except if T1 which will remove VTOL related structures or if over limits.
+			if (overLimit || (t1Tech && (s.stattype === VTOL_FACTORY || s.stattype === REARM_PAD)))
+			{
+				removeObject(s, false);
+				continue;
+			}
+		}
+		else if (!isStructureAvailable(statID, player))
+		{
+			// isStructureAvailable() will return false if >= build limits, so account for that.
+			if (countStruct(statID, player) === getStructureLimit(statID, player))
+			{
+				//console(statID + " at the limit");
+			}
+			else if (!insaneAI || overLimit)
+			{
+				//console(statID + " removed");
+				removeObject(s, false); // Also removes excess structures over the limits.
+				continue;
+			}
+		}
+
+		// Replace factories and research labs with the basic structure if one has modules on bases or lower.
+		if (t1Tech && s.modules && (s.modules > 0) && (baseType <= CAMP_BASE))
+		{
+			if (s.stattype === RESEARCH_LAB || s.stattype === FACTORY)
+			{
+				//console(statID + " replaced cause of modules");
+				removeObject(s, false);
+				addStructure(statID, player, loc.x, loc.y);
+				continue;
+			}
+		}
+	}
+}
+
 function eventGameLoaded()
 {
 	setupGame();
@@ -356,40 +443,18 @@ function eventGameInit()
 		{
 			setPower(1300, playnum);
 			completeResearchOnTime(cleanTech, playnum);
-			// Keep only some structures for insane AI
-			var structs = enumStruct(playnum);
-			for (var i = 0; i < structs.length; i++)
-			{
-				var s = structs[i];
-				if (playerData[playnum].difficulty != INSANE
-				    || (s.stattype != WALL && s.stattype != DEFENSE && s.stattype != GATE
-				        && s.stattype != RESOURCE_EXTRACTOR))
-				{
-					removeObject(s, false);
-				}
-			}
 		}
 		else if (baseType == CAMP_BASE)
 		{
 			setPower(2500, playnum);
 			completeResearchOnTime(timeBaseTech, playnum);
-			// Keep only some structures
-			var structs = enumStruct(playnum);
-			for (var i = 0; i < structs.length; i++)
-			{
-				var s = structs[i];
-				if ((playerData[playnum].difficulty != INSANE && (s.stattype == WALL || s.stattype == DEFENSE))
-				    || s.stattype == GATE || s.stattype == CYBORG_FACTORY || s.stattype == COMMAND_CONTROL)
-				{
-					removeObject(s, false);
-				}
-			}
 		}
 		else // CAMP_WALLS
 		{
 			setPower(2500, playnum);
 			completeResearchOnTime(timeAdvancedBaseTech, playnum);
 		}
+
 		var techLevel = getMultiTechLevel();
 		if (techLevel == 2)
 		{
@@ -403,6 +468,8 @@ function eventGameInit()
 		{
 			completeResearchOnTime(Infinity, playnum);
 		}
+
+		standardizeBase(playnum);
 	}
 
 	hackNetOn();
