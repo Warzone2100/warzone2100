@@ -202,7 +202,6 @@ int droidReloadBar(const BASE_OBJECT *psObj, const WEAPON *psWeap, int weapon_sl
  * \param angle angle of impact (from the damage dealing projectile in relation to this droid)
  * \return > 0 when the dealt damage destroys the droid, < 0 when the droid survives
  *
- * NOTE: This function will damage but _never_ destroy transports when in single player (campaign) mode
  */
 int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, WEAPON_SUBCLASS weaponSubClass, unsigned impactTime, bool isDamagePerSecond, int minDamage)
 {
@@ -232,15 +231,6 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 	}
 	else if (relativeDamage < 0)
 	{
-		// HACK: Prevent transporters from being destroyed in single player
-		// FIXME: When we fix campaign scripts to use DROID_SUPERTRANSPORTER
-		if ((game.type == LEVEL_TYPE::CAMPAIGN) && !bMultiPlayer && (psDroid->droidType == DROID_TRANSPORTER))
-		{
-			debug(LOG_ATTACK, "Transport(%d) saved from death--since it should never die (SP only)", psDroid->id);
-			psDroid->body = 1;
-			return 0;
-		}
-
 		// Droid destroyed
 		debug(LOG_ATTACK, "droid (%d): DESTROYED", psDroid->id);
 
