@@ -25,7 +25,7 @@
 #include <string>
 
 const char *version_getVersionString();
-const char *version_getFormattedVersionString();
+const char *version_getFormattedVersionString(bool translated = true);
 std::string version_getVersionedAppDirFolderName();
 
 #endif // __INCLUDED_VERSION_H__

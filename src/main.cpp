@@ -1315,7 +1315,7 @@ int realmain(int argc, char *argv[])
 	}
 
 	LaunchInfo::initialize(argc, argv);
-	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(), version_getVersionedAppDirFolderName(), isPortableMode());
+	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(false), version_getVersionedAppDirFolderName(), isPortableMode());
 
 	/*** Initialize sodium library ***/
 	if (sodium_init() < 0) {
@@ -1408,7 +1408,7 @@ int realmain(int argc, char *argv[])
 
 	// NOTE: it is now safe to use debug() calls to make sure output gets captured.
 	check_Physfs();
-	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
+	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString(false));
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 	debug(LOG_WZ, "Backend: %s", BACKEND);
 	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",
@@ -1522,7 +1522,7 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString());
+	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString(false));
 	debug(LOG_WZ, "Using language: %s", getLanguage());
 	debug(LOG_WZ, "Backend: %s", BACKEND);
 	debug(LOG_MEMORY, "sizeof: SIMPLE_OBJECT=%ld, BASE_OBJECT=%ld, DROID=%ld, STRUCTURE=%ld, FEATURE=%ld, PROJECTILE=%ld",

@@ -176,21 +176,21 @@ const char *version_getVersionString()
 /** Composes a nicely formatted version string.
 *
 */
-const char *version_getFormattedVersionString()
+const char *version_getFormattedVersionString(bool translated /* = true */)
 {
 	static char versionString[MAX_STR_LENGTH] = {'\0'};
 
 	// Compose the working copy state string
 #if (VCS_WC_MODIFIED)
 	// TRANSLATORS: Printed when compiling with uncommitted changes
-	const char *wc_state = _(" (modified locally)");
+	const char *wc_state = (translated) ? _(" (modified locally)") : " (modified locally)";
 #else
 	const char *wc_state = "";
 #endif
 	// Compose the build type string
 #ifdef DEBUG
 	// TRANSLATORS: Printed in Debug builds
-	const char *build_type = _(" - DEBUG");
+	const char *build_type = (translated) ? _(" - DEBUG") : " - DEBUG";
 #else
 	const char *build_type = "";
 #endif
@@ -199,7 +199,7 @@ const char *version_getFormattedVersionString()
 	// TRANSLATORS: This string looks as follows when expanded.
 	// "Version: <version name/number>, <working copy state>,
 	// Built: <BUILD DATE><BUILD TYPE>"
-	snprintf(versionString, MAX_STR_LENGTH, _("Version: %s,%s Built: %s%s"), version_getVersionString(), wc_state, getCompileDate(), build_type);
+	snprintf(versionString, MAX_STR_LENGTH, (translated) ? _("Version: %s,%s Built: %s%s") : "Version: %s,%s Built: %s%s", version_getVersionString(), wc_state, getCompileDate(), build_type);
 
 	return versionString;
 }
