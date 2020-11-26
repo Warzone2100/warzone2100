@@ -114,7 +114,7 @@ target_link_libraries(warzone2100
 )
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
 if(ENABLE_NLS)
-	target_link_libraries(warzone2100 "${Intl_LIBRARIES}")
+	target_link_libraries(warzone2100 ${Intl_LIBRARIES})
 endif()
 
 target_link_libraries(warzone2100 quickjs)
