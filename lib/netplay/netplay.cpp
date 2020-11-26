@@ -3102,10 +3102,6 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	{
 		initPlayerNetworkProps(playerIndex);
 	}
-	for (unsigned n = 0; n < MAX_PLAYERS_IN_GUI; ++n)
-	{
-		changeColour(n, rand() % (n + 1), true); // Put colours in random order.
-	}
 	if (!NetPlay.bComms)
 	{
 		selectedPlayer			= 0;

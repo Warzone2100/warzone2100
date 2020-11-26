@@ -2985,14 +2985,22 @@ static int playersPerTeam()
 	return 1;
 }
 
+static void swapPlayerColours(uint32_t player1, uint32_t player2)
+{
+	auto player1Colour = getPlayerColour(player1);
+	setPlayerColour(player1, getPlayerColour(player2));
+	setPlayerColour(player2, player1Colour);
+}
+
 /**
  * Resets all player difficulties, positions, teams and colors etc.
  */
 static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 {
-	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS_IN_GUI; playerIndex++)
 	{
 		setPlayerColour(playerIndex, playerIndex);
+		swapPlayerColours(playerIndex, rand() % (playerIndex + 1));
 
 		if (!bShouldResetLocal && playerIndex == selectedPlayer)
 		{
@@ -3001,12 +3009,12 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 
 		NetPlay.players[playerIndex].position = playerIndex;
 		NetPlay.players[playerIndex].team = playerIndex / playersPerTeam();
-		NetPlay.players[playerIndex].name[0] = '\0';
 
 		if (NetPlay.bComms)
 		{
 			NetPlay.players[playerIndex].difficulty =  AIDifficulty::DISABLED;
 			NetPlay.players[playerIndex].ai = AI_OPEN;
+			NetPlay.players[playerIndex].name[0] = '\0';
 		}
 		else
 		{
@@ -3015,6 +3023,17 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 
 			/* ensure all players have a name in One Player Skirmish games */
 			sstrcpy(NetPlay.players[playerIndex].name, getAIName(playerIndex));
+		}
+	}
+
+	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
+
+	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
+	{
+		if (getPlayerColour(playerIndex) == war_getMPcolour())
+		{
+			swapPlayerColours(selectedPlayer, playerIndex);
+			break;
 		}
 	}
 }
