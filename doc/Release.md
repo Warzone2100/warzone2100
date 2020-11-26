@@ -45,7 +45,7 @@ Wait for all CI builds to complete, and verify they have completed successfully.
 [![Fedora](https://github.com/Warzone2100/warzone2100/workflows/Fedora/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
 [![Windows](https://github.com/Warzone2100/warzone2100/workflows/Windows/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
 [![Azure Build Status](https://dev.azure.com/wz2100/warzone2100/_apis/build/status/Build?branchName=master)](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
-[![Travis CI Build Status](https://travis-ci.org/Warzone2100/warzone2100.svg?branch=master)](https://travis-ci.org/Warzone2100/warzone2100)
+[![Drone Cloud CI ARM64 Build Status](https://img.shields.io/drone/build/Warzone2100/warzone2100/master?label=ARM64%20Linux)](https://cloud.drone.io/Warzone2100/warzone2100)
 
 Can be flakey:
 - FreeBSD builds: [![FreeBSD Build Status](https://api.cirrus-ci.com/github/Warzone2100/warzone2100.svg?branch=master)](https://cirrus-ci.com/github/Warzone2100/warzone2100)
