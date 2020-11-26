@@ -288,8 +288,8 @@ const weaponStats =
 	{
 		alias: "fmor",
 		weapons: [
-			{ res: "R-Wpn-Mortar-Incenediary", stat: "Mortar-Incenediary" },
-			{ res: "R-Wpn-Howitzer-Incenediary", stat: "Howitzer-Incenediary" },
+			{ res: "R-Wpn-Mortar-Incendiary", stat: "Mortar-Incendiary" },
+			{ res: "R-Wpn-Howitzer-Incendiary", stat: "Howitzer-Incendiary" },
 		],
 		fastFire: [
 			{ res: "R-Wpn-Howitzer03-Rot", stat: "Howitzer03-Rot" },
@@ -300,8 +300,8 @@ const weaponStats =
 			{ res: "R-Wpn-Bomb05", stat: "Bomb5-VTOL-Plasmite" },
 		],
 		defenses: [
-			{ res: "R-Defense-MortarPit-Incenediary", stat: "Emplacement-MortarPit-Incenediary" },
-			{ res: "R-Defense-Howitzer-Incenediary", stat: "Emplacement-Howitzer-Incenediary" },
+			{ res: "R-Defense-MortarPit-Incendiary", stat: "Emplacement-MortarPit-Incendiary" },
+			{ res: "R-Defense-Howitzer-Incendiary", stat: "Emplacement-Howitzer-Incendiary" },
 		],
 		templates: [],
 		extras: [

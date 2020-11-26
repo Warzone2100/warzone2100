@@ -2006,7 +2006,7 @@
         "weaponWav": "hevlsr.ogg",
         "weight": 5000
     },
-    "Howitzer-Incenediary": {
+    "Howitzer-Incendiary": {
         "buildPoints": 1000,
         "buildPower": 300,
         "damage": 200,
@@ -2020,7 +2020,7 @@
         "flightSpeed": 1500,
         "hitGfx": "FXLExp.PIE",
         "hitpoints": 10,
-        "id": "Howitzer-Incenediary",
+        "id": "Howitzer-Incendiary",
         "lightWorld": 1,
         "longHit": 50,
         "longRange": 4992,
@@ -3235,7 +3235,7 @@
         "weaponWav": "rocket.ogg",
         "weight": 120000
     },
-    "Mortar-Incenediary": {
+    "Mortar-Incendiary": {
         "buildPoints": 750,
         "buildPower": 200,
         "damage": 80,
@@ -3249,7 +3249,7 @@
         "flightSpeed": 1500,
         "hitGfx": "FXLExp.PIE",
         "hitpoints": 5,
-        "id": "Mortar-Incenediary",
+        "id": "Mortar-Incendiary",
         "lightWorld": 1,
         "longHit": 50,
         "longRange": 2304,
