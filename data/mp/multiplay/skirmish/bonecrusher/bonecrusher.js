@@ -348,7 +348,7 @@ var towers=[
 ['R-Defense-MortarPit', 'Emplacement-MortarPit01'], 						//Мортира
 ['R-Defense-RotMor', 'Emplacement-RotMor'],									//Пепперпот
 ['R-Defense-WallTower-TwinAGun', 'WallTower-TwinAssaultGun'],				//Спаренный пулемёт
-['R-Defense-MortarPit-Incenediary' , 'Emplacement-MortarPit-Incenediary'],	//Адская мортира
+['R-Defense-MortarPit-Incendiary' , 'Emplacement-MortarPit-Incendiary'],	//Адская мортира
 ];
 
 var AA_defence = [];
@@ -713,7 +713,7 @@ function letsRockThisFxxxingWorld(init){
 		
 		} else if(difficulty == INSANE){
 		
-//			research_way.unshift(["R-Defense-MortarPit-Incenediary"]);
+//			research_way.unshift(["R-Defense-MortarPit-Incendiary"]);
 			
 			setTimer("targetPartisan", 5000+me*100);
 //			setTimer("buildersOrder", 5000+me*100);

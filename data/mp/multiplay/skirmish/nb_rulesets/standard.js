@@ -359,8 +359,8 @@ const weaponStats = {
 		micro: MICRO.DUMB,
 		weapons: [
 			{ res: "R-Wpn-Mortar01Lt", stat: "Mortar1Mk1", weight: WEIGHT.HEAVY }, // duplicate stat!
-			{ res: "R-Wpn-Mortar-Incenediary", stat: "Mortar-Incenediary", weight: WEIGHT.HEAVY },
-			{ res: "R-Wpn-Howitzer-Incenediary", stat: "Howitzer-Incenediary", weight: WEIGHT.ULTRAHEAVY },
+			{ res: "R-Wpn-Mortar-Incendiary", stat: "Mortar-Incendiary", weight: WEIGHT.HEAVY },
+			{ res: "R-Wpn-Howitzer-Incendiary", stat: "Howitzer-Incendiary", weight: WEIGHT.ULTRAHEAVY },
 		],
 		vtols: [
 			{ res: "R-Wpn-Bomb03", stat: "Bomb3-VTOL-LtINC", weight: WEIGHT.LIGHT },
@@ -368,8 +368,8 @@ const weaponStats = {
 			{ res: "R-Wpn-Bomb05", stat: "Bomb5-VTOL-Plasmite", weight: WEIGHT.HEAVY },
 		],
 		defenses: [
-			{ res: "R-Defense-MortarPit-Incenediary", stat: "Emplacement-MortarPit-Incenediary", defrole: DEFROLE.STANDALONE },
-			{ res: "R-Defense-Howitzer-Incenediary", stat: "Emplacement-Howitzer-Incenediary", defrole: DEFROLE.ARTY },
+			{ res: "R-Defense-MortarPit-Incendiary", stat: "Emplacement-MortarPit-Incendiary", defrole: DEFROLE.STANDALONE },
+			{ res: "R-Defense-Howitzer-Incendiary", stat: "Emplacement-Howitzer-Incendiary", defrole: DEFROLE.ARTY },
 		],
 		templates: [],
 		extras: [

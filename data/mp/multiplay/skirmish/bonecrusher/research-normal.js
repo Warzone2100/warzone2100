@@ -125,7 +125,7 @@ const research_way_defence = [
 "R-Defense-MortarPit",
 "R-Defense-RotMor",
 "R-Defense-IDFRocket",
-"R-Defense-MortarPit-Incenediary",
+"R-Defense-MortarPit-Incendiary",
 "R-Defense-Pillbox06",
 "R-Defense-WallTower-TwinAGun",
 "R-Defense-HvyHowitzer",

@@ -818,14 +818,14 @@
         ],
         "width": 1
     },
-    "Emplacement-Howitzer-Incenediary": {
+    "Emplacement-Howitzer-Incendiary": {
         "armour": 10,
         "breadth": 1,
         "buildPoints": 550,
         "buildPower": 400,
         "height": 1,
         "hitpoints": 400,
-        "id": "Emplacement-Howitzer-Incenediary",
+        "id": "Emplacement-Howitzer-Incendiary",
         "name": "Incendiary Howitzer Emplacement",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
@@ -836,7 +836,29 @@
         "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
-            "Howitzer-Incenediary"
+            "Howitzer-Incendiary"
+        ],
+        "width": 1
+    },
+    "Emplacement-Howitzer-Incenediary": {
+        "armour": 10,
+        "breadth": 1,
+        "buildPoints": 550,
+        "buildPower": 400,
+        "height": 1,
+        "hitpoints": 400,
+        "id": "Emplacement-Howitzer-Incenediary",
+        "name": "Incendiary Howitzer Emplacement 2",
+        "resistance": 150,
+        "sensorID": "DefaultSensor1Mk1",
+        "strength": "HARD",
+        "structureModel": [
+            "Blhowmnt.PIE"
+        ],
+        "thermal": 10,
+        "type": "DEFENSE",
+        "weapons": [
+            "Howitzer-Incendiary"
         ],
         "width": 1
     },
@@ -994,14 +1016,14 @@
         ],
         "width": 1
     },
-    "Emplacement-MortarPit-Incenediary": {
+    "Emplacement-MortarPit-Incendiary": {
         "armour": 10,
         "breadth": 1,
         "buildPoints": 425,
         "buildPower": 170,
         "height": 1,
         "hitpoints": 300,
-        "id": "Emplacement-MortarPit-Incenediary",
+        "id": "Emplacement-MortarPit-Incendiary",
         "name": "Incendiary Mortar Pit",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
@@ -1012,7 +1034,29 @@
         "thermal": 10,
         "type": "DEFENSE",
         "weapons": [
-            "Mortar-Incenediary"
+            "Mortar-Incendiary"
+        ],
+        "width": 1
+    },
+    "Emplacement-MortarPit-Incenediary": {
+        "armour": 10,
+        "breadth": 1,
+        "buildPoints": 425,
+        "buildPower": 170,
+        "height": 1,
+        "hitpoints": 300,
+        "id": "Emplacement-MortarPit-Incenediary",
+        "name": "Incendiary Mortar Pit 2",
+        "resistance": 150,
+        "sensorID": "DefaultSensor1Mk1",
+        "strength": "MEDIUM",
+        "structureModel": [
+            "BLMRTPIT.PIE"
+        ],
+        "thermal": 10,
+        "type": "DEFENSE",
+        "weapons": [
+            "Mortar-Incendiary"
         ],
         "width": 1
     },

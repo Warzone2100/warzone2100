@@ -36,24 +36,24 @@ const STANDARD_MORTAR_DEFENSES = [
      "Emplacement-MortarPit01",
      "Emplacement-MortarPit02",
      "Emplacement-RotMor",
-     "Emplacement-MortarPit-Incenediary",
+     "Emplacement-MortarPit-Incendiary",
 ];
 
 const STANDARD_HOWITZER_DEFENSES = [
      "Emplacement-Howitzer105",
      "Emplacement-Howitzer150",
      "Emplacement-RotHow",
-     "Emplacement-Howitzer-Incenediary",
+     "Emplacement-Howitzer-Incendiary",
 ];
 
 const STANDARD_INCENDIARIES = [
 	"Emplacement-MortarPit01",
 	"Emplacement-MortarPit02",
-	"Emplacement-MortarPit-Incenediary",
+	"Emplacement-MortarPit-Incendiary",
 	"Emplacement-RotMor",
 	"Emplacement-Howitzer105",
 	"Emplacement-Howitzer150",
-	"Emplacement-Howitzer-Incenediary",
+	"Emplacement-Howitzer-Incendiary",
 	"Emplacement-RotHow",
 ];
 
