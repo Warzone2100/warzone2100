@@ -77,6 +77,7 @@ parts:
 
   sdl:
     source: https://www.libsdl.org/release/SDL2-2.0.12.tar.gz
+    source-checksum: sha512/3f1f04af0f3d9dda9c84a2e9274ae8d83ea0da3fc367970a820036cc4dc1dbf990cfc37e4975ae05f0b45a4ffa739c6c19e470c00bf3f2bce9b8b63717b8b317
     plugin: autotools
     configflags:
     - --prefix=/usr
