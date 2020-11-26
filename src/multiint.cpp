@@ -158,17 +158,41 @@ extern char	MultiCustomMapsPath[PATH_MAX];
 extern char	MultiPlayersPath[PATH_MAX];
 extern bool bSendingMap;			// used to indicate we are sending a map
 
+enum RoomMessageType {
+	RoomMessagePlayer,
+	RoomMessageSystem,
+	RoomMessageNotify
+};
+
 struct RoomMessage
 {
-	int32_t sender;
+	std::shared_ptr<PlayerReference> sender = nullptr;
 	std::string text;
-	std::time_t time;
+	std::time_t time = std::time(nullptr);
+	RoomMessageType type;
 
-	RoomMessage(int32_t messageSender, std::string messageText, std::time_t messageTime)
+	static RoomMessage player(uint32_t messageSender, std::string messageText)
 	{
-		sender = messageSender;
+		auto message = RoomMessage(RoomMessagePlayer, messageText);
+		message.sender = NetPlay.playerReferences[messageSender];
+		return message;
+	}
+
+	static RoomMessage system(std::string messageText)
+	{
+		return RoomMessage(RoomMessageSystem, messageText);
+	}
+
+	static RoomMessage notify(std::string messageText)
+	{
+		return RoomMessage(RoomMessageNotify, messageText);
+	}
+
+private:
+	RoomMessage(RoomMessageType messageType, std::string messageText)
+	{
+		type = messageType;
 		text = messageText;
-		time = messageTime;
 	}
 };
 
@@ -276,7 +300,7 @@ class ChatBoxWidget : public IntFormAnimated
 public:
 	ChatBoxWidget(WIDGET *parent, bool openAnimate = true);
 	virtual ~ChatBoxWidget();
-	void addMessage(int32_t sender, char const *text);
+	void addMessage(RoomMessage const &message);
 	void initializeMessages(bool preserveOldChat);
 
 protected:
@@ -293,21 +317,21 @@ private:
 
 std::vector<RoomMessage> ChatBoxWidget::persistentMessageLocalStorage;
 
-void displayRoomMessage(char const *text, uint32_t sender)
+void displayRoomMessage(RoomMessage const &message)
 {
 	if (auto chatBox = (ChatBoxWidget *)widgGetFromID(psWScreen, MULTIOP_CHATBOX)) {
-		chatBox->addMessage(sender, text);
+		chatBox->addMessage(message);
 	}
 }
 
 void displayRoomSystemMessage(char const *text)
 {
-	displayRoomMessage(text, SYSTEM_MESSAGE);
+	displayRoomMessage(RoomMessage::system(text));
 }
 
 void displayRoomNotifyMessage(char const *text)
 {
-	displayRoomMessage(text, NOTIFY_MESSAGE);
+	displayRoomMessage(RoomMessage::notify(text));
 }
 
 const std::vector<WzString> getAINames()
@@ -2498,6 +2522,25 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	NETplayerKicked(player_id);
 }
 
+RoomMessage buildMessage(int32_t sender, const char *text)
+{
+	switch (sender)
+	{
+	case SYSTEM_MESSAGE:
+		return RoomMessage::system(text);
+	case NOTIFY_MESSAGE:
+		return RoomMessage::notify(text);
+	default:
+		if (sender >= 0 && sender < MAX_PLAYERS_IN_GUI)
+		{
+			return RoomMessage::player(sender, text);
+		}
+
+		debug(LOG_ERROR, "Invalid message sender %d.", sender);
+		return RoomMessage::system(text);
+	}
+}
+
 ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(parent, openAnimate)
 {
 	id = MULTIOP_CHATBOX;
@@ -2510,7 +2553,7 @@ ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(
 
 	handleConsoleMessage = std::make_shared<CONSOLE_MESSAGE_LISTENER>([&](ConsoleMessage const &message) -> void
 	{
-		addMessage(message.sender, message.text);
+		addMessage(buildMessage(message.sender, message.text));
 	});
 
 	W_EDBINIT sEdInit;
@@ -2585,10 +2628,10 @@ private:
 	}
 };
 
-void ChatBoxWidget::addMessage(int32_t sender, const char *text)
+void ChatBoxWidget::addMessage(RoomMessage const &message)
 {
-	ChatBoxWidget::persistentMessageLocalStorage.emplace_back(sender, text, std::time(nullptr));
-	displayMessage(ChatBoxWidget::persistentMessageLocalStorage.back());
+	ChatBoxWidget::persistentMessageLocalStorage.push_back(message);
+	displayMessage(message);
 }
 
 void ChatBoxWidget::geometryChanged()
@@ -2617,28 +2660,31 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 	paragraphInit.width = messages->calculateListViewWidth();
 	auto paragraph = new Paragraph(&paragraphInit);
 
-	switch (message.sender)
+	switch (message.type)
 	{
-	case SYSTEM_MESSAGE:
+	case RoomMessageSystem:
 		paragraph->setFontColour(WZCOL_CONS_TEXT_SYSTEM);
 		paragraph->addText(message.text);
 		break;
-	case NOTIFY_MESSAGE:
-		paragraph->setFontColour(WZCOL_YELLOW);
-		paragraph->addText(message.text);
-		break;
-	default:
+
+	case RoomMessagePlayer:
 		paragraph->setFont(font_small);
 		paragraph->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
 		paragraph->addText(formatLocalDateTime("%H:%M", message.time));
 
-		paragraph->addWidget(new ChatBoxPlayerNameWidget(NetPlay.playerReferences[message.sender]), iV_GetTextAboveBase(font_regular));
+		paragraph->addWidget(new ChatBoxPlayerNameWidget(message.sender), iV_GetTextAboveBase(font_regular));
 
 		paragraph->setFont(font_regular);
 		paragraph->setShadeColour({0, 0, 0, 0});
 		paragraph->setFontColour(WZCOL_WHITE);
 		paragraph->addText(astringf(" %s", message.text.c_str()));
 
+		break;
+
+	case RoomMessageNotify:
+	default:
+		paragraph->setFontColour(WZCOL_YELLOW);
+		paragraph->addText(message.text);
 		break;
 	}
 
@@ -3990,7 +4036,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			{
 				NetworkTextMessage message;
 				if (message.receive(queue)) {
-					displayRoomMessage(message.text, message.sender);
+					displayRoomMessage(buildMessage(message.sender, message.text));
 					audio_PlayTrack(FE_AUDIO_MESSAGEEND);
 				}
 			}
@@ -4898,6 +4944,6 @@ void sendRoomSystemMessage(char const *text)
 static void sendRoomChatMessage(char const *text)
 {
 	NetworkTextMessage message(selectedPlayer, text);
-	displayRoomMessage(text, selectedPlayer);
+	displayRoomMessage(RoomMessage::player(selectedPlayer, text));
 	message.enqueue(NETbroadcastQueue());
 }
