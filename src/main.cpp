@@ -1298,8 +1298,6 @@ int realmain(int argc, char *argv[])
 
 	osSpecificFirstChanceProcessSetup();
 
-	wzMain(argc, argv);		// init Qt integration first
-
 	debug_init();
 	debug_register_callback(debug_callback_stderr, nullptr, nullptr, nullptr);
 #if defined(WZ_OS_WIN) && defined(DEBUG_INSANE)
@@ -1314,6 +1312,15 @@ int realmain(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	/*** Initialize PhysicsFS ***/
+	initialize_PhysicsFS(utfargv[0]);
+
+	/*** Initialize translations ***/
+	/*** NOTE: Should occur before any use of gettext / libintl translation routines. ***/
+	initI18n();
+
+	wzMain(argc, argv);		// init Qt integration first
+
 	LaunchInfo::initialize(argc, argv);
 	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(false), version_getVersionedAppDirFolderName(), isPortableMode());
 
@@ -1326,12 +1333,6 @@ int realmain(int argc, char *argv[])
 
 	/*** Initialize URL Request library ***/
 	urlRequestInit();
-
-	/*** Initialize PhysicsFS ***/
-	initialize_PhysicsFS(utfargv[0]);
-
-	/*** Initialize translations ***/
-	initI18n();
 
 	// find early boot info
 	if (!ParseCommandLineEarly(utfargc, utfargv))
