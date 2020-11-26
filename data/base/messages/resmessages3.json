@@ -769,14 +769,14 @@
             "Body Points: Very Low"
         ]
     },
-    "RES_W_BAC3": {
-        "id": "RES_W_BAC3",
+    "RES_W_BDMG3": {
+        "id": "RES_W_BDMG3",
         "imdName": "MICAPSUL.PIE",
         "sequenceName": "res_weapons.ogg",
         "text": [
-            "Bombsight Upgrade",
-            "Bombs lock on and guide themselves to the target",
-            "Increases Bombing accuracy",
+            "Bomb Upgrade",
+            "Low yield thermonuclear warhead",
+            "Bomb damage +10%",
             "All bomb bays upgraded automatically"
         ]
     },

@@ -582,14 +582,14 @@
             "All AA weapons upgraded automatically"
         ]
     },
-    "RES_W_BAC1": {
-        "id": "RES_W_BAC1",
+    "RES_W_BDMG1": {
+        "id": "RES_W_BDMG1",
         "imdName": "MICAPSUL.PIE",
         "sequenceName": "res_weapons.ogg",
         "text": [
-            "Bombsight Upgrade",
-            "Locks on to thermal emissions",
-            "Increases Bombing accuracy",
+            "Bomb Upgrade",
+            "High Explosive shells",
+            "Bomb damage +10%",
             "All bomb bays upgraded automatically"
         ]
     },

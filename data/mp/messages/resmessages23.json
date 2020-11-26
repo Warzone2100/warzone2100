@@ -120,8 +120,8 @@
             "All AA weapons upgraded automatically"
         ]
     },
-    "RES_W_BAC2": {
-        "id": "RES_W_BAC2",
+    "RES_W_BDMG2": {
+        "id": "RES_W_BDMG2",
         "imdName": "MICAPSUL.PIE",
         "sequenceName": "res_weapons.ogg",
         "text": [

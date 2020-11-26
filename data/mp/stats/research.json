@@ -5103,11 +5103,11 @@
         ],
         "statID": "AAGunLaser"
     },
-    "R-Wpn-Bomb-Accuracy01": {
+    "R-Wpn-Bomb-Damage01": {
         "iconID": "IMAGE_RES_WEAPONTECH",
-        "id": "R-Wpn-Bomb-Accuracy01",
+        "id": "R-Wpn-Bomb-Damage01",
         "imdName": "trlvtlhe.PIE",
-        "msgName": "RES_W_BAC1",
+        "msgName": "RES_W_BDMG1",
         "name": "HE Bomb Shells",
         "requiredResearch": [
             "R-Wpn-Mortar-Damage02",
@@ -5141,14 +5141,14 @@
         ],
         "subgroupIconID": "IMAGE_RES_GRPDAM"
     },
-    "R-Wpn-Bomb-Accuracy02": {
+    "R-Wpn-Bomb-Damage02": {
         "iconID": "IMAGE_RES_WEAPONTECH",
-        "id": "R-Wpn-Bomb-Accuracy02",
+        "id": "R-Wpn-Bomb-Damage02",
         "imdName": "trlvtlhe.PIE",
-        "msgName": "RES_W_BAC2",
+        "msgName": "RES_W_BDMG2",
         "name": "Improved Bomb Warhead",
         "requiredResearch": [
-            "R-Wpn-Bomb-Accuracy01"
+            "R-Wpn-Bomb-Damage01"
         ],
         "researchPoints": 9200,
         "researchPower": 287,
@@ -5177,14 +5177,14 @@
         ],
         "subgroupIconID": "IMAGE_RES_GRPDAM"
     },
-    "R-Wpn-Bomb-Accuracy03": {
+    "R-Wpn-Bomb-Damage03": {
         "iconID": "IMAGE_RES_WEAPONTECH",
-        "id": "R-Wpn-Bomb-Accuracy03",
+        "id": "R-Wpn-Bomb-Damage03",
         "imdName": "trlvtlhe.PIE",
-        "msgName": "RES_W_BAC3",
+        "msgName": "RES_W_BDMG3",
         "name": "Advanced Bomb Warhead",
         "requiredResearch": [
-            "R-Wpn-Bomb-Accuracy02"
+            "R-Wpn-Bomb-Damage02"
         ],
         "researchPoints": 11200,
         "researchPower": 350,
@@ -5237,7 +5237,7 @@
         "name": "HEAP Bomb Bay",
         "requiredResearch": [
             "R-Wpn-Bomb01",
-            "R-Wpn-Bomb-Accuracy01"
+            "R-Wpn-Bomb-Damage01"
         ],
         "researchPoints": 7200,
         "researchPower": 225,

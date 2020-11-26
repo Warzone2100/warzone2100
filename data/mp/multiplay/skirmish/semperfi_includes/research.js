@@ -45,7 +45,7 @@ const KINETIC_ALLOYS = [
 const VTOL_WEAPONRY = [
 	"R-Struc-VTOLPad-Upgrade06",
 	"R-Wpn-Bomb05", // plasmite bomb
-	"R-Wpn-Bomb-Accuracy03",
+	"R-Wpn-Bomb-Damage03",
 ];
 const START_COMPONENTS = [
 	"R-Struc-RprFac-Upgrade01",

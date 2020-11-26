@@ -122,7 +122,7 @@ const PLAYER_RES_GAMMA = [
 	"R-Wpn-RocketSlow-ROF03", "R-Vehicle-Armor-Heat03", "R-Cyborg-Armor-Heat03",
 	"R-Struc-VTOLFactory-Upgrade03", "R-Struc-VTOLPad-Upgrade03",
 	"R-Struc-Power-Upgrade01", "R-Sys-Sensor-Upgrade01", "R-Wpn-AAGun-Accuracy02",
-	"R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03", "R-Wpn-Bomb-Accuracy02", "R-Wpn-Bomb03",
+	"R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03", "R-Wpn-Bomb-Damage02", "R-Wpn-Bomb03",
 	"R-Wpn-Howitzer-ROF03", "R-Sys-CBSensor-Turret01", "R-Sys-VTOLStrike-Turret01",
 	"R-Cyborg-Wpn-RotMG", "R-Defense-AASite-QuadRotMg", "R-Defense-Emplacement-HPVcannon",
 	"R-Defense-Howitzer", "R-Defense-HvyFlamer", "R-Defense-RotMG", "R-Defense-Wall-VulcanCan",
@@ -144,7 +144,7 @@ const GAMMA_ALLY_RES = [
 	"R-Struc-VTOLPad-Upgrade03", "R-Struc-Materials06", "R-Struc-Power-Upgrade01",
 	"R-Struc-Research-Upgrade06", "R-Struc-RprFac-Upgrade06", "R-Sys-Engineering02",
 	"R-Sys-MobileRepairTurret01", "R-Sys-Sensor-Upgrade01", "R-Wpn-AAGun-Accuracy02",
-	"R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03", "R-Wpn-Bomb-Accuracy02",
+	"R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03", "R-Wpn-Bomb-Damage02",
 ];
 
 //...

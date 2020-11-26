@@ -17,7 +17,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-RocketSlow-Damage06", "R-Sys-Sensor-Upgrade01",
 	"R-Wpn-Howitzer-Accuracy02", "R-Wpn-RocketSlow-ROF03",
 	"R-Wpn-Howitzer-Damage03", "R-Wpn-AAGun-Accuracy01", "R-Wpn-AAGun-Damage01",
-	"R-Wpn-AAGun-ROF01", "R-Wpn-Bomb-Accuracy01",
+	"R-Wpn-AAGun-ROF01", "R-Wpn-Bomb-Damage01",
 ];
 
 //Remove enemy vtols when in the remove zone area.
