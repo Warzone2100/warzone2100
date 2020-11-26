@@ -347,7 +347,7 @@ const weaponStats = {
 			{ res: "R-Wpn-Mortar01Lt", body: "CyborgLightBody", prop: "CyborgLegs", weapons: [ "Cyb-Wpn-Grenade", ] },
 		],
 		extras: [
-			"R-Wpn-Bomb-Accuracy03",
+			"R-Wpn-Bomb-Damage03",
 			"R-Wpn-Howitzer-Damage06",
 			"R-Wpn-Howitzer-ROF04",
 			"R-Wpn-Howitzer-Accuracy03",
@@ -373,7 +373,7 @@ const weaponStats = {
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-Bomb-Accuracy03",
+			"R-Wpn-Bomb-Damage03",
 			"R-Wpn-Howitzer-Damage06",
 			"R-Wpn-Howitzer-ROF04",
 			"R-Wpn-Howitzer-Accuracy03",

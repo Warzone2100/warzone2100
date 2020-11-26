@@ -22,5 +22,5 @@ const VTOL_RESEARCH = [
      "R-Wpn-Bomb02",
      "R-Struc-VTOLPad-Upgrade06",
      "R-Wpn-Bomb05",
-     "R-Wpn-Bomb-Accuracy03"
+     "R-Wpn-Bomb-Damage03"
 ];

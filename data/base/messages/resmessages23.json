@@ -120,14 +120,14 @@
             "All AA weapons upgraded automatically"
         ]
     },
-    "RES_W_BAC2": {
-        "id": "RES_W_BAC2",
+    "RES_W_BDMG2": {
+        "id": "RES_W_BDMG2",
         "imdName": "MICAPSUL.PIE",
         "sequenceName": "res_weapons.ogg",
         "text": [
-            "Bombsight Upgrade",
-            "Laser designator paints and guides bombs to the target",
-            "Increases Bombing accuracy",
+            "Bomb Upgrade",
+            "Improved trinitramine explosive formula",
+            "Bomb damage +10%",
             "All bomb bays upgraded automatically"
         ]
     },

@@ -97,7 +97,7 @@ const VTOL_RES = [
 	"R-Struc-VTOLPad-Upgrade01",
 	"R-Wpn-Bomb02",
 	"R-Struc-VTOLPad-Upgrade03",
-	"R-Wpn-Bomb-Accuracy03",
+	"R-Wpn-Bomb-Damage03",
 	"R-Struc-VTOLPad-Upgrade06",
 	"R-Wpn-Bomb04",
 	"R-Wpn-Bomb05",

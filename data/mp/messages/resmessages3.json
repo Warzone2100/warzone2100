@@ -769,8 +769,8 @@
             "Body Points: Very Low"
         ]
     },
-    "RES_W_BAC3": {
-        "id": "RES_W_BAC3",
+    "RES_W_BDMG3": {
+        "id": "RES_W_BDMG3",
         "imdName": "MICAPSUL.PIE",
         "sequenceName": "res_weapons.ogg",
         "text": [

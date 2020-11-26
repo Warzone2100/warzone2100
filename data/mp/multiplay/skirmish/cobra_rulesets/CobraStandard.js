@@ -584,7 +584,7 @@ const weaponStats =
 		templates: [],
 		extras: [
 			"R-Struc-VTOLPad-Upgrade03",
-			"R-Wpn-Bomb-Accuracy03",
+			"R-Wpn-Bomb-Damage03",
 			"R-Struc-VTOLPad-Upgrade06",
 		],
 	},
@@ -662,7 +662,7 @@ const weaponStats =
 		templates: [],
 		extras: [
 			"R-Struc-VTOLPad-Upgrade03",
-			"R-Wpn-Bomb-Accuracy03",
+			"R-Wpn-Bomb-Damage03",
 			"R-Struc-VTOLPad-Upgrade06",
 		],
 	},
