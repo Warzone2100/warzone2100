@@ -164,9 +164,26 @@ function cam_eventDroidBuilt(droid, structure)
 function cam_eventDestroyed(obj)
 {
 	__camCheckPlaceArtifact(obj);
-	if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
+	if (obj.type === DROID)
 	{
-		__camCheckDeadTruck(obj);
+		if (obj.droidType === DROID_CONSTRUCT)
+		{
+			__camCheckDeadTruck(obj);
+		}
+		else if (camIsTransporter(obj))
+		{
+			__camRemoveIncomingTransporter(obj.player);
+			if (obj.player === CAM_HUMAN_PLAYER)
+			{
+				// Player will lose if their transporter gets destroyed
+				__camGameLost();
+				return;
+			}
+			if (camDef(__camPlayerTransports[obj.player]))
+			{
+				delete __camPlayerTransports[obj.player];
+			}
+		}
 	}
 }
 
@@ -205,11 +222,7 @@ function cam_eventTransporterExit(transport)
 		(__camWinLossCallback === CAM_VICTORY_STANDARD &&
 		transport.player === CAM_HUMAN_PLAYER))
 	{
-		// allow the next transport to enter
-		if (camDef(__camIncomingTransports[transport.player]))
-		{
-			delete __camIncomingTransports[transport.player];
-		}
+		__camRemoveIncomingTransporter(transport.player);
 	}
 	else if (__camWinLossCallback === CAM_VICTORY_PRE_OFFWORLD)
 	{

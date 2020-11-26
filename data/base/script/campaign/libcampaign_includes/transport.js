@@ -149,3 +149,12 @@ function __camLandTransporter(player, pos)
 	playSound("pcv395.ogg", pos.x, pos.y, 0); //Incoming enemy transport.
 	camManageGroup(camMakeGroup(ti.droids), ti.order, ti.data);
 }
+
+function __camRemoveIncomingTransporter(player)
+{
+	// allow the next transporter to enter
+	if (camDef(__camIncomingTransports[player]))
+	{
+		delete __camIncomingTransports[player];
+	}
+}
