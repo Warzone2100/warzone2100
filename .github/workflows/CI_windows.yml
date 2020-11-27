@@ -112,6 +112,9 @@ jobs:
           $WZ_VISUAL_STUDIO_INSTALL_PATH = & "vswhere.exe" -latest -property installationPath
           echo "::warning ::Default to 'latest' MSVC: `"${WZ_VISUAL_STUDIO_INSTALL_PATH}`""
         }
+        
+        $WZ_VISUAL_STUDIO_INSTALL_VERSION = & "vswhere.exe" -path "${WZ_VISUAL_STUDIO_INSTALL_PATH}" -property installationVersion
+        echo "WZ_VISUAL_STUDIO_INSTALL_VERSION = ${WZ_VISUAL_STUDIO_INSTALL_VERSION}"
 
         $VCPKG_VISUAL_STUDIO_PATH = "${WZ_VISUAL_STUDIO_INSTALL_PATH}"
         #$CMAKE_GENERATOR_INSTANCE = "${WZ_VISUAL_STUDIO_INSTALL_PATH}"
@@ -135,6 +138,12 @@ jobs:
         }
 
         # ----------------
+        # Determine vcpkg binary cache directory
+
+        $VCPKG_BINARYCACHE_DIR = "${{ github.workspace }}\vcpkg_cache"
+        $VCPKG_BINARY_SOURCES = "files,${VCPKG_BINARYCACHE_DIR},readwrite"
+
+        # ----------------
         # Export Variables
 
         # Export everything important to environment variables (for future steps)
@@ -151,9 +160,13 @@ jobs:
         echo "WZ_VC_GENERATOR=${WZ_VC_GENERATOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         #echo "WZ_VC_TOOLCHAIN=${WZ_VC_TOOLCHAIN}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VISUAL_STUDIO_INSTALL_PATH=${WZ_VISUAL_STUDIO_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "::set-output name=WZ_VISUAL_STUDIO_INSTALL_VERSION::${WZ_VISUAL_STUDIO_INSTALL_VERSION}"
         echo "VCPKG_VISUAL_STUDIO_PATH=${VCPKG_VISUAL_STUDIO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "::set-output name=WZ_DEPLOY_RELEASE::${WZ_DEPLOY_RELEASE}"
+        echo "::set-output name=VCPKG_BINARYCACHE_DIR::${VCPKG_BINARYCACHE_DIR}"
+        echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "::set-output name=VCPKG_BINARY_SOURCES::${VCPKG_BINARY_SOURCES}"
     - name: Check Environment for Qt Install
       env:
         QT_CI_LOGIN: ${{ secrets.QT_CI_LOGIN }}
@@ -354,6 +367,15 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\error_logs"
+    - name: Cache vcpkg dependencies
+      id: vcpkg-cache
+      if: success() && !(github.event_name == 'push' && contains(github.ref, 'refs/tags/'))
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.settings.outputs.VCPKG_BINARYCACHE_DIR }}
+        key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.architecture }}-${{ steps.settings.outputs.WZ_VISUAL_STUDIO_INSTALL_VERSION }}-${{ hashFiles('**/get-dependencies_win.ps1') }}-${{ hashFiles('**/vcpkg.json') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.architecture }}-${{ steps.settings.outputs.WZ_VISUAL_STUDIO_INSTALL_VERSION }}-${{ hashFiles('**/get-dependencies_win.ps1') }}-
     - name: Build vcpkg + dependencies
       working-directory: '${{ github.workspace }}\build'
       run: |
