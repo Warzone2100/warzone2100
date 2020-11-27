@@ -20,6 +20,8 @@
 #ifndef __INCLUDED_SRC_TIME_H__
 #define __INCLUDED_SRC_TIME_H__
 
+tm getUtcTime(std::time_t const &timer);
+
 /**
  * Examples of formats:
  * - "%H:%M:%S"
