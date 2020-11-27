@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-06 20:06\n"
+"PO-Revision-Date: 2020-11-27 05:37\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -34,15 +34,15 @@ msgstr "Ez az épület tartalmazza a terv sikeréhez elengedhetetlen technológi
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "ALFA BÁZIS KÜLDETÉS: Dögevő rablók"
+msgstr "ALFA BÁZIS KÜLDETÉS: Fosztogató portyázók"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr "Dögevő rablók közelednek a bázishoz."
+msgstr "Fosztogató portyázók közelednek a bázishoz."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Védd a bázist és pusztítsd el a dögevők táborát."
+msgstr "Védje meg a bázist, és pusztítsa el a Fosztogatók táborát."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
@@ -59,11 +59,11 @@ msgstr "Vizsgálja meg és biztosítsa a területet."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "ALFA BÁZIS KÜLDETÉS: Az új Paradigma"
+msgstr "ALFA BÁZIS KÜLDETÉS: Az Új Paradigma"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Az új Paradigma kiváló fegyver technológiával rendelkezik."
+msgstr "Az Új Paradigma fejlettebb fegyver technológiával rendelkezik."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
@@ -71,23 +71,23 @@ msgstr "Náluk lehet a szinaptikus kapcsolat technológia, létfontosságú viss
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "SZÁLLÍTÁS KÜLDETÉS: Keresse meg és szerezze vissza a tárgyi leleteket"
+msgstr "SZÁLLÍTÁSI KÜLDETÉS: Keresse meg és szerezze vissza a leleteket"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr "Rakodjon támadó egységet a szállítóba."
+msgstr "Rakodjon egy támadóerőt a szállítóba."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "Landolás, tárja fel a romokat és szerezze vissza a tárgyi leleteket."
+msgstr "Landolás után tárja fel a romokat, és szerezze vissza a leleteket."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "SZÁLLÍTÁSI FELADAT: Vizsgálja meg a kutató központot"
+msgstr "SZÁLLÍTÁSI FELADAT: Vizsgálja meg a kutatóközpontot"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Vizsgálja meg a területet és szerezzen vissza minden jelenlévő tárgyi leletet."
+msgstr "Vizsgálja meg a területet, és szerezzen vissza minden leletet."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
@@ -100,7 +100,7 @@ msgstr "SZÁLLÍTÁSI FELADAT: Kódolt jelek észlelve"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr "Vegyen egy felderítő egységet, hogy megvizsgálja ezeket a jeleket."
+msgstr "Vigyen egy felderítő egységet, hogy megvizsgálja ezeket a jeleket."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
@@ -112,11 +112,11 @@ msgstr "SZÁLLÍTÁSI FELADAT: Ellenséges adás észlelve"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Derítse fel a megjelölt területet, ellenséges kutatóintézetekért."
+msgstr "Derítse fel a megjelölt területet, ellenséges kutatóintézeteket keresve."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Haladjon tovább LZ#2-re. Ne támadja az ellenséget."
+msgstr "Haladjon tovább a 2-es LZ-re. Most ne támadja az ellenséget."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
@@ -228,7 +228,7 @@ msgstr "GAMMA CSAPAT FRISS INFORMÁCIÓK"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr "Nincs jelentés."
+msgstr "Nincs jelentenivaló."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
@@ -276,7 +276,7 @@ msgstr "Észleltünk és elszigeteltünk egy behatoló programot."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr "Kiegészítő"
+msgstr "Kiegészítés"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
