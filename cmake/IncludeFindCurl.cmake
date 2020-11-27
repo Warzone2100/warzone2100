@@ -59,10 +59,15 @@ if(CURL_CONFIG_EXECUTABLE)
 	if ((CURL_VERSION_STRING VERSION_EQUAL "${_min_curl_version_for_ssl_backends}") OR (CURL_VERSION_STRING VERSION_GREATER "${_min_curl_version_for_ssl_backends}"))
 
 		execute_process(COMMAND ${CURL_CONFIG_EXECUTABLE} --ssl-backends
+						RESULT_VARIABLE _result_ssl_backends
 						OUTPUT_VARIABLE CURL_CONFIG_SSL_BACKENDS_STRING
 						ERROR_QUIET
 						OUTPUT_STRIP_TRAILING_WHITESPACE)
-		string(REPLACE "," ";" CURL_SUPPORTED_SSL_BACKENDS "${CURL_CONFIG_SSL_BACKENDS_STRING}")
+		if (_result_ssl_backends EQUAL 0)
+			string(REPLACE "," ";" CURL_SUPPORTED_SSL_BACKENDS "${CURL_CONFIG_SSL_BACKENDS_STRING}")
+		else()
+			message(STATUS "curl-config (\"${CURL_CONFIG_EXECUTABLE}\") doesn't seem to support --ssl-backends - it may be a different version than the detected libcurl")
+		endif()
 
 	else()
 
