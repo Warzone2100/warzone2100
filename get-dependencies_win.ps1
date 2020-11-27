@@ -7,16 +7,15 @@ param([string]$VCPKG_BUILD_TYPE = "")
 # To ensure reproducible builds, pin to a specific vcpkg commit
 $VCPKG_COMMIT_SHA = "6e073f168652a551d8f29d19481ec67be3fccac8";
 
-# WZ Windows dependencies (for vcpkg install)
-$VCPKG_INSTALL_DEPENDENCIES = @("physfs", "harfbuzz", "libiconv", "libogg", "libtheora", "libvorbis", "libpng", "openal-soft", "freetype", "gettext", "zlib", "curl[core,winssl,ssl]", "libsodium", "angle")
+# WZ Windows features (for vcpkg install)
+$VCPKG_INSTALL_FEATURES = @()
 If ((-not ([string]::IsNullOrEmpty($env:VULKAN_SDK))) -and (Test-Path $env:VULKAN_SDK -PathType Container))
 {
-	Write-Output "VULKAN_SDK environment variable detected - using SDL2 with Vulkan support";
-	$VCPKG_INSTALL_DEPENDENCIES += "sdl2[vulkan]"
+	Write-Output "VULKAN_SDK environment variable detected - configuring WZ with Vulkan support";
+	$VCPKG_INSTALL_FEATURES += "vulkan"
 }
 Else {
-	Write-Output "VULKAN_SDK not detected - using SDL2 *without* Vulkan support";
-	$VCPKG_INSTALL_DEPENDENCIES += "sdl2"
+	Write-Output "VULKAN_SDK not detected - configuring WZ *without* Vulkan support";
 }
 
 # To ensure the proper dump_syms.exe is downloaded, specify the commit + hash
@@ -90,11 +89,18 @@ If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
 	}
 }
 
+popd;
+
+$additional_vcpkg_flags = @("--x-no-default-features");
+$VCPKG_INSTALL_FEATURES | ForEach-Object { $additional_vcpkg_flags += "--x-feature=${PSItem}" };
+
 $vcpkg_succeeded = -1;
 $vcpkg_attempts = 0;
+Write-Output "vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ $additional_vcpkg_flags";
+
 While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
 {
-	& .\vcpkg install $VCPKG_INSTALL_DEPENDENCIES;
+	& .\vcpkg\vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ $additional_vcpkg_flags;
 	$vcpkg_succeeded = $LastExitCode;
 	$vcpkg_attempts++;
 }
@@ -102,7 +108,6 @@ If ($vcpkg_succeeded -ne 0)
 {
 	Write-Error "vcpkg install failed ($vcpkg_attempts attempts)";
 }
-popd;
 
 # Download google-breakpad's dump_syms.exe (if necessary)
 $dump_syms_path = $(Join-Path (pwd) dump_syms.exe);
