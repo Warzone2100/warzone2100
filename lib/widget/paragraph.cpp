@@ -100,7 +100,7 @@ private:
 
         while (current < end)
         {
-            long fragmentFits;
+            long long fragmentFits;
 
             if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, end - current) > maxWidth)
             // fragment doesn't fit completely in the current line

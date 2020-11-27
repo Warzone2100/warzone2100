@@ -21,6 +21,18 @@
 #include <time.h>
 #include <iomanip>
 #include <sstream>
+#include "lib/framework/wzglobal.h"
+
+tm getUtcTime(std::time_t const &timer)
+{
+	struct tm timeinfo = {};
+#if defined(WZ_OS_WIN)
+	gmtime_s(&timeinfo, &timer);
+#else
+	gmtime_r(&timer, &timeinfo);
+#endif
+	return timeinfo;
+}
 
 static tm getLocalTime(std::time_t const &timer)
 {
