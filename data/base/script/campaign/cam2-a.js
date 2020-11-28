@@ -345,7 +345,7 @@ function eventStartLevel()
 	startedFromMenu = false;
 
 	//Only if starting Beta directly rather than going through Alpha
-	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)
+	if (enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER).length === 0)
 	{
 		startedFromMenu = true;
 		sendPlayerTransporter();

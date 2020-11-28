@@ -20,7 +20,7 @@ function camIsTransporter(object)
 		return false;
 	}
 
-	return ((object.droidType === DROID_TRANSPORTER) || (object.droidType === DROID_SUPERTRANSPORTER));
+	return object.droidType === DROID_SUPERTRANSPORTER;
 }
 
 //;; ## camSetupTransport(place x, place y, exit x, exit y)

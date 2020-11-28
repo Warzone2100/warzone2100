@@ -294,6 +294,10 @@ static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index
 	{
 		psStats->droidTypeOverride = DROID_TRANSPORTER;
 	}
+	else if (dtype.compare("SUPERTRANSPORTER") == 0)
+	{
+		psStats->droidTypeOverride = DROID_SUPERTRANSPORTER;
+	}
 	else if (dtype.compare("CYBORG") == 0)
 	{
 		psStats->droidTypeOverride = DROID_CYBORG;

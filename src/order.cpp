@@ -765,8 +765,7 @@ void orderUpdateDroid(DROID *psDroid)
 			// only place it can be trapped - in multiPlayer can only put cyborgs onto a Cyborg Transporter
 			DROID *temp = (DROID *)psDroid->order.psObj;	// NOTE: It is possible to have a NULL here
 
-			// FIXME: since we now have 2 transporter types, we should fix this in the scripts for campaign
-			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid) && game.type != LEVEL_TYPE::CAMPAIGN && bMultiPlayer)
+			if (temp && temp->droidType == DROID_TRANSPORTER && !cyborgDroid(psDroid))
 			{
 				psDroid->order = DroidOrder(DORDER_NONE);
 				actionDroid(psDroid, DACTION_NONE);
@@ -2349,8 +2348,7 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 		if (psCurr->selected)
 		{
 			// can't use bMultiPlayer since multimsg could be off.
-			// FIXME: Fix this for DROID_SUPERTRANSPORTER when we fix campaign scripts
-			if (psCurr->droidType == DROID_TRANSPORTER && game.type == LEVEL_TYPE::CAMPAIGN)
+			if (psCurr->droidType == DROID_SUPERTRANSPORTER && game.type == LEVEL_TYPE::CAMPAIGN)
 			{
 				// Transport in campaign cannot be controlled by players
 				DeSelectDroid(psCurr);
@@ -2770,7 +2768,7 @@ void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STA
 /** This function runs though all player's droids to check if any of then is a transporter. Returns the transporter droid if any was found, and NULL else.*/
 DROID *FindATransporter(DROID const *embarkee)
 {
-	bool isCyborg = cyborgDroid(embarkee) || !bMultiPlayer;  // In campaign, any unit can go on a regular transporter, so consider any unit to be a cyborg.
+	bool isCyborg = cyborgDroid(embarkee);
 
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;

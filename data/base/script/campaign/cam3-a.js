@@ -329,7 +329,7 @@ function eventStartLevel()
 	startedFromMenu = false;
 
 	//Only if starting Gamma directly rather than going through Beta
-	if (enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER).length === 0)
+	if (enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER).length === 0)
 	{
 		startedFromMenu = true;
 		setReinforcementTime(LZ_COMPROMISED_TIME);
