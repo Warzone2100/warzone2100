@@ -2825,5 +2825,5 @@ void scripting_engine::logFunctionPerformance(wzapi::scripting_instance *instanc
 		m.worstGameTime = gameTime;
 	}
 	m.time += ticks;
-	monitor->insert(MONITOR::value_type(function, m));
+	(*monitor)[function] = m;
 }
