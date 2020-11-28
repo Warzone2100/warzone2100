@@ -446,6 +446,10 @@ bool runCampaignSelector()
 		SPinit(LEVEL_TYPE::CAMPAIGN);
 		frontEndNewGame(id - FRONTEND_CAMPAIGN_1);
 	}
+	else if (id == FRONTEND_HYPERLINK)
+	{
+		runHyperlink();
+	}
 
 	widgDisplayScreen(psWScreen); // show the widgets currently running
 
@@ -509,6 +513,10 @@ bool runSinglePlayerMenu()
 		case FRONTEND_CHALLENGES:
 			SPinit(LEVEL_TYPE::CAMPAIGN);
 			addChallenges();
+			break;
+
+		case FRONTEND_HYPERLINK:
+			runHyperlink();
 			break;
 
 		default:
