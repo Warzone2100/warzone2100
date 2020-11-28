@@ -49,8 +49,6 @@
 	<true/>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET).0</string>
-	<key>LSMultipleInstancesProhibited</key>
-	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>@WZINFO_NSHumanReadableCopyright@</string>
 	<key>UTExportedTypeDeclarations</key>
