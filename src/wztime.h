@@ -17,8 +17,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_SRC_TIME_H__
-#define __INCLUDED_SRC_TIME_H__
+#ifndef __INCLUDED_SRC_WZTIME_H__
+#define __INCLUDED_SRC_WZTIME_H__
+
+#include <ctime>
+#include <time.h>
+#include <string>
 
 tm getUtcTime(std::time_t const &timer);
 
@@ -30,4 +34,4 @@ tm getUtcTime(std::time_t const &timer);
 std::string const formatLocalDateTime(char const *format, std::time_t const &timer);
 std::string const formatLocalDateTime(char const *format);
 
-#endif // __INCLUDED_SRC_TIME_H__
+#endif // __INCLUDED_SRC_WZTIME_H__

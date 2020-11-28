@@ -17,8 +17,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include <ctime>
-#include <time.h>
+#include "wztime.h"
 #include <iomanip>
 #include <sstream>
 #include "lib/framework/wzglobal.h"
