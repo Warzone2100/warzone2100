@@ -507,7 +507,7 @@ bool runSinglePlayerMenu()
 			break;
 
 		case FRONTEND_CHALLENGES:
-			SPinit(LEVEL_TYPE::CAMPAIGN);
+			SPinit(LEVEL_TYPE::SKIRMISH);
 			addChallenges();
 			break;
 
