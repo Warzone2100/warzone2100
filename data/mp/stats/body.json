@@ -802,7 +802,7 @@
         "buildPoints": 625,
         "buildPower": 500,
         "class": "Transports",
-        "droidType": "TRANSPORTER",
+        "droidType": "SUPERTRANSPORTER",
         "hitpoints": 500,
         "id": "SuperTransportBody",
         "model": "drtrans.pie",

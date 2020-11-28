@@ -1306,7 +1306,7 @@ SDWORD moveCalcDroidSpeed(DROID *psDroid)
 	CHECK_DROID(psDroid);
 
 	// NOTE: This screws up since the transporter is offscreen still (on a mission!), and we are trying to find terrainType of a tile (that is offscreen!)
-	if (psDroid->droidType == DROID_TRANSPORTER && missionIsOffworld())
+	if (psDroid->droidType == DROID_SUPERTRANSPORTER && missionIsOffworld())
 	{
 		PROPULSION_STATS	*propulsion = asPropulsionStats + psDroid->asBits[COMP_PROPULSION];
 		speed = propulsion->maxSpeed;

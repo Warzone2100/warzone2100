@@ -237,7 +237,7 @@ function __camPlayerDead()
 	else
 	{
 		//Check the transporter.
-		var transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_TRANSPORTER);
+		var transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER);
 		if (transporter.length > 0)
 		{
 			var cargoDroids = enumCargo(transporter[0]);
@@ -259,7 +259,7 @@ function __camPlayerDead()
 		var droidCount = 0;
 		enumDroid(CAM_HUMAN_PLAYER).forEach(function(obj) {
 			droidCount += 1;
-			if (obj.droidType === DROID_TRANSPORTER)
+			if (obj.droidType === DROID_SUPERTRANSPORTER)
 			{
 				droidCount += enumCargo(obj).length;
 			}

@@ -1283,7 +1283,7 @@
         "armourKinetic": 100,
         "buildPoints": 5000,
         "class": "Transports",
-        "droidType": "TRANSPORTER",
+        "droidType": "SUPERTRANSPORTER",
         "hitpoints": 5000,
         "id": "TransporterBody",
         "model": "drtrans.pie",
