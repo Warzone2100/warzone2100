@@ -78,6 +78,7 @@
 #include "combat.h"
 #include "qtscript.h"
 #include "activity.h"
+#include "wztime.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005
@@ -1982,13 +1983,7 @@ static void fillTimeDisplay(W_LABEL &Label, UDWORD time, bool bHours)
 	}
 	else
 	{
-		time_t secs = time / GAME_TICKS_PER_SEC;
-		struct tm tmp;
-#if defined(WZ_OS_WIN)
-		gmtime_s(&tmp, &secs);
-#else
-		gmtime_r(&secs, &tmp);
-#endif
+		struct tm tmp = getUtcTime(static_cast<time_t>(time / GAME_TICKS_PER_SEC));
 		strftime(psText, sizeof(psText), bHours ? "%H:%M:%S" : "%M:%S", &tmp);
 	}
 	Label.setString(WzString::fromUtf8(psText));

@@ -42,6 +42,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "mission.h"
+#include "wztime.h"
 #include "titleui/titleui.h"
 #include "titleui/multiplayer.h"
 
@@ -317,13 +318,7 @@ bool addChallenges()
 		if (seconds > 0)
 		{
 			char psTimeText[sizeof("HH:MM:SS")] = { 0 };
-			time_t secs = seconds;
-			struct tm tmp;
-#if defined(WZ_OS_WIN)
-			gmtime_s(&tmp, &secs);
-#else
-			gmtime_r(&secs, &tmp);
-#endif
+			struct tm tmp = getUtcTime(static_cast<time_t>(seconds));
 			strftime(psTimeText, sizeof(psTimeText), "%H:%M:%S", &tmp);
 			highscore = WzString::fromUtf8(psTimeText) + " by " + name + " (" + WzString(victory ? "Victory" : "Survived") + ")";
 		}
