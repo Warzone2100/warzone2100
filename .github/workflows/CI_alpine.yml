@@ -32,9 +32,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build the Docker image
       run: |
-        cd docker/alpine-latest/
-        docker build -t alpine .
-        cd ../..
+        docker build -f docker/alpine-latest/Dockerfile -t alpine .
     - name: CMake Configure
       env:
         CC: ${{ matrix.cc }}

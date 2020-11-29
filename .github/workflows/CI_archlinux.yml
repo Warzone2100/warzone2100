@@ -35,9 +35,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build the Docker image
       run: |
-        cd docker/archlinux-latest/
-        docker build -t archlinux .
-        cd ../..
+        docker build -f docker/archlinux-latest/Dockerfile -t archlinux .
     - name: CMake Configure
       env:
         CC: ${{ matrix.cc }}
