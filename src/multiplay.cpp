@@ -269,7 +269,7 @@ bool multiPlayerLoop()
 						NETlogEntry(msg, SYNC_FLAG, index);
 
 #ifndef DEBUG
-						kickPlayer(index, "invalid data!", ERROR_INVALID);
+						kickPlayer(index, _("Invalid data!"), ERROR_INVALID);
 #endif
 						debug(LOG_WARNING, "Kicking Player %s (%u), they tried to bypass data integrity check!", getPlayerName(index), index);
 					}
@@ -839,7 +839,8 @@ bool recvMessage()
 				}
 				else if (selectedPlayer == player_id)  // we've been told to leave.
 				{
-					debug(LOG_ERROR, "You were kicked because %s", reason);
+					debug(LOG_INFO, "You were kicked because %s", reason);
+					displayKickReasonPopup(reason);
 					setPlayerHasLost(true);
 					ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
 				}
@@ -891,7 +892,7 @@ void HandleBadParam(const char *msg, const int from, const int actual)
 	NETlogEntry(buf, SYNC_FLAG, actual);
 	if (NetPlay.isHost)
 	{
-		ssprintf(buf, "Auto kicking player %s, invalid command received.", NetPlay.players[actual].name);
+		ssprintf(buf, _("Auto kicking player %s, invalid command received."), NetPlay.players[actual].name);
 		sendInGameSystemMessage(buf);
 		kickPlayer(actual, buf, KICK_TYPE);
 	}

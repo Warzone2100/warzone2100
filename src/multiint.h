@@ -120,6 +120,7 @@ extern char sPlayer[128];
 extern bool multiintDisableLobbyRefresh; // gamefind
 
 void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type);
+void displayKickReasonPopup(const std::string &reason);
 void loadMapPreview(bool hideInterface);
 
 bool changeReadyStatus(UBYTE player, bool bReady);

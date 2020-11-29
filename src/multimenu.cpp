@@ -1242,7 +1242,7 @@ void intProcessMultiMenu(UDWORD id)
 				sendInGameSystemMessage(buf);
 				ssprintf(buf, _("kicked %s : %s from the game, and added them to the banned list!"), getPlayerName((unsigned int) i), NetPlay.players[i].IPtextAddress);
 				NETlogEntry(buf, SYNC_FLAG, (unsigned int) i);
-				kickPlayer((unsigned int) i, "you are unwanted by the host.", ERROR_KICKED);
+				kickPlayer((unsigned int) i, _("The host has kicked you from the game."), ERROR_KICKED);
 				return;
 			}
 		}
