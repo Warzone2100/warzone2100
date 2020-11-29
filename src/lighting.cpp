@@ -103,12 +103,6 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			if (i == 0 || j == 0 || i >= mapWidth - 1 || j >= mapHeight - 1)
 			{
 				psTile->illumination = 16;
-
-				// give water tiles at edge of map a border
-				if (terrainType(psTile) == TER_WATER)
-				{
-					psTile->texture = 0;
-				}
 			}
 			else
 			{
