@@ -442,7 +442,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
 	requestList->setChildSize(R_BUT_W, R_BUT_H);
 	requestList->setChildSpacing(4, 4);
-	requestList->setGeometry(2 + buttonsX, 2, M_REQUEST_W - buttonsX, M_REQUEST_H - 4);
+	requestList->setGeometry(2 + buttonsX, 2, sButInit.x - buttonsX - 8, M_REQUEST_H - 4);
 
 	// Put the buttons on it.
 	int nextButtonId = M_REQUEST_BUT;
