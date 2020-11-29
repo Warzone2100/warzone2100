@@ -29,9 +29,7 @@ jobs:
         echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
     - name: Build the Docker image
       run: |
-        cd docker/ubuntu-16.04/
-        docker build -t ubuntu .
-        cd ../..
+        docker build -f docker/ubuntu-16.04/Dockerfile -t ubuntu .
     - name: CMake Configure
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
     - name: CMake Build
@@ -63,9 +61,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build the Docker image
       run: |
-        cd docker/${{ matrix.docker }}/
-        docker build -t ubuntu .
-        cd ../..
+        docker build -f docker/${{ matrix.docker }}/Dockerfile -t ubuntu .
     - name: Compute build variables
       run: |
         . .ci/githubactions/export_build_output_desc.sh
@@ -141,9 +137,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build the Docker image
       run: |
-        cd docker/ubuntu-18.04/
-        docker build -t ubuntu .
-        cd ../..
+        docker build -f docker/ubuntu-18.04/Dockerfile -t ubuntu .
     - name: CMake Configure
       run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
     - name: CMake Package Source
@@ -186,9 +180,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build the Docker image
       run: |
-        cd docker/ubuntu-18.04/
-        docker build -t ubuntu .
-        cd ../..
+        docker build -f docker/ubuntu-18.04/Dockerfile -t ubuntu .
     - name: CMake Configure
       run: docker run --rm -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
     - name: CMake Build
@@ -208,9 +200,7 @@ jobs:
   #     run: git submodule update --init --recursive
   #   - name: Build the Docker image
   #     run: |
-  #       cd docker/ubuntu-20.04/
-  #       docker build -t ubuntu .
-  #       cd ../..
+  #       docker build -f docker/ubuntu-20.04/Dockerfile -t ubuntu .
   #   - name: CMake Configure
   #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
   #   - name: CMake Build
@@ -230,9 +220,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build the Docker image
       run: |
-        cd docker/ubuntu-20.04/
-        docker build -t ubuntu .
-        cd ../..
+        docker build -f docker/ubuntu-20.04/Dockerfile -t ubuntu .
     - name: CMake Configure
       run: docker run --rm -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
     - name: CMake Build
@@ -257,9 +245,7 @@ jobs:
   #       docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   #   - name: Build the Docker image
   #     run: |
-  #       cd docker/ubuntu-20.04/
-  #       docker build -t ubuntu -f Dockerfile.arm64 .
-  #       cd ../..
+  #       docker build -f docker/ubuntu-20.04/Dockerfile.arm64 -t ubuntu .
   #   - name: CMake Configure
   #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
   #   - name: CMake Build
