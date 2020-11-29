@@ -12,7 +12,8 @@ steps:
   commands:
   - cat /etc/lsb-release
   - apt-get -u update
-  - DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev zip unzip qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev asciidoctor gettext git cmake libcurl4-gnutls-dev gnutls-dev libsodium-dev
+  - DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ libc-dev dpkg-dev ninja-build pkg-config
+  - ./get-dependencies_linux.sh ubuntu build-dependencies
   - rm -rf /var/lib/apt/lists/*
   - cmake -P ".ci/travis/prepare_git_repo.cmake"
   - git submodule update --init --recursive
@@ -34,7 +35,8 @@ steps:
   commands:
   - cat /etc/lsb-release
   - apt-get -u update
-  - DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev zip unzip qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev asciidoctor gettext git cmake libcurl4-gnutls-dev gnutls-dev libsodium-dev
+  - DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config
+  - ./get-dependencies_linux.sh ubuntu build-dependencies
   - rm -rf /var/lib/apt/lists/*
   - cmake -P ".ci/travis/prepare_git_repo.cmake"
   - git submodule update --init --recursive
@@ -56,7 +58,8 @@ steps:
   commands:
   - cat /etc/lsb-release
   - apt-get -u update
-  - DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev zip unzip qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev asciidoctor gettext git cmake libcurl4-gnutls-dev gnutls-dev libsodium-dev
+  - DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config
+  - ./get-dependencies_linux.sh ubuntu build-dependencies
   - rm -rf /var/lib/apt/lists/*
   - cmake -P ".ci/travis/prepare_git_repo.cmake"
   - git submodule update --init --recursive
