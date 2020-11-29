@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-04 18:19\n"
+"PO-Revision-Date: 2020-11-29 16:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -4016,11 +4016,11 @@ msgstr "Все ракеты автоматически улучшены"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Уничтожьте все юниты Новой Парадигмы"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Уничтожьте все подкрепления Новой Парадигмы"
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
@@ -16484,43 +16484,43 @@ msgstr "Назначить группу 9"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Добавить в группу 0"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Добавить в группу 1"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Добавить в группу 2"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Добавить в группу 3"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Добавить в группу 4"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Добавить в группу 5"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Добавить в группу 6"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Добавить в группу 7"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Добавить в группу 8"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Добавить в группу 9"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
@@ -16728,19 +16728,19 @@ msgstr "Перекрытия"
 
 #: src/keymap.cpp:494
 msgid "Toggle Console History "
-msgstr ""
+msgstr "Переключить историю консоли "
 
 #: src/keymap.cpp:495
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Переключить историю командного чата"
 
 #: src/keymap.cpp:496
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Повернуть здание по часовой стрелке"
 
 #: src/keymap.cpp:497
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Повернуть здание против часовой стрелки"
 
 #: src/keymap.cpp:500
 msgid "Center View on HQ"
@@ -16792,7 +16792,7 @@ msgstr "Переключение на радар союзников или вр�
 
 #: src/keymap.cpp:524
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Показать все горячие клавиши"
 
 #: src/keymap.cpp:533
 msgid "Select all Combat Units"
@@ -17177,7 +17177,7 @@ msgstr "Карта-Мод!"
 
 #: src/multiint.cpp:1371
 msgid "Random map!"
-msgstr ""
+msgstr "Случайная карта!"
 
 #: src/multiint.cpp:1388
 msgid "Click to set Password"
@@ -17393,7 +17393,7 @@ msgstr "Вы были исключены: "
 
 #: src/multiint.cpp:3781
 msgid "No connection to host."
-msgstr ""
+msgstr "Нет соединения с хостом."
 
 #: src/multiint.cpp:3941
 msgid "Cannot change to a map with too few slots for all players."
