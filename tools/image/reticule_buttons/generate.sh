@@ -1,19 +1,22 @@
 #!/bin/bash
 
-# This script combines images in data/base/images/src/ to create the icons for the reticule buttons.
+# This script combines images in ./src/ to create the icons for the reticule buttons.
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 source_dir="$DIR/src"
 target_dir="$DIR/../../../data/base/images/intfac"
-scale=2
-hilight_border_thickness=1
-blue_border_thickness=1
+scale=1
+hilight_border_thickness=3
+hilight_border_outline_thickness=1
+blue_border_thickness=3
 white_outline_thickness=1
-small_width=38
-small_height=30
-big_width=46
-big_height=38
+reflection_padding_thickness=2
+down_padding=$((blue_border_thickness + white_outline_thickness))
+small_width=76
+small_height=60
+big_width=92
+big_height=76
 
 main () {
     for i in build research design intelmap manufacture commanddroid
@@ -23,26 +26,23 @@ main () {
 
     generate_reticule_icon cancel $((big_width)) $((big_height))
 
-    convert $(border $((small_width + 2 * hilight_border_thickness)) $((small_height + 2 * hilight_border_thickness)) $((hilight_border_thickness + 1))) $target_dir/image_reticule_hilight.png &
-    convert $(border $((big_width + 2 * hilight_border_thickness)) $((big_height + 2 * hilight_border_thickness)) $((hilight_border_thickness + 1))) $target_dir/image_cancel_hilight.png &
+    convert $(border $((small_width + 2 * hilight_border_outline_thickness)) $((small_height + 2 * hilight_border_outline_thickness)) $((hilight_border_thickness))) $target_dir/image_reticule_hilight.png &
+    convert $(border $((big_width + 2 * hilight_border_outline_thickness)) $((big_height + 2 * hilight_border_outline_thickness)) $((hilight_border_thickness))) $target_dir/image_cancel_hilight.png &
 
     convert \
-        $(rasterized_svg "$source_dir/shape.svg" $small_width $small_height) \
-        \( \
-            $(rasterized_svg "$source_dir/shape.svg" $((small_width - 2 * blue_border_thickness)) $((small_height - 2 * blue_border_thickness))) \
-            -modulate 50,0 \
-        \) \
         -gravity center \
+        $(shape "$small_width" "$small_height" "#5c5c5cff") \
+        $(shape $((small_width - 2 * blue_border_thickness)) $((small_height - 2 * blue_border_thickness)) "#000000ff") \
+        -compose over \
+        -composite \
+        $(shape $((small_width - 2 * down_padding)) $((small_height - 2 * down_padding)) "#5c5c5cff") \
         -compose over \
         -composite \
         $target_dir/image_reticule_grey.png &
 
     convert \
-        $(rasterized_svg "$source_dir/shape.svg" $((small_width)) $((small_height))) \
-        \( \
-            $(rasterized_svg "$source_dir/shape.svg" $((small_width - 2 * blue_border_thickness)) $((small_height - 2 * blue_border_thickness))) \
-            -modulate 200 \
-        \) \
+        $(shape "$small_width" "$small_height" "#cce6ffff") \
+        $(shape $((small_width - 2 * blue_border_thickness)) $((small_height - 2 * blue_border_thickness)) "#ffffffff") \
         -gravity center \
         -compose over \
         -composite \
@@ -64,7 +64,7 @@ border () {
     thickness="$3"
 
     echo "(
-        $(rasterized_svg "$source_dir/shape.svg" "$width" "$height")
+        $(shape "$width" "$height" "#cce6ffff") \
         (
             $(rasterized_svg "$source_dir/shape.svg" $((width - 2 * thickness)) $((height - 2 * thickness)))
             -channel a -negate +channel
@@ -76,16 +76,55 @@ border () {
     )"
 }
 
+shape () {
+    width="$1"
+    height="$2"
+    color="$3"
+
+    echo "(
+        ( -size $((width * scale))x$((height * scale)) xc:${color} )
+        $(rasterized_svg "$source_dir/shape.svg" "$width" "$height")
+        -gravity center
+        -channel A
+        -compose multiply
+        -composite +channel
+    )"
+}
+
 generate_reticule_icon () {
     icon_name="$1"
     width="$2"
     height="$3"
+    glow_padding=$((down_padding))
+    reflection_padding=$((down_padding + reflection_padding_thickness))
+
+    reflection_image="
+        -compose over
+        -composite
+        (
+            $(rasterized_svg "$source_dir/reflection.svg" $((width - 2 * reflection_padding)) $((height - 2 * reflection_padding)))
+            $(rasterized_svg "$source_dir/shape.svg" $((width - 2 * reflection_padding)) $((height - 2 * reflection_padding)))
+            -gravity center
+            -channel A
+            -compose multiply
+            -composite +channel
+        )
+    "
+
+    if [ "$reflection" == '0' ]
+    then
+        reflection_image=''
+    fi
 
     convert \
-        $(rasterized_svg "$source_dir/shape.svg" "$width" "$height") \
+        -gravity center \
+        $(shape "$width" "$height" "#818eb8ff") \
+        $(shape $((width - 2 * blue_border_thickness)) $((height - 2 * blue_border_thickness)) "#000000ff") \
+        -compose over \
+        -composite \
         \( \
             $(rasterized_svg "$source_dir/$icon_name.svg" "$width" "$height") \
-            $(rasterized_svg "$source_dir/shape.svg" $((width - 2 * blue_border_thickness)) $((height - 2 * blue_border_thickness))) \
+            $(rasterized_svg "$source_dir/shape.svg" $((width - 2 * down_padding)) $((height - 2 * down_padding))) \
             -gravity center \
             -compose copyopacity \
             -composite \
@@ -94,16 +133,10 @@ generate_reticule_icon () {
         -layers merge \
         "$target_dir/image_${icon_name}_up.png" &
 
-    down_padding=$((blue_border_thickness + white_outline_thickness))
-    glow_padding=$((down_padding))
-    reflection_padding=$((down_padding + 1))
     convert \
         -gravity center \
-        $(rasterized_svg "$source_dir/shape.svg" "$width" "$height") \
-        \( \
-            -modulate 300,100 \
-            $(rasterized_svg "$source_dir/shape.svg" $((width - 2 * blue_border_thickness)) $((height - 2 * blue_border_thickness))) \
-        \) \
+        $(shape "$width" "$height" "#cce6ffff") \
+        $(shape $((width - 2 * blue_border_thickness)) $((height - 2 * blue_border_thickness)) "#ffffffff") \
         -compose over \
         -composite \
         \( \
@@ -121,7 +154,10 @@ generate_reticule_icon () {
                 $(rasterized_svg "$source_dir/$icon_name.svg" "$width" "$height") \
             \) \
             \( \
-                $(rasterized_svg "$source_dir/glow_mask.svg" $((width - 2 * glow_padding)) $((height - 2 * glow_padding))) \
+                \( \
+                    $(rasterized_svg "$source_dir/glow_mask.svg" $((width - 2 * glow_padding)) $((height - 2 * glow_padding))) \
+                    -alpha set -channel A -function Polynomial 0.7,0 \
+                \) \
                 $(rasterized_svg "$source_dir/shape.svg" $((width - 2 * glow_padding)) $((height - 2 * glow_padding))) \
                 -gravity center \
                 -channel A \
@@ -132,16 +168,7 @@ generate_reticule_icon () {
             -compose copyopacity \
             -composite \
         \) \
-        -compose over \
-        -composite \
-        \( \
-            $(rasterized_svg "$source_dir/reflection.svg" $((width - 2 * reflection_padding)) $((height - 2 * reflection_padding))) \
-            $(rasterized_svg "$source_dir/shape.svg" $((width - 2 * reflection_padding)) $((height - 2 * reflection_padding))) \
-            -gravity center \
-            -channel A \
-            -compose multiply \
-            -composite +channel \
-        \) \
+        $reflection_image \
         -gravity center \
         -compose over \
         -composite \
