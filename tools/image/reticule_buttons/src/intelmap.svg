@@ -8,6 +8,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="38"
@@ -19,6 +20,11 @@
    sodipodi:docname="intelmap.svg">
   <defs
      id="defs1072">
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#pattern1601"
+       id="pattern1606"
+       patternTransform="matrix(0.26458333,0,0,0.26458333,5.4009607,293.96346)" />
     <linearGradient
        id="linearGradient1813"
        osb:paint="solid">
@@ -48,6 +54,41 @@
          offset="1"
          style="stop-color:#373c66;stop-opacity:1;" />
     </linearGradient>
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="4.9999998"
+       height="4.9999998"
+       patternTransform="matrix(0.26458333,0,0,0.26458333,-2.789592,290.24646)"
+       id="pattern1677">
+      <rect
+         y="0"
+         x="0"
+         height="5"
+         width="5"
+         id="rect873-3-6-7"
+         style="opacity:1;fill:#7b2013;fill-opacity:1;stroke:none;stroke-width:0.51282263;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <rect
+         y="0"
+         x="0"
+         height="3.9999998"
+         width="3.9999998"
+         id="rect873-3-5"
+         style="opacity:1;fill:#630000;fill-opacity:1;stroke:none;stroke-width:0.41025808;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </pattern>
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="4.4102579"
+       height="4.4102579"
+       patternTransform="matrix(0.26458333,0,0,0.26458333,-4.7314903,291.44402)"
+       id="pattern1601">
+      <rect
+         y="0.20512904"
+         x="0.20512904"
+         height="3.9999998"
+         width="3.9999998"
+         id="rect873"
+         style="opacity:1;fill:#630000;fill-opacity:1;stroke:#7b2113;stroke-width:0.41025808;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </pattern>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -56,9 +97,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313708"
-     inkscape:cx="-5.4120228"
-     inkscape:cy="14.262868"
+     inkscape:zoom="7.9999997"
+     inkscape:cx="-11.364469"
+     inkscape:cy="28.73468"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -76,7 +117,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -86,7 +127,7 @@
      id="layer1"
      transform="translate(0,-289.0625)">
     <rect
-       style="fill:#630000;fill-opacity:1;stroke:none;stroke-width:0.33560413;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:url(#pattern1606);fill-opacity:1;stroke:none;stroke-width:0.33560413;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect3505"
        width="10.054167"
        height="7.9375"
