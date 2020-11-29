@@ -1,12 +1,11 @@
 # How to build the docker images:
 
-In the `Dockerfile` directory:
-- `docker build -t <build_image_name> .`
+In the root of the WZ repo:
+- `docker build -f docker/<subdir>/Dockerfile -t <build_image_name> .`
 
 For example:
 ```
-cd ubuntu-16.04
-docker build -t ubuntu .
+docker build -f docker/ubuntu-20.04/Dockerfile -t ubuntu .
 ```
 
 For more information, see the documentation on [`docker build`](https://docs.docker.com/engine/reference/commandline/build/).
@@ -17,13 +16,6 @@ Beware of line ending mismatch between Windows and Linux when cloning repo.
 Replace `${pwd}` with your pwd command on your platform.
 
 ### Ubuntu
-
-- via Makefile
-```
-docker run --rm -v ${pwd}:/code <build_image_name> ./autogen.sh
-docker run --rm -v ${pwd}:/code <build_image_name> ./configure
-docker run --rm -v ${pwd}:/code <build_image_name> make
-```
 
 - via CMake
 ```
