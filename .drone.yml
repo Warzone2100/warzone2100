@@ -8,7 +8,7 @@ platform:
 
 steps:
 - name: build
-  image: arm64v8/ubuntu:20.04
+  image: arm64v8/ubuntu:18.04
   commands:
   - cat /etc/lsb-release
   - apt-get -u update
