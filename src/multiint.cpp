@@ -123,6 +123,7 @@
 
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 #define VOTE_TAG                 "voting"
+#define KICK_REASON_TAG          "kickReason"
 
 // ////////////////////////////////////////////////////////////////////////////
 // tertile dependent colors for map preview
@@ -1392,8 +1393,8 @@ static void setupVoteChoice()
 	{
 		WZ_Notification notification;
 		notification.duration = 0;
-		notification.contentTitle = "Vote";
-		notification.contentText = "Allow host to change map or randomize?";
+		notification.contentTitle = _("Vote");
+		notification.contentText = _("Allow host to change map or randomize?");
 		notification.action = WZ_Notification_Action("Allow", [](const WZ_Notification&) {
 			uint8_t vote = 1;
 			sendVoteData(vote);
@@ -2514,12 +2515,22 @@ void kickPlayer(uint32_t player_id, const char *reason, LOBBY_ERROR_TYPES type)
 	NETend();
 	NETflush();
 	wzDelay(300);
-	debug(LOG_NET, "Kicking player %u (%s).",
-	      (unsigned int)player_id, getPlayerName(player_id));
+	debug(LOG_NET, "Kicking player %u (%s). Reason: %s", (unsigned int)player_id, getPlayerName(player_id), reason);
 
 	ActivityManager::instance().hostKickPlayer(NetPlay.players[player_id], type, reason);
 
 	NETplayerKicked(player_id);
+}
+
+void displayKickReasonPopup(const std::string &reason)
+{
+	WZ_Notification notification;
+	notification.duration = GAME_TICKS_PER_SEC * 10;
+	notification.contentTitle = _("Kicked from game");
+	notification.contentText = reason;
+	notification.tag = KICK_REASON_TAG;
+
+	addNotification(notification, WZ_Notification_Trigger(GAME_TICKS_PER_SEC * 1));
 }
 
 RoomMessage buildMessage(int32_t sender, const char *text)
@@ -3664,7 +3675,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			{
 				std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(player));
 				sendRoomSystemMessage(msg.c_str());
-				kickPlayer(player, "you are unwanted by the host.", ERROR_KICKED);
+				kickPlayer(player, _("The host has kicked you from the game."), ERROR_KICKED);
 				resetReadyStatus(true);		//reset and send notification to all clients
 			}
 		}
@@ -3750,7 +3761,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 	if (id == MULTIOP_TEAMCHOOSER_KICK)
 	{
 		std::string msg = astringf(_("The host has kicked %s from the game!"), getPlayerName(teamChooserUp));
-		kickPlayer(teamChooserUp, "you are unwanted by the host.", ERROR_KICKED);
+		kickPlayer(teamChooserUp, _("The host has kicked you from the game."), ERROR_KICKED);
 		sendRoomSystemMessage(msg.c_str());
 		resetReadyStatus(true);		//reset and send notification to all clients
 		closeTeamChooser();
@@ -4014,7 +4025,8 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 				{
 					setLobbyError(KICK_TYPE);
 					stopJoining(std::make_shared<WzMsgBoxTitleUI>(WzString(_("You have been kicked: ")) + reason, parent));
-					debug(LOG_ERROR, "You have been kicked, because %s ", reason);
+					debug(LOG_INFO, "You have been kicked, because %s ", reason);
+					displayKickReasonPopup(reason);
 					ActivityManager::instance().wasKickedByPlayer(NetPlay.players[queue.index], KICK_TYPE, reason);
 				}
 				else
