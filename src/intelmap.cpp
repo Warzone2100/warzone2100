@@ -29,6 +29,7 @@
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/button.h"
+#include "lib/sound/mixer.h" //for sound_GetUIVolume()
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/pietypes.h"
@@ -757,7 +758,6 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 				psResearch = getResearchForMsg(psMessage->pViewData);
 				if (psResearch != nullptr)
 				{
-					static const float maxVolume = 1.f;
 					static AUDIO_STREAM *playing = nullptr;
 
 					// only play the sample once, otherwise, they tend to overlap each other
@@ -793,7 +793,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 
 					if (audio != nullptr)
 					{
-						playing = audio_PlayStream(audio, maxVolume, [](const void *) { playing = nullptr; }, nullptr);
+						playing = audio_PlayStream(audio, sound_GetUIVolume(), [](const void *) { playing = nullptr; }, nullptr);
 					}
 				}
 
