@@ -62,13 +62,13 @@ You may fill them out with the correct values for backward compatibility.
 
 ### NORMALMAP
 
-> NORMALMAP 0 page-7-barbarians-arizona_normal.png 0 0
+> NORMALMAP 0 page-7-barbarians-arizona_normal.png
 
 Optional. As above, but this sets the normal map texture page for the model.
 
 ### SPECULARMAP
 
-> SPECULARMAP 0 page-7-barbarians-arizona.png 0 0
+> SPECULARMAP 0 page-7-barbarians-arizona.png
 
 Optional. As above, but this sets the specular map texture page for the model.
 
