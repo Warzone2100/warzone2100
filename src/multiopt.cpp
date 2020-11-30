@@ -345,6 +345,7 @@ bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 	loadMultiStats(sPlayer, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
+	lookupRatingAsync(selectedPlayer);
 
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
 	return true;

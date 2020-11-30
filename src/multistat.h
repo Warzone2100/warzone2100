@@ -68,6 +68,7 @@ void updateMultiStatsWins();
 void updateMultiStatsLoses();
 void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player);
 void recvMultiStats(NETQUEUE queue);
+void lookupRatingAsync(uint32_t playerIndex);
 
 std::map<std::string, EcKey::Key> const &getKnownPlayers();
 void addKnownPlayer(std::string const &name, EcKey const &key, bool override = false);

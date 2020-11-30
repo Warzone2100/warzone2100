@@ -74,6 +74,7 @@ static void NETauto(PLAYERSTATS::Autorating &ar)
 		NETauto(ar.medal);
 		NETauto(ar.level);
 		NETauto(ar.elo);
+		NETauto(ar.autohoster);
 	}
 }
 
@@ -94,7 +95,7 @@ PLAYERSTATS::Autorating::Autorating(nlohmann::json const &json)
 	}
 }
 
-static void lookupRatingAsync(uint32_t playerIndex)
+void lookupRatingAsync(uint32_t playerIndex)
 {
 	if (playerStats[playerIndex].identity.empty())
 	{
