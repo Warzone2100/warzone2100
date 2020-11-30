@@ -430,7 +430,9 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, i
 
 void iV_DrawImage2(const WzString &filename, float x, float y, float width, float height)
 {
+	if (filename.isEmpty()) { return; }
 	ImageDef *image = iV_GetImage(filename);
+	ASSERT_OR_RETURN(, image != nullptr, "No image found for filename: %s", filename.toUtf8().c_str());
 	const gfx_api::gfxFloat invTextureSize = image->invTextureSize;
 	const int tu = image->Tu;
 	const int tv = image->Tv;
