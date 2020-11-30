@@ -21,6 +21,9 @@ jobs:
       WZ_MSVC_VER: ${{ matrix.compiler }}
       WZ_TARGET_ARCH: ${{ matrix.architecture }}
       VSCMD_SKIP_SENDTELEMETRY: 1
+      # MSVC parallel builds: https://devblogs.microsoft.com/cppblog/improved-parallelism-in-msbuild/
+      UseMultiToolTask: true
+      EnforceProcessCountAcrossBuilds: true
     name: '${{ matrix.architecture }} [${{ matrix.compiler }}]'
     runs-on: windows-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
@@ -392,10 +395,14 @@ jobs:
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
     - name: CMake Configure (Portable Build)
       working-directory: '${{ github.workspace }}\build'
+      env:
+        CXXFLAGS: '/MP'
       run: |
         # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform (portable build)
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
     - name: CMake Build (Portable Build)
+      env:
+        CXXFLAGS: '/MP'
       run: |
         & cmake --build build --config Release --target package -- /m
         # Rename the portable installer
@@ -419,10 +426,14 @@ jobs:
         if-no-files-found: 'warn'
     - name: CMake Configure (Regular Installer)
       working-directory: '${{ github.workspace }}\build'
+      env:
+        CXXFLAGS: '/MP'
       run: |
         # Re-run CMake configure for non-portable (regular) installer
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
     - name: CMake Build (Regular Installer)
+      env:
+        CXXFLAGS: '/MP'
       run: |
         & cmake --build build --config Release --target package
         # Rename the regular installer
