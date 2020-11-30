@@ -440,7 +440,7 @@ std::string wzBindTextDomain(const char *domainname, const char *dirname)
 	}
 
 	// and call wbindtextdomain
-	wchar_t *pResult = wbindtextdomain(domainname, wstr_dirname.data());
+	const wchar_t *pResult = wbindtextdomain(domainname, wstr_dirname.data());
 	if (!pResult)
 	{
 		debug(LOG_ERROR, "wbindtextdomain failed");
@@ -468,7 +468,7 @@ std::string wzBindTextDomain(const char *domainname, const char *dirname)
 	return std::string(utf8Buffer.data(), utf8Len - 1);
 #else
 	// call the normal bindtextdomain function
-	char * pResult = bindtextdomain(domainname, dirname);
+	const char * pResult = bindtextdomain(domainname, dirname);
 	if (!pResult)
 	{
 		return std::string();
