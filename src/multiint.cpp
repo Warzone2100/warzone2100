@@ -3507,6 +3507,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		loadMultiStats((char *)sPlayer, &playerStats);
 		setMultiStats(selectedPlayer, playerStats, false);
 		setMultiStats(selectedPlayer, playerStats, true);
+		lookupRatingAsync(selectedPlayer);
 		netPlayersUpdated = true;
 
 		if (NetPlay.isHost && NetPlay.bComms)
@@ -4161,6 +4162,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 				loadMultiStats((char *)sPlayer, &playerStats);
 				setMultiStats(selectedPlayer, playerStats, false);
 				setMultiStats(selectedPlayer, playerStats, true);
+				lookupRatingAsync(selectedPlayer);
 				netPlayersUpdated = true;
 				if (NetPlay.isHost && NetPlay.bComms)
 				{
@@ -4406,6 +4408,7 @@ void WzMultiplayerOptionsTitleUI::start()
 
 		PLAYERSTATS	nullStats;
 		loadMultiStats((char*)sPlayer, &nullStats);
+		lookupRatingAsync(selectedPlayer);
 
 		/* Entering the first time with challenge, immediately start the host */
 		if (challengeActive && !startHost())
