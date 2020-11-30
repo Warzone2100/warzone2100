@@ -13,6 +13,7 @@ uniform int tcmask; // whether a tcmask texture exists for the model
 uniform int normalmap; // whether a normal map exists for the model
 uniform int specularmap; // whether a specular map exists for the model
 uniform int hasTangents; // whether tangents were calculated for model
+uniform vec4 lightPosition;
 uniform mat4 NormalMatrix;
 uniform bool ecmEffect; // whether ECM special effect is enabled
 uniform bool alphaTest;
@@ -30,12 +31,18 @@ uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in float vertexDistance;
-in vec3 normal, lightDir, halfVec;
+in vec3 normal;
 in vec2 texCoord;
+in vec3 vVertex;
+in vec3 eyeVec;
+in mat3 TangentSpaceMatrix;
 #else
 varying float vertexDistance;
-varying vec3 normal, lightDir, halfVec;
+varying vec3 normal;
 varying vec2 texCoord;
+varying vec3 vVertex;
+varying vec3 eyeVec;
+varying mat3 TangentSpaceMatrix;
 #endif
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
@@ -56,6 +63,16 @@ void main()
 	{
 		discard;
 	}
+
+	vec3 lightDir = normalize(lightPosition.xyz - vVertex);
+
+	if (hasTangents != 0)
+	{
+		// Transform light and eye direction vectors by tangent basis
+		lightDir *= TangentSpaceMatrix;
+	}
+
+	vec3 halfVec = normalize(lightDir - eyeVec);
 
 	// Normal map implementations
 	vec3 N = normal;
