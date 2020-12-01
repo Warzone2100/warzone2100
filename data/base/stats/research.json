@@ -3479,7 +3479,7 @@
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-RotMG",
         "msgName": "RES_DEF_RotMG",
-        "name": "Assault Gun Emplacement",
+        "name": "Assault Gun Guard Tower",
         "requiredResearch": [
             "R-Wpn-MG4"
         ],
