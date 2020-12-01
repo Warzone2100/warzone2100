@@ -343,8 +343,8 @@ void counterBatteryFire(BASE_OBJECT *psAttacker, BASE_OBJECT *psTarget)
 	{
 		if (aiCheckAlliances(psTarget->player, psViewer->player))
 		{
-			if ((psViewer->type == OBJ_STRUCTURE && !structCBSensor((STRUCTURE *)psViewer))
-			    || (psViewer->type == OBJ_DROID && !cbSensorDroid((DROID *)psViewer)))
+			if ((psViewer->type == OBJ_STRUCTURE && !structCBSensor((STRUCTURE *)psViewer) && (((STRUCTURE *)psViewer)->pStructureType->pSensor->type != VTOL_CB_SENSOR)) ||
+				(psViewer->type == OBJ_DROID && !cbSensorDroid((DROID *)psViewer)))
 			{
 				continue;
 			}
