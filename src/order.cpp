@@ -899,7 +899,7 @@ void orderUpdateDroid(DROID *psDroid)
 		if (psDroid->order.psObj == nullptr)
 		{
 			psDroid->order = DroidOrder(DORDER_NONE);
-			if (isVtolDroid(psDroid))
+			if (isVtolDroid(psDroid) && !vtolFull(psDroid))
 			{
 				moveToRearm(psDroid);
 			}
@@ -969,6 +969,7 @@ void orderUpdateDroid(DROID *psDroid)
 				}
 			}
 			else if (isVtolDroid(psDroid) &&
+			        !vtolFull(psDroid) &&
 			         (psDroid->action != DACTION_NONE) &&
 			         (psDroid->action != DACTION_FIRESUPPORT))
 			{
