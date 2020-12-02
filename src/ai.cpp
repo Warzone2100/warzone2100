@@ -197,6 +197,11 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			{
 				continue;
 			}
+			// Artillery should not fire at objects observed by VTOL CB sensors.
+			if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_CB_SENSOR)
+			{
+				continue;
+			}
 			psTemp = psDroid->psActionTarget[0];
 			isCB = asSensorStats[psDroid->asBits[COMP_SENSOR]].type == INDIRECT_CB_SENSOR;
 			isRD = objRadarDetector((BASE_OBJECT *)psDroid);
@@ -207,6 +212,11 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 
 			// skip incomplete structures
 			if (psCStruct->status != SS_BUILT)
+			{
+				continue;
+			}
+			// Artillery should not fire at objects observed by VTOL CB sensors.
+			if (psCStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR)
 			{
 				continue;
 			}
