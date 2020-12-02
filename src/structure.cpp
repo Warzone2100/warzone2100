@@ -6644,7 +6644,6 @@ bool structVTOLCBSensor(const STRUCTURE *psStruct)
 	// Super Sensor works as any type
 	if (psStruct->pStructureType->pSensor
 	    && (psStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR
-	        || psStruct->pStructureType->pSensor->type == RADAR_DETECTOR_SENSOR
 	        || psStruct->pStructureType->pSensor->type == SUPER_SENSOR)
 	    && psStruct->pStructureType->pSensor->location == LOC_TURRET)
 	{
