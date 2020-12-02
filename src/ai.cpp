@@ -181,7 +181,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 	{
 		BASE_OBJECT	*psTemp = nullptr;
 		bool		isCB = false;
-		bool		isRD = false;
+		//bool		isRD = false;
 
 		if (!aiCheckAlliances(psSensor->player, psObj->player))
 		{
@@ -192,20 +192,21 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			DROID		*psDroid = (DROID *)psSensor;
 
 			ASSERT_OR_RETURN(nullptr, psDroid->droidType == DROID_SENSOR, "A non-sensor droid in a sensor list is non-sense");
-			// Skip non-observing droids.
+			// Skip non-observing droids. This includes Radar Detectors at the moment since they never observe anything.
 			if (psDroid->action != DACTION_OBSERVE)
 			{
 				continue;
 			}
 			// Artillery should not fire at objects observed by VTOL CB/Strike sensors.
 			if (asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_CB_SENSOR ||
-				asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_INTERCEPT_SENSOR)
+				asSensorStats[psDroid->asBits[COMP_SENSOR]].type == VTOL_INTERCEPT_SENSOR ||
+				objRadarDetector((BASE_OBJECT *)psDroid))
 			{
 				continue;
 			}
 			psTemp = psDroid->psActionTarget[0];
 			isCB = asSensorStats[psDroid->asBits[COMP_SENSOR]].type == INDIRECT_CB_SENSOR;
-			isRD = objRadarDetector((BASE_OBJECT *)psDroid);
+			//isRD = objRadarDetector((BASE_OBJECT *)psDroid);
 		}
 		else if (psSensor->type == OBJ_STRUCTURE)
 		{
@@ -218,13 +219,14 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 			}
 			// Artillery should not fire at objects observed by VTOL CB/Strike sensors.
 			if (psCStruct->pStructureType->pSensor->type == VTOL_CB_SENSOR ||
-				psCStruct->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR)
+				psCStruct->pStructureType->pSensor->type == VTOL_INTERCEPT_SENSOR ||
+				objRadarDetector((BASE_OBJECT *)psCStruct))
 			{
 				continue;
 			}
 			psTemp = psCStruct->psTarget[0];
 			isCB = structCBSensor(psCStruct);
-			isRD = objRadarDetector((BASE_OBJECT *)psCStruct);
+			//isRD = objRadarDetector((BASE_OBJECT *)psCStruct);
 		}
 		if (!psTemp || psTemp->died || aiObjectIsProbablyDoomed(psTemp, false) || !validTarget(psObj, psTemp, 0) || aiCheckAlliances(psTemp->player, psObj->player))
 		{
@@ -251,6 +253,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 					}
 					foundCB = true;  // got CB target, drop everything and shoot!
 				}
+				/*
 				else if (isRD)
 				{
 					if (targetOrigin)
@@ -258,6 +261,7 @@ static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, W
 						*targetOrigin = ORIGIN_RADAR_DETECTOR;
 					}
 				}
+				*/
 			}
 		}
 	}
