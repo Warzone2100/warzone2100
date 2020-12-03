@@ -313,7 +313,7 @@ int war_GetMapZoom()
 
 void war_SetMapZoom(int mapZoom)
 {
-	if (mapZoom % MAP_ZOOM_RATE_MIN == 0 && ! (mapZoom < MINDISTANCE_CONFIG || mapZoom > MAXDISTANCE))
+	if (mapZoom % MAP_ZOOM_CONFIG_STEP == 0 && ! (mapZoom < MINDISTANCE_CONFIG || mapZoom > MAXDISTANCE))
 	{
 		warGlobs.mapZoom = mapZoom;
 		ActivityManager::instance().changedSetting("mapZoom", std::to_string(mapZoom));
