@@ -208,12 +208,16 @@ where zero is infinitely many, and finally the number of animation frames that f
 
 #### Animation frame lines
 
-> 	frame xpos ypos zpos xrot yrot zrot xscale yscale zscale
+> 	frame xpos zpos ypos xrot zrot yrot xscale yscale zscale
+
+(note order x,z,y order here! but not for scale where its x,y,z!)
 
 Each animation line starts with a tab followed by
 
 * the serially increasing frame number
-* three (x, y, z) vectors, one for position, one for rotation, and one for scaling.
+* three 3-dimensional vectors, one for position, one for rotation, and one for scaling.
+
+NOTE: For position and rotation - but not scaling - Y and Z are swapped.
 
 If the scaling values are negative, they indicate that the animation is a legacy
 keyframe animation sequence. Do not use this in future content.
