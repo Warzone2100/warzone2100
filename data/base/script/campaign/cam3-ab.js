@@ -35,7 +35,7 @@ function sendEdgeMapDroids()
 	var list = [
 		cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,
 		cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh,
-		cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike,
+		cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmsens,
 	];
 	var droids = [];
 

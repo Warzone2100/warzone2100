@@ -191,7 +191,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmsens]
 		},
 		"NX-NWFactory2": {
 			assembly: "NX-NWFactory2Assembly",
@@ -203,7 +203,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmsens]
 		},
 		"NX-NWCyborgFactory": {
 			assembly: "NX-NWCyborgFactoryAssembly",
@@ -227,7 +227,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmsens]
 		},
 		"NX-SWFactory": {
 			assembly: "NX-SWFactoryAssembly",
@@ -288,7 +288,7 @@ function eventStartLevel()
 				repair: 45,
 				count: -1,
 			},
-			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmstrike]
+			templates: [cTempl.nxhgauss, cTempl.nxmpulseh, cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmsens]
 		},
 		"NX-VtolFactory1": {
 			assembly: "NX-VtolFactory1Assembly",

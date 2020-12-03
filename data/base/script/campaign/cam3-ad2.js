@@ -38,7 +38,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 function randomTemplates(list)
 {
 	var i = 0;
-	var extras = [cTempl.nxmstrike, cTempl.nxmsamh];
+	var extras = [cTempl.nxmsens, cTempl.nxmsamh];
 	var droids = [];
 	var size = 12 + camRand(4); //Max of 15.
 
