@@ -980,6 +980,12 @@ void intResetScreen(bool NoAnim)
 
 void intOpenDebugMenu(OBJECT_TYPE id)
 {
+	if (gamePaused())
+	{
+		// All menu tabs will not work if they are opened, and the forms will fail to cleanup properly, if the game is paused.
+		return;
+	}
+
 	switch (id)
 	{
 	case OBJ_DROID:
