@@ -1689,6 +1689,10 @@ static void intRunStats()
 	if (intMode != INT_EDITSTAT && objMode == IOBJ_MANUFACTURE)
 	{
 		psOwner = (BASE_OBJECT *)widgGetUserData(psWScreen, IDSTAT_LOOP_LABEL);
+		if (psOwner == nullptr)
+		{
+			return;
+		}
 		ASSERT_OR_RETURN(, psOwner->type == OBJ_STRUCTURE, "Invalid object type");
 
 		psStruct = (STRUCTURE *)psOwner;
