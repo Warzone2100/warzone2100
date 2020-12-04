@@ -36,6 +36,8 @@
 #include "main.h"
 #include "radar.h"
 #include "hci.h"
+#include "mission.h" //for TIMER_Y
+#include "challenge.h" //for challengeActive
 #include <string>
 #include <istream>
 #include <sstream>
@@ -144,7 +146,7 @@ void	initConsoleMessages()
 
 	//	Set up the main console size and position x,y,width
 	setConsoleCalcLayout([]() {
-		setConsoleSizePos(16, 32, pie_GetVideoBufferWidth() - 32);
+		setConsoleSizePos(16, (!challengeActive && (game.type == LEVEL_TYPE::SKIRMISH)) ? 32 : (32 + TIMER_Y), pie_GetVideoBufferWidth() - 32);
 	});
 	historyConsole.topX = HISTORYBOX_X;
 	historyConsole.topY = HISTORYBOX_Y;
