@@ -1,5 +1,5 @@
 [Desktop Entry]
-Version=1.0
+Version=1.4
 Type=Application
 Name=Warzone 2100
 Name[de]=Warzone 2100
@@ -10,6 +10,7 @@ Comment[de]=Postnukleare Echtzeitstrategie
 Icon=warzone2100
 TryExec=warzone2100
 Exec=warzone2100
+PrefersNonDefaultGPU=true
 Categories=Game;StrategyGame;
 Name[pt_BR] = Warzone 2100
 GenericName[pt_BR] = Jogo de Estratégia
