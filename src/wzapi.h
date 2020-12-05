@@ -356,7 +356,7 @@ namespace wzapi
 		//__ if the droid was produced in a factory. It is not triggered for droid theft or
 		//__ gift (check ```eventObjectTransfer``` for that).
 		//__
-		virtual bool handle_eventDroidBuilt(const DROID *psDroid, const STRUCTURE *psFactory) = 0;
+		virtual bool handle_eventDroidBuilt(const DROID *psDroid, optional<const STRUCTURE *> psFactory) = 0;
 
 		//__ ## eventStructureBuilt(structure[, droid])
 		//__
@@ -364,14 +364,14 @@ namespace wzapi
 		//__ if the structure was built by a droid. It is not triggered for building theft
 		//__ (check ```eventObjectTransfer``` for that).
 		//__
-		virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, const DROID *psDroid) = 0;
+		virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, optional<const DROID *> psDroid) = 0;
 
 		//__ ## eventStructureDemolish(structure[, droid])
 		//__
 		//__ An event that is run every time a structure begins to be demolished. This does
 		//__ not trigger again if the structure is partially demolished.
 		//__
-		virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, const DROID *psDroid) = 0;
+		virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, optional<const DROID *> psDroid) = 0;
 
 		//__ ## eventStructureReady(structure)
 		//__
@@ -454,7 +454,7 @@ namespace wzapi
 		//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
 		//__ Message may be undefined.
 		//__
-		virtual bool handle_eventBeacon(int x, int y, int from, int to, const char *message) = 0;
+		virtual bool handle_eventBeacon(int x, int y, int from, int to, optional<const char *> message) = 0;
 
 		//__ ## eventBeaconRemoved(from, to)
 		//__

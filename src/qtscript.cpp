@@ -1260,13 +1260,14 @@ bool triggerEventDroidIdle(DROID *psDroid)
 bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+	optional<const STRUCTURE *> opt_factory = (psFactory) ? optional<const STRUCTURE *>(psFactory) : nullopt;
 	for (auto *instance : scripts)
 	{
 		int player = instance->player();
 		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psDroid->player || receiveAll)
 		{
-			instance->handle_eventDroidBuilt(psDroid, psFactory);
+			instance->handle_eventDroidBuilt(psDroid, opt_factory);
 		}
 	}
 	return true;
@@ -1281,13 +1282,14 @@ bool triggerEventDroidBuilt(DROID *psDroid, STRUCTURE *psFactory)
 bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+	optional<const DROID *> opt_droid = (psDroid) ? optional<const DROID *>(psDroid) : nullopt;
 	for (auto *instance : scripts)
 	{
 		int player = instance->player();
 		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psStruct->player || receiveAll)
 		{
-			instance->handle_eventStructureBuilt(psStruct, psDroid);
+			instance->handle_eventStructureBuilt(psStruct, opt_droid);
 		}
 	}
 	return true;
@@ -1301,13 +1303,14 @@ bool triggerEventStructBuilt(STRUCTURE *psStruct, DROID *psDroid)
 bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+	optional<const DROID *> opt_droid = (psDroid) ? optional<const DROID *>(psDroid) : nullopt;
 	for (auto *instance : scripts)
 	{
 		int player = instance->player();
 		bool receiveAll = instance->isReceivingAllEvents();
 		if (player == psStruct->player || receiveAll)
 		{
-			instance->handle_eventStructureDemolish(psStruct, psDroid);
+			instance->handle_eventStructureDemolish(psStruct, opt_droid);
 		}
 	}
 	return true;
@@ -1522,13 +1525,14 @@ bool triggerEventChat(int from, int to, const char *message)
 bool triggerEventBeacon(int from, int to, const char *message, int x, int y)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
+	optional<const char *> opt_message = (message) ? optional<const char *>(message) : nullopt;
 	for (auto *instance : scripts)
 	{
 		int me = instance->player();
 		bool receiveAll = instance->isReceivingAllEvents();
 		if (me == to || receiveAll)
 		{
-			instance->handle_eventBeacon(map_coord(x), map_coord(y), from, to, message);
+			instance->handle_eventBeacon(map_coord(x), map_coord(y), from, to, opt_message);
 		}
 	}
 	return true;

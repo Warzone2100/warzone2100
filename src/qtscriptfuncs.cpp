@@ -391,7 +391,7 @@ public:
 	//__ if the droid was produced in a factory. It is not triggered for droid theft or
 	//__ gift (check ```eventObjectTransfer``` for that).
 	//__
-	virtual bool handle_eventDroidBuilt(const DROID *psDroid, const STRUCTURE *psFactory) override;
+	virtual bool handle_eventDroidBuilt(const DROID *psDroid, optional<const STRUCTURE *> psFactory) override;
 
 	//__ ## eventStructureBuilt(structure[, droid])
 	//__
@@ -399,14 +399,14 @@ public:
 	//__ if the structure was built by a droid. It is not triggered for building theft
 	//__ (check ```eventObjectTransfer``` for that).
 	//__
-	virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, const DROID *psDroid) override;
+	virtual bool handle_eventStructureBuilt(const STRUCTURE *psStruct, optional<const DROID *> psDroid) override;
 
 	//__ ## eventStructureDemolish(structure[, droid])
 	//__
 	//__ An event that is run every time a structure begins to be demolished. This does
 	//__ not trigger again if the structure is partially demolished.
 	//__
-	virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, const DROID *psDroid) override;
+	virtual bool handle_eventStructureDemolish(const STRUCTURE *psStruct, optional<const DROID *> psDroid) override;
 
 	//__ ## eventStructureReady(structure)
 	//__
@@ -489,7 +489,7 @@ public:
 	//__ player sending the beacon. For the moment, the ```to``` parameter is always the script player.
 	//__ Message may be undefined.
 	//__
-	virtual bool handle_eventBeacon(int x, int y, int from, int to, const char *message) override;
+	virtual bool handle_eventBeacon(int x, int y, int from, int to, optional<const char *> message) override;
 
 	//__ ## eventBeaconRemoved(from, to)
 	//__
@@ -2703,9 +2703,9 @@ IMPL_EVENT_HANDLER(eventObjectRecycled, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventPlayerLeft, int)
 IMPL_EVENT_HANDLER(eventCheatMode, bool)
 IMPL_EVENT_HANDLER(eventDroidIdle, const DROID *)
-IMPL_EVENT_HANDLER(eventDroidBuilt, const DROID *, const STRUCTURE *)
-IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, const DROID *)
-IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, const DROID *)
+IMPL_EVENT_HANDLER(eventDroidBuilt, const DROID *, optional<const STRUCTURE *>)
+IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, optional<const DROID *>)
+IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, optional<const DROID *>)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, wzapi::event_nullable_ptr<const STRUCTURE>, int)
@@ -2715,7 +2715,7 @@ IMPL_EVENT_HANDLER(eventObjectSeen, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventGroupSeen, const BASE_OBJECT *, int)
 IMPL_EVENT_HANDLER(eventObjectTransfer, const BASE_OBJECT *, int)
 IMPL_EVENT_HANDLER(eventChat, int, int, const char *)
-IMPL_EVENT_HANDLER(eventBeacon, int, int, int, int, const char *)
+IMPL_EVENT_HANDLER(eventBeacon, int, int, int, int, optional<const char *>)
 IMPL_EVENT_HANDLER(eventBeaconRemoved, int, int)
 IMPL_EVENT_HANDLER(eventGroupLoss, const BASE_OBJECT *, int, int)
 bool qtscript_scripting_instance::handle_eventArea(const std::string& label, const DROID *psDroid)
