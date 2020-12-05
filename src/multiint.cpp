@@ -393,19 +393,29 @@ void loadMultiScripts()
 	sstrcpy(aPathName, aFileName);
 	sstrcat(aFileName, ".json");
 	sstrcat(aPathName, "/");
-	WzString ininame = challengeActive ? sRequestResult : aFileName;
-	WzString path = challengeActive ? "challenges/" : aPathName;
+	WzString ininame;
+	WzString path;
+	bool loadExtra = false;
+
+	if (challengeFileName.length() > 0)
+	{
+		ininame = challengeFileName;
+		path = "challenges/";
+		loadExtra = true;
+	}
 
 	if (hostlaunch == HostLaunch::Skirmish)
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "tests/";
+		loadExtra = true;
 	}
 
 	if (hostlaunch == HostLaunch::Autohost)
 	{
 		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "autohost/";
+		loadExtra = true;
 	}
 
 	// Reset assigned counter
@@ -415,7 +425,7 @@ void loadMultiScripts()
 	}
 
 	// Load map scripts
-	if (PHYSFS_exists(ininame.toUtf8().c_str()))
+	if (loadExtra && PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
 		WzConfig ini(ininame, WzConfig::ReadOnly);
 		debug(LOG_SAVE, "Loading map scripts");
