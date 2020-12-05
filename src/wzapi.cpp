@@ -672,7 +672,7 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 //-- Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
 //-- Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
 //--
-const BASE_OBJECT * wzapi::hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED
+wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED
 {
 	OBJECT_TYPE type = (OBJECT_TYPE)_type;
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
@@ -1766,7 +1766,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 //-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
 //-- pass -1 as both x and y.
 //--
-const DROID* wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
+wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	bool onMission = (x == -1) && (y == -1);
@@ -1851,7 +1851,7 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 //-- Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
 //-- Returns the created game object on success, null otherwise. (3.2+ only)
 //--
-const FEATURE * wzapi::addFeature(WZAPI_PARAMS(std::string featName, int x, int y)) MUTLIPLAY_UNSAFE
+wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::string featName, int x, int y)) MUTLIPLAY_UNSAFE
 {
 	int feature = getFeatureStatFromName(WzString::fromUtf8(featName));
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
@@ -2838,7 +2838,7 @@ scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
 //-- Position uses world coordinates, if you want use position based on Map Tiles, then
 //-- use as addStructure(structure id, players, x*128, y*128)
 //--
-const STRUCTURE * wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y))
+wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y))
 {
 	int index = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
 	SCRIPT_ASSERT(nullptr, context, index >= 0, "%s not found", structureName.c_str());

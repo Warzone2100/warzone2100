@@ -740,6 +740,34 @@ namespace wzapi
 		std::vector<const RESEARCH *> resList;
 		int player;
 	};
+	template<typename T>
+	struct returned_nullable_ptr
+	{
+	private:
+		using TYPE_POINTER = T*;
+		TYPE_POINTER pt;
+
+	public:
+		returned_nullable_ptr(TYPE_POINTER _pt)
+		: pt(_pt)
+		{ }
+		returned_nullable_ptr()
+		: pt(nullptr)
+		{ }
+
+		operator TYPE_POINTER&()
+		{
+			return pt;
+		}
+		operator TYPE_POINTER() const
+		{
+			return pt;
+		}
+		explicit operator bool() const noexcept
+		{
+			return pt != nullptr;
+		}
+	};
 
 	class GameEntityRules
 	{
@@ -873,7 +901,7 @@ namespace wzapi
 	no_return_value hackNetOn(WZAPI_NO_PARAMS);
 	no_return_value hackAddMessage(WZAPI_PARAMS(std::string message, int type, int player, bool immediate));
 	no_return_value hackRemoveMessage(WZAPI_PARAMS(std::string message, int type, int player));
-	const BASE_OBJECT * hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED;
+	returned_nullable_ptr<const BASE_OBJECT> hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED;
 	no_return_value hackAssert(WZAPI_PARAMS(bool condition, va_list_treat_as_strings message));
 	bool receiveAllEvents(WZAPI_PARAMS(optional<bool> enabled));
 	no_return_value hackDoNotSave(WZAPI_PARAMS(std::string name));
@@ -910,10 +938,10 @@ namespace wzapi
 	int terrainType(WZAPI_PARAMS(int x, int y));
 	bool orderDroidObj(WZAPI_PARAMS(DROID *psDroid, int _order, BASE_OBJECT *psObj));
 	bool buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets));
-	const DROID* addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)); MUTLIPLAY_UNSAFE
+	returned_nullable_ptr<const DROID> addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)); MUTLIPLAY_UNSAFE
 	std::unique_ptr<const DROID_TEMPLATE> makeTemplate(WZAPI_PARAMS(int player, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets));
 	bool addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporter, game_object_identifier droid));
-	const FEATURE * addFeature(WZAPI_PARAMS(std::string featName, int x, int y)) MUTLIPLAY_UNSAFE;
+	returned_nullable_ptr<const FEATURE> addFeature(WZAPI_PARAMS(std::string featName, int x, int y)) MUTLIPLAY_UNSAFE;
 	bool componentAvailable(WZAPI_PARAMS(std::string arg1, optional<std::string> arg2));
 	bool isVTOL(WZAPI_PARAMS(const DROID *psDroid));
 	bool safeDest(WZAPI_PARAMS(int player, int x, int y));
@@ -968,7 +996,7 @@ namespace wzapi
 	bool removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx));
 	no_return_value setScrollLimits(WZAPI_PARAMS(int x1, int y1, int x2, int y2));
 	scr_area getScrollLimits(WZAPI_NO_PARAMS);
-	const STRUCTURE * addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y));
+	returned_nullable_ptr<const STRUCTURE> addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y));
 	unsigned int getStructureLimit(WZAPI_PARAMS(std::string structureName, optional<int> _player));
 	int countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _player));
 	int countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _player));
