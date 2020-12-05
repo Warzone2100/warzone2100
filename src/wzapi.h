@@ -112,6 +112,35 @@ namespace wzapi
 
 	struct researchResult; // forward-declare
 
+	template<typename T>
+	struct event_nullable_ptr
+	{
+	private:
+		using TYPE_POINTER = T*;
+		TYPE_POINTER pt;
+
+	public:
+		event_nullable_ptr(TYPE_POINTER _pt)
+		: pt(_pt)
+		{ }
+		event_nullable_ptr()
+		: pt(nullptr)
+		{ }
+
+		operator TYPE_POINTER&()
+		{
+			return pt;
+		}
+		operator TYPE_POINTER() const
+		{
+			return pt;
+		}
+		explicit operator bool() const noexcept
+		{
+			return pt != nullptr;
+		}
+	};
+
 	class scripting_event_handling_interface
 	{
 	public:
@@ -366,7 +395,7 @@ namespace wzapi
 		//__ current player. If an ally does the research, the structure parameter will
 		//__ be set to null. The player parameter gives the player it is called for.
 		//__
-		virtual bool handle_eventResearched(const researchResult& research, const STRUCTURE *psStruct, int player) = 0;
+		virtual bool handle_eventResearched(const researchResult& research, event_nullable_ptr<const STRUCTURE> psStruct, int player) = 0;
 
 		//__ ## eventDestroyed(object)
 		//__
