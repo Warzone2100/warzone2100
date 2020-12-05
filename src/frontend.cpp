@@ -197,14 +197,10 @@ static void runchatlink()
 
 void runContinue()
 {
-	SPinit(bMultiPlayer ? LEVEL_TYPE::SKIRMISH : LEVEL_TYPE::CAMPAIGN);
+	SPinit(lastSaveMP ? LEVEL_TYPE::SKIRMISH : LEVEL_TYPE::CAMPAIGN);
 	sstrcpy(saveGameName, lastSavePath);
 	bMultiPlayer = lastSaveMP;
-	if (!bMultiPlayer)
-	{
-		int campaign = getCampaign(lastSavePath);
-		setCampaignNumber(campaign);
-	}
+	setCampaignNumber(getCampaign(lastSavePath));
 }
 
 bool runTitleMenu()
