@@ -430,7 +430,7 @@ public:
 	//__ current player. If an ally does the research, the structure parameter will
 	//__ be set to null. The player parameter gives the player it is called for.
 	//__
-	virtual bool handle_eventResearched(const wzapi::researchResult& research, const STRUCTURE *psStruct, int player) override;
+	virtual bool handle_eventResearched(const wzapi::researchResult& research, wzapi::event_nullable_ptr<const STRUCTURE> psStruct, int player) override;
 
 	//__ ## eventDestroyed(object)
 	//__
@@ -1780,6 +1780,19 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 		}
 
 		template<typename PtrType>
+		QScriptValue box(wzapi::event_nullable_ptr<PtrType> result, QScriptEngine* engine)
+		{
+			if (result)
+			{
+				return box<PtrType *>(result, engine);
+			}
+			else
+			{
+				return QScriptValue::NullValue;
+			}
+		}
+
+		template<typename PtrType>
 		QScriptValue box(wzapi::returned_nullable_ptr<PtrType> result, QScriptEngine* engine)
 		{
 			if (result)
@@ -2695,7 +2708,7 @@ IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, const DROID *)
 IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, const DROID *)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
-IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, const STRUCTURE *, int)
+IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, wzapi::event_nullable_ptr<const STRUCTURE>, int)
 IMPL_EVENT_HANDLER(eventDestroyed, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventPickup, const FEATURE *, const DROID *)
 IMPL_EVENT_HANDLER(eventObjectSeen, const BASE_OBJECT *, const BASE_OBJECT *)
