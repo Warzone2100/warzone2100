@@ -154,10 +154,6 @@ ADD_CUSTOM_COMMAND(
 	VERBATIM
 )
 
-ADD_CUSTOM_TARGET(pot_file ALL
-	DEPENDS ${_potFile})
-set_property(TARGET pot_file PROPERTY FOLDER "po")
-
 # Update the in-source warzone2100.pot (Should only run when explicitly built, ex. by CI)
 set(_potFile_inRepo "${CMAKE_CURRENT_SOURCE_DIR}/warzone2100.pot")
 ADD_CUSTOM_COMMAND(
