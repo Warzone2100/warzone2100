@@ -1989,6 +1989,19 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 		}
 
 		template<typename PtrType>
+		JSValue box(wzapi::returned_nullable_ptr<PtrType> result, JSContext* ctx)
+		{
+			if (result)
+			{
+				return box<PtrType *>(result, ctx);
+			}
+			else
+			{
+				return JS_NULL;
+			}
+		}
+
+		template<typename PtrType>
 		JSValue box(std::unique_ptr<PtrType> result, JSContext* ctx)
 		{
 			if (result)

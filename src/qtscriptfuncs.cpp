@@ -1780,6 +1780,19 @@ static QScriptValue callFunction(QScriptEngine *engine, const QString &function,
 		}
 
 		template<typename PtrType>
+		QScriptValue box(wzapi::returned_nullable_ptr<PtrType> result, QScriptEngine* engine)
+		{
+			if (result)
+			{
+				return box<PtrType *>(result, engine);
+			}
+			else
+			{
+				return QScriptValue::NullValue;
+			}
+		}
+
+		template<typename PtrType>
 		QScriptValue box(std::unique_ptr<PtrType> result, QScriptEngine* engine)
 		{
 			if (result)
