@@ -1594,6 +1594,7 @@ static bool IsScenario;
 static bool gameLoadV7(PHYSFS_file *fileHandle);
 static bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version);
 static bool loadMainFile(const std::string &fileName);
+static bool loadMainFileFinal(const std::string &fileName);
 static bool writeMainFile(const std::string &fileName, SDWORD saveType);
 static bool writeGameFile(const char *fileName, SDWORD saveType);
 static bool writeMapFile(const char *fileName);
@@ -3057,11 +3058,16 @@ static bool gameLoad(const char *fileName)
 	}
 	else if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
-		bool retVal = gameLoadV(fileHandle, fileHeader.version);
-		PHYSFS_close(fileHandle);
 		//remove the file extension
 		CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
 		loadMainFile(std::string(CurrentFileName) + "/main.json");
+
+		bool retVal = gameLoadV(fileHandle, fileHeader.version);
+		PHYSFS_close(fileHandle);
+
+		loadMainFileFinal(std::string(CurrentFileName) + "/main.json");
+
+		challengeFileName = "";
 		return retVal;
 	}
 	else
@@ -3800,6 +3806,18 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		playerBuiltHQ = save.value("playerBuiltHQ").toBool();
 	}
+	if (save.contains("challengeFileName"))
+	{
+		challengeFileName = save.string("challengeFileName");
+	}
+
+	return true;
+}
+
+static bool loadMainFileFinal(const std::string &fileName)
+{
+	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
+
 	if (save.contains("techLevel"))
 	{
 		game.techLevel = save.value("techLevel").toInt();
@@ -3817,6 +3835,7 @@ static bool loadMainFile(const std::string &fileName)
 		save.nextArrayItem();
 	}
 	save.endArray();
+
 	return true;
 }
 
@@ -3947,6 +3966,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("modList", getModList().c_str());
 	save.setValue("playerBuiltHQ", playerBuiltHQ);
 	save.setValue("techLevel", game.techLevel);
+	save.setValue("challengeFileName", challengeFileName.toUtf8().c_str());
 
 	return true;
 }

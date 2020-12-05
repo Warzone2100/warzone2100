@@ -31,6 +31,7 @@ void updateChallenge(bool gameWon);
 
 extern bool challengesUp;
 extern bool challengeActive;
+extern WzString challengeFileName;
 
 const char* currentChallengeName();
 

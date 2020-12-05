@@ -76,6 +76,7 @@ static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
 std::string challengeName;
+WzString challengeFileName;
 
 static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -403,6 +404,7 @@ bool runChallenges()
 				assert(data != nullptr);
 				assert(data->filename != nullptr);
 				sstrcpy(sRequestResult, data->filename);
+				challengeFileName = sRequestResult;
 				challengeName = psWidget->pText.toStdString();
 			}
 			else
