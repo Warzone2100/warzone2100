@@ -166,9 +166,9 @@ static void saveMissionLimboData();
 static void restoreMissionLimboData();
 static void processMissionLimbo();
 
-static void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext);
+static void intUpdateMissionTimer(WIDGET &widget, W_CONTEXT *psContext);
 static bool intAddMissionTimer();
-static void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext);
+static void intUpdateTransporterTimer(WIDGET &widget, W_CONTEXT *psContext);
 static void adjustMissionPower();
 static void saveMissionPower();
 static UDWORD getHomeLandingX();
@@ -1869,7 +1869,7 @@ bool intAddMissionTimer()
 	sFormInit.x = (SWORD)(RADTLX + RADWIDTH - sFormInit.width);
 	sFormInit.y = (SWORD)TIMER_Y;
 	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->move((SWORD)(RADTLX + RADWIDTH - psWidget->width()), TIMER_Y);
+		widget.move((SWORD)(RADTLX + RADWIDTH - widget.width()), TIMER_Y);
 	});
 	sFormInit.UserData = PACKDWORD_TRI(0, IMAGE_MISSION_CLOCK, IMAGE_MISSION_CLOCK_UP);
 	sFormInit.pDisplay = intDisplayMissionClock;
@@ -1991,9 +1991,9 @@ static void fillTimeDisplay(W_LABEL &Label, UDWORD time, bool bHours)
 
 
 //update function for the mission timer
-void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateMissionTimer(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL		*Label = (W_LABEL *)psWidget;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
 	UDWORD		timeElapsed;
 	SDWORD		timeRemaining;
 
@@ -2020,8 +2020,8 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 		timeRemaining = timeElapsed;
 	}
 
-	fillTimeDisplay(*Label, timeRemaining, true);
-	Label->show();  // Make sure its visible
+	fillTimeDisplay(label, timeRemaining, true);
+	label.show();  // Make sure its visible
 
 	if (challengeActive)
 	{
@@ -2078,9 +2078,9 @@ void intUpdateMissionTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 #define	TRANSPORTER_REINFORCE_LEADIN	10*GAME_TICKS_PER_SEC
 
 //update function for the transporter timer
-void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateTransporterTimer(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL		*Label = (W_LABEL *)psWidget;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
 	DROID		*psTransporter;
 	SDWORD		timeRemaining;
 	SDWORD		ETA;
@@ -2092,7 +2092,7 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 	}
 
 	// Get the object associated with this widget.
-	psTransporter = (DROID *)Label->pUserData;
+	psTransporter = (DROID *)label.pUserData;
 	if (psTransporter != nullptr)
 	{
 		ASSERT(psTransporter != nullptr,
@@ -2123,40 +2123,40 @@ void intUpdateTransporterTimer(WIDGET *psWidget, W_CONTEXT *psContext)
 					}
 				}
 			}
-			fillTimeDisplay(*Label, timeRemaining, false);
+			fillTimeDisplay(label, timeRemaining, false);
 		}
 		else
 		{
-			fillTimeDisplay(*Label, ETA, false);
+			fillTimeDisplay(label, ETA, false);
 		}
 	}
 	else
 	{
 		if (missionCanReEnforce())  // ((mission.type == LDS_MKEEP) || (mission.type == LDS_MCLEAR)) & (mission.ETA >= 0) ) {
 		{
-			fillTimeDisplay(*Label, ETA, false);
+			fillTimeDisplay(label, ETA, false);
 		}
 		else
 		{
 
-			fillTimeDisplay(*Label, 0, false);
+			fillTimeDisplay(label, 0, false);
 
 		}
 	}
 
 	//minutes
 	/*calcTime = timeRemaining / (60*GAME_TICKS_PER_SEC);
-	Label->aText[0] = (UBYTE)('0'+ calcTime / 10);
-	Label->aText[1] = (UBYTE)('0'+ calcTime % 10);
+	label.aText[0] = (UBYTE)('0'+ calcTime / 10);
+	label.aText[1] = (UBYTE)('0'+ calcTime % 10);
 	timeElapsed -= calcTime * (60*GAME_TICKS_PER_SEC);
 	//separator
-	Label->aText[3] = (UBYTE)(':');
+	label.aText[3] = (UBYTE)(':');
 	//seconds
 	calcTime = timeRemaining / GAME_TICKS_PER_SEC;
-	Label->aText[3] = (UBYTE)('0'+ calcTime / 10);
-	Label->aText[4] = (UBYTE)('0'+ calcTime % 10);*/
+	label.aText[3] = (UBYTE)('0'+ calcTime / 10);
+	label.aText[4] = (UBYTE)('0'+ calcTime % 10);*/
 
-	Label->show();
+	label.show();
 }
 
 /* Remove the Mission Timer widgets from the screen*/
@@ -2189,13 +2189,13 @@ void intRemoveTransporterTimer()
 
 
 
-static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void intDisplayMissionBackDrop(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using intDisplayMissionBackDrop must have its pUserData initialized to a (ScoreDataToScreenCache*)
-	assert(psWidget->pUserData != nullptr);
-	ScoreDataToScreenCache& cache = *static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	ScoreDataToScreenCache& cache = *static_cast<ScoreDataToScreenCache *>(widget.pUserData);
 
-	scoreDataToScreen(psWidget, cache);
+	scoreDataToScreen(widget, cache);
 }
 
 static void missionResetInGameState()
@@ -2237,28 +2237,30 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sFormInit.style			= WFORM_PLAIN;
 	sFormInit.pDisplay		= intDisplayMissionBackDrop;
 	sFormInit.pUserData = new ScoreDataToScreenCache();
-	sFormInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<ScoreDataToScreenCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sFormInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<ScoreDataToScreenCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
-	W_FORM *missionResBackForm = widgAddForm(psWScreen, &sFormInit);
-	missionResBackForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(0 + D_W, 0 + D_H, 640, 480);
+	auto &missionResBackForm = *widgAddForm(psWScreen, &sFormInit);
+	missionResBackForm.setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
+		widget.setGeometry(0 + D_W, 0 + D_H, 640, 480);
 	}));
 
 	// TITLE
-	IntFormAnimated *missionResTitle = new IntFormAnimated(missionResBackForm);
+	auto missionResTitle = std::make_shared<IntFormAnimated>();
+	missionResBackForm.attach(missionResTitle);
 	missionResTitle->id = IDMISSIONRES_TITLE;
 	missionResTitle->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MISSIONRES_TITLE_X, MISSIONRES_TITLE_Y, MISSIONRES_TITLE_W, MISSIONRES_TITLE_H);
+		widget.setGeometry(MISSIONRES_TITLE_X, MISSIONRES_TITLE_Y, MISSIONRES_TITLE_W, MISSIONRES_TITLE_H);
 	}));
 
 	// add form
-	IntFormAnimated *missionResForm = new IntFormAnimated(missionResBackForm);
+	auto missionResForm = std::make_shared<IntFormAnimated>();
+	missionResBackForm.attach(missionResForm);
 	missionResForm->id = IDMISSIONRES_FORM;
 	missionResForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
+		widget.setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);
 	}));
 
 	// description of success/fail
@@ -2297,10 +2299,10 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	sButInit.height		= MISSION_TEXT_H;
 	sButInit.pDisplay	= displayTextOption;
 	sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 	//if won
 	if (result || bMultiPlayer)
@@ -2463,10 +2465,10 @@ void intProcessMissionResult(UDWORD id)
 			sButInit.height		= MISSION_TEXT_H;
 			sButInit.pDisplay	= displayTextOption;
 			sButInit.pUserData = new DisplayTextOptionCache();
-			sButInit.onDelete = [](WIDGET *psWidget) {
-				assert(psWidget->pUserData != nullptr);
-				delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-				psWidget->pUserData = nullptr;
+			sButInit.onDelete = [](WIDGET &widget) {
+				assert(widget.pUserData != nullptr);
+				delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+				widget.pUserData = nullptr;
 			};
 			sButInit.id			= IDMISSIONRES_QUIT;
 			sButInit.x			= MISSION_3_X;

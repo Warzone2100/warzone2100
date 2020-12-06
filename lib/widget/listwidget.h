@@ -49,8 +49,6 @@ class TabSelectionWidget : public WIDGET
 {
 
 public:
-	TabSelectionWidget(WIDGET *parent);
-
 	void setHeight(int height);
 	void addStyle(TabSelectionStyle const &tabStyle);
 
@@ -63,6 +61,17 @@ public:
 	typedef std::function<void (TabSelectionWidget& widget, size_t currentTab)> W_TABSELECTION_ON_TAB_CHANGED_FUNC;
 
 	void addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHANGED_FUNC& onTabChangedFunc);
+
+	static std::shared_ptr<TabSelectionWidget> create()
+	{
+		auto tabSelection = std::shared_ptr<TabSelectionWidget>(new TabSelectionWidget());
+		tabSelection->initialize();
+		return tabSelection;
+	}
+
+protected:
+	TabSelectionWidget(): WIDGET(), currentTab(0), tabsAtOnce(1) {}
+	virtual void initialize();
 
 public:
 	void setTab(size_t tab);
@@ -78,9 +87,9 @@ private:
 	std::vector<TabSelectionStyle> styles;
 	size_t currentTab;
 	size_t tabsAtOnce;
-	std::vector<W_BUTTON *> tabButtons;
-	W_BUTTON *prevTabPageButton;
-	W_BUTTON *nextTabPageButton;
+	std::vector<std::shared_ptr<W_BUTTON>> tabButtons;
+	std::shared_ptr<W_BUTTON> prevTabPageButton;
+	std::shared_ptr<W_BUTTON> nextTabPageButton;
 	std::vector<W_TABSELECTION_ON_TAB_CHANGED_FUNC> onTabChangedHandlers;
 };
 
@@ -90,14 +99,14 @@ class ListWidget : public WIDGET
 public:
 	enum Order {RightThenDown, DownThenRight};
 
-	ListWidget(WIDGET *parent);
+	ListWidget();
 
-	void widgetLost(WIDGET *widget) override;
+	void widgetLost(std::shared_ptr<WIDGET> const &widget) override;
 
 	void setChildSize(int width, int height);  ///< Sets the size of all child widgets (applied by calling addWidgetToLayout).
 	void setChildSpacing(int width, int height);  ///< Sets the distance between child widgets (applied by calling addWidgetToLayout).
 	void setOrder(Order order);  ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
-	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
+	void addWidgetToLayout(std::shared_ptr<WIDGET> widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
 
 	size_t currentPage() const
 	{
@@ -148,7 +157,7 @@ private:
 	WzSize childSize;
 	WzSize spacing;
 	size_t currentPage_;
-	std::vector<WIDGET *> myChildren;
+	std::vector<std::shared_ptr<WIDGET>> myChildren;
 	Order order;
 	std::vector<W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC> onCurrentPageChangedHandlers;
 	std::vector<W_LISTWIDGET_ON_NUMBEROFPAGESCHANGED_FUNC> onNumberOfPagesChangedHandlers;
@@ -159,8 +168,6 @@ class ListTabWidget : public WIDGET
 
 public:
 	enum TabPosition {Top, Bottom};
-
-	ListTabWidget(WIDGET *parent);
 
 	void geometryChanged() override;
 
@@ -176,7 +183,7 @@ public:
 	{
 		widgets->setOrder(order);    ///< Sets whether subsequent child widgets are placed in horizontal or vertical lines (applied by calling addWidgetToLayout).
 	}
-	void addWidgetToLayout(WIDGET *widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
+	void addWidgetToLayout(std::shared_ptr<WIDGET> widget);  ///< Manages the geometry of widget, and shows/hides it when changing tabs.
 	bool setCurrentPage(size_t page)
 	{
 		widgets->setCurrentPage(page);
@@ -193,18 +200,29 @@ public:
 
 	void setTabPosition(TabPosition pos);
 
-	TabSelectionWidget *tabWidget()
+	std::shared_ptr<TabSelectionWidget> &tabWidget()
 	{
 		return tabs;
 	}
-	ListWidget *listWidget()
+	std::shared_ptr<ListWidget> &listWidget()
 	{
 		return widgets;
 	}
 
+	static std::shared_ptr<ListTabWidget> create()
+	{
+		auto listWidget = std::shared_ptr<ListTabWidget>(new ListTabWidget());
+		listWidget->initialize();
+		return listWidget;
+	}
+
+protected:
+	ListTabWidget(): WIDGET(), tabPos(Top) {}
+	virtual void initialize();
+
 private:
-	TabSelectionWidget *tabs;
-	ListWidget *widgets;
+	std::shared_ptr<TabSelectionWidget> tabs;
+	std::shared_ptr<ListWidget> widgets;
 	TabPosition tabPos;
 };
 

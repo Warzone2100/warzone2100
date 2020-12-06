@@ -100,21 +100,21 @@ void SetFormAudioIDs(int OpenID, int CloseID);
 void intInitialiseGraphics();
 
 // callback to update the command droid size label
-void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateCommandSize(WIDGET &widget, W_CONTEXT *psContext);
 
 // callback to update the command droid experience
-void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateCommandExp(WIDGET &widget, W_CONTEXT *psContext);
 
 // callback to update the command droid factories
-void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateCommandFact(WIDGET &widget, W_CONTEXT *psContext);
 
-void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateProgressBar(WIDGET &widget, W_CONTEXT *psContext);
 
-void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateQuantity(WIDGET &widget, W_CONTEXT *psContext);
 //callback to display the factory number
-void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext);
+void intAddFactoryInc(WIDGET &widget, W_CONTEXT *psContext);
 //callback to display the production quantity number for a template
-void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
+void intAddProdQuantity(WIDGET &widget, W_CONTEXT *psContext);
 
 /* Holds the cached rendered text for the power bar */
 struct DisplayPowerBarCache
@@ -122,12 +122,12 @@ struct DisplayPowerBarCache
 	WzText wzText;
 	WzText wzNeedText;
 };
-void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayPowerBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 class IntFancyButton : public W_CLICKFORM
 {
 public:
-	IntFancyButton(WIDGET *parent);
+	IntFancyButton();
 
 protected:
 	//the two types of button used in the object display (bottom bar)
@@ -154,7 +154,7 @@ protected:
 class IntObjectButton : public IntFancyButton
 {
 public:
-	IntObjectButton(WIDGET *parent);
+	IntObjectButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -176,7 +176,7 @@ protected:
 class IntStatusButton : public IntObjectButton
 {
 public:
-	IntStatusButton(WIDGET *parent);
+	IntStatusButton();
 
 	void setObject(BASE_OBJECT *object)
 	{
@@ -198,7 +198,7 @@ protected:
 class IntStatsButton : public IntFancyButton
 {
 public:
-	IntStatsButton(WIDGET *parent);
+	IntStatsButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -220,7 +220,7 @@ protected:
 class IntFormTransparent : public W_FORM
 {
 public:
-	IntFormTransparent(WIDGET *parent);
+	IntFormTransparent();
 
 	virtual void display(int xOffset, int yOffset);
 };
@@ -229,7 +229,7 @@ public:
 class IntFormAnimated : public W_FORM
 {
 public:
-	IntFormAnimated(WIDGET *parent, bool openAnimate = true);
+	IntFormAnimated(bool openAnimate = true);
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -240,17 +240,17 @@ private:
 	int             currentAction;          ///< Opening/open/closing/closed.
 };
 
-void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayImage(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayImageHilight(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayButtonHilight(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayButtonFlash(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
-void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
+void intAddLoopQuantity(WIDGET &widget, W_CONTEXT *psContext);
 
-void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayEditBox(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 bool DroidIsBuilding(DROID *Droid);
 STRUCTURE *DroidGetBuildStructure(DROID *Droid);
@@ -283,18 +283,17 @@ struct DisplayBarCache {
 };
 
 /* Draws a stats bar for the design screen */
-void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayStatsBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 /* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayDesignPowerBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 // Widget callback function to play an audio track.
 void WidgetAudioCallback(int AudioID);
 
-//void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 class IntTransportButton : public IntFancyButton
 {
 public:
-	IntTransportButton(WIDGET *parent);
+	IntTransportButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -311,16 +310,16 @@ protected:
 void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, const glm::mat4 &modelViewProjection);
 
 /*Displays the proximity messages blips over the world*/
-void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayProximityBlips(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
-void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateQuantitySlider(WIDGET &widget, W_CONTEXT *psContext);
 
-void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayResSubGroup(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayMissionClock(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayAllyIcon(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayAllyBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 void intSetShadowPower(int quantity);
 

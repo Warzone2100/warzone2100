@@ -289,7 +289,7 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 	return fullStats;
 }
 
-void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
+void scoreDataToScreen(WIDGET &widget, ScoreDataToScreenCache& cache)
 {
 	int index, x, y, width, height;
 	bool bMoreBars;

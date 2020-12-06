@@ -65,6 +65,6 @@ public:
 };
 
 /* The trough bar graph display function */
-void barGraphDisplayTrough(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void barGraphDisplayTrough(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 #endif // __INCLUDED_LIB_WIDGET_BAR_H__

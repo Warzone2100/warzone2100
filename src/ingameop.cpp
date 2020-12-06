@@ -90,10 +90,10 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 	sButInit.pDisplay	= displayTextOption;
 	sButInit.pText		= string;
 	sButInit.pUserData = new DisplayTextOptionCache();
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 	widgAddButton(psWScreen, &sButInit);
 
@@ -103,30 +103,31 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 static bool addHostQuitOptions()
 {
 	// get rid of the old stuff.
-	delete widgGetFromID(psWScreen, INTINGAMEPOPUP);
-	delete widgGetFromID(psWScreen, INTINGAMEOP);
-
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEPOPUP);
+	widgDelete(psWScreen, INTINGAMEOP);
 
 	// add form
-	auto inGameOp = new IntFormAnimated(parent);
+	auto inGameOp = std::shared_ptr<IntFormAnimated>();
+	psWScreen->psForm->attach(inGameOp);
 	inGameOp->id = INTINGAMEOP;
 	inGameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
+		widget.setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
 	}));
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
-	auto inGamePopup = new IntFormAnimated(parent);
+	auto inGamePopup = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(inGamePopup);
 	inGamePopup->id = INTINGAMEPOPUP;
 	inGamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		assert(psWScreen != nullptr);
 		WIDGET * inGameOp = widgGetFromID(psWScreen, INTINGAMEOP);
 		assert(inGameOp != nullptr);
-		psWidget->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
+		widget.setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
 	}));
 
-	auto label = new W_LABEL(inGamePopup);
+	auto label = std::make_shared<W_LABEL>();
+	inGamePopup->attach(label);
 	label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
 	label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
 	label->setTextAlignment(WLAB_ALIGNCENTRE);
@@ -139,12 +140,11 @@ static bool addHostQuitOptions()
 
 static bool addAudioOptions()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 #ifdef DEBUG
 #define ROWS 5
@@ -152,7 +152,7 @@ static bool addAudioOptions()
 #define ROWS 4
 #endif
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(ROWS), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(ROWS));
+		widget.setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(ROWS), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(ROWS));
 	}));
 #undef ROWS
 
@@ -224,16 +224,15 @@ static bool _intAddInGameOptions()
 		kf_TogglePauseMode();
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
 	bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(s? 3 : 5), INTINGAMEOP_W, INTINGAMEOPAUTO_H(s? 3 : 5));
+		widget.setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(s? 3 : 5), INTINGAMEOP_W, INTINGAMEOPAUTO_H(s? 3 : 5));
 	}));
 
 	int row = 1;
@@ -314,12 +313,11 @@ void intAddInGamePopup()
 		kf_TogglePauseMode();	// Pause the game.
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
-	IntFormAnimated *ingamePopup = new IntFormAnimated(parent);
+	auto ingamePopup = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(ingamePopup);
 	ingamePopup->id = INTINGAMEPOPUP;
 	ingamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
+		widget.setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
 	}));
 
 	// add the text "buttons" now
@@ -333,10 +331,10 @@ void intAddInGamePopup()
 	sButInit.height		= 10;
 	sButInit.pDisplay	= displayTextOption;
 	sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	sButInit.id			= INTINGAMEOP_POPUP_MSG2;
@@ -468,8 +466,8 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 static bool startIGOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
 	isMouseOptionsUp = false;
@@ -477,7 +475,8 @@ static bool startIGOptionsMenu()
 	isMusicManagerUp = false;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	int row = 1;
 	// Game Options can't be changed during game
@@ -502,8 +501,8 @@ static bool startIGOptionsMenu()
 	addIGTextButton(INTINGAMEOP_MUSICMANAGER, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Manager"), OPALIGN);
 	row++;
 
-	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
+	ingameOp->setCalcLayout([row](WIDGET &widget, unsigned int, unsigned int, unsigned int, unsigned int){
+		widget.setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
 	});
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
@@ -514,14 +513,14 @@ static bool startIGOptionsMenu()
 // Graphics Options
 static bool startIGGraphicsOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(7));
+		widget.setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(7));
 	}));
 
 	int row = 1;
@@ -622,15 +621,15 @@ static void refreshCurrentIGVideoOptionsValues()
 
 static bool startIGVideoOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		bool showDisplayScales = wzAvailableDisplayScales().size() > 1;
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(showDisplayScales? 3 : 2), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(showDisplayScales? 3 : 2));
+		widget.setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(showDisplayScales? 3 : 2), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(showDisplayScales? 3 : 2));
 	}));
 
 	int row = 1;
@@ -694,15 +693,15 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 // Mouse Options
 static bool startIGMouseOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		bool s = bMultiPlayer && NetPlay.bComms != 0;
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(s ? 6 : 7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(s ? 6 : 7));
+		widget.setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(s ? 6 : 7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(s ? 6 : 7));
 	}));
 
 	int row = 1;
@@ -872,12 +871,12 @@ void intProcessInGameOptions(UDWORD id)
 		isMouseOptionsUp = true;
 		break;
 	case INTINGAMEOP_KEYMAP:			//keymap was pressed
-		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+		widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 		startInGameKeyMapEditor(false);
 		isKeyMapEditorUp = true;
 		break;
 	case INTINGAMEOP_MUSICMANAGER:
-		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+		widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 		startInGameMusicManager();
 		isMusicManagerUp = true;
 		break;

@@ -61,7 +61,7 @@ struct DisplayRemoteGameCache
 static DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 
 // find games
-static void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayRemoteGame(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 static std::vector<GAMESTRUCT> gamesList;
 
 WzGameFindTitleUI::WzGameFindTitleUI() {
@@ -75,13 +75,12 @@ void WzGameFindTitleUI::start()
 {
 	addBackdrop();										//background image
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
 	// draws the background of the games listed
-	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	auto botForm = std::make_shared<IntFormAnimated>();
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(botForm);
 	botForm->id = FRONTEND_BOTFORM;
 	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
+		widget.setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
 	}));
 
 	addSideText(FRONTEND_SIDETEXT,  MULTIOP_OPTIONSX - 3, MULTIOP_OPTIONSY, _("GAMES"));
@@ -227,12 +226,11 @@ void WzGameFindTitleUI::addConsoleBox()
 		return;
 	}
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *consoleBox = new IntFormAnimated(parent);
+	auto consoleBox = std::make_shared<IntFormAnimated>();
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(consoleBox);
 	consoleBox->id = MULTIOP_CONSOLEBOX;
 	consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_CONSOLEBOXX, MULTIOP_CONSOLEBOXY, MULTIOP_CONSOLEBOXW, MULTIOP_CONSOLEBOXH);
+		widget.setGeometry(MULTIOP_CONSOLEBOXX, MULTIOP_CONSOLEBOXY, MULTIOP_CONSOLEBOXW, MULTIOP_CONSOLEBOXH);
 	}));
 
 	flushConsoleMessages();											// add the chatbox.
@@ -247,7 +245,6 @@ void WzGameFindTitleUI::addConsoleBox()
 
 	addConsoleMessage(_("Connecting to the lobby server..."), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 	displayConsoleMessages();
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -267,10 +264,10 @@ void WzGameFindTitleUI::addGames()
 	sButInit.height = GAMES_GAMEHEIGHT;
 	sButInit.pDisplay = displayRemoteGame;
 	sButInit.initPUserDataFunc = []() -> void * { return new DisplayRemoteGameCache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayRemoteGameCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayRemoteGameCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	// we want the old games deleted, and only list games when we should
@@ -351,10 +348,10 @@ void WzGameFindTitleUI::addGames()
 			sButInit.height = FRONTEND_BUTHEIGHT;
 			sButInit.pDisplay = displayTextOption;
 			sButInit.pUserData = new DisplayTextOptionCache();
-			sButInit.onDelete = [](WIDGET *psWidget) {
-				assert(psWidget->pUserData != nullptr);
-				delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-				psWidget->pUserData = nullptr;
+			sButInit.onDelete = [](WIDGET &widget) {
+				assert(widget.pUserData != nullptr);
+				delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+				widget.pUserData = nullptr;
 			};
 			sButInit.FontID = font_large;
 			sButInit.pText = _("Can't find any games for your version.");
@@ -425,10 +422,10 @@ void WzGameFindTitleUI::addGames()
 		sButInit.height = FRONTEND_BUTHEIGHT;
 		sButInit.pDisplay = displayTextOption;
 		sButInit.pUserData = new DisplayTextOptionCache();
-		sButInit.onDelete = [](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
+		sButInit.onDelete = [](WIDGET &widget) {
+			assert(widget.pUserData != nullptr);
+			delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+			widget.pUserData = nullptr;
 		};
 		sButInit.FontID = font_medium;
 		sButInit.pText = txt;
@@ -445,16 +442,16 @@ void WzGameFindTitleUI::addGames()
 	displayConsoleMessages();
 }
 
-void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayRemoteGame(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	UDWORD	gameID = psWidget->UserData;
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
+	UDWORD	gameID = widget.UserData;
 	char tmp[80], name[StringSize];
 
 	// Any widget using displayRemoteGame must have its pUserData initialized to a (DisplayRemoteGameCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayRemoteGameCache& cache = *static_cast<DisplayRemoteGameCache*>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayRemoteGameCache& cache = *static_cast<DisplayRemoteGameCache*>(widget.pUserData);
 
 	if ((getLobbyError() != ERROR_NOERROR) && (bMultiPlayer && !NetPlay.bComms))
 	{
@@ -463,10 +460,10 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	// Draw blue boxes for games (buttons) & headers
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
-	drawBlueBox(x, y, GAMES_STATUS_START - 4 , psWidget->height());
-	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 , psWidget->height());
-	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
+	drawBlueBox(x, y, GAMES_STATUS_START - 4 , widget.height());
+	drawBlueBox(x, y, GAMES_PLAYERS_START - 4 , widget.height());
+	drawBlueBox(x, y, GAMES_MAPNAME_START - 4, widget.height());
 
 	int lamp = IMAGE_LAMP_RED;
 	int statusStart = IMAGE_NOJOIN;
@@ -526,7 +523,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	iV_DrawImage(FrontImages, lamp, x - 14, y + 8);
 	if (disableButton)
 	{
-		widgSetButtonState(psWScreen, psWidget->id, WBUT_DISABLE);
+		widgSetButtonState(psWScreen, widget.id, WBUT_DISABLE);
 	}
 
 	//draw game name, chop when we get a too long name

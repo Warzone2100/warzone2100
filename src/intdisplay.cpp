@@ -73,7 +73,7 @@
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
-#define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0)
+#define buttonIsHilite(p)  ((p.getState() & WBUT_HIGHLIGHT) != 0)
 
 #define FORM_OPEN_ANIM_DURATION		(GAME_TICKS_PER_SEC/6) // Time duration for form open/close anims.
 
@@ -106,30 +106,30 @@ void SetFormAudioIDs(int OpenID, int CloseID)
 	FormCloseCount = 0;
 }
 
-static void setBarGraphValue(W_BARGRAPH *barGraph, PIELIGHT colour, int value, int range)
+static void setBarGraphValue(W_BARGRAPH &barGraph, PIELIGHT colour, int value, int range)
 {
-	barGraph->majorCol = colour;
-	barGraph->majorSize = PERNUM(WBAR_SCALE, clip(value, 0, range), range);
-	barGraph->show();
+	barGraph.majorCol = colour;
+	barGraph.majorSize = PERNUM(WBAR_SCALE, clip(value, 0, range), range);
+	barGraph.show();
 }
 
-static void formatEmpty(W_BARGRAPH *barGraph)
+static void formatEmpty(W_BARGRAPH &barGraph)
 {
-	barGraph->text.clear();
+	barGraph.text.clear();
 	setBarGraphValue(barGraph, WZCOL_BLACK, 0, 1);
 }
 
-static void formatTimeText(W_BARGRAPH *barGraph, int time)
+static void formatTimeText(W_BARGRAPH &barGraph, int time)
 {
 	char timeText[20];
 	ssprintf(timeText, "%d:%02d", time / 60, time % 60);
-	barGraph->text = timeText;
-	barGraph->textCol = WZCOL_CONSTRUCTION_BARTEXT;
+	barGraph.text = timeText;
+	barGraph.textCol = WZCOL_CONSTRUCTION_BARTEXT;
 }
 
-static void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip)
+static void formatTime(W_BARGRAPH &barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip)
 {
-	barGraph->setTip(toolTip);
+	barGraph.setTip(toolTip);
 
 	if (buildRate != 0)
 	{
@@ -139,21 +139,21 @@ static void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPoint
 	}
 	else
 	{
-		barGraph->text.clear();
+		barGraph.text.clear();
 	}
 
 	setBarGraphValue(barGraph, WZCOL_YELLOW, buildPointsDone, buildPointsTotal);
 }
 
-static void formatPowerText(W_BARGRAPH *barGraph, int neededPower)
+static void formatPowerText(W_BARGRAPH &barGraph, int neededPower)
 {
 	char powerText[20];
 	ssprintf(powerText, "%d", neededPower);
-	barGraph->text = powerText;
-	barGraph->textCol = WZCOL_POWERQUEUE_BARTEXT;
+	barGraph.text = powerText;
+	barGraph.textCol = WZCOL_POWERQUEUE_BARTEXT;
 }
 
-static void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
+static void formatPower(W_BARGRAPH &barGraph, int neededPower, int powerToBuild)
 {
 	if (neededPower == -1 || powerToBuild == 0)
 	{
@@ -161,27 +161,27 @@ static void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 		return;
 	}
 
-	barGraph->setTip(_("Waiting for Power"));
+	barGraph.setTip(_("Waiting for Power"));
 	formatPowerText(barGraph, neededPower);
 	setBarGraphValue(barGraph, WZCOL_GREEN, powerToBuild - neededPower, powerToBuild);
 }
 
 // Widget callback to update the progress bar in the object stats screen.
 //
-void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateProgressBar(WIDGET &widget, W_CONTEXT *psContext)
 {
 	BASE_OBJECT			*psObj;
 	DROID				*Droid;
 	STRUCTURE			*Structure;
 	FACTORY				*Manufacture;
 	RESEARCH_FACILITY	*Research;
-	W_BARGRAPH			*BarGraph = (W_BARGRAPH *)psWidget;
+	auto &barGraph = dynamic_cast<W_BARGRAPH &>(widget);
 
-	psObj = (BASE_OBJECT *)BarGraph->pUserData;	// Get the object associated with this widget.
+	psObj = (BASE_OBJECT *)barGraph.pUserData;	// Get the object associated with this widget.
 
 	if (psObj == nullptr)
 	{
-		BarGraph->hide();
+		barGraph.hide();
 		return;
 	}
 
@@ -190,8 +190,8 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 		return;
 	}
 
-	BarGraph->majorSize = 0;
-	BarGraph->hide();
+	barGraph.majorSize = 0;
+	barGraph.hide();
 
 	switch (psObj->type)
 	{
@@ -209,11 +209,11 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				//show progress of build
 				if (Structure->currentBuildPts != 0)
 				{
-					formatTime(BarGraph, Structure->currentBuildPts, structureBuildPointsToCompletion(*Structure), Structure->lastBuildRate, _("Build Progress"));
+					formatTime(barGraph, Structure->currentBuildPts, structureBuildPointsToCompletion(*Structure), Structure->lastBuildRate, _("Build Progress"));
 				}
 				else
 				{
-					formatPower(BarGraph, checkPowerRequest(Structure), Structure->pStructureType->powerToBuild);
+					formatPower(barGraph, checkPowerRequest(Structure), Structure->pStructureType->powerToBuild);
 				}
 			}
 		}
@@ -231,14 +231,14 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 				// Started production. Set the colour of the bar to yellow.
 				int buildPointsTotal = calcTemplateBuild(FactoryGetTemplate(Manufacture));
 				int buildRate = Manufacture->timeStartHold == 0 ? getBuildingProductionPoints(Structure) : 0;
-				formatTime(BarGraph, buildPointsTotal - Manufacture->buildPointsRemaining, buildPointsTotal, buildRate, _("Construction Progress"));
+				formatTime(barGraph, buildPointsTotal - Manufacture->buildPointsRemaining, buildPointsTotal, buildRate, _("Construction Progress"));
 			}
 			else
 			{
 				// Not yet started production.
 				int neededPower = checkPowerRequest(Structure);
 				int powerToBuild = Manufacture->psSubject ? calcTemplatePower(Manufacture->psSubject) : 0;
-				formatPower(BarGraph, neededPower, powerToBuild);
+				formatPower(barGraph, neededPower, powerToBuild);
 			}
 		}
 		else if (structureIsResearchingPending(Structure)) // Is it researching.
@@ -252,14 +252,14 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 			if (currentPoints != 0)
 			{
 				int researchRate = Research->timeStartHold == 0 ? getBuildingResearchPoints(Structure) : 0;
-				formatTime(BarGraph, currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
+				formatTime(barGraph, currentPoints, Research->psSubject->researchPoints, researchRate, _("Research Progress"));
 			}
 			else
 			{
 				// Not yet started production.
 				int neededPower = checkPowerRequest(Structure);
 				int powerToBuild = Research->psSubject != nullptr ? Research->psSubject->researchPower : 0;
-				formatPower(BarGraph, neededPower, powerToBuild);
+				formatPower(barGraph, neededPower, powerToBuild);
 			}
 		}
 
@@ -271,10 +271,10 @@ void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext)
 }
 
 
-void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateQuantity(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL *Label = (W_LABEL *)psWidget;
-	BASE_OBJECT *psObj = (BASE_OBJECT *)Label->pUserData; // Get the object associated with this widget.
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	BASE_OBJECT *psObj = (BASE_OBJECT *)label.pUserData; // Get the object associated with this widget.
 
 	int remaining = -1;
 
@@ -340,20 +340,20 @@ void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	{
 		char tmp[20];
 		ssprintf(tmp, "%d", remaining);
-		Label->setString(WzString::fromUtf8(tmp));
-		Label->show();
+		label.setString(WzString::fromUtf8(tmp));
+		label.show();
 	}
 	else
 	{
-		Label->hide();
+		label.hide();
 	}
 }
 
 //callback to display the factory number
-void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
+void intAddFactoryInc(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL		*Label = (W_LABEL *)psWidget;
-	BASE_OBJECT	*psObj = (BASE_OBJECT *)Label->pUserData;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	BASE_OBJECT	*psObj = (BASE_OBJECT *)label.pUserData;
 
 	// Get the object associated with this widget.
 	if (psObj != nullptr && !isDead(psObj))
@@ -364,20 +364,20 @@ void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext)
 			FACTORY		*Factory = &Structure->pFunctionality->factory;
 			char tmp[20];
 			ssprintf(tmp, "%u", Factory->psAssemblyPoint->factoryInc + 1);
-			Label->setString(WzString::fromUtf8(tmp));
-			Label->show();
+			label.setString(WzString::fromUtf8(tmp));
+			label.show();
 			return;
 		}
 	}
-	Label->setString("");
-	Label->hide();
+	label.setString("");
+	label.hide();
 }
 
 //callback to display the production quantity number for a template
-void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
+void intAddProdQuantity(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL *)psWidget;
-	DROID_TEMPLATE                 *psTemplate = (DROID_TEMPLATE *)Label->pUserData;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	DROID_TEMPLATE                 *psTemplate = (DROID_TEMPLATE *)label.pUserData;
 
 	// Get the object associated with this widget.
 	if (psTemplate != nullptr)
@@ -408,22 +408,22 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 			{
 				ssprintf(tmp, "%u", entry.numRemaining());
 			}
-			Label->setString(WzString::fromUtf8(tmp));
-			Label->show();
+			label.setString(WzString::fromUtf8(tmp));
+			label.show();
 		}
 		else
 		{
-			Label->setString("");
-			Label->hide();
+			label.setString("");
+			label.hide();
 		}
 	}
 }
 
 //callback to display the production loop quantity number for a factory
-void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
+void intAddLoopQuantity(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL		*Label = (W_LABEL *)psWidget;
-	STRUCTURE	*psStruct = (STRUCTURE *)Label->pUserData;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	STRUCTURE	*psStruct = (STRUCTURE *)label.pUserData;
 
 	//loop depends on the factory
 	if (psStruct && psStruct->pFunctionality && !psStruct->died)
@@ -432,33 +432,33 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		if (psFactory->productionLoops == INFINITE_PRODUCTION)
 		{
-			Label->setString(WzString::fromUtf8("∞"));
+			label.setString(WzString::fromUtf8("∞"));
 		}
 		else if (psFactory->productionLoops != 0)
 		{
 			char tmp[20];
 			ssprintf(tmp, "%u", psFactory->productionLoops + DEFAULT_LOOP);
-			Label->setString(WzString::fromUtf8(tmp));
+			label.setString(WzString::fromUtf8(tmp));
 		}
 		else
 		{
-			Label->setString("");  // Don't show "1" loop.
+			label.setString("");  // Don't show "1" loop.
 		}
-		Label->show();
+		label.show();
 	}
 	else
 	{
 		//hide the label if no factory
-		Label->setString("");
-		Label->hide();
+		label.setString("");
+		label.hide();
 	}
 }
 
 // callback to update the command droid size label
-void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateCommandSize(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL *)psWidget;
-	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	BASE_OBJECT *psObj = (BASE_OBJECT *)label.pUserData;
 
 	// Get the object associated with this widget.
 	if (psObj != nullptr && !isDead(psObj))
@@ -470,21 +470,21 @@ void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 
 		char tmp[40];
 		ssprintf(tmp, "%u/%u", psDroid->psGroup ? psDroid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(psDroid));
-		Label->setString(WzString::fromUtf8(tmp));
-		Label->show();
+		label.setString(WzString::fromUtf8(tmp));
+		label.show();
 	}
 	else
 	{
-		Label->setString("");
-		Label->hide();
+		label.setString("");
+		label.hide();
 	}
 }
 
 // callback to update the command droid experience
-void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateCommandExp(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL *)psWidget;
-	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	BASE_OBJECT			*psObj = (BASE_OBJECT *)label.pUserData;
 
 	// Get the object associated with this widget.
 	if (psObj != nullptr && !isDead(psObj))
@@ -495,21 +495,21 @@ void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
 		int numStars = std::max((int)getDroidLevel(psDroid) - 1, 0);
-		Label->setString(WzString(numStars, WzUniCodepoint::fromASCII('*')));
-		Label->show();
+		label.setString(WzString(numStars, WzUniCodepoint::fromASCII('*')));
+		label.show();
 	}
 	else
 	{
-		Label->setString("");
-		Label->hide();
+		label.setString("");
+		label.hide();
 	}
 }
 
 // callback to update the command droid factories
-void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateCommandFact(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL				*Label = (W_LABEL *)psWidget;
-	BASE_OBJECT			*psObj = (BASE_OBJECT *)Label->pUserData;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	BASE_OBJECT			*psObj = (BASE_OBJECT *)label.pUserData;
 	SDWORD                          i, start;
 
 	// Get the object associated with this widget.
@@ -521,11 +521,11 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 		ASSERT(psDroid->droidType == DROID_COMMAND, "Droid is not a command droid");
 
 		// see which type of factory this is for
-		if (Label->id >= IDOBJ_COUNTSTART && Label->id < IDOBJ_COUNTEND)
+		if (label.id >= IDOBJ_COUNTSTART && label.id < IDOBJ_COUNTEND)
 		{
 			start = DSS_ASSPROD_SHIFT;
 		}
-		else if (Label->id >= IDOBJ_CMDFACSTART && Label->id < IDOBJ_CMDFACEND)
+		else if (label.id >= IDOBJ_CMDFACSTART && label.id < IDOBJ_CMDFACEND)
 		{
 			start = DSS_ASSPROD_CYBORG_SHIFT;
 		}
@@ -534,28 +534,28 @@ void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext)
 			start = DSS_ASSPROD_VTOL_SHIFT;
 		}
 
-		Label->setString("");
+		label.setString("");
 		for (i = 0; i < 5; ++i)  // TODO Support up to MAX_FACTORY (which won't fit in the ugly secondaryOrder bitmask hack).
 		{
 			if (psDroid->secondaryOrder & (1 << (i + start)))
 			{
-				Label->setString(Label->getString().append(WzUniCodepoint::fromASCII((char)('0' + i + 1))));
+				label.setString(label.getString().append(WzUniCodepoint::fromASCII((char)('0' + i + 1))));
 			}
 		}
-		Label->show();
+		label.show();
 	}
 	else
 	{
-		Label->setString("");
-		Label->hide();
+		label.setString("");
+		label.hide();
 	}
 }
 
 // Widget callback to update and display the power bar.
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
-void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayPowerBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
+	auto &barGraph = dynamic_cast<W_BARGRAPH &>(widget);
 	SDWORD		Avail, ManPow, realPower;
 	SDWORD		Empty;
 	SDWORD		BarWidth, textWidth = 0;
@@ -572,12 +572,12 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	Avail = (displayPower + 1e-8) / POWERBAR_SCALE;
 	realPower = (displayPower + 1e-8) - ManuPower;
 
-	BarWidth = BarGraph->width();
+	BarWidth = barGraph.width();
 	sprintf(szVal, "%d", realPower);
 
 	// Any widget using intDisplayPowerBar must have its pUserData initialized to a (DisplayPowerBarCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayPowerBarCache& cache = *static_cast<DisplayPowerBarCache*>(psWidget->pUserData);
+	assert(barGraph.pUserData != nullptr);
+	DisplayPowerBarCache& cache = *static_cast<DisplayPowerBarCache*>(barGraph.pUserData);
 
 	cache.wzText.setText(szVal, font_regular);
 
@@ -607,8 +607,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		Empty = 0;
 	}
 
-	int x0 = xOffset + BarGraph->x();
-	int y0 = yOffset + BarGraph->y();
+	int x0 = xOffset + barGraph.x();
+	int y0 = yOffset + barGraph.y();
 
 	pie_SetFogStatus(false);
 
@@ -684,8 +684,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	if (showNeedMessage)
 	{
 		auto needTextWidth = cache.wzNeedText.width();
-		auto textX = iX + (BarGraph->width() - needTextWidth) / 2;
-		pie_UniTransBoxFill(textX - 3, y0 + 1, textX + needTextWidth + 3, y0 + BarGraph->height() - 1, WZCOL_TRANSPARENT_BOX);
+		auto textX = iX + (barGraph.width() - needTextWidth) / 2;
+		pie_UniTransBoxFill(textX - 3, y0 + 1, textX + needTextWidth + 3, y0 + barGraph.height() - 1, WZCOL_TRANSPARENT_BOX);
 		cache.wzNeedText.render(textX, iY - 1, (realTime / 1250) % 5 ? WZCOL_WHITE: WZCOL_RED);
 	}
 
@@ -693,8 +693,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	cache.wzText.render(iX, iY, Avail < 0 ? WZCOL_RED : WZCOL_TEXT_BRIGHT);
 }
 
-IntFancyButton::IntFancyButton(WIDGET *parent)
-	: W_CLICKFORM(parent)
+IntFancyButton::IntFancyButton()
+	: W_CLICKFORM()
 	, buttonType(TOPBUTTON)
 {
 	model.position.x = 0;
@@ -725,8 +725,8 @@ void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
 	}
 }
 
-IntStatusButton::IntStatusButton(WIDGET *parent)
-	: IntObjectButton(parent)
+IntStatusButton::IntStatusButton()
+	: IntObjectButton()
 	, theStats(nullptr)
 {
 	buttonType = TOPBUTTON;
@@ -875,8 +875,8 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	}
 }
 
-IntObjectButton::IntObjectButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntObjectButton::IntObjectButton()
+	: IntFancyButton()
 	, psObj(nullptr)
 {
 	buttonType = BTMBUTTON;
@@ -918,8 +918,8 @@ void IntObjectButton::display(int xOffset, int yOffset)
 	doneDisplay();
 }
 
-IntStatsButton::IntStatsButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntStatsButton::IntStatsButton()
+	: IntFancyButton()
 	, Stat(nullptr)
 {}
 
@@ -1007,8 +1007,8 @@ void IntStatsButton::display(int xOffset, int yOffset)
 	doneDisplay();
 }
 
-IntFormTransparent::IntFormTransparent(WIDGET *parent)
-	: W_FORM(parent)
+IntFormTransparent::IntFormTransparent()
+	: W_FORM()
 {
 }
 
@@ -1016,8 +1016,8 @@ void IntFormTransparent::display(int xOffset, int yOffset)
 {
 }
 
-IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
-	: W_FORM(parent)
+IntFormAnimated::IntFormAnimated(bool openAnimate)
+	: W_FORM()
 	, startTime(0)
 	, currentAction(openAnimate ? 0 : 2)
 {
@@ -1097,60 +1097,60 @@ void IntFormAnimated::display(int xOffset, int yOffset)
 
 // Display an image for a widget.
 //
-void intDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayImage(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 
-	iV_DrawImage(IntImages, psWidget->UserData, x, y);
+	iV_DrawImage(IntImages, widget.UserData, x, y);
 }
 
 
 //draws the mission clock - flashes when below a predefined time
-void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayMissionClock(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 
 	// Draw the background image
-	iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
+	iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(widget.UserData), x, y);
 	// Need to flash the timer when < 5 minutes remaining, but > 4 minutes
-	bool flash = UNPACKDWORD_TRI_A(psWidget->UserData);
+	bool flash = UNPACKDWORD_TRI_A(widget.UserData);
 	if (flash && ((realTime / 250) % 2) == 0)
 	{
-		iV_DrawImage(IntImages, UNPACKDWORD_TRI_C(psWidget->UserData), x, y);
+		iV_DrawImage(IntImages, UNPACKDWORD_TRI_C(widget.UserData), x, y);
 	}
 }
 
 
 // Display one of two images depending on if the widget is hilighted by the mouse.
 //
-void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayImageHilight(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 	UWORD ImageID;
 	bool Hilight = false;
 
-	switch (psWidget->type)
+	switch (widget.type)
 	{
 	case WIDG_FORM:
-		Hilight = (psWidget->getState() & WBUT_HIGHLIGHT) != 0;
+		Hilight = (widget.getState() & WBUT_HIGHLIGHT) != 0;
 		break;
 
 	case WIDG_BUTTON:
-		Hilight = buttonIsHilite(psWidget);
+		Hilight = buttonIsHilite(widget);
 		break;
 
 	case WIDG_EDITBOX:
-		if (((W_EDITBOX *)psWidget)->state & WEDBS_HILITE)
+		if (dynamic_cast<W_EDITBOX &>(widget).state & WEDBS_HILITE)
 		{
 			Hilight = true;
 		}
 		break;
 
 	case WIDG_SLIDER:
-		if (((W_SLIDER *)psWidget)->isHighlighted())
+		if (dynamic_cast<W_SLIDER &>(widget).isHighlighted())
 		{
 			Hilight = true;
 		}
@@ -1160,16 +1160,16 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		Hilight = false;
 	}
 
-	ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
+	ImageID = UNPACKDWORD_TRI_C(widget.UserData);
 
 
 	//need to flash the button if Full Transporter
-	bool flash = UNPACKDWORD_TRI_A(psWidget->UserData);
-	if (flash && psWidget->id == IDTRANS_LAUNCH)
+	bool flash = UNPACKDWORD_TRI_A(widget.UserData);
+	if (flash && widget.id == IDTRANS_LAUNCH)
 	{
 		if (((realTime / 250) % 2) == 0)
 		{
-			iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
+			iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(widget.UserData), x, y);
 		}
 		else
 		{
@@ -1181,36 +1181,36 @@ void intDisplayImageHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		iV_DrawImage(IntImages, ImageID, x, y);
 		if (Hilight)
 		{
-			iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
+			iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(widget.UserData), x, y);
 		}
 	}
 }
 
 // Display one of two images depending on whether the widget is highlighted by the mouse.
-void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayButtonHilight(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 	UWORD ImageID;
 
-	unsigned state = psWidget->getState();
+	unsigned state = widget.getState();
 	bool grey = (state & WBUT_DISABLE) != 0;
 	bool down = (state & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
 	bool highlight = (state & WBUT_HIGHLIGHT) != 0;
 	if (grey)
 	{
-		ImageID = UNPACKDWORD_TRI_A(psWidget->UserData);
+		ImageID = UNPACKDWORD_TRI_A(widget.UserData);
 		highlight = false;
 	}
 	else
 	{
-		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData) + down;
+		ImageID = UNPACKDWORD_TRI_C(widget.UserData) + down;
 	}
 
 	iV_DrawImage(IntImages, ImageID, x, y);
 	if (highlight)
 	{
-		iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(psWidget->UserData), x, y);
+		iV_DrawImage(IntImages, UNPACKDWORD_TRI_B(widget.UserData), x, y);
 	}
 
 }
@@ -1218,37 +1218,36 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // Flash one of two images, regardless of whether or not it is highlighted
 // Commented-out portions are retained because I am planning on making the intensity of the
 // flash depend on whether or not the button is highlighted.
-void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayButtonFlash(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 	UWORD ImageID;
 
-	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
+	ASSERT(widget.type == WIDG_BUTTON, "Not a button");
 
 	if ((realTime / 250) % 2 == 0)
 	{
-		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
+		ImageID = UNPACKDWORD_TRI_B(widget.UserData);
 	}
 	else
 	{
-		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
+		ImageID = UNPACKDWORD_TRI_C(widget.UserData);
 	}
 
 	iV_DrawImage(IntImages, ImageID, x, y);
 }
 
 /* display highlighted edit box from left, middle and end edit box graphics */
-void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayEditBox(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-
-	W_EDITBOX	*psEditBox = (W_EDITBOX *) psWidget;
+	auto &editBox = dynamic_cast<W_EDITBOX &>(widget);
 	UWORD		iImageIDLeft, iImageIDMid, iImageIDRight;
 	UDWORD		iX, iY, iXRight;
-	UDWORD          iXLeft = xOffset + psWidget->x(),
-	                iYLeft = yOffset + psWidget->y();
+	UDWORD          iXLeft = xOffset + editBox.x(),
+	                iYLeft = yOffset + editBox.y();
 
-	if (psEditBox->state & WEDBS_HILITE)
+	if (editBox.state & WEDBS_HILITE)
 	{
 		iImageIDLeft  = IMAGE_DES_EDITBOXLEFTH;
 		iImageIDMid   = IMAGE_DES_EDITBOXMIDH;
@@ -1268,7 +1267,7 @@ void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	/* draw middle of bar */
 	iX += iV_GetImageWidth(IntImages, iImageIDLeft);
-	iXRight = xOffset + psWidget->width() - iV_GetImageWidth(IntImages, iImageIDRight);
+	iXRight = xOffset + editBox.width() - iV_GetImageWidth(IntImages, iImageIDRight);
 	if (iX < iXRight)
 	{
 		iV_DrawImageRepeatX(IntImages, iImageIDMid, iX, iY, (iXRight - iX) + 3, defaultProjectionMatrix(), true);
@@ -1958,13 +1957,13 @@ static void StatGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **S
 	}
 }
 
-static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool isPowerBar, DisplayBarCache& cache)
+static void intDisplayBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset, bool isPowerBar, DisplayBarCache& cache)
 {
-	W_BARGRAPH *BarGraph = (W_BARGRAPH *)psWidget;
+	auto &barGraph = dynamic_cast<W_BARGRAPH &>(widget);
 	char szVal[30];
 	char const *szCheckWidth = "00000";
-	int x0 = xOffset + BarGraph->x();
-	int y0 = yOffset + BarGraph->y();
+	int x0 = xOffset + barGraph.x();
+	int y0 = yOffset + barGraph.y();
 	int arbitraryOffset = 3;
 	int iX, iY;
 	int barWidth = 100, width;
@@ -1976,7 +1975,7 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	{
 		//draw the background image
 		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_LEFT, x0, y0);
-		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + psWidget->width() - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
+		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + barGraph.width() - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
 	}
 
 	// Arbitrary increment for the position of the bars
@@ -1990,49 +1989,49 @@ static void intDisplayBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset, bool
 	if (isPowerBar)
 	{
 		// Adjust the width based on the text drawn
-		barWidth = BarGraph->width() - (iX - x0 + arbitraryOffset);
+		barWidth = barGraph.width() - (iX - x0 + arbitraryOffset);
 	}
 
 	//draw current value section
-	width = MIN(BarGraph->majorSize * barWidth / 100, barWidth);
+	width = MIN(barGraph.majorSize * barWidth / 100, barWidth);
 	iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, width, defaultProjectionMatrix(), true);
 
 	/* draw text value */
-	for (i = 0; i < BarGraph->precision; ++i)
+	for (i = 0; i < barGraph.precision; ++i)
 	{
 		precisionFactor *= 10;
 	}
-	value = (BarGraph->iOriginal * precisionFactor + BarGraph->denominator / 2) / BarGraph->denominator;
-	sprintf(szVal, "%d%s%.*d", value / precisionFactor, precisionFactor == 1 ? "" : ".", BarGraph->precision, value % precisionFactor);
+	value = (barGraph.iOriginal * precisionFactor + barGraph.denominator / 2) / barGraph.denominator;
+	sprintf(szVal, "%d%s%.*d", value / precisionFactor, precisionFactor == 1 ? "" : ".", barGraph.precision, value % precisionFactor);
 	cache.wzText.setText(szVal, font_regular);
 	cache.wzText.render(x0, iY, WZCOL_TEXT_BRIGHT);
 
 	//draw the comparison value - only if not zero
-	if (BarGraph->minorSize != 0)
+	if (barGraph.minorSize != 0)
 	{
-		width = MIN(BarGraph->minorSize * barWidth / 100, barWidth);
+		width = MIN(barGraph.minorSize * barWidth / 100, barWidth);
 		iV_DrawImage(IntImages, IMAGE_DES_STATSCOMP, iX + width, y0 - 1);
 	}
 }
 
 /* Draws a stats bar for the design screen */
-void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayStatsBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using intDisplayStatsBar must have its pUserData initialized to a (DisplayBarCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayBarCache& cache = *static_cast<DisplayBarCache*>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayBarCache& cache = *static_cast<DisplayBarCache*>(widget.pUserData);
 
-	intDisplayBar(psWidget, xOffset, yOffset, false, cache);
+	intDisplayBar(widget, xOffset, yOffset, false, cache);
 }
 
 /* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayDesignPowerBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using intDisplayDesignPowerBar must have its pUserData initialized to a (DisplayBarCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayBarCache& cache = *static_cast<DisplayBarCache*>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayBarCache& cache = *static_cast<DisplayBarCache*>(widget.pUserData);
 
-	intDisplayBar(psWidget, xOffset, yOffset, true, cache);
+	intDisplayBar(widget, xOffset, yOffset, true, cache);
 }
 
 // Widget callback function to play an audio track.
@@ -2056,8 +2055,8 @@ void WidgetAudioCallback(int AudioID)
 	}
 }
 
-IntTransportButton::IntTransportButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntTransportButton::IntTransportButton()
+	: IntFancyButton()
 	, psDroid(nullptr)
 {}
 
@@ -2233,10 +2232,10 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 
 
 /*Displays the proximity messages blips over the world*/
-void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
+void intDisplayProximityBlips(WIDGET &widget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
 {
-	W_CLICKFORM			*psButton = (W_CLICKFORM *)psWidget;
-	PROXIMITY_DISPLAY	*psProxDisp = (PROXIMITY_DISPLAY *)psButton->pUserData;
+	auto &button = dynamic_cast<W_CLICKFORM &>(widget);
+	PROXIMITY_DISPLAY	*psProxDisp = (PROXIMITY_DISPLAY *)button.pUserData;
 	MESSAGE				*psMsg = psProxDisp->psMessage;
 	SDWORD				x = 0, y = 0;
 
@@ -2268,60 +2267,60 @@ void intDisplayProximityBlips(WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, W
 	if (!psMsg->read)
 	{
 		//set the button's x/y so that can be clicked on
-		psButton->move(psProxDisp->screenX - psButton->width() / 2, psProxDisp->screenY - psButton->height() / 2);
+		button.move(psProxDisp->screenX - button.width() / 2, psProxDisp->screenY - button.height() / 2);
 	}
 }
 
-static UWORD sliderMouseUnit(W_SLIDER *Slider)
+static UWORD sliderMouseUnit(W_SLIDER &slider)
 {
-	UWORD posStops = (UWORD)(Slider->numStops / 20);
+	UWORD posStops = (UWORD)(slider.numStops / 20);
 
-	if (posStops == 0 || Slider->pos == 0 || Slider->pos == Slider->numStops)
+	if (posStops == 0 || slider.pos == 0 || slider.pos == slider.numStops)
 	{
 		return 1;
 	}
 
-	if (Slider->pos < posStops)
+	if (slider.pos < posStops)
 	{
-		return (Slider->pos);
+		return (slider.pos);
 	}
 
-	if (Slider->pos > (Slider->numStops - posStops))
+	if (slider.pos > (slider.numStops - posStops))
 	{
-		return (UWORD)(Slider->numStops - Slider->pos);
+		return (UWORD)(slider.numStops - slider.pos);
 	}
 	return posStops;
 }
 
-void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateQuantitySlider(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_SLIDER *Slider = (W_SLIDER *)psWidget;
+	auto &slider = dynamic_cast<W_SLIDER &>(widget);
 
-	if (Slider->isHighlighted())
+	if (slider.isHighlighted())
 	{
 		if (keyDown(KEY_LEFTARROW))
 		{
-			if (Slider->pos > 0)
+			if (slider.pos > 0)
 			{
-				Slider->pos = (UWORD)(Slider->pos - sliderMouseUnit(Slider));
+				slider.pos = (UWORD)(slider.pos - sliderMouseUnit(slider));
 			}
 		}
 		else if (keyDown(KEY_RIGHTARROW))
 		{
-			if (Slider->pos < Slider->numStops)
+			if (slider.pos < slider.numStops)
 			{
-				Slider->pos = (UWORD)(Slider->pos + sliderMouseUnit(Slider));
+				slider.pos = (UWORD)(slider.pos + sliderMouseUnit(slider));
 			}
 		}
 	}
 }
 
-void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayResSubGroup(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		x = Label->x() + xOffset;
-	UDWORD		y = Label->y() + yOffset;
-	RESEARCH    *psResearch = (RESEARCH *)Label->pUserData;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	UDWORD		x = label.x() + xOffset;
+	UDWORD		y = label.y() + yOffset;
+	RESEARCH    *psResearch = (RESEARCH *)label.pUserData;
 
 	if (psResearch->subGroup != NO_RESEARCH_ICON)
 	{
@@ -2329,14 +2328,14 @@ void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayAllyIcon(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_LABEL		*Label = (W_LABEL *)psWidget;
-	UDWORD		x = Label->x() + xOffset;
-	UDWORD		y = Label->y() + yOffset;
+	auto &label = dynamic_cast<W_LABEL &>(widget);
+	UDWORD		x = label.x() + xOffset;
+	UDWORD		y = label.y() + yOffset;
 
-	unsigned ref = UNPACKDWORD_HI(psWidget->UserData) + STAT_RESEARCH;
-	unsigned num = UNPACKDWORD_LOW(psWidget->UserData);
+	unsigned ref = UNPACKDWORD_HI(label.UserData) + STAT_RESEARCH;
+	unsigned num = UNPACKDWORD_LOW(label.UserData);
 
 	std::vector<AllyResearch> const &researches = listAllyResearch(ref);
 	if (num >= researches.size())
@@ -2351,11 +2350,11 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	iV_DrawImageTc(IntImages, IMAGE_ALLY_RESEARCH, IMAGE_ALLY_RESEARCH_TC, x, y, pal_GetTeamColour(getPlayerColour(researches[num].player)));
 }
 
-void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayAllyBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_BARGRAPH *psBar = (W_BARGRAPH *)psWidget;
+	auto &barGraph = dynamic_cast<W_BARGRAPH &>(widget);
 
-	RESEARCH const &research = asResearch[psWidget->UserData];
+	RESEARCH const &research = asResearch[barGraph.UserData];
 	std::vector<AllyResearch> const &researches = listAllyResearch(research.ref);
 
 	unsigned bestCompletion = 0;
@@ -2368,7 +2367,7 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		if (bestCompletion < res.completion)
 		{
 			bestCompletion = res.completion;
-			psBar->majorCol = pal_GetTeamColour(getPlayerColour(res.player));
+			barGraph.majorCol = pal_GetTeamColour(getPlayerColour(res.player));
 		}
 		if (!res.active)
 		{
@@ -2385,24 +2384,24 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 	}
 
-	setBarGraphValue(psBar, psBar->majorCol, bestCompletion, research.researchPoints);
+	setBarGraphValue(barGraph, barGraph.majorCol, bestCompletion, research.researchPoints);
 	if (bestTimeToResearch != researchNotStarted)
 	{
 		// Show research progress.
-		formatTimeText(psBar, bestTimeToResearch);
+		formatTimeText(barGraph, bestTimeToResearch);
 	}
 	else if (bestCompletion > 0)
 	{
 		// Waiting for module...
-		psBar->text = std::string("—*—");
+		barGraph.text = std::string("—*—");
 	}
 	else if (bestPowerNeeded != researchNotStarted)
 	{
 		// Show how much power is needed, before research can start.
-		formatPowerText(psBar, bestPowerNeeded);
-		setBarGraphValue(psBar, psBar->majorCol, researchPowerCost - bestPowerNeeded, researchPowerCost);
+		formatPowerText(barGraph, bestPowerNeeded);
+		setBarGraphValue(barGraph, barGraph.majorCol, researchPowerCost - bestPowerNeeded, researchPowerCost);
 	}
-	barGraphDisplayTrough(psWidget, xOffset, yOffset);
+	barGraphDisplayTrough(widget, xOffset, yOffset);
 }
 
 /* Set the shadow power for the selected player */

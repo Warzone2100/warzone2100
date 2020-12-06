@@ -68,7 +68,7 @@ bool launchTransporter(DROID *psTransporter);
 have arrived - returns true when there*/
 bool updateTransporter(DROID *psTransporter);
 
-void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext);
+void intUpdateTransCapacity(WIDGET &widget, W_CONTEXT *psContext);
 
 /* Remove the Transporter Launch widget from the screen*/
 void intRemoveTransporterLaunch();

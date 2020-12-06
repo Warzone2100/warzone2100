@@ -69,12 +69,22 @@
 class KeyMapForm : public IntFormAnimated
 {
 public:
-	KeyMapForm(WIDGET *parent, bool ingame);
 	void checkPushedKeyCombo();
 	bool pushedKeyCombo(KEY_CODE subkey);
 
+	static std::shared_ptr<KeyMapForm> create(bool ingame)
+	{
+		auto keyMapForm = std::shared_ptr<KeyMapForm>(new KeyMapForm());
+		keyMapForm->initialize(ingame);
+		return keyMapForm;
+	}
+
+protected:
+	KeyMapForm() : IntFormAnimated(false) {}
+	virtual void initialize(bool ingame);
+
 private:
-	ScrollableListWidget *keyMapList;
+	std::shared_ptr<ScrollableListWidget> keyMapList;
 	void unhighlightSelected();
 };
 
@@ -247,16 +257,16 @@ static uint16_t getMaxKeyMapNameWidth()
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a keymap on the interface.
-static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayKeyMap(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayKeyMap must have its pUserData initialized to a (DisplayKeyMapData*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayKeyMapData& data = *static_cast<DisplayKeyMapData *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayKeyMapData& data = *static_cast<DisplayKeyMapData *>(widget.pUserData);
 
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	int w = psWidget->width();
-	int h = psWidget->height();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
+	int w = widget.width();
+	int h = widget.height();
 	KEY_MAPPING *psMapping = data.psMapping;
 	char sKey[MAX_STR_LENGTH];
 
@@ -276,7 +286,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	// draw name
 	data.cache.wzNameText.setText(_(psMapping->name.c_str()), font_regular);
-	data.cache.wzNameText.render(x + 2, y + (psWidget->height() / 2) + 3, WZCOL_FORM_TEXT);
+	data.cache.wzNameText.render(x + 2, y + (widget.height() / 2) + 3, WZCOL_FORM_TEXT);
 
 	// draw binding
 	keyMapToString(sKey, psMapping);
@@ -287,18 +297,18 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		bindingTextColor = WZCOL_YELLOW;
 	}
 	data.cache.wzBindingText.setText(sKey, font_regular);
-	data.cache.wzBindingText.render(x + psWidget->width() - getMaxKeyMapNameWidth() - 2, y + (psWidget->height() / 2) + 3, bindingTextColor);
+	data.cache.wzBindingText.render(x + widget.width() - getMaxKeyMapNameWidth() - 2, y + (widget.height() / 2) + 3, bindingTextColor);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
+static bool keyMapEditor(bool first, WIDGET &parent, bool ingame)
 {
 	if (first)
 	{
 		loadKeyMap();									// get the current mappings.
 	}
 
-	new KeyMapForm(parent, ingame);
+	parent.attach(KeyMapForm::create(ingame));
 
 	/* Stop when the right number or when alphabetically last - not sure...! */
 	/* Go home... */
@@ -307,7 +317,7 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 
 bool startInGameKeyMapEditor(bool first)
 {
-	WIDGET *parent = psWScreen->psForm;
+	auto &parent = *psWScreen->psForm;
 	bAllowOtherKeyPresses = false;
 	return keyMapEditor(first, parent, true);
 }
@@ -317,7 +327,7 @@ bool startKeyMapEditor(bool first)
 	addBackdrop();
 	addSideText(FRONTEND_SIDETEXT, KM_SX, KM_Y, _("KEY MAPPING"));
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-	return keyMapEditor(first, parent, false);
+	return keyMapEditor(first, *parent, false);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -391,25 +401,26 @@ bool loadKeyMap()
 	return true;
 }
 
-KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, false)
+void KeyMapForm::initialize(bool ingame)
 {
 	id = KM_FORM;
 
-	keyMapList = new ScrollableListWidget(this);
+	keyMapList = ScrollableListWidget::create();
+	attach(keyMapList);
 	if (!ingame)
 	{
 		setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);
+			widget.setGeometry(KM_X, KM_Y, KM_W, KM_H);
 		}));
 		keyMapList->setGeometry(52, 10, KM_ENTRYW, 26 * KM_ENTRYH);
 
-		addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
+		addMultiBut(*this, KM_RETURN,			// return button.
 				8, 5,
 				iV_GetImageWidth(FrontImages, IMAGE_RETURN),
 				iV_GetImageHeight(FrontImages, IMAGE_RETURN),
 				_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
-		addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
+		addMultiBut(*this, KM_DEFAULT,
 				11, 45,
 				iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
 				iV_GetImageHeight(FrontImages, IMAGE_KEYMAP_DEFAULT),
@@ -420,7 +431,7 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 	{
 		// Text versions for in-game where image resources are not available
 		setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H + 10);
+			widget.setGeometry(((300-(KM_W/2))+D_W), ((240-(KM_H/2))+D_H), KM_W, KM_H + 10);
 		}));
 		keyMapList->setGeometry(52, 10, KM_ENTRYW, 24 * KM_ENTRYH);
 
@@ -434,17 +445,17 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 		sButInit.height		= 10;
 		sButInit.pDisplay	= displayTextOption;
 		sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-		sButInit.onDelete = [](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
+		sButInit.onDelete = [](WIDGET &widget) {
+			assert(widget.pUserData != nullptr);
+			delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+			widget.pUserData = nullptr;
 		};
 
 		sButInit.id			= KM_RETURN;
 		sButInit.y			= KM_H - 32;
 		sButInit.pText		= _("Resume Game");
 
-		widgAddButton(psWScreen, &sButInit);
+		attach(std::make_shared<W_BUTTON>(&sButInit));
 
 		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
 		{
@@ -452,7 +463,7 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 			sButInit.y			= KM_H - 8;
 			sButInit.pText		= _("Select Default");
 
-			widgAddButton(psWScreen, &sButInit);
+			attach(std::make_shared<W_BUTTON>(&sButInit));
 		}
 	}
 
@@ -467,15 +478,15 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
 	{
 		W_BUTINIT emptyInit;
-		W_BUTTON *button = new W_BUTTON(&emptyInit);
+		auto button = std::make_shared<W_BUTTON>(&emptyInit);
 		button->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
 		button->id = KM_START + (i - mappings.begin());
 		button->displayFunction = displayKeyMap;
 		button->pUserData = new DisplayKeyMapData(*i);
-		button->setOnDelete([](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayKeyMapData *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
+		button->setOnDelete([](WIDGET &widget) {
+			assert(widget.pUserData != nullptr);
+			delete static_cast<DisplayKeyMapData *>(widget.pUserData);
+			widget.pUserData = nullptr;
 		});
 		button->addOnClickHandler([=](W_BUTTON& clickedButton) {
 			auto clickedMapping = static_cast<DisplayKeyMapData *>(clickedButton.pUserData)->psMapping;

@@ -50,25 +50,25 @@ class ListWidget;
 class ScrollBarWidget;
 
 /* The display function prototype */
-typedef void (*WIDGET_DISPLAY)(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+typedef void (*WIDGET_DISPLAY)(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 /* The optional user callback function */
-typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, W_CONTEXT *psContext);
+typedef void (*WIDGET_CALLBACK)(WIDGET &widget, W_CONTEXT *psContext);
 typedef void (*WIDGET_AUDIOCALLBACK)(int AudioID);
 
 /* The optional "calc layout" callback function, to support runtime layout recalculation */
-typedef std::function<void (WIDGET *psWidget, unsigned int oldScreenWidth, unsigned int oldScreenHeight, unsigned int newScreenWidth, unsigned int newScreenHeight)> WIDGET_CALCLAYOUT_FUNC;
+typedef std::function<void (WIDGET &widget, unsigned int oldScreenWidth, unsigned int oldScreenHeight, unsigned int newScreenWidth, unsigned int newScreenHeight)> WIDGET_CALCLAYOUT_FUNC;
 
 // To avoid typing, use the following define to construct a lambda for WIDGET_CALCLAYOUT_FUNC
 // psWidget is the widget
 // The { } are still required (for clarity).
-#define LAMBDA_CALCLAYOUT_SIMPLE(x) [](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) x
+#define LAMBDA_CALCLAYOUT_SIMPLE(x) [](WIDGET &widget, unsigned int, unsigned int, unsigned int, unsigned int) x
 
 /* The optional "onDelete" callback function */
-typedef std::function<void (WIDGET *psWidget)> WIDGET_ONDELETE_FUNC;
+typedef std::function<void (WIDGET &widget)> WIDGET_ONDELETE_FUNC;
 
 /* The optional hit-testing function, used for custom hit-testing within the outer bounding rectangle */
-typedef std::function<bool (WIDGET *psWidget, int x, int y)> WIDGET_HITTEST_FUNC;
+typedef std::function<bool (WIDGET &widget, int x, int y)> WIDGET_HITTEST_FUNC;
 
 
 /* The different base types of widget */
@@ -133,20 +133,19 @@ public:
 };
 
 /* The base widget data type */
-class WIDGET
+class WIDGET : public std::enable_shared_from_this<WIDGET>
 {
 
 public:
-	typedef std::vector<WIDGET *> Children;
+	typedef std::vector<std::shared_ptr<WIDGET>> Children;
 
 	WIDGET(WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	WIDGET(W_INIT const *init, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
-	WIDGET(WIDGET *parent, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	virtual ~WIDGET();
 
 	void deleteLater();  ///< Like "delete this;", but safe to call from display/run callbacks.
 
-	virtual void widgetLost(WIDGET *);
+	virtual void widgetLost(std::shared_ptr<WIDGET> const &p);
 
 	virtual void focusLost() {}
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
@@ -189,13 +188,15 @@ public:
 		setTip((stringUtf8 != nullptr) ? std::string(stringUtf8) : std::string());
 	}
 
-	WIDGET *parent()
-	{
-		return parentWidget;
-	}
+	WIDGET *parent();
+
 	Children const &children()
 	{
 		return childWidgets;
+	}
+	void removeAllChildren()
+	{
+		childWidgets = {};
 	}
 	WzRect const &geometry() const
 	{
@@ -227,8 +228,8 @@ public:
 	}
 	void setGeometry(WzRect const &r);
 
-	void attach(WIDGET *widget);
-	void detach(WIDGET *widget);
+	void attach(std::shared_ptr<WIDGET> widget);
+	void detach(std::shared_ptr<WIDGET> widget);
 
 	void setCalcLayout(const WIDGET_CALCLAYOUT_FUNC& calcLayoutFunc);
 	void callCalcLayout();
@@ -263,8 +264,8 @@ public:
 	}
 
 private:
-	WIDGET                 *parentWidget;           ///< Parent widget.
-	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
+	std::weak_ptr<WIDGET> parentWidget = {};
+	std::vector<std::shared_ptr<WIDGET>> childWidgets;
 
 	WzRect                  dim;
 
@@ -280,7 +281,7 @@ public:
 
 struct WidgetTrigger
 {
-	WIDGET *widget;
+	std::shared_ptr<WIDGET> widget;
 };
 typedef std::vector<WidgetTrigger> WidgetTriggers;
 
@@ -288,17 +289,36 @@ typedef std::vector<WidgetTrigger> WidgetTriggers;
 struct W_SCREEN
 {
 	W_SCREEN();
-	~W_SCREEN();
 
-	void setFocus(WIDGET *widget);  ///< Sets psFocus, notifying the old widget, if any.
-	void setReturn(WIDGET *psWidget);  ///< Adds psWidget to retWidgets.
+	void setFocus(std::shared_ptr<WIDGET> widget);  ///< Sets psFocus, notifying the old widget, if any.
+	void resetFocus();
+	void setReturn(std::shared_ptr<WIDGET> psWidget);  ///< Adds psWidget to retWidgets.
 	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight); // used to handle screen resizing
 
-	W_FORM          *psForm;        ///< The root form of the screen
-	WIDGET          *psFocus;       ///< The widget that has keyboard focus
-	WIDGET         *lastHighlight;  ///< The last widget to be highlighted. This is used to track when the mouse moves off something.
-	iV_fonts         TipFontID;     ///< ID of the IVIS font to use for tool tips.
-	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
+	/**
+	 * The root form of the screen
+	 **/
+	std::shared_ptr<W_FORM> psForm;
+
+	/**
+	 * The widget that has keyboard focus
+	 **/
+	std::shared_ptr<WIDGET> psFocus;
+
+	/**
+	 * The last widget to be highlighted. This is used to track when the mouse moves off something.
+	 **/
+	std::shared_ptr<WIDGET> lastHighlight;
+
+	/**
+	 * ID of the IVIS font to use for tool tips.
+	 **/
+	iV_fonts TipFontID;
+
+	/**
+	 * The widgets to be returned by widgRunScreen.
+	 **/
+	WidgetTriggers retWidgets;
 
 private:
 #ifdef WZ_CXX11

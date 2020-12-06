@@ -81,7 +81,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // protos.
 
-static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayStructureBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 struct DisplayStructureBarCache {
 	WzText wzNameText;
@@ -138,10 +138,11 @@ void WzMultiLimitTitleUI::start()
 	// TRANSLATORS: Sidetext of structure limits screen
 	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, _("LIMITS"));
 
-	IntFormAnimated *limitsForm = new IntFormAnimated(widgGetFromID(psWScreen, FRONTEND_BACKDROP), false);
+	auto limitsForm = std::make_shared<IntFormAnimated>(false);
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(limitsForm);
 	limitsForm->id = IDLIMITS;
 	limitsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
+		widget.setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
 	}));
 
 	// force limits off button
@@ -187,13 +188,13 @@ void WzMultiLimitTitleUI::start()
 	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
 
 	// add tab form..
-	IntListTabWidget *limitsList = new IntListTabWidget(limitsForm);
+	auto limitsList = IntListTabWidget::create();
+	limitsForm->attach(limitsList);
 	limitsList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		IntListTabWidget *limitsList = static_cast<IntListTabWidget *>(psWidget);
-		assert(limitsList != nullptr);
-		limitsList->setChildSize(BARWIDTH, BARHEIGHT);
-		limitsList->setChildSpacing(5, 5);
-		limitsList->setGeometry(50, 10, BARWIDTH, 370);
+		auto &limitsList = dynamic_cast<IntListTabWidget &>(widget);
+		limitsList.setChildSize(BARWIDTH, BARHEIGHT);
+		limitsList.setChildSpacing(5, 5);
+		limitsList.setGeometry(50, 10, BARWIDTH, 370);
 	}));
 
 	//Put the buttons on it
@@ -203,15 +204,16 @@ void WzMultiLimitTitleUI::start()
 	{
 		if (asStructureStats[i].base.limit != LOTS_OF)
 		{
-			W_FORM *button = new W_FORM(limitsList);
+			auto button = std::make_shared<W_FORM>();
+			limitsList->attach(button);
 			button->id = limitsButtonId;
 			button->displayFunction = displayStructureBar;
 			button->UserData = i;
 			button->pUserData = new DisplayStructureBarCache();
-			button->setOnDelete([](WIDGET *psWidget) {
-				assert(psWidget->pUserData != nullptr);
-				delete static_cast<DisplayStructureBarCache *>(psWidget->pUserData);
-				psWidget->pUserData = nullptr;
+			button->setOnDelete([](WIDGET &widget) {
+				assert(widget.pUserData != nullptr);
+				delete static_cast<DisplayStructureBarCache *>(widget.pUserData);
+				widget.pUserData = nullptr;
 			});
 			limitsList->addWidgetToLayout(button);
 			++limitsButtonId;
@@ -446,17 +448,17 @@ bool applyLimitSet()
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayStructureBar(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayStructureBar must have its pUserData initialized to a (DisplayStructureBarCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayStructureBarCache& cache = *static_cast<DisplayStructureBarCache *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayStructureBarCache& cache = *static_cast<DisplayStructureBarCache *>(widget.pUserData);
 
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	int w = psWidget->width();
-	int h = psWidget->height();
-	STRUCTURE_STATS	*stat = asStructureStats + psWidget->UserData;
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
+	int w = widget.width();
+	int h = widget.height();
+	STRUCTURE_STATS	*stat = asStructureStats + widget.UserData;
 	Position position;
 	Vector3i rotation;
 	char str[20];
@@ -466,7 +468,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	drawBlueBox(x, y, w, h);
 
 	// draw image
-	pie_SetGeometricOffset(x + 35, y + psWidget->height() / 2 + 9);
+	pie_SetGeometricOffset(x + 35, y + widget.height() / 2 + 9);
 	rotation.x = -15;
 	rotation.y = ((realTime / 45) % 360) ; //45
 	rotation.z = 0;
@@ -492,14 +494,12 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 	// draw name
 	cache.wzNameText.setText(_(getName(stat)), font_regular);
-	cache.wzNameText.render(x + 80, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
+	cache.wzNameText.render(x + 80, y + widget.height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	// draw limit
-	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, psWidget->id + 1))->pos);
+	ssprintf(str, "%d", ((W_SLIDER *)widgGetFromID(psWScreen, widget.id + 1))->pos);
 	cache.wzLimitText.setText(str, font_regular);
-	cache.wzLimitText.render(x + 270, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
-
-	return;
+	cache.wzLimitText.render(x + 270, y + widget.height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 }
 
 void resetLimits(void)

@@ -166,7 +166,7 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 	sFormInit.id = CON_SETTINGS;
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(CON_SETTINGSX, CON_SETTINGSY, CON_SETTINGSWIDTH, CON_SETTINGSHEIGHT);
+		widget.setGeometry(CON_SETTINGSX, CON_SETTINGSY, CON_SETTINGSWIDTH, CON_SETTINGSHEIGHT);
 	});
 	sFormInit.pDisplay = intDisplayFeBox;
 	widgAddForm(psSettingsScreen, &sFormInit);

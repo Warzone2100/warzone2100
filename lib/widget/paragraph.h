@@ -81,7 +81,7 @@ public:
 	Paragraph(W_INIT const *init);
 
 	void addText(std::string const &text);
-	void addWidget(WIDGET *widget, int32_t aboveBase);
+	void addWidget(std::shared_ptr<WIDGET> widget, int32_t aboveBase);
 
 	void setFont(iV_fonts font)
 	{

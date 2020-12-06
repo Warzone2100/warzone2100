@@ -213,14 +213,14 @@ static void addBlueForm(UDWORD parent, UDWORD id, WzString txt, UDWORD x, UDWORD
 static void drawReadyButton(UDWORD player);
 
 // Drawing Functions
-static void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayChatEdit(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayPlayer(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayPosition(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayColour(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayTeamChooser(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayAi(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayDifficulty(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayMultiEditBox(WIDGET &wWidget, UDWORD xOffset, UDWORD yOffset);
 
 // pUserData structures used by drawing functions
 struct DisplayPlayerCache {
@@ -286,7 +286,7 @@ static std::vector<AIDATA> aidata;
 
 struct WzMultiButton : public W_BUTTON
 {
-	WzMultiButton(WIDGET *parent) : W_BUTTON(parent) {}
+	WzMultiButton() : W_BUTTON() {}
 
 	void display(int xOffset, int yOffset) override;
 
@@ -299,17 +299,25 @@ struct WzMultiButton : public W_BUTTON
 class ChatBoxWidget : public IntFormAnimated
 {
 public:
-	ChatBoxWidget(WIDGET *parent, bool openAnimate = true);
 	virtual ~ChatBoxWidget();
 	void addMessage(RoomMessage const &message);
 	void initializeMessages(bool preserveOldChat);
 
+	static std::shared_ptr<ChatBoxWidget> create(bool openAnimate = true)
+	{
+		auto chatBox = std::shared_ptr<ChatBoxWidget>(new ChatBoxWidget(openAnimate));
+		chatBox->initialize();
+		return chatBox;
+	}
+
 protected:
 	void geometryChanged() override;
+	virtual void initialize();
 
 private:
-	ScrollableListWidget *messages;
-	W_EDITBOX *editBox;
+	ChatBoxWidget(bool openAnimate): IntFormAnimated(openAnimate) {}
+	std::shared_ptr<ScrollableListWidget> messages;
+	std::shared_ptr<W_EDITBOX> editBox;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
 	void displayMessage(RoomMessage const &message);
 
@@ -1091,8 +1099,8 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 
 // ////////////////////////////////////////////////////////////////////////////
 
-MultibuttonWidget::MultibuttonWidget(WIDGET *parent, int value)
-	: W_FORM(parent)
+MultibuttonWidget::MultibuttonWidget(int value)
+	: W_FORM()
 	, label(nullptr)
 	, currentValue_(value)
 	, disabled(false)
@@ -1122,8 +1130,8 @@ void MultibuttonWidget::geometryChanged()
 
 void MultibuttonWidget::setLabel(char const *text)
 {
-	delete label;
-	label = new W_LABEL(this);
+	label = std::make_shared<W_LABEL>();
+	attach(label);
 	label->setString(text);
 
 	geometryChanged();
@@ -1131,7 +1139,8 @@ void MultibuttonWidget::setLabel(char const *text)
 
 void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char const *tip)
 {
-	W_BUTTON *button = new W_BUTTON(this);
+	auto button = std::make_shared<W_BUTTON>();
+	attach(button);
 	button->setImages(image, imageDown, mpwidgetGetFrontHighlightImage(image));
 	button->setTip(tip);
 	button->setState(value == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
@@ -1199,7 +1208,7 @@ void MultibuttonWidget::choose(int value)
 		}
 	}
 
-	screenPointer->setReturn(this);
+	screenPointer->setReturn(shared_from_this());
 }
 
 void MultibuttonWidget::stateChanged()
@@ -1210,8 +1219,8 @@ void MultibuttonWidget::stateChanged()
 	}
 }
 
-MultichoiceWidget::MultichoiceWidget(WIDGET *parent, int value)
-	: MultibuttonWidget(parent, value)
+MultichoiceWidget::MultichoiceWidget(int value)
+	: MultibuttonWidget(value)
 {
 	lockCurrent = true;
 }
@@ -1436,14 +1445,12 @@ static void addGameOptions()
 {
 	widgDelete(psWScreen, MULTIOP_OPTIONS);  				// clear options list
 	widgDelete(psWScreen, FRONTEND_SIDETEXT3);				// del text..
-
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
 	// draw options box.
-	IntFormAnimated *optionsForm = new IntFormAnimated(parent, false);
+	auto optionsForm = std::make_shared<IntFormAnimated>(false);
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(optionsForm);
 	optionsForm->id = MULTIOP_OPTIONS;
 	optionsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_OPTIONSW, MULTIOP_OPTIONSH);
+		widget.setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_OPTIONSW, MULTIOP_OPTIONSH);
 	}));
 
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX - 3 , MULTIOP_OPTIONSY, _("OPTIONS"));
@@ -1505,12 +1512,14 @@ static void addGameOptions()
 	//just display the game options.
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char *) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
 
-	ListWidget *optionsList = new ListWidget(optionsForm);
+	auto optionsList = std::make_shared<ListWidget>();
+	optionsForm->attach(optionsList);
 	optionsList->setChildSize(MULTIOP_BLUEFORMW, 29);
 	optionsList->setChildSpacing(2, 2);
 	optionsList->setGeometry(MCOL0, MROW5, MULTIOP_BLUEFORMW, optionsForm->height() - MROW5);
 
-	MultichoiceWidget *scavengerChoice = new MultichoiceWidget(optionsList, game.scavengers);
+	auto scavengerChoice = std::make_shared<MultichoiceWidget>(game.scavengers);
+	optionsList->attach(scavengerChoice);
 	scavengerChoice->id = MULTIOP_GAMETYPE;
 	scavengerChoice->setLabel(_("Scavengers"));
 	if (game.mapHasScavengers)
@@ -1521,7 +1530,8 @@ static void addGameOptions()
 	scavengerChoice->enable(!locked.scavengers);
 	optionsList->addWidgetToLayout(scavengerChoice);
 
-	MultichoiceWidget *allianceChoice = new MultichoiceWidget(optionsList, game.alliance);
+	auto allianceChoice = std::make_shared<MultichoiceWidget>(game.alliance);
+	optionsList->attach(allianceChoice);
 	allianceChoice->id = MULTIOP_ALLIANCES;
 	allianceChoice->setLabel(_("Alliances"));
 	allianceChoice->addButton(NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
@@ -1531,7 +1541,8 @@ static void addGameOptions()
 	allianceChoice->enable(!locked.alliances);
 	optionsList->addWidgetToLayout(allianceChoice);
 
-	MultichoiceWidget *powerChoice = new MultichoiceWidget(optionsList, game.power);
+	auto powerChoice = std::make_shared<MultichoiceWidget>(game.power);
+	optionsList->attach(powerChoice);
 	powerChoice->id = MULTIOP_POWER;
 	powerChoice->setLabel(_("Power"));
 	powerChoice->addButton(LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
@@ -1540,7 +1551,8 @@ static void addGameOptions()
 	powerChoice->enable(!locked.power);
 	optionsList->addWidgetToLayout(powerChoice);
 
-	MultichoiceWidget *baseTypeChoice = new MultichoiceWidget(optionsList, game.base);
+	auto baseTypeChoice = std::make_shared<MultichoiceWidget>(game.base);
+	optionsList->attach(baseTypeChoice);
 	baseTypeChoice->id = MULTIOP_BASETYPE;
 	baseTypeChoice->setLabel(_("Base"));
 	baseTypeChoice->addButton(CAMP_CLEAN, Image(FrontImages, IMAGE_NOBASE), Image(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
@@ -1549,7 +1561,8 @@ static void addGameOptions()
 	baseTypeChoice->enable(!locked.bases);
 	optionsList->addWidgetToLayout(baseTypeChoice);
 
-	MultibuttonWidget *mapPreviewButton = new MultibuttonWidget(optionsList);
+	auto mapPreviewButton = std::make_shared<MultibuttonWidget>();
+	optionsList->attach(mapPreviewButton);
 	mapPreviewButton->id = MULTIOP_MAP_PREVIEW;
 	mapPreviewButton->setLabel(_("Map Preview"));
 	mapPreviewButton->addButton(0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
@@ -1559,7 +1572,8 @@ static void addGameOptions()
 	if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
 		auto structureLimitsLabel = challengeActive ? _("Show Structure Limits") : _("Set Structure Limits");
-		MultibuttonWidget *structLimitsButton = new MultibuttonWidget(optionsList);
+		auto structLimitsButton = std::make_shared<MultibuttonWidget>();
+		optionsList->attach(structLimitsButton);
 		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
 		structLimitsButton->setLabel(structureLimitsLabel);
 		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), structureLimitsLabel);
@@ -1568,7 +1582,8 @@ static void addGameOptions()
 		/* ...and even more controls if we are not starting a challenge */
 		if (!challengeActive)
 		{
-			MultibuttonWidget *randomButton = new MultibuttonWidget(optionsList);
+			auto randomButton = std::make_shared<MultibuttonWidget>();
+			optionsList->attach(randomButton);
 			randomButton->id = MULTIOP_RANDOM;
 			randomButton->setLabel(_("Random Game Options"));
 			randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
@@ -1579,7 +1594,8 @@ static void addGameOptions()
 			   starting the host is due to the fact that there is not enough room before the "Host Game" button is hidden.		*/
 			if (NetPlay.isHost)
 			{
-				MultichoiceWidget* TechnologyChoice = new MultichoiceWidget(optionsList, game.techLevel);
+				auto TechnologyChoice = std::make_shared<MultichoiceWidget>(game.techLevel);
+				optionsList->attach(TechnologyChoice);
 				TechnologyChoice->id = MULTIOP_TECHLEVEL;
 				TechnologyChoice->setLabel(_("Tech"));
 				TechnologyChoice->addButton(TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
@@ -1591,7 +1607,8 @@ static void addGameOptions()
 			/* If not hosting (yet), add the button for starting the host. */
 			else
 			{
-				MultibuttonWidget *hostButton = new MultibuttonWidget(optionsList);
+				auto hostButton = std::make_shared<MultibuttonWidget>();
+				optionsList->attach(hostButton);
 				hostButton->id = MULTIOP_HOST;
 				hostButton->setLabel(_("Start Hosting Game"));
 				hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
@@ -1689,12 +1706,11 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	difficultyChooserUp = player;
 
-	WIDGET *chooserParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *aiForm = new IntFormAnimated(chooserParent, false);
+	auto aiForm = std::make_shared<IntFormAnimated>(false);
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(aiForm);
 	aiForm->id = MULTIOP_AI_FORM;
 	aiForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+		widget.setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
 	}));
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("DIFFICULTY"));
@@ -1724,10 +1740,10 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 		sButInit.pDisplay = displayDifficulty;
 		sButInit.UserData = i;
 		sButInit.pUserData = new DisplayDifficultyCache();
-		sButInit.onDelete = [](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayDifficultyCache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
+		sButInit.onDelete = [](WIDGET &widget) {
+			assert(widget.pUserData != nullptr);
+			delete static_cast<DisplayDifficultyCache *>(widget.pUserData);
+			widget.pUserData = nullptr;
 		};
 		widgAddButton(psWScreen, &sButInit);
 	}
@@ -1741,12 +1757,11 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
 	aiChooserUp = player;
 
-	WIDGET *chooserParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *aiForm = new IntFormAnimated(chooserParent, false);
+	auto aiForm = std::make_shared<IntFormAnimated>(false);
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(aiForm);
 	aiForm->id = MULTIOP_AI_FORM;
 	aiForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+		widget.setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
 	}));
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("CHOOSE AI"));
@@ -1767,10 +1782,10 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	}
 	sButInit.pDisplay = displayAi;
 	sButInit.initPUserDataFunc = []() -> void * { return new DisplayAICache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayAICache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayAICache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	// only need this button in (true) mp games
@@ -2242,9 +2257,6 @@ static void drawReadyButton(UDWORD player)
 	            playerBoxHeight(player),
 	            MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT);
 
-	WIDGET *parent = widgGetFromID(psWScreen, MULTIOP_READY_FORM_ID + player);
-
-
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
 	{
 		int playerDifficulty = static_cast<int8_t>(NetPlay.players[player].difficulty);
@@ -2280,7 +2292,8 @@ static void drawReadyButton(UDWORD player)
 	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
 
-	W_LABEL *label = new W_LABEL(parent);
+	auto label = std::make_shared<W_LABEL>();
+	widgGetFromID(psWScreen, MULTIOP_READY_FORM_ID + player)->attach(label);
 	label->id = MULTIOP_READY_START + MAX_PLAYERS + player;
 	label->setGeometry(0, 0, MULTIOP_READY_WIDTH, 17);
 	label->setTextAlignment(WLAB_ALIGNBOTTOM);
@@ -2319,12 +2332,11 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 	}
 
 	// draw player window
-	WIDGET *widgetParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *playersForm = new IntFormAnimated(widgetParent, false);
+	auto playersForm = std::make_shared<IntFormAnimated>(false);
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(playersForm);
 	playersForm->id = MULTIOP_PLAYERS;
 	playersForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
+		widget.setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
 	}));
 
 	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("PLAYERS"));
@@ -2366,10 +2378,10 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 				sButInit.pDisplay = displayPosition;
 				sButInit.UserData = i;
 				sButInit.pUserData = new DisplayPositionCache();
-				sButInit.onDelete = [](WIDGET *psWidget) {
-					assert(psWidget->pUserData != nullptr);
-					delete static_cast<DisplayPositionCache *>(psWidget->pUserData);
-					psWidget->pUserData = nullptr;
+				sButInit.onDelete = [](WIDGET &widget) {
+					assert(widget.pUserData != nullptr);
+					delete static_cast<DisplayPositionCache *>(widget.pUserData);
+					widget.pUserData = nullptr;
 				};
 				widgAddButton(psWScreen, &sButInit);
 				continue;
@@ -2479,10 +2491,10 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 				sButInit.pDisplay = displayPlayer;
 				sButInit.UserData = i;
 				sButInit.pUserData = new DisplayPlayerCache();
-				sButInit.onDelete = [](WIDGET *psWidget) {
-					assert(psWidget->pUserData != nullptr);
-					delete static_cast<DisplayPlayerCache *>(psWidget->pUserData);
-					psWidget->pUserData = nullptr;
+				sButInit.onDelete = [](WIDGET &widget) {
+					assert(widget.pUserData != nullptr);
+					delete static_cast<DisplayPlayerCache *>(widget.pUserData);
+					widget.pUserData = nullptr;
 				};
 				widgAddButton(psWScreen, &sButInit);
 			}
@@ -2552,11 +2564,12 @@ RoomMessage buildMessage(int32_t sender, const char *text)
 	}
 }
 
-ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(parent, openAnimate)
+void ChatBoxWidget::initialize()
 {
 	id = MULTIOP_CHATBOX;
 
-	messages = new ScrollableListWidget(this);
+	messages = ScrollableListWidget::create();
+	attach(messages);
 	messages->setSnapOffset(true);
 	messages->setStickToBottom(true);
 	messages->setPadding({3, 4, 3, 4});
@@ -2572,7 +2585,7 @@ ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(
 	sEdInit.id = MULTIOP_CHATEDIT;
 	sEdInit.pUserData = nullptr;
 	sEdInit.pBoxDisplay = displayChatEdit;
-	editBox = new W_EDITBOX(&sEdInit);
+	editBox = std::make_shared<W_EDITBOX>(&sEdInit);
 	attach(editBox);
 
 	consoleAddMessageListener(handleConsoleMessage);
@@ -2669,7 +2682,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 {
 	W_INIT paragraphInit;
 	paragraphInit.width = messages->calculateListViewWidth();
-	auto paragraph = new Paragraph(&paragraphInit);
+	auto paragraph = std::make_shared<Paragraph>(&paragraphInit);
 
 	switch (message.type)
 	{
@@ -2683,7 +2696,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		paragraph->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
 		paragraph->addText(formatLocalDateTime("%H:%M", message.time));
 
-		paragraph->addWidget(new ChatBoxPlayerNameWidget(message.sender), iV_GetTextAboveBase(font_regular));
+		paragraph->addWidget(std::make_shared<ChatBoxPlayerNameWidget>(message.sender), iV_GetTextAboveBase(font_regular));
 
 		paragraph->setFont(font_regular);
 		paragraph->setShadeColour({0, 0, 0, 0});
@@ -2714,10 +2727,10 @@ static void addChatBox(bool preserveOldChat)
 		return;
 	}
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-	ChatBoxWidget *chatBox = new ChatBoxWidget(parent);
+	auto chatBox = ChatBoxWidget::create();
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(chatBox);
 	chatBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, psWidget->parent()->height() - MULTIOP_CHATBOXY);
+		widget.setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, widget.parent()->height() - MULTIOP_CHATBOXY);
 	}));
 	chatBox->initializeMessages(preserveOldChat);
 
@@ -4361,12 +4374,12 @@ static void printHostHelpMessagesToConsole()
 	displayRoomNotifyMessage(buf);
 }
 
-void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget, unsigned int, unsigned int, unsigned int newScreenWidth, unsigned int newScreenHeight)
+void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET &widget, unsigned int, unsigned int, unsigned int newScreenWidth, unsigned int newScreenHeight)
 {
 	auto height = newScreenHeight - 80;
 	CLIP(height, HIDDEN_FRONTEND_HEIGHT, HIDDEN_FRONTEND_WIDTH);
 
-	psWidget->setGeometry(
+	widget.setGeometry(
 		((newScreenWidth - HIDDEN_FRONTEND_WIDTH) / 2),
 		((newScreenHeight - height) / 2),
 		HIDDEN_FRONTEND_WIDTH - 1,
@@ -4461,27 +4474,27 @@ void WzMultiplayerOptionsTitleUI::start()
 /////////////////////////////////////////////////////////////////////////////////////////
 // Drawing functions
 
-void displayChatEdit(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayChatEdit(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 
 	// draws the line at the bottom of the multiplayer join dialog separating the chat
 	// box from the input box
-	iV_Line(x, y, x + psWidget->width(), y, WZCOL_MENU_SEPARATOR);
+	iV_Line(x, y, x + widget.width(), y, WZCOL_MENU_SEPARATOR);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 
-void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayTeamChooser(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	UDWORD		i = psWidget->UserData;
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
+	UDWORD		i = widget.UserData;
 
 	ASSERT_OR_RETURN(, i < MAX_PLAYERS && NetPlay.players[i].team >= 0 && NetPlay.players[i].team < MAX_PLAYERS, "Team index out of bounds");
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 
 	if (NetPlay.players[i].difficulty != AIDifficulty::DISABLED)
 	{
@@ -4489,35 +4502,35 @@ void displayTeamChooser(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-void displayPosition(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayPosition(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayPosition must have its pUserData initialized to a (DisplayPositionCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayPositionCache& cache = *static_cast<DisplayPositionCache *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayPositionCache& cache = *static_cast<DisplayPositionCache *>(widget.pUserData);
 
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
-	const int i = psWidget->UserData;
+	const int x = xOffset + widget.x();
+	const int y = yOffset + widget.y();
+	const int i = widget.UserData;
 	char text[80];
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 	ssprintf(text, _("Click to take player slot %d"), NetPlay.players[i].position);
 	cache.wzPositionText.setText(text, font_regular);
 	cache.wzPositionText.render(x + 10, y + 22, WZCOL_FORM_TEXT);
 }
 
-static void displayAi(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayAi(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayAi must have its pUserData initialized to a (DisplayAICache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayAICache& cache = *static_cast<DisplayAICache *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayAICache& cache = *static_cast<DisplayAICache *>(widget.pUserData);
 
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
-	const int j = psWidget->UserData;
+	const int x = xOffset + widget.x();
+	const int y = yOffset + widget.y();
+	const int j = widget.UserData;
 	const char *commsText[] = { N_("Open"), N_("Closed") };
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 	cache.wzText.setText((j >= 0) ? aidata[j].name : gettext(commsText[j + 2]), font_regular);
 	cache.wzText.render(x + 10, y + 22, WZCOL_FORM_TEXT);
 }
@@ -4534,18 +4547,18 @@ static int difficultyIcon(int difficulty)
 	}
 }
 
-static void displayDifficulty(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayDifficulty(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayDifficulty must have its pUserData initialized to a (DisplayDifficultyCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayDifficultyCache& cache = *static_cast<DisplayDifficultyCache *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayDifficultyCache& cache = *static_cast<DisplayDifficultyCache *>(widget.pUserData);
 
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
-	const int j = psWidget->UserData;
+	const int x = xOffset + widget.x();
+	const int y = yOffset + widget.y();
+	const int j = widget.UserData;
 
 	ASSERT_OR_RETURN(, j < ARRAY_SIZE(difficultyList), "Bad difficulty found: %d", j);
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 	iV_DrawImage(FrontImages, difficultyIcon(j), x + 5, y + 5);
 	cache.wzDifficultyText.setText(gettext(difficultyList[j]), font_regular);
 	cache.wzDifficultyText.render(x + 42, y + 22, WZCOL_FORM_TEXT);
@@ -4562,21 +4575,21 @@ static bool isKnownPlayer(std::map<std::string, EcKey::Key> const &knownPlayers,
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayPlayer(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayPlayer must have its pUserData initialized to a (DisplayPlayerCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayPlayerCache& cache = *static_cast<DisplayPlayerCache *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayPlayerCache& cache = *static_cast<DisplayPlayerCache *>(widget.pUserData);
 
-	int const x = xOffset + psWidget->x();
-	int const y = yOffset + psWidget->y();
-	unsigned const j = psWidget->UserData;
+	int const x = xOffset + widget.x();
+	int const y = yOffset + widget.y();
+	unsigned const j = widget.UserData;
 
 	const int nameX = 32;
 
 	unsigned downloadProgress = NETgetDownloadProgress(j);
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 	if (downloadProgress != 100)
 	{
 		char progressString[MAX_STR_LENGTH];
@@ -4589,7 +4602,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		std::string name = NetPlay.players[j].name;
 
-		drawBlueBox(x, y, psWidget->width(), psWidget->height());
+		drawBlueBox(x, y, widget.width(), widget.height());
 
 		std::map<std::string, EcKey::Key> serverPlayers;  // TODO Fill this with players known to the server (needs implementing on the server, too). Currently useless.
 
@@ -4614,9 +4627,9 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		// name
 		if (cache.fullMainText != name)
 		{
-			if ((int)iV_GetTextWidth(name.c_str(), font_regular) > psWidget->width() - nameX)
+			if ((int)iV_GetTextWidth(name.c_str(), font_regular) > widget.width() - nameX)
 			{
-				while (!name.empty() && (int)iV_GetTextWidth((name + "...").c_str(), font_regular) > psWidget->width() - nameX)
+				while (!name.empty() && (int)iV_GetTextWidth((name + "...").c_str(), font_regular) > widget.width() - nameX)
 				{
 					name.resize(name.size() - 1);  // Clip name.
 				}
@@ -4747,13 +4760,13 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayColour(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
-	const int j = psWidget->UserData;
+	const int x = xOffset + widget.x();
+	const int y = yOffset + widget.y();
+	const int j = widget.UserData;
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 	if (NetPlay.players[j].wzFiles.empty() && NetPlay.players[j].difficulty != AIDifficulty::DISABLED)
 	{
 		int player = getPlayerColour(j);
@@ -4764,26 +4777,26 @@ void displayColour(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display blue box
-void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayFeBox(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	int w = psWidget->width();
-	int h = psWidget->height();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
+	int w = widget.width();
+	int h = widget.height();
 
 	drawBlueBox(x, y, w, h);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // Display edit box
-void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayMultiEditBox(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 
-	if (((W_EDITBOX *)psWidget)->state & WEDBS_DISABLE)					// disabled
+	if (dynamic_cast<W_EDITBOX &>(widget).state & WEDBS_DISABLE)					// disabled
 	{
 		PIELIGHT colour;
 
@@ -4791,7 +4804,7 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		colour.byte.b = FILLBLUE;
 		colour.byte.g = FILLGREEN;
 		colour.byte.a = FILLTRANS;
-		pie_UniTransBoxFill(x, y, x + psWidget->width() + psWidget->height(), y + psWidget->height(), colour);
+		pie_UniTransBoxFill(x, y, x + widget.width() + widget.height(), y + widget.height(), colour);
 	}
 }
 
@@ -4914,9 +4927,10 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+bool addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
-	WzMultiButton *button = new WzMultiButton(widgGetFromID(screen, formid));
+	auto button = std::make_shared<WzMultiButton>();
+	parent.attach(button);
 	button->id = id;
 	button->setGeometry(x, y, width, height);
 	button->setTip((tipres != nullptr) ? std::string(tipres) : std::string());
@@ -4924,6 +4938,12 @@ bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y,
 	button->imDown = Image(FrontImages, down);
 	button->doHighlight = hi;
 	button->tc = tc;
+	return true;
+}
+
+bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+{
+	addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc);
 	return true;
 }
 

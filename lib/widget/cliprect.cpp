@@ -58,7 +58,7 @@ void ClipRectWidget::displayRecursive(const WidgetGraphicsContext &context)
 		.translatedBy(x() - offset.x, + y() - offset.y)
 		.clippedBy(WzRect(offset.x, offset.y, width(), height()));
 
-	for (auto child : children())
+	for (auto &child: children())
 	{
 		if (child->visible())
 		{

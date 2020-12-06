@@ -41,20 +41,20 @@ TabSelectionStyle::TabSelectionStyle(Image tab, Image tabDown, Image tabHighligh
 	}
 }
 
-TabSelectionWidget::TabSelectionWidget(WIDGET *parent)
-	: WIDGET(parent)
-	, currentTab(0)
-	, tabsAtOnce(1)
-	, prevTabPageButton(new W_BUTTON(this))
-	, nextTabPageButton(new W_BUTTON(this))
+void TabSelectionWidget::initialize()
 {
+	prevTabPageButton = std::make_shared<W_BUTTON>();
+	attach(prevTabPageButton);
+	nextTabPageButton = std::make_shared<W_BUTTON>();
+	attach(nextTabPageButton);
+
 	prevTabPageButton->addOnClickHandler([](W_BUTTON& button) {
-		TabSelectionWidget* pParent = static_cast<TabSelectionWidget*>(button.parent());
+		auto pParent = dynamic_cast<TabSelectionWidget *>(button.parent());
 		assert(pParent != nullptr);
 		pParent->prevTabPage();
 	});
 	nextTabPageButton->addOnClickHandler([](W_BUTTON& button) {
-		TabSelectionWidget* pParent = static_cast<TabSelectionWidget*>(button.parent());
+		auto pParent = dynamic_cast<TabSelectionWidget *>(button.parent());
 		assert(pParent != nullptr);
 		pParent->nextTabPage();
 	});
@@ -107,16 +107,13 @@ void TabSelectionWidget::addOnTabChangedHandler(const W_TABSELECTION_ON_TAB_CHAN
 void TabSelectionWidget::setNumberOfTabs(size_t tabs)
 {
 	size_t previousSize = tabButtons.size();
-	for (size_t n = tabs; n < previousSize; ++n)
-	{
-		delete tabButtons[n];
-	}
 	tabButtons.resize(tabs);
 	for (size_t n = previousSize; n < tabButtons.size(); ++n)
 	{
-		tabButtons[n] = new W_BUTTON(this);
+		tabButtons[n] = std::make_shared<W_BUTTON>();
+		attach(tabButtons[n]);
 		tabButtons[n]->addOnClickHandler([n](W_BUTTON& button) {
-			TabSelectionWidget* pParent = static_cast<TabSelectionWidget*>(button.parent());
+			auto pParent = dynamic_cast<TabSelectionWidget *>(button.parent());
 			assert(pParent != nullptr);
 			pParent->setTab(n);
 		});
@@ -175,17 +172,17 @@ void TabSelectionWidget::doLayoutAll()
 	}
 }
 
-ListWidget::ListWidget(WIDGET *parent)
-	: WIDGET(parent)
+ListWidget::ListWidget()
+	: WIDGET()
 	, childSize(10, 10)
 	, spacing(4, 4)
 	, currentPage_(0)
 	, order(RightThenDown)
 {}
 
-void ListWidget::widgetLost(WIDGET *widget)
+void ListWidget::widgetLost(std::shared_ptr<WIDGET> const &widget)
 {
-	std::vector<WIDGET *>::iterator i = std::find(myChildren.begin(), myChildren.end(), widget);
+	auto i = std::find(myChildren.begin(), myChildren.end(), widget);
 	if (i != myChildren.end())
 	{
 		myChildren.erase(i);
@@ -211,7 +208,7 @@ void ListWidget::setOrder(Order order_)
 	doLayoutAll();
 }
 
-void ListWidget::addWidgetToLayout(WIDGET *widget)
+void ListWidget::addWidgetToLayout(std::shared_ptr<WIDGET> widget)
 {
 	size_t oldNumPages = pages();
 
@@ -300,24 +297,25 @@ void ListWidget::addOnNumberOfPagesChangedHandler(const W_LISTWIDGET_ON_NUMBEROF
 	onNumberOfPagesChangedHandlers.push_back(handlerFunc);
 }
 
-ListTabWidget::ListTabWidget(WIDGET *parent)
-	: WIDGET(parent)
-	, tabs(new TabSelectionWidget(this))
-	, widgets(new ListWidget(this))
-	, tabPos(Top)
+void ListTabWidget::initialize()
 {
+	tabs = TabSelectionWidget::create();
+	attach(tabs);
+	widgets = std::make_shared<ListWidget>();
+	attach(widgets);
+
 	tabs->addOnTabChangedHandler([](TabSelectionWidget& tabsWidget, size_t currentTab) {
-		ListTabWidget* pParent = static_cast<ListTabWidget*>(tabsWidget.parent());
+		ListTabWidget* pParent = dynamic_cast<ListTabWidget *>(tabsWidget.parent());
 		assert(pParent != nullptr);
 		pParent->setCurrentPage(currentTab);
 	});
 	widgets->addOnCurrentPageChangedHandler([](ListWidget& listWidget, size_t currentPage) {
-		ListTabWidget* pParent = static_cast<ListTabWidget*>(listWidget.parent());
+		ListTabWidget* pParent = dynamic_cast<ListTabWidget *>(listWidget.parent());
 		assert(pParent != nullptr);
 		pParent->tabs->setTab(currentPage);
 	});
 	widgets->addOnNumberOfPagesChangedHandler([](ListWidget& listWidget, size_t numberOfPages) {
-		ListTabWidget* pParent = static_cast<ListTabWidget*>(listWidget.parent());
+		ListTabWidget* pParent = dynamic_cast<ListTabWidget *>(listWidget.parent());
 		assert(pParent != nullptr);
 		pParent->tabs->setNumberOfTabs(numberOfPages);
 	});
@@ -339,7 +337,7 @@ void ListTabWidget::geometryChanged()
 	}
 }
 
-void ListTabWidget::addWidgetToLayout(WIDGET *widget)
+void ListTabWidget::addWidgetToLayout(std::shared_ptr<WIDGET> widget)
 {
 	if (widget->parent() == this)
 	{

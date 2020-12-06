@@ -111,10 +111,10 @@ struct ParagraphTextElement: public ParagraphElement
 
 	WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
 	{
-		auto widget = new ParagraphTextWidget(text.substr(fragment.begin, fragment.length).toUtf8(), style);
+		auto widget = std::make_shared<ParagraphTextWidget>(text.substr(fragment.begin, fragment.length).toUtf8(), style);
 		paragraph.attach(widget);
 		fragments.push_back(widget);
-		return widget;
+		return widget.get();
 	}
 
 	bool isLayoutDirty() const override
@@ -127,7 +127,6 @@ struct ParagraphTextElement: public ParagraphElement
 		for (auto fragment: fragments)
 		{
 			paragraph.detach(fragment);
-			delete fragment;
 		}
 
 		fragments.clear();
@@ -141,12 +140,12 @@ struct ParagraphTextElement: public ParagraphElement
 private:
 	WzString text;
 	ParagraphTextStyle style;
-	std::vector<WIDGET *> fragments;
+	std::vector<std::shared_ptr<WIDGET>> fragments;
 };
 
 struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescriptor
 {
-	ParagraphWidgetElement(WIDGET *widget, int32_t aboveBase): widget(widget), aboveBase(aboveBase)
+	ParagraphWidgetElement(std::shared_ptr<WIDGET> widget, int32_t aboveBase): widget(widget), aboveBase(aboveBase)
 	{
 	}
 
@@ -179,7 +178,7 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 	{
 		layoutWidth = widget->width();
 		layoutHeight = widget->height();
-		return widget;
+		return widget.get();
 	}
 
 	void destroyFragments(Paragraph &paragraph) override
@@ -197,7 +196,7 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 	}
 
 private:
-	WIDGET *widget;
+	std::shared_ptr<WIDGET> widget;
 	uint32_t layoutWidth = 0;
 	uint32_t layoutHeight = 0;
 	int32_t aboveBase;
@@ -281,7 +280,7 @@ void Paragraph::addText(std::string const &text)
 	elements.push_back(std::unique_ptr<ParagraphTextElement>(new ParagraphTextElement(text, textStyle)));
 }
 
-void Paragraph::addWidget(WIDGET *widget, int32_t aboveBase)
+void Paragraph::addWidget(std::shared_ptr<WIDGET> widget, int32_t aboveBase)
 {
 	layoutDirty = true;
 	attach(widget);

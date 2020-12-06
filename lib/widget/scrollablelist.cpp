@@ -27,10 +27,12 @@
 
 static const auto SCROLLBAR_WIDTH = 15;
 
-ScrollableListWidget::ScrollableListWidget(WIDGET *parent) : WIDGET(parent)
+void ScrollableListWidget::initialize()
 {
-	scrollBar = new ScrollBarWidget(this);
-	listView = new ClipRectWidget(this);
+	scrollBar = ScrollBarWidget::create();
+	listView = std::make_shared<ClipRectWidget>();
+	attach(scrollBar);
+	attach(listView);
 	scrollBar->show(false);
 	backgroundColor.rgba = 0;
 }
@@ -55,7 +57,7 @@ void ScrollableListWidget::run(W_CONTEXT *psContext)
  */
 uint32_t ScrollableListWidget::snappedOffset()
 {
-	for (auto child : listView->children())
+	for (auto &child : listView->children())
 	{
 		if (child->y() >= scrollBar->position())
 		{
@@ -66,7 +68,7 @@ uint32_t ScrollableListWidget::snappedOffset()
 	return 0;
 }
 
-void ScrollableListWidget::addItem(WIDGET *item)
+void ScrollableListWidget::addItem(std::shared_ptr<WIDGET> item)
 {
 	listView->attach(item);
 	layoutDirty = true;
@@ -102,7 +104,7 @@ void ScrollableListWidget::resizeChildren(uint32_t width)
 {
 	scrollableHeight = 0;
 	auto nextOffset = 0;
-	for (auto child : listView->children())
+	for (auto &child : listView->children())
 	{
 		child->setGeometry(0, nextOffset, width, child->height());
 		scrollableHeight = nextOffset + child->height();

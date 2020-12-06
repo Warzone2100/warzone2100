@@ -58,34 +58,37 @@ void WzPassBoxTitleUI::start()
 {
 	addBackdrop();
 
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
 	// draws the background of the password box
-	IntFormAnimated *passwordForm = new IntFormAnimated(parent);
+	auto passwordForm = std::make_shared<IntFormAnimated>();
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(passwordForm);
 	passwordForm->id = FRONTEND_PASSWORDFORM;
 	passwordForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(FRONTEND_BOTFORMX, 160, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH - 40);
+		widget.setGeometry(FRONTEND_BOTFORMX, 160, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH - 40);
 	}));
 
 	// password label.
-	W_LABEL *enterPasswordLabel = new W_LABEL(passwordForm);
+	auto enterPasswordLabel = std::make_shared<W_LABEL>();
+	passwordForm->attach(enterPasswordLabel);
 	enterPasswordLabel->setTextAlignment(WLAB_ALIGNCENTRE);
 	enterPasswordLabel->setGeometry(130, 0, 280, 40);
 	enterPasswordLabel->setFont(font_large, WZCOL_FORM_TEXT);
 	enterPasswordLabel->setString(_("Enter Password:"));
 
 	// and finally draw the password entry box
-	W_EDITBOX *passwordBox = new W_EDITBOX(passwordForm);
+	auto passwordBox = std::make_shared<W_EDITBOX>();
+	passwordForm->attach(passwordBox);
 	passwordBox->id = CON_PASSWORD;
 	passwordBox->setGeometry(130, 40, 280, 20);
 	passwordBox->setBoxColours(WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
 
-	W_BUTTON *buttonYes = new W_BUTTON(passwordForm);
+	auto buttonYes = std::make_shared<W_BUTTON>();
+	passwordForm->attach(buttonYes);
 	buttonYes->id = CON_PASSWORDYES;
 	buttonYes->setImages(Image(FrontImages, IMAGE_OK), Image(FrontImages, IMAGE_OK), mpwidgetGetFrontHighlightImage(Image(FrontImages, IMAGE_OK)));
 	buttonYes->move(180, 65);
 	buttonYes->setTip(_("OK"));
-	W_BUTTON *buttonNo = new W_BUTTON(passwordForm);
+	auto buttonNo = std::make_shared<W_BUTTON>();
+	passwordForm->attach(buttonNo);
 	buttonNo->id = CON_PASSWORDNO;
 	buttonNo->setImages(Image(FrontImages, IMAGE_NO), Image(FrontImages, IMAGE_NO), mpwidgetGetFrontHighlightImage(Image(FrontImages, IMAGE_NO)));
 	buttonNo->move(230, 65);

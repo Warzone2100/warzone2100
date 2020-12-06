@@ -1204,9 +1204,10 @@ void startVideoOptionsMenu()
 	addBottomForm();
 
 	// Add a note about changes taking effect on restart for certain options
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+	auto &parent = *widgGetFromID(psWScreen, FRONTEND_BOTFORM);
 
-	W_LABEL *label = new W_LABEL(parent);
+	auto label = std::make_shared<W_LABEL>();
+	parent.attach(label);
 	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
 	label->setFontColour(WZCOL_TEXT_BRIGHT);
 	label->setString(_("* Takes effect on game restart"));
@@ -1232,7 +1233,8 @@ void startVideoOptionsMenu()
 	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, _("Antialiasing*"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsAntialiasingString(), WBUT_SECONDARY);
 
-	W_LABEL *antialiasing_label = new W_LABEL(parent);
+	auto antialiasing_label = std::make_shared<W_LABEL>();
+	parent.attach(antialiasing_label);
 	antialiasing_label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y - 18, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
 	antialiasing_label->setFontColour(WZCOL_YELLOW);
 	antialiasing_label->setString(_("Warning: Antialiasing can cause crashes, especially with values > 16"));
@@ -1930,7 +1932,7 @@ struct TitleBitmapCache {
 // drawing functions
 
 // show a background picture (currently used for version and mods labels)
-static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
+static void displayTitleBitmap(WIDGET &widget, WZ_DECL_UNUSED UDWORD xOffset, WZ_DECL_UNUSED UDWORD yOffset)
 {
 	char modListText[MAX_STR_LENGTH] = "";
 
@@ -1940,8 +1942,8 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 		sstrcat(modListText, getModList().c_str());
 	}
 
-	assert(psWidget->pUserData != nullptr);
-	TitleBitmapCache& cache = *static_cast<TitleBitmapCache*>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	TitleBitmapCache& cache = *static_cast<TitleBitmapCache*>(widget.pUserData);
 
 	cache.formattedVersionString.setText(version_getFormattedVersionString(), font_regular);
 	cache.modListText.setText(modListText, font_regular);
@@ -1968,44 +1970,48 @@ static void displayTitleBitmap(WZ_DECL_UNUSED WIDGET *psWidget, WZ_DECL_UNUSED U
 
 // ////////////////////////////////////////////////////////////////////////////
 // show warzone logo
-static void displayLogo(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayLogo(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	iV_DrawImage2(WzString::fromUtf8("image_fe_logo.png"), xOffset + psWidget->x(), yOffset + psWidget->y(), psWidget->width(), psWidget->height());
+	iV_DrawImage2(
+		WzString::fromUtf8("image_fe_logo.png"),
+		xOffset + widget.x(),
+		yOffset + widget.y(),
+		widget.width(),
+		widget.height()
+	);
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////
 // show, well have a guess..
-static void displayBigSlider(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayBigSlider(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	W_SLIDER *Slider = (W_SLIDER *)psWidget;
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	auto &slider = dynamic_cast<W_SLIDER &>(widget);
+	int x = xOffset + slider.x();
+	int y = yOffset + slider.y();
 
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BIG, x + STAT_SLD_OX, y + STAT_SLD_OY);			// draw bdrop
 
-	int sx = (Slider->width() - 3 - Slider->barSize) * Slider->pos / Slider->numStops;  // determine pos.
+	int sx = (slider.width() - 3 - slider.barSize) * slider.pos / slider.numStops;  // determine pos.
 	iV_DrawImage(IntImages, IMAGE_SLIDER_BIGBUT, x + 3 + sx, y + 3);								//draw amount
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 // show text written on its side.
-static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayTextAt270(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	SDWORD		fx, fy;
-	W_LABEL		*psLab;
-
-	psLab = (W_LABEL *)psWidget;
+	auto &psLab = dynamic_cast<W_LABEL &>(widget);
 
 	// Any widget using displayTextAt270 must have its pUserData initialized to a (DisplayTextOptionCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
+	assert(psLab.pUserData != nullptr);
+	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psLab.pUserData);
 
 	// TODO: Only works for single-line (not "formatted text") labels
-	cache.wzText.setText(psLab->getString().toUtf8(), font_large);
+	cache.wzText.setText(psLab.getString().toUtf8(), font_large);
 
-	fx = xOffset + psWidget->x();
-	fy = yOffset + psWidget->y() + cache.wzText.width();
+	fx = xOffset + psLab.x();
+	fy = yOffset + psLab.y() + cache.wzText.width();
 
 	cache.wzText.render(fx + 2, fy + 2, WZCOL_GREY, 270.f);
 	cache.wzText.render(fx, fy, WZCOL_TEXT_BRIGHT, 270.f);
@@ -2013,34 +2019,34 @@ static void displayTextAt270(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 // ////////////////////////////////////////////////////////////////////////////
 // show a text option.
-void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayTextOption(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
+	auto &psBut = dynamic_cast<W_BUTTON &>(widget);
 	SDWORD			fx, fy, fw;
-	W_BUTTON		*psBut = (W_BUTTON *)psWidget;
 	bool			hilight = false;
-	bool			greyOut = psWidget->UserData || (psBut->getState() & WBUT_DISABLE); // if option is unavailable.
+	bool			greyOut = psBut.UserData || (psBut.getState() & WBUT_DISABLE); // if option is unavailable.
 
 	// Any widget using displayTextOption must have its pUserData initialized to a (DisplayTextOptionCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psWidget->pUserData);
+	assert(psBut.pUserData != nullptr);
+	DisplayTextOptionCache& cache = *static_cast<DisplayTextOptionCache*>(psBut.pUserData);
 
-	cache.wzText.setText(psBut->pText.toUtf8(), psBut->FontID);
+	cache.wzText.setText(psBut.pText.toUtf8(), psBut.FontID);
 
-	if (widgGetMouseOver(psWScreen) == psBut->id)					// if mouse is over text then hilight.
+	if (widgGetMouseOver(psWScreen) == psBut.id)					// if mouse is over text then hilight.
 	{
 		hilight = true;
 	}
 
 	fw = cache.wzText.width();
-	fy = yOffset + psWidget->y() + (psWidget->height() - cache.wzText.lineSize()) / 2 - cache.wzText.aboveBase();
+	fy = yOffset + psBut.y() + (psBut.height() - cache.wzText.lineSize()) / 2 - cache.wzText.aboveBase();
 
-	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
+	if (psBut.style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
 	{
-		fx = xOffset + psWidget->x() + ((psWidget->width() - fw) / 2);
+		fx = xOffset + psBut.x() + ((psBut.width() - fw) / 2);
 	}
 	else
 	{
-		fx = xOffset + psWidget->x();
+		fx = xOffset + psBut.x();
 	}
 
 	PIELIGHT colour;
@@ -2055,7 +2061,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			colour = WZCOL_TEXT_BRIGHT;
 		}
-		else if (psWidget->id == FRONTEND_HYPERLINK || psWidget->id == FRONTEND_DONATELINK || psWidget->id == FRONTEND_CHATLINK) // special case for our hyperlink
+		else if (psBut.id == FRONTEND_HYPERLINK || psBut.id == FRONTEND_DONATELINK || psBut.id == FRONTEND_CHATLINK) // special case for our hyperlink
 		{
 			colour = WZCOL_YELLOW;
 		}
@@ -2066,8 +2072,6 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	cache.wzText.render(fx, fy, colour);
-
-	return;
 }
 
 
@@ -2076,24 +2080,26 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 // common widgets.
 
-W_FORM *addBackdrop(W_SCREEN *screen)
+std::shared_ptr<W_FORM> addBackdrop(W_SCREEN *screen)
 {
 	W_FORMINIT sFormInit;                              // Backdrop
 	sFormInit.formID = 0;
 	sFormInit.id = FRONTEND_BACKDROP;
 	sFormInit.style = WFORM_PLAIN;
 	sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry((SWORD)((pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2),
-							  (SWORD)((pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT) / 2),
-							  HIDDEN_FRONTEND_WIDTH - 1,
-							  HIDDEN_FRONTEND_HEIGHT - 1);
+		widget.setGeometry(
+			(SWORD)((pie_GetVideoBufferWidth() - HIDDEN_FRONTEND_WIDTH) / 2),
+			(SWORD)((pie_GetVideoBufferHeight() - HIDDEN_FRONTEND_HEIGHT) / 2),
+			HIDDEN_FRONTEND_WIDTH - 1,
+			HIDDEN_FRONTEND_HEIGHT - 1
+		);
 	});
 	sFormInit.pDisplay = displayTitleBitmap;
 	sFormInit.pUserData = new TitleBitmapCache();
-	sFormInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete ((TitleBitmapCache *)psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sFormInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete ((TitleBitmapCache *)widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	return widgAddForm(screen ? screen : psWScreen, &sFormInit);
@@ -2102,20 +2108,21 @@ W_FORM *addBackdrop(W_SCREEN *screen)
 // ////////////////////////////////////////////////////////////////////////////
 void addTopForm(bool wide)
 {
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
+	auto &parent = *widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormTransparent *topForm = new IntFormTransparent(parent);
+	auto topForm = std::make_shared<IntFormTransparent>();
+	parent.attach(topForm);
 	topForm->id = FRONTEND_TOPFORM;
 	if (wide)
 	{
 		topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
+			widget.setGeometry(FRONTEND_TOPFORM_WIDEX, FRONTEND_TOPFORM_WIDEY, FRONTEND_TOPFORM_WIDEW, FRONTEND_TOPFORM_WIDEH);
 		}));
 	}
 	else
 	{
 		topForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
+			widget.setGeometry(FRONTEND_TOPFORMX, FRONTEND_TOPFORMY, FRONTEND_TOPFORMW, FRONTEND_TOPFORMH);
 		}));
 	}
 
@@ -2145,21 +2152,19 @@ void addTopForm(bool wide)
 // ////////////////////////////////////////////////////////////////////////////
 void addBottomForm()
 {
-	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	auto botForm = std::make_shared<IntFormAnimated>();
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(botForm);
 	botForm->id = FRONTEND_BOTFORM;
 	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
+		widget.setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
 	}));
 }
 
 // ////////////////////////////////////////////////////////////////////////////
 void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID)
 {
-	WIDGET *parent = widgGetFromID(psWScreen, formID);
-
-	W_LABEL *label = new W_LABEL(parent);
+	auto label = std::make_shared<W_LABEL>();
+	widgGetFromID(psWScreen, formID)->attach(label);
 	label->id = id;
 	label->setGeometry(PosX, PosY, MULTIOP_READY_WIDTH, FRONTEND_BUTHEIGHT);
 	label->setTextAlignment(WLAB_ALIGNCENTRE);
@@ -2184,10 +2189,10 @@ void addSideText(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt)
 	sLabInit.pDisplay = displayTextAt270;
 	sLabInit.pText = WzString::fromUtf8(txt);
 	sLabInit.pUserData = new DisplayTextOptionCache();
-	sLabInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sLabInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 	widgAddLabel(psWScreen, &sLabInit);
 }
@@ -2222,10 +2227,10 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 
 	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
 	sButInit.pUserData = new DisplayTextOptionCache();
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
@@ -2270,10 +2275,10 @@ W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *
 
 	sButInit.UserData = (style & WBUT_DISABLE); // store disable state
 	sButInit.pUserData = new DisplayTextOptionCache();
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	sButInit.height = FRONTEND_BUTHEIGHT;

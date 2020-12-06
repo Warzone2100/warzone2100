@@ -588,13 +588,12 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		}
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
 	/* Create the basic form */
-	IntFormAnimated *orderForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto orderForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	psWScreen->psForm->attach(orderForm);
 	orderForm->id = IDORDER_FORM;
 	orderForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);
+		widget.setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);
 	}));
 
 	// Add the close button.
@@ -810,8 +809,8 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	// Now we know how many orders there are we can resize the form accordingly.
 	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
-	orderForm->setCalcLayout([newHeight](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
-		psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
+	orderForm->setCalcLayout([newHeight](WIDGET &widget, unsigned int, unsigned int, unsigned int, unsigned int) {
+		widget.setGeometry(widget.x(), ORDER_BOTTOMY - newHeight, widget.width(), newHeight);
 	});
 
 	OrderUp = true;

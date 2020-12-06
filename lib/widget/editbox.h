@@ -32,7 +32,7 @@
 #define WEDBS_FIXED		0x0001		// No editing is going on
 #define WEDBS_INSERT	0x0002		// Insertion editing
 #define WEDBS_OVER		0x0003		// Overwrite editing
-#define WEDBS_MASK		0x000f		// 
+#define WEDBS_MASK		0x000f		//
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
@@ -46,7 +46,7 @@ class W_EDITBOX : public WIDGET
 
 public:
 	W_EDITBOX(W_EDBINIT const *init);
-	W_EDITBOX(WIDGET *parent);
+	W_EDITBOX();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
 	void simulateClick(W_CONTEXT *psContext, bool silenceClickAudio = false, WIDGET_KEY key = WKEY_PRIMARY);

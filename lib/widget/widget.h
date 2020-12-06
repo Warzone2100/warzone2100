@@ -233,7 +233,7 @@ void widgRemoveOverlayScreen(W_SCREEN* psScreen);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
 
 /** Add a form to the widget screen */
-WZ_DECL_NONNULL(1, 2) W_FORM *widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
+std::shared_ptr<W_FORM> widgAddForm(W_SCREEN *psScreen, const W_FORMINIT *psInit);
 
 /** Add a label to the widget screen */
 WZ_DECL_NONNULL(1, 2) W_LABEL *widgAddLabel(W_SCREEN *psScreen, const W_LABINIT *psInit);
@@ -304,7 +304,7 @@ WZ_DECL_NONNULL(1) UDWORD widgGetUserData2(W_SCREEN *psScreen, UDWORD id);
 WZ_DECL_NONNULL(1) void widgSetUserData2(W_SCREEN *psScreen, UDWORD id, UDWORD UserData);
 
 /** Get widget structure */
-WZ_DECL_NONNULL(1) WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
+WIDGET *widgGetFromID(W_SCREEN *psScreen, UDWORD id);
 
 /** Set tip string for a widget */
 WZ_DECL_NONNULL(1) void widgSetTip(W_SCREEN *psScreen, UDWORD id, std::string pTip);

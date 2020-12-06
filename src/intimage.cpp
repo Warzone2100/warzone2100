@@ -233,9 +233,9 @@ void RenderWindowFrame(FRAMETYPE frame, UDWORD x, UDWORD y, UDWORD Width, UDWORD
 	imageDrawBatch.draw(true);
 }
 
-IntListTabWidget::IntListTabWidget(WIDGET *parent)
-	: ListTabWidget(parent)
+void IntListTabWidget::initialize()
 {
+	ListTabWidget::initialize();
 	tabWidget()->setHeight(15);
 	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1),    Image(IntImages, IMAGE_TAB1DOWN),    Image(IntImages, IMAGE_TABHILIGHT),    Image(), Image(), Image(), Image(), Image(), Image(), 2));
 	tabWidget()->addStyle(TabSelectionStyle(Image(IntImages, IMAGE_TAB1_SM), Image(IntImages, IMAGE_TAB1DOWN_SM), Image(IntImages, IMAGE_TABHILIGHT_SM), Image(), Image(), Image(), Image(), Image(), Image(), 2));

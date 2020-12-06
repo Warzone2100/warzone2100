@@ -77,14 +77,14 @@ bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
 std::string challengeName;
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayLoadBanner(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	PIELIGHT col = WZCOL_GREEN;
-	UDWORD	x = xOffset + psWidget->x();
-	UDWORD	y = yOffset + psWidget->y();
+	UDWORD	x = xOffset + widget.x();
+	UDWORD	y = yOffset + widget.y();
 
-	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
-	pie_BoxFill(x + 2, y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
+	pie_BoxFill(x, y, x + widget.width(), y + widget.height(), col);
+	pie_BoxFill(x + 2, y + 2, x + widget.width() - 2, y + widget.height() - 2, WZCOL_MENU_BACKGROUND);
 }
 
 const char* currentChallengeName()
@@ -143,26 +143,27 @@ struct DisplayLoadSlotData {
 	const char * filename;
 };
 
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayLoadSlot(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayLoadSlot must have its pUserData initialized to a (DisplayLoadSlotData*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayLoadSlotData& data = *static_cast<DisplayLoadSlotData *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayLoadSlotData& data = *static_cast<DisplayLoadSlotData *>(widget.pUserData);
 
-	UDWORD	x = xOffset + psWidget->x();
-	UDWORD	y = yOffset + psWidget->y();
+	UDWORD	x = xOffset + widget.x();
+	UDWORD	y = yOffset + widget.y();
 	char  butString[64];
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());	//draw box
+	drawBlueBox(x, y, widget.width(), widget.height());	//draw box
 
-	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
+	auto &button = dynamic_cast<W_BUTTON &>(widget);
+	if (!button.pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().c_str());
+		sstrcpy(butString, button.pText.toUtf8().c_str());
 
 		if (data.cache.fullText != butString)
 		{
 			// Update cache
-			while (iV_GetTextWidth(butString, font_regular) > psWidget->width())
+			while (iV_GetTextWidth(butString, font_regular) > widget.width())
 			{
 				butString[strlen(butString) - 1] = '\0';
 			}
@@ -195,13 +196,12 @@ bool addChallenges()
 
 	psRequestScreen = new W_SCREEN; // init the screen
 
-	WIDGET *parent = psRequestScreen->psForm;
-
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *challengeForm = new IntFormAnimated(parent);
+	auto challengeForm = std::make_shared<IntFormAnimated>();
+	psRequestScreen->psForm->attach(challengeForm);
 	challengeForm->id = CHALLENGE_FORM;
 	challengeForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
+		widget.setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
 	}));
 
 	// Add Banner
@@ -251,10 +251,10 @@ bool addChallenges()
 	sButInit.height		= CHALLENGE_ENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
 	sButInit.initPUserDataFunc = []() -> void * { return new DisplayLoadSlotData(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayLoadSlotData *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayLoadSlotData *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	for (slotCount = 0; slotCount < totalslots; slotCount++)
@@ -380,7 +380,7 @@ bool closeChallenges()
 bool runChallenges()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
-	for (const auto trigger : triggers)
+	for (auto const &trigger: triggers)
 	{
 		unsigned id = trigger.widget->id;
 

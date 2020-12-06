@@ -92,8 +92,8 @@
 #define AUTOSAVE_SKI_DIR "savegames/skirmish/auto"
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void displayLoadBanner(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
+static void displayLoadSlot(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 struct LoadSaveDisplayLoadSlotCache {
 	std::string fullText;
@@ -232,15 +232,14 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	psRequestScreen = new W_SCREEN;
 
-	WIDGET *parent = psRequestScreen->psForm;
-
 	/* add a form to place the tabbed form on */
 	// we need the form to be long enough for all resolutions, so we take the total number of items * height
 	// and * the gaps, add the banner, and finally, the fudge factor ;)
-	IntFormAnimated *loadSaveForm = new IntFormAnimated(parent);
+	auto loadSaveForm = std::make_shared<IntFormAnimated>();
+	psRequestScreen->psForm->attach(loadSaveForm);
 	loadSaveForm->id = LOADSAVE_FORM;
 	loadSaveForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(LOADSAVE_X, LOADSAVE_Y, LOADSAVE_W, slotsInColumn * (LOADENTRY_H + LOADSAVE_HGAP) + LOADSAVE_BANNER_DEPTH + 20);
+		widget.setGeometry(LOADSAVE_X, LOADSAVE_Y, LOADSAVE_W, slotsInColumn * (LOADENTRY_H + LOADSAVE_HGAP) + LOADSAVE_BANNER_DEPTH + 20);
 	}));
 
 	// Add Banner
@@ -291,10 +290,10 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	sButInit.height		= LOADENTRY_H;
 	sButInit.pDisplay	= displayLoadSlot;
 	sButInit.initPUserDataFunc = []() -> void * { return new LoadSaveDisplayLoadSlotCache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<LoadSaveDisplayLoadSlotCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<LoadSaveDisplayLoadSlotCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 
 	for (slotCount = 0; slotCount < totalslots; slotCount++)
@@ -616,10 +615,9 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 			if (! widgGetFromID(psRequestScreen, SAVEENTRY_EDIT))
 			{
-				WIDGET *parent = widgGetFromID(psRequestScreen, LOADSAVE_FORM);
-
 				// add blank box.
-				W_EDITBOX *saveEntryEdit = new W_EDITBOX(parent);
+				auto saveEntryEdit = std::make_shared<W_EDITBOX>();
+				widgGetFromID(psRequestScreen, LOADSAVE_FORM)->attach(saveEntryEdit);
 				saveEntryEdit->id = SAVEENTRY_EDIT;
 				saveEntryEdit->setGeometry(slotButton->geometry());
 				saveEntryEdit->setString(slotButton->getString());
@@ -792,13 +790,13 @@ void removeWildcards(char *pStr)
 // ////////////////////////////////////////////////////////////////////////////
 // DISPLAY FUNCTIONS
 
-static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayLoadBanner(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	PIELIGHT col;
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 
-	if (psWidget->pUserData)
+	if (widget.pUserData)
 	{
 		col = WZCOL_GREEN;
 	}
@@ -807,31 +805,33 @@ static void displayLoadBanner(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		col = WZCOL_MENU_LOAD_BORDER;
 	}
 
-	pie_BoxFill(x, y, x + psWidget->width(), y + psWidget->height(), col);
-	pie_BoxFill(x + 2, y + 2, x + psWidget->width() - 2, y + psWidget->height() - 2, WZCOL_MENU_BACKGROUND);
+	pie_BoxFill(x, y, x + widget.width(), y + widget.height(), col);
+	pie_BoxFill(x + 2, y + 2, x + widget.width() - 2, y + widget.height() - 2, WZCOL_MENU_BACKGROUND);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayLoadSlot(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayLoadSlot(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	// Any widget using displayLoadSlot must have its pUserData initialized to a (LoadSaveDisplayLoadSlotCache*)
-	assert(psWidget->pUserData != nullptr);
-	LoadSaveDisplayLoadSlotCache& cache = *static_cast<LoadSaveDisplayLoadSlotCache *>(psWidget->pUserData);
+	auto &button = dynamic_cast<W_BUTTON &>(widget);
 
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	// Any widget using displayLoadSlot must have its pUserData initialized to a (LoadSaveDisplayLoadSlotCache*)
+	assert(button.pUserData != nullptr);
+	LoadSaveDisplayLoadSlotCache& cache = *static_cast<LoadSaveDisplayLoadSlotCache *>(button.pUserData);
+
+	int x = xOffset + button.x();
+	int y = yOffset + button.y();
 	char  butString[64];
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());  //draw box
+	drawBlueBox(x, y, button.width(), button.height());  //draw box
 
-	if (!((W_BUTTON *)psWidget)->pText.isEmpty())
+	if (!button.pText.isEmpty())
 	{
-		sstrcpy(butString, ((W_BUTTON *)psWidget)->pText.toUtf8().c_str());
+		sstrcpy(butString, button.pText.toUtf8().c_str());
 
 		if (cache.fullText != butString)
 		{
 			// Update cache
-			while (iV_GetTextWidth(butString, font_regular) > psWidget->width())
+			while (iV_GetTextWidth(butString, font_regular) > button.width())
 			{
 				butString[strlen(butString) - 1] = '\0';
 			}

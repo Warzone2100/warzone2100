@@ -44,7 +44,7 @@ class MultibuttonWidget : public W_FORM
 {
 
 public:
-	MultibuttonWidget(WIDGET *parent, int value = -1);
+	MultibuttonWidget(int value = -1);
 
 	virtual void display(int xOffset, int yOffset);
 	virtual void geometryChanged();
@@ -75,8 +75,8 @@ private:
 	void stateChanged();
 
 protected:
-	W_LABEL *label;
-	std::vector<std::pair<W_BUTTON *, int>> buttons;
+	std::shared_ptr<W_LABEL> label = nullptr;
+	std::vector<std::pair<std::shared_ptr<W_BUTTON>, int>> buttons;
 	int currentValue_;
 	bool disabled;
 	int gap_;
@@ -88,12 +88,12 @@ class MultichoiceWidget : public MultibuttonWidget
 {
 
 public:
-	MultichoiceWidget(WIDGET *parent, int value = -1);
+	MultichoiceWidget(int value = -1);
 };
 
 // WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
-void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int);
+void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET &widget, unsigned int, unsigned int, unsigned int, unsigned int);
 void readAIs();	///< step 1, load AI definition files
 void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
@@ -110,8 +110,9 @@ void setLobbyError(LOBBY_ERROR_TYPES error_type);
  */
 void updateStructureDisabledFlags();
 
-void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayFeBox(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
+bool addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
 bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
 Image mpwidgetGetFrontHighlightImage(Image image);
 bool changeColour(unsigned player, int col, bool isHost);

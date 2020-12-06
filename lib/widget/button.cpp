@@ -49,8 +49,8 @@ W_BUTTON::W_BUTTON(W_BUTINIT const *init)
 	ASSERT((init->style & ~(WBUT_PLAIN | WIDG_HIDDEN | WBUT_NOPRIMARY | WBUT_SECONDARY | WBUT_TXTCENTRE)) == 0, "unknown button style");
 }
 
-W_BUTTON::W_BUTTON(WIDGET *parent)
-	: WIDGET(parent, WIDG_BUTTON)
+W_BUTTON::W_BUTTON()
+	: WIDGET(WIDG_BUTTON)
 	, state(WBUT_PLAIN)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
@@ -159,7 +159,7 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 				}
 			}
 
-			screenPointer->setReturn(this);
+			screenPointer->setReturn(shared_from_this());
 			state &= ~WBUT_DOWN;
 			dirty = true;
 		}

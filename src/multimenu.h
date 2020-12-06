@@ -34,7 +34,7 @@ extern bool multiRequestUp;
 extern W_SCREEN *psRScreen;			// requester stuff.
 
 bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET **chosenValue, bool *isHoverPreview);
-void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void displayRequestOption(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 
 // multimenu
 void intProcessMultiMenu(UDWORD id);

@@ -182,12 +182,11 @@ bool intAddTransporter(DROID *psSelected, bool offWorld)
 		Animate = false;
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
-	IntFormAnimated *transForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto transForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	psWScreen->psForm->attach(transForm);
 	transForm->id = IDTRANS_FORM;
 	transForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(TRANS_X, TRANS_Y, TRANS_WIDTH, TRANS_HEIGHT);
+		widget.setGeometry(TRANS_X, TRANS_Y, TRANS_WIDTH, TRANS_HEIGHT);
 	}));
 
 	/* Add the close button */
@@ -243,12 +242,11 @@ bool intAddTransporterContents()
 		Animate = false;
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
-	IntFormAnimated *transContentForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto transContentForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	psWScreen->psForm->attach(transContentForm);
 	transContentForm->id = IDTRANS_CONTENTFORM;
 	transContentForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(TRANSCONT_X, TRANSCONT_Y, TRANSCONT_WIDTH, TRANSCONT_HEIGHT);
+		widget.setGeometry(TRANSCONT_X, TRANSCONT_Y, TRANSCONT_WIDTH, TRANSCONT_HEIGHT);
 	}));
 
 	/* Add the close button */
@@ -256,7 +254,7 @@ bool intAddTransporterContents()
 	sButInit.formID = IDTRANS_CONTENTFORM;
 	sButInit.id = IDTRANS_CONTCLOSE;
 	sButInit.calcLayout = (LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(STAT_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+		widget.setGeometry(STAT_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
@@ -399,14 +397,15 @@ void intRemoveTransporterLaunch()
 /* Add the Transporter Button form */
 bool intAddTransButtonForm()
 {
-	WIDGET *transForm = widgGetFromID(psWScreen, IDTRANS_FORM);
+	auto &transForm = *widgGetFromID(psWScreen, IDTRANS_FORM);
 
 	/* Add the button form */
-	IntListTabWidget *transList = new IntListTabWidget(transForm);
+	auto transList = IntListTabWidget::create();
+	transForm.attach(transList);
 	transList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
 	transList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int objListWidth = OBJ_BUTWIDTH * 5 + OBJ_GAP * 4;
-	transList->setGeometry((OBJ_BACKWIDTH - objListWidth) / 2, TRANS_TABY, objListWidth, transForm->height() - TRANS_TABY);
+	transList->setGeometry((OBJ_BACKWIDTH - objListWidth) / 2, TRANS_TABY, objListWidth, transForm.height() - TRANS_TABY);
 
 	/* Add the transporter and status buttons */
 	int nextObjButtonId = IDTRANS_START;
@@ -422,14 +421,17 @@ bool intAddTransButtonForm()
 			continue;
 		}
 
-		WIDGET *buttonHolder = new WIDGET(transList);
+		auto buttonHolder = std::make_shared<WIDGET>();
+		transList->attach(buttonHolder);
 		transList->addWidgetToLayout(buttonHolder);
 
-		IntStatusButton *statButton = new IntStatusButton(buttonHolder);
+		auto statButton = std::make_shared<IntStatusButton>();
+		buttonHolder->attach(statButton);
 		statButton->id = nextStatButtonId;
 		statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
-		IntObjectButton *objButton = new IntObjectButton(buttonHolder);
+		auto objButton = std::make_shared<IntObjectButton>();
+		buttonHolder->attach(objButton);
 		objButton->id = nextObjButtonId;
 		objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 
@@ -466,14 +468,15 @@ bool intAddTransButtonForm()
 /* Add the Transporter Contents form */
 bool intAddTransContentsForm()
 {
-	WIDGET *contForm = widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
+	auto &contForm = *widgGetFromID(psWScreen, IDTRANS_CONTENTFORM);
 
 	/* Add the contents form */
-	IntListTabWidget *contList = new IntListTabWidget(contForm);
+	auto contList = IntListTabWidget::create();
+	contForm.attach(contList);
 	contList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	contList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int contListWidth = OBJ_BUTWIDTH * 2 + OBJ_GAP;
-	contList->setGeometry((contForm->width() - contListWidth) / 2, TRANSCONT_TABY, contListWidth, contForm->height() - TRANSCONT_TABY);
+	contList->setGeometry((contForm.width() - contListWidth) / 2, TRANSCONT_TABY, contListWidth, contForm.height() - TRANSCONT_TABY);
 
 	/* Add the transporter contents buttons */
 	int nextButtonId = IDTRANS_CONTSTART;
@@ -492,7 +495,8 @@ bool intAddTransContentsForm()
 		}
 
 		/* Set the tip and add the button */
-		IntTransportButton *button = new IntTransportButton(contList);
+		auto button = std::make_shared<IntTransportButton>();
+		contList->attach(button);
 		button->id = nextButtonId;
 		button->setTip(droidGetName(psDroid));
 		button->setObject(psDroid);
@@ -521,13 +525,12 @@ bool intAddDroidsAvailForm()
 		Animate = false;
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
 	/* Add the droids available form */
-	IntFormAnimated *transDroids = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto transDroids = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	psWScreen->psForm->attach(transDroids);
 	transDroids->id = IDTRANS_DROIDS;
 	transDroids->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(TRANSDROID_X, TRANSDROID_Y, TRANSDROID_WIDTH, TRANSDROID_HEIGHT);
+		widget.setGeometry(TRANSDROID_X, TRANSDROID_Y, TRANSDROID_WIDTH, TRANSDROID_HEIGHT);
 	}));
 
 	/* Add the close button */
@@ -535,7 +538,7 @@ bool intAddDroidsAvailForm()
 	sButInit.formID = IDTRANS_DROIDS;
 	sButInit.id = IDTRANS_DROIDCLOSE;
 	sButInit.calcLayout = (LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(TRANSDROID_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+		widget.setGeometry(TRANSDROID_WIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
@@ -546,15 +549,15 @@ bool intAddDroidsAvailForm()
 	}
 
 	//now add the tabbed droids available form
-	IntListTabWidget *droidList = new IntListTabWidget(transDroids);
+	auto droidList = IntListTabWidget::create();
+	transDroids->attach(droidList);
 	droidList->id = IDTRANS_DROIDTAB;
 	droidList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		IntListTabWidget *droidList = static_cast<IntListTabWidget *>(psWidget);
-		assert(droidList != nullptr);
-		droidList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
-		droidList->setChildSpacing(OBJ_GAP, OBJ_GAP);
+		auto &droidList = dynamic_cast<IntListTabWidget &>(widget);
+		droidList.setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
+		droidList.setChildSpacing(OBJ_GAP, OBJ_GAP);
 		int droidListWidth = OBJ_BUTWIDTH * 2 + OBJ_GAP;
-		droidList->setGeometry((TRANSDROID_WIDTH - droidListWidth) / 2, AVAIL_STARTY + 15, droidListWidth, TRANSDROID_HEIGHT - (AVAIL_STARTY + 15));
+		droidList.setGeometry((TRANSDROID_WIDTH - droidListWidth) / 2, AVAIL_STARTY + 15, droidListWidth, TRANSDROID_HEIGHT - (AVAIL_STARTY + 15));
 	}));
 
 	/* Add the droids available buttons */
@@ -583,7 +586,8 @@ bool intAddDroidsAvailForm()
 		if (!isTransporter(psDroid))
 		{
 			/* Set the tip and add the button */
-			IntTransportButton *button = new IntTransportButton(droidList);
+			auto button = std::make_shared<IntTransportButton>();
+			droidList->attach(button);
 			button->id = nextButtonId;
 			button->setTip(droidGetName(psDroid));
 			button->setObject(psDroid);
@@ -674,11 +678,9 @@ static void intSetTransCapacityLabel(W_LABEL &Label)
 }
 
 /*updates the capacity of the current Transporter*/
-void intUpdateTransCapacity(WIDGET *psWidget, W_CONTEXT *psContext)
+void intUpdateTransCapacity(WIDGET &widget, W_CONTEXT *psContext)
 {
-	W_LABEL		*Label = (W_LABEL *)psWidget;
-
-	intSetTransCapacityLabel(*Label);
+	intSetTransCapacityLabel(dynamic_cast<W_LABEL &>(widget));
 }
 
 /* Process return codes from the Transporter Screen*/
@@ -817,7 +819,7 @@ void intRemoveTransDroidsAvailNoAnim()
 		objMajor = droidList->currentPage();
 
 		//remove main screen
-		delete form;
+		widgDelete(psWScreen, IDTRANS_DROIDS);
 	}
 }
 

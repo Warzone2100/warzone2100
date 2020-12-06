@@ -353,7 +353,7 @@ void removeInGameNotificationForm(WZ_Queued_Notification* request);
 struct WzCheckboxButton : public W_BUTTON
 {
 public:
-	WzCheckboxButton(WIDGET *parent) : W_BUTTON(parent)
+	WzCheckboxButton() : W_BUTTON()
 	{
 		addOnClickHandler([](W_BUTTON& button) {
 			WzCheckboxButton& self = static_cast<WzCheckboxButton&>(button);
@@ -413,7 +413,7 @@ private:
 	gfx_api::texture* loadImage(const WZ_Notification_Image& image);
 	void internalDismissNotification(float animationSpeed = 1.0f);
 public:
-	WzCheckboxButton *pOnDoNotShowAgainCheckbox = nullptr;
+	std::shared_ptr<WzCheckboxButton> pOnDoNotShowAgainCheckbox = nullptr;
 private:
 	WZ_Queued_Notification* request;
 	bool isInDragMode = false;
@@ -538,21 +538,21 @@ void WzCheckboxButton::display(int xOffset, int yOffset)
 
 // ////////////////////////////////////////////////////////////////////////////
 // display a notification action button
-void displayNotificationAction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayNotificationAction(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
+	auto &button = dynamic_cast<W_BUTTON &>(widget);
 	SDWORD			fx, fy, fw;
-	W_BUTTON		*psBut = (W_BUTTON *)psWidget;
 	bool			hilight = false;
-	bool			greyOut = /*psWidget->UserData ||*/ (psBut->getState() & WBUT_DISABLE); // if option is unavailable.
-	bool			isActionButton = (psBut->UserData == 1);
+	bool			greyOut = /*button.UserData ||*/ (button.getState() & WBUT_DISABLE); // if option is unavailable.
+	bool			isActionButton = (button.UserData == 1);
 
 	// Any widget using displayTextOption must have its pUserData initialized to a (DisplayTextOptionCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayNotificationButtonCache& cache = *static_cast<DisplayNotificationButtonCache*>(psWidget->pUserData);
+	assert(button.pUserData != nullptr);
+	DisplayNotificationButtonCache& cache = *static_cast<DisplayNotificationButtonCache*>(button.pUserData);
 
-	cache.wzText.setText(psBut->pText.toUtf8(), psBut->FontID);
+	cache.wzText.setText(button.pText.toUtf8(), button.FontID);
 
-	if (psBut->isHighlighted())					// if mouse is over text then hilight.
+	if (button.isHighlighted())					// if mouse is over text then hilight.
 	{
 		hilight = true;
 	}
@@ -578,10 +578,10 @@ void displayNotificationAction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	if (isActionButton)
 	{
 		// "Action" buttons have a bordering box
-		int x0 = psBut->x() + xOffset;
-		int y0 = psBut->y() + yOffset;
-		int x1 = x0 + psBut->width();
-		int y1 = y0 + psBut->height();
+		int x0 = button.x() + xOffset;
+		int y0 = button.y() + yOffset;
+		int x1 = x0 + button.width();
+		int y1 = y0 + button.height();
 		if (hilight)
 		{
 			PIELIGHT fillClr = pal_RGBA(255, 255, 255, 30);
@@ -591,15 +591,15 @@ void displayNotificationAction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 
 	fw = cache.wzText.width();
-	fy = yOffset + psWidget->y() + (psWidget->height() - cache.wzText.lineSize()) / 2 - cache.wzText.aboveBase();
+	fy = yOffset + button.y() + (button.height() - cache.wzText.lineSize()) / 2 - cache.wzText.aboveBase();
 
-	if (psWidget->style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
+	if (button.style & WBUT_TXTCENTRE)							//check for centering, calculate offset.
 	{
-		fx = xOffset + psWidget->x() + ((psWidget->width() - fw) / 2);
+		fx = xOffset + button.x() + ((button.width() - fw) / 2);
 	}
 	else
 	{
-		fx = xOffset + psWidget->x();
+		fx = xOffset + button.x();
 	}
 
 	if (!greyOut)
@@ -607,8 +607,6 @@ void displayNotificationAction(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		cache.wzText.render(fx + 1, fy + 1, pal_RGBA(0, 0, 0, 80));
 	}
 	cache.wzText.render(fx, fy, colour);
-
-	return;
 }
 
 bool W_NOTIFICATION::dismissNotification(float animationSpeed /*= 1.0f*/)
@@ -656,7 +654,7 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 , request(request)
 {
 	W_NOTIFICATION* psNewNotificationForm = this;
-	psNotificationOverlayScreen->psForm->attach(psNewNotificationForm);
+	psNotificationOverlayScreen->psForm->attach(shared_from_this());
 
 	// Load the image, if specified
 	if (!request->notification.largeIcon.empty())
@@ -673,14 +671,14 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 //		sCloseButInit.pTip = _("Close");
 //		sCloseButInit.pDisplay = intDisplayImageHilight;
 //		sCloseButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-//		W_BUTTON* psCloseButton = new W_BUTTON(&sCloseButInit);
+//		auto psCloseButton = std::make_shared<W_BUTTON>(&sCloseButInit);
 //		psCloseButton->addOnClickHandler([psNewNotificationForm](W_BUTTON& button) {
 //			psNewNotificationForm->internalDismissNotification();
 //		});
 //		attach(psCloseButton);
 //		psCloseButton->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-//			int parentWidth = psWidget->parent()->width();
-//			psWidget->setGeometry(parentWidth - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+//			int parentWidth = widget.parent()->width();
+//			widget.setGeometry(parentWidth - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 //		}));
 
 	// Calculate dimensions for text area
@@ -688,17 +686,19 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	int maxTextWidth = notificationWidth - (WZ_NOTIFICATION_PADDING * 2) - imageSize - ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : 0);
 
 	// Add title
-	W_LABEL *label_title = new W_LABEL(psNewNotificationForm);
+	auto label_title = std::make_shared<W_LABEL>();
+	attach(label_title);
 	label_title->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING, maxTextWidth, 12);
 	label_title->setFontColour(WZCOL_TEXT_BRIGHT);
 	int heightOfTitleLabel = label_title->setFormattedString(WzString::fromUtf8(request->notification.contentTitle), maxTextWidth, font_regular_bold, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
 	label_title->setGeometry(label_title->x(), label_title->y(), maxTextWidth, heightOfTitleLabel);
 	label_title->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	// set a custom hit-testing function that ignores all mouse input / clicks
-	label_title->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	label_title->setCustomHitTest([](WIDGET &widget, int x, int y) -> bool { return false; });
 
 	// Add contents
-	W_LABEL *label_contents = new W_LABEL(psNewNotificationForm);
+	auto label_contents = std::make_shared<W_LABEL>();
+	attach(label_contents);
 //	debug(LOG_GUI, "label_title.height=%d", label_title->height());
 	label_contents->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING + label_title->height() + WZ_NOTIFICATION_CONTENTS_TOP_PADDING, maxTextWidth, 12);
 	label_contents->setFontColour(WZCOL_TEXT_BRIGHT);
@@ -706,14 +706,14 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	label_contents->setGeometry(label_contents->x(), label_contents->y(), maxTextWidth, heightOfContentsLabel);
 	label_contents->setTextAlignment(WLAB_ALIGNTOPLEFT);
 	// set a custom hit-testing function that ignores all mouse input / clicks
-	label_contents->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
+	label_contents->setCustomHitTest([](WIDGET &widget, int x, int y) -> bool { return false; });
 
 	// Add action buttons
 	std::string dismissLabel = _("Dismiss");
 	std::string actionLabel = request->notification.action.title;
 
-	W_BUTTON *psActionButton = nullptr;
-	W_BUTTON *psDismissButton = nullptr;
+	std::shared_ptr<W_BUTTON> psActionButton = nullptr;
+	std::shared_ptr<W_BUTTON> psDismissButton = nullptr;
 
 	// Position the buttons below the text contents area
 	int buttonsTop = label_contents->y() + label_contents->height() + WZ_NOTIFICATION_PADDING;
@@ -725,10 +725,10 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	sButInit.style |= WBUT_TXTCENTRE;
 	sButInit.UserData = 0; // store whether "Action" button or not
 	sButInit.initPUserDataFunc = []() -> void * { return new DisplayNotificationButtonCache(); };
-	sButInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayNotificationButtonCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sButInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayNotificationButtonCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 	sButInit.pDisplay = displayNotificationAction;
 
@@ -743,7 +743,7 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		sButInit.UserData = 1; // store "Action" state
 		sButInit.FontID = font_regular_bold;
 		sButInit.pText = actionLabel.c_str();
-		psActionButton = new W_BUTTON(&sButInit);
+		psActionButton = std::make_shared<W_BUTTON>(&sButInit);
 		psActionButton->addOnClickHandler([psNewNotificationForm](W_BUTTON& button) {
 			if (psNewNotificationForm->request->notification.action.onAction)
 			{
@@ -768,7 +768,7 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		sButInit.x = (short)(((psActionButton) ? (psActionButton->x()) - WZ_NOTIFICATION_BETWEEN_BUTTON_PADDING : width() - WZ_NOTIFICATION_PADDING) - sButInit.width);
 		sButInit.pText = dismissLabel.c_str();
 		sButInit.UserData = 0; // store regular state
-		psDismissButton = new W_BUTTON(&sButInit);
+		psDismissButton = std::make_shared<W_BUTTON>(&sButInit);
 		psDismissButton->addOnClickHandler([psNewNotificationForm](W_BUTTON& button) {
 			psNewNotificationForm->internalDismissNotification();
 		});
@@ -782,7 +782,8 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		if (numTimesShown >= request->notification.displayOptions.numTimesSeenBeforeDoNotShowAgainOption())
 		{
 			// Display "do not show again" button with checkbox
-			WzCheckboxButton *pDoNotShowAgainButton = new WzCheckboxButton(psNewNotificationForm);
+			auto pDoNotShowAgainButton = std::make_shared<WzCheckboxButton>();
+			attach(pDoNotShowAgainButton);
 			pDoNotShowAgainButton->id = WZ_NOTIFY_DONOTSHOWAGAINCB_ID;
 			pDoNotShowAgainButton->pText = _("Do not show again");
 			pDoNotShowAgainButton->FontID = font_small;

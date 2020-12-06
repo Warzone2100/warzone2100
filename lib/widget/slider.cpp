@@ -113,7 +113,7 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 	if ((state & SLD_DRAG) && !mouseDown(MOUSE_LMB))
 	{
 		state &= ~SLD_DRAG;
-		screenPointer->setReturn(this);
+		screenPointer->setReturn(shared_from_this());
 		dirty = true;
 	}
 	else if (!(state & SLD_DRAG) && mouseDown(MOUSE_LMB))

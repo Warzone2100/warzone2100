@@ -217,21 +217,21 @@ struct DisplayRequestOptionData {
 	DisplayRequestOptionCache	cache;
 };
 
-void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void displayRequestOption(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayRequestOption must have its pUserData initialized to a (DisplayRequestOptionData*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayRequestOptionData& data = *static_cast<DisplayRequestOptionData *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayRequestOptionData& data = *static_cast<DisplayRequestOptionData *>(widget.pUserData);
 
 	LEVEL_DATASET *mapData = data.pMapData;
 
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 	char  butString[255];
 
-	sstrcpy(butString, ((W_BUTTON *)psWidget)->pTip.c_str());
+	sstrcpy(butString, dynamic_cast<W_BUTTON &>(widget).pTip.c_str());
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 
 	PIELIGHT colour;
 	if (mapData && CheckForMod(mapData->realFileName))
@@ -243,14 +243,14 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		colour = WZCOL_TEXT_BRIGHT;
 	}
 
-	if (!data.cache.canUseCachedText(butString, psWidget->width()))
+	if (!data.cache.canUseCachedText(butString, widget.width()))
 	{
 		std::string fullButString = butString;
-		while ((int)iV_GetTextWidth(butString, font_regular) > psWidget->width() - 10)
+		while ((int)iV_GetTextWidth(butString, font_regular) > widget.width() - 10)
 		{
 			butString[strlen(butString) - 1] = '\0';
 		}
-		data.cache.setCachedText(butString, font_regular, fullButString, psWidget->width());
+		data.cache.setCachedText(butString, font_regular, fullButString, widget.width());
 	}
 
 	data.cache.renderCachedText(x + 6, y + 12, colour);	//draw text
@@ -273,7 +273,7 @@ void displayRequestOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 			if (hash != data.cache.hash)
 			{
 				sstrcpy(butString, hash.toString().c_str());
-				while ((int)iV_GetTextWidth(butString, font_small) > psWidget->width() - 10 - (8 + mapData->players * 6))
+				while ((int)iV_GetTextWidth(butString, font_small) > widget.width() - 10 - (8 + mapData->players * 6))
 				{
 					butString[strlen(butString) - 1] = '\0';
 				}
@@ -304,20 +304,20 @@ struct DisplayNumPlayersButCache {
 	WzText wzText;
 };
 
-static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayNumPlayersBut(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayNumPlayersBut must have its pUserData initialized to a (DisplayNumPlayersButCache*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayNumPlayersButCache& cache = *static_cast<DisplayNumPlayersButCache*>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayNumPlayersButCache& cache = *static_cast<DisplayNumPlayersButCache*>(widget.pUserData);
 
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 	char buffer[8];
 
-	drawBlueBox(x, y, psWidget->width(), psWidget->height());
+	drawBlueBox(x, y, widget.width(), widget.height());
 
 	PIELIGHT colour;
-	if ((unsigned int)(psWidget->UserData) == current_numplayers)
+	if ((unsigned int)(widget.UserData) == current_numplayers)
 	{
 		colour = WZCOL_TEXT_BRIGHT;
 	}
@@ -325,13 +325,13 @@ static void displayNumPlayersBut(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	{
 		colour = WZCOL_TEXT_MEDIUM;
 	}
-	if ((unsigned int)(psWidget->UserData) == 0)
+	if ((unsigned int)(widget.UserData) == 0)
 	{
 		sprintf(buffer, " *");
 	}
 	else
 	{
-		sprintf(buffer, "%iP", (int)(psWidget->UserData));
+		sprintf(buffer, "%iP", (int)(widget.UserData));
 		buffer[2] = '\0';  // Truncate 'P' if 2 digits, since there isn't room.
 	}
 	cache.wzText.setText(buffer, font_regular);
@@ -419,10 +419,11 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	backdrop->setCalcLayout(calcBackdropLayoutForMultiplayerOptionsTitleUI);
 
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *requestForm = new IntFormAnimated(backdrop);
+	auto requestForm = std::make_shared<IntFormAnimated>();
+	backdrop->attach(requestForm);
 	requestForm->id = M_REQUEST;
 	requestForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(M_REQUEST_X, M_REQUEST_Y, M_REQUEST_W, M_REQUEST_H);
+		widget.setGeometry(M_REQUEST_X, M_REQUEST_Y, M_REQUEST_W, M_REQUEST_H);
 	}));
 
 	// Add the close button.
@@ -439,7 +440,8 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	widgAddButton(psRScreen, &sButInit);
 
 	// Add the button list.
-	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
+	auto requestList = IntListTabWidget::create();
+	requestForm->attach(requestList);
 	requestList->setChildSize(R_BUT_W, R_BUT_H);
 	requestList->setChildSpacing(4, 4);
 	requestList->setGeometry(2 + buttonsX, 2, sButInit.x - buttonsX - 8, M_REQUEST_H - 4);
@@ -463,16 +465,17 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		free(withoutExtension);
 
 		// Set the tip and add the button
-		W_BUTTON *button = new W_BUTTON(requestList);
+		auto button = std::make_shared<W_BUTTON>();
+		requestList->attach(button);
 		button->id = nextButtonId;
 		button->setTip(withoutTechlevel);
 		button->setString(WzString::fromUtf8(withoutTechlevel));
 		button->displayFunction = displayRequestOption;
 		button->pUserData = new DisplayRequestOptionData();
-		button->setOnDelete([](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayRequestOptionData *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
+		button->setOnDelete([](WIDGET &widget) {
+			assert(widget.pUserData != nullptr);
+			delete static_cast<DisplayRequestOptionData *>(widget.pUserData);
+			widget.pUserData = nullptr;
 		});
 		requestList->addWidgetToLayout(button);
 
@@ -489,23 +492,24 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	if (mode == MULTIOP_MAP)
 	{
 		LEVEL_LIST levels = enumerateMultiMaps(game.techLevel, numPlayers);
-		using Pair = std::pair<int, W_BUTTON *>;
+		using Pair = std::pair<int, std::shared_ptr<W_BUTTON>>;
 		std::vector<Pair> buttons;
 
 		for (auto mapData : levels)
 		{
 			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
 			// add number of players to string.
-			W_BUTTON *button = new W_BUTTON(requestList);
+			auto button = std::make_shared<W_BUTTON>();
+			requestList->attach(button);
 			button->id = nextButtonId;
 			button->setTip(withoutTechlevel);
 			button->setString(WzString::fromUtf8(withoutTechlevel));
 			button->displayFunction = displayRequestOption;
 			button->pUserData = new DisplayRequestOptionData(mapData);
-			button->setOnDelete([](WIDGET *psWidget) {
-				assert(psWidget->pUserData != nullptr);
-				delete static_cast<DisplayRequestOptionData *>(psWidget->pUserData);
-				psWidget->pUserData = nullptr;
+			button->setOnDelete([](WIDGET &widget) {
+				assert(widget.pUserData != nullptr);
+				delete static_cast<DisplayRequestOptionData *>(widget.pUserData);
+				widget.pUserData = nullptr;
 			});
 			buttons.push_back({stringRelevance(mapData->pName, searchString), button});
 
@@ -532,10 +536,10 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		sButInit.pTip		= _("Any number of players");
 		sButInit.pDisplay	= displayNumPlayersBut;
 		sButInit.initPUserDataFunc = []() -> void * { return new DisplayNumPlayersButCache(); };
-		sButInit.onDelete = [](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayNumPlayersButCache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
+		sButInit.onDelete = [](WIDGET &widget) {
+			assert(widget.pUserData != nullptr);
+			delete static_cast<DisplayNumPlayersButCache *>(widget.pUserData);
+			widget.pUserData = nullptr;
 		};
 		widgAddButton(psRScreen, &sButInit);
 
@@ -737,16 +741,16 @@ struct DisplayMultiPlayerData {
 	WzText wzRightmostColumnText; // purpose differs depending on mode
 };
 
-static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayMultiPlayer(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
 	// Any widget using displayMultiPlayer must have its pUserData initialized to a (DisplayMultiPlayerData*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayMultiPlayerData& data = *static_cast<DisplayMultiPlayerData *>(psWidget->pUserData);
+	assert(widget.pUserData != nullptr);
+	DisplayMultiPlayerData& data = *static_cast<DisplayMultiPlayerData *>(widget.pUserData);
 
 	char str[128];
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	unsigned player = psWidget->UserData;  // Get the in game player number.
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
+	unsigned player = widget.UserData;  // Get the in game player number.
 
 	if (responsibleFor(player, 0))
 	{
@@ -932,9 +936,9 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
-static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayAllianceState(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	UDWORD a, b, c, player = psWidget->UserData;
+	UDWORD a, b, c, player = widget.UserData;
 	switch (alliances[selectedPlayer][player])
 	{
 	case ALLIANCE_BROKEN:
@@ -960,25 +964,25 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 		break;
 	}
 
-	psWidget->UserData = PACKDWORD_TRI(a, b, c);
-	intDisplayImageHilight(psWidget,  xOffset,  yOffset);
-	psWidget->UserData = player;
+	widget.UserData = PACKDWORD_TRI(a, b, c);
+	intDisplayImageHilight(widget, xOffset, yOffset);
+	widget.UserData = player;
 }
 
-static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void displayChannelState(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	UDWORD player = psWidget->UserData;
+	UDWORD player = widget.UserData;
 
 	if (openchannels[player])
 	{
-		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_CHAN, IMAGE_MULTI_CHAN);
+		widget.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_CHAN, IMAGE_MULTI_CHAN);
 	}
 	else
 	{
-		psWidget->UserData = PACKDWORD_TRI(0, IMAGE_MULTI_NOCHAN, IMAGE_MULTI_NOCHAN);
+		widget.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_NOCHAN, IMAGE_MULTI_NOCHAN);
 	}
-	intDisplayImageHilight(psWidget, xOffset, yOffset);
-	psWidget->UserData = player;
+	intDisplayImageHilight(widget, xOffset, yOffset);
+	widget.UserData = player;
 }
 
 
@@ -1002,10 +1006,10 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 	sFormInit.pDisplay		  = displayMultiPlayer;
 	sFormInit.UserData		  = player;
 	sFormInit.pUserData = new DisplayMultiPlayerData();
-	sFormInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayMultiPlayerData *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sFormInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayMultiPlayerData *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 	widgAddForm(psWScreen, &sFormInit);
 
@@ -1096,13 +1100,12 @@ bool intAddMultiMenu()
 		intResetScreen(false);
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
 	// add form
-	IntFormAnimated *multiMenuForm = new IntFormAnimated(parent);
+	auto multiMenuForm = std::make_shared<IntFormAnimated>();
+	psWScreen->psForm->attach(multiMenuForm);
 	multiMenuForm->id = MULTIMENU_FORM;
 	multiMenuForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7);
+		widget.setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7);
 	}));
 
 	// add any players

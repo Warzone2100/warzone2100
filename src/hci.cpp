@@ -86,7 +86,7 @@
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 // Do not highlight buttons while paused.
 //
-#define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0 && !gamePaused())
+#define buttonIsHilite(p)  ((p.getState() & WBUT_HIGHLIGHT) != 0 && !gamePaused())
 
 // Empty edit window
 static bool SecondaryWindowUp = false;
@@ -410,15 +410,15 @@ void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 		button.setGeometry(button.x(), button.y(), image->Width / 2, image->Height / 2);
 
 		// add a custom hit-testing function that uses a tighter bounding ellipse
-		button.setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool {
+		button.setCustomHitTest([](WIDGET &widget, int x, int y) -> bool {
 
 			// determine center of ellipse contained within the bounding rect
-			float centerX = ((psWidget->x()) + (psWidget->x() + psWidget->width())) / 2.f;
-			float centerY = ((psWidget->y()) + (psWidget->y() + psWidget->height())) / 2.f;
+			float centerX = ((widget.x()) + (widget.x() + widget.width())) / 2.f;
+			float centerY = ((widget.y()) + (widget.y() + widget.height())) / 2.f;
 
 			// determine semi-major axis + semi-minor axis
-			float axisX = psWidget->width() / 2.f;
-			float axisY = psWidget->height() / 2.f;
+			float axisX = widget.width() / 2.f;
+			float axisY = widget.height() / 2.f;
 
 			// Srivatsan (https://math.stackexchange.com/users/13425/srivatsan), Check if a point is within an ellipse, URL (version: 2011-10-27): https://math.stackexchange.com/q/76463
 			float partX = (((float)x - centerX) * ((float)x - centerX)) / (axisX * axisX); // ((x - centerX)^2) / ((axisX)^2)
@@ -465,48 +465,48 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	}
 }
 
-static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void intDisplayReticuleButton(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
-	int DownTime = retbutstats[psWidget->UserData].downTime;
-	bool flashing = retbutstats[psWidget->UserData].flashing;
-	int flashTime = retbutstats[psWidget->UserData].flashTime;
-	ASSERT_OR_RETURN(, psWidget->type == WIDG_BUTTON, "Not a button");
-	W_BUTTON *psButton = (W_BUTTON *)psWidget;
-	bool butDisabled = psButton->state & WBUT_DISABLE;
+	ASSERT_OR_RETURN(, widget.type == WIDG_BUTTON, "Not a button");
+	auto &button = dynamic_cast<W_BUTTON &>(widget);
+	const int x = xOffset + button.x();
+	const int y = yOffset + button.y();
+	int DownTime = retbutstats[button.UserData].downTime;
+	bool flashing = retbutstats[button.UserData].flashing;
+	int flashTime = retbutstats[button.UserData].flashTime;
+	bool butDisabled = button.state & WBUT_DISABLE;
 
-	if (retbutstats[psWidget->UserData].filename.isEmpty() && !butDisabled)
+	if (retbutstats[button.UserData].filename.isEmpty() && !butDisabled)
 	{
 		butDisabled = true;
-		retbutstats[psWidget->UserData].button->setState(WBUT_DISABLE);
+		retbutstats[button.UserData].button->setState(WBUT_DISABLE);
 	}
 
 	if (butDisabled)
 	{
-		if (psWidget->UserData != RETBUT_CANCEL)
+		if (button.UserData != RETBUT_CANCEL)
 		{
-			iV_DrawImage2("image_reticule_grey.png", x, y, psWidget->width(), psWidget->height());
+			iV_DrawImage2("image_reticule_grey.png", x, y, button.width(), button.height());
 		}
 		else
 		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
+			iV_DrawImage2(retbutstats[button.UserData].filenameDown, x, y, button.width(), button.height());
 		}
 		return;
 	}
 
-	bool Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
-	bool Hilight = buttonIsHilite(psButton);
+	bool Down = button.state & (WBUT_DOWN | WBUT_CLICKLOCK);
+	bool Hilight = buttonIsHilite(button);
 
 	if (Down && !gamePaused())
 	{
-		if ((DownTime < 1) && (psWidget->UserData != RETBUT_CANCEL))
+		if ((DownTime < 1) && (button.UserData != RETBUT_CANCEL))
 		{
-			iV_DrawImage2("image_reticule_butdown.png", x, y, psWidget->width(), psWidget->height());
+			iV_DrawImage2("image_reticule_butdown.png", x, y, button.width(), button.height());
 		}
 		else
 		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
+			iV_DrawImage2(retbutstats[button.UserData].filenameDown, x, y, button.width(), button.height());
 		}
 		DownTime++;
 		flashing = false;	// stop the reticule from flashing if it was
@@ -517,35 +517,35 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 		{
 			if (((realTime / 250) % 2) != 0)
 			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filenameDown, x, y, psWidget->width(), psWidget->height());
+				iV_DrawImage2(retbutstats[button.UserData].filenameDown, x, y, button.width(), button.height());
 				flashTime = 0;
 			}
 			else
 			{
-				iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
+				iV_DrawImage2(retbutstats[button.UserData].filename, x, y, button.width(), button.height());
 			}
 			flashTime++;
 		}
 		else
 		{
-			iV_DrawImage2(retbutstats[psWidget->UserData].filename, x, y, psWidget->width(), psWidget->height());
+			iV_DrawImage2(retbutstats[button.UserData].filename, x, y, button.width(), button.height());
 			DownTime = 0;
 		}
 	}
 	if (Hilight)
 	{
-		if (psWidget->UserData == RETBUT_CANCEL)
+		if (button.UserData == RETBUT_CANCEL)
 		{
-			iV_DrawImage2("image_cancel_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
+			iV_DrawImage2("image_cancel_hilight.png", x - 1, y - 1, button.width() + 2, button.height() + 2);
 		}
 		else
 		{
-			iV_DrawImage2("image_reticule_hilight.png", x - 1, y - 1, psWidget->width() + 2, psWidget->height() + 2);
+			iV_DrawImage2("image_reticule_hilight.png", x - 1, y - 1, button.width() + 2, button.height() + 2);
 		}
 	}
-	retbutstats[psWidget->UserData].flashTime = flashTime;
-	retbutstats[psWidget->UserData].flashing = flashing;
-	retbutstats[psWidget->UserData].downTime = DownTime;
+	retbutstats[button.UserData].flashTime = flashTime;
+	retbutstats[button.UserData].flashing = flashing;
+	retbutstats[button.UserData].downTime = DownTime;
 }
 
 /* Initialise the in game interface */
@@ -1184,7 +1184,7 @@ INT_RETVAL intRunWidgets()
 	if (!bLoadSaveUp)
 	{
 		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-		for (const auto trigger : triggers)
+		for (auto const &trigger: triggers)
 		{
 			retIDs.push_back(trigger.widget->id);
 		}
@@ -2719,11 +2719,11 @@ bool intAddReticule()
 	{
 		return true; // all fine
 	}
-	WIDGET *parent = psWScreen->psForm;
-	IntFormAnimated *retForm = new IntFormAnimated(parent, false);
+	auto retForm = std::make_shared<IntFormAnimated>(false);
+	psWScreen->psForm->attach(retForm);
 	retForm->id = IDRET_FORM;
 	retForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
+		widget.setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
 	}));
 	for (int i = 0; i < NUMRETBUTS; i++)
 	{
@@ -2794,15 +2794,15 @@ bool intAddPower()
 	//start the power bar off in view (default)
 	sBarInit.style = WBAR_TROUGH;
 	sBarInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
+		widget.setGeometry((SWORD)POW_X, (SWORD)POW_Y, POW_BARWIDTH, iV_GetImageHeight(IntImages, IMAGE_PBAR_EMPTY));
 	});
 	sBarInit.sCol = WZCOL_POWER_BAR;
 	sBarInit.pDisplay = intDisplayPowerBar;
 	sBarInit.pUserData = new DisplayPowerBarCache();
-	sBarInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayPowerBarCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	sBarInit.onDelete = [](WIDGET &widget) {
+		assert(widget.pUserData != nullptr);
+		delete static_cast<DisplayPowerBarCache *>(widget.pUserData);
+		widget.pUserData = nullptr;
 	};
 	sBarInit.iRange = POWERBAR_SCALE;
 
@@ -2936,13 +2936,12 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	/* Reset the current object and store the current list */
 	psObjSelected = nullptr;
 
-	WIDGET *parent = psWScreen->psForm;
-
 	/* Create the basic form */
-	IntFormAnimated *objForm = new IntFormAnimated(parent, false);
+	auto objForm = std::make_shared<IntFormAnimated>(false);
+	psWScreen->psForm->attach(objForm);
 	objForm->id = IDOBJ_FORM;
 	objForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
+		widget.setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
 	}));
 
 	/* Add the close button */
@@ -2950,7 +2949,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sButInit.formID = IDOBJ_FORM;
 	sButInit.id = IDOBJ_CLOSE;
 	sButInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_BACKWIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+		widget.setGeometry(OBJ_BACKWIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	});
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
@@ -2961,15 +2960,15 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	}
 
 	/*add the tabbed form */
-	IntListTabWidget *objList = new IntListTabWidget(objForm);
+	auto objList = IntListTabWidget::create();
+	objForm->attach(objList);
 	objList->id = IDOBJ_TABFORM;
 	objList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		IntListTabWidget *objList = static_cast<IntListTabWidget *>(psWidget);
-		assert(objList != nullptr);
-		objList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
-		objList->setChildSpacing(OBJ_GAP, OBJ_GAP);
+		auto &objList = dynamic_cast<IntListTabWidget &>(widget);
+		objList.setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT * 2);
+		objList.setChildSpacing(OBJ_GAP, OBJ_GAP);
 		int objListWidth = OBJ_BUTWIDTH * 5 + STAT_GAP * 4;
-		objList->setGeometry((OBJ_BACKWIDTH - objListWidth) / 2, OBJ_TABY, objListWidth, OBJ_BACKHEIGHT - OBJ_TABY);
+		objList.setGeometry((OBJ_BACKWIDTH - objListWidth) / 2, OBJ_TABY, objListWidth, OBJ_BACKHEIGHT - OBJ_TABY);
 	}));
 
 	/* Add the object and stats buttons */
@@ -2982,7 +2981,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sBarInit.id = IDOBJ_PROGBARSTART;
 	sBarInit.style = WBAR_TROUGH | WIDG_HIDDEN;
 	sBarInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(STAT_PROGBARX, STAT_PROGBARY, STAT_PROGBARWIDTH, STAT_PROGBARHEIGHT);
+		widget.setGeometry(STAT_PROGBARX, STAT_PROGBARY, STAT_PROGBARWIDTH, STAT_PROGBARHEIGHT);
 	});
 	sBarInit.size = 0;
 	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
@@ -2994,7 +2993,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sBarInit2.id = IDOBJ_POWERBARSTART;
 	sBarInit2.style = WBAR_PLAIN;
 	sBarInit2.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->move(STAT_POWERBARX, STAT_POWERBARY);
+		widget.move(STAT_POWERBARX, STAT_POWERBARY);
 	});
 	sBarInit2.size = 50;
 
@@ -3002,7 +3001,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	sLabInit.id = IDOBJ_COUNTSTART;
 	sLabInit.style = WIDG_HIDDEN;
 	sLabInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(OBJ_TEXTX, OBJ_T1TEXTY, 16, 16);
+		widget.setGeometry(OBJ_TEXTX, OBJ_T1TEXTY, 16, 16);
 	});
 	sLabInit.pText = WzString::fromUtf8("BUG! (a)");
 
@@ -3058,15 +3057,18 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		bool IsFactory = false;
 		bool isResearch = false;
 
-		WIDGET *buttonHolder = new WIDGET(objList);
+		auto buttonHolder = std::make_shared<WIDGET>();
+		objList->attach(buttonHolder);
 		objList->addWidgetToLayout(buttonHolder);
 
-		IntStatusButton *statButton = new IntStatusButton(buttonHolder);
+		auto statButton = std::make_shared<IntStatusButton>();
+		buttonHolder->attach(statButton);
 		statButton->id = nextStatButtonId;
 		statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 		statButton->style |= WFORM_SECONDARY;
 
-		IntObjectButton *objButton = new IntObjectButton(buttonHolder);
+		auto objButton = std::make_shared<IntObjectButton>();
+		buttonHolder->attach(objButton);
 		objButton->id = nextObjButtonId;
 		objButton->setObject(psObj);
 		objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
@@ -3445,11 +3447,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 		return;
 	}
 	statButton->setTip("");
-	WIDGET::Children children = statButton->children();
-	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
-	{
-		delete *i;
-	}
+	statButton->removeAllChildren();
 
 	// Action progress bar.
 	W_BARINIT sBarInit;
@@ -3510,9 +3508,9 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	}
 }
 
-MultipleChoiceButton *makeObsoleteButton(WIDGET *parent)
+std::shared_ptr<MultipleChoiceButton> makeObsoleteButton()
 {
-	auto obsoleteButton = new MultipleChoiceButton(parent);
+	auto obsoleteButton = std::make_shared<MultipleChoiceButton>();
 	obsoleteButton->id = IDSTAT_OBSOLETE_BUTTON;
 	obsoleteButton->style |= WBUT_SECONDARY;
 	obsoleteButton->setChoice(includeRedundantDesigns);
@@ -3524,9 +3522,9 @@ MultipleChoiceButton *makeObsoleteButton(WIDGET *parent)
 	return obsoleteButton;
 }
 
-static void makeFavoriteButton(WIDGET *parent)
+static std::shared_ptr<MultipleChoiceButton> makeFavoriteButton()
 {
-	auto favoriteButton = new MultipleChoiceButton(parent);
+	auto favoriteButton = std::make_shared<MultipleChoiceButton>();
 	favoriteButton->id = IDSTAT_FAVORITE_BUTTON;
 	favoriteButton->style |= WBUT_SECONDARY;
 	favoriteButton->setChoice(showFavorites);
@@ -3535,6 +3533,7 @@ static void makeFavoriteButton(WIDGET *parent)
 	favoriteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC)));
 	favoriteButton->setTip(true, _("Showing Only Favorite Tech\nRight-click to remove from Favorites"));
 	favoriteButton->move(4*2 + Image(IntImages, IMAGE_FDP_UP).width()*2 + 4*2, STAT_SLDY);
+	return favoriteButton;
 }
 
 /* Add the stats widgets to the widget screen */
@@ -3574,24 +3573,23 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	SecondaryWindowUp = true;
 	psStatsScreenOwner = psOwner;
 
-	WIDGET *parent = psWScreen->psForm;
-
 	/* Create the basic form */
-	IntFormAnimated *statForm = new IntFormAnimated(parent, false);
+	auto statForm = std::make_shared<IntFormAnimated>(false);
+	psWScreen->psForm->attach(statForm);
 	statForm->id = IDSTAT_FORM;
 	statForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
+		widget.setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
 	}));
 
 	if ((objMode == IOBJ_MANUFACTURE || objMode == IOBJ_BUILD) && psOwner != nullptr)
 	{
 		// Add the obsolete items button.
-		makeObsoleteButton(statForm);
+		statForm->attach(makeObsoleteButton());
 	}
 	if (objMode == IOBJ_BUILD)
 	{
 		// Add the favorite items button.
-		makeFavoriteButton(statForm);
+		statForm->attach(makeFavoriteButton());
 	}
 
 	W_LABINIT sLabInit;
@@ -3602,7 +3600,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		STRUCTURE_TYPE factoryType = ((STRUCTURE *)psOwner)->pStructureType->type;
 
 		//add the Factory DP button
-		W_BUTTON *deliveryPointButton = new W_BUTTON(statForm);
+		auto deliveryPointButton = std::make_shared<W_BUTTON>();
+		statForm->attach(deliveryPointButton);
 		deliveryPointButton->id = IDSTAT_DP_BUTTON;
 		deliveryPointButton->style |= WBUT_SECONDARY;
 		switch (factoryType)
@@ -3617,7 +3616,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		deliveryPointButton->pUserData = psOwner;
 
 		//add the Factory Loop button!
-		W_BUTTON *loopButton = new W_BUTTON(statForm);
+		auto loopButton = std::make_shared<W_BUTTON>();
+		statForm->attach(loopButton);
 		loopButton->id = IDSTAT_LOOP_BUTTON;
 		loopButton->style |= WBUT_SECONDARY;
 		loopButton->setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
@@ -3682,7 +3682,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 
 	// Add the tabbed form
-	IntListTabWidget *statList = new IntListTabWidget(statForm);
+	auto statList = IntListTabWidget::create();
+	statForm->attach(statList);
 	statList->id = IDSTAT_TABFORM;
 	statList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
 	statList->setChildSpacing(STAT_GAP, STAT_GAP);
@@ -3713,7 +3714,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			break;
 		}
 
-		IntStatsButton *button = new IntStatsButton(statList);
+		auto button = std::make_shared<IntStatsButton>();
+		statList->attach(button);
 		button->id = nextButtonId;
 		button->style |= WFORM_SECONDARY;
 		button->setStats(ppsStatsList[i]);
@@ -4904,18 +4906,17 @@ void chatDialog(int mode)
 {
 	if (!ChatDialogUp)
 	{
-		WIDGET *parent = psWScreen->psForm;
-		static IntFormAnimated *consoleBox = nullptr;
-		W_EDITBOX *chatBox = nullptr;
 		W_CONTEXT sContext;
 
-		consoleBox = new IntFormAnimated(parent);
+		auto consoleBox = std::make_shared<IntFormAnimated>();
+		psWScreen->psForm->attach(consoleBox);
 		consoleBox->id = CHAT_CONSOLEBOX;
 		consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
+			widget.setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
 		}));
 
-		chatBox = new W_EDITBOX(consoleBox);
+		auto chatBox = std::make_shared<W_EDITBOX>();
+		consoleBox->attach(chatBox);
 		chatBox->id = CHAT_EDITBOX;
 		chatBox->setGeometry(80, 2, 320, 16);
 		if (mode == CHAT_GLOB)
@@ -4931,7 +4932,8 @@ void chatDialog(int mode)
 		sContext.xOffset = sContext.yOffset = 0;
 		sContext.mx = sContext.my = 0;
 
-		W_LABEL *label = new W_LABEL(consoleBox);
+		auto label = std::make_shared<W_LABEL>();
+		consoleBox->attach(label);
 		label->setGeometry(2, 2,60, 16);
 		if (mode == CHAT_GLOB)
 		{

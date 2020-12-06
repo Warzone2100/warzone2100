@@ -125,7 +125,7 @@ static void	updatePlayerAverageCentreTerrainHeight();
 bool	doWeDrawProximitys();
 static PIELIGHT getBlueprintColour(STRUCT_STATES state);
 
-static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void networkDisplayImage(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 extern bool writeGameInfo(const char *pFileName); // Used to help debug issues when we have fatal errors & crash handler testing.
 
 static WzText txtLevelName;
@@ -425,7 +425,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 			return false;
 		}
 
-		modelMatrix *= 
+		modelMatrix *=
 				glm::interpolate(glm::translate(glm::vec3(state.pos)), glm::translate(glm::vec3(nextState.pos)), frameFraction) *
 				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.pitch / DEG(1), nextState.rot.pitch / DEG(1), frameFraction)), glm::vec3(1.f, 0.f, 0.f)) *
 				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.direction / DEG(1), nextState.rot.direction / DEG(1), frameFraction)), glm::vec3(0.f, 1.f, 0.f)) *
@@ -597,23 +597,23 @@ static void showDroidPaths()
 }
 
 /// Displays an image for the Network Issue button
-static void NetworkDisplayImage(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void networkDisplayImage(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
+	int x = xOffset + widget.x();
+	int y = yOffset + widget.y();
 	UWORD ImageID;
-	CONNECTION_STATUS status = (CONNECTION_STATUS)UNPACKDWORD_TRI_A(psWidget->UserData);
+	CONNECTION_STATUS status = (CONNECTION_STATUS)UNPACKDWORD_TRI_A(widget.UserData);
 
-	ASSERT(psWidget->type == WIDG_BUTTON, "Not a button");
+	ASSERT(widget.type == WIDG_BUTTON, "Not a button");
 
 	// cheap way to do a button flash
 	if ((realTime / 250) % 2 == 0)
 	{
-		ImageID = UNPACKDWORD_TRI_B(psWidget->UserData);
+		ImageID = UNPACKDWORD_TRI_B(widget.UserData);
 	}
 	else
 	{
-		ImageID = UNPACKDWORD_TRI_C(psWidget->UserData);
+		ImageID = UNPACKDWORD_TRI_C(widget.UserData);
 	}
 
 	if (NETcheckPlayerConnectionStatus(status, NET_ALL_PLAYERS))
@@ -687,7 +687,7 @@ static void setupConnectionStatusForm()
 		sFormInit.id = NETWORK_FORM_ID;
 		sFormInit.style = WFORM_PLAIN;
 		sFormInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->move((int)(pie_GetVideoBufferWidth() - 52), 80);
+			widget.move((int)(pie_GetVideoBufferWidth() - 52), 80);
 		});
 		sFormInit.width = 36;
 		sFormInit.height = (24 + separation) * total - separation;
@@ -715,7 +715,7 @@ static void setupConnectionStatusForm()
 			sButInit.style = WBUT_PLAIN;
 			sButInit.x = 0;
 			sButInit.y = (24 + separation) * n;
-			sButInit.pDisplay = NetworkDisplayImage;
+			sButInit.pDisplay = networkDisplayImage;
 			// Note we would set the image to be different based on which issue it is.
 			switch (i)
 			{

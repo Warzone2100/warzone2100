@@ -88,8 +88,8 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
 }
 
-W_EDITBOX::W_EDITBOX(WIDGET *parent)
-	: WIDGET(parent)
+W_EDITBOX::W_EDITBOX()
+	: WIDGET()
 	, state(WEDBS_FIXED)
 	, FontID(font_regular)
 	, blinkOffset(wzGetTicks())
@@ -300,7 +300,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
 		StopTextInput();
-		screenPointer->setFocus(nullptr);
+		screenPointer->resetFocus();
 		return;
 	}
 
@@ -411,7 +411,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case KEY_KPENTER:					// either normal return key || keypad enter
 			/* Finish editing */
 			StopTextInput();
-			screenPointer->setFocus(nullptr);
+			screenPointer->resetFocus();
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
 			break;
@@ -430,7 +430,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			{
 				// hitting ESC while the editbox is empty ends editing mode
 				StopTextInput();
-				screenPointer->setFocus(nullptr);
+				screenPointer->resetFocus();
 				return;
 			}
 			break;
@@ -552,7 +552,7 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		inputClearBuffer();
 
 		/* Tell the form that the edit box has focus */
-		screenPointer->setFocus(this);
+		screenPointer->setFocus(shared_from_this());
 	}
 	dirty = true;
 }
@@ -568,7 +568,7 @@ void W_EDITBOX::focusLost()
 	printStart = 0;
 	fitStringStart();
 
-	screenPointer->setReturn(this);
+	screenPointer->setReturn(shared_from_this());
 	dirty = true;
 }
 
@@ -619,7 +619,7 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 
 	if (pBoxDisplay != nullptr)
 	{
-		pBoxDisplay(this, xOffset, yOffset);
+		pBoxDisplay(*this, xOffset, yOffset);
 	}
 	else
 	{

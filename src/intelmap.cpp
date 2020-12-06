@@ -161,7 +161,7 @@ static bool intAddMessageForm(bool playCurrent);
 class IntMessageButton : public IntFancyButton
 {
 public:
-	IntMessageButton(WIDGET *parent);
+	IntMessageButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -178,12 +178,12 @@ protected:
   button has been pressed*/
 static void intIntelButtonPressed(bool proxMsg, UDWORD id);
 
-static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayPIEView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayFLICView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplayTEXTView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
-static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+static void intDisplaySeqTextView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset);
 static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
                                       UDWORD x0, UDWORD y0,
                                       UDWORD width, UDWORD height,
@@ -248,13 +248,12 @@ bool intAddIntelMap()
 	//set pause states before putting the interface up
 	setIntelligencePauseState();
 
-	WIDGET *parent = psWScreen->psForm;
-
 	// Add the main Intelligence Map form
-	IntFormAnimated *intMapForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto intMapForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	psWScreen->psForm->attach(intMapForm);
 	intMapForm->id = IDINTMAP_FORM;
 	intMapForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
+		widget.setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
 	}));
 
 	if (!intAddMessageForm(playCurrent))
@@ -273,15 +272,16 @@ bool intAddIntelMap()
 /* Add the Message sub form */
 static bool intAddMessageForm(bool playCurrent)
 {
-	WIDGET *msgForm = widgGetFromID(psWScreen, IDINTMAP_FORM);
+	auto &msgForm = *widgGetFromID(psWScreen, IDINTMAP_FORM);
 
 	/* Add the Message form */
-	IntListTabWidget *msgList = new IntListTabWidget(msgForm);
+	auto msgList = IntListTabWidget::create();
+	msgForm.attach(msgList);
 	msgList->id = IDINTMAP_MSGFORM;
 	msgList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	msgList->setChildSpacing(OBJ_GAP, OBJ_GAP);
 	int msgListWidth = OBJ_BUTWIDTH * 5 + OBJ_GAP * 4;
-	msgList->setGeometry((msgForm->width() - msgListWidth) / 2, INTMAP_MSGY, msgListWidth, msgForm->height() - INTMAP_MSGY);
+	msgList->setGeometry((msgForm.width() - msgListWidth) / 2, INTMAP_MSGY, msgListWidth, msgForm.height() - INTMAP_MSGY);
 
 	/* Add the message buttons */
 	int nextButtonId = IDINTMAP_MSGSTART;
@@ -302,7 +302,8 @@ static bool intAddMessageForm(bool playCurrent)
 			continue;
 		}
 
-		IntMessageButton *button = new IntMessageButton(msgList);
+		auto button = std::make_shared<IntMessageButton>();
+		msgList->attach(button);
 		button->id = nextButtonId;
 		button->setMessage(psMessage);
 		msgList->addWidgetToLayout(button);
@@ -382,12 +383,11 @@ bool intAddMessageView(MESSAGE *psMessage)
 		intCloseMultiMenuNoAnim();
 	}
 
-	WIDGET *parent = psWScreen->psForm;
-
-	IntFormAnimated *intMapMsgView = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto intMapMsgView = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	psWScreen->psForm->attach(intMapMsgView);
 	intMapMsgView->id = IDINTMAP_MSGVIEW;
 	intMapMsgView->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
+		widget.setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
 	}));
 
 	/* Add the close box */
@@ -413,7 +413,8 @@ bool intAddMessageView(MESSAGE *psMessage)
 		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
 
 		/* Add a big tabbed text box for the subtitle text */
-		IntListTabWidget *seqList = new IntListTabWidget(intMapMsgView);
+		auto seqList = IntListTabWidget::create();
+		intMapMsgView->attach(seqList);
 		seqList->setChildSize(INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTTABHEIGHT);
 		seqList->setChildSpacing(2, 2);
 		seqList->setGeometry(INTMAP_SEQTEXTX, INTMAP_SEQTEXTY, INTMAP_SEQTEXTWIDTH, INTMAP_SEQTEXTHEIGHT);
@@ -424,7 +425,8 @@ bool intAddMessageView(MESSAGE *psMessage)
 		int nextPageId = IDINTMAP_SEQTEXTSTART;
 		do
 		{
-			W_FORM *page = new W_FORM(seqList);
+			auto page = std::make_shared<W_FORM>();
+			seqList->attach(page);
 			page->id = nextPageId++;
 			page->displayFunction = intDisplaySeqTextView;
 			page->pUserData = psViewReplay;
@@ -590,20 +592,20 @@ static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
 /**
  * Draw the text window for the intelligence display
  */
-static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+static void intDisplaySeqTextView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY *)psWidget->pUserData;
+	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY *)widget.pUserData;
 	size_t cur_seq, cur_seqpage;
 
-	int x0 = xOffset + psWidget->x();
-	int y0 = yOffset + psWidget->y();
+	int x0 = xOffset + widget.x();
+	int y0 = yOffset + widget.y();
 
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, psWidget->width(), psWidget->height());
+	RenderWindowFrame(FRAME_NORMAL, x0, y0, widget.width(), widget.height());
 
 	/* work out where we're up to in the text */
 	cur_seq = cur_seqpage = 0;
 
-	intDisplaySeqTextViewPage(psViewReplay, x0, y0, psWidget->width() - 40, psWidget->height(), true, &cur_seq, &cur_seqpage);
+	intDisplaySeqTextViewPage(psViewReplay, x0, y0, widget.width() - 40, widget.height(), true, &cur_seq, &cur_seqpage);
 }
 
 
@@ -908,13 +910,12 @@ void intRemoveMessageView(bool animated)
 	}
 	else
 	{
-		//remove without the animating close window
-		delete form;
+		widgDelete(psWScreen, IDINTMAP_MSGVIEW);
 	}
 }
 
-IntMessageButton::IntMessageButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntMessageButton::IntMessageButton()
+	: IntFancyButton()
 	, psMsg(nullptr)
 {}
 
@@ -1005,9 +1006,9 @@ void IntMessageButton::display(int xOffset, int yOffset)
 
 
 /* displays the PIE view for the current message */
-void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayPIEView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
+	MESSAGE *psMessage = (MESSAGE *)widget.pUserData;
 	SWORD			image = -1;
 	RESEARCH        *psResearch;
 
@@ -1019,10 +1020,10 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (psMessage->pViewData)
 	{
-		int x0 = xOffset + psWidget->x();
-		int y0 = yOffset + psWidget->y();
-		int x1 = x0 + psWidget->width();
-		int y1 = y0 + psWidget->height();
+		int x0 = xOffset + widget.x();
+		int y0 = yOffset + widget.y();
+		int x1 = x0 + widget.width();
+		int y1 = y0 + widget.height();
 
 		//moved from after close render
 		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
@@ -1047,9 +1048,9 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 }
 
 /* displays the FLIC view for the current message */
-void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayFLICView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
+	MESSAGE *psMessage = (MESSAGE *)widget.pUserData;
 	VIEW_RESEARCH	*psViewResearch;
 
 	//shouldn't have any proximity messages here...
@@ -1060,10 +1061,10 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	if (psMessage->pViewData)
 	{
-		int x0 = xOffset + psWidget->x();
-		int y0 = yOffset + psWidget->y();
-		int x1 = x0 + psWidget->width();
-		int y1 = y0 + psWidget->height();
+		int x0 = xOffset + widget.x();
+		int y0 = yOffset + widget.y();
+		int x1 = x0 + widget.width();
+		int y1 = y0 + widget.height();
 
 		if (psMessage->pViewData->type != VIEW_RES)
 		{
@@ -1085,14 +1086,14 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
  * If this function breaks, please merge it with intDisplaySeqTextViewPage
  * which presumably does almost the same.
  */
-void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+void intDisplayTEXTView(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 {
-	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
+	MESSAGE *psMessage = (MESSAGE *)widget.pUserData;
 
-	int x0 = xOffset + psWidget->x();
-	int y0 = yOffset + psWidget->y();
-	int x1 = x0 + psWidget->width();
-	int y1 = y0 + psWidget->height();
+	int x0 = xOffset + widget.x();
+	int y0 = yOffset + widget.y();
+	int x1 = x0 + widget.width();
+	int y1 = y0 + widget.height();
 	int ty = y0;
 
 	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
@@ -1111,7 +1112,7 @@ void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		for (unsigned i = 0; i < psMessage->pViewData->textMsg.size(); i++)
 		{
 			//check haven't run out of room first!
-			if (i * linePitch > psWidget->height())
+			if (i * linePitch > widget.height())
 			{
 				ASSERT(false, "intDisplayTEXTView: Run out of room!");
 				return;
