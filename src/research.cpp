@@ -592,15 +592,8 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	if (player == selectedPlayer && bDisplay)
 	{
 		//add console text message
-		if (pResearch->pViewData != nullptr)
-		{
-			snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(pResearch->pViewData->textMsg[0].toUtf8().c_str()));
-			addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		else
-		{
-			addConsoleMessage(_("Research Completed"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		}
+		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(getName(pResearch)));
+		addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
 	if (psResearchFacility)
