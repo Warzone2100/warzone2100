@@ -165,7 +165,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	// Static as these are assigned to the widget buttons by reference
 	static char	sSlotCaps[totalslots][totalslotspace];
 	static char	sSlotTips[totalslots][totalslotspace];
-	char **i, **files;
 
 	switch (savemode)
 	{
@@ -346,7 +345,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	debug(LOG_SAVE, "Searching \"%s\" for savegames", NewSaveGamePath);
 
 	// add savegame filenames minus extensions to buttons
-	files = PHYSFS_enumerateFiles(NewSaveGamePath);
 
 	struct SaveGameNamesAndTimes
 	{
@@ -356,28 +354,28 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
 
-	for (i = files; *i != nullptr; ++i)
-	{
+	WZ_PHYSFS_enumerateFiles(NewSaveGamePath, [&NewSaveGamePath, &saveGameNamesAndTimes](char *i) -> bool {
 		char savefile[256];
 		time_t savetime;
 
-		if (!isASavedGamefile(*i))
+		if (!isASavedGamefile(i))
 		{
 			// If it doesn't, move on to the next filename
-			continue;
+			return true; // continue;
 		}
 
-		debug(LOG_SAVE, "We found [%s]", *i);
+		debug(LOG_SAVE, "We found [%s]", i);
 
 		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, *i);
+		snprintf(savefile, sizeof(savefile), "%s/%s", NewSaveGamePath, i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 
-		(*i)[strlen(*i) - 4] = '\0'; // remove .gam extension
+		(i)[strlen(i) - 4] = '\0'; // remove .gam extension
 
-		SaveGameNamesAndTimes saveGameNameAndTime{ *i, savetime };
+		SaveGameNamesAndTimes saveGameNameAndTime{ i, savetime };
 		saveGameNamesAndTimes.push_back(saveGameNameAndTime);
-	}
+		return true; // continue
+	});
 
 	// Sort the save games so that the most recent one appears first
 	std::sort(saveGameNamesAndTimes.begin(),
@@ -401,8 +399,6 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 			return (slotCount < totalslots);
 		}
 	);
-
-	PHYSFS_freeList(files);
 
 	bLoadSaveUp = true;
 	return true;
@@ -446,8 +442,6 @@ bool closeLoadSave()
 ***************************************************************************/
 void deleteSaveGame(char *saveGameName)
 {
-	char **files, **i;
-
 	ASSERT(strlen(saveGameName) < MAX_STR_LENGTH, "deleteSaveGame; save game name too long");
 
 	PHYSFS_delete(saveGameName);
@@ -458,14 +452,12 @@ void deleteSaveGame(char *saveGameName)
 	saveGameName[strlen(saveGameName) - 3] = '\0'; // strip extension
 
 	// check for a directory and remove that too.
-	files = PHYSFS_enumerateFiles(saveGameName);
-	for (i = files; *i != nullptr; ++i)
-	{
+	WZ_PHYSFS_enumerateFiles(saveGameName, [saveGameName](const char *i) -> bool {
 		char del_file[PATH_MAX];
 
 		// Construct the full path to the file by appending the
 		// filename to the directory it is in.
-		snprintf(del_file, sizeof(del_file), "%s/%s", saveGameName, *i);
+		snprintf(del_file, sizeof(del_file), "%s/%s", saveGameName, i);
 
 		debug(LOG_SAVE, "Deleting [%s].", del_file);
 
@@ -474,8 +466,8 @@ void deleteSaveGame(char *saveGameName)
 		{
 			debug(LOG_ERROR, "Warning [%s] could not be deleted due to PhysicsFS error: %s", del_file, WZ_PHYSFS_getLastError());
 		}
-	}
-	PHYSFS_freeList(files);
+		return true; // continue
+	});
 
 	if (!PHYSFS_delete(saveGameName))		// now (should be)empty directory
 	{
@@ -491,22 +483,19 @@ static time_t lastSaveTime;
 
 static bool findLastSaveFrom(const char *path)
 {
-	char **i, **files;
 	bool found = false;
 
-	files = PHYSFS_enumerateFiles(path);
-	for (i = files; *i != nullptr; ++i)
-	{
+	WZ_PHYSFS_enumerateFiles(path, [&path, &found](const char *i) -> bool {
 		char savefile[PATH_MAX];
 		time_t savetime;
 
-		if (!isASavedGamefile(*i))
+		if (!isASavedGamefile(i))
 		{
 			// If it doesn't, move on to the next filename
-			continue;
+			return true; // continue;
 		}
 		/* Figure save-time */
-		snprintf(savefile, sizeof(savefile), "%s/%s", path, *i);
+		snprintf(savefile, sizeof(savefile), "%s/%s", path, i);
 		savetime = WZ_PHYSFS_getLastModTime(savefile);
 		if (difftime(savetime, lastSaveTime) > 0.0)
 		{
@@ -514,8 +503,8 @@ static bool findLastSaveFrom(const char *path)
 			strcpy(lastSavePath, savefile);
 			found = true;
 		}
-	}
-	PHYSFS_freeList(files);
+		return true; // continue
+	});
 	return found;
 }
 
@@ -861,6 +850,7 @@ static void freeAutoSaveSlot(const char *path)
 {
 	char **i, **files;
 	files = PHYSFS_enumerateFiles(path);
+	ASSERT_OR_RETURN(, files, "PHYSFS_enumerateFiles(\"%s\") failed: %s", path, WZ_PHYSFS_getLastError());
 	int nfiles = 0;
 	for (i = files; *i != nullptr; ++i)
 	{

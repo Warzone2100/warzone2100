@@ -241,20 +241,19 @@ void screenShutDown()
 /// dirname must have a trailing slash.
 void screen_SetRandomBackdrop(const char *dirname, const char *basename)
 {
+	ASSERT_OR_RETURN(, dirname != nullptr, "dirname is null");
 	std::vector<std::string> names;  // vector to hold the strings we want
-	char **rc = PHYSFS_enumerateFiles(dirname); // all the files in dirname
-
+	// all the files in dirname
 	// Walk thru the files in our dir, adding the ones that start with basename to our vector of strings
 	size_t len = strlen(basename);
-	for (char **i = rc; *i != nullptr; i++)
-	{
+	WZ_PHYSFS_enumerateFiles(dirname, [&names, basename, len](const char *i) -> bool {
 		// does our filename start with basename?
-		if (!strncmp(*i, basename, len))
+		if (!strncmp(i, basename, len))
 		{
-			names.push_back(*i);
+			names.push_back(i);
 		}
-	}
-	PHYSFS_freeList(rc);
+		return true; // continue
+	});
 
 	if (names.empty())
 	{
