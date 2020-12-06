@@ -3276,6 +3276,7 @@ IMPL_JS_FUNC(distBetweenTwoPoints, wzapi::distBetweenTwoPoints)
 IMPL_JS_FUNC(droidCanReach, wzapi::droidCanReach)
 IMPL_JS_FUNC(propulsionCanReach, wzapi::propulsionCanReach)
 IMPL_JS_FUNC(terrainType, wzapi::terrainType)
+IMPL_JS_FUNC(tileIsBurning, wzapi::tileIsBurning)
 IMPL_JS_FUNC(orderDroid, wzapi::orderDroid)
 IMPL_JS_FUNC(orderDroidObj, wzapi::orderDroidObj)
 IMPL_JS_FUNC(orderDroidBuild, wzapi::orderDroidBuild)
@@ -3619,6 +3620,7 @@ bool quickjs_scripting_instance::registerFunctions(const std::string& scriptName
 	JS_REGISTER_FUNC(droidCanReach, 3); // WZAPI
 	JS_REGISTER_FUNC(propulsionCanReach, 5); // WZAPI
 	JS_REGISTER_FUNC(terrainType, 2); // WZAPI
+	JS_REGISTER_FUNC(tileIsBurning, 2); // WZAPI
 	JS_REGISTER_FUNC2(orderDroidBuild, 5, 6); // WZAPI
 	JS_REGISTER_FUNC(orderDroidObj, 3); // WZAPI
 	JS_REGISTER_FUNC(orderDroid, 2); // WZAPI

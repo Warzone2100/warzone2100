@@ -1581,6 +1581,17 @@ int wzapi::terrainType(WZAPI_PARAMS(int x, int y))
 	return ::terrainType(mapTile(x, y));
 }
 
+//-- ## tileIsBurning(x, y)
+//--
+//-- Returns whether the given map tile is burning. (3.5+ only)
+//--
+bool wzapi::tileIsBurning(WZAPI_PARAMS(int x, int y))
+{
+	const MAPTILE *psTile = mapTile(x, y);
+	SCRIPT_ASSERT(false, context, psTile, "Checking fire on tile outside the map (%d, %d)", x, y);
+	return ::TileIsBurning(psTile);
+}
+
 //-- ## orderDroidObj(droid, order, object)
 //--
 //-- Give a droid an order to do something to something.
