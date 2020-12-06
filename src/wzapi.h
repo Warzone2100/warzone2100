@@ -965,6 +965,7 @@ namespace wzapi
 	bool droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y));
 	bool propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, int y1, int x2, int y2));
 	int terrainType(WZAPI_PARAMS(int x, int y));
+	bool tileIsBurning(WZAPI_PARAMS(int x, int y));
 	bool orderDroidObj(WZAPI_PARAMS(DROID *psDroid, int _order, BASE_OBJECT *psObj));
 	bool buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets));
 	returned_nullable_ptr<const DROID> addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)); MUTLIPLAY_UNSAFE
