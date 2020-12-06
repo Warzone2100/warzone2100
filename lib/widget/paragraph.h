@@ -25,7 +25,11 @@
 #include "lib/gamelib/gtime.h"
 #include "widget.h"
 #include "widgbase.h"
+#include "flowlayout.h"
 
+/**
+ * Provide information about an element appended to the paragraph.
+ **/
 struct ParagraphElement;
 
 struct ParagraphTextStyle
@@ -69,15 +73,6 @@ private:
 	uint32_t cacheDurationMs;
 	std::unique_ptr<WzText> cachedText = nullptr;
 	uint32_t cacheExpireAt = 0;
-};
-
-struct FlowLayoutFragment
-{
-    size_t elementId;
-    size_t begin;
-    size_t length;
-    unsigned int width;
-    unsigned int offset;
 };
 
 class Paragraph : public WIDGET
@@ -127,6 +122,17 @@ private:
 	bool hasElementWithLayoutDirty() const;
 	void updateLayout();
 	std::vector<std::vector<FlowLayoutFragment>> calculateLinesLayout();
+};
+
+struct ParagraphElement
+{
+	virtual ~ParagraphElement() = default;
+
+	virtual void appendTo(FlowLayout &layout) = 0;
+	virtual WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) = 0;
+	virtual void destroyFragments(Paragraph &paragraph) = 0;
+	virtual bool isLayoutDirty() const = 0;
+	virtual int32_t getAboveBase() const = 0;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_PARAGRAPH_H__
