@@ -4043,9 +4043,9 @@ nlohmann::json wzapi::constructStatsObject()
 			body["Size"] = psStats->size;
 			body["WeaponSlots"] = psStats->weaponSlots;
 			body["BodyClass"] = psStats->bodyClass;
-			bodybase[psStats->name.toUtf8()] = body;
+			bodybase[psStats->name.toUtf8()] = std::move(body);
 		}
-		stats["Body"] = bodybase;
+		stats["Body"] = std::move(bodybase);
 
 		//==   * ```Sensor``` Sensor turrets
 		nlohmann::json sensorbase = nlohmann::json::object();
@@ -4054,9 +4054,9 @@ nlohmann::json wzapi::constructStatsObject()
 			SENSOR_STATS *psStats = asSensorStats + j;
 			nlohmann::json sensor = register_common(psStats);
 			sensor["Range"] = psStats->base.range;
-			sensorbase[psStats->name.toUtf8()] = sensor;
+			sensorbase[psStats->name.toUtf8()] = std::move(sensor);
 		}
-		stats["Sensor"] = sensorbase;
+		stats["Sensor"] = std::move(sensorbase);
 
 		//==   * ```ECM``` ECM (Electronic Counter-Measure) turrets
 		nlohmann::json ecmbase = nlohmann::json::object();
@@ -4065,9 +4065,9 @@ nlohmann::json wzapi::constructStatsObject()
 			ECM_STATS *psStats = asECMStats + j;
 			nlohmann::json ecm = register_common(psStats);
 			ecm["Range"] = psStats->base.range;
-			ecmbase[psStats->name.toUtf8()] = ecm;
+			ecmbase[psStats->name.toUtf8()] = std::move(ecm);
 		}
-		stats["ECM"] = ecmbase;
+		stats["ECM"] = std::move(ecmbase);
 
 		//==   * ```Propulsion``` Propulsions
 		nlohmann::json propbase = nlohmann::json::object();
@@ -4083,9 +4083,9 @@ nlohmann::json wzapi::constructStatsObject()
 			v["SkidDeceleration"] = psStats->skidDeceleration;
 			v["Acceleration"] = psStats->acceleration;
 			v["Deceleration"] = psStats->deceleration;
-			propbase[psStats->name.toUtf8()] = v;
+			propbase[psStats->name.toUtf8()] = std::move(v);
 		}
-		stats["Propulsion"] = propbase;
+		stats["Propulsion"] = std::move(propbase);
 
 		//==   * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
 		nlohmann::json repairbase = nlohmann::json::object();
@@ -4094,9 +4094,9 @@ nlohmann::json wzapi::constructStatsObject()
 			REPAIR_STATS *psStats = asRepairStats + j;
 			nlohmann::json repair = register_common(psStats);
 			repair["RepairPoints"] = psStats->base.repairPoints;
-			repairbase[psStats->name.toUtf8()] = repair;
+			repairbase[psStats->name.toUtf8()] = std::move(repair);
 		}
-		stats["Repair"] = repairbase;
+		stats["Repair"] = std::move(repairbase);
 
 		//==   * ```Construct``` Constructor turrets (eg for trucks)
 		nlohmann::json conbase = nlohmann::json::object();
@@ -4105,9 +4105,9 @@ nlohmann::json wzapi::constructStatsObject()
 			CONSTRUCT_STATS *psStats = asConstructStats + j;
 			nlohmann::json con = register_common(psStats);
 			con["ConstructorPoints"] = psStats->base.constructPoints;
-			conbase[psStats->name.toUtf8()] = con;
+			conbase[psStats->name.toUtf8()] = std::move(con);
 		}
-		stats["Construct"] = conbase;
+		stats["Construct"] = std::move(conbase);
 
 		//==   * ```Brain``` Brains
 		nlohmann::json brainbase = nlohmann::json::object();
@@ -4129,9 +4129,9 @@ nlohmann::json wzapi::constructStatsObject()
 				ranks.push_back(psStats->rankNames.at(x));
 			}
 			br["RankNames"] = ranks;
-			brainbase[psStats->name.toUtf8()] = br;
+			brainbase[psStats->name.toUtf8()] = std::move(br);
 		}
-		stats["Brain"] = brainbase;
+		stats["Brain"] = std::move(brainbase);
 
 		//==   * ```Weapon``` Weapon turrets
 		nlohmann::json wbase = nlohmann::json::object();
@@ -4159,9 +4159,9 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["ImpactClass"] = getWeaponSubClass(psStats->weaponSubClass);
 			weap["RepeatClass"] = getWeaponSubClass(psStats->periodicalDamageWeaponSubClass);
 			weap["FireOnMove"] = psStats->fireOnMove;
-			wbase[psStats->name.toUtf8()] = weap;
+			wbase[psStats->name.toUtf8()] = std::move(weap);
 		}
-		stats["Weapon"] = wbase;
+		stats["Weapon"] = std::move(wbase);
 
 		//==   * ```WeaponClass``` Defined weapon classes
 		nlohmann::json weaptypes = nlohmann::json::array(); //engine->newArray(WSC_NUM_WEAPON_SUBCLASSES);
@@ -4169,7 +4169,7 @@ nlohmann::json wzapi::constructStatsObject()
 		{
 			weaptypes.push_back(getWeaponSubClass((WEAPON_SUBCLASS)j));
 		}
-		stats["WeaponClass"] = weaptypes;
+		stats["WeaponClass"] = std::move(weaptypes);
 
 		//==   * ```Building``` Buildings
 		nlohmann::json structbase = nlohmann::json::object();
@@ -4200,9 +4200,9 @@ nlohmann::json wzapi::constructStatsObject()
 			strct["Thermal"] = psStats->base.thermal;
 			strct["HitPoints"] = psStats->base.hitpoints;
 			strct["Resistance"] = psStats->base.resistance;
-			structbase[psStats->name.toUtf8()] = strct;
+			structbase[psStats->name.toUtf8()] = std::move(strct);
 		}
-		stats["Building"] = structbase;
+		stats["Building"] = std::move(structbase);
 	}
 	return stats;
 }
@@ -4335,7 +4335,7 @@ nlohmann::json wzapi::constructStaticPlayerData()
 		vector["isAI"] = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
 		vector["isHuman"] = NetPlay.players[i].allocated;
 		vector["type"] = SCRIPT_PLAYER;
-		playerData.push_back(vector);
+		playerData.push_back(std::move(vector));
 	}
 	return playerData;
 }
