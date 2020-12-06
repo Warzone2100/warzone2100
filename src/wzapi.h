@@ -1047,6 +1047,7 @@ namespace wzapi
 	nlohmann::json getUsefulConstants();
 	nlohmann::json constructStaticPlayerData();
 	std::vector<PerPlayerUpgrades> getUpgradesObject();
+	nlohmann::json constructMapTilesArray();
 }
 
 #endif

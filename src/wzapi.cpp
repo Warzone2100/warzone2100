@@ -4339,3 +4339,31 @@ nlohmann::json wzapi::constructStaticPlayerData()
 	}
 	return playerData;
 }
+
+nlohmann::json wzapi::constructMapTilesArray()
+{
+	// Static knowledge about map tiles
+	//== * ```MapTiles``` A two-dimensional array of static information about the map tiles in a game. Each item in MapTiles[y][x] is an object
+	//== containing the following variables:
+	//==   * ```terrainType``` (see ```terrainType(x, y)``` function)
+	//==   * ```height``` the height at the top left of the tile
+	//==   * ```hoverContinent``` (For hover type propulsions)
+	//==   * ```limitedContinent``` (For land or sea limited propulsion types)
+	nlohmann::json mapTileArray = nlohmann::json::array();
+	for (SDWORD y = 0; y < mapHeight; y++)
+	{
+		nlohmann::json mapRow = nlohmann::json::array();
+		for (SDWORD x = 0; x < mapWidth; x++)
+		{
+			MAPTILE *psTile = mapTile(x, y);
+			nlohmann::json mapTile = nlohmann::json::object();
+			mapTile["terrainType"] = ::terrainType(psTile);
+			mapTile["height"] = psTile->height;
+			mapTile["hoverContinent"] = psTile->hoverContinent;
+			mapTile["limitedContinent"] = psTile->limitedContinent;
+			mapRow.push_back(std::move(mapTile));
+		}
+		mapTileArray.push_back(std::move(mapRow));
+	}
+	return mapTileArray;
+}
