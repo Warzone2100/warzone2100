@@ -28,6 +28,8 @@
 
 #include "wzglobal.h"
 
+#include <functional>
+
 #define PHYSFS_APPEND 1
 #define PHYSFS_PREPEND 0
 
@@ -146,6 +148,9 @@ static inline PHYSFS_ErrorCode _WZ_PHYSFS_setBuffer(PHYSFS_File *fileHandle, PHY
 #else
 #define WZ_PHYSFS_SETBUFFER(fileHandle, bufsize)	// no-op
 #endif
+
+// enumFunc receives each enumerated file, and returns true to continue enumeration, or false to shortcut / stop enumeration
+bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* file)>& enumFunc);
 
 // Older wrappers
 
