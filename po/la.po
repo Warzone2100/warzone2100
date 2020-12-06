@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-12-06 04:14\n"
+"PO-Revision-Date: 2020-12-06 16:15\n"
 "Last-Translator: \n"
 "Language-Team: Latin\n"
 "Language: la_LA\n"
@@ -17769,7 +17769,7 @@ msgstr ""
 #: src/scores.cpp:107
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "Tirones: %u"
 
 #: src/scores.cpp:108
 #, c-format
@@ -17980,11 +17980,11 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:310
 msgid "[Password required]"
-msgstr ""
+msgstr "[Tessera exspectata est]"
 
 #: src/titleui/gamefind.cpp:314
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Nulli Autocurri Armati]"
 
 #: src/titleui/gamefind.cpp:318
 msgid "[No Cyborgs]"
@@ -18002,39 +18002,39 @@ msgstr ""
 #: src/titleui/gamefind.cpp:331
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr ""
+msgstr "Сreator %s —%s"
 
 #: src/titleui/gamefind.cpp:360
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Ullos ludos versioni tuae quaerere non possum."
 
 #: src/titleui/gamefind.cpp:377
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Manifeste renovatio ludi impetrabilis est!"
 
 #: src/titleui/gamefind.cpp:381
 msgid "No games are available for your version"
-msgstr ""
+msgstr "Nulli ludi impetrabiles versioni tuae sunt"
 
 #: src/titleui/gamefind.cpp:385
 msgid "Game is full"
-msgstr ""
+msgstr "Ludus abundat"
 
 #: src/titleui/gamefind.cpp:389
 msgid "You were kicked!"
-msgstr ""
+msgstr "Exclusus es!"
 
 #: src/titleui/gamefind.cpp:392
 msgid "Wrong Game Version!"
-msgstr ""
+msgstr "Versio Ludi Incorrecta!"
 
 #: src/titleui/gamefind.cpp:395
 msgid "You have an incompatible mod."
-msgstr ""
+msgstr "Immutationem discordem tenes."
 
 #: src/titleui/gamefind.cpp:399
 msgid "Host couldn't send file?"
-msgstr ""
+msgstr "Parochus tabularium mittere non potuit?"
 
 #: src/titleui/gamefind.cpp:403
 msgid "Incorrect Password!"
@@ -18050,21 +18050,21 @@ msgstr "Error Nexus"
 
 #: src/titleui/gamefind.cpp:461
 msgid "Can't connect to lobby server!"
-msgstr ""
+msgstr "Ad vestibulum colligare non possum!"
 
 #: src/titleui/gamefind.cpp:556
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Immutationes: %s"
 
 #: src/titleui/gamefind.cpp:562
 msgid "Mods: None!"
-msgstr ""
+msgstr "Immutationes: Nihil!"
 
 #: src/titleui/gamefind.cpp:568
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "Versio: %s"
 
 #: src/titleui/gamefind.cpp:581
 msgid "Map Name"
@@ -18080,7 +18080,7 @@ msgstr "Status rerum"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Continuare"
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
@@ -18093,7 +18093,7 @@ msgstr "BENE"
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:190
 msgid "Cancel"
-msgstr ""
+msgstr "Expungere"
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
@@ -18144,7 +18144,7 @@ msgstr "Renovare nunc"
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:186
 msgid " (modified locally)"
-msgstr ""
+msgstr " (immutatum localiter est)"
 
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:193
