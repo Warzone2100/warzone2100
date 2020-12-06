@@ -140,6 +140,8 @@ void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath
 
 void removeSubdirs(const char *basedir, const char *subdir)
 {
+	ASSERT(basedir, "basedir is null");
+	ASSERT(subdir, "subdir is null");
 	const WzString subdir_platformDependent = convertToPlatformDependentPath(subdir);
 	char tmpstr[PATH_MAX];
 	WZ_PHYSFS_enumerateFiles(subdir, [&](const char *i) -> bool {
