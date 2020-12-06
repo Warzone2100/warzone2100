@@ -764,22 +764,19 @@ void readAIs()
 {
 	char basepath[PATH_MAX];
 	const char *sSearchPath = "multiplay/skirmish/";
-	char **i, **files;
 
 	aidata.clear();
 
 	sstrcpy(basepath, sSearchPath);
-	files = PHYSFS_enumerateFiles(basepath);
-	for (i = files; *i != nullptr; ++i)
-	{
+	WZ_PHYSFS_enumerateFiles(basepath, [&](const char *file) -> bool {
 		char path[PATH_MAX];
 		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, ".json"))
+		if (!strstr(file, ".json"))
 		{
-			continue;
+			return true; // continue;
 		}
 		sstrcpy(path, basepath);
-		sstrcat(path, *i);
+		sstrcat(path, file);
 		WzConfig aiconf(path, WzConfig::ReadOnly);
 		AIDATA ai;
 		aiconf.beginGroup("AI");
@@ -833,7 +830,7 @@ void readAIs()
 			sstrcat(ai.tip, statistics);
 		}
 
-		if (strcmp(*i, "nb_generic.json") == 0)
+		if (strcmp(file, "nb_generic.json") == 0)
 		{
 			aidata.insert(aidata.begin(), ai);
 		}
@@ -842,8 +839,8 @@ void readAIs()
 			aidata.push_back(ai);
 		}
 		aiconf.endGroup();
-	}
-	PHYSFS_freeList(files);
+		return true; // continue
+	});
 }
 
 //sets sWRFILE form game.map

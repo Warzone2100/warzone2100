@@ -27,6 +27,7 @@
 #include <physfs.h>
 #include "file.h"
 #include <sstream>
+#include "physfs_ext.h"
 
 WzConfig::~WzConfig()
 {
@@ -112,14 +113,14 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 	ASSERT(!mRoot.is_null(), "JSON document from %s is null", name.toUtf8().c_str());
 	ASSERT(mRoot.is_object(), "JSON document from %s is not an object. Read: \n%s", name.toUtf8().c_str(), data);
 	free(data);
-	char **diffList = PHYSFS_enumerateFiles("diffs");
-	for (char **i = diffList; *i != nullptr; i++)
-	{
-		std::string str(std::string("diffs/") + *i + std::string("/") + name.toUtf8().c_str());
+	WZ_PHYSFS_enumerateFiles("diffs", [&](const char *i) -> bool {
+		std::string str(std::string("diffs/") + i + std::string("/") + name.toUtf8().c_str());
 		if (!PHYSFS_exists(str.c_str()))
 		{
-			continue;
+			return true; // continue;
 		}
+		UDWORD size = 0;
+		char *data = nullptr;
 		if (!loadFile(str.c_str(), &data, &size))
 		{
 			debug(LOG_FATAL, "jsondiff file \"%s\" could not be opened!", name.toUtf8().c_str());
@@ -139,8 +140,8 @@ WzConfig::WzConfig(const WzString &name, WzConfig::warning warning)
 		mRoot = jsonMerge(mRoot, tmpJson);
 		free(data);
 		debug(LOG_INFO, "jsondiff \"%s\" loaded and merged", str.c_str());
-	}
-	PHYSFS_freeList(diffList);
+		return true; // continue
+	});
 	debug(LOG_SAVE, "Opening %s", name.toUtf8().c_str());
 	pCurrentObj = &mRoot;
 }

@@ -30,6 +30,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/netplay/netplay.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -191,7 +192,6 @@ bool addChallenges()
 	static char		sSlotCaps[totalslots][totalslotspace];
 	static char		sSlotTips[totalslots][totalslotspace];
 	static char		sSlotFile[totalslots][totalslotspace];
-	char **i, **files;
 
 	psRequestScreen = new W_SCREEN; // init the screen
 
@@ -291,23 +291,21 @@ bool addChallenges()
 	debug(LOG_SAVE, "Searching \"%s\" for challenges", sPath);
 
 	// add challenges to buttons
-	files = PHYSFS_enumerateFiles(sSearchPath);
-	for (i = files; *i != nullptr; ++i)
-	{
+	WZ_PHYSFS_enumerateFiles(sSearchPath, [&](const char *i) -> bool {
 		W_BUTTON *button;
 		WzString name, map, difficulty, highscore, description;
 		bool victory;
 		int seconds;
 
 		// See if this filename contains the extension we're looking for
-		if (!strstr(*i, ".json"))
+		if (!strstr(i, ".json"))
 		{
 			// If it doesn't, move on to the next filename
-			continue;
+			return true; // continue;
 		}
 
 		/* First grab any high score associated with this challenge */
-		sstrcpy(sPath, *i);
+		sstrcpy(sPath, i);
 		sPath[strlen(sPath) - 5] = '\0';	// remove .json
 		highscore = "no score";
 		WzConfig scores(CHALLENGE_SCORES, WzConfig::ReadOnly);
@@ -323,7 +321,7 @@ bool addChallenges()
 			highscore = WzString::fromUtf8(psTimeText) + " by " + name + " (" + WzString(victory ? "Victory" : "Survived") + ")";
 		}
 		scores.endGroup();
-		ssprintf(sPath, "%s/%s", sSearchPath, *i);
+		ssprintf(sPath, "%s/%s", sSearchPath, i);
 		WzConfig challenge(sPath, WzConfig::ReadOnlyAndRequired);
 		ASSERT(challenge.contains("challenge"), "Invalid challenge file %s - no challenge section!", sPath);
 		challenge.beginGroup("challenge");
@@ -336,7 +334,7 @@ bool addChallenges()
 
 		button = (W_BUTTON *)widgGetFromID(psRequestScreen, CHALLENGE_ENTRY_START + slotCount);
 
-		debug(LOG_SAVE, "We found [%s]", *i);
+		debug(LOG_SAVE, "We found [%s]", i);
 
 		/* Set the button-text */
 		sstrcpy(sSlotCaps[slotCount], name.toUtf8().c_str());		// store it!
@@ -351,11 +349,11 @@ bool addChallenges()
 		slotCount++;		// go to next button...
 		if (slotCount == totalslots)
 		{
-			break;
+			return false; // break;
 		}
 		challenge.endGroup();
-	}
-	PHYSFS_freeList(files);
+		return true; // continue
+	});
 
 	challengesUp = true;
 

@@ -411,7 +411,6 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		current_numplayers = numPlayers;
 		current_searchString = searchString;
 	}
-	char **fileList = PHYSFS_enumerateFiles(searchDir);
 
 	psRScreen = new W_SCREEN; ///< move this to intinit or somewhere like that.. (close too.)
 
@@ -446,18 +445,17 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 	// Put the buttons on it.
 	int nextButtonId = M_REQUEST_BUT;
-	for (char **currFile = fileList; *currFile != nullptr; ++currFile)
-	{
-		const size_t fileNameLength = strlen(*currFile);
+	WZ_PHYSFS_enumerateFiles(searchDir, [&](const char *currFile) -> bool {
+		const size_t fileNameLength = strlen(currFile);
 
 		// Check to see if this file matches the given extension
 		if (fileNameLength <= extensionLength
-		    || strcmp(&(*currFile)[fileNameLength - extensionLength], fileExtension) != 0)
+		    || strcmp(&(currFile)[fileNameLength - extensionLength], fileExtension) != 0)
 		{
-			continue;
+			return true; //continue
 		}
 
-		char *withoutExtension = strdup(*currFile);
+		char *withoutExtension = strdup(currFile);
 		withoutExtension[fileNameLength - extensionLength] = '\0';
 		std::string withoutTechlevel = mapNameWithoutTechlevel(withoutExtension);
 		free(withoutExtension);
@@ -478,10 +476,8 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 
 		/* Update the init struct for the next button */
 		++nextButtonId;
-	}
-
-	// Make sure to return memory back to PhyscisFS
-	PHYSFS_freeList(fileList);
+		return true; // continue
+	});
 
 	multiRequestUp = true;
 	hoverPreviewId = 0;

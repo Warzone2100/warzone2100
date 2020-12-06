@@ -29,6 +29,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/screen.h"
@@ -3141,15 +3142,13 @@ std::vector<CAMPAIGN_FILE> readCampaignFiles()
 		return result;
 	}
 
-	char **files = PHYSFS_enumerateFiles("campaigns");
-	for (char **i = files; *i != nullptr; ++i)
-	{
+	WZ_PHYSFS_enumerateFiles("campaigns", [&](const char *i) -> bool {
 		CAMPAIGN_FILE c;
 		WzString filename("campaigns/");
-		filename += *i;
+		filename += i;
 		if (!filename.endsWith(".json"))
 		{
-			continue;
+			return true; // continue;
 		}
 		WzConfig ini(filename, WzConfig::ReadOnlyAndRequired);
 		c.name = ini.value("name").toWzString();
@@ -3159,8 +3158,8 @@ std::vector<CAMPAIGN_FILE> readCampaignFiles()
 		c.video = ini.value("video").toWzString();
 		c.captions = ini.value("captions").toWzString();
 		result.push_back(c);
-	}
-	PHYSFS_freeList(files);
+		return true; // continue
+	});
 	return result;
 }
 

@@ -483,21 +483,19 @@ static MapFileList listMapFiles()
 	MapFileList ret, filtered;
 	std::vector<std::string> oldSearchPath;
 
-	char **subdirlist = PHYSFS_enumerateFiles("maps");
-
-	for (char **i = subdirlist; *i != nullptr; ++i)
-	{
-		std::string wzfile = *i;
-		if (*i[0] == '.' || wzfile.substr(wzfile.find_last_of('.') + 1) != "wz")
+	WZ_PHYSFS_enumerateFiles("maps", [&](const char *i) -> bool {
+		std::string wzfile = i;
+		if (i[0] == '.' || wzfile.substr(wzfile.find_last_of('.') + 1) != "wz")
 		{
-			continue;
+			return true; // continue;
 		}
 
-		std::string realFileName_platformIndependent = std::string("maps") + "/" + *i;
-		std::string realFileName_platformDependent = std::string("maps") + PHYSFS_getDirSeparator() + *i;
+		std::string realFileName_platformIndependent = std::string("maps") + "/" + i;
+		std::string realFileName_platformDependent = std::string("maps") + PHYSFS_getDirSeparator() + i;
 		ret.push_back(MapFileListPath(realFileName_platformIndependent, realFileName_platformDependent));
-	}
-	PHYSFS_freeList(subdirlist);
+		return true; // continue
+	});
+
 	// save our current search path(s)
 	debug(LOG_WZ, "Map search paths:");
 	char **searchPath = PHYSFS_getSearchPath();
@@ -515,27 +513,24 @@ static MapFileList listMapFiles()
 		if (PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND))
 		{
 			int unsafe = 0;
-			char **filelist = PHYSFS_enumerateFiles("multiplay/maps");
-
-			for (char **file = filelist; *file != nullptr; ++file)
-			{
-				std::string isDir = std::string("multiplay/maps/") + *file;
+			WZ_PHYSFS_enumerateFiles("multiplay/maps", [&unsafe, &realFilePathAndName](const char *file) -> bool {
+				std::string isDir = std::string("multiplay/maps/") + file;
 				if (WZ_PHYSFS_isDirectory(isDir.c_str()))
 				{
-					continue;
+					return true; // continue;
 				}
-				std::string checkfile = *file;
-				debug(LOG_WZ, "checking ... %s", *file);
+				std::string checkfile = file;
+				debug(LOG_WZ, "checking ... %s", file);
 				if (checkfile.substr(checkfile.find_last_of('.') + 1) == "gam")
 				{
 					if (unsafe++ > 1)
 					{
 						debug(LOG_ERROR, "Map packs are not supported! %s NOT added.", realFilePathAndName.c_str());
-						break;
+						return false; // break;
 					}
 				}
-			}
-			PHYSFS_freeList(filelist);
+				return true; // continue
+			});
 			if (unsafe < 2)
 			{
 				filtered.push_back(realFileName);
@@ -626,39 +621,34 @@ static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpo
 
 	std::string checkpath = lookin;
 	checkpath.append("/");
-	char **filelist = PHYSFS_enumerateFiles(lookin);
-	for (char **file = filelist; *file != nullptr; ++file)
-	{
-		std::string checkfile = *file;
+	WZ_PHYSFS_enumerateFiles(lookin, [&](const char *file) -> bool {
+		std::string checkfile = file;
 		if (WZ_PHYSFS_isDirectory((checkpath + checkfile).c_str()))
 		{
 			if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
-			    || checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
-			    || checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
-			    || checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
-			    || checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
-			    || checkfile.compare("skirmish") == 0)
+				|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
+				|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
+				|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
+				|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
+				|| checkfile.compare("skirmish") == 0)
 			{
 				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
 				mapmod = true;
-				break;
+				return false; // break;
 			}
 		}
-	}
-	PHYSFS_freeList(filelist);
+		return true; // continue
+	});
 
 	std::string maps = checkpath + "/multiplay/maps";
-	filelist = PHYSFS_enumerateFiles(maps.c_str());
-	maps += '/';
-	for (char **file = filelist; *file != nullptr; ++file)
-	{
-		if (WZ_PHYSFS_isDirectory((maps + *file).c_str()) && PHYSFS_exists((maps + *file + "/game.js").c_str()))
+	WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
+		if (WZ_PHYSFS_isDirectory((maps + "/" + file).c_str()) && PHYSFS_exists((maps + "/" + file + "/game.js").c_str()))
 		{
 			isRandom = true;
-			break;
+			return false; // break;
 		}
-	}
-	PHYSFS_freeList(filelist);
+		return true; // continue
+	});
 
 	if (!WZ_PHYSFS_unmount(archive))
 	{
@@ -689,22 +679,19 @@ bool buildMapList()
 
 		PHYSFS_mount(realFilePathAndName.c_str(), NULL, PHYSFS_APPEND);
 
-		char **filelist = PHYSFS_enumerateFiles("");
-		for (char **file = filelist; *file != nullptr; ++file)
-		{
-			std::string checkfile = *file;
-			size_t len = strlen(*file);
-			if (len > 10 && !strcasecmp(*file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
+		WZ_PHYSFS_enumerateFiles("", [&](const char *file) -> bool {
+			size_t len = strlen(file);
+			if (len > 10 && !strcasecmp(file + (len - 10), ".addon.lev"))  // Do not add addon.lev again
 			{
-				loadLevFile(*file, mod_multiplay, true, realFileName.platformIndependent.c_str());
+				loadLevFile(file, mod_multiplay, true, realFileName.platformIndependent.c_str());
 			}
 			// add support for X player maps using a new name to prevent conflicts.
-			if (len > 13 && !strcasecmp(*file + (len - 13), ".xplayers.lev"))
+			if (len > 13 && !strcasecmp(file + (len - 13), ".xplayers.lev"))
 			{
-				loadLevFile(*file, mod_multiplay, true, realFileName.platformIndependent.c_str());
+				loadLevFile(file, mod_multiplay, true, realFileName.platformIndependent.c_str());
 			}
-		}
-		PHYSFS_freeList(filelist);
+			return true; // continue
+		});
 
 		if (WZ_PHYSFS_unmount(realFilePathAndName.c_str()) == 0)
 		{
