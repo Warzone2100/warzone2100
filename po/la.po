@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-12-05 16:15\n"
+"PO-Revision-Date: 2020-12-06 04:14\n"
 "Last-Translator: \n"
 "Language-Team: Latin\n"
 "Language: la_LA\n"
@@ -18038,15 +18038,15 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:403
 msgid "Incorrect Password!"
-msgstr ""
+msgstr "Tessera Incorrecta!"
 
 #: src/titleui/gamefind.cpp:406
 msgid "Host has dropped connection!"
-msgstr ""
+msgstr "Parochus nexum perdidit!"
 
 #: src/titleui/gamefind.cpp:410
 msgid "Connection Error"
-msgstr ""
+msgstr "Error Nexus"
 
 #: src/titleui/gamefind.cpp:461
 msgid "Can't connect to lobby server!"
@@ -18068,15 +18068,15 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:581
 msgid "Map Name"
-msgstr ""
+msgstr "Nomen tabulae"
 
 #: src/titleui/gamefind.cpp:584
 msgid "Players"
-msgstr ""
+msgstr "Lusores"
 
 #: src/titleui/gamefind.cpp:587
 msgid "Status"
-msgstr ""
+msgstr "Status rerum"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
@@ -18084,11 +18084,11 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
-msgstr ""
+msgstr "Summitte Tesseram:"
 
 #: src/titleui/passbox.cpp:87
 msgid "OK"
-msgstr ""
+msgstr "BENE"
 
 #: src/titleui/passbox.cpp:92
 #: src/titleui/protocol.cpp:190
@@ -18097,49 +18097,49 @@ msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "CONNECTION"
-msgstr ""
+msgstr "NEXUS"
 
 #: src/titleui/protocol.cpp:89
 msgid "Lobby"
-msgstr ""
+msgstr "Vestibulum"
 
 #: src/titleui/protocol.cpp:90
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:201
 msgid "IP Address or Machine Name"
-msgstr ""
+msgstr "IP Index vel Nomen Computatri"
 
 #: src/transporter.cpp:298
 #: src/transporter.cpp:346
 msgid "Launch Transport"
-msgstr ""
+msgstr "Commovere Vehiculum"
 
 #: src/transporter.cpp:982
 msgid "There is not enough room in the Transport!"
-msgstr ""
+msgstr "In Vehiculo spatium satis non est!"
 
 #: src/transporter.cpp:1161
 msgid "Reinforcements landing"
-msgstr ""
+msgstr "Appulsus subsidii"
 
 #: src/updatemanager.cpp:247
 msgid "Update Available"
-msgstr ""
+msgstr "Renovatio impetrabilis est"
 
 #: src/updatemanager.cpp:250
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "Versio nova de Warzone 2100 (%s) impetrabilis est!"
 
 #: src/updatemanager.cpp:254
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "Versio nova de Warzone 2100 impetrabilis est!"
 
 #: src/updatemanager.cpp:256
 msgid "Get Update Now"
-msgstr ""
+msgstr "Renovare nunc"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:186
@@ -18149,7 +18149,7 @@ msgstr ""
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:193
 msgid " - DEBUG"
-msgstr ""
+msgstr " - APTATIO"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
@@ -18157,5 +18157,5 @@ msgstr ""
 #: src/version.cpp:202
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Versio: %s,%s Constructum: %s%s"
 
