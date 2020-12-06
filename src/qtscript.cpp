@@ -642,6 +642,9 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	// Register 'Stats' object. It is a read-only representation of basic game component states.
 	pNewInstance->setSpecifiedGlobalVariable("Stats", wzapi::constructStatsObject(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
+	// Register 'MapTiles' two-dimensional array. It is a read-only representation of static map tile states.
+	pNewInstance->setSpecifiedGlobalVariable("MapTiles", wzapi::constructMapTilesArray(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
+
 	// Set some useful constants
 	pNewInstance->setSpecifiedGlobalVariables(wzapi::getUsefulConstants(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
