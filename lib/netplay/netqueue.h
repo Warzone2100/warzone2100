@@ -96,6 +96,10 @@ class NetQueue
 public:
 	NetQueue();
 
+	// Disable copy constructor and assignment operator.
+	NetQueue(const NetQueue &) = delete;
+	void operator =(const NetQueue &) = delete;
+
 	// Network related, receiving
 	void writeRawData(const uint8_t *netData, size_t netLen);          ///< Inserts data from the network into the NetQueue.
 	// Network related, sending
@@ -116,14 +120,10 @@ public:
 private:
 	void popOldMessages();                                             ///< Pops any messages that are no longer needed.
 
-	// Disable copy constructor and assignment operator.
-	NetQueue(const NetQueue &);         // TODO When switching to C++0x, use "= delete" notation.
-	void operator =(const NetQueue &);  // TODO When switching to C++0x, use "= delete" notation.
-
 	bool canGetMessagesForNet;                                         ///< True if we will send the messages over the network, false if we don't.
 	bool canGetMessages;                                               ///< True if we will get the messages, false if we don't use them ourselves.
 
-	typedef std::list<NetMessage> List;
+	using List = std::list<NetMessage>;
 	List::iterator                dataPos;                             ///< Last message which was sent over the network.
 	List::iterator                messagePos;                          ///< Last message which was popped.
 	List                          messages;                            ///< List of messages. Messages are added to the front and read from the back.

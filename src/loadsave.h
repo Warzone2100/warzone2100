@@ -37,11 +37,12 @@ enum LOADSAVE_MODE
 	SAVE_MISSIONEND,
 	SAVE_INGAME_MISSION,
 	SAVE_INGAME_SKIRMISH,
+	LOADREPLAY_FRONTEND_SKIRMISH,
 	LOAD_FRONTEND_MISSION_AUTO = 16,// internal use only
 	LOAD_MISSIONEND_AUTO,		// internal use only
 	LOAD_INGAME_MISSION_AUTO,	// internal use only
 	LOAD_FRONTEND_SKIRMISH_AUTO,	// internal use only
-	LOAD_INGAME_SKIRMISH_AUTO	// internal use only
+	LOAD_INGAME_SKIRMISH_AUTO,      // internal use only
 };
 
 /***************************************************************************/
@@ -56,7 +57,8 @@ extern char saveGameName[256];
 extern char lastSavePath[PATH_MAX];
 extern bool lastSaveMP;
 extern char	sRequestResult[PATH_MAX];
-extern bool		bRequestLoad;
+extern bool     bRequestLoad;
+extern bool     bRequestLoadReplay;
 
 /***************************************************************************/
 /*
