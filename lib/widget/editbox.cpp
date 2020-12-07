@@ -300,7 +300,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
 		StopTextInput();
-		screenPointer->resetFocus();
+		clearScreenFocus();
 		return;
 	}
 
@@ -411,7 +411,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case KEY_KPENTER:					// either normal return key || keypad enter
 			/* Finish editing */
 			StopTextInput();
-			screenPointer->resetFocus();
+			clearScreenFocus();
 			debug(LOG_INPUT, "EditBox cursor return");
 			return;
 			break;
@@ -430,7 +430,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			{
 				// hitting ESC while the editbox is empty ends editing mode
 				StopTextInput();
-				screenPointer->resetFocus();
+				clearScreenFocus();
 				return;
 			}
 			break;
@@ -552,7 +552,10 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		inputClearBuffer();
 
 		/* Tell the form that the edit box has focus */
-		screenPointer->setFocus(shared_from_this());
+		if (auto screen = screenPointer.lock())
+		{
+			screen->setFocus(shared_from_this());
+		}
 	}
 	dirty = true;
 }
@@ -568,7 +571,10 @@ void W_EDITBOX::focusLost()
 	printStart = 0;
 	fitStringStart();
 
-	screenPointer->setReturn(shared_from_this());
+	if (auto screen = screenPointer.lock())
+	{
+		screen->setReturn(shared_from_this());
+	}
 	dirty = true;
 }
 
@@ -694,4 +700,12 @@ void W_EDITBOX::setState(unsigned newState)
 {
 	unsigned mask = WEDBS_DISABLE;
 	state = (state & ~mask) | (newState & mask);
+}
+
+void W_EDITBOX::clearScreenFocus()
+{
+	if (auto screen = screenPointer.lock())
+	{
+		screen->resetFocus();
+	}
 }

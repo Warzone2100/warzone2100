@@ -256,7 +256,7 @@ enum INTMODE
 extern INTMODE intMode;
 
 /* The widget screen */
-extern W_SCREEN		*psWScreen;
+extern std::shared_ptr<W_SCREEN> psWScreen;
 
 // The last widget ID from widgRunScreen
 extern UDWORD			intLastWidget;

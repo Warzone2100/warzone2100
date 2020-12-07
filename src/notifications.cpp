@@ -433,7 +433,7 @@ struct DisplayNotificationButtonCache
 // MARK: - In-game Notification Display
 
 static std::list<std::unique_ptr<WZ_Queued_Notification>> notificationQueue;
-static W_SCREEN* psNotificationOverlayScreen = nullptr;
+static std::shared_ptr<W_SCREEN> psNotificationOverlayScreen = nullptr;
 static std::unique_ptr<WZ_Queued_Notification> currentNotification;
 static W_NOTIFICATION* currentInGameNotification = nullptr;
 static uint32_t lastNotificationClosed = 0;
@@ -1139,7 +1139,7 @@ bool notificationsInitialize()
 	notificationPrefs = new WZ_Notification_Preferences("notifications.json");
 
 	// Initialize the notifications overlay screen
-	psNotificationOverlayScreen = new W_SCREEN();
+	psNotificationOverlayScreen = W_SCREEN::create();
 	psNotificationOverlayScreen->psForm->hide(); // hiding the root form does not stop display of children, but *does* prevent it from accepting mouse over itself - i.e. basically makes it transparent
 	widgRegisterOverlayScreen(psNotificationOverlayScreen, std::numeric_limits<uint16_t>::max());
 
@@ -1158,7 +1158,6 @@ void notificationsShutDown()
 	if (psNotificationOverlayScreen)
 	{
 		widgRemoveOverlayScreen(psNotificationOverlayScreen);
-		delete psNotificationOverlayScreen;
 		psNotificationOverlayScreen = nullptr;
 	}
 }

@@ -71,7 +71,8 @@ void runContinue();
 
 void addTopForm(bool wide);
 void addBottomForm();
-std::shared_ptr<W_FORM>addBackdrop(W_SCREEN *screen = nullptr);
+std::shared_ptr<W_FORM> addBackdrop();
+std::shared_ptr<W_FORM> addBackdrop(std::shared_ptr<W_SCREEN> const &screen);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
 void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);

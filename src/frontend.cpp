@@ -2080,7 +2080,7 @@ void displayTextOption(WIDGET &widget, UDWORD xOffset, UDWORD yOffset)
 // ////////////////////////////////////////////////////////////////////////////
 // common widgets.
 
-std::shared_ptr<W_FORM> addBackdrop(W_SCREEN *screen)
+std::shared_ptr<W_FORM> addBackdrop(std::shared_ptr<W_SCREEN> const &screen)
 {
 	W_FORMINIT sFormInit;                              // Backdrop
 	sFormInit.formID = 0;
@@ -2102,7 +2102,12 @@ std::shared_ptr<W_FORM> addBackdrop(W_SCREEN *screen)
 		widget.pUserData = nullptr;
 	};
 
-	return widgAddForm(screen ? screen : psWScreen, &sFormInit);
+	return widgAddForm(screen, &sFormInit);
+}
+
+std::shared_ptr<W_FORM> addBackdrop()
+{
+	return addBackdrop(psWScreen);
 }
 
 // ////////////////////////////////////////////////////////////////////////////

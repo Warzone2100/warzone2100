@@ -144,10 +144,13 @@ void W_LABEL::display(int xOffset, int yOffset)
 /* Respond to a mouse moving over a label */
 void W_LABEL::highlight(W_CONTEXT *psContext)
 {
-	/* If there is a tip string start the tool tip */
-	if (!pTip.empty())
+	if (auto screen = screenPointer.lock())
 	{
-		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		/* If there is a tip string start the tool tip */
+		if (!pTip.empty())
+		{
+			tipStart(this, pTip, screen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		}
 	}
 }
 

@@ -71,7 +71,7 @@
 #define CHALLENGE_ENTRY_START			ID_LOADSAVE+10		// each of the buttons.
 #define CHALLENGE_ENTRY_END			ID_LOADSAVE+10 +totalslots  // must have unique ID hmm -Q
 
-static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
+static std::shared_ptr<W_SCREEN> psRequestScreen;					// Widget screen for requester
 
 bool		challengesUp = false;		///< True when interface is up and should be run.
 bool		challengeActive = false;	///< Whether we are running a challenge
@@ -194,7 +194,7 @@ bool addChallenges()
 	static char		sSlotFile[totalslots][totalslotspace];
 	char **i, **files;
 
-	psRequestScreen = new W_SCREEN; // init the screen
+	psRequestScreen = W_SCREEN::create();
 
 	/* add a form to place the tabbed form on */
 	auto challengeForm = std::make_shared<IntFormAnimated>();
@@ -365,7 +365,6 @@ bool addChallenges()
 // ////////////////////////////////////////////////////////////////////////////
 bool closeChallenges()
 {
-	delete psRequestScreen;
 	psRequestScreen = nullptr;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();

@@ -103,7 +103,7 @@
 #define MAX_TRANSPORT_FULL_MESSAGE_PAUSE 20000
 
 /* the widget screen */
-extern W_SCREEN		*psWScreen;
+extern std::shared_ptr<W_SCREEN> psWScreen;
 
 /* Static variables */
 static DROID *psCurrTransporter = nullptr;

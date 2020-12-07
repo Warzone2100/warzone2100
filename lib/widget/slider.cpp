@@ -73,7 +73,7 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 }
 
 /* Get the current position of a slider bar */
-UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
+UDWORD widgGetSliderPos(std::shared_ptr<W_SCREEN> const &psScreen, UDWORD id)
 {
 	WIDGET	*psWidget;
 
@@ -87,7 +87,7 @@ UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
 }
 
 /* Set the current position of a slider bar */
-void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos)
+void widgSetSliderPos(std::shared_ptr<W_SCREEN> const &psScreen, UDWORD id, UWORD pos)
 {
 	WIDGET	*psWidget;
 
@@ -113,7 +113,10 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 	if ((state & SLD_DRAG) && !mouseDown(MOUSE_LMB))
 	{
 		state &= ~SLD_DRAG;
-		screenPointer->setReturn(shared_from_this());
+		if (auto screen = screenPointer.lock())
+		{
+			screen->setReturn(shared_from_this());
+		}
 		dirty = true;
 	}
 	else if (!(state & SLD_DRAG) && mouseDown(MOUSE_LMB))

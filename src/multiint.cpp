@@ -1208,7 +1208,10 @@ void MultibuttonWidget::choose(int value)
 		}
 	}
 
-	screenPointer->setReturn(shared_from_this());
+	if (auto screen = screenPointer.lock())
+	{
+		screen->setReturn(shared_from_this());
+	}
 }
 
 void MultibuttonWidget::stateChanged()
@@ -4941,7 +4944,7 @@ bool addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UD
 	return true;
 }
 
-bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+bool addMultiBut(std::shared_ptr<W_SCREEN> const &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
 	addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc);
 	return true;

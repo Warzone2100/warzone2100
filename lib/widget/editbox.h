@@ -87,6 +87,7 @@ private:
 	void fitStringStart();  // Calculate how much of the start of a string can fit into the edit box
 	void fitStringEnd();
 	void setCursorPosPixels(int xPos);
+	void clearScreenFocus();
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
 	EditBoxDisplayCache displayCache;

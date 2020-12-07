@@ -159,7 +159,10 @@ void W_BUTTON::released(W_CONTEXT *, WIDGET_KEY key)
 				}
 			}
 
-			screenPointer->setReturn(shared_from_this());
+			if (auto screen = screenPointer.lock())
+			{
+				screen->setReturn(shared_from_this());
+			}
 			state &= ~WBUT_DOWN;
 			dirty = true;
 		}
@@ -183,10 +186,14 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 	{
 		AudioCallback(HilightAudioID);
 	}
-	/* If there is a tip string start the tool tip */
-	if (!pTip.empty())
+
+	if (auto screen = screenPointer.lock())
 	{
-		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		/* If there is a tip string start the tool tip */
+		if (!pTip.empty())
+		{
+			tipStart(this, pTip, screen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		}
 	}
 }
 

@@ -73,7 +73,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 }
 
 /* Set the current size of a bar graph */
-void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
+void widgSetBarSize(std::shared_ptr<W_SCREEN> const &psScreen, UDWORD id, UDWORD iValue)
 {
 	W_BARGRAPH *psBGraph = dynamic_cast<W_BARGRAPH *>(widgGetFromID(psScreen, id));
 	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
@@ -95,7 +95,7 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 
 
 /* Set the current size of a minor bar on a double graph */
-void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
+void widgSetMinorBarSize(std::shared_ptr<W_SCREEN> const &psScreen, UDWORD id, UDWORD iValue)
 {
 	W_BARGRAPH *psBGraph = dynamic_cast<W_BARGRAPH *>(widgGetFromID(psScreen, id));
 	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
@@ -108,9 +108,12 @@ void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 /* Respond to a mouse moving over a barGraph */
 void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 {
-	if (!pTip.empty())
+	if (auto screen = screenPointer.lock())
 	{
-		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		if (!pTip.empty())
+		{
+			tipStart(this, pTip, screen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		}
 	}
 }
 

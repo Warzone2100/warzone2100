@@ -133,7 +133,10 @@ void W_CLICKFORM::released(W_CONTEXT *, WIDGET_KEY key)
 		if ((!(style & WFORM_NOPRIMARY) && key == WKEY_PRIMARY) ||
 		    ((style & WFORM_SECONDARY) && key == WKEY_SECONDARY))
 		{
-			screenPointer->setReturn(shared_from_this());
+			if (auto screen = screenPointer.lock())
+			{
+				screen->setReturn(shared_from_this());
+			}
 			state &= ~WBUT_DOWN;
 			dirty = true;
 		}
@@ -146,10 +149,13 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 {
 	state |= WBUT_HIGHLIGHT;
 
-	// If there is a tip string start the tool tip.
-	if (!pTip.empty())
+	if (auto screen = screenPointer.lock())
 	{
-		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		// If there is a tip string start the tool tip.
+		if (!pTip.empty())
+		{
+			tipStart(this, pTip, screen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		}
 	}
 
 	if (AudioCallback != nullptr)
