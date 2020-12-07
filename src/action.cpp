@@ -1581,7 +1581,6 @@ void actionUpdateDroid(DROID *psDroid)
 				else if (droidStartBuild(psDroid))
 				{
 					psDroid->action = DACTION_BUILD;
-					intBuildStarted(psDroid);
 				}
 			}
 			else
@@ -1598,7 +1597,6 @@ void actionUpdateDroid(DROID *psDroid)
 				{
 					objTrace(psDroid->id, "DACTION_MOVETOBUILD: starting help build");
 					psDroid->action = DACTION_BUILD;
-					intBuildStarted(psDroid);
 				}
 			}
 		}
