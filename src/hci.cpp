@@ -2524,6 +2524,7 @@ void intBuildFinished(DROID *psDroid)
 			}
 		}
 	}
+	intRefreshScreen();
 }
 
 /* Tell the interface a construction droid has started building*/
@@ -2549,6 +2550,7 @@ void intBuildStarted(DROID *psDroid)
 			}
 		}
 	}
+	intRefreshScreen();
 }
 
 /* Are we in build select mode*/
