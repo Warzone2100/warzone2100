@@ -30,6 +30,7 @@
 #include "lib/framework/file.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/strres.h"
+#include "lib/framework/frameresource.h"
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/ivisdef.h"
@@ -2059,7 +2060,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			goto error;
 		}
 
-
 		//load the terrain type data
 		if (pFileData)
 		{
@@ -3811,6 +3811,10 @@ static bool loadMainFile(const std::string &fileName)
 	{
 		challengeFileName = save.string("challengeFileName");
 	}
+	if (save.contains("builtInMap"))
+	{
+		builtInMap = save.value("builtInMap").toBool();
+	}
 
 	return true;
 }
@@ -3968,6 +3972,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("playerBuiltHQ", playerBuiltHQ);
 	save.setValue("techLevel", game.techLevel);
 	save.setValue("challengeFileName", challengeFileName.toUtf8().c_str());
+	save.setValue("builtInMap", builtInMap);
 
 	return true;
 }
@@ -6135,6 +6140,83 @@ bool loadTerrainTypeMap(char *pFileData, UDWORD filesize)
 		pType++;
 		endian_uword(pType);
 	}
+
+	return true;
+}
+
+bool loadTerrainTypeMapOverride(unsigned int tileSet)
+{
+	resForceBaseDir("/data/base/");
+	WzString iniName = "tileset/tileTypes.json";
+	if (!PHYSFS_exists(iniName.toUtf8().c_str()))
+	{
+		return false;
+	}
+
+	WzConfig ini(iniName, WzConfig::ReadOnly);
+	WzString tileTypeKey;
+
+	if (tileSet == ARIZONA)
+	{
+		tileTypeKey = "Arizona";
+	}
+	else if (tileSet == URBAN)
+	{
+		tileTypeKey = "Urban";
+	}
+	else if (tileSet == ROCKIE)
+	{
+		tileTypeKey = "Rockies";
+	}
+	else
+	{
+		debug(LOG_ERROR, "Unknown tile type");
+		resForceBaseDir("");
+		return false;
+	}
+
+	std::vector<WzString> list = ini.childGroups();
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		if (list[i].compare(tileTypeKey) == 0)
+		{
+			ini.beginGroup(list[i]);
+
+			debug(LOG_TERRAIN, "Looking at tileset type: %s", tileTypeKey.toUtf8().c_str());
+			unsigned int counter = 0;
+
+			std::vector<WzString> keys = ini.childKeys();
+			for (size_t j = 0; j < keys.size(); ++j)
+			{
+				unsigned int tileType = ini.value(keys.at(j)).toUInt();
+
+				if (tileType > TER_MAX)
+				{
+					debug(LOG_ERROR, "loadTerrainTypeMapOverride: terrain type out of range");
+					resForceBaseDir("");
+					return false;
+				}
+				// Workaround for fugly map editor bug, since we can't fix the map editor
+				if (counter > (MAX_TILE_TEXTURES - 1))
+				{
+					debug(LOG_ERROR, "loadTerrainTypeMapOverride: too many textures!");
+					resForceBaseDir("");
+					return false;
+				}
+				// Log the output for the override value.
+				if (terrainTypes[counter] != tileType)
+				{
+					debug(LOG_TERRAIN, "Upgrading map tile %d (type %d) to type %d", counter, terrainTypes[counter], tileType);
+				}
+				terrainTypes[counter] = tileType;
+				++counter;
+				debug(LOG_TERRAIN, "Tile %d at value: %d", counter - 1, tileType);
+			}
+			ini.endGroup();
+		}
+	}
+
+	resForceBaseDir("");
 
 	return true;
 }
