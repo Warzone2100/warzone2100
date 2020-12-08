@@ -787,9 +787,25 @@ bool scripting_engine::loadScriptStates(const char *filename)
 		wzapi::scripting_instance* instance = findInstanceForPlayer(player, scriptName);
 		if (instance && list[i].startsWith("triggers_"))
 		{
-			std::shared_ptr<timerNode> node = std::make_shared<timerNode>();;
-			node->timerID = ini.value("timerID").toInt();
-			node->timerName = ini.value("timerName").toWzString().toStdString();
+			std::shared_ptr<timerNode> node = std::make_shared<timerNode>();
+			if (ini.contains("timerID"))
+			{
+				node->timerID = ini.value("timerID").toInt();
+			}
+			else
+			{
+				// backwards-compat with old saves
+				node->timerID = getNextAvailableTimerID();
+			}
+			if (ini.contains("timerName"))
+			{
+				node->timerName = ini.value("timerName").toWzString().toStdString();
+			}
+			else
+			{
+				// backwards-compat with old saves
+				node->timerName = ini.value("function").toWzString().toStdString();
+			}
 			node->instance = instance;
 			debug(LOG_SAVE, "Registering trigger %zu for player %d, script %s",
 			      i, player, scriptName.toUtf8().c_str());
@@ -804,7 +820,23 @@ bool scripting_engine::loadScriptStates(const char *filename)
 			std::tuple<TimerFunc, std::unique_ptr<timerAdditionalData>> restoredTimerInfo;
 			try
 			{
-				restoredTimerInfo = instance->restoreTimerFunction(ini.value("functionRestoreInfo").jsonValue());
+				if (ini.contains("functionRestoreInfo"))
+				{
+					restoredTimerInfo = instance->restoreTimerFunction(ini.value("functionRestoreInfo").jsonValue());
+				}
+				else
+				{
+					// backwards-compat with old saves
+					// construct a JS-compatible functionRestoreInfo using the "function" key, which should be set in an older save
+					nlohmann::json backwardsCompatJSFunctionRestoreInfo = nlohmann::json::object();
+					if (!ini.contains("function"))
+					{
+						ASSERT(false, "Invalid trigger in save (%s) - missing new functionRestoreInfo block, and old function parameter", list[i].toUtf8().c_str());
+						continue;
+					}
+					backwardsCompatJSFunctionRestoreInfo["function"] = ini.value("function").jsonValue();
+					restoredTimerInfo = instance->restoreTimerFunction(backwardsCompatJSFunctionRestoreInfo);
+				}
 			}
 			catch (const std::exception& e)
 			{
