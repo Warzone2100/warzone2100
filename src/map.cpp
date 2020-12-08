@@ -69,6 +69,9 @@ static int lastDangerPlayer = -1;
 //scroll min and max values
 SDWORD		scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
+//For saves to determine if loading the terrain type override should occur
+bool builtInMap;
+
 /* Structure definitions for loading and saving map data */
 struct MAP_SAVEHEADER  // : public GAME_SAVEHEADER
 {
@@ -123,9 +126,6 @@ int numGroundTypes;
 char *tilesetDir = nullptr;
 static int numTile_names;
 static char *Tile_names = nullptr;
-#define ARIZONA 1
-#define URBAN 2
-#define ROCKIE 3
 
 static int *map;			// 3D array pointer that holds the texturetype
 static bool *mapDecals;           // array that tells us what tile is a decal
@@ -230,7 +230,7 @@ static void init_tileNames(int type)
 // This is the main loading routine to get all the map's parameters set.
 // Once it figures out what tileset we need, we then parse the files for that tileset.
 // Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
-static bool mapLoadGroundTypes()
+static bool mapLoadGroundTypes(bool preview)
 {
 	char	*pFileData = nullptr;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
@@ -248,6 +248,11 @@ static bool mapLoadGroundTypes()
 	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
 fallback:
+		// load the override terrain types
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(ARIZONA))
+		{
+			debug(LOG_POPUP, "Failed to load terrain type override");
+		}
 		init_tileNames(ARIZONA);
 		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
@@ -287,6 +292,11 @@ fallback:
 	// for Urban
 	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
 	{
+		// load the override terrain types
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(URBAN))
+		{
+			debug(LOG_POPUP, "Failed to load terrain type override");
+		}
 		init_tileNames(URBAN);
 		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
@@ -326,6 +336,11 @@ fallback:
 	// for Rockie
 	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
 	{
+		// load the override terrain types
+		if (!preview && builtInMap && !loadTerrainTypeMapOverride(ROCKIE))
+		{
+			debug(LOG_POPUP, "Failed to load terrain type override");
+		}
 		init_tileNames(ROCKIE);
 		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
 		{
@@ -797,7 +812,7 @@ bool mapLoad(char const *filename, bool preview)
 	}
 
 	// load the ground types
-	if (!mapLoadGroundTypes())
+	if (!mapLoadGroundTypes(preview))
 	{
 		goto failure;
 	}
@@ -901,7 +916,7 @@ bool mapLoadFromScriptData(ScriptMapData const &data, bool preview)
 	}
 
 	// load the ground types
-	if (!mapLoadGroundTypes())
+	if (!mapLoadGroundTypes(preview))
 	{
 		return false;
 	}

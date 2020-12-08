@@ -32,6 +32,10 @@
 #include "display.h"
 #include "ai.h"
 
+#define ARIZONA 1
+#define URBAN 2
+#define ROCKIE 3
+
 /* The different types of terrain as far as the game is concerned */
 enum TYPE_OF_TERRAIN
 {
@@ -583,5 +587,8 @@ WZ_DECL_ALWAYS_INLINE static inline bool hasSensorOnTile(MAPTILE *psTile, unsign
 
 void mapInit();
 void mapUpdate();
+
+//For saves to determine if loading the terrain type override should occur
+extern bool builtInMap;
 
 #endif // __INCLUDED_SRC_MAP_H__

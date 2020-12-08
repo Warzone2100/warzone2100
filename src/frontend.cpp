@@ -70,6 +70,7 @@
 #include "titleui/titleui.h"
 #include "urlhelpers.h"
 #include "game.h"
+#include "map.h" //for builtInMap
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -427,6 +428,7 @@ void SPinit(LEVEL_TYPE gameType)
 	}
 	setPlayerColour(0, playercolor);
 	game.hash.setZero();	// must reset this to zero
+	builtInMap = true;
 }
 
 bool runCampaignSelector()
