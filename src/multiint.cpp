@@ -241,6 +241,7 @@ static	void	SendFireUp();
 static	void	decideWRF();
 
 static bool		SendColourRequest(UBYTE player, UBYTE col);
+static bool		SendFactionRequest(UBYTE player, UBYTE faction);
 static bool		SendPositionRequest(UBYTE player, UBYTE chosenPlayer);
 bool changeReadyStatus(UBYTE player, bool bReady);
 static void stopJoining(std::shared_ptr<WzTitleUI> parent);
@@ -2070,12 +2071,14 @@ void WzMultiplayerOptionsTitleUI::openFactionChooser(uint32_t player)
 			STATIC_ASSERT(MULTIOP_FACCHOOSER + NUM_FACTIONS - 1 <= MULTIOP_FACCHOOSER_END);
 			if (id >= MULTIOP_FACCHOOSER && id <= MULTIOP_FACCHOOSER + NUM_FACTIONS -1)
 			{
+				// TODO: @cpdef clean this
+				resetReadyStatus(false, true);
 				uint8_t idx = id - MULTIOP_FACCHOOSER;
-				NetPlay.players[player].faction = static_cast<FactionID>(idx);
-				NETBroadcastPlayerInfo(player);
+				SendFactionRequest(player, idx);
+//				NetPlay.players[player].faction = static_cast<FactionID>(idx);
+//				NETBroadcastPlayerInfo(player);
 				pStrongPtr->closeFactionChooser();
 				pStrongPtr->addPlayerBox(true);
-				resetReadyStatus(false);
 
 				debug(LOG_INFO, "click on faction %i", id-MULTIOP_FACCHOOSER);
 			}
@@ -2308,6 +2311,27 @@ static bool SendColourRequest(UBYTE player, UBYTE col)
 	return true;
 }
 
+static bool SendFactionRequest(UBYTE player, UBYTE faction)
+{
+	// TODO: needs to be rewritten from scratch
+	if (NetPlay.isHost)			// do or request the change
+	{
+		NetPlay.players[player].faction = static_cast<FactionID>(faction);
+		NETBroadcastPlayerInfo(player);
+		//return changeColour(player, col, true);
+		return true;
+	}
+	else
+	{
+		// clients tell the host which color they want
+		NETbeginEncode(NETnetQueue(NET_HOST_ONLY), NET_FACTIONREQUEST);
+		NETuint8_t(&player);
+		NETuint8_t(&faction);
+		NETend();
+	}
+	return true;
+}
+
 static bool SendPositionRequest(UBYTE player, UBYTE position)
 {
 	if (NetPlay.isHost)			// do or request the change
@@ -2323,6 +2347,37 @@ static bool SendPositionRequest(UBYTE player, UBYTE position)
 		NETuint8_t(&position);
 		NETend();
 	}
+	return true;
+}
+
+bool recvFactionRequest(NETQUEUE queue)
+{
+	ASSERT_HOST_ONLY(return true);
+
+	NETbeginDecode(queue, NET_FACTIONREQUEST);
+
+	UBYTE player, faction;
+	NETuint8_t(&player);
+	NETuint8_t(&faction);
+	NETend();
+
+	if (player >= MAX_PLAYERS)
+	{
+		debug(LOG_ERROR, "Invalid NET_FACTIONREQUEST from player %d: Tried to change player %d to faction %d",
+		      queue.index, (int)player, (int)faction);
+		return false;
+	}
+
+	if (whosResponsible(player) != queue.index)
+	{
+		HandleBadParam("NET_FACTIONREQUEST given incorrect params.", player, queue.index);
+		return false;
+	}
+
+	resetReadyStatus(false, true);
+
+	NetPlay.players[player].faction = static_cast<FactionID>(faction);
+	NETBroadcastPlayerInfo(player);
 	return true;
 }
 
@@ -4025,6 +4080,10 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case NET_COLOURREQUEST:
 			recvColourRequest(queue);
+			break;
+
+		case NET_FACTIONREQUEST:
+			recvFactionRequest(queue);
 			break;
 
 		case NET_POSITIONREQUEST:

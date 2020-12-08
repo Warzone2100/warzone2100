@@ -71,6 +71,7 @@ enum MESSAGE_TYPES
 	NET_KICK,                       ///< kick a player .
 	NET_FIREUP,                     ///< campaign game has started, we can go too.. Shortcut message, not to be used in dmatch.
 	NET_COLOURREQUEST,              ///< player requests a colour change.
+	NET_FACTIONREQUEST,             ///< player requests a colour change.
 	NET_AITEXTMSG,                  ///< chat between AIs
 	NET_BEACONMSG,                  ///< place beacon
 	NET_TEAMREQUEST,                ///< request team membership
