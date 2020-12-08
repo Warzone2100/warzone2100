@@ -145,7 +145,13 @@ if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT C
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-	# Ensure all builds always have debug info built (MSVC)
+	# Set better-than-default optimization flags
+	add_compile_options("$<$<CONFIG:RELWITHDEBINFO>:/Ob2>")
+	add_compile_options("$<$<CONFIG:RELWITHDEBINFO>:/GL>")
+	add_link_options("$<$<CONFIG:RELWITHDEBINFO>:/INCREMENTAL:NO>")
+	add_link_options("$<$<CONFIG:RELWITHDEBINFO>:/LTCG>")
+
+	# Ensure all builds always have debug info built
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
 	set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Flags used by the linker (Release builds)" FORCE)
 
