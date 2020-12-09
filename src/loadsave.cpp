@@ -348,8 +348,13 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	struct SaveGameNamesAndTimes
 	{
-		char* name;
+		std::string name;
 		time_t savetime;
+
+		SaveGameNamesAndTimes(const std::string& name, time_t savetime)
+		: name(name)
+		, savetime(savetime)
+		{ }
 	};
 
 	std::vector<SaveGameNamesAndTimes> saveGameNamesAndTimes;
@@ -372,8 +377,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 		(i)[strlen(i) - 4] = '\0'; // remove .gam extension
 
-		SaveGameNamesAndTimes saveGameNameAndTime{ i, savetime };
-		saveGameNamesAndTimes.push_back(saveGameNameAndTime);
+		saveGameNamesAndTimes.emplace_back(i, savetime);
 		return true; // continue
 	});
 
@@ -387,7 +391,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	(void)std::all_of(saveGameNamesAndTimes.begin(), saveGameNamesAndTimes.end(), [&](SaveGameNamesAndTimes& saveGameNameAndTime)
 		{
 			/* Set the button-text and tip text (the save time) into static storage */
-			sstrcpy(sSlotCaps[slotCount], saveGameNameAndTime.name);
+			sstrcpy(sSlotCaps[slotCount], saveGameNameAndTime.name.c_str());
 			strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", localtime(& (saveGameNameAndTime.savetime)));
 
 			/* Add a button that references the static strings */
