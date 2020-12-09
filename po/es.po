@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-17 14:30\n"
+"PO-Revision-Date: 2020-12-09 07:58\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -17365,7 +17365,7 @@ msgstr "Este es un mod, ¡puede cambiar tu experiencia de juego!"
 
 #: src/multiint.cpp:3226
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Este es un mapa aleatorio, ¡puede variar tú experiencia de juego!"
 
 #: src/multiint.cpp:3417
 #: src/multiint.cpp:3504
