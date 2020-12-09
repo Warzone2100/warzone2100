@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-04 18:18\n"
+"PO-Revision-Date: 2020-12-09 19:56\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -71,7 +71,7 @@ msgstr "Onlar sinaptik bağlantı sistemine sahip olabileceklerinden, canımız 
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "TAŞIMA GÖREVİ: Kalıntılerı Bul ve Kurtar"
+msgstr "TAŞIMA GÖREVİ: Kalıntıları Bul ve Kurtar"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
@@ -104,7 +104,7 @@ msgstr "Sinyallari araştırmak için bir izci kuvvet al."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "İniş Bölgesinde güvenliği sağlamak için kamyonlarınla koruma binaları inşa et."
+msgstr "İniş Alanında güvenliği sağlamak için kamyonlarınla koruma binaları inşa et."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -649,7 +649,7 @@ msgstr "Eğer kaçacaksan, üssün etrafindaki karadan havaya uçaksavarları yo
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr "İniş alanına uç, sonra karadan ilerleyerek SAM yerlerini yoket."
+msgstr "İniş Alanına uç, sonra karadan ilerleyerek SAM yerlerini yoket."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
@@ -4016,11 +4016,11 @@ msgstr "Tüm Roketler otomatik olarak yükseltildi"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Tüm Yeni Paradigma birimlerini yok et"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Tüm Yeni Paradigma takviyelerini yok et"
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
@@ -4044,15 +4044,15 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Tüm birimleri vadiye taşı"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Tüm füze silolarını yok et"
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Alfa takımını Nexus'tan kurtar"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -4060,11 +4060,11 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-ad1.js:215
 msgid "Secure a missile silo"
-msgstr ""
+msgstr "Bir füze silosunu koru"
 
 #: data/base/script/campaign/cam3-ad2.js:272
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Füze silolarını koru ve füze kodlarını araştır"
 
 #: data/base/script/campaign/cam3-c.js:127
 msgid "Reunite a part of Beta team with a Gamma team outpost"
@@ -4076,35 +4076,35 @@ msgstr "İniş Bölgesine Geri Dön"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Tüm düşman birim ve binalarını yok et"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Toplanan kalıntılar"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:495
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Yok edilen üsler"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Kalan düşman birimi"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:497
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Kalan düşman binası"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:503
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Gerektiği gibi İniş Alanına dön"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:513
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Tüm düşman birimleri ve üslerini yok et"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:518
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Zamanlayıcı sıfıra ulaşana kadar hayatta kal"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -16476,43 +16476,43 @@ msgstr "Grup 9'a Ata"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "0. Gruba Ekle"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "1. Gruba Ekle"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "2. Gruba Ekle"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "3. Gruba Ekle"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "4. Gruba Ekle"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "5. Gruba Ekle"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "6. Gruba Ekle"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "7. Gruba Ekle"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "8. Gruba Ekle"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "9. Gruba Ekle"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
@@ -16728,11 +16728,11 @@ msgstr "Takım Sohbet Geçmişini Aç/Kapat"
 
 #: src/keymap.cpp:496
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Binayı Saat Yönünde Döndür"
 
 #: src/keymap.cpp:497
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Binayı Saatin Tersi Yönünde Döndür"
 
 #: src/keymap.cpp:500
 msgid "Center View on HQ"
@@ -16888,27 +16888,27 @@ msgstr "Sonraki Sayborg Fabrikasını seç"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Sonraki DİvK Fabrikasını seç"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Sonraki Fabrikaya atla"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Sonraki Araştırma Merkezine atla"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Sonraki Güç Jeneratörüne atla"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Sonraki Sayborg Fabrikasına atla"
 
 #: src/keymap.cpp:570
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Sonraki DİvK Fabrikasına atla"
 
 #: src/keymap.cpp:573
 msgid "Toggle Debug Mappings"
@@ -17169,7 +17169,7 @@ msgstr "Harita Modu!"
 
 #: src/multiint.cpp:1371
 msgid "Random map!"
-msgstr ""
+msgstr "Rastgele harita!"
 
 #: src/multiint.cpp:1388
 msgid "Click to set Password"
@@ -17366,7 +17366,7 @@ msgstr "Bu bir harita modu, oynama deneyiminizi değiştirebilir!"
 
 #: src/multiint.cpp:3226
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Bu bir rastgele harita, oynama deneyiminizi değiştirebilir!"
 
 #: src/multiint.cpp:3417
 #: src/multiint.cpp:3504
