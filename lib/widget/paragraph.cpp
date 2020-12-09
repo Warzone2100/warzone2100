@@ -124,7 +124,7 @@ private:
             }
 
             auto whitespacePosition = fragmentFits + 1;
-            while ((whitespacePosition >= elementDescriptor.size() || !elementDescriptor.isWhitespace(whitespacePosition - 1)) && whitespacePosition > current)
+            while (whitespacePosition > elementDescriptor.size() || (whitespacePosition > current && !elementDescriptor.isWhitespace(whitespacePosition - 1)))
             {
                 whitespacePosition--;
             }
