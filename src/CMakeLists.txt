@@ -192,8 +192,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group,-subsystem,windows")
     target_link_libraries(warzone2100 ${QT5ALL_LIBRARIES} ${QT5ALL_LDFLAGS_OTHER})
     target_link_libraries(warzone2100 version Qt5::QWindowsIntegrationPlugin Qt5ThemeSupport Qt5FontDatabaseSupport Qt5EventDispatcherSupport)
-  else()
-    set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group")
+    set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--end-group")
   endif()
 endif()
 
