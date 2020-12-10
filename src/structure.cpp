@@ -569,6 +569,8 @@ bool loadStructureStats(WzConfig &ini)
 		types += psStats->pSensor != nullptr && psStats->pSensor->location == LOC_TURRET;
 		ASSERT(types <= 1, "Too many turret types for structure '%s'", getID(psStats));
 
+		psStats->combinesWithWall = ini.value("combinesWithWall", false).toBool();
+
 		ini.endGroup();
 	}
 	parseFavoriteStructs();
@@ -1057,12 +1059,10 @@ static WallOrientation structWallScan(bool aWallPresent[5][5], int x, int y)
 static bool isWallCombiningStructureType(STRUCTURE_STATS const *pStructureType)
 {
 	STRUCTURE_TYPE type = pStructureType->type;
-	STRUCT_STRENGTH strength = pStructureType->strength;
 	return type == REF_WALL ||
 	       type == REF_GATE ||
 	       type == REF_WALLCORNER ||
-	       (type == REF_DEFENSE && strength == STRENGTH_HARD) ||
-	       (type == REF_GENERIC && strength == STRENGTH_HARD);  // fortresses
+	       pStructureType->combinesWithWall;  // hardpoints and fortresses by default
 }
 
 bool isWall(STRUCTURE_TYPE type)

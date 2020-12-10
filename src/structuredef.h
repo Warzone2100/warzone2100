@@ -122,6 +122,7 @@ struct STRUCTURE_STATS : public BASE_STATS
 	UDWORD numWeaps;                /*Number of weapons for default */
 	struct WEAPON_STATS *psWeapStat[MAX_WEAPONS];
 	uint64_t flags;
+	bool combinesWithWall;			//If the structure will trigger nearby walls to try combining with it
 
 	unsigned minLimit;		///< lowest value user can set limit to (currently unused)
 	unsigned maxLimit;		///< highest value user can set limit to, LOTS_OF = no limit
