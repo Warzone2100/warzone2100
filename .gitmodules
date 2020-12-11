@@ -34,3 +34,6 @@
 	path = 3rdparty/discord-rpc
 	url = https://github.com/past-due/discord-rpc.git
 	shallow = true
+[submodule "3rdparty/SQLiteCpp"]
+	path = 3rdparty/SQLiteCpp
+	url = https://github.com/past-due/SQLiteCpp.git

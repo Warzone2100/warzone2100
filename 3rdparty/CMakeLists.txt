@@ -29,6 +29,22 @@ if(ENABLE_DISCORD)
 	set_property(TARGET discord-rpc PROPERTY FOLDER "3rdparty")
 endif()
 
+find_package(SQLite3 3.14 REQUIRED)
+set(SQLITECPP_USE_STATIC_RUNTIME OFF CACHE BOOL "Use static runtime" FORCE)
+set(SQLITE_ENABLE_COLUMN_METADATA OFF CACHE BOOL "Enable Column::getColumnOriginName(). Require support from sqlite3 library." FORCE)
+set(SQLITE_HAS_CODEC OFF CACHE BOOL "Enable database encryption API. Not available in the public release of SQLite." FORCE)
+if(SQLite3_VERSION VERSION_LESS 3.19)
+	set(SQLITE_USE_LEGACY_STRUCT ON CACHE BOOL "Fallback to forward declaration of legacy struct sqlite3_value (pre SQLite 3.19)" FORCE)
+endif()
+set(SQLITECPP_INTERNAL_SQLITE OFF CACHE BOOL "Add the internal SQLite3 source to the project." FORCE)
+set(SQLITECPP_INCLUDE_SCRIPT OFF CACHE BOOL "Include config & script files." FORCE)
+set(SQLITECPP_RUN_CPPLINT OFF CACHE BOOL "Run cpplint.py tool for Google C++ StyleGuide." FORCE)
+set(SQLITECPP_RUN_CPPCHECK OFF CACHE BOOL "Run cppcheck C++ static analysis tool." FORCE)
+set(SQLITECPP_BUILD_EXAMPLES OFF CACHE BOOL "Build examples." FORCE)
+set(SQLITECPP_BUILD_TESTS OFF CACHE BOOL "Build and run tests." FORCE)
+add_subdirectory(SQLiteCpp EXCLUDE_FROM_ALL)
+set_property(TARGET SQLiteCpp PROPERTY FOLDER "3rdparty")
+
 # glad library
 
 set(GLAD_HEADERS
