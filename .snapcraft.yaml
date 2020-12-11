@@ -186,6 +186,7 @@ parts:
       - libcurl4-gnutls-dev
       - libgnutls28-dev
       - libsodium-dev
+      - libsqlite3-dev
       - ninja-build
       - unzip
       - wget
@@ -210,6 +211,7 @@ parts:
       - libvulkan1
       - libcurl3-gnutls
       - libsodium23
+      - libsqlite3-0
       - libglu1-mesa
       - mesa-vulkan-drivers
       - unzip
