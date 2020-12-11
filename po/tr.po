@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-12-09 19:56\n"
+"PO-Revision-Date: 2020-12-11 02:55\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -17110,7 +17110,7 @@ msgstr "EKSİK YZ AÇIKLAMASI"
 #: src/multiint.cpp:745
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
-msgstr "YZ turnuvası: %%%3.1f kazanma, %%%3.1f kayıp, %%%3.1f%% beraberlik"
+msgstr "YZ turnuvası: %%%3.1f kazanma, %%%3.1f kayıp, %%%3.1f beraberlik"
 
 #: src/multiint.cpp:921
 msgid "Error while joining."
