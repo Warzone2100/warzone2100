@@ -1568,7 +1568,7 @@ INT_RETVAL intRunWidgets()
 							// the fact that we're cheating ourselves a new
 							// structure.
 							std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new structure: %s."),
-										selectedPlayer, getName(psStructure->pStructureType));
+										selectedPlayer, getStatsName(psStructure->pStructureType));
 							sendInGameSystemMessage(msg.c_str());
 							Cheated = true;
 						}
@@ -1577,7 +1577,7 @@ INT_RETVAL intRunWidgets()
 					{
 						// Send a text message to all players, notifying them of the fact that we're cheating ourselves a new feature.
 						std::string msg = astringf(_("Player %u is cheating (debug menu) him/herself a new feature: %s."),
-									selectedPlayer, getName(psPositionStats));
+									selectedPlayer, getStatsName(psPositionStats));
 						sendInGameSystemMessage(msg.c_str());
 						Cheated = true;
 						// Notify the other hosts that we've just built ourselves a feature
@@ -3135,11 +3135,11 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 				ASSERT(false, "Invalid structure type");
 				return false;
 			}
-			objButton->setTip(getName(((STRUCTURE *)psObj)->pStructureType));
+			objButton->setTip(getStatsName(((STRUCTURE *)psObj)->pStructureType));
 			break;
 
 		case OBJ_FEATURE:
-			objButton->setTip(getName(((FEATURE *)psObj)->psStats));
+			objButton->setTip(getStatsName(((FEATURE *)psObj)->psStats));
 			break;
 
 		default:
@@ -3220,7 +3220,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 
 		if (psStats != nullptr)
 		{
-			statButton->setTip(getName(psStats));
+			statButton->setTip(getStatsName(psStats));
 			statButton->setObjectAndStats(psObj, psStats);
 		}
 		else if ((psObj->type == OBJ_DROID) && (((DROID *)psObj)->droidType == DROID_COMMAND))
@@ -3492,7 +3492,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 
 	if (psStats)
 	{
-		statButton->setTip(getName(psStats));
+		statButton->setTip(getStatsName(psStats));
 		statButton->setObjectAndStats(intGetObject(id), psStats);
 
 		// Add a text label for the size of the production run.
@@ -3732,7 +3732,7 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		statList->addWidgetToLayout(button);
 
 		BASE_STATS *Stat = ppsStatsList[i];
-		WzString tipString = getName(ppsStatsList[i]);
+		WzString tipString = getStatsName(ppsStatsList[i]);
 		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
 		if (Stat->hasType(STAT_STRUCTURE))  // It's a structure.

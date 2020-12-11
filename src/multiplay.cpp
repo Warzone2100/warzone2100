@@ -1091,7 +1091,7 @@ bool recvResearchStatus(NETQUEUE queue)
 
 			if (!researchAvailable(index, player, ModeImmediate) && bMultiPlayer)
 			{
-				debug(LOG_ERROR, "Player %d researching impossible topic \"%s\".", player, getName(&asResearch[index]));
+				debug(LOG_ERROR, "Player %d researching impossible topic \"%s\".", player, getStatsName(&asResearch[index]));
 				return false;
 			}
 
@@ -1330,7 +1330,7 @@ bool recvDestroyFeature(NETQUEUE queue)
 		return false;
 	}
 
-	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, getName(pF->psStats));
+	debug(LOG_FEATURE, "p%d feature id %d destroyed (%s)", pF->player, pF->id, getStatsName(pF->psStats));
 	// Remove the feature locally
 	turnOffMultiMsg(true);
 	destroyFeature(pF, gameTime - deltaGameTime + 1);  // deltaGameTime is actually 0 here, since we're between updates. However, the value of gameTime - deltaGameTime + 1 will not change when we start the next tick.

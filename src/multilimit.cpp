@@ -491,7 +491,7 @@ static void displayStructureBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 	displayStructureStatButton(stat, &rotation, &position, scale);
 
 	// draw name
-	cache.wzNameText.setText(_(getName(stat)), font_regular);
+	cache.wzNameText.setText(_(getStatsName(stat)), font_regular);
 	cache.wzNameText.render(x + 80, y + psWidget->height() / 2 + 3, WZCOL_TEXT_BRIGHT);
 
 	// draw limit

@@ -1393,7 +1393,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->pos.x, psOrder->pos.y);
 		intBuildStarted(psDroid);
-		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getName(psOrder->psStats) : "NULL");
+		objTrace(psDroid->id, "Starting new construction effort of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_BUILDMODULE:
 		//build a module onto the structure
@@ -1406,7 +1406,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT_OR_RETURN(, !psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psOrder->psObj->pos.x, psOrder->psObj->pos.y);
 		intBuildStarted(psDroid);
-		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getName(psOrder->psStats) : "NULL");
+		objTrace(psDroid->id, "Starting new upgrade of %s", psOrder->psStats ? getStatsName(psOrder->psStats) : "NULL");
 		break;
 	case DORDER_HELPBUILD:
 		// help to build a structure that is starting to be built
@@ -1418,7 +1418,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 		ASSERT_OR_RETURN(,!psDroid->order.psStats || psDroid->order.psStats->type != REF_DEMOLISH, "Cannot build demolition");
 		actionDroid(psDroid, DACTION_BUILD, psDroid->order.pos.x, psDroid->order.pos.y);
 		intBuildStarted(psDroid);
-		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? getName(psDroid->order.psStats) : "NULL");
+		objTrace(psDroid->id, "Helping construction of %s", psOrder->psStats ? getStatsName(psDroid->order.psStats) : "NULL");
 		break;
 	case DORDER_DEMOLISH:
 		if (!(psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT))

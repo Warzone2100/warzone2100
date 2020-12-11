@@ -709,14 +709,14 @@ bool pickupArtefact(int toPlayer, int fromPlayer)
 					MakeResearchPossible(&asPlayerResList[toPlayer][topic]);
 					if (toPlayer == selectedPlayer)
 					{
-						CONPRINTF(_("You Discover Blueprints For %s"), getName(&asResearch[topic]));
+						CONPRINTF(_("You Discover Blueprints For %s"), getStatsName(&asResearch[topic]));
 					}
 					break;
 				}
 				// Invalid topic
 				else
 				{
-					debug(LOG_WARNING, "%s is a invalid research topic?", getName(&asResearch[topic]));
+					debug(LOG_WARNING, "%s is a invalid research topic?", getStatsName(&asResearch[topic]));
 				}
 			}
 		}

@@ -260,7 +260,7 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 		WzString filename = json_variant(value).toWzString();
 		retval = modelGet(filename);
 		ASSERT(retval != nullptr, "Cannot find the PIE model %s for stat %s in %s",
-		       filename.toUtf8().c_str(), getName(psStats), json.fileName().toUtf8().c_str());
+		       filename.toUtf8().c_str(), getStatsName(psStats), json.fileName().toUtf8().c_str());
 	}
 	return retval;
 }
@@ -430,7 +430,7 @@ bool loadWeaponStats(WzConfig &ini)
 		//set the weapon class
 		if (!getWeaponClass(ini.value("weaponClass").toWzString(), &psStats->weaponClass))
 		{
-			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getName(psStats));
+			debug(LOG_ERROR, "Invalid weapon class for weapon %s - assuming KINETIC", getStatsName(psStats));
 			psStats->weaponClass = WC_KINETIC;
 		}
 
@@ -457,7 +457,7 @@ bool loadWeaponStats(WzConfig &ini)
 		//set the weapon effect
 		if (!getWeaponEffect(ini.value("weaponEffect").toWzString(), &psStats->weaponEffect))
 		{
-			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getName(psStats));
+			debug(LOG_FATAL, "loadWepaonStats: Invalid weapon effect for weapon %s", getStatsName(psStats));
 			return false;
 		}
 
@@ -470,7 +470,7 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 		else if (!getWeaponClass(periodicalDamageWeaponClass, &psStats->periodicalDamageWeaponClass))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponClass for weapon %s - assuming same class as weapon", getStatsName(psStats));
 			psStats->periodicalDamageWeaponClass = psStats->weaponClass;
 		}
 
@@ -483,7 +483,7 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 		else if (!getWeaponSubClass(periodicalDamageWeaponSubClass.toUtf8().c_str(), &psStats->periodicalDamageWeaponSubClass))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponSubClass for weapon %s - assuming same subclass as weapon", getStatsName(psStats));
 			psStats->periodicalDamageWeaponSubClass = psStats->weaponSubClass;
 		}
 
@@ -496,7 +496,7 @@ bool loadWeaponStats(WzConfig &ini)
 		}
 		else if (!getWeaponEffect(periodicalDamageWeaponEffect.toUtf8().c_str(), &psStats->periodicalDamageWeaponEffect))
 		{
-			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getName(psStats));
+			debug(LOG_ERROR, "Invalid periodicalDamageWeaponEffect for weapon %s - assuming same effect as weapon", getStatsName(psStats));
 			psStats->periodicalDamageWeaponEffect = psStats->weaponEffect;
 		}
 
@@ -512,11 +512,11 @@ bool loadWeaponStats(WzConfig &ini)
 		unsigned int longHit = psStats->upgrade[0].hitChance;
 		if (shortRange > longRange)
 		{
-			debug(LOG_ERROR, "%s, Short range (%d) is greater than long range (%d)", getName(psStats), shortRange, longRange);
+			debug(LOG_ERROR, "%s, Short range (%d) is greater than long range (%d)", getStatsName(psStats), shortRange, longRange);
 		}
 		if (shortRange == longRange && shortHit != longHit)
 		{
-			debug(LOG_ERROR, "%s, shortHit and longHit should be equal if the ranges are the same", getName(psStats));
+			debug(LOG_ERROR, "%s, shortHit and longHit should be equal if the ranges are the same", getStatsName(psStats));
 		}
 
 		// set the face Player value
@@ -552,9 +552,9 @@ bool loadWeaponStats(WzConfig &ini)
 		WzString szWeaponWav = ini.value("weaponWav", "-1").toWzString();
 		WzString szExplosionWav = ini.value("explosionWav", "-1").toWzString();
 		bool result = statsGetAudioIDFromString(list[i], szWeaponWav, &weaponSoundID);
-		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().c_str(), getName(psStats));
+		ASSERT_OR_RETURN(false, result, "Weapon sound %s not found for %s", szWeaponWav.toUtf8().c_str(), getStatsName(psStats));
 		result = statsGetAudioIDFromString(list[i], szExplosionWav, &explosionSoundID);
-		ASSERT_OR_RETURN(false, result, "Explosion sound %s not found for %s", szExplosionWav.toUtf8().c_str(), getName(psStats));
+		ASSERT_OR_RETURN(false, result, "Explosion sound %s not found for %s", szExplosionWav.toUtf8().c_str(), getStatsName(psStats));
 		psStats->iAudioFireID = weaponSoundID;
 		psStats->iAudioImpactID = explosionSoundID;
 
@@ -603,7 +603,7 @@ bool loadBodyStats(WzConfig &ini)
 		psStats->ref = STAT_BODY + i;
 		if (!getBodySize(ini.value("size").toWzString(), &psStats->size))
 		{
-			ASSERT(false, "Unknown body size for %s", getName(psStats));
+			ASSERT(false, "Unknown body size for %s", getStatsName(psStats));
 			return false;
 		}
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");
@@ -732,7 +732,7 @@ bool loadBrainStats(WzConfig &ini)
 		if (ini.contains("turret"))
 		{
 			int weapon = getCompFromName(COMP_WEAPON, ini.value("turret").toWzString());
-			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getName(psStats));
+			ASSERT_OR_RETURN(false, weapon >= 0, "Unable to find weapon for brain %s", getStatsName(psStats));
 			psStats->psWeaponStat = asWeaponStats + weapon;
 		}
 		psStats->designable = ini.value("designable", false).toBool();
@@ -819,7 +819,7 @@ bool loadPropulsionStats(WzConfig &ini)
 		}
 		if (!getPropulsionType(ini.value("type").toWzString().toUtf8().c_str(), &psStats->propulsionType))
 		{
-			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getName(psStats));
+			debug(LOG_FATAL, "loadPropulsionStats: Invalid Propulsion type for %s", getStatsName(psStats));
 			return false;
 		}
 		ini.endGroup();
@@ -1040,7 +1040,7 @@ bool loadRepairStats(WzConfig &ini)
 		}
 
 		//check its not 0 since we will be dividing by it at a later stage
-		ASSERT_OR_RETURN(false, psStats->time > 0, "Repair delay cannot be zero for %s", getName(psStats));
+		ASSERT_OR_RETURN(false, psStats->time > 0, "Repair delay cannot be zero for %s", getStatsName(psStats));
 
 		//get the IMD for the component
 		psStats->pIMD = statsGetIMD(ini, psStats, "model");

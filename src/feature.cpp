@@ -258,8 +258,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 			MAPTILE *psTile = mapTile(b.map.x + width, b.map.y + breadth);
 
 			//check not outside of map - for load save game
-			ASSERT_OR_RETURN(nullptr, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getName(psFeature->psStats), psFeature->id);
-			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.x + width < mapWidth, "x coord bigger than map width - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
+			ASSERT_OR_RETURN(nullptr, b.map.y + breadth < mapHeight, "y coord bigger than map height - %s, id = %d", getStatsName(psFeature->psStats), psFeature->id);
 
 			if (width != psStats->baseWidth && breadth != psStats->baseBreadth)
 			{
@@ -268,8 +268,8 @@ FEATURE *buildFeature(FEATURE_STATS *psStats, UDWORD x, UDWORD y, bool FromSave)
 					FEATURE *psBlock = (FEATURE *)psTile->psObject;
 
 					debug(LOG_ERROR, "%s(%d) already placed at (%d+%d, %d+%d) when trying to place %s(%d) at (%d+%d, %d+%d) - removing it",
-					      getName(psBlock->psStats), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
-					      psBlock->psStats->baseBreadth, getName(psFeature->psStats), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
+					      getStatsName(psBlock->psStats), psBlock->id, map_coord(psBlock->pos.x), psBlock->psStats->baseWidth, map_coord(psBlock->pos.y),
+					      psBlock->psStats->baseBreadth, getStatsName(psFeature->psStats), psFeature->id, b.map.x, b.size.x, b.map.y, b.size.y);
 
 					removeFeature(psBlock);
 				}

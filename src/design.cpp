@@ -1097,7 +1097,7 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	    psTemplate->asParts[COMP_REPAIRUNIT]   != 0 ||
 	    psTemplate->asParts[COMP_BRAIN]		!= 0)
 	{
-		sstrcpy(aCurrName, getName(psStats));
+		sstrcpy(aCurrName, getStatsName(psStats));
 		sstrcat(aCurrName, " ");
 	}
 
@@ -1111,8 +1111,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asBodyStats + compIndex);
 	if (psTemplate->asParts[COMP_BODY] != 0)
 	{
-		checkStringLength(aCurrName, getName(psStats));
-		sstrcat(aCurrName, getName(psStats));
+		checkStringLength(aCurrName, getStatsName(psStats));
+		sstrcat(aCurrName, getStatsName(psStats));
 		sstrcat(aCurrName, " ");
 	}
 
@@ -1121,8 +1121,8 @@ const char *GetDefaultTemplateName(DROID_TEMPLATE *psTemplate)
 	psStats = (COMPONENT_STATS *)(asPropulsionStats + compIndex);
 	if (psTemplate->asParts[COMP_PROPULSION] != 0)
 	{
-		checkStringLength(aCurrName, getName(psStats));
-		sstrcat(aCurrName, getName(psStats));
+		checkStringLength(aCurrName, getStatsName(psStats));
+		sstrcat(aCurrName, getStatsName(psStats));
 	}
 
 	return aCurrName;
@@ -1135,7 +1135,7 @@ static void intSetEditBoxTextFromTemplate(DROID_TEMPLATE *psTemplate)
 	/* show component names if default template else show stat name */
 	if (psTemplate->droidType != DROID_DEFAULT)
 	{
-		sstrcpy(aCurrName, getName(psTemplate));
+		sstrcpy(aCurrName, getStatsName(psTemplate));
 	}
 	else
 	{
@@ -1219,7 +1219,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 	sFormInit.y = DES_BARFORMY;
 	sFormInit.width = DES_BARFORMWIDTH;	//COMPBUTWIDTH;
 	sFormInit.height = DES_BARFORMHEIGHT;	//COMPBUTHEIGHT;
-	sFormInit.pTip = getName(psStats);  // set form tip to stats string
+	sFormInit.pTip = getStatsName(psStats);  // set form tip to stats string
 	sFormInit.pUserData = psStats;			/* store component stats */
 	sFormInit.pDisplay = intDisplayStatForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
@@ -1553,7 +1553,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sFormInit.y = DES_BARFORMY;
 	sFormInit.width = DES_BARFORMWIDTH;	//DES_COMPBUTWIDTH;
 	sFormInit.height = DES_BARFORMHEIGHT;	//DES_COMPBUTHEIGHT;
-	sFormInit.pTip = getName(psStats);  // set form tip to stats string
+	sFormInit.pTip = getStatsName(psStats);  // set form tip to stats string
 	sFormInit.pDisplay = intDisplayStatForm;
 	if (!widgAddForm(psWScreen, &sFormInit))
 	{
@@ -2026,7 +2026,7 @@ static void intSetSystemStats(COMPONENT_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats != nullptr, "Invalid stats pointer");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_SYSTEMFORM, checkIfZNullStat(psStats) ? "" : getName(psStats));
+	widgSetTip(psWScreen, IDDES_SYSTEMFORM, checkIfZNullStat(psStats) ? "" : getStatsName(psStats));
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_SYSTEMFORM);
@@ -2344,7 +2344,7 @@ static void intSetBodyStats(BODY_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats->hasType(STAT_BODY), "stats have wrong type");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_BODYFORM, checkIfZNullStat(psStats) ? "" : getName(psStats));
+	widgSetTip(psWScreen, IDDES_BODYFORM, checkIfZNullStat(psStats) ? "" : getStatsName(psStats));
 
 	/* armour */
 	//do kinetic armour
@@ -2561,7 +2561,7 @@ static void intSetPropulsionStats(PROPULSION_STATS *psStats)
 	ASSERT_OR_RETURN(, psStats->hasType(STAT_PROPULSION), "stats have wrong type");
 
 	/* set form tip to stats string */
-	widgSetTip(psWScreen, IDDES_PROPFORM, checkIfZNullStat(psStats) ? "" : getName(psStats));
+	widgSetTip(psWScreen, IDDES_PROPFORM, checkIfZNullStat(psStats) ? "" : getStatsName(psStats));
 
 	/* set form stats for later display in intDisplayStatForm */
 	psForm = (W_FORM *) widgGetFromID(psWScreen, IDDES_PROPFORM);
@@ -2879,7 +2879,7 @@ static void intSetButtonFlash(UDWORD id, bool bFlash)
 static bool desTemplateNameCustomised(DROID_TEMPLATE *psTemplate)
 {
 	return psTemplate->droidType != DROID_DEFAULT &&
-	    strcmp(getName(psTemplate), GetDefaultTemplateName(psTemplate)) != 0;
+	    strcmp(getStatsName(psTemplate), GetDefaultTemplateName(psTemplate)) != 0;
 }
 
 static DROID_TEMPLATE *templateFromButtonId(unsigned buttonId, bool allowBlankTemplate = false)
@@ -2939,7 +2939,7 @@ void intProcessDesign(UDWORD id)
 			{
 				/* Set the new template */
 				sCurrDesign = *psTempl;
-				sstrcpy(aCurrName, getName(psTempl));
+				sstrcpy(aCurrName, getStatsName(psTempl));
 
 				/* reveal body/propulsion/turret component buttons */
 				widgReveal(psWScreen, IDDES_BODYBUTTON);
@@ -3223,7 +3223,7 @@ void intProcessDesign(UDWORD id)
 		/* The name edit box */
 		case IDDES_NAMEBOX:
 			sCurrDesign.name = widgGetWzString(psWScreen, IDDES_NAMEBOX);
-			sstrcpy(aCurrName, getName(&sCurrDesign));
+			sstrcpy(aCurrName, getStatsName(&sCurrDesign));
 			break;
 		case IDDES_BIN:
 			{
@@ -3259,7 +3259,7 @@ void intProcessDesign(UDWORD id)
 
 					/* Set the new template */
 					sCurrDesign = *psTempl;
-					sstrcpy(aCurrName, getName(psTempl));
+					sstrcpy(aCurrName, getStatsName(psTempl));
 
 					intSetEditBoxTextFromTemplate(psTempl);
 

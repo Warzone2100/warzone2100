@@ -209,7 +209,7 @@ public:
 	void setStatsAndTip(BASE_STATS *stats)
 	{
 		setStats(stats);
-		setTip(getName(stats));
+		setTip(getStatsName(stats));
 	}
 
 protected:

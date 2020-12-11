@@ -123,7 +123,7 @@ bool loadResearch(WzConfig &ini)
 		research.id = list[inc];
 
 		//check the name hasn't been used already
-		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getName(&research));
+		ASSERT_OR_RETURN(false, checkResearchName(&research, inc), "Research name '%s' used already", getStatsName(&research));
 
 		research.ref = STAT_RESEARCH + inc;
 
@@ -133,7 +133,7 @@ bool loadResearch(WzConfig &ini)
 		WzString subGroup = ini.value("subgroupIconID", "").toWzString();
 		if (subGroup.compare("") != 0)
 		{
-			research.subGroup = setIconID(subGroup.toUtf8().c_str(), getName(&research));
+			research.subGroup = setIconID(subGroup.toUtf8().c_str(), getStatsName(&research));
 		}
 		else
 		{
@@ -142,7 +142,7 @@ bool loadResearch(WzConfig &ini)
 
 		//set key topic
 		unsigned int keyTopic = ini.value("keyTopic", 0).toUInt();
-		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getName(&research));
+		ASSERT(keyTopic <= 1, "Invalid keyTopic for research topic - '%s' ", getStatsName(&research));
 		if (keyTopic <= 1)
 		{
 			research.keyTopic = ini.value("keyTopic", 0).toUInt();
@@ -154,7 +154,7 @@ bool loadResearch(WzConfig &ini)
 
 		//set tech code
 		UBYTE techCode = ini.value("techCode", 0).toUInt();
-		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getName(&research));
+		ASSERT(techCode <= 1, "Invalid tech code for research topic - '%s' ", getStatsName(&research));
 		if (techCode == 0)
 		{
 			research.techCode = TC_MAJOR;
@@ -166,14 +166,14 @@ bool loadResearch(WzConfig &ini)
 
 		//get flags when to disable tech
 		UBYTE disabledWhen = ini.value("disabledWhen", 0).toUInt();
-		ASSERT(disabledWhen <= MPFLAGS_MAX, "Invalid disabled tech flag for research topic - '%s' ", getName(&research));
+		ASSERT(disabledWhen <= MPFLAGS_MAX, "Invalid disabled tech flag for research topic - '%s' ", getStatsName(&research));
 		research.disabledWhen = disabledWhen;
 
 		//set the iconID
 		WzString iconID = ini.value("iconID", "").toWzString();
 		if (iconID.compare("") != 0)
 		{
-			research.iconID = setIconID(iconID.toUtf8().c_str(), getName(&research));
+			research.iconID = setIconID(iconID.toUtf8().c_str(), getStatsName(&research));
 		}
 		else
 		{
@@ -187,28 +187,28 @@ bool loadResearch(WzConfig &ini)
 		{
 			//try find the structure stat with given name
 			research.psStat = getCompStatsFromName(statID);
-			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getName(&research));
+			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getStatsName(&research));
 		}
 
 		WzString imdName = ini.value("imdName", "").toWzString();
 		if (imdName.compare("") != 0)
 		{
 			research.pIMD = modelGet(imdName);
-			ASSERT(research.pIMD != nullptr, "Cannot find the research PIE '%s' for record '%s'", imdName.toUtf8().data(), getName(&research));
+			ASSERT(research.pIMD != nullptr, "Cannot find the research PIE '%s' for record '%s'", imdName.toUtf8().data(), getStatsName(&research));
 		}
 
 		WzString imdName2 = ini.value("imdName2", "").toWzString();
 		if (imdName2.compare("") != 0)
 		{
 			research.pIMD2 = modelGet(imdName2);
-			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getName(&research));
+			ASSERT(research.pIMD2 != nullptr, "Cannot find the 2nd research '%s' PIE for record '%s'", imdName2.toUtf8().data(), getStatsName(&research));
 		}
 
 		WzString msgName = ini.value("msgName", "").toWzString();
 		if (msgName.compare("") != 0)
 		{
 			//check its a major tech code
-			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getName(&research));
+			ASSERT(research.techCode == TC_MAJOR, "This research should not have a message associated with it, '%s' the message will be ignored!", getStatsName(&research));
 			if (research.techCode == TC_MAJOR)
 			{
 				research.pViewData = getViewData(msgName);
@@ -217,12 +217,12 @@ bool loadResearch(WzConfig &ini)
 
 		//set the researchPoints
 		unsigned int resPoints = ini.value("researchPoints", 0).toUInt();
-		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - '%s' ", getName(&research));
+		ASSERT_OR_RETURN(false, resPoints <= UWORD_MAX, "Research Points too high for research topic - '%s' ", getStatsName(&research));
 		research.researchPoints = resPoints;
 
 		//set the research power
 		unsigned int resPower = ini.value("researchPower", 0).toUInt();
-		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getName(&research));
+		ASSERT_OR_RETURN(false, resPower <= UWORD_MAX, "Research Power too high for research topic - '%s' ", getStatsName(&research));
 		research.researchPower = resPower;
 
 		//remember research pre-requisites for futher checking
@@ -240,7 +240,7 @@ bool loadResearch(WzConfig &ini)
 			}
 			else
 			{
-				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of result components of research '%s' ", compID.toUtf8().c_str(), getStatsName(&research));
 			}
 		}
 
@@ -250,7 +250,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			//read pair of components oldComponent:newComponent
 			std::vector<WzString> pair = replacedComp[j].split(":");
-			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().c_str(), getName(&research));
+			ASSERT(pair.size() == 2, "Invalid item '%s' in list of replaced components of research '%s'. Required format: 'oldItem:newItem, item1:item2'", replacedComp[j].toUtf8().c_str(), getStatsName(&research));
 			if (pair.size() != 2)
 			{
 				continue; //skip invalid entries
@@ -260,13 +260,13 @@ bool loadResearch(WzConfig &ini)
 			COMPONENT_STATS *oldComp = getCompStatsFromName(oldCompID);
 			if (oldComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", oldCompID.toUtf8().c_str(), getStatsName(&research));
 				continue;
 			}
 			COMPONENT_STATS *newComp = getCompStatsFromName(newCompID);
 			if (newComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of replaced components of research '%s'. Wrong component code.", newCompID.toUtf8().c_str(), getStatsName(&research));
 				continue;
 			}
 			RES_COMP_REPLACEMENT replItem;
@@ -283,7 +283,7 @@ bool loadResearch(WzConfig &ini)
 			COMPONENT_STATS *pComp = getCompStatsFromName(compID);
 			if (pComp == nullptr)
 			{
-				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().c_str(), getName(&research));
+				ASSERT(false, "Invalid item '%s' in list of redundant components of research '%s' ", compID.toUtf8().c_str(), getStatsName(&research));
 			}
 			else
 			{
@@ -297,7 +297,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString strucID = resStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID);
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of result structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
 			if (structIndex >= 0)
 			{
 				research.pStructureResults.push_back(structIndex);
@@ -310,7 +310,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString strucID = reqStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of required structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
 			if (structIndex >= 0)
 			{
 				research.pStructList.push_back(structIndex);
@@ -323,7 +323,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString strucID = redStruct[j].trimmed();
 			int structIndex = getStructStatFromName(strucID.toUtf8().c_str());
-			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().c_str(), getName(&research));
+			ASSERT(structIndex >= 0, "Invalid item '%s' in list of redundant structures of research '%s' ", strucID.toUtf8().c_str(), getStatsName(&research));
 			if (structIndex >= 0)
 			{
 				research.pRedStructs.push_back(structIndex);
@@ -342,7 +342,7 @@ bool loadResearch(WzConfig &ini)
 		{
 			WzString resID = preRes[j].trimmed();
 			RESEARCH *preResItem = getResearch(resID.toUtf8().c_str());
-			ASSERT(preResItem != nullptr, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().c_str(), getName(&asResearch[inc]));
+			ASSERT(preResItem != nullptr, "Invalid item '%s' in list of pre-requisites of research '%s' ", resID.toUtf8().c_str(), getStatsName(&asResearch[inc]));
 			if (preResItem != nullptr)
 			{
 				asResearch[inc].pPRList.push_back(preResItem->index);
@@ -592,7 +592,7 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	if (player == selectedPlayer && bDisplay)
 	{
 		//add console text message
-		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(getName(pResearch)));
+		snprintf(consoleMsg, MAX_RESEARCH_MSG_SIZE, _("Research completed: %s"), _(getStatsName(pResearch)));
 		addConsoleMessage(consoleMsg, LEFT_JUSTIFY, SYSTEM_MESSAGE);
 	}
 
@@ -1085,7 +1085,7 @@ static bool checkResearchName(RESEARCH *psResearch, UDWORD numStats)
 	{
 
 		ASSERT_OR_RETURN(false, asResearch[inc].id.compare(psResearch->id) != 0,
-		                 "Research name has already been used - %s", getName(psResearch));
+		                 "Research name has already been used - %s", getStatsName(psResearch));
 	}
 	return true;
 }
@@ -1101,7 +1101,7 @@ bool enableResearch(RESEARCH *psResearch, UDWORD player)
 	inc = psResearch->index;
 	if (inc > asResearch.size())
 	{
-		ASSERT(false, "enableResearch: Invalid research topic - %s", getName(psResearch));
+		ASSERT(false, "enableResearch: Invalid research topic - %s", getStatsName(psResearch));
 		return false;
 	}
 
@@ -1157,7 +1157,7 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 			//name the actual reward
 			CONPRINTF("%s :- %s",
 			                          _("Research Award"),
-			                          getName(&asResearch[rewardID]));
+			                          getStatsName(&asResearch[rewardID]));
 		}
 	}
 }
