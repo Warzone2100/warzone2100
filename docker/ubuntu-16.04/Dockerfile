@@ -3,8 +3,23 @@ FROM ubuntu:16.04
 RUN cat /etc/lsb-release
 
 RUN apt-get -u update \
- && apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config libpng12-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev zip unzip qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev docbook-xsl xsltproc asciidoc gettext git cmake libcurl4-gnutls-dev gnutls-dev libsqlite3-dev \
+ && apt-get -y install gcc g++ clang libc-dev dpkg-dev ninja-build pkg-config libpng12-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev zip unzip qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev docbook-xsl xsltproc asciidoc gettext git cmake libcurl4-gnutls-dev gnutls-dev \
  && rm -rf /var/lib/apt/lists/*
+
+# Download, build, & install SQLite 3.14.2 from source
+ENV SQLITE3_SHA256 644f0c127f7d0cbe8765b9bbdf9ed09d6a2f2b9dfba48ddfd8ca0a42fdb5b3fc
+ADD https://sqlite.org/2016/sqlite-autoconf-3140200.tar.gz /tmp
+RUN echo "$SQLITE3_SHA256 /tmp/sqlite-autoconf-3140200.tar.gz" | sha256sum -c \
+ && tar -C /tmp -xzf /tmp/sqlite-autoconf-3140200.tar.gz \
+ && rm /tmp/sqlite-autoconf-3140200.tar.gz \
+ && cd /tmp/sqlite-autoconf-3140200 \
+ && mkdir build \
+ && cd build \
+ && ../configure --prefix=/usr --disable-static \
+ && make \
+ && make install \
+ && cd /tmp \
+ && rm -rf /tmp/sqlite-autoconf-3140200
 
 # Download, build, & install SDL 2.0.5 from source
 # For why --enable-mir-shared=no is needed, see: https://bugzilla.libsdl.org/show_bug.cgi?id=3539

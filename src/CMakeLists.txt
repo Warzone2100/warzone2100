@@ -123,8 +123,9 @@ include(IncludeFindCurl)
 target_link_libraries(warzone2100 CURL::libcurl)
 target_link_libraries(warzone2100 re2::re2)
 
-find_package(SQLite3 3.7.11 REQUIRED)
+find_package(SQLite3 3.14 REQUIRED)
 target_link_libraries(warzone2100 SQLite::SQLite3)
+target_link_libraries(warzone2100 SQLiteCpp)
 
 set(_curl_gnutls_thread_safe_fix FALSE)
 if (DEFINED CURL_GNUTLS_REQUIRES_CALLBACKS)
