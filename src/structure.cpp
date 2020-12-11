@@ -605,7 +605,7 @@ void setCurrentStructQuantity(bool displayError)
 			{
 				//check quantity never exceeds the limit
 				ASSERT(asStructureStats[inc].curCount[player] <= asStructureStats[inc].upgrade[player].limit,
-				       "There appears to be too many %s on this map!", getName(&asStructureStats[inc]));
+				       "There appears to be too many %s on this map!", getStatsName(&asStructureStats[inc]));
 			}
 		}
 	}
@@ -1323,7 +1323,7 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 		if (asStructureStats[max].curCount[player] + 1 > asStructureStats[max].upgrade[player].limit)
 		{
 			debug(LOG_ERROR, "Player %u: Building %s could not be built due to building limits (has %u, max %u)!",
-			      player, getName(pStructureType), asStructureStats[max].curCount[player],
+			      player, getStatsName(pStructureType), asStructureStats[max].curCount[player],
 			      asStructureStats[max].upgrade[player].limit);
 			return nullptr;
 		}
@@ -1424,8 +1424,8 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 # pragma GCC diagnostic ignored "-Wnull-dereference"
 #endif
 					debug(LOG_ERROR, "Player %u (%s): is building %s at (%d, %d) but found %s already at (%d, %d)",
-					      player, isHumanPlayer(player) ? "Human" : "AI", getName(pStructureType), map.x, map.y,
-					      getName(getTileStructure(tileX, tileY)->pStructureType), tileX, tileY);
+					      player, isHumanPlayer(player) ? "Human" : "AI", getStatsName(pStructureType), map.x, map.y,
+					      getStatsName(getTileStructure(tileX, tileY)->pStructureType), tileX, tileY);
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic pop
 #endif
@@ -1760,7 +1760,7 @@ STRUCTURE *buildBlueprint(STRUCTURE_STATS const *psStats, Vector3i pos, uint16_t
 	STRUCTURE *blueprint;
 
 	ASSERT_OR_RETURN(nullptr, psStats != nullptr, "No blueprint stats");
-	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getName(psStats));
+	ASSERT_OR_RETURN(nullptr, psStats->pIMD[0] != nullptr, "No blueprint model for %s", getStatsName(psStats));
 
 	Rotation rot(direction, 0, 0);
 
@@ -3943,7 +3943,7 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 					continue;
 				}
 
-				debug(LOG_NEVER, "adding %s (%x)", getName(psBuilding), apStructTypeLists[selectedPlayer][inc]);
+				debug(LOG_NEVER, "adding %s (%x)", getStatsName(psBuilding), apStructTypeLists[selectedPlayer][inc]);
 				ppList[count++] = psBuilding;
 				if (count == limit)
 				{
@@ -5447,7 +5447,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Hitpoints %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-			        getName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+			        getStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 			if (getDebugMappingStatus())
 			{
 				console("ID %d - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
@@ -5466,11 +5466,11 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Damage %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
-			        getName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
+			        getStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
 		}
 		else
 		{
-			console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+			console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		}
 		if (getDebugMappingStatus())
 		{
@@ -5480,14 +5480,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_REPAIR_FACILITY:
-		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
 			console("ID %d - Queue %d", psStructure->id, psStructure->pFunctionality->repairFacility.droidQueue);
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
-		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
 			console("ID %d - %s", psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe");
@@ -5503,7 +5503,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 				numConnected++;
 			}
 		}
-		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getName(psStructure->pStructureType), numConnected,
+		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), numConnected,
 		        NUM_POWER_MODULES, psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
@@ -5513,7 +5513,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 	case REF_CYBORG_FACTORY:
 	case REF_VTOL_FACTORY:
 	case REF_FACTORY:
-		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
 			console("ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d", psStructure->id,
@@ -5522,14 +5522,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	case REF_RESEARCH:
-		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
 			console("ID %u - Research Points: %u", psStructure->id, getBuildingResearchPoints(psStructure));
 		}
 		break;
 	case REF_REARM_PAD:
-		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
 			console("tile %d,%d - target %s", psStructure->pos.x / TILE_UNITS, psStructure->pos.y / TILE_UNITS,
@@ -5537,7 +5537,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		break;
 	default:
-		console(_("%s - Hitpoints %d/%d"), getName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
+		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		if (getDebugMappingStatus())
 		{
 			console("ID %u - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
@@ -5659,7 +5659,7 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 				if (psStructure->player == selectedPlayer)
 				{
 					console(_("%s - Electronically Damaged"),
-					        getName(psStructure->pStructureType));
+					        getStatsName(psStructure->pStructureType));
 				}
 				bCompleted = true;
 				//give the structure to the attacking player
@@ -5870,7 +5870,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_PROPULSION][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Factory Reward - Propulsion"), getName(&asPropulsionStats[comp]));
+			console("%s :- %s", _("Factory Reward - Propulsion"), getStatsName(&asPropulsionStats[comp]));
 		}
 		return;
 	}
@@ -5892,7 +5892,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_BODY][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Factory Reward - Body"), getName(&asBodyStats[comp]));
+			console("%s :- %s", _("Factory Reward - Body"), getStatsName(&asBodyStats[comp]));
 		}
 		return;
 	}
@@ -5914,7 +5914,7 @@ void factoryReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_WEAPON][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Factory Reward - Weapon"), getName(&asWeaponStats[comp]));
+			console("%s :- %s", _("Factory Reward - Weapon"), getStatsName(&asWeaponStats[comp]));
 		}
 		return;
 	}
@@ -5949,7 +5949,7 @@ void repairFacilityReward(UBYTE losingPlayer, UBYTE rewardPlayer)
 		apCompLists[rewardPlayer][COMP_REPAIRUNIT][comp] = AVAILABLE;
 		if (rewardPlayer == selectedPlayer)
 		{
-			console("%s :- %s", _("Repair Facility Award - Repair"), getName(&asRepairStats[comp]));
+			console("%s :- %s", _("Repair Facility Award - Repair"), getStatsName(&asRepairStats[comp]));
 		}
 		return;
 	}

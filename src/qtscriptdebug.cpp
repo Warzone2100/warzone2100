@@ -616,7 +616,7 @@ static QString arrayToString(const T *array, int length)
 QStandardItemList componentToString(const QString &name, const COMPONENT_STATS *psStats, int player)
 {
 	QStandardItem *key = new QStandardItem(name);
-	QStandardItem *value = new QStandardItem(getName(psStats));
+	QStandardItem *value = new QStandardItem(getStatsName(psStats));
 	key->appendRow(QStandardItemList{ new QStandardItem("^Id"), new QStandardItem(QString::fromUtf8(psStats->id.toUtf8().c_str())) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Power"), new QStandardItem(QString::number(psStats->buildPower)) });
 	key->appendRow(QStandardItemList{ new QStandardItem("^Build Points"), new QStandardItem(QString::number(psStats->buildPoints)) });

@@ -1232,7 +1232,7 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
 				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player,
-				      objInfo(psStruct), psStruct->id, getName(cur));
+				      objInfo(psStruct), psStruct->id, getStatsName(cur));
 				return true;
 			}
 		}
@@ -1252,7 +1252,7 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 			cur = reslist.front(); // retrieve options from the stack
 			reslist.pop_front();
 		}
-		ASSERT_OR_RETURN(false, ++iterations < asResearch.size() * 100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", getName(cur));
+		ASSERT_OR_RETURN(false, ++iterations < asResearch.size() * 100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", getStatsName(cur));
 	}
 	debug(LOG_SCRIPT, "No research topic found for %s(%d)", objInfo(psStruct), psStruct->id);
 	return false; // none found
@@ -1541,7 +1541,7 @@ endstructloc:
 	}
 	else
 	{
-		debug(LOG_SCRIPT, "Did not find valid positioning for %s", getName(psStat));
+		debug(LOG_SCRIPT, "Did not find valid positioning for %s", getStatsName(psStat));
 	}
 	return {};
 }
@@ -1745,24 +1745,24 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 	{
 		SCRIPT_ASSERT(false, context, validTemplateForFactory(psTemplate, psStruct, true),
 		              "Invalid template %s for factory %s",
-		              getName(psTemplate), getName(psStruct->pStructureType));
+		              getStatsName(psTemplate), getStatsName(psStruct->pStructureType));
 		// Delete similar template from existing list before adding this one
 		for (auto t : apsTemplateList)
 		{
 			if (t->name.compare(psTemplate->name) == 0)
 			{
-				debug(LOG_SCRIPT, "deleting %s for player %d", getName(t), player);
+				debug(LOG_SCRIPT, "deleting %s for player %d", getStatsName(t), player);
 				deleteTemplateFromProduction(t, player, ModeQueue); // duplicate? done below?
 				break;
 			}
 		}
 		// Add to list
-		debug(LOG_SCRIPT, "adding template %s for player %d", getName(psTemplate), player);
+		debug(LOG_SCRIPT, "adding template %s for player %d", getStatsName(psTemplate), player);
 		psTemplate->multiPlayerID = generateNewObjectId();
 		addTemplate(player, psTemplate);
 		if (!structSetManufacture(psStruct, psTemplate, ModeQueue))
 		{
-			debug(LOG_ERROR, "Could not produce template %s in %s", getName(psTemplate), objInfo(psStruct));
+			debug(LOG_ERROR, "Could not produce template %s in %s", getStatsName(psTemplate), objInfo(psStruct));
 			return false;
 		}
 	}
@@ -2028,7 +2028,7 @@ std::unique_ptr<const DROID> wzapi::getDroidProduction(WZAPI_PARAMS(const STRUCT
 	psDroid->pos = psStruct->pos;
 	psDroid->rot = psStruct->rot;
 	psDroid->experience = 0;
-	droidSetName(psDroid, getName(psTemp));
+	droidSetName(psDroid, getStatsName(psTemp));
 	droidSetBits(psTemp, psDroid);
 	psDroid->weight = calcDroidWeight(psTemp);
 	psDroid->baseSpeed = calcDroidBaseSpeed(psTemp, psDroid->weight, player);

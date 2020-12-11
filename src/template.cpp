@@ -81,7 +81,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 	bool researchedEverything = resBody && resBrain && resProp && resSensor && resEcm && resRepair && resConstruct;
 	if (verbose && !researchedEverything)
 	{
-		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", getName(psCurr),
+		debug(LOG_ERROR, "%s : not researched : body=%d brai=%d prop=%d sensor=%d ecm=%d rep=%d con=%d", getStatsName(psCurr),
 		      (int)resBody, (int)resBrain, (int)resProp, (int)resSensor, (int)resEcm, (int)resRepair, (int)resConstruct);
 	}
 	for (int weapIndex = 0; weapIndex < psCurr->numWeaps && researchedEverything; ++weapIndex)
@@ -89,7 +89,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 		researchedEverything = researchedWeap(psCurr, player, weapIndex, allowRedundant);
 		if (!researchedEverything && verbose)
 		{
-			debug(LOG_ERROR, "%s : not researched weapon %u", getName(psCurr), weapIndex);
+			debug(LOG_ERROR, "%s : not researched weapon %u", getStatsName(psCurr), weapIndex);
 		}
 	}
 	return researchedEverything;
@@ -454,13 +454,13 @@ bool loadDroidTemplates(const char *filename)
 					DROID_TEMPLATE *psCurr = &*it;
 					if (psCurr->multiPlayerID == design.multiPlayerID)
 					{
-						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getName(&design), i);
+						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getStatsName(&design), i);
 						break;
 					}
 				}
 				if (it == localTemplates.end())
 				{
-					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getName(&design), i);
+					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getStatsName(&design), i);
 					localTemplates.push_back(design);
 				}
 			}
@@ -471,7 +471,7 @@ bool loadDroidTemplates(const char *filename)
 			}
 		}
 		debug(LOG_NEVER, "Droid template found, Name: %s, MP ID: %d, ref: %u, ID: %s, prefab: %s, type:%d (loading)",
-		      getName(&design), design.multiPlayerID, design.ref, getID(&design), design.prefab ? "yes" : "no", design.droidType);
+		      getStatsName(&design), design.multiPlayerID, design.ref, getID(&design), design.prefab ? "yes" : "no", design.droidType);
 	}
 
 	return true;
@@ -630,7 +630,7 @@ void listTemplates()
 	for (auto &keyvaluepair : droidTemplates[selectedPlayer])
 	{
 		DROID_TEMPLATE *t = keyvaluepair.second;
-		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
+		debug(LOG_INFO, "template %s : %ld : %s : %s : %s", getStatsName(t), (long)t->multiPlayerID, t->enabled ? "Enabled" : "Disabled", t->stored ? "Stored" : "Temporal", t->prefab ? "Prefab" : "Designed");
 	}
 }
 

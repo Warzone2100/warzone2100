@@ -1500,7 +1500,7 @@ DROID *reallyBuildDroid(DROID_TEMPLATE *pTemplate, Position pos, UDWORD player, 
 	ASSERT(!bMultiPlayer || worldOnMap(pos.x, pos.y), "the build locations are not on the map");
 
 	DROID *psDroid = new DROID(generateSynchronisedObjectId(), player);
-	droidSetName(psDroid, getName(pTemplate));
+	droidSetName(psDroid, getStatsName(pTemplate));
 
 	// Set the droids type
 	psDroid->droidType = droidTemplateType(pTemplate);  // Is set again later to the same thing, in droidSetBits.
