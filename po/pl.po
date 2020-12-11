@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-05 06:14\n"
+"PO-Revision-Date: 2020-12-11 17:46\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -4044,11 +4044,11 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Przenieś wszystkie jednostki do doliny"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Zniszcz silosy rakietowe"
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
@@ -4076,7 +4076,7 @@ msgstr "Wróć do SL"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Zniszcz wszystkie wrogie jednostki i budynki"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
@@ -4088,11 +4088,11 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Pozostałe jednostki wroga"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:497
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Pozostałe struktury wroga"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:503
 msgid "Return to LZ required"
@@ -5667,7 +5667,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
-msgstr ""
+msgstr "Jak chcesz, szefie!"
 
 #: data/mp/multiplay/skirmish/rules.js:29
 #: src/multiint.cpp:1411
@@ -5748,7 +5748,8 @@ msgstr ""
 #: lib/netplay/netplay.cpp:1122
 msgid "You must manually configure your router & firewall to\n"
 " open port 2100 before you can host a game."
-msgstr ""
+msgstr "Musisz ręcznie skonfigurować router i zaporę aby\n"
+" otworzyć port 2100 zanim będziesz mógł hostować grę."
 
 #: lib/netplay/netplay.cpp:1132
 #, c-format
