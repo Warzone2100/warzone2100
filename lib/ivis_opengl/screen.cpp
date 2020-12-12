@@ -26,6 +26,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
+#include "lib/framework/wztime.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 #include "lib/ivis_opengl/png_util.h"
 #include "lib/ivis_opengl/tex.h"
@@ -177,13 +178,13 @@ void wzPerfFrame()
 
 	// Make a screenshot to document sample content
 	time_t aclock;
-	struct tm *t;
+	struct tm t;
 
 	time(&aclock);           /* Get time in seconds */
-	t = localtime(&aclock);  /* Convert time to struct */
+	t = getLocalTime(aclock);  /* Convert time to struct */
 
 	ssprintf(screendump_filename, "screenshots/wz2100-perf-sample-%02d-%04d%02d%02d_%02d%02d%02d.png", perfList.size() - 1,
-	         t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
+	         t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
 	screendump_required = true;
 	gfx_api::context::get().debugStringMarker("Performance sample complete");
 }
@@ -562,16 +563,16 @@ void screenDumpToDisk(const char *path, const char *level)
 {
 	unsigned int screendump_num = 0;
 	time_t aclock;
-	struct tm *t;
+	struct tm t;
 
 	time(&aclock);           /* Get time in seconds */
-	t = localtime(&aclock);  /* Convert time to struct */
+	t = getLocalTime(aclock);  /* Convert time to struct */
 
-	ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level);
+	ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s.png", path, t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, level);
 
 	while (PHYSFS_exists(screendump_filename))
 	{
-		ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, level, ++screendump_num);
+		ssprintf(screendump_filename, "%swz2100-%04d%02d%02d_%02d%02d%02d-%s-%d.png", path, t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, level, ++screendump_num);
 	}
 	screendump_required = true;
 }

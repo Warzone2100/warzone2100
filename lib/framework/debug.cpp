@@ -25,6 +25,7 @@
  */
 
 #include "frame.h"
+#include "wztime.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -525,11 +526,7 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		char ourtime[15];		//HH:MM:SS
 
 		time(&rawtime);
-#if defined(WZ_OS_WIN)
-		localtime_s(&timeinfo, &rawtime);
-#else
-		localtime_r(&rawtime, &timeinfo);
-#endif
+		timeinfo = getLocalTime(rawtime);
 		strftime(ourtime, 15, "%H:%M:%S", &timeinfo);
 
 		// Assemble the outputBuffer:
