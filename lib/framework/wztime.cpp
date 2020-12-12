@@ -77,16 +77,25 @@ tm getLocalTime(std::time_t const &timer)
 	return result.value();
 }
 
-std::string const formatLocalDateTime(char const *format, std::time_t const &timer)
+static std::string const formatLocalDateTime_Internal(char const *format, tm const &tmVal, optional<std::locale> locale = nullopt)
 {
 	std::stringstream ss;
-	auto timeinfo = getLocalTimeOpt(timer);
-	ASSERT_OR_RETURN("", timeinfo.has_value(), "getLocalTime failed");
-	ss << std::put_time(&(timeinfo.value()), format);
+	if (locale.has_value())
+	{
+		ss.imbue(locale.value());
+	}
+	ss << std::put_time(&tmVal, format);
 	return ss.str();
+}
+
+std::string const formatLocalDateTime(char const *format, std::time_t const &timer)
+{
+	auto timeinfo = getLocalTime(timer);
+	return formatLocalDateTime_Internal(format, timeinfo);
 }
 
 std::string const formatLocalDateTime(char const *format)
 {
-	return formatLocalDateTime(format, std::time(nullptr));
+	auto timeinfo = getLocalTime(std::time(nullptr));
+	return formatLocalDateTime_Internal(format, timeinfo);
 }
