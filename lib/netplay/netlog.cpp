@@ -24,6 +24,7 @@
 #include <time.h>
 #include <physfs.h>
 #include "lib/framework/physfs_ext.h"
+#include "lib/framework/wztime.h"
 
 #include "netlog.h"
 #include "netplay.h"
@@ -41,7 +42,6 @@ static uint32_t		packetsize[2][NUM_GAME_PACKETS];
 bool NETstartLogging(void)
 {
 	time_t aclock;
-	struct tm *newtime;
 	char buf[256];
 	static char filename[256] = {'\0'};
 	int i;
@@ -55,9 +55,9 @@ bool NETstartLogging(void)
 	}
 
 	time(&aclock);                   /* Get time in seconds */
-	newtime = localtime(&aclock);    /* Convert time to struct */
+	auto newtime = getLocalTime(aclock);    /* Convert time to struct */
 
-	snprintf(filename, sizeof(filename), "logs/netplay-%04d%02d%02d_%02d%02d%02d.log", newtime->tm_year + 1900, newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec);
+	snprintf(filename, sizeof(filename), "logs/netplay-%04d%02d%02d_%02d%02d%02d.log", newtime.tm_year + 1900, newtime.tm_mon + 1, newtime.tm_mday, newtime.tm_hour, newtime.tm_min, newtime.tm_sec);
 	pFileHandle = PHYSFS_openWrite(filename);   // open the file
 	if (!pFileHandle)
 	{
@@ -65,7 +65,7 @@ bool NETstartLogging(void)
 		      WZ_PHYSFS_getLastError());
 		return false;
 	}
-	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(newtime));
+	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(&newtime));
 	WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
 	return true;
 }
@@ -156,7 +156,6 @@ bool NETlogEntry(const char *str, UDWORD a, UDWORD b)
 	static UDWORD lastframe = 0;
 	UDWORD frame = frameGetFrameNumber();
 	time_t aclock;
-	struct tm *newtime;
 	char buf[256];
 
 	if (!pFileHandle)
@@ -165,13 +164,15 @@ bool NETlogEntry(const char *str, UDWORD a, UDWORD b)
 	}
 
 	time(&aclock);					/* Get time in seconds */
-	newtime = localtime(&aclock);		/* Convert time to struct */
+	auto newtime_result = getLocalTimeOpt(aclock);		/* Convert time to struct */
 
-	if (!newtime || !pFileHandle)
+	if (!newtime_result.has_value() || !pFileHandle)
 	{
 		debug(LOG_ERROR, "Fatal error averted in NETlog");
 		return false;
 	}
+
+	struct tm newtime = newtime_result.value();
 
 	// check to see if a new frame.
 	if (frame != lastframe)
@@ -185,15 +186,15 @@ bool NETlogEntry(const char *str, UDWORD a, UDWORD b)
 	if (a < NUM_GAME_PACKETS)
 		// replace common msgs with txt descriptions
 	{
-		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, messageTypeToString(a), b, asctime(newtime));
+		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, messageTypeToString(a), b, asctime(&newtime));
 	}
 	else if (a == SYNC_FLAG)
 	{
-		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, asctime(newtime));
+		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, asctime(&newtime));
 	}
 	else
 	{
-		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(newtime));
+		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(&newtime));
 	}
 
 	if (a == NET_PLAYER_LEAVING || a == NET_PLAYER_DROPPED)

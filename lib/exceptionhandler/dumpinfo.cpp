@@ -33,6 +33,7 @@
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/wzapp.h"
 #include "lib/framework/i18n.h" // required to print build date in ISO 8601
+#include "lib/framework/wztime.h"
 
 #if defined(WZ_OS_UNIX)
 # include <sys/utsname.h>
@@ -554,9 +555,9 @@ void addDumpInfo(const char *inbuffer)
 	char ourtime[sizeof("HH:MM:SS")];
 
 	const time_t curtime = time(nullptr);
-	struct tm *const timeinfo = localtime(&curtime);
+	struct tm timeinfo = getLocalTime(curtime);
 
-	strftime(ourtime, sizeof(ourtime), "%H:%M:%S", timeinfo);
+	strftime(ourtime, sizeof(ourtime), "%H:%M:%S", &timeinfo);
 
 	// add timestamp to all strings
 	std::ostringstream os;

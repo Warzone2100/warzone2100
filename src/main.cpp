@@ -43,6 +43,7 @@
 #include "lib/framework/input.h"
 #include "lib/framework/physfs_ext.h"
 #include "lib/framework/wzpaths.h"
+#include "lib/framework/wztime.h"
 #include "lib/exceptionhandler/exceptionhandler.h"
 #include "lib/exceptionhandler/dumpinfo.h"
 
@@ -1392,15 +1393,15 @@ int realmain(int argc, char *argv[])
 		// there was no custom debug file specified  (--debug-file=blah)
 		// so we use our write directory to store our logs.
 		time_t aclock;
-		struct tm *newtime;
+		struct tm newtime;
 		char buf[PATH_MAX];
 
 		time(&aclock);					// Get time in seconds
-		newtime = localtime(&aclock);		// Convert time to struct
+		newtime = getLocalTime(aclock);		// Convert time to struct
 		// Note: We are using fopen(), and not physfs routines to open the file
 		// log name is logs/(or \)WZlog-MMDD_HHMMSS.txt
 		snprintf(buf, sizeof(buf), "%slogs%sWZlog-%02d%02d_%02d%02d%02d.txt", PHYSFS_getWriteDir(), PHYSFS_getDirSeparator(),
-		         newtime->tm_mon + 1, newtime->tm_mday, newtime->tm_hour, newtime->tm_min, newtime->tm_sec);
+		         newtime.tm_mon + 1, newtime.tm_mday, newtime.tm_hour, newtime.tm_min, newtime.tm_sec);
 		WzString debug_filename = buf;
 		debug_register_callback(debug_callback_file, debug_callback_file_init, debug_callback_file_exit, &debug_filename); // note: by the time this function returns, all use of debug_filename has completed
 

@@ -33,6 +33,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/framework/stdio_ext.h"
+#include "lib/framework/wztime.h"
 #include "lib/widget/button.h"
 #include "lib/widget/editbox.h"
 #include "lib/widget/widget.h"
@@ -392,7 +393,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		{
 			/* Set the button-text and tip text (the save time) into static storage */
 			sstrcpy(sSlotCaps[slotCount], saveGameNameAndTime.name.c_str());
-			strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", localtime(& (saveGameNameAndTime.savetime)));
+			auto newtime = getLocalTime(saveGameNameAndTime.savetime);
+			strftime(sSlotTips[slotCount], sizeof(sSlotTips[slotCount]), "%F %H:%M:%S", &newtime);
 
 			/* Add a button that references the static strings */
 			W_BUTTON* button = (W_BUTTON*)widgGetFromID(psRequestScreen, LOADENTRY_START + slotCount);
@@ -907,9 +909,9 @@ bool autoSave()
 	freeAutoSaveSlot(dir);
 
 	time_t now = time(nullptr);
-	struct tm *timeinfo = localtime(&now);
+	struct tm timeinfo = getLocalTime(now);
 	char savedate[PATH_MAX];
-	strftime(savedate, sizeof(savedate), "%F_%H%M%S", timeinfo);
+	strftime(savedate, sizeof(savedate), "%F_%H%M%S", &timeinfo);
 
 	std::string withoutTechlevel = mapNameWithoutTechlevel(getLevelName());
 	char savefile[PATH_MAX];
