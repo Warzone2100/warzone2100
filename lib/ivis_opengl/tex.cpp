@@ -223,7 +223,7 @@ bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
 	int output_w = static_cast<int>(s->width * scalingRatio);
 	int output_h = static_cast<int>(s->height * scalingRatio);
 
-	unsigned char *output_pixels = (unsigned char *)malloc(output_w * output_h * s->depth);
+	unsigned char *output_pixels = (unsigned char *)malloc(static_cast<size_t>(output_w) * static_cast<size_t>(output_h) * s->depth);
 	stbir_resize_uint8(s->bmp, s->width, s->height, 0,
 					   output_pixels, output_w, output_h, 0,
 					   s->depth);

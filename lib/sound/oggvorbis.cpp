@@ -289,7 +289,7 @@ soundDataBuffer *sound_DecodeOggVorbis(struct OggVorbisDecoderState *decoder, si
 
 		if (((bufferSize == 0) || (bufferSize > sizeEstimate)) && (sizeEstimate != 0))
 		{
-			bufferSize = (sampleCount - getCurrentSample(decoder)) * decoder->VorbisInfo->channels * 2;
+			bufferSize = static_cast<size_t>(sampleCount - getCurrentSample(decoder)) * static_cast<size_t>(decoder->VorbisInfo->channels) * 2;
 		}
 	}
 

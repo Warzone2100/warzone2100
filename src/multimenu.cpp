@@ -342,8 +342,8 @@ static int stringRelevance(std::string const &string, std::string const &search)
 {
 	WzString str = WzString::fromUtf8(string).normalized(WzString::NormalizationForm_KD);
 	WzString sea = WzString::fromUtf8(search).normalized(WzString::NormalizationForm_KD);
-	int strDim = str.size() + 1;
-	int seaDim = sea.size() + 1;
+	size_t strDim = static_cast<size_t>(str.size()) + 1;
+	size_t seaDim = static_cast<size_t>(sea.size()) + 1;
 
 	if (strDim > 10000 || seaDim > 10000 || strDim * seaDim > 100000)
 	{
