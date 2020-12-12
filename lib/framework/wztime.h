@@ -23,8 +23,12 @@
 #include <ctime>
 #include <time.h>
 #include <string>
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 tm getUtcTime(std::time_t const &timer);
+optional<tm> getLocalTimeOpt(std::time_t const &timer);
 
 /**
  * Examples of formats:

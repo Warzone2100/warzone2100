@@ -43,7 +43,7 @@
 #include "loadsave.h"
 #include "multiplay.h"
 #include "mission.h"
-#include "wztime.h"
+#include "lib/framework/wztime.h"
 #include "titleui/titleui.h"
 #include "titleui/multiplayer.h"
 
