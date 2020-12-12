@@ -963,12 +963,14 @@ static bool afterMapLoad()
 	scrollMaxY = mapHeight;
 
 	/* Allocate aux maps */
-	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
-	psBlockMap[AUX_ASTARMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
-	psBlockMap[AUX_DANGERMAP] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psBlockMap[0]));
+	ASSERT(mapWidth >= 0 && mapHeight >= 0, "Invalid mapWidth or mapHeight (%d x %d)", mapWidth, mapHeight);
+	const size_t mapSize = static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight);
+	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapSize * sizeof(*psBlockMap[0]));
+	psBlockMap[AUX_ASTARMAP] = (uint8_t *)malloc(mapSize * sizeof(*psBlockMap[0]));
+	psBlockMap[AUX_DANGERMAP] = (uint8_t *)malloc(mapSize * sizeof(*psBlockMap[0]));
 	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
-		psAuxMap[x] = (uint8_t *)malloc(mapWidth * mapHeight * sizeof(*psAuxMap[0]));
+		psAuxMap[x] = (uint8_t *)malloc(mapSize * sizeof(*psAuxMap[0]));
 	}
 
 	// Set our blocking bits
