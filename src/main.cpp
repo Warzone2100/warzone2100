@@ -95,6 +95,7 @@
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
+# include <time.h>
 #endif
 
 #if defined(WZ_OS_MAC)
@@ -1283,6 +1284,9 @@ void osSpecificFirstChanceProcessSetup()
 	sa.sa_handler = SIG_IGN;
 	sa.sa_flags = 0;
 	ignoredSIGPIPE = sigaction(SIGPIPE, &sa, 0) == 0;
+
+	// Initialize time conversion information
+	tzset();
 #else
 	// currently, no-op
 #endif
