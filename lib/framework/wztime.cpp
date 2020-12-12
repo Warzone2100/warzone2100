@@ -99,3 +99,8 @@ std::string const formatLocalDateTime(char const *format)
 	auto timeinfo = getLocalTime(std::time(nullptr));
 	return formatLocalDateTime_Internal(format, timeinfo);
 }
+
+std::string const getAscTime(tm const &tmVal)
+{
+	return formatLocalDateTime_Internal("%c", tmVal, std::locale::classic());
+}
