@@ -249,12 +249,45 @@ void recvMultiStats(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Load Player Stats
+
+static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, bool skipLoadingIdentity = false)
+{
+	char *pFileData = nullptr;
+	UDWORD size = 0;
+
+	if (loadFile(fileName.c_str(), &pFileData, &size))
+	{
+		if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
+		{
+			free(pFileData);
+			pFileData = nullptr;
+			return false; // wrong version or not a stats file
+		}
+
+		char identity[1001];
+		identity[0] = '\0';
+		if (!skipLoadingIdentity)
+		{
+			sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n%1000[A-Za-z0-9+/=]",
+			   &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played, identity);
+		}
+		else
+		{
+			sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n",
+				   &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
+		}
+		free(pFileData);
+		if (identity[0] != '\0')
+		{
+			st->identity.fromBytes(base64Decode(identity), EcKey::Private);
+		}
+	}
+
+	return true;
+}
+
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 {
-	char				fileName[255];
-	UDWORD				size;
-	char				*pFileData;
-
 	*st = PLAYERSTATS();  // clear in case we don't get to load
 
 	// Prevent an empty player name (where the first byte is a 0x0 terminating char already)
@@ -263,30 +296,27 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 		strcpy(sPlayerName, _("Player"));
 	}
 
-	snprintf(fileName, sizeof(fileName), "%s%s.sta2", MultiPlayersPath, sPlayerName);
+	std::string fileName = std::string(MultiPlayersPath) + sPlayerName + ".sta2";
 
-	debug(LOG_WZ, "loadMultiStats: %s", fileName);
+	debug(LOG_WZ, "loadMultiStats: %s", fileName.c_str());
 
-	// check player already exists
-	if (PHYSFS_exists(fileName))
+	// check player .sta2 already exists
+	if (PHYSFS_exists(fileName.c_str()))
 	{
-		if (loadFile(fileName, &pFileData, &size))
+		if (!loadMultiStatsFile(fileName, st))
 		{
-			if (strncmp(pFileData, "WZ.STA.v3", 9) != 0)
+			return false;
+		}
+	}
+	else
+	{
+		// one-time porting of old .sta player files to .sta2
+		fileName = std::string(MultiPlayersPath) + sPlayerName + ".sta";
+		if (PHYSFS_exists(fileName.c_str()))
+		{
+			if (!loadMultiStatsFile(fileName, st, true))
 			{
-				free(pFileData);
-				pFileData = nullptr;
-				return false; // wrong version or not a stats file
-			}
-
-			char identity[1001];
-			identity[0] = '\0';
-			sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n%1000[A-Za-z0-9+/=]",
-				   &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played, identity);
-			free(pFileData);
-			if (identity[0] != '\0')
-			{
-				st->identity.fromBytes(base64Decode(identity), EcKey::Private);
+				return false;
 			}
 		}
 	}
@@ -302,7 +332,7 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	st->recentScore = 0;
 
 	// clear any skirmish stats.
-	for (size = 0; size < MAX_PLAYERS; size++)
+	for (size_t size = 0; size < MAX_PLAYERS; size++)
 	{
 		ingame.skScores[size][0] = 0;
 		ingame.skScores[size][1] = 0;
@@ -320,14 +350,13 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 	    return false;
 	}
 	char buffer[1000];
-	char fileName[255] = "";
 
 	ssprintf(buffer, "WZ.STA.v3\n%u %u %u %u %u\n%s\n",
 	         st->wins, st->losses, st->totalKills, st->totalScore, st->played, base64Encode(st->identity.toBytes(EcKey::Private)).c_str());
 
-	snprintf(fileName, sizeof(fileName), "%s%s.sta2", MultiPlayersPath, sFileName);
+	std::string fileName = std::string(MultiPlayersPath) + sFileName + ".sta2";
 
-	saveFile(fileName, buffer, strlen(buffer));
+	saveFile(fileName.c_str(), buffer, strlen(buffer));
 
 	return true;
 }
