@@ -39,4 +39,6 @@ tm getLocalTime(std::time_t const &timer);
 std::string const formatLocalDateTime(char const *format, std::time_t const &timer);
 std::string const formatLocalDateTime(char const *format);
 
+std::string const getAscTime(tm const &tmVal);
+
 #endif // __INCLUDED_SRC_WZTIME_H__
