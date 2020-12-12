@@ -98,7 +98,7 @@ function truckDefense()
 			"NX-Tower-ATMiss", "Sys-NX-CBTower"
 		];
 
-		for (var i = 0; i < truckNum * 2; ++i)
+		for (var i = 0; i < truckNum; ++i)
 		{
 			camQueueBuilding(NEXUS, list[camRand(list.length)]);
 		}
@@ -133,7 +133,6 @@ function eventStartLevel()
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 	setupNexusPatrols();
 	camManageTrucks(NEXUS);
-	truckDefense();
 
 	camSetArtifacts({
 		"NX-NWCyborgFactory": { tech: "R-Wpn-RailGun03" },
@@ -330,5 +329,5 @@ function eventStartLevel()
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
 	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(10)));
-	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(5)));
+	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(15)));
 }
