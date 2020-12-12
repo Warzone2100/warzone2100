@@ -94,8 +94,8 @@ static gfx_api::texture* lightmap_tex_num = nullptr;
 /// When are we going to update the lightmap next?
 static unsigned int lightmapLastUpdate;
 /// How big is the lightmap?
-static int lightmapWidth;
-static int lightmapHeight;
+static size_t lightmapWidth;
+static size_t lightmapHeight;
 /// Lightmap image
 static gfx_api::gfxUByte *lightmapPixmap;
 /// Ticks per lightmap refresh
@@ -932,7 +932,7 @@ bool initTerrain()
 	while (mapWidth > (lightmapWidth <<= 1)) {}
 	while (mapHeight > (lightmapHeight <<= 1)) {}
 	debug(LOG_TERRAIN, "the size of the map is %ix%i", mapWidth, mapHeight);
-	debug(LOG_TERRAIN, "lightmap texture size is %ix%i", lightmapWidth, lightmapHeight);
+	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
 	// Prepare the lightmap pixmap and texture
 	lightmapPixmap = (gfx_api::gfxUByte *)calloc(lightmapWidth * lightmapHeight, 3 * sizeof(gfx_api::gfxUByte));
@@ -1231,8 +1231,8 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
  */
 void drawTerrain(const glm::mat4 &mvp)
 {
-	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / lightmapWidth), 0, 0, 0);
-	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / lightmapHeight), 0);
+	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
+	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
 
 	///////////////////////////////////
 	// set up the lightmap texture
@@ -1251,7 +1251,7 @@ void drawTerrain(const glm::mat4 &mvp)
 	cullTerrain();
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
-	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / lightmapWidth / 2, 1.f / lightmapHeight / 2, 0.f));
+	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
 
 	//////////////////////////////////////
 	// canvas to draw on
