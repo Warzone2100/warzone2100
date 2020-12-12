@@ -257,20 +257,6 @@ private:
 	ParagraphTextStyle textStyle;
 };
 
-/**
- * Provide information about an element appended to the paragraph.
- **/
-struct ParagraphElement
-{
-	virtual ~ParagraphElement() = default;
-
-	virtual void appendTo(FlowLayout &layout) = 0;
-	virtual WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) = 0;
-	virtual void destroyFragments(Paragraph &paragraph) = 0;
-	virtual bool isLayoutDirty() const = 0;
-	virtual int32_t getAboveBase() const = 0;
-};
-
 class FlowLayoutStringDescriptor : public FlowLayoutElementDescriptor
 {
     WzString text;
@@ -320,9 +306,9 @@ struct ParagraphTextElement: public ParagraphElement
 		layout.append(FlowLayoutStringDescriptor(text, style.font));
 	}
 
-	WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
+	std::shared_ptr<WIDGET> createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
 	{
-		auto widget = new ParagraphTextWidget(text.substr(fragment.begin, fragment.length).toUtf8(), style);
+		auto widget = std::shared_ptr<ParagraphTextWidget>(new ParagraphTextWidget(text.substr(fragment.begin, fragment.length).toUtf8(), style));
 		paragraph.attach(widget);
 		fragments.push_back(widget);
 		return widget;
@@ -338,7 +324,6 @@ struct ParagraphTextElement: public ParagraphElement
 		for (auto fragment: fragments)
 		{
 			paragraph.detach(fragment);
-			delete fragment;
 		}
 
 		fragments.clear();
@@ -352,12 +337,12 @@ struct ParagraphTextElement: public ParagraphElement
 private:
 	WzString text;
 	ParagraphTextStyle style;
-	std::vector<WIDGET *> fragments;
+	std::vector<std::shared_ptr<WIDGET>> fragments;
 };
 
 struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescriptor
 {
-	ParagraphWidgetElement(WIDGET *widget, int32_t aboveBase): widget(widget), aboveBase(aboveBase)
+	ParagraphWidgetElement(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase): widget(widget), aboveBase(aboveBase)
 	{
 	}
 
@@ -386,7 +371,7 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 		layout.append(*this);
 	}
 
-	WIDGET *createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
+	std::shared_ptr<WIDGET> createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
 	{
 		layoutWidth = widget->width();
 		layoutHeight = widget->height();
@@ -408,7 +393,7 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 	}
 
 private:
-	WIDGET *widget;
+	std::shared_ptr<WIDGET> widget;
 	uint32_t layoutWidth = 0;
 	uint32_t layoutHeight = 0;
 	int32_t aboveBase;
@@ -459,7 +444,7 @@ void Paragraph::updateLayout()
 			aboveBase = std::max(aboveBase, fragmentAboveBase);
 			belowBase = std::max(belowBase, fragment->height() - fragmentAboveBase);
 			fragment->setGeometry(fragmentDescriptor.offset, nextLineOffset - fragmentAboveBase, fragment->width(), fragment->height());
-			lineFragments.push_back(fragment);
+			lineFragments.push_back(fragment.get());
 		}
 
 		for (auto fragment: lineFragments)
@@ -492,7 +477,7 @@ void Paragraph::addText(std::string const &text)
 	elements.push_back(std::unique_ptr<ParagraphTextElement>(new ParagraphTextElement(text, textStyle)));
 }
 
-void Paragraph::addWidget(WIDGET *widget, int32_t aboveBase)
+void Paragraph::addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase)
 {
 	layoutDirty = true;
 	attach(widget);

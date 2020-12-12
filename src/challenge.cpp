@@ -196,11 +196,12 @@ bool addChallenges()
 
 	psRequestScreen = W_SCREEN::make(); // init the screen
 
-	WIDGET *parent = psRequestScreen->psForm;
+	WIDGET *parent = psRequestScreen->psForm.get();
 
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *challengeForm = new IntFormAnimated(parent);
+	auto challengeForm = std::make_shared<IntFormAnimated>();
 	challengeForm->id = CHALLENGE_FORM;
+	parent->attach(challengeForm);
 	challengeForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(CHALLENGE_X, CHALLENGE_Y, CHALLENGE_W, (slotsInColumn * CHALLENGE_ENTRY_H + CHALLENGE_HGAP * slotsInColumn) + CHALLENGE_BANNER_DEPTH + 20);
 	}));
@@ -378,7 +379,7 @@ bool closeChallenges()
 bool runChallenges()
 {
 	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
-	for (const auto trigger : triggers)
+	for (const auto &trigger : triggers)
 	{
 		unsigned id = trigger.widget->id;
 

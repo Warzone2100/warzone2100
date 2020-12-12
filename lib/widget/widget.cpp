@@ -51,7 +51,7 @@
 static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
-static WIDGET	*psMouseOverWidget = nullptr;
+static auto psMouseOverWidget = std::weak_ptr<WIDGET>();
 
 static WIDGET_AUDIOCALLBACK AudioCallback = nullptr;
 static SWORD HilightAudioID = -1;
@@ -110,17 +110,20 @@ void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	);
 }
 
+bool WIDGET::isMouseOverWidget() const
+{
+	return psMouseOverWidget.lock().get() == this;
+}
+
 bool isMouseOverScreenOverlayChild(int mx, int my)
 {
 	for (const auto& overlay : overlays)
 	{
-		W_FORM* psRoot = overlay.psScreen->psForm;
+		W_FORM* psRoot = overlay.psScreen->psForm.get();
 
 		// Hit-test all children of root form
-		for (WIDGET::Children::const_iterator i = psRoot->children().begin(); i != psRoot->children().end(); ++i)
+		for (const auto &psCurr: psRoot->children())
 		{
-			WIDGET *psCurr = *i;
-
 			if (!psCurr->visible() || !psCurr->hitTest(mx, my))
 			{
 				continue;  // Skip any hidden widgets, or widgets the click missed.
@@ -143,7 +146,7 @@ static void deleteOldWidgets()
 
 		ASSERT_OR_RETURN(, std::find(widgetDeletionQueue.begin(), widgetDeletionQueue.end(), guiltyWidget) == widgetDeletionQueue.end(), "Called deleteLater() twice on the same widget.");
 
-		delete guiltyWidget;
+		widgDelete(guiltyWidget);
 	}
 }
 
@@ -175,7 +178,6 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	, calcLayout(init->calcLayout)
 	, onDelete(init->onDelete)
 	, customHitTest(init->customHitTest)
-	, parentWidget(nullptr)
 	, dim(init->x, init->y, init->width, init->height)
 	, dirty(true)
 {
@@ -190,11 +192,6 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 	callCalcLayout();
 }
 
-WIDGET::WIDGET(WIDGET *parent, WIDGET_TYPE type): WIDGET(type)
-{
-	parent->attach(this);
-}
-
 WIDGET::WIDGET(WIDGET_TYPE type)
 	: id(0xFFFFEEEEu)
 	, type(type)
@@ -206,7 +203,6 @@ WIDGET::WIDGET(WIDGET_TYPE type)
 	, calcLayout(nullptr)
 	, onDelete(nullptr)
 	, customHitTest(nullptr)
-	, parentWidget(nullptr)
 	, dim(0, 0, 1, 1)
 	, dirty(true)
 {
@@ -220,16 +216,6 @@ WIDGET::~WIDGET()
 	}
 
 	tipStop(this);  // Stop showing tooltip, if we are.
-
-	if (parentWidget != nullptr)
-	{
-		parentWidget->detach(this);
-	}
-	for (unsigned n = 0; n < childWidgets.size(); ++n)
-	{
-		childWidgets[n]->parentWidget = nullptr;  // Detach in advance, slightly faster than detach(), and doesn't change our list.
-		delete childWidgets[n];
-	}
 }
 
 void WIDGET::deleteLater()
@@ -254,9 +240,8 @@ void WIDGET::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 	callCalcLayout();
 
 	// Then propagates the event to all children
-	for (Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	for (auto const &psCurr: childWidgets)
 	{
-		WIDGET *psCurr = *i;
 		psCurr->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	}
 }
@@ -295,23 +280,23 @@ void WIDGET::setCustomHitTest(const WIDGET_HITTEST_FUNC& newCustomHitTestFunc)
 	customHitTest = newCustomHitTestFunc;
 }
 
-void WIDGET::attach(WIDGET *widget)
+void WIDGET::attach(const std::shared_ptr<WIDGET> &widget)
 {
-	ASSERT_OR_RETURN(, widget != nullptr && widget->parentWidget == nullptr, "Bad attach.");
-	widget->parentWidget = this;
+	ASSERT_OR_RETURN(, widget != nullptr && widget->parentWidget.expired(), "Bad attach.");
+	widget->parentWidget = shared_from_this();
 	widget->setScreenPointer(screenPointer.lock());
 	childWidgets.push_back(widget);
 }
 
-void WIDGET::detach(WIDGET *widget)
+void WIDGET::detach(const std::shared_ptr<WIDGET> &widget)
 {
-	ASSERT_OR_RETURN(, widget != nullptr && widget->parentWidget != nullptr, "Bad detach.");
+	ASSERT_OR_RETURN(, widget != nullptr && !widget->parentWidget.expired(), "Bad detach.");
 
-	widget->parentWidget = nullptr;
+	widget->parentWidget.reset();
 	widget->setScreenPointer(nullptr);
 	childWidgets.erase(std::find(childWidgets.begin(), childWidgets.end(), widget));
 
-	widgetLost(widget);
+	widgetLost(widget.get());
 }
 
 void WIDGET::setScreenPointer(const std::shared_ptr<W_SCREEN> &screen)
@@ -321,35 +306,35 @@ void WIDGET::setScreenPointer(const std::shared_ptr<W_SCREEN> &screen)
 		return;
 	}
 
-	if (psMouseOverWidget == this)
+	if (isMouseOverWidget())
 	{
-		psMouseOverWidget = nullptr;
+		psMouseOverWidget.reset();
 	}
 
 	if (auto lockedScreen = screenPointer.lock())
 	{
-		if (lockedScreen->psFocus == this)
+		if (lockedScreen->hasFocus(*this))
 		{
-			lockedScreen->psFocus = nullptr;
+			lockedScreen->psFocus.reset();
 		}
-		if (lockedScreen->lastHighlight == this)
+		if (lockedScreen->isLastHighlight(*this))
 		{
-			lockedScreen->lastHighlight = nullptr;
+			lockedScreen->lastHighlight.reset();
 		}
 	}
 
 	screenPointer = screen;
-	for (Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	for (auto const &child: childWidgets)
 	{
-		(*i)->setScreenPointer(screen);
+		child->setScreenPointer(screen);
 	}
 }
 
 void WIDGET::widgetLost(WIDGET *widget)
 {
-	if (parentWidget != nullptr)
+	if (auto lockedParent = parentWidget.lock())
 	{
-		parentWidget->widgetLost(widget);  // We don't care about the lost widget, maybe the parent does. (Special code for W_TABFORM.)
+		lockedParent->widgetLost(widget);  // We don't care about the lost widget, maybe the parent does. (Special code for W_TABFORM.)
 	}
 }
 
@@ -363,13 +348,8 @@ void W_SCREEN::initialize()
 	sInit.width = screenWidth - 1;
 	sInit.height = screenHeight - 1;
 
-	psForm = new W_FORM(&sInit);
+	psForm = std::make_shared<W_FORM>(&sInit);
 	psForm->screenPointer = shared_from_this();
-}
-
-W_SCREEN::~W_SCREEN()
-{
-	delete psForm;
 }
 
 void W_SCREEN::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
@@ -388,9 +368,9 @@ static bool widgCheckIDForm(WIDGET *psForm, UDWORD id)
 	{
 		return true;
 	}
-	for (WIDGET::Children::const_iterator i = psForm->children().begin(); i != psForm->children().end(); ++i)
+	for (auto const &child: psForm->children())
 	{
-		if (widgCheckIDForm(*i, id))
+		if (widgCheckIDForm(child.get(), id))
 		{
 			return true;
 		}
@@ -398,17 +378,17 @@ static bool widgCheckIDForm(WIDGET *psForm, UDWORD id)
 	return false;
 }
 
-static bool widgAddWidget(const std::shared_ptr<W_SCREEN> &psScreen, W_INIT const *psInit, WIDGET *widget)
+static bool widgAddWidget(const std::shared_ptr<W_SCREEN> &psScreen, W_INIT const *psInit, const std::shared_ptr<WIDGET> &widget)
 {
 	ASSERT_OR_RETURN(false, widget != nullptr, "Invalid widget");
 	ASSERT_OR_RETURN(false, psScreen != nullptr, "Invalid screen pointer");
-	ASSERT_OR_RETURN(false, !widgCheckIDForm(psScreen->psForm, psInit->id), "ID number has already been used (%d)", psInit->id);
+	ASSERT_OR_RETURN(false, !widgCheckIDForm(psScreen->psForm.get(), psInit->id), "ID number has already been used (%d)", psInit->id);
 	// Find the form to add the widget to.
 	W_FORM *psParent;
 	if (psInit->formID == 0)
 	{
 		/* Add to the base form */
-		psParent = psScreen->psForm;
+		psParent = psScreen->psForm.get();
 	}
 	else
 	{
@@ -424,64 +404,86 @@ static bool widgAddWidget(const std::shared_ptr<W_SCREEN> &psScreen, W_INIT cons
 W_FORM *widgAddForm(const std::shared_ptr<W_SCREEN> &psScreen, const W_FORMINIT *psInit)
 {
 	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
-	W_FORM *psForm;
+	std::shared_ptr<W_FORM> psForm = nullptr;
 	if (psInit->style & WFORM_CLICKABLE)
 	{
-		psForm = new W_CLICKFORM(psInit);
+		psForm = std::make_shared<W_CLICKFORM>(psInit);
 	}
 	else
 	{
-		psForm = new W_FORM(psInit);
+		psForm = std::make_shared<W_FORM>(psInit);
 	}
 
-	return widgAddWidget(psScreen, psInit, psForm) ? psForm : nullptr;
+	return widgAddWidget(psScreen, psInit, psForm) ? psForm.get() : nullptr;
 }
 
 /* Add a label to the widget screen */
 W_LABEL *widgAddLabel(const std::shared_ptr<W_SCREEN> &psScreen, const W_LABINIT *psInit)
 {
 	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
-	W_LABEL *psLabel = new W_LABEL(psInit);
-	return widgAddWidget(psScreen, psInit, psLabel) ? psLabel : nullptr;
+	auto psLabel = std::make_shared<W_LABEL>(psInit);
+	return widgAddWidget(psScreen, psInit, psLabel) ? psLabel.get() : nullptr;
 }
 
 /* Add a button to the widget screen */
 W_BUTTON *widgAddButton(const std::shared_ptr<W_SCREEN> &psScreen, const W_BUTINIT *psInit)
 {
 	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
-	W_BUTTON *psButton = new W_BUTTON(psInit);
-	return widgAddWidget(psScreen, psInit, psButton) ? psButton : nullptr;
+	auto psButton = std::make_shared<W_BUTTON>(psInit);
+	return widgAddWidget(psScreen, psInit, psButton) ? psButton.get() : nullptr;
 }
 
 /* Add an edit box to the widget screen */
 W_EDITBOX *widgAddEditBox(const std::shared_ptr<W_SCREEN> &psScreen, const W_EDBINIT *psInit)
 {
 	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
-	W_EDITBOX *psEdBox = new W_EDITBOX(psInit);
-	return widgAddWidget(psScreen, psInit, psEdBox) ? psEdBox : nullptr;
+	auto psEdBox = std::make_shared<W_EDITBOX>(psInit);
+	return widgAddWidget(psScreen, psInit, psEdBox) ? psEdBox.get() : nullptr;
 }
 
 /* Add a bar graph to the widget screen */
 W_BARGRAPH *widgAddBarGraph(const std::shared_ptr<W_SCREEN> &psScreen, const W_BARINIT *psInit)
 {
 	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
-	W_BARGRAPH *psBarGraph = new W_BARGRAPH(psInit);
-	return widgAddWidget(psScreen, psInit, psBarGraph) ? psBarGraph : nullptr;
+	auto psBarGraph = std::make_shared<W_BARGRAPH>(psInit);
+	return widgAddWidget(psScreen, psInit, psBarGraph) ? psBarGraph.get() : nullptr;
 }
 
 /* Add a slider to a form */
 W_SLIDER *widgAddSlider(const std::shared_ptr<W_SCREEN> &psScreen, const W_SLDINIT *psInit)
 {
 	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
-	W_SLIDER *psSlider = new W_SLIDER(psInit);
-	return widgAddWidget(psScreen, psInit, psSlider) ? psSlider : nullptr;
+	auto psSlider = std::make_shared<W_SLIDER>(psInit);
+	return widgAddWidget(psScreen, psInit, psSlider) ? psSlider.get() : nullptr;
+}
+
+/* Delete a widget from the screen */
+void widgDelete(WIDGET *widget)
+{
+	if (!widget)
+	{
+		return;
+	}
+
+	if (auto lockedScreen = widget->screenPointer.lock())
+	{
+		if (lockedScreen->psForm.get() == widget)
+		{
+			lockedScreen->psForm = nullptr;
+		}
+	}
+
+	if (auto parent = widget->parent())
+	{
+		parent->detach(widget);
+	}
 }
 
 /* Delete a widget from the screen */
 void widgDelete(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 {
 	ASSERT_OR_RETURN(, psScreen != nullptr, "Invalid screen pointer");
-	delete widgGetFromID(psScreen, id);
+	widgDelete(widgGetFromID(psScreen, id));
 }
 
 /* Find a widget on a form from its id number */
@@ -491,10 +493,9 @@ static WIDGET *widgFormGetFromID(WIDGET *widget, UDWORD id)
 	{
 		return widget;
 	}
-	WIDGET::Children const &c = widget->children();
-	for (WIDGET::Children::const_iterator i = c.begin(); i != c.end(); ++i)
+	for (auto const &child: widget->children())
 	{
-		WIDGET *w = widgFormGetFromID(*i, id);
+		WIDGET *w = widgFormGetFromID(child.get(), id);
 		if (w != nullptr)
 		{
 			return w;
@@ -507,7 +508,7 @@ static WIDGET *widgFormGetFromID(WIDGET *widget, UDWORD id)
 WIDGET *widgGetFromID(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 {
 	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
-	return widgFormGetFromID(psScreen->psForm, id);
+	return widgFormGetFromID(psScreen->psForm.get(), id);
 }
 
 void widgHide(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
@@ -536,12 +537,12 @@ UDWORD widgGetMouseOver(const std::shared_ptr<W_SCREEN> &psScreen)
 	   handy if psMouseOverWidget needs to stop being a static and moves into
 	   the screen structure */
 
-	if (psMouseOverWidget == nullptr)
+	if (auto lockedMouserOverWidget = psMouseOverWidget.lock())
 	{
-		return 0;
+		return lockedMouserOverWidget->id;
 	}
 
-	return psMouseOverWidget->id;
+	return 0;
 }
 
 
@@ -737,7 +738,7 @@ void widgSetString(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, const c
 	WIDGET *psWidget = widgGetFromID(psScreen, id);
 	ASSERT_OR_RETURN(, psWidget, "Couldn't find widget by ID %u", id);
 
-	if (psWidget->type == WIDG_EDITBOX && psScreen->psFocus == psWidget)
+	if (psWidget->type == WIDG_EDITBOX && psScreen->hasFocus(*psWidget))
 	{
 		psScreen->setFocus(nullptr);
 	}
@@ -748,14 +749,12 @@ void widgSetString(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, const c
 void WIDGET::processCallbacksRecursive(W_CONTEXT *psContext)
 {
 	/* Go through all the widgets on the form */
-	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	for (auto const &psCurr: childWidgets)
 	{
-		WIDGET *psCurr = *i;
-
 		/* Call the callback */
 		if (psCurr->callback)
 		{
-			psCurr->callback(psCurr, psContext);
+			psCurr->callback(psCurr.get(), psContext);
 		}
 
 		/* and then recurse */
@@ -774,10 +773,8 @@ void WIDGET::processCallbacksRecursive(W_CONTEXT *psContext)
 void WIDGET::runRecursive(W_CONTEXT *psContext)
 {
 	/* Process the form's widgets */
-	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	for (auto const &psCurr: childWidgets)
 	{
-		WIDGET *psCurr = *i;
-
 		/* Skip any hidden widgets */
 		if (!psCurr->visible())
 		{
@@ -824,10 +821,8 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 	shiftedContext.yOffset = psContext->yOffset + y();
 
 	// Process subwidgets.
-	for (WIDGET::Children::const_iterator i = childWidgets.begin(); i != childWidgets.end(); ++i)
+	for (auto const &psCurr: childWidgets)
 	{
-		WIDGET *psCurr = *i;
-
 		if (!psCurr->visible() || !psCurr->hitTest(shiftedContext.mx, shiftedContext.my))
 		{
 			continue;  // Skip any hidden widgets, or widgets the click missed.
@@ -845,20 +840,20 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		return false;
 	}
 
-	if (psMouseOverWidget == nullptr)
+	if (psMouseOverWidget.expired())
 	{
-		psMouseOverWidget = this;  // Mark that the mouse is over a widget (if we haven't already).
+		psMouseOverWidget = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
 	}
 
 	if (auto lockedScreen = screenPointer.lock())
 	{
-		if (lockedScreen->lastHighlight != this && psMouseOverWidget == this)
+		if (isMouseOverWidget() && !lockedScreen->isLastHighlight(*this))
 		{
-			if (lockedScreen->lastHighlight != nullptr)
+			if (auto lockedLastHighligh = lockedScreen->lastHighlight.lock())
 			{
-				lockedScreen->lastHighlight->highlightLost();
+				lockedLastHighligh->highlightLost();
 			}
-			lockedScreen->lastHighlight = this;  // Mark that the mouse is over a widget (if we haven't already).
+			lockedScreen->lastHighlight = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
 			highlight(psContext);
 		}
 	}
@@ -868,7 +863,7 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		return false;  // Just checking mouse position, not a click.
 	}
 
-	if (psMouseOverWidget == this)
+	if (isMouseOverWidget())
 	{
 		if (wasPressed)
 		{
@@ -898,7 +893,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	W_CONTEXT sContext;
 	sContext.xOffset = 0;
 	sContext.yOffset = 0;
-	psMouseOverWidget = nullptr;
+	psMouseOverWidget.reset();
 
 	// Note which keys have been pressed
 	lastReleasedKey_DEPRECATED = WKEY_NONE;
@@ -955,7 +950,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 }
 
 /* Set the id number for widgRunScreen to return */
-void W_SCREEN::setReturn(WIDGET *psWidget)
+void W_SCREEN::setReturn(const std::shared_ptr<WIDGET> &psWidget)
 {
 	WidgetTrigger trigger;
 	trigger.widget = psWidget;
@@ -1057,11 +1052,11 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	}
 }
 
-void W_SCREEN::setFocus(WIDGET *widget)
+void W_SCREEN::setFocus(const std::shared_ptr<WIDGET> &widget)
 {
-	if (psFocus != nullptr)
+	if (auto locked = psFocus.lock())
 	{
-		psFocus->focusLost();
+		locked->focusLost();
 	}
 	psFocus = widget;
 }

@@ -68,13 +68,23 @@
 
 class KeyMapForm : public IntFormAnimated
 {
+protected:
+	KeyMapForm(): IntFormAnimated(false) {}
+	void initialize(bool ingame);
+
 public:
-	KeyMapForm(WIDGET *parent, bool ingame);
+	static std::shared_ptr<KeyMapForm> make(bool ingame)
+	{
+		auto widget = std::shared_ptr<KeyMapForm>(new KeyMapForm());
+		widget->initialize(ingame);
+		return widget;
+	}
+
 	void checkPushedKeyCombo();
 	bool pushedKeyCombo(KEY_CODE subkey);
 
 private:
-	ScrollableListWidget *keyMapList;
+	std::shared_ptr<ScrollableListWidget> keyMapList;
 	void unhighlightSelected();
 };
 
@@ -298,7 +308,7 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 		loadKeyMap();									// get the current mappings.
 	}
 
-	new KeyMapForm(parent, ingame);
+	parent->attach(KeyMapForm::make(ingame));
 
 	/* Stop when the right number or when alphabetically last - not sure...! */
 	/* Go home... */
@@ -307,9 +317,8 @@ static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
 
 bool startInGameKeyMapEditor(bool first)
 {
-	WIDGET *parent = psWScreen->psForm;
 	bAllowOtherKeyPresses = false;
-	return keyMapEditor(first, parent, true);
+	return keyMapEditor(first, psWScreen->psForm.get(), true);
 }
 
 bool startKeyMapEditor(bool first)
@@ -391,11 +400,11 @@ bool loadKeyMap()
 	return true;
 }
 
-KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, false)
+void KeyMapForm::initialize(bool ingame)
 {
 	id = KM_FORM;
 
-	keyMapList = new ScrollableListWidget(this);
+	attach(keyMapList = ScrollableListWidget::make());
 	if (!ingame)
 	{
 		setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
@@ -403,13 +412,13 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 		}));
 		keyMapList->setGeometry(52, 10, KM_ENTRYW, 26 * KM_ENTRYH);
 
-		addMultiBut(psWScreen, KM_FORM, KM_RETURN,			// return button.
+		addMultiBut(*this, KM_RETURN,			// return button.
 				8, 5,
 				iV_GetImageWidth(FrontImages, IMAGE_RETURN),
 				iV_GetImageHeight(FrontImages, IMAGE_RETURN),
 				_("Return To Previous Screen"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
-		addMultiBut(psWScreen, KM_FORM, KM_DEFAULT,
+		addMultiBut(*this, KM_DEFAULT,
 				11, 45,
 				iV_GetImageWidth(FrontImages, IMAGE_KEYMAP_DEFAULT),
 				iV_GetImageHeight(FrontImages, IMAGE_KEYMAP_DEFAULT),
@@ -444,7 +453,7 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 		sButInit.y			= KM_H - 32;
 		sButInit.pText		= _("Resume Game");
 
-		widgAddButton(psWScreen, &sButInit);
+		attach(std::make_shared<W_BUTTON>(&sButInit));
 
 		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
 		{
@@ -452,7 +461,7 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 			sButInit.y			= KM_H - 8;
 			sButInit.pText		= _("Select Default");
 
-			widgAddButton(psWScreen, &sButInit);
+			attach(std::make_shared<W_BUTTON>(&sButInit));
 		}
 	}
 
@@ -467,7 +476,7 @@ KeyMapForm::KeyMapForm(WIDGET *parent, bool ingame) : IntFormAnimated(parent, fa
 	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
 	{
 		W_BUTINIT emptyInit;
-		W_BUTTON *button = new W_BUTTON(&emptyInit);
+		auto button = std::make_shared<W_BUTTON>(&emptyInit);
 		button->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
 		button->id = KM_START + (i - mappings.begin());
 		button->displayFunction = displayKeyMap;

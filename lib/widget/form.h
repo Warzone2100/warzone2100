@@ -33,7 +33,7 @@ class W_FORM : public WIDGET
 
 public:
 	W_FORM(W_FORMINIT const *init);
-	W_FORM(WIDGET *parent);
+	W_FORM();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void highlightLost() override;
@@ -48,7 +48,7 @@ class W_CLICKFORM : public W_FORM
 
 public:
 	W_CLICKFORM(W_FORMINIT const *init);
-	W_CLICKFORM(WIDGET *parent);
+	W_CLICKFORM();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;

@@ -44,8 +44,8 @@ W_LABEL::W_LABEL(W_LABINIT const *init)
 	setString(init->pText);
 }
 
-W_LABEL::W_LABEL(WIDGET *parent)
-	: WIDGET(parent, WIDG_LABEL)
+W_LABEL::W_LABEL()
+	: WIDGET(WIDG_LABEL)
 	, FontID(font_regular)
 	, fontColour(WZCOL_FORM_TEXT)
 {}

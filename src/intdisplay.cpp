@@ -693,8 +693,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	cache.wzText.render(iX, iY, Avail < 0 ? WZCOL_RED : WZCOL_TEXT_BRIGHT);
 }
 
-IntFancyButton::IntFancyButton(WIDGET *parent)
-	: W_CLICKFORM(parent)
+IntFancyButton::IntFancyButton()
+	: W_CLICKFORM()
 	, buttonType(TOPBUTTON)
 {
 	model.position.x = 0;
@@ -725,8 +725,8 @@ void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
 	}
 }
 
-IntStatusButton::IntStatusButton(WIDGET *parent)
-	: IntObjectButton(parent)
+IntStatusButton::IntStatusButton()
+	: IntObjectButton()
 	, theStats(nullptr)
 {
 	buttonType = TOPBUTTON;
@@ -875,8 +875,8 @@ void IntStatusButton::display(int xOffset, int yOffset)
 	}
 }
 
-IntObjectButton::IntObjectButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntObjectButton::IntObjectButton()
+	: IntFancyButton()
 	, psObj(nullptr)
 {
 	buttonType = BTMBUTTON;
@@ -918,8 +918,8 @@ void IntObjectButton::display(int xOffset, int yOffset)
 	doneDisplay();
 }
 
-IntStatsButton::IntStatsButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntStatsButton::IntStatsButton()
+	: IntFancyButton()
 	, Stat(nullptr)
 {}
 
@@ -1007,8 +1007,8 @@ void IntStatsButton::display(int xOffset, int yOffset)
 	doneDisplay();
 }
 
-IntFormTransparent::IntFormTransparent(WIDGET *parent)
-	: W_FORM(parent)
+IntFormTransparent::IntFormTransparent()
+	: W_FORM()
 {
 }
 
@@ -1016,8 +1016,8 @@ void IntFormTransparent::display(int xOffset, int yOffset)
 {
 }
 
-IntFormAnimated::IntFormAnimated(WIDGET *parent, bool openAnimate)
-	: W_FORM(parent)
+IntFormAnimated::IntFormAnimated(bool openAnimate)
+	: W_FORM()
 	, startTime(0)
 	, currentAction(openAnimate ? 0 : 2)
 {
@@ -2056,8 +2056,8 @@ void WidgetAudioCallback(int AudioID)
 	}
 }
 
-IntTransportButton::IntTransportButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntTransportButton::IntTransportButton()
+	: IntFancyButton()
 	, psDroid(nullptr)
 {}
 

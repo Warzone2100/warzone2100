@@ -138,7 +138,8 @@ void WzMultiLimitTitleUI::start()
 	// TRANSLATORS: Sidetext of structure limits screen
 	addSideText(FRONTEND_SIDETEXT1, LIMITSX - 2, LIMITSY, _("LIMITS"));
 
-	IntFormAnimated *limitsForm = new IntFormAnimated(widgGetFromID(psWScreen, FRONTEND_BACKDROP), false);
+	auto limitsForm = std::make_shared<IntFormAnimated>(false);
+	widgGetFromID(psWScreen, FRONTEND_BACKDROP)->attach(limitsForm);
 	limitsForm->id = IDLIMITS;
 	limitsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(LIMITSX, LIMITSY, LIMITSW, LIMITSH);
@@ -187,7 +188,8 @@ void WzMultiLimitTitleUI::start()
 	            _("Accept Settings"), IMAGE_OK, IMAGE_OK, true);
 
 	// add tab form..
-	IntListTabWidget *limitsList = new IntListTabWidget(limitsForm);
+	auto limitsList = IntListTabWidget::make();
+	limitsForm->attach(limitsList);
 	limitsList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *limitsList = static_cast<IntListTabWidget *>(psWidget);
 		assert(limitsList != nullptr);
@@ -203,7 +205,8 @@ void WzMultiLimitTitleUI::start()
 	{
 		if (asStructureStats[i].base.limit != LOTS_OF)
 		{
-			W_FORM *button = new W_FORM(limitsList);
+			auto button = std::make_shared<W_FORM>();
+			limitsList->attach(button);
 			button->id = limitsButtonId;
 			button->displayFunction = displayStructureBar;
 			button->UserData = i;

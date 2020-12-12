@@ -286,7 +286,7 @@ static std::vector<AIDATA> aidata;
 
 struct WzMultiButton : public W_BUTTON
 {
-	WzMultiButton(WIDGET *parent) : W_BUTTON(parent) {}
+	WzMultiButton() : W_BUTTON() {}
 
 	void display(int xOffset, int yOffset) override;
 
@@ -298,8 +298,18 @@ struct WzMultiButton : public W_BUTTON
 
 class ChatBoxWidget : public IntFormAnimated
 {
+protected:
+	ChatBoxWidget(): IntFormAnimated(true) {}
+	virtual void initialize();
+
 public:
-	ChatBoxWidget(WIDGET *parent, bool openAnimate = true);
+	static std::shared_ptr<ChatBoxWidget> make()
+	{
+		auto widget = std::shared_ptr<ChatBoxWidget>(new ChatBoxWidget());
+		widget->initialize();
+		return widget;
+	}
+
 	virtual ~ChatBoxWidget();
 	void addMessage(RoomMessage const &message);
 	void initializeMessages(bool preserveOldChat);
@@ -308,8 +318,8 @@ protected:
 	void geometryChanged() override;
 
 private:
-	ScrollableListWidget *messages;
-	W_EDITBOX *editBox;
+	std::shared_ptr<ScrollableListWidget> messages;
+	std::shared_ptr<W_EDITBOX> editBox;
 	std::shared_ptr<CONSOLE_MESSAGE_LISTENER> handleConsoleMessage;
 	void displayMessage(RoomMessage const &message);
 
@@ -1098,8 +1108,8 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 
 // ////////////////////////////////////////////////////////////////////////////
 
-MultibuttonWidget::MultibuttonWidget(WIDGET *parent, int value)
-	: W_FORM(parent)
+MultibuttonWidget::MultibuttonWidget(int value)
+	: W_FORM()
 	, label(nullptr)
 	, currentValue_(value)
 	, disabled(false)
@@ -1129,8 +1139,7 @@ void MultibuttonWidget::geometryChanged()
 
 void MultibuttonWidget::setLabel(char const *text)
 {
-	delete label;
-	label = new W_LABEL(this);
+	attach(label = std::make_shared<W_LABEL>());
 	label->setString(text);
 
 	geometryChanged();
@@ -1138,7 +1147,8 @@ void MultibuttonWidget::setLabel(char const *text)
 
 void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char const *tip)
 {
-	W_BUTTON *button = new W_BUTTON(this);
+	auto button = std::make_shared<W_BUTTON>();
+	this->attach(button);
 	button->setImages(image, imageDown, mpwidgetGetFrontHighlightImage(image));
 	button->setTip(tip);
 	button->setState(value == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
@@ -1208,7 +1218,7 @@ void MultibuttonWidget::choose(int value)
 
 	if (auto lockedScreen = screenPointer.lock())
 	{
-		lockedScreen->setReturn(this);
+		lockedScreen->setReturn(shared_from_this());
 	}
 }
 
@@ -1220,8 +1230,8 @@ void MultibuttonWidget::stateChanged()
 	}
 }
 
-MultichoiceWidget::MultichoiceWidget(WIDGET *parent, int value)
-	: MultibuttonWidget(parent, value)
+MultichoiceWidget::MultichoiceWidget(int value)
+	: MultibuttonWidget(value)
 {
 	lockCurrent = true;
 }
@@ -1450,7 +1460,8 @@ static void addGameOptions()
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
 	// draw options box.
-	IntFormAnimated *optionsForm = new IntFormAnimated(parent, false);
+	auto optionsForm = std::make_shared<IntFormAnimated>(false);
+	parent->attach(optionsForm);
 	optionsForm->id = MULTIOP_OPTIONS;
 	optionsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_OPTIONSW, MULTIOP_OPTIONSH);
@@ -1515,12 +1526,14 @@ static void addGameOptions()
 	//just display the game options.
 	addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PNAME, MCOL0, MROW1, _("Select Player Name"), (char *) sPlayer, IMAGE_EDIT_PLAYER, IMAGE_EDIT_PLAYER_HI, MULTIOP_PNAME_ICON);
 
-	ListWidget *optionsList = new ListWidget(optionsForm);
+	auto optionsList = std::make_shared<ListWidget>();
+	optionsForm->attach(optionsList);
 	optionsList->setChildSize(MULTIOP_BLUEFORMW, 29);
 	optionsList->setChildSpacing(2, 2);
 	optionsList->setGeometry(MCOL0, MROW5, MULTIOP_BLUEFORMW, optionsForm->height() - MROW5);
 
-	MultichoiceWidget *scavengerChoice = new MultichoiceWidget(optionsList, game.scavengers);
+	auto scavengerChoice = std::make_shared<MultichoiceWidget>(game.scavengers);
+	optionsList->attach(scavengerChoice);
 	scavengerChoice->id = MULTIOP_GAMETYPE;
 	scavengerChoice->setLabel(_("Scavengers"));
 	if (game.mapHasScavengers)
@@ -1531,7 +1544,8 @@ static void addGameOptions()
 	scavengerChoice->enable(!locked.scavengers);
 	optionsList->addWidgetToLayout(scavengerChoice);
 
-	MultichoiceWidget *allianceChoice = new MultichoiceWidget(optionsList, game.alliance);
+	auto allianceChoice = std::make_shared<MultichoiceWidget>(game.alliance);
+	optionsList->attach(allianceChoice);
 	allianceChoice->id = MULTIOP_ALLIANCES;
 	allianceChoice->setLabel(_("Alliances"));
 	allianceChoice->addButton(NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
@@ -1541,7 +1555,8 @@ static void addGameOptions()
 	allianceChoice->enable(!locked.alliances);
 	optionsList->addWidgetToLayout(allianceChoice);
 
-	MultichoiceWidget *powerChoice = new MultichoiceWidget(optionsList, game.power);
+	auto powerChoice = std::make_shared<MultichoiceWidget>(game.power);
+	optionsList->attach(powerChoice);
 	powerChoice->id = MULTIOP_POWER;
 	powerChoice->setLabel(_("Power"));
 	powerChoice->addButton(LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
@@ -1550,7 +1565,8 @@ static void addGameOptions()
 	powerChoice->enable(!locked.power);
 	optionsList->addWidgetToLayout(powerChoice);
 
-	MultichoiceWidget *baseTypeChoice = new MultichoiceWidget(optionsList, game.base);
+	auto baseTypeChoice = std::make_shared<MultichoiceWidget>(game.base);
+	optionsList->attach(baseTypeChoice);
 	baseTypeChoice->id = MULTIOP_BASETYPE;
 	baseTypeChoice->setLabel(_("Base"));
 	baseTypeChoice->addButton(CAMP_CLEAN, Image(FrontImages, IMAGE_NOBASE), Image(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
@@ -1559,7 +1575,8 @@ static void addGameOptions()
 	baseTypeChoice->enable(!locked.bases);
 	optionsList->addWidgetToLayout(baseTypeChoice);
 
-	MultibuttonWidget *mapPreviewButton = new MultibuttonWidget(optionsList);
+	auto mapPreviewButton = std::make_shared<MultibuttonWidget>();
+	optionsList->attach(mapPreviewButton);
 	mapPreviewButton->id = MULTIOP_MAP_PREVIEW;
 	mapPreviewButton->setLabel(_("Map Preview"));
 	mapPreviewButton->addButton(0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
@@ -1569,7 +1586,8 @@ static void addGameOptions()
 	if (ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
 		auto structureLimitsLabel = challengeActive ? _("Show Structure Limits") : _("Set Structure Limits");
-		MultibuttonWidget *structLimitsButton = new MultibuttonWidget(optionsList);
+		auto structLimitsButton = std::make_shared<MultibuttonWidget>();
+		optionsList->attach(structLimitsButton);
 		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
 		structLimitsButton->setLabel(structureLimitsLabel);
 		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), structureLimitsLabel);
@@ -1578,7 +1596,8 @@ static void addGameOptions()
 		/* ...and even more controls if we are not starting a challenge */
 		if (!challengeActive)
 		{
-			MultibuttonWidget *randomButton = new MultibuttonWidget(optionsList);
+			auto randomButton = std::make_shared<MultibuttonWidget>();
+			optionsList->attach(randomButton);
 			randomButton->id = MULTIOP_RANDOM;
 			randomButton->setLabel(_("Random Game Options"));
 			randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
@@ -1589,7 +1608,8 @@ static void addGameOptions()
 			   starting the host is due to the fact that there is not enough room before the "Host Game" button is hidden.		*/
 			if (NetPlay.isHost)
 			{
-				MultichoiceWidget* TechnologyChoice = new MultichoiceWidget(optionsList, game.techLevel);
+				auto TechnologyChoice = std::make_shared<MultichoiceWidget>(game.techLevel);
+				optionsList->attach(TechnologyChoice);
 				TechnologyChoice->id = MULTIOP_TECHLEVEL;
 				TechnologyChoice->setLabel(_("Tech"));
 				TechnologyChoice->addButton(TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
@@ -1601,7 +1621,8 @@ static void addGameOptions()
 			/* If not hosting (yet), add the button for starting the host. */
 			else
 			{
-				MultibuttonWidget *hostButton = new MultibuttonWidget(optionsList);
+				auto hostButton = std::make_shared<MultibuttonWidget>();
+				optionsList->attach(hostButton);
 				hostButton->id = MULTIOP_HOST;
 				hostButton->setLabel(_("Start Hosting Game"));
 				hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
@@ -1701,7 +1722,8 @@ void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 
 	WIDGET *chooserParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *aiForm = new IntFormAnimated(chooserParent, false);
+	auto aiForm = std::make_shared<IntFormAnimated>(false);
+	chooserParent->attach(aiForm);
 	aiForm->id = MULTIOP_AI_FORM;
 	aiForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -1753,7 +1775,8 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 
 	WIDGET *chooserParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *aiForm = new IntFormAnimated(chooserParent, false);
+	auto aiForm = std::make_shared<IntFormAnimated>(false);
+	chooserParent->attach(aiForm);
 	aiForm->id = MULTIOP_AI_FORM;
 	aiForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -2290,7 +2313,8 @@ static void drawReadyButton(UDWORD player)
 	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
 
-	W_LABEL *label = new W_LABEL(parent);
+	auto label = std::make_shared<W_LABEL>();
+	parent->attach(label);
 	label->id = MULTIOP_READY_START + MAX_PLAYERS + player;
 	label->setGeometry(0, 0, MULTIOP_READY_WIDTH, 17);
 	label->setTextAlignment(WLAB_ALIGNBOTTOM);
@@ -2331,7 +2355,8 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 	// draw player window
 	WIDGET *widgetParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *playersForm = new IntFormAnimated(widgetParent, false);
+	auto playersForm = std::make_shared<IntFormAnimated>(false);
+	widgetParent->attach(playersForm);
 	playersForm->id = MULTIOP_PLAYERS;
 	playersForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -2562,11 +2587,11 @@ RoomMessage buildMessage(int32_t sender, const char *text)
 	}
 }
 
-ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(parent, openAnimate)
+void ChatBoxWidget::initialize()
 {
 	id = MULTIOP_CHATBOX;
 
-	messages = new ScrollableListWidget(this);
+	attach(messages = ScrollableListWidget::make());
 	messages->setSnapOffset(true);
 	messages->setStickToBottom(true);
 	messages->setPadding({3, 4, 3, 4});
@@ -2582,7 +2607,7 @@ ChatBoxWidget::ChatBoxWidget(WIDGET *parent, bool openAnimate): IntFormAnimated(
 	sEdInit.id = MULTIOP_CHATEDIT;
 	sEdInit.pUserData = nullptr;
 	sEdInit.pBoxDisplay = displayChatEdit;
-	editBox = new W_EDITBOX(&sEdInit);
+	editBox = std::make_shared<W_EDITBOX>(&sEdInit);
 	attach(editBox);
 
 	consoleAddMessageListener(handleConsoleMessage);
@@ -2679,7 +2704,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 {
 	W_INIT paragraphInit;
 	paragraphInit.width = messages->calculateListViewWidth();
-	auto paragraph = new Paragraph(&paragraphInit);
+	auto paragraph = std::make_shared<Paragraph>(&paragraphInit);
 
 	switch (message.type)
 	{
@@ -2693,7 +2718,7 @@ void ChatBoxWidget::displayMessage(RoomMessage const &message)
 		paragraph->setFontColour({0xc0, 0xc0, 0xc0, 0xff});
 		paragraph->addText(formatLocalDateTime("%H:%M", message.time));
 
-		paragraph->addWidget(new ChatBoxPlayerNameWidget(message.sender), iV_GetTextAboveBase(font_regular));
+		paragraph->addWidget(std::make_shared<ChatBoxPlayerNameWidget>(message.sender), iV_GetTextAboveBase(font_regular));
 
 		paragraph->setFont(font_regular);
 		paragraph->setShadeColour({0, 0, 0, 0});
@@ -2725,9 +2750,13 @@ static void addChatBox(bool preserveOldChat)
 	}
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-	ChatBoxWidget *chatBox = new ChatBoxWidget(parent);
+	auto chatBox = ChatBoxWidget::make();
+	parent->attach(chatBox);
 	chatBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, psWidget->parent()->height() - MULTIOP_CHATBOXY);
+		if (auto parent = psWidget->parent())
+		{
+			psWidget->setGeometry(MULTIOP_CHATBOXX, MULTIOP_CHATBOXY, MULTIOP_CHATBOXW, parent->height() - MULTIOP_CHATBOXY);
+		}
 	}));
 	chatBox->initializeMessages(preserveOldChat);
 
@@ -4129,7 +4158,7 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 	}
 
 	// if we don't have the focus, then autoclick in the chatbox.
-	if (!psWScreen->psFocus)
+	if (psWScreen->psFocus.expired())
 	{
 		context.xOffset = 	context.yOffset = 0;
 		context.mx			= mouseX();
@@ -4931,10 +4960,10 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
-bool addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+bool addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
-	WzMultiButton *button = new WzMultiButton(widgGetFromID(screen, formid));
+	auto button = std::make_shared<WzMultiButton>();
+	parent.attach(button);
 	button->id = id;
 	button->setGeometry(x, y, width, height);
 	button->setTip((tipres != nullptr) ? std::string(tipres) : std::string());
@@ -4943,6 +4972,11 @@ bool addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD 
 	button->doHighlight = hi;
 	button->tc = tc;
 	return true;
+}
+
+bool addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+{
+	return addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc);
 }
 
 /* Returns true if all human players clicked on the 'ready' button */

@@ -353,7 +353,7 @@ void removeInGameNotificationForm(WZ_Queued_Notification* request);
 struct WzCheckboxButton : public W_BUTTON
 {
 public:
-	WzCheckboxButton(WIDGET *parent) : W_BUTTON(parent)
+	WzCheckboxButton() : W_BUTTON()
 	{
 		addOnClickHandler([](W_BUTTON& button) {
 			WzCheckboxButton& self = static_cast<WzCheckboxButton&>(button);
@@ -413,7 +413,7 @@ private:
 	gfx_api::texture* loadImage(const WZ_Notification_Image& image);
 	void internalDismissNotification(float animationSpeed = 1.0f);
 public:
-	WzCheckboxButton *pOnDoNotShowAgainCheckbox = nullptr;
+	std::shared_ptr<WzCheckboxButton> pOnDoNotShowAgainCheckbox = nullptr;
 private:
 	WZ_Queued_Notification* request;
 	bool isInDragMode = false;
@@ -688,7 +688,8 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	int maxTextWidth = notificationWidth - (WZ_NOTIFICATION_PADDING * 2) - imageSize - ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : 0);
 
 	// Add title
-	W_LABEL *label_title = new W_LABEL(psNewNotificationForm);
+	auto label_title = std::make_shared<W_LABEL>();
+	psNewNotificationForm->attach(label_title);
 	label_title->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING, maxTextWidth, 12);
 	label_title->setFontColour(WZCOL_TEXT_BRIGHT);
 	int heightOfTitleLabel = label_title->setFormattedString(WzString::fromUtf8(request->notification.contentTitle), maxTextWidth, font_regular_bold, WZ_NOTIFICATION_CONTENTS_LINE_SPACING);
@@ -698,7 +699,8 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	label_title->setCustomHitTest([](WIDGET *psWidget, int x, int y) -> bool { return false; });
 
 	// Add contents
-	W_LABEL *label_contents = new W_LABEL(psNewNotificationForm);
+	auto label_contents = std::make_shared<W_LABEL>();
+	psNewNotificationForm->attach(label_contents);
 //	debug(LOG_GUI, "label_title.height=%d", label_title->height());
 	label_contents->setGeometry(WZ_NOTIFICATION_PADDING, WZ_NOTIFICATION_PADDING + label_title->height() + WZ_NOTIFICATION_CONTENTS_TOP_PADDING, maxTextWidth, 12);
 	label_contents->setFontColour(WZCOL_TEXT_BRIGHT);
@@ -782,7 +784,8 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		if (numTimesShown >= request->notification.displayOptions.numTimesSeenBeforeDoNotShowAgainOption())
 		{
 			// Display "do not show again" button with checkbox
-			WzCheckboxButton *pDoNotShowAgainButton = new WzCheckboxButton(psNewNotificationForm);
+			auto pDoNotShowAgainButton = std::make_shared<WzCheckboxButton>();
+			psNewNotificationForm->attach(pDoNotShowAgainButton);
 			pDoNotShowAgainButton->id = WZ_NOTIFY_DONOTSHOWAGAINCB_ID;
 			pDoNotShowAgainButton->pText = _("Do not show again");
 			pDoNotShowAgainButton->FontID = font_small;

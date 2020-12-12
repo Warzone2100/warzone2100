@@ -405,7 +405,7 @@ bool intIsRefreshing();
 
 void intDemolishCancel();
 
-MultipleChoiceButton *makeObsoleteButton(WIDGET *parent);  ///< Makes a button to toggle showing obsolete items.
+void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent);  ///< Makes a button to toggle showing obsolete items.
 
 void chatDialog(int mode);
 bool isChatUp();

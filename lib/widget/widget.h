@@ -251,6 +251,7 @@ WZ_DECL_NONNULL(2) W_BARGRAPH *widgAddBarGraph(const std::shared_ptr<W_SCREEN> &
 WZ_DECL_NONNULL(2) W_SLIDER *widgAddSlider(const std::shared_ptr<W_SCREEN> &psScreen, const W_SLDINIT *psInit);
 
 /** Delete a widget from the screen */
+void widgDelete(WIDGET *widget);
 void widgDelete(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Hide a widget */

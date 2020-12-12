@@ -117,6 +117,14 @@ template <typename T> static T pow2Cycle(T value, T min, T max)
 		min < value ? (value / 2 > 1 ? value / 2 : 0) : max;  // Cycle backwards.
 }
 
+static void moveToParentRightEdge(WIDGET *widget, int32_t right)
+{
+	if (auto parent = widget->parent())
+	{
+		widget->move(parent->width() - (widget->width() + right), widget->y());
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Title Screen
 void startTitleMenu()
@@ -157,12 +165,10 @@ void startTitleMenu()
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Official site: http://wz2100.net/"), 0);
 	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Come visit the forums and all Warzone 2100 news! Click this link."));
 	W_BUTTON * pRightAlignedButton = addSmallTextButton(FRONTEND_DONATELINK, FRONTEND_POS9X + 360, FRONTEND_POS9Y, _("Donate: http://donations.wz2100.net/"), 0);
-	// fix-up right-aligned link's positioning (based on size of text)
-	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 1), pRightAlignedButton->y());
+	moveToParentRightEdge(pRightAlignedButton, 1);
 	widgSetTip(psWScreen, FRONTEND_DONATELINK, _("Help support the project with our server costs, Click this link."));
 	pRightAlignedButton = addSmallTextButton(FRONTEND_CHATLINK, FRONTEND_POS9X + 360, 0, _("Chat with players on Discord or IRC"), 0);
-	// fix-up right-aligned link's positioning (based on size of text)
-	pRightAlignedButton->move(pRightAlignedButton->parent()->width() - (pRightAlignedButton->width() + 6), pRightAlignedButton->y());
+	moveToParentRightEdge(pRightAlignedButton, 6);
 	widgSetTip(psWScreen, FRONTEND_CHATLINK, _("Connect to Discord or Freenode through webchat by clicking this link."));
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_UPGRDLINK, 7, 7, MULTIOP_BUTW, MULTIOP_BUTH, _("Check for a newer version"), IMAGE_GAMEVERSION, IMAGE_GAMEVERSION_HI, true);
 }
@@ -1202,7 +1208,8 @@ void startVideoOptionsMenu()
 	// Add a note about changes taking effect on restart for certain options
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
 
-	W_LABEL *label = new W_LABEL(parent);
+	auto label = std::make_shared<W_LABEL>();
+	parent->attach(label);
 	label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
 	label->setFontColour(WZCOL_TEXT_BRIGHT);
 	label->setString(_("* Takes effect on game restart"));
@@ -1228,7 +1235,8 @@ void startVideoOptionsMenu()
 	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, _("Antialiasing*"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsAntialiasingString(), WBUT_SECONDARY);
 
-	W_LABEL *antialiasing_label = new W_LABEL(parent);
+	auto antialiasing_label = std::make_shared<W_LABEL>();
+	parent->attach(antialiasing_label);
 	antialiasing_label->setGeometry(FRONTEND_POS1X + 48, FRONTEND_POS1Y - 18, FRONTEND_BUTWIDTH - FRONTEND_POS1X - 48, FRONTEND_BUTHEIGHT);
 	antialiasing_label->setFontColour(WZCOL_YELLOW);
 	antialiasing_label->setString(_("Warning: Antialiasing can cause crashes, especially with values > 16"));
@@ -2106,7 +2114,8 @@ void addTopForm(bool wide)
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormTransparent *topForm = new IntFormTransparent(parent);
+	auto topForm = std::make_shared<IntFormTransparent>();
+	parent->attach(topForm);
 	topForm->id = FRONTEND_TOPFORM;
 	if (wide)
 	{
@@ -2149,7 +2158,8 @@ void addBottomForm()
 {
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	auto botForm = std::make_shared<IntFormAnimated>();
+	parent->attach(botForm);
 	botForm->id = FRONTEND_BOTFORM;
 	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(FRONTEND_BOTFORMX, FRONTEND_BOTFORMY, FRONTEND_BOTFORMW, FRONTEND_BOTFORMH);
@@ -2161,7 +2171,8 @@ void addText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, UDWORD formID
 {
 	WIDGET *parent = widgGetFromID(psWScreen, formID);
 
-	W_LABEL *label = new W_LABEL(parent);
+	auto label = std::make_shared<W_LABEL>();
+	parent->attach(label);
 	label->id = id;
 	label->setGeometry(PosX, PosY, MULTIOP_READY_WIDTH, FRONTEND_BUTHEIGHT);
 	label->setTextAlignment(WLAB_ALIGNCENTRE);

@@ -38,15 +38,14 @@ static void displayScrollBar(WIDGET *widget, UDWORD xOffset, UDWORD yOffset)
 	pie_UniTransBoxFill(x0, y0 + sliderY, x0 + slider->width(), y0 + sliderY + slider->barSize, slider->isEnabled() ? WZCOL_LBLUE : WZCOL_FORM_DISABLE);
 }
 
-ScrollBarWidget::ScrollBarWidget(WIDGET *parent) : WIDGET(parent)
+void ScrollBarWidget::initialize()
 {
 	W_SLDINIT sliderInit;
-	slider = new W_SLIDER(&sliderInit);
+	attach(slider = std::make_shared<W_SLIDER>(&sliderInit));
 	slider->numStops = 0;
 	slider->barSize = 0;
 	slider->orientation = WSLD_TOP;
 	slider->displayFunction = displayScrollBar;
-	attach(slider);
 }
 
 void ScrollBarWidget::geometryChanged()

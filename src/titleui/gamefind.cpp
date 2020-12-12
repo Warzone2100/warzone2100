@@ -78,7 +78,8 @@ void WzGameFindTitleUI::start()
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
 	// draws the background of the games listed
-	IntFormAnimated *botForm = new IntFormAnimated(parent);
+	auto botForm = std::make_shared<IntFormAnimated>();
+	parent->attach(botForm);
 	botForm->id = FRONTEND_BOTFORM;
 	botForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_OPTIONSX, MULTIOP_OPTIONSY, MULTIOP_CHATBOXW, 415);  // FIXME: Add box at bottom for server messages
@@ -229,7 +230,8 @@ void WzGameFindTitleUI::addConsoleBox()
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
 
-	IntFormAnimated *consoleBox = new IntFormAnimated(parent);
+	auto consoleBox = std::make_shared<IntFormAnimated>();
+	parent->attach(consoleBox);
 	consoleBox->id = MULTIOP_CONSOLEBOX;
 	consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIOP_CONSOLEBOXX, MULTIOP_CONSOLEBOXY, MULTIOP_CONSOLEBOXW, MULTIOP_CONSOLEBOXH);

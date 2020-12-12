@@ -88,8 +88,8 @@ W_EDITBOX::W_EDITBOX(W_EDBINIT const *init)
 	ASSERT((init->style & ~(WEDB_PLAIN | WIDG_HIDDEN)) == 0, "Unknown edit box style");
 }
 
-W_EDITBOX::W_EDITBOX(WIDGET *parent)
-	: WIDGET(parent)
+W_EDITBOX::W_EDITBOX()
+	: WIDGET()
 	, state(WEDBS_FIXED)
 	, FontID(font_regular)
 	, blinkOffset(wzGetTicks())
@@ -563,7 +563,7 @@ void W_EDITBOX::clicked(W_CONTEXT *psContext, WIDGET_KEY)
 		/* Tell the form that the edit box has focus */
 		if (auto lockedScreen = screenPointer.lock())
 		{
-			lockedScreen->setFocus(this);
+			lockedScreen->setFocus(shared_from_this());
 		}
 	}
 	dirty = true;
@@ -582,7 +582,7 @@ void W_EDITBOX::focusLost()
 
 	if (auto lockedScreen = screenPointer.lock())
 	{
-		lockedScreen->setReturn(this);
+		lockedScreen->setReturn(shared_from_this());
 	}
 	dirty = true;
 }

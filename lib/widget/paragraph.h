@@ -26,7 +26,23 @@
 #include "widget.h"
 #include "widgbase.h"
 
-struct ParagraphElement;
+class Paragraph;
+struct FlowLayout;
+struct FlowLayoutFragment;
+
+/**
+ * Provide information about an element appended to the paragraph.
+ **/
+struct ParagraphElement
+{
+	virtual ~ParagraphElement() = default;
+
+	virtual void appendTo(FlowLayout &layout) = 0;
+	virtual std::shared_ptr<WIDGET> createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) = 0;
+	virtual void destroyFragments(Paragraph &paragraph) = 0;
+	virtual bool isLayoutDirty() const = 0;
+	virtual int32_t getAboveBase() const = 0;
+};
 
 struct ParagraphTextStyle
 {
@@ -86,7 +102,7 @@ public:
 	Paragraph(W_INIT const *init);
 
 	void addText(std::string const &text);
-	void addWidget(WIDGET *widget, int32_t aboveBase);
+	void addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase);
 
 	void setFont(iV_fonts font)
 	{

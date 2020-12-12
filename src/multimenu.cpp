@@ -418,7 +418,8 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	backdrop->setCalcLayout(calcBackdropLayoutForMultiplayerOptionsTitleUI);
 
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *requestForm = new IntFormAnimated(backdrop);
+	auto requestForm = std::make_shared<IntFormAnimated>();
+	backdrop->attach(requestForm);
 	requestForm->id = M_REQUEST;
 	requestForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(M_REQUEST_X, M_REQUEST_Y, M_REQUEST_W, M_REQUEST_H);
@@ -438,7 +439,8 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	widgAddButton(psRScreen, &sButInit);
 
 	// Add the button list.
-	IntListTabWidget *requestList = new IntListTabWidget(requestForm);
+	auto requestList = IntListTabWidget::make();
+	requestForm->attach(requestList);
 	requestList->setChildSize(R_BUT_W, R_BUT_H);
 	requestList->setChildSpacing(4, 4);
 	requestList->setGeometry(2 + buttonsX, 2, sButInit.x - buttonsX - 8, M_REQUEST_H - 4);
@@ -461,7 +463,8 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		free(withoutExtension);
 
 		// Set the tip and add the button
-		W_BUTTON *button = new W_BUTTON(requestList);
+		auto button = std::make_shared<W_BUTTON>();
+		requestList->attach(button);
 		button->id = nextButtonId;
 		button->setTip(withoutTechlevel);
 		button->setString(WzString::fromUtf8(withoutTechlevel));
@@ -485,14 +488,15 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	if (mode == MULTIOP_MAP)
 	{
 		LEVEL_LIST levels = enumerateMultiMaps(game.techLevel, numPlayers);
-		using Pair = std::pair<int, W_BUTTON *>;
+		using Pair = std::pair<int, std::shared_ptr<W_BUTTON>>;
 		std::vector<Pair> buttons;
 
 		for (auto mapData : levels)
 		{
 			std::string withoutTechlevel = mapNameWithoutTechlevel(mapData->pName);
 			// add number of players to string.
-			W_BUTTON *button = new W_BUTTON(requestList);
+			auto button = std::make_shared<W_BUTTON>();
+			requestList->attach(button);
 			button->id = nextButtonId;
 			button->setTip(withoutTechlevel);
 			button->setString(WzString::fromUtf8(withoutTechlevel));
@@ -1091,10 +1095,11 @@ bool intAddMultiMenu()
 		intResetScreen(false);
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *multiMenuForm = new IntFormAnimated(parent);
+	auto multiMenuForm = std::make_shared<IntFormAnimated>();
+	parent->attach(multiMenuForm);
 	multiMenuForm->id = MULTIMENU_FORM;
 	multiMenuForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7);
