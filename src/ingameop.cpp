@@ -103,13 +103,14 @@ static bool addIGTextButton(UDWORD id, UWORD x, UWORD y, UWORD width, const char
 static bool addHostQuitOptions()
 {
 	// get rid of the old stuff.
-	delete widgGetFromID(psWScreen, INTINGAMEPOPUP);
-	delete widgGetFromID(psWScreen, INTINGAMEOP);
+	widgDelete(psWScreen, INTINGAMEPOPUP);
+	widgDelete(psWScreen, INTINGAMEOP);
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	auto inGameOp = new IntFormAnimated(parent);
+	auto inGameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(inGameOp);
 	inGameOp->id = INTINGAMEOP;
 	inGameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(INTINGAMEOP3_X, INTINGAMEOP3_Y, INTINGAMEOP3_W, INTINGAMEOP3_H);
@@ -117,7 +118,8 @@ static bool addHostQuitOptions()
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOP_1_Y, INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
-	auto inGamePopup = new IntFormAnimated(parent);
+	auto inGamePopup = std::make_shared<IntFormAnimated>();
+	parent->attach(inGamePopup);
 	inGamePopup->id = INTINGAMEPOPUP;
 	inGamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		assert(psWScreen != nullptr);
@@ -126,7 +128,8 @@ static bool addHostQuitOptions()
 		psWidget->setGeometry((pie_GetVideoBufferWidth() - 600)/2, inGameOp->y() - 26 - 20, 600, 26);
 	}));
 
-	auto label = new W_LABEL(inGamePopup);
+	auto label = std::make_shared<W_LABEL>();
+	inGamePopup->attach(label);
 	label->setGeometry(0, 0, inGamePopup->width(), inGamePopup->height());
 	label->setString(_("WARNING: You're the host. If you quit, the game ends for everyone!"));
 	label->setTextAlignment(WLAB_ALIGNCENTRE);
@@ -139,12 +142,13 @@ static bool addHostQuitOptions()
 
 static bool addAudioOptions()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 #ifdef DEBUG
 #define ROWS 5
@@ -224,12 +228,13 @@ static bool _intAddInGameOptions()
 		kf_TogglePauseMode();
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
@@ -314,9 +319,10 @@ void intAddInGamePopup()
 		kf_TogglePauseMode();	// Pause the game.
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
-	IntFormAnimated *ingamePopup = new IntFormAnimated(parent);
+	auto ingamePopup = std::make_shared<IntFormAnimated>();
+	parent->attach(ingamePopup);
 	ingamePopup->id = INTINGAMEPOPUP;
 	ingamePopup->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(20 + D_W, (240 - 160 / 2) + D_H, 600, 160);
@@ -468,8 +474,8 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 
 static bool startIGOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
 	isMouseOptionsUp = false;
@@ -477,7 +483,8 @@ static bool startIGOptionsMenu()
 	isMusicManagerUp = false;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	int row = 1;
 	// Game Options can't be changed during game
@@ -514,11 +521,12 @@ static bool startIGOptionsMenu()
 // Graphics Options
 static bool startIGGraphicsOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(7));
@@ -622,11 +630,12 @@ static void refreshCurrentIGVideoOptionsValues()
 
 static bool startIGVideoOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		bool showDisplayScales = wzAvailableDisplayScales().size() > 1;
@@ -694,11 +703,12 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 // Mouse Options
 static bool startIGMouseOptionsMenu()
 {
-	delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-	WIDGET *parent = psWScreen->psForm;
+	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+	auto const &parent = psWScreen->psForm;
 
 	// add form
-	IntFormAnimated *ingameOp = new IntFormAnimated(parent);
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		bool s = bMultiPlayer && NetPlay.bComms != 0;
@@ -872,12 +882,12 @@ void intProcessInGameOptions(UDWORD id)
 		isMouseOptionsUp = true;
 		break;
 	case INTINGAMEOP_KEYMAP:			//keymap was pressed
-		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+		widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 		startInGameKeyMapEditor(false);
 		isKeyMapEditorUp = true;
 		break;
 	case INTINGAMEOP_MUSICMANAGER:
-		delete widgGetFromID(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
+		widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
 		startInGameMusicManager();
 		isMusicManagerUp = true;
 		break;

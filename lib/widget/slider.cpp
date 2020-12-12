@@ -95,7 +95,7 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 		state &= ~SLD_DRAG;
 		if (auto lockedScreen = screenPointer.lock())
 		{
-			lockedScreen->setReturn(this);
+			lockedScreen->setReturn(shared_from_this());
 		}
 		dirty = true;
 	}

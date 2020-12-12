@@ -232,12 +232,13 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 
 	psRequestScreen = W_SCREEN::make();
 
-	WIDGET *parent = psRequestScreen->psForm;
+	auto const &parent = psRequestScreen->psForm;
 
 	/* add a form to place the tabbed form on */
 	// we need the form to be long enough for all resolutions, so we take the total number of items * height
 	// and * the gaps, add the banner, and finally, the fudge factor ;)
-	IntFormAnimated *loadSaveForm = new IntFormAnimated(parent);
+	auto loadSaveForm = std::make_shared<IntFormAnimated>();
+	parent->attach(loadSaveForm);
 	loadSaveForm->id = LOADSAVE_FORM;
 	loadSaveForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(LOADSAVE_X, LOADSAVE_Y, LOADSAVE_W, slotsInColumn * (LOADENTRY_H + LOADSAVE_HGAP) + LOADSAVE_BANNER_DEPTH + 20);
@@ -613,7 +614,8 @@ bool runLoadSave(bool bResetMissionWidgets)
 				WIDGET *parent = widgGetFromID(psRequestScreen, LOADSAVE_FORM);
 
 				// add blank box.
-				W_EDITBOX *saveEntryEdit = new W_EDITBOX(parent);
+				auto saveEntryEdit = std::make_shared<W_EDITBOX>();
+				parent->attach(saveEntryEdit);
 				saveEntryEdit->id = SAVEENTRY_EDIT;
 				saveEntryEdit->setGeometry(slotButton->geometry());
 				saveEntryEdit->setString(slotButton->getString());

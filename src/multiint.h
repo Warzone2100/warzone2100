@@ -44,7 +44,7 @@ class MultibuttonWidget : public W_FORM
 {
 
 public:
-	MultibuttonWidget(WIDGET *parent, int value = -1);
+	MultibuttonWidget(int value = -1);
 
 	virtual void display(int xOffset, int yOffset);
 	virtual void geometryChanged();
@@ -75,8 +75,8 @@ private:
 	void stateChanged();
 
 protected:
-	W_LABEL *label;
-	std::vector<std::pair<W_BUTTON *, int>> buttons;
+	std::shared_ptr<W_LABEL> label;
+	std::vector<std::pair<std::shared_ptr<W_BUTTON>, int>> buttons;
 	int currentValue_;
 	bool disabled;
 	int gap_;
@@ -88,7 +88,7 @@ class MultichoiceWidget : public MultibuttonWidget
 {
 
 public:
-	MultichoiceWidget(WIDGET *parent, int value = -1);
+	MultichoiceWidget(int value = -1);
 };
 
 // WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
@@ -112,7 +112,12 @@ void updateStructureDisabledFlags();
 
 void intDisplayFeBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
+bool addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
+/**
+ * @deprecated use `addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS)` instead
+ **/
 bool addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS);
+
 Image mpwidgetGetFrontHighlightImage(Image image);
 bool changeColour(unsigned player, int col, bool isHost);
 

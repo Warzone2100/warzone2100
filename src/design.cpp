@@ -357,11 +357,12 @@ bool intAddDesign(bool bShowCentreScreen)
 		displayWorld();
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	/* Add the main design form */
-	IntFormAnimated *desForm = new IntFormAnimated(parent, false);
+	auto desForm = std::make_shared<IntFormAnimated>(false);
 	desForm->id = IDDES_FORM;
+	parent->attach(desForm);
 	desForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(DES_CENTERFORMX, DES_CENTERFORMY, DES_CENTERFORMWIDTH, DES_CENTERFORMHEIGHT);
 	}));
@@ -543,7 +544,8 @@ bool intAddDesign(bool bShowCentreScreen)
 	}
 
 	/* add central stats form */
-	IntFormAnimated *statsForm = new IntFormAnimated(parent, false);
+	auto statsForm = std::make_shared<IntFormAnimated>(false);
+	parent->attach(statsForm);
 	statsForm->id = IDDES_STATSFORM;
 	statsForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(DES_STATSFORMX, DES_STATSFORMY, DES_STATSFORMWIDTH, DES_STATSFORMHEIGHT);
@@ -788,10 +790,11 @@ void desSetupDesignTemplates()
 /* Add the design template form */
 static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 {
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *templbaseForm = new IntFormAnimated(parent, false);
+	auto templbaseForm = std::make_shared<IntFormAnimated>(false);
+	parent->attach(templbaseForm);
 	templbaseForm->id = IDDES_TEMPLBASE;
 	templbaseForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(RET_X, DESIGN_Y, RET_FORMWIDTH, DES_LEFTFORMHEIGHT);
@@ -801,20 +804,22 @@ static bool intAddTemplateForm(DROID_TEMPLATE *psSelected)
 	makeObsoleteButton(templbaseForm);
 
 	/* Add the design templates form */
-	IntListTabWidget *templList = new IntListTabWidget(templbaseForm);
+	auto templList = IntListTabWidget::make();
+	templbaseForm->attach(templList);
 	templList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *templList = static_cast<IntListTabWidget *>(psWidget);
 		assert(templList != nullptr);
-		WIDGET *templbaseForm = templList->parent();
-		assert(templbaseForm != nullptr);
 		templList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
 		templList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
-		int templListWidth = OBJ_BUTWIDTH * 2 + DES_TABBUTGAP;
-		templList->setGeometry((RET_FORMWIDTH - templListWidth) / 2, 18, templListWidth, templbaseForm->height() - 18);
+		if (auto templbaseForm = templList->parent())
+		{
+			int templListWidth = OBJ_BUTWIDTH * 2 + DES_TABBUTGAP;
+			templList->setGeometry((RET_FORMWIDTH - templListWidth) / 2, 18, templListWidth, templbaseForm->height() - 18);
+		}
 	}));
 
 	/* Put the buttons on it */
-	return intAddTemplateButtons(templList, psSelected);
+	return intAddTemplateButtons(templList.get(), psSelected);
 }
 
 /* Add the droid template buttons to a form */
@@ -841,7 +846,8 @@ static bool intAddTemplateButtons(ListTabWidget *templList, DROID_TEMPLATE *psSe
 	for (DROID_TEMPLATE *psTempl : apsTemplateList)
 	{
 		/* Set the tip and add the button */
-		IntStatsButton *button = new IntStatsButton(templList);
+		auto button = std::make_shared<IntStatsButton>();
+		templList->attach(button);
 		button->id = nextButtonId;
 		button->setStatsAndTip(psTempl);
 		templList->addWidgetToLayout(button);
@@ -1723,28 +1729,31 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 /* Add the component tab form to the design screen */
 static ListTabWidget *intAddComponentForm()
 {
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	/* add a form to place the tabbed form on */
-	IntFormAnimated *rightBase = new IntFormAnimated(parent, false);
+	auto rightBase = std::make_shared<IntFormAnimated>(false);
+	parent->attach(rightBase);
 	rightBase->id = IDDES_RIGHTBASE;
 	rightBase->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(RADTLX - 2, DESIGN_Y, RET_FORMWIDTH, DES_RIGHTFORMHEIGHT);
 	}));
 
 	//now a single form
-	IntListTabWidget *compList = new IntListTabWidget(rightBase);
+	auto compList = IntListTabWidget::make();
+	rightBase->attach(compList);
 	compList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *compList = static_cast<IntListTabWidget *>(psWidget);
 		assert(compList != nullptr);
-		WIDGET * rightBase = compList->parent();
-		assert(rightBase != nullptr);
 		compList->setChildSize(DES_TABBUTWIDTH, DES_TABBUTHEIGHT);
 		compList->setChildSpacing(DES_TABBUTGAP, DES_TABBUTGAP);
-		int objListWidth = DES_TABBUTWIDTH * 2 + DES_TABBUTGAP;
-		compList->setGeometry((rightBase->width() - objListWidth) / 2, 40, objListWidth, rightBase->height() - 40);
+		if (auto rightBase = compList->parent())
+		{
+			int objListWidth = DES_TABBUTWIDTH * 2 + DES_TABBUTGAP;
+			compList->setGeometry((rightBase->width() - objListWidth) / 2, 40, objListWidth, rightBase->height() - 40);
+		}
 	}));
-	return compList;
+	return compList.get();
 }
 
 /* Add the system buttons (weapons, command droid, etc) to the design screen */
@@ -1876,7 +1885,8 @@ static bool intAddComponentButtons(ListTabWidget *compList, COMPONENT_STATS *psS
 		}
 
 		/* Set the tip and add the button */
-		IntStatsButton *button = new IntStatsButton(compList);
+		auto button = std::make_shared<IntStatsButton>();
+		compList->attach(button);
 		button->id = nextButtonId;
 		button->setStatsAndTip(psCurrStats);
 		compList->addWidgetToLayout(button);
@@ -1984,7 +1994,8 @@ static bool intAddExtraSystemButtons(ListTabWidget *compList, unsigned sensorInd
 			}
 
 			// Set the tip and add the button
-			IntStatsButton *button = new IntStatsButton(compList);
+			auto button = std::make_shared<IntStatsButton>();
+			compList->attach(button);
 			button->id = nextButtonId;
 			button->setStatsAndTip(psCurrStats);
 			compList->addWidgetToLayout(button);

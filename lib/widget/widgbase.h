@@ -133,15 +133,14 @@ public:
 };
 
 /* The base widget data type */
-class WIDGET
+class WIDGET: public std::enable_shared_from_this<WIDGET>
 {
 
 public:
-	typedef std::vector<WIDGET *> Children;
+	typedef std::vector<std::shared_ptr<WIDGET>> Children;
 
 	WIDGET(WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	WIDGET(W_INIT const *init, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
-	WIDGET(WIDGET *parent, WIDGET_TYPE type = WIDG_UNSPECIFIED_TYPE);
 	virtual ~WIDGET();
 
 	void deleteLater();  ///< Like "delete this;", but safe to call from display/run callbacks.
@@ -160,6 +159,7 @@ protected:
 	virtual void geometryChanged() {}
 
 	virtual bool hitTest(int x, int y);
+	bool isMouseOverWidget() const;
 
 public:
 	virtual unsigned getState();
@@ -191,11 +191,15 @@ public:
 
 	WIDGET *parent()
 	{
-		return parentWidget;
+		return parentWidget.lock().get();
 	}
 	Children const &children()
 	{
 		return childWidgets;
+	}
+	void removeAllChildren()
+	{
+		childWidgets = {};
 	}
 	WzRect const &geometry() const
 	{
@@ -227,8 +231,17 @@ public:
 	}
 	void setGeometry(WzRect const &r);
 
-	void attach(WIDGET *widget);
-	void detach(WIDGET *widget);
+	void attach(const std::shared_ptr<WIDGET> &widget);
+	/**
+	 * @deprecated use `void WIDGET::attach(const std::shared_ptr<WIDGET> &widget)` instead
+	 **/
+	void attach(WIDGET *widget) { attach(widget->shared_from_this()); }
+
+	void detach(const std::shared_ptr<WIDGET> &widget);
+	/**
+	 * @deprecated use `void WIDGET::detach(const std::shared_ptr<WIDGET> &widget)` instead
+	 **/
+	void detach(WIDGET *widget) { detach(widget->shared_from_this()); }
 
 	void setCalcLayout(const WIDGET_CALCLAYOUT_FUNC& calcLayoutFunc);
 	void callCalcLayout();
@@ -263,8 +276,8 @@ public:
 	}
 
 private:
-	WIDGET                 *parentWidget;           ///< Parent widget.
-	std::vector<WIDGET *>   childWidgets;           ///< Child widgets. Will be deleted if we are deleted.
+	std::weak_ptr<WIDGET> parentWidget;
+	std::vector<std::shared_ptr<WIDGET>> childWidgets;
 
 	WzRect                  dim;
 
@@ -280,7 +293,7 @@ public:
 
 struct WidgetTrigger
 {
-	WIDGET *widget;
+	std::shared_ptr<WIDGET> widget;
 };
 typedef std::vector<WidgetTrigger> WidgetTriggers;
 
@@ -288,7 +301,7 @@ typedef std::vector<WidgetTrigger> WidgetTriggers;
 struct W_SCREEN: public std::enable_shared_from_this<W_SCREEN>
 {
 protected:
-	W_SCREEN(): psFocus(nullptr), lastHighlight(nullptr), TipFontID(font_regular) {}
+	W_SCREEN(): TipFontID(font_regular) {}
 	void initialize();
 
 public:
@@ -299,17 +312,25 @@ public:
 		return screen;
 	}
 
-	~W_SCREEN();
-
-	void setFocus(WIDGET *widget);  ///< Sets psFocus, notifying the old widget, if any.
-	void setReturn(WIDGET *psWidget);  ///< Adds psWidget to retWidgets.
+	void setFocus(const std::shared_ptr<WIDGET> &widget);  ///< Sets psFocus, notifying the old widget, if any.
+	void setReturn(const std::shared_ptr<WIDGET> &psWidget);  ///< Adds psWidget to retWidgets.
 	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight); // used to handle screen resizing
 
-	W_FORM          *psForm;        ///< The root form of the screen
-	WIDGET          *psFocus;       ///< The widget that has keyboard focus
-	WIDGET         *lastHighlight;  ///< The last widget to be highlighted. This is used to track when the mouse moves off something.
+	std::shared_ptr<W_FORM> psForm; ///< The root form of the screen
+	std::weak_ptr<WIDGET> psFocus;  ///< The widget that has keyboard focus
+	std::weak_ptr<WIDGET> lastHighlight; ///< The last widget to be highlighted. This is used to track when the mouse moves off something.
 	iV_fonts         TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
+
+	bool hasFocus(WIDGET const &widget) const
+	{
+		return psFocus.lock().get() == &widget;
+	}
+
+	bool isLastHighlight(WIDGET const &widget) const
+	{
+		return lastHighlight.lock().get() == &widget;
+	}
 
 private:
 #ifdef WZ_CXX11

@@ -38,7 +38,7 @@ class W_LABEL : public WIDGET
 
 public:
 	W_LABEL(W_LABINIT const *init);
-	W_LABEL(WIDGET *parent);
+	W_LABEL();
 
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;

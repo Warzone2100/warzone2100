@@ -50,7 +50,7 @@ public:
 
 public:
 	W_BUTTON(W_BUTINIT const *init);
-	W_BUTTON(WIDGET *parent);
+	W_BUTTON();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
@@ -99,7 +99,7 @@ class MultipleChoiceButton : public W_BUTTON
 {
 
 public:
-	MultipleChoiceButton(WIDGET *parent) : W_BUTTON(parent), choice(0) {}
+	MultipleChoiceButton() : W_BUTTON(), choice(0) {}
 	void setChoice(unsigned newChoice);
 	void setTip(unsigned stateValue, std::string const &string);
 	void setTip(unsigned stateValue, char const *stringUtf8);

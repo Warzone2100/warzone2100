@@ -1189,7 +1189,7 @@ INT_RETVAL intRunWidgets()
 	if (!bLoadSaveUp)
 	{
 		WidgetTriggers const &triggers = widgRunScreen(psWScreen);
-		for (const auto trigger : triggers)
+		for (const auto &trigger: triggers)
 		{
 			retIDs.push_back(trigger.widget->id);
 		}
@@ -2730,8 +2730,9 @@ bool intAddReticule()
 	{
 		return true; // all fine
 	}
-	WIDGET *parent = psWScreen->psForm;
-	IntFormAnimated *retForm = new IntFormAnimated(parent, false);
+	auto const &parent = psWScreen->psForm;
+	auto retForm = std::make_shared<IntFormAnimated>(false);
+	parent->attach(retForm);
 	retForm->id = IDRET_FORM;
 	retForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(RET_X, RET_Y, RET_FORMWIDTH, RET_FORMHEIGHT);
@@ -2947,10 +2948,11 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	/* Reset the current object and store the current list */
 	psObjSelected = nullptr;
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	/* Create the basic form */
-	IntFormAnimated *objForm = new IntFormAnimated(parent, false);
+	auto objForm = std::make_shared<IntFormAnimated>(false);
+	parent->attach(objForm);
 	objForm->id = IDOBJ_FORM;
 	objForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(OBJ_BACKX, OBJ_BACKY, OBJ_BACKWIDTH, OBJ_BACKHEIGHT);
@@ -2972,7 +2974,8 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 	}
 
 	/*add the tabbed form */
-	IntListTabWidget *objList = new IntListTabWidget(objForm);
+	auto objList = IntListTabWidget::make();
+	objForm->attach(objList);
 	objList->id = IDOBJ_TABFORM;
 	objList->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		IntListTabWidget *objList = static_cast<IntListTabWidget *>(psWidget);
@@ -3069,15 +3072,18 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		bool IsFactory = false;
 		bool isResearch = false;
 
-		WIDGET *buttonHolder = new WIDGET(objList);
+		auto buttonHolder = std::make_shared<WIDGET>();
+		objList->attach(buttonHolder);
 		objList->addWidgetToLayout(buttonHolder);
 
-		IntStatusButton *statButton = new IntStatusButton(buttonHolder);
+		auto statButton = std::make_shared<IntStatusButton>();
+		buttonHolder->attach(statButton);
 		statButton->id = nextStatButtonId;
 		statButton->setGeometry(0, 0, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 		statButton->style |= WFORM_SECONDARY;
 
-		IntObjectButton *objButton = new IntObjectButton(buttonHolder);
+		auto objButton = std::make_shared<IntObjectButton>();
+		buttonHolder->attach(objButton);
 		objButton->id = nextObjButtonId;
 		objButton->setObject(psObj);
 		objButton->setGeometry(0, OBJ_STARTY, OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
@@ -3456,11 +3462,7 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 		return;
 	}
 	statButton->setTip("");
-	WIDGET::Children children = statButton->children();
-	for (WIDGET::Children::const_iterator i = children.begin(); i != children.end(); ++i)
-	{
-		delete *i;
-	}
+	statButton->removeAllChildren();
 
 	// Action progress bar.
 	W_BARINIT sBarInit;
@@ -3521,9 +3523,10 @@ static void intSetStats(UDWORD id, BASE_STATS *psStats)
 	}
 }
 
-MultipleChoiceButton *makeObsoleteButton(WIDGET *parent)
+void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 {
-	auto obsoleteButton = new MultipleChoiceButton(parent);
+	auto obsoleteButton = std::make_shared<MultipleChoiceButton>();
+	parent->attach(obsoleteButton);
 	obsoleteButton->id = IDSTAT_OBSOLETE_BUTTON;
 	obsoleteButton->style |= WBUT_SECONDARY;
 	obsoleteButton->setChoice(includeRedundantDesigns);
@@ -3532,12 +3535,12 @@ MultipleChoiceButton *makeObsoleteButton(WIDGET *parent)
 	obsoleteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
 	obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
 	obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
-	return obsoleteButton;
 }
 
-static void makeFavoriteButton(WIDGET *parent)
+static void makeFavoriteButton(const std::shared_ptr<WIDGET> &parent)
 {
-	auto favoriteButton = new MultipleChoiceButton(parent);
+	auto favoriteButton = std::make_shared<MultipleChoiceButton>();
+	parent->attach(favoriteButton);
 	favoriteButton->id = IDSTAT_FAVORITE_BUTTON;
 	favoriteButton->style |= WBUT_SECONDARY;
 	favoriteButton->setChoice(showFavorites);
@@ -3585,10 +3588,11 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	SecondaryWindowUp = true;
 	psStatsScreenOwner = psOwner;
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	/* Create the basic form */
-	IntFormAnimated *statForm = new IntFormAnimated(parent, false);
+	auto statForm = std::make_shared<IntFormAnimated>(false);
+	parent->attach(statForm);
 	statForm->id = IDSTAT_FORM;
 	statForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
@@ -3613,7 +3617,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		STRUCTURE_TYPE factoryType = ((STRUCTURE *)psOwner)->pStructureType->type;
 
 		//add the Factory DP button
-		W_BUTTON *deliveryPointButton = new W_BUTTON(statForm);
+		auto deliveryPointButton = std::make_shared<W_BUTTON>();
+		statForm->attach(deliveryPointButton);
 		deliveryPointButton->id = IDSTAT_DP_BUTTON;
 		deliveryPointButton->style |= WBUT_SECONDARY;
 		switch (factoryType)
@@ -3628,7 +3633,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		deliveryPointButton->pUserData = psOwner;
 
 		//add the Factory Loop button!
-		W_BUTTON *loopButton = new W_BUTTON(statForm);
+		auto loopButton = std::make_shared<W_BUTTON>();
+		statForm->attach(loopButton);
 		loopButton->id = IDSTAT_LOOP_BUTTON;
 		loopButton->style |= WBUT_SECONDARY;
 		loopButton->setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
@@ -3693,7 +3699,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	}
 
 	// Add the tabbed form
-	IntListTabWidget *statList = new IntListTabWidget(statForm);
+	auto statList = IntListTabWidget::make();
+	statForm->attach(statList);
 	statList->id = IDSTAT_TABFORM;
 	statList->setChildSize(STAT_BUTWIDTH, STAT_BUTHEIGHT);
 	statList->setChildSpacing(STAT_GAP, STAT_GAP);
@@ -3724,7 +3731,8 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 			break;
 		}
 
-		IntStatsButton *button = new IntStatsButton(statList);
+		auto button = std::make_shared<IntStatsButton>();
+		statList->attach(button);
 		button->id = nextButtonId;
 		button->style |= WFORM_SECONDARY;
 		button->setStats(ppsStatsList[i]);
@@ -4915,18 +4923,18 @@ void chatDialog(int mode)
 {
 	if (!ChatDialogUp)
 	{
-		WIDGET *parent = psWScreen->psForm;
-		static IntFormAnimated *consoleBox = nullptr;
-		W_EDITBOX *chatBox = nullptr;
+		auto const &parent = psWScreen->psForm;
 		W_CONTEXT sContext;
 
-		consoleBox = new IntFormAnimated(parent);
+		auto consoleBox = std::make_shared<IntFormAnimated>();
+		parent->attach(consoleBox);
 		consoleBox->id = CHAT_CONSOLEBOX;
 		consoleBox->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(CHAT_CONSOLEBOXX, CHAT_CONSOLEBOXY, CHAT_CONSOLEBOXW, CHAT_CONSOLEBOXH);
 		}));
 
-		chatBox = new W_EDITBOX(consoleBox);
+		auto chatBox = std::make_shared<W_EDITBOX>();
+		consoleBox->attach(chatBox);
 		chatBox->id = CHAT_EDITBOX;
 		chatBox->setGeometry(80, 2, 320, 16);
 		if (mode == CHAT_GLOB)
@@ -4942,7 +4950,8 @@ void chatDialog(int mode)
 		sContext.xOffset = sContext.yOffset = 0;
 		sContext.mx = sContext.my = 0;
 
-		W_LABEL *label = new W_LABEL(consoleBox);
+		auto label = std::make_shared<W_LABEL>();
+		consoleBox->attach(label);
 		label->setGeometry(2, 2,60, 16);
 		if (mode == CHAT_GLOB)
 		{

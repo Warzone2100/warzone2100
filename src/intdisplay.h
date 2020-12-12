@@ -127,7 +127,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 class IntFancyButton : public W_CLICKFORM
 {
 public:
-	IntFancyButton(WIDGET *parent);
+	IntFancyButton();
 
 protected:
 	//the two types of button used in the object display (bottom bar)
@@ -154,7 +154,7 @@ protected:
 class IntObjectButton : public IntFancyButton
 {
 public:
-	IntObjectButton(WIDGET *parent);
+	IntObjectButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -176,7 +176,7 @@ protected:
 class IntStatusButton : public IntObjectButton
 {
 public:
-	IntStatusButton(WIDGET *parent);
+	IntStatusButton();
 
 	void setObject(BASE_OBJECT *object)
 	{
@@ -198,7 +198,7 @@ protected:
 class IntStatsButton : public IntFancyButton
 {
 public:
-	IntStatsButton(WIDGET *parent);
+	IntStatsButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -220,7 +220,7 @@ protected:
 class IntFormTransparent : public W_FORM
 {
 public:
-	IntFormTransparent(WIDGET *parent);
+	IntFormTransparent();
 
 	virtual void display(int xOffset, int yOffset);
 };
@@ -229,7 +229,7 @@ public:
 class IntFormAnimated : public W_FORM
 {
 public:
-	IntFormAnimated(WIDGET *parent, bool openAnimate = true);
+	IntFormAnimated(bool openAnimate = true);
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -294,7 +294,7 @@ void WidgetAudioCallback(int AudioID);
 class IntTransportButton : public IntFancyButton
 {
 public:
-	IntTransportButton(WIDGET *parent);
+	IntTransportButton();
 
 	virtual void display(int xOffset, int yOffset);
 

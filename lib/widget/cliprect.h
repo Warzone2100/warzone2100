@@ -31,7 +31,7 @@
 class ClipRectWidget : public WIDGET
 {
 public:
-	ClipRectWidget(WIDGET *parent) : WIDGET(parent) {}
+	ClipRectWidget() : WIDGET() {}
 
 	void run(W_CONTEXT *psContext) override;
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;

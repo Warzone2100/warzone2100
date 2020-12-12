@@ -161,7 +161,7 @@ static bool intAddMessageForm(bool playCurrent);
 class IntMessageButton : public IntFancyButton
 {
 public:
-	IntMessageButton(WIDGET *parent);
+	IntMessageButton();
 
 	virtual void display(int xOffset, int yOffset);
 
@@ -248,10 +248,11 @@ bool intAddIntelMap()
 	//set pause states before putting the interface up
 	setIntelligencePauseState();
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	// Add the main Intelligence Map form
-	IntFormAnimated *intMapForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto intMapForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	parent->attach(intMapForm);
 	intMapForm->id = IDINTMAP_FORM;
 	intMapForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(INTMAP_X, INTMAP_Y, INTMAP_WIDTH, INTMAP_HEIGHT);
@@ -276,7 +277,8 @@ static bool intAddMessageForm(bool playCurrent)
 	WIDGET *msgForm = widgGetFromID(psWScreen, IDINTMAP_FORM);
 
 	/* Add the Message form */
-	IntListTabWidget *msgList = new IntListTabWidget(msgForm);
+	auto msgList = IntListTabWidget::make();
+	msgForm->attach(msgList);
 	msgList->id = IDINTMAP_MSGFORM;
 	msgList->setChildSize(OBJ_BUTWIDTH, OBJ_BUTHEIGHT);
 	msgList->setChildSpacing(OBJ_GAP, OBJ_GAP);
@@ -302,7 +304,8 @@ static bool intAddMessageForm(bool playCurrent)
 			continue;
 		}
 
-		IntMessageButton *button = new IntMessageButton(msgList);
+		auto button = std::make_shared<IntMessageButton>();
+		msgList->attach(button);
 		button->id = nextButtonId;
 		button->setMessage(psMessage);
 		msgList->addWidgetToLayout(button);
@@ -382,9 +385,10 @@ bool intAddMessageView(MESSAGE *psMessage)
 		intCloseMultiMenuNoAnim();
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
-	IntFormAnimated *intMapMsgView = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto intMapMsgView = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	parent->attach(intMapMsgView);
 	intMapMsgView->id = IDINTMAP_MSGVIEW;
 	intMapMsgView->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(INTMAP_RESEARCHX, INTMAP_RESEARCHY, INTMAP_RESEARCHWIDTH, INTMAP_RESEARCHHEIGHT);
@@ -413,7 +417,8 @@ bool intAddMessageView(MESSAGE *psMessage)
 		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
 
 		/* Add a big tabbed text box for the subtitle text */
-		IntListTabWidget *seqList = new IntListTabWidget(intMapMsgView);
+		auto seqList = IntListTabWidget::make();
+		intMapMsgView->attach(seqList);
 		seqList->setChildSize(INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTTABHEIGHT);
 		seqList->setChildSpacing(2, 2);
 		seqList->setGeometry(INTMAP_SEQTEXTX, INTMAP_SEQTEXTY, INTMAP_SEQTEXTWIDTH, INTMAP_SEQTEXTHEIGHT);
@@ -424,7 +429,8 @@ bool intAddMessageView(MESSAGE *psMessage)
 		int nextPageId = IDINTMAP_SEQTEXTSTART;
 		do
 		{
-			W_FORM *page = new W_FORM(seqList);
+			auto page = std::make_shared<W_FORM>();
+			seqList->attach(page);
 			page->id = nextPageId++;
 			page->displayFunction = intDisplaySeqTextView;
 			page->pUserData = psViewReplay;
@@ -909,12 +915,12 @@ void intRemoveMessageView(bool animated)
 	else
 	{
 		//remove without the animating close window
-		delete form;
+		widgDelete(form);
 	}
 }
 
-IntMessageButton::IntMessageButton(WIDGET *parent)
-	: IntFancyButton(parent)
+IntMessageButton::IntMessageButton()
+	: IntFancyButton()
 	, psMsg(nullptr)
 {}
 

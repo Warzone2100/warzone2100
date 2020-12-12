@@ -45,8 +45,8 @@ W_FORM::W_FORM(W_FORMINIT const *init)
 	ASSERT((init->style & WFORM_CLICKABLE) != 0 || (init->style & (WFORM_NOPRIMARY | WFORM_SECONDARY)) == 0, "Cannot set keys if the form isn't clickable");
 }
 
-W_FORM::W_FORM(WIDGET *parent)
-	: WIDGET(parent, WIDG_FORM)
+W_FORM::W_FORM()
+	: WIDGET(WIDG_FORM)
 	, disableChildren(false)
 {}
 
@@ -59,8 +59,8 @@ W_CLICKFORM::W_CLICKFORM(W_FORMINIT const *init)
 	, AudioCallback(WidgGetAudioCallback())
 {}
 
-W_CLICKFORM::W_CLICKFORM(WIDGET *parent)
-	: W_FORM(parent)
+W_CLICKFORM::W_CLICKFORM()
+	: W_FORM()
 	, state(WBUT_PLAIN)
 	, HilightAudioID(WidgGetHilightAudioID())
 	, ClickedAudioID(WidgGetClickedAudioID())
@@ -135,7 +135,7 @@ void W_CLICKFORM::released(W_CONTEXT *, WIDGET_KEY key)
 		{
 			if (auto lockedScreen = screenPointer.lock())
 			{
-				lockedScreen->setReturn(this);
+				lockedScreen->setReturn(shared_from_this());
 			}
 			state &= ~WBUT_DOWN;
 			dirty = true;

@@ -588,10 +588,11 @@ bool intAddOrder(BASE_OBJECT *psObj)
 		}
 	}
 
-	WIDGET *parent = psWScreen->psForm;
+	auto const &parent = psWScreen->psForm;
 
 	/* Create the basic form */
-	IntFormAnimated *orderForm = new IntFormAnimated(parent, Animate);  // Do not animate the opening, if the window was already open.
+	auto orderForm = std::make_shared<IntFormAnimated>(Animate);  // Do not animate the opening, if the window was already open.
+	parent->attach(orderForm);
 	orderForm->id = IDORDER_FORM;
 	orderForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(ORDER_X, ORDER_Y, ORDER_WIDTH, ORDER_HEIGHT);

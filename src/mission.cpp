@@ -2249,14 +2249,16 @@ static bool _intAddMissionResult(bool result, bool bPlaySuccess, bool showBackDr
 	}));
 
 	// TITLE
-	IntFormAnimated *missionResTitle = new IntFormAnimated(missionResBackForm);
+	auto missionResTitle = std::make_shared<IntFormAnimated>();
+	missionResBackForm->attach(missionResTitle);
 	missionResTitle->id = IDMISSIONRES_TITLE;
 	missionResTitle->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MISSIONRES_TITLE_X, MISSIONRES_TITLE_Y, MISSIONRES_TITLE_W, MISSIONRES_TITLE_H);
 	}));
 
 	// add form
-	IntFormAnimated *missionResForm = new IntFormAnimated(missionResBackForm);
+	auto missionResForm = std::make_shared<IntFormAnimated>();
+	missionResBackForm->attach(missionResForm);
 	missionResForm->id = IDMISSIONRES_FORM;
 	missionResForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(MISSIONRES_X, MISSIONRES_Y, MISSIONRES_W, MISSIONRES_H);

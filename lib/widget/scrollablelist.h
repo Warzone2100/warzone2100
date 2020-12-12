@@ -38,12 +38,21 @@ struct Padding
 
 class ScrollableListWidget : public WIDGET
 {
+protected:
+	ScrollableListWidget(): WIDGET() {}
+	virtual void initialize();
+
 public:
-	ScrollableListWidget(WIDGET *parent);
+	static std::shared_ptr<ScrollableListWidget> make()
+	{
+		auto widget = std::shared_ptr<ScrollableListWidget>(new ScrollableListWidget());
+		widget->initialize();
+		return widget;
+	}
 
 	void initializeLayout();
 	void run(W_CONTEXT *psContext) override;
-	void addItem(WIDGET *widget);
+	void addItem(const std::shared_ptr<WIDGET> &widget);
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void enableScroll();
 	void disableScroll();
@@ -61,8 +70,8 @@ protected:
 	void geometryChanged() override;
 
 private:
-	ScrollBarWidget *scrollBar;
-	ClipRectWidget *listView;
+	std::shared_ptr<ScrollBarWidget> scrollBar;
+	std::shared_ptr<ClipRectWidget> listView;
 	uint32_t scrollableHeight = 0;
 	bool snapOffset = true;
 	bool layoutDirty = false;
