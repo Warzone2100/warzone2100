@@ -43,12 +43,6 @@ WzProtocolTitleUI::WzProtocolTitleUI()
 
 }
 
-WzProtocolTitleUI::~WzProtocolTitleUI()
-{
-	if (psSettingsScreen)
-		delete psSettingsScreen;
-}
-
 /*!
  * Set the server name
  * \param hostname The hostname or IP address of the server to connect to
@@ -99,7 +93,7 @@ TITLECODE WzProtocolTitleUI::run()
 {
 	screen_disableMapPreview();
 
-	W_SCREEN *curScreen = psSettingsScreen ? psSettingsScreen : psWScreen;
+	auto const &curScreen = psSettingsScreen ? psSettingsScreen : psWScreen;
 	WidgetTriggers const &triggers = widgRunScreen(curScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
@@ -159,7 +153,7 @@ void WzProtocolTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int 
 
 void WzProtocolTitleUI::openIPDialog()			//internet options
 {
-	psSettingsScreen = new W_SCREEN;
+	psSettingsScreen = W_SCREEN::make();
 
 	W_FORMINIT sFormInit;           //Connection Settings
 	sFormInit.formID = 0;
@@ -215,9 +209,5 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 
 void WzProtocolTitleUI::closeIPDialog()
 {
-	if (psSettingsScreen)
-	{
-		delete psSettingsScreen;
-		psSettingsScreen = nullptr;
-	}
+	psSettingsScreen = nullptr;
 }

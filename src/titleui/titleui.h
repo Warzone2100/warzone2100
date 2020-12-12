@@ -68,7 +68,6 @@ class WzProtocolTitleUI: public WzTitleUI
 {
 public:
 	WzProtocolTitleUI();
-	virtual ~WzProtocolTitleUI() override;
 	virtual void start() override;
 	virtual TITLECODE run() override;
 	virtual void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
@@ -76,7 +75,7 @@ private:
 	void openIPDialog();
 	void closeIPDialog();
 	// Not-null: the settings screen is up
-	W_SCREEN * psSettingsScreen = nullptr;
+	std::shared_ptr<W_SCREEN> psSettingsScreen = nullptr;
 	// If true, there's an IP address waiting to be used.
 	bool hasWaitingIP = false;
 };

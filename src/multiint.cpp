@@ -1206,7 +1206,10 @@ void MultibuttonWidget::choose(int value)
 		}
 	}
 
-	screenPointer->setReturn(this);
+	if (auto lockedScreen = screenPointer.lock())
+	{
+		lockedScreen->setReturn(this);
+	}
 }
 
 void MultibuttonWidget::stateChanged()
@@ -4921,7 +4924,7 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-bool addMultiBut(W_SCREEN *screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+bool addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
 	WzMultiButton *button = new WzMultiButton(widgGetFromID(screen, formid));
 	button->id = id;

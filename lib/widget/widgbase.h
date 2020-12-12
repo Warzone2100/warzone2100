@@ -244,13 +244,13 @@ public:
 	WIDGET_CALLBACK         callback;               ///< User callback (if any)
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
 	UDWORD                  UserData;               ///< User data (if any)
-	W_SCREEN               *screenPointer;          ///< Pointer to screen the widget is on (if attached).
+	std::weak_ptr<W_SCREEN> screenPointer;          ///< Pointer to screen the widget is on (if attached).
 
 private:
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calc layout callback
 	WIDGET_ONDELETE_FUNC	onDelete;				///< Optional callback called when the Widget is about to be deleted
 	WIDGET_HITTEST_FUNC		customHitTest;			///< Optional hit-testing custom function
-	void setScreenPointer(W_SCREEN *screen);        ///< Set screen pointer for us and all children.
+	void setScreenPointer(const std::shared_ptr<W_SCREEN> &screen); ///< Set screen pointer for us and all children.
 public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
 	void runRecursive(W_CONTEXT *psContext);
@@ -285,9 +285,20 @@ struct WidgetTrigger
 typedef std::vector<WidgetTrigger> WidgetTriggers;
 
 /* The screen structure which stores all info for a widget screen */
-struct W_SCREEN
+struct W_SCREEN: public std::enable_shared_from_this<W_SCREEN>
 {
-	W_SCREEN();
+protected:
+	W_SCREEN(): psFocus(nullptr), lastHighlight(nullptr), TipFontID(font_regular) {}
+	void initialize();
+
+public:
+	static std::shared_ptr<W_SCREEN> make()
+	{
+		auto screen = std::shared_ptr<W_SCREEN>(new W_SCREEN());
+		screen->initialize();
+		return screen;
+	}
+
 	~W_SCREEN();
 
 	void setFocus(WIDGET *widget);  ///< Sets psFocus, notifying the old widget, if any.

@@ -73,8 +73,9 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 }
 
 /* Get the current position of a slider bar */
-UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
+UDWORD widgGetSliderPos(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 {
+	ASSERT_OR_RETURN(0, psScreen != nullptr, "Invalid screen pointer");
 	WIDGET	*psWidget;
 
 	psWidget = widgGetFromID(psScreen, id);
@@ -92,7 +93,10 @@ void W_SLIDER::run(W_CONTEXT *psContext)
 	if ((state & SLD_DRAG) && !mouseDown(MOUSE_LMB))
 	{
 		state &= ~SLD_DRAG;
-		screenPointer->setReturn(this);
+		if (auto lockedScreen = screenPointer.lock())
+		{
+			lockedScreen->setReturn(this);
+		}
 		dirty = true;
 	}
 	else if (!(state & SLD_DRAG) && mouseDown(MOUSE_LMB))

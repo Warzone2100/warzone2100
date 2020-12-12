@@ -73,8 +73,9 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 }
 
 /* Set the current size of a bar graph */
-void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
+void widgSetBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
 {
+	ASSERT_OR_RETURN(, psScreen != nullptr, "Invalid screen pointer");
 	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
 	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
@@ -95,8 +96,9 @@ void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
 
 
 /* Set the current size of a minor bar on a double graph */
-void widgSetMinorBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD iValue)
+void widgSetMinorBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
 {
+	ASSERT_OR_RETURN(, psScreen != nullptr, "Invalid screen pointer");
 	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
 	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
@@ -110,7 +112,10 @@ void W_BARGRAPH::highlight(W_CONTEXT *psContext)
 {
 	if (!pTip.empty())
 	{
-		tipStart(this, pTip, screenPointer->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		if (auto lockedScreen = screenPointer.lock())
+		{
+			tipStart(this, pTip, lockedScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+		}
 	}
 }
 

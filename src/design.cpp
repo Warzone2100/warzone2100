@@ -223,7 +223,7 @@ char StringBuffer[STRING_BUFFER_SIZE];
 #define	DES_STATBAR_Y4	(DES_CLICKBARY+(DES_CLICKBARHEIGHT + DES_CLICKGAP)*3)
 
 /* the widget screen */
-extern W_SCREEN		*psWScreen;
+extern std::shared_ptr<W_SCREEN> psWScreen;
 
 /* default droid design template */
 static DROID_TEMPLATE sDefaultDesignTemplate;
