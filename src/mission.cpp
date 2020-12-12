@@ -79,7 +79,7 @@
 #include "combat.h"
 #include "qtscript.h"
 #include "activity.h"
-#include "wztime.h"
+#include "lib/framework/wztime.h"
 
 #define		IDMISSIONRES_TXT		11004
 #define		IDMISSIONRES_LOAD		11005

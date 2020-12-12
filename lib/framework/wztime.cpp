@@ -20,26 +20,48 @@
 #include "wztime.h"
 #include <iomanip>
 #include <sstream>
-#include "lib/framework/wzglobal.h"
+#include "wzglobal.h"
+#include "frame.h"
 
 tm getUtcTime(std::time_t const &timer)
 {
 	struct tm timeinfo = {};
 #if defined(WZ_OS_WIN)
-	gmtime_s(&timeinfo, &timer);
+	if (gmtime_s(&timeinfo, &timer) != 0)
+	{
+		// Invalid argument to gmtime_s
+		debug(LOG_ERROR, "Invalid time_t argument");
+	}
 #else
-	gmtime_r(&timer, &timeinfo);
+	if (!gmtime_r(&timer, &timeinfo))
+	{
+		debug(LOG_ERROR, "gmtime_r failed");
+	}
 #endif
 	return timeinfo;
 }
 
-static tm getLocalTime(std::time_t const &timer)
+optional<tm> getLocalTimeOpt(std::time_t const &timer)
 {
 	struct tm timeinfo = {};
 #if defined(WZ_OS_WIN)
-	localtime_s(&timeinfo, &timer);
+	errno_t result = localtime_s(&timeinfo, &timer);
+	if (result != 0)
+	{
+		char sys_msg[80];
+		if (strerror_s(sys_msg, sizeof(sys_msg), result) != 0)
+		{
+			strncpy(sys_msg, "unknown error", sizeof(sys_msg));
+		}
+		debug(LOG_ERROR, "localtime_s failed with error: %s", sys_msg);
+		return nullopt;
+	}
 #else
-	localtime_r(&timer, &timeinfo);
+	if (!localtime_r(&timer, &timeinfo))
+	{
+		debug(LOG_ERROR, "localtime_r failed");
+		return nullopt;
+	}
 #endif
 	return timeinfo;
 }
@@ -47,8 +69,9 @@ static tm getLocalTime(std::time_t const &timer)
 std::string const formatLocalDateTime(char const *format, std::time_t const &timer)
 {
 	std::stringstream ss;
-	auto timeinfo = getLocalTime(timer);
-	ss << std::put_time(&timeinfo, format);
+	auto timeinfo = getLocalTimeOpt(timer);
+	ASSERT_OR_RETURN("", timeinfo.has_value(), "getLocalTime failed");
+	ss << std::put_time(&(timeinfo.value()), format);
 	return ss.str();
 }
 
