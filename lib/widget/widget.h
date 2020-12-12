@@ -273,14 +273,8 @@ WZ_DECL_NONNULL(1) const WzString& widgGetWzString(W_SCREEN *psScreen, UDWORD id
 /** Set the text in a widget */
 WZ_DECL_NONNULL(1) void widgSetString(W_SCREEN *psScreen, UDWORD id, const char *pText);
 
-/** Get the current position of a widget */
-WZ_DECL_NONNULL(1, 3, 4) void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY);
-
 /** Get the current position of a slider bar */
 WZ_DECL_NONNULL(1) UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id);
-
-/** Set the current position of a slider bar */
-WZ_DECL_NONNULL(1) void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos);
 
 /** Set the current size of a bar graph */
 WZ_DECL_NONNULL(1) void widgSetBarSize(W_SCREEN *psScreen, UDWORD id, UDWORD size);
