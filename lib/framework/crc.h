@@ -96,4 +96,6 @@ private:
 std::string base64Encode(std::vector<uint8_t> const &bytes);
 std::vector<uint8_t> base64Decode(std::string const &str);
 
+std::vector<uint8_t> genSecRandomBytes(size_t numBytes);
+
 #endif //_CRC_H_
