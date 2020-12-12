@@ -66,6 +66,17 @@ optional<tm> getLocalTimeOpt(std::time_t const &timer)
 	return timeinfo;
 }
 
+tm getLocalTime(std::time_t const &timer)
+{
+	auto result = getLocalTimeOpt(timer);
+	if (!result.has_value())
+	{
+		struct tm zeroResult = {};
+		return zeroResult;
+	}
+	return result.value();
+}
+
 std::string const formatLocalDateTime(char const *format, std::time_t const &timer)
 {
 	std::stringstream ss;
