@@ -86,27 +86,6 @@ UDWORD widgGetSliderPos(W_SCREEN *psScreen, UDWORD id)
 	return 0;
 }
 
-/* Set the current position of a slider bar */
-void widgSetSliderPos(W_SCREEN *psScreen, UDWORD id, UWORD pos)
-{
-	WIDGET	*psWidget;
-
-	psWidget = widgGetFromID(psScreen, id);
-	ASSERT(psWidget != nullptr, "Could not find widget from id %u", id);
-	if (psWidget && pos != ((W_SLIDER *)psWidget)->pos)
-	{
-		psWidget->dirty = true;
-		if (pos > ((W_SLIDER *)psWidget)->numStops)
-		{
-			((W_SLIDER *)psWidget)->pos = ((W_SLIDER *)psWidget)->numStops;
-		}
-		else
-		{
-			((W_SLIDER *)psWidget)->pos = pos;
-		}
-	}
-}
-
 /* Run a slider widget */
 void W_SLIDER::run(W_CONTEXT *psContext)
 {

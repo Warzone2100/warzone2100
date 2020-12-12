@@ -520,27 +520,6 @@ void widgReveal(W_SCREEN *psScreen, UDWORD id)
 	psWidget->show();
 }
 
-
-/* Get the current position of a widget */
-void widgGetPos(W_SCREEN *psScreen, UDWORD id, SWORD *pX, SWORD *pY)
-{
-	WIDGET	*psWidget;
-
-	/* Find the widget */
-	psWidget = widgGetFromID(psScreen, id);
-	if (psWidget != nullptr)
-	{
-		*pX = psWidget->x();
-		*pY = psWidget->y();
-	}
-	else
-	{
-		ASSERT(!"Couldn't find widget by ID", "Couldn't find widget by ID");
-		*pX = 0;
-		*pY = 0;
-	}
-}
-
 /* Return the ID of the widget the mouse was over this frame */
 UDWORD widgGetMouseOver(W_SCREEN *psScreen)
 {
