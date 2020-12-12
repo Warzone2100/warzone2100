@@ -91,7 +91,7 @@ void GFX::loadTexture(const char *filename, int maxWidth /*= -1*/, int maxHeight
 	}
 }
 
-void GFX::makeTexture(int width, int height, const gfx_api::pixel_format& format, const void *image)
+void GFX::makeTexture(size_t width, size_t height, const gfx_api::pixel_format& format, const void *image)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
 	if (mTexture)
@@ -107,14 +107,14 @@ void GFX::makeTexture(int width, int height, const gfx_api::pixel_format& format
 	mFormat = format;
 }
 
-void GFX::updateTexture(const void *image, int width, int height)
+void GFX::updateTexture(const void *image, size_t width, size_t height)
 {
 	ASSERT(mType == GFX_TEXTURE, "Wrong GFX type");
-	if (width == -1)
+	if (width == 0)
 	{
 		width = mWidth;
 	}
-	if (height == -1)
+	if (height == 0)
 	{
 		height = mHeight;
 	}
@@ -587,7 +587,7 @@ bool pie_ShutdownRadar()
 	return true;
 }
 
-void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, int twidth, int theight)
+void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, size_t twidth, size_t theight)
 {
 	radarGfx->makeTexture(twidth, theight);
 	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // Want GL_LINEAR (or GL_LINEAR_MIPMAP_NEAREST) for min filter, but GL_NEAREST for mag filter. // TODO: Add a gfx_api::sampler_type to handle this case? bilinear, but nearest for mag?

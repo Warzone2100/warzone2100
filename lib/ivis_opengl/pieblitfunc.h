@@ -87,10 +87,10 @@ public:
 
 	/// Allocate space on the GPU for texture of given parameters. If image is non-NULL,
 	/// then that memory buffer is uploaded to the GPU.
-	void makeTexture(int width, int height, const gfx_api::pixel_format& format = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, const void *image = nullptr);
+	void makeTexture(size_t width, size_t height, const gfx_api::pixel_format& format = gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, const void *image = nullptr);
 
 	/// Upload given memory buffer to already allocated texture space on the GPU
-	void updateTexture(const void *image, int width = -1, int height = -1);
+	void updateTexture(const void *image, size_t width = 0, size_t height = 0);
 
 	/// Upload vertex and texture buffer data to the GPU
 	void buffers(int vertices, const void *vertBuf, const void *texBuf);
@@ -118,8 +118,8 @@ public:
 private:
 	GFXTYPE mType;
 	gfx_api::pixel_format mFormat;
-	int mWidth;
-	int mHeight;
+	size_t mWidth = 0;
+	size_t mHeight = 0;
 	int mCoordsPerVertex;
 	gfx_api::buffer* mBuffers[VBO_COUNT] = { nullptr };
 	gfx_api::texture* mTexture = nullptr;
@@ -238,7 +238,7 @@ bool pie_InitRadar();
 bool pie_ShutdownRadar();
 void pie_DownLoadRadar(UDWORD *buffer);
 void pie_RenderRadar(const glm::mat4 &modelViewProjectionMatrix);
-void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, int twidth, int theight);
+void pie_SetRadar(gfx_api::gfxFloat x, gfx_api::gfxFloat y, gfx_api::gfxFloat width, gfx_api::gfxFloat height, size_t twidth, size_t theight);
 
 enum SCREENTYPE
 {
