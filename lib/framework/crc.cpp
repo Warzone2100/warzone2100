@@ -485,3 +485,14 @@ std::vector<uint8_t> base64Decode(std::string const &str)
 	}
 	return bytes;
 }
+
+//================================================================================
+// MARK: - Generating Random Data
+//================================================================================
+
+std::vector<uint8_t> genSecRandomBytes(size_t numBytes)
+{
+	std::vector<uint8_t> result(numBytes);
+	randombytes_buf(&result[0], result.size());
+	return result;
+}
