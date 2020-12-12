@@ -65,7 +65,7 @@ bool NETstartLogging(void)
 		      WZ_PHYSFS_getLastError());
 		return false;
 	}
-	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", asctime(&newtime));
+	snprintf(buf, sizeof(buf), "NETPLAY log: %s\n", getAscTime(newtime).c_str());
 	WZ_PHYSFS_writeBytes(pFileHandle, buf, static_cast<PHYSFS_uint32>(strlen(buf)));
 	return true;
 }
@@ -186,15 +186,15 @@ bool NETlogEntry(const char *str, UDWORD a, UDWORD b)
 	if (a < NUM_GAME_PACKETS)
 		// replace common msgs with txt descriptions
 	{
-		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, messageTypeToString(a), b, asctime(&newtime));
+		snprintf(buf, sizeof(buf), "%s \t: %s \t:%d\t\t%s", str, messageTypeToString(a), b, getAscTime(newtime).c_str());
 	}
 	else if (a == SYNC_FLAG)
 	{
-		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, asctime(&newtime));
+		snprintf(buf, sizeof(buf), "%s \t: %d \t(Sync) \t%s", str, b, getAscTime(newtime).c_str());
 	}
 	else
 	{
-		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, asctime(&newtime));
+		snprintf(buf, sizeof(buf), "%s \t:%d \t\t\t:%d\t\t%s", str, a, b, getAscTime(newtime).c_str());
 	}
 
 	if (a == NET_PLAYER_LEAVING || a == NET_PLAYER_DROPPED)
