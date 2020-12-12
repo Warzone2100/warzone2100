@@ -75,6 +75,7 @@
 #include "multiint.h"
 #include "multigifts.h"
 #include "multiplay.h"
+#include "multistat.h"
 #include "notifications.h"
 #include "projectile.h"
 #include "order.h"
@@ -786,6 +787,9 @@ void systemShutdown()
 		debug(LOG_FATAL, "Unable to multiShutdown() cleanly!");
 		abort();
 	}
+
+	// shut down various databases
+	shutdownKnownPlayers();
 
 	debug(LOG_MAIN, "shutting down audio subsystems");
 

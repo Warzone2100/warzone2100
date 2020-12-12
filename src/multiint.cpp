@@ -4398,6 +4398,7 @@ void WzMultiplayerOptionsTitleUI::start()
 	/* Entering the first time */
 	if (!bReenter)
 	{
+		initKnownPlayers();
 		resetPlayerConfiguration(true);
 		memset(&locked, 0, sizeof(locked));
 		loadMapChallengeAndPlayerSettings(true);
@@ -4609,7 +4610,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 			colour = WZCOL_FORM_PLAYER_KNOWN_BY_SERVER;
 		}
-		else if (isKnownPlayer(getKnownPlayers(), name, getMultiStats(j).identity))
+		else if (isLocallyKnownPlayer(name, getMultiStats(j).identity))
 		{
 			colour = WZCOL_FORM_PLAYER_KNOWN;
 		}

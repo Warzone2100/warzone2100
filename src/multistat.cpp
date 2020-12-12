@@ -25,17 +25,6 @@
  * load / update / store multiplayer statistics for league tables etc...
  */
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-#include <QtCore/QSettings> // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
 #include "lib/framework/file.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
@@ -49,6 +38,8 @@
 #include "urlrequest.h"
 
 #include <utility>
+#include <memory>
+#include <SQLiteCpp/SQLiteCpp.h>
 
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -422,21 +413,169 @@ void updateMultiStatsKills(BASE_OBJECT *psKilled, UDWORD player)
 	}
 }
 
-static std::map<std::string, EcKey::Key> knownPlayers;
-static QSettings *knownPlayersIni = nullptr;
+class KnownPlayersDB {
+public:
+	struct PlayerInfo {
+		int64_t local_id;
+		std::string name;
+		EcKey::Key pk;
+	};
 
-std::map<std::string, EcKey::Key> const &getKnownPlayers()
-{
-	if (knownPlayersIni == nullptr)
+public:
+	// Caller is expected to handle thrown exceptions
+	KnownPlayersDB(const std::string& knownPlayersDBPath)
 	{
-		knownPlayersIni = new QSettings(PHYSFS_getWriteDir() + QString("/") + "knownPlayers.ini", QSettings::IniFormat);
-		QStringList names = knownPlayersIni->allKeys();
-		for (int i = 0; i < names.size(); ++i)
+		db = std::unique_ptr<SQLite::Database>(new SQLite::Database(knownPlayersDBPath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE));
+		db->exec("PRAGMA journal_mode=WAL");
+		createKnownPlayersDBTables();
+		query_findPlayerByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT local_id, name, pk FROM known_players WHERE name = ?"));
+		query_insertNewKnownPlayer = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO known_players(name, pk) VALUES(?, ?)"));
+		query_updateKnownPlayerKey = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE known_players SET pk = ? WHERE name = ?"));
+	}
+
+public:
+	optional<PlayerInfo> findPlayerByName(const std::string& name)
+	{
+		if (name.empty())
 		{
-			knownPlayers[names[i].toUtf8().constData()] = base64Decode(knownPlayersIni->value(names[i]).toString().toStdString());
+			return nullopt;
+		}
+		cleanupCache();
+		const auto i = findPlayerCache.find(name);
+		if (i != findPlayerCache.end())
+		{
+			return i->second.first;
+		}
+		optional<PlayerInfo> result;
+		try {
+			query_findPlayerByName->bind(1, name);
+			if (query_findPlayerByName->executeStep())
+			{
+				PlayerInfo data;
+				data.local_id = query_findPlayerByName->getColumn(0).getInt64();
+				data.name = query_findPlayerByName->getColumn(1).getString();
+				std::string publicKeyb64 = query_findPlayerByName->getColumn(2).getString();
+				data.pk = base64Decode(publicKeyb64);
+				result = data;
+			}
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failure to query database for player; error: %s", e.what());
+			result = nullopt;
+		}
+		try {
+			query_findPlayerByName->reset();
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failed to reset prepared statement; error: %s", e.what());
+		}
+		// add to the current in-memory cache
+		findPlayerCache[name] = std::pair<optional<PlayerInfo>, UDWORD>(result, realTime);
+		return result;
+	}
+
+	// Note: May throw on database error!
+	void addKnownPlayer(std::string const &name, EcKey const &key, bool overrideCurrentKey)
+	{
+		if (key.empty())
+		{
+			return;
+		}
+
+		std::string publicKeyb64 = base64Encode(key.toBytes(EcKey::Public));
+
+		// Begin transaction
+		SQLite::Transaction transaction(*db);
+
+		query_insertNewKnownPlayer->bind(1, name);
+		query_insertNewKnownPlayer->bind(2, publicKeyb64);
+		if (query_insertNewKnownPlayer->exec() == 0 && overrideCurrentKey)
+		{
+			query_updateKnownPlayerKey->bind(1, publicKeyb64);
+			query_updateKnownPlayerKey->bind(2, name);
+			if (query_updateKnownPlayerKey->exec() == 0)
+			{
+				debug(LOG_WARNING, "Failed to update known_player (%s)", name.c_str());
+			}
+			query_updateKnownPlayerKey->reset();
+		}
+		query_insertNewKnownPlayer->reset();
+
+		// remove from the current in-memory cache
+		findPlayerCache.erase(name);
+
+		// Commit transaction
+		transaction.commit();
+	}
+
+private:
+	void createKnownPlayersDBTables()
+	{
+		SQLite::Transaction transaction(*db);
+		if (!db->tableExists("known_players"))
+		{
+			db->exec("CREATE TABLE known_players (local_id INTEGER PRIMARY KEY, name TEXT UNIQUE, pk TEXT)");
+		}
+		transaction.commit();
+	}
+
+	void cleanupCache()
+	{
+		const UDWORD CACHE_CLEAN_INTERAL = 10 * GAME_TICKS_PER_SEC;
+		if (realTime - lastCacheClean > CACHE_CLEAN_INTERAL)
+		{
+			findPlayerCache.clear();
+			lastCacheClean = realTime;
 		}
 	}
-	return knownPlayers;
+
+private:
+	std::unique_ptr<SQLite::Database> db; // Must be the first-listed member variable so it is destructed last
+	std::unique_ptr<SQLite::Statement> query_findPlayerByName;
+	std::unique_ptr<SQLite::Statement> query_insertNewKnownPlayer;
+	std::unique_ptr<SQLite::Statement> query_updateKnownPlayerKey;
+	std::unordered_map<std::string, std::pair<optional<PlayerInfo>, UDWORD>> findPlayerCache;
+	UDWORD lastCacheClean = 0;
+};
+
+static std::unique_ptr<KnownPlayersDB> knownPlayersDB;
+
+void initKnownPlayers()
+{
+	if (!knownPlayersDB)
+	{
+		const char *pWriteDir = PHYSFS_getWriteDir();
+		ASSERT_OR_RETURN(, pWriteDir, "PHYSFS_getWriteDir returned null");
+		std::string knownPlayersDBPath = std::string(pWriteDir) + "/" + "knownPlayers.db";
+		try {
+			knownPlayersDB = std::unique_ptr<KnownPlayersDB>(new KnownPlayersDB(knownPlayersDBPath));
+		}
+		catch (std::exception& e) {
+			// error loading SQLite database
+			debug(LOG_ERROR, "Unable to load or initialize SQLite3 database (%s); error: %s", knownPlayersDBPath.c_str(), e.what());
+			return;
+		}
+	}
+}
+
+void shutdownKnownPlayers()
+{
+	knownPlayersDB.reset();
+}
+
+bool isLocallyKnownPlayer(std::string const &name, EcKey const &key)
+{
+	ASSERT_OR_RETURN(false, knownPlayersDB.operator bool(), "knownPlayersDB is uninitialized");
+	if (key.empty())
+	{
+		return false;
+	}
+	auto result = knownPlayersDB->findPlayerByName(name);
+	if (!result.has_value())
+	{
+		return false;
+	}
+	return result.value().pk == key.toBytes(EcKey::Public);
 }
 
 void addKnownPlayer(std::string const &name, EcKey const &key, bool override)
@@ -445,16 +584,14 @@ void addKnownPlayer(std::string const &name, EcKey const &key, bool override)
 	{
 		return;
 	}
+	ASSERT_OR_RETURN(, knownPlayersDB.operator bool(), "knownPlayersDB is uninitialized");
 
-	if (!override && knownPlayers.find(name) != knownPlayers.end())
-	{
-		return;
+	try {
+		knownPlayersDB->addKnownPlayer(name, key, override);
 	}
-
-	getKnownPlayers();  // Init knownPlayersIni.
-	knownPlayers[name] = key.toBytes(EcKey::Public);
-	knownPlayersIni->setValue(QString::fromUtf8(name.c_str()), base64Encode(key.toBytes(EcKey::Public)).c_str());
-	knownPlayersIni->sync();
+	catch (const std::exception& e) {
+		debug(LOG_ERROR, "Failed to add known_player with error: %s", e.what());
+	}
 }
 
 uint32_t getSelectedPlayerUnitsKilled()
