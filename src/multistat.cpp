@@ -263,7 +263,7 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 		strcpy(sPlayerName, _("Player"));
 	}
 
-	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sPlayerName);
+	snprintf(fileName, sizeof(fileName), "%s%s.sta2", MultiPlayersPath, sPlayerName);
 
 	debug(LOG_WZ, "loadMultiStats: %s", fileName);
 
@@ -325,7 +325,7 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 	ssprintf(buffer, "WZ.STA.v3\n%u %u %u %u %u\n%s\n",
 	         st->wins, st->losses, st->totalKills, st->totalScore, st->played, base64Encode(st->identity.toBytes(EcKey::Private)).c_str());
 
-	snprintf(fileName, sizeof(fileName), "%s%s.sta", MultiPlayersPath, sFileName);
+	snprintf(fileName, sizeof(fileName), "%s%s.sta2", MultiPlayersPath, sFileName);
 
 	saveFile(fileName, buffer, strlen(buffer));
 

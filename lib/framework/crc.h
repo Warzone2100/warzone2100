@@ -48,8 +48,8 @@ Sha256 sha256Sum(void const *data, size_t dataLen);
 class EcKey
 {
 public:
-	typedef std::vector<uint8_t> Sig;
-	typedef std::vector<uint8_t> Key;
+	typedef std::vector<unsigned char> Sig;
+	typedef std::vector<unsigned char> Key;
 	enum Privacy { Public, Private };
 
 	EcKey();
