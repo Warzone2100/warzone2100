@@ -259,8 +259,8 @@ static double getRelativeTime(void)
 	return ((getTimeNow() - basetime) * .001);
 }
 
-const gfx_api::gfxFloat texture_width = 1024.0f;
-const gfx_api::gfxFloat texture_height = 1024.0f;
+const size_t texture_width = 1024;
+const size_t texture_height = 1024;
 
 /** Allocates memory to hold the decoded video frame
  */
@@ -381,7 +381,7 @@ static void video_write(bool update)
 			}
 		}
 
-		videoGfx->updateTexture(RGBAframe, video_width, video_height * height_factor);
+		videoGfx->updateTexture(RGBAframe, static_cast<size_t>(video_width), static_cast<size_t>(video_height) * static_cast<size_t>(height_factor));
 	}
 
 	const auto& modelViewProjectionMatrix = glm::ortho(0.f, static_cast<float>(pie_GetVideoBufferWidth()), static_cast<float>(pie_GetVideoBufferHeight()), 0.f) *
@@ -681,7 +681,7 @@ bool seq_Play(const char *filename)
 	{
 		if (videodata.ti.frame_width > texture_width || videodata.ti.frame_height > texture_height)
 		{
-			debug(LOG_ERROR, "Video size too large, must be below %.gx%.g!",
+			debug(LOG_ERROR, "Video size too large, must be below %zu x %zu!",
 			      texture_width, texture_height);
 			delete videoGfx;
 			videoGfx = nullptr;
@@ -707,9 +707,9 @@ bool seq_Play(const char *filename)
 		free(blackframe);
 
 		// when using scanlines we need to double the height
-		const int height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
-		const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / texture_width;
-		const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / texture_height;
+		const uint32_t height_factor = ((!seq_getScanlinesDisabled() && seq_getScanlineMode()) ? 2 : 1);
+		const gfx_api::gfxFloat vtwidth = (float)videodata.ti.frame_width / (float)texture_width;
+		const gfx_api::gfxFloat vtheight = (float)videodata.ti.frame_height * height_factor / (float)texture_height;
 		gfx_api::gfxFloat texcoords[NUM_VERTICES * 2] = { 0.0f, 0.0f, vtwidth, 0.0f, 0.0f, vtheight, vtwidth, vtheight };
 		videoGfx->buffers(NUM_VERTICES, vertices, texcoords);
 	}

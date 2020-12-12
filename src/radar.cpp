@@ -110,10 +110,11 @@ static PIELIGHT flashColours[] =
 	{{254, 37, 37, 200}},   // Player F
 };
 
-static SDWORD radarWidth, radarHeight, radarCenterX, radarCenterY, radarTexWidth, radarTexHeight;
+static size_t radarWidth, radarHeight, radarTexWidth, radarTexHeight;
+static SDWORD radarCenterX, radarCenterY;
 static uint8_t RadarZoom;
 static float RadarZoomMultiplier = 1.0f;
-static UDWORD radarBufferSize = 0;
+static size_t radarBufferSize = 0;
 static int frameSkip = 0;
 
 static void DrawRadarTiles();
@@ -129,15 +130,15 @@ static void radarSize(int ZoomLevel)
 	radarHeight = radarTexHeight * zoom;
 	if (rotateRadar)
 	{
-		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - MAX(radarHeight, radarWidth) / 2;
-		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - MAX(radarWidth, radarHeight) / 2;
+		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - static_cast<int>(MAX(radarHeight, radarWidth)) / 2;
+		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - static_cast<int>(MAX(radarWidth, radarHeight)) / 2;
 	}
 	else
 	{
-		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - radarWidth / 2;
-		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - radarHeight / 2;
+		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - static_cast<int>(radarWidth) / 2;
+		radarCenterY = pie_GetVideoBufferHeight() - BASE_GAP * 4 - static_cast<int>(radarHeight) / 2;
 	}
-	debug(LOG_WZ, "radar=(%u,%u) tex=(%u,%u) size=(%u,%u)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
+	debug(LOG_WZ, "radar=(%u,%u) tex=(%zu,%zu) size=(%zu,%zu)", radarCenterX, radarCenterY, radarTexWidth, radarTexHeight, radarWidth, radarHeight);
 }
 
 void radarInitVars()
@@ -174,7 +175,7 @@ bool resizeRadar()
 	frameSkip = 0;
 	if (rotateRadar)
 	{
-		RadarZoomMultiplier = (float)std::max(RADWIDTH, RADHEIGHT) / std::max({radarTexWidth, radarTexHeight, 1});
+		RadarZoomMultiplier = (float)std::max(RADWIDTH, RADHEIGHT) / std::max<size_t>({radarTexWidth, radarTexHeight, 1});
 	}
 	else
 	{
@@ -182,7 +183,7 @@ bool resizeRadar()
 	}
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
-	pie_SetRadar(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, radarWidth, radarHeight, radarTexWidth, radarTexHeight);
+	pie_SetRadar(-static_cast<float>(radarWidth) / 2.0 - 1, -static_cast<float>(radarHeight) / 2.0 - 1, static_cast<float>(radarWidth), static_cast<float>(radarHeight), radarTexWidth, radarTexHeight);
 	setViewingWindow();
 
 	return true;
@@ -221,8 +222,8 @@ uint8_t GetRadarZoom()
 /** Calculate the radar pixel sizes. Returns pixels per tile. */
 static void CalcRadarPixelSize(float *SizeH, float *SizeV)
 {
-	*SizeH = (float)radarHeight / std::max(radarTexHeight, 1);
-	*SizeV = (float)radarWidth / std::max(radarTexWidth, 1);
+	*SizeH = (float)radarHeight / std::max<size_t>(radarTexHeight, 1);
+	*SizeV = (float)radarWidth / std::max<size_t>(radarTexWidth, 1);
 }
 
 /** Given a position within the radar, return a world coordinate. */
@@ -292,8 +293,8 @@ void drawRadar()
 	}
 
 	pie_RenderRadar(orthoMatrix * radarMatrix);
-	DrawRadarExtras(orthoMatrix * radarMatrix * glm::translate(glm::vec3(-radarWidth / 2.f - 1.f, -radarHeight / 2.f - 1.f, 0.f)));
-	drawRadarBlips(-radarWidth / 2.0 - 1, -radarHeight / 2.0 - 1, pixSizeH, pixSizeV, orthoMatrix * radarMatrix);
+	DrawRadarExtras(orthoMatrix * radarMatrix * glm::translate(glm::vec3(-static_cast<float>(radarWidth) / 2.f - 1.f, -static_cast<float>(radarHeight) / 2.f - 1.f, 0.f)));
+	drawRadarBlips(-static_cast<int>(radarWidth) / 2.0 - 1, -static_cast<int>(radarHeight) / 2.0 - 1, pixSizeH, pixSizeV, orthoMatrix * radarMatrix);
 }
 
 static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix)
