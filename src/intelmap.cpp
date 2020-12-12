@@ -147,7 +147,7 @@
 #define TEXT_END_FRAME			9999
 
 /* the widget screen */
-extern W_SCREEN		*psWScreen;
+extern std::shared_ptr<W_SCREEN> psWScreen;
 
 static UDWORD			messageID;
 static bool				immediateMessage = false;

@@ -101,7 +101,7 @@ struct LoadSaveDisplayLoadSlotCache {
 	WzText wzText;
 };
 
-static	W_SCREEN	*psRequestScreen;					// Widget screen for requester
+static std::shared_ptr<W_SCREEN> psRequestScreen = nullptr; // Widget screen for requester
 static	bool		mode;
 static	UDWORD		chosenSlotId;
 
@@ -230,7 +230,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		intRemoveReticule();
 	}
 
-	psRequestScreen = new W_SCREEN;
+	psRequestScreen = W_SCREEN::make();
 
 	WIDGET *parent = psRequestScreen->psForm;
 
@@ -434,7 +434,6 @@ bool closeLoadSave()
 		intShowPowerBar();
 
 	}
-	delete psRequestScreen;
 	psRequestScreen = nullptr;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();

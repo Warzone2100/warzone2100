@@ -65,7 +65,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
-W_SCREEN  *psRScreen;			// requester stuff.
+std::shared_ptr<W_SCREEN> psRScreen = nullptr; // requester stuff.
 
 extern char	MultiCustomMapsPath[PATH_MAX];
 
@@ -412,7 +412,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 		current_searchString = searchString;
 	}
 
-	psRScreen = new W_SCREEN; ///< move this to intinit or somewhere like that.. (close too.)
+	psRScreen = W_SCREEN::make(); ///< move this to intinit or somewhere like that.. (close too.)
 
 	auto backdrop = addBackdrop(psRScreen);
 	backdrop->setCalcLayout(calcBackdropLayoutForMultiplayerOptionsTitleUI);
@@ -553,7 +553,6 @@ static void closeMultiRequester()
 {
 	multiRequestUp = false;
 	resetReadyStatus(false);
-	delete psRScreen;  // move this to the frontend shutdown...
 	psRScreen = nullptr;
 	return;
 }

@@ -186,7 +186,7 @@ static bool showFavorites = false;
 #define STAT_BUTHEIGHT		46
 
 /* The widget screen */
-W_SCREEN		*psWScreen;
+std::shared_ptr<W_SCREEN> psWScreen = nullptr;
 
 // The last widget ID from widgRunScreen
 UDWORD				intLastWidget;
@@ -590,7 +590,7 @@ bool intInitialise()
 
 	intInitialiseGraphics();
 
-	psWScreen = new W_SCREEN;
+	psWScreen = W_SCREEN::make();
 
 	if (GetGameMode() == GS_NORMAL)
 	{
@@ -645,7 +645,6 @@ void intResetPreviousObj()
 /* Shut down the in game interface */
 void interfaceShutDown()
 {
-	delete psWScreen;
 	psWScreen = nullptr;
 
 	free(apsStructStatsList);
