@@ -95,7 +95,8 @@ function truckDefense()
 	{
 		var list = [
 			"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
-			"NX-Tower-ATMiss", "Sys-NX-CBTower"
+			"NX-Tower-ATMiss", "Sys-NX-CBTower", "Emplacement-HvART-pit",
+			"Sys-SensoTower02"
 		];
 
 		for (var i = 0; i < truckNum; ++i)
