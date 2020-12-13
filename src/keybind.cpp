@@ -1252,6 +1252,7 @@ void	kf_ToggleGodMode()
 		}
 		// remove all proximity messages
 		releaseAllProxDisp();
+		radarPermitted = structureExists(selectedPlayer, REF_HQ, true, false) || structureExists(selectedPlayer, REF_HQ, true, true);
 	}
 	else
 	{
@@ -1259,6 +1260,7 @@ void	kf_ToggleGodMode()
 		revealAll(selectedPlayer);
 		pastReveal = getRevealStatus();
 		setRevealStatus(true); // view the entire map
+		radarPermitted = true; //add minimap without CC building
 	}
 
 	std::string cmsg = astringf(_("(Player %u) is using cheat :%s"),
