@@ -2985,7 +2985,7 @@ static bool gameLoad(const char *fileName)
 	if (!fileHandle)
 	{
 		// Failure to open the file is a failure to load the specified savegame
-		return true;
+		return false;
 	}
 	debug(LOG_WZ, "gameLoad");
 
