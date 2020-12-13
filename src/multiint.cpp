@@ -483,9 +483,12 @@ void loadMultiScripts()
 			}
 
 			// Make sure local player has an AI in autogames
-			if (NetPlay.players[i].ai < 0 && bIsLocalPlayer && autogame_enabled())
+			if (/*NetPlay.players[i].ai < 0 &&*/ bIsLocalPlayer && autogame_enabled())
 			{
-				NetPlay.players[i].ai = 0;
+				//NetPlay.players[i].ai = 0;
+				// levLoadData handles making sure the local player has an AI in autogames
+				// TODO: clean this mess up, and pick one place to handle initializing the AI in autogames
+				continue;
 			}
 
 			if (NetPlay.players[i].ai >= 0 && myResponsibility(i))
