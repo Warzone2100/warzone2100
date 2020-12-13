@@ -623,21 +623,26 @@ void addKnownPlayer(std::string const &name, EcKey const &key, bool override)
 	}
 }
 
+uint32_t getMultiPlayUnitsKilled(uint32_t player)
+{
+	// Let's use the real score for MP games
+	// FIXME: Why in the world are we using two different structs for stats when we can use only one?
+	if (NetPlay.bComms)
+	{
+		return getMultiStats(player).recentKills;
+	}
+	else
+	{
+		// estimated kills
+		return static_cast<uint32_t>(ingame.skScores[player][1]);
+	}
+}
+
 uint32_t getSelectedPlayerUnitsKilled()
 {
 	if (ActivityManager::instance().getCurrentGameMode() != ActivitySink::GameMode::CAMPAIGN)
 	{
-		// Let's use the real score for MP games
-		// FIXME: Why in the world are we using two different structs for stats when we can use only one?
-		if (NetPlay.bComms)
-		{
-			return getMultiStats(selectedPlayer).recentKills;
-		}
-		else
-		{
-			// estimated kills
-			return static_cast<uint32_t>(ingame.skScores[selectedPlayer][1]);
-		}
+		return getMultiPlayUnitsKilled(selectedPlayer);
 	}
 	else
 	{
