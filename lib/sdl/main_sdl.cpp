@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 
 // At this time, we only have 1 window.
 static SDL_Window *WZwindow = nullptr;
-static video_backend WZbackend = video_backend::opengl;
+static optional<video_backend> WZbackend = video_backend::opengl;
 
 // The screen that the game window is on.
 int screenIndex = 0;
@@ -328,7 +328,11 @@ void SDL_WZBackend_GetDrawableSize(SDL_Window* window,
 								   int*        w,
 								   int*        h)
 {
-	switch (WZbackend)
+	if (!WZbackend.has_value())
+	{
+		return;
+	}
+	switch (WZbackend.value())
 	{
 #if defined(WZ_BACKEND_DIRECTX)
 		case video_backend::directx: // because DirectX is supported via OpenGLES (LibANGLE)
@@ -1560,6 +1564,8 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 // Returns the current window screen, width, and height
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height)
 {
+	assert(WZwindow != nullptr);
+
 	if (screen != nullptr)
 	{
 		*screen = screenIndex;
@@ -1676,8 +1682,50 @@ bool wzSDLOneTimeInit()
 	return true;
 }
 
+void wzSDLPreWindowCreate_InitOpenGLAttributes(bool antialiasing, bool useOpenGLES, bool useOpenGLESLibrary)
+{
+	// Set OpenGL attributes before creating the SDL Window
+
+	// Set minimum number of bits for the RGB channels of the color buffer
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+#if defined(WZ_OS_WIN)
+	if (useOpenGLES)
+	{
+		// Always force minimum 8-bit color channels when using OpenGL ES on Windows
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	}
+#endif
+
+	// Set the double buffer OpenGL attribute.
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	// Request a 24-bit depth buffer.
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+	// Enable stencil buffer, needed for shadows to work.
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+	if (antialiasing)
+	{
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
+	}
+
+	if (!sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary))
+	{
+		// Failed to configure OpenGL context request
+		debug(LOG_FATAL, "Failed to configure OpenGL context request");
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+}
+
 // This stage, we handle display mode setting
-bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool fullscreen, int vsync, bool highDPI)
+optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoWindow(const video_backend& backend, int antialiasing, bool fullscreen, int vsync, bool highDPI)
 {
 	const bool useOpenGLES = (backend == video_backend::opengles)
 #if defined(WZ_BACKEND_DIRECTX)
@@ -1690,81 +1738,17 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 #endif
 	;
 	const bool usesSDLBackend_OpenGL = useOpenGLES || (backend == video_backend::opengl);
-	const bool usesSDLBackend_Vulkan = (backend == video_backend::vulkan);
-	const auto vsyncMode = to_swap_mode(vsync);
-
-	// Output linked SDL version
-	char buf[512];
-	SDL_version linked_sdl_version;
-	SDL_GetVersion(&linked_sdl_version);
-	ssprintf(buf, "Linked SDL version: %u.%u.%u\n", (unsigned int)linked_sdl_version.major, (unsigned int)linked_sdl_version.minor, (unsigned int)linked_sdl_version.patch);
-	addDumpInfo(buf);
-	debug(LOG_WZ, "%s", buf);
 
 	// populate with the saved configuration values (if we had any)
 	int width = war_GetWidth();
 	int height = war_GetHeight();
-	int bitDepth = war_GetVideoBufferDepth();
 	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
 	// (i.e. not taking into account the game display scale). This function later sets the display system
 	// to the *game screen* width and height (taking into account the display scale).
 
-	if (!wzSDLOneTimeInit())
-	{
-		// wzSDLOneTimeInit already logged an error on failure
-		return false;
-	}
-
-#if defined(WZ_OS_MAC)
-	// on macOS, support maximizing to a fullscreen space (modern behavior)
-	if (SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "1") == SDL_FALSE)
-	{
-		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES");
-	}
-#endif
-
-	WZbackend = backend;
-
 	if(usesSDLBackend_OpenGL)
 	{
-		// Set OpenGL attributes before creating the SDL Window
-
-		// Set minimum number of bits for the RGB channels of the color buffer
-		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-#if defined(WZ_OS_WIN)
-		if (useOpenGLES)
-		{
-			// Always force minimum 8-bit color channels when using OpenGL ES on Windows
-			SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-			SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-		}
-#endif
-
-		// Set the double buffer OpenGL attribute.
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-		// Request a 24-bit depth buffer.
-		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
-		// Enable stencil buffer, needed for shadows to work.
-		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
-		if (antialiasing)
-		{
-			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-			SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing);
-		}
-
-		if (!sdl_OpenGL_Impl::configureOpenGLContextRequest(sdl_OpenGL_Impl::getInitialContextRequest(useOpenGLES), useOpenGLESLibrary))
-		{
-			// Failed to configure OpenGL context request
-			debug(LOG_FATAL, "Failed to configure OpenGL context request");
-			SDL_Quit();
-			exit(EXIT_FAILURE);
-		}
+		wzSDLPreWindowCreate_InitOpenGLAttributes(antialiasing, useOpenGLES, useOpenGLESLibrary);
 	}
 
 	// Populated our resolution list (does all displays now)
@@ -1914,7 +1898,7 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend, "window", createWindowErrorStr))
 		{
 			resetGfxBackend(defaultBackend);
-			return false; // must return so new configuration will be saved
+			return nullopt; // must return so new configuration will be saved
 		}
 		else
 		{
@@ -2024,56 +2008,21 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 
 	SDL_SetWindowTitle(WZwindow, PACKAGE_NAME);
 
-	/* initialise all cursors */
-	if (war_GetColouredCursor())
-	{
-		sdlInitColoredCursors();
-	}
-	else
-	{
-		sdlInitCursors();
-	}
+	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
+	sdl_impl_config.useOpenGLES = useOpenGLES;
+	sdl_impl_config.useOpenGLESLibrary = useOpenGLESLibrary;
+	return sdl_impl_config;
+}
 
-	// For the script engine, let Qt know we're alive
-	//
-	// IMPORTANT: This must come *after* SDL has had a chance to initialize,
-	//			  or Qt can step on certain SDL functionality.
-	//			  (For example, on macOS, Qt can break the "Quit" menu
-	//			  functionality if QApplication is initialized before SDL.)
-	appPtr = new QApplication(copied_argc, copied_argv);
-
-	// IMPORTANT: Because QApplication calls setlocale(LC_ALL,""),
-	//			  we *must* immediately call setlocale(LC_NUMERIC,"C") after initializing
-	//			  or things like loading (parsing) levels / resources can fail
-	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
-
-#if defined(WZ_OS_MAC)
-	cocoaSetupWZMenus();
-#endif
-
-	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, useOpenGLES, useOpenGLESLibrary), antialiasing, vsyncMode, usesSDLBackend_Vulkan))
-	{
-		// Failed to initialize desired backend / renderer settings
-		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
-		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend))
-		{
-			resetGfxBackend(defaultBackend);
-			return false; // must return so new configuration will be saved
-		}
-		else
-		{
-			debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend).c_str());
-		}
-
-		SDL_Quit();
-		exit(EXIT_FAILURE);
-	}
+bool wzMainScreenSetup_VerifyWindow()
+{
+	int bitDepth = war_GetVideoBufferDepth();
 
 	int bpp = SDL_BITSPERPIXEL(SDL_GetWindowPixelFormat(WZwindow));
 	debug(LOG_WZ, "Bpp = %d format %s" , bpp, SDL_GetPixelFormatName(SDL_GetWindowPixelFormat(WZwindow)));
 	if (!bpp)
 	{
-		debug(LOG_ERROR, "Video mode %dx%d@%dbpp is not supported!", width, height, bitDepth);
+		debug(LOG_ERROR, "Video mode %ux%u@%dbpp is not supported!", windowWidth, windowHeight, bitDepth);
 		return false;
 	}
 	switch (bpp)
@@ -2099,6 +2048,122 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 	return true;
 }
 
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, bool fullscreen, int vsync, bool highDPI)
+{
+	// Output linked SDL version
+	char buf[512];
+	SDL_version linked_sdl_version;
+	SDL_GetVersion(&linked_sdl_version);
+	ssprintf(buf, "Linked SDL version: %u.%u.%u\n", (unsigned int)linked_sdl_version.major, (unsigned int)linked_sdl_version.minor, (unsigned int)linked_sdl_version.patch);
+	addDumpInfo(buf);
+	debug(LOG_WZ, "%s", buf);
+
+	if (!wzSDLOneTimeInit())
+	{
+		// wzSDLOneTimeInit already logged an error on failure
+		return false;
+	}
+
+#if defined(WZ_OS_MAC)
+	// on macOS, support maximizing to a fullscreen space (modern behavior)
+	if (SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "1") == SDL_FALSE)
+	{
+		debug(LOG_WARNING, "Failed to set hint: SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES");
+	}
+#endif
+
+	WZbackend = backend;
+
+	SDL_gfx_api_Impl_Factory::Configuration sdl_impl_config;
+
+	if (backend.has_value())
+	{
+		auto result = wzMainScreenSetup_CreateVideoWindow(backend.value(), antialiasing, fullscreen, vsync, highDPI);
+		if (!result.has_value())
+		{
+			return false; // must return so new configuration will be saved
+		}
+		sdl_impl_config = result.value();
+
+		/* initialise all cursors */
+		if (war_GetColouredCursor())
+		{
+			sdlInitColoredCursors();
+		}
+		else
+		{
+			sdlInitCursors();
+		}
+	}
+
+	// For the script engine, let Qt know we're alive
+	//
+	// IMPORTANT: This must come *after* SDL has had a chance to initialize,
+	//			  or Qt can step on certain SDL functionality.
+	//			  (For example, on macOS, Qt can break the "Quit" menu
+	//			  functionality if QApplication is initialized before SDL.)
+	appPtr = new QApplication(copied_argc, copied_argv);
+
+	// IMPORTANT: Because QApplication calls setlocale(LC_ALL,""),
+	//			  we *must* immediately call setlocale(LC_NUMERIC,"C") after initializing
+	//			  or things like loading (parsing) levels / resources can fail
+	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
+
+#if defined(WZ_OS_MAC)
+	if (backend.has_value())
+	{
+		cocoaSetupWZMenus();
+	}
+#endif
+
+	const auto vsyncMode = to_swap_mode(vsync);
+
+	gfx_api::backend_type gfxapi_backend = gfx_api::backend_type::null_backend;
+	if (backend.has_value())
+	{
+		if (backend.value() == video_backend::vulkan)
+		{
+			gfxapi_backend = gfx_api::backend_type::vulkan_backend;
+		}
+		else
+		{
+			gfxapi_backend = gfx_api::backend_type::opengl_backend;
+		}
+	}
+
+	if (!gfx_api::context::initialize(SDL_gfx_api_Impl_Factory(WZwindow, sdl_impl_config), antialiasing, vsyncMode, gfxapi_backend))
+	{
+		// Failed to initialize desired backend / renderer settings
+		if (backend.has_value())
+		{
+			video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
+			if ((backend.value() != defaultBackend) && shouldResetGfxBackendPrompt(backend.value(), defaultBackend))
+			{
+				resetGfxBackend(defaultBackend);
+				return false; // must return so new configuration will be saved
+			}
+			else
+			{
+				debug(LOG_FATAL, "gfx_api::context::get().initialize failed for backend: %s", to_string(backend.value()).c_str());
+			}
+		}
+		else
+		{
+			// headless mode failed in gfx_api::context::initialize??
+			debug(LOG_FATAL, "gfx_api::context::get().initialize failed for headless-mode backend?");
+		}
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
+
+	if (backend.has_value())
+	{
+		wzMainScreenSetup_VerifyWindow();
+	}
+
+	return true;
+}
+
 
 // Calculates and returns the scale factor from the SDL window's coordinate system (in points) to the raw
 // underlying pixels of the viewport / renderer.
@@ -2112,6 +2177,18 @@ bool wzMainScreenSetup(const video_backend& backend, int antialiasing, bool full
 //
 void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor)
 {
+	if (!WZbackend.has_value())
+	{
+		if (horizScaleFactor != nullptr)
+		{
+			*horizScaleFactor = 1.0f;
+		}
+		if (vertScaleFactor != nullptr)
+		{
+			*vertScaleFactor = 1.0f;
+		}
+		return;
+	}
 	assert(WZwindow != nullptr);
 
 	// Obtain the window context's drawable size in pixels

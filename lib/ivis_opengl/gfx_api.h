@@ -55,6 +55,16 @@ namespace gfx_api
 
 namespace gfx_api
 {
+	enum class backend_type
+	{
+		null_backend,
+		opengl_backend,
+		vulkan_backend
+	};
+}
+
+namespace gfx_api
+{
 #ifdef GL_ONLY
 	using gfxFloat = GLfloat;
 	using gfxByte = GLbyte;
@@ -286,7 +296,7 @@ namespace gfx_api
 		virtual void set_depth_range(const float& min, const float& max) = 0;
 		virtual int32_t get_context_value(const context_value property) = 0;
 		static context& get();
-		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, bool useVulkan);
+		static bool initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode, gfx_api::backend_type backend);
 		virtual void flip(int clearMode) = 0;
 		virtual void debugStringMarker(const char *str) = 0;
 		virtual void debugSceneBegin(const char *descr) = 0;

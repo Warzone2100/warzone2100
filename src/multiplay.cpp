@@ -1715,7 +1715,7 @@ void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset)
 		for (unsigned int i = 0; i < game.maxPlayers; ++i)
 		{
 			//Ignore for autohost launch option.
-			if (selectedPlayer == i && hostlaunch == HostLaunch::Autohost)
+			if (selectedPlayer == i && getHostLaunch() == HostLaunch::Autohost)
 			{
 				continue;
 			}

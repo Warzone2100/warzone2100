@@ -25,6 +25,9 @@
 #include "wzstring.h"
 #include <vector>
 #include <functional>
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 struct WZ_THREAD;
 struct WZ_MUTEX;
@@ -67,7 +70,7 @@ struct screeninfo
 };
 
 void wzMain(int &argc, char **argv);
-bool wzMainScreenSetup(const video_backend& backend, int antialiasing = 0, bool fullscreen = false, int vsync = 1, bool highDPI = true);
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, bool fullscreen = false, int vsync = 1, bool highDPI = true);
 video_backend wzGetDefaultGfxBackendForCurrentSystem();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzMainEventLoop();

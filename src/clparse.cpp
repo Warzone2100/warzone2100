@@ -81,6 +81,7 @@ static bool wz_autogame = false;
 static std::string wz_saveandquit;
 static std::string wz_test;
 static std::string wz_autoratingUrl;
+static bool wz_cli_headless = false;
 
 static void poptPrintHelp(poptContext ctx, FILE *output)
 {
@@ -257,6 +258,7 @@ typedef enum
 	CLI_CONTINUE,
 	CLI_AUTOHOST,
 	CLI_AUTORATING,
+	CLI_AUTOHEADLESS,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -307,6 +309,7 @@ static const struct poptOption *getOptionsTable()
 					")"
 		},
 		{ "autogame", POPT_ARG_NONE, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr },
+		{ "headless", POPT_ARG_NONE, CLI_AUTOHEADLESS,   N_("Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"), nullptr },
 		{ "saveandquit", POPT_ARG_STRING, CLI_SAVEANDQUIT, N_("Immediately save game and quit"), N_("save name") },
 		{ "skirmish", POPT_ARG_STRING, CLI_SKIRMISH,   N_("Start skirmish game with given settings file"), N_("test") },
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
@@ -506,7 +509,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 		case CLI_HOSTLAUNCH:
 			// go directly to host screen, bypass all others.
-			hostlaunch = HostLaunch::Host;
+			setHostLaunch(HostLaunch::Host);
 			break;
 		case CLI_GAME:
 			// retrieve the game name
@@ -709,6 +712,8 @@ bool ParseCommandLine(int argc, const char * const *argv)
 
 		case CLI_AUTOGAME:
 			wz_autogame = true;
+			// need to cause wrappers.cpp to update calculated effective headless mode
+			setHeadlessGameMode(wz_cli_headless);
 			break;
 
 		case CLI_SAVEANDQUIT:
@@ -721,7 +726,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_SKIRMISH:
-			hostlaunch = HostLaunch::Skirmish;
+			setHostLaunch(HostLaunch::Skirmish);
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
@@ -731,7 +736,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_AUTOHOST:
-			hostlaunch = HostLaunch::Autohost;
+			setHostLaunch(HostLaunch::Autohost);
 			token = poptGetOptArg(poptCon);
 			if (token == nullptr)
 			{
@@ -748,6 +753,12 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			}
 			wz_autoratingUrl = token;
 			debug(LOG_INFO, "Using \"%s\" for ratings.", wz_autoratingUrl.c_str());
+			break;
+
+		case CLI_AUTOHEADLESS:
+			wz_cli_headless = true;
+			setHeadlessGameMode(true);
+			break;
 		};
 	}
 

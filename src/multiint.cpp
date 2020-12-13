@@ -415,14 +415,14 @@ void loadMultiScripts()
 		loadExtra = true;
 	}
 
-	if (hostlaunch == HostLaunch::Skirmish)
+	if (getHostLaunch() == HostLaunch::Skirmish)
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "tests/";
 		loadExtra = true;
 	}
 
-	if (hostlaunch == HostLaunch::Autohost)
+	if (getHostLaunch() == HostLaunch::Autohost)
 	{
 		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
 		path = "autohost/";
@@ -3117,7 +3117,7 @@ static void loadMapChallengeSettings(WzConfig& ini)
 	}
 	ini.endGroup();
 
-	const bool bIsAutoHostOrAutoGame = hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost;
+	const bool bIsAutoHostOrAutoGame = getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost;
 	if (challengeActive || bIsAutoHostOrAutoGame)
 	{
 		ini.beginGroup("challenge");
@@ -3138,7 +3138,7 @@ static void loadMapChallengeSettings(WzConfig& ini)
 			game.maxPlayers = mapData->players;
 
 			uint8_t configuredMaxPlayers = ini.value("maxPlayers", game.maxPlayers).toUInt();
-			if (hostlaunch == HostLaunch::Autohost)
+			if (getHostLaunch() == HostLaunch::Autohost)
 			{
 				// always use the autohost config - if it specifies an invalid number of players, this is a bug in the config
 				game.maxPlayers = std::max((uint8_t)1u, configuredMaxPlayers);
@@ -3363,11 +3363,11 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 	sstrcat(aFileName, ".json");
 
 	WzString ininame = challengeActive ? sRequestResult : aFileName;
-	if (hostlaunch == HostLaunch::Skirmish)
+	if (getHostLaunch() == HostLaunch::Skirmish)
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
 	}
-	if (hostlaunch == HostLaunch::Autohost)
+	if (getHostLaunch() == HostLaunch::Autohost)
 	{
 		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
 	}
@@ -3538,7 +3538,7 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 	resetReadyStatus(false);
 	removeWildcards((char*)sPlayer);
 
-	const bool bIsAutoHostOrAutoGame = hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost;
+	const bool bIsAutoHostOrAutoGame = getHostLaunch() == HostLaunch::Skirmish || getHostLaunch() == HostLaunch::Autohost;
 	if (!hostCampaign((char*)game.name, (char*)sPlayer, bIsAutoHostOrAutoGame))
 	{
 		displayRoomSystemMessage(_("Sorry! Failed to host the game."));
@@ -3808,7 +3808,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 
 	case CON_CANCEL:
 		pie_LoadBackDrop(SCREEN_RANDOMBDROP);
-		hostlaunch = HostLaunch::Normal; // Dont load the autohost file on subsequent hosts
+		setHostLaunch(HostLaunch::Normal); // Dont load the autohost file on subsequent hosts
 		performedFirstStart = false; // Reset everything
 		if (!challengeActive)
 		{
@@ -4700,14 +4700,14 @@ void WzMultiplayerOptionsTitleUI::start()
 		updateLimitIcons();
 	}
 
-	if (autogame_enabled() || hostlaunch == HostLaunch::Autohost)
+	if (autogame_enabled() || getHostLaunch() == HostLaunch::Autohost)
 	{
 		if (!ingame.localJoiningInProgress)
 		{
 			processMultiopWidgets(MULTIOP_HOST);
 		}
 		SendReadyRequest(selectedPlayer, true);
-		if (hostlaunch == HostLaunch::Skirmish)
+		if (getHostLaunch() == HostLaunch::Skirmish)
 		{
 			startMultiplayerGame();
 			// reset flag in case people dropped/quit on join screen
