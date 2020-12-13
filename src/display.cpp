@@ -1095,6 +1095,11 @@ bool CheckScrollLimits()
 /* Do the 3D display */
 void displayWorld()
 {
+	if (headlessGameMode())
+	{
+		return;
+	}
+
 	Vector3i pos;
 
 	if (panActive)

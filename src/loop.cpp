@@ -288,7 +288,7 @@ static GAMECODE renderLoop()
 			pie_LoadBackDrop(SCREEN_RANDOMBDROP);
 		}
 	}
-	if (!loop_GetVideoStatus() && !quitting)
+	if (!loop_GetVideoStatus() && !quitting && !headlessGameMode())
 	{
 		if (!gameUpdatePaused())
 		{
