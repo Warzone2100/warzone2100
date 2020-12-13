@@ -19,27 +19,26 @@
 
 #pragma once
 
-#ifndef __INCLUDED_GFX_API_SDL_H__
-#define __INCLUDED_GFX_API_SDL_H__
+#ifndef __INCLUDED_GFX_API_NULL_SDL_H__
+#define __INCLUDED_GFX_API_NULL_SDL_H__
 
-#include "lib/ivis_opengl/gfx_api.h"
+#include "lib/ivis_opengl/gfx_api_null.h"
 #include <SDL_video.h>
+#include <chrono>
 
-class SDL_gfx_api_Impl_Factory final : public gfx_api::backend_Impl_Factory
+class sdl_Null_Impl final : public gfx_api::backend_Null_Impl
 {
 public:
-	SDL_gfx_api_Impl_Factory(SDL_Window* window, bool useOpenGLES, bool useOpenGLESLibrary);
+	sdl_Null_Impl();
 
-	virtual std::unique_ptr<gfx_api::backend_Null_Impl> createNullBackendImpl() const override;
-	virtual std::unique_ptr<gfx_api::backend_OpenGL_Impl> createOpenGLBackendImpl() const override;
-#if defined(WZ_VULKAN_ENABLED)
-	virtual std::unique_ptr<gfx_api::backend_Vulkan_Impl> createVulkanBackendImpl() const override;
-#endif
+	virtual void swapWindow() override;
+
+	virtual bool setSwapInterval(gfx_api::context::swap_interval_mode mode) override;
+	virtual gfx_api::context::swap_interval_mode getSwapInterval() const override;
 
 private:
-	SDL_Window* window;
-	bool useOpenGLES;
-	bool useOpenGLESLibrary;
+	gfx_api::context::swap_interval_mode swapMode = gfx_api::context::swap_interval_mode::vsync;
+	std::chrono::steady_clock::time_point lastSwapEndTime;
 };
 
-#endif // __INCLUDED_GFX_API_SDL_H__
+#endif // __INCLUDED_GFX_API_NULL_SDL_H__
