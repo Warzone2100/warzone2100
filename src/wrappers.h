@@ -42,7 +42,12 @@ enum class HostLaunch
 	Skirmish,
 	Autohost,
 };
-extern HostLaunch hostlaunch;
+
+void setHostLaunch(HostLaunch value);
+HostLaunch getHostLaunch();
+
+void setHeadlessGameMode(bool enabled);
+bool headlessGameMode();
 
 bool frontendInitVars();
 TITLECODE titleLoop();

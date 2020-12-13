@@ -1031,7 +1031,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	if (autogame_enabled())
 	{
 		gameTimeSetMod(Rational(500));
-		if (hostlaunch != HostLaunch::Skirmish) // tests will specify the AI manually
+		if (getHostLaunch() != HostLaunch::Skirmish) // tests will specify the AI manually
 		{
 			jsAutogameSpecific("multiplay/skirmish/semperfi.js", selectedPlayer);
 		}

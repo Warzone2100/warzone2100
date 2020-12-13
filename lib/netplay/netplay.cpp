@@ -3194,7 +3194,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 #endif
 	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
 
-	selectedPlayer = NET_CreatePlayer(PlayerName, (hostlaunch == HostLaunch::Autohost));
+	selectedPlayer = NET_CreatePlayer(PlayerName, (getHostLaunch() == HostLaunch::Autohost));
 	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Failed to create player");
 	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;

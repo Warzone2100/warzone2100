@@ -34,6 +34,7 @@
 #include "lib/sound/audio.h"
 #include "lib/framework/wzapp.h"
 
+#include "clparse.h"
 #include "frontend.h"
 #include "keyedit.h"
 #include "keymap.h"
@@ -57,7 +58,9 @@ static bool		bPlayerHasLost = false;
 static bool		bPlayerHasWon = false;
 static UBYTE    scriptWinLoseVideo = PLAY_NONE;
 
-HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are hosting a game via command line option.
+static HostLaunch hostlaunch = HostLaunch::Normal;  // used to detect if we are hosting a game via command line option.
+static bool bHeadlessAutoGameModeCLIOption = false;
+static bool bActualHeadlessAutoGameMode = false;
 
 static uint32_t lastTick = 0;
 static int barLeftX, barLeftY, barRightX, barRightY, boxWidth, boxHeight, starsNum, starHeight;
@@ -101,6 +104,38 @@ static void setupLoadingScreen()
 	{
 		stars[i] = newStar();
 	}
+}
+
+bool recalculateEffectiveHeadlessValue()
+{
+	if (hostlaunch == HostLaunch::Skirmish || hostlaunch == HostLaunch::Autohost || autogame_enabled())
+	{
+		// only support headless mode if hostlaunch is --skirmish or --autogame
+		return bHeadlessAutoGameModeCLIOption;
+	}
+	return false;
+}
+
+void setHostLaunch(HostLaunch value)
+{
+	hostlaunch = value;
+	bActualHeadlessAutoGameMode = recalculateEffectiveHeadlessValue();
+}
+
+HostLaunch getHostLaunch()
+{
+	return hostlaunch;
+}
+
+void setHeadlessGameMode(bool enabled)
+{
+	bHeadlessAutoGameModeCLIOption = enabled;
+	bActualHeadlessAutoGameMode = recalculateEffectiveHeadlessValue();
+}
+
+bool headlessGameMode()
+{
+	return bActualHeadlessAutoGameMode;
 }
 
 

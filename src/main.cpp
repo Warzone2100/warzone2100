@@ -1526,7 +1526,12 @@ int realmain(int argc, char *argv[])
 
 	ActivityManager::instance().initialize();
 
-	if (!wzMainScreenSetup(war_getGfxBackend(), war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
+	optional<video_backend> gfxbackend;
+	if (!headlessGameMode())
+	{
+		gfxbackend = war_getGfxBackend();
+	}
+	if (!wzMainScreenSetup(gfxbackend, war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
 	{
 		saveConfig(); // ensure any setting changes are persisted on failure
 		return EXIT_FAILURE;
@@ -1562,10 +1567,14 @@ int realmain(int argc, char *argv[])
 	{
 		return EXIT_FAILURE;
 	}
-	unsigned int windowWidth = 0, windowHeight = 0;
-	wzGetWindowResolution(nullptr, &windowWidth, &windowHeight);
-	war_SetWidth(windowWidth);
-	war_SetHeight(windowHeight);
+
+	if (!headlessGameMode())
+	{
+		unsigned int windowWidth = 0, windowHeight = 0;
+		wzGetWindowResolution(nullptr, &windowWidth, &windowHeight);
+		war_SetWidth(windowWidth);
+		war_SetHeight(windowHeight);
+	}
 
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);

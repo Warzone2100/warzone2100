@@ -28,7 +28,13 @@
 class SDL_gfx_api_Impl_Factory final : public gfx_api::backend_Impl_Factory
 {
 public:
-	SDL_gfx_api_Impl_Factory(SDL_Window* window, bool useOpenGLES, bool useOpenGLESLibrary);
+	struct Configuration
+	{
+		bool useOpenGLES = false;
+		bool useOpenGLESLibrary = false;
+	};
+public:
+	SDL_gfx_api_Impl_Factory(SDL_Window* window, Configuration config);
 
 	virtual std::unique_ptr<gfx_api::backend_Null_Impl> createNullBackendImpl() const override;
 	virtual std::unique_ptr<gfx_api::backend_OpenGL_Impl> createOpenGLBackendImpl() const override;
@@ -38,8 +44,7 @@ public:
 
 private:
 	SDL_Window* window;
-	bool useOpenGLES;
-	bool useOpenGLESLibrary;
+	Configuration config;
 };
 
 #endif // __INCLUDED_GFX_API_SDL_H__
