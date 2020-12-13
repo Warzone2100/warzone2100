@@ -30,8 +30,9 @@
 
 static CURSOR currentCursor = CURSOR_MAX;
 static CURSOR lastAppliedCursor = CURSOR_MAX;
-static SDL_Cursor *aCursors[CURSOR_MAX];
+static SDL_Cursor *aCursors[CURSOR_MAX] = {};
 static bool monoCursor;
+static bool cursorsEnabled = false;
 
 /* TODO: do bridge and attach need swapping? */
 static const char *cursor_arrow[] =
@@ -1367,6 +1368,8 @@ void wzSetCursor(CURSOR cur)
 
 void wzApplyCursor()
 {
+	if (!cursorsEnabled) return;
+
 	// If mouse cursor options change, change cursors (used to only work on mouse options screen for some reason)
 	if (!(war_GetColouredCursor() ^ monoCursor))
 	{
@@ -1421,6 +1424,7 @@ void sdlInitColoredCursors()
 	aCursors[CURSOR_PICKUP]      = init_system_ColorCursor(CURSOR_PICKUP, "images/intfac/image_cursor_pickup.png");
 	aCursors[CURSOR_SEEKREPAIR]  = init_system_ColorCursor(CURSOR_SEEKREPAIR, "images/intfac/image_cursor_repair.png");
 	aCursors[CURSOR_SELECT]      = init_system_ColorCursor(CURSOR_SELECT, "images/intfac/image_cursor_select.png");
+	cursorsEnabled = true;
 }
 
 /**
@@ -1457,6 +1461,7 @@ void sdlInitCursors()
 	aCursors[CURSOR_PICKUP]      = init_system_cursor32(CURSOR_PICKUP);
 	aCursors[CURSOR_SEEKREPAIR]  = init_system_cursor32(CURSOR_SEEKREPAIR);
 	aCursors[CURSOR_SELECT]      = init_system_cursor32(CURSOR_SELECT);
+	cursorsEnabled = true;
 }
 
 void sdlFreeCursors()
@@ -1465,5 +1470,7 @@ void sdlFreeCursors()
 	for (i = 0 ; i < ARRAY_SIZE(aCursors); ++i)
 	{
 		SDL_FreeCursor(aCursors[i]);
+		aCursors[i] = nullptr;
 	}
+	cursorsEnabled = false;
 }
