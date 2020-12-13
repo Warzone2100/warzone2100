@@ -18,6 +18,7 @@
 */
 
 #include "gfx_api_sdl.h"
+#include "gfx_api_null_sdl.h"
 #include "gfx_api_gl_sdl.h"
 #include "gfx_api_vk_sdl.h"
 #include <SDL_version.h>
@@ -29,6 +30,11 @@ SDL_gfx_api_Impl_Factory::SDL_gfx_api_Impl_Factory(SDL_Window* _window, bool _us
 	window = _window;
 	useOpenGLES = _useOpenGLES;
 	useOpenGLESLibrary = _useOpenGLESLibrary;
+}
+
+std::unique_ptr<gfx_api::backend_Null_Impl> SDL_gfx_api_Impl_Factory::createNullBackendImpl() const
+{
+	return std::unique_ptr<gfx_api::backend_Null_Impl>(new sdl_Null_Impl());
 }
 
 std::unique_ptr<gfx_api::backend_OpenGL_Impl> SDL_gfx_api_Impl_Factory::createOpenGLBackendImpl() const
