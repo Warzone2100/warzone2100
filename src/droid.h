@@ -168,7 +168,7 @@ void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGrou
 
 bool activateGroup(UDWORD playerNumber, UDWORD groupNumber);
 
-UDWORD getNumDroidsForLevel(UDWORD level);
+UDWORD getNumDroidsForLevel(uint32_t player, UDWORD level);
 
 bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber);
 /* calculate muzzle tip location in 3d world added int weapon_slot to fix the always slot 0 hack*/

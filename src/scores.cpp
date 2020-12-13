@@ -279,7 +279,7 @@ END_GAME_STATS_DATA	collectEndGameStatsData()
 
 	for (size_t i = 0; i < DROID_LEVELS; i++)
 	{
-		fullStats.numDroidsPerLevel.push_back(getNumDroidsForLevel(i));
+		fullStats.numDroidsPerLevel.push_back(getNumDroidsForLevel(selectedPlayer, i));
 	}
 
 	fullStats.numUnits = 0;

@@ -2054,12 +2054,14 @@ const char *getDroidLevelName(const DROID *psDroid)
 	return PE_("rank", psStats->rankNames[getDroidLevel(psDroid)].c_str());
 }
 
-UDWORD	getNumDroidsForLevel(UDWORD	level)
+UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 {
 	DROID	*psDroid;
 	UDWORD	count;
 
-	for (psDroid = apsDroidLists[selectedPlayer], count = 0;
+	ASSERT_OR_RETURN(0, player < MAX_PLAYERS, "invalid player idx: %" PRIu32 "", player);
+
+	for (psDroid = apsDroidLists[player], count = 0;
 	     psDroid; psDroid = psDroid->psNext)
 	{
 		if (getDroidLevel(psDroid) == level)
