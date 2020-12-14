@@ -54,6 +54,10 @@
 #include "lib/sound/audio_id.h"
 #include "intimage.h"
 
+#include "activity.h"
+#include "multistat.h"
+#include "clparse.h"
+
 #include <algorithm>
 
 #define	BAR_CRAWL_TIME	(GAME_TICKS_PER_SEC*3)
@@ -552,4 +556,62 @@ bool readScoreData(const char *fileName)
 
 	/* Hopefully everything's just fine by now */
 	return true;
+}
+
+void stdOutGameSummary(UDWORD realTimeThrottleSeconds)
+{
+	static UDWORD lastOutputRealTime = 0;
+	if (realTimeThrottleSeconds > 0 && (realTime - lastOutputRealTime < (realTimeThrottleSeconds * GAME_TICKS_PER_SEC)))
+	{
+		return;
+	}
+	fprintf(stdout, "Game State [gameTime: %" PRIu32 "]\n", gameTime);
+	fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+	if (ActivityManager::instance().getCurrentGameMode() != ActivitySink::GameMode::CAMPAIGN)
+	{
+		fprintf(stdout, " # | Player Name | Extrct Pwr | Units Killed | Structs (F/R) | Units Alive |  Power  |\n");
+		fprintf(stdout, "-- | ----------- | ---------- | ------------ | ------------- | ----------- | ------- |\n");
+		for (unsigned n = 0; n < std::min<unsigned>(MAX_PLAYERS, (unsigned)game.maxPlayers); ++n)
+		{
+			if (NetPlay.players[n].ai < 0)
+			{
+				// skip closed slots / open / empty slots
+				continue;
+			}
+			uint32_t unitsKilled = getMultiPlayUnitsKilled(n);
+			uint32_t numUnits = 0;
+			for (DROID *psDroid = apsDroidLists[n]; psDroid; psDroid = psDroid->psNext, numUnits++) {}
+			uint32_t numStructs = 0;
+			uint32_t numFactories = 0;
+			uint32_t numResearch = 0;
+			uint32_t numFactoriesThatCanProduceConstructionUnits = 0;
+			for (STRUCTURE *psStruct = apsStructLists[n]; psStruct; psStruct = psStruct->psNext, numStructs++)
+			{
+				if (psStruct->status != SS_BUILT || psStruct->died != 0)
+				{
+					continue; // ignore structures that aren't completely built, or are "dead"
+				}
+				if (StructIsFactory(psStruct))
+				{
+					numFactories++;
+					if (psStruct->pStructureType->type == REF_FACTORY ||
+						psStruct->pStructureType->type == REF_CYBORG_FACTORY)
+					{
+						numFactoriesThatCanProduceConstructionUnits++;
+					}
+				}
+				else if (psStruct->pStructureType->type == REF_RESEARCH)
+				{
+					numResearch++;
+				}
+			}
+			std::string structInfoString = std::to_string(numStructs) + " (" + std::to_string(numFactories) + "/" + std::to_string(numResearch) + ")";
+			// NOTE: This duplicates the logic in rules.js - checkEndConditions()
+			const bool playerCantDoAnything = (numFactoriesThatCanProduceConstructionUnits == 0) && (numUnits == 0);
+			const char * deadStatus = playerCantDoAnything ? "x" : "";
+			fprintf(stdout, "%2u | %11.11s | %10" PRIi64 " | %12" PRIi32 " | %13.13s | %11" PRIi32 " | %7" PRIi32 " | %s\n", n, NetPlay.players[n].name, getExtractedPower(n), unitsKilled, structInfoString.c_str(), numUnits, getPower(n), deadStatus);
+		}
+	}
+	fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+	lastOutputRealTime = realTime;
 }
