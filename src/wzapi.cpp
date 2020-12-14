@@ -72,6 +72,7 @@
 #include "wzapi.h"
 #include "order.h"
 #include "chat.h"
+#include "scores.h"
 
 #include <list>
 
@@ -2272,6 +2273,10 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 	if (autogame_enabled())
 	{
 		debug(LOG_WARNING, "Autogame completed successfully!");
+		if (headlessGameMode())
+		{
+			stdOutGameSummary(0);
+		}
 		exit(0);
 	}
 	return true;
