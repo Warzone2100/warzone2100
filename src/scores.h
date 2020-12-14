@@ -122,4 +122,6 @@ void getAsciiTime(char *psText, unsigned time);
 bool readScoreData(const char *fileName);
 bool writeScoreData(const char *fileName);
 
+void stdOutGameSummary(UDWORD realTimeThrottleSeconds = 5);
+
 #endif // __INCLUDED_SRC_SCORES_H__
