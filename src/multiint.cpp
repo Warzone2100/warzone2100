@@ -2899,7 +2899,14 @@ static void loadMapChallengeSettings(WzConfig& ini)
 			game.maxPlayers = mapData->players;
 
 			uint8_t configuredMaxPlayers = ini.value("maxPlayers", game.maxPlayers).toUInt();
-			game.maxPlayers = std::min(std::max((uint8_t)1u, configuredMaxPlayers), game.maxPlayers);
+			if (hostlaunch == HostLaunch::Autohost)
+			{
+				game.maxPlayers = std::max(std::max((uint8_t)1u, configuredMaxPlayers), game.maxPlayers);
+			}
+			else
+			{
+				game.maxPlayers = std::min(std::max((uint8_t)1u, configuredMaxPlayers), game.maxPlayers);
+			}
 			game.scavengers = ini.value("scavengers", game.scavengers).toBool();
 			game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
 			game.power = ini.value("powerLevel", game.power).toInt();
