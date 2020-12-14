@@ -82,6 +82,8 @@
 #include "qtscript.h"
 #include "version.h"
 #include "notifications.h"
+#include "scores.h"
+#include "clparse.h"
 
 #include "warzoneconfig.h"
 
@@ -676,6 +678,12 @@ GAMECODE gameLoop()
 	renderBudget += (after - before) * updateFraction.n;
 	renderBudget = std::min(renderBudget, (renderFraction * 500).floor());
 	previousUpdateWasRender = true;
+
+	if (headlessGameMode() && autogame_enabled())
+	{
+		// Output occasional stats to stdout
+		stdOutGameSummary();
+	}
 
 	return renderReturn;
 }
