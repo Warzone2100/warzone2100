@@ -93,7 +93,7 @@ function camDebugOnce()
 //;;
 function camTrace()
 {
-	if (!__camCheatMode)
+	if (!camIsCheating())
 	{
 		return;
 	}
@@ -109,7 +109,7 @@ function camTrace()
 //;;
 function camTraceOnce()
 {
-	if (!__camCheatMode)
+	if (!camIsCheating())
 	{
 		return;
 	}
@@ -138,7 +138,7 @@ function camIsCheating()
 function __camUpdateMarkedTiles()
 {
 	hackMarkTiles();
-	if (__camCheatMode && camDef(__camMarkedTiles))
+	if (camIsCheating() && camDef(__camMarkedTiles))
 	{
 		for (var label in __camMarkedTiles)
 		{
