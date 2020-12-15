@@ -2153,7 +2153,7 @@
         "height": 1,
         "hitpoints": 500,
         "id": "Pillbox-RotMG",
-        "name": "Rotary MG Bunker",
+        "name": "Assault Gun Bunker",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
         "strength": "BUNKER",

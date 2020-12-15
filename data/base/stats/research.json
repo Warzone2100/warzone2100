@@ -3452,9 +3452,12 @@
     },
     "R-Defense-Pillbox-RotMG": {
         "id": "R-Defense-Pillbox-RotMG",
-        "name": "Rotary MG Bunker",
+        "name": "Assault Gun Bunker",
         "redStructures": [
             "PillBox1"
+        ],
+	    "requiredResearch": [
+            "R-Wpn-MG4"
         ],
         "researchPoints": 4800,
         "researchPower": 150,
