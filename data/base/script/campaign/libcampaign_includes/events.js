@@ -48,7 +48,7 @@ function cam_eventChat(from, to, message)
 	{
 		__camShowVictoryConditions(true);
 	}
-	if (!__camCheatMode)
+	if (!camIsCheating())
 	{
 		return;
 	}
@@ -332,6 +332,10 @@ function cam_eventGameLoaded()
 
 	//Subscribe to eventGroupSeen again.
 	camSetEnemyBases();
+
+	//Reset any vars
+	__camCheatMode = false;
+
 	__camSaveLoading = false;
 }
 
