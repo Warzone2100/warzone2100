@@ -27,6 +27,7 @@
 #include <chrono>
 #include <memory>
 #include <unordered_set>
+#include <unordered_map>
 
 class QString;
 class QStandardItemModel;
@@ -271,11 +272,11 @@ public:
 	struct GROUPMAP
 	{
 		typedef int groupID;
-		typedef std::map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
+		typedef std::unordered_map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
 	private:
 		ObjectToGroupMap m_map;
 		typedef std::unordered_set<const BASE_OBJECT *> GroupSet;
-		std::map<groupID, GroupSet> m_groups;
+		std::unordered_map<groupID, GroupSet> m_groups;
 		int lastNewGroupId = 0;
 	protected:
 		int getLastNewGroupId() const { return lastNewGroupId; }
