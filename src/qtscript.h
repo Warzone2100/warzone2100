@@ -274,7 +274,11 @@ public:
 	private:
 		ObjectToGroupMap m_map;
 		std::map<groupID, size_t> m_groupCount;
+		int lastNewGroupId = 0;
+	protected:
+		int getLastNewGroupId() const { return lastNewGroupId; }
 	public:
+		groupID newGroupID();
 		void insertObjectIntoGroup(const BASE_OBJECT *psObj, groupID groupId);
 		inline const ObjectToGroupMap& map() const { return m_map; }
 		size_t groupSize(groupID groupId) const;
