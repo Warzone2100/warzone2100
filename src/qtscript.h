@@ -279,7 +279,9 @@ public:
 		std::unordered_map<groupID, GroupSet> m_groups;
 		int lastNewGroupId = 0;
 	protected:
+		friend class scripting_engine;
 		int getLastNewGroupId() const { return lastNewGroupId; }
+		void saveLoadSetLastNewGroupId(int value);
 	public:
 		groupID newGroupID();
 		void insertObjectIntoGroup(const BASE_OBJECT *psObj, groupID groupId);
