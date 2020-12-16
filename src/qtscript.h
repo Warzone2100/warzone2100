@@ -26,6 +26,7 @@
 #include "wzapi.h"
 #include <chrono>
 #include <memory>
+#include <unordered_set>
 
 class QString;
 class QStandardItemModel;
@@ -273,7 +274,8 @@ public:
 		typedef std::map<const BASE_OBJECT *, groupID> ObjectToGroupMap;
 	private:
 		ObjectToGroupMap m_map;
-		std::map<groupID, size_t> m_groupCount;
+		typedef std::unordered_set<const BASE_OBJECT *> GroupSet;
+		std::map<groupID, GroupSet> m_groups;
 		int lastNewGroupId = 0;
 	protected:
 		int getLastNewGroupId() const { return lastNewGroupId; }
@@ -283,6 +285,7 @@ public:
 		inline const ObjectToGroupMap& map() const { return m_map; }
 		size_t groupSize(groupID groupId) const;
 		optional<groupID> removeObjectFromGroup(const BASE_OBJECT *psObj);
+		std::vector<const BASE_OBJECT *> getGroupObjects(groupID groupId) const;
 	};
 
 	struct timerNode

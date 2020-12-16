@@ -101,7 +101,7 @@ extern bool doUpdateModels; // ugh-ly hack; fix with signal when moc-ing this fi
 int scripting_engine::GROUPMAP::newGroupID()
 {
 	groupID newId = lastNewGroupId + 1;
-	while (m_groupCount.count(newId) != 0 && m_groupCount.at(newId) > 0)
+	while (m_groups.count(newId) != 0 && m_groups.at(newId).size() > 0)
 	{
 		if (newId < std::numeric_limits<int>::max())
 		{
@@ -123,16 +123,17 @@ void scripting_engine::GROUPMAP::insertObjectIntoGroup(const BASE_OBJECT *psObj,
 	std::pair<ObjectToGroupMap::iterator,bool> result = m_map.insert(std::pair<const BASE_OBJECT *, scripting_engine::GROUPMAP::groupID>(psObj, groupId));
 	if (result.second)
 	{
-		m_groupCount[groupId] = m_groupCount[groupId] + 1;
+		auto groupSetResult = m_groups[groupId].insert(psObj);
+		ASSERT(groupSetResult.second, "Object already exists in group!");
 	}
 }
 
 size_t scripting_engine::GROUPMAP::groupSize(GROUPMAP::groupID groupId) const
 {
-	auto it = m_groupCount.find(groupId);
-	if (it != m_groupCount.end())
+	auto it = m_groups.find(groupId);
+	if (it != m_groups.end())
 	{
-		return it->second;
+		return it->second.size();
 	}
 	return 0;
 }
@@ -145,12 +146,22 @@ optional<scripting_engine::GROUPMAP::groupID> scripting_engine::GROUPMAP::remove
 		groupID groupId = it->second;
 		m_map.erase(it);
 
-		size_t oldGroupCount = groupSize(groupId);
-		ASSERT(oldGroupCount > 0, "Bad group count in group %d (was %zu)", groupId, oldGroupCount);
-		m_groupCount[groupId] = oldGroupCount - 1;
+		size_t numItemsErased = m_groups[groupId].erase(psObj);
+		ASSERT(numItemsErased == 1, "Object did not exist in group set??");
 		return optional<groupID>(groupId);
 	}
 	return optional<groupID>();
+}
+
+std::vector<const BASE_OBJECT *> scripting_engine::GROUPMAP::getGroupObjects(groupID groupId) const
+{
+	std::vector<const BASE_OBJECT *> result;
+	auto it = m_groups.find(groupId);
+	if (it != m_groups.end())
+	{
+		result.assign(it->second.begin(), it->second.end());
+	}
+	return result;
 }
 
 scripting_engine::timerNode::timerNode(wzapi::scripting_instance* caller, const TimerFunc& func, const std::string& timerName, int plr, int frame, std::unique_ptr<timerAdditionalData> additionalParam /*= nullptr*/)
@@ -2699,13 +2710,7 @@ std::vector<const BASE_OBJECT *> scripting_engine::enumGroup(WZAPI_PARAMS(int gr
 
 	if (psMap != nullptr)
 	{
-		for (auto i = psMap->map().cbegin(); i != psMap->map().cend(); ++i)
-		{
-			if (i->second == groupId)
-			{
-				matches.push_back(i->first);
-			}
-		}
+		matches = psMap->getGroupObjects(groupId);
 	}
 	return matches;
 }
