@@ -98,6 +98,12 @@ typedef QList<QStandardItem *> QStandardItemList;
 static bool selectionChanged = false;
 extern bool doUpdateModels; // ugh-ly hack; fix with signal when moc-ing this file
 
+void scripting_engine::GROUPMAP::saveLoadSetLastNewGroupId(int value)
+{
+	ASSERT_OR_RETURN(, value >= 0, "Invalid value: %d", value);
+	lastNewGroupId = value;
+}
+
 int scripting_engine::GROUPMAP::newGroupID()
 {
 	groupID newId = lastNewGroupId + 1;
@@ -907,6 +913,16 @@ bool scripting_engine::loadScriptStates(const char *filename)
 				{
 					int groupId = values.at(k).toInt();
 					loadGroup(instance, groupId, droidId);
+				}
+			}
+			bool bHasLastNewGroupId = false;
+			int lastNewGroupId = ini.value("lastNewGroupId").toInt(&bHasLastNewGroupId);
+			if (bHasLastNewGroupId)
+			{
+				GROUPMAP *psMap = getGroupMap(instance);
+				if (psMap)
+				{
+					psMap->saveLoadSetLastNewGroupId(lastNewGroupId);
 				}
 			}
 		}
@@ -2074,6 +2090,7 @@ bool scripting_engine::saveGroups(nlohmann::json &result, wzapi::scripting_insta
 	// Save group info as a list of group memberships for each droid
 	GROUPMAP *psMap = getGroupMap(instance);
 	ASSERT_OR_RETURN(false, psMap, "Non-existent groupmap for engine");
+	result["lastNewGroupId"] = psMap->getLastNewGroupId();
 	for (auto i = psMap->map().begin(); i != psMap->map().end(); ++i)
 	{
 		const BASE_OBJECT *psObj = i->first;
