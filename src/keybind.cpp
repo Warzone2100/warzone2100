@@ -1333,12 +1333,21 @@ void	kf_TogglePauseMode()
 		gameTimeStop();
 		addConsoleMessage(_("PAUSED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 
+
+		// check if campaign and display gamemode
+
+		bool campaignTrue = false;
+
 		auto gameMode = ActivityManager::instance().getCurrentGameMode();
 
 		switch (gameMode)
 		{
 			case ActivitySink::GameMode::CAMPAIGN:
 				addConsoleMessage(_("CAMPAIGN"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+				campaignTrue = true;
+				break;
+			case ActivitySink::GameMode::CHALLENGE:
+				addConsoleMessage(_("CHALLENGE"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 				break;
 			case ActivitySink::GameMode::SKIRMISH:
 				addConsoleMessage(_("SKIRMISH"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
@@ -1347,26 +1356,33 @@ void	kf_TogglePauseMode()
 				break;
 		}
 
+
+		// display level info
 		addConsoleMessage(_(getLevelName()), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 
-		DIFFICULTY_LEVEL lev = getDifficultyLevel();
-
-		switch (lev)
+		// if we are playing campaign, display difficulty
+		if (campaignTrue)
 		{
-		case	DL_EASY:
-			addConsoleMessage(_("DIFFICULTY: EASY"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-			break;
-		case	DL_NORMAL:
-			addConsoleMessage(_("DIFFICULTY: NORMAL"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-			break;
-		case	DL_HARD:
-			addConsoleMessage(_("DIFFICULTY: HARD"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-			break;
-		case	DL_INSANE:
-			addConsoleMessage(_("DIFFICULTY: INSANE"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
-			break;
+			DIFFICULTY_LEVEL lev = getDifficultyLevel();
+
+			switch (lev)
+			{
+				case DL_EASY:
+					addConsoleMessage(_("DIFFICULTY: EASY"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+					break;
+				case DL_NORMAL:
+					addConsoleMessage(_("DIFFICULTY: NORMAL"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+					break;
+				case DL_HARD:
+					addConsoleMessage(_("DIFFICULTY: HARD"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+					break;
+				case DL_INSANE:
+					addConsoleMessage(_("DIFFICULTY: INSANE"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
+					break;
+			}
 		}
 
+		// display cheats status
 		if (getDebugMappingStatus())
 		{
 			addConsoleMessage(_("CHEATS: ENABLED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
