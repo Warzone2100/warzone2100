@@ -98,6 +98,26 @@ typedef QList<QStandardItem *> QStandardItemList;
 static bool selectionChanged = false;
 extern bool doUpdateModels; // ugh-ly hack; fix with signal when moc-ing this file
 
+int scripting_engine::GROUPMAP::newGroupID()
+{
+	groupID newId = lastNewGroupId + 1;
+	while (m_groupCount.count(newId) != 0 && m_groupCount.at(newId) > 0)
+	{
+		if (newId < std::numeric_limits<int>::max())
+		{
+			newId++;
+		}
+		else
+		{
+			// loop back around
+			// NOTE: group zero is reserved
+			newId = 1;
+		}
+	}
+	lastNewGroupId = newId;
+	return newId;
+}
+
 void scripting_engine::GROUPMAP::insertObjectIntoGroup(const BASE_OBJECT *psObj, scripting_engine::GROUPMAP::groupID groupId)
 {
 	std::pair<ObjectToGroupMap::iterator,bool> result = m_map.insert(std::pair<const BASE_OBJECT *, scripting_engine::GROUPMAP::groupID>(psObj, groupId));
@@ -2697,8 +2717,11 @@ std::vector<const BASE_OBJECT *> scripting_engine::enumGroup(WZAPI_PARAMS(int gr
 //--
 int scripting_engine::newGroup(WZAPI_NO_PARAMS)
 {
-	static int i = 1; // group zero reserved
-	return i++;
+	GROUPMAP *psMap = instance().getGroupMap(context.currentInstance());
+	int i = psMap->newGroupID();
+	// NOTE: group zero is reserved
+	SCRIPT_ASSERT(1, context, i != 0, "Group 0 is reserved - error in WZ code");
+	return i;
 }
 
 //-- ## groupAddArea(group, x1, y1, x2, y2)
