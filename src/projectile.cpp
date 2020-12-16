@@ -569,7 +569,7 @@ bool proj_SendProjectileAngled(WEAPON *psWeap, SIMPLE_OBJECT *psAttacker, int pl
 		}
 	}
 
-	if (psAttacker != nullptr && !proj_Direct(psStats))
+	if (psAttacker != nullptr && !proj_Direct(psStats) && psProj->psWStats->movementModel != MM_HOMINGINDIRECT)
 	{
 		//check for Counter Battery Sensor in range of target
 		counterBatteryFire(castBaseObject(psAttacker), psTarget);
