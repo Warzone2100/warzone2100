@@ -12,15 +12,15 @@ trigger:
     - l10n_*
 
 jobs:
-- template: .ci/azure/templates/macos-build-pipeline-template.yml
-  parameters:
-    name: macOS_Xcode_9_4_1
-    displayName: 'macOS [Xcode 9.4.1, macOS 10.13 SDK]'  # friendly name to display in the UI
-    vmImage: 'macOS-10.14'
-    xcodeDeveloperDir: '/Applications/Xcode_9.4.1.app/Contents/Developer'
-    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
-    vcpkgInstallXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
-    publishArtifact: false
+#- template: .ci/azure/templates/macos-build-pipeline-template.yml
+#  parameters:
+#    name: macOS_Xcode_9_4_1
+#    displayName: 'macOS [Xcode 9.4.1, macOS 10.13 SDK]'  # friendly name to display in the UI
+#    vmImage: 'macOS-10.14'
+#    xcodeDeveloperDir: '/Applications/Xcode_9.4.1.app/Contents/Developer'
+#    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
+#    vcpkgInstallXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
+#    publishArtifact: false
 - template: .ci/azure/templates/macos-build-pipeline-template.yml
   parameters:
     name: macOS_Xcode_10_3_novideos
