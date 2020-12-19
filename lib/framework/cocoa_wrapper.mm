@@ -27,6 +27,7 @@
 #endif
 
 #import <AppKit/AppKit.h>
+#import <ApplicationServices/ApplicationServices.h>
 
 static inline NSString * _Nonnull nsstringify(const char *str)
 {
@@ -148,6 +149,26 @@ bool cocoaSetFileQuarantineAttribute(const char *path)
 		}
 		return true;
 	}
+}
+
+bool TransformProcessState(ProcessApplicationTransformState newState)
+{
+	@autoreleasepool {
+		ProcessSerialNumber psn = {0, kCurrentProcess};
+		OSStatus result = TransformProcessType(&psn, newState);
+
+		if (result != 0)
+		{
+			NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:result userInfo:nil];
+			NSLog(@"TransformProcessType failed with error - %@", error);
+		}
+		return (result == 0);
+	}
+}
+
+bool cocoaTransformToBackgroundApplication()
+{
+    return TransformProcessState(kProcessTransformToBackgroundApplication);
 }
 
 #endif // WZ_OS_MAC

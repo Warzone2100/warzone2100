@@ -1625,6 +1625,14 @@ int realmain(int argc, char *argv[])
 	debug_MEMSTATS();
 #endif
 	debug(LOG_MAIN, "Entering main loop");
+
+#if defined(WZ_OS_MAC)
+	if (headlessGameMode())
+	{
+		cocoaTransformToBackgroundApplication();
+	}
+#endif
+
 	wzMainEventLoop();
 	ActivityManager::instance().preSystemShutdown();
 
