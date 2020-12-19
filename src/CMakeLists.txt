@@ -399,9 +399,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		message( WARNING "wz2100_ROOT_FILES is not defined. Needed to bundle root COPYING, README, etc files." )
 	endif()
 
-	# Set Apple link flags
-	set_property(TARGET warzone2100 APPEND_STRING PROPERTY LINK_FLAGS " -framework Security -framework Cocoa")
-
 	# Embed the dSYM file in the app bundle
 	set_target_properties(warzone2100 PROPERTIES
 		XCODE_ATTRIBUTE_DWARF_DSYM_FOLDER_PATH "\$(CONFIGURATION_BUILD_DIR)/\$(EXECUTABLE_FOLDER_PATH)"
