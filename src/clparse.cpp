@@ -122,6 +122,8 @@ void SetStdOutToConsole_Win()
 		SetConsoleTitleW(L"Warzone 2100");
 	}
 
+	SetConsoleOutputCP(CP_UTF8);
+
 	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	// give the console window a bigger buffer size / scroll-back
