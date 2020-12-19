@@ -109,6 +109,11 @@
 		"pos1": [896, 6656],
 		"pos2": [1152, 6912]
 	},
+	"area_12": {
+		"label": "betaUnits",
+		"pos1": [512, 18816],
+		"pos2": [1152, 19328]
+	},
 
 	"object_0": {
 		"label": "NXbase1HeavyFacArti",
