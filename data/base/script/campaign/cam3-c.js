@@ -14,6 +14,7 @@ const NEXUS_RES = [
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
 var reunited;
+var betaUnitIds;
 
 camAreaEvent("gammaBaseTrigger", function(droid) {
 	discoverGammaBase();
@@ -87,6 +88,18 @@ function discoverGammaBase()
 	enableAllFactories();
 }
 
+function findBetaUnitIds()
+{
+	var droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter(function(obj) {
+		return obj.type === DROID;
+	});
+
+	for (var i = 0, len = droids.length; i < len; ++i)
+	{
+		betaUnitIds.push(droids[i].id);
+	}
+}
+
 function betaAlive()
 {
 	if (reunited)
@@ -94,15 +107,14 @@ function betaAlive()
 		return true; //Don't need to see if Beta is still alive if reunited with base.
 	}
 
-	const BETA_DROID_IDS = [536, 1305, 1306, 1307, 540, 541,];
 	var alive = false;
 	var myDroids = enumDroid(CAM_HUMAN_PLAYER);
 
-	for (var i = 0, l = BETA_DROID_IDS.length; i < l; ++i)
+	for (var i = 0, l = betaUnitIds.length; i < l; ++i)
 	{
 		for (var x = 0, c = myDroids.length; x < c; ++x)
 		{
-			if (myDroids[x].id === BETA_DROID_IDS[i])
+			if (myDroids[x].id === betaUnitIds[i])
 			{
 				alive = true;
 				break;
@@ -128,6 +140,9 @@ function eventStartLevel()
 	var startpos = getObject("startPosition");
 	var limboLZ = getObject("limboDroidLZ");
 	reunited = false;
+	betaUnitIds = [];
+
+	findBetaUnitIds();
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D1", {
 		callback: "betaAlive"
