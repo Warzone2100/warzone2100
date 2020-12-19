@@ -1448,6 +1448,15 @@ int realmain(int argc, char *argv[])
 	// Save new (commandline) settings
 	saveConfig();
 
+	// Print out some initial information if in headless mode
+	if (headlessGameMode())
+	{
+		fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+		fprintf(stdout, " * Warzone 2100 - Headless Mode\n");
+		fprintf(stdout, " * %s\n", version_getFormattedVersionString(false));
+		fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+	}
+
 	// Find out where to find the data
 	scanDataDirs();
 
@@ -1606,6 +1615,10 @@ int realmain(int argc, char *argv[])
 		startTitleLoop();
 		break;
 	case GS_SAVEGAMELOAD:
+		if (headlessGameMode())
+		{
+			fprintf(stdout, "Loading savegame ...\n");
+		}
 		initSaveGameLoad();
 		break;
 	case GS_NORMAL:
