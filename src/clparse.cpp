@@ -83,6 +83,68 @@ static std::string wz_test;
 static std::string wz_autoratingUrl;
 static bool wz_cli_headless = false;
 
+#if defined(WZ_OS_WIN)
+
+#include <ntverp.h>				// Windows SDK - include for access to VER_PRODUCTBUILD
+#if VER_PRODUCTBUILD >= 9200
+	// 9200 is the Windows SDK 8.0 (which introduced family support)
+	#include <winapifamily.h>	// Windows SDK
+#else
+	// Earlier SDKs don't have the concept of families - provide simple implementation
+	// that treats everything as "desktop"
+	#define WINAPI_PARTITION_DESKTOP			0x00000001
+	#define WINAPI_FAMILY_PARTITION(Partition)	((WINAPI_PARTITION_DESKTOP & Partition) == Partition)
+#endif
+
+#include <fcntl.h>
+#include <io.h>
+#include <iostream>
+
+void SetStdOutToConsole_Win()
+{
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+	static bool has_setup_console = false;
+	const WORD MAX_CONSOLE_LINES = 9999;
+
+	if (has_setup_console) { return; }
+
+	if (AttachConsole(ATTACH_PARENT_PROCESS) == 0)
+	{
+		// failed to attach to parent process console
+		// allocate a console for this app
+		if (AllocConsole() == 0)
+		{
+			// failed to allocate a console
+			return;
+		}
+
+		// give the new console window a nicer title
+		SetConsoleTitleW(L"Warzone 2100");
+	}
+
+	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	// give the console window a bigger buffer size / scroll-back
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	if (GetConsoleScreenBufferInfo(consoleHandle, &csbi))
+	{
+		csbi.dwSize.Y = MAX_CONSOLE_LINES;
+		SetConsoleScreenBufferSize(consoleHandle, csbi.dwSize);
+	}
+
+	FILE* fi = 0;
+	freopen_s(&fi, "CONOUT$", "w", stdout);
+	fi = 0;
+	freopen_s(&fi, "CONOUT$", "w", stderr);
+
+	std::ios::sync_with_stdio();
+
+	has_setup_console = true;
+#endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
+}
+
+#endif /* defined(WZ_OS_WIN) */
+
 static void poptPrintHelp(poptContext ctx, FILE *output)
 {
 	// TRANSLATORS: Summary of commandline option syntax
@@ -259,6 +321,9 @@ typedef enum
 	CLI_AUTOHOST,
 	CLI_AUTORATING,
 	CLI_AUTOHEADLESS,
+#if defined(WZ_OS_WIN)
+	CLI_WIN_ENABLE_CONSOLE,
+#endif
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -315,6 +380,9 @@ static const struct poptOption *getOptionsTable()
 		{ "continue", POPT_ARG_NONE, CLI_CONTINUE,   N_("Continue the last saved game"), nullptr },
 		{ "autohost", POPT_ARG_STRING, CLI_AUTOHOST,   N_("Start host game with given settings file"), N_("autohost") },
 		{ "autorating", POPT_ARG_STRING, CLI_AUTORATING,   N_("Query ratings from given server url (containing \"{HASH}\"), when hosting"), N_("autorating") },
+#if defined(WZ_OS_WIN)
+		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
+#endif
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -436,6 +504,11 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 			printf("Warzone 2100 - %s\n", version_getFormattedVersionString());
 			return false;
 
+#if defined(WZ_OS_WIN)
+		case CLI_WIN_ENABLE_CONSOLE:
+			SetStdOutToConsole_Win();
+			break;
+#endif
 		default:
 			break;
 		};
@@ -470,6 +543,9 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_CONFIGDIR:
 		case CLI_HELP:
 		case CLI_VERSION:
+#if defined(WZ_OS_WIN)
+		case CLI_WIN_ENABLE_CONSOLE:
+#endif
 			// These options are parsed in ParseCommandLineEarly() already, so ignore them
 			break;
 
