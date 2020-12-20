@@ -296,6 +296,7 @@ void recvPlayerLeft(NETQUEUE queue)
 	turnOffMultiMsg(true);
 	clearPlayer(playerIndex, false);  // don't do it quietly
 	turnOffMultiMsg(false);
+	setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
 	NetPlay.players[playerIndex].allocated = false;
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, playerIndex);
@@ -321,6 +322,7 @@ bool MultiPlayerLeave(UDWORD playerIndex)
 	{
 		addConsolePlayerLeftMessage(playerIndex);
 		clearPlayer(playerIndex, false);
+		setMultiStats(playerIndex, PLAYERSTATS(), true); // local only
 	}
 	else if (NetPlay.isHost)  // If hosting, and game has started (not in pre-game lobby screen, that is).
 	{
