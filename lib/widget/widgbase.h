@@ -189,7 +189,7 @@ public:
 		setTip((stringUtf8 != nullptr) ? std::string(stringUtf8) : std::string());
 	}
 
-	std::shared_ptr<WIDGET> parent()
+	std::shared_ptr<WIDGET> parent() const
 	{
 		return parentWidget.lock();
 	}
