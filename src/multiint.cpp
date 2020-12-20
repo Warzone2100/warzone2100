@@ -2899,6 +2899,15 @@ static void loadMapChallengeSettings(WzConfig& ini)
 			game.hash = levGetMapNameHash(game.map);
 
 			LEVEL_DATASET* mapData = levFindDataSet(game.map, &game.hash);
+			if (!mapData)
+			{
+				code_part log_level = (bIsAutoHostOrAutoGame) ? LOG_ERROR : LOG_FATAL;
+				debug(log_level, "Map %s not found!", game.map);
+				if (bIsAutoHostOrAutoGame)
+				{
+					exit(1);
+				}
+			}
 			game.maxPlayers = mapData->players;
 
 			uint8_t configuredMaxPlayers = ini.value("maxPlayers", game.maxPlayers).toUInt();
