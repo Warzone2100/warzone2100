@@ -514,6 +514,15 @@ void widgDelete(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
 	ASSERT_OR_RETURN(, psScreen != nullptr, "Invalid screen pointer");
 	widgDelete(widgGetFromID(psScreen, id));
 }
+void widgDeleteLater(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
+{
+	ASSERT_OR_RETURN(, psScreen != nullptr, "Invalid screen pointer");
+	auto psWidget = widgGetFromID(psScreen, id);
+	if (psWidget)
+	{
+		psWidget->deleteLater();
+	}
+}
 
 /* Find a widget on a form from its id number */
 static WIDGET *widgFormGetFromID(WIDGET *widget, UDWORD id)
