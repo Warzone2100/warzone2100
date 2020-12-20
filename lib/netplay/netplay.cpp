@@ -512,7 +512,7 @@ void NETBroadcastPlayerInfo(uint32_t index)
 	NETSendPlayerInfoTo(index, NET_ALL_PLAYERS);
 }
 
-static int NET_CreatePlayer(char const *name)
+static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlayerNumber = false)
 {
 	int index = -1;
 	int position = INT_MAX;
@@ -524,6 +524,10 @@ static int NET_CreatePlayer(char const *name)
 		{
 			index = i;
 			position = p.position;
+			if (forceTakeLowestAvailablePlayerNumber)
+			{
+				break;
+			}
 		}
 	}
 
@@ -3190,7 +3194,7 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 #endif
 	gamestruct.future4 = NETCODE_VERSION_MAJOR << 16 | NETCODE_VERSION_MINOR;	// for future use
 
-	selectedPlayer = NET_CreatePlayer(PlayerName);
+	selectedPlayer = NET_CreatePlayer(PlayerName, (hostlaunch == HostLaunch::Autohost));
 	ASSERT_OR_RETURN(false, selectedPlayer < MAX_PLAYERS, "Failed to create player");
 	realSelectedPlayer = selectedPlayer;
 	NetPlay.isHost	= true;
