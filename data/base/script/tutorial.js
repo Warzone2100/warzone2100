@@ -507,6 +507,7 @@ function eventStartLevel()
 	setMiniMap(true);
 	setDesign(false);
 
+	showInterface(); // init buttons. This MUST come before setting the reticule button data
 	setReticuleButton(CLOSE_BUTTON, _("Close"), "", "");
 	setReticuleButton(PRODUCTION_BUTTON, _("Manufacture - build factory first"), "", "");
 	setReticuleButton(RESEARCH_BUTTON, _("Research - build research facility first"), "", "");
@@ -514,7 +515,6 @@ function eventStartLevel()
 	setReticuleButton(DESIGN_BUTTON, _("Design - construct HQ first"), "", "");
 	setReticuleButton(INTEL_BUTTON, _("Intelligence Display (F5)"), "", "");
 	setReticuleButton(COMMAND_BUTTON, _("Commanders - manufacture commanders first"), "", "");
-	showInterface();
 
 	queue("addToConsole", camSecondsToMilliseconds(2));
 }
