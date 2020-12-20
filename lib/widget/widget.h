@@ -253,6 +253,7 @@ WZ_DECL_NONNULL(2) W_SLIDER *widgAddSlider(const std::shared_ptr<W_SCREEN> &psSc
 /** Delete a widget from the screen */
 void widgDelete(WIDGET *widget);
 void widgDelete(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
+void widgDeleteLater(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
 /** Hide a widget */
 void widgHide(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
