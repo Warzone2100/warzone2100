@@ -2913,7 +2913,8 @@ static void loadMapChallengeSettings(WzConfig& ini)
 			uint8_t configuredMaxPlayers = ini.value("maxPlayers", game.maxPlayers).toUInt();
 			if (hostlaunch == HostLaunch::Autohost)
 			{
-				game.maxPlayers = std::max(std::max((uint8_t)1u, configuredMaxPlayers), game.maxPlayers);
+				// always use the autohost config - if it specifies an invalid number of players, this is a bug in the config
+				game.maxPlayers = std::max((uint8_t)1u, configuredMaxPlayers);
 			}
 			else
 			{
