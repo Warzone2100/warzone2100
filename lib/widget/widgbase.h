@@ -213,6 +213,24 @@ public:
 	{
 		return dim.y();
 	}
+	int screenPosX() const
+	{
+		int screenX = x();
+		for (auto psParent = parent(); psParent != nullptr; psParent = psParent->parent())
+		{
+			screenX += psParent->x();
+		}
+		return screenX;
+	}
+	int screenPosY() const
+	{
+		int screenY = y();
+		for (auto psParent = parent(); psParent != nullptr; psParent = psParent->parent())
+		{
+			screenY += psParent->y();
+		}
+		return screenY;
+	}
 	int width() const
 	{
 		return dim.width();
