@@ -916,6 +916,10 @@ static void stopGameLoop()
 			{
 				debug(LOG_ERROR, "levReleaseAll failed!");
 			}
+			for (auto& player : NetPlay.players)
+			{
+				player.resetAll();
+			}
 		}
 		closeLoadingScreen();
 		reloadMPConfig();
