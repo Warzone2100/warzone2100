@@ -34,7 +34,7 @@
 
 // Regarding construction vs. start():
 // This allows a reference to the parent to be held for a stack-like effect.
-class WzTitleUI
+class WzTitleUI : public std::enable_shared_from_this<WzTitleUI>
 {
 public:
 	virtual ~WzTitleUI();
