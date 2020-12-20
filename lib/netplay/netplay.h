@@ -257,6 +257,24 @@ struct PLAYER
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
 	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
 	char                IPtextAddress[40];  ///< IP of this player
+
+	void resetAll()
+	{
+		name[0] = '\0';
+		position = -1;
+		colour = 0;
+		allocated = false;
+		heartattacktime = 0;
+		heartbeat = false;
+		kick = false;
+		connection = -1;
+		team = -1;
+		ready = false;
+		ai = 0;
+		difficulty = AIDifficulty::DISABLED;
+		autoGame = false;
+		IPtextAddress[0] = '\0';
+	}
 };
 
 struct PlayerReference;

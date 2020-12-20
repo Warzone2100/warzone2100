@@ -2847,6 +2847,10 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 	changeTitleUI(parent);
 	selectedPlayer = 0;
 	realSelectedPlayer = 0;
+	for (auto& player : NetPlay.players)
+	{
+		player.resetAll();
+	}
 }
 
 static void resetPlayerPositions()
