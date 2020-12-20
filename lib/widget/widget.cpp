@@ -123,7 +123,8 @@ void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 		std::remove_if(
 			overlays.begin(), overlays.end(),
 			[psScreen](const OverlayScreen& a) { return a.psScreen == psScreen; }
-		)
+		),
+		overlays.end()
 	);
 }
 
