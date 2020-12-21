@@ -33,6 +33,7 @@ class WzMultiplayerOptionsTitleUI : public WzTitleUI
 {
 public:
 	WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitleUI> parent);
+	virtual ~WzMultiplayerOptionsTitleUI();
 	virtual void start() override;
 	virtual TITLECODE run() override;
 	void frontendMultiMessages(bool running);
