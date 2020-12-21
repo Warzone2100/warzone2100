@@ -76,6 +76,7 @@ struct OverlayScreen
 	uint16_t zOrder;
 };
 static std::vector<OverlayScreen> overlays;
+static std::unordered_set<std::shared_ptr<W_SCREEN>> overlaysToDelete;
 
 
 /* Initialise the widget module */
@@ -98,6 +99,8 @@ void widgReset(void)
 void widgShutDown(void)
 {
 	tipShutdown();
+	overlays.clear();
+	overlaysToDelete.clear();
 #ifdef DEBUG
 	if (!debugLiveWidgets.empty())
 	{
@@ -138,13 +141,26 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 {
+	auto it = std::find_if(overlays.begin(), overlays.end(), [psScreen](const OverlayScreen& overlay) -> bool {
+		return overlay.psScreen == psScreen;
+	});
+	if (it != overlays.end())
+	{
+		overlaysToDelete.insert(psScreen);
+	}
+}
+
+static void cleanupDeletedOverlays()
+{
+	if (overlaysToDelete.empty()) { return; }
 	overlays.erase(
 		std::remove_if(
 			overlays.begin(), overlays.end(),
-			[psScreen](const OverlayScreen& a) { return a.psScreen == psScreen; }
+			[](const OverlayScreen& a) { return overlaysToDelete.count(a.psScreen) > 0; }
 		),
 		overlays.end()
 	);
+	overlaysToDelete.clear();
 }
 
 bool WIDGET::isMouseOverWidget() const
@@ -152,11 +168,26 @@ bool WIDGET::isMouseOverWidget() const
 	return psMouseOverWidget.lock().get() == this;
 }
 
-bool isMouseOverScreenOverlayChild(int mx, int my)
+static inline void forEachOverlayScreen(const std::function<bool (const OverlayScreen& overlay)>& func)
 {
+	ASSERT_OR_RETURN(, func.operator bool(), "Requires a valid func");
 	for (const auto& overlay : overlays)
 	{
-		W_FORM* psRoot = overlay.psScreen->psForm.get();
+		if (!func(overlay))
+		{
+			break; // stop enumerating
+		}
+	}
+	// now that we aren't in the middle of enumerating overlays, handling removing any that were queued for deletion
+	cleanupDeletedOverlays();
+}
+
+bool isMouseOverScreenOverlayChild(int mx, int my)
+{
+	bool bMouseIsOverOverlayChild = false;
+	forEachOverlayScreen([mx, my, &bMouseIsOverOverlayChild](const OverlayScreen& overlay)
+	{
+		auto psRoot = overlay.psScreen->psForm;
 
 		// Hit-test all children of root form
 		for (const auto &psCurr: psRoot->children())
@@ -167,11 +198,13 @@ bool isMouseOverScreenOverlayChild(int mx, int my)
 			}
 
 			// hit test succeeded for child widget
-			return true;
+			bMouseIsOverOverlayChild = true;
+			return false; // stop enumerating
 		}
-	}
+		return true; // keep enumerating
+	});
 
-	return false;
+	return bMouseIsOverOverlayChild;
 }
 
 static void deleteOldWidgets()
@@ -945,6 +978,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	static WidgetTriggers assertReturn;
 	ASSERT_OR_RETURN(assertReturn, psScreen != nullptr, "Invalid screen pointer");
 	psScreen->retWidgets.clear();
+	cleanupDeletedOverlays();
 
 	/* Initialise the context */
 	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
@@ -973,10 +1007,11 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 			}
 			sContext.mx = c->pos.x;
 			sContext.my = c->pos.y;
-			for (const auto& overlay : overlays)
+			forEachOverlayScreen([&sContext, wkey, pressed](const OverlayScreen& overlay) -> bool
 			{
 				overlay.psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
-			}
+				return true;
+			});
 			psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
 
 			lastReleasedKey_DEPRECATED = wkey;
@@ -985,17 +1020,19 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 
 	sContext.mx = mouseX();
 	sContext.my = mouseY();
-	for (const auto& overlay : overlays)
+	forEachOverlayScreen([&sContext](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
-	}
+		return true;
+	});
 	psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
 
 	/* Process the screen's widgets */
-	for (const auto& overlay : overlays)
+	forEachOverlayScreen([&sContext](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->psForm->runRecursive(&sContext);
-	}
+		return true;
+	});
 	psScreen->psForm->runRecursive(&sContext);
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
@@ -1076,6 +1113,8 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	debugLoc = debugLoc[1] == -1 ? debugSequence : debugLoc[0] == debugCode ? debugLoc : debugLoc[1] == debugCode ? debugLoc + 1 : debugSequence;
 	debugBoundingBoxes = debugBoundingBoxes ^ (debugLoc[1] == -1);
 
+	cleanupDeletedOverlays();
+
 	/* Process any user callback functions */
 	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	sContext.mx = mouseX();
@@ -1086,11 +1125,12 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	psScreen->psForm->displayRecursive();
 
 	// Always overlays on-top (i.e. draw them last)
-	for (const auto& overlay : overlays)
+	forEachOverlayScreen([&sContext](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->psForm->processCallbacksRecursive(&sContext);
 		overlay.psScreen->psForm->displayRecursive();
-	}
+		return true;
+	});
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being displayed.
 
