@@ -40,6 +40,9 @@ void ClipRectWidget::run(W_CONTEXT *psContext)
 bool ClipRectWidget::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
 {
 	W_CONTEXT newContext(psContext);
+	newContext.xOffset = psContext->xOffset - offset.x;
+	newContext.yOffset = psContext->yOffset - offset.y;
+	newContext.mx = psContext->mx + offset.x;
 	newContext.my = psContext->my + offset.y;
 	return WIDGET::processClickRecursive(&newContext, key, wasPressed);
 }
