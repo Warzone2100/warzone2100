@@ -1718,8 +1718,13 @@ void WzMultiplayerOptionsTitleUI::closeAllChoosers()
 	closeColourChooser();
 	closeTeamChooser();
 	closePositionChooser();
-	closeAiChooser();
-	closeDifficultyChooser();
+
+	// AiChooser and DifficultyChooser currently use the same form, so to avoid a double-delete-later, do it once explicitly here
+	widgDeleteLater(psInlineChooserOverlayScreen, MULTIOP_AI_FORM);
+	widgDeleteLater(psInlineChooserOverlayScreen, FRONTEND_SIDETEXT2);
+	aiChooserUp = -1;
+	difficultyChooserUp = -1;
+	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
 }
 
 void WzMultiplayerOptionsTitleUI::initInlineChooser(uint32_t player)
@@ -1797,55 +1802,63 @@ static bool addMultiButWithClickHandler(const std::shared_ptr<W_SCREEN> &screen,
 
 void WzMultiplayerOptionsTitleUI::openDifficultyChooser(uint32_t player)
 {
-	closeAllChoosers();
-
-	widgDelete(psWScreen, MULTIOP_PLAYERS);
-	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
-	difficultyChooserUp = player;
-
-	WIDGET *chooserParent = widgGetFromID(psWScreen, FRONTEND_BACKDROP);
-
-	auto aiForm = std::make_shared<IntFormAnimated>(false);
-	chooserParent->attach(aiForm);
-	aiForm->id = MULTIOP_AI_FORM;
-	aiForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
-	}));
-
-	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("DIFFICULTY"));
-
-	for (int i = 0; i < 4; i++)
+	IntFormAnimated *aiForm = initRightSideChooser(_("DIFFICULTY"));
+	if (!aiForm)
 	{
+		debug(LOG_ERROR, "Failed to initialize right-side chooser?");
+		return;
+	}
+
+	auto psWeakTitleUI = std::weak_ptr<WzMultiplayerOptionsTitleUI>(std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(shared_from_this()));
+
+	for (int difficultyIdx = 0; difficultyIdx < 4; difficultyIdx++)
+	{
+		auto onClickHandler = [psWeakTitleUI, difficultyIdx, player](W_BUTTON& clickedButton) {
+			auto pStrongPtr = psWeakTitleUI.lock();
+			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
+			NetPlay.players[player].difficulty = difficultyValue[difficultyIdx];
+			NETBroadcastPlayerInfo(player);
+			pStrongPtr->closeDifficultyChooser();
+			pStrongPtr->addPlayerBox(true);
+			resetReadyStatus(false);
+		};
+
 		W_BUTINIT sButInit;
 		sButInit.formID = MULTIOP_AI_FORM;
-		sButInit.id = MULTIOP_DIFFICULTY_CHOOSE_START + i;
+		sButInit.id = MULTIOP_DIFFICULTY_CHOOSE_START + difficultyIdx;
 		sButInit.x = 7;
-		sButInit.y = (MULTIOP_PLAYERHEIGHT + 5) * i + 4;
+		sButInit.y = (MULTIOP_PLAYERHEIGHT + 5) * difficultyIdx + 4;
 		sButInit.width = MULTIOP_PLAYERWIDTH + 1;
 		sButInit.height = MULTIOP_PLAYERHEIGHT;
-		switch (i)
+		switch (difficultyIdx)
 		{
 		case 0: sButInit.pTip = _("Starts disadvantaged"); break;
 		case 1: sButInit.pTip = _("Plays nice"); break;
 		case 2: sButInit.pTip = _("No holds barred"); break;
 		case 3: sButInit.pTip = _("Starts with advantages"); break;
 		}
-		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[i];
+		const char *difficultyTip = aidata[NetPlay.players[player].ai].difficultyTips[difficultyIdx];
 		if (strcmp(difficultyTip, "") != 0)
 		{
 			sButInit.pTip += "\n";
 			sButInit.pTip += difficultyTip;
 		}
 		sButInit.pDisplay = displayDifficulty;
-		sButInit.UserData = i;
+		sButInit.UserData = difficultyIdx;
 		sButInit.pUserData = new DisplayDifficultyCache();
 		sButInit.onDelete = [](WIDGET *psWidget) {
 			assert(psWidget->pUserData != nullptr);
 			delete static_cast<DisplayDifficultyCache *>(psWidget->pUserData);
 			psWidget->pUserData = nullptr;
 		};
-		widgAddButton(psWScreen, &sButInit);
+		auto psButton = widgAddButton(psInlineChooserOverlayScreen, &sButInit);
+		if (psButton)
+		{
+			psButton->addOnClickHandler(onClickHandler);
+		}
 	}
+
+	difficultyChooserUp = player;
 }
 
 void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
@@ -1981,11 +1994,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 
 void WzMultiplayerOptionsTitleUI::openPositionChooser(uint32_t player)
 {
-	closeColourChooser();
-	closeTeamChooser();
-	closePositionChooser();
-	closeAiChooser();
-	closeDifficultyChooser();
+	closeAllChoosers();
 
 	positionChooserUp = player;
 	addPlayerBox(true);
@@ -2151,17 +2160,16 @@ void WzMultiplayerOptionsTitleUI::closeTeamChooser()
 
 void WzMultiplayerOptionsTitleUI::closeAiChooser()
 {
-	widgDeleteLater(psInlineChooserOverlayScreen, MULTIOP_AI_FORM);
-	widgDeleteLater(psInlineChooserOverlayScreen, FRONTEND_SIDETEXT2);
-	aiChooserUp = -1;
-	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
+	// AiChooser and DifficultyChooser currently use the same formID
+	// Just call closeAllChoosers() for now
+	closeAllChoosers();
 }
 
 void WzMultiplayerOptionsTitleUI::closeDifficultyChooser()
 {
-	widgDeleteLater(psWScreen, MULTIOP_AI_FORM);
-	widgDelete(psWScreen, FRONTEND_SIDETEXT2);
-	difficultyChooserUp = -1;
+	// AiChooser and DifficultyChooser currently use the same formID
+	// Just call closeAllChoosers() for now
+	closeAllChoosers();
 }
 
 void WzMultiplayerOptionsTitleUI::closePositionChooser()
@@ -2544,7 +2552,6 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 	}
 	else if (difficultyChooserUp >= 0)
 	{
-		openDifficultyChooser(difficultyChooserUp);
 		return;
 	}
 
@@ -3826,16 +3833,6 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		break;
 	default:
 		break;
-	}
-
-	if (id >= MULTIOP_DIFFICULTY_CHOOSE_START && id <= MULTIOP_DIFFICULTY_CHOOSE_END && difficultyChooserUp != -1)
-	{
-		int idx = id - MULTIOP_DIFFICULTY_CHOOSE_START;
-		NetPlay.players[difficultyChooserUp].difficulty = difficultyValue[idx];
-		NETBroadcastPlayerInfo(difficultyChooserUp);
-		closeDifficultyChooser();
-		addPlayerBox(true);
-		resetReadyStatus(false);
 	}
 
 	STATIC_ASSERT(MULTIOP_TEAMS_START + MAX_PLAYERS - 1 <= MULTIOP_TEAMS_END);
