@@ -364,8 +364,39 @@ private:
 /* Context information to pass into the widget functions */
 struct W_CONTEXT
 {
+public:
 	SDWORD		xOffset, yOffset;	// Screen offset of the parent form
 	SDWORD		mx, my;				// mouse position on the form
+
+private:
+	W_CONTEXT()
+	: xOffset(0)
+	, yOffset(0)
+	, mx(0)
+	, my(0)
+	{ }
+public:
+	static W_CONTEXT ZeroContext()
+	{
+		return W_CONTEXT();
+	}
+	W_CONTEXT(SDWORD xOffset, SDWORD yOffset, SDWORD mx, SDWORD my)
+	: xOffset(xOffset)
+	, yOffset(yOffset)
+	, mx(mx)
+	, my(my)
+	{ }
+	W_CONTEXT(const W_CONTEXT& other) = default;
+	W_CONTEXT(const W_CONTEXT* other)
+	: xOffset(0)
+	, yOffset(0)
+	, mx(0)
+	, my(0)
+	{
+		ASSERT_OR_RETURN(, other, "Initializing with null W_CONTEXT");
+		*this = *other;
+	}
+	W_CONTEXT& operator=(const W_CONTEXT& other) = default;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGBASE_H__

@@ -796,7 +796,7 @@ void WIDGET::processCallbacksRecursive(W_CONTEXT *psContext)
 		}
 
 		/* and then recurse */
-		W_CONTEXT sFormContext;
+		W_CONTEXT sFormContext(psContext);
 		sFormContext.mx = psContext->mx - psCurr->x();
 		sFormContext.my = psContext->my - psCurr->y();
 		sFormContext.xOffset = psContext->xOffset + psCurr->x();
@@ -820,7 +820,7 @@ void WIDGET::runRecursive(W_CONTEXT *psContext)
 		}
 
 		/* Found a sub form, so set up the context */
-		W_CONTEXT sFormContext;
+		W_CONTEXT sFormContext(psContext);
 		sFormContext.mx = psContext->mx - psCurr->x();
 		sFormContext.my = psContext->my - psCurr->y();
 		sFormContext.xOffset = psContext->xOffset + psCurr->x();
@@ -852,7 +852,7 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 {
 	bool didProcessClick = false;
 
-	W_CONTEXT shiftedContext;
+	W_CONTEXT shiftedContext(psContext);
 	shiftedContext.mx = psContext->mx - x();
 	shiftedContext.my = psContext->my - y();
 	shiftedContext.xOffset = psContext->xOffset + x();
@@ -928,9 +928,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	psScreen->retWidgets.clear();
 
 	/* Initialise the context */
-	W_CONTEXT sContext;
-	sContext.xOffset = 0;
-	sContext.yOffset = 0;
+	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	psMouseOverWidget.reset();
 
 	// Note which keys have been pressed
@@ -1060,9 +1058,7 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	debugBoundingBoxes = debugBoundingBoxes ^ (debugLoc[1] == -1);
 
 	/* Process any user callback functions */
-	W_CONTEXT sContext;
-	sContext.xOffset = 0;
-	sContext.yOffset = 0;
+	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	sContext.mx = mouseX();
 	sContext.my = mouseY();
 	psScreen->psForm->processCallbacksRecursive(&sContext);

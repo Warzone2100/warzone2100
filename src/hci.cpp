@@ -4924,7 +4924,7 @@ void chatDialog(int mode)
 	if (!ChatDialogUp)
 	{
 		auto const &parent = psWScreen->psForm;
-		W_CONTEXT sContext;
+		W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 
 		auto consoleBox = std::make_shared<IntFormAnimated>();
 		parent->attach(consoleBox);
@@ -4947,8 +4947,6 @@ void chatDialog(int mode)
 			chatBox->setBoxColours(WZCOL_YELLOW, WZCOL_YELLOW, WZCOL_MENU_BACKGROUND);
 			widgSetUserData2(psWScreen, CHAT_EDITBOX, CHAT_TEAM);
 		}
-		sContext.xOffset = sContext.yOffset = 0;
-		sContext.mx = sContext.my = 0;
 
 		auto label = std::make_shared<W_LABEL>();
 		consoleBox->attach(label);

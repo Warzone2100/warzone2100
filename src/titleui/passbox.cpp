@@ -97,11 +97,7 @@ void WzPassBoxTitleUI::start()
 	buttonNo->setTip(_("Cancel"));
 
 	// auto click in the password box
-	W_CONTEXT sContext;
-	sContext.xOffset	= 0;
-	sContext.yOffset	= 0;
-	sContext.mx			= 0;
-	sContext.my			= 0;
+	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	widgGetFromID(psWScreen, CON_PASSWORD)->clicked(&sContext);
 }
 

@@ -199,9 +199,7 @@ void WzProtocolTitleUI::openIPDialog()			//internet options
 	}
 	widgSetString(psSettingsScreen, CON_IP, sEdInit.pText);
 	// auto click in the text box
-	W_CONTEXT sContext;
-	sContext.xOffset	= 0;
-	sContext.yOffset	= 0;
+	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	sContext.mx			= CON_NAMEBOXWIDTH;
 	sContext.my			= 0;
 	widgGetFromID(psSettingsScreen, CON_IP)->clicked(&sContext);
