@@ -74,7 +74,8 @@ void addBottomForm();
 W_FORM *addBackdrop();
 W_FORM *addBackdrop(const std::shared_ptr<W_SCREEN> &screen);
 void addTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
-void addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
+W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
+W_LABEL *addSideText(const std::shared_ptr<W_SCREEN> &screen, UDWORD formId, UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt);
 void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos);
 
 void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
