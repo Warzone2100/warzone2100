@@ -27,6 +27,8 @@
 #include "../wrappers.h"
 #include "titleui.h"
 
+class IntFormAnimated; // forward-declare
+
 class WzMultiplayerOptionsTitleUI : public WzTitleUI
 {
 public:
@@ -59,6 +61,12 @@ private:
 	 * any widgets that may have been positioned on that player's row.
 	 */
 	void initInlineChooser(uint32_t playerIndex);
+
+	/**
+	 * Initializes a chooser, preparing to replace the "right side". This involves removing
+	 * the player list.
+	 */
+	IntFormAnimated* initRightSideChooser(const char* sideText);
 
 	/**
 	 * Initializes the right side box which usually contains the list of players. Handles opening difficulty
