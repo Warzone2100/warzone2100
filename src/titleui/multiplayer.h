@@ -51,6 +51,8 @@ public:
 	void closeColourChooser();
 
 	void closeAllChoosers();
+
+	void screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight) override;
 private:
 	/**
 	 * Initializes a chooser, preparing to add it on a single line on player list. This involves removing
@@ -72,11 +74,11 @@ private:
 
 	void processMultiopWidgets(UDWORD button);
 
+	std::shared_ptr<W_SCREEN> psInlineChooserOverlayScreen = nullptr;
 	std::shared_ptr<WzTitleUI> parent;
 	bool performedFirstStart = false;
 
-	int8_t colourChooserUp;
-	int8_t teamChooserUp;
+	int8_t inlineChooserUp;
 	int8_t aiChooserUp;
 	int8_t difficultyChooserUp;
 	int8_t positionChooserUp;
