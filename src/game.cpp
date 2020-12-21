@@ -1796,6 +1796,7 @@ static void allocatePlayers()
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
 		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
+		NetPlay.players[i].position = saveGameData.sNetPlay.players[i].position;
 		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && i == 0))
 		{
 			NetPlay.players[i].allocated = true;
