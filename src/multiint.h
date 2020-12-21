@@ -207,6 +207,8 @@ void displayRoomNotifyMessage(char const *text);
 #define MULTIOP_TEAMCHOOSER_END     102841
 #define MULTIOP_TEAMCHOOSER_KICK	10289
 
+#define MULTIOP_INLINE_OVERLAY_ROOT_FRM	10287
+
 // 'Ready' button
 #define MULTIOP_READY_FORM_ID		102900
 #define MULTIOP_READY_START         (MULTIOP_READY_FORM_ID + MAX_PLAYERS + 1)

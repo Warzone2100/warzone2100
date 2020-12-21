@@ -104,7 +104,7 @@ void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsi
 	multiMenuScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	display3dScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	consoleScreenDidChangeSize(oldWidth, oldHeight, newWidth, newHeight);
-	frontendScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+	frontendScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight); // must be last!
 }
 
 void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor)
