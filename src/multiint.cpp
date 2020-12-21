@@ -4495,6 +4495,11 @@ WzMultiplayerOptionsTitleUI::WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitle
 {
 }
 
+WzMultiplayerOptionsTitleUI::~WzMultiplayerOptionsTitleUI()
+{
+	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
+}
+
 void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
 {
 	// NOTE: To properly support resizing the inline overlay screen based on underlying screen layer recalculations
