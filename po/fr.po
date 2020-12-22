@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-09 11:17\n"
+"PO-Revision-Date: 2020-12-22 05:25\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4080,11 +4080,11 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefacts obtenus"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:495
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Bases détruites"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
@@ -16472,43 +16472,43 @@ msgstr "Assigner au groupe 9"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Ajouter au groupe 0"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Ajouter au groupe 1"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Ajouter au groupe 2"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Ajouter au groupe 3"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Ajouter au groupe 4"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Ajouter au groupe 5"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Ajouter au groupe 6"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Ajouter au groupe 7"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Ajouter au groupe 8"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Ajouter au groupe 9"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
@@ -17223,11 +17223,11 @@ msgstr ""
 
 #: src/multiint.cpp:1483
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Niveau technologique 3"
 
 #: src/multiint.cpp:1484
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Niveau technologique 4"
 
 #: src/multiint.cpp:1492
 #: src/multiint.cpp:1493
@@ -17376,11 +17376,11 @@ msgstr "L'hôte démarre la partie"
 
 #: src/multiint.cpp:3768
 msgid "You have been kicked: "
-msgstr ""
+msgstr "Vous avez été exclu : "
 
 #: src/multiint.cpp:3781
 msgid "No connection to host."
-msgstr ""
+msgstr "Pas de connexion à l'hôte."
 
 #: src/multiint.cpp:3941
 msgid "Cannot change to a map with too few slots for all players."
@@ -18139,7 +18139,7 @@ msgstr "Les renforts sont arrivés !"
 
 #: src/updatemanager.cpp:247
 msgid "Update Available"
-msgstr ""
+msgstr "Mise à jour disponible"
 
 #: src/updatemanager.cpp:250
 #, c-format
