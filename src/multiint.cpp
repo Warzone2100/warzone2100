@@ -1156,7 +1156,7 @@ void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char 
 	buttons.push_back(std::make_pair(button, value));
 
 	button->addOnClickHandler([value](W_BUTTON& button) {
-		MultibuttonWidget* pParent = static_cast<MultibuttonWidget*>(button.parent());
+		auto pParent = std::static_pointer_cast<MultibuttonWidget>(button.parent());
 		assert(pParent != nullptr);
 		pParent->choose(value);
 	});
