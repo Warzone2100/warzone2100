@@ -47,6 +47,7 @@
 #include "tip.h"
 
 #include <algorithm>
+#include <unordered_set>
 
 static	bool	bWidgetsActive = true;
 
@@ -63,6 +64,11 @@ static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 static std::vector<WIDGET *> widgetDeletionQueue;
 
 static bool debugBoundingBoxesOnly = false;
+
+#ifdef DEBUG
+#include "lib/framework/demangle.hpp"
+static std::unordered_set<const WIDGET*> debugLiveWidgets;
+#endif
 
 struct OverlayScreen
 {
@@ -92,6 +98,17 @@ void widgReset(void)
 void widgShutDown(void)
 {
 	tipShutdown();
+#ifdef DEBUG
+	if (!debugLiveWidgets.empty())
+	{
+		// Some widgets still exist - there may be reference cycles, non-cleared references, or other bugs
+		for (auto widget : debugLiveWidgets)
+		{
+			debug(LOG_ERROR, "Widget not cleaned up: %p (type: %s)", (const void*)widget, cxxDemangle(typeid(*widget).name()).c_str());
+		}
+		ASSERT(debugLiveWidgets.empty(), "There are %zu widgets that were not cleaned up.", debugLiveWidgets.size());
+	}
+#endif
 }
 
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder)
@@ -190,6 +207,10 @@ WIDGET::WIDGET(W_INIT const *init, WIDGET_TYPE type)
 
 	// if calclayout is not null, call it
 	callCalcLayout();
+
+#ifdef DEBUG
+	debugLiveWidgets.insert(this);
+#endif
 }
 
 WIDGET::WIDGET(WIDGET_TYPE type)
@@ -206,6 +227,9 @@ WIDGET::WIDGET(WIDGET_TYPE type)
 	, dim(0, 0, 1, 1)
 	, dirty(true)
 {
+#ifdef DEBUG
+	debugLiveWidgets.insert(this);
+#endif
 }
 
 WIDGET::~WIDGET()
@@ -216,6 +240,10 @@ WIDGET::~WIDGET()
 	}
 
 	tipStop(this);  // Stop showing tooltip, if we are.
+
+#ifdef DEBUG
+	debugLiveWidgets.erase(this);
+#endif
 }
 
 void WIDGET::deleteLater()
