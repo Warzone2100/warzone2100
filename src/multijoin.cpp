@@ -173,7 +173,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	STRUCTURE		*psStruct, *psNext;
 
 	NetPlay.playerReferences[player]->disconnect();
-	NetPlay.playerReferences[player] = std::shared_ptr<PlayerReference>(new PlayerReference(player));
+	NetPlay.playerReferences[player] = std::make_shared<PlayerReference>(player);
 
 	debug(LOG_NET, "R.I.P. %s (%u). quietly is %s", getPlayerName(player), player, quietly ? "true" : "false");
 

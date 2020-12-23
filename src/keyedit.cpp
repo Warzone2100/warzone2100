@@ -75,7 +75,8 @@ protected:
 public:
 	static std::shared_ptr<KeyMapForm> make(bool ingame)
 	{
-		auto widget = std::shared_ptr<KeyMapForm>(new KeyMapForm());
+		class make_shared_enabler: public KeyMapForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize(ingame);
 		return widget;
 	}

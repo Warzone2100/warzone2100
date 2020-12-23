@@ -54,7 +54,8 @@ protected:
 public:
 	static std::shared_ptr<TabSelectionWidget> make()
 	{
-		auto widget = std::shared_ptr<TabSelectionWidget>(new TabSelectionWidget());
+		class make_shared_enabler: public TabSelectionWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize();
 		return widget;
 	}

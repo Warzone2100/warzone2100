@@ -235,7 +235,12 @@ protected:
 public:
 	static std::shared_ptr<W_TrackRow> make(W_BUTINIT const *init, std::shared_ptr<const WZ_TRACK> const &track, bool ingame)
 	{
-		auto widget = std::shared_ptr<W_TrackRow>(new W_TrackRow(init, track));
+		class make_shared_enabler: public W_TrackRow
+		{
+		public:
+			make_shared_enabler(W_BUTINIT const *init, std::shared_ptr<const WZ_TRACK> const &track): W_TrackRow(init, track) {}
+		};
+		auto widget = std::make_shared<make_shared_enabler>(init, track);
 		widget->initialize(ingame);
 		return widget;
 	}
@@ -800,7 +805,7 @@ protected:
 		selectedTrack = cdAudio_GetCurrentTrack();
 
 		// register for cd audio events
-		musicManagerAudioEventSink = std::shared_ptr<MusicManager_CDAudioEventSink>(new MusicManager_CDAudioEventSink());
+		musicManagerAudioEventSink = std::make_shared<MusicManager_CDAudioEventSink>();
 		cdAudio_RegisterForEvents(std::static_pointer_cast<CDAudioEventSink>(musicManagerAudioEventSink));
 
 		addTrackList(botForm.get(), ingame);
@@ -810,7 +815,12 @@ protected:
 public:
 	static std::shared_ptr<MusicManagerForm> make(bool ingame)
 	{
-		auto widget = std::shared_ptr<MusicManagerForm>(new MusicManagerForm(ingame));
+		class make_shared_enabler: public MusicManagerForm
+		{
+		public:
+			make_shared_enabler(bool ingame): MusicManagerForm(ingame) {}
+		};
+		auto widget = std::make_shared<make_shared_enabler>(ingame);
 		widget->initialize();
 		return widget;
 	}

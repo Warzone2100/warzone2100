@@ -308,7 +308,7 @@ struct ParagraphTextElement: public ParagraphElement
 
 	std::shared_ptr<WIDGET> createFragmentWidget(Paragraph &paragraph, FlowLayoutFragment const &fragment) override
 	{
-		auto widget = std::shared_ptr<ParagraphTextWidget>(new ParagraphTextWidget(text.substr(fragment.begin, fragment.length).toUtf8(), style));
+		auto widget = std::make_shared<ParagraphTextWidget>(text.substr(fragment.begin, fragment.length).toUtf8(), style);
 		paragraph.attach(widget);
 		fragments.push_back(widget);
 		return widget;
