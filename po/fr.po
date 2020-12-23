@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-12-22 17:27\n"
+"PO-Revision-Date: 2020-12-23 05:25\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -7570,7 +7570,7 @@ msgstr "Châssis lourd du Collectif"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1441
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Cyborg ingénieur de combat"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -7848,7 +7848,7 @@ msgstr "Usine de Cyborgs"
 #. data/mp/stats/weapons.json: $.CyborgFlamer01.name
 #: po/custom/fromJson.txt:1602
 msgid "Cyborg Flamer"
-msgstr "Cyborg incendieur"
+msgstr "Cyborg lance-flammes"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
@@ -8754,7 +8754,7 @@ msgstr "Fait un bon véhicule d'éclairage"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2227
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Cyborg grenadier"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -10728,7 +10728,7 @@ msgstr "Peut être agrandie par des modules de production"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3658
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Cyborg mécanicien"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -13086,13 +13086,13 @@ msgstr "DCA Sunburst"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5242
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Super Cyborg à canon lourd"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5259
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Super Cyborg à canon électrique lourd"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13486,7 +13486,7 @@ msgstr "Bombes incendiaires"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5518
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Cyborg lance-flammes à thermite"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -15312,7 +15312,7 @@ msgstr "Instantané"
 
 #: src/frontend.cpp:726
 msgid "Tracked"
-msgstr ""
+msgstr "Suivi"
 
 #: src/frontend.cpp:739
 #: src/ingameop.cpp:517
@@ -15889,23 +15889,23 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:600
 #: src/integrations/wzdiscordrpc.cpp:836
 msgid "Map:"
-msgstr ""
+msgstr "Carte :"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:603
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Bots:"
-msgstr ""
+msgstr "Bots :"
 
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "Dans un salon multijoueur"
 
 #: src/integrations/wzdiscordrpc.cpp:652
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "En partie multijoueur"
 
 #: src/integrations/wzdiscordrpc.cpp:848
 #, c-format
@@ -15925,7 +15925,7 @@ msgstr "Alliances :"
 
 #: src/integrations/wzdiscordrpc.cpp:927
 msgid "In Menu"
-msgstr ""
+msgstr "Dans le menu"
 
 #: src/integrations/wzdiscordrpc.cpp:1076
 #, c-format
@@ -18093,7 +18093,7 @@ msgstr "Statut"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Continuer"
 
 #: src/titleui/passbox.cpp:75
 msgid "Enter Password:"
