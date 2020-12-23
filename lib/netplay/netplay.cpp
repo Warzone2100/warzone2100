@@ -206,7 +206,7 @@ NETPLAY::NETPLAY()
 	playerReferences.resize(MAX_PLAYERS);
 	for (auto i = 0; i < MAX_PLAYERS; i++)
 	{
-		playerReferences[i] = std::shared_ptr<PlayerReference>(new PlayerReference(i));
+		playerReferences[i] = std::make_shared<PlayerReference>(i);
 	}
 }
 

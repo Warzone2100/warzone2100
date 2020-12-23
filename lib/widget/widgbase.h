@@ -307,7 +307,8 @@ protected:
 public:
 	static std::shared_ptr<W_SCREEN> make()
 	{
-		auto screen = std::shared_ptr<W_SCREEN>(new W_SCREEN());
+		class make_shared_enabler: public W_SCREEN {};
+		auto screen = std::make_shared<make_shared_enabler>();
 		screen->initialize();
 		return screen;
 	}

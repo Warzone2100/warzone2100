@@ -52,7 +52,8 @@ protected:
 public:
 	static std::shared_ptr<IntListTabWidget> make()
 	{
-		auto widget = std::shared_ptr<IntListTabWidget>(new IntListTabWidget());
+		class make_shared_enabler: public IntListTabWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize();
 		return widget;
 	}

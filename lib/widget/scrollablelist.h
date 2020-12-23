@@ -45,7 +45,8 @@ protected:
 public:
 	static std::shared_ptr<ScrollableListWidget> make()
 	{
-		auto widget = std::shared_ptr<ScrollableListWidget>(new ScrollableListWidget());
+		class make_shared_enabler: public ScrollableListWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize();
 		return widget;
 	}

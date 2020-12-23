@@ -305,7 +305,8 @@ protected:
 public:
 	static std::shared_ptr<ChatBoxWidget> make()
 	{
-		auto widget = std::shared_ptr<ChatBoxWidget>(new ChatBoxWidget());
+		class make_shared_enabler: public ChatBoxWidget {};
+		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize();
 		return widget;
 	}
