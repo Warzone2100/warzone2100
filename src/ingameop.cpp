@@ -529,7 +529,7 @@ static bool startIGGraphicsOptionsMenu()
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(7));
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(8), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(8));
 	}));
 
 	int row = 1;
@@ -561,6 +561,11 @@ static bool startIGGraphicsOptionsMenu()
 	// RadarJump
 	addIGTextButton(INTINGAMEOP_RADAR_JUMP,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Radar Jump"), WBUT_PLAIN);
 	addIGTextButton(INTINGAMEOP_RADAR_JUMP_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsRadarJumpString(), WBUT_PLAIN);
+	row++;
+
+	// Screen shake
+	addIGTextButton(INTINGAMEOP_SCREENSHAKE,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Shake"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_SCREENSHAKE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsScreenShakeString(), WBUT_PLAIN);
 	row++;
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
@@ -606,6 +611,12 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 	case INTINGAMEOP_RADAR_JUMP_R:
 		war_SetRadarJump(!war_GetRadarJump());
 		widgSetString(psWScreen, INTINGAMEOP_RADAR_JUMP_R, graphicsOptionsRadarJumpString());
+		break;
+
+	case INTINGAMEOP_SCREENSHAKE:
+	case INTINGAMEOP_SCREENSHAKE_R:
+		setShakeStatus(!getShakeStatus());
+		widgSetString(psWScreen, INTINGAMEOP_SCREENSHAKE_R, graphicsOptionsScreenShakeString());
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.

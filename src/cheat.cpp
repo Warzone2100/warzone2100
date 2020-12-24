@@ -88,6 +88,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"damage me", kf_DamageMe},
 	{"autogame on", kf_AutoGame},
 	{"autogame off", kf_AutoGame},
+	{"shakey", kf_ToggleShakeStatus}, //shakey
 
 };
 

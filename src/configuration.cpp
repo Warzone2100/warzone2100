@@ -136,6 +136,7 @@ bool loadConfig()
 	{
 		war_SetCameraSpeed(ini.value("cameraSpeed").toInt());
 	}
+	setShakeStatus(ini.value("shake", false).toBool());
 	setCameraAccel(ini.value("cameraAccel", true).toBool());
 	setDrawShadows(ini.value("shadows", true).toBool());
 	war_setSoundEnabled(ini.value("sound", true).toBool());
@@ -294,6 +295,7 @@ bool saveConfig()
 	ini.setValue("radarJump", war_GetRadarJump());		// radar jump
 	ini.setValue("scrollEvent", war_GetScrollEvent());	// scroll event
 	ini.setValue("cameraAccel", getCameraAccel());		// camera acceleration
+	ini.setValue("shake", (SDWORD)(getShakeStatus()));		// screenshake
 	ini.setValue("mouseflip", (SDWORD)(getInvertMouseStatus()));	// flipmouse
 	ini.setValue("nomousewarp", (SDWORD)getMouseWarp());		// mouse warp
 	ini.setValue("coloredCursor", (SDWORD)war_GetColouredCursor());

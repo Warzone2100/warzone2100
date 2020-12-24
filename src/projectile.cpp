@@ -56,6 +56,7 @@
 #include "multistat.h"
 #include "mapgrid.h"
 #include "random.h"
+#include "display3d.h"
 
 #include <algorithm>
 #include <functional>
@@ -1004,6 +1005,11 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			position.z = psObj->pos.y;  // z = y [sic] intentional
 			position.y = map_Height(position.x, position.z);
 			addEffect(&position, EFFECT_SAT_LASER, SAT_LASER_STANDARD, false, nullptr, 0, psObj->time);
+
+			if (clipXY(psObj->pos.x, psObj->pos.y))
+			{
+				shakeStart(1800); // takes out lots of stuff so shake length is greater
+			}
 		}
 	}
 

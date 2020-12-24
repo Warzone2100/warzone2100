@@ -171,6 +171,11 @@ enum MOUSE_TARGET
 extern bool		gameStats;
 extern bool		godMode;
 
+extern bool getShakeStatus();
+extern void setShakeStatus(bool val);
+extern void shakeStart(unsigned int length);
+extern void shakeStop();
+
 // reset the input state
 void resetInput();
 

@@ -222,6 +222,7 @@ void kf_JumpNextVTOLFactory();
 void kf_JumpNextPowerStation();
 void kf_JumpNextResearch();
 void kf_ToggleConsoleDrop();
+void kf_ToggleShakeStatus();
 void kf_ToggleMouseInvert();
 void kf_BifferBaker();
 void kf_SetEasyLevel();
