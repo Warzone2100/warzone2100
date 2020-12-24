@@ -1454,6 +1454,10 @@ int realmain(int argc, char *argv[])
 		fprintf(stdout, "--------------------------------------------------------------------------------------\n");
 		fprintf(stdout, " * Warzone 2100 - Headless Mode\n");
 		fprintf(stdout, " * %s\n", version_getFormattedVersionString(false));
+		if (to_swap_mode(war_GetVsync()) == gfx_api::context::swap_interval_mode::immediate)
+		{
+			fprintf(stdout, " * NOTE: VSYNC IS DISABLED - CPU USAGE MAY BE UNBOUNDED\n");
+		}
 		fprintf(stdout, "--------------------------------------------------------------------------------------\n");
 	}
 
