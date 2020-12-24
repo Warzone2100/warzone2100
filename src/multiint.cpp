@@ -3378,6 +3378,8 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 	const bool bIsOnline = NetPlay.bComms && NetPlay.isHost;
 	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
+		debug(LOG_ERROR, "Missing specified file: %s", ininame.toUtf8().c_str());
+
 		/* Just reset the players if config is not found and host is not started yet */
 		if (!bIsOnline) {
 			resetPlayerConfiguration();
