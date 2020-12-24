@@ -141,6 +141,25 @@ static UDWORD CurrentItemUnderMouse = 0;
 bool	rotActive = false;
 bool	gameStats = false;
 
+/* Hackety hack hack hack */
+static int screenShakeTable[100] =
+{
+	-2, -2, -3, -4, -3, -3, -5, -4, -4, -4,
+	-4, -5, -5, -5, -5, -7, -5, -6, -8, -6,
+	-7, -8, -6, -4, -8, -7, -7, -7, -6, -5,
+	-6, -5, -2, -5, -6, -3, -5, -3, -2, -4,
+	-5, -3, -2, -0, 1, 2, 2, 1, 0, 0,
+	0, 1, 1, 3, 2, 1, 0, 2, 3, 4,
+	4, 2, 6, 4, 5, 3, 7, 7, 3, 6,
+	4, 7, 9, 10, 9, 8, 6, 4, 7, 5,
+	5, 4, 6, 2, 4, 5, 3, 3, 2, 1,
+	1, 0, -1, -1, -2, -1, 1, 0, 1, 0
+};
+
+static bool bScreenShakeActive = false;
+static UDWORD screenShakeStarted;
+static UDWORD screenShakeLength;
+
 static const UDWORD FADE_START_OF_GAME_TIME = 1000;
 static UDWORD fadeEndTime = 0;
 static void fadeStartOfGame();
@@ -151,6 +170,8 @@ static bool bSensorAssigned;
 static bool bLasSatStruct;
 // Local prototypes
 static MOUSE_TARGET	itemUnderMouse(BASE_OBJECT **ppObjUnderCursor);
+// If shaking is allowed
+static bool bShakingPermitted = true;
 
 static auto viewDistanceAnimation = Animation<float>(realTime);
 static uint32_t viewDistanceIncrementCooldownTime = 0;
@@ -189,6 +210,62 @@ static void updateViewDistanceAnimation()
 		viewDistanceAnimation.update();
 		setViewDistance(viewDistanceAnimation.getCurrent());
 		UpdateFogDistance(viewDistanceAnimation.getCurrent());
+	}
+}
+
+bool getShakeStatus()
+{
+	return bShakingPermitted;
+}
+
+void setShakeStatus(bool val)
+{
+	bShakingPermitted = val;
+}
+
+void shakeStart(unsigned int length)
+{
+	if (bShakingPermitted)
+	{
+		if (!bScreenShakeActive)
+		{
+			bScreenShakeActive = true;
+			screenShakeStarted = gameTime;
+			screenShakeLength = length;
+		}
+	}
+}
+
+void shakeStop()
+{
+	bScreenShakeActive = false;
+	player.r.z = 0;
+}
+
+static void shakeUpdate()
+{
+	UDWORD	screenShakePercentage;
+
+	/* Check if we're shaking the screen or not */
+	if (bScreenShakeActive)
+	{
+		screenShakePercentage = PERCENT(gameTime - screenShakeStarted, screenShakeLength);
+		if (screenShakePercentage < 100)
+		{
+			player.r.z = 0 + DEG(screenShakeTable[screenShakePercentage]);
+		}
+		if (gameTime > (screenShakeStarted + screenShakeLength))
+		{
+			bScreenShakeActive = false;
+			player.r.z = 0;
+		}
+	}
+	else
+	{
+		if (!getWarCamStatus())
+		{
+			player.r.z = 0;
+		}
 	}
 }
 
@@ -1101,6 +1178,8 @@ void displayWorld()
 	}
 
 	Vector3i pos;
+
+	shakeUpdate();
 
 	if (panActive)
 	{

@@ -807,6 +807,11 @@ void	kf_ToggleFog()
 /* Toggle camera on/off */
 void	kf_ToggleCamera()
 {
+	if (!getWarCamStatus())
+	{
+		shakeStop(); // Ensure screen shake stopped before starting camera mode.
+	}
+
 	camToggleStatus();
 }
 
@@ -2524,6 +2529,21 @@ void	kf_ToggleMouseInvert()
 	{
 		setInvertMouseStatus(true);
 		CONPRINTF("%s", _("Vertical rotation direction: Flipped"));
+	}
+}
+
+// --------------------------------------------------------------------------
+void	kf_ToggleShakeStatus(void)
+{
+	if (getShakeStatus())
+	{
+		setShakeStatus(false);
+		CONPRINTF("%s", _("Screen shake when things die: Off"));
+	}
+	else
+	{
+		setShakeStatus(true);
+		CONPRINTF("%s", _("Screen shake when things die: On"));
 	}
 }
 

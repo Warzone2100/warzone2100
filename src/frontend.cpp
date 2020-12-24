@@ -723,6 +723,11 @@ char const *graphicsOptionsScanlinesString()
 	}
 }
 
+char const *graphicsOptionsScreenShakeString()
+{
+	return getShakeStatus() ? _("On") : _("Off");
+}
+
 char const *graphicsOptionsSubtitlesString()
 {
 	return seq_GetSubtitles() ? _("On") : _("Off");
@@ -777,6 +782,10 @@ void startGraphicsOptionsMenu()
 	// RadarJump
 	addTextButton(FRONTEND_RADAR_JUMP,   FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar Jump"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_RADAR_JUMP_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, graphicsOptionsRadarJumpString(), WBUT_SECONDARY);
+
+	// screenshake
+	addTextButton(FRONTEND_SSHAKE,   FRONTEND_POS8X - 35, FRONTEND_POS8Y, _("Screen Shake"), WBUT_SECONDARY);
+	addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS8M - 55, FRONTEND_POS8Y, graphicsOptionsScreenShakeString(), WBUT_SECONDARY);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GRAPHICS OPTIONS"));
@@ -841,6 +850,12 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_RADAR_JUMP_R:
 		war_SetRadarJump(!war_GetRadarJump());
 		widgSetString(psWScreen, FRONTEND_RADAR_JUMP_R, graphicsOptionsRadarJumpString());
+		break;
+
+	case FRONTEND_SSHAKE:
+	case FRONTEND_SSHAKE_R:
+		setShakeStatus(!getShakeStatus());
+		widgSetString(psWScreen, FRONTEND_SSHAKE_R, graphicsOptionsScreenShakeString());
 		break;
 
 	default:
