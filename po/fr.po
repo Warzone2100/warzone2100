@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-12-23 05:25\n"
+"PO-Revision-Date: 2020-12-25 15:05\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4024,7 +4024,7 @@ msgstr "Détruisez tous les renforts du Nouveau Paradigme"
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Construisez des structures non murales sur le plateau et détruisez tous les renforts du Nouveau Paradigme"
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4040,11 +4040,11 @@ msgstr "Sécurisez la Liaison du Collectif"
 
 #: data/base/script/campaign/cam2-end.js:152
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Envoyez au moins un transporteur avec un camion et survivez à l’assaut du Collectif"
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Déplacez toutes les unités dans la vallée"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
@@ -4056,7 +4056,7 @@ msgstr "Secourez l'équipe Alpha face à Nexus"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Terminez la recherche des circuits de résistance et survivez à l’assaut du Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:215
 msgid "Secure a missile silo"
@@ -4068,7 +4068,7 @@ msgstr "Protégez les silos à missiles et recherchez les codes des missiles"
 
 #: data/base/script/campaign/cam3-c.js:127
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Réunissez une partie de l’équipe Beta à l’avant-poste de l’équipe Gamma"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -4076,7 +4076,7 @@ msgstr "Revenez à la ZA"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Détruisez toutes les unités et structures ennemies"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
