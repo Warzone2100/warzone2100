@@ -316,19 +316,10 @@ function eventStartLevel()
 		},
 	});
 
-	const START_FACTORIES = [
-		"NX-VtolFactory1", "NX-VtolFactory2", "NX-SEFactory", "NX-NEFactory",
-		"NX-NWCyborgFactory"
-	];
-	for (var i = 0, l = START_FACTORIES.length; i < l; ++i)
-	{
-		camEnableFactory(START_FACTORIES[i]);
-	}
-
 	//Show Project transport flying video.
 	hackAddMessage("MB3_4_MSG3", MISS_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("CM34_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(10)));
+	queue("enableAllFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
 	setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(15)));
 }
