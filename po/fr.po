@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-12-25 15:05\n"
+"PO-Revision-Date: 2020-12-26 03:06\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -8076,7 +8076,7 @@ msgstr "Balles à uranium appauvri pour mitrailleuses"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1788
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Conçu en se concentrant sur la recherche"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8144,7 +8144,7 @@ msgstr "Attaque électroniquement les structures ennemies et empêche leur bon f
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1838
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Pont défensif à canon magnétique"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -13190,19 +13190,19 @@ msgstr "Gel inflammable très haute température"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5332
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Gel plasma très haute température Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5335
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Gel plasma très haute température Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5338
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Gel plasma très haute température"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -14750,11 +14750,11 @@ msgstr "Désactiver la compression des textures"
 
 #: src/clparse.cpp:291
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Définir le backend gfx"
 
 #: src/clparse.cpp:301
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Utiliser le débogage du backend gfx"
 
 #: src/clparse.cpp:302
 msgid "Run games automatically for testing"
@@ -14782,19 +14782,19 @@ msgstr "Continuer la dernière partie sauvegardée"
 
 #: src/clparse.cpp:306
 msgid "Start host game with given settings file"
-msgstr ""
+msgstr "Lancer la partie hôte avec le fichier de paramètres choisi"
 
 #: src/clparse.cpp:306
 msgid "autohost"
-msgstr ""
+msgstr "hébergement automatique"
 
 #: src/clparse.cpp:307
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
-msgstr ""
+msgstr "Requérir les évaluations à partir de l’URL du serveur choisi (contenant «  {HASH} ») en cours d’hébergement"
 
 #: src/clparse.cpp:307
 msgid "autorating"
-msgstr ""
+msgstr "évaluation automatique"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
