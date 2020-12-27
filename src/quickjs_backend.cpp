@@ -3754,7 +3754,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 	switch (tag)
 	{
 		case JS_TAG_BOOL:
-			j = JS_ToBool(v.ctx, v.value);
+			j = static_cast<bool>(JS_ToBool(v.ctx, v.value) != 0);
 			break;
 		case JS_TAG_INT:
 		{
