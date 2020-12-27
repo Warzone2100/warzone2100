@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-12-11 02:55\n"
+"PO-Revision-Date: 2020-12-27 03:46\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -7574,7 +7574,7 @@ msgstr "Kollektif Ağır Gövde"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1441
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Savaş Mühendisi Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -10732,7 +10732,7 @@ msgstr "Fabrika eki ile yükseltilebilir"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3658
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Mekanik Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -13090,7 +13090,7 @@ msgstr "Güneş Işığı AA"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5242
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Süper Ağır Topçu Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -15439,7 +15439,7 @@ msgstr "Görüntü Ölçeği"
 
 #: src/frontend.cpp:1135
 msgid "Adaptive"
-msgstr ""
+msgstr "Uyarlanabilir"
 
 #: src/frontend.cpp:1167
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
