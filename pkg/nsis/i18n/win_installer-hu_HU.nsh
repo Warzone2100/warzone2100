@@ -28,5 +28,5 @@ ${LangFileString} DESC_SecNLS "Az angolon kívüli nyelvek támogatása."
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
 ${LangFileString} DESC_SecNLS_WinFonts "A Windows betűkészletmappájának hozzáadása a keresési útvonalhoz. Engedélyezze, ha egyéni betűkészleteket akar használni a konfigurációs fájlban vagy problémája van a szabványos betűkészlettel. Vistán és későbbi rendszereken lassú lehet!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Fontos Microsoft Runtime DDL-ek"
+${LangFileString} TEXT_SecMSSysLibraries "Fontos Microsoft Runtime DLL-ek"
 ${LangFileString} DESC_SecMSSysLibraries "A Microsoft Visual C++ terjeszthető rendszer-programkönyvtárak letöltése és telepítése (vagy frissítése), amely az egyes komponensek futtatásához szükséges lehet."
