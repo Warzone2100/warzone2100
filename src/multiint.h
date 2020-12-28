@@ -39,56 +39,6 @@
 #define AI_CLOSED         -1
 #define AI_NOT_FOUND     -99
 
-
-class MultibuttonWidget : public W_FORM
-{
-
-public:
-	MultibuttonWidget(int value = -1);
-
-	virtual void display(int xOffset, int yOffset);
-	virtual void geometryChanged();
-
-	void setLabel(char const *text);
-	void addButton(int value, Image image, Image imageHighlight, char const *tip);
-	void setButtonMinClickInterval(UDWORD interval);
-	void enable(bool enabled = true);
-	void disable()
-	{
-		enable(false);
-	}
-	void setGap(int gap);
-	int currentValue() const
-	{
-		return currentValue_;
-	}
-
-	/* The optional "onChoose" callback function */
-	typedef std::function<void (MultibuttonWidget& widget, int newValue)> W_ON_CHOOSE_FUNC;
-
-public:
-	void choose(int value);
-
-private:
-	void stateChanged();
-
-protected:
-	std::shared_ptr<W_LABEL> label;
-	std::vector<std::pair<std::shared_ptr<W_BUTTON>, int>> buttons;
-	int currentValue_;
-	bool disabled;
-	int gap_;
-	bool lockCurrent;
-	std::vector<W_ON_CHOOSE_FUNC> onChooseHandlers;
-};
-
-class MultichoiceWidget : public MultibuttonWidget
-{
-
-public:
-	MultichoiceWidget(int value = -1);
-};
-
 // WzMultiplayerOptionsTitleUI is in titleui.h to prevent dependency explosions
 
 void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int);
