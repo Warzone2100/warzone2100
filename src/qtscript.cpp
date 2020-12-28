@@ -2316,10 +2316,7 @@ wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string lab
 	SCRIPT_ASSERT({}, context, labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
 	LABEL &l = labels[labelName];
 	l.triggered = 0; // make active again
-	if (filter.has_value())
-	{
-		l.subscriber = filter.value();
-	}
+	l.subscriber = (filter.has_value()) ? filter.value() : ALL_PLAYERS;
 	return {};
 }
 
