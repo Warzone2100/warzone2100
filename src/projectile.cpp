@@ -1175,8 +1175,13 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 		/* Note when it exploded for the explosion effect */
 		psObj->born = gameTime;
 
+		// If projectile impacts a droid start the splash damage from the center of it, else use whatever location the projectile impacts at as the splash center.
+		auto destDroid = castDroid(psObj->psDest);
+		Vector3i targetPos = (destDroid != nullptr) ? destDroid->pos : psObj->pos;
+
 		static GridList gridList;  // static to avoid allocations.
-		gridList = gridStartIterate(psObj->pos.x, psObj->pos.y, psStats->upgrade[psObj->player].radius);
+		gridList = gridStartIterate(targetPos.x, targetPos.y, psStats->upgrade[psObj->player].radius);
+
 		for (GridIterator gi = gridList.begin(); gi != gridList.end(); ++gi)
 		{
 			BASE_OBJECT *psCurr = *gi;
@@ -1222,7 +1227,7 @@ static void proj_ImpactFunc(PROJECTILE *psObj)
 			{
 				continue;  // Target in air, and can't shoot at air, or target on ground, and can't shoot at ground.
 			}
-			if (useSphere && !Vector3i_InSphere(psCurr->pos, psObj->pos, psStats->upgrade[psObj->player].radius))
+			if (useSphere && !Vector3i_InSphere(psCurr->pos, targetPos, psStats->upgrade[psObj->player].radius))
 			{
 				continue;  // Target out of range.
 			}
