@@ -69,6 +69,7 @@
 #include "lib/widget/widgint.h"
 #include "lib/widget/label.h"
 #include "lib/widget/paragraph.h"
+#include "lib/widget/multibutform.h"
 
 #include "challenge.h"
 #include "main.h"
@@ -1093,134 +1094,6 @@ static JoinGameResult joinGameInternalConnect(const char *host, uint32_t port, s
 
 // ////////////////////////////////////////////////////////////////////////////
 
-MultibuttonWidget::MultibuttonWidget(int value)
-	: W_FORM()
-	, label(nullptr)
-	, currentValue_(value)
-	, disabled(false)
-	, gap_(3)
-	, lockCurrent(false)
-{
-}
-
-void MultibuttonWidget::display(int xOffset, int yOffset)
-{
-	iV_ShadowBox(xOffset + x(), yOffset + y(), xOffset + x() + width() - 1, yOffset + y() + height() - 1, 0, WZCOL_MENU_BORDER, WZCOL_MENU_BORDER, WZCOL_MENU_BACKGROUND);
-}
-
-void MultibuttonWidget::geometryChanged()
-{
-	int s = width() - gap_;
-	for (auto i = buttons.crbegin(); i != buttons.crend(); ++i)
-	{
-		i->first->move(s - i->first->width(), (height() - i->first->height()) / 2);
-		s -= i->first->width() + gap_;
-	}
-	if (label != nullptr)
-	{
-		label->setGeometry(gap_, 0, s - gap_, height());
-	}
-}
-
-void MultibuttonWidget::setLabel(char const *text)
-{
-	attach(label = std::make_shared<W_LABEL>());
-	label->setString(text);
-
-	geometryChanged();
-}
-
-void MultibuttonWidget::addButton(int value, Image image, Image imageDown, char const *tip)
-{
-	auto button = std::make_shared<W_BUTTON>();
-	this->attach(button);
-	button->setImages(image, imageDown, mpwidgetGetFrontHighlightImage(image));
-	button->setTip(tip);
-	button->setState(value == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
-	buttons.push_back(std::make_pair(button, value));
-
-	button->addOnClickHandler([value](W_BUTTON& button) {
-		auto pParent = std::static_pointer_cast<MultibuttonWidget>(button.parent());
-		assert(pParent != nullptr);
-		pParent->choose(value);
-	});
-
-	geometryChanged();
-}
-
-void MultibuttonWidget::setButtonMinClickInterval(UDWORD interval)
-{
-	for (auto& button_pair : buttons)
-	{
-		if (button_pair.first)
-		{
-			button_pair.first->minClickInterval = interval;
-		}
-	}
-}
-
-void MultibuttonWidget::enable(bool enabled)
-{
-	if (!enabled == disabled)
-	{
-		return;
-	}
-
-	disabled = !enabled;
-	stateChanged();
-}
-
-void MultibuttonWidget::setGap(int gap)
-{
-	if (gap == gap_)
-	{
-		return;
-	}
-
-	gap_ = gap;
-	geometryChanged();
-}
-
-void MultibuttonWidget::choose(int value)
-{
-	if (value == currentValue_ && lockCurrent)
-	{
-		return;
-	}
-
-	currentValue_ = value;
-	stateChanged();
-
-	/* Call all onChoose event handlers */
-	for (auto it = onChooseHandlers.begin(); it != onChooseHandlers.end(); it++)
-	{
-		auto onChoose = *it;
-		if (onChoose)
-		{
-			onChoose(*this, currentValue_);
-		}
-	}
-
-	if (auto lockedScreen = screenPointer.lock())
-	{
-		lockedScreen->setReturn(shared_from_this());
-	}
-}
-
-void MultibuttonWidget::stateChanged()
-{
-	for (auto i = buttons.cbegin(); i != buttons.cend(); ++i)
-	{
-		i->first->setState(i->second == currentValue_ && lockCurrent ? WBUT_LOCK : disabled ? WBUT_DISABLE : 0);
-	}
-}
-
-MultichoiceWidget::MultichoiceWidget(int value)
-	: MultibuttonWidget(value)
-{
-	lockCurrent = true;
-}
-
 static void addInlineChooserBlueForm(const std::shared_ptr<W_SCREEN> &psScreen, W_FORM *psParent, UDWORD id, WzString txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 {
 	W_FORMINIT sFormInit;                  // draw options box.
@@ -1458,6 +1331,15 @@ static bool canChangeMapOrRandomize()
 	return allowed;
 }
 
+static void addMultiButton(std::shared_ptr<MultibuttonWidget> mbw, int value, Image image, Image imageDown, char const *tip)
+{
+	auto button = std::make_shared<W_BUTTON>();
+	button->setImages(image, imageDown, mpwidgetGetFrontHighlightImage(image));
+	button->setTip(tip);
+
+	mbw->addButton(value, button);
+}
+
 // need to check for side effects.
 static void addGameOptions()
 {
@@ -1545,9 +1427,9 @@ static void addGameOptions()
 	scavengerChoice->setLabel(_("Scavengers"));
 	if (game.mapHasScavengers)
 	{
-		scavengerChoice->addButton(true, Image(FrontImages, IMAGE_SCAVENGERS_ON), Image(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
+		addMultiButton(scavengerChoice, true, Image(FrontImages, IMAGE_SCAVENGERS_ON), Image(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
 	}
-	scavengerChoice->addButton(false, Image(FrontImages, IMAGE_SCAVENGERS_OFF), Image(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
+	addMultiButton(scavengerChoice, false, Image(FrontImages, IMAGE_SCAVENGERS_OFF), Image(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
 	scavengerChoice->enable(!locked.scavengers);
 	optionsList->addWidgetToLayout(scavengerChoice);
 
@@ -1555,10 +1437,10 @@ static void addGameOptions()
 	optionsList->attach(allianceChoice);
 	allianceChoice->id = MULTIOP_ALLIANCES;
 	allianceChoice->setLabel(_("Alliances"));
-	allianceChoice->addButton(NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
-	allianceChoice->addButton(ALLIANCES, Image(FrontImages, IMAGE_ALLI), Image(FrontImages, IMAGE_ALLI_HI), _("Allow Alliances"));
-	allianceChoice->addButton(ALLIANCES_UNSHARED, Image(FrontImages, IMAGE_ALLI_UNSHARED), Image(FrontImages, IMAGE_ALLI_UNSHARED_HI), _("Locked Teams, No Shared Research"));
-	allianceChoice->addButton(ALLIANCES_TEAMS, Image(FrontImages, IMAGE_ALLI_TEAMS), Image(FrontImages, IMAGE_ALLI_TEAMS_HI), _("Locked Teams"));
+	addMultiButton(allianceChoice, NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
+	addMultiButton(allianceChoice, ALLIANCES, Image(FrontImages, IMAGE_ALLI), Image(FrontImages, IMAGE_ALLI_HI), _("Allow Alliances"));
+	addMultiButton(allianceChoice, ALLIANCES_UNSHARED, Image(FrontImages, IMAGE_ALLI_UNSHARED), Image(FrontImages, IMAGE_ALLI_UNSHARED_HI), _("Locked Teams, No Shared Research"));
+	addMultiButton(allianceChoice, ALLIANCES_TEAMS, Image(FrontImages, IMAGE_ALLI_TEAMS), Image(FrontImages, IMAGE_ALLI_TEAMS_HI), _("Locked Teams"));
 	allianceChoice->enable(!locked.alliances);
 	optionsList->addWidgetToLayout(allianceChoice);
 
@@ -1566,9 +1448,9 @@ static void addGameOptions()
 	optionsList->attach(powerChoice);
 	powerChoice->id = MULTIOP_POWER;
 	powerChoice->setLabel(_("Power"));
-	powerChoice->addButton(LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
-	powerChoice->addButton(LEV_MED, Image(FrontImages, IMAGE_POWMED), Image(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
-	powerChoice->addButton(LEV_HI, Image(FrontImages, IMAGE_POWHI), Image(FrontImages, IMAGE_POWHI_HI), _("High Power Levels"));
+	addMultiButton(powerChoice, LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
+	addMultiButton(powerChoice, LEV_MED, Image(FrontImages, IMAGE_POWMED), Image(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
+	addMultiButton(powerChoice, LEV_HI, Image(FrontImages, IMAGE_POWHI), Image(FrontImages, IMAGE_POWHI_HI), _("High Power Levels"));
 	powerChoice->enable(!locked.power);
 	optionsList->addWidgetToLayout(powerChoice);
 
@@ -1576,9 +1458,9 @@ static void addGameOptions()
 	optionsList->attach(baseTypeChoice);
 	baseTypeChoice->id = MULTIOP_BASETYPE;
 	baseTypeChoice->setLabel(_("Base"));
-	baseTypeChoice->addButton(CAMP_CLEAN, Image(FrontImages, IMAGE_NOBASE), Image(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
-	baseTypeChoice->addButton(CAMP_BASE, Image(FrontImages, IMAGE_SBASE), Image(FrontImages, IMAGE_SBASE_HI), _("Start with Bases"));
-	baseTypeChoice->addButton(CAMP_WALLS, Image(FrontImages, IMAGE_LBASE), Image(FrontImages, IMAGE_LBASE_HI), _("Start with Advanced Bases"));
+	addMultiButton(baseTypeChoice, CAMP_CLEAN, Image(FrontImages, IMAGE_NOBASE), Image(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
+	addMultiButton(baseTypeChoice, CAMP_BASE, Image(FrontImages, IMAGE_SBASE), Image(FrontImages, IMAGE_SBASE_HI), _("Start with Bases"));
+	addMultiButton(baseTypeChoice, CAMP_WALLS, Image(FrontImages, IMAGE_LBASE), Image(FrontImages, IMAGE_LBASE_HI), _("Start with Advanced Bases"));
 	baseTypeChoice->enable(!locked.bases);
 	optionsList->addWidgetToLayout(baseTypeChoice);
 
@@ -1586,7 +1468,7 @@ static void addGameOptions()
 	optionsList->attach(mapPreviewButton);
 	mapPreviewButton->id = MULTIOP_MAP_PREVIEW;
 	mapPreviewButton->setLabel(_("Map Preview"));
-	mapPreviewButton->addButton(0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
+	addMultiButton(mapPreviewButton, 0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
 	optionsList->addWidgetToLayout(mapPreviewButton);
 
 	/* Add additional controls if we are (or going to be) hosting the game */
@@ -1597,7 +1479,7 @@ static void addGameOptions()
 		optionsList->attach(structLimitsButton);
 		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
 		structLimitsButton->setLabel(structureLimitsLabel);
-		structLimitsButton->addButton(0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), structureLimitsLabel);
+		addMultiButton(structLimitsButton, 0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), structureLimitsLabel);
 		optionsList->addWidgetToLayout(structLimitsButton);
 
 		/* ...and even more controls if we are not starting a challenge */
@@ -1607,7 +1489,7 @@ static void addGameOptions()
 			optionsList->attach(randomButton);
 			randomButton->id = MULTIOP_RANDOM;
 			randomButton->setLabel(_("Random Game Options"));
-			randomButton->addButton(0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
+			addMultiButton(randomButton, 0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
 			randomButton->setButtonMinClickInterval(GAME_TICKS_PER_SEC / 2);
 			optionsList->addWidgetToLayout(randomButton);
 
@@ -1619,10 +1501,10 @@ static void addGameOptions()
 				optionsList->attach(TechnologyChoice);
 				TechnologyChoice->id = MULTIOP_TECHLEVEL;
 				TechnologyChoice->setLabel(_("Tech"));
-				TechnologyChoice->addButton(TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
-				TechnologyChoice->addButton(TECH_2, Image(FrontImages, IMAGE_TECHMED), Image(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
-				TechnologyChoice->addButton(TECH_3, Image(FrontImages, IMAGE_TECHHI), Image(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
-				TechnologyChoice->addButton(TECH_4, Image(FrontImages, IMAGE_COMPUTER_Y), Image(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
+				addMultiButton(TechnologyChoice, TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
+				addMultiButton(TechnologyChoice, TECH_2, Image(FrontImages, IMAGE_TECHMED), Image(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
+				addMultiButton(TechnologyChoice, TECH_3, Image(FrontImages, IMAGE_TECHHI), Image(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
+				addMultiButton(TechnologyChoice, TECH_4, Image(FrontImages, IMAGE_COMPUTER_Y), Image(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
 				optionsList->addWidgetToLayout(TechnologyChoice);
 			}
 			/* If not hosting (yet), add the button for starting the host. */
@@ -1632,7 +1514,7 @@ static void addGameOptions()
 				optionsList->attach(hostButton);
 				hostButton->id = MULTIOP_HOST;
 				hostButton->setLabel(_("Start Hosting Game"));
-				hostButton->addButton(0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
+				addMultiButton(hostButton, 0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
 				optionsList->addWidgetToLayout(hostButton);
 			}
 		}
