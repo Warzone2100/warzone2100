@@ -441,7 +441,7 @@ function init(){
 			if(propulsionCanReach('wheeled01', base.x, base.y, startPositions[player].x, startPositions[player].y)){ msg+= ", по земле"; access = 'land';}
 			else if(propulsionCanReach('hover01', base.x, base.y, startPositions[player].x, startPositions[player].y)){ msg+= ", по воде"; access = 'island';}
 			else if(propulsionCanReach('V-Tol', base.x, base.y, startPositions[player].x, startPositions[player].y)){ msg+= ", по воздуху"; access = 'air';}
-			else {msg+= ", не доступен!"; access = 'island';};
+			else {msg+= ", не доступен!"; access = 'island';}
 			if(!nf['policy'] || nf['policy'] == 'island' || nf['policy'] == 'air'){nf['policy'] = access;} 
 		}
 		

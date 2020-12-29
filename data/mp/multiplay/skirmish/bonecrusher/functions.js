@@ -1216,8 +1216,6 @@ function recycleDroid(droid){
 		orderDroidLoc_p(droid, DORDER_MOVE, base.x, base.y);
 		return true;
 	}
-	
-	return false;
 }
 
 function getFixPoints(droid){
