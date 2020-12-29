@@ -237,6 +237,7 @@ void widgShutDown();
 
 /** Used by the notifications system to register forms that are "over the top", and may consume click / mouse-over events */
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder);
+void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psScreen, const std::shared_ptr<W_SCREEN> &priorScreen);
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
 void widgScheduleTask(std::function<void ()> f);
