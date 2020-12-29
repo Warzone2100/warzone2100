@@ -37,6 +37,7 @@
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/slider.h"
+#include "lib/widget/dropdown.h"
 
 #include "advvis.h"
 #include "challenge.h"
@@ -85,6 +86,7 @@ bool			bLimiterLoaded = false;
 // Forward definitions
 
 static W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
+static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Helper functions
@@ -140,6 +142,7 @@ void startTitleMenu()
 	addTextButton(FRONTEND_MULTIPLAYER, FRONTEND_POS3X, FRONTEND_POS3Y, _("Multi Player"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_TUTORIAL, FRONTEND_POS4X, FRONTEND_POS4Y, _("Tutorial"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_OPTIONS, FRONTEND_POS5X, FRONTEND_POS5Y, _("Options"), WBUT_TXTCENTRE);
+
 	// check whether video sequences are installed
 	if (PHYSFS_exists("sequences/devastation.ogg"))
 	{
@@ -1084,20 +1087,20 @@ static bool canChangeResolutionLive()
 	return wzSupportsLiveResolutionChanges();
 }
 
-static void videoOptionsDisableResolutionButtons(std::string toolTip)
+static void videoOptionsDisableResolutionButtons()
 {
-	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, WBUT_DISABLE);
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION, toolTip);
-	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION_R, WBUT_DISABLE);
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION_R, toolTip);
+	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL);
+	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY);
+	widgHide(psWScreen, FRONTEND_RESOLUTION_DROPDOWN_LABEL);
+	widgHide(psWScreen, FRONTEND_RESOLUTION_DROPDOWN);
 }
 
 static void videoOptionsEnableResolutionButtons()
 {
-	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION, 0);
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION, "");
-	widgSetButtonState(psWScreen, FRONTEND_RESOLUTION_R, 0);
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION_R, "");
+	widgHide(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL);
+	widgHide(psWScreen, FRONTEND_RESOLUTION_READONLY);
+	widgReveal(psWScreen, FRONTEND_RESOLUTION_DROPDOWN_LABEL);
+	widgReveal(psWScreen, FRONTEND_RESOLUTION_DROPDOWN);
 }
 
 static char const *videoOptionsWindowModeString()
@@ -1130,13 +1133,6 @@ static char const *videoOptionsResolutionLabel()
 char const *videoOptionsDisplayScaleLabel()
 {
 	return (!canChangeResolutionLive())? _("Display Scale*") : _("Display Scale");
-}
-
-static std::string videoOptionsResolutionString()
-{
-	char resolution[100];
-	ssprintf(resolution, "[%d] %d × %d", war_GetScreen(), war_GetWidth(), war_GetHeight());
-	return resolution;
 }
 
 static std::string videoOptionsTextureSizeString()
@@ -1183,20 +1179,157 @@ std::string videoOptionsGfxBackendString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Video Options
+
+class ScreenResolutionsModel
+{
+public:
+	typedef const std::vector<screeninfo>::iterator iterator;
+	typedef const std::vector<screeninfo>::const_iterator const_iterator;
+
+	ScreenResolutionsModel(): modes(ScreenResolutionsModel::loadModes())
+	{
+	}
+
+	const_iterator begin() const
+	{
+		return modes.begin();
+	}
+
+	const_iterator end() const
+	{
+		return modes.end();
+	}
+
+	const_iterator findResolutionClosestToCurrent() const
+	{
+		auto currentResolution = getCurrentResolution();
+		auto closest = std::lower_bound(modes.begin(), modes.end(), currentResolution, compareLess);
+		if (closest != modes.end() && compareEq(*closest, currentResolution))
+		{
+			return closest;
+		}
+
+		if (closest != modes.begin())
+		{
+			--closest;  // If current resolution doesn't exist, round down to next-highest one.
+		}
+
+		return closest;
+	}
+
+	void selectAt(size_t index) const
+	{
+		// Disable the ability to use the Video options menu to live-change the window size when in windowed mode.
+		// Why?
+		//	- Certain window managers don't report their own changes to window size through SDL in all circumstances.
+		//	  (For example, attempting to set a window size of 800x600 might result in no actual change when using a
+		//	   tiling window manager (ex. i3), but SDL thinks the window size has been set to 800x600. This obviously
+		//     breaks things.)
+		//  - Manual window resizing is supported (so there is no need for this functionality in the Video menu).
+		ASSERT_OR_RETURN(, wzIsFullscreen(), "Attempt to change resolution in windowed-mode");
+
+		ASSERT_OR_RETURN(, index < modes.size(), "Invalid mode index passed to ScreenResolutionsModel::selectAt");
+
+		auto selectedResolution = modes.at(index);
+
+		if (canChangeResolutionLive())
+		{
+			auto currentResolution = getCurrentResolution();
+			// Attempt to change the resolution
+			if (!wzChangeWindowResolution(selectedResolution.screen, selectedResolution.width, selectedResolution.height))
+			{
+				debug(
+					LOG_WARNING,
+					"Failed to change active resolution from: %s to: %s",
+					ScreenResolutionsModel::resolutionString(currentResolution).c_str(),
+					ScreenResolutionsModel::resolutionString(selectedResolution).c_str()
+				);
+			}
+		}
+		else
+		{
+			// when live resolution changes are unavailable, check to see if the current display scale is supported at the desired resolution
+			unsigned int maxDisplayScale = std::max(100u, wzGetMaximumDisplayScaleForWindowSize(selectedResolution.width, selectedResolution.height));
+			unsigned int current_displayScale = war_GetDisplayScale();
+			if (maxDisplayScale < current_displayScale)
+			{
+				// Reduce the display scale to the maximum supported for this resolution
+				war_SetDisplayScale(maxDisplayScale);
+			}
+		}
+
+		// Store the new width and height
+		war_SetScreen(selectedResolution.screen);
+		war_SetWidth(selectedResolution.width);
+		war_SetHeight(selectedResolution.height);
+
+		// Update the widget(s)
+		refreshCurrentVideoOptionsValues();
+	}
+
+	static std::string currentResolutionString()
+	{
+		return ScreenResolutionsModel::resolutionString(getCurrentResolution());
+	}
+
+	static std::string resolutionString(const screeninfo &info)
+	{
+		return astringf("[%d] %d × %d", info.screen, info.width, info.height);
+	}
+
+private:
+	const std::vector<screeninfo> modes;
+
+	static screeninfo getCurrentResolution()
+	{
+		screeninfo info;
+		info.screen = war_GetScreen();
+		info.width = war_GetWidth();
+		info.height = war_GetHeight();
+		info.refresh_rate = -1;  // Unused.
+		return info;
+	}
+
+	static std::vector<screeninfo> loadModes()
+	{
+		// Get resolutions, sorted with duplicates removed.
+		std::vector<screeninfo> modes = wzAvailableResolutions();
+		std::sort(modes.begin(), modes.end(), ScreenResolutionsModel::compareLess);
+		modes.erase(std::unique(modes.begin(), modes.end(), ScreenResolutionsModel::compareEq), modes.end());
+
+		return modes;
+	}
+
+	static std::tuple<int, int, int> compareKey(const screeninfo &x)
+	{
+		return std::make_tuple(x.screen, x.width, x.height);
+	}
+
+	static bool compareLess(const screeninfo &a, const screeninfo &b)
+	{
+		return ScreenResolutionsModel::compareKey(a) < ScreenResolutionsModel::compareKey(b);
+	}
+
+	static bool compareEq(const screeninfo &a, const screeninfo &b)
+	{
+		return ScreenResolutionsModel::compareKey(a) == ScreenResolutionsModel::compareKey(b);
+	}
+};
+
 void refreshCurrentVideoOptionsValues()
 {
 	widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
 	widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
-	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_R)) // Resolution option may not be available
+	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_READONLY)) // Resolution option may not be available
 	{
-		widgSetString(psWScreen, FRONTEND_RESOLUTION_R, videoOptionsResolutionString().c_str());
+		widgSetString(psWScreen, FRONTEND_RESOLUTION_READONLY, ScreenResolutionsModel::currentResolutionString().c_str());
 		if (canChangeResolutionLive())
 		{
 			if (!war_getFullscreen())
 			{
 				// If live window resizing is supported & the current mode is "windowed", disable the Resolution option and add a tooltip
 				// explaining the user can now resize the window normally.
-				videoOptionsDisableResolutionButtons(_("You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"));
+				videoOptionsDisableResolutionButtons();
 			}
 			else
 			{
@@ -1214,6 +1347,38 @@ void refreshCurrentVideoOptionsValues()
 	{
 		widgSetString(psWScreen, FRONTEND_DISPLAYSCALE_R, videoOptionsDisplayScaleString().c_str());
 	}
+}
+
+static void addResolutionDropdown()
+{
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_RESOLUTION_DROPDOWN;
+	uint32_t dropdownLeftPadding = 10;
+	auto dropdownX = FRONTEND_POS3M - 20 - dropdownLeftPadding;
+	dropdown->setGeometry(dropdownX, FRONTEND_POS3Y, FRONTEND_BOTFORMW - dropdownX - FRONTEND_POS3X, FRONTEND_BUTHEIGHT);
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
+	dropdown->setItemPadding({ 0, 0, 0, dropdownLeftPadding });
+
+	ScreenResolutionsModel screenResolutionsModel;
+	for (auto resolution: screenResolutionsModel)
+	{
+		dropdown->addItem(makeTextButton(0, 0, 0, ScreenResolutionsModel::resolutionString(resolution), 0));
+	}
+
+	auto closestResolution = screenResolutionsModel.findResolutionClosestToCurrent();
+	if (closestResolution != screenResolutionsModel.end())
+	{
+		dropdown->setSelectedIndex(closestResolution - screenResolutionsModel.begin());
+	}
+
+	dropdown->setOnChange([dropdown, screenResolutionsModel]() {
+		if (auto selectedIndex = dropdown->getSelectedIndex())
+		{
+			screenResolutionsModel.selectAt(selectedIndex.value());
+		}
+	});
+
+	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(dropdown);
 }
 
 void startVideoOptionsMenu()
@@ -1237,8 +1402,13 @@ void startVideoOptionsMenu()
 	addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, videoOptionsWindowModeString(), WBUT_SECONDARY);
 
 	// Resolution
-	addTextButton(FRONTEND_RESOLUTION, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RESOLUTION_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, videoOptionsResolutionString(), WBUT_SECONDARY);
+	addTextButton(FRONTEND_RESOLUTION_READONLY_LABEL, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY | WBUT_DISABLE);
+	addTextButton(FRONTEND_RESOLUTION_READONLY, FRONTEND_POS3M - 55, FRONTEND_POS3Y, ScreenResolutionsModel::currentResolutionString(), WBUT_SECONDARY | WBUT_DISABLE);
+	auto readonlyResolutionTooltip = _("You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)");
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL, readonlyResolutionTooltip);
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY, readonlyResolutionTooltip);
+	addTextButton(FRONTEND_RESOLUTION_DROPDOWN_LABEL, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY);
+	addResolutionDropdown();
 
 	// Texture size
 	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), WBUT_SECONDARY);
@@ -1278,21 +1448,6 @@ void startVideoOptionsMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	refreshCurrentVideoOptionsValues();
-}
-
-// Get available resolutions list, sorted, with duplicates removed.
-std::vector<screeninfo> availableResolutionsSorted()
-{
-	auto compareKey = [](screeninfo const &x) { return std::make_tuple(x.screen, x.width, x.height); };
-	auto compareLess = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) < compareKey(b); };
-	auto compareEq = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) == compareKey(b); };
-
-	// Get resolutions, sorted with duplicates removed.
-	std::vector<screeninfo> modes = wzAvailableResolutions();
-	std::sort(modes.begin(), modes.end(), compareLess);
-	modes.erase(std::unique(modes.begin(), modes.end(), compareEq), modes.end());
-
-	return modes;
 }
 
 std::vector<unsigned int> availableDisplayScalesSorted()
@@ -1398,10 +1553,6 @@ bool runVideoOptionsMenu()
 	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
-	auto compareKey = [](screeninfo const &x) { return std::make_tuple(x.screen, x.width, x.height); };
-	auto compareLess = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) < compareKey(b); };
-	auto compareEq = [&](screeninfo const &a, screeninfo const &b) { return compareKey(a) == compareKey(b); };
-
 	switch (id)
 	{
 	case FRONTEND_WINDOWMODE:
@@ -1430,94 +1581,6 @@ bool runVideoOptionsMenu()
 		{
 			war_setAntialiasing(pow2Cycle(war_getAntialiasing(), 0, pie_GetMaxAntialiasing()));
 			widgSetString(psWScreen, FRONTEND_FSAA_R, videoOptionsAntialiasingString().c_str());
-			break;
-		}
-
-	case FRONTEND_RESOLUTION:
-	case FRONTEND_RESOLUTION_R:
-		{
-			// Get resolutions, sorted with duplicates removed.
-			std::vector<screeninfo> modes = availableResolutionsSorted();
-
-			// We can't pick resolutions if there aren't any.
-			if (modes.empty())
-			{
-				debug(LOG_ERROR, "No resolutions available to change.");
-				break;
-			}
-
-			// Get currently configured resolution.
-			screeninfo config;
-			config.screen = war_GetScreen();
-			config.width = war_GetWidth();
-			config.height = war_GetHeight();
-			config.refresh_rate = -1;  // Unused.
-
-			// Find current resolution in list.
-			auto current = std::lower_bound(modes.begin(), modes.end(), config, compareLess);
-			if (current == modes.end() || !compareEq(*current, config))
-			{
-				if (current != modes.begin())
-				{
-					--current;  // If current resolution doesn't exist, round down to next-highest one.
-				}
-			}
-
-			// Increment/decrement and loop if required.
-			auto startingResolution = current;
-			bool successfulResolutionChange = false;
-			current = seqCycle(current, modes.begin(), 1, modes.end() - 1);
-
-			if (canChangeResolutionLive())
-			{
-				// Disable the ability to use the Video options menu to live-change the window size when in windowed mode.
-				// Why?
-				//	- Certain window managers don't report their own changes to window size through SDL in all circumstances.
-				//	  (For example, attempting to set a window size of 800x600 might result in no actual change when using a
-				//	   tiling window manager (ex. i3), but SDL thinks the window size has been set to 800x600. This obviously
-				//     breaks things.)
-				//  - Manual window resizing is supported (so there is no need for this functionality in the Video menu).
-				if (!wzIsFullscreen()) break;
-
-				while (current != startingResolution)
-				{
-					// Attempt to change the resolution
-					if (!wzChangeWindowResolution(current->screen, current->width, current->height))
-					{
-						debug(LOG_WARNING, "Failed to change active resolution from: [%d] %d x %d to: [%d] %d x %d", config.screen, config.width, config.height, current->screen, current->width, current->height);
-
-						// try the next resolution, and loop
-						current = seqCycle(current, modes.begin(), 1, modes.end() - 1);
-						continue;
-					}
-					else
-					{
-						successfulResolutionChange = true;
-						break;
-					}
-				}
-
-				if (!successfulResolutionChange) break;
-			}
-			else
-			{
-				// when live resolution changes are unavailable, check to see if the current display scale is supported at the desired resolution
-				unsigned int maxDisplayScale = std::max(100u, wzGetMaximumDisplayScaleForWindowSize(current->width, current->height));
-				unsigned int current_displayScale = war_GetDisplayScale();
-				if (maxDisplayScale < current_displayScale)
-				{
-					// Reduce the display scale to the maximum supported for this resolution
-					war_SetDisplayScale(maxDisplayScale);
-				}
-			}
-
-			// Store the new width and height
-			war_SetScreen(current->screen);
-			war_SetWidth(current->width);
-			war_SetHeight(current->height);
-
-			// Update the widget(s)
-			refreshCurrentVideoOptionsValues();
 			break;
 		}
 
@@ -2047,7 +2110,7 @@ void displayTextOption(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	cache.wzText.setText(psBut->pText.toUtf8(), psBut->FontID);
 
-	if (widgGetMouseOver(psWScreen) == psBut->id)					// if mouse is over text then hilight.
+	if (psBut->isMouseOverWidget()) // if mouse is over text then hilight.
 	{
 		hilight = true;
 	}
@@ -2231,7 +2294,7 @@ W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
+static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
 {
 	W_BUTINIT sButInit;
 
@@ -2270,13 +2333,20 @@ void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt,
 	sButInit.pDisplay = displayTextOption;
 	sButInit.FontID = font_large;
 	sButInit.pText = txt.c_str();
-	widgAddButton(psWScreen, &sButInit);
 
+	auto button = std::make_shared<W_BUTTON>(&sButInit);
 	// Disable button
 	if (style & WBUT_DISABLE)
 	{
-		widgSetButtonState(psWScreen, id, WBUT_DISABLE);
+		button->setState(WBUT_DISABLE);
 	}
+
+	return button;
+}
+
+void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
+{
+	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(makeTextButton(id, PosX, PosY, txt, style));
 }
 
 W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)

@@ -106,6 +106,14 @@ enum WzTextAlignment
 /* (Useful if re-using a W_*INIT structure for multiple widget instances) */
 typedef std::function<void* ()> WIDGET_INITIALIZE_PUSERDATA_FUNC;
 
+struct Padding
+{
+	uint32_t top;
+	uint32_t right;
+	uint32_t bottom;
+	uint32_t left;
+};
+
 /** The basic initialisation structure */
 struct W_INIT
 {
@@ -231,6 +239,7 @@ void widgShutDown();
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder);
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
+void widgScheduleTask(std::function<void ()> f);
 
 /** Add a form to the widget screen */
 WZ_DECL_NONNULL(2) W_FORM *widgAddForm(const std::shared_ptr<W_SCREEN> &psScreen, const W_FORMINIT *psInit);

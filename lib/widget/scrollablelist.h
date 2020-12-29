@@ -28,14 +28,6 @@
 #include "scrollbar.h"
 #include "cliprect.h"
 
-struct Padding
-{
-	uint32_t top;
-	uint32_t right;
-	uint32_t bottom;
-	uint32_t left;
-};
-
 class ScrollableListWidget : public WIDGET
 {
 protected:

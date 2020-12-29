@@ -68,6 +68,18 @@ bool runVideoOptionsMenu();
 bool runMouseOptionsMenu();
 bool runTutorialMenu();
 void runContinue();
+void startTitleMenu();
+void startTutorialMenu();
+void startSinglePlayerMenu();
+void startCampaignSelector();
+void startMultiPlayerMenu();
+void startOptionsMenu();
+void startGraphicsOptionsMenu();
+void startAudioAndZoomOptionsMenu();
+void startVideoOptionsMenu();
+void startMouseOptionsMenu();
+void startGameOptionsMenu();
+void refreshCurrentVideoOptionsValues();
 
 void addTopForm(bool wide);
 void addBottomForm();
@@ -279,8 +291,10 @@ enum
 	FRONTEND_VIDEOOPTIONS = 24000,          // video Options Menu
 	FRONTEND_WINDOWMODE,
 	FRONTEND_WINDOWMODE_R,
-	FRONTEND_RESOLUTION,
-	FRONTEND_RESOLUTION_R,
+	FRONTEND_RESOLUTION_READONLY_LABEL,
+	FRONTEND_RESOLUTION_READONLY,
+	FRONTEND_RESOLUTION_DROPDOWN_LABEL,
+	FRONTEND_RESOLUTION_DROPDOWN,
 	FRONTEND_TEXTURESZ,
 	FRONTEND_TEXTURESZ_R,
 	FRONTEND_VSYNC,

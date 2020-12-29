@@ -62,6 +62,7 @@ static SWORD ErrorAudioID = -1;
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
 static std::vector<WIDGET *> widgetDeletionQueue;
+static std::vector<std::function<void()>> widgetScheduledTasks;
 
 static bool debugBoundingBoxesOnly = false;
 
@@ -78,6 +79,14 @@ struct OverlayScreen
 static std::vector<OverlayScreen> overlays;
 static std::unordered_set<std::shared_ptr<W_SCREEN>> overlaysToDelete;
 
+static void runScheduledTasks()
+{
+	auto tasksCopy = std::move(widgetScheduledTasks);
+	for (auto task: tasksCopy)
+	{
+		task();
+	}
+}
 
 /* Initialise the widget module */
 bool widgInitialise()
@@ -112,6 +121,11 @@ void widgShutDown(void)
 		ASSERT(debugLiveWidgets.empty(), "There are %zu widgets that were not cleaned up.", debugLiveWidgets.size());
 	}
 #endif
+}
+
+void widgScheduleTask(std::function<void ()> task)
+{
+	widgetScheduledTasks.push_back(task);
 }
 
 void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16_t zOrder)
@@ -1036,6 +1050,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	psScreen->psForm->runRecursive(&sContext);
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
+	runScheduledTasks();
 
 	/* Return the ID of a pressed button or finished edit box if any */
 	return psScreen->retWidgets;
