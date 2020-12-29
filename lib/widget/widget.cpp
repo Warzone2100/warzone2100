@@ -153,6 +153,26 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 	overlays.insert(std::upper_bound(overlays.begin(), overlays.end(), newOverlay, [](const OverlayScreen& a, const OverlayScreen& b){ return a.zOrder > b.zOrder; }), newOverlay);
 }
 
+// Note: If priorScreen is not the "regular" screen (i.e. if priorScreen is an overlay screen) it should already be registered
+void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psScreen, const std::shared_ptr<W_SCREEN> &priorScreen)
+{
+	auto it = std::find_if(overlays.begin(), overlays.end(), [priorScreen](const OverlayScreen& overlay) -> bool {
+		return overlay.psScreen == priorScreen;
+	});
+	if (it != overlays.end())
+	{
+		OverlayScreen newOverlay {psScreen, it->zOrder}; // use the same z-order as priorScreen, but insert *after* it in the list
+		overlays.insert((it + 1), newOverlay);
+	}
+	else
+	{
+		// priorScreen does not exist in the overlays list, so it is probably the "regular" screen
+		// just insert this overlay at the front of the overlay list
+		OverlayScreen newOverlay {psScreen, 0};
+		overlays.insert(overlays.begin(), newOverlay);
+	}
+}
+
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 {
 	auto it = std::find_if(overlays.begin(), overlays.end(), [psScreen](const OverlayScreen& overlay) -> bool {
