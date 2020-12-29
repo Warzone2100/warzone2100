@@ -118,7 +118,7 @@ void DropdownWidget::open()
 {
 	widgScheduleTask([this]() {
 		overlayScreen = W_SCREEN::make();
-		widgRegisterOverlayScreen(overlayScreen, 1);
+		widgRegisterOverlayScreenOnTopOfScreen(overlayScreen, screenPointer.lock());
 		itemsList->setGeometry(screenPosX(), screenPosY() + height(), width(), itemsList->height());
 		overlayScreen->psForm->attach(itemsList);
 		overlayScreen->psForm->attach(std::make_shared<DropdownOverlay>([this]() { close(); }));
