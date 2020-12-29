@@ -25,7 +25,7 @@ camAreaEvent("vtolRemoveZone", function(droid)
 		camSafeRemoveObject(droid, false);
 	}
 
-	resetLabel("vtolRemoveZone");
+	resetLabel("vtolRemoveZone", THE_COLLECTIVE);
 });
 
 //Order the truck to build some defenses.
