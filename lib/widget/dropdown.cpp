@@ -103,6 +103,7 @@ void DropdownWidget::run(W_CONTEXT *psContext)
 
 		if (keyPressed(KEY_ESC))
 		{
+			inputLoseFocus();	// clear the input buffer.
 			close();
 		}
 	}
