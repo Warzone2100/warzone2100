@@ -144,4 +144,19 @@ std::string to_string(video_backend backend);
 std::string to_display_string(const video_backend& backend);
 // video_backend - end
 
+// fullscreen_mode - begin
+
+enum class WINDOW_MODE : int
+{
+	desktop_fullscreen = -1,
+	windowed = 0,
+	fullscreen = 1
+};
+std::string to_display_string(const WINDOW_MODE& mode);
+
+#define MIN_VALID_WINDOW_MODE WINDOW_MODE::desktop_fullscreen
+#define MAX_VALID_WINDOW_MODE WINDOW_MODE::fullscreen
+
+// fullscreen_mode - end
+
 #endif

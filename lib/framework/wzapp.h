@@ -70,15 +70,18 @@ struct screeninfo
 };
 
 void wzMain(int &argc, char **argv);
-bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, bool fullscreen = false, int vsync = 1, bool highDPI = true);
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing = 0, WINDOW_MODE fullscreen = WINDOW_MODE::windowed, int vsync = 1, bool highDPI = true);
 video_backend wzGetDefaultGfxBackendForCurrentSystem();
 void wzGetGameToRendererScaleFactor(float *horizScaleFactor, float *vertScaleFactor);
 void wzMainEventLoop();
 void wzPumpEventsWhileLoading();
 void wzQuit();              ///< Quit game
 void wzShutdown();
-void wzToggleFullscreen();
-bool wzIsFullscreen();
+std::vector<WINDOW_MODE> wzSupportedWindowModes();
+WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
+WINDOW_MODE wzToggleNextWindowMode();
+bool wzChangeWindowMode(WINDOW_MODE mode);
+WINDOW_MODE wzGetCurrentWindowMode();
 void wzSetWindowIsResizable(bool resizable);
 bool wzIsWindowResizable();
 bool wzSupportsLiveResolutionChanges();

@@ -398,3 +398,17 @@ std::string to_display_string(const video_backend& backend)
 	}
 	return "n/a";
 }
+
+std::string to_display_string(const WINDOW_MODE& mode)
+{
+	switch (mode)
+	{
+		case WINDOW_MODE::desktop_fullscreen:
+			return "Desktop Full";
+		case WINDOW_MODE::windowed:
+			return "Windowed";
+		case WINDOW_MODE::fullscreen:
+			return "Fullscreen";
+	}
+	return "n/a"; // silence warning
+}

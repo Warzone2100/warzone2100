@@ -574,7 +574,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_FULLSCREEN:
-			war_setFullscreen(true);
+			war_setWindowMode(WINDOW_MODE::fullscreen);
 			break;
 		case CLI_CONNECTTOIP:
 			//get the ip we want to connect with, and go directly to join screen.
@@ -717,7 +717,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 			break;
 
 		case CLI_WINDOW:
-			war_setFullscreen(false);
+			war_setWindowMode(WINDOW_MODE::windowed);
 			break;
 
 		case CLI_SHADOWS:

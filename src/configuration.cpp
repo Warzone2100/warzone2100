@@ -197,8 +197,14 @@ bool loadConfig()
 	{
 		war_setAntialiasing(ini.value("antialiasing").toInt());
 	}
-	// Leave this to false, some system will fail and they can't see the system popup dialog!
-	war_setFullscreen(ini.value("fullscreen", false).toBool());
+	if (ini.contains("fullscreen"))
+	{
+		int fullscreenmode_int = ini.value("fullscreen").toInt();
+		if (fullscreenmode_int >= static_cast<int>(MIN_VALID_WINDOW_MODE) && fullscreenmode_int <= static_cast<int>(MAX_VALID_WINDOW_MODE))
+		{
+			war_setWindowMode(static_cast<WINDOW_MODE>(fullscreenmode_int));
+		}
+	}
 	war_SetTrapCursor(ini.value("trapCursor", false).toBool());
 	war_SetColouredCursor(ini.value("coloredCursor", true).toBool());
 	// this should be enabled on all systems by default
@@ -288,7 +294,7 @@ bool saveConfig()
 	ini.setValue("height", war_GetHeight());
 	ini.setValue("screen", war_GetScreen());
 	ini.setValue("bpp", war_GetVideoBufferDepth());
-	ini.setValue("fullscreen", war_getFullscreen());
+	ini.setValue("fullscreen", static_cast<typename std::underlying_type<WINDOW_MODE>::type>(war_getWindowMode()));
 	ini.setValue("language", getLanguage());
 	ini.setValue("difficulty", getDifficultyLevel());		// level
 	ini.setValue("cameraSpeed", war_GetCameraSpeed());	// camera speed

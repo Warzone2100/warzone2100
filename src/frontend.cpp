@@ -1087,10 +1087,26 @@ static bool canChangeResolutionLive()
 	return wzSupportsLiveResolutionChanges();
 }
 
+static char const *videoOptionsResolutionGetReadOnlyTooltip()
+{
+	switch (war_getWindowMode())
+	{
+		case WINDOW_MODE::desktop_fullscreen:
+			return _("In Desktop Fullscreen mode, the resolution matches that of your desktop \n(or what the window manager allows).");
+		case WINDOW_MODE::windowed:
+			return _("You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)");
+		default:
+			return "";
+	}
+}
+
 static void videoOptionsDisableResolutionButtons()
 {
 	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL);
 	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY);
+	auto readonlyResolutionTooltip = videoOptionsResolutionGetReadOnlyTooltip();
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL, readonlyResolutionTooltip);
+	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY, readonlyResolutionTooltip);
 	widgHide(psWScreen, FRONTEND_RESOLUTION_DROPDOWN_LABEL);
 	widgHide(psWScreen, FRONTEND_RESOLUTION_DROPDOWN);
 }
@@ -1105,7 +1121,16 @@ static void videoOptionsEnableResolutionButtons()
 
 static char const *videoOptionsWindowModeString()
 {
-	return war_getFullscreen()? _("Fullscreen") : _("Windowed");
+	switch (war_getWindowMode())
+	{
+		case WINDOW_MODE::desktop_fullscreen:
+			return _("Desktop Full");
+		case WINDOW_MODE::windowed:
+			return _("Windowed");
+		case WINDOW_MODE::fullscreen:
+			return _("Fullscreen");
+	}
+	return "n/a"; // silence warning
 }
 
 static std::string videoOptionsAntialiasingString()
@@ -1226,7 +1251,7 @@ public:
 		//	   tiling window manager (ex. i3), but SDL thinks the window size has been set to 800x600. This obviously
 		//     breaks things.)
 		//  - Manual window resizing is supported (so there is no need for this functionality in the Video menu).
-		ASSERT_OR_RETURN(, wzIsFullscreen(), "Attempt to change resolution in windowed-mode");
+		ASSERT_OR_RETURN(, wzGetCurrentWindowMode() == WINDOW_MODE::fullscreen, "Attempt to change resolution in windowed-mode / desktop-fullscreen mode");
 
 		ASSERT_OR_RETURN(, index < modes.size(), "Invalid mode index passed to ScreenResolutionsModel::selectAt");
 
@@ -1325,7 +1350,7 @@ void refreshCurrentVideoOptionsValues()
 		widgSetString(psWScreen, FRONTEND_RESOLUTION_READONLY, ScreenResolutionsModel::currentResolutionString().c_str());
 		if (canChangeResolutionLive())
 		{
-			if (!war_getFullscreen())
+			if (war_getWindowMode() != WINDOW_MODE::fullscreen)
 			{
 				// If live window resizing is supported & the current mode is "windowed", disable the Resolution option and add a tooltip
 				// explaining the user can now resize the window normally.
@@ -1404,7 +1429,7 @@ void startVideoOptionsMenu()
 	// Resolution
 	addTextButton(FRONTEND_RESOLUTION_READONLY_LABEL, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY | WBUT_DISABLE);
 	addTextButton(FRONTEND_RESOLUTION_READONLY, FRONTEND_POS3M - 55, FRONTEND_POS3Y, ScreenResolutionsModel::currentResolutionString(), WBUT_SECONDARY | WBUT_DISABLE);
-	auto readonlyResolutionTooltip = _("You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)");
+	auto readonlyResolutionTooltip = videoOptionsResolutionGetReadOnlyTooltip();
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL, readonlyResolutionTooltip);
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY, readonlyResolutionTooltip);
 	addTextButton(FRONTEND_RESOLUTION_DROPDOWN_LABEL, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY);
@@ -1455,6 +1480,43 @@ std::vector<unsigned int> availableDisplayScalesSorted()
 	std::vector<unsigned int> displayScales = wzAvailableDisplayScales();
 	std::sort(displayScales.begin(), displayScales.end());
 	return displayScales;
+}
+
+void seqWindowMode()
+{
+	auto currentFullscreenMode = war_getWindowMode();
+	bool success = false;
+
+	auto supportedFullscreenModes = wzSupportedWindowModes();
+	if (supportedFullscreenModes.empty()) { return; }
+	size_t currentFullscreenModePos = 0;
+	for (size_t i = 0; i < supportedFullscreenModes.size(); i++)
+	{
+		if (supportedFullscreenModes[i] == currentFullscreenMode)
+		{
+			currentFullscreenModePos = i;
+			break;
+		}
+	}
+	auto startingFullscreenModePos = currentFullscreenModePos;
+
+	do
+	{
+		currentFullscreenModePos = seqCycle(currentFullscreenModePos, static_cast<size_t>(0), 1, supportedFullscreenModes.size());
+		success = wzChangeWindowMode(supportedFullscreenModes[currentFullscreenModePos]);
+
+	} while ((!success) && (currentFullscreenModePos != startingFullscreenModePos));
+
+	if (currentFullscreenModePos == startingFullscreenModePos)
+	{
+		// Failed to change window mode - display messagebox
+		wzDisplayDialog(Dialog_Warning, _("Unable to change Window Mode"), _("Warzone failed to change the Window mode.\nYour system / drivers may not support other modes."));
+	}
+	else if (success)
+	{
+		// succeeded changing vsync mode
+		war_setWindowMode(supportedFullscreenModes[currentFullscreenModePos]);
+	}
 }
 
 void seqVsyncMode()
@@ -1558,18 +1620,16 @@ bool runVideoOptionsMenu()
 	case FRONTEND_WINDOWMODE:
 	case FRONTEND_WINDOWMODE_R:
 		{
-			war_setFullscreen(!war_getFullscreen());
-			widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
-
 			if (!wzSupportsLiveResolutionChanges())
 			{
+				auto nextMode = wzGetNextWindowMode(war_getWindowMode());
+				war_setWindowMode(nextMode);
+				widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
 				refreshCurrentVideoOptionsValues();
 				break;
 			}
 
-
-			wzToggleFullscreen();
-
+			seqWindowMode();
 
 			// Update the widget(s)
 			refreshCurrentVideoOptionsValues();
