@@ -223,8 +223,7 @@ TITLECODE titleLoop()
 
 	if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 	{
-		war_setFullscreen(!war_getFullscreen());
-		wzToggleFullscreen();
+		war_setWindowMode(wzToggleNextWindowMode());
 	}
 	return RetCode;
 }

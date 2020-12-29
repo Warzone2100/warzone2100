@@ -112,13 +112,6 @@ static std::vector<screeninfo> displaylist;	// holds all our possible display li
 
 QCoreApplication *appPtr;				// Needed for qtscript
 
-#if defined(WZ_OS_MAC)
-// on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
-const SDL_WindowFlags WZ_SDL_FULLSCREEN_MODE = SDL_WINDOW_FULLSCREEN_DESKTOP;
-#else
-const SDL_WindowFlags WZ_SDL_FULLSCREEN_MODE = SDL_WINDOW_FULLSCREEN;
-#endif
-
 std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
 enum wzSDLAppEventCodes
 {
@@ -397,24 +390,98 @@ void wzDisplayDialog(DialogType type, const char *title, const char *message)
 	SDL_ShowSimpleMessageBox(sdl_messagebox_flags, title, message, WZwindow);
 }
 
-SDL_WindowFlags getSDLFullscreenMode()
+WINDOW_MODE wzGetCurrentWindowMode()
 {
-	return WZ_SDL_FULLSCREEN_MODE;
-}
-
-void wzToggleFullscreen()
-{
-	Uint32 flags = SDL_GetWindowFlags(WZwindow);
-	if (flags & getSDLFullscreenMode())
+	if (!WZbackend.has_value())
 	{
-		SDL_SetWindowFullscreen(WZwindow, 0);
-		wzSetWindowIsResizable(true);
+		// return a dummy value
+		return WINDOW_MODE::windowed;
+	}
+	ASSERT(WZwindow != nullptr, "window is null");
+
+	Uint32 flags = SDL_GetWindowFlags(WZwindow);
+	if ((flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)
+	{
+		return WINDOW_MODE::desktop_fullscreen;
+	}
+	else if (flags & SDL_WINDOW_FULLSCREEN)
+	{
+		return WINDOW_MODE::fullscreen;
 	}
 	else
 	{
-		SDL_SetWindowFullscreen(WZwindow, getSDLFullscreenMode());
-		wzSetWindowIsResizable(false);
+		return WINDOW_MODE::windowed;
 	}
+}
+
+std::vector<WINDOW_MODE> wzSupportedWindowModes()
+{
+#if defined(WZ_OS_MAC)
+	// on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
+	// thus "classic" fullscreen is not supported
+	return {WINDOW_MODE::desktop_fullscreen, WINDOW_MODE::windowed};
+#else
+	return {WINDOW_MODE::desktop_fullscreen, WINDOW_MODE::windowed, WINDOW_MODE::fullscreen};
+#endif
+}
+
+WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode)
+{
+	auto supportedModes = wzSupportedWindowModes();
+	ASSERT_OR_RETURN(WINDOW_MODE::windowed, !supportedModes.empty(), "No supported fullscreen / windowed modes available?");
+	auto it = std::find(supportedModes.begin(), supportedModes.end(), currentMode);
+	if (it == supportedModes.end())
+	{
+		// we appear to be in an unsupported mode - so default to the first
+		return *supportedModes.begin();
+	}
+	++it;
+	if (it == supportedModes.end()) { it = supportedModes.begin(); }
+	return *it;
+}
+
+WINDOW_MODE wzToggleNextWindowMode()
+{
+	auto mode = wzGetCurrentWindowMode();
+	auto startingMode = mode;
+	bool success = false;
+	do
+	{
+		mode = wzGetNextWindowMode(mode);
+		success = wzChangeWindowMode(mode);
+	} while ((!success) && (mode != startingMode));
+	return (success) ? mode : wzGetCurrentWindowMode();
+}
+
+bool wzChangeWindowMode(WINDOW_MODE mode)
+{
+	if (wzGetCurrentWindowMode() == mode)
+	{
+		// already in this mode
+		return true;
+	}
+
+	int sdl_result = -1;
+	switch (mode)
+	{
+		case WINDOW_MODE::desktop_fullscreen:
+			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			if (sdl_result != 0) { return false; }
+			wzSetWindowIsResizable(false);
+			break;
+		case WINDOW_MODE::windowed:
+			sdl_result = SDL_SetWindowFullscreen(WZwindow, 0);
+			if (sdl_result != 0) { return false; }
+			wzSetWindowIsResizable(true);
+			break;
+		case WINDOW_MODE::fullscreen:
+			sdl_result = SDL_SetWindowFullscreen(WZwindow, SDL_WINDOW_FULLSCREEN);
+			if (sdl_result != 0) { return false; }
+			wzSetWindowIsResizable(false);
+			break;
+	}
+
+	return sdl_result == 0;
 }
 
 bool wzIsFullscreen()
@@ -1725,7 +1792,7 @@ void wzSDLPreWindowCreate_InitOpenGLAttributes(bool antialiasing, bool useOpenGL
 }
 
 // This stage, we handle display mode setting
-optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoWindow(const video_backend& backend, int antialiasing, bool fullscreen, int vsync, bool highDPI)
+optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoWindow(const video_backend& backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, bool highDPI)
 {
 	const bool useOpenGLES = (backend == video_backend::opengles)
 #if defined(WZ_BACKEND_DIRECTX)
@@ -1854,7 +1921,15 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	windowWidth = std::max(windowWidth, minWindowWidth);
 	windowHeight = std::max(windowHeight, minWindowHeight);
 
-	if (!fullscreen)
+	auto supportedFullscreenModes = wzSupportedWindowModes();
+	if (std::find(supportedFullscreenModes.begin(), supportedFullscreenModes.end(), fullscreen) == supportedFullscreenModes.end())
+	{
+		debug(LOG_ERROR, "Unsupported fullscreen mode specified: %d; using default", static_cast<int>(fullscreen));
+		fullscreen = WINDOW_MODE::windowed;
+		war_setWindowMode(fullscreen); // persist the change
+	}
+
+	if (fullscreen == WINDOW_MODE::windowed)
 	{
 		// Determine the maximum usable windowed size for this display/screen
 		SDL_Rect displayUsableBounds = { 0, 0, 0, 0 };
@@ -1871,14 +1946,18 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	//// The flags to pass to SDL_CreateWindow
 	int video_flags  = SDL_backend(backend) | SDL_WINDOW_SHOWN;
 
-	if (fullscreen)
+	switch (fullscreen)
 	{
-		video_flags |= getSDLFullscreenMode();
-	}
-	else
-	{
-		// Allow the window to be manually resized, if not fullscreen
-		video_flags |= SDL_WINDOW_RESIZABLE;
+		case WINDOW_MODE::desktop_fullscreen:
+			video_flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			break;
+		case WINDOW_MODE::fullscreen:
+			video_flags |= SDL_WINDOW_FULLSCREEN;
+			break;
+		case WINDOW_MODE::windowed:
+			// Allow the window to be manually resized, if not fullscreen
+			video_flags |= SDL_WINDOW_RESIZABLE;
+			break;
 	}
 
 	if (highDPI)
@@ -2048,7 +2127,7 @@ bool wzMainScreenSetup_VerifyWindow()
 	return true;
 }
 
-bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, bool fullscreen, int vsync, bool highDPI)
+bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, bool highDPI)
 {
 	// Output linked SDL version
 	char buf[512];
@@ -2270,6 +2349,14 @@ void wzSetWindowIsResizable(bool resizable)
 	}
 	SDL_bool sdl_resizable = (resizable) ? SDL_TRUE : SDL_FALSE;
 	SDL_SetWindowResizable(WZwindow, sdl_resizable);
+
+	if (resizable)
+	{
+		// Set the minimum window size
+		unsigned int minWindowWidth = 0, minWindowHeight = 0;
+		wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, current_displayScaleFactor);
+		SDL_SetWindowMinimumSize(WZwindow, minWindowWidth, minWindowHeight);
+	}
 }
 
 bool wzIsWindowResizable()

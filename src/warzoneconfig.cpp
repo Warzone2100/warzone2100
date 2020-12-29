@@ -48,7 +48,7 @@ struct WARZONE_GLOBALS
 	int8_t SPcolor = 0;
 	int MPcolour = -1;
 	int antialiasing = 0;
-	bool Fullscreen = false;
+	WINDOW_MODE Fullscreen = WINDOW_MODE::windowed; // Leave this to windowed, some system will fail and they can't see the system popup dialog!
 	bool soundEnabled = true;
 	bool trapCursor = false;
 	int vsync = 1;
@@ -132,12 +132,12 @@ int war_getMPcolour()
 	return warGlobs.MPcolour;
 }
 
-void war_setFullscreen(bool b)
+void war_setWindowMode(WINDOW_MODE b)
 {
 	warGlobs.Fullscreen = b;
 }
 
-bool war_getFullscreen()
+WINDOW_MODE war_getWindowMode()
 {
 	return warGlobs.Fullscreen;
 }

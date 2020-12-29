@@ -544,9 +544,9 @@ void _debug(int line, code_part part, const char *function, const char *str, ...
 		// Throw up a dialog box for users since most don't have a clue to check the dump file for information. Use for (duh) Fatal errors, that force us to terminate the game.
 		if (part == LOG_FATAL)
 		{
-			if (wzIsFullscreen())
+			if (wzGetCurrentWindowMode() == WINDOW_MODE::fullscreen)
 			{
-				wzToggleFullscreen();
+				wzChangeWindowMode(WINDOW_MODE::windowed);
 			}
 #if defined(WZ_OS_WIN)
 			char wbuf[1024];

@@ -932,7 +932,7 @@ static void stopGameLoop()
 	}
 
 	// Re-enable resizable windows
-	if (!wzIsFullscreen())
+	if (wzGetCurrentWindowMode() == WINDOW_MODE::windowed)
 	{
 		// FIXME: This is required because of the disabling in startGameLoop()
 		wzSetWindowIsResizable(true);
@@ -1544,7 +1544,7 @@ int realmain(int argc, char *argv[])
 	{
 		gfxbackend = war_getGfxBackend();
 	}
-	if (!wzMainScreenSetup(gfxbackend, war_getAntialiasing(), war_getFullscreen(), war_GetVsync()))
+	if (!wzMainScreenSetup(gfxbackend, war_getAntialiasing(), war_getWindowMode(), war_GetVsync()))
 	{
 		saveConfig(); // ensure any setting changes are persisted on failure
 		return EXIT_FAILURE;
@@ -1560,7 +1560,7 @@ int realmain(int argc, char *argv[])
 	int h = pie_GetVideoBufferHeight();
 
 	char buf[256];
-	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, war_getFullscreen() ? "fullscreen" : "window");
+	ssprintf(buf, "Video Mode %d x %d (%s)", w, h, to_display_string(war_getWindowMode()).c_str());
 	addDumpInfo(buf);
 
 	float horizScaleFactor, vertScaleFactor;
