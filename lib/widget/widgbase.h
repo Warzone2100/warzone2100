@@ -159,7 +159,6 @@ protected:
 	virtual void geometryChanged() {}
 
 	virtual bool hitTest(int x, int y);
-	bool isMouseOverWidget() const;
 
 public:
 	virtual unsigned getState();
@@ -267,6 +266,8 @@ public:
 	void setOnDelete(const WIDGET_ONDELETE_FUNC& onDeleteFunc);
 
 	void setCustomHitTest(const WIDGET_HITTEST_FUNC& newCustomHitTestFunc);
+
+	bool isMouseOverWidget() const;
 
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type

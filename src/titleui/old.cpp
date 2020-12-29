@@ -31,6 +31,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 #include "../intdisplay.h"
+#include "../frontend.h"
 #include "../hci.h"
 #include "../keyedit.h"
 #include "../keymap.h"
@@ -41,20 +42,6 @@
 #include "../musicmanager.h"
 #include "../warzoneconfig.h"
 #include "../frend.h"
-
-// frontend.cpp
-void startTitleMenu();
-void startTutorialMenu();
-void startSinglePlayerMenu();
-void startCampaignSelector();
-void startMultiPlayerMenu();
-void startOptionsMenu();
-void startGraphicsOptionsMenu();
-void startAudioAndZoomOptionsMenu();
-void startVideoOptionsMenu();
-void startMouseOptionsMenu();
-void startGameOptionsMenu();
-void refreshCurrentVideoOptionsValues();
 
 WzOldTitleUI::WzOldTitleUI(tMode mode) : mode(mode)
 {
