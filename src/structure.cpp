@@ -3841,9 +3841,10 @@ fills the list with Structure that can be built. There is a limit on how many ca
 be built at any one time. Pass back the number available.
 There is now a limit of how many of each type of structure are allowed per mission
 */
-UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD limit, bool showFavorites)
+std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD selectedPlayer, UDWORD limit, bool showFavorites)
 {
-	UDWORD			inc, count;
+	std::vector<STRUCTURE_STATS *> structureList;
+	UDWORD			inc;
 	bool			researchModule, factoryModule, powerModule;
 	STRUCTURE		*psCurr;
 	STRUCTURE_STATS	*psBuilding;
@@ -3871,7 +3872,6 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 		}
 	}
 
-	count = 0;
 	//set the list of Structures to build
 	for (inc = 0; inc < numStructureStats; inc++)
 	{
@@ -3944,15 +3944,15 @@ UDWORD fillStructureList(STRUCTURE_STATS **ppList, UDWORD selectedPlayer, UDWORD
 				}
 
 				debug(LOG_NEVER, "adding %s (%x)", getStatsName(psBuilding), apStructTypeLists[selectedPlayer][inc]);
-				ppList[count++] = psBuilding;
-				if (count == limit)
+				structureList.push_back(psBuilding);
+				if (structureList.size() == limit)
 				{
-					return count;
+					return structureList;
 				}
 			}
 		}
 	}
-	return count;
+	return structureList;
 }
 
 
