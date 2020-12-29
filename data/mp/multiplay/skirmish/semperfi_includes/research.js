@@ -110,7 +110,7 @@ function evalResearch(labID, list)
 	return false;
 }
 
-function findResearch(tech, labParam)
+function lookForResearch(tech, labParam)
 {
 	if (!countDroid(DROID_CONSTRUCT) || researchDone)
 	{
