@@ -1,3 +1,5 @@
+debugMsg('Module: weap-init.js','init');
+
 var guns=[
 //	===== Пулемёты
 ["R-Wpn-MG1Mk1", "MG1Mk1"],						//Лёгкий пулемёт

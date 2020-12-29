@@ -1,4 +1,4 @@
-
+debugMsg('Module: performance.js','init');
 
 
 //function getOrder(obj, order, loc){
@@ -15,7 +15,11 @@ function distBetweenTwoPoints_p(x1,y1,x2,y2){
 	return distBetweenTwoPoints(x1,y1,x2,y2);
 }
 
-
+function droidCanReach_p(obj,x,y){
+	debugMsg('droidCanReach:'+x+'x'+y, 'performance');
+	debugMsg('droidCanReach:'+JSON.stringify(obj), 'performance');
+	return droidCanReach(obj,x,y);
+}
 
 var perfOrder=[];
 var perfCommands=0;

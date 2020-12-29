@@ -1,3 +1,5 @@
+debugMsg('Module: produce.js','init');
+
 //Подготавливаем технологии для производства
 //на самом деле лишняя функция, однако необходимая
 //для того, что бы не читерить. Мы не можем производить
@@ -119,9 +121,9 @@ function produceDroids(){
 	//	debugMsg("Have builders: "+builders.length+"; limits: "+builders_limit, 'production');
 	//	debugMsg("Have warriors="+groupSize(armyRegular)+" partisan="+groupSize(armyPartisans), 'production');
 
-	var _body=light_bodies;
-	if(droid_factories[0].modules >= 1 && (playerPower(me)>500 || berserk) && medium_bodies.length != 0) _body = medium_bodies;
-	if(droid_factories[0].modules == 2 && (playerPower(me)>1500 || berserk) && heavy_bodies.length != 0) _body = heavy_bodies;
+	var _body=light_bodies[Math.floor(Math.random()*light_bodies.length)];
+	if(droid_factories[0].modules >= 1 && (playerPower(me)>50 || berserk) && medium_bodies.length != 0) _body = medium_bodies[Math.floor(Math.random()*medium_bodies.length)];
+	if(droid_factories[0].modules == 2 && (playerPower(me)>1000 || berserk) && heavy_bodies.length != 0) _body = heavy_bodies[Math.floor(Math.random()*heavy_bodies.length)];
 	
 	var _prop = ['tracked01','HalfTrack','wheeled01'];
 	if(nf['policy']=='island') _prop = ['hover01'];
@@ -162,7 +164,7 @@ function produceDroids(){
 	}
 
 	
-	if(groupSize(armyScanners) == 0 && getInfoNear(base.x,base.y,'safe',base_range).value && scannersTrigger < gameTime){
+	if(enumDroid(me, DROID_SENSOR).length == 0 && getInfoNear(base.x,base.y,'safe',base_range).value && scannersTrigger < gameTime){
 		var hq = enumStruct(me, HQ).filter(function (e){if(e.status == BUILT)return true;return false;});
 		if (hq.length != 0){
 			buildDroid(droid_factories[0], "Scanner", ['Body2SUP','Body4ABT','Body1REC'], ['hover01','HalfTrack','wheeled01'], "", DROID_SENSOR, "SensorTurret1Mk1");
