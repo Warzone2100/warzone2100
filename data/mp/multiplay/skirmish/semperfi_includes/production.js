@@ -208,5 +208,5 @@ function produceAndResearch()
 		}
 	}
 
-	findResearch();
+	lookForResearch();
 }
