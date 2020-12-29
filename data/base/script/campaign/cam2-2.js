@@ -97,7 +97,7 @@ camAreaEvent("failZone", function(droid)
 	}
 	else
 	{
-		resetLabel("failZone");
+		resetLabel("failZone", THE_COLLECTIVE);
 	}
 });
 
