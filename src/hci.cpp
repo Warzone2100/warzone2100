@@ -1699,8 +1699,13 @@ static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	//determine the Structures that can be built
 	if (objMode == IOBJ_BUILD)
 	{
-		numStatsListEntries = fillStructureList(apsStructStatsList,
-		                                        selectedPlayer, MAXSTRUCTURES - 1, showFavorites);
+		auto structureList = fillStructureList(selectedPlayer, MAXSTRUCTURES - 1, showFavorites);
+		numStatsListEntries = structureList.size();
+		size_t current = 0;
+		for (auto structure: structureList)
+		{
+			apsStructStatsList[current++] = structure;
+		}
 
 		ppsStatsList = (BASE_STATS **)apsStructStatsList;
 	}
