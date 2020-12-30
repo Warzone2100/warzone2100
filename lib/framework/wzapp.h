@@ -79,7 +79,7 @@ void wzQuit();              ///< Quit game
 void wzShutdown();
 std::vector<WINDOW_MODE> wzSupportedWindowModes();
 WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
-WINDOW_MODE wzToggleNextWindowMode();
+WINDOW_MODE wzAltEnterToggleFullscreen();
 bool wzChangeWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetCurrentWindowMode();
 void wzSetWindowIsResizable(bool resizable);
