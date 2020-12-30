@@ -2369,11 +2369,6 @@ bool wzIsWindowResizable()
 	return false;
 }
 
-bool wzSupportsLiveResolutionChanges()
-{
-	return true;
-}
-
 /*!
  * Activation (focus change ... and) eventhandler.  Mainly for debugging.
  */
