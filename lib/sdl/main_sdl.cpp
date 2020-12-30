@@ -96,6 +96,14 @@ int main(int argc, char *argv[])
 static SDL_Window *WZwindow = nullptr;
 static optional<video_backend> WZbackend = video_backend::opengl;
 
+#if defined(WZ_OS_MAC)
+// on macOS, SDL_WINDOW_FULLSCREEN_DESKTOP *must* be used (or high-DPI fullscreen toggling breaks)
+const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::desktop_fullscreen;
+#else
+const WINDOW_MODE WZ_SDL_DEFAULT_FULLSCREEN_MODE = WINDOW_MODE::fullscreen;
+#endif
+static WINDOW_MODE lastFullscreenMode = WZ_SDL_DEFAULT_FULLSCREEN_MODE;
+
 // The screen that the game window is on.
 int screenIndex = 0;
 // The logical resolution of the game in the game's coordinate system (points).
@@ -440,17 +448,30 @@ WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode)
 	return *it;
 }
 
-WINDOW_MODE wzToggleNextWindowMode()
+WINDOW_MODE wzAltEnterToggleFullscreen()
 {
+	// toggles out of and into the "last" fullscreen mode
 	auto mode = wzGetCurrentWindowMode();
-	auto startingMode = mode;
-	bool success = false;
-	do
+	switch (mode)
 	{
-		mode = wzGetNextWindowMode(mode);
-		success = wzChangeWindowMode(mode);
-	} while ((!success) && (mode != startingMode));
-	return (success) ? mode : wzGetCurrentWindowMode();
+		case WINDOW_MODE::desktop_fullscreen:
+			// fall-through
+		case WINDOW_MODE::fullscreen:
+			lastFullscreenMode = mode;
+			if (wzChangeWindowMode(WINDOW_MODE::windowed))
+			{
+				mode = WINDOW_MODE::windowed;
+			}
+			break;
+		case WINDOW_MODE::windowed:
+			// use lastFullscreenMode
+			if (wzChangeWindowMode(lastFullscreenMode))
+			{
+				mode = lastFullscreenMode;
+			}
+			break;
+	}
+	return mode;
 }
 
 bool wzChangeWindowMode(WINDOW_MODE mode)

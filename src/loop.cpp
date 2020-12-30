@@ -335,7 +335,7 @@ static GAMECODE renderLoop()
 		/* Check for toggling display mode */
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 		{
-			war_setWindowMode(wzToggleNextWindowMode());
+			war_setWindowMode(wzAltEnterToggleFullscreen());
 		}
 	}
 
@@ -390,7 +390,7 @@ static GAMECODE renderLoop()
 		/* Check for toggling display mode */
 		if ((keyDown(KEY_LALT) || keyDown(KEY_RALT)) && keyPressed(KEY_RETURN))
 		{
-			war_setWindowMode(wzToggleNextWindowMode());
+			war_setWindowMode(wzAltEnterToggleFullscreen());
 		}
 		return GAMECODE_QUITGAME;
 	}
