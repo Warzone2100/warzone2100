@@ -228,9 +228,6 @@ static OBJ_SELECT		objSelectFunc;
 static OBJ_GETSTATS		objGetStatsFunc;
 static OBJ_SETSTATS		objSetStatsFunc;
 
-/* Whether the objects that are on the object screen have changed this frame */
-static bool				objectsChanged;
-
 /* The current stats list being used by the stats screen */
 static BASE_STATS		**ppsStatsList;
 static UDWORD			numStatsListEntries;
@@ -603,8 +600,6 @@ bool intInitialise()
 
 	/* Note the current screen state */
 	intMode = INT_NORMAL;
-
-	objectsChanged = false;
 
 	// reset the previous objects
 	intResetPreviousObj();
@@ -1108,45 +1103,6 @@ INT_RETVAL intRunWidgets()
 	bool			quitting = false;
 
 	intDoScreenRefresh();
-
-	/* if objects in the world have changed, may have to update the interface */
-	if (objectsChanged)
-	{
-		/* The objects on the object screen have changed */
-		if (intMode == INT_OBJECT)
-		{
-			ASSERT_OR_RETURN(INT_NONE, widgGetFromID(psWScreen, IDOBJ_TABFORM) != nullptr, "No object form");
-
-			/* Remove the old screen */
-			int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
-			intRemoveObject();
-
-			/* Add the new screen */
-			switch (objMode)
-			{
-			case IOBJ_BUILD:
-			case IOBJ_BUILDSEL:
-				intAddBuild(nullptr);
-				break;
-			case IOBJ_MANUFACTURE:
-				intAddManufacture(nullptr);
-				break;
-			case IOBJ_RESEARCH:
-				intAddResearch(nullptr);
-				break;
-			default:
-				break;
-			}
-
-			/* Reset the tabs on the object screen */
-			((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->setCurrentPage(objMajor);
-		}
-		else if (intMode == INT_STAT)
-		{
-			/* Need to get the stats screen to update as well */
-		}
-	}
-	objectsChanged = false;
 
 	if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult) > 0)
 	{
@@ -2438,25 +2394,6 @@ void intDisplayWidgets()
 	if (bLoadSaveUp)
 	{
 		displayLoadSave();
-	}
-}
-
-
-/* Tell the interface when an object is created - it may have to be added to a screen */
-void intNewObj(BASE_OBJECT *psObj)
-{
-	if (intMode == INT_OBJECT || intMode == INT_STAT)
-	{
-		if ((objMode == IOBJ_BUILD || objMode == IOBJ_BUILDSEL) &&
-		    psObj->type == OBJ_DROID && objSelectFunc(psObj))
-		{
-			objectsChanged = true;
-		}
-		else if ((objMode == IOBJ_RESEARCH || objMode == IOBJ_MANUFACTURE) &&
-		         psObj->type == OBJ_STRUCTURE && objSelectFunc(psObj))
-		{
-			objectsChanged = true;
-		}
 	}
 }
 
