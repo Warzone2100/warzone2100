@@ -309,11 +309,6 @@ void intSetMapPos(UDWORD x, UDWORD y);
 /* Set the map view point to the world coordinates x,y */
 void intSetMapPos(UDWORD x, UDWORD y);
 
-/* Tell the interface when an object is created
- * - it may have to be added to a screen
- */
-void intNewObj(BASE_OBJECT *psObj);
-
 /* Tell the interface a construction droid has finished building */
 void intBuildFinished(DROID *psDroid);
 /* Tell the interface a construction droid has started building*/
