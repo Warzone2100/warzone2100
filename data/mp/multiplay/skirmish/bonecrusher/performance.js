@@ -108,7 +108,7 @@ function orderDroidBuild_p(who, order, building, x, y, rotation){
 	return result;
 
 }
-
+/*
 function perfMonitor(){
 	if(!running)return;
 	if(Object.keys(perfOrder).length != 0){
@@ -126,3 +126,4 @@ function perfMonitor(){
 		
 	}}
 }
+*/

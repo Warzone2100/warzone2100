@@ -125,8 +125,8 @@ function builderBuild(droid, structure, rotation, position){
 		
 		debugMsg("droid:"+droid.id+", structure:"+structure+", pos:"+_pos.x+'x'+_pos.y+", try", "builders");
 		var pos = pickStructLocation(droid,structure,_pos.x+1,_pos.y+1);
-		if (!!pos && !(typeof pos === 'undefined') && (policy['build'] == 'rich' || base_range < 15 || distBetweenTwoPoints_p(pos.x,pos.y,base.x,base.y) < (base_range+10))) {
-//		if (!!pos) {
+		if (pos !== false && !(typeof pos === 'undefined') && (policy['build'] == 'rich' || base_range < 15 || distBetweenTwoPoints_p(pos.x,pos.y,base.x,base.y) < (base_range+10))) {
+//		if (pos !== false) {
 //			debugMsg("Строю: ("+pos.x+","+pos.y+") ["+structure+"]",3);
 
 			var result = orderDroidBuild_p(droid, DORDER_BUILD, structure, pos.x, pos.y, rotation);
@@ -210,7 +210,7 @@ function buildersOrder(order,target) {
 		debugMsg("Срочно строим ПВО "+_def+" "+target.x+"x"+target.y, 'builders');
 		var _build = 0;
 		var pos = pickStructLocation(obj,_def,target.x,target.y);
-		if(!!pos){
+		if(pos !== false){
 			enumGroup(buildersMain).forEach( function(obj, iter){
 				if(builderBusy(obj) == true) return;
 				orderDroidBuild_p(obj, DORDER_BUILD, _def, pos.x, pos.y, 0);
@@ -382,7 +382,7 @@ function rigDefence(obj, nearbase){
 		return true;
 	}
 /*	var pos = pickStructLocation(obj,toBuild,posRnd(defQueue[0].x, 'x'), posRnd(defQueue[0].y, 'y'));
-	if(!!pos && !builderBusy(obj)){
+	if(pos !== false && !builderBusy(obj)){
 		debugMsg('try-build: '+defQueue[0].x+'x'+defQueue[0].y+", build: "+pos.x+'x'+pos.y+', '+nearbase, 'defence');
 		orderDroidBuild_p(obj, DORDER_BUILD, toBuild, pos.x, pos.y, 0);
 		defQueue.shift();
@@ -481,7 +481,7 @@ function AA_build(obj, nearbase){
 //		debugMsg("Строим ПВО "+_def+" "+target.x+"x"+target.y, 'builders');
 		var pos = pickStructLocation(obj,_def,target.x,target.y);
 		
-		if(!!pos){
+		if(pos !== false){
 			if(builderBusy(obj) == true) return;
 			orderDroidBuild_p(obj, DORDER_BUILD, _def, pos.x, pos.y, 0);
 			return true;
@@ -505,7 +505,7 @@ function oilHunt(obj, nearbase){
 		for ( var i in oil_enemy ) {if(distBetweenTwoPoints_p(oil_enemy[i].x,oil_enemy[i].y,obj.x,obj.y) <= 15 && !getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'defended').value && getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'safe').value){
 		var toBuild = defence[Math.floor(Math.random()*defence.length)];
 		var pos = pickStructLocation(obj,toBuild,oil_enemy[i].x+Math.round(Math.random()*2-1), oil_enemy[i].y+Math.round(Math.random()*2-1));
-		if(!!pos && !builderBusy(obj)){
+		if(pos !== false && !builderBusy(obj)){
 			orderDroidBuild_p(obj, DORDER_BUILD, toBuild, pos.x, pos.y, 0);
 			debugMsg("oilHunt(): Строим вышку у вражеского ресурса");
 			return true;
@@ -561,7 +561,7 @@ function oilHunt(obj, nearbase){
 					
 					var toBuild = defence[Math.floor(Math.random()*Math.min(defence.length, 3))];
 					var pos = pickStructLocation(obj,toBuild,builder_targets[i].x+Math.round(Math.random()*3-1), builder_targets[i].y+Math.round(Math.random()*3-1));
-					if(!!pos && !builderBusy(obj) && (!getInfoNear(builder_targets[i].x,builder_targets[i].y,'defended').value || (playerPower(me) > 500 || berserk))){
+					if(pos !== false && !builderBusy(obj) && (!getInfoNear(builder_targets[i].x,builder_targets[i].y,'defended').value || (playerPower(me) > 500 || berserk))){
 						orderDroidBuild_p(obj, DORDER_BUILD, toBuild, pos.x, pos.y, 0);
 //						debugMsg("oilHunt(): Строим вышку у вражеского ресурса");
 						return true;

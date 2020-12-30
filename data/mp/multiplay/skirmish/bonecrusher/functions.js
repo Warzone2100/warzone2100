@@ -1,4 +1,4 @@
-debugMsg('Module: functions.js','init');
+// debugMsg('Module: functions.js','init');
 
 //Функция проверяет объекты и возвращает значение
 //Задача стоит в обработке тяжёлых данных, и работа данной функции
@@ -1146,10 +1146,10 @@ function longCycle(){
 	if(broken.length != 0){
 		broken.forEach(function(o){
 			if(o.health > 80){groupArmy(o); return;}
-			if(!points) recycleDroid(o);
+			if(!points){recycleDroid(o); return;}
 			var p=0;
 			if(points.length > 1)p=Math.floor(Math.random()*points.length);
-			if(typeof points !== "undefined") orderDroidLoc_p(o, DORDER_MOVE, points[p].x, points[p].y); return;
+			orderDroidLoc_p(o, DORDER_MOVE, points[p].x, points[p].y); return;
 		});
 	}
 	

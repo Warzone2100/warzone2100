@@ -693,7 +693,7 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("stats", 10000); // Отключить в релизе
 		}
 		setTimer("checkProcess", 60000+me*100);
-		setTimer("perfMonitor", 5000);
+//		setTimer("perfMonitor", 5000);
 
 	}
 }
