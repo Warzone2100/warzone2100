@@ -1082,11 +1082,6 @@ bool runAudioAndZoomOptionsMenu()
 	return true;
 }
 
-static bool canChangeResolutionLive()
-{
-	return wzSupportsLiveResolutionChanges();
-}
-
 static char const *videoOptionsResolutionGetReadOnlyTooltip()
 {
 	switch (war_getWindowMode())
@@ -1147,17 +1142,17 @@ static std::string videoOptionsAntialiasingString()
 
 char const *videoOptionsWindowModeLabel()
 {
-	return (!canChangeResolutionLive())? _("Graphics Mode*") : _("Graphics Mode");
+	return _("Graphics Mode");
 }
 
 static char const *videoOptionsResolutionLabel()
 {
-	return (!canChangeResolutionLive())? _("Resolution*") : _("Resolution");
+	return _("Resolution");
 }
 
 char const *videoOptionsDisplayScaleLabel()
 {
-	return (!canChangeResolutionLive())? _("Display Scale*") : _("Display Scale");
+	return _("Display Scale");
 }
 
 static std::string videoOptionsTextureSizeString()
@@ -1257,30 +1252,16 @@ public:
 
 		auto selectedResolution = modes.at(index);
 
-		if (canChangeResolutionLive())
+		auto currentResolution = getCurrentResolution();
+		// Attempt to change the resolution
+		if (!wzChangeWindowResolution(selectedResolution.screen, selectedResolution.width, selectedResolution.height))
 		{
-			auto currentResolution = getCurrentResolution();
-			// Attempt to change the resolution
-			if (!wzChangeWindowResolution(selectedResolution.screen, selectedResolution.width, selectedResolution.height))
-			{
-				debug(
-					LOG_WARNING,
-					"Failed to change active resolution from: %s to: %s",
-					ScreenResolutionsModel::resolutionString(currentResolution).c_str(),
-					ScreenResolutionsModel::resolutionString(selectedResolution).c_str()
-				);
-			}
-		}
-		else
-		{
-			// when live resolution changes are unavailable, check to see if the current display scale is supported at the desired resolution
-			unsigned int maxDisplayScale = std::max(100u, wzGetMaximumDisplayScaleForWindowSize(selectedResolution.width, selectedResolution.height));
-			unsigned int current_displayScale = war_GetDisplayScale();
-			if (maxDisplayScale < current_displayScale)
-			{
-				// Reduce the display scale to the maximum supported for this resolution
-				war_SetDisplayScale(maxDisplayScale);
-			}
+			debug(
+				LOG_WARNING,
+				"Failed to change active resolution from: %s to: %s",
+				ScreenResolutionsModel::resolutionString(currentResolution).c_str(),
+				ScreenResolutionsModel::resolutionString(selectedResolution).c_str()
+			);
 		}
 
 		// Store the new width and height
@@ -1348,18 +1329,11 @@ void refreshCurrentVideoOptionsValues()
 	if (widgGetFromID(psWScreen, FRONTEND_RESOLUTION_READONLY)) // Resolution option may not be available
 	{
 		widgSetString(psWScreen, FRONTEND_RESOLUTION_READONLY, ScreenResolutionsModel::currentResolutionString().c_str());
-		if (canChangeResolutionLive())
+		if (war_getWindowMode() != WINDOW_MODE::fullscreen)
 		{
-			if (war_getWindowMode() != WINDOW_MODE::fullscreen)
-			{
-				// If live window resizing is supported & the current mode is "windowed", disable the Resolution option and add a tooltip
-				// explaining the user can now resize the window normally.
-				videoOptionsDisableResolutionButtons();
-			}
-			else
-			{
-				videoOptionsEnableResolutionButtons();
-			}
+			// If live window resizing is supported & the current mode is "windowed", disable the Resolution option and add a tooltip
+			// explaining the user can now resize the window normally.
+			videoOptionsDisableResolutionButtons();
 		}
 		else
 		{
@@ -1565,41 +1539,21 @@ void seqDisplayScale()
 	bool successfulDisplayScaleChange = false;
 	current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
 
-	unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(war_GetWidth(), war_GetHeight());
-
 	while (current != startingDisplayScale)
 	{
-		if (canChangeResolutionLive())
+		// Attempt to change the display scale
+		if (!wzChangeDisplayScale(*current))
 		{
-			// Attempt to change the display scale
-			if (!wzChangeDisplayScale(*current))
-			{
-				debug(LOG_WARNING, "Failed to change display scale from: %d to: %d", current_displayScale, *current);
+			debug(LOG_WARNING, "Failed to change display scale from: %d to: %d", current_displayScale, *current);
 
-				// try the next display scale factor, and loop
-				current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
-				continue;
-			}
-			else
-			{
-				successfulDisplayScaleChange = true;
-				break;
-			}
+			// try the next display scale factor, and loop
+			current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
+			continue;
 		}
 		else
 		{
-			// when live resolution changes are unavailable, check to see if the display scale is supported at the desired resolution
-			if (maxDisplayScale < *current)
-			{
-				// try the next display scale factor, and loop
-				current = seqCycle(current, displayScales.begin(), 1, displayScales.end() - 1);
-				continue;
-			}
-			else
-			{
-				successfulDisplayScaleChange = true;
-				break;
-			}
+			successfulDisplayScaleChange = true;
+			break;
 		}
 	}
 
@@ -1620,15 +1574,6 @@ bool runVideoOptionsMenu()
 	case FRONTEND_WINDOWMODE:
 	case FRONTEND_WINDOWMODE_R:
 		{
-			if (!wzSupportsLiveResolutionChanges())
-			{
-				auto nextMode = wzGetNextWindowMode(war_getWindowMode());
-				war_setWindowMode(nextMode);
-				widgSetString(psWScreen, FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString());
-				refreshCurrentVideoOptionsValues();
-				break;
-			}
-
 			seqWindowMode();
 
 			// Update the widget(s)
