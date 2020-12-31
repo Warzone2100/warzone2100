@@ -45,6 +45,7 @@ public:
 
 	void run(W_CONTEXT *psContext) override;
 	void addItem(const std::shared_ptr<WIDGET> &widget);
+	void clear();
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void enableScroll();
 	void disableScroll();
