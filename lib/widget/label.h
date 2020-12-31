@@ -26,11 +26,12 @@
 
 #include "widget.h"
 #include "widgbase.h"
+#include "paragraph.h"
 #include "lib/ivis_opengl/textdraw.h"
 #include <string>
 
 struct LabelDisplayCache {
-	std::vector<WzText> wzText;
+	std::vector<WzCachedText> wzText;
 };
 
 class W_LABEL : public WIDGET
@@ -47,6 +48,8 @@ public:
 	WzString getString() const override;
 	void setString(WzString string) override;
 	void setTip(std::string string) override;
+
+	void run(W_CONTEXT *) override;
 
 	// Sets a string for the label
 	// - line-wraps at max width
@@ -68,6 +71,11 @@ public:
 	}
 	void setTextAlignment(WzTextAlignment align);
 
+	void setCacheNeverExpires(bool value)
+	{
+		cacheNeverExpires = value;
+	}
+
 	using WIDGET::setTip;
 
 private:
@@ -78,6 +86,7 @@ private:
 	PIELIGHT fontColour;
 	LabelDisplayCache displayCache;
 	int lineSpacing = 0;
+	bool cacheNeverExpires = false;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__

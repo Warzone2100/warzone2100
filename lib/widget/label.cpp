@@ -30,6 +30,8 @@
 
 #include <algorithm>
 
+#define LABEL_DEFAULT_CACHE_EXPIRY 250
+
 W_LABINIT::W_LABINIT()
 	: FontID(font_regular)
 {}
@@ -69,6 +71,12 @@ int W_LABEL::setFormattedString(WzString string, uint32_t MaxWidth, iV_fonts fon
 		maxLineWidth = std::max(maxLineWidth, line.dimensions.x);
 	}
 
+	displayCache.wzText.clear();
+	for (size_t idx = 0; idx < aTextLines.size(); idx++)
+	{
+		displayCache.wzText.push_back(WzCachedText(aTextLines[idx].text, FontID, LABEL_DEFAULT_CACHE_EXPIRY));
+	}
+
 	return requiredHeight;
 }
 
@@ -80,13 +88,11 @@ void W_LABEL::display(int xOffset, int yOffset)
 {
 	int maxWidth = 0;
 	int textTotalHeight = 0;
-	displayCache.wzText.resize(aTextLines.size());
-	for (size_t idx = 0; idx < aTextLines.size(); idx++)
+	for (size_t idx = 0; idx < displayCache.wzText.size(); idx++)
 	{
-		displayCache.wzText[idx].setText(aTextLines[idx].text, FontID);
-		maxWidth = std::max(maxWidth, displayCache.wzText[idx].width());
-		textTotalHeight += displayCache.wzText[idx].lineSize();
-		if (idx < (aTextLines.size() - 1))
+		maxWidth = std::max(maxWidth, displayCache.wzText[idx]->width());
+		textTotalHeight += displayCache.wzText[idx]->lineSize();
+		if (idx < (displayCache.wzText.size() - 1))
 		{
 			textTotalHeight += lineSpacing;
 		}
@@ -114,12 +120,12 @@ void W_LABEL::display(int xOffset, int yOffset)
 		int fx = 0;
 		if (style & WLAB_ALIGNCENTRE)
 		{
-			int fw = wzTextLine.width();
+			int fw = wzTextLine->width();
 			fx = xOffset + x() + (width() - fw) / 2;
 		}
 		else if (style & WLAB_ALIGNRIGHT)
 		{
-			int fw = wzTextLine.width();
+			int fw = wzTextLine->width();
 			fx = xOffset + x() + width() - fw;
 		}
 		else
@@ -128,7 +134,7 @@ void W_LABEL::display(int xOffset, int yOffset)
 		}
 
 
-		float fy = float(textBoundingBoxOffset.y) + float(jy) - float(wzTextLine.aboveBase());
+		float fy = float(textBoundingBoxOffset.y) + float(jy) - float(wzTextLine->aboveBase());
 
 #ifdef DEBUG_BOUNDING_BOXES
 		// Display bounding boxes.
@@ -136,8 +142,8 @@ void W_LABEL::display(int xOffset, int yOffset)
 		col.byte.r = 128 + iSinSR(realTime, 2000, 127); col.byte.g = 128 + iSinSR(realTime + 667, 2000, 127); col.byte.b = 128 + iSinSR(realTime + 1333, 2000, 127); col.byte.a = 128;
 		iV_Box(textBoundingBoxOffset.x + fx, textBoundingBoxOffset.y + jy + baseLineOffset, textBoundingBoxOffset.x + fx + wzTextLine.width() - 1, textBoundingBoxOffset.y + jy + baseLineOffset + wzTextLine.lineSize() - 1, col);
 #endif
-		wzTextLine.render(textBoundingBoxOffset.x + fx, fy, fontColour);
-		jy += wzTextLine.lineSize() + lineSpacing;
+		wzTextLine->render(textBoundingBoxOffset.x + fx, fy, fontColour);
+		jy += wzTextLine->lineSize() + lineSpacing;
 	}
 }
 
@@ -174,6 +180,8 @@ void W_LABEL::setString(WzString string)
 {
 	aTextLines.clear();
 	aTextLines.push_back({string.toStdString(), Vector2i(0,0), Vector2i(0,0)});
+	displayCache.wzText.clear();
+	displayCache.wzText.push_back(WzCachedText(string.toStdString(), FontID, LABEL_DEFAULT_CACHE_EXPIRY));
 	dirty = true;
 }
 
@@ -187,4 +195,15 @@ void W_LABEL::setTextAlignment(WzTextAlignment align)
 	style &= ~(WLAB_ALIGNLEFT | WLAB_ALIGNCENTRE | WLAB_ALIGNRIGHT);
 	style |= align;
 	dirty = true;
+}
+
+void W_LABEL::run(W_CONTEXT *)
+{
+	if (!cacheNeverExpires)
+	{
+		for (auto& wzTextLine : displayCache.wzText)
+		{
+			wzTextLine.tick();
+		}
+	}
 }
