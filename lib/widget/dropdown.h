@@ -84,6 +84,7 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void run(W_CONTEXT *) override;
+	void geometryChanged() override;
 	void open();
 	void close();
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
@@ -100,7 +101,7 @@ public:
 		ASSERT_OR_RETURN(, index < items.size(), "Invalid dropdown item index");
 		select(items[index]);
 	}
-	void setOnChange(std::function<void()> value)
+	void setOnChange(std::function<void(DropdownWidget&)> value)
 	{
 		onChange = value;
 	}
@@ -128,7 +129,7 @@ private:
 	std::shared_ptr<W_SCREEN> overlayScreen;
 	std::shared_ptr<DropdownItemWrapper> selectedItem;
 	Padding itemPadding;
-	std::function<void()> onChange;
+	std::function<void(DropdownWidget&)> onChange;
 
 	void select(const std::shared_ptr<DropdownItemWrapper> &selected)
 	{
@@ -146,7 +147,7 @@ private:
 
 		if (onChange)
 		{
-			onChange();
+			onChange(*this);
 		}
 	}
 };
