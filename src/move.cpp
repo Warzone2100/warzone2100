@@ -1696,13 +1696,6 @@ static void moveAdjustVtolHeight(DROID *psDroid, int32_t iMapHeight)
 	}
 }
 
-// set a vtol to be hovering in the air
-void moveMakeVtolHover(DROID *psDroid)
-{
-	psDroid->sMove.Status = MOVEHOVER;
-	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y) + VTOL_HEIGHT_LEVEL;
-}
-
 static void moveUpdateVtolModel(DROID *psDroid, SDWORD speed, uint16_t direction)
 {
 	int fPerpSpeed, fNormalSpeed;

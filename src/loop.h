@@ -64,7 +64,6 @@ bool loop_GetVideoStatus();
 SDWORD loop_GetVideoMode();
 bool	gamePaused();
 void	setGamePauseStatus(bool val);
-void loopFastExit();
 
 bool gameUpdatePaused();
 bool audioPaused();

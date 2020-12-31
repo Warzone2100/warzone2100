@@ -4272,207 +4272,6 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 	return true;
 }
 
-/*
-for a new structure, find a location along an edge which the droid can get
-to and return this as the destination for the droid.
-*/
-bool getDroidDestination(BASE_STATS *psStats, UDWORD structX,
-                         UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY)
-{
-	int32_t                         start;
-	UDWORD				structTileX, structTileY, width = 0, breadth = 0;
-
-	if (StatIsStructure(psStats))
-	{
-		width = ((STRUCTURE_STATS *)psStats)->baseWidth;
-		breadth = ((STRUCTURE_STATS *)psStats)->baseBreadth;
-	}
-	else if (StatIsFeature(psStats))
-	{
-		width = ((FEATURE_STATS *)psStats)->baseWidth;
-		breadth = ((FEATURE_STATS *)psStats)->baseBreadth;
-	}
-	ASSERT_OR_RETURN(false, width + breadth > 0, "Weird droid destination");
-
-	//get a random starting place 0=top left
-	start = gameRand((width + breadth) * 2);
-
-	//search in a clockwise direction around the structure from the starting point
-	// TODO Fix 4x code duplication.
-	if (start == 0 || start < width)
-	{
-		//top side first
-		structTileX = map_coord(structX);
-		structTileY = map_coord(structY) - 1;
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX += width;
-		structTileY += 1;
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX = map_coord(structX);
-		structTileY += breadth;
-
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX -= 1;
-		structTileY = map_coord(structY);
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-	}
-	else if (start == width || start < (width + breadth))
-	{
-		//right side first
-		structTileX = (map_coord(structX)) + width;
-		structTileY = map_coord(structY);
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX = map_coord(structX);
-		structTileY += breadth;
-
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX -= 1;
-		structTileY = map_coord(structY);
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX += 1;
-		structTileY -= 1;
-
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-	}
-	else if (start == (width + breadth) || start < (width * breadth))
-	{
-		//bottom first
-		structTileX = map_coord(structX);
-		structTileY = map_coord(structY) + breadth;
-
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX -= 1;
-		structTileY = map_coord(structY);
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX += 1;
-		structTileY -= 1;
-
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX += width;
-		structTileY += 1;
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-	}
-	else
-	{
-		//left side first
-		structTileX = (map_coord(structX)) - 1;
-		structTileY = map_coord(structY);
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX += 1;
-		structTileY -= 1;
-
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX += width;
-		structTileY += 1;
-
-		if (checkLength(breadth, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-		structTileX = map_coord(structX);
-		structTileY += breadth;
-
-		if (checkWidth(width, structTileX, structTileY, pDroidX, pDroidY))
-		{
-			return true;
-		}
-	}
-
-	//not found a valid location so return false
-	return false;
-}
-
-/* check along the width of a structure for an empty space */
-bool checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY)
-{
-	UDWORD		side;
-
-	for (side = 0; side < maxRange; side++)
-	{
-		if (x + side < mapWidth && y < mapHeight && !TileIsOccupied(mapTile(x + side, y)))
-		{
-			*pDroidX = world_coord(x + side);
-			*pDroidY = world_coord(y);
-
-			ASSERT_OR_RETURN(false, worldOnMap(*pDroidX, *pDroidY), "Insane droid position generated at width (%u, %u)", *pDroidX, *pDroidY);
-
-			return true;
-		}
-	}
-
-	return false;
-}
-
-/* check along the length of a structure for an empty space */
-bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY)
-{
-	UDWORD		side;
-
-	for (side = 0; side < maxRange; side++)
-	{
-		if (y + side < mapHeight && x < mapWidth && !TileIsOccupied(mapTile(x, y + side)))
-		{
-			*pDroidX = world_coord(x);
-			*pDroidY = world_coord(y + side);
-
-			ASSERT_OR_RETURN(false, worldOnMap(*pDroidX, *pDroidY), "Insane droid position generated at length (%u, %u)", *pDroidX, *pDroidY);
-
-			return true;
-		}
-	}
-
-	return false;
-}
-
 
 //remove a structure from the map
 static void removeStructFromMap(STRUCTURE *psStruct)
@@ -4809,29 +4608,6 @@ bool  structureIdle(const STRUCTURE *psBuilding)
 }
 
 
-/*checks to see if any structure exists of a specified type with a specified status */
-bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status)
-{
-	STRUCTURE	*psStructure;
-	bool		found = false;
-
-	for (psStructure = apsStructLists[player]; psStructure != nullptr;
-	     psStructure = psStructure->psNext)
-	{
-		if (psStructure->pStructureType->type == psStats->type)
-		{
-			//need to check if THIS instance of the type has the correct status
-			if (psStructure->status == status)
-			{
-				found = true;
-				break;
-			}
-		}
-	}
-	return found;
-}
-
-
 /*checks to see if a specific structure type exists -as opposed to a structure
 stat type*/
 bool checkSpecificStructExists(UDWORD structInc, UDWORD player)
@@ -4997,13 +4773,6 @@ bool getSatUplinkExists(UDWORD player)
 void setLasSatExists(bool state, UDWORD player)
 {
 	lasSatExists[player] = (UBYTE)state;
-}
-
-
-/*returns the status of the flag*/
-bool getLasSatExists(UDWORD player)
-{
-	return lasSatExists[player];
 }
 
 
@@ -5816,11 +5585,6 @@ unsigned structureBodyBuilt(const STRUCTURE *psStructure)
 UDWORD structureBody(const STRUCTURE *psStructure)
 {
 	return psStructure->pStructureType->upgrade[psStructure->player].hitpoints;
-}
-
-UDWORD	structureArmour(const STRUCTURE_STATS *psStats, UBYTE player)
-{
-	return psStats->upgrade[player].armour;
 }
 
 UDWORD	structureResistance(const STRUCTURE_STATS *psStats, UBYTE player)

@@ -43,7 +43,6 @@ public:
 		return widget;
 	}
 
-	void initializeLayout();
 	void run(W_CONTEXT *psContext) override;
 	void addItem(const std::shared_ptr<WIDGET> &widget);
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;

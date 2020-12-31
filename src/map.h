@@ -571,8 +571,6 @@ extern SDWORD scrollMinX, scrollMaxX, scrollMinY, scrollMaxY;
 
 void mapFloodFillContinents();
 
-void mapTest();
-
 void tileSetFire(int32_t x, int32_t y, uint32_t duration);
 bool fireOnLocation(unsigned int x, unsigned int y);
 

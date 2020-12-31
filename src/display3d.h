@@ -82,7 +82,6 @@ void renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix);
 void renderProximityMsg(PROXIMITY_DISPLAY	*psProxDisp, const glm::mat4 &viewMatrix);
 void renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix);
 void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::mat4 &viewMatrix);
-void debugToggleSensorDisplay();
 
 void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix);
 ENERGY_BAR toggleEnergyBars();
@@ -126,9 +125,6 @@ extern const Vector2i visibleTiles;
 
 /*returns the graphic ID for a droid rank*/
 UDWORD  getDroidRankGraphic(DROID *psDroid);
-
-/* Visualize radius at position */
-void showRangeAtPos(SDWORD centerX, SDWORD centerY, SDWORD radius);
 
 void setSkyBox(const char *page, float mywind, float myscale);
 

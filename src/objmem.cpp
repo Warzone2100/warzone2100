@@ -937,14 +937,6 @@ UDWORD getRepairIdFromFlag(FLAG_POSITION *psFlag)
 	return UDWORD_MAX;
 }
 
-
-// check a base object exists for an ID
-bool checkValidId(UDWORD id)
-{
-	return getBaseObjFromId(id) != nullptr;
-}
-
-
 // integrity check the lists
 #ifdef DEBUG
 static void objListIntegCheck()

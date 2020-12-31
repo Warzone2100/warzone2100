@@ -290,7 +290,6 @@ void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 // Widget callback function to play an audio track.
 void WidgetAudioCallback(int AudioID);
 
-//void intDisplayTransportButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 class IntTransportButton : public IntFancyButton
 {
 public:

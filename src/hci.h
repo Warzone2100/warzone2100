@@ -323,11 +323,8 @@ void intUpdateManufacture(STRUCTURE *psBuilding);
 /* Sync the interface to an object */
 void intObjectSelected(BASE_OBJECT *psObj);
 
-// add the construction interface if a constructor droid is selected
-void intConstructorSelected(DROID *psDroid);
 bool intBuildSelectMode();
 bool intDemolishSelectMode();
-bool intBuildMode();
 
 //sets up the Intelligence Screen as far as the interface is concerned
 void addIntelScreen();

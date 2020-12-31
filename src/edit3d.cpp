@@ -102,21 +102,6 @@ void	adjustTileHeight(MAPTILE *psTile, SDWORD adjust)
 	}
 }
 
-bool	inHighlight(UDWORD realX, UDWORD realY)
-{
-	bool	retVal = false;
-
-	if (realX >= buildSite.xTL && realX <= buildSite.xBR)
-	{
-		if (realY >= buildSite.yTL && realY <= buildSite.yBR)
-		{
-			retVal = true;
-		}
-	}
-
-	return (retVal);
-}
-
 void init3DBuilding(BASE_STATS *psStats, BUILDCALLBACK CallBack, void *UserData)
 {
 	ASSERT_OR_RETURN(, psStats, "Bad parameter");

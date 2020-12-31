@@ -100,9 +100,6 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 uint32_t structureBuildPointsToCompletion(const STRUCTURE & structure);
 float structureCompletionProgress(const STRUCTURE & structure);
 
-//temp test function for creating structures at the start of the game
-void createTestStructures();
-
 //builds a specified structure at a given location
 STRUCTURE *buildStructure(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, UDWORD player, bool FromSave);
 STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y, uint16_t direction, UDWORD player, bool FromSave);
@@ -132,19 +129,6 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 bool isWall(STRUCTURE_TYPE type);                                    ///< Structure is a wall. Not completely sure it handles all cases.
 bool isBuildableOnWalls(STRUCTURE_TYPE type);                        ///< Structure can be built on walls. Not completely sure it handles all cases.
 
-/* for a new structure, find a location along an edge which the droid can get
-to and return this as the destination for the droid */
-
-/* for a structure or feature, find a location along an edge which the droid can get
-to and return this as the destination for the droid*/
-bool getDroidDestination(BASE_STATS *psPositionStats, UDWORD structX, UDWORD structY, UDWORD *pDroidX, UDWORD *pDroidY);
-
-/* check along the width of a structure for an empty space */
-bool checkWidth(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
-
-/* check along the length of a structure for an empty space */
-bool checkLength(UDWORD maxRange, UDWORD x, UDWORD y, UDWORD *pDroidX, UDWORD *pDroidY);
-
 void alignStructure(STRUCTURE *psBuilding);
 
 /* set the current number of structures of each type built */
@@ -153,8 +137,6 @@ void setCurrentStructQuantity(bool displayError);
 int32_t getStructStatFromName(const WzString &name);
 /*check to see if the structure is 'doing' anything  - return true if idle*/
 bool  structureIdle(const STRUCTURE *psBuilding);
-/*checks to see if any structure exists of a specified type with a specified status */
-bool checkStructureStatus(STRUCTURE_STATS *psStats, UDWORD player, UDWORD status);
 /*sets the point new droids go to - x/y in world coords for a Factory*/
 void setAssemblyPoint(FLAG_POSITION *psAssemblyPoint, UDWORD x, UDWORD y, UDWORD player, bool bCheck);
 
@@ -190,9 +172,6 @@ bool getSatUplinkExists(UDWORD player);
 
 /*sets the flag to indicate a Las Sat Exists - ONLY EVER WANT ONE*/
 void setLasSatExists(bool state, UDWORD player);
-
-/*returns the status of the flag*/
-bool getLasSatExists(UDWORD player);
 
 /* added int weapon_slot to fix the alway slot 0 hack */
 bool calcStructureMuzzleLocation(const STRUCTURE *psStructure, Vector3i *muzzle, int weapon_slot);
@@ -247,7 +226,6 @@ int32_t getStructureDamage(const STRUCTURE *psStructure);
 
 unsigned structureBodyBuilt(const STRUCTURE *psStruct);  ///< Returns the maximum body points of a structure with the current number of build points.
 UDWORD structureBody(const STRUCTURE *psStruct);
-UDWORD structureArmour(const STRUCTURE_STATS *psStats, UBYTE player);
 UDWORD structureResistance(const STRUCTURE_STATS *psStats, UBYTE player);
 
 void hqReward(UBYTE losingPlayer, UBYTE rewardPlayer);
@@ -295,10 +273,6 @@ void releaseProduction(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
 /// Does the next item in the production list.
 void doNextProduction(STRUCTURE *psStructure, DROID_TEMPLATE *current, QUEUE_MODE mode);
-
-/*This function is called after a game is loaded so that any resource extractors
-that are active are initialised for when to start*/
-void checkResExtractorsActive();
 
 // Count number of factories assignable to a command droid.
 UWORD countAssignableFactories(UBYTE player, UWORD FactoryType);

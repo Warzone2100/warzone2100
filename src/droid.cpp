@@ -1977,31 +1977,6 @@ bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_
 	return true;
 }
 
-
-// finds a droid for the player and sets it to be the current selected droid
-bool selectDroidByID(UDWORD id, UDWORD player)
-{
-	DROID	*psCurr;
-
-	//look through the list of droids for the player and find the matching id
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->id == id)
-		{
-			break;
-		}
-	}
-
-	if (psCurr)
-	{
-		clearSelection();
-		SelectDroid(psCurr);
-		return true;
-	}
-
-	return false;
-}
-
 struct rankMap
 {
 	unsigned int kills;          // required minimum amount of kills to reach this rank

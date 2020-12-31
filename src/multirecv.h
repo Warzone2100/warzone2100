@@ -30,13 +30,10 @@
 bool recvDroid(NETQUEUE queue);
 bool recvDroidInfo(NETQUEUE queue);
 bool recvDestroyDroid(NETQUEUE queue);
-bool recvDroidMove(NETQUEUE queue);
 bool recvDestroyStructure(NETQUEUE queue);
 bool recvBuildFinished(NETQUEUE queue);
-bool recvTemplate(NETQUEUE queue);
 bool recvDestroyFeature(NETQUEUE queue);
 bool recvPing(NETQUEUE queue);
-bool recvRequestDroid(NETQUEUE queue);
 bool receiveInGameTextMessage(NETQUEUE queue);
 bool recvDroidDisEmbark(NETQUEUE queue);
 bool recvColourRequest(NETQUEUE queue);

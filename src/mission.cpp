@@ -579,31 +579,6 @@ void addTransporterTimerInterface()
 #define OFFSCREEN_HEIGHT	600
 #define	EDGE_SIZE	1
 
-/* pick nearest map edge to point */
-void missionGetNearestCorner(UWORD iX, UWORD iY, UWORD *piOffX, UWORD *piOffY)
-{
-	UDWORD	iMidX = (scrollMinX + scrollMaxX) / 2,
-	        iMidY = (scrollMinY + scrollMaxY) / 2;
-
-	if (map_coord(iX) < iMidX)
-	{
-		*piOffX = (UWORD)(world_coord(scrollMinX) + (EDGE_SIZE * TILE_UNITS));
-	}
-	else
-	{
-		*piOffX = (UWORD)(world_coord(scrollMaxX) - (EDGE_SIZE * TILE_UNITS));
-	}
-
-	if (map_coord(iY) < iMidY)
-	{
-		*piOffY = (UWORD)(world_coord(scrollMinY) + (EDGE_SIZE * TILE_UNITS));
-	}
-	else
-	{
-		*piOffY = (UWORD)(world_coord(scrollMaxY) - (EDGE_SIZE * TILE_UNITS));
-	}
-}
-
 /* fly in transporters at start of level */
 void missionFlyTransportersIn(SDWORD iPlayer, bool bTrackTransporter)
 {

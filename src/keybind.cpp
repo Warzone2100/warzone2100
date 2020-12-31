@@ -1002,7 +1002,6 @@ void	kf_PitchBack()
 	{
 		player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
 	}
-	setDesiredPitch(player.r.x / DEG_1);
 }
 
 // --------------------------------------------------------------------------
@@ -1016,7 +1015,6 @@ void	kf_PitchForward()
 	{
 		player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
 	}
-	setDesiredPitch(player.r.x / DEG_1);
 }
 
 // --------------------------------------------------------------------------

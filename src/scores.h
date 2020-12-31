@@ -115,7 +115,6 @@ struct ScoreDataToScreenCache {
 
 bool scoreInitSystem();
 void scoreUpdateVar(DATA_INDEX var);
-void scoreDataToConsole();
 END_GAME_STATS_DATA	collectEndGameStatsData();
 void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache);
 void getAsciiTime(char *psText, unsigned time);

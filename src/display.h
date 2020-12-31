@@ -41,7 +41,6 @@ void processInput();
 void processMouseClickInput();
 
 void resetScroll();
-void setMouseScroll(bool);
 
 bool DrawnInLastFrame(SDWORD Frame);
 
@@ -181,12 +180,8 @@ void resetInput();
 
 bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos);
 bool CheckScrollLimits();
-extern bool	rotActive;
 
 BASE_OBJECT	*mouseTarget();
-
-bool StartObjectOrbit(BASE_OBJECT *psObj);
-void CancelObjectOrbit();
 
 void cancelDeliveryRepos();
 void startDeliveryPosition(FLAG_POSITION *psFlag);
@@ -195,12 +190,7 @@ void processDeliveryRepos();
 void renderDeliveryRepos(const glm::mat4 &viewMatrix);
 bool deliveryReposFinished(FLAG_POSITION *psFlag = nullptr);
 
-void StartTacticalScrollObj(bool driveActive, BASE_OBJECT *psObj);
-void CancelTacticalScroll();
-void MoveTacticalScroll(SDWORD xVel, SDWORD yVel);
 bool	getRotActive();
-SDWORD	getDesiredPitch();
-void	setDesiredPitch(SDWORD pitch);
 
 #define MAX_PLAYER_X_ANGLE	(-1)
 #define MIN_PLAYER_X_ANGLE	(-90)
@@ -227,8 +217,6 @@ void AddDerrickBurningMessage();
 
 // check whether the queue order keys are pressed
 bool ctrlShiftDown();
-
-UDWORD getTargetType();
 
 #define	DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED (5000)
 

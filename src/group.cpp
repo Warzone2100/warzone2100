@@ -241,20 +241,6 @@ unsigned int DROID_GROUP::getNumMembers()
 	return num;
 }
 
-// remove all droids from a group
-void DROID_GROUP::removeAll()
-{
-	DROID	*psCurr, *psNext;
-
-	ASSERT(grpInitialized, "Group code not initialized yet");
-
-	for (psCurr = psList; psCurr; psCurr = psNext)
-	{
-		psNext = psCurr->psGrpNext;
-		remove(psCurr);
-	}
-}
-
 // Give a group of droids an order
 void DROID_GROUP::orderGroup(DROID_ORDER order)
 {

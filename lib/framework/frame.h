@@ -97,20 +97,6 @@ bool frameInitialise();
  */
 void frameShutDown();
 
-/*!
- * Set the framerate limit
- *
- * \param fpsLimit Desired framerate
- */
-void setFramerateLimit(int fpsLimit);
-
-/*!
- * Get the framerate limit
- *
- * \return Desired framerate
- */
-int getFramerateLimit();
-
 /** Call this each cycle to allow the framework to deal with
  * windows messages, and do general house keeping.
  */
