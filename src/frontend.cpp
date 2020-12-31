@@ -1476,7 +1476,7 @@ void seqWindowMode()
 
 	do
 	{
-		currentFullscreenModePos = seqCycle(currentFullscreenModePos, static_cast<size_t>(0), 1, supportedFullscreenModes.size());
+		currentFullscreenModePos = seqCycle(currentFullscreenModePos, static_cast<size_t>(0), 1, supportedFullscreenModes.size() - 1);
 		success = wzChangeWindowMode(supportedFullscreenModes[currentFullscreenModePos]);
 
 	} while ((!success) && (currentFullscreenModePos != startingFullscreenModePos));
