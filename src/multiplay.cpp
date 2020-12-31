@@ -1296,14 +1296,6 @@ bool recvTextMessageAI(NETQUEUE queue)
 // ////////////////////////////////////////////////////////////////////////////
 // Features
 
-// send a destruct feature message.
-bool SendDestroyFeature(FEATURE *pF)
-{
-	NETbeginEncode(NETgameQueue(selectedPlayer), GAME_DEBUG_REMOVE_FEATURE);
-	NETuint32_t(&pF->id);
-	return NETend();
-}
-
 // process a destroy feature msg.
 bool recvDestroyFeature(NETQUEUE queue)
 {

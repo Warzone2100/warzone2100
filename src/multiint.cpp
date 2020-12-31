@@ -371,27 +371,6 @@ const char *getAIName(int player)
 	}
 }
 
-int getNextAIAssignment(const char *name)
-{
-	int ai = matchAIbyName(name);
-	int match = aidata[ai].assigned;
-
-	for (int i = 0; i < game.maxPlayers; i++)
-	{
-		if (ai == NetPlay.players[i].ai)
-		{
-			if (match == 0)
-			{
-				aidata[ai].assigned++;
-				debug(LOG_SAVE, "wzscript assigned to player %d", i);
-				return i;	// found right player
-			}
-			match--;		// find next of this type
-		}
-	}
-	return AI_NOT_FOUND;
-}
-
 void loadMultiScripts()
 {
 	bool defaultRules = true;

@@ -42,7 +42,6 @@ uint16_t getBuildingDirection();
 void adjustTileHeight(MAPTILE *psTile, SDWORD adjust);
 void raiseTile(int tile3dX, int tile3dY);
 void lowerTile(int tile3dX, int tile3dY);
-bool inHighlight(UDWORD realX, UDWORD realY);
 
 enum BuildState
 {

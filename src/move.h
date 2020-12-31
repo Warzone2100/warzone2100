@@ -51,17 +51,11 @@ void moveUpdateDroid(DROID *psDroid);
 
 SDWORD moveCalcDroidSpeed(DROID *psDroid);
 
-/* Frame update for the movement of a tracked droid */
-void moveUpdateTracked(DROID *psDroid);
-
 /* update body and turret to local slope */
 void updateDroidOrientation(DROID *psDroid);
 
 /* audio callback used to kill movement sounds */
 bool moveCheckDroidMovingAndVisible(void *psObj);
-
-// set a vtol to be hovering in the air
-void moveMakeVtolHover(DROID *psDroid);
 
 const char *moveDescription(MOVE_STATUS status);
 

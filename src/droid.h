@@ -176,9 +176,6 @@ bool calcDroidMuzzleLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_
 /* calculate muzzle base location in 3d world added int weapon_slot to fix the always slot 0 hack*/
 bool calcDroidMuzzleBaseLocation(const DROID *psDroid, Vector3i *muzzle, int weapon_slot);
 
-// finds a droid for the player and sets it to be the current selected droid
-bool selectDroidByID(UDWORD id, UDWORD player);
-
 /* Droid experience stuff */
 unsigned int getDroidLevel(const DROID *psDroid);
 UDWORD getDroidEffectiveLevel(const DROID *psDroid);

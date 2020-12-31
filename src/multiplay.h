@@ -200,7 +200,6 @@ bool multiPlayerLoop();							// for loop.c
 
 bool recvMessage();
 bool SendResearch(uint8_t player, uint32_t index, bool trigger);
-bool SendDestroyFeature(FEATURE *pF);					// send a destruct feature message.
 void printInGameTextMessage(NetworkTextMessage const &message);
 void sendInGameSystemMessage(const char *text);
 int32_t findPlayerIndexByPosition(uint32_t position);
@@ -225,7 +224,6 @@ bool SendDroid(DROID_TEMPLATE *pTemplate, uint32_t x, uint32_t y, uint8_t player
 bool SendDestroyDroid(const DROID *psDroid);
 void sendQueuedDroidInfo();  ///< Actually sends the droid orders which were queued by SendDroidInfo.
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add);
-bool SendCmdGroup(DROID_GROUP *psGroup, UWORD x, UWORD y, BASE_OBJECT *psObj);
 
 bool sendDroidSecondary(const DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE state);
 bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
@@ -266,9 +264,6 @@ bool sendPing();							// allow game to request pings.
 void HandleBadParam(const char *msg, const int from, const int actual);
 // multijoin
 bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player, bool bStart);
-
-void displayAIMessage(char *pStr, SDWORD from, SDWORD to);  //make AI process a message
-
 
 bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
 

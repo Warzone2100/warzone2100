@@ -66,8 +66,6 @@ public:
 	/* The optional "onChoose" callback function */
 	typedef std::function<void (MultibuttonWidget& widget, int newValue)> W_ON_CHOOSE_FUNC;
 
-	void addOnChooseHandler(const W_ON_CHOOSE_FUNC& onChooseFunc);
-
 public:
 	void choose(int value);
 
@@ -99,8 +97,6 @@ void loadMultiScripts();	///< step 2, load the actual AI scripts
 const char *getAIName(int player);	///< only run this -after- readAIs() is called
 const std::vector<WzString> getAINames();
 int matchAIbyName(const char* name);	///< only run this -after- readAIs() is called
-int matchAIbyPath(const char *path);	///< only run this -after- readAIs() is called
-int getNextAIAssignment(const char *name);
 
 LOBBY_ERROR_TYPES getLobbyError();
 void setLobbyError(LOBBY_ERROR_TYPES error_type);

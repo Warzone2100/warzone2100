@@ -126,9 +126,6 @@ void holdResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 /*release a research facility from hold*/
 void releaseResearch(STRUCTURE *psBuilding, QUEUE_MODE mode);
 
-/*checks the stat to see if its of type wall or defence*/
-bool wallDefenceStruct(STRUCTURE_STATS *psStats);
-
 void enableSelfRepair(UBYTE player);
 
 void CancelAllResearch(UDWORD pl);

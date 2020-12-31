@@ -115,7 +115,6 @@ static FLAG_POSITION *findMouseDeliveryPoint();
 
 void finishDeliveryPosition();
 
-static SDWORD	desiredPitch = 340;
 static UDWORD	currentFrame;
 static UDWORD StartOfLastFrame;
 static SDWORD	rotX;
@@ -135,8 +134,6 @@ static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static bool bRadarDragging = false;
 static bool cameraAccel;
-static bool mouseScroll = true;
-static UDWORD CurrentItemUnderMouse = 0;
 
 bool	rotActive = false;
 bool	gameStats = false;
@@ -272,11 +269,6 @@ static void shakeUpdate()
 bool isMouseOverRadar()
 {
 	return mouseOverRadar;
-}
-
-void setMouseScroll(bool scroll)
-{
-	mouseScroll = scroll;
 }
 
 bool	getCameraAccel()
@@ -618,11 +610,6 @@ static void HandleDrag()
 			wallDrag.status = DRAG_DRAGGING;
 		}
 	}
-}
-
-UDWORD getTargetType()
-{
-	return CurrentItemUnderMouse;
 }
 
 // Mouse X coordinate at start of panning.
@@ -973,8 +960,6 @@ void processMouseClickInput()
 			wzSetCursor(CURSOR_SELECT); // Special casing for LasSat or own unit
 		}
 	}
-
-	CurrentItemUnderMouse = item;
 }
 
 static void calcScroll(float *y, float *dydt, float accel, float decel, float targetVelocity, float dt)
@@ -1040,7 +1025,7 @@ static void handleCameraScrolling()
 		return;
 	}
 
-	if (mouseScroll && wzMouseInWindow())
+	if (wzMouseInWindow())
 	{
 		if (mouseY() < BOUNDARY_Y)
 		{
@@ -1218,8 +1203,6 @@ void displayWorld()
 
 		player.r.x = rotationVerticalTracker->setTargetDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
 		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
-
-		setDesiredPitch(player.r.x / DEG_1);
 	}
 
 	if (!mouseDown(MOUSE_ROTATE) && rotActive)
@@ -2018,16 +2001,6 @@ void	dealWithLMB()
 bool	getRotActive()
 {
 	return (rotActive);
-}
-
-SDWORD	getDesiredPitch()
-{
-	return (desiredPitch);
-}
-
-void	setDesiredPitch(SDWORD pitch)
-{
-	desiredPitch = pitch;
 }
 
 // process LMB double clicks

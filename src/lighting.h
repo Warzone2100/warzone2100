@@ -35,7 +35,6 @@ Vector3f getTheSun();
 
 void processLight(LIGHT *psLight);
 void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2);
-void lightValueForTile(UDWORD tileX, UDWORD tileY);
 void doBuildingLights();
 void UpdateFogDistance(float distance);
 void calcDroidIllumination(DROID *psDroid);

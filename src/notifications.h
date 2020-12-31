@@ -240,6 +240,5 @@ bool notificationsInitialize();
 void notificationsShutDown();
 void runNotifications();
 bool isDraggingInGameNotification();
-bool isMouseOverInGameNotification();
 
 #endif // __INCLUDED_SRC_NOTIFICATIONS_H__

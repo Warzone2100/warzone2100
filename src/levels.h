@@ -105,8 +105,6 @@ SDWORD getLevelLoadType();
 
 const char *getLevelName();
 
-void levTest();
-
 std::string mapNameWithoutTechlevel(const char *mapName);
 
 #endif // __INCLUDED_SRC_LEVELS_H__

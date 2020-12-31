@@ -1180,20 +1180,6 @@ bool selfRepairEnabled(UBYTE player)
 	}
 }
 
-/*checks the stat to see if its of type wall or defence*/
-bool wallDefenceStruct(STRUCTURE_STATS *psStats)
-{
-	if (psStats->type == REF_DEFENSE || psStats->type == REF_WALL || psStats->type == REF_GATE
-	    || psStats->type == REF_WALLCORNER || psStats->type == REF_GENERIC)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 /*for a given list of droids, replace the old component if exists*/
 void replaceDroidComponent(DROID *pList, UDWORD oldType, UDWORD oldCompInc,
                            UDWORD newCompInc)

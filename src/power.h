@@ -40,12 +40,6 @@ void delPowerRequest(STRUCTURE *psStruct);
 /// Returns -1 if there is no power request or if there is enough power already.
 int32_t checkPowerRequest(STRUCTURE *psStruct);
 
-/** Reset the power levels when a power_gen or resource_extractor is destroyed. */
-bool resetPlayerPower(UDWORD player, STRUCTURE *psStruct);
-
-/** Check the available power. */
-bool checkPower(int player, uint32_t quantity);
-
 bool requestPowerFor(STRUCTURE *psStruct, int32_t amount);
 bool requestPrecisePowerFor(STRUCTURE *psStruct, int64_t amount);
 
@@ -59,7 +53,6 @@ void updatePlayerPower(int player, int ticks = 1);
 
 /** Used in multiplayer to force power levels. */
 void setPower(unsigned player, int32_t power);
-void setPrecisePower(unsigned player, int64_t power);
 
 void setPowerModifier(int player, int modifier);
 void setPowerMaxStorage(int player, int max);

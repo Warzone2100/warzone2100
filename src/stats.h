@@ -216,8 +216,6 @@ WZ_DECL_PURE int constructorPoints(const CONSTRUCT_STATS *psStats, int player);
 WZ_DECL_PURE int bodyPower(const BODY_STATS *psStats, int player);
 WZ_DECL_PURE int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass);
 
-void adjustMaxDesignStats();
-
 //Access functions for the max values to be used in the Design Screen
 UDWORD getMaxComponentWeight();
 UDWORD getMaxBodyArmour();

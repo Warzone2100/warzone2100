@@ -118,7 +118,6 @@ void war_setJSBackend(JS_BACKEND backend);
 
 /**
  * Enable or disable sound initialization
- * Has no effect after systemInitialize()!
  *
  * \param	soundEnabled	enable sound (or not)
  */

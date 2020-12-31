@@ -197,20 +197,6 @@ static void syncDebugEconomy(unsigned player, char ch)
 	syncDebug("%c economy%u = %" PRId64"", ch, player, asPower[player].currentPower);
 }
 
-/*check the current power - if enough return true, else return false */
-bool checkPower(int player, uint32_t quantity)
-{
-	ASSERT_OR_RETURN(false, player < MAX_PLAYERS, "Bad player (%d)", player);
-
-	//if not doing a check on the power - just return true
-	if (!powerCalculated)
-	{
-		return true;
-	}
-
-	return asPower[player].currentPower >= quantity * FP_ONE;
-}
-
 void usePower(int player, uint32_t quantity)
 {
 	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player (%d)", player);
@@ -334,15 +320,6 @@ void setPower(unsigned player, int32_t power)
 
 	syncDebug("setPower%d %" PRId64"->%d", player, asPower[player].currentPower, power);
 	asPower[player].currentPower = power * FP_ONE;
-	ASSERT(asPower[player].currentPower >= 0, "negative power");
-}
-
-void setPrecisePower(unsigned player, int64_t power)
-{
-	ASSERT_OR_RETURN(, player < MAX_PLAYERS, "Invalid player (%u)", player);
-
-	syncDebug("setPower%d %" PRId64"->%" PRId64"", player, asPower[player].currentPower, power);
-	asPower[player].currentPower = power;
 	ASSERT(asPower[player].currentPower >= 0, "negative power");
 }
 

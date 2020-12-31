@@ -2339,14 +2339,6 @@ void intObjectSelected(BASE_OBJECT *psObj)
 }
 
 
-// add the construction interface if a constructor droid is selected
-void intConstructorSelected(DROID *psDroid)
-{
-	setWidgetsStatus(true);
-	intAddBuild(psDroid);
-	widgHide(psWScreen, IDOBJ_FORM);
-}
-
 /* Start looking for a structure location */
 static void intStartStructPosition(BASE_STATS *psStats)
 {
@@ -2499,12 +2491,6 @@ bool intBuildSelectMode()
 bool intDemolishSelectMode()
 {
 	return (objMode == IOBJ_DEMOLISHSEL);
-}
-
-//is the build interface up?
-bool intBuildMode()
-{
-	return (objMode == IOBJ_BUILD);
 }
 
 //Written to allow demolish order to be added to the queuing system

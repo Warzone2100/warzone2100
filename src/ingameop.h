@@ -28,7 +28,6 @@
 bool intAddInGameOptions();
 bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets);
 void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets);
-bool intRunInGameOptions();
 void intProcessInGameOptions(UDWORD);
 void intAddInGamePopup();
 
