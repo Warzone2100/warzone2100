@@ -71,6 +71,8 @@ public:
 	}
 	void setTextAlignment(WzTextAlignment align);
 
+	int getMaxLineWidth() const;
+
 	void setCacheNeverExpires(bool value)
 	{
 		cacheNeverExpires = value;
