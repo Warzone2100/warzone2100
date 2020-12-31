@@ -109,6 +109,14 @@ void DropdownWidget::run(W_CONTEXT *psContext)
 	}
 }
 
+void DropdownWidget::geometryChanged()
+{
+	for(auto& item : items)
+	{
+		item->setGeometry(0, 0, width(), height());
+	}
+}
+
 void DropdownWidget::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 	open();
@@ -116,21 +124,30 @@ void DropdownWidget::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 
 void DropdownWidget::open()
 {
-	widgScheduleTask([this]() {
-		overlayScreen = W_SCREEN::make();
-		widgRegisterOverlayScreenOnTopOfScreen(overlayScreen, screenPointer.lock());
-		itemsList->setGeometry(screenPosX(), screenPosY() + height(), width(), itemsList->height());
-		overlayScreen->psForm->attach(itemsList);
-		overlayScreen->psForm->attach(std::make_shared<DropdownOverlay>([this]() { close(); }));
+	if (overlayScreen != nullptr) { return; }
+	std::weak_ptr<DropdownWidget> pWeakThis(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()));
+	widgScheduleTask([pWeakThis]() {
+		if (auto dropdownWidget = pWeakThis.lock())
+		{
+			dropdownWidget->overlayScreen = W_SCREEN::make();
+			widgRegisterOverlayScreenOnTopOfScreen(dropdownWidget->overlayScreen, dropdownWidget->screenPointer.lock());
+			dropdownWidget->itemsList->setGeometry(dropdownWidget->screenPosX(), dropdownWidget->screenPosY() + dropdownWidget->height(), dropdownWidget->width(), dropdownWidget->itemsList->height());
+			dropdownWidget->overlayScreen->psForm->attach(dropdownWidget->itemsList);
+			dropdownWidget->overlayScreen->psForm->attach(std::make_shared<DropdownOverlay>([pWeakThis]() { if (auto dropdownWidget = pWeakThis.lock()) { dropdownWidget->close(); } }));
+		}
 	});
 }
 
 void DropdownWidget::close()
 {
-	widgScheduleTask([this]() {
-		widgRemoveOverlayScreen(overlayScreen);
-		overlayScreen->psForm->detach(itemsList);
-		overlayScreen = nullptr;
+	std::weak_ptr<DropdownWidget> pWeakThis(std::dynamic_pointer_cast<DropdownWidget>(shared_from_this()));
+	widgScheduleTask([pWeakThis]() {
+		if (auto dropdownWidget = pWeakThis.lock())
+		{
+			widgRemoveOverlayScreen(dropdownWidget->overlayScreen);
+			dropdownWidget->overlayScreen->psForm->detach(dropdownWidget->itemsList);
+			dropdownWidget->overlayScreen = nullptr;
+		}
 	});
 }
 

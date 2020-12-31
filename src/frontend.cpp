@@ -1370,8 +1370,8 @@ static void addResolutionDropdown()
 		dropdown->setSelectedIndex(closestResolution - screenResolutionsModel.begin());
 	}
 
-	dropdown->setOnChange([dropdown, screenResolutionsModel]() {
-		if (auto selectedIndex = dropdown->getSelectedIndex())
+	dropdown->setOnChange([screenResolutionsModel](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
 		{
 			screenResolutionsModel.selectAt(selectedIndex.value());
 		}
