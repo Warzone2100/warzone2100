@@ -72,6 +72,14 @@ void ScrollableListWidget::addItem(const std::shared_ptr<WIDGET> &item)
 	layoutDirty = true;
 }
 
+void ScrollableListWidget::clear()
+{
+	listView->removeAllChildren();
+	layoutDirty = true;
+	updateLayout();
+	listView->setTopOffset(0);
+}
+
 void ScrollableListWidget::updateLayout()
 {
 	if (!layoutDirty) {
