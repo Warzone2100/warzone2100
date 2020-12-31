@@ -150,6 +150,7 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 			// fall-through to inserting it again in the new zOrder
 		}
 	}
+	// the screens are stored in decreasing z-order
 	overlays.insert(std::upper_bound(overlays.begin(), overlays.end(), newOverlay, [](const OverlayScreen& a, const OverlayScreen& b){ return a.zOrder > b.zOrder; }), newOverlay);
 }
 
@@ -161,15 +162,15 @@ void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psS
 	});
 	if (it != overlays.end())
 	{
-		OverlayScreen newOverlay {psScreen, it->zOrder}; // use the same z-order as priorScreen, but insert *after* it in the list
-		overlays.insert((it + 1), newOverlay);
+		OverlayScreen newOverlay {psScreen, it->zOrder}; // use the same z-order as priorScreen, but insert *before* it in the list (i.e. "above" it, since overlays are stored in decreasing z-order)
+		overlays.insert(it, newOverlay);
 	}
 	else
 	{
 		// priorScreen does not exist in the overlays list, so it is probably the "regular" screen
-		// just insert this overlay at the front of the overlay list
+		// just insert this overlay at the bottom of the overlay list
 		OverlayScreen newOverlay {psScreen, 0};
-		overlays.insert(overlays.begin(), newOverlay);
+		overlays.insert(overlays.end(), newOverlay);
 	}
 }
 
@@ -202,18 +203,32 @@ bool WIDGET::isMouseOverWidget() const
 	return psMouseOverWidget.lock().get() == this;
 }
 
-static inline void forEachOverlayScreen(const std::function<bool (const OverlayScreen& overlay)>& func)
+template<typename Iterator>
+static inline void iterateOverlayScreens(Iterator iter, Iterator end, const std::function<bool (const OverlayScreen& overlay)>& func)
 {
 	ASSERT_OR_RETURN(, func.operator bool(), "Requires a valid func");
-	for (const auto& overlay : overlays)
+	for ( ; iter != end; ++iter )
 	{
-		if (!func(overlay))
+		if (!func(*iter))
 		{
 			break; // stop enumerating
 		}
 	}
 	// now that we aren't in the middle of enumerating overlays, handling removing any that were queued for deletion
 	cleanupDeletedOverlays();
+}
+
+// enumerate the overlay screens in decreasing z-order (i.e. "top-down")
+static inline void forEachOverlayScreen(const std::function<bool (const OverlayScreen& overlay)>& func)
+{
+	// the screens are stored in decreasing z-order
+	iterateOverlayScreens(overlays.cbegin(), overlays.cend(), func);
+}
+
+// enumerate the overlay screens in increasing z-order (i.e. "bottom-up")
+static inline void forEachOverlayScreenBottomUp(const std::function<bool (const OverlayScreen& overlay)>& func)
+{
+	iterateOverlayScreens(overlays.crbegin(), overlays.crend(), func);
 }
 
 bool isMouseOverScreenOverlayChild(int mx, int my)
@@ -1160,12 +1175,12 @@ void widgDisplayScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	psScreen->psForm->displayRecursive();
 
 	// Always overlays on-top (i.e. draw them last)
-	forEachOverlayScreen([&sContext](const OverlayScreen& overlay) -> bool
+	forEachOverlayScreenBottomUp([&sContext](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->psForm->processCallbacksRecursive(&sContext);
 		overlay.psScreen->psForm->displayRecursive();
 		return true;
-	});
+	}); // <- enumerate in *increasing* z-order for drawing
 
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being displayed.
 
