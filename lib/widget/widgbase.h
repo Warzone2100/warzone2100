@@ -198,6 +198,14 @@ public:
 	}
 	void removeAllChildren()
 	{
+		for (auto& child : childWidgets)
+		{
+			if (child->parent().get() == this)
+			{
+				child->parentWidget.reset();
+				child->setScreenPointer(nullptr);
+			}
+		}
 		childWidgets = {};
 	}
 	WzRect const &geometry() const
