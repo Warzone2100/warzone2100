@@ -36,6 +36,7 @@
 #include "lib/framework/string_ext.h"
 #include "lib/framework/vector.h"
 #include "lib/framework/wzstring.h"
+#include "lib/framework/geometry.h"
 #include <glm/mat4x4.hpp>
 #include "piedef.h"
 #include "ivisdef.h"
@@ -216,6 +217,7 @@ private:
 
 void iV_DrawImageAnisotropic(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
 void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
+void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImage2(const WzString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());

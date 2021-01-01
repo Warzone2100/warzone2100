@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lib/framework/string_ext.h"
+#include "lib/framework/geometry.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/pieclip.h"
@@ -1013,7 +1014,7 @@ inline void WzText::updateCacheIfNecessary()
 	}
 }
 
-void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
+void WzText::render(Vector2i position, PIELIGHT colour, float rotation, int maxWidth, int maxHeight)
 {
 	updateCacheIfNecessary();
 
@@ -1028,7 +1029,18 @@ void WzText::render(Vector2i position, PIELIGHT colour, float rotation)
 	{
 		rotation = 180. - rotation;
 	}
-	iV_DrawImageText(*texture, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f(dimensions.x / mRenderingHorizScaleFactor, dimensions.y / mRenderingVertScaleFactor), rotation, colour);
+
+	if (maxWidth <= 0 && maxHeight <= 0)
+	{
+		iV_DrawImageText(*texture, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f(dimensions.x / mRenderingHorizScaleFactor, dimensions.y / mRenderingVertScaleFactor), rotation, colour);
+	}
+	else
+	{
+		WzRect clippingRectInPixels;
+		clippingRectInPixels.setWidth((maxWidth > 0) ? static_cast<int>((float)maxWidth * mRenderingHorizScaleFactor) : dimensions.x);
+		clippingRectInPixels.setHeight((maxHeight > 0) ? static_cast<int>((float)maxHeight * mRenderingVertScaleFactor) : dimensions.y);
+		iV_DrawImageTextClipped(*texture, dimensions, position, Vector2f(offsets.x / mRenderingHorizScaleFactor, offsets.y / mRenderingVertScaleFactor), Vector2f((maxWidth > 0) ? maxWidth : dimensions.x / mRenderingHorizScaleFactor, (maxHeight > 0) ? maxHeight : dimensions.y / mRenderingVertScaleFactor), rotation, colour, clippingRectInPixels);
+	}
 }
 
 // Sets the text, truncating to a desired width limit (in *points*) if needed
