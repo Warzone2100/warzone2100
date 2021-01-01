@@ -277,6 +277,9 @@ public:
 
 	bool isMouseOverWidget() const;
 
+	void setTransparentToClicks(bool hasClickTransparency);
+	bool transparentToClicks() const;
+
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
 	UDWORD                  style;                  ///< The style of the widget
@@ -307,6 +310,7 @@ private:
 	std::vector<std::shared_ptr<WIDGET>> childWidgets;
 
 	WzRect                  dim;
+	bool					isTransparentToClicks = false;
 
 	WIDGET(WIDGET const &) = delete;
 	WIDGET &operator =(WIDGET const &) = delete;
