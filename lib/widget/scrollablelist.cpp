@@ -185,3 +185,8 @@ void ScrollableListWidget::displayRecursive(WidgetGraphicsContext const& context
 	updateLayout();
 	WIDGET::displayRecursive(context);
 }
+
+int ScrollableListWidget::getScrollbarWidth() const
+{
+	return SCROLLBAR_WIDTH;
+}
