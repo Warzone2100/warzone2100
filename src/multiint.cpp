@@ -210,7 +210,7 @@ LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
 
 // widget functions
 static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
-static void addBlueForm(UDWORD parent, UDWORD id, WzString txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
+static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 static void drawReadyButton(UDWORD player);
 
 // Drawing Functions
@@ -1116,7 +1116,7 @@ static void addInlineChooserBlueForm(const std::shared_ptr<W_SCREEN> &psScreen, 
 	widgAddForm(psScreen, &sFormInit);
 }
 
-static void addBlueForm(UDWORD parent, UDWORD id, WzString txt, UDWORD x, UDWORD y, UDWORD w, UDWORD h)
+static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD w, UDWORD h)
 {
 	W_FORMINIT sFormInit;                  // draw options box.
 	sFormInit.formID = parent;
@@ -1127,21 +1127,7 @@ static void addBlueForm(UDWORD parent, UDWORD id, WzString txt, UDWORD x, UDWORD
 	sFormInit.width = (UWORD)w;//190;
 	sFormInit.height = (UWORD)h; //27;
 	sFormInit.pDisplay =  intDisplayFeBox;
-	widgAddForm(psWScreen, &sFormInit);
-
-	if (txt.length() > 0)
-	{
-		W_LABINIT sLabInit;
-		sLabInit.formID = id;
-		sLabInit.id		= id + 1;
-		sLabInit.x		= 3;
-		sLabInit.y		= 4;
-		sLabInit.width	= 80;
-		sLabInit.height = 20;
-		sLabInit.pText	= txt;
-		widgAddLabel(psWScreen, &sLabInit);
-	}
-	return;
+	return widgAddForm(psWScreen, &sFormInit);
 }
 
 
@@ -1194,7 +1180,7 @@ static void updateLimitIcons()
 			// only add the background once. Must be added *before* the "icons" as the form acts as their parent
 			if (!formBackgroundAdded)
 			{
-				addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, "", MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, MULTIOP_ICON_LIMITS_X2, MULTIOP_ICON_LIMITS_Y2);
+				addBlueForm(MULTIOP_OPTIONS, MULTIOP_NO_SOMETHING, MULTIOP_HOSTX, MULTIOP_NO_SOMETHINGY, MULTIOP_ICON_LIMITS_X2, MULTIOP_ICON_LIMITS_Y2);
 				formBackgroundAdded = true;
 			}
 
@@ -1379,7 +1365,16 @@ static void addGameOptions()
 	//  and then consider that the two buttons are relative to MCOL0, MROW3.
 	// MCOL for N >= 1 is basically useless because that's not the actual rule followed by addMultiEditBox.
 	// And that's what this panel is meant to align to.
-	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, formatGameName(game.map), MCOL0, MROW3, MULTIOP_EDITBOXW + MULTIOP_EDITBOXH, MULTIOP_EDITBOXH);
+	addBlueForm(MULTIOP_OPTIONS, MULTIOP_MAP, MCOL0, MROW3, MULTIOP_EDITBOXW + MULTIOP_EDITBOXH, MULTIOP_EDITBOXH);
+	W_LABINIT sLabInit;
+	sLabInit.formID = MULTIOP_MAP;
+	sLabInit.id		= MULTIOP_MAP + 1;
+	sLabInit.x		= 3;
+	sLabInit.y		= 4;
+	sLabInit.width	= MULTIOP_EDITBOXW - 24 - 5;
+	sLabInit.height = 20;
+	sLabInit.pText	= formatGameName(game.map);
+	widgAddLabel(psWScreen, &sLabInit);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_ICON, MULTIOP_EDITBOXW + 2, 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, _("Select Map\nCan be blocked by players' votes"), IMAGE_EDIT_MAP, IMAGE_EDIT_MAP_HI, true);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_MOD, MULTIOP_EDITBOXW - 14, 1, 12, 12, _("Map-Mod!"), IMAGE_LAMP_RED, IMAGE_LAMP_AMBER, false);
 	addMultiBut(psWScreen, MULTIOP_MAP, MULTIOP_MAP_RANDOM, MULTIOP_EDITBOXW - 24, 15, 12, 12, _("Random map!"), IMAGE_WEE_DIE, IMAGE_WEE_DIE, false);
@@ -2341,7 +2336,7 @@ static void drawReadyButton(UDWORD player)
 	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
 
 	// add form to hold 'ready' botton
-	addBlueForm(MULTIOP_PLAYERS, MULTIOP_READY_FORM_ID + player, "",
+	addBlueForm(MULTIOP_PLAYERS, MULTIOP_READY_FORM_ID + player,
 	            7 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
 	            playerBoxHeight(player),
 	            MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT);
