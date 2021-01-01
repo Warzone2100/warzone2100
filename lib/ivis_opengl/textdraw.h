@@ -127,6 +127,9 @@ void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor);
 void iV_TextShutdown();
 void iV_font(const char *fontName, const char *fontFace, const char *fontFaceBold);
 
+int iV_GetEllipsisWidth(iV_fonts fontID);
+void iV_DrawEllipsis(iV_fonts fontID, Vector2i position, PIELIGHT colour);
+
 int iV_GetTextAboveBase(iV_fonts fontID);
 int iV_GetTextBelowBase(iV_fonts fontID);
 int iV_GetTextLineSize(iV_fonts fontID);

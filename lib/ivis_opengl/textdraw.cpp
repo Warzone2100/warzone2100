@@ -505,6 +505,16 @@ static FTFace *medium = nullptr;
 static FTFace *small = nullptr;
 static FTFace *smallBold = nullptr;
 
+struct iVFontsHash
+{
+    std::size_t operator()(iV_fonts FontID) const
+    {
+        return static_cast<std::size_t>(FontID);
+    }
+};
+typedef std::unordered_map<iV_fonts, WzText, iVFontsHash> FontToEllipsisMapType;
+static FontToEllipsisMapType fontToEllipsisMap;
+
 static FTFace &getFTFace(iV_fonts FontID)
 {
 	switch (FontID)
@@ -562,12 +572,34 @@ void iV_TextShutdown()
 	smallBold = nullptr;
 	delete textureID;
 	textureID = nullptr;
+	fontToEllipsisMap.clear();
 }
 
 void iV_TextUpdateScaleFactor(float horizScaleFactor, float vertScaleFactor)
 {
 	iV_TextShutdown();
 	iV_TextInit(horizScaleFactor, vertScaleFactor);
+}
+
+static WzText& iV_Internal_GetEllipsis(iV_fonts fontID)
+{
+	auto it = fontToEllipsisMap.find(fontID);
+	if (it == fontToEllipsisMap.end())
+	{
+		// We must create + cache an ellipsis for this fontID
+		it = fontToEllipsisMap.insert(FontToEllipsisMapType::value_type(fontID, WzText("\u2026", fontID))).first;
+	}
+	return it->second;
+}
+
+int iV_GetEllipsisWidth(iV_fonts fontID)
+{
+	return iV_Internal_GetEllipsis(fontID).width();
+}
+
+void iV_DrawEllipsis(iV_fonts fontID, Vector2i position, PIELIGHT colour)
+{
+	iV_Internal_GetEllipsis(fontID).render(position, colour);
 }
 
 unsigned int width_pixelsToPoints(unsigned int widthInPixels)
