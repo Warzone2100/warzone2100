@@ -441,38 +441,43 @@ void processInput()
 
 	ignoreRMBC = false;
 
-	/* Process all of our key mappings */
-	mouseOverConsole = mouseOverHistoryConsoleBox();
-	if (mousePressed(MOUSE_WUP) && !isMouseOverRadar())
-	{
-		if (mOverConstruction)
-		{
-			kf_BuildPrevPage();
-		}
-		else if (!mouseOverConsole)
-		{
-		    switch(war_GetScrollEvent())
-		    {
-			case 0: kf_ZoomIn(); break;
-			case 1: kf_SpeedUp(); break;
-			case 2: kf_PitchForward(); break;
-		    }
-		}
-	}
+	bool mouseIsOverScreenOverlayChild = isMouseOverScreenOverlayChild(mouseX(), mouseY());
 
-	if (mousePressed(MOUSE_WDN) && !isMouseOverRadar())
+	if (!mouseIsOverScreenOverlayChild)
 	{
-		if (mOverConstruction)
+		/* Process all of our key mappings */
+		mouseOverConsole = mouseOverHistoryConsoleBox();
+		if (mousePressed(MOUSE_WUP) && !isMouseOverRadar())
 		{
-			kf_BuildNextPage();
-		}
-		else if (!mouseOverConsole)
-		{
-			switch(war_GetScrollEvent())
+			if (mOverConstruction)
 			{
-			    case 0: kf_ZoomOut(); break;
-			    case 1: kf_SlowDown(); break;
-			    case 2: kf_PitchBack(); break;
+				kf_BuildPrevPage();
+			}
+			else if (!mouseOverConsole)
+			{
+				switch(war_GetScrollEvent())
+				{
+				case 0: kf_ZoomIn(); break;
+				case 1: kf_SpeedUp(); break;
+				case 2: kf_PitchForward(); break;
+				}
+			}
+		}
+
+		if (mousePressed(MOUSE_WDN) && !isMouseOverRadar())
+		{
+			if (mOverConstruction)
+			{
+				kf_BuildNextPage();
+			}
+			else if (!mouseOverConsole)
+			{
+				switch(war_GetScrollEvent())
+				{
+					case 0: kf_ZoomOut(); break;
+					case 1: kf_SlowDown(); break;
+					case 2: kf_PitchBack(); break;
+				}
 			}
 		}
 	}
@@ -488,7 +493,7 @@ void processInput()
 		keyProcessMappings(false);
 	}
 	/* Allow the user to clear the (Active) console if need be */
-	if (mouseOverConsoleBox() && mousePressed(MOUSE_LMB))
+	if (!mouseIsOverScreenOverlayChild && mouseOverConsoleBox() && mousePressed(MOUSE_LMB))
 	{
 		clearActiveConsole();
 	}
