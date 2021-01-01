@@ -53,6 +53,7 @@ static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
 static auto psMouseOverWidget = std::weak_ptr<WIDGET>();
+static auto psMouseOverWidgetScreen = std::shared_ptr<W_SCREEN>();
 
 static WIDGET_AUDIOCALLBACK AudioCallback = nullptr;
 static SWORD HilightAudioID = -1;
@@ -77,6 +78,7 @@ struct OverlayScreen
 	uint16_t zOrder;
 };
 static std::vector<OverlayScreen> overlays;
+static std::unordered_set<std::shared_ptr<W_SCREEN>> overlaySet; // for quick lookup
 static std::unordered_set<std::shared_ptr<W_SCREEN>> overlaysToDelete;
 
 static void runScheduledTasks()
@@ -152,6 +154,7 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 	}
 	// the screens are stored in decreasing z-order
 	overlays.insert(std::upper_bound(overlays.begin(), overlays.end(), newOverlay, [](const OverlayScreen& a, const OverlayScreen& b){ return a.zOrder > b.zOrder; }), newOverlay);
+	overlaySet.insert(psScreen);
 }
 
 // Note: If priorScreen is not the "regular" screen (i.e. if priorScreen is an overlay screen) it should already be registered
@@ -164,6 +167,7 @@ void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psS
 	{
 		OverlayScreen newOverlay {psScreen, it->zOrder}; // use the same z-order as priorScreen, but insert *before* it in the list (i.e. "above" it, since overlays are stored in decreasing z-order)
 		overlays.insert(it, newOverlay);
+		overlaySet.insert(psScreen);
 	}
 	else
 	{
@@ -171,6 +175,7 @@ void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psS
 		// just insert this overlay at the bottom of the overlay list
 		OverlayScreen newOverlay {psScreen, 0};
 		overlays.insert(overlays.end(), newOverlay);
+		overlaySet.insert(psScreen);
 	}
 }
 
@@ -195,6 +200,10 @@ static void cleanupDeletedOverlays()
 		),
 		overlays.end()
 	);
+	for (const auto& overlayToDelete : overlaysToDelete)
+	{
+		overlaySet.erase(overlayToDelete);
+	}
 	overlaysToDelete.clear();
 }
 
@@ -241,28 +250,43 @@ static inline void forEachOverlayScreenBottomUp(const std::function<bool (const 
 	iterateOverlayScreens(overlays.crbegin(), overlays.crend(), func);
 }
 
+static bool isScreenARegisteredOverlay(const std::shared_ptr<W_SCREEN> &psScreen)
+{
+	if (!psScreen) { return false; }
+	return overlaySet.count(psScreen) > 0;
+}
+
 bool isMouseOverScreenOverlayChild(int mx, int my)
 {
-	bool bMouseIsOverOverlayChild = false;
-	forEachOverlayScreen([mx, my, &bMouseIsOverOverlayChild](const OverlayScreen& overlay)
+	if (psMouseOverWidgetScreen != nullptr)
 	{
-		auto psRoot = overlay.psScreen->psForm;
-
-		// Hit-test all children of root form
-		for (const auto &psCurr: psRoot->children())
+		return isScreenARegisteredOverlay(psMouseOverWidgetScreen);
+	}
+	bool bMouseIsOverOverlayChild = false;
+	if (auto mouseOverWidget = psMouseOverWidget.lock())
+	{
+		// Fallback - the mouse is over a widget, but the widget does not have a screen pointer
+		// Hit-test each overlay screen to identify if the mouse is over one
+		// (Note: This can currently occur with DropdownWidget members.)
+		forEachOverlayScreen([mx, my, &bMouseIsOverOverlayChild](const OverlayScreen& overlay)
 		{
-			if (!psCurr->visible() || !psCurr->hitTest(mx, my))
+			auto psRoot = overlay.psScreen->psForm;
+
+			// Hit-test all children of root form
+			for (const auto &psCurr: psRoot->children())
 			{
-				continue;  // Skip any hidden widgets, or widgets the click missed.
+				if (!psCurr->visible() || !psCurr->hitTest(mx, my))
+				{
+					continue;  // Skip any hidden widgets, or widgets the click missed.
+				}
+
+				// hit test succeeded for child widget
+				bMouseIsOverOverlayChild = true;
+				return false; // stop enumerating
 			}
-
-			// hit test succeeded for child widget
-			bMouseIsOverOverlayChild = true;
-			return false; // stop enumerating
-		}
-		return true; // keep enumerating
-	});
-
+			return true; // keep enumerating
+		});
+	}
 	return bMouseIsOverOverlayChild;
 }
 
@@ -1007,6 +1031,12 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 				lockedScreen->lastHighlight = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
 				highlight(psContext);
 			}
+			psMouseOverWidgetScreen = lockedScreen;
+		}
+		else
+		{
+			// Note: There are rare exceptions where this can happen, if a WIDGET is doing something funky like drawing widgets it hasn't attached.
+			psMouseOverWidgetScreen = nullptr;
 		}
 	}
 
@@ -1099,6 +1129,10 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 		return true;
 	});
 	psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
+	if (psMouseOverWidget.lock() == nullptr)
+	{
+		psMouseOverWidgetScreen.reset();
+	}
 
 	/* Process the screen's widgets */
 	forEachOverlayScreen([&sContext](const OverlayScreen& overlay) -> bool
