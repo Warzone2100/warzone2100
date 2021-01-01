@@ -58,6 +58,7 @@ public:
 	uint32_t calculateListViewWidth() const;
 	void display(int xOffset, int yOffset) override;
 	void displayRecursive(WidgetGraphicsContext const& context) override;
+	int getScrollbarWidth() const;
 
 protected:
 	void geometryChanged() override;
