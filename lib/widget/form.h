@@ -26,6 +26,9 @@
 
 #include "lib/widget/widget.h"
 
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
 
 /* The standard form */
 class W_FORM : public WIDGET
@@ -36,10 +39,16 @@ public:
 	W_FORM();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void released(W_CONTEXT *psContext, WIDGET_KEY = WKEY_PRIMARY) override;
+	void run(W_CONTEXT *psContext) override;
 	void highlightLost() override;
 	void display(int xOffset, int yOffset) override;
 
 	bool            disableChildren;        ///< Disable all child widgets if true
+	bool			userMovable = false;	///< Whether the user can drag the form around (NOTE: should only be used with forms on overlay screens, currently)
+
+private:
+	optional<Vector2i> dragStart;
 };
 
 /* The clickable form data structure */

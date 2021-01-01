@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/math_ext.h"
 #include "widget.h"
 #include "widgint.h"
 #include "form.h"
@@ -94,11 +95,48 @@ void W_CLICKFORM::setFlash(bool enable)
 	dirty = true;
 }
 
-void W_FORM::clicked(W_CONTEXT *, WIDGET_KEY)
+void W_FORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 	// Stop the tip if there is one.
 	tipStop(this);
 	dirty = true;
+	if (userMovable && key == WKEY_PRIMARY)
+	{
+		dragStart = Vector2i(psContext->mx, psContext->my);
+	}
+}
+
+void W_FORM::released(W_CONTEXT *, WIDGET_KEY)
+{
+	if (!userMovable || !dragStart.has_value()) { return; }
+	dragStart = nullopt;
+	dirty = true;
+}
+
+void W_FORM::run(W_CONTEXT *psContext)
+{
+	if (!userMovable || !dragStart.has_value()) { return; }
+
+	/* If the mouse is released *anywhere*, stop dragging */
+	if (mouseReleased(MOUSE_LMB))
+	{
+		dragStart = nullopt;
+		return;
+	}
+
+	Vector2i currentMousePos(psContext->mx, psContext->my);
+	if (currentMousePos == dragStart.value()) { return; }
+	Vector2i dragDelta(currentMousePos.x - dragStart.value().x, currentMousePos.y - dragStart.value().y);
+
+	Vector2i newPosition(x() + dragDelta.x, y() + dragDelta.y);
+
+	int maxPossibleX = pie_GetVideoBufferWidth() - width();
+	int maxPossibleY = pie_GetVideoBufferHeight() - height();
+	newPosition.x = clip<int>(newPosition.x, 0, maxPossibleX);
+	newPosition.y = clip<int>(newPosition.y, 0, maxPossibleY);
+	move(newPosition.x, newPosition.y);
+	dirty = true;
+	dragStart = currentMousePos;
 }
 
 /* Respond to a mouse click */
