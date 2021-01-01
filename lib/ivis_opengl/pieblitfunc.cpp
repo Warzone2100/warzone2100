@@ -349,6 +349,20 @@ void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f o
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
 
+void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect)
+{
+	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
+
+	gfx_api::gfxFloat invTextureSizeX = 1.f / textureSize.x;
+	gfx_api::gfxFloat invTextureSizeY = 1.f / textureSize.y;
+	float tu = (float)(clippingRect.x()) * invTextureSizeX;
+	float tv = (float)(clippingRect.y()) * invTextureSizeY;
+	float su = (float)(clippingRect.x() + clippingRect.width()) * invTextureSizeX;
+	float sv = (float)(clippingRect.y() + clippingRect.height()) * invTextureSizeY;
+
+	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(tu, tv), Vector2f(su, sv), colour, mvp, SHADER_TEXT);
+}
+
 static void pie_DrawImage(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
 {
 	ImageDef const &image2 = imageFile->imageDefs[id];
