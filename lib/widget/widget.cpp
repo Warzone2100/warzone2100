@@ -994,16 +994,19 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		psMouseOverWidget = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
 	}
 
-	if (auto lockedScreen = screenPointer.lock())
+	if (isMouseOverWidget())
 	{
-		if (isMouseOverWidget() && !lockedScreen->isLastHighlight(*this))
+		if (auto lockedScreen = screenPointer.lock())
 		{
-			if (auto lockedLastHighligh = lockedScreen->lastHighlight.lock())
+			if (!lockedScreen->isLastHighlight(*this))
 			{
-				lockedLastHighligh->highlightLost();
+				if (auto lockedLastHighligh = lockedScreen->lastHighlight.lock())
+				{
+					lockedLastHighligh->highlightLost();
+				}
+				lockedScreen->lastHighlight = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
+				highlight(psContext);
 			}
-			lockedScreen->lastHighlight = shared_from_this();  // Mark that the mouse is over a widget (if we haven't already).
-			highlight(psContext);
 		}
 	}
 
