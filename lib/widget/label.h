@@ -70,6 +70,10 @@ public:
 		setFontColour(colour);
 	}
 	void setTextAlignment(WzTextAlignment align);
+	void setCanTruncate(bool _canTruncate)
+	{
+		canTruncate = _canTruncate;
+	}
 
 	int getMaxLineWidth() const;
 
@@ -89,6 +93,8 @@ private:
 	LabelDisplayCache displayCache;
 	int lineSpacing = 0;
 	bool cacheNeverExpires = false;
+	bool canTruncate = false;
+	bool isTruncated = false;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_LABEL_H__
