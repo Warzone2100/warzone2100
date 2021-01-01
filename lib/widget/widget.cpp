@@ -203,6 +203,16 @@ bool WIDGET::isMouseOverWidget() const
 	return psMouseOverWidget.lock().get() == this;
 }
 
+void WIDGET::setTransparentToClicks(bool hasClickTransparency)
+{
+	isTransparentToClicks = hasClickTransparency;
+}
+
+bool WIDGET::transparentToClicks() const
+{
+	return isTransparentToClicks;
+}
+
 template<typename Iterator>
 static inline void iterateOverlayScreens(Iterator iter, Iterator end, const std::function<bool (const OverlayScreen& overlay)>& func)
 {
@@ -1004,13 +1014,24 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 
 	if (isMouseOverWidget())
 	{
+		auto psClickedWidget = shared_from_this();
+		if (isTransparentToClicks)
+		{
+			do {
+				psClickedWidget = psClickedWidget->parent();
+			} while (psClickedWidget != nullptr && psClickedWidget->isTransparentToClicks);
+			if (psClickedWidget == nullptr)
+			{
+				return false;
+			}
+		}
 		if (wasPressed)
 		{
-			clicked(psContext, key);
+			psClickedWidget->clicked(psContext, key);
 		}
 		else
 		{
-			released(psContext, key);
+			psClickedWidget->released(psContext, key);
 		}
 		didProcessClick = true;
 	}
