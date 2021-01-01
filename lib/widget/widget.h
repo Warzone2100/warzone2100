@@ -240,6 +240,7 @@ void widgRegisterOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen, uint16
 void widgRegisterOverlayScreenOnTopOfScreen(const std::shared_ptr<W_SCREEN> &psScreen, const std::shared_ptr<W_SCREEN> &priorScreen);
 void widgRemoveOverlayScreen(const std::shared_ptr<W_SCREEN> &psScreen);
 bool isMouseOverScreenOverlayChild(int mx, int my); // global mouse coordinates - i.e. those returned from mouseX()/mouseY()
+bool isMouseClickDownOnScreenOverlayChild();
 void widgScheduleTask(std::function<void ()> f);
 
 /** Add a form to the widget screen */
