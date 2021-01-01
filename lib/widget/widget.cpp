@@ -53,6 +53,7 @@ static	bool	bWidgetsActive = true;
 
 /* The widget the mouse is over this update */
 static auto psMouseOverWidget = std::weak_ptr<WIDGET>();
+static auto psClickDownWidgetScreen = std::shared_ptr<W_SCREEN>();
 static auto psMouseOverWidgetScreen = std::shared_ptr<W_SCREEN>();
 
 static WIDGET_AUDIOCALLBACK AudioCallback = nullptr;
@@ -288,6 +289,12 @@ bool isMouseOverScreenOverlayChild(int mx, int my)
 		});
 	}
 	return bMouseIsOverOverlayChild;
+}
+
+bool isMouseClickDownOnScreenOverlayChild()
+{
+	if (!psClickDownWidgetScreen) { return false; }
+	return isScreenARegisteredOverlay(psClickDownWidgetScreen);
 }
 
 static void deleteOldWidgets()
@@ -1061,10 +1068,12 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		if (wasPressed)
 		{
 			psClickedWidget->clicked(psContext, key);
+			psClickDownWidgetScreen = psClickedWidget->screenPointer.lock();
 		}
 		else
 		{
 			psClickedWidget->released(psContext, key);
+			psClickDownWidgetScreen.reset();
 		}
 		didProcessClick = true;
 	}
