@@ -128,7 +128,7 @@ private:
 	std::shared_ptr<ScrollableListWidget> itemsList;
 	std::shared_ptr<W_SCREEN> overlayScreen;
 	std::shared_ptr<DropdownItemWrapper> selectedItem;
-	Padding itemPadding;
+	Padding itemPadding = {0, 0, 0, 0};
 	std::function<void(DropdownWidget&)> onChange;
 
 	void select(const std::shared_ptr<DropdownItemWrapper> &selected)
