@@ -3859,7 +3859,6 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 	DROID *psDroid = (DROID *)psObj;
 	BASE_STATS *Stats;
 	BASE_OBJECT *Structure;
-	UDWORD x, y;
 
 	ASSERT_OR_RETURN(nullptr, psObj != nullptr && psObj->type == OBJ_DROID, "Invalid droid pointer");
 
@@ -3869,7 +3868,7 @@ static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
 		return nullptr;
 	}
 
-	if (orderStateStatsLoc(psDroid, DORDER_BUILD, &Stats, &x, &y)) // Moving to build location?
+	if (orderStateStatsLoc(psDroid, DORDER_BUILD, &Stats)) // Moving to build location?
 	{
 		return Stats;
 	}

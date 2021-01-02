@@ -1633,7 +1633,6 @@ void IntFancyButton::displayBlank(int xOffset, int yOffset)
 bool DroidIsBuilding(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	UDWORD x, y;
 
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
 	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
@@ -1641,7 +1640,7 @@ bool DroidIsBuilding(DROID *Droid)
 		return false;
 	}
 
-	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats, &x, &y))
+	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats))
 	{
 		// Moving to build location?
 		return false;
@@ -1661,7 +1660,6 @@ bool DroidIsBuilding(DROID *Droid)
 bool DroidGoingToBuild(DROID *Droid)
 {
 	BASE_STATS	*Stats;
-	UDWORD x, y;
 
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
 	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
@@ -1669,7 +1667,7 @@ bool DroidGoingToBuild(DROID *Droid)
 		return false;
 	}
 
-	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats, &x, &y))  	// Moving to build location?
+	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats)) // Moving to build location?
 	{
 		return true;
 	}
@@ -1749,9 +1747,8 @@ static STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 BASE_STATS *DroidGetBuildStats(DROID *Droid)
 {
 	BASE_STATS *Stats;
-	UDWORD x, y;
 
-	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats, &x, &y))  	// Moving to build location?
+	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats))  	// Moving to build location?
 	{
 		return Stats;
 	}
