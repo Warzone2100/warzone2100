@@ -122,6 +122,11 @@ public:
 
 		return nonstd::nullopt;
 	}
+	int getScrollbarWidth() const
+	{
+		ASSERT_OR_RETURN(0, itemsList != nullptr, "null itemsList");
+		return itemsList->getScrollbarWidth();
+	}
 
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
