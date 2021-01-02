@@ -66,7 +66,7 @@ BASE_OBJECT *orderStateObj(DROID *psDroid, DROID_ORDER order);
 void orderDroidStatsLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, QUEUE_MODE mode);
 
 /** \brief Gets the state of a droid order with a location and a stat. */
-bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats, UDWORD *pX, UDWORD *pY);
+bool orderStateStatsLoc(DROID *psDroid, DROID_ORDER order, BASE_STATS **ppsStats);
 
 /** \brief Sends an order with a location and a stat to a droid. */
 void orderDroidStatsTwoLocDir(DROID *psDroid, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, QUEUE_MODE mode);
