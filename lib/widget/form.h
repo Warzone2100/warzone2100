@@ -33,6 +33,12 @@ using nonstd::nullopt;
 /* The standard form */
 class W_FORM : public WIDGET
 {
+public:
+	enum FormState
+	{
+		NORMAL,
+		MINIMIZED
+	};
 
 public:
 	W_FORM(W_FORMINIT const *init);
@@ -44,11 +50,34 @@ public:
 	void highlightLost() override;
 	void display(int xOffset, int yOffset) override;
 
+	void screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight) override;
+	bool hitTest(int x, int y) override;
+	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
+	void displayRecursive(WidgetGraphicsContext const &context) override;
+	using WIDGET::displayRecursive;
+
+	void enableMinimizing(const std::string& minimizedTitle, PIELIGHT titleColour = WZCOL_FORM_LIGHT);
+	void disableMinimizing();
+	bool setFormState(FormState state);
+	bool toggleMinimized();
+	FormState getFormState() const { return formState; }
+
 	bool            disableChildren;        ///< Disable all child widgets if true
 	bool			userMovable = false;	///< Whether the user can drag the form around (NOTE: should only be used with forms on overlay screens, currently)
 
 private:
-	optional<Vector2i> dragStart;
+	Vector2i calcMinimizedSize() const;
+	const WzRect& minimizedGeometry() const;
+	bool isUserMovable() const;
+	void displayMinimized(int xOffset, int yOffset);
+
+private:
+	std::shared_ptr<W_LABEL>	minimizedTitle;
+	WzRect				minimizedRect;
+	int					minimizedLeftButtonWidth = 0;
+	FormState			formState = FormState::NORMAL;
+	optional<Vector2i>	dragStart;
+	bool				minimizable = false;
 };
 
 /* The clickable form data structure */
