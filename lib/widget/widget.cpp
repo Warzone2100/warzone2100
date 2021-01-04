@@ -1017,7 +1017,7 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 		// special case for root form
 		// since the processClickRecursive of children is only called if they are visible
 		// this should only trigger for the root form of a screen that's been set to invisible
-		return false;
+		return didProcessClick;
 	}
 
 	if (psMouseOverWidget.expired())
@@ -1045,11 +1045,17 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 			// Note: There are rare exceptions where this can happen, if a WIDGET is doing something funky like drawing widgets it hasn't attached.
 			psMouseOverWidgetScreen = nullptr;
 		}
+
+		if (key == WKEY_NONE)
+		{
+			// We're just checking mouse position, and this isn't a click, but return that we handled it
+			return true;
+		}
 	}
 
 	if (key == WKEY_NONE)
 	{
-		return false;  // Just checking mouse position, not a click.
+		return didProcessClick;  // Just checking mouse position, not a click.
 	}
 
 	if (isMouseOverWidget())
@@ -1119,12 +1125,16 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 			}
 			sContext.mx = c->pos.x;
 			sContext.my = c->pos.y;
-			forEachOverlayScreen([&sContext, wkey, pressed](const OverlayScreen& overlay) -> bool
+			bool didProcessClick = false;
+			forEachOverlayScreen([&sContext, &didProcessClick, wkey, pressed](const OverlayScreen& overlay) -> bool
 			{
-				overlay.psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
-				return true;
+				didProcessClick = overlay.psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
+				return !didProcessClick;
 			});
-			psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
+			if (!didProcessClick)
+			{
+				psScreen->psForm->processClickRecursive(&sContext, wkey, pressed);
+			}
 
 			lastReleasedKey_DEPRECATED = wkey;
 		}
@@ -1132,12 +1142,16 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 
 	sContext.mx = mouseX();
 	sContext.my = mouseY();
-	forEachOverlayScreen([&sContext](const OverlayScreen& overlay) -> bool
+	bool didProcessClick = false;
+	forEachOverlayScreen([&sContext, &didProcessClick](const OverlayScreen& overlay) -> bool
 	{
-		overlay.psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
-		return true;
+		didProcessClick = overlay.psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
+		return !didProcessClick;
 	});
-	psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
+	if (!didProcessClick)
+	{
+		psScreen->psForm->processClickRecursive(&sContext, WKEY_NONE, true);  // Update highlights and psMouseOverWidget.
+	}
 	if (psMouseOverWidget.lock() == nullptr)
 	{
 		psMouseOverWidgetScreen.reset();
