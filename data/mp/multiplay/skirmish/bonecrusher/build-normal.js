@@ -1,4 +1,4 @@
-
+debugMsg('Module: build-normal.js','init');
 
 function mainBuilders(rotation){
 //	debugMsg('mainBuilders()', 'builders_advanced');
@@ -18,7 +18,7 @@ function mainBuilders(rotation){
 	
 	//enumGroup(buildersMain).forEach( function(obj, iter){
 	var rnd = Math.round(Math.random());
-	debugMsg("lab="+len_research_lab_ready+", fact="+factory_ready.length+", pow="+playerPower(me), 'builders');
+//	debugMsg("lab="+len_research_lab_ready+", fact="+factory_ready.length+", pow="+playerPower(me), 'builders');
 	for (var i=0;i<_b.length;i++){
 //		debugMsg('---', 'builders');
 		var obj = _b[i];
@@ -52,6 +52,7 @@ function mainBuilders(rotation){
 			var _h=false;
 			for ( var b in myBase ){
 //				if(earlyGame && distBetweenTwoPoints_p(myBase[b].x, myBase[b].y, obj.x, obj.y) > 5){continue;}
+//				if(myBase[b].status == BEING_DEMOLISHED){orderDroidObj_p(obj, DORDER_DEMOLISH, myBase[b]); helped++; _h=true; break;} //TODO
 				if(distBetweenTwoPoints_p(base.x,base.y,myBase[b].x,myBase[b].y) > (base_range/2)){continue;}
 				if(myBase[b].status == BEING_BUILT && myBase[b].stattype == RESOURCE_EXTRACTOR){continue;}
 				if(myBase[b].status == BEING_BUILT && myBase[b].stattype == DEFENSE){continue;}
@@ -93,8 +94,8 @@ function mainBuilders(rotation){
 			continue;
 		}
 
-
-
+		//Продажа заборов
+		if(builderRecycleWalls(obj)) continue;
 
 		debugMsg('policy build', 'builders');
 		if(policy['build'] == 'cyborgs'){
@@ -159,6 +160,14 @@ function mainBuilders(rotation){
 			if(factory.length < 3 && (playerPower(me) > 900 || berserk)) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
 			
 		}else {
+			
+			
+			if(nf['oilfinite'] && isStructureAvailable("A0ComDroidControl", me) && ccontrol.length == 0)if(builderBuild(obj, "A0ComDroidControl", rotation)){build++; continue;}
+			
+			if(alliancesType == 2 && isHumanAlly()){
+				if(len_research_lab < 1) { if(builderBuild(obj, "A0ResearchFacility", rotation)){build++; continue;} }
+			}
+			
 			//Завод, лаборатория,генератор,ком-центр! - вот залог хорошего пионера!
 			if(factory_ready.length < 1) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
 			
@@ -182,7 +191,8 @@ function mainBuilders(rotation){
 			
 			//Строим генераторы, если мало денег и нехватка генераторов
 			if(playerPower(me) < 1000 && (power_gen_ready.length * 4) <= resource_extractor.length && (power_gen.length < getStructureLimit("A0PowerGenerator")) ) { if(builderBuild(obj, "A0PowerGenerator", rotation)){build++;continue;} }
-			
+			if(factory.length <= 3 && (playerPower(me) > 800 || berserk)) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
+			if(len_research_lab < 4 && (playerPower(me) > 500 || berserk)) { if(builderBuild(obj, "A0ResearchFacility", rotation)){build++; continue;} }
 			if(factory.length <= 5 && (playerPower(me) > 1000 || berserk)) { if(builderBuild(obj, "A0LightFactory", rotation)){build++; continue;} }
 			if(isStructureAvailable("A0CyborgFactory") && cyborg_factory_ready.length < 4 && (playerPower(me) > 500 || berserk)) { if(builderBuild(obj, "A0CyborgFactory", rotation)){build++; continue;} }
 
@@ -235,7 +245,13 @@ function mainBuilders(rotation){
 		if(isStructureAvailable("A0VtolPad") && (playerPower(me) > 2000 || berserk) && rearm_pad.length < enumGroup(VTOLAttacker).length && rearm_pad.length <= maxPads){ if(builderBuild(obj, "A0VtolPad", rotation)){build++; continue;} }
 		if(isStructureAvailable("A0VTolFactory1") && vtol_factory.length < 5 && (playerPower(me) > 1000 || berserk)){ if(builderBuild(obj, "A0VTolFactory1", rotation)){build++; continue;} }
 		
+		if(isStructureAvailable("A0RepairCentre3") && repfac.length <= 1) { if(builderBuild(obj, "A0RepairCentre3", rotation)){build++; continue;} }
+		if(isStructureAvailable("A0RepairCentre3") && repfac.length <= 2 && ( playerPower(me) > 1000 || berserk ) ) { if(builderBuild(obj, "A0RepairCentre3", rotation)){build++; continue;} }
+		if(isStructureAvailable("A0RepairCentre3") && repfac.length < 5 && ( playerPower(me) > 1500 || berserk ) ) { if(builderBuild(obj, "A0RepairCentre3", rotation)){build++; continue;} }
+		
 		debugMsg("Строителям нечего строить", 'builders');
+		
+
 		
 //		debugMsg('2 rigDefence', 'buildersbug');
 		if((policy['build'] != 'rich' || isFullBase(me)) && rigDefence(obj)){
@@ -258,10 +274,10 @@ function mainBuilders(rotation){
 			&& (
 			( ( (policy['build'] == 'cyborgs' && cyborg_factory_ready.length > 2) || policy['build'] != 'cyborgs') && policy['build'] != 'rich' && policy['build'] != 'island' )
 				|| ( (policy['build'] == 'island' && getResearch("R-Vehicle-Prop-Hover").done) || groupSize(buildersHunters) == 0) ) ){
-			groupAddDroid(buildersHunters, obj);
+			groupAdd(buildersHunters, obj);
 //			debugMsg('Builder --> Hunter +1', 'group');
 		}else if(policy['build'] == 'rich' && groupSize(buildersHunters) == 0){
-			groupAddDroid(buildersHunters, obj);
+			groupAdd(buildersHunters, obj);
 		}else if(policy['build'] != 'rich' &&  distBetweenTwoPoints_p(base.x,base.y,obj.x,obj.y) > 2 && unitIdle(obj)){
 			orderDroidLoc_p(obj,DORDER_MOVE,base.x,base.y);
 			continue;
@@ -270,7 +286,7 @@ function mainBuilders(rotation){
 		debugMsg('===', 'builders');
 		
 		//Если строителям нечего делать, уменьшаем кол-во исполнений функции buildersOrder
-		func_buildersOrder_timer+=1000;
+		func_buildersOrder_timer+=250;
 		debugMsg('func_buildersOrder_timer+1000','controller');
 		//Если данному строителю нечего делать, выходим из цикла и по остальным.
 		break; 

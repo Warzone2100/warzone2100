@@ -1,3 +1,5 @@
+debugMsg('Module: tech.js','init');
+
 //Описываем технологие связанные только с киборгами
 tech['cyborgs'] = [
 "R-Cyborg-Armor-Heat01",
