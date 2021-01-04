@@ -326,6 +326,7 @@ typedef enum
 #if defined(WZ_OS_WIN)
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
+	CLI_GAMEPORT,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -385,6 +386,7 @@ static const struct poptOption *getOptionsTable()
 #if defined(WZ_OS_WIN)
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
+		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -836,6 +838,16 @@ bool ParseCommandLine(int argc, const char * const *argv)
 		case CLI_AUTOHEADLESS:
 			wz_cli_headless = true;
 			setHeadlessGameMode(true);
+			break;
+
+		case CLI_GAMEPORT:
+			token = poptGetOptArg(poptCon);
+			if (token == nullptr)
+			{
+				qFatal("Bad game server port");
+			}
+			NETsetGameserverPort(atoi(token));
+			debug(LOG_INFO, "Games will be hosted on port [%d]", NETgetGameserverPort());
 			break;
 		};
 	}

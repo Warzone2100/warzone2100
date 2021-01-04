@@ -161,7 +161,10 @@ bool loadConfig()
 	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
 	NETsetMasterserverPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
-	NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
+	if(NETgetGameserverPort() == GAMESERVERPORT)  // must not be overwritten by cl argument
+	{
+		NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
+	}
 	NETsetJoinPreferenceIPv6(ini.value("prefer_ipv6", true).toBool());
 	setPublicIPv4LookupService(ini.value("publicIPv4LookupService_Url", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_URL).toString().toStdString(), ini.value("publicIPv4LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv4_LOOKUP_SERVICE_JSONKEY).toString().toStdString());
 	setPublicIPv6LookupService(ini.value("publicIPv6LookupService_Url", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_URL).toString().toStdString(), ini.value("publicIPv6LookupService_JSONKey", WZ_DEFAULT_PUBLIC_IPv6_LOOKUP_SERVICE_JSONKEY).toString().toStdString());
