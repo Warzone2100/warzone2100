@@ -1000,16 +1000,25 @@ bool WIDGET::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wa
 	shiftedContext.xOffset = psContext->xOffset + x();
 	shiftedContext.yOffset = psContext->yOffset + y();
 
-	// Process subwidgets.
-	for (auto const &psCurr: childWidgets)
+	bool skipProcessingChildren = false;
+	if (type == WIDG_FORM && ((W_FORM *)this)->disableChildren)
 	{
-		if (!psCurr->visible() || !psCurr->hitTest(shiftedContext.mx, shiftedContext.my))
-		{
-			continue;  // Skip any hidden widgets, or widgets the click missed.
-		}
+		skipProcessingChildren = true;
+	}
 
-		// Process it (recursively).
-		didProcessClick = psCurr->processClickRecursive(&shiftedContext, key, wasPressed) || didProcessClick;
+	if (!skipProcessingChildren)
+	{
+		// Process subwidgets.
+		for (auto const &psCurr: childWidgets)
+		{
+			if (!psCurr->visible() || !psCurr->hitTest(shiftedContext.mx, shiftedContext.my))
+			{
+				continue;  // Skip any hidden widgets, or widgets the click missed.
+			}
+
+			// Process it (recursively).
+			didProcessClick = psCurr->processClickRecursive(&shiftedContext, key, wasPressed) || didProcessClick;
+		}
 	}
 
 	if (!visible())
