@@ -148,7 +148,6 @@ struct INPUT_STATE
 
 // Clipboard routines
 bool has_scrap(void);
-bool put_scrap(char *src);
 bool get_scrap(char **dst);
 
 /// constant for the interval between 2 singleclicks for doubleclick event in ms
@@ -223,8 +222,8 @@ bool has_scrap(void)
 	return SDL_HasClipboardText();
 }
 
-// When (if?) we decide to put text into the clipboard...
-bool put_scrap(char *src)
+// Set the clipboard text
+bool wzSetClipboardText(const char *src)
 {
 	if (SDL_SetClipboardText(src))
 	{

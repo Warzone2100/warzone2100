@@ -89,6 +89,7 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight);
 unsigned int wzGetCurrentDisplayScale();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
+bool wzSetClipboardText(const char *text);
 void wzSetCursor(CURSOR index);
 void wzApplyCursor();
 void wzShowMouse(bool visible); ///< Show the Mouse?
