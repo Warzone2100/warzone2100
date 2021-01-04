@@ -29,9 +29,12 @@
 #include "widgint.h"
 #include "form.h"
 #include "tip.h"
+#include "label.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
 
+#define WZ_FORM_MINIMIZED_LEFT_PADDING 5
+#define WZ_FORM_MINIMIZED_MAXBUTTON_RIGHT_PADDING WZ_FORM_MINIMIZED_LEFT_PADDING
 
 W_FORMINIT::W_FORMINIT()
 	: disableChildren(false)
@@ -95,20 +98,37 @@ void W_CLICKFORM::setFlash(bool enable)
 	dirty = true;
 }
 
+bool W_FORM::isUserMovable() const
+{
+	return userMovable || formState == FormState::MINIMIZED;
+}
+
 void W_FORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 {
 	// Stop the tip if there is one.
 	tipStop(this);
 	dirty = true;
-	if (userMovable && key == WKEY_PRIMARY)
+	if (isUserMovable() && key == WKEY_PRIMARY)
 	{
+		if (formState == FormState::MINIMIZED && (psContext->mx <= minimizedGeometry().x() + minimizedLeftButtonWidth))
+		{
+			return;
+		}
 		dragStart = Vector2i(psContext->mx, psContext->my);
 	}
 }
 
-void W_FORM::released(W_CONTEXT *, WIDGET_KEY)
+void W_FORM::released(W_CONTEXT *psContext, WIDGET_KEY)
 {
-	if (!userMovable || !dragStart.has_value()) { return; }
+	if (formState == FormState::MINIMIZED
+		&& !dragStart.has_value()	// mousedown was on "re-open" button (drag is only started when mouse is over the rest of the minimized frame)
+		&& (psContext->mx <= minimizedGeometry().x() + minimizedLeftButtonWidth)) // mouse is still over "re-open" button
+	{
+		// clicked + released mouse-button on "re-open" button
+		toggleMinimized();
+		return;
+	}
+	if (!isUserMovable() || !dragStart.has_value()) { return; }
 	dragStart = nullopt;
 	dirty = true;
 }
@@ -128,13 +148,25 @@ void W_FORM::run(W_CONTEXT *psContext)
 	if (currentMousePos == dragStart.value()) { return; }
 	Vector2i dragDelta(currentMousePos.x - dragStart.value().x, currentMousePos.y - dragStart.value().y);
 
-	Vector2i newPosition(x() + dragDelta.x, y() + dragDelta.y);
+	const WzRect *pRectToMove = &(geometry());
+	if (formState == FormState::MINIMIZED)
+	{
+		pRectToMove = &(minimizedGeometry());
+	}
+	Vector2i newPosition(pRectToMove->x() + dragDelta.x, pRectToMove->y() + dragDelta.y);
 
-	int maxPossibleX = pie_GetVideoBufferWidth() - width();
-	int maxPossibleY = pie_GetVideoBufferHeight() - height();
+	int maxPossibleX = pie_GetVideoBufferWidth() - pRectToMove->width();
+	int maxPossibleY = pie_GetVideoBufferHeight() - pRectToMove->height();
 	newPosition.x = clip<int>(newPosition.x, 0, maxPossibleX);
 	newPosition.y = clip<int>(newPosition.y, 0, maxPossibleY);
-	move(newPosition.x, newPosition.y);
+	if (formState != FormState::MINIMIZED)
+	{
+		move(newPosition.x, newPosition.y);
+	}
+	else
+	{
+		minimizedRect = WzRect(newPosition.x, newPosition.y, minimizedRect.width(), minimizedRect.height());
+	}
 	dirty = true;
 	dragStart = currentMousePos;
 }
@@ -230,6 +262,167 @@ void W_FORM::display(int xOffset, int yOffset)
 
 		iV_ShadowBox(x0, y0, x1, y1, 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_BACKGROUND);
 	}
+}
+
+void W_FORM::screenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	if (formState == FormState::MINIMIZED)
+	{
+		// must ensure that the minimizedRect is fully within the new screen bounds
+		int newMinX0 = std::max(0, std::min(minimizedRect.x(), newWidth - minimizedRect.width()));
+		int newMinY0 = std::max(0, std::min(minimizedRect.y(), newHeight - minimizedRect.height()));
+		minimizedRect = WzRect(newMinX0, newMinY0, minimizedRect.width(), minimizedRect.height());
+	}
+	WIDGET::screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+}
+
+bool W_FORM::hitTest(int x, int y)
+{
+	if (!minimizable || formState != FormState::MINIMIZED)
+	{
+		return WIDGET::hitTest(x, y);
+	}
+	// handle: minimized
+	return minimizedGeometry().contains(x, y);
+}
+
+bool W_FORM::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed)
+{
+	if (!minimizable || formState != FormState::MINIMIZED)
+	{
+		return WIDGET::processClickRecursive(psContext, key, wasPressed);
+	}
+	// handle: minimized
+	ASSERT(disableChildren, "disableChildren should be set to true while minimized");
+	return WIDGET::processClickRecursive(psContext, key, wasPressed);
+}
+
+void W_FORM::displayRecursive(WidgetGraphicsContext const &context)
+{
+	if (!minimizable || formState != FormState::MINIMIZED)
+	{
+		WIDGET::displayRecursive(context);
+		return;
+	}
+
+	// handle: minimized
+	displayMinimized(context.getXOffset(), context.getYOffset());
+}
+
+void W_FORM::displayMinimized(int xOffset, int yOffset)
+{
+	auto minDim = minimizedGeometry();
+
+	int x0 = minDim.x() + xOffset;
+	int y0 = minDim.y() + yOffset;
+	int x1 = x0 + minDim.width();
+	int y1 = y0 + minDim.height();
+
+	// draw "drop-shadow"
+	int dropShadowX0 = std::max<int>(x0 - 5, 0);
+	int dropShadowY0 = std::max<int>(y0 - 5, 0);
+	int dropShadowX1 = std::min<int>(x1 + 5, pie_GetVideoBufferWidth());
+	int dropShadowY1 = std::min<int>(y1 + 5, pie_GetVideoBufferHeight());
+	pie_UniTransBoxFill((float)dropShadowX0, (float)dropShadowY0, (float)dropShadowX1, (float)dropShadowY1, pal_RGBA(0, 0, 0, 40));
+
+	// draw background + border
+	iV_TransBoxFill((float)x0, (float)y0, (float)x1, (float)y1);
+	iV_Box(x0, y0, x1, y1, pal_RGBA(255, 255, 255, 150));
+
+	// draw minimized title
+	int titleY0 = y0 + (minDim.height() - minimizedTitle->height()) / 2;
+	minimizedTitle->display(x0 + WZ_FORM_MINIMIZED_LEFT_PADDING, titleY0);
+
+	if (isMouseOverWidget() && (mouseX() <= x0 + minimizedLeftButtonWidth))
+	{
+		// Draw "re-open" button border when mouse is over
+		iV_Box(x0 + 1, y0 + 1, x0 + minimizedLeftButtonWidth, y1 - 1, pal_RGBA(255, 255, 255, 150));
+	}
+}
+
+void W_FORM::enableMinimizing(const std::string& _minimizedTitle, PIELIGHT titleColour)
+{
+	minimizedTitle = std::make_shared<W_LABEL>();
+	minimizedTitle->setFont(font_regular_bold, titleColour);
+	WzString titleString = WzString("\u21F2  "); // ⇲
+	if (!_minimizedTitle.empty())
+	{
+		titleString += WzString::fromUtf8(_minimizedTitle);
+	}
+	else
+	{
+		titleString += _("(untitled)");
+	}
+	minimizedLeftButtonWidth = WZ_FORM_MINIMIZED_LEFT_PADDING + iV_GetTextWidth("\u21F2", font_regular_bold) + WZ_FORM_MINIMIZED_MAXBUTTON_RIGHT_PADDING;
+	minimizedTitle->setString(titleString);
+	minimizedTitle->setGeometry(0, 0, minimizedTitle->getMaxLineWidth(), iV_GetTextLineSize(font_regular_bold));
+	minimizable = true;
+}
+
+void W_FORM::disableMinimizing()
+{
+	minimizedTitle.reset();
+	minimizable = false;
+	if (formState == FormState::MINIMIZED)
+	{
+		setFormState(FormState::NORMAL);
+	}
+}
+
+bool W_FORM::setFormState(FormState state)
+{
+	if (formState == state) { return true; }
+	if (formState == FormState::MINIMIZED)
+	{
+		disableChildren = false;
+	}
+	switch(state)
+	{
+		case FormState::NORMAL:
+			break;
+		case FormState::MINIMIZED:
+		{
+			if (!minimizable)
+			{
+				return false;
+			}
+			auto minimizedSize = calcMinimizedSize();
+			minimizedRect = WzRect(x(), y(), minimizedSize.x, minimizedSize.y);
+			disableChildren = true;
+			break;
+		}
+	}
+	formState = state;
+	return true;
+}
+
+bool W_FORM::toggleMinimized()
+{
+	FormState desiredState = FormState::MINIMIZED;
+	if (formState == FormState::MINIMIZED)
+	{
+		desiredState = FormState::NORMAL;
+	}
+	return setFormState(desiredState);
+}
+
+Vector2i W_FORM::calcMinimizedSize() const
+{
+	Vector2i minimizedSize = {0,0};
+	if (!minimizable) { return minimizedSize; }
+	// width = width of the minimizedTitle (which includes the "re-open button" as a unicode character) + padding
+	if (minimizedTitle != nullptr)
+	{
+		minimizedSize.x = minimizedTitle->getMaxLineWidth() + 15;
+	}
+	// height = height of the font's line height + padding
+	minimizedSize.y = iV_GetTextLineSize(font_regular_bold) + 6;
+	return minimizedSize;
+}
+
+const WzRect& W_FORM::minimizedGeometry() const
+{
+	return minimizedRect;
 }
 
 void W_CLICKFORM::setTip(std::string string)
