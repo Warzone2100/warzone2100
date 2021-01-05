@@ -254,6 +254,24 @@ enum INTMODE
 
 extern INTMODE intMode;
 
+/* Which type of object screen is being displayed. Starting value is where the intMode left off*/
+enum OBJECT_MODE
+{
+	IOBJ_NONE = INT_MAXMODE,	// Nothing doing.
+	IOBJ_BUILD,			        // The build screen
+	IOBJ_BUILDSEL,		        // Selecting a position for a new structure
+	IOBJ_DEMOLISHSEL,	        // Selecting a structure to demolish
+	IOBJ_MANUFACTURE,	        // The manufacture screen
+	IOBJ_RESEARCH,		        // The research screen
+	IOBJ_COMMAND,		        // the command droid screen
+
+	IOBJ_NEW_BUILD,
+
+	IOBJ_MAX,			        // maximum object mode,
+};
+
+extern OBJECT_MODE objMode;
+
 /* The widget screen */
 extern std::shared_ptr<W_SCREEN> psWScreen;
 
@@ -403,5 +421,20 @@ bool isChatUp();
 bool isSecondaryWindowUp();
 
 void intOpenDebugMenu(OBJECT_TYPE id);
+
+void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id);
+void intSetPositionStats(BASE_STATS *value);
+void intSetSelectedObject(BASE_OBJECT *value);
+BASE_OBJECT *intGetSelectedObject();
+void intSetShouldShowRedundantDesign(bool value);
+bool intGetShouldShowRedundantDesign();
+void intSetShowFavorites(bool value);
+bool intGetShowFavorites();
+
+/* Start looking for a structure location */
+void intStartStructPosition(BASE_STATS *psStats);
+
+/* Remove the object widgets from the widget screen */
+void intRemoveObject();
 
 #endif // __INCLUDED_SRC_HCI_H__

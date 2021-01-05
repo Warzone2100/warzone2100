@@ -82,6 +82,7 @@
 #include "qtscript.h"
 #include "frend.h"
 #include "chat.h"
+#include "hci/build_interface.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 // Do not highlight buttons while paused.
@@ -200,19 +201,8 @@ static enum _edit_pos_mode
 	IED_POS,
 } editPosMode;
 
-/* Which type of object screen is being displayed. Starting value is where the intMode left off*/
-static enum _obj_mode
-{
-	IOBJ_NONE = INT_MAXMODE,	// Nothing doing.
-	IOBJ_BUILD,			        // The build screen
-	IOBJ_BUILDSEL,		        // Selecting a position for a new structure
-	IOBJ_DEMOLISHSEL,	        // Selecting a structure to demolish
-	IOBJ_MANUFACTURE,	        // The manufacture screen
-	IOBJ_RESEARCH,		        // The research screen
-	IOBJ_COMMAND,		        // the command droid screen
-
-	IOBJ_MAX,			        // maximum object mode
-} objMode;
+OBJECT_MODE objMode;
+std::shared_ptr<BaseObjectsStatsController> objectsInterfaceController = nullptr;
 
 /* Function type for selecting a base object while building the object screen */
 typedef bool (* OBJ_SELECT)(BASE_OBJECT *psObj);
@@ -283,9 +273,7 @@ static std::vector<Vector2i> asJumpPos;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
-static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, bool bForceStats);
-/* Remove the object widgets from the widget screen */
-void intRemoveObject();
+static bool intUpdateObject(BASE_OBJECT *psObjects, bool bForceStats);
 static void intRemoveObjectNoAnim();
 /* Process the object widgets */
 static void intProcessObject(UDWORD id);
@@ -307,7 +295,7 @@ static void intObjectDied(UDWORD objID);
 
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static bool intAddBuild(DROID *psSelected);
+static bool intAddBuild();
 /* Add the manufacture widgets to the widget screen */
 /* If psSelected != NULL it specifies which factory should be hilited */
 static bool intAddManufacture(STRUCTURE *psSelected);
@@ -318,8 +306,6 @@ static bool intAddResearch(STRUCTURE *psSelected);
 /* If psSelected != NULL it specifies which droid should be hilited */
 static bool intAddCommand(DROID *psSelected);
 
-/* Start looking for a structure location */
-static void intStartStructPosition(BASE_STATS *psStats);
 /* Stop looking for a structure location */
 static void intStopStructPosition();
 
@@ -707,6 +693,13 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 //
 static void intDoScreenRefresh()
 {
+	if (objectsInterfaceController != nullptr)
+	{
+		objectsInterfaceController->refresh();
+		IntRefreshPending = false;
+		return;
+	}
+
 	size_t          objMajor = 0, statMajor = 0;
 	FLAG_POSITION	*psFlag;
 
@@ -761,7 +754,7 @@ static void intDoScreenRefresh()
 			case IOBJ_MANUFACTURE:	// The manufacture screen (factorys on bottom bar)
 			case IOBJ_RESEARCH:		// The research screen
 				//pass in the currently selected object
-				intUpdateObject((BASE_OBJECT *)interfaceStructList(), psObjSelected, StatsWasUp);
+				intUpdateObject((BASE_OBJECT *)interfaceStructList(), StatsWasUp);
 				break;
 
 			case IOBJ_BUILD:
@@ -769,7 +762,7 @@ static void intDoScreenRefresh()
 			case IOBJ_BUILDSEL:		// Selecting a position for a new structure
 			case IOBJ_DEMOLISHSEL:	// Selecting a structure to demolish
 				//pass in the currently selected object
-				intUpdateObject((BASE_OBJECT *)apsDroidLists[selectedPlayer], psObjSelected, StatsWasUp);
+				intUpdateObject((BASE_OBJECT *)apsDroidLists[selectedPlayer], StatsWasUp);
 				break;
 
 			default:
@@ -1216,7 +1209,7 @@ INT_RETVAL intRunWidgets()
 			}
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
-			intAddBuild(nullptr);
+			intAddBuild();
 			reticuleCallback(RETBUT_BUILD);
 			break;
 
@@ -1662,7 +1655,7 @@ static void intRunStats()
 
 
 /* Add the stats screen for a given object */
-static void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
+void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 {
 	BASE_STATS		*psStats;
 	size_t          statMajor = 0;
@@ -1801,35 +1794,6 @@ static void intSelectDroid(BASE_OBJECT *psObj)
 }
 
 
-static void intResetWindows(BASE_OBJECT *psObj)
-{
-	if (psObj)
-	{
-		// reset the object screen with the new object
-		switch (objMode)
-		{
-		case IOBJ_BUILD:
-		case IOBJ_BUILDSEL:
-		case IOBJ_DEMOLISHSEL:
-			intAddBuild((DROID *)psObj);
-			break;
-		case IOBJ_RESEARCH:
-			intAddResearch((STRUCTURE *)psObj);
-			break;
-		case IOBJ_MANUFACTURE:
-			intAddManufacture((STRUCTURE *)psObj);
-			break;
-		case IOBJ_COMMAND:
-
-			intAddCommand((DROID *)psObj);
-			break;
-		default:
-			break;
-		}
-	}
-}
-
-
 /* Process return codes from the object screen */
 static void intProcessObject(UDWORD id)
 {
@@ -1950,7 +1914,7 @@ static void intProcessObject(UDWORD id)
 				}
 			}
 
-			intResetWindows(psObj);
+			intRefreshScreen();
 
 			// If a construction droid button was clicked then
 			// clear all other selections and select it.
@@ -1976,7 +1940,7 @@ static void intProcessObject(UDWORD id)
 			psObj = intGetObject(id);
 			ASSERT_OR_RETURN(, psObj, "Missing referred to object id %u", id);
 
-			intResetWindows(psObj);
+			intRefreshScreen();
 
 			// If a droid button was clicked then clear all other selections and select it.
 			if (psObj->type == OBJ_DROID)
@@ -2005,6 +1969,7 @@ static void intProcessObject(UDWORD id)
 				psObj->selected = true;
 				triggerEventSelected();
 				jsDebugSelected(psObj);
+				psObjSelected = psObj;
 			}
 		}
 	}
@@ -2337,7 +2302,7 @@ void intObjectSelected(BASE_OBJECT *psObj)
 
 
 /* Start looking for a structure location */
-static void intStartStructPosition(BASE_STATS *psStats)
+void intStartStructPosition(BASE_STATS *psStats)
 {
 	init3DBuilding(psStats, nullptr, nullptr);
 }
@@ -3279,9 +3244,9 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 }
 
 
-static bool intUpdateObject(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, bool bForceStats)
+static bool intUpdateObject(BASE_OBJECT *psObjects, bool bForceStats)
 {
-	intAddObjectWindow(psObjects, psSelected, bForceStats);
+	intAddObjectWindow(psObjects, psObjSelected, bForceStats);
 
 	// if the stats screen is up and it's owner is dead then..
 	if (StatsUp && psStatsScreenOwner != nullptr && psStatsScreenOwner->died != 0)
@@ -3307,6 +3272,7 @@ void intRemoveObject()
 		Form->closeAnimateDelete();
 	}
 
+	objectsInterfaceController = nullptr;
 	intHidePowerBar();
 }
 
@@ -3318,6 +3284,7 @@ static void intRemoveObjectNoAnim()
 	widgDelete(psWScreen, IDOBJ_CLOSE);
 	widgDelete(psWScreen, IDOBJ_FORM);
 
+	objectsInterfaceController = nullptr;
 	intHidePowerBar();
 }
 
@@ -3325,8 +3292,8 @@ static void intRemoveObjectNoAnim()
 /* Remove the stats widgets from the widget screen */
 void intRemoveStats()
 {
-	widgDelete(psWScreen, IDSTAT_CLOSE);
-	widgDelete(psWScreen, IDSTAT_TABFORM);
+	widgHide(psWScreen, IDSTAT_CLOSE);
+	widgHide(psWScreen, IDSTAT_TABFORM);
 
 	// Start the window close animation.
 	IntFormAnimated *Form = (IntFormAnimated *)widgGetFromID(psWScreen, IDSTAT_FORM);
@@ -4045,22 +4012,29 @@ static bool setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
-static bool intAddBuild(DROID *psSelected)
+static bool intAddBuild()
 {
 	/* Store the correct stats list for future reference */
-	ppsStatsList = (BASE_STATS **)apsStructStatsList;
+	// ppsStatsList = (BASE_STATS **)apsStructStatsList;
 
+	// TODO: remove these three, cause we shouldn't need them at the end
 	objSelectFunc = selectConstruction;
 	objGetStatsFunc = getConstructionStats;
 	objSetStatsFunc = setConstructionStats;
 
 	/* Set the sub mode */
-	objMode = IOBJ_BUILD;
+	objMode = IOBJ_NEW_BUILD;
 
 	/* Create the object screen with the required data */
 
-	return intAddObjectWindow((BASE_OBJECT *)apsDroidLists[selectedPlayer],
-	                          (BASE_OBJECT *)psSelected, true);
+	auto controller = std::make_shared<BuildInterfaceController>();
+	if (controller->showInterface())
+	{
+		objectsInterfaceController = controller;
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -4223,7 +4197,7 @@ static void intObjStatRMBPressed(UDWORD id)
 	{
 		return;
 	}
-	intResetWindows(psObj);
+	intRefreshScreen();
 	if (psObj->type == OBJ_STRUCTURE)
 	{
 		psStructure = (STRUCTURE *)psObj;
@@ -4365,7 +4339,7 @@ void intShowWidget(int buttonID)
 	case RETBUT_BUILD:
 		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
-		intAddBuild(nullptr);
+		intAddBuild();
 		reticuleCallback(RETBUT_BUILD);
 		break;
 	case RETBUT_DESIGN:
@@ -4927,3 +4901,39 @@ static void parseChatMessageModifiers(InGameChatMessage &message)
 		message.addPlayerByPosition(*message.text - '0');
 	}
 }
+
+void intSetPositionStats(BASE_STATS *value)
+{
+	psPositionStats = value;
+}
+
+void intSetSelectedObject(BASE_OBJECT *value)
+{
+	psObjSelected = value;
+}
+
+BASE_OBJECT *intGetSelectedObject()
+{
+	return psObjSelected;
+}
+
+void intSetShouldShowRedundantDesign(bool value)
+{
+	includeRedundantDesigns = value;
+}
+
+bool intGetShouldShowRedundantDesign()
+{
+	return includeRedundantDesigns;
+}
+
+void intSetShowFavorites(bool value)
+{
+	showFavorites = value;
+}
+
+bool intGetShowFavorites()
+{
+	return showFavorites;
+}
+

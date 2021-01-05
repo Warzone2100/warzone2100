@@ -116,6 +116,10 @@ public:
 	{
 		return myChildren.empty() ? 1 : ((myChildren.size() - 1) / widgetsPerPage()) + 1;
 	}
+	size_t childrenSize() const
+	{
+		return myChildren.size();
+	}
 
 	/* The optional "onCurrentPageChanged" callback function */
 	typedef std::function<void (ListWidget& psWidget, size_t currentPage)> W_LISTWIDGET_ON_CURRENTPAGECHANGED_FUNC;
@@ -199,6 +203,10 @@ public:
 	size_t pages() const
 	{
 		return widgets->pages();
+	}
+	size_t childrenSize() const
+	{
+		return widgets->childrenSize();
 	}
 
 	void setTabPosition(TabPosition pos);

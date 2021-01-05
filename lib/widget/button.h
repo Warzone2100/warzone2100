@@ -155,6 +155,10 @@ public:
 	void setTip(unsigned stateValue, std::string const &string);
 	void setTip(unsigned stateValue, char const *stringUtf8);
 	void setImages(unsigned stateValue, Images const &stateImages);
+	unsigned getChoice()
+	{
+		return choice;
+	}
 
 	using WIDGET::setTip;
 
