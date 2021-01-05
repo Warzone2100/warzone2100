@@ -57,6 +57,7 @@ public:
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
 	void display(int xOffset, int yOffset) override;
+	void displayRecursive(WidgetGraphicsContext const &context) override; // for handling progress border overlay
 
 	unsigned getState() override;
 	void setState(unsigned state) override;
@@ -77,8 +78,56 @@ public:
 
 	void addOnClickHandler(const W_BUTTON_ONCLICK_FUNC& onClickFunc);
 
+	struct ProgressBorder
+	{
+	public:
+		struct BorderInset
+		{
+			BorderInset() { }
+			BorderInset(int left, int top, int right, int bottom)
+			: left(left), top(top), right(right), bottom(bottom)
+			{ }
+			int left = 0;
+			int top = 0;
+			int right = 0;
+			int bottom = 0;
+		};
+	private:
+		ProgressBorder(UDWORD interval, optional<float> factor, bool repeated, BorderInset inset = BorderInset()): m_inset(inset), m_interval(interval), m_factor(factor), m_repeated(repeated) { resetStartingTime(); }
+	public:
+		// Create an indeterminate ProgressBorder
+		static ProgressBorder indeterminate(BorderInset inset = BorderInset()) { return ProgressBorder(0, nullopt, true, inset); }
+		// Create a timed ProgressBorder which proceeds from 0 to 100% over the interval
+		static ProgressBorder timed(UDWORD interval, bool repeated = false, BorderInset inset = BorderInset()) { return ProgressBorder(interval, nullopt, repeated, inset); }
+		// Create a fixed factor ProgressBorder, where `factor` is expected to be a float from 0.0 to 1.0 (which corresponds to the percentage progress)
+		static ProgressBorder fixedFactor(float factor, BorderInset inset = BorderInset()) { return ProgressBorder(0, factor, false, inset); }
+	public:
+		void setInset(const BorderInset& newInset) { m_inset = newInset; }
+		void resetStartingTime();
+		const BorderInset& inset() const { return m_inset; }
+		UDWORD interval() const { return m_interval; }
+		UDWORD startingTime() const { return m_startingTime; }
+		optional<float> factor() const { return m_factor; }
+		bool repeated() const { return m_repeated; }
+
+		bool isIndeterminate() const { return !m_factor.has_value() && m_interval == 0; }
+	private:
+		BorderInset m_inset;
+		UDWORD m_interval = 0;
+		UDWORD m_startingTime = 0;
+		optional<float> m_factor = 0.0f;
+		bool m_repeated = false;
+	};
+
+	// Set the current ProgressBorder on the button, optionally specifying a color
+	// To disable a ProgressBorder, use `setProgressBorder(nullopt)`
+	void setProgressBorder(optional<ProgressBorder> progressBorder, optional<PIELIGHT> borderColour = nullopt);
+
 public:
 	bool isHighlighted() const;
+
+private:
+	void drawProgressBorder(int xOffset, int yOffset);
 
 public:
 	unsigned        state;                          // The current button state
@@ -93,6 +142,8 @@ public:
 private:
 	UDWORD lastClickTime = 0;
 	std::vector<W_BUTTON_ONCLICK_FUNC> onClickHandlers;
+	optional<ProgressBorder> progressBorder;
+	PIELIGHT				 progressBorderColour;
 };
 
 class MultipleChoiceButton : public W_BUTTON
