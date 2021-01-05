@@ -1,3 +1,4 @@
+debugMsg('Module: names.js','init');
 
 //Цвета
 const colors = new Array("Green","Orange","Grey","Black","Red","Blue","Pink","Cyan","Yellow","Purple","White","Bright blue","Neon green","Infrared","Ultraviolet","Brown");
@@ -22,7 +23,7 @@ const droidTypes = new Array(
 
 var droidOrders = new Array(
     "DORDER_NONE",            /**< no order set. */
-
+    
     "DORDER_STOP",            /**< stop the current order. */
     "DORDER_MOVE",            /**< 2 - move to a location. */
     "DORDER_ATTACK",          /**< attack an enemy. */
@@ -34,7 +35,7 @@ var droidOrders = new Array(
     "DORDER_OBSERVE",         /**< keep a target in sensor view. */
     "DORDER_FIRESUPPORT",     /**< 10 - attack whatever the linked sensor droid attacks. */
     "DORDER_RETREAT",         /**< return to the players retreat position. */
-    "DORDER_UNUSED_2",
+    "DORDER_UNUSED_2",        
     "DORDER_RTB",             /**< return to base. */
     "DORDER_RTR",             /**< 14 - return to repair at any repair facility. */
     "DORDER_RUN",             /**< run away after moral failure. */
@@ -52,7 +53,7 @@ var droidOrders = new Array(
     "DORDER_RESTORE",         /**< restore resistance points for a structure. */
     "DORDER_SCOUT",           /**< 28 - same as move, but stop if an enemy is seen. */
     "DORDER_UNUSED_3",
-    "DORDER_UNUSED",
+    "DORDER_UNUSED",          
     "DORDER_PATROL",          /**< move between two way points. */
     "DORDER_REARM",           /**< 32 - order a vtol to rearming pad. */
     "DORDER_RECOVER",         /**< pick up an artifact. */

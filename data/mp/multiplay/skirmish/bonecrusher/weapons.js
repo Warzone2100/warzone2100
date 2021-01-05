@@ -1,4 +1,4 @@
-
+debugMsg('Module: weapons.js','init');
 
 /*
 
