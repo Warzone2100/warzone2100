@@ -273,6 +273,201 @@ void W_BUTTON::display(int xOffset, int yOffset)
 	}
 }
 
+void W_BUTTON::displayRecursive(WidgetGraphicsContext const &context)
+{
+	// call parent displayRecursive
+	WIDGET::displayRecursive(context);
+
+	if (progressBorder.has_value())
+	{
+		// "over-draw" with the progress border
+		drawProgressBorder(context.getXOffset(), context.getYOffset());
+	}
+}
+
+void W_BUTTON::drawProgressBorder(int xOffset, int yOffset)
+{
+	ASSERT_OR_RETURN(, progressBorder.has_value(), "progressBorder is nullopt");
+	auto& config = progressBorder.value();
+
+	// Determine total rect to be used for the progress border
+	int x0 = geometry().x() + xOffset;
+	int y0 = geometry().y() + yOffset;
+	int widthReduction = config.inset().left + config.inset().right;
+	int heightReduction = config.inset().top + config.inset().bottom;
+	WzRect progressBorderRect = WzRect(x0 + config.inset().left, y0 + config.inset().top, geometry().width() - widthReduction, geometry().height() - heightReduction);
+
+	// Determine border lines
+	// THERE. ARE. 5. LINES!!! (because the "top" line is split in two - the starting point is the middle of the top line, and proceeds clockwise)
+	std::vector<glm::ivec4> borderLines; // x, y, z, w
+	std::vector<int> lengthOfEachLine;
+	borderLines.push_back({progressBorderRect.x() + (progressBorderRect.width() / 2), progressBorderRect.y(), progressBorderRect.x() + progressBorderRect.width(), progressBorderRect.y()});
+	lengthOfEachLine.push_back(borderLines.back().z - borderLines.back().x);
+	borderLines.push_back({progressBorderRect.x() + progressBorderRect.width(), progressBorderRect.y(), progressBorderRect.x() + progressBorderRect.width(), progressBorderRect.y() + progressBorderRect.height()});
+	lengthOfEachLine.push_back(borderLines.back().w - borderLines.back().y);
+	borderLines.push_back({progressBorderRect.x() + progressBorderRect.width(), progressBorderRect.y() + progressBorderRect.height(), progressBorderRect.x(), progressBorderRect.y() + progressBorderRect.height()});
+	lengthOfEachLine.push_back(progressBorderRect.width());
+	borderLines.push_back({progressBorderRect.x(), progressBorderRect.y() + progressBorderRect.height(), progressBorderRect.x(), progressBorderRect.y()});
+	lengthOfEachLine.push_back(lengthOfEachLine[1]);
+	borderLines.push_back({progressBorderRect.x(), progressBorderRect.y(), progressBorderRect.x() + (progressBorderRect.width() / 2) + 1, progressBorderRect.y()});
+	lengthOfEachLine.push_back(borderLines.back().z - borderLines.back().x);
+	size_t realLineCount = borderLines.size();
+	int totalLength = 0;
+	for (const auto& lineLength : lengthOfEachLine)
+	{
+		totalLength += lineLength;
+	}
+	const int indeterminateMaxLineLength = static_cast<int>((float)totalLength / 4.f);
+	if (config.isIndeterminate())
+	{
+		// "Repeat" indeterminate mode (progress goes all the way to 0 and restarts)
+		// Increase totalLength by indeterminateMaxLineLength, and add a "fake" line at the end of the borderLine list that we don't actually draw
+		totalLength += indeterminateMaxLineLength;
+		borderLines.push_back({borderLines[0].x, borderLines[0].y, borderLines[0].x + indeterminateMaxLineLength, borderLines[0].w});
+		lengthOfEachLine.push_back(indeterminateMaxLineLength);
+	}
+	UDWORD timeElapsed = (realTime - config.startingTime());
+
+	float factor = 0.0f;
+	if (config.factor().has_value())
+	{
+		factor = config.factor().value();
+	}
+	else if (config.interval() != 0)
+	{
+		factor = (float)timeElapsed / (float)config.interval();
+	}
+	else
+	{
+		// Indeterminate mode
+		const int FIXED_INDETERMINATE_MODE_INTERVAL = 4 * GAME_TICKS_PER_SEC;
+		factor = (float)timeElapsed / (float)FIXED_INDETERMINATE_MODE_INTERVAL;
+	}
+
+	// Get length of progress
+	int progressLength = static_cast<int>(factor * (float)totalLength) % totalLength;
+
+	if (!config.factor().has_value() && !config.repeated() && timeElapsed >= config.interval())
+	{
+		// Done - draw once at full, and then stop drawing in the future
+		progressLength = totalLength;
+		progressBorder = nullopt;
+	}
+
+	// Decide what parts of what lines to draw
+	int remainingLength = progressLength;
+	std::vector<glm::ivec4> linesToDraw;
+	for (size_t lineIdx = 0; lineIdx < borderLines.size() && remainingLength > 0; lineIdx++)
+	{
+		int lineLength = lengthOfEachLine[lineIdx];
+		if (remainingLength >= lineLength)
+		{
+			linesToDraw.push_back(borderLines[lineIdx]);
+			remainingLength -= lineLength;
+		}
+		else
+		{
+			// Last line - partial line - reduce end-point
+			auto v = borderLines[lineIdx];
+			bool isVerticalLine = lineIdx % 2;
+			int extraLength = lineLength - remainingLength;
+			if (!isVerticalLine)
+			{
+				if (v[2] > v[0])
+				{
+					v[2] -= extraLength;
+				}
+				else
+				{
+					v[2] += extraLength;
+				}
+			}
+			else
+			{
+				if (v[3] > v[1])
+				{
+					v[3] -= extraLength;
+				}
+				else
+				{
+					v[3] += extraLength;
+				}
+			}
+			linesToDraw.push_back(v);
+			lengthOfEachLine[lineIdx] = remainingLength; // update line length (for indeterminate mode case, below)
+			remainingLength = 0;
+		}
+	}
+
+	if (config.isIndeterminate() && !linesToDraw.empty())
+	{
+		// In indeterminate mode, start from the end and remove any lines beyond the indeterminateMaxLineLength
+		remainingLength = indeterminateMaxLineLength;
+		int lineIdx = static_cast<int>(linesToDraw.size() - 1);
+		for (; lineIdx >= 0; lineIdx--)
+		{
+			int lineLength = lengthOfEachLine[lineIdx];
+			if (remainingLength >= lineLength)
+			{
+				remainingLength -= lineLength;
+			}
+			else
+			{
+				// Shorten this line by adjusting its *starting point*
+				auto v = linesToDraw[lineIdx];
+				bool isVerticalLine = lineIdx % 2;
+				int extraLength = lineLength - remainingLength;
+				if (!isVerticalLine)
+				{
+					if (v[2] > v[0])
+					{
+						v[0] += extraLength;
+					}
+					else
+					{
+						v[0] -= extraLength;
+					}
+				}
+				else
+				{
+					if (v[3] > v[1])
+					{
+						v[1] += extraLength;
+					}
+					else
+					{
+						v[1] -= extraLength;
+					}
+				}
+				linesToDraw[lineIdx] = v;
+				remainingLength = 0;
+				break;
+			}
+		}
+		// "Repeat" indeterminate mode: remove the last line *if* if it's the "fake" line for indeterminate mode calculations)
+		if (linesToDraw.size() > realLineCount)
+		{
+			linesToDraw.pop_back();
+		}
+		// Remove any lines earlier in the list than lineIdx
+		if (lineIdx > 0)
+		{
+			linesToDraw.erase(linesToDraw.begin(), linesToDraw.begin() + lineIdx);
+		}
+	}
+
+	if (!linesToDraw.empty())
+	{
+		// Draw the lines
+		iV_Lines(linesToDraw, progressBorderColour);
+	}
+}
+
+void W_BUTTON::ProgressBorder::resetStartingTime()
+{
+	m_startingTime = realTime;
+}
+
 void W_BUTTON::setImages(Images const &images_)
 {
 	images = images_;
@@ -336,4 +531,10 @@ void MultipleChoiceButton::setImages(unsigned choiceValue, Images const &stateIm
 	{
 		W_BUTTON::setImages(stateImages);
 	}
+}
+
+void W_BUTTON::setProgressBorder(optional<ProgressBorder> _progressBorder, optional<PIELIGHT> _borderColour)
+{
+	progressBorder = _progressBorder;
+	progressBorderColour = (_borderColour.has_value()) ? _borderColour.value() : WZCOL_FORM_HILITE;
 }
