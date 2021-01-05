@@ -71,7 +71,7 @@ if(ENABLE_NLS)
 endif()
 
 file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h")
-file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp")
+file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp" "hci/*.cpp")
 
 set(_additionalSourceFiles)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
