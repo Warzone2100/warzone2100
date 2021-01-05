@@ -301,19 +301,19 @@ void ListTabWidget::initialize()
 	attach(tabs = TabSelectionWidget::make());
 	attach(widgets = std::make_shared<ListWidget>());
 	tabs->addOnTabChangedHandler([](TabSelectionWidget& tabsWidget, size_t currentTab) {
-		auto pParent = std::static_pointer_cast<ListTabWidget>(tabsWidget.parent());
-		assert(pParent != nullptr);
-		pParent->setCurrentPage(currentTab);
+		auto pParent = tabsWidget.parent();
+		ASSERT_OR_RETURN(, pParent != nullptr, "pParent is nullptr");
+		std::static_pointer_cast<ListTabWidget>(pParent)->setCurrentPage(currentTab);
 	});
 	widgets->addOnCurrentPageChangedHandler([](ListWidget& listWidget, size_t currentPage) {
-		auto pParent = std::static_pointer_cast<ListTabWidget>(listWidget.parent());
-		assert(pParent != nullptr);
-		pParent->tabs->setTab(currentPage);
+		auto pParent = listWidget.parent();
+		ASSERT_OR_RETURN(, pParent != nullptr, "pParent is nullptr");
+		std::static_pointer_cast<ListTabWidget>(pParent)->tabs->setTab(currentPage);
 	});
 	widgets->addOnNumberOfPagesChangedHandler([](ListWidget& listWidget, size_t numberOfPages) {
-		auto pParent = std::static_pointer_cast<ListTabWidget>(listWidget.parent());
-		assert(pParent != nullptr);
-		pParent->tabs->setNumberOfTabs(numberOfPages);
+		auto pParent = listWidget.parent();
+		ASSERT_OR_RETURN(, pParent != nullptr, "pParent is nullptr");
+		std::static_pointer_cast<ListTabWidget>(pParent)->tabs->setNumberOfTabs(numberOfPages);
 	});
 	tabs->setNumberOfTabs(widgets->pages());
 }
@@ -338,8 +338,9 @@ void ListTabWidget::addWidgetToLayout(const std::shared_ptr<WIDGET> &widget)
 	if (widget->parent().get() == this)
 	{
 		detach(widget);
-		widgets->attach(widget);
 	}
+
+	widgets->attach(widget);
 	widgets->addWidgetToLayout(widget);
 }
 
