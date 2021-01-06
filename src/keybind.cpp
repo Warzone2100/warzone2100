@@ -2796,7 +2796,7 @@ void kf_BuildPrevPage()
 		return;
 	}
 
-	if (!psTForm->setCurrentPage(psTForm->currentPage() - 1))
+	if ((psTForm->currentPage() == 0) || !psTForm->setCurrentPage(psTForm->currentPage() - 1))
 	{
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		return;
