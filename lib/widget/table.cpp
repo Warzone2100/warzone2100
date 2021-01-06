@@ -145,6 +145,7 @@ protected:
 public:
 	void addColumn(const TableColumn& column);
 	void changeColumnWidths(const std::vector<size_t>& newColumnWidths);
+	bool isUserDraggingColumnHeader() const;
 
 private:
 	int columnWidgetHeight() const;
@@ -232,6 +233,11 @@ void TableHeader::released(W_CONTEXT *, WIDGET_KEY)
 	dragStart = nullopt;
 }
 
+bool TableHeader::isUserDraggingColumnHeader() const
+{
+	return userResizableHeaders && dragStart.has_value();
+}
+
 void TableHeader::run(W_CONTEXT *psContext)
 {
 	if (!userResizableHeaders || !dragStart.has_value()) { return; }
@@ -252,7 +258,7 @@ void TableHeader::run(W_CONTEXT *psContext)
 	size_t newProposedColumnWidth = static_cast<size_t>(std::max<int>(priorColumnWidth + dragDelta.x, 0));
 	if (auto table = parentTable.lock())
 	{
-		auto result = table->changeColumnWidth(colBeingResized.value(), static_cast<size_t>(newProposedColumnWidth));
+		auto result = table->header_changeColumnWidth(colBeingResized.value(), static_cast<size_t>(newProposedColumnWidth));
 		if (result.has_value())
 		{
 			Vector2i currentDragLogicalPos = dragStart.value();
@@ -385,9 +391,13 @@ void ScrollableTableWidget::clearRows()
 	rows.clear();
 }
 
-bool ScrollableTableWidget::changeColumnWidths(const std::vector<size_t>& newColumnWidths)
+bool ScrollableTableWidget::changeColumnWidths(const std::vector<size_t>& newColumnWidths, bool overrideUserColumnResizing /*= false*/)
 {
 	ASSERT_OR_RETURN(false, newColumnWidths.size() == columnWidths.size(), "newColumnWidths.size (%zu) does not match existing number of columns (%zu)", newColumnWidths.size(), columnWidths.size());
+	if (userDidResizeColumnWidths && !overrideUserColumnResizing)
+	{
+		return false;
+	}
 	if (!relayoutColumns(newColumnWidths))
 	{
 		debug(LOG_WZ, "The proposed column widths are not possible to achieve given the table width and layout constraints.");
@@ -396,9 +406,13 @@ bool ScrollableTableWidget::changeColumnWidths(const std::vector<size_t>& newCol
 	return true;
 }
 
-optional<size_t> ScrollableTableWidget::changeColumnWidth(size_t col, size_t newColumnWidth)
+optional<size_t> ScrollableTableWidget::changeColumnWidth(size_t col, size_t newColumnWidth, bool overrideUserColumnResizing /*= false*/)
 {
 	ASSERT_OR_RETURN(nullopt, col < columnWidths.size(), "Invalid column index: %zu", col);
+	if (userDidResizeColumnWidths && !overrideUserColumnResizing)
+	{
+		return nullopt;
+	}
 	auto newProposedColumnWidths = columnWidths;
 	newProposedColumnWidths[col] = newColumnWidth;
 	if (!relayoutColumns(newProposedColumnWidths, {col}))
@@ -406,6 +420,14 @@ optional<size_t> ScrollableTableWidget::changeColumnWidth(size_t col, size_t new
 		return nullopt;
 	}
 	return columnWidths[col];
+}
+
+// Called specifically from the header to inform the Table that the user has resized the columns
+optional<size_t> ScrollableTableWidget::header_changeColumnWidth(size_t col, size_t newColumnWidth)
+{
+	auto result = changeColumnWidth(col, newColumnWidth, true);
+	userDidResizeColumnWidths = true;
+	return result;
 }
 
 void ScrollableTableWidget::setMinimumColumnWidths(const std::vector<size_t>& newMinColumnWidths)
@@ -553,4 +575,9 @@ size_t ScrollableTableWidget::getMaxColumnTotalWidth(size_t numColumns) const
 	// also factor in scrollbar width
 	size_t totalPaddingWidth = TABLE_COL_PADDING + ((numColumns - 1) * 2 * TABLE_COL_PADDING) + TABLE_COL_PADDING + scrollableList->getScrollbarWidth();
 	return static_cast<size_t>(width()) - totalPaddingWidth;
+}
+
+bool ScrollableTableWidget::isUserDraggingColumnHeader() const
+{
+	return header->isUserDraggingColumnHeader();
 }
