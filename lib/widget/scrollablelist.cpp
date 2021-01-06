@@ -190,3 +190,15 @@ int ScrollableListWidget::getScrollbarWidth() const
 {
 	return SCROLLBAR_WIDTH;
 }
+
+uint16_t ScrollableListWidget::getScrollPosition() const
+{
+	return scrollBar->position();
+}
+
+void ScrollableListWidget::setScrollPosition(uint16_t newPosition)
+{
+	updateLayout();
+	scrollBar->setPosition(newPosition);
+	listView->setTopOffset(snapOffset ? snappedOffset() : scrollBar->position());
+}

@@ -127,6 +127,9 @@ public:
 	// Change the table background color
 	void setBackgroundColor(PIELIGHT const &color);
 
+	uint16_t getScrollPosition() const;
+	void setScrollPosition(uint16_t newPosition);
+
 protected:
 	virtual void geometryChanged() override;
 

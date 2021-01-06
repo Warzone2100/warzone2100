@@ -59,6 +59,8 @@ public:
 	void display(int xOffset, int yOffset) override;
 	void displayRecursive(WidgetGraphicsContext const& context) override;
 	int getScrollbarWidth() const;
+	uint16_t getScrollPosition() const;
+	void setScrollPosition(uint16_t newPosition);
 
 protected:
 	void geometryChanged() override;
