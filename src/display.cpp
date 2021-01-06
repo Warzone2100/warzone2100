@@ -482,15 +482,18 @@ void processInput()
 		}
 	}
 
-	if (intMode == INT_DESIGN)
+	if (!isInTextInputMode())
 	{
-		/* Only process the function keys */
-		keyProcessMappings(true);
-	}
-	else if (bAllowOtherKeyPresses)
-	{
-		/* Run all standard mappings */
-		keyProcessMappings(false);
+		if (intMode == INT_DESIGN)
+		{
+			/* Only process the function keys */
+			keyProcessMappings(true);
+		}
+		else if (bAllowOtherKeyPresses)
+		{
+			/* Run all standard mappings */
+			keyProcessMappings(false);
+		}
 	}
 	/* Allow the user to clear the (Active) console if need be */
 	if (!mouseIsOverScreenOverlayChild && mouseOverConsoleBox() && mousePressed(MOUSE_LMB))

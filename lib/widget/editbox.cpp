@@ -108,6 +108,23 @@ W_EDITBOX::W_EDITBOX()
 	, boxColourBackground(WZCOL_FORM_BACKGROUND)
 {}
 
+W_EDITBOX::~W_EDITBOX()
+{
+	/* Note the edit state */
+	unsigned editState = state & WEDBS_MASK;
+
+	/* Only have anything to do if the widget is being edited */
+	if ((editState & WEDBS_MASK) == WEDBS_FIXED)
+	{
+		return;
+	}
+
+	// If the edit box still somehow has focus, and is editable, need to StopTextInput()
+	// (May be able to remove this once more refactoring of the game menus / in-game UI occurs)
+	debug(LOG_INFO, "Editbox seems to still have focus, and is editable, as it's being destroyed.");
+	StopTextInput(this); // force-stop text input if this EditBox somehow still has the input
+}
+
 void W_EDITBOX::initialise()
 {
 	state = WEDBS_FIXED;
@@ -293,13 +310,13 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		return;
 	}
 	dirty = true;
-	StartTextInput();
+	StartTextInput(this);
 	/* If there is a mouse click outside of the edit box - stop editing */
 	int mx = psContext->mx;
 	int my = psContext->my;
 	if (mousePressed(MOUSE_LMB) && !geometry().contains(mx, my))
 	{
-		StopTextInput();
+		StopTextInput(this);
 		if (auto lockedScreen = screenPointer.lock())
 		{
 			lockedScreen->setFocus(nullptr);
@@ -413,7 +430,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 		case INPBUF_CR :
 		case KEY_KPENTER:					// either normal return key || keypad enter
 			/* Finish editing */
-			StopTextInput();
+			StopTextInput(this);
 			if (auto lockedScreen = screenPointer.lock())
 			{
 				lockedScreen->setFocus(nullptr);
@@ -435,7 +452,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 			else
 			{
 				// hitting ESC while the editbox is empty ends editing mode
-				StopTextInput();
+				StopTextInput(this);
 				if (auto lockedScreen = screenPointer.lock())
 				{
 					lockedScreen->setFocus(nullptr);
@@ -580,7 +597,7 @@ void W_EDITBOX::focusLost()
 	state = WEDBS_FIXED;
 	printStart = 0;
 	fitStringStart();
-	StopTextInput();
+	StopTextInput(this);
 
 	if (auto lockedScreen = screenPointer.lock())
 	{

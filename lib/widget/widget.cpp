@@ -509,6 +509,16 @@ void WIDGET::widgetLost(WIDGET *widget)
 	}
 }
 
+W_SCREEN::~W_SCREEN()
+{
+	if (auto focusedWidget = psFocus.lock())
+	{
+		// must trigger a resignation of focus
+		focusedWidget->focusLost();
+	}
+	psFocus.reset();
+}
+
 void W_SCREEN::initialize()
 {
 	W_FORMINIT sInit;
@@ -638,6 +648,14 @@ void widgDelete(WIDGET *widget)
 
 	if (auto lockedScreen = widget->screenPointer.lock())
 	{
+		if (auto widgetWithFocus = lockedScreen->getWidgetWithFocus())
+		{
+			if (widgetWithFocus->hasAncestor(widget))
+			{
+				// must trigger a resignation of focus
+				lockedScreen->setFocus(nullptr);
+			}
+		}
 		if (lockedScreen->psForm.get() == widget)
 		{
 			lockedScreen->psForm = nullptr;

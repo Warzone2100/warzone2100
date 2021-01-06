@@ -238,6 +238,17 @@ public:
 		}
 		return screenY;
 	}
+	bool hasAncestor(const WIDGET* psWidget) const
+	{
+		for (auto psParent = parent(); psParent != nullptr; psParent = psParent->parent())
+		{
+			if (psParent.get() == psWidget)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	int width() const
 	{
 		return dim.width();
@@ -333,6 +344,7 @@ struct W_SCREEN: public std::enable_shared_from_this<W_SCREEN>
 {
 protected:
 	W_SCREEN(): TipFontID(font_regular) {}
+	virtual ~W_SCREEN();
 	void initialize();
 
 public:
@@ -353,6 +365,11 @@ public:
 	std::weak_ptr<WIDGET> lastHighlight; ///< The last widget to be highlighted. This is used to track when the mouse moves off something.
 	iV_fonts         TipFontID;     ///< ID of the IVIS font to use for tool tips.
 	WidgetTriggers   retWidgets;    ///< The widgets to be returned by widgRunScreen.
+
+	std::shared_ptr<WIDGET> getWidgetWithFocus() const
+	{
+		return psFocus.lock();
+	}
 
 	bool hasFocus(WIDGET const &widget) const
 	{

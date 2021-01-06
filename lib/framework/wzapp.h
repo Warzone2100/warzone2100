@@ -111,8 +111,9 @@ WzString wzGetSelection();
 unsigned int wzGetCurrentKey();
 void wzDelay(unsigned int delay);	//delay in ms
 // unicode text support
-void StartTextInput();
-void StopTextInput();
+void StartTextInput(void* pTextInputRequester);
+void StopTextInput(void* pTextInputResigner);
+bool isInTextInputMode();
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
 unsigned long wzThreadID(WZ_THREAD *thread);
