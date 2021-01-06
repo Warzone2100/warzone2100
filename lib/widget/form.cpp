@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -443,4 +443,61 @@ bool W_CLICKFORM::isHighlighted() const
 void W_CLICKFORM::display(int xOffset, int yOffset)
 {
 	ASSERT(false, "No default implementation exists for click forms");
+}
+
+// MARK: - W_FULLSCREENOVERLAY_CLICKFORM
+
+W_FULLSCREENOVERLAY_CLICKFORM::W_FULLSCREENOVERLAY_CLICKFORM(W_FORMINIT const *init) : W_CLICKFORM(init) {}
+W_FULLSCREENOVERLAY_CLICKFORM::W_FULLSCREENOVERLAY_CLICKFORM() : W_CLICKFORM() {}
+
+std::shared_ptr<W_FULLSCREENOVERLAY_CLICKFORM> W_FULLSCREENOVERLAY_CLICKFORM::make(UDWORD formID)
+{
+	W_FORMINIT sInit;
+	sInit.id = formID;
+	sInit.style = WFORM_PLAIN | WFORM_CLICKABLE;
+	sInit.x = 0;
+	sInit.y = 0;
+	sInit.width = screenWidth - 1;
+	sInit.height = screenHeight - 1;
+	sInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
+		psWidget->setGeometry(0, 0, screenWidth - 1, screenHeight - 1);
+	});
+
+	class make_shared_enabler: public W_FULLSCREENOVERLAY_CLICKFORM
+	{
+	public:
+		make_shared_enabler(W_FORMINIT const *init): W_FULLSCREENOVERLAY_CLICKFORM(init) {}
+	};
+	return std::make_shared<make_shared_enabler>(&sInit);
+}
+
+void W_FULLSCREENOVERLAY_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
+{
+	if (onClickedFunc)
+	{
+		onClickedFunc();
+	}
+}
+
+void W_FULLSCREENOVERLAY_CLICKFORM::display(int xOffset, int yOffset)
+{
+	if (backgroundColor.rgba == 0)
+	{
+		return;
+	}
+	int x0 = x() + xOffset;
+	int y0 = y() + yOffset;
+	pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), backgroundColor);
+}
+
+void W_FULLSCREENOVERLAY_CLICKFORM::run(W_CONTEXT *psContext)
+{
+	if (keyPressed(KEY_ESC))
+	{
+		if (onCancelPressed)
+		{
+			onCancelPressed();
+		}
+	}
+	inputLoseFocus();	// clear the input buffer.
 }
