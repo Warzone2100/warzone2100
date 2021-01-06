@@ -56,6 +56,7 @@ public:
 	void focusLost() override;
 	void run(W_CONTEXT *psContext) override;
 	void display(int xOffset, int yOffset) override;
+	void geometryChanged() override;
 
 	void setState(unsigned state) override;
 	WzString getString() const override;
