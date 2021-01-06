@@ -205,7 +205,7 @@ struct InputKey
 static InputKey	pInputBuffer[INPUT_MAXSTR];
 static InputKey	*pStartBuffer, *pEndBuffer;
 static utf_32_char *utf8Buf;				// is like the old 'unicode' from SDL 1.x
-bool GetTextEvents = false;
+void* GetTextEventsOwner = nullptr;
 
 /**************************/
 /***     Misc support   ***/
@@ -254,21 +254,43 @@ bool get_scrap(char **dst)
 	}
 }
 
-void StartTextInput()
+void StartTextInput(void* pTextInputRequester)
 {
-	if (!GetTextEvents)
+	if (!GetTextEventsOwner)
 	{
 		SDL_StartTextInput();	// enable text events
-		GetTextEvents = true;
 		debug(LOG_INPUT, "SDL text events started");
 	}
+	else if (pTextInputRequester != GetTextEventsOwner)
+	{
+		debug(LOG_INPUT, "StartTextInput called by new input requester before old requester called StopTextInput");
+	}
+	GetTextEventsOwner = pTextInputRequester;
 }
 
-void StopTextInput()
+void StopTextInput(void* pTextInputResigner)
 {
+	if (!GetTextEventsOwner)
+	{
+		debug(LOG_INPUT, "Ignoring StopTextInput call when text input is already disabled");
+		return;
+	}
+	if (pTextInputResigner != GetTextEventsOwner)
+	{
+		// Rejecting StopTextInput from regsigner who is not the last requester
+		debug(LOG_INPUT, "Ignoring StopTextInput call from resigner that is not the last requester (i.e. caller of StartTextInput)");
+		return;
+	}
 	SDL_StopTextInput();	// disable text events
-	GetTextEvents = false;
+	GetTextEventsOwner = nullptr;
 	debug(LOG_INPUT, "SDL text events stopped");
+}
+
+bool isInTextInputMode()
+{
+	bool result = (GetTextEventsOwner != nullptr);
+	ASSERT((SDL_IsTextInputActive() != SDL_FALSE) == result, "How did GetTextEvents state and SDL_IsTextInputActive get out of sync?");
+	return result;
 }
 
 /* Put a character into a text buffer overwriting any text under the cursor */

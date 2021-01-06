@@ -47,6 +47,7 @@ class W_EDITBOX : public WIDGET
 public:
 	W_EDITBOX(W_EDBINIT const *init);
 	W_EDITBOX();
+	~W_EDITBOX();
 
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key = WKEY_PRIMARY) override;
 	void simulateClick(W_CONTEXT *psContext, bool silenceClickAudio = false, WIDGET_KEY key = WKEY_PRIMARY);
