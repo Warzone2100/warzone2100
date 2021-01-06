@@ -50,9 +50,9 @@ public:
 	bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed) override;
 	void geometryChanged() override;
 
-	WIDGET &getItem() const
+	const std::shared_ptr<WIDGET>& getItem() const
 	{
-		return *(item.get());
+		return item;
 	}
 
 	void setPadding(const Padding &value)
@@ -104,6 +104,14 @@ public:
 	void setOnChange(std::function<void(DropdownWidget&)> value)
 	{
 		onChange = value;
+	}
+	std::shared_ptr<WIDGET> getSelectedItem() const
+	{
+		if (selectedItem == nullptr)
+		{
+			return nullptr;
+		}
+		return selectedItem->getItem();
 	}
 	nonstd::optional<size_t> getSelectedIndex() const
 	{

@@ -165,7 +165,7 @@ void DropdownWidget::display(int xOffset, int yOffset)
 	{
 		WidgetGraphicsContext context;
 		context = context.translatedBy(x0, y0);
-		selectedItem->getItem().displayRecursive(context);
+		selectedItem->getItem()->displayRecursive(context);
 	}
 }
 
