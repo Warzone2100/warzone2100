@@ -137,8 +137,8 @@ void tipStop(WIDGET *psSource)
 	if (tipState != TIP_NONE && psSource == psWidget)
 	{
 		tipState = TIP_NONE;
+		displayCache.wzTip.clear();
 	}
-	displayCache.wzTip.clear();
 }
 
 /* Update and possibly display the tip */
