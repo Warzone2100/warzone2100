@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -110,6 +110,23 @@ public:
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound
 	WIDGET_AUDIOCALLBACK AudioCallback;	// Pointer to audio callback function
+};
+
+class W_FULLSCREENOVERLAY_CLICKFORM : public W_CLICKFORM
+{
+protected:
+	W_FULLSCREENOVERLAY_CLICKFORM(W_FORMINIT const *init);
+	W_FULLSCREENOVERLAY_CLICKFORM();
+public:
+	static std::shared_ptr<W_FULLSCREENOVERLAY_CLICKFORM> make(UDWORD formID = 0);
+	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
+	void display(int xOffset, int yOffset) override;
+	void run(W_CONTEXT *psContext) override;
+
+public:
+	PIELIGHT backgroundColor = pal_RGBA(0, 0, 0, 125);
+	std::function<void ()> onClickedFunc;
+	std::function<void ()> onCancelPressed;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_FORM_H__

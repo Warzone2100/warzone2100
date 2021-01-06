@@ -4431,61 +4431,6 @@ void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget, unsigned i
 	);
 }
 
-class W_INLINEOPTIONSCLICKFORM : public W_CLICKFORM
-{
-public:
-	W_INLINEOPTIONSCLICKFORM(W_FORMINIT const *init) : W_CLICKFORM(init) {}
-	W_INLINEOPTIONSCLICKFORM() : W_CLICKFORM() {}
-public:
-	static std::shared_ptr<W_INLINEOPTIONSCLICKFORM> make()
-	{
-		W_FORMINIT sInit;
-		sInit.id = MULTIOP_INLINE_OVERLAY_ROOT_FRM;
-		sInit.style = WFORM_PLAIN | WFORM_INVISIBLE;
-		sInit.x = 0;
-		sInit.y = 0;
-		sInit.width = screenWidth - 1;
-		sInit.height = screenHeight - 1;
-		sInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-			psWidget->setGeometry(0, 0, screenWidth - 1, screenHeight - 1);
-		});
-
-		return std::make_shared<W_INLINEOPTIONSCLICKFORM>(&sInit);
-	}
-
-	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override
-	{
-		if (onClickedFunc)
-		{
-			onClickedFunc();
-		}
-	}
-
-	void display(int xOffset, int yOffset) override
-	{
-		// just draw slightly darkened background
-		int x0 = x() + xOffset;
-		int y0 = y() + yOffset;
-		pie_UniTransBoxFill(x0, y0, x0 + width(), y0 + height(), pal_RGBA(0, 0, 0, 125));
-	}
-
-	void run(W_CONTEXT *psContext) override
-	{
-		if (CancelPressed())
-		{
-			if (onCancelPressed)
-			{
-				onCancelPressed();
-			}
-		}
-		inputLoseFocus();	// clear the input buffer.
-	}
-
-public:
-	std::function<void ()> onClickedFunc;
-	std::function<void ()> onCancelPressed;
-};
-
 void WzMultiplayerOptionsTitleUI::start()
 {
 	const bool bReenter = performedFirstStart;
@@ -4518,7 +4463,7 @@ void WzMultiplayerOptionsTitleUI::start()
 
 		// Initialize the inline chooser overlay screen
 		psInlineChooserOverlayScreen = W_SCREEN::make();
-		auto newRootFrm = W_INLINEOPTIONSCLICKFORM::make();
+		auto newRootFrm = W_FULLSCREENOVERLAY_CLICKFORM::make(MULTIOP_INLINE_OVERLAY_ROOT_FRM);
 		std::weak_ptr<W_SCREEN> psWeakInlineOverlayScreen(psInlineChooserOverlayScreen);
 		WzMultiplayerOptionsTitleUI *psTitleUI = this;
 		newRootFrm->onClickedFunc = [psWeakInlineOverlayScreen, psTitleUI]() {
