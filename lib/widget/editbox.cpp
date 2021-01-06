@@ -214,6 +214,20 @@ void W_EDITBOX::delCharLeft()
 }
 
 
+void W_EDITBOX::geometryChanged()
+{
+	/* Note the edit state */
+	unsigned editState = state & WEDBS_MASK;
+
+	/* For now, only handle fit recalculation if not being edited */
+	if (!((editState & WEDBS_MASK) == WEDBS_FIXED))
+	{
+		return;
+	}
+	fitStringStart();
+}
+
+
 /* Calculate how much of the start of a string can fit into the edit box */
 void W_EDITBOX::fitStringStart()
 {
