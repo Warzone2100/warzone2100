@@ -440,6 +440,7 @@ void W_EDITBOX::run(W_CONTEXT *psContext)
 				{
 					lockedScreen->setFocus(nullptr);
 				}
+				inputLoseFocus();	// clear the input buffer.
 				return;
 			}
 			break;
@@ -579,6 +580,7 @@ void W_EDITBOX::focusLost()
 	state = WEDBS_FIXED;
 	printStart = 0;
 	fitStringStart();
+	StopTextInput();
 
 	if (auto lockedScreen = screenPointer.lock())
 	{
