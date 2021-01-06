@@ -103,7 +103,7 @@ public:
 	// The ScrollableTableWidget will automatically adjust the submitted widths for various constraints
 	// (like the minimum column widths, total maximum width, which columns can be resized / expanded-to-fill-space, fixed width sizes, etc)
 	// It is expected that newColumnWidths.size() will be equal to the number of columns in the table.
-	bool changeColumnWidths(const std::vector<size_t>& newColumnWidths);
+	bool changeColumnWidths(const std::vector<size_t>& newColumnWidths, bool overrideUserColumnResizing = false);
 
 	// Change a single column width
 	// The ScrollableTableWidget will preferentially re-layout / flow the other column widths according to the table's column constraints.
@@ -111,7 +111,7 @@ public:
 	// Returns:
 	// - `nullopt` on failure (if there was no way to change the specified column to the newColumnWidth and layout the other columns)
 	// - the actual newColumnWidth, on success, which may differ from the input newColumnWidth if required to satisfy layout constraints
-	optional<size_t> changeColumnWidth(size_t col, size_t newColumnWidth);
+	optional<size_t> changeColumnWidth(size_t col, size_t newColumnWidth, bool overrideUserColumnResizing = false);
 
 	// Get the current minimum column width layout constraints
 	const std::vector<size_t>& getMinimumColumnWidths() const { return minColumnWidths; }
@@ -129,6 +129,12 @@ public:
 
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
+
+	bool isUserDraggingColumnHeader() const;
+
+protected:
+	friend class TableHeader;
+	optional<size_t> header_changeColumnWidth(size_t col, size_t newColumnWidth);
 
 protected:
 	virtual void geometryChanged() override;
@@ -159,6 +165,8 @@ private:
 	std::shared_ptr<ScrollableListWidget> scrollableList;
 
 	std::vector<std::shared_ptr<TableRow>> rows;
+
+	bool userDidResizeColumnWidths = false;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_TABLE_H__
