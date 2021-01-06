@@ -43,6 +43,7 @@ public:
 	}
 
 	uint16_t position() const;
+	void setPosition(uint16_t newPosition);
 	void setScrollableSize(uint16_t value);
 	void setViewSize(uint16_t value);
 	void setStickToBottom(bool value);
