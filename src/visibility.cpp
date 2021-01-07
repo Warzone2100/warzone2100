@@ -737,7 +737,7 @@ static void processVisibilityVision(BASE_OBJECT *psViewer)
 
 /* Find out what can see this object */
 // Fade in/out of view. Must be called after calculation of which objects are seen.
-static void processVisibilityLevel(BASE_OBJECT *psObj)
+static void processVisibilityLevel(BASE_OBJECT *psObj, bool& addedMessage)
 {
 	// update the visibility levels
 	for (unsigned player = 0; player < MAX_PLAYERS; player++)
@@ -801,6 +801,7 @@ static void processVisibilityLevel(BASE_OBJECT *psObj)
 					{
 						psMessage->psObj = psObj;
 						debug(LOG_MSG, "Added message for oil well or artefact, pViewData=%p", static_cast<void *>(psMessage->pViewData));
+						addedMessage = true;
 					}
 					if (!bInTutorial && player == selectedPlayer)
 					{
@@ -855,6 +856,7 @@ void processVisibility()
 			}
 		}
 	}
+	bool addedMessage = false;
 	for (int player = 0; player < MAX_PLAYERS; ++player)
 	{
 		BASE_OBJECT *lists[] = {apsDroidLists[player], apsStructLists[player], apsFeatureLists[player]};
@@ -863,9 +865,13 @@ void processVisibility()
 		{
 			for (BASE_OBJECT *psObj = lists[list]; psObj != nullptr; psObj = psObj->psNext)
 			{
-				processVisibilityLevel(psObj);
+				processVisibilityLevel(psObj, addedMessage);
 			}
 		}
+	}
+	if (addedMessage)
+	{
+		jsDebugMessageUpdate();
 	}
 }
 

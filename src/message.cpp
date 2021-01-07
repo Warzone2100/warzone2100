@@ -37,6 +37,7 @@
 #include "hci.h"
 #include "stats.h"
 #include "text.h"
+#include "qtscript.h"
 
 static std::map<WzString, VIEWDATA *> apsViewData;
 
@@ -397,6 +398,7 @@ void freeMessages()
 {
 	releaseAllProxDisp();
 	releaseAllMessages(apsMessages);
+	jsDebugMessageUpdate();
 }
 
 /* removes all the proximity displays */
@@ -404,6 +406,7 @@ void releaseAllProxDisp()
 {
 	UDWORD				player;
 	PROXIMITY_DISPLAY	*psCurr, *psNext;
+	bool removedAMessage = false;
 
 	for (player = 0; player < MAX_PLAYERS; player++)
 	{
@@ -412,11 +415,16 @@ void releaseAllProxDisp()
 			psNext = psCurr->psNext;
 			//remove message associated with this display
 			removeMessage(psCurr->psMessage, player);
+			removedAMessage = true;
 		}
 		apsProxDisp[player] = nullptr;
 	}
 	//re-initialise variables
 	currentNumProxDisplays = 0;
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
+	}
 }
 
 /* Initialise the message heaps */
@@ -775,6 +783,7 @@ static void checkMessages(VIEWDATA *psViewData)
 {
 	MESSAGE			*psCurr, *psNext;
 
+	bool removedAMessage = false;
 	for (unsigned i = 0; i < MAX_PLAYERS; i++)
 	{
 		for (psCurr = apsMessages[i]; psCurr != nullptr; psCurr = psNext)
@@ -783,8 +792,14 @@ static void checkMessages(VIEWDATA *psViewData)
 			if (psCurr->pViewData == psViewData)
 			{
 				removeMessage(psCurr, i);
+				removedAMessage = true;
 			}
 		}
+	}
+
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
 	}
 }
 

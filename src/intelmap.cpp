@@ -817,6 +817,7 @@ void intIntelButtonPressed(bool proxMsg, UDWORD id)
 static void intCleanUpIntelMap()
 {
 	MESSAGE		*psMessage, *psNext;
+	bool removedAMessage = false;
 
 	//remove any research messages that have been read
 	for (psMessage = apsMessages[selectedPlayer]; psMessage != nullptr; psMessage =
@@ -826,7 +827,12 @@ static void intCleanUpIntelMap()
 		if (psMessage->type == MSG_RESEARCH && psMessage->read)
 		{
 			removeMessage(psMessage, selectedPlayer);
+			removedAMessage = true;
 		}
+	}
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
 	}
 	resetIntelligencePauseState();
 	immediateMessage = false;
