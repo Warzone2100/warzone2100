@@ -613,12 +613,6 @@ static void gameStateUpdate()
 
 	// Must be at the end of gameStateUpdate, since countUpdate is also called randomly (unsynchronised) between gameStateUpdate calls, but should have no effect if we already called it, and recvMessage requires consistent counts on all clients.
 	countUpdate(true);
-
-	static int i = 0;
-	if (i++ % 10 == 0) // trigger every second
-	{
-		jsDebugUpdate();
-	}
 }
 
 /* The main game loop */

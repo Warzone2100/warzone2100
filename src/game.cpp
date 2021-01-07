@@ -89,6 +89,7 @@
 #include <ctime>
 #include "multimenu.h"
 #include "console.h"
+#include "wzscriptdebug.h"
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
@@ -105,6 +106,7 @@ void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsi
 	multiMenuScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	display3dScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	consoleScreenDidChangeSize(oldWidth, oldHeight, newWidth, newHeight);
+	scriptDebuggerScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	frontendScreenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight); // must be last!
 }
 

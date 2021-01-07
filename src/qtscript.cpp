@@ -50,9 +50,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
-#include <QtGui/QStandardItemModel>
 #include <QtWidgets/QFileDialog>
-#include <QtCore/QPointer>
 
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
 # pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
@@ -85,18 +83,15 @@
 #include <sstream>
 #include <iomanip>
 
-#include "qtscriptdebug.h"
+#include "wzscriptdebug.h"
 #include "qtscriptfuncs.h"
 #include "quickjs_backend.h"
 
 #define ATTACK_THROTTLE 1000
 
-typedef QList<QStandardItem *> QStandardItemList;
-
 /// selection changes are too often and too erratic to trigger immediately,
 /// so until we have a queue system for events, delay triggering this way.
 static bool selectionChanged = false;
-extern bool doUpdateModels; // ugh-ly hack; fix with signal when moc-ing this file
 
 void scripting_engine::GROUPMAP::saveLoadSetLastNewGroupId(int value)
 {
@@ -285,8 +280,6 @@ typedef struct monitor_bin
 typedef std::unordered_map<std::string, MONITOR_BIN> MONITOR;
 static std::unordered_map<wzapi::scripting_instance *, MONITOR *> monitors;
 
-static MODELMAP models;
-static QStandardItemModel *triggerModel;
 static bool globalDialog = false;
 
 bool bInTutorial = false;
@@ -419,8 +412,6 @@ bool scripting_engine::shutdownScripts()
 	scriptsReady = false;
 	jsDebugShutdown();
 	globalDialog = false;
-	models.clear();
-	triggerModel = nullptr;
 	for (auto *instance : scripts)
 	{
 		MONITOR *monitor = monitors.at(instance);
@@ -510,12 +501,6 @@ bool scripting_engine::updateScripts()
 			continue; // skip
 		}
 		node->function(node->timerID, IdToObject(node->baseobjtype, node->baseobj, node->player), node->additionalTimerFuncParam.get());
-	}
-
-	if (globalDialog && doUpdateModels)
-	{
-		updateGlobalModels();
-		doUpdateModels = false;
 	}
 
 	return true;
@@ -939,77 +924,25 @@ bool scripting_engine::loadScriptStates(const char *filename)
 	return true;
 }
 
-static QStandardItemList addModelItem(const std::string& name, const nlohmann::json& data)
+std::unordered_map<wzapi::scripting_instance *, nlohmann::json> scripting_engine::debug_GetGlobalsSnapshot() const
 {
-	QStandardItemList l;
-	QStandardItem *key = new QStandardItem(QString::fromStdString(name));
-	QStandardItem *value = nullptr;
-
-	if (data.is_object() || data.is_array())
-	{
-		for (auto it : data.items())
-		{
-			key->appendRow(addModelItem(it.key(), it.value()));
-		}
-		value = new QStandardItem("[Object]");
-	}
-	else
-	{
-		value = new QStandardItem(QString::fromUtf8(json_variant(data).toWzString().toUtf8().c_str()));
-	}
-	l += key;
-	l += value;
-	return l;
-}
-
-void scripting_engine::updateGlobalModels()
-{
+	MODELMAP debug_globals;
 	for (auto *instance : scripts)
 	{
 		json scriptGlobals = instance->debugGetAllScriptGlobals();
-		QStandardItemModel *m = models.at(instance);
-		m->setRowCount(0);
+		debug_globals[instance] = std::move(scriptGlobals);
+	}
+	return debug_globals;
+}
 
-		for (auto it : scriptGlobals.items())
-		{
-			QStandardItemList list = addModelItem(it.key(), it.value());
-			m->appendRow(list);
-		}
-	}
-	QStandardItemModel *m = triggerModel;
-	m->setRowCount(0);
-	for (const auto &node : timers)
+std::vector<scripting_engine::timerNodeSnapshot> scripting_engine::debug_GetTimersSnapshot() const
+{
+	std::vector<scripting_engine::timerNodeSnapshot> debug_timer_snapshot;
+	for (auto& timer : timers)
 	{
-		int nextRow = m->rowCount();
-		m->setRowCount(nextRow);
-		m->setItem(nextRow, 0, new QStandardItem(QString::number(node->timerID)));
-		m->setItem(nextRow, 1, new QStandardItem(QString::fromStdString(node->timerName)));
-		QString scriptName = QString::fromStdString(node->instance->scriptName());
-		m->setItem(nextRow, 2, new QStandardItem(scriptName + ":" + QString::number(node->player)));
-		if (node->baseobj >= 0)
-		{
-			m->setItem(nextRow, 3, new QStandardItem(QString::number(node->baseobj)));
-		}
-		else
-		{
-			m->setItem(nextRow, 3, new QStandardItem("-"));
-		}
-		m->setItem(nextRow, 4, new QStandardItem(QString::number(node->frameTime)));
-		m->setItem(nextRow, 5, new QStandardItem(QString::number(node->ms)));
-		if (node->type == TIMER_ONESHOT_READY)
-		{
-			m->setItem(nextRow, 6, new QStandardItem("Oneshot"));
-		}
-		else if (node->type == TIMER_ONESHOT_DONE)
-		{
-			m->setItem(nextRow, 6, new QStandardItem("Done"));
-		}
-		else
-		{
-			m->setItem(nextRow, 6, new QStandardItem("Repeat"));
-		}
-		m->setItem(nextRow, 7, new QStandardItem(QString::number(node->calls)));
+		debug_timer_snapshot.emplace_back(timerNodeSnapshot(timer));
 	}
+	return debug_timer_snapshot;
 }
 
 void jsAutogameSpecific(const WzString &name, int player)
@@ -1043,33 +976,13 @@ void jsAutogame()
 void jsHandleDebugClosed()
 {
 	globalDialog = false;
-	models.clear();
 }
 
 void jsShowDebug()
 {
-	// Add globals
-	for (auto *instance : scripts)
-	{
-		QStandardItemModel *m = new QStandardItemModel(0, 2);
-		m->setHeaderData(0, Qt::Horizontal, QString("Name"));
-		m->setHeaderData(1, Qt::Horizontal, QString("Value"));
-		models.insert(MODELMAP::value_type(instance, m));
-	}
-	// Add triggers
-	triggerModel = new QStandardItemModel(0, 8);
-	triggerModel->setHeaderData(0, Qt::Horizontal, QString("timerID"));
-	triggerModel->setHeaderData(1, Qt::Horizontal, QString("Function"));
-	triggerModel->setHeaderData(2, Qt::Horizontal, QString("Script"));
-	triggerModel->setHeaderData(3, Qt::Horizontal, QString("Object"));
-	triggerModel->setHeaderData(4, Qt::Horizontal, QString("Time"));
-	triggerModel->setHeaderData(5, Qt::Horizontal, QString("Interval"));
-	triggerModel->setHeaderData(6, Qt::Horizontal, QString("Type"));
-	triggerModel->setHeaderData(7, Qt::Horizontal, QString("Calls"));
-
 	globalDialog = true;
-	scripting_engine::instance().updateGlobalModels();
-	jsDebugCreate(models, triggerModel, scripting_engine::instance().createLabelModel(), jsHandleDebugClosed);
+	class make_shared_enabler : public scripting_engine::DebugInterface { };
+	jsDebugCreate(std::make_shared<make_shared_enabler>(), jsHandleDebugClosed);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1784,27 +1697,20 @@ bool triggerEventKeyPressed(int meta, int key)
 #define ALLIES -2
 #define ENEMIES -3
 
-static QPointer<QStandardItemModel> labelModel; // TODO: Move this into scripting_engine instance
-
 scripting_engine& scripting_engine::instance()
 {
 	static scripting_engine engine = scripting_engine();
 	return engine;
 }
 
-void scripting_engine::updateLabelModel()
+std::vector<scripting_engine::LabelInfo> scripting_engine::debug_GetLabelInfo() const
 {
-	if (!labelModel)
-	{
-		return;
-	}
-	labelModel->setRowCount(0);
-	labelModel->setRowCount(static_cast<int>(labels.size()));
-	int nextRow = 0;
-	for (LABELMAP::iterator i = labels.begin(); i != labels.end(); i++)
+	std::vector<scripting_engine::LabelInfo> results;
+	for (LABELMAP::const_iterator i = labels.cbegin(); i != labels.cend(); i++)
 	{
 		const LABEL &l = i->second;
-		labelModel->setItem(nextRow, 0, new QStandardItem(QString::fromStdString(i->first)));
+		scripting_engine::LabelInfo labelInfo;
+		labelInfo.label = WzString::fromUtf8(i->first);
 		const char *c = "?";
 		switch (l.type)
 		{
@@ -1820,43 +1726,32 @@ void scripting_engine::updateLabelModel()
 		case OBJ_PROJECTILE:
 		case SCRIPT_COUNT: c = "ERROR"; break;
 		}
-		labelModel->setItem(nextRow, 1, new QStandardItem(QString(c)));
+		labelInfo.type = WzString::fromUtf8(c);
 		switch (l.triggered)
 		{
-		case -1: labelModel->setItem(nextRow, 2, new QStandardItem("N/A")); break;
-		case 0: labelModel->setItem(nextRow, 2, new QStandardItem("Active")); break;
-		default: labelModel->setItem(nextRow, 2, new QStandardItem("Done")); break;
+		case -1: labelInfo.trigger = "N/A"; break;
+		case 0: labelInfo.trigger = "Active"; break;
+		default: labelInfo.trigger = "Done"; break;
 		}
 		if (l.player == ALL_PLAYERS)
 		{
-			labelModel->setItem(nextRow, 3, new QStandardItem("ALL"));
+			labelInfo.owner = "ALL";
 		}
 		else
 		{
-			labelModel->setItem(nextRow, 3, new QStandardItem(QString::number(l.player)));
+			labelInfo.owner = WzString::number(l.player);
 		}
 		if (l.subscriber == ALL_PLAYERS)
 		{
-			labelModel->setItem(nextRow, 4, new QStandardItem("ALL"));
+			labelInfo.subscriber = "ALL";
 		}
 		else
 		{
-			labelModel->setItem(nextRow, 4, new QStandardItem(QString::number(l.subscriber)));
+			labelInfo.subscriber = WzString::number(l.subscriber);
 		}
-		nextRow++;
+		results.push_back(std::move(labelInfo));
 	}
-}
-
-QStandardItemModel *scripting_engine::createLabelModel()
-{
-	labelModel = new QStandardItemModel(0, 5);
-	labelModel->setHeaderData(0, Qt::Horizontal, QString("Label"));
-	labelModel->setHeaderData(1, Qt::Horizontal, QString("Type"));
-	labelModel->setHeaderData(2, Qt::Horizontal, QString("Trigger"));
-	labelModel->setHeaderData(3, Qt::Horizontal, QString("Owner"));
-	labelModel->setHeaderData(4, Qt::Horizontal, QString("Subscriber"));
-	updateLabelModel();
-	return labelModel;
+	return results;
 }
 
 void clearMarks()
@@ -2007,7 +1902,7 @@ std::pair<bool, int> scripting_engine::seenLabelCheck(wzapi::scripting_instance 
 	}
 	if (foundObj || foundGroup)
 	{
-		updateLabelModel();
+		jsDebugUpdateLabels();
 	}
 	return std::make_pair(foundObj, foundGroup ? groupId : 0);
 }
@@ -2032,7 +1927,7 @@ bool scripting_engine::areaLabelCheck(DROID *psDroid)
 	}
 	if (activated)
 	{
-		updateLabelModel();
+		jsDebugUpdateLabels();
 	}
 	return activated;
 }
@@ -2494,7 +2389,7 @@ wzapi::no_return_value scripting_engine::addLabel(WZAPI_PARAMS(generic_script_ob
 	}
 
 	labels[label] = value;
-	scripting_engine::instance().updateLabelModel();
+	jsDebugUpdateLabels();
 	return {};
 }
 
@@ -2507,7 +2402,7 @@ int scripting_engine::removeLabel(WZAPI_PARAMS(std::string label))
 {
 	LABELMAP& labels = scripting_engine::instance().labels;
 	int result = labels.erase(label);
-	scripting_engine::instance().updateLabelModel();
+	jsDebugUpdateLabels();
 	return result;
 }
 
@@ -2814,7 +2709,6 @@ bool scripting_engine::unregisterFunctions(wzapi::scripting_instance *instance)
 	}
 	ASSERT(num == 1, "Number of engines removed from group map is %d!", num);
 	labels.clear();
-	labelModel = nullptr;
 	return true;
 }
 
@@ -2844,7 +2738,7 @@ void scripting_engine::prepareLabels()
 			}
 		}
 	}
-	updateLabelModel();
+	jsDebugUpdateLabels();
 }
 
 wzapi::no_return_value scripting_engine::hackMarkTiles_ByLabel(WZAPI_PARAMS(const std::string& label))
@@ -2907,4 +2801,29 @@ void scripting_engine::logFunctionPerformance(wzapi::scripting_instance *instanc
 	}
 	m.time += ticks;
 	(*monitor)[function] = m;
+}
+
+// MARK: - DebugInterface
+
+std::unordered_map<wzapi::scripting_instance *, nlohmann::json> scripting_engine::DebugInterface::debug_GetGlobalsSnapshot() const
+{
+	return scripting_engine::instance().debug_GetGlobalsSnapshot();
+}
+std::vector<scripting_engine::timerNodeSnapshot> scripting_engine::DebugInterface::debug_GetTimersSnapshot() const
+{
+	return scripting_engine::instance().debug_GetTimersSnapshot();
+}
+std::vector<scripting_engine::LabelInfo> scripting_engine::DebugInterface::debug_GetLabelInfo() const
+{
+	return scripting_engine::instance().debug_GetLabelInfo();
+}
+/// Show all labels or all currently active labels
+void scripting_engine::DebugInterface::markAllLabels(bool only_active)
+{
+	return scripting_engine::instance().markAllLabels(only_active);
+}
+/// Mark and show label
+void scripting_engine::DebugInterface::showLabel(const std::string &key, bool clear_old /*= true*/, bool jump_to /*= true*/)
+{
+	return scripting_engine::instance().showLabel(key, clear_old, jump_to);
 }
