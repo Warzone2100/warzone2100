@@ -45,10 +45,7 @@
 #endif
 
 // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtCore/QList>
-#include <QtCore/QQueue>
 #include <QtCore/QString>
-#include <QtCore/QStringList>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QFileDialog>
 
@@ -82,6 +79,7 @@
 #include <unordered_map>
 #include <sstream>
 #include <iomanip>
+#include <queue>
 
 #include "wzscriptdebug.h"
 #include "qtscriptfuncs.h"
@@ -262,10 +260,7 @@ struct researchEvent
 	researchEvent(RESEARCH *r, STRUCTURE *s, int p): research(r), structure(s), player(p) {}
 };
 /// Research events that are put on hold until the scripts are ready
-static QQueue<struct researchEvent> eventQueue;
-
-///// Remember what names are used internally in the scripting engine, we don't want to save these to the savegame
-//static std::set<QString> internalNamespace;
+static std::queue<struct researchEvent> eventQueue;
 
 typedef struct monitor_bin
 {
@@ -389,10 +384,11 @@ bool prepareScripts(bool loadGame)
 	}
 	// Assume that by this point all scripts are loaded
 	scriptsReady = true;
-	while (!eventQueue.isEmpty())
+	while (!eventQueue.empty())
 	{
-		researchEvent resEvent = eventQueue.dequeue();
+		researchEvent& resEvent = eventQueue.front();
 		triggerEventResearched(resEvent.research, resEvent.structure, resEvent.player);
+		eventQueue.pop();
 	}
 	return true;
 }
@@ -1376,7 +1372,7 @@ bool triggerEventResearched(RESEARCH *psResearch, STRUCTURE *psStruct, int playe
 	// if this is the case, we need to store these events and replay them later
 	if (!scriptsReady)
 	{
-		eventQueue.enqueue(researchEvent(psResearch, psStruct, player));
+		eventQueue.emplace(psResearch, psStruct, player);
 		return true;
 	}
 	for (auto *instance : scripts)
@@ -2148,15 +2144,13 @@ bool scripting_engine::writeLabels(const char *filename)
 			ini.beginGroup("group_" + WzString::number(c[3]++));
 			ini.setValue("player", l.player);
 			ini.setValue("triggered", l.triggered);
-			QStringList list;
+			std::vector<WzString> list;
+			list.reserve(l.idlist.size());
 			for (int i : l.idlist)
 			{
-				list += QString::number(i);
+				list.push_back(WzString::number(i));
 			}
-			std::list<WzString> wzlist;
-			std::transform(list.constBegin(), list.constEnd(), std::back_inserter(wzlist),
-						   [](const QString& qs) -> WzString { return QStringToWzString(qs); });
-			ini.setValue("members", wzlist);
+			ini.setValue("members", list);
 			ini.setValue("label", WzString::fromUtf8(key));
 			ini.setValue("subscriber", l.subscriber);
 			ini.endGroup();
