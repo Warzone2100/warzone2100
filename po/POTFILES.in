@@ -379,7 +379,6 @@ src/pointtree.cpp
 src/power.cpp
 src/projectile.cpp
 src/qtscript.cpp
-src/qtscriptdebug.cpp
 src/qtscriptfuncs.cpp
 src/radar.cpp
 src/random.cpp

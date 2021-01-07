@@ -30,7 +30,6 @@
 #include <unordered_map>
 
 class QString;
-class QStandardItemModel;
 class WzString;
 struct BASE_OBJECT;
 struct DROID;
@@ -163,7 +162,6 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to);
 
 void jsDebugSelected(const BASE_OBJECT *psObj);
 void jsDebugMessageUpdate();
-void jsDebugUpdate();
 
 struct ScriptMapData
 {
@@ -479,12 +477,72 @@ public:
 	static int groupSize(WZAPI_PARAMS(int groupId));
 private:
 	wzapi::scripting_instance* findInstanceForPlayer(int match, const WzString& scriptName);
+
+public:
+	// debug APIs
+
+	struct timerNodeSnapshot
+	{
+		uniqueTimerID timerID = 0;
+		std::string timerName;
+		wzapi::scripting_instance* instance = nullptr;
+		int baseobj = -1;
+		OBJECT_TYPE baseobjtype = OBJ_NUM_TYPES;
+		int frameTime = -1;
+		int ms = -1;
+		int player = -1;
+		int calls = 0;
+		timerType type = TIMER_REMOVED;
+		nlohmann::json instanceTimerRestoreData;
+
+		timerNodeSnapshot() { }
+		timerNodeSnapshot(const std::shared_ptr<timerNode>& node)
+		{
+			ASSERT_OR_RETURN(, node != nullptr, "null timerNode");
+			timerID = node->timerID;
+			timerName = node->timerName;
+			instance = node->instance;
+			baseobj = node->baseobj;
+			baseobjtype = node->baseobjtype;
+			frameTime = node->frameTime;
+			ms = node->ms;
+			player = node->player;
+			calls = node->calls;
+			type = node->type;
+			instanceTimerRestoreData = node->instance->saveTimerFunction(node->timerID, node->timerName, node->additionalTimerFuncParam.get());
+		}
+	};
+
+	struct LabelInfo
+	{
+		WzString label;
+		WzString type;
+		WzString trigger;
+		WzString owner;
+		WzString subscriber;
+	};
+
+	class DebugInterface
+	{
+	protected:
+		friend class scripting_engine;
+		DebugInterface() {}
+	public:
+		std::unordered_map<wzapi::scripting_instance *, nlohmann::json> debug_GetGlobalsSnapshot() const;
+		std::vector<scripting_engine::timerNodeSnapshot> debug_GetTimersSnapshot() const;
+		std::vector<scripting_engine::LabelInfo> debug_GetLabelInfo() const;
+		/// Show all labels or all currently active labels
+		void markAllLabels(bool only_active);
+		/// Mark and show label
+		void showLabel(const std::string &key, bool clear_old = true, bool jump_to = true);
+	};
+
 protected:
 	friend void jsShowDebug();
-	friend class ScriptDebugger;
-	void updateLabelModel();
-	/// Create model for labels for js debug dialog
-	QStandardItemModel *createLabelModel();
+
+	std::unordered_map<wzapi::scripting_instance *, nlohmann::json> debug_GetGlobalsSnapshot() const;
+	std::vector<scripting_engine::timerNodeSnapshot> debug_GetTimersSnapshot() const;
+	std::vector<scripting_engine::LabelInfo> debug_GetLabelInfo() const;
 	
 	/// Show all labels or all currently active labels
 	void markAllLabels(bool only_active);
@@ -501,7 +559,6 @@ private:
 	std::pair<bool, int> seenLabelCheck(wzapi::scripting_instance *instance, const BASE_OBJECT *seen, const BASE_OBJECT *viewer);
 	void removeFromGroup(wzapi::scripting_instance *instance, GROUPMAP *psMap, const BASE_OBJECT *psObj);
 	bool groupAddObject(const BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
-	void updateGlobalModels();
 };
 
 #define QStringToWzString(_qstring) \

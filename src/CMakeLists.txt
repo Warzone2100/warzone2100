@@ -72,14 +72,13 @@ endif()
 
 file(GLOB HEADERS "*.h" "3rdparty/*.h" "titleui/*.h")
 file(GLOB SRC "*.cpp" "3rdparty/*.cpp" "titleui/*.cpp")
-qt5_wrap_cpp(MOCFILES qtscriptdebug.h)
 
 set(_additionalSourceFiles)
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(_additionalSourceFiles "${CMAKE_CURRENT_BINARY_DIR}/warzone2100.rc")
 endif()
 
-add_executable(warzone2100 ${HEADERS} ${SRC} ${MOCFILES} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
+add_executable(warzone2100 ${HEADERS} ${SRC} "${wz2100_autorevision_h_file}" ${_additionalSourceFiles})
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(warzone2100 PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
 endif()
