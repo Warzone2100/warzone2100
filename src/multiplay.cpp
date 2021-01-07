@@ -1594,6 +1594,7 @@ bool addBeaconBlip(SDWORD locX, SDWORD locY, SDWORD forPlayer, SDWORD sender, co
 		ASSERT_OR_RETURN(false, pTempData != nullptr, "Empty help data for radar beacon");
 		psMessage->pViewData = pTempData;
 		debug(LOG_MSG, "blip added, pViewData=%p", static_cast<void *>(psMessage->pViewData));
+		jsDebugMessageUpdate();
 	}
 	else
 	{

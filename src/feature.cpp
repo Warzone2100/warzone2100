@@ -45,6 +45,7 @@
 #include "scores.h"
 #include "combat.h"
 #include "multiplay.h"
+#include "qtscript.h"
 
 #include "mapgrid.h"
 #include "display3d.h"
@@ -392,6 +393,7 @@ bool removeFeature(FEATURE *psDel)
 		}
 	}
 
+	bool removedAMessage = false;
 	if (psDel->psStats->subType == FEAT_GEN_ARTE || psDel->psStats->subType == FEAT_OIL_RESOURCE)
 	{
 		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
@@ -400,9 +402,14 @@ bool removeFeature(FEATURE *psDel)
 			while (psMessage)
 			{
 				removeMessage(psMessage, player);
+				removedAMessage = true;
 				psMessage = findMessage(psDel, MSG_PROXIMITY, player);
 			}
 		}
+	}
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
 	}
 
 	debug(LOG_DEATH, "Killing off feature %s id %d (%p)", objInfo(psDel), psDel->id, static_cast<void *>(psDel));

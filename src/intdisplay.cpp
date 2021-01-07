@@ -70,6 +70,7 @@
 #include "mission.h"
 
 #include "multiplay.h"
+#include "qtscript.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 //
@@ -2104,6 +2105,7 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	height = scrollMaxY - scrollMinY;
 
 	// Check if it's time to remove beacons
+	bool removedAMessage = false;
 	for (i = 0; i < MAX_PLAYERS; i++)
 	{
 		/* Go through all the proximity Displays*/
@@ -2123,11 +2125,16 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 					{
 						debug(LOG_MSG, "blip timeout for %d, from %d", i, (((VIEW_PROXIMITY *)pViewData->pData)->sender));
 						removeMessage(psCurrMsg, i);	//remove beacon
+						removedAMessage = true;
 						break;	//there can only be 1 beacon per player
 					}
 				}
 			}
 		}
+	}
+	if (removedAMessage)
+	{
+		jsDebugMessageUpdate();
 	}
 
 	/* Go through all the proximity Displays */
