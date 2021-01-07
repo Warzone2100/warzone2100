@@ -215,7 +215,7 @@ void W_LABEL::setString(WzString string)
 	aTextLines.push_back({string.toStdString(), Vector2i(0,0), Vector2i(0,0)});
 	displayCache.wzText.clear();
 	displayCache.wzText.push_back(WzCachedText(string.toStdString(), FontID, LABEL_DEFAULT_CACHE_EXPIRY));
-	maxLineWidth = iV_GetTextWidth(string.toUtf8().c_str(), FontID);
+	maxLineWidth = -1; // delay calculating line width until it's requested
 	dirty = true;
 }
 
@@ -242,7 +242,11 @@ void W_LABEL::run(W_CONTEXT *)
 	}
 }
 
-int W_LABEL::getMaxLineWidth() const
+int W_LABEL::getMaxLineWidth()
 {
+	if (maxLineWidth > -1) { return maxLineWidth; }
+	if (aTextLines.empty()) { return 0; }
+	// delayed calculation of maxLineWidth until first requested
+	maxLineWidth = iV_GetTextWidth(aTextLines[0].text.c_str(), FontID);
 	return maxLineWidth;
 }
