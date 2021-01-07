@@ -75,7 +75,7 @@ public:
 		canTruncate = _canTruncate;
 	}
 
-	int getMaxLineWidth() const;
+	int getMaxLineWidth();
 
 	void setCacheNeverExpires(bool value)
 	{
@@ -86,7 +86,7 @@ public:
 
 private:
 	std::vector<TextLine> aTextLines;   // text lines on the label
-	int maxLineWidth = 0;
+	int maxLineWidth = -1;
 	iV_fonts FontID;
 	std::string		pTip;          		// The tool tip for the button
 	PIELIGHT fontColour;
