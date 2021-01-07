@@ -82,6 +82,7 @@ WINDOW_MODE wzGetNextWindowMode(WINDOW_MODE currentMode);
 WINDOW_MODE wzAltEnterToggleFullscreen();
 bool wzChangeWindowMode(WINDOW_MODE mode);
 WINDOW_MODE wzGetCurrentWindowMode();
+bool wzIsFullscreen();
 void wzSetWindowIsResizable(bool resizable);
 bool wzIsWindowResizable();
 bool wzChangeDisplayScale(unsigned int displayScale);
