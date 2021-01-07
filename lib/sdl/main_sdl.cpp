@@ -426,7 +426,7 @@ WINDOW_MODE wzGetCurrentWindowMode()
 		// return a dummy value
 		return WINDOW_MODE::windowed;
 	}
-	ASSERT(WZwindow != nullptr, "window is null");
+	ASSERT_OR_RETURN(WINDOW_MODE::windowed, WZwindow != nullptr, "window is null");
 
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
 	if ((flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)
@@ -544,7 +544,11 @@ bool wzIsFullscreen()
 
 bool wzIsMaximized()
 {
-	assert(WZwindow != nullptr);
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzIsMaximized called when window is not available");
+		return false;
+	}
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
 	if (flags & SDL_WINDOW_MAXIMIZED)
 	{
@@ -1562,7 +1566,11 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 
 bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height)
 {
-	assert(WZwindow != nullptr);
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeWindowResolution called when window is not available");
+		return false;
+	}
 	debug(LOG_WZ, "Attempt to change resolution to [%d] %dx%d", screen, width, height);
 
 #if defined(WZ_OS_MAC)
