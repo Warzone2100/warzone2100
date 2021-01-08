@@ -24,6 +24,11 @@
 #include "lib/framework/physfs_ext.h"
 #include "piemode.h"
 
+
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_impl_opengl3.h"
+
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -530,7 +535,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		vertexShaderHeader = shaderVersionStr;
 		// OpenGL ES Shading Language - 4. Variables and Types - pp. 35-36
 		// https://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf?#page=41
-		// 
+		//
 		// > The fragment language has no default precision qualifier for floating point types.
 		// > Hence for float, floating point vector and matrix variable declarations, either the
 		// > declaration must include a precision qualifier or the default float precision must
@@ -2045,8 +2050,12 @@ bool gl_context::initGLContext()
 
 	glGenBuffers(1, &scratchbuffer);
 
+	debug(LOG_INFO, "imgui gl init");
+	ImGui_ImplOpenGL3_Init("#version 130");
+
 	return true;
 }
+
 
 void gl_context::flip(int clearMode)
 {
@@ -2108,4 +2117,3 @@ gfx_api::context::swap_interval_mode gl_context::getSwapInterval() const
 {
 	return backend_impl->getSwapInterval();
 }
-
