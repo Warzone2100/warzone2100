@@ -433,6 +433,17 @@ protected:
 		setTip(tipString.toUtf8().c_str());
 	}
 
+	void run(W_CONTEXT *context) override
+	{
+		BaseWidget::run(context);
+
+		if (isMouseOverWidget())
+		{
+			auto stats = controller->getStatsAt(buildOptionIndex);
+			intSetShadowPower(((STRUCTURE_STATS *)stats)->powerToBuild);
+		}
+	}
+
 	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::clicked(context, mouseButton);
