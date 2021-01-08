@@ -106,6 +106,14 @@ public:
 	bool isHighlighted() const;
 
 	unsigned state;                     // Button state of the form
+
+protected:
+	virtual std::string getTip()
+	{
+		return pTip;
+	}
+
+private:
 	std::string pTip;                   // Tip for the form
 	SWORD HilightAudioID;				// Audio ID for form clicked sound
 	SWORD ClickedAudioID;				// Audio ID for form hilighted sound

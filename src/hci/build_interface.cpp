@@ -325,20 +325,6 @@ public:
 		buttonType = BTMBUTTON;
 	}
 
-	void display(int xOffset, int yOffset) override
-	{
-		initDisplay();
-
-		auto droid = castDroid(controller->getObjectAt(builderIndex));
-		if (droid && !isDead(droid))
-		{
-			displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
-		}
-
-		displayIfHighlight(xOffset, yOffset);
-		doneDisplay();
-	}
-
 	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::clicked(context, mouseButton);
@@ -367,6 +353,26 @@ public:
 			setWarCamActive(false);
 			jumpPosition = {0, 0};
 		}
+	}
+
+protected:
+	void display(int xOffset, int yOffset) override
+	{
+		auto droid = castDroid(controller->getObjectAt(builderIndex));
+		initDisplay();
+
+		if (droid && !isDead(droid))
+		{
+			displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
+		}
+
+		displayIfHighlight(xOffset, yOffset);
+		doneDisplay();
+	}
+
+	std::string getTip() override
+	{
+		return droidGetName(castDroid(controller->getObjectAt(builderIndex)));
 	}
 
 private:
@@ -404,6 +410,17 @@ private:
 			clearSelection();
 			buildController->selectBuilder(droid);
 		}
+	}
+
+protected:
+	std::string getTip() override
+	{
+		if (auto stats = getStats())
+		{
+			return getStatsName(stats);
+		}
+
+		return "";
 	}
 };
 
@@ -472,11 +489,17 @@ private:
 		auto stat = getStats();
 		auto powerCost = ((STRUCTURE_STATS *)stat)->powerToBuild;
 		bar->majorSize = powerCost / POWERPOINTS_DROIDDIV;
+	}
+
+	std::string getTip() override
+	{
+		auto stat = getStats();
+		auto powerCost = ((STRUCTURE_STATS *)stat)->powerToBuild;
 		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
 		costString.replace("%1", WzString::number(powerCost));
 		WzString tipString = getStatsName(stat);
 		tipString.append(costString);
-		setTip(tipString.toUtf8().c_str());
+		return tipString.toUtf8();
 	}
 
 	void run(W_CONTEXT *context) override
@@ -533,7 +556,7 @@ public:
 	}
 
 	std::shared_ptr<ObjectStatsButton> makeStatsButton(size_t buttonIndex) const override
-		{
+	{
 		return std::make_shared<BuildStatsButton>(controller, buttonIndex);
 	}
 
