@@ -572,6 +572,7 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	ManPow = ManuPower / POWERBAR_SCALE;
 	Avail = (displayPower + 1e-8) / POWERBAR_SCALE;
 	realPower = (displayPower + 1e-8) - ManuPower;
+	ManuPower = 0;
 
 	BarWidth = BarGraph->width();
 	sprintf(szVal, "%d", realPower);

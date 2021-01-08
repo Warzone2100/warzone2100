@@ -1626,10 +1626,6 @@ static void intRunPower()
 		//update the power bars
 		intSetShadowPower(quantity);
 	}
-	else
-	{
-		intSetShadowPower(0);
-	}
 }
 
 
