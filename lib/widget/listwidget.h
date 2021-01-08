@@ -114,7 +114,7 @@ public:
 	}
 	size_t pages() const
 	{
-		return myChildren.empty() ? 1 : ((myChildren.size() - 1) / widgetsPerPage()) + 1;
+		return numberOfPages;
 	}
 	size_t childrenSize() const
 	{
@@ -157,7 +157,9 @@ private:
 	{
 		return childSize.height() + spacing.height();
 	}
+	void updateNumberOfPages();
 
+	uint32_t numberOfPages = 1;
 	WzSize childSize;
 	WzSize spacing;
 	size_t currentPage_;
