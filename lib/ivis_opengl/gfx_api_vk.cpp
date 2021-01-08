@@ -1992,9 +1992,9 @@ void VkRoot::handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeigh
 	backend_impl->getDrawableSize(&w, &h);
 	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
 	{
-		// Must re-create swapchain
-		debug(LOG_3D, "[2] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
-		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+		// Theoretically, one could recreate swapchain here.
+		// However this currently causes issues in practice / Vulkan validation layer errors in certain circumstances / (on certain menu screens?)
+		// Relying on the DrawableSize versus swapchainSize check in flip() seems to work fine and doesn't have the same issues.
 		return;
 	}
 }
@@ -3373,6 +3373,18 @@ void VkRoot::flip(int clearMode)
 	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.flushAutomappedMemory();
 	buffering_mechanism::get_current_resources().streamedVertexBufferAllocator.unmapAutomappedMemory();
 
+	bool mustRecreateSwapchain = false;
+	int w, h;
+	backend_impl->getDrawableSize(&w, &h);
+	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
+	{
+		// Must re-create swapchain
+		debug(LOG_3D, "[1] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - must re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
+		// Ignore graphics instructions this time around (as there are issues on certain drivers like MoltenVK)
+		// but *must* still submit the cmdCopy CommandBuffer
+		mustRecreateSwapchain = true;
+	}
+
 	const auto executableCmdBuffer = std::array<vk::CommandBuffer, 2>{buffering_mechanism::get_current_resources().cmdCopy, buffering_mechanism::get_current_resources().cmdDraw}; // copy before render
 	const vk::PipelineStageFlags waitStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; //vk::PipelineStageFlagBits::eAllCommands;
 
@@ -3380,7 +3392,8 @@ void VkRoot::flip(int clearMode)
 		.setWaitSemaphoreCount(1)
 		.setPWaitSemaphores(&buffering_mechanism::get_current_resources().imageAcquireSemaphore)
 		.setPWaitDstStageMask(&waitStage)
-		.setCommandBufferCount(static_cast<uint32_t>(executableCmdBuffer.size()))
+		// if mustRecreateSwapchain, only submit the cmdCopy buffer
+		.setCommandBufferCount((!mustRecreateSwapchain) ? static_cast<uint32_t>(executableCmdBuffer.size()) : 1)
 		.setPCommandBuffers(executableCmdBuffer.data());
 
 	auto presentInfo = vk::PresentInfoKHR()
@@ -3402,6 +3415,12 @@ void VkRoot::flip(int clearMode)
 	}
 
 	graphicsQueue.submit(submitInfo, buffering_mechanism::get_current_resources().previousSubmission, vkDynLoader);
+
+	if (mustRecreateSwapchain)
+	{
+		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
+		return; // end processing this flip
+	}
 
 	vk::Result presentResult;
 	try {
@@ -3437,12 +3456,11 @@ void VkRoot::flip(int clearMode)
 		return; // end processing this flip
 	}
 
-	int w, h;
 	backend_impl->getDrawableSize(&w, &h);
 	if (w != (int)swapchainSize.width || h != (int)swapchainSize.height)
 	{
 		// Must re-create swapchain
-		debug(LOG_3D, "Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
+		debug(LOG_3D, "[3] Drawable size (%d x %d) does not match swapchainSize (%d x %d) - re-create swapchain", w, h, (int)swapchainSize.width, (int)swapchainSize.height);
 		createNewSwapchainAndSwapchainSpecificStuff(vk::Result::eErrorOutOfDateKHR);
 		return; // end processing this flip
 	}
