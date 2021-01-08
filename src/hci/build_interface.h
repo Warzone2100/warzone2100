@@ -56,6 +56,7 @@ public:
 	void closeInterface();
 	void refresh() override;
 	void findSelected();
+	void toggleBuilderSelection(DROID *droid);
 
 private:
 	void updateBuildersList();

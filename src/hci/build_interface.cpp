@@ -1,4 +1,6 @@
 #include <memory>
+#include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include "lib/widget/widgbase.h"
 #include "lib/widget/button.h"
 #include "lib/widget/bar.h"
@@ -215,7 +217,6 @@ void BuildInterfaceController::startBuildPosition(BASE_STATS *buildOption)
 
 void BuildInterfaceController::selectBuilder(BASE_OBJECT *builder)
 {
-	clearSelection();
 	builder->selected = true;
 	triggerEventSelected();
 	jsDebugSelected(builder);
@@ -290,6 +291,28 @@ void BuildInterfaceController::findSelected()
 	setSelectedObject(selectedBuilder);
 }
 
+void BuildInterfaceController::toggleBuilderSelection(DROID *droid)
+{
+	if (droid->selected)
+	{
+		if (getSelectedObject() == droid)
+		{
+			setSelectedObject(nullptr);
+		}
+		droid->selected = false;
+		findSelected();
+	}
+	else
+	{
+		if (getSelectedObject())
+		{
+			getSelectedObject()->selected = true;
+		}
+		selectBuilder(droid);
+	}
+	triggerEventSelected();
+}
+
 class BuildObjectButton : public IntFancyButton
 {
 private:
@@ -320,11 +343,18 @@ public:
 	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::clicked(context, mouseButton);
-		auto droid = controller->getObjectAt(builderIndex);
+		auto droid = castDroid(controller->getObjectAt(builderIndex));
+		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
 
-		if (droid && mouseButton == WKEY_PRIMARY)
+		auto buildController = std::static_pointer_cast<BuildInterfaceController>(controller);
+
+		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
-			auto buildController = std::static_pointer_cast<BuildInterfaceController>(controller);
+			buildController->toggleBuilderSelection(droid);
+		}
+		else
+		{
+			clearSelection();
 			buildController->selectBuilder(droid);
 			buildController->jumpToSelectedBuilder();
 		}
@@ -352,11 +382,19 @@ protected:
 	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::clicked(context, mouseButton);
-		auto droid = controller->getObjectAt(buttonIndex);
+		auto droid = castDroid(controller->getObjectAt(buttonIndex));
+		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
 
-		if (droid && mouseButton == WKEY_PRIMARY)
+		auto buildController = std::static_pointer_cast<BuildInterfaceController>(controller);
+
+		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
-			std::static_pointer_cast<BuildInterfaceController>(controller)->selectBuilder(droid);
+			buildController->toggleBuilderSelection(droid);
+		}
+		else
+		{
+			clearSelection();
+			buildController->selectBuilder(droid);
 		}
 	}
 };
