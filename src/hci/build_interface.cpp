@@ -15,6 +15,7 @@
 #include "../qtscript.h"
 #include "../display3d.h"
 #include "../warcam.h"
+#include "../geometry.h"
 
 #define STAT_GAP			2
 #define STAT_BUTWIDTH		60
@@ -227,10 +228,7 @@ void BuildInterfaceController::jumpToSelectedBuilder()
 {
 	auto builder = getSelectedObject();
 	setPlayerPos(builder->pos.x, builder->pos.y);
-	if (getWarCamStatus())
-	{
-		camToggleStatus();
-	}
+	setWarCamActive(false);
 }
 
 void BuildInterfaceController::addToFavorites(BASE_STATS *buildOption)
@@ -317,6 +315,7 @@ class BuildObjectButton : public IntFancyButton
 {
 private:
 	typedef IntFancyButton BaseWidget;
+
 public:
 	BuildObjectButton(const std::shared_ptr<BaseObjectsStatsController> &controller, size_t builderIndex)
 		: BaseWidget()
@@ -351,28 +350,37 @@ public:
 		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
 			buildController->toggleBuilderSelection(droid);
+			return;
+		}
+
+		clearSelection();
+		buildController->selectBuilder(droid);
+
+		if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !droidOnScreen(droid, 0))
+		{
+			jumpPosition = getPlayerPos();
+			buildController->jumpToSelectedBuilder();
 		}
 		else
 		{
-			clearSelection();
-			buildController->selectBuilder(droid);
-			buildController->jumpToSelectedBuilder();
+			setPlayerPos(jumpPosition.x, jumpPosition.y);
+			setWarCamActive(false);
+			jumpPosition = {0, 0};
 		}
 	}
 
-protected:
+private:
 	std::shared_ptr<BaseObjectsStatsController> controller;
 	size_t builderIndex;
+	Vector2i jumpPosition = {0, 0};
 };
 
 class BuildStatsButton: public ObjectStatsButton
 {
 private:
 	typedef ObjectStatsButton BaseWidget;
-public:
 	using BaseWidget::BaseWidget;
 
-protected:
 	bool isSelected() const override
 	{
 		auto droid = controller->getObjectAt(buttonIndex);
@@ -416,7 +424,7 @@ public:
 		return widget;
 	}
 
-protected:
+private:
 	BASE_STATS *getStats() override
 	{
 		return controller->getStatsAt(buildOptionIndex);
@@ -507,8 +515,8 @@ class BuildObjectsForm: public ObjectsForm
 {
 private:
 	typedef ObjectsForm BaseWidget;
-protected:
 	using BaseWidget::BaseWidget;
+
 public:
 	static std::shared_ptr<BuildObjectsForm> make(const std::shared_ptr<BaseObjectsStatsController> &controller)
 	{
@@ -539,8 +547,8 @@ class BuildStatsForm: public StatsForm
 {
 private:
 	typedef StatsForm BaseWidget;
-protected:
 	using BaseWidget::BaseWidget;
+
 public:
 	static std::shared_ptr<BuildStatsForm> make(const std::shared_ptr<BuildInterfaceController> &controller)
 	{
@@ -562,7 +570,7 @@ public:
 		return BuildOptionButton::make(buildController, buttonIndex);
 	}
 
-protected:
+private:
 	void initialize() override
 	{
 		BaseWidget::initialize();
@@ -647,7 +655,6 @@ bool BuildInterfaceController::showInterface()
 
 static void addBuildObjectStats(std::shared_ptr<BuildInterfaceController> controller)
 {
-
 	auto const &parent = psWScreen->psForm;
 
 	auto statForm = BuildStatsForm::make(controller);
