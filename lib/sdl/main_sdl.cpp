@@ -1379,7 +1379,6 @@ void handleGameScreenSizeChange(unsigned int oldWidth, unsigned int oldHeight, u
 	pie_SetVideoBufferWidth(screenWidth);
 	pie_SetVideoBufferHeight(screenHeight);
 	pie_UpdateSurfaceGeometry();
-	screen_updateGeometry();
 
 	if (currentScreenResizingStatus == nullptr)
 	{
@@ -1484,6 +1483,7 @@ void processScreenSizeChangeNotificationIfNeeded()
 	if (currentScreenResizingStatus != nullptr)
 	{
 		// WZ must process the screen size change
+		screen_updateGeometry(); // must come after gfx_api::context::handleWindowSizeChange
 		gameScreenSizeDidChange(currentScreenResizingStatus->oldWidth, currentScreenResizingStatus->oldHeight, currentScreenResizingStatus->newWidth, currentScreenResizingStatus->newHeight);
 		delete currentScreenResizingStatus;
 		currentScreenResizingStatus = nullptr;
