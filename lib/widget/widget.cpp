@@ -48,6 +48,7 @@
 
 #include <algorithm>
 #include <unordered_set>
+#include <deque>
 
 static	bool	bWidgetsActive = true;
 
@@ -63,7 +64,7 @@ static SWORD ErrorAudioID = -1;
 
 static WIDGET_KEY lastReleasedKey_DEPRECATED = WKEY_NONE;
 
-static std::vector<WIDGET *> widgetDeletionQueue;
+static std::deque<std::shared_ptr<WIDGET>> widgetDeletionQueue;
 static std::vector<std::function<void()>> widgetScheduledTasks;
 
 static bool debugBoundingBoxesOnly = false;
@@ -301,12 +302,9 @@ static void deleteOldWidgets()
 {
 	while (!widgetDeletionQueue.empty())
 	{
-		WIDGET *guiltyWidget = widgetDeletionQueue.back();
-		widgetDeletionQueue.pop_back();  // Do this before deleting widget, in case it calls deleteLater() on other widgets.
-
-		ASSERT_OR_RETURN(, std::find(widgetDeletionQueue.begin(), widgetDeletionQueue.end(), guiltyWidget) == widgetDeletionQueue.end(), "Called deleteLater() twice on the same widget.");
-
-		widgDelete(guiltyWidget);
+		std::shared_ptr<WIDGET> guiltyWidget = widgetDeletionQueue.front();
+		widgDelete(guiltyWidget.get());
+		widgetDeletionQueue.pop_front();
 	}
 }
 
@@ -391,7 +389,9 @@ WIDGET::~WIDGET()
 
 void WIDGET::deleteLater()
 {
-	widgetDeletionQueue.push_back(this);
+	auto shared_widget_ptr = shared_from_this();
+	ASSERT_OR_RETURN(, std::find(widgetDeletionQueue.begin(), widgetDeletionQueue.end(), shared_widget_ptr) == widgetDeletionQueue.end(), "Called deleteLater() twice on the same widget.");
+	widgetDeletionQueue.push_back(shared_widget_ptr);
 }
 
 void WIDGET::setGeometry(WzRect const &r)
@@ -1205,8 +1205,8 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	});
 	psScreen->psForm->runRecursive(&sContext);
 
-	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
 	runScheduledTasks();
+	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
 
 	/* Return the ID of a pressed button or finished edit box if any */
 	return psScreen->retWidgets;
