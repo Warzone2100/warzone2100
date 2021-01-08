@@ -77,7 +77,8 @@ const std::vector<const char*> deviceExtensions = {
 
 const std::vector<const char*> optionalDeviceExtensions = {
 	VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME,
-	VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME
+	VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
+	"VK_KHR_portability_subset" // According to VUID-VkDeviceCreateInfo-pProperties-04451, if device supports this extension it *must* be enabled
 };
 
 const std::vector<vk::Format> supportedDepthFormats = {
