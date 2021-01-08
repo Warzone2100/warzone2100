@@ -220,11 +220,12 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 	state |= WBUT_HIGHLIGHT;
 
 	// If there is a tip string start the tool tip.
-	if (!pTip.empty())
+	auto tip = getTip();
+	if (!tip.empty())
 	{
 		if (auto lockedScreen = screenPointer.lock())
 		{
-			tipStart(this, pTip, lockedScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
+			tipStart(this, tip, lockedScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
 		}
 	}
 
