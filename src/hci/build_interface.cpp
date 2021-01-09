@@ -3,6 +3,7 @@
 #include "lib/framework/input.h"
 #include "lib/widget/widgbase.h"
 #include "lib/widget/button.h"
+#include "lib/widget/label.h"
 #include "lib/widget/bar.h"
 #include "build_interface.h"
 #include "../objmem.h"
@@ -16,6 +17,7 @@
 #include "../display3d.h"
 #include "../warcam.h"
 #include "../geometry.h"
+#include "../intdisplay.h"
 
 #define STAT_GAP			2
 #define STAT_BUTWIDTH		60
@@ -317,10 +319,10 @@ private:
 	typedef IntFancyButton BaseWidget;
 
 public:
-	BuildObjectButton(const std::shared_ptr<BaseObjectsStatsController> &controller, size_t builderIndex)
+	BuildObjectButton(const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex)
 		: BaseWidget()
-		, controller(controller)
-		, builderIndex(builderIndex)
+		, buildController(controller)
+		, objectIndex(objectIndex)
 	{
 		buttonType = BTMBUTTON;
 	}
@@ -328,10 +330,8 @@ public:
 	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::clicked(context, mouseButton);
-		auto droid = castDroid(controller->getObjectAt(builderIndex));
+		auto droid = castDroid(buildController->getObjectAt(objectIndex));
 		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
-
-		auto buildController = std::static_pointer_cast<BuildInterfaceController>(controller);
 
 		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
@@ -358,7 +358,7 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		auto droid = castDroid(controller->getObjectAt(builderIndex));
+		auto droid = castDroid(buildController->getObjectAt(objectIndex));
 		initDisplay();
 
 		if (droid && !isDead(droid))
@@ -372,34 +372,219 @@ protected:
 
 	std::string getTip() override
 	{
-		return droidGetName(castDroid(controller->getObjectAt(builderIndex)));
+		return droidGetName(castDroid(buildController->getObjectAt(objectIndex)));
 	}
 
 private:
-	std::shared_ptr<BaseObjectsStatsController> controller;
-	size_t builderIndex;
+	std::shared_ptr<BuildInterfaceController> buildController;
+	size_t objectIndex;
 	Vector2i jumpPosition = {0, 0};
 };
 
 class BuildStatsButton: public ObjectStatsButton
 {
 private:
-	typedef ObjectStatsButton BaseWidget;
-	using BaseWidget::BaseWidget;
+	typedef	ObjectStatsButton BaseWidget;
+
+protected:
+	BuildStatsButton (const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex):
+		BaseWidget(controller, objectIndex),
+		buildController(controller)
+	{}
+
+public:
+	static std::shared_ptr<BuildStatsButton> make(const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex)
+	{
+		class make_shared_enabler: public BuildStatsButton
+		{
+		public:
+			make_shared_enabler (const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex):
+				BuildStatsButton(controller, objectIndex)
+			{}
+		};
+		auto widget = std::make_shared<make_shared_enabler>(controller, objectIndex);
+		widget->initialize();
+		return widget;
+	}
+
+protected:
+	void display(int xOffset, int yOffset) override
+	{
+		auto droid = castDroid(controller->getObjectAt(objectIndex));
+
+		updateProgressBar(droid);
+		updateProductionRunSizeLabel(droid);
+
+		BaseWidget::display(xOffset, yOffset);
+	}
+
+	std::string getTip() override
+	{
+		if (auto stats = getStats())
+		{
+			return getStatsName(stats);
+		}
+
+		return "";
+	}
+
+private:
+	void initialize()
+	{
+		addProgressBar();
+		addProductionRunSizeLabel();
+	}
+
+	void addProgressBar()
+	{
+		W_BARINIT init;
+		init.x = STAT_PROGBARX;
+		init.y = STAT_PROGBARY;
+		init.width = STAT_PROGBARWIDTH;
+		init.height = STAT_PROGBARHEIGHT;
+		init.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+		init.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
+		init.pTip = _("Progress Bar");
+		init.style = WBAR_TROUGH | WIDG_HIDDEN;
+		init.iRange = GAME_TICKS_PER_SEC;
+		attach(progressBar = std::make_shared<W_BARGRAPH>(&init));
+	}
+
+	void addProductionRunSizeLabel()
+	{
+		W_LABINIT init;
+		init.style = WIDG_HIDDEN;
+		init.x = OBJ_TEXTX;
+		init.y = OBJ_T1TEXTY;
+		init.width = 16;
+		init.height = 16;
+		init.pText = WzString::fromUtf8("BUG! (a)");
+
+		attach(productionRunSizeLabel = std::make_shared<W_LABEL>(&init));
+	}
+
+	void updateProgressBar(DROID *droid)
+	{
+		progressBar->hide();
+
+		if (!DroidIsBuilding(droid))
+		{
+			return;
+		}
+
+		ASSERT(droid->asBits[COMP_CONSTRUCT], "Invalid droid type");
+
+		if (auto structure = DroidGetBuildStructure(droid))
+		{
+			//show progress of build
+			if (structure->currentBuildPts != 0)
+			{
+				formatTime(progressBar.get(), structure->currentBuildPts, structureBuildPointsToCompletion(*structure), structure->lastBuildRate, _("Build Progress"));
+			}
+			else
+			{
+				formatPower(progressBar.get(), checkPowerRequest(structure), structure->pStructureType->powerToBuild);
+			}
+		}
+	}
+
+	void updateProductionRunSizeLabel(DROID *droid)
+	{
+		int remaining = -1;
+
+		STRUCTURE_STATS const *stats = nullptr;
+		int count = 0;
+		auto processOrder = [&](DroidOrder const &order) {
+			STRUCTURE_STATS *newStats = nullptr;
+			int deltaCount = 0;
+			switch (order.type)
+			{
+				case DORDER_BUILD:
+				case DORDER_LINEBUILD:
+					newStats = order.psStats;
+					deltaCount = order.type == DORDER_LINEBUILD? 1 + (abs(order.pos.x - order.pos2.x) + abs(order.pos.y - order.pos2.y))/TILE_UNITS : 1;
+					break;
+				case DORDER_HELPBUILD:
+					if (STRUCTURE *target = castStructure(order.psObj))
+					{
+						newStats = target->pStructureType;
+						deltaCount = 1;
+					}
+					break;
+				default:
+					return false;
+			}
+			if (newStats != nullptr && (stats == nullptr || stats == newStats))
+			{
+				stats = newStats;
+				count += deltaCount;
+				return true;
+			}
+			return false;
+		};
+
+		if (processOrder(droid->order))
+		{
+			for (auto const &order: droid->asOrderList)
+			{
+				if (!processOrder(order))
+				{
+					break;
+				}
+			}
+		}
+		if (count > 1)
+		{
+			remaining = count;
+		}
+
+		if (remaining != -1)
+		{
+			productionRunSizeLabel->setString(WzString::fromUtf8(astringf("%d", remaining)));
+			productionRunSizeLabel->show();
+		}
+		else
+		{
+			productionRunSizeLabel->hide();
+		}
+	}
+
+	void updateProductionRunSize(DROID *droid)
+	{
+		progressBar->hide();
+
+		if (!DroidIsBuilding(droid))
+		{
+			return;
+		}
+
+		ASSERT(droid->asBits[COMP_CONSTRUCT], "Invalid droid type");
+
+		if (auto structure = DroidGetBuildStructure(droid))
+		{
+			//show progress of build
+			if (structure->currentBuildPts != 0)
+			{
+				formatTime(progressBar.get(), structure->currentBuildPts, structureBuildPointsToCompletion(*structure), structure->lastBuildRate, _("Build Progress"));
+			}
+			else
+			{
+				formatPower(progressBar.get(), checkPowerRequest(structure), structure->pStructureType->powerToBuild);
+			}
+		}
+	}
 
 	bool isSelected() const override
 	{
-		auto droid = controller->getObjectAt(buttonIndex);
+		auto droid = controller->getObjectAt(objectIndex);
 		return droid && (droid->selected || droid == controller->getSelectedObject());
 	}
 
 	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::clicked(context, mouseButton);
-		auto droid = castDroid(controller->getObjectAt(buttonIndex));
+		auto droid = castDroid(controller->getObjectAt(objectIndex));
 		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
-
-		auto buildController = std::static_pointer_cast<BuildInterfaceController>(controller);
 
 		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
@@ -412,16 +597,9 @@ private:
 		}
 	}
 
-protected:
-	std::string getTip() override
-	{
-		if (auto stats = getStats())
-		{
-			return getStatsName(stats);
-		}
-
-		return "";
-	}
+	std::shared_ptr<W_BARGRAPH> progressBar;
+	std::shared_ptr<W_LABEL> productionRunSizeLabel;
+	std::shared_ptr<BuildInterfaceController> buildController;
 };
 
 class BuildOptionButton: public StatsFormButton
@@ -450,18 +628,12 @@ private:
 	void initialize()
 	{
 		W_BARINIT sBarInit;
-		sBarInit.id = IDSTAT_TIMEBARSTART;
 		sBarInit.x = STAT_TIMEBARX;
 		sBarInit.y = STAT_TIMEBARY;
 		sBarInit.width = STAT_PROGBARWIDTH;
 		sBarInit.height = STAT_PROGBARHEIGHT;
-		sBarInit.size = 50;
 		sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
 		sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
-		if (sBarInit.size > 100)
-		{
-			sBarInit.size = 100;
-		}
 
 		sBarInit.iRange = GAME_TICKS_PER_SEC;
 		attach(bar = std::make_shared<W_BARGRAPH>(&sBarInit));
@@ -488,7 +660,7 @@ private:
 	{
 		auto stat = getStats();
 		auto powerCost = ((STRUCTURE_STATS *)stat)->powerToBuild;
-		bar->majorSize = powerCost / POWERPOINTS_DROIDDIV;
+		bar->majorSize = std::min(100, (int32_t)(powerCost / POWERPOINTS_DROIDDIV));
 	}
 
 	std::string getTip() override
@@ -538,15 +710,19 @@ class BuildObjectsForm: public ObjectsForm
 {
 private:
 	typedef ObjectsForm BaseWidget;
-	using BaseWidget::BaseWidget;
+
+protected:
+	BuildObjectsForm(const std::shared_ptr<BuildInterfaceController> &controller): BaseWidget(controller), buildController(controller)
+	{
+	}
 
 public:
-	static std::shared_ptr<BuildObjectsForm> make(const std::shared_ptr<BaseObjectsStatsController> &controller)
+	static std::shared_ptr<BuildObjectsForm> make(const std::shared_ptr<BuildInterfaceController> &controller)
 	{
 		class make_shared_enabler: public BuildObjectsForm
 		{
 		public:
-			make_shared_enabler(const std::shared_ptr<BaseObjectsStatsController> &controller): BuildObjectsForm(controller)
+			make_shared_enabler(const std::shared_ptr<BuildInterfaceController> &controller): BuildObjectsForm(controller)
 			{
 			}
 		};
@@ -557,13 +733,16 @@ public:
 
 	std::shared_ptr<ObjectStatsButton> makeStatsButton(size_t buttonIndex) const override
 	{
-		return std::make_shared<BuildStatsButton>(controller, buttonIndex);
+		return BuildStatsButton::make(buildController, buttonIndex);
 	}
 
 	std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const override
 	{
-		return std::make_shared<BuildObjectButton>(controller, buttonIndex);
+		return std::make_shared<BuildObjectButton>(buildController, buttonIndex);
 	}
+
+private:
+	std::shared_ptr<BuildInterfaceController> buildController;
 };
 
 class BuildStatsForm: public StatsForm

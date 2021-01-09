@@ -76,10 +76,10 @@ protected:
 class ObjectStatsButton : public StatsButton
 {
 public:
-	ObjectStatsButton(const std::shared_ptr<BaseObjectsStatsController> &controller, size_t buttonIndex)
+	ObjectStatsButton(const std::shared_ptr<BaseObjectsStatsController> &controller, size_t objectIndex)
 		: StatsButton()
 		, controller(controller)
-		, buttonIndex(buttonIndex)
+		, objectIndex(objectIndex)
 	{
 		buttonType = TOPBUTTON;
 	}
@@ -87,16 +87,16 @@ public:
 protected:
 	BASE_STATS *getStats() override
 	{
-		return controller->getObjectStatsAt(buttonIndex);
+		return controller->getObjectStatsAt(objectIndex);
 	}
 
 	bool isSelected() const override
 	{
-		return controller->getObjectAt(buttonIndex) == controller->getSelectedObject();
+		return controller->getObjectAt(objectIndex) == controller->getSelectedObject();
 	}
 
 	std::shared_ptr<BaseObjectsStatsController> controller;
-	size_t buttonIndex;
+	size_t objectIndex;
 };
 
 class ObjectsForm: public IntFormAnimated

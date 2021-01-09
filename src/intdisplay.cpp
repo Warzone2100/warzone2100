@@ -128,7 +128,7 @@ static void formatTimeText(W_BARGRAPH *barGraph, int time)
 	barGraph->textCol = WZCOL_CONSTRUCTION_BARTEXT;
 }
 
-static void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip)
+void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip)
 {
 	barGraph->setTip(toolTip);
 
@@ -154,7 +154,7 @@ static void formatPowerText(W_BARGRAPH *barGraph, int neededPower)
 	barGraph->textCol = WZCOL_POWERQUEUE_BARTEXT;
 }
 
-static void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
+void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 {
 	if (neededPower == -1 || powerToBuild == 0)
 	{
