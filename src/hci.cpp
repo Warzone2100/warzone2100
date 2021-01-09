@@ -1881,6 +1881,7 @@ static void intProcessObject(UDWORD id)
 
 				/* Select new one */
 				((STRUCTURE *)psObj)->selected = true;
+				psObjSelected = psObj;
 				triggerEventSelected();
 				jsDebugSelected(psObj);
 			}
