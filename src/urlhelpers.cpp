@@ -55,6 +55,8 @@
 # endif
 #endif
 
+#include "lib/framework/wzapp.h"
+
 #include <vector>
 
 static const std::vector<std::string> validLinkPrefixes = { "http://", "https://" };
@@ -132,9 +134,11 @@ bool openURLInBrowser(char const *url)
 		return false;
 	}
 
+	bool succeededOpeningUrl = false;
+
 	//FIXME: There is no decent way we can re-init the display to switch to window or fullscreen within game. refs: screenToggleMode().
 
-#if defined(WZ_OS_WIN)
+#if defined(WZ_OS_WIN) // Desktop Windows
 	std::vector<wchar_t> wUrl;
 	if (!win_utf8ToUtf16(url, wUrl))
 	{
@@ -183,13 +187,19 @@ bool openURLInBrowser(char const *url)
 	{
 		::CoUninitialize();
 	}
-	return !bShellExecuteFailure;
-#elif defined (WZ_OS_MAC)
-	return cocoaOpenURL(url);
-#else
-	// for linux
-	return xdg_open(url);
+	succeededOpeningUrl = !bShellExecuteFailure;
 #endif
+#if defined(WZ_OS_MAC) // macOS
+	succeededOpeningUrl = cocoaOpenURL(url);
+#endif
+	// Attempt using backend "open URL" support (if available)
+	if (succeededOpeningUrl) { return succeededOpeningUrl; }
+	succeededOpeningUrl = wzBackendAttemptOpenURL(url);
+#if defined(WZ_OS_UNIX) && !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC) // *nix
+	if (succeededOpeningUrl) { return succeededOpeningUrl; }
+	succeededOpeningUrl = xdg_open(url);
+#endif
+	return succeededOpeningUrl;
 }
 
 #include <curl/curl.h>
