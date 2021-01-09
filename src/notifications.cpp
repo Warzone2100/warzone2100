@@ -391,9 +391,11 @@ static W_FORMINIT MakeNotificationFormInit()
 
 class W_NOTIFICATION : public W_FORM
 {
-public:
+protected:
 	W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init = MakeNotificationFormInit());
+public:
 	~W_NOTIFICATION();
+	static std::shared_ptr<W_NOTIFICATION> make(WZ_Queued_Notification* request, W_FORMINIT init = MakeNotificationFormInit());
 	void run(W_CONTEXT *psContext) override;
 	void clicked(W_CONTEXT *psContext, WIDGET_KEY key) override;
 	void released(W_CONTEXT *psContext, WIDGET_KEY key) override;
@@ -435,7 +437,7 @@ struct DisplayNotificationButtonCache
 static std::list<std::unique_ptr<WZ_Queued_Notification>> notificationQueue;
 static std::shared_ptr<W_SCREEN> psNotificationOverlayScreen = nullptr;
 static std::unique_ptr<WZ_Queued_Notification> currentNotification;
-static W_NOTIFICATION* currentInGameNotification = nullptr;
+static std::shared_ptr<W_NOTIFICATION> currentInGameNotification = nullptr;
 static uint32_t lastNotificationClosed = 0;
 static Vector2i lastDragOnNotificationStartPos(-1,-1);
 
@@ -654,17 +656,24 @@ void W_NOTIFICATION::internalDismissNotification(float animationSpeed /*= 1.0f*/
 W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init /*= MakeNotificationFormInit()*/)
 : W_FORM(&init)
 , request(request)
+{ }
+
+std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* request, W_FORMINIT init /*= MakeNotificationFormInit()*/)
 {
-	W_NOTIFICATION* psNewNotificationForm = this;
+	class make_shared_enabler : public W_NOTIFICATION {
+	public:
+		make_shared_enabler(WZ_Queued_Notification* request, W_FORMINIT init): W_NOTIFICATION(request, init) {}
+	};
+	auto psNewNotificationForm = std::make_shared<make_shared_enabler>(request, init);
 	psNotificationOverlayScreen->psForm->attach(psNewNotificationForm);
 
 	// Load the image, if specified
 	if (!request->notification.largeIcon.empty())
 	{
-		pImageTexture = loadImage(request->notification.largeIcon);
+		psNewNotificationForm->pImageTexture = psNewNotificationForm->loadImage(request->notification.largeIcon);
 	}
 
-	const int notificationWidth = width();
+	const int notificationWidth = psNewNotificationForm->width();
 
 //		/* Add the close button */
 //		W_BUTINIT sCloseButInit;
@@ -684,7 +693,7 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 //		}));
 
 	// Calculate dimensions for text area
-	int imageSize = (pImageTexture) ? WZ_NOTIFICATION_IMAGE_SIZE : 0;
+	int imageSize = (psNewNotificationForm->pImageTexture) ? WZ_NOTIFICATION_IMAGE_SIZE : 0;
 	int maxTextWidth = notificationWidth - (WZ_NOTIFICATION_PADDING * 2) - imageSize - ((imageSize > 0) ? WZ_NOTIFICATION_PADDING : 0);
 
 	// Add title
@@ -714,8 +723,8 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	std::string dismissLabel = _("Dismiss");
 	std::string actionLabel = request->notification.action.title;
 
-	W_BUTTON *psActionButton = nullptr;
-	W_BUTTON *psDismissButton = nullptr;
+	std::shared_ptr<W_BUTTON> psActionButton = nullptr;
+	std::shared_ptr<W_BUTTON> psDismissButton = nullptr;
 
 	// Position the buttons below the text contents area
 	int buttonsTop = label_contents->y() + label_contents->height() + WZ_NOTIFICATION_PADDING;
@@ -741,12 +750,15 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		// 1.) "Action" button
 		sButInit.id = 2;
 		sButInit.width = iV_GetTextWidth(actionLabel.c_str(), font_regular_bold) + 18;
-		sButInit.x = (short)(width() - WZ_NOTIFICATION_PADDING - sButInit.width);
+		sButInit.x = (short)(psNewNotificationForm->width() - WZ_NOTIFICATION_PADDING - sButInit.width);
 		sButInit.UserData = 1; // store "Action" state
 		sButInit.FontID = font_regular_bold;
 		sButInit.pText = actionLabel.c_str();
-		psActionButton = new W_BUTTON(&sButInit);
-		psActionButton->addOnClickHandler([psNewNotificationForm](W_BUTTON& button) {
+		psActionButton = std::make_shared<W_BUTTON>(&sButInit);
+		psNewNotificationForm->attach(psActionButton);
+		psActionButton->addOnClickHandler([](W_BUTTON& button) {
+			auto psNewNotificationForm = std::dynamic_pointer_cast<W_NOTIFICATION>(button.parent());
+			ASSERT_OR_RETURN(, psNewNotificationForm != nullptr, "null parent");
 			if (psNewNotificationForm->request->notification.action.onAction)
 			{
 				psNewNotificationForm->request->notification.action.onAction(psNewNotificationForm->request->notification);
@@ -757,7 +769,6 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 			}
 			psNewNotificationForm->internalDismissNotification();
 		});
-		attach(psActionButton);
 	}
 
 	if (psActionButton != nullptr || request->notification.duration == 0)
@@ -767,14 +778,16 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 		sButInit.id = 3;
 		sButInit.FontID = font_regular;
 		sButInit.width = iV_GetTextWidth(dismissLabel.c_str(), font_regular) + 18;
-		sButInit.x = (short)(((psActionButton) ? (psActionButton->x()) - WZ_NOTIFICATION_BETWEEN_BUTTON_PADDING : width() - WZ_NOTIFICATION_PADDING) - sButInit.width);
+		sButInit.x = (short)(((psActionButton) ? (psActionButton->x()) - WZ_NOTIFICATION_BETWEEN_BUTTON_PADDING : psNewNotificationForm->width() - WZ_NOTIFICATION_PADDING) - sButInit.width);
 		sButInit.pText = dismissLabel.c_str();
 		sButInit.UserData = 0; // store regular state
-		psDismissButton = new W_BUTTON(&sButInit);
-		psDismissButton->addOnClickHandler([psNewNotificationForm](W_BUTTON& button) {
+		psDismissButton = std::make_shared<W_BUTTON>(&sButInit);
+		psDismissButton->addOnClickHandler([](W_BUTTON& button) {
+			auto psNewNotificationForm = std::dynamic_pointer_cast<W_NOTIFICATION>(button.parent());
+			ASSERT_OR_RETURN(, psNewNotificationForm != nullptr, "null parent");
 			psNewNotificationForm->internalDismissNotification();
 		});
-		attach(psDismissButton);
+		psNewNotificationForm->attach(psDismissButton);
 	}
 
 	if (request->notification.isIgnorable() && !request->notification.displayOptions.isOneTimeNotification())
@@ -791,7 +804,7 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 			pDoNotShowAgainButton->FontID = font_small;
 			Vector2i minimumDimensions = pDoNotShowAgainButton->calculateDesiredDimensions();
 			pDoNotShowAgainButton->setGeometry(WZ_NOTIFICATION_PADDING, buttonsTop, minimumDimensions.x, std::max(minimumDimensions.y, WZ_NOTIFICATION_BUTTON_HEIGHT));
-			pOnDoNotShowAgainCheckbox = pDoNotShowAgainButton;
+			psNewNotificationForm->pOnDoNotShowAgainCheckbox = pDoNotShowAgainButton;
 		}
 	}
 
@@ -808,7 +821,9 @@ W_NOTIFICATION::W_NOTIFICATION(WZ_Queued_Notification* request, W_FORMINIT init 
 	{
 		calculatedHeight = std::max<int>(calculatedHeight, imageSize + (WZ_NOTIFICATION_PADDING * 2));
 	}
-	setGeometry(x(), y(), width(), calculatedHeight);
+	psNewNotificationForm->setGeometry(psNewNotificationForm->x(), psNewNotificationForm->y(), psNewNotificationForm->width(), calculatedHeight);
+
+	return psNewNotificationForm;
 }
 
 W_NOTIFICATION::~W_NOTIFICATION()
@@ -1157,6 +1172,12 @@ void notificationsShutDown()
 		notificationPrefs = nullptr;
 	}
 
+	if (currentInGameNotification)
+	{
+		widgDelete(currentInGameNotification.get());
+		currentInGameNotification = nullptr;
+	}
+
 	if (psNotificationOverlayScreen)
 	{
 		widgRemoveOverlayScreen(psNotificationOverlayScreen);
@@ -1181,14 +1202,14 @@ bool isDraggingInGameNotification()
 	return (lastDragOnNotificationStartPos.x >= 0 && lastDragOnNotificationStartPos.y >= 0);
 }
 
-W_NOTIFICATION* getOrCreateInGameNotificationForm(WZ_Queued_Notification* request)
+std::shared_ptr<W_NOTIFICATION> getOrCreateInGameNotificationForm(WZ_Queued_Notification* request)
 {
 	if (!request) return nullptr;
 
 	// right now we only support a single concurrent notification
 	if (!currentInGameNotification)
 	{
-		currentInGameNotification = new W_NOTIFICATION(request);
+		currentInGameNotification = W_NOTIFICATION::make(request);
 	}
 	return currentInGameNotification;
 }
