@@ -50,7 +50,7 @@ public:
 
 	void selectBuilder(BASE_OBJECT *psObj);
 	void jumpToSelectedBuilder();
-	void addToFavorites(BASE_STATS *buildOption);
+	void toggleFavorites(BASE_STATS *buildOption);
 	void startBuildPosition(BASE_STATS *buildOption);
 	bool showInterface();
 	void closeInterface();

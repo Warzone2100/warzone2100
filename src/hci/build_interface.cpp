@@ -231,9 +231,17 @@ void BuildInterfaceController::jumpToSelectedBuilder()
 	setWarCamActive(false);
 }
 
-void BuildInterfaceController::addToFavorites(BASE_STATS *buildOption)
+void BuildInterfaceController::toggleFavorites(BASE_STATS *buildOption)
 {
-	asStructureStats[buildOption->index].isFavorite = !shouldShowFavorites();
+	auto index = buildOption->index;
+	std::weak_ptr<BuildInterfaceController> weakController = shared_from_this();
+	widgScheduleTask([index, weakController](){
+		if (auto controller = weakController.lock())
+		{
+			asStructureStats[index].isFavorite = !controller->shouldShowFavorites();
+			controller->updateBuildOptionsList();
+		}
+	});
 }
 
 void BuildInterfaceController::refresh()
@@ -685,7 +693,7 @@ private:
 		}
 		else if (mouseButton == WKEY_SECONDARY)
 		{
-			controller->addToFavorites(clickedStats);
+			controller->toggleFavorites(clickedStats);
 		}
 	}
 
