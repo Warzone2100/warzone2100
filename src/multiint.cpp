@@ -2213,6 +2213,11 @@ bool recvTeamRequest(NETQUEUE queue)
 		return false;
 	}
 
+	if (locked.teams)
+	{
+		return false;
+	}
+
 	if (NetPlay.players[player].team != team)
 	{
 		resetReadyStatus(false);
@@ -2442,6 +2447,11 @@ bool recvPositionRequest(NETQUEUE queue)
 	if (whosResponsible(player) != queue.index)
 	{
 		HandleBadParam("NET_POSITIONREQUEST given incorrect params.", player, queue.index);
+		return false;
+	}
+
+	if (locked.position)
+	{
 		return false;
 	}
 
