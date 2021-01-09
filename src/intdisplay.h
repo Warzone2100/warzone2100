@@ -252,6 +252,9 @@ void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
+void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip);
+void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild);
+
 bool DroidIsBuilding(DROID *Droid);
 STRUCTURE *DroidGetBuildStructure(DROID *Droid);
 bool DroidGoingToBuild(DROID *Droid);
