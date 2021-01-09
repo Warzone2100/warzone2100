@@ -55,8 +55,9 @@ public:
 	bool showInterface();
 	void closeInterface();
 	void refresh() override;
-	void findSelected();
+	void updateSelected();
 	void toggleBuilderSelection(DROID *droid);
+	void displayStatsForm();
 
 private:
 	void updateBuildersList();

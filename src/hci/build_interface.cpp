@@ -23,8 +23,6 @@
 #define STAT_BUTWIDTH		60
 #define STAT_BUTHEIGHT		46
 
-static void addBuildObjectStats(std::shared_ptr<BuildInterfaceController> controller);
-
 void BuildInterfaceController::updateBuildersList()
 {
 	std::vector<DROID *> newBuilders;
@@ -248,12 +246,6 @@ void BuildInterfaceController::refresh()
 		closeInterface();
 		return;
 	}
-
-	auto selected = getSelectedObject();
-	if (!selected || selected->died)
-	{
-		findSelected();
-	}
 }
 
 void BuildInterfaceController::closeInterface()
@@ -262,45 +254,37 @@ void BuildInterfaceController::closeInterface()
 	intRemoveObject();
 }
 
-void BuildInterfaceController::findSelected()
+void BuildInterfaceController::updateSelected()
 {
-	auto selectedBuilder = getSelectedObject();
-	for (auto builder: objects)
-	{
-		if (builder->died == 0 && builder == selectedBuilder)
-		{
-			return;
-		}
-	}
-
-	selectedBuilder = nullptr;
 	for (auto builder: objects)
 	{
 		if (builder->died == 0 && builder->selected)
 		{
-			selectedBuilder = builder;
-			break;
+			setSelectedObject(builder);
+			return;
 		}
 	}
 
-	if (!selectedBuilder)
+	if (auto previouslySelected = getSelectedObject())
 	{
-		selectedBuilder = objects.front();
+		for (auto builder: objects)
+		{
+			if (builder->died == 0 && builder == previouslySelected)
+			{
+				setSelectedObject(builder);
+				return;
+			}
+		}
 	}
 
-	setSelectedObject(selectedBuilder);
+	setSelectedObject(objects.front());
 }
 
 void BuildInterfaceController::toggleBuilderSelection(DROID *droid)
 {
 	if (droid->selected)
 	{
-		if (getSelectedObject() == droid)
-		{
-			setSelectedObject(nullptr);
-		}
 		droid->selected = false;
-		findSelected();
 	}
 	else
 	{
@@ -353,6 +337,8 @@ public:
 			setWarCamActive(false);
 			jumpPosition = {0, 0};
 		}
+
+		buildController->displayStatsForm();
 	}
 
 protected:
@@ -595,6 +581,8 @@ private:
 			clearSelection();
 			buildController->selectBuilder(droid);
 		}
+
+		buildController->displayStatsForm();
 	}
 
 	std::shared_ptr<W_BARGRAPH> progressBar;
@@ -741,6 +729,13 @@ public:
 		return std::make_shared<BuildObjectButton>(buildController, buttonIndex);
 	}
 
+protected:
+	void display(int xOffset, int yOffset) override
+	{
+		buildController->updateSelected();
+		BaseWidget::display(xOffset, yOffset);
+	}
+
 private:
 	std::shared_ptr<BuildInterfaceController> buildController;
 };
@@ -841,13 +836,10 @@ bool BuildInterfaceController::showInterface()
 		return false;
 	}
 
-	findSelected();
-
-	auto const &parent = psWScreen->psForm;
 	auto objectsForm = BuildObjectsForm::make(shared_from_this());
-	parent->attach(objectsForm);
+	psWScreen->psForm->attach(objectsForm);
 
-	addBuildObjectStats(shared_from_this());
+	displayStatsForm();
 
 	intMode = INT_STAT;
 	triggerEvent(TRIGGER_MENU_BUILD_UP);
@@ -855,10 +847,11 @@ bool BuildInterfaceController::showInterface()
 	return true;
 }
 
-static void addBuildObjectStats(std::shared_ptr<BuildInterfaceController> controller)
+void BuildInterfaceController::displayStatsForm()
 {
-	auto const &parent = psWScreen->psForm;
-
-	auto statForm = BuildStatsForm::make(controller);
-	parent->attach(statForm);
+	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
+	{
+		auto statForm = BuildStatsForm::make(shared_from_this());
+		psWScreen->psForm->attach(statForm);
+	}
 }
