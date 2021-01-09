@@ -117,6 +117,10 @@ void wzDelay(unsigned int delay);	//delay in ms
 void StartTextInput(void* pTextInputRequester);
 void StopTextInput(void* pTextInputResigner);
 bool isInTextInputMode();
+
+// NOTE: wzBackendAttemptOpenURL should *not* be called directly - instead, call openURLInBrowser() from urlhelpers.h
+bool wzBackendAttemptOpenURL(const char *url);
+
 // Thread related
 WZ_THREAD *wzThreadCreate(int (*threadFunc)(void *), void *data);
 unsigned long wzThreadID(WZ_THREAD *thread);

@@ -2922,3 +2922,19 @@ void wzShutdown()
 		copied_argc = 0;
 	}
 }
+
+// NOTE: wzBackendAttemptOpenURL should *not* be called directly - instead, call openURLInBrowser() from urlhelpers.h
+bool wzBackendAttemptOpenURL(const char *url)
+{
+#if SDL_VERSION_ATLEAST(2, 0, 14) // SDL >= 2.0.14
+	// Can use SDL_OpenURL to support many (not all) platforms if run-time SDL library is also >= 2.0.14
+	SDL_version linked_sdl_version;
+	SDL_GetVersion(&linked_sdl_version);
+	if ((linked_sdl_version.major > 2) || (linked_sdl_version.major == 2 && (linked_sdl_version.minor > 0 || (linked_sdl_version.minor == 0 && linked_sdl_version.patch >= 14))))
+	{
+		return (SDL_OpenURL(url) == 0);
+	}
+#endif
+	// SDL_OpenURL requires SDL >= 2.0.14
+	return false;
+}
