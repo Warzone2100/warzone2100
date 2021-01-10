@@ -468,14 +468,14 @@ There can only be 'limit' number of entries
 'topic' is the currently researched topic
 */
 // NOTE by AJL may 99 - skirmish now has it's own version of this, skTopicAvail.
-UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit)
+UWORD fillResearchList(UWORD *plist, UDWORD playerID, nonstd::optional<UWORD> topic, UWORD limit)
 {
 	UWORD				inc, count = 0;
 
 	for (inc = 0; inc < asResearch.size(); inc++)
 	{
 		// if the inc matches the 'topic' - automatically add to the list
-		if (inc == topic || researchAvailable(inc, playerID, ModeQueue))
+		if ((topic.has_value() && inc == topic.value()) || researchAvailable(inc, playerID, ModeQueue))
 		{
 			*plist++ = inc;
 			count++;

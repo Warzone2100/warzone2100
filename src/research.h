@@ -24,6 +24,8 @@
 #ifndef __INCLUDED_SRC_RESEARCH_H__
 #define __INCLUDED_SRC_RESEARCH_H__
 
+#include <optional-lite/optional.hpp>
+
 #include "lib/framework/wzconfig.h"
 
 #include "objectdef.h"
@@ -87,7 +89,7 @@ bool loadResearch(WzConfig &ini);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
-UWORD fillResearchList(UWORD *plist, UDWORD playerID, UWORD topic, UWORD limit);
+UWORD fillResearchList(UWORD *plist, UDWORD playerID, nonstd::optional<UWORD> topic, UWORD limit);
 
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger);

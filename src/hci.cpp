@@ -1654,7 +1654,7 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 {
 	BASE_STATS		*psStats;
 	size_t          statMajor = 0;
-	UDWORD			i, j, index;
+	UDWORD			i, j;
 	UDWORD			count;
 	SDWORD			iconNumber, entryIN;
 
@@ -1698,14 +1698,10 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	  so that only one topic can be researched at a time*/
 	if (objMode == IOBJ_RESEARCH)
 	{
-		//set to value that won't be reached in fillResearchList
-		index = asResearch.size() + 1;
-		if (psStats)
-		{
-			index = ((RESEARCH *)psStats)->index;
-		}
+		auto currentTopic = psStats ? nonstd::optional<UWORD>(((RESEARCH *)psStats)->index): nonstd::nullopt;
+
 		//recalculate the list
-		numStatsListEntries = fillResearchList(pList, selectedPlayer, (UWORD)index, MAXRESEARCH);
+		numStatsListEntries = fillResearchList(pList, selectedPlayer, currentTopic, MAXRESEARCH);
 
 		//	-- Alex's reordering of the list
 		// NOTE!  Do we even want this anymore, since we can have basically
@@ -4327,10 +4323,8 @@ int intGetResearchState()
 	int count = 0;
 	if (resFree)
 	{
-		//set to value that won't be reached in fillResearchList
-		int index = asResearch.size() + 1;
 		//calculate the list
-		int preCount = fillResearchList(pList, selectedPlayer, index, MAXRESEARCH);
+		int preCount = fillResearchList(pList, selectedPlayer, nonstd::nullopt, MAXRESEARCH);
 		count = preCount;
 		for (int n = 0; n < preCount; ++n)
 		{
