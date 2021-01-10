@@ -3347,19 +3347,25 @@ static void loadMapChallengeAndPlayerSettings(bool forceLoadPlayers = false)
 	sstrcat(aFileName, ".json");
 
 	WzString ininame = challengeActive ? sRequestResult : aFileName;
+	bool warnIfMissing = false;
 	if (getHostLaunch() == HostLaunch::Skirmish)
 	{
 		ininame = "tests/" + WzString::fromUtf8(wz_skirmish_test());
+		warnIfMissing = true;
 	}
 	if (getHostLaunch() == HostLaunch::Autohost)
 	{
 		ininame = "autohost/" + WzString::fromUtf8(wz_skirmish_test());
+		warnIfMissing = true;
 	}
 
 	const bool bIsOnline = NetPlay.bComms && NetPlay.isHost;
 	if (!PHYSFS_exists(ininame.toUtf8().c_str()))
 	{
-		debug(LOG_ERROR, "Missing specified file: %s", ininame.toUtf8().c_str());
+		if (warnIfMissing)
+		{
+			debug(LOG_ERROR, "Missing specified file: %s", ininame.toUtf8().c_str());
+		}
 
 		/* Just reset the players if config is not found and host is not started yet */
 		if (!bIsOnline) {
