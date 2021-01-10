@@ -8,7 +8,6 @@
 #include "build_interface.h"
 #include "../objmem.h"
 #include "../hci.h"
-#include "../research.h"
 #include "../statsdef.h"
 #include "../order.h"
 #include "../intorder.h"
@@ -442,6 +441,7 @@ private:
 		init.style = WBAR_TROUGH | WIDG_HIDDEN;
 		init.iRange = GAME_TICKS_PER_SEC;
 		attach(progressBar = std::make_shared<W_BARGRAPH>(&init));
+		progressBar->setBackgroundColour(WZCOL_BLACK);
 	}
 
 	void addProductionRunSizeLabel()
@@ -540,31 +540,6 @@ private:
 		else
 		{
 			productionRunSizeLabel->hide();
-		}
-	}
-
-	void updateProductionRunSize(DROID *droid)
-	{
-		progressBar->hide();
-
-		if (!DroidIsBuilding(droid))
-		{
-			return;
-		}
-
-		ASSERT(droid->asBits[COMP_CONSTRUCT], "Invalid droid type");
-
-		if (auto structure = DroidGetBuildStructure(droid))
-		{
-			//show progress of build
-			if (structure->currentBuildPts != 0)
-			{
-				formatTime(progressBar.get(), structure->currentBuildPts, structureBuildPointsToCompletion(*structure), structure->lastBuildRate, _("Build Progress"));
-			}
-			else
-			{
-				formatPower(progressBar.get(), checkPowerRequest(structure), structure->pStructureType->powerToBuild);
-			}
 		}
 	}
 
