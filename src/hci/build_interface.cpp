@@ -40,10 +40,10 @@ void BuildInterfaceController::updateBuildOptionsList()
 {
 	auto newBuildOptions = fillStructureList(selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
 
-	stats = std::vector<BASE_STATS *>(newBuildOptions.begin(), newBuildOptions.end());
+	stats = std::vector<STRUCTURE_STATS *>(newBuildOptions.begin(), newBuildOptions.end());
 }
 
-BASE_STATS *BuildInterfaceController::getObjectStatsAt(size_t objectIndex) const
+STRUCTURE_STATS *BuildInterfaceController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto builder = castDroid(getObjectAt(objectIndex));
 	if (!builder)
@@ -56,7 +56,7 @@ BASE_STATS *BuildInterfaceController::getObjectStatsAt(size_t objectIndex) const
 		return nullptr;
 	}
 
-	BASE_STATS *stats;
+	STRUCTURE_STATS *stats;
 	if (orderStateStatsLoc(builder, DORDER_BUILD, &stats)) // Moving to build location?
 	{
 		return stats;
@@ -488,7 +488,7 @@ public:
 	}
 
 private:
-	BASE_STATS *getStats() override
+	STRUCTURE_STATS *getStats() override
 	{
 		return controller->getStatsAt(buildOptionIndex);
 	}
@@ -527,14 +527,14 @@ private:
 	void updateLayout()
 	{
 		auto stat = getStats();
-		auto powerCost = ((STRUCTURE_STATS *)stat)->powerToBuild;
+		auto powerCost = stat->powerToBuild;
 		bar->majorSize = std::min(100, (int32_t)(powerCost / POWERPOINTS_DROIDDIV));
 	}
 
 	std::string getTip() override
 	{
 		auto stat = getStats();
-		auto powerCost = ((STRUCTURE_STATS *)stat)->powerToBuild;
+		auto powerCost = stat->powerToBuild;
 		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
 		costString.replace("%1", WzString::number(powerCost));
 		WzString tipString = getStatsName(stat);
@@ -549,7 +549,7 @@ private:
 		if (isMouseOverWidget())
 		{
 			auto stats = controller->getStatsAt(buildOptionIndex);
-			intSetShadowPower(((STRUCTURE_STATS *)stats)->powerToBuild);
+			intSetShadowPower(stats->powerToBuild);
 		}
 	}
 
