@@ -15,8 +15,8 @@ public:
 		updateBuildOptionsList();
 	}
 
-	BASE_STATS *getObjectStatsAt(size_t objectIndex) const override;
-	BASE_STATS *getStatsAt(size_t statsIndex) const override
+	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
+	STRUCTURE_STATS *getStatsAt(size_t statsIndex) const override
 	{
 		return stats.at(statsIndex);
 	}
@@ -62,7 +62,7 @@ public:
 private:
 	void updateBuildersList();
 	void updateBuildOptionsList();
-	std::vector<BASE_STATS *> stats;
+	std::vector<STRUCTURE_STATS *> stats;
 };
 
 bool showBuildInterface();

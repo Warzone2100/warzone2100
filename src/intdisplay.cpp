@@ -1633,7 +1633,7 @@ void IntFancyButton::displayBlank(int xOffset, int yOffset)
 //
 bool DroidIsBuilding(DROID *Droid)
 {
-	BASE_STATS	*Stats;
+	STRUCTURE_STATS	*Stats;
 
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
 	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
@@ -1660,7 +1660,7 @@ bool DroidIsBuilding(DROID *Droid)
 //
 bool DroidGoingToBuild(DROID *Droid)
 {
-	BASE_STATS	*Stats;
+	STRUCTURE_STATS	*Stats;
 
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
 	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
@@ -1747,7 +1747,7 @@ static STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 //
 BASE_STATS *DroidGetBuildStats(DROID *Droid)
 {
-	BASE_STATS *Stats;
+	STRUCTURE_STATS *Stats;
 
 	if (orderStateStatsLoc(Droid, DORDER_BUILD, &Stats))  	// Moving to build location?
 	{
