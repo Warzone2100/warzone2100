@@ -22,21 +22,9 @@
  * New scripting system -- script functions
  */
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtCore/QFileInfo>
-
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/wzpaths.h"
 #include "lib/framework/fixedpoint.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
@@ -2276,6 +2264,7 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 //-- ## include(file)
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
 static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
@@ -2284,24 +2273,24 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 	std::string basePath = QuickJS_GetStdString(ctx, global_obj, "scriptPath");
 	std::string basenameStr = JSValueToStdString(ctx, argv[0]);
-	QFileInfo basename(basenameStr.c_str());
-	std::string path = basePath + "/" + basename.fileName().toStdString();
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(basenameStr);
+	std::string path = basePath + "/" + basename.fileName();
 	// allow users to use subdirectories too
-	if (PHYSFS_exists(basename.filePath().toUtf8().constData()))
+	if (PHYSFS_exists(basename.filePath().c_str()))
 	{
-		path = basename.filePath().toStdString(); // use this path instead (from read-only dir)
+		path = basename.filePath(); // use this path instead (from read-only dir)
 	}
-	else if (PHYSFS_exists(QString("scripts/" + basename.filePath()).toUtf8().constData()))
+	else if (PHYSFS_exists((std::string("scripts/") + basename.filePath()).c_str()))
 	{
-		path = "scripts/" + basename.filePath().toStdString(); // use this path instead (in user write dir)
+		path = "scripts/" + basename.filePath(); // use this path instead (in user write dir)
 	}
 	UDWORD size;
 	char *bytes = nullptr;
 	if (!loadFile(path.c_str(), &bytes, &size))
 	{
 		debug(LOG_ERROR, "Failed to read include file \"%s\" (path=%s, name=%s)",
-		      path.c_str(), basePath.c_str(), basename.filePath().toUtf8().constData());
-		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\" (path=%s, name=%s)", path.c_str(), basePath.c_str(), basename.filePath().toUtf8().constData());
+		      path.c_str(), basePath.c_str(), basename.filePath().c_str());
+		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\" (path=%s, name=%s)", path.c_str(), basePath.c_str(), basename.filePath().c_str());
 		return JS_FALSE;
 	}
 	JSValue compiledFuncObj = JS_Eval(ctx, bytes, size, path.c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
@@ -2830,8 +2819,8 @@ ScriptMapData runMapScript_QuickJS(WzString const &path, uint64_t seed, bool pre
 
 wzapi::scripting_instance* createQuickJSScriptInstance(const WzString& path, int player, int difficulty)
 {
-	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
-	quickjs_scripting_instance* pNewInstance = new quickjs_scripting_instance(player, basename.baseName().toStdString());
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
+	quickjs_scripting_instance* pNewInstance = new quickjs_scripting_instance(player, basename.baseName());
 	if (!pNewInstance->loadScript(path, player, difficulty))
 	{
 		delete pNewInstance;
@@ -2914,8 +2903,8 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 	JS_SetPropertyFunctionList(ctx, global_obj, js_builtin_funcs, sizeof(js_builtin_funcs) / sizeof(js_builtin_funcs[0]));
 
 	// Regular functions
-	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
-	registerFunctions(basename.baseName().toStdString());
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
+	registerFunctions(basename.baseName());
 	// Remember internal, reserved names
 	std::unordered_set<std::string>& internalNamespaceRef = internalNamespace;
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [&internalNamespaceRef](const char *key, JSAtom &) {

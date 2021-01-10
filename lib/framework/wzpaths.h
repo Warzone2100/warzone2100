@@ -24,4 +24,34 @@
 
 std::string getWZInstallPrefix();
 
+class WzPathInfo
+{
+private:
+	WzPathInfo(const std::string &file);
+public:
+	// Expects a filename / path with "/" as the path separator.
+	static WzPathInfo fromPlatformIndependentPath(const std::string& file);
+public:
+	// Returns the name of the file (excluding the path).
+	std::string fileName() const;
+
+	// Returns the file name, including the path.
+	std::string filePath() const;
+
+	// Returns the base name of the file (without the path).
+	// The base name = all characters in the file up to (but not including) the first '.' character.
+	// ex.
+	// ```cpp
+	//   WzPathInfo info("/autohost/example.js");
+	//   auto result = info.baseName(); // result == "example"
+	// ```
+	std::string baseName() const;
+
+	// Returns the file's path. Does *not* include the file name.
+	std::string path() const;
+
+private:
+	std::string file;
+};
+
 #endif // _LIB_FRAMEWORK_WZPATHS_H

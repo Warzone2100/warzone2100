@@ -2030,6 +2030,7 @@ static QScriptValue js_profile(QScriptContext *context, QScriptEngine *engine)
 //-- ## include(file)
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
 static QScriptValue js_include(QScriptContext *context, QScriptEngine *engine)
 {
