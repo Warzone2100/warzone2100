@@ -757,7 +757,6 @@ static void intDoScreenRefresh()
 				intUpdateObject((BASE_OBJECT *)interfaceStructList(), StatsWasUp);
 				break;
 
-			case IOBJ_BUILD:
 			case IOBJ_COMMAND:		// the command droid screen
 			case IOBJ_BUILDSEL:		// Selecting a position for a new structure
 			case IOBJ_DEMOLISHSEL:	// Selecting a structure to demolish
@@ -983,7 +982,7 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 			apsStructStatsList[i] = asStructureStats + i;
 		}
 		ppsStatsList = (BASE_STATS **)apsStructStatsList;
-		objMode = IOBJ_BUILD;
+		objMode = IOBJ_DEBUG_STRUCTURE;
 		intAddStats(ppsStatsList, std::min<unsigned>(numStructureStats, MAXSTRUCTURES), nullptr, nullptr);
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
@@ -1686,18 +1685,6 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	// NOTE! The below functions populate our list (building/units...)
 	// up to MAX____.  We have unlimited potential, but it is capped at 200 now.
 	//determine the Structures that can be built
-	if (objMode == IOBJ_BUILD)
-	{
-		auto structureList = fillStructureList(selectedPlayer, MAXSTRUCTURES - 1, showFavorites);
-		numStatsListEntries = structureList.size();
-		size_t current = 0;
-		for (auto structure: structureList)
-		{
-			apsStructStatsList[current++] = structure;
-		}
-
-		ppsStatsList = (BASE_STATS **)apsStructStatsList;
-	}
 
 	//have to determine the Template list once the factory has been chosen
 	if (objMode == IOBJ_MANUFACTURE)
@@ -1796,57 +1783,10 @@ static void intProcessObject(UDWORD id)
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct;
 	SDWORD			butIndex;
-	UDWORD			statButID;
 
 	ASSERT_OR_RETURN(, widgGetFromID(psWScreen, IDOBJ_TABFORM) != nullptr, "intProcessObject, missing form");
 
-	// deal with CRTL clicks
-	if (objMode == IOBJ_BUILD &&	// What..................?
-	    (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)) &&
-	    ((id >= IDOBJ_OBJSTART && id <= IDOBJ_OBJEND) ||
-	     (id >= IDOBJ_STATSTART && id <= IDOBJ_STATEND)))
-	{
-		/* Find the object that the ID refers to */
-		psObj = intGetObject(id);
-		if (id >= IDOBJ_OBJSTART && id <= IDOBJ_OBJEND)
-		{
-			statButID = IDOBJ_STATSTART + id - IDOBJ_OBJSTART;
-		}
-		else
-		{
-			statButID = id;
-		}
-		if (psObj && psObj->selected)
-		{
-			psObj->selected = false;
-			widgSetButtonState(psWScreen, statButID, 0);
-			if (intNumSelectedDroids(DROID_CONSTRUCT) == 0 && intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0)
-			{
-				intRemoveStats();
-			}
-			if (psObjSelected == psObj)
-			{
-				psObjSelected = (BASE_OBJECT *)intCheckForDroid(DROID_CONSTRUCT);
-				if (!psObjSelected)
-				{
-					psObjSelected = (BASE_OBJECT *)intCheckForDroid(DROID_CYBORG_CONSTRUCT);
-				}
-			}
-		}
-		else if (psObj)
-		{
-			if (psObjSelected)
-			{
-				psObjSelected->selected = true;
-			}
-			psObj->selected = true;
-			widgSetButtonState(psWScreen, statButID, WBUT_CLICKLOCK);
-			intAddObjectStats(psObj, statButID);
-			jsDebugSelected(psObj);
-		}
-		triggerEventSelected();
-	}
-	else if (id >= IDOBJ_OBJSTART && id <= IDOBJ_OBJEND)
+	if (id >= IDOBJ_OBJSTART && id <= IDOBJ_OBJEND)
 	{
 		/* deal with RMB clicks */
 		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
@@ -2056,7 +1996,7 @@ static void intProcessStats(UDWORD id)
 				/* See if this was a click on an already selected stat */
 				psStats = objGetStatsFunc(psObjSelected);
 				// only do the cancel operation if not trying to add to the build list
-				if (psStats == ppsStatsList[id - IDSTAT_START] && objMode != IOBJ_BUILD)
+				if (psStats == ppsStatsList[id - IDSTAT_START])
 				{
 					// this needs to be done before the topic is cancelled from the structure
 					/* If Research then need to set topic to be cancelled */
@@ -2095,11 +2035,7 @@ static void intProcessStats(UDWORD id)
 						}
 					}
 
-					if (objMode == IOBJ_BUILD)
-					{
-						triggerEvent(TRIGGER_MENU_BUILD_SELECTED);
-					}
-					else if (objMode == IOBJ_RESEARCH)
+					if (objMode == IOBJ_RESEARCH)
 					{
 						triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
 					}
@@ -2311,8 +2247,7 @@ static void intStopStructPosition()
 	/* Check there is still a struct position running */
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 	{
-		// Reset the stats button
-		objMode = IOBJ_BUILD;
+		objMode = IOBJ_NONE;
 	}
 	kill3DBuilding();
 }
@@ -2386,58 +2321,6 @@ static void intObjectDied(UDWORD objID)
 			intMode = INT_OBJECT;
 		}
 	}
-}
-
-
-/* Tell the interface a construction droid has finished building */
-void intBuildFinished(DROID *psDroid)
-{
-	ASSERT_OR_RETURN(, psDroid != nullptr, "Invalid droid pointer");
-
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILD)
-	{
-		// Find which button the droid is on and clear its stats
-		unsigned droidID = 0;
-		for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-		{
-			if (objSelectFunc((BASE_OBJECT *)psCurr))
-			{
-				if (psCurr == psDroid)
-				{
-					intSetStats(droidID + IDOBJ_STATSTART, nullptr);
-					break;
-				}
-				droidID++;
-			}
-		}
-	}
-	intRefreshScreen();
-}
-
-/* Tell the interface a construction droid has started building*/
-void intBuildStarted(DROID *psDroid)
-{
-	ASSERT_OR_RETURN(, psDroid != nullptr, "Invalid droid pointer");
-
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILD)
-	{
-		// Find which button the droid is on and clear its stats
-		unsigned droidID = 0;
-		for (DROID *psCurr = apsDroidLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-		{
-			if (objSelectFunc(psCurr))
-			{
-				if (psCurr == psDroid)
-				{
-					STRUCTURE *target = castStructure(psCurr->order.psObj);
-					intSetStats(droidID + IDOBJ_STATSTART, target != nullptr? target->pStructureType : nullptr);
-					break;
-				}
-				droidID++;
-			}
-		}
-	}
-	intRefreshScreen();
 }
 
 /* Are we in build select mode*/
@@ -2791,13 +2674,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 			if (!psSelected)
 			{
 				psSelected = (BASE_OBJECT *)intCheckForStructure(REF_VTOL_FACTORY);
-			}
-			break;
-		case IOBJ_BUILD:
-			psSelected = (BASE_OBJECT *)intCheckForDroid(DROID_CONSTRUCT);
-			if (!psSelected)
-			{
-				psSelected = (BASE_OBJECT *)intCheckForDroid(DROID_CYBORG_CONSTRUCT);
 			}
 			break;
 		case IOBJ_COMMAND:
@@ -3232,7 +3108,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		intMode = INT_OBJECT;
 	}
 
-	if (objMode == IOBJ_BUILD || objMode == IOBJ_MANUFACTURE || objMode == IOBJ_RESEARCH)
+	if (objMode == IOBJ_MANUFACTURE || objMode == IOBJ_RESEARCH)
 	{
 		intShowPowerBar();
 	}
@@ -3421,20 +3297,6 @@ void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 	obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 }
 
-static void makeFavoriteButton(const std::shared_ptr<WIDGET> &parent)
-{
-	auto favoriteButton = std::make_shared<MultipleChoiceButton>();
-	parent->attach(favoriteButton);
-	favoriteButton->id = IDSTAT_FAVORITE_BUTTON;
-	favoriteButton->style |= WBUT_SECONDARY;
-	favoriteButton->setChoice(showFavorites);
-	favoriteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH)));
-	favoriteButton->setTip(false, _("Showing All Tech\nRight-click to add to Favorites"));
-	favoriteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC)));
-	favoriteButton->setTip(true, _("Showing Only Favorite Tech\nRight-click to remove from Favorites"));
-	favoriteButton->move(4*2 + Image(IntImages, IMAGE_FDP_UP).width()*2 + 4*2, STAT_SLDY);
-}
-
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
@@ -3482,15 +3344,10 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
 	}));
 
-	if ((objMode == IOBJ_MANUFACTURE || objMode == IOBJ_BUILD) && psOwner != nullptr)
+	if (objMode == IOBJ_MANUFACTURE && psOwner != nullptr)
 	{
 		// Add the obsolete items button.
 		makeObsoleteButton(statForm);
-	}
-	if (objMode == IOBJ_BUILD)
-	{
-		// Add the favorite items button.
-		makeFavoriteButton(statForm);
 	}
 
 	W_LABINIT sLabInit;
@@ -3758,9 +3615,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	switch (objMode)
 	{
-	case IOBJ_BUILD:
-		triggerEvent(TRIGGER_MENU_BUILD_UP);
-		break;
 	case IOBJ_RESEARCH:
 		triggerEvent(TRIGGER_MENU_RESEARCH_UP);
 		break;
@@ -3796,85 +3650,6 @@ static BASE_STATS *getCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj)
 /* Set the stats for a command droid */
 static bool setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BASE_STATS *psStats)
 {
-	return true;
-}
-
-/* Select a construction droid */
-static bool selectConstruction(BASE_OBJECT *psObj)
-{
-	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_DROID, "Invalid droid pointer");
-	auto psDroid = (DROID *)psObj;
-
-	//check the droid type
-	return (psDroid->droidType == DROID_CONSTRUCT || psDroid->droidType == DROID_CYBORG_CONSTRUCT) && psDroid->died == 0;
-}
-
-/* Return the stats for a construction droid */
-static BASE_STATS *getConstructionStats(BASE_OBJECT *psObj)
-{
-	DROID *psDroid = (DROID *)psObj;
-	BASE_STATS *Stats;
-	BASE_OBJECT *Structure;
-
-	ASSERT_OR_RETURN(nullptr, psObj != nullptr && psObj->type == OBJ_DROID, "Invalid droid pointer");
-
-	if (!(droidType(psDroid) == DROID_CONSTRUCT ||
-	      droidType(psDroid) == DROID_CYBORG_CONSTRUCT))
-	{
-		return nullptr;
-	}
-
-	if (orderStateStatsLoc(psDroid, DORDER_BUILD, &Stats)) // Moving to build location?
-	{
-		return Stats;
-	}
-	else if ((Structure = orderStateObj(psDroid, DORDER_BUILD))
-	         && psDroid->order.type == DORDER_BUILD) // Is building
-	{
-		return psDroid->order.psStats;
-	}
-	else if ((Structure = orderStateObj(psDroid, DORDER_HELPBUILD))
-	         && (psDroid->order.type == DORDER_HELPBUILD
-	             || psDroid->order.type == DORDER_LINEBUILD)) // Is helping
-	{
-		return (BASE_STATS *)((STRUCTURE *)Structure)->pStructureType;
-	}
-	else if (orderState(psDroid, DORDER_DEMOLISH))
-	{
-		return (BASE_STATS *)structGetDemolishStat();
-	}
-
-	return nullptr;
-}
-
-/* Set the stats for a construction droid */
-static bool setConstructionStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
-{
-	DROID *psDroid = castDroid(psObj);
-	ASSERT_OR_RETURN(false, psDroid != nullptr, "invalid droid pointer");
-
-	/* psStats might be NULL if the operation is canceled in the middle */
-	if (psStats != nullptr)
-	{
-		//check for demolish first
-		if (psStats == structGetDemolishStat())
-		{
-			objMode = IOBJ_DEMOLISHSEL;
-
-			return true;
-		}
-
-		/* Store the stats for future use */
-		psPositionStats = psStats;
-
-		/* Now start looking for a location for the structure */
-		objMode = IOBJ_BUILDSEL;
-
-		intStartStructPosition(psStats);
-
-		return true;
-	}
-	orderDroid(psDroid, DORDER_STOP, ModeQueue);
 	return true;
 }
 
@@ -4011,19 +3786,10 @@ static bool setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
 /* If psSelected != NULL it specifies which droid should be hilited */
 static bool intAddBuild()
 {
-	/* Store the correct stats list for future reference */
-	// ppsStatsList = (BASE_STATS **)apsStructStatsList;
-
-	// TODO: remove these three, cause we shouldn't need them at the end
-	objSelectFunc = selectConstruction;
-	objGetStatsFunc = getConstructionStats;
-	objSetStatsFunc = setConstructionStats;
-
 	/* Set the sub mode */
-	objMode = IOBJ_NEW_BUILD;
+	objMode = IOBJ_BUILD;
 
 	/* Create the object screen with the required data */
-
 	auto controller = std::make_shared<BuildInterfaceController>();
 	if (controller->showInterface())
 	{
@@ -4137,17 +3903,6 @@ static void intStatsRMBPressed(UDWORD id)
 			// Reset the button on the object form
 			intSetStats(objStatID, (BASE_STATS *)psNext);
 		}
-	}
-	else if (objMode == IOBJ_BUILD)
-	{
-		BASE_STATS *psStats = ppsStatsList[id - IDSTAT_START];
-
-		// Add/remove item to/from Favorites list
-
-		ASSERT_OR_RETURN(, psObjSelected != nullptr, "Invalid structure pointer");
-		ASSERT_OR_RETURN(, psStats != nullptr, "Invalid template pointer");
-		asStructureStats[psStats->index].isFavorite = !showFavorites;
-		intRefreshScreen();
 	}
 }
 

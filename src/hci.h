@@ -265,7 +265,7 @@ enum OBJECT_MODE
 	IOBJ_RESEARCH,		        // The research screen
 	IOBJ_COMMAND,		        // the command droid screen
 
-	IOBJ_NEW_BUILD,
+	IOBJ_DEBUG_STRUCTURE,
 
 	IOBJ_MAX,			        // maximum object mode,
 };
@@ -326,10 +326,6 @@ void intSetMapPos(UDWORD x, UDWORD y);
 /* Set the map view point to the world coordinates x,y */
 void intSetMapPos(UDWORD x, UDWORD y);
 
-/* Tell the interface a construction droid has finished building */
-void intBuildFinished(DROID *psDroid);
-/* Tell the interface a construction droid has started building*/
-void intBuildStarted(DROID *psDroid);
 /* Tell the interface a research facility has completed a topic */
 void intResearchFinished(STRUCTURE *psBuilding);
 void intAlliedResearchChanged();
