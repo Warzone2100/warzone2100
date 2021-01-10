@@ -438,7 +438,7 @@ static uint16_t getAverageTrackAngle(unsigned groupNumber, bool bCheckOnScreen)
 		/* Is he worth selecting? */
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
-			if (bCheckOnScreen ? droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
+			if (bCheckOnScreen ? objectOnScreen(psDroid, pie_GetVideoBufferWidth() / 6) : true)
 			{
 				xTotal += iSin(psDroid->rot.direction);
 				yTotal += iCos(psDroid->rot.direction);
@@ -461,7 +461,7 @@ static void getTrackingConcerns(SDWORD *x, SDWORD *y, SDWORD *z, UDWORD groupNum
 	{
 		if (groupNumber == GROUP_SELECTED ? psDroid->selected : psDroid->group == groupNumber)
 		{
-			if (!bOnScreen || droidOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
+			if (!bOnScreen || objectOnScreen(psDroid, pie_GetVideoBufferWidth() / 4))
 			{
 				count++;
 				xTotals += psDroid->pos.x;

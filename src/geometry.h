@@ -32,7 +32,7 @@ uint16_t calcDirection(int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 bool inQuad(const Vector2i *pt, const QUAD *quad);
 Vector2i positionInQuad(Vector2i const &pt, QUAD const &quad);
 DROID *getNearestDroid(UDWORD x, UDWORD y, bool bSelected);
-bool droidOnScreen(DROID *psDroid, SDWORD tolerance);
+bool objectOnScreen(BASE_OBJECT *object, SDWORD tolerance);
 
 static inline STRUCTURE *getTileStructure(UDWORD x, UDWORD y)
 {
