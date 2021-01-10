@@ -89,7 +89,7 @@ bool loadResearch(WzConfig &ini);
 
 /*function to check what can be researched for a particular player at any one
   instant. Returns the number to research*/
-UWORD fillResearchList(UWORD *plist, UDWORD playerID, nonstd::optional<UWORD> topic, UWORD limit);
+std::vector<uint16_t> fillResearchList(UDWORD playerID, nonstd::optional<UWORD> topic, UWORD limit);
 
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger);
