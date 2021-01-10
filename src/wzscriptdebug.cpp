@@ -69,6 +69,7 @@ static std::shared_ptr<W_SCREEN> debugScreen = nullptr;
 static std::shared_ptr<WZScriptDebugger> globalDialog = nullptr;
 static jsDebugShutdownHandlerFunction globalDialogShutdownHandler;
 
+#define SCRIPTDEBUG_WINDOW_HEIGHT_MAX 700
 #define SCRIPTDEBUG_BUTTON_HEIGHT 24
 #define SCRIPTDEBUG_ROW_HEIGHT 24
 #define ACTION_BUTTON_ROW_SPACING 10
@@ -1923,10 +1924,12 @@ std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<s
 	result->setGeometry((pie_GetVideoBufferWidth() - newFormWidth) / 2, 10, newFormWidth, pie_GetVideoBufferHeight() - 50);
 	result->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 		// update the height
-		int newHeight = pie_GetVideoBufferHeight() - 50;
+		int newHeight = std::min<int>(pie_GetVideoBufferHeight() - 50, SCRIPTDEBUG_WINDOW_HEIGHT_MAX);
 		// update the x if necessary to ensure the entire form is visible
 		int x0 = std::min(psWidget->x(), pie_GetVideoBufferWidth() - psWidget->width());
-		psWidget->setGeometry(x0, psWidget->y(), psWidget->width(), newHeight);
+		// update the y if necessary to ensure the entire form is visible
+		int y0 = std::min(psWidget->y(), pie_GetVideoBufferHeight() - newHeight);
+		psWidget->setGeometry(x0, y0, psWidget->width(), newHeight);
 	}));
 	result->userMovable = true;
 
