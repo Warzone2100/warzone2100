@@ -1783,6 +1783,12 @@ bool wzSDLOneTimeInit()
 			debug(LOG_ERROR, "Error: Could not initialise SDL (%s).", SDL_GetError());
 			return false;
 		}
+
+		if ((SDL_IsTextInputActive() != SDL_FALSE) && (GetTextEventsOwner == nullptr))
+		{
+			// start text input disabled
+			SDL_StopTextInput();
+		}
 	}
 
 	if (wzSDLAppEvent == ((Uint32)-1))
