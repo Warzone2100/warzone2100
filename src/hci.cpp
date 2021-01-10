@@ -248,8 +248,6 @@ std::list<DROID_TEMPLATE>       localTemplates;
 static FEATURE_STATS	**apsFeatureList;
 
 /*Store a list of research indices which can be performed*/
-static UWORD			*pList;
-static UWORD			*pSList;
 
 /* Store a list of component stats pointers for the design screen */
 UDWORD			numComponent;
@@ -549,11 +547,6 @@ bool intInitialise()
 	//create the storage for Research topics - max possible size
 	ppResearchList = (RESEARCH **) malloc(sizeof(RESEARCH *) * MAXRESEARCH);
 
-	//create the list for the selected player
-	//needs to be UWORD sized for Patches
-	pList = (UWORD *) malloc(sizeof(UWORD) * MAXRESEARCH);
-	pSList = (UWORD *) malloc(sizeof(UWORD) * MAXRESEARCH);
-
 	/* Create storage for Templates that can be built */
 	apsTemplateList.clear();
 
@@ -630,8 +623,6 @@ void interfaceShutDown()
 
 	free(apsStructStatsList);
 	free(ppResearchList);
-	free(pList);
-	free(pSList);
 	apsTemplateList.clear();
 	free(apsFeatureList);
 	free(apsComponentList);
@@ -642,8 +633,6 @@ void interfaceShutDown()
 	psWScreen = nullptr;
 	apsStructStatsList = nullptr;
 	ppResearchList = nullptr;
-	pList = nullptr;
-	pSList = nullptr;
 	apsFeatureList = nullptr;
 	apsComponentList = nullptr;
 	apsExtraSysList = nullptr;
@@ -1655,7 +1644,6 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 	BASE_STATS		*psStats;
 	size_t          statMajor = 0;
 	UDWORD			i, j;
-	UDWORD			count;
 	SDWORD			iconNumber, entryIN;
 
 	/* Clear a previous structure pos if there is one */
@@ -1701,23 +1689,24 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		auto currentTopic = psStats ? nonstd::optional<UWORD>(((RESEARCH *)psStats)->index): nonstd::nullopt;
 
 		//recalculate the list
-		numStatsListEntries = fillResearchList(pList, selectedPlayer, currentTopic, MAXRESEARCH);
+		auto researchList = fillResearchList(selectedPlayer, currentTopic, MAXRESEARCH);
+		numStatsListEntries = researchList.size();
+		std::vector<uint16_t> sortedResearchList;
 
 		//	-- Alex's reordering of the list
 		// NOTE!  Do we even want this anymore, since we can have basically
 		// unlimted tabs? Future enhancement assign T1/2/3 button on form
 		// so we can pick what level of tech we want to build instead of
 		// Alex picking for us?
-		count = 0;
 		for (i = 0; i < RID_MAXRID; i++)
 		{
 			iconNumber = mapRIDToIcon(i);
 			for (j = 0; j < numStatsListEntries; j++)
 			{
-				entryIN = asResearch[pList[j]].iconID;
+				entryIN = asResearch[researchList[j]].iconID;
 				if (entryIN == iconNumber)
 				{
-					pSList[count++] = pList[j];
+					sortedResearchList.push_back(researchList[j]);
 				}
 
 			}
@@ -1726,17 +1715,17 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		// NOTE! more pruning [future ref]
 		for (j = 0; j < numStatsListEntries; j++)
 		{
-			iconNumber = mapIconToRID(asResearch[pList[j]].iconID);
+			iconNumber = mapIconToRID(asResearch[researchList[j]].iconID);
 			if (iconNumber < 0)
 			{
-				pSList[count++] = pList[j];
+				sortedResearchList.push_back(researchList[j]);
 			}
 		}
 
 		//fill up the list with topics
 		for (i = 0; i < numStatsListEntries; i++)
 		{
-			ppResearchList[i] = &asResearch[pSList[i]];	  // note change from pList
+			ppResearchList[i] = &asResearch[sortedResearchList[i]];
 		}
 	}
 
@@ -4324,13 +4313,13 @@ int intGetResearchState()
 	if (resFree)
 	{
 		//calculate the list
-		int preCount = fillResearchList(pList, selectedPlayer, nonstd::nullopt, MAXRESEARCH);
-		count = preCount;
-		for (int n = 0; n < preCount; ++n)
+		auto researchList = fillResearchList(selectedPlayer, nonstd::nullopt, MAXRESEARCH);
+		count = researchList.size();
+		for (int n = 0; n < researchList.size(); ++n)
 		{
 			for (int player = 0; player < MAX_PLAYERS; ++player)
 			{
-				if (aiCheckAlliances(player, selectedPlayer) && IsResearchStarted(&asPlayerResList[player][pList[n]]))
+				if (aiCheckAlliances(player, selectedPlayer) && IsResearchStarted(&asPlayerResList[player][researchList[n]]))
 				{
 					--count;  // An ally is already researching this topic, so don't flash the button because of it.
 					break;
