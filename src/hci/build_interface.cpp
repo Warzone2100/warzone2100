@@ -733,5 +733,6 @@ void BuildInterfaceController::displayStatsForm()
 	{
 		auto statForm = BuildStatsForm::make(shared_from_this());
 		psWScreen->psForm->attach(statForm);
+		intMode = INT_STAT;
 	}
 }
