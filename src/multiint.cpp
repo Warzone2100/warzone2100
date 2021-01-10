@@ -25,20 +25,9 @@
  * along with connection and game options.
  */
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtCore/QFileInfo> // used to strip path of challenge AI values
-
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/wzpaths.h"
 
 #include <time.h>
 
@@ -3043,7 +3032,7 @@ static void resolveAIForPlayer(int player, WzString& aiValue)
 	}
 
 	// strip given path down to filename
-	WzString filename(QFileInfo(QString::fromUtf8(aiValue.toUtf8().c_str())).fileName().toUtf8().constData());
+	WzString filename = WzString::fromUtf8(WzPathInfo::fromPlatformIndependentPath(aiValue.toUtf8()).fileName().c_str());
 
 	// look up AI value in vector of known skirmish AIs
 	for (unsigned ai = 0; ai < aidata.size(); ++ai)

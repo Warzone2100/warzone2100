@@ -46,7 +46,6 @@
 
 // **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
 #include <QtCore/QString>
-#include <QtCore/QFileInfo>
 #include <QtWidgets/QFileDialog>
 
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
@@ -55,6 +54,7 @@
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/wzpaths.h"
 
 #include "qtscript.h"
 
@@ -678,7 +678,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	pNewInstance->setSpecifiedGlobalVariable("derrickPositions", constructDerrickPositions(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 	pNewInstance->setSpecifiedGlobalVariable("startPositions", constructStartPositions(), wzapi::GlobalVariableFlags::ReadOnly | wzapi::GlobalVariableFlags::DoNotSave);
 
-	QFileInfo basename(QString::fromUtf8(path.toUtf8().c_str()));
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
 	json globalVarsToSave = json::object();
 	// We need to always save the 'me' special variable.
 	//== * ```me``` The player the script is currently running as.
@@ -686,11 +686,11 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 
 	// We also need to save the special 'scriptName' variable.
 	//== * ```scriptName``` Base name of the script that is running.
-	globalVarsToSave["scriptName"] = basename.baseName().toStdString();
+	globalVarsToSave["scriptName"] = basename.baseName();
 
 	// We also need to save the special 'scriptPath' variable.
 	//== * ```scriptPath``` Base path of the script that is running.
-	globalVarsToSave["scriptPath"] = basename.path().toStdString();
+	globalVarsToSave["scriptPath"] = basename.path();
 
 	pNewInstance->setSpecifiedGlobalVariables(globalVarsToSave, wzapi::GlobalVariableFlags::ReadOnly); // ensure these are saved
 
@@ -960,13 +960,13 @@ void jsAutogame()
 	srcPath += PHYSFS_getDirSeparator();
 	srcPath += "scripts";
 	QString path = QFileDialog::getOpenFileName(nullptr, "Choose AI script to load", srcPath, "Javascript files (*.js)");
-	QFileInfo basename(path);
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toStdString());
 	if (path.isEmpty())
 	{
 		console("No file specified");
 		return;
 	}
-	jsAutogameSpecific(QStringToWzString("scripts/" + basename.fileName()), selectedPlayer);
+	jsAutogameSpecific(WzString("scripts/") + WzString::fromUtf8(basename.fileName()), selectedPlayer);
 }
 
 void jsHandleDebugClosed()
