@@ -334,7 +334,7 @@ public:
 		clearSelection();
 		buildController->selectBuilder(droid);
 
-		if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !droidOnScreen(droid, 0))
+		if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(droid, 0))
 		{
 			jumpPosition = getPlayerPos();
 			buildController->jumpToSelectedBuilder();

@@ -60,7 +60,7 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 	// Go through all.
 	for (DROID *psDroid = apsDroidLists[player]; psDroid != nullptr; psDroid = psDroid->psNext)
 	{
-		bool shouldSelect = (!onlyOnScreen || droidOnScreen(psDroid, 0)) &&
+		bool shouldSelect = (!onlyOnScreen || objectOnScreen(psDroid, 0)) &&
 		                    condition(psDroid);
 		count += shouldSelect;
 		if (shouldSelect && !psDroid->selected && !psDroid->flags.test(OBJECT_FLAG_UNSELECTABLE))
@@ -221,7 +221,7 @@ static unsigned int selSelectAllSame(unsigned int player, bool bOnScreen)
 	// find out which units will need to be compared to which component combinations
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if (bOnScreen && !droidOnScreen(psDroid, 0))
+		if (bOnScreen && !objectOnScreen(psDroid, 0))
 		{
 			excluded.push_back(i);
 		}
