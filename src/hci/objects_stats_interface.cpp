@@ -210,7 +210,6 @@ void StatsForm::initialize()
 void StatsForm::addCloseButton()
 {
 	W_BUTINIT init;
-	init.formID = IDSTAT_FORM;
 	init.id = IDSTAT_CLOSE;
 	init.x = STAT_WIDTH - CLOSE_WIDTH;
 	init.y = 0;
