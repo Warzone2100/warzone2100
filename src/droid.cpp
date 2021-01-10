@@ -881,7 +881,6 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		if (ia != AVAILABLE && ia != REDUNDANT)
 		{
 			ASSERT(false, "Cannot build \"%s\" for player %d.", psStructStat->name.toUtf8().c_str(), psDroid->player);
-			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
 			objTrace(psDroid->id, "DroidStartBuildFailed: not researched");
 			return DroidStartBuildFailed;
@@ -890,7 +889,6 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		//need to check structLimits have not been exceeded
 		if (psStructStat->curCount[psDroid->player] >= psStructStat->upgrade[psDroid->player].limit)
 		{
-			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
 			objTrace(psDroid->id, "DroidStartBuildFailed: structure limits");
 			return DroidStartBuildFailed;
@@ -906,7 +904,6 @@ DroidStartBuild droidStartBuild(DROID *psDroid)
 		psStruct = buildStructureDir(psStructStat, psDroid->order.pos.x, psDroid->order.pos.y, psDroid->order.direction, psDroid->player, false);
 		if (!psStruct)
 		{
-			intBuildFinished(psDroid);
 			cancelBuild(psDroid);
 			objTrace(psDroid->id, "DroidStartBuildFailed: buildStructureDir failed");
 			return DroidStartBuildFailed;
@@ -998,8 +995,6 @@ bool droidUpdateBuild(DROID *psDroid)
 	// First check the structure hasn't been completed by another droid
 	if (psStruct->status == SS_BUILT)
 	{
-		// Update the interface
-		intBuildFinished(psDroid);
 		// Check if line order build is completed, or we are not carrying out a line order build
 		if (psDroid->order.type != DORDER_LINEBUILD ||
 		    map_coord(psDroid->order.pos) == map_coord(psDroid->order.pos2))
@@ -2411,7 +2406,6 @@ void setUpBuildModule(DROID *psDroid)
 			if (droidStartBuild(psDroid))
 			{
 				psDroid->action = DACTION_BUILD;
-				intBuildStarted(psDroid);
 				return;
 			}
 		}
@@ -2423,7 +2417,6 @@ void setUpBuildModule(DROID *psDroid)
 				if (droidStartBuild(psDroid))
 				{
 					psDroid->action = DACTION_BUILD;
-					intBuildStarted(psDroid);
 					return;
 				}
 			}

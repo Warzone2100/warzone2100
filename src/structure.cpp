@@ -810,11 +810,6 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 	{
 		buildingComplete(psStruct);
 
-		if (psDroid)
-		{
-			intBuildFinished(psDroid);
-		}
-
 		//only play the sound if selected player
 		if (psDroid &&
 		    psStruct->player == selectedPlayer
