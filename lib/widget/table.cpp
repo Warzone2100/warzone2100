@@ -466,6 +466,16 @@ std::vector<size_t> ScrollableTableWidget::getExpandToFillColumnIndexes()
 	});
 }
 
+void ScrollableTableWidget::updateColumnWidths()
+{
+	// actually resize header and row columns
+	header->changeColumnWidths(columnWidths);
+	for (auto& row : rows)
+	{
+		row->resizeColumns(columnWidths, TABLE_COL_PADDING);
+	}
+}
+
 bool ScrollableTableWidget::relayoutColumns(std::vector<size_t> proposedColumnWidths, const std::unordered_set<size_t>& priorityIndexes)
 {
 	// respect any minimum column widths (first pass)
@@ -503,17 +513,33 @@ bool ScrollableTableWidget::relayoutColumns(std::vector<size_t> proposedColumnWi
 			ASSERT(!shrinkableColumnIndexes.empty(), "All columns are fixed width (or non-shrinkable) but desired sizes exceed maxColumnWidthAvailable: %zu", maxColumnWidthAvailable);
 			return false;
 		}
-		auto shrinkColumnWidths = [this, &proposedColumnWidths](const std::vector<size_t>& shrinkableColumnIndexes, size_t extraWidth) -> size_t {
+		auto shrinkColumnWidths = [this, &proposedColumnWidths](std::vector<size_t> shrinkableColumnIndexes, size_t extraWidth) -> size_t {
 			size_t currentTotalColumnWidthReduction = 0;
+			std::vector<size_t> stillShrinkableColumnIndexes;
+			// order shrinkableColumnIndexes by maxColumnWidthReduction for associated column
+			std::sort(shrinkableColumnIndexes.begin(), shrinkableColumnIndexes.end(), [this, proposedColumnWidths](size_t colIndexA, size_t coldIndexB) -> bool {
+				size_t maxColumnWidthReductionA = proposedColumnWidths[colIndexA];
+				if (minColumnWidths.size() > colIndexA)
+				{
+					maxColumnWidthReductionA = (proposedColumnWidths[colIndexA] > minColumnWidths[colIndexA]) ? (proposedColumnWidths[colIndexA] - minColumnWidths[colIndexA]) : 0;
+				}
+				size_t maxColumnWidthReductionB = proposedColumnWidths[coldIndexB];
+				if (minColumnWidths.size() > coldIndexB)
+				{
+					maxColumnWidthReductionB = (proposedColumnWidths[coldIndexB] > minColumnWidths[coldIndexB]) ? (proposedColumnWidths[coldIndexB] - minColumnWidths[coldIndexB]) : 0;
+				}
+				return maxColumnWidthReductionA < maxColumnWidthReductionB;
+			});
+			// try to shrink all shrinkable columns proportionally
 			for (size_t i = 0; i < shrinkableColumnIndexes.size(); i++)
 			{
 				size_t colIdx = shrinkableColumnIndexes[i];
 				size_t remainingExtraWidth = extraWidth - currentTotalColumnWidthReduction;
 				size_t widthReductionAmount = (i < shrinkableColumnIndexes.size()-1) ? (remainingExtraWidth / (shrinkableColumnIndexes.size() - i)) : (remainingExtraWidth);
 				size_t maxColumnWidthReduction = proposedColumnWidths[colIdx];
-				if (minColumnWidths.size() > colIdx && proposedColumnWidths[colIdx] > minColumnWidths[colIdx])
+				if (minColumnWidths.size() > colIdx)
 				{
-					maxColumnWidthReduction = proposedColumnWidths[colIdx] - minColumnWidths[colIdx];
+					maxColumnWidthReduction = (proposedColumnWidths[colIdx] > minColumnWidths[colIdx]) ? (proposedColumnWidths[colIdx] - minColumnWidths[colIdx]) : 0;
 				}
 				widthReductionAmount = std::min(widthReductionAmount, maxColumnWidthReduction);
 				proposedColumnWidths[colIdx] -= widthReductionAmount;
@@ -560,11 +586,7 @@ bool ScrollableTableWidget::relayoutColumns(std::vector<size_t> proposedColumnWi
 	columnWidths = proposedColumnWidths;
 
 	// actually resize header and row columns
-	header->changeColumnWidths(columnWidths);
-	for (auto& row : rows)
-	{
-		row->resizeColumns(columnWidths, TABLE_COL_PADDING);
-	}
+	updateColumnWidths();
 
 	return true;
 }
