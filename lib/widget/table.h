@@ -141,6 +141,7 @@ protected:
 
 private:
 	bool relayoutColumns(std::vector<size_t> proposedColumnWidths, const std::unordered_set<size_t>& priorityIndexes = {});
+	void updateColumnWidths();
 	std::vector<size_t> getShrinkableColumnIndexes(const std::vector<size_t>& currentColumnWidths);
 	std::vector<size_t> getExpandToFillColumnIndexes();
 	inline std::vector<size_t> getColumnIndexes(const std::function<bool (size_t idx, const TableColumn&)>& func)
