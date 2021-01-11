@@ -717,7 +717,10 @@ public:
 		panel->table->updateData(fillMainModel());
 		panel->table->setUpdateButtonFunc([](JSONTableWidget& table){
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(table.parent());
-			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+			if (psParent == nullptr)
+			{
+				return;
+			}
 			psParent->table->updateData(fillMainModel(), true);
 		}, 3 * GAME_TICKS_PER_SEC);
 
@@ -990,7 +993,10 @@ public:
 		}));
 		result->table->setUpdateButtonFunc([](JSONTableWidget& table){
 			auto psParent = std::dynamic_pointer_cast<WzScriptPlayersPanel>(table.parent());
-			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
+			if (psParent == nullptr)
+			{
+				return;
+			}
 			if (auto selectedIndex = psParent->playersDropdown->getSelectedIndex())
 			{
 				psParent->viewPlayerModel(static_cast<int>(selectedIndex.value()));
