@@ -125,7 +125,7 @@ const PLAYER_RES_GAMMA = [
 	"R-Cyborg-Wpn-RotMG", "R-Defense-AASite-QuadRotMg", "R-Defense-Emplacement-HPVcannon",
 	"R-Defense-Howitzer", "R-Defense-HvyFlamer", "R-Defense-RotMG", "R-Defense-Wall-VulcanCan",
 	"R-Defense-WallTower-HPVcannon", "R-Defense-HvyHowitzer", "R-Defense-Wall-RotMg",
-	"R-Defense-IDFRocket", "R-Wpn-Bomb04",
+	"R-Defense-IDFRocket", "R-Wpn-Bomb04", "R-Defense-Pillbox-RotMG",
 ];
 
 //This is used for giving allies in Gamma technology (3-b/3-2/3-c)
