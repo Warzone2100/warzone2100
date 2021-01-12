@@ -85,6 +85,10 @@ char masterserver_name[255] = {'\0'};
 static unsigned int masterserver_port = 0, gameserver_port = 0;
 static bool bJoinPrefTryIPv6First = true;
 
+// This is for command line argument override
+// Disables port saving and reading from/to config
+bool netGameserverPortOverride = false;
+
 #define NET_TIMEOUT_DELAY	2500		// we wait this amount of time for socket activity
 #define NET_READ_TIMEOUT	0
 /*
