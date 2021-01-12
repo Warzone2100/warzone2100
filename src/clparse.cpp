@@ -847,6 +847,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 				qFatal("Bad game server port");
 			}
 			NETsetGameserverPort(atoi(token));
+			netGameserverPortOverride = true;
 			debug(LOG_INFO, "Games will be hosted on port [%d]", NETgetGameserverPort());
 			break;
 		};

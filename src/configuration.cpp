@@ -161,8 +161,8 @@ bool loadConfig()
 	        ini.value("fontface", "Book").toString().toUtf8().constData(),
 	        ini.value("fontfacebold", "Bold").toString().toUtf8().constData());
 	NETsetMasterserverPort(ini.value("masterserver_port", MASTERSERVERPORT).toInt());
-	if(NETgetGameserverPort() == GAMESERVERPORT)  // must not be overwritten by cl argument
-	{
+	if(!netGameserverPortOverride)  // do not load the config port setting if there's a command-line override
+	{ // PS for some unknown reason default port is not GAMESERVERPORT but 0 --maxsuperman
 		NETsetGameserverPort(ini.value("gameserver_port", GAMESERVERPORT).toInt());
 	}
 	NETsetJoinPreferenceIPv6(ini.value("prefer_ipv6", true).toBool());
@@ -332,7 +332,10 @@ bool saveConfig()
 	ini.setValue("masterserver_name", NETgetMasterserverName());
 	ini.setValue("masterserver_port", NETgetMasterserverPort());
 	ini.setValue("server_name", mpGetServerName());
-	ini.setValue("gameserver_port", NETgetGameserverPort());
+	if (!netGameserverPortOverride) // do not save the config port setting if there's a command-line override
+	{
+		ini.setValue("gameserver_port", NETgetGameserverPort());
+	}
 	ini.setValue("prefer_ipv6", NETgetJoinPreferenceIPv6());
 	ini.setValue("publicIPv4LookupService_Url", getPublicIPv4LookupServiceUrl().c_str());
 	ini.setValue("publicIPv4LookupService_JSONKey", getPublicIPv4LookupServiceJSONKey().c_str());

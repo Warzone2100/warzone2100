@@ -320,6 +320,7 @@ extern PLAYER_IP	*IPlist;
 // update flags
 extern bool netPlayersUpdated;
 extern char iptoconnect[PATH_MAX]; // holds IP/hostname from command line
+extern bool netGameserverPortOverride; // = false; (for cli override)
 
 #define ASSERT_HOST_ONLY(failAction) \
 	if (!NetPlay.isHost) \
