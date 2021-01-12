@@ -1,6 +1,6 @@
 namespace("bc_");
-const vernum    = "bonecrusher"; //v1.1
-const verdate   = "28.12.2020";
+const vernum    = "bonecrusher"; //v1.1.1
+const verdate   = "12.01.2021";
 const vername   = "BoneCrusher!";
 const shortname = "bc";
 const release	= true;
@@ -16,6 +16,7 @@ const release	= true;
 //v1.02 - 03.07.2020 Cosmetic update
 //		Не читерить без явных указаний на это
 //v1.1 - Big update
+//v1.1.1 - Fix some errors
 /*
 + Проверить чит-чат для INSANE (как у встроенного)
 === Строители
@@ -373,6 +374,7 @@ var AA_towers=[
 //Инициализация
 function init(){
 
+	if(isHumanOverride()) {debugMsg("Human override detected..", 'init');rage=HARD;}
 	
 	debugMsg("ИИ №"+me+" "+vername+" "+vernum+"("+verdate+") difficulty="+rage, "init");
 	debugMsg("Warzone2100 "+version, "init");

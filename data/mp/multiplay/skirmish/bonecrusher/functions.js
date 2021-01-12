@@ -85,7 +85,7 @@ function getInfoNear(x,y,command,range,time,obj,cheat,inc){
 			}
 			var toBuild = defence[Math.floor(Math.random()*defence.length)];
 			var pos = pickStructLocation(_builder[0],toBuild,x,y);
-			if(!!pos && distBetweenTwoPoints_p(x,y,pos.x,pos.y) < range){
+			if(pos && distBetweenTwoPoints_p(x,y,pos.x,pos.y) < range){
 				debugMsg('gi: try: '+x+'x'+y+', build: '+pos.x+'x'+pos.y+' - true', 'defence');
 				_globalInfoNear[x+'_'+y+'_'+command].value = true;
 				_globalInfoNear[x+'_'+y+'_'+command].x = pos.x;
@@ -693,6 +693,12 @@ function getNumEnemies(){
 	}
 	return enemies;
 }
+
+function isHumanOverride(){
+    if(playerData[me].isHuman) return true;
+    return false;
+}
+
 
 function isHumanAlly(){
 	for ( var e = 0; e < maxPlayers; ++e ) {
