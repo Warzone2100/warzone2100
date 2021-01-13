@@ -22,22 +22,6 @@
  * SDL backend code
  */
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtWidgets/QApplication>
-// This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
-#if defined(QT_STATICPLUGIN)
-#include <QtCore/QtPlugin>
-#endif
-
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
 // Get platform defines before checking for them!
 #include "lib/framework/wzapp.h"
 
@@ -66,11 +50,6 @@
 #include <locale.h>
 #include <atomic>
 #include <chrono>
-
-// This is for the cross-compiler, for static QT 5 builds to avoid the 'plugins' crap on windows
-#if defined(QT_STATICPLUGIN)
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
-#endif
 
 #if defined(WZ_OS_MAC)
 #include "cocoa_sdl_helpers.h"
@@ -117,8 +96,6 @@ unsigned int current_displayScale = 100;
 float current_displayScaleFactor = 1.f;
 
 static std::vector<screeninfo> displaylist;	// holds all our possible display lists
-
-QCoreApplication *appPtr;				// Needed for qtscript
 
 std::atomic<Uint32> wzSDLAppEvent((Uint32)-1);
 enum wzSDLAppEventCodes
@@ -1377,7 +1354,7 @@ static void inputHandleMouseMotionEvent(SDL_MouseMotionEvent *motionEvent)
 static int copied_argc = 0;
 static char** copied_argv = nullptr;
 
-// This stage, we only setup keycodes, and copy argc & argv for later use initializing Qt stuff for the script engine.
+// This stage, we only setup keycodes, and copy argc & argv for later use initializing stuff.
 void wzMain(int &argc, char **argv)
 {
 	initKeycodes();
@@ -2231,17 +2208,6 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		}
 	}
 
-	// For the script engine, let Qt know we're alive
-	//
-	// IMPORTANT: This must come *after* SDL has had a chance to initialize,
-	//			  or Qt can step on certain SDL functionality.
-	//			  (For example, on macOS, Qt can break the "Quit" menu
-	//			  functionality if QApplication is initialized before SDL.)
-	appPtr = new QApplication(copied_argc, copied_argv);
-
-	// IMPORTANT: Because QApplication calls setlocale(LC_ALL,""),
-	//			  we *must* immediately call setlocale(LC_NUMERIC,"C") after initializing
-	//			  or things like loading (parsing) levels / resources can fail
 	setlocale(LC_NUMERIC, "C"); // set radix character to the period (".")
 
 #if defined(WZ_OS_MAC)
@@ -2567,18 +2533,7 @@ void wzMainEventLoop(void)
 				}
 			}
 		}
-#if !defined(WZ_OS_WIN) && !defined(WZ_OS_MAC)
-		// Ideally, we don't want Qt processing events in addition to SDL - this causes
-		// all kinds of issues (crashes taking screenshots on Windows, freezing on
-		// macOS without a nasty workaround) - but without the following line the script
-		// debugger window won't display properly on Linux.
-		//
-		// Therefore, do not include it on Windows and macOS builds, which does not
-		// impact the script debugger's functionality, but include it (for now) on other
-		// builds until an alternative script debugger UI is available.
-		//
-		appPtr->processEvents();		// Qt needs to do its stuff
-#endif
+
 		processScreenSizeChangeNotificationIfNeeded();
 		mainLoop();				// WZ does its thing
 		inputNewFrame();			// reset input states
@@ -2600,9 +2555,6 @@ void wzShutdown()
 		WZwindow = nullptr;
 	}
 	SDL_Quit();
-	appPtr->quit();
-	delete appPtr;
-	appPtr = nullptr;
 
 	// delete copies of argc, argv
 	if (copied_argv != nullptr)
