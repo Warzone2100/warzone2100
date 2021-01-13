@@ -105,12 +105,6 @@ if(MSVC)
 endif()
 
 target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay sdl-backend framework sequence sound widget)
-target_link_libraries(warzone2100
-	Qt5::Core
-	Qt5::Script
-	Qt5::Gui
-	Qt5::Widgets
-)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
 if(ENABLE_NLS)
 	target_link_libraries(warzone2100 ${Intl_LIBRARIES})
@@ -193,8 +187,6 @@ endif()
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--start-group,-subsystem,windows")
-    target_link_libraries(warzone2100 ${QT5ALL_LIBRARIES} ${QT5ALL_LDFLAGS_OTHER})
-    target_link_libraries(warzone2100 version Qt5::QWindowsIntegrationPlugin Qt5ThemeSupport Qt5FontDatabaseSupport Qt5EventDispatcherSupport)
     set_target_properties(warzone2100 PROPERTIES LINK_FLAGS "-Wl,--end-group")
   endif()
 endif()
@@ -410,73 +402,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		XCODE_ATTRIBUTE_DEPLOYMENT_POSTPROCESSING[variant=Release] YES
 	)
 
-	# Frameworks
-	macro(copy_imported_framework _qt_framework_target)
-		get_target_property(_framework_target_imported "${_qt_framework_target}" IMPORTED)
-		if(_framework_target_imported)
-			get_target_property(_framework_target_type "${_qt_framework_target}" TYPE)
-			if(_framework_target_type STREQUAL "INTERFACE_LIBRARY")
-				get_target_property(_qt_framework_location "${_qt_framework_target}" INTERFACE_LINK_LIBRARIES)
-			elseif (_framework_target_type STREQUAL "SHARED")
-				get_target_property(_qt_framework_location "${_qt_framework_target}" LOCATION)
-			endif()
-			if(EXISTS "${_qt_framework_location}")
-				# Copy framework to bundle *now* (don't wait for CMake install)
-				set_source_files_properties(
-					${_qt_framework_location} PROPERTIES
-					MACOSX_PACKAGE_LOCATION "Frameworks"
-					XCODE_LAST_KNOWN_FILE_TYPE "wrapper.framework"
-					XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
-				)
-				if(NOT CMAKE_GENERATOR STREQUAL "Xcode")
-					# Other generators will need a custom-command equivalent of setting the "Code Sign on Copy" Xcode attribute to ON
-					message( WARNING "The generator \"${CMAKE_GENERATOR}\" does not currently handle code-signing: \"${_qt_framework_location}\"" )
-				endif()
-				target_sources(warzone2100 PRIVATE ${_qt_framework_location})
-			else()
-				message(FATAL_ERROR "Imported framework ${_qt_framework_target} not found at: ${_qt_framework_location}")
-			endif()
-		else()
-			message(FATAL_ERROR "Framework ${_qt_framework_target} is not an IMPORTED CMake target")
-		endif()
-	endmacro()
-
-	# Qt5
-	copy_imported_framework(Qt5::Core)
-	copy_imported_framework(Qt5::Gui)
-	copy_imported_framework(Qt5::PrintSupport)	# required by QCocoaIntegrationPlugin
-	copy_imported_framework(Qt5::Script)
-	copy_imported_framework(Qt5::Widgets)
-
-	# Qt5 plugins
-	# based on code from CMake's QtDialog/CMakeLists.txt
-	macro(copy_qt5_plugin _qt_plugin_name)
-		get_target_property(_qt_plugin_path "${_qt_plugin_name}" LOCATION)
-		if(EXISTS "${_qt_plugin_path}")
-			get_filename_component(_qt_plugin_file "${_qt_plugin_path}" NAME)
-			get_filename_component(_qt_plugin_type "${_qt_plugin_path}" PATH)
-			get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
-			set(_qt_plugin_dest "PlugIns/${_qt_plugin_type}")
-			# Copy plugin to bundle *now* (don't wait for CMake install)
-			set_source_files_properties(
-				${_qt_plugin_path} PROPERTIES
-				MACOSX_PACKAGE_LOCATION "${_qt_plugin_dest}"
-				XCODE_LAST_KNOWN_FILE_TYPE "compiled.mach-o.dylib"
-				XCODE_FILE_ATTRIBUTES "CodeSignOnCopy;"
-			)
-			if(NOT CMAKE_GENERATOR STREQUAL "Xcode")
-				# Other generators will need a custom-command equivalent of setting the "Code Sign on Copy" Xcode attribute to ON
-				message( WARNING "The generator \"${CMAKE_GENERATOR}\" does not currently handle code-signing: \"${_qt_plugin_dest}\"" )
-			endif()
-			target_sources(warzone2100 PRIVATE ${_qt_plugin_path})
-		else()
-			message(FATAL_ERROR "QT plugin ${_qt_plugin_name} not found at: ${_qt_plugin_path}")
-		endif()
-	endmacro()
-
-	copy_qt5_plugin("Qt5::QCocoaIntegrationPlugin")
-	copy_qt5_plugin("Qt5::QCocoaPrinterSupportPlugin")
-
 	if(WZ_ENABLE_BACKEND_VULKAN)
 		# Vulkan / MoltenVK
 		find_package(Vulkan)
@@ -690,18 +615,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 					endif()
 				endforeach()
 			" COMPONENT Core)
-
-			# Run windeployqt to pick up all Qt dependencies
-			find_program(TOOL_WINDEPLOYQT NAMES windeployqt)
-			if(TOOL_WINDEPLOYQT)
-				install(CODE "
-					execute_process(
-						COMMAND ${TOOL_WINDEPLOYQT} \"\${CMAKE_INSTALL_PREFIX}/${WZ_APP_INSTALL_DEST}/${_mainexename}.exe\" --no-compiler-runtime --no-angle --no-svg
-					)
-				" COMPONENT Core)
-			else()
-				message( WARNING "Unable to find windeployqt; installation may not included all required Qt libraries" )
-			endif()
 
 			# Install LibANGLE DLLs (if available, from vcpkg)
 			find_package(unofficial-angle CONFIG)

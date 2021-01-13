@@ -119,21 +119,6 @@ if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
 	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/gettext")
 endif()
 
-set(_wz_additional_qt_components)
-if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	# Workaround: Qt5's Cocoa platform integration plugin requires Qt5::PrintSupport
-	set(_wz_additional_qt_components "PrintSupport")
-endif()
-find_package(Qt5 COMPONENTS Core Widgets Script Gui ${_wz_additional_qt_components} REQUIRED)
-
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-  find_package(PkgConfig)
-  if(${CMAKE_CROSSCOMPILING})
-    pkg_check_modules(QT5ALL REQUIRED Qt5Widgets Qt5Core Qt5Script)
-    link_directories(${QT5ALL_LIBRARY_DIRS})
-  endif()
-endif()
-
 # Use "-fPIC" / "-fPIE" for all targets by default, including static libs
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
