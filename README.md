@@ -282,7 +282,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       * [libcurl](https://curl.haxx.se/libcurl/) _(strongly recommended: ≥ 7.58.0)_
       * [libsodium](https://github.com/jedisct1/libsodium) ≥ 1.0.14
       * [SQLite](https://www.sqlite.org/index.html) ≥ 3.14
-      * [Qt5 Script](https://doc.qt.io/qt-5/qtscript-index.html) ≥ 5.6
    * For language support: [Gettext](https://www.gnu.org/software/gettext/)
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
@@ -291,13 +290,13 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    ```
    sudo apt-get -u update
    sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
-   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev qtscript5-dev qt5-default libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
+   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
    ```
    * Fedora:
    ```
    sudo dnf -y update && dnf clean all
    sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
-   sudo dnf -y install qt5-qtbase-devel qt5-qtscript-devel libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
+   sudo dnf -y install libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
    ```
 * **Building from the command-line:**
    1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
@@ -326,10 +325,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
    * **CMake 3.10+** (https://cmake.org/)
-   * **Qt 5.9.1+** (https://www.qt.io/)
-     - Here's a direct link to the [Qt 5.9.9 installer](https://download.qt.io/archive/qt/5.9/5.9.9/).
-     - You will probably need to register for a Qt account during the installation, along with activating your email.
-     - Required components to install: MSVC 2015, Qt Script (even though it's labelled as deprecated). The MSVC 2015 components will work on MSVC 2017 / 2019, and 32-bit versions work on 64-bit platforms.
    * **Git** (if not building from a release source archive)
    * **7-Zip** (http://www.7-zip.org)
    * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
@@ -352,7 +347,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**. You can also reach this dialog by clicking "Manage Configurations" in the configuration dropdown in the toolbar. Make sure the CMake components in Visual Studio are installed (by running the Visual Studio Installer).
       - This creates `CMakeSettings.json`
    4. Add the following variables to `CMakeSettings.json`:
-      - To `cmakeCommandArgs`, add: `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_PREFIX_PATH=C:\Qt\Qt5.9.9\5.9.9\msvc2015` (check your Qt installation path)
+      - To `cmakeCommandArgs`, add: `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake`
       - If you're running a 64-bit platform, you need to set the compilation to 32-bit by setting `inheritEnvironments` to `[ "msvc_x86_x64" ]`
       - Note: Visual Studio automatically escapes and turns each `\` into `\\`
    5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
