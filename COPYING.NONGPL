@@ -19,6 +19,8 @@ data/base/texpages/page-25-sky-urban.png
 	- BSD, Copyright (c) 2014, Kenneth MacKay (https://github.com/kmackay/micro-ecc)
 3rdparty/sha/*
 	- BSD, Copyright (c) 1998-2010, Brian Gladman, Worcester, UK. (https://github.com/BrianGladman/sha)
+3rdparty/mINI/*
+	- MIT, Copyright (c) 2018 Danijel Durakovic (https://github.com/pulzed/mINI)
 3rdparty/miniupnp/*
 	- BSD, Copyright (c) 2005-2017, Thomas BERNARD (http://miniupnp.free.fr)
 3rdparty/optional-lite/*
@@ -63,5 +65,7 @@ src/3rdparty/gsl_finally.h
 	- MIT License, Copyright (c) 2015 Microsoft Corporation (https://github.com/microsoft/GSL)
 src/3rdparty/integer_sequence.hpp
 	- CC0, Written in 2017 by Simon Brand (@TartanLlama)
+src/3rdparty/physfs.hpp
+	- Zlib, Copyright (c) 2013 Kevin Howell and others, Copyright (c) 2018 Arthur Brainville (Ybalrid), Copyright (c) 2021 Warzone 2100 Project
 ANGLE (libGLESv2, libEGL)
 	- BSD 3-Clause License, Copyright 2018 The ANGLE Project Authors. (https://chromium.googlesource.com/angle/angle)

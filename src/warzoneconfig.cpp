@@ -52,7 +52,7 @@ struct WARZONE_GLOBALS
 	bool soundEnabled = true;
 	bool trapCursor = false;
 	int vsync = 1;
-	bool pauseOnFocusLoss = true;
+	bool pauseOnFocusLoss = false;
 	bool ColouredCursor = true;
 	bool MusicEnabled = true;
 	HRTFMode hrtfMode = HRTFMode::Auto;

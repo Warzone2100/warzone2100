@@ -3663,6 +3663,12 @@ const char *NETgetMasterserverName()
  */
 void NETsetMasterserverPort(unsigned int port)
 {
+	const unsigned int MAX_PORT = 65535;
+	if (port > MAX_PORT || port == 0)
+	{
+		debug(LOG_ERROR, "Invalid port number: %u", port);
+		return;
+	}
 	masterserver_port = port;
 }
 

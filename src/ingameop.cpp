@@ -58,7 +58,7 @@
 #include "seqdisp.h"
 #include "texture.h"
 
-bool hostQuitConfirmation;
+bool hostQuitConfirmation = true;
 
 bool	InGameOpUp		= false;
 bool 	isInGamePopupUp = false;

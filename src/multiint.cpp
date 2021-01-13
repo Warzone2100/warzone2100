@@ -187,7 +187,7 @@ private:
 	}
 };
 
-char sPlayer[128]; // player name (to be used)
+char sPlayer[128] = {'\0'}; // player name (to be used)
 bool multiintDisableLobbyRefresh = false; // if we allow lobby to be refreshed or not.
 
 static UDWORD hideTime = 0;
