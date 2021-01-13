@@ -59,8 +59,8 @@
 
 bool bEnemyAllyRadarColor = false;     			/**< Enemy/ally radar color. */
 RADAR_DRAW_MODE	radarDrawMode = RADAR_MODE_DEFAULT;	/**< Current mini-map mode. */
-bool rotateRadar; ///< Rotate the radar?
-bool radarRotationArrow; ///< display arrow when radar rotation enabled?
+bool rotateRadar = true; ///< Rotate the radar?
+bool radarRotationArrow = true; ///< display arrow when radar rotation enabled?
 
 static PIELIGHT		colRadarAlly, colRadarMe, colRadarEnemy;
 static PIELIGHT		tileColours[MAX_TILES];

@@ -97,6 +97,12 @@ Files: src/3rdparty/integer_sequence.hpp
 Copyright: 2017 by Simon Brand
 License: CC0
 
+Files: src/3rdparty/physfs.hpp
+Copyright: 2013 Kevin Howell and others
+           2018 Arthur Brainville (Ybalrid)
+           2021 Warzone 2100 Project
+License: Zlib
+
 Files: src/3rdparty/propertymatcher.*
 Copyright: 2020 past-due
 License: Expat
@@ -130,9 +136,9 @@ Files: 3rdparty/launchinfo/*
 Copyright: 2020 past-due
 License: Expat
 
-Files: 3rdparty/micro-ecc/*
-Copyright: 2014, Kenneth MacKay
-License: BSD-2-clause
+Files: 3rdparty/mINI/*
+Copyright: 2018 Danijel Durakovic
+License: Expat
 
 Files: 3rdparty/miniupnpc/*
 Copyright: 2005-2019, Thomas BERNARD
@@ -1165,3 +1171,22 @@ License: CC0
     4. Affirmer understands and acknowledges that Creative Commons is not
     a party to this document and has no duty or obligation with respect to
     this CC0 or use of the Work.
+
+License: Zlib
+ This software is provided 'as-is', without any express or implied warranty.
+ In no event will the authors be held liable for any damages arising from
+ the use of this software.
+ .
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+ .
+ 1. The origin of this software must not be misrepresented; you must not
+ claim that you wrote the original software. If you use this software in a
+ product, an acknowledgment in the product documentation would be
+ appreciated but is not required.
+ .
+ 2. Altered source versions must be plainly marked as such, and must not be
+ misrepresented as being the original software.
+ .
+ 3. This notice may not be removed or altered from any source distribution.

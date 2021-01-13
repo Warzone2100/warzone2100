@@ -133,7 +133,7 @@ static bool	ignoreRMBC	= true;
 static DROID	*psSelectedVtol;
 static DROID	*psDominantSelected;
 static bool bRadarDragging = false;
-static bool cameraAccel;
+static bool cameraAccel = true;
 
 bool	rotActive = false;
 bool	gameStats = false;
