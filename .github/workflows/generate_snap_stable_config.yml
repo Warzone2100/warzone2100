@@ -150,11 +150,26 @@ jobs:
           git commit -m "Snap stable build config for ${LATEST_GITHUB_RELEASE_TAG}" || { echo "::set-output name=PROCESS_DEPLOYMENT::false" && exit 0; }
           echo "::set-output name=PROCESS_DEPLOYMENT::true"
           exit 0
-      - name: Attempt Snap build using stable config
+      - name: Snap build stable config (w/ most recent stable version)
+        id: build-stable
         if: success() && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
+        continue-on-error: true
         uses: snapcore/action-build@v1
         with:
           path: ${{ github.workspace }}/snap-stable-build
+      - name: Fail-check
+        id: fail-check
+        if: (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true') && (steps.build-stable.outcome == 'failure' && steps.build-stable.conclusion == 'success')
+        run: |
+          # The build-stable step failed
+          if [[ "${PUBLISH_CONFIG}" != "false" ]] || [[ "${{ steps.config.outputs.PUBLISH_CONFIG }}" != "false" ]]; then
+            # The prior step had a FATAL error (because we're aiming to publish the config)
+            echo "::error ::Snap stable config failed to build (for: ${LATEST_GITHUB_RELEASE_TAG})"
+            exit 1
+          else
+            # Output a warning that this stable config will *not* work with the current stable release (but, presumably, with the next?)
+            echo "::warning ::Snap stable config failed to build (for: ${LATEST_GITHUB_RELEASE_TAG}). This may be acceptable, assuming it works for the next release."
+          fi
       - name: Push config to snap-stable-build
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true') && (steps.config.outputs.PUBLISH_CONFIG == 'true')
         id: push-snap-changes
