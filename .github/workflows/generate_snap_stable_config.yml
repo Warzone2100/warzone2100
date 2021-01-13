@@ -120,7 +120,7 @@ jobs:
           fi
           
           # Generate stable repo snapcraft.yml (that uses tags directly) from main repo snapcraft.yml via yq merge
-          yq m -x "${BASE_SNAPCRAFT_YAML}" "${SNAPCRAFT_STABLE_OVERRIDES_YAML}" > "${GITHUB_WORKSPACE}/snap-stable-build/.snapcraft.yaml"
+          yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' "${BASE_SNAPCRAFT_YAML}" "${SNAPCRAFT_STABLE_OVERRIDES_YAML}" > "${GITHUB_WORKSPACE}/snap-stable-build/.snapcraft.yaml"
           
           # Write .stable_tag file that contains the desired published tag
           LATEST_GITHUB_RELEASE_TAG=$(cat "${{ steps.preparefolders.outputs.RELEASES_DATA }}/latest.json" | jq --raw-output '.tag_name')
@@ -136,6 +136,9 @@ jobs:
           rm -rf "${GITHUB_WORKSPACE}/snap-stable-build/pkg/snap"
           mkdir -p "${GITHUB_WORKSPACE}/snap-stable-build/pkg/snap"
           cp -r pkg/snap/. "${GITHUB_WORKSPACE}/snap-stable-build/pkg/snap"
+      - name: Debug output generated config
+        run: |
+          cat "${GITHUB_WORKSPACE}/snap-stable-build/.snapcraft.yaml"
       - name: Commit changes to snap-stable-build
         id: commit-snap-changes
         working-directory: "${{ github.workspace }}/snap-stable-build"
