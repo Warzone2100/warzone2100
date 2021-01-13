@@ -51,10 +51,10 @@ if [ "${DISTRO}" == "ubuntu" ]; then
 
   if [ "${VERSION_PARTS[0]}" -eq "18" ]; then
     echo "Installing build-dependencies for Ubuntu 18.x"
-    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libsdl2-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libtheora-dev libxrandr-dev libfreetype6-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev qtscript5-dev qt5-default
+    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libsdl2-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libtheora-dev libxrandr-dev libfreetype6-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
   elif [ "${VERSION_PARTS[0]}" -ge "20" ]; then
     echo "Installing build-dependencies for Ubuntu 20.x+"
-    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libsdl2-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libtheora-dev libxrandr-dev libfreetype-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev qtscript5-dev qt5-default
+    DEBIAN_FRONTEND=noninteractive apt-get -y install cmake git zip unzip gettext asciidoctor libsdl2-dev libphysfs-dev libpng-dev libopenal-dev libvorbis-dev libtheora-dev libxrandr-dev libfreetype-dev libharfbuzz-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
   else
     echo "Script does not currently support Ubuntu ${VERSION_PARTS[0]} (${VERSION})"
     exit 1
@@ -76,7 +76,7 @@ if [ "${DISTRO}" == "fedora" ]; then
   fi
 
   echo "Installing build-dependencies for Fedora"
-  dnf -y install cmake git p7zip gettext rubygem-asciidoctor SDL2-devel physfs-devel libpng-devel openal-soft-devel libvorbis-devel libogg-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel qt5-qtbase-devel qt5-qtscript-devel
+  dnf -y install cmake git p7zip gettext rubygem-asciidoctor SDL2-devel physfs-devel libpng-devel openal-soft-devel libvorbis-devel libogg-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
   dnf -y install vulkan-devel glslc
 fi
 
@@ -92,7 +92,7 @@ if [ "${DISTRO}" == "alpine" ]; then
   fi
 
   echo "Installing build-dependencies for Alpine"
-  apk add --no-cache cmake git p7zip gettext asciidoctor sdl2-dev physfs-dev libpng-dev openal-soft-dev libvorbis-dev libogg-dev libtheora-dev freetype-dev harfbuzz-dev curl-dev libsodium-dev sqlite-dev qt5-qtbase-dev qt5-qtscript-dev
+  apk add --no-cache cmake git p7zip gettext asciidoctor sdl2-dev physfs-dev libpng-dev openal-soft-dev libvorbis-dev libogg-dev libtheora-dev freetype-dev harfbuzz-dev curl-dev libsodium-dev sqlite-dev
 fi
 
 ##################
@@ -107,7 +107,7 @@ if [ "${DISTRO}" == "archlinux" ]; then
   fi
 
   echo "Installing build-dependencies for ArchLinux"
-  pacman -S --noconfirm cmake git p7zip gettext asciidoctor sdl2 physfs libpng openal libvorbis libogg libtheora xorg-xrandr freetype2 harfbuzz curl libsodium sqlite qt5-base qt5-script
+  pacman -S --noconfirm cmake git p7zip gettext asciidoctor sdl2 physfs libpng openal libvorbis libogg libtheora xorg-xrandr freetype2 harfbuzz curl libsodium sqlite
 fi
 
 ##################

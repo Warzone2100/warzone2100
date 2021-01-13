@@ -60,28 +60,10 @@ jobs:
         if ($env:WZ_TARGET_ARCH -eq "x86") {
           $VCPKG_DEFAULT_TRIPLET = "x86-windows"
           $WZ_VC_TARGET_PLATFORMNAME = "Win32" # special case, map "x86" -> "Win32"
-          # Qt packages and install location
-          $QT5DIR = "5.9.9\msvc2015"
-          $QTCI_ARCH = "win32_msvc2015"
         }
         elseif ($env:WZ_TARGET_ARCH -eq "x64") {
           $VCPKG_DEFAULT_TRIPLET = "x64-windows"
-          # Qt packages and install location
-          $QT5DIR = "5.9.9\msvc2017_64"
-          $QTCI_ARCH = "win64_msvc2017_64"
         }
-        $QTCI_PACKAGES = "qt.qt5.599.${QTCI_ARCH},qt.qt5.599.qtscript"
-
-        # -------------
-        # Qt DL Info
-
-        ## For the offline installer (must correspond to the versioned QT5DIR / QTCI_PACKAGES above)
-        $QT_DL_URL = "https://download.qt.io/archive/qt/5.9/5.9.9/qt-opensource-windows-x86-5.9.9.exe"
-        $QT_DL_SHA512 = "F858F0892DF87CF7BF9CFC1EAE114CAC83C245EC363684D4ECE2337CC1A103EAD35BFCF9A3338DFD9C078C4D8D1B7A85FBE2924EB4E6754D10E660B22C635696"
-
-        # ## For the online installer
-        # $QT_DL_URL = "https://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe"
-        # $QT_DL_SHA512 = "" # Will cause the code signature to be checked
 
         # ------------------------------
         # MSVC version / generator info
@@ -154,12 +136,6 @@ jobs:
         echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_TARGET_PLATFORMNAME=${WZ_VC_TARGET_PLATFORMNAME}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "QT5DIR=${QT5DIR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "QTCI_ARCH=${QTCI_ARCH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=QTCI_ARCH::${QTCI_ARCH}"
-        echo "QTCI_PACKAGES=${QTCI_PACKAGES}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "QT_DL_URL=${QT_DL_URL}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "QT_DL_SHA512=${QT_DL_SHA512}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_GENERATOR=${WZ_VC_GENERATOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         #echo "WZ_VC_TOOLCHAIN=${WZ_VC_TOOLCHAIN}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VISUAL_STUDIO_INSTALL_PATH=${WZ_VISUAL_STUDIO_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -170,143 +146,6 @@ jobs:
         echo "::set-output name=VCPKG_BINARYCACHE_DIR::${VCPKG_BINARYCACHE_DIR}"
         echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "::set-output name=VCPKG_BINARY_SOURCES::${VCPKG_BINARY_SOURCES}"
-    - name: Check Environment for Qt Install
-      env:
-        QT_CI_LOGIN: ${{ secrets.QT_CI_LOGIN }}
-        QT_CI_PASSWORD: ${{ secrets.QT_CI_PASSWORD }}
-      run: |
-        if ([string]::IsNullOrWhitespace(${env:QT_CI_LOGIN}))
-        {
-          # Looks like we don't have access to secrets - might be a pull request, fork, etc
-          # So use an alternative method to download + install Qt
-          echo "WZ_USE_ALT_QT_INSTALL_METHOD=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        }
-    #####################################################
-    # Standard Qt install method
-    # - uses the official installers
-    # - requires:
-    #   - secrets.QT_CI_LOGIN
-    #   - secrets.QT_CI_PASSWORD
-    #####################################################
-    - name: Download Qt
-      if: env.WZ_USE_ALT_QT_INSTALL_METHOD != 'true'
-      run: |
-        Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
-
-        $VerbosePreference = "Continue"
-        . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
-
-        $QT_DL_BASEDIR = "${{ github.workspace }}\dl"
-        $QT_DL_PATH = "${QT_DL_BASEDIR}\qt-windows-installer.exe"
-        New-Item -ItemType Directory -Force -Path "$QT_DL_BASEDIR"
-
-        Write-Host "Original Url: `"${env:QT_DL_URL}`""
-        $url = Get-RedirectedUrl "${env:QT_DL_URL}"
-        Write-Host "Redirected Url: `"$url`""
-        $req = Req -Params @{ 'Method'='GET';'Uri'="$url";'OutFile'="$QT_DL_PATH" } -Retries 3 -SecondsDelay 10
-
-        if (![string]::IsNullOrWhitespace(${env:QT_DL_SHA512}))
-        {
-          $qt_exe_hash = Get-FileHash -Path "$QT_DL_PATH" -Algorithm SHA512
-          If ($qt_exe_hash.Hash -eq ${env:QT_DL_SHA512}) {
-            Write-Output "Verified downloaded Qt installer SHA512"
-          } Else {
-            Write-Error "The downloaded Qt installer hash `n`t'$($qt_exe_hash.Hash)'`ndoes not match the expected hash: `n`t'${env:QT_DL_SHA512}'"
-          }
-        }
-        else
-        {
-          # If no hash was specified (for example, when using the "latest" online installer), check the Authenticode signature
-          $signature = Get-AuthenticodeSignature -LiteralPath "$QT_DL_PATH"
-          if ($signature.Status -ne "Valid")
-          {
-            # Failed to valid file signature
-            Throw "The file's signature is invalid"
-          }
-          Write-Host "Authenticode Signature: Valid"
-          $dnDict = ($signature.SignerCertificate.Subject -split ', ') |
-                   foreach `
-                       { $dnDict = @{} } `
-                       { $item = $_.Split('='); $dnDict[$item[0]] = $item[1] } `
-                       { $dnDict }
-          $signer_common_name = $dnDict['CN'] #$signature.SignerCertificate.subject.split(',')[0].split('=')[1]
-          Write-Host "Authenticode Signature SignerCertificate.Subject: $($dnDict | Out-String)"
-          if ($signer_common_name -ne "The Qt Company Oy")
-          {
-            # Unexpected signing common name
-            throw "The file's signature has an unexpected common name: `"$signer_common_name`""
-          }
-          Write-Host "SignerCertificate.Subject is as expected"
-        }
-
-        # Output Qt download path for next step
-        echo "QT_DL_PATH=${QT_DL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-    - name: Install Qt
-      if: env.WZ_USE_ALT_QT_INSTALL_METHOD != 'true'
-      env:
-        QT_CI_LOGIN: ${{ secrets.QT_CI_LOGIN }}
-        QT_CI_PASSWORD: ${{ secrets.QT_CI_PASSWORD }}
-      run: |
-        # Try to run the Qt installer, passing the unattended installation script
-        try {
-          $QT_INSTALL_ROOT = "C:\Qt" #"${{ github.workspace }}\Qt"
-          Write-Host "------------------------------------------------------"
-          Write-Host "Running Qt installer... (this may take a little while)"
-          Write-Host "env:QT_DL_PATH=`"${env:QT_DL_PATH}`""
-          Write-Host "------------------------------------------------------"
-          $proc = Start-Process "${env:QT_DL_PATH}" -ArgumentList "--verbose","--script","${env:WZ_REPO_PATH}\.ci\install_scripts\qt-install.qs","QTCI_OUTPUT=`"${QT_INSTALL_ROOT}`"","QTCI_PACKAGES=${env:QTCI_PACKAGES}" -PassThru -NoNewWindow
-          # Wait up to 30 minutes (specified in seconds) for normal termination
-          $timeouted = $null
-          $proc | Wait-Process -Timeout 1800 -ErrorAction SilentlyContinue -ErrorVariable timeouted
-          if ($timeouted)
-          {
-              # terminate the process
-              $proc | kill
-              # throw an error
-              Throw "Qt installer reached timeout - did not complete / exit; forcefully terminated"
-          }
-          if ($proc.ExitCode -ne 0)
-          {
-            Throw "$($proc.ExitCode)"
-          }
-        } catch {
-            # $_ returns the error details
-            Write-Error "qt-windows-installer.exe returned the following error: $_"
-            Throw "Aborted qt-windows-installer.exe returned: $_"
-        }
-        Write-Host "------------------------------------------------------"
-        Write-Host "Qt installer seems to have completed..."
-        # Clean-up the installer exe
-        Remove-Item "${env:QT_DL_PATH}"
-        # Output install path for following steps
-        echo "QT_INSTALL_ROOT=${QT_INSTALL_ROOT}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-    - name: Verify Qt version
-      if: env.WZ_USE_ALT_QT_INSTALL_METHOD != 'true'
-      run: |
-        Write-Host "Qt version:"
-        & "${env:QT_INSTALL_ROOT}\${env:QT5DIR}\bin\qmake" -version
-
-        # Add the QT5 \bin dir to PATH (for future steps)
-        Write-Host "Adding Qt bin folder to PATH: `"${env:QT_INSTALL_ROOT}\${env:QT5DIR}\bin`""
-        echo "${env:QT_INSTALL_ROOT}\${env:QT5DIR}\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-    #####################################################
-    # Alternative Qt Install method
-    # - relies on external action that uses unofficial
-    #   download / installation scripts
-    #####################################################
-    - name: Install Qt (Alt Method)
-      if: env.WZ_USE_ALT_QT_INSTALL_METHOD == 'true'
-      uses: jurplel/install-qt-action@v2.9.0
-      with:
-        version: 5.9.9
-        arch: ${{ steps.settings.outputs.QTCI_ARCH }}
-        dir: 'C:/Qt'
-        modules: qtscript
-    - name: Verify Qt install + version (Alt Method)
-      if: env.WZ_USE_ALT_QT_INSTALL_METHOD == 'true'
-      run: |
-        Write-Host "Qt version:"
-        & "qmake" -version
     #####################################################
     - name: 'Download & Install Vulkan SDK'
       run: |
