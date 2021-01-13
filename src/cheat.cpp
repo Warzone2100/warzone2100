@@ -46,7 +46,6 @@ bool Cheated = false;
 static CHEAT_ENTRY cheatCodes[] =
 {
 	{"templates", listTemplates}, // print templates
-	{"jsload", jsAutogame}, // load an AI script for selectedPlayer
 	{"jsdebug", jsShowDebug}, // show scripting states
 	{"teach us", kf_TeachSelected}, // give experience to selected units
 	{"untouchable", kf_Unselectable}, // make selected droids unselectable
