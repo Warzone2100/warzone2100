@@ -181,8 +181,6 @@ parts:
       - libpng-dev
       - libtheora-dev
       - libvorbis-dev
-      - qtbase5-dev
-      - qtscript5-dev
       - libcurl4-gnutls-dev
       - libgnutls28-dev
       - libsodium-dev
@@ -202,8 +200,6 @@ parts:
       - libopenal1
       - libphysfs1
       - libpng16-16
-      - libqt5opengl5
-      - libqt5script5
       - libtheora0
       - libvorbis0a
       - libvorbisenc2
