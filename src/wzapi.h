@@ -100,7 +100,10 @@ struct scr_position
 	int32_t x; int32_t y;
 };
 
-class QScriptEngine;
+// Utility conversion functions
+BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
+
+// MARK: - wzapi
 
 namespace wzapi
 {

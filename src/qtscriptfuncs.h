@@ -27,12 +27,6 @@
 // ----------------------------------------------
 // Private to scripting module functions below
 
-// Utility conversion functions
-BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player);
-
-/// Clear all map markers (used by label marking, for instance)
-void clearMarks();
-
 wzapi::scripting_instance* createQtScriptInstance(const WzString& path, int player, int difficulty);
 ScriptMapData runMapScript_QtScript(WzString const &path, uint64_t seed, bool preview);
 

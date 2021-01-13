@@ -255,10 +255,10 @@ public:
 	LABEL toNewLabel() const;
 };
 
-/// Load map labels (implemented in qtscriptfuncs.cpp)
+/// Load map labels
 bool loadLabels(const char *filename);
 
-/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+/// Write map labels to savegame
 bool writeLabels(const char *filename);
 
 class scripting_engine
@@ -354,10 +354,10 @@ public:
 
 // MARK: LABELS
 public:
-	/// Load map labels (implemented in qtscriptfuncs.cpp)
+	/// Load map labels
 	bool loadLabels(const char *filename);
 
-	/// Write map labels to savegame (implemented in qtscriptfuncs.cpp)
+	/// Write map labels to savegame
 	bool writeLabels(const char *filename);
 
 // MARK: GROUPS
@@ -558,7 +558,7 @@ private:
 	bool groupAddObject(const BASE_OBJECT *psObj, int groupId, wzapi::scripting_instance *instance);
 };
 
-#define QStringToWzString(_qstring) \
-WzString::fromUtf8((_qstring).toUtf8().constData())
+/// Clear all map markers (used by label marking, for instance)
+void clearMarks();
 
 #endif
