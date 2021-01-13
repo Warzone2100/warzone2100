@@ -373,7 +373,6 @@ static const struct poptOption *getOptionsTable()
 		{ "jsbackend", POPT_ARG_STRING, CLI_JSBACKEND, N_("Set JS backend"),
 					"("
 					"quickjs"
-					", qtscript"
 					")"
 		},
 		{ "autogame", POPT_ARG_NONE, CLI_AUTOGAME,   N_("Run games automatically for testing"), nullptr },

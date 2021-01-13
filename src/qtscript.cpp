@@ -69,7 +69,6 @@
 #include <queue>
 
 #include "wzscriptdebug.h"
-#include "qtscriptfuncs.h"
 #include "quickjs_backend.h"
 
 #define ATTACK_THROTTLE 1000
@@ -547,8 +546,6 @@ static wzapi::scripting_instance* loadPlayerScriptByBackend(const WzString& path
 	{
 		case JS_BACKEND::quickjs:
 			return createQuickJSScriptInstance(path, player, realDifficulty);
-		case JS_BACKEND::qtscript:
-			return createQtScriptInstance(path, player, realDifficulty);
 		case JS_BACKEND::num_backends:
 			debug(LOG_ERROR, "Invalid js backend value"); // should not happen
 	}

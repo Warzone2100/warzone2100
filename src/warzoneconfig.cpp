@@ -73,7 +73,6 @@ static WARZONE_GLOBALS warGlobs;
 std::string js_backend_names[] =
 {
 	"quickjs",
-	"qtscript",
 	"invalid" // Must be last!
 };
 

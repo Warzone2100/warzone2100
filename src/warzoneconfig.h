@@ -50,7 +50,6 @@ enum FMV_MODE
 enum class JS_BACKEND
 {
 	quickjs,
-	qtscript,
 	num_backends // Must be last!
 };
 
