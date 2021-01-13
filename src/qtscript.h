@@ -117,9 +117,6 @@ void scriptRemoveObject(const BASE_OBJECT *psObj);
 /// Open debug GUI
 void jsShowDebug();
 
-/// Choose autogame AI with GUI
-void jsAutogame();
-
 /// Choose a specific autogame AI
 void jsAutogameSpecific(const WzString &name, int player);
 

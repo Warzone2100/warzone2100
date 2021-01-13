@@ -39,19 +39,6 @@
 //__ to start receiving all events unfiltered.
 //__
 
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-copy" // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
-// **NOTE: Qt headers _must_ be before platform specific headers so we don't get conflicts.
-#include <QtCore/QString>
-#include <QtWidgets/QFileDialog>
-
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (9 <= __GNUC__)
-# pragma GCC diagnostic pop // Workaround Qt < 5.13 `deprecated-copy` issues with GCC 9
-#endif
-
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/wzpaths.h"
@@ -952,21 +939,6 @@ void jsAutogameSpecific(const WzString &name, int player)
 	console("Loaded the %s AI script for current player!", name.toUtf8().c_str());
 	instance->handle_eventGameInit();
 	instance->handle_eventStartLevel();
-}
-
-void jsAutogame()
-{
-	QString srcPath(PHYSFS_getWriteDir());
-	srcPath += PHYSFS_getDirSeparator();
-	srcPath += "scripts";
-	QString path = QFileDialog::getOpenFileName(nullptr, "Choose AI script to load", srcPath, "Javascript files (*.js)");
-	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toStdString());
-	if (path.isEmpty())
-	{
-		console("No file specified");
-		return;
-	}
-	jsAutogameSpecific(WzString("scripts/") + WzString::fromUtf8(basename.fileName()), selectedPlayer);
 }
 
 void jsHandleDebugClosed()
