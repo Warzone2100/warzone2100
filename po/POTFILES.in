@@ -379,7 +379,7 @@ src/pointtree.cpp
 src/power.cpp
 src/projectile.cpp
 src/qtscript.cpp
-src/qtscriptfuncs.cpp
+src/quickjs_backend.cpp
 src/radar.cpp
 src/random.cpp
 src/raycast.cpp
