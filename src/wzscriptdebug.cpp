@@ -59,8 +59,8 @@
 #include "template.h"
 #include "multiint.h"
 
+#include "wzapi.h"
 #include "qtscript.h"
-#include "qtscriptfuncs.h"
 
 #include <numeric>
 #include <algorithm>

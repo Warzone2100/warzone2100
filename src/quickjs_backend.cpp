@@ -29,7 +29,6 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
-#include "qtscriptfuncs.h"
 #include "lib/ivis_opengl/tex.h"
 
 #include "action.h"
@@ -71,6 +70,8 @@
 #include "advvis.h"
 #include "loadsave.h"
 #include "wzapi.h"
+#include "qtscript.h"
+#include "featuredef.h"
 
 
 #include <unordered_set>

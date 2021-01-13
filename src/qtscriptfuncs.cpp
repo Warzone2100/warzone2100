@@ -1034,17 +1034,6 @@ QScriptValue convMax(const BASE_OBJECT *psObj, QScriptEngine *engine)
 	}
 }
 
-BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
-{
-	switch (type)
-	{
-	case OBJ_DROID: return IdToDroid(id, player);
-	case OBJ_FEATURE: return IdToFeature(id, player);
-	case OBJ_STRUCTURE: return IdToStruct(id, player);
-	default: return nullptr;
-	}
-}
-
 // Call a function by name
 static QScriptValue callFunction(QScriptEngine *engine, const QString &function, const QScriptValueList &args, bool event = true)
 {

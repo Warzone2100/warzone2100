@@ -28,7 +28,7 @@
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
-#include "qtscriptfuncs.h"
+#include "qtscript.h"
 #include "lib/ivis_opengl/tex.h"
 
 #include "action.h"
@@ -97,6 +97,16 @@
 #define ENEMIES -3
 
 
+BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
+{
+	switch (type)
+	{
+	case OBJ_DROID: return IdToDroid(id, player);
+	case OBJ_FEATURE: return IdToFeature(id, player);
+	case OBJ_STRUCTURE: return IdToStruct(id, player);
+	default: return nullptr;
+	}
+}
 
 wzapi::scripting_instance::scripting_instance(int player, const std::string& scriptName)
 : m_player(player)
