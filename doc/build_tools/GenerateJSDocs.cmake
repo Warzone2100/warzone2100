@@ -99,7 +99,7 @@ PROCESS_LINES("src/qtscript.cpp"
 				STRIP_LINE_PREFIX_REGEX "== ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-globals.md")
 
-PROCESS_LINES("src/qtscriptfuncs.cpp"
+PROCESS_LINES("src/wzapi.cpp"
 				MATCHING_LINE_REGEX "//=="
 				STRIP_LINE_PREFIX_REGEX "//== ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-globals.md" APPEND)
@@ -114,7 +114,7 @@ PROCESS_LINES("src/wzapi.h"
 				STRIP_LINE_PREFIX_REGEX "//-- ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-functions.md")
 
-PROCESS_LINES("src/qtscriptfuncs.cpp"
+PROCESS_LINES("src/quickjs_backend.cpp"
 				MATCHING_LINE_REGEX "//--"
 				STRIP_LINE_PREFIX_REGEX "//-- ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-functions.md" APPEND)
@@ -134,7 +134,7 @@ PROCESS_LINES("src/wzapi.h"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-objects.md")
 
-PROCESS_LINES("src/qtscriptfuncs.cpp"
+PROCESS_LINES("src/quickjs_backend.cpp"
 				MATCHING_LINE_REGEX "//[;][;]"
 				STRIP_LINE_PREFIX_REGEX "//[;][;] ?"
 				OUTPUT_FILE "${OUTPUT_DIR}/js-objects.md" APPEND)
