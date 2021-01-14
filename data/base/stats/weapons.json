@@ -559,8 +559,8 @@
         "shortHit": 80,
         "shortRange": 384,
         "waterGfx": "FXMSplsh.PIE",
-        "weaponClass": "KINETIC",
-        "weaponEffect": "ARTILLERY ROUND",
+        "weaponClass": "HEAT",
+        "weaponEffect": "FLAMER",
         "weaponSubClass": "BOMB",
         "weaponWav": "hwtzflgt.ogg",
         "weight": 500
@@ -600,8 +600,8 @@
         "shortHit": 80,
         "shortRange": 384,
         "waterGfx": "FXMSplsh.PIE",
-        "weaponClass": "KINETIC",
-        "weaponEffect": "ARTILLERY ROUND",
+        "weaponClass": "HEAT",
+        "weaponEffect": "FLAMER",
         "weaponSubClass": "BOMB",
         "weaponWav": "hwtzflgt.ogg",
         "weight": 9000
