@@ -25,7 +25,6 @@
  * return a filename to use for the ops.
  */
 
-#include <ctype.h>
 #include <physfs.h>
 #include "lib/framework/physfs_ext.h"
 #include <ctime>
@@ -353,8 +352,8 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		std::string name;
 		time_t savetime;
 
-		SaveGameNamesAndTimes(const std::string& name, time_t savetime)
-		: name(name)
+		SaveGameNamesAndTimes(std::string name, time_t savetime)
+		: name(std::move(name))
 		, savetime(savetime)
 		{ }
 	};
@@ -368,7 +367,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		if (!isASavedGamefile(i))
 		{
 			// If it doesn't, move on to the next filename
-			return true; // continue;
+			return true;
 		}
 
 		debug(LOG_SAVE, "We found [%s]", i);
@@ -380,7 +379,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 		(i)[strlen(i) - 4] = '\0'; // remove .gam extension
 
 		saveGameNamesAndTimes.emplace_back(i, savetime);
-		return true; // continue
+		return true;
 	});
 
 	// Sort the save games so that the most recent one appears first
@@ -479,8 +478,6 @@ void deleteSaveGame(char *saveGameName)
 	{
 		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", saveGameName, WZ_PHYSFS_getLastError());
 	}
-
-	return;
 }
 
 char lastSavePath[PATH_MAX];
@@ -498,7 +495,7 @@ static bool findLastSaveFrom(const char *path)
 		if (!isASavedGamefile(i))
 		{
 			// If it doesn't, move on to the next filename
-			return true; // continue;
+			return true;
 		}
 		/* Figure save-time */
 		snprintf(savefile, sizeof(savefile), "%s/%s", path, i);
@@ -509,7 +506,7 @@ static bool findLastSaveFrom(const char *path)
 			strcpy(lastSavePath, savefile);
 			found = true;
 		}
-		return true; // continue
+		return true;
 	});
 	return found;
 }
@@ -535,6 +532,63 @@ bool findLastSave()
 		lastSaveMP = true;
 	}
 	return foundMP | foundCAM;
+}
+
+static WzString suggestSaveName(const char *NewSaveGamePath)
+{
+	const WzString levelName = getLevelName();
+	const std::string cheatedSuffix = Cheated ? _("cheated") : "";
+	char saveNamePartial[64] = "\0";
+
+	if (bLoadSaveMode == SAVE_MISSIONEND || bLoadSaveMode == SAVE_INGAME_MISSION)
+	{
+		std::string campaignName;
+		if (levelName.startsWith("CAM_1") || levelName.startsWith("SUB_1"))
+		{
+			campaignName = "Alpha";
+		}
+		else if (levelName.startsWith("CAM_2") || levelName.startsWith("SUB_2"))
+		{
+			campaignName = "Beta";
+		}
+		else if (levelName.startsWith("CAM_3") || levelName.startsWith("SUB_3"))
+		{
+			campaignName = "Gamma";
+		}
+		ssprintf(saveNamePartial, "%s %s %s", campaignName.c_str(), levelName.toStdString().c_str(),
+				 cheatedSuffix.c_str());
+	}
+	else if (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
+	{
+		int humanPlayers = 0;
+		for (int i = 0; i < MAX_PLAYERS; i++)
+		{
+			if (isHumanPlayer(i))
+			{
+				humanPlayers++;
+			}
+		}
+
+		ssprintf(saveNamePartial, "%s %dp %s", levelName.toStdString().c_str(), humanPlayers, cheatedSuffix.c_str());
+	}
+
+	WzString saveName = WzString(saveNamePartial).trimmed();
+	int similarSaveGames = 0;
+	WZ_PHYSFS_enumerateFiles(NewSaveGamePath, [&similarSaveGames, &saveName](const char *fileName) -> bool {
+		if (isASavedGamefile(fileName) && WzString(fileName).startsWith(saveName))
+		{
+			similarSaveGames++;
+		}
+		return true;
+	});
+
+
+	if (similarSaveGames > 0)
+	{
+		saveName += " " + WzString::number(similarSaveGames + 1);
+	}
+
+	return saveName;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -619,6 +673,8 @@ bool runLoadSave(bool bResetMissionWidgets)
 				saveEntryEdit->setGeometry(slotButton->geometry());
 				saveEntryEdit->setString(slotButton->getString());
 				saveEntryEdit->setBoxColours(WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_BACKGROUND);
+				WzString suggestedSaveName = suggestSaveName(NewSaveGamePath);
+				saveEntryEdit->setString(suggestedSaveName);
 
 				if (!slotButton->pText.isEmpty())
 				{
@@ -637,10 +693,6 @@ bool runLoadSave(bool bResetMissionWidgets)
 				context.mx			= mouseX();
 				context.my			= mouseY();
 				saveEntryEdit->clicked(&context);
-			}
-			else
-			{
-				// clicked in a different box. shouldnt be possible!(since we autoclicked in editbox)
 			}
 		}
 	}
@@ -764,21 +816,12 @@ void removeWildcards(char *pStr)
 	{}
 	pStr[i] = 0;
 
-	// Trims leading spaces (currently unused)
-	/* for (i=0; pStr[i]==' '; i++);
-	 if (i != 0)
-	 {
-	 memmove(pStr, pStr+i, strlen(pStr)+1-i);
-	 } */
-
 	// If that leaves us with a blank string, replace with '!'
 	if (pStr[0] == 0)
 	{
 		pStr[0] = '!';
 		pStr[1] = 0;
 	}
-
-	return;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
