@@ -57,9 +57,10 @@ protected:
 class StatsButton: public DynamicIntFancyButton
 {
 protected:
-	virtual BASE_STATS *getStats() = 0;
+	void addProgressBar();
+	virtual void updateLayout();
 
-	void display(int xOffset, int yOffset) override;
+	std::shared_ptr<W_BARGRAPH> progressBar;
 };
 
 class StatsFormButton : public StatsButton
@@ -69,8 +70,12 @@ public:
 	{
 		statsForm = value;
 	}
+
+	void addCostBar();
+
 protected:
 	std::weak_ptr<StatsForm> statsForm;
+	std::shared_ptr<W_BARGRAPH> costBar;
 };
 
 class ObjectStatsButton : public StatsButton
@@ -85,30 +90,23 @@ public:
 	}
 
 protected:
-	BASE_STATS *getStats() override
-	{
-		return controller->getObjectStatsAt(objectIndex);
-	}
-
-	bool isSelected() const override
-	{
-		return controller->getObjectAt(objectIndex) == controller->getSelectedObject();
-	}
-
 	std::shared_ptr<BaseObjectsStatsController> controller;
 	size_t objectIndex;
 };
 
 class ObjectsForm: public IntFormAnimated
 {
+private:
+	typedef IntFormAnimated BaseWidget;
+
 protected:
 	ObjectsForm(const std::shared_ptr<BaseObjectsStatsController> &controller):
-		IntFormAnimated(false),
+		BaseWidget(false),
 		controller(controller)
 	{
 	}
 
-	void run(W_CONTEXT *) override;
+	void display(int xOffset, int yOffset);
 	void initialize();
 	void addCloseButton();
 	void addTabList();
@@ -127,11 +125,13 @@ class StatsForm: public IntFormAnimated
 {
 private:
 	typedef IntFormAnimated BaseWidget;
+
 public:
 	BASE_STATS *getSelectedStats() const
 	{
 		return selectedObjectStats;
 	}
+
 protected:
 	StatsForm(const std::shared_ptr<BaseObjectsStatsController> &controller):
 		IntFormAnimated(false),

@@ -1012,7 +1012,6 @@ void IntMessageButton::display(int xOffset, int yOffset)
 		displayImage(MovieButton ? image : Image(image.images, image.id + isDown()), xOffset, yOffset);
 	}
 	displayIfHighlight(xOffset, yOffset);
-	doneDisplay();
 }
 
 

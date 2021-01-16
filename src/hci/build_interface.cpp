@@ -130,14 +130,8 @@ void BuildInterfaceController::jumpToSelectedBuilder()
 void BuildInterfaceController::toggleFavorites(BASE_STATS *buildOption)
 {
 	auto index = buildOption->index;
-	std::weak_ptr<BuildInterfaceController> weakController = shared_from_this();
-	widgScheduleTask([index, weakController](){
-		if (auto controller = weakController.lock())
-		{
-			asStructureStats[index].isFavorite = !controller->shouldShowFavorites();
-			controller->updateBuildOptionsList();
-		}
-	});
+	asStructureStats[index].isFavorite = !shouldShowFavorites();
+	updateBuildOptionsList();
 }
 
 void BuildInterfaceController::refresh()
@@ -215,9 +209,9 @@ public:
 		buttonType = BTMBUTTON;
 	}
 
-	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
-		BaseWidget::clicked(context, mouseButton);
+		BaseWidget::released(context, mouseButton);
 		auto droid = castDroid(buildController->getObjectAt(objectIndex));
 		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
 
@@ -257,7 +251,6 @@ protected:
 		}
 
 		displayIfHighlight(xOffset, yOffset);
-		doneDisplay();
 	}
 
 	std::string getTip() override
@@ -300,12 +293,18 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		auto droid = castDroid(controller->getObjectAt(objectIndex));
+		updateLayout();
+		auto stat = getStats();
+		displayIMD(Image(), stat ? ImdObject::StructureStat(stat): ImdObject::Component(nullptr), xOffset, yOffset);
+		displayIfHighlight(xOffset, yOffset);
+	}
 
+	void updateLayout() override
+	{
+		BaseWidget::updateLayout();
+		auto droid = castDroid(controller->getObjectAt(objectIndex));
 		updateProgressBar(droid);
 		updateProductionRunSizeLabel(droid);
-
-		BaseWidget::display(xOffset, yOffset);
 	}
 
 	std::string getTip() override
@@ -319,26 +318,15 @@ protected:
 	}
 
 private:
+	STRUCTURE_STATS *getStats()
+	{
+		return buildController->getObjectStatsAt(objectIndex);
+	}
+
 	void initialize()
 	{
 		addProgressBar();
 		addProductionRunSizeLabel();
-	}
-
-	void addProgressBar()
-	{
-		W_BARINIT init;
-		init.x = STAT_PROGBARX;
-		init.y = STAT_PROGBARY;
-		init.width = STAT_PROGBARWIDTH;
-		init.height = STAT_PROGBARHEIGHT;
-		init.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
-		init.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
-		init.pTip = _("Progress Bar");
-		init.style = WBAR_TROUGH | WIDG_HIDDEN;
-		init.iRange = GAME_TICKS_PER_SEC;
-		attach(progressBar = std::make_shared<W_BARGRAPH>(&init));
-		progressBar->setBackgroundColour(WZCOL_BLACK);
 	}
 
 	void addProductionRunSizeLabel()
@@ -446,9 +434,9 @@ private:
 		return droid && (droid->selected || droid == controller->getSelectedObject());
 	}
 
-	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
-		BaseWidget::clicked(context, mouseButton);
+		BaseWidget::released(context, mouseButton);
 		auto droid = castDroid(controller->getObjectAt(objectIndex));
 		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
 
@@ -465,7 +453,6 @@ private:
 		buildController->displayStatsForm();
 	}
 
-	std::shared_ptr<W_BARGRAPH> progressBar;
 	std::shared_ptr<W_LABEL> productionRunSizeLabel;
 	std::shared_ptr<BuildInterfaceController> buildController;
 };
@@ -487,31 +474,26 @@ public:
 		return widget;
 	}
 
+protected:
+	void display(int xOffset, int yOffset) override
+	{
+		updateLayout();
+		auto stat = getStats();
+		ASSERT_OR_RETURN(, stat != nullptr, "Invalid stat pointer");
+
+		displayIMD(Image(), ImdObject::StructureStat(stat), xOffset, yOffset);
+		displayIfHighlight(xOffset, yOffset);
+	}
+
 private:
-	STRUCTURE_STATS *getStats() override
+	STRUCTURE_STATS *getStats()
 	{
 		return controller->getStatsAt(buildOptionIndex);
 	}
 
 	void initialize()
 	{
-		W_BARINIT sBarInit;
-		sBarInit.x = STAT_TIMEBARX;
-		sBarInit.y = STAT_TIMEBARY;
-		sBarInit.width = STAT_PROGBARWIDTH;
-		sBarInit.height = STAT_PROGBARHEIGHT;
-		sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
-		sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
-
-		sBarInit.iRange = GAME_TICKS_PER_SEC;
-		attach(bar = std::make_shared<W_BARGRAPH>(&sBarInit));
-		bar->setBackgroundColour(WZCOL_BLACK);
-	}
-
-	void display(int xOffset, int yOffset) override
-	{
-		updateLayout();
-		BaseWidget::display(xOffset, yOffset);
+		addCostBar();
 	}
 
 	bool isSelected() const override
@@ -524,11 +506,12 @@ private:
 		return false;
 	}
 
-	void updateLayout()
+	void updateLayout() override
 	{
+		BaseWidget::updateLayout();
 		auto stat = getStats();
 		auto powerCost = stat->powerToBuild;
-		bar->majorSize = std::min(100, (int32_t)(powerCost / POWERPOINTS_DROIDDIV));
+		costBar->majorSize = std::min(100, (int32_t)(powerCost / POWERPOINTS_DROIDDIV));
 	}
 
 	std::string getTip() override
@@ -553,24 +536,26 @@ private:
 		}
 	}
 
-	void clicked(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
-		BaseWidget::clicked(context, mouseButton);
+		BaseWidget::released(context, mouseButton);
 		auto clickedStats = controller->getStatsAt(buildOptionIndex);
 		ASSERT_OR_RETURN(, clickedStats != nullptr, "Invalid template pointer");
 
-		if (mouseButton == WKEY_PRIMARY)
-		{
-			controller->startBuildPosition(clickedStats);
-		}
-		else if (mouseButton == WKEY_SECONDARY)
-		{
-			controller->toggleFavorites(clickedStats);
-		}
+		auto controllerRef = controller;
+		widgScheduleTask([mouseButton, clickedStats, controllerRef]() {
+			if (mouseButton == WKEY_PRIMARY)
+			{
+				controllerRef->startBuildPosition(clickedStats);
+			}
+			else if (mouseButton == WKEY_SECONDARY)
+			{
+				controllerRef->toggleFavorites(clickedStats);
+			}
+		});
 	}
 
 	std::shared_ptr<BuildInterfaceController> controller;
-	std::shared_ptr<W_BARGRAPH> bar;
 	size_t buildOptionIndex;
 };
 
@@ -710,6 +695,7 @@ bool BuildInterfaceController::showInterface()
 {
 	intRemoveStatsNoAnim();
 	intRemoveOrderNoAnim();
+	intRemoveObjectNoAnim();
 
 	if (objects.empty())
 	{

@@ -83,6 +83,7 @@
 #include "frend.h"
 #include "chat.h"
 #include "hci/build_interface.h"
+#include "hci/research_interface.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 // Do not highlight buttons while paused.
@@ -272,7 +273,6 @@ static std::vector<Vector2i> asJumpPos;
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
 static bool intUpdateObject(BASE_OBJECT *psObjects, bool bForceStats);
-static void intRemoveObjectNoAnim();
 /* Process the object widgets */
 static void intProcessObject(UDWORD id);
 /* Get the object referred to by a button ID on the object screen.
@@ -1773,6 +1773,11 @@ static void intSelectDroid(BASE_OBJECT *psObj)
 /* Process return codes from the object screen */
 static void intProcessObject(UDWORD id)
 {
+	if (objectsInterfaceController != nullptr)
+	{
+		return;
+	}
+
 	BASE_OBJECT		*psObj;
 	STRUCTURE		*psStruct;
 	SDWORD			butIndex;
@@ -2613,6 +2618,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		// reset the object position array
 		asJumpPos.clear();
 	}
+	objectsInterfaceController = nullptr;
 
 	/* See how many objects the player has */
 	apsObjectList.clear();
@@ -3138,19 +3144,17 @@ void intRemoveObject()
 		Form->closeAnimateDelete();
 	}
 
-	objectsInterfaceController = nullptr;
 	intHidePowerBar();
 }
 
 
 /* Remove the build widgets from the widget screen */
-static void intRemoveObjectNoAnim()
+void intRemoveObjectNoAnim()
 {
 	widgDelete(psWScreen, IDOBJ_TABFORM);
 	widgDelete(psWScreen, IDOBJ_CLOSE);
 	widgDelete(psWScreen, IDOBJ_FORM);
 
-	objectsInterfaceController = nullptr;
 	intHidePowerBar();
 }
 
@@ -3158,8 +3162,8 @@ static void intRemoveObjectNoAnim()
 /* Remove the stats widgets from the widget screen */
 void intRemoveStats()
 {
-	widgHide(psWScreen, IDSTAT_CLOSE);
-	widgHide(psWScreen, IDSTAT_TABFORM);
+	widgDelete(psWScreen, IDSTAT_CLOSE);
+	widgDelete(psWScreen, IDSTAT_TABFORM);
 
 	// Start the window close animation.
 	IntFormAnimated *Form = (IntFormAnimated *)widgGetFromID(psWScreen, IDSTAT_FORM);
@@ -3646,17 +3650,6 @@ static bool setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BA
 	return true;
 }
 
-/* Select a research facility */
-static bool selectResearch(BASE_OBJECT *psObj)
-{
-	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
-
-	auto psResFacility = (STRUCTURE *)psObj;
-
-	// A Structure is a research facility if its type = REF_RESEARCH and is completely built
-	return psResFacility->pStructureType->type == REF_RESEARCH && psResFacility->status == SS_BUILT && psResFacility->died == 0;
-}
-
 /* Return the stats for a research facility */
 static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 {
@@ -3670,60 +3663,6 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 	}
 
 	return psResearchFacility->psSubject;
-}
-
-/* Set the stats for a research facility */
-static bool setResearchStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
-{
-	STRUCTURE			*psBuilding;
-	RESEARCH               *pResearch = (RESEARCH *)psStats;
-	PLAYER_RESEARCH		*pPlayerRes;
-	UDWORD				count;
-	RESEARCH_FACILITY	*psResFacilty;
-
-	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
-	/* psStats might be NULL if the operation is canceled in the middle */
-	psBuilding = (STRUCTURE *)psObj;
-	psResFacilty = &psBuilding->pFunctionality->researchFacility;
-
-	if (bMultiMessages)
-	{
-		if (pResearch != nullptr)
-		{
-			// Say that we want to do research [sic].
-			sendResearchStatus(psBuilding, pResearch->ref - STAT_RESEARCH, selectedPlayer, true);
-			setStatusPendingStart(*psResFacilty, pResearch);  // Tell UI that we are going to research.
-		}
-		else
-		{
-			cancelResearch(psBuilding, ModeQueue);
-		}
-		//stop the button from flashing once a topic has been chosen
-		stopReticuleButtonFlash(IDRET_RESEARCH);
-		return true;
-	}
-
-	//initialise the subject
-	psResFacilty->psSubject = nullptr;
-
-	//set up the player_research
-	if (pResearch != nullptr)
-	{
-		count = pResearch->ref - STAT_RESEARCH;
-		//meant to still be in the list but greyed out
-		pPlayerRes = &asPlayerResList[selectedPlayer][count];
-
-		//set the subject up
-		psResFacilty->psSubject = pResearch;
-
-		sendResearchStatus(psBuilding, count, selectedPlayer, true);	// inform others, I'm researching this.
-
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStartHold = 0;
-		//stop the button from flashing once a topic has been chosen
-		stopReticuleButtonFlash(IDRET_RESEARCH);
-	}
-	return true;
 }
 
 /* Select a Factory */
@@ -3821,18 +3760,18 @@ static bool intAddManufacture(STRUCTURE *psSelected)
 /* If psSelected != NULL it specifies which droid should be hilited */
 static bool intAddResearch(STRUCTURE *psSelected)
 {
-	ppsStatsList = (BASE_STATS **)ppResearchList;
-
-	objSelectFunc = selectResearch;
-	objGetStatsFunc = getResearchStats;
-	objSetStatsFunc = setResearchStats;
-
 	/* Set the sub mode */
 	objMode = IOBJ_RESEARCH;
 
 	/* Create the object screen with the required data */
-	return intAddObjectWindow((BASE_OBJECT *)interfaceStructList(),
-	                          (BASE_OBJECT *)psSelected, true);
+	auto controller = std::make_shared<ResearchInterfaceController>();
+	if (controller->showInterface())
+	{
+		objectsInterfaceController = controller;
+		return true;
+	}
+
+	return false;
 }
 
 
