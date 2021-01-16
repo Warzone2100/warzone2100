@@ -143,14 +143,14 @@ const std::string& WzString::toStdString() const
 	return toUtf8();
 }
 
-const std::vector<uint16_t> WzString::toUtf16() const
+std::vector<uint16_t> WzString::toUtf16() const
 {
 	std::vector<uint16_t> utf16result;
 	utf8::utf8to16(_utf8String.begin(), _utf8String.end(), back_inserter(utf16result));
 	return utf16result;
 }
 
-const std::vector<uint32_t> WzString::toUtf32() const
+std::vector<uint32_t> WzString::toUtf32() const
 {
 	std::vector<uint32_t> utf32result;
 	utf8::utf8to32(_utf8String.begin(), _utf8String.end(), back_inserter(utf32result));
@@ -203,7 +203,7 @@ WzString WzString::substr(size_t start, size_t length) const
 	return WzString(std::string(begin, end));
 }
 
-const WzUniCodepoint WzString::at(int position) const
+WzUniCodepoint WzString::at(int position) const
 {
 	auto it = _utf8String.begin();
 	_utf8_advance(it, position, _utf8String.end());
@@ -392,7 +392,7 @@ std::vector<WzString> WzString::split(const WzString & delimiter) const
 	auto it = _utf8String.begin();
 	auto it_currenttokenstart = _utf8String.begin();
 	bool lastCodepointWasDelimiterEnd = false;
-	uint32_t codepoint = 0;
+	uint32_t codepoint;
 	while (it != _utf8String.end())
 	{
 		codepoint = utf8::next(it, _utf8String.end());
@@ -426,7 +426,7 @@ std::vector<WzString> WzString::split(const WzString & delimiter) const
 	{
 		// string ends with delimiter (and delimiter is not an empty string)
 		// append an empty string to the end of the list
-		tokens.push_back(WzString());
+		tokens.emplace_back();
 	}
 	return tokens;
 }
@@ -546,7 +546,7 @@ WzString& WzString::operator+=(const char* str)
 	return *this;
 }
 
-const WzString WzString::operator+(const WzString &other) const
+WzString WzString::operator+(const WzString &other) const
 {
 	WzString newString = *this;
 	newString.append(other);
@@ -554,7 +554,7 @@ const WzString WzString::operator+(const WzString &other) const
 }
 
 // NOTE: The char * should be valid UTF-8.
-const WzString WzString::operator+(const char* other) const
+WzString WzString::operator+(const char* other) const
 {
 	WzString newString = *this;
 	newString.append(other);
@@ -574,7 +574,7 @@ WzString& WzString::operator=(const WzUniCodepoint& ch)
 	return *this;
 }
 
-WzString& WzString::operator=(WzString&& other)
+WzString& WzString::operator=(WzString&& other) noexcept
 {
 	if (this != &other)
 	{

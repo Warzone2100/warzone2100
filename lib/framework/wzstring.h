@@ -44,7 +44,7 @@ public:
 	bool operator==(const WzUniCodepoint& ch) const { return _codepoint == ch._codepoint; }
 
 protected:
-	WzUniCodepoint(uint32_t utf_32_codepoint)
+	explicit WzUniCodepoint(uint32_t utf_32_codepoint)
 	: _codepoint(utf_32_codepoint)
 	{ }
 
@@ -54,7 +54,7 @@ private:
 
 class WzString {
 public:
-	WzString() { }
+	WzString() = default;
 	WzString(size_t size, const WzUniCodepoint& ch);
 	WzString(WzString&& other) noexcept : _utf8String(std::move(other._utf8String)) { }
 	WzString(const WzString& other) noexcept : _utf8String(other._utf8String) { }
@@ -70,8 +70,8 @@ public:
 	// Same as `toUtf8()`
 	const std::string& toStdString() const;
 
-	const std::vector<uint16_t> toUtf16() const;
-	const std::vector<uint32_t> toUtf32() const;
+	std::vector<uint16_t> toUtf16() const;
+	std::vector<uint32_t> toUtf32() const;
 
 	int toInt(bool *ok = nullptr, int base = 10) const;
 
@@ -83,7 +83,7 @@ public:
 	// Same as `length()`
 	int size() const { return length(); }
 
-	const WzUniCodepoint at(int position) const;
+	WzUniCodepoint at(int position) const;
 
 	WzString& append(const WzString &str);
 	WzString& append(const WzUniCodepoint &c);
@@ -136,10 +136,10 @@ public:
 	WzString& operator+=(const char* str);
 	WzString& operator=(const WzString &other);
 	WzString& operator=(const WzUniCodepoint& ch);
-	WzString& operator=(WzString&& other);
+	WzString& operator=(WzString&& other) noexcept;
 
-	const WzString operator+(const WzString &other) const;
-	const WzString operator+(const char* other) const;
+	WzString operator+(const WzString &other) const;
+	WzString operator+(const char* other) const;
 
 	bool operator==(const WzString &other) const;
 	bool operator!=(const WzString &other) const;
@@ -177,8 +177,8 @@ public:
 	WzUniCodepointRef operator[](int position);
 
 private:
-	WzString(std::string utf8String)
-	: _utf8String(utf8String)
+	explicit WzString(std::string utf8String)
+	: _utf8String(std::move(utf8String))
 	{ }
 
 	template <typename octet_iterator, typename distance_type>
