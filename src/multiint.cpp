@@ -479,7 +479,7 @@ void loadMultiScripts()
 	if (game.scavengers && myResponsibility(scavengerPlayer()))
 	{
 		debug(LOG_SAVE, "Loading scavenger AI for player %d", scavengerPlayer());
-		loadPlayerScript("multiplay/script/scavfact.js", scavengerPlayer(), AIDifficulty::EASY);
+		loadPlayerScript("multiplay/script/scavengers/init.js", scavengerPlayer(), AIDifficulty::EASY);
 	}
 
 	// Restore data hashes, since AI and scavenger scripts aren't run on all clients.
