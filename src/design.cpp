@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include "lib/widget/widget.h"
 
 #include "objects.h"
@@ -3598,6 +3599,13 @@ void intRunDesign()
 		//set the template shadow stats
 		intSetTemplateBodyShadowStats(psStats);
 		intSetTemplatePowerShadowStats(psStats);
+	}
+
+	if (keyPressed(KEY_ESC))
+	{
+		intResetScreen(false);
+		// clear key press so we don't enter in-game options
+		inputLoseFocus();
 	}
 }
 

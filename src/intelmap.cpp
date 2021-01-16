@@ -40,6 +40,7 @@
 
 #include "display3d.h"
 #include "lib/framework/cursors.h"
+#include "lib/framework/input.h"
 #include "map.h"
 #include "intdisplay.h"
 #include "objects.h"
@@ -1254,4 +1255,15 @@ bool messageIsImmediate()
 void setMessageImmediate(bool state)
 {
 	immediateMessage = state;
+}
+
+/* run intel map (in the game loop) */
+void intRunIntelMap()
+{
+	if (keyPressed(KEY_ESC))
+	{
+		intResetScreen(false);
+		// clear key press so we don't enter in-game options
+		inputLoseFocus();
+	}
 }

@@ -72,4 +72,7 @@ bool messageIsImmediate();
 /*sets the flag*/
 void setMessageImmediate(bool state);
 
+/* run intel map (in the game loop) */
+void intRunIntelMap();
+
 #endif	// __INCLUDED_SRC_INTELMAP_H__
