@@ -79,3 +79,13 @@ function eventPickup(feature, droid)
 		queue("placeOilDrum", (delay * 120000) + oilDrumData.delay);
 	}
 }
+
+function oilDrumInit()
+{
+	// always at least one oil drum, and one more for every 64x64 tiles of map area
+	oilDrumData.maxOilDrums = (mapWidth * mapHeight) >> 12; // replace float division with shift for sync-safety
+	for (var i = 0; i < oilDrumData.maxOilDrums; ++i)
+	{
+		queue("placeOilDrum", 10000 * i);
+	}
+}
