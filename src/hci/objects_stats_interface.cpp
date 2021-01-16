@@ -18,89 +18,41 @@
 #define STAT_BUTWIDTH		60
 #define STAT_BUTHEIGHT		46
 
-static void statGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon);
-
-void StatsButton::display(int xOffset, int yOffset)
+void StatsButton::updateLayout()
 {
 	updateSelection();
-
-	auto stat = getStats();
 	initDisplay();
+}
 
-	ImdObject object;
-	Image image;
+void StatsButton::addProgressBar()
+{
+	auto init = W_BARINIT();
+	init.x = STAT_PROGBARX;
+	init.y = STAT_PROGBARY;
+	init.width = STAT_PROGBARWIDTH;
+	init.height = STAT_PROGBARHEIGHT;
+	init.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	init.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
+	init.pTip = _("Progress Bar");
+	init.style = WBAR_TROUGH | WIDG_HIDDEN;
+	init.iRange = GAME_TICKS_PER_SEC;
+	attach(progressBar = std::make_shared<W_BARGRAPH>(&init));
+	progressBar->setBackgroundColour(WZCOL_BLACK);
+}
 
-	if (stat)
-	{
-		if (StatIsStructure(stat))
-		{
-			object = ImdObject::StructureStat(stat);
-		}
-		else if (StatIsTemplate(stat))
-		{
-			object = ImdObject::DroidTemplate(stat);
-		}
-		else if (StatIsFeature(stat))
-		{
-			object = ImdObject::Feature(stat);
-		}
-		else
-		{
-			auto compID = StatIsComponent(stat); // This fails for viper body.
-			if (compID != COMP_NUMCOMPONENTS)
-			{
-				object = ImdObject::Component(stat);
-			}
-			else if (StatIsResearch(stat))
-			{
-				iIMDShape *shape;
-				BASE_STATS *psResGraphic;
-				statGetResearchImage(stat, &image, &shape, &psResGraphic, true);
-				if (psResGraphic)
-				{
-					//we have a Stat associated with this research topic
-					if (StatIsStructure(psResGraphic))
-					{
-						object = ImdObject::StructureStat(psResGraphic);
-					}
-					else
-					{
-						compID = StatIsComponent(psResGraphic);
-						if (compID != COMP_NUMCOMPONENTS)
-						{
-							//overwrite the Object pointer
-							object = ImdObject::Component(psResGraphic);
-						}
-						else
-						{
-							ASSERT(false, "Invalid Stat for research button");
-							object = ImdObject::Research(nullptr);
-						}
-					}
-				}
-				else
-				{
-					//no Stat for this research topic so just use the graphic provided
-					//if Object != NULL the there must be a IMD so set the object to
-					//equal the Research stat
-					if (shape != nullptr)
-					{
-						object = ImdObject::Research(stat);
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		//BLANK button for now - AB 9/1/98
-		object = ImdObject::Component(nullptr);
-	}
+void StatsFormButton::addCostBar()
+{
+	W_BARINIT sBarInit;
+	sBarInit.x = STAT_TIMEBARX;
+	sBarInit.y = STAT_TIMEBARY;
+	sBarInit.width = STAT_PROGBARWIDTH;
+	sBarInit.height = STAT_PROGBARHEIGHT;
+	sBarInit.sCol = WZCOL_ACTION_PROGRESS_BAR_MAJOR;
+	sBarInit.sMinorCol = WZCOL_ACTION_PROGRESS_BAR_MINOR;
 
-	displayIMD(image, object, xOffset, yOffset);
-	displayIfHighlight(xOffset, yOffset);
-
-	doneDisplay();
+	sBarInit.iRange = GAME_TICKS_PER_SEC;
+	attach(costBar = std::make_shared<W_BARGRAPH>(&sBarInit));
+	costBar->setBackgroundColour(WZCOL_BLACK);
 }
 
 void DynamicIntFancyButton::updateSelection()
@@ -112,9 +64,10 @@ void DynamicIntFancyButton::updateSelection()
 	}
 }
 
-void ObjectsForm::run(W_CONTEXT *)
+void ObjectsForm::display(int xOffset, int yOffset)
 {
 	updateButtons();
+	BaseWidget::display(xOffset, yOffset);
 }
 
 void ObjectsForm::initialize()
@@ -131,15 +84,20 @@ void ObjectsForm::initialize()
 void ObjectsForm::addCloseButton()
 {
 	W_BUTINIT init;
-	init.id = IDOBJ_CLOSE;
 	init.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
 		psWidget->setGeometry(OBJ_BACKWIDTH - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	});
 	init.pTip = _("Close");
 	init.pDisplay = intDisplayImageHilight;
 	init.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	auto button = std::static_pointer_cast<WIDGET>(std::make_shared<W_BUTTON>(&init));
+	auto button = std::make_shared<W_BUTTON>(&init);
 	attach(button);
+	button->addOnClickHandler([](W_BUTTON&) {
+		widgScheduleTask([]() {
+			intResetScreen(false);
+			intMode = INT_NORMAL;
+		});
+	});
 }
 
 void ObjectsForm::addTabList()
@@ -210,7 +168,6 @@ void StatsForm::initialize()
 void StatsForm::addCloseButton()
 {
 	W_BUTINIT init;
-	init.id = IDSTAT_CLOSE;
 	init.x = STAT_WIDTH - CLOSE_WIDTH;
 	init.y = 0;
 	init.width = CLOSE_WIDTH;
@@ -218,7 +175,14 @@ void StatsForm::addCloseButton()
 	init.pTip = _("Close");
 	init.pDisplay = intDisplayImageHilight;
 	init.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	attach(std::make_shared<W_BUTTON>(&init));
+	auto button = std::make_shared<W_BUTTON>(&init);
+	attach(button);
+	button->addOnClickHandler([](W_BUTTON&) {
+		widgScheduleTask([]() {
+			intRemoveStats();
+			intMode = INT_OBJECT;
+		});
+	});
 }
 
 void StatsForm::addTabList()
@@ -284,28 +248,6 @@ void StatsForm::removeLastButton()
 	{
 		auto lastButton = listWidget->children().back();
 		listWidget->detach(lastButton);
-	}
-}
-
-static void statGetResearchImage(BASE_STATS *psStat, Image *image, iIMDShape **Shape, BASE_STATS **ppGraphicData, bool drawTechIcon)
-{
-	if (drawTechIcon && ((RESEARCH *)psStat)->iconID != NO_RESEARCH_ICON)
-	{
-		*image = Image(IntImages, ((RESEARCH *)psStat)->iconID);
-	}
-	//if the research has a Stat associated with it - use this as display in the button
-	if (((RESEARCH *)psStat)->psStat)
-	{
-		*ppGraphicData = ((RESEARCH *)psStat)->psStat;
-		//make sure the IMDShape is initialised
-		*Shape = nullptr;
-	}
-	else
-	{
-		//no stat so just just the IMD associated with the research
-		*Shape = ((RESEARCH *)psStat)->pIMD;
-		//make sure the stat is initialised
-		*ppGraphicData = nullptr;
 	}
 }
 

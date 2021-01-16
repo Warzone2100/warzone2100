@@ -356,6 +356,8 @@ void intRemoveStats();
 /* Remove the stats widgets from the widget screen */
 void intRemoveStatsNoAnim();
 
+void intRemoveObjectNoAnim();
+
 /*sets which list of structures to use for the interface*/
 STRUCTURE *interfaceStructList();
 

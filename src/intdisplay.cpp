@@ -715,10 +715,6 @@ void IntFancyButton::initDisplay()
 	model.rotation.y += realTimeAdjustedAverage(model.rate);
 }
 
-void IntFancyButton::doneDisplay()
-{
-}
-
 void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
 {
 	if (isHighlighted())
@@ -916,8 +912,6 @@ void IntObjectButton::display(int xOffset, int yOffset)
 
 	displayIMD(Image(), object, xOffset, yOffset);
 	displayIfHighlight(xOffset, yOffset);
-
-	doneDisplay();
 }
 
 IntStatsButton::IntStatsButton()
@@ -1005,8 +999,6 @@ void IntStatsButton::display(int xOffset, int yOffset)
 
 	displayIMD(image, object, xOffset, yOffset);
 	displayIfHighlight(xOffset, yOffset);
-
-	doneDisplay();
 }
 
 IntFormTransparent::IntFormTransparent()
@@ -2080,7 +2072,6 @@ void IntTransportButton::display(int xOffset, int yOffset)
 			iV_DrawImage(IntImages, gfxId, xOffset + x() + 50, yOffset + y() + 10);
 		}
 	}
-	doneDisplay();
 }
 
 /* Draws blips on radar to represent Proximity Display and damaged structures */
@@ -2359,10 +2350,14 @@ void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	W_BARGRAPH *psBar = (W_BARGRAPH *)psWidget;
+	const RESEARCH &research = asResearch[psBar->UserData];
+	const std::vector<AllyResearch> &researches = listAllyResearch(research.ref);
+	intDisplayUpdateAllyBar(psBar, research, researches);
+	barGraphDisplayTrough(psWidget, xOffset, yOffset);
+}
 
-	RESEARCH const &research = asResearch[psWidget->UserData];
-	std::vector<AllyResearch> const &researches = listAllyResearch(research.ref);
-
+void intDisplayUpdateAllyBar(W_BARGRAPH *psBar, const RESEARCH &research, const std::vector<AllyResearch> &researches)
+{
 	unsigned bestCompletion = 0;
 	const int researchNotStarted = 3600000;
 	int bestPowerNeeded = researchNotStarted;
@@ -2407,7 +2402,6 @@ void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		formatPowerText(psBar, bestPowerNeeded);
 		setBarGraphValue(psBar, psBar->majorCol, researchPowerCost - bestPowerNeeded, researchPowerCost);
 	}
-	barGraphDisplayTrough(psWidget, xOffset, yOffset);
 }
 
 /* Set the shadow power for the selected player */

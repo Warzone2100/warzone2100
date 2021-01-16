@@ -26,6 +26,7 @@
 #include "intimage.h"
 #include "droid.h"
 #include "template.h"
+#include "research.h"
 
 
 /* Power levels are divided by this for power bar display. The extra factor has
@@ -134,7 +135,6 @@ protected:
 	enum ButtonType {TOPBUTTON = 0, BTMBUTTON = 1};
 
 	void initDisplay();
-	void doneDisplay();
 	void displayClear(int xOffset, int yOffset);
 	void displayIMD(Image image, ImdObject imdObject, int xOffset, int yOffset);
 	void displayImage(Image image, int xOffset, int yOffset);
@@ -323,6 +323,7 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
+void intDisplayUpdateAllyBar(W_BARGRAPH *psBar, const RESEARCH &research, const std::vector<AllyResearch> &researches);
 
 void intSetShadowPower(int quantity);
 
