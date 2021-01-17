@@ -635,9 +635,6 @@ void deleteTemplateFromProduction(DROID_TEMPLATE *psTemplate, unsigned player, Q
 					// Check to see if anything left to produce. (Also calls cancelProduction again, if nothing left to produce, which is a no-op. But if other things are left to produce, doesn't call cancelProduction, so wouldn't return power without the explicit cancelProduction call above.)
 					doNextProduction(psStruct, nullptr, ModeImmediate);
 
-					//tell the interface
-					intManufactureFinished(psStruct);
-
 					syncDebugStructure(psStruct, '>');
 				}
 			}
@@ -676,10 +673,10 @@ fills the list with Templates that can be manufactured
 in the Factory - based on size. There is a limit on how many can be manufactured
 at any one time.
 */
-void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory)
+std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory)
 {
+	std::vector<DROID_TEMPLATE *> pList;
 	const int player = psFactory->player;
-	pList.clear();
 
 	BODY_SIZE	iCapacity = (BODY_SIZE)psFactory->capacity;
 
@@ -722,6 +719,8 @@ void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory
 			}
 		}
 	}
+
+	return pList;
 }
 
 void checkPlayerBuiltHQ(const STRUCTURE *psStruct)

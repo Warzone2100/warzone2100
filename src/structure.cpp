@@ -985,10 +985,6 @@ bool structSetManufacture(STRUCTURE *psStruct, DROID_TEMPLATE *psTempl, QUEUE_MO
 		//check for zero build time - usually caused by 'silly' data! If so, set to 1 build point - ie very fast!
 		psFact->buildPointsRemaining = std::max(psFact->buildPointsRemaining, 1);
 	}
-	if (psStruct->player == productionPlayer)
-	{
-		intUpdateManufacture(psStruct);
-	}
 	return true;
 }
 
@@ -5890,9 +5886,6 @@ void cancelProduction(STRUCTURE *psBuilding, QUEUE_MODE mode, bool mayClearProdu
 			asProductionRun[psFactory->psAssemblyPoint->factoryType][psFactory->psAssemblyPoint->factoryInc].clear();
 		}
 		psFactory->productionLoops = 0;
-
-		//tell the interface
-		intManufactureFinished(psBuilding);
 	}
 
 	if (mode == ModeQueue)
@@ -6108,6 +6101,21 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 		{
 			psFactory->productionLoops = 0;  // Reset number of loops, unless set to infinite.
 		}
+	}
+
+	//need to check if this was the template that was mid-production
+	if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
+	{
+		doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
+	}
+	else if (!StructureIsManufacturingPending(psStructure))
+	{
+		structSetManufacture(psStructure, psTemplate, ModeQueue);
+	}
+
+	if (StructureIsOnHoldPending(psStructure))
+	{
+		releaseProduction(psStructure, ModeQueue);
 	}
 }
 

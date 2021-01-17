@@ -236,9 +236,14 @@ void StatsForm::addTabList()
 
 void StatsForm::display(int xOffset, int yOffset)
 {
+	updateLayout();
+	BaseWidget::display(xOffset, yOffset);
+}
+
+void StatsForm::updateLayout()
+{
 	updateSelectedObjectStats();
 	updateButtons();
-	BaseWidget::display(xOffset, yOffset);
 }
 
 void StatsForm::updateSelectedObjectStats()

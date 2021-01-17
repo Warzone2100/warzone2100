@@ -266,6 +266,7 @@ enum OBJECT_MODE
 	IOBJ_COMMAND,		        // the command droid screen
 
 	IOBJ_DEBUG_STRUCTURE,
+	IOBJ_DEBUG_DROID,
 
 	IOBJ_MAX,			        // maximum object mode,
 };
@@ -329,9 +330,6 @@ void intSetMapPos(UDWORD x, UDWORD y);
 /* Tell the interface a research facility has completed a topic */
 void intResearchFinished(STRUCTURE *psBuilding);
 void intAlliedResearchChanged();
-/* Tell the interface a factory has completed building ALL droids */
-void intManufactureFinished(STRUCTURE *psBuilding);
-void intUpdateManufacture(STRUCTURE *psBuilding);
 
 /* Sync the interface to an object */
 void intObjectSelected(BASE_OBJECT *psObj);
