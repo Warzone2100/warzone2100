@@ -134,6 +134,16 @@ bool QuickJS_EnumerateObjectProperties(JSContext *ctx, JSValue obj, const std::f
 class quickjs_scripting_instance;
 static std::map<JSContext*, quickjs_scripting_instance *> engineToInstanceMap;
 
+static void QJSRuntimeFree_LeakHandler_Warning(const char* msg)
+{
+	debug(LOG_WARNING, "QuickJS FreeRuntime leak: %s", msg);
+}
+
+static void QJSRuntimeFree_LeakHandler_Error(const char* msg)
+{
+	debug(LOG_ERROR, "QuickJS FreeRuntime leak: %s", msg);
+}
+
 class quickjs_scripting_instance : public wzapi::scripting_instance
 {
 public:
@@ -153,7 +163,7 @@ public:
 		JS_FreeValue(ctx, global_obj);
 		JS_FreeContext(ctx);
 		ctx = nullptr;
-		JS_FreeRuntime(rt);
+		JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Error);
 		rt = nullptr;
 	}
 	bool loadScript(const WzString& path, int player, int difficulty);
@@ -2737,7 +2747,7 @@ ScriptMapData runMapScript_QuickJS(WzString const &path, uint64_t seed, bool pre
 	data.mt = MersenneTwister(seed);
 
 	JSRuntime *rt = JS_NewRuntime();
-	auto free_runtime_ref = gsl::finally([rt] { JS_FreeRuntime(rt); });
+	auto free_runtime_ref = gsl::finally([rt] { JS_FreeRuntime2(rt, QJSRuntimeFree_LeakHandler_Warning); });
 	JSLimitedContextOptions ctxOptions;
 	ctxOptions.baseObjects = true;
 	ctxOptions.dateObject = false;
