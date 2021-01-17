@@ -59,6 +59,7 @@ quickjs_apply_patches(
 		"005-fix-pedantic-cxx-warnings.patch"
 		"006-bsd-compile-fixes.patch"
 		"007-msvc-64bit-compatibility.patch"
+		"008-freeruntime2.patch"
 )
 
 message(STATUS "Finished applying patches.")
