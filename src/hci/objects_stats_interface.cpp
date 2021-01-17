@@ -13,10 +13,28 @@
 #include "../mission.h"
 #include "../qtscript.h"
 #include "../display3d.h"
+#include "../warcam.h"
+#include "../geometry.h"
 
 #define STAT_GAP			2
 #define STAT_BUTWIDTH		60
 #define STAT_BUTHEIGHT		46
+
+void BaseObjectsStatsController::selectObject(BASE_OBJECT *object)
+{
+	object->selected = true;
+	triggerEventSelected();
+	jsDebugSelected(object);
+	setSelectedObject(object);
+}
+
+void BaseObjectsStatsController::jumpToSelected()
+{
+	auto selected = getSelectedObject();
+	ASSERT_OR_RETURN(, selected != nullptr, "Invalid selected object pointer");
+	setPlayerPos(selected->pos.x, selected->pos.y);
+	setWarCamActive(false);
+}
 
 void StatsButton::updateLayout()
 {
@@ -38,6 +56,27 @@ void StatsButton::addProgressBar()
 	init.iRange = GAME_TICKS_PER_SEC;
 	attach(progressBar = std::make_shared<W_BARGRAPH>(&init));
 	progressBar->setBackgroundColour(WZCOL_BLACK);
+}
+
+void ObjectButton::selectAndJump()
+{
+	auto object = getController()->getObjectAt(objectIndex);
+	ASSERT_OR_RETURN(, object != nullptr, "Invalid object pointer");
+
+	clearSelection();
+	getController()->selectObject(object);
+
+	if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(object, 0))
+	{
+		jumpPosition = getPlayerPos();
+		getController()->jumpToSelected();
+	}
+	else
+	{
+		setPlayerPos(jumpPosition.x, jumpPosition.y);
+		setWarCamActive(false);
+		jumpPosition = {0, 0};
+	}
 }
 
 void StatsFormButton::addCostBar()
@@ -116,7 +155,7 @@ void ObjectsForm::addTabList()
 
 void ObjectsForm::updateButtons()
 {
-	auto objectsCount = controller->objectsSize();
+	auto objectsCount = getController()->objectsSize();
 	while (buttonsCount < objectsCount)
 	{
 		addNewButton();
@@ -204,15 +243,15 @@ void StatsForm::display(int xOffset, int yOffset)
 
 void StatsForm::updateSelectedObjectStats()
 {
-	auto selectedObject = controller->getSelectedObject();
-	auto objectsSize = controller->objectsSize();
+	auto selectedObject = getController()->getSelectedObject();
+	auto objectsSize = getController()->objectsSize();
 	selectedObjectStats = nullptr;
 
 	for (auto i = 0; i < objectsSize; i++)
 	{
-		if (controller->getObjectAt(i) == selectedObject)
+		if (getController()->getObjectAt(i) == selectedObject)
 		{
-			selectedObjectStats = controller->getObjectStatsAt(i);
+			selectedObjectStats = getController()->getObjectStatsAt(i);
 			break;
 		}
 	}
@@ -220,7 +259,7 @@ void StatsForm::updateSelectedObjectStats()
 
 void StatsForm::updateButtons()
 {
-	auto statsCount = controller->statsSize();
+	auto statsCount = getController()->statsSize();
 	while (buttonsCount < statsCount)
 	{
 		addNewButton();

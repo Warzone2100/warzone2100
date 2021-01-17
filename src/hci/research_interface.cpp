@@ -24,15 +24,22 @@
 
 static ImdObject getResearchObjectImage(RESEARCH *research);
 
+void ResearchInterfaceController::updateData()
+{
+	updateFacilitiesList();
+	updateSelected();
+	updateResearchOptionsList();
+}
+
 void ResearchInterfaceController::updateFacilitiesList()
 {
-	objects.clear();
+	facilities.clear();
 
 	for (auto psStruct = interfaceStructList(); psStruct != nullptr; psStruct = psStruct->psNext)
 	{
 		if (psStruct->pStructureType->type == REF_RESEARCH && psStruct->status == SS_BUILT && psStruct->died == 0)
 		{
-			objects.push_back(psStruct);
+			facilities.push_back(psStruct);
 		}
 	}
 }
@@ -44,9 +51,9 @@ nonstd::optional<size_t> ResearchInterfaceController::getSelectedFacilityIndex()
 		return nonstd::nullopt;
 	}
 
-	auto found = std::find(objects.begin(), objects.end(), getSelectedObject());
+	auto found = std::find(facilities.begin(), facilities.end(), getSelectedObject());
 
-	return found == objects.end() ? nonstd::nullopt : nonstd::optional<size_t>(found - objects.begin());
+	return found == facilities.end() ? nonstd::nullopt : nonstd::optional<size_t>(found - facilities.begin());
 }
 
 void ResearchInterfaceController::updateResearchOptionsList()
@@ -69,7 +76,7 @@ void ResearchInterfaceController::updateResearchOptionsList()
 
 RESEARCH *ResearchInterfaceController::getObjectStatsAt(size_t objectIndex) const
 {
-	auto facility = castStructure(getObjectAt(objectIndex));
+	auto facility = getObjectAt(objectIndex);
 	ASSERT_OR_RETURN(nullptr, facility != nullptr, "Invalid Structure pointer");
 
 	RESEARCH_FACILITY *psResearchFacility = &facility->pFunctionality->researchFacility;
@@ -82,25 +89,9 @@ RESEARCH *ResearchInterfaceController::getObjectStatsAt(size_t objectIndex) cons
 	return psResearchFacility->psSubject;
 }
 
-void ResearchInterfaceController::selectFacility(STRUCTURE *facility)
-{
-	facility->selected = true;
-	triggerEventSelected();
-	jsDebugSelected(facility);
-	setSelectedObject(facility);
-}
-
-void ResearchInterfaceController::jumpToSelectedFacility()
-{
-	auto facility = getSelectedObject();
-	setPlayerPos(facility->pos.x, facility->pos.y);
-	setWarCamActive(false);
-}
-
 void ResearchInterfaceController::refresh()
 {
-	updateFacilitiesList();
-	updateResearchOptionsList();
+	updateData();
 
 	if (objectsSize() == 0)
 	{
@@ -117,7 +108,7 @@ void ResearchInterfaceController::closeInterface()
 
 void ResearchInterfaceController::updateSelected()
 {
-	for (auto facility: objects)
+	for (auto facility: facilities)
 	{
 		if (facility->died == 0 && facility->selected)
 		{
@@ -128,7 +119,7 @@ void ResearchInterfaceController::updateSelected()
 
 	if (auto previouslySelected = getSelectedObject())
 	{
-		for (auto facility: objects)
+		for (auto facility: facilities)
 		{
 			if (facility->died == 0 && facility == previouslySelected)
 			{
@@ -138,7 +129,7 @@ void ResearchInterfaceController::updateSelected()
 		}
 	}
 
-	setSelectedObject(objects.front());
+	setSelectedObject(facilities.front());
 }
 
 void ResearchInterfaceController::startResearch(RESEARCH *research)
@@ -247,16 +238,13 @@ public:
 	}
 };
 
-class ResearchObjectButton : public IntFancyButton
+class ResearchObjectButton : public ObjectButton
 {
 private:
-	typedef IntFancyButton BaseWidget;
+	typedef ObjectButton BaseWidget;
 
 protected:
-	ResearchObjectButton(): BaseWidget()
-	{
-		buttonType = BTMBUTTON;
-	}
+	ResearchObjectButton (): BaseWidget() {}
 
 public:
 	static std::shared_ptr<ResearchObjectButton> make(const std::shared_ptr<ResearchInterfaceController> &controller, size_t objectIndex)
@@ -264,7 +252,7 @@ public:
 		class make_shared_enabler: public ResearchObjectButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
 		widget->initialize();
-		widget->researchController = controller;
+		widget->controller = controller;
 		widget->objectIndex = objectIndex;
 		return widget;
 	}
@@ -282,26 +270,8 @@ private:
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
-
-		auto facility = castStructure(researchController->getObjectAt(objectIndex));
-		ASSERT_OR_RETURN(, facility != nullptr, "Invalid facility pointer");
-
-		clearSelection();
-		researchController->selectFacility(facility);
-
-		if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(facility, 0))
-		{
-			jumpPosition = getPlayerPos();
-			researchController->jumpToSelectedFacility();
-		}
-		else
-		{
-			setPlayerPos(jumpPosition.x, jumpPosition.y);
-			setWarCamActive(false);
-			jumpPosition = {0, 0};
-		}
-
-		researchController->displayStatsForm();
+		selectAndJump();
+		controller->displayStatsForm();
 	}
 
 protected:
@@ -312,7 +282,7 @@ protected:
 			updateAllyStatus();
 		}
 
-		auto facility = castStructure(researchController->getObjectAt(objectIndex));
+		auto facility = controller->getObjectAt(objectIndex);
 		initDisplay();
 
 		if (facility && !isDead(facility))
@@ -327,7 +297,7 @@ protected:
 	{
 		allyResearchIcons.hide();
 
-		auto research = researchController->getObjectStatsAt(objectIndex);
+		auto research = controller->getObjectStatsAt(objectIndex);
 		if (research == nullptr)
 		{
 			return;
@@ -344,40 +314,34 @@ protected:
 
 	std::string getTip() override
 	{
-		auto facility = castStructure(researchController->getObjectAt(objectIndex));
+		auto facility = controller->getObjectAt(objectIndex);
 		ASSERT_OR_RETURN("", facility != nullptr, "Invalid facility pointer");
 		return getStatsName(facility->pStructureType);
 	}
 
+	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	{
+		return controller;
+	}
+
 private:
-	std::shared_ptr<ResearchInterfaceController> researchController;
-	size_t objectIndex;
-	Vector2i jumpPosition = {0, 0};
+	std::shared_ptr<ResearchInterfaceController> controller;
 	AllyResearchsIcons allyResearchIcons;
 };
 
-class ResearchStatsButton: public ObjectStatsButton
+class ResearchStatsButton: public StatsButton
 {
 private:
-	typedef	ObjectStatsButton BaseWidget;
-
-protected:
-	ResearchStatsButton (const std::shared_ptr<ResearchInterfaceController> &controller, size_t objectIndex):
-		BaseWidget(controller, objectIndex),
-		researchController(controller)
-	{}
+	typedef	StatsButton BaseWidget;
+	using BaseWidget::BaseWidget;
 
 public:
 	static std::shared_ptr<ResearchStatsButton> make(const std::shared_ptr<ResearchInterfaceController> &controller, size_t objectIndex)
 	{
-		class make_shared_enabler: public ResearchStatsButton
-		{
-		public:
-			make_shared_enabler (const std::shared_ptr<ResearchInterfaceController> &controller, size_t objectIndex):
-				ResearchStatsButton(controller, objectIndex)
-			{}
-		};
-		auto widget = std::make_shared<make_shared_enabler>(controller, objectIndex);
+		class make_shared_enabler: public ResearchStatsButton {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
+		widget->objectIndex = objectIndex;
 		widget->initialize();
 		return widget;
 	}
@@ -386,8 +350,8 @@ protected:
 	void display(int xOffset, int yOffset) override
 	{
 		updateLayout();
-		auto facility = castStructure(researchController->getObjectAt(objectIndex));
-		auto research = researchController->getObjectStatsAt(objectIndex);
+		auto facility = controller->getObjectAt(objectIndex);
+		auto research = controller->getObjectStatsAt(objectIndex);
 
 		ImdObject objectImage;
 
@@ -433,7 +397,7 @@ protected:
 private:
 	RESEARCH *getResearch()
 	{
-		return researchController->getObjectStatsAt(objectIndex);
+		return controller->getObjectStatsAt(objectIndex);
 	}
 
 	void initialize()
@@ -443,7 +407,7 @@ private:
 
 	void updateProgressBar()
 	{
-		auto facility = castStructure(researchController->getObjectAt(objectIndex));
+		auto facility = controller->getObjectAt(objectIndex);
 		progressBar->hide();
 
 		auto research = StructureGetResearch(facility);
@@ -476,7 +440,7 @@ private:
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
-		auto facility = castStructure(controller->getObjectAt(objectIndex));
+		auto facility = controller->getObjectAt(objectIndex);
 		ASSERT_OR_RETURN(, facility != nullptr, "Invalid facility pointer");
 
 		if (mouseButton == WKEY_PRIMARY)
@@ -484,25 +448,26 @@ private:
 			//might need to cancel the hold on research facility
 			releaseResearch(facility, ModeQueue);
 			clearSelection();
-			researchController->selectFacility(facility);
-			researchController->displayStatsForm();
+			controller->selectObject(facility);
+			controller->displayStatsForm();
 		}
 		else if (mouseButton == WKEY_SECONDARY)
 		{
-			researchController->requestResearchCancellation(facility);
+			controller->requestResearchCancellation(facility);
 		}
 	}
 
-	std::shared_ptr<ResearchInterfaceController> researchController;
+	std::shared_ptr<ResearchInterfaceController> controller;
+	size_t objectIndex;
 };
 
 class ResearchOptionButton: public StatsFormButton
 {
 private:
 	typedef StatsFormButton BaseWidget;
+	using BaseWidget::BaseWidget;
 	static const size_t MAX_ALLY_ICONS = 4;
 
-	ResearchOptionButton(): BaseWidget() {}
 public:
 	static std::shared_ptr<ResearchOptionButton> make(const std::shared_ptr<ResearchInterfaceController> &controller, size_t researchOptionIndex)
 	{
@@ -515,7 +480,7 @@ public:
 	}
 
 private:
-	RESEARCH *getResearch()
+	RESEARCH *getStats() override
 	{
 		return controller->getStatsAt(researchOptionIndex);
 	}
@@ -537,7 +502,7 @@ private:
 	{
 		updateLayout();
 
-		auto research = getResearch();
+		auto research = getStats();
 		ASSERT_OR_RETURN(, research != nullptr, "Invalid research pointer");
 
 		auto researchIcon = research->iconID != NO_RESEARCH_ICON ? Image(IntImages, research->iconID) : Image();
@@ -564,7 +529,7 @@ private:
 	void updateLayout() override
 	{
 		BaseWidget::updateLayout();
-		auto research = getResearch();
+		auto research = getStats();
 
 		updateCostBar(research);
 
@@ -576,7 +541,7 @@ private:
 
 	void updateCostBar(RESEARCH *stat)
 	{
-		costBar->majorSize = std::min(100, (int32_t)(stat->researchPower / POWERPOINTS_DROIDDIV));
+		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
 	}
 
 	void updateAllyStatus(RESEARCH *research)
@@ -604,15 +569,9 @@ private:
 		progressBar->show();
 	}
 
-	std::string getTip() override
+	uint32_t getCost() override
 	{
-		auto research = getResearch();
-		auto powerCost = research->researchPower;
-		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
-		costString.replace("%1", WzString::number(powerCost));
-		WzString tipString = getStatsName(research);
-		tipString.append(costString);
-		return tipString.toUtf8();
+		return getStats()->researchPower;
 	}
 
 	void run(W_CONTEXT *context) override
@@ -621,7 +580,7 @@ private:
 
 		if (BaseWidget::isMouseOverWidget())
 		{
-			intSetShadowPower(controller->getStatsAt(researchOptionIndex)->researchPower);
+			intSetShadowPower(getCost());
 		}
 	}
 
@@ -647,46 +606,42 @@ class ResearchObjectsForm: public ObjectsForm
 {
 private:
 	typedef ObjectsForm BaseWidget;
-
-protected:
-	ResearchObjectsForm(const std::shared_ptr<ResearchInterfaceController> &controller): BaseWidget(controller), researchController(controller)
-	{
-	}
+	using BaseWidget::BaseWidget;
 
 public:
 	static std::shared_ptr<ResearchObjectsForm> make(const std::shared_ptr<ResearchInterfaceController> &controller)
 	{
-		class make_shared_enabler: public ResearchObjectsForm
-		{
-		public:
-			make_shared_enabler(const std::shared_ptr<ResearchInterfaceController> &controller): ResearchObjectsForm(controller)
-			{
-			}
-		};
-		auto widget = std::make_shared<make_shared_enabler>(controller);
+		class make_shared_enabler: public ResearchObjectsForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
 		widget->initialize();
 		return widget;
 	}
 
-	std::shared_ptr<ObjectStatsButton> makeStatsButton(size_t buttonIndex) const override
+	std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const override
 	{
-		return ResearchStatsButton::make(researchController, buttonIndex);
+		return ResearchStatsButton::make(controller, buttonIndex);
 	}
 
 	std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const override
 	{
-		return ResearchObjectButton::make(researchController, buttonIndex);
+		return ResearchObjectButton::make(controller, buttonIndex);
 	}
 
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		researchController->updateSelected();
+		controller->updateSelected();
 		BaseWidget::display(xOffset, yOffset);
 	}
 
+	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	{
+		return controller;
+	}
+
 private:
-	std::shared_ptr<ResearchInterfaceController> researchController;
+	std::shared_ptr<ResearchInterfaceController> controller;
 };
 
 class ResearchStatsForm: public StatsForm
@@ -698,26 +653,26 @@ private:
 public:
 	static std::shared_ptr<ResearchStatsForm> make(const std::shared_ptr<ResearchInterfaceController> &controller)
 	{
-		class make_shared_enabler: public ResearchStatsForm
-		{
-		public:
-			make_shared_enabler(const std::shared_ptr<ResearchInterfaceController> &controller): ResearchStatsForm(controller)
-			{
-			}
-		};
-		auto widget = std::make_shared<make_shared_enabler>(controller);
-		widget->researchController = controller;
+		class make_shared_enabler: public ResearchStatsForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
 		widget->initialize();
 		return widget;
 	}
 
 	std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const override
 	{
-		return ResearchOptionButton::make(researchController, buttonIndex);
+		return ResearchOptionButton::make(controller, buttonIndex);
+	}
+
+protected:
+	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	{
+		return controller;
 	}
 
 private:
-	std::shared_ptr<ResearchInterfaceController> researchController;
+	std::shared_ptr<ResearchInterfaceController> controller;
 };
 
 bool ResearchInterfaceController::showInterface()
@@ -726,7 +681,8 @@ bool ResearchInterfaceController::showInterface()
 	intRemoveOrderNoAnim();
 	intRemoveObjectNoAnim();
 
-	if (objects.empty())
+	updateData();
+	if (facilities.empty())
 	{
 		return false;
 	}

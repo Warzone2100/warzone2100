@@ -9,12 +9,6 @@
 class BuildInterfaceController: public BaseObjectsStatsController, public std::enable_shared_from_this<BuildInterfaceController>
 {
 public:
-	BuildInterfaceController()
-	{
-		updateBuildersList();
-		updateBuildOptionsList();
-	}
-
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
 	STRUCTURE_STATS *getStatsAt(size_t statsIndex) const override
 	{
@@ -48,8 +42,17 @@ public:
 		updateBuildOptionsList();
 	}
 
-	void selectBuilder(BASE_OBJECT *psObj);
-	void jumpToSelectedBuilder();
+	size_t objectsSize() const override
+	{
+		return builders.size();
+	}
+
+	DROID *getObjectAt(size_t index) const override
+	{
+		return builders.at(index);
+	}
+
+	void updateData();
 	void toggleFavorites(BASE_STATS *buildOption);
 	void startBuildPosition(BASE_STATS *buildOption);
 	bool showInterface();
@@ -63,6 +66,7 @@ private:
 	void updateBuildersList();
 	void updateBuildOptionsList();
 	std::vector<STRUCTURE_STATS *> stats;
+	std::vector<DROID *> builders;
 };
 
 bool showBuildInterface();
