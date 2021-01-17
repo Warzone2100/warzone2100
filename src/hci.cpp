@@ -741,7 +741,6 @@ static void intDoScreenRefresh()
 			switch (objMode)
 			{
 			case IOBJ_MANUFACTURE:	// The manufacture screen (factorys on bottom bar)
-			case IOBJ_RESEARCH:		// The research screen
 				//pass in the currently selected object
 				intUpdateObject((BASE_OBJECT *)interfaceStructList(), StatsWasUp);
 				break;
@@ -1643,8 +1642,6 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 {
 	BASE_STATS		*psStats;
 	size_t          statMajor = 0;
-	UDWORD			i, j;
-	SDWORD			iconNumber, entryIN;
 
 	/* Clear a previous structure pos if there is one */
 	intStopStructPosition();
@@ -1680,53 +1677,6 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 		fillTemplateList(apsTemplateList, (STRUCTURE *)psObj);
 		numStatsListEntries = apsTemplateList.size();
 		ppsStatsList = (BASE_STATS **)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
-	}
-
-	/*have to calculate the list each time the Topic button is pressed
-	  so that only one topic can be researched at a time*/
-	if (objMode == IOBJ_RESEARCH)
-	{
-		auto currentTopic = psStats ? nonstd::optional<UWORD>(((RESEARCH *)psStats)->index): nonstd::nullopt;
-
-		//recalculate the list
-		auto researchList = fillResearchList(selectedPlayer, currentTopic, MAXRESEARCH);
-		numStatsListEntries = researchList.size();
-		std::vector<uint16_t> sortedResearchList;
-
-		//	-- Alex's reordering of the list
-		// NOTE!  Do we even want this anymore, since we can have basically
-		// unlimted tabs? Future enhancement assign T1/2/3 button on form
-		// so we can pick what level of tech we want to build instead of
-		// Alex picking for us?
-		for (i = 0; i < RID_MAXRID; i++)
-		{
-			iconNumber = mapRIDToIcon(i);
-			for (j = 0; j < numStatsListEntries; j++)
-			{
-				entryIN = asResearch[researchList[j]].iconID;
-				if (entryIN == iconNumber)
-				{
-					sortedResearchList.push_back(researchList[j]);
-				}
-
-			}
-		}
-		// Tag on the ones at the end that have no BASTARD icon IDs - why is this?!!?!?!?
-		// NOTE! more pruning [future ref]
-		for (j = 0; j < numStatsListEntries; j++)
-		{
-			iconNumber = mapIconToRID(asResearch[researchList[j]].iconID);
-			if (iconNumber < 0)
-			{
-				sortedResearchList.push_back(researchList[j]);
-			}
-		}
-
-		//fill up the list with topics
-		for (i = 0; i < numStatsListEntries; i++)
-		{
-			ppResearchList[i] = &asResearch[sortedResearchList[i]];
-		}
 	}
 
 	intAddStats(ppsStatsList, numStatsListEntries, psStats, psObj);
@@ -1988,17 +1938,6 @@ static void intProcessStats(UDWORD id)
 				// only do the cancel operation if not trying to add to the build list
 				if (psStats == ppsStatsList[id - IDSTAT_START])
 				{
-					// this needs to be done before the topic is cancelled from the structure
-					/* If Research then need to set topic to be cancelled */
-					if (objMode == IOBJ_RESEARCH)
-					{
-						if (psObjSelected->type == OBJ_STRUCTURE)
-						{
-							// TODO This call seems to be redundant, since cancelResearch is called from objSetStatsFunc==setResearchStats.
-							cancelResearch((STRUCTURE *)psObjSelected, ModeQueue);
-						}
-					}
-
 					/* Clear the object stats */
 					objSetStatsFunc(psObjSelected, nullptr);
 
@@ -2010,26 +1949,6 @@ static void intProcessStats(UDWORD id)
 				}
 				else
 				{
-					//If Research then need to set the topic - if one, to be cancelled
-					if (objMode == IOBJ_RESEARCH)
-					{
-						if (psObjSelected->type == OBJ_STRUCTURE && ((STRUCTURE *)
-						        psObjSelected)->pStructureType->type == REF_RESEARCH)
-						{
-							//if there was a topic currently being researched - cancel it
-							if (((RESEARCH_FACILITY *)((STRUCTURE *)psObjSelected)->
-							     pFunctionality)->psSubject)
-							{
-								cancelResearch((STRUCTURE *)psObjSelected, ModeQueue);
-							}
-						}
-					}
-
-					if (objMode == IOBJ_RESEARCH)
-					{
-						triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
-					}
-
 					// Set the object stats
 					compIndex = id - IDSTAT_START;
 					ASSERT_OR_RETURN(, compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
@@ -2652,9 +2571,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		//first check if there is an object selected of the required type
 		switch (objMode)
 		{
-		case IOBJ_RESEARCH:
-			psSelected = (BASE_OBJECT *)intCheckForStructure(REF_RESEARCH);
-			break;
 		case IOBJ_MANUFACTURE:
 			psSelected = (BASE_OBJECT *)intCheckForStructure(REF_FACTORY);
 			//if haven't got a Factory, check for specific types of factory
@@ -3099,7 +3015,7 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		intMode = INT_OBJECT;
 	}
 
-	if (objMode == IOBJ_MANUFACTURE || objMode == IOBJ_RESEARCH)
+	if (objMode == IOBJ_MANUFACTURE)
 	{
 		intShowPowerBar();
 	}
@@ -3604,9 +3520,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	switch (objMode)
 	{
-	case IOBJ_RESEARCH:
-		triggerEvent(TRIGGER_MENU_RESEARCH_UP);
-		break;
 	case IOBJ_MANUFACTURE:
 		triggerEvent(TRIGGER_MENU_MANUFACTURE_UP);
 		break;
