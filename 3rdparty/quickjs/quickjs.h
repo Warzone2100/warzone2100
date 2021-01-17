@@ -355,6 +355,7 @@ void JS_SetGCThreshold(JSRuntime *rt, size_t gc_threshold);
 void JS_SetMaxStackSize(JSRuntime *rt, size_t stack_size);
 JSRuntime *JS_NewRuntime2(const JSMallocFunctions *mf, void *opaque);
 void JS_FreeRuntime(JSRuntime *rt);
+void JS_FreeRuntime2(JSRuntime *rt, void (*gc_leak_handler)(const char* msg));
 void *JS_GetRuntimeOpaque(JSRuntime *rt);
 void JS_SetRuntimeOpaque(JSRuntime *rt, void *opaque);
 typedef void JS_MarkFunc(JSRuntime *rt, JSGCObjectHeader *gp);

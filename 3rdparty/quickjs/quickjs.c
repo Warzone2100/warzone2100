@@ -1953,6 +1953,11 @@ void JS_SetRuntimeInfo(JSRuntime *rt, const char *s)
 
 void JS_FreeRuntime(JSRuntime *rt)
 {
+	JS_FreeRuntime2(rt, NULL);
+}
+
+void JS_FreeRuntime2(JSRuntime *rt, void (*gc_leak_handler)(const char* msg))
+{
     struct list_head *el, *el1;
     int i;
 
@@ -2007,7 +2012,11 @@ void JS_FreeRuntime(JSRuntime *rt)
             printf("Secondary object leaks: %d\n", count);
     }
 #endif
-    assert(list_empty(&rt->gc_obj_list));
+    if (!list_empty(&rt->gc_obj_list)) {
+		if (gc_leak_handler != NULL) {
+			gc_leak_handler("gc_obj_list is not empty");
+		}
+	}
 
     /* free the classes */
     for(i = 0; i < rt->class_count; i++) {
