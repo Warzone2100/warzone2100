@@ -11,13 +11,14 @@ class BaseObjectsStatsController
 {
 public:
 	virtual ~BaseObjectsStatsController() = default;
-
-	size_t objectsSize()
-	{
-		return objects.size();
-	}
-
+	virtual size_t objectsSize() const = 0;
 	virtual size_t statsSize() const = 0;
+	virtual BASE_OBJECT *getObjectAt(size_t index) const = 0;
+	virtual BASE_STATS *getObjectStatsAt(size_t index) const = 0;
+	virtual BASE_STATS *getStatsAt(size_t index) const = 0;
+	virtual void refresh() = 0;
+	void selectObject(BASE_OBJECT *object);
+	void jumpToSelected();
 
 	BASE_OBJECT *getSelectedObject() const
 	{
@@ -28,23 +29,6 @@ public:
 	{
 		intSetSelectedObject(value);
 	}
-
-	const std::vector<BASE_OBJECT *> &getObjects() const
-	{
-		return objects;
-	}
-
-	BASE_OBJECT *getObjectAt(size_t index) const
-	{
-		return objects.at(index);
-	}
-
-	virtual BASE_STATS *getObjectStatsAt(size_t index) const = 0;
-	virtual BASE_STATS *getStatsAt(size_t index) const = 0;
-	virtual void refresh() = 0;
-
-protected:
-	std::vector<BASE_OBJECT *> objects;
 };
 
 class DynamicIntFancyButton: public IntFancyButton
@@ -63,6 +47,24 @@ protected:
 	std::shared_ptr<W_BARGRAPH> progressBar;
 };
 
+class ObjectButton : public IntFancyButton
+{
+public:
+	ObjectButton()
+	{
+		buttonType = BTMBUTTON;
+	}
+
+protected:
+	virtual std::shared_ptr<BaseObjectsStatsController> getController() const = 0;
+	void selectAndJump();
+
+	size_t objectIndex;
+
+private:
+	Vector2i jumpPosition = {0, 0};
+};
+
 class StatsFormButton : public StatsButton
 {
 public:
@@ -74,24 +76,20 @@ public:
 	void addCostBar();
 
 protected:
-	std::weak_ptr<StatsForm> statsForm;
-	std::shared_ptr<W_BARGRAPH> costBar;
-};
-
-class ObjectStatsButton : public StatsButton
-{
-public:
-	ObjectStatsButton(const std::shared_ptr<BaseObjectsStatsController> &controller, size_t objectIndex)
-		: StatsButton()
-		, controller(controller)
-		, objectIndex(objectIndex)
+	std::string getTip() override
 	{
-		buttonType = TOPBUTTON;
+		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
+		costString.replace("%1", WzString::number(getCost()));
+		WzString tipString = getStatsName(getStats());
+		tipString.append(costString);
+		return tipString.toUtf8();
 	}
 
-protected:
-	std::shared_ptr<BaseObjectsStatsController> controller;
-	size_t objectIndex;
+	virtual BASE_STATS *getStats() = 0;
+	virtual uint32_t getCost() = 0;
+
+	std::weak_ptr<StatsForm> statsForm;
+	std::shared_ptr<W_BARGRAPH> costBar;
 };
 
 class ObjectsForm: public IntFormAnimated
@@ -100,11 +98,7 @@ private:
 	typedef IntFormAnimated BaseWidget;
 
 protected:
-	ObjectsForm(const std::shared_ptr<BaseObjectsStatsController> &controller):
-		BaseWidget(false),
-		controller(controller)
-	{
-	}
+	ObjectsForm(): BaseWidget(false) {}
 
 	void display(int xOffset, int yOffset);
 	void initialize();
@@ -113,10 +107,10 @@ protected:
 	void updateButtons();
 	void addNewButton();
 	void removeLastButton();
-	virtual std::shared_ptr<ObjectStatsButton> makeStatsButton(size_t buttonIndex) const = 0;
+	virtual std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const = 0;
 	virtual std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const = 0;
+	virtual std::shared_ptr<BaseObjectsStatsController> getController() const = 0;
 
-	std::shared_ptr<BaseObjectsStatsController> controller;
 	std::shared_ptr<IntListTabWidget> objectsList;
 	size_t buttonsCount = 0;
 };
@@ -133,11 +127,7 @@ public:
 	}
 
 protected:
-	StatsForm(const std::shared_ptr<BaseObjectsStatsController> &controller):
-		IntFormAnimated(false),
-		controller(controller)
-	{
-	}
+	StatsForm(): IntFormAnimated(false) {}
 
 	void display(int xOffset, int yOffset) override;
 	virtual void initialize();
@@ -148,8 +138,8 @@ protected:
 	void addNewButton();
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
+	virtual std::shared_ptr<BaseObjectsStatsController> getController() const = 0;
 
-	std::shared_ptr<BaseObjectsStatsController> controller;
 	std::shared_ptr<IntListTabWidget> optionList;
 	size_t buttonsCount = 0;
 	BASE_STATS *selectedObjectStats = nullptr;

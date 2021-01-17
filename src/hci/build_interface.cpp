@@ -22,6 +22,13 @@
 #define STAT_BUTWIDTH		60
 #define STAT_BUTHEIGHT		46
 
+void BuildInterfaceController::updateData()
+{
+	updateBuildersList();
+	updateSelected();
+	updateBuildOptionsList();
+}
+
 void BuildInterfaceController::updateBuildersList()
 {
 	std::vector<DROID *> newBuilders;
@@ -33,7 +40,7 @@ void BuildInterfaceController::updateBuildersList()
 		}
 	}
 
-	objects = std::vector<BASE_OBJECT *>(newBuilders.rbegin(), newBuilders.rend());
+	builders = std::vector<DROID *>(newBuilders.rbegin(), newBuilders.rend());
 }
 
 void BuildInterfaceController::updateBuildOptionsList()
@@ -45,7 +52,7 @@ void BuildInterfaceController::updateBuildOptionsList()
 
 STRUCTURE_STATS *BuildInterfaceController::getObjectStatsAt(size_t objectIndex) const
 {
-	auto builder = castDroid(getObjectAt(objectIndex));
+	auto builder = getObjectAt(objectIndex);
 	if (!builder)
 	{
 		return nullptr;
@@ -112,21 +119,6 @@ void BuildInterfaceController::startBuildPosition(BASE_STATS *buildOption)
 	closeInterface();
 }
 
-void BuildInterfaceController::selectBuilder(BASE_OBJECT *builder)
-{
-	builder->selected = true;
-	triggerEventSelected();
-	jsDebugSelected(builder);
-	setSelectedObject(builder);
-}
-
-void BuildInterfaceController::jumpToSelectedBuilder()
-{
-	auto builder = getSelectedObject();
-	setPlayerPos(builder->pos.x, builder->pos.y);
-	setWarCamActive(false);
-}
-
 void BuildInterfaceController::toggleFavorites(BASE_STATS *buildOption)
 {
 	auto index = buildOption->index;
@@ -136,8 +128,7 @@ void BuildInterfaceController::toggleFavorites(BASE_STATS *buildOption)
 
 void BuildInterfaceController::refresh()
 {
-	updateBuildersList();
-	updateBuildOptionsList();
+	updateData();
 
 	if (objectsSize() == 0)
 	{
@@ -154,7 +145,7 @@ void BuildInterfaceController::closeInterface()
 
 void BuildInterfaceController::updateSelected()
 {
-	for (auto builder: objects)
+	for (auto builder: builders)
 	{
 		if (builder->died == 0 && builder->selected)
 		{
@@ -165,7 +156,7 @@ void BuildInterfaceController::updateSelected()
 
 	if (auto previouslySelected = getSelectedObject())
 	{
-		for (auto builder: objects)
+		for (auto builder: builders)
 		{
 			if (builder->died == 0 && builder == previouslySelected)
 			{
@@ -175,7 +166,7 @@ void BuildInterfaceController::updateSelected()
 		}
 	}
 
-	setSelectedObject(objects.front());
+	setSelectedObject(builders.front());
 }
 
 void BuildInterfaceController::toggleBuilderSelection(DROID *droid)
@@ -190,59 +181,44 @@ void BuildInterfaceController::toggleBuilderSelection(DROID *droid)
 		{
 			getSelectedObject()->selected = true;
 		}
-		selectBuilder(droid);
+		selectObject(droid);
 	}
 	triggerEventSelected();
 }
 
-class BuildObjectButton : public IntFancyButton
+class BuildObjectButton : public ObjectButton
 {
 private:
-	typedef IntFancyButton BaseWidget;
+	typedef ObjectButton BaseWidget;
 
 public:
-	BuildObjectButton(const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex)
-		: BaseWidget()
-		, buildController(controller)
-		, objectIndex(objectIndex)
+	BuildObjectButton(const std::shared_ptr<BuildInterfaceController> &controller, size_t newObjectIndex)
+		: controller(controller)
 	{
-		buttonType = BTMBUTTON;
+		objectIndex = newObjectIndex;
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
-		auto droid = castDroid(buildController->getObjectAt(objectIndex));
+		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
 
 		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
-			buildController->toggleBuilderSelection(droid);
+			controller->toggleBuilderSelection(droid);
 			return;
 		}
 
-		clearSelection();
-		buildController->selectBuilder(droid);
+		selectAndJump();
 
-		if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(droid, 0))
-		{
-			jumpPosition = getPlayerPos();
-			buildController->jumpToSelectedBuilder();
-		}
-		else
-		{
-			setPlayerPos(jumpPosition.x, jumpPosition.y);
-			setWarCamActive(false);
-			jumpPosition = {0, 0};
-		}
-
-		buildController->displayStatsForm();
+		controller->displayStatsForm();
 	}
 
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		auto droid = castDroid(buildController->getObjectAt(objectIndex));
+		auto droid = controller->getObjectAt(objectIndex);
 		initDisplay();
 
 		if (droid && !isDead(droid))
@@ -253,39 +229,35 @@ protected:
 		displayIfHighlight(xOffset, yOffset);
 	}
 
+	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	{
+		return controller;
+	}
+
 	std::string getTip() override
 	{
-		return droidGetName(castDroid(buildController->getObjectAt(objectIndex)));
+		return droidGetName(controller->getObjectAt(objectIndex));
 	}
 
 private:
-	std::shared_ptr<BuildInterfaceController> buildController;
-	size_t objectIndex;
-	Vector2i jumpPosition = {0, 0};
+	std::shared_ptr<BuildInterfaceController> controller;
 };
 
-class BuildStatsButton: public ObjectStatsButton
+class BuildStatsButton: public StatsButton
 {
 private:
-	typedef	ObjectStatsButton BaseWidget;
+	typedef	StatsButton BaseWidget;
 
 protected:
-	BuildStatsButton (const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex):
-		BaseWidget(controller, objectIndex),
-		buildController(controller)
-	{}
+	BuildStatsButton() {}
 
 public:
 	static std::shared_ptr<BuildStatsButton> make(const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex)
 	{
-		class make_shared_enabler: public BuildStatsButton
-		{
-		public:
-			make_shared_enabler (const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex):
-				BuildStatsButton(controller, objectIndex)
-			{}
-		};
-		auto widget = std::make_shared<make_shared_enabler>(controller, objectIndex);
+		class make_shared_enabler: public BuildStatsButton {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
+		widget->objectIndex = objectIndex;
 		widget->initialize();
 		return widget;
 	}
@@ -302,7 +274,7 @@ protected:
 	void updateLayout() override
 	{
 		BaseWidget::updateLayout();
-		auto droid = castDroid(controller->getObjectAt(objectIndex));
+		auto droid = controller->getObjectAt(objectIndex);
 		updateProgressBar(droid);
 		updateProductionRunSizeLabel(droid);
 	}
@@ -320,7 +292,7 @@ protected:
 private:
 	STRUCTURE_STATS *getStats()
 	{
-		return buildController->getObjectStatsAt(objectIndex);
+		return controller->getObjectStatsAt(objectIndex);
 	}
 
 	void initialize()
@@ -437,32 +409,33 @@ private:
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
-		auto droid = castDroid(controller->getObjectAt(objectIndex));
+		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
 
 		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
-			buildController->toggleBuilderSelection(droid);
+			controller->toggleBuilderSelection(droid);
 		}
 		else
 		{
 			clearSelection();
-			buildController->selectBuilder(droid);
+			controller->selectObject(droid);
 		}
 
-		buildController->displayStatsForm();
+		controller->displayStatsForm();
 	}
 
 	std::shared_ptr<W_LABEL> productionRunSizeLabel;
-	std::shared_ptr<BuildInterfaceController> buildController;
+	std::shared_ptr<BuildInterfaceController> controller;
+	size_t objectIndex;
 };
 
 class BuildOptionButton: public StatsFormButton
 {
 private:
 	typedef StatsFormButton BaseWidget;
+	using BaseWidget::BaseWidget;
 
-	BuildOptionButton(): BaseWidget() {}
 public:
 	static std::shared_ptr<BuildOptionButton> make(const std::shared_ptr<BuildInterfaceController> &controller, size_t buildOptionIndex)
 	{
@@ -486,7 +459,7 @@ protected:
 	}
 
 private:
-	STRUCTURE_STATS *getStats()
+	STRUCTURE_STATS *getStats() override
 	{
 		return controller->getStatsAt(buildOptionIndex);
 	}
@@ -509,20 +482,12 @@ private:
 	void updateLayout() override
 	{
 		BaseWidget::updateLayout();
-		auto stat = getStats();
-		auto powerCost = stat->powerToBuild;
-		costBar->majorSize = std::min(100, (int32_t)(powerCost / POWERPOINTS_DROIDDIV));
+		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
 	}
 
-	std::string getTip() override
+	uint32_t getCost() override
 	{
-		auto stat = getStats();
-		auto powerCost = stat->powerToBuild;
-		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
-		costString.replace("%1", WzString::number(powerCost));
-		WzString tipString = getStatsName(stat);
-		tipString.append(costString);
-		return tipString.toUtf8();
+		return getStats()->powerToBuild;
 	}
 
 	void run(W_CONTEXT *context) override
@@ -531,8 +496,7 @@ private:
 
 		if (isMouseOverWidget())
 		{
-			auto stats = controller->getStatsAt(buildOptionIndex);
-			intSetShadowPower(stats->powerToBuild);
+			intSetShadowPower(getCost());
 		}
 	}
 
@@ -563,46 +527,42 @@ class BuildObjectsForm: public ObjectsForm
 {
 private:
 	typedef ObjectsForm BaseWidget;
-
-protected:
-	BuildObjectsForm(const std::shared_ptr<BuildInterfaceController> &controller): BaseWidget(controller), buildController(controller)
-	{
-	}
+	using BaseWidget::BaseWidget;
 
 public:
 	static std::shared_ptr<BuildObjectsForm> make(const std::shared_ptr<BuildInterfaceController> &controller)
 	{
-		class make_shared_enabler: public BuildObjectsForm
-		{
-		public:
-			make_shared_enabler(const std::shared_ptr<BuildInterfaceController> &controller): BuildObjectsForm(controller)
-			{
-			}
-		};
-		auto widget = std::make_shared<make_shared_enabler>(controller);
+		class make_shared_enabler: public BuildObjectsForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
 		widget->initialize();
 		return widget;
 	}
 
-	std::shared_ptr<ObjectStatsButton> makeStatsButton(size_t buttonIndex) const override
+	std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const override
 	{
-		return BuildStatsButton::make(buildController, buttonIndex);
+		return BuildStatsButton::make(controller, buttonIndex);
 	}
 
 	std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const override
 	{
-		return std::make_shared<BuildObjectButton>(buildController, buttonIndex);
+		return std::make_shared<BuildObjectButton>(controller, buttonIndex);
 	}
 
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		buildController->updateSelected();
+		controller->updateSelected();
 		BaseWidget::display(xOffset, yOffset);
 	}
 
+	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	{
+		return controller;
+	}
+
 private:
-	std::shared_ptr<BuildInterfaceController> buildController;
+	std::shared_ptr<BuildInterfaceController> controller;
 };
 
 class BuildStatsForm: public StatsForm
@@ -614,22 +574,22 @@ private:
 public:
 	static std::shared_ptr<BuildStatsForm> make(const std::shared_ptr<BuildInterfaceController> &controller)
 	{
-		class make_shared_enabler: public BuildStatsForm
-		{
-		public:
-			make_shared_enabler(const std::shared_ptr<BuildInterfaceController> &controller): BuildStatsForm(controller)
-			{
-			}
-		};
-		auto widget = std::make_shared<make_shared_enabler>(controller);
-		widget->buildController = controller;
+		class make_shared_enabler: public BuildStatsForm {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
 		widget->initialize();
 		return widget;
 	}
 
 	std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const override
 	{
-		return BuildOptionButton::make(buildController, buttonIndex);
+		return BuildOptionButton::make(controller, buttonIndex);
+	}
+
+protected:
+	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	{
+		return controller;
 	}
 
 private:
@@ -644,14 +604,14 @@ private:
 	{
 		attach(obsoleteButton = std::make_shared<MultipleChoiceButton>());
 		obsoleteButton->style |= WBUT_SECONDARY;
-		obsoleteButton->setChoice(buildController->shouldShowRedundantDesign());
+		obsoleteButton->setChoice(controller->shouldShowRedundantDesign());
 		obsoleteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
 		obsoleteButton->setTip(false, _("Hiding Obsolete Tech"));
 		obsoleteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
 		obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
 		obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 
-		auto weakController = std::weak_ptr<BuildInterfaceController>(buildController);
+		auto weakController = std::weak_ptr<BuildInterfaceController>(controller);
 		obsoleteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto buildController = weakController.lock())
 			{
@@ -667,14 +627,14 @@ private:
 	{
 		attach(favoriteButton = std::make_shared<MultipleChoiceButton>());
 		favoriteButton->style |= WBUT_SECONDARY;
-		favoriteButton->setChoice(buildController->shouldShowFavorites());
+		favoriteButton->setChoice(controller->shouldShowFavorites());
 		favoriteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH)));
 		favoriteButton->setTip(false, _("Showing All Tech\nRight-click to add to Favorites"));
 		favoriteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC)));
 		favoriteButton->setTip(true, _("Showing Only Favorite Tech\nRight-click to remove from Favorites"));
 		favoriteButton->move(4 * 2 + Image(IntImages, IMAGE_FDP_UP).width() * 2 + 4 * 2, STAT_SLDY);
 
-		auto weakController = std::weak_ptr<BuildInterfaceController>(buildController);
+		auto weakController = std::weak_ptr<BuildInterfaceController>(controller);
 		favoriteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto buildController = weakController.lock())
 			{
@@ -686,7 +646,7 @@ private:
 		});
 	}
 
-	std::shared_ptr<BuildInterfaceController> buildController;
+	std::shared_ptr<BuildInterfaceController> controller;
 	std::shared_ptr<MultipleChoiceButton> obsoleteButton;
 	std::shared_ptr<MultipleChoiceButton> favoriteButton;
 };
@@ -697,7 +657,8 @@ bool BuildInterfaceController::showInterface()
 	intRemoveOrderNoAnim();
 	intRemoveObjectNoAnim();
 
-	if (objects.empty())
+	updateData();
+	if (builders.empty())
 	{
 		return false;
 	}
