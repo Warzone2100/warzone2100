@@ -27,7 +27,7 @@ jobs:
     displayName: 'macOS [Xcode 10.3, macOS 10.14 SDK] - no videos'  # friendly name to display in the UI
     vmImage: 'macOS-10.14'
     xcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer' # Set default Xcode to Xcode 10.3 on macOS 10.14
-    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
+    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_11.7.app/Contents/Developer'
     includeVideos: false
     publishArtifact: true
     artifact: 'warzone2100_macOS_novideos'
@@ -41,7 +41,7 @@ jobs:
     displayName: 'macOS [Xcode 10.3, macOS 10.14 SDK] - full'  # friendly name to display in the UI
     vmImage: 'macOS-10.14'
     xcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer' # Set default Xcode to Xcode 10.3 on macOS 10.14
-    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer'
+    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_11.7.app/Contents/Developer'
     includeVideos: true
     publishArtifact: true
     artifact: 'warzone2100_macOS'
