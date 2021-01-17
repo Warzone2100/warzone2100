@@ -53,7 +53,7 @@ bool loadDroidTemplates(const char *filename);
 bool templateIsIDF(DROID_TEMPLATE *psTemplate);
 
 /// Fills the list with Templates that can be manufactured in the Factory - based on size
-void fillTemplateList(std::vector<DROID_TEMPLATE *> &pList, STRUCTURE *psFactory);
+std::vector<DROID_TEMPLATE *> fillTemplateList(STRUCTURE *psFactory);
 
 /* gets a template from its name - relies on the name being unique */
 const DROID_TEMPLATE *getTemplateFromTranslatedNameNoPlayer(char const *pName);

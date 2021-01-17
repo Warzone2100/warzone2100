@@ -84,6 +84,7 @@
 #include "chat.h"
 #include "hci/build_interface.h"
 #include "hci/research_interface.h"
+#include "hci/manufacture_interface.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 // Do not highlight buttons while paused.
@@ -317,11 +318,6 @@ static DROID_TYPE CurrentDroidType = DROID_ANY;
 /* Set the shadow for the PowerBar */
 static void intRunPower();
 
-static void intRunStats();
-
-/*Deals with the RMB click for the stats screen */
-static void intStatsRMBPressed(UDWORD id);
-
 /*Deals with the RMB click for the object screen */
 static void intObjectRMBPressed(UDWORD id);
 
@@ -332,7 +328,6 @@ static void intObjStatRMBPressed(UDWORD id);
 static void processProximityButtons(UDWORD id);
 
 static DROID *intCheckForDroid(UDWORD droidType);
-static STRUCTURE *intCheckForStructure(UDWORD structType);
 
 // count the number of selected droids of a type
 static SDWORD intNumSelectedDroids(UDWORD droidType);
@@ -740,11 +735,6 @@ static void intDoScreenRefresh()
 
 			switch (objMode)
 			{
-			case IOBJ_MANUFACTURE:	// The manufacture screen (factorys on bottom bar)
-				//pass in the currently selected object
-				intUpdateObject((BASE_OBJECT *)interfaceStructList(), StatsWasUp);
-				break;
-
 			case IOBJ_COMMAND:		// the command droid screen
 			case IOBJ_BUILDSEL:		// Selecting a position for a new structure
 			case IOBJ_DEMOLISHSEL:	// Selecting a structure to demolish
@@ -969,7 +959,7 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 			apsTemplateList.push_back(&localTemplate);
 		}
 		ppsStatsList = (BASE_STATS **)&apsTemplateList[0]; // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
-		objMode = IOBJ_MANUFACTURE;
+		objMode = IOBJ_DEBUG_DROID;
 		intAddStats(ppsStatsList, apsTemplateList.size(), nullptr, nullptr);
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
@@ -1147,11 +1137,6 @@ INT_RETVAL intRunWidgets()
 	if (powerBarUp)
 	{
 		intRunPower();
-	}
-
-	if (StatsUp)
-	{
-		intRunStats();
 	}
 
 	if (OrderUp)
@@ -1615,36 +1600,6 @@ static void intRunPower()
 	}
 }
 
-
-// Process stats screen.
-static void intRunStats()
-{
-	BASE_OBJECT			*psOwner;
-	STRUCTURE			*psStruct;
-	FACTORY				*psFactory;
-
-	if (intMode != INT_EDITSTAT && objMode == IOBJ_MANUFACTURE)
-	{
-		psOwner = (BASE_OBJECT *)widgGetUserData(psWScreen, IDSTAT_LOOP_LABEL);
-		if (psOwner == nullptr)
-		{
-			return;
-		}
-		ASSERT_OR_RETURN(, psOwner->type == OBJ_STRUCTURE, "Invalid object type");
-
-		psStruct = (STRUCTURE *)psOwner;
-		ASSERT_OR_RETURN(, StructIsFactory(psStruct), "Invalid Structure type");
-
-		psFactory = (FACTORY *)psStruct->pFunctionality;
-		//adjust the loop button if necessary
-		if (psFactory->psSubject != nullptr && psFactory->productionLoops != 0)
-		{
-			widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
-		}
-	}
-}
-
-
 /* Add the stats screen for a given object */
 void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 {
@@ -1674,18 +1629,6 @@ void intAddObjectStats(BASE_OBJECT *psObj, UDWORD id)
 
 	// note the object for the screen
 	apsPreviousObj[objMode] = psObj;
-
-	// NOTE! The below functions populate our list (building/units...)
-	// up to MAX____.  We have unlimited potential, but it is capped at 200 now.
-	//determine the Structures that can be built
-
-	//have to determine the Template list once the factory has been chosen
-	if (objMode == IOBJ_MANUFACTURE)
-	{
-		fillTemplateList(apsTemplateList, (STRUCTURE *)psObj);
-		numStatsListEntries = apsTemplateList.size();
-		ppsStatsList = (BASE_STATS **)&apsTemplateList[0];  // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
-	}
 
 	intAddStats(ppsStatsList, numStatsListEntries, psStats, psObj);
 
@@ -1894,107 +1837,61 @@ static void intProcessStats(UDWORD id)
 		ASSERT_OR_RETURN(, id - IDSTAT_START < numStatsListEntries, "Invalid structure stats id");
 
 		/* deal with RMB clicks */
-		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_SECONDARY)
+		if (widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY)
 		{
-			intStatsRMBPressed(id);
-		}
-		/* deal with LMB clicks */
-		else
-		{
-			//manufacture works differently!
-			if (objMode == IOBJ_MANUFACTURE)
+			/* See if this was a click on an already selected stat */
+			psStats = objGetStatsFunc(psObjSelected);
+			// only do the cancel operation if not trying to add to the build list
+			if (psStats == ppsStatsList[id - IDSTAT_START])
 			{
-				compIndex = id - IDSTAT_START;
-				//get the stats
-				ASSERT_OR_RETURN(, compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
-				psStats = ppsStatsList[compIndex];
-				ASSERT_OR_RETURN(, psObjSelected != nullptr, "Invalid structure pointer");
-				ASSERT_OR_RETURN(, psStats != nullptr, "Invalid template pointer");
-				if (productionPlayer == (SBYTE)selectedPlayer)
-				{
-					STRUCTURE *psStructure = (STRUCTURE *)psObjSelected;
-					FACTORY  *psFactory = &psStructure->pFunctionality->factory;
-					DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
+				/* Clear the object stats */
+				objSetStatsFunc(psObjSelected, nullptr);
 
-					//increase the production
-					factoryProdAdjust(psStructure, psNext, true);
+				/* Reset the button on the object form */
+				intSetStats(objStatID, nullptr);
 
-					//need to check if this was the template that was mid-production
-					if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
-					{
-						doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
-						psNext = FactoryGetTemplate(psFactory);
-					}
-					else if (!StructureIsManufacturingPending(psStructure))
-					{
-						structSetManufacture(psStructure, psNext, ModeQueue);
-					}
-
-					if (StructureIsOnHoldPending(psStructure))
-					{
-						releaseProduction(psStructure, ModeQueue);
-					}
-
-					// Reset the button on the object form
-					intSetStats(objStatID, (BASE_STATS *)psNext);
-				}
+				/* Unlock the button on the stats form */
+				widgSetButtonState(psWScreen, id, 0);
 			}
 			else
 			{
-				/* See if this was a click on an already selected stat */
-				psStats = objGetStatsFunc(psObjSelected);
-				// only do the cancel operation if not trying to add to the build list
-				if (psStats == ppsStatsList[id - IDSTAT_START])
+				// Set the object stats
+				compIndex = id - IDSTAT_START;
+				ASSERT_OR_RETURN(, compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
+				psStats = ppsStatsList[compIndex];
+
+				// Reset the button on the object form
+				//if this returns false, there's a problem so set the button to NULL
+				if (!objSetStatsFunc(psObjSelected, psStats))
 				{
-					/* Clear the object stats */
-					objSetStatsFunc(psObjSelected, nullptr);
-
-					/* Reset the button on the object form */
 					intSetStats(objStatID, nullptr);
-
-					/* Unlock the button on the stats form */
-					widgSetButtonState(psWScreen, id, 0);
 				}
 				else
 				{
-					// Set the object stats
-					compIndex = id - IDSTAT_START;
-					ASSERT_OR_RETURN(, compIndex < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", compIndex, numStatsListEntries);
-					psStats = ppsStatsList[compIndex];
-
 					// Reset the button on the object form
-					//if this returns false, there's a problem so set the button to NULL
-					if (!objSetStatsFunc(psObjSelected, psStats))
-					{
-						intSetStats(objStatID, nullptr);
-					}
-					else
-					{
-						// Reset the button on the object form
-						intSetStats(objStatID, psStats);
-					}
+					intSetStats(objStatID, psStats);
 				}
+			}
 
-				// Get the tabs on the object form
-				int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
+			// Get the tabs on the object form
+			int objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
 
-				// Close the stats box
-				intRemoveStats();
-				intMode = INT_OBJECT;
+			// Close the stats box
+			intRemoveStats();
+			intMode = INT_OBJECT;
 
-				// Reset the tabs on the object form
-				((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->setCurrentPage(objMajor);
+			// Reset the tabs on the object form
+			((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->setCurrentPage(objMajor);
 
-				// Close the object box as well if selecting a location to build- no longer hide/reveal
-				// or if selecting a structure to demolish
-				if (objMode == IOBJ_BUILDSEL || objMode == IOBJ_DEMOLISHSEL)
+			// Close the object box as well if selecting a location to build- no longer hide/reveal
+			// or if selecting a structure to demolish
+			if (objMode == IOBJ_BUILDSEL || objMode == IOBJ_DEMOLISHSEL)
+			{
+				intRemoveObject();
+				// hack to stop the stats window re-opening in demolish mode
+				if (objMode == IOBJ_DEMOLISHSEL)
 				{
-					intRemoveObject();
-					// hack to stop the stats window re-opening in demolish mode
-					if (objMode == IOBJ_DEMOLISHSEL)
-					{
-						IntRefreshPending = false;
-					}
+					IntRefreshPending = false;
 				}
 			}
 		}
@@ -2334,60 +2231,6 @@ static void orderObjectInterface()
 	}
 }
 
-// Rebuilds apsObjectList, and returns the index of psBuilding in apsObjectList, or returns apsObjectList.size() if not present (not sure whether that's supposed to be possible).
-static unsigned rebuildFactoryListAndFindIndex(STRUCTURE *psBuilding)
-{
-	apsObjectList.clear();
-	for (STRUCTURE *psCurr = interfaceStructList(); psCurr; psCurr = psCurr->psNext)
-	{
-		if (objSelectFunc(psCurr))
-		{
-			// The list is ordered now so we have to get all possible entries and sort it before checking if this is the one!
-			apsObjectList.push_back(psCurr);
-		}
-	}
-	// order the list
-	orderFactories();
-	// now look thru the list to see which one corresponds to the factory that has just finished
-	return std::find(apsObjectList.begin(), apsObjectList.end(), psBuilding) - apsObjectList.begin();
-}
-
-/* Tell the interface a factory has completed building ALL droids */
-void intManufactureFinished(STRUCTURE *psBuilding)
-{
-	ASSERT_OR_RETURN(, psBuilding != nullptr, "Invalid structure pointer");
-
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
-	{
-		/* Find which button the structure is on and clear it's stats */
-		unsigned structureIndex = rebuildFactoryListAndFindIndex(psBuilding);
-		if (structureIndex != apsObjectList.size())
-		{
-			intSetStats(structureIndex + IDOBJ_STATSTART, nullptr);
-			// clear the loop button if interface is up
-			if (widgGetFromID(psWScreen, IDSTAT_LOOP_BUTTON))
-			{
-				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, 0);
-			}
-		}
-	}
-}
-
-void intUpdateManufacture(STRUCTURE *psBuilding)
-{
-	ASSERT_OR_RETURN(, psBuilding != nullptr, "Invalid structure pointer");
-
-	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_MANUFACTURE)
-	{
-		/* Find which button the structure is on and update its stats */
-		unsigned structureIndex = rebuildFactoryListAndFindIndex(psBuilding);
-		if (structureIndex != apsObjectList.size())
-		{
-			intSetStats(structureIndex + IDOBJ_STATSTART, psBuilding->pFunctionality->factory.psSubject);
-		}
-	}
-}
-
 /* Tell the interface a research facility has completed a topic */
 void intResearchFinished(STRUCTURE *psBuilding)
 {
@@ -2579,18 +2422,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		//first check if there is an object selected of the required type
 		switch (objMode)
 		{
-		case IOBJ_MANUFACTURE:
-			psSelected = (BASE_OBJECT *)intCheckForStructure(REF_FACTORY);
-			//if haven't got a Factory, check for specific types of factory
-			if (!psSelected)
-			{
-				psSelected = (BASE_OBJECT *)intCheckForStructure(REF_CYBORG_FACTORY);
-			}
-			if (!psSelected)
-			{
-				psSelected = (BASE_OBJECT *)intCheckForStructure(REF_VTOL_FACTORY);
-			}
-			break;
 		case IOBJ_COMMAND:
 			psSelected = (BASE_OBJECT *)intCheckForDroid(DROID_COMMAND);
 			break;
@@ -3023,11 +2854,6 @@ static bool intAddObjectWindow(BASE_OBJECT *psObjects, BASE_OBJECT *psSelected, 
 		intMode = INT_OBJECT;
 	}
 
-	if (objMode == IOBJ_MANUFACTURE)
-	{
-		intShowPowerBar();
-	}
-
 	return true;
 }
 
@@ -3216,9 +3042,7 @@ void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
                         BASE_STATS *psSelected, BASE_OBJECT *psOwner)
 {
-	FACTORY				*psFactory;
-
-	int                             allyResearchIconCount = 0;
+	int allyResearchIconCount = 0;
 
 	// should this ever be called with psOwner == NULL?
 
@@ -3257,73 +3081,11 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
 	}));
 
-	if (objMode == IOBJ_MANUFACTURE && psOwner != nullptr)
-	{
-		// Add the obsolete items button.
-		makeObsoleteButton(statForm);
-	}
-
 	W_LABINIT sLabInit;
-
-	// Add the quantity slider ( if it's a factory ).
-	if (objMode == IOBJ_MANUFACTURE && psOwner != nullptr)
-	{
-		STRUCTURE_TYPE factoryType = ((STRUCTURE *)psOwner)->pStructureType->type;
-
-		//add the Factory DP button
-		auto deliveryPointButton = std::make_shared<W_BUTTON>();
-		statForm->attach(deliveryPointButton);
-		deliveryPointButton->id = IDSTAT_DP_BUTTON;
-		deliveryPointButton->style |= WBUT_SECONDARY;
-		switch (factoryType)
-		{
-		default:
-		case REF_FACTORY:        deliveryPointButton->setImages(Image(IntImages, IMAGE_FDP_UP), Image(IntImages, IMAGE_FDP_DOWN), Image(IntImages, IMAGE_FDP_HI)); break;
-		case REF_CYBORG_FACTORY: deliveryPointButton->setImages(Image(IntImages, IMAGE_CDP_UP), Image(IntImages, IMAGE_CDP_DOWN), Image(IntImages, IMAGE_CDP_HI)); break;
-		case REF_VTOL_FACTORY:   deliveryPointButton->setImages(Image(IntImages, IMAGE_VDP_UP), Image(IntImages, IMAGE_VDP_DOWN), Image(IntImages, IMAGE_VDP_HI)); break;
-		}
-		deliveryPointButton->move(4, STAT_SLDY);
-		deliveryPointButton->setTip(_("Factory Delivery Point"));
-		deliveryPointButton->pUserData = psOwner;
-
-		//add the Factory Loop button!
-		auto loopButton = std::make_shared<W_BUTTON>();
-		statForm->attach(loopButton);
-		loopButton->id = IDSTAT_LOOP_BUTTON;
-		loopButton->style |= WBUT_SECONDARY;
-		loopButton->setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
-		loopButton->move(STAT_SLDX + STAT_SLDWIDTH + 2, STAT_SLDY);
-		loopButton->setTip(_("Loop Production"));
-
-		if (psOwner != nullptr)
-		{
-			psFactory = (FACTORY *)((STRUCTURE *)psOwner)->pFunctionality;
-			if (psFactory->psSubject != nullptr && psFactory->productionLoops != 0)
-			{
-				widgSetButtonState(psWScreen, IDSTAT_LOOP_BUTTON, WBUT_CLICKLOCK);
-			}
-		}
-
-		// create a text label for the loop quantity.
-		sLabInit.formID = IDSTAT_FORM;
-		sLabInit.id = IDSTAT_LOOP_LABEL;
-		sLabInit.style = WIDG_HIDDEN;
-		sLabInit.x = loopButton->x() - 15;
-		sLabInit.y = loopButton->y();
-		sLabInit.width = 12;
-		sLabInit.height = 15;
-		sLabInit.pUserData = psOwner;
-		sLabInit.pCallback = intAddLoopQuantity;
-		if (!widgAddLabel(psWScreen, &sLabInit))
-		{
-			return false;
-		}
-	}
-
-	if (objMode == IOBJ_MANUFACTURE)
+	if (objMode == IOBJ_DEBUG_DROID)
 	{
 		/* store the common values for the text labels for the quantity
-		to produce (on each button).*/
+			to produce (on each button).*/
 		sLabInit = W_LABINIT();
 		sLabInit.id = IDSTAT_PRODSTART;
 		sLabInit.style = WIDG_HIDDEN | WLAB_ALIGNRIGHT;
@@ -3526,15 +3288,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 
 	StatsUp = true;
 
-	switch (objMode)
-	{
-	case IOBJ_MANUFACTURE:
-		triggerEvent(TRIGGER_MENU_MANUFACTURE_UP);
-		break;
-	default:
-		break;
-	}
-
 	return true;
 }
 
@@ -3578,55 +3331,6 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 	return psResearchFacility->psSubject;
 }
 
-/* Select a Factory */
-static bool selectManufacture(BASE_OBJECT *psObj)
-{
-	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
-	STRUCTURE *psBuilding = (STRUCTURE *)psObj;
-
-	/* A Structure is a Factory if its type = REF_FACTORY or REF_CYBORG_FACTORY or
-	REF_VTOL_FACTORY and it is completely built*/
-	return (psBuilding->pStructureType->type == REF_FACTORY ||
-	     psBuilding->pStructureType->type == REF_CYBORG_FACTORY ||
-	     psBuilding->pStructureType->type == REF_VTOL_FACTORY) &&
-	    psBuilding->status == SS_BUILT && psBuilding->died == 0;
-}
-
-/* Return the stats for a Factory */
-static BASE_STATS *getManufactureStats(BASE_OBJECT *psObj)
-{
-	ASSERT_OR_RETURN(nullptr, psObj != nullptr && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
-	STRUCTURE *psBuilding = (STRUCTURE *)psObj;
-
-	return ((BASE_STATS *)((FACTORY *)psBuilding->pFunctionality)->psSubject);
-}
-
-
-/* Set the stats for a Factory */
-static bool setManufactureStats(BASE_OBJECT *psObj, BASE_STATS *psStats)
-{
-	ASSERT_OR_RETURN(false, psObj != nullptr && psObj->type == OBJ_STRUCTURE, "Invalid Structure pointer");
-	/* psStats might be NULL if the operation is canceled in the middle */
-
-	STRUCTURE *Structure = (STRUCTURE *)psObj;
-	//check to see if the factory was already building something
-	if (!((FACTORY *)Structure->pFunctionality)->psSubject)
-	{
-		//factory not currently building so set up the factory stats
-		if (psStats != nullptr)
-		{
-			/* Set the factory to build droid(s) */
-			if (!structSetManufacture(Structure, (DROID_TEMPLATE *)psStats, ModeQueue))
-			{
-				return false;
-			}
-		}
-	}
-
-	return true;
-}
-
-
 /* Add the build widgets to the widget screen */
 /* If psSelected != NULL it specifies which droid should be hilited */
 static bool intAddBuild()
@@ -3650,22 +3354,18 @@ static bool intAddBuild()
 /* If psSelected != NULL it specifies which factory should be hilited */
 static bool intAddManufacture(STRUCTURE *psSelected)
 {
-	/* Store the correct stats list for future reference */
-	if (!apsTemplateList.empty())
-	{
-		ppsStatsList = (BASE_STATS **)&apsTemplateList[0]; // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
-	}
-
-	objSelectFunc = selectManufacture;
-	objGetStatsFunc = getManufactureStats;
-	objSetStatsFunc = setManufactureStats;
-
 	/* Set the sub mode */
 	objMode = IOBJ_MANUFACTURE;
 
 	/* Create the object screen with the required data */
-	return intAddObjectWindow((BASE_OBJECT *)interfaceStructList(),
-	                          (BASE_OBJECT *)psSelected, true);
+	auto controller = std::make_shared<ManufactureInterfaceController>();
+	if (controller->showInterface())
+	{
+		objectsInterfaceController = controller;
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -3704,51 +3404,6 @@ static bool intAddCommand(DROID *psSelected)
 	/* Create the object screen with the required data */
 	return intAddObjectWindow((BASE_OBJECT *)apsDroidLists[selectedPlayer],
 	                          (BASE_OBJECT *)psSelected, true);
-}
-
-
-/*Deals with the RMB click for the stats screen */
-static void intStatsRMBPressed(UDWORD id)
-{
-	ASSERT_OR_RETURN(, id - IDSTAT_START < numStatsListEntries, "Invalid range referenced for numStatsListEntries, %d > %d", id - IDSTAT_START, numStatsListEntries);
-
-	if (objMode == IOBJ_MANUFACTURE)
-	{
-		BASE_STATS *psStats = ppsStatsList[id - IDSTAT_START];
-
-		//this now causes the production run to be decreased by one
-
-		ASSERT_OR_RETURN(, psObjSelected != nullptr, "Invalid structure pointer");
-		ASSERT_OR_RETURN(, psStats != nullptr, "Invalid template pointer");
-		if (productionPlayer == (SBYTE)selectedPlayer)
-		{
-			STRUCTURE *psStructure = (STRUCTURE *)psObjSelected;
-			FACTORY  *psFactory = &psStructure->pFunctionality->factory;
-			DROID_TEMPLATE *psNext = (DROID_TEMPLATE *)psStats;
-
-			//decrease the production
-			factoryProdAdjust(psStructure, psNext, false);
-
-			//need to check if this was the template that was mid-production
-			if (getProduction(psStructure, FactoryGetTemplate(psFactory)).numRemaining() == 0)
-			{
-				doNextProduction(psStructure, FactoryGetTemplate(psFactory), ModeQueue);
-				psNext = FactoryGetTemplate(psFactory);
-			}
-			else if (!StructureIsManufacturingPending(psStructure))
-			{
-				structSetManufacture(psStructure, psNext, ModeQueue);
-			}
-
-			if (StructureIsOnHoldPending(psStructure))
-			{
-				releaseProduction(psStructure, ModeQueue);
-			}
-
-			// Reset the button on the object form
-			intSetStats(objStatID, (BASE_STATS *)psNext);
-		}
-	}
 }
 
 /*Deals with the RMB click for the Object screen */
@@ -4076,32 +3731,6 @@ void processProximityButtons(UDWORD id)
 void	setKeyButtonMapping(UDWORD	val)
 {
 	keyButtonMapping = val;
-}
-
-
-/*Looks through the players list of structures to see if there is one selected
-of the required type. If there is more than one, they are all deselected and
-the first one reselected*/
-STRUCTURE *intCheckForStructure(UDWORD structType)
-{
-	STRUCTURE	*psStruct, *psSel = nullptr;
-
-	for (psStruct = interfaceStructList(); psStruct != nullptr; psStruct = psStruct->psNext)
-	{
-		if (psStruct->selected && psStruct->pStructureType->type == structType && psStruct->status == SS_BUILT)
-		{
-			if (psSel != nullptr)
-			{
-				clearSelection();
-				psSel->selected = true;
-				jsDebugSelected(psSel);
-				break;
-			}
-			psSel = psStruct;
-		}
-	}
-	triggerEventSelected();
-	return psSel;
 }
 
 /*Looks through the players list of droids to see if there is one selected

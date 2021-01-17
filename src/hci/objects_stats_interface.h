@@ -129,16 +129,19 @@ public:
 protected:
 	StatsForm(): IntFormAnimated(false) {}
 
-	void display(int xOffset, int yOffset) override;
 	virtual void initialize();
+	virtual void updateLayout();
+	void display(int xOffset, int yOffset) override;
 	void addCloseButton();
 	void addTabList();
-	void updateSelectedObjectStats();
-	void updateButtons();
 	void addNewButton();
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
 	virtual std::shared_ptr<BaseObjectsStatsController> getController() const = 0;
+
+private:
+	void updateSelectedObjectStats();
+	void updateButtons();
 
 	std::shared_ptr<IntListTabWidget> optionList;
 	size_t buttonsCount = 0;
