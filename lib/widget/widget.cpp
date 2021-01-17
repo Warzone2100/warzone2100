@@ -111,8 +111,11 @@ void widgReset(void)
 /* Shut down the widget module */
 void widgShutDown(void)
 {
+	psClickDownWidgetScreen = nullptr;
+	psMouseOverWidgetScreen = nullptr;
 	tipShutdown();
 	overlays.clear();
+	overlaySet.clear();
 	overlaysToDelete.clear();
 #ifdef DEBUG
 	if (!debugLiveWidgets.empty())
