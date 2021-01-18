@@ -50,7 +50,7 @@ public:
 	void adjustFactoryProduction(DROID_TEMPLATE *manufactureOption, bool add);
 	void adjustFactoryLoop(bool add);
 	void startDeliveryPointPosition();
-	bool showInterface();
+	bool showInterface() override;
 	void refresh() override;
 	void displayStatsForm();
 

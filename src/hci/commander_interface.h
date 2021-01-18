@@ -32,7 +32,7 @@ public:
 	}
 
 	void updateData();
-	bool showInterface();
+	bool showInterface() override;
 	void refresh() override;
 	void displayOrderForm();
 

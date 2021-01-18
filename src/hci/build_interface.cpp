@@ -97,26 +97,19 @@ void BuildInterfaceController::startBuildPosition(BASE_STATS *buildOption)
 	
 	triggerEvent(TRIGGER_MENU_BUILD_SELECTED);
 
-	//check for demolish first
 	if (buildOption == structGetDemolishStat())
 	{
 		objMode = IOBJ_DEMOLISHSEL;
 	}
 	else
 	{
-		intSetPositionStats(buildOption);
-
-		/* Now start looking for a location for the structure */
 		objMode = IOBJ_BUILDSEL;
-
+		intSetPositionStats(buildOption);
 		intStartStructPosition(buildOption);
 	}
 
-	// Close the stats box
 	intRemoveStats();
 	intMode = INT_OBJECT;
-
-	closeInterface();
 }
 
 void BuildInterfaceController::toggleFavorites(BASE_STATS *buildOption)
@@ -606,8 +599,6 @@ private:
 
 bool BuildInterfaceController::showInterface()
 {
-	closeInterfaceNoAnim();
-
 	updateData();
 	if (builders.empty())
 	{
@@ -616,12 +607,8 @@ bool BuildInterfaceController::showInterface()
 
 	auto objectsForm = BuildObjectsForm::make(shared_from_this());
 	psWScreen->psForm->attach(objectsForm);
-
 	displayStatsForm();
-
-	intMode = INT_STAT;
 	triggerEvent(TRIGGER_MENU_BUILD_UP);
-
 	return true;
 }
 

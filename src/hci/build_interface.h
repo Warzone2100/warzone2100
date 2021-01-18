@@ -60,7 +60,7 @@ public:
 	void updateData();
 	void toggleFavorites(BASE_STATS *buildOption);
 	void startBuildPosition(BASE_STATS *buildOption);
-	bool showInterface();
+	bool showInterface() override;
 	void refresh() override;
 	void toggleBuilderSelection(DROID *droid);
 	void displayStatsForm();

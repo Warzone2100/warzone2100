@@ -17,6 +17,7 @@ public:
 	virtual BASE_STATS *getObjectStatsAt(size_t index) const = 0;
 	virtual bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const = 0;
 	virtual void refresh() = 0;
+	virtual bool showInterface() = 0;
 	void selectObject(BASE_OBJECT *object);
 	void jumpToSelected();
 	void updateSelected();
@@ -33,16 +34,12 @@ public:
 
 	void closeInterface()
 	{
-		intRemoveStats();
-		intRemoveObject();
-		intRemoveOrder();
+		intResetScreen(false);
 	}
 
 	void closeInterfaceNoAnim()
 	{
-		intRemoveStatsNoAnim();
-		intRemoveObjectNoAnim();
-		intRemoveOrderNoAnim();
+		intResetScreen(true);
 	}
 
 protected:

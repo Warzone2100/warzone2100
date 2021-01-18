@@ -248,8 +248,6 @@ void intDisplayButtonHilight(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intDisplayButtonFlash(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
-
 void intDisplayEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void formatTime(W_BARGRAPH *barGraph, int buildPointsDone, int buildPointsTotal, int buildRate, char const *toolTip);

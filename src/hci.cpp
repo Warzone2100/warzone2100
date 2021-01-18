@@ -294,17 +294,13 @@ static void intProcessStats(UDWORD id);
 static void intObjectDied(UDWORD objID);
 
 /* Add the build widgets to the widget screen */
-/* If psSelected != NULL it specifies which droid should be hilited */
 static bool intAddBuild();
 /* Add the manufacture widgets to the widget screen */
-/* If psSelected != NULL it specifies which factory should be hilited */
-static bool intAddManufacture(STRUCTURE *psSelected);
+static bool intAddManufacture();
 /* Add the research widgets to the widget screen */
-/* If psSelected != NULL it specifies which droid should be hilited */
-static bool intAddResearch(STRUCTURE *psSelected);
+static bool intAddResearch();
 /* Add the command droid widgets to the widget screen */
-/* If psSelected != NULL it specifies which droid should be hilited */
-static bool intAddCommand(DROID *psSelected);
+static bool intAddCommand();
 
 /* Stop looking for a structure location */
 static void intStopStructPosition();
@@ -937,6 +933,7 @@ void intResetScreen(bool NoAnim)
 	default:
 		break;
 	}
+	objectsInterfaceController = nullptr;
 	SecondaryWindowUp = false;
 	intMode = INT_NORMAL;
 	//clearSelelection() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
@@ -1179,7 +1176,7 @@ INT_RETVAL intRunWidgets()
 			}
 			intResetScreen(false);
 			widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
-			intAddCommand(nullptr);
+			intAddCommand();
 			reticuleCallback(RETBUT_COMMAND);
 			break;
 
@@ -1201,7 +1198,7 @@ INT_RETVAL intRunWidgets()
 			}
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-			intAddManufacture(nullptr);
+			intAddManufacture();
 			reticuleCallback(RETBUT_FACTORY);
 			break;
 
@@ -1212,7 +1209,7 @@ INT_RETVAL intRunWidgets()
 			}
 			intResetScreen(true);
 			widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
-			(void)intAddResearch(nullptr);
+			intAddResearch();
 			reticuleCallback(RETBUT_RESEARCH);
 			break;
 
@@ -2020,28 +2017,25 @@ void intObjectSelected(BASE_OBJECT *psObj)
 			break;
 
 		case OBJ_STRUCTURE:
-			//don't do anything if structure is only partially built
+			if (objMode != IOBJ_DEMOLISHSEL)
+			{
+				auto structure = castStructure(psObj);
+
+				if (structure->status == SS_BUILT)
+				{
+					if (StructIsFactory(structure))
+					{
+						intAddManufacture();
+						break;
+					}
+					else if (structure->pStructureType->type == REF_RESEARCH)
+					{
+						intAddResearch();
+						break;
+					}
+				}
+			}
 			intResetScreen(false);
-
-			if (objMode == IOBJ_DEMOLISHSEL)
-			{
-				/* do nothing here */
-				break;
-			}
-
-			if (((STRUCTURE *)psObj)->status == SS_BUILT)
-			{
-				if (((STRUCTURE *)psObj)->pStructureType->type == REF_FACTORY ||
-				    ((STRUCTURE *)psObj)->pStructureType->type == REF_CYBORG_FACTORY ||
-				    ((STRUCTURE *)psObj)->pStructureType->type == REF_VTOL_FACTORY)
-				{
-					intAddManufacture((STRUCTURE *)psObj);
-				}
-				else if (((STRUCTURE *)psObj)->pStructureType->type == REF_RESEARCH)
-				{
-					intAddResearch((STRUCTURE *)psObj);
-				}
-			}
 			break;
 		default:
 			break;
@@ -3297,31 +3291,6 @@ static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats,
 	return true;
 }
 
-
-/* Select a command droid */
-static bool selectCommand(BASE_OBJECT *psObj)
-{
-	ASSERT_OR_RETURN(false, psObj && psObj->type == OBJ_DROID, "Invalid droid pointer");
-	DROID *psDroid = (DROID *)psObj;
-	if (psDroid->droidType == DROID_COMMAND && psDroid->died == 0)
-	{
-		return true;
-	}
-	return false;
-}
-
-/* Return the stats for a command droid */
-static BASE_STATS *getCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj)
-{
-	return nullptr;
-}
-
-/* Set the stats for a command droid */
-static bool setCommandStats(WZ_DECL_UNUSED BASE_OBJECT *psObj, WZ_DECL_UNUSED BASE_STATS *psStats)
-{
-	return true;
-}
-
 /* Return the stats for a research facility */
 static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 {
@@ -3337,92 +3306,45 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 	return psResearchFacility->psSubject;
 }
 
+bool setInterfaceController(std::shared_ptr<BaseObjectsController> controller, INTMODE newIntMode, OBJECT_MODE newObjMode)
+{
+	intResetScreen(true);
+
+	if (!controller->showInterface())
+	{
+		debug(LOG_ERROR, "Failed to show interface");
+		intResetScreen(true);
+		return false;
+	}
+
+	intMode = newIntMode;
+	objMode = newObjMode;
+	objectsInterfaceController = controller;
+	return true;
+}
+
 /* Add the build widgets to the widget screen */
-/* If psSelected != NULL it specifies which droid should be hilited */
 static bool intAddBuild()
 {
-	/* Set the sub mode */
-	objMode = IOBJ_BUILD;
-
-	/* Create the object screen with the required data */
-	auto controller = std::make_shared<BuildInterfaceController>();
-	if (controller->showInterface())
-	{
-		objectsInterfaceController = controller;
-		return true;
-	}
-
-	return false;
+	return setInterfaceController(std::make_shared<BuildInterfaceController>(), INT_STAT, IOBJ_BUILD);
 }
-
 
 /* Add the manufacture widgets to the widget screen */
-/* If psSelected != NULL it specifies which factory should be hilited */
-static bool intAddManufacture(STRUCTURE *psSelected)
+static bool intAddManufacture()
 {
-	/* Set the sub mode */
-	objMode = IOBJ_MANUFACTURE;
-
-	/* Create the object screen with the required data */
-	auto controller = std::make_shared<ManufactureInterfaceController>();
-	if (controller->showInterface())
-	{
-		objectsInterfaceController = controller;
-		return true;
-	}
-
-	return false;
+	return setInterfaceController(std::make_shared<ManufactureInterfaceController>(), INT_STAT, IOBJ_MANUFACTURE);
 }
-
 
 /* Add the research widgets to the widget screen */
-/* If psSelected != NULL it specifies which droid should be hilited */
-static bool intAddResearch(STRUCTURE *psSelected)
+static bool intAddResearch()
 {
-	/* Set the sub mode */
-	objMode = IOBJ_RESEARCH;
-
-	/* Create the object screen with the required data */
-	auto controller = std::make_shared<ResearchInterfaceController>();
-	if (controller->showInterface())
-	{
-		objectsInterfaceController = controller;
-		return true;
-	}
-
-	return false;
+	return setInterfaceController(std::make_shared<ResearchInterfaceController>(), INT_STAT, IOBJ_RESEARCH);
 }
 
-
 /* Add the command droid widgets to the widget screen */
-/* If psSelected != NULL it specifies which droid should be hilited */
-static bool intAddCommand(DROID *psSelected)
+static bool intAddCommand()
 {
-	ppsStatsList = nullptr;//(BASE_STATS **)ppResearchList;
-
-	// TODO: remove
-	objSelectFunc = selectCommand;
-	objGetStatsFunc = getCommandStats;
-	objSetStatsFunc = setCommandStats;
-
-	/* Set the sub mode */
-	objMode = IOBJ_COMMAND;
-
-	/* Create the object screen with the required data */
-	/*
-	return intAddObjectWindow((BASE_OBJECT *)apsDroidLists[selectedPlayer],
-	                          (BASE_OBJECT *)psSelected, true);
-
-	/*/
-	auto controller = std::make_shared<CommanderInterfaceController>();
-	if (controller->showInterface())
-	{
-		objectsInterfaceController = controller;
-		return true;
-	}
-
-	return false;
-	//*/
+	return setInterfaceController(std::make_shared<CommanderInterfaceController>(), INT_CMDORDER, IOBJ_COMMAND);
 }
 
 /*Deals with the RMB click for the Object screen */
@@ -3596,19 +3518,16 @@ void intShowWidget(int buttonID)
 	switch (buttonID)
 	{
 	case RETBUT_FACTORY:
-		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_MANUFACTURE, WBUT_CLICKLOCK);
-		intAddManufacture(nullptr);
+		intAddManufacture();
 		reticuleCallback(RETBUT_FACTORY);
 		break;
 	case RETBUT_RESEARCH:
-		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_RESEARCH, WBUT_CLICKLOCK);
-		(void)intAddResearch(nullptr);
+		intAddResearch();
 		reticuleCallback(RETBUT_RESEARCH);
 		break;
 	case RETBUT_BUILD:
-		intResetScreen(true);
 		widgSetButtonState(psWScreen, IDRET_BUILD, WBUT_CLICKLOCK);
 		intAddBuild();
 		reticuleCallback(RETBUT_BUILD);
@@ -3628,9 +3547,8 @@ void intShowWidget(int buttonID)
 		reticuleCallback(RETBUT_INTELMAP);
 		break;
 	case RETBUT_COMMAND:
-		intResetScreen(false);
 		widgSetButtonState(psWScreen, IDRET_COMMAND, WBUT_CLICKLOCK);
-		intAddCommand(nullptr);
+		intAddCommand();
 		reticuleCallback(RETBUT_COMMAND);
 		break;
 	default:
