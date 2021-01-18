@@ -20,7 +20,7 @@
 #define STAT_BUTWIDTH		60
 #define STAT_BUTHEIGHT		46
 
-void BaseObjectsStatsController::selectObject(BASE_OBJECT *object)
+void BaseObjectsController::selectObject(BASE_OBJECT *object)
 {
 	object->selected = true;
 	triggerEventSelected();
@@ -28,7 +28,7 @@ void BaseObjectsStatsController::selectObject(BASE_OBJECT *object)
 	setSelectedObject(object);
 }
 
-void BaseObjectsStatsController::jumpToSelected()
+void BaseObjectsController::jumpToSelected()
 {
 	auto selected = getSelectedObject();
 	ASSERT_OR_RETURN(, selected != nullptr, "Invalid selected object pointer");
@@ -36,7 +36,51 @@ void BaseObjectsStatsController::jumpToSelected()
 	setWarCamActive(false);
 }
 
-void StatsButton::updateLayout()
+void BaseObjectsController::updateSelected()
+{
+	if (objectsSize() == 0)
+	{
+		setSelectedObject(nullptr);
+		return;
+	}
+
+	auto findAnySelectedObject = [&] (BASE_OBJECT *object) {
+		if (object->died == 0 && object->selected)
+		{
+			setSelectedObject(object);
+			return true;
+		}
+
+		return false;
+	};
+
+	if (findObject(findAnySelectedObject))
+	{
+		return;
+	}
+
+	if (auto previouslySelected = getSelectedObject())
+	{
+		auto findPreviouslySelectedObject = [&] (BASE_OBJECT *object) {
+			if (object->died == 0 && object == previouslySelected)
+			{
+				setSelectedObject(object);
+				return true;
+			}
+
+			return false;
+		};
+
+		if (findObject(findPreviouslySelectedObject))
+		{
+			return;
+		}
+	}
+
+	setSelectedObject(getObjectAt(0));
+}
+
+void DynamicIntFancyButton::updateLayout()
 {
 	updateSelection();
 	initDisplay();

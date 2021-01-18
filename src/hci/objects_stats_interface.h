@@ -4,21 +4,22 @@
 #include <vector>
 #include "../hci.h"
 #include "../intdisplay.h"
+#include "../intorder.h"
 
 class StatsForm;
 
-class BaseObjectsStatsController
+class BaseObjectsController
 {
 public:
-	virtual ~BaseObjectsStatsController() = default;
+	virtual ~BaseObjectsController() = default;
 	virtual size_t objectsSize() const = 0;
-	virtual size_t statsSize() const = 0;
 	virtual BASE_OBJECT *getObjectAt(size_t index) const = 0;
 	virtual BASE_STATS *getObjectStatsAt(size_t index) const = 0;
-	virtual BASE_STATS *getStatsAt(size_t index) const = 0;
+	virtual bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const = 0;
 	virtual void refresh() = 0;
 	void selectObject(BASE_OBJECT *object);
 	void jumpToSelected();
+	void updateSelected();
 
 	BASE_OBJECT *getSelectedObject() const
 	{
@@ -29,25 +30,68 @@ public:
 	{
 		intSetSelectedObject(value);
 	}
+
+	void closeInterface()
+	{
+		intRemoveStats();
+		intRemoveObject();
+		intRemoveOrder();
+	}
+
+	void closeInterfaceNoAnim()
+	{
+		intRemoveStatsNoAnim();
+		intRemoveObjectNoAnim();
+		intRemoveOrderNoAnim();
+	}
+
+protected:
+	template<typename A, typename B>
+	static bool findObject(std::vector<A> vector, std::function<bool (B)> iteration)
+	{
+		for (auto item: vector)
+		{
+			if (iteration(item))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+};
+
+class BaseStatsController: public BaseObjectsController
+{
+public:
+	virtual ~BaseStatsController() = default;
+	virtual size_t statsSize() const = 0;
 };
 
 class DynamicIntFancyButton: public IntFancyButton
 {
 protected:
 	virtual bool isSelected() const = 0;
+	virtual void updateLayout();
 	void updateSelection();
 };
 
 class StatsButton: public DynamicIntFancyButton
 {
 protected:
-	void addProgressBar();
-	virtual void updateLayout();
+	virtual BASE_STATS *getStats() = 0;
 
+	std::string getTip() override
+	{
+		auto stats = getStats();
+		return stats == nullptr ? "": getStatsName(stats);
+	}
+
+	void addProgressBar();
 	std::shared_ptr<W_BARGRAPH> progressBar;
 };
 
-class ObjectButton : public IntFancyButton
+class ObjectButton : public DynamicIntFancyButton
 {
 public:
 	ObjectButton()
@@ -56,7 +100,12 @@ public:
 	}
 
 protected:
-	virtual std::shared_ptr<BaseObjectsStatsController> getController() const = 0;
+	bool isSelected() const override
+	{
+		return false;
+	}
+
+	virtual std::shared_ptr<BaseObjectsController> getController() const = 0;
 	void selectAndJump();
 
 	size_t objectIndex;
@@ -85,7 +134,6 @@ protected:
 		return tipString.toUtf8();
 	}
 
-	virtual BASE_STATS *getStats() = 0;
 	virtual uint32_t getCost() = 0;
 
 	std::weak_ptr<StatsForm> statsForm;
@@ -108,8 +156,8 @@ protected:
 	void addNewButton();
 	void removeLastButton();
 	virtual std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const = 0;
-	virtual std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const = 0;
-	virtual std::shared_ptr<BaseObjectsStatsController> getController() const = 0;
+	virtual std::shared_ptr<ObjectButton> makeObjectButton(size_t buttonIndex) const = 0;
+	virtual std::shared_ptr<BaseObjectsController> getController() const = 0;
 
 	std::shared_ptr<IntListTabWidget> objectsList;
 	size_t buttonsCount = 0;
@@ -137,7 +185,7 @@ protected:
 	void addNewButton();
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
-	virtual std::shared_ptr<BaseObjectsStatsController> getController() const = 0;
+	virtual std::shared_ptr<BaseStatsController> getController() const = 0;
 
 private:
 	void updateSelectedObjectStats();

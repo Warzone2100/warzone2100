@@ -96,40 +96,7 @@ void ResearchInterfaceController::refresh()
 	if (objectsSize() == 0)
 	{
 		closeInterface();
-		return;
 	}
-}
-
-void ResearchInterfaceController::closeInterface()
-{
-	intRemoveStats();
-	intRemoveObject();
-}
-
-void ResearchInterfaceController::updateSelected()
-{
-	for (auto facility: facilities)
-	{
-		if (facility->died == 0 && facility->selected)
-		{
-			setSelectedObject(facility);
-			return;
-		}
-	}
-
-	if (auto previouslySelected = getSelectedObject())
-	{
-		for (auto facility: facilities)
-		{
-			if (facility->died == 0 && facility == previouslySelected)
-			{
-				setSelectedObject(facility);
-				return;
-			}
-		}
-	}
-
-	setSelectedObject(facilities.front());
 }
 
 void ResearchInterfaceController::startResearch(RESEARCH *research)
@@ -277,20 +244,20 @@ private:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
+		auto facility = controller->getObjectAt(objectIndex);
+		ASSERT_OR_RETURN(, facility != nullptr && !isDead(facility), "Invalid facility pointer");
+		displayIMD(Image(), ImdObject::Structure(facility), xOffset, yOffset);
+		displayIfHighlight(xOffset, yOffset);
+	}
+
+	void updateLayout() override
+	{
+		BaseWidget::updateLayout();
+
 		if (bMultiPlayer)
 		{
 			updateAllyStatus();
 		}
-
-		auto facility = controller->getObjectAt(objectIndex);
-		initDisplay();
-
-		if (facility && !isDead(facility))
-		{
-			displayIMD(Image(), ImdObject::Structure(facility), xOffset, yOffset);
-		}
-
-		displayIfHighlight(xOffset, yOffset);
 	}
 
 	void updateAllyStatus()
@@ -319,7 +286,7 @@ protected:
 		return getStatsName(facility->pStructureType);
 	}
 
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
 	}
@@ -384,18 +351,8 @@ protected:
 		updateProgressBar();
 	}
 
-	std::string getTip() override
-	{
-		if (auto stats = getResearch())
-		{
-			return getStatsName(stats);
-		}
-
-		return "";
-	}
-
 private:
-	RESEARCH *getResearch()
+	RESEARCH *getStats() override
 	{
 		return controller->getObjectStatsAt(objectIndex);
 	}
@@ -623,7 +580,7 @@ public:
 		return ResearchStatsButton::make(controller, buttonIndex);
 	}
 
-	std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const override
+	std::shared_ptr<ObjectButton> makeObjectButton(size_t buttonIndex) const override
 	{
 		return ResearchObjectButton::make(controller, buttonIndex);
 	}
@@ -635,7 +592,7 @@ protected:
 		BaseWidget::display(xOffset, yOffset);
 	}
 
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
 	}
@@ -666,7 +623,7 @@ public:
 	}
 
 protected:
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseStatsController> getController() const override
 	{
 		return controller;
 	}
@@ -677,9 +634,7 @@ private:
 
 bool ResearchInterfaceController::showInterface()
 {
-	intRemoveStatsNoAnim();
-	intRemoveOrderNoAnim();
-	intRemoveObjectNoAnim();
+	closeInterfaceNoAnim();
 
 	updateData();
 	if (facilities.empty())

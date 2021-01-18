@@ -85,6 +85,7 @@
 #include "hci/build_interface.h"
 #include "hci/research_interface.h"
 #include "hci/manufacture_interface.h"
+#include "hci/commander_interface.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 // Do not highlight buttons while paused.
@@ -204,7 +205,7 @@ static enum _edit_pos_mode
 } editPosMode;
 
 OBJECT_MODE objMode;
-std::shared_ptr<BaseObjectsStatsController> objectsInterfaceController = nullptr;
+std::shared_ptr<BaseObjectsController> objectsInterfaceController = nullptr;
 
 /* Function type for selecting a base object while building the object screen */
 typedef bool (* OBJ_SELECT)(BASE_OBJECT *psObj);
@@ -677,6 +678,11 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 //
 static void intDoScreenRefresh()
 {
+	if (!IntRefreshPending)
+	{
+		return;
+	}
+
 	if (objectsInterfaceController != nullptr)
 	{
 		objectsInterfaceController->refresh();
@@ -687,105 +693,100 @@ static void intDoScreenRefresh()
 	size_t          objMajor = 0, statMajor = 0;
 	FLAG_POSITION	*psFlag;
 
-	if (IntRefreshPending)
+	if ((intMode == INT_OBJECT ||
+		 intMode == INT_STAT ||
+		 intMode == INT_CMDORDER ||
+		 intMode == INT_ORDER ||
+		 intMode == INT_TRANSPORTER) &&
+		widgGetFromID(psWScreen, IDOBJ_FORM) != nullptr &&
+		widgGetFromID(psWScreen, IDOBJ_FORM)->visible())
 	{
-		Refreshing = true;
+		bool StatsWasUp = false;
+		bool OrderWasUp = false;
 
-		if ((intMode == INT_OBJECT ||
-		     intMode == INT_STAT ||
-		     intMode == INT_CMDORDER ||
-		     intMode == INT_ORDER ||
-		     intMode == INT_TRANSPORTER) &&
-		    widgGetFromID(psWScreen, IDOBJ_FORM) != nullptr &&
-		    widgGetFromID(psWScreen, IDOBJ_FORM)->visible())
+		// If the stats form is up then remove it, but remember that it was up.
+		if ((intMode == INT_STAT) && widgGetFromID(psWScreen, IDSTAT_FORM) != nullptr)
 		{
-			bool StatsWasUp = false;
-			bool OrderWasUp = false;
-
-			// If the stats form is up then remove it, but remember that it was up.
-			if ((intMode == INT_STAT) && widgGetFromID(psWScreen, IDSTAT_FORM) != nullptr)
-			{
-				StatsWasUp = true;
-			}
-
-			// store the current tab position
-			if (widgGetFromID(psWScreen, IDOBJ_TABFORM) != nullptr)
-			{
-				objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
-			}
-			if (StatsWasUp)
-			{
-				statMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->currentPage();
-			}
-			// now make sure the stats screen isn't up
-			if (widgGetFromID(psWScreen, IDSTAT_FORM) != nullptr)
-			{
-				intRemoveStatsNoAnim();
-			}
-
-			// see if there was a delivery point being positioned
-			psFlag = intFindSelectedDelivPoint();
-
-			// see if the commander order screen is up
-			if ((intMode == INT_CMDORDER) &&
-			    (widgGetFromID(psWScreen, IDORDER_FORM) != nullptr))
-			{
-				OrderWasUp = true;
-			}
-
-			switch (objMode)
-			{
-			case IOBJ_COMMAND:		// the command droid screen
-			case IOBJ_BUILDSEL:		// Selecting a position for a new structure
-			case IOBJ_DEMOLISHSEL:	// Selecting a structure to demolish
-				//pass in the currently selected object
-				intUpdateObject((BASE_OBJECT *)apsDroidLists[selectedPlayer], StatsWasUp);
-				break;
-
-			default:
-				// generic refresh (trouble at the moment, cant just always pass in a null to addobject
-				// if object screen is up, refresh it if stats screen is up, refresh that.
-				break;
-			}
-
-			// set the tabs again
-			if (widgGetFromID(psWScreen, IDOBJ_TABFORM) != nullptr)
-			{
-				((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->setCurrentPage(objMajor);
-			}
-
-			if (widgGetFromID(psWScreen, IDSTAT_TABFORM) != nullptr)
-			{
-				((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->setCurrentPage(statMajor);
-			}
-
-			if (psFlag != nullptr)
-			{
-				// need to restart the delivery point position
-				startDeliveryPosition(psFlag);
-			}
-
-			// make sure the commander order screen is in the right state
-			if ((intMode == INT_CMDORDER) &&
-			    !OrderWasUp &&
-			    (widgGetFromID(psWScreen, IDORDER_FORM) != nullptr))
-			{
-				intRemoveOrderNoAnim();
-				if (statID)
-				{
-					widgSetButtonState(psWScreen, statID, 0);
-				}
-			}
+			StatsWasUp = true;
 		}
 
-		// Refresh the transporter interface.
-		intRefreshTransporter();
+		// store the current tab position
+		if (widgGetFromID(psWScreen, IDOBJ_TABFORM) != nullptr)
+		{
+			objMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->currentPage();
+		}
+		if (StatsWasUp)
+		{
+			statMajor = ((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->currentPage();
+		}
+		// now make sure the stats screen isn't up
+		if (widgGetFromID(psWScreen, IDSTAT_FORM) != nullptr)
+		{
+			intRemoveStatsNoAnim();
+		}
 
-		// Refresh the order interface.
-		intRefreshOrder();
+		// see if there was a delivery point being positioned
+		psFlag = intFindSelectedDelivPoint();
 
-		Refreshing = false;
+		// see if the commander order screen is up
+		if ((intMode == INT_CMDORDER) &&
+			(widgGetFromID(psWScreen, IDORDER_FORM) != nullptr))
+		{
+			OrderWasUp = true;
+		}
+
+		switch (objMode)
+		{
+		case IOBJ_COMMAND:		// the command droid screen
+		case IOBJ_BUILDSEL:		// Selecting a position for a new structure
+		case IOBJ_DEMOLISHSEL:	// Selecting a structure to demolish
+			//pass in the currently selected object
+			intUpdateObject((BASE_OBJECT *)apsDroidLists[selectedPlayer], StatsWasUp);
+			break;
+
+		default:
+			// generic refresh (trouble at the moment, cant just always pass in a null to addobject
+			// if object screen is up, refresh it if stats screen is up, refresh that.
+			break;
+		}
+
+		// set the tabs again
+		if (widgGetFromID(psWScreen, IDOBJ_TABFORM) != nullptr)
+		{
+			((ListTabWidget *)widgGetFromID(psWScreen, IDOBJ_TABFORM))->setCurrentPage(objMajor);
+		}
+
+		if (widgGetFromID(psWScreen, IDSTAT_TABFORM) != nullptr)
+		{
+			((ListTabWidget *)widgGetFromID(psWScreen, IDSTAT_TABFORM))->setCurrentPage(statMajor);
+		}
+
+		if (psFlag != nullptr)
+		{
+			// need to restart the delivery point position
+			startDeliveryPosition(psFlag);
+		}
+
+		// make sure the commander order screen is in the right state
+		if ((intMode == INT_CMDORDER) &&
+			!OrderWasUp &&
+			(widgGetFromID(psWScreen, IDORDER_FORM) != nullptr))
+		{
+			intRemoveOrderNoAnim();
+			if (statID)
+			{
+				widgSetButtonState(psWScreen, statID, 0);
+			}
+		}
 	}
+
+	// Refresh the transporter interface.
+	intRefreshTransporter();
+
+	// Refresh the order interface.
+	intRefreshOrder();
+
+	Refreshing = false;
 
 	IntRefreshPending = false;
 }
@@ -1312,8 +1313,13 @@ INT_RETVAL intRunWidgets()
 			case INT_EDITSTAT:
 				intProcessEditStats(retID);
 				break;
-			case INT_STAT:
 			case INT_CMDORDER:
+				if (objMode == IOBJ_COMMAND && retID != IDOBJ_TABFORM)
+				{
+					intProcessOrder(retID);
+				}
+				break;
+			case INT_STAT:
 			/* In stat mode ids get passed to processObject
 			* and then through to processStats
 			*/
@@ -3394,6 +3400,7 @@ static bool intAddCommand(DROID *psSelected)
 {
 	ppsStatsList = nullptr;//(BASE_STATS **)ppResearchList;
 
+	// TODO: remove
 	objSelectFunc = selectCommand;
 	objGetStatsFunc = getCommandStats;
 	objSetStatsFunc = setCommandStats;
@@ -3402,8 +3409,20 @@ static bool intAddCommand(DROID *psSelected)
 	objMode = IOBJ_COMMAND;
 
 	/* Create the object screen with the required data */
+	/*
 	return intAddObjectWindow((BASE_OBJECT *)apsDroidLists[selectedPlayer],
 	                          (BASE_OBJECT *)psSelected, true);
+
+	/*/
+	auto controller = std::make_shared<CommanderInterfaceController>();
+	if (controller->showInterface())
+	{
+		objectsInterfaceController = controller;
+		return true;
+	}
+
+	return false;
+	//*/
 }
 
 /*Deals with the RMB click for the Object screen */

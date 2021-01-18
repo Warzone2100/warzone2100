@@ -133,40 +133,7 @@ void BuildInterfaceController::refresh()
 	if (objectsSize() == 0)
 	{
 		closeInterface();
-		return;
 	}
-}
-
-void BuildInterfaceController::closeInterface()
-{
-	intRemoveStats();
-	intRemoveObject();
-}
-
-void BuildInterfaceController::updateSelected()
-{
-	for (auto builder: builders)
-	{
-		if (builder->died == 0 && builder->selected)
-		{
-			setSelectedObject(builder);
-			return;
-		}
-	}
-
-	if (auto previouslySelected = getSelectedObject())
-	{
-		for (auto builder: builders)
-		{
-			if (builder->died == 0 && builder == previouslySelected)
-			{
-				setSelectedObject(builder);
-				return;
-			}
-		}
-	}
-
-	setSelectedObject(builders.front());
 }
 
 void BuildInterfaceController::toggleBuilderSelection(DROID *droid)
@@ -218,18 +185,14 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
+		updateLayout();
 		auto droid = controller->getObjectAt(objectIndex);
-		initDisplay();
-
-		if (droid && !isDead(droid))
-		{
-			displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
-		}
-
+		ASSERT_OR_RETURN(, droid != nullptr && !isDead(droid), "Invalid droid pointer");
+		displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
 	}
@@ -279,18 +242,8 @@ protected:
 		updateProductionRunSizeLabel(droid);
 	}
 
-	std::string getTip() override
-	{
-		if (auto stats = getStats())
-		{
-			return getStatsName(stats);
-		}
-
-		return "";
-	}
-
 private:
-	STRUCTURE_STATS *getStats()
+	STRUCTURE_STATS *getStats() override
 	{
 		return controller->getObjectStatsAt(objectIndex);
 	}
@@ -544,7 +497,7 @@ public:
 		return BuildStatsButton::make(controller, buttonIndex);
 	}
 
-	std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const override
+	std::shared_ptr<ObjectButton> makeObjectButton(size_t buttonIndex) const override
 	{
 		return std::make_shared<BuildObjectButton>(controller, buttonIndex);
 	}
@@ -556,7 +509,7 @@ protected:
 		BaseWidget::display(xOffset, yOffset);
 	}
 
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
 	}
@@ -587,7 +540,7 @@ public:
 	}
 
 protected:
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseStatsController> getController() const override
 	{
 		return controller;
 	}
@@ -653,9 +606,7 @@ private:
 
 bool BuildInterfaceController::showInterface()
 {
-	intRemoveStatsNoAnim();
-	intRemoveOrderNoAnim();
-	intRemoveObjectNoAnim();
+	closeInterfaceNoAnim();
 
 	updateData();
 	if (builders.empty())
