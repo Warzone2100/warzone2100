@@ -126,6 +126,7 @@ static inline JSCFunctionListEntry QJS_CGETSET_DEF(const char *name, JSCFunction
 struct JSContextValue {
 	JSContext *ctx;
 	JSValue value;
+	bool skip_constructors;
 };
 void to_json(nlohmann::json& j, const JSContextValue& value); // forward-declare
 
@@ -2958,9 +2959,10 @@ bool quickjs_scripting_instance::saveScriptGlobals(nlohmann::json &result)
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
 		if (internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
+			&& !JS_IsConstructor(ctx, jsVal)
 			)//&& !it.value().equals(engine->globalObject()))
 		{
-			result[nameStr] = JSContextValue{ctx, jsVal};
+			result[nameStr] = JSContextValue{ctx, jsVal, true};
 		}
         JS_FreeValue(ctx, jsVal);
 	});
@@ -3052,7 +3054,7 @@ nlohmann::json quickjs_scripting_instance::debugGetAllScriptGlobals()
 			/*&& !it.value().equals(engine->globalObject()*/))
 			|| nameStr == "Upgrades" || nameStr == "Stats")
 		{
-			globals[nameStr] = JSContextValue{ctx, jsVal}; // uses to_json JSContextValue implementation
+			globals[nameStr] = JSContextValue{ctx, jsVal, false}; // uses to_json JSContextValue implementation
 		}
         JS_FreeValue(ctx, jsVal);
 	});
@@ -3437,7 +3439,7 @@ static JSValue js_stats_set(JSContext *ctx, JSValueConst this_val, JSValueConst 
 	std::string name = QuickJS_GetStdString(ctx, currentFuncObj, "name");
 	JS_FreeValue(ctx, currentFuncObj);
 	quickjs_execution_context execution_context(ctx);
-	wzapi::setUpgradeStats(execution_context, player, name, type, index, JSContextValue{ctx, val});
+	wzapi::setUpgradeStats(execution_context, player, name, type, index, JSContextValue{ctx, val, true});
 	// Now read value and return it
 	return mapJsonToQuickJSValue(ctx, wzapi::getUpgradeStats(execution_context, player, name, type, index), JS_PROP_C_W_E);
 }
@@ -3740,7 +3742,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 			{
 				JSValue jsVal = JS_GetPropertyUint32(v.ctx, v.value, k);
 				nlohmann::json jsonValue;
-				to_json(jsonValue, JSContextValue{v.ctx, jsVal});
+				to_json(jsonValue, JSContextValue{v.ctx, jsVal, v.skip_constructors});
 				j.push_back(jsonValue);
 				JS_FreeValue(v.ctx, jsVal);
 			}
@@ -3749,11 +3751,23 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 	}
 	if (JS_IsObject(v.value))
 	{
+		if (JS_IsConstructor(v.ctx, v.value))
+		{
+			j = (!v.skip_constructors) ? "<constructor>" : nlohmann::json() /* null value */;
+			return;
+		}
 		j = nlohmann::json::object();
 		QuickJS_EnumerateObjectProperties(v.ctx, v.value, [v, &j](const char *key, JSAtom &atom) {
 			JSValue jsVal = JS_GetProperty(v.ctx, v.value, atom);
 			std::string nameStr = key;
-			j[nameStr] = JSContextValue{v.ctx, jsVal};
+			if (!JS_IsConstructor(v.ctx, jsVal))
+			{
+				j[nameStr] = JSContextValue{v.ctx, jsVal, v.skip_constructors};
+			}
+			else if (!v.skip_constructors)
+			{
+				j[nameStr] = "<constructor>";
+			}
 			JS_FreeValue(v.ctx, jsVal);
 		}, false);
 		return;
