@@ -192,6 +192,7 @@ public:
 public:
 	// get state for debugging
 	nlohmann::json debugGetAllScriptGlobals() override;
+	std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> debugGetScriptGlobalSpecialStringValues() override;
 
 	bool debugEvaluateCommand(const std::string &text) override;
 
@@ -3059,6 +3060,13 @@ nlohmann::json quickjs_scripting_instance::debugGetAllScriptGlobals()
         JS_FreeValue(ctx, jsVal);
 	});
 	return globals;
+}
+
+std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> quickjs_scripting_instance::debugGetScriptGlobalSpecialStringValues()
+{
+	std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> result;
+	result["<constructor>"] = wzapi::scripting_instance::DebugSpecialStringType::TYPE_DESCRIPTION;
+	return result;
 }
 
 bool quickjs_scripting_instance::debugEvaluateCommand(const std::string &text)

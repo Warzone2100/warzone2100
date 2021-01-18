@@ -587,6 +587,10 @@ namespace wzapi
 	public:
 		// get state for debugging
 		virtual nlohmann::json debugGetAllScriptGlobals() = 0;
+		enum class DebugSpecialStringType {
+			TYPE_DESCRIPTION
+		};
+		virtual std::unordered_map<std::string, DebugSpecialStringType> debugGetScriptGlobalSpecialStringValues();
 
 		virtual bool debugEvaluateCommand(const std::string &text) = 0;
 
