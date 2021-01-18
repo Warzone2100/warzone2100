@@ -907,9 +907,30 @@ public:
 			const auto& modelMap = scriptDebuggerStrong->getModelMap();
 			auto it = modelMap.find(context);
 			ASSERT_OR_RETURN(, it != modelMap.end(), "context not found?!");
-			table->updateData(it->second, tryToPreservePath);
+			table->updateData(it->second, tryToPreservePath, transformContextSpecialStrings(context));
 			currentContext = context;
 		}
+	}
+private:
+	JSONTableWidget::SpecialJSONStringTypes toJSONSpecialStringType(wzapi::scripting_instance::DebugSpecialStringType debugStringType) const
+	{
+		switch (debugStringType)
+		{
+		case wzapi::scripting_instance::DebugSpecialStringType::TYPE_DESCRIPTION:
+			return JSONTableWidget::SpecialJSONStringTypes::TYPE_DESCRIPTION;
+		}
+		return static_cast<JSONTableWidget::SpecialJSONStringTypes>(0); // silence warning
+	}
+	std::unordered_map<std::string, JSONTableWidget::SpecialJSONStringTypes> transformContextSpecialStrings(wzapi::scripting_instance *context)
+	{
+		ASSERT_OR_RETURN({}, context != nullptr, "null context");
+		auto contextSpecialStringInfo = context->debugGetScriptGlobalSpecialStringValues();
+		std::unordered_map<std::string, JSONTableWidget::SpecialJSONStringTypes> result;
+		for (auto& it : contextSpecialStringInfo)
+		{
+			result[it.first] = toJSONSpecialStringType(it.second);
+		}
+		return result;
 	}
 public:
 	wzapi::scripting_instance *currentContext = nullptr;

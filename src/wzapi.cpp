@@ -114,6 +114,10 @@ wzapi::scripting_instance::scripting_instance(int player, const std::string& scr
 { }
 wzapi::scripting_instance::~scripting_instance()
 { }
+std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> wzapi::scripting_instance::debugGetScriptGlobalSpecialStringValues()
+{
+	return {};
+}
 void wzapi::scripting_instance::dumpScriptLog(const std::string &info)
 {
 	dumpScriptLog(info, player());
