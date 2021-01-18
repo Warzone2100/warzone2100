@@ -160,6 +160,12 @@ public:
 	{
 		engineToInstanceMap.erase(ctx);
 
+		if (!(JS_IsUninitialized(compiledScriptObj)))
+		{
+			JS_FreeValue(ctx, compiledScriptObj);
+			compiledScriptObj = JS_UNINITIALIZED;
+		}
+
 		JS_FreeValue(ctx, global_obj);
 		JS_FreeContext(ctx);
 		ctx = nullptr;
@@ -2825,6 +2831,7 @@ ScriptMapData runMapScript_QuickJS(WzString const &path, uint64_t seed, bool pre
 		return data;
 	}
 
+	JS_FreeValue(ctx, result);
 	return data;
 }
 
@@ -2927,6 +2934,7 @@ bool quickjs_scripting_instance::loadScript(const WzString& path, int player, in
 
 bool quickjs_scripting_instance::readyInstanceForExecution()
 {
+	ASSERT_OR_RETURN(false, !JS_IsUninitialized(compiledScriptObj), "compiledScriptObj is uninitialized");
 	JSValue result = JS_EvalFunction(ctx, compiledScriptObj);
 	compiledScriptObj = JS_UNINITIALIZED;
 	if (JS_IsException(result))
@@ -2939,6 +2947,7 @@ bool quickjs_scripting_instance::readyInstanceForExecution()
 		return false;
 	}
 
+	JS_FreeValue(ctx, result);
 	return true;
 }
 
