@@ -587,8 +587,6 @@ private:
 
 bool ManufactureInterfaceController::showInterface()
 {
-	closeInterfaceNoAnim();
-
 	updateData();
 	if (factories.empty())
 	{
@@ -597,12 +595,8 @@ bool ManufactureInterfaceController::showInterface()
 
 	auto objectsForm = ManufactureObjectsForm::make(shared_from_this());
 	psWScreen->psForm->attach(objectsForm);
-
 	displayStatsForm();
-
-	intMode = INT_STAT;
 	triggerEvent(TRIGGER_MENU_MANUFACTURE_UP);
-
 	return true;
 }
 

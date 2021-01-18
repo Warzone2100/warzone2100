@@ -37,7 +37,7 @@ public:
 
 	nonstd::optional<size_t> getSelectedFacilityIndex();
 	void updateData();
-	bool showInterface();
+	bool showInterface() override;
 	void refresh() override;
 	void displayStatsForm();
 	void startResearch(RESEARCH *research);

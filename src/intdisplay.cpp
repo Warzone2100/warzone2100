@@ -417,41 +417,6 @@ void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
 	}
 }
 
-//callback to display the production loop quantity number for a factory
-void intAddLoopQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	W_LABEL		*Label = (W_LABEL *)psWidget;
-	STRUCTURE	*psStruct = (STRUCTURE *)Label->pUserData;
-
-	//loop depends on the factory
-	if (psStruct && psStruct->pFunctionality && !psStruct->died)
-	{
-		FACTORY *psFactory = &psStruct->pFunctionality->factory;
-
-		if (psFactory->productionLoops == INFINITE_PRODUCTION)
-		{
-			Label->setString(WzString::fromUtf8("∞"));
-		}
-		else if (psFactory->productionLoops != 0)
-		{
-			char tmp[20];
-			ssprintf(tmp, "%u", psFactory->productionLoops + DEFAULT_LOOP);
-			Label->setString(WzString::fromUtf8(tmp));
-		}
-		else
-		{
-			Label->setString("");  // Don't show "1" loop.
-		}
-		Label->show();
-	}
-	else
-	{
-		//hide the label if no factory
-		Label->setString("");
-		Label->hide();
-	}
-}
-
 // callback to update the command droid size label
 void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext)
 {

@@ -303,8 +303,6 @@ private:
 
 bool CommanderInterfaceController::showInterface()
 {
-	closeInterfaceNoAnim();
-
 	updateData();
 	if (commanders.empty())
 	{
@@ -313,11 +311,7 @@ bool CommanderInterfaceController::showInterface()
 
 	auto objectsForm = CommanderObjectsForm::make(shared_from_this());
 	psWScreen->psForm->attach(objectsForm);
-
 	displayOrderForm();
-
-	intMode = INT_CMDORDER;
-
 	return true;
 }
 

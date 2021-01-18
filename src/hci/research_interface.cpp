@@ -244,6 +244,7 @@ private:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
+		updateLayout();
 		auto facility = controller->getObjectAt(objectIndex);
 		ASSERT_OR_RETURN(, facility != nullptr && !isDead(facility), "Invalid facility pointer");
 		displayIMD(Image(), ImdObject::Structure(facility), xOffset, yOffset);
@@ -634,24 +635,16 @@ private:
 
 bool ResearchInterfaceController::showInterface()
 {
-	closeInterfaceNoAnim();
-
 	updateData();
 	if (facilities.empty())
 	{
 		return false;
 	}
 
-	auto sharedThis = shared_from_this();
-
-	auto objectsForm = ResearchObjectsForm::make(sharedThis);
+	auto objectsForm = ResearchObjectsForm::make(shared_from_this());
 	psWScreen->psForm->attach(objectsForm);
-
-	sharedThis->displayStatsForm();
-
-	intMode = INT_STAT;
+	displayStatsForm();
 	triggerEvent(TRIGGER_MENU_RESEARCH_UP);
-
 	return true;
 }
 
