@@ -303,8 +303,8 @@ void setTableToJson(const json_type& json, JSONTableWidget& jsonTable)
 {
 	jsonTable.table->clearRows();
 	jsonTable.currentMaxColumnWidths = {0,0,0};
-	PIELIGHT expandableValueTextColor = WZCOL_TEXT_MEDIUM;
-	expandableValueTextColor.byte.a = static_cast<uint8_t>((float)expandableValueTextColor.byte.a * 0.75f);
+	PIELIGHT specialValueTextColor = WZCOL_TEXT_MEDIUM;
+	specialValueTextColor.byte.a = static_cast<uint8_t>((float)specialValueTextColor.byte.a * 0.75f);
 	for (auto item : json.items())
 	{
 		auto keyLabel = std::make_shared<W_LABEL>();
@@ -330,7 +330,7 @@ void setTableToJson(const json_type& json, JSONTableWidget& jsonTable)
 			{
 				valueStr += " (empty)";
 			}
-			valueTextColor = expandableValueTextColor;
+			valueTextColor = specialValueTextColor;
 		}
 		else if (item.value().is_array())
 		{
@@ -344,7 +344,7 @@ void setTableToJson(const json_type& json, JSONTableWidget& jsonTable)
 			{
 				valueStr += " (empty)";
 			}
-			valueTextColor = expandableValueTextColor;
+			valueTextColor = specialValueTextColor;
 		}
 		else if (item.value().is_null())
 		{
@@ -354,6 +354,28 @@ void setTableToJson(const json_type& json, JSONTableWidget& jsonTable)
 		{
 			try {
 				valueStr = item.value().dump();
+				if (item.value().is_string() && !valueStr.empty())
+				{
+					auto it = jsonTable._specialStrings.find(valueStr);
+					if (it != jsonTable._specialStrings.end())
+					{
+						switch (it->second)
+						{
+						case JSONTableWidget::SpecialJSONStringTypes::TYPE_DESCRIPTION:
+							valueTextColor = specialValueTextColor;
+							break;
+						}
+						// remove surrounding quotes
+						if (valueStr.back() == '"')
+						{
+							valueStr.erase(valueStr.end() - 1);
+						}
+						if (!valueStr.empty() && valueStr.front() == '"')
+						{
+							valueStr.erase(valueStr.begin());
+						}
+					}
+				}
 			}
 			catch (const std::exception& e)
 			{
@@ -894,13 +916,25 @@ bool JSONTableWidget::rootJsonHasExpandableChildren() const
 	return false;
 }
 
-void JSONTableWidget::updateData_Internal(const std::function<void ()>& setJsonFunc, bool tryToPreservePath)
+void JSONTableWidget::setSpecialStrings_Internal(const SpecialStrings& specialStrings)
+{
+	JSONTableWidget::SpecialStrings internalResult;
+	// surround every key with " "
+	for (const auto& it : specialStrings)
+	{
+		internalResult["\"" + it.first + "\""] = it.second;
+	}
+	_specialStrings = std::move(internalResult);
+}
+
+void JSONTableWidget::updateData_Internal(const std::function<void ()>& setJsonFunc, bool tryToPreservePath, const SpecialStrings& specialStrings)
 {
 	std::vector<std::string> previousPath = currentPathFromRoot();
 	auto oldScrollPosition = table->getScrollPosition();
 	resetPath();
 
 	setJsonFunc();
+	setSpecialStrings_Internal(specialStrings);
 
 	bool hasExpandableChildren = rootJsonHasExpandableChildren();
 	if (!tryToPreservePath)
@@ -921,7 +955,7 @@ void JSONTableWidget::updateData_Internal(const std::function<void ()>& setJsonF
 	refreshUpdateButtonState();
 }
 
-void JSONTableWidget::updateData(const nlohmann::ordered_json& json, bool tryToPreservePath /*= false*/)
+void JSONTableWidget::updateData(const nlohmann::ordered_json& json, bool tryToPreservePath /*= false*/, const SpecialStrings& specialStrings /*= SpecialStrings()*/)
 {
 	updateData_Internal([this, &json]{
 		_orderedjson = json;
@@ -929,10 +963,10 @@ void JSONTableWidget::updateData(const nlohmann::ordered_json& json, bool tryToP
 
 		_json = nullopt;
 		_json_currentPointer.clear();
-	}, tryToPreservePath);
+	}, tryToPreservePath, specialStrings);
 }
 
-void JSONTableWidget::updateData(const nlohmann::json& json, bool tryToPreservePath /*= false*/)
+void JSONTableWidget::updateData(const nlohmann::json& json, bool tryToPreservePath /*= false*/, const SpecialStrings& specialStrings /*= SpecialStrings()*/)
 {
 	updateData_Internal([this, &json]{
 		_json = json;
@@ -940,7 +974,7 @@ void JSONTableWidget::updateData(const nlohmann::json& json, bool tryToPreserveP
 
 		_orderedjson = nullopt;
 		_orderedjson_currentPointer.clear();
-	}, tryToPreservePath);
+	}, tryToPreservePath, specialStrings);
 }
 
 std::string JSONTableWidget::currentJSONPathStr() const
