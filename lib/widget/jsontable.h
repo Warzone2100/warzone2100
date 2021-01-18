@@ -76,14 +76,19 @@ class JSONTableWidget : public W_FORM
 {
 public:
 	typedef std::function<void (JSONTableWidget&)> CallbackFunc;
+	enum class SpecialJSONStringTypes
+	{
+		TYPE_DESCRIPTION
+	};
+	typedef std::unordered_map<std::string, SpecialJSONStringTypes> SpecialStrings;
 public:
 	JSONTableWidget() : W_FORM() {}
 	~JSONTableWidget();
 
 public:
 	static std::shared_ptr<JSONTableWidget> make(const std::string& title = std::string());
-	void updateData(const nlohmann::ordered_json& json, bool tryToPreservePath = false);
-	void updateData(const nlohmann::json& json, bool tryToPreservePath = false);
+	void updateData(const nlohmann::ordered_json& json, bool tryToPreservePath = false, const SpecialStrings& specialStrings = SpecialStrings());
+	void updateData(const nlohmann::json& json, bool tryToPreservePath = false, const SpecialStrings& specialStrings = SpecialStrings());
 	bool pushJSONPath(const std::string& keyInCurrentJSONPointer);
 	size_t popJSONPath(size_t numLevels = 1);
 	std::string currentJSONPathStr() const;
@@ -98,7 +103,8 @@ public:
 	virtual void run(W_CONTEXT *psContext) override;
 
 private:
-	void updateData_Internal(const std::function<void ()>& setJsonFunc, bool tryToPreservePath);
+	void updateData_Internal(const std::function<void ()>& setJsonFunc, bool tryToPreservePath, const SpecialStrings& specialStrings);
+	void setSpecialStrings_Internal(const SpecialStrings& specialStrings);
 	bool rootJsonHasExpandableChildren() const;
 	void refreshUpdateButtonState();
 	void resizeColumnWidths(bool overrideUserColumnSizing);
@@ -127,6 +133,8 @@ private:
 
 	optional<nlohmann::json>				_json;
 	std::vector<nlohmann::json*>			_json_currentPointer;
+
+	SpecialStrings							_specialStrings;
 
 	std::vector<int>						currentMaxColumnWidths = {0,0,0};
 	std::vector<std::string>				actualPushedPathComponents;
