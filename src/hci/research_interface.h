@@ -6,11 +6,11 @@
 #include "../hci.h"
 #include "objects_stats_interface.h"
 
-class ResearchInterfaceController: public BaseObjectsStatsController, public std::enable_shared_from_this<ResearchInterfaceController>
+class ResearchInterfaceController: public BaseStatsController, public std::enable_shared_from_this<ResearchInterfaceController>
 {
 public:
 	RESEARCH *getObjectStatsAt(size_t objectIndex) const override;
-	RESEARCH *getStatsAt(size_t statsIndex) const override
+	RESEARCH *getStatsAt(size_t statsIndex) const
 	{
 		return stats.at(statsIndex);
 	}
@@ -30,12 +30,15 @@ public:
 		return facilities.at(index);
 	}
 
+	bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const override
+	{
+		return BaseObjectsController::findObject(facilities, iteration);
+	}
+
 	nonstd::optional<size_t> getSelectedFacilityIndex();
 	void updateData();
 	bool showInterface();
-	void closeInterface();
 	void refresh() override;
-	void updateSelected();
 	void displayStatsForm();
 	void startResearch(RESEARCH *research);
 	void requestResearchCancellation(STRUCTURE *facility);
@@ -46,7 +49,5 @@ private:
 	std::vector<RESEARCH *> stats;
 	std::vector<STRUCTURE *> facilities;
 };
-
-bool showBuildInterface();
 
 #endif // __INCLUDED_SRC_HCI_RESEARCH_INTERFACE_H__

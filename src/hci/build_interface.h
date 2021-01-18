@@ -6,11 +6,11 @@
 #include "../hci.h"
 #include "objects_stats_interface.h"
 
-class BuildInterfaceController: public BaseObjectsStatsController, public std::enable_shared_from_this<BuildInterfaceController>
+class BuildInterfaceController: public BaseStatsController, public std::enable_shared_from_this<BuildInterfaceController>
 {
 public:
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
-	STRUCTURE_STATS *getStatsAt(size_t statsIndex) const override
+	STRUCTURE_STATS *getStatsAt(size_t statsIndex) const
 	{
 		return stats.at(statsIndex);
 	}
@@ -52,13 +52,16 @@ public:
 		return builders.at(index);
 	}
 
+	bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const override
+	{
+		return BaseObjectsController::findObject(builders, iteration);
+	}
+
 	void updateData();
 	void toggleFavorites(BASE_STATS *buildOption);
 	void startBuildPosition(BASE_STATS *buildOption);
 	bool showInterface();
-	void closeInterface();
 	void refresh() override;
-	void updateSelected();
 	void toggleBuilderSelection(DROID *droid);
 	void displayStatsForm();
 
@@ -68,7 +71,5 @@ private:
 	std::vector<STRUCTURE_STATS *> stats;
 	std::vector<DROID *> builders;
 };
-
-bool showBuildInterface();
 
 #endif // __INCLUDED_SRC_HCI_BUILD_INTERFACE_H__

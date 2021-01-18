@@ -107,40 +107,7 @@ void ManufactureInterfaceController::refresh()
 	if (objectsSize() == 0)
 	{
 		closeInterface();
-		return;
 	}
-}
-
-void ManufactureInterfaceController::closeInterface()
-{
-	intRemoveStats();
-	intRemoveObject();
-}
-
-void ManufactureInterfaceController::updateSelected()
-{
-	for (auto factory: factories)
-	{
-		if (factory->died == 0 && factory->selected)
-		{
-			setSelectedObject(factory);
-			return;
-		}
-	}
-
-	if (auto previouslySelected = getSelectedObject())
-	{
-		for (auto factory: factories)
-		{
-			if (factory->died == 0 && factory == previouslySelected)
-			{
-				setSelectedObject(factory);
-				return;
-			}
-		}
-	}
-
-	setSelectedObject(factories.front());
 }
 
 class ManufactureObjectButton : public ObjectButton
@@ -166,14 +133,10 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
+		updateLayout();
 		auto factory = controller->getObjectAt(objectIndex);
-		initDisplay();
-
-		if (factory && !isDead(factory))
-		{
-			displayIMD(Image(), ImdObject::Structure(factory), xOffset, yOffset);
-		}
-
+		ASSERT_OR_RETURN(, factory != nullptr && !isDead(factory), "Invalid factory pointer");
+		displayIMD(Image(), ImdObject::Structure(factory), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -184,7 +147,7 @@ protected:
 		return getStatsName(factory->pStructureType);
 	}
 
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
 	}
@@ -268,18 +231,8 @@ protected:
 		productionRunSizeLabel.update(factory, FactoryGetTemplate(StructureGetFactory(factory)));
 	}
 
-	std::string getTip() override
-	{
-		if (auto stats = getStats())
-		{
-			return getStatsName(stats);
-		}
-
-		return "";
-	}
-
 private:
-	DROID_TEMPLATE *getStats()
+	DROID_TEMPLATE *getStats() override
 	{
 		return controller->getObjectStatsAt(objectIndex);
 	}
@@ -452,7 +405,7 @@ public:
 		return ManufactureStatsButton::make(controller, buttonIndex);
 	}
 
-	std::shared_ptr<IntFancyButton> makeObjectButton(size_t buttonIndex) const override
+	std::shared_ptr<ObjectButton> makeObjectButton(size_t buttonIndex) const override
 	{
 		return std::make_shared<ManufactureObjectButton>(controller, buttonIndex);
 	}
@@ -464,7 +417,7 @@ protected:
 		BaseWidget::display(xOffset, yOffset);
 	}
 
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
 	}
@@ -517,7 +470,7 @@ public:
 	}
 
 protected:
-	std::shared_ptr<BaseObjectsStatsController> getController() const override
+	std::shared_ptr<BaseStatsController> getController() const override
 	{
 		return controller;
 	}
@@ -634,9 +587,7 @@ private:
 
 bool ManufactureInterfaceController::showInterface()
 {
-	intRemoveStatsNoAnim();
-	intRemoveOrderNoAnim();
-	intRemoveObjectNoAnim();
+	closeInterfaceNoAnim();
 
 	updateData();
 	if (factories.empty())

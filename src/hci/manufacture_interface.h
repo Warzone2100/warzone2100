@@ -6,11 +6,11 @@
 #include "../hci.h"
 #include "objects_stats_interface.h"
 
-class ManufactureInterfaceController: public BaseObjectsStatsController, public std::enable_shared_from_this<ManufactureInterfaceController>
+class ManufactureInterfaceController: public BaseStatsController, public std::enable_shared_from_this<ManufactureInterfaceController>
 {
 public:
 	DROID_TEMPLATE *getObjectStatsAt(size_t objectIndex) const override;
-	DROID_TEMPLATE *getStatsAt(size_t statsIndex) const override
+	DROID_TEMPLATE *getStatsAt(size_t statsIndex) const
 	{
 		return stats.at(statsIndex);
 	}
@@ -41,14 +41,17 @@ public:
 		return factories.at(index);
 	}
 
+	bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const override
+	{
+		return BaseObjectsController::findObject(factories, iteration);
+	}
+
 	void updateData();
 	void adjustFactoryProduction(DROID_TEMPLATE *manufactureOption, bool add);
 	void adjustFactoryLoop(bool add);
 	void startDeliveryPointPosition();
 	bool showInterface();
-	void closeInterface();
 	void refresh() override;
-	void updateSelected();
 	void displayStatsForm();
 
 private:
@@ -57,7 +60,5 @@ private:
 	std::vector<DROID_TEMPLATE *> stats;
 	std::vector<STRUCTURE *> factories;
 };
-
-bool showManufactureInterface();
 
 #endif // __INCLUDED_SRC_HCI_MANUFACTURE_INTERFACE_H__

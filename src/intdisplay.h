@@ -324,6 +324,7 @@ void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intDisplayUpdateAllyBar(W_BARGRAPH *psBar, const RESEARCH &research, const std::vector<AllyResearch> &researches);
+STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 
 void intSetShadowPower(int quantity);
 

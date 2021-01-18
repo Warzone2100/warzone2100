@@ -93,9 +93,6 @@ static int FormCloseCount;	// Count used to ensure only one sfx played when two 
 
 static UDWORD ManuPower = 0;	// Power required to manufacture the current item.
 
-// Get the first factory assigned to a command droid
-static STRUCTURE *droidGetCommandFactory(DROID *psDroid);
-
 // Set audio IDs for form opening/closing anims.
 // Use -1 to dissable audio.
 //
@@ -1684,7 +1681,7 @@ STRUCTURE *DroidGetBuildStructure(DROID *Droid)
 }
 
 // Get the first factory assigned to a command droid
-static STRUCTURE *droidGetCommandFactory(DROID *psDroid)
+STRUCTURE *droidGetCommandFactory(DROID *psDroid)
 {
 	SDWORD		inc;
 	STRUCTURE	*psCurr;
