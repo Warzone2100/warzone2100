@@ -173,9 +173,6 @@ static bool Refreshing = false;
 /* The widget screen */
 std::shared_ptr<W_SCREEN> psWScreen = nullptr;
 
-// The last widget ID from widgRunScreen
-UDWORD				intLastWidget;
-
 INTMODE intMode;
 
 /* Status of the positioning for the object placement */
@@ -1021,8 +1018,6 @@ INT_RETVAL intRunWidgets()
 		/* Clear it so it doesn't trigger next time around */
 		keyButtonMapping = 0;
 	}
-
-	intLastWidget = retIDs.empty() ? 0 : retIDs.back();
 
 	/* Extra code for the power bars to deal with the shadow */
 	if (powerBarUp)
