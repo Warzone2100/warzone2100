@@ -6,6 +6,10 @@
 #include "../intdisplay.h"
 #include "../intorder.h"
 
+#define STAT_GAP	   2
+#define STAT_BUTWIDTH  60
+#define STAT_BUTHEIGHT 46
+
 class StatsForm;
 
 class BaseObjectsController

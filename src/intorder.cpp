@@ -910,8 +910,6 @@ void intProcessOrder(UDWORD id)
 		}
 		else
 		{
-			/* Unlock the stats button */
-			widgSetButtonState(psWScreen, objStatID, 0);
 			intMode = INT_OBJECT;
 		}
 		return;

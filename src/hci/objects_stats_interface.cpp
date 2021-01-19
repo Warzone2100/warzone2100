@@ -16,10 +16,6 @@
 #include "../warcam.h"
 #include "../geometry.h"
 
-#define STAT_GAP			2
-#define STAT_BUTWIDTH		60
-#define STAT_BUTHEIGHT		46
-
 void BaseObjectsController::selectObject(BASE_OBJECT *object)
 {
 	object->selected = true;

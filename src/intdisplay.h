@@ -100,20 +100,6 @@ void SetFormAudioIDs(int OpenID, int CloseID);
 // Initialise interface graphics.
 void intInitialiseGraphics();
 
-// callback to update the command droid size label
-void intUpdateCommandSize(WIDGET *psWidget, W_CONTEXT *psContext);
-
-// callback to update the command droid experience
-void intUpdateCommandExp(WIDGET *psWidget, W_CONTEXT *psContext);
-
-// callback to update the command droid factories
-void intUpdateCommandFact(WIDGET *psWidget, W_CONTEXT *psContext);
-
-void intUpdateProgressBar(WIDGET *psWidget, W_CONTEXT *psContext);
-
-void intUpdateQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
-//callback to display the factory number
-void intAddFactoryInc(WIDGET *psWidget, W_CONTEXT *psContext);
 //callback to display the production quantity number for a template
 void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
 
@@ -315,12 +301,8 @@ void intDisplayProximityBlips(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
 void intUpdateQuantitySlider(WIDGET *psWidget, W_CONTEXT *psContext);
 
-void intDisplayResSubGroup(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
 void intDisplayMissionClock(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
-void intDisplayAllyIcon(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-void intDisplayAllyBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 void intDisplayUpdateAllyBar(W_BARGRAPH *psBar, const RESEARCH &research, const std::vector<AllyResearch> &researches);
 STRUCTURE *droidGetCommandFactory(DROID *psDroid);
 

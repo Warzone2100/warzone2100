@@ -18,10 +18,6 @@
 #include "../power.h"
 #include "../component.h"
 
-#define STAT_GAP			2
-#define STAT_BUTWIDTH		60
-#define STAT_BUTHEIGHT		46
-
 static ImdObject getResearchObjectImage(RESEARCH *research);
 
 void ResearchInterfaceController::updateData()
@@ -42,6 +38,8 @@ void ResearchInterfaceController::updateFacilitiesList()
 			facilities.push_back(psStruct);
 		}
 	}
+
+	std::reverse(facilities.begin(), facilities.end());
 }
 
 nonstd::optional<size_t> ResearchInterfaceController::getSelectedFacilityIndex()

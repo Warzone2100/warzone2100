@@ -18,9 +18,7 @@
 #include "../geometry.h"
 #include "../intdisplay.h"
 
-#define STAT_GAP			2
-#define STAT_BUTWIDTH		60
-#define STAT_BUTHEIGHT		46
+bool BuildInterfaceController::showFavorites = false;
 
 void BuildInterfaceController::updateData()
 {
@@ -31,16 +29,17 @@ void BuildInterfaceController::updateData()
 
 void BuildInterfaceController::updateBuildersList()
 {
-	std::vector<DROID *> newBuilders;
+	builders.clear();
+
 	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
 	{
 		if ((droid->droidType == DROID_CONSTRUCT || droid->droidType == DROID_CYBORG_CONSTRUCT) && droid->died == 0)
 		{
-			newBuilders.push_back(droid);
+			builders.push_back(droid);
 		}
 	}
 
-	builders = std::vector<DROID *>(newBuilders.rbegin(), newBuilders.rend());
+	std::reverse(builders.begin(), builders.end());
 }
 
 void BuildInterfaceController::updateBuildOptionsList()

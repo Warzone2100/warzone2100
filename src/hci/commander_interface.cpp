@@ -19,10 +19,6 @@
 #include "../intdisplay.h"
 #include "../cmddroid.h"
 
-#define STAT_GAP			2
-#define STAT_BUTWIDTH		60
-#define STAT_BUTHEIGHT		46
-
 void CommanderInterfaceController::updateData()
 {
 	updateCommandersList();
@@ -31,16 +27,17 @@ void CommanderInterfaceController::updateData()
 
 void CommanderInterfaceController::updateCommandersList()
 {
-	std::vector<DROID *> newCommanders;
+	commanders.clear();
+
 	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
 	{
 		if (droid->droidType == DROID_COMMAND && droid->died == 0)
 		{
-			newCommanders.push_back(droid);
+			commanders.push_back(droid);
 		}
 	}
 
-	commanders = std::vector<DROID *>(newCommanders.rbegin(), newCommanders.rend());
+	std::reverse(commanders.begin(), commanders.end());
 }
 
 STRUCTURE_STATS *CommanderInterfaceController::getObjectStatsAt(size_t objectIndex) const
