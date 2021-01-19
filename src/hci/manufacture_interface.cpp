@@ -19,10 +19,6 @@
 #include "../intdisplay.h"
 #include "../template.h"
 
-#define STAT_GAP			2
-#define STAT_BUTWIDTH		60
-#define STAT_BUTHEIGHT		46
-
 void ManufactureInterfaceController::updateData()
 {
 	updateFactoriesList();
@@ -59,23 +55,35 @@ void ManufactureInterfaceController::startDeliveryPointPosition()
 	}
 }
 
+static inline bool compareFactories(STRUCTURE *a, STRUCTURE *b)
+{
+	if (a == nullptr || b == nullptr)
+	{
+		return (a == nullptr) < (b == nullptr);
+	}
+	auto x = (FACTORY *)a->pFunctionality;
+	auto y = (FACTORY *)b->pFunctionality;
+	if (x->psAssemblyPoint->factoryType != y->psAssemblyPoint->factoryType)
+	{
+		return x->psAssemblyPoint->factoryType < y->psAssemblyPoint->factoryType;
+	}
+
+	return x->psAssemblyPoint->factoryInc < y->psAssemblyPoint->factoryInc;
+}
+
 void ManufactureInterfaceController::updateFactoriesList()
 {
 	factories.clear();
 
-	for (auto psBuilding = interfaceStructList(); psBuilding != nullptr; psBuilding = psBuilding->psNext)
+	for (auto structure = interfaceStructList(); structure != nullptr; structure = structure->psNext)
 	{
-		if (psBuilding->status != SS_BUILT || psBuilding->died != 0)
+		if (structure->status == SS_BUILT && structure->died == 0 && StructIsFactory(structure))
 		{
-			continue;
-		}
-
-		auto structureType = psBuilding->pStructureType->type;
-		if (structureType == REF_FACTORY || structureType == REF_CYBORG_FACTORY || structureType == REF_VTOL_FACTORY)
-		{
-			factories.push_back(psBuilding);
+			factories.push_back(structure);
 		}
 	}
+
+	std::sort(factories.begin(), factories.end(), compareFactories);
 }
 
 void ManufactureInterfaceController::updateManufactureOptionsList()

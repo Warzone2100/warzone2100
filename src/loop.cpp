@@ -602,9 +602,6 @@ static void gameStateUpdate()
 		featureUpdate(psCFeat);
 	}
 
-	// Clean up dead droid pointers in UI.
-	hciUpdate();
-
 	// Free dead droid memory.
 	objmemUpdate();
 

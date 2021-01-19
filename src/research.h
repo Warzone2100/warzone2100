@@ -120,7 +120,6 @@ void researchReward(UBYTE losingPlayer, UBYTE rewardPlayer);
 /*check to see if any research has been completed that enables self repair*/
 bool selfRepairEnabled(UBYTE player);
 
-SDWORD	mapRIDToIcon(UDWORD rid);
 SDWORD	mapIconToRID(UDWORD iconID);
 
 /*puts research facility on hold*/

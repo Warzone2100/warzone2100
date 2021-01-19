@@ -33,12 +33,12 @@ public:
 
 	bool shouldShowFavorites() const
 	{
-		return intGetShowFavorites();
+		return BuildInterfaceController::showFavorites;
 	}
 
 	void setShouldShowFavorite(bool value)
 	{
-		intSetShowFavorites(value);
+		BuildInterfaceController::showFavorites = value;
 		updateBuildOptionsList();
 	}
 
@@ -65,11 +65,18 @@ public:
 	void toggleBuilderSelection(DROID *droid);
 	void displayStatsForm();
 
+	static void resetShowFavorites()
+	{
+		BuildInterfaceController::showFavorites = false;
+	}
+
 private:
 	void updateBuildersList();
 	void updateBuildOptionsList();
 	std::vector<STRUCTURE_STATS *> stats;
 	std::vector<DROID *> builders;
+
+	static bool showFavorites;
 };
 
 #endif // __INCLUDED_SRC_HCI_BUILD_INTERFACE_H__
