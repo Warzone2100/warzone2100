@@ -403,7 +403,11 @@ WINDOW_MODE wzGetCurrentWindowMode()
 		// return a dummy value
 		return WINDOW_MODE::windowed;
 	}
-	ASSERT_OR_RETURN(WINDOW_MODE::windowed, WZwindow != nullptr, "window is null");
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzGetCurrentWindowMode called when window is not available");
+		return WINDOW_MODE::windowed;
+	}
 
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
 	if ((flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)
