@@ -252,7 +252,7 @@ static std::vector<Vector2i> asJumpPos;
 
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited */
-static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats);
+static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats);
 
 /* Add the build widgets to the widget screen */
 static bool intAddBuild();
@@ -896,7 +896,7 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 		}
 		ppsStatsList = (BASE_STATS **)&apsTemplateList[0]; // FIXME Ugly cast, and is undefined behaviour (strict-aliasing violation) in C/C++.
 		objMode = IOBJ_DEBUG_DROID;
-		intAddStats(ppsStatsList, apsTemplateList.size());
+		intAddDebugStatsForm(ppsStatsList, apsTemplateList.size());
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
 		break;
@@ -907,7 +907,7 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 		}
 		ppsStatsList = (BASE_STATS **)apsStructStatsList;
 		objMode = IOBJ_DEBUG_STRUCTURE;
-		intAddStats(ppsStatsList, std::min<unsigned>(numStructureStats, MAXSTRUCTURES));
+		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(numStructureStats, MAXSTRUCTURES));
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
 		break;
@@ -917,7 +917,7 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 			apsFeatureList[i] = asFeatureStats + i;
 		}
 		ppsStatsList = (BASE_STATS **)apsFeatureList;
-		intAddStats(ppsStatsList, std::min<unsigned>(numFeatureStats, MAXFEATURES));
+		intAddDebugStatsForm(ppsStatsList, std::min<unsigned>(numFeatureStats, MAXFEATURES));
 		intMode = INT_EDITSTAT;
 		editPosMode = IED_NOPOS;
 		break;
@@ -1823,7 +1823,7 @@ void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
-static bool intAddStats(BASE_STATS **ppsStatsList, UDWORD numStats)
+static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
 {
 	// should this ever be called with psOwner == NULL?
 
