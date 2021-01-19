@@ -1540,14 +1540,12 @@ INT_RETVAL intRunWidgets()
 		}
 	}
 
-	unsigned widgOverID = widgGetMouseOver(psWScreen);
-
 	INT_RETVAL retCode = INT_NONE;
 	if (quitting)
 	{
 		retCode = INT_QUIT;
 	}
-	else if (!retIDs.empty() || intMode == INT_EDIT || intMode == INT_MISSIONRES || widgOverID != 0)
+	else if (!retIDs.empty() || intMode == INT_EDIT || intMode == INT_MISSIONRES || isMouseOverSomeWidget(psWScreen))
 	{
 		retCode = INT_INTERCEPT;
 	}
