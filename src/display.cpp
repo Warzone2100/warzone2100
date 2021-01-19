@@ -1777,12 +1777,7 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 		}
 		else
 		{
-			// now only display interface if nothing selected
-			if (!anyDroidSelected(selectedPlayer))
-			{
-				intObjectSelected((BASE_OBJECT *)psStructure);
-				FeedbackOrderGiven();
-			}
+			auto shouldDisplayInterface = !anyDroidSelected(selectedPlayer);
 			if (selection == SC_INVALID)
 			{
 				STRUCTURE *psCurr;
@@ -1799,6 +1794,12 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 			}
 			//determine if LasSat structure has been selected
 			bLasSatStruct = lasSatStructSelected(psStructure);
+
+			if (shouldDisplayInterface)
+			{
+				intObjectSelected((BASE_OBJECT *)psStructure);
+				FeedbackOrderGiven();
+			}
 		}
 
 	}
