@@ -746,6 +746,15 @@ UDWORD widgGetMouseOver(const std::shared_ptr<W_SCREEN> &psScreen)
 	return 0;
 }
 
+bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen)
+{
+	if (auto lockedMouserOverWidget = psMouseOverWidget.lock())
+	{
+		return lockedMouserOverWidget != psScreen->psForm;
+	}
+
+	return false;
+}
 
 /* Return the user data for a widget */
 void *widgGetUserData(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
