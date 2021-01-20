@@ -49,6 +49,7 @@
 #include "main.h"
 #include "multiint.h"
 #include "multiplay.h"
+#include "ingameop.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // defines
@@ -87,6 +88,7 @@ public:
 private:
 	std::shared_ptr<ScrollableListWidget> keyMapList;
 	void unhighlightSelected();
+	void addButton(int buttonId, int y, const char *text);
 };
 
 struct DisplayKeyMapCache {
@@ -95,7 +97,7 @@ struct DisplayKeyMapCache {
 };
 
 struct DisplayKeyMapData {
-	DisplayKeyMapData(KEY_MAPPING *psMapping)
+	explicit DisplayKeyMapData(KEY_MAPPING *psMapping)
 	: psMapping(psMapping)
 	{ }
 
@@ -138,12 +140,17 @@ static KEY_CODE scanKeyBoardForBinding()
 
 bool runInGameKeyMapEditor(unsigned id)
 {
-	if (id == KM_RETURN)			// return
+	if (id == KM_RETURN || id == KM_GO_BACK)			// return
 	{
 		saveKeyMap();
 		widgDelete(psWScreen, KM_FORM);
 		inputLoseFocus();
 		bAllowOtherKeyPresses = true;
+		if (id == KM_GO_BACK)
+		{
+			intReopenMenuWithoutUnPausing();
+			return false;
+		}
 		return true;
 	}
 	if (id == KM_DEFAULT)
@@ -387,7 +394,7 @@ bool loadKeyMap()
 		auto sub = (KEY_CODE)ini.value("sub", 0).toInt();
 		auto action = (KEY_ACTION)ini.value("action", 0).toInt();
 		auto functionName = ini.value("function", "").toWzString();
-		auto function = keymapEntryByName(functionName.toUtf8().c_str());
+		auto function = keymapEntryByName(functionName.toUtf8());
 		if (function == nullptr)
 		{
 			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.toUtf8().c_str());
@@ -434,35 +441,13 @@ void KeyMapForm::initialize(bool ingame)
 		}));
 		keyMapList->setGeometry(52, 10, KM_ENTRYW, 24 * KM_ENTRYH);
 
-		W_BUTINIT sButInit;
+		addButton(KM_GO_BACK, KM_H - 40, _("Go Back"));
 
-		sButInit.formID		= KM_FORM;
-		sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
-		sButInit.width		= KM_W;
-		sButInit.FontID		= font_regular;
-		sButInit.x		= 0;
-		sButInit.height		= 10;
-		sButInit.pDisplay	= displayTextOption;
-		sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-		sButInit.onDelete = [](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
-		};
-
-		sButInit.id			= KM_RETURN;
-		sButInit.y			= KM_H - 32;
-		sButInit.pText		= _("Resume Game");
-
-		attach(std::make_shared<W_BUTTON>(&sButInit));
+		addButton(KM_RETURN, KM_H - 24, _("Resume Game"));
 
 		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
 		{
-			sButInit.id			= KM_DEFAULT;
-			sButInit.y			= KM_H - 8;
-			sButInit.pText		= _("Select Default");
-
-			attach(std::make_shared<W_BUTTON>(&sButInit));
+			addButton(KM_DEFAULT, KM_H - 8, _("Select Default"));
 		}
 	}
 
@@ -501,6 +486,31 @@ void KeyMapForm::initialize(bool ingame)
 		});
 		keyMapList->addItem(button);
 	}
+}
+
+void KeyMapForm::addButton(int buttonId, int y, const char *text)
+{
+	W_BUTINIT sButInit;
+
+	sButInit.formID		= KM_FORM;
+	sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
+	sButInit.width		= KM_W;
+	sButInit.FontID		= font_regular;
+	sButInit.x			= 0;
+	sButInit.height		= 10;
+	sButInit.pDisplay	= displayTextOption;
+	sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
+	sButInit.onDelete = [](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	};
+
+	sButInit.id			= buttonId;
+	sButInit.y			= y;
+	sButInit.pText		= text;
+
+	attach(std::make_shared<W_BUTTON>(&sButInit));
 }
 
 void KeyMapForm::checkPushedKeyCombo()

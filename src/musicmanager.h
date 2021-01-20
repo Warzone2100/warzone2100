@@ -22,6 +22,7 @@
 
 #define MM_FORM			10200
 #define MM_RETURN			10202
+constexpr int MM_GO_BACK = 10203;
 
 bool runMusicManager();
 bool runInGameMusicManager(unsigned id);

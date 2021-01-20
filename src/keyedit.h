@@ -24,6 +24,7 @@
 #define KM_FORM			10200
 #define KM_RETURN			10202
 #define KM_DEFAULT			10203
+constexpr int KM_GO_BACK = 10204;
 
 bool runKeyMapEditor();
 bool runInGameKeyMapEditor(unsigned id);

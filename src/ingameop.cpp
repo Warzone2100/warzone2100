@@ -23,17 +23,12 @@
  * Pumpkin Studios. 98
  */
 
-#include <string.h>
-
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
-#include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/label.h"
 #include "lib/netplay/netplay.h"
-#include "lib/ivis_opengl/piestate.h"		// for getrendertype
 #include "lib/sound/audio.h"					// for sound.
-#include "lib/sound/cdaudio.h"
 #include "lib/sound/mixer.h"
 
 #include "display3d.h"
@@ -50,13 +45,10 @@
 #include "musicmanager.h"
 #include "ingameop.h"
 #include "mission.h"
-#include "transporter.h"
-#include "main.h"
 #include "warzoneconfig.h"
 #include "qtscript.h"		// for bInTutorial
 #include "radar.h"
 #include "seqdisp.h"
-#include "texture.h"
 
 bool hostQuitConfirmation = true;
 
@@ -150,15 +142,6 @@ static bool addAudioOptions()
 	auto ingameOp = std::make_shared<IntFormAnimated>();
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-#ifdef DEBUG
-#define ROWS 5
-#else
-#define ROWS 4
-#endif
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(ROWS), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(ROWS));
-	}));
-#undef ROWS
 
 	int row = 1;
 	// voice vol
@@ -194,7 +177,14 @@ static bool addAudioOptions()
 	row++;
 #endif
 
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	return true;
 }
@@ -213,7 +203,7 @@ static bool _intAddInGameOptions()
 	setWidgetsStatus(true);
 
 	//if already open, then close!
-	if (widgGetFromID(psWScreen, INTINGAMEOP))
+	if (widgGetFromID(psWScreen, INTINGAMEOP) || isMusicManagerUp)
 	{
 		intCloseInGameOptions(false, true);
 		return true;
@@ -384,26 +374,6 @@ static void ProcessOptionFinished()
 
 }
 
-void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets)
-{
-	if (NetPlay.isHost)
-	{
-		widgDelete(psWScreen, INTINGAMEPOPUP);
-	}
-	widgDelete(psWScreen, INTINGAMEOP);
-	InGameOpUp = false;
-
-	ProcessOptionFinished();
-
-	//don't add the widgets if the load/save screen is put up or exiting to front end
-	if (bResetMissionWidgets)
-	{
-		//put any widgets back on for the missions
-		resetMissionWidgets();
-	}
-}
-
-
 // ////////////////////////////////////////////////////////////////////////////
 bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 {
@@ -472,6 +442,22 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	return true;
 }
 
+void intReopenMenuWithoutUnPausing()
+{
+	isGraphicsOptionsUp = false;
+	isVideoOptionsUp = false;
+	isMouseOptionsUp = false;
+	isKeyMapEditorUp = false;
+	isMusicManagerUp = false;
+
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+	widgDelete(psWScreen, INTINGAMEOP);
+	intAddInGameOptions();
+}
+
 static bool startIGOptionsMenu()
 {
 	widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
@@ -509,11 +495,14 @@ static bool startIGOptionsMenu()
 	addIGTextButton(INTINGAMEOP_MUSICMANAGER, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Manager"), OPALIGN);
 	row++;
 
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Go Back"), OPALIGN);
+	row++;
+
+	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
+
 	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
 		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
 	});
-
-	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
 	return true;
 }
@@ -528,9 +517,6 @@ static bool startIGGraphicsOptionsMenu()
 	auto ingameOp = std::make_shared<IntFormAnimated>();
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(8), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(8));
-	}));
 
 	int row = 1;
 	// FMV mode.
@@ -568,7 +554,14 @@ static bool startIGGraphicsOptionsMenu()
 	addIGTextButton(INTINGAMEOP_SCREENSHAKE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsScreenShakeString(), WBUT_PLAIN);
 	row++;
 
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	return true;
 }
@@ -619,6 +612,10 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 		widgSetString(psWScreen, INTINGAMEOP_SCREENSHAKE_R, graphicsOptionsScreenShakeString());
 		break;
 
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
+		break;
+
 	case INTINGAMEOP_RESUME:			//resume was pressed.
 		return true;
 
@@ -648,10 +645,6 @@ static bool startIGVideoOptionsMenu()
 	auto ingameOp = std::make_shared<IntFormAnimated>();
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		bool showDisplayScales = wzAvailableDisplayScales().size() > 1;
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(showDisplayScales? 3 : 2), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(showDisplayScales? 3 : 2));
-	}));
 
 	int row = 1;
 	// Fullscreen/windowed can't be changed during game
@@ -673,8 +666,15 @@ static bool startIGVideoOptionsMenu()
 		row++;
 	}
 
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
 	// Quit/return
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	refreshCurrentIGVideoOptionsValues();
 
@@ -701,6 +701,10 @@ static bool runIGVideoOptionsMenu(UDWORD id)
 		refreshCurrentIGVideoOptionsValues();
 		break;
 
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
+		break;
+
 	case INTINGAMEOP_RESUME:			//resume was pressed.
 		return true;
 
@@ -721,10 +725,6 @@ static bool startIGMouseOptionsMenu()
 	auto ingameOp = std::make_shared<IntFormAnimated>();
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
-	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		bool s = bMultiPlayer && NetPlay.bComms != 0;
-		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(s ? 6 : 7), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(s ? 6 : 7));
-	}));
 
 	int row = 1;
 	// mouseflip
@@ -760,8 +760,15 @@ static bool startIGMouseOptionsMenu()
 	addIGTextButton(INTINGAMEOP_SCROLLEVENT_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsScrollEventString(), WBUT_PLAIN);
 	row++;
 
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
+	row++;
+
 	// Quit/return
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
+	});
 
 	return true;
 }
@@ -805,6 +812,10 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 	case INTINGAMEOP_SCROLLEVENT_R:
 		seqScrollEvent();
 		widgSetString(psWScreen, INTINGAMEOP_SCROLLEVENT_R, mouseOptionsScrollEventString());
+		break;
+
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
 		break;
 
 	case INTINGAMEOP_RESUME:			//resume was pressed.
@@ -905,6 +916,9 @@ void intProcessInGameOptions(UDWORD id)
 	case INTINGAMEOP_RESUME:			//resume was pressed.
 		intCloseInGameOptions(false, true);
 		break;
+	case INTINGAMEOP_GO_BACK:
+		intReopenMenuWithoutUnPausing();
+		break;
 
 
 //	case INTINGAMEOP_REPLAY:
@@ -940,13 +954,13 @@ void intProcessInGameOptions(UDWORD id)
 
 
 	case INTINGAMEOP_FXVOL_S:
-		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S) / 100.0);
+		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_FXVOL_S) / 100.0f);
 		break;
 	case INTINGAMEOP_3DFXVOL_S:
-		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S) / 100.0);
+		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_3DFXVOL_S) / 100.0f);
 		break;
 	case INTINGAMEOP_CDVOL_S:
-		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0);
+		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0f);
 		break;
 
 	case INTINGAMEOP_TUI_TARGET_ORIGIN_SW:
