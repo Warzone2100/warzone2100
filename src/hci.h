@@ -77,6 +77,7 @@ enum  				  // Reticule button indecies.
 /* Object screen IDs */
 
 #define IDOBJ_FORM			3000		// The object back form for build/manufacture/research
+#define IDOBJ_CLOSE 		3001        // The form for the close button
 #define IDOBJ_TABFORM		3500		// The object tab form for build/manufacture/research
 
 #define IDSTAT_FORM				14000		// The stats form for structure/droid/research type
