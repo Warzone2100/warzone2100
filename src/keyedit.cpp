@@ -83,7 +83,7 @@ public:
 	}
 
 	void checkPushedKeyCombo();
-	bool pushedKeyCombo(KEY_CODE subkey);
+	bool pushedKeyCombo(const KeyMappingInput input);
 
 private:
 	std::shared_ptr<ScrollableListWidget> keyMapList;
@@ -114,7 +114,7 @@ static bool maxKeyMapNameWidthDirty = true;
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
 // ////////////////////////////////////////////////////////////////////////////
-static KEY_CODE scanKeyBoardForBinding()
+static KEY_CODE scanKeyBoardForPressedBindableKey()
 {
 	UDWORD i;
 	for (i = 0; i < KEY_MAXSCAN; i++)
@@ -136,6 +136,25 @@ static KEY_CODE scanKeyBoardForBinding()
 		}
 	}
 	return (KEY_CODE)0;
+}
+
+static MOUSE_KEY_CODE scanMouseForPressedBindableKey()
+{
+	UDWORD i;
+	for (i = 0; i < MOUSE_KEY_CODE::MOUSE_END; i++)
+	{
+		const MOUSE_KEY_CODE mouseKeyCode = (MOUSE_KEY_CODE)i;
+		if (mousePressed(mouseKeyCode))
+		{
+			if (   mouseKeyCode != MOUSE_KEY_CODE::MOUSE_LMB // exceptions
+				&& mouseKeyCode != MOUSE_KEY_CODE::MOUSE_RMB
+				&& mouseKeyCode != MOUSE_KEY_CODE::MOUSE_MMB)
+			{
+				return mouseKeyCode; // Bindable mouse key pressed
+			}
+		}
+	}
+	return (MOUSE_KEY_CODE)0;
 }
 
 bool runInGameKeyMapEditor(unsigned id)
@@ -203,6 +222,37 @@ bool runKeyMapEditor()
 	return true;
 }
 
+static void mouseKeyCodeToString(MOUSE_KEY_CODE code, char* pResult, int maxStringLength)
+{
+	switch (code)
+	{
+	case MOUSE_KEY_CODE::MOUSE_LMB:
+		strcpy(pResult, "Mouse Left");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_MMB:
+		strcpy(pResult, "Mouse Middle");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_RMB:
+		strcpy(pResult, "Mouse Right");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_X1:
+		strcpy(pResult, "Mouse 4");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_X2:
+		strcpy(pResult, "Mouse 5");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_WUP:
+		strcpy(pResult, "Mouse Wheel Up");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_WDN:
+		strcpy(pResult, "Mouse Wheel Down");
+		break;
+	default:
+		strcpy(pResult, "Mouse ???");
+		break;
+	}
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // returns key to press given a mapping.
 static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
@@ -215,7 +265,20 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 		keyScanToString(psMapping->metaKeyCode, (char *)&asciiMeta, 20);
 		onlySub = false;
 	}
-	keyScanToString(psMapping->subKeyCode, (char *)&asciiSub, 20);
+
+	// Figure out if the keycode is for mouse or keyboard. Default to assuming it 
+	switch (psMapping->input.source)
+	{
+	case KeyMappingInputSource::KEY_CODE:
+		keyScanToString(psMapping->input.value.keyCode, (char*)&asciiSub, 20);
+		break;
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		mouseKeyCodeToString(psMapping->input.value.mouseKeyCode, (char*)&asciiSub, 20);
+		break;
+	default:
+		strcpy(asciiSub, "NOT VALID");
+		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", psMapping->input.source);
+	}
 
 	if (onlySub)
 	{
@@ -300,7 +363,7 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	keyMapToString(sKey, psMapping);
 	// Check to see if key is on the numpad, if so tell user and change color
 	PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
-	if (psMapping->subKeyCode >= KEY_KP_0 && psMapping->subKeyCode <= KEY_KPENTER)
+	if (psMapping->input.source == KeyMappingInputSource::KEY_CODE && psMapping->input.value.keyCode >= KEY_KP_0 && psMapping->input.value.keyCode <= KEY_KPENTER)
 	{
 		bindingTextColor = WZCOL_YELLOW;
 	}
@@ -357,7 +420,21 @@ bool saveKeyMap()
 		ini.setValue("name", mapping.name.c_str());
 		ini.setValue("status", mapping.status);
 		ini.setValue("meta", mapping.metaKeyCode);
-		ini.setValue("sub", mapping.subKeyCode);
+
+		switch (mapping.input.source) {
+		case KeyMappingInputSource::KEY_CODE:
+			ini.setValue("source", "default");
+			ini.setValue("sub", mapping.input.value.keyCode);
+			break;
+		case KeyMappingInputSource::MOUSE_KEY_CODE:
+			ini.setValue("source", "mouse_key");
+			ini.setValue("sub", mapping.input.value.mouseKeyCode);
+			break;
+		default:
+			debug(LOG_WZ, "Encountered invalid key mapping source %u while saving keymap!", mapping.input.source);
+			break;
+		}
+
 		ini.setValue("action", mapping.action);
 		if (auto function = keymapEntryByFunction(mapping.function))
 		{
@@ -391,7 +468,7 @@ bool loadKeyMap()
 		auto name = ini.value("name", "").toWzString();
 		auto status = (KEY_STATUS)ini.value("status", 0).toInt();
 		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
-		auto sub = (KEY_CODE)ini.value("sub", 0).toInt();
+		auto sub = ini.value("sub", 0).toInt();
 		auto action = (KEY_ACTION)ini.value("action", 0).toInt();
 		auto functionName = ini.value("function", "").toWzString();
 		auto function = keymapEntryByName(functionName.toUtf8());
@@ -401,8 +478,24 @@ bool loadKeyMap()
 			continue;
 		}
 
+		const WzString sourceName = ini.value("source", "default").toWzString();
+		const KeyMappingInputSource source = keyMappingSourceByName(sourceName.toUtf8().c_str());
+
 		// add mapping
-		keyAddMapping(status, meta, sub, action, function->function, name.toUtf8().c_str());
+		KeyMappingInput input;
+		input.source = source;
+		switch (source) {
+		case KeyMappingInputSource::KEY_CODE:
+			input.value.keyCode = (KEY_CODE)sub;
+			break;
+		case KeyMappingInputSource::MOUSE_KEY_CODE:
+			input.value.mouseKeyCode = (MOUSE_KEY_CODE)sub;
+			break;
+		default:
+			debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", source);
+			break;
+		}
+		keyAddMapping(status, meta, input, action, function->function, name.toUtf8().c_str());
 	}
 	ini.endArray();
 	return true;
@@ -517,15 +610,20 @@ void KeyMapForm::checkPushedKeyCombo()
 {
 	if (selectedKeyMap)
 	{
-		KEY_CODE kc = scanKeyBoardForBinding();
+		const KEY_CODE kc = scanKeyBoardForPressedBindableKey();
 		if (kc)
 		{
-			pushedKeyCombo(kc);
+			pushedKeyCombo(KeyMappingInput::key(kc));
+		}
+		const MOUSE_KEY_CODE mkc = scanMouseForPressedBindableKey();
+		if (mkc)
+		{
+			pushedKeyCombo(KeyMappingInput::mouseKey(mkc));
 		}
 	}
 }
 
-bool KeyMapForm::pushedKeyCombo(KEY_CODE subkey)
+bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 {
 	KEY_CODE	metakey = KEY_IGNORE;
 	KEY_MAPPING	*pExist;
@@ -560,7 +658,7 @@ bool KeyMapForm::pushedKeyCombo(KEY_CODE subkey)
 	}
 
 	// check if bound to a fixed combo.
-	pExist = keyFindMapping(metakey,  subkey);
+	pExist = keyFindMapping(metakey, input);
 	if (pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
 	{
 		unhighlightSelected();
@@ -568,7 +666,7 @@ bool KeyMapForm::pushedKeyCombo(KEY_CODE subkey)
 	}
 
 	/* Clear down mappings using these keys... But only if it isn't unassigned */
-	keyReAssignMapping(metakey, subkey, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN);
+	keyReAssignMapping(metakey, input, KEY_IGNORE, KeyMappingInput::key(KEY_MAXSCAN));
 
 	/* Try and see if its there already - damn well should be! */
 	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);
@@ -578,9 +676,9 @@ bool KeyMapForm::pushedKeyCombo(KEY_CODE subkey)
 
 	/* Now alter it to the new values */
 	psMapping->metaKeyCode = metakey;
-	psMapping->subKeyCode = subkey;
-	// was "=="
-	psMapping->status = KEYMAP_ASSIGNABLE; //must be
+	psMapping->input = input;
+
+	psMapping->status = KEYMAP_ASSIGNABLE;
 	if (alt)
 	{
 		psMapping->altMetaKeyCode = alt;
