@@ -26,8 +26,8 @@
 
 // functions
 bool intAddInGameOptions();
+void intReopenMenuWithoutUnPausing();
 bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets);
-void intCloseInGameOptionsNoAnim(bool bResetMissionWidgets);
 void intProcessInGameOptions(UDWORD);
 void intAddInGamePopup();
 
@@ -83,6 +83,7 @@ enum
 	INTINGAMEOP_HOSTQUIT,
 	INTINGAMEOP_QUIT,               ///< The all important quit button
 	INTINGAMEOP_RESUME,
+	INTINGAMEOP_GO_BACK,
 	INTINGAMEOP_LOAD_MISSION,
 	INTINGAMEOP_LOAD_SKIRMISH,
 	INTINGAMEOP_SAVE_MISSION,

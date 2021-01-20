@@ -910,16 +910,6 @@ void intResetScreen(bool NoAnim)
 			intRemoveOrder();
 		}
 		break;
-	case INT_INGAMEOP:
-		if (NoAnim)
-		{
-			intCloseInGameOptionsNoAnim(true);
-		}
-		else
-		{
-			intCloseInGameOptions(false, true);
-		}
-		break;
 	case INT_MISSIONRES:
 		intRemoveMissionResultNoAnim();
 		break;

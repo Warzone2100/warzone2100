@@ -30,6 +30,8 @@
 #include "multiint.h"
 #include "frontend.h"
 #include "frend.h"
+#include "ingameop.h"
+#include "keymap.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/widget/button.h"
@@ -76,7 +78,7 @@ static int GetTrackListHeight()
 
 static int GetNumVisibleTracks()
 {
-	int maxTracks = static_cast<int>(floor(float(GetTrackListHeight() - TL_Y - W_TRACK_HEADER_Y) / float(TL_ENTRYH)));
+	int maxTracks = static_cast<int>(std::floor(float(GetTrackListHeight() - TL_Y - W_TRACK_HEADER_Y) / float(TL_ENTRYH)));
 	return maxTracks;
 }
 
@@ -147,7 +149,7 @@ public:
 		, isChecked(isChecked)
 	{
 		addOnClickHandler([](W_BUTTON& button) {
-			W_MusicModeCheckboxButton& self = static_cast<W_MusicModeCheckboxButton&>(button);
+			W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
 			if (!self.isEnabled()) { return; }
 			self.isChecked = !self.isChecked;
 		});
@@ -229,7 +231,7 @@ struct TrackRowCache {
 class W_TrackRow : public W_BUTTON
 {
 protected:
-	W_TrackRow(W_BUTINIT const *init, std::shared_ptr<const WZ_TRACK> const &track): W_BUTTON(init), track(track) {}
+	W_TrackRow(W_BUTINIT const *init, std::shared_ptr<const WZ_TRACK> track): W_BUTTON(init), track(std::move(track)) {}
 	void initialize(bool ingame);
 
 public:
@@ -279,7 +281,7 @@ void W_TrackRow::initialize(bool ingame)
 		attach(pCheckBox);
 		auto captureTrack = track;
 		pCheckBox->addOnClickHandler([captureTrack](W_BUTTON& button) {
-			W_MusicModeCheckboxButton& self = static_cast<W_MusicModeCheckboxButton&>(button);
+			W_MusicModeCheckboxButton& self = dynamic_cast<W_MusicModeCheckboxButton&>(button);
 			PlayList_SetTrackMusicMode(captureTrack, self.getMusicMode(), self.getIsChecked());
 		});
 		pCheckBox->setGeometry(W_TRACK_CHECKBOX_STARTINGPOS + ((W_TRACK_CHECKBOX_SIZE + W_TRACK_COL_PADDING) * musicModeIdx), W_TRACK_ROW_PADDING, W_TRACK_CHECKBOX_SIZE, W_TRACK_CHECKBOX_SIZE);
@@ -408,7 +410,7 @@ public:
 	: IntFormAnimated(true)
 	{ }
 	virtual void display(int xOffset, int yOffset) override;
-	virtual ~TrackDetailsForm()
+	virtual ~TrackDetailsForm() override
 	{
 		if (pAlbumCoverTexture)
 		{
@@ -456,7 +458,7 @@ private:
 	std::string album_cover_path;
 };
 
-#define WZ_TRACKDETAILS_IMAGE_X	20 + 210 + 10
+#define WZ_TRACKDETAILS_IMAGE_X	(20 + 210 + 10)
 #define WZ_TRACKDETAILS_IMAGE_Y 10
 #define WZ_TRACKDETAILS_IMAGE_SIZE 60
 
@@ -582,8 +584,6 @@ static void addTrackDetailsBox(WIDGET *parent, bool ingame)
 	}
 
 	UpdateTrackDetailsBox(pTrackDetailsBox.get());
-
-	return;
 }
 
 // MARK: - Track List
@@ -705,7 +705,7 @@ static void addTrackList(WIDGET *parent, bool ingame)
 		auto pTrackRow = W_TrackRow::make(&emptyInit, trackList[i], ingame);
 		pTrackRow->setGeometry(0, 0, TL_ENTRYW, TL_ENTRYH);
 		pTrackRow->addOnClickHandler([](W_BUTTON& clickedButton) {
-			W_TrackRow& pTrackRow = static_cast<W_TrackRow&>(clickedButton);
+			W_TrackRow& pTrackRow = dynamic_cast<W_TrackRow&>(clickedButton);
 			if (selectedTrack == pTrackRow.getTrack()) { return; }
 			cdAudio_PlaySpecificTrack(pTrackRow.getTrack());
 		});
@@ -741,7 +741,7 @@ static void closeMusicManager(bool ingame)
 class MusicManagerForm : public IntFormTransparent
 {
 protected:
-	MusicManagerForm(bool ingame)
+	explicit MusicManagerForm(bool ingame)
 	: IntFormTransparent()
 	, ingame(ingame) {}
 
@@ -764,7 +764,7 @@ protected:
 			}));
 
 			// cancel
-			addMultiBut(*botForm.get(), MM_RETURN, 10, 5, MULTIOP_OKW, MULTIOP_OKH, _("Return To Previous Screen"),
+			addMultiBut(*botForm, MM_RETURN, 10, 5, MULTIOP_OKW, MULTIOP_OKH, _("Return To Previous Screen"),
 					IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 		}
 		else
@@ -774,30 +774,8 @@ protected:
 				psWidget->setGeometry(((300-(TL_W/2))+D_W), ((240-(GetTotalTrackAndDetailsBoxHeight()/2))+D_H), TL_W, GetTrackListHeight() + 20);
 			}));
 
-			W_BUTINIT sButInit;
-
-			sButInit.formID		= botForm->id;
-			sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
-			sButInit.width		= TL_W;
-			sButInit.FontID		= font_regular;
-			sButInit.x		= 0;
-			sButInit.height		= 10;
-			sButInit.pDisplay	= displayTextOption;
-			sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
-			sButInit.onDelete = [](WIDGET *psWidget) {
-				assert(psWidget->pUserData != nullptr);
-				delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
-				psWidget->pUserData = nullptr;
-			};
-
-			sButInit.id			= MM_RETURN;
-			sButInit.y			= GetTrackListHeight() - 10;
-			sButInit.pText		= _("Resume Game");
-			sButInit.calcLayout = LAMBDA_CALCLAYOUT_SIMPLE({
-				psWidget->move(0, GetTrackListHeight() - 10);
-			});
-
-			botForm->attach(std::make_shared<W_BUTTON>(&sButInit));
+			addButton(botForm, _("Go Back"), MM_GO_BACK, GetTrackListHeight() - 20);
+			addButton(botForm, _("Resume Game"), MM_RETURN, GetTrackListHeight());
 		}
 
 		// get track list
@@ -812,20 +790,48 @@ protected:
 		addTrackDetailsBox(this, ingame);
 	}
 
+	static void addButton(const std::shared_ptr<IntFormAnimated> &botForm, const char *text, int id, int y)
+	{
+		W_BUTINIT sButInit;
+
+		sButInit.formID		= botForm->id;
+		sButInit.style		= WBUT_PLAIN | WBUT_TXTCENTRE;
+		sButInit.width		= TL_W;
+		sButInit.FontID		= font_regular;
+		sButInit.x			= 0;
+		sButInit.height		= 10;
+		sButInit.pDisplay	= displayTextOption;
+		sButInit.initPUserDataFunc = []() -> void * { return new DisplayTextOptionCache(); };
+		sButInit.onDelete = [](WIDGET *psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayTextOptionCache *>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		};
+
+		sButInit.id			= id;
+		sButInit.y			= y;
+		sButInit.pText		= text;
+		sButInit.calcLayout = [y] (WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
+			psWidget->move(0, y);
+		};
+
+		botForm->attach(std::make_shared<W_BUTTON>(&sButInit));
+	}
+
 public:
 	static std::shared_ptr<MusicManagerForm> make(bool ingame)
 	{
 		class make_shared_enabler: public MusicManagerForm
 		{
 		public:
-			make_shared_enabler(bool ingame): MusicManagerForm(ingame) {}
+			explicit make_shared_enabler(bool ingame): MusicManagerForm(ingame) {}
 		};
 		auto widget = std::make_shared<make_shared_enabler>(ingame);
 		widget->initialize();
 		return widget;
 	}
 
-	~MusicManagerForm()
+	~MusicManagerForm() override
 	{
 		closeMusicManager(ingame);
 	}
@@ -873,7 +879,13 @@ bool runInGameMusicManager(unsigned id)
 	if (id == MM_RETURN)			// return
 	{
 		widgDelete(psWScreen, MM_FORM);
+		inputLoseFocus();
 		return true;
+	}
+	else if (id == MM_GO_BACK)
+	{
+		widgDelete(psWScreen, MM_FORM);
+		intReopenMenuWithoutUnPausing();
 	}
 
 	perFrameCleanup();
@@ -910,7 +922,7 @@ static void CDAudioEvent_UpdateCurrentTrack(const std::shared_ptr<const WZ_TRACK
 	if (selectedTrack != track)
 	{
 		selectedTrack = track;
-		UpdateTrackDetailsBox(static_cast<TrackDetailsForm *>(widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX)));
+		UpdateTrackDetailsBox(dynamic_cast<TrackDetailsForm *>(widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX)));
 	}
 }
 
