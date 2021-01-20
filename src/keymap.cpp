@@ -48,6 +48,95 @@ static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 static KEY_CODE getQwertyKey();
 
 // ----------------------------------------------------------------------------------
+bool KeyMappingInput::isPressed() const
+{
+	switch (source) {
+	case KeyMappingInputSource::KEY_CODE:
+		return keyPressed(value.keyCode);
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		return mousePressed(value.mouseKeyCode);
+	default:
+		return false;
+	}
+}
+
+bool KeyMappingInput::isDown() const
+{
+	switch (source) {
+	case KeyMappingInputSource::KEY_CODE:
+		return keyDown(value.keyCode);
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		return mouseDown(value.mouseKeyCode);
+	default:
+		return false;
+	}
+}
+
+bool KeyMappingInput::isReleased() const
+{
+	switch (source) {
+	case KeyMappingInputSource::KEY_CODE:
+		return keyReleased(value.keyCode);
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		return mouseReleased(value.mouseKeyCode);
+	default:
+		return false;
+	}
+}
+
+KeyMappingInput::KeyMappingInput()
+	: source(KeyMappingInputSource::KEY_CODE)
+	, value(KEY_CODE::KEY_IGNORE)
+{}
+
+KeyMappingInput KeyMappingInput::key(const KEY_CODE keyCode)
+{
+	KeyMappingInput input;
+	input.source = KeyMappingInputSource::KEY_CODE;
+	input.value.keyCode = keyCode;
+	return input;
+}
+
+KeyMappingInput KeyMappingInput::mouseKey(const MOUSE_KEY_CODE mouseKeyCode)
+{
+	KeyMappingInput input;
+	input.source = KeyMappingInputSource::MOUSE_KEY_CODE;
+	input.value.mouseKeyCode = mouseKeyCode;
+	return input;
+}
+
+KeyMappingInputValue::KeyMappingInputValue(const KEY_CODE keyCode)
+	: keyCode(keyCode)
+{
+}
+
+KeyMappingInputValue::KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode)
+	: mouseKeyCode(mouseKeyCode)
+{
+}
+
+// Key mapping inputs are unions with type enum attached, so we overload the equality
+// comparison for convenience.
+static bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
+	if (lhs.source != rhs.source) {
+		return false;
+	}
+
+	switch (lhs.source) {
+	case KeyMappingInputSource::KEY_CODE:
+		return lhs.value.keyCode == rhs.value.keyCode;
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		return lhs.value.mouseKeyCode == rhs.value.mouseKeyCode;
+	default:
+		return false;
+	}
+}
+
+static bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
+	return !(lhs == rhs);
+}
+
+// ----------------------------------------------------------------------------------
 KEY_MAPPING *keyGetMappingFromFunction(void (*function)())
 {
 	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [function](KEY_MAPPING const &mapping) {
@@ -349,6 +438,23 @@ KeyMapSaveEntry const *keymapEntryByName(std::string const &name)
 	return keyMapSaveTable.keymapEntryByName(name);
 }
 
+KeyMappingInputSource keyMappingSourceByName(std::string const& name)
+{
+	if (name == "default")
+	{
+		return KeyMappingInputSource::KEY_CODE;
+	}
+	else if (name == "mouse_key")
+	{
+		return KeyMappingInputSource::MOUSE_KEY_CODE;
+	}
+	else
+	{
+		debug(LOG_WZ, "Encountered invalid key mapping source name '%s', falling back to using 'default'", name.c_str());
+		return KeyMappingInputSource::KEY_CODE;
+	}
+}
+
 static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, bool bForceDefaults); // forward-declare
 
 // ----------------------------------------------------------------------------------
@@ -604,7 +710,7 @@ void keyInitMappings(bool bForceDefaults)
 // ----------------------------------------------------------------------------------
 /* Adds a new mapping to the list */
 //bool	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, char *name)
-KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name)
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char* name)
 {
 	/* Get some memory for our binding */
 	keyMappings.emplace_back();
@@ -614,9 +720,9 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCod
 	newMapping->name = name;
 
 	/* Fill up our entries, first the ones that activate it */
-	newMapping->metaKeyCode	= metaCode;
-	newMapping->subKeyCode	= subCode;
-	newMapping->status	= status;
+	newMapping->metaKeyCode = metaCode;
+	newMapping->input       = input;
+	newMapping->status      = status;
 
 	/* When it was last called - needed? */
 	newMapping->lastCalled	= gameTime;
@@ -652,10 +758,10 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCod
 
 // ----------------------------------------------------------------------------------
 /* Returns a pointer to a mapping if it exists - NULL otherwise */
-KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KEY_CODE subCode)
+KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KeyMappingInput input)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [metaCode, subCode](KEY_MAPPING const &mapping) {
-		return mapping.metaKeyCode == metaCode && mapping.subKeyCode == subCode;
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [metaCode, input](KEY_MAPPING const &mapping) {
+		return mapping.metaKeyCode == metaCode && mapping.input == input;
 	});
 	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
@@ -698,11 +804,11 @@ static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE 
 	if (!bForceDefaults)
 	{
 		// Clear down conflicting mappings using these keys... But only if it isn't unassigned
-		keyReAssignMapping(metaCode, subCode, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN);
+		keyReAssignMapping(metaCode, KeyMappingInput::key(subCode), KEY_IGNORE, KeyMappingInput::key(KEY_MAXSCAN));
 	}
 
 	// Set default key mapping
-	psMapping = keyAddMapping(status, metaCode, subCode, action, pKeyMapFunc, name);
+	psMapping = keyAddMapping(status, metaCode, KeyMappingInput::key(subCode), action, pKeyMapFunc, name);
 	return true;
 }
 
@@ -731,7 +837,7 @@ static bool checkQwertyKeys()
 			}
 			/* Now add the new one for this location */
 			qwertyKeyMappings[tableEntry].psMapping =
-			    keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, qKey, KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
+				keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, KeyMappingInput::key(qKey), KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
 			aquired = true;
 
 			/* Store away the position and view angle */
@@ -752,7 +858,7 @@ static bool isIgnoredMapping(const bool bExclude, const KEY_MAPPING& mapping)
 		return true;
 	}
 
-	if (mapping.subKeyCode == (KEY_CODE)KEY_MAXSCAN)
+	if (mapping.input.source == KeyMappingInputSource::KEY_CODE && mapping.input.value.keyCode == KEY_MAXSCAN)
 	{
 		return true;
 	}
@@ -812,14 +918,14 @@ void keyProcessMappings(bool bExclude)
 					continue;
 				}
 
-				/* Only match agaist keys with the same subKeyCode */
-				if (otherKey->subKeyCode != keyToProcess->subKeyCode)
+				/* Only match agaist keys with the same mapping input */
+				if (otherKey->input != keyToProcess->input)
 				{
 					continue;
 				}
 
 				bool bIsOtherKeyCombination = otherKey->metaKeyCode != KEY_IGNORE;
-				if (bIsOtherKeyCombination && keyPressed(otherKey->subKeyCode))
+				if (bIsOtherKeyCombination && otherKey->input.isPressed())
 				{
 					bool bHasAlt = otherKey->altMetaKeyCode != KEY_IGNORE;
 					if (keyDown(otherKey->metaKeyCode) || (bHasAlt && keyDown(otherKey->altMetaKeyCode)))
@@ -835,6 +941,7 @@ void keyProcessMappings(bool bExclude)
 			}
 		}
 
+		bool mappingWasHit = false;
 		/* Process simple ones (single keys) */
 		if (!bIsKeyCombination)
 		{
@@ -842,30 +949,24 @@ void keyProcessMappings(bool bExclude)
 			{
 			case KEYMAP_PRESSED:
 				/* Were the right keys pressed? */
-				if (keyPressed(keyToProcess->subKeyCode))
+				if (keyToProcess->input.isPressed())
 				{
-					lastSubKey = keyToProcess->subKeyCode;
-					/* Jump to the associated function call */
-					keyToProcess->function();
+					mappingWasHit = true;
 				}
 				break;
 			case KEYMAP_DOWN:
 				/* Is the key Down? */
-				if (keyDown(keyToProcess->subKeyCode))
+				if (keyToProcess->input.isDown())
 				{
-					lastSubKey = keyToProcess->subKeyCode;
-					/* Jump to the associated function call */
-					keyToProcess->function();
+					mappingWasHit = true;
 				}
 
 				break;
 			case KEYMAP_RELEASED:
 				/* Has the key been released? */
-				if (keyReleased(keyToProcess->subKeyCode))
+				if (keyToProcess->input.isReleased())
 				{
-					lastSubKey = keyToProcess->subKeyCode;
-					/* Jump to the associated function call */
-					keyToProcess->function();
+					mappingWasHit = true;
 				}
 				break;
 
@@ -879,7 +980,7 @@ void keyProcessMappings(bool bExclude)
 		else
 		{
 			/* It's a combo keypress - meta held down and the sub pressed */
-			bool bSubKeyIsPressed = keyPressed(keyToProcess->subKeyCode);
+			bool bSubKeyIsPressed = keyToProcess->input.isPressed();
 			if (bSubKeyIsPressed)
 			{
 				bool bHasAlt = keyToProcess->altMetaKeyCode != KEY_IGNORE;
@@ -888,17 +989,24 @@ void keyProcessMappings(bool bExclude)
 				if (keyDown(keyToProcess->metaKeyCode))
 				{
 					lastMetaKey = keyToProcess->metaKeyCode;
-					lastSubKey = keyToProcess->subKeyCode;
-					keyToProcess->function();
+					mappingWasHit = true;
 				}
 				/* Meta key not held, check if we have alternative and try that */
 				else if (bHasAlt && keyDown(keyToProcess->altMetaKeyCode))
 				{
 					lastMetaKey = keyToProcess->metaKeyCode;
-					lastSubKey = keyToProcess->subKeyCode;
-					keyToProcess->function();
+					mappingWasHit = true;
 				}
 			}
+		}
+
+		/* Execute the action if mapping was hit */
+		if (mappingWasHit) {
+			if (keyToProcess->input.source == KeyMappingInputSource::KEY_CODE)
+			{
+				lastSubKey = keyToProcess->input.value.keyCode;
+			}
+			keyToProcess->function();
 		}
 	}
 
@@ -1092,16 +1200,16 @@ std::string getWantedDebugMappingStatuses(bool val)
 	return ret;
 }
 // ----------------------------------------------------------------------------------
-bool keyReAssignMapping(KEY_CODE origMetaCode, KEY_CODE origSubCode, KEY_CODE newMetaCode, KEY_CODE newSubCode)
+bool keyReAssignMapping(const KEY_CODE origMetaCode, const KeyMappingInput origInput, const KEY_CODE newMetaCode, const KeyMappingInput newInput)
 {
 	/* Find the original */
-	if (KEY_MAPPING *psMapping = keyFindMapping(origMetaCode, origSubCode))
+	if (KEY_MAPPING *psMapping = keyFindMapping(origMetaCode, origInput))
 	{
 		/* Not all can be remapped */
 		if (psMapping->status != KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
 		{
 			psMapping->metaKeyCode = newMetaCode;
-			psMapping->subKeyCode = newSubCode;
+			psMapping->input = newInput;
 			return true;
 		}
 	}
