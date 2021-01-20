@@ -151,12 +151,12 @@ parts:
       snapcraftctl set-version "$(git describe --always)"
       git submodule update --init
     override-build: |
+      echo "SNAPCRAFT_TARGET_ARCH=${SNAPCRAFT_TARGET_ARCH}"
+      echo "SNAPCRAFT_ARCH_TRIPLET=${SNAPCRAFT_ARCH_TRIPLET}"
+      
       # Install Vulkan SDK
-      wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add -
-      wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list https://packages.lunarg.com/vulkan/1.2.148/lunarg-vulkan-1.2.148-bionic.list
-      apt update
-      apt install --yes vulkan-sdk
-
+      . "${SNAPCRAFT_PART_SRC}/.ci/snap/install_vulkan_sdk.sh"
+      
       if [ -f ".snapenv" ]; then set -a; source .snapenv; set +a; fi
       if [ -z "$WZ_DISTRIBUTOR" ]; then export WZ_DISTRIBUTOR="UNKNOWN"; fi
       cmake -S "$SNAPCRAFT_PART_SRC" -B. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja"
