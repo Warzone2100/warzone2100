@@ -5,7 +5,7 @@
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
-#include "commander_interface.h"
+#include "commander.h"
 #include "../objmem.h"
 #include "../hci.h"
 #include "../statsdef.h"
@@ -19,13 +19,13 @@
 #include "../intdisplay.h"
 #include "../cmddroid.h"
 
-void CommanderInterfaceController::updateData()
+void CommanderController::updateData()
 {
 	updateCommandersList();
 	updateSelected();
 }
 
-void CommanderInterfaceController::updateCommandersList()
+void CommanderController::updateCommandersList()
 {
 	commanders.clear();
 
@@ -40,7 +40,7 @@ void CommanderInterfaceController::updateCommandersList()
 	std::reverse(commanders.begin(), commanders.end());
 }
 
-STRUCTURE_STATS *CommanderInterfaceController::getObjectStatsAt(size_t objectIndex) const
+STRUCTURE_STATS *CommanderController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto droid = getObjectAt(objectIndex);
 	ASSERT_OR_RETURN(nullptr, droid != nullptr, "Invalid droid pointer");
@@ -48,7 +48,7 @@ STRUCTURE_STATS *CommanderInterfaceController::getObjectStatsAt(size_t objectInd
 	return assignedFactory == nullptr ? nullptr : assignedFactory->pStructureType;
 }
 
-void CommanderInterfaceController::refresh()
+void CommanderController::refresh()
 {
 	updateData();
 
@@ -70,7 +70,7 @@ protected:
 	CommanderObjectButton() {}
 
 public:
-	static std::shared_ptr<CommanderObjectButton> make(const std::shared_ptr<CommanderInterfaceController> &controller, size_t objectIndex)
+	static std::shared_ptr<CommanderObjectButton> make(const std::shared_ptr<CommanderController> &controller, size_t objectIndex)
 	{
 		class make_shared_enabler: public CommanderObjectButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -143,7 +143,7 @@ protected:
 private:
 	std::shared_ptr<W_LABEL> groupSizeLabel;
 	std::shared_ptr<W_LABEL> experienceStarsLabel;
-	std::shared_ptr<CommanderInterfaceController> controller;
+	std::shared_ptr<CommanderController> controller;
 };
 
 class CommanderStatsButton: public StatsButton
@@ -155,7 +155,7 @@ protected:
 	CommanderStatsButton() {}
 
 public:
-	static std::shared_ptr<CommanderStatsButton> make(const std::shared_ptr<CommanderInterfaceController> &controller, size_t objectIndex)
+	static std::shared_ptr<CommanderStatsButton> make(const std::shared_ptr<CommanderController> &controller, size_t objectIndex)
 	{
 		class make_shared_enabler: public CommanderStatsButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -252,7 +252,7 @@ private:
 	std::shared_ptr<W_LABEL> assignedFactoriesLabel;
 	std::shared_ptr<W_LABEL> assignedCyborgFactoriesLabel;
 	std::shared_ptr<W_LABEL> assignedVtolFactoriesLabel;
-	std::shared_ptr<CommanderInterfaceController> controller;
+	std::shared_ptr<CommanderController> controller;
 	size_t objectIndex;
 };
 
@@ -263,7 +263,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<CommanderObjectsForm> make(const std::shared_ptr<CommanderInterfaceController> &controller)
+	static std::shared_ptr<CommanderObjectsForm> make(const std::shared_ptr<CommanderController> &controller)
 	{
 		class make_shared_enabler: public CommanderObjectsForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -295,10 +295,10 @@ protected:
 	}
 
 private:
-	std::shared_ptr<CommanderInterfaceController> controller;
+	std::shared_ptr<CommanderController> controller;
 };
 
-bool CommanderInterfaceController::showInterface()
+bool CommanderController::showInterface()
 {
 	updateData();
 	if (commanders.empty())
@@ -312,7 +312,7 @@ bool CommanderInterfaceController::showInterface()
 	return true;
 }
 
-void CommanderInterfaceController::displayOrderForm()
+void CommanderController::displayOrderForm()
 {
 	intAddOrder(getSelectedObject());
 }

@@ -5,7 +5,7 @@
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
-#include "build_interface.h"
+#include "build.h"
 #include "../objmem.h"
 #include "../hci.h"
 #include "../statsdef.h"
@@ -18,16 +18,16 @@
 #include "../geometry.h"
 #include "../intdisplay.h"
 
-bool BuildInterfaceController::showFavorites = false;
+bool BuildController::showFavorites = false;
 
-void BuildInterfaceController::updateData()
+void BuildController::updateData()
 {
 	updateBuildersList();
 	updateSelected();
 	updateBuildOptionsList();
 }
 
-void BuildInterfaceController::updateBuildersList()
+void BuildController::updateBuildersList()
 {
 	builders.clear();
 
@@ -42,14 +42,14 @@ void BuildInterfaceController::updateBuildersList()
 	std::reverse(builders.begin(), builders.end());
 }
 
-void BuildInterfaceController::updateBuildOptionsList()
+void BuildController::updateBuildOptionsList()
 {
 	auto newBuildOptions = fillStructureList(selectedPlayer, MAXSTRUCTURES - 1, shouldShowFavorites());
 
 	stats = std::vector<STRUCTURE_STATS *>(newBuildOptions.begin(), newBuildOptions.end());
 }
 
-STRUCTURE_STATS *BuildInterfaceController::getObjectStatsAt(size_t objectIndex) const
+STRUCTURE_STATS *BuildController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto builder = getObjectAt(objectIndex);
 	if (!builder)
@@ -90,7 +90,7 @@ STRUCTURE_STATS *BuildInterfaceController::getObjectStatsAt(size_t objectIndex) 
 }
 
 
-void BuildInterfaceController::startBuildPosition(BASE_STATS *buildOption)
+void BuildController::startBuildPosition(BASE_STATS *buildOption)
 {
 	ASSERT_OR_RETURN(, castDroid(getSelectedObject()) != nullptr, "invalid droid pointer");
 	
@@ -111,14 +111,14 @@ void BuildInterfaceController::startBuildPosition(BASE_STATS *buildOption)
 	intMode = INT_OBJECT;
 }
 
-void BuildInterfaceController::toggleFavorites(BASE_STATS *buildOption)
+void BuildController::toggleFavorites(BASE_STATS *buildOption)
 {
 	auto index = buildOption->index;
 	asStructureStats[index].isFavorite = !shouldShowFavorites();
 	updateBuildOptionsList();
 }
 
-void BuildInterfaceController::refresh()
+void BuildController::refresh()
 {
 	updateData();
 
@@ -128,7 +128,7 @@ void BuildInterfaceController::refresh()
 	}
 }
 
-void BuildInterfaceController::toggleBuilderSelection(DROID *droid)
+void BuildController::toggleBuilderSelection(DROID *droid)
 {
 	if (droid->selected)
 	{
@@ -151,7 +151,7 @@ private:
 	typedef ObjectButton BaseWidget;
 
 public:
-	BuildObjectButton(const std::shared_ptr<BuildInterfaceController> &controller, size_t newObjectIndex)
+	BuildObjectButton(const std::shared_ptr<BuildController> &controller, size_t newObjectIndex)
 		: controller(controller)
 	{
 		objectIndex = newObjectIndex;
@@ -195,7 +195,7 @@ protected:
 	}
 
 private:
-	std::shared_ptr<BuildInterfaceController> controller;
+	std::shared_ptr<BuildController> controller;
 };
 
 class BuildStatsButton: public StatsButton
@@ -207,7 +207,7 @@ protected:
 	BuildStatsButton() {}
 
 public:
-	static std::shared_ptr<BuildStatsButton> make(const std::shared_ptr<BuildInterfaceController> &controller, size_t objectIndex)
+	static std::shared_ptr<BuildStatsButton> make(const std::shared_ptr<BuildController> &controller, size_t objectIndex)
 	{
 		class make_shared_enabler: public BuildStatsButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -371,7 +371,7 @@ private:
 	}
 
 	std::shared_ptr<W_LABEL> productionRunSizeLabel;
-	std::shared_ptr<BuildInterfaceController> controller;
+	std::shared_ptr<BuildController> controller;
 	size_t objectIndex;
 };
 
@@ -382,7 +382,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<BuildOptionButton> make(const std::shared_ptr<BuildInterfaceController> &controller, size_t buildOptionIndex)
+	static std::shared_ptr<BuildOptionButton> make(const std::shared_ptr<BuildController> &controller, size_t buildOptionIndex)
 	{
 		class make_shared_enabler: public BuildOptionButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -464,7 +464,7 @@ private:
 		});
 	}
 
-	std::shared_ptr<BuildInterfaceController> controller;
+	std::shared_ptr<BuildController> controller;
 	size_t buildOptionIndex;
 };
 
@@ -475,7 +475,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<BuildObjectsForm> make(const std::shared_ptr<BuildInterfaceController> &controller)
+	static std::shared_ptr<BuildObjectsForm> make(const std::shared_ptr<BuildController> &controller)
 	{
 		class make_shared_enabler: public BuildObjectsForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -507,7 +507,7 @@ protected:
 	}
 
 private:
-	std::shared_ptr<BuildInterfaceController> controller;
+	std::shared_ptr<BuildController> controller;
 };
 
 class BuildStatsForm: public StatsForm
@@ -517,7 +517,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<BuildStatsForm> make(const std::shared_ptr<BuildInterfaceController> &controller)
+	static std::shared_ptr<BuildStatsForm> make(const std::shared_ptr<BuildController> &controller)
 	{
 		class make_shared_enabler: public BuildStatsForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -556,7 +556,7 @@ private:
 		obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
 		obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 
-		auto weakController = std::weak_ptr<BuildInterfaceController>(controller);
+		auto weakController = std::weak_ptr<BuildController>(controller);
 		obsoleteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto buildController = weakController.lock())
 			{
@@ -579,7 +579,7 @@ private:
 		favoriteButton->setTip(true, _("Showing Only Favorite Tech\nRight-click to remove from Favorites"));
 		favoriteButton->move(4 * 2 + Image(IntImages, IMAGE_FDP_UP).width() * 2 + 4 * 2, STAT_SLDY);
 
-		auto weakController = std::weak_ptr<BuildInterfaceController>(controller);
+		auto weakController = std::weak_ptr<BuildController>(controller);
 		favoriteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto buildController = weakController.lock())
 			{
@@ -591,12 +591,12 @@ private:
 		});
 	}
 
-	std::shared_ptr<BuildInterfaceController> controller;
+	std::shared_ptr<BuildController> controller;
 	std::shared_ptr<MultipleChoiceButton> obsoleteButton;
 	std::shared_ptr<MultipleChoiceButton> favoriteButton;
 };
 
-bool BuildInterfaceController::showInterface()
+bool BuildController::showInterface()
 {
 	updateData();
 	if (builders.empty())
@@ -611,7 +611,7 @@ bool BuildInterfaceController::showInterface()
 	return true;
 }
 
-void BuildInterfaceController::displayStatsForm()
+void BuildController::displayStatsForm()
 {
 	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
 	{

@@ -4,9 +4,9 @@
 #include <vector>
 #include "../objectdef.h"
 #include "../hci.h"
-#include "objects_stats_interface.h"
+#include "objects_stats.h"
 
-class CommanderInterfaceController: public BaseStatsController, public std::enable_shared_from_this<CommanderInterfaceController>
+class CommanderController: public BaseStatsController, public std::enable_shared_from_this<CommanderController>
 {
 public:
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;

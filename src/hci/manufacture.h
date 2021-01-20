@@ -4,9 +4,9 @@
 #include <vector>
 #include "../objectdef.h"
 #include "../hci.h"
-#include "objects_stats_interface.h"
+#include "objects_stats.h"
 
-class ManufactureInterfaceController: public BaseStatsController, public std::enable_shared_from_this<ManufactureInterfaceController>
+class ManufactureController: public BaseStatsController, public std::enable_shared_from_this<ManufactureController>
 {
 public:
 	DROID_TEMPLATE *getObjectStatsAt(size_t objectIndex) const override;

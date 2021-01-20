@@ -5,7 +5,7 @@
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
-#include "manufacture_interface.h"
+#include "manufacture.h"
 #include "../objmem.h"
 #include "../hci.h"
 #include "../statsdef.h"
@@ -19,21 +19,21 @@
 #include "../intdisplay.h"
 #include "../template.h"
 
-void ManufactureInterfaceController::updateData()
+void ManufactureController::updateData()
 {
 	updateFactoriesList();
 	updateSelected();
 	updateManufactureOptionsList();
 }
 
-void ManufactureInterfaceController::adjustFactoryProduction(DROID_TEMPLATE *manufactureOption, bool add)
+void ManufactureController::adjustFactoryProduction(DROID_TEMPLATE *manufactureOption, bool add)
 {
 	auto factory = castStructure(getSelectedObject());
 	ASSERT_OR_RETURN(, factory != nullptr, "Invalid factory pointer");
 	factoryProdAdjust(castStructure(getSelectedObject()), manufactureOption, add);
 }
 
-void ManufactureInterfaceController::adjustFactoryLoop(bool add)
+void ManufactureController::adjustFactoryLoop(bool add)
 {
 	auto factory = castStructure(getSelectedObject());
 	ASSERT_OR_RETURN(, factory != nullptr, "Invalid factory pointer");
@@ -41,7 +41,7 @@ void ManufactureInterfaceController::adjustFactoryLoop(bool add)
 	factoryLoopAdjust(factory, add);
 }
 
-void ManufactureInterfaceController::startDeliveryPointPosition()
+void ManufactureController::startDeliveryPointPosition()
 {
 	if (auto factory = castStructure(getSelectedObject()))
 	{
@@ -71,7 +71,7 @@ static inline bool compareFactories(STRUCTURE *a, STRUCTURE *b)
 	return x->psAssemblyPoint->factoryInc < y->psAssemblyPoint->factoryInc;
 }
 
-void ManufactureInterfaceController::updateFactoriesList()
+void ManufactureController::updateFactoriesList()
 {
 	factories.clear();
 
@@ -86,7 +86,7 @@ void ManufactureInterfaceController::updateFactoriesList()
 	std::sort(factories.begin(), factories.end(), compareFactories);
 }
 
-void ManufactureInterfaceController::updateManufactureOptionsList()
+void ManufactureController::updateManufactureOptionsList()
 {
 	auto factory = castStructure(getSelectedObject());
 	if (!factory)
@@ -100,7 +100,7 @@ void ManufactureInterfaceController::updateManufactureOptionsList()
 	stats = std::vector<DROID_TEMPLATE *>(newManufactureOptions.begin(), newManufactureOptions.end());
 }
 
-DROID_TEMPLATE *ManufactureInterfaceController::getObjectStatsAt(size_t objectIndex) const
+DROID_TEMPLATE *ManufactureController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto factory = getObjectAt(objectIndex);
 	ASSERT_OR_RETURN(nullptr, factory != nullptr, "Invalid Structure pointer");
@@ -108,7 +108,7 @@ DROID_TEMPLATE *ManufactureInterfaceController::getObjectStatsAt(size_t objectIn
 	return ((FACTORY *)factory->pFunctionality)->psSubject;
 }
 
-void ManufactureInterfaceController::refresh()
+void ManufactureController::refresh()
 {
 	updateData();
 
@@ -124,7 +124,7 @@ private:
 	typedef ObjectButton BaseWidget;
 
 public:
-	ManufactureObjectButton(const std::shared_ptr<ManufactureInterfaceController> &controller, size_t newObjectIndex)
+	ManufactureObjectButton(const std::shared_ptr<ManufactureController> &controller, size_t newObjectIndex)
 		: BaseWidget()
 		, controller(controller)
 	{
@@ -161,7 +161,7 @@ protected:
 	}
 
 private:
-	std::shared_ptr<ManufactureInterfaceController> controller;
+	std::shared_ptr<ManufactureController> controller;
 };
 
 class ProductionRunSizeLabel
@@ -212,7 +212,7 @@ protected:
 	ManufactureStatsButton() {}
 
 public:
-	static std::shared_ptr<ManufactureStatsButton> make(const std::shared_ptr<ManufactureInterfaceController> &controller, size_t objectIndex)
+	static std::shared_ptr<ManufactureStatsButton> make(const std::shared_ptr<ManufactureController> &controller, size_t objectIndex)
 	{
 		class make_shared_enabler: public ManufactureStatsButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -298,7 +298,7 @@ private:
 		controller->displayStatsForm();
 	}
 
-	std::shared_ptr<ManufactureInterfaceController> controller;
+	std::shared_ptr<ManufactureController> controller;
 	ProductionRunSizeLabel productionRunSizeLabel;
 	size_t objectIndex;
 };
@@ -310,7 +310,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<ManufactureOptionButton> make(const std::shared_ptr<ManufactureInterfaceController> &controller, size_t manufactureOptionIndex)
+	static std::shared_ptr<ManufactureOptionButton> make(const std::shared_ptr<ManufactureController> &controller, size_t manufactureOptionIndex)
 	{
 		class make_shared_enabler: public ManufactureOptionButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -387,7 +387,7 @@ private:
 		});
 	}
 
-	std::shared_ptr<ManufactureInterfaceController> controller;
+	std::shared_ptr<ManufactureController> controller;
 	ProductionRunSizeLabel productionRunSizeLabel;
 	size_t manufactureOptionIndex;
 };
@@ -399,7 +399,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<ManufactureObjectsForm> make(const std::shared_ptr<ManufactureInterfaceController> &controller)
+	static std::shared_ptr<ManufactureObjectsForm> make(const std::shared_ptr<ManufactureController> &controller)
 	{
 		class make_shared_enabler: public ManufactureObjectsForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -431,7 +431,7 @@ protected:
 	}
 
 private:
-	std::shared_ptr<ManufactureInterfaceController> controller;
+	std::shared_ptr<ManufactureController> controller;
 };
 
 class ManufactureStatsForm: public StatsForm
@@ -446,7 +446,7 @@ private:
 		typedef W_BUTTON BaseWidget;
 
 	public:
-		LoopProductionButton(const std::shared_ptr<ManufactureInterfaceController> &controller): BaseWidget(), controller(controller)
+		LoopProductionButton(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
 		{
 			style |= WBUT_SECONDARY;
 			setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
@@ -459,11 +459,11 @@ private:
 			controller->adjustFactoryLoop(key == WKEY_PRIMARY);
 		}
 	private:
-		std::shared_ptr<ManufactureInterfaceController> controller;
+		std::shared_ptr<ManufactureController> controller;
 	};
 
 public:
-	static std::shared_ptr<ManufactureStatsForm> make(const std::shared_ptr<ManufactureInterfaceController> &controller)
+	static std::shared_ptr<ManufactureStatsForm> make(const std::shared_ptr<ManufactureController> &controller)
 	{
 		class make_shared_enabler: public ManufactureStatsForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -550,7 +550,7 @@ private:
 		obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
 		obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 
-		auto weakController = std::weak_ptr<ManufactureInterfaceController>(controller);
+		auto weakController = std::weak_ptr<ManufactureController>(controller);
 		obsoleteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto manufactureController = weakController.lock())
 			{
@@ -569,7 +569,7 @@ private:
 		deliveryPointButton->move(4, STAT_SLDY);
 		deliveryPointButton->setTip(_("Factory Delivery Point"));
 
-		auto weakController = std::weak_ptr<ManufactureInterfaceController>(controller);
+		auto weakController = std::weak_ptr<ManufactureController>(controller);
 		deliveryPointButton->addOnClickHandler([weakController](W_BUTTON &) {
 			auto controller = weakController.lock();
 			ASSERT_OR_RETURN(, controller != nullptr, "Invalid controller pointer");
@@ -586,14 +586,14 @@ private:
 		loopProductionLabel->setGeometry(loopProductionButton->x() - 15, loopProductionButton->y(), 12, 15);
 	}
 
-	std::shared_ptr<ManufactureInterfaceController> controller;
+	std::shared_ptr<ManufactureController> controller;
 	std::shared_ptr<MultipleChoiceButton> obsoleteButton;
 	std::shared_ptr<W_BUTTON> deliveryPointButton;
 	std::shared_ptr<LoopProductionButton> loopProductionButton;
 	std::shared_ptr<W_LABEL> loopProductionLabel;
 };
 
-bool ManufactureInterfaceController::showInterface()
+bool ManufactureController::showInterface()
 {
 	updateData();
 	if (factories.empty())
@@ -608,7 +608,7 @@ bool ManufactureInterfaceController::showInterface()
 	return true;
 }
 
-void ManufactureInterfaceController::displayStatsForm()
+void ManufactureController::displayStatsForm()
 {
 	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
 	{

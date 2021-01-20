@@ -82,10 +82,10 @@
 #include "qtscript.h"
 #include "frend.h"
 #include "chat.h"
-#include "hci/build_interface.h"
-#include "hci/research_interface.h"
-#include "hci/manufacture_interface.h"
-#include "hci/commander_interface.h"
+#include "hci/build.h"
+#include "hci/research.h"
+#include "hci/manufacture.h"
+#include "hci/commander.h"
 
 // Is a button widget highlighted, either because the cursor is over it or it is flashing.
 // Do not highlight buttons while paused.
@@ -183,7 +183,7 @@ static enum _edit_pos_mode
 } editPosMode;
 
 OBJECT_MODE objMode;
-std::shared_ptr<BaseObjectsController> objectsInterfaceController = nullptr;
+std::shared_ptr<BaseObjectsController> interfaceController = nullptr;
 
 /* Function type for selecting a base object while building the object screen */
 typedef bool (* OBJ_SELECT)(BASE_OBJECT *psObj);
@@ -542,7 +542,7 @@ bool intInitialise()
 		}
 	}
 
-	BuildInterfaceController::resetShowFavorites();
+	BuildController::resetShowFavorites();
 
 	return true;
 }
@@ -629,9 +629,9 @@ static void intDoScreenRefresh()
 		return;
 	}
 
-	if (objectsInterfaceController != nullptr)
+	if (interfaceController != nullptr)
 	{
-		objectsInterfaceController->refresh();
+		interfaceController->refresh();
 		IntRefreshPending = false;
 		return;
 	}
@@ -868,7 +868,7 @@ void intResetScreen(bool NoAnim)
 	default:
 		break;
 	}
-	objectsInterfaceController = nullptr;
+	interfaceController = nullptr;
 	SecondaryWindowUp = false;
 	intMode = INT_NORMAL;
 	//clearSelelection() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
@@ -1992,7 +1992,7 @@ static BASE_STATS *getResearchStats(BASE_OBJECT *psObj)
 	return psResearchFacility->psSubject;
 }
 
-bool setInterfaceController(std::shared_ptr<BaseObjectsController> controller, INTMODE newIntMode, OBJECT_MODE newObjMode)
+bool setController(std::shared_ptr<BaseObjectsController> controller, INTMODE newIntMode, OBJECT_MODE newObjMode)
 {
 	intResetScreen(true);
 
@@ -2005,32 +2005,32 @@ bool setInterfaceController(std::shared_ptr<BaseObjectsController> controller, I
 
 	intMode = newIntMode;
 	objMode = newObjMode;
-	objectsInterfaceController = controller;
+	interfaceController = controller;
 	return true;
 }
 
 /* Add the build widgets to the widget screen */
 static bool intAddBuild()
 {
-	return setInterfaceController(std::make_shared<BuildInterfaceController>(), INT_STAT, IOBJ_BUILD);
+	return setController(std::make_shared<BuildController>(), INT_STAT, IOBJ_BUILD);
 }
 
 /* Add the manufacture widgets to the widget screen */
 static bool intAddManufacture()
 {
-	return setInterfaceController(std::make_shared<ManufactureInterfaceController>(), INT_STAT, IOBJ_MANUFACTURE);
+	return setController(std::make_shared<ManufactureController>(), INT_STAT, IOBJ_MANUFACTURE);
 }
 
 /* Add the research widgets to the widget screen */
 static bool intAddResearch()
 {
-	return setInterfaceController(std::make_shared<ResearchInterfaceController>(), INT_STAT, IOBJ_RESEARCH);
+	return setController(std::make_shared<ResearchController>(), INT_STAT, IOBJ_RESEARCH);
 }
 
 /* Add the command droid widgets to the widget screen */
 static bool intAddCommand()
 {
-	return setInterfaceController(std::make_shared<CommanderInterfaceController>(), INT_CMDORDER, IOBJ_COMMAND);
+	return setController(std::make_shared<CommanderController>(), INT_CMDORDER, IOBJ_COMMAND);
 }
 
 //sets up the Intelligence Screen as far as the interface is concerned

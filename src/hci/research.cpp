@@ -6,7 +6,7 @@
 #include "lib/widget/button.h"
 #include "lib/widget/bar.h"
 #include "lib/widget/label.h"
-#include "research_interface.h"
+#include "research.h"
 #include "../display.h"
 #include "../geometry.h"
 #include "../warcam.h"
@@ -20,14 +20,14 @@
 
 static ImdObject getResearchObjectImage(RESEARCH *research);
 
-void ResearchInterfaceController::updateData()
+void ResearchController::updateData()
 {
 	updateFacilitiesList();
 	updateSelected();
 	updateResearchOptionsList();
 }
 
-void ResearchInterfaceController::updateFacilitiesList()
+void ResearchController::updateFacilitiesList()
 {
 	facilities.clear();
 
@@ -42,7 +42,7 @@ void ResearchInterfaceController::updateFacilitiesList()
 	std::reverse(facilities.begin(), facilities.end());
 }
 
-nonstd::optional<size_t> ResearchInterfaceController::getSelectedFacilityIndex()
+nonstd::optional<size_t> ResearchController::getSelectedFacilityIndex()
 {
 	if (!getSelectedObject())
 	{
@@ -54,7 +54,7 @@ nonstd::optional<size_t> ResearchInterfaceController::getSelectedFacilityIndex()
 	return found == facilities.end() ? nonstd::nullopt : nonstd::optional<size_t>(found - facilities.begin());
 }
 
-void ResearchInterfaceController::updateResearchOptionsList()
+void ResearchController::updateResearchOptionsList()
 {
 	stats.clear();
 
@@ -72,7 +72,7 @@ void ResearchInterfaceController::updateResearchOptionsList()
 	});
 }
 
-RESEARCH *ResearchInterfaceController::getObjectStatsAt(size_t objectIndex) const
+RESEARCH *ResearchController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto facility = getObjectAt(objectIndex);
 	ASSERT_OR_RETURN(nullptr, facility != nullptr, "Invalid Structure pointer");
@@ -87,7 +87,7 @@ RESEARCH *ResearchInterfaceController::getObjectStatsAt(size_t objectIndex) cons
 	return psResearchFacility->psSubject;
 }
 
-void ResearchInterfaceController::refresh()
+void ResearchController::refresh()
 {
 	updateData();
 
@@ -97,7 +97,7 @@ void ResearchInterfaceController::refresh()
 	}
 }
 
-void ResearchInterfaceController::startResearch(RESEARCH *research)
+void ResearchController::startResearch(RESEARCH *research)
 {
 	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
 
@@ -212,7 +212,7 @@ protected:
 	ResearchObjectButton (): BaseWidget() {}
 
 public:
-	static std::shared_ptr<ResearchObjectButton> make(const std::shared_ptr<ResearchInterfaceController> &controller, size_t objectIndex)
+	static std::shared_ptr<ResearchObjectButton> make(const std::shared_ptr<ResearchController> &controller, size_t objectIndex)
 	{
 		class make_shared_enabler: public ResearchObjectButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -291,7 +291,7 @@ protected:
 	}
 
 private:
-	std::shared_ptr<ResearchInterfaceController> controller;
+	std::shared_ptr<ResearchController> controller;
 	AllyResearchsIcons allyResearchIcons;
 };
 
@@ -302,7 +302,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<ResearchStatsButton> make(const std::shared_ptr<ResearchInterfaceController> &controller, size_t objectIndex)
+	static std::shared_ptr<ResearchStatsButton> make(const std::shared_ptr<ResearchController> &controller, size_t objectIndex)
 	{
 		class make_shared_enabler: public ResearchStatsButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -413,7 +413,7 @@ private:
 		}
 	}
 
-	std::shared_ptr<ResearchInterfaceController> controller;
+	std::shared_ptr<ResearchController> controller;
 	size_t objectIndex;
 };
 
@@ -425,7 +425,7 @@ private:
 	static const size_t MAX_ALLY_ICONS = 4;
 
 public:
-	static std::shared_ptr<ResearchOptionButton> make(const std::shared_ptr<ResearchInterfaceController> &controller, size_t researchOptionIndex)
+	static std::shared_ptr<ResearchOptionButton> make(const std::shared_ptr<ResearchController> &controller, size_t researchOptionIndex)
 	{
 		class make_shared_enabler: public ResearchOptionButton {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -553,7 +553,7 @@ private:
 		}
 	}
 
-	std::shared_ptr<ResearchInterfaceController> controller;
+	std::shared_ptr<ResearchController> controller;
 	size_t researchOptionIndex;
 	AllyResearchsIcons allyResearchIcons;
 };
@@ -565,7 +565,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<ResearchObjectsForm> make(const std::shared_ptr<ResearchInterfaceController> &controller)
+	static std::shared_ptr<ResearchObjectsForm> make(const std::shared_ptr<ResearchController> &controller)
 	{
 		class make_shared_enabler: public ResearchObjectsForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -597,7 +597,7 @@ protected:
 	}
 
 private:
-	std::shared_ptr<ResearchInterfaceController> controller;
+	std::shared_ptr<ResearchController> controller;
 };
 
 class ResearchStatsForm: public StatsForm
@@ -607,7 +607,7 @@ private:
 	using BaseWidget::BaseWidget;
 
 public:
-	static std::shared_ptr<ResearchStatsForm> make(const std::shared_ptr<ResearchInterfaceController> &controller)
+	static std::shared_ptr<ResearchStatsForm> make(const std::shared_ptr<ResearchController> &controller)
 	{
 		class make_shared_enabler: public ResearchStatsForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
@@ -628,10 +628,10 @@ protected:
 	}
 
 private:
-	std::shared_ptr<ResearchInterfaceController> controller;
+	std::shared_ptr<ResearchController> controller;
 };
 
-bool ResearchInterfaceController::showInterface()
+bool ResearchController::showInterface()
 {
 	updateData();
 	if (facilities.empty())
@@ -646,7 +646,7 @@ bool ResearchInterfaceController::showInterface()
 	return true;
 }
 
-void ResearchInterfaceController::displayStatsForm()
+void ResearchController::displayStatsForm()
 {
 	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
 	{
@@ -656,7 +656,7 @@ void ResearchInterfaceController::displayStatsForm()
 	}
 }
 
-void ResearchInterfaceController::requestResearchCancellation(STRUCTURE *facility)
+void ResearchController::requestResearchCancellation(STRUCTURE *facility)
 {
 	if (!structureIsResearchingPending(facility))
 	{
