@@ -2,7 +2,7 @@
 #include "lib/widget/widgbase.h"
 #include "lib/widget/button.h"
 #include "lib/widget/bar.h"
-#include "build_interface.h"
+#include "build.h"
 #include "../intdisplay.h"
 #include "../objmem.h"
 #include "../hci.h"

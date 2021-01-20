@@ -4,9 +4,9 @@
 #include <vector>
 #include "../objectdef.h"
 #include "../hci.h"
-#include "objects_stats_interface.h"
+#include "objects_stats.h"
 
-class BuildInterfaceController: public BaseStatsController, public std::enable_shared_from_this<BuildInterfaceController>
+class BuildController: public BaseStatsController, public std::enable_shared_from_this<BuildController>
 {
 public:
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
@@ -33,12 +33,12 @@ public:
 
 	bool shouldShowFavorites() const
 	{
-		return BuildInterfaceController::showFavorites;
+		return BuildController::showFavorites;
 	}
 
 	void setShouldShowFavorite(bool value)
 	{
-		BuildInterfaceController::showFavorites = value;
+		BuildController::showFavorites = value;
 		updateBuildOptionsList();
 	}
 
@@ -67,7 +67,7 @@ public:
 
 	static void resetShowFavorites()
 	{
-		BuildInterfaceController::showFavorites = false;
+		BuildController::showFavorites = false;
 	}
 
 private:

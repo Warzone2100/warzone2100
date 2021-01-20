@@ -4,9 +4,9 @@
 #include <vector>
 #include "../objectdef.h"
 #include "../hci.h"
-#include "objects_stats_interface.h"
+#include "objects_stats.h"
 
-class ResearchInterfaceController: public BaseStatsController, public std::enable_shared_from_this<ResearchInterfaceController>
+class ResearchController: public BaseStatsController, public std::enable_shared_from_this<ResearchController>
 {
 public:
 	RESEARCH *getObjectStatsAt(size_t objectIndex) const override;
