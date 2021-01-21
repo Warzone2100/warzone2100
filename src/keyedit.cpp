@@ -93,15 +93,17 @@ private:
 
 struct DisplayKeyMapCache {
 	WzText wzNameText;
-	WzText wzBindingText;
+	WzText wzPrimaryBindingText;
+	WzText wzSecondaryBindingText;
 };
 
 struct DisplayKeyMapData {
 	explicit DisplayKeyMapData(KEY_MAPPING *psMapping)
-	: psMapping(psMapping)
-	{ }
+		: mappings(std::vector<KEY_MAPPING*>(static_cast<unsigned int>(KeyMappingPriority::LAST), nullptr))
+	{
+	}
 
-	KEY_MAPPING *psMapping;
+	std::vector<KEY_MAPPING*> mappings;
 	DisplayKeyMapCache cache;
 };
 
@@ -109,7 +111,8 @@ struct DisplayKeyMapData {
 // variables
 
 static KEY_MAPPING	*selectedKeyMap;
-static bool maxKeyMapNameWidthDirty = true;
+static std::vector<bool> maxKeyMapNameWidthDirty(static_cast<unsigned int>(KeyMappingPriority::LAST), true);
+static const std::string NOT_BOUND_LABEL = "<not bound>";
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -178,7 +181,7 @@ bool runInGameKeyMapEditor(unsigned id)
 		keyInitMappings(true);
 		widgDelete(psWScreen, KM_FORM); // readd the widgets
 		startInGameKeyMapEditor(false);
-		maxKeyMapNameWidthDirty = true;
+		std::fill(maxKeyMapNameWidthDirty.begin(), maxKeyMapNameWidthDirty.end(), true);
 	}
 
 	if (auto kmForm = (KeyMapForm *)widgGetFromID(psWScreen, KM_FORM))
@@ -278,6 +281,7 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 	default:
 		strcpy(asciiSub, "NOT VALID");
 		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", static_cast<unsigned int>(psMapping->input.source));
+		return true;
 	}
 
 	if (onlySub)
@@ -305,28 +309,71 @@ std::vector<KEY_MAPPING *> getVisibleMappings()
 	return mappings;
 }
 
-static uint16_t getMaxKeyMapNameWidth()
+static uint16_t getMaxKeyMapNameWidth(const KeyMappingPriority priority)
 {
-	static uint16_t max = 0;
+	static std::vector<int> max(static_cast<unsigned int>(KeyMappingPriority::LAST));
 
-	if (maxKeyMapNameWidthDirty) {
-		max = 0;
+	const unsigned int priorityIndex = static_cast<unsigned int>(priority);
+	if (maxKeyMapNameWidthDirty[priorityIndex]) {
+		debug(LOG_WZ, "Calculating max width for %u (pIdx = %u)", static_cast<unsigned int>(priority), priorityIndex);
 		WzText displayText;
+		displayText.setText(NOT_BOUND_LABEL, font_regular);
+		max[priorityIndex] = displayText.width();
+
 		char sKey[MAX_STR_LENGTH];
-
 		for (auto mapping: getVisibleMappings()) {
-			keyMapToString(sKey, mapping);
-			displayText.setText(sKey, font_regular);
-			max = MAX(max, displayText.width());
+			if (mapping->priority == priority) {
+				keyMapToString(sKey, mapping);
+				displayText.setText(sKey, font_regular);
+				max[priorityIndex] = MAX(max[priorityIndex], displayText.width());
+			}
 		}
+		debug(LOG_WZ, "\tresult: %d", max[priorityIndex]);
 
-		maxKeyMapNameWidthDirty = false;
+		maxKeyMapNameWidthDirty[priorityIndex] = false;
 	}
 
-	return max;
+	return max[priorityIndex];
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+static void drawKeyMapping(const int x, const int y, const int w, const int h, const int boxX, const int boxY, const int boxW, const int boxH, const int textOffset, KEY_MAPPING* mapping, DisplayKeyMapData& data)
+{
+	PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
+	char sPrimaryKey[MAX_STR_LENGTH];
+
+	if (mapping)
+	{
+		if (mapping == selectedKeyMap)
+		{
+			pie_BoxFill(boxX, boxY, boxX + boxW, boxY + boxH, WZCOL_KEYMAP_ACTIVE);
+		}
+		else if (mapping->status == KEYMAP_ALWAYS || mapping->status == KEYMAP_ALWAYS_PROCESS)
+		{
+			pie_BoxFill(boxX, boxY, boxX + boxW, boxY + boxH, WZCOL_KEYMAP_FIXED);
+		}
+		else
+		{
+			drawBlueBoxInset(boxX, boxY, boxW, boxH);
+		}
+
+		// Check to see if key is on the numpad, if so tell user and change color
+		if (mapping->input.source == KeyMappingInputSource::KEY_CODE && mapping->input.value.keyCode >= KEY_KP_0 && mapping->input.value.keyCode <= KEY_KPENTER)
+		{
+			bindingTextColor = WZCOL_YELLOW;
+		}
+		keyMapToString(sPrimaryKey, mapping);
+	}
+	else
+	{
+		drawBlueBoxInset(boxX, boxY, boxW, boxH);
+		strcpy(sPrimaryKey, NOT_BOUND_LABEL.c_str());
+	}
+
+	data.cache.wzPrimaryBindingText.setText(sPrimaryKey, font_regular);
+	data.cache.wzPrimaryBindingText.render(boxX, y + (h / 2) + 3, bindingTextColor);
+}
+
 // display a keymap on the interface.
 static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -338,37 +385,39 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	int y = yOffset + psWidget->y();
 	int w = psWidget->width();
 	int h = psWidget->height();
-	KEY_MAPPING *psMapping = data.psMapping;
-	char sKey[MAX_STR_LENGTH];
+	int primaryW = getMaxKeyMapNameWidth(KeyMappingPriority::PRIMARY);
+	int secondaryW = getMaxKeyMapNameWidth(KeyMappingPriority::SECONDARY);
+	KEY_MAPPING *primaryMapping = data.mappings[static_cast<unsigned int>(KeyMappingPriority::PRIMARY)];
+	KEY_MAPPING *secondaryMapping = data.mappings[static_cast<unsigned int>(KeyMappingPriority::SECONDARY)];	
 
-	if (psMapping == selectedKeyMap)
-	{
-		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_ACTIVE);
-	}
-	else if (psMapping->status == KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
-	{
-		// when user can't edit something...
-		pie_BoxFill(x, y , x + w, y + h, WZCOL_KEYMAP_FIXED);
-	}
-	else
-	{
-		drawBlueBoxInset(x, y, w, h);
-	}
+	drawBlueBoxInset(x, y, w - primaryW - secondaryW, h);
 
-	// draw name
-	data.cache.wzNameText.setText(_(psMapping->name.c_str()), font_regular);
+	// Draw name. Try to use primary mapping for the name, but if it for some reason does not exist, fall back to secondary.
+	// If both fail, fall back to "<unknown>"
+	const char* name = primaryMapping
+		? primaryMapping->name.c_str()
+		: secondaryMapping ? secondaryMapping->name.c_str() : "<unknown>";
+	data.cache.wzNameText.setText(_(name), font_regular);
 	data.cache.wzNameText.render(x + 2, y + (psWidget->height() / 2) + 3, WZCOL_FORM_TEXT);
 
-	// draw binding
-	keyMapToString(sKey, psMapping);
-	// Check to see if key is on the numpad, if so tell user and change color
-	PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
-	if (psMapping->input.source == KeyMappingInputSource::KEY_CODE && psMapping->input.value.keyCode >= KEY_KP_0 && psMapping->input.value.keyCode <= KEY_KPENTER)
-	{
-		bindingTextColor = WZCOL_YELLOW;
-	}
-	data.cache.wzBindingText.setText(sKey, font_regular);
-	data.cache.wzBindingText.render(x + psWidget->width() - getMaxKeyMapNameWidth() - 2, y + (psWidget->height() / 2) + 3, bindingTextColor);
+	// draw binding(s)
+	drawKeyMapping(
+		x, y, w, h,
+		x + w - primaryW - secondaryW,
+		y,
+		primaryW,
+		h,
+		-primaryW - 2 - secondaryW - 2,
+		primaryMapping, data);
+
+	drawKeyMapping(
+		x, y, w, h,
+		x + w - secondaryW,
+		y,
+		secondaryW,
+		h,
+		-secondaryW - 2,
+		secondaryMapping, data);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -434,6 +483,18 @@ bool saveKeyMap()
 			debug(LOG_WZ, "Encountered invalid key mapping source %u while saving keymap!", static_cast<unsigned int>(mapping.input.source));
 			break;
 		}
+		switch (mapping.priority)
+		{
+		case KeyMappingPriority::PRIMARY:
+			ini.setValue("priority", "primary");
+			break;
+		case KeyMappingPriority::SECONDARY:
+			ini.setValue("priority", "secondary");
+			break;
+		default:
+			debug(LOG_WZ, "Encountered invalid key mapping priority %u while saving keymap!", static_cast<unsigned int>(mapping.priority));
+			break;
+		}
 
 		ini.setValue("action", mapping.action);
 		if (auto function = keymapEntryByFunction(mapping.function))
@@ -495,7 +556,11 @@ bool loadKeyMap()
 			debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", static_cast<unsigned int>(source));
 			break;
 		}
-		keyAddMapping(status, meta, input, action, function->function, name.toUtf8().c_str());
+
+		const WzString priorityName = ini.value("priority", "primary").toWzString();
+		const KeyMappingPriority priority = keyMappingPriorityByName(priorityName.toUtf8().c_str());
+
+		keyAddMapping(status, meta, input, action, function->function, name.toUtf8().c_str(), priority);
 	}
 	ini.endArray();
 	return true;
@@ -550,34 +615,53 @@ void KeyMapForm::initialize(bool isInGame)
 	std::sort(mappings.begin(), mappings.end(), [](KEY_MAPPING *a, KEY_MAPPING *b) {
 		return a->name < b->name;
 	});
-	/* Add our first mapping to the form */
-	/* Now add the others... */
+
+	/* Add key mappings to the form */
+	std::unordered_map<void(*)(), DisplayKeyMapData*> displayDataLookup;
 	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
 	{
-		W_BUTINIT emptyInit;
-		auto button = std::make_shared<W_BUTTON>(&emptyInit);
-		button->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
-		button->id = KM_START + (i - mappings.begin());
-		button->displayFunction = displayKeyMap;
-		button->pUserData = new DisplayKeyMapData(*i);
-		button->setOnDelete([](WIDGET *psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayKeyMapData *>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
-		});
-		button->addOnClickHandler([=](W_BUTTON& clickedButton) {
-			auto clickedMapping = static_cast<DisplayKeyMapData *>(clickedButton.pUserData)->psMapping;
-			if (!clickedMapping || clickedMapping->status != KEYMAP_ASSIGNABLE)
-			{
-				audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-			} else if (selectedKeyMap == clickedMapping) {
-				unhighlightSelected();
-			} else {
-				keyMapList->disableScroll();
-				selectedKeyMap = clickedMapping;
-			}
-		});
-		keyMapList->addItem(button);
+		// Insert the mapping to correct priority slot in the display data. Create new data if no entry
+		// for this keybind is available.
+		KEY_MAPPING *mapping = *i;
+		DisplayKeyMapData* data;
+
+		if (!(data = displayDataLookup[mapping->function])) {
+			data = new DisplayKeyMapData(*i);
+			displayDataLookup[mapping->function] = data;
+
+			// Only create the button if it does not exist yet
+			// TODO 1309: separate buttons for primary/secondary keybinds?
+			W_BUTINIT emptyInit;
+			auto button = std::make_shared<W_BUTTON>(&emptyInit);
+			button->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
+			button->id = KM_START + (i - mappings.begin());
+			button->displayFunction = displayKeyMap;
+			button->pUserData = data;
+			button->setOnDelete([](WIDGET* psWidget) {
+				assert(psWidget->pUserData != nullptr);
+				delete static_cast<DisplayKeyMapData*>(psWidget->pUserData);
+				psWidget->pUserData = nullptr;
+			});
+			button->addOnClickHandler([=](W_BUTTON& clickedButton) {
+				// TODO: Allow clicking the secondary key
+				const int priorityIndex = static_cast<unsigned int>(KeyMappingPriority::PRIMARY);
+				auto clickedMapping = static_cast<DisplayKeyMapData*>(clickedButton.pUserData)->mappings[priorityIndex];
+				if (!clickedMapping || clickedMapping->status != KEYMAP_ASSIGNABLE)
+				{
+					audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+				}
+				else if (selectedKeyMap == clickedMapping) {
+					unhighlightSelected();
+				}
+				else {
+					keyMapList->disableScroll();
+					selectedKeyMap = clickedMapping;
+				}
+			});
+			keyMapList->addItem(button);
+		}
+
+		data->mappings[static_cast<unsigned int>(mapping->priority)] = mapping;
 	}
 }
 
@@ -613,12 +697,12 @@ void KeyMapForm::checkPushedKeyCombo()
 		const KEY_CODE kc = scanKeyBoardForPressedBindableKey();
 		if (kc)
 		{
-			pushedKeyCombo(KeyMappingInput::key(kc));
+			pushedKeyCombo(KeyMappingInput((KEY_CODE)kc)); // TODO 1309
 		}
 		const MOUSE_KEY_CODE mkc = scanMouseForPressedBindableKey();
 		if (mkc)
 		{
-			pushedKeyCombo(KeyMappingInput::mouseKey(mkc));
+			pushedKeyCombo(KeyMappingInput((MOUSE_KEY_CODE)mkc)); // TODO 1309
 		}
 	}
 }
@@ -666,10 +750,11 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	}
 
 	/* Clear down mappings using these keys... But only if it isn't unassigned */
-	keyReAssignMapping(metakey, input, KEY_IGNORE, KeyMappingInput::key(KEY_MAXSCAN));
+	clearKeyMappingIfExists(metakey, input);
 
 	/* Try and see if its there already - damn well should be! */
-	psMapping = keyGetMappingFromFunction(selectedKeyMap->function);
+	// TODO 1309: this might not always be the case in case of secondary keybinds. Might be nullable for primaries now, too
+	psMapping = keyGetMappingFromFunction(selectedKeyMap->function, KeyMappingPriority::PRIMARY);
 
 	/* Cough if it's not there */
 	ASSERT_OR_RETURN(false, psMapping != nullptr, "Trying to patch a non-existent function mapping - whoop whoop!!!");
@@ -684,7 +769,9 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		psMapping->altMetaKeyCode = alt;
 	}
 	unhighlightSelected();
-	maxKeyMapNameWidthDirty = true;
+
+	// TODO 1309: handle priorities here
+	maxKeyMapNameWidthDirty[static_cast<unsigned int>(KeyMappingPriority::PRIMARY)] = true;
 	return true;
 }
 

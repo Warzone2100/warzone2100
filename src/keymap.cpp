@@ -89,20 +89,18 @@ KeyMappingInput::KeyMappingInput()
 	, value(KEY_CODE::KEY_IGNORE)
 {}
 
-KeyMappingInput KeyMappingInput::key(const KEY_CODE keyCode)
+KeyMappingInput::KeyMappingInput(const KEY_CODE KeyCode)
+	: source(KeyMappingInputSource::KEY_CODE)
+	, value(KeyMappingInputValue((KEY_CODE)KeyCode))
 {
-	KeyMappingInput input;
-	input.source = KeyMappingInputSource::KEY_CODE;
-	input.value.keyCode = keyCode;
-	return input;
+	//value.keyCode = keyCode; // TODO 1309
 }
 
-KeyMappingInput KeyMappingInput::mouseKey(const MOUSE_KEY_CODE mouseKeyCode)
+KeyMappingInput::KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode)
+	: source(KeyMappingInputSource::MOUSE_KEY_CODE)
+	, value(KeyMappingInputValue((MOUSE_KEY_CODE)mouseKeyCode))
 {
-	KeyMappingInput input;
-	input.source = KeyMappingInputSource::MOUSE_KEY_CODE;
-	input.value.mouseKeyCode = mouseKeyCode;
-	return input;
+	//value.mouseKeyCode = mouseKeyCode; // TODO 1309
 }
 
 KeyMappingInputValue::KeyMappingInputValue(const KEY_CODE keyCode)
@@ -137,10 +135,10 @@ static bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
 }
 
 // ----------------------------------------------------------------------------------
-KEY_MAPPING *keyGetMappingFromFunction(void (*function)())
+KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingPriority priority)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [function](KEY_MAPPING const &mapping) {
-		return mapping.function == function;
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [function, priority](KEY_MAPPING const &mapping) {
+		return mapping.function == function && mapping.priority == priority;
 	});
 	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
@@ -455,7 +453,24 @@ KeyMappingInputSource keyMappingSourceByName(std::string const& name)
 	}
 }
 
-static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, bool bForceDefaults); // forward-declare
+KeyMappingPriority keyMappingPriorityByName(std::string const& name)
+{
+	if (name == "primary")
+	{
+		return KeyMappingPriority::PRIMARY;
+	}
+	else if (name == "secondary")
+	{
+		return KeyMappingPriority::SECONDARY;
+	}
+	else
+	{
+		debug(LOG_WZ, "Encountered invalid key mapping priority name '%s', falling back to using 'primary'", name.c_str());
+		return KeyMappingPriority::PRIMARY;
+	}
+}
+
+static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char* name, bool bForceDefaults, const KeyMappingPriority priority = KeyMappingPriority::PRIMARY); // forward-declare
 
 // ----------------------------------------------------------------------------------
 /*
@@ -577,7 +592,9 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_MINUS,             KEYMAP_PRESSED, kf_RadarZoomOut,            N_("Zoom Radar Out"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_EQUALS,            KEYMAP_PRESSED, kf_RadarZoomIn,             N_("Zoom Radar In"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_PLUS,           KEYMAP_DOWN,    kf_ZoomIn,                  N_("Zoom In"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, MOUSE_KEY_CODE::MOUSE_WUP, KEYMAP_PRESSED, kf_ZoomIn,              N_("Zoom In"), bForceDefaults, KeyMappingPriority::SECONDARY) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_MINUS,          KEYMAP_DOWN,    kf_ZoomOut,                 N_("Zoom Out"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, MOUSE_KEY_CODE::MOUSE_WDN, KEYMAP_PRESSED, kf_ZoomOut,             N_("Zoom Out"), bForceDefaults, KeyMappingPriority::SECONDARY) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_2,              KEYMAP_DOWN,    kf_PitchForward,            N_("Pitch Forward"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_4,              KEYMAP_DOWN,    kf_RotateLeft,              N_("Rotate Left"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KP_5,              KEYMAP_DOWN,    kf_ResetPitch,              N_("Reset Pitch"), bForceDefaults) || didAdd;
@@ -710,7 +727,7 @@ void keyInitMappings(bool bForceDefaults)
 // ----------------------------------------------------------------------------------
 /* Adds a new mapping to the list */
 //bool	keyAddMapping(KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action,void *function, char *name)
-KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char* name)
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char* name, const KeyMappingPriority priority)
 {
 	/* Get some memory for our binding */
 	keyMappings.emplace_back();
@@ -723,6 +740,7 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput
 	newMapping->metaKeyCode = metaCode;
 	newMapping->input       = input;
 	newMapping->status      = status;
+	newMapping->priority    = priority;
 
 	/* When it was last called - needed? */
 	newMapping->lastCalled	= gameTime;
@@ -758,10 +776,12 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput
 
 // ----------------------------------------------------------------------------------
 /* Returns a pointer to a mapping if it exists - NULL otherwise */
-KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KeyMappingInput input)
+KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingPriority priority)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [metaCode, input](KEY_MAPPING const &mapping) {
-		return mapping.metaKeyCode == metaCode && mapping.input == input;
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [metaCode, input, priority](KEY_MAPPING const &mapping) {
+		// If priority is set to LAST, find any mapping regardless of priority
+		const bool priorityMatches = priority == KeyMappingPriority::LAST || mapping.priority == priority;
+		return mapping.metaKeyCode == metaCode && mapping.input == input && priorityMatches;
 	});
 	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
@@ -781,12 +801,12 @@ static bool keyRemoveMappingPt(KEY_MAPPING *psToRemove)
 	return false;
 }
 
-static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE subCode, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, bool bForceDefaults)
+static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, bool bForceDefaults, const KeyMappingPriority priority)
 {
-	KEY_MAPPING *psMapping = keyGetMappingFromFunction(pKeyMapFunc);
+	KEY_MAPPING *psMapping = keyGetMappingFromFunction(pKeyMapFunc, priority);
 	if (!bForceDefaults && psMapping != nullptr)
 	{
-		// Not forcing defaults, and there is already a mapping entry for this function
+		// Not forcing defaults, and there is already a mapping entry for this function with this priority
 		return false;
 	}
 
@@ -803,12 +823,12 @@ static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KEY_CODE 
 	}
 	if (!bForceDefaults)
 	{
-		// Clear down conflicting mappings using these keys... But only if it isn't unassigned
-		keyReAssignMapping(metaCode, KeyMappingInput::key(subCode), KEY_IGNORE, KeyMappingInput::key(KEY_MAXSCAN));
+		// Clear the keys from any other mappings
+		clearKeyMappingIfExists(metaCode, input);
 	}
 
 	// Set default key mapping
-	psMapping = keyAddMapping(status, metaCode, KeyMappingInput::key(subCode), action, pKeyMapFunc, name);
+	psMapping = keyAddMapping(status, metaCode, input, action, pKeyMapFunc, name, priority);
 	return true;
 }
 
@@ -837,7 +857,7 @@ static bool checkQwertyKeys()
 			}
 			/* Now add the new one for this location */
 			qwertyKeyMappings[tableEntry].psMapping =
-				keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, KeyMappingInput::key(qKey), KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
+				keyAddMapping(KEYMAP_ALWAYS, KEY_LSHIFT, KeyMappingInput((KEY_CODE)qKey), KEYMAP_PRESSED, kf_JumpToMapMarker, "Jump to new map marker");
 			aquired = true;
 
 			/* Store away the position and view angle */
@@ -1200,16 +1220,16 @@ std::string getWantedDebugMappingStatuses(bool val)
 	return ret;
 }
 // ----------------------------------------------------------------------------------
-bool keyReAssignMapping(const KEY_CODE origMetaCode, const KeyMappingInput origInput, const KEY_CODE newMetaCode, const KeyMappingInput newInput)
+bool clearKeyMappingIfExists(const KEY_CODE metaCode, const KeyMappingInput input)
 {
-	/* Find the original */
-	if (KEY_MAPPING *psMapping = keyFindMapping(origMetaCode, origInput))
+	/* Find any mapping with same keys */
+	if (KEY_MAPPING *psMapping = keyFindMapping(metaCode, input))
 	{
 		/* Not all can be remapped */
-		if (psMapping->status != KEYMAP_ALWAYS || psMapping->status == KEYMAP_ALWAYS_PROCESS)
+		if (psMapping->status != KEY_STATUS::KEYMAP_ALWAYS || psMapping->status == KEY_STATUS::KEYMAP_ALWAYS_PROCESS)
 		{
-			psMapping->metaKeyCode = newMetaCode;
-			psMapping->input = newInput;
+			psMapping->metaKeyCode = KEY_CODE::KEY_IGNORE;
+			psMapping->input = KEY_CODE::KEY_MAXSCAN;
 			return true;
 		}
 	}
