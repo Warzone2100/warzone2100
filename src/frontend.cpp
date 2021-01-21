@@ -1687,17 +1687,6 @@ char const *mouseOptionsCursorModeString()
 	return war_GetColouredCursor() ? _("On") : _("Off");
 }
 
-char const *mouseOptionsScrollEventString()
-{
-	switch(war_GetScrollEvent())
-	{
-	    case 0: return _("Map/Radar Zoom");
-	    case 1: return _("Game Speed");
-	    case 2: return _("Camera Pitch");
-	    default: return "";
-	}
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 // Mouse Options
 void startMouseOptionsMenu()
@@ -1729,20 +1718,11 @@ void startMouseOptionsMenu()
 	addTextButton(FRONTEND_CURSORMODE,   FRONTEND_POS4X - 35, FRONTEND_POS6Y, _("Colored Cursors"), WBUT_SECONDARY);
 	addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 55, FRONTEND_POS6Y, mouseOptionsCursorModeString(), WBUT_SECONDARY);
 
-	// Function of the scroll wheel
-	addTextButton(FRONTEND_SCROLLEVENT,   FRONTEND_POS5X - 35, FRONTEND_POS7Y, _("Scroll Event"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SCROLLEVENT_R, FRONTEND_POS5M - 55, FRONTEND_POS7Y, mouseOptionsScrollEventString(), WBUT_SECONDARY);
-
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
 
 	// Quit/return
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
-}
-
-void seqScrollEvent()
-{
-	war_SetScrollEvent(seqCycle(war_GetScrollEvent(), 0, 1, 2));
 }
 
 bool runMouseOptionsMenu()
@@ -1780,12 +1760,6 @@ bool runMouseOptionsMenu()
 		war_SetColouredCursor(!war_GetColouredCursor());
 		widgSetString(psWScreen, FRONTEND_CURSORMODE_R, mouseOptionsCursorModeString());
 		wzSetCursor(CURSOR_DEFAULT);
-		break;
-
-	case FRONTEND_SCROLLEVENT:
-	case FRONTEND_SCROLLEVENT_R:
-		seqScrollEvent();
-		widgSetString(psWScreen, FRONTEND_SCROLLEVENT_R, mouseOptionsScrollEventString());
 		break;
 
 	case FRONTEND_QUIT:

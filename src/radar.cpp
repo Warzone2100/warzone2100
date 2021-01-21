@@ -184,7 +184,6 @@ bool resizeRadar()
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
 	pie_SetRadar(-static_cast<float>(radarWidth) / 2.0 - 1, -static_cast<float>(radarHeight) / 2.0 - 1, static_cast<float>(radarWidth), static_cast<float>(radarHeight), radarTexWidth, radarTexHeight);
-	setViewingWindow();
 
 	return true;
 }

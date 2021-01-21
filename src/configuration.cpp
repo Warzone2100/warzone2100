@@ -344,10 +344,6 @@ bool loadConfig()
 	{
 		war_SetRadarJump(value.value());
 	}
-	if (auto value = iniGetIntegerOpt("scrollEvent"))
-	{
-		war_SetScrollEvent(value.value());
-	}
 	rotateRadar = iniGetBool("rotateRadar", true).value();
 	radarRotationArrow = iniGetBool("radarRotationArrow", true).value();
 	hostQuitConfirmation = iniGetBool("hostQuitConfirmation", true).value();
@@ -538,7 +534,6 @@ bool saveConfig()
 	iniSetInteger("difficulty", getDifficultyLevel());		// level
 	iniSetInteger("cameraSpeed", war_GetCameraSpeed());	// camera speed
 	iniSetBool("radarJump", war_GetRadarJump());		// radar jump
-	iniSetInteger("scrollEvent", war_GetScrollEvent());	// scroll event
 	iniSetBool("cameraAccel", getCameraAccel());		// camera acceleration
 	iniSetInteger("shake", (int)getShakeStatus());		// screenshake
 	iniSetInteger("mouseflip", (int)(getInvertMouseStatus()));	// flipmouse
