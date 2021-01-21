@@ -19,6 +19,17 @@
 #include "../intdisplay.h"
 #include "../template.h"
 
+FACTORY *getFactoryOrNullptr(BASE_OBJECT *structure)
+{
+	if (auto factory = castStructure(structure))
+	{
+		ASSERT_OR_RETURN(nullptr, StructIsFactory(factory), "Invalid factory pointer");
+		return (FACTORY *)factory->pFunctionality;
+	}
+
+	return nullptr;
+}
+
 void ManufactureController::updateData()
 {
 	updateFactoriesList();
@@ -28,17 +39,12 @@ void ManufactureController::updateData()
 
 void ManufactureController::adjustFactoryProduction(DROID_TEMPLATE *manufactureOption, bool add)
 {
-	auto factory = castStructure(getSelectedObject());
-	ASSERT_OR_RETURN(, factory != nullptr, "Invalid factory pointer");
 	factoryProdAdjust(castStructure(getSelectedObject()), manufactureOption, add);
 }
 
 void ManufactureController::adjustFactoryLoop(bool add)
 {
-	auto factory = castStructure(getSelectedObject());
-	ASSERT_OR_RETURN(, factory != nullptr, "Invalid factory pointer");
-
-	factoryLoopAdjust(factory, add);
+	factoryLoopAdjust(castStructure(getSelectedObject()), add);
 }
 
 void ManufactureController::startDeliveryPointPosition()
@@ -61,8 +67,10 @@ static inline bool compareFactories(STRUCTURE *a, STRUCTURE *b)
 	{
 		return (a == nullptr) < (b == nullptr);
 	}
-	auto x = (FACTORY *)a->pFunctionality;
-	auto y = (FACTORY *)b->pFunctionality;
+	auto x = getFactoryOrNullptr(a);
+	ASSERT_OR_RETURN(false, x != nullptr, "Invalid factory pointer");
+	auto y = getFactoryOrNullptr(b);
+	ASSERT_OR_RETURN(false, y != nullptr, "Invalid factory pointer");
 	if (x->psAssemblyPoint->factoryType != y->psAssemblyPoint->factoryType)
 	{
 		return x->psAssemblyPoint->factoryType < y->psAssemblyPoint->factoryType;
@@ -88,24 +96,22 @@ void ManufactureController::updateFactoriesList()
 
 void ManufactureController::updateManufactureOptionsList()
 {
-	auto factory = castStructure(getSelectedObject());
-	if (!factory)
+	if (auto factory = castStructure(getSelectedObject()))
+	{
+		stats = fillTemplateList(factory);
+	}
+	else
 	{
 		stats.clear();
-		return;
 	}
-
-	auto newManufactureOptions = fillTemplateList(factory);
-
-	stats = std::vector<DROID_TEMPLATE *>(newManufactureOptions.begin(), newManufactureOptions.end());
 }
 
 DROID_TEMPLATE *ManufactureController::getObjectStatsAt(size_t objectIndex) const
 {
-	auto factory = getObjectAt(objectIndex);
-	ASSERT_OR_RETURN(nullptr, factory != nullptr, "Invalid Structure pointer");
+	auto factory = getFactoryOrNullptr(getObjectAt(objectIndex));
+	ASSERT_OR_RETURN(nullptr, factory != nullptr, "Invalid factory pointer");
 
-	return ((FACTORY *)factory->pFunctionality)->psSubject;
+	return factory->psSubject;
 }
 
 void ManufactureController::refresh()
@@ -440,28 +446,6 @@ private:
 	typedef StatsForm BaseWidget;
 	using BaseWidget::BaseWidget;
 
-	class LoopProductionButton: public W_BUTTON
-	{
-	private:
-		typedef W_BUTTON BaseWidget;
-
-	public:
-		LoopProductionButton(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
-		{
-			style |= WBUT_SECONDARY;
-			setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
-			setTip(_("Loop Production"));
-		}
-
-		void released(W_CONTEXT *psContext, WIDGET_KEY key) override
-		{
-			BaseWidget::released(psContext, key);
-			controller->adjustFactoryLoop(key == WKEY_PRIMARY);
-		}
-	private:
-		std::shared_ptr<ManufactureController> controller;
-	};
-
 public:
 	static std::shared_ptr<ManufactureStatsForm> make(const std::shared_ptr<ManufactureController> &controller)
 	{
@@ -483,65 +467,19 @@ protected:
 		return controller;
 	}
 
-	void updateLayout() override
-	{
-		BaseWidget::updateLayout();
-		updateDeliveryPointButton();
-		updateLoopProduction();
-	}
-
-	void updateDeliveryPointButton()
-	{
-		auto factory = castStructure(controller->getSelectedObject());
-
-		switch (factory->pStructureType->type)
-		{
-		default:
-		case REF_FACTORY:
-			deliveryPointButton->setImages(Image(IntImages, IMAGE_FDP_UP), Image(IntImages, IMAGE_FDP_DOWN), Image(IntImages, IMAGE_FDP_HI));
-			break;
-		case REF_CYBORG_FACTORY:
-			deliveryPointButton->setImages(Image(IntImages, IMAGE_CDP_UP), Image(IntImages, IMAGE_CDP_DOWN), Image(IntImages, IMAGE_CDP_HI));
-			break;
-		case REF_VTOL_FACTORY:
-			deliveryPointButton->setImages(Image(IntImages, IMAGE_VDP_UP), Image(IntImages, IMAGE_VDP_DOWN), Image(IntImages, IMAGE_VDP_HI));
-			break;
-		}
-	}
-
-	void updateLoopProduction()
-	{
-		auto structure = castStructure(controller->getSelectedObject());
-		ASSERT_OR_RETURN(, structure != nullptr, "Invalid structure pointer");
-		auto psFactory = (FACTORY *)structure->pFunctionality;
-		ASSERT_OR_RETURN(, psFactory != nullptr, "Invalid factory pointer");
-
-		auto productionLoops = psFactory->productionLoops;
-
-		if (psFactory->psSubject == nullptr || productionLoops == 0)
-		{
-			loopProductionButton->setState(0);
-			loopProductionLabel->hide();
-			return;
-		}
-
-		loopProductionButton->setState(WBUT_CLICKLOCK);
-		loopProductionLabel->setString(productionLoops == INFINITE_PRODUCTION ? WzString::fromUtf8("∞"): WzString::fromUtf8(astringf("%u", productionLoops + 1)));
-		loopProductionLabel->show();
-	}
-
 private:
 	void initialize() override
 	{
 		BaseWidget::initialize();
 		addObsoleteButton();
-		addDeliveryPointButton();
+		attach(std::make_shared<DeliveryPointButton>(controller));
 		addLoopProductionWidgets();
 	}
 
 	void addObsoleteButton()
 	{
-		attach(obsoleteButton = std::make_shared<MultipleChoiceButton>());
+		auto obsoleteButton = std::make_shared<MultipleChoiceButton>();
+		attach(obsoleteButton);
 		obsoleteButton->style |= WBUT_SECONDARY;
 		obsoleteButton->setChoice(controller->shouldShowRedundantDesign());
 		obsoleteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
@@ -562,35 +500,141 @@ private:
 		});
 	}
 
-	void addDeliveryPointButton()
-	{
-		attach(deliveryPointButton = std::make_shared<W_BUTTON>());
-		deliveryPointButton->style |= WBUT_SECONDARY;
-		deliveryPointButton->move(4, STAT_SLDY);
-		deliveryPointButton->setTip(_("Factory Delivery Point"));
-
-		auto weakController = std::weak_ptr<ManufactureController>(controller);
-		deliveryPointButton->addOnClickHandler([weakController](W_BUTTON &) {
-			auto controller = weakController.lock();
-			ASSERT_OR_RETURN(, controller != nullptr, "Invalid controller pointer");
-			controller->startDeliveryPointPosition();
-		});
-	}
-
 	void addLoopProductionWidgets()
 	{
-		attach(loopProductionButton = std::make_shared<LoopProductionButton>(controller));
+		auto loopProductionButton = std::make_shared<LoopProductionButton>(controller);
+		attach(loopProductionButton);
 		loopProductionButton->move(STAT_SLDX + STAT_SLDWIDTH + 2, STAT_SLDY);
 
-		attach(loopProductionLabel = std::make_shared<W_LABEL>());
+		auto loopProductionLabel = std::make_shared<LoopProductionLabel>(controller);
+		attach(loopProductionLabel);
 		loopProductionLabel->setGeometry(loopProductionButton->x() - 15, loopProductionButton->y(), 12, 15);
 	}
 
 	std::shared_ptr<ManufactureController> controller;
-	std::shared_ptr<MultipleChoiceButton> obsoleteButton;
-	std::shared_ptr<W_BUTTON> deliveryPointButton;
-	std::shared_ptr<LoopProductionButton> loopProductionButton;
-	std::shared_ptr<W_LABEL> loopProductionLabel;
+
+	class DeliveryPointButton: public W_BUTTON
+	{
+	private:
+		typedef W_BUTTON BaseWidget;
+
+	public:
+		DeliveryPointButton(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
+		{
+			style |= WBUT_SECONDARY;
+			move(4, STAT_SLDY);
+			setTip(_("Factory Delivery Point"));
+
+			auto weakController = std::weak_ptr<ManufactureController>(controller);
+			addOnClickHandler([weakController](W_BUTTON &) {
+				auto controller = weakController.lock();
+				ASSERT_OR_RETURN(, controller != nullptr, "Invalid controller pointer");
+				controller->startDeliveryPointPosition();
+			});
+		}
+
+	protected:
+		void display(int xOffset, int yOffset)
+		{
+			updateLayout();
+			BaseWidget::display(xOffset, yOffset);
+		}
+
+	private:
+		void updateLayout()
+		{
+			auto factory = castStructure(controller->getSelectedObject());
+
+			switch (factory->pStructureType->type)
+			{
+			default:
+			case REF_FACTORY:
+				setImages(Image(IntImages, IMAGE_FDP_UP), Image(IntImages, IMAGE_FDP_DOWN), Image(IntImages, IMAGE_FDP_HI));
+				break;
+			case REF_CYBORG_FACTORY:
+				setImages(Image(IntImages, IMAGE_CDP_UP), Image(IntImages, IMAGE_CDP_DOWN), Image(IntImages, IMAGE_CDP_HI));
+				break;
+			case REF_VTOL_FACTORY:
+				setImages(Image(IntImages, IMAGE_VDP_UP), Image(IntImages, IMAGE_VDP_DOWN), Image(IntImages, IMAGE_VDP_HI));
+				break;
+			}
+		}
+
+		std::shared_ptr<ManufactureController> controller;
+	};
+
+	class LoopProductionButton: public W_BUTTON
+	{
+	private:
+		typedef W_BUTTON BaseWidget;
+
+	public:
+		LoopProductionButton(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
+		{
+			style |= WBUT_SECONDARY;
+			setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
+			setTip(_("Loop Production"));
+		}
+
+		void released(W_CONTEXT *psContext, WIDGET_KEY key) override
+		{
+			BaseWidget::released(psContext, key);
+			controller->adjustFactoryLoop(key == WKEY_PRIMARY);
+		}
+
+	private:
+		void run(W_CONTEXT *) override
+		{
+			setState(ManufactureStatsForm::getProductionLoops(controller) == 0 ? 0: WBUT_CLICKLOCK);
+		}
+
+		std::shared_ptr<ManufactureController> controller;
+	};
+
+	class LoopProductionLabel: public W_LABEL
+	{
+	private:
+		typedef W_LABEL BaseWidget;
+
+	public:
+		LoopProductionLabel(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
+		{
+		}
+
+	private:
+		void run(W_CONTEXT *) override
+		{
+			auto productionLoops = ManufactureStatsForm::getProductionLoops(controller);
+			if (productionLoops != lastProductionLoop)
+			{
+				lastProductionLoop = productionLoops;
+				setString(WzString::fromUtf8(getNewString()));
+			}
+		}
+
+		std::string getNewString()
+		{
+			switch (lastProductionLoop)
+			{
+			case 0:
+				return "";
+			case INFINITE_PRODUCTION:
+				return "∞";
+			default:
+				return astringf("%u", lastProductionLoop + 1);
+			}
+		}
+
+		uint8_t lastProductionLoop = 0;
+		std::shared_ptr<ManufactureController> controller;
+	};
+
+	static uint8_t getProductionLoops(std::shared_ptr<ManufactureController> controller)
+	{
+		auto psFactory = getFactoryOrNullptr(controller->getSelectedObject());
+		ASSERT_OR_RETURN(0, psFactory != nullptr, "Invalid factory pointer");
+		return psFactory->psSubject == nullptr ? 0 : psFactory->productionLoops;
+	}
 };
 
 bool ManufactureController::showInterface()
