@@ -174,7 +174,6 @@ parts:
       - libfreetype6-dev
       - libfribidi-dev
       - libglc-dev
-      - libglew-dev
       - libharfbuzz-dev
       - libopenal-dev
       - libphysfs-dev
@@ -194,7 +193,6 @@ parts:
       - libfreetype6
       - libfribidi0
       - libglc0
-      - libglew2.0
       - libharfbuzz0b
       - libogg0
       - libopenal1
