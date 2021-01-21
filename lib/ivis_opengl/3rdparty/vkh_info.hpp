@@ -1,8 +1,8 @@
 //
 // VkhInfo
-// Version: 1.3.1
+// Version: 1.3.2
 //
-// Copyright (c) 2019-2020 past-due
+// Copyright (c) 2019-2021 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
