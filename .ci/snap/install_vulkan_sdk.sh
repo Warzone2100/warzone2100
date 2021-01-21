@@ -48,7 +48,6 @@ elif [ "$TARGET_BUILD_ARCH" = "i386" ] || [ "$TARGET_BUILD_ARCH" = "arm64" ] || 
 else
   # Skip Vulkan SDK
   echo "Skipping Vulkan SDK (for TARGET_BUILD_ARCH: $TARGET_BUILD_ARCH)"
-  exit 0
 
 fi
 
