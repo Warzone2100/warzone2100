@@ -1,8 +1,8 @@
 //
 // VkhInfo
-// Version: 1.3.1
+// Version: 1.3.2
 //
-// Copyright (c) 2019-2020 past-due
+// Copyright (c) 2019-2021 past-due
 //
 // https://github.com/past-due/vulkan-helpers
 //
@@ -14,6 +14,7 @@
 #include "vkh_info.hpp"
 
 #include <sstream>
+#include <array>
 
 template <typename VKType, typename F, typename... Args>
 std::vector<VKType> GetVectorFromVKFuncWithExplicitInit(F &&func, VKType init, Args &&... args)
@@ -341,13 +342,13 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, const vk::Applica
 		buf << "  - maxFragmentDualSrcAttachments: " << deviceLimits.maxFragmentDualSrcAttachments << "\n";
 		buf << "  - maxFragmentCombinedOutputResources: " << deviceLimits.maxFragmentCombinedOutputResources << "\n";
 		buf << "  - maxComputeSharedMemorySize: " << deviceLimits.maxComputeSharedMemorySize << "\n";
-		buf << "  - maxComputeWorkGroupCount[0]: " << deviceLimits.maxComputeWorkGroupCount[0] << "\n";
-		buf << "  - maxComputeWorkGroupCount[1]: " << deviceLimits.maxComputeWorkGroupCount[1] << "\n";
-		buf << "  - maxComputeWorkGroupCount[2]: " << deviceLimits.maxComputeWorkGroupCount[2] << "\n";
+		buf << "  - maxComputeWorkGroupCount[0]: " << std::get<0>(deviceLimits.maxComputeWorkGroupCount) << "\n";
+		buf << "  - maxComputeWorkGroupCount[1]: " << std::get<1>(deviceLimits.maxComputeWorkGroupCount) << "\n";
+		buf << "  - maxComputeWorkGroupCount[2]: " << std::get<2>(deviceLimits.maxComputeWorkGroupCount) << "\n";
 		buf << "  - maxComputeWorkGroupInvocations: " << deviceLimits.maxComputeWorkGroupInvocations << "\n";
-		buf << "  - maxComputeWorkGroupSize[0]: " << deviceLimits.maxComputeWorkGroupSize[0] << "\n";
-		buf << "  - maxComputeWorkGroupSize[1]: " << deviceLimits.maxComputeWorkGroupSize[1] << "\n";
-		buf << "  - maxComputeWorkGroupSize[2]: " << deviceLimits.maxComputeWorkGroupSize[2] << "\n";
+		buf << "  - maxComputeWorkGroupSize[0]: " << std::get<0>(deviceLimits.maxComputeWorkGroupSize) << "\n";
+		buf << "  - maxComputeWorkGroupSize[1]: " << std::get<1>(deviceLimits.maxComputeWorkGroupSize) << "\n";
+		buf << "  - maxComputeWorkGroupSize[2]: " << std::get<2>(deviceLimits.maxComputeWorkGroupSize) << "\n";
 		buf << "  - subPixelPrecisionBits: " << deviceLimits.subPixelPrecisionBits << "\n";
 		buf << "  - subTexelPrecisionBits: " << deviceLimits.subTexelPrecisionBits << "\n";
 		buf << "  - mipmapPrecisionBits: " << deviceLimits.mipmapPrecisionBits << "\n";
@@ -356,10 +357,10 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, const vk::Applica
 		buf << "  - maxSamplerLodBias: " << deviceLimits.maxSamplerLodBias << "\n";
 		buf << "  - maxSamplerAnisotropy: " << deviceLimits.maxSamplerAnisotropy << "\n";
 		buf << "  - maxViewports: " << deviceLimits.maxViewports << "\n";
-		buf << "  - maxViewportDimensions[0]: " << deviceLimits.maxViewportDimensions[0] << "\n";
-		buf << "  - maxViewportDimensions[1]: " << deviceLimits.maxViewportDimensions[1] << "\n";
-		buf << "  - viewportBoundsRange[0]: " << deviceLimits.viewportBoundsRange[0] << "\n";
-		buf << "  - viewportBoundsRange[1]: " << deviceLimits.viewportBoundsRange[1] << "\n";
+		buf << "  - maxViewportDimensions[0]: " << std::get<0>(deviceLimits.maxViewportDimensions) << "\n";
+		buf << "  - maxViewportDimensions[1]: " << std::get<1>(deviceLimits.maxViewportDimensions) << "\n";
+		buf << "  - viewportBoundsRange[0]: " << std::get<0>(deviceLimits.viewportBoundsRange) << "\n";
+		buf << "  - viewportBoundsRange[1]: " << std::get<1>(deviceLimits.viewportBoundsRange) << "\n";
 		buf << "  - viewportSubPixelBits: " << deviceLimits.viewportSubPixelBits << "\n";
 		buf << "  - viewportSubPixelBits: " << deviceLimits.minMemoryMapAlignment << "\n";
 		buf << "  - minTexelBufferOffsetAlignment: " << deviceLimits.minTexelBufferOffsetAlignment << "\n";
@@ -392,10 +393,10 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, const vk::Applica
 		buf << "  - maxCullDistances: " << deviceLimits.maxCullDistances << "\n";
 		buf << "  - maxCombinedClipAndCullDistances: " << deviceLimits.maxCombinedClipAndCullDistances << "\n";
 		buf << "  - discreteQueuePriorities: " << deviceLimits.discreteQueuePriorities << "\n";
-		buf << "  - pointSizeRange[0]: " << deviceLimits.pointSizeRange[0] << "\n";
-		buf << "  - pointSizeRange[1]: " << deviceLimits.pointSizeRange[1] << "\n";
-		buf << "  - lineWidthRange[0]: " << deviceLimits.lineWidthRange[0] << "\n";
-		buf << "  - lineWidthRange[1]: " << deviceLimits.lineWidthRange[1] << "\n";
+		buf << "  - pointSizeRange[0]: " << std::get<0>(deviceLimits.pointSizeRange) << "\n";
+		buf << "  - pointSizeRange[1]: " << std::get<1>(deviceLimits.pointSizeRange) << "\n";
+		buf << "  - lineWidthRange[0]: " << std::get<0>(deviceLimits.lineWidthRange) << "\n";
+		buf << "  - lineWidthRange[1]: " << std::get<1>(deviceLimits.lineWidthRange) << "\n";
 		buf << "  - pointSizeGranularity: " << deviceLimits.pointSizeGranularity << "\n";
 		buf << "  - lineWidthGranularity: " << deviceLimits.lineWidthGranularity << "\n";
 		buf << "  - strictLines: " << deviceLimits.strictLines << "\n";
