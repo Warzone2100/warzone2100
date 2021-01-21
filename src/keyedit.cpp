@@ -277,7 +277,7 @@ static bool keyMapToString(char *pStr, KEY_MAPPING *psMapping)
 		break;
 	default:
 		strcpy(asciiSub, "NOT VALID");
-		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", psMapping->input.source);
+		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", static_cast<unsigned int>(psMapping->input.source));
 	}
 
 	if (onlySub)
@@ -431,7 +431,7 @@ bool saveKeyMap()
 			ini.setValue("sub", mapping.input.value.mouseKeyCode);
 			break;
 		default:
-			debug(LOG_WZ, "Encountered invalid key mapping source %u while saving keymap!", mapping.input.source);
+			debug(LOG_WZ, "Encountered invalid key mapping source %u while saving keymap!", static_cast<unsigned int>(mapping.input.source));
 			break;
 		}
 
@@ -492,7 +492,7 @@ bool loadKeyMap()
 			input.value.mouseKeyCode = (MOUSE_KEY_CODE)sub;
 			break;
 		default:
-			debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", source);
+			debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", static_cast<unsigned int>(source));
 			break;
 		}
 		keyAddMapping(status, meta, input, action, function->function, name.toUtf8().c_str());
