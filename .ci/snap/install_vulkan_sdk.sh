@@ -15,7 +15,7 @@ if [ "$TARGET_BUILD_ARCH" = "amd64" ]; then
   apt update
   apt install --yes vulkan-sdk
 
-else
+elif [[ "$TARGET_BUILD_ARCH" = "arm64" ]] || [[ "$TARGET_BUILD_ARCH" = "ppc64el" ]] || [[ "$TARGET_BUILD_ARCH" = "s390x" ]]; then
   # Compile the necessary components of the Vulkan SDK from source
   echo "Compiling Vulkan SDK (selected components)"
 
@@ -44,6 +44,12 @@ else
 
   cd ..
   rm -rf "tmp_vulkan_sdk_build"
+
+else
+  # Skip Vulkan SDK
+  echo "Skipping Vulkan SDK (for TARGET_BUILD_ARCH: $TARGET_BUILD_ARCH)"
+  exit 0
+
 fi
 
 echo "Installing Vulkan SDK - done"
