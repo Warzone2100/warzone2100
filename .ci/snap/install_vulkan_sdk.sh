@@ -11,7 +11,7 @@ if [ "$TARGET_BUILD_ARCH" = "amd64" ]; then
 
   # Add Vulkan SDK repo
   wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | apt-key add -
-  wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list https://packages.lunarg.com/vulkan/1.2.148/lunarg-vulkan-1.2.148-bionic.list
+  wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.162-bionic.list https://packages.lunarg.com/vulkan/1.2.162/lunarg-vulkan-1.2.162-bionic.list
   apt update
   apt install --yes vulkan-sdk
 
