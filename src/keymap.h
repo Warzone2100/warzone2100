@@ -63,27 +63,34 @@ struct KeyMappingInput {
 	bool isDown() const;
 	bool isReleased() const;
 
-	static KeyMappingInput key(const KEY_CODE keyCode);
-	static KeyMappingInput mouseKey(const MOUSE_KEY_CODE mouseKeyCode);
+	KeyMappingInput(const KEY_CODE keyCode);
+	KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode);
 
 	KeyMappingInput();
 };
 
-struct KEY_MAPPING
-{
-	void            (*function)();
-	KEY_STATUS      status;
-	UDWORD          lastCalled;
-	KEY_CODE        metaKeyCode;
-	KEY_CODE        altMetaKeyCode;
-	KeyMappingInput input;
-	KEY_ACTION      action;
-	std::string     name;
+enum class KeyMappingPriority {
+	PRIMARY,
+	SECONDARY,
+	LAST
 };
 
-KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name);
-KEY_MAPPING *keyGetMappingFromFunction(void (*function)());
-KEY_MAPPING *keyFindMapping(KEY_CODE metaCode, KeyMappingInput input);
+struct KEY_MAPPING
+{
+	void             (*function)();
+	KEY_STATUS         status;
+	UDWORD             lastCalled;
+	KEY_CODE           metaKeyCode;
+	KEY_CODE           altMetaKeyCode;
+	KeyMappingInput    input;
+	KEY_ACTION         action;
+	std::string        name;
+	KeyMappingPriority priority;
+};
+
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, const KeyMappingPriority priority = KeyMappingPriority::PRIMARY);
+KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingPriority priority);
+KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingPriority priority = KeyMappingPriority::LAST);
 void keyProcessMappings(bool bExclude);
 void keyInitMappings(bool bForceDefaults);
 KEY_CODE getLastSubKey();
@@ -93,7 +100,7 @@ bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
 
-bool keyReAssignMapping(const KEY_CODE origMetaCode, const KeyMappingInput origInput, const KEY_CODE newMetaCode, const KeyMappingInput newInput);
+bool clearKeyMappingIfExists(const KEY_CODE metaCode, const KeyMappingInput input);
 
 UDWORD	getMarkerX(KEY_CODE code);
 UDWORD	getMarkerY(KEY_CODE code);
@@ -109,6 +116,7 @@ KeyMapSaveEntry const *keymapEntryByFunction(void (*function)());
 KeyMapSaveEntry const *keymapEntryByName(std::string const &name);
 extern std::list<KEY_MAPPING> keyMappings;
 KeyMappingInputSource keyMappingSourceByName(std::string const& name);
+KeyMappingPriority keyMappingPriorityByName(std::string const& name);
 
 
 #endif // __INCLUDED_SRC_KEYMAP_H__
