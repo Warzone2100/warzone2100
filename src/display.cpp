@@ -393,21 +393,11 @@ void ProcessRadarInput()
 			}
 			else if (mousePressed(MOUSE_WUP))
 			{
-				switch(war_GetScrollEvent())
-				{
-				    case 0: kf_RadarZoomIn(); break;
-				    case 1: kf_SpeedUp(); break;
-				    case 2: kf_PitchForward(); break;
-				}
+				kf_RadarZoomIn();
 			}
 			else if (mousePressed(MOUSE_WDN))
 			{
-				switch(war_GetScrollEvent())
-				{
-				    case 0: kf_RadarZoomOut(); break;
-				    case 1: kf_SlowDown(); break;
-				    case 2: kf_PitchBack(); break;
-				}
+				kf_RadarZoomOut();
 			}
 		}
 	}
@@ -424,80 +414,52 @@ void resetInput()
 /* Process the user input. This just processes the key input and jumping around the radar*/
 void processInput()
 {
-	bool mOverConstruction = false;
-
 	if (InGameOpUp || isInGamePopupUp)
 	{
 		dragBox3D.status = DRAG_INACTIVE;	// disengage the dragging since it stops menu input
 	}
 
-	if (CoordInBuild(mouseX(), mouseY()))
-	{
-		mOverConstruction = true;
-	}
 
 	StartOfLastFrame = currentFrame;
 	currentFrame = frameGetFrameNumber();
 
 	ignoreRMBC = false;
 
-	bool mouseIsOverScreenOverlayChild = isMouseOverScreenOverlayChild(mouseX(), mouseY());
+	const bool mOverConstruction = CoordInBuild(mouseX(), mouseY());
+	const bool mouseIsOverScreenOverlayChild = isMouseOverScreenOverlayChild(mouseX(), mouseY());
 
 	if (!mouseIsOverScreenOverlayChild)
 	{
-		/* Process all of our key mappings */
 		mouseOverConsole = mouseOverHistoryConsoleBox();
-		if (!isMouseOverRadar())
+
+		/* Process all of our key mappings */
+		if (!isMouseOverRadar() && mOverConstruction)
 		{
 			if (mousePressed(MOUSE_WUP))
 			{
-				if (mOverConstruction)
-				{
-					kf_BuildPrevPage();
-				}
-				else if (!mouseOverConsole)
-				{
-					// TODO 1309
-					switch(war_GetScrollEvent())
-					{
-					case 0: /*kf_ZoomIn();*/ break;
-					case 1: kf_SpeedUp(); break;
-					case 2: kf_PitchForward(); break;
-					}
-				}
+				kf_BuildPrevPage();
 			}
 
 			if (mousePressed(MOUSE_WDN))
 			{
-				if (mOverConstruction)
-				{
-					kf_BuildNextPage();
-				}
-				else if (!mouseOverConsole)
-				{
-					// TODO 1309
-					switch(war_GetScrollEvent())
-					{
-						case 0: /*kf_ZoomOut();*/ break;
-						case 1: kf_SlowDown(); break;
-						case 2: kf_PitchBack(); break;
-					}
-				}
+				kf_BuildNextPage();
 			}
 		}
 	}
 
 	if (!isInTextInputMode())
 	{
+		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction && !isMouseOverRadar();
+
 		if (intMode == INT_DESIGN)
 		{
 			/* Only process the function keys */
-			keyProcessMappings(true);
+			keyProcessMappings(true, allowMouseWheelEvents);
 		}
 		else if (bAllowOtherKeyPresses)
 		{
 			/* Run all standard mappings */
-			keyProcessMappings(false);
+			keyProcessMappings(false, allowMouseWheelEvents);
 		}
 	}
 	/* Allow the user to clear the (Active) console if need be */

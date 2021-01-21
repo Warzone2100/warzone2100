@@ -60,7 +60,6 @@ struct WARZONE_GLOBALS
 	int mapZoomRate = MAP_ZOOM_RATE_DEFAULT;
 	int radarZoom = DEFAULT_RADARZOOM;
 	int cameraSpeed = CAMERASPEED_DEFAULT;
-	int scrollEvent = 0; // map/radar zoom
 	bool radarJump = false;
 	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
@@ -360,16 +359,6 @@ void war_SetCameraSpeed(int cameraSpeed)
 		warGlobs.cameraSpeed = cameraSpeed;
 		ActivityManager::instance().changedSetting("cameraSpeed", std::to_string(cameraSpeed));
 	}
-}
-
-int war_GetScrollEvent()
-{
-	return warGlobs.scrollEvent;
-}
-
-void war_SetScrollEvent(int scrollEvent)
-{
-	warGlobs.scrollEvent = scrollEvent;
 }
 
 bool war_GetRadarJump()

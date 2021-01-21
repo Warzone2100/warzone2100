@@ -102,8 +102,6 @@ bool war_GetRadarJump();
 void war_SetRadarJump(bool radarJump);
 int war_GetCameraSpeed();
 void war_SetCameraSpeed(int cameraSpeed);
-int war_GetScrollEvent();
-void war_SetScrollEvent(int scrollEvent);
 int8_t war_GetSPcolor();
 void war_SetSPcolor(int color);
 void war_setMPcolour(int colour);

@@ -871,7 +871,7 @@ static bool checkQwertyKeys()
 
 // ----------------------------------------------------------------------------------
 /* allows checking if mapping should currently be ignored in keyProcessMappings */
-static bool isIgnoredMapping(const bool bExclude, const KEY_MAPPING& mapping)
+static bool isIgnoredMapping(const bool bExclude, const bool allowMouseWheelEvents, const KEY_MAPPING& mapping)
 {
 	if (bExclude && mapping.status != KEYMAP_ALWAYS_PROCESS)
 	{
@@ -879,6 +879,11 @@ static bool isIgnoredMapping(const bool bExclude, const KEY_MAPPING& mapping)
 	}
 
 	if (mapping.input.source == KeyMappingInputSource::KEY_CODE && mapping.input.value.keyCode == KEY_MAXSCAN)
+	{
+		return true;
+	}
+
+	if (!allowMouseWheelEvents && mapping.input.source == KeyMappingInputSource::MOUSE_KEY_CODE && (mapping.input.value.mouseKeyCode == MOUSE_KEY_CODE::MOUSE_WUP || mapping.input.value.mouseKeyCode == MOUSE_KEY_CODE::MOUSE_WDN))
 	{
 		return true;
 	}
@@ -898,7 +903,7 @@ static bool isIgnoredMapping(const bool bExclude, const KEY_MAPPING& mapping)
 
 // ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
-void keyProcessMappings(bool bExclude)
+void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents)
 {
 	/* Bomb out if there are none */
 	if (keyMappings.empty())
@@ -918,7 +923,7 @@ void keyProcessMappings(bool bExclude)
 	for (auto keyToProcess = keyMappings.begin(); keyToProcess != keyMappings.end(); ++keyToProcess)
 	{
 		/* Skip inappropriate ones when necessary */
-		if (isIgnoredMapping(bExclude, *keyToProcess))
+		if (isIgnoredMapping(bExclude, allowMouseWheelEvents, *keyToProcess))
 		{
 			continue;
 		}
@@ -933,7 +938,7 @@ void keyProcessMappings(bool bExclude)
 			for (auto otherKey = keyMappings.begin(); otherKey != keyMappings.end(); ++otherKey)
 			{
 				/* Skip inappropriate ones when necessary */
-				if (isIgnoredMapping(bExclude, *keyToProcess))
+				if (isIgnoredMapping(bExclude, allowMouseWheelEvents, *otherKey))
 				{
 					continue;
 				}

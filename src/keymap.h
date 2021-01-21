@@ -91,7 +91,7 @@ struct KEY_MAPPING
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, const KeyMappingPriority priority = KeyMappingPriority::PRIMARY);
 KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingPriority priority);
 KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingPriority priority = KeyMappingPriority::LAST);
-void keyProcessMappings(bool bExclude);
+void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
 void keyInitMappings(bool bForceDefaults);
 KEY_CODE getLastSubKey();
 KEY_CODE getLastMetaKey();

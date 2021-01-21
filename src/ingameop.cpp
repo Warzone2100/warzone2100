@@ -836,11 +836,6 @@ static bool startIGMouseOptionsMenu()
 	addIGTextButton(INTINGAMEOP_CURSORMODE_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsCursorModeString(), WBUT_PLAIN);
 	row++;
 
-	// Function of the scroll wheel
-	addIGTextButton(INTINGAMEOP_SCROLLEVENT,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Scroll Event"), WBUT_PLAIN);
-	addIGTextButton(INTINGAMEOP_SCROLLEVENT_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsScrollEventString(), WBUT_PLAIN);
-	row++;
-
 	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Go Back"), OPALIGN);
 	row++;
 
@@ -887,12 +882,6 @@ static bool runIGMouseOptionsMenu(UDWORD id)
 		war_SetColouredCursor(!war_GetColouredCursor());
 		widgSetString(psWScreen, INTINGAMEOP_CURSORMODE_R, mouseOptionsCursorModeString());
 		wzSetCursor(CURSOR_DEFAULT);
-		break;
-
-	case INTINGAMEOP_SCROLLEVENT:
-	case INTINGAMEOP_SCROLLEVENT_R:
-		seqScrollEvent();
-		widgSetString(psWScreen, INTINGAMEOP_SCROLLEVENT_R, mouseOptionsScrollEventString());
 		break;
 
 	case INTINGAMEOP_GO_BACK:
