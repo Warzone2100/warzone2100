@@ -20,6 +20,12 @@ else
   aarch64)
       BUILDTIME_TARGET_ARCH="arm64"
       ;;
+  s390x)
+      BUILDTIME_TARGET_ARCH="s390x"
+      ;;
+  powerpc64le)
+      BUILDTIME_TARGET_ARCH="ppc64el"
+      ;;
   *)
       BUILDTIME_TARGET_ARCH=""
   esac
