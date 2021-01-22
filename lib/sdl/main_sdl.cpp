@@ -294,6 +294,21 @@ std::vector<unsigned int> wzAvailableDisplayScales()
 	return std::vector<unsigned int>(wzDisplayScales, wzDisplayScales + (sizeof(wzDisplayScales) / sizeof(wzDisplayScales[0])));
 }
 
+static std::vector<video_backend>& sortGfxBackendsForCurrentSystem(std::vector<video_backend>& backends)
+{
+#if defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
+	// On ARM-based Windows, DirectX should be first (for compatibility)
+	std::stable_sort(backends.begin(), backends.end(), [](video_backend a, video_backend b) -> bool {
+		if (a == b) { return false; }
+		if (a == video_backend::directx) { return true; }
+		return false;
+	});
+#else
+	// currently, no-op
+#endif
+	return backends;
+}
+
 std::vector<video_backend> wzAvailableGfxBackends()
 {
 	std::vector<video_backend> availableBackends;
@@ -307,6 +322,7 @@ std::vector<video_backend> wzAvailableGfxBackends()
 #if defined(WZ_BACKEND_DIRECTX)
 	availableBackends.push_back(video_backend::directx);
 #endif
+	sortGfxBackendsForCurrentSystem(availableBackends);
 	return availableBackends;
 }
 
@@ -314,13 +330,18 @@ video_backend wzGetDefaultGfxBackendForCurrentSystem()
 {
 	// SDL backend supports: OpenGL, OpenGLES, Vulkan (if compiled with support), DirectX (on Windows, via LibANGLE)
 
+#if defined(_WIN32) && defined(WZ_BACKEND_DIRECTX) && (defined(_M_ARM64) || defined(_M_ARM))
+	// On ARM-based Windows, DirectX should be the default (for compatibility)
+	return video_backend::directx;
+#else
 	// Future TODO examples:
 	//	- Default to Vulkan backend on macOS versions > 10.??, to use Metal via MoltenVK (needs testing - and may require exclusions depending on hardware?)
 	//	- Default to DirectX (via LibANGLE) backend on Windows, depending on Windows version (and possibly hardware? / DirectX-level support?)
 	//	- Check if Vulkan appears to be properly supported on a Windows / Linux system, and default to Vulkan backend?
 
-	// For now, default to OpenGL (which automatically falls back to OpenGL ES if needed) on all platforms
+	// For now, default to OpenGL (which automatically falls back to OpenGL ES if needed)
 	return video_backend::opengl;
+#endif
 }
 
 void SDL_WZBackend_GetDrawableSize(SDL_Window* window,
