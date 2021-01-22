@@ -67,7 +67,11 @@ If ( -not (Test-Path (Join-Path (pwd) vcpkg\.git) -PathType Container) )
 Else
 {
 	# On CI (for example), the vcpkg directory may have been cached and restored
-	Write-Output "Skipping git clone for vcpkg (local copy already exists)";
+	# Fetch origin updates
+	Write-Output "Fetching origin updates for vcpkg (local copy already exists)";
+	pushd vcpkg;
+	git fetch origin;
+	popd;
 }
 pushd vcpkg;
 git reset --hard $VCPKG_COMMIT_SHA;
