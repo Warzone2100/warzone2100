@@ -695,8 +695,8 @@ function getNumEnemies(){
 }
 
 function isHumanOverride(){
-    if(playerData[me].isHuman) return true;
-    return false;
+	if(playerData[me].isHuman) return true;
+	return false;
 }
 
 
@@ -1000,16 +1000,20 @@ function checkEventIdle(){
 
 
 //для 3.2
+
 function recycleBuilders(){
+	/*
 	var factory = enumStruct(me, FACTORY);
 	factory = factory.concat(enumStruct(me, REPAIR_FACILITY));
 	var factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
 	if(factory_ready.length != 0){
-		var _builders = enumDroid(me,DROID_CONSTRUCT);
-		_builders.forEach(function(e){
-			orderDroid(e, DORDER_RECYCLE);
-		});
-	}
+	*/
+	var _builders = enumDroid(me,DROID_CONSTRUCT);
+	_builders.forEach(function(e){
+//		orderDroid(e, DORDER_RECYCLE);
+		recycleDroid(e);
+	});
+//	}
 }
 
 
@@ -1100,10 +1104,11 @@ function longCycle(){
 	if(!running) return;
 	
 	//Повторно отправляем дроидов на продажу
-	var broken = enumGroup(droidsRecycle);
-	if(broken.length != 0){
-		debugMsg("broken: "+broken.length, 'debug');
-		broken.forEach(function(o){
+	var recycle = enumGroup(droidsRecycle);
+	if(recycle.length != 0){
+		debugMsg("recycle: "+recycle.length, 'debug');
+		recycle.forEach(function(o){
+			if(o.droidType == DROID_CONSTRUCT && (o.order == DORDER_BUILD || o.order == DORDER_HELPBUILD)) return;
 			orderDroid(o, DORDER_RECYCLE);
 		});
 	}
@@ -1206,6 +1211,8 @@ function recycleDroid(droid){
 	debugMsg(JSON.stringify(droid), 'group');
 	debugMsg(typeof droid.group, 'group');
 */
+	
+
 	if(!(typeof droid.group === "undefined") && droid.group != droidsRecycle) groupAdd(droidsRecycle, droid);
 	
 	debugMsg(droid.health+": "+droid.x+"x"+droid.y, 'droids');
@@ -1214,6 +1221,8 @@ function recycleDroid(droid){
 	factory = factory.concat(enumStruct(me, REPAIR_FACILITY));
 	
 	var factory_ready = factory.filter(function(e){if(e.status == 1)return true; return false;});
+	
+	if(droid.droidType == DROID_CONSTRUCT && (droid.order == DORDER_BUILD || droid.order == DORDER_HELPBUILD)) return false;
 	
 	if(factory_ready.length != 0){
 		orderDroid(droid, DORDER_RECYCLE);
