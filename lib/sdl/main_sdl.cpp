@@ -344,6 +344,54 @@ video_backend wzGetDefaultGfxBackendForCurrentSystem()
 #endif
 }
 
+static video_backend wzGetNextFallbackGfxBackendForCurrentSystem(const video_backend& current_failed_backend)
+{
+	video_backend next_backend;
+#if defined(_WIN32) && defined(WZ_BACKEND_DIRECTX)
+	switch (current_failed_backend)
+	{
+		case video_backend::opengl:
+			// offer DirectX as a fallback option if OpenGL failed
+			next_backend = video_backend::directx;
+			break;
+#if (defined(_M_ARM64) || defined(_M_ARM))
+		case video_backend::directx:
+			// since DirectX is the default on ARM-based Windows, offer OpenGL as an alternative
+			next_backend = video_backend::opengl;
+			break;
+#endif
+		default:
+			// offer usual default
+			next_backend = wzGetDefaultGfxBackendForCurrentSystem();
+			break;
+	}
+#elif defined(WZ_OS_MAC)
+	switch (current_failed_backend)
+	{
+		case video_backend::opengl:
+			// offer Vulkan (which uses Vulkan -> Metal) as a fallback option if OpenGL failed
+			next_backend = video_backend::vulkan;
+			break;
+		default:
+			// offer usual default
+			next_backend = wzGetDefaultGfxBackendForCurrentSystem();
+			break;
+	}
+#else
+	next_backend = wzGetDefaultGfxBackendForCurrentSystem();
+#endif
+
+	// sanity-check: verify that next_backend is in available backends
+	const auto available = wzAvailableGfxBackends();
+	if (std::find(available.begin(), available.end(), next_backend) == available.end())
+	{
+		// next_backend does not exist in the list of available backends, so default to wzGetDefaultGfxBackendForCurrentSystem()
+		next_backend = wzGetDefaultGfxBackendForCurrentSystem();
+	}
+
+	return next_backend;
+}
+
 void SDL_WZBackend_GetDrawableSize(SDL_Window* window,
 								   int*        w,
 								   int*        h)
@@ -2027,7 +2075,7 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	if (!WZwindow)
 	{
 		std::string createWindowErrorStr = SDL_GetError();
-		video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
+		video_backend defaultBackend = wzGetNextFallbackGfxBackendForCurrentSystem(backend);
 		if ((backend != defaultBackend) && shouldResetGfxBackendPrompt(backend, defaultBackend, "window", createWindowErrorStr))
 		{
 			resetGfxBackend(defaultBackend);
@@ -2258,7 +2306,7 @@ bool wzMainScreenSetup(optional<video_backend> backend, int antialiasing, WINDOW
 		// Failed to initialize desired backend / renderer settings
 		if (backend.has_value())
 		{
-			video_backend defaultBackend = wzGetDefaultGfxBackendForCurrentSystem();
+			video_backend defaultBackend = wzGetNextFallbackGfxBackendForCurrentSystem(backend.value());
 			if ((backend.value() != defaultBackend) && shouldResetGfxBackendPrompt(backend.value(), defaultBackend))
 			{
 				resetGfxBackend(defaultBackend);
