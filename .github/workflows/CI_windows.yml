@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         compiler: ["MSVC_2019"]
-        architecture: ["x86", "x64"]
+        architecture: ["x86", "x64", "arm64"]
       fail-fast: false
     env:
       WZ_MSVC_VER: ${{ matrix.compiler }}
@@ -63,6 +63,9 @@ jobs:
         }
         elseif ($env:WZ_TARGET_ARCH -eq "x64") {
           $VCPKG_DEFAULT_TRIPLET = "x64-windows"
+        }
+        elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
+          $VCPKG_DEFAULT_TRIPLET = "arm64-windows"
         }
 
         # ------------------------------
