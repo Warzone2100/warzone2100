@@ -21,6 +21,7 @@ function bc_eventResearched(research, structure, player) {
 	prepeareProduce();
 	queue("doResearch", 1000);
 	
+	
 	if(research.name == 'R-Vehicle-Prop-Hover'){
 		minBuilders = 7;
 		buildersTimer = 5000;
