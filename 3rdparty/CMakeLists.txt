@@ -110,6 +110,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 		target_compile_options(quickjs PRIVATE -fno-code-hoisting)
 	endif()
 endif()
+include(CheckCompilerFlagsOutput)
 if(MSVC)
 	# Disable some warnings for QuickJS
 	set(QUICKJS_COMPILE_OPTIONS "")
@@ -117,9 +118,32 @@ if(MSVC)
 	# warning C4018: '<': signed/unsigned mismatch
 	set(QUICKJS_COMPILE_OPTIONS ${QUICKJS_COMPILE_OPTIONS} /wd4018)
 
+	# warning C4146: unary minus operator applied to unsigned type, result still unsigned
+	set(QUICKJS_COMPILE_OPTIONS ${QUICKJS_COMPILE_OPTIONS} /wd4146)
+
 	# warning C4191: 'type cast': unsafe conversion from 'JSCFunctionMagic (__cdecl *)' to 'JSCFunction (__cdecl *)'
 	set(QUICKJS_COMPILE_OPTIONS ${QUICKJS_COMPILE_OPTIONS} /wd4191)
 
+	# warning C4244: 'conversion' conversion from 'type1' to 'type2', possible loss of data
+	set(QUICKJS_COMPILE_OPTIONS ${QUICKJS_COMPILE_OPTIONS} /wd4244)
+
+	# warning C4267: 'var' : conversion from 'size_t' to 'type', possible loss of data
+	set(QUICKJS_COMPILE_OPTIONS ${QUICKJS_COMPILE_OPTIONS} /wd4267)
+
+	# warning C4334: 'operator' : result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+	set(QUICKJS_COMPILE_OPTIONS ${QUICKJS_COMPILE_OPTIONS} /wd4334)
+
 	target_compile_options(quickjs PRIVATE ${QUICKJS_COMPILE_OPTIONS})
 	target_compile_definitions(quickjs PRIVATE "_CRT_SECURE_NO_WARNINGS")
+else()
+	# Disable some warnings from QuickJS
+
+	set(_supported_quickjs_c_compiler_flags "")
+
+	# -Wcast-align				(GCC 3.4+, Clang 3.2+)
+	check_compiler_flags_output("-Werror -Wno-cast-align -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-cast-align" OUTPUT_VARIABLE _supported_quickjs_c_compiler_flags APPEND)
+
+	if (NOT _supported_quickjs_c_compiler_flags STREQUAL "")
+		target_compile_options(quickjs PRIVATE ${_supported_quickjs_c_compiler_flags})
+	endif()
 endif()
