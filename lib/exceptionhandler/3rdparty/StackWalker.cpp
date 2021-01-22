@@ -1,6 +1,7 @@
 // Modifications for WZ:
 //	2019-03-25 - Added BeforeLoadModules() and BeforeShowCallstack()
 //	2019-03-25 - Disable warning C4191
+//	2021-01-22 - Add ARM / ARM64 STACKFRAME64 support
 
 /**********************************************************************
  *
@@ -1127,6 +1128,22 @@ BOOL StackWalker::ShowCallstack(HANDLE                    hThread,
   s.AddrBStore.Offset = c.RsBSP;
   s.AddrBStore.Mode = AddrModeFlat;
   s.AddrStack.Offset = c.IntSp;
+  s.AddrStack.Mode = AddrModeFlat;
+#elif defined(_M_ARM64) || defined(_M_ARM)
+#if defined(_M_ARM64)
+  imageType = IMAGE_FILE_MACHINE_ARM64;
+#elif defined(_M_ARM)
+  imageType = IMAGE_FILE_MACHINE_ARM;
+#endif
+  s.AddrPC.Offset = c.Pc;
+  s.AddrPC.Mode = AddrModeFlat;
+#if defined(_M_ARM64)
+  s.AddrFrame.Offset = c.Fp;
+#elif defined(_M_ARM)
+  s.AddrFrame.Offset = c.R11;
+#endif
+  s.AddrFrame.Mode = AddrModeFlat;
+  s.AddrStack.Offset = c.Sp;
   s.AddrStack.Mode = AddrModeFlat;
 #else
 #error "Platform not supported!"
