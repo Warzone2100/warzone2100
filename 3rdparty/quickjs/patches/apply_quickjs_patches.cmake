@@ -60,6 +60,7 @@ quickjs_apply_patches(
 		"006-bsd-compile-fixes.patch"
 		"007-msvc-64bit-compatibility.patch"
 		"008-freeruntime2.patch"
+		"009-msvc-arm64-compat.patch"
 )
 
 message(STATUS "Finished applying patches.")

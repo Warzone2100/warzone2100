@@ -31,6 +31,10 @@
 #include "cutils.h"
 #include "libregexp.h"
 
+#if defined(_WIN32)
+#include <malloc.h>
+#endif
+
 /*
   TODO:
 
