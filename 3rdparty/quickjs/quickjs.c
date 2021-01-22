@@ -45,6 +45,8 @@
 #include <malloc.h>
 #elif defined(__FreeBSD__)
 #include <malloc_np.h>
+#elif defined(_WIN32)
+#include <malloc.h>
 #endif
 
 #include "cutils.h"
