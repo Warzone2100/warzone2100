@@ -317,4 +317,5 @@ bool CommanderController::showInterface()
 void CommanderController::displayOrderForm()
 {
 	intAddOrder(getHighlightedObject());
+	intMode = INT_CMDORDER;
 }
