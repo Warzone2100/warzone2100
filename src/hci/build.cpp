@@ -18,12 +18,13 @@
 #include "../geometry.h"
 #include "../intdisplay.h"
 
+DROID *BuildController::highlightedBuilder = nullptr;
 bool BuildController::showFavorites = false;
 
 void BuildController::updateData()
 {
 	updateBuildersList();
-	updateSelected();
+	updateHighlighted();
 	updateBuildOptionsList();
 }
 
@@ -33,7 +34,7 @@ void BuildController::updateBuildersList()
 
 	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
 	{
-		if ((droid->droidType == DROID_CONSTRUCT || droid->droidType == DROID_CYBORG_CONSTRUCT) && droid->died == 0)
+		if (isConstructionDroid(droid) && droid->died == 0)
 		{
 			builders.push_back(droid);
 		}
@@ -90,9 +91,10 @@ STRUCTURE_STATS *BuildController::getObjectStatsAt(size_t objectIndex) const
 }
 
 
-void BuildController::startBuildPosition(BASE_STATS *buildOption)
+void BuildController::startBuildPosition(STRUCTURE_STATS *buildOption)
 {
-	ASSERT_OR_RETURN(, castDroid(getSelectedObject()) != nullptr, "invalid droid pointer");
+	auto builder = getHighlightedObject();
+	ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
 	
 	triggerEvent(TRIGGER_MENU_BUILD_SELECTED);
 
@@ -103,18 +105,16 @@ void BuildController::startBuildPosition(BASE_STATS *buildOption)
 	else
 	{
 		objMode = IOBJ_BUILDSEL;
-		intSetPositionStats(buildOption);
-		intStartStructPosition(buildOption);
+		intStartConstructionPosition(builder, buildOption);
 	}
 
 	intRemoveStats();
 	intMode = INT_OBJECT;
 }
 
-void BuildController::toggleFavorites(BASE_STATS *buildOption)
+void BuildController::toggleFavorites(STRUCTURE_STATS *buildOption)
 {
-	auto index = buildOption->index;
-	asStructureStats[index].isFavorite = !shouldShowFavorites();
+	asStructureStats[buildOption->index].isFavorite = !shouldShowFavorites();
 	updateBuildOptionsList();
 }
 
@@ -136,9 +136,9 @@ void BuildController::toggleBuilderSelection(DROID *droid)
 	}
 	else
 	{
-		if (getSelectedObject())
+		if (auto selectedObject = getHighlightedObject())
 		{
-			getSelectedObject()->selected = true;
+			selectedObject->selected = true;
 		}
 		selectObject(droid);
 	}
@@ -161,7 +161,7 @@ public:
 	{
 		BaseWidget::released(context, mouseButton);
 		auto droid = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 
 		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
@@ -348,14 +348,14 @@ private:
 	bool isSelected() const override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
-		return droid && (droid->selected || droid == controller->getSelectedObject());
+		return droid && (droid->selected || droid == controller->getHighlightedObject());
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
 		auto droid = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 
 		if (keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT))
 		{
@@ -397,7 +397,7 @@ protected:
 	{
 		updateLayout();
 		auto stat = getStats();
-		ASSERT_OR_RETURN(, stat != nullptr, "Invalid stat pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, stat);
 
 		displayIMD(Image(), ImdObject::StructureStat(stat), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
@@ -449,7 +449,7 @@ private:
 	{
 		BaseWidget::released(context, mouseButton);
 		auto clickedStats = controller->getStatsAt(buildOptionIndex);
-		ASSERT_OR_RETURN(, clickedStats != nullptr, "Invalid template pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);
 
 		auto controllerRef = controller;
 		widgScheduleTask([mouseButton, clickedStats, controllerRef]() {
@@ -497,7 +497,7 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		controller->updateSelected();
+		controller->updateHighlighted();
 		BaseWidget::display(xOffset, yOffset);
 	}
 

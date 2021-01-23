@@ -54,11 +54,24 @@ public:
 	void refresh() override;
 	void displayStatsForm();
 
+	STRUCTURE *getHighlightedObject() const override
+	{
+		return highlightedFactory;
+	}
+
+	void setHighlightedObject(BASE_OBJECT *object) override
+	{
+		auto factory = castStructure(object);
+		ASSERT_OR_RETURN(, factory != nullptr && StructIsFactory(factory), "Invalid factory pointer");
+		highlightedFactory = factory;
+	}
+
 private:
 	void updateFactoriesList();
 	void updateManufactureOptionsList();
 	std::vector<DROID_TEMPLATE *> stats;
 	std::vector<STRUCTURE *> factories;
+	static STRUCTURE *highlightedFactory;
 };
 
 #endif // __INCLUDED_SRC_HCI_MANUFACTURE_INTERFACE_H__

@@ -116,6 +116,9 @@ extern bool assertEnabled;
 #define ASSERT_OR_RETURN(retval, expr, ...) \
 	do { bool _wzeval = likely(expr); if (!_wzeval) { ASSERT_FAILURE(expr, #expr, AT_MACRO, __FUNCTION__, __VA_ARGS__); return retval; } } while (0)
 
+#define ASSERT_NOT_NULLPTR_OR_RETURN(retval, ptrexpr) \
+	ASSERT_OR_RETURN(retval, (ptrexpr) != nullptr, "%s should not be nullptr", #ptrexpr)
+
 
 /**
  * Compile time assert

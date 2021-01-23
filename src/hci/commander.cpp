@@ -19,10 +19,12 @@
 #include "../intdisplay.h"
 #include "../cmddroid.h"
 
+DROID *CommanderController::highlightedCommander = nullptr;
+
 void CommanderController::updateData()
 {
 	updateCommandersList();
-	updateSelected();
+	updateHighlighted();
 }
 
 void CommanderController::updateCommandersList()
@@ -43,7 +45,7 @@ void CommanderController::updateCommandersList()
 STRUCTURE_STATS *CommanderController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto droid = getObjectAt(objectIndex);
-	ASSERT_OR_RETURN(nullptr, droid != nullptr, "Invalid droid pointer");
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, droid);
 	auto assignedFactory = droidGetCommandFactory(droid);
 	return assignedFactory == nullptr ? nullptr : assignedFactory->pStructureType;
 }
@@ -111,7 +113,7 @@ protected:
 	{
 		BaseWidget::updateLayout();
 		auto droid = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		updateGroupSizeLabel(droid);
 		updateExperienceStarsLabel(droid);
 	}
@@ -191,7 +193,7 @@ protected:
 	{
 		BaseWidget::updateLayout();
 		auto droid = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		updateAssignedFactoriesLabel(assignedFactoriesLabel, droid, DSS_ASSPROD_SHIFT);
 		updateAssignedFactoriesLabel(assignedCyborgFactoriesLabel, droid, DSS_ASSPROD_CYBORG_SHIFT);
 		updateAssignedFactoriesLabel(assignedVtolFactoriesLabel, droid, DSS_ASSPROD_VTOL_SHIFT);
@@ -235,14 +237,14 @@ private:
 	bool isSelected() const override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
-		return droid && droid == controller->getSelectedObject();
+		return droid && droid == controller->getHighlightedObject();
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
 		auto droid = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, droid != nullptr, "Invalid droid pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 
 		clearSelection();
 		controller->selectObject(droid);
@@ -285,7 +287,7 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		controller->updateSelected();
+		controller->updateHighlighted();
 		BaseWidget::display(xOffset, yOffset);
 	}
 
@@ -314,5 +316,5 @@ bool CommanderController::showInterface()
 
 void CommanderController::displayOrderForm()
 {
-	intAddOrder(getSelectedObject());
+	intAddOrder(getHighlightedObject());
 }

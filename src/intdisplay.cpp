@@ -164,52 +164,6 @@ void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 	setBarGraphValue(barGraph, WZCOL_GREEN, powerToBuild - neededPower, powerToBuild);
 }
 
-//callback to display the production quantity number for a template
-void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext)
-{
-	W_LABEL				*Label = (W_LABEL *)psWidget;
-	DROID_TEMPLATE                 *psTemplate = (DROID_TEMPLATE *)Label->pUserData;
-
-	// Get the object associated with this widget.
-	if (psTemplate != nullptr)
-	{
-		STRUCTURE	*psStructure = nullptr;
-		BASE_OBJECT	*psObj = getCurrentSelected();
-
-		if (psObj != nullptr && psObj->type == OBJ_STRUCTURE && !isDead(psObj))
-		{
-			psStructure = (STRUCTURE *)psObj;
-		}
-
-		ProductionRunEntry entry;
-		if (psStructure != nullptr && StructIsFactory(psStructure))
-		{
-			entry = getProduction(psStructure, psTemplate);
-		}
-
-		// now find out how many we have built
-		if (entry.isValid())
-		{
-			char tmp[40];
-			if (psStructure->pFunctionality->factory.productionLoops != 0)
-			{
-				ssprintf(tmp, "%u/%u", entry.numRemaining(), entry.quantity);
-			}
-			else
-			{
-				ssprintf(tmp, "%u", entry.numRemaining());
-			}
-			Label->setString(WzString::fromUtf8(tmp));
-			Label->show();
-		}
-		else
-		{
-			Label->setString("");
-			Label->hide();
-		}
-	}
-}
-
 // Widget callback to update and display the power bar.
 // !!!!!!!!!!!!!!!!!!!!!!ONLY WORKS ON A SIDEWAYS POWERBAR!!!!!!!!!!!!!!!!!
 void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)

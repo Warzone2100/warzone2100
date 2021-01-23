@@ -18,12 +18,13 @@
 #include "../power.h"
 #include "../component.h"
 
+STRUCTURE *ResearchController::highlightedFacility = nullptr;
 static ImdObject getResearchObjectImage(RESEARCH *research);
 
 void ResearchController::updateData()
 {
 	updateFacilitiesList();
-	updateSelected();
+	updateHighlighted();
 	updateResearchOptionsList();
 }
 
@@ -44,12 +45,12 @@ void ResearchController::updateFacilitiesList()
 
 nonstd::optional<size_t> ResearchController::getSelectedFacilityIndex()
 {
-	if (!getSelectedObject())
+	if (!getHighlightedObject())
 	{
 		return nonstd::nullopt;
 	}
 
-	auto found = std::find(facilities.begin(), facilities.end(), getSelectedObject());
+	auto found = std::find(facilities.begin(), facilities.end(), getHighlightedObject());
 
 	return found == facilities.end() ? nonstd::nullopt : nonstd::optional<size_t>(found - facilities.begin());
 }
@@ -75,7 +76,7 @@ void ResearchController::updateResearchOptionsList()
 RESEARCH *ResearchController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto facility = getObjectAt(objectIndex);
-	ASSERT_OR_RETURN(nullptr, facility != nullptr, "Invalid Structure pointer");
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, facility);
 
 	RESEARCH_FACILITY *psResearchFacility = &facility->pFunctionality->researchFacility;
 
@@ -101,9 +102,9 @@ void ResearchController::startResearch(RESEARCH *research)
 {
 	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
 
-	auto facility = castStructure(getSelectedObject());
+	auto facility = getHighlightedObject();
 
-	ASSERT_OR_RETURN(, facility != nullptr, "Invalid Structure pointer");
+	ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 	auto psResFacilty = &facility->pFunctionality->researchFacility;
 
 	if (bMultiMessages)
@@ -281,7 +282,7 @@ protected:
 	std::string getTip() override
 	{
 		auto facility = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN("", facility != nullptr, "Invalid facility pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN("", facility);
 		return getStatsName(facility->pStructureType);
 	}
 
@@ -390,14 +391,14 @@ private:
 	bool isSelected() const override
 	{
 		auto facility = controller->getObjectAt(objectIndex);
-		return facility && (facility->selected || facility == controller->getSelectedObject());
+		return facility && (facility->selected || facility == controller->getHighlightedObject());
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
 		auto facility = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, facility != nullptr, "Invalid facility pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 
 		if (mouseButton == WKEY_PRIMARY)
 		{
@@ -459,7 +460,7 @@ private:
 		updateLayout();
 
 		auto research = getStats();
-		ASSERT_OR_RETURN(, research != nullptr, "Invalid research pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, research);
 
 		auto researchIcon = research->iconID != NO_RESEARCH_ICON ? Image(IntImages, research->iconID) : Image();
 		displayIMD(researchIcon, getResearchObjectImage(research), xOffset, yOffset);
@@ -544,7 +545,7 @@ private:
 	{
 		BaseWidget::released(context, mouseButton);
 		auto clickedStats = controller->getStatsAt(researchOptionIndex);
-		ASSERT_OR_RETURN(, clickedStats != nullptr, "Invalid template pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);
 
 		if (mouseButton == WKEY_PRIMARY)
 		{
@@ -587,7 +588,7 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		controller->updateSelected();
+		controller->updateHighlighted();
 		BaseWidget::display(xOffset, yOffset);
 	}
 

@@ -58,8 +58,8 @@ public:
 	}
 
 	void updateData();
-	void toggleFavorites(BASE_STATS *buildOption);
-	void startBuildPosition(BASE_STATS *buildOption);
+	void toggleFavorites(STRUCTURE_STATS *buildOption);
+	void startBuildPosition(STRUCTURE_STATS *buildOption);
 	bool showInterface() override;
 	void refresh() override;
 	void toggleBuilderSelection(DROID *droid);
@@ -70,6 +70,18 @@ public:
 		BuildController::showFavorites = false;
 	}
 
+	DROID *getHighlightedObject() const override
+	{
+		return highlightedBuilder;
+	}
+
+	void setHighlightedObject(BASE_OBJECT *object) override
+	{
+		auto builder = castDroid(object);
+		ASSERT_OR_RETURN(, builder != nullptr && isConstructionDroid(builder), "Invalid builder pointer");
+		highlightedBuilder = builder;
+	}
+
 private:
 	void updateBuildersList();
 	void updateBuildOptionsList();
@@ -77,6 +89,7 @@ private:
 	std::vector<DROID *> builders;
 
 	static bool showFavorites;
+	static DROID *highlightedBuilder;
 };
 
 #endif // __INCLUDED_SRC_HCI_BUILD_INTERFACE_H__
