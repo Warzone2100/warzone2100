@@ -629,10 +629,13 @@ static void intDoScreenRefresh()
 		return;
 	}
 
+	Refreshing = true;
+
 	if (interfaceController != nullptr)
 	{
 		interfaceController->refresh();
 		IntRefreshPending = false;
+		Refreshing = false;
 		return;
 	}
 
