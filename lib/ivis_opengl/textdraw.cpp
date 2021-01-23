@@ -671,9 +671,14 @@ void iV_SetTextColour(PIELIGHT colour)
 	font_colour[3] = colour.byte.a / 255.0f;
 }
 
+static bool breaksLine(char const c)
+{
+	return c == ASCII_NEWLINE || c == '\n';
+}
+
 static bool breaksWord(char const c)
 {
-	return c == ASCII_SPACE || c == ASCII_NEWLINE || c == '\n';
+	return c == ASCII_SPACE || breaksLine(c);
 }
 
 std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines /*= false*/)
@@ -714,7 +719,7 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 			FWord.clear();
 			for (
 				;
-				*curChar && (indexWithinLine == 0 || !breaksWord(*curChar));
+				*curChar && ((indexWithinLine == 0 && !breaksLine(*curChar)) || !breaksWord(*curChar));
 				++i, ++curChar, ++indexWithinLine
 			)
 			{
@@ -754,8 +759,7 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 				}
 			}
 			// Check for new line character.
-			else if (*curChar == ASCII_NEWLINE
-			         || *curChar == '\n')
+			else if (breaksLine(*curChar))
 			{
 				if (!ignoreNewlines)
 				{
