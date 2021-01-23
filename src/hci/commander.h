@@ -36,9 +36,22 @@ public:
 	void refresh() override;
 	void displayOrderForm();
 
+	DROID *getHighlightedObject() const override
+	{
+		return highlightedCommander;
+	}
+
+	void setHighlightedObject(BASE_OBJECT *object) override
+	{
+		auto commander = castDroid(object);
+		ASSERT_OR_RETURN(, commander != nullptr && commander->droidType == DROID_COMMAND, "Invalid commander pointer");
+		highlightedCommander = commander;
+	}
+
 private:
 	void updateCommandersList();
 	std::vector<DROID *> commanders;
+	static DROID *highlightedCommander;
 };
 
 #endif // __INCLUDED_SRC_HCI_COMMANDER_INTERFACE_H__

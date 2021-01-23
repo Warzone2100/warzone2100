@@ -22,19 +22,12 @@ public:
 	virtual bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const = 0;
 	virtual void refresh() = 0;
 	virtual bool showInterface() = 0;
+	void jumpToHighlighted();
+	void updateHighlighted();
 	void selectObject(BASE_OBJECT *object);
-	void jumpToSelected();
-	void updateSelected();
 
-	BASE_OBJECT *getSelectedObject() const
-	{
-		return intGetSelectedObject();
-	}
-
-	void setSelectedObject(BASE_OBJECT *value)
-	{
-		intSetSelectedObject(value);
-	}
+	virtual BASE_OBJECT *getHighlightedObject() const = 0;
+	virtual void setHighlightedObject(BASE_OBJECT *object) = 0;
 
 	void closeInterface()
 	{

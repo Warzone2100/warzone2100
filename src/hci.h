@@ -384,9 +384,7 @@ bool isSecondaryWindowUp();
 
 void intOpenDebugMenu(OBJECT_TYPE id);
 
-void intSetPositionStats(BASE_STATS *value);
-void intSetSelectedObject(BASE_OBJECT *value);
-BASE_OBJECT *intGetSelectedObject();
+void intStartConstructionPosition(DROID *builder, STRUCTURE_STATS *structure);
 void intSetShouldShowRedundantDesign(bool value);
 bool intGetShouldShowRedundantDesign();
 

@@ -100,9 +100,6 @@ void SetFormAudioIDs(int OpenID, int CloseID);
 // Initialise interface graphics.
 void intInitialiseGraphics();
 
-//callback to display the production quantity number for a template
-void intAddProdQuantity(WIDGET *psWidget, W_CONTEXT *psContext);
-
 /* Holds the cached rendered text for the power bar */
 struct DisplayPowerBarCache
 {

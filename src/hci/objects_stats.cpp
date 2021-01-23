@@ -21,29 +21,29 @@ void BaseObjectsController::selectObject(BASE_OBJECT *object)
 	object->selected = true;
 	triggerEventSelected();
 	jsDebugSelected(object);
-	setSelectedObject(object);
+	setHighlightedObject(object);
 }
 
-void BaseObjectsController::jumpToSelected()
+void BaseObjectsController::jumpToHighlighted()
 {
-	auto selected = getSelectedObject();
-	ASSERT_OR_RETURN(, selected != nullptr, "Invalid selected object pointer");
-	setPlayerPos(selected->pos.x, selected->pos.y);
+	auto highlighted = getHighlightedObject();
+	ASSERT_NOT_NULLPTR_OR_RETURN(, highlighted);
+	setPlayerPos(highlighted->pos.x, highlighted->pos.y);
 	setWarCamActive(false);
 }
 
-void BaseObjectsController::updateSelected()
+void BaseObjectsController::updateHighlighted()
 {
 	if (objectsSize() == 0)
 	{
-		setSelectedObject(nullptr);
+		setHighlightedObject(nullptr);
 		return;
 	}
 
 	auto findAnySelectedObject = [&] (BASE_OBJECT *object) {
 		if (object->died == 0 && object->selected)
 		{
-			setSelectedObject(object);
+			setHighlightedObject(object);
 			return true;
 		}
 
@@ -55,25 +55,25 @@ void BaseObjectsController::updateSelected()
 		return;
 	}
 
-	if (auto previouslySelected = getSelectedObject())
+	if (auto previouslyHighlighted = getHighlightedObject())
 	{
-		auto findPreviouslySelectedObject = [&] (BASE_OBJECT *object) {
-			if (object->died == 0 && object == previouslySelected)
+		auto findPreviouslyHighlightedObject = [&] (BASE_OBJECT *object) {
+			if (object->died == 0 && object == previouslyHighlighted)
 			{
-				setSelectedObject(object);
+				setHighlightedObject(object);
 				return true;
 			}
 
 			return false;
 		};
 
-		if (findObject(findPreviouslySelectedObject))
+		if (findObject(findPreviouslyHighlightedObject))
 		{
 			return;
 		}
 	}
 
-	setSelectedObject(getObjectAt(0));
+	setHighlightedObject(getObjectAt(0));
 }
 
 void DynamicIntFancyButton::updateLayout()
@@ -101,7 +101,7 @@ void StatsButton::addProgressBar()
 void ObjectButton::selectAndJump()
 {
 	auto object = getController()->getObjectAt(objectIndex);
-	ASSERT_OR_RETURN(, object != nullptr, "Invalid object pointer");
+	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
 
 	clearSelection();
 	getController()->selectObject(object);
@@ -109,7 +109,7 @@ void ObjectButton::selectAndJump()
 	if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(object, 0))
 	{
 		jumpPosition = getPlayerPos();
-		getController()->jumpToSelected();
+		getController()->jumpToHighlighted();
 	}
 	else
 	{
@@ -288,7 +288,7 @@ void StatsForm::updateLayout()
 
 void StatsForm::updateSelectedObjectStats()
 {
-	auto selectedObject = getController()->getSelectedObject();
+	auto selectedObject = getController()->getHighlightedObject();
 	auto objectsSize = getController()->objectsSize();
 	selectedObjectStats = nullptr;
 

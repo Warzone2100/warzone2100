@@ -197,8 +197,8 @@ typedef bool (* OBJ_SETSTATS)(BASE_OBJECT *psObj, BASE_STATS *psStats);
 /* The current stats list being used by the stats screen */
 static BASE_STATS		**ppsStatsList;
 
-/* The selected object on the object screen when the stats screen is displayed */
-static BASE_OBJECT		*psObjSelected;
+/* The selected builder on the object screen when the build screen is displayed */
+static DROID *psSelectedBuilder;
 
 /* The button ID of the objects stat when the stat screen is displayed */
 UDWORD			objStatID;
@@ -504,7 +504,7 @@ bool intInitialise()
 	// allocate the object list
 	apsObjectList.clear();
 
-	psObjSelected = nullptr;
+	psSelectedBuilder = nullptr;
 
 	intInitialiseGraphics();
 
@@ -570,7 +570,7 @@ void interfaceShutDown()
 	free(apsComponentList);
 	free(apsExtraSysList);
 	apsObjectList.clear();
-	psObjSelected = nullptr;
+	psSelectedBuilder = nullptr;
 
 	psWScreen = nullptr;
 	apsStructStatsList = nullptr;
@@ -1261,9 +1261,9 @@ INT_RETVAL intRunWidgets()
 				// Set the droid order
 				if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
 					&& intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-					&& psObjSelected != nullptr && isConstructionDroid(psObjSelected))
+					&& psSelectedBuilder != nullptr && isConstructionDroid(psSelectedBuilder))
 				{
-					orderDroidStatsTwoLocDir((DROID *)psObjSelected, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, pos2.x, pos2.y, getBuildingDirection(), ModeQueue);
+					orderDroidStatsTwoLocDir(psSelectedBuilder, DORDER_LINEBUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, pos2.x, pos2.y, getBuildingDirection(), ModeQueue);
 				}
 				else
 				{
@@ -1279,8 +1279,8 @@ INT_RETVAL intRunWidgets()
 			else if (found3DBuilding(pos))	//found building
 			{
 				//check droid hasn't died
-				if ((psObjSelected == nullptr) ||
-				    !psObjSelected->died)
+				if ((psSelectedBuilder == nullptr) ||
+					!psSelectedBuilder->died)
 				{
 					// Send the droid off to build the structure assuming the droid
 					// can get to the location chosen
@@ -1296,9 +1296,9 @@ INT_RETVAL intRunWidgets()
 					// Set the droid order
 					if (intNumSelectedDroids(DROID_CONSTRUCT) == 0
 						&& intNumSelectedDroids(DROID_CYBORG_CONSTRUCT) == 0
-						&& psObjSelected != nullptr)
+						&& psSelectedBuilder != nullptr)
 					{
-						orderDroidStatsLocDir((DROID *)psObjSelected, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, getBuildingDirection(), ModeQueue);
+						orderDroidStatsLocDir(psSelectedBuilder, DORDER_BUILD, (STRUCTURE_STATS *)psPositionStats, pos.x, pos.y, getBuildingDirection(), ModeQueue);
 					}
 					else
 					{
@@ -1546,6 +1546,17 @@ void intObjectSelected(BASE_OBJECT *psObj)
 }
 
 
+/**
+ * Start location selection, where the builder will build the structure
+ */
+void intStartConstructionPosition(DROID *builder, STRUCTURE_STATS *structure)
+{
+	psSelectedBuilder = builder;
+	psPositionStats = structure;
+	intStartStructPosition(structure);
+}
+
+
 /* Start looking for a structure location */
 void intStartStructPosition(BASE_STATS *psStats)
 {
@@ -1556,6 +1567,8 @@ void intStartStructPosition(BASE_STATS *psStats)
 /* Stop looking for a structure location */
 static void intStopStructPosition()
 {
+	psSelectedBuilder = nullptr;
+
 	/* Check there is still a struct position running */
 	if ((intMode == INT_OBJECT || intMode == INT_STAT) && objMode == IOBJ_BUILDSEL)
 	{
@@ -1847,23 +1860,6 @@ static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
 		psWidget->setGeometry(STAT_X, STAT_Y, STAT_WIDTH, STAT_HEIGHT);
 	}));
 
-	W_LABINIT sLabInit;
-	if (objMode == IOBJ_DEBUG_DROID)
-	{
-		/* store the common values for the text labels for the quantity
-			to produce (on each button).*/
-		sLabInit = W_LABINIT();
-		sLabInit.id = IDSTAT_PRODSTART;
-		sLabInit.style = WIDG_HIDDEN | WLAB_ALIGNRIGHT;
-
-		sLabInit.x = STAT_BUTWIDTH - 12 - 6;
-		sLabInit.y = 2;
-
-		sLabInit.width = 12;
-		sLabInit.height = 15;
-		sLabInit.pCallback = intAddProdQuantity;
-	}
-
 	/* Add the close button */
 	W_BUTINIT sButInit;
 	sButInit.formID = IDSTAT_FORM;
@@ -1951,15 +1947,6 @@ static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
 			sBarInit.iRange = GAME_TICKS_PER_SEC;
 			bar = widgAddBarGraph(psWScreen, &sBarInit);
 			bar->setBackgroundColour(WZCOL_BLACK);
-
-			// Add a text label for the quantity to produce.
-			sLabInit.formID = nextButtonId;
-			sLabInit.pUserData = Stat;
-			if (!widgAddLabel(psWScreen, &sLabInit))
-			{
-				return false;
-			}
-			sLabInit.id++;
 		}
 		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
 		costString.replace("%1", WzString::number(powerCost));
@@ -2512,12 +2499,6 @@ DROID *intGotoNextDroidType(DROID *CurrDroid, DROID_TYPE droidType, bool AllowGr
 	return nullptr;
 }
 
-//access function for selected object in the interface
-BASE_OBJECT *getCurrentSelected()
-{
-	return psObjSelected;
-}
-
 // Checks if a coordinate is over the build menu
 bool CoordInBuild(int x, int y)
 {
@@ -2628,21 +2609,6 @@ static void parseChatMessageModifiers(InGameChatMessage &message)
 	{
 		message.addPlayerByPosition(*message.text - '0');
 	}
-}
-
-void intSetPositionStats(BASE_STATS *value)
-{
-	psPositionStats = value;
-}
-
-void intSetSelectedObject(BASE_OBJECT *value)
-{
-	psObjSelected = value;
-}
-
-BASE_OBJECT *intGetSelectedObject()
-{
-	return psObjSelected;
 }
 
 void intSetShouldShowRedundantDesign(bool value)

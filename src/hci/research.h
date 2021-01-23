@@ -43,11 +43,24 @@ public:
 	void startResearch(RESEARCH *research);
 	void requestResearchCancellation(STRUCTURE *facility);
 
+	STRUCTURE *getHighlightedObject() const override
+	{
+		return highlightedFacility;
+	}
+
+	void setHighlightedObject(BASE_OBJECT *object) override
+	{
+		auto facility = castStructure(object);
+		ASSERT_OR_RETURN(, facility != nullptr && facility->pStructureType->type == REF_RESEARCH, "Invalid facility pointer");
+		highlightedFacility = facility;
+	}
+
 private:
 	void updateFacilitiesList();
 	void updateResearchOptionsList();
 	std::vector<RESEARCH *> stats;
 	std::vector<STRUCTURE *> facilities;
+	static STRUCTURE *highlightedFacility;
 };
 
 #endif // __INCLUDED_SRC_HCI_RESEARCH_INTERFACE_H__

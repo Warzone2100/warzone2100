@@ -19,45 +19,42 @@
 #include "../intdisplay.h"
 #include "../template.h"
 
-FACTORY *getFactoryOrNullptr(BASE_OBJECT *structure)
-{
-	if (auto factory = castStructure(structure))
-	{
-		ASSERT_OR_RETURN(nullptr, StructIsFactory(factory), "Invalid factory pointer");
-		return (FACTORY *)factory->pFunctionality;
-	}
+STRUCTURE *ManufactureController::highlightedFactory = nullptr;
 
-	return nullptr;
+FACTORY *getFactoryOrNullptr(STRUCTURE *factory)
+{
+	ASSERT_OR_RETURN(nullptr, StructIsFactory(factory), "Invalid factory pointer");
+	return (FACTORY *)factory->pFunctionality;
 }
 
 void ManufactureController::updateData()
 {
 	updateFactoriesList();
-	updateSelected();
+	updateHighlighted();
 	updateManufactureOptionsList();
 }
 
 void ManufactureController::adjustFactoryProduction(DROID_TEMPLATE *manufactureOption, bool add)
 {
-	factoryProdAdjust(castStructure(getSelectedObject()), manufactureOption, add);
+	factoryProdAdjust(getHighlightedObject(), manufactureOption, add);
 }
 
 void ManufactureController::adjustFactoryLoop(bool add)
 {
-	factoryLoopAdjust(castStructure(getSelectedObject()), add);
+	factoryLoopAdjust(getHighlightedObject(), add);
 }
 
 void ManufactureController::startDeliveryPointPosition()
 {
-	if (auto factory = castStructure(getSelectedObject()))
+	auto factory = getHighlightedObject();
+	ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
+
+	// make sure that the factory isn't assigned to a commander
+	assignFactoryCommandDroid(factory, nullptr);
+	auto psFlag = FindFactoryDelivery(factory);
+	if (psFlag)
 	{
-		// make sure that the factory isn't assigned to a commander
-		assignFactoryCommandDroid(factory, nullptr);
-		auto psFlag = FindFactoryDelivery(factory);
-		if (psFlag)
-		{
-			startDeliveryPosition(psFlag);
-		}
+		startDeliveryPosition(psFlag);
 	}
 }
 
@@ -68,9 +65,9 @@ static inline bool compareFactories(STRUCTURE *a, STRUCTURE *b)
 		return (a == nullptr) < (b == nullptr);
 	}
 	auto x = getFactoryOrNullptr(a);
-	ASSERT_OR_RETURN(false, x != nullptr, "Invalid factory pointer");
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, x);
 	auto y = getFactoryOrNullptr(b);
-	ASSERT_OR_RETURN(false, y != nullptr, "Invalid factory pointer");
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, y);
 	if (x->psAssemblyPoint->factoryType != y->psAssemblyPoint->factoryType)
 	{
 		return x->psAssemblyPoint->factoryType < y->psAssemblyPoint->factoryType;
@@ -96,7 +93,7 @@ void ManufactureController::updateFactoriesList()
 
 void ManufactureController::updateManufactureOptionsList()
 {
-	if (auto factory = castStructure(getSelectedObject()))
+	if (auto factory = getHighlightedObject())
 	{
 		stats = fillTemplateList(factory);
 	}
@@ -109,7 +106,8 @@ void ManufactureController::updateManufactureOptionsList()
 DROID_TEMPLATE *ManufactureController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto factory = getFactoryOrNullptr(getObjectAt(objectIndex));
-	ASSERT_OR_RETURN(nullptr, factory != nullptr, "Invalid factory pointer");
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, factory);
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, factory);
 
 	return factory->psSubject;
 }
@@ -157,7 +155,7 @@ protected:
 	std::string getTip() override
 	{
 		auto factory = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN("", factory != nullptr, "Invalid factory pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN("", factory);
 		return getStatsName(factory->pStructureType);
 	}
 
@@ -289,14 +287,14 @@ private:
 	bool isSelected() const override
 	{
 		auto factory = controller->getObjectAt(objectIndex);
-		return factory && (factory->selected || factory == controller->getSelectedObject());
+		return factory && (factory->selected || factory == controller->getHighlightedObject());
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
 		auto factory = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, factory != nullptr, "Invalid factory pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 
 		clearSelection();
 		controller->selectObject(factory);
@@ -331,7 +329,7 @@ protected:
 	{
 		updateLayout();
 		auto stat = getStats();
-		ASSERT_OR_RETURN(, stat != nullptr, "Invalid stat pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, stat);
 
 		displayIMD(Image(), ImdObject::DroidTemplate(stat), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
@@ -363,7 +361,7 @@ private:
 	{
 		BaseWidget::updateLayout();
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
-		productionRunSizeLabel.update(castStructure(controller->getSelectedObject()), getStats());
+		productionRunSizeLabel.update(controller->getHighlightedObject(), getStats());
 	}
 
 	uint32_t getCost() override
@@ -385,7 +383,7 @@ private:
 	{
 		BaseWidget::released(context, mouseButton);
 		auto clickedStats = controller->getStatsAt(manufactureOptionIndex);
-		ASSERT_OR_RETURN(, clickedStats != nullptr, "Invalid template pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);
 
 		auto controllerRef = controller;
 		widgScheduleTask([mouseButton, clickedStats, controllerRef]() {
@@ -427,7 +425,7 @@ public:
 protected:
 	void display(int xOffset, int yOffset) override
 	{
-		controller->updateSelected();
+		controller->updateHighlighted();
 		BaseWidget::display(xOffset, yOffset);
 	}
 
@@ -528,7 +526,7 @@ private:
 			auto weakController = std::weak_ptr<ManufactureController>(controller);
 			addOnClickHandler([weakController](W_BUTTON &) {
 				auto controller = weakController.lock();
-				ASSERT_OR_RETURN(, controller != nullptr, "Invalid controller pointer");
+				ASSERT_NOT_NULLPTR_OR_RETURN(, controller);
 				controller->startDeliveryPointPosition();
 			});
 		}
@@ -543,7 +541,8 @@ private:
 	private:
 		void updateLayout()
 		{
-			auto factory = castStructure(controller->getSelectedObject());
+			auto factory = controller->getHighlightedObject();
+			ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 
 			switch (factory->pStructureType->type)
 			{
@@ -631,8 +630,8 @@ private:
 
 	static uint8_t getProductionLoops(std::shared_ptr<ManufactureController> controller)
 	{
-		auto psFactory = getFactoryOrNullptr(controller->getSelectedObject());
-		ASSERT_OR_RETURN(0, psFactory != nullptr, "Invalid factory pointer");
+		auto psFactory = getFactoryOrNullptr(controller->getHighlightedObject());
+		ASSERT_NOT_NULLPTR_OR_RETURN(0, psFactory);
 		return psFactory->psSubject == nullptr ? 0 : psFactory->productionLoops;
 	}
 };
