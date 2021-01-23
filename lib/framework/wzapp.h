@@ -88,6 +88,8 @@ bool wzIsWindowResizable();
 bool wzChangeDisplayScale(unsigned int displayScale);
 bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int height);
 unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight);
+unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize();
+unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension);
 unsigned int wzGetCurrentDisplayScale();
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height);
 bool wzSetClipboardText(const char *text);
