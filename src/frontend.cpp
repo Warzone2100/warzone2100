@@ -72,6 +72,7 @@
 #include "urlhelpers.h"
 #include "game.h"
 #include "map.h" //for builtInMap
+#include "notifications.h"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Global variables
@@ -2431,6 +2432,13 @@ void changeTitleMode(tMode mode)
 // ////////////////////////////////////////////////////////////////////////////
 // Handling Screen Size Changes
 
+#define DISPLAY_SCALE_PROMPT_TAG_PREFIX		"displayscale::prompt::"
+#define DISPLAY_SCALE_PROMPT_INCREASE_TAG	DISPLAY_SCALE_PROMPT_TAG_PREFIX "increase"
+#define WZ_SUGGESTED_MAX_LOGICAL_SCREEN_SIZE_DIMENSION 1440
+static unsigned int lastProcessedDisplayScale = 0;
+static int lastProcessedScreenWidth = 0;
+static int lastProcessedScreenHeight = 0;
+
 /* Tell the frontend when the screen has been resized */
 void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
 {
@@ -2442,4 +2450,79 @@ void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 		std::shared_ptr<WzTitleUI> current = wzTitleUICurrent;
 		current->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 	}
+
+	// Determine if there should be a prompt to increase display scaling
+	const unsigned int currentDisplayScale = wzGetCurrentDisplayScale();
+	if ((newWidth >= oldWidth && newHeight >= oldHeight)
+		&& (lastProcessedScreenWidth != newWidth || lastProcessedScreenHeight != newHeight) // filter out duplicate events
+		&& (lastProcessedDisplayScale == 0 || lastProcessedDisplayScale == currentDisplayScale)	// filter out duplicate events & display-scale-only changes
+		&& (newWidth >= WZ_SUGGESTED_MAX_LOGICAL_SCREEN_SIZE_DIMENSION || newHeight >= WZ_SUGGESTED_MAX_LOGICAL_SCREEN_SIZE_DIMENSION))
+	{
+		unsigned int suggestedDisplayScale = wzGetSuggestedDisplayScaleForCurrentWindowSize(WZ_SUGGESTED_MAX_LOGICAL_SCREEN_SIZE_DIMENSION);
+		if ((suggestedDisplayScale > currentDisplayScale)
+			&& !hasNotificationsWithTag(DISPLAY_SCALE_PROMPT_INCREASE_TAG, NotificationScope::DISPLAYED_ONLY))
+		{
+			cancelOrDismissNotificationIfTag([](const std::string& tag) {
+				return (tag.rfind(DISPLAY_SCALE_PROMPT_TAG_PREFIX, 0) == 0);
+			});
+
+			WZ_Notification notification;
+			notification.duration = 0;
+			notification.contentTitle = _("Increase Game Display Scale?");
+			std::string contextText = "\n";
+			contextText += _("With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted.");
+			contextText += "\n\n";
+			contextText += _("You can fix this by increasing the game's Display Scale setting.");
+			contextText += "\n\n";
+			contextText += astringf(_("Would you like to increase the game's Display Scale to: %u%%?"), suggestedDisplayScale);
+			notification.contentText = contextText;
+			notification.action = WZ_Notification_Action(_("Increase Display Scale"), [](const WZ_Notification&) {
+				// Determine maximum display scale for current window size
+				unsigned int desiredDisplayScale = wzGetSuggestedDisplayScaleForCurrentWindowSize(WZ_SUGGESTED_MAX_LOGICAL_SCREEN_SIZE_DIMENSION);
+				if (desiredDisplayScale == wzGetCurrentDisplayScale())
+				{
+					// nothing to do now
+					return;
+				}
+
+				// Store the new display scale
+				auto priorDisplayScale = war_GetDisplayScale();
+				war_SetDisplayScale(desiredDisplayScale);
+
+				if (wzChangeDisplayScale(desiredDisplayScale))
+				{
+					WZ_Notification completed_notification;
+					completed_notification.duration = 6 * GAME_TICKS_PER_SEC;
+					completed_notification.contentTitle = astringf(_("Display Scale Increased to: %u%%"), desiredDisplayScale);
+					std::string contextText = _("You can adjust the Display Scale at any time in the Video Options menu.");
+					completed_notification.contentText = contextText;
+					completed_notification.tag = DISPLAY_SCALE_PROMPT_TAG_PREFIX "completed";
+					addNotification(completed_notification, WZ_Notification_Trigger::Immediate());
+				}
+				else
+				{
+					// failed to change display scale - restore the prior setting
+					war_SetDisplayScale(priorDisplayScale);
+				}
+			});
+			notification.onDismissed = [](const WZ_Notification&, bool wasProgrammaticallyDismissed) {
+				if (wasProgrammaticallyDismissed) { return; }
+				WZ_Notification dismissed_notification;
+				dismissed_notification.duration = 0;
+				dismissed_notification.contentTitle = _("Tip: Adjusting Display Scale");
+				std::string contextText = _("You can adjust the Display Scale at any time in the Video Options menu.");
+				dismissed_notification.contentText = contextText;
+				dismissed_notification.tag = DISPLAY_SCALE_PROMPT_TAG_PREFIX "dismissed_info";
+				dismissed_notification.displayOptions = WZ_Notification_Display_Options::makeOneTime("displayscale::tip");
+				addNotification(dismissed_notification, WZ_Notification_Trigger::Immediate());
+			};
+			notification.tag = DISPLAY_SCALE_PROMPT_INCREASE_TAG;
+			notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable("displayscale::prompt_increase", 4);
+
+			addNotification(notification, WZ_Notification_Trigger(GAME_TICKS_PER_SEC * 2));
+		}
+	}
+	lastProcessedDisplayScale = currentDisplayScale;
+	lastProcessedScreenWidth = newWidth;
+	lastProcessedScreenHeight = newHeight;
 }
