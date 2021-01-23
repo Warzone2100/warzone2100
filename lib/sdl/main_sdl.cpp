@@ -1542,6 +1542,31 @@ unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, uns
 	return *maxDisplayScale;
 }
 
+unsigned int wzGetMaximumDisplayScaleForCurrentWindowSize()
+{
+	return wzGetMaximumDisplayScaleForWindowSize(windowWidth, windowHeight);
+}
+
+unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desiredMaxScreenDimension)
+{
+	unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForCurrentWindowSize();
+
+	auto availableDisplayScales = wzAvailableDisplayScales();
+	std::sort(availableDisplayScales.begin(), availableDisplayScales.end());
+
+	for (auto it = availableDisplayScales.begin(); it != availableDisplayScales.end() && (*it <= maxDisplayScale); it++)
+	{
+		auto resultingLogicalScreenWidth = (windowWidth * 100) / *it;
+		auto resultingLogicalScreenHeight = (windowHeight * 100) / *it;
+		if (resultingLogicalScreenWidth <= desiredMaxScreenDimension && resultingLogicalScreenHeight <= desiredMaxScreenDimension)
+		{
+			return *it;
+		}
+	}
+
+	return maxDisplayScale;
+}
+
 bool wzWindowSizeIsSmallerThanMinimumRequired(unsigned int windowWidth, unsigned int windowHeight, float displayScaleFactor = current_displayScaleFactor)
 {
 	unsigned int minWindowWidth = 0, minWindowHeight = 0;
