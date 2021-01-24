@@ -648,14 +648,9 @@ bool ResearchController::showInterface()
 	return true;
 }
 
-void ResearchController::displayStatsForm()
+std::shared_ptr<StatsForm> ResearchController::makeStatsForm()
 {
-	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
-	{
-		auto statForm = ResearchStatsForm::make(shared_from_this());
-		psWScreen->psForm->attach(statForm);
-		intMode = INT_STAT;
-	}
+	return ResearchStatsForm::make(shared_from_this());
 }
 
 void ResearchController::requestResearchCancellation(STRUCTURE *facility)

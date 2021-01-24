@@ -612,12 +612,7 @@ bool BuildController::showInterface()
 	return true;
 }
 
-void BuildController::displayStatsForm()
+std::shared_ptr<StatsForm> BuildController::makeStatsForm()
 {
-	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
-	{
-		auto statForm = BuildStatsForm::make(shared_from_this());
-		psWScreen->psForm->attach(statForm);
-		intMode = INT_STAT;
-	}
+	return BuildStatsForm::make(shared_from_this());
 }

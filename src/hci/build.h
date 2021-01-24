@@ -63,7 +63,7 @@ public:
 	bool showInterface() override;
 	void refresh() override;
 	void toggleBuilderSelection(DROID *droid);
-	void displayStatsForm();
+	std::shared_ptr<StatsForm> makeStatsForm() override;
 
 	static void resetShowFavorites()
 	{

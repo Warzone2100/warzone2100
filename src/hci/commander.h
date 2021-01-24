@@ -6,15 +6,10 @@
 #include "../hci.h"
 #include "objects_stats.h"
 
-class CommanderController: public BaseStatsController, public std::enable_shared_from_this<CommanderController>
+class CommanderController: public BaseObjectsController, public std::enable_shared_from_this<CommanderController>
 {
 public:
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
-
-	size_t statsSize() const override
-	{
-		return 0;
-	}
 
 	size_t objectsSize() const override
 	{
