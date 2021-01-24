@@ -78,7 +78,8 @@ public:
 	void setHighlightedObject(BASE_OBJECT *object) override
 	{
 		auto builder = castDroid(object);
-		ASSERT_OR_RETURN(, builder != nullptr && isConstructionDroid(builder), "Invalid builder pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
+		ASSERT_OR_RETURN(, isConstructionDroid(builder), "Droid is not a construction droid");
 		highlightedBuilder = builder;
 	}
 

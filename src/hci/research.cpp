@@ -245,7 +245,8 @@ protected:
 	{
 		updateLayout();
 		auto facility = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, facility != nullptr && !isDead(facility), "Invalid facility pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
+		ASSERT_OR_RETURN(, !isDead(facility), "Facility is dead");
 		displayIMD(Image(), ImdObject::Structure(facility), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
