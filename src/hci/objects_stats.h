@@ -102,7 +102,7 @@ protected:
 	}
 
 	virtual std::shared_ptr<BaseObjectsController> getController() const = 0;
-	void selectAndJump();
+	virtual void selectAndJump();
 
 	size_t objectIndex;
 
