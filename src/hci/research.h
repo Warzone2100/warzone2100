@@ -51,7 +51,8 @@ public:
 	void setHighlightedObject(BASE_OBJECT *object) override
 	{
 		auto facility = castStructure(object);
-		ASSERT_OR_RETURN(, facility != nullptr && facility->pStructureType->type == REF_RESEARCH, "Invalid facility pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
+		ASSERT_OR_RETURN(, facility->pStructureType->type == REF_RESEARCH, "Invalid facility pointer");
 		highlightedFacility = facility;
 	}
 

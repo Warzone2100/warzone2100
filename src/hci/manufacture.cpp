@@ -147,7 +147,8 @@ protected:
 	{
 		updateLayout();
 		auto factory = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, factory != nullptr && !isDead(factory), "Invalid factory pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
+		ASSERT_OR_RETURN(, !isDead(factory), "Factory is dead");
 		displayIMD(Image(), ImdObject::Structure(factory), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}

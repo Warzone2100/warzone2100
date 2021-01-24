@@ -105,7 +105,8 @@ protected:
 	{
 		updateLayout();
 		auto droid = controller->getObjectAt(objectIndex);
-		ASSERT_OR_RETURN(, droid != nullptr && !isDead(droid), "Invalid droid pointer");
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
+		ASSERT_OR_RETURN(, !isDead(droid), "Droid is dead");
 		displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
