@@ -159,7 +159,7 @@ private:
 	}
 	void updateNumberOfPages();
 
-	uint32_t numberOfPages = 1;
+	size_t numberOfPages = 1;
 	WzSize childSize;
 	WzSize spacing;
 	size_t currentPage_;
