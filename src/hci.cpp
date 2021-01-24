@@ -185,23 +185,11 @@ static enum _edit_pos_mode
 OBJECT_MODE objMode;
 std::shared_ptr<BaseObjectsController> interfaceController = nullptr;
 
-/* Function type for selecting a base object while building the object screen */
-typedef bool (* OBJ_SELECT)(BASE_OBJECT *psObj);
-
-/* Function type for getting the appropriate stats for an object */
-typedef BASE_STATS *(* OBJ_GETSTATS)(BASE_OBJECT *psObj);
-
-/* Function type for setting the appropriate stats for an object */
-typedef bool (* OBJ_SETSTATS)(BASE_OBJECT *psObj, BASE_STATS *psStats);
-
 /* The current stats list being used by the stats screen */
 static BASE_STATS		**ppsStatsList;
 
 /* The selected builder on the object screen when the build screen is displayed */
 static DROID *psSelectedBuilder;
-
-/* The button ID of the objects stat when the stat screen is displayed */
-UDWORD			objStatID;
 
 /* The button ID of an objects stat on the stat screen if it is locked down */
 static UDWORD			statID;
@@ -212,9 +200,6 @@ static BASE_STATS		*psPositionStats;
 /* Store a list of stats pointers from the main structure stats */
 static STRUCTURE_STATS	**apsStructStatsList;
 
-/* Store a list of research pointers for topics that can be performed*/
-static RESEARCH			**ppResearchList;
-
 /* Store a list of Template pointers for Droids that can be built */
 std::vector<DROID_TEMPLATE *>   apsTemplateList;
 std::list<DROID_TEMPLATE>       localTemplates;
@@ -222,27 +207,14 @@ std::list<DROID_TEMPLATE>       localTemplates;
 /* Store a list of Feature pointers for features to be placed on the map */
 static FEATURE_STATS	**apsFeatureList;
 
-/*Store a list of research indices which can be performed*/
-
 /* Store a list of component stats pointers for the design screen */
 UDWORD			numComponent;
 COMPONENT_STATS	**apsComponentList;
 UDWORD			numExtraSys;
 COMPONENT_STATS	**apsExtraSysList;
 
-// store the objects that are being used for the object bar
-static std::vector<BASE_OBJECT *> apsObjectList;
-
 /* Flags to check whether the power bars are currently on the screen */
 static bool				powerBarUp = false;
-static bool				StatsUp = false;
-static BASE_OBJECT		*psStatsScreenOwner = nullptr;
-
-/* The previous object for each object bar */
-static BASE_OBJECT		*apsPreviousObj[IOBJ_MAX];
-
-/* The jump position for each object on the base bar */
-static std::vector<Vector2i> asJumpPos;
 
 /***************************************************************************************/
 /*              Function Prototypes                                                    */
@@ -486,9 +458,6 @@ bool intInitialise()
 	/* Create storage for Structures that can be built */
 	apsStructStatsList = (STRUCTURE_STATS **)malloc(sizeof(STRUCTURE_STATS *) * MAXSTRUCTURES);
 
-	//create the storage for Research topics - max possible size
-	ppResearchList = (RESEARCH **) malloc(sizeof(RESEARCH *) * MAXRESEARCH);
-
 	/* Create storage for Templates that can be built */
 	apsTemplateList.clear();
 
@@ -500,9 +469,6 @@ bool intInitialise()
 
 	/* Create storage for the extra systems list */
 	apsExtraSysList = (COMPONENT_STATS **)malloc(sizeof(COMPONENT_STATS *) * MAXEXTRASYS);
-
-	// allocate the object list
-	apsObjectList.clear();
 
 	psSelectedBuilder = nullptr;
 
@@ -521,12 +487,6 @@ bool intInitialise()
 
 	/* Note the current screen state */
 	intMode = INT_NORMAL;
-
-	// reset the previous objects
-	intResetPreviousObj();
-
-	// reset the jump positions
-	asJumpPos.clear();
 
 	if (!bInTutorial)
 	{
@@ -548,33 +508,20 @@ bool intInitialise()
 }
 
 
-//initialise all the previous obj - particularly useful for when go Off world!
-void intResetPreviousObj()
-{
-	//make sure stats screen doesn't think it should be up
-	StatsUp = false;
-	// reset the previous objects
-	memset(apsPreviousObj, 0, sizeof(apsPreviousObj));
-}
-
-
 /* Shut down the in game interface */
 void interfaceShutDown()
 {
 	psWScreen = nullptr;
 
 	free(apsStructStatsList);
-	free(ppResearchList);
 	apsTemplateList.clear();
 	free(apsFeatureList);
 	free(apsComponentList);
 	free(apsExtraSysList);
-	apsObjectList.clear();
 	psSelectedBuilder = nullptr;
 
 	psWScreen = nullptr;
 	apsStructStatsList = nullptr;
-	ppResearchList = nullptr;
 	apsFeatureList = nullptr;
 	apsComponentList = nullptr;
 	apsExtraSysList = nullptr;
@@ -1800,9 +1747,6 @@ void intRemoveStats()
 	{
 		Form->closeAnimateDelete();
 	}
-
-	StatsUp = false;
-	psStatsScreenOwner = nullptr;
 }
 
 
@@ -1812,9 +1756,6 @@ void intRemoveStatsNoAnim()
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
 	widgDelete(psWScreen, IDSTAT_FORM);
-
-	StatsUp = false;
-	psStatsScreenOwner = nullptr;
 }
 
 void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
@@ -1851,7 +1792,6 @@ static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
 	}
 
 	SecondaryWindowUp = true;
-	psStatsScreenOwner = nullptr;
 
 	auto const &parent = psWScreen->psForm;
 
@@ -1961,8 +1901,6 @@ static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
 
 		sBarInit.id += 1;
 	}
-
-	StatsUp = true;
 
 	return true;
 }

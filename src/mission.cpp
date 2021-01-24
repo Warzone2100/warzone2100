@@ -1112,7 +1112,6 @@ bool startMissionOffClear(char *pGame)
 	}
 
 	offWorldKeepLists = false;
-	intResetPreviousObj();
 
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
@@ -1133,7 +1132,6 @@ bool startMissionOffKeep(char *pGame)
 	}
 
 	offWorldKeepLists = true;
-	intResetPreviousObj();
 
 	// The message should have been played at the between stage
 	missionCountDown &= ~NOT_PLAYED_ACTIVATED;
@@ -1182,7 +1180,6 @@ bool startMissionCampaignChange(char *pGame)
 	}
 
 	offWorldKeepLists = false;
-	intResetPreviousObj();
 
 	return true;
 }

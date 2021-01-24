@@ -1417,7 +1417,6 @@ bool saveGameReset()
 	//free up the gateway stuff?
 	gwShutDown();
 	intResetScreen(true);
-	intResetPreviousObj();
 
 	if (!mapShutdown())
 	{
