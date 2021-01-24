@@ -17,6 +17,7 @@
 #include "../intdisplay.h"
 #include "../power.h"
 #include "../component.h"
+#include "../mission.h"
 
 STRUCTURE *ResearchController::highlightedFacility = nullptr;
 static ImdObject getResearchObjectImage(RESEARCH *research);
@@ -290,6 +291,14 @@ protected:
 	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
+	}
+
+	void selectAndJump() override
+	{
+		if (!offWorldKeepLists)
+		{
+			BaseWidget::selectAndJump();
+		}
 	}
 
 private:

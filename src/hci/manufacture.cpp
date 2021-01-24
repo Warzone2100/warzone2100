@@ -165,6 +165,14 @@ protected:
 		return controller;
 	}
 
+	void selectAndJump() override
+	{
+		if (!offWorldKeepLists)
+		{
+			BaseWidget::selectAndJump();
+		}
+	}
+
 private:
 	std::shared_ptr<ManufactureController> controller;
 };
