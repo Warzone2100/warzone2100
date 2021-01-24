@@ -58,7 +58,8 @@ void CommanderController::refresh()
 	{
 		closeInterface();
 	}
-	else
+	// If order form is visible, refresh it.
+	else if (widgGetFromID(psWScreen, IDORDER_FORM) != nullptr)
 	{
 		displayOrderForm();
 	}
