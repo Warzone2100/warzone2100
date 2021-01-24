@@ -63,10 +63,10 @@ STRUCTURE_STATS *BuildController::getObjectStatsAt(size_t objectIndex) const
 		return nullptr;
 	}
 
-	STRUCTURE_STATS *stats;
-	if (orderStateStatsLoc(builder, DORDER_BUILD, &stats)) // Moving to build location?
+	STRUCTURE_STATS *builderStats;
+	if (orderStateStatsLoc(builder, DORDER_BUILD, &builderStats)) // Moving to build location?
 	{
-		return stats;
+		return builderStats;
 	}
 
 	if (builder->order.type == DORDER_BUILD && orderStateObj(builder, DORDER_BUILD)) // Is building
