@@ -816,6 +816,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 	});
 
 	OrderUp = true;
+	setSecondaryWindowUp(true);
 
 	return true;
 }
@@ -1148,6 +1149,7 @@ bool intRefreshOrder()
 void intRemoveOrder()
 {
 	widgDelete(psWScreen, IDORDER_CLOSE);
+	setSecondaryWindowUp(false);
 
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDORDER_FORM);
@@ -1167,6 +1169,7 @@ void intRemoveOrderNoAnim()
 {
 	widgDelete(psWScreen, IDORDER_CLOSE);
 	widgDelete(psWScreen, IDORDER_FORM);
+	setSecondaryWindowUp(false);
 	OrderUp = false;
 	SelectedDroids.clear();
 	psSelectedFactory = nullptr;

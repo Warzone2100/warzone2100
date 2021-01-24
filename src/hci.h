@@ -375,6 +375,7 @@ void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent);  ///< Makes a bu
 void chatDialog(int mode);
 bool isChatUp();
 bool isSecondaryWindowUp();
+void setSecondaryWindowUp(bool value);
 
 void intOpenDebugMenu(OBJECT_TYPE id);
 
