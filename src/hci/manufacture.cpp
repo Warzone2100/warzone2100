@@ -652,12 +652,7 @@ bool ManufactureController::showInterface()
 	return true;
 }
 
-void ManufactureController::displayStatsForm()
+std::shared_ptr<StatsForm> ManufactureController::makeStatsForm()
 {
-	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
-	{
-		auto statForm = ManufactureStatsForm::make(shared_from_this());
-		psWScreen->psForm->attach(statForm);
-		intMode = INT_STAT;
-	}
+	return ManufactureStatsForm::make(shared_from_this());
 }

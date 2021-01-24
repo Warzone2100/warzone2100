@@ -76,6 +76,15 @@ void BaseObjectsController::updateHighlighted()
 	setHighlightedObject(getObjectAt(0));
 }
 
+void BaseStatsController::displayStatsForm()
+{
+	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
+	{
+		psWScreen->psForm->attach(makeStatsForm());
+		intMode = INT_STAT;
+	}
+}
+
 void DynamicIntFancyButton::updateLayout()
 {
 	updateSelection();

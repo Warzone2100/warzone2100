@@ -60,6 +60,8 @@ class BaseStatsController: public BaseObjectsController
 public:
 	virtual ~BaseStatsController() = default;
 	virtual size_t statsSize() const = 0;
+	virtual std::shared_ptr<StatsForm> makeStatsForm() = 0;
+	void displayStatsForm();
 };
 
 class DynamicIntFancyButton: public IntFancyButton
