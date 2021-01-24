@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-27 05:37\n"
+"PO-Revision-Date: 2021-01-24 23:23\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -92,7 +92,7 @@ msgstr "Vizsgálja meg a területet, és szerezzen vissza minden leletet."
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr "Megerősítések elérhetők."
+msgstr "Erősítés érhető el."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -132,23 +132,23 @@ msgstr "Állítson össze egy támadócsapatot, és szerezze vissza a szinaptiku
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "SZÁLLÍTÁSI FELADAT: Új feladat"
+msgstr "SZÁLLÍTÁSI FELADAT: Új feladatok"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Új Paradigma a közelben kutat a tárgyi leletekért."
+msgstr "Új Paradigma leleteket kutat a közelben."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Elfogni őket. Ne hagyja, hogy bármely ellenség elhagyja ezt a területet."
+msgstr "Fogja el őket. Ne hagyja, hogy bármely ellenség elhagyja ezt a területet."
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "SZÁLLÍTÁSI FELADAT: Ellenséges bázis felépítés alatt"
+msgstr "SZÁLLÍTÁSI FELADAT: Ellenséges bázis építés alatt"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "Ellenséges erők előretolt bázist létesítenek ezen a helyszínen."
+msgstr "Az ellenséges erők előretolt bázist létesítenek ezen a helyszínen."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
@@ -176,7 +176,7 @@ msgstr "Északról és keletről ellenséges erők közelednek."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr "Tartsa a bázist és verjen vissza minden támadást."
+msgstr "Tartsa a bázist, és verjen vissza minden támadást."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
@@ -184,11 +184,11 @@ msgstr "ALFA BÁZIS KÜLDETÉS: Bejövő adás"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr "Ellenséges erőket észleltünk ezen a helyszínen."
+msgstr "Ellenséges erőket észleltünk ezeken a helyeken."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Ez a mi lehetőségünk, elpusztítani az Új Paradigmát és lerombolni a bázisát."
+msgstr "Itt a lehetőség, hogy legyőzzük az Új Paradigmát, és leromboljuk a bázisukat."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -196,11 +196,11 @@ msgstr "Gratulálunk parancsnok."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr "Most már van egy újabb feladat önnek."
+msgstr "Most egy újabb feladatunk van Önnek."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr "ALFA BÁZIS KÜLDETÉS: Keresse meg és szerezze vissza a tárgyi leleteket"
+msgstr "ALFA BÁZIS KÜLDETÉS: Keresse meg, és szerezze vissza a leleteket"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
@@ -208,11 +208,11 @@ msgstr "Az első két zóna most már biztonságos."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr "TERVEZŐCSAPAT FRISS INFORMÁCIÓK"
+msgstr "TERVCSAPAT HÍREI"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr "BÉTA CSAPAT FRISS INFORMÁCIÓK"
+msgstr "BÉTA CSAPAT HÍREI"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
@@ -220,11 +220,11 @@ msgstr "Visszaszereztünk néhány leletet."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr "Ez a terület, egy jobban felszerelt erő felügyelete alatt áll."
+msgstr "Egy jobban felszerelt erő felügyeli ezt a területet."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr "GAMMA CSAPAT FRISS INFORMÁCIÓK"
+msgstr "GAMMA CSAPAT HÍREI"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
@@ -232,15 +232,15 @@ msgstr "Nincs jelentenivaló."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr "Nem találtunk tárgyi leleteket sem ellenséget."
+msgstr "Nem találtunk leleteket, sem ellenséget."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr "ALFA BÁZIS HÍRSZERZŐJELENTÉS: Ellenséges Támadás"
+msgstr "ALFA BÁZIS HÍRSZERZŐJELENTÉS: Ellenséges támadás"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr "Ellenséges támadó erőt észleltünk ezen a területen."
+msgstr "Ellenséges támadóerőt észlelünk ezen a helyszínen."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
@@ -252,7 +252,7 @@ msgstr "Ez az épület az elsődleges feladat."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr "Ezen a területen, kutassa fel és szerezze meg a tárgyi leleteket."
+msgstr "Kutassa fel és szerezze meg a leleteket ezen a területen."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
@@ -300,7 +300,7 @@ msgstr "Parancsnok."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "Dekódoltuk a bejövő adást az Új Paradigmának..."
+msgstr "Dekódoltuk az Új Paradigma bejövő hívását..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
@@ -308,11 +308,11 @@ msgstr "Pusztítsa el az ellenséges bázist"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr "Állítson össze egy támadó csapatot és készüljön a szállításra."
+msgstr "Állítson össze egy támadóerőt, és rakodja be a szállítóba."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr "Pusztítsa el a bázist és szerezzen vissza minden jelenlévő tárgyi leletet."
+msgstr "Pusztítsa el a bázist, és szerezzen vissza minden leletet."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
@@ -320,11 +320,11 @@ msgstr "Visszaszerezte a szinaptikus kapcsolat technológiát!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Kezdeti kutatások alátámasztják, hogy nagy hasznára lesz a tervnek."
+msgstr "A kezdeti kutatások alátámasztják, hogy nagy hasznára lesz a tervnek."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "Béta bázis súlyos támadás alatt áll, erősítésre van szüksége."
+msgstr "A Béta bázis súlyos támadás alatt áll, erősítésre lehet szükségük."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
@@ -332,35 +332,35 @@ msgstr "További híreket küldünk, amint megérkeznek."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr "Ez az adás néhány perce érkezett."
+msgstr "Ez az adás néhány perce lett elfogva."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr "Keletről származik."
+msgstr "Keletről ered."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr "ENERGIAMODUL TÁRGYI LELET"
+msgstr "ENERGIAMODUL LELET"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr "Kutassa az energiamodul tárgyi leletet."
+msgstr "Kutassa az energiamodul leletet."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr "Korszerűsítéshez munkagéppel bővítsd az áramfejlesztőt."
+msgstr "Aztán használjon egy munkagépet, hogy a modullal fejlessze az erőművet."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr "DÖGEVŐ BÁZIST ÉSZLELTÜNK"
+msgstr "FOSZTOGATÓ BÁZIS ÉSZLELVE"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Győzze le a dögevőket és szerezzen vissza minden tárgyi leletet."
+msgstr "Győzze le a fosztogatókat, és szerezzen vissza minden leletet."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr "Gratulálunk, legyőzte az Új Paradigmát, ez a szektor biztosítva."
+msgstr "Gratulálunk, hogy legyőzte az Új Paradigmát, ez a szektor biztosítva."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
@@ -388,7 +388,7 @@ msgstr "BÉTA BÁZIS KÜLDETÉS: Keleti szektor"
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr "Érkezésekor ön átveszi a bázis irányítását."
+msgstr "Érkezéskor vegye át a bázis irányítását."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
@@ -403,13 +403,13 @@ msgstr "BÉTA BÁZIS KÜLDETÉS: Védelem és megerősítés"
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr "Ügyeljen arra, hogy megerősítse a határokat, és létrehozza a légvédelmet."
+msgstr "Erősítse meg a határokat, és alakítson ki légvédelmet."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr "Új technológiák állnak rendelkezésre."
+msgstr "Új technológiák érhetők el."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
@@ -423,11 +423,11 @@ msgstr "Dekódolás..."
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "SZÁLLÍTÁSI FELADAT: Szállítás meghiúsult"
+msgstr "SZÁLLÍTÁSI FELADAT: Lelőtt szállító"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr "Alfa bázis csapatából, lelőtték a szállítást végző egységeinket."
+msgstr "Az Alfa bázisról érkező csapatokat hozó szállítónkat lelőtték."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
@@ -435,7 +435,7 @@ msgstr "A Kollektíva támadása alatt áll, ezen a helyen."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr "Állítson össze egy mentőcsapatot a rakomány és a szállítást végző egységek kimentésére."
+msgstr "Állítson össze egy mentőcsapatot a szállító és a rakománya kimentésére."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
@@ -447,15 +447,15 @@ msgstr "A Béta csapat a függőleges fel- és leszállási (VTOL) technológia 
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr "Hiszünk benne, hogy van egy összeomlás előtti légibázis ezen a területen."
+msgstr "Úgy gondolják, hogy egy összeomlás előtti légibázison van, ezen a területen."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr "Béta csapat súlyos támadás alatt áll"
+msgstr "A Béta csapat súlyos támadás alatt áll"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr "BÉTA BÁZIS KÜLDETÉS: Tartsa minden áron"
+msgstr "BÉTA BÁZIS KÜLDETÉS: Tartsa meg bármi áron"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
@@ -463,11 +463,11 @@ msgstr "Kódolt jelezést fogtunk a Kollektívától."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr "BÉTA BÁZIS KÜLDETÉS: Tartsa minden áron"
+msgstr "BÉTA BÁZIS KÜLDETÉS: Tartsa meg bármi áron"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr "Északi irányban légi és szárazföldi csapatokat észlelünk."
+msgstr "Észak felől légi és szárazföldi csapatokat észlelünk."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
