@@ -247,9 +247,6 @@ extern std::shared_ptr<W_SCREEN> psWScreen;
 // The last widget ID from widgRunScreen
 extern UDWORD			intLastWidget;
 
-/* The button ID of the objects stat when the stat screen is displayed */
-extern UDWORD			objStatID;
-
 /* The current template for the design screen to start with*/
 extern std::vector<DROID_TEMPLATE *> apsTemplateList;  ///< Either a list of templates a factory can build or a list of designable templates, for UI use only.
 extern std::list<DROID_TEMPLATE> localTemplates;       ///< Unsynchronised list, for UI use only.
@@ -368,9 +365,6 @@ bool intCheckReticuleButEnabled(UDWORD id);
 
 //access function for selected object in the interface
 BASE_OBJECT *getCurrentSelected();
-
-//initialise all the previous obj - particularly useful for when go Off world!
-void intResetPreviousObj();
 
 bool intIsRefreshing();
 
