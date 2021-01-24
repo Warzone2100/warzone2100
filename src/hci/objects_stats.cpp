@@ -82,6 +82,7 @@ void BaseStatsController::displayStatsForm()
 	{
 		psWScreen->psForm->attach(makeStatsForm());
 		intMode = INT_STAT;
+		setSecondaryWindowUp(true);
 	}
 }
 

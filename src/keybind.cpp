@@ -2786,7 +2786,7 @@ void kf_NoAssert()
 	debug(LOG_ERROR, "Asserts turned off");
 }
 
-// rotuine to decrement the tab-scroll 'buttons'
+// routine to decrement the tab-scroll 'buttons'
 void kf_BuildPrevPage()
 {
 	ASSERT_OR_RETURN(, psWScreen != nullptr, " Invalid screen pointer!");
@@ -2805,7 +2805,7 @@ void kf_BuildPrevPage()
 	audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
 }
 
-// rotuine to advance the tab-scroll 'buttons'
+// routine to advance the tab-scroll 'buttons'
 void kf_BuildNextPage()
 {
 	ASSERT_OR_RETURN(, psWScreen != nullptr, " Invalid screen pointer!");

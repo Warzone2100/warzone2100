@@ -93,7 +93,7 @@
 #define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0 && !gamePaused())
 
 // Empty edit window
-static bool SecondaryWindowUp = false;
+static bool secondaryWindowUp = false;
 // Chat dialog
 static bool ChatDialogUp = false;
 
@@ -819,7 +819,7 @@ void intResetScreen(bool NoAnim)
 		break;
 	}
 	interfaceController = nullptr;
-	SecondaryWindowUp = false;
+	setSecondaryWindowUp(false);
 	intMode = INT_NORMAL;
 	//clearSelelection() sets IntRefreshPending = true by calling intRefreshScreen() but if we're doing this then we won't need to refresh - hopefully!
 	IntRefreshPending = false;
@@ -998,7 +998,7 @@ INT_RETVAL intRunWidgets()
 	/* Extra code for the design screen to deal with the shadow bar graphs */
 	if (intMode == INT_DESIGN)
 	{
-		SecondaryWindowUp = true;
+		setSecondaryWindowUp(true);
 		intRunDesign();
 	}
 
@@ -1740,6 +1740,7 @@ void intRemoveStats()
 {
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
+	setSecondaryWindowUp(false);
 
 	// Start the window close animation.
 	IntFormAnimated *Form = (IntFormAnimated *)widgGetFromID(psWScreen, IDSTAT_FORM);
@@ -1756,6 +1757,7 @@ void intRemoveStatsNoAnim()
 	widgDelete(psWScreen, IDSTAT_CLOSE);
 	widgDelete(psWScreen, IDSTAT_TABFORM);
 	widgDelete(psWScreen, IDSTAT_FORM);
+	setSecondaryWindowUp(false);
 }
 
 void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
@@ -1791,7 +1793,7 @@ static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
 		intRemoveOrderNoAnim();
 	}
 
-	SecondaryWindowUp = true;
+	setSecondaryWindowUp(true);
 
 	auto const &parent = psWScreen->psForm;
 
@@ -2452,7 +2454,7 @@ bool CoordInBuild(int x, int y)
 	pos.x = x - RET_X;
 	pos.y = y - RET_Y + buildmenu_height; // guesstimation
 
-	if ((pos.x < 0 || pos.y < 0 || pos.x >= RET_FORMWIDTH || pos.y >= buildmenu_height) || !SecondaryWindowUp)
+	if ((pos.x < 0 || pos.y < 0 || pos.x >= RET_FORMWIDTH || pos.y >= buildmenu_height) || !isSecondaryWindowUp())
 	{
 		return false;
 	}
@@ -2524,7 +2526,12 @@ bool isChatUp()
 // Helper call to see if we have builder/research/... window up or not.
 bool isSecondaryWindowUp()
 {
-	return SecondaryWindowUp;
+	return secondaryWindowUp;
+}
+
+void setSecondaryWindowUp(bool value)
+{
+	secondaryWindowUp = true;
 }
 
 /**
