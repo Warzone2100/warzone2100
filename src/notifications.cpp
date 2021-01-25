@@ -278,10 +278,12 @@ public:
 
 public:
 	void setState(WZ_Notification_Status::NotificationState newState);
-	bool wasProgrammaticallyDismissed() const { return bWasProgrammaticallyDismissed; }
+	bool wasProgrammaticallyDismissed() const { return dismissalCause == WZ_Notification_Dismissal_Reason::ACTION_BUTTON_CLICK || dismissalCause == WZ_Notification_Dismissal_Reason::PROGRAMMATIC; }
+	WZ_Notification_Dismissal_Reason dismissReason() const { return dismissalCause; }
 
 protected:
-	void setWasProgrammaticallyDismissed() { bWasProgrammaticallyDismissed = true; }
+	void setWasProgrammaticallyDismissed() { dismissalCause = WZ_Notification_Dismissal_Reason::PROGRAMMATIC; }
+	void setWasDismissedByActionButton() { dismissalCause = WZ_Notification_Dismissal_Reason::ACTION_BUTTON_CLICK; }
 
 public:
 	WZ_Notification notification;
@@ -290,7 +292,7 @@ public:
 private:
 	bool bWasInitiallyShown = false;
 	bool bWasFullyShown = false;
-	bool bWasProgrammaticallyDismissed = false;
+	WZ_Notification_Dismissal_Reason dismissalCause = WZ_Notification_Dismissal_Reason::USER_DISMISSED;
 	friend class W_NOTIFICATION;
 };
 
@@ -301,7 +303,7 @@ void WZ_Queued_Notification::setState(WZ_Notification_Status::NotificationState 
 
 	if (newState == WZ_Notification_Status::NotificationState::closed)
 	{
-		if (notification.isIgnorable() && !bWasFullyShown && !bWasProgrammaticallyDismissed)
+		if (notification.isIgnorable() && !bWasFullyShown && (dismissalCause != WZ_Notification_Dismissal_Reason::PROGRAMMATIC))
 		{
 			notificationPrefs->incrementNotificationRuns(notification.displayOptions.uniqueNotificationIdentifier());
 		}
@@ -767,6 +769,7 @@ std::shared_ptr<W_NOTIFICATION> W_NOTIFICATION::make(WZ_Queued_Notification* req
 			{
 				debug(LOG_ERROR, "Action defined (\"%s\"), but no action handler!", psNewNotificationForm->request->notification.action.title.c_str());
 			}
+			psNewNotificationForm->request->setWasDismissedByActionButton();
 			psNewNotificationForm->internalDismissNotification();
 		});
 	}
@@ -1293,7 +1296,7 @@ void finishedProcessingNotificationRequest(WZ_Queued_Notification* request, bool
 
 	if (request->notification.onDismissed)
 	{
-		request->notification.onDismissed(request->notification, request->wasProgrammaticallyDismissed());
+		request->notification.onDismissed(request->notification, request->dismissReason());
 	}
 
 	// finished with this notification

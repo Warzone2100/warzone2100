@@ -2505,8 +2505,8 @@ void frontendScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int 
 					war_SetDisplayScale(priorDisplayScale);
 				}
 			});
-			notification.onDismissed = [](const WZ_Notification&, bool wasProgrammaticallyDismissed) {
-				if (wasProgrammaticallyDismissed) { return; }
+			notification.onDismissed = [](const WZ_Notification&, WZ_Notification_Dismissal_Reason reason) {
+				if (reason != WZ_Notification_Dismissal_Reason::USER_DISMISSED) { return; }
 				WZ_Notification dismissed_notification;
 				dismissed_notification.duration = 0;
 				dismissed_notification.contentTitle = _("Tip: Adjusting Display Scale");
