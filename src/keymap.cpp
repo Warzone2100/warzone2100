@@ -84,6 +84,11 @@ bool KeyMappingInput::isReleased() const
 	}
 }
 
+bool KeyMappingInput::isCleared() const
+{
+	return source == KeyMappingInputSource::KEY_CODE && value.keyCode == KEY_CODE::KEY_MAXSCAN;
+}
+
 KeyMappingInput::KeyMappingInput()
 	: source(KeyMappingInputSource::KEY_CODE)
 	, value(KEY_CODE::KEY_IGNORE)
@@ -91,16 +96,14 @@ KeyMappingInput::KeyMappingInput()
 
 KeyMappingInput::KeyMappingInput(const KEY_CODE KeyCode)
 	: source(KeyMappingInputSource::KEY_CODE)
-	, value(KeyMappingInputValue((KEY_CODE)KeyCode))
+	, value(KeyMappingInputValue(KeyCode))
 {
-	//value.keyCode = keyCode; // TODO 1309
 }
 
 KeyMappingInput::KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode)
 	: source(KeyMappingInputSource::MOUSE_KEY_CODE)
-	, value(KeyMappingInputValue((MOUSE_KEY_CODE)mouseKeyCode))
+	, value(KeyMappingInputValue(mouseKeyCode))
 {
-	//value.mouseKeyCode = mouseKeyCode; // TODO 1309
 }
 
 KeyMappingInputValue::KeyMappingInputValue(const KEY_CODE keyCode)

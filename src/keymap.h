@@ -63,6 +63,8 @@ struct KeyMappingInput {
 	bool isDown() const;
 	bool isReleased() const;
 
+	bool isCleared() const;
+
 	KeyMappingInput(const KEY_CODE keyCode);
 	KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode);
 
