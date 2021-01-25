@@ -1085,7 +1085,8 @@ static void handleDiscordJoinRequest(const DiscordUser* request)
 				Discord_Respond(userId.c_str(), DISCORD_REPLY_YES);
 				lastDismissedJoinRequestByUserId.erase(userId);
 			});
-			notification.onDismissed = [userId](const WZ_Notification&, bool){
+			notification.onDismissed = [userId](const WZ_Notification&, WZ_Notification_Dismissal_Reason reason){
+				if (reason == WZ_Notification_Dismissal_Reason::ACTION_BUTTON_CLICK) { return; }
 				Discord_Respond(userId.c_str(), DISCORD_REPLY_NO);
 				// store this to prevent join-spamming
 				lastDismissedJoinRequestByUserId[userId] = std::chrono::system_clock::now();
