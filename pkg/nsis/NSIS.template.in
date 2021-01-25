@@ -46,8 +46,18 @@ Unicode true
 
   !define ADDITIONAL_PLUGINS_DIR "${TOP_SRCDIR}\pkg\nsis\plugins"
 
+  !ifdef NSIS_IX86
   !addplugindir /x86-ansi "${ADDITIONAL_PLUGINS_DIR}\x86-ansi"
   !addplugindir /x86-unicode "${ADDITIONAL_PLUGINS_DIR}\x86-unicode"
+  !endif
+
+  !ifdef NSIS_AMD64
+  !addplugindir /amd64-unicode "${ADDITIONAL_PLUGINS_DIR}\amd64-unicode"
+  !endif
+
+  !ifdef NSIS_ARM64
+  !addplugindir /arm64-unicode "${ADDITIONAL_PLUGINS_DIR}\arm64-unicode"
+  !endif
 
 ;--------------------------------
 ;General
