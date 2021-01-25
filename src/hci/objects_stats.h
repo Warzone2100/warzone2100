@@ -24,6 +24,7 @@ public:
 	virtual bool showInterface() = 0;
 	void jumpToHighlighted();
 	void updateHighlighted();
+	void clearStructureSelection();
 	void selectObject(BASE_OBJECT *object);
 
 	virtual BASE_OBJECT *getHighlightedObject() const = 0;
@@ -102,7 +103,7 @@ protected:
 	}
 
 	virtual std::shared_ptr<BaseObjectsController> getController() const = 0;
-	virtual void selectAndJump();
+	void jump();
 
 	size_t objectIndex;
 
