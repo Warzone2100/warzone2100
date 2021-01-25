@@ -110,7 +110,7 @@ void ScrollableListWidget::resizeChildren(uint32_t width)
 {
 	scrollableHeight = 0;
 	auto nextOffset = 0;
-	for (auto child : listView->children())
+	for (auto& child : listView->children())
 	{
 		child->setGeometry(0, nextOffset, width, child->height());
 		scrollableHeight = nextOffset + child->height();
