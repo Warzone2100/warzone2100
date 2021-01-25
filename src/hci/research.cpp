@@ -237,7 +237,14 @@ private:
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
-		selectAndJump();
+
+		controller->clearStructureSelection();
+		controller->selectObject(controller->getObjectAt(objectIndex));
+		if (!offWorldKeepLists)
+		{
+			jump();
+		}
+
 		controller->displayStatsForm();
 	}
 
@@ -291,14 +298,6 @@ protected:
 	std::shared_ptr<BaseObjectsController> getController() const override
 	{
 		return controller;
-	}
-
-	void selectAndJump() override
-	{
-		if (!offWorldKeepLists)
-		{
-			BaseWidget::selectAndJump();
-		}
 	}
 
 private:
@@ -414,7 +413,7 @@ private:
 		{
 			//might need to cancel the hold on research facility
 			releaseResearch(facility, ModeQueue);
-			clearSelection();
+			controller->clearStructureSelection();
 			controller->selectObject(facility);
 			controller->displayStatsForm();
 		}

@@ -86,7 +86,9 @@ public:
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
-		selectAndJump();
+		clearSelection();
+		controller->selectObject(controller->getObjectAt(objectIndex));
+		jump();
 		controller->displayOrderForm();
 	}
 

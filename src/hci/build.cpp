@@ -169,7 +169,9 @@ public:
 			return;
 		}
 
-		selectAndJump();
+		clearSelection();
+		controller->selectObject(controller->getObjectAt(objectIndex));
+		jump();
 
 		controller->displayStatsForm();
 	}

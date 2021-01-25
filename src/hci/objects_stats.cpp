@@ -16,12 +16,22 @@
 #include "../warcam.h"
 #include "../geometry.h"
 
+void BaseObjectsController::clearStructureSelection()
+{
+	for (auto structure = interfaceStructList(); structure != nullptr; structure = structure->psNext)
+	{
+		structure->selected = false;
+	}
+}
+
 void BaseObjectsController::selectObject(BASE_OBJECT *object)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
 	object->selected = true;
 	triggerEventSelected();
 	jsDebugSelected(object);
 	setHighlightedObject(object);
+	refresh();
 }
 
 void BaseObjectsController::jumpToHighlighted()
@@ -108,13 +118,10 @@ void StatsButton::addProgressBar()
 	progressBar->setBackgroundColour(WZCOL_BLACK);
 }
 
-void ObjectButton::selectAndJump()
+void ObjectButton::jump()
 {
 	auto object = getController()->getObjectAt(objectIndex);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
-
-	clearSelection();
-	getController()->selectObject(object);
 
 	if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(object, 0))
 	{
