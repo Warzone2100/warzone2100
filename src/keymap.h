@@ -95,7 +95,7 @@ KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingPrior
 KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingPriority priority = KeyMappingPriority::LAST);
 void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
 void keyInitMappings(bool bForceDefaults);
-KEY_CODE getLastSubKey();
+KeyMappingInput getLastInput();
 KEY_CODE getLastMetaKey();
 void processDebugMappings(unsigned player, bool val);
 bool getDebugMappingStatus();

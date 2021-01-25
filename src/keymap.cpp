@@ -167,7 +167,8 @@ static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 std::list<KEY_MAPPING> keyMappings;
 
 /* Last meta and sub key that were recorded */
-static KEY_CODE	lastMetaKey, lastSubKey;
+static KEY_CODE	lastMetaKey;
+static KeyMappingInput lastInput;
 
 // ----------------------------------------------------------------------------------
 // Adding a mapped function ? add a save pointer! Thank AlexL.
@@ -1030,10 +1031,7 @@ void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents)
 
 		/* Execute the action if mapping was hit */
 		if (mappingWasHit) {
-			if (keyToProcess->input.source == KeyMappingInputSource::KEY_CODE)
-			{
-				lastSubKey = keyToProcess->input.value.keyCode;
-			}
+			lastInput = keyToProcess->input;
 			keyToProcess->function();
 		}
 	}
@@ -1103,9 +1101,9 @@ void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents)
 
 // ----------------------------------------------------------------------------------
 /* Returns the key code of the last sub key pressed - allows called functions to have a simple stack */
-KEY_CODE getLastSubKey()
+KeyMappingInput getLastInput()
 {
-	return lastSubKey;
+	return lastInput;
 }
 
 // ----------------------------------------------------------------------------------
