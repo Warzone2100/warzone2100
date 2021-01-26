@@ -414,6 +414,7 @@ bool loadConfig()
 		displayScale = 500;
 	}
 	war_SetDisplayScale(static_cast<unsigned int>(displayScale));
+	war_setAutoAdjustDisplayScale(iniGetBool("autoAdjustDisplayScale", true).value());
 	// 640x480 is minimum that we will support, but default to something more sensible
 	int width = iniGetInteger("width", war_GetWidth()).value();
 	int height = iniGetInteger("height", war_GetHeight()).value();
@@ -549,6 +550,7 @@ bool saveConfig()
 	iniSetBool("trapCursor", war_GetTrapCursor());
 	iniSetInteger("vsync", war_GetVsync());
 	iniSetInteger("displayScale", war_GetDisplayScale());
+	iniSetBool("autoAdjustDisplayScale", war_getAutoAdjustDisplayScale());
 	iniSetInteger("textureSize", getTextureSize());
 	iniSetInteger("antialiasing", war_getAntialiasing());
 	iniSetInteger("UPnP", (int)NetPlay.isUPNP);
