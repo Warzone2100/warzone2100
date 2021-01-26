@@ -59,12 +59,7 @@ public:
 		return highlightedFactory;
 	}
 
-	void setHighlightedObject(BASE_OBJECT *object) override
-	{
-		auto factory = castStructure(object);
-		ASSERT_OR_RETURN(, StructIsFactory(factory), "Invalid factory pointer");
-		highlightedFactory = factory;
-	}
+	void setHighlightedObject(BASE_OBJECT *object) override;
 
 private:
 	void updateFactoriesList();

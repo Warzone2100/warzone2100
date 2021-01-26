@@ -148,6 +148,20 @@ void ResearchController::startResearch(RESEARCH *research)
 	}
 }
 
+void ResearchController::setHighlightedObject(BASE_OBJECT *object)
+{
+	if (object == nullptr)
+	{
+		highlightedFacility = nullptr;
+		return;
+	}
+
+	auto facility = castStructure(object);
+	ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
+	ASSERT_OR_RETURN(, facility->pStructureType->type == REF_RESEARCH, "Invalid facility pointer");
+	highlightedFacility = facility;
+}
+
 class AllyResearchsIcons
 {
 private:

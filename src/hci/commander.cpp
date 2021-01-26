@@ -65,6 +65,20 @@ void CommanderController::refresh()
 	}
 }
 
+void CommanderController::setHighlightedObject(BASE_OBJECT *object)
+{
+	if (object == nullptr)
+	{
+		highlightedCommander = nullptr;
+		return;
+	}
+
+	auto commander = castDroid(object);
+	ASSERT_NOT_NULLPTR_OR_RETURN(, commander);
+	ASSERT_OR_RETURN(, commander->droidType == DROID_COMMAND, "Droid is not a commander");
+	highlightedCommander = commander;
+}
+
 class CommanderObjectButton : public ObjectButton
 {
 	typedef	ObjectButton BaseWidget;

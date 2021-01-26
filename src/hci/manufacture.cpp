@@ -122,6 +122,19 @@ void ManufactureController::refresh()
 	}
 }
 
+void ManufactureController::setHighlightedObject(BASE_OBJECT *object)
+{
+	if (object == nullptr)
+	{
+		highlightedFactory = nullptr;
+		return;
+	}
+
+	auto factory = castStructure(object);
+	ASSERT_OR_RETURN(, StructIsFactory(factory), "Invalid factory pointer");
+	highlightedFactory = factory;
+}
+
 class ManufactureObjectButton : public ObjectButton
 {
 private:
