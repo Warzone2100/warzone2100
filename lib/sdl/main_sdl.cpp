@@ -1586,6 +1586,137 @@ void processScreenSizeChangeNotificationIfNeeded()
 	}
 }
 
+#if defined(WZ_OS_WIN)
+
+# if defined(__has_include)
+#  if __has_include(<shellscalingapi.h>)
+#   include <shellscalingapi.h>
+#  endif
+# endif
+
+# if !defined(DPI_ENUMS_DECLARED)
+typedef enum PROCESS_DPI_AWARENESS
+{
+	PROCESS_DPI_UNAWARE = 0,
+	PROCESS_SYSTEM_DPI_AWARE = 1,
+	PROCESS_PER_MONITOR_DPI_AWARE = 2
+} PROCESS_DPI_AWARENESS;
+# endif
+typedef HRESULT (WINAPI *GetProcessDpiAwarenessFunction)(
+	HANDLE                hprocess,
+	PROCESS_DPI_AWARENESS *value
+);
+typedef BOOL (WINAPI *IsProcessDPIAwareFunction)();
+
+static bool win_IsProcessDPIAware()
+{
+	HMODULE hShcore = LoadLibraryW(L"Shcore.dll");
+	if (hShcore != NULL)
+	{
+		const auto* func_getProcessDpiAwareness = reinterpret_cast<GetProcessDpiAwarenessFunction>(reinterpret_cast<void*>(GetProcAddress(hShcore, "GetProcessDpiAwareness")));
+		if (func_getProcessDpiAwareness)
+		{
+			PROCESS_DPI_AWARENESS result = PROCESS_DPI_UNAWARE;
+			if (func_getProcessDpiAwareness(nullptr, &result) == S_OK)
+			{
+				FreeLibrary(hShcore);
+				return result != PROCESS_DPI_UNAWARE;
+			}
+		}
+		FreeLibrary(hShcore);
+	}
+	HMODULE hUser32 = LoadLibraryW(L"User32.dll");
+	ASSERT_OR_RETURN(false, hUser32 != NULL, "Unable to get handle to User32?");
+	const auto* func_isProcessDPIAware = reinterpret_cast<IsProcessDPIAwareFunction>(reinterpret_cast<void*>(GetProcAddress(hUser32, "IsProcessDPIAware")));
+	bool bIsProcessDPIAware = false;
+	if (func_isProcessDPIAware)
+	{
+		bIsProcessDPIAware = (func_isProcessDPIAware() == TRUE);
+	}
+	FreeLibrary(hUser32);
+	return bIsProcessDPIAware;
+}
+#endif
+
+#if defined(WZ_OS_WIN) // currently only used on Windows
+static bool wzGetDisplayDPI(int displayIndex, float* dpi, float* baseDpi)
+{
+	const float systemBaseDpi =
+#if defined(WZ_OS_WIN) || defined(_WIN32)
+	96.f;
+#elif defined(WZ_OS_MAC) || defined(__APPLE__)
+	72.f;
+#elif defined(__ANDROID__)
+	160.f;
+#else
+	// default to 96, but possibly extend if needed
+	96.f;
+#endif
+	if (baseDpi)
+	{
+		*baseDpi = systemBaseDpi;
+	}
+
+	float hdpi, vdpi;
+	if (SDL_GetDisplayDPI(displayIndex, nullptr, &hdpi, &vdpi) != 0)
+	{
+		debug(LOG_WARNING, "Failed to get the display (%d) DPI because : %s", displayIndex, SDL_GetError());
+		return false;
+	}
+	if (dpi)
+	{
+		*dpi = std::min(hdpi, vdpi);
+	}
+	return true;
+}
+#endif
+
+unsigned int wzGetDefaultBaseDisplayScale(int displayIndex)
+{
+#if defined(WZ_OS_WIN)
+	// SDL does not yet have built-in "high-DPI display" support on Windows (as of SDL 2.0.14)
+	// Thus, all adjustments must be made using the Display Scale feature in WZ itself
+	// Calculate a good base game Display Scale based on the actual screen display scale
+	if (!win_IsProcessDPIAware())
+	{
+		return 100;
+	}
+	float dpi, baseDpi;
+	if (!wzGetDisplayDPI(displayIndex, &dpi, &baseDpi))
+	{
+		// Failed to get the display DPI
+		return 100;
+	}
+	unsigned int approxActualDisplayScale = static_cast<unsigned int>(ceil((dpi / baseDpi) * 100.f));
+	auto availableDisplayScales = wzAvailableDisplayScales();
+	std::sort(availableDisplayScales.begin(), availableDisplayScales.end());
+	auto displayScale = std::lower_bound(availableDisplayScales.begin(), availableDisplayScales.end(), approxActualDisplayScale);
+	if (displayScale == availableDisplayScales.end())
+	{
+		// return the largest available display scale
+		return availableDisplayScales.back();
+	}
+	if (*displayScale != approxActualDisplayScale)
+	{
+		if (displayScale == availableDisplayScales.begin())
+		{
+			// no lower display scale to return
+			return 100;
+		}
+		--displayScale;
+	}
+	return *displayScale;
+#elif defined(WZ_OS_MAC)
+	// SDL has built-in "high-DPI display" support on Apple platforms
+	// Just return 100%
+	return 100;
+#else
+	// SDL has built-in "high-DPI display" support on many other platforms (Wayland [SDL 2.0.10+])
+	// For now, rely on that, and just return 100%
+	return 100;
+#endif
+}
+
 bool wzChangeDisplayScale(unsigned int displayScale)
 {
 	float newDisplayScaleFactor = (float)displayScale / 100.f;
@@ -2030,6 +2161,25 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 		war_SetScreen(0);
 	}
 
+	if (war_getAutoAdjustDisplayScale())
+	{
+		// Since SDL (at least <= 2.0.14) does not provide built-in support for high-DPI displays on *some* platforms
+		// (example: Windows), do our best to bump up the game's Display Scale setting to be a better match if the screen
+		// on which the game starts has a higher effective Display Scale than the game's starting Display Scale setting.
+		unsigned int screenBaseDisplayScale = wzGetDefaultBaseDisplayScale(screenIndex);
+		if (screenBaseDisplayScale > wzGetCurrentDisplayScale())
+		{
+			// When bumping up the display scale, also increase the target window size proportionally
+			debug(LOG_WZ, "Increasing game Display Scale to better match calculated default base display scale: %u%% -> %u%%", wzGetCurrentDisplayScale(), screenBaseDisplayScale);
+			unsigned int priorDisplayScale = wzGetCurrentDisplayScale();
+			setDisplayScale(screenBaseDisplayScale);
+			float displayScaleDiff = (float)screenBaseDisplayScale / (float)priorDisplayScale;
+			windowWidth = static_cast<unsigned int>(ceil((float)windowWidth * displayScaleDiff));
+			windowHeight = static_cast<unsigned int>(ceil((float)windowHeight * displayScaleDiff));
+			war_SetDisplayScale(screenBaseDisplayScale); // save the new display scale configuration
+		}
+	}
+
 	// Calculate the minimum window size given the current display scale
 	unsigned int minWindowWidth = 0, minWindowHeight = 0;
 	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
@@ -2120,14 +2270,14 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	if (resultingWidth < minWindowWidth || resultingHeight < minWindowHeight)
 	{
 		// The created window size (that the system returned) is less than the minimum required window size (for this display scale)
-		debug(LOG_ERROR, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; which is below the required minimum size of %d x %d for the current display scale level", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
+		debug(LOG_WARNING, "Failed to create window at desired resolution: [%d] %d x %d; instead, received window of resolution: [%d] %d x %d; which is below the required minimum size of %d x %d for the current display scale level", war_GetScreen(), windowWidth, windowHeight, war_GetScreen(), resultingWidth, resultingHeight, minWindowWidth, minWindowHeight);
 
 		// Adjust the display scale (if possible)
 		unsigned int maxDisplayScale = wzGetMaximumDisplayScaleForWindowSize(resultingWidth, resultingHeight);
 		if (maxDisplayScale >= 100)
 		{
 			// Reduce the display scale
-			debug(LOG_ERROR, "Reducing the display scale level to the maximum supported for this window size: %u", maxDisplayScale);
+			debug(LOG_WARNING, "Reducing the display scale level to the maximum supported for this window size: %u", maxDisplayScale);
 			setDisplayScale(maxDisplayScale);
 			war_SetDisplayScale(maxDisplayScale); // save the new display scale configuration
 			wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight);
