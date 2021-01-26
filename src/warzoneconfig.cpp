@@ -64,6 +64,7 @@ struct WARZONE_GLOBALS
 	bool radarJump = false;
 	video_backend gfxBackend = video_backend::opengl; // the actual default value is determined in loadConfig()
 	JS_BACKEND jsBackend = (JS_BACKEND)0;
+	bool autoAdjustDisplayScale = true;
 };
 
 static WARZONE_GLOBALS warGlobs;
@@ -400,4 +401,14 @@ JS_BACKEND war_getJSBackend()
 void war_setJSBackend(JS_BACKEND backend)
 {
 	warGlobs.jsBackend = backend;
+}
+
+bool war_getAutoAdjustDisplayScale()
+{
+	return warGlobs.autoAdjustDisplayScale;
+}
+
+void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale)
+{
+	warGlobs.autoAdjustDisplayScale = autoAdjustDisplayScale;
 }

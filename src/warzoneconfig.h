@@ -114,6 +114,8 @@ video_backend war_getGfxBackend();
 void war_setGfxBackend(video_backend backend);
 JS_BACKEND war_getJSBackend();
 void war_setJSBackend(JS_BACKEND backend);
+bool war_getAutoAdjustDisplayScale();
+void war_setAutoAdjustDisplayScale(bool autoAdjustDisplayScale);
 
 /**
  * Enable or disable sound initialization
