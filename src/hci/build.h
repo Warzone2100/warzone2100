@@ -75,13 +75,7 @@ public:
 		return highlightedBuilder;
 	}
 
-	void setHighlightedObject(BASE_OBJECT *object) override
-	{
-		auto builder = castDroid(object);
-		ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
-		ASSERT_OR_RETURN(, isConstructionDroid(builder), "Droid is not a construction droid");
-		highlightedBuilder = builder;
-	}
+	void setHighlightedObject(BASE_OBJECT *object) override;
 
 private:
 	void updateBuildersList();

@@ -36,13 +36,7 @@ public:
 		return highlightedCommander;
 	}
 
-	void setHighlightedObject(BASE_OBJECT *object) override
-	{
-		auto commander = castDroid(object);
-		ASSERT_NOT_NULLPTR_OR_RETURN(, commander);
-		ASSERT_OR_RETURN(, commander->droidType == DROID_COMMAND, "Droid is not a commander");
-		highlightedCommander = commander;
-	}
+	void setHighlightedObject(BASE_OBJECT *object) override;
 
 private:
 	void updateCommandersList();

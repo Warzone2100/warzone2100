@@ -145,6 +145,20 @@ void BuildController::toggleBuilderSelection(DROID *droid)
 	triggerEventSelected();
 }
 
+void BuildController::setHighlightedObject(BASE_OBJECT *object)
+{
+	if (object == nullptr)
+	{
+		highlightedBuilder = nullptr;
+		return;
+	}
+
+	auto builder = castDroid(object);
+	ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
+	ASSERT_OR_RETURN(, isConstructionDroid(builder), "Droid is not a construction droid");
+	highlightedBuilder = builder;
+}
+
 class BuildObjectButton : public ObjectButton
 {
 private:
