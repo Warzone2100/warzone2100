@@ -195,14 +195,13 @@ public:
 		ASSERT_OR_RETURN(, psParentForm != nullptr, "Cannot handle KeyMapButton::clicked: parent form was nullptr!");
 
 		const int slotIndex = static_cast<size_t>(slot);
-		const KEY_MAPPING* clickedMapping = targetFunctionData->mappings[slotIndex];
-		const KEY_MAPPING* primaryMapping = targetFunctionData->mappings[static_cast<size_t>(KeyMappingSlot::PRIMARY)];
+		const KeyFunctionInfo* info = keyFunctionInfoByFunction(targetFunctionData->function);
+		ASSERT_OR_RETURN(, info != nullptr, "Could not find key function info for function during onClick handler!");
 
-		const bool bClickedIsNotAssignable = clickedMapping && clickedMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
-		const bool bPrimaryIsNotAssignable = primaryMapping && primaryMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
-		if (bClickedIsNotAssignable || bPrimaryIsNotAssignable)
+		if (!info->assignable)
 		{
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			psParentForm->unhighlightSelected();
 			return;
 		}
 
@@ -240,17 +239,15 @@ public:
 		int h = height();
 		int w = width();
 
-		const KEY_MAPPING* primaryMapping = targetFunctionData->mappings[static_cast<unsigned int>(KeyMappingSlot::PRIMARY)];
-		const bool bPrimaryIsFixed = primaryMapping && (primaryMapping->status == KEYMAP_ALWAYS || primaryMapping->status == KEYMAP_ALWAYS_PROCESS);
-
-		const KEY_MAPPING* mapping = targetFunctionData->mappings[static_cast<unsigned int>(slot)];
+		const KeyFunctionInfo* info = keyFunctionInfoByFunction(targetFunctionData->function);
+		ASSERT_OR_RETURN(, info != nullptr, "Invalid key function on key map button, could not find matching key function info!");
 
 		// Draw base
 		if (keyMapSelection.isSelected(targetFunctionData->function, slot))
 		{
 			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_ACTIVE);
 		}
-		else if (bPrimaryIsFixed)
+		else if (!info->assignable)
 		{
 			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_FIXED);
 		}
@@ -263,6 +260,7 @@ public:
 		PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
 		char sPrimaryKey[MAX_STR_LENGTH];
 		sPrimaryKey[0] = '\0';
+		const KEY_MAPPING* mapping = targetFunctionData->mappings[static_cast<unsigned int>(slot)];
 		if (mapping && !mapping->input.isCleared())
 		{
 			// Check to see if key is on the numpad, if so tell user and change color
@@ -275,7 +273,7 @@ public:
 		}
 		else
 		{
-			sstrcpy(sPrimaryKey, bPrimaryIsFixed ? "\0" : getNotBoundLabel().c_str());
+			sstrcpy(sPrimaryKey, info->assignable ? getNotBoundLabel().c_str() : "\0");
 		}
 
 		wzBindingText.setText(sPrimaryKey, iV_fonts::font_regular);
@@ -453,29 +451,18 @@ bool runKeyMapEditor()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-std::vector<std::reference_wrapper<const KeyFunctionInfo>> getAssignableKeymapEntries()
+std::vector<std::reference_wrapper<const KeyFunctionInfo>> getVisibleKeymapEntries()
 {
 	std::vector<std::reference_wrapper<const KeyFunctionInfo>> visibleMappings;
-	for (const KeyFunctionInfo& entry : allKeymapEntries())
+	for (const KeyFunctionInfo& info : allKeymapEntries())
 	{
-		bool bIsAssignable = false;
-		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
+		// TODO: this does not hide keybinds which used to have __HIDE status
+		if (info.context != InputContext::__DEBUG)
 		{
-			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
-			if (const KEY_MAPPING* mapping = keyGetMappingFromFunction(entry.function, slot))
-			{
-				if (mapping->status != KEYMAP__DEBUG && mapping->status != KEYMAP___HIDE)
-				{
-					bIsAssignable = true;
-				}
-			}
-		}
-
-		if (bIsAssignable)
-		{
-			visibleMappings.push_back(entry);
+			visibleMappings.push_back(info);
 		}
 	}
+
 
 	return visibleMappings;
 }
@@ -483,17 +470,14 @@ std::vector<std::reference_wrapper<const KeyFunctionInfo>> getAssignableKeymapEn
 std::vector<std::reference_wrapper<const KEY_MAPPING>> getVisibleMappings()
 {
 	std::vector<std::reference_wrapper<const KEY_MAPPING>> visibleMappings;
-	for (const KeyFunctionInfo& info : allKeymapEntries())
+	for (const KeyFunctionInfo& info : getVisibleKeymapEntries())
 	{
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
 			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
 			if (const KEY_MAPPING* mapping = keyGetMappingFromFunction(info.function, slot))
 			{
-				if (mapping->status != KEYMAP__DEBUG && mapping->status != KEYMAP___HIDE)
-				{
-					visibleMappings.push_back(*mapping);
-				}
+				visibleMappings.push_back(*mapping);
 			}
 		}
 	}
@@ -566,7 +550,6 @@ bool saveKeyMap()
 	ini.beginArray("mappings");
 	for (auto const &mapping : keyMappings)
 	{
-		ini.setValue("status", mapping.status);
 		ini.setValue("meta", mapping.metaKeyCode);
 
 		switch (mapping.input.source) {
@@ -596,9 +579,9 @@ bool saveKeyMap()
 		}
 
 		ini.setValue("action", mapping.action);
-		if (auto function = keyFunctionInfoByFunction(mapping.function))
+		if (auto info = keyFunctionInfoByFunction(mapping.function))
 		{
-			ini.setValue("function", function->name);
+			ini.setValue("function", info->name);
 		}
 
 		ini.nextArrayItem();
@@ -638,14 +621,12 @@ bool loadKeyMap()
 
 	for (ini.beginArray("mappings"); ini.remainingArrayItems(); ini.nextArrayItem())
 	{
-		auto name = ini.value("name", "").toWzString();
-		auto status = (KEY_STATUS)ini.value("status", 0).toInt();
 		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
 		auto sub = ini.value("sub", 0).toInt();
 		auto action = (KEY_ACTION)ini.value("action", 0).toInt();
 		auto functionName = ini.value("function", "").toWzString();
-		auto function = keyFunctionInfoByName(functionName.toUtf8());
-		if (function == nullptr)
+		auto info = keyFunctionInfoByName(functionName.toUtf8());
+		if (info == nullptr)
 		{
 			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.toUtf8().c_str());
 			continue;
@@ -658,7 +639,7 @@ bool loadKeyMap()
 		const WzString slotName = ini.value("slot", "primary").toWzString();
 		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
 
-		keyAddMapping(status, meta, input, action, function->function, slot);
+		keyAddMapping(meta, input, action, info->function, slot);
 	}
 	ini.endArray();
 	return true;
@@ -715,11 +696,9 @@ void KeyMapForm::initialize(bool isInGame)
 		}
 	}
 
-	//Put the buttons on it
-	auto infos = getAssignableKeymapEntries();
-
+	auto infos = getVisibleKeymapEntries();
 	std::sort(infos.begin(), infos.end(), [](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
-		return a.name < b.name;
+		return a.displayName < b.displayName;
 	});
 
 	/* Add key mappings to the form */
@@ -819,31 +798,33 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		metakey = KEY_LMETA;
 	}
 
-	// check if bound to a fixed combo.
-	const KEY_MAPPING* pExist = keyFindMapping(metakey, input);
-	if (pExist && (pExist->status == KEYMAP_ALWAYS || pExist->status == KEYMAP_ALWAYS_PROCESS))
+	const auto selectedFunction = keyMapSelection.data->function;
+	const KeyFunctionInfo* info = keyFunctionInfoByFunction(selectedFunction);
+	ASSERT_OR_RETURN(false, info != nullptr, "Could not find key function info for function while creating a new mapping!");
+
+	/* check if bound to a fixed combo. */
+	if (!info->assignable)
 	{
 		unhighlightSelected();
 		return false;
 	}
 
 	/* Clear down mappings using these keys */
-	clearKeyMappingIfExists(metakey, input);
+	clearKeyMappingIfConflicts(metakey, input, info->context);
 
 	/* Try and see if its there already - add it if not. e.g. secondary keybinds are expected to be null on default key sets */
-	const auto selectedFunction = keyMapSelection.data->function;
 	const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
 	KEY_MAPPING* psMapping = keyGetMappingFromFunction(selectedFunction, keyMapSelection.slot);
 	if (!psMapping)
 	{
-		psMapping = keyAddMapping(KEY_STATUS::KEYMAP_ASSIGNABLE, metakey, input, KEY_ACTION::KEYMAP_PRESSED, selectedFunction, keyMapSelection.slot);
+		psMapping = keyAddMapping(metakey, input, KEY_ACTION::KEYMAP_PRESSED, selectedFunction, keyMapSelection.slot);
 		keyMapSelection.data->mappings[slotIndex] = psMapping;
 	}
 	else
 	{
 		/* Found existing mapping, alter it to the new values */
 		psMapping->input       = input;
-		psMapping->status      = KEYMAP_ASSIGNABLE;
+		psMapping->info        = info;
 		psMapping->metaKeyCode = metakey;
 	}
 	invalidateKeyMappingSortOrder();
