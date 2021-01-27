@@ -391,14 +391,6 @@ void ProcessRadarInput()
 					requestRadarTrack(PosX * TILE_UNITS, PosY * TILE_UNITS);
 				}
 			}
-			else if (mousePressed(MOUSE_WUP))
-			{
-				kf_RadarZoomIn();
-			}
-			else if (mousePressed(MOUSE_WDN))
-			{
-				kf_RadarZoomOut();
-			}
 		}
 	}
 }
@@ -433,7 +425,7 @@ void processInput()
 		mouseOverConsole = mouseOverHistoryConsoleBox();
 
 		/* Process all of our key mappings */
-		if (!isMouseOverRadar() && mOverConstruction)
+		if (mOverConstruction)
 		{
 			if (mousePressed(MOUSE_WUP))
 			{
@@ -447,9 +439,15 @@ void processInput()
 		}
 	}
 
+	InputContext::RADAR.setState(
+		isMouseOverRadar()
+			? InputContext::State::PRIORITIZED
+			: InputContext::State::ACTIVE
+	);
+
 	if (!isInTextInputMode())
 	{
-		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction && !isMouseOverRadar();
+		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction;
 
 		if (intMode == INT_DESIGN)
 		{

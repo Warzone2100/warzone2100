@@ -33,15 +33,6 @@ enum KEY_ACTION
 	KEYMAP_RELEASED
 };
 
-enum KEY_STATUS
-{
-	KEYMAP__DEBUG,
-	KEYMAP_ALWAYS,
-	KEYMAP_ASSIGNABLE,
-	KEYMAP_ALWAYS_PROCESS,
-	KEYMAP___HIDE
-};
-
 enum class KeyMappingInputSource
 {
 	KEY_CODE = 1,
@@ -57,7 +48,8 @@ union KeyMappingInputValue
 	KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode);
 };
 
-struct KeyMappingInput {
+struct KeyMappingInput
+{
 	KeyMappingInputSource source;
 	KeyMappingInputValue  value;
 
@@ -99,6 +91,100 @@ struct KeyMappingInput {
 	};
 };
 
+struct ContextPriority {
+	const unsigned int prioritized;
+	const unsigned int active;
+
+	ContextPriority(unsigned int value)
+		: ContextPriority(value, value)
+	{
+	}
+	ContextPriority(unsigned int prioritized, unsigned int active)
+		: prioritized(prioritized)
+		, active(active)
+	{
+	}
+};
+
+struct InputContext {
+	/* Always enabled. Actions in this context will always execute. Bindings with collisions to ALWAYS_ACTIVE keybinds are not valid, as they would never get executed */
+	static InputContext ALWAYS_ACTIVE;
+	/* Background-level keybinds. These run at the lowest priority, and are not executed if _anything_ else is bound to the keys */
+	static InputContext BACKGROUND;
+	/* Generic gameplay (main viewport) keybindings. Unit commands etc. */
+	static InputContext GAMEPLAY;
+	/* Active while player hovers over the radar. */
+	static InputContext RADAR;
+
+	/* For debug-only bindings. */
+	static InputContext __DEBUG;
+
+	enum class State {
+		/*
+		 The input context is prioritized. e.g. `InputContext::RADAR` is prioritized when player hovers
+		 over the radar, prioritizing any bindings belonging to that context.
+		 */
+		PRIORITIZED,
+
+		/*
+		 The input context is active. Any bindings will use the lower `active` priority.
+		 */
+		ACTIVE,
+
+		/*
+		 The input context is inactive. Bindings in the context are ignored.
+		 */
+		INACTIVE,
+	};
+
+	InputContext(const ContextPriority priority, const State initialState);
+
+	void setState(const State newState);
+
+	/*
+	 Gets the status of this context. If this returns `false`, any bindings belonging to this context
+	 should not be processed.
+	 */
+	bool isActive() const;
+
+	/* Priority of the context when resolving collisions. Context with highest priority wins */
+	unsigned int getPriority() const;
+
+private:
+	const ContextPriority priority;
+	State state;
+	unsigned int index;
+
+	friend bool operator==(const InputContext& lhs, const InputContext& rhs);
+};
+
+bool operator==(const InputContext& lhs, const InputContext& rhs);
+bool operator!=(const InputContext& lhs, const InputContext& rhs);
+
+struct KeyFunctionInfo
+{
+	const InputContext& context;
+	const bool          assignable;
+	void             (* function)();
+	const std::string   name;
+	const std::string   displayName;
+
+	KeyFunctionInfo(
+		const InputContext& context,
+		const bool          assignable,
+		void              (*function)(),
+		const std::string   name,
+		const std::string   displayName
+	);
+
+	// Prevent copies. The entries are immutable and thus should never be copied around.
+	KeyFunctionInfo(const KeyFunctionInfo&) = delete;
+	void operator=(const KeyFunctionInfo&) = delete;
+
+	// Allow construction-time move semantics
+	KeyFunctionInfo(KeyFunctionInfo&&) = default;
+};
+
 bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
 bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
 
@@ -110,13 +196,13 @@ enum class KeyMappingSlot {
 
 struct KEY_MAPPING
 {
-	void             (*function)();
-	KEY_STATUS         status;
-	UDWORD             lastCalled;
-	KEY_CODE           metaKeyCode;
-	KeyMappingInput    input;
-	KEY_ACTION         action;
-	KeyMappingSlot     slot;
+	void                 (*function)();
+	const KeyFunctionInfo* info;
+	UDWORD                 lastCalled;
+	KEY_CODE               metaKeyCode;
+	KeyMappingInput        input;
+	KEY_ACTION             action;
+	KeyMappingSlot         slot;
 
 	bool isActivated() const;
 
@@ -125,9 +211,9 @@ struct KEY_MAPPING
 	bool toString(char* pOutStr) const;
 };
 
-KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
-KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot slot);
-KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingSlot slot = KeyMappingSlot::LAST);
+KEY_MAPPING* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KEY_ACTION action, void (* const pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+KEY_MAPPING* keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot slot);
+KEY_MAPPING* keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingSlot slot = KeyMappingSlot::LAST);
 void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
 void keyInitMappings(bool bForceDefaults);
 KeyMappingInput getLastInput();
@@ -137,32 +223,13 @@ bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
 
-bool clearKeyMappingIfExists(const KEY_CODE metaCode, const KeyMappingInput input);
+bool clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput input, const InputContext& context);
 
 UDWORD	getMarkerX(KEY_CODE code);
 UDWORD	getMarkerY(KEY_CODE code);
 SDWORD	getMarkerSpin(KEY_CODE code);
 
 // for keymap editor.
-struct KeyFunctionInfo
-{
-	void      (*function)();
-	std::string name;
-	std::string displayName;
-
-	KeyFunctionInfo(
-		void      (*function)(),
-		std::string name,
-		std::string displayName
-	);
-
-	// Prevent copies. The entries are immutable and thus should never be copied around.
-	KeyFunctionInfo(const KeyFunctionInfo&) = delete;
-	void operator=(const KeyFunctionInfo&) = delete;
-
-    // Allow construction-time move semantics
-	KeyFunctionInfo(KeyFunctionInfo&&) = default;
-};
 void invalidateKeyMappingSortOrder();
 const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
 KeyFunctionInfo const *keyFunctionInfoByFunction(void (*function)());
