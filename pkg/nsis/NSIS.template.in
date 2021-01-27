@@ -79,8 +79,6 @@ Unicode true
   ManifestDPIAware true
 
 !ifndef PORTABLE
-  ;Default installation folder
-  InstallDir "$PROGRAMFILES\${PACKAGE_NAME}-${PACKAGE_VERSION}"
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\${PACKAGE_NAME}-${PACKAGE_VERSION}" ""
   ;Request application privileges for Windows Vista
@@ -423,7 +421,8 @@ ${EndIf}
     Section "" SecMSSysLibraries
       SetOutPath "$INSTDIR"
 
-      ${If} $MSVCRT16_x86_NotPresent == 1
+      ${If} "${VS_PLATFORM_NAME}" == "Win32"
+      ${AndIf} $MSVCRT16_x86_NotPresent == 1
         !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x86.exe" "Downloading vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
@@ -437,7 +436,7 @@ ${EndIf}
           MessageBox MB_OK|MB_ICONSTOP "Download of system library (x86) failed: $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
-      ${If} ${RunningX64}
+      ${If} "${VS_PLATFORM_NAME}" == "x64"
       ${AndIf} $MSVCRT16_x64_NotPresent == 1
         !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x64.exe" "Downloading vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
@@ -452,7 +451,7 @@ ${EndIf}
           MessageBox MB_OK|MB_ICONSTOP "Download of system library (x64) failed: $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
-      ${If} ${IsNativeARM64}
+      ${If} "${VS_PLATFORM_NAME}" == "arm64"
       ${AndIf} $MSVCRT16_ARM64_NotPresent == 1
         !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/VC_redist.arm64.exe" "Downloading VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
@@ -576,6 +575,7 @@ Function .onInit
   !insertmacro UnSelectSection ${SecFMVs_Eng}
   !insertmacro UnSelectSection ${SecFMVs_EngLo}
 ;    !insertmacro UnSelectSection ${SecFMVs_Ger}
+!endif
 
   ; Determine whether Microsoft system libraries are installed
   !ifdef MSVCRUNTIME
@@ -603,14 +603,14 @@ Function .onInit
         ${EndIf}
       ${EndIf}
       StrCpy $R1 ""
-      ${If} ${IsNativeARM64}
+      ${If} ${RunningX64}
         SetRegView 64
-        ;ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\ARM64" "Bld" ; is this the right registry key to check for ARM64?
+        ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\ARM64" "Bld" ; is this the right registry key to check for ARM64?
         SetRegView lastused
         ;MessageBox MB_OK|MB_ICONSTOP "ARM64 VC14 Runtime Bld: $R1"
-        ;${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
+        ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
           StrCpy $MSVCRT16_ARM64_NotPresent 1
-        ;${EndIf}
+        ${EndIf}
       ${EndIf}
       StrCpy $R1 ""
       SetRegView 32
@@ -642,13 +642,36 @@ Function .onInit
     !endif
   !endif
 
-!endif
+  ${If} ${RunningX64}
+  !ifdef WIN64
+    SetRegView 64
+  !else
+    MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 '$(WZ_64BIT_AVAILABLE)' IDYES installanyway
+    Quit
+  installanyway:
+  !endif
+  ${Else}
+  !ifdef WIN64
+    MessageBox MB_OK|MB_ICONSTOP '$(WZ_64BIT_INSTALL_32BIT_AVAILABLE)'
+    Quit
+  !endif
+  ${EndIf}
 
-!ifdef PORTABLE
- System::Call "kernel32::GetCurrentDirectory(i ${NSIS_MAX_STRLEN}, t .r0)"
- GetFullPathName $0 "$0\"
- StrCpy $INSTDIR "$0${PACKAGE_NAME}-${PACKAGE_VERSION}\"
-!endif
+  !ifndef PORTABLE
+    ${If} $INSTDIR == "" ; Don't override setup.exe /D=c:\custom_dir
+    ;manually set $INSTDIR for 64-bit builds
+    !ifdef WIN64
+      StrCpy $INSTDIR "$PROGRAMFILES64\${PACKAGE_NAME}-${PACKAGE_VERSION}"
+    !else
+      StrCpy $INSTDIR "$PROGRAMFILES\${PACKAGE_NAME}-${PACKAGE_VERSION}"
+    !endif
+    ${EndIf}
+  !else
+    ;PORTABLE build
+    System::Call "kernel32::GetCurrentDirectory(i ${NSIS_MAX_STRLEN}, t .r0)"
+    GetFullPathName $0 "$0\"
+    StrCpy $INSTDIR "$0${PACKAGE_NAME}-${PACKAGE_VERSION}\"
+  !endif
 FunctionEnd
 
 !ifndef INSTALLVIDS

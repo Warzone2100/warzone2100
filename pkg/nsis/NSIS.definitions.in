@@ -9,6 +9,8 @@
 !define WZ_DATADIR_APPEND "@NSIS_WZ_DATADIR_APPEND@"
 !if "@NSIS_MSVCRUNTIME@" == "ON"
   !define MSVCRUNTIME "ON"
+  !define VS_PLATFORM_NAME "@CMAKE_VS_PLATFORM_NAME@"
+
   !if "@NSIS_CALCULATED_MSVCRT_BLD_MINIMUM@" == ""
     # default minimum if one couldn't be determined at build time - last updated 2020-11-18
     !define MSVCRT14_BLD_MINIMUM 29325 ; (14.28.29325.2)
@@ -43,5 +45,18 @@
         !warning "Missing defines for platform: (@CMAKE_VS_PLATFORM_NAME@) in NSIS.definitions.in"
       !endif
     !endif
+  !endif
+!endif
+
+!if "@CMAKE_VS_PLATFORM_NAME@" == "x64"
+  !define WIN64 1
+!endif
+!if "@CMAKE_VS_PLATFORM_NAME@" == "arm64"
+  !define WIN64 1
+!endif
+
+!if "@CMAKE_VS_PLATFORM_NAME@" == ""
+  !if "@CMAKE_SIZEOF_VOID_P@" == "8"
+    !define WIN64 1
   !endif
 !endif
