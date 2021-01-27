@@ -29,4 +29,4 @@ ${LangFileString} TEXT_SecNLS_WinFonts "WinШрифты"
 ${LangFileString} DESC_SecNLS_WinFonts "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "Важные Microsoft Runtime DLL"
-${LangFileString} DESC_SecMSSysLibraries "Загрузить и установить (или обновить) системные библиотеки Microsoft's Visual C++ redistributable, которые могут потребоваться для запуска некоторых компонентов."
+${LangFileString} DESC_SecMSSysLibraries "Загрузить и установить (или обновить) системные библиотеки дистрибутивов Microsoft's Visual C++, которые могут потребоваться для запуска некоторых компонентов."
