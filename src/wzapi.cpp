@@ -108,9 +108,10 @@ BASE_OBJECT *IdToObject(OBJECT_TYPE type, int id, int player)
 	}
 }
 
-wzapi::scripting_instance::scripting_instance(int player, const std::string& scriptName)
+wzapi::scripting_instance::scripting_instance(int player, const std::string& scriptName, const std::string& scriptPath)
 : m_player(player)
 , m_scriptName(scriptName)
+, m_scriptPath(scriptPath)
 { }
 wzapi::scripting_instance::~scripting_instance()
 { }
