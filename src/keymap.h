@@ -71,7 +71,7 @@ struct KeyMappingInput {
 	KeyMappingInput();
 };
 
-enum class KeyMappingPriority {
+enum class KeyMappingSlot {
 	PRIMARY,
 	SECONDARY,
 	LAST
@@ -87,12 +87,12 @@ struct KEY_MAPPING
 	KeyMappingInput    input;
 	KEY_ACTION         action;
 	std::string        name;
-	KeyMappingPriority priority;
+	KeyMappingSlot     slot;
 };
 
-KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, const KeyMappingPriority priority = KeyMappingPriority::PRIMARY);
-KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingPriority priority);
-KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingPriority priority = KeyMappingPriority::LAST);
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot slot);
+KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingSlot slot = KeyMappingSlot::LAST);
 void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
 void keyInitMappings(bool bForceDefaults);
 KeyMappingInput getLastInput();
@@ -118,7 +118,7 @@ KeyMapSaveEntry const *keymapEntryByFunction(void (*function)());
 KeyMapSaveEntry const *keymapEntryByName(std::string const &name);
 extern std::list<KEY_MAPPING> keyMappings;
 KeyMappingInputSource keyMappingSourceByName(std::string const& name);
-KeyMappingPriority keyMappingPriorityByName(std::string const& name);
+KeyMappingSlot keyMappingSlotByName(std::string const& name);
 
 
 #endif // __INCLUDED_SRC_KEYMAP_H__
