@@ -2,6 +2,10 @@ ${LangFileString} WZWelcomeText "Selamat datang di Warzone 2100 installer!\r\n\r
 
 ${LangFileString} WZWelcomeText_Portable "Selamat datang di Warzone 2100 portable installer!\r\n\r\nWizard ini akan memandu Anda sepanjang instalasi dari Warzone 2100 versi portable.\r\n\r\nInstalasi ini sepenuhnya dilakukan sendiri dan Anda dapat meng-uninstall program ini kapan pun dengan menghapus direktori.\r\n\r\nWarzone 2100 ini adalah program yang sepenuhnya sumber terbuka dan 100% gratis! \r\n\r\nKlik untuk melanjutkan."
 
+${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+
 ${LangFileString} WZ_GPL_NEXT "Berikutnya"
 
 ${LangFileString} TEXT_SecBase "File Inti"
