@@ -148,8 +148,8 @@ static void QJSRuntimeFree_LeakHandler_Error(const char* msg)
 class quickjs_scripting_instance : public wzapi::scripting_instance
 {
 public:
-	quickjs_scripting_instance(int player, const std::string& scriptName)
-	: scripting_instance(player, scriptName)
+	quickjs_scripting_instance(int player, const std::string& scriptName, const std::string& scriptPath)
+	: scripting_instance(player, scriptName, scriptPath)
 	{
 		rt = JS_NewRuntime();
 		ctx = JS_NewContext(rt);
@@ -2293,9 +2293,8 @@ static bool strEndsWith(const std::string &str, const std::string &suffix)
 static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
-	JSValue global_obj = JS_GetGlobalObject(ctx);
-	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
-	std::string basePath = QuickJS_GetStdString(ctx, global_obj, "scriptPath");
+	const auto instance = engineToInstanceMap.at(ctx);
+	std::string basePath = instance->scriptPath();
 	std::string basenameStr = JSValueToStdString(ctx, argv[0]);
 	SCRIPT_ASSERT(ctx, strEndsWith(basenameStr, ".js"), "Include file must end in .js");
 	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(basenameStr);
@@ -2846,7 +2845,7 @@ ScriptMapData runMapScript_QuickJS(WzString const &path, uint64_t seed, bool pre
 wzapi::scripting_instance* createQuickJSScriptInstance(const WzString& path, int player, int difficulty)
 {
 	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(path.toUtf8());
-	quickjs_scripting_instance* pNewInstance = new quickjs_scripting_instance(player, basename.baseName());
+	quickjs_scripting_instance* pNewInstance = new quickjs_scripting_instance(player, basename.baseName(), basename.path());
 	if (!pNewInstance->loadScript(path, player, difficulty))
 	{
 		delete pNewInstance;

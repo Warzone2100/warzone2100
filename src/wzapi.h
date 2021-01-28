@@ -556,7 +556,7 @@ namespace wzapi
 	class scripting_instance : public scripting_event_handling_interface
 	{
 	public:
-		scripting_instance(int player, const std::string& scriptName);
+		scripting_instance(int player, const std::string& scriptName, const std::string& scriptPath);
 		virtual ~scripting_instance();
 
 	public:
@@ -564,6 +564,7 @@ namespace wzapi
 
 	public:
 		const std::string& scriptName() const { return m_scriptName; }
+		const std::string& scriptPath() const { return m_scriptPath; }
 		int player() const { return m_player; }
 
 	public:
@@ -623,6 +624,7 @@ namespace wzapi
 	private:
 		int m_player;
 		std::string m_scriptName;
+		std::string m_scriptPath;
 		bool m_isReceivingAllEvents = false;
 	};
 
