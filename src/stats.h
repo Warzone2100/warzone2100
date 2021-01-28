@@ -235,6 +235,9 @@ WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 void statsInitVars();
 
 bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect);
+/*returns the weapon effect string based on the enum passed in */
+const char *getWeaponEffect(WEAPON_EFFECT effect);
+
 bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass);
 
 /* Wrappers */
