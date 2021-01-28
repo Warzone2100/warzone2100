@@ -27,6 +27,7 @@
 // includes
 #include <string.h>
 #include <physfs.h>
+#include <optional-lite/optional.hpp>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/frameresource.h"
@@ -325,18 +326,52 @@ static bool keyMapToString(char *pStr, const KEY_MAPPING *psMapping)
 	return true;
 }
 
-std::vector<KEY_MAPPING *> getVisibleMappings()
+std::vector<std::reference_wrapper<const KeyMapSaveEntry>> getAssignableKeymapEntries()
 {
-	std::vector<KEY_MAPPING *> mappings;
-	for (KEY_MAPPING &mapping : keyMappings)
+	std::vector<std::reference_wrapper<const KeyMapSaveEntry>> visibleMappings;
+	for (const KeyMapSaveEntry& entry : allKeymapEntries())
 	{
-		if (mapping.status != KEYMAP__DEBUG && mapping.status != KEYMAP___HIDE)
+		bool bIsAssignable = false;
+		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
-			mappings.push_back(&mapping);
+			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
+			if (const KEY_MAPPING* mapping = keyGetMappingFromFunction(entry.function, slot))
+			{
+				if (mapping->status != KEYMAP__DEBUG && mapping->status != KEYMAP___HIDE)
+				{
+					bIsAssignable = true;
+				}
+			}
+		}
+
+		if (bIsAssignable)
+		{
+			visibleMappings.push_back(entry);
 		}
 	}
 
-	return mappings;
+	return visibleMappings;
+}
+
+std::vector<std::reference_wrapper<const KEY_MAPPING>> getVisibleMappings()
+{
+	std::vector<std::reference_wrapper<const KEY_MAPPING>> visibleMappings;
+	for (const KeyMapSaveEntry& info : allKeymapEntries())
+	{
+		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
+		{
+			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
+			if (const KEY_MAPPING* mapping = keyGetMappingFromFunction(info.function, slot))
+			{
+				if (mapping->status != KEYMAP__DEBUG && mapping->status != KEYMAP___HIDE)
+				{
+					visibleMappings.push_back(*mapping);
+				}
+			}
+		}
+	}
+
+	return visibleMappings;
 }
 
 static unsigned int getMaxKeyMapNameWidth()
@@ -349,8 +384,8 @@ static unsigned int getMaxKeyMapNameWidth()
 		max = static_cast<int>(displayText.width());
 
 		char sKey[MAX_STR_LENGTH];
-		for (auto mapping : getVisibleMappings()) {
-			keyMapToString(sKey, mapping);
+		for (const KEY_MAPPING& mapping : getVisibleMappings()) {
+			keyMapToString(sKey, &mapping);
 			displayText.setText(sKey, font_regular);
 			max = MAX(max, static_cast<unsigned int>(displayText.width()));
 		}
@@ -498,7 +533,6 @@ bool saveKeyMap()
 	ini.beginArray("mappings");
 	for (auto const &mapping : keyMappings)
 	{
-		ini.setValue("name", mapping.name.c_str());
 		ini.setValue("status", mapping.status);
 		ini.setValue("meta", mapping.metaKeyCode);
 
@@ -591,7 +625,7 @@ bool loadKeyMap()
 		const WzString slotName = ini.value("slot", "primary").toWzString();
 		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
 
-		keyAddMapping(status, meta, input, action, function->function, name.toUtf8().c_str(), slot);
+		keyAddMapping(status, meta, input, action, function->function, slot);
 	}
 	ini.endArray();
 	return true;
@@ -685,63 +719,51 @@ void KeyMapForm::initialize(bool isInGame)
 	}
 
 	//Put the buttons on it
-	auto mappings = getVisibleMappings();
+	auto infos = getAssignableKeymapEntries();
 
-	std::sort(mappings.begin(), mappings.end(), [](KEY_MAPPING *a, KEY_MAPPING *b) {
-		return a->name < b->name;
+	std::sort(infos.begin(), infos.end(), [](const KeyMapSaveEntry& a, const KeyMapSaveEntry& b) {
+		return a.name < b.name;
 	});
 
 	/* Add key mappings to the form */
-	std::unordered_map<void(*)(), DisplayKeyMapData*> displayDataLookup;
-	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
+	for (std::vector<std::reference_wrapper<const KeyMapSaveEntry>>::const_iterator i = infos.begin(); i != infos.end(); ++i)
 	{
-		// Insert the mapping to correct slot in the display data. Create new data if no entry
-		// for this keybind is available.
-		KEY_MAPPING *mapping = *i;
-		DisplayKeyMapData* data;
+		const KeyMapSaveEntry& info = *i;
+		DisplayKeyMapData* data = new DisplayKeyMapData(info.function, info.displayName);
 
-		if (!(data = displayDataLookup[mapping->function])) {
-			data = new DisplayKeyMapData(mapping->function, mapping->name);
-			displayDataLookup[mapping->function] = data;
+		const unsigned int numSlots = static_cast<unsigned int>(KeyMappingSlot::LAST);
 
-			const auto numSlots = static_cast<unsigned int>(KeyMappingSlot::LAST);
+		const unsigned int index = i - infos.begin();
+		const unsigned int containerId = KM_START + index * (numSlots + 2);
+		const unsigned int labelId = KM_START + index * (numSlots + 2) + 1;
 
-			const unsigned int index = i - mappings.begin();
-			const unsigned int containerId = KM_START + index * (numSlots + 2);
-			const unsigned int labelId = KM_START + index * (numSlots + 2) + 1;
+		auto label = std::make_shared<WIDGET>();
+		label->setGeometry(0, 0, KM_ENTRYW / 3, KM_ENTRYH);
+		label->id = labelId;
+		label->displayFunction = displayKeyMapLabel;
+		label->pUserData = data;
+		label->setOnDelete([](WIDGET* psWidget) {
+			assert(psWidget->pUserData != nullptr);
+			delete static_cast<DisplayKeyMapData*>(psWidget->pUserData);
+			psWidget->pUserData = nullptr;
+		});
 
-			auto label = std::make_shared<WIDGET>();
-			label->setGeometry(0, 0, KM_ENTRYW / 3, KM_ENTRYH);
-			label->id = labelId;
-			label->displayFunction = displayKeyMapLabel;
-			label->pUserData = data;
-			label->setOnDelete([](WIDGET* psWidget) {
-				assert(psWidget->pUserData != nullptr);
-				delete static_cast<DisplayKeyMapData*>(psWidget->pUserData);
-				psWidget->pUserData = nullptr;
-			});
+		auto container = std::make_shared<WIDGET>();
+		container->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH * numSlots);
+		container->id = containerId;
+		container->attach(label);
 
-			auto container = std::make_shared<WIDGET>();
-			container->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH * numSlots);
-			container->id = containerId;
-			container->attach(label);
-
-			for (unsigned int slotIndex = 0; slotIndex < numSlots; ++slotIndex)
-			{
-				const auto slot = static_cast<KeyMappingSlot>(slotIndex);
-				const auto buttonId = KM_START + index * (numSlots + 2) + 2 + slotIndex;
-				const auto button = createKeyMapButton(buttonId, slot, data);
-				container->attach(button);
-			}
-
-			keyMapList->addItem(container);
-		}
-
-		data->mappings[static_cast<unsigned int>(mapping->slot)] = mapping;
-		if (!data->function && mapping->function)
+		for (unsigned int slotIndex = 0; slotIndex < numSlots; ++slotIndex)
 		{
-			data->function = mapping->function;
+			const auto slot = static_cast<KeyMappingSlot>(slotIndex);
+			const auto buttonId = KM_START + index * (numSlots + 2) + 2 + slotIndex;
+			const auto button = createKeyMapButton(buttonId, slot, data);
+			container->attach(button);
+
+			data->mappings[slotIndex] = keyGetMappingFromFunction(info.function, slot);
 		}
+
+		keyMapList->addItem(container);
 	}
 }
 
@@ -792,26 +814,21 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	KEY_CODE metakey = KEY_IGNORE;
 	KEY_CODE altMetaKey = (KEY_CODE)0;
 
-	// check for
-	// alt
 	if (keyDown(KEY_RALT) || keyDown(KEY_LALT))
 	{
 		metakey = KEY_LALT;
 		altMetaKey = KEY_RALT;
 	}
-	// ctrl
 	else if (keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL))
 	{
 		metakey = KEY_LCTRL;
 		altMetaKey = KEY_RCTRL;
 	}
-	// shift
 	else if (keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT))
 	{
 		metakey = KEY_LSHIFT;
 		altMetaKey = KEY_RSHIFT;
 	}
-	// meta (cmd)
 	else if (keyDown(KEY_RMETA) || keyDown(KEY_LMETA))
 	{
 		metakey = KEY_LMETA;
@@ -835,8 +852,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	KEY_MAPPING* psMapping = keyGetMappingFromFunction(selectedFunction, keyMapSelection.slot);
 	if (!psMapping)
 	{
-		const char* name = keyMapSelection.data->name.c_str();
-		psMapping = keyAddMapping(KEY_STATUS::KEYMAP_ASSIGNABLE, metakey, input, KEY_ACTION::KEYMAP_PRESSED, selectedFunction, name, keyMapSelection.slot);
+		psMapping = keyAddMapping(KEY_STATUS::KEYMAP_ASSIGNABLE, metakey, input, KEY_ACTION::KEYMAP_PRESSED, selectedFunction, keyMapSelection.slot);
 		keyMapSelection.data->mappings[slotIndex] = psMapping;
 	}
 	else
