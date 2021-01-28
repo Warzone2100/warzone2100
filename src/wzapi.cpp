@@ -4251,6 +4251,8 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["RepeatClass"] = getWeaponSubClass(psStats->periodicalDamageWeaponSubClass);
 			weap["FireOnMove"] = psStats->fireOnMove;
 			weap["Effect"] = getWeaponEffect(psStats->weaponEffect);
+			weap["ShootInAir"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_IN_AIR) != 0);
+			weap["ShootOnGround"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_ON_GROUND) != 0);
 			wbase[psStats->name.toUtf8()] = std::move(weap);
 		}
 		stats["Weapon"] = std::move(wbase);
