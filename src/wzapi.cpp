@@ -4253,6 +4253,13 @@ nlohmann::json wzapi::constructStatsObject()
 			weap["Effect"] = getWeaponEffect(psStats->weaponEffect);
 			weap["ShootInAir"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_IN_AIR) != 0);
 			weap["ShootOnGround"] = static_cast<bool>((psStats->surfaceToAir & SHOOT_ON_GROUND) != 0);
+			weap["NoFriendlyFire"] = psStats->flags.test(WEAPON_FLAG_NO_FRIENDLY_FIRE);
+			weap["FlightSpeed"] = psStats->flightSpeed;
+			weap["Rotate"] = psStats->rotate;
+			weap["MinElevation"] = psStats->minElevation;
+			weap["MaxElevation"] = psStats->maxElevation;
+			weap["Recoil"] = psStats->recoilValue;
+			weap["Penetrate"] = psStats->penetrate;
 			wbase[psStats->name.toUtf8()] = std::move(weap);
 		}
 		stats["Weapon"] = std::move(wbase);
