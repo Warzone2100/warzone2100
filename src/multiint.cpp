@@ -4177,8 +4177,8 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 		WidgetTriggers const &triggers = widgRunScreen(psRScreen);
 		unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
-		LEVEL_DATASET *mapData;
-		bool isHoverPreview;
+		LEVEL_DATASET *mapData = nullptr;
+		bool isHoverPreview = false;
 		WzString sTemp;
 		if (runMultiRequester(id, &id, &sTemp, &mapData, &isHoverPreview))
 		{
