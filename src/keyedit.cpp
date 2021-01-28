@@ -87,14 +87,14 @@ public:
 
 private:
 	std::shared_ptr<ScrollableListWidget> keyMapList;
-	std::shared_ptr<W_BUTTON> createKeyMapButton(const unsigned int id, const KeyMappingPriority priority, struct DisplayKeyMapData* targetFunctionData, const int rightOffset);
+	std::shared_ptr<W_BUTTON> createKeyMapButton(const unsigned int id, const KeyMappingSlot slot, struct DisplayKeyMapData* targetFunctionData);
 	void unhighlightSelected();
 	void addButton(int buttonId, int y, const char *text);
 };
 
 struct DisplayKeyMapData {
 	explicit DisplayKeyMapData(void (* const function)(), const std::string name)
-		: mappings(std::vector<KEY_MAPPING*>(static_cast<unsigned int>(KeyMappingPriority::LAST), nullptr))
+		: mappings(std::vector<KEY_MAPPING*>(static_cast<unsigned int>(KeyMappingSlot::LAST), nullptr))
 		, function(function)
 		, name(name)
 	{
@@ -109,7 +109,7 @@ struct DisplayKeyMapData {
 
 struct DisplayKeyMapButtonData {
 	WzText wzBindingText;
-	KeyMappingPriority priority;
+	KeyMappingSlot slot;
 	DisplayKeyMapData* targetFunctionData;
 };
 
@@ -118,19 +118,19 @@ struct DisplayKeyMapButtonData {
 
 struct KeyMappingSelection {
 	bool               hasActiveSelection;
-	KeyMappingPriority priority;
+	KeyMappingSlot slot;
 	DisplayKeyMapData* data;
 
 public:
-	bool isSelected(void (*const otherFunction)(), const KeyMappingPriority otherPriority) const
+	bool isSelected(void (*const otherFunction)(), const KeyMappingSlot otherSlot) const
 	{
-		return hasActiveSelection && data->function == otherFunction && priority == otherPriority;
+		return hasActiveSelection && data->function == otherFunction && slot == otherSlot;
 	}
 
-	void select(const KeyMappingPriority newPriority, DisplayKeyMapData* const newData)
+	void select(const KeyMappingSlot newSlot, DisplayKeyMapData* const newData)
 	{
 		hasActiveSelection = true;
-		priority = newPriority;
+		slot = newSlot;
 		data = newData;
 	}
 
@@ -138,12 +138,12 @@ public:
 	{
 		hasActiveSelection = false;
 		data = nullptr;
-		priority = KeyMappingPriority::LAST;
+		slot = KeyMappingSlot::LAST;
 	}
 };
 
 static KeyMappingSelection keyMapSelection;
-static std::vector<bool> maxKeyMapNameWidthDirty(static_cast<unsigned int>(KeyMappingPriority::LAST), true);
+static std::vector<bool> maxKeyMapNameWidthDirty(static_cast<unsigned int>(KeyMappingSlot::LAST), true);
 static const std::string NOT_BOUND_LABEL = "<not bound>";
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -339,30 +339,30 @@ std::vector<KEY_MAPPING *> getVisibleMappings()
 	return mappings;
 }
 
-static unsigned int getMaxKeyMapNameWidth(const KeyMappingPriority priority)
+static unsigned int getMaxKeyMapNameWidth(const KeyMappingSlot slot)
 {
-	static std::vector<unsigned int> max(static_cast<unsigned int>(KeyMappingPriority::LAST));
+	static std::vector<unsigned int> max(static_cast<unsigned int>(KeyMappingSlot::LAST));
 
-	const unsigned int priorityIndex = static_cast<unsigned int>(priority);
-	ASSERT(priorityIndex < max.size(), "Out of bounds priority index while checking keymap name width: %u", priorityIndex);
-	if (maxKeyMapNameWidthDirty[priorityIndex]) {
+	const unsigned int slotIndex = static_cast<unsigned int>(slot);
+	ASSERT(slotIndex < max.size(), "Out of bounds slot index while checking keymap name width: %u", slotIndex);
+	if (maxKeyMapNameWidthDirty[slotIndex]) {
 		WzText displayText;
 		displayText.setText(NOT_BOUND_LABEL, font_regular);
-		max[priorityIndex] = displayText.width();
+		max[slotIndex] = displayText.width();
 
 		char sKey[MAX_STR_LENGTH];
 		for (auto mapping: getVisibleMappings()) {
-			if (mapping->priority == priority) {
+			if (mapping->slot == slot) {
 				keyMapToString(sKey, mapping);
 				displayText.setText(sKey, font_regular);
-				max[priorityIndex] = MAX(max[priorityIndex], displayText.width());
+				max[slotIndex] = MAX(max[slotIndex], displayText.width());
 			}
 		}
 
-		maxKeyMapNameWidthDirty[priorityIndex] = false;
+		maxKeyMapNameWidthDirty[slotIndex] = false;
 	}
 
-	return max[priorityIndex];
+	return max[slotIndex];
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -374,11 +374,11 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 	// Update layout
 	int layoutXOffset = 0;
 	unsigned int buttonWidth = 0;
-	for (unsigned int i = static_cast<unsigned int>(KeyMappingPriority::LAST); i > static_cast<unsigned int>(data.priority); --i)
+	for (unsigned int i = static_cast<unsigned int>(KeyMappingSlot::LAST); i > static_cast<unsigned int>(data.slot); --i)
 	{
 		// Offset by -1 to avoid underflow to uint max
-		const auto priority = static_cast<KeyMappingPriority>(i - 1);
-		buttonWidth = getMaxKeyMapNameWidth(priority);
+		const auto slot = static_cast<KeyMappingSlot>(i - 1);
+		buttonWidth = getMaxKeyMapNameWidth(slot);
 		layoutXOffset += buttonWidth;
 	}
 	psWidget->setGeometry(
@@ -393,10 +393,10 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 	int h = psWidget->height();
 	int w = psWidget->width();
 
-	const KEY_MAPPING* mapping = data.targetFunctionData->mappings[static_cast<unsigned int>(data.priority)];
+	const KEY_MAPPING* mapping = data.targetFunctionData->mappings[static_cast<unsigned int>(data.slot)];
 
 	// Draw base
-	if (keyMapSelection.isSelected(data.targetFunctionData->function, data.priority))
+	if (keyMapSelection.isSelected(data.targetFunctionData->function, data.slot))
 	{
 		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_ACTIVE);
 	}
@@ -438,10 +438,10 @@ static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	// Update layout
 	int layoutButtonTotalWidth = 0;
-	for (unsigned int i = 0; i < static_cast<unsigned int>(KeyMappingPriority::LAST); ++i)
+	for (unsigned int i = 0; i < static_cast<unsigned int>(KeyMappingSlot::LAST); ++i)
 	{
-		const auto priority = static_cast<KeyMappingPriority>(i);
-		const int buttonWidth = getMaxKeyMapNameWidth(priority);
+		const auto slot = static_cast<KeyMappingSlot>(i);
+		const int buttonWidth = getMaxKeyMapNameWidth(slot);
 		layoutButtonTotalWidth += buttonWidth;
 	}
 	psWidget->setGeometry(
@@ -523,16 +523,16 @@ bool saveKeyMap()
 			debug(LOG_WZ, "Encountered invalid key mapping source %u while saving keymap!", static_cast<unsigned int>(mapping.input.source));
 			break;
 		}
-		switch (mapping.priority)
+		switch (mapping.slot)
 		{
-		case KeyMappingPriority::PRIMARY:
-			ini.setValue("priority", "primary");
+		case KeyMappingSlot::PRIMARY:
+			ini.setValue("slot", "primary");
 			break;
-		case KeyMappingPriority::SECONDARY:
-			ini.setValue("priority", "secondary");
+		case KeyMappingSlot::SECONDARY:
+			ini.setValue("slot", "secondary");
 			break;
 		default:
-			debug(LOG_WZ, "Encountered invalid key mapping priority %u while saving keymap!", static_cast<unsigned int>(mapping.priority));
+			debug(LOG_WZ, "Encountered invalid key mapping slot %u while saving keymap!", static_cast<unsigned int>(mapping.slot));
 			break;
 		}
 
@@ -596,20 +596,20 @@ bool loadKeyMap()
 			break;
 		}
 
-		const WzString priorityName = ini.value("priority", "primary").toWzString();
-		const KeyMappingPriority priority = keyMappingPriorityByName(priorityName.toUtf8().c_str());
+		const WzString slotName = ini.value("slot", "primary").toWzString();
+		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
 
-		keyAddMapping(status, meta, input, action, function->function, name.toUtf8().c_str(), priority);
+		keyAddMapping(status, meta, input, action, function->function, name.toUtf8().c_str(), slot);
 	}
 	ini.endArray();
 	return true;
 }
 
-std::shared_ptr<W_BUTTON> KeyMapForm::createKeyMapButton(const unsigned int buttonId, const KeyMappingPriority priority, DisplayKeyMapData* targetFunctionData, const int rightOffset)
+std::shared_ptr<W_BUTTON> KeyMapForm::createKeyMapButton(const unsigned int buttonId, const KeyMappingSlot slot, DisplayKeyMapData* targetFunctionData)
 {
 	W_BUTINIT emptyInit;
 	DisplayKeyMapButtonData* buttonData = new DisplayKeyMapButtonData();
-	buttonData->priority = priority;
+	buttonData->slot = slot;
 	buttonData->targetFunctionData = targetFunctionData;
 
 	auto button = std::make_shared<W_BUTTON>(&emptyInit);
@@ -625,22 +625,22 @@ std::shared_ptr<W_BUTTON> KeyMapForm::createKeyMapButton(const unsigned int butt
 	button->addOnClickHandler([=](W_BUTTON& clickedButton) {
 		const DisplayKeyMapButtonData* data = static_cast<DisplayKeyMapButtonData*>(clickedButton.pUserData);
 
-		const int priorityIndex = static_cast<unsigned int>(data->priority);
-		KEY_MAPPING* clickedMapping = data->targetFunctionData->mappings[priorityIndex];
+		const int slotIndex = static_cast<unsigned int>(data->slot);
+		KEY_MAPPING* clickedMapping = data->targetFunctionData->mappings[slotIndex];
 		if (clickedMapping)
 		{
 			if (clickedMapping->status != KEYMAP_ASSIGNABLE)
 			{
 				audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 			}
-			else if (keyMapSelection.isSelected(data->targetFunctionData->function, data->priority)) {
+			else if (keyMapSelection.isSelected(data->targetFunctionData->function, data->slot)) {
 				unhighlightSelected();
 				return;
 			}
 		}
 
 		keyMapList->disableScroll();
-		keyMapSelection.select(data->priority, data->targetFunctionData);
+		keyMapSelection.select(data->slot, data->targetFunctionData);
 	});
 
 	return button;
@@ -700,7 +700,7 @@ void KeyMapForm::initialize(bool isInGame)
 	std::unordered_map<void(*)(), DisplayKeyMapData*> displayDataLookup;
 	for (std::vector<KEY_MAPPING *>::const_iterator i = mappings.begin(); i != mappings.end(); ++i)
 	{
-		// Insert the mapping to correct priority slot in the display data. Create new data if no entry
+		// Insert the mapping to correct slot in the display data. Create new data if no entry
 		// for this keybind is available.
 		KEY_MAPPING *mapping = *i;
 		DisplayKeyMapData* data;
@@ -726,8 +726,8 @@ void KeyMapForm::initialize(bool isInGame)
 				psWidget->pUserData = nullptr;
 			});
 
-			const auto secondaryButton = createKeyMapButton(secondaryButtonId, KeyMappingPriority::SECONDARY, data, 0);
-			const auto primaryButton = createKeyMapButton(primaryButtonId, KeyMappingPriority::PRIMARY, data, secondaryButton->width());
+			const auto secondaryButton = createKeyMapButton(secondaryButtonId, KeyMappingSlot::SECONDARY, data);
+			const auto primaryButton = createKeyMapButton(primaryButtonId, KeyMappingSlot::PRIMARY, data);
 
 			auto container = std::make_shared<WIDGET>();
 			container->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
@@ -739,7 +739,7 @@ void KeyMapForm::initialize(bool isInGame)
 			keyMapList->addItem(container);
 		}
 
-		data->mappings[static_cast<unsigned int>(mapping->priority)] = mapping;
+		data->mappings[static_cast<unsigned int>(mapping->slot)] = mapping;
 		if (!data->function && mapping->function)
 		{
 			data->function = mapping->function;
@@ -833,13 +833,13 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 
 	/* Try and see if its there already - add it if not. e.g. secondary keybinds are expected to be null on default key sets */
 	const auto selectedFunction = keyMapSelection.data->function;
-	const unsigned int priorityIndex = static_cast<unsigned int>(keyMapSelection.priority);
-	KEY_MAPPING* psMapping = keyGetMappingFromFunction(selectedFunction, keyMapSelection.priority);
+	const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
+	KEY_MAPPING* psMapping = keyGetMappingFromFunction(selectedFunction, keyMapSelection.slot);
 	if (!psMapping)
 	{
 		const char* name = keyMapSelection.data->name.c_str();
-		psMapping = keyAddMapping(KEY_STATUS::KEYMAP_ASSIGNABLE, metakey, input, KEY_ACTION::KEYMAP_PRESSED, selectedFunction, name, keyMapSelection.priority);
-		keyMapSelection.data->mappings[priorityIndex] = psMapping;
+		psMapping = keyAddMapping(KEY_STATUS::KEYMAP_ASSIGNABLE, metakey, input, KEY_ACTION::KEYMAP_PRESSED, selectedFunction, name, keyMapSelection.slot);
+		keyMapSelection.data->mappings[slotIndex] = psMapping;
 	}
 	else
 	{
@@ -853,7 +853,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 			psMapping->altMetaKeyCode = altMetaKey;
 		}
 	}
-	maxKeyMapNameWidthDirty[priorityIndex] = true;
+	maxKeyMapNameWidthDirty[slotIndex] = true;
 	unhighlightSelected();
 	return true;
 }
