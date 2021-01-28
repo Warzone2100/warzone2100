@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2021-01-27 13:08\n"
+"PO-Revision-Date: 2021-01-28 01:03\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2233,7 +2233,7 @@ msgstr "Сила защиты: высокая"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:798
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Усиленная точка с огнемётом Адовое пламя"
+msgstr "Усиленная точка с огнемётом Инферно"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2330,7 +2330,7 @@ msgstr "Укреплённая оборонительная точка со шт
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Укреплённая  точка с огнемётом \"Адовое пламя\""
+msgstr "Укреплённая  точка с огнемётом Инферно"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -7058,7 +7058,7 @@ msgstr "основан на оригинальном ИИ, теперь для �
 #. data/mp/messages/resmessagesall.json: $.RES_REPTU1.text[1]
 #: po/custom/fromJson.txt:1049
 msgid "Battlefield repair unit"
-msgstr "Боевой ремонтный модуль"
+msgstr "Боевой Ремонтный Юнит"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7350,14 +7350,14 @@ msgstr "Точность пушки +10%"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF02.name
 #: po/custom/fromJson.txt:1296
 msgid "Cannon Autoloader Mk2"
-msgstr "Автозарядка пушки Mk2"
+msgstr "Автозарядка Пушки Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-ROF03.name
 #: po/custom/fromJson.txt:1300
 msgid "Cannon Autoloader Mk3"
-msgstr "Автозарядка пушки Mk3"
+msgstr "Автозарядка Пушки Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF01.name
@@ -7574,7 +7574,7 @@ msgstr "Тяжёлый корпус Альянса"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1441
 msgid "Combat Engineer Cyborg"
-msgstr "Киборг-боевой инженер"
+msgstr "Киборг инженер"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -12806,7 +12806,7 @@ msgstr "Турель захвата"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5056
 msgid "Sea map AI, based on NullBot"
-msgstr "ИИ отрегулированный для карт с водой, основан на NullBot"
+msgstr "ИИ, отрегулированный для карт с водой, основан на NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -12839,7 +12839,7 @@ msgstr "Саморепликация производства"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5083
 msgid "SemperFi"
-msgstr "СэмперФи"
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -14698,7 +14698,7 @@ msgstr "сохранение"
 
 #: src/clparse.cpp:279
 msgid "Load a saved campaign game"
-msgstr "Загрузить сохранённую кампанию"
+msgstr "Загрузить сохранённую игру кампании"
 
 #: src/clparse.cpp:280
 msgid "Play in windowed mode"
@@ -16728,7 +16728,7 @@ msgstr "Перекрытия"
 
 #: src/keymap.cpp:494
 msgid "Toggle Console History "
-msgstr "История консоли разработчика "
+msgstr "Переключить историю сообщений "
 
 #: src/keymap.cpp:495
 msgid "Toggle Team Chat History"
@@ -16992,11 +16992,11 @@ msgstr ""
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory"
-msgstr "Папка автосохранения"
+msgstr ""
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory (not allowed for saving)"
-msgstr "Папка автосохранения (не допускается для сохранения)"
+msgstr ""
 
 #: src/loop.cpp:249
 #: src/loop.cpp:265
