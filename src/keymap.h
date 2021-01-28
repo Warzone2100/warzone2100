@@ -97,13 +97,12 @@ struct KEY_MAPPING
 	KEY_CODE           altMetaKeyCode;
 	KeyMappingInput    input;
 	KEY_ACTION         action;
-	std::string        name;
 	KeyMappingSlot     slot;
 
 	bool isActivated() const;
 };
 
-KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
 KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot slot);
 KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingSlot slot = KeyMappingSlot::LAST);
 void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
@@ -124,9 +123,24 @@ SDWORD	getMarkerSpin(KEY_CODE code);
 // for keymap editor.
 struct KeyMapSaveEntry
 {
-	void (*function)();
-	char const *name;
+	void      (*function)();
+	std::string name;
+	std::string displayName;
+
+	KeyMapSaveEntry(
+		void      (*function)(),
+		std::string name,
+		std::string displayName
+	);
+
+	// Prevent copies. The entries are immutable and thus should never be copied around.
+	KeyMapSaveEntry(const KeyMapSaveEntry&) = delete;
+	void operator=(const KeyMapSaveEntry&) = delete;
+
+    // Allow construction-time move semantics
+	KeyMapSaveEntry(KeyMapSaveEntry&&) = default;
 };
+const std::vector<std::reference_wrapper<const KeyMapSaveEntry>> allKeymapEntries();
 KeyMapSaveEntry const *keymapEntryByFunction(void (*function)());
 KeyMapSaveEntry const *keymapEntryByName(std::string const &name);
 extern std::list<KEY_MAPPING> keyMappings;
