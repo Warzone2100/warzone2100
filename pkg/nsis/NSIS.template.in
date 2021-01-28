@@ -203,14 +203,20 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Greek" "win_installer-el_GR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Hungarian"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Hungarian" "win_installer-hu_HU.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Indonesian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Indonesian" "win_installer-id_ID.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Italian"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Italian" "win_installer-it_IT.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Korean"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Korean" "win_installer-ko_KR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Polish"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Polish" "win_installer-pl_PL.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Portuguese"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Portuguese" "win_installer-pt_PT.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "PortugueseBR"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "PortugueseBR" "win_installer-pt_BR.nsh" ${WZ_LANGFILE_FALLBACK}
+  !insertmacro MUI_LANGUAGE "Romanian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Romanian" "win_installer-ro_RO.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Russian"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Russian" "win_installer-ru_RU.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Slovenian"
