@@ -2339,6 +2339,43 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	return JS_TRUE;
 }
 
+//-- ## includeJSON(file)
+//-- Includes JSON files and returns an object. You should generally only specify the filename,
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+//-- PS straight copypaste from js_include above
+static JSValue js_includeJSON(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
+	JSValue global_obj = JS_GetGlobalObject(ctx);
+	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
+	std::string basePath = QuickJS_GetStdString(ctx, global_obj, "scriptPath");
+	std::string basenameStr = JSValueToStdString(ctx, argv[0]);
+	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(basenameStr);
+	std::string path = basePath + "/" + basename.fileName();
+	// allow users to use subdirectories too
+	if (PHYSFS_exists(basename.filePath().c_str()))
+	{
+		path = basename.filePath(); // use this path instead (from read-only dir)
+	}
+	else if (PHYSFS_exists((std::string("scripts/") + basename.filePath()).c_str()))
+	{
+		path = "scripts/" + basename.filePath(); // use this path instead (in user write dir)
+	}
+	UDWORD size;
+	char *bytes = nullptr;
+	if (!loadFile(path.c_str(), &bytes, &size))
+	{
+		debug(LOG_ERROR, "Failed to read include file \"%s\" (path=%s, name=%s)",
+		      path.c_str(), basePath.c_str(), basename.filePath().c_str());
+		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\" (path=%s, name=%s)", path.c_str(), basePath.c_str(), basename.filePath().c_str());
+		return JS_FALSE;
+	}
+	JSValue r = JS_ParseJSON(ctx, bytes, size, path.c_str());
+	free(bytes);
+	debug(LOG_SCRIPT, "Included new JSON file %s", path.c_str());
+	return r;
+}
+
 class quickjs_timer_additionaldata : public timerAdditionalData
 {
 public:
@@ -2890,6 +2927,7 @@ static const JSCFunctionListEntry js_builtin_funcs[] = {
 	QJS_CFUNC_DEF("removeTimer", 1, js_removeTimer ), // JS-specific implementation
 	QJS_CFUNC_DEF("profile", 1, js_profile ), // JS-specific implementation
 	QJS_CFUNC_DEF("include", 1, js_include ), // backend-specific (a scripting_instance can't directly include a different type of script)
+	QJS_CFUNC_DEF("includeJSON", 1, js_includeJSON ), // backend-specific (not) JSON loading
 	QJS_CFUNC_DEF("namespace", 1, js_namespace ), // JS-specific implementation
 	QJS_CFUNC_DEF("debugGetCallerFuncObject", 0, debugGetCallerFuncObject ), // backend-specific
 	QJS_CFUNC_DEF("debugGetCallerFuncName", 0, debugGetCallerFuncName ), // backend-specific
@@ -3844,4 +3882,3 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		}
 	}
 }
-
