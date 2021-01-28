@@ -2280,6 +2280,11 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 	return result;
 }
 
+static bool strEndsWith(const std::string &str, const std::string &suffix)
+{
+	return (str.size() >= suffix.size()) && (str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0);
+}
+
 //-- ## include(file)
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
@@ -2292,6 +2297,7 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 	std::string basePath = QuickJS_GetStdString(ctx, global_obj, "scriptPath");
 	std::string basenameStr = JSValueToStdString(ctx, argv[0]);
+	SCRIPT_ASSERT(ctx, strEndsWith(basenameStr, ".js"), "Include file must end in .js");
 	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(basenameStr);
 	std::string path = basePath + "/" + basename.fileName();
 	// allow users to use subdirectories too
