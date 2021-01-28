@@ -2,6 +2,10 @@ ${LangFileString} WZWelcomeText "Üdvözöljük a Warzone 2100 telepítőjében!
 
 ${LangFileString} WZWelcomeText_Portable "Üdvözöljük a Warzone 2100 hordozható telepítőjében!\r\n\r\nA varázsló végigvezeti a Warzone 2100 hordozható verziójának telepítésén.\r\n\r\nA telepítő teljesen önálló, és a programot bármikor eltávolíthatja a könyvtára törlésével.\r\n\r\nA Warzone 2100 egy teljesen szabad és nyílt forráskódú program.\r\n\r\nKattintson a folytatáshoz."
 
+${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+
 ${LangFileString} WZ_GPL_NEXT "Következő"
 
 ${LangFileString} TEXT_SecBase "Központi fájlok"
