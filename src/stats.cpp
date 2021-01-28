@@ -1567,6 +1567,23 @@ bool getWeaponEffect(const WzString& weaponEffect, WEAPON_EFFECT *effect)
 	return true;
 }
 
+/*returns the weapon effect string based on the enum passed in */
+const char *getWeaponEffect(WEAPON_EFFECT effect)
+{
+	switch (effect)
+	{
+	case WE_ANTI_PERSONNEL: return "ANTI PERSONNEL";
+	case WE_ANTI_TANK: return "ANTI TANK";
+	case WE_BUNKER_BUSTER: return "BUNKER BUSTER";
+	case WE_ARTILLERY_ROUND: return "ARTILLERY ROUND";
+	case WE_FLAMER: return "FLAMER";
+	case WE_ANTI_AIRCRAFT: return "ANTI AIRCRAFT";
+	case WE_NUMEFFECTS: break;
+	}
+	ASSERT(false, "No such weapon effect");
+	return "Bad weapon effect";
+}
+
 bool getWeaponClass(const WzString& weaponClassStr, WEAPON_CLASS *weaponClass)
 {
 	if (weaponClassStr.compare("KINETIC") == 0)
