@@ -2293,38 +2293,25 @@ static bool strEndsWith(const std::string &str, const std::string &suffix)
 static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
 {
 	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
+	std::string filePath = JSValueToStdString(ctx, argv[0]);
+	SCRIPT_ASSERT(ctx, strEndsWith(filePath, ".js"), "Include file must end in .js");
 	const auto instance = engineToInstanceMap.at(ctx);
-	std::string basePath = instance->scriptPath();
-	std::string basenameStr = JSValueToStdString(ctx, argv[0]);
-	SCRIPT_ASSERT(ctx, strEndsWith(basenameStr, ".js"), "Include file must end in .js");
-	WzPathInfo basename = WzPathInfo::fromPlatformIndependentPath(basenameStr);
-	std::string path = basePath + "/" + basename.fileName();
-	// allow users to use subdirectories too
-	if (PHYSFS_exists(basename.filePath().c_str()))
-	{
-		path = basename.filePath(); // use this path instead (from read-only dir)
-	}
-	else if (PHYSFS_exists((std::string("scripts/") + basename.filePath()).c_str()))
-	{
-		path = "scripts/" + basename.filePath(); // use this path instead (in user write dir)
-	}
 	UDWORD size;
 	char *bytes = nullptr;
-	if (!loadFile(path.c_str(), &bytes, &size))
+	std::string loadedFilePath;
+	if (!instance->loadFileForInclude(filePath.c_str(), loadedFilePath, &bytes, &size, wzapi::scripting_instance::LoadFileSearchOptions::All_BackwardsCompat))
 	{
-		debug(LOG_ERROR, "Failed to read include file \"%s\" (path=%s, name=%s)",
-		      path.c_str(), basePath.c_str(), basename.filePath().c_str());
-		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\" (path=%s, name=%s)", path.c_str(), basePath.c_str(), basename.filePath().c_str());
+		debug(LOG_ERROR, "Failed to read include file \"%s\"", filePath.c_str());
+		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
 		return JS_FALSE;
 	}
-	JSValue compiledFuncObj = JS_Eval(ctx, bytes, size, path.c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
+	JSValue compiledFuncObj = JS_Eval(ctx, bytes, size, loadedFilePath.c_str(), JS_EVAL_TYPE_GLOBAL | JS_EVAL_FLAG_COMPILE_ONLY);
 	free(bytes);
 	if (JS_IsException(compiledFuncObj))
 	{
 		// compilation error / syntax error
 		std::string errorAsString = QuickJS_DumpError(ctx);
-		debug(LOG_ERROR, "Syntax error in include file %s: %s",
-			  path.c_str(), errorAsString.c_str());
+		debug(LOG_ERROR, "Syntax error in include file %s: %s", loadedFilePath.c_str(), errorAsString.c_str());
 		JS_FreeValue(ctx, compiledFuncObj);
 		compiledFuncObj = JS_UNINITIALIZED;
 		return JS_FALSE;
@@ -2334,13 +2321,12 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	if (JS_IsException(result))
 	{
 		std::string errorAsString = QuickJS_DumpError(ctx);
-		debug(LOG_ERROR, "Uncaught exception in include file %s: %s",
-		      path.c_str(), errorAsString.c_str());
+		debug(LOG_ERROR, "Uncaught exception in include file %s: %s", loadedFilePath.c_str(), errorAsString.c_str());
 		JS_FreeValue(ctx, result);
 		return JS_FALSE;
     }
     JS_FreeValue(ctx, result);
-	debug(LOG_SCRIPT, "Included new script file %s", path.c_str());
+	debug(LOG_SCRIPT, "Included new script file %s", loadedFilePath.c_str());
 	return JS_TRUE;
 }
 

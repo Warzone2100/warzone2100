@@ -24,7 +24,9 @@
 
 #include "lib/framework/wzapp.h"
 #include "lib/framework/wzconfig.h"
+#include "lib/framework/wzpaths.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/file.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
@@ -115,6 +117,70 @@ wzapi::scripting_instance::scripting_instance(int player, const std::string& scr
 { }
 wzapi::scripting_instance::~scripting_instance()
 { }
+
+// Loads a file.
+// (Intended for use from implementations of things like "include" functions.)
+//
+// Lookup order is as follows (based on the value of `searchFlags`):
+// - 1.) The filename *only* is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat) - for backwards-compat only
+// - 2.) The filePath is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath)
+// - 3.) The filePath is checked relative to the read-only data dir search paths (LoadFileSearchOptions::DataDir)
+// - 4.) The filePath is checked relative to "<user's config dir>/script/" (LoadFileSearchOptions::ConfigScriptDir)
+bool wzapi::scripting_instance::loadFileForInclude(const std::string& filePath, std::string& loadedFilePath, char **ppFileData, UDWORD *pFileSize, uint32_t searchFlags /*= LoadFileSearchOptions::All*/)
+{
+	WzPathInfo filePathInfo = WzPathInfo::fromPlatformIndependentPath(filePath);
+	std::string path;
+
+	if (searchFlags & LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat)
+	{
+		// to provide backwards-compat, start by checking the scriptPath for the passed-in filename *only*
+		path = scriptPath() + "/" + filePathInfo.fileName();
+		if (!PHYSFS_exists(path.c_str()))
+		{
+			path.clear();
+		}
+	}
+	if (path.empty() && (searchFlags & LoadFileSearchOptions::ScriptPath))
+	{
+		path = scriptPath() + "/" + filePathInfo.filePath();
+		if (!PHYSFS_exists(path.c_str()))
+		{
+			path.clear();
+		}
+	}
+	if (path.empty() && (searchFlags & LoadFileSearchOptions::DataDir))
+	{
+		if (PHYSFS_exists(filePathInfo.filePath().c_str()))
+		{
+			path = filePathInfo.filePath(); // use this path instead (from read-only data dir)
+		}
+	}
+	if (path.empty() && (searchFlags & LoadFileSearchOptions::ConfigScriptDir))
+	{
+		if (PHYSFS_exists((std::string("scripts/") + filePathInfo.filePath()).c_str()))
+		{
+			path = "scripts/" + filePathInfo.filePath(); // use this path instead (in user write dir)
+		}
+	}
+	if (path.empty())
+	{
+		debug(LOG_ERROR, "Failed to find file: %s", filePath.c_str());
+		*ppFileData = nullptr;
+		*pFileSize = 0;
+		return false;
+	}
+	if (!::loadFile(path.c_str(), ppFileData, pFileSize))
+	{
+		debug(LOG_ERROR, "Failed to read file \"%s\" (name=\"%s\")", path.c_str(), filePathInfo.filePath().c_str());
+		*ppFileData = nullptr;
+		*pFileSize = 0;
+		return false;
+	}
+
+	loadedFilePath = path;
+	return true;
+}
+
 std::unordered_map<std::string, wzapi::scripting_instance::DebugSpecialStringType> wzapi::scripting_instance::debugGetScriptGlobalSpecialStringValues()
 {
 	return {};

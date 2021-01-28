@@ -572,6 +572,29 @@ namespace wzapi
 		inline bool isReceivingAllEvents() const { return m_isReceivingAllEvents; }
 
 	public:
+		// Helpers for loading a file from the "context" of a scripting_instance
+		class LoadFileSearchOptions
+		{
+		public:
+			static const uint32_t ScriptPath_FileNameOnlyBackwardsCompat = 0x00000001;
+			static const uint32_t ScriptPath = 0x00000002;
+			static const uint32_t DataDir = 0x00000004;
+			static const uint32_t ConfigScriptDir = 0x00000008;
+			static const uint32_t All = ScriptPath | DataDir | ConfigScriptDir;
+			static const uint32_t All_BackwardsCompat = ScriptPath_FileNameOnlyBackwardsCompat | All;
+		};
+
+		// Loads a file.
+		// (Intended for use from implementations of things like "include" functions.)
+		//
+		// Lookup order is as follows (based on the value of `searchFlags`):
+		// - 1.) The filename *only* is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat) - for backwards-compat only
+		// - 2.) The filePath is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath)
+		// - 3.) The filePath is checked relative to the read-only data dir search paths (LoadFileSearchOptions::DataDir)
+		// - 4.) The filePath is checked relative to "<user's config dir>/script/" (LoadFileSearchOptions::ConfigScriptDir)
+		bool loadFileForInclude(const std::string& filePath, std::string& loadedFilePath, char **ppFileData, UDWORD *pFileSize, uint32_t searchFlags = LoadFileSearchOptions::All);
+
+	public:
 		// event handling
 		// - see `scripting_event_handling_interface`
 
