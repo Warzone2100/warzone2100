@@ -2,6 +2,10 @@ ${LangFileString} WZWelcomeText "Warzone 2100 kurulumuna hoşgeldiniz!\r\n\r\nBu
 
 ${LangFileString} WZWelcomeText_Portable "Warzone 2100 portatif kurulumuna hoşgeldiniz.\r\n\r\nBu sihirbaz size Warzone 2100 portatif kurulum boyunca rehberlik edecektir.\r\n\r\nBu kurulum bağımsızdır ve bulunduğu dosyalarını silerek programı tamamen kaldırabilirsiniz.\r\n\r\nWarzone 2100 Açık kaynaktır ve %100 ücretsizdir.\r\n\r\nDevam etmek için tıklayınız."
 
+${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+
 ${LangFileString} WZ_GPL_NEXT "Devam"
 
 ${LangFileString} TEXT_SecBase "Çekirdek dosyalar"
