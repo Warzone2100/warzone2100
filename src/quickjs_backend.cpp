@@ -2330,6 +2330,31 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	return JS_TRUE;
 }
 
+//-- ## includeJSON(file)
+//-- Reads a JSON file and returns an object. You should generally only specify the filename,
+//-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
+//--
+static JSValue js_includeJSON(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
+{
+	SCRIPT_ASSERT(ctx, argc == 1, "Must specify a file to include");
+	std::string filePath = JSValueToStdString(ctx, argv[0]);
+	SCRIPT_ASSERT(ctx, strEndsWith(filePath, ".json"), "Include file must end in .json");
+	const auto instance = engineToInstanceMap.at(ctx);
+	UDWORD size;
+	char *bytes = nullptr;
+	std::string loadedFilePath;
+	if (!instance->loadFileForInclude(filePath.c_str(), loadedFilePath, &bytes, &size, wzapi::scripting_instance::LoadFileSearchOptions::ScriptPath))
+	{
+		debug(LOG_ERROR, "Failed to read include file \"%s\"", filePath.c_str());
+		JS_ThrowReferenceError(ctx, "Failed to read include file \"%s\"", filePath.c_str());
+		return JS_FALSE;
+	}
+	JSValue r = JS_ParseJSON(ctx, bytes, size, loadedFilePath.c_str());
+	free(bytes);
+	debug(LOG_SCRIPT, "Included new JSON file %s", loadedFilePath.c_str());
+	return r;
+}
+
 class quickjs_timer_additionaldata : public timerAdditionalData
 {
 public:
@@ -2881,6 +2906,7 @@ static const JSCFunctionListEntry js_builtin_funcs[] = {
 	QJS_CFUNC_DEF("removeTimer", 1, js_removeTimer ), // JS-specific implementation
 	QJS_CFUNC_DEF("profile", 1, js_profile ), // JS-specific implementation
 	QJS_CFUNC_DEF("include", 1, js_include ), // backend-specific (a scripting_instance can't directly include a different type of script)
+	QJS_CFUNC_DEF("includeJSON", 1, js_includeJSON ), // JS-specific JSON loading
 	QJS_CFUNC_DEF("namespace", 1, js_namespace ), // JS-specific implementation
 	QJS_CFUNC_DEF("debugGetCallerFuncObject", 0, debugGetCallerFuncObject ), // backend-specific
 	QJS_CFUNC_DEF("debugGetCallerFuncName", 0, debugGetCallerFuncName ), // backend-specific
@@ -3835,4 +3861,3 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		}
 	}
 }
-
