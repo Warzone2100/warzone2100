@@ -702,195 +702,206 @@ void keyInitMappings(bool bForceDefaults)
 	{
 		bForceDefaults = true;
 	}
+
+	/********************************************************************************************/
+	/* The default mappings here are ordered. Similarly the KeyMapInfoTable has the same order. */
+	/* Please DO NOT REORDER the mappings.                                                      */
+	/********************************************************************************************/
+
 	// Use keyAddDefaultMapping to add the default key mapping if either: (a) bForceDefaults is true, or (b) the loaded key mappings are missing an entry
 	bool didAdd = false;
 
-	// ********************************* ALL THE MAPPINGS ARE NOW IN ORDER, PLEASE ****
-	// ********************************* DO NOT REORDER THEM!!!!!! ********************
-	// FUNCTION KEY MAPPINGS F1 to F12
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F1,  KEYMAP_PRESSED, kf_ChooseManufacture,            bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F2,  KEYMAP_PRESSED, kf_ChooseResearch,               bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F3,  KEYMAP_PRESSED, kf_ChooseBuild,                  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F4,  KEYMAP_PRESSED, kf_ChooseDesign,                 bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F5,  KEYMAP_PRESSED, kf_ChooseIntelligence,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F6,  KEYMAP_PRESSED, kf_ChooseCommand,                bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F7,  KEYMAP_PRESSED, kf_QuickSave,                    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_F7,  KEYMAP_PRESSED, kf_ToggleRadar,                  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F8,  KEYMAP_PRESSED, kf_QuickLoad,                    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_F8,  KEYMAP_PRESSED, kf_ToggleConsole,                bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F9,  KEYMAP_PRESSED, kf_ToggleEnergyBars,             bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F10, KEYMAP_PRESSED, kf_ScreenDump,                   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F11, KEYMAP_PRESSED, kf_ToggleFormationSpeedLimiting, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F12, KEYMAP_PRESSED, kf_MoveToLastMessagePos,         bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_F12, KEYMAP_PRESSED, kf_ToggleSensorDisplay,          bForceDefaults) || didAdd;
-	// ASSIGN GROUPS - Will create or replace the existing group
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_0, KEYMAP_PRESSED, kf_AssignGrouping_0, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_1, KEYMAP_PRESSED, kf_AssignGrouping_1, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_2, KEYMAP_PRESSED, kf_AssignGrouping_2, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_3, KEYMAP_PRESSED, kf_AssignGrouping_3, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_4, KEYMAP_PRESSED, kf_AssignGrouping_4, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_5, KEYMAP_PRESSED, kf_AssignGrouping_5, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_6, KEYMAP_PRESSED, kf_AssignGrouping_6, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_7, KEYMAP_PRESSED, kf_AssignGrouping_7, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_8, KEYMAP_PRESSED, kf_AssignGrouping_8, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_9, KEYMAP_PRESSED, kf_AssignGrouping_9, bForceDefaults) || didAdd;
-	// ADD TO GROUPS - Will add the selected units to the group
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_0, KEYMAP_PRESSED, kf_AddGrouping_0, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_1, KEYMAP_PRESSED, kf_AddGrouping_1, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_2, KEYMAP_PRESSED, kf_AddGrouping_2, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_3, KEYMAP_PRESSED, kf_AddGrouping_3, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_4, KEYMAP_PRESSED, kf_AddGrouping_4, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_5, KEYMAP_PRESSED, kf_AddGrouping_5, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_6, KEYMAP_PRESSED, kf_AddGrouping_6, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_7, KEYMAP_PRESSED, kf_AddGrouping_7, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_8, KEYMAP_PRESSED, kf_AddGrouping_8, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_9, KEYMAP_PRESSED, kf_AddGrouping_9, bForceDefaults) || didAdd;
-	// SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_0, KEYMAP_PRESSED, kf_SelectGrouping_0, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_1, KEYMAP_PRESSED, kf_SelectGrouping_1, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_2, KEYMAP_PRESSED, kf_SelectGrouping_2, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_3, KEYMAP_PRESSED, kf_SelectGrouping_3, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_4, KEYMAP_PRESSED, kf_SelectGrouping_4, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_5, KEYMAP_PRESSED, kf_SelectGrouping_5, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_6, KEYMAP_PRESSED, kf_SelectGrouping_6, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_7, KEYMAP_PRESSED, kf_SelectGrouping_7, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_8, KEYMAP_PRESSED, kf_SelectGrouping_8, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_9, KEYMAP_PRESSED, kf_SelectGrouping_9, bForceDefaults) || didAdd;
-	// SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_0, KEYMAP_PRESSED, kf_SelectCommander_0, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_1, KEYMAP_PRESSED, kf_SelectCommander_1, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_2, KEYMAP_PRESSED, kf_SelectCommander_2, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_3, KEYMAP_PRESSED, kf_SelectCommander_3, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_4, KEYMAP_PRESSED, kf_SelectCommander_4, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_5, KEYMAP_PRESSED, kf_SelectCommander_5, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_6, KEYMAP_PRESSED, kf_SelectCommander_6, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_7, KEYMAP_PRESSED, kf_SelectCommander_7, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_8, KEYMAP_PRESSED, kf_SelectCommander_8, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT, KEY_9, KEYMAP_PRESSED, kf_SelectCommander_9, bForceDefaults) || didAdd;
-	// MULTIPLAYER
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KPENTER, KEYMAP_PRESSED, kf_addMultiMenu, bForceDefaults) || didAdd;
-	// GAME CONTROLS - Moving around, zooming in, rotating etc
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_UPARROW,           KEYMAP_DOWN,    kf_CameraUp,               bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_DOWNARROW,         KEYMAP_DOWN,    kf_CameraDown,             bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_RIGHTARROW,        KEYMAP_DOWN,    kf_CameraRight,            bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_LEFTARROW,         KEYMAP_DOWN,    kf_CameraLeft,             bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_BACKSPACE,         KEYMAP_PRESSED, kf_SeekNorth,              bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_SPACE,             KEYMAP_PRESSED, kf_ToggleCamera,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_ESC,               KEYMAP_PRESSED, kf_addInGameOptions,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_MINUS,             KEYMAP_PRESSED, kf_RadarZoomOut,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_EQUALS,            KEYMAP_PRESSED, kf_RadarZoomIn,            bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_PLUS,           KEYMAP_DOWN,    kf_ZoomIn,                 bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, MOUSE_KEY_CODE::MOUSE_WUP, KEYMAP_PRESSED, kf_ZoomIn,             bForceDefaults, KeyMappingSlot::SECONDARY) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_MINUS,          KEYMAP_DOWN,    kf_ZoomOut,                bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, MOUSE_KEY_CODE::MOUSE_WDN, KEYMAP_PRESSED, kf_ZoomOut,            bForceDefaults, KeyMappingSlot::SECONDARY) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_2,              KEYMAP_DOWN,    kf_PitchForward,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_4,              KEYMAP_DOWN,    kf_RotateLeft,             bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_5,              KEYMAP_DOWN,    kf_ResetPitch,             bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_6,              KEYMAP_DOWN,    kf_RotateRight,            bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_8,              KEYMAP_DOWN,    kf_PitchBack,              bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_0,              KEYMAP_PRESSED, kf_RightOrderMenu,         bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_MINUS,             KEYMAP_PRESSED, kf_SlowDown,               bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_EQUALS,            KEYMAP_PRESSED, kf_SpeedUp,                bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_BACKSPACE,         KEYMAP_PRESSED, kf_NormalSpeed,            bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_UPARROW,           KEYMAP_PRESSED, kf_FaceNorth,              bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_DOWNARROW,         KEYMAP_PRESSED, kf_FaceSouth,              bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_LEFTARROW,         KEYMAP_PRESSED, kf_FaceEast,               bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_RIGHTARROW,        KEYMAP_PRESSED, kf_FaceWest,               bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_KP_STAR,           KEYMAP_PRESSED, kf_JumpToResourceExtractor,bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToRepairUnits,      bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToConstructorUnits, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToSensorUnits,      bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpToCommandUnits,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_TAB,               KEYMAP_PRESSED, kf_ToggleOverlays,         bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleConsoleDrop,      bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleTeamChat,         bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingCW,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingACW,      bForceDefaults) || didAdd;
-	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_B,      KEYMAP_PRESSED, kf_CentreOnBase,          bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_C,      KEYMAP_PRESSED, kf_SetDroidAttackCease,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_D,      KEYMAP_PRESSED, kf_JumpToUnassignedUnits, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_E,      KEYMAP_PRESSED, kf_SetDroidAttackReturn,  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_F,      KEYMAP_PRESSED, kf_SetDroidAttackAtWill,  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_G,      KEYMAP_PRESSED, kf_SetDroidMoveGuard,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_H,      KEYMAP_PRESSED, kf_SetDroidReturnToBase,  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_H,      KEYMAP_PRESSED, kf_SetDroidOrderHold,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_I,      KEYMAP_PRESSED, kf_SetDroidRangeOptimum,  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_O,      KEYMAP_PRESSED, kf_SetDroidRangeShort,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_P,      KEYMAP_PRESSED, kf_SetDroidMovePursue,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_Q,      KEYMAP_PRESSED, kf_SetDroidMovePatrol,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_R,      KEYMAP_PRESSED, kf_SetDroidGoForRepair,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_S,      KEYMAP_PRESSED, kf_SetDroidOrderStop,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_T,      KEYMAP_PRESSED, kf_SetDroidGoToTransport, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_U,      KEYMAP_PRESSED, kf_SetDroidRangeLong,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendGlobalMessage,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_RETURN, KEYMAP_PRESSED, kf_SendTeamMessage,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT,   KEY_H,      KEYMAP_PRESSED, kf_AddHelpBlip,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT,   KEY_S,   KEYMAP_PRESSED,  kf_ToggleShadows,        bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT,   KEY_T,   KEYMAP_PRESSED,  kf_toggleTrapCursor,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarTerrain,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarAllyEnemy, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_M,   KEYMAP_PRESSED,  kf_ShowMappings,         bForceDefaults) || didAdd;
+	// FUNCTION KEY MAPPINGS - F1 to F12
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F1,           KEY_ACTION::KEYMAP_PRESSED,     kf_ChooseManufacture,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F2,           KEY_ACTION::KEYMAP_PRESSED,     kf_ChooseResearch,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F3,           KEY_ACTION::KEYMAP_PRESSED,     kf_ChooseBuild,                     bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F4,           KEY_ACTION::KEYMAP_PRESSED,     kf_ChooseDesign,                    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F5,           KEY_ACTION::KEYMAP_PRESSED,     kf_ChooseIntelligence,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F6,           KEY_ACTION::KEYMAP_PRESSED,     kf_ChooseCommand,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F7,           KEY_ACTION::KEYMAP_PRESSED,     kf_QuickSave,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_F7,           KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleRadar,                     bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F8,           KEY_ACTION::KEYMAP_PRESSED,     kf_QuickLoad,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_F8,           KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleConsole,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F9,           KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleEnergyBars,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F10,          KEY_ACTION::KEYMAP_PRESSED,     kf_ScreenDump,                      bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F11,          KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleFormationSpeedLimiting,    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F12,          KEY_ACTION::KEYMAP_PRESSED,     kf_MoveToLastMessagePos,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_F12,          KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleSensorDisplay,             bForceDefaults);
+
+	//	ASSIGN GROUPS - Will create or replace the existing group
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_0,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_0,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_1,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_1,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_2,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_2,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_3,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_3,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_4,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_4,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_5,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_5,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_6,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_6,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_7,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_7,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_8,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_8,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_9,            KEY_ACTION::KEYMAP_PRESSED,     kf_AssignGrouping_9,                bForceDefaults);
+
+	//	ADD TO GROUPS - Will add the selected units to the group
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_0,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_0,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_1,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_1,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_2,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_2,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_3,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_3,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_4,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_4,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_5,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_5,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_6,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_6,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_7,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_7,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_8,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_8,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_9,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddGrouping_9,                   bForceDefaults);
+
+	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_0,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_0,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_1,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_1,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_2,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_2,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_3,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_3,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_4,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_4,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_5,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_5,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_6,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_6,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_7,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_7,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_8,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_8,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_9,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectGrouping_9,                bForceDefaults);
+
+	//	SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_0,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_0,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_1,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_1,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_2,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_2,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_3,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_3,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_4,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_4,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_5,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_5,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_6,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_6,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_7,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_7,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_8,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_8,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_9,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectCommander_9,               bForceDefaults);
+
+	//	MULTIPLAYER
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KPENTER,      KEY_ACTION::KEYMAP_PRESSED,     kf_addMultiMenu,                    bForceDefaults);
+
+	//	GAME CONTROLS - Moving around, zooming in, rotating etc
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_UPARROW,      KEY_ACTION::KEYMAP_DOWN,        kf_CameraUp,                        bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_DOWNARROW,    KEY_ACTION::KEYMAP_DOWN,        kf_CameraDown,                      bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_RIGHTARROW,   KEY_ACTION::KEYMAP_DOWN,        kf_CameraRight,                     bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_LEFTARROW,    KEY_ACTION::KEYMAP_DOWN,        kf_CameraLeft,                      bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_BACKSPACE,    KEY_ACTION::KEYMAP_PRESSED,     kf_SeekNorth,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_SPACE,        KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleCamera,                    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_ESC,          KEY_ACTION::KEYMAP_PRESSED,     kf_addInGameOptions,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MINUS,        KEY_ACTION::KEYMAP_PRESSED,     kf_RadarZoomOut,                    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    MOUSE_KEY_CODE::MOUSE_WDN,  KEY_ACTION::KEYMAP_PRESSED,     kf_RadarZoomOut,                    bForceDefaults, KeyMappingSlot::SECONDARY);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_EQUALS,       KEY_ACTION::KEYMAP_PRESSED,     kf_RadarZoomIn,                     bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    MOUSE_KEY_CODE::MOUSE_WUP,  KEY_ACTION::KEYMAP_PRESSED,     kf_RadarZoomIn,                     bForceDefaults, KeyMappingSlot::SECONDARY);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_PLUS,      KEY_ACTION::KEYMAP_DOWN,        kf_ZoomIn,                          bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    MOUSE_KEY_CODE::MOUSE_WUP,  KEY_ACTION::KEYMAP_PRESSED,     kf_ZoomIn,                          bForceDefaults, KeyMappingSlot::SECONDARY);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_MINUS,     KEY_ACTION::KEYMAP_DOWN,        kf_ZoomOut,                         bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    MOUSE_KEY_CODE::MOUSE_WDN,  KEY_ACTION::KEYMAP_PRESSED,     kf_ZoomOut,                         bForceDefaults, KeyMappingSlot::SECONDARY);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_2,         KEY_ACTION::KEYMAP_DOWN,        kf_PitchForward,                    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_4,         KEY_ACTION::KEYMAP_DOWN,        kf_RotateLeft,                      bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_5,         KEY_ACTION::KEYMAP_DOWN,        kf_ResetPitch,                      bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_6,         KEY_ACTION::KEYMAP_DOWN,        kf_RotateRight,                     bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_8,         KEY_ACTION::KEYMAP_DOWN,        kf_PitchBack,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_0,         KEY_ACTION::KEYMAP_PRESSED,     kf_RightOrderMenu,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_MINUS,        KEY_ACTION::KEYMAP_PRESSED,     kf_SlowDown,                        bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_EQUALS,       KEY_ACTION::KEYMAP_PRESSED,     kf_SpeedUp,                         bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_BACKSPACE,    KEY_ACTION::KEYMAP_PRESSED,     kf_NormalSpeed,                     bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_UPARROW,      KEY_ACTION::KEYMAP_PRESSED,     kf_FaceNorth,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_DOWNARROW,    KEY_ACTION::KEYMAP_PRESSED,     kf_FaceSouth,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_LEFTARROW,    KEY_ACTION::KEYMAP_PRESSED,     kf_FaceEast,                        bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_RIGHTARROW,   KEY_ACTION::KEYMAP_PRESSED,     kf_FaceWest,                        bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_KP_STAR,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpToResourceExtractor,         bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpToRepairUnits,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpToConstructorUnits,          bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpToSensorUnits,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpToCommandUnits,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_TAB,          KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleOverlays,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_BACKQUOTE,    KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleConsoleDrop,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_BACKQUOTE,    KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleTeamChat,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_RotateBuildingCW,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_RotateBuildingACW,               bForceDefaults);
+	// IN GAME MAPPINGS - Droid orders etc.
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_B,            KEY_ACTION::KEYMAP_PRESSED,     kf_CentreOnBase,                    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_C,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidAttackCease,             bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_D,            KEY_ACTION::KEYMAP_PRESSED,     kf_JumpToUnassignedUnits,           bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_E,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidAttackReturn,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_F,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidAttackAtWill,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_G,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidMoveGuard,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_H,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidReturnToBase,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_H,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidOrderHold,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_I,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidRangeOptimum,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_O,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidRangeShort,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_P,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidMovePursue,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_Q,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidMovePatrol,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_R,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidGoForRepair,             bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_S,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidOrderStop,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_T,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidGoToTransport,           bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_U,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidRangeLong,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_RETURN,       KEY_ACTION::KEYMAP_PRESSED,     kf_SendGlobalMessage,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_RETURN,       KEY_ACTION::KEYMAP_PRESSED,     kf_SendTeamMessage,                 bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_H,            KEY_ACTION::KEYMAP_PRESSED,     kf_AddHelpBlip,                     bForceDefaults);
+
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_S,            KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleShadows,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_T,            KEY_ACTION::KEYMAP_PRESSED,     kf_toggleTrapCursor,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_TAB,          KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleRadarTerrain,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_TAB,          KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleRadarAllyEnemy,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_M,            KEY_ACTION::KEYMAP_PRESSED,     kf_ShowMappings,                    bForceDefaults);
 
 	// Some extra non QWERTY mappings but functioning in same way
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_COMMA,        KEYMAP_PRESSED, kf_SetDroidRetreatMedium, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_FULLSTOP,     KEYMAP_PRESSED, kf_SetDroidRetreatHeavy,  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_FORWARDSLASH, KEYMAP_PRESSED, kf_SetDroidRetreatNever,  bForceDefaults) || didAdd;
-	// In game mappings - COMBO (CTRL + LETTER) presses.
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_A, KEYMAP_PRESSED, kf_SelectAllCombatUnits,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_C, KEYMAP_PRESSED, kf_SelectAllCyborgs,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_D, KEYMAP_PRESSED, kf_SelectAllDamaged,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_F, KEYMAP_PRESSED, kf_SelectAllHalfTracked,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_H, KEYMAP_PRESSED, kf_SelectAllHovers,        bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_R, KEYMAP_PRESSED, kf_SetDroidRecycle,        bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_S, KEYMAP_PRESSED, kf_SelectAllOnScreenUnits, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_T, KEYMAP_PRESSED, kf_SelectAllTracked,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_U, KEYMAP_PRESSED, kf_SelectAllUnits,         bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_V, KEYMAP_PRESSED, kf_SelectAllVTOLs,         bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_V, KEYMAP_PRESSED, kf_SelectAllArmedVTOLs,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_W, KEYMAP_PRESSED, kf_SelectAllWheeled,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL, KEY_Z, KEYMAP_PRESSED, kf_SelectAllSameType,      bForceDefaults) || didAdd;
-	// In game mappings - COMBO (SHIFT + LETTER) presses.
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_C, KEYMAP_PRESSED, kf_SelectAllCombatCyborgs,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_E, KEYMAP_PRESSED, kf_SelectAllEngineers,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_G, KEYMAP_PRESSED, kf_SelectAllLandCombatUnits, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_M, KEYMAP_PRESSED, kf_SelectAllMechanics,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_P, KEYMAP_PRESSED, kf_SelectAllTransporters,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_R, KEYMAP_PRESSED, kf_SelectAllRepairTanks,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_S, KEYMAP_PRESSED, kf_SelectAllSensorUnits,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_T, KEYMAP_PRESSED, kf_SelectAllTrucks,          bForceDefaults) || didAdd;
-	// SELECT PLAYERS - DEBUG ONLY
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextFactory,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextCyborgFactory, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextVTOLFactory,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextFactory,         bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextResearch,        bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextPowerStation,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextCyborgFactory,   bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextVTOLFactory,     bForceDefaults) || didAdd;
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_COMMA,        KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidRetreatMedium,           bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_FULLSTOP,     KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidRetreatHeavy,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_FORWARDSLASH, KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidRetreatNever,            bForceDefaults);
 
-	// Debug options
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_M,         KEYMAP_PRESSED, kf_ToggleShowPath,      bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_E,         KEYMAP_PRESSED, kf_ToggleShowGateways,  bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_V,         KEYMAP_PRESSED, kf_ToggleVisibility,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_W,         KEYMAP_DOWN,    kf_RaiseTile,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_A,         KEYMAP_DOWN,    kf_LowerTile,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_J,         KEYMAP_PRESSED, kf_ToggleFog,           bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_PerformanceSample,   bForceDefaults) || didAdd;
-	// These ones are necessary for debugging
-	didAdd = keyAddDefaultMapping(KEY_LALT,   KEY_A, KEYMAP_PRESSED, kf_AllAvailable,      bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LALT,   KEY_K, KEYMAP_PRESSED, kf_KillSelected,      bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_G, KEYMAP_PRESSED, kf_ToggleGodMode,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_O, KEYMAP_PRESSED, kf_ChooseOptions,     bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_X, KEYMAP_PRESSED, kf_FinishResearch,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_RevealMapAtPos,    bForceDefaults) || didAdd;
-	didAdd = keyAddDefaultMapping(KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       bForceDefaults) || didAdd;
+	// IN GAME MAPPINGS - Unit/factory selection
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_A,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllCombatUnits,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_C,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllCyborgs,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_D,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllDamaged,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_F,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllHalfTracked,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_H,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllHovers,                 bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_R,            KEY_ACTION::KEYMAP_PRESSED,     kf_SetDroidRecycle,                 bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_S,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllOnScreenUnits,          bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_T,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllTracked,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_U,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllUnits,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_V,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllVTOLs,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_V,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllArmedVTOLs,             bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_W,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllWheeled,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_Y,            KEY_ACTION::KEYMAP_PRESSED,     kf_FrameRate,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_Z,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllSameType,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_C,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllCombatCyborgs,          bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_E,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllEngineers,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_G,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllLandCombatUnits,        bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_M,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllMechanics,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_P,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllTransporters,           bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_R,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllRepairTanks,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_S,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllSensorUnits,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_T,            KEY_ACTION::KEYMAP_PRESSED,     kf_SelectAllTrucks,                 bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_SelectNextFactory,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_SelectNextResearch,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_SelectNextPowerStation,          bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_SelectNextCyborgFactory,         bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_SelectNextVTOLFactory,           bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpNextFactory,                 bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpNextResearch,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpNextPowerStation,            bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpNextCyborgFactory,           bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_MAXSCAN,      KEY_ACTION::KEYMAP_PRESSED,     kf_JumpNextVTOLFactory,             bForceDefaults);
+
+	// DEBUG MAPPINGS
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_BACKSPACE,    KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleDebugMappings,             bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_M,            KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleShowPath,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_E,            KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleShowGateways,              bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_V,            KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleVisibility,                bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_W,            KEY_ACTION::KEYMAP_DOWN,        kf_RaiseTile,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_A,            KEY_ACTION::KEYMAP_DOWN,        kf_LowerTile,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_J,            KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleFog,                       bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_Q,            KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleWeather,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_IGNORE,    KEY_CODE::KEY_K,            KEY_ACTION::KEYMAP_PRESSED,     kf_TriFlip,                         bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_K,            KEY_ACTION::KEYMAP_PRESSED,     kf_PerformanceSample,               bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_A,            KEY_ACTION::KEYMAP_PRESSED,     kf_AllAvailable,                    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LALT,      KEY_CODE::KEY_K,            KEY_ACTION::KEYMAP_PRESSED,     kf_KillSelected,                    bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_G,            KEY_ACTION::KEYMAP_PRESSED,     kf_ToggleGodMode,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_O,            KEY_ACTION::KEYMAP_PRESSED,     kf_ChooseOptions,                   bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_X,            KEY_ACTION::KEYMAP_PRESSED,     kf_FinishResearch,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LSHIFT,    KEY_CODE::KEY_W,            KEY_ACTION::KEYMAP_PRESSED,     kf_RevealMapAtPos,                  bForceDefaults);
+	didAdd |= keyAddDefaultMapping(KEY_CODE::KEY_LCTRL,     KEY_CODE::KEY_L,            KEY_ACTION::KEYMAP_PRESSED,     kf_TraceObject,                     bForceDefaults);
 
 	if (didAdd)
 	{
