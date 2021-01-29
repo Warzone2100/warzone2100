@@ -244,8 +244,8 @@ Function WelcomePageSetupLinkPre
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 3" "Bottom" "142" ; limit size of the upper label
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Settings" "Numfields" "4" ; increase counter
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Type" "Link"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Text" "Visit our Official Homepage http://wz2100.net for the latest version."
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "State" "http://wz2100.net/"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Text" "$(WZWelcomeHomepageLink)"
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "State" "https://wz2100.net/"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Left" "120"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Right" "300"
   !insertmacro MUI_INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 4" "Top" "154"
@@ -431,7 +431,7 @@ ${EndIf}
 
       ${If} "${VS_PLATFORM_NAME}" == "Win32"
       ${AndIf} $MSVCRT16_x86_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x86.exe" "Downloading vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x86.exe" "$(DLTEXT_Downloading) vc_redist.x86.exe" "$PLUGINSDIR\vc_redist.x86.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x86.exe ..."
@@ -441,12 +441,12 @@ ${EndIf}
           ${EndIf}
           DetailPrint "vc_redist.x86.exe returned: $0"
         ${Else}
-          MessageBox MB_OK|MB_ICONSTOP "Download of system library (x86) failed: $Result_MSVCDownload"
+          MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (x86): $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
       ${If} "${VS_PLATFORM_NAME}" == "x64"
       ${AndIf} $MSVCRT16_x64_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x64.exe" "Downloading vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/vc_redist.x64.exe" "$(DLTEXT_Downloading) vc_redist.x64.exe" "$PLUGINSDIR\vc_redist.x64.exe" "Microsoft Visual C++ 2015-2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "vc_redist.x64.exe ..."
@@ -456,12 +456,12 @@ ${EndIf}
           ${EndIf}
           DetailPrint "vc_redist.x64.exe returned: $0"
         ${Else}
-          MessageBox MB_OK|MB_ICONSTOP "Download of system library (x64) failed: $Result_MSVCDownload"
+          MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (x64): $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
       ${If} "${VS_PLATFORM_NAME}" == "arm64"
       ${AndIf} $MSVCRT16_ARM64_NotPresent == 1
-        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/VC_redist.arm64.exe" "Downloading VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2019 Redistributable" $Result_MSVCDownload
+        !insertmacro DownloadMSSysLib "https://aka.ms/vs/16/release/VC_redist.arm64.exe" "$(DLTEXT_Downloading) VC_redist.arm64.exe" "$PLUGINSDIR\VC_redist.arm64.exe" "Microsoft Visual C++ 2019 Redistributable" $Result_MSVCDownload
         ${If} $Result_MSVCDownload == "OK"
           ; Download succeeded
           DetailPrint "VC_redist.arm64.exe ..."
@@ -471,7 +471,7 @@ ${EndIf}
           ${EndIf}
           DetailPrint "VC_redist.arm64.exe returned: $0"
         ${Else}
-          MessageBox MB_OK|MB_ICONSTOP "Download of system library (ARM64) failed: $Result_MSVCDownload"
+          MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (ARM64): $Result_MSVCDownload"
         ${EndIf}
       ${EndIf}
     SectionEnd
@@ -490,7 +490,7 @@ ${EndIf}
           DetailPrint "$0" ; print error message to log
         ${EndIf}
       ${Else}
-        MessageBox MB_OK|MB_ICONSTOP "Download of applocal system library failed: $Result_MSVCDownload"
+        MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_SysLibDLFailed) (applocal): $Result_MSVCDownload"
       ${EndIf}
 
     SectionEnd
@@ -506,7 +506,7 @@ Section $(TEXT_SecFMVs_EngHi) SecFMVs_EngHi
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 SectionEnd
 
 Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
@@ -515,7 +515,7 @@ Section /o $(TEXT_SecFMVs_Eng) SecFMVs_Eng
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/standard-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 SectionEnd
 
 Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
@@ -524,7 +524,7 @@ Section /o $(TEXT_SecFMVs_EngLo) SecFMVs_EngLo
     NSISdl::download "http://downloads.sourceforge.net/project/warzone2100/warzone2100/Videos/low-quality-en/sequences.wz"               "sequences.wz"
     Pop $R0 ; Get the return value
     StrCmp $R0 "success" +2
-      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 SectionEnd
 
 ;Section /o $(TEXT_SecFMVs_Ger) SecFMVs_Ger
@@ -533,7 +533,7 @@ SectionEnd
 ;    NSISdl::download "http://download.gna.org/warzone/videos/2.2/warzone2100-sequences-ger-hi-2.2.wz"               "sequences.wz"
 ;    Pop $R0 ; Get the return value
 ;    StrCmp $R0 "success" +2
-;      MessageBox MB_OK|MB_ICONSTOP "Download of videos failed: $R0"
+;      MessageBox MB_OK|MB_ICONSTOP "$(DLTEXT_VideosDLFailed): $R0"
 ;
 ;SectionEnd
 
@@ -713,7 +713,7 @@ Function .onInstSuccess
   !ifdef MSVCRUNTIME
     ${If} $MSVCRT16_NeedsReboot <> 0
       ; Needs a reboot
-      MessageBox MB_YESNO|MB_ICONQUESTION "A reboot is needed to finish the installation. Do you wish to reboot the system now?" IDNO NoReboot
+      MessageBox MB_YESNO|MB_ICONQUESTION "$(TEXT_PromptRebootNeeded)" IDNO NoReboot
       Reboot
       NoReboot:
     ${EndIf}
@@ -721,7 +721,7 @@ Function .onInstSuccess
 FunctionEnd
 
 Function .onRebootFailed
-  MessageBox MB_OK|MB_ICONSTOP "Reboot failed. Please reboot manually." /SD IDOK
+  MessageBox MB_OK|MB_ICONSTOP "$(TEXT_MsgRebootFailed)" /SD IDOK
 FunctionEnd
 
 ;--------------------------------
