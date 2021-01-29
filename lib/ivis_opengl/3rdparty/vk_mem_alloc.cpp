@@ -47,6 +47,7 @@
 # pragma warning( push )
 # pragma warning( disable : 4189 ) // warning C4189: 'identifier' : local variable is initialized but not referenced
 # pragma warning( disable : 4324 ) // warning C4324: 'struct_name' : structure was padded due to alignment specifier
+# pragma warning( disable : 4127 ) // warning C4127: conditional expression is constant
 #endif
 
 #define VMA_IMPLEMENTATION
