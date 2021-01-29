@@ -2,9 +2,9 @@ ${LangFileString} WZWelcomeText "Willkommen beim Warzone 2100 Installer!\r\n\r\n
 
 ${LangFileString} WZWelcomeText_Portable "Willkommen im portablen Warzone 2100 Installer!\r\n\r\nDieser Assistent führt Sie durch die Installation der portablen Version von Warzone 2100.\r\n\r\nDie Installation ist komplett eigenständig und Sie können das Programm jederzeit deinstallieren, indem Sie das Verzeichnis löschen.\r\n\r\nWarzone 2100 ist 100% kostenlos und komplett Open Source! \r\n\r\nKlicken Sie auf Weiter, um fortzufahren."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "Es ist eine 64-Bit-Version von Warzone 2100 verfügbar.$\r\nFür Details besuchen Sie https://wz2100.net/ $\r$\nTrotzdem mit 32-Bit-Installation fortfahren?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Dies ist die 64-Bit-Version von Warzone 2100.$\r\nBitte laden Sie die 32-Bit-Version von https://wz2100.net/ herunter. $\r$\nKlicken Sie auf OK, um die Installation zu beenden."
 
 ${LangFileString} WZ_GPL_NEXT "Weiter"
 
