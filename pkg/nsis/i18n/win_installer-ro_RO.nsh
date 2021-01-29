@@ -2,9 +2,9 @@ ${LangFileString} WZWelcomeText "Bine ați venit în programul de instalare Warz
 
 ${LangFileString} WZWelcomeText_Portable "Bine ați venit în programul de instalare portabil Warzone 2100!\r\n\r\nAcest asistent vă va ghida prin instalarea versiunii portabile de Warzone 2100.\r\n\r\nAceastă instalare este complet autonomă şi puteți dezinstala programul în orice moment prin ştergerea directorului.\r\n\r\nWarzone 2100 este 100% gratuit, program deschis cu sursă\r\n\r\nApăsați „Înainte” pentru a continua."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "Există o versiune de 64 biți a Warzone 2100 disponibilă.$\r$\nPentru detalii vizitați https://wz2100.net/ $\r$\nContinuați cu o instalare de 32 biți?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Aceasta este versiunea de 64 biți a Warzone 2100.$\r$\nTe rugăm să descarci versiunea de 32 biți de pe https://wz2100. et/ $\r$\nApăsați OK pentru a ieși din Instalare."
 
 ${LangFileString} WZ_GPL_NEXT "Înainte"
 
