@@ -137,7 +137,7 @@ struct InputContext {
 		INACTIVE,
 	};
 
-	InputContext(const ContextPriority priority, const State initialState);
+	InputContext(const ContextPriority priority, const State initialState, const char* const displayName);
 
 	void setState(const State newState);
 
@@ -150,10 +150,15 @@ struct InputContext {
 	/* Priority of the context when resolving collisions. Context with highest priority wins */
 	unsigned int getPriority() const;
 
+	/* Display name to be shown in e.g. edit keymap options */
+	const std::string getDisplayName() const;
+
 private:
 	const ContextPriority priority;
+	const unsigned int index;
+	const std::string displayName;
+
 	State state;
-	unsigned int index;
 
 	friend bool operator==(const InputContext& lhs, const InputContext& rhs);
 };
