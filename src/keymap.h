@@ -26,11 +26,11 @@
 #include "lib/framework/input.h"
 
 
-enum KEY_ACTION
+enum class KeyAction
 {
-	KEYMAP_DOWN,
-	KEYMAP_PRESSED,
-	KEYMAP_RELEASED
+	DOWN,
+	PRESSED,
+	RELEASED
 };
 
 enum class KeyMappingInputSource
@@ -217,7 +217,7 @@ struct KEY_MAPPING
 	UDWORD                 lastCalled;
 	KEY_CODE               metaKeyCode;
 	KeyMappingInput        input;
-	KEY_ACTION             action;
+	KeyAction              action;
 	KeyMappingSlot         slot;
 
 	bool isActivated() const;
@@ -227,8 +227,8 @@ struct KEY_MAPPING
 	bool toString(char* pOutStr) const;
 };
 
-KEY_MAPPING* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KEY_ACTION action, void (* const pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
-KEY_MAPPING* keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot slot);
+KEY_MAPPING* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, void (*const pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+KEY_MAPPING* keyGetMappingFromFunction(void (*const function)(), const KeyMappingSlot slot);
 KEY_MAPPING* keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingSlot slot = KeyMappingSlot::LAST);
 void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
 void keyInitMappings(bool bForceDefaults);

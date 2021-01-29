@@ -616,12 +616,18 @@ bool loadKeyMap()
 	{
 		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
 		auto sub = ini.value("sub", 0).toInt();
-		auto action = (KEY_ACTION)ini.value("action", 0).toInt();
+		auto action = (KeyAction)ini.value("action", 0).toInt();
 		auto functionName = ini.value("function", "").toWzString();
 		auto info = keyFunctionInfoByName(functionName.toUtf8());
 		if (info == nullptr)
 		{
 			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.toUtf8().c_str());
+			continue;
+		}
+		else if (info->type != KeyMappingType::ASSIGNABLE)
+		{
+			/* No need to load non-assignable mappings */
+			debug(LOG_WARNING, "Skipping non-assignable keymap function \"%s\".", functionName.toUtf8().c_str());
 			continue;
 		}
 
@@ -823,7 +829,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	KEY_MAPPING* psMapping = keyGetMappingFromFunction(info.function, keyMapSelection.slot);
 	if (!psMapping)
 	{
-		psMapping = keyAddMapping(metakey, input, KEY_ACTION::KEYMAP_PRESSED, info.function, keyMapSelection.slot);
+		psMapping = keyAddMapping(metakey, input, KeyAction::PRESSED, info.function, keyMapSelection.slot);
 		keyMapSelection.data->mappings[slotIndex] = psMapping;
 	}
 	else
