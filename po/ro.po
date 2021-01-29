@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-04 18:19\n"
+"PO-Revision-Date: 2021-01-29 05:52\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -8681,7 +8681,8 @@ msgstr "Genrează și concentrează pulsații de energie laser"
 #, no-c-format
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Obține ~ 100% mai multă energie de la fiecare pompă de petrol\n"
+"Începe cu structuri defensive și pompe de petrol"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.insane_tip
@@ -8690,7 +8691,9 @@ msgstr ""
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr ""
+msgstr "Obține ~ 100% mai multă energie de la fiecare pompă de petrol\n"
+"Folosește Lansatorul Greu de Plasmă și Mortierul PEM\n"
+"Începe cu structuri defensive și pompe de petrol"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8700,7 +8703,7 @@ msgstr ""
 #: po/custom/fromJson.txt:2199
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick"
-msgstr ""
+msgstr "Obține ~ 25% mai puțină energie de la fiecare pompă de petrol"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.easy_tip
@@ -8708,7 +8711,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Basic decision making is slower"
-msgstr ""
+msgstr "Obține ~ 25% mai puțină energie de la fiecare pompă de petrol\n"
+"Procesul decizional de bază este mai lent"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.easy_tip
@@ -8717,7 +8721,8 @@ msgstr ""
 #, no-c-format
 msgid "Gets ~ 25% less power from each oil derrick\n"
 "Research is not focused on a specific weapon branch"
-msgstr ""
+msgstr "Obține ~ 25% mai puțină energie de la fiecare pompă de petrol\n"
+"Cercetarea nu se concentrează pe o anumită ramură de arme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[2]
@@ -15775,7 +15780,7 @@ msgstr "Progresul Cercetării"
 #: src/intdisplay.cpp:672
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d pompă(e) inactive"
 
 #: src/intdisplay.cpp:677
 msgid "Need more resources!"
@@ -16255,7 +16260,7 @@ msgstr "Meniul de depanare deschis"
 
 #: src/keybind.cpp:1517
 msgid "Unable to locate any oil derricks!"
-msgstr ""
+msgstr "Imposibil de localizat pompe de petrol!"
 
 #: src/keybind.cpp:1681
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -16470,43 +16475,43 @@ msgstr "Atribuie grupul 9"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Adaugă la Grupul 0"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Adaugă la Grupul 1"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Adaugă la Grupul 2"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Adaugă la Grupul 3"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Adaugă la Grupul 4"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Adaugă la Grupul 5"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Adaugă la Grupul 6"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Adaugă la Grupul 7"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Adaugă la Grupul 8"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Adaugă la Grupul 9"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
@@ -17158,11 +17163,11 @@ msgstr ""
 
 #: src/multiint.cpp:1370
 msgid "Map-Mod!"
-msgstr ""
+msgstr "Hartă-modată!"
 
 #: src/multiint.cpp:1371
 msgid "Random map!"
-msgstr ""
+msgstr "Hartă aleatorie!"
 
 #: src/multiint.cpp:1388
 msgid "Click to set Password"
@@ -17209,23 +17214,23 @@ msgstr "Opțiuni de Joc Aleatoriu\n"
 
 #: src/multiint.cpp:1480
 msgid "Tech"
-msgstr ""
+msgstr "Tehnologie"
 
 #: src/multiint.cpp:1481
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Nivel Tehnologic 1"
 
 #: src/multiint.cpp:1482
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Nivel Tehnologic 2"
 
 #: src/multiint.cpp:1483
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Nivel Tehnologic 3"
 
 #: src/multiint.cpp:1484
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Nivel Tehnologic 4"
 
 #: src/multiint.cpp:1492
 #: src/multiint.cpp:1493
@@ -17355,7 +17360,7 @@ msgstr "*** parola NU este necesară! ***"
 
 #: src/multiint.cpp:3221
 msgid "This is a map-mod, it can change your playing experience!"
-msgstr ""
+msgstr "Aceasta este o hartă-modată, îți poate schimba experiența de joc!"
 
 #: src/multiint.cpp:3226
 msgid "This is a random map, it can vary your playing experience!"
@@ -17480,7 +17485,7 @@ msgstr "Mesaj server:"
 
 #: src/multijoin.cpp:518
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "Există o actualizare a jocului, te rugăm să vizitezi http://wz2100.net pentru a descărca versiunea nouă."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
@@ -17591,7 +17596,7 @@ msgstr "eliminat pe %s: %s din joc, și adăugat la lista de interziși!"
 #: src/multiopt.cpp:298
 #: src/multiplay.cpp:1725
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
-msgstr ""
+msgstr "Atenție, aceasta este o hartă-modată, poate altera jocul."
 
 #: src/multiopt.cpp:299
 #: src/multiplay.cpp:1729
@@ -17707,11 +17712,11 @@ msgstr "Maro"
 
 #: src/notifications.cpp:712
 msgid "Dismiss"
-msgstr ""
+msgstr "Revocă"
 
 #: src/notifications.cpp:787
 msgid "Do not show again"
-msgstr ""
+msgstr "Nu afișa din nou"
 
 #: src/order.cpp:776
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -18141,7 +18146,7 @@ msgstr "Întăririle aterizează"
 
 #: src/updatemanager.cpp:247
 msgid "Update Available"
-msgstr ""
+msgstr "Actualizare disponibilă"
 
 #: src/updatemanager.cpp:250
 #, c-format
@@ -18154,7 +18159,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:256
 msgid "Get Update Now"
-msgstr ""
+msgstr "Obțineți Actualizarea Acum"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:186
