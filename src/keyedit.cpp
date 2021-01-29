@@ -196,7 +196,7 @@ public:
 		const int slotIndex = static_cast<size_t>(slot);
 		const KeyFunctionInfo& info = targetFunctionData->info;
 
-		if (!info->assignable)
+		if (info.type != KeyMappingType::ASSIGNABLE)
 		{
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 			psParentForm->unhighlightSelected();
@@ -244,7 +244,7 @@ public:
 		{
 			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_ACTIVE);
 		}
-		else if (!info.assignable)
+		else if (info.type != KeyMappingType::ASSIGNABLE)
 		{
 			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_FIXED);
 		}
@@ -270,7 +270,7 @@ public:
 		}
 		else
 		{
-			sstrcpy(sPrimaryKey, info.assignable ? getNotBoundLabel().c_str() : "\0");
+			sstrcpy(sPrimaryKey, info.type == KeyMappingType::ASSIGNABLE ? getNotBoundLabel().c_str() : "\0");
 		}
 
 		wzBindingText.setText(sPrimaryKey, iV_fonts::font_regular);
@@ -453,8 +453,7 @@ std::vector<std::reference_wrapper<const KeyFunctionInfo>> getVisibleKeymapEntri
 	std::vector<std::reference_wrapper<const KeyFunctionInfo>> visibleMappings;
 	for (const KeyFunctionInfo& info : allKeymapEntries())
 	{
-		// TODO: this does not hide keybinds which used to have __HIDE status
-		if (info.context != InputContext::__DEBUG)
+		if (info.type != KeyMappingType::HIDDEN)
 		{
 			visibleMappings.push_back(info);
 		}
@@ -576,10 +575,7 @@ bool saveKeyMap()
 		}
 
 		ini.setValue("action", mapping.action);
-		if (auto info = keyFunctionInfoByFunction(mapping.function))
-		{
-			ini.setValue("function", info->name);
-		}
+		ini.setValue("function", mapping.info->name);
 
 		ini.nextArrayItem();
 	}
@@ -813,7 +809,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	const KeyFunctionInfo& info = keyMapSelection.data->info;
 
 	/* check if bound to a fixed combo. */
-	if (!info.assignable)
+	if (info.type != KeyMappingType::ASSIGNABLE)
 	{
 		unhighlightSelected();
 		return false;

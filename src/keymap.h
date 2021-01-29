@@ -166,20 +166,32 @@ private:
 bool operator==(const InputContext& lhs, const InputContext& rhs);
 bool operator!=(const InputContext& lhs, const InputContext& rhs);
 
+enum class KeyMappingType
+{
+	/* The mapping value can be freely re-assigned. */
+	ASSIGNABLE,
+
+	/* The mapping value is visible, but cannot be re-assigned. */
+	FIXED,
+
+	/* The mapping does not show up in the key map options */
+	HIDDEN
+};
+
 struct KeyFunctionInfo
 {
-	const InputContext& context;
-	const bool          assignable;
-	void             (* function)();
-	const std::string   name;
-	const std::string   displayName;
+	const InputContext&  context;
+	const KeyMappingType type;
+	void        (* const function)();
+	const std::string    name;
+	const std::string    displayName;
 
 	KeyFunctionInfo(
-		const InputContext& context,
-		const bool          assignable,
-		void              (*function)(),
-		const std::string   name,
-		const std::string   displayName
+		const InputContext&  context,
+		const KeyMappingType type,
+		void               (*function)(),
+		const std::string    name,
+		const std::string    displayName
 	);
 
 	// Prevent copies. The entries are immutable and thus should never be copied around.
@@ -201,7 +213,6 @@ enum class KeyMappingSlot {
 
 struct KEY_MAPPING
 {
-	void                 (*function)();
 	const KeyFunctionInfo* info;
 	UDWORD                 lastCalled;
 	KEY_CODE               metaKeyCode;
