@@ -298,6 +298,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	target_sources(warzone2100 PRIVATE ${_wz_entitlements_file})
 	set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS "${_wz_entitlements_file}")
 
+	# Enable Hardened Runtime
+	set_target_properties(warzone2100 PROPERTIES XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME "YES")
+
 	# To properly bundle the resources, they must be built before the app
 	add_dependencies(warzone2100 data)
 	if(ENABLE_DOCS)
