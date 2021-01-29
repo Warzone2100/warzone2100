@@ -810,5 +810,13 @@ Function un.onInit
   !verbose push
   !verbose push
   !insertmacro MUI_UNGETLANGUAGE
+
+  !ifdef WIN64
+    SetRegView 64
+  !else
+    ${If} ${RunningX64}
+    SetRegView 32
+    ${EndIf}
+  !endif
 FunctionEnd
 !endif
