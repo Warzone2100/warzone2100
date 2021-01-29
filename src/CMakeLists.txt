@@ -510,6 +510,8 @@ set_target_properties(warzone2100 PROPERTIES
 set_target_properties(warzone2100 PROPERTIES
 	XCODE_GENERATE_SCHEME TRUE
 	XCODE_SCHEME_ARGUMENTS "--gfxdebug"
+	# Disable NSDocumentRevisionsDebugMode
+	XCODE_SCHEME_DEBUG_DOCUMENT_VERSIONING "NO"
 )
 
 #######################
