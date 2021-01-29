@@ -56,17 +56,19 @@ void invalidateKeyMappingSortOrder()
 }
 
 // ----------------------------------------------------------------------------------
-InputContext InputContext::ALWAYS_ACTIVE = { std::numeric_limits<unsigned int>::max(), InputContext::State::ACTIVE };
-InputContext InputContext::BACKGROUND    = { 0,                                        InputContext::State::ACTIVE };
-InputContext InputContext::GAMEPLAY      = { 1,                                        InputContext::State::ACTIVE };
-InputContext InputContext::RADAR         = { { 2, 0 },                                 InputContext::State::ACTIVE };
-InputContext InputContext::__DEBUG       = { std::numeric_limits<unsigned int>::max(), InputContext::State::INACTIVE };
+static const unsigned int MAX_ICONTEXT_PRIORITY = std::numeric_limits<unsigned int>::max();
+InputContext InputContext::ALWAYS_ACTIVE = { MAX_ICONTEXT_PRIORITY, InputContext::State::ACTIVE,    N_("Global Hotkeys") };
+InputContext InputContext::BACKGROUND    = { 0,                     InputContext::State::ACTIVE,    N_("Other Hotkeys") };
+InputContext InputContext::GAMEPLAY      = { 1,                     InputContext::State::ACTIVE,    N_("Gameplay") };
+InputContext InputContext::RADAR         = { { 2, 0 },              InputContext::State::ACTIVE,    N_("Radar") };
+InputContext InputContext::__DEBUG       = { MAX_ICONTEXT_PRIORITY, InputContext::State::INACTIVE,  N_("Debug") };
 
 static unsigned int inputCtxIndexCounter = 0;
-InputContext::InputContext(const ContextPriority priority, const State initialState)
+InputContext::InputContext(const ContextPriority priority, const State initialState, const char* const displayName)
 	: priority(priority)
-	, state(initialState)
 	, index(inputCtxIndexCounter++)
+	, displayName(displayName)
+	, state(initialState)
 {
 }
 
@@ -93,6 +95,11 @@ unsigned int InputContext::getPriority() const
 	default:
 		return 0;
 	}
+}
+
+const std::string InputContext::getDisplayName() const
+{
+	return displayName;
 }
 
 bool operator==(const InputContext& lhs, const InputContext& rhs) {
