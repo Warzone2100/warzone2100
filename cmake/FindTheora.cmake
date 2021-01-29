@@ -1,4 +1,5 @@
-# Source: https://github.com/Kitware/VTK/blob/0593d416f56ee2919c3ca0a2b7da1e00be3cad45/CMake/FindTHEORA.cmake
+# Original Source: https://github.com/Kitware/VTK/blob/0593d416f56ee2919c3ca0a2b7da1e00be3cad45/CMake/FindTHEORA.cmake
+# Modified to fix CMake warning
 #
 # License: https://github.com/Kitware/VTK/blob/master/Copyright.txt
 #
@@ -73,6 +74,6 @@ set_target_properties(theora::dec
   INTERFACE_INCLUDE_DIRECTORIES ${THEORA_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(theora DEFAULT_MSG THEORA_enc_LIBRARY THEORA_dec_LIBRARY THEORA_INCLUDE_DIR)
+find_package_handle_standard_args(Theora DEFAULT_MSG THEORA_enc_LIBRARY THEORA_dec_LIBRARY THEORA_INCLUDE_DIR)
 
 mark_as_advanced(THEORA_enc_LIBRARY THEORA_dec_LIBRARY THEORA_INCLUDE_DIR)
