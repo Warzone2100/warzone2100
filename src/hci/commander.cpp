@@ -252,7 +252,7 @@ private:
 		return controller->getObjectStatsAt(objectIndex);
 	}
 
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
 		return droid && droid == controller->getHighlightedObject();
