@@ -2,6 +2,8 @@ ${LangFileString} WZWelcomeText "Этот помощник установки п
 
 ${LangFileString} WZWelcomeText_Portable "Добро пожаловать в установщик портативной Warzone 2100!\r\n\r\nЭтот установщик поможет вам установить портативную версию Warzone 2100.\r\n\r\nЭта установка полностью самодостаточна, и вы можете удалить программу в любое время, удалив каталог.\r\n\r\nWarzone 2100 — 100% бесплатная программа с открытым исходным кодом! \r\n\r\nНажмите кнопку Далее, чтобы продолжить."
 
+${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+
 ${LangFileString} WZ_64BIT_AVAILABLE "Доступна 64-битная версия Warzone 2100.$\r$\nДля получения подробностей посетите https://wz2100.net/ $\r$\nПродолжить установку 32-битной версии в любом случае?"
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Это 64-битная версия Warzone 2100.$\r$\nПожалуйста, скачайте 32-битную версию с https://wz2100. et/ $\r$\nНажмите OK, чтобы выйти из установки."
@@ -34,3 +36,10 @@ ${LangFileString} DESC_SecNLS_WinFonts "Задействовать папку ш
 
 ${LangFileString} TEXT_SecMSSysLibraries "Важные Microsoft Runtime DLL"
 ${LangFileString} DESC_SecMSSysLibraries "Загрузить и установить (или обновить) системные библиотеки дистрибутивов Microsoft's Visual C++, которые могут потребоваться для запуска некоторых компонентов."
+
+${LangFileString} DLTEXT_Downloading "Downloading"
+${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
+${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+
+${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
+${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
