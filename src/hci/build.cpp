@@ -201,9 +201,9 @@ protected:
 		displayIfHighlight(xOffset, yOffset);
 	}
 
-	std::shared_ptr<BaseObjectsController> getController() const override
+	BuildController &getController() const override
 	{
-		return controller;
+		return *controller.get();
 	}
 
 	std::string getTip() override
@@ -433,12 +433,7 @@ private:
 
 	bool isSelected() const override
 	{
-		if (auto form = statsForm.lock())
-		{
-			return form->getSelectedStats() == controller->getStatsAt(buildOptionIndex);
-		}
-
-		return false;
+		return controller->isSelectedObjectStats(buildOptionIndex);
 	}
 
 	void updateLayout() override
@@ -512,25 +507,19 @@ public:
 	}
 
 protected:
-	void display(int xOffset, int yOffset) override
+	BuildController &getController() const override
 	{
-		controller->updateHighlighted();
-		BaseWidget::display(xOffset, yOffset);
-	}
-
-	std::shared_ptr<BaseObjectsController> getController() const override
-	{
-		return controller;
+		return *controller.get();
 	}
 
 private:
 	std::shared_ptr<BuildController> controller;
 };
 
-class BuildStatsForm: public StatsForm
+class BuildStatsForm: public ObjectStatsForm
 {
 private:
-	typedef StatsForm BaseWidget;
+	typedef ObjectStatsForm BaseWidget;
 	using BaseWidget::BaseWidget;
 
 public:
@@ -549,9 +538,9 @@ public:
 	}
 
 protected:
-	std::shared_ptr<BaseStatsController> getController() const override
+	BuildController &getController() const override
 	{
-		return controller;
+		return *controller.get();
 	}
 
 private:

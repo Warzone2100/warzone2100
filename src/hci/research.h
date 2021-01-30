@@ -6,11 +6,11 @@
 #include "../hci.h"
 #include "objects_stats.h"
 
-class ResearchController: public BaseStatsController, public std::enable_shared_from_this<ResearchController>
+class ResearchController: public BaseObjectsStatsController, public std::enable_shared_from_this<ResearchController>
 {
 public:
 	RESEARCH *getObjectStatsAt(size_t objectIndex) const override;
-	RESEARCH *getStatsAt(size_t statsIndex) const
+	RESEARCH *getStatsAt(size_t statsIndex) const override
 	{
 		return stats.at(statsIndex);
 	}

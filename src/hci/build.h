@@ -6,11 +6,11 @@
 #include "../hci.h"
 #include "objects_stats.h"
 
-class BuildController: public BaseStatsController, public std::enable_shared_from_this<BuildController>
+class BuildController: public BaseObjectsStatsController, public std::enable_shared_from_this<BuildController>
 {
 public:
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
-	STRUCTURE_STATS *getStatsAt(size_t statsIndex) const
+	STRUCTURE_STATS *getStatsAt(size_t statsIndex) const override
 	{
 		return stats.at(statsIndex);
 	}
