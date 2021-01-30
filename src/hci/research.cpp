@@ -340,21 +340,11 @@ protected:
 	void display(int xOffset, int yOffset) override
 	{
 		updateLayout();
+
 		auto facility = controller->getObjectAt(objectIndex);
 		auto research = controller->getObjectStatsAt(objectIndex);
-
-		ImdObject objectImage;
-
 		auto researchPending = structureIsResearchingPending(facility);
-
-		if (researchPending && research)
-		{
-			objectImage = getResearchObjectImage(research);
-		}
-		else
-		{
-			objectImage = ImdObject::Component(nullptr);
-		}
+		auto objectImage = researchPending && research ? getResearchObjectImage(research) : ImdObject::Component(nullptr);
 
 		displayIMD(Image(), objectImage, xOffset, yOffset);
 
