@@ -2,6 +2,8 @@ ${LangFileString} WZWelcomeText "欢迎使用Warzone 2100安装程序！\r\n\r\n
 
 ${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
 
+${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+
 ${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
@@ -34,3 +36,10 @@ ${LangFileString} DESC_SecNLS_WinFonts "在搜索路径中包含 Windows 字体�
 
 ${LangFileString} TEXT_SecMSSysLibraries "重要的 Microsoft 运行时间期限"
 ${LangFileString} DESC_SecMSSysLibraries "下载并安装(或更新)微软的Visual C++可再发行的系统库，其中可能需要运行部分内容。"
+
+${LangFileString} DLTEXT_Downloading "Downloading"
+${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
+${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+
+${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
+${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
