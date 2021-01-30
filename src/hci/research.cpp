@@ -44,7 +44,7 @@ void ResearchController::updateFacilitiesList()
 	std::reverse(facilities.begin(), facilities.end());
 }
 
-nonstd::optional<size_t> ResearchController::getSelectedFacilityIndex()
+nonstd::optional<size_t> ResearchController::getHighlightedFacilityIndex()
 {
 	if (!getHighlightedObject())
 	{
@@ -60,8 +60,8 @@ void ResearchController::updateResearchOptionsList()
 {
 	stats.clear();
 
-	auto selectedIndex = getSelectedFacilityIndex();
-	auto research = selectedIndex.has_value() ? (RESEARCH *)getObjectStatsAt(selectedIndex.value()) : nullptr;
+	auto highlightedIndex = getHighlightedFacilityIndex();
+	auto research = highlightedIndex.has_value() ? (RESEARCH *)getObjectStatsAt(highlightedIndex.value()) : nullptr;
 	auto researchIndex = research != nullptr ? nonstd::optional<UWORD>(research->index) : nonstd::nullopt;
 
 	for (auto researchOption: fillResearchList(selectedPlayer, researchIndex, MAXRESEARCH))
@@ -411,7 +411,7 @@ private:
 		}
 	}
 
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
 		auto facility = controller->getObjectAt(objectIndex);
 		return facility && (facility->selected || facility == controller->getHighlightedObject());
@@ -496,9 +496,9 @@ private:
 		displayIfHighlight(xOffset, yOffset);
 	}
 
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
-		return controller->isSelectedObjectStats(researchOptionIndex);
+		return controller->isHighlightedObjectStats(researchOptionIndex);
 	}
 
 	void updateLayout() override

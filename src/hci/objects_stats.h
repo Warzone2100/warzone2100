@@ -70,23 +70,23 @@ public:
 class BaseObjectsStatsController: public BaseStatsController, public BaseObjectsController
 {
 public:
-	void updateSelectedObjectStats();
+	void updateHighlightedObjectStats();
 
-	bool isSelectedObjectStats(size_t statsIndex)
+	bool isHighlightedObjectStats(size_t statsIndex)
 	{
-		return getStatsAt(statsIndex) == selectedObjectStats;
+		return getStatsAt(statsIndex) == highlightedObjectStats;
 	}
 
 private:
-	BASE_STATS *selectedObjectStats;
+	BASE_STATS *highlightedObjectStats;
 };
 
 class DynamicIntFancyButton: public IntFancyButton
 {
 protected:
-	virtual bool isSelected() const = 0;
+	virtual bool isHighlighted() const = 0;
 	virtual void updateLayout();
-	void updateSelection();
+	void updateHighlight();
 };
 
 class StatsButton: public DynamicIntFancyButton
@@ -113,7 +113,7 @@ public:
 	}
 
 protected:
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
 		return false;
 	}

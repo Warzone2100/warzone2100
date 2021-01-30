@@ -304,7 +304,7 @@ private:
 		}
 	}
 
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
 		auto factory = controller->getObjectAt(objectIndex);
 		return factory && (factory->selected || factory == controller->getHighlightedObject());
@@ -367,9 +367,9 @@ private:
 		productionRunSizeLabel.initialize(*this);
 	}
 
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
-		return controller->isSelectedObjectStats(manufactureOptionIndex);
+		return controller->isHighlightedObjectStats(manufactureOptionIndex);
 	}
 
 	void updateLayout() override

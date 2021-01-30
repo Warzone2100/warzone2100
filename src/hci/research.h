@@ -35,7 +35,7 @@ public:
 		return BaseObjectsController::findObject(facilities, iteration);
 	}
 
-	nonstd::optional<size_t> getSelectedFacilityIndex();
+	nonstd::optional<size_t> getHighlightedFacilityIndex();
 	void updateData();
 	bool showInterface() override;
 	void refresh() override;

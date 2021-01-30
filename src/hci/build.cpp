@@ -136,9 +136,9 @@ void BuildController::toggleBuilderSelection(DROID *droid)
 	}
 	else
 	{
-		if (auto selectedObject = getHighlightedObject())
+		if (auto highlightedObject = getHighlightedObject())
 		{
-			selectedObject->selected = true;
+			highlightedObject->selected = true;
 		}
 		selectObject(droid);
 	}
@@ -362,7 +362,7 @@ private:
 		}
 	}
 
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
 		auto droid = controller->getObjectAt(objectIndex);
 		return droid && (droid->selected || droid == controller->getHighlightedObject());
@@ -431,9 +431,9 @@ private:
 		addCostBar();
 	}
 
-	bool isSelected() const override
+	bool isHighlighted() const override
 	{
-		return controller->isSelectedObjectStats(buildOptionIndex);
+		return controller->isHighlightedObjectStats(buildOptionIndex);
 	}
 
 	void updateLayout() override

@@ -65,10 +65,10 @@ void BaseObjectsController::updateHighlighted()
 		return;
 	}
 
-	if (auto previouslyHighlighted = getHighlightedObject())
+	if (auto highlighted = getHighlightedObject())
 	{
-		auto findPreviouslyHighlightedObject = [&] (BASE_OBJECT *object) {
-			if (object->died == 0 && object == previouslyHighlighted)
+		auto findHighlightedObject = [&] (BASE_OBJECT *object) {
+			if (object->died == 0 && object == highlighted)
 			{
 				setHighlightedObject(object);
 				return true;
@@ -77,7 +77,7 @@ void BaseObjectsController::updateHighlighted()
 			return false;
 		};
 
-		if (findObject(findPreviouslyHighlightedObject))
+		if (findObject(findHighlightedObject))
 		{
 			return;
 		}
@@ -98,7 +98,7 @@ void BaseStatsController::displayStatsForm()
 
 void DynamicIntFancyButton::updateLayout()
 {
-	updateSelection();
+	updateHighlight();
 	initDisplay();
 }
 
@@ -151,9 +151,9 @@ void StatsFormButton::addCostBar()
 	costBar->setBackgroundColour(WZCOL_BLACK);
 }
 
-void DynamicIntFancyButton::updateSelection()
+void DynamicIntFancyButton::updateHighlight()
 {
-	if (isSelected()) {
+	if (isHighlighted()) {
 		state |= WBUT_CLICKLOCK;
 	} else {
 		state &= ~WBUT_CLICKLOCK;
@@ -303,27 +303,27 @@ void StatsForm::updateLayout()
 	updateButtons();
 }
 
-void BaseObjectsStatsController::updateSelectedObjectStats()
+void BaseObjectsStatsController::updateHighlightedObjectStats()
 {
-	auto selectedObject = getHighlightedObject();
+	auto highlightedObject = getHighlightedObject();
 	auto size = objectsSize();
 
 	for (auto i = 0; i < size; i++)
 	{
-		if (getObjectAt(i) == selectedObject)
+		if (getObjectAt(i) == highlightedObject)
 		{
-			selectedObjectStats = getObjectStatsAt(i);
+			highlightedObjectStats = getObjectStatsAt(i);
 			return;
 		}
 	}
 
-	selectedObjectStats = nullptr;
+	highlightedObjectStats = nullptr;
 }
 
 void ObjectStatsForm::updateLayout()
 {
 	BaseWidget::updateLayout();
-	getController().updateSelectedObjectStats();
+	getController().updateHighlightedObjectStats();
 }
 
 void StatsForm::updateButtons()
