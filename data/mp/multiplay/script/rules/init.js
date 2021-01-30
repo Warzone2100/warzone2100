@@ -8,7 +8,7 @@
 */
 
 
-//All stuff of rules moved to multiplay/script
+//All stuff of rules
 include("multiplay/script/rules/includes.js");
 
 //Do not add stuff here for mods, use "multiplay/script/mods/init.js" instead
