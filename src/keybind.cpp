@@ -17,10 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-#include <string.h>
+#include <cstring>
 
 #include "lib/framework/frame.h"
-#include "lib/framework/stdio_ext.h"
 #include "lib/framework/wzapp.h"
 #include "lib/framework/rational.h"
 #include "objects.h"
@@ -31,7 +30,6 @@
 #include "warzoneconfig.h"
 #include "console.h"
 #include "display.h"
-#include "mapdisplay.h"
 #include "display3d.h"
 #include "edit3d.h"
 #include "keybind.h"
@@ -45,7 +43,6 @@
 #include "ingameop.h"
 #include "effects.h"
 #include "component.h"
-#include "geometry.h"
 #include "radar.h"
 #include "structure.h"
 // FIXME Direct iVis implementation include!
@@ -64,16 +61,12 @@
 #include "lib/ivis_opengl/piestate.h"
 // FIXME Direct iVis implementation include!
 #include "lib/framework/fixedpoint.h"
-#include "lib/ivis_opengl/piematrix.h"
 
 #include "keymap.h"
 #include "loop.h"
 #include "mission.h"
-#include "mapgrid.h"
-#include "order.h"
 #include "selection.h"
 #include "difficulty.h"
-#include "clparse.h"
 #include "research.h"
 #include "template.h"
 #include "qtscript.h"
@@ -817,7 +810,7 @@ void	kf_ToggleCamera()
 
 void kf_RevealMapAtPos()
 {
-	addSpotter(mouseTileX, mouseTileY, selectedPlayer, 1024, 0, gameTime + 2000);
+	addSpotter(mouseTileX, mouseTileY, selectedPlayer, 1024, false, gameTime + 2000);
 }
 
 // --------------------------------------------------------------------------
@@ -1242,11 +1235,11 @@ void	kf_ToggleGodMode()
 		}
 
 		// and the structures
-		for (unsigned player = 0; player < MAX_PLAYERS; ++player)
+		for (unsigned playerId = 0; playerId < MAX_PLAYERS; ++playerId)
 		{
-			if (player != selectedPlayer)
+			if (playerId != selectedPlayer)
 			{
-				STRUCTURE *psStruct = apsStructLists[player];
+				STRUCTURE *psStruct = apsStructLists[playerId];
 
 				while (psStruct)
 				{
@@ -1320,13 +1313,14 @@ void	kf_TogglePauseMode()
 	}
 
 	/* Is the game running? */
-	if (gamePaused() == false)
+	if (!gamePaused())
 	{
 		/* Then pause it */
 		setGamePauseStatus(true);
 		setConsolePause(true);
 		setScriptPause(true);
 		setAudioPause(true);
+		setScrollPause(true);
 
 		// If cursor trapping is enabled allow the cursor to leave the window
 		if (war_GetTrapCursor())
@@ -1403,6 +1397,7 @@ void	kf_TogglePauseMode()
 		setConsolePause(false);
 		setScriptPause(false);
 		setAudioPause(false);
+		setScrollPause(false);
 
 		// Re-enable cursor trapping if it is enabled
 		if (war_GetTrapCursor())
@@ -1432,7 +1427,7 @@ void	kf_FinishAllResearch()
 
 	for (j = 0; j < asResearch.size(); j++)
 	{
-		if (IsResearchCompleted(&asPlayerResList[selectedPlayer][j]) == false)
+		if (!IsResearchCompleted(&asPlayerResList[selectedPlayer][j]))
 		{
 			if (bMultiMessages)
 			{
@@ -1495,7 +1490,7 @@ void	kf_FinishResearch()
 	{
 		if (psCurr->pStructureType->type == REF_RESEARCH)
 		{
-			BASE_STATS	*pSubject = nullptr;
+			BASE_STATS	*pSubject;
 
 			// find out what we are researching here
 			pSubject = ((RESEARCH_FACILITY *)psCurr->pFunctionality)->psSubject;
@@ -1949,7 +1944,6 @@ void	kf_JumpNextVTOLFactory()
 
 void	kf_KillEnemy()
 {
-	UDWORD		player;
 	DROID		*psCDroid, *psNDroid;
 	STRUCTURE	*psCStruct, *psNStruct;
 
@@ -1969,18 +1963,18 @@ void	kf_KillEnemy()
 	sendInGameSystemMessage(cmsg.c_str());
 	Cheated = true;
 
-	for (player = 0; player < MAX_PLAYERS; player++)
+	for (int playerId = 0; playerId < MAX_PLAYERS; playerId++)
 	{
-		if (player != selectedPlayer)
+		if (playerId != selectedPlayer)
 		{
 			// wipe out all the droids
-			for (psCDroid = apsDroidLists[player]; psCDroid; psCDroid = psNDroid)
+			for (psCDroid = apsDroidLists[playerId]; psCDroid; psCDroid = psNDroid)
 			{
 				psNDroid = psCDroid->psNext;
 				SendDestroyDroid(psCDroid);
 			}
 			// wipe out all their structures
-			for (psCStruct = apsStructLists[player]; psCStruct; psCStruct = psNStruct)
+			for (psCStruct = apsStructLists[playerId]; psCStruct; psCStruct = psNStruct)
 			{
 				psNStruct = psCStruct->psNext;
 				SendDestroyStructure(psCStruct);
@@ -2726,7 +2720,6 @@ void kf_ToggleRadarTerrain()
 		break;
 	case NUM_RADAR_MODES:
 		assert(false);
-		break;
 	}
 }
 

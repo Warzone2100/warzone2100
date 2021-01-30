@@ -47,7 +47,6 @@
 #include "lib/sound/audio.h"
 #include "frontend.h"
 #include "main.h"
-#include "display3d.h"
 #include "display.h"
 #include "lib/netplay/netplay.h"
 #include "loop.h"
@@ -59,6 +58,7 @@
 #include "keymap.h"
 #include "qtscript.h"
 #include "clparse.h"
+#include "ingameop.h"
 
 #define totalslots 36			// saves slots
 #define slotsInColumn 12		// # of slots in a column
@@ -218,11 +218,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 			}
 
 			setGamePauseStatus(true);
-			setGameUpdatePause(true);
-			setScriptPause(true);
-			setScrollPause(true);
-			setConsolePause(true);
-
+			setAllPauseStates(true);
 		}
 
 		forceHidePowerBar();
@@ -411,7 +407,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-bool closeLoadSave()
+bool closeLoadSave(bool goBack)
 {
 	bLoadSaveUp = false;
 
@@ -419,21 +415,25 @@ bool closeLoadSave()
 	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
 	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
 	{
-
+		if (goBack)
+		{
+			intReopenMenuWithoutUnPausing();
+		}
 		if (!bMultiPlayer || (NetPlay.bComms == 0))
 		{
-			gameTimeStart();
-			setGamePauseStatus(false);
 			setGameUpdatePause(false);
-			setScriptPause(false);
-			setScrollPause(false);
-			setConsolePause(false);
+			if (!goBack)
+			{
+				gameTimeStart();
+				setGamePauseStatus(false);
+				setAllPauseStates(false);
+			}
 		}
 
 		intAddReticule();
 		intShowPowerBar();
-
 	}
+
 	psRequestScreen = nullptr;
 	// need to "eat" up the return key so it don't pass back to game.
 	inputLoseFocus();
@@ -441,28 +441,28 @@ bool closeLoadSave()
 }
 
 /***************************************************************************
-	Delete a savegame.  saveGameName should be a .gam extension save game
+	Delete a savegame.  fileName should be a .gam extension save game
 	filename reference.  We delete this file, any .es file with the same
 	name, and any files in the directory with the same name.
 ***************************************************************************/
-void deleteSaveGame(char *saveGameName)
+void deleteSaveGame(char *fileName)
 {
-	ASSERT(strlen(saveGameName) < MAX_STR_LENGTH, "deleteSaveGame; save game name too long");
+	ASSERT(strlen(fileName) < MAX_STR_LENGTH, "deleteSaveGame; save game name too long");
 
-	PHYSFS_delete(saveGameName);
-	saveGameName[strlen(saveGameName) - 4] = '\0'; // strip extension
+	PHYSFS_delete(fileName);
+	fileName[strlen(fileName) - 4] = '\0'; // strip extension
 
-	strcat(saveGameName, ".es");					// remove script data if it exists.
-	PHYSFS_delete(saveGameName);
-	saveGameName[strlen(saveGameName) - 3] = '\0'; // strip extension
+	strcat(fileName, ".es");					// remove script data if it exists.
+	PHYSFS_delete(fileName);
+	fileName[strlen(fileName) - 3] = '\0'; // strip extension
 
 	// check for a directory and remove that too.
-	WZ_PHYSFS_enumerateFiles(saveGameName, [saveGameName](const char *i) -> bool {
+	WZ_PHYSFS_enumerateFiles(fileName, [fileName](const char *i) -> bool {
 		char del_file[PATH_MAX];
 
 		// Construct the full path to the file by appending the
 		// filename to the directory it is in.
-		snprintf(del_file, sizeof(del_file), "%s/%s", saveGameName, i);
+		snprintf(del_file, sizeof(del_file), "%s/%s", fileName, i);
 
 		debug(LOG_SAVE, "Deleting [%s].", del_file);
 
@@ -474,9 +474,9 @@ void deleteSaveGame(char *saveGameName)
 		return true; // continue
 	});
 
-	if (!PHYSFS_delete(saveGameName))		// now (should be)empty directory
+	if (!PHYSFS_delete(fileName))		// now (should be)empty directory
 	{
-		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", saveGameName, WZ_PHYSFS_getLastError());
+		debug(LOG_ERROR, "Warning directory[%s] could not be deleted because %s", fileName, WZ_PHYSFS_getLastError());
 	}
 }
 
@@ -591,6 +591,25 @@ static WzString suggestSaveName(const char *NewSaveGamePath)
 	return saveName;
 }
 
+static void runLoadSaveCleanup(bool resetWidgets, bool goBack)
+{
+	closeLoadSave(goBack);
+	bRequestLoad = false;
+	if (!goBack && resetWidgets && widgGetFromID(psWScreen, IDMISSIONRES_FORM) == nullptr)
+	{
+		resetMissionWidgets();
+	}
+}
+
+static void runLoadCleanup()
+{
+	int campaign = getCampaign(sRequestResult);
+	setCampaignNumber(campaign);
+	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
+	closeLoadSave();
+	bRequestLoad = true;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Returns true if cancel pressed or a valid game slot was selected.
 // if when returning true strlen(sRequestResult) != 0 then a valid game slot was selected
@@ -598,7 +617,6 @@ static WzString suggestSaveName(const char *NewSaveGamePath)
 bool runLoadSave(bool bResetMissionWidgets)
 {
 	static char     sDelete[PATH_MAX];
-	UDWORD		i, campaign;
 	char NewSaveGamePath[PATH_MAX] = {'\0'};
 
 	WidgetTriggers const &triggers = widgRunScreen(psRequestScreen);
@@ -606,10 +624,10 @@ bool runLoadSave(bool bResetMissionWidgets)
 
 	sstrcpy(sRequestResult, "");					// set returned filename to null;
 
-	// cancel this operation...
 	if (id == LOADSAVE_CANCEL || CancelPressed())
 	{
-		goto cleanup;
+		runLoadSaveCleanup(bResetMissionWidgets, true);
+		return true;
 	}
 	if (bMultiPlayer)
 	{
@@ -657,7 +675,8 @@ bool runLoadSave(bool bResetMissionWidgets)
 				return false;				// clicked on an empty box
 			}
 
-			goto success;
+			runLoadCleanup();
+			return true;
 		}
 		else //  SAVING!add edit box at that position.
 		{
@@ -713,7 +732,7 @@ bool runLoadSave(bool bResetMissionWidgets)
 		// scan to see if that game exists in another slot, if so then fail.
 		sstrcpy(sTemp, widgGetString(psRequestScreen, id));
 
-		for (i = LOADENTRY_START; i < LOADENTRY_END; i++)
+		for (int i = LOADENTRY_START; i < LOADENTRY_END; i++)
 		{
 			if (i != chosenSlotId)
 			{
@@ -742,29 +761,11 @@ bool runLoadSave(bool bResetMissionWidgets)
 			}
 		}
 
-		goto cleanup;
+		runLoadSaveCleanup(bResetMissionWidgets, false);
+		return true;
 	}
 
 	return false;
-
-// failed and/or cancelled..
-cleanup:
-	closeLoadSave();
-	bRequestLoad = false;
-	if (bResetMissionWidgets && widgGetFromID(psWScreen, IDMISSIONRES_FORM) == nullptr)
-	{
-		resetMissionWidgets();			//reset the mission widgets here if necessary
-	}
-	return true;
-
-// success on load.
-success:
-	campaign = getCampaign(sRequestResult);
-	setCampaignNumber(campaign);
-	debug(LOG_WZ, "Set campaign for %s to %u", sRequestResult, campaign);
-	closeLoadSave();
-	bRequestLoad = true;
-	return true;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
