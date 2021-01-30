@@ -5,6 +5,8 @@
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
+#include "lib/sound/audio_id.h"
+#include "lib/sound/audio.h"
 #include "manufacture.h"
 #include "../objmem.h"
 #include "../hci.h"
@@ -42,6 +44,28 @@ void ManufactureController::adjustFactoryProduction(DROID_TEMPLATE *manufactureO
 void ManufactureController::adjustFactoryLoop(bool add)
 {
 	factoryLoopAdjust(getHighlightedObject(), add);
+}
+
+void ManufactureController::releaseFactoryProduction(STRUCTURE *structure)
+{
+	releaseProduction(structure, ModeQueue);
+}
+
+void ManufactureController::cancelFactoryProduction(STRUCTURE *structure)
+{
+	if (!StructureIsManufacturingPending(structure))
+	{
+		return;
+	}
+
+	if (!StructureIsOnHoldPending(structure))
+	{
+		holdProduction(structure, ModeQueue);
+		return;
+	}
+
+	cancelProduction(structure, ModeQueue);
+	audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 }
 
 void ManufactureController::startDeliveryPointPosition()
@@ -250,9 +274,22 @@ protected:
 	void display(int xOffset, int yOffset) override
 	{
 		updateLayout();
-		auto stat = getStats();
-		displayIMD(Image(), stat ? ImdObject::DroidTemplate(stat): ImdObject::Component(nullptr), xOffset, yOffset);
-		displayIfHighlight(xOffset, yOffset);
+
+		auto factory = controller->getObjectAt(objectIndex);
+		auto production = getStats();
+		auto productionPending = StructureIsManufacturingPending(factory);
+		auto objectImage = productionPending && production ? ImdObject::DroidTemplate(production): ImdObject::Component(nullptr);
+
+		displayIMD(Image(), objectImage, xOffset, yOffset);
+
+		if (productionPending && StructureIsOnHoldPending(factory))
+		{
+			iV_DrawImage(IntImages, ((realTime / 250) % 2) == 0 ? IMAGE_BUT0_DOWN : IMAGE_BUT_HILITE, xOffset + x(), yOffset + y());
+		}
+		else
+		{
+			displayIfHighlight(xOffset, yOffset);
+		}
 	}
 
 	void updateLayout() override
@@ -316,10 +353,17 @@ private:
 		auto factory = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 
-		controller->clearStructureSelection();
-		controller->selectObject(factory);
-
-		controller->displayStatsForm();
+		if (mouseButton == WKEY_PRIMARY)
+		{
+			controller->releaseFactoryProduction(factory);
+			controller->clearStructureSelection();
+			controller->selectObject(factory);
+			controller->displayStatsForm();
+		}
+		else if (mouseButton == WKEY_SECONDARY)
+		{
+			controller->cancelFactoryProduction(factory);
+		}
 	}
 
 	std::shared_ptr<ManufactureController> controller;
