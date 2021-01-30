@@ -309,9 +309,9 @@ protected:
 		return getStatsName(facility->pStructureType);
 	}
 
-	std::shared_ptr<BaseObjectsController> getController() const override
+	ResearchController &getController() const override
 	{
-		return controller;
+		return *controller.get();
 	}
 
 private:
@@ -498,12 +498,7 @@ private:
 
 	bool isSelected() const override
 	{
-		if (auto form = statsForm.lock())
-		{
-			return form->getSelectedStats() == controller->getStatsAt(researchOptionIndex);
-		}
-
-		return false;
+		return controller->isSelectedObjectStats(researchOptionIndex);
 	}
 
 	void updateLayout() override
@@ -609,25 +604,19 @@ public:
 	}
 
 protected:
-	void display(int xOffset, int yOffset) override
+	ResearchController &getController() const override
 	{
-		controller->updateHighlighted();
-		BaseWidget::display(xOffset, yOffset);
-	}
-
-	std::shared_ptr<BaseObjectsController> getController() const override
-	{
-		return controller;
+		return *controller.get();
 	}
 
 private:
 	std::shared_ptr<ResearchController> controller;
 };
 
-class ResearchStatsForm: public StatsForm
+class ResearchStatsForm: public ObjectStatsForm
 {
 private:
-	typedef StatsForm BaseWidget;
+	typedef ObjectStatsForm BaseWidget;
 	using BaseWidget::BaseWidget;
 
 public:
@@ -646,9 +635,9 @@ public:
 	}
 
 protected:
-	std::shared_ptr<BaseStatsController> getController() const override
+	ResearchController &getController() const override
 	{
-		return controller;
+		return *controller.get();
 	}
 
 private:

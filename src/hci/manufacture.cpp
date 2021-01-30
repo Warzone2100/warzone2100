@@ -180,9 +180,9 @@ protected:
 		return getStatsName(factory->pStructureType);
 	}
 
-	std::shared_ptr<BaseObjectsController> getController() const override
+	ManufactureController &getController() const override
 	{
-		return controller;
+		return *controller.get();
 	}
 
 private:
@@ -370,12 +370,7 @@ private:
 
 	bool isSelected() const override
 	{
-		if (auto form = statsForm.lock())
-		{
-			return form->getSelectedStats() == controller->getStatsAt(manufactureOptionIndex);
-		}
-
-		return false;
+		return controller->isSelectedObjectStats(manufactureOptionIndex);
 	}
 
 	void updateLayout() override
@@ -444,25 +439,19 @@ public:
 	}
 
 protected:
-	void display(int xOffset, int yOffset) override
+	ManufactureController &getController() const override
 	{
-		controller->updateHighlighted();
-		BaseWidget::display(xOffset, yOffset);
-	}
-
-	std::shared_ptr<BaseObjectsController> getController() const override
-	{
-		return controller;
+		return *controller.get();
 	}
 
 private:
 	std::shared_ptr<ManufactureController> controller;
 };
 
-class ManufactureStatsForm: public StatsForm
+class ManufactureStatsForm: public ObjectStatsForm
 {
 private:
-	typedef StatsForm BaseWidget;
+	typedef ObjectStatsForm BaseWidget;
 	using BaseWidget::BaseWidget;
 
 public:
@@ -481,9 +470,9 @@ public:
 	}
 
 protected:
-	std::shared_ptr<BaseStatsController> getController() const override
+	ManufactureController &getController() const override
 	{
-		return controller;
+		return *controller.get();
 	}
 
 private:

@@ -6,11 +6,11 @@
 #include "../hci.h"
 #include "objects_stats.h"
 
-class ManufactureController: public BaseStatsController, public std::enable_shared_from_this<ManufactureController>
+class ManufactureController: public BaseObjectsStatsController, public std::enable_shared_from_this<ManufactureController>
 {
 public:
 	DROID_TEMPLATE *getObjectStatsAt(size_t objectIndex) const override;
-	DROID_TEMPLATE *getStatsAt(size_t statsIndex) const
+	DROID_TEMPLATE *getStatsAt(size_t statsIndex) const override
 	{
 		return stats.at(statsIndex);
 	}

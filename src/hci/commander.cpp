@@ -150,9 +150,9 @@ protected:
 		experienceStarsLabel->show();
 	}
 
-	std::shared_ptr<BaseObjectsController> getController() const override
+	CommanderController &getController() const override
 	{
-		return controller;
+		return *controller.get();
 	}
 
 	std::string getTip() override
@@ -303,15 +303,9 @@ public:
 	}
 
 protected:
-	void display(int xOffset, int yOffset) override
+	BaseObjectsController &getController() const override
 	{
-		controller->updateHighlighted();
-		BaseWidget::display(xOffset, yOffset);
-	}
-
-	std::shared_ptr<BaseObjectsController> getController() const override
-	{
-		return controller;
+		return *controller.get();
 	}
 
 private:

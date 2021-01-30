@@ -120,13 +120,13 @@ void StatsButton::addProgressBar()
 
 void ObjectButton::jump()
 {
-	auto object = getController()->getObjectAt(objectIndex);
+	auto object = getController().getObjectAt(objectIndex);
 	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
 
 	if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(object, 0))
 	{
 		jumpPosition = getPlayerPos();
-		getController()->jumpToHighlighted();
+		getController().jumpToHighlighted();
 	}
 	else
 	{
@@ -163,6 +163,7 @@ void DynamicIntFancyButton::updateSelection()
 void ObjectsForm::display(int xOffset, int yOffset)
 {
 	updateButtons();
+	getController().updateHighlighted();
 	BaseWidget::display(xOffset, yOffset);
 }
 
@@ -212,7 +213,7 @@ void ObjectsForm::addTabList()
 
 void ObjectsForm::updateButtons()
 {
-	auto objectsCount = getController()->objectsSize();
+	auto objectsCount = getController().objectsSize();
 	while (buttonsCount < objectsCount)
 	{
 		addNewButton();
@@ -299,29 +300,35 @@ void StatsForm::display(int xOffset, int yOffset)
 
 void StatsForm::updateLayout()
 {
-	updateSelectedObjectStats();
 	updateButtons();
 }
 
-void StatsForm::updateSelectedObjectStats()
+void BaseObjectsStatsController::updateSelectedObjectStats()
 {
-	auto selectedObject = getController()->getHighlightedObject();
-	auto objectsSize = getController()->objectsSize();
-	selectedObjectStats = nullptr;
+	auto selectedObject = getHighlightedObject();
+	auto size = objectsSize();
 
-	for (auto i = 0; i < objectsSize; i++)
+	for (auto i = 0; i < size; i++)
 	{
-		if (getController()->getObjectAt(i) == selectedObject)
+		if (getObjectAt(i) == selectedObject)
 		{
-			selectedObjectStats = getController()->getObjectStatsAt(i);
-			break;
+			selectedObjectStats = getObjectStatsAt(i);
+			return;
 		}
 	}
+
+	selectedObjectStats = nullptr;
+}
+
+void ObjectStatsForm::updateLayout()
+{
+	BaseWidget::updateLayout();
+	getController().updateSelectedObjectStats();
 }
 
 void StatsForm::updateButtons()
 {
-	auto statsCount = getController()->statsSize();
+	auto statsCount = getController().statsSize();
 	while (buttonsCount < statsCount)
 	{
 		addNewButton();
@@ -337,7 +344,6 @@ void StatsForm::addNewButton()
 {
 	auto buttonIndex = buttonsCount++;
 	auto button = makeOptionButton(buttonIndex);
-	button->setStatsForm(std::static_pointer_cast<StatsForm>(shared_from_this()));
 	optionList->addWidgetToLayout(button);
 	button->style |= WFORM_SECONDARY;
 }

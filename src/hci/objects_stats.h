@@ -11,6 +11,7 @@
 #define STAT_BUTHEIGHT 46
 
 class StatsForm;
+class ObjectStatsForm;
 
 class BaseObjectsController
 {
@@ -56,13 +57,28 @@ protected:
 	}
 };
 
-class BaseStatsController: public BaseObjectsController
+class BaseStatsController
 {
 public:
 	virtual ~BaseStatsController() = default;
 	virtual size_t statsSize() const = 0;
 	virtual std::shared_ptr<StatsForm> makeStatsForm() = 0;
 	void displayStatsForm();
+	virtual BASE_STATS *getStatsAt(size_t) const = 0;
+};
+
+class BaseObjectsStatsController: public BaseStatsController, public BaseObjectsController
+{
+public:
+	void updateSelectedObjectStats();
+
+	bool isSelectedObjectStats(size_t statsIndex)
+	{
+		return getStatsAt(statsIndex) == selectedObjectStats;
+	}
+
+private:
+	BASE_STATS *selectedObjectStats;
 };
 
 class DynamicIntFancyButton: public IntFancyButton
@@ -102,7 +118,7 @@ protected:
 		return false;
 	}
 
-	virtual std::shared_ptr<BaseObjectsController> getController() const = 0;
+	virtual BaseObjectsController &getController() const = 0;
 	void jump();
 
 	size_t objectIndex;
@@ -114,11 +130,6 @@ private:
 class StatsFormButton : public StatsButton
 {
 public:
-	void setStatsForm(const std::shared_ptr<StatsForm> &value)
-	{
-		statsForm = value;
-	}
-
 	void addCostBar();
 
 protected:
@@ -133,7 +144,6 @@ protected:
 
 	virtual uint32_t getCost() = 0;
 
-	std::weak_ptr<StatsForm> statsForm;
 	std::shared_ptr<W_BARGRAPH> costBar;
 };
 
@@ -154,7 +164,7 @@ protected:
 	void removeLastButton();
 	virtual std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const = 0;
 	virtual std::shared_ptr<ObjectButton> makeObjectButton(size_t buttonIndex) const = 0;
-	virtual std::shared_ptr<BaseObjectsController> getController() const = 0;
+	virtual BaseObjectsController &getController() const = 0;
 
 	std::shared_ptr<IntListTabWidget> objectsList;
 	size_t buttonsCount = 0;
@@ -165,14 +175,8 @@ class StatsForm: public IntFormAnimated
 private:
 	typedef IntFormAnimated BaseWidget;
 
-public:
-	BASE_STATS *getSelectedStats() const
-	{
-		return selectedObjectStats;
-	}
-
 protected:
-	StatsForm(): IntFormAnimated(false) {}
+	StatsForm(): BaseWidget(false) {}
 
 	virtual void initialize();
 	virtual void updateLayout();
@@ -182,15 +186,25 @@ protected:
 	void addNewButton();
 	void removeLastButton();
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
-	virtual std::shared_ptr<BaseStatsController> getController() const = 0;
+	virtual BaseStatsController &getController() const = 0;
 
 private:
-	void updateSelectedObjectStats();
 	void updateButtons();
 
 	std::shared_ptr<IntListTabWidget> optionList;
 	size_t buttonsCount = 0;
-	BASE_STATS *selectedObjectStats = nullptr;
+};
+
+class ObjectStatsForm: public StatsForm
+{
+private:
+	typedef StatsForm BaseWidget;
+
+public:
+	virtual BaseObjectsStatsController &getController() const override = 0;
+
+protected:
+	void updateLayout() override;
 };
 
 #endif // __INCLUDED_SRC_HCI_OBJECTS_STATS_INTERFACE_H__
