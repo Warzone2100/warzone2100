@@ -49,6 +49,8 @@ public:
 	void updateData();
 	void adjustFactoryProduction(DROID_TEMPLATE *manufactureOption, bool add);
 	void adjustFactoryLoop(bool add);
+	void releaseFactoryProduction(STRUCTURE *structure);
+	void cancelFactoryProduction(STRUCTURE *structure);
 	void startDeliveryPointPosition();
 	bool showInterface() override;
 	void refresh() override;
