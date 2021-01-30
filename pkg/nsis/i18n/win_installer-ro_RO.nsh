@@ -2,6 +2,8 @@ ${LangFileString} WZWelcomeText "Bine ați venit în programul de instalare Warz
 
 ${LangFileString} WZWelcomeText_Portable "Bine ați venit în programul de instalare portabil Warzone 2100!\r\n\r\nAcest asistent vă va ghida prin instalarea versiunii portabile de Warzone 2100.\r\n\r\nAceastă instalare este complet autonomă şi puteți dezinstala programul în orice moment prin ştergerea directorului.\r\n\r\nWarzone 2100 este 100% gratuit, program deschis cu sursă\r\n\r\nApăsați „Înainte” pentru a continua."
 
+${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+
 ${LangFileString} WZ_64BIT_AVAILABLE "Există o versiune de 64 biți a Warzone 2100 disponibilă.$\r$\nPentru detalii vizitați https://wz2100.net/ $\r$\nContinuați cu o instalare de 32 biți?"
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Aceasta este versiunea de 64 biți a Warzone 2100.$\r$\nTe rugăm să descarci versiunea de 32 biți de pe https://wz2100. et/ $\r$\nApăsați OK pentru a ieși din Instalare."
@@ -34,3 +36,10 @@ ${LangFileString} DESC_SecNLS_WinFonts "Include folderul Windows Fonts în calea
 
 ${LangFileString} TEXT_SecMSSysLibraries "Biblioteci de legături dinamice importante de la Microsoft [DLL-uri]"
 ${LangFileString} DESC_SecMSSysLibraries "Descărcați și instalați (sau actualizați) bibliotecile de sistem redistribuabile ale Microsoft Visual C++, de care unele componente ar avea nevoie să poată rula."
+
+${LangFileString} DLTEXT_Downloading "Downloading"
+${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
+${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+
+${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
+${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
