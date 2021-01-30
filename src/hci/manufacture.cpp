@@ -107,7 +107,6 @@ DROID_TEMPLATE *ManufactureController::getObjectStatsAt(size_t objectIndex) cons
 {
 	auto factory = getFactoryOrNullptr(getObjectAt(objectIndex));
 	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, factory);
-	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, factory);
 
 	return factory->psSubject;
 }
@@ -594,7 +593,7 @@ private:
 	private:
 		void run(W_CONTEXT *) override
 		{
-			setState(ManufactureStatsForm::getProductionLoops(controller) == 0 ? 0: WBUT_CLICKLOCK);
+			setState(ManufactureStatsForm::getProductionLoops(controller->getHighlightedObject()) == 0 ? 0: WBUT_CLICKLOCK);
 		}
 
 		std::shared_ptr<ManufactureController> controller;
@@ -613,7 +612,7 @@ private:
 	private:
 		void run(W_CONTEXT *) override
 		{
-			auto productionLoops = ManufactureStatsForm::getProductionLoops(controller);
+			auto productionLoops = ManufactureStatsForm::getProductionLoops(controller->getHighlightedObject());
 			if (productionLoops != lastProductionLoop)
 			{
 				lastProductionLoop = productionLoops;
@@ -638,9 +637,14 @@ private:
 		std::shared_ptr<ManufactureController> controller;
 	};
 
-	static uint8_t getProductionLoops(std::shared_ptr<ManufactureController> controller)
+	static uint8_t getProductionLoops(STRUCTURE *structure)
 	{
-		auto psFactory = getFactoryOrNullptr(controller->getHighlightedObject());
+		if (structure == nullptr)
+		{
+			return 0;
+		}
+
+		auto psFactory = getFactoryOrNullptr(structure);
 		ASSERT_NOT_NULLPTR_OR_RETURN(0, psFactory);
 		return psFactory->psSubject == nullptr ? 0 : psFactory->productionLoops;
 	}
