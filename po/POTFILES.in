@@ -139,6 +139,7 @@ data/mp/messages/strings/resstrings.txt
 data/mp/multiplay/maps/10c-WaterLoop/game.js
 data/mp/multiplay/maps/6c-Entropy/game.js
 data/mp/multiplay/script/rules/printsettings.js
+data/mp/multiplay/script/rules/reticule.js
 data/mp/multiplay/skirmish/Cobra.js
 data/mp/multiplay/skirmish/bonecrusher/bonecrusher.js
 data/mp/multiplay/skirmish/bonecrusher/build-normal.js
@@ -207,7 +208,6 @@ data/mp/multiplay/skirmish/nexus_standards/chatDefinitions.js
 data/mp/multiplay/skirmish/nexus_standards/personalityDefinitions.js
 data/mp/multiplay/skirmish/nexus_standards/researchDefinitions.js
 data/mp/multiplay/skirmish/nexus_standards/templates.js
-data/mp/multiplay/skirmish/rules.js
 data/mp/multiplay/skirmish/semperfi.js
 data/mp/multiplay/skirmish/semperfi_includes/build.js
 data/mp/multiplay/skirmish/semperfi_includes/chat.js

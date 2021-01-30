@@ -434,7 +434,7 @@ void loadMultiScripts()
 	if (defaultRules)
 	{
 		debug(LOG_SAVE, "Loading default rules");
-		loadGlobalScript("multiplay/skirmish/rules.js");
+		loadGlobalScript("multiplay/script/rules/init.js");
 	}
 
 	// Backup data hashes, since AI and scavenger scripts aren't run on all clients.
