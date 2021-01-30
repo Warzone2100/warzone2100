@@ -68,7 +68,7 @@ void drawBlueBox(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 void drawBlueBoxInset(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 
 bool addLoadSave(LOADSAVE_MODE mode, const char *title);
-bool closeLoadSave();
+bool closeLoadSave(bool goBack = false);
 bool runLoadSave(bool bResetMissionWidgets);
 bool displayLoadSave();
 
@@ -80,7 +80,7 @@ bool saveInMissionRes();
 // return whether the save screen was displayed in the middle of a mission
 bool saveMidMission();
 
-void deleteSaveGame(char *saveGameName);
+void deleteSaveGame(char *fileName);
 
 void loadSaveScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 
