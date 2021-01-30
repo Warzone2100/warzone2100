@@ -2,6 +2,8 @@ ${LangFileString} WZWelcomeText "Bemvindo à instalação do Warzone 2100!\r\n\r
 
 ${LangFileString} WZWelcomeText_Portable "Bemvindo ao assistente de instalação portátil do Warzone 2100!\r\n\r\nEste assistente vai guiá-lo pelo processo de instalação da versão portátil do Warzone 2100.\r\n\r\nEsta instalação é completamente autónoma e poderá desistalar o programa a qualquer altura eliminando o directório.\r\n\r\nO Warzone 2100 é um programa open-source 100% grátis\r\n\r\nClique em Seguinte para continuar."
 
+${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+
 ${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
@@ -34,3 +36,10 @@ ${LangFileString} DESC_SecNLS_WinFonts "Incluir a pasta de Fontes do Windows no 
 
 ${LangFileString} TEXT_SecMSSysLibraries "DLLs Importantes do Microsoft Runtime"
 ${LangFileString} DESC_SecMSSysLibraries "Descarregar e instalar (ou actualizar) as bibliotecas redistribuíveis do Microsoft Visual C++, que alguns componentes podem requerir para serem executados."
+
+${LangFileString} DLTEXT_Downloading "Downloading"
+${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
+${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+
+${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
+${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
