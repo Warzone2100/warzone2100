@@ -1,9 +1,6 @@
 #ifndef __INCLUDED_SRC_HCI_MANUFACTURE_INTERFACE_H__
 #define __INCLUDED_SRC_HCI_MANUFACTURE_INTERFACE_H__
 
-#include <vector>
-#include "../objectdef.h"
-#include "../hci.h"
 #include "objects_stats.h"
 
 class ManufactureController: public BaseObjectsStatsController, public std::enable_shared_from_this<ManufactureController>
