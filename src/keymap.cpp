@@ -235,21 +235,20 @@ bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
 }
 
 // ----------------------------------------------------------------------------------
-
-KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot slot)
+KeyMapping *keyGetMappingFromFunction(void (*const function)(), const KeyMappingSlot slot)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [function, slot](const KEY_MAPPING& mapping) {
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [function, slot](const KeyMapping& mapping) {
 		return mapping.info->function == function && mapping.slot == slot;
 	});
 	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
 
-static bool isCombination(const KEY_MAPPING& mapping)
+static bool isCombination(const KeyMapping& mapping)
 {
 	return mapping.metaKeyCode != KEY_CODE::KEY_IGNORE;
 }
 
-static bool isActiveSingleKey(const KEY_MAPPING& mapping)
+static bool isActiveSingleKey(const KeyMapping& mapping)
 {
 	switch (mapping.action)
 	{
@@ -288,7 +287,7 @@ static KEY_CODE getAlternativeForMetaKey(const KEY_CODE meta)
 	return altMeta;
 }
 
-static bool isActiveCombination(const KEY_MAPPING& mapping)
+static bool isActiveCombination(const KeyMapping& mapping)
 {
 	ASSERT(mapping.hasMeta(), "isActiveCombination called for non-meta key mapping!");
 
@@ -302,19 +301,19 @@ static bool isActiveCombination(const KEY_MAPPING& mapping)
 	return bSubKeyIsPressed && (bMetaIsDown || bAltMetaIsDown);
 }
 
-bool KEY_MAPPING::isActivated() const
+bool KeyMapping::isActivated() const
 {
 	return isCombination(*this)
 		? isActiveCombination(*this)
 		: isActiveSingleKey(*this);
 }
 
-bool KEY_MAPPING::hasMeta() const
+bool KeyMapping::hasMeta() const
 {
 	return metaKeyCode != KEY_CODE::KEY_IGNORE;
 }
 
-bool KEY_MAPPING::toString(char* pOutStr) const
+bool KeyMapping::toString(char* pOutStr) const
 {
 	// Figure out if the keycode is for mouse or keyboard and print the name of
 	// the respective key/mouse button to `asciiSub`
@@ -353,7 +352,7 @@ bool KEY_MAPPING::toString(char* pOutStr) const
 #define	NUM_QWERTY_KEYS	26
 struct KEYMAP_MARKER
 {
-	KEY_MAPPING	*psMapping;
+	KeyMapping	*psMapping;
 	UDWORD	xPos, yPos;
 	SDWORD	spin;
 };
@@ -366,7 +365,7 @@ static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 
 // ----------------------------------------------------------------------------------
 /* The linked list of present key mappings */
-std::list<KEY_MAPPING> keyMappings;
+std::list<KeyMapping> keyMappings;
 
 /* Last meta and sub key that were recorded */
 static KEY_CODE	lastMetaKey;
@@ -918,7 +917,7 @@ void keyInitMappings(bool bForceDefaults)
 
 // ----------------------------------------------------------------------------------
 /* Adds a new mapping to the list */
-KEY_MAPPING *keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, void (*const pKeyMapFunc)(), const KeyMappingSlot slot)
+KeyMapping* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, void (*const pKeyMapFunc)(), const KeyMappingSlot slot)
 {
 	/* Make sure the meta key is the left variant */
 	KEY_CODE leftMetaCode = metaCode;
@@ -960,21 +959,25 @@ KEY_MAPPING *keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input,
 
 // ----------------------------------------------------------------------------------
 /* Returns a pointer to a mapping if it exists - NULL otherwise */
-KEY_MAPPING *keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingSlot slot)
+std::vector<KeyMapping*> keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [metaCode, input, slot](KEY_MAPPING const &mapping) {
-		// If slot is set to LAST, find any mapping regardless of slot
-		const bool slotMatches = slot == KeyMappingSlot::LAST || mapping.slot == slot;
-		return mapping.metaKeyCode == metaCode && mapping.input == input && slotMatches;
-	});
-	return mapping != keyMappings.end()? &*mapping : nullptr;
+	std::vector<KeyMapping*> matches;
+	for (auto& mapping : keyMappings)
+	{
+		if (mapping.metaKeyCode == metaCode && mapping.input == input)
+		{
+			matches.push_back(&mapping);
+		}
+	}
+
+	return matches;
 }
 
 // ----------------------------------------------------------------------------------
 /* Removes a mapping specified by a pointer */
-static bool keyRemoveMappingPt(KEY_MAPPING *psToRemove)
+static bool keyRemoveMappingPt(KeyMapping *psToRemove)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [psToRemove](KEY_MAPPING const &mapping) {
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [psToRemove](KeyMapping const &mapping) {
 		return &mapping == psToRemove;
 	});
 	if (mapping != keyMappings.end())
@@ -991,7 +994,7 @@ static bool keyAddDefaultMapping(KEY_CODE metaCode, KeyMappingInput input, KeyAc
 	const KeyFunctionInfo* info = keyFunctionInfoTable.keyFunctionInfoByFunction(pKeyMapFunc);
 	ASSERT_OR_RETURN(false, info != nullptr, "Could not determine key function info for mapping being added!");
 
-	KEY_MAPPING *psMapping = keyGetMappingFromFunction(pKeyMapFunc, slot);
+	KeyMapping* psMapping = keyGetMappingFromFunction(pKeyMapFunc, slot);
 	if (!bForceDefaults && psMapping != nullptr)
 	{
 		// Not forcing defaults, and there is already a mapping entry for this function with this slot
@@ -1058,7 +1061,7 @@ static bool checkQwertyKeys()
 
 // ----------------------------------------------------------------------------------
 /* allows checking if mapping should currently be ignored in keyProcessMappings */
-static bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEvents, const KEY_MAPPING& mapping)
+static bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
 {
 	// TODO refact-process-input: can this be removed and handled in the info.context.isActive() check?
 	//  - likely requires removing the bExclude (?)
@@ -1112,7 +1115,7 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 	/* If mappings have been updated or context priorities have changed, sort the mappings by priority and whether or not they have meta keys */
 	if (bMappingsSortOrderDirty)
 	{
-		keyMappings.sort([](const KEY_MAPPING& a, const KEY_MAPPING& b) {
+		keyMappings.sort([](const KeyMapping& a, const KeyMapping& b) {
 			// Primary sort by priority
 			const unsigned int priorityA = a.info->context.getPriority();
 			const unsigned int priorityB = b.info->context.getPriority();
@@ -1134,7 +1137,7 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 	std::unordered_set<KeyMappingInput, KeyMappingInput::Hash> consumedInputs;
 
 	/* Run through all sorted mappings */
-	for (const KEY_MAPPING& keyToProcess : keyMappings)
+	for (const KeyMapping& keyToProcess : keyMappings)
 	{
 		/* Skip inappropriate ones when necessary */
 		if (isIgnoredMapping(bExclude, bAllowMouseWheelEvents, keyToProcess))
@@ -1353,10 +1356,11 @@ std::string getWantedDebugMappingStatuses(bool val)
 	return ret;
 }
 // ----------------------------------------------------------------------------------
-bool clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput input, const InputContext& context)
+void clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput input, const InputContext& context)
 {
 	/* Find any mapping with same keys */
-	if (KEY_MAPPING *psMapping = keyFindMapping(metaCode, input))
+	const auto matches = keyFindMapping(metaCode, input);
+	for (KeyMapping *psMapping : matches)
 	{
 		/* Clear only if the mapping is for an assignable binding. Do not clear if there is no conflict (different context) */
 		const bool bConflicts = psMapping->info->context == context;
@@ -1364,9 +1368,6 @@ bool clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput i
 		{
 			psMapping->metaKeyCode = KEY_CODE::KEY_IGNORE;
 			psMapping->input = KEY_CODE::KEY_MAXSCAN;
-			return true;
 		}
 	}
-
-	return false;
 }

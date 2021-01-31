@@ -101,12 +101,12 @@ private:
 struct DisplayKeyMapData
 {
 	explicit DisplayKeyMapData(const KeyFunctionInfo& info)
-		: mappings(std::vector<KEY_MAPPING*>(static_cast<unsigned int>(KeyMappingSlot::LAST), nullptr))
+		: mappings(std::vector<KeyMapping*>(static_cast<unsigned int>(KeyMappingSlot::LAST), nullptr))
 		, info(info)
 	{
 	}
 
-	std::vector<KEY_MAPPING*> mappings;
+	std::vector<KeyMapping*> mappings;
 	const KeyFunctionInfo& info;
 };
 
@@ -116,7 +116,7 @@ struct DisplayKeyMapData
 struct KeyMappingSelection
 {
 	bool               hasActiveSelection;
-	KeyMappingSlot slot;
+	KeyMappingSlot     slot;
 	DisplayKeyMapData* data;
 
 public:
@@ -257,7 +257,7 @@ public:
 		PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
 		char sPrimaryKey[MAX_STR_LENGTH];
 		sPrimaryKey[0] = '\0';
-		const KEY_MAPPING* mapping = targetFunctionData->mappings[static_cast<unsigned int>(slot)];
+		const KeyMapping* mapping = targetFunctionData->mappings[static_cast<unsigned int>(slot)];
 		if (mapping && !mapping->input.isCleared())
 		{
 			// Check to see if key is on the numpad, if so tell user and change color
@@ -459,19 +459,18 @@ std::vector<std::reference_wrapper<const KeyFunctionInfo>> getVisibleKeymapEntri
 		}
 	}
 
-
 	return visibleMappings;
 }
 
-std::vector<std::reference_wrapper<const KEY_MAPPING>> getVisibleMappings()
+std::vector<std::reference_wrapper<const KeyMapping>> getVisibleMappings()
 {
-	std::vector<std::reference_wrapper<const KEY_MAPPING>> visibleMappings;
+	std::vector<std::reference_wrapper<const KeyMapping>> visibleMappings;
 	for (const KeyFunctionInfo& info : getVisibleKeymapEntries())
 	{
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
 			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
-			if (const KEY_MAPPING* mapping = keyGetMappingFromFunction(info.function, slot))
+			if (const KeyMapping* mapping = keyGetMappingFromFunction(info.function, slot))
 			{
 				visibleMappings.push_back(*mapping);
 			}
@@ -489,7 +488,7 @@ static unsigned int getMaxKeyMapNameWidth()
 		max = static_cast<int>(iV_GetTextWidth(getNotBoundLabel().c_str(), iV_fonts::font_regular));
 
 		char sKey[MAX_STR_LENGTH];
-		for (const KEY_MAPPING& mapping : getVisibleMappings()) {
+		for (const KeyMapping& mapping : getVisibleMappings()) {
 			mapping.toString(sKey);
 			max = MAX(max, static_cast<int>(iV_GetTextWidth(sKey, iV_fonts::font_regular)));
 		}
@@ -603,7 +602,9 @@ static KeyMappingInput createInputForSource(const KeyMappingInputSource source, 
 bool loadKeyMap()
 {
 	// throw away any keymaps!!
-	keyMappings.clear();
+	keyMappings.remove_if([](const KeyMapping& mapping) {
+		return mapping.info->type == KeyMappingType::ASSIGNABLE;
+	});
 
 	WzConfig ini(KeyMapPath, WzConfig::ReadOnly);
 	if (!ini.status())
@@ -826,7 +827,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 
 	/* Try and see if its there already - add it if not. e.g. secondary keybinds are expected to be null on default key sets */
 	const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
-	KEY_MAPPING* psMapping = keyGetMappingFromFunction(info.function, keyMapSelection.slot);
+	KeyMapping* psMapping = keyGetMappingFromFunction(info.function, keyMapSelection.slot);
 	if (!psMapping)
 	{
 		psMapping = keyAddMapping(metakey, input, KeyAction::PRESSED, info.function, keyMapSelection.slot);
