@@ -1,5 +1,9 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.14)
 project(warzone2100)
+
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+endif()
 
 OPTION(ENABLE_DOCS "Enable documentation generation" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)

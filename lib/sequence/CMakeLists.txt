@@ -1,6 +1,3 @@
-cmake_minimum_required (VERSION 3.5)
-project (sequence CXX)
-
 file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
