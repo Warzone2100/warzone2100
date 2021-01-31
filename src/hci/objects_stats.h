@@ -1,10 +1,8 @@
 #ifndef __INCLUDED_SRC_HCI_OBJECTS_STATS_INTERFACE_H__
 #define __INCLUDED_SRC_HCI_OBJECTS_STATS_INTERFACE_H__
 
-#include <vector>
 #include "../hci.h"
 #include "../intdisplay.h"
-#include "../intorder.h"
 
 #define STAT_GAP	   2
 #define STAT_BUTWIDTH  60
@@ -25,6 +23,7 @@ public:
 	virtual bool showInterface() = 0;
 	void jumpToHighlighted();
 	void updateHighlighted();
+	void clearSelection();
 	void clearStructureSelection();
 	void selectObject(BASE_OBJECT *object);
 

@@ -1,22 +1,14 @@
-#include <memory>
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/widget/widgbase.h"
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
 #include "build.h"
 #include "../objmem.h"
-#include "../hci.h"
-#include "../statsdef.h"
 #include "../order.h"
-#include "../intorder.h"
-#include "../mission.h"
 #include "../qtscript.h"
-#include "../display3d.h"
-#include "../warcam.h"
-#include "../geometry.h"
-#include "../intdisplay.h"
+#include "../power.h"
+#include "../map.h"
 
 DROID *BuildController::highlightedBuilder = nullptr;
 bool BuildController::showFavorites = false;
@@ -183,7 +175,7 @@ public:
 			return;
 		}
 
-		clearSelection();
+		controller->clearSelection();
 		controller->selectObject(controller->getObjectAt(objectIndex));
 		jump();
 
@@ -315,7 +307,7 @@ private:
 				case DORDER_BUILD:
 				case DORDER_LINEBUILD:
 					newStats = order.psStats;
-					deltaCount = order.type == DORDER_LINEBUILD? 1 + (abs(order.pos.x - order.pos2.x) + abs(order.pos.y - order.pos2.y))/TILE_UNITS : 1;
+					deltaCount = order.type == DORDER_LINEBUILD? 1 + (abs(order.pos.x - order.pos2.x) + abs(order.pos.y - order.pos2.y)) / TILE_UNITS : 1;
 					break;
 				case DORDER_HELPBUILD:
 					if (STRUCTURE *target = castStructure(order.psObj))
@@ -380,7 +372,7 @@ private:
 		}
 		else
 		{
-			clearSelection();
+			controller->clearSelection();
 			controller->selectObject(droid);
 		}
 

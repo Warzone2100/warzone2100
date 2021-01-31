@@ -1,20 +1,15 @@
-#include <memory>
-#include "lib/widget/widgbase.h"
 #include "lib/widget/button.h"
 #include "lib/widget/bar.h"
-#include "build.h"
-#include "../intdisplay.h"
-#include "../objmem.h"
-#include "../hci.h"
-#include "../research.h"
-#include "../statsdef.h"
-#include "../order.h"
-#include "../intorder.h"
-#include "../mission.h"
-#include "../qtscript.h"
+#include "objects_stats.h"
 #include "../display3d.h"
+#include "../qtscript.h"
 #include "../warcam.h"
 #include "../geometry.h"
+
+void BaseObjectsController::clearSelection()
+{
+	::clearSelection();
+}
 
 void BaseObjectsController::clearStructureSelection()
 {

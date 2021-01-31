@@ -1,25 +1,11 @@
-#include <memory>
-#include "lib/framework/frame.h"
-#include "lib/framework/input.h"
-#include "lib/widget/widgbase.h"
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
 #include "lib/sound/audio_id.h"
 #include "lib/sound/audio.h"
 #include "manufacture.h"
-#include "../objmem.h"
-#include "../hci.h"
-#include "../statsdef.h"
-#include "../order.h"
-#include "../intorder.h"
 #include "../mission.h"
 #include "../qtscript.h"
-#include "../display3d.h"
-#include "../warcam.h"
-#include "../geometry.h"
-#include "../intdisplay.h"
-#include "../template.h"
 
 STRUCTURE *ManufactureController::highlightedFactory = nullptr;
 

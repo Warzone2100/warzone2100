@@ -1,23 +1,9 @@
-#include <memory>
-#include "lib/framework/frame.h"
-#include "lib/framework/input.h"
-#include "lib/widget/widgbase.h"
-#include "lib/widget/button.h"
 #include "lib/widget/label.h"
-#include "lib/widget/bar.h"
 #include "commander.h"
 #include "../objmem.h"
-#include "../hci.h"
-#include "../statsdef.h"
-#include "../order.h"
-#include "../intorder.h"
-#include "../mission.h"
-#include "../qtscript.h"
-#include "../display3d.h"
-#include "../warcam.h"
-#include "../geometry.h"
-#include "../intdisplay.h"
 #include "../cmddroid.h"
+#include "../group.h"
+#include "../intorder.h"
 
 DROID *CommanderController::highlightedCommander = nullptr;
 
@@ -100,7 +86,7 @@ public:
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
 	{
 		BaseWidget::released(context, mouseButton);
-		clearSelection();
+		controller->clearSelection();
 		controller->selectObject(controller->getObjectAt(objectIndex));
 		jump();
 		controller->displayOrderForm();
@@ -263,8 +249,7 @@ private:
 		BaseWidget::released(context, mouseButton);
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
-
-		clearSelection();
+		controller->clearSelection();
 		controller->selectObject(droid);
 		controller->displayOrderForm();
 	}
