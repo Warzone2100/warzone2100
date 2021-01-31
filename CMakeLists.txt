@@ -187,6 +187,15 @@ else()
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
 	endif()
 endif()
+# Enable -fstack-clash-protection if available
+check_c_compiler_flag(-fstack-clash-protection HAS_CFLAG_FSTACK_CLASH_PROTECTION)
+if (HAS_CFLAG_FSTACK_CLASH_PROTECTION)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-clash-protection")
+endif()
+check_cxx_compiler_flag(-fstack-clash-protection HAS_CXXFLAG_FSTACK_CLASH_PROTECTION)
+if (HAS_CXXFLAG_FSTACK_CLASH_PROTECTION)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-clash-protection")
+endif()
 
 include(CheckCompilerFlagsOutput)
 
