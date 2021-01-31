@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 if(UNIX AND NOT APPLE AND NOT WIN32)
 	include(GNUInstallDirs)
 

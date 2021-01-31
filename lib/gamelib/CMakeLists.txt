@@ -1,6 +1,3 @@
-cmake_minimum_required (VERSION 3.5)
-project (gamelib CXX)
-
 if(ENABLE_NLS)
 	find_package (Intl REQUIRED)
 endif()

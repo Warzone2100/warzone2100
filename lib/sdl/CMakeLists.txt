@@ -1,6 +1,3 @@
-cmake_minimum_required (VERSION 3.5)
-project (sdl-backend CXX)
-
 if(NOT (CMAKE_SYSTEM_NAME MATCHES "Windows" OR CMAKE_SYSTEM_NAME MATCHES "Darwin"))
 	# Temporary workaround for systems with broken SDL2 CMake config (ex. imported target does not exist in "SDL2Targets.cmake")
 	# Can be manually set to "ON" to avoid using the CONFIG mode

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 # This file finds CURL
 #
 # Attempts to determine its linked / available SSL backend(s):

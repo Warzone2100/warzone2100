@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 if(NOT DEFINED WZ_DATADIR)
 	message(FATAL_ERROR "This file should be included in the project's root CMakeLists.txt, after WZ_DATADIR is defined.")
 endif()

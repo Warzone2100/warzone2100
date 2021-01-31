@@ -1,6 +1,3 @@
-cmake_minimum_required (VERSION 3.5)
-project (exception-handler CXX)
-
 file(GLOB HEADERS "*.h")
 set(SRC "dumpinfo.cpp" "exceptionhandler.cpp")
 

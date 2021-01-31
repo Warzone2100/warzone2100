@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 if(NOT ENABLE_DOCS)
 	message(STATUS "Skipping documentation generation")
 	return()

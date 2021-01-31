@@ -1,5 +1,3 @@
-cmake_minimum_required (VERSION 3.5)
-
 find_package(PhysFS REQUIRED)
 MARK_AS_ADVANCED(PHYSFS_LIBRARY PHYSFS_INCLUDE_DIR)
 if(ENABLE_NLS)
