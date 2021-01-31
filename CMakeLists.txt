@@ -119,14 +119,19 @@ if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
 	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/gettext")
 endif()
 
+INCLUDE(AddTargetLinkFlagsIfSupported)
+
 # Use "-fPIC" / "-fPIE" for all targets by default, including static libs
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# CMake doesn't add "-pie" by default for executables (CMake issue #14983)
-INCLUDE(AddTargetLinkFlagsIfSupported)
-CHECK_CXX_LINKER_FLAGS("${CMAKE_EXE_LINKER_FLAGS} -pie" LINK_FLAG_PIE_SUPPORTED)
-if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
+if (CMAKE_VERSION VERSION_LESS 3.14)
+	# CMake < 3.14 doesn't add "-pie" by default for executables (CMake issue #14983)
+	CHECK_CXX_LINKER_FLAGS("${CMAKE_EXE_LINKER_FLAGS} -pie" LINK_FLAG_PIE_SUPPORTED)
+	if(LINK_FLAG_PIE_SUPPORTED AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pie")
+	endif()
+elseif(POLICY CMP0083)
+	cmake_policy(SET CMP0083 NEW) # Apply -pie link flag if supported
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
