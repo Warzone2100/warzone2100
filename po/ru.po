@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2021-01-28 01:03\n"
+"PO-Revision-Date: 2021-01-31 07:01\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -4024,11 +4024,11 @@ msgstr "Уничтожьте все подкрепления Новой Пара
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Постройте сооружения (не стены) на плато и уничтожьте все подкрепления Новой Парадигмы"
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Найдите и спасите юнитов из подбитого транспортера"
 
 #: data/base/script/campaign/cam2-c.js:30
 msgid "Rescue the civilians from The Collective before too many are captured"
@@ -4044,19 +4044,19 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Переместите все единицы в долину"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Уничтожьте ракетные шахты"
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Спасите команду Альфа от Нексуса"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Исследуйте программы сопротивления и выживите от нападения Нексуса"
 
 #: data/base/script/campaign/cam3-ad1.js:215
 msgid "Secure a missile silo"
@@ -4076,35 +4076,35 @@ msgstr "Вернуться к зоне высадки"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Уничтожить все войска и сооружения противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Артефакт найден"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:495
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Базы уничтожены"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Осталось войск противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:497
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Осталось строений противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:503
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Требуется возврат к зоне высадки"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:513
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Уничтожьте все войска и базы противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:518
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Выжить, пока таймер не достигнет нуля"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -8148,7 +8148,7 @@ msgstr "Электронная атака разрушает вражеские 
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1838
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепточка ЭМИ пушки"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -10255,7 +10255,7 @@ msgstr "Джип"
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[3]
 #: po/custom/fromJson.txt:3326
 msgid "Jump Cyborgs can now be researched"
-msgstr "Можно исследовать Киборгов-,Прыгунов"
+msgstr "Можно исследовать Киборгов-Прыгунов"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_STW1.text[2]
@@ -13490,7 +13490,7 @@ msgstr "Отсек для термитных бомб"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5518
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Киборг с Термитным огнеметом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -14798,7 +14798,7 @@ msgstr ""
 
 #: src/clparse.cpp:307
 msgid "autorating"
-msgstr ""
+msgstr "авторейтинг"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15447,7 +15447,7 @@ msgstr "Масштаб экрана"
 
 #: src/frontend.cpp:1135
 msgid "Adaptive"
-msgstr ""
+msgstr "Адаптивный"
 
 #: src/frontend.cpp:1167
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15913,7 +15913,7 @@ msgstr "Боты:"
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "В лобби"
 
 #: src/integrations/wzdiscordrpc.cpp:652
 msgid "In Multiplayer Game"
@@ -16896,27 +16896,27 @@ msgstr "Выбрать следующий завод киборгов"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Выбрать следующий завод ВВС"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Перейти к следующему заводу"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Перейти к следующей исследовательской лаборатории"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Перейти к следующему генератору энергии"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Перейти к следующему заводу киборгов"
 
 #: src/keymap.cpp:570
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Перейти к следующему заводу ВВС"
 
 #: src/keymap.cpp:573
 msgid "Toggle Debug Mappings"
@@ -16992,7 +16992,7 @@ msgstr ""
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory"
-msgstr ""
+msgstr "Каталог автоматических сохранений"
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory (not allowed for saving)"
