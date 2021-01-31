@@ -211,7 +211,7 @@ enum class KeyMappingSlot {
 	LAST
 };
 
-struct KEY_MAPPING
+struct KeyMapping
 {
 	const KeyFunctionInfo* info;
 	UDWORD                 lastCalled;
@@ -227,9 +227,10 @@ struct KEY_MAPPING
 	bool toString(char* pOutStr) const;
 };
 
-KEY_MAPPING* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, void (*const pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
-KEY_MAPPING* keyGetMappingFromFunction(void (*const function)(), const KeyMappingSlot slot);
-KEY_MAPPING* keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyMappingSlot slot = KeyMappingSlot::LAST);
+KeyMapping* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, void (*const pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+KeyMapping* keyGetMappingFromFunction(void (*const function)(), const KeyMappingSlot slot);
+std::vector<KeyMapping*> keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input);
+
 void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
 void keyInitMappings(bool bForceDefaults);
 KeyMappingInput getLastInput();
@@ -239,7 +240,7 @@ bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
 
-bool clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput input, const InputContext& context);
+void clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput input, const InputContext& context);
 
 UDWORD	getMarkerX(KEY_CODE code);
 UDWORD	getMarkerY(KEY_CODE code);
@@ -248,9 +249,9 @@ SDWORD	getMarkerSpin(KEY_CODE code);
 // for keymap editor.
 void invalidateKeyMappingSortOrder();
 const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
-KeyFunctionInfo const *keyFunctionInfoByFunction(void (*function)());
+KeyFunctionInfo const *keyFunctionInfoByFunction(void (*const function)());
 KeyFunctionInfo const *keyFunctionInfoByName(std::string const &name);
-extern std::list<KEY_MAPPING> keyMappings;
+extern std::list<KeyMapping> keyMappings;
 KeyMappingInputSource keyMappingSourceByName(std::string const& name);
 KeyMappingSlot keyMappingSlotByName(std::string const& name);
 
