@@ -2862,7 +2862,34 @@ static void NETallowJoining()
 				memcpy(&minor, p_buffer, sizeof(uint32_t));
 				minor = ntohl(minor);
 
-				if (NETisCorrectVersion(major, minor))
+				if (major == 0 && minor == 0)
+				{
+					// special case for lobby server "alive" check
+					// expects a special response that includes the gameId
+					const char ResponseStart[] = "WZLR";
+					char buf[(sizeof(char) * 4) + sizeof(uint32_t) + sizeof(uint32_t)] = { 0 };
+					char *pLobbyRespBuffer = buf;
+					auto push32 = [&pLobbyRespBuffer](uint32_t value) {
+						uint32_t swapped = htonl(value);
+						memcpy(pLobbyRespBuffer, &swapped, sizeof(swapped));
+						pLobbyRespBuffer += sizeof(swapped);
+					};
+
+					// Copy response prefix chars ("WZLR")
+					memcpy(pLobbyRespBuffer, ResponseStart, sizeof(char) * strlen(ResponseStart));
+					pLobbyRespBuffer += sizeof(char) * strlen(ResponseStart);
+
+					// Copy version of response
+					const uint32_t response_version = 1;
+					push32(response_version);
+
+					// Copy gameId (as 32bit large big endian number)
+					push32(gamestruct.gameId);
+
+					writeAll(tmp_socket[i], buf, sizeof(buf));
+					connectFailed = true;
+				}
+				else if (NETisCorrectVersion(major, minor))
 				{
 					result = htonl(ERROR_NOERROR);
 					memcpy(&buffer, &result, sizeof(result));
@@ -2882,7 +2909,7 @@ static void NETallowJoining()
 					addToBanList(rIP.c_str(), "BAD_USER");
 					connectFailed = true;
 				}
-				if ((int)NetPlay.playercount == gamestruct.desc.dwMaxPlayers)
+				if ((!connectFailed) && ((int)NetPlay.playercount == gamestruct.desc.dwMaxPlayers))
 				{
 					// early player count test, in case they happen to get in before updates.
 					// Tell the player that we are full.
