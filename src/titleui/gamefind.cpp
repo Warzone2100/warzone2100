@@ -178,7 +178,7 @@ TITLECODE WzGameFindTitleUI::run()
 	{
 		UDWORD gameNumber = id - GAMES_GAMESTART;
 
-		std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, 0)};
+		std::vector<JoinConnectionDescription> connectionDesc = {JoinConnectionDescription(gamesList[gameNumber].desc.host, gamesList[gameNumber].hostPort)};
 		ActivityManager::instance().willAttemptToJoinLobbyGame(NETgetMasterserverName(), NETgetMasterserverPort(), gamesList[gameNumber].gameId, connectionDesc);
 
 		clearActiveConsole();
