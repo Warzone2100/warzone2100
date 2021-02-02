@@ -950,7 +950,7 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 		return {};
 	}
 	std::string host = game.desc.host;
-	return {JoinConnectionDescription(host, 0)};
+	return {JoinConnectionDescription(host, game.hostPort)};
 }
 
 static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI);

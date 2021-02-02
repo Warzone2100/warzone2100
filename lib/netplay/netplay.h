@@ -134,7 +134,7 @@ enum MESSAGE_TYPES
 #define MaxMsgSize		16384		// max size of a message in bytes.
 #define	StringSize		64			// size of strings used.
 #define MaxGames		11			// max number of concurrently playable games to allow.
-#define extra_string_size	159		// extra 199 char for future use
+#define extra_string_size	157		// extra 199 char for future use
 #define map_string_size		40
 #define	hostname_string_size	40
 #define modlist_string_size	255		// For a concatenated list of mods
@@ -172,6 +172,7 @@ struct GAMESTRUCT
 	// NOTE: do NOT save the following items in game.c--it will break savegames.
 	char		secondaryHosts[2][40];
 	char		extra[extra_string_size];		// extra string (future use)
+	uint16_t	hostPort;						// server port
 	char		mapname[map_string_size];		// map server is hosting
 	char		hostname[hostname_string_size];	// ...
 	char		versionstring[StringSize];		//

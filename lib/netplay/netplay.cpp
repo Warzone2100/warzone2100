@@ -823,7 +823,7 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	// to zero so that we can be sure we're not sending any (undefined)
 	// memory content across the network.
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-	         sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
+	         sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->hostPort) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 	         sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
@@ -831,6 +831,12 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 
 	auto push32 = [&](uint32_t value) {
 		uint32_t swapped = htonl(value);
+		memcpy(buffer, &swapped, sizeof(swapped));
+		buffer += sizeof(swapped);
+	};
+
+	auto push16 = [&](uint16_t value) {
+		uint16_t swapped = htons(value);
 		memcpy(buffer, &swapped, sizeof(swapped));
 		buffer += sizeof(swapped);
 	};
@@ -869,6 +875,9 @@ static bool NETsendGAMESTRUCT(Socket *sock, const GAMESTRUCT *ourgamestruct)
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->extra, sizeof(ourgamestruct->extra));
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy 16bit large big endian number
+	push16(ourgamestruct->hostPort);
 
 	// Copy a string
 	strlcpy(buffer, ourgamestruct->mapname, sizeof(ourgamestruct->mapname));
@@ -944,7 +953,7 @@ static bool NETrecvGAMESTRUCT(Socket *sock, GAMESTRUCT *ourgamestruct)
 	// A buffer that's guaranteed to have the correct size (i.e. it
 	// circumvents struct padding, which could pose a problem).
 	char buf[sizeof(ourgamestruct->GAMESTRUCT_VERSION) + sizeof(ourgamestruct->name) + sizeof(ourgamestruct->desc.host) + (sizeof(int32_t) * 8) +
-	         sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
+	         sizeof(ourgamestruct->secondaryHosts) + sizeof(ourgamestruct->extra) + sizeof(ourgamestruct->hostPort) + sizeof(ourgamestruct->mapname) + sizeof(ourgamestruct->hostname) + sizeof(ourgamestruct->versionstring) +
 	         sizeof(ourgamestruct->modlist) + (sizeof(uint32_t) * 9) ] = { 0 };
 	char *buffer = buf;
 	unsigned int i;
@@ -954,6 +963,14 @@ static bool NETrecvGAMESTRUCT(Socket *sock, GAMESTRUCT *ourgamestruct)
 		uint32_t value = 0;
 		memcpy(&value, buffer, sizeof(value));
 		value = ntohl(value);
+		buffer += sizeof(value);
+		return value;
+	};
+
+	auto pop16 = [&]() -> uint16_t {
+		uint16_t value = 0;
+		memcpy(&value, buffer, sizeof(value));
+		value = ntohs(value);
 		buffer += sizeof(value);
 		return value;
 	};
@@ -1010,6 +1027,9 @@ static bool NETrecvGAMESTRUCT(Socket *sock, GAMESTRUCT *ourgamestruct)
 	// Copy a string
 	sstrcpy(ourgamestruct->extra, buffer);
 	buffer += sizeof(ourgamestruct->extra);
+
+	// Copy 16-bit host port
+	ourgamestruct->hostPort = pop16();
 
 	// Copy a string
 	sstrcpy(ourgamestruct->mapname, buffer);
@@ -3177,11 +3197,12 @@ bool NEThostGame(const char *SessionName, const char *PlayerName,
 	gamestruct.desc.dwUserFlags[3] = four;
 	memset(gamestruct.secondaryHosts, 0, sizeof(gamestruct.secondaryHosts));
 	sstrcpy(gamestruct.extra, "Extra");						// extra string (future use)
+	gamestruct.hostPort = gameserver_port;
 	sstrcpy(gamestruct.mapname, game.map);					// map we are hosting
 	sstrcpy(gamestruct.hostname, PlayerName);
 	sstrcpy(gamestruct.versionstring, versionString);		// version (string)
 	sstrcpy(gamestruct.modlist, getModList().c_str());      // List of mods
-	gamestruct.GAMESTRUCT_VERSION = 3;						// version of this structure
+	gamestruct.GAMESTRUCT_VERSION = 4;						// version of this structure
 	gamestruct.game_version_major = NETCODE_VERSION_MAJOR;	// Netcode Major version
 	gamestruct.game_version_minor = NETCODE_VERSION_MINOR;	// NetCode Minor version
 //	gamestruct.privateGame = 0;								// if true, it is a private game
