@@ -143,6 +143,46 @@ struct NET_PLAYER_DATA
 	size_t          buffer_size;
 };
 
+#define SERVER_UPDATE_MIN_INTERVAL 7 * GAME_TICKS_PER_SEC
+#define SERVER_UPDATE_MAX_INTERVAL 25 * GAME_TICKS_PER_SEC
+
+class LobbyServerConnectionHandler
+{
+public:
+	bool connect();
+	bool disconnect();
+	void sendUpdate();
+	void run();
+private:
+	void sendUpdateNow();
+	void sendKeepAlive();
+
+	inline bool canSendServerUpdateNow()
+	{
+		return (currentState == LobbyConnectionState::Connected)
+			&& (realTime - lastServerUpdate >= SERVER_UPDATE_MIN_INTERVAL);
+	}
+
+	inline bool shouldSendServerKeepAliveNow()
+	{
+		return (currentState == LobbyConnectionState::Connected)
+			&& (realTime - lastServerUpdate >= SERVER_UPDATE_MAX_INTERVAL);
+	}
+private:
+	enum class LobbyConnectionState
+	{
+		Disconnected,
+		Connecting_WaitingForResponse,
+		Connected
+	};
+	LobbyConnectionState currentState = LobbyConnectionState::Disconnected;
+	Socket *rs_socket = nullptr;
+	SocketSet* waitingForConnectionFinalize = nullptr;
+	uint32_t lastConnectionTime = 0;
+	uint32_t lastServerUpdate = 0;
+	bool queuedServerUpdate = false;
+};
+
 // ////////////////////////////////////////////////////////////////////////
 // Variables
 
@@ -193,6 +233,8 @@ static const NETSTATS nZeroStats    = {{0, 0}, {0, 0}, {0, 0}};
 static int nStatsLastUpdateTime = 0;
 
 unsigned NET_PlayerConnectionStatus[CONNECTIONSTATUS_NORMAL][MAX_PLAYERS];
+
+static LobbyServerConnectionHandler lobbyConnectionHandler;
 
 // ////////////////////////////////////////////////////////////////////////////
 /************************************************************************************
@@ -1249,11 +1291,16 @@ int NETinit(bool bFirstCall)
 		NetPlay.isHostAlive = false;
 		NetPlay.HaveUpgrade = false;
 		NetPlay.gamePassword[0] = '\0';
-		NetPlay.MOTD = strdup("");
+		NetPlay.MOTD = nullptr;
 		sstrcpy(NetPlay.gamePassword, _("Enter password here"));
 		NETstartLogging();
 	}
 
+	if (NetPlay.MOTD)
+	{
+		free(NetPlay.MOTD);
+	}
+	NetPlay.MOTD = nullptr;
 	NetPlay.ShowedMOTD = false;
 	NetPlay.GamePassworded = false;
 	memset(&sync_counter, 0x0, sizeof(sync_counter));	//clear counters
@@ -1964,7 +2011,7 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 	{
 		NETfixPlayerCount();
 		NETallowJoining();
-		NETprocessQueuedServerUpdates();
+		lobbyConnectionHandler.run();
 		NETcheckPlayers();		// make sure players are still alive & well
 	}
 
@@ -2377,7 +2424,10 @@ static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
 	MOTDLength = ntohl(buffer[1]);
 
 	// Get status message
-	free(NetPlay.MOTD);
+	if (NetPlay.MOTD)
+	{
+		free(NetPlay.MOTD);
+	}
 	NetPlay.MOTD = (char *)malloc(MOTDLength + 1);
 	result = readAll(sock, NetPlay.MOTD, MOTDLength, timeout);
 	if (result != MOTDLength)
@@ -2412,23 +2462,35 @@ static ssize_t readLobbyResponse(Socket *sock, unsigned int timeout)
 error:
 	if (result == SOCKET_ERROR)
 	{
-		free(NetPlay.MOTD);
+		if (NetPlay.MOTD)
+		{
+			free(NetPlay.MOTD);
+		}
 		if (asprintf(&NetPlay.MOTD, "Error while connecting to the lobby server: %s\nMake sure port %d can receive incoming connections.", strSockError(getSockErr()), gameserver_port) == -1)
 		{
 			NetPlay.MOTD = nullptr;
 		}
-		NetPlay.ShowedMOTD = false;
-		debug(LOG_ERROR, "%s", NetPlay.MOTD);
+		else
+		{
+			NetPlay.ShowedMOTD = false;
+			debug(LOG_ERROR, "%s", NetPlay.MOTD);
+		}
 	}
 	else
 	{
-		free(NetPlay.MOTD);
+		if (NetPlay.MOTD)
+		{
+			free(NetPlay.MOTD);
+		}
 		if (asprintf(&NetPlay.MOTD, "Disconnected from lobby server. Failed to register game.") == -1)
 		{
 			NetPlay.MOTD = nullptr;
 		}
-		NetPlay.ShowedMOTD = false;
-		debug(LOG_ERROR, "%s", NetPlay.MOTD);
+		else
+		{
+			NetPlay.ShowedMOTD = false;
+			debug(LOG_ERROR, "%s", NetPlay.MOTD);
+		}
 	}
 
 	return SOCKET_ERROR;
@@ -2500,227 +2562,245 @@ bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function
 	return true;
 }
 
-static uint32_t lastServerUpdate = 0;
-static bool queuedServerUpdate = false;
-#define SERVER_UPDATE_MIN_INTERVAL 7 * GAME_TICKS_PER_SEC
-#define SERVER_UPDATE_MAX_INTERVAL 25 * GAME_TICKS_PER_SEC
-
-static inline bool canSendServerUpdateNow()
+bool LobbyServerConnectionHandler::connect()
 {
-	return (realTime - lastServerUpdate >= SERVER_UPDATE_MIN_INTERVAL);
+	if (server_not_there)
+	{
+		return false;
+	}
+	if (currentState == LobbyConnectionState::Connecting_WaitingForResponse || currentState == LobbyConnectionState::Connected)
+	{
+		return false; // already connecting or connected
+	}
+
+	bool bProcessingConnectOrDisconnectThisCall = true;
+	uint32_t gameId = 0;
+	SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
+
+	if (hosts == nullptr)
+	{
+		debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(getSockErr()));
+		free(NetPlay.MOTD);
+		if (asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name) == -1)
+		{
+			NetPlay.MOTD = nullptr;
+		}
+		server_not_there = true;
+		return bProcessingConnectOrDisconnectThisCall;
+	}
+
+	// Close an existing socket.
+	if (rs_socket != nullptr)
+	{
+		socketClose(rs_socket);
+		rs_socket = nullptr;
+	}
+
+	// try each address from resolveHost until we successfully connect.
+	rs_socket = socketOpenAny(hosts, 1500);
+	deleteSocketAddress(hosts);
+
+	// No address succeeded.
+	if (rs_socket == nullptr)
+	{
+		debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
+		free(NetPlay.MOTD);
+		if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to use UPnP\n or to forward the port to your system."),
+					 strSockError(getSockErr()), masterserver_port) == -1)
+		{
+			NetPlay.MOTD = nullptr;
+		}
+		server_not_there = true;
+		return bProcessingConnectOrDisconnectThisCall;
+	}
+
+	// Get a game ID
+	if (writeAll(rs_socket, "gaId", sizeof("gaId")) == SOCKET_ERROR
+		|| readAll(rs_socket, &gameId, sizeof(gameId), 10000) != sizeof(gameId))
+	{
+		free(NetPlay.MOTD);
+		if (asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr())) == -1)
+		{
+			NetPlay.MOTD = nullptr;
+		}
+		else
+		{
+			debug(LOG_ERROR, "%s", NetPlay.MOTD);
+		}
+
+		// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
+		disconnect();
+		return bProcessingConnectOrDisconnectThisCall;
+	}
+
+	gamestruct.gameId = ntohl(gameId);
+	debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
+
+	// Register our game with the server
+	if (writeAll(rs_socket, "addg", sizeof("addg")) == SOCKET_ERROR
+		// and now send what the server wants
+		|| !NETsendGAMESTRUCT(rs_socket, &gamestruct))
+	{
+		debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
+		disconnect();
+		return bProcessingConnectOrDisconnectThisCall;
+	}
+
+	lastServerUpdate = realTime;
+	queuedServerUpdate = false;
+
+	lastConnectionTime = realTime;
+	waitingForConnectionFinalize = allocSocketSet();
+	SocketSet_AddSocket(waitingForConnectionFinalize, rs_socket);
+
+	currentState = LobbyConnectionState::Connecting_WaitingForResponse;
+	return bProcessingConnectOrDisconnectThisCall;
 }
 
-static inline bool shouldSendServerKeepAliveNow()
+bool LobbyServerConnectionHandler::disconnect()
 {
-	return (realTime - lastServerUpdate >= SERVER_UPDATE_MAX_INTERVAL);
+	if (currentState == LobbyConnectionState::Disconnected)
+	{
+		return false; // already disconnected
+	}
+
+	if (rs_socket != nullptr)
+	{
+		// we don't need this anymore, so clean up
+		socketClose(rs_socket);
+		rs_socket = nullptr;
+		server_not_there = true;
+	}
+
+	queuedServerUpdate = false;
+
+	currentState = LobbyConnectionState::Disconnected;
+	return true;
+}
+
+void LobbyServerConnectionHandler::sendUpdate()
+{
+	if (server_not_there)
+	{
+		return;
+	}
+
+	if (canSendServerUpdateNow())
+	{
+		sendUpdateNow();
+	}
+	else
+	{
+		// queue future update
+		debug(LOG_NET, "Queueing server update");
+		queuedServerUpdate = true;
+	}
+}
+
+void LobbyServerConnectionHandler::sendUpdateNow()
+{
+	ASSERT_OR_RETURN(, rs_socket != nullptr, "Null socket");
+	if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
+	{
+		disconnect();
+		ActivityManager::instance().hostGameLobbyServerDisconnect();
+	}
+	lastServerUpdate = realTime;
+	queuedServerUpdate = false;
+	// newer lobby server will return a lobby response / status after each update call
+	if (rs_socket && readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+	{
+		disconnect();
+		ActivityManager::instance().hostGameLobbyServerDisconnect();
+	}
+}
+
+void LobbyServerConnectionHandler::sendKeepAlive()
+{
+	ASSERT_OR_RETURN(, rs_socket != nullptr, "Null socket");
+	if (writeAll(rs_socket, "keep", sizeof("keep")) == SOCKET_ERROR)
+	{
+		// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
+		disconnect();
+		ActivityManager::instance().hostGameLobbyServerDisconnect();
+	}
+	lastServerUpdate = realTime;
+}
+
+void LobbyServerConnectionHandler::run()
+{
+	switch (currentState)
+	{
+		case LobbyConnectionState::Disconnected:
+			return;
+			break;
+		case LobbyConnectionState::Connecting_WaitingForResponse:
+		{
+			// check if response has been received
+			ASSERT_OR_RETURN(, waitingForConnectionFinalize != nullptr, "Null socket set");
+			ASSERT_OR_RETURN(, rs_socket != nullptr, "Null socket");
+			bool exceededTimeout = (realTime - lastConnectionTime >= 10000);
+			// We use readLobbyResponse to display error messages and handle state changes if there's no response
+			// So if exceededTimeout, just call it with a low timeout
+			int checkSocketRet = checkSockets(waitingForConnectionFinalize, NET_READ_TIMEOUT);
+			if (checkSocketRet == SOCKET_ERROR)
+			{
+				debug(LOG_ERROR, "Lost connection to lobby server");
+				disconnect();
+				break;
+			}
+			if (exceededTimeout || (checkSocketRet > 0 && socketReadReady(rs_socket)))
+			{
+				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
+				{
+					disconnect();
+					break;
+				}
+				deleteSocketSet(waitingForConnectionFinalize);
+				waitingForConnectionFinalize = nullptr;
+				currentState = LobbyConnectionState::Connected;
+			}
+			break;
+		}
+		case LobbyConnectionState::Connected:
+		{
+			// handle sending keep alive or queued updates
+			if (!queuedServerUpdate)
+			{
+				if (allow_joining && shouldSendServerKeepAliveNow())
+				{
+					// ensure that the lobby server knows we're still alive by sending a no-op "keep-alive"
+					sendKeepAlive();
+				}
+				break;
+			}
+			if (!canSendServerUpdateNow())
+			{
+				break;
+			}
+			queuedServerUpdate = false;
+			sendUpdateNow();
+			break;
+		}
+	}
 }
 
 bool NETregisterServer(int state)
 {
-	static Socket *rs_socket = nullptr;
-	static int registered = 0;
-	bool bProcessingConnectOrDisconnectThisCall = false;
-
-	if (server_not_there)
+	switch (state)
 	{
-		return bProcessingConnectOrDisconnectThisCall;
-	}
-
-	if (state != registered)
-	{
-		switch (state)
-		{
-		// Inform lobby server that we're still here, hosting a game lobby, waiting on players
-		case WZ_SERVER_KEEPALIVE:
-			{
-				if (rs_socket == nullptr)
-				{
-					return bProcessingConnectOrDisconnectThisCall;
-				}
-				if (writeAll(rs_socket, "keep", sizeof("keep")) == SOCKET_ERROR)
-				{
-					// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
-					socketClose(rs_socket);
-					rs_socket = nullptr;
-					server_not_there = true;
-					ActivityManager::instance().hostGameLobbyServerDisconnect();
-				}
-				lastServerUpdate = realTime;
-				return bProcessingConnectOrDisconnectThisCall;
-			}
-			break;
-		// Update player counts
 		case WZ_SERVER_UPDATE:
-			{
-				if (rs_socket == nullptr)
-				{
-					queuedServerUpdate = false;
-					return bProcessingConnectOrDisconnectThisCall;
-				}
-
-				if (canSendServerUpdateNow())
-				{
-					if (!NETsendGAMESTRUCT(rs_socket, &gamestruct))
-					{
-						socketClose(rs_socket);
-						rs_socket = nullptr;
-						ActivityManager::instance().hostGameLobbyServerDisconnect();
-					}
-					lastServerUpdate = realTime;
-					queuedServerUpdate = false;
-					// newer lobby server will return a lobby response / status after each update call
-					if (rs_socket && readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
-					{
-						socketClose(rs_socket);
-						server_not_there = true;
-						rs_socket = nullptr;
-						ActivityManager::instance().hostGameLobbyServerDisconnect();
-						return bProcessingConnectOrDisconnectThisCall;
-					}
-				}
-				else
-				{
-					// queue future update
-					debug(LOG_NET, "Queueing server update");
-					queuedServerUpdate = true;
-				}
-			}
+			lobbyConnectionHandler.sendUpdate();
 			break;
-
-		// Register a game with the lobby
 		case WZ_SERVER_CONNECT:
-			{
-				bProcessingConnectOrDisconnectThisCall = true;
-				uint32_t gameId = 0;
-				SocketAddress *const hosts = resolveHost(masterserver_name, masterserver_port);
-
-				if (hosts == nullptr)
-				{
-					debug(LOG_ERROR, "Cannot resolve masterserver \"%s\": %s", masterserver_name, strSockError(getSockErr()));
-					free(NetPlay.MOTD);
-					if (asprintf(&NetPlay.MOTD, _("Could not resolve masterserver name (%s)!"), masterserver_name) == -1)
-					{
-						NetPlay.MOTD = nullptr;
-					}
-					server_not_there = true;
-					return bProcessingConnectOrDisconnectThisCall;
-				}
-
-				// Close an existing socket.
-				if (rs_socket != nullptr)
-				{
-					socketClose(rs_socket);
-					rs_socket = nullptr;
-				}
-
-				// try each address from resolveHost until we successfully connect.
-				rs_socket = socketOpenAny(hosts, 1500);
-				deleteSocketAddress(hosts);
-
-				// No address succeeded.
-				if (rs_socket == nullptr)
-				{
-					debug(LOG_ERROR, "Cannot connect to masterserver \"%s:%d\": %s", masterserver_name, masterserver_port, strSockError(getSockErr()));
-					free(NetPlay.MOTD);
-					if (asprintf(&NetPlay.MOTD, _("Error connecting to the lobby server: %s.\nMake sure port %d can receive incoming connections.\nIf you're using a router configure it to use UPnP\n or to forward the port to your system."),
-					             strSockError(getSockErr()), masterserver_port) == -1)
-					{
-						NetPlay.MOTD = nullptr;
-					}
-					server_not_there = true;
-					return bProcessingConnectOrDisconnectThisCall;
-				}
-
-				// Get a game ID
-				if (writeAll(rs_socket, "gaId", sizeof("gaId")) == SOCKET_ERROR
-				    || readAll(rs_socket, &gameId, sizeof(gameId), 10000) != sizeof(gameId))
-				{
-					free(NetPlay.MOTD);
-					if (asprintf(&NetPlay.MOTD, "Failed to retrieve a game ID: %s", strSockError(getSockErr())) == -1)
-					{
-						NetPlay.MOTD = nullptr;
-					}
-					debug(LOG_ERROR, "%s", NetPlay.MOTD);
-
-					// The socket has been invalidated, so get rid of it. (using them now may cause SIGPIPE).
-					socketClose(rs_socket);
-					rs_socket = nullptr;
-					server_not_there = true;
-					return bProcessingConnectOrDisconnectThisCall;
-				}
-
-				gamestruct.gameId = ntohl(gameId);
-				debug(LOG_NET, "Using game ID: %u", (unsigned int)gamestruct.gameId);
-
-				// Register our game with the server
-				if (writeAll(rs_socket, "addg", sizeof("addg")) == SOCKET_ERROR
-				    // and now send what the server wants
-				    || !NETsendGAMESTRUCT(rs_socket, &gamestruct))
-				{
-					debug(LOG_ERROR, "Failed to register game with server: %s", strSockError(getSockErr()));
-					socketClose(rs_socket);
-					server_not_there = true;
-					rs_socket = nullptr;
-					return bProcessingConnectOrDisconnectThisCall;
-				}
-				lastServerUpdate = realTime;
-				queuedServerUpdate = false;
-
-				if (readLobbyResponse(rs_socket, NET_TIMEOUT_DELAY) == SOCKET_ERROR)
-				{
-					socketClose(rs_socket);
-					server_not_there = true;
-					rs_socket = nullptr;
-					return bProcessingConnectOrDisconnectThisCall;
-				}
-
-				// Preserves another register
-				registered = state;
-			}
+			return lobbyConnectionHandler.connect();
 			break;
-
-		// Unregister the game (close the socket)
 		case WZ_SERVER_DISCONNECT:
-			{
-				bProcessingConnectOrDisconnectThisCall = true;
-				if (rs_socket != nullptr)
-				{
-					// we don't need this anymore, so clean up
-					socketClose(rs_socket);
-					rs_socket = nullptr;
-					server_not_there = true;
-				}
-
-				queuedServerUpdate = false;
-
-				// Preserves another unregister
-				registered = state;
-			}
+			return lobbyConnectionHandler.disconnect();
 			break;
-		}
 	}
 
-	return bProcessingConnectOrDisconnectThisCall;
-}
-
-bool NETprocessQueuedServerUpdates()
-{
-	if (!queuedServerUpdate)
-	{
-		if (allow_joining && shouldSendServerKeepAliveNow())
-		{
-			// ensure that the lobby server knows we're still alive by sending a no-op "keep-alive"
-			NETregisterServer(WZ_SERVER_KEEPALIVE);
-		}
-		return false;
-	}
-	if (!canSendServerUpdateNow())
-	{
-		return false;
-	}
-	queuedServerUpdate = false;
-	NETregisterServer(WZ_SERVER_UPDATE);
-	return true;
+	return false;
 }
 
 // ////////////////////////////////////////////////////////////////////////
@@ -2791,9 +2871,11 @@ static void NETallowJoining()
 
 	// This is here since we need to get the status, before we can show the info.
 	// FIXME: find better location to stick this?
-	if (!NetPlay.ShowedMOTD)
+	if ((!NetPlay.ShowedMOTD) && (NetPlay.MOTD != nullptr))
 	{
 		ShowMOTD();
+		free(NetPlay.MOTD);
+		NetPlay.MOTD = nullptr;
 		NetPlay.ShowedMOTD = true;
 	}
 

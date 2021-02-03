@@ -437,7 +437,7 @@ void WzGameFindTitleUI::addGames()
 
 		widgAddButton(psWScreen, &sButInit);
 	}
-	if (strlen(NetPlay.MOTD))
+	if (NetPlay.MOTD && strlen(NetPlay.MOTD))
 	{
 		permitNewConsoleMessages(true);
 		addConsoleMessage(NetPlay.MOTD, DEFAULT_JUSTIFY, SYSTEM_MESSAGE, false, MAX_CONSOLE_MESSAGE_DURATION);
