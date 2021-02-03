@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_KEYMAP_H__
 #define __INCLUDED_SRC_KEYMAP_H__
 
+#include <vector>
+#include <functional>
 #include <optional-lite/optional.hpp>
 
 #include "lib/framework/input.h"
@@ -91,7 +93,8 @@ struct KeyMappingInput
 	};
 };
 
-struct ContextPriority {
+struct ContextPriority
+{
 	const unsigned int prioritized;
 	const unsigned int active;
 
@@ -106,20 +109,27 @@ struct ContextPriority {
 	}
 };
 
-struct InputContext {
+struct InputContext;
+typedef std::list<std::reference_wrapper<InputContext>> InputContexts;
+
+struct InputContext
+{
 	/* Always enabled. Actions in this context will always execute. Bindings with collisions to ALWAYS_ACTIVE keybinds are not valid, as they would never get executed */
-	static InputContext ALWAYS_ACTIVE;
+	static const InputContext ALWAYS_ACTIVE;
 	/* Background-level keybinds. These run at the lowest priority, and are not executed if _anything_ else is bound to the keys */
-	static InputContext BACKGROUND;
+	static const InputContext BACKGROUND;
 	/* Generic gameplay (main viewport) keybindings. Unit commands etc. */
-	static InputContext GAMEPLAY;
+	static const InputContext GAMEPLAY;
 	/* Active while player hovers over the radar. */
-	static InputContext RADAR;
+	static const InputContext RADAR;
 
 	/* For debug-only bindings. */
-	static InputContext __DEBUG;
+	static const InputContext __DEBUG;
 
-	enum class State {
+	static const InputContexts getAllContexts();
+
+	enum class State
+	{
 		/*
 		 The input context is prioritized. e.g. `InputContext::RADAR` is prioritized when player hovers
 		 over the radar, prioritizing any bindings belonging to that context.
@@ -137,30 +147,21 @@ struct InputContext {
 		INACTIVE,
 	};
 
-	InputContext(const ContextPriority priority, const State initialState, const char* const displayName);
-
-	void setState(const State newState);
-
-	/*
-	 Gets the status of this context. If this returns `false`, any bindings belonging to this context
-	 should not be processed.
-	 */
-	bool isActive() const;
-
-	/* Priority of the context when resolving collisions. Context with highest priority wins */
-	unsigned int getPriority() const;
-
 	/* Display name to be shown in e.g. edit keymap options */
 	const std::string getDisplayName() const;
 
 private:
+	static InputContexts contexts;
+
+	InputContext(const ContextPriority priority, const State initialState, const char* const displayName);
+
 	const ContextPriority priority;
 	const unsigned int index;
 	const std::string displayName;
-
-	State state;
+	const State defaultState;
 
 	friend bool operator==(const InputContext& lhs, const InputContext& rhs);
+	friend class InputManager;
 };
 
 bool operator==(const InputContext& lhs, const InputContext& rhs);
@@ -205,7 +206,8 @@ struct KeyFunctionInfo
 bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
 bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
 
-enum class KeyMappingSlot {
+enum class KeyMappingSlot
+{
 	PRIMARY,
 	SECONDARY,
 	LAST
@@ -227,11 +229,39 @@ struct KeyMapping
 	bool toString(char* pOutStr) const;
 };
 
+class InputManager
+{
+public:
+	void resetStates();
+
+// Input processing
+public:
+	void processMappings(const bool bExclude, const bool bAllowMouseWheelEvents);
+
+private:
+	bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEvents, const KeyMapping& mapping) const;
+
+// Input contexts
+public:
+	void setContextState(const InputContext& context, const InputContext::State state);
+
+	/*
+	 Gets the status of the context. If this returns `false`, any bindings belonging to the context
+	 should not be processed.
+	 */
+	bool isContextActive(const InputContext& context) const;
+
+	/* Priority of the context when resolving collisions. Context with highest priority wins */
+	unsigned int getContextPriority(const InputContext& context) const;
+
+private:
+	std::vector<InputContext::State> contextStates;
+};
+
 KeyMapping* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, void (*const pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
 KeyMapping* keyGetMappingFromFunction(void (*const function)(), const KeyMappingSlot slot);
 std::vector<KeyMapping*> keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input);
 
-void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents);
 void keyInitMappings(bool bForceDefaults);
 KeyMappingInput getLastInput();
 KEY_CODE getLastMetaKey();
@@ -242,9 +272,9 @@ std::string getWantedDebugMappingStatuses(bool val);
 
 void clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput input, const InputContext& context);
 
-UDWORD	getMarkerX(KEY_CODE code);
-UDWORD	getMarkerY(KEY_CODE code);
-SDWORD	getMarkerSpin(KEY_CODE code);
+UDWORD getMarkerX(KEY_CODE code);
+UDWORD getMarkerY(KEY_CODE code);
+SDWORD getMarkerSpin(KEY_CODE code);
 
 // for keymap editor.
 void invalidateKeyMappingSortOrder();

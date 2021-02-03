@@ -79,6 +79,7 @@
 #include "lib/ivis_opengl/piematrix.h"
 #include "animation.h"
 
+InputManager inputManager;
 DragBox3D dragBox3D;
 WallDrag wallDrag;
 
@@ -401,6 +402,7 @@ void resetInput()
 	rotActive = false;
 	dragBox3D.status = DRAG_INACTIVE;
 	wallDrag.status = DRAG_INACTIVE;
+	inputManager.resetStates();
 }
 
 /* Process the user input. This just processes the key input and jumping around the radar*/
@@ -439,7 +441,8 @@ void processInput()
 		}
 	}
 
-	InputContext::RADAR.setState(
+	inputManager.setContextState(
+		InputContext::RADAR,
 		isMouseOverRadar()
 			? InputContext::State::PRIORITIZED
 			: InputContext::State::ACTIVE
@@ -452,12 +455,12 @@ void processInput()
 		if (intMode == INT_DESIGN)
 		{
 			/* Only process the function keys */
-			keyProcessMappings(true, allowMouseWheelEvents);
+			inputManager.processMappings(true, allowMouseWheelEvents);
 		}
 		else if (bAllowOtherKeyPresses)
 		{
 			/* Run all standard mappings */
-			keyProcessMappings(false, allowMouseWheelEvents);
+			inputManager.processMappings(false, allowMouseWheelEvents);
 		}
 	}
 	/* Allow the user to clear the (Active) console if need be */
@@ -2669,5 +2672,6 @@ void setSensorAssigned()
 bool dispInitialise()
 {
 	flagReposVarsValid = false;
+	inputManager.resetStates();
 	return true;
 }
