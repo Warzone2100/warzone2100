@@ -26,6 +26,7 @@
 
 #include "basedef.h"
 #include "structure.h"
+#include "keymap.h"
 #include <glm/fwd.hpp>
 
 /* Initialise the display system */
@@ -33,6 +34,8 @@ bool dispInitialise();
 
 /* Initialize fade-in transition */
 bool transitionInit();
+
+extern InputManager inputManager;
 
 void ProcessRadarInput();
 

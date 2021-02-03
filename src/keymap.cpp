@@ -56,41 +56,50 @@ void invalidateKeyMappingSortOrder()
 }
 
 // ----------------------------------------------------------------------------------
+InputContexts InputContext::contexts = InputContexts();
+
 static const unsigned int MAX_ICONTEXT_PRIORITY = std::numeric_limits<unsigned int>::max();
-InputContext InputContext::ALWAYS_ACTIVE = { MAX_ICONTEXT_PRIORITY, InputContext::State::ACTIVE,    N_("Global Hotkeys") };
-InputContext InputContext::BACKGROUND    = { 0,                     InputContext::State::ACTIVE,    N_("Other Hotkeys") };
-InputContext InputContext::GAMEPLAY      = { 1,                     InputContext::State::ACTIVE,    N_("Gameplay") };
-InputContext InputContext::RADAR         = { { 2, 0 },              InputContext::State::ACTIVE,    N_("Radar") };
-InputContext InputContext::__DEBUG       = { MAX_ICONTEXT_PRIORITY, InputContext::State::INACTIVE,  N_("Debug") };
+const InputContext InputContext::ALWAYS_ACTIVE = { MAX_ICONTEXT_PRIORITY, InputContext::State::ACTIVE,    N_("Global Hotkeys") };
+const InputContext InputContext::BACKGROUND    = { 0,                     InputContext::State::ACTIVE,    N_("Other Hotkeys") };
+const InputContext InputContext::GAMEPLAY      = { 1,                     InputContext::State::ACTIVE,    N_("Gameplay") };
+const InputContext InputContext::RADAR         = { { 2, 0 },              InputContext::State::ACTIVE,    N_("Radar") };
+const InputContext InputContext::__DEBUG       = { MAX_ICONTEXT_PRIORITY, InputContext::State::INACTIVE,  N_("Debug") };
 
 static unsigned int inputCtxIndexCounter = 0;
 InputContext::InputContext(const ContextPriority priority, const State initialState, const char* const displayName)
 	: priority(priority)
 	, index(inputCtxIndexCounter++)
 	, displayName(displayName)
-	, state(initialState)
+	, defaultState(initialState)
 {
+	contexts.push_back(*this);
 }
 
-void InputContext::setState(const State newState)
+const InputContexts InputContext::getAllContexts()
 {
-	state = newState;
+	return contexts;
+}
+
+void InputManager::setContextState(const InputContext& context, const InputContext::State newState)
+{
+	contextStates[context.index] = newState;
 	bMappingsSortOrderDirty = true;
 }
 
-bool InputContext::isActive() const
+bool InputManager::isContextActive(const InputContext& context) const
 {
-	return state != State::INACTIVE;
+	const auto state = contextStates[context.index];
+	return state != InputContext::State::INACTIVE;
 }
 
-unsigned int InputContext::getPriority() const
+unsigned int InputManager::getContextPriority(const InputContext& context) const
 {
-	switch (state)
+	switch (contextStates[context.index])
 	{
 	case InputContext::State::PRIORITIZED:
-		return priority.prioritized;
+		return context.priority.prioritized;
 	case InputContext::State::ACTIVE:
-		return priority.active;
+		return context.priority.active;
 	case InputContext::State::INACTIVE:
 	default:
 		return 0;
@@ -102,12 +111,25 @@ const std::string InputContext::getDisplayName() const
 	return displayName;
 }
 
-bool operator==(const InputContext& lhs, const InputContext& rhs) {
+bool operator==(const InputContext& lhs, const InputContext& rhs)
+{
 	return lhs.index == rhs.index;
 }
 
-bool operator!=(const InputContext& lhs, const InputContext& rhs) {
+bool operator!=(const InputContext& lhs, const InputContext& rhs)
+{
 	return !(lhs == rhs);
+}
+
+void InputManager::resetStates()
+{
+	const auto contexts = InputContext::getAllContexts();
+	contextStates = std::vector<InputContext::State>(contexts.size(), InputContext::State::INACTIVE);
+	for (const InputContext& context : contexts)
+	{
+		contextStates[context.index] = context.defaultState;
+	}
+	bMappingsSortOrderDirty = true;
 }
 
 // ----------------------------------------------------------------------------------
@@ -1061,7 +1083,7 @@ static bool checkQwertyKeys()
 
 // ----------------------------------------------------------------------------------
 /* allows checking if mapping should currently be ignored in keyProcessMappings */
-static bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
+bool InputManager::isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEvents, const KeyMapping& mapping) const
 {
 	// TODO refact-process-input: can this be removed and handled in the info.context.isActive() check?
 	//  - likely requires removing the bExclude (?)
@@ -1071,7 +1093,7 @@ static bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEve
 		return true;
 	}
 
-	if (!mapping.info->context.isActive())
+	if (!isContextActive(mapping.info->context))
 	{
 		return true;
 	}
@@ -1101,7 +1123,7 @@ static bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEve
 
 // ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
-void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
+void InputManager::processMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 {
 	/* Bomb out if there are none */
 	if (keyMappings.empty())
@@ -1109,16 +1131,16 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 		return;
 	}
 
-	/* Jump out if we've got a new mapping */
-	(void) checkQwertyKeys();
+	/* Check if player has made new camera markers */
+	checkQwertyKeys();
 
 	/* If mappings have been updated or context priorities have changed, sort the mappings by priority and whether or not they have meta keys */
 	if (bMappingsSortOrderDirty)
 	{
-		keyMappings.sort([](const KeyMapping& a, const KeyMapping& b) {
+		keyMappings.sort([this](const KeyMapping& a, const KeyMapping& b) {
 			// Primary sort by priority
-			const unsigned int priorityA = a.info->context.getPriority();
-			const unsigned int priorityB = b.info->context.getPriority();
+			const unsigned int priorityA = getContextPriority(a.info->context);
+			const unsigned int priorityB = getContextPriority(b.info->context);
 			if (priorityA != priorityB)
 			{
 				return priorityA > priorityB;
