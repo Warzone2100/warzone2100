@@ -483,8 +483,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 		endif(Vulkan_FOUND)
 	endif(WZ_ENABLE_BACKEND_VULKAN)
 
-	# Set install RPATH for WZ app bundle
-	set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
+	if (BUILD_SHARED_LIBS)
+		# Set install RPATH for WZ app bundle
+		set_target_properties(warzone2100 PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
+	endif()
 
 	# Since the dependencies are bundled as part of the build stages (and not at install-time), build with the install rpath
 	set_target_properties(warzone2100 PROPERTIES BUILD_WITH_INSTALL_RPATH True)
@@ -532,6 +534,12 @@ if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	# Enable RELRO (if supported)
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,relro" CACHED_RESULT_NAME LINK_FLAG_WL_Z_RELRO_SUPPORTED)
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-z,now" CACHED_RESULT_NAME LINK_FLAG_WL_Z_NOW_SUPPORTED)
+endif()
+
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	if (NOT BUILD_SHARED_LIBS)
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,-sectcreate,__RESTRICT,__restrict,/dev/null" CONFIG RELEASE CACHED_RESULT_NAME LINK_FLAG_WL_SECTCREATE_RESTRICT_SUPPORTED)
+	endif()
 endif()
 
 #######################
