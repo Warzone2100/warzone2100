@@ -2049,6 +2049,21 @@ void wzSDLPreWindowCreate_InitOpenGLAttributes(bool antialiasing, bool useOpenGL
 	}
 }
 
+void wzSDLPreWindowCreate_InitVulkanLibrary()
+{
+#if defined(WZ_OS_MAC)
+	// Attempt to explicitly load libvulkan.dylib with a full path
+	// to support situations where run-time search paths using @executable_path are prohibited
+	std::string fullPathToVulkanLibrary = cocoaGetFrameworksPath("libvulkan.dylib");
+	if (SDL_Vulkan_LoadLibrary(fullPathToVulkanLibrary.c_str()) != 0)
+	{
+		debug(LOG_ERROR, "Failed to explicitly load Vulkan library");
+	}
+#else
+	// rely on SDL's built-in loading paths / behavior
+#endif
+}
+
 // This stage, we handle display mode setting
 optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoWindow(const video_backend& backend, int antialiasing, WINDOW_MODE fullscreen, int vsync, bool highDPI)
 {
@@ -2071,9 +2086,13 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	// (i.e. not taking into account the game display scale). This function later sets the display system
 	// to the *game screen* width and height (taking into account the display scale).
 
-	if(usesSDLBackend_OpenGL)
+	if (usesSDLBackend_OpenGL)
 	{
 		wzSDLPreWindowCreate_InitOpenGLAttributes(antialiasing, useOpenGLES, useOpenGLESLibrary);
+	}
+	else if (backend == video_backend::vulkan)
+	{
+		wzSDLPreWindowCreate_InitVulkanLibrary();
 	}
 
 	// Populated our resolution list (does all displays now)
