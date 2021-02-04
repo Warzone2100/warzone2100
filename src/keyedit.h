@@ -26,11 +26,13 @@
 #define KM_DEFAULT			10203
 constexpr int KM_GO_BACK = 10204;
 
-bool runKeyMapEditor();
-bool runInGameKeyMapEditor(unsigned id);
-bool startKeyMapEditor(bool first);
-bool startInGameKeyMapEditor(bool first);
-bool saveKeyMap();
-bool loadKeyMap();
+class InputManager;
+
+bool runKeyMapEditor(InputManager& inputManager);
+bool runInGameKeyMapEditor(InputManager& inputManager, unsigned id);
+bool startKeyMapEditor(InputManager& inputManager, bool first);
+bool startInGameKeyMapEditor(InputManager& inputManager, bool first);
+bool saveKeyMap(const InputManager& inputManager);
+bool loadKeyMap(InputManager& inputManager);
 
 #endif // __INCLUDED_SRC_KEYEDIT_H__
