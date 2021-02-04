@@ -93,6 +93,9 @@ struct KeyMappingInput
 	};
 };
 
+bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
+bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
+
 struct ContextPriority
 {
 	const unsigned int prioritized;
@@ -179,6 +182,8 @@ enum class KeyMappingType
 	HIDDEN
 };
 
+typedef void (*MappableFunction)();
+
 struct KeyFunctionInfo
 {
 	const InputContext&  context;
@@ -231,18 +236,37 @@ struct KeyMapping
 
 class InputManager
 {
-public:
-	void resetStates();
-
 // Input processing
 public:
+	KeyMapping* addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const MappableFunction function, const KeyMappingSlot slot);
+
+	KeyMapping* getMappingFromFunction(const MappableFunction function, const KeyMappingSlot slot);
+
+	void removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
+
+	/* Removes a mapping specified by a pointer */
+	bool removeMapping(KeyMapping* mapping);
+
 	void processMappings(const bool bExclude, const bool bAllowMouseWheelEvents);
 
+	/* (Re-)Initializes mappings to their default values. If `bForceDefaults` is true, any existing mappings will be overwritten with the defaults */
+	void resetMappings(const bool bForceDefaults);
+
+	void clearAssignableMappings();
+
+	const std::list<KeyMapping> getAllMappings() const;
+
 private:
-	bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEvents, const KeyMapping& mapping) const;
+	/* Finds all mappings with matching meta and input */
+	std::vector<KeyMapping*> findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input);
+
+	/* Registers a new default key mapping */
+	bool addDefaultMapping(KEY_CODE metaCode, KeyMappingInput input, KeyAction action, const MappableFunction function, bool bForceDefaults, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
 
 // Input contexts
 public:
+	void resetContextStates();
+
 	void setContextState(const InputContext& context, const InputContext::State state);
 
 	/*
@@ -254,15 +278,15 @@ public:
 	/* Priority of the context when resolving collisions. Context with highest priority wins */
 	unsigned int getContextPriority(const InputContext& context) const;
 
+// General
+public:
+	void shutdown();
+
 private:
 	std::vector<InputContext::State> contextStates;
+	std::list<KeyMapping> keyMappings;
 };
 
-KeyMapping* keyAddMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, void (*const pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
-KeyMapping* keyGetMappingFromFunction(void (*const function)(), const KeyMappingSlot slot);
-std::vector<KeyMapping*> keyFindMapping(const KEY_CODE metaCode, const KeyMappingInput input);
-
-void keyInitMappings(bool bForceDefaults);
 KeyMappingInput getLastInput();
 KEY_CODE getLastMetaKey();
 void processDebugMappings(unsigned player, bool val);
@@ -270,18 +294,15 @@ bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
 
-void clearKeyMappingIfConflicts(const KEY_CODE metaCode, const KeyMappingInput input, const InputContext& context);
-
 UDWORD getMarkerX(KEY_CODE code);
 UDWORD getMarkerY(KEY_CODE code);
 SDWORD getMarkerSpin(KEY_CODE code);
 
-// for keymap editor.
+// For keymap editor
 void invalidateKeyMappingSortOrder();
 const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
 KeyFunctionInfo const *keyFunctionInfoByFunction(void (*const function)());
 KeyFunctionInfo const *keyFunctionInfoByName(std::string const &name);
-extern std::list<KeyMapping> keyMappings;
 KeyMappingInputSource keyMappingSourceByName(std::string const& name);
 KeyMappingSlot keyMappingSlotByName(std::string const& name);
 

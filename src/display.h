@@ -35,7 +35,7 @@ bool dispInitialise();
 /* Initialize fade-in transition */
 bool transitionInit();
 
-extern InputManager inputManager;
+extern InputManager gInputManager;
 
 void ProcessRadarInput();
 
