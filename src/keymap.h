@@ -186,18 +186,18 @@ typedef void (*MappableFunction)();
 
 struct KeyFunctionInfo
 {
-	const InputContext&  context;
-	const KeyMappingType type;
-	void        (* const function)();
-	const std::string    name;
-	const std::string    displayName;
+	const InputContext&    context;
+	const KeyMappingType   type;
+	const MappableFunction function;
+	const std::string      name;
+	const std::string      displayName;
 
 	KeyFunctionInfo(
-		const InputContext&  context,
-		const KeyMappingType type,
-		void               (*function)(),
-		const std::string    name,
-		const std::string    displayName
+		const InputContext&    context,
+		const KeyMappingType   type,
+		const MappableFunction function,
+		const std::string      name,
+		const std::string      displayName
 	);
 
 	// Prevent copies. The entries are immutable and thus should never be copied around.
@@ -242,7 +242,7 @@ public:
 
 	KeyMapping* getMappingFromFunction(const MappableFunction function, const KeyMappingSlot slot);
 
-	void removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
+	std::vector<KeyMapping> removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
 
 	/* Removes a mapping specified by a pointer */
 	bool removeMapping(KeyMapping* mapping);
@@ -285,6 +285,7 @@ public:
 private:
 	std::vector<InputContext::State> contextStates;
 	std::list<KeyMapping> keyMappings;
+	bool bMappingsSortOrderDirty = true;
 };
 
 KeyMappingInput getLastInput();
@@ -299,7 +300,6 @@ UDWORD getMarkerY(KEY_CODE code);
 SDWORD getMarkerSpin(KEY_CODE code);
 
 // For keymap editor
-void invalidateKeyMappingSortOrder();
 const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
 KeyFunctionInfo const *keyFunctionInfoByFunction(void (*const function)());
 KeyFunctionInfo const *keyFunctionInfoByName(std::string const &name);
