@@ -48,13 +48,6 @@
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 static KEY_CODE getQwertyKey();
 
-static bool bMappingsSortOrderDirty = true;
-
-void invalidateKeyMappingSortOrder()
-{
-	bMappingsSortOrderDirty = true;
-}
-
 // ----------------------------------------------------------------------------------
 InputContexts InputContext::contexts = InputContexts();
 
@@ -194,20 +187,23 @@ std::vector<KeyMapping*> InputManager::findMappingsForInput(const KEY_CODE meta,
 	return matches;
 }
 
-void InputManager::removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
+std::vector<KeyMapping> InputManager::removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
 {
 	/* Find any mapping with same keys */
 	const auto matches = findMappingsForInput(meta, input);
+	std::vector<KeyMapping> conflicts;
 	for (KeyMapping* psMapping : matches)
 	{
 		/* Clear only if the mapping is for an assignable binding. Do not clear if there is no conflict (different context) */
 		const bool bConflicts = psMapping->info->context == context;
 		if (psMapping->info->type == KeyMappingType::ASSIGNABLE && bConflicts)
 		{
-			psMapping->metaKeyCode = KEY_CODE::KEY_IGNORE;
-			psMapping->input = KEY_CODE::KEY_MAXSCAN;
+			conflicts.push_back(*psMapping);
+			removeMapping(psMapping);
 		}
 	}
+
+	return conflicts;
 }
 
 void InputManager::shutdown()
