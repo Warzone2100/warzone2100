@@ -152,7 +152,7 @@ KeyMappingInputValue::KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode)
 
 // Key mapping inputs are unions with type enum attached, so we overload the equality
 // comparison for convenience.
-static bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
+bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
 	if (lhs.source != rhs.source) {
 		return false;
 	}
@@ -167,11 +167,12 @@ static bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
 	}
 }
 
-static bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
+bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs) {
 	return !(lhs == rhs);
 }
 
 // ----------------------------------------------------------------------------------
+
 KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot slot)
 {
 	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [function, slot](KEY_MAPPING const &mapping) {
@@ -179,6 +180,45 @@ KEY_MAPPING *keyGetMappingFromFunction(void (*function)(), const KeyMappingSlot 
 	});
 	return mapping != keyMappings.end()? &*mapping : nullptr;
 }
+
+static bool isCombination(const KEY_MAPPING* mapping)
+{
+	return mapping->metaKeyCode != KEY_CODE::KEY_IGNORE;
+}
+
+static bool isActiveSingleKey(const KEY_MAPPING* mapping)
+{
+	switch (mapping->action)
+	{
+	case KEY_ACTION::KEYMAP_PRESSED:
+		return mapping->input.isPressed();
+	case KEY_ACTION::KEYMAP_DOWN:
+		return mapping->input.isDown();
+	case KEY_ACTION::KEYMAP_RELEASED:
+		return mapping->input.isReleased();
+	default:
+		debug(LOG_WARNING, "Unknown key action (action code %u) while processing keymap.", (unsigned int)mapping->action);
+		return false;
+	}
+}
+
+static bool isActiveCombination(const KEY_MAPPING* mapping)
+{
+	const bool bSubKeyIsPressed = mapping->input.isPressed();
+	const bool bMetaIsDown = keyDown(mapping->metaKeyCode);
+	const bool bHasAlt = mapping->altMetaKeyCode != KEY_IGNORE;
+	const bool bAltMetaIsDown = bHasAlt && keyDown(mapping->altMetaKeyCode);
+
+	return bSubKeyIsPressed && (bMetaIsDown || bAltMetaIsDown);
+}
+
+bool KEY_MAPPING::isActivated() const
+{
+	return isCombination(this)
+		? isActiveCombination(this)
+		: isActiveSingleKey(this);
+}
+
 // ----------------------------------------------------------------------------------
 /* Some stuff allowing the user to add key mappings themselves */
 
@@ -237,22 +277,6 @@ public:
 		return nullptr;
 	}
 
-	bool sortKeyMappingFunc(const KEY_MAPPING& a, const KEY_MAPPING& b) const
-	{
-		auto it_a = functionpt_to_index_map.find(a.function);
-		auto it_b = functionpt_to_index_map.find(b.function);
-		if (it_a == functionpt_to_index_map.end())
-		{
-			debug(LOG_ERROR, "Failed to find KEY_MAPPING a (%s)", a.name.c_str());
-			return &a < &b;
-		}
-		if (it_b == functionpt_to_index_map.end())
-		{
-			debug(LOG_ERROR, "Failed to find KEY_MAPPING b (%s)", b.name.c_str());
-			return &a < &b;
-		}
-		return it_a->second < it_b->second;
-	}
 private:
 	std::vector<KeyMapSaveEntry> ordered_list;
 	std::unordered_map<void (*)(), size_t> functionpt_to_index_map;
@@ -751,11 +775,6 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LSHIFT, KEY_W, KEYMAP_PRESSED, kf_RevealMapAtPos,    N_("Reveal map at mouse position"), bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_L, KEYMAP_PRESSED, kf_TraceObject,       N_("Trace a game object"), bForceDefaults) || didAdd;
 
-	// ensure sort ordering
-	keyMappings.sort([](const KEY_MAPPING &a, const KEY_MAPPING &b) {
-		return keyMapSaveTable.sortKeyMappingFunc(a, b);
-	});
-
 	if (didAdd)
 	{
 		saveKeyMap();	// save out the default key mappings.
@@ -952,13 +971,20 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 	/* Jump out if we've got a new mapping */
 	(void) checkQwertyKeys();
 
-	/* Check for the meta keys */
-	bool bMetaKeyDown = keyDown(KEY_LCTRL) || keyDown(KEY_RCTRL) || keyDown(KEY_LALT)
-	    || keyDown(KEY_RALT) || keyDown(KEY_LSHIFT) || keyDown(KEY_RSHIFT)
-	    || keyDown(KEY_LMETA) || keyDown(KEY_RMETA);
+	/* Sort mappings by whether or not they have meta keys */
+	std::vector<KEY_MAPPING> mappings = { keyMappings.begin(), keyMappings.end() };
+	std::sort(mappings.begin(), mappings.end(), [](const KEY_MAPPING& a, const KEY_MAPPING& b) {
+		// Sort by meta. This causes all mappings with meta to be checked before non-meta mappings,
+		// avoiding having to check for meta-conflicts in the processing loop. (e.g. if we should execute
+		// a mapping with right arrow key, depending on if another binding on shift+right-arrow is executed
+		// or not). In other words, if any mapping with meta is executed, it will consume the respective input,
+		// preventing any non-meta mappings with the same input from being executed.
+		return a.metaKeyCode != KEY_CODE::KEY_IGNORE && b.metaKeyCode == KEY_CODE::KEY_IGNORE;
+	});
+	std::vector<KeyMappingInput> consumedInputs;
 
-	/* Run through all our mappings */
-	for (auto keyToProcess = keyMappings.begin(); keyToProcess != keyMappings.end(); ++keyToProcess)
+	/* Run through all sorted mappings */
+	for (auto keyToProcess = mappings.begin(); keyToProcess != mappings.end(); ++keyToProcess)
 	{
 		/* Skip inappropriate ones when necessary */
 		if (isIgnoredMapping(bExclude, bAllowMouseWheelEvents, *keyToProcess))
@@ -966,107 +992,27 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 			continue;
 		}
 
-		// Check if there exists another keybinding, with the same subKeyCode, but with meta- or altMetaKeyCode
-		// and which has its respective meta key currently down. If any are found, then we want to completely skip
-		// any bindings without meta, as the keybind with meta (being more specific) should take precedence. This
-		// allows e.g. having camera movement in arrow keys and alignment in arrow keys + ctrl
-		const bool bIsKeyCombination = keyToProcess->metaKeyCode != KEY_IGNORE;
-		if (bMetaKeyDown && !bIsKeyCombination) {
-			bool bOverridingCombinationExists = false;
-			for (auto otherKey = keyMappings.begin(); otherKey != keyMappings.end(); ++otherKey)
-			{
-				/* Skip inappropriate ones when necessary */
-				if (isIgnoredMapping(bExclude, bAllowMouseWheelEvents, *otherKey))
-				{
-					continue;
-				}
-
-				/* Only match agaist keys with the same mapping input */
-				if (otherKey->input != keyToProcess->input)
-				{
-					continue;
-				}
-
-				bool bIsOtherKeyCombination = otherKey->metaKeyCode != KEY_IGNORE;
-				if (bIsOtherKeyCombination && otherKey->input.isPressed())
-				{
-					bool bHasAlt = otherKey->altMetaKeyCode != KEY_IGNORE;
-					if (keyDown(otherKey->metaKeyCode) || (bHasAlt && keyDown(otherKey->altMetaKeyCode)))
-					{
-						bOverridingCombinationExists = true;
-						break;
-					}
-				}
-			}
-
-			if (bOverridingCombinationExists) {
-				continue;
-			}
-		}
-
-		bool mappingWasHit = false;
-		/* Process simple ones (single keys) */
-		if (!bIsKeyCombination)
+		/* Skip if the input is already consumed. Handles skips for context/priority and meta-conflicts */
+		const auto bIsAlreadyConsumed = std::find_if(consumedInputs.begin(), consumedInputs.end(), [keyToProcess](const KeyMappingInput& consumed) {
+			return consumed == keyToProcess->input;
+		}) != consumedInputs.end();
+		if (bIsAlreadyConsumed)
 		{
-			switch (keyToProcess->action)
-			{
-			case KEYMAP_PRESSED:
-				/* Were the right keys pressed? */
-				if (keyToProcess->input.isPressed())
-				{
-					mappingWasHit = true;
-				}
-				break;
-			case KEYMAP_DOWN:
-				/* Is the key Down? */
-				if (keyToProcess->input.isDown())
-				{
-					mappingWasHit = true;
-				}
-
-				break;
-			case KEYMAP_RELEASED:
-				/* Has the key been released? */
-				if (keyToProcess->input.isReleased())
-				{
-					mappingWasHit = true;
-				}
-				break;
-
-			default:
-				debug(LOG_FATAL, "Unknown key action (action code %u) while processing keymap.", (unsigned int)keyToProcess->action);
-				abort();
-				break;
-			}
-		}
-		/* Process the combination ones */
-		else
-		{
-			/* It's a combo keypress - meta held down and the sub pressed */
-			bool bSubKeyIsPressed = keyToProcess->input.isPressed();
-			if (bSubKeyIsPressed)
-			{
-				bool bHasAlt = keyToProcess->altMetaKeyCode != KEY_IGNORE;
-
-				/* First, try the meta key */
-				if (keyDown(keyToProcess->metaKeyCode))
-				{
-					lastMetaKey = keyToProcess->metaKeyCode;
-					mappingWasHit = true;
-				}
-				/* Meta key not held, check if we have alternative and try that */
-				else if (bHasAlt && keyDown(keyToProcess->altMetaKeyCode))
-				{
-					lastMetaKey = keyToProcess->metaKeyCode;
-					mappingWasHit = true;
-				}
-			}
+			continue;
 		}
 
 		/* Execute the action if mapping was hit */
-		if (mappingWasHit) {
+		if (keyToProcess->isActivated())
+		{
+			const bool bHasMeta = keyToProcess->metaKeyCode != KEY_IGNORE;
+			if (bHasMeta)
+			{
+				lastMetaKey = keyToProcess->metaKeyCode;
+			}
+
 			lastInput = keyToProcess->input;
 			keyToProcess->function();
+			consumedInputs.push_back(keyToProcess->input);
 		}
 	}
 

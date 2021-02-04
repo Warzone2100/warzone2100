@@ -79,6 +79,9 @@ struct KeyMappingInput {
 	KeyMappingInput();
 };
 
+bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
+bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
+
 enum class KeyMappingSlot {
 	PRIMARY,
 	SECONDARY,
@@ -96,6 +99,8 @@ struct KEY_MAPPING
 	KEY_ACTION         action;
 	std::string        name;
 	KeyMappingSlot     slot;
+
+	bool isActivated() const;
 };
 
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const char *name, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
