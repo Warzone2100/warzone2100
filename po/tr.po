@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2021-01-18 14:26\n"
+"PO-Revision-Date: 2021-02-04 11:03\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -15249,7 +15249,7 @@ msgstr ""
 
 #: src/frontend.cpp:669
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Yapılandırma dizini açılması başarısız"
 
 #: src/frontend.cpp:691
 msgid "1×"
@@ -15476,7 +15476,7 @@ msgstr "VİDEO AYARLARI"
 
 #: src/frontend.cpp:1288
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "Dikey Senk. değiştirme başarısız"
 
 #: src/frontend.cpp:1288
 msgid "Warzone failed to change the Vertical Sync mode.\n"
