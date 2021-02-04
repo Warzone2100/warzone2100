@@ -5,7 +5,7 @@ param([string]$VCPKG_BUILD_TYPE = "")
 ############################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-$VCPKG_COMMIT_SHA = "450de5f3c61e072323d5ed705909782ea70ed5ea";
+$VCPKG_COMMIT_SHA = "5eea585548058540c3b73d087eb101c033b5fa85";
 
 # WZ Windows features (for vcpkg install)
 $VCPKG_INSTALL_FEATURES = @()
