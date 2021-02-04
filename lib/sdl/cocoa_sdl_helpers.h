@@ -27,7 +27,10 @@
 #define cocoa_sdl_helpers_h
 
 #include <SDL.h>
+#include <string>
 
 bool cocoaIsSDLWindowFullscreened(SDL_Window *window);
+std::string cocoaGetCurrentExecutablePath();
+std::string cocoaGetFrameworksPath(const char* resourceName);
 
 #endif /* cocoa_sdl_helpers_h */
