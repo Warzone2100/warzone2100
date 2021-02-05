@@ -455,7 +455,6 @@ void sound_Update()
 {
 	SAMPLE_LIST *node = active_samples;
 	SAMPLE_LIST *previous = nullptr;
-	ALCenum err;
 	ALfloat gain;
 
 	if (!openal_initialized)
@@ -526,7 +525,7 @@ void sound_Update()
 
 	alcProcessContext(context);
 
-	err = sound_GetContextError(device);
+	ALCenum err = sound_GetContextError(device);
 	if (err != ALC_NO_ERROR)
 	{
 		debug(LOG_ERROR, "Error while processing audio context: %s", alGetString(err));

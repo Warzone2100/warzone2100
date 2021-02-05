@@ -273,7 +273,7 @@ bool intAddIntelMap()
 }
 
 /* Add the Message sub form */
-static bool intAddMessageForm(bool playCurrent)
+static bool intAddMessageForm(bool _playCurrent)
 {
 	WIDGET *msgForm = widgGetFromID(psWScreen, IDINTMAP_FORM);
 
@@ -354,7 +354,7 @@ static bool intAddMessageForm(bool playCurrent)
 		}
 	}
 	//check to play current message instantly
-	if (playCurrent)
+	if (_playCurrent)
 	{
 		//is it a proximity message?
 		if (psCurrentMsg->type == MSG_PROXIMITY)

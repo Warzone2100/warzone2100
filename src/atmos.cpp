@@ -85,25 +85,25 @@ void atmosInitSystem()
 static void testParticleWrap(ATPART *psPart)
 {
 	/* Gone off left side */
-	if (psPart->position.x < player.p.x - world_coord(visibleTiles.x) / 2)
+	if (psPart->position.x < playerPos.p.x - world_coord(visibleTiles.x) / 2)
 	{
 		psPart->position.x += world_coord(visibleTiles.x);
 	}
 
 	/* Gone off right side */
-	else if (psPart->position.x > (player.p.x + world_coord(visibleTiles.x) / 2))
+	else if (psPart->position.x > (playerPos.p.x + world_coord(visibleTiles.x) / 2))
 	{
 		psPart->position.x -= world_coord(visibleTiles.x);
 	}
 
 	/* Gone off top */
-	if (psPart->position.z < player.p.z - world_coord(visibleTiles.y) / 2)
+	if (psPart->position.z < playerPos.p.z - world_coord(visibleTiles.y) / 2)
 	{
 		psPart->position.z += world_coord(visibleTiles.y);
 	}
 
 	/* Gone off bottom */
-	else if (psPart->position.z > (player.p.z + world_coord(visibleTiles.y) / 2))
+	else if (psPart->position.z > (playerPos.p.z + world_coord(visibleTiles.y) / 2))
 	{
 		psPart->position.z -= world_coord(visibleTiles.y);
 	}
@@ -279,8 +279,8 @@ void atmosUpdateSystem()
 		/* Temporary stuff - just adds a few particles! */
 		for (i = 0; i < numberToAdd; i++)
 		{
-			pos.x = player.p.x;
-			pos.z = player.p.z;
+			pos.x = playerPos.p.x;
+			pos.z = playerPos.p.z;
 			pos.x += world_coord(rand() % visibleTiles.x - visibleTiles.x / 2);
 			pos.z += world_coord(rand() % visibleTiles.x - visibleTiles.y / 2);
 			pos.y = 1000;
@@ -336,14 +336,14 @@ void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 	Vector3i dv;
 
 	/* Transform it */
-	dv.x = psPart->position.x - player.p.x;
+	dv.x = psPart->position.x - playerPos.p.x;
 	dv.y = psPart->position.y;
-	dv.z = -(psPart->position.z - player.p.z);
+	dv.z = -(psPart->position.z - playerPos.p.z);
 	/* Make it face camera */
 	/* Scale it... */
 	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) *
-		glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::rotate(UNDEG(-player.r.x), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::scale(glm::vec3(psPart->size / 100.f));
 	pie_Draw3DShape(psPart->imd, 0, 0, WZCOL_WHITE, 0, 0, viewMatrix * modelMatrix);
 	/* Draw it... */

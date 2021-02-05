@@ -465,7 +465,7 @@ static void rotFlip(int tile, int *i, int *j)
 {
 	int texture = TileNumber_texture(tile);
 	int rot;
-	int map[2][2], invmap[4][2];
+	int tmpMap[2][2], invmap[4][2];
 
 	if (texture & TILE_XFLIP)
 	{
@@ -476,11 +476,11 @@ static void rotFlip(int tile, int *i, int *j)
 		*j = 1 - *j;
 	}
 
-	map[0][0] = 0; invmap[0][0] = 0; invmap[0][1] = 0;
-	map[1][0] = 1; invmap[1][0] = 1; invmap[1][1] = 0;
-	map[1][1] = 2; invmap[2][0] = 1; invmap[2][1] = 1;
-	map[0][1] = 3; invmap[3][0] = 0; invmap[3][1] = 1;
-	rot = map[*i][*j];
+	tmpMap[0][0] = 0; invmap[0][0] = 0; invmap[0][1] = 0;
+	tmpMap[1][0] = 1; invmap[1][0] = 1; invmap[1][1] = 0;
+	tmpMap[1][1] = 2; invmap[2][0] = 1; invmap[2][1] = 1;
+	tmpMap[0][1] = 3; invmap[3][0] = 0; invmap[3][1] = 1;
+	rot = tmpMap[*i][*j];
 	rot -= (texture & TILE_ROTMASK) >> TILE_ROTSHIFT;
 	while (rot < 0)
 	{
@@ -828,17 +828,17 @@ bool mapLoad(char const *filename, bool preview)
 	/* Load in the map data */
 	for (int i = 0; i < mapWidth * mapHeight; ++i)
 	{
-		UWORD	texture;
-		UBYTE	height;
+		UWORD	tileTexture;
+		UBYTE	tileHeight;
 
-		if (!PHYSFS_readULE16(fp, &texture) || !PHYSFS_readULE8(fp, &height))
+		if (!PHYSFS_readULE16(fp, &tileTexture) || !PHYSFS_readULE8(fp, &tileHeight))
 		{
 			debug(LOG_ERROR, "%s: Error during savegame load", filename);
 			goto failure;
 		}
 
-		psMapTiles[i].texture = texture;
-		psMapTiles[i].height = height * ELEVATION_SCALE;
+		psMapTiles[i].texture = tileTexture;
+		psMapTiles[i].height = tileHeight * ELEVATION_SCALE;
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));

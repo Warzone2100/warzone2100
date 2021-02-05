@@ -143,17 +143,17 @@ void W_LABEL::display(int xOffset, int yOffset)
 		col.byte.r = 128 + iSinSR(realTime, 2000, 127); col.byte.g = 128 + iSinSR(realTime + 667, 2000, 127); col.byte.b = 128 + iSinSR(realTime + 1333, 2000, 127); col.byte.a = 128;
 		iV_Box(textBoundingBoxOffset.x + fx, textBoundingBoxOffset.y + jy + baseLineOffset, textBoundingBoxOffset.x + fx + wzTextLine.width() - 1, textBoundingBoxOffset.y + jy + baseLineOffset + wzTextLine.lineSize() - 1, col);
 #endif
-		int maxWidth = -1;
+		int lineWidthLimit = -1;
 		if (canTruncate && (wzTextLine->width() > width()))
 		{
-			// text would render outside the width of the label, so figure out a maxWidth that can be displayed (leaving room for ellipsis)
-			maxWidth = width() - iV_GetEllipsisWidth(FontID) - 2;
+			// text would render outside the width of the label, so figure out a maxLineWidth that can be displayed (leaving room for ellipsis)
+			lineWidthLimit = width() - iV_GetEllipsisWidth(FontID) - 2;
 		}
-		wzTextLine->render(textBoundingBoxOffset.x + fx, fy, fontColour, 0.0f, maxWidth);
-		if (maxWidth > -1)
+		wzTextLine->render(textBoundingBoxOffset.x + fx, fy, fontColour, 0.0f, lineWidthLimit);
+		if (lineWidthLimit > -1)
 		{
 			// Render ellipsis
-			iV_DrawEllipsis(FontID, Vector2i(textBoundingBoxOffset.x + fx + maxWidth + 2, fy), fontColour);
+			iV_DrawEllipsis(FontID, Vector2i(textBoundingBoxOffset.x + fx + lineWidthLimit + 2, fy), fontColour);
 			isTruncated = true;
 		}
 		jy += wzTextLine->lineSize() + lineSpacing;

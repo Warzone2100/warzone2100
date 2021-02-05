@@ -237,7 +237,7 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	pos.y = mY - radarCenterY;
 	if (rotateRadar)
 	{
-		pos = Vector2f_Rotate2f(pos, -player.r.y);
+		pos = Vector2f_Rotate2f(pos, -playerPos.r.y);
 	}
 	pos.x += radarWidth / 2.0;
 	pos.y += radarHeight / 2.0;
@@ -270,7 +270,7 @@ void drawRadar()
 	ASSERT_OR_RETURN(, radarBuffer, "No radar buffer allocated");
 
 	setViewingWindow();
-	playerpos = player.p; // cache position
+	playerpos = playerPos.p; // cache position
 
 	if (frameSkip <= 0)
 	{
@@ -285,7 +285,7 @@ void drawRadar()
 	if (rotateRadar)
 	{
 		// rotate the map
-		radarMatrix *= glm::rotate(UNDEG(player.r.y), glm::vec3(0.f, 0.f, 1.f));
+		radarMatrix *= glm::rotate(UNDEG(playerPos.r.y), glm::vec3(0.f, 0.f, 1.f));
 		if (radarRotationArrow)
 		{
 			DrawNorth(orthoMatrix * radarMatrix);
@@ -302,7 +302,7 @@ static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix)
 	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1), -(radarHeight / 2.0), modelViewProjectionMatrix);
 }
 
-static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile)
+static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
 {
 	PIELIGHT WScr = WZCOL_BLACK;	// squelch warning
 
@@ -312,7 +312,7 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE radarDrawMode, MAPTILE *WTile
 		return WZCOL_TRANSPARENT_BOX;
 	}
 
-	switch (radarDrawMode)
+	switch (drawMode)
 	{
 	case RADAR_MODE_TERRAIN:
 		{
@@ -420,7 +420,6 @@ static void DrawRadarObjects()
 	UBYTE				clan;
 	PIELIGHT			playerCol;
 	PIELIGHT			flashCol;
-	int				x, y;
 
 	/* Show droids on map - go through all players */
 	for (clan = 0; clan < MAX_PLAYERS; clan++)
@@ -479,9 +478,9 @@ static void DrawRadarObjects()
 	}
 
 	/* Do the same for structures */
-	for (x = scrollMinX; x < scrollMaxX; x++)
+	for (SDWORD x = scrollMinX; x < scrollMaxX; x++)
 	{
-		for (y = scrollMinY; y < scrollMaxY; y++)
+		for (SDWORD y = scrollMinY; y < scrollMaxY; y++)
 		{
 			MAPTILE		*psTile = mapTile(x, y);
 			STRUCTURE	*psStruct;
@@ -566,7 +565,7 @@ static SDWORD getDistanceAdjust()
 
 static SDWORD getLengthAdjust()
 {
-	const int pitch = 360 - (player.r.x / DEG_1);
+	const int pitch = 360 - (playerPos.r.x / DEG_1);
 
 	// Max at
 	const int lookingDown = (0 - MIN_PLAYER_X_ANGLE);
@@ -591,8 +590,8 @@ static void setViewingWindow()
 	int	dif2 = getLengthAdjust();
 	PIELIGHT colour;
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
-	int x = player.p.x * pixSizeH / TILE_UNITS;
-	int y = player.p.z * pixSizeV / TILE_UNITS;
+	int x = playerPos.p.x * pixSizeH / TILE_UNITS;
+	int y = playerPos.p.z * pixSizeV / TILE_UNITS;
 
 	shortX = ((visibleTiles.x / 4) - (dif / 6)) * pixSizeH;
 	longX = ((visibleTiles.x / 2) - (dif / 4)) * pixSizeH;
@@ -614,7 +613,7 @@ static void setViewingWindow()
 	centre.x = x - scrollMinX * pixSizeH;
 	centre.y = y - scrollMinY * pixSizeV;
 
-	RotateVector2D(v, tv, &centre, player.r.y, 4);
+	RotateVector2D(v, tv, &centre, playerPos.r.y, 4);
 
 	switch (getCampaignNumber())
 	{
@@ -658,7 +657,7 @@ bool CoordInRadar(int x, int y)
 	pos.y = y - radarCenterY;
 	if (rotateRadar)
 	{
-		pos = Vector2f_Rotate2f(pos, -player.r.y);
+		pos = Vector2f_Rotate2f(pos, -playerPos.r.y);
 	}
 	pos.x += radarWidth / 2.0;
 	pos.y += radarHeight / 2.0;

@@ -569,7 +569,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 			//read in the data for the sequences
 			for (unsigned dataInc = 0; dataInc < psViewReplay->seqList.size(); dataInc++)
 			{
-				int numText = 0;
+				int numSeqText = 0;
 
 				name[0] = '\0';
 				//load extradat for extended type only
@@ -579,7 +579,7 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					pViewMsgData += cnt;
 					//set the flag to default
 					psViewReplay->seqList[dataInc].flag = 0;
-					numText = count;
+					numSeqText = count;
 				}
 				else //extended type
 				{
@@ -587,12 +587,12 @@ WzString *loadViewData(const char *pViewMsgData, UDWORD bufferSize)
 					sscanf(pViewMsgData, ",%255[^,'\r\n],%u,%d%n", name, &count, &count2, &cnt);
 					pViewMsgData += cnt;
 					psViewReplay->seqList[dataInc].flag = (UBYTE)count;
-					numText = count2;
+					numSeqText = count2;
 				}
 				psViewReplay->seqList[dataInc].sequenceName = name;
 
 				//get the text strings for this sequence - if any
-				for (unsigned seqInc = 0; seqInc < numText; seqInc++)
+				for (unsigned seqInc = 0; seqInc < numSeqText; seqInc++)
 				{
 					name[0] = '\0';
 					sscanf(pViewMsgData, ",%255[^,'\r\n]%n", name, &cnt);

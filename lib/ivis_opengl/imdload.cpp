@@ -727,7 +727,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
-	int cnt = 0, n = 0, i;
+	int cnt = 0, n = 0, scanResult = 0;
 	float dummy;
 
 	if (nlevels == 0)
@@ -744,15 +744,15 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
 	iIMDShape &s = models[key]; // create entry and return reference
 
-	i = sscanf(pFileData, "%255s %n", buffer, &cnt);
-	ASSERT_OR_RETURN(nullptr, i == 1, "Bad directive following LEVEL");
+	scanResult = sscanf(pFileData, "%255s %n", buffer, &cnt);
+	ASSERT_OR_RETURN(nullptr, scanResult == 1, "Bad directive following LEVEL");
 
 	// Optionally load and ignore deprecated MATERIALS directive
 	if (strcmp(buffer, "MATERIALS") == 0)
 	{
-		i = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer, &dummy, &dummy, &dummy, &dummy,
+		scanResult = sscanf(pFileData, "%255s %f %f %f %f %f %f %f %f %f %f%n", buffer, &dummy, &dummy, &dummy, &dummy,
 		           &dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &cnt);
-		ASSERT_OR_RETURN(nullptr, i == 11, "Bad MATERIALS directive");
+		ASSERT_OR_RETURN(nullptr, scanResult == 11, "Bad MATERIALS directive");
 		debug(LOG_WARNING, "MATERIALS directive no longer supported!");
 		pFileData += cnt;
 	}

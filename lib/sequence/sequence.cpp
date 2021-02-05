@@ -620,7 +620,7 @@ bool seq_Play(const char *filename)
 		}
 		else
 		{
-			int ret = buffer_data(fpInfile, &videodata.oy);   /* someone needs more data */
+			ret = buffer_data(fpInfile, &videodata.oy);   /* someone needs more data */
 
 			if (ret == 0)
 			{

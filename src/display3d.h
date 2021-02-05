@@ -97,7 +97,7 @@ bool clipStructureOnScreen(STRUCTURE *psStructure, const glm::mat4 &viewModelMat
 
 bool init3DView();
 void shutdown3DView();
-extern iView player;
+extern iView playerPos;
 extern bool selectAttempt;
 
 extern SDWORD scrollSpeed;

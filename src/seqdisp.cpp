@@ -279,7 +279,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	unsigned int subMax = SUBTITLE_BOX_MIN + D_H2;
 
 	//get any text lines over bottom of the video
-	double realTime = seq_GetFrameTime();
+	double frameTime = seq_GetFrameTime();
 	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
 	{
 		SEQTEXT seqtext = aSeqList[currentPlaySeq].aText[i];
@@ -287,7 +287,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 		{
 			if (seqtext.bSubtitle)
 			{
-				if (((realTime >= seqtext.startTime) && (realTime <= seqtext.endTime)) ||
+				if (((frameTime >= seqtext.startTime) && (frameTime <= seqtext.endTime)) ||
 				    aSeqList[currentPlaySeq].bSeqLoop) //if its a looped video always draw the text
 				{
 					if (subMin > seqtext.y && seqtext.y > SUBTITLE_BOX_MIN)
@@ -301,7 +301,7 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 				}
 			}
 
-			if (realTime >= seqtext.endTime && realTime < seqtext.endTime)
+			if (frameTime >= seqtext.endTime && frameTime < seqtext.endTime)
 			{
 				if (pbClear != nullptr)
 				{
@@ -331,14 +331,14 @@ bool seq_UpdateFullScreenVideo(int *pbClear)
 	//call sequence player to download last frame
 	stillPlaying = seq_Update();
 	//print any text over the video
-	realTime = seq_GetFrameTime();
+	frameTime = seq_GetFrameTime();
 
 	for (i = 0; i < MAX_TEXT_OVERLAYS; i++)
 	{
 		SEQTEXT currentText = aSeqList[currentPlaySeq].aText[i];
 		if (currentText.pText[0] != '\0')
 		{
-			if (((realTime >= currentText.startTime) && (realTime <= currentText.endTime)) ||
+			if (((frameTime >= currentText.startTime) && (frameTime <= currentText.endTime)) ||
 			    (aSeqList[currentPlaySeq].bSeqLoop)) //if its a looped video always draw the text
 			{
 				if (i >= wzCachedSeqText.size())

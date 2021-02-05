@@ -148,7 +148,7 @@ bool multiplayerWinSequence(bool firstCall)
 	if (MissionResUp && !getWarCamStatus())
 	{
 		rotAmount = graphicsTimeAdjustedIncrement(MAP_SPIN_RATE / 12);
-		player.r.y += rotAmount;
+		playerPos.r.y += rotAmount;
 	}
 
 	if (last > gameTime)
