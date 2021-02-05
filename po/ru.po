@@ -15524,7 +15524,7 @@ msgstr "Захват курсора"
 #: src/frontend.cpp:1615
 #: src/ingameop.cpp:711
 msgid "Switch Mouse Buttons"
-msgstr "Настройки Мыши"
+msgstr "Поменять кнопки мыши"
 
 #: src/frontend.cpp:1620
 #: src/ingameop.cpp:716
