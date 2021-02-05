@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2021-01-29 05:52\n"
+"PO-Revision-Date: 2021-02-05 22:25\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -1551,17 +1551,17 @@ msgstr "Îmbunătățire DAV AB Mk3"
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL Strike Upgrade"
-msgstr ""
+msgstr "Îmbunătățire la Atac DAV"
 
 #: data/base/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:483
 msgid "VTOL Strike Upgrade Mk2"
-msgstr ""
+msgstr "Îmbunătățire la Atac DAV Mk2"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:484
 msgid "VTOL Strike Upgrade Mk3"
-msgstr ""
+msgstr "Îmbunătățire la Atac DAV Mk3"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:486
@@ -4024,7 +4024,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Construiește structuri non-perete pe platou și distruge toate întăririle Noii Paradigme"
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4052,7 +4052,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Salvează echipa Alfa"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -5623,15 +5623,15 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:101
 msgid "Research blocked, will research nothing now."
-msgstr ""
+msgstr "Cercetarea blocată, nu se va cerceta nimic acum."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Se cercetează tehnologia fundamentală."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
-msgstr ""
+msgstr "Se cercetează "
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:116
 msgid "No such research path! Try one of these:"
@@ -7313,7 +7313,7 @@ msgstr "Rachetă Anti-Buncăr pe şasiu Scorpion Şenilat"
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-BB.name
 #: po/custom/fromJson.txt:1276
 msgid "Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "Rachetă Anti-Buncăr pe şasiu Scorpion DAV"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperBBWheels.name
@@ -7484,7 +7484,7 @@ msgstr "Turelă AB"
 #. data/mp/messages/resmessages3.json: $.RES_W_AAROF4.text[1]
 #: po/custom/fromJson.txt:1378
 msgid "Chainfeed loader eradicates jams and improves performance"
-msgstr ""
+msgstr "Încărcătorul în lanț eradică blocajele și îmbunătățește performanța"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_MG_ROF1.text[1]
@@ -7785,7 +7785,7 @@ msgstr "Focul anti-baterie continuă până când bateria inamică e eliminată"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[1]
 #: po/custom/fromJson.txt:1564
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr ""
+msgstr "Turnul anti-baterie detectează bateriile de artilerie inamice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
@@ -8361,7 +8361,7 @@ msgstr "Rachete ușoare și rapide anti-vehicule"
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
 #: po/custom/fromJson.txt:1972
 msgid "Fast Loader"
-msgstr ""
+msgstr "Încărcător Rapid"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[2]
@@ -8611,13 +8611,13 @@ msgstr "Motor cu turbină de gaz"
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01b.name
 #: po/custom/fromJson.txt:2146
 msgid "Gas Turbine Generator Mk2"
-msgstr ""
+msgstr "Generator pe Turbină de Gaz Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01c.name
 #: po/custom/fromJson.txt:2149
 msgid "Gas Turbine Generator Mk3"
-msgstr ""
+msgstr "Generator pe Turbină de Gaz Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Power-Upgrade01.name
@@ -10008,7 +10008,7 @@ msgstr "Mortier Incendiar"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[1]
 #: po/custom/fromJson.txt:3067
 msgid "Increased gauss output speeds up reload time"
-msgstr ""
+msgstr "Producția gauss mărită accelerează timpul de reîncărcare"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[2]
@@ -10369,7 +10369,7 @@ msgstr "Lăncier pe şasiu Scorpion Şenilat"
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-Lancer.name
 #: po/custom/fromJson.txt:3397
 msgid "Lancer Scorpion VTOL"
-msgstr ""
+msgstr "Lăncier pe şasiu Scorpion DAV"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperTrkLancer.name
@@ -11817,7 +11817,7 @@ msgstr "Cost de energie și timp de producție identic cu al Pitonului"
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4403
 msgid "Power Generator"
-msgstr "Centrală electrică"
+msgstr "Generator de Energie"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -12005,7 +12005,7 @@ msgstr "Mitralieră AA Cvadruplă de 80mm"
 #. data/mp/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
 #: po/custom/fromJson.txt:4531
 msgid "Racked missile dispensers allow for fast reloading"
-msgstr ""
+msgstr "Distribuitoarele de rachete reglate permit reîncărcarea rapidă"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[2]
@@ -12312,7 +12312,7 @@ msgstr "Descoperirea îmbunătățește ritmul de construcție"
 #. data/mp/stats/structure.json: $.A0ResearchFacility.name
 #: po/custom/fromJson.txt:4745
 msgid "Research Facility"
-msgstr "Centru de cercetare"
+msgstr "Centru de Cercetare"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[3]
@@ -12697,7 +12697,7 @@ msgstr "Zid orizontal al bandiților"
 #. data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 #: po/custom/fromJson.txt:4994
 msgid "Scavenger Power Generator"
-msgstr "Centrală electrică a bandiților"
+msgstr "Generator de Energie al Bandiților"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -13843,13 +13843,13 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade03.name
 #: po/custom/fromJson.txt:5736
 msgid "Vapor Turbine Generator Mk2"
-msgstr ""
+msgstr "Generator pe Turbină de Vapori Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade03a.name
 #: po/custom/fromJson.txt:5739
 msgid "Vapor Turbine Generator Mk3"
-msgstr ""
+msgstr "Generator pe Turbină de Vapori Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Power-Upgrade02.name
@@ -13996,13 +13996,13 @@ msgstr "Mitralieră de asalt DAV"
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
 #: po/custom/fromJson.txt:5852
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr ""
+msgstr "Rachetă Anti-Buncăr pe şasiu Gândac DAV"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-BB.name
 #: po/custom/fromJson.txt:5855
 msgid "VTOL Bunker Buster Scorpion VTOL"
-msgstr ""
+msgstr "Rachetă Anti-Buncăr pe şasiu Scorpion DAV"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-BB.name
@@ -14023,14 +14023,14 @@ msgstr "Tun DAV"
 #. data/mp/stats/sensor.json: $.Sys-VTOLCBTower01.name
 #: po/custom/fromJson.txt:5873
 msgid "VTOL CB Radar Tower"
-msgstr ""
+msgstr "Turn Radar DAV-AB"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-VTOLCBTurret01.name
 #. data/mp/stats/sensor.json: $.Sys-VTOLCBTurret01.name
 #: po/custom/fromJson.txt:5877
 msgid "VTOL CB Radar Turret"
-msgstr ""
+msgstr "Turelă Radar DAV-AB"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VCBSTW1.text[1]
@@ -14053,7 +14053,7 @@ msgstr "Turn DAV AB"
 #. data/mp/stats/research.json: $.R-Sys-VTOLCBS-Turret01.name
 #: po/custom/fromJson.txt:5895
 msgid "VTOL CB Turret"
-msgstr ""
+msgstr "Turn DAV-AB"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-ClusterBomb.name
@@ -14649,7 +14649,7 @@ msgstr "Joacă pe tot ecranul"
 
 #: src/clparse.cpp:271
 msgid "Load a specific game mode"
-msgstr ""
+msgstr "Încarcă un anumit mod de joc"
 
 #: src/clparse.cpp:271
 msgid "level name"
@@ -14671,7 +14671,7 @@ msgstr "modificare"
 
 #: src/clparse.cpp:274
 msgid "Enable a campaign only mod"
-msgstr ""
+msgstr "Activează o modificare doar pentru campanie"
 
 #: src/clparse.cpp:275
 msgid "Enable a multiplay only mod"
@@ -14687,7 +14687,7 @@ msgstr ""
 
 #: src/clparse.cpp:278
 msgid "Load a saved skirmish game"
-msgstr ""
+msgstr "Încarcă un joc tip ciocnire salvat"
 
 #: src/clparse.cpp:278
 #: src/clparse.cpp:279
@@ -14696,7 +14696,7 @@ msgstr "salvare"
 
 #: src/clparse.cpp:279
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "Încarcă un joc tip campanie salvat"
 
 #: src/clparse.cpp:280
 msgid "Play in windowed mode"
@@ -14772,7 +14772,7 @@ msgstr ""
 
 #: src/clparse.cpp:304
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "Incepe jocul tip ciocnire cu fișerul de setări dat"
 
 #: src/clparse.cpp:304
 msgid "test"
@@ -15066,7 +15066,7 @@ msgstr "Vizualizare film de început"
 
 #: src/frontend.cpp:142
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr ""
+msgstr "Lipsesc secvențele, descarcă-le de la http://wz2100.net"
 
 #: src/frontend.cpp:147
 #: src/frontend.cpp:151
@@ -15151,11 +15151,11 @@ msgstr "Provocări"
 
 #: src/frontend.cpp:329
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "Încarcă Jocul tip Campanie"
 
 #: src/frontend.cpp:330
 msgid "Load Skirmish Game"
-msgstr ""
+msgstr "Încarcă Jocul tip Ciocnire"
 
 #: src/frontend.cpp:332
 msgid "SINGLE PLAYER"
@@ -15173,12 +15173,12 @@ msgstr "CAMPANII"
 #: src/frontend.cpp:485
 #: src/ingameop.cpp:875
 msgid "Load Campaign Saved Game"
-msgstr ""
+msgstr "Încarcă Jocul tip Campanie Salvat"
 
 #: src/frontend.cpp:491
 #: src/ingameop.cpp:879
 msgid "Load Skirmish Saved Game"
-msgstr ""
+msgstr "Încarcă Jocul tip Ciocnire Salvat"
 
 #: src/frontend.cpp:548
 msgid "MULTI PLAYER"
@@ -15287,7 +15287,7 @@ msgstr "Dezactivat"
 
 #: src/frontend.cpp:703
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:704
 #: src/multiplay.cpp:1921
@@ -15586,7 +15586,7 @@ msgstr ""
 #: src/frontend.cpp:1784
 #: src/frontend.cpp:1818
 msgid "Skirmish/Multiplayer"
-msgstr ""
+msgstr "Ciocnire/Multiplayer"
 
 #: src/frontend.cpp:1791
 msgid "Click to open webpage."
@@ -15752,7 +15752,7 @@ msgstr ""
 
 #: src/ingameop.cpp:887
 msgid "Save Skirmish Game"
-msgstr ""
+msgstr "Salvează Jocul tip Ciocnire"
 
 #: src/init.cpp:448
 #, c-format
@@ -15788,35 +15788,35 @@ msgstr "Ai nevoie de mai multe resurse!"
 
 #: src/integrations/wzdiscordrpc.cpp:201
 msgid "Discord: Can't Join Game"
-msgstr ""
+msgstr "Discord: Nu te poți alătura jocului"
 
 #: src/integrations/wzdiscordrpc.cpp:202
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr ""
+msgstr "Nu te poți alătura unui joc cât timp ești într-un joc. Te rugăm să salvezi / să ieși din jocul curent, să ieși la meniul principal și să încerci din nou."
 
 #: src/integrations/wzdiscordrpc.cpp:232
 msgid "Discord: Finding & Connecting to Game"
-msgstr ""
+msgstr "Discord: Găsire și conectare la joc"
 
 #: src/integrations/wzdiscordrpc.cpp:233
 msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr ""
+msgstr "Se încearcă găsirea și conectarea la jocul specificat de invitația Discord."
 
 #: src/integrations/wzdiscordrpc.cpp:235
 msgid "This may take a moment..."
-msgstr ""
+msgstr "S-ar putea să dureze un moment..."
 
 #: src/integrations/wzdiscordrpc.cpp:260
 msgid "Failed to find game in the lobby server: "
-msgstr ""
+msgstr "Nu s-a putut găsi jocul în serverul lobby: "
 
 #: src/integrations/wzdiscordrpc.cpp:262
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
+msgstr "Este posibil ca jocul să fi început deja, sau gazda poate să fi desființat jocul din lobby."
 
 #: src/integrations/wzdiscordrpc.cpp:265
 msgid "Failed to Find Game"
-msgstr ""
+msgstr "Nu s-a putut găsi jocul"
 
 #: src/integrations/wzdiscordrpc.cpp:293
 msgid "Failed to join the game from the specified invite link, with error:"
@@ -15836,7 +15836,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:371
 msgid "Discord: Connect to Untrusted Lobby?"
-msgstr ""
+msgstr "Discord: Conectare la Lobby-ul Neacreditat?"
 
 #: src/integrations/wzdiscordrpc.cpp:373
 #: src/integrations/wzdiscordrpc.cpp:447
@@ -15861,11 +15861,11 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:479
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
-msgstr ""
+msgstr "Link-ul de invitație pe care l-ai urmat nu este acceptat de această versiune de Warzone 2100."
 
 #: src/integrations/wzdiscordrpc.cpp:480
 msgid "A newer version of Warzone 2100 may be required, if available."
-msgstr ""
+msgstr "Poate fi necesară o versiune mai nouă a Warzone 2100, dacă este disponibilă."
 
 #: src/integrations/wzdiscordrpc.cpp:483
 msgid "Discord: Unsupported / Invalid Invite"
@@ -15873,80 +15873,80 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:549
 msgid "Playing: Campaign"
-msgstr ""
+msgstr "Se joacă: Campanie"
 
 #: src/integrations/wzdiscordrpc.cpp:574
 msgid "Playing: Challenge"
-msgstr ""
+msgstr "Se joacă: Provocare"
 
 #: src/integrations/wzdiscordrpc.cpp:592
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "Se joacă: Ciocnire"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:597
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "Se joacă: %s Ciocnire"
 
 #: src/integrations/wzdiscordrpc.cpp:600
 #: src/integrations/wzdiscordrpc.cpp:836
 msgid "Map:"
-msgstr ""
+msgstr "Hartă:"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:603
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Bots:"
-msgstr ""
+msgstr "Boți:"
 
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "În Lobby Multiplayer"
 
 #: src/integrations/wzdiscordrpc.cpp:652
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "În Joc Multiplayer"
 
 #: src/integrations/wzdiscordrpc.cpp:848
 #, c-format
 msgid "Game Name: \"%s\" by %s"
-msgstr ""
+msgstr "Nume Joc: \"%s\" de %s"
 
 #. TRANSLATORS: "No:" to signify limits - example usage: "No: Tanks,VTOLs"
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:895
 msgid "No:"
-msgstr ""
+msgstr "Fară:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:911
 msgid "Alliances:"
-msgstr ""
+msgstr "Alianțe:"
 
 #: src/integrations/wzdiscordrpc.cpp:927
 msgid "In Menu"
-msgstr ""
+msgstr "În Meniu"
 
 #: src/integrations/wzdiscordrpc.cpp:1076
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "Utilizatorul Discord \"%s\" ar dori să se alăture jocului tău."
 
 #: src/integrations/wzdiscordrpc.cpp:1078
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "Permiți acestui jucător să intre în jocul tău?"
 
 #: src/integrations/wzdiscordrpc.cpp:1082
 #, c-format
 msgid "Join Request from %s"
-msgstr ""
+msgstr "Alătură-te Solicitării de la %s"
 
 #: src/integrations/wzdiscordrpc.cpp:1084
 msgid "Allow"
-msgstr ""
+msgstr "Permite"
 
 #: src/intelmap.cpp:239
 #: src/keybind.cpp:1332
@@ -16727,11 +16727,11 @@ msgstr "Comută Istoricul Conversațiilor Echipei"
 
 #: src/keymap.cpp:496
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Rotește Clădirea în Sens Orar"
 
 #: src/keymap.cpp:497
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Rotește Clădirea în Sens Antiorar"
 
 #: src/keymap.cpp:500
 msgid "Center View on HQ"
@@ -16891,15 +16891,15 @@ msgstr ""
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Sari la următoarea Fabrică"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Sari la următorul Centru de Cercetare"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Sari la următorul Generator de Energie"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
@@ -16979,15 +16979,15 @@ msgstr ""
 
 #: src/loadsave.cpp:335
 msgid "Parent directory"
-msgstr ""
+msgstr "Director părinte"
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory"
-msgstr ""
+msgstr "Directorul de salvare automată"
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "Directorul de salvare automată (nu este permis pentru salvare)"
 
 #: src/loop.cpp:249
 #: src/loop.cpp:265
@@ -18151,11 +18151,11 @@ msgstr "Actualizare disponibilă"
 #: src/updatemanager.cpp:250
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "O nouă versiune în lucru a Warzone 2100 (%s) este disponibilă!"
 
 #: src/updatemanager.cpp:254
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "O nouă versiune în lucru a Warzone 2100 este disponibilă!"
 
 #: src/updatemanager.cpp:256
 msgid "Get Update Now"
