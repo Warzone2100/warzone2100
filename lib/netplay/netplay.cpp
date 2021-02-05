@@ -3458,8 +3458,8 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	// Earlier versions (and earlier lobby servers) restricted this to no more than 11
 	std::vector<GAMESTRUCT> initialBatchOfGameStructs;
 
-	if (!readGameStructsList(tcp_socket, NET_TIMEOUT_DELAY, [&initialBatchOfGameStructs](const GAMESTRUCT &game) -> bool {
-		initialBatchOfGameStructs.push_back(game);
+	if (!readGameStructsList(tcp_socket, NET_TIMEOUT_DELAY, [&initialBatchOfGameStructs](const GAMESTRUCT &lobbyGame) -> bool {
+		initialBatchOfGameStructs.push_back(lobbyGame);
 		return true; // continue enumerating
 	}))
 	{
@@ -3560,7 +3560,7 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 {
 	size_t gamecount = 0;
 	results.clear();
-	bool success = NETenumerateGames([&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &game) -> bool {
+	bool success = NETenumerateGames([&results, &gamecount, startingIndex, resultsLimit, onlyMatchingLocalVersion](const GAMESTRUCT &lobbyGame) -> bool {
 		if (gamecount++ < startingIndex)
 		{
 			// skip this item, continue
@@ -3571,12 +3571,12 @@ bool NETfindGames(std::vector<GAMESTRUCT>& results, size_t startingIndex, size_t
 			// stop processing games
 			return false;
 		}
-		if ((onlyMatchingLocalVersion) && ((game.game_version_major != (unsigned)NETGetMajorVersion()) || (game.game_version_minor != (unsigned)NETGetMinorVersion())))
+		if ((onlyMatchingLocalVersion) && ((lobbyGame.game_version_major != (unsigned)NETGetMajorVersion()) || (lobbyGame.game_version_minor != (unsigned)NETGetMinorVersion())))
 		{
 			// skip this non-matching version, continue
 			return true;
 		}
-		results.push_back(game);
+		results.push_back(lobbyGame);
 		return true;
 	});
 
@@ -3587,13 +3587,13 @@ bool NETfindGame(uint32_t gameId, GAMESTRUCT& output)
 {
 	bool foundMatch = false;
 	memset(&output, 0x00, sizeof(output));
-	NETenumerateGames([&foundMatch, &output, gameId](const GAMESTRUCT &game) -> bool {
-		if (game.gameId != gameId)
+	NETenumerateGames([&foundMatch, &output, gameId](const GAMESTRUCT &lobbyGame) -> bool {
+		if (lobbyGame.gameId != gameId)
 		{
 			// not a match - continue enumerating
 			return true;
 		}
-		output = game;
+		output = lobbyGame;
 		foundMatch = true;
 		return false; // stop searching
 	});
