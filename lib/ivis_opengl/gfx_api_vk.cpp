@@ -3441,7 +3441,8 @@ void VkRoot::flip(int clearMode)
 	}
 	catch (vk::SystemError& e)
 	{
-		debug(LOG_ERROR, "vk::Queue::presentKHR: unhandled error: %s", e.what());
+		debug(LOG_FATAL, "vk::Queue::presentKHR: unhandled error: %s", e.what());
+		presentResult = vk::Result::eErrorUnknown;
 	}
 	if(presentResult == vk::Result::eSuboptimalKHR)
 	{
