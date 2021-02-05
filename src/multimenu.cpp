@@ -70,7 +70,7 @@ std::shared_ptr<W_SCREEN> psRScreen = nullptr; // requester stuff.
 extern char	MultiCustomMapsPath[PATH_MAX];
 
 bool	MultiMenuUp			= false;
-static UDWORD	context = 0;
+static UDWORD	current_context = 0;
 UDWORD	current_numplayers = 4;
 static std::string current_searchString;
 
@@ -404,7 +404,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	const size_t extensionLength = strlen(fileExtension);
 	const unsigned int buttonsX = (mode == MULTIOP_MAP) ? 22 : 17;
 
-	context = mode;
+	current_context = mode;
 	if (mode == MULTIOP_MAP)
 	{
 		// only save these when they select MAP button
@@ -576,7 +576,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 	}
 
 	bool hoverPreview = false;
-	if (id == 0 && context == MULTIOP_MAP)
+	if (id == 0 && current_context == MULTIOP_MAP)
 	{
 		id = widgGetMouseOver(psRScreen);
 		if (id != hoverId)
@@ -597,7 +597,7 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 		DisplayRequestOptionData * pData = static_cast<DisplayRequestOptionData *>(((W_BUTTON *)widgGetFromID(psRScreen, id))->pUserData);
 		assert(pData != nullptr);
 		*chosenValue = (LEVEL_DATASET *)pData->pMapData;
-		*mode = context;
+		*mode = current_context;
 		*isHoverPreview = hoverPreview;
 		hoverPreviewId = id;
 		if (!hoverPreview)
