@@ -1270,7 +1270,7 @@ INT_RETVAL intRunWidgets()
 			{
 				if (auto stats = castStructureStats(sBuildDetails.psStats))
 				{
-					size = stats->size(player.r.y);
+					size = stats->size(playerPos.r.y);
 					type = stats->type;
 				}
 				if (pos2.x == INT32_MAX)
@@ -1396,25 +1396,25 @@ INT_RETVAL intRunWidgets()
 /* Set the shadow for the PowerBar */
 static void intRunPower()
 {
-	UDWORD				statID;
+	UDWORD				highlightedStatID;
 	BASE_STATS			*psStat;
 	UDWORD				quantity = 0;
 
 	/* Find out which button was hilited */
-	statID = widgGetMouseOver(psWScreen);
-	if (statID >= IDSTAT_START && statID <= IDSTAT_END)
+	highlightedStatID = widgGetMouseOver(psWScreen);
+	if (highlightedStatID >= IDSTAT_START && highlightedStatID <= IDSTAT_END)
 	{
-		psStat = ppsStatsList[statID - IDSTAT_START];
+		psStat = ppsStatsList[highlightedStatID - IDSTAT_START];
 		if (psStat->hasType(STAT_STRUCTURE))
 		{
 			//get the structure build points
-			quantity = ((STRUCTURE_STATS *)apsStructStatsList[statID -
+			quantity = ((STRUCTURE_STATS *)apsStructStatsList[highlightedStatID -
 			            IDSTAT_START])->powerToBuild;
 		}
 		else if (psStat->hasType(STAT_TEMPLATE))
 		{
 			//get the template build points
-			quantity = calcTemplatePower(apsTemplateList[statID - IDSTAT_START]);
+			quantity = calcTemplatePower(apsTemplateList[highlightedStatID - IDSTAT_START]);
 		}
 
 		//update the power bars
@@ -1769,7 +1769,7 @@ void makeObsoleteButton(const std::shared_ptr<WIDGET> &parent)
 /* Add the stats widgets to the widget screen */
 /* If psSelected != NULL it specifies which stat should be hilited
    psOwner specifies which object is hilighted on the object bar for this stat*/
-static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
+static bool intAddDebugStatsForm(BASE_STATS **_ppsStatsList, UDWORD numStats)
 {
 	// should this ever be called with psOwner == NULL?
 
@@ -1850,11 +1850,11 @@ static bool intAddDebugStatsForm(BASE_STATS **ppsStatsList, UDWORD numStats)
 		statList->attach(button);
 		button->id = nextButtonId;
 		button->style |= WFORM_SECONDARY;
-		button->setStats(ppsStatsList[i]);
+		button->setStats(_ppsStatsList[i]);
 		statList->addWidgetToLayout(button);
 
-		BASE_STATS *Stat = ppsStatsList[i];
-		WzString tipString = getStatsName(ppsStatsList[i]);
+		BASE_STATS *Stat = _ppsStatsList[i];
+		WzString tipString = getStatsName(_ppsStatsList[i]);
 		unsigned powerCost = 0;
 		W_BARGRAPH *bar;
 		if (Stat->hasType(STAT_STRUCTURE))  // It's a structure.

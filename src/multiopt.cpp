@@ -313,13 +313,13 @@ void recvOptions(NETQUEUE queue)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Host Campaign.
-bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetAIs)
 {
-	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", sGame, sPlayer);
+	debug(LOG_WZ, "Hosting campaign: '%s', player: '%s'", SessionName, hostPlayerName);
 
 	freeMessages();
 
-	if (!NEThostGame(sGame, sPlayer, static_cast<SDWORD>(game.type), 0, 0, 0, game.maxPlayers))
+	if (!NEThostGame(SessionName, hostPlayerName, static_cast<SDWORD>(game.type), 0, 0, 0, game.maxPlayers))
 	{
 		return false;
 	}
@@ -334,7 +334,7 @@ bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 	}
 
 	NetPlay.players[selectedPlayer].ready = false;
-	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
+	sstrcpy(NetPlay.players[selectedPlayer].name, hostPlayerName);
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
@@ -342,7 +342,7 @@ bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs)
 	bMultiMessages = true; // enable messages
 
 	PLAYERSTATS playerStats;
-	loadMultiStats(sPlayer, &playerStats);
+	loadMultiStats(hostPlayerName, &playerStats);
 	setMultiStats(selectedPlayer, playerStats, false);
 	setMultiStats(selectedPlayer, playerStats, true);
 	lookupRatingAsync(selectedPlayer);

@@ -71,14 +71,14 @@ class KeyMapForm : public IntFormAnimated
 {
 protected:
 	KeyMapForm(): IntFormAnimated(false) {}
-	void initialize(bool ingame);
+	void initialize(bool isInGame);
 
 public:
-	static std::shared_ptr<KeyMapForm> make(bool ingame)
+	static std::shared_ptr<KeyMapForm> make(bool isInGame)
 	{
 		class make_shared_enabler: public KeyMapForm {};
 		auto widget = std::make_shared<make_shared_enabler>();
-		widget->initialize(ingame);
+		widget->initialize(isInGame);
 		return widget;
 	}
 
@@ -309,14 +309,14 @@ static void displayKeyMap(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static bool keyMapEditor(bool first, WIDGET *parent, bool ingame)
+static bool keyMapEditor(bool first, WIDGET *parent, bool isInGame)
 {
 	if (first)
 	{
 		loadKeyMap();									// get the current mappings.
 	}
 
-	parent->attach(KeyMapForm::make(ingame));
+	parent->attach(KeyMapForm::make(isInGame));
 
 	/* Stop when the right number or when alphabetically last - not sure...! */
 	/* Go home... */
@@ -408,12 +408,12 @@ bool loadKeyMap()
 	return true;
 }
 
-void KeyMapForm::initialize(bool ingame)
+void KeyMapForm::initialize(bool isInGame)
 {
 	id = KM_FORM;
 
 	attach(keyMapList = ScrollableListWidget::make());
-	if (!ingame)
+	if (!isInGame)
 	{
 		setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
 			psWidget->setGeometry(KM_X, KM_Y, KM_W, KM_H);

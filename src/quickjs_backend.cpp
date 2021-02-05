@@ -2629,22 +2629,22 @@ static JSValue runMap_setMapData(JSContext *ctx, JSValueConst this_val, int argc
 	auto &data = *static_cast<ScriptMapData*>(pOpaque);
 	data.valid = false;
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, argc == 7, "Must have 7 parameters");
-	auto mapWidth = argv[0];
-	auto mapHeight = argv[1];
+	auto jsVal_mapWidth = argv[0];
+	auto jsVal_mapHeight = argv[1];
 	auto texture = argv[2];
 	auto height = argv[3];
 	auto structures = argv[4];
 	auto droids = argv[5];
 	auto features = argv[6];
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(mapWidth), "mapWidth must be number");
-	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(mapHeight), "mapHeight must be number");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_mapWidth), "mapWidth must be number");
+	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsNumber(jsVal_mapHeight), "mapHeight must be number");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, texture), "texture must be array");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, height), "height must be array");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, structures), "structures must be array");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, droids), "droids must be array");
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, JS_IsArray(ctx, features), "features must be array");
-	data.mapWidth = JSValueToInt32(ctx, mapWidth);
-	data.mapHeight = JSValueToInt32(ctx, mapHeight);
+	data.mapWidth = JSValueToInt32(ctx, jsVal_mapWidth);
+	data.mapHeight = JSValueToInt32(ctx, jsVal_mapHeight);
 	SCRIPT_ASSERT_AND_RETURNERROR(ctx, data.mapWidth > 1 && data.mapHeight > 1 && (uint64_t)data.mapWidth*data.mapHeight <= 65536, "Map size out of bounds");
 	size_t N = (size_t)data.mapWidth*data.mapHeight;
 	data.texture.resize(N);
@@ -3116,9 +3116,9 @@ bool quickjs_scripting_instance::debugEvaluateCommand(const std::string &text)
 	return true;
 }
 
-void quickjs_scripting_instance::updateGameTime(uint32_t gameTime)
+void quickjs_scripting_instance::updateGameTime(uint32_t newGameTime)
 {
-	int ret = JS_DefinePropertyValueStr(ctx, global_obj, "gameTime", JS_NewUint32(ctx, gameTime), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
+	int ret = JS_DefinePropertyValueStr(ctx, global_obj, "gameTime", JS_NewUint32(ctx, newGameTime), JS_PROP_WRITABLE | JS_PROP_ENUMERABLE);
 	ASSERT(ret >= 1, "Failed to update gameTime");
 }
 

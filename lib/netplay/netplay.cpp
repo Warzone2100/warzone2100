@@ -337,7 +337,7 @@ void NETresetGamePassword()
 
 // *********** Socket with buffer that read NETMSGs ******************
 
-static size_t NET_fillBuffer(Socket **pSocket, SocketSet *socket_set, uint8_t *bufstart, int bufsize)
+static size_t NET_fillBuffer(Socket **pSocket, SocketSet *pSocketSet, uint8_t *bufstart, int bufsize)
 {
 	Socket *socket = *pSocket;
 	ssize_t size;
@@ -371,9 +371,9 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet *socket_set, uint8_t *b
 		}
 
 		// an error occurred, or the remote host has closed the connection.
-		if (socket_set != nullptr)
+		if (pSocketSet != nullptr)
 		{
-			SocketSet_DelSocket(socket_set, socket);
+			SocketSet_DelSocket(pSocketSet, socket);
 		}
 
 		ASSERT(size <= bufsize, "Socket buffer is too small!");
@@ -2537,22 +2537,22 @@ bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function
 	while (gamecount < gamesavailable)
 	{
 		// Attempt to receive a game description structure
-		GAMESTRUCT game;
-		memset(&game, 0x00, sizeof(game));
-		if (!NETrecvGAMESTRUCT(sock, &game))
+		GAMESTRUCT tmpGame;
+		memset(&tmpGame, 0x00, sizeof(tmpGame));
+		if (!NETrecvGAMESTRUCT(sock, &tmpGame))
 		{
 			debug(LOG_NET, "only %u game(s) received", (unsigned int)gamecount);
 			return false;
 		}
 
-		if (game.desc.host[0] == '\0')
+		if (tmpGame.desc.host[0] == '\0')
 		{
-			memset(game.desc.host, 0, sizeof(game.desc.host));
-			strncpy(game.desc.host, getSocketTextAddress(sock), sizeof(game.desc.host) - 1);
+			memset(tmpGame.desc.host, 0, sizeof(tmpGame.desc.host));
+			strncpy(tmpGame.desc.host, getSocketTextAddress(sock), sizeof(tmpGame.desc.host) - 1);
 		}
 
-		uint32_t Vmgr = (game.future4 & 0xFFFF0000) >> 16;
-		uint32_t Vmnr = (game.future4 & 0x0000FFFF);
+		uint32_t Vmgr = (tmpGame.future4 & 0xFFFF0000) >> 16;
+		uint32_t Vmnr = (tmpGame.future4 & 0x0000FFFF);
 
 		if (NETisGreaterVersion(Vmgr, Vmnr))
 		{
@@ -2560,9 +2560,9 @@ bool readGameStructsList(Socket *sock, unsigned int timeout, const std::function
 			NetPlay.HaveUpgrade = true;
 		}
 
-		if (game.desc.dwSize != 0)
+		if (tmpGame.desc.dwSize != 0)
 		{
-			if (!handleEnumerateGameFunc(game))
+			if (!handleEnumerateGameFunc(tmpGame))
 			{
 				// stop enumerating
 				break;
@@ -2848,8 +2848,6 @@ void NETfixPlayerCount()
 static void NETallowJoining()
 {
 	unsigned int i;
-	char buffer[10] = {'\0'};
-	char *p_buffer;
 	int32_t result;
 	bool connectFailed = true;
 	uint32_t major, minor;
@@ -2926,7 +2924,9 @@ static void NETallowJoining()
 		NETinitQueue(NETnetTmpQueue(i));
 		SocketSet_AddSocket(tmp_socket_set, tmp_socket[i]);
 
-		p_buffer = buffer;
+		char buffer[10] = {'\0'};
+		char *p_buffer = buffer;
+
 		// We check for socket activity (connection), and then we check if we got data, since it is possible to have a connection
 		// and have no data waiting.
 		if (checkSockets(tmp_socket_set, NET_TIMEOUT_DELAY) > 0
@@ -3088,7 +3088,7 @@ static void NETallowJoining()
 						debug(LOG_ERROR, "freeing temp socket %p, couldn't create player!", static_cast<void *>(tmp_socket[i]));
 
 						// Tell the player that we are full.
-						uint8_t rejected = ERROR_FULL;
+						rejected = ERROR_FULL;
 						NETbeginEncode(NETnetTmpQueue(i), NET_REJECTED);
 						NETuint8_t(&rejected);
 						NETend();
@@ -3498,9 +3498,9 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 		if (!ignoreFirstBatch)
 		{
 			// pass the first batch to the handleEnumerateGameFunc
-			for (const auto& game : initialBatchOfGameStructs)
+			for (const auto& lobbyGame : initialBatchOfGameStructs)
 			{
-				if (!handleEnumerateGameFunc(game))
+				if (!handleEnumerateGameFunc(lobbyGame))
 				{
 					// stop enumerating
 					requestSecondBatch = false;
@@ -3539,9 +3539,9 @@ bool NETenumerateGames(const std::function<bool (const GAMESTRUCT& game)>& handl
 	else
 	{
 		// to support earlier lobby servers that don't provide this additional second batch (and optional parameter), just process the first batch
-		for (const auto& game : initialBatchOfGameStructs)
+		for (const auto& lobbyGame : initialBatchOfGameStructs)
 		{
-			if (!handleEnumerateGameFunc(game))
+			if (!handleEnumerateGameFunc(lobbyGame))
 			{
 				// stop enumerating
 				break;

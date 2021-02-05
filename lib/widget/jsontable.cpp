@@ -788,11 +788,11 @@ std::shared_ptr<JSONTableWidget> JSONTableWidget::make(const std::string& title)
 	result->pathBar = PathBarWidget::make(".");
 	result->pathBar->setGeometry(0, 0, 0, iV_GetTextLineSize(font_regular));
 	result->pathBar->pushPathComponent(" $ ");
-	result->pathBar->setOnClickPath([](PathBarWidget& pathBar, size_t componentIndex) {
-		auto psParent = std::dynamic_pointer_cast<JSONTableWidget>(pathBar.parent());
+	result->pathBar->setOnClickPath([](PathBarWidget& pathBarWidget, size_t componentIndex) {
+		auto psParent = std::dynamic_pointer_cast<JSONTableWidget>(pathBarWidget.parent());
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 		std::weak_ptr<JSONTableWidget> psWeakJsonTable = psParent;
-		size_t numComponentsToPop = pathBar.numPathComponents() - (componentIndex + 1);
+		size_t numComponentsToPop = pathBarWidget.numPathComponents() - (componentIndex + 1);
 		if (numComponentsToPop == 0) { return; }
 		widgScheduleTask([psWeakJsonTable, numComponentsToPop]{
 			if (auto jsonTable = psWeakJsonTable.lock())

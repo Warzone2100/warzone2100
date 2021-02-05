@@ -232,7 +232,7 @@ bool sendDroidDisembark(DROID const *psTransporter, DROID const *psDroid);
 bool multiShutdown();
 bool sendLeavingMsg();
 
-bool hostCampaign(char *sGame, char *sPlayer, bool skipResetAIs);
+bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetAIs);
 struct JoinConnectionDescription
 {
 public:

@@ -2563,7 +2563,6 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	WEAPON_STATS		*psWStats;
 	bool				bDirect = false;
 	SDWORD				xdiff, ydiff, mindist, currdist;
-	UDWORD				i;
 	TARGET_ORIGIN tmpOrigin = ORIGIN_UNKNOWN;
 
 	CHECK_STRUCTURE(psStructure);
@@ -2586,7 +2585,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	}
 	psStructure->prevTime = psStructure->time;
 	psStructure->time = gameTime;
-	for (i = 0; i < MAX(1, psStructure->numWeaps); ++i)
+	for (UDWORD i = 0; i < MAX(1, psStructure->numWeaps); ++i)
 	{
 		psStructure->asWeaps[i].prevRot = psStructure->asWeaps[i].rot;
 	}
@@ -2634,7 +2633,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 	if (psStructure->numWeaps > 0)
 	{
 		//structures always update their targets
-		for (i = 0; i < psStructure->numWeaps; i++)
+		for (UDWORD i = 0; i < psStructure->numWeaps; i++)
 		{
 			bDirect = proj_Direct(asWeaponStats + psStructure->asWeaps[i].nStat);
 			if (psStructure->asWeaps[i].nStat > 0 &&
@@ -2909,7 +2908,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				{
 					mindist = (TILE_UNITS * 5 / 2) * (TILE_UNITS * 5 / 2);
 
-					for (i = 0; i < MAX_PLAYERS; i++)
+					for (uint8_t i = 0; i < MAX_PLAYERS; i++)
 					{
 						if (aiCheckAlliances(i, psStructure->player) && i != psStructure->player)
 						{
@@ -3148,7 +3147,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				// Update allies research accordingly
 				if (game.type == LEVEL_TYPE::SKIRMISH && alliancesSharedResearch(game.alliance))
 				{
-					for (i = 0; i < MAX_PLAYERS; i++)
+					for (uint8_t i = 0; i < MAX_PLAYERS; i++)
 					{
 						if (alliances[i][psStructure->player] == ALLIANCE_FORMED)
 						{
@@ -3373,7 +3372,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				if (pointsToAdd >= psDroid->weight) // amount required is a factor of the droid weight
 				{
 					// We should be fully loaded by now.
-					for (i = 0; i < psDroid->numWeaps; i++)
+					for (unsigned i = 0; i < psDroid->numWeaps; i++)
 					{
 						// set rearm value to no runs made
 						psDroid->asWeaps[i].usedAmmo = 0;
@@ -3384,7 +3383,7 @@ static void aiUpdateStructure(STRUCTURE *psStructure, bool isMission)
 				}
 				else
 				{
-					for (i = 0; i < psDroid->numWeaps; i++)		// rearm one weapon at a time
+					for (unsigned i = 0; i < psDroid->numWeaps; i++)		// rearm one weapon at a time
 					{
 						// Make sure it's a rearmable weapon (and so we don't divide by zero)
 						if (psDroid->asWeaps[i].usedAmmo > 0 && asWeaponStats[psDroid->asWeaps[i].nStat].upgrade[psDroid->player].numRounds > 0)
@@ -3552,7 +3551,7 @@ int gateCurrentOpenHeight(const STRUCTURE *psStructure, uint32_t time, int minim
 }
 
 /* The main update routine for all Structures */
-void structureUpdate(STRUCTURE *psBuilding, bool mission)
+void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 {
 	UDWORD widthScatter, breadthScatter;
 	UDWORD emissionInterval, iPointsToAdd, iPointsRequired;
@@ -3561,7 +3560,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 
 	syncDebugStructure(psBuilding, '<');
 
-	if (psBuilding->flags.test(OBJECT_FLAG_DIRTY) && !mission)
+	if (psBuilding->flags.test(OBJECT_FLAG_DIRTY) && !bMission)
 	{
 		visTilesUpdate(psBuilding);
 		psBuilding->flags.set(OBJECT_FLAG_DIRTY, false);
@@ -3653,7 +3652,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	//update the manufacture/research of the building once complete
 	if (psBuilding->status == SS_BUILT)
 	{
-		aiUpdateStructure(psBuilding, mission);
+		aiUpdateStructure(psBuilding, bMission);
 	}
 
 	if (psBuilding->status != SS_BUILT)
@@ -3664,7 +3663,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 		}
 	}
 
-	if (!mission)
+	if (!bMission)
 	{
 		if (psBuilding->status == SS_BEING_BUILT && psBuilding->buildRate == 0 && !structureHasModules(psBuilding))
 		{
@@ -3684,7 +3683,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 	}
 
 	/* Only add smoke if they're visible and they can 'burn' */
-	if (!mission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
+	if (!bMission && psBuilding->visible[selectedPlayer] && canSmoke(psBuilding))
 	{
 		const int32_t damage = getStructureDamage(psBuilding);
 
@@ -3765,7 +3764,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool mission)
 			                                                 aDefaultRepair[psBuilding->player])->time);
 
 			//add the blue flashing effect for multiPlayer
-			if (bMultiPlayer && ONEINTEN && !mission)
+			if (bMultiPlayer && ONEINTEN && !bMission)
 			{
 				Vector3i position;
 				Vector3f *point;
@@ -3832,7 +3831,7 @@ fills the list with Structure that can be built. There is a limit on how many ca
 be built at any one time. Pass back the number available.
 There is now a limit of how many of each type of structure are allowed per mission
 */
-std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD selectedPlayer, UDWORD limit, bool showFavorites)
+std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD _selectedPlayer, UDWORD limit, bool showFavorites)
 {
 	std::vector<STRUCTURE_STATS *> structureList;
 	UDWORD			inc;
@@ -3846,7 +3845,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD selectedPlayer, UDWORD l
 	//if currently on a mission can't build factory/research/power/derricks
 	if (!missionIsOffworld())
 	{
-		for (psCurr = apsStructLists[selectedPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
+		for (psCurr = apsStructLists[_selectedPlayer]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			if (psCurr->pStructureType->type == REF_RESEARCH && psCurr->status == SS_BUILT)
 			{
@@ -3867,10 +3866,10 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD selectedPlayer, UDWORD l
 	for (inc = 0; inc < numStructureStats; inc++)
 	{
 		//if the structure is flagged as available, add it to the list
-		if (apStructTypeLists[selectedPlayer][inc] == AVAILABLE || (includeRedundantDesigns && apStructTypeLists[selectedPlayer][inc] == REDUNDANT))
+		if (apStructTypeLists[_selectedPlayer][inc] == AVAILABLE || (includeRedundantDesigns && apStructTypeLists[_selectedPlayer][inc] == REDUNDANT))
 		{
 			//check not built the maximum allowed already
-			if (asStructureStats[inc].curCount[selectedPlayer] < asStructureStats[inc].upgrade[selectedPlayer].limit)
+			if (asStructureStats[inc].curCount[_selectedPlayer] < asStructureStats[inc].upgrade[_selectedPlayer].limit)
 			{
 				psBuilding = asStructureStats + inc;
 
@@ -3934,7 +3933,7 @@ std::vector<STRUCTURE_STATS *> fillStructureList(UDWORD selectedPlayer, UDWORD l
 					continue;
 				}
 
-				debug(LOG_NEVER, "adding %s (%x)", getStatsName(psBuilding), apStructTypeLists[selectedPlayer][inc]);
+				debug(LOG_NEVER, "adding %s (%x)", getStatsName(psBuilding), apStructTypeLists[_selectedPlayer][inc]);
 				structureList.push_back(psBuilding);
 				if (structureList.size() == limit)
 				{
@@ -6087,11 +6086,11 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
 	else
 	{
 		//start off a new template
-		ProductionRunEntry entry;
-		entry.psTemplate = psTemplate;
-		entry.quantity = add ? 1 : MAX_IN_RUN; //wrap around to max value
-		entry.built = 0;
-		productionRun.push_back(entry);
+		ProductionRunEntry tmplEntry;
+		tmplEntry.psTemplate = psTemplate;
+		tmplEntry.quantity = add ? 1 : MAX_IN_RUN; //wrap around to max value
+		tmplEntry.built = 0;
+		productionRun.push_back(tmplEntry);
 	}
 	//if nothing is allocated then the current factory may have been cancelled
 	if (productionRun.empty())

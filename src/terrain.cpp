@@ -1023,8 +1023,8 @@ static void updateLightMap()
 			if (!pie_GetFogStatus())
 			{
 				// fade to black at the edges of the visible terrain area
-				const float playerX = map_coordf(player.p.x);
-				const float playerY = map_coordf(player.p.z);
+				const float playerX = map_coordf(playerPos.p.x);
+				const float playerY = map_coordf(playerPos.p.z);
 
 				const float distA = i - (playerX - visibleTiles.x / 2);
 				const float distB = (playerX + visibleTiles.x / 2) - i;
@@ -1074,7 +1074,7 @@ static void cullTerrain()
 		{
 			float xPos = world_coord(x * sectorSize + sectorSize / 2);
 			float yPos = world_coord(y * sectorSize + sectorSize / 2);
-			float distance = pow(player.p.x - xPos, 2) + pow(player.p.z - yPos, 2);
+			float distance = pow(playerPos.p.x - xPos, 2) + pow(playerPos.p.z - yPos, 2);
 
 			if (distance > pow((double)world_coord(terrainDistance), 2))
 			{

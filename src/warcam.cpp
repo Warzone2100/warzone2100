@@ -398,14 +398,14 @@ void	camAlignWithTarget(DROID *psDroid)
 	trackingCamera.target = psDroid;
 
 	/* Save away all the view angles */
-	trackingCamera.oldView.r.x = trackingCamera.rotation.x = (float)player.r.x;
-	trackingCamera.oldView.r.y = trackingCamera.rotation.y = (float)player.r.y;
-	trackingCamera.oldView.r.z = trackingCamera.rotation.z = (float)player.r.z;
+	trackingCamera.oldView.r.x = trackingCamera.rotation.x = (float)playerPos.r.x;
+	trackingCamera.oldView.r.y = trackingCamera.rotation.y = (float)playerPos.r.y;
+	trackingCamera.oldView.r.z = trackingCamera.rotation.z = (float)playerPos.r.z;
 
 	/* Store away the old positions and set the start position too */
-	trackingCamera.oldView.p.x = trackingCamera.position.x = (float)player.p.x;
-	trackingCamera.oldView.p.y = trackingCamera.position.y = (float)player.p.y;
-	trackingCamera.oldView.p.z = trackingCamera.position.z = (float)player.p.z;
+	trackingCamera.oldView.p.x = trackingCamera.position.x = (float)playerPos.p.x;
+	trackingCamera.oldView.p.y = trackingCamera.position.y = (float)playerPos.p.y;
+	trackingCamera.oldView.p.z = trackingCamera.position.z = (float)playerPos.p.z;
 
 	//	trackingCamera.rotation.x = player.r.x = DEG(-90);
 	/* No initial velocity for moving */
@@ -536,7 +536,7 @@ static void updateCameraAcceleration(UBYTE update)
 		that we need to find an offset point from it relative to it's present
 		direction
 	*/
-	const int angle = 90 - abs((player.r.x / 182) % 90);
+	const int angle = 90 - abs((playerPos.r.x / 182) % 90);
 
 	const PROPULSION_STATS *psPropStats = &asPropulsionStats[trackingCamera.target->asBits[COMP_PROPULSION]];
 
@@ -840,19 +840,19 @@ static bool camTrackCamera()
 	}
 
 	/* Update the position that's now stored in trackingCamera.position */
-	player.p.x = trackingCamera.position.x;
-	player.p.y = trackingCamera.position.y;
-	player.p.z = trackingCamera.position.z;
+	playerPos.p.x = trackingCamera.position.x;
+	playerPos.p.y = trackingCamera.position.y;
+	playerPos.p.z = trackingCamera.position.z;
 
 	/* Update the rotations that're now stored in trackingCamera.rotation */
-	player.r.x = trackingCamera.rotation.x;
-	player.r.y = trackingCamera.rotation.y;
-	player.r.z = trackingCamera.rotation.z;
+	playerPos.r.x = trackingCamera.rotation.x;
+	playerPos.r.y = trackingCamera.rotation.y;
+	playerPos.r.z = trackingCamera.rotation.z;
 
 	/* There's a minimum for this - especially when John's VTOL code lets them land vertically on cliffs */
-	if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+	if (playerPos.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
 	{
-		player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+		playerPos.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
 	}
 
 	/* Clip the position to the edge of the map */
@@ -874,8 +874,8 @@ static void camRadarJump()
 {
 	radarJumpAnimation.position.update();
 	radarJumpAnimation.rotation.update();
-	player.p = radarJumpAnimation.position.getCurrent();
-	player.r = radarJumpAnimation.rotation.getCurrent();
+	playerPos.p = radarJumpAnimation.position.getCurrent();
+	playerPos.r = radarJumpAnimation.rotation.getCurrent();
 
 	if (!radarJumpAnimation.position.isActive() && !radarJumpAnimation.rotation.isActive())
 	{
@@ -949,10 +949,10 @@ void	camToggleInfo()
 /* Informs the tracking camera that we want to start tracking to a new radar target */
 void requestRadarTrack(SDWORD x, SDWORD y)
 {
-	auto initialPosition = Vector3f(player.p);
+	auto initialPosition = Vector3f(playerPos.p);
 	auto targetPosition = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
 	auto animationDuration = glm::log(glm::length(targetPosition - initialPosition)) * 100;
-	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : player.r;
+	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : playerPos.r;
 	finalRotation.z = 0;
 
 	radarJumpAnimation.position
@@ -962,7 +962,7 @@ void requestRadarTrack(SDWORD x, SDWORD y)
 		.start();
 
 	radarJumpAnimation.rotation
-		.setInitialData(player.r)
+		.setInitialData(playerPos.r)
 		.setFinalData(finalRotation)
 		.setDuration(animationDuration)
 		.start();

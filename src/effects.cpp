@@ -233,9 +233,9 @@ static glm::mat4 positionEffect(const EFFECT *psEffect)
 {
 	/* Establish world position */
 	glm::vec3 dv(
-	    psEffect->position.x - player.p.x,
+	    psEffect->position.x - playerPos.p.x,
 	    psEffect->position.y,
-	    -(psEffect->position.z - player.p.z)
+	    -(psEffect->position.z - playerPos.p.z)
 	);
 
 	return glm::translate(dv);
@@ -1372,7 +1372,7 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 	}
 
 	glm::mat4 modelMatrix = positionEffect(psEffect);
-	modelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f))
+	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
 	               * glm::scale(glm::vec3(psEffect->size / 100.f));
 
 	pie_Draw3DShape(psEffect->imd, psEffect->frameNumber, 0, WZCOL_WHITE, pie_ADDITIVE, EFFECT_EXPLOSION_ADDITIVE, viewMatrix * modelMatrix);
@@ -1382,7 +1382,7 @@ static void renderFirework(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 static void renderBloodEffect(const EFFECT *psEffect, const glm::mat4 &viewMatrix)
 {
 	glm::mat4 modelMatrix = positionEffect(psEffect);
-	modelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f))
+	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f))
 	               * glm::scale(glm::vec3(psEffect->size / 100.f));
 
 	pie_Draw3DShape(getImdFromIndex(MI_BLOOD), psEffect->frameNumber, 0, WZCOL_WHITE, pie_TRANSLUCENT, EFFECT_BLOOD_TRANSPARENCY, viewMatrix * modelMatrix);
@@ -1467,8 +1467,8 @@ static void renderExplosionEffect(const EFFECT *psEffect, const glm::mat4 &viewM
 		/* Always face the viewer! */
 		// TODO This only faces towards the viewer, if the effect is in the middle of the screen... It draws the effect parallel with the screens near/far planes.
 		modelMatrix *=
-			glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
+			glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
 	}
 
 	/* Tesla explosions diminish in size */
@@ -1553,8 +1553,8 @@ static void renderConstructionEffect(const EFFECT *psEffect, const glm::mat4 &vi
 	if (TEST_FACING(psEffect))
 	{
 		modelMatrix *=
-			glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
+			glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
 	}
 
 	/* Scale size according to age */
@@ -1596,8 +1596,8 @@ static void renderSmokeEffect(const EFFECT *psEffect, const glm::mat4 &viewMatri
 	if (TEST_FACING(psEffect))
 	{
 		/* Always face the viewer! */
-		modelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-			glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
+		modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+			glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
 	}
 
 	if (TEST_SCALED(psEffect))

@@ -1201,12 +1201,12 @@ void actionUpdateDroid(DROID *psDroid)
 			else
 			{
 				// if the vtol is close to the target, go around again
-				const Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy();
+				Vector2i diff = (psDroid->pos - psDroid->psActionTarget[0]->pos).xy();
 				const unsigned rangeSq = dot(diff, diff);
 				if (rangeSq < VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 				{
 					// don't do another attack run if already moving away from the target
-					const Vector2i diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy();
+					diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy();
 					if (dot(diff, diff) < VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 					{
 						actionAddVtolAttackRun(psDroid);
@@ -1220,7 +1220,7 @@ void actionUpdateDroid(DROID *psDroid)
 					if (rangeSq > maxRange * maxRange)
 					{
 						// don't do another attack run if already heading for the target
-						const Vector2i diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy();
+						diff = psDroid->sMove.destination - psDroid->psActionTarget[0]->pos.xy();
 						if (dot(diff, diff) > VTOL_ATTACK_TARDIST * VTOL_ATTACK_TARDIST)
 						{
 							moveDroidToDirect(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);

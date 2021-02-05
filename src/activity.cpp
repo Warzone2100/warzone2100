@@ -474,14 +474,14 @@ void ActivityManager::joinedLobbyQuit()
 }
 
 // for skirmish / multiplayer, provide additional data / state
-void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const MULTIPLAYERINGAME& ingame, optional<bool> privateGame)
+void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& multiGame, const MULTIPLAYERINGAME& multiInGame, optional<bool> privateGame)
 {
-	uint8_t maxPlayers = game.maxPlayers;
+	uint8_t maxPlayers = multiGame.maxPlayers;
 	uint8_t numAIBotPlayers = 0;
 	uint8_t numHumanPlayers = 0;
 	uint8_t numAvailableSlots = 0;
 
-	for (size_t index = 0; index < std::min<size_t>(MAX_PLAYERS, (size_t)game.maxPlayers); ++index)
+	for (size_t index = 0; index < std::min<size_t>(MAX_PLAYERS, (size_t)multiGame.maxPlayers); ++index)
 	{
 		PLAYER const &p = NetPlay.players[index];
 		if (p.ai == AI_CLOSED)
@@ -512,20 +512,20 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const
 		}
 	}
 
-	ActivitySink::MultiplayerGameInfo::AllianceOption alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::NO_ALLIANCES;
-	if (game.alliance == ::AllianceType::ALLIANCES)
+	ActivitySink::MultiplayerGameInfo::AllianceOption alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::NO_ALLIANCES;
+	if (multiGame.alliance == ::AllianceType::ALLIANCES)
 	{
-		alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES;
+		alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES;
 	}
-	else if (game.alliance == ::AllianceType::ALLIANCES_TEAMS)
+	else if (multiGame.alliance == ::AllianceType::ALLIANCES_TEAMS)
 	{
-		alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_TEAMS;
+		alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_TEAMS;
 	}
-	else if (game.alliance == ::AllianceType::ALLIANCES_UNSHARED)
+	else if (multiGame.alliance == ::AllianceType::ALLIANCES_UNSHARED)
 	{
-		alliances = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_UNSHARED;
+		alliancesOpt = ActivitySink::MultiplayerGameInfo::AllianceOption::ALLIANCES_UNSHARED;
 	}
-	currentMultiplayGameInfo.alliances = alliances;
+	currentMultiplayGameInfo.alliances = alliancesOpt;
 
 	currentMultiplayGameInfo.maxPlayers = maxPlayers; // accounts for closed slots
 	currentMultiplayGameInfo.numHumanPlayers = numHumanPlayers;
@@ -537,20 +537,20 @@ void ActivityManager::updateMultiplayGameData(const MULTIPLAYERGAME& game, const
 		currentMultiplayGameInfo.privateGame = privateGame.value();
 	}
 
-	currentMultiplayGameInfo.game = game;
+	currentMultiplayGameInfo.game = multiGame;
 	currentMultiplayGameInfo.numAIBotPlayers = numAIBotPlayers;
 	currentMultiplayGameInfo.currentPlayerIdx = selectedPlayer;
 	currentMultiplayGameInfo.players = NetPlay.players;
-	currentMultiplayGameInfo.players.resize(game.maxPlayers);
+	currentMultiplayGameInfo.players.resize(multiGame.maxPlayers);
 
-	currentMultiplayGameInfo.limit_no_tanks = (ingame.flags & MPFLAGS_NO_TANKS) != 0;
-	currentMultiplayGameInfo.limit_no_cyborgs = (ingame.flags & MPFLAGS_NO_CYBORGS) != 0;
-	currentMultiplayGameInfo.limit_no_vtols = (ingame.flags & MPFLAGS_NO_VTOLS) != 0;
-	currentMultiplayGameInfo.limit_no_uplink = (ingame.flags & MPFLAGS_NO_UPLINK) != 0;
-	currentMultiplayGameInfo.limit_no_lassat = (ingame.flags & MPFLAGS_NO_LASSAT) != 0;
-	currentMultiplayGameInfo.force_structure_limits = (ingame.flags & MPFLAGS_FORCELIMITS) != 0;
+	currentMultiplayGameInfo.limit_no_tanks = (multiInGame.flags & MPFLAGS_NO_TANKS) != 0;
+	currentMultiplayGameInfo.limit_no_cyborgs = (multiInGame.flags & MPFLAGS_NO_CYBORGS) != 0;
+	currentMultiplayGameInfo.limit_no_vtols = (multiInGame.flags & MPFLAGS_NO_VTOLS) != 0;
+	currentMultiplayGameInfo.limit_no_uplink = (multiInGame.flags & MPFLAGS_NO_UPLINK) != 0;
+	currentMultiplayGameInfo.limit_no_lassat = (multiInGame.flags & MPFLAGS_NO_LASSAT) != 0;
+	currentMultiplayGameInfo.force_structure_limits = (multiInGame.flags & MPFLAGS_FORCELIMITS) != 0;
 
-	currentMultiplayGameInfo.structureLimits = ingame.structureLimits;
+	currentMultiplayGameInfo.structureLimits = multiInGame.structureLimits;
 
 	if (currentMode == ActivitySink::GameMode::JOINING_IN_PROGRESS || currentMode == ActivitySink::GameMode::JOINING_IN_LOBBY)
 	{

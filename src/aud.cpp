@@ -57,9 +57,9 @@ Vector3f audio_GetPlayerPos()
 {
 	Vector3f pos;
 
-	pos.x = player.p.x;
-	pos.y = player.p.z;
-	pos.z = player.p.y;
+	pos.x = playerPos.p.x;
+	pos.y = playerPos.p.z;
+	pos.z = playerPos.p.y;
 
 	// Invert Y to match QSOUND axes
 	// @NOTE What is QSOUND? Why invert the Y axis?
@@ -73,7 +73,7 @@ Vector3f audio_GetPlayerPos()
  */
 void audio_Get3DPlayerRotAboutVerticalAxis(float *angle)
 {
-	*angle = ((float) player.r.y / DEG_1) * M_PI / 180.0f;
+	*angle = ((float) playerPos.r.y / DEG_1) * M_PI / 180.0f;
 }
 
 /**

@@ -101,12 +101,12 @@ std::string WzUpdateManager::configureUpdateLinkURL(const std::string& url, Buil
 
 	std::vector<std::string> tokens;
 	re2::StringPiece input(url);
-	std::string token;
+	std::string tmpToken;
 
 	RE2 re("({{[\\S]+}})");
-	while (RE2::FindAndConsume(&input, re, &token))
+	while (RE2::FindAndConsume(&input, re, &tmpToken))
 	{
-		tokens.push_back(token);
+		tokens.push_back(tmpToken);
 	}
 
 	std::string resultUrl = url;

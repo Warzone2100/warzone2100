@@ -400,18 +400,18 @@ static PathCoord fpathAStarExplore(PathfindContext &context, PathCoord tileF)
 			*/
 			if (dir % 2 != 0 && !context.dstIgnore.isNonblocking(node.p.x, node.p.y) && !context.dstIgnore.isNonblocking(x, y))
 			{
-				int x, y;
+				int x2, y2;
 
 				// We cannot cut corners
-				x = node.p.x + aDirOffset[(dir + 1) % 8].x;
-				y = node.p.y + aDirOffset[(dir + 1) % 8].y;
-				if (context.isBlocked(x, y))
+				x2 = node.p.x + aDirOffset[(dir + 1) % 8].x;
+				y2 = node.p.y + aDirOffset[(dir + 1) % 8].y;
+				if (context.isBlocked(x2, y2))
 				{
 					continue;
 				}
-				x = node.p.x + aDirOffset[(dir + 7) % 8].x;
-				y = node.p.y + aDirOffset[(dir + 7) % 8].y;
-				if (context.isBlocked(x, y))
+				x2 = node.p.x + aDirOffset[(dir + 7) % 8].x;
+				y2 = node.p.y + aDirOffset[(dir + 7) % 8].y;
+				if (context.isBlocked(x2, y2))
 				{
 					continue;
 				}

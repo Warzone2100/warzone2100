@@ -438,13 +438,13 @@ bool loadDroidTemplates(const char *filename)
 		design.name = WzString::fromUtf8(droidResourceName != nullptr ? droidResourceName : GetDefaultTemplateName(&design));
 		ini.endGroup();
 
-		for (int i = 0; i < MAX_PLAYERS; ++i)
+		for (int playerIdx = 0; playerIdx < MAX_PLAYERS; ++playerIdx)
 		{
 			// Give those meant for humans to all human players.
-			if (NetPlay.players[i].allocated && available)
+			if (NetPlay.players[playerIdx].allocated && available)
 			{
 				design.prefab = false;
-				copyTemplate(i, &design);
+				copyTemplate(playerIdx, &design);
 
 				// This sets up the UI templates for display purposes ONLY--we still only use droidTemplates for making them.
 				// FIXME: Why are we doing this here, and not on demand ?
@@ -455,20 +455,20 @@ bool loadDroidTemplates(const char *filename)
 					DROID_TEMPLATE *psCurr = &*it;
 					if (psCurr->multiPlayerID == design.multiPlayerID)
 					{
-						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getStatsName(&design), i);
+						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getStatsName(&design), playerIdx);
 						break;
 					}
 				}
 				if (it == localTemplates.end())
 				{
-					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getStatsName(&design), i);
+					debug(LOG_NEVER, "Design id:%d (%s) added to UI list, player =%d", design.multiPlayerID, getStatsName(&design), playerIdx);
 					localTemplates.push_back(design);
 				}
 			}
-			else if (!NetPlay.players[i].allocated)	// AI template
+			else if (!NetPlay.players[playerIdx].allocated)	// AI template
 			{
 				design.prefab = true;  // prefabricated templates referenced from VLOs
-				copyTemplate(i, &design);
+				copyTemplate(playerIdx, &design);
 			}
 		}
 		debug(LOG_NEVER, "Droid template found, Name: %s, MP ID: %d, ref: %u, ID: %s, prefab: %s, type:%d (loading)",

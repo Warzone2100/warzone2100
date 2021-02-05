@@ -910,9 +910,9 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 		setLobbyError(ERROR_NOERROR);
 	}
 
-	GAMESTRUCT game;
-	memset(&game, 0x00, sizeof(game));
-	if (!NETfindGame(lobbyGameId, game))
+	GAMESTRUCT lobbyGame;
+	memset(&lobbyGame, 0x00, sizeof(lobbyGame));
+	if (!NETfindGame(lobbyGameId, lobbyGame))
 	{
 		// failed to get list of games from lobby server
 		debug(LOG_ERROR, "Failed to find gameId in lobby server");
@@ -927,23 +927,23 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 		return {};
 	}
 
-	if (game.desc.dwSize == 0)
+	if (lobbyGame.desc.dwSize == 0)
 	{
 		debug(LOG_ERROR, "Invalid game struct");
 		cleanup();
 		return {};
 	}
 
-	if (game.gameId != lobbyGameId)
+	if (lobbyGame.gameId != lobbyGameId)
 	{
-		ASSERT(game.gameId == lobbyGameId, "NETfindGame returned a non-matching game"); // logic error
+		ASSERT(lobbyGame.gameId == lobbyGameId, "NETfindGame returned a non-matching game"); // logic error
 		cleanup();
 		return {};
 	}
 
 	// found the game id, but is it compatible?
 
-	if (!NETisCorrectVersion(game.game_version_major, game.game_version_minor))
+	if (!NETisCorrectVersion(lobbyGame.game_version_major, lobbyGame.game_version_minor))
 	{
 		// incompatible version
 		debug(LOG_ERROR, "Failed to find a matching + compatible game in the lobby server");
@@ -952,14 +952,14 @@ std::vector<JoinConnectionDescription> findLobbyGame(const std::string& lobbyAdd
 	}
 
 	// found the game
-	if (strlen(game.desc.host) == 0)
+	if (strlen(lobbyGame.desc.host) == 0)
 	{
 		debug(LOG_ERROR, "Found the game, but no host details available");
 		cleanup();
 		return {};
 	}
-	std::string host = game.desc.host;
-	return {JoinConnectionDescription(host, game.hostPort)};
+	std::string host = lobbyGame.desc.host;
+	return {JoinConnectionDescription(host, lobbyGame.hostPort)};
 }
 
 static JoinGameResult joinGameInternal(std::vector<JoinConnectionDescription> connection_list, std::shared_ptr<WzTitleUI> oldUI);

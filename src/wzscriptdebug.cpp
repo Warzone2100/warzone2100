@@ -673,13 +673,13 @@ public:
 		}
 		panel->aiPlayerDropdown->setSelectedIndex(0);
 		panel->aiPlayerDropdown->setCalcLayout([maxButtonTextWidth](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
-			auto aiPlayerDropdown = static_cast<DropdownWidget *>(psWidget);
+			auto pAiPlayerDropdown = static_cast<DropdownWidget *>(psWidget);
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
-			int width = maxButtonTextWidth + aiPlayerDropdown->getScrollbarWidth();
+			int width = maxButtonTextWidth + pAiPlayerDropdown->getScrollbarWidth();
 			int x0 = psParent->aiAttachButton->x() - ACTION_BUTTON_SPACING - width;
 			int bottomOfPowerRow = psParent->powerEditField->y() + psParent->powerEditField->height() + ACTION_BUTTON_ROW_SPACING;
-			aiPlayerDropdown->setGeometry(x0, bottomOfPowerRow, width, TAB_BUTTONS_HEIGHT);
+			pAiPlayerDropdown->setGeometry(x0, bottomOfPowerRow, width, TAB_BUTTONS_HEIGHT);
 		});
 
 		// AI names dropdown
@@ -696,13 +696,13 @@ public:
 		}
 		panel->aiDropdown->setSelectedIndex(0);
 		panel->aiDropdown->setCalcLayout([](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
-			auto aiDropdown = static_cast<DropdownWidget *>(psWidget);
+			auto pAiDropdown = static_cast<DropdownWidget *>(psWidget);
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			int x0 = psParent->attachAItoPlayerLabel->x() + psParent->attachAItoPlayerLabel->width() + ACTION_BUTTON_SPACING;
 			int bottomOfPowerRow = psParent->powerEditField->y() + psParent->powerEditField->height() + ACTION_BUTTON_ROW_SPACING;
 			int fillWidth = psParent->aiPlayerDropdown->x() - ACTION_BUTTON_SPACING - x0;
-			aiDropdown->setGeometry(x0, bottomOfPowerRow, fillWidth, TAB_BUTTONS_HEIGHT);
+			pAiDropdown->setGeometry(x0, bottomOfPowerRow, fillWidth, TAB_BUTTONS_HEIGHT);
 		});
 
 		// JSONTable for main game state / info / model
@@ -715,8 +715,8 @@ public:
 			psWidget->setGeometry(0, y0, psParent->width(), psParent->height() - y0);
 		}));
 		panel->table->updateData(fillMainModel());
-		panel->table->setUpdateButtonFunc([](JSONTableWidget& table){
-			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(table.parent());
+		panel->table->setUpdateButtonFunc([](JSONTableWidget& tableWidget){
+			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(tableWidget.parent());
 			if (psParent == nullptr)
 			{
 				return;
@@ -875,8 +875,8 @@ public:
 			psWidget->setGeometry(0, y0, psParent->width(), psParent->runCommandButton->y() - ACTION_BUTTON_ROW_SPACING - y0);
 		}));
 
-		result->table->setUpdateButtonFunc([contextButtonMap](JSONTableWidget& table){
-			auto psParent = std::dynamic_pointer_cast<WzScriptContextsPanel>(table.parent());
+		result->table->setUpdateButtonFunc([contextButtonMap](JSONTableWidget& tableWidget){
+			auto psParent = std::dynamic_pointer_cast<WzScriptContextsPanel>(tableWidget.parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			if (auto scriptDebuggerStrong = psParent->scriptDebugger.lock())
 			{
@@ -1012,8 +1012,8 @@ public:
 			int y0 = psParent->playersDropdown->y() + psParent->playersDropdown->height() + ACTION_BUTTON_ROW_SPACING;
 			psWidget->setGeometry(0, y0, psParent->width(), psParent->height() - y0);
 		}));
-		result->table->setUpdateButtonFunc([](JSONTableWidget& table){
-			auto psParent = std::dynamic_pointer_cast<WzScriptPlayersPanel>(table.parent());
+		result->table->setUpdateButtonFunc([](JSONTableWidget& tableWidget){
+			auto psParent = std::dynamic_pointer_cast<WzScriptPlayersPanel>(tableWidget.parent());
 			if (psParent == nullptr)
 			{
 				return;

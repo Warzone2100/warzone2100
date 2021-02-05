@@ -236,7 +236,7 @@ void shakeStart(unsigned int length)
 void shakeStop()
 {
 	bScreenShakeActive = false;
-	player.r.z = 0;
+	playerPos.r.z = 0;
 }
 
 static void shakeUpdate()
@@ -249,19 +249,19 @@ static void shakeUpdate()
 		screenShakePercentage = PERCENT(gameTime - screenShakeStarted, screenShakeLength);
 		if (screenShakePercentage < 100)
 		{
-			player.r.z = 0 + DEG(screenShakeTable[screenShakePercentage]);
+			playerPos.r.z = 0 + DEG(screenShakeTable[screenShakePercentage]);
 		}
 		if (gameTime > (screenShakeStarted + screenShakeLength))
 		{
 			bScreenShakeActive = false;
-			player.r.z = 0;
+			playerPos.r.z = 0;
 		}
 	}
 	else
 	{
 		if (!getWarCamStatus())
 		{
-			player.r.z = 0;
+			playerPos.r.z = 0;
 		}
 	}
 }
@@ -370,7 +370,7 @@ void ProcessRadarInput()
 				bRadarDragging = true;
 				if (ctrlShiftDown())
 				{
-					player.r.y = 0;
+					playerPos.r.y = 0;
 				}
 			}
 			else if (mousePressed(MOUSE_SELECT))
@@ -715,14 +715,14 @@ void processMouseClickInput()
 	}
 	if (mouseDrag(MOUSE_ROTATE, (UDWORD *)&rotX, (UDWORD *)&rotY) && !rotActive && !bRadarDragging && !getRadarTrackingStatus())
 	{
-		rotationVerticalTracker->startTracking((UWORD)player.r.x);
-		rotationHorizontalTracker->startTracking((UWORD)player.r.y); // negative values caused problems with float conversion
+		rotationVerticalTracker->startTracking((UWORD)playerPos.r.x);
+		rotationHorizontalTracker->startTracking((UWORD)playerPos.r.y); // negative values caused problems with float conversion
 		rotActive = true;
 	}
 	if (mouseDrag(MOUSE_PAN, (UDWORD *)&panMouseX, (UDWORD *)&panMouseY) && !rotActive && !panActive && !bRadarDragging && !getRadarTrackingStatus())
 	{
-		panXTracker->startTracking(player.p.x);
-		panZTracker->startTracking(player.p.z);
+		panXTracker->startTracking(playerPos.p.x);
+		panZTracker->startTracking(playerPos.p.z);
 		panActive = true;
 	}
 
@@ -1075,13 +1075,13 @@ static void handleCameraScrolling()
 	calcScroll(&scrollStepUpDown,    &scrollSpeedUpDown,    scaled_accel, 2 * scaled_accel, scrollDirUpDown    * scaled_max_scroll_speed, (float)timeDiff / GAME_TICKS_PER_SEC);
 
 	/* Get x component of movement */
-	xDif = (int) (cos(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-player.r.y * (M_PI / 32768)) * scrollStepUpDown);
+	xDif = (int) (cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight + sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
 	/* Get y component of movement */
-	yDif = (int) (sin(-player.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-player.r.y * (M_PI / 32768)) * scrollStepUpDown);
+	yDif = (int) (sin(-playerPos.r.y * (M_PI / 32768)) * scrollStepLeftRight - cos(-playerPos.r.y * (M_PI / 32768)) * scrollStepUpDown);
 
 	/* Adjust player's position by these components */
-	player.p.x += xDif;
-	player.p.z += yDif;
+	playerPos.p.x += xDif;
+	playerPos.p.z += yDif;
 
 	CheckScrollLimits();
 
@@ -1152,12 +1152,12 @@ bool CheckInScrollLimits(SDWORD *xPos, SDWORD *zPos)
 //
 bool CheckScrollLimits()
 {
-	SDWORD xp = player.p.x;
-	SDWORD zp = player.p.z;
+	SDWORD xp = playerPos.p.x;
+	SDWORD zp = playerPos.p.z;
 	bool ret = CheckInScrollLimits(&xp, &zp);
 
-	player.p.x = xp;
-	player.p.z = zp;
+	playerPos.p.x = xp;
+	playerPos.p.z = zp;
 
 	return ret;
 }
@@ -1187,12 +1187,12 @@ void displayWorld()
 			float horizontalMovement = panXTracker->setTargetDelta(mouseDeltaX * panningSpeed)->update()->getCurrentDelta();
 			float verticalMovement = -1 * panZTracker->setTargetDelta(mouseDeltaY * panningSpeed)->update()->getCurrentDelta();
 
-			player.p.x = panXTracker->getInitial()
-				+ cos(-player.r.y * (M_PI / 32768)) * horizontalMovement
-				+ sin(-player.r.y * (M_PI / 32768)) * verticalMovement;
-			player.p.z = panZTracker->getInitial()
-				+ sin(-player.r.y * (M_PI / 32768)) * horizontalMovement
-				- cos(-player.r.y * (M_PI / 32768)) * verticalMovement;
+			playerPos.p.x = panXTracker->getInitial()
+				+ cos(-playerPos.r.y * (M_PI / 32768)) * horizontalMovement
+				+ sin(-playerPos.r.y * (M_PI / 32768)) * verticalMovement;
+			playerPos.p.z = panZTracker->getInitial()
+				+ sin(-playerPos.r.y * (M_PI / 32768)) * horizontalMovement
+				- cos(-playerPos.r.y * (M_PI / 32768)) * verticalMovement;
 			CheckScrollLimits();
 		}
 	}
@@ -1202,24 +1202,24 @@ void displayWorld()
 		float mouseDeltaX = mouseX() - rotX;
 		float mouseDeltaY = mouseY() - rotY;
 
-		player.r.y = rotationHorizontalTracker->setTargetDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
+		playerPos.r.y = rotationHorizontalTracker->setTargetDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
 
 		if(bInvertMouse)
 		{
 			mouseDeltaY *= -1;
 		}
 
-		player.r.x = rotationVerticalTracker->setTargetDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
-		player.r.x = glm::clamp(player.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
+		playerPos.r.x = rotationVerticalTracker->setTargetDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
+		playerPos.r.x = glm::clamp(playerPos.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 	}
 
 	if (!mouseDown(MOUSE_ROTATE) && rotActive)
 	{
 		rotActive = false;
 		ignoreRMBC = true;
-		pos.x = player.r.x;
-		pos.y = player.r.y;
-		pos.z = player.r.z;
+		pos.x = playerPos.r.x;
+		pos.y = playerPos.r.y;
+		pos.z = playerPos.r.z;
 		camInformOfRotation(&pos);
 		bRadarDragging = false;
 	}
@@ -1881,7 +1881,7 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 						AddDerrickBurningMessage();
 					}
 
-					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], psFeature->pos.xy(), player.r.y), ctrlShiftDown());
+					sendDroidInfo(psCurr, DroidOrder(DORDER_BUILD, &asStructureStats[i], psFeature->pos.xy(), playerPos.r.y), ctrlShiftDown());
 					FeedbackOrderGiven();
 				}
 			}
@@ -2495,13 +2495,13 @@ static UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] =
 /* Only deals with one type of droid being selected!!!! */
 /*	We'll have to make it assess which selection is to be dominant in the case
 	of multiple selections */
-static SELECTION_TYPE	establishSelection(UDWORD selectedPlayer)
+static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
 {
 	DROID *psDominant = nullptr;
 	UBYTE CurrWeight = UBYTE_MAX;
 	SELECTION_TYPE selectionClass = SC_INVALID;
 
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID *psDroid = apsDroidLists[_selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.

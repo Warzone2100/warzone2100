@@ -25,9 +25,14 @@
 #pragma warning( push )
 #pragma warning( disable : 4191 ) // warning C4191: '<function-style-cast>': unsafe conversion from 'PFN_vkVoidFunction' to 'PFN_vk<...>'
 #endif
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshadow"
+#endif
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 9
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-copy" // Ignore warnings caused by vulkan.hpp 148
+#pragma GCC diagnostic ignored "-Wshadow"
 #endif
 #define VULKAN_HPP_TYPESAFE_CONVERSION 1
 #include <vulkan/vulkan.hpp>

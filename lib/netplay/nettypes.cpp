@@ -381,9 +381,9 @@ void NETinsertRawData(NETQUEUE queue, uint8_t *data, size_t dataLen)
 	receiveQueue(queue)->writeRawData(data, dataLen);
 }
 
-void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *message)
+void NETinsertMessageFromNet(NETQUEUE queue, NetMessage const *newMessage)
 {
-	receiveQueue(queue)->pushMessage(*message);
+	receiveQueue(queue)->pushMessage(*newMessage);
 }
 
 bool NETisMessageReady(NETQUEUE queue)
@@ -778,18 +778,18 @@ void NETVector2i(Vector2i *vp)
 	queueAuto(*vp);
 }
 
-void NETnetMessage(NetMessage const **message)
+void NETnetMessage(NetMessage const **msg)
 {
 	if (NETgetPacketDir() == PACKET_ENCODE)
 	{
-		queueAuto(*const_cast<NetMessage *>(*message));  // Const cast safe when encoding.
+		queueAuto(*const_cast<NetMessage *>(*msg));  // Const cast safe when encoding.
 	}
 
 	if (NETgetPacketDir() == PACKET_DECODE)
 	{
 		NetMessage *m = new NetMessage;
 		queueAuto(*m);
-		*message = m;
+		*msg = m;
 		return;
 	}
 }

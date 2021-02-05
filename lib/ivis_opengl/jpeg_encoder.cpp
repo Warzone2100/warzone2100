@@ -23,6 +23,15 @@
 
 // Cleaned up and removed the assembly for use in Warzone.
 
+#if defined( _MSC_VER )
+	#pragma warning( disable : 4459 ) // warning C4459: declaration of 'identifier' hides global declaration
+#endif
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wshadow"
+#elif defined(__GNUC__)
+	#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+
 #include "jpeg_encoder.h"
 
 #include <assert.h>

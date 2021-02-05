@@ -172,7 +172,7 @@ UWORD barMode;
 bool	selectAttempt = false;
 
 /// Vectors that hold the player and camera directions and positions
-iView	player;
+iView	playerPos;
 
 /// How far away are we from the terrain
 static float distance;
@@ -788,7 +788,7 @@ void draw3DScene()
 	pie_SetGeometricOffset(rendSurface.width / 2, geoOffset);
 
 	/* Now, draw the terrain */
-	drawTiles(&player);
+	drawTiles(&playerPos);
 
 	wzPerfBegin(PERF_MISC, "3D scene - misc and text");
 
@@ -919,9 +919,9 @@ void draw3DScene()
 		txtCurrentTime.render(RET_X + 134, 422 + E_H, WZCOL_TEXT_MEDIUM);
 	}
 
-	while (player.r.y > DEG(360))
+	while (playerPos.r.y > DEG(360))
 	{
-		player.r.y -= DEG(360);
+		playerPos.r.y -= DEG(360);
 	}
 
 	/* If we don't have an active camera track, then track terrain height! */
@@ -1039,15 +1039,15 @@ static void updatePlayerAverageCentreTerrainHeight()
 
 inline bool quadIntersectsWithScreen(const QUAD & quad)
 {
-	const int screenWidth = pie_GetVideoBufferWidth();
-	const int screenHeight = pie_GetVideoBufferHeight();
+	const int width = pie_GetVideoBufferWidth();
+	const int height = pie_GetVideoBufferHeight();
 	for (int iCoordIdx = 0; iCoordIdx < 4; ++iCoordIdx)
 	{
-		if ((quad.coords[iCoordIdx].x < 0) || (quad.coords[iCoordIdx].x > screenWidth))
+		if ((quad.coords[iCoordIdx].x < 0) || (quad.coords[iCoordIdx].x > width))
 		{
 			continue;
 		}
-		if ((quad.coords[iCoordIdx].y < 0) || (quad.coords[iCoordIdx].y > screenHeight))
+		if ((quad.coords[iCoordIdx].y < 0) || (quad.coords[iCoordIdx].y > height))
 		{
 			continue;
 		}
@@ -1255,9 +1255,9 @@ bool init3DView()
 	// distance is not saved, so initialise it now
 	distance = war_GetMapZoom(); // distance
 
-	player.r.z = 0; // roll
-	player.r.y = 0; // rotation
-	player.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
+	playerPos.r.z = 0; // roll
+	playerPos.r.y = 0; // rotation
+	playerPos.r.x = DEG(360 + INITIAL_STARTING_PITCH); // angle
 
 	if (!initTerrain())
 	{
@@ -1289,20 +1289,20 @@ void shutdown3DView()
 /// set the view position from save game
 void disp3d_setView(iView *newView)
 {
-	player = *newView;
+	playerPos = *newView;
 }
 
 /// reset the camera rotation (used for save games <= 10)
 void disp3d_oldView()
 {
-	player.r.y = OLD_INITIAL_ROTATION; // rotation
-	player.p.y = OLD_START_HEIGHT; // height
+	playerPos.r.y = OLD_INITIAL_ROTATION; // rotation
+	playerPos.p.y = OLD_START_HEIGHT; // height
 }
 
 /// get the view position for save game
 void disp3d_getView(iView *newView)
 {
-	*newView = player;
+	*newView = playerPos;
 }
 
 /// Are the current world coordinates within the processed range of tiles on the screen?
@@ -1310,8 +1310,8 @@ void disp3d_getView(iView *newView)
 bool quickClipXYToMaximumTilesFromCurrentPosition(SDWORD x, SDWORD y)
 {
 	// +2 for edge of visibility fading (see terrain.cpp)
-	if (std::abs(x - player.p.x) < world_coord(visibleTiles.x / 2 + 2) &&
-		std::abs(y - player.p.z) < world_coord(visibleTiles.y / 2 + 2))
+	if (std::abs(x - playerPos.p.x) < world_coord(visibleTiles.x / 2 + 2) &&
+		std::abs(y - playerPos.p.z) < world_coord(visibleTiles.y / 2 + 2))
 	{
 		return (true);
 	}
@@ -1325,12 +1325,12 @@ bool quickClipXYToMaximumTilesFromCurrentPosition(SDWORD x, SDWORD y)
 bool clipXY(SDWORD x, SDWORD y)
 {
 	// +2 for edge of visibility fading (see terrain.cpp)
-	if (std::abs(x - player.p.x) < world_coord(visibleTiles.x / 2 + 2) &&
-	    std::abs(y - player.p.z) < world_coord(visibleTiles.y / 2 + 2))
+	if (std::abs(x - playerPos.p.x) < world_coord(visibleTiles.x / 2 + 2) &&
+	    std::abs(y - playerPos.p.z) < world_coord(visibleTiles.y / 2 + 2))
 	{
 		// additional check using the tileScreenVisible matrix
-		int mapX = map_coord(x - player.p.x) + visibleTiles.x / 2;
-		int mapY = map_coord(y - player.p.z) + visibleTiles.y / 2;
+		int mapX = map_coord(x - playerPos.p.x) + visibleTiles.x / 2;
+		int mapY = map_coord(y - playerPos.p.z) + visibleTiles.y / 2;
 		if (mapX < 0 || mapY < 0)
 		{
 			return false;
@@ -1359,8 +1359,8 @@ bool clipXYZNormalized(const Vector3i &normalizedPosition, const glm::mat4 &view
 bool clipXYZ(int x, int y, int z, const glm::mat4 &viewMatrix)
 {
 	Vector3i position;
-	position.x = x - player.p.x;
-	position.z = -(y - player.p.z);
+	position.x = x - playerPos.p.x;
+	position.z = -(y - playerPos.p.z);
 	position.y = z;
 
 	return clipXYZNormalized(position, viewMatrix);
@@ -1549,10 +1549,10 @@ void	renderProjectile(PROJECTILE *psCurr, const glm::mat4 &viewMatrix)
 		}
 
 		/* Get bullet's x coord */
-		dv.x = st.pos.x - player.p.x;
+		dv.x = st.pos.x - playerPos.p.x;
 
 		/* Get it's y coord (z coord in the 3d world */
-		dv.z = -(st.pos.y - player.p.z);
+		dv.z = -(st.pos.y - playerPos.p.z);
 
 		/* What's the present height of the bullet? */
 		dv.y = st.pos.z;
@@ -1685,9 +1685,9 @@ static void drawLineBuild(STRUCTURE_STATS const *psStats, Vector2i pos, Vector2i
 		StructureBounds b = getStructureBounds(psStats, cur, direction);
 		int z = 0;
 		for (int j = 0; j <= b.size.y; ++j)
-			for (int i = 0; i <= b.size.x; ++i)
+			for (int k = 0; k <= b.size.x; ++k)
 			{
-				z = std::max(z, map_TileHeight(b.map.x + i, b.map.y + j));
+				z = std::max(z, map_TileHeight(b.map.x + k, b.map.y + j));
 			}
 		Blueprint blueprint(psStats, Vector3i(cur, z), snapDirection(direction), 0, state); // snapDirection may be unnecessary here
 		blueprints.push_back(blueprint);
@@ -1959,15 +1959,15 @@ static void displayDynamicObjects(const glm::mat4 &viewMatrix)
 /// Sets the player's position and view angle - defaults player rotations as well
 void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 {
-	player.p.x = world_coord(x);
-	player.p.z = world_coord(y);
-	player.r.z = 0;
+	playerPos.p.x = world_coord(x);
+	playerPos.p.z = world_coord(y);
+	playerPos.r.z = 0;
 
 	updatePlayerAverageCentreTerrainHeight();
 
-	if(player.p.y < averageCentreTerrainHeight)
+	if(playerPos.p.y < averageCentreTerrainHeight)
 	{
-		player.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
+		playerPos.p.y = averageCentreTerrainHeight + CAMERA_PIVOT_HEIGHT - HEIGHT_TRACK_INCREMENTS;
 	}
 
 	if (getWarCamStatus())
@@ -1979,16 +1979,16 @@ void setViewPos(UDWORD x, UDWORD y, WZ_DECL_UNUSED bool Pan)
 /// Get the player position
 Vector2i getPlayerPos()
 {
-	return player.p.xz();
+	return playerPos.p.xz();
 }
 
 /// Set the player position
 void setPlayerPos(SDWORD x, SDWORD y)
 {
 	ASSERT(x >= 0 && x < world_coord(mapWidth) && y >= 0 && y < world_coord(mapHeight), "Position off map");
-	player.p.x = x;
-	player.p.z = y;
-	player.r.z = 0;
+	playerPos.p.x = x;
+	playerPos.p.z = y;
+	playerPos.r.z = 0;
 }
 
 /// Get the distance at which the player views the world
@@ -2026,9 +2026,9 @@ void	renderFeature(FEATURE *psFeature, const glm::mat4 &viewMatrix)
 	}
 
 	Vector3i dv = Vector3i(
-	         psFeature->pos.x - player.p.x,
+	         psFeature->pos.x - playerPos.p.x,
 	         psFeature->pos.z, // features sits at the height of the tile it's centre is on
-	         -(psFeature->pos.y - player.p.z)
+	         -(psFeature->pos.y - playerPos.p.z)
 	     );
 
 	glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::rotate(UNDEG(-psFeature->rot.direction), glm::vec3(0.f, 1.f, 0.f));
@@ -2117,12 +2117,12 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 		return;
 	}
 
-	dv.x = msgX - player.p.x;
+	dv.x = msgX - playerPos.p.x;
 #if defined( _MSC_VER )
 	#pragma warning( push )
 	#pragma warning( disable : 4146 ) // warning C4146: unary minus operator applied to unsigned type, result still unsigned
 #endif
-	dv.z = -(msgY - player.p.z);
+	dv.z = -(msgY - playerPos.p.z);
 #if defined( _MSC_VER )
 	#pragma warning( pop )
 #endif
@@ -2166,8 +2166,8 @@ void renderProximityMsg(PROXIMITY_DISPLAY *psProxDisp, const glm::mat4& viewMatr
 		}
 	}
 
-	modelMatrix *= glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-		glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
+	modelMatrix *= glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+		glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
 
 	if (proxImd)
 	{
@@ -2299,8 +2299,8 @@ static void renderStructureTurrets(STRUCTURE *psStructure, iIMDShape *strImd, PI
 
 							matrix *= glm::translate(glm::vec3(weaponImd[i]->connectors->x, weaponImd[i]->connectors->z - 12, weaponImd[i]->connectors->y)) *
 								glm::rotate(UNDEG(rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
-								glm::rotate(UNDEG(-player.r.y), glm::vec3(0.f, 1.f, 0.f)) *
-								glm::rotate(UNDEG(-player.r.x), glm::vec3(1.f, 0.f, 0.f));
+								glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
+								glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(1.f, 0.f, 0.f));
 							pie_Draw3DShape(pRepImd, getModularScaledGraphicsTime(pRepImd->animInterval, pRepImd->numFrames), colour, buildingBrightness, pie_ADDITIVE, 192, modelViewMatrix * matrix);
 						}
 					}
@@ -2379,7 +2379,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
 	int colour, pieFlagData, ecmFlag = 0, pieFlag = 0;
 	PIELIGHT buildingBrightness;
-	const Vector3i dv = Vector3i(psStructure->pos.x - player.p.x, psStructure->pos.z, -(psStructure->pos.y - player.p.z));
+	const Vector3i dv = Vector3i(psStructure->pos.x - playerPos.p.x, psStructure->pos.z, -(psStructure->pos.y - playerPos.p.z));
 	bool bHitByElectronic = false;
 	bool defensive = false;
 	iIMDShape *strImd = psStructure->sDisplay.imd;
@@ -2524,14 +2524,14 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 	//store the frame number for when deciding what has been clicked on
 	psPosition->frameNumber = currentGameFrame;
 
-	dv.x = psPosition->coords.x - player.p.x;
-	dv.z = -(psPosition->coords.y - player.p.z);
+	dv.x = psPosition->coords.x - playerPos.p.x;
+	dv.z = -(psPosition->coords.y - playerPos.p.z);
 	dv.y = psPosition->coords.z;
 
 	//quick check for invalid data
 	ASSERT_OR_RETURN(, psPosition->factoryType < NUM_FLAG_TYPES && psPosition->factoryInc < MAX_FACTORY_FLAG_IMDS, "Invalid assembly point");
 
-	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::scale(glm::vec3(.5f)) * glm::rotate(-UNDEG(player.r.y), glm::vec3(0,1,0));
+	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) * glm::scale(glm::vec3(.5f)) * glm::rotate(-UNDEG(playerPos.r.y), glm::vec3(0,1,0));
 
 	pieFlag = pie_TRANSLUCENT;
 	pieFlagData = BLUEPRINT_OPACITY;
@@ -2584,8 +2584,8 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	pie_SetShaderStretchDepth(psStructure->pos.z - psStructure->foundationDepth);
 
 	/* Establish where it is in the world */
-	dv.x = psStructure->pos.x - player.p.x;
-	dv.z = -(psStructure->pos.y - player.p.z);
+	dv.x = psStructure->pos.x - playerPos.p.x;
+	dv.z = -(psStructure->pos.y - playerPos.p.z);
 	dv.y = psStructure->pos.z;
 
 	dv.y -= gateCurrentOpenHeight(psStructure, graphicsTime, 1);  // Make gate stick out by 1 unit, so that the tops of ┼ gates can safely have heights differing by 1 unit.
@@ -3423,8 +3423,8 @@ static void locateMouse()
 				/* We've got a match for our mouse coords */
 				if (inQuad(&pt, &quad))
 				{
-					mousePos.x = player.p.x + world_coord(j);
-					mousePos.y = player.p.z + world_coord(i);
+					mousePos.x = playerPos.p.x + world_coord(j);
+					mousePos.y = playerPos.p.z + world_coord(i);
 					mousePos += positionInQuad(pt, quad);
 
 					if (mousePos.x < 0)
@@ -3466,12 +3466,12 @@ static void renderSurroundings(const glm::mat4 &viewMatrix)
 	{
 		wind = std::remainder(wind + graphicsTimeAdjustedIncrement(windSpeed), 360.0f);
 	}
-	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, player.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(RADIANS(wind), glm::vec3(0.f, 1.f, 0.f)));
+	pie_DrawSkybox(skybox_scale, viewMatrix * glm::translate(glm::vec3(0.f, playerPos.p.y - skybox_scale / 8.f, 0.f)) * glm::rotate(RADIANS(wind), glm::vec3(0.f, 1.f, 0.f)));
 }
 
-static int calculateCameraHeight(int mapHeight)
+static int calculateCameraHeight(int _mapHeight)
 {
-	return static_cast<int>(std::ceil(static_cast<float>(mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
+	return static_cast<int>(std::ceil(static_cast<float>(_mapHeight) / static_cast<float>(HEIGHT_TRACK_INCREMENTS))) * HEIGHT_TRACK_INCREMENTS + CAMERA_PIVOT_HEIGHT;
 }
 
 int calculateCameraHeightAt(int tileX, int tileY)
@@ -3494,19 +3494,19 @@ static void trackHeight(int desiredHeight)
 	}
 	lastHeightAdjustmentRealTime = realTime;
 
-	if ((desiredHeight == player.p.y) && ((heightSpeed > -5.f) && (heightSpeed < 5.f)))
+	if ((desiredHeight == playerPos.p.y) && ((heightSpeed > -5.f) && (heightSpeed < 5.f)))
 	{
 		heightSpeed = 0.0f;
 		return;
 	}
 
-	float separation = desiredHeight - player.p.y;	// How far are we from desired height?
+	float separation = desiredHeight - playerPos.p.y;	// How far are we from desired height?
 
 	// d²/dt² player.p.y = -ACCEL_CONSTANT * (player.p.y - desiredHeight) - VELOCITY_CONSTANT * d/dt player.p.y
 	solveDifferential2ndOrder(&separation, &heightSpeed, ACCEL_CONSTANT, VELOCITY_CONSTANT, (float) deltaTrackHeightRealTime / (float) GAME_TICKS_PER_SEC);
 
 	/* Adjust the height accordingly */
-	player.p.y = desiredHeight - static_cast<int>(std::trunc(separation));
+	playerPos.p.y = desiredHeight - static_cast<int>(std::trunc(separation));
 }
 
 /// Select the next energy bar display mode
@@ -3979,7 +3979,7 @@ static uint32_t randHash(std::initializer_list<uint32_t> data) {
 /// Draw the construction or demolish lines for one droid
 static void addConstructionLine(DROID *psDroid, STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 {
-	auto deltaPlayer = Vector3f(-player.p.x, 0, player.p.z);
+	auto deltaPlayer = Vector3f(-playerPos.p.x, 0, playerPos.p.z);
 	auto pt0 = Vector3f(psDroid->pos.x, psDroid->pos.z + 24, -psDroid->pos.y) + deltaPlayer;
 
 	int constructPoints = constructorPoints(asConstructStats + psDroid->asBits[COMP_CONSTRUCT], psDroid->player);

@@ -1496,29 +1496,29 @@ void wzGetMinimumWindowSizeForDisplayScaleFactor(unsigned int *minWindowWidth, u
 	}
 }
 
-void wzGetMaximumDisplayScaleFactorsForWindowSize(unsigned int windowWidth, unsigned int windowHeight, float *horizScaleFactor, float *vertScaleFactor)
+void wzGetMaximumDisplayScaleFactorsForWindowSize(unsigned int width, unsigned int height, float *horizScaleFactor, float *vertScaleFactor)
 {
 	if (horizScaleFactor != nullptr)
 	{
-		*horizScaleFactor = (float)windowWidth / (float)MIN_WZ_GAMESCREEN_WIDTH;
+		*horizScaleFactor = (float)width / (float)MIN_WZ_GAMESCREEN_WIDTH;
 	}
 	if (vertScaleFactor != nullptr)
 	{
-		*vertScaleFactor = (float)windowHeight / (float)MIN_WZ_GAMESCREEN_HEIGHT;
+		*vertScaleFactor = (float)height / (float)MIN_WZ_GAMESCREEN_HEIGHT;
 	}
 }
 
-float wzGetMaximumDisplayScaleFactorForWindowSize(unsigned int windowWidth, unsigned int windowHeight)
+float wzGetMaximumDisplayScaleFactorForWindowSize(unsigned int width, unsigned int height)
 {
 	float maxHorizScaleFactor = 0.f, maxVertScaleFactor = 0.f;
-	wzGetMaximumDisplayScaleFactorsForWindowSize(windowWidth, windowHeight, &maxHorizScaleFactor, &maxVertScaleFactor);
+	wzGetMaximumDisplayScaleFactorsForWindowSize(width, height, &maxHorizScaleFactor, &maxVertScaleFactor);
 	return std::min(maxHorizScaleFactor, maxVertScaleFactor);
 }
 
 // returns: the maximum display scale percentage (sourced from wzAvailableDisplayScales), or 0 if window is below the minimum required size for the minimum supported display scale
-unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int windowWidth, unsigned int windowHeight)
+unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int width, unsigned int height)
 {
-	float maxDisplayScaleFactor = wzGetMaximumDisplayScaleFactorForWindowSize(windowWidth, windowHeight);
+	float maxDisplayScaleFactor = wzGetMaximumDisplayScaleFactorForWindowSize(width, height);
 	unsigned int maxDisplayScalePercentage = floor(maxDisplayScaleFactor * 100.f);
 
 	auto availableDisplayScales = wzAvailableDisplayScales();
@@ -1567,11 +1567,11 @@ unsigned int wzGetSuggestedDisplayScaleForCurrentWindowSize(unsigned int desired
 	return maxDisplayScale;
 }
 
-bool wzWindowSizeIsSmallerThanMinimumRequired(unsigned int windowWidth, unsigned int windowHeight, float displayScaleFactor = current_displayScaleFactor)
+bool wzWindowSizeIsSmallerThanMinimumRequired(unsigned int width, unsigned int height, float displayScaleFactor = current_displayScaleFactor)
 {
 	unsigned int minWindowWidth = 0, minWindowHeight = 0;
 	wzGetMinimumWindowSizeForDisplayScaleFactor(&minWindowWidth, &minWindowHeight, displayScaleFactor);
-	return ((windowWidth < minWindowWidth) || (windowHeight < minWindowHeight));
+	return ((width < minWindowWidth) || (height < minWindowHeight));
 }
 
 void processScreenSizeChangeNotificationIfNeeded()
@@ -2560,18 +2560,18 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 	SDL_WZBackend_GetDrawableSize(WZwindow, &drawableWidth, &drawableHeight);
 
 	// Obtain the logical window size (in points)
-	int windowWidth, windowHeight = 0;
-	SDL_GetWindowSize(WZwindow, &windowWidth, &windowHeight);
+	int logicalWindowWidth, logicalWindowHeight = 0;
+	SDL_GetWindowSize(WZwindow, &logicalWindowWidth, &logicalWindowHeight);
 
-	debug(LOG_WZ, "Window Logical Size (%d, %d) vs Drawable Size in Pixels (%d, %d)", windowWidth, windowHeight, drawableWidth, drawableHeight);
+	debug(LOG_WZ, "Window Logical Size (%d, %d) vs Drawable Size in Pixels (%d, %d)", logicalWindowWidth, logicalWindowHeight, drawableWidth, drawableHeight);
 
 	if (horizScaleFactor != nullptr)
 	{
-		*horizScaleFactor = ((float)drawableWidth / (float)windowWidth) * current_displayScaleFactor;
+		*horizScaleFactor = ((float)drawableWidth / (float)logicalWindowWidth) * current_displayScaleFactor;
 	}
 	if (vertScaleFactor != nullptr)
 	{
-		*vertScaleFactor = ((float)drawableHeight / (float)windowHeight) * current_displayScaleFactor;
+		*vertScaleFactor = ((float)drawableHeight / (float)logicalWindowHeight) * current_displayScaleFactor;
 	}
 
 	int displayIndex = SDL_GetWindowDisplayIndex(WZwindow);

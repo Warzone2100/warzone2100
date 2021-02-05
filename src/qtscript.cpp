@@ -2115,9 +2115,9 @@ bool scripting_engine::writeLabels(const char *filename)
 			ini.setValue("triggered", l.triggered);
 			std::vector<WzString> list;
 			list.reserve(l.idlist.size());
-			for (int i : l.idlist)
+			for (int val : l.idlist)
 			{
-				list.push_back(WzString::number(i));
+				list.push_back(WzString::number(val));
 			}
 			ini.setValue("members", list);
 			ini.setValue("label", WzString::fromUtf8(key));

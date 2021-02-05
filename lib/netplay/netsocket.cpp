@@ -436,11 +436,11 @@ static int socketThreadFunction(void *)
 
 				// Write data.
 				// FIXME SOMEHOW AAARGH This send() call can't block, but unless the socket is not set to blocking (setting the socket to nonblocking had better work, or else), does anyway (at least sometimes, when someone quits). Not reproducible except in public releases.
-				ssize_t ret = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
-				if (ret != SOCKET_ERROR)
+				ssize_t retSent = send(sock->fd[SOCK_CONNECTION], reinterpret_cast<char *>(&writeQueue[0]), writeQueue.size(), MSG_NOSIGNAL);
+				if (retSent != SOCKET_ERROR)
 				{
 					// Erase as much data as written.
-					writeQueue.erase(writeQueue.begin(), writeQueue.begin() + ret);
+					writeQueue.erase(writeQueue.begin(), writeQueue.begin() + retSent);
 					if (writeQueue.empty())
 					{
 						socketThreadWrites.erase(w);  // Nothing left to write, delete from pending list.

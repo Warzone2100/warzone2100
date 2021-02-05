@@ -735,9 +735,9 @@ static bool checkQwertyKeys()
 			aquired = true;
 
 			/* Store away the position and view angle */
-			qwertyKeyMappings[tableEntry].xPos = player.p.x;
-			qwertyKeyMappings[tableEntry].yPos = player.p.z;
-			qwertyKeyMappings[tableEntry].spin = player.r.y;
+			qwertyKeyMappings[tableEntry].xPos = playerPos.p.x;
+			qwertyKeyMappings[tableEntry].yPos = playerPos.p.z;
+			qwertyKeyMappings[tableEntry].spin = playerPos.r.y;
 		}
 	}
 	return aquired;
@@ -818,8 +818,8 @@ void keyProcessMappings(bool bExclude)
 					continue;
 				}
 
-				bool bIsKeyCombination = otherKey->metaKeyCode != KEY_IGNORE;
-				if (bIsKeyCombination && keyPressed(otherKey->subKeyCode))
+				bool bIsOtherKeyCombination = otherKey->metaKeyCode != KEY_IGNORE;
+				if (bIsOtherKeyCombination && keyPressed(otherKey->subKeyCode))
 				{
 					bool bHasAlt = otherKey->altMetaKeyCode != KEY_IGNORE;
 					if (keyDown(otherKey->metaKeyCode) || (bHasAlt && keyDown(otherKey->altMetaKeyCode)))

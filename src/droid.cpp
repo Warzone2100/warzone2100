@@ -3056,9 +3056,9 @@ DROID *giftSingleDroid(DROID *psD, UDWORD to, bool electronic)
 				orderDroid(psCurr, DORDER_STOP, ModeQueue);
 				break;
 			}
-			for (unsigned i = 0; i < psCurr->numWeaps; ++i)
+			for (unsigned iWeap = 0; iWeap < psCurr->numWeaps; ++iWeap)
 			{
-				if (psCurr->psActionTarget[i] == psD)
+				if (psCurr->psActionTarget[iWeap] == psD)
 				{
 					orderDroid(psCurr, DORDER_STOP, ModeImmediate);
 					break;

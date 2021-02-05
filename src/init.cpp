@@ -131,7 +131,7 @@ static bool InitialiseGlobals()
 }
 
 
-bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, char const *realFileName)
+bool loadLevFile(const char *filename, searchPathMode pathMode, bool ignoreWrf, char const *realFileName)
 {
 	char *pBuffer;
 	UDWORD size;
@@ -150,7 +150,7 @@ bool loadLevFile(const char *filename, searchPathMode datadir, bool ignoreWrf, c
 		debug(LOG_ERROR, "File not found: %s\n", filename);
 		return false; // only in NDEBUG case
 	}
-	if (!levParse(pBuffer, size, datadir, ignoreWrf, realFileName))
+	if (!levParse(pBuffer, size, pathMode, ignoreWrf, realFileName))
 	{
 		debug(LOG_ERROR, "Parse error in %s\n", filename);
 		free(pBuffer);

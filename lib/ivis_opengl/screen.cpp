@@ -104,7 +104,7 @@ void wzPerfStart()
 	perfStarted = gfx_api::context::get().debugPerfStart(perfList.size());
 }
 
-void wzPerfWriteOut(const std::vector<PERF_STORE> &perfList, const WzString &outfile)
+void wzPerfWriteOut(const std::vector<PERF_STORE> &list, const WzString &outfile)
 {
 	PHYSFS_file *fileHandle = PHYSFS_openWrite(outfile.toUtf8().c_str());
 	if (fileHandle)
@@ -117,13 +117,13 @@ void wzPerfWriteOut(const std::vector<PERF_STORE> &perfList, const WzString &out
 			PHYSFS_close(fileHandle);
 			return;
 		}
-		for (size_t i = 0; i < perfList.size(); i++)
+		for (size_t i = 0; i < list.size(); i++)
 		{
 			WzString line;
-			line += WzString::number(perfList[i].counters[PERF_START_FRAME]);
+			line += WzString::number(list[i].counters[PERF_START_FRAME]);
 			for (int j = 1; j < PERF_COUNT; j++)
 			{
-				line += ", " + WzString::number(perfList[i].counters[j]);
+				line += ", " + WzString::number(list[i].counters[j]);
 			}
 			line += "\n";
 			ASSERT(line.toUtf8().length() <= static_cast<size_t>(std::numeric_limits<PHYSFS_uint32>::max()), "Line length exceeds PHYSFS_uint32::max");

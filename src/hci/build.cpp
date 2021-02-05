@@ -558,10 +558,10 @@ private:
 		obsoleteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto buildController = weakController.lock())
 			{
-				auto &obsoleteButton = static_cast<MultipleChoiceButton &>(button);
-				auto newValue = !obsoleteButton.getChoice();
+				auto &_obsoleteButton = static_cast<MultipleChoiceButton &>(button);
+				auto newValue = !_obsoleteButton.getChoice();
 				buildController->setShouldShowRedundantDesign(newValue);
-				obsoleteButton.setChoice(newValue);
+				_obsoleteButton.setChoice(newValue);
 			}
 		});
 	}
@@ -581,10 +581,10 @@ private:
 		favoriteButton->addOnClickHandler([weakController](W_BUTTON &button) {
 			if (auto buildController = weakController.lock())
 			{
-				auto &favoriteButton = static_cast<MultipleChoiceButton &>(button);
-				auto newValue = !favoriteButton.getChoice();
+				auto &_favoriteButton = static_cast<MultipleChoiceButton &>(button);
+				auto newValue = !_favoriteButton.getChoice();
 				buildController->setShouldShowFavorite(newValue);
-				favoriteButton.setChoice(newValue);
+				_favoriteButton.setChoice(newValue);
 			}
 		});
 	}

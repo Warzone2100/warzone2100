@@ -555,10 +555,10 @@ void VkhInfo::Output_PhysicalDevices(const vk::Instance& inst, const vk::Applica
 		const auto queueFamilies = physicalDevice.getQueueFamilyProperties(vkDynLoader);
 		buf << "VkQueueFamilyProperties:\n";
 		buf << "------------------------\n";
-		for (size_t idx = 0; idx < queueFamilies.size(); ++idx)
+		for (size_t queueIdx = 0; queueIdx < queueFamilies.size(); ++queueIdx)
 		{
-			const auto & queueFamily = queueFamilies[idx];
-			buf << "[Queue Family " << idx << "]\n";
+			const auto & queueFamily = queueFamilies[queueIdx];
+			buf << "[Queue Family " << queueIdx << "]\n";
 			buf << "- queueFlags = " << to_string(queueFamily.queueFlags) << "\n";
 			buf << "- queueCount = " << queueFamily.queueCount << "\n";
 			buf << "- timestampValidBits = " << queueFamily.timestampValidBits << "\n";

@@ -222,7 +222,7 @@ void incrementBuildingDirection(uint16_t amount)
 
 uint16_t getBuildingDirection()
 {
-	return snapDirection(player.r.y + sBuildDetails.directionShift);
+	return snapDirection(playerPos.r.y + sBuildDetails.directionShift);
 }
 
 /* See if a structure location has been found */

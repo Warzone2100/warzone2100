@@ -2604,21 +2604,21 @@ wzapi::no_return_value wzapi::setTutorialMode(WZAPI_PARAMS(bool tutorialMode))
 //--
 //-- Whether to allow player to design stuff.
 //--
-wzapi::no_return_value wzapi::setDesign(WZAPI_PARAMS(bool allowDesign))
+wzapi::no_return_value wzapi::setDesign(WZAPI_PARAMS(bool allowDesignValue))
 {
 	DROID_TEMPLATE *psCurr;
 	// Switch on or off future templates
 	// FIXME: This dual data structure for templates is just plain insane.
-	enumerateTemplates(selectedPlayer, [allowDesign](DROID_TEMPLATE * psTempl) {
+	enumerateTemplates(selectedPlayer, [allowDesignValue](DROID_TEMPLATE * psTempl) {
 		bool researched = researchedTemplate(psTempl, selectedPlayer, true);
-		psTempl->enabled = (researched || allowDesign);
+		psTempl->enabled = (researched || allowDesignValue);
 		return true;
 	});
 	for (auto &localTemplate : localTemplates)
 	{
 		psCurr = &localTemplate;
 		bool researched = researchedTemplate(psCurr, selectedPlayer, true);
-		psCurr->enabled = (researched || allowDesign);
+		psCurr->enabled = (researched || allowDesignValue);
 	}
 	return {};
 }

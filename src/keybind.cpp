@@ -313,7 +313,7 @@ void	kf_FaceNorth()
 // --------------------------------------------------------------------------
 void	kf_FaceSouth()
 {
-	player.r.y = DEG(180);
+	playerPos.r.y = DEG(180);
 	if (getWarCamStatus())
 	{
 		camToggleStatus();
@@ -323,7 +323,7 @@ void	kf_FaceSouth()
 // --------------------------------------------------------------------------
 void	kf_FaceEast()
 {
-	player.r.y = DEG(90);
+	playerPos.r.y = DEG(90);
 	if (getWarCamStatus())
 	{
 		camToggleStatus();
@@ -333,7 +333,7 @@ void	kf_FaceEast()
 // --------------------------------------------------------------------------
 void	kf_FaceWest()
 {
-	player.r.y = DEG(270);
+	playerPos.r.y = DEG(270);
 	if (getWarCamStatus())
 	{
 		camToggleStatus();
@@ -953,7 +953,7 @@ void	kf_RotateLeft()
 {
 	float rotAmount = realTimeAdjustedIncrement(MAP_SPIN_RATE);
 
-	player.r.y += rotAmount;
+	playerPos.r.y += rotAmount;
 }
 
 // --------------------------------------------------------------------------
@@ -962,10 +962,10 @@ void	kf_RotateRight()
 {
 	float rotAmount = realTimeAdjustedIncrement(MAP_SPIN_RATE);
 
-	player.r.y -= rotAmount;
-	if (player.r.y < 0)
+	playerPos.r.y -= rotAmount;
+	if (playerPos.r.y < 0)
 	{
-		player.r.y += DEG(360);
+		playerPos.r.y += DEG(360);
 	}
 }
 
@@ -989,11 +989,11 @@ void	kf_PitchBack()
 {
 	float pitchAmount = realTimeAdjustedIncrement(MAP_PITCH_RATE);
 
-	player.r.x += pitchAmount;
+	playerPos.r.x += pitchAmount;
 
-	if (player.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
+	if (playerPos.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
 	{
-		player.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
+		playerPos.r.x = DEG(360 + MAX_PLAYER_X_ANGLE);
 	}
 }
 
@@ -1003,10 +1003,10 @@ void	kf_PitchForward()
 {
 	float pitchAmount = realTimeAdjustedIncrement(MAP_PITCH_RATE);
 
-	player.r.x -= pitchAmount;
-	if (player.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
+	playerPos.r.x -= pitchAmount;
+	if (playerPos.r.x < DEG(360 + MIN_PLAYER_X_ANGLE))
 	{
-		player.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
+		playerPos.r.x = DEG(360 + MIN_PLAYER_X_ANGLE);
 	}
 }
 
@@ -1014,7 +1014,7 @@ void	kf_PitchForward()
 /* Resets pitch to default */
 void	kf_ResetPitch()
 {
-	player.r.x = DEG(360 - 20);
+	playerPos.r.x = DEG(360 - 20);
 	setViewDistance(STARTDISTANCE);
 }
 
@@ -1183,9 +1183,9 @@ void	kf_JumpToMapMarker()
 	{
 		entry = getLastSubKey();
 //		CONPRINTF("Restoring map position %d:%d",getMarkerX(entry),getMarkerY(entry));
-		player.p.x = getMarkerX(entry);
-		player.p.z = getMarkerY(entry);
-		player.r.y = getMarkerSpin(entry);
+		playerPos.p.x = getMarkerX(entry);
+		playerPos.p.z = getMarkerY(entry);
+		playerPos.r.y = getMarkerSpin(entry);
 		/* A fix to stop the camera continuing when marker code is called */
 		if (getWarCamStatus())
 		{
@@ -1269,7 +1269,7 @@ void	kf_ToggleGodMode()
 /* Aligns the view to north - some people can't handle the world spinning */
 void	kf_SeekNorth()
 {
-	player.r.y = 0;
+	playerPos.r.y = 0;
 	if (getWarCamStatus())
 	{
 		camToggleStatus();
@@ -1568,7 +1568,7 @@ void	kf_JumpToResourceExtractor()
 
 	if (psOldRE)
 	{
-		player.r.y = 0; // face north
+		playerPos.r.y = 0; // face north
 		setViewPos(map_coord(psOldRE->pos.x), map_coord(psOldRE->pos.y), true);
 	}
 	else
@@ -2448,9 +2448,9 @@ void	kf_CentreOnBase()
 	if (bGotHQ)
 	{
 		addConsoleMessage(_("Centered on player HQ, direction NORTH"), LEFT_JUSTIFY, SYSTEM_MESSAGE);
-		player.p.x = xJump;
-		player.p.z = yJump;
-		player.r.y = 0; // face north
+		playerPos.p.x = xJump;
+		playerPos.p.z = yJump;
+		playerPos.r.y = 0; // face north
 		/* A fix to stop the camera continuing when marker code is called */
 		if (getWarCamStatus())
 		{
