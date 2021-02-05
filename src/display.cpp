@@ -441,27 +441,20 @@ void processInput()
 		}
 	}
 
-	gInputManager.setContextState(
-		InputContext::RADAR,
-		isMouseOverRadar()
-			? InputContext::State::PRIORITIZED
-			: InputContext::State::ACTIVE
-	);
+	if (intMode != INTMODE::INT_DESIGN)
+	{
+		gInputManager.setContextState(
+			InputContext::RADAR,
+			isMouseOverRadar()
+				? InputContext::State::PRIORITIZED
+				: InputContext::State::ACTIVE
+		);
+	}
 
 	if (!isInTextInputMode())
 	{
 		const bool allowMouseWheelEvents = !mouseIsOverScreenOverlayChild && !mouseOverConsole && !mOverConstruction;
-
-		if (intMode == INT_DESIGN)
-		{
-			/* Only process the function keys */
-			gInputManager.processMappings(true, allowMouseWheelEvents);
-		}
-		else if (bAllowOtherKeyPresses)
-		{
-			/* Run all standard mappings */
-			gInputManager.processMappings(false, allowMouseWheelEvents);
-		}
+		gInputManager.processMappings(allowMouseWheelEvents);
 	}
 	/* Allow the user to clear the (Active) console if need be */
 	if (!mouseIsOverScreenOverlayChild && mouseOverConsoleBox() && mousePressed(MOUSE_LMB))

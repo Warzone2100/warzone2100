@@ -247,7 +247,7 @@ public:
 	/* Removes a mapping specified by a pointer */
 	bool removeMapping(KeyMapping* mapping);
 
-	void processMappings(const bool bExclude, const bool bAllowMouseWheelEvents);
+	void processMappings(const bool bAllowMouseWheelEvents);
 
 	/* (Re-)Initializes mappings to their default values. If `bForceDefaults` is true, any existing mappings will be overwritten with the defaults */
 	void resetMappings(const bool bForceDefaults);
@@ -266,6 +266,8 @@ private:
 // Input contexts
 public:
 	void resetContextStates();
+
+	void makeAllContextsInactive();
 
 	void setContextState(const InputContext& context, const InputContext::State state);
 
