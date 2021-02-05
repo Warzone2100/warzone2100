@@ -89,6 +89,40 @@ bool KeyMappingInput::isCleared() const
 	return source == KeyMappingInputSource::KEY_CODE && value.keyCode == KEY_CODE::KEY_MAXSCAN;
 }
 
+bool KeyMappingInput::is(const KEY_CODE keyCode) const
+{
+	return source == KeyMappingInputSource::KEY_CODE && value.keyCode == keyCode;
+}
+
+bool KeyMappingInput::is(const MOUSE_KEY_CODE mouseKeyCode) const
+{
+	return source == KeyMappingInputSource::MOUSE_KEY_CODE && value.mouseKeyCode == mouseKeyCode;
+}
+
+nonstd::optional<KEY_CODE> KeyMappingInput::asKeyCode() const
+{
+	if (source == KeyMappingInputSource::KEY_CODE)
+	{
+		return value.keyCode;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
+nonstd::optional<MOUSE_KEY_CODE> KeyMappingInput::asMouseKeyCode() const
+{
+	if (source == KeyMappingInputSource::MOUSE_KEY_CODE)
+	{
+		return value.mouseKeyCode;
+	}
+	else
+	{
+		return nonstd::nullopt;
+	}
+}
+
 KeyMappingInput::KeyMappingInput()
 	: source(KeyMappingInputSource::KEY_CODE)
 	, value(KEY_CODE::KEY_IGNORE)
@@ -875,19 +909,19 @@ static bool checkQwertyKeys()
 
 // ----------------------------------------------------------------------------------
 /* allows checking if mapping should currently be ignored in keyProcessMappings */
-static bool isIgnoredMapping(const bool bExclude, const bool allowMouseWheelEvents, const KEY_MAPPING& mapping)
+static bool isIgnoredMapping(const bool bExclude, const bool bAllowMouseWheelEvents, const KEY_MAPPING& mapping)
 {
 	if (bExclude && mapping.status != KEYMAP_ALWAYS_PROCESS)
 	{
 		return true;
 	}
 
-	if (mapping.input.source == KeyMappingInputSource::KEY_CODE && mapping.input.value.keyCode == KEY_MAXSCAN)
+	if (mapping.input.is(KEY_CODE::KEY_MAXSCAN))
 	{
 		return true;
 	}
 
-	if (!allowMouseWheelEvents && mapping.input.source == KeyMappingInputSource::MOUSE_KEY_CODE && (mapping.input.value.mouseKeyCode == MOUSE_KEY_CODE::MOUSE_WUP || mapping.input.value.mouseKeyCode == MOUSE_KEY_CODE::MOUSE_WDN))
+	if (!bAllowMouseWheelEvents && (mapping.input.is(MOUSE_KEY_CODE::MOUSE_WUP) || mapping.input.is(MOUSE_KEY_CODE::MOUSE_WDN)))
 	{
 		return true;
 	}
@@ -907,7 +941,7 @@ static bool isIgnoredMapping(const bool bExclude, const bool allowMouseWheelEven
 
 // ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
-void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents)
+void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 {
 	/* Bomb out if there are none */
 	if (keyMappings.empty())
@@ -927,7 +961,7 @@ void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents)
 	for (auto keyToProcess = keyMappings.begin(); keyToProcess != keyMappings.end(); ++keyToProcess)
 	{
 		/* Skip inappropriate ones when necessary */
-		if (isIgnoredMapping(bExclude, allowMouseWheelEvents, *keyToProcess))
+		if (isIgnoredMapping(bExclude, bAllowMouseWheelEvents, *keyToProcess))
 		{
 			continue;
 		}
@@ -942,7 +976,7 @@ void keyProcessMappings(const bool bExclude, const bool allowMouseWheelEvents)
 			for (auto otherKey = keyMappings.begin(); otherKey != keyMappings.end(); ++otherKey)
 			{
 				/* Skip inappropriate ones when necessary */
-				if (isIgnoredMapping(bExclude, allowMouseWheelEvents, *otherKey))
+				if (isIgnoredMapping(bExclude, bAllowMouseWheelEvents, *otherKey))
 				{
 					continue;
 				}

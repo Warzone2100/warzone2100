@@ -299,7 +299,7 @@ static bool keyMapToString(char *pStr, const KEY_MAPPING *psMapping)
 		onlySub = false;
 	}
 
-	// Figure out if the keycode is for mouse or keyboard. Default to assuming it 
+	// Figure out if the keycode is for mouse or keyboard.
 	switch (psMapping->input.source)
 	{
 	case KeyMappingInputSource::KEY_CODE:
@@ -551,6 +551,19 @@ bool saveKeyMap()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
+static KeyMappingInput createInputForSource(const KeyMappingInputSource source, const unsigned int keyCode)
+{
+	switch (source) {
+	case KeyMappingInputSource::KEY_CODE:
+		return (KEY_CODE)keyCode;
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		return (MOUSE_KEY_CODE)keyCode;
+	default:
+		debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", static_cast<unsigned int>(source));
+		return KEY_CODE::KEY_MAXSCAN;
+	}
+}
+
 // load keymaps from registry.
 bool loadKeyMap()
 {
@@ -581,20 +594,7 @@ bool loadKeyMap()
 
 		const WzString sourceName = ini.value("source", "default").toWzString();
 		const KeyMappingInputSource source = keyMappingSourceByName(sourceName.toUtf8().c_str());
-
-		KeyMappingInput input;
-		input.source = source;
-		switch (source) {
-		case KeyMappingInputSource::KEY_CODE:
-			input.value.keyCode = (KEY_CODE)sub;
-			break;
-		case KeyMappingInputSource::MOUSE_KEY_CODE:
-			input.value.mouseKeyCode = (MOUSE_KEY_CODE)sub;
-			break;
-		default:
-			debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", static_cast<unsigned int>(source));
-			break;
-		}
+		const KeyMappingInput input = createInputForSource(source, sub);
 
 		const WzString slotName = ini.value("slot", "primary").toWzString();
 		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
