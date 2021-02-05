@@ -125,6 +125,18 @@ void InputManager::resetContextStates()
 	bMappingsSortOrderDirty = true;
 }
 
+void InputManager::makeAllContextsInactive()
+{
+	for (const InputContext& context : InputContext::getAllContexts())
+	{
+		if (context != InputContext::ALWAYS_ACTIVE)
+		{
+			setContextState(context, InputContext::State::INACTIVE);
+		}
+	}
+	bMappingsSortOrderDirty = true;
+}
+
 KeyMapping* InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const MappableFunction function, const KeyMappingSlot slot)
 {
 	/* Make sure the meta key is the left variant */
@@ -1104,16 +1116,8 @@ static bool checkQwertyKeys(InputManager& inputManager)
 
 // ----------------------------------------------------------------------------------
 /* allows checking if mapping should currently be ignored in processMappings */
-static bool isIgnoredMapping(const InputManager& inputManager, const bool bExclude, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
+static bool isIgnoredMapping(const InputManager& inputManager, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
 {
-	// TODO refact-process-input: can this be removed and handled in the info.context.isActive() check?
-	//  - likely requires removing the bExclude (?)
-	//  - can we handle bExclude with context states?
-	if (bExclude && mapping.info->context != InputContext::ALWAYS_ACTIVE)
-	{
-		return true;
-	}
-
 	if (!inputManager.isContextActive(mapping.info->context))
 	{
 		return true;
@@ -1144,7 +1148,7 @@ static bool isIgnoredMapping(const InputManager& inputManager, const bool bExclu
 
 // ----------------------------------------------------------------------------------
 /* Manages update of all the active function mappings */
-void InputManager::processMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
+void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 {
 	/* Bomb out if there are none */
 	if (keyMappings.empty())
@@ -1183,7 +1187,7 @@ void InputManager::processMappings(const bool bExclude, const bool bAllowMouseWh
 	for (const KeyMapping& keyToProcess : keyMappings)
 	{
 		/* Skip inappropriate ones when necessary */
-		if (isIgnoredMapping(*this, bExclude, bAllowMouseWheelEvents, keyToProcess))
+		if (isIgnoredMapping(*this, bAllowMouseWheelEvents, keyToProcess))
 		{
 			continue;
 		}
