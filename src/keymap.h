@@ -21,6 +21,8 @@
 #ifndef __INCLUDED_SRC_KEYMAP_H__
 #define __INCLUDED_SRC_KEYMAP_H__
 
+#include <optional-lite/optional.hpp>
+
 #include "lib/framework/input.h"
 
 
@@ -64,6 +66,12 @@ struct KeyMappingInput {
 	bool isReleased() const;
 
 	bool isCleared() const;
+
+	bool is(const KEY_CODE keyCode) const;
+	bool is(const MOUSE_KEY_CODE mouseKeyCode) const;
+
+	nonstd::optional<KEY_CODE> asKeyCode() const;
+	nonstd::optional<MOUSE_KEY_CODE> asMouseKeyCode() const;
 
 	KeyMappingInput(const KEY_CODE keyCode);
 	KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode);
