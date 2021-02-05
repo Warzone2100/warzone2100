@@ -574,7 +574,7 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 			{
 				LPVOID lpMsgBuf;
 				DWORD dw = GetLastError();
-				wchar_t szBuffer[4196];
+				wchar_t szFailureBuffer[4196];
 
 				FormatMessageW(
 				    FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -586,8 +586,8 @@ LONG WINAPI TopLevelExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo)
 				    (LPWSTR) &lpMsgBuf,
 				    0, NULL);
 
-				wsprintfW(szBuffer, L"Exception handler failed with error %d: %s\n", dw, lpMsgBuf);
-				MessageBoxW((HWND)MB_ICONEXCLAMATION, szBuffer, L"Error", MB_OK);
+				wsprintfW(szFailureBuffer, L"Exception handler failed with error %d: %s\n", dw, lpMsgBuf);
+				MessageBoxW((HWND)MB_ICONEXCLAMATION, szFailureBuffer, L"Error", MB_OK);
 
 				LocalFree(lpMsgBuf);
 				debug(LOG_ERROR, "Exception handler failed to create file!");
