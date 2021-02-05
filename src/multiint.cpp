@@ -660,6 +660,11 @@ void loadMapPreview(bool hideInterface)
 		plGroundL = WZCOL_TERC3_GROUND_LOW;
 		plGroundH = WZCOL_TERC3_GROUND_HIGH;
 		break;
+	default:
+		debug(LOG_FATAL, "Invalid tileset type");
+		// silence warnings
+		abort();
+		return;
 	}
 
 	oursize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
