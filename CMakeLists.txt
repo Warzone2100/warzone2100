@@ -342,6 +342,14 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Custom Warning Flags - No Error Tweaks
 		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} -Wno-error=deprecated-declarations")
 
+		set(_supported_cxx_compiler_flags "")
+
+		# -Wno-shadow-field-in-constructor (Clang 3.9+)
+		check_compiler_flags_output("-Werror -Wno-shadow-field-in-constructor -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-shadow-field-in-constructor" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+		message( STATUS "Supported additional CXX compiler_flags=${_supported_cxx_compiler_flags}" )
+		set(CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS "${CMAKE_XCODE_ATTRIBUTE_WARNING_CFLAGS} ${_supported_cxx_compiler_flags}")
+
 		# Apple Clang - Preprocessing
 		set(CMAKE_XCODE_ATTRIBUTE_ENABLE_STRICT_OBJC_MSGSEND YES)
 
@@ -361,7 +369,7 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_DOCUMENTATION_COMMENTS NO)				# -Wdocumentation		[DISABLED]
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_EMPTY_BODY YES)						# -Wempty-body
 		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_FOUR_CHARACTER_CONSTANTS YES)			# -Wfour-char-constants
-		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_SHADOW NO)								# -Wshadow				[DISABLED] - FIXME
+		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_SHADOW YES)								# -Wshadow
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_BOOL_CONVERSION YES)					# -Wbool-conversion
 		set(CMAKE_XCODE_ATTRIBUTE_CLANG_WARN_CONSTANT_CONVERSION YES)				# -Wconstant-conversion
 		set(CMAKE_XCODE_ATTRIBUTE_GCC_WARN_64_TO_32_BIT_CONVERSION NO)				# -Wshorten-64-to-32	[DISABLED] - FIXME
@@ -513,10 +521,20 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# -Wnon-virtual-dtor		(GCC 3.4+, Clang 3.2+) [C++ only]
 		check_compiler_flags_output("-Werror -Wnon-virtual-dtor -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wnon-virtual-dtor" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
-#		# FUTURE-TODO: Enable -Wshadow (lots of warnings to fix, some due to 3rdparty dependencies?)
-#		# -Wshadow					(GCC 3.4+, Clang 3.2+)
-#		check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-#		check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		# -Wshadow					(GCC 3.4+, Clang 3.2+)
+		# NOTE: -Wshadow on GCC is currently too noisy, but Clang 3.9+ is much more selective
+		if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.9))
+			check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+
+			# -Wno-shadow-field-in-constructor (Clang 3.9+)
+			check_compiler_flags_output("-Werror -Wno-shadow-field-in-constructor -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-shadow-field-in-constructor" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		endif()
+		if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.9))
+			check_compiler_flags_output("-Werror -Wshadow -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wshadow" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
+			# -Wno-shadow-field-in-constructor (Clang 3.9+)
+			check_compiler_flags_output("-Werror -Wno-shadow-field-in-constructor -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wno-shadow-field-in-constructor" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+		endif()
 
 #		# FUTURE-TODO: Enable -Wuseless-cast (large number of warnings to fix)
 #		# -Wuseless-cast			(GCC 4.8+)

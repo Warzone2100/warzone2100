@@ -143,6 +143,9 @@ else()
 	# -Wcast-align				(GCC 3.4+, Clang 3.2+)
 	check_compiler_flags_output("-Werror -Wno-cast-align -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-cast-align" OUTPUT_VARIABLE _supported_quickjs_c_compiler_flags APPEND)
 
+	# -Wshadow					(GCC 3.4+, Clang 3.2+)
+	check_compiler_flags_output("-Werror -Wno-shadow -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wno-shadow" OUTPUT_VARIABLE _supported_quickjs_c_compiler_flags APPEND)
+
 	if (NOT _supported_quickjs_c_compiler_flags STREQUAL "")
 		string(REPLACE " " ";" _supported_quickjs_c_compiler_flags "${_supported_quickjs_c_compiler_flags}")
 		target_compile_options(quickjs PRIVATE ${_supported_quickjs_c_compiler_flags})
