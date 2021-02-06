@@ -673,8 +673,6 @@ bool runLoadSave(bool bResetMissionWidgets)
 				saveEntryEdit->setGeometry(slotButton->geometry());
 				saveEntryEdit->setString(slotButton->getString());
 				saveEntryEdit->setBoxColours(WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_LOAD_BORDER, WZCOL_MENU_BACKGROUND);
-				WzString suggestedSaveName = suggestSaveName(NewSaveGamePath);
-				saveEntryEdit->setString(suggestedSaveName);
 
 				if (!slotButton->pText.isEmpty())
 				{
@@ -682,6 +680,8 @@ bool runLoadSave(bool bResetMissionWidgets)
 				}
 				else
 				{
+					WzString suggestedSaveName = suggestSaveName(NewSaveGamePath);
+					saveEntryEdit->setString(suggestedSaveName);
 					sstrcpy(sDelete, "");
 				}
 
