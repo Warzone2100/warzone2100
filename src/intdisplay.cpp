@@ -322,9 +322,42 @@ IntFancyButton::IntFancyButton()
 
 void IntFancyButton::initDisplay()
 {
-	model.rate += realTimeAdjustedAverage(isHighlighted() ? 2 * BUTTONOBJ_ROTSPEED : -4 * BUTTONOBJ_ROTSPEED);
-	model.rate = clip(model.rate, 0, BUTTONOBJ_ROTSPEED);
-	model.rotation.y += realTimeAdjustedAverage(model.rate);
+	if (isHighlighted())
+	{
+		model.rate += realTimeAdjustedAverage(isHighlighted() ? 2 * BUTTONOBJ_ROTSPEED : -4 * BUTTONOBJ_ROTSPEED);
+		model.rate = clip(model.rate, 0, BUTTONOBJ_ROTSPEED);
+		model.rotation.y += realTimeAdjustedAverage(model.rate);
+		model.rotation.y = model.rotation.y % 360;
+	}
+	else if (model.rotation.y != DEFAULT_BUTTON_ROTATION)
+	{
+		// return to default rotation using the nearest direction
+		if (model.rotation.y > (180 + DEFAULT_BUTTON_ROTATION))
+		{
+			model.rate += realTimeAdjustedAverage(5 * BUTTONOBJ_ROTSPEED);
+			model.rate = clip(model.rate, 0, 5 * BUTTONOBJ_ROTSPEED);
+			model.rotation.y += realTimeAdjustedAverage(model.rate);
+			if (model.rotation.y > 360)
+			{
+				model.rotation.y = model.rotation.y % 360;
+				model.rotation.y = std::min(model.rotation.y, DEFAULT_BUTTON_ROTATION);
+			}
+		}
+		else if (model.rotation.y < DEFAULT_BUTTON_ROTATION)
+		{
+			model.rate += realTimeAdjustedAverage(5 * BUTTONOBJ_ROTSPEED);
+			model.rate = clip(model.rate, 0, 5 * BUTTONOBJ_ROTSPEED);
+			model.rotation.y += realTimeAdjustedAverage(model.rate);
+			model.rotation.y = std::min(model.rotation.y, DEFAULT_BUTTON_ROTATION);
+		}
+		else
+		{
+			model.rate -= realTimeAdjustedAverage(7 * BUTTONOBJ_ROTSPEED);
+			model.rate = clip(model.rate, -5 * BUTTONOBJ_ROTSPEED, BUTTONOBJ_ROTSPEED);
+			model.rotation.y += realTimeAdjustedAverage(model.rate);
+			model.rotation.y = std::max(model.rotation.y, DEFAULT_BUTTON_ROTATION);
+		}
+	}
 }
 
 void IntFancyButton::displayIfHighlight(int xOffset, int yOffset)
