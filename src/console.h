@@ -53,7 +53,7 @@ struct ConsoleMessage
 	UDWORD duration;
 };
 
-const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING({2500});
+const DEBOUNCED_MESSAGE CANNOT_BUILD_BURNING = {2500};
 
 
 /* ID to use for addConsoleMessage() in case of a system message */
