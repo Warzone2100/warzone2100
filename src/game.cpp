@@ -386,6 +386,15 @@ static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERG
 		return false;
 	}
 
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		// dummy, was `skDiff` for each player
+		if (!PHYSFS_writeUBE8(fileHandle, 0))
+		{
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -417,6 +426,15 @@ static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME 
 		return false;
 	}
 	challengeActive = dummy8;	// hack
+
+	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		// dummy, was `skDiff` for each player
+		if (!PHYSFS_readUBE8(fileHandle, &dummy8))
+		{
+			return false;
+		}
+	}
 
 	return true;
 }
