@@ -7,8 +7,8 @@ freebsd_build_task:
   freebsd_instance:
     # See the list of available FreeBSD image families here: https://cirrus-ci.org/guide/FreeBSD/
     matrix:
-#      - image_family: freebsd-11-3-snap # FreeBSD 11.3-STABLE # currently disabled because of Qt5 port issue
       - image_family: freebsd-12-2 # FreeBSD 12.2-RELEASE
+      - image_family: freebsd-11-4 # FreeBSD 11.4-RELEASE
 #    cpu: 4
 #    memory: 8G
 
