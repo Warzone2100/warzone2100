@@ -951,7 +951,7 @@ static bool initSaveGameLoad()
 {
 	// NOTE: always setGameMode correctly before *any* loading routines!
 	SetGameMode(GS_NORMAL);
-	screen_RestartBackDrop();
+	initLoadingScreen(true);
 
 	// load up a save game
 	if (!loadGameInit(saveGameName))
