@@ -16,6 +16,7 @@ jobs:
       matrix:
         compiler: ["MSVC_2019"]
         architecture: ["x86", "x64", "arm64"]
+        deploy_release: [true]
       fail-fast: false
     env:
       WZ_MSVC_VER: ${{ matrix.compiler }}
@@ -116,16 +117,6 @@ jobs:
         }
 
         # ----------------
-        # Determine which matrix combinations to deploy
-
-        $WZ_DEPLOY_RELEASE = 'false'
-        if ($env:WZ_MSVC_VER -eq "MSVC_2019") {
-          if ($env:WZ_TARGET_ARCH -eq "x86") {
-            $WZ_DEPLOY_RELEASE = 'true'
-          }
-        }
-
-        # ----------------
         # Determine vcpkg binary cache directory
 
         $VCPKG_BINARYCACHE_DIR = "${{ github.workspace }}\vcpkg_cache"
@@ -145,7 +136,6 @@ jobs:
         echo "::set-output name=WZ_VISUAL_STUDIO_INSTALL_VERSION::${WZ_VISUAL_STUDIO_INSTALL_VERSION}"
         echo "VCPKG_VISUAL_STUDIO_PATH=${VCPKG_VISUAL_STUDIO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-        echo "::set-output name=WZ_DEPLOY_RELEASE::${WZ_DEPLOY_RELEASE}"
         echo "::set-output name=VCPKG_BINARYCACHE_DIR::${VCPKG_BINARYCACHE_DIR}"
         echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "::set-output name=VCPKG_BINARY_SOURCES::${VCPKG_BINARY_SOURCES}"
@@ -335,7 +325,7 @@ jobs:
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
       uses: actions/upload-artifact@v2
-      if: success() && startsWith(github.ref, 'refs/tags/') && (steps.settings.outputs.WZ_DEPLOY_RELEASE == 'true') && (github.repository == 'Warzone2100/warzone2100')
+      if: success() && startsWith(github.ref, 'refs/tags/') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_win_${{ matrix.architecture }}_archive
         path: '${{ github.workspace }}\output\archive'
@@ -344,7 +334,7 @@ jobs:
     # Upload Release assets (if a release tag)
     #####################################################
     - name: Upload Release Assets
-      if: startsWith(github.ref, 'refs/tags/') && (steps.settings.outputs.WZ_DEPLOY_RELEASE == 'true') && (github.repository == 'Warzone2100/warzone2100')
+      if: success() && startsWith(github.ref, 'refs/tags/') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       uses: past-due/action-gh-release@master
       with:
         # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
