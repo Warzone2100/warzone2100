@@ -75,13 +75,13 @@ static unsigned int getMaxKeyMapNameWidth(InputManager& inputManager);
 struct DisplayKeyMapData {
 	explicit DisplayKeyMapData(InputManager& inputManager, const KeyFunctionInfo& info)
 		: inputManager(inputManager)
-		, mappings(std::vector<KeyMapping*>(static_cast<unsigned int>(KeyMappingSlot::LAST), nullptr))
+		, mappings(std::vector<nonstd::optional<std::reference_wrapper<KeyMapping>>>(static_cast<unsigned int>(KeyMappingSlot::LAST), nonstd::nullopt))
 		, info(info)
 	{
 	}
 
 	InputManager& inputManager;
-	std::vector<KeyMapping*> mappings;
+	std::vector<nonstd::optional<std::reference_wrapper<KeyMapping>>> mappings;
 	const KeyFunctionInfo& info;
 };
 
@@ -122,7 +122,7 @@ private:
 	std::shared_ptr<ScrollableListWidget> keyMapList;
 	std::unordered_map<std::string, DisplayKeyMapData*> displayDataPerInfo;
 
-	std::shared_ptr<W_BUTTON> createKeyMapButton(const unsigned int id, const KeyMappingSlot slot, DisplayKeyMapData* targetFunctionData);
+	std::shared_ptr<W_BUTTON> createKeyMapButton(const unsigned int id, const KeyMappingSlot slot, struct DisplayKeyMapData& targetFunctionData);
 	void unhighlightSelected();
 	void addButton(int buttonId, int y, const char *text);
 };
@@ -175,7 +175,7 @@ protected:
 	KeyMapButton(
 		InputManager& inputManager,
 		KeyMappingSlot slot,
-		DisplayKeyMapData* targetFunctionData,
+		DisplayKeyMapData& targetFunctionData,
 		std::weak_ptr<KeyMapForm> parentForm
 	)
 		: inputManager(inputManager)
@@ -189,7 +189,7 @@ public:
 	static std::shared_ptr<KeyMapButton> make(
 		InputManager& inputManager,
 		KeyMappingSlot slot,
-		DisplayKeyMapData* targetFunctionData,
+		DisplayKeyMapData& targetFunctionData,
 		std::weak_ptr<KeyMapForm> parentForm
 	) {
 		class make_shared_enabler : public KeyMapButton
@@ -198,7 +198,7 @@ public:
 			make_shared_enabler(
 				InputManager& inputManager,
 				KeyMappingSlot slot,
-				DisplayKeyMapData* targetFunctionData,
+				DisplayKeyMapData& targetFunctionData,
 				std::weak_ptr<KeyMapForm> parentForm
 			)
 				: KeyMapButton(inputManager, slot, targetFunctionData, parentForm)
@@ -215,7 +215,7 @@ public:
 		ASSERT_OR_RETURN(, psParentForm != nullptr, "Cannot handle KeyMapButton::clicked: parent form was nullptr!");
 
 		const int slotIndex = static_cast<size_t>(slot);
-		const KeyFunctionInfo& info = targetFunctionData->info;
+		const KeyFunctionInfo& info = targetFunctionData.info;
 
 		if (info.type != KeyMappingType::ASSIGNABLE)
 		{
@@ -224,22 +224,20 @@ public:
 			return;
 		}
 
-		if (keyMapSelection.isSelected(targetFunctionData->function, slot))
+		if (keyMapSelection.isSelected(info, slot))
 		{
 			psParentForm->unhighlightSelected();
 			return;
 		}
 
 		psParentForm->keyMapList->disableScroll();
-		keyMapSelection.select(targetFunctionData->info, slot);
+		keyMapSelection.select(targetFunctionData.info, slot);
 	}
 
 	virtual void display(int xOffset, int yOffset) override
 	{
 		const std::shared_ptr<WIDGET> pParent = this->parent();
 		ASSERT_OR_RETURN(, pParent != nullptr, "Keymap buttons should have a parent container!");
-
-		ASSERT_OR_RETURN(, targetFunctionData != nullptr, "KeyMapButton being rendered is missing target function data!");
 
 		// Update layout
 		const int numSlots = static_cast<int>(KeyMappingSlot::LAST);
@@ -258,7 +256,7 @@ public:
 		int h = height();
 		int w = width();
 
-		const KeyFunctionInfo& info = targetFunctionData->info;
+		const KeyFunctionInfo& info = targetFunctionData.info;
 
 		// Draw base
 		if (keyMapSelection.isSelected(info, slot))
@@ -278,7 +276,7 @@ public:
 		PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
 		char sPrimaryKey[MAX_STR_LENGTH];
 		sPrimaryKey[0] = '\0';
-		const KeyMapping* mapping = targetFunctionData->mappings[static_cast<unsigned int>(slot)];
+		const nonstd::optional<KeyMapping> mapping = targetFunctionData.mappings[static_cast<unsigned int>(slot)];
 		if (mapping && !mapping->input.isCleared())
 		{
 			// Check to see if key is on the numpad, if so tell user and change color
@@ -303,7 +301,7 @@ private:
 
 	WzText wzBindingText;
 	KeyMappingSlot slot;
-	DisplayKeyMapData* targetFunctionData;
+	DisplayKeyMapData& targetFunctionData;
 
 	std::weak_ptr<KeyMapForm> parentForm;
 };
@@ -311,18 +309,18 @@ private:
 class KeyMapLabel : public WIDGET
 {
 protected:
-	KeyMapLabel(InputManager& inputManager, DisplayKeyMapData* targetFunctionData)
+	KeyMapLabel(InputManager& inputManager, DisplayKeyMapData& targetFunctionData)
 		: inputManager(inputManager)
 		, targetFunctionData(targetFunctionData)
 	{
 	}
 
 public:
-	static std::shared_ptr<KeyMapLabel> make(InputManager& inputManager, DisplayKeyMapData* targetFunctionData) {
+	static std::shared_ptr<KeyMapLabel> make(InputManager& inputManager, DisplayKeyMapData& targetFunctionData) {
 		class make_shared_enabler : public KeyMapLabel
 		{
 		public:
-			make_shared_enabler(InputManager& inputManager, DisplayKeyMapData* targetFunctionData)
+			make_shared_enabler(InputManager& inputManager, DisplayKeyMapData& targetFunctionData)
 				: KeyMapLabel(inputManager, targetFunctionData)
 			{
 			}
@@ -350,7 +348,7 @@ public:
 		const int w = width();
 		const int h = height();
 		drawBlueBoxInset(xPos, yPos, w, h);
-		wzNameText.setText(_(targetFunctionData->info.displayName.c_str()), iV_fonts::font_regular);
+		wzNameText.setText(_(targetFunctionData.info.displayName.c_str()), iV_fonts::font_regular);
 		wzNameText.render(xPos + 2, yPos + (h / 2) + 3, WZCOL_FORM_TEXT);
 	}
 
@@ -359,7 +357,7 @@ private:
 
 	WzText wzNameText;
 
-	DisplayKeyMapData* targetFunctionData;
+	DisplayKeyMapData& targetFunctionData;
 };
 
 
@@ -474,24 +472,24 @@ bool runKeyMapEditor(InputManager& inputManager)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-std::vector<std::reference_wrapper<const KeyFunctionInfo>> getVisibleKeymapEntries()
+KeyFunctionEntries getVisibleKeyFunctionEntries()
 {
-	std::vector<std::reference_wrapper<const KeyFunctionInfo>> visibleMappings;
-	for (const KeyFunctionInfo& info : allKeymapEntries())
+	KeyFunctionEntries visible;
+	for (const KeyFunctionInfo& info : allKeyFunctionEntries())
 	{
 		if (info.type != KeyMappingType::HIDDEN)
 		{
-			visibleMappings.push_back(info);
+			visible.push_back(info);
 		}
 	}
 
-	return visibleMappings;
+	return visible;
 }
 
 std::vector<std::reference_wrapper<const KeyMapping>> getVisibleMappings(InputManager& inputManager)
 {
 	std::vector<std::reference_wrapper<const KeyMapping>> visibleMappings;
-	for (const KeyFunctionInfo& info : getVisibleKeymapEntries())
+	for (const KeyFunctionInfo& info : getVisibleKeyFunctionEntries())
 	{
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
@@ -568,6 +566,13 @@ bool saveKeyMap(const InputManager& inputManager)
 	ini.beginArray("mappings");
 	for (auto const &mapping : inputManager.getAllMappings())
 	{
+		/* No need to save non-assignable mappings */
+		if (mapping.info.type != KeyMappingType::ASSIGNABLE)
+		{
+			continue;
+		}
+
+		ini.setValue("name", mapping.info.name);
 		ini.setValue("meta", mapping.metaKeyCode);
 
 		switch (mapping.input.source) {
@@ -597,7 +602,7 @@ bool saveKeyMap(const InputManager& inputManager)
 		}
 
 		ini.setValue("action", mapping.action);
-		ini.setValue("function", mapping.info->name);
+		ini.setValue("function", mapping.info.name);
 
 		ini.nextArrayItem();
 	}
@@ -641,12 +646,12 @@ bool loadKeyMap(InputManager& inputManager)
 		auto action = (KeyAction)ini.value("action", 0).toInt();
 		auto functionName = ini.value("function", "").toWzString();
 		auto info = keyFunctionInfoByName(functionName.toUtf8());
-		if (info == nullptr)
+		if (!info.has_value())
 		{
 			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.toUtf8().c_str());
 			continue;
 		}
-		else if (info->type != KeyMappingType::ASSIGNABLE)
+		else if (info->get().type != KeyMappingType::ASSIGNABLE)
 		{
 			/* No need to load non-assignable mappings */
 			debug(LOG_WARNING, "Skipping non-assignable keymap function \"%s\".", functionName.toUtf8().c_str());
@@ -666,7 +671,7 @@ bool loadKeyMap(InputManager& inputManager)
 	return true;
 }
 
-std::shared_ptr<W_BUTTON> KeyMapForm::createKeyMapButton(const unsigned int buttonId, const KeyMappingSlot slot, DisplayKeyMapData* targetFunctionData)
+std::shared_ptr<W_BUTTON> KeyMapForm::createKeyMapButton(const unsigned int buttonId, const KeyMappingSlot slot, DisplayKeyMapData& targetFunctionData)
 {
 	auto button = KeyMapButton::make(inputManager, slot, targetFunctionData, std::static_pointer_cast<KeyMapForm>(shared_from_this()));
 	button->setGeometry(0, 0, KM_ENTRYW / 3, KM_ENTRYH); // Initially set to occupy 1/3 of the width. Display func will determine and update the actual size
@@ -717,7 +722,7 @@ void KeyMapForm::initialize(bool isInGame)
 		}
 	}
 
-	auto infos = getVisibleKeymapEntries();
+	auto infos = getVisibleKeyFunctionEntries();
 	std::sort(infos.begin(), infos.end(), [](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
 		const bool bContextsAreSame = a.context == b.context;
 		return bContextsAreSame
@@ -727,7 +732,7 @@ void KeyMapForm::initialize(bool isInGame)
 
 	/* Add key mappings to the form */
 	displayDataPerInfo.clear();
-	for (std::vector<std::reference_wrapper<const KeyFunctionInfo>>::const_iterator i = infos.begin(); i != infos.end(); ++i)
+	for (KeyFunctionEntries::const_iterator i = infos.begin(); i != infos.end(); ++i)
 	{
 		const KeyFunctionInfo& info = *i;
 
@@ -751,7 +756,7 @@ void KeyMapForm::initialize(bool isInGame)
 		const unsigned int containerId = KM_START + index * (numSlots + 2);
 		const unsigned int labelId = KM_START + index * (numSlots + 2) + 1;
 
-		auto label = KeyMapLabel::make(inputManager, data);
+		auto label = KeyMapLabel::make(inputManager, *data);
 		label->setGeometry(0, 0, KM_ENTRYW / 3, KM_ENTRYH);
 		label->id = labelId;
 
@@ -764,10 +769,17 @@ void KeyMapForm::initialize(bool isInGame)
 		{
 			const auto slot = static_cast<KeyMappingSlot>(slotIndex);
 			const auto buttonId = KM_START + index * (numSlots + 2) + 2 + slotIndex;
-			const auto button = createKeyMapButton(buttonId, slot, data);
+			const auto button = createKeyMapButton(buttonId, slot, *data);
 			container->attach(button);
 
-			data->mappings[slotIndex] = inputManager.getMapping(info, slot);
+			if (const auto mapping = inputManager.getMapping(info, slot))
+			{
+				data->mappings[slotIndex] = *mapping;
+			}
+			else
+			{
+				data->mappings[slotIndex] = nonstd::nullopt;
+			}
 		}
 
 		keyMapList->addItem(container);
@@ -849,10 +861,10 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	for (auto& conflict : conflicts)
 	{
 		// Update conflicting mappings' display data
-		if (auto conflictData = displayDataPerInfo[conflict.info->name])
+		if (auto conflictData = displayDataPerInfo[conflict.info.name])
 		{
 			const unsigned int slotIndex = static_cast<unsigned int>(conflict.slot);
-			conflictData->mappings[slotIndex] = nullptr;
+			conflictData->mappings[slotIndex] = nonstd::nullopt;
 		}
 	}
 
@@ -861,13 +873,16 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	{
 		inputManager.removeMapping(oldMapping);
 	}
-	KeyMapping* newMapping = inputManager.addMapping(metakey, input, KeyAction::PRESSED, *selectedInfo, keyMapSelection.slot);
 
-	// Update display data for the new mapping
-	if (auto displayData = displayDataPerInfo[selectedInfo->name])
+	KeyMapping* newMapping = inputManager.addMapping(metakey, input, KeyAction::PRESSED, *selectedInfo, keyMapSelection.slot);
+	if (newMapping)
 	{
-		const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
-		displayData->mappings[slotIndex] = newMapping;
+		// Update display data for the new mapping
+		if (auto displayData = displayDataPerInfo[selectedInfo->name])
+		{
+			const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
+			displayData->mappings[slotIndex] = *newMapping;
+		}
 	}
 	maxKeyMapNameWidthDirty = true;
 	unhighlightSelected();
