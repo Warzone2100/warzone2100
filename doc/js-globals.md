@@ -4,6 +4,10 @@ This section describes global variables (or 'globals' for short) that are
 available from all scripts. You typically cannot write to these variables,
 they are read-only.
 
+* ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
+object containing the x and y variables for a derrick.
+* ```startPositions``` An array of player start positions on the current map. Each item in the array is an
+object containing the x and y variables for a player start position.
 * ```version``` Current version of the game, set in *major.minor* format.
 * ```selectedPlayer``` The player controlled by the client on which the script runs.
 * ```gameTime``` The current game time. Updated before every invokation of a script.
@@ -21,23 +25,11 @@ they are read-only.
 * ```mapHeight``` Height of map in tiles.
 * ```scavengerPlayer``` Index of scavenger player. (3.2+ only)
 * ```isMultiplayer``` If the current game is a online multiplayer game or not. (3.2+ only)
+* ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
+be undefined.
 * ```me``` The player the script is currently running as.
 * ```scriptName``` Base name of the script that is running.
 * ```scriptPath``` Base path of the script that is running.
-* ```Stats``` A sparse, read-only array containing rules information for game entity types.
-(For now only the highest level member attributes are documented here. Use the 'jsdebug' cheat
-to see them all.)
-These values are defined:
-  * ```Body``` Droid bodies
-  * ```Sensor``` Sensor turrets
-  * ```ECM``` ECM (Electronic Counter-Measure) turrets
-  * ```Propulsion``` Propulsions
-  * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
-  * ```Construct``` Constructor turrets (eg for trucks)
-  * ```Brain``` Brains
-  * ```Weapon``` Weapon turrets
-  * ```WeaponClass``` Defined weapon classes
-  * ```Building``` Buildings
 * ```Upgrades``` A special array containing per-player rules information for game entity types,
 which can be written to in order to implement upgrades and other dynamic rules changes. Each item in the
 array contains a subset of the sparse array of rules information in the ```Stats``` global.
@@ -55,8 +47,20 @@ kills are required for this brain to level up to the next rank. To alter this fr
 set the entire array at once. Setting each item in the array will not work at the moment.
   * ```Weapon``` Weapon turrets
   * ```Building``` Buildings
-* ```groupSizes``` A sparse array of group sizes. If a group has never been used, the entry in this array will
-be undefined.
+* ```Stats``` A sparse, read-only array containing rules information for game entity types.
+(For now only the highest level member attributes are documented here. Use the 'jsdebug' cheat
+to see them all.)
+These values are defined:
+  * ```Body``` Droid bodies
+  * ```Sensor``` Sensor turrets
+  * ```ECM``` ECM (Electronic Counter-Measure) turrets
+  * ```Propulsion``` Propulsions
+  * ```Repair``` Repair turrets (not used, incidentally, for repair centers)
+  * ```Construct``` Constructor turrets (eg for trucks)
+  * ```Brain``` Brains
+  * ```Weapon``` Weapon turrets
+  * ```WeaponClass``` Defined weapon classes
+  * ```Building``` Buildings
 * ```playerData``` An array of information about the players in a game. Each item in the array is an object
 containing the following variables:
   * ```difficulty``` (see ```difficulty``` global constant)
@@ -66,7 +70,9 @@ containing the following variables:
   * ```isHuman``` whether the player is human (3.2+ only)
   * ```name``` the name of the player (3.2+ only)
   * ```team``` the number of the team the player is part of
-* ```derrickPositions``` An array of derrick starting positions on the current map. Each item in the array is an
-object containing the x and y variables for a derrick.
-* ```startPositions``` An array of player start positions on the current map. Each item in the array is an
-object containing the x and y variables for a player start position.
+* ```MapTiles``` A two-dimensional array of static information about the map tiles in a game. Each item in MapTiles[y][x] is an object
+containing the following variables:
+  * ```terrainType``` (see ```terrainType(x, y)``` function)
+  * ```height``` the height at the top left of the tile
+  * ```hoverContinent``` (For hover type propulsions)
+  * ```limitedContinent``` (For land or sea limited propulsion types)
