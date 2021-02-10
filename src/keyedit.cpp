@@ -817,27 +817,22 @@ void KeyMapForm::checkPushedKeyCombo()
 bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 {
 	KEY_CODE metakey = KEY_IGNORE;
-	KEY_CODE altMetaKey = (KEY_CODE)0;
 
 	if (keyDown(KEY_RALT) || keyDown(KEY_LALT))
 	{
 		metakey = KEY_LALT;
-		altMetaKey = KEY_RALT;
 	}
 	else if (keyDown(KEY_RCTRL) || keyDown(KEY_LCTRL))
 	{
 		metakey = KEY_LCTRL;
-		altMetaKey = KEY_RCTRL;
 	}
 	else if (keyDown(KEY_RSHIFT) || keyDown(KEY_LSHIFT))
 	{
 		metakey = KEY_LSHIFT;
-		altMetaKey = KEY_RSHIFT;
 	}
 	else if (keyDown(KEY_RMETA) || keyDown(KEY_LMETA))
 	{
 		metakey = KEY_LMETA;
-		altMetaKey = KEY_RMETA;
 	}
 
 	// check if bound to a fixed combo.
@@ -866,11 +861,6 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		psMapping->input       = input;
 		psMapping->status      = KEYMAP_ASSIGNABLE;
 		psMapping->metaKeyCode = metakey;
-
-		if (altMetaKey)
-		{
-			psMapping->altMetaKeyCode = altMetaKey;
-		}
 	}
 	maxKeyMapNameWidthDirty = true;
 	unhighlightSelected();

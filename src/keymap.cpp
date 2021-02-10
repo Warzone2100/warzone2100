@@ -202,12 +202,39 @@ static bool isActiveSingleKey(const KEY_MAPPING* mapping)
 	}
 }
 
+static KEY_CODE getAlternativeForMetaKey(const KEY_CODE meta)
+{
+	auto altMeta = KEY_CODE::KEY_IGNORE;
+	if (meta == KEY_CODE::KEY_LCTRL)
+	{
+		altMeta = KEY_CODE::KEY_RCTRL;
+	}
+	else if (meta == KEY_CODE::KEY_LALT)
+	{
+		altMeta = KEY_CODE::KEY_RALT;
+	}
+	else if (meta == KEY_CODE::KEY_LSHIFT)
+	{
+		altMeta = KEY_CODE::KEY_RSHIFT;
+	}
+	else if (meta == KEY_CODE::KEY_LMETA)
+	{
+		altMeta = KEY_CODE::KEY_RMETA;
+	}
+
+	return altMeta;
+}
+
 static bool isActiveCombination(const KEY_MAPPING* mapping)
 {
+	ASSERT(mapping->hasMeta(), "isActiveCombination called for non-meta key mapping!");
+
 	const bool bSubKeyIsPressed = mapping->input.isPressed();
 	const bool bMetaIsDown = keyDown(mapping->metaKeyCode);
-	const bool bHasAlt = mapping->altMetaKeyCode != KEY_IGNORE;
-	const bool bAltMetaIsDown = bHasAlt && keyDown(mapping->altMetaKeyCode);
+
+	const auto altMeta = getAlternativeForMetaKey(mapping->metaKeyCode);
+	const bool bHasAlt = altMeta != KEY_IGNORE;
+	const bool bAltMetaIsDown = bHasAlt && keyDown(altMeta);
 
 	return bSubKeyIsPressed && (bMetaIsDown || bAltMetaIsDown);
 }
@@ -217,6 +244,11 @@ bool KEY_MAPPING::isActivated() const
 	return isCombination(this)
 		? isActiveCombination(this)
 		: isActiveSingleKey(this);
+}
+
+bool KeyMapping::hasMeta() const
+{
+	return metaKeyCode != KEY_CODE::KEY_IGNORE;
 }
 
 // ----------------------------------------------------------------------------------
@@ -796,46 +828,38 @@ void keyInitMappings(bool bForceDefaults)
 /* Adds a new mapping to the list */
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const KeyMappingSlot slot)
 {
-	/* Get some memory for our binding */
-	keyMappings.emplace_back();
-	KEY_MAPPING *newMapping = &keyMappings.back();
-
-	/* Fill up our entries, first the ones that activate it */
-	newMapping->metaKeyCode = metaCode;
-	newMapping->input       = input;
-	newMapping->status      = status;
-	newMapping->slot    = slot;
-
-	/* When it was last called - needed? */
-	newMapping->lastCalled	= gameTime;
-
-	/* And what gets called when it's activated */
-	newMapping->function	= pKeyMapFunc;
-
-	/* Is it functional on the key being down or just pressed */
-	newMapping->action	= action;
-
-	newMapping->altMetaKeyCode = KEY_IGNORE;
-
-	/* We always request only the left hand one */
-	if (metaCode == KEY_LCTRL)
+	/* Make sure the meta key is the left variant */
+	KEY_CODE leftMetaCode = metaCode;
+	if (metaCode == KEY_RCTRL)
 	{
-		newMapping->altMetaKeyCode = KEY_RCTRL;
+		leftMetaCode = KEY_LCTRL;
 	}
-	else if (metaCode == KEY_LALT)
+	else if (metaCode == KEY_RALT)
 	{
-		newMapping->altMetaKeyCode = KEY_RALT;
+		leftMetaCode = KEY_LALT;
 	}
-	else if (metaCode == KEY_LSHIFT)
+	else if (metaCode == KEY_RSHIFT)
 	{
-		newMapping->altMetaKeyCode = KEY_RSHIFT;
+		leftMetaCode = KEY_LSHIFT;
 	}
-	else if (metaCode == KEY_LMETA)
+	else if (metaCode == KEY_RMETA)
 	{
-		newMapping->altMetaKeyCode = KEY_RMETA;
+		leftMetaCode = KEY_LMETA;
 	}
 
-	return newMapping;
+	/* Create the mapping as the last element in the list */
+	keyMappings.push_back({
+		pKeyMapFunc,
+		status,
+		gameTime,
+		leftMetaCode,
+		input,
+		action,
+		slot
+	});
+
+	/* Return the newly created mapping */
+	return &keyMappings.back();
 }
 
 // ----------------------------------------------------------------------------------
@@ -989,7 +1013,7 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 		// a mapping with right arrow key, depending on if another binding on shift+right-arrow is executed
 		// or not). In other words, if any mapping with meta is executed, it will consume the respective input,
 		// preventing any non-meta mappings with the same input from being executed.
-		return a.metaKeyCode != KEY_CODE::KEY_IGNORE && b.metaKeyCode == KEY_CODE::KEY_IGNORE;
+		return a.hasMeta() && !b.hasMeta();
 	});
 	std::vector<KeyMappingInput> consumedInputs;
 
