@@ -486,7 +486,7 @@ KeyFunctionEntries getVisibleKeyFunctionEntries()
 	return visible;
 }
 
-std::vector<std::reference_wrapper<const KeyMapping>> getVisibleMappings(InputManager& inputManager)
+static std::vector<std::reference_wrapper<const KeyMapping>> getVisibleMappings(InputManager& inputManager)
 {
 	std::vector<std::reference_wrapper<const KeyMapping>> visibleMappings;
 	for (const KeyFunctionInfo& info : getVisibleKeyFunctionEntries())
@@ -772,14 +772,7 @@ void KeyMapForm::initialize(bool isInGame)
 			const auto button = createKeyMapButton(buttonId, slot, *data);
 			container->attach(button);
 
-			if (const auto mapping = inputManager.getMapping(info, slot))
-			{
-				data->mappings[slotIndex] = *mapping;
-			}
-			else
-			{
-				data->mappings[slotIndex] = nonstd::nullopt;
-			}
+			data->mappings[slotIndex] = inputManager.getMapping(info, slot);
 		}
 
 		keyMapList->addItem(container);
@@ -869,20 +862,18 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	}
 
 	/* Try and see if the mapping already exists. Remove the old mapping first and then create a new one. */
-	if (KeyMapping* oldMapping = inputManager.getMapping(*selectedInfo, keyMapSelection.slot))
+	const auto maybeOld = inputManager.getMapping(*selectedInfo, keyMapSelection.slot);
+	if (maybeOld.has_value())
 	{
-		inputManager.removeMapping(oldMapping);
+		inputManager.removeMapping(*maybeOld);
 	}
+	KeyMapping& newMapping = inputManager.addMapping(metakey, input, KeyAction::PRESSED, *selectedInfo, keyMapSelection.slot);
 
-	KeyMapping* newMapping = inputManager.addMapping(metakey, input, KeyAction::PRESSED, *selectedInfo, keyMapSelection.slot);
-	if (newMapping)
+	// Update display data for the new mapping
+	if (auto displayData = displayDataPerInfo[selectedInfo->name])
 	{
-		// Update display data for the new mapping
-		if (auto displayData = displayDataPerInfo[selectedInfo->name])
-		{
-			const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
-			displayData->mappings[slotIndex] = *newMapping;
-		}
+		const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
+		displayData->mappings[slotIndex] = newMapping;
 	}
 	maxKeyMapNameWidthDirty = true;
 	unhighlightSelected();
