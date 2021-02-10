@@ -157,7 +157,18 @@ KeyFunctionInfo::KeyFunctionInfo(
 {
 }
 
+bool operator==(const KeyMapping& lhs, const KeyMapping& rhs)
+{
+	return lhs.input == rhs.input
+		&& lhs.metaKeyCode == rhs.metaKeyCode
+		&& lhs.action == rhs.action && lhs.slot == rhs.slot
+		&& &lhs.info == &rhs.info; // Assume infos are immutable with only one copy existing at a time.
+}
 
+bool operator!=(const KeyMapping& lhs, const KeyMapping& rhs)
+{
+	return !(lhs == rhs);
+}
 
 void InputManager::resetContextStates()
 {
@@ -182,7 +193,7 @@ void InputManager::makeAllContextsInactive()
 	bMappingsSortOrderDirty = true;
 }
 
-KeyMapping* InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
+KeyMapping& InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
 	/* Make sure the meta key is the left variant */
 	KEY_CODE leftMeta = meta;
@@ -215,25 +226,30 @@ KeyMapping* InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput 
 
 	/* Invalidate the sorting order and return the newly created mapping */
 	bMappingsSortOrderDirty = true;
-	return &keyMappings.back();
+	return keyMappings.back();
 }
 
-KeyMapping* InputManager::getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot)
+nonstd::optional<std::reference_wrapper<KeyMapping>> InputManager::getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
 	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [&info, slot](const KeyMapping& mapping) {
 		return mapping.info.name == info.name && mapping.slot == slot;
 	});
-	return mapping != keyMappings.end() ? &*mapping : nullptr;
+	if (mapping != keyMappings.end())
+	{
+		return *mapping;
+	}
+
+	return nonstd::nullopt;
 }
 
-std::vector<KeyMapping*> InputManager::findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input)
+std::vector<std::reference_wrapper<KeyMapping>> InputManager::findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input)
 {
-	std::vector<KeyMapping*> matches;
-	for (auto& mapping : keyMappings)
+	std::vector<std::reference_wrapper<KeyMapping>> matches;
+	for (KeyMapping& mapping : keyMappings)
 	{
 		if (mapping.metaKeyCode == meta && mapping.input == input)
 		{
-			matches.push_back(&mapping);
+			matches.push_back(mapping);
 		}
 	}
 
@@ -245,14 +261,14 @@ std::vector<KeyMapping> InputManager::removeConflictingMappings(const KEY_CODE m
 	/* Find any mapping with same keys */
 	const auto matches = findMappingsForInput(meta, input);
 	std::vector<KeyMapping> conflicts;
-	for (KeyMapping* psMapping : matches)
+	for (KeyMapping& mapping : matches)
 	{
 		/* Clear only if the mapping is for an assignable binding. Do not clear if there is no conflict (different context) */
-		const bool bConflicts = psMapping->info.context == context;
-		if (psMapping->info.type == KeyMappingType::ASSIGNABLE && bConflicts)
+		const bool bConflicts = mapping.info.context == context;
+		if (mapping.info.type == KeyMappingType::ASSIGNABLE && bConflicts)
 		{
-			conflicts.push_back(*psMapping);
-			removeMapping(psMapping);
+			conflicts.push_back(mapping);
+			removeMapping(mapping);
 		}
 	}
 
@@ -853,10 +869,10 @@ void InputManager::resetMappings(bool bForceDefaults)
 }
 
 // ----------------------------------------------------------------------------------
-bool InputManager::removeMapping(KeyMapping *psToRemove)
+bool InputManager::removeMapping(const KeyMapping& mappingToRemove)
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [psToRemove](KeyMapping const &mapping) {
-		return &mapping == psToRemove;
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [mappingToRemove](const KeyMapping& mapping) {
+		return mapping == mappingToRemove;
 	});
 	if (mapping != keyMappings.end())
 	{
@@ -869,8 +885,8 @@ bool InputManager::removeMapping(KeyMapping *psToRemove)
 
 bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const bool bForceDefaults, const KeyMappingSlot slot)
 {
-	KeyMapping* psMapping = getMapping(info, slot);
-	if (!bForceDefaults && psMapping != nullptr)
+	const auto psMapping = getMapping(info, slot);
+	if (!bForceDefaults && psMapping.has_value())
 	{
 		// Not forcing defaults, and there is already a mapping entry for this function with this slot
 		return false;
@@ -881,11 +897,10 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 	{
 		debug(LOG_INFO, "Adding missing keymap entry: %s", info.displayName.c_str());
 	}
-	if (psMapping)
+	if (psMapping.has_value())
 	{
 		// Remove any existing mapping for this function
-		removeMapping(psMapping);
-		psMapping = nullptr;
+		removeMapping(*psMapping);
 	}
 	if (!bForceDefaults)
 	{	
@@ -917,16 +932,16 @@ static bool checkQwertyKeys(InputManager& inputManager)
 			}
 
 			const auto existing = inputManager.findMappingsForInput(KEY_CODE::KEY_LSHIFT, qKey);
-			if (existing.size() > 0 && std::any_of(existing.begin(), existing.end(), [](const KeyMapping* mapping) {
-				return mapping->info.name != "JumpToMapMarker";
+			if (existing.size() > 0 && std::any_of(existing.begin(), existing.end(), [](const KeyMapping& mapping) {
+				return mapping.info.name != "JumpToMapMarker";
 			}))
 			{
 				return false;
 			}
 
-			for (const auto old : existing)
+			for (const KeyMapping& old : existing)
 			{
-				if (old->info.name == "JumpToMapMarker")
+				if (old.info.name == "JumpToMapMarker")
 				{
 					inputManager.removeMapping(old);
 				}
@@ -938,12 +953,12 @@ static bool checkQwertyKeys(InputManager& inputManager)
 			if (qwertyKeyMappings[tableEntry].psMapping)
 			{
 				/* Get rid of the old mapping on this key if there was one */
-				inputManager.removeMapping(qwertyKeyMappings[tableEntry].psMapping);
+				inputManager.removeMapping(*qwertyKeyMappings[tableEntry].psMapping);
 			}
 
 			/* Now add the new one for this location */
 			qwertyKeyMappings[tableEntry].psMapping =
-				inputManager.addMapping(KEY_LSHIFT, KeyMappingInput((KEY_CODE)qKey), KeyAction::PRESSED, *info, KeyMappingSlot::PRIMARY);
+				&inputManager.addMapping(KEY_LSHIFT, KeyMappingInput((KEY_CODE)qKey), KeyAction::PRESSED, *info, KeyMappingSlot::PRIMARY);
 
 			/* Store away the position and view angle */
 			qwertyKeyMappings[tableEntry].xPos = playerPos.p.x;

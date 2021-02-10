@@ -259,21 +259,24 @@ struct KeyMapping
 	bool toString(char* pOutStr) const;
 };
 
+bool operator==(const KeyMapping& lhs, const KeyMapping& rhs);
+bool operator!=(const KeyMapping& lhs, const KeyMapping& rhs);
+
 class InputManager
 {
 // Input processing
 public:
-	KeyMapping* addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot);
+	KeyMapping& addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot);
 
-	KeyMapping* getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot);
+	nonstd::optional<std::reference_wrapper<KeyMapping>> getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot);
 
 	/* Finds all mappings with matching meta and input */
-	std::vector<KeyMapping*> findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input);
+	std::vector<std::reference_wrapper<KeyMapping>> findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input);
 
 	std::vector<KeyMapping> removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
 
 	/* Removes a mapping specified by a pointer */
-	bool removeMapping(KeyMapping* mapping);
+	bool removeMapping(const KeyMapping& mappingToRemove);
 
 	void processMappings(const bool bAllowMouseWheelEvents);
 
