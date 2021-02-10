@@ -1336,7 +1336,7 @@ int getCompFromID(COMPONENT_TYPE compType, const WzString &name)
 	auto it = lookupCompStatPtr.find(WzString::fromUtf8(name.toUtf8().c_str()));
 	if (it != lookupCompStatPtr.end())
 	{
-		psComp = (COMPONENT_STATS *)it->second;
+		psComp = it->second;
 	}
 	ASSERT_OR_RETURN(-1, psComp, "No such component ID [%s] found", name.toUtf8().c_str());
 	ASSERT_OR_RETURN(-1, compType == psComp->compType, "Wrong component type for ID %s", name.toUtf8().c_str());
@@ -1352,7 +1352,7 @@ COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 	auto it = lookupCompStatPtr.find(name);
 	if (it != lookupCompStatPtr.end())
 	{
-		psComp = (COMPONENT_STATS *)it->second;
+		psComp = it->second;
 	}
 	/*if (!psComp)
 	{
