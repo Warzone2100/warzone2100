@@ -186,7 +186,7 @@ bool loadResearch(WzConfig &ini)
 		if (statID.compare("") != 0)
 		{
 			//try find the structure stat with given name
-			research.psStat = getCompStatsFromName(statID);
+			research.psStat = getStructStatsFromName(statID);
 			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getStatsName(&research));
 		}
 
@@ -491,12 +491,12 @@ std::vector<uint16_t> fillResearchList(UDWORD playerID, nonstd::optional<UWORD> 
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
-	RESEARCH                                       *pResearch = &asResearch[researchIndex];
+	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
+
+	RESEARCH                    *pResearch = &asResearch[researchIndex];
 	MESSAGE						*pMessage;
 	//the message gets sent to console
 	char						consoleMsg[MAX_RESEARCH_MSG_SIZE];
-
-	ASSERT_OR_RETURN(, researchIndex < asResearch.size(), "Invalid research index %u", researchIndex);
 
 	syncDebug("researchResult(%u, %u, …)", researchIndex, player);
 
