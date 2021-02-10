@@ -120,7 +120,9 @@ jobs:
         # Determine vcpkg binary cache directory
 
         $VCPKG_BINARYCACHE_DIR = "${{ github.workspace }}\vcpkg_cache"
-        $VCPKG_BINARY_SOURCES = "files,${VCPKG_BINARYCACHE_DIR},readwrite"
+        $VCPKG_BINARY_SOURCES = "clear;files,${VCPKG_BINARYCACHE_DIR},readwrite"
+
+        echo "VCPKG_BINARYCACHE_DIR = ${VCPKG_BINARYCACHE_DIR}"
 
         # ----------------
         # Export Variables
@@ -216,6 +218,7 @@ jobs:
       run: |
         Write-Host "env:VCPKG_DEFAULT_TRIPLET=`"${env:VCPKG_DEFAULT_TRIPLET}`""
         Write-Host "env:VCPKG_VISUAL_STUDIO_PATH=`"${env:VCPKG_VISUAL_STUDIO_PATH}`""
+        Write-Host "env:VCPKG_BINARY_SOURCES=`"${env:VCPKG_BINARY_SOURCES}`""
 
         & ${env:WZ_REPO_PATH}\get-dependencies_win.ps1 -VCPKG_BUILD_TYPE "release"
 
