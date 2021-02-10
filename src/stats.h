@@ -166,6 +166,9 @@ COMPONENT_STATS *getCompStatsFromName(const WzString &name);
 /// Get the structure pointer for a structure based on the name
 STRUCTURE_STATS *getStructStatsFromName(const WzString &name);
 
+/// Get the base stat pointer for a stat based on the name
+BASE_STATS *getBaseStatsFromName(const WzString &name);
+
 /*returns the weapon sub class based on the string name passed in */
 bool getWeaponSubClass(const char *subClass, WEAPON_SUBCLASS *wclass);
 const char *getWeaponSubClass(WEAPON_SUBCLASS wclass);
