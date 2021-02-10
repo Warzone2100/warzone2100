@@ -185,8 +185,8 @@ bool loadResearch(WzConfig &ini)
 		research.psStat = nullptr;
 		if (statID.compare("") != 0)
 		{
-			//try find the structure stat with given name
-			research.psStat = getStructStatsFromName(statID);
+			//try find the stat with given name
+			research.psStat = getBaseStatsFromName(statID);
 			ASSERT_OR_RETURN(false, research.psStat, "Could not find stats for %s research %s", statID.toUtf8().c_str(), getStatsName(&research));
 		}
 

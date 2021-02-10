@@ -1376,6 +1376,17 @@ STRUCTURE_STATS *getStructStatsFromName(const WzString &name)
 	return psStat;
 }
 
+BASE_STATS *getBaseStatsFromName(const WzString &name)
+{
+	BASE_STATS *psStat = nullptr;
+	auto it = lookupStatPtr.find(name);
+	if (it != lookupStatPtr.end())
+	{
+		psStat = it->second;
+	}
+	return psStat;
+}
+
 /*sets the store to the body size based on the name passed in - returns false
 if doesn't compare with any*/
 bool getBodySize(const WzString &size, BODY_SIZE *pStore)
