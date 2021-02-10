@@ -245,7 +245,7 @@ bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
 
 struct KeyMapping
 {
-	const KeyFunctionInfo* info;
+	const KeyFunctionInfo& info;
 	UDWORD                 lastCalled;
 	KEY_CODE               metaKeyCode;
 	KeyMappingInput        input;
@@ -327,8 +327,10 @@ UDWORD getMarkerY(KEY_CODE code);
 SDWORD getMarkerSpin(KEY_CODE code);
 
 // For keymap editor
-const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
-const KeyFunctionInfo* keyFunctionInfoByName(std::string const &name);
+typedef std::vector<std::reference_wrapper<const KeyFunctionInfo>> KeyFunctionEntries;
+
+const KeyFunctionEntries allKeyFunctionEntries();
+nonstd::optional<std::reference_wrapper<const KeyFunctionInfo>> keyFunctionInfoByName(std::string const &name);
 KeyMappingInputSource keyMappingSourceByName(std::string const& name);
 KeyMappingSlot keyMappingSlotByName(std::string const& name);
 

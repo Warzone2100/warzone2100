@@ -205,7 +205,7 @@ KeyMapping* InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput 
 
 	/* Create the mapping as the last element in the list */
 	keyMappings.push_back({
-		&info,
+		info,
 		gameTime,
 		leftMeta,
 		input,
@@ -220,10 +220,8 @@ KeyMapping* InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput 
 
 KeyMapping* InputManager::getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
-	const auto infoAddr = &info;
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [infoAddr, slot](KeyMapping const& mapping) {
-		// KeyFunctionInfos are immutable and non-copyable, so it is safe to compare by ptr
-		return mapping.info == infoAddr && mapping.slot == slot;
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [&info, slot](const KeyMapping& mapping) {
+		return mapping.info.name == info.name && mapping.slot == slot;
 	});
 	return mapping != keyMappings.end() ? &*mapping : nullptr;
 }
@@ -250,8 +248,8 @@ std::vector<KeyMapping> InputManager::removeConflictingMappings(const KEY_CODE m
 	for (KeyMapping* psMapping : matches)
 	{
 		/* Clear only if the mapping is for an assignable binding. Do not clear if there is no conflict (different context) */
-		const bool bConflicts = psMapping->info->context == context;
-		if (psMapping->info->type == KeyMappingType::ASSIGNABLE && bConflicts)
+		const bool bConflicts = psMapping->info.context == context;
+		if (psMapping->info.type == KeyMappingType::ASSIGNABLE && bConflicts)
 		{
 			conflicts.push_back(*psMapping);
 			removeMapping(psMapping);
@@ -269,7 +267,7 @@ void InputManager::shutdown()
 void InputManager::clearAssignableMappings()
 {
 	keyMappings.remove_if([](const KeyMapping& mapping) {
-		return mapping.info->type == KeyMappingType::ASSIGNABLE;
+		return mapping.info.type == KeyMappingType::ASSIGNABLE;
 	});
 }
 
@@ -540,19 +538,19 @@ public:
 		}
 	}
 public:
-	KeyFunctionInfo const *keyFunctionInfoByName(std::string const &name) const
+	nonstd::optional<std::reference_wrapper<const KeyFunctionInfo>> keyFunctionInfoByName(std::string const &name) const
 	{
 		auto it = name_to_index_map.find(name);
 		if (it != name_to_index_map.end()) {
-			return &ordered_list[it->second];
+			return ordered_list[it->second];
 		}
-		return nullptr;
+		return nonstd::nullopt;
 	}
 
-	const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries() const
+	const KeyFunctionEntries allKeyFunctionEntries() const
 	{
-		std::vector<std::reference_wrapper<const KeyFunctionInfo>> entries;
-		for (auto const &keyFunctionInfo : ordered_list)
+		KeyFunctionEntries entries;
+		for (auto const& keyFunctionInfo : ordered_list)
 		{
 			entries.push_back(keyFunctionInfo);
 		}
@@ -759,12 +757,12 @@ static KeyFunctionInfoTable initializeKeyFunctionInfoTable()
 }
 static const KeyFunctionInfoTable keyFunctionInfoTable = initializeKeyFunctionInfoTable();
 
-const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries()
+const KeyFunctionEntries allKeyFunctionEntries()
 {
-	return keyFunctionInfoTable.allKeymapEntries();
+	return keyFunctionInfoTable.allKeyFunctionEntries();
 }
 
-const KeyFunctionInfo* keyFunctionInfoByName(std::string const &name)
+nonstd::optional<std::reference_wrapper<const KeyFunctionInfo>> keyFunctionInfoByName(std::string const &name)
 {
 	return keyFunctionInfoTable.keyFunctionInfoByName(name);
 }
@@ -838,7 +836,7 @@ void InputManager::resetMappings(bool bForceDefaults)
 
 	// Use addDefaultMapping to add the default key mapping if either: (a) bForceDefaults is true, or (b) the loaded key mappings are missing an entry
 	bool didAdd = false;
-	for (const KeyFunctionInfo& info : allKeymapEntries())
+	for (const KeyFunctionInfo& info : allKeyFunctionEntries())
 	{
 		for (const auto& mapping : info.defaultMappings)
 		{
@@ -912,15 +910,15 @@ static bool checkQwertyKeys(InputManager& inputManager)
 		if (qKey)
 		{
 			const auto info = keyFunctionInfoByName("JumpToMapMarker");
-			ASSERT(info, "Could not find keymap info table entry for JumpToMapMarker");
-			if (!info)
+			ASSERT(info.has_value(), "Could not find keymap info table entry for JumpToMapMarker");
+			if (!info.has_value())
 			{
 				return false;
 			}
 
 			const auto existing = inputManager.findMappingsForInput(KEY_CODE::KEY_LSHIFT, qKey);
-			if (existing.size() > 0 && std::any_of(existing.begin(), existing.end(), [info](const KeyMapping* mapping) {
-				return mapping->info->name != "JumpToMapMarker";
+			if (existing.size() > 0 && std::any_of(existing.begin(), existing.end(), [](const KeyMapping* mapping) {
+				return mapping->info.name != "JumpToMapMarker";
 			}))
 			{
 				return false;
@@ -928,7 +926,7 @@ static bool checkQwertyKeys(InputManager& inputManager)
 
 			for (const auto old : existing)
 			{
-				if (old->info->name == "JumpToMapMarker")
+				if (old->info.name == "JumpToMapMarker")
 				{
 					inputManager.removeMapping(old);
 				}
@@ -962,7 +960,7 @@ static bool checkQwertyKeys(InputManager& inputManager)
 /* allows checking if mapping should currently be ignored in processMappings */
 static bool isIgnoredMapping(const InputManager& inputManager, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
 {
-	if (!inputManager.isContextActive(mapping.info->context))
+	if (!inputManager.isContextActive(mapping.info.context))
 	{
 		return true;
 	}
@@ -977,12 +975,12 @@ static bool isIgnoredMapping(const InputManager& inputManager, const bool bAllow
 		return true;
 	}
 
-	if (mapping.info->function == nullptr)
+	if (mapping.info.function == nullptr)
 	{
 		return true;
 	}
 
-	const bool bIsDebugMapping = mapping.info->context == InputContext::__DEBUG;
+	const bool bIsDebugMapping = mapping.info.context == InputContext::__DEBUG;
 	if (bIsDebugMapping && !getDebugMappingStatus()) {
 		return true;
 	}
@@ -1008,8 +1006,8 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 	{
 		keyMappings.sort([this](const KeyMapping& a, const KeyMapping& b) {
 			// Primary sort by priority
-			const unsigned int priorityA = getContextPriority(a.info->context);
-			const unsigned int priorityB = getContextPriority(b.info->context);
+			const unsigned int priorityA = getContextPriority(a.info.context);
+			const unsigned int priorityB = getContextPriority(b.info.context);
 			if (priorityA != priorityB)
 			{
 				return priorityA > priorityB;
@@ -1052,7 +1050,7 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 			}
 
 			lastInput = keyToProcess.input;
-			keyToProcess.info->function();
+			keyToProcess.info.function();
 			consumedInputs.insert(keyToProcess.input);
 		}
 	}
