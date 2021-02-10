@@ -94,12 +94,13 @@ struct KEY_MAPPING
 	KEY_STATUS         status;
 	UDWORD             lastCalled;
 	KEY_CODE           metaKeyCode;
-	KEY_CODE           altMetaKeyCode;
 	KeyMappingInput    input;
 	KEY_ACTION         action;
 	KeyMappingSlot     slot;
 
 	bool isActivated() const;
+
+	bool hasMeta() const;
 };
 
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
