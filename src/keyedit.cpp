@@ -120,7 +120,7 @@ private:
 
 	InputManager& inputManager;
 	std::shared_ptr<ScrollableListWidget> keyMapList;
-	std::unordered_map<MappableFunction, DisplayKeyMapData*> displayDataPerFunction;
+	std::unordered_map<std::string, DisplayKeyMapData*> displayDataPerInfo;
 
 	std::shared_ptr<W_BUTTON> createKeyMapButton(const unsigned int id, const KeyMappingSlot slot, DisplayKeyMapData* targetFunctionData);
 	void unhighlightSelected();
@@ -133,26 +133,26 @@ private:
 
 struct KeyMappingSelection
 {
-	bool               hasActiveSelection;
-	KeyMappingSlot     slot;
-	MappableFunction   function;
+	bool                   hasActiveSelection;
+	KeyMappingSlot         slot;
+	const KeyFunctionInfo* info;
 
-	bool isSelected(void (*const otherFunction)(), const KeyMappingSlot otherSlot) const
+	bool isSelected(const KeyFunctionInfo& otherInfo, const KeyMappingSlot otherSlot) const
 	{
-		return hasActiveSelection && function == otherFunction && slot == otherSlot;
+		return hasActiveSelection && info == &otherInfo && slot == otherSlot;
 	}
 
-	void select(const KeyMappingSlot newSlot, const MappableFunction newFunction)
+	void select(const KeyFunctionInfo& newInfo, const KeyMappingSlot newSlot)
 	{
 		hasActiveSelection = true;
 		slot = newSlot;
-		function = newFunction;
+		info = &newInfo;
 	}
 
 	void clearSelection()
 	{
 		hasActiveSelection = false;
-		function = nullptr;
+		info = nullptr;
 		slot = KeyMappingSlot::LAST;
 	}
 };
@@ -231,7 +231,7 @@ public:
 		}
 
 		psParentForm->keyMapList->disableScroll();
-		keyMapSelection.select(slot, targetFunctionData->info.function);
+		keyMapSelection.select(targetFunctionData->info, slot);
 	}
 
 	virtual void display(int xOffset, int yOffset) override
@@ -261,7 +261,7 @@ public:
 		const KeyFunctionInfo& info = targetFunctionData->info;
 
 		// Draw base
-		if (keyMapSelection.isSelected(info.function, slot))
+		if (keyMapSelection.isSelected(info, slot))
 		{
 			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_ACTIVE);
 		}
@@ -496,7 +496,7 @@ std::vector<std::reference_wrapper<const KeyMapping>> getVisibleMappings(InputMa
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
 			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
-			if (const KeyMapping* mapping = inputManager.getMappingFromFunction(info.function, slot))
+			if (const auto mapping = inputManager.getMapping(info, slot))
 			{
 				visibleMappings.push_back(*mapping);
 			}
@@ -660,7 +660,7 @@ bool loadKeyMap(InputManager& inputManager)
 		const WzString slotName = ini.value("slot", "primary").toWzString();
 		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
 
-		inputManager.addMapping(meta, input, action, info->function, slot);
+		inputManager.addMapping(meta, input, action, *info, slot);
 	}
 	ini.endArray();
 	return true;
@@ -726,7 +726,7 @@ void KeyMapForm::initialize(bool isInGame)
 	});
 
 	/* Add key mappings to the form */
-	displayDataPerFunction.clear();
+	displayDataPerInfo.clear();
 	for (std::vector<std::reference_wrapper<const KeyFunctionInfo>>::const_iterator i = infos.begin(); i != infos.end(); ++i)
 	{
 		const KeyFunctionInfo& info = *i;
@@ -743,7 +743,7 @@ void KeyMapForm::initialize(bool isInGame)
 		}
 
 		DisplayKeyMapData* data = new DisplayKeyMapData(inputManager, info);
-		displayDataPerFunction.insert({ info.function, data });
+		displayDataPerInfo.insert({ info.name, data });
 
 		const unsigned int numSlots = static_cast<unsigned int>(KeyMappingSlot::LAST);
 
@@ -767,7 +767,7 @@ void KeyMapForm::initialize(bool isInGame)
 			const auto button = createKeyMapButton(buttonId, slot, data);
 			container->attach(button);
 
-			data->mappings[slotIndex] = inputManager.getMappingFromFunction(info.function, slot);
+			data->mappings[slotIndex] = inputManager.getMapping(info, slot);
 		}
 
 		keyMapList->addItem(container);
@@ -836,22 +836,20 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		metakey = KEY_LMETA;
 	}
 
-	const KeyFunctionInfo* info = keyFunctionInfoByFunction(keyMapSelection.function);
-	ASSERT_OR_RETURN(false, info != nullptr, "Could not find matching key function info while creating new mapping!");
-
-	/* check if bound to a fixed combo. */
-	if (info->type != KeyMappingType::ASSIGNABLE)
+	const auto selectedInfo = keyMapSelection.info;
+	/* Disallow modifying non-assignable mappings. (Null-check the `info` in case assertions are disabled) */
+	if (!selectedInfo || selectedInfo->type != KeyMappingType::ASSIGNABLE)
 	{
 		unhighlightSelected();
 		return false;
 	}
 
 	/* Clear conflicting mappings using these keys */
-	const auto conflicts = inputManager.removeConflictingMappings(metakey, input, info->context);
+	const auto conflicts = inputManager.removeConflictingMappings(metakey, input, selectedInfo->context);
 	for (auto& conflict : conflicts)
 	{
 		// Update conflicting mappings' display data
-		if (auto conflictData = displayDataPerFunction[conflict.info->function])
+		if (auto conflictData = displayDataPerInfo[conflict.info->name])
 		{
 			const unsigned int slotIndex = static_cast<unsigned int>(conflict.slot);
 			conflictData->mappings[slotIndex] = nullptr;
@@ -859,15 +857,14 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	}
 
 	/* Try and see if the mapping already exists. Remove the old mapping first and then create a new one. */
-	if (KeyMapping* oldMapping = inputManager.getMappingFromFunction(info->function, keyMapSelection.slot))
+	if (KeyMapping* oldMapping = inputManager.getMapping(*selectedInfo, keyMapSelection.slot))
 	{
 		inputManager.removeMapping(oldMapping);
 	}
-
-	KeyMapping* newMapping = inputManager.addMapping(metakey, input, KeyAction::PRESSED, info->function, keyMapSelection.slot);
+	KeyMapping* newMapping = inputManager.addMapping(metakey, input, KeyAction::PRESSED, *selectedInfo, keyMapSelection.slot);
 
 	// Update display data for the new mapping
-	if (auto displayData = displayDataPerFunction[info->function])
+	if (auto displayData = displayDataPerInfo[selectedInfo->name])
 	{
 		const unsigned int slotIndex = static_cast<unsigned int>(keyMapSelection.slot);
 		displayData->mappings[slotIndex] = newMapping;

@@ -22,6 +22,7 @@
 #define __INCLUDED_SRC_KEYBIND_H__
 
 #include "console.h"
+#include "keymap.h"
 #include "lib/framework/fixedpoint.h"
 
 #define	MAP_ZOOM_RATE_MAX	(1000)
@@ -50,9 +51,6 @@ void kf_RecalcLighting();
 void kf_ScreenDump();
 void kf_AllAvailable();
 void kf_TriFlip();
-void kf_ToggleBackgroundFog();
-void kf_ToggleDistanceFog();
-void kf_ToggleMistFog();
 void kf_ToggleFog();
 void kf_ToggleShadows();
 void kf_ToggleCamera();
@@ -61,8 +59,6 @@ void kf_LowerTile();
 void kf_MapCheck();
 void kf_ZoomOut();
 void kf_ZoomIn();
-void kf_ShrinkScreen();
-void kf_ExpandScreen();
 void kf_RotateLeft();
 void kf_RotateRight();
 void kf_RotateBuildingCW();
@@ -70,7 +66,6 @@ void kf_RotateBuildingACW();
 void kf_PitchBack();
 void kf_PitchForward();
 void kf_ResetPitch();
-void kf_ToggleDimension();
 void kf_ShowMappings();
 void kf_SelectGrouping(UDWORD groupNumber);
 void kf_SelectGrouping_0();
@@ -103,7 +98,6 @@ void kf_AddGrouping_6();
 void kf_AddGrouping_7();
 void kf_AddGrouping_8();
 void kf_AddGrouping_9();
-void kf_SelectMoveGrouping();
 void kf_ToggleDroidInfo();
 void kf_addInGameOptions();
 void kf_NewPlayerPower();
@@ -141,7 +135,6 @@ void kf_KillSelected();
 void kf_ShowGridInfo();
 void kf_SendGlobalMessage();
 void kf_SendTeamMessage();
-void kf_SelectPlayer();
 void kf_ToggleConsole();
 void kf_ToggleTeamChat();
 void kf_SelectAllOnScreenUnits();
@@ -180,8 +173,8 @@ void kf_SetDroidOrderHold();
 void kf_SetDroidOrderStop();
 
 void kf_SetDroidMoveGuard();
-void kf_SetDroidMovePursue();   //not there?
-void kf_SetDroidMovePatrol();   // not there?
+void kf_SetDroidMovePursue();
+void kf_SetDroidMovePatrol();
 
 void kf_SetDroidReturnToBase();
 void kf_SetDroidGoToTransport();
@@ -197,13 +190,13 @@ extern bool bAllowOtherKeyPresses;
 
 void kf_TriggerRayCast();
 void kf_ToggleFormationSpeedLimiting();
-void kf_ToggleSensorDisplay();		//Was commented out.  Re-enabled --Q 5/10/05
+void kf_ToggleSensorDisplay();
 void kf_JumpToResourceExtractor();
 void kf_JumpToRepairUnits();
 void kf_JumpToConstructorUnits();
 void kf_JumpToCommandUnits();
 void kf_JumpToSensorUnits();
-void kf_AddHelpBlip();				//Add a beacon
+void kf_AddHelpBlip();
 void kf_ToggleProximitys();
 
 void kf_JumpToUnassignedUnits();

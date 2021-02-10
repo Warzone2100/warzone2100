@@ -182,7 +182,21 @@ enum class KeyMappingType
 	HIDDEN
 };
 
-typedef void (*MappableFunction)();
+typedef std::function<void()> MappableFunction;
+
+enum class KeyMappingSlot
+{
+	PRIMARY,
+	SECONDARY,
+	LAST
+};
+
+struct KeyCombination
+{
+	KEY_CODE        meta;
+	KeyMappingInput input;
+	KeyAction       action;
+};
 
 struct KeyFunctionInfo
 {
@@ -192,12 +206,30 @@ struct KeyFunctionInfo
 	const std::string      name;
 	const std::string      displayName;
 
+	const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings;
+
+	KeyFunctionInfo(
+		const InputContext& context,
+		const KeyMappingType   type,
+		const MappableFunction function,
+		const std::string      name
+	);
+
 	KeyFunctionInfo(
 		const InputContext&    context,
 		const KeyMappingType   type,
 		const MappableFunction function,
 		const std::string      name,
 		const std::string      displayName
+	);
+
+	KeyFunctionInfo(
+		const InputContext&    context,
+		const KeyMappingType   type,
+		const MappableFunction function,
+		const std::string      name,
+		const std::string      displayName,
+		const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings
 	);
 
 	// Prevent copies. The entries are immutable and thus should never be copied around.
@@ -210,13 +242,6 @@ struct KeyFunctionInfo
 
 bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
 bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs);
-
-enum class KeyMappingSlot
-{
-	PRIMARY,
-	SECONDARY,
-	LAST
-};
 
 struct KeyMapping
 {
@@ -238,9 +263,12 @@ class InputManager
 {
 // Input processing
 public:
-	KeyMapping* addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const MappableFunction function, const KeyMappingSlot slot);
+	KeyMapping* addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot);
 
-	KeyMapping* getMappingFromFunction(const MappableFunction function, const KeyMappingSlot slot);
+	KeyMapping* getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot);
+
+	/* Finds all mappings with matching meta and input */
+	std::vector<KeyMapping*> findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input);
 
 	std::vector<KeyMapping> removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
 
@@ -257,11 +285,8 @@ public:
 	const std::list<KeyMapping> getAllMappings() const;
 
 private:
-	/* Finds all mappings with matching meta and input */
-	std::vector<KeyMapping*> findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input);
-
 	/* Registers a new default key mapping */
-	bool addDefaultMapping(KEY_CODE metaCode, KeyMappingInput input, KeyAction action, const MappableFunction function, bool bForceDefaults, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+	bool addDefaultMapping(KEY_CODE metaCode, KeyMappingInput input, KeyAction action, const KeyFunctionInfo& info, bool bForceDefaults, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
 
 // Input contexts
 public:
@@ -303,8 +328,7 @@ SDWORD getMarkerSpin(KEY_CODE code);
 
 // For keymap editor
 const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
-KeyFunctionInfo const *keyFunctionInfoByFunction(void (*const function)());
-KeyFunctionInfo const *keyFunctionInfoByName(std::string const &name);
+const KeyFunctionInfo* keyFunctionInfoByName(std::string const &name);
 KeyMappingInputSource keyMappingSourceByName(std::string const& name);
 KeyMappingSlot keyMappingSlotByName(std::string const& name);
 

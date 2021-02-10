@@ -1028,7 +1028,7 @@ void	kf_ResetPitch()
 
 // --------------------------------------------------------------------------
 /* Quickly access the in-game keymap */
-void	kf_ShowMappings()
+void kf_ShowMappings()
 {
 	if (!InGameOpUp && !isInGamePopupUp)
 	{
@@ -1039,51 +1039,9 @@ void	kf_ShowMappings()
 }
 
 // --------------------------------------------------------------------------
-/*If this is performed twice then it changes the productionPlayer*/
-void	kf_SelectPlayer()
-{
-	UDWORD	playerNumber, prevPlayer;
-
-#ifndef DEBUG
-	// Bail out if we're running a _true_ multiplayer game (to prevent MP
-	// cheating which could even result in undefined behaviour)
-	if (runningMultiplayer())
-	{
-		noMPCheatMsg();
-		return;
-	}
-#endif
-
-	const auto lastKey = getLastInput().asKeyCode();
-	if (!lastKey.has_value())
-	{
-		return;
-	}
-
-	//store the current player
-	prevPlayer = selectedPlayer;
-
-	playerNumber = ((*lastKey) - KEY_CODE::KEY_F1);
-	if (playerNumber >= 10)
-	{
-		selectedPlayer = 0;
-	}
-	else
-	{
-		selectedPlayer = playerNumber;
-	}
-	realSelectedPlayer = selectedPlayer;
-	//	godMode = true;
-
-	if (prevPlayer == selectedPlayer)
-	{
-		changeProductionPlayer((UBYTE)selectedPlayer);
-	}
-}
-// --------------------------------------------------------------------------
 
 /* Selects the player's groups 1..9 */
-void	kf_SelectGrouping(UDWORD	groupNumber)
+void kf_SelectGrouping(UDWORD groupNumber)
 {
 	bool	bAlreadySelected;
 	DROID	*psDroid;
@@ -1153,19 +1111,6 @@ DEFINE_NUMED_KF(8)
 DEFINE_NUMED_KF(9)
 
 // --------------------------------------------------------------------------
-void	kf_SelectMoveGrouping()
-{
-	const auto lastKey = getLastInput().asKeyCode();
-	if (!lastKey.has_value())
-	{
-		return;
-	}
-
-	const UDWORD groupNumber = ((*lastKey) - KEY_CODE::KEY_1) + 1;
-
-	activateGroupAndMove(selectedPlayer, groupNumber);
-}
-// --------------------------------------------------------------------------
 void	kf_ToggleDroidInfo()
 {
 	camToggleInfo();
@@ -1192,7 +1137,7 @@ void	kf_addMultiMenu()
 
 // --------------------------------------------------------------------------
 
-void	kf_JumpToMapMarker()
+void kf_JumpToMapMarker()
 {
 	const auto lastKey = getLastInput().asKeyCode();
 	if (!lastKey.has_value())
