@@ -34,13 +34,6 @@ An event that is run before game is saved. There is usually no need to use this 
 
 An event that is run after game is saved. There is usually no need to use this event.
 
-## eventDeliveryPointMoving()
-
-An event that is run when the current player starts to move a delivery point.
-
-## eventDeliveryPointMoved()
-
-An event that is run after the current player has moved a delivery point.
 
 ## eventTransporterLaunch(transport)
 
@@ -61,6 +54,14 @@ An event that is run when the mission transporter has no more reinforcements to 
 ## eventTransporterLanded(transport)
 
 An event that is run when the mission transporter has landed with reinforcements.
+
+## eventDeliveryPointMoving()
+
+An event that is run when the current player starts to move a delivery point.
+
+## eventDeliveryPointMoved()
+
+An event that is run after the current player has moved a delivery point.
 
 ## eventDesignBody()
 
@@ -90,6 +91,10 @@ An event that is run when current user leaves the design menu.
 
 An event that is run when current user picks something new in the build menu.
 
+## eventMenuResearchSelected()
+
+An event that is run when current user picks something new in the research menu.
+
 ## eventMenuBuild()
 
 An event that is run when current user opens the build menu.
@@ -100,6 +105,20 @@ An event that is run when current user opens the research menu.
 
 ## eventMenuManufacture()
 An event that is run when current user opens the manufacture menu.
+
+## eventSelectionChanged(objects)
+
+An event that is triggered whenever the host player selects one or more game objects.
+The ```objects``` parameter contains an array of the currently selected game objects.
+Keep in mind that the player may drag and drop select many units at once, select one
+unit specifically, or even add more selections to a current selection one at a time.
+This event will trigger once for each user action, not once for each selected or
+deselected object. If all selected game objects are deselected, ```objects``` will
+be empty.
+
+## eventObjectRecycled()
+
+An event that is run when an object (ex. droid, structure) is recycled.
 
 ## eventPlayerLeft(player index)
 
@@ -198,16 +217,6 @@ Message may be undefined.
 
 An event that is run whenever a beacon message is removed. The ```from``` parameter is the
 player sending the beacon. For the moment, the ```to``` parameter is always the script player.
-
-## eventSelectionChanged(objects)
-
-An event that is triggered whenever the host player selects one or more game objects.
-The ```objects``` parameter contains an array of the currently selected game objects.
-Keep in mind that the player may drag and drop select many units at once, select one
-unit specifically, or even add more selections to a current selection one at a time.
-This event will trigger once for each user action, not once for each selected or
-deselected object. If all selected game objects are deselected, ```objects``` will
-be empty.
 
 ## eventGroupLoss(object, group id, new size)
 
