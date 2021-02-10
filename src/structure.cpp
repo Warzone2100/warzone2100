@@ -441,7 +441,7 @@ bool loadStructureStats(WzConfig &ini)
 	{
 		ini.beginGroup(list[inc]);
 		STRUCTURE_STATS *psStats = &asStructureStats[inc];
-		loadStats(ini, psStats, inc);
+		loadStructureStats_BaseStats(ini, psStats, inc);
 
 		psStats->ref = STAT_STRUCTURE + inc;
 
@@ -4550,7 +4550,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 return the first one it finds!! */
 int32_t getStructStatFromName(const WzString &name)
 {
-	BASE_STATS *psStat = getCompStatsFromName(name);
+	STRUCTURE_STATS *psStat = getStructStatsFromName(name);
 	if (psStat)
 	{
 		return psStat->index;

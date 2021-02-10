@@ -92,6 +92,8 @@ UBYTE		*apCompLists[MAX_PLAYERS][COMP_NUMCOMPONENTS];
 UBYTE		*apStructTypeLists[MAX_PLAYERS];
 
 static std::unordered_map<WzString, BASE_STATS *> lookupStatPtr;
+static std::unordered_map<WzString, STRUCTURE_STATS *> lookupStructStatPtr;
+static std::unordered_map<WzString, COMPONENT_STATS *> lookupCompStatPtr;
 
 static bool getMovementModel(const WzString &movementModel, MOVEMENT_MODEL *model);
 static bool statsGetAudioIDFromString(const WzString &szStatName, const WzString &szWavName, int *piWavID);
@@ -167,6 +169,8 @@ void statsInitVars()
 bool statsShutDown()
 {
 	lookupStatPtr.clear();
+	lookupStructStatPtr.clear();
+	lookupCompStatPtr.clear();
 
 	STATS_DEALLOC(asWeaponStats, numWeaponStats);
 	STATS_DEALLOC(asBrainStats, numBrainStats);
@@ -257,7 +261,7 @@ static iIMDShape *statsGetIMD(WzConfig &json, BASE_STATS *psStats, const WzStrin
 	return retval;
 }
 
-void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
+static void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
 {
 	psStats->id = json.group();
 	psStats->name = json.string("name");
@@ -266,9 +270,16 @@ void loadStats(WzConfig &json, BASE_STATS *psStats, size_t index)
 	lookupStatPtr.insert(std::make_pair(psStats->id, psStats));
 }
 
+void loadStructureStats_BaseStats(WzConfig &json, STRUCTURE_STATS *psStats, size_t index)
+{
+	loadStats(json, psStats, index);
+	lookupStructStatPtr.insert(std::make_pair(psStats->id, psStats));
+}
+
 static void loadCompStats(WzConfig &json, COMPONENT_STATS *psStats, size_t index)
 {
 	loadStats(json, psStats, index);
+	lookupCompStatPtr.insert(std::make_pair(psStats->id, psStats));
 	psStats->buildPower = json.value("buildPower", 0).toUInt();
 	psStats->buildPoints = json.value("buildPoints", 0).toUInt();
 	psStats->designable = json.value("designable", false).toBool();
@@ -1322,8 +1333,8 @@ int getCompFromName(COMPONENT_TYPE compType, const WzString &name)
 int getCompFromID(COMPONENT_TYPE compType, const WzString &name)
 {
 	COMPONENT_STATS *psComp = nullptr;
-	auto it = lookupStatPtr.find(WzString::fromUtf8(name.toUtf8().c_str()));
-	if (it != lookupStatPtr.end())
+	auto it = lookupCompStatPtr.find(WzString::fromUtf8(name.toUtf8().c_str()));
+	if (it != lookupCompStatPtr.end())
 	{
 		psComp = (COMPONENT_STATS *)it->second;
 	}
@@ -1338,8 +1349,8 @@ int getCompFromID(COMPONENT_TYPE compType, const WzString &name)
 COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 {
 	COMPONENT_STATS *psComp = nullptr;
-	auto it = lookupStatPtr.find(name);
-	if (it != lookupStatPtr.end())
+	auto it = lookupCompStatPtr.find(name);
+	if (it != lookupCompStatPtr.end())
 	{
 		psComp = (COMPONENT_STATS *)it->second;
 	}
@@ -1352,6 +1363,17 @@ COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 		}
 	}*/
 	return psComp;
+}
+
+STRUCTURE_STATS *getStructStatsFromName(const WzString &name)
+{
+	STRUCTURE_STATS *psStat = nullptr;
+	auto it = lookupStructStatPtr.find(name);
+	if (it != lookupStructStatPtr.end())
+	{
+		psStat = it->second;
+	}
+	return psStat;
 }
 
 /*sets the store to the body size based on the name passed in - returns false
