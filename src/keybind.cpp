@@ -1085,30 +1085,33 @@ void kf_SelectGrouping(UDWORD groupNumber)
 
 // --------------------------------------------------------------------------
 
-#define DEFINE_NUMED_KF(x) \
-	void	kf_SelectGrouping_##x( void ) { \
-		kf_SelectGrouping(x); \
-	} \
-	void	kf_AssignGrouping_##x( void ) { \
-		assignDroidsToGroup(selectedPlayer, x, true); \
-	} \
-	void	kf_AddGrouping_##x( void ) { \
-		assignDroidsToGroup(selectedPlayer, x, false); \
-	} \
-	void	kf_SelectCommander_##x( void ) { \
-		selCommander(x); \
-	}
+MappableFunction kf_SelectGrouping_N(const unsigned int n)
+{
+	return [n]() {
+		kf_SelectGrouping(n);
+	};
+}
 
-DEFINE_NUMED_KF(0)
-DEFINE_NUMED_KF(1)
-DEFINE_NUMED_KF(2)
-DEFINE_NUMED_KF(3)
-DEFINE_NUMED_KF(4)
-DEFINE_NUMED_KF(5)
-DEFINE_NUMED_KF(6)
-DEFINE_NUMED_KF(7)
-DEFINE_NUMED_KF(8)
-DEFINE_NUMED_KF(9)
+MappableFunction kf_AssignGrouping_N(const unsigned int n)
+{
+	return [n]() {
+		assignDroidsToGroup(selectedPlayer, n, true);
+	};
+}
+
+MappableFunction kf_AddGrouping_N(const unsigned int n)
+{
+	return [n]() {
+		assignDroidsToGroup(selectedPlayer, n, false);
+	};
+}
+
+MappableFunction kf_SelectCommander_N(const unsigned int n)
+{
+	return [n]() {
+		selCommander(n);
+	};
+}
 
 // --------------------------------------------------------------------------
 void	kf_ToggleDroidInfo()
