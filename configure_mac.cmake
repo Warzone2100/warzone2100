@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 # Optional input defines:
 #  - VCPKG_BUILD_TYPE : This will be used to modify the current triplet (once vcpkg is downloaded)
 #  - WZ_DISTRIBUTOR : Passed to the main WZ CMake configure command
+#  - ADDITIONAL_VCPKG_FLAGS : Additional arguments to be passed to vcpkg
 #  - ADDITIONAL_CMAKE_ARGUMENTS : Additional arguments to be passed to CMake configure
 #  - ONLY_BUILD_VCPKG : Only proceed through the steps to build vcpkg
 #  - SKIP_VCPKG_BUILD : Skip building vcpkg itself, proceed with remaining steps
@@ -268,9 +269,9 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ vcpkg install dependencies.
 
 set(_additional_vcpkg_flags)
 if(_HAS_VULKAN_SDK)
-	set(_additional_vcpkg_flags --x-no-default-features --x-feature=vulkan)
+	set(_additional_vcpkg_flags ${ADDITIONAL_VCPKG_FLAGS} --x-no-default-features --x-feature=vulkan)
 else()
-	set(_additional_vcpkg_flags --x-no-default-features)
+	set(_additional_vcpkg_flags ${ADDITIONAL_VCPKG_FLAGS} --x-no-default-features)
 endif()
 
 set(_vcpkgInstallResult -1)
