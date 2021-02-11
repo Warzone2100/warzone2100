@@ -149,12 +149,18 @@ class ManufactureObjectButton : public ObjectButton
 private:
 	typedef ObjectButton BaseWidget;
 
+protected:
+	ManufactureObjectButton() {}
+
 public:
-	ManufactureObjectButton(const std::shared_ptr<ManufactureController> &controller, size_t newObjectIndex)
-		: BaseWidget()
-		, controller(controller)
+	static std::shared_ptr<ManufactureObjectButton> make(const std::shared_ptr<ManufactureController> &controller, size_t objectIndex)
 	{
-		objectIndex = newObjectIndex;
+		class make_shared_enabler: public ManufactureObjectButton {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->controller = controller;
+		widget->objectIndex = objectIndex;
+		widget->initialize();
+		return widget;
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
@@ -172,6 +178,12 @@ public:
 	}
 
 protected:
+	void initialize()
+	{
+		attach(factoryNumberLabel = std::make_shared<W_LABEL>());
+		factoryNumberLabel->setGeometry(OBJ_TEXTX, OBJ_B1TEXTY, 16, 16);
+	}
+
 	void display(int xOffset, int yOffset) override
 	{
 		updateLayout();
@@ -180,6 +192,14 @@ protected:
 		ASSERT_OR_RETURN(, !isDead(factory), "Factory is dead");
 		displayIMD(Image(), ImdObject::Structure(factory), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
+	}
+
+	void updateLayout() override
+	{
+		BaseWidget::updateLayout();
+		auto factory = getFactoryOrNullptr(controller->getObjectAt(objectIndex));
+		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
+		factoryNumberLabel->setString(WzString::fromUtf8(astringf("%u", factory->psAssemblyPoint->factoryInc + 1)));
 	}
 
 	std::string getTip() override
@@ -196,6 +216,7 @@ protected:
 
 private:
 	std::shared_ptr<ManufactureController> controller;
+	std::shared_ptr<W_LABEL> factoryNumberLabel;
 };
 
 class ProductionRunSizeLabel
@@ -464,7 +485,7 @@ public:
 
 	std::shared_ptr<ObjectButton> makeObjectButton(size_t buttonIndex) const override
 	{
-		return std::make_shared<ManufactureObjectButton>(controller, buttonIndex);
+		return ManufactureObjectButton::make(controller, buttonIndex);
 	}
 
 protected:
