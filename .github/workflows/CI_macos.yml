@@ -1,0 +1,324 @@
+name: macOS
+
+on:
+  push:
+    branches-ignore:
+      - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - '*'
+  pull_request:
+    # Match all pull requests
+
+jobs:
+  macos-build:
+    strategy:
+      matrix:
+        include:
+          - name: "Xcode 11.7 (x64)"
+            image: "macos-latest"
+            osx_target_arch: "x86_64"
+            vcpkg_triplet: "x64-osx"
+            xcode_dev_dir: "/Applications/Xcode_11.7.app"
+            include_videos: false
+            artifact_suffix: "x64"
+            publish_artifact: false
+          - name: "Xcode 12.4 (x64)"
+            image: "macos-latest"
+            osx_target_arch: "x86_64"
+            vcpkg_triplet: "x64-osx"
+            xcode_dev_dir: "/Applications/Xcode_12.4.app"
+            include_videos: true
+            artifact_suffix: "x64"
+            publish_artifact: true
+          - name: "Xcode 12.4 (ARM64)"
+            image: "macos-latest"
+            osx_target_arch: "arm64"
+            vcpkg_triplet: "arm64-osx"
+            xcode_dev_dir: "/Applications/Xcode_12.4.app"
+            include_videos: false
+            artifact_suffix: "arm64"
+            publish_artifact: true
+      fail-fast: false
+    name: '${{ matrix.name }}'
+    runs-on: '${{ matrix.image }}'
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    env:
+      MACOSX_DEPLOYMENT_TARGET: '10.10'
+      VSCMD_SKIP_SENDTELEMETRY: 1
+      DESIRED_XCODE_DEV_DIR: '${{ matrix.xcode_dev_dir }}'
+      WZ_INCLUDE_VIDEOS: '${{ matrix.include_videos }}'
+      WZ_OSX_TARGET_ARCH: '${{ matrix.osx_target_arch }}'
+      VCPKG_DEFAULT_TRIPLET: '${{ matrix.vcpkg_triplet }}'
+      ARCHS: '${{ matrix.osx_target_arch }}'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        path: 'src'
+    - name: Prepare Git Repo for autorevision
+      working-directory: ./src
+      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
+    - name: Init Git Submodules
+      working-directory: ./src
+      run: git submodule update --init --recursive
+    - name: Install Pre-reqs
+      run: |
+        brew install gettext
+        # NOTE: Specify an explicit Asciidoctor version to help ensure reproducible builds
+        gem install asciidoctor -v 2.0.10 --no-document
+
+        #brew update
+        #if (brew outdated | grep cmake > /dev/null); then echo "upgrading CMake"; brew upgrade cmake; fi
+        cmake --version
+    - name: Prep Environment
+      run: |
+        mkdir build
+        mkdir output
+
+        echo "OUTPUT_DIR=output" >> $GITHUB_ENV
+
+        WZ_DISTRIBUTOR="UNKNOWN"
+        if [ "${GITHUB_REPOSITORY}" == "Warzone2100/warzone2100" ]; then
+          WZ_DISTRIBUTOR="wz2100.net"
+        fi
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
+        echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
+
+        echo "Setting Xcode: ${DESIRED_XCODE_DEV_DIR}"
+        sudo xcode-select -s "${DESIRED_XCODE_DEV_DIR}"
+
+        echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
+    - name: configure_mac.cmake
+      working-directory: ./build
+      run: |
+        ADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_OSX_ARCHITECTURES=${WZ_OSX_TARGET_ARCH};-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=-;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO"
+        echo "WZ_INCLUDE_VIDEOS=${WZ_INCLUDE_VIDEOS}"
+        if [ "${WZ_INCLUDE_VIDEOS}" == "true" ]; then
+          ADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS};-DWZ_INCLUDE_VIDEOS:BOOL=ON"
+        else
+          ADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS};-DWZ_INCLUDE_VIDEOS:BOOL=OFF"
+        fi
+        echo "ADDITIONAL_CMAKE_ARGUMENTS=${ADDITIONAL_CMAKE_ARGUMENTS}"
+
+        echo "-DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -DADDITIONAL_CMAKE_ARGUMENTS=\"${ADDITIONAL_CMAKE_ARGUMENTS}\" -P ../src/configure_mac.cmake"
+        #cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS}" -P ../src/configure_mac.cmake
+        cmake -DADDITIONAL_VCPKG_FLAGS=--no-binarycaching -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS}" -P ../src/configure_mac.cmake
+        result=${?}
+        if [ $result -ne 0 ]; then
+        	echo "ERROR: configure_mac.cmake failed"
+        	exit ${result}
+        fi
+    - name: Build Xcode project
+      working-directory: ./build
+      run: |
+        # Build Xcode project, and package "warzone2100.zip"
+        set -o pipefail && \
+        xcodebuild  \
+         -project warzone2100.xcodeproj \
+         -target "package" \
+         -configuration "Release" \
+         -destination "platform=macOS" \
+         -PBXBuildsContinueAfterErrors=NO \
+        | tee "xcodebuild.log" | xcpretty -c
+        result=${?}
+        if [ $result -ne 0 ]; then
+        	echo "ERROR: xcodebuild failed"
+        	exit ${result}
+        fi
+    - name: Output Build Info
+      shell: sh {0}
+      run: |
+        echo "OUTPUT_DIR=${OUTPUT_DIR}"
+
+        echo "[autorevision.h]:"
+        cat "build/build_tools/autorevision.h"
+        echo "==============================="
+
+        echo "[netplay_config.h]:"
+        cat "build/lib/netplay/netplay_config.h"
+        echo "==============================="
+
+        # Verify "warzone2100.zip" was created
+        BUILT_WARZONE_ZIP="build/warzone2100.zip"
+        src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+
+        # Move warzone2100.zip to the output directory, renaming it
+        DESIRED_ZIP_NAME="warzone2100_macOS_${{ matrix.artifact_suffix }}.zip"
+        mv "$BUILT_WARZONE_ZIP" "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}"
+        result=${?}
+        if [ $result -ne 0 ]; then
+          echo "ERROR: Failed to move zip file"
+          exit ${result}
+        fi
+        echo "Generated warzone2100.zip: \"${OUTPUT_DIR}/${DESIRED_ZIP_NAME}\""
+        ZIP_HASH="$(shasum -a 512 "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+        ZIP_SIZE="$(stat -f '%z' "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+        echo "  -> SHA512: ${ZIP_HASH}"
+        echo "  -> Size (bytes): ${ZIP_SIZE}"
+
+        echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
+        exit 0
+    - uses: actions/upload-artifact@v2
+      if: success() && (matrix.publish_artifact == true)
+      with:
+        name: "warzone2100_macOS_${{ matrix.artifact_suffix }}"
+        path: ${{ env.OUTPUT_DIR }}
+        if-no-files-found: 'error'
+
+  macos_universal_combine:
+    name: 'Package Universal Binary'
+    needs: macos-build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: 'src'
+      - name: Prep Environment
+        run: |
+          mkdir dl-artifacts
+          mkdir build
+          mkdir output
+        
+          echo "OUTPUT_DIR=output" >> $GITHUB_ENV
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: ./dl-artifacts
+      - name: Display structure of downloaded files
+        working-directory: ./dl-artifacts
+        run: ls -R
+      - name: Extract each .zip
+        working-directory: ./dl-artifacts
+        run: |
+          for i in ./*/*.zip; do
+              folder=${i%.zip}
+              folder="$(dirname $folder)"
+              unzip -o "$i" -d "$folder" && rm "$i"
+          done
+      - name: Create Universal Binary
+        working-directory: ./dl-artifacts
+        run: |
+          BASE_APP_BUNDLE="warzone2100_macOS_x64/Warzone 2100.app"
+          # extract entitlements plist from the "base" app bundle binary
+          echo "Extract entitlements.plist"
+          codesign -d --entitlements :- "${BASE_APP_BUNDLE}/Contents/MacOS/Warzone 2100" > "entitlements.plist"
+          cat "entitlements.plist"
+          echo "-----------------------------------"
+          echo "Make universal binary + app package"
+          ../src/macosx/BuildBot/make_universal.sh "${BASE_APP_BUNDLE}" "warzone2100_macOS_arm64/Warzone 2100.app"
+          # Rename the "base" app package directory
+          mv "warzone2100_macOS_x64" "warzone2100_macOS_universal"
+          echo "Re-code-sign"
+          codesign --force --options runtime --entitlements "entitlements.plist" -s - "warzone2100_macOS_universal/Warzone 2100.app"
+          # Zip and copy to build dir
+          echo "Compress .zip"
+          cd "warzone2100_macOS_universal"
+          zip -vr --symlinks "../../build/warzone2100.zip" "Warzone 2100.app/"
+      - name: Output Build Info (Full)
+        shell: sh {0}
+        run: |
+          echo "OUTPUT_DIR=${OUTPUT_DIR}"
+
+          # Verify "warzone2100.zip" was created
+          BUILT_WARZONE_ZIP="build/warzone2100.zip"
+          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+
+          # Move warzone2100.zip to the output directory, renaming it
+          DESIRED_ZIP_NAME="warzone2100_macOS_universal.zip"
+          mv "$BUILT_WARZONE_ZIP" "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}"
+          result=${?}
+          if [ $result -ne 0 ]; then
+            echo "ERROR: Failed to move zip file"
+            exit ${result}
+          fi
+          echo "Generated warzone2100.zip: \"${OUTPUT_DIR}/${DESIRED_ZIP_NAME}\""
+          ZIP_HASH="$(shasum -a 512 "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+          ZIP_SIZE="$(stat -f '%z' "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+          echo "  -> SHA512: ${ZIP_HASH}"
+          echo "  -> Size (bytes): ${ZIP_SIZE}"
+
+          echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
+          exit 0
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "warzone2100_macOS_universal"
+          path: ${{ env.OUTPUT_DIR }}
+          if-no-files-found: 'error'
+      - name: Clear OUTPUT_DIR
+        run: |
+          echo "OUTPUT_DIR=${OUTPUT_DIR}"
+          rm -rf "${OUTPUT_DIR}"
+          mkdir -p "${OUTPUT_DIR}"
+      - name: Create Universal Binary (no videos)
+        working-directory: ./dl-artifacts
+        run: |
+          # Remove the videos from the universal app bundle
+          rm "warzone2100_macOS_universal/Warzone 2100.app/Contents/Resources/data/sequences.wz"
+          # Re-code-sign
+          echo "Re-code-sign no-videos package"
+          codesign --force --options runtime --entitlements "entitlements.plist" -s - "warzone2100_macOS_universal/Warzone 2100.app"
+          # Zip and copy to build dir
+          echo "Compress no videos .zip"
+          cd "warzone2100_macOS_universal"
+          zip -vr --symlinks "../../build/warzone2100_novideos.zip" "Warzone 2100.app/"
+      - name: Output Build Info (No-Videos)
+        shell: sh {0}
+        run: |
+          echo "OUTPUT_DIR=${OUTPUT_DIR}"
+
+          # Verify "warzone2100_novideos.zip" was created
+          BUILT_WARZONE_ZIP="build/warzone2100_novideos.zip"
+          src/macosx/BuildBot/check_warzone2100_zip.sh "${BUILT_WARZONE_ZIP}" "build/tmp/"
+
+          # Move warzone2100.zip to the output directory, renaming it
+          DESIRED_ZIP_NAME="warzone2100_macOS_universal_novideos.zip"
+          mv "$BUILT_WARZONE_ZIP" "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}"
+          result=${?}
+          if [ $result -ne 0 ]; then
+            echo "ERROR: Failed to move zip file"
+            exit ${result}
+          fi
+          echo "Generated warzone2100_novideos.zip: \"${OUTPUT_DIR}/${DESIRED_ZIP_NAME}\""
+          ZIP_HASH="$(shasum -a 512 "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+          ZIP_SIZE="$(stat -f '%z' "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
+          echo "  -> SHA512: ${ZIP_HASH}"
+          echo "  -> Size (bytes): ${ZIP_SIZE}"
+
+          exit 0
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "warzone2100_macOS_universal_novideos"
+          path: ${{ env.OUTPUT_DIR }}
+          if-no-files-found: 'error'
+
+  upload_release_artifacts:
+    if: startsWith(github.ref, 'refs/tags/') && (github.repository == 'Warzone2100/warzone2100')
+    name: Upload Release Artifacts
+    needs: macos_universal_combine
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download macOS universal artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: warzone2100_macOS_universal
+          path: warzone2100_macOS_universal
+      - name: Download macOS universal (no videos) artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: warzone2100_macOS_universal_novideos
+          path: warzone2100_macOS_universal_novideos
+      - name: Rename artifact zips
+        run: |
+          mv "./warzone2100_macOS_universal/warzone2100_macOS_universal.zip" "./warzone2100_macOS.zip"
+          mv "./warzone2100_macOS_universal_novideos/warzone2100_macOS_universal_novideos.zip" "./warzone2100_macOS_novideos.zip"
+      - name: Upload to release
+        uses: past-due/action-gh-release@master
+        with:
+          # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
+          files: |
+            ./warzone2100_macOS.zip
+            ./warzone2100_macOS_novideos.zip
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
