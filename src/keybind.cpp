@@ -870,44 +870,30 @@ void	kf_LowerTile()
 }
 
 // --------------------------------------------------------------------------
-/* Zooms out from display */
-void kf_ZoomOut()
+/* Zooms in/out from display */
+MappableFunction kf_Zoom(const int multiplier)
 {
-	incrementViewDistance(war_GetMapZoomRate());
+	return [multiplier]() {
+		incrementViewDistance(war_GetMapZoomRate() * multiplier);
+	};
 }
 
-// --------------------------------------------------------------------------
-void	kf_RadarZoomIn()
+/* Zooms in/out from radar */
+MappableFunction kf_RadarZoom(const int multiplier)
 {
-	uint8_t RadarZoomLevel = GetRadarZoom();
+	return [multiplier]() {
+		const uint8_t oldZoomLevel = GetRadarZoom();
+		uint8_t newZoomLevel = oldZoomLevel + (RADARZOOM_STEP * multiplier);
+		newZoomLevel = (newZoomLevel > MAX_RADARZOOM ? MAX_RADARZOOM : newZoomLevel);
+		newZoomLevel = (newZoomLevel < MIN_RADARZOOM ? MIN_RADARZOOM : newZoomLevel);
 
-	if (RadarZoomLevel < MAX_RADARZOOM)
-	{
-		RadarZoomLevel += RADARZOOM_STEP;
-		CONPRINTF(_("Setting radar zoom to %u"), RadarZoomLevel);
-		SetRadarZoom(RadarZoomLevel);
-		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
-	}
-}
-// --------------------------------------------------------------------------
-void	kf_RadarZoomOut()
-{
-	uint8_t RadarZoomLevel = GetRadarZoom();
-
-	if (RadarZoomLevel > MIN_RADARZOOM)
-	{
-		RadarZoomLevel -= RADARZOOM_STEP;
-		CONPRINTF(_("Setting radar zoom to %u"), RadarZoomLevel);
-		SetRadarZoom(RadarZoomLevel);
-		audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
-	}
-}
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
-/* Zooms in the map */
-void kf_ZoomIn()
-{
-	incrementViewDistance(-war_GetMapZoomRate());
+		if (newZoomLevel != oldZoomLevel)
+		{
+			CONPRINTF(_("Setting radar zoom to %u"), newZoomLevel);
+			SetRadarZoom(newZoomLevel);
+			audio_PlayTrack(ID_SOUND_BUTTON_CLICK_5);
+		}
+	};
 }
 
 // --------------------------------------------------------------------------
@@ -918,43 +904,6 @@ void kf_MaxScrollLimits()
 	scrollMaxY = mapHeight;
 }
 
-
-// --------------------------------------------------------------------------
-// Shrink the screen down
-/*
-void	kf_ShrinkScreen( void )
-{
-	// nearest multiple of 8 plus 1
-	if (xOffset<73)
-	{
-		xOffset+=8;
-  		distance+=170;
-		if (yOffset<200)
-		{
-			yOffset+=8;
-		}
-	}
-}
-*/
-// --------------------------------------------------------------------------
-// Expand the screen
-/*
-void	kf_ExpandScreen( void )
-{
-	if(xOffset)
-	{
-   		if (distance>MAXDISTANCE)
-   		{
-   			distance-=170;
-   		}
-   		xOffset-=8;
-   		if(yOffset)
-   		{
-   			yOffset-=8;
-   		}
-	}
-}
-*/
 // --------------------------------------------------------------------------
 /* Spins the world round left */
 void	kf_RotateLeft()
@@ -1484,13 +1433,6 @@ void	kf_FinishResearch()
 }
 
 // --------------------------------------------------------------------------
-//void	kf_ToggleRadarAllign( void )
-//{
-//	toggleRadarAllignment();
-//	addConsoleMessage("Radar allignment toggled",LEFT_JUSTIFY, SYSTEM_MESSAGE);
-//}
-
-// --------------------------------------------------------------------------
 void	kf_ToggleEnergyBars()
 {
 	switch (toggleEnergyBars())
@@ -2007,32 +1949,6 @@ void kf_KillSelected()
 	}
 }
 
-#if 0  // There's no gridDisplayCoverage anymore.
-// --------------------------------------------------------------------------
-// display the grid info for all the selected objects
-void kf_ShowGridInfo()
-{
-	DROID		*psCDroid, *psNDroid;
-	STRUCTURE	*psCStruct, *psNStruct;
-
-	for (psCDroid = apsDroidLists[selectedPlayer]; psCDroid; psCDroid = psNDroid)
-	{
-		psNDroid = psCDroid->psNext;
-		if (psCDroid->selected)
-		{
-			gridDisplayCoverage((BASE_OBJECT *)psCDroid);
-		}
-	}
-	for (psCStruct = apsStructLists[selectedPlayer]; psCStruct; psCStruct = psNStruct)
-	{
-		psNStruct = psCStruct->psNext;
-		if (psCStruct->selected)
-		{
-			gridDisplayCoverage((BASE_OBJECT *)psCStruct);
-		}
-	}
-}
-#endif
 // --------------------------------------------------------------------------
 // Chat message. NOTE THIS FUNCTION CAN DISABLE ALL OTHER KEYPRESSES
 void kf_SendTeamMessage()
