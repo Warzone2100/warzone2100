@@ -31,35 +31,27 @@ jobs:
     includeVideos: false
     publishArtifact: true
     artifact: 'warzone2100_macOS_novideos'
-    # Upload this macOS job's output to GitHub Releases
-    uploadArtifactToGitHubReleases: true
-    gitHubConnection: 'githubReleases'
-    #
-- template: .ci/azure/templates/macos-build-pipeline-template.yml
-  parameters:
-    name: macOS_Xcode_10_3
-    displayName: 'macOS [Xcode 10.3, macOS 10.14 SDK] - full'  # friendly name to display in the UI
-    vmImage: 'macOS-10.14'
-    xcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer' # Set default Xcode to Xcode 10.3 on macOS 10.14
-    vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_11.7.app/Contents/Developer'
-    includeVideos: true
-    publishArtifact: true
-    artifact: 'warzone2100_macOS'
-    # Upload this macOS job's output to GitHub Releases
-    uploadArtifactToGitHubReleases: true
-    gitHubConnection: 'githubReleases'
-    #
-- template: .ci/azure/templates/macos-build-pipeline-template.yml
-  parameters:
-    name: macOS_Xcode_11
-    displayName: 'macOS [Xcode 11.7, macOS 10.15 SDK]'  # friendly name to display in the UI
-    vmImage: 'macOS-10.15'
-    xcodeDeveloperDir: '/Applications/Xcode_11.7.app/Contents/Developer'
-    publishArtifact: false
-- template: .ci/azure/templates/macos-build-pipeline-template.yml
-  parameters:
-    name: macOS_latest
-    displayName: 'macOS [vmImage: macOS-latest]'  # friendly name to display in the UI
-    vmImage: 'macOS-latest'
-    publishArtifact: true
-    artifact: 'warzone2100_macOS (latest)'
+# - template: .ci/azure/templates/macos-build-pipeline-template.yml
+#   parameters:
+#     name: macOS_Xcode_10_3
+#     displayName: 'macOS [Xcode 10.3, macOS 10.14 SDK] - full'  # friendly name to display in the UI
+#     vmImage: 'macOS-10.14'
+#     xcodeDeveloperDir: '/Applications/Xcode_10.3.app/Contents/Developer' # Set default Xcode to Xcode 10.3 on macOS 10.14
+#     vcpkgBuildXcodeDeveloperDir: '/Applications/Xcode_11.7.app/Contents/Developer'
+#     includeVideos: true
+#     publishArtifact: true
+#     artifact: 'warzone2100_macOS'
+# - template: .ci/azure/templates/macos-build-pipeline-template.yml
+#   parameters:
+#     name: macOS_Xcode_11
+#     displayName: 'macOS [Xcode 11.7, macOS 10.15 SDK]'  # friendly name to display in the UI
+#     vmImage: 'macOS-10.15'
+#     xcodeDeveloperDir: '/Applications/Xcode_11.7.app/Contents/Developer'
+#     publishArtifact: false
+# - template: .ci/azure/templates/macos-build-pipeline-template.yml
+#   parameters:
+#     name: macOS_latest
+#     displayName: 'macOS [vmImage: macOS-latest]'  # friendly name to display in the UI
+#     vmImage: 'macOS-latest'
+#     publishArtifact: true
+#     artifact: 'warzone2100_macOS (latest)'
