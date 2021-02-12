@@ -46,7 +46,7 @@ jobs:
     #     Write-Host "------------------------------------------------------"
     #     & gci env:* | sort-object name
     - name: Install Asciidoctor
-      run: gem install asciidoctor -v 2.0.10 --no-document
+      run: gem install asciidoctor -v 2.0.12 --no-document
     - name: Install NSIS
       run: choco install nsis -y
     - name: Generate Settings for Run [${{ matrix.compiler }}:${{ matrix.architecture }}]
