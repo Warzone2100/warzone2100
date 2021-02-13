@@ -89,7 +89,7 @@ void ResearchController::refresh()
 	}
 }
 
-void ResearchController::startResearch(RESEARCH *research)
+void ResearchController::startResearch(RESEARCH &research)
 {
 	triggerEvent(TRIGGER_MENU_RESEARCH_SELECTED);
 
@@ -100,16 +100,9 @@ void ResearchController::startResearch(RESEARCH *research)
 
 	if (bMultiMessages)
 	{
-		if (research != nullptr)
-		{
-			// Say that we want to do research [sic].
-			sendResearchStatus(facility, research->ref - STAT_RESEARCH, selectedPlayer, true);
-			setStatusPendingStart(*psResFacilty, research);  // Tell UI that we are going to research.
-		}
-		else
-		{
-			cancelResearch(facility, ModeQueue);
-		}
+		// Say that we want to do research [sic].
+		sendResearchStatus(facility, research.ref - STAT_RESEARCH, selectedPlayer, true);
+		setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
 
 		//stop the button from flashing once a topic has been chosen
 		stopReticuleButtonFlash(IDRET_RESEARCH);
@@ -120,22 +113,19 @@ void ResearchController::startResearch(RESEARCH *research)
 	psResFacilty->psSubject = nullptr;
 
 	//set up the player_research
-	if (research != nullptr)
-	{
-		auto count = research->ref - STAT_RESEARCH;
-		//meant to still be in the list but greyed out
-		auto pPlayerRes = &asPlayerResList[selectedPlayer][count];
+	auto count = research.ref - STAT_RESEARCH;
+	//meant to still be in the list but greyed out
+	auto pPlayerRes = &asPlayerResList[selectedPlayer][count];
 
-		//set the subject up
-		psResFacilty->psSubject = research;
+	//set the subject up
+	psResFacilty->psSubject = &research;
 
-		sendResearchStatus(facility, count, selectedPlayer, true);	// inform others, I'm researching this.
+	sendResearchStatus(facility, count, selectedPlayer, true);	// inform others, I'm researching this.
 
-		MakeResearchStarted(pPlayerRes);
-		psResFacilty->timeStartHold = 0;
-		//stop the button from flashing once a topic has been chosen
-		stopReticuleButtonFlash(IDRET_RESEARCH);
-	}
+	MakeResearchStarted(pPlayerRes);
+	psResFacilty->timeStartHold = 0;
+	//stop the button from flashing once a topic has been chosen
+	stopReticuleButtonFlash(IDRET_RESEARCH);
 }
 
 void ResearchController::setHighlightedObject(BASE_OBJECT *object)
@@ -547,7 +537,7 @@ private:
 
 		if (mouseButton == WKEY_PRIMARY)
 		{
-			controller->startResearch(clickedStats);
+			controller->startResearch(*clickedStats);
 			intRemoveStats();
 		}
 	}
