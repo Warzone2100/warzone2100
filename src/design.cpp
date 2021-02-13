@@ -28,6 +28,7 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/bar.h"
 
 #include "objects.h"
 #include "loop.h"
@@ -41,6 +42,7 @@
 #include "lib/ivis_opengl/piematrix.h"//matrix code
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/piemode.h"
+#include "lib/ivis_opengl/textdraw.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
 #include "objmem.h"
@@ -338,6 +340,58 @@ static DROID_TEMPLATE sShadowDesign;
 static void intDisplayStatForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 
+class DesignStatsBar: public W_BARGRAPH
+{
+public:
+	using W_BARGRAPH::W_BARGRAPH;
+
+protected:
+	void display(int xOffset, int yOffset) override
+	{
+		auto x0 = xOffset + x() + PADDING;
+		auto y0 = yOffset + y() + PADDING;
+
+		/* indent to allow text value */
+		auto iX = x0 + maxValueTextWidth;
+		auto iY = y0 + (iV_GetImageHeight(IntImages, IMAGE_DES_STATSCURR) - iV_GetTextLineSize(font_regular)) / 2 - iV_GetTextAboveBase(font_regular);
+
+		//draw current value section
+		int barWidth = width() - maxValueTextWidth - 2 * PADDING;
+		auto filledWidth = MIN(majorSize * barWidth / 100, barWidth);
+		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, filledWidth, defaultProjectionMatrix(), true);
+
+		valueTextCache.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
+		valueTextCache.render(x0, iY, WZCOL_TEXT_BRIGHT);
+
+		//draw the comparison value - only if not zero
+		if (minorSize != 0)
+		{
+			filledWidth = MIN(minorSize * barWidth / 100, barWidth);
+			iV_DrawImage(IntImages, IMAGE_DES_STATSCOMP, iX + filledWidth, y0 - 1);
+		}
+	}
+
+	WzText valueTextCache;
+	uint32_t maxValueTextWidth = iV_GetTextWidth("00000", font_regular);
+	const uint32_t PADDING = 3;
+};
+
+class DesignPowerBar: public DesignStatsBar
+{
+public:
+	using DesignStatsBar::DesignStatsBar;
+
+protected:
+	void display(int xOffset, int yOffset) override
+	{
+		auto x0 = xOffset + x();
+		auto y0 = yOffset + y();
+		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_LEFT, x0, y0);
+		iV_DrawImage(IntImages, IMAGE_DES_POWERBAR_RIGHT, x0 + width() - iV_GetImageWidth(IntImages, IMAGE_DES_POWERBAR_RIGHT), y0);
+		DesignStatsBar::display(xOffset, yOffset);
+	}
+};
+
 /* Add the design widgets to the widget screen */
 bool intAddDesign(bool bShowCentreScreen)
 {
@@ -568,7 +622,8 @@ bool intAddDesign(bool bShowCentreScreen)
 	sFormInit.x = DES_BARFORMX;
 	sFormInit.y = DES_BARFORMY;
 	sFormInit.pDisplay = intDisplayStatForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
+	auto bodyForm = widgAddForm(psWScreen, &sFormInit);
+	if (!bodyForm)
 	{
 		return false;
 	}
@@ -587,45 +642,27 @@ bool intAddDesign(bool bShowCentreScreen)
 	sBarInit.sMinorCol.byte.r = DES_CLICKBARMINORRED;
 	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
 	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
-	sBarInit.pDisplay = intDisplayStatsBar;
-	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
-	sBarInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
 	sBarInit.pTip = _("Kinetic Armour");
 	sBarInit.iRange = getMaxBodyArmour();
-	if (!widgAddBarGraph(psWScreen, &sBarInit))
-	{
-		return true;
-	}
+	bodyForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 	sBarInit.id = IDDES_BODYARMOUR_H;
 	sBarInit.y  = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sBarInit.pTip = _("Thermal Armour");
 	sBarInit.iRange = getMaxBodyArmour();
-	if (!widgAddBarGraph(psWScreen, &sBarInit))
-	{
-		return true;
-	}
+	bodyForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 	sBarInit.id = IDDES_BODYPOWER;
 	sBarInit.y = DES_STATBAR_Y3;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sBarInit.pTip = _("Engine Output");
 	sBarInit.iRange = (UWORD)getMaxBodyPower();//DBAR_BODYMAXPOWER;
-	if (!widgAddBarGraph(psWScreen, &sBarInit))
-	{
-		return true;
-	}
+	bodyForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 	sBarInit.id = IDDES_BODYWEIGHT;
 	sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sBarInit.pTip = _("Weight");
 	sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-	if (!widgAddBarGraph(psWScreen, &sBarInit))
-	{
-		return true;
-	}
+	bodyForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 	/* Add the labels for the Body */
 	sLabInit.formID = IDDES_BODYFORM;
@@ -680,7 +717,8 @@ bool intAddDesign(bool bShowCentreScreen)
 	sFormInit.width = DES_POWERFORMWIDTH;
 	sFormInit.height = DES_POWERFORMHEIGHT;
 	sFormInit.pDisplay = intDisplayDesignForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
+	auto powerForm = widgAddForm(psWScreen, &sFormInit);
+	if (!powerForm)
 	{
 		return false;
 	}
@@ -704,19 +742,9 @@ bool intAddDesign(bool bShowCentreScreen)
 	sBarInit.width = (SWORD)(DES_POWERFORMWIDTH - 15 -
 	                         iV_GetImageWidth(IntImages, IMAGE_DES_BODYPOINTS));
 	sBarInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_POWERBACK);
-	sBarInit.pDisplay = intDisplayDesignPowerBar;//intDisplayStatsBar;
-	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
-	sBarInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
 	sBarInit.pTip = _("Total Power Required");
 	sBarInit.iRange = DBAR_TEMPLATEMAXPOWER;//WBAR_SCALE;
-	if (!widgAddBarGraph(psWScreen, &sBarInit))
-	{
-		return false;
-	}
+	powerForm->attach(std::make_shared<DesignPowerBar>(&sBarInit));
 
 	/* Add the design template body points bar and label*/
 	sLabInit.formID	= IDDES_POWERFORM;
@@ -739,19 +767,9 @@ bool intAddDesign(bool bShowCentreScreen)
 	sBarInit.width = (SWORD)(DES_POWERFORMWIDTH - 15 -
 	                         iV_GetImageWidth(IntImages, IMAGE_DES_BODYPOINTS));
 	sBarInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_POWERBACK);
-	sBarInit.pDisplay = intDisplayDesignPowerBar;//intDisplayStatsBar;
-	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
-	sBarInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
 	sBarInit.pTip = _("Total Body Points");
 	sBarInit.iRange = DBAR_TEMPLATEMAXPOINTS;//(UWORD)getMaxBodyPoints();//DBAR_BODYMAXPOINTS;
-	if (!widgAddBarGraph(psWScreen, &sBarInit))
-	{
-		return false;
-	}
+	powerForm->attach(std::make_shared<DesignPowerBar>(&sBarInit));
 
 	/* Add the variable bits of the design screen and set the bar graphs */
 	desCompMode = IDES_NOCOMPONENT;
@@ -1236,7 +1254,8 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 	sFormInit.pTip = getStatsName(psStats);  // set form tip to stats string
 	sFormInit.pUserData = psStats;			/* store component stats */
 	sFormInit.pDisplay = intDisplayStatForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
+	auto systemForm = widgAddForm(psWScreen, &sFormInit);
+	if (!systemForm)
 	{
 		return false;
 	}
@@ -1255,13 +1274,6 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 	sBarInit.sMinorCol.byte.r = DES_CLICKBARMINORRED;
 	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
 	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
-	sBarInit.pDisplay = intDisplayStatsBar;
-	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
-	sBarInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
 
 	/* Initialise the label struct */
 	W_LABINIT sLabInit;
@@ -1281,20 +1293,15 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.pTip = _("Sensor Range");
 		sBarInit.denominator = TILE_UNITS;
 		sBarInit.precision = 1;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.denominator = 0;
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_SENSORWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_SENSORRANGELAB;
@@ -1319,18 +1326,13 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.id = IDDES_ECMPOWER;
 		sBarInit.iRange = (UWORD)getMaxECMRange();
 		sBarInit.pTip = _("ECM Power");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.id = IDDES_ECMWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_ECMPOWERLAB;
@@ -1355,18 +1357,13 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.id = IDDES_CONSTPOINTS;
 		sBarInit.pTip = _("Build Points");
 		sBarInit.iRange = (UWORD)getMaxConstPoints();//DBAR_CONSTMAXPOINTS;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.id = IDDES_CONSTWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Weight");
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_CONSTPOINTSLAB;
@@ -1391,18 +1388,13 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.id = IDDES_REPAIRPOINTS;
 		sBarInit.pTip = _("Build Points");
 		sBarInit.iRange = (UWORD)getMaxRepairPoints();//DBAR_REPAIRMAXPOINTS;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.id = IDDES_REPAIRWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Weight");
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_REPAIRPTLAB;
@@ -1429,36 +1421,27 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.pTip = _("Range");
 		sBarInit.denominator = TILE_UNITS;
 		sBarInit.precision = 1;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.denominator = 1;
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_WEAPDAMAGE;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxWeaponDamage();//DBAR_WEAPMAXDAMAGE;
 		sBarInit.pTip = _("Damage");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.id = IDDES_WEAPROF;
 		sBarInit.y = DES_STATBAR_Y3;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = getMaxWeaponROF();
 		sBarInit.pTip = _("Rate-of-Fire");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.id = IDDES_WEAPWEIGHT;
 		sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_WEAPRANGELAB;
@@ -1569,7 +1552,8 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sFormInit.height = DES_BARFORMHEIGHT;	//DES_COMPBUTHEIGHT;
 	sFormInit.pTip = getStatsName(psStats);  // set form tip to stats string
 	sFormInit.pDisplay = intDisplayStatForm;
-	if (!widgAddForm(psWScreen, &sFormInit))
+	auto propulsionForm = widgAddForm(psWScreen, &sFormInit);
+	if (!propulsionForm)
 	{
 		return false;
 	}
@@ -1588,13 +1572,6 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 	sBarInit.sMinorCol.byte.r = DES_CLICKBARMINORRED;
 	sBarInit.sMinorCol.byte.g = DES_CLICKBARMINORGREEN;
 	sBarInit.sMinorCol.byte.b = DES_CLICKBARMINORBLUE;
-	sBarInit.pDisplay = intDisplayStatsBar;
-	sBarInit.initPUserDataFunc = []() -> void * { return new DisplayBarCache(); };
-	sBarInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayBarCache *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	};
 
 	/* Initialise the label struct */
 	W_LABINIT sLabInit;
@@ -1615,20 +1592,15 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sBarInit.pTip = _("Air Speed");
 		sBarInit.denominator = TILE_UNITS;
 		sBarInit.precision = 2;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.denominator = 1;
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_PROPWEIGHT;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_PROPAIRLAB;
@@ -1654,36 +1626,27 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sBarInit.iRange = (UWORD)getMaxPropulsionSpeed();//DBAR_PROPMAXSPEED;
 		sBarInit.denominator = TILE_UNITS;
 		sBarInit.precision = 2;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.id = IDDES_PROPCOUNTRY;
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Off-Road Speed");
 		sBarInit.iRange = (UWORD)getMaxPropulsionSpeed();//DBAR_PROPMAXSPEED;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.id = IDDES_PROPWATER;
 		sBarInit.y = DES_STATBAR_Y3;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Water Speed");
 		sBarInit.iRange = (UWORD)getMaxPropulsionSpeed();//DBAR_PROPMAXSPEED;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+
 		sBarInit.denominator = 1;
 		sBarInit.precision = 0;
 		sBarInit.id = IDDES_PROPWEIGHT;
 		sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Weight");
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-		if (!widgAddBarGraph(psWScreen, &sBarInit))
-		{
-			return false;
-		}
+		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_PROPROADLAB;
