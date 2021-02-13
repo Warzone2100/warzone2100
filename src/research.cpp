@@ -404,7 +404,8 @@ bool loadResearch(WzConfig &ini)
 		}
 	}
 
-	if (auto cycle = CycleDetection::detectCycle()) {
+	if (auto cycle = CycleDetection::detectCycle())
+	{
 		debug(LOG_ERROR, "A cycle was detected in the research dependency graph:");
 		for (auto research: cycle.value())
 		{
