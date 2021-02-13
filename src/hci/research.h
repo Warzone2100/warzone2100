@@ -38,6 +38,7 @@ public:
 	void refresh() override;
 	std::shared_ptr<StatsForm> makeStatsForm() override;
 	void startResearch(RESEARCH &research);
+	void cancelResearch(STRUCTURE *facility);
 	void requestResearchCancellation(STRUCTURE *facility);
 
 	STRUCTURE *getHighlightedObject() const override
