@@ -260,17 +260,6 @@ bool StatGetComponentIMD(BASE_STATS *Stat, SDWORD compID, iIMDShape **CompIMD, i
 
 bool StatIsResearch(BASE_STATS *Stat);
 
-/* The cache (pUserData) expected by both intDisplayStatsBar and intDisplayDesignPowerBar */
-struct DisplayBarCache {
-	WzText wzCheckWidthText;
-	WzText wzText;
-};
-
-/* Draws a stats bar for the design screen */
-void intDisplayStatsBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-/* Draws a Template Power Bar for the Design Screen */
-void intDisplayDesignPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-
 // Widget callback function to play an audio track.
 void WidgetAudioCallback(int AudioID);
 
