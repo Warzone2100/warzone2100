@@ -26,7 +26,7 @@ Latest development builds
 -------------------------
 
 [![Windows Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/Windows/master?label=Windows&logo=windows)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
- [![macOS Build Status](https://img.shields.io/azure-devops/build/wz2100/27126038-ce95-47c8-8726-aaba57651f31/1/master?label=macOS&logo=apple&logoColor=FFFFFF)](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
+ [![macOS Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/macOS/master?label=macOS&logo=apple)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
  [![Ubuntu Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/Ubuntu/master?label=Ubuntu&logo=ubuntu&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
  [![Fedora Build Status](https://img.shields.io/github/workflow/status/Warzone2100/warzone2100/Fedora/master?label=Fedora&logo=fedora&logoColor=FFFFFF)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
  [![FreeBSD Build Status](https://img.shields.io/cirrus/github/Warzone2100/warzone2100/master?label=FreeBSD&logo=FreeBSD)](https://cirrus-ci.com/github/Warzone2100/warzone2100/master)
@@ -45,10 +45,11 @@ How to get the latest Windows development builds:
 ### macOS
 
 How to get the latest macOS development builds:
-1. View the **[latest macOS build](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)**.
-2. Under the **`Artifacts:`** column there should be a link titled `<#> published`.
-   Click it to view the build artifacts.
-3. Download the `warzone2100_macOS` artifact (a download icon will appear to the right side of the row when you mouse-over).
+1. View the **[latest successful macOS builds](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush+is%3Asuccess)**.
+2. Select the latest workflow run in the table / list.
+   This should display a list of **Artifacts** from the run.
+3. Download the `warzone2100_macOS_universal` or `warzone2100_macOS_universal_novideos` artifact (depending on whether you want the full app bundle or not).
+> Note: A free GitHub account is currently required to download the artifacts.
 
 ### Ubuntu
 
@@ -286,18 +287,26 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    * To generate documentation: [Asciidoctor](https://asciidoctor.org) ≥ 1.5.3
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
 * **Installing prerequisites:**
-   * Ubuntu 18.04+:
-   ```
-   sudo apt-get -u update
-   sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
-   sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
-   ```
-   * Fedora:
-   ```
-   sudo dnf -y update && dnf clean all
-   sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
-   sudo dnf -y install libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
-   ```
+   * Using `get-dependencies_linux.sh`:
+      1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`) _REQUIRED_
+      2. Specify a mode: (`build-all` (default), `build-dependencies`) _OPTIONAL_
+      
+      Example:
+      ```
+      sudo ./get-dependencies_linux.sh ubuntu build-dependencies
+      ```
+   * Manually (Ubuntu 18.04)+:
+     ```
+     sudo apt-get -u update
+     sudo apt-get -y install git gcc g++ clang cmake libc-dev dpkg-dev ninja-build zip unzip pkg-config gettext asciidoctor
+     sudo apt-get -y install libpng-dev libsdl2-dev libopenal-dev libphysfs-dev libvorbis-dev libtheora-dev libxrandr-dev libfribidi-dev libfreetype6-dev libharfbuzz-dev libfontconfig1-dev libcurl4-gnutls-dev gnutls-dev libsodium-dev libsqlite3-dev
+     ```
+   * Manually (Fedora):
+     ```
+     sudo dnf -y update && dnf clean all
+     sudo dnf -y install git gcc gcc-c++ cmake ninja-build p7zip gettext rubygem-asciidoctor
+     sudo dnf -y install libpng-devel SDL2-devel openal-soft-devel physfs-devel libogg-devel libvorbis-devel libtheora-devel freetype-devel harfbuzz-devel libcurl-devel openssl-devel libsodium-devel sqlite-devel
+     ```
 * **Building from the command-line:**
    1. Starting from the _parent_ directory of the warzone2100 source code (which is assumed to be in a folder named `warzone2100`), create a **sibling** build directory:
       ```
@@ -321,7 +330,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
 ### Windows using MSVC
 
 * Prerequisites
-   * **Visual Studio 2017** (Visual Studio 2015 may work, but 2017 is strongly encouraged)
+   * **Visual Studio 2019** (Visual Studio 2015-2017 may work, but 2019 is strongly encouraged)
       - If you do not already have Visual Studio installed, you can download the free **Visual Studio Community** from: https://developer.microsoft.com/en-us/windows/downloads
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
    * **CMake 3.10+** (https://cmake.org/)
@@ -335,13 +344,14 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
 * **Building from the command-line:**
    * Change directory to the warzone2100 repo directory
    * Configure
+      * Visual Studio 2019: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 16 2019"`
       * Visual Studio 2017: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 15 2017"`
       * Visual Studio 2015: `cmake -H. -DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake -Bbuild -G "Visual Studio 14 2015"`
    * Build
       * Release: `cmake --build build --config Release`
       * Debug: `cmake --build build --config Debug`
-* **Building using Visual Studio 2017:**
-   1. Open Visual Studio 2017
+* **Building using Visual Studio 2019:**
+   1. Open Visual Studio 2019
    2. Open the warzone2100 folder using **File** > **Open** > **Folder...**
       - Allow Visual Studio some time to load the project and retrieve information from CMake.
    3. Create a VS CMake settings JSON file using **CMake** > **Change CMake settings**. You can also reach this dialog by clicking "Manage Configurations" in the configuration dropdown in the toolbar. Make sure the CMake components in Visual Studio are installed (by running the Visual Studio Installer).
