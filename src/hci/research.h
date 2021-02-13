@@ -37,7 +37,7 @@ public:
 	bool showInterface() override;
 	void refresh() override;
 	std::shared_ptr<StatsForm> makeStatsForm() override;
-	void startResearch(RESEARCH *research);
+	void startResearch(RESEARCH &research);
 	void requestResearchCancellation(STRUCTURE *facility);
 
 	STRUCTURE *getHighlightedObject() const override
