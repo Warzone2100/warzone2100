@@ -76,8 +76,8 @@ parts:
       - libgtk2.0-0
 
   sdl:
-    source: https://www.libsdl.org/release/SDL2-2.0.12.tar.gz
-    source-checksum: sha512/3f1f04af0f3d9dda9c84a2e9274ae8d83ea0da3fc367970a820036cc4dc1dbf990cfc37e4975ae05f0b45a4ffa739c6c19e470c00bf3f2bce9b8b63717b8b317
+    source: https://www.libsdl.org/release/SDL2-2.0.14.tar.gz
+    source-checksum: sha512/ebc482585bd565bf3003fbcedd91058b2183e333b9ea566d2f386da0298ff970645d9d25c1aa4459c7c96e9ea839fd1c5f2da0242a56892865b2e456cdd027ee
     plugin: autotools
     configflags:
     - --prefix=/usr
@@ -90,6 +90,9 @@ parts:
       snapcraftctl build
       sed -i 's|"/usr"|"'"$SNAPCRAFT_STAGE/usr"'"|g' "$SNAPCRAFT_PART_INSTALL/usr/lib/cmake/SDL2/sdl2-config.cmake"
     build-packages:
+    - git
+    - libdbus-1-dev
+    - libudev-dev
     - fcitx-libs-dev
     - libegl1-mesa-dev
     - libgl1-mesa-dev
@@ -113,6 +116,8 @@ parts:
     - libxss-dev
     - libxxf86vm-dev
     stage-packages:
+    - libdbus-1-3
+    - libudev1
     - fcitx-libs
     - libdrm2
     - libegl1-mesa
