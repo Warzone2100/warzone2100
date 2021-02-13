@@ -99,6 +99,60 @@ bool researchInitVars()
 	return true;
 }
 
+class CycleDetection
+{
+private:
+	CycleDetection() {}
+
+	std::unordered_set<RESEARCH *> visited;
+	std::unordered_set<RESEARCH *> exploring;
+
+	nonstd::optional<std::deque<RESEARCH *>> explore(RESEARCH *research)
+	{
+		if (visited.find(research) != visited.end())
+		{
+			return nonstd::nullopt;
+		}
+
+		if (exploring.find(research) != exploring.end())
+		{
+			return {{research}};
+		}
+
+		exploring.insert(research);
+
+		for (auto requirementIndex: research->pPRList)
+		{
+			auto requirement = &asResearch[requirementIndex];
+			if (auto cycle = explore(requirement))
+			{
+				cycle->push_front(research);
+				return cycle;
+			}
+		}
+
+		exploring.erase(exploring.find(research));
+		visited.insert(research);
+		return nonstd::nullopt;
+	}
+
+public:
+	static nonstd::optional<std::deque<RESEARCH *>> detectCycle()
+	{
+		CycleDetection detection;
+
+		for (auto &research: asResearch)
+		{
+			if (auto cycle = detection.explore(&research))
+			{
+				return cycle;
+			}
+		}
+
+		return nonstd::nullopt;
+	}
+};
+
 /** Load the research stats */
 bool loadResearch(WzConfig &ini)
 {
@@ -348,6 +402,15 @@ bool loadResearch(WzConfig &ini)
 				asResearch[inc].pPRList.push_back(preResItem->index);
 			}
 		}
+	}
+
+	if (auto cycle = CycleDetection::detectCycle()) {
+		debug(LOG_ERROR, "A cycle was detected in the research dependency graph:");
+		for (auto research: cycle.value())
+		{
+			debug(LOG_ERROR, "\t-> %s", research->id.toUtf8().c_str());
+		}
+		return false;
 	}
 
 	return true;
