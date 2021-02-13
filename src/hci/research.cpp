@@ -98,32 +98,33 @@ void ResearchController::startResearch(RESEARCH &research)
 	ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 	auto psResFacilty = &facility->pFunctionality->researchFacility;
 
+	if (psResFacilty->psSubject)
+	{
+		cancelResearch(facility);
+	}
+
 	if (bMultiMessages)
 	{
 		// Say that we want to do research [sic].
 		sendResearchStatus(facility, research.ref - STAT_RESEARCH, selectedPlayer, true);
 		setStatusPendingStart(*psResFacilty, &research);  // Tell UI that we are going to research.
+	}
+	else
+	{
+		//set up the player_research
+		auto count = research.ref - STAT_RESEARCH;
+		//meant to still be in the list but greyed out
+		auto pPlayerRes = &asPlayerResList[selectedPlayer][count];
 
-		//stop the button from flashing once a topic has been chosen
-		stopReticuleButtonFlash(IDRET_RESEARCH);
-		return;
+		//set the subject up
+		psResFacilty->psSubject = &research;
+
+		sendResearchStatus(facility, count, selectedPlayer, true);	// inform others, I'm researching this.
+
+		MakeResearchStarted(pPlayerRes);
+		psResFacilty->timeStartHold = 0;
 	}
 
-	//initialise the subject
-	psResFacilty->psSubject = nullptr;
-
-	//set up the player_research
-	auto count = research.ref - STAT_RESEARCH;
-	//meant to still be in the list but greyed out
-	auto pPlayerRes = &asPlayerResList[selectedPlayer][count];
-
-	//set the subject up
-	psResFacilty->psSubject = &research;
-
-	sendResearchStatus(facility, count, selectedPlayer, true);	// inform others, I'm researching this.
-
-	MakeResearchStarted(pPlayerRes);
-	psResFacilty->timeStartHold = 0;
 	//stop the button from flashing once a topic has been chosen
 	stopReticuleButtonFlash(IDRET_RESEARCH);
 }
@@ -537,7 +538,14 @@ private:
 
 		if (mouseButton == WKEY_PRIMARY)
 		{
-			controller->startResearch(*clickedStats);
+			if (controller->isHighlightedObjectStats(researchOptionIndex))
+			{
+				controller->cancelResearch(controller->getHighlightedObject());
+			}
+			else
+			{
+				controller->startResearch(*clickedStats);
+			}
 			intRemoveStats();
 		}
 	}
@@ -634,6 +642,11 @@ std::shared_ptr<StatsForm> ResearchController::makeStatsForm()
 	return ResearchStatsForm::make(shared_from_this());
 }
 
+void ResearchController::cancelResearch(STRUCTURE *facility)
+{
+	::cancelResearch(facility, ModeQueue);
+}
+
 void ResearchController::requestResearchCancellation(STRUCTURE *facility)
 {
 	if (!structureIsResearchingPending(facility))
@@ -647,7 +660,7 @@ void ResearchController::requestResearchCancellation(STRUCTURE *facility)
 		return;
 	}
 
-	cancelResearch(facility, ModeQueue);
+	cancelResearch(facility);
 	audio_PlayTrack(ID_SOUND_WINDOWCLOSE);
 }
 
