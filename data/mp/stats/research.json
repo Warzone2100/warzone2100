@@ -768,7 +768,7 @@
         "msgName": "RES_DEF_EMPM",
         "name": "EMP Mortar Pit",
         "requiredResearch": [
-            "R-Defense-EMPCannon"
+            "R-Wpn-MortarEMP"
         ],
         "researchPoints": 28800,
         "researchPower": 450,
@@ -8280,10 +8280,13 @@
         "msgName": "RES_W_M2",
         "name": "EMP Mortar",
         "requiredResearch": [
-            "R-Wpn-MortarEMP"
+            "R-Wpn-EMPCannon"
         ],
         "researchPoints": 20000,
         "researchPower": 450,
+        "resultComponents": [
+            "MortarEMP"
+        ],
         "statID": "MortarEMP"
     },
     "R-Wpn-PlasmaCannon": {
