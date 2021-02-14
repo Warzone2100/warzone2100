@@ -67,9 +67,6 @@
         "keyTopic": 1,
         "msgName": "RES_C_SL1",
         "name": "Synaptic Link",
-        "requiredResearch": [
-            "R-Comp-SynapticLink"
-        ],
         "researchPoints": 1200,
         "researchPower": 37
     },
@@ -3489,9 +3486,6 @@
         "id": "R-Sys-Spade1Mk1",
         "keyTopic": 1,
         "name": "Construction Unit",
-        "requiredResearch": [
-            "R-Sys-Spade1Mk1"
-        ],
         "researchPoints": 10,
         "resultComponents": [
             "Spade1Mk1"
@@ -3806,9 +3800,6 @@
         "id": "R-Vehicle-Body01",
         "msgName": "RES_V_B01",
         "name": "Light Body - Viper",
-        "requiredResearch": [
-            "R-Vehicle-Body01"
-        ],
         "researchPoints": 600,
         "researchPower": 18,
         "resultComponents": [
@@ -4582,9 +4573,6 @@
         "id": "R-Vehicle-Prop-Wheels",
         "msgName": "RES_V_P_W1",
         "name": "Wheeled Propulsion",
-        "requiredResearch": [
-            "R-Vehicle-Prop-Wheels"
-        ],
         "researchPoints": 1200,
         "researchPower": 37,
         "resultComponents": [
