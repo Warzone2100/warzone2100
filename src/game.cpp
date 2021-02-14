@@ -445,7 +445,6 @@ static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlay
 	        && WZ_PHYSFS_writeBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	        && WZ_PHYSFS_writeBytes(fileHandle, getAIName(player), MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
 	        && PHYSFS_writeSBE8(fileHandle, static_cast<int8_t>(serializePlayer->difficulty))
-	        && PHYSFS_writeUBE8(fileHandle, static_cast<uint8_t>(serializePlayer->faction))
 	        && PHYSFS_writeUBE8(fileHandle, (uint8_t)serializePlayer->allocated)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
 	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
@@ -462,7 +461,6 @@ static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, 
 	          && WZ_PHYSFS_readBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
 	          && WZ_PHYSFS_readBytes(fileHandle, aiName, MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
 	          && PHYSFS_readSBE8(fileHandle, reinterpret_cast<int8_t*>(&serializePlayer->difficulty))
-	          && PHYSFS_readUBE8(fileHandle,  reinterpret_cast<uint8_t *>(&serializePlayer->faction))
 	          && PHYSFS_readUBE8(fileHandle, &allocated)
 	          && PHYSFS_readUBE32(fileHandle, &colour)
 	          && PHYSFS_readUBE32(fileHandle, &team));
@@ -1818,7 +1816,7 @@ static void allocatePlayers()
 	{
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
-		NetPlay.players[i].faction = saveGameData.sNetPlay.players[i].faction;
+//		NetPlay.players[i].faction; // read and initialized by loadMainFile
 		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
 		NetPlay.players[i].position = saveGameData.sNetPlay.players[i].position;
 		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && i == 0))
@@ -3839,6 +3837,22 @@ static bool loadMainFile(const std::string &fileName)
 		builtInMap = save.value("builtInMap").toBool();
 	}
 
+	save.beginArray("players");
+	while (save.remainingArrayItems() > 0)
+	{
+		int index = save.value("index").toInt();
+		if (!(index >= 0 && index < MAX_PLAYERS))
+		{
+			debug(LOG_ERROR, "Invalid player index: %d", index);
+			save.nextArrayItem();
+			continue;
+		}
+		unsigned int FactionValue = save.value("faction", static_cast<uint8_t>(FACTION_NORMAL)).toUInt();
+		NetPlay.players[index].faction = static_cast<FactionID>(FactionValue);
+		save.nextArrayItem();
+	}
+	save.endArray();
+
 	return true;
 }
 
@@ -3855,6 +3869,12 @@ static bool loadMainFileFinal(const std::string &fileName)
 	while (save.remainingArrayItems() > 0)
 	{
 		int index = save.value("index").toInt();
+		if (!(index >= 0 && index < MAX_PLAYERS))
+		{
+			debug(LOG_ERROR, "Invalid player index: %d", index);
+			save.nextArrayItem();
+			continue;
+		}
 		auto value = save.value("recycled_droids").jsonValue();
 		for (const auto &v : value)
 		{
@@ -3946,6 +3966,7 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("position", NetPlay.players[i].position);
 		save.setValue("colour", NetPlay.players[i].colour);
 		save.setValue("allocated", NetPlay.players[i].allocated);
+		save.setValue("faction", NetPlay.players[i].faction);
 		save.setValue("team", NetPlay.players[i].team);
 		save.setValue("ai", NetPlay.players[i].ai);
 		save.setValue("autoGame", NetPlay.players[i].autoGame);
