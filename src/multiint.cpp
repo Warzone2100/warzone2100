@@ -2071,16 +2071,11 @@ void WzMultiplayerOptionsTitleUI::openFactionChooser(uint32_t player)
 			STATIC_ASSERT(MULTIOP_FACCHOOSER + NUM_FACTIONS - 1 <= MULTIOP_FACCHOOSER_END);
 			if (id >= MULTIOP_FACCHOOSER && id <= MULTIOP_FACCHOOSER + NUM_FACTIONS -1)
 			{
-				// TODO: @cpdef clean this
 				resetReadyStatus(false, true);
 				uint8_t idx = id - MULTIOP_FACCHOOSER;
 				SendFactionRequest(player, idx);
-//				NetPlay.players[player].faction = static_cast<FactionID>(idx);
-//				NETBroadcastPlayerInfo(player);
 				pStrongPtr->closeFactionChooser();
 				pStrongPtr->addPlayerBox(true);
-
-				debug(LOG_INFO, "click on faction %i", id-MULTIOP_FACCHOOSER);
 			}
 		};
 
