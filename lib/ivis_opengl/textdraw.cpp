@@ -1080,6 +1080,18 @@ void WzText::render(Vector2i position, PIELIGHT colour, float rotation, int maxW
 	}
 }
 
+void WzText::renderOutlined(int x, int y, PIELIGHT colour, PIELIGHT outlineColour)
+{
+	for (auto i = -1; i <= 1; i++)
+	{
+		for (auto j = -1; j <= 1; j++)
+		{
+			render(x + i, y + j, outlineColour);
+		}
+	}
+	render(x, y, colour);
+}
+
 // Sets the text, truncating to a desired width limit (in *points*) if needed
 // returns: the length of the string that will be drawn (may be less than the input text.length() if truncated)
 size_t WidthLimitedWzText::setTruncatableText(const std::string &text, iV_fonts fontID, size_t limitWidthInPoints)

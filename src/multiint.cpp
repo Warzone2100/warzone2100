@@ -2869,14 +2869,7 @@ public:
 		auto textX = marginLeft + horizontalPadding;
 		auto textY = top - cachedText->aboveBase();
 		pie_UniTransBoxFill(marginLeft, top, left + width(), top + height(), pal_GetTeamColour((*player)->colour));
-		for (int32_t i = -1; i <= 1; i++)
-		{
-			for (int32_t j = -1; j <= 1; j++)
-			{
-				cachedText->render(textX + i, textY + j, {0, 0, 0, 128});
-			}
-		}
-		cachedText->render(textX, textY, WZCOL_WHITE);
+		cachedText->renderOutlined(textX, textY, WZCOL_WHITE, {0, 0, 0, 128});
 	}
 
 	void run(W_CONTEXT *) override
