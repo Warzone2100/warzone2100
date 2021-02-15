@@ -2082,7 +2082,8 @@ void WzMultiplayerOptionsTitleUI::openFactionChooser(uint32_t player)
 		addMultiButWithClickHandler(psInlineChooserOverlayScreen, MULTIOP_FACCHOOSER_FORM, MULTIOP_FACCHOOSER + i,
 			i * (flagW * spaceDiv + space) / spaceDiv + 7,  4, // x, y
 			flagW, flagH,  // w, h
-			nullptr, IMAGE_FACTION_NORMAL+i, IMAGE_FACTION_NORMAL_HI+i, IMAGE_FACTION_NORMAL_HI+i, onClickHandler
+			to_localized_string(static_cast<FactionID>(i)),
+			IMAGE_FACTION_NORMAL+i, IMAGE_FACTION_NORMAL_HI+i, IMAGE_FACTION_NORMAL_HI+i, onClickHandler
 		);
 	}
 
