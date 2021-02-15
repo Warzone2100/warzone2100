@@ -49,8 +49,7 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	, majorSize(init->size)
 	, minorSize(init->minorSize)
 	, iRange(init->iRange)
-	, iValue(0)
-	, iOriginal(0)
+	, majorValue(0)
 	, denominator(MAX(init->denominator, 1))
 	, precision(init->precision)
 	, majorCol(init->sCol)
@@ -80,17 +79,8 @@ void widgSetBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD
 	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
 	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
 
-	psBGraph->iOriginal = iValue;
-	if (iValue < psBGraph->iRange)
-	{
-		psBGraph->iValue = iValue;
-	}
-	else
-	{
-		psBGraph->iValue = psBGraph->iRange;
-	}
-
-	psBGraph->majorSize = WBAR_SCALE * psBGraph->iValue / MAX(psBGraph->iRange, 1);
+	psBGraph->majorValue = iValue;
+	psBGraph->majorSize = WBAR_SCALE * MIN(iValue, psBGraph->iRange) / MAX(psBGraph->iRange, 1);
 	psBGraph->dirty = true;
 }
 
@@ -102,6 +92,7 @@ void widgSetMinorBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, U
 	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
 	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
 	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
+	psBGraph->minorValue = iValue;
 	psBGraph->minorSize = MIN(WBAR_SCALE * iValue / MAX(psBGraph->iRange, 1), WBAR_SCALE);
 	psBGraph->dirty = true;
 }
