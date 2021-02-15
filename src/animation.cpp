@@ -122,7 +122,7 @@ static uint16_t calculateEasing(EasingType easingType, uint16_t progress)
 	case EASE_IN_OUT:
 		return MAX(0, MIN(UINT16_MAX, iCos(UINT16_MAX / 2 + progress / 2) / 2 + (1 << 15)));
 	case EASE_IN:
-		return (progress * (uint32_t)progress) / (UINT16_MAX * (uint32_t)UINT16_MAX);
+		return (progress * (uint32_t)progress) / UINT16_MAX;
 	case EASE_OUT:
 		return 2 * progress - (progress * (uint32_t)progress) / (UINT16_MAX - 1);
 	}
@@ -174,13 +174,14 @@ const AnimatableData &Animation<AnimatableData>::getFinalData() const
 template <class AnimatableData>
 uint16_t Animation<AnimatableData>::getEasedProgress() const
 {
-	return calculateEasing(easingType, calculateEasing(easingType, progress));
+	return calculateEasing(easingType, progress);
 }
 
 template <class AnimatableData>
 Animation<AnimatableData> &Animation<AnimatableData>::setInitialData(AnimatableData initial)
 {
 	initialData = initial;
+	currentData = initial;
 	return *this;
 }
 
