@@ -53,6 +53,7 @@ public:
 	int height();
 	void render(Vector2i position, PIELIGHT colour, float rotation = 0.0f, int maxWidth = -1, int maxHeight = -1);
 	void render(int x, int y, PIELIGHT colour, float rotation = 0.0f, int maxWidth = -1, int maxHeight = -1) { render(Vector2i{x,y}, colour, rotation, maxWidth, maxHeight); }
+	void renderOutlined(int x, int y, PIELIGHT colour, PIELIGHT outlineColour);
 	int aboveBase(); // (in points)
 	int belowBase(); // (in points)
 	int lineSize(); // (in points)
