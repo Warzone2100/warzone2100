@@ -67,6 +67,7 @@
 #include "template.h"
 #include "multiplay.h"
 #include "qtscript.h"
+#include "animation.h"
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wcast-align"	// TODO: FIXME!
@@ -360,19 +361,45 @@ protected:
 		auto filledWidth = MIN(majorSize * barWidth / 100, barWidth);
 		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, filledWidth, defaultProjectionMatrix(), true);
 
-		valueTextCache.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
-		valueTextCache.render(x0, iY, WZCOL_TEXT_BRIGHT);
+		valueText.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
+		valueText.render(x0, iY, WZCOL_TEXT_BRIGHT);
+
+		if (minorSize == 0)
+		{
+			return;
+		}
 
 		//draw the comparison value - only if not zero
-		if (minorSize != 0)
+		updateAnimation();
+		filledWidth = MIN(minorAnimation.getCurrent() * barWidth / 100, barWidth);
+		iV_DrawImage(IntImages, IMAGE_DES_STATSCOMP, iX + filledWidth, y0 - 1);
+
+		auto delta = minorValue - majorValue;
+		if (delta != 0)
 		{
-			filledWidth = MIN(minorSize * barWidth / 100, barWidth);
-			iV_DrawImage(IntImages, IMAGE_DES_STATSCOMP, iX + filledWidth, y0 - 1);
+			deltaText.setText(astringf("%c%.*f", delta > 0 ? '+': '-', precision, std::abs(delta) / (float)denominator), font_small);
+			auto xDeltaText = xOffset + x() + width() - iV_GetTextWidth(deltaText.getText().c_str(), font_small) - PADDING;
+			deltaText.renderOutlined(xDeltaText, iY - 1, delta > 0 ? WZCOL_GREEN : WZCOL_RED, {0, 0, 0, 223});
 		}
 	}
 
-	WzText valueTextCache;
+	void updateAnimation()
+	{
+		if (minorSize != minorAnimation.getFinalData())
+		{
+			minorAnimation
+				.setInitialData(minorAnimation.getCurrent())
+				.setFinalData(minorSize)
+				.start();
+		}
+
+		minorAnimation.update();
+	}
+
+	WzText valueText;
+	WzText deltaText;
 	uint32_t maxValueTextWidth = iV_GetTextWidth("00000", font_regular);
+	Animation<float> minorAnimation = Animation<float>(realTime, EASE_IN, 200).setInitialData(0).setFinalData(0);
 	const uint32_t PADDING = 3;
 };
 
