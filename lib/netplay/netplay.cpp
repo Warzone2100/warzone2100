@@ -1749,7 +1749,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			int32_t team = 0;
 			int8_t ai = 0;
 			int8_t difficulty = 0;
-			FactionID faction = FACTION_NORMAL;
+			uint8_t faction = FACTION_NORMAL;
 			bool error = false;
 
 			NETbeginDecode(playerQueue, NET_PLAYER_INFO);
@@ -1792,7 +1792,15 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 				NETbool(&NetPlay.players[index].ready);
 				NETint8_t(&ai);
 				NETint8_t(&difficulty);
-				NETuint8_t((uint8_t *)&faction);
+				NETuint8_t(&faction);
+
+				auto newFactionId = uintToFactionID(faction);
+				if (!newFactionId.has_value())
+				{
+					debug(LOG_ERROR, "MSG_PLAYER_INFO from %u: Faction ID (%u) out of range (max %u)", playerQueue.index, (unsigned int)faction, (unsigned int)MAX_FACTION_ID);
+					error = true;
+					break;
+				}
 
 				// Don't let anyone except the host change these, otherwise it will end up inconsistent at some point, and the game gets really messed up.
 				if (playerQueue.index == NetPlay.hostPlayer)
@@ -1802,7 +1810,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NetPlay.players[index].team = team;
 					NetPlay.players[index].ai = ai;
 					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
-					NetPlay.players[index].faction = faction;
+					NetPlay.players[index].faction = newFactionId.value();
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");

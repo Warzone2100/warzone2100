@@ -2309,11 +2309,11 @@ static bool SendColourRequest(UBYTE player, UBYTE col)
 static bool SendFactionRequest(UBYTE player, UBYTE faction)
 {
 	// TODO: needs to be rewritten from scratch
+	ASSERT_OR_RETURN(false, faction <= static_cast<UBYTE>(MAX_FACTION_ID), "Invalid faction: %u", (unsigned int)faction);
 	if (NetPlay.isHost)			// do or request the change
 	{
 		NetPlay.players[player].faction = static_cast<FactionID>(faction);
 		NETBroadcastPlayerInfo(player);
-		//return changeColour(player, col, true);
 		return true;
 	}
 	else
@@ -2369,9 +2369,16 @@ bool recvFactionRequest(NETQUEUE queue)
 		return false;
 	}
 
+	auto newFactionId = uintToFactionID(faction);
+	if (!newFactionId.has_value())
+	{
+		HandleBadParam("NET_FACTIONREQUEST given incorrect params.", player, queue.index);
+		return false;
+	}
+
 	resetReadyStatus(false, true);
 
-	NetPlay.players[player].faction = static_cast<FactionID>(faction);
+	NetPlay.players[player].faction = newFactionId.value();
 	NETBroadcastPlayerInfo(player);
 	return true;
 }
