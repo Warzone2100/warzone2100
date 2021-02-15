@@ -48,4 +48,7 @@ const FACTION* getFactionByID(FactionID faction);
 
 std::unordered_set<FactionID> getEnabledFactions(bool ignoreNormalFaction = false);
 
+const char* to_string(FactionID faction);
+const char* to_localized_string(FactionID faction);
+
 #endif

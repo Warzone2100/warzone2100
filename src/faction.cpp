@@ -1,4 +1,5 @@
 #include "faction.h"
+#include "lib/framework/frame.h"
 #include "lib/netplay/netplay.h"
 
 static const struct FACTION factions[NUM_FACTIONS] = {
@@ -122,4 +123,35 @@ std::unordered_set<FactionID> getEnabledFactions(bool ignoreNormalFaction /*= fa
 		}
 	}
 	return enabledFactions;
+}
+
+const char* to_string(FactionID faction)
+{
+	switch (faction)
+	{
+		case FACTION_NORMAL:
+			return "Normal";
+		case FACTION_NEXUS:
+			return "NEXUS";
+		case FACTION_COLLECTIVE:
+			return "Collective";
+	}
+	return ""; // silence warning - switch above should be complete
+}
+
+const char* to_localized_string(FactionID faction)
+{
+	switch (faction)
+	{
+		case FACTION_NORMAL:
+			// TRANSLATORS: "Normal" Faction
+			return _("Normal");
+		case FACTION_NEXUS:
+			// TRANSLATORS: "NEXUS" Faction
+			return _("NEXUS");
+		case FACTION_COLLECTIVE:
+			// TRANSLATORS: "Collective" Faction
+			return _("Collective");
+	}
+	return ""; // silence warning - switch above should be complete
 }
