@@ -1195,6 +1195,14 @@ void	kf_SeekNorth()
 	CONPRINTF("%s", _("View Aligned to North"));
 }
 
+MappableFunction kf_ScrollCamera(const int horizontal, const int vertical)
+{
+	return [horizontal, vertical]() {
+		scrollDirLeftRight += horizontal;
+		scrollDirUpDown += vertical;
+	};
+}
+
 void kf_CameraUp() {
 	scrollDirUpDown += 1;
 }
@@ -1488,30 +1496,14 @@ void	kf_JumpToResourceExtractor()
 	}
 
 }
+
 // --------------------------------------------------------------------------
-void	kf_JumpToRepairUnits()
+MappableFunction kf_JumpToUnits(const DROID_TYPE droidType)
 {
-	selNextSpecifiedUnit(DROID_REPAIR);
+	return [droidType]() {
+		selNextSpecifiedUnit(droidType);
+	};
 }
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
-void	kf_JumpToConstructorUnits()
-{
-	selNextSpecifiedUnit(DROID_CONSTRUCT);
-}
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
-void	kf_JumpToSensorUnits()
-{
-	selNextSpecifiedUnit(DROID_SENSOR);
-}
-// --------------------------------------------------------------------------
-// --------------------------------------------------------------------------
-void	kf_JumpToCommandUnits()
-{
-	selNextSpecifiedUnit(DROID_COMMAND);
-}
-// --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
 void	kf_JumpToUnassignedUnits()
@@ -1665,194 +1657,63 @@ void	kf_ToggleWeather()
 }
 
 // --------------------------------------------------------------------------
-void	kf_SelectNextFactory()
+MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bool bJumpToSelected)
 {
-	STRUCTURE	*psCurr;
+	static const std::vector<STRUCTURE_TYPE> FACTORY_TYPES = {
+		STRUCTURE_TYPE::REF_FACTORY,
+		STRUCTURE_TYPE::REF_CYBORG_FACTORY,
+		STRUCTURE_TYPE::REF_VTOL_FACTORY,
+	};
 
-	selNextSpecifiedBuilding(REF_FACTORY, false);
+	return [factoryType, bJumpToSelected]() {
+		selNextSpecifiedBuilding(factoryType, bJumpToSelected);
 
-	//deselect factories of other types
-	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected &&
-		    ((psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
-		     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
+		STRUCTURE* psCurrent;
+
+		//deselect factories of other types
+		for (psCurrent = apsStructLists[selectedPlayer]; psCurrent; psCurrent = psCurrent->psNext)
 		{
-			psCurr->selected = false;
+			const STRUCTURE_TYPE currentType = psCurrent->pStructureType->type;
+			const bool bIsAnotherTypeOfFactory = currentType != factoryType && std::any_of(FACTORY_TYPES.begin(), FACTORY_TYPES.end(), [currentType](const STRUCTURE_TYPE type) {
+				return currentType == type;
+			});
+			if (psCurrent->selected && bIsAnotherTypeOfFactory)
+			{
+				psCurrent->selected = false;
+			}
 		}
-	}
 
-	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
-	{
-		setKeyButtonMapping(IDRET_MANUFACTURE);
-	}
-	triggerEventSelected();
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectNextResearch()
-{
-	selNextSpecifiedBuilding(REF_RESEARCH, false);
-	if (intCheckReticuleButEnabled(IDRET_RESEARCH))
-	{
-		setKeyButtonMapping(IDRET_RESEARCH);
-	}
-	triggerEventSelected();
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectNextPowerStation()
-{
-	selNextSpecifiedBuilding(REF_POWER_GEN, false);
-	triggerEventSelected();
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectNextCyborgFactory()
-{
-	STRUCTURE	*psCurr;
-
-	selNextSpecifiedBuilding(REF_CYBORG_FACTORY, false);
-
-	//deselect factories of other types
-	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected &&
-		    ((psCurr->pStructureType->type == REF_FACTORY) ||
-		     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
+		if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
 		{
-			psCurr->selected = false;
+			setKeyButtonMapping(IDRET_MANUFACTURE);
 		}
-	}
-
-	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
-	{
-		setKeyButtonMapping(IDRET_MANUFACTURE);
-	}
-	triggerEventSelected();
+		triggerEventSelected();
+	};
 }
 
 // --------------------------------------------------------------------------
-void	kf_SelectNextVTOLFactory()
+MappableFunction kf_SelectNextResearch(const bool bJumpToSelected)
 {
-	STRUCTURE	*psCurr;
-
-	selNextSpecifiedBuilding(REF_VTOL_FACTORY, false);
-
-	//deselect factories of other types
-	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected &&
-		    ((psCurr->pStructureType->type == REF_FACTORY) ||
-		     (psCurr->pStructureType->type == REF_CYBORG_FACTORY)))
+	return [bJumpToSelected]() {
+		selNextSpecifiedBuilding(REF_RESEARCH, bJumpToSelected);
+		if (intCheckReticuleButEnabled(IDRET_RESEARCH))
 		{
-			psCurr->selected = false;
+			setKeyButtonMapping(IDRET_RESEARCH);
 		}
-	}
-
-	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
-	{
-		setKeyButtonMapping(IDRET_MANUFACTURE);
-	}
-	triggerEventSelected();
+		triggerEventSelected();
+	};
 }
 
 // --------------------------------------------------------------------------
-void	kf_JumpNextFactory()
+MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected)
 {
-	STRUCTURE	*psCurr;
-
-	selNextSpecifiedBuilding(REF_FACTORY, true);
-
-	//deselect factories of other types
-	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected &&
-		    ((psCurr->pStructureType->type == REF_CYBORG_FACTORY) ||
-		     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
-		{
-			psCurr->selected = false;
-		}
-	}
-
-	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
-	{
-		setKeyButtonMapping(IDRET_MANUFACTURE);
-	}
-	triggerEventSelected();
+	return [bJumpToSelected]() {
+		selNextSpecifiedBuilding(REF_POWER_GEN, bJumpToSelected);
+		triggerEventSelected();
+	};
 }
 
 // --------------------------------------------------------------------------
-void	kf_JumpNextResearch()
-{
-	selNextSpecifiedBuilding(REF_RESEARCH, true);
-	if (intCheckReticuleButEnabled(IDRET_RESEARCH))
-	{
-		setKeyButtonMapping(IDRET_RESEARCH);
-	}
-	triggerEventSelected();
-}
-
-// --------------------------------------------------------------------------
-void	kf_JumpNextPowerStation()
-{
-	selNextSpecifiedBuilding(REF_POWER_GEN, true);
-	triggerEventSelected();
-}
-
-// --------------------------------------------------------------------------
-void	kf_JumpNextCyborgFactory()
-{
-	STRUCTURE	*psCurr;
-
-	selNextSpecifiedBuilding(REF_CYBORG_FACTORY, true);
-
-	//deselect factories of other types
-	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected &&
-		    ((psCurr->pStructureType->type == REF_FACTORY) ||
-		     (psCurr->pStructureType->type == REF_VTOL_FACTORY)))
-		{
-			psCurr->selected = false;
-		}
-	}
-
-	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
-	{
-		setKeyButtonMapping(IDRET_MANUFACTURE);
-	}
-	triggerEventSelected();
-}
-
-// --------------------------------------------------------------------------
-void	kf_JumpNextVTOLFactory()
-{
-	STRUCTURE	*psCurr;
-
-	selNextSpecifiedBuilding(REF_VTOL_FACTORY, true);
-
-	//deselect factories of other types
-	for (psCurr = apsStructLists[selectedPlayer]; psCurr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected &&
-		    ((psCurr->pStructureType->type == REF_FACTORY) ||
-		     (psCurr->pStructureType->type == REF_CYBORG_FACTORY)))
-		{
-			psCurr->selected = false;
-		}
-	}
-
-	if (intCheckReticuleButEnabled(IDRET_MANUFACTURE))
-	{
-		setKeyButtonMapping(IDRET_MANUFACTURE);
-	}
-	triggerEventSelected();
-}
-
-// --------------------------------------------------------------------------
-
-
 void	kf_KillEnemy()
 {
 	DROID		*psCDroid, *psNDroid;
@@ -2006,246 +1867,33 @@ void	kf_ToggleConsole()
 }
 
 // --------------------------------------------------------------------------
-void	kf_SelectAllOnScreenUnits()
+MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen)
 {
-
-	selDroidSelection(selectedPlayer, DS_ALL_UNITS, DST_UNUSED, true);
+	return [selectionClass, selectionType, bOnScreen]() {
+		selDroidSelection(selectedPlayer, selectionClass, selectionType, bOnScreen);
+	};
 }
 
 // --------------------------------------------------------------------------
-void	kf_SelectAllUnits()
+MappableFunction kf_SetDroid(const SECONDARY_ORDER order, const SECONDARY_STATE state)
 {
-
-	selDroidSelection(selectedPlayer, DS_ALL_UNITS, DST_UNUSED, false);
+	return [order, state]() {
+		kfsf_SetSelectedDroidsState(order, state);
+	};
 }
 
 // --------------------------------------------------------------------------
-void	kf_SelectAllVTOLs()
+MappableFunction kf_OrderDroid(const DroidOrderType order)
 {
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_VTOL, false);
-}
-
-void kf_SelectAllArmedVTOLs()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_VTOL_ARMED, false);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectAllHovers()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_HOVER, false);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectAllWheeled()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_WHEELED, false);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectAllTracked()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_TRACKED, false);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectAllHalfTracked()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_HALF_TRACKED, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllCyborgs()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_CYBORG, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllEngineers()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ENGINEER, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllMechanics()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_MECHANIC, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllTransporters()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_TRANSPORTER, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllRepairTanks()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_REPAIR_TANK, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllSensorUnits()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_SENSOR, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllTrucks()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_TRUCK, false);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectAllDamaged()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_DAMAGED, false);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SelectAllCombatUnits()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_COMBAT, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllLandCombatUnits()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_COMBAT_LAND, false);
-}
-
-// --------------------------------------------------------------------------
-void kf_SelectAllCombatCyborgs()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_COMBAT_CYBORG, false);
-}
-
-// --------------------------------------------------------------------------
-// this is worst case (size of apsDroidLists[selectedPlayer] squared).
-// --------------------------------------------------------------------------
-void	kf_SelectAllSameType()
-{
-	selDroidSelection(selectedPlayer, DS_BY_TYPE, DST_ALL_SAME, false);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidRangeShort()
-{
-	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_SHORT);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidRangeOptimum()
-{
-	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_OPTIMUM);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidRangeLong()
-{
-	kfsf_SetSelectedDroidsState(DSO_ATTACK_RANGE, DSS_ARANGE_LONG);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidRetreatMedium()
-{
-	kfsf_SetSelectedDroidsState(DSO_REPAIR_LEVEL, DSS_REPLEV_LOW);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidRetreatHeavy()
-{
-	kfsf_SetSelectedDroidsState(DSO_REPAIR_LEVEL, DSS_REPLEV_HIGH);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidRetreatNever()
-{
-	kfsf_SetSelectedDroidsState(DSO_REPAIR_LEVEL, DSS_REPLEV_NEVER);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidAttackAtWill()
-{
-	kfsf_SetSelectedDroidsState(DSO_ATTACK_LEVEL, DSS_ALEV_ALWAYS);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidAttackReturn()
-{
-	kfsf_SetSelectedDroidsState(DSO_ATTACK_LEVEL, DSS_ALEV_ATTACKED);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidAttackCease()
-{
-	kfsf_SetSelectedDroidsState(DSO_ATTACK_LEVEL, DSS_ALEV_NEVER);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidOrderHold()
-{
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-	{
-		if (psDroid->selected)
+	return [order]() {
+		for (DROID* psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 		{
-			orderDroid(psDroid, DORDER_HOLD, ModeQueue);
+			if (psDroid->selected)
+			{
+				orderDroid(psDroid, order, ModeQueue);
+			}
 		}
-	}
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidOrderStop()
-{
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
-	{
-		if (psDroid->selected)
-		{
-			orderDroid(psDroid, DORDER_STOP, ModeQueue);
-		}
-	}
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidMoveGuard()
-{
-	kfsf_SetSelectedDroidsState(DSO_HALTTYPE, DSS_HALT_GUARD);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidMovePursue()
-{
-	kfsf_SetSelectedDroidsState(DSO_HALTTYPE, DSS_HALT_PURSUE);	// ASK?
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidMovePatrol()
-{
-	kfsf_SetSelectedDroidsState(DSO_PATROL, DSS_PATROL_SET);	// ASK
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidReturnToBase()
-{
-	kfsf_SetSelectedDroidsState(DSO_RETURN_TO_LOC, DSS_RTL_BASE);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidGoToTransport()
-{
-	kfsf_SetSelectedDroidsState(DSO_RETURN_TO_LOC, DSS_RTL_TRANSPORT);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidGoForRepair()
-{
-	kfsf_SetSelectedDroidsState(DSO_RETURN_TO_LOC, DSS_RTL_REPAIR);
-}
-
-// --------------------------------------------------------------------------
-void	kf_SetDroidRecycle()
-{
-	kfsf_SetSelectedDroidsState(DSO_RECYCLE, DSS_RECYCLE_SET);
+	};
 }
 
 // --------------------------------------------------------------------------
@@ -2383,17 +2031,6 @@ void	kf_RightOrderMenu()
 	}
 }
 
-// --------------------------------------------------------------------------
-void kf_TriggerShockWave()
-{
-	Vector3i pos;
-
-	pos.x = mouseTileX * TILE_UNITS + TILE_UNITS / 2;
-	pos.z = mouseTileY * TILE_UNITS + TILE_UNITS / 2;
-	pos.y = map_Height(pos.x, pos.z) + SHOCK_WAVE_HEIGHT;
-
-	addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SHOCKWAVE, false, nullptr, 0);
-}
 // --------------------------------------------------------------------------
 void	kf_ToggleMouseInvert()
 {
