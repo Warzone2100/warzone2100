@@ -23,6 +23,8 @@
 
 #include "console.h"
 #include "keymap.h"
+#include "selection.h"
+#include "orderdef.h"
 #include "lib/framework/fixedpoint.h"
 
 #define	MAP_ZOOM_RATE_MAX	(1000)
@@ -77,10 +79,7 @@ void kf_JumpToMapMarker();
 void kf_TogglePowerBar();
 void kf_ToggleDebugMappings();
 void kf_ToggleGodMode();
-void kf_CameraUp();
-void kf_CameraDown();
-void kf_CameraLeft();
-void kf_CameraRight();
+MappableFunction kf_ScrollCamera(const int horizontal, const int vertical);
 void kf_SeekNorth();
 void kf_MaxScrollLimits();
 void kf_toggleTrapCursor();
@@ -104,53 +103,14 @@ void kf_SendGlobalMessage();
 void kf_SendTeamMessage();
 void kf_ToggleConsole();
 void kf_ToggleTeamChat();
-void kf_SelectAllOnScreenUnits();
-void kf_SelectAllUnits();
-void kf_SelectAllVTOLs();
-void kf_SelectAllArmedVTOLs();
-void kf_SelectAllHovers();
-void kf_SelectAllWheeled();
-void kf_SelectAllTracked();
-void kf_SelectAllHalfTracked();
-void kf_SelectAllCyborgs();
-void kf_SelectAllEngineers();
-void kf_SelectAllMechanics();
-void kf_SelectAllTransporters();
-void kf_SelectAllRepairTanks();
-void kf_SelectAllSensorUnits();
-void kf_SelectAllTrucks();
-void kf_SelectAllCombatUnits();
-void kf_SelectAllLandCombatUnits();
-void kf_SelectAllCombatCyborgs();
-void kf_SelectAllSameType();
+MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass = SELECTION_CLASS::DS_BY_TYPE, const bool bOnScreen = false);
 
-void kf_SetDroidRangeShort();
-void kf_SetDroidRangeOptimum();
-void kf_SetDroidRangeLong();
+MappableFunction kf_SetDroid(const SECONDARY_ORDER order, const SECONDARY_STATE state);
+MappableFunction kf_OrderDroid(const DroidOrderType order);
 
-void kf_SetDroidRetreatMedium();
-void kf_SetDroidRetreatHeavy();
-void kf_SetDroidRetreatNever();
-
-void kf_SetDroidAttackAtWill();
-void kf_SetDroidAttackReturn();
-void kf_SetDroidAttackCease();
-
-void kf_SetDroidOrderHold();
-void kf_SetDroidOrderStop();
-
-void kf_SetDroidMoveGuard();
-void kf_SetDroidMovePursue();
-void kf_SetDroidMovePatrol();
-
-void kf_SetDroidReturnToBase();
-void kf_SetDroidGoToTransport();
-void kf_SetDroidGoForRepair();
-void kf_SetDroidRecycle();
 void kf_CentreOnBase();
 void kf_ToggleFog();
 void kf_MoveToLastMessagePos();
-void kf_SelectAllDamaged();
 void kf_RightOrderMenu();
 
 extern bool bAllowOtherKeyPresses;
@@ -159,27 +119,16 @@ void kf_TriggerRayCast();
 void kf_ToggleFormationSpeedLimiting();
 void kf_ToggleSensorDisplay();
 void kf_JumpToResourceExtractor();
-void kf_JumpToRepairUnits();
-void kf_JumpToConstructorUnits();
-void kf_JumpToCommandUnits();
-void kf_JumpToSensorUnits();
+MappableFunction kf_JumpToUnits(const DROID_TYPE droidType);
 void kf_AddHelpBlip();
 void kf_ToggleProximitys();
 
 void kf_JumpToUnassignedUnits();
-void kf_TriggerShockWave();
 void kf_ToggleVisibility();
 MappableFunction kf_RadarZoom(const int multiplier);
-void kf_SelectNextFactory();
-void kf_SelectNextCyborgFactory();
-void kf_SelectNextVTOLFactory();
-void kf_SelectNextPowerStation();
-void kf_SelectNextResearch();
-void kf_JumpNextFactory();
-void kf_JumpNextCyborgFactory();
-void kf_JumpNextVTOLFactory();
-void kf_JumpNextPowerStation();
-void kf_JumpNextResearch();
+MappableFunction kf_SelectNextFactory(const STRUCTURE_TYPE factoryType, const bool bJumpToSelected = false);
+MappableFunction kf_SelectNextPowerStation(const bool bJumpToSelected = false);
+MappableFunction kf_SelectNextResearch(const bool bJumpToSelected = false);
 void kf_ToggleConsoleDrop();
 void kf_ToggleShakeStatus();
 void kf_ToggleMouseInvert();
