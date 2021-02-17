@@ -75,7 +75,7 @@ MappableFunction kf_AddGrouping_N(const unsigned int n);
 void kf_ToggleDroidInfo();
 void kf_addInGameOptions();
 void kf_addMultiMenu();
-void kf_JumpToMapMarker();
+MappableFunction kf_JumpToMapMarker(const unsigned int x, const unsigned int z, const int yaw);
 void kf_TogglePowerBar();
 void kf_ToggleDebugMappings();
 void kf_ToggleGodMode();

@@ -24,6 +24,7 @@
 #include <vector>
 #include <functional>
 #include <optional-lite/optional.hpp>
+#include <unordered_map>
 
 #include "lib/framework/input.h"
 
@@ -312,22 +313,30 @@ public:
 public:
 	void shutdown();
 
+// Map markers
+public:
+	void updateMapMarkers();
+
 private:
+	/* Explicit hash fn for KEY_CODEs. Do not use std::hash<KEY_CODE> directly to avoid breaking things once/if KEY_CODE is converted to an enum class */
+	struct KeyCodeHash
+	{
+		std::size_t operator()(KEY_CODE keyCode) const
+		{
+			return static_cast<std::size_t>(keyCode);
+		}
+	};
+
 	std::vector<InputContext::State> contextStates;
 	std::list<KeyMapping> keyMappings;
+	std::unordered_map<KEY_CODE, KeyFunctionInfo, KeyCodeHash> markerKeyFunctions;
 	bool bMappingsSortOrderDirty = true;
 };
 
-KeyMappingInput getLastInput();
-KEY_CODE getLastMetaKey();
 void processDebugMappings(unsigned player, bool val);
 bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
-
-UDWORD getMarkerX(KEY_CODE code);
-UDWORD getMarkerY(KEY_CODE code);
-SDWORD getMarkerSpin(KEY_CODE code);
 
 // For keymap editor
 typedef std::vector<std::reference_wrapper<const KeyFunctionInfo>> KeyFunctionEntries;
