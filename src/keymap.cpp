@@ -45,7 +45,6 @@
 #include <unordered_map>
 #include <unordered_set>
 
-static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 static KEY_CODE getQwertyKey();
 
 // ----------------------------------------------------------------------------------
@@ -521,26 +520,9 @@ bool KeyMapping::toString(char* pOutStr) const
 }
 
 // ----------------------------------------------------------------------------------
-/* Some stuff allowing the user to add key mappings themselves */
-
-#define	NUM_QWERTY_KEYS	26
-struct KEYMAP_MARKER
-{
-	KeyMapping	*psMapping;
-	UDWORD	xPos, yPos;
-	SDWORD	spin;
-};
-static	KEYMAP_MARKER	qwertyKeyMappings[NUM_QWERTY_KEYS];
-
-
 static bool bDoingDebugMappings = false;
 static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 // ----------------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------------
-/* Last meta and sub key that were recorded */
-static KEY_CODE	lastMetaKey;
-static KeyMappingInput lastInput;
 
 // ----------------------------------------------------------------------------------
 class KeyFunctionInfoTable {
@@ -766,8 +748,6 @@ static KeyFunctionInfoTable initializeKeyFunctionInfoTable()
 	entries.emplace_back(KeyFunctionInfo(InputContext::__DEBUG,         KeyMappingType::HIDDEN,      kf_RevealMapAtPos,                                             "RevealMapAtPos",               N_("Reveal map at mouse position"),                 {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_LSHIFT,   KEY_CODE::KEY_W,            KeyAction::PRESSED}}}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::__DEBUG,         KeyMappingType::HIDDEN,      kf_TraceObject,                                                "TraceObject",                  N_("Trace a game object"),                          {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_LCTRL,    KEY_CODE::KEY_L,            KeyAction::PRESSED}}}));
 
-	// Mappings bindable at runtime (hidden, not saved, custom bind logic)
-	entries.emplace_back(KeyFunctionInfo(InputContext::GAMEPLAY,        KeyMappingType::HIDDEN,      kf_JumpToMapMarker,                                            "JumpToMapMarker"));
 
 	return KeyFunctionInfoTable(entries);
 }
@@ -826,15 +806,12 @@ KeyMappingSlot keyMappingSlotByName(std::string const& name)
 void InputManager::resetMappings(bool bForceDefaults)
 {
 	keyMappings.clear();
+	markerKeyFunctions.clear();
+
 	bMappingsSortOrderDirty = true;
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
 		processDebugMappings(n, false);
-	}
-
-	for (unsigned i = 0; i < NUM_QWERTY_KEYS; i++)
-	{
-		qwertyKeyMappings[i].psMapping = nullptr;
 	}
 
 	// load the mappings.
@@ -915,60 +892,60 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 
 // ----------------------------------------------------------------------------------
 /* Allows _new_ mappings to be made at runtime */
-static bool checkQwertyKeys(InputManager& inputManager)
+void InputManager::updateMapMarkers()
 {
 	/* Are we trying to make a new map marker? */
-	if (keyDown(KEY_LALT))
+	if (!keyDown(KEY_LALT))
 	{
-		/* Did we press a key */
-		const KEY_CODE qKey = getQwertyKey();
-		if (qKey)
+		return;
+	}
+
+	/* Did we press a key */
+	KEY_CODE qKey = getQwertyKey();
+	if (!qKey)
+	{
+		return;
+	}
+
+	const auto existing = findMappingsForInput(KEY_CODE::KEY_LSHIFT, qKey);
+	if (existing.size() > 0 && std::any_of(existing.begin(), existing.end(), [](const KeyMapping& mapping) {
+		return mapping.info.name != "JumpToMapMarker";
+	}))
+	{
+		return;
+	}
+
+	for (const KeyMapping& old : existing)
+	{
+		if (old.info.name == "JumpToMapMarker")
 		{
-			const auto info = keyFunctionInfoByName("JumpToMapMarker");
-			ASSERT(info.has_value(), "Could not find keymap info table entry for JumpToMapMarker");
-			if (!info.has_value())
-			{
-				return false;
-			}
-
-			const auto existing = inputManager.findMappingsForInput(KEY_CODE::KEY_LSHIFT, qKey);
-			if (existing.size() > 0 && std::any_of(existing.begin(), existing.end(), [](const KeyMapping& mapping) {
-				return mapping.info.name != "JumpToMapMarker";
-			}))
-			{
-				return false;
-			}
-
-			for (const KeyMapping& old : existing)
-			{
-				if (old.info.name == "JumpToMapMarker")
-				{
-					inputManager.removeMapping(old);
-				}
-			}
-
-			const unsigned int tableEntry = asciiKeyCodeToTable(qKey);
-			/* We're assigning something to the key */
-			debug(LOG_NEVER, "Assigning keymapping to tableEntry: %i", tableEntry);
-			if (qwertyKeyMappings[tableEntry].psMapping)
-			{
-				/* Get rid of the old mapping on this key if there was one */
-				inputManager.removeMapping(*qwertyKeyMappings[tableEntry].psMapping);
-			}
-
-			/* Now add the new one for this location */
-			qwertyKeyMappings[tableEntry].psMapping =
-				&inputManager.addMapping(KEY_LSHIFT, KeyMappingInput((KEY_CODE)qKey), KeyAction::PRESSED, *info, KeyMappingSlot::PRIMARY);
-
-			/* Store away the position and view angle */
-			qwertyKeyMappings[tableEntry].xPos = playerPos.p.x;
-			qwertyKeyMappings[tableEntry].yPos = playerPos.p.z;
-			qwertyKeyMappings[tableEntry].spin = playerPos.r.y;
-
-			return true;
+			removeMapping(old);
 		}
 	}
-	return false;
+
+	/* Destroy any existing keymap entries for the key */
+	const auto& entry = markerKeyFunctions.find(qKey);
+	if (entry != markerKeyFunctions.end())
+	{
+		markerKeyFunctions.erase(entry);
+	}
+
+	/* Create a new keymap entry. x/z/yaw are captured within the lambda in kf_JumpToMapMarker */
+	markerKeyFunctions.emplace(
+		qKey,
+		KeyFunctionInfo(
+			InputContext::GAMEPLAY,
+			KeyMappingType::HIDDEN,
+			kf_JumpToMapMarker(playerPos.p.x, playerPos.p.z, playerPos.r.y),
+			"JumpToMapMarker"
+		)
+	);
+	const auto& maybeInfo = markerKeyFunctions.find(qKey);
+	if (maybeInfo != markerKeyFunctions.end())
+	{
+		const auto& info = maybeInfo->second;
+		addMapping(KEY_LSHIFT, qKey, KeyAction::PRESSED, info, KeyMappingSlot::PRIMARY);
+	}
 }
 
 // ----------------------------------------------------------------------------------
@@ -1014,7 +991,7 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 	}
 
 	/* Check if player has made new camera markers */
-	checkQwertyKeys(*this);
+	updateMapMarkers();
 
 	/* If mappings have been updated or context priorities have changed, sort the mappings by priority and whether or not they have meta keys */
 	if (bMappingsSortOrderDirty)
@@ -1059,12 +1036,6 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 		/* Execute the action if mapping was hit */
 		if (keyToProcess.isActivated())
 		{
-			if (keyToProcess.hasMeta())
-			{
-				lastMetaKey = keyToProcess.metaKeyCode;
-			}
-
-			lastInput = keyToProcess.input;
 			keyToProcess.info.function();
 			consumedInputs.insert(keyToProcess.input);
 		}
@@ -1134,20 +1105,6 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 }
 
 // ----------------------------------------------------------------------------------
-/* Returns the key code of the last sub key pressed - allows called functions to have a simple stack */
-KeyMappingInput getLastInput()
-{
-	return lastInput;
-}
-
-// ----------------------------------------------------------------------------------
-/* Returns the key code of the last meta key pressed - allows called functions to have a simple stack */
-KEY_CODE getLastMetaKey()
-{
-	return lastMetaKey;
-}
-
-
 static const KEY_CODE qwertyCodes[26] =
 {
 	//  +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+   +---+
@@ -1164,63 +1121,16 @@ static const KEY_CODE qwertyCodes[26] =
 /* Returns the key code of the first ascii key that its finds has been PRESSED */
 static KEY_CODE getQwertyKey()
 {
-	for (KEY_CODE code : qwertyCodes)
+	for (const KEY_CODE& code : qwertyCodes)
 	{
 		if (keyPressed(code))
 		{
-			return code;  // Top-, middle- or bottom-row key pressed.
+			return code; // Top-, middle- or bottom-row key pressed.
 		}
 	}
 
-	return (KEY_CODE)0;                     // no ascii key pressed
+	return (KEY_CODE)0; // no ascii key pressed
 }
-
-// ----------------------------------------------------------------------------------
-/*	Returns the number (0 to 26) of a key on the keyboard
-	from it's keycode. Q is zero, through to M being 25
-*/
-UDWORD asciiKeyCodeToTable(KEY_CODE code)
-{
-	unsigned i;
-	for (i = 0; i < ARRAY_SIZE(qwertyCodes); ++i)
-	{
-		if (code == qwertyCodes[i])
-		{
-			return i;
-		}
-	}
-
-	ASSERT(false, "only pass nonzero key codes from getQwertyKey to this function");
-	return 0;
-}
-
-// ----------------------------------------------------------------------------------
-/* Returns the map X position associated with the passed in keycode */
-UDWORD	getMarkerX(KEY_CODE code)
-{
-	UDWORD	entry;
-	entry = asciiKeyCodeToTable(code);
-	return (qwertyKeyMappings[entry].xPos);
-}
-
-// ----------------------------------------------------------------------------------
-/* Returns the map Y position associated with the passed in keycode */
-UDWORD	getMarkerY(KEY_CODE code)
-{
-	UDWORD	entry;
-	entry = asciiKeyCodeToTable(code);
-	return (qwertyKeyMappings[entry].yPos);
-}
-
-// ----------------------------------------------------------------------------------
-/* Returns the map Y rotation associated with the passed in keycode */
-SDWORD	getMarkerSpin(KEY_CODE code)
-{
-	UDWORD	entry;
-	entry = asciiKeyCodeToTable(code);
-	return (qwertyKeyMappings[entry].spin);
-}
-
 
 // ----------------------------------------------------------------------------------
 /* Defines whether we process debug key mapping stuff */

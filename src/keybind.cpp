@@ -1089,27 +1089,22 @@ void	kf_addMultiMenu()
 
 // --------------------------------------------------------------------------
 
-void kf_JumpToMapMarker()
+MappableFunction kf_JumpToMapMarker(const unsigned int x, const unsigned int z, const int yaw)
 {
-	const auto lastKey = getLastInput().asKeyCode();
-	if (!lastKey.has_value())
-	{
-		return;
-	}
-
-	if (!getRadarTrackingStatus())
-	{
-		const KEY_CODE entry = *lastKey;
-//		CONPRINTF("Restoring map position %d:%d",getMarkerX(entry),getMarkerY(entry));
-		playerPos.p.x = getMarkerX(entry);
-		playerPos.p.z = getMarkerY(entry);
-		playerPos.r.y = getMarkerSpin(entry);
-		/* A fix to stop the camera continuing when marker code is called */
-		if (getWarCamStatus())
+	return [x, z, yaw]() {
+		if (!getRadarTrackingStatus())
 		{
-			camToggleStatus();
+			playerPos.p.x = x;
+			playerPos.p.z = z;
+			playerPos.r.y = yaw;
+
+			/* A fix to stop the camera continuing when marker code is called */
+			if (getWarCamStatus())
+			{
+				camToggleStatus();
+			}
 		}
-	}
+	};
 }
 
 // --------------------------------------------------------------------------
