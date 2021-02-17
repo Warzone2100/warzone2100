@@ -876,8 +876,19 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 	}
 	if (psMapping.has_value())
 	{
+		// Older GCC versions flag the nonstd::optional unwrapping here as potentially uninitialized usage. This is
+		// a false-positive, and fixed on newer compiler versions (This broke Ubuntu 16.04 builds). I could not find
+		// a way of cleanly tricking the compiler to comply, so we just ignore the warning for the line.
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif //  __GNUC__
 		// Remove any existing mapping for this function
 		removeMapping(*psMapping);
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif // __GNUC__
+
 	}
 	if (!bForceDefaults)
 	{	
