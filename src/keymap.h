@@ -290,7 +290,7 @@ public:
 
 private:
 	/* Registers a new default key mapping */
-	bool addDefaultMapping(KEY_CODE metaCode, KeyMappingInput input, KeyAction action, const KeyFunctionInfo& info, bool bForceDefaults, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+	bool addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
 
 // Input contexts
 public:
