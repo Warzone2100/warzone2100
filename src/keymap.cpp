@@ -828,17 +828,19 @@ void InputManager::resetMappings(bool bForceDefaults)
 		}
 	}
 
-	// Use addDefaultMapping to add the default key mapping if either: (a) bForceDefaults is true, or (b) the loaded key mappings are missing an entry
-	bool didAdd = false;
-	for (const KeyFunctionInfo& info : allKeyFunctionEntries())
+	// If we are forcing defaults (e.g. "reset to defaults" button was pressed from the UI) or loading key map failed, add in the default mappings
+	if (bForceDefaults)
 	{
-		for (const auto& mapping : info.defaultMappings)
+		bool didAdd = false;
+		for (const KeyFunctionInfo& info : allKeyFunctionEntries())
 		{
-			const auto slot = mapping.first;
-			const auto keys = mapping.second;
-			didAdd |= addDefaultMapping(keys.meta, keys.input, keys.action, info, bForceDefaults, slot);
+			for (const auto& mapping : info.defaultMappings)
+			{
+				const auto slot = mapping.first;
+				const auto keys = mapping.second;
+				didAdd |= addDefaultMapping(keys.meta, keys.input, keys.action, info, slot);
+			}
 		}
-	}
 
 	if (didAdd)
 	{
@@ -861,20 +863,9 @@ bool InputManager::removeMapping(const KeyMapping& mappingToRemove)
 	return false;
 }
 
-bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const bool bForceDefaults, const KeyMappingSlot slot)
+bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
 	const auto psMapping = getMapping(info, slot);
-	if (!bForceDefaults && psMapping.has_value())
-	{
-		// Not forcing defaults, and there is already a mapping entry for this function with this slot
-		return false;
-	}
-
-	// Otherwise, force / overwrite with the default
-	if (!bForceDefaults)
-	{
-		debug(LOG_INFO, "Adding missing keymap entry: %s", info.displayName.c_str());
-	}
 	if (psMapping.has_value())
 	{
 		// Older GCC versions flag the nonstd::optional unwrapping here as potentially uninitialized usage. This is
@@ -891,11 +882,9 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 #endif // __GNUC__
 
 	}
-	if (!bForceDefaults)
-	{	
-		// Clear the keys from any other mappings
-		removeConflictingMappings(metaCode, input, info.context);
-	}
+
+	// Clear the keys from any other mappings
+	removeConflictingMappings(metaCode, input, info.context);
 
 	// Set default key mapping
 	addMapping(metaCode, input, action, info, slot);
