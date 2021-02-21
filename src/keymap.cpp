@@ -828,24 +828,22 @@ void InputManager::resetMappings(bool bForceDefaults)
 		}
 	}
 
-	// If we are forcing defaults (e.g. "reset to defaults" button was pressed from the UI) or loading key map failed, add in the default mappings
-	if (bForceDefaults)
+	/* Add in the default mappings if we are forcing defaults (e.g. "reset to defaults" button was pressed from the UI) or loading key map failed. */
+	for (const KeyFunctionInfo& info : allKeyFunctionEntries())
 	{
-		bool didAdd = false;
-		for (const KeyFunctionInfo& info : allKeyFunctionEntries())
+		for (const auto& mapping : info.defaultMappings)
 		{
-			for (const auto& mapping : info.defaultMappings)
+			const auto slot = mapping.first;
+			const auto keys = mapping.second;
+			/* Always add non-assignable mappings as they are not saved. */
+			if (bForceDefaults || info.type != KeyMappingType::ASSIGNABLE)
 			{
-				const auto slot = mapping.first;
-				const auto keys = mapping.second;
-				didAdd |= addDefaultMapping(keys.meta, keys.input, keys.action, info, slot);
+				addDefaultMapping(keys.meta, keys.input, keys.action, info, slot);
 			}
 		}
-
-	if (didAdd)
-	{
-		saveKeyMap(*this);
 	}
+
+	saveKeyMap(*this);
 }
 
 // ----------------------------------------------------------------------------------
