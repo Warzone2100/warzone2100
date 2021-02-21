@@ -1,7 +1,7 @@
 Warzone 2100
 ============
 
-[Homepage of the Warzone 2100 Project](http://wz2100.net/)
+[Homepage of the Warzone 2100 Project](https://wz2100.net/)
 
 Origins
 -------
@@ -326,7 +326,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       - IMPORTANT: You need the fully-featured Visual Studio IDE. “Visual Studio Code” does not include the necessary support for building C++ Windows apps.
    * **CMake 3.10+** (https://cmake.org/)
    * **Git** (if not building from a release source archive)
-   * **7-Zip** (http://www.7-zip.org)
+   * **7-Zip** (https://www.7-zip.org)
    * **Vulkan SDK 1.2.148.1+** (https://vulkan.lunarg.com/sdk/home)
       - Required only if you want to build with Vulkan support.
 * **Preparing to build:**
