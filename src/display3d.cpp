@@ -2424,7 +2424,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 	psStructure->sDisplay.frameNumber = currentGameFrame;
 
 	if (!defensive
-	    && graphicsTime - psStructure->timeLastHit < ELEC_DAMAGE_DURATION
+	    && psStructure->timeLastHit - graphicsTime < ELEC_DAMAGE_DURATION
 	    && psStructure->lastHitWeapon == WSC_ELECTRONIC)
 	{
 		bHitByElectronic = true;
