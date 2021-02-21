@@ -5458,6 +5458,8 @@ bool electronicDamage(BASE_OBJECT *psTarget, UDWORD damage, UBYTE attackPlayer)
 		psDroid = (DROID *)psTarget;
 		bCompleted = false;
 		int lastHit = psDroid->timeLastHit;
+		psDroid->timeLastHit = gameTime;
+		psDroid->lastHitWeapon = WSC_ELECTRONIC;
 
 		//in multiPlayer cannot attack a Transporter with EW
 		if (bMultiPlayer)
