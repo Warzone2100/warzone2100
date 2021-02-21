@@ -393,7 +393,7 @@ static bool displayCompObj(DROID *psDroid, bool bButton, const glm::mat4 &viewMa
 
 	glm::mat4 modelMatrix(1.f);
 
-	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC / 4 && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
+	if (psDroid->timeLastHit - graphicsTime < ELEC_DAMAGE_DURATION && psDroid->lastHitWeapon == WSC_ELECTRONIC && !gamePaused())
 	{
 		colour = getPlayerColour(rand() % MAX_PLAYERS);
 	}
@@ -852,7 +852,7 @@ void displayComponentObject(DROID *psDroid, const glm::mat4 &viewMatrix)
 		glm::rotate(UNDEG(rotation.x), glm::vec3(1.f, 0.f, 0.f)) *
 		glm::rotate(UNDEG(rotation.z), glm::vec3(0.f, 0.f, 1.f));
 
-	if (graphicsTime - psDroid->timeLastHit < GAME_TICKS_PER_SEC && psDroid->lastHitWeapon == WSC_ELECTRONIC)
+	if (psDroid->timeLastHit - graphicsTime < ELEC_DAMAGE_DURATION && psDroid->lastHitWeapon == WSC_ELECTRONIC)
 	{
 		modelMatrix *= objectShimmy((BASE_OBJECT *) psDroid);
 	}
