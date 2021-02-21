@@ -2383,3 +2383,8 @@ void kf_QuickLoad()
 		console("QuickSave file does not exist yet");
 	}
 }
+
+void kf_ToggleFullscreen()
+{
+	war_setWindowMode(wzAltEnterToggleFullscreen());
+}

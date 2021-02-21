@@ -192,4 +192,6 @@ void kf_PerformanceSample();
 void kf_QuickSave();
 void kf_QuickLoad();
 
+void kf_ToggleFullscreen();
+
 #endif // __INCLUDED_SRC_KEYBIND_H__
