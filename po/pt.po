@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2021-02-20 12:54\n"
+"PO-Revision-Date: 2021-02-21 00:53\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -459,7 +459,7 @@ msgstr "MISSÃO BASE BETA: Aguentar a todo o custo"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr "Estamos a detectar sinais codificados da Colectividade"
+msgstr "Estamos a detectar sinais codificados da Colectiviade."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -4036,39 +4036,39 @@ msgstr "Resgate os civis antes que a Colectividade os capture"
 
 #: data/base/script/campaign/cam2-d.js:77
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Capture o Centro de Ligação Satélite da Colectividade"
 
 #: data/base/script/campaign/cam2-end.js:152
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Envie pelo menos um transporte com um camião e sobreviva à ofensiva da Colectividade"
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Mova todas as unidades para o vale"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Destrua os silos de mísseis"
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Resgate a equipa Alfa"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Pesquise circuitos de resistência e sobreviva ao ataque do Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:215
 msgid "Secure a missile silo"
-msgstr ""
+msgstr "Obtenha controlo de um silo de mísseis"
 
 #: data/base/script/campaign/cam3-ad2.js:272
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Defenda os silos e pesquise os códigos dos mísseis"
 
 #: data/base/script/campaign/cam3-c.js:127
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Reúna uma parte da equipa Beta com o posto avançado da equipa Gama"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -4076,35 +4076,35 @@ msgstr "Regresse à ZA"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Destrua todas as unidades e estruturas inimigas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefactos recuperados"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:495
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Bases destruídas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Unidades inimigas restantes"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:497
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Estruturas inimigas restantes"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:503
 msgid "Return to LZ required"
-msgstr ""
+msgstr "É necessário voltar à ZA"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:513
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Destrua todas as unidades e bases inimigas"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:518
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Sobreviva até ao tempo acabar"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -7573,7 +7573,7 @@ msgstr "Chassis Pesado da Colectividade"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1441
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Cyborg Engenheiro de Combate"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -8079,7 +8079,7 @@ msgstr "Balas de Metralhadora de Urânio Empobrecido"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1788
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Projetado com foco em pesquisa"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8147,7 +8147,7 @@ msgstr "Ataca electrónicamente e perturba estruturas inimigas"
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1838
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Fortificação de Canhão EMP"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8757,7 +8757,7 @@ msgstr "Bom veículo de reconhecimento"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2227
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Cyborg Granadeiro"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -10731,7 +10731,7 @@ msgstr "Podem ser melhorados com módulos para fábricas"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3658
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Cyborg Mecânico"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -13089,13 +13089,13 @@ msgstr "Sunburst AA"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5242
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Super Artilheiro Pesado"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5259
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Super Artilheiro de Canhão Electromagnético"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13193,19 +13193,19 @@ msgstr "Gel Incendiário Superquente"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5332
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Gel de Plasmite Superquente Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5335
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Gel de Plasmite Superquente Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5338
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Gel de Plasmite Superquente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13489,7 +13489,7 @@ msgstr "Bombas de Termite"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5518
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Cyborg de Lança Chamas de Termite"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -14753,11 +14753,11 @@ msgstr "Desactivar compressão de texturas"
 
 #: src/clparse.cpp:291
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Definir backend do gfx"
 
 #: src/clparse.cpp:301
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Usar depuração do back-end gfx"
 
 #: src/clparse.cpp:302
 msgid "Run games automatically for testing"
@@ -14793,11 +14793,11 @@ msgstr "autohost"
 
 #: src/clparse.cpp:307
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
-msgstr ""
+msgstr "Consultar avaliações de determinada url do servidor (contendo \"{HASH}\"), ao hospedar"
 
 #: src/clparse.cpp:307
 msgid "autorating"
-msgstr ""
+msgstr "autoclassificação"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14967,7 +14967,7 @@ msgstr "Impossível construir. Fonte de petróleo a arder."
 #: src/display.cpp:1456
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Dano %d/%d - Experiência %.1f, %s, Mortes %d"
 
 #: src/display.cpp:1618
 #, c-format
@@ -15228,27 +15228,27 @@ msgstr "Definir teclas"
 
 #: src/frontend.cpp:625
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Abrir directório de configuração"
 
 #: src/frontend.cpp:660
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Falha ao abrir o directório de configuração no gestor de aquivos padrão do sistema."
 
 #: src/frontend.cpp:662
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "O directório de configuração é reportado como:"
 
 #: src/frontend.cpp:666
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Se estiver a ser executado numa instância / ambiente isolado, isto pode diferir do caminho real no disco."
 
 #: src/frontend.cpp:668
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Por favor, consulte a documentação para obter mais informações sobre como localizá-lo manualmente."
 
 #: src/frontend.cpp:669
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Falha ao abrir o directório de configuração"
 
 #: src/frontend.cpp:691
 msgid "1×"
@@ -15438,7 +15438,7 @@ msgstr "Proporção"
 
 #: src/frontend.cpp:1135
 msgid "Adaptive"
-msgstr ""
+msgstr "Adaptativo"
 
 #: src/frontend.cpp:1167
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15467,7 +15467,7 @@ msgstr "Aviso: O Antialiasing pode causar crashes, especialmente com valores > 1
 
 #: src/frontend.cpp:1237
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Backend Gráfico*"
 
 #: src/frontend.cpp:1241
 msgid "VIDEO OPTIONS"
@@ -15475,12 +15475,13 @@ msgstr "OPÇÕES DE VÍDEO"
 
 #: src/frontend.cpp:1288
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "Não é possível alterar a sincronização vertical"
 
 #: src/frontend.cpp:1288
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone falhou ao alterar o modo de sincronização vertical.\n"
+"O seu sistema ou os seus drivers podem não suportar outros modos."
 
 #: src/frontend.cpp:1577
 msgid "Middle Mouse"
@@ -15780,7 +15781,7 @@ msgstr "Progresso da Investigação"
 #: src/intdisplay.cpp:672
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d extractor(es) inactivos"
 
 #: src/intdisplay.cpp:677
 msgid "Need more resources!"
@@ -16475,43 +16476,43 @@ msgstr "Designar Grupo 9"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Adicionar ao Grupo 0"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Adicionar ao Grupo 1"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Adicionar ao Grupo 2"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Adicionar ao Grupo 3"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Adicionar ao Grupo 4"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Adicionar ao Grupo 5"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Adicionar ao Grupo 6"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Adicionar ao Grupo 7"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Adicionar ao Grupo 8"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Adicionar ao Grupo 9"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
@@ -16727,11 +16728,11 @@ msgstr "Activar / Desactivar Histórico do Chat de Equipa"
 
 #: src/keymap.cpp:496
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Rodar Edifício no sentido dos ponteiros do relógio"
 
 #: src/keymap.cpp:497
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Rodar Edifício no sentido contrário aos ponteiros do relógio"
 
 #: src/keymap.cpp:500
 msgid "Center View on HQ"
@@ -16887,27 +16888,27 @@ msgstr "Selecionar a próxima Fábrica de Cyborgs"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Seleccionar a próxima Fábrica de VTOLs"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Ir para a próxima Fábrica"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Ir para o próximo Centro de Pesquisas"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Ir para o próximo Gerador de Energia"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Ir para a próxima Fábrica de Cyborgs"
 
 #: src/keymap.cpp:570
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Ir para a próxima Fábrica VTOL"
 
 #: src/keymap.cpp:573
 msgid "Toggle Debug Mappings"
@@ -17168,7 +17169,7 @@ msgstr "Mapa Modificado!"
 
 #: src/multiint.cpp:1371
 msgid "Random map!"
-msgstr ""
+msgstr "Mapa aleatório!"
 
 #: src/multiint.cpp:1388
 msgid "Click to set Password"
@@ -17365,7 +17366,7 @@ msgstr "Este é um mapa modificado, pode mudar a tua experiência de jogo!"
 
 #: src/multiint.cpp:3226
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Este é um mapa aleatório, pode variar sua experiência de jogo!"
 
 #: src/multiint.cpp:3417
 #: src/multiint.cpp:3504
