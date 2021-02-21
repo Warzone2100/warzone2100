@@ -749,6 +749,9 @@ static KeyFunctionInfoTable initializeKeyFunctionInfoTable()
 	entries.emplace_back(KeyFunctionInfo(InputContext::__DEBUG,         KeyMappingType::HIDDEN,      kf_TraceObject,                                                "TraceObject",                  N_("Trace a game object"),                          {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_LCTRL,    KEY_CODE::KEY_L,            KeyAction::PRESSED}}}));
 
 
+	// Hidden/"Hardcoded" mappings
+	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,   KeyMappingType::HIDDEN,      kf_ToggleFullscreen,                                           "ToggleFullscreen",             N_("Toggle fullscreen"),                            {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_LALT,     KEY_CODE::KEY_RETURN,       KeyAction::PRESSED}}}));
+
 	return KeyFunctionInfoTable(entries);
 }
 static const KeyFunctionInfoTable keyFunctionInfoTable = initializeKeyFunctionInfoTable();
