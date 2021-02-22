@@ -143,7 +143,7 @@ public:
 };
 
 static KeyMappingSelection keyMapSelection;
-static std::vector<bool> maxKeyMapNameWidthDirty(static_cast<unsigned int>(KeyMappingSlot::LAST), true);
+static bool maxKeyMapNameWidthDirty = true;
 static const std::string NOT_BOUND_LABEL = "<not bound>";
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -210,8 +210,8 @@ bool runInGameKeyMapEditor(unsigned id)
 		// reinitialise key mappings
 		keyInitMappings(true);
 		widgDelete(psWScreen, KM_FORM); // readd the widgets
+		maxKeyMapNameWidthDirty = true;
 		startInGameKeyMapEditor(false);
-		std::fill(maxKeyMapNameWidthDirty.begin(), maxKeyMapNameWidthDirty.end(), true);
 	}
 
 	if (auto kmForm = (KeyMapForm *)widgGetFromID(psWScreen, KM_FORM))
@@ -339,30 +339,26 @@ std::vector<KEY_MAPPING *> getVisibleMappings()
 	return mappings;
 }
 
-static unsigned int getMaxKeyMapNameWidth(const KeyMappingSlot slot)
+static unsigned int getMaxKeyMapNameWidth()
 {
-	static std::vector<unsigned int> max(static_cast<unsigned int>(KeyMappingSlot::LAST));
+	static unsigned int max = 0;
 
-	const unsigned int slotIndex = static_cast<unsigned int>(slot);
-	ASSERT(slotIndex < max.size(), "Out of bounds slot index while checking keymap name width: %u", slotIndex);
-	if (maxKeyMapNameWidthDirty[slotIndex]) {
+	if (maxKeyMapNameWidthDirty) {
 		WzText displayText;
 		displayText.setText(NOT_BOUND_LABEL, font_regular);
-		max[slotIndex] = displayText.width();
+		max = static_cast<int>(displayText.width());
 
 		char sKey[MAX_STR_LENGTH];
-		for (auto mapping: getVisibleMappings()) {
-			if (mapping->slot == slot) {
-				keyMapToString(sKey, mapping);
-				displayText.setText(sKey, font_regular);
-				max[slotIndex] = MAX(max[slotIndex], displayText.width());
-			}
+		for (auto mapping : getVisibleMappings()) {
+			keyMapToString(sKey, mapping);
+			displayText.setText(sKey, font_regular);
+			max = MAX(max, static_cast<unsigned int>(displayText.width()));
 		}
 
-		maxKeyMapNameWidthDirty[slotIndex] = false;
+		maxKeyMapNameWidthDirty = false;
 	}
 
-	return max[slotIndex];
+	return max;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -372,20 +368,15 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 	DisplayKeyMapButtonData& data = *static_cast<DisplayKeyMapButtonData*>(psWidget->pUserData);
 
 	// Update layout
-	int layoutXOffset = 0;
-	unsigned int buttonWidth = 0;
-	for (unsigned int i = static_cast<unsigned int>(KeyMappingSlot::LAST); i > static_cast<unsigned int>(data.slot); --i)
-	{
-		// Offset by -1 to avoid underflow to uint max
-		const auto slot = static_cast<KeyMappingSlot>(i - 1);
-		buttonWidth = getMaxKeyMapNameWidth(slot);
-		layoutXOffset += buttonWidth;
-	}
+	const int numSlots = static_cast<int>(KeyMappingSlot::LAST);
+	const int buttonHeight = (psWidget->parent()->height() / numSlots);
+	const int layoutYOffset = buttonHeight * static_cast<int>(data.slot);
+	const int buttonWidth = getMaxKeyMapNameWidth();
 	psWidget->setGeometry(
-		psWidget->parent()->width() - layoutXOffset,
-		0,
+		psWidget->parent()->width() - buttonWidth,
+		layoutYOffset,
 		buttonWidth,
-		psWidget->height()
+		buttonHeight
 	);
 
 	int x = xOffset + psWidget->x();
@@ -437,18 +428,12 @@ static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 	DisplayKeyMapData& data = *static_cast<DisplayKeyMapData*>(psWidget->pUserData);
 
 	// Update layout
-	int layoutButtonTotalWidth = 0;
-	for (unsigned int i = 0; i < static_cast<unsigned int>(KeyMappingSlot::LAST); ++i)
-	{
-		const auto slot = static_cast<KeyMappingSlot>(i);
-		const int buttonWidth = getMaxKeyMapNameWidth(slot);
-		layoutButtonTotalWidth += buttonWidth;
-	}
+	const int buttonWidth = getMaxKeyMapNameWidth();
 	psWidget->setGeometry(
 		0,
 		0,
-		psWidget->parent()->width() - layoutButtonTotalWidth,
-		psWidget->height()
+		psWidget->parent()->width() - buttonWidth,
+		psWidget->parent()->height()
 	);
 
 	const int x = xOffset + psWidget->x();
@@ -457,7 +442,7 @@ static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 	const int h = psWidget->height();
 	drawBlueBoxInset(x, y, w, h);
 	data.wzNameText.setText(_(data.name.c_str()), font_regular);
-	data.wzNameText.render(x + 2, y + (psWidget->height() / 2) + 3, WZCOL_FORM_TEXT/*, w + buttonXOffset*/);
+	data.wzNameText.render(x + 2, y + (psWidget->height() / 2) + 3, WZCOL_FORM_TEXT);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -709,11 +694,11 @@ void KeyMapForm::initialize(bool isInGame)
 			data = new DisplayKeyMapData(mapping->function, mapping->name);
 			displayDataLookup[mapping->function] = data;
 
+			const auto numSlots = static_cast<unsigned int>(KeyMappingSlot::LAST);
+
 			const unsigned int index = i - mappings.begin();
-			const unsigned int containerId = KM_START + index * 4;
-			const unsigned int labelId = KM_START + index * 4 + 1;
-			const unsigned int primaryButtonId = KM_START + index * 4 + 2;
-			const unsigned int secondaryButtonId = KM_START + index * 4 + 3;
+			const unsigned int containerId = KM_START + index * (numSlots + 2);
+			const unsigned int labelId = KM_START + index * (numSlots + 2) + 1;
 
 			auto label = std::make_shared<WIDGET>();
 			label->setGeometry(0, 0, KM_ENTRYW / 3, KM_ENTRYH);
@@ -726,15 +711,18 @@ void KeyMapForm::initialize(bool isInGame)
 				psWidget->pUserData = nullptr;
 			});
 
-			const auto secondaryButton = createKeyMapButton(secondaryButtonId, KeyMappingSlot::SECONDARY, data);
-			const auto primaryButton = createKeyMapButton(primaryButtonId, KeyMappingSlot::PRIMARY, data);
-
 			auto container = std::make_shared<WIDGET>();
-			container->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH);
+			container->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH * numSlots);
 			container->id = containerId;
 			container->attach(label);
-			container->attach(primaryButton);
-			container->attach(secondaryButton);
+
+			for (unsigned int slotIndex = 0; slotIndex < numSlots; ++slotIndex)
+			{
+				const auto slot = static_cast<KeyMappingSlot>(slotIndex);
+				const auto buttonId = KM_START + index * (numSlots + 2) + 2 + slotIndex;
+				const auto button = createKeyMapButton(buttonId, slot, data);
+				container->attach(button);
+			}
 
 			keyMapList->addItem(container);
 		}
@@ -853,7 +841,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 			psMapping->altMetaKeyCode = altMetaKey;
 		}
 	}
-	maxKeyMapNameWidthDirty[slotIndex] = true;
+	maxKeyMapNameWidthDirty = true;
 	unhighlightSelected();
 	return true;
 }
