@@ -384,6 +384,9 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 	int h = psWidget->height();
 	int w = psWidget->width();
 
+	const KEY_MAPPING* primaryMapping = data.targetFunctionData->mappings[static_cast<unsigned int>(KeyMappingSlot::PRIMARY)];
+	const bool bPrimaryIsFixed = primaryMapping && (primaryMapping->status == KEYMAP_ALWAYS || primaryMapping->status == KEYMAP_ALWAYS_PROCESS);
+
 	const KEY_MAPPING* mapping = data.targetFunctionData->mappings[static_cast<unsigned int>(data.slot)];
 
 	// Draw base
@@ -391,7 +394,7 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 	{
 		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_ACTIVE);
 	}
-	else if (mapping && (mapping->status == KEYMAP_ALWAYS || mapping->status == KEYMAP_ALWAYS_PROCESS))
+	else if (bPrimaryIsFixed)
 	{
 		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_FIXED);
 	}
@@ -415,7 +418,7 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 	else
 	{
-		strcpy(sPrimaryKey, NOT_BOUND_LABEL.c_str());
+		strcpy(sPrimaryKey, bPrimaryIsFixed ? "\0" : NOT_BOUND_LABEL.c_str());
 	}
 
 	data.wzBindingText.setText(sPrimaryKey, font_regular);
