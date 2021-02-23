@@ -617,18 +617,21 @@ std::shared_ptr<W_BUTTON> KeyMapForm::createKeyMapButton(const unsigned int butt
 	button->addOnClickHandler([=](W_BUTTON& clickedButton) {
 		const DisplayKeyMapButtonData* data = static_cast<DisplayKeyMapButtonData*>(clickedButton.pUserData);
 
-		const int slotIndex = static_cast<unsigned int>(data->slot);
-		KEY_MAPPING* clickedMapping = data->targetFunctionData->mappings[slotIndex];
-		if (clickedMapping)
+		const int slotIndex = static_cast<size_t>(data->slot);
+		const KEY_MAPPING* clickedMapping = data->targetFunctionData->mappings[slotIndex];
+		const KEY_MAPPING* primaryMapping = data->targetFunctionData->mappings[static_cast<size_t>(KeyMappingSlot::PRIMARY)];
+
+		const bool bClickedIsNotAssignable = clickedMapping && clickedMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
+		const bool bPrimaryIsNotAssignable = primaryMapping && primaryMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
+		if (bClickedIsNotAssignable || bPrimaryIsNotAssignable)
 		{
-			if (clickedMapping->status != KEYMAP_ASSIGNABLE)
-			{
-				audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-			}
-			else if (keyMapSelection.isSelected(data->targetFunctionData->function, data->slot)) {
-				unhighlightSelected();
-				return;
-			}
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			return;
+		}
+		else if (keyMapSelection.isSelected(data->targetFunctionData->function, data->slot))
+		{
+			unhighlightSelected();
+			return;
 		}
 
 		keyMapList->disableScroll();
