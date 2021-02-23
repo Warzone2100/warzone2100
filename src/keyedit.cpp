@@ -399,18 +399,21 @@ static unsigned int getMaxKeyMapNameWidth()
 // ////////////////////////////////////////////////////////////////////////////
 static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	ASSERT_OR_RETURN(, psWidget->parent().get(), "Keymap buttons should have a parent container!");
+	ASSERT_OR_RETURN(, psWidget != nullptr, "Cannot display keyMap button: Widget was null!");
+	ASSERT_OR_RETURN(, psWidget->parent() != nullptr, "Keymap buttons should have a parent container!");
+	const WIDGET& parent = *psWidget->parent().get();
 
-	ASSERT(psWidget->pUserData != nullptr, "Any widget using displayKeyMapButton must have its pUserData initialized to a (DisplayKeyMapButtonData*)");
+	ASSERT_OR_RETURN(, psWidget->pUserData != nullptr, "Any widget using displayKeyMapButton must have its pUserData initialized to a (DisplayKeyMapButtonData*)");
 	DisplayKeyMapButtonData& data = *static_cast<DisplayKeyMapButtonData*>(psWidget->pUserData);
+	ASSERT_OR_RETURN(, data.targetFunctionData != nullptr, "DisplayKeyMapButtonData is missing target function data!");
 
 	// Update layout
 	const int numSlots = static_cast<int>(KeyMappingSlot::LAST);
-	const int buttonHeight = (psWidget->parent()->height() / numSlots);
+	const int buttonHeight = (parent.height() / numSlots);
 	const int layoutYOffset = buttonHeight * static_cast<int>(data.slot);
 	const int buttonWidth = getMaxKeyMapNameWidth();
 	psWidget->setGeometry(
-		psWidget->parent()->width() - buttonWidth,
+		parent.width() - buttonWidth,
 		layoutYOffset,
 		buttonWidth,
 		buttonHeight
@@ -464,7 +467,9 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 
 static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 {
-	ASSERT_OR_RETURN(, psWidget->parent().get(), "Keymap buttons should have a parent container!");
+	ASSERT_OR_RETURN(, psWidget != nullptr, "Cannot display keyMap label: Widget was null!");
+	ASSERT_OR_RETURN(, psWidget->parent() != nullptr, "Keymap labels should have a parent container!");
+	const WIDGET& parent = *psWidget->parent().get();
 
 	ASSERT(psWidget->pUserData != nullptr, "Any widget using displayKeyMapLabel must have its pUserData initialized to a (DisplayKeyMapData*)");
 	DisplayKeyMapData& data = *static_cast<DisplayKeyMapData*>(psWidget->pUserData);
@@ -474,8 +479,8 @@ static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 	psWidget->setGeometry(
 		0,
 		0,
-		psWidget->parent()->width() - buttonWidth,
-		psWidget->parent()->height()
+		parent.width() - buttonWidth,
+		parent.height()
 	);
 
 	const int x = xOffset + psWidget->x();
