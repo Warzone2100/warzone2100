@@ -121,28 +121,28 @@ UDWORD	getMarkerY(KEY_CODE code);
 SDWORD	getMarkerSpin(KEY_CODE code);
 
 // for keymap editor.
-struct KeyMapSaveEntry
+struct KeyFunctionInfo
 {
 	void      (*function)();
 	std::string name;
 	std::string displayName;
 
-	KeyMapSaveEntry(
+	KeyFunctionInfo(
 		void      (*function)(),
 		std::string name,
 		std::string displayName
 	);
 
 	// Prevent copies. The entries are immutable and thus should never be copied around.
-	KeyMapSaveEntry(const KeyMapSaveEntry&) = delete;
-	void operator=(const KeyMapSaveEntry&) = delete;
+	KeyFunctionInfo(const KeyFunctionInfo&) = delete;
+	void operator=(const KeyFunctionInfo&) = delete;
 
     // Allow construction-time move semantics
-	KeyMapSaveEntry(KeyMapSaveEntry&&) = default;
+	KeyFunctionInfo(KeyFunctionInfo&&) = default;
 };
-const std::vector<std::reference_wrapper<const KeyMapSaveEntry>> allKeymapEntries();
-KeyMapSaveEntry const *keymapEntryByFunction(void (*function)());
-KeyMapSaveEntry const *keymapEntryByName(std::string const &name);
+const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
+KeyFunctionInfo const *keyFunctionInfoByFunction(void (*function)());
+KeyFunctionInfo const *keyFunctionInfoByName(std::string const &name);
 extern std::list<KEY_MAPPING> keyMappings;
 KeyMappingInputSource keyMappingSourceByName(std::string const& name);
 KeyMappingSlot keyMappingSlotByName(std::string const& name);

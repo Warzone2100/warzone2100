@@ -326,10 +326,10 @@ static bool keyMapToString(char *pStr, const KEY_MAPPING *psMapping)
 	return true;
 }
 
-std::vector<std::reference_wrapper<const KeyMapSaveEntry>> getAssignableKeymapEntries()
+std::vector<std::reference_wrapper<const KeyFunctionInfo>> getAssignableKeymapEntries()
 {
-	std::vector<std::reference_wrapper<const KeyMapSaveEntry>> visibleMappings;
-	for (const KeyMapSaveEntry& entry : allKeymapEntries())
+	std::vector<std::reference_wrapper<const KeyFunctionInfo>> visibleMappings;
+	for (const KeyFunctionInfo& entry : allKeymapEntries())
 	{
 		bool bIsAssignable = false;
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
@@ -356,7 +356,7 @@ std::vector<std::reference_wrapper<const KeyMapSaveEntry>> getAssignableKeymapEn
 std::vector<std::reference_wrapper<const KEY_MAPPING>> getVisibleMappings()
 {
 	std::vector<std::reference_wrapper<const KEY_MAPPING>> visibleMappings;
-	for (const KeyMapSaveEntry& info : allKeymapEntries())
+	for (const KeyFunctionInfo& info : allKeymapEntries())
 	{
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
@@ -563,7 +563,7 @@ bool saveKeyMap()
 		}
 
 		ini.setValue("action", mapping.action);
-		if (auto function = keymapEntryByFunction(mapping.function))
+		if (auto function = keyFunctionInfoByFunction(mapping.function))
 		{
 			ini.setValue("function", function->name);
 		}
@@ -611,7 +611,7 @@ bool loadKeyMap()
 		auto sub = ini.value("sub", 0).toInt();
 		auto action = (KEY_ACTION)ini.value("action", 0).toInt();
 		auto functionName = ini.value("function", "").toWzString();
-		auto function = keymapEntryByName(functionName.toUtf8());
+		auto function = keyFunctionInfoByName(functionName.toUtf8());
 		if (function == nullptr)
 		{
 			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.toUtf8().c_str());
@@ -721,14 +721,14 @@ void KeyMapForm::initialize(bool isInGame)
 	//Put the buttons on it
 	auto infos = getAssignableKeymapEntries();
 
-	std::sort(infos.begin(), infos.end(), [](const KeyMapSaveEntry& a, const KeyMapSaveEntry& b) {
+	std::sort(infos.begin(), infos.end(), [](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
 		return a.name < b.name;
 	});
 
 	/* Add key mappings to the form */
-	for (std::vector<std::reference_wrapper<const KeyMapSaveEntry>>::const_iterator i = infos.begin(); i != infos.end(); ++i)
+	for (std::vector<std::reference_wrapper<const KeyFunctionInfo>>::const_iterator i = infos.begin(); i != infos.end(); ++i)
 	{
-		const KeyMapSaveEntry& info = *i;
+		const KeyFunctionInfo& info = *i;
 		DisplayKeyMapData* data = new DisplayKeyMapData(info.function, info.displayName);
 
 		const unsigned int numSlots = static_cast<unsigned int>(KeyMappingSlot::LAST);
