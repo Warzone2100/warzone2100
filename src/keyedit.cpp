@@ -364,6 +364,8 @@ static unsigned int getMaxKeyMapNameWidth()
 // ////////////////////////////////////////////////////////////////////////////
 static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	ASSERT_OR_RETURN(, psWidget->parent().get(), "Keymap buttons should have a parent container!");
+
 	ASSERT(psWidget->pUserData != nullptr, "Any widget using displayKeyMapButton must have its pUserData initialized to a (DisplayKeyMapButtonData*)");
 	DisplayKeyMapButtonData& data = *static_cast<DisplayKeyMapButtonData*>(psWidget->pUserData);
 
@@ -427,6 +429,8 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 
 static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 {
+	ASSERT_OR_RETURN(, psWidget->parent().get(), "Keymap buttons should have a parent container!");
+
 	ASSERT(psWidget->pUserData != nullptr, "Any widget using displayKeyMapLabel must have its pUserData initialized to a (DisplayKeyMapData*)");
 	DisplayKeyMapData& data = *static_cast<DisplayKeyMapData*>(psWidget->pUserData);
 
