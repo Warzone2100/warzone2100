@@ -862,6 +862,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		psMapping->status      = KEYMAP_ASSIGNABLE;
 		psMapping->metaKeyCode = metakey;
 	}
+	invalidateKeyMappingSortOrder();
 	maxKeyMapNameWidthDirty = true;
 	unhighlightSelected();
 	return true;

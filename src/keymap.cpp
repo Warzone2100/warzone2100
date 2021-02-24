@@ -246,7 +246,7 @@ bool KEY_MAPPING::isActivated() const
 		: isActiveSingleKey(this);
 }
 
-bool KeyMapping::hasMeta() const
+bool KEY_MAPPING::hasMeta() const
 {
 	return metaKeyCode != KEY_CODE::KEY_IGNORE;
 }
@@ -271,6 +271,12 @@ static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 // ----------------------------------------------------------------------------------
 /* The linked list of present key mappings */
 std::list<KEY_MAPPING> keyMappings;
+static bool bMappingsSortOrderDirty = true;
+
+void invalidateKeyMappingSortOrder()
+{
+	bMappingsSortOrderDirty = true;
+}
 
 /* Last meta and sub key that were recorded */
 static KEY_CODE	lastMetaKey;
@@ -586,6 +592,7 @@ static bool keyAddDefaultMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappin
 void keyInitMappings(bool bForceDefaults)
 {
 	keyMappings.clear();
+	bMappingsSortOrderDirty = true;
 	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
 	{
 		processDebugMappings(n, false);
@@ -612,10 +619,7 @@ void keyInitMappings(bool bForceDefaults)
 
 	// ********************************* ALL THE MAPPINGS ARE NOW IN ORDER, PLEASE ****
 	// ********************************* DO NOT REORDER THEM!!!!!! ********************
-	/* ALL OF THIS NEEDS TO COME IN OFF A USER CUSTOMISABLE TEXT FILE */
-	//                                **********************************
-	//                                **********************************
-	//									FUNCTION KEY MAPPINGS F1 to F12
+	// FUNCTION KEY MAPPINGS F1 to F12
 	didAdd = keyAddDefaultMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F1,  KEYMAP_PRESSED, kf_ChooseManufacture,            bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F2,  KEYMAP_PRESSED, kf_ChooseResearch,               bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ALWAYS_PROCESS, KEY_IGNORE, KEY_F3,  KEYMAP_PRESSED, kf_ChooseBuild,                  bForceDefaults) || didAdd;
@@ -631,9 +635,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F11, KEYMAP_PRESSED, kf_ToggleFormationSpeedLimiting, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE,     KEY_IGNORE, KEY_F12, KEYMAP_PRESSED, kf_MoveToLastMessagePos,         bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE,     KEY_LSHIFT, KEY_F12, KEYMAP_PRESSED, kf_ToggleSensorDisplay,          bForceDefaults) || didAdd;
-	//                                **********************************
-	//                                **********************************
-	//	ASSIGN GROUPS - Will create or replace the existing group
+	// ASSIGN GROUPS - Will create or replace the existing group
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_0, KEYMAP_PRESSED, kf_AssignGrouping_0, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_1, KEYMAP_PRESSED, kf_AssignGrouping_1, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_2, KEYMAP_PRESSED, kf_AssignGrouping_2, bForceDefaults) || didAdd;
@@ -644,7 +646,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_7, KEYMAP_PRESSED, kf_AssignGrouping_7, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_8, KEYMAP_PRESSED, kf_AssignGrouping_8, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_9, KEYMAP_PRESSED, kf_AssignGrouping_9, bForceDefaults) || didAdd;
-	//	ADD TO GROUPS - Will add the selected units to the group
+	// ADD TO GROUPS - Will add the selected units to the group
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_0, KEYMAP_PRESSED, kf_AddGrouping_0, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_1, KEYMAP_PRESSED, kf_AddGrouping_1, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_2, KEYMAP_PRESSED, kf_AddGrouping_2, bForceDefaults) || didAdd;
@@ -655,9 +657,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_7, KEYMAP_PRESSED, kf_AddGrouping_7, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_8, KEYMAP_PRESSED, kf_AddGrouping_8, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_9, KEYMAP_PRESSED, kf_AddGrouping_9, bForceDefaults) || didAdd;
-	//                                **********************************
-	//                                **********************************
-	//	SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
+	// SELECT GROUPS - Will jump to the group as well as select if group is ALREADY selected
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_0, KEYMAP_PRESSED, kf_SelectGrouping_0, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_1, KEYMAP_PRESSED, kf_SelectGrouping_1, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_2, KEYMAP_PRESSED, kf_SelectGrouping_2, bForceDefaults) || didAdd;
@@ -668,9 +668,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_7, KEYMAP_PRESSED, kf_SelectGrouping_7, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_8, KEYMAP_PRESSED, kf_SelectGrouping_8, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_9, KEYMAP_PRESSED, kf_SelectGrouping_9, bForceDefaults) || didAdd;
-	//                                **********************************
-	//                                **********************************
-	//	SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
+	// SELECT COMMANDER - Will jump to the group as well as select if group is ALREADY selected
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_0, KEYMAP_PRESSED, kf_SelectCommander_0, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_1, KEYMAP_PRESSED, kf_SelectCommander_1, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_2, KEYMAP_PRESSED, kf_SelectCommander_2, bForceDefaults) || didAdd;
@@ -681,12 +679,9 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_7, KEYMAP_PRESSED, kf_SelectCommander_7, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_8, KEYMAP_PRESSED, kf_SelectCommander_8, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT, KEY_9, KEYMAP_PRESSED, kf_SelectCommander_9, bForceDefaults) || didAdd;
-	//                                **********************************
-	//                                **********************************
-	//	MULTIPLAYER
+	// MULTIPLAYER
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KPENTER, KEYMAP_PRESSED, kf_addMultiMenu, bForceDefaults) || didAdd;
-	//
-	//	GAME CONTROLS - Moving around, zooming in, rotating etc
+	// GAME CONTROLS - Moving around, zooming in, rotating etc
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_UPARROW,           KEYMAP_DOWN,    kf_CameraUp,               bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_DOWNARROW,         KEYMAP_DOWN,    kf_CameraDown,             bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RIGHTARROW,        KEYMAP_DOWN,    kf_CameraRight,            bForceDefaults) || didAdd;
@@ -723,7 +718,6 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_BACKQUOTE,         KEYMAP_PRESSED, kf_ToggleTeamChat,         bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingCW,       bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_RotateBuildingACW,      bForceDefaults) || didAdd;
-	//                                **********************************
 	// IN GAME MAPPINGS - Single key presses - ALL __DEBUG keymappings will be removed for master
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_B,      KEYMAP_PRESSED, kf_CentreOnBase,          bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_C,      KEYMAP_PRESSED, kf_SetDroidAttackCease,   bForceDefaults) || didAdd;
@@ -744,20 +738,16 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_RETURN, KEYMAP_PRESSED, kf_SendGlobalMessage,     bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_RETURN, KEYMAP_PRESSED, kf_SendTeamMessage,       bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_H,      KEYMAP_PRESSED, kf_AddHelpBlip,           bForceDefaults) || didAdd;
-
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_S,   KEYMAP_PRESSED,  kf_ToggleShadows,        bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LALT,   KEY_T,   KEYMAP_PRESSED,  kf_toggleTrapCursor,     bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL,  KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarTerrain,   bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_TAB, KEYMAP_PRESSED,  kf_ToggleRadarAllyEnemy, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_M,   KEYMAP_PRESSED,  kf_ShowMappings,         bForceDefaults) || didAdd;
-
 	// Some extra non QWERTY mappings but functioning in same way
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_COMMA,        KEYMAP_PRESSED, kf_SetDroidRetreatMedium, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_FULLSTOP,     KEYMAP_PRESSED, kf_SetDroidRetreatHeavy,  bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_FORWARDSLASH, KEYMAP_PRESSED, kf_SetDroidRetreatNever,  bForceDefaults) || didAdd;
-	//                                **********************************
-	//                                **********************************
-	//								In game mappings - COMBO (CTRL + LETTER) presses.
+	// In game mappings - COMBO (CTRL + LETTER) presses.
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_A, KEYMAP_PRESSED, kf_SelectAllCombatUnits,   bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_C, KEYMAP_PRESSED, kf_SelectAllCyborgs,       bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_D, KEYMAP_PRESSED, kf_SelectAllDamaged,       bForceDefaults) || didAdd;
@@ -772,9 +762,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_W, KEYMAP_PRESSED, kf_SelectAllWheeled,       bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG,     KEY_LCTRL, KEY_Y, KEYMAP_PRESSED, kf_FrameRate,              bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LCTRL, KEY_Z, KEYMAP_PRESSED, kf_SelectAllSameType,      bForceDefaults) || didAdd;
-	//                                **********************************
-	//                                **********************************
-	//                                                              In game mappings - COMBO (SHIFT + LETTER) presses.
+	// In game mappings - COMBO (SHIFT + LETTER) presses.
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_C, KEYMAP_PRESSED, kf_SelectAllCombatCyborgs,   bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_E, KEYMAP_PRESSED, kf_SelectAllEngineers,       bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_G, KEYMAP_PRESSED, kf_SelectAllLandCombatUnits, bForceDefaults) || didAdd;
@@ -783,9 +771,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_R, KEYMAP_PRESSED, kf_SelectAllRepairTanks,     bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_S, KEYMAP_PRESSED, kf_SelectAllSensorUnits,     bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT, KEY_T, KEYMAP_PRESSED, kf_SelectAllTrucks,          bForceDefaults) || didAdd;
-	//                                **********************************
-	//                                **********************************
-	//									SELECT PLAYERS - DEBUG ONLY
+	// SELECT PLAYERS - DEBUG ONLY
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextFactory,       bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextResearch,      bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_SelectNextPowerStation,  bForceDefaults) || didAdd;
@@ -796,7 +782,6 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextPowerStation,    bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextCyborgFactory,   bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, (KEY_CODE)KEY_MAXSCAN, KEYMAP_PRESSED, kf_JumpNextVTOLFactory,     bForceDefaults) || didAdd;
-
 	// Debug options
 	didAdd = keyAddDefaultMapping(KEYMAP___HIDE, KEY_LSHIFT, KEY_BACKSPACE, KEYMAP_PRESSED, kf_ToggleDebugMappings, bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_M,         KEYMAP_PRESSED, kf_ToggleShowPath,      bForceDefaults) || didAdd;
@@ -808,8 +793,7 @@ void keyInitMappings(bool bForceDefaults)
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_Q,         KEYMAP_PRESSED, kf_ToggleWeather,       bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_IGNORE, KEY_K,         KEYMAP_PRESSED, kf_TriFlip,             bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_K,         KEYMAP_PRESSED, kf_PerformanceSample,   bForceDefaults) || didAdd;
-
-	//These ones are necessary for debugging
+	// These ones are necessary for debugging
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_A, KEYMAP_PRESSED, kf_AllAvailable,      bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LALT,   KEY_K, KEYMAP_PRESSED, kf_KillSelected,      bForceDefaults) || didAdd;
 	didAdd = keyAddDefaultMapping(KEYMAP__DEBUG, KEY_LCTRL,  KEY_G, KEYMAP_PRESSED, kf_ToggleGodMode,     bForceDefaults) || didAdd;
@@ -858,7 +842,8 @@ KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput
 		slot
 	});
 
-	/* Return the newly created mapping */
+	/* Invalidate the sorting order and return the newly created mapping */
+	bMappingsSortOrderDirty = true;
 	return &keyMappings.back();
 }
 
@@ -884,6 +869,7 @@ static bool keyRemoveMappingPt(KEY_MAPPING *psToRemove)
 	if (mapping != keyMappings.end())
 	{
 		keyMappings.erase(mapping);
+		bMappingsSortOrderDirty = true;
 		return true;
 	}
 	return false;
@@ -1005,30 +991,33 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 	/* Jump out if we've got a new mapping */
 	(void) checkQwertyKeys();
 
-	/* Sort mappings by whether or not they have meta keys */
-	std::vector<KEY_MAPPING> mappings = { keyMappings.begin(), keyMappings.end() };
-	std::sort(mappings.begin(), mappings.end(), [](const KEY_MAPPING& a, const KEY_MAPPING& b) {
-		// Sort by meta. This causes all mappings with meta to be checked before non-meta mappings,
-		// avoiding having to check for meta-conflicts in the processing loop. (e.g. if we should execute
-		// a mapping with right arrow key, depending on if another binding on shift+right-arrow is executed
-		// or not). In other words, if any mapping with meta is executed, it will consume the respective input,
-		// preventing any non-meta mappings with the same input from being executed.
-		return a.hasMeta() && !b.hasMeta();
-	});
+	/* If mappings have been updated, sort the mappings by whether or not they have meta keys */
+	if (bMappingsSortOrderDirty)
+	{
+		keyMappings.sort([](const KEY_MAPPING& a, const KEY_MAPPING& b) {
+			// Sort by meta. This causes all mappings with meta to be checked before non-meta mappings,
+			// avoiding having to check for meta-conflicts in the processing loop. (e.g. if we should execute
+			// a mapping with right arrow key, depending on if another binding on shift+right-arrow is executed
+			// or not). In other words, if any mapping with meta is executed, it will consume the respective input,
+			// preventing any non-meta mappings with the same input from being executed.
+			return a.hasMeta() && !b.hasMeta();
+		});
+		bMappingsSortOrderDirty = false;
+	}
 	std::vector<KeyMappingInput> consumedInputs;
 
 	/* Run through all sorted mappings */
-	for (auto keyToProcess = mappings.begin(); keyToProcess != mappings.end(); ++keyToProcess)
+	for (const KEY_MAPPING& keyToProcess : keyMappings)
 	{
 		/* Skip inappropriate ones when necessary */
-		if (isIgnoredMapping(bExclude, bAllowMouseWheelEvents, *keyToProcess))
+		if (isIgnoredMapping(bExclude, bAllowMouseWheelEvents, keyToProcess))
 		{
 			continue;
 		}
 
 		/* Skip if the input is already consumed. Handles skips for context/priority and meta-conflicts */
 		const auto bIsAlreadyConsumed = std::find_if(consumedInputs.begin(), consumedInputs.end(), [keyToProcess](const KeyMappingInput& consumed) {
-			return consumed == keyToProcess->input;
+			return consumed == keyToProcess.input;
 		}) != consumedInputs.end();
 		if (bIsAlreadyConsumed)
 		{
@@ -1036,17 +1025,16 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 		}
 
 		/* Execute the action if mapping was hit */
-		if (keyToProcess->isActivated())
+		if (keyToProcess.isActivated())
 		{
-			const bool bHasMeta = keyToProcess->metaKeyCode != KEY_IGNORE;
-			if (bHasMeta)
+			if (keyToProcess.hasMeta())
 			{
-				lastMetaKey = keyToProcess->metaKeyCode;
+				lastMetaKey = keyToProcess.metaKeyCode;
 			}
 
-			lastInput = keyToProcess->input;
-			keyToProcess->function();
-			consumedInputs.push_back(keyToProcess->input);
+			lastInput = keyToProcess.input;
+			keyToProcess.function();
+			consumedInputs.push_back(keyToProcess.input);
 		}
 	}
 

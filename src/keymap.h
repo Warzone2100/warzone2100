@@ -141,6 +141,7 @@ struct KeyFunctionInfo
     // Allow construction-time move semantics
 	KeyFunctionInfo(KeyFunctionInfo&&) = default;
 };
+void invalidateKeyMappingSortOrder();
 const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries();
 KeyFunctionInfo const *keyFunctionInfoByFunction(void (*function)());
 KeyFunctionInfo const *keyFunctionInfoByName(std::string const &name);
