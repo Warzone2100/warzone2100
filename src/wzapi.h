@@ -588,10 +588,10 @@ namespace wzapi
 		// (Intended for use from implementations of things like "include" functions.)
 		//
 		// Lookup order is as follows (based on the value of `searchFlags`):
-		// - 1.) The filename *only* is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat) - for backwards-compat only
-		// - 2.) The filePath is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath)
-		// - 3.) The filePath is checked relative to the read-only data dir search paths (LoadFileSearchOptions::DataDir)
-		// - 4.) The filePath is checked relative to "<user's config dir>/script/" (LoadFileSearchOptions::ConfigScriptDir)
+		// - 1.) The filePath is checked relative to the read-only data dir search paths (LoadFileSearchOptions::DataDir)
+		// - 2.) The filePath is checked relative to "<user's config dir>/script/" (LoadFileSearchOptions::ConfigScriptDir)
+		// - 3.) The filename *only* is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat) - for backwards-compat only
+		// - 4.) The filePath is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath)
 		bool loadFileForInclude(const std::string& filePath, std::string& loadedFilePath, char **ppFileData, UDWORD *pFileSize, uint32_t searchFlags = LoadFileSearchOptions::All);
 
 	public:
