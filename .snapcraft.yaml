@@ -5,6 +5,9 @@ confinement: strict
 grade: stable
 base: core18
 
+# Enable LZO compression for the snap
+compression: lzo
+
 layout:
   /usr/share/vulkan:
     symlink: $SNAP/usr/share/vulkan
