@@ -13,7 +13,7 @@ function seupTechLevel(player)
 	}
 	else if (techLevel == 4)
 	{
-		completeResearchOnTime(Infinity, player);
+		completeAllResearch(player);
 	}
 	
 }
