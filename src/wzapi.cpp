@@ -122,16 +122,30 @@ wzapi::scripting_instance::~scripting_instance()
 // (Intended for use from implementations of things like "include" functions.)
 //
 // Lookup order is as follows (based on the value of `searchFlags`):
-// - 1.) The filename *only* is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat) - for backwards-compat only
-// - 2.) The filePath is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath)
-// - 3.) The filePath is checked relative to the read-only data dir search paths (LoadFileSearchOptions::DataDir)
-// - 4.) The filePath is checked relative to "<user's config dir>/script/" (LoadFileSearchOptions::ConfigScriptDir)
+// - 1.) The filePath is checked relative to the read-only data dir search paths (LoadFileSearchOptions::DataDir)
+// - 2.) The filePath is checked relative to "<user's config dir>/script/" (LoadFileSearchOptions::ConfigScriptDir)
+// - 3.) The filename *only* is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat) - for backwards-compat only
+// - 4.) The filePath is checked relative to the main scriptPath (LoadFileSearchOptions::ScriptPath)
 bool wzapi::scripting_instance::loadFileForInclude(const std::string& filePath, std::string& loadedFilePath, char **ppFileData, UDWORD *pFileSize, uint32_t searchFlags /*= LoadFileSearchOptions::All*/)
 {
 	WzPathInfo filePathInfo = WzPathInfo::fromPlatformIndependentPath(filePath);
 	std::string path;
 
-	if (searchFlags & LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat)
+	if (path.empty() && (searchFlags & LoadFileSearchOptions::DataDir))
+	{
+		if (PHYSFS_exists(filePathInfo.filePath().c_str()))
+		{
+			path = filePathInfo.filePath(); // use this path instead (from read-only data dir)
+		}
+	}
+	if (path.empty() && (searchFlags & LoadFileSearchOptions::ConfigScriptDir))
+	{
+		if (PHYSFS_exists((std::string("scripts/") + filePathInfo.filePath()).c_str()))
+		{
+			path = "scripts/" + filePathInfo.filePath(); // use this path instead (in user write dir)
+		}
+	}
+	if (path.empty() && (searchFlags & LoadFileSearchOptions::ScriptPath_FileNameOnlyBackwardsCompat))
 	{
 		// to provide backwards-compat, start by checking the scriptPath for the passed-in filename *only*
 		path = scriptPath() + "/" + filePathInfo.fileName();
@@ -146,20 +160,6 @@ bool wzapi::scripting_instance::loadFileForInclude(const std::string& filePath, 
 		if (!PHYSFS_exists(path.c_str()))
 		{
 			path.clear();
-		}
-	}
-	if (path.empty() && (searchFlags & LoadFileSearchOptions::DataDir))
-	{
-		if (PHYSFS_exists(filePathInfo.filePath().c_str()))
-		{
-			path = filePathInfo.filePath(); // use this path instead (from read-only data dir)
-		}
-	}
-	if (path.empty() && (searchFlags & LoadFileSearchOptions::ConfigScriptDir))
-	{
-		if (PHYSFS_exists((std::string("scripts/") + filePathInfo.filePath()).c_str()))
-		{
-			path = "scripts/" + filePathInfo.filePath(); // use this path instead (in user write dir)
 		}
 	}
 	if (path.empty())
