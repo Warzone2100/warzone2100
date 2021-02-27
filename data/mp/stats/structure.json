@@ -2081,7 +2081,7 @@
     "Wall-RotMg": {
         "armour": 15,
         "breadth": 1,
-        "buildPoints": 150,
+        "buildPoints": 400,
         "buildPower": 150,
         "combinesWithWall": true,
         "height": 2,
