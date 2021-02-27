@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2020-11-03 12:31+0000\n"
-"PO-Revision-Date: 2020-11-29 16:27\n"
+"PO-Revision-Date: 2021-01-31 07:01\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2233,7 +2233,7 @@ msgstr "Сила защиты: высокая"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:798
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Усиленная точка с огнемётом Адовое пламя"
+msgstr "Усиленная точка с огнемётом Инферно"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2330,7 +2330,7 @@ msgstr "Укреплённая оборонительная точка со шт
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Укреплённая  точка с огнемётом Адовое пламя"
+msgstr "Укреплённая  точка с огнемётом Инферно"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2700,7 +2700,7 @@ msgstr "Тяжёлый ремонтный юнит"
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:989
 msgid "Automatically Repairs Damaged Units"
-msgstr "Автоматически ремонтирует повреждённые юниты"
+msgstr "Автоматически ремонтирует повреждённую технику"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
@@ -2710,7 +2710,7 @@ msgstr "Автоматически ремонтирует повреждённы
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:4287
 msgid "Or damaged units may be selected as target"
-msgstr "Также можно выбрать повреждённые юниты как его цель"
+msgstr "Также можно выделить повреждённую технику, как его цель"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
@@ -4016,7 +4016,7 @@ msgstr "Все ракеты автоматически улучшены"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr "Уничтожьте все юниты Новой Парадигмы"
+msgstr "Уничтожьте всю армию Новой Парадигмы"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
@@ -4024,11 +4024,11 @@ msgstr "Уничтожьте все подкрепления Новой Пара
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Постройте сооружения (не стены) на плато и уничтожьте все подкрепления Новой Парадигмы"
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Найдите и спасите юнитов из подбитого транспортера"
 
 #: data/base/script/campaign/cam2-c.js:30
 msgid "Rescue the civilians from The Collective before too many are captured"
@@ -4044,19 +4044,19 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:163
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Переместите все единицы в долину"
 
 #: data/base/script/campaign/cam3-1.js:246
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Уничтожьте ракетные шахты"
 
 #: data/base/script/campaign/cam3-2.js:258
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Спасите команду Альфа от Нексуса"
 
 #: data/base/script/campaign/cam3-ab.js:217
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Исследуйте программы сопротивления и выживите от нападения Нексуса"
 
 #: data/base/script/campaign/cam3-ad1.js:215
 msgid "Secure a missile silo"
@@ -4076,35 +4076,35 @@ msgstr "Вернуться к зоне высадки"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:478
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Уничтожить все войска и сооружения противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:494
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Артефакт найден"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:495
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Базы уничтожены"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:496
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Осталось войск противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:497
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Осталось строений противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:503
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Требуется возврат к зоне высадки"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:513
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Уничтожьте все войска и базы противника"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:518
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Выжить, пока таймер не достигнет нуля"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -4147,7 +4147,7 @@ msgstr "Строить (F3)"
 #: data/base/script/tutorial.js:513
 #: data/mp/multiplay/skirmish/rules.js:130
 msgid "Build - manufacture constructor droids first"
-msgstr "Строительство - сначала произведите строительных юнитов"
+msgstr "Строительство - сначала произведите строительную технику"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
@@ -4328,7 +4328,7 @@ msgstr "Выберите размещение завода"
 
 #: data/base/script/tutorial.js:68
 msgid "The delivery point is indicated by the number 1"
-msgstr "Точка прибытия обозначена цифрой 1"
+msgstr "Точка сбора обозначена цифрой 1"
 
 #: data/base/script/tutorial.js:69
 msgid "All new units will drive to this location once built"
@@ -4336,11 +4336,11 @@ msgstr "Все построенные машины будут прибывать
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Вы можете переместить точку прибытия в любой момент, щёлкнув по ней"
+msgstr "Вы можете переместить точку сбора в любой момент, щёлкнув по ней"
 
 #: data/base/script/tutorial.js:71
 msgid "Now click where you want to position the delivery point"
-msgstr "Теперь укажите, где Вы хотите разместить точку прибытия"
+msgstr "Теперь укажите, где вы хотите разместить точку сбора"
 
 #: data/base/script/tutorial.js:72
 msgid "The factory can now be ordered to build a new unit"
@@ -4444,7 +4444,7 @@ msgstr "Мы раскодировали входящее сообщение от
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:6
 msgid "This turret allows commanders to coordinate attacks between assigned units and to act as a delivery point for factories. Researching and using this technology has the highest priority."
-msgstr "Эта турель позволяет командирам координировать атаки между юнитами, а также является точкой назначения для продукции фабрик. Разработка и внедрение данной технологии имеет высший приоритет."
+msgstr "Эта турель позволяет командирам координировать атаки между отрядами, а также является точкой сбора для продукции фабрик. Разработка и внедрение данной технологии имеет высший приоритет."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:8
 msgid "Commander, we are receiving this transmission."
@@ -6245,7 +6245,7 @@ msgstr "Союзник"
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:479
 msgid "Alpha Campaign"
-msgstr "Кампания альфа"
+msgstr "Кампания Альфа"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -7160,7 +7160,7 @@ msgstr "Лучшие цели: колёсный транспорт и амфиб
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1154
 msgid "Beta Campaign"
-msgstr "Бета кампания"
+msgstr "Кампания Бета"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7574,7 +7574,7 @@ msgstr "Тяжёлый корпус Альянса"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1441
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Киборг инженер"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -8148,7 +8148,7 @@ msgstr "Электронная атака разрушает вражеские 
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1838
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепточка ЭМИ пушки"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8758,7 +8758,7 @@ msgstr "Хороший разведывательный транспорт"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2227
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Киборг-гранатомётчик"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -9605,7 +9605,7 @@ msgstr "Бункер с тяжелым пулеметом"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
 #: po/custom/fromJson.txt:2800
 msgid "Hover AI"
-msgstr "Ховер AI"
+msgstr "Ховер ИИ"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
@@ -10202,7 +10202,7 @@ msgstr "Установка Инферно"
 #. data/mp/stats/structure.json: $.WallTower-Projector.name
 #: po/custom/fromJson.txt:3297
 msgid "Inferno Hardpoint"
-msgstr "Укреплённая точка Инферно"
+msgstr "Укреплённая точка \"Инферно\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
@@ -10255,7 +10255,7 @@ msgstr "Джип"
 #. data/mp/messages/resmessages3.json: $.RES_CY_JP1.text[3]
 #: po/custom/fromJson.txt:3326
 msgid "Jump Cyborgs can now be researched"
-msgstr "Можно исследовать Киборгов-,Прыгунов"
+msgstr "Можно исследовать Киборгов-Прыгунов"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_STW1.text[2]
@@ -10347,7 +10347,7 @@ msgstr "Киборг-Лансер"
 #. data/mp/stats/structure.json: $.WallTower06.name
 #: po/custom/fromJson.txt:3385
 msgid "Lancer Hardpoint"
-msgstr "Укреплённая точка Лансера"
+msgstr "Укреплённая точка \"Лансер\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -10732,7 +10732,7 @@ msgstr "Можно модернизировать используя модул�
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3658
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Киборг-механик"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -11514,7 +11514,7 @@ msgstr "Башня связи НЕКСУС"
 #. data/mp/stats/weapons.json: $.SpyTurret01.name
 #: po/custom/fromJson.txt:4222
 msgid "Nexus Link Turret"
-msgstr "Турель нейросвязи НЕКСУС"
+msgstr "Турель нейросвязи \"НЕКСУС\""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_B07.text[0]
@@ -11569,7 +11569,7 @@ msgstr "Негде спрятаться"
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4253
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Non-Cheating. Hard. Fun. Crush!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
@@ -12806,7 +12806,7 @@ msgstr "Турель захвата"
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.tip
 #: po/custom/fromJson.txt:5056
 msgid "Sea map AI, based on NullBot"
-msgstr "ИИ, отрегулированный на карты с водой, основан на NullBot"
+msgstr "ИИ, отрегулированный для карт с водой, основан на NullBot"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Accuracy02.name
@@ -13490,7 +13490,7 @@ msgstr "Отсек для термитных бомб"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5518
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Киборг с Термитным огнеметом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -14563,7 +14563,7 @@ msgstr "Файл с кампанией Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Файл с модом мультиплеера Warzone 2100"
+msgstr "Файл с модом для сетевой игры Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
@@ -14651,7 +14651,7 @@ msgstr "Полноэкранный режим"
 
 #: src/clparse.cpp:271
 msgid "Load a specific game mode"
-msgstr "Загрузить определенный режим игры"
+msgstr "Загрузить определённый режим игры"
 
 #: src/clparse.cpp:271
 msgid "level name"
@@ -14677,7 +14677,7 @@ msgstr "Включить мод для Кампаний"
 
 #: src/clparse.cpp:275
 msgid "Enable a multiplay only mod"
-msgstr "Включить мод для мультиплеера"
+msgstr "Включить мод для сетевой игры"
 
 #: src/clparse.cpp:276
 msgid "Disable asserts"
@@ -14689,7 +14689,7 @@ msgstr "Вызывает крэш для тестирования програм
 
 #: src/clparse.cpp:278
 msgid "Load a saved skirmish game"
-msgstr "Загрузить сохраненную схватку"
+msgstr "Загрузить сохранённую cхватку"
 
 #: src/clparse.cpp:278
 #: src/clparse.cpp:279
@@ -14698,7 +14698,7 @@ msgstr "сохранение"
 
 #: src/clparse.cpp:279
 msgid "Load a saved campaign game"
-msgstr "Загрузить сохраненную игру кампании"
+msgstr "Загрузить сохранённую игру кампании"
 
 #: src/clparse.cpp:280
 msgid "Play in windowed mode"
@@ -14798,7 +14798,7 @@ msgstr ""
 
 #: src/clparse.cpp:307
 msgid "autorating"
-msgstr ""
+msgstr "авторейтинг"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15001,7 +15001,7 @@ msgstr "Установка увеличения на %.0f"
 #: src/droid.cpp:251
 #, c-format
 msgid "%s Lost!"
-msgstr "%s Потерян!"
+msgstr "%s потерян!"
 
 #: src/droid.cpp:1114
 msgid "Structure Restored"
@@ -15077,7 +15077,7 @@ msgstr "Видео из кампании отсутствуют! Скачайт�
 #: src/frontend.cpp:147
 #: src/frontend.cpp:151
 msgid "Continue Last Save"
-msgstr "Продолжить последнее сохранение"
+msgstr "Продолжить последнюю сохранённую игру"
 
 #: src/frontend.cpp:152
 msgid "No last save available"
@@ -15153,7 +15153,7 @@ msgstr "Начать Сражение"
 
 #: src/frontend.cpp:328
 msgid "Challenges"
-msgstr "Усложненные бои"
+msgstr "Испытания"
 
 #: src/frontend.cpp:329
 msgid "Load Campaign Game"
@@ -15390,12 +15390,12 @@ msgstr "Громкость музыки"
 
 #: src/frontend.cpp:919
 msgid "HRTF"
-msgstr ""
+msgstr "Объёмный звук"
 
 #: src/frontend.cpp:924
 #: src/frontend.cpp:926
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "HRTF(объёмный звук для наушников) не поддерживается на вашем устройстве / системе / библиотеке OpenAL"
 
 #: src/frontend.cpp:930
 msgid "Map Zoom"
@@ -15415,7 +15415,7 @@ msgstr "Увеличение миникарты"
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:949
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "Настройки звука / зума"
+msgstr "Настройки звука / камеры"
 
 #: src/frontend.cpp:1073
 msgid "Windowed"
@@ -15447,7 +15447,7 @@ msgstr "Масштаб экрана"
 
 #: src/frontend.cpp:1135
 msgid "Adaptive"
-msgstr ""
+msgstr "Адаптивный"
 
 #: src/frontend.cpp:1167
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15472,7 +15472,7 @@ msgstr "Сглаживание*"
 
 #: src/frontend.cpp:1225
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Предупреждение: сглаживание может вызвать сбои, особенно при значениях> 16"
+msgstr "Внимание: сглаживание может вызвать сбои, особенно при значениях> 16"
 
 #: src/frontend.cpp:1237
 msgid "Graphics Backend*"
@@ -15539,7 +15539,7 @@ msgstr "Цветной указатель"
 #: src/frontend.cpp:1628
 #: src/ingameop.cpp:726
 msgid "Scroll Event"
-msgstr "Колёсик мыши"
+msgstr "Колесо мыши"
 
 #: src/frontend.cpp:1632
 msgid "MOUSE OPTIONS"
@@ -15596,7 +15596,7 @@ msgstr "Сражение"
 
 #: src/frontend.cpp:1791
 msgid "Click to open webpage."
-msgstr "Открыть веб страницу."
+msgstr "Открыть веб-страницу."
 
 #: src/frontend.cpp:1794
 #: src/frontend.cpp:1813
@@ -15617,22 +15617,22 @@ msgstr "ИГРА СОХРАНЕНА: "
 #: src/hci.cpp:1560
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Игрок %u начитерил себе новую постройку: %s."
+msgstr "Игрок %u сжульничал и создал себе новую постройку: %s."
 
 #: src/hci.cpp:1569
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
-msgstr "Игрок %u начитерил себе новый особый элемент: %s."
+msgstr "Игрок %u сжульничал и создал себе новый особый элемент: %s."
 
 #: src/hci.cpp:1588
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
-msgstr "Игрок %u начитерил себе нового дроида: %s."
+msgstr "Игрок %u сжульничал и создал себе нового дроида: %s."
 
 #: src/hci.cpp:1596
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
-msgstr "Игрок %u создал (Debug Menu) себе нового дроида."
+msgstr "Игрок %u сжульничал и создал себе нового дроида."
 
 #: src/hci.cpp:2805
 #: src/multiint.cpp:1432
@@ -15845,7 +15845,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:371
 msgid "Discord: Connect to Untrusted Lobby?"
-msgstr ""
+msgstr "Discord: Подключиться к ненадёжному лобби?"
 
 #: src/integrations/wzdiscordrpc.cpp:373
 #: src/integrations/wzdiscordrpc.cpp:447
@@ -15913,7 +15913,7 @@ msgstr "Боты:"
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "В лобби"
 
 #: src/integrations/wzdiscordrpc.cpp:652
 msgid "In Multiplayer Game"
@@ -16087,19 +16087,19 @@ msgstr "Круг"
 
 #: src/keybind.cpp:123
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Извините, в мультиплеере читы отключены."
+msgstr "Извините, в сетевой игре жульничество отключено."
 
 #: src/keybind.cpp:156
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr "Внимание! Этот читкод может вызвать нестабильность игры. Рекомендуем не использовать его."
+msgstr "Внимание! Это жульничество может вызвать нестабильность игры. Рекомендуем не использовать его."
 
 #: src/keybind.cpp:218
 msgid "Ouch! Droid's health is down 20%!"
-msgstr "Ауч! Жизни дроида ниже 20%!"
+msgstr "Ауч! Прочность дроида ниже 20%!"
 
 #: src/keybind.cpp:234
 msgid "Ouch! Structure's health is down 20%!"
-msgstr "Ауч! Жизнь строения ниже 20%!"
+msgstr "Ауч! Прочность строения ниже 20%!"
 
 #: src/keybind.cpp:290
 msgid "Lets us see what you see!"
@@ -16124,7 +16124,7 @@ msgstr "Вид выравнивается на Запад"
 #: src/keybind.cpp:410
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr ""
+msgstr "Игрок %u сжульничал и создал себе новую армию дроидов: %d × %s."
 
 #: src/keybind.cpp:507
 #: src/keybind.cpp:535
@@ -16140,7 +16140,7 @@ msgstr ""
 #: src/keybind.cpp:1943
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr "(Игрок %u) использует чит :%s"
+msgstr "(Игрок %u) использует жульничество :%s"
 
 #: src/keybind.cpp:508
 msgid "Hard as nails!!!"
@@ -16189,7 +16189,7 @@ msgstr "Отображение количества единиц отключе�
 #: src/keybind.cpp:673
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(Игрок %u) использует чит. Число машин: %d, построек: %d, особых элементов: %d"
+msgstr "(Игрок %u) использует жульничество. Число дроидов: %d, построек: %d, особых элементов: %d"
 
 #: src/keybind.cpp:707
 msgid "Infinite power disabled"
@@ -16245,7 +16245,7 @@ msgstr "Выбранные здания мгновенно перезаряжа�
 #: src/keybind.cpp:1450
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr "(Игрок %u) использует чит :%s %s"
+msgstr "(Игрок %u) использует жульничество :%s %s"
 
 #: src/keybind.cpp:1450
 msgid "Researched"
@@ -16289,7 +16289,7 @@ msgstr "Внимание! При неправильном использован
 
 #: src/keybind.cpp:1904
 msgid "All enemies destroyed by cheating!"
-msgstr "Враги уничтожены с помощью читов!"
+msgstr "Враги уничтожены с помощью жульничества!"
 
 #: src/keybind.cpp:1944
 msgid "Destroying selected droids and structures!"
@@ -16325,7 +16325,7 @@ msgstr "Вращение по вертикали: инверсия"
 
 #: src/keybind.cpp:2517
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Извините, скорость игры не меняется в мультиплеере."
+msgstr "Извините, скорость игры не меняется в сетевой игре."
 
 #: src/keybind.cpp:2552
 #: src/keybind.cpp:2606
@@ -16424,7 +16424,7 @@ msgstr "Переключатель консоли"
 
 #: src/keymap.cpp:403
 msgid "Toggle Damage Bars On/Off"
-msgstr "Переключатель индикации жизни вкл./выкл."
+msgstr "Переключатель индикатора прочности вкл./выкл."
 
 #: src/keymap.cpp:404
 msgid "Take Screen Shot"
@@ -16728,11 +16728,11 @@ msgstr "Перекрытия"
 
 #: src/keymap.cpp:494
 msgid "Toggle Console History "
-msgstr "Переключить историю консоли "
+msgstr "Переключить историю сообщений "
 
 #: src/keymap.cpp:495
 msgid "Toggle Team Chat History"
-msgstr "Переключить историю командного чата"
+msgstr "История командного чата"
 
 #: src/keymap.cpp:496
 msgid "Rotate Building Clockwise"
@@ -16832,7 +16832,7 @@ msgstr "Выделить всю воздушную технику"
 
 #: src/keymap.cpp:543
 msgid "Select all fully-armed VTOLs"
-msgstr ""
+msgstr "Выделить всю полностью вооружённую воздушную технику"
 
 #: src/keymap.cpp:544
 msgid "Select all Wheels"
@@ -16868,11 +16868,11 @@ msgstr "Выделить все Транспорты"
 
 #: src/keymap.cpp:555
 msgid "Select all Repair Tanks"
-msgstr "Выделить всех Ремонтных Юнитов"
+msgstr "Выделить все ремонтные войска"
 
 #: src/keymap.cpp:556
 msgid "Select all Sensor Units"
-msgstr "Выделить всех Сенсорных Юнитов"
+msgstr "Выделить все сенсорные войска"
 
 #: src/keymap.cpp:557
 msgid "Select all Trucks"
@@ -16896,27 +16896,27 @@ msgstr "Выбрать следующий завод киборгов"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Выбрать следующий завод ВВС"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Перейти к следующему заводу"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Перейти к следующей исследовательской лаборатории"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Перейти к следующему генератору энергии"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Перейти к следующему заводу киборгов"
 
 #: src/keymap.cpp:570
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Перейти к следующему заводу ВВС"
 
 #: src/keymap.cpp:573
 msgid "Toggle Debug Mappings"
@@ -16992,7 +16992,7 @@ msgstr ""
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory"
-msgstr ""
+msgstr "Каталог автоматических сохранений"
 
 #: src/loadsave.cpp:340
 msgid "Autosave directory (not allowed for saving)"
@@ -17109,16 +17109,16 @@ msgstr "Командующий"
 
 #: src/multiint.cpp:706
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "ОТСУТСТВУЕТ ИМЯ ИИ"
 
 #: src/multiint.cpp:731
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "ОТСУТСТВУЕТ ОПИСАНИЕ ИИ"
 
 #: src/multiint.cpp:745
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
-msgstr ""
+msgstr "Состязание ИИ: %3.1f%% побед, %3.1f%% проиграно, %3.1f%% ничьих"
 
 #: src/multiint.cpp:921
 msgid "Error while joining."
@@ -17168,7 +17168,7 @@ msgstr "Выбрать название игры"
 #: src/multiint.cpp:1369
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr "Выберите Карту\n"
+msgstr "Выберите карту\n"
 "Может быть заблокировано голосами игроков"
 
 #: src/multiint.cpp:1370
@@ -17185,7 +17185,7 @@ msgstr "Щёлкни чтобы задать пароль"
 
 #: src/multiint.cpp:1402
 msgid "Select Player Name"
-msgstr "Выбор Имя Игрока"
+msgstr "Выбор имени игрока"
 
 #: src/multiint.cpp:1422
 #: src/multimenu.cpp:675
@@ -17228,19 +17228,19 @@ msgstr "Технологии"
 
 #: src/multiint.cpp:1481
 msgid "Technology Level 1"
-msgstr "Технологический Уровень 1"
+msgstr "Уровень технологий 1"
 
 #: src/multiint.cpp:1482
 msgid "Technology Level 2"
-msgstr "Технологический Уровень 2"
+msgstr "Уровень технологий 2"
 
 #: src/multiint.cpp:1483
 msgid "Technology Level 3"
-msgstr "Технологический Уровень 3"
+msgstr "Уровень технологий 3"
 
 #: src/multiint.cpp:1484
 msgid "Technology Level 4"
-msgstr "Технологический Уровень 4"
+msgstr "Уровень технологий 4"
 
 #: src/multiint.cpp:1492
 #: src/multiint.cpp:1493
@@ -17253,7 +17253,7 @@ msgstr "СЛОЖНОСТЬ"
 
 #: src/multiint.cpp:1609
 msgid "Starts disadvantaged"
-msgstr ""
+msgstr "Играет без преимущества"
 
 #: src/multiint.cpp:1610
 msgid "Plays nice"
@@ -17337,15 +17337,15 @@ msgstr "Нажмите, чтобы изменить позицию игрока"
 
 #: src/multiint.cpp:2357
 msgid "Click to change AI, right click to distribute choice"
-msgstr ""
+msgstr "Нажмите, чтобы добавить ИИ, ПКМ для распространения выбора на другой ИИ"
 
 #: src/multiint.cpp:2372
 msgid "Player ID: "
-msgstr "Игрок ID: "
+msgstr "ID игрока: "
 
 #: src/multiint.cpp:2373
 msgid "(none)"
-msgstr ""
+msgstr "(нет)"
 
 #: src/multiint.cpp:2456
 msgid "CHAT"
@@ -17374,7 +17374,7 @@ msgstr "Это мод-карта, она может изменить ваш иг
 
 #: src/multiint.cpp:3226
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Это случайная карта, она может изменить ваш игровой опыт!"
 
 #: src/multiint.cpp:3417
 #: src/multiint.cpp:3504
@@ -17397,11 +17397,11 @@ msgstr "Нет соединения с хостом."
 
 #: src/multiint.cpp:3941
 msgid "Cannot change to a map with too few slots for all players."
-msgstr "Нельзя изменить карту, слишком мало слотов для всех игроков."
+msgstr "Нельзя изменить карту, слишком мало мест для всех игроков."
 
 #: src/multiint.cpp:3946
 msgid "Cannot change to a map with fewer slots."
-msgstr "Невозможно изменить на карту с меньшим количеством слотов."
+msgstr "Невозможно изменить на карту с меньшим количеством мест для игроков."
 
 #: src/multiint.cpp:4040
 msgid "The host has quit."
@@ -17500,15 +17500,15 @@ msgstr "Доступно обновление игры, пожалуйста, п
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
 msgid "LIMITS"
-msgstr "ПРЕДЕЛЫ"
+msgstr "ОГРАНИЧЕНИЯ"
 
 #: src/multilimit.cpp:152
 msgid "Map Can Exceed Limits"
-msgstr "Карта может превышать лимиты"
+msgstr "Карта может превышать ограничения"
 
 #: src/multilimit.cpp:158
 msgid "Force Limits at Start"
-msgstr "Принудительное ограничение при старте"
+msgstr "Принудительное применение при старте"
 
 #: src/multilimit.cpp:180
 msgid "Apply Defaults and Return To Previous Screen"
@@ -17542,11 +17542,11 @@ msgstr "Счёт"
 
 #: src/multimenu.cpp:679
 msgid "Kills"
-msgstr "Убил"
+msgstr "Убито"
 
 #: src/multimenu.cpp:681
 msgid "Units"
-msgstr "Юниты"
+msgstr "Войско"
 
 #: src/multimenu.cpp:697
 msgid "Structs"
@@ -17625,7 +17625,7 @@ msgstr " (Союзник)"
 
 #: src/multiplay.cpp:1166
 msgid " (Global)"
-msgstr ""
+msgstr " (Мир)"
 
 #: src/multiplay.cpp:1264
 msgid "(allies"
@@ -17757,12 +17757,12 @@ msgstr "Награда исследования"
 #: src/scores.cpp:98
 #, c-format
 msgid "Own Units: %u"
-msgstr "Собственные юниты: %u"
+msgstr "Собственная техника: %u"
 
 #: src/scores.cpp:99
 #, c-format
 msgid "Enemy Units: %u"
-msgstr "Вражеские юниты: %u"
+msgstr "Вражеская техника: %u"
 
 #: src/scores.cpp:100
 #, c-format
@@ -17914,13 +17914,13 @@ msgstr "Не могу построить \"%s\", достигнут предел
 #: src/structure.cpp:2553
 #, c-format
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
-msgstr "Не могу построить больше \"%s\", достигнут предел строительных юнитов — производство приостановлено"
+msgstr "Невозможно построить \"%s\", достигнут предел строительных войск — производство приостановлено"
 
 #: src/structure.cpp:5457
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] "%s - %u Юнит назначен - Здоровье %d/%d"
+msgstr[0] "%s - %u Войск назначено - Прочность %d/%d"
 msgstr[1] "%s - %u Юнита назначено - Здоровье %d/%d"
 msgstr[2] "%s - %u Юнитов назначено - Здоровье %d/%d"
 msgstr[3] "%s - %u Юнитов назначено - Здоровье %d/%d"

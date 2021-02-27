@@ -2,6 +2,12 @@ ${LangFileString} WZWelcomeText "Этот помощник установки п
 
 ${LangFileString} WZWelcomeText_Portable "Добро пожаловать в установщик портативной Warzone 2100!\r\n\r\nЭтот установщик поможет вам установить портативную версию Warzone 2100.\r\n\r\nЭта установка полностью самодостаточна, и вы можете удалить программу в любое время, удалив каталог.\r\n\r\nWarzone 2100 — 100% бесплатная программа с открытым исходным кодом! \r\n\r\nНажмите кнопку Далее, чтобы продолжить."
 
+${LangFileString} WZWelcomeHomepageLink "Посетите нашу официальную страницу https://wz2100.net для получения последней версии."
+
+${LangFileString} WZ_64BIT_AVAILABLE "Доступна 64-битная версия Warzone 2100.$\r$\nДля получения подробностей посетите https://wz2100.net/ $\r$\nПродолжить установку 32-битной версии в любом случае?"
+
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Это 64-битная версия Warzone 2100.$\r$\nПожалуйста, скачайте 32-битную версию с https://wz2100. et/ $\r$\nНажмите OK, чтобы выйти из установки."
+
 ${LangFileString} WZ_GPL_NEXT "Согласен"
 
 ${LangFileString} TEXT_SecBase "Базовые файлы"
@@ -29,4 +35,11 @@ ${LangFileString} TEXT_SecNLS_WinFonts "WinШрифты"
 ${LangFileString} DESC_SecNLS_WinFonts "Задействовать папку шрифтов Windows при поиске. Помогает если есть проблемы с поставляемыми шрифтами. На Висте возможно замедление при загрузке!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "Важные Microsoft Runtime DLL"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} DESC_SecMSSysLibraries "Загрузить и установить (или обновить) системные библиотеки дистрибутивов Microsoft's Visual C++, которые могут потребоваться для запуска некоторых компонентов."
+
+${LangFileString} DLTEXT_Downloading "Загрузка"
+${LangFileString} DLTEXT_SysLibDLFailed "Ошибка загрузки системной библиотеки"
+${LangFileString} DLTEXT_VideosDLFailed "Не удалось загрузить видео"
+
+${LangFileString} TEXT_PromptRebootNeeded "Для завершения установки необходима перезагрузка. Хотите перезагрузить систему сейчас?"
+${LangFileString} TEXT_MsgRebootFailed "Не удалось перезагрузить систему. Пожалуйста, перезагрузите вручную."

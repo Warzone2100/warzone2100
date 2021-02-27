@@ -2,6 +2,12 @@ ${LangFileString} WZWelcomeText "Warzone 2100 kurulumuna hoşgeldiniz!\r\n\r\nBu
 
 ${LangFileString} WZWelcomeText_Portable "Warzone 2100 portatif kurulumuna hoşgeldiniz.\r\n\r\nBu sihirbaz size Warzone 2100 portatif kurulum boyunca rehberlik edecektir.\r\n\r\nBu kurulum bağımsızdır ve bulunduğu dosyalarını silerek programı tamamen kaldırabilirsiniz.\r\n\r\nWarzone 2100 Açık kaynaktır ve %100 ücretsizdir.\r\n\r\nDevam etmek için tıklayınız."
 
+${LangFileString} WZWelcomeHomepageLink "En son sürüm için https://wz2100.net Resmi Ana Sayfamızı ziyaret edin."
+
+${LangFileString} WZ_64BIT_AVAILABLE "Warzone 2100 64-bit sürümü mevcut.$\r$\nAyrıntılar için https://wz2100.net/ adresine gidin.$\r$\n32-bit kurulumla devam edilsin mi?"
+
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Bu Warzone 2100 64-bit sürümüdür.$\r$\nLütfen 32-bit sürümünü https://wz2100.net/ adresinden indirin.$\r$\nTamam'a basıp kurulumdan çıkın."
+
 ${LangFileString} WZ_GPL_NEXT "Devam"
 
 ${LangFileString} TEXT_SecBase "Çekirdek dosyalar"
@@ -30,3 +36,10 @@ ${LangFileString} DESC_SecNLS_WinFonts "Arama yoluna Windows Fonts dosyasını e
 
 ${LangFileString} TEXT_SecMSSysLibraries "Önemli Microsoft Runtime DLL dosyaları"
 ${LangFileString} DESC_SecMSSysLibraries "Bazı bileşenleri çalıştırmak için Microsoft's Visual C++ redistributable sistem kütüphanesini indirin ve yükleyin (veya güncelleyin)."
+
+${LangFileString} DLTEXT_Downloading "İndiriliyor"
+${LangFileString} DLTEXT_SysLibDLFailed "Sistem kütüphanesi indirmesi başarısız"
+${LangFileString} DLTEXT_VideosDLFailed "Videoların indirilmesi başarısız"
+
+${LangFileString} TEXT_PromptRebootNeeded "Kurulumu bitirmek için yeniden başlatma gerekiyor. Sistemi şimdi yeniden başlatmak istiyor musunuz?"
+${LangFileString} TEXT_MsgRebootFailed "Yeniden başlatma başarısız oldu. Lütfen elle yeniden başlatın."
