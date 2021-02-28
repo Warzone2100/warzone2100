@@ -170,7 +170,8 @@ _("Advanced Base Structure Materials Mk3")
 // data/mp/stats/research.json: $.R-Struc-Materials07.name
 _("Advanced Base Structure Materials")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy03.name
+// data/base/stats/research.json: $.R-Wpn-Bomb-Damage03.name
+// data/mp/stats/research.json: $.R-Wpn-Bomb-Damage03.name
 _("Advanced Bomb Warhead")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
@@ -235,14 +236,7 @@ _("Advanced target recognition systems")
 // data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[1]
 _("Advanced Thermal Emissions detection")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade05.name
-_("Advanced VTOL Production Mk2")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade06.name
-_("Advanced VTOL Production Mk3")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_ST_VFU4.text[1]
-// data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade04.name
 // data/mp/messages/resmessages3.json: $.RES_ST_VFU4.text[1]
 _("Advanced VTOL Production")  
 // TRANSLATORS: 
@@ -280,9 +274,9 @@ _("All AA weapons upgraded automatically")
 // ... + 5 refs
 _("All base structures upgraded automatically")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_BAC1.text[3]
-// data/base/messages/resmessages23.json: $.RES_W_BAC2.text[3]
-// data/base/messages/resmessages3.json: $.RES_W_BAC3.text[3]
+// data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[3]
+// data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[3]
+// data/base/messages/resmessages3.json: $.RES_W_BDMG3.text[3]
 // ... + 3 refs
 _("All bomb bays upgraded automatically")  
 // TRANSLATORS: 
@@ -545,13 +539,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
-_("Armed with Cyborg Assault Gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 _("Armed with Cyborg assault gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+// data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
+_("Armed with Cyborg Assault Gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -852,12 +846,18 @@ _("Assault Cannon Mantis Hover")
 // data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 _("Assault Cannon")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Defense-RotMG.name
+// data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
+// data/base/stats/structure.json: $.Pillbox-RotMG.name
+_("Assault Gun Bunker")  
+// TRANSLATORS: 
 // data/mp/stats/structure.json: $.Tower-RotMg.name
 _("Assault Gun Emplacement")  
 // TRANSLATORS: 
-// data/base/stats/structure.json: $.GuardTower-RotMg.name
 // data/base/stats/structure.json: $.Tower-RotMg.name
+_("Assault Gun Guard Tower 2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-RotMG.name
+// data/base/stats/structure.json: $.GuardTower-RotMg.name
 _("Assault Gun Guard Tower")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Defense-Wall-RotMg.name
@@ -919,14 +919,7 @@ _("Auto-Repair")
 // data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[1]
 _("Autoloader increases reload rate")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade02.name
-_("Automated Cyborg Production Mk2")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade03.name
-_("Automated Cyborg Production Mk3")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[1]
-// data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade01.name
 // data/mp/messages/resmessages1.json: $.RES_ST_FCY01.text[1]
 _("Automated Cyborg Production")  
 // TRANSLATORS: 
@@ -1180,20 +1173,26 @@ _("Body Points: Low")
 // ... + 75 refs
 _("Body Points: Medium")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
-// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-_("Body Points: Very low")  
-// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
 // data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[3]
 // ... + 28 refs
 _("Body Points: Very Low")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_W_BAC1.text[2]
-// data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[2]
-// data/mp/messages/resmessages3.json: $.RES_W_BAC3.text[2]
+// data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
+// data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
+_("Body Points: Very low")  
+// TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[2]
+// data/base/messages/resmessages3.json: $.RES_W_BDMG3.text[2]
+// xgettext:no-c-format
+_("Bomb damage +10%")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
+// data/mp/messages/resmessages23.json: $.RES_W_BDMG2.text[2]
+// data/mp/messages/resmessages3.json: $.RES_W_BDMG3.text[2]
 // xgettext:no-c-format
 _("Bomb damage +25%")  
 // TRANSLATORS: 
@@ -1201,9 +1200,10 @@ _("Bomb damage +25%")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
 _("Bomb turret explodes in proximity to enemy")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_W_BAC1.text[0]
-// data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[0]
-// data/mp/messages/resmessages3.json: $.RES_W_BAC3.text[0]
+// data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[0]
+// data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[0]
+// data/base/messages/resmessages3.json: $.RES_W_BDMG3.text[0]
+// ... + 3 refs
 _("Bomb Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/templates.json: $.CobraHvyMortarHalftrack.name
@@ -1219,14 +1219,6 @@ _("Bombard Pit")
 // data/base/stats/weapons.json: $.Mortar2Mk1.name
 // data/mp/stats/weapons.json: $.Mortar2Mk1.name
 _("Bombard")  
-// TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_W_BAC3.text[1]
-_("Bombs lock on and guide themselves to the target")  
-// TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_BAC1.text[0]
-// data/base/messages/resmessages23.json: $.RES_W_BAC2.text[0]
-// data/base/messages/resmessages3.json: $.RES_W_BAC3.text[0]
-_("Bombsight Upgrade")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_DF_WU10.text[1]
 // data/mp/messages/resmessages3.json: $.RES_DF_WU10.text[1]
@@ -2324,7 +2316,8 @@ _("Hardpoint Vindicator SAM Site Available")
 // data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[0]
 _("Hardpoint Whirlwind AA Gun Available")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy01.name
+// data/base/stats/research.json: $.R-Wpn-Bomb-Damage01.name
+// data/mp/stats/research.json: $.R-Wpn-Bomb-Damage01.name
 _("HE Bomb Shells")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer-Damage02.name
@@ -2735,8 +2728,9 @@ _("High explosive heavy artillery missile")
 // data/mp/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[1]
 _("High explosive shaped charge missile")  
 // TRANSLATORS: 
+// data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[1]
 // data/base/messages/resmessages2.json: $.RES_W_HOWD1.text[1]
-// data/mp/messages/resmessages2.json: $.RES_W_BAC1.text[1]
+// data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[1]
 // data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[1]
 _("High Explosive shells")  
 // TRANSLATORS: 
@@ -2937,7 +2931,8 @@ _("Immense damage infliction capability")
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text[1]
 _("Improved armor-piercing dart")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Wpn-Bomb-Accuracy02.name
+// data/base/stats/research.json: $.R-Wpn-Bomb-Damage02.name
+// data/mp/stats/research.json: $.R-Wpn-Bomb-Damage02.name
 _("Improved Bomb Warhead")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_MG_ROF2.text[1]
@@ -3023,7 +3018,8 @@ _("Improved Thermal Emissions detection")
 // data/mp/messages/resmessages1.json: $.RES_DF_WU1.text[1]
 _("Improved Titanium-reinforced concrete")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages23.json: $.RES_W_BAC2.text[1]
+// data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[1]
+// data/mp/messages/resmessages23.json: $.RES_W_BDMG2.text[1]
 _("Improved trinitramine explosive formula")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_LASD1.text[1]
@@ -3040,8 +3036,11 @@ _("Improvement in laser optics reduces light dispersal")
 // data/base/messages/resmessages3.json: $.RES_V_EN7.text[2]
 _("Improves vehicle speed")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Defense-Howitzer-Incenediary.name
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
+_("Incendiary Howitzer Emplacement 2")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
+// data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 _("Incendiary Howitzer Emplacement")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
@@ -3050,16 +3049,19 @@ _("Incendiary howitzer emplacement")
 // data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 _("Incendiary Howitzer may be assigned to a sensor")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Wpn-Howitzer-Incenediary.name
-// data/mp/stats/weapons.json: $.Howitzer-Incenediary.name
+// data/mp/stats/research.json: $.R-Wpn-Howitzer-Incendiary.name
+// data/mp/stats/weapons.json: $.Howitzer-Incendiary.name
 _("Incendiary Howitzer")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Defense-MortarPit-Incenediary.name
 // data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
+_("Incendiary Mortar Pit 2")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
+// data/mp/stats/structure.json: $.Emplacement-MortarPit-Incendiary.name
 _("Incendiary Mortar Pit")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Wpn-Mortar-Incenediary.name
-// data/mp/stats/weapons.json: $.Mortar-Incenediary.name
+// data/mp/stats/research.json: $.R-Wpn-Mortar-Incendiary.name
+// data/mp/stats/weapons.json: $.Mortar-Incendiary.name
 _("Incendiary Mortar")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[1]
@@ -3093,11 +3095,6 @@ _("Increases Armour and Body Points")
 // data/base/messages/resmessages2.json: $.RES_V_P_H2.text[2]
 // ... + 17 refs
 _("Increases Body Points")  
-// TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_BAC1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_BAC2.text[2]
-// data/base/messages/resmessages3.json: $.RES_W_BAC3.text[2]
-_("Increases Bombing accuracy")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
 // data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[2]
@@ -3430,15 +3427,9 @@ _("Laser accuracy +10%")
 // xgettext:no-c-format
 _("Laser damage +25%")  
 // TRANSLATORS: 
-// data/base/messages/resmessages23.json: $.RES_W_BAC2.text[1]
-_("Laser designator paints and guides bombs to the target")  
-// TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
 // data/mp/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
 _("Laser designator paints and guides rounds to the target")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Wpn-Bomb-Accuracy02.name
-_("Laser Guided Bombsight")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_LASROF1.text[2]
 // xgettext:no-c-format
@@ -3542,9 +3533,6 @@ _("Light Cannon Viper Wheels")
 // data/mp/stats/weapons.json: $.Cannon1Mk1.name
 _("Light Cannon")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_BAC1.text[1]
-_("Locks on to thermal emissions")  
-// TRANSLATORS: 
 // data/base/stats/structure.json: $.LookOutTower.name
 // data/mp/stats/structure.json: $.LookOutTower.name
 _("Look-Out Tower")  
@@ -3553,8 +3541,9 @@ _("Look-Out Tower")
 // data/mp/messages/resmessages1.json: $.RES_V_B01.text[3]
 _("Low power cost and low production times")  
 // TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_W_BDMG3.text[1]
 // data/base/messages/resmessages3.json: $.RES_W_MS_D1.text[1]
-// data/mp/messages/resmessages3.json: $.RES_W_BAC3.text[1]
+// data/mp/messages/resmessages3.json: $.RES_W_BDMG3.text[1]
 // data/mp/messages/resmessages3.json: $.RES_W_MS_D1.text[1]
 _("Low yield thermonuclear warhead")  
 // TRANSLATORS: 
@@ -4161,15 +4150,15 @@ _("New Systems Structure Available")
 // ... + 6 refs
 _("New Systems Tower Available")  
 // TRANSLATORS: 
+// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+_("New Systems Turret Available For Design")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 // data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 // data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 _("New Systems Turret Available for Design")  
-// TRANSLATORS: 
-// data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-// data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-_("New Systems Turret Available For Design")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
 // data/base/messages/resmessages23.json: $.RES_SY_VSTU1.text[0]
@@ -4802,14 +4791,7 @@ _("Ripple Rockets")
 // data/mp/messages/resmessages23.json: $.RES_W_MG_ROF3.text[1]
 _("Robotic advances make new chaingun upgrade available")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade05.name
-_("Robotic Cyborg Production Mk2")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade06.name
-_("Robotic Cyborg Production Mk3")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_ST_FCY4.text[1]
-// data/base/stats/research.json: $.R-Struc-Factory-Cyborg-Upgrade04.name
 // data/mp/messages/resmessages2.json: $.RES_ST_FCY4.text[1]
 _("Robotic Cyborg Production")  
 // TRANSLATORS: 
@@ -4843,14 +4825,7 @@ _("Robotic Repair Facility Upgrade")
 // data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade04.name
 _("Robotic Repair Facility")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade02.name
-_("Robotic VTOL Production Mk2")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade03.name
-_("Robotic VTOL Production Mk3")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[1]
-// data/base/stats/research.json: $.R-Struc-VTOLFactory-Upgrade01.name
 // data/mp/messages/resmessages2.json: $.RES_ST_VFU1.text[1]
 _("Robotic VTOL Production")  
 // TRANSLATORS: 
@@ -4933,8 +4908,6 @@ _("Rocket Upgrade")
 // data/mp/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
 _("Rotary Howitzer - Hellstorm")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
-// data/base/stats/structure.json: $.Pillbox-RotMG.name
 // data/mp/stats/research.json: $.R-Defense-RotMG.name
 // data/mp/stats/structure.json: $.Pillbox-RotMG.name
 _("Rotary MG Bunker")  
@@ -5440,9 +5413,6 @@ _("Target Acquisition Artillery Shells Mk2")
 // data/mp/stats/research.json: $.R-Wpn-Howitzer-Accuracy01.name
 _("Target Acquisition Artillery Shells")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Wpn-Bomb-Accuracy03.name
-_("Target Acquisition Bombsight")  
-// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Acc03.name
 _("Target Acquisition Mortar Shells")  
@@ -5470,14 +5440,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
-// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
+// TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
@@ -5498,9 +5468,6 @@ _("Thermal Armor Mk3")
 // data/base/stats/research.json: $.R-Vehicle-Armor-Heat01.name
 // data/mp/stats/research.json: $.R-Vehicle-Armor-Heat01.name
 _("Thermal Armor")  
-// TRANSLATORS: 
-// data/base/stats/research.json: $.R-Wpn-Bomb-Accuracy01.name
-_("Thermal Imaging Bombsight")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Mortar-Acc02.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar-Acc02.name
