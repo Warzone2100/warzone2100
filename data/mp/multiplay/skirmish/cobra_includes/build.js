@@ -125,12 +125,70 @@ function countAndBuild(stat, count)
 	return false;
 }
 
+// Use this to build a defense next to a derrick (that was taken before we got to build there)
+// This can be called from eventStructureBuilt() to build a few defenses with a chance.
+function fastDefendSpot(structure, droid)
+{
+	if (!droid)
+	{
+		return;
+	}
+
+	const MIN_DEFENSES = (gameTime < 900000) ? 1 : 2;
+	if (structure && (structure.stattype === FACTORY ||
+		structure.stattype === CYBORG_FACTORY ||
+		structure.stattype === VTOL_FACTORY ||
+		structure.stattype === POWER_GEN ||
+		structure.stattype === RESEARCH_LAB ||
+		structure.stattype === HQ))
+	{
+		return; //do not waste time trying to defend basic base structures.
+	}
+
+	var chance = (gameTime > 900000 && ((structure && structure.stattype === RESOURCE_EXTRACTOR) || (random(100) < 20)));
+	var structs = enumRange(droid.x, droid.y, 7, me, false).filter(function(obj) { return obj.type === STRUCTURE; });
+	var defenses = structs.filter(function(obj) { return obj.stattype === DEFENSE; });
+	var enemyDerr = enumRange(droid.x, droid.y, 8, ENEMIES, false).filter(function(obj) { return obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR; });
+	//Build a defense structure here.
+	if (chance || (defenses.length < MIN_DEFENSES) || (enemyDerr.length > 0 && defenses.length === 0))
+	{
+		buildDefenses(droid, true); // Build right where this droid is at.
+		return;
+	}
+
+	//Try a sensor tower
+	if (gameTime > 900000 && random(100) < 67 && structs.length < 5)
+	{
+		var sensor;
+		//const CB_TOWER = "Sys-CB-Tower01";
+		const TOWERS = [ "Sys-SensoTowerWS", "Sys-SensoTower02" ];
+		for (var i = 0, len = TOWERS.length; i < len; ++i)
+		{
+			var sen = TOWERS[i];
+			if (isStructureAvailable(sen))
+			{
+				sensor = sen;
+				break;
+			}
+		}
+		if (isDefined(sensor))
+		{
+			var result = pickStructLocation(droid, sensor, droid.x, droid.y, 1);
+			if (result)
+			{
+				orderDroidBuild(droid, DORDER_BUILD, sensor, result.x, result.y);
+			}
+		}
+	}
+}
+
 //Find the closest derrick that is not guarded a defense.
 function protectUnguardedDerricks(droid)
 {
 	var derrs = enumStruct(me, structures.derrick);
 	const LEN = derrs.length;
 	const MAX_BLOCKING = 8;
+	const HIGH_OIL = highOilMap();
 
 	if (droid)
 	{
@@ -149,7 +207,7 @@ function protectUnguardedDerricks(droid)
 		for (var i = 0; i < LEN; ++i)
 		{
 			var found = false;
-			var objects = enumRange(derrs[i].x, derrs[i].y, 8, me, false);
+			var objects = enumRange(derrs[i].x, derrs[i].y, (HIGH_OIL) ? 4 : 8, me, false);
 
 			for (var c = 0, u = objects.length; c < u; ++c)
 			{
@@ -169,10 +227,17 @@ function protectUnguardedDerricks(droid)
 		if (undefended.length > 0)
 		{
 			//Don't defend it ATM if that derrick is surrounded by enemies.
-			undefended = undefended.filter(function(obj) {
-				return (gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, MY_BASE.x, MY_BASE.y) > 9) ||
-					(enumRange(obj.x, obj.y, 6, ENEMIES, false).length === 0);
-			}).sort(distanceToBase);
+			if (!HIGH_OIL)
+			{
+				undefended = undefended.filter(function(obj) {
+					return (gameTime < 600000 && distBetweenTwoPoints(obj.x, obj.y, MY_BASE.x, MY_BASE.y) > 9) ||
+						(enumRange(obj.x, obj.y, 6, ENEMIES, false).length === 0);
+				}).sort(distanceToBase);
+			}
+			else
+			{
+				undefended = undefended.sort(distanceToBase);
+			}
 
 			if (undefended.length > 0 && buildStuff(returnDefense(), undefined, undefended[0], MAX_BLOCKING, oilGrabberGroup))
 			{
@@ -323,12 +388,12 @@ function lookForOil()
 	var droids = enumGroup(oilGrabberGroup);
 	var oils = enumFeature(-1, OIL_RES).sort(distanceToBase);
 
-	if (!forceDerrickBuildDefense && (oils.length < averageOilPerPlayer()))
+	if (!forceDerrickBuildDefense && (oils.length < 2))
 	{
 		//Ok, most oils are already owned so go ahead and defend all derricks from now one
 		forceDerrickBuildDefense = true;
 	}
-	if (mapOilLevel() !== "NTW" && forceDerrickBuildDefense)
+	if (forceDerrickBuildDefense && random(100) < 15)
 	{
 		protectUnguardedDerricks();
 	}
@@ -362,24 +427,6 @@ function lookForOil()
 			orderDroidBuild(bestDroid, DORDER_BUILD, structures.derrick, oil.x, oil.y);
 			return;
 		}
-	}
-}
-
-// Build CB, Wide-Spectrum or radar detector
-// TODO: Find a way to space these out.
-function buildSensors()
-{
-	const CB_TOWER = "Sys-CB-Tower01";
-	const WS_TOWER = "Sys-SensoTowerWS";
-
-	if (countAndBuild(WS_TOWER, 1))
-	{
-		return true;
-	}
-
-	if (countAndBuild(CB_TOWER, 1))
-	{
-		return true;
 	}
 }
 
@@ -506,8 +553,12 @@ function defendRandomDerrick()
 	if (derrs.length > 0)
 	{
 		const MAX_BLOCKING = 8;
+		var derr = derrs[random(derrs.length)];
+		var defs = enumRange(derr.x, derr.y, 10, ALLIES, false).filter(function(obj) {
+			return obj.type === STRUCTURE && obj.stattype === DEFENSE;
+		}).length;
 
-		if (buildStuff(returnDefense(), undefined, derrs[random(derrs.length)], MAX_BLOCKING, oilGrabberGroup))
+		if ((defs < 4) && buildStuff(returnDefense(), undefined, derr, MAX_BLOCKING, oilGrabberGroup))
 		{
 			return true;
 		}
@@ -536,12 +587,7 @@ function buildDefenses(truck, urgent)
 			return buildDefenseNearTruck(truck, 0);
 		}
 
-		if (buildSensors())
-		{
-			return true;
-		}
-
-		if (pow > urgent ? -SUPER_LOW_POWER : MIN_BUILD_POWER)
+		if (mapOilLevel() !== "NTW" && ((pow > urgent) ? -SUPER_LOW_POWER : MIN_BUILD_POWER))
 		{
 			defendRandomDerrick();
 		}
@@ -578,11 +624,15 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(structures.gen, 2))
+		if (countAndBuild(structures.gen, 1))
 		{
 			return true;
 		}
 		if (countAndBuild(structures.hq, 1))
+		{
+			return true;
+		}
+		if (countAndBuild(structures.gen, 2))
 		{
 			return true;
 		}
@@ -620,7 +670,7 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (!researchComplete && countAndBuild(structures.lab, haveAllies ? 3 : 5))
+		if (!researchComplete && countAndBuild(structures.lab, (haveAllies) ? 2 : 4))
 		{
 			return true;
 		}
@@ -636,11 +686,11 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(structures.cyborgFactory, 3))
+		if (!researchComplete && countAndBuild(structures.lab, 5))
 		{
 			return true;
 		}
-		if (!researchComplete && haveAllies && countAndBuild(structures.lab, 5))
+		if (countAndBuild(structures.cyborgFactory, 3))
 		{
 			return true;
 		}
@@ -688,9 +738,9 @@ function factoryBuildOrder()
 		{
 			continue;
 		}
-		if (fac === structures.vtolFactory && !getResearch("R-Struc-VTOLPad-Upgrade01").done)
+		if (fac === structures.vtolFactory && !getResearch("R-Struc-VTOLPad").done)
 		{
-			continue; //wait until the pads are better (at least for high oil)
+			continue;
 		}
 
 		var derrNum = countStruct(structures.derrick);

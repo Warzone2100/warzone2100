@@ -38,40 +38,29 @@ function eventStartLevel()
 //defend our derrick if possible.
 function eventStructureBuilt(structure, droid)
 {
-	if (structure.stattype === RESOURCE_EXTRACTOR && droid)
+	if (!droid || (droid.player !== me ) || (droid.group !== oilGrabberGroup))
 	{
-		var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false);
-		nearbyOils = nearbyOils.filter(function(obj) {
-			return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
-		});
-		nearbyOils = nearbyOils.sort(distanceToBase);
-		droid.busy = false;
+		return;
+	}
 
-		if (nearbyOils.length > 0)
+	var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter(function(obj) {
+		return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
+	}).sort(distanceToBase);
+
+	if (nearbyOils.length > 0)
+	{
+		orderDroidBuild(droid, DORDER_BUILD, structures.derrick, nearbyOils[0].x, nearbyOils[0].y);
+		return;
+	}
+	else if (forceDerrickBuildDefense)
+	{
+		const MIN_DIST_FROM_BASE = 10;
+		var dist = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, structure.x, structure.y);
+
+		if (dist >= MIN_DIST_FROM_BASE && (getRealPower() > (-3 * SUPER_LOW_POWER)))
 		{
-			orderDroidBuild(droid, DORDER_BUILD, structures.derrick, nearbyOils[0].x, nearbyOils[0].y);
-		}
-		else if (getRealPower() > -SUPER_LOW_POWER)
-		{
-			var high = highOilMap();
-			//Probably most oils are close to base anyway on high oil maps
-			if (high && (gameTime < 240000))
-			{
-				return;
-			}
-			if (!high && !forceDerrickBuildDefense && countStruct(structures.derrick) < (averageOilPerPlayer() - 4))
-			{
-				return;
-			}
-
-			var numDefenses = enumRange(droid.x, droid.y, 7, me, false).filter(function(obj) {
-				return (allianceExistsBetween(me, obj.player) && (obj.type === STRUCTURE) && (obj.stattype === DEFENSE));
-			}).length;
-
-			if (numDefenses === 0)
-			{
-				buildDefenses(droid, true);
-			}
+			fastDefendSpot(structure, droid);
+			return;
 		}
 	}
 }
@@ -88,6 +77,19 @@ function eventDroidIdle(droid)
 			attackThisObject(droid.id, objectInformation(enemyObjects[0]));
 		}
 	}
+	else if (forceDerrickBuildDefense && droid.droidType === DROID_CONSTRUCT && droid.group === oilGrabberGroup)
+	{
+		const SCAN_RANGE = 7;
+		var enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter(function(obj) {
+			return obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR;
+		});
+
+		//most likely an enemy truck got the oil before us, so try to build a defense near it.
+		if (enemyDerrs.length > 0)
+		{
+			fastDefendSpot(undefined, droid);
+		}
+	}
 }
 
 //Groups droid types.
@@ -101,7 +103,7 @@ function eventDroidBuilt(droid, struct)
 		{
 			groupAdd(oilGrabberGroup, droid); //Fix for crazy T2/T3/T4 no-bases config
 		}
-		else if (!isEngineer && (gameTime < 120000) && !highOilMap() && enumGroup(constructGroup).length >= 2 && enumGroup(oilGrabberGroup).length < 2)
+		else if (!isEngineer && enumGroup(constructGroup).length >= 2 && enumGroup(oilGrabberGroup).length < 1)
 		{
 			groupAdd(oilGrabberGroup, droid); //Get oil faster
 		}
@@ -206,11 +208,10 @@ function eventAttacked(victim, attacker)
 		return;
 	}
 
-	if ((gameTime > 420000) || !highOilMap())
+	if (!startAttacking && (gameTime > 420000) || !highOilMap())
 	{
 		startAttacking = true; //well, they want to play so...
 	}
-
 
 	if (attacker.player !== me && !allianceExistsBetween(attacker.player, victim.player))
 	{

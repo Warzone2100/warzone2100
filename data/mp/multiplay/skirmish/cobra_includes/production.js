@@ -1,26 +1,4 @@
 
-//See if we can design this droid.
-function isDesignable(item, body, prop)
-{
-	if (!isDefined(item))
-	{
-		return false;
-	}
-
-	if (!isDefined(body))
-	{
-		body = "Body1REC";
-	}
-
-	if (!isDefined(prop))
-	{
-		prop = "wheeled01";
-	}
-
-	var virDroid = makeTemplate(me, "Virtual Droid", body, prop, "", "", item, item);
-	return (virDroid !== null);
-}
-
 function havePrimaryOrArtilleryWeapon()
 {
 	var primary = componentAvailable(subPersonalities[personality].primaryWeapon.weapons[0].stat);
@@ -131,6 +109,17 @@ function chooseRandomVTOLWeapon()
 		weaps = weaponStats.bombs;
 	}
 
+	//randomize the big bombs for variety
+	if (weaps.alias === "bomb")
+	{
+		var rdm = [];
+		while (rdm.length !== weaps.vtols.length)
+		{
+			rdm.push(weaps.vtols[random(weaps.vtols.length)]);
+		}
+		return rdm;
+	}
+
 	return weaps.vtols;
 }
 
@@ -155,16 +144,18 @@ function choosePersonalityWeapon(type)
 		weaponList = shuffleWeaponList(chooseWeaponType(weaps));
 
 		//randomly choose an unbalanced and overpowered weapon if on hard or insane difficulty.
-		if (difficulty >= HARD && componentAvailable("tracked01") && (random(100) <= 2))
+		if ((difficulty >= HARD) && componentAvailable("tracked01") && (random(100) < 2))
 		{
-			weaponList = [];
-			skip = true;
 			if (difficulty >= INSANE && random(100) <= 50)
 			{
+				weaponList = [];
+				skip = true;
 				weaponList.push("MortarEMP");
 			}
-			else
+			else if (gameTime > 900000)
 			{
+				weaponList = [];
+				skip = true;
 				weaponList.push("PlasmaHeavy");
 			}
 		}
@@ -289,18 +280,44 @@ function pickPropulsion(weap)
 	}
 
 	const TIME_FOR_HALF_TRACKS = 600000;
+
+	if (gameTime < TIME_FOR_HALF_TRACKS && getMultiTechLevel() === 1)
+	{
+		return ["HalfTrack", "wheeled01"];
+	}
+
 	var tankProp = [
 		"tracked01", // tracked01
 		"HalfTrack", // half-track
 		"wheeled01", // wheels
 	];
 
-	if ((gameTime < TIME_FOR_HALF_TRACKS) || (!(getRealPower() >= PRODUCTION_POWER + 200) && random(100) < 40))
+	if (random(100) < ((!(getRealPower() >= PRODUCTION_POWER + 200)) ? 85 : 66))
 	{
 		tankProp.shift();
 	}
 
 	return tankProp;
+}
+
+function pickTankBody()
+{
+	//Early-game now has a focus on small or medium body and will then shift
+	//a preference towards heavy or medium bodies (if power is relatively low).
+	//This helps keep things competitive among a player rushing with small/medium bodies.
+	var body;
+	var bodySwitchTime = 900000;
+
+	if (gameTime < bodySwitchTime && random(100) < 75)
+	{
+		body = (random(100) < ((!(getRealPower() >= PRODUCTION_POWER + 200)) ? 60 : 30)) ? SYSTEM_BODY : VTOL_BODY;
+	}
+	else
+	{
+		body = (random(100) < ((!(getRealPower() >= PRODUCTION_POWER + 200)) ? 57 : 37)) ? VTOL_BODY : TANK_BODY;
+	}
+
+	return body;
 }
 
 //Create a ground attacker tank with a heavy body when possible.
@@ -330,36 +347,7 @@ function buildAttacker(id)
 				secondary = "EMP-Cannon";
 			}
 
-			//Early-game now has a focus on small or medium body and will then shift
-			//a preference towards heavy or medium bodies (if power is relatively low).
-			//This helps keep things competitive among a player rushing with small/medium bodies.
-
-			var body;
-			var bodySwitchTime = 900000;
-			if (gameTime < bodySwitchTime && random(100) < 75)
-			{
-				if (!(getRealPower() >= PRODUCTION_POWER + 200) && random(100) < 60)
-				{
-					body = SYSTEM_BODY;
-				}
-				else
-				{
-					body = VTOL_BODY;
-				}
-			}
-			else
-			{
-				if (!(getRealPower() >= PRODUCTION_POWER + 200) && random(100) < 40)
-				{
-					body = VTOL_BODY;
-				}
-				else
-				{
-					body = TANK_BODY;
-				}
-			}
-
-			return getRealPower() > PRODUCTION_POWER && buildDroid(fac, "Droid", body, pickPropulsion(weap), "", "", weap, secondary);
+			return getRealPower() > PRODUCTION_POWER && buildDroid(fac, "Droid", pickTankBody(), pickPropulsion(weap), "", "", weap, secondary);
 		}
 	}
 
@@ -533,7 +521,7 @@ function produce()
 	var useCybEngineer = !countStruct(structures.factory); //use them if we have no factory
 	var systems = analyzeQueuedSystems();
 
-	var attackers = groupSize(attackGroup);
+	var attackers = enumGroup(attackGroup).length;
 	var allowSpecialSystems = isDefined(attackers) ? attackers > 10 : false;
 	var buildSensors = ((enumGroup(sensorGroup).length + systems.sensor) < MIN_SENSORS);
 	var buildRepairs = ((enumGroup(repairGroup).length + systems.repair) < MIN_REPAIRS);
@@ -572,7 +560,15 @@ function produce()
 
 				if (facType === structures.factory)
 				{
-					if (buildTrucks &&
+					if (gameTime > 40000 &&
+						highOilMap() &&
+						componentAvailable("MG1Mk1") &&
+						attackers < 2 &&
+						(countStruct(structures.gen) && countStruct(structures.derrick)))
+					{
+						buildAttacker(FC.id);
+					}
+					else if (buildTrucks &&
 						(attackerCountsGood(false) ||
 						(gameTime < 240000 && highOilMap()) ||
 						!havePrimaryOrArtilleryWeapon() ||

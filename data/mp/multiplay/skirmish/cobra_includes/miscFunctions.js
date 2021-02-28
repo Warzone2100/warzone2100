@@ -86,10 +86,21 @@ function rangeStep(player)
 			player = getMostHarmfulPlayer();
 		}
 
+		var highOil = highOilMap();
 		var targets = [];
+		var derr;
 		var struc = findNearestEnemyStructure(player);
 		var droid = findNearestEnemyDroid(player);
 
+		if (!highOil)
+		{
+			derr = findNearestEnemyDerrick(player);
+		}
+
+		if (derr)
+		{
+			targets.push(getObject(derr.typeInfo, derr.playerInfo, derr.idInfo));
+		}
 		if (struc)
 		{
 			targets.push(getObject(struc.typeInfo, struc.playerInfo, struc.idInfo));
@@ -101,8 +112,15 @@ function rangeStep(player)
 
 		if (targets.length > 0)
 		{
-			targets = targets.sort(distanceToBase);
-			return objectInformation(targets[0]);
+			if (!highOil && derr && ((random(100) < 7) || (countStruct(structures.derrick) <= Math.floor(1.5 * averageOilPerPlayer()))))
+			{
+				return objectInformation(derr);
+			}
+			else
+			{
+				targets = targets.sort(distanceToBase);
+				return objectInformation(targets[0]);
+			}
 		}
 
 		return undefined;
@@ -145,7 +163,7 @@ function getRealPower(player)
 		player = me;
 	}
 	const POWER = playerPower(player) - queuedPower(player);
-	if (playerAlliance(true).length > 0 && player === me && POWER < 50)
+	if (!currently_dead && playerAlliance(true).length > 0 && player === me && POWER < -300)
 	{
 		sendChatMessage("need Power", ALLIES);
 	}
@@ -304,7 +322,7 @@ function checkIfDead()
 		// Remind players to help me... (other Cobra allies will respond)
 		if (playerAlliance(true).length > 0)
 		{
-			const GOOD_POWER_SUPPLY = 1200;
+			const GOOD_POWER_SUPPLY = 200;
 
 			if (playerPower(me) < GOOD_POWER_SUPPLY)
 			{
@@ -355,6 +373,7 @@ function initCobraVars()
 	var isHoverMap = checkIfSeaMap();
 
 	lastMsg = "eventStartLevel";
+	lastMsgThrottle = 0;
 	currently_dead = false;
 	researchComplete = false;
 	initializeGrudgeCounter();
@@ -376,7 +395,7 @@ function initCobraVars()
 	enemyUsedElectronicWarfare = false;
 	startAttacking = false;
 	lastShuffleTime = 0;
-	forceDerrickBuildDefense = false;
+	forceDerrickBuildDefense = highOilMap(); //defend base derricks on high/NTW ASAP from rusher trucks
 }
 
 //Attempt to workaround a bug with pickStructLocation() failing to find valid locations

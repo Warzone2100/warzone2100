@@ -35,10 +35,12 @@ const MODULE_RESEARCH = [
 	"R-Struc-Factory-Module",
 	"R-Struc-PowerModuleMk1",
 ];
-const ESSENTIALS = [
+const MOST_ESSENTIAL = [
 	"R-Wpn-MG-Damage01",
 	"R-Sys-Engineering01",
 	"R-Defense-Tower01",
+];
+const ESSENTIALS = [
 	"R-Wpn-MG2Mk1",
 	"R-Wpn-MG-Damage02",
 	"R-Struc-PowerModuleMk1",
@@ -50,16 +52,16 @@ const ESSENTIALS = [
 const ESSENTIALS_2 = [
 	"R-Vehicle-Metals02",
 	"R-Cyborg-Metals02",
-	"R-Struc-RprFac-Upgrade01",
 	"R-Wpn-MG3Mk1",
+	"R-Struc-RprFac-Upgrade01",
 	"R-Sys-Autorepair-General",
-	"R-Struc-Research-Upgrade09",
 	"R-Struc-Power-Upgrade03a",
-	"R-Struc-Factory-Upgrade09",
+	"R-Struc-Research-Upgrade09",
 ];
 const ESSENTIALS_3 = [
+	"R-Vehicle-Body04",
 	"R-Vehicle-Prop-Hover",
-	"R-Sys-Sensor-Upgrade01",
+	"R-Struc-Factory-Upgrade09",
 ];
 const SYSTEM_UPGRADES = [
 	"R-Sys-MobileRepairTurretHvy",
@@ -83,11 +85,9 @@ const DEFENSE_UPGRADES = [
 	"R-Struc-Materials09",
 	"R-Defense-WallUpgrade12",
 ];
-const BODY_RESEARCH_1 = [
+const BODY_RESEARCH = [
 	"R-Vehicle-Body08",
 	"R-Vehicle-Body12",
-];
-const BODY_RESEARCH_2 = [
 	"R-Vehicle-Body09",
 	"R-Vehicle-Body10",
 	"R-Vehicle-Engine09",
@@ -155,7 +155,7 @@ var subPersonalities =
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 5,
+		"defensePriority": 15,
 		"vtolPriority": 40,
 		"alloyPriority": 33,
 		"useLasers": true,
@@ -178,7 +178,7 @@ var subPersonalities =
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 5,
+		"defensePriority": 15,
 		"vtolPriority": 50,
 		"alloyPriority": 35,
 		"useLasers": true,
@@ -201,7 +201,7 @@ var subPersonalities =
 		"artillery": weaponStats.rockets_Arty,
 		"antiAir": weaponStats.rockets_AA,
 		"factoryOrder": [structures.vtolFactory, structures.factory, structures.cyborgFactory],
-		"defensePriority": 7,
+		"defensePriority": 20,
 		"vtolPriority": 50,
 		"alloyPriority": 25,
 		"useLasers": true,
@@ -223,7 +223,7 @@ var subPersonalities =
 		"artillery": weaponStats.mortars,
 		"antiAir": weaponStats.AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 5,
+		"defensePriority": 15,
 		"vtolPriority": 80,
 		"alloyPriority": 35,
 		"useLasers": true,
@@ -245,7 +245,7 @@ var subPersonalities =
 		"artillery": weaponStats.fireMortars,
 		"antiAir": weaponStats.AA,
 		"factoryOrder": [structures.factory, structures.cyborgFactory, structures.vtolFactory],
-		"defensePriority": 15,
+		"defensePriority": 45,
 		"vtolPriority": 66,
 		"alloyPriority": 10,
 		"useLasers": true,
@@ -279,6 +279,7 @@ var retreatGroup;
 var grudgeCount; //See who bullies this bot the most and act on it. DO NOT let this use the scavenger player number.
 var personality; //What personality is this instance of Cobra using.
 var lastMsg; //The last Cobra chat message.
+var lastMsgThrottle; //Last game time a chat messge was sent - throttles Cobra AIs from talking to eachother too much.
 var forceHover; //Use hover propulsion only.
 var seaMapWithLandEnemy; //Hover map with an enemy sharing land with Cobra.
 var turnOffCyborgs; //Turn of cyborgs (hover maps/chat).
