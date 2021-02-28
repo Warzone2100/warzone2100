@@ -59,10 +59,10 @@ void	setDifficultyLevel(DIFFICULTY_LEVEL lev)
 		setDamageModifiers(100, 100);
 		break;
 	case	DL_HARD:
-		setDamageModifiers(100, 105);
+		setDamageModifiers(100, 110);
 		break;
 	case	DL_INSANE:
-		setDamageModifiers(80, 110);
+		setDamageModifiers(80, 120);
 		break;
 	}
 	presDifLevel = lev;
