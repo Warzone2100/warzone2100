@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 06:36\n"
+"PO-Revision-Date: 2021-02-28 18:34\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -5773,7 +5773,7 @@ msgstr "Не получилось получить ответ от лобби!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Меню"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5803,11 +5803,11 @@ msgstr ""
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Копировать путь в буфер обмена"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Копировать JSON в буфер обмена"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
@@ -6818,7 +6818,7 @@ msgstr "Штурмовая пушка"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:851
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Бункер со Штурмовым орудием"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6830,7 +6830,7 @@ msgstr "Установка штурмового орудия"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Укрепленная башня с Штурмовым пулеметом 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -7209,7 +7209,7 @@ msgstr "Прочность корпуса: Очень низкая"
 #: po/custom/fromJson.txt:1191
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Урон бомб +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -9993,7 +9993,7 @@ msgstr "Улучшение лазерной оптики: снижает рас�
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3040
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Установка Адской гаубицы 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
@@ -10025,7 +10025,7 @@ msgstr "Адская гаубица"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3057
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Адский миномётный окоп 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -14574,20 +14574,20 @@ msgstr "Стратегия"
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr ""
+msgstr "Общий"
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
 msgid "Allies"
-msgstr ""
+msgstr "Союзники"
 
 #: src/chat.cpp:71
 msgid "private to "
-msgstr ""
+msgstr "приват "
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr ""
+msgstr " и "
 
 #: src/cheat.cpp:182
 #, c-format
@@ -14766,7 +14766,7 @@ msgstr ""
 
 #: src/clparse.cpp:373
 msgid "Set JS backend"
-msgstr ""
+msgstr "Установить JS бэкэнд"
 
 #: src/clparse.cpp:378
 msgid "Run games automatically for testing"
@@ -14774,7 +14774,7 @@ msgstr "Запуск игр автоматически для тестирова
 
 #: src/clparse.cpp:379
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Режим без графики (поддерживается только с --autogame, --autohost, --skirmish)"
 
 #: src/clparse.cpp:380
 msgid "Immediately save game and quit"
@@ -14814,15 +14814,15 @@ msgstr "авторейтинг"
 
 #: src/clparse.cpp:386
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Прикрепить или создать окно консоли и выводить информацию в него (только для Windows)"
 
 #: src/clparse.cpp:388
 msgid "Set game server port"
-msgstr ""
+msgstr "Установить порт игрового сервера"
 
 #: src/clparse.cpp:388
 msgid "port"
-msgstr ""
+msgstr "порт"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15080,12 +15080,12 @@ msgstr "Нормальная"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
 msgid "NEXUS"
-msgstr ""
+msgstr "НЕКСУС"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:176
 msgid "Collective"
-msgstr ""
+msgstr "Альянс"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
@@ -15278,7 +15278,7 @@ msgstr "Раскладка клавиатуры"
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:495
 msgid "Music Manager"
-msgstr ""
+msgstr "Менеджер Музыки"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
@@ -15405,7 +15405,7 @@ msgstr "Переход по карте"
 
 #: src/frontend.cpp:791
 msgid "Screen Shake"
-msgstr ""
+msgstr "Встряхивание экрана"
 
 #: src/frontend.cpp:795
 msgid "GRAPHICS OPTIONS"
@@ -15532,7 +15532,7 @@ msgstr "Настройки видео"
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Не удается изменить режим окна"
 
 #: src/frontend.cpp:1488
 msgid "Warzone failed to change the Window mode.\n"
@@ -17301,11 +17301,11 @@ msgstr "Применен лимит строений."
 
 #: src/multiint.cpp:1280
 msgid "Vote"
-msgstr ""
+msgstr "Голосование"
 
 #: src/multiint.cpp:1281
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Разрешить хосту смену карты или рандомизацию настроек?"
 
 #: src/multiint.cpp:1312
 msgid "Not enough votes to randomize or change the map."
@@ -17453,7 +17453,7 @@ msgstr "Хост выкинул %s из игры!"
 #: src/multiint.cpp:3897
 #: src/multimenu.cpp:1245
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "Хост выгнал вас из игры."
 
 #: src/multiint.cpp:2486
 msgid "Click to change difficulty"
@@ -17505,7 +17505,7 @@ msgstr "Нажмите, чтобы изменить цвет игрока"
 
 #: src/multiint.cpp:2661
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Нажмите, чтобы изменить фракцию игрока"
 
 #: src/multiint.cpp:2686
 msgid "Click to change player position"
@@ -17525,7 +17525,7 @@ msgstr "(нет)"
 
 #: src/multiint.cpp:2761
 msgid "Kicked from game"
-msgstr ""
+msgstr "Кикнут из игры"
 
 #: src/multiint.cpp:2960
 msgid "CHAT"
@@ -17654,7 +17654,7 @@ msgstr "Передача файла была прервана на %d."
 
 #: src/multijoin.cpp:390
 msgid "The game is already full."
-msgstr ""
+msgstr "Игра уже заполнена."
 
 #: src/multijoin.cpp:465
 #, c-format
@@ -17663,7 +17663,7 @@ msgstr "%s (%u) имеет несовместимый мод и отключён
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "Ваши данные не совпадают с хостом!"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17706,7 +17706,7 @@ msgstr "Ограничения сброшены к настройкам по у�
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Ограничения сброшены к настройкам по умолчанию"
 
 #: src/multimenu.cpp:532
 msgid "Any number of players"
@@ -17902,15 +17902,15 @@ msgstr ""
 #: src/musicmanager.cpp:532
 #: src/musicmanager.cpp:678
 msgid "Album"
-msgstr ""
+msgstr "Альбом"
 
 #: src/musicmanager.cpp:543
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: src/musicmanager.cpp:669
 msgid "Title"
-msgstr ""
+msgstr "Название"
 
 #: src/musicmanager.cpp:856
 msgid "MUSIC MANAGER"
@@ -18386,5 +18386,5 @@ msgstr "ВЫ ПРОИГРАЛИ!"
 
 #: src/wzscriptdebug.cpp:1813
 msgid "Script Debugger"
-msgstr ""
+msgstr "Отладчик скриптов"
 
