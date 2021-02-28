@@ -3,7 +3,7 @@ Release Checklist
 
 Preliminary Testing
 -------------------
-While the CI builds on GitHub (via `GitHub Actions`, `Azure Pipelines`, etc) can be used to check that it compiles fine on Linux, macOS & Windows, it can't actually tell you if it works.
+While the CI builds on GitHub (via `GitHub Actions`, etc) can be used to check that it compiles fine on Linux, macOS & Windows, it can't actually tell you if it works.
 You should locally test whether the latest commit's build actually runs, in both single & skirmish and multiplayer!
 Of course, it is always nice to gather up enough volunteers to test before you actually make releases.
 
@@ -44,7 +44,7 @@ Wait for all CI builds to complete, and verify they have completed successfully.
 [![Ubuntu](https://github.com/Warzone2100/warzone2100/workflows/Ubuntu/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
 [![Fedora](https://github.com/Warzone2100/warzone2100/workflows/Fedora/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AFedora+branch%3Amaster+event%3Apush)
 [![Windows](https://github.com/Warzone2100/warzone2100/workflows/Windows/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+branch%3Amaster+event%3Apush)
-[![Azure Build Status](https://dev.azure.com/wz2100/warzone2100/_apis/build/status/Build?branchName=master)](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
+[![macOS](https://github.com/Warzone2100/warzone2100/workflows/macOS/badge.svg?branch=master&event=push)](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
 [![Drone Cloud CI ARM64 Build Status](https://img.shields.io/drone/build/Warzone2100/warzone2100/master?label=ARM64%20Linux)](https://cloud.drone.io/Warzone2100/warzone2100)
 
 Can be flakey:
@@ -59,8 +59,8 @@ The latest CI (master branch) builds may be downloaded from:
    * Select the latest "Windows" workflow run, download the `warzone2100_win_*_portable` and `warzone2100_win_*_installer` artifacts.
    * (Note: These will be a .zip _of_ the .exe. Only the .exe gets automatically uploaded on release.)
    * Test both the portable and regular installers!
-* [MacOS Build](https://dev.azure.com/wz2100/warzone2100/_build/latest?definitionId=1&branchName=master)
-   * Under "Artifacts:", click the "\<N\> published" link, then select the `warzone2100_macOS` artifact.
+* [macOS Build](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+branch%3Amaster+event%3Apush)
+   * Select the latest "macOS" workflow run, download the `warzone2100_macOS_universal` and `warzone2100_macOS_universal_novideos` artifacts.
    * (Note: This may be a .zip _of_ a .zip. Only the inner .zip gets automatically uploaded on release.)
 * [Source Tarball](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+branch%3Amaster+event%3Apush)
    * Select the latest "Ubuntu" workflow run, download the `warzone2100_src` artifact.
@@ -97,11 +97,11 @@ Create the tag for the new release
 
 Since everything works (since you tested it), it is time to make the **annotated** tag. Verify you are on the appropriate branch + commit, then tag it:
 
-    git tag -a 3.3.0
+    git tag -a 4.0.0
     git push
-    git push origin 3.3.0
+    git push origin 4.0.0
 
-Where `3.3.0` is the name of the tag.
+Where `4.0.0` is the name of the tag.
 
 > ### Always forwards
 > _Do **NOT** re-use an existing tag / tag that was previously used!_
@@ -142,16 +142,19 @@ the CI -> GitHub integration breaks).
       - [x] `warzone2100_win_x86.DEBUGSYMBOLS.7z`
       - [x] `warzone2100_win_x86_installer.exe`
       - [x] `warzone2100_win_x86_portable.exe`
+      - [x] `warzone2100_win_x64.DEBUGSYMBOLS.7z`
+      - [x] `warzone2100_win_x64_installer.exe`
+      - [x] `warzone2100_win_x64_portable.exe`
    - [x] Verify the SHA512 hashes towards the end of the [Windows workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+event%3Apush) log match the files you downloaded.
       - [x] **Make sure you are viewing the build for the _tag_ you just made**
-      - [x] Select the appropriate job (x86, etc).
+      - [x] Select the appropriate job (x86, x64, etc).
       - [x] Expand the "Compare Build Outputs" step, which outputs the SHA512 hashes at the bottom of its output.
    - [x] Download the macOS build from the draft release:
       - [x] `warzone2100_macOS.zip`
-   - [x] Verify the SHA512 hash in the [Azure Pipelines](https://dev.azure.com/wz2100/warzone2100/_build?definitionId=1&_a=summary) build log matches the file you downloaded.
+   - [x] Verify the SHA512 hash towards the end of the [macOS workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+event%3Apush) log matches the file you downloaded.
       - [x] **Make sure you are viewing the build for the _tag_ you just made**
-      - [x] Select the `macOS [Xcode 10.3, macOS 10.14 SDK]` job
-      - [x] Scroll down to the `Output build info` step, which outputs the SHA512 at the bottom of its output.
+      - [x] Select the `Package Universal Binary` job
+      - [x] Scroll down to the `Output Build Info` step(s), which output the SHA512 at the bottom of their output.
    - [x] Download the tag's source tarball from the draft release:
       - [x] `warzone2100_src.tar.xz`
    - [x] Verify the SHA512 hash towards the end of the [Ubuntu workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+event%3Apush+) ("Package Source" job) log matches the file you downloaded.
