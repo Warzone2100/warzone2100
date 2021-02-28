@@ -2,15 +2,34 @@
 //A way to control chat messages sent to Cobra AI.
 function sendChatMessage(msg, receiver)
 {
-	if (isDefined(msg))
+	if (!isDefined(msg))
 	{
-		if (!isDefined(receiver))
+		return;
+	}
+	if (!isDefined(receiver))
+	{
+		receiver = ALLIES;
+	}
+
+	if ((lastMsg !== msg) || (gameTime >= lastMsgThrottle + 15000))
+	{
+		lastMsg = msg;
+		lastMsgThrottle = gameTime;
+
+		if (receiver === ALLIES || receiver === ENEMIES)
 		{
-			receiver = ALLIES;
+			var players = playerAlliance(receiver === ALLIES);
+			for (var i = 0, len = players.length; i < len; ++i)
+			{
+				if (msg === "need power" && !playerData[players[i]].isAI)
+				{
+					continue; //don't spam humans with power requests.
+				}
+				chat(players[i], msg);
+			}
 		}
-		if (lastMsg !== msg)
+		else
 		{
-			lastMsg = msg;
 			chat(receiver, msg);
 		}
 	}
@@ -105,9 +124,9 @@ function eventChat(from, to, message)
 	}
 	else if (message === "need power")
 	{
-		if (playerPower(me) > 50)
+		if (playerPower(me) > 300)
 		{
-			donatePower(playerPower(me) / 2, from);
+			donatePower(playerPower(me) / 5, from);
 		}
 	}
 	else if (message === "need tank")

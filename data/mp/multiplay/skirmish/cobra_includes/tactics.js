@@ -229,6 +229,29 @@ function findNearestEnemyStructure(enemy)
 	return cacheThis(uncached, [enemy], "findNearestEnemyStructure" + enemy, 5000);
 }
 
+//Return information about the closest derrick of an enemy. Returns undefined otherwise.
+function findNearestEnemyDerrick(enemy)
+{
+	function uncached(enemy)
+	{
+		if (!isDefined(enemy))
+		{
+			enemy = getMostHarmfulPlayer();
+		}
+
+		var derr = enumStruct(enemy, structures.derricks).sort(distanceToBase);
+
+		if (derr.length > 0)
+		{
+			return objectInformation(derr[0]);
+		}
+
+		return undefined;
+	}
+
+	return cacheThis(uncached, [enemy], "findNearestEnemyDerrick" + enemy, 5000);
+}
+
 //Sensors know all your secrets. They will observe what is closest to Cobra base.
 function artilleryTactics()
 {
@@ -635,7 +658,7 @@ function haveEnoughUnitsForFirstAttack()
 
 function baseShuffleDefensePattern()
 {
-	if (gameTime < lastShuffleTime + 20000)
+	if (gameTime < lastShuffleTime + 40000)
 	{
 		return; //Prevent the dreadful jitter movement defense pattern.
 	}
@@ -657,7 +680,7 @@ function baseShuffleDefensePattern()
 	var x = sector.x1 + random(sector.x2);
 	var y = sector.y1 + random(sector.y2);
 
-	if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, x, y))
+	if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, x, y) || (enumRange(x, y, 7, ALLIES, false).length > 0))
 	{
 		return;
 	}
