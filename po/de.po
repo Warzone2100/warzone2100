@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 06:36\n"
+"PO-Revision-Date: 2021-02-28 18:34\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -188,7 +188,7 @@ msgstr "Wir orten feindliche Truppen an diesen Positionen."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr "Das ist unsere Chance das New Paradigm zu besiegen und ihre Basis zu zerstören."
+msgstr "Das ist unsere Chance, das New Paradigm zu besiegen und ihre Basis zu zerstören."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
@@ -320,7 +320,7 @@ msgstr "Die Technologie der synaptischen Verbindung wurde geborgen!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Erste Untersuchungen bestätigen, dass sie für das Projekt von großem Vorteil sein werden."
+msgstr "Erste Untersuchungen bestätigen, dass sie für das Projekt von großem Vorteil sein wird."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -483,7 +483,7 @@ msgstr "Daten aus der Basis des Kollektivs deuten auf die Anwesenheit des NEXUS-
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr "Bevor NEXUS sich selbst deaktiviert hat, bekamen wir Zugriff auf folgendes."
+msgstr "Bevor NEXUS sich selbst deaktiviert hat, bekamen wir Zugriff auf Folgendes."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
@@ -607,7 +607,7 @@ msgstr "BETABASISMISSION: NASDA-Zentrale einnehmen"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr "Nehmen Sie die NASDA-Zentrale ein, bevor NEXUS oder das Kollektiv sie verwenden können."
+msgstr "Nehmen Sie die NASDA-Zentrale ein, bevor NEXUS und das Kollektiv sie verwenden können."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
@@ -761,7 +761,7 @@ msgstr "Auf diesem NASDA-Gelände gab es eine oder mehrere Raketen."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr "Wir übermitteln die Koordinaten einer Landezone in der Nähe des Silos."
+msgstr "Wir übermitteln die Koordinaten einer Landezone in der Nähe der Silos."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
@@ -3843,7 +3843,7 @@ msgstr "Erhöht Feuerrate von Maschinengewehren"
 #: data/mp/messages/strings/resstrings.txt:412
 #: po/custom/fromJson.txt:3632
 msgid "May be assigned to a sensor"
-msgstr "Kann Sensoren zugewiesen werden"
+msgstr "Kann einem Sensor zugewiesen werden"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
@@ -4675,7 +4675,7 @@ msgstr "Es gab auch bodengestützte Einrichtungen. Viele von ihnen wurden währe
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:10
 msgid "The NASDA satellites also contained pulse-lasers designed to shoot down missiles approaching North America."
-msgstr "Die NASDA-Satelliten verfügen auch über Pulslaser, die Nordamerika anfliegende Raketen zerstören sollten."
+msgstr "Die NASDA-Satelliten verfügten auch über Pulslaser, die Nordamerika anfliegende Raketen zerstören sollten."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
@@ -5385,7 +5385,7 @@ msgstr "Turm mit Lancer"
 
 #: data/mp/messages/strings/names.txt:428
 msgid "Advanced Manufacturing Mk3"
-msgstr "Fortschrittliche Fertigung Mk3"
+msgstr "Fortschrittliche Produktion Mk3"
 
 #: data/mp/messages/strings/names.txt:436
 msgid "Robotic Repair Facility Mk3"
@@ -5772,7 +5772,7 @@ msgstr "Keine Lobbyantwort erhalten!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menü"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5782,19 +5782,19 @@ msgstr "Kampagne"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Herausforderung"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Geplänkel"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Mehrspieler"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Menümusik"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
@@ -5802,15 +5802,15 @@ msgstr ""
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Pfad in die Zwischenablage kopieren"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "JSON in die Zwischenablage kopieren"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Gib JSON auf der Konsole aus"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -5832,7 +5832,7 @@ msgstr "Schweres 12,7-mm-Maschinengewehr"
 #. data/mp/messages/resmessages23.json: $.RES_W_RHOW.text[1]
 #: po/custom/fromJson.txt:16
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "Mehrläufige 105-mm-Haubitze kann Sensoren zugewiesen werden"
+msgstr "Mehrläufige 105-mm-Haubitze kann einem Sensor zugewiesen werden"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[1]
@@ -5916,7 +5916,7 @@ msgstr "Aufhängung mit Flugabwehrkanone"
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Flak Cannon Python Half-tracks"
-msgstr "Flugabwehrkanone Python Ketten"
+msgstr "Flugabwehrkanone Python Halbketten"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
@@ -6065,7 +6065,7 @@ msgstr "Fortschrittliches Beschussortungssystem"
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade07.name
 #: po/custom/fromJson.txt:196
 msgid "Advanced Manufacturing"
-msgstr "Fortschrittliche Fertigung"
+msgstr "Fortschrittliche Produktion"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-ROF02.name
@@ -6817,7 +6817,7 @@ msgstr "Sturmkanone"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:851
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Sturmgewehrbunker"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6829,7 +6829,7 @@ msgstr "Stellung mit Sturmgewehr"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Wachturm mit Sturmgewehr 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -6962,7 +6962,7 @@ msgstr "Automatisierte Fabrikproduktion"
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade01.name
 #: po/custom/fromJson.txt:939
 msgid "Automated Manufacturing"
-msgstr "Automatisierte Fertigung"
+msgstr "Automatisierte Produktion"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_ROF1.text[1]
@@ -7208,7 +7208,7 @@ msgstr "Rumpfpunkte: sehr niedrig"
 #: po/custom/fromJson.txt:1191
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Bombenschaden +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7807,7 +7807,7 @@ msgstr "Counter-Battery-Feuer hält an, bis die feindliche Stellung vernichtet i
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[1]
 #: po/custom/fromJson.txt:1556
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Counter-Battery-Türme orten feindliche indirektfeuernde Stellungen"
+msgstr "Counter-Battery-Turm ortet feindliche indirektfeuernde Stellungen"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
@@ -9938,7 +9938,7 @@ msgstr "Verbesserte Raketendrahtlenkung"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[3]
 #: po/custom/fromJson.txt:3000
 msgid "Improved sensor range"
-msgstr "Erhöht Sensorreichweite"
+msgstr "Erhöhte Sensorreichweite"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_D1.text[1]
@@ -9992,7 +9992,7 @@ msgstr "Verbesserte Laseroptik reduziert Lichtstreuung"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3040
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Stellung mit Brandhaubitze 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
@@ -10011,7 +10011,7 @@ msgstr "Stellung mit Brandhaubitze"
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 #: po/custom/fromJson.txt:3050
 msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr "Brandhaubitze kann Sensoren zugewiesen werden"
+msgstr "Brandhaubitze kann einem Sensor zugewiesen werden"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Incendiary.name
@@ -10024,7 +10024,7 @@ msgstr "Brandhaubitze"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3057
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Brandmörsergrube 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -10093,7 +10093,7 @@ msgstr "Erhöht Feuerrate von Flammenwerfern"
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[2]
 #: po/custom/fromJson.txt:3168
 msgid "Increases Laser accuracy"
-msgstr "Erhöht Genauigkeit von Lasern"
+msgstr "Erhöht Genauigkeit von Laserwaffen"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text[2]
@@ -11662,7 +11662,7 @@ msgstr "Oder wählen Sie die Reparatureinrichtung als Ziel der Einheit aus"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[2]
 #: po/custom/fromJson.txt:4286
 msgid "Orders assigned indirect fire units to fire at the enemy batteries"
-msgstr "Weist die zugewiesenen indirektfeuernden Einheiten an auf Feindstellungen zu feuern"
+msgstr "Weist die zugewiesenen indirektfeuernden Einheiten an, auf Feindstellungen zu feuern"
 
 #. TRANSLATORS:
 #. data/base/ruleset.json: $.name
@@ -12456,7 +12456,7 @@ msgstr "Robotergestützter Lademechanismus befördert Geschosse schneller in den
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade04.name
 #: po/custom/fromJson.txt:4814
 msgid "Robotic Manufacturing"
-msgstr "Robotergestützte Fertigung"
+msgstr "Robotergestützte Produktion"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RprFac-Upgrade05.name
@@ -12520,7 +12520,7 @@ msgstr "Raketengenauigkeit +10%"
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
 #: po/custom/fromJson.txt:4855
 msgid "Rocket artillery; can be assigned to a sensor"
-msgstr "Raketenartillerie; kann Sensoren zugewiesen werden"
+msgstr "Raketenartillerie; kann einem Sensor zugewiesen werden"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF02.name
@@ -12831,7 +12831,7 @@ msgstr "Selbstständig zielsuchende raketengetriebene Geschosse"
 #. data/mp/stats/research.json: $.R-Struc-Factory-Upgrade09.name
 #: po/custom/fromJson.txt:5053
 msgid "Self-Replicating Manufacturing"
-msgstr "Selbstreplizierende Fertigung"
+msgstr "Selbstreplizierende Produktion"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
@@ -14573,20 +14573,20 @@ msgstr "Strategiespiel"
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
 msgid "Allies"
-msgstr ""
+msgstr "Verbündete"
 
 #: src/chat.cpp:71
 msgid "private to "
-msgstr ""
+msgstr "direkt an "
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr ""
+msgstr " und "
 
 #: src/cheat.cpp:182
 #, c-format
@@ -14765,7 +14765,7 @@ msgstr "Gfx Backend-Debug verwenden"
 
 #: src/clparse.cpp:373
 msgid "Set JS backend"
-msgstr ""
+msgstr "JS Backend setzen"
 
 #: src/clparse.cpp:378
 msgid "Run games automatically for testing"
@@ -14813,15 +14813,15 @@ msgstr "Autorating"
 
 #: src/clparse.cpp:386
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Ein Konsolenfenster anhängen oder erstellen und Konsolenausgabe anzeigen (nur Windows)"
 
 #: src/clparse.cpp:388
 msgid "Set game server port"
-msgstr ""
+msgstr "Gameserver Port festlegen"
 
 #: src/clparse.cpp:388
 msgid "port"
-msgstr ""
+msgstr "Port"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15071,12 +15071,12 @@ msgstr "Normal"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:176
 msgid "Collective"
-msgstr ""
+msgstr "Kollektiv"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
@@ -15269,7 +15269,7 @@ msgstr "Tastenzuordnung"
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:495
 msgid "Music Manager"
-msgstr ""
+msgstr "Musik-Manager"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
@@ -15396,7 +15396,7 @@ msgstr "Minikartensprung"
 
 #: src/frontend.cpp:791
 msgid "Screen Shake"
-msgstr ""
+msgstr "Bildschirmerschütterung"
 
 #: src/frontend.cpp:795
 msgid "GRAPHICS OPTIONS"
@@ -15463,7 +15463,8 @@ msgstr "AUDIO- UND ZOOM-\n"
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "Im Desktop Vollbild-Modus stimmt die Auflösung mit der Deines Desktops \n"
+"(oder was der Fenstermanager zulässt) überein."
 
 #: src/frontend.cpp:1093
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15524,12 +15525,13 @@ msgstr "VIDEOEINSTELLUNGEN"
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Fenstermodus kann nicht geändert werden"
 
 #: src/frontend.cpp:1488
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone konnte den Fenstermodus nicht ändern.\n"
+"Dein System / Treiber unterstützen möglicherweise keine anderen Modi."
 
 #: src/frontend.cpp:1514
 msgid "Unable to change Vertical Sync"
@@ -15637,7 +15639,7 @@ msgstr "Geplänkel/Mehrspieler"
 
 #: src/frontend.cpp:1894
 msgid "Click to open webpage."
-msgstr "Hier klicken, um die Internetseite zu öffnen."
+msgstr "Internetseite öffnen."
 
 #: src/frontend.cpp:1897
 #: src/frontend.cpp:1916
@@ -15651,38 +15653,38 @@ msgstr "Mod: "
 
 #: src/frontend.cpp:2471
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Den Anzeigemaßstab erhöhen?"
 
 #: src/frontend.cpp:2473
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Mit Deinen aktuellen Auflösungs- und Anzeigeeinstellungen kann die Benutzeroberfläche des Spiels klein erscheinen und die Spielperspektive könnte verzerrt erscheinen."
 
 #: src/frontend.cpp:2475
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Du kannst das beheben, indem Du den Anzeigemaßstab des Spiels erhöht."
 
 #: src/frontend.cpp:2477
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Möchtest Du den Anzeigemaßstab des Spiels auf %u%% erhöhen?"
 
 #: src/frontend.cpp:2479
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Anzeigemaßstab erhöhen"
 
 #: src/frontend.cpp:2496
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Anzeigemaßstab erhöht auf: %u%%"
 
 #: src/frontend.cpp:2497
 #: src/frontend.cpp:2513
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Du kannst die Anzeige-Skala jederzeit im Menü Videoeinstellungen anpassen."
 
 #: src/frontend.cpp:2512
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Tipp: Anzeigemaßstab anpassen"
 
 #: src/hci.cpp:929
 #: src/loop.cpp:244
@@ -15821,7 +15823,7 @@ msgstr "Taktische Anzeige (Zielherkunftssymbol): Verstecken"
 #: src/keyedit.cpp:444
 #: src/musicmanager.cpp:777
 msgid "Go Back"
-msgstr ""
+msgstr "Zurück"
 
 #: src/ingameop.cpp:248
 #: src/ingameop.cpp:257
@@ -15860,7 +15862,7 @@ msgstr "Zeige Tastenzuordnungen"
 
 #: src/ingameop.cpp:553
 msgid "Shake"
-msgstr ""
+msgstr "Erschütterung"
 
 #: src/ingameop.cpp:943
 msgid "Save Campaign Game"
@@ -16331,39 +16333,39 @@ msgstr "Mauszeiger einfangen %s"
 
 #: src/keybind.cpp:1345
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "KAMPAGNE"
 
 #: src/keybind.cpp:1349
 msgid "CHALLENGE"
-msgstr ""
+msgstr "HERAUSFORDERUNG"
 
 #: src/keybind.cpp:1352
 msgid "SKIRMISH"
-msgstr ""
+msgstr "GEPLÄNKEL"
 
 #: src/keybind.cpp:1370
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "SCHWIERIGKEIT: EINFACH"
 
 #: src/keybind.cpp:1373
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "SCHWIERIGKEIT: NORMAL"
 
 #: src/keybind.cpp:1376
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "SCHWIERIGKEIT: SCHWER"
 
 #: src/keybind.cpp:1379
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "SCHWIERIGKEIT: VERRÜCKT"
 
 #: src/keybind.cpp:1387
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "CHEATS: AKTIVIERT"
 
 #: src/keybind.cpp:1389
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "CHEATS: DEAKTIVIERT"
 
 #: src/keybind.cpp:1445
 msgid "Researched EVERYTHING for you!"
@@ -16456,11 +16458,11 @@ msgstr "Richtung vertikaler Drehung: Vertauscht"
 
 #: src/keybind.cpp:2533
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Bildschirmerschütterung wenn Dinge sterben: Aus"
 
 #: src/keybind.cpp:2538
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Bildschirmerschütterung wenn Dinge sterben: An"
 
 #: src/keybind.cpp:2590
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -17140,7 +17142,7 @@ msgstr "Autosave-Verzeichnis (nicht zum Speichern erlaubt)"
 
 #: src/loadsave.cpp:540
 msgid "cheated"
-msgstr ""
+msgstr "cheated"
 
 #: src/loop.cpp:251
 #: src/loop.cpp:267
@@ -17298,7 +17300,7 @@ msgstr ""
 
 #: src/multiint.cpp:1281
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Spielleiter erlauben, die Karte zu ändern oder zufällig auszuwählen?"
 
 #: src/multiint.cpp:1312
 msgid "Not enough votes to randomize or change the map."
@@ -17446,7 +17448,7 @@ msgstr "Der Spielleiter hat %s aus dem Spiel geworfen!"
 #: src/multiint.cpp:3897
 #: src/multimenu.cpp:1245
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "Der Spielleiter hat Dich aus dem Spiel geworfen."
 
 #: src/multiint.cpp:2486
 msgid "Click to change difficulty"
@@ -17498,7 +17500,7 @@ msgstr "Klicken, um Spielerfarbe zu ändern"
 
 #: src/multiint.cpp:2661
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Klicken, um die Spielerfraktion zu ändern"
 
 #: src/multiint.cpp:2686
 msgid "Click to change player position"
@@ -17518,7 +17520,7 @@ msgstr "(keine)"
 
 #: src/multiint.cpp:2761
 msgid "Kicked from game"
-msgstr ""
+msgstr "Aus dem Spiel geworfen"
 
 #: src/multiint.cpp:2960
 msgid "CHAT"
@@ -17647,7 +17649,7 @@ msgstr "Dateiübertragung für %d abgebrochen."
 
 #: src/multijoin.cpp:390
 msgid "The game is already full."
-msgstr ""
+msgstr "Das Spiel ist bereits voll."
 
 #: src/multijoin.cpp:465
 #, c-format
@@ -17656,7 +17658,7 @@ msgstr "%s (%u) hat eine inkompatible Mod und wurde rausgeschmissen."
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "Deine Daten stimmen nicht mit denen des Spielleiters überein!"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17699,7 +17701,7 @@ msgstr "Beschränkungen auf Standardwerte zurückgesetzt"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Beschränkungen auf Standardwerte zurücksetzen"
 
 #: src/multimenu.cpp:532
 msgid "Any number of players"
@@ -17797,12 +17799,12 @@ msgstr "Werfe Spieler %s hinaus wegen des Versuchs die Datenintegritätsprüfung
 
 #: src/multiplay.cpp:272
 msgid "Invalid data!"
-msgstr ""
+msgstr "Ungültige Daten!"
 
 #: src/multiplay.cpp:895
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "Spieler %s automatisch rauswerfen, ungültigen Befehl erhalten."
 
 #: src/multiplay.cpp:1359
 msgid "Map was requested: SENDING MAP!"
@@ -17888,24 +17890,24 @@ msgstr "Braun"
 
 #: src/musicmanager.cpp:492
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "JETZT SPIELEN"
 
 #: src/musicmanager.cpp:532
 #: src/musicmanager.cpp:678
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/musicmanager.cpp:543
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: src/musicmanager.cpp:669
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: src/musicmanager.cpp:856
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "MUSIK-MANAGER"
 
 #: src/notifications.cpp:725
 msgid "Dismiss"
@@ -18371,5 +18373,5 @@ msgstr "SIE WURDEN BESIEGT!"
 
 #: src/wzscriptdebug.cpp:1813
 msgid "Script Debugger"
-msgstr ""
+msgstr "Skript Debugger"
 
