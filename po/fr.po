@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 06:36\n"
+"PO-Revision-Date: 2021-02-28 18:34\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -5769,7 +5769,7 @@ msgstr "L'antichambre le répond pas !"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5779,31 +5779,31 @@ msgstr "Campagne"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Défi"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Escarmouche"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multijoueur"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Musique du menu"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(Sans titre)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Copier la cible dans le presse-papier"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Copier au format JSON dans le presse-papier"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
@@ -6814,7 +6814,7 @@ msgstr "Canon d'assaut"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:851
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Bunker à canon d'assaut"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6826,7 +6826,7 @@ msgstr "Emplacement à fusil d'assaut"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Tour de garde à canon d'assaut 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -7205,7 +7205,7 @@ msgstr "Résistance : très faible"
 #: po/custom/fromJson.txt:1191
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Dégâts des bombes +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -9989,7 +9989,7 @@ msgstr "Des percées en optique réduisent la dispersion des rayons laser"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3040
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Emplacement à obusier incendiaire 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
@@ -10021,7 +10021,7 @@ msgstr "Obusier incendiaire"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3057
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Mortier incendiaire retranché"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -14570,20 +14570,20 @@ msgstr "Jeu de stratégie"
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
 msgid "Allies"
-msgstr ""
+msgstr "Alliés"
 
 #: src/chat.cpp:71
 msgid "private to "
-msgstr ""
+msgstr "privé à "
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr ""
+msgstr " et "
 
 #: src/cheat.cpp:182
 #, c-format
@@ -14762,7 +14762,7 @@ msgstr "Utiliser le débogage du backend gfx"
 
 #: src/clparse.cpp:373
 msgid "Set JS backend"
-msgstr ""
+msgstr "Définir le backend JS"
 
 #: src/clparse.cpp:378
 msgid "Run games automatically for testing"
@@ -14770,7 +14770,7 @@ msgstr "Lancer automatiquement les parties (test)"
 
 #: src/clparse.cpp:379
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Mode Headless (uniquement pris en charge lorsque vous spécifiez --autogame, --autohost, --skirmish)"
 
 #: src/clparse.cpp:380
 msgid "Immediately save game and quit"
@@ -14810,15 +14810,15 @@ msgstr "évaluation automatique"
 
 #: src/clparse.cpp:386
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Attachez ou créez une fenêtre de console et affichez la sortie de la console (Windows uniquement)"
 
 #: src/clparse.cpp:388
 msgid "Set game server port"
-msgstr ""
+msgstr "Définir le port du serveur de jeu"
 
 #: src/clparse.cpp:388
 msgid "port"
-msgstr ""
+msgstr "port"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14988,7 +14988,7 @@ msgstr "Construction impossible pour le moment. Le gisement de pétrole est en f
 #: src/display.cpp:1569
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Points de vie %d/%d - Expérience %.1f, %s, Tués %d"
 
 #: src/display.cpp:1731
 #, c-format
@@ -15068,12 +15068,12 @@ msgstr "Normale"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:176
 msgid "Collective"
-msgstr ""
+msgstr "Collectif"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
@@ -15266,7 +15266,7 @@ msgstr "Raccourcis clavier"
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:495
 msgid "Music Manager"
-msgstr ""
+msgstr "Gestionnaire de musique"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
@@ -15393,7 +15393,7 @@ msgstr "Saut Mini-carte"
 
 #: src/frontend.cpp:791
 msgid "Screen Shake"
-msgstr ""
+msgstr "Vibrations de l’écran"
 
 #: src/frontend.cpp:795
 msgid "GRAPHICS OPTIONS"
@@ -15459,7 +15459,8 @@ msgstr "OPTIONS AUDIO / ZOOM"
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "En mode bureau plein écran, la résolution correspond à celle de votre bureau \n"
+"(ou ce que le gestionnaire de fenêtres permet)."
 
 #: src/frontend.cpp:1093
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15467,7 +15468,7 @@ msgstr "Vous pouvez changer la résolution en redimensionnant la fenêtre normal
 
 #: src/frontend.cpp:1123
 msgid "Desktop Full"
-msgstr ""
+msgstr "Bureau complet"
 
 #: src/frontend.cpp:1125
 msgid "Windowed"
@@ -15520,12 +15521,13 @@ msgstr "OPTIONS VIDÉO"
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Impossible de changer le mode fenêtre"
 
 #: src/frontend.cpp:1488
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone n'a pas pu changer le mode fenêtre.\n"
+"Votre système / vos pilotes peuvent ne pas prendre en charge d'autres modes."
 
 #: src/frontend.cpp:1514
 msgid "Unable to change Vertical Sync"
@@ -15646,15 +15648,15 @@ msgstr "Mode(s) : "
 
 #: src/frontend.cpp:2471
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Augmenter l'échelle d'affichage du jeu ?"
 
 #: src/frontend.cpp:2473
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Avec vos paramètres de résolution et d'échelle d'affichage actuels, l'interface utilisateur du jeu peut sembler petite, et la perspective du jeu peut sembler déformée."
 
 #: src/frontend.cpp:2475
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Vous pouvez corriger cela en augmentant l'échelle d'affichage du jeu."
 
 #: src/frontend.cpp:2477
 #, c-format
