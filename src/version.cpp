@@ -57,27 +57,30 @@ static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
 		}
 	}
 
-	TagVer result;
 	std::smatch base_match;
-	const std::regex semver_regex("^([0-9]+)(.[0-9]+)?(.[0-9]+)?");
-	if (std::regex_match(tagStr, base_match, semver_regex))
+	const std::regex semver_regex("^([0-9]+)(.[0-9]+)?(.[0-9]+)?.*");
+	if (!std::regex_match(tagStr, base_match, semver_regex))
 	{
-		// base_match[0] is the whole string
-		const size_t matchCount = base_match.size();
-		switch (matchCount)
-		{
-			case 4:
-				result.revision = base_match[3].str().substr(1); // remove the "." prefix
-				// fallthrough
-			case 3:
-				result.minor = base_match[2].str().substr(1); // remove the "." prefix
-				result.major = base_match[1].str();
-				break;
-			default:
-				// failure
-				return nullopt;
-				break;
-		}
+		// regex failure
+		return nullopt;
+	}
+
+	TagVer result;
+	// base_match[0] is the whole string
+	const size_t matchCount = base_match.size();
+	switch (matchCount)
+	{
+		case 4:
+			result.revision = base_match[3].str().substr(1); // remove the "." prefix
+			// fallthrough
+		case 3:
+			result.minor = base_match[2].str().substr(1); // remove the "." prefix
+			result.major = base_match[1].str();
+			break;
+		default:
+			// failure
+			return nullopt;
+			break;
 	}
 
 	return result;
