@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 18:34\n"
+"PO-Revision-Date: 2021-03-01 06:35\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -5798,7 +5798,7 @@ msgstr "Menümusik"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(unbenannt)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
@@ -14773,7 +14773,7 @@ msgstr "Spiele zum Testen automatisch laufen lassen"
 
 #: src/clparse.cpp:379
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Server-Modus (wird nur unterstützt, wenn --autogame, --autohost, --skirmish spezifiziert ist)"
 
 #: src/clparse.cpp:380
 msgid "Immediately save game and quit"
@@ -17296,7 +17296,7 @@ msgstr "Gebäudebeschränkungen erzwungen."
 
 #: src/multiint.cpp:1280
 msgid "Vote"
-msgstr ""
+msgstr "Abstimmen"
 
 #: src/multiint.cpp:1281
 msgid "Allow host to change map or randomize?"
