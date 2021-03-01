@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-01 06:35\n"
+"PO-Revision-Date: 2021-03-01 18:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15472,7 +15472,7 @@ msgstr "Sie können die Auflösung durch bloße Größenänderungen des Fensters
 
 #: src/frontend.cpp:1123
 msgid "Desktop Full"
-msgstr ""
+msgstr "Kompletter Bildschirm"
 
 #: src/frontend.cpp:1125
 msgid "Windowed"
