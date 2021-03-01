@@ -6743,7 +6743,11 @@ UDWORD structPowerToBuildOrAddNextModule(const STRUCTURE *psStruct)
 	if (psStruct->capacity)
 	{
 		STRUCTURE_STATS *psStats = getModuleStat(psStruct);
-		return psStats->powerToBuild; // return the cost to build the module
+		ASSERT(psStats != nullptr, "getModuleStat returned null");
+		if (psStats)
+		{
+			return psStats->powerToBuild; // return the cost to build the module
+		}
 	}
 	// no module attached so building the base structure
 	return psStruct->pStructureType->powerToBuild;
