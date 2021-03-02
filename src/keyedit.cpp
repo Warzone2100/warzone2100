@@ -494,9 +494,10 @@ static std::vector<std::reference_wrapper<const KeyMapping>> getVisibleMappings(
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
 			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
-			if (const auto mapping = inputManager.getMapping(info, slot))
+			if (const nonstd::optional<std::reference_wrapper<KeyMapping>> maybeMapping = inputManager.getMapping(info, slot))
 			{
-				visibleMappings.push_back(*mapping);
+				const KeyMapping& mapping = maybeMapping.value();
+				visibleMappings.push_back(mapping);
 			}
 		}
 	}
