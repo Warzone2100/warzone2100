@@ -145,7 +145,7 @@ KeyFunctionInfo::KeyFunctionInfo(
 	const InputContext& context,
 	const KeyMappingType type,
 	const MappableFunction function,
-	const std::string saveId
+	const std::string name
 )
 	: context(context)
 	, type(type)
@@ -525,40 +525,6 @@ static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 // ----------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------
-class KeyFunctionInfoTable {
-public:
-	KeyFunctionInfoTable(std::vector<KeyFunctionInfo>& items)
-		: ordered_list(std::move(items))
-	{
-		for (size_t i = 0; i < ordered_list.size(); ++i)
-		{
-			name_to_index_map[ordered_list[i].name] = i;
-		}
-	}
-public:
-	nonstd::optional<std::reference_wrapper<const KeyFunctionInfo>> keyFunctionInfoByName(std::string const &name) const
-	{
-		auto it = name_to_index_map.find(name);
-		if (it != name_to_index_map.end()) {
-			return ordered_list[it->second];
-		}
-		return nonstd::nullopt;
-	}
-
-	const KeyFunctionEntries allKeyFunctionEntries() const
-	{
-		KeyFunctionEntries entries;
-		for (auto const& keyFunctionInfo : ordered_list)
-		{
-			entries.push_back(keyFunctionInfo);
-		}
-		return entries;
-	}
-private:
-	const std::vector<KeyFunctionInfo> ordered_list;
-	std::unordered_map<std::string, size_t> name_to_index_map;
-};
-
 // Definitions/Configuration for all mappable Key Functions
 //
 // NOTE: The initialization is done as a function with bunch of emplace_backs instead of an initializer list for two reasons:
@@ -566,9 +532,8 @@ private:
 //            types to be copyable, so we cannot use initializer lists, at all (we use move-semantics with std::move instead)
 //        2.) The initializer list itself would require >20kb of stack memory due to sheer size of this thing. Inserting all
 //            entries one-by-one requires only one entry on the stack at a time, mitigating the risk of a stack overflow.
-static KeyFunctionInfoTable initializeKeyFunctionInfoTable()
+static void initializeKeyFunctionInfoTable(std::vector<KeyFunctionInfo>& entries)
 {
-	std::vector<KeyFunctionInfo> entries;
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,   KeyMappingType::FIXED,       kf_ChooseManufacture,                                          "ChooseManufacture",            N_("Manufacture"),                                  {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_IGNORE,   KEY_CODE::KEY_F1,           KeyAction::PRESSED}}}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,   KeyMappingType::FIXED,       kf_ChooseResearch,                                             "ChooseResearch",               N_("Research"),                                     {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_IGNORE,   KEY_CODE::KEY_F2,           KeyAction::PRESSED}}}));
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,   KeyMappingType::FIXED,       kf_ChooseBuild,                                                "ChooseBuild",                  N_("Build"),                                        {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_IGNORE,   KEY_CODE::KEY_F3,           KeyAction::PRESSED}}}));
@@ -751,10 +716,42 @@ static KeyFunctionInfoTable initializeKeyFunctionInfoTable()
 
 	// Hidden/"Hardcoded" mappings
 	entries.emplace_back(KeyFunctionInfo(InputContext::ALWAYS_ACTIVE,   KeyMappingType::HIDDEN,      kf_ToggleFullscreen,                                           "ToggleFullscreen",             N_("Toggle fullscreen"),                            {{KeyMappingSlot::PRIMARY, {KEY_CODE::KEY_LALT,     KEY_CODE::KEY_RETURN,       KeyAction::PRESSED}}}));
-
-	return KeyFunctionInfoTable(entries);
 }
-static const KeyFunctionInfoTable keyFunctionInfoTable = initializeKeyFunctionInfoTable();
+
+static const class KeyFunctionInfoTable {
+public:
+	KeyFunctionInfoTable()
+	{
+		initializeKeyFunctionInfoTable(entries);
+		for (size_t i = 0; i < entries.size(); ++i)
+		{
+			nameToIndexMap[entries[i].name] = i;
+		}
+	}
+public:
+	nonstd::optional<std::reference_wrapper<const KeyFunctionInfo>> keyFunctionInfoByName(std::string const& name) const
+	{
+		auto it = nameToIndexMap.find(name);
+		if (it != nameToIndexMap.end()) {
+			return entries[it->second];
+		}
+		return nonstd::nullopt;
+	}
+
+	const KeyFunctionEntries allKeyFunctionEntries() const
+	{
+		KeyFunctionEntries entries;
+		for (auto const& keyFunctionInfo : ordered_list)
+		{
+			entries.push_back(keyFunctionInfo);
+		}
+		return entries;
+	}
+
+private:
+	std::vector<KeyFunctionInfo> entries;
+	std::unordered_map<std::string, size_t> nameToIndexMap;
+} keyFunctionInfoTable;
 
 const KeyFunctionEntries allKeyFunctionEntries()
 {
