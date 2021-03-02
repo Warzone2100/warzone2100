@@ -1221,7 +1221,7 @@ static bool recvVote(NETQUEUE queue)
 	uint32_t player;
 
 	NETbeginDecode(queue, NET_VOTE);
-	NETuint32_t(&player);
+	NETuint32_t(&player); // TODO: check that NETQUEUE belongs to that player :wink:
 	NETuint8_t(&newVote);
 	NETend();
 
@@ -1234,6 +1234,13 @@ static bool recvVote(NETQUEUE queue)
 	playerVotes[player] = (newVote == 1) ? 1 : 0;
 
 	debug(LOG_NET, "total votes: %d/%d", static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
+
+	// there is no "votes" that disallows map change so assume they are all allowing
+	if(newVote == 1) {
+		char msg[128] = {0};
+		snprintf(msg, 127, _("%s (%d) allowed map change. Total: %d/%d"), NetPlay.players[player].name, player, static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
+		sendRoomChatMessage(msg);
+	}
 
 	return true;
 }
