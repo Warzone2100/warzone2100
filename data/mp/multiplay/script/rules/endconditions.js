@@ -44,20 +44,20 @@ function inOneTeam(playnum, splaynum)
 
 function hasFactory(playnum)
 {
-	var structs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY];
+	let structs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY];
 
-	for (var splaynum = 0; splaynum < maxPlayers; splaynum++)
+	for (let splaynum = 0; splaynum < maxPlayers; splaynum++)
 		{
 		if (!inOneTeam(playnum, splaynum))
 		{
 			continue;
 		}
 
-		for (var i = 0; i < structs.length; ++i)
+		for (let i = 0; i < structs.length; ++i)
 		{
-			var onMapStructss = enumStruct(splaynum, structs[i]);
+			let onMapStructss = enumStruct(splaynum, structs[i]);
 
-			for (var j = 0; j < onMapStructss.length; ++j)
+			for (let j = 0; j < onMapStructss.length; ++j)
 			{
 				if (onMapStructss[j].status === BUILT)
 				{
@@ -72,7 +72,7 @@ function hasFactory(playnum)
 
 function hasDroid(playnum)
 {
-	for (var splaynum = 0; splaynum < maxPlayers; splaynum++)
+	for (let splaynum = 0; splaynum < maxPlayers; splaynum++)
 	{
 		if (inOneTeam(playnum, splaynum) && countDroid(DROID_ANY, splaynum) > 0)	// checking enemy player
 		{
@@ -85,8 +85,8 @@ function hasDroid(playnum)
 
 function hasOnlyConstructor(playnum)
 {
-	var count = 0;
-	for (var splaynum = 0; splaynum < maxPlayers; splaynum++)
+	let count = 0;
+	for (let splaynum = 0; splaynum < maxPlayers; splaynum++)
 	{
 		if (inOneTeam(playnum, splaynum))
 		{
@@ -99,16 +99,16 @@ function hasOnlyConstructor(playnum)
 
 function canReachOil(playnum)
 {
-	var oils = enumFeature(ALL_PLAYERS).filter(function(e) {
+	let oils = enumFeature(ALL_PLAYERS).filter(function(e) {
 		return e.stattype === OIL_RESOURCE;
 	});
 
-	for (var tplaynum = 0; tplaynum < maxPlayers; tplaynum++)
+	for (let tplaynum = 0; tplaynum < maxPlayers; tplaynum++)
 	{
 		oils = oils.concat(enumStruct(tplaynum, "A0ResourceExtractor"));
 	}
 
-	for (var splaynum = 0; splaynum < maxPlayers; splaynum++)
+	for (let splaynum = 0; splaynum < maxPlayers; splaynum++)
 	{
 		if (!inOneTeam(playnum, splaynum))
 		{
@@ -121,15 +121,15 @@ function canReachOil(playnum)
 		}
 		else
 		{
-			var trucks = enumDroid(splaynum, DROID_CONSTRUCT);
+			let trucks = enumDroid(splaynum, DROID_CONSTRUCT);
 
-			for (var i = 0, len = trucks.length; i < len; ++i)
+			for (let i = 0, len = trucks.length; i < len; ++i)
 			{
-				var truck = trucks[i];
+				let truck = trucks[i];
 
-				for (var j = 0, len2 = oils.length; j < len2; ++j)
+				for (let j = 0, len2 = oils.length; j < len2; ++j)
 				{
-					var oil = oils[j];
+					let oil = oils[j];
 
 					if (droidCanReach(truck, oil.x, oil.y))
 					{
@@ -145,7 +145,7 @@ function canReachOil(playnum)
 
 function activeGame(playnum)
 {
-	for (var splaynum = 0; splaynum < maxPlayers; splaynum++)
+	for (let splaynum = 0; splaynum < maxPlayers; splaynum++)
 	{
 		if (inOneTeam(playnum, splaynum) &&
 		playerData[playnum].lastActivity + IDLETIME >= gameTime)
@@ -159,15 +159,16 @@ function activeGame(playnum)
 
 function canPlay(playnum)
 {
-
-//	var feature = {
-//		factory: hasFactory(playnum),
-//		droid: hasDroid(playnum),
-//		onlyConstruct: hasOnlyConstructor(playnum),
-//		oilReach: canReachOil(playnum),
-//		activeGame: activeGame(playnum)
-//	};
-//	debug(playerData[playnum].name + JSON.stringify(feature));
+/*
+	let feature = {
+		factory: hasFactory(playnum),
+		droid: hasDroid(playnum),
+		onlyConstruct: hasOnlyConstructor(playnum),
+		oilReach: canReachOil(playnum),
+		activeGame: activeGame(playnum)
+	};
+	debug(playerData[playnum].name + JSON.stringify(feature));
+*/
 
 	if (!hasFactory(playnum) && !hasDroid(playnum))
 	{
@@ -186,10 +187,10 @@ function canPlay(playnum)
 
 function roomPlayability()
 {
-	var unPlayability = true;
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	let unPlayability = true;
+	for (let playnum = 0; playnum < maxPlayers; playnum++)
 	{
-		for (var splaynum = 0; splaynum < maxPlayers; splaynum++)
+		for (let splaynum = 0; splaynum < maxPlayers; splaynum++)
 		{
 			if (playnum != splaynum &&
 			playerData[playnum].usertype == USERTYPE.player.fighter &&
@@ -204,7 +205,7 @@ function roomPlayability()
 	{
 //		debug(_("There are no opponents in the game."));
 		console(_("There are no opponents in the game"));
-//		gameOverMessage(false);
+//		gameOverMessage(true);
 		return false;
 	}
 	else {return true;}
@@ -214,26 +215,26 @@ function toSpectator(playnum, remove)
 {
 	hackNetOff();
 	setPower(0, playnum);
-	var spotter = {
+	let spotter = {
 		X: mapWidth/2,
 		Y: mapHeight/2,
 		radius: Math.sqrt(mapWidth*mapWidth + mapHeight*mapHeight)/2*128
 	};
 	addSpotter(spotter.X, spotter.Y, playnum, spotter.radius, 0, 0);
 
-	var HQstructs = enumStruct(playnum, HQ);
+	let HQstructs = enumStruct(playnum, HQ);
 	HQstructs.forEach(function(e) {
 		removeObject(e);
 	});
 
 	if (remove === true)
 	{
-		var droids = enumDroid(playnum, DROID_ANY);
+		let droids = enumDroid(playnum, DROID_ANY);
 		droids.forEach(function(e) {
 			removeObject(e);
 		});
 
-		var structs = enumStruct(playnum);
+		let structs = enumStruct(playnum);
 		structs.forEach(function(e) {
 			removeObject(e);
 		});
@@ -261,7 +262,7 @@ function hud()
 
 function checkPlayerVictoryStatus()
 {
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	for (let playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		if (playerData[playnum].usertype === USERTYPE.player.winner)
 		{
@@ -269,7 +270,7 @@ function checkPlayerVictoryStatus()
 		}
 	}
 
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	for (let playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		if (playerData[playnum].usertype === USERTYPE.player.loser)
 		{
@@ -291,15 +292,15 @@ function checkPlayerVictoryStatus()
 		// all participants except teammates (this is not the same as the allies) cannot continue the game
 	}
 
-	var endGame = true;
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	let endGame = true;
+	for (let playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		if (playerData[playnum].usertype != USERTYPE.player.fighter)
 		{
 			continue;
 		}
 
-		for (var splaynum = 0; splaynum < maxPlayers; splaynum++)
+		for (let splaynum = 0; splaynum < maxPlayers; splaynum++)
 		{
 			if (inOneTeam(playnum, splaynum))
 			{
@@ -314,7 +315,7 @@ function checkPlayerVictoryStatus()
 
 	if (endGame == true)
 	{
-		for (var playnum = 0; playnum < maxPlayers; playnum++)
+		for (let playnum = 0; playnum < maxPlayers; playnum++)
 		{
 			if (playerData[playnum].usertype === USERTYPE.player.fighter)
 			{
@@ -337,7 +338,7 @@ function checkPlayerVictoryStatus()
 
 function co_eventGameInit()
 {
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	for (let playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		playerData[playnum].lastActivity = gameTime;
 			//we consider observers to players who cannot play from the beginning of the game
@@ -397,7 +398,6 @@ function co_eventStructureBuilt (structure)
 		playerData[structure.player].lastActivity = gameTime;
 	}
 }
-
 function co_eventResearched (research, structure, player)
 {
 	if (player != scavengerPlayer)
