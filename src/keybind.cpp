@@ -76,6 +76,8 @@
 
 #include "activity.h"
 
+#include "statistics.h"
+
 /*
 	KeyBind.c
 	Holds all the functions that can be mapped to a key.
@@ -2873,4 +2875,8 @@ void kf_QuickLoad()
 	{
 		console("QuickSave file does not exist yet");
 	}
+}
+
+void kf_OpenStatisticsWindow() {
+	statisticsWindowShow();
 }

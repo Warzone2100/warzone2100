@@ -207,6 +207,7 @@ static KeyMapSaveTable const keyMapSaveTable(
 	// **********************************
 	// MULTIPLAYER
 	{kf_addMultiMenu, "addMultiMenu"},
+	{kf_OpenStatisticsWindow, "openStats"},
 	//
 	// GAME CONTROLS - Moving around, zooming in, rotating etc
 	{kf_CameraUp, "CameraUp"},
@@ -459,6 +460,7 @@ void keyInitMappings(bool bForceDefaults)
 	//                                **********************************
 	//	MULTIPLAYER
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_KPENTER, KEYMAP_PRESSED, kf_addMultiMenu, N_("Multiplayer Options / Alliance dialog"), bForceDefaults) || didAdd;
+	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_LSHIFT,  KEY_L, KEYMAP_PRESSED, kf_OpenStatisticsWindow,       N_("Open stats"), bForceDefaults) || didAdd;
 	//
 	//	GAME CONTROLS - Moving around, zooming in, rotating etc
 	didAdd = keyAddDefaultMapping(KEYMAP_ASSIGNABLE, KEY_IGNORE, KEY_UPARROW,           KEYMAP_DOWN,    kf_CameraUp,                N_("Move Camera Up"), bForceDefaults) || didAdd;
