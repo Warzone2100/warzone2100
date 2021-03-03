@@ -22,9 +22,13 @@ public:
 
 private:
 	WzText cachedTitleText;
+	WzText cachedTextMin;
+	WzText cachedTextMax;
 };
 
 bool statisticsWindowShutdown();
 void statisticsWindowShow();
+
+void StatisticsHistoryUpdate();
 
 #endif /* end of include guard: STATISTICS_H_DEFINED */

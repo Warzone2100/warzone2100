@@ -6,9 +6,12 @@
 #include "intdisplay.h"
 #include "frontend.h"
 #include "multiint.h"
+#include "multistat.h"
 #include "intdisplay.h"
 #include "research.h"
 #include "frend.h"
+#include "scores.h"
+// #include "string_ext.h"
 #include "lib/ivis_opengl/bitimage.h"
 
 #define STATISTICS_WINDOW_HEIGHT_MAX 440
@@ -26,6 +29,20 @@ static std::shared_ptr<W_SCREEN> statisticsScreen = nullptr;
 static std::shared_ptr<StatisticsWindow> statisticsDialog = nullptr;
 
 static std::shared_ptr<W_BUTTON> makeCornerButton(const char* text);
+
+std::vector<double> KDhistory;
+
+void AddKDtoHistory(double a) {
+	KDhistory.push_back(a);
+}
+
+void StatisticsHistoryUpdate() {
+	if(missionData.unitsLost == 0) {
+		AddKDtoHistory(getSelectedPlayerUnitsKilled());
+	} else {
+		AddKDtoHistory((double)getSelectedPlayerUnitsKilled() / (double)missionData.unitsLost);
+	}
+}
 
 StatisticsWindow::StatisticsWindow() {
 
@@ -64,6 +81,51 @@ void StatisticsWindow::display(int xOffset, int yOffset)
 	int fx = x0 + titleXPadding + (width() - titleXPadding - fw) / 2;
 	float fy = float(textBoundingBoxOffset.y) - float(cachedTitleText.aboveBase());
 	cachedTitleText.render(textBoundingBoxOffset.x + fx, fy, WZCOL_FORM_TEXT);
+
+	int KDsize = KDhistory.size();
+	int LastRecords = 300;
+	int GraphOX = 10;
+	int GraphOY = 30;
+	int GraphH = 100;
+	int PeriodMax = 1;
+
+	float GboxX0 = x0+GraphOX;
+	float GboxY0 = y0+GraphOY;
+	float GboxX1 = GboxX0+LastRecords;
+	float GboxY1 = GboxY0+GraphH+1;
+	pie_UniTransBoxFill(GboxX0, GboxY0, GboxX1, GboxY1, pal_RGBA(5, 0, 15, 170));
+	iV_Box(GboxX0, GboxY0, GboxX1, GboxY1, pal_RGBA(255, 255, 255, 150));
+	for(int s = 0; s < LastRecords; s++) {
+		if(KDsize-LastRecords+s >= 0) {
+			if(abs(KDhistory[KDsize-LastRecords+s]) > PeriodMax) {
+				PeriodMax = abs(KDhistory[KDsize-LastRecords+s]);
+			}
+		}
+	}
+	std::string text = astringf("max: %.5f total %d", PeriodMax, KDsize);
+	cachedTextMin.setText(text, font_regular_bold);
+	cachedTextMin.render(GboxX0, GboxY1+15, WZCOL_FORM_TEXT);
+	for(int s = 0; s < LastRecords; s++) {
+		int p = KDsize-LastRecords+s;
+		if(p < 0) {
+			continue;
+		}
+		double a = KDhistory[p];
+		int centerY = GboxY0+GraphH/2+1;
+		PIELIGHT c = pal_RGBA(255, 255, 255, 255);
+		int d = 0;
+		if(a > 1) {
+			d = -(((GraphH/2)/PeriodMax)*KDhistory[p]-GraphH/2);
+			c = pal_RGBA(50, 255, 50, 255);
+		} else if(a < 1) {
+			d = ((GraphH/2)/PeriodMax) - ((GraphH/2)/PeriodMax)*KDhistory[p];
+			c = pal_RGBA(255, 50, 50, 255);
+		} else {
+			iV_Line(GboxX0+s, centerY, GboxX0+s-1, centerY, c);
+			continue;
+		}
+		iV_Line(GboxX0+s, centerY, GboxX0+s, centerY+d, c);
+	}
 }
 
 std::shared_ptr<StatisticsWindow> StatisticsWindow::make() {
