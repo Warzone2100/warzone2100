@@ -83,11 +83,11 @@ void StatisticsWindow::display(int xOffset, int yOffset)
 	cachedTitleText.render(textBoundingBoxOffset.x + fx, fy, WZCOL_FORM_TEXT);
 
 	int KDsize = KDhistory.size();
-	int LastRecords = 300;
+	int LastRecords = 550;
 	int GraphOX = 10;
 	int GraphOY = 30;
-	int GraphH = 100;
-	int PeriodMax = 1;
+	int GraphH = 200;
+	double PeriodMax = 1.0;
 
 	float GboxX0 = x0+GraphOX;
 	float GboxY0 = y0+GraphOY;
@@ -102,24 +102,46 @@ void StatisticsWindow::display(int xOffset, int yOffset)
 			}
 		}
 	}
-	std::string text = astringf("max: %.5f total %d", PeriodMax, KDsize);
-	cachedTextMin.setText(text, font_regular_bold);
-	cachedTextMin.render(GboxX0, GboxY1+15, WZCOL_FORM_TEXT);
+	cachedCountsText.setText(astringf("%d measures, %.3lf max, %.3lf latest", KDsize, PeriodMax, KDhistory.back()), font_regular);
+	cachedCountsText.render(x0+10, y0+231+20, WZCOL_TEXT_BRIGHT);
+	// Line1->setString(astringf("max: %.5f total %d", PeriodMax, KDsize));
 	for(int s = 0; s < LastRecords; s++) {
 		int p = KDsize-LastRecords+s;
 		if(p < 0) {
 			continue;
 		}
 		double a = KDhistory[p];
+		double ap = a;
+		if(p+1 < KDsize) {
+			ap = KDhistory[p+1];
+		}
 		int centerY = GboxY0+GraphH/2+1;
+		const PIELIGHT cred = pal_RGBA(255, 50, 50, 255);
+		const PIELIGHT credbright = pal_RGBA(255, 10, 10, 255);
+		const PIELIGHT creddull = pal_RGBA(255, 90, 90, 255);
+		const PIELIGHT cgreen = pal_RGBA(50, 255, 50, 255);
+		const PIELIGHT cgreenbright = pal_RGBA(10, 255, 10, 255);
+		const PIELIGHT cgreendull = pal_RGBA(90, 255, 90, 255);
 		PIELIGHT c = pal_RGBA(255, 255, 255, 255);
 		int d = 0;
 		if(a > 1) {
 			d = -(((GraphH/2)/PeriodMax)*KDhistory[p]-GraphH/2);
-			c = pal_RGBA(50, 255, 50, 255);
+			if(ap < a) {
+				c = cgreendull;
+			} else if(ap > a) {
+				c = cgreenbright;
+			} else {
+				c = cgreen;
+			}
 		} else if(a < 1) {
 			d = ((GraphH/2)/PeriodMax) - ((GraphH/2)/PeriodMax)*KDhistory[p];
-			c = pal_RGBA(255, 50, 50, 255);
+			if(ap > a) {
+				c = creddull;
+			} else if(ap < a) {
+				c = credbright;
+			} else {
+				c = cred;
+			}
 		} else {
 			iV_Line(GboxX0+s, centerY, GboxX0+s-1, centerY, c);
 			continue;
@@ -177,6 +199,13 @@ std::shared_ptr<StatisticsWindow> StatisticsWindow::make() {
 		ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 		psWidget->setGeometry(psParent->width() - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
 	}));
+
+	// result->Line1 = std::make_shared<W_LABEL>();
+	// result->attach(result->Line1);
+	// result->Line1->setFont(font_regular, WZCOL_FORM_TEXT);
+	// result->Line1->setString("Initializing...");
+	// result->Line1->setGeometry(10, 131, result->Line1->getMaxLineWidth(), iV_GetTextLineSize(font_regular));
+
 
 	return result;
 }

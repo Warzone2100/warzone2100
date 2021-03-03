@@ -22,8 +22,8 @@ public:
 
 private:
 	WzText cachedTitleText;
-	WzText cachedTextMin;
-	WzText cachedTextMax;
+	WzText cachedCountsText;
+	std::shared_ptr<W_LABEL> Line1;
 };
 
 bool statisticsWindowShutdown();
