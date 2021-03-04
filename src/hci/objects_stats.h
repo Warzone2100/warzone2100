@@ -76,6 +76,11 @@ public:
 		return getStatsAt(statsIndex) == highlightedObjectStats;
 	}
 
+	BASE_STATS *getHighlightedObjectStats()
+	{
+		return highlightedObjectStats;
+	}
+
 private:
 	BASE_STATS *highlightedObjectStats;
 };
@@ -189,10 +194,11 @@ protected:
 	virtual std::shared_ptr<StatsFormButton> makeOptionButton(size_t buttonIndex) const = 0;
 	virtual BaseStatsController &getController() const = 0;
 
+	std::shared_ptr<IntListTabWidget> optionList;
+
 private:
 	void updateButtons();
 
-	std::shared_ptr<IntListTabWidget> optionList;
 	size_t buttonsCount = 0;
 };
 
@@ -206,6 +212,8 @@ public:
 
 protected:
 	void updateLayout() override;
+	void goToHighlightedTab();
+	BASE_STATS *previousHighlighted = nullptr;
 };
 
 #endif // __INCLUDED_SRC_HCI_OBJECTS_STATS_INTERFACE_H__
