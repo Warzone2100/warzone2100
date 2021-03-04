@@ -3800,7 +3800,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 		widgDelete(psWScreen, MULTIOP_PLAYERS);
 		widgDelete(psWScreen, FRONTEND_SIDETEXT2);					// del text too,
 
-		addMultiRequest(MultiPlayersPath, ".sta", MULTIOP_PNAME, 0);
+		addMultiRequest(MultiPlayersPath, ".sta2", MULTIOP_PNAME, 0);
 		break;
 
 	case MULTIOP_HOST:
