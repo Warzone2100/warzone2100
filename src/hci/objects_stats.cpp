@@ -110,7 +110,7 @@ void StatsButton::addProgressBar()
 	init.style = WBAR_TROUGH | WIDG_HIDDEN;
 	init.iRange = GAME_TICKS_PER_SEC;
 	attach(progressBar = std::make_shared<W_BARGRAPH>(&init));
-	progressBar->setBackgroundColour(WZCOL_BLACK);
+	progressBar->setBackgroundColour(WZCOL_ACTION_PRODUCTION_RUN_BACKGROUND);
 }
 
 void ObjectButton::jump()
