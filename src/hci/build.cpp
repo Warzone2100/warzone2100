@@ -266,6 +266,7 @@ private:
 		init.pText = WzString::fromUtf8("BUG! (a)");
 
 		attach(productionRunSizeLabel = std::make_shared<W_LABEL>(&init));
+		productionRunSizeLabel->setFontColour(WZCOL_ACTION_PRODUCTION_RUN_TEXT);
 	}
 
 	void updateProgressBar(DROID *droid)

@@ -15,6 +15,28 @@ FACTORY *getFactoryOrNullptr(STRUCTURE *factory)
 	return (FACTORY *)factory->pFunctionality;
 }
 
+static uint8_t getProductionLoops(STRUCTURE *structure)
+{
+	if (structure == nullptr)
+	{
+		return 0;
+	}
+
+	auto psFactory = getFactoryOrNullptr(structure);
+	ASSERT_NOT_NULLPTR_OR_RETURN(0, psFactory);
+	return psFactory->psSubject == nullptr ? 0 : psFactory->productionLoops;
+}
+
+static std::shared_ptr<W_LABEL> makeProductionRunSizeLabel()
+{
+	auto init = W_LABINIT();
+	init.x = OBJ_TEXTX;
+	init.y = OBJ_T1TEXTY;
+	init.width = 16;
+	init.height = 16;
+	return std::make_shared<W_LABEL>(&init);
+}
+
 void ManufactureController::updateData()
 {
 	updateFactoriesList();
@@ -219,45 +241,6 @@ private:
 	std::shared_ptr<W_LABEL> factoryNumberLabel;
 };
 
-class ProductionRunSizeLabel
-{
-private:
-	std::shared_ptr<W_LABEL> label;
-
-public:
-	void initialize(WIDGET &parent)
-	{
-		auto init = W_LABINIT();
-		init.x = OBJ_TEXTX;
-		init.y = OBJ_T1TEXTY;
-		init.width = 16;
-		init.height = 16;
-		parent.attach(label = std::make_shared<W_LABEL>(&init));
-	}
-
-	void hide()
-	{
-		label->hide();
-	}
-
-	void update(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
-	{
-		label->hide();
-
-		if (!StructureIsManufacturingPending(factory))
-		{
-			return;
-		}
-
-		auto remaining = getProduction(factory, droidTemplate).numRemaining();
-		if (remaining > 0)
-		{
-			label->setString(WzString::fromUtf8(astringf("%d", remaining)));
-			label->show();
-		}
-	}
-};
-
 class ManufactureStatsButton: public StatsButton
 {
 private:
@@ -304,7 +287,7 @@ protected:
 		BaseWidget::updateLayout();
 		auto factory = controller->getObjectAt(objectIndex);
 		updateProgressBar(factory);
-		productionRunSizeLabel.update(factory, FactoryGetTemplate(StructureGetFactory(factory)));
+		updateProductionRunSizeLabel(factory, FactoryGetTemplate(StructureGetFactory(factory)));
 	}
 
 private:
@@ -316,7 +299,27 @@ private:
 	void initialize()
 	{
 		addProgressBar();
-		productionRunSizeLabel.initialize(*this);
+		addProductionRunSizeLabel();
+	}
+
+	void addProductionRunSizeLabel()
+	{
+		attach(productionRunSizeLabel = makeProductionRunSizeLabel());
+		productionRunSizeLabel->setFontColour(WZCOL_ACTION_PRODUCTION_RUN_TEXT);
+	}
+
+	void updateProductionRunSizeLabel(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
+	{
+		auto productionRemaining = getProduction(factory, droidTemplate).numRemaining();
+		if (StructureIsManufacturingPending(factory) && productionRemaining > 0)
+		{
+			productionRunSizeLabel->setString(WzString::fromUtf8(astringf("%d", productionRemaining)));
+			productionRunSizeLabel->show();
+		}
+		else
+		{
+			productionRunSizeLabel->hide();
+		}
 	}
 
 	void updateProgressBar(STRUCTURE *factory)
@@ -374,7 +377,7 @@ private:
 	}
 
 	std::shared_ptr<ManufactureController> controller;
-	ProductionRunSizeLabel productionRunSizeLabel;
+	std::shared_ptr<W_LABEL> productionRunSizeLabel;
 	size_t objectIndex;
 };
 
@@ -415,7 +418,28 @@ private:
 	void initialize()
 	{
 		addCostBar();
-		productionRunSizeLabel.initialize(*this);
+		addProductionRunSizeLabel();
+	}
+
+	void addProductionRunSizeLabel()
+	{
+		attach(productionRunSizeLabel = makeProductionRunSizeLabel());
+	}
+
+	void updateProductionRunSizeLabel(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
+	{
+		auto production = getProduction(factory, droidTemplate);
+		if (StructureIsManufacturingPending(factory) && production.isValid())
+		{
+			auto productionLoops = getProductionLoops(factory);
+			auto labelText = astringf(productionLoops > 0 ? "%d/%d" : "%d", production.numRemaining(), production.quantity);
+			productionRunSizeLabel->setString(WzString::fromUtf8(labelText));
+			productionRunSizeLabel->show();
+		}
+		else
+		{
+			productionRunSizeLabel->hide();
+		}
 	}
 
 	bool isHighlighted() const override
@@ -431,7 +455,7 @@ private:
 			intSetShadowPower(getCost());
 		}
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
-		productionRunSizeLabel.update(controller->getHighlightedObject(), getStats());
+		updateProductionRunSizeLabel(controller->getHighlightedObject(), getStats());
 	}
 
 	uint32_t getCost() override
@@ -452,7 +476,7 @@ private:
 	}
 
 	std::shared_ptr<ManufactureController> controller;
-	ProductionRunSizeLabel productionRunSizeLabel;
+	std::shared_ptr<W_LABEL> productionRunSizeLabel;
 	size_t manufactureOptionIndex;
 };
 
@@ -644,7 +668,7 @@ protected:
 
 		void updateLayout()
 		{
-			setState(ManufactureStatsForm::getProductionLoops(controller->getHighlightedObject()) == 0 ? 0: WBUT_CLICKLOCK);
+			setState(getProductionLoops(controller->getHighlightedObject()) == 0 ? 0: WBUT_CLICKLOCK);
 		}
 
 	private:
@@ -670,7 +694,7 @@ protected:
 
 		void updateLayout()
 		{
-			auto productionLoops = ManufactureStatsForm::getProductionLoops(controller->getHighlightedObject());
+			auto productionLoops = getProductionLoops(controller->getHighlightedObject());
 			if (productionLoops != lastProductionLoop)
 			{
 				lastProductionLoop = productionLoops;
@@ -695,18 +719,6 @@ protected:
 		uint8_t lastProductionLoop = 0;
 		std::shared_ptr<ManufactureController> controller;
 	};
-
-	static uint8_t getProductionLoops(STRUCTURE *structure)
-	{
-		if (structure == nullptr)
-		{
-			return 0;
-		}
-
-		auto psFactory = getFactoryOrNullptr(structure);
-		ASSERT_NOT_NULLPTR_OR_RETURN(0, psFactory);
-		return psFactory->psSubject == nullptr ? 0 : psFactory->productionLoops;
-	}
 };
 
 bool ManufactureController::showInterface()
