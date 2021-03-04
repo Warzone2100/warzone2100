@@ -94,6 +94,7 @@
 #include "activity.h"
 
 #include <algorithm>
+#include <unordered_map>
 
 static void initMiscVars();
 
@@ -556,18 +557,19 @@ static MapFileList listMapFiles()
 }
 
 // Map processing
-struct WZmaps
+struct WZmapInfo
 {
-	std::string MapName;
 	bool isMapMod;
 	bool isRandom;
 };
 
-std::vector<struct WZmaps> WZ_Maps;
+typedef std::string MapName;
+typedef std::unordered_map<MapName, WZmapInfo> WZMapInfo_Map;
+WZMapInfo_Map WZ_Maps;
 
-static std::vector<WZmaps>::iterator findMap(char const *name)
+static inline WZMapInfo_Map::iterator findMap(char const *name)
 {
-	return name != nullptr? std::find_if(WZ_Maps.begin(), WZ_Maps.end(), [name](WZmaps const &map) { return map.MapName == name; }) : WZ_Maps.end();
+	return name != nullptr? WZ_Maps.find(name) : WZ_Maps.end();
 }
 
 bool CheckForMod(char const *mapFile)
@@ -575,7 +577,7 @@ bool CheckForMod(char const *mapFile)
 	auto it = findMap(mapFile);
 	if (it != WZ_Maps.end())
 	{
-		return it->isMapMod;
+		return it->second.isMapMod;
 	}
 	if (mapFile != nullptr)
 	{
@@ -590,7 +592,7 @@ bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
 	auto it = findMap(mapFile);
 	if (it != WZ_Maps.end())
 	{
-		return it->isRandom;
+		return it->second.isRandom;
 	}
 
 	if (mapFile != nullptr) {
@@ -673,7 +675,7 @@ bool buildMapList()
 	const std::vector<const char *> lookin_list = { "WZMap", "WZMap/multiplay" };
 	for (auto &realFileName : realFileNames)
 	{
-		struct WZmaps CurrentMap;
+		struct WZmapInfo CurrentMap;
 		const char * pRealDirStr = PHYSFS_getRealDir(realFileName.platformIndependent.c_str());
 		if (!pRealDirStr)
 		{
@@ -705,10 +707,10 @@ bool buildMapList()
 
 		auto chk = CheckInMap(realFilePathAndName.c_str(), "WZMap", lookin_list);
 
-		CurrentMap.MapName = realFileName.platformIndependent;
+		const std::string& MapName = realFileName.platformIndependent;
 		CurrentMap.isMapMod = chk.first;
 		CurrentMap.isRandom = chk.second;
-		WZ_Maps.push_back(std::move(CurrentMap));
+		WZ_Maps.insert(WZMapInfo_Map::value_type(MapName, std::move(CurrentMap)));
 	}
 
 	return true;
