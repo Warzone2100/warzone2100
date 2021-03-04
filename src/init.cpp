@@ -608,7 +608,7 @@ bool CheckForRandom(char const *mapFile, char const *mapDataFile0)
 }
 
 // Mount the archive under the mountpoint, and enumerate the archive according to lookin
-static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpoint, const char *lookin)
+static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpoint, const std::vector<const char *>& lookin_list)
 {
 	bool mapmod = false;
 	bool isRandom = false;
@@ -620,36 +620,39 @@ static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpo
 		exit(-1);
 	}
 
-	std::string checkpath = lookin;
-	checkpath.append("/");
-	WZ_PHYSFS_enumerateFiles(lookin, [&](const char *file) -> bool {
-		std::string checkfile = file;
-		if (WZ_PHYSFS_isDirectory((checkpath + checkfile).c_str()))
-		{
-			if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
-				|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
-				|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
-				|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
-				|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
-				|| checkfile.compare("skirmish") == 0)
+	for (auto lookin : lookin_list)
+	{
+		std::string checkpath = lookin;
+		checkpath.append("/");
+		WZ_PHYSFS_enumerateFiles(lookin, [&](const char *file) -> bool {
+			std::string checkfile = file;
+			if (WZ_PHYSFS_isDirectory((checkpath + checkfile).c_str()))
 			{
-				debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
-				mapmod = true;
+				if (checkfile.compare("wrf") == 0 || checkfile.compare("stats") == 0 || checkfile.compare("components") == 0
+					|| checkfile.compare("effects") == 0 || checkfile.compare("messages") == 0
+					|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
+					|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
+					|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
+					|| checkfile.compare("skirmish") == 0)
+				{
+					debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
+					mapmod = true;
+					return false; // break;
+				}
+			}
+			return true; // continue
+		});
+
+		std::string maps = checkpath + "/multiplay/maps";
+		WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
+			if (WZ_PHYSFS_isDirectory((maps + "/" + file).c_str()) && PHYSFS_exists((maps + "/" + file + "/game.js").c_str()))
+			{
+				isRandom = true;
 				return false; // break;
 			}
-		}
-		return true; // continue
-	});
-
-	std::string maps = checkpath + "/multiplay/maps";
-	WZ_PHYSFS_enumerateFiles(maps.c_str(), [&](const char *file) -> bool {
-		if (WZ_PHYSFS_isDirectory((maps + "/" + file).c_str()) && PHYSFS_exists((maps + "/" + file + "/game.js").c_str()))
-		{
-			isRandom = true;
-			return false; // break;
-		}
-		return true; // continue
-	});
+			return true; // continue
+		});
+	}
 
 	if (!WZ_PHYSFS_unmount(archive))
 	{
@@ -667,6 +670,7 @@ bool buildMapList()
 	loadLevFile("addon.lev", mod_multiplay, false, nullptr);
 	WZ_Maps.clear();
 	MapFileList realFileNames = listMapFiles();
+	const std::vector<const char *> lookin_list = { "WZMap", "WZMap/multiplay" };
 	for (auto &realFileName : realFileNames)
 	{
 		struct WZmaps CurrentMap;
@@ -699,13 +703,12 @@ bool buildMapList()
 			debug(LOG_ERROR, "Could not unmount %s, %s", realFilePathAndName.c_str(), WZ_PHYSFS_getLastError());
 		}
 
-		auto chk = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap");
-		auto chk2 = CheckInMap(realFilePathAndName.c_str(), "WZMap", "WZMap/multiplay");
+		auto chk = CheckInMap(realFilePathAndName.c_str(), "WZMap", lookin_list);
 
 		CurrentMap.MapName = realFileName.platformIndependent;
-		CurrentMap.isMapMod = chk.first || chk2.first;
-		CurrentMap.isRandom = chk.second || chk2.second;
-		WZ_Maps.push_back(CurrentMap);
+		CurrentMap.isMapMod = chk.first;
+		CurrentMap.isRandom = chk.second;
+		WZ_Maps.push_back(std::move(CurrentMap));
 	}
 
 	return true;
