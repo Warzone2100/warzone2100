@@ -159,7 +159,25 @@ void ObjectsForm::display(int xOffset, int yOffset)
 {
 	updateButtons();
 	getController().updateHighlighted();
+	if (previousHighlighted != getController().getHighlightedObject())
+	{
+		goToHighlightedTab();
+	}
+	previousHighlighted = getController().getHighlightedObject();
 	BaseWidget::display(xOffset, yOffset);
+}
+
+void ObjectsForm::goToHighlightedTab()
+{
+	auto highlighted = getController().getHighlightedObject();
+	for (auto i = 0; i < getController().objectsSize(); i++)
+	{
+		if (highlighted == getController().getObjectAt(i))
+		{
+			objectsList->goToChildPage(i);
+			return;
+		}
+	}
 }
 
 void ObjectsForm::initialize()

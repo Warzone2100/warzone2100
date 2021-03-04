@@ -161,12 +161,14 @@ protected:
 	void updateButtons();
 	void addNewButton();
 	void removeLastButton();
+	void goToHighlightedTab();
 	virtual std::shared_ptr<StatsButton> makeStatsButton(size_t buttonIndex) const = 0;
 	virtual std::shared_ptr<ObjectButton> makeObjectButton(size_t buttonIndex) const = 0;
 	virtual BaseObjectsController &getController() const = 0;
 
 	std::shared_ptr<IntListTabWidget> objectsList;
 	size_t buttonsCount = 0;
+	BASE_OBJECT *previousHighlighted = nullptr;
 };
 
 class StatsForm: public IntFormAnimated
