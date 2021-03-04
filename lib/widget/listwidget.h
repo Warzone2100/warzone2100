@@ -133,14 +133,15 @@ public:
 public:
 	void setCurrentPage(size_t page);
 
-private:
-	void doLayoutAll();
-	void doLayout(size_t num);
-
 	size_t widgetsPerPage() const
 	{
 		return widgetsPerRow() * widgetsPerColumn();
 	}
+
+private:
+	void doLayoutAll();
+	void doLayout(size_t num);
+
 	size_t widgetsPerRow() const
 	{
 		return static_cast<size_t>(std::max((width() + spacing.width()) / widgetSkipX(), 1));
@@ -220,6 +221,11 @@ public:
 	ListWidget *listWidget()
 	{
 		return widgets.get();
+	}
+
+	void goToChildPage(size_t childIndex)
+	{
+		setCurrentPage(childIndex / widgets->widgetsPerPage());
 	}
 
 private:
