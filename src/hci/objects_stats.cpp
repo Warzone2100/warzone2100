@@ -337,6 +337,25 @@ void ObjectStatsForm::updateLayout()
 {
 	BaseWidget::updateLayout();
 	getController().updateHighlightedObjectStats();
+	auto highlighted = getController().getHighlightedObjectStats();
+	if (highlighted != nullptr && previousHighlighted != highlighted)
+	{
+		goToHighlightedTab();
+	}
+	previousHighlighted = highlighted;
+}
+
+void ObjectStatsForm::goToHighlightedTab()
+{
+	auto highlighted = getController().getHighlightedObjectStats();
+	for (auto i = 0; i < getController().statsSize(); i++)
+	{
+		if (highlighted == getController().getStatsAt(i))
+		{
+			optionList->goToChildPage(i);
+			return;
+		}
+	}
 }
 
 void StatsForm::updateButtons()
