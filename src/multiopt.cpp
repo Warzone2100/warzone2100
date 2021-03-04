@@ -136,6 +136,9 @@ void recvOptions(NETQUEUE queue)
 {
 	unsigned int i;
 
+	// store prior map / mod info
+	MULTIPLAYERGAME priorGameInfo = game;
+
 	debug(LOG_NET, "Receiving options from host");
 	NETbeginDecode(queue, NET_OPTIONS);
 
@@ -205,12 +208,16 @@ void recvOptions(NETQUEUE queue)
 
 	NETend();
 
-	debug(LOG_INFO, "Rebuilding map list");
-	// clear out the old level list.
-	levShutDown();
-	levInitialise();
-	rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
-	buildMapList();
+	bool bRebuildMapList = strcmp(game.map, priorGameInfo.map) != 0 || game.hash != priorGameInfo.hash || game.modHashes != priorGameInfo.modHashes;
+	if (bRebuildMapList)
+	{
+		debug(LOG_INFO, "Rebuilding map list");
+		// clear out the old level list.
+		levShutDown();
+		levInitialise();
+		rebuildSearchPath(mod_multiplay, true);	// MUST rebuild search path for the new maps we just got!
+		buildMapList();
+	}
 
 	bool haveData = true;
 	auto requestFile = [&haveData](Sha256 &hash, char const *filename) {
