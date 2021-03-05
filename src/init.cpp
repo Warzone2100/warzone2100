@@ -44,6 +44,7 @@
 
 #include "init.h"
 
+#include "input/manager.h"
 #include "advvis.h"
 #include "atmos.h"
 #include "challenge.h"

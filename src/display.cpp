@@ -65,7 +65,6 @@
 #include "oprint.h"
 #include "warcam.h"
 #include "keybind.h"
-#include "keymap.h"
 #include "projectile.h"
 #include "message.h"
 #include "effects.h"
@@ -78,6 +77,7 @@
 #include "warzoneconfig.h"
 #include "lib/ivis_opengl/piematrix.h"
 #include "animation.h"
+#include "input/manager.h"
 
 InputManager gInputManager;
 DragBox3D dragBox3D;

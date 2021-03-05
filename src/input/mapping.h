@@ -18,27 +18,31 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_SRC_KEYMAP_H__
-#define __INCLUDED_SRC_KEYMAP_H__
+#ifndef __INCLUDED_SRC_INPUT_MAPPING_H__
+#define __INCLUDED_SRC_INPUT_MAPPING_H__
 
-#include <vector>
-#include <functional>
-#include <optional-lite/optional.hpp>
-#include <unordered_map>
+#include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 
-#include "input/keyconfig.h"
-#include "input/context.h"
+#include "keyconfig.h"
 
-void processDebugMappings(unsigned player, bool val);
-bool getDebugMappingStatus();
-bool getWantedDebugMappingStatus(unsigned player);
-std::string getWantedDebugMappingStatuses(bool val);
+struct KeyMapping
+{
+	const KeyFunctionInfo& info;
+	UDWORD                 lastCalled;
+	KEY_CODE               metaKeyCode;
+	KeyMappingInput        input;
+	KeyAction              action;
+	KeyMappingSlot         slot;
 
-// For keymap editor
-const KeyFunctionEntries allKeyFunctionEntries();
-nonstd::optional<std::reference_wrapper<const KeyFunctionInfo>> keyFunctionInfoByName(std::string const &name);
-KeyMappingInputSource keyMappingSourceByName(std::string const& name);
-KeyMappingSlot keyMappingSlotByName(std::string const& name);
+	bool isActivated() const;
 
+	bool hasMeta() const;
 
-#endif // __INCLUDED_SRC_KEYMAP_H__
+	bool toString(char* pOutStr) const;
+};
+
+bool operator==(const KeyMapping& lhs, const KeyMapping& rhs);
+bool operator!=(const KeyMapping& lhs, const KeyMapping& rhs);
+
+#endif // __INCLUDED_SRC_INPUT_MAPPING_H__
