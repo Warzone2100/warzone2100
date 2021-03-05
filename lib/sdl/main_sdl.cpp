@@ -964,6 +964,37 @@ void keyScanToString(KEY_CODE code, char *ascii, UDWORD maxStringSize)
 	}
 }
 
+void mouseKeyCodeToString(const MOUSE_KEY_CODE code, char* ascii, const int maxStringLength)
+{
+	switch (code)
+	{
+	case MOUSE_KEY_CODE::MOUSE_LMB:
+		strcpy(ascii, "Mouse Left");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_MMB:
+		strcpy(ascii, "Mouse Middle");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_RMB:
+		strcpy(ascii, "Mouse Right");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_X1:
+		strcpy(ascii, "Mouse 4");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_X2:
+		strcpy(ascii, "Mouse 5");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_WUP:
+		strcpy(ascii, "Mouse Wheel Up");
+		break;
+	case MOUSE_KEY_CODE::MOUSE_WDN:
+		strcpy(ascii, "Mouse Wheel Down");
+		break;
+	default:
+		strcpy(ascii, "Mouse ???");
+		break;
+	}
+}
+
 /* Initialise the input module */
 void inputInitialise(void)
 {

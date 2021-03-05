@@ -251,6 +251,39 @@ bool KEY_MAPPING::hasMeta() const
 	return metaKeyCode != KEY_CODE::KEY_IGNORE;
 }
 
+bool KEY_MAPPING::toString(char* pOutStr) const
+{
+	// Figure out if the keycode is for mouse or keyboard and print the name of
+	// the respective key/mouse button to `asciiSub`
+	char asciiSub[20] = "\0";
+	switch (input.source)
+	{
+	case KeyMappingInputSource::KEY_CODE:
+		keyScanToString(input.value.keyCode, (char*)&asciiSub, 20);
+		break;
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		mouseKeyCodeToString(input.value.mouseKeyCode, (char*)&asciiSub, 20);
+		break;
+	default:
+		strcpy(asciiSub, "NOT VALID");
+		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", static_cast<unsigned int>(input.source));
+		return true;
+	}
+
+	if (hasMeta())
+	{
+		char asciiMeta[20] = "\0";
+		keyScanToString(metaKeyCode, (char*)&asciiMeta, 20);
+
+		sprintf(pOutStr, "%s %s", asciiMeta, asciiSub);
+	}
+	else
+	{
+		sprintf(pOutStr, "%s", asciiSub);
+	}
+	return true;
+}
+
 // ----------------------------------------------------------------------------------
 /* Some stuff allowing the user to add key mappings themselves */
 

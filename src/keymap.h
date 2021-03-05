@@ -101,6 +101,8 @@ struct KEY_MAPPING
 	bool isActivated() const;
 
 	bool hasMeta() const;
+
+	bool toString(char* pOutStr) const;
 };
 
 KEY_MAPPING *keyAddMapping(KEY_STATUS status, KEY_CODE metaCode, KeyMappingInput input, KEY_ACTION action, void (*pKeyMapFunc)(), const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);

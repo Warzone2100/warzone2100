@@ -257,75 +257,6 @@ bool runKeyMapEditor()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void mouseKeyCodeToString(const MOUSE_KEY_CODE code, char* pResult, const int maxStringLength)
-{
-	switch (code)
-	{
-	case MOUSE_KEY_CODE::MOUSE_LMB:
-		strcpy(pResult, "Mouse Left");
-		break;
-	case MOUSE_KEY_CODE::MOUSE_MMB:
-		strcpy(pResult, "Mouse Middle");
-		break;
-	case MOUSE_KEY_CODE::MOUSE_RMB:
-		strcpy(pResult, "Mouse Right");
-		break;
-	case MOUSE_KEY_CODE::MOUSE_X1:
-		strcpy(pResult, "Mouse 4");
-		break;
-	case MOUSE_KEY_CODE::MOUSE_X2:
-		strcpy(pResult, "Mouse 5");
-		break;
-	case MOUSE_KEY_CODE::MOUSE_WUP:
-		strcpy(pResult, "Mouse Wheel Up");
-		break;
-	case MOUSE_KEY_CODE::MOUSE_WDN:
-		strcpy(pResult, "Mouse Wheel Down");
-		break;
-	default:
-		strcpy(pResult, "Mouse ???");
-		break;
-	}
-}
-
-// returns key to press given a mapping.
-static bool keyMapToString(char *pStr, const KEY_MAPPING *psMapping)
-{
-	bool	onlySub = true;
-	char	asciiSub[20], asciiMeta[20];
-
-	if (psMapping->metaKeyCode != KEY_IGNORE)
-	{
-		keyScanToString(psMapping->metaKeyCode, (char *)&asciiMeta, 20);
-		onlySub = false;
-	}
-
-	// Figure out if the keycode is for mouse or keyboard.
-	switch (psMapping->input.source)
-	{
-	case KeyMappingInputSource::KEY_CODE:
-		keyScanToString(psMapping->input.value.keyCode, (char*)&asciiSub, 20);
-		break;
-	case KeyMappingInputSource::MOUSE_KEY_CODE:
-		mouseKeyCodeToString(psMapping->input.value.mouseKeyCode, (char*)&asciiSub, 20);
-		break;
-	default:
-		strcpy(asciiSub, "NOT VALID");
-		debug(LOG_WZ, "Encountered invalid key mapping source %u while converting mapping to string!", static_cast<unsigned int>(psMapping->input.source));
-		return true;
-	}
-
-	if (onlySub)
-	{
-		sprintf(pStr, "%s", asciiSub);
-	}
-	else
-	{
-		sprintf(pStr, "%s %s", asciiMeta, asciiSub);
-	}
-	return true;
-}
-
 std::vector<std::reference_wrapper<const KeyFunctionInfo>> getAssignableKeymapEntries()
 {
 	std::vector<std::reference_wrapper<const KeyFunctionInfo>> visibleMappings;
@@ -385,7 +316,7 @@ static unsigned int getMaxKeyMapNameWidth()
 
 		char sKey[MAX_STR_LENGTH];
 		for (const KEY_MAPPING& mapping : getVisibleMappings()) {
-			keyMapToString(sKey, &mapping);
+			mapping.toString(sKey);
 			displayText.setText(sKey, font_regular);
 			max = MAX(max, static_cast<unsigned int>(displayText.width()));
 		}
@@ -454,7 +385,7 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 		{
 			bindingTextColor = WZCOL_YELLOW;
 		}
-		keyMapToString(sPrimaryKey, mapping);
+		mapping->toString(sPrimaryKey);
 	}
 	else
 	{
