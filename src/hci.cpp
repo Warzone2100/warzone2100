@@ -40,6 +40,7 @@
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 
+#include "input/manager.h"
 #include "action.h"
 #include "lib/sound/audio_id.h"
 #include "lib/widget/label.h"

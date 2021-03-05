@@ -40,6 +40,8 @@
 #include "lib/widget/label.h"
 #include "lib/widget/scrollablelist.h"
 
+#include "input/mapping.h"
+#include "input/manager.h"
 #include "frend.h"
 #include "frontend.h"
 #include "hci.h"

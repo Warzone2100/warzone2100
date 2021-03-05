@@ -26,7 +26,7 @@
 
 #include "basedef.h"
 #include "structure.h"
-#include "keymap.h"
+#include "input/manager.h"
 #include <glm/fwd.hpp>
 
 /* Initialise the display system */
