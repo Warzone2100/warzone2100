@@ -483,6 +483,11 @@ private:
 		{
 			updateAllyStatus(research);
 		}
+
+		if (isMouseOverWidget())
+		{
+			intSetShadowPower(getCost());
+		}
 	}
 
 	void updateCostBar(RESEARCH *stat)
@@ -518,16 +523,6 @@ private:
 	uint32_t getCost() override
 	{
 		return getStats()->researchPower;
-	}
-
-	void run(W_CONTEXT *context) override
-	{
-		BaseWidget::run(context);
-
-		if (BaseWidget::isMouseOverWidget())
-		{
-			intSetShadowPower(getCost());
-		}
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
