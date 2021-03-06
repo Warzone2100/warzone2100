@@ -426,6 +426,10 @@ private:
 	void updateLayout() override
 	{
 		BaseWidget::updateLayout();
+		if (isMouseOverWidget())
+		{
+			intSetShadowPower(getCost());
+		}
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
 		productionRunSizeLabel.update(controller->getHighlightedObject(), getStats());
 	}
@@ -433,16 +437,6 @@ private:
 	uint32_t getCost() override
 	{
 		return calcTemplatePower(getStats());
-	}
-
-	void run(W_CONTEXT *context) override
-	{
-		BaseWidget::run(context);
-
-		if (isMouseOverWidget())
-		{
-			intSetShadowPower(getCost());
-		}
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
@@ -641,12 +635,19 @@ private:
 			controller->adjustFactoryLoop(key == WKEY_PRIMARY);
 		}
 
-	private:
-		void run(W_CONTEXT *) override
+protected:
+		void display(int xOffset, int yOffset) override
+		{
+			updateLayout();
+			BaseWidget::display(xOffset, yOffset);
+		}
+
+		void updateLayout()
 		{
 			setState(ManufactureStatsForm::getProductionLoops(controller->getHighlightedObject()) == 0 ? 0: WBUT_CLICKLOCK);
 		}
 
+	private:
 		std::shared_ptr<ManufactureController> controller;
 	};
 
@@ -660,8 +661,14 @@ private:
 		{
 		}
 
-	private:
-		void run(W_CONTEXT *) override
+	protected:
+		void display(int xOffset, int yOffset) override
+		{
+			updateLayout();
+			BaseWidget::display(xOffset, yOffset);
+		}
+
+		void updateLayout()
 		{
 			auto productionLoops = ManufactureStatsForm::getProductionLoops(controller->getHighlightedObject());
 			if (productionLoops != lastProductionLoop)
@@ -671,6 +678,7 @@ private:
 			}
 		}
 
+	private:
 		std::string getNewString()
 		{
 			switch (lastProductionLoop)

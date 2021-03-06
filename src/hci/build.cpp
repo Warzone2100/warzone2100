@@ -87,7 +87,7 @@ void BuildController::startBuildPosition(STRUCTURE_STATS *buildOption)
 {
 	auto builder = getHighlightedObject();
 	ASSERT_NOT_NULLPTR_OR_RETURN(, builder);
-	
+
 	triggerEvent(TRIGGER_MENU_BUILD_SELECTED);
 
 	if (buildOption == structGetDemolishStat())
@@ -431,22 +431,18 @@ private:
 	void updateLayout() override
 	{
 		BaseWidget::updateLayout();
+
+		if (isMouseOverWidget())
+		{
+			intSetShadowPower(getCost());
+		}
+
 		costBar->majorSize = std::min(100, (int32_t)(getCost() / POWERPOINTS_DROIDDIV));
 	}
 
 	uint32_t getCost() override
 	{
 		return getStats()->powerToBuild;
-	}
-
-	void run(W_CONTEXT *context) override
-	{
-		BaseWidget::run(context);
-
-		if (isMouseOverWidget())
-		{
-			intSetShadowPower(getCost());
-		}
 	}
 
 	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
