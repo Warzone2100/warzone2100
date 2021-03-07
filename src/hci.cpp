@@ -762,6 +762,12 @@ void intResetScreen(bool NoAnim)
 			intRemoveOrder();
 		}
 		break;
+	case INT_INGAMEOP:
+		if (NoAnim) // Other menus can be opened when options menu is up, so close the options (issue #1589)
+		{
+			intCloseInGameOptionsNoAnim();
+		}
+		break;
 	case INT_MISSIONRES:
 		intRemoveMissionResultNoAnim();
 		break;
