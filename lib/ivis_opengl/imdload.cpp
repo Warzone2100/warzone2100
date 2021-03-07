@@ -960,11 +960,12 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX], specfile[PATH_MAX];
-	int cnt, nlevels;
+	int cnt, nlevels, interpolate;
 	UDWORD level;
 	int32_t imd_version;
 	uint32_t imd_flags;
 	bool bTextured = false;
+	bool readInterpolate = false;
 	iIMDShape *objanimpie[ANIM_EVENT_COUNT];
 
 	memset(normalfile, 0, sizeof(normalfile));
@@ -998,6 +999,18 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		return;
 	}
 	pFileData += cnt;
+
+	// Read interpolation -- optional
+	if (sscanf(pFileData, "%255s %d%n", buffer, &interpolate, &cnt) != 2)
+	{
+		debug(LOG_ERROR, "%s: Expecting INTERPOLATE: %s", filename.toUtf8().c_str(), buffer);
+		return;
+	}
+	if (strncmp(buffer, "INTERPOLATE", 11) == 0)
+	{
+		readInterpolate = true;
+		pFileData += cnt;
+	}
 
 	/* This can be either texture or levels */
 	if (sscanf(pFileData, "%255s %d%n", buffer, &nlevels, &cnt) != 2)
@@ -1219,6 +1232,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 			psShape->normalpage = (normalpage.has_value()) ? normalpage.value() : iV_TEX_INVALID;
 			psShape->specularpage = (specpage.has_value()) ? specpage.value() : iV_TEX_INVALID;
 			psShape->flags = imd_flags;
+			psShape->interpolate = (readInterpolate) ? interpolate : 1;
 		}
 
 		// check if model should use team colour mask

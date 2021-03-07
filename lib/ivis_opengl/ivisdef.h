@@ -149,6 +149,8 @@ struct iIMDShape
 	int objanimcycles = 0; ///< Number of cycles to render, zero means infinitely many
 	iIMDShape *objanimpie[ANIM_EVENT_COUNT] = { nullptr };
 
+	int interpolate = 1; // if the model wants to be interpolated
+
 	iIMDShape *next = nullptr;  // next pie in multilevel pies (NULL for non multilevel !)
 };
 
