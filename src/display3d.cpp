@@ -413,25 +413,38 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 		{
 			elapsed = 0; // Animation hasn't started yet.
 		}
+
 		const int frame = (elapsed / strImd->objanimtime) % strImd->objanimframes;
-		const float frameFraction = fmod(elapsed / (float)strImd->objanimtime, strImd->objanimframes) - frame;
-		const int nextFrame = (frame + 1) % strImd->objanimframes;
 		ASSERT(frame < strImd->objanimframes, "Bad index %d >= %d", frame, strImd->objanimframes);
 
 		const ANIMFRAME &state = strImd->objanimdata.at(frame);
-		const ANIMFRAME &nextState = strImd->objanimdata.at(nextFrame);
 
 		if (state.scale.x == -1.0f) // disabled frame, for implementing key frame animation
 		{
 			return false;
 		}
 
-		modelMatrix *=
+		if (strImd->interpolate == 1)
+		{
+			const float frameFraction = fmod(elapsed / (float)strImd->objanimtime, strImd->objanimframes) - frame;
+			const int nextFrame = (frame + 1) % strImd->objanimframes;
+			const ANIMFRAME &nextState = strImd->objanimdata.at(nextFrame);
+
+			modelMatrix *=
 				glm::interpolate(glm::translate(glm::vec3(state.pos)), glm::translate(glm::vec3(nextState.pos)), frameFraction) *
 				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.pitch / DEG(1), nextState.rot.pitch / DEG(1), frameFraction)), glm::vec3(1.f, 0.f, 0.f)) *
 				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.direction / DEG(1), nextState.rot.direction / DEG(1), frameFraction)), glm::vec3(0.f, 1.f, 0.f)) *
 				glm::rotate(RADIANS(interpolateAngleDegrees(state.rot.roll / DEG(1), nextState.rot.roll / DEG(1), frameFraction)), glm::vec3(0.f, 0.f, 1.f)) *
 				glm::scale(state.scale);
+		}
+		else
+		{
+			modelMatrix *= glm::translate(glm::vec3(state.pos)) *
+				glm::rotate(UNDEG(state.rot.pitch), glm::vec3(1.f, 0.f, 0.f)) *
+				glm::rotate(UNDEG(state.rot.direction), glm::vec3(0.f, 1.f, 0.f)) *
+				glm::rotate(UNDEG(state.rot.roll), glm::vec3(0.f, 0.f, 1.f)) *
+				glm::scale(state.scale);
+		}
 	}
 
 	return pie_Draw3DShape(strImd, animFrame, colour, buildingBrightness, pieFlag, pieFlagData, viewMatrix * modelMatrix);

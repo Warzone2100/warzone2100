@@ -42,6 +42,12 @@ The following flags are available:
 * 0x01000 -- Specifies that the model should not be stretched to fit terrain. For defensive buildings that have a deep foundation.
 * 0x10000 -- Specifies the usage of the TCMask feature, for which a texture named 'page-N_tcmask.png' (*N* being a number) should be used together with the model's ordinary texture. This flag replaced old team coloration methods (read ticket #851).
 
+### INTERPOLATE
+
+> INTERPOLATE 0
+
+Optional. Specifies if the model wants to have interpolated frames. Default is set to interpolate.
+
 ### TEXTURE
 
 > TEXTURE 0 page-7-barbarians-arizona.png 0 0
