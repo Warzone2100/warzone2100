@@ -363,15 +363,23 @@ static void ProcessOptionFinished()
 {
 	intMode		= INT_NORMAL;
 
-
-
-	//unpause.
 	if (gamePaused())
 	{
 		kf_TogglePauseMode();
 	}
+}
 
+void intCloseInGameOptionsNoAnim()
+{
+	if (NetPlay.isHost)
+	{
+		widgDelete(psWScreen, INTINGAMEPOPUP);
+	}
+	widgDelete(psWScreen, INTINGAMEOP);
+	InGameOpUp = false;
 
+	ProcessOptionFinished();
+	resetMissionWidgets();
 }
 
 // ////////////////////////////////////////////////////////////////////////////
