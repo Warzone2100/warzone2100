@@ -62,7 +62,6 @@
 // FIXME Direct iVis implementation include!
 #include "lib/framework/fixedpoint.h"
 
-#include "keymap.h"
 #include "loop.h"
 #include "mission.h"
 #include "selection.h"
@@ -1115,9 +1114,10 @@ void	kf_TogglePowerBar()
 }
 // --------------------------------------------------------------------------
 /* Toggles whether we process debug key mappings */
-void	kf_ToggleDebugMappings()
+void kf_ToggleDebugMappings()
 {
-	sendProcessDebugMappings(!getWantedDebugMappingStatus(selectedPlayer));
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	sendProcessDebugMappings(!dbgInputManager.getPlayerWantsDebugMappings(selectedPlayer));
 }
 // --------------------------------------------------------------------------
 
@@ -1287,7 +1287,8 @@ void	kf_TogglePauseMode()
 		}
 
 		// display cheats status
-		if (getDebugMappingStatus())
+		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			addConsoleMessage(_("CHEATS: ENABLED"), CENTRE_JUSTIFY, SYSTEM_MESSAGE);
 		} else {
@@ -2084,7 +2085,8 @@ const unsigned nb_available_speeds = ARRAY_SIZE(available_speed);
 static void tryChangeSpeed(Rational newMod, Rational oldMod)
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial
-	if ((runningMultiplayer() && !getDebugMappingStatus()) || bInTutorial)
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if ((runningMultiplayer() && !dbgInputManager.debugMappingsAllowed()) || bInTutorial)
 	{
 		if (!bInTutorial)
 		{
@@ -2094,7 +2096,7 @@ static void tryChangeSpeed(Rational newMod, Rational oldMod)
 	}
 
 	// only in debug/cheat mode do we enable all time compression speeds.
-	if (!getDebugMappingStatus() && (newMod >= 2 || newMod <= 0))  // 2 = max officially allowed time compression
+	if (!dbgInputManager.debugMappingsAllowed() && (newMod >= 2 || newMod <= 0))  // 2 = max officially allowed time compression
 	{
 		return;
 	}

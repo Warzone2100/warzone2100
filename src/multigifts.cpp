@@ -51,7 +51,6 @@
 #include "multimenu.h"			// for multimenu
 #include "multistat.h"
 #include "random.h"
-#include "keymap.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // prototypes
@@ -667,7 +666,8 @@ void recvMultiPlayerFeature(NETQUEUE queue)
 	}
 	NETend();
 
-	if (!getDebugMappingStatus() && bMultiPlayer)
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to add feature for player %u.", NetPlay.players[queue.index].position);
 		return;

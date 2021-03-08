@@ -28,9 +28,10 @@
 #include "lib/netplay/netplay.h"
 #include "lib/framework/string_ext.h"
 
+#include "input/debugmappings.h"
+#include "display.h"
 #include "cheat.h"
 #include "keybind.h"
-#include "keymap.h"
 #include "multiplay.h"
 #include "qtscript.h"
 #include "template.h"
@@ -109,20 +110,21 @@ bool _attemptCheatCode(const char *cheat_name)
 		return true;
 	}
 
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	if (strcmp(cheat_name, "cheat on") == 0 || strcmp(cheat_name, "debug") == 0)
 	{
-		if (!getDebugMappingStatus())
+		if (!dbgInputManager.debugMappingsAllowed())
 		{
 			kf_ToggleDebugMappings();
 		}
 		return true;
 	}
-	if (strcmp(cheat_name, "cheat off") == 0 && getDebugMappingStatus())
+	if (strcmp(cheat_name, "cheat off") == 0 && dbgInputManager.debugMappingsAllowed())
 	{
 		kf_ToggleDebugMappings();
 		return true;
 	}
-	if (!getDebugMappingStatus())
+	if (!dbgInputManager.debugMappingsAllowed())
 	{
 		return false;
 	}
@@ -166,6 +168,22 @@ void sendProcessDebugMappings(bool val)
 	NETend();
 }
 
+static std::string getWantedDebugMappingStatuses(const DebugInputManager& dbgInputManager, bool bStatus)
+{
+	char ret[MAX_PLAYERS + 1] = "\0";
+	char* p = ret;
+	for (unsigned n = 0; n < MAX_PLAYERS; ++n)
+	{
+		if (NetPlay.players[n].allocated && (dbgInputManager.getPlayerWantsDebugMappings(n) == bStatus))
+		{
+			*p++ = '0' + NetPlay.players[n].position;
+		}
+	}
+	std::sort(ret, p);
+	*p++ = '\0';
+	return ret;
+}
+
 void recvProcessDebugMappings(NETQUEUE queue)
 {
 	bool val = false;
@@ -173,18 +191,29 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	NETbool(&val);
 	NETend();
 
-	bool oldDebugMode = getDebugMappingStatus();
-	processDebugMappings(queue.index, val);
-	bool newDebugMode = getDebugMappingStatus();
+	DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	bool oldDebugMode = dbgInputManager.debugMappingsAllowed();
+	dbgInputManager.setPlayerWantsDebugMappings(queue.index, val);
+	bool newDebugMode = dbgInputManager.debugMappingsAllowed();
 
 	std::string cmsg;
 	if (val)
 	{
-		cmsg = astringf(_("%s wants to enable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		cmsg = astringf(
+			_("%s wants to enable debug mode. Enabled: %s, Disabled: %s."),
+			getPlayerName(queue.index),
+			getWantedDebugMappingStatuses(dbgInputManager, true).c_str(),
+			getWantedDebugMappingStatuses(dbgInputManager, false).c_str()
+		);
 	}
 	else
 	{
-		cmsg = astringf(_("%s wants to disable debug mode. Enabled: %s, Disabled: %s."), getPlayerName(queue.index), getWantedDebugMappingStatuses(true).c_str(), getWantedDebugMappingStatuses(false).c_str());
+		cmsg = astringf(
+			_("%s wants to disable debug mode. Enabled: %s, Disabled: %s."),
+			getPlayerName(queue.index),
+			getWantedDebugMappingStatuses(dbgInputManager, true).c_str(),
+			getWantedDebugMappingStatuses(dbgInputManager, false).c_str()
+		);
 	}
 	addConsoleMessage(cmsg.c_str(), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 

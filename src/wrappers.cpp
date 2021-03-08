@@ -37,7 +37,6 @@
 #include "clparse.h"
 #include "frontend.h"
 #include "keyedit.h"
-#include "keymap.h"
 #include "mission.h"
 #include "multiint.h"
 #include "multilimit.h"

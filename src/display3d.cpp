@@ -75,7 +75,6 @@
 #include "message.h"
 #include "component.h"
 #include "warcam.h"
-#include "keymap.h"
 #include "order.h"
 #include "scores.h"
 #include "multiplay.h"
@@ -926,7 +925,8 @@ void draw3DScene()
 		char buildInfo[255];
 		getAsciiTime(buildInfo, graphicsTime);
 		txtLevelName.render(RET_X + 134, 410 + E_H, WZCOL_TEXT_MEDIUM);
-		if (getDebugMappingStatus())
+		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			txtDebugStatus.render(RET_X + 134, 436 + E_H, WZCOL_TEXT_MEDIUM);
 		}

@@ -34,7 +34,6 @@
 #include "../frontend.h"
 #include "../hci.h"
 #include "../keyedit.h"
-#include "../keymap.h"
 #include "../mission.h"
 #include "../multiint.h"
 #include "../multilimit.h"

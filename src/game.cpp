@@ -87,7 +87,6 @@
 #include "template.h"
 #include "version.h"
 #include "lib/ivis_opengl/screen.h"
-#include "keymap.h"
 #include <ctime>
 #include "multimenu.h"
 #include "console.h"
@@ -1811,6 +1810,7 @@ static inline void setIniDroidOrder(nlohmann::json &jsonObj, WzString const &key
 
 static void allocatePlayers()
 {
+	DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
@@ -1822,7 +1822,7 @@ static void allocatePlayers()
 		{
 			NetPlay.players[i].allocated = true;
 			//processDebugMappings ensures game does not start in DEBUG mode
-			processDebugMappings(i, false);
+			dbgInputManager.setPlayerWantsDebugMappings(i, false);
 		}
 		else
 		{
@@ -5507,6 +5507,8 @@ Writes some version info
 */
 bool writeGameInfo(const char *pFileName)
 {
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+
 	WzConfig ini(WzString::fromUtf8(pFileName), WzConfig::ReadAndWrite);
 	char ourtime[100] = {'\0'};
 	const time_t currentTime = time(nullptr);
@@ -5523,7 +5525,7 @@ bool writeGameInfo(const char *pFileName)
 	ini.setValue("version", version_getVersionString());
 	ini.setValue("full_version", version_getFormattedVersionString());
 	ini.setValue("cheated", Cheated);
-	ini.setValue("debug", getDebugMappingStatus());
+	ini.setValue("debug", dbgInputManager.debugMappingsAllowed());
 	ini.setValue("level/map", getLevelName());
 	ini.setValue("mods", !getModList().empty() ? getModList().c_str() : "None");
 	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
