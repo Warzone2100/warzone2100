@@ -27,12 +27,13 @@
 constexpr int KM_GO_BACK = 10204;
 
 class InputManager;
+class KeyFunctionConfiguration;
 
-bool runKeyMapEditor(InputManager& inputManager);
-bool runInGameKeyMapEditor(InputManager& inputManager, unsigned id);
-bool startKeyMapEditor(InputManager& inputManager, bool first);
-bool startInGameKeyMapEditor(InputManager& inputManager, bool first);
+bool runKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig);
+bool runInGameKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, unsigned id);
+bool startKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, bool first);
+bool startInGameKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, bool first);
 bool saveKeyMap(const InputManager& inputManager);
-bool loadKeyMap(InputManager& inputManager);
+bool loadKeyMap(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig);
 
 #endif // __INCLUDED_SRC_KEYEDIT_H__
