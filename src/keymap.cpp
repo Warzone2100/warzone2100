@@ -53,18 +53,6 @@ static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 
 // ----------------------------------------------------------------------------------
 
-static const KeyFunctionConfiguration keyFunctionInfoTable;
-
-const KeyFunctionEntries allKeyFunctionEntries()
-{
-	return keyFunctionInfoTable.allKeyFunctionEntries();
-}
-
-nonstd::optional<std::reference_wrapper<const KeyFunctionInfo>> keyFunctionInfoByName(std::string const &name)
-{
-	return keyFunctionInfoTable.keyFunctionInfoByName(name);
-}
-
 KeyMappingInputSource keyMappingSourceByName(std::string const& name)
 {
 	if (name == "default")

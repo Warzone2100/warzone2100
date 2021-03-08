@@ -78,8 +78,10 @@
 #include "lib/ivis_opengl/piematrix.h"
 #include "animation.h"
 #include "input/manager.h"
+#include "input/keyconfig.h"
 
 InputManager gInputManager;
+KeyFunctionConfiguration gKeyFuncConfig;
 DragBox3D dragBox3D;
 WallDrag wallDrag;
 

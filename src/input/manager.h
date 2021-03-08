@@ -48,7 +48,7 @@ public:
 	void processMappings(const bool bAllowMouseWheelEvents);
 
 	/* (Re-)Initializes mappings to their default values. If `bForceDefaults` is true, any existing mappings will be overwritten with the defaults */
-	void resetMappings(const bool bForceDefaults);
+	void resetMappings(const bool bForceDefaults, const KeyFunctionConfiguration& keyFuncConfig);
 
 	void clearAssignableMappings();
 

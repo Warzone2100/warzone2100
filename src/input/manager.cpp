@@ -185,7 +185,7 @@ const std::list<KeyMapping> InputManager::getAllMappings() const
 	return keyMappings;
 }
 
-void InputManager::resetMappings(bool bForceDefaults)
+void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfiguration& keyFuncConfig)
 {
 	keyMappings.clear();
 	markerKeyFunctions.clear();
@@ -199,7 +199,7 @@ void InputManager::resetMappings(bool bForceDefaults)
 	// load the mappings.
 	if (!bForceDefaults)
 	{
-		if (loadKeyMap(*this))
+		if (loadKeyMap(*this, keyFuncConfig))
 		{
 			debug(LOG_WZ, "Loaded key map successfully");
 		}
@@ -211,7 +211,7 @@ void InputManager::resetMappings(bool bForceDefaults)
 	}
 
 	/* Add in the default mappings if we are forcing defaults (e.g. "reset to defaults" button was pressed from the UI) or loading key map failed. */
-	for (const KeyFunctionInfo& info : allKeyFunctionEntries())
+	for (const KeyFunctionInfo& info : keyFuncConfig.allKeyFunctionEntries())
 	{
 		for (const auto& mapping : info.defaultMappings)
 		{

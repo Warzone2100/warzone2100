@@ -27,6 +27,7 @@
 #include "basedef.h"
 #include "structure.h"
 #include "input/manager.h"
+#include "input/keyconfig.h"
 #include <glm/fwd.hpp>
 
 /* Initialise the display system */
@@ -36,6 +37,7 @@ bool dispInitialise();
 bool transitionInit();
 
 extern InputManager gInputManager;
+extern KeyFunctionConfiguration gKeyFuncConfig;
 
 void ProcessRadarInput();
 

@@ -86,7 +86,7 @@ void WzOldTitleUI::start()
 		startMultiPlayerMenu();		// goto multiplayer menu
 		break;
 	case KEYMAP:
-		startKeyMapEditor(gInputManager, true);
+		startKeyMapEditor(gInputManager, gKeyFuncConfig, true);
 		break;
 	case MUSIC_MANAGER:
 		startMusicManager();
@@ -120,7 +120,7 @@ TITLECODE WzOldTitleUI::run()
 		runMultiPlayerMenu();
 		break;
 	case KEYMAP:
-		runKeyMapEditor(gInputManager);
+		runKeyMapEditor(gInputManager, gKeyFuncConfig);
 		break;
 
 	case MUSIC_MANAGER:
