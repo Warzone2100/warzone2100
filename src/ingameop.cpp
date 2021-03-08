@@ -459,7 +459,7 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	isKeyMapEditorUp = false;
 	if (isMusicManagerUp)
 	{
-		runInGameMusicManager(MM_RETURN);
+		runInGameMusicManager(MM_RETURN, gInputManager);
 	}
 	isMusicManagerUp = false;
 
@@ -936,7 +936,7 @@ void intProcessInGameOptions(UDWORD id)
 	}
 	else if (isMusicManagerUp)
 	{
-		if (runInGameMusicManager(id))
+		if (runInGameMusicManager(id, gInputManager))
 		{
 			intCloseInGameOptions(true, true);
 		}
@@ -993,7 +993,7 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 	case INTINGAMEOP_MUSICMANAGER:
 		widgDelete(psWScreen, INTINGAMEOP);  // get rid of the old stuff.
-		startInGameMusicManager();
+		startInGameMusicManager(gInputManager);
 		isMusicManagerUp = true;
 		break;
 	case INTINGAMEOP_RESUME:			//resume was pressed.

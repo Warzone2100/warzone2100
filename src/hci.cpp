@@ -59,7 +59,6 @@
 #include "intdisplay.h"
 #include "intelmap.h"
 #include "intorder.h"
-#include "keymap.h"
 #include "loadsave.h"
 #include "loop.h"
 #include "order.h"
@@ -1416,7 +1415,8 @@ INT_RETVAL intRunWidgets()
 		retCode = INT_INTERCEPT;
 	}
 
-	if ((testPlayerHasLost() || testPlayerHasWon()) && !bMultiPlayer && intMode != INT_MISSIONRES && !getDebugMappingStatus())
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if ((testPlayerHasLost() || testPlayerHasWon()) && !bMultiPlayer && intMode != INT_MISSIONRES && !dbgInputManager.debugMappingsAllowed())
 	{
 		debug(LOG_ERROR, "PlayerHasLost Or Won");
 		intResetScreen(true);

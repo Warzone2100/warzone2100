@@ -73,7 +73,6 @@
 #include "mapgrid.h"
 #include "selection.h"
 #include "scores.h"
-#include "keymap.h"
 #include "texture.h"
 #include "warzoneconfig.h"
 #include "combat.h"

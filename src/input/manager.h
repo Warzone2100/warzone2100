@@ -25,9 +25,12 @@
 #include <list>
 #include <optional-lite/optional.hpp>
 
+#include "lib/framework/frame.h"
+
 #include "keyconfig.h"
 #include "context.h"
 #include "mapping.h"
+#include "debugmappings.h"
 
 class InputManager
 {
@@ -77,6 +80,8 @@ public:
 
 	// General
 public:
+	DebugInputManager& debugManager();
+
 	void shutdown();
 
 	// Map markers
@@ -96,7 +101,9 @@ private:
 	std::vector<InputContext::State> contextStates;
 	std::list<KeyMapping> keyMappings;
 	std::unordered_map<KEY_CODE, KeyFunctionInfo, KeyCodeHash> markerKeyFunctions;
-	bool bMappingsSortOrderDirty = true;
+	bool bMappingsSortOrderDirty;
+
+	DebugInputManager dbgInputManager = DebugInputManager(MAX_PLAYERS);
 };
 
 #endif // __INCLUDED_SRC_INPUT_MANAGER_H__

@@ -57,7 +57,6 @@
 #include "wrappers.h"
 #include "power.h"
 #include "map.h"
-#include "keymap.h"
 #include "intimage.h"
 #include "mechanics.h"
 #include "lighting.h"
@@ -195,8 +194,9 @@ void incrementViewDistance(float amount)
 	}
 
 	viewDistanceIncrementCooldownTime = realTime + GAME_TICKS_PER_SEC / 50;
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	auto target = (viewDistanceAnimation.isActive() ? viewDistanceAnimation.getFinalData() : getViewDistance()) + amount;
-	if (!getDebugMappingStatus())
+	if (!dbgInputManager.debugMappingsAllowed())
 	{
 		CLIP(target, MINDISTANCE, MAXDISTANCE);
 	}
@@ -1520,7 +1520,8 @@ void AddDerrickBurningMessage()
 
 static void printDroidClickInfo(DROID *psDroid)
 {
-	if (getDebugMappingStatus()) // cheating on, so output debug info
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (dbgInputManager.debugMappingsAllowed()) // cheating on, so output debug info
 	{
 		console("%s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %hu - ECM %u - pitch %.0f - frust %u - kills %d",
 		        droidGetName(psDroid), psDroid->body, psDroid->originalBody, psDroid->id,
@@ -1546,7 +1547,8 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 	{
 		memset(DROIDDOING, 0x0 , sizeof(DROIDDOING)); // take over the other players droid by debug menu.
 		/* We've clicked on enemy droid */
-		if (getDebugMappingStatus())
+		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("(Enemy!) %s - Hitpoints %d/%d - ID %d - experience %f, %s - order %s - action %s - sensor range %d - ECM %d - pitch %.0f",
 			        droidGetName(psDroid),  psDroid->body, psDroid->originalBody, psDroid->id,
@@ -1705,7 +1707,8 @@ static void dealWithLMBStructure(STRUCTURE *psStructure, SELECTION_TYPE selectio
 	if (!aiCheckAlliances(psStructure->player, selectedPlayer))
 	{
 		/* We've clicked on an enemy building */
-		if (getDebugMappingStatus())
+		const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("(Enemy!) %s, ref: %d, ID: %d Hitpoints: %d/%d", getID(psStructure->pStructureType), psStructure->pStructureType->ref,
 			        psStructure->id, psStructure->body, psStructure->pStructureType->upgrade[psStructure->player].hitpoints);
@@ -1875,7 +1878,8 @@ static void dealWithLMBFeature(FEATURE *psFeature)
 			break;
 		}
 	}
-	if (getDebugMappingStatus())
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (dbgInputManager.debugMappingsAllowed())
 	{
 		console("(Feature) %s ID: %d ref: %d Hitpoints: %d/%d", getID(psFeature->psStats), psFeature->id, psFeature->psStats->ref, psFeature->psStats->body, psFeature->body);
 	}
@@ -1957,7 +1961,8 @@ void	dealWithLMB()
 		audio_PlayTrack(ID_SOUND_SELECT);
 	}
 
-	if (getDebugMappingStatus() && tileOnMap(mouseTileX, mouseTileY))
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (dbgInputManager.debugMappingsAllowed() && tileOnMap(mouseTileX, mouseTileY))
 	{
 		MAPTILE *psTile = mapTile(mouseTileX, mouseTileY);
 		uint8_t aux = auxTile(mouseTileX, mouseTileY, selectedPlayer);

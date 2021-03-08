@@ -68,7 +68,6 @@
 #include "intdisplay.h"
 #include "display.h"
 #include "difficulty.h"
-#include "keymap.h"
 #include "game.h"
 #include "qtscript.h"
 #include "multiplay.h"
@@ -4042,7 +4041,8 @@ bool validLocation(BASE_STATS *psStats, Vector2i pos, uint16_t direction, unsign
 			for (int i = 0; i < b.size.x; ++i)
 			{
 				// Don't allow building structures (allow delivery points, though) outside visible area in single-player with debug mode off. (Why..?)
-				if (!bMultiPlayer && !getDebugMappingStatus() && !TEST_TILE_VISIBLE(player, mapTile(b.map.x + i, b.map.y + j)))
+				const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+				if (!bMultiPlayer && !dbgInputManager.debugMappingsAllowed() && !TEST_TILE_VISIBLE(player, mapTile(b.map.x + i, b.map.y + j)))
 				{
 					return false;
 				}
@@ -5229,6 +5229,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		return;  // Don't print anything about imaginary structures. Would crash, anyway.
 	}
 
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	switch (psStructure->pStructureType->type)
 	{
 	case REF_HQ:
@@ -5236,7 +5237,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 			unsigned int assigned_droids = countAssignedDroids(psStructure);
 			console(ngettext("%s - %u Unit assigned - Hitpoints %d/%d", "%s - %u Units assigned - Hitpoints %d/%d", assigned_droids),
 			        getStatsName(psStructure->pStructureType), assigned_droids, psStructure->body, structureBody(psStructure));
-			if (getDebugMappingStatus())
+			if (dbgInputManager.debugMappingsAllowed())
 			{
 				console("ID %d - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
 			}
@@ -5260,7 +5261,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		{
 			console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
 		}
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("ID %d - armour %d|%d - sensor range %d - ECM %d - born %u - depth %.02f",
 			        psStructure->id, objArmour(psStructure, WC_KINETIC), objArmour(psStructure, WC_HEAT),
@@ -5269,14 +5270,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 		break;
 	case REF_REPAIR_FACILITY:
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("ID %d - Queue %d", psStructure->id, psStructure->pFunctionality->repairFacility.droidQueue);
 		}
 		break;
 	case REF_RESOURCE_EXTRACTOR:
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("ID %d - %s", psStructure->id, (auxTile(map_coord(psStructure->pos.x), map_coord(psStructure->pos.y), selectedPlayer) & AUXBITS_DANGER) ? "danger" : "safe");
 		}
@@ -5293,7 +5294,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		}
 		console(_("%s - Connected %u of %u - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), numConnected,
 		        NUM_POWER_MODULES, psStructure->body, structureBody(psStructure));
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("ID %u - Multiplier: %u", psStructure->id, getBuildingPowerPoints(psStructure));
 		}
@@ -5302,7 +5303,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 	case REF_VTOL_FACTORY:
 	case REF_FACTORY:
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("ID %u - Production Output: %u - BuildPointsRemaining: %u - Resistance: %d / %d", psStructure->id,
 			        getBuildingProductionPoints(psStructure), psStructure->pFunctionality->factory.buildPointsRemaining,
@@ -5311,14 +5312,14 @@ void printStructureInfo(STRUCTURE *psStructure)
 		break;
 	case REF_RESEARCH:
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("ID %u - Research Points: %u", psStructure->id, getBuildingResearchPoints(psStructure));
 		}
 		break;
 	case REF_REARM_PAD:
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("tile %d,%d - target %s", psStructure->pos.x / TILE_UNITS, psStructure->pos.y / TILE_UNITS,
 			        objInfo(psStructure->pFunctionality->rearmPad.psObj));
@@ -5326,7 +5327,7 @@ void printStructureInfo(STRUCTURE *psStructure)
 		break;
 	default:
 		console(_("%s - Hitpoints %d/%d"), getStatsName(psStructure->pStructureType), psStructure->body, structureBody(psStructure));
-		if (getDebugMappingStatus())
+		if (dbgInputManager.debugMappingsAllowed())
 		{
 			console("ID %u - sensor range %d - ECM %d", psStructure->id, structSensorRange(psStructure), structJammerPower(psStructure));
 		}

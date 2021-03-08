@@ -70,7 +70,6 @@
 #include "multistat.h"
 #include "multigifts.h"								// gifts and alliances.
 #include "multiint.h"
-#include "keymap.h"
 #include "cheat.h"
 #include "main.h"								// for gamemode
 #include "multiint.h"
@@ -527,8 +526,9 @@ bool responsibleFor(int player, int playerinquestion)
 
 bool canGiveOrdersFor(int player, int playerInQuestion)
 {
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	return playerInQuestion >= 0 && playerInQuestion < MAX_PLAYERS &&
-	       (player == playerInQuestion || responsibleFor(player, playerInQuestion) || getDebugMappingStatus());
+	       (player == playerInQuestion || responsibleFor(player, playerInQuestion) || dbgInputManager.debugMappingsAllowed());
 }
 
 int scavengerSlot()
@@ -901,7 +901,8 @@ static bool recvResearch(NETQUEUE queue)
 	NETuint32_t(&index);
 	NETend();
 
-	if (!getDebugMappingStatus() && bMultiPlayer)
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to finish research for player %u.", NetPlay.players[queue.index].position);
 		return false;
@@ -1286,7 +1287,8 @@ bool recvDestroyFeature(NETQUEUE queue)
 	NETuint32_t(&id);
 	NETend();
 
-	if (!getDebugMappingStatus() && bMultiPlayer)
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (!dbgInputManager.debugMappingsAllowed() && bMultiPlayer)
 	{
 		debug(LOG_WARNING, "Failed to remove feature for player %u.", NetPlay.players[queue.index].position);
 		return false;

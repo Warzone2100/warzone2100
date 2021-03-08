@@ -57,7 +57,6 @@
 #include "multijoin.h"
 #include "mission.h"
 #include "scores.h"
-#include "keymap.h"
 #include "keybind.h"
 #include "loop.h"
 #include "frontend.h"
@@ -681,7 +680,8 @@ static void displayExtraGubbins(UDWORD height, ExtraGubbinsCache& cache)
 	cache.wzTitleText_Units.setText(_("Units"), font_regular);
 	cache.wzTitleText_Units.render(MULTIMENU_FORM_X + MULTIMENU_C10, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
 
-	if (getDebugMappingStatus())
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (dbgInputManager.debugMappingsAllowed())
 	{
 		cache.wzTitleText_RightColumn.setText(_("Power"), font_regular);
 	}
@@ -829,7 +829,8 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 	//only show player's and allies' unit counts, and nobody elses.
 	//c10:units
-	if (isAlly || getDebugMappingStatus())
+	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	if (isAlly || dbgInputManager.debugMappingsAllowed())
 	{
 		sprintf(str, "%d", getNumDroids(player) + getNumTransporterDroids(player));
 		data.wzUnitsText.setText(str, font_regular);
@@ -839,7 +840,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	/* Display player power instead of number of played games
 	  * and number of units instead of ping when in debug mode
 	  */
-	if (getDebugMappingStatus())  //Won't pass this when in both release and multiplayer modes
+	if (dbgInputManager.debugMappingsAllowed())  //Won't pass this when in both release and multiplayer modes
 	{
 		//c11: Player power
 		sprintf(str, "%u", (int)getPower(player));
@@ -866,7 +867,7 @@ static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	else
 	{
 		//c11: Structures
-		if (isAlly || getDebugMappingStatus())
+		if (isAlly || dbgInputManager.debugMappingsAllowed())
 		{
 			// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
 			int num = 0;

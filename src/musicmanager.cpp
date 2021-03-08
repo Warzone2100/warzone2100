@@ -24,15 +24,16 @@
 
 #include "musicmanager.h"
 
+#include "lib/framework/frame.h"
+#include "lib/framework/input.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
+#include "input/manager.h"
 #include "intdisplay.h"
 #include "hci.h"
 #include "multiint.h"
 #include "frontend.h"
 #include "frend.h"
 #include "ingameop.h"
-#include "keymap.h"
-#include "keybind.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/widget/button.h"
@@ -846,9 +847,9 @@ static bool musicManager(WIDGET *parent, bool ingame)
 	return true;
 }
 
-bool startInGameMusicManager()
+bool startInGameMusicManager(InputManager& inputManager)
 {
-	bAllowOtherKeyPresses = false;
+	inputManager.makeAllContextsInactive();
 	return musicManager(psWScreen->psForm.get(), true);
 }
 
@@ -876,18 +877,18 @@ static void perFrameCleanup()
 	}
 }
 
-bool runInGameMusicManager(unsigned id)
+bool runInGameMusicManager(unsigned id, InputManager& inputManager)
 {
 	if (id == MM_RETURN)			// return
 	{
-		bAllowOtherKeyPresses = true;
+		inputManager.resetContextStates();
 		widgDelete(psWScreen, MM_FORM);
 		inputLoseFocus();
 		return true;
 	}
 	else if (id == MM_GO_BACK)
 	{
-		bAllowOtherKeyPresses = true;
+		inputManager.resetContextStates();
 		widgDelete(psWScreen, MM_FORM);
 		intReopenMenuWithoutUnPausing();
 	}

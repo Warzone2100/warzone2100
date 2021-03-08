@@ -49,7 +49,6 @@
 #include "intdisplay.h"
 #include "keybind.h"
 #include "keyedit.h"
-#include "keymap.h"
 #include "loadsave.h"
 #include "main.h"
 #include "multiint.h"

@@ -22,7 +22,6 @@
 #define __INCLUDED_SRC_KEYBIND_H__
 
 #include "console.h"
-#include "keymap.h"
 #include "selection.h"
 #include "orderdef.h"
 #include "lib/framework/fixedpoint.h"

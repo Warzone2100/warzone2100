@@ -18,21 +18,26 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_SRC_KEYMAP_H__
-#define __INCLUDED_SRC_KEYMAP_H__
+#ifndef __INCLUDED_SRC_INPUT_DEBUGMAPPINGS_H__
+#define __INCLUDED_SRC_INPUT_DEBUGMAPPINGS_H__
 
 #include <vector>
-#include <functional>
-#include <optional-lite/optional.hpp>
-#include <unordered_map>
 
-#include "input/keyconfig.h"
-#include "input/context.h"
+class DebugInputManager
+{
+public:
+	DebugInputManager(const unsigned int maxPlayers);
 
-void processDebugMappings(unsigned player, bool val);
-bool getDebugMappingStatus();
-bool getWantedDebugMappingStatus(unsigned player);
-std::string getWantedDebugMappingStatuses(bool val);
+public:
+	bool debugMappingsAllowed() const;
 
+	bool getPlayerWantsDebugMappings(const unsigned int playerIndex) const;
 
-#endif // __INCLUDED_SRC_KEYMAP_H__
+	void setPlayerWantsDebugMappings(const unsigned int playerIndex, const bool bWants);
+
+private:
+	bool bDoingDebugMappings;
+	std::vector<bool> playerWantsDebugMappings;
+};
+
+#endif // __INCLUDED_SRC_INPUT_DEBUGMAPPINGS_H__

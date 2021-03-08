@@ -24,9 +24,11 @@
 #define MM_RETURN			10202
 constexpr int MM_GO_BACK = 10203;
 
+class InputManager;
+
 bool runMusicManager();
-bool runInGameMusicManager(unsigned id);
+bool runInGameMusicManager(unsigned id, InputManager& inputManager);
 bool startMusicManager();
-bool startInGameMusicManager();
+bool startInGameMusicManager(InputManager& inputManager);
 
 #endif // __INCLUDED_SRC_MUSICMANAGER_H__

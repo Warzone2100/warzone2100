@@ -84,7 +84,6 @@
 #include "advvis.h"
 #include "frontend.h"
 #include "data.h"
-#include "keymap.h"
 #include "game.h"
 #include "warzoneconfig.h"
 #include "modding.h"
