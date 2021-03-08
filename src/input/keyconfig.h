@@ -35,6 +35,8 @@ enum class KeyMappingInputSource
 	MOUSE_KEY_CODE
 };
 
+KeyMappingInputSource keyMappingSourceByName(const std::string& name);
+
 union KeyMappingInputValue
 {
 	KEY_CODE       keyCode;
@@ -122,6 +124,9 @@ enum class KeyMappingSlot
 	SECONDARY,
 	LAST
 };
+
+KeyMappingSlot keyMappingSlotByName(const std::string& name);
+
 
 typedef std::function<void()> MappableFunction;
 
