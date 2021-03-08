@@ -34,9 +34,5 @@ bool getDebugMappingStatus();
 bool getWantedDebugMappingStatus(unsigned player);
 std::string getWantedDebugMappingStatuses(bool val);
 
-// For keymap editor
-KeyMappingInputSource keyMappingSourceByName(std::string const& name);
-KeyMappingSlot keyMappingSlotByName(std::string const& name);
-
 
 #endif // __INCLUDED_SRC_KEYMAP_H__

@@ -52,42 +52,6 @@ static bool bWantDebugMappings[MAX_PLAYERS] = {false};
 // ----------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------
-
-KeyMappingInputSource keyMappingSourceByName(std::string const& name)
-{
-	if (name == "default")
-	{
-		return KeyMappingInputSource::KEY_CODE;
-	}
-	else if (name == "mouse_key")
-	{
-		return KeyMappingInputSource::MOUSE_KEY_CODE;
-	}
-	else
-	{
-		debug(LOG_WZ, "Encountered invalid key mapping source name '%s', falling back to using 'default'", name.c_str());
-		return KeyMappingInputSource::KEY_CODE;
-	}
-}
-
-KeyMappingSlot keyMappingSlotByName(std::string const& name)
-{
-	if (name == "primary")
-	{
-		return KeyMappingSlot::PRIMARY;
-	}
-	else if (name == "secondary")
-	{
-		return KeyMappingSlot::SECONDARY;
-	}
-	else
-	{
-		debug(LOG_WZ, "Encountered invalid key mapping slot name '%s', falling back to using 'primary'", name.c_str());
-		return KeyMappingSlot::PRIMARY;
-	}
-}
-
-// ----------------------------------------------------------------------------------
 /* Defines whether we process debug key mapping stuff */
 void processDebugMappings(unsigned player, bool val)
 {
