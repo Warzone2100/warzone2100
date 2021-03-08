@@ -380,6 +380,8 @@ src/hci/objects_stats.cpp
 src/hci/research.cpp
 src/ingameop.cpp
 src/init.cpp
+src/input/context.cpp
+src/input/keyconfig.cpp
 src/intdisplay.cpp
 src/integrations/wzdiscordrpc.cpp
 src/intelmap.cpp
@@ -387,7 +389,6 @@ src/intimage.cpp
 src/intorder.cpp
 src/keybind.cpp
 src/keyedit.cpp
-src/keymap.cpp
 src/levels.cpp
 src/lighting.cpp
 src/loadsave.cpp
