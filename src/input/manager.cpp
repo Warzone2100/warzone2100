@@ -37,55 +37,6 @@
 #include "../qtscript.h"    // For triggerEventKeyPressed
 
 
-void InputManager::setContextState(const InputContext& context, const InputContext::State newState)
-{
-	contextStates[context.index] = newState;
-	bMappingsSortOrderDirty = true;
-}
-
-bool InputManager::isContextActive(const InputContext& context) const
-{
-	const auto state = contextStates[context.index];
-	return state != InputContext::State::INACTIVE;
-}
-
-unsigned int InputManager::getContextPriority(const InputContext& context) const
-{
-	switch (contextStates[context.index])
-	{
-	case InputContext::State::PRIORITIZED:
-		return context.priority.prioritized;
-	case InputContext::State::ACTIVE:
-		return context.priority.active;
-	case InputContext::State::INACTIVE:
-	default:
-		return 0;
-	}
-}
-
-void InputManager::resetContextStates()
-{
-	const auto contexts = InputContext::getAllContexts();
-	contextStates = std::vector<InputContext::State>(contexts.size(), InputContext::State::INACTIVE);
-	for (const InputContext& context : contexts)
-	{
-		contextStates[context.index] = context.defaultState;
-	}
-	bMappingsSortOrderDirty = true;
-}
-
-void InputManager::makeAllContextsInactive()
-{
-	for (const InputContext& context : InputContext::getAllContexts())
-	{
-		if (context != InputContext::ALWAYS_ACTIVE)
-		{
-			setContextState(context, InputContext::State::INACTIVE);
-		}
-	}
-	bMappingsSortOrderDirty = true;
-}
-
 KeyMapping& InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
 	/* Make sure the meta key is the left variant */
@@ -168,6 +119,11 @@ std::vector<KeyMapping> InputManager::removeConflictingMappings(const KEY_CODE m
 	return conflicts;
 }
 
+ContextManager& InputManager::contexts()
+{
+	return contextManager;
+}
+
 DebugInputManager& InputManager::debugManager()
 {
 	return dbgInputManager;
@@ -178,11 +134,17 @@ void InputManager::shutdown()
 	keyMappings.clear();
 }
 
+bool InputManager::mappingsSortRequired() const
+{
+	return bMappingsSortOrderDirty || contextManager.isDirty();
+}
+
 void InputManager::clearAssignableMappings()
 {
 	keyMappings.remove_if([](const KeyMapping& mapping) {
 		return mapping.info.type == KeyMappingType::ASSIGNABLE;
 	});
+	bMappingsSortOrderDirty = true;
 }
 
 const std::list<KeyMapping> InputManager::getAllMappings() const
@@ -363,7 +325,7 @@ void InputManager::updateMapMarkers()
 /* allows checking if mapping should currently be ignored in processMappings */
 static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseWheelEvents, const KeyMapping& mapping)
 {
-	if (!inputManager.isContextActive(mapping.info.context))
+	if (!inputManager.contexts().isActive(mapping.info.context))
 	{
 		return true;
 	}
@@ -407,12 +369,12 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 	updateMapMarkers();
 
 	/* If mappings have been updated or context priorities have changed, sort the mappings by priority and whether or not they have meta keys */
-	if (bMappingsSortOrderDirty)
+	if (mappingsSortRequired())
 	{
 		keyMappings.sort([this](const KeyMapping& a, const KeyMapping& b) {
 			// Primary sort by priority
-			const unsigned int priorityA = getContextPriority(a.info.context);
-			const unsigned int priorityB = getContextPriority(b.info.context);
+			const unsigned int priorityA = contextManager.getPriority(a.info.context);
+			const unsigned int priorityB = contextManager.getPriority(b.info.context);
 			if (priorityA != priorityB)
 			{
 				return priorityA > priorityB;
@@ -425,6 +387,7 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 			// preventing any non-meta mappings with the same input from being executed.
 			return a.hasMeta() && !b.hasMeta();
 		});
+		contextManager.clearDirty();
 		bMappingsSortOrderDirty = false;
 	}
 	std::unordered_set<KeyMappingInput, KeyMappingInput::Hash> consumedInputs;

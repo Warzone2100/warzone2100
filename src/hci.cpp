@@ -808,7 +808,7 @@ void intResetScreen(bool NoAnim)
 	case INT_DESIGN:
 		intRemoveDesign();
 		intHidePowerBar();
-		gInputManager.resetContextStates();
+		gInputManager.contexts().resetStates();
 		triggerEvent(TRIGGER_DESIGN_QUIT);
 		break;
 	case INT_INTELMAP:
@@ -1113,7 +1113,7 @@ INT_RETVAL intRunWidgets()
 			intShowPowerBar();
 			intAddDesign(false);
 			intMode = INT_DESIGN;
-			gInputManager.makeAllContextsInactive();
+			gInputManager.contexts().makeAllInactive();
 			reticuleCallback(RETBUT_DESIGN);
 			triggerEvent(TRIGGER_MENU_DESIGN_UP);
 			break;
@@ -2091,7 +2091,7 @@ void intShowWidget(int buttonID)
 		intShowPowerBar();
 		intAddDesign(false);
 		intMode = INT_DESIGN;
-		gInputManager.makeAllContextsInactive();
+		gInputManager.contexts().makeAllInactive();
 		reticuleCallback(RETBUT_DESIGN);
 		triggerEvent(TRIGGER_MENU_DESIGN_UP);
 		break;

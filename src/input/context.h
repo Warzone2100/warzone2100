@@ -23,6 +23,7 @@
 
 #include <string>
 #include <list>
+#include <vector>
 
 struct ContextPriority
 {
@@ -92,10 +93,43 @@ private:
 	const State defaultState;
 
 	friend bool operator==(const InputContext& lhs, const InputContext& rhs);
-	friend class InputManager;
+	friend class ContextManager;
 };
 
 bool operator==(const InputContext& lhs, const InputContext& rhs);
 bool operator!=(const InputContext& lhs, const InputContext& rhs);
+
+
+class ContextManager
+{
+public:
+	/* Resets all context states to their defaults. */
+	void resetStates();
+
+	/* Makes all contexts inactive. Used to disable key mappings while in design screen. */
+	void makeAllInactive();
+
+	/* Updates the state of a single context. Use this to prioritize/enable/disable contexts. */
+	void set(const InputContext& context, const InputContext::State state);
+
+	/*
+	 Gets the status of the context. If this returns `false`, any bindings belonging to the context
+	 should not be processed.
+	 */
+	bool isActive(const InputContext& context) const;
+
+	/* Priority of the context when resolving collisions. Context with highest priority wins */
+	unsigned int getPriority(const InputContext& context) const;
+
+private:
+	bool isDirty() const;
+
+	void clearDirty();
+
+	std::vector<InputContext::State> states;
+	bool bDirty;
+
+	friend class InputManager;
+};
 
 #endif // __INCLUDED_SRC_INPUT_CONTEXT_H__

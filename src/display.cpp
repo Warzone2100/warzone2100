@@ -404,7 +404,7 @@ void resetInput()
 	rotActive = false;
 	dragBox3D.status = DRAG_INACTIVE;
 	wallDrag.status = DRAG_INACTIVE;
-	gInputManager.resetContextStates();
+	gInputManager.contexts().resetStates();
 }
 
 /* Process the user input. This just processes the key input and jumping around the radar*/
@@ -445,7 +445,7 @@ void processInput()
 
 	if (intMode != INTMODE::INT_DESIGN)
 	{
-		gInputManager.setContextState(
+		gInputManager.contexts().set(
 			InputContext::RADAR,
 			isMouseOverRadar()
 				? InputContext::State::PRIORITIZED
@@ -2672,6 +2672,6 @@ void setSensorAssigned()
 bool dispInitialise()
 {
 	flagReposVarsValid = false;
-	gInputManager.resetContextStates();
+	gInputManager.contexts().resetStates();
 	return true;
 }

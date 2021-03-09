@@ -63,3 +63,64 @@ bool operator!=(const InputContext& lhs, const InputContext& rhs)
 {
 	return !(lhs == rhs);
 }
+
+
+void ContextManager::set(const InputContext& context, const InputContext::State newState)
+{
+	states[context.index] = newState;
+	bDirty = true;
+}
+
+bool ContextManager::isActive(const InputContext& context) const
+{
+	const auto state = states[context.index];
+	return state != InputContext::State::INACTIVE;
+}
+
+unsigned int ContextManager::getPriority(const InputContext& context) const
+{
+	switch (states[context.index])
+	{
+	case InputContext::State::PRIORITIZED:
+		return context.priority.prioritized;
+	case InputContext::State::ACTIVE:
+		return context.priority.active;
+	case InputContext::State::INACTIVE:
+	default:
+		return 0;
+	}
+}
+
+void ContextManager::resetStates()
+{
+	const auto contexts = InputContext::getAllContexts();
+	states = std::vector<InputContext::State>(contexts.size(), InputContext::State::INACTIVE);
+	for (const InputContext& context : contexts)
+	{
+		states[context.index] = context.defaultState;
+	}
+	bDirty = true;
+}
+
+void ContextManager::makeAllInactive()
+{
+	for (const InputContext& context : InputContext::getAllContexts())
+	{
+		if (context != InputContext::ALWAYS_ACTIVE)
+		{
+			set(context, InputContext::State::INACTIVE);
+		}
+	}
+	bDirty = true;
+}
+
+
+bool ContextManager::isDirty() const
+{
+	return bDirty;
+}
+
+void ContextManager::clearDirty()
+{
+	bDirty = false;
+}

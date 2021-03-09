@@ -849,7 +849,7 @@ static bool musicManager(WIDGET *parent, bool ingame)
 
 bool startInGameMusicManager(InputManager& inputManager)
 {
-	inputManager.makeAllContextsInactive();
+	inputManager.contexts().makeAllInactive();
 	return musicManager(psWScreen->psForm.get(), true);
 }
 
@@ -881,14 +881,14 @@ bool runInGameMusicManager(unsigned id, InputManager& inputManager)
 {
 	if (id == MM_RETURN)			// return
 	{
-		inputManager.resetContextStates();
+		inputManager.contexts().resetStates();
 		widgDelete(psWScreen, MM_FORM);
 		inputLoseFocus();
 		return true;
 	}
 	else if (id == MM_GO_BACK)
 	{
-		inputManager.resetContextStates();
+		inputManager.contexts().resetStates();
 		widgDelete(psWScreen, MM_FORM);
 		intReopenMenuWithoutUnPausing();
 	}

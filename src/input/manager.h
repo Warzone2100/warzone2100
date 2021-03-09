@@ -61,25 +61,9 @@ private:
 	/* Registers a new default key mapping */
 	bool addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
 
-	// Input contexts
 public:
-	void resetContextStates();
+	ContextManager& contexts();
 
-	void makeAllContextsInactive();
-
-	void setContextState(const InputContext& context, const InputContext::State state);
-
-	/*
-	 Gets the status of the context. If this returns `false`, any bindings belonging to the context
-	 should not be processed.
-	 */
-	bool isContextActive(const InputContext& context) const;
-
-	/* Priority of the context when resolving collisions. Context with highest priority wins */
-	unsigned int getContextPriority(const InputContext& context) const;
-
-	// General
-public:
 	DebugInputManager& debugManager();
 
 	void shutdown();
@@ -89,6 +73,8 @@ public:
 	void updateMapMarkers();
 
 private:
+	bool mappingsSortRequired() const;
+
 	/* Explicit hash fn for KEY_CODEs. Do not use std::hash<KEY_CODE> directly to avoid breaking things once/if KEY_CODE is converted to an enum class */
 	struct KeyCodeHash
 	{
@@ -98,7 +84,7 @@ private:
 		}
 	};
 
-	std::vector<InputContext::State> contextStates;
+	ContextManager contextManager;
 	std::list<KeyMapping> keyMappings;
 	std::unordered_map<KEY_CODE, KeyFunctionInfo, KeyCodeHash> markerKeyFunctions;
 	bool bMappingsSortOrderDirty;
