@@ -39,7 +39,9 @@ The scripts in this addon currently support importing and exporting the followin
     * PIE Anim Objects*
 
 *1: N-gons should not be used in exported meshes due to UV corruption. Quads will be triangulated correctly and are acceptable for export from Blender to PIE.
+
 *2: Mesh objects with active modifiers will not export this feature to new faces in the case of mirrored/arrayed geometry.
+
 *3: There may be some cases Blender will not interpret rotation keys in the same manner as the game.
 
 ## Usage
