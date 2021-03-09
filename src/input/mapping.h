@@ -36,10 +36,10 @@ struct KeyMapping
 {
 	const KeyFunctionInfo& info;
 	UDWORD                 lastCalled;
-	KEY_CODE               metaKeyCode;
-	KeyMappingInput        input;
-	KeyAction              action;
+	KeyCombination         keys;
 	KeyMappingSlot         slot;
+
+	bool isInvalid() const;
 
 	bool isActivated() const;
 
@@ -55,7 +55,7 @@ bool operator!=(const KeyMapping& lhs, const KeyMapping& rhs);
 class KeyMappings
 {
 public:
-	KeyMapping& add(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot);
+	KeyMapping& add(const KeyCombination keys, const KeyFunctionInfo& info, const KeyMappingSlot slot);
 
 	nonstd::optional<std::reference_wrapper<KeyMapping>> get(const KeyFunctionInfo& info, const KeyMappingSlot slot);
 
@@ -89,12 +89,12 @@ private:
 
 	// For range-based-for
 public:
-	auto begin() const
+	std::list<KeyMapping>::const_iterator begin() const
 	{
 		return keyMappings.cbegin();
 	}
 
-	auto end() const
+	std::list<KeyMapping>::const_iterator end() const
 	{
 		return keyMappings.cend();
 	}
