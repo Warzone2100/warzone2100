@@ -29,11 +29,10 @@ void BaseObjectsController::selectObject(BASE_OBJECT *object)
 	refresh();
 }
 
-void BaseObjectsController::jumpToHighlighted()
+void BaseObjectsController::jumpToObject(BASE_OBJECT *object)
 {
-	auto highlighted = getHighlightedObject();
-	ASSERT_NOT_NULLPTR_OR_RETURN(, highlighted);
-	setPlayerPos(highlighted->pos.x, highlighted->pos.y);
+	ASSERT_NOT_NULLPTR_OR_RETURN(, object);
+	setPlayerPos(object->pos.x, object->pos.y);
 	setWarCamActive(false);
 }
 
@@ -97,6 +96,20 @@ void DynamicIntFancyButton::updateLayout()
 	initDisplay();
 }
 
+void DynamicIntFancyButton::released(W_CONTEXT *context, WIDGET_KEY mouseButton)
+{
+	IntFancyButton::released(context, mouseButton);
+
+	if (mouseButton == WKEY_PRIMARY)
+	{
+		clickPrimary();
+	}
+	else if (mouseButton == WKEY_SECONDARY)
+	{
+		clickSecondary();
+	}
+}
+
 void StatsButton::addProgressBar()
 {
 	auto init = W_BARINIT();
@@ -121,7 +134,7 @@ void ObjectButton::jump()
 	if ((jumpPosition.x == 0 && jumpPosition.y == 0) || !objectOnScreen(object, 0))
 	{
 		jumpPosition = getPlayerPos();
-		getController().jumpToHighlighted();
+		getController().jumpToObject(object);
 	}
 	else
 	{

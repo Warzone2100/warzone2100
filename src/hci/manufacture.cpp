@@ -185,17 +185,19 @@ public:
 		return widget;
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void jump() override
 	{
-		BaseWidget::released(context, mouseButton);
-
-		controller->clearStructureSelection();
-		controller->selectObject(controller->getObjectAt(objectIndex));
 		if (!offWorldKeepLists)
 		{
-			jump();
+			BaseWidget::jump();
 		}
+	}
 
+	void clickPrimary() override
+	{
+		controller->clearStructureSelection();
+		controller->selectObject(controller->getObjectAt(objectIndex));
+		jump();
 		controller->displayStatsForm();
 	}
 
@@ -357,23 +359,25 @@ private:
 		return factory && (factory->selected || factory == controller->getHighlightedObject());
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		auto factory = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
+		controller->releaseFactoryProduction(factory);
+		controller->clearStructureSelection();
+		controller->selectObject(factory);
+		controller->displayStatsForm();
+	}
 
-		if (mouseButton == WKEY_PRIMARY)
-		{
-			controller->releaseFactoryProduction(factory);
-			controller->clearStructureSelection();
-			controller->selectObject(factory);
-			controller->displayStatsForm();
-		}
-		else if (mouseButton == WKEY_SECONDARY)
-		{
-			controller->cancelFactoryProduction(factory);
-		}
+	void clickSecondary() override
+	{
+		auto factory = controller->getObjectAt(objectIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
+		controller->clearStructureSelection();
+		controller->cancelFactoryProduction(factory);
+		controller->setHighlightedObject(factory);
+		controller->refresh();
+		controller->displayStatsForm();
 	}
 
 	std::shared_ptr<ManufactureController> controller;
@@ -463,15 +467,24 @@ private:
 		return calcTemplatePower(getStats());
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
+		adjustFactoryProduction(true);
+	}
+
+	void clickSecondary() override
+	{
+		adjustFactoryProduction(false);
+	}
+
+	void adjustFactoryProduction(bool add)
+	{
 		auto clickedStats = controller->getStatsAt(manufactureOptionIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);
 
 		auto controllerRef = controller;
-		widgScheduleTask([mouseButton, clickedStats, controllerRef]() {
-			controllerRef->adjustFactoryProduction(clickedStats, mouseButton == WKEY_PRIMARY);
+		widgScheduleTask([add, clickedStats, controllerRef]() {
+			controllerRef->adjustFactoryProduction(clickedStats, add);
 		});
 	}
 

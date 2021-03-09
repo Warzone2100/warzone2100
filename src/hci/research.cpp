@@ -229,21 +229,23 @@ private:
 		}
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+protected:
+	void jump() override
 	{
-		BaseWidget::released(context, mouseButton);
-
-		controller->clearStructureSelection();
-		controller->selectObject(controller->getObjectAt(objectIndex));
 		if (!offWorldKeepLists)
 		{
-			jump();
+			BaseWidget::jump();
 		}
+	}
 
+	void clickPrimary() override
+	{
+		controller->clearStructureSelection();
+		controller->selectObject(controller->getObjectAt(objectIndex));
+		jump();
 		controller->displayStatsForm();
 	}
 
-protected:
 	void display(int xOffset, int yOffset) override
 	{
 		updateLayout();
@@ -388,24 +390,28 @@ private:
 		return facility && (facility->selected || facility == controller->getHighlightedObject());
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		auto facility = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 
-		if (mouseButton == WKEY_PRIMARY)
-		{
-			//might need to cancel the hold on research facility
-			releaseResearch(facility, ModeQueue);
-			controller->clearStructureSelection();
-			controller->selectObject(facility);
-			controller->displayStatsForm();
-		}
-		else if (mouseButton == WKEY_SECONDARY)
-		{
-			controller->requestResearchCancellation(facility);
-		}
+		//might need to cancel the hold on research facility
+		releaseResearch(facility, ModeQueue);
+		controller->clearStructureSelection();
+		controller->selectObject(facility);
+		controller->displayStatsForm();
+		controller->refresh();
+	}
+
+	void clickSecondary() override
+	{
+		auto facility = controller->getObjectAt(objectIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
+		controller->clearStructureSelection();
+		controller->requestResearchCancellation(facility);
+		controller->setHighlightedObject(facility);
+		controller->displayStatsForm();
+		controller->refresh();
 	}
 
 	std::shared_ptr<ResearchController> controller;
@@ -525,24 +531,19 @@ private:
 		return getStats()->researchPower;
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		auto clickedStats = controller->getStatsAt(researchOptionIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);
-
-		if (mouseButton == WKEY_PRIMARY)
+		if (controller->isHighlightedObjectStats(researchOptionIndex))
 		{
-			if (controller->isHighlightedObjectStats(researchOptionIndex))
-			{
-				controller->cancelResearch(controller->getHighlightedObject());
-			}
-			else
-			{
-				controller->startResearch(*clickedStats);
-			}
-			intRemoveStats();
+			controller->cancelResearch(controller->getHighlightedObject());
 		}
+		else
+		{
+			controller->startResearch(*clickedStats);
+		}
+		intRemoveStats();
 	}
 
 	std::shared_ptr<ResearchController> controller;

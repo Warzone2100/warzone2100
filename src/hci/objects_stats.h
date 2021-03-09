@@ -21,7 +21,7 @@ public:
 	virtual bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const = 0;
 	virtual void refresh() = 0;
 	virtual bool showInterface() = 0;
-	void jumpToHighlighted();
+	void jumpToObject(BASE_OBJECT *object);
 	void updateHighlighted();
 	void clearSelection();
 	void clearStructureSelection();
@@ -91,6 +91,9 @@ protected:
 	virtual bool isHighlighted() const = 0;
 	virtual void updateLayout();
 	void updateHighlight();
+	virtual void clickPrimary() {}
+	virtual void clickSecondary() {}
+	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override;
 };
 
 class StatsButton: public DynamicIntFancyButton
@@ -123,7 +126,12 @@ protected:
 	}
 
 	virtual BaseObjectsController &getController() const = 0;
-	void jump();
+	virtual void jump();
+
+	void clickSecondary() override
+	{
+		jump();
+	}
 
 	size_t objectIndex;
 
