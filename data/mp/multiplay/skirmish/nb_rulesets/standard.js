@@ -506,16 +506,34 @@ const weaponStats = {
 		],
 		extras: [],
 	},
+	lasers_AA:
+	{
+		roles: [ 0.0, 0.0, 0.0, 1.0 ],
+		chatalias: "las_AA",
+		micro: MICRO.RANGED,
+		weapons: [
+			{ res: "R-Wpn-AALaser", stat: "AAGunLaser", weight: WEIGHT.ULTRAHEAVY }, // stormbringer
+		],
+		vtols: [],
+		defenses: [
+			{ res: "R-Defense-AA-Laser", stat: "P0-AASite-Laser", defrole: DEFROLE.STANDALONE }, // stormbringer
+		],
+		templates: [],
+		extras: [
+			"R-Wpn-Energy-Accuracy01",
+			"R-Wpn-Energy-Damage03",
+			"R-Wpn-Energy-ROF03",
+		],
+	},
 	useless_AT: {
 		roles: [ 1.0, 0.0, 0.0, 0.0 ],
 		chatalias: "useless_AT",
+		micro: MICRO.RANGED,
 		weapons: [
-			{ stat: "CannonSuper" }, // cannon fort weapon
-			{ stat: "RocketSuper" }, // rocket bastion weapon
-			{ stat: "MissileSuper" }, // missile fort weapon
-			{ stat: "MassDriver" }, // mass driver fort weapon
-			{ stat: "MortarEMP" }, // emp mortar
-			{ stat: "EMP-Cannon" }, // emp cannon
+			{ stat: "CannonSuper", weight: WEIGHT.ULTRAHEAVY }, // cannon fort weapon
+			{ stat: "RocketSuper", weight: WEIGHT.ULTRAHEAVY }, // rocket bastion weapon
+			{ stat: "MissileSuper", weight: WEIGHT.ULTRAHEAVY }, // missile fort weapon
+			{ stat: "MassDriver", weight: WEIGHT.ULTRAHEAVY }, // mass driver fort weapon
 		],
 		vtols: [],
 		defenses: [],
@@ -525,12 +543,12 @@ const weaponStats = {
 	useless_AP: {
 		roles: [ 0.0, 1.0, 0.0, 0.0 ],
 		chatalias: "useless_AP",
+		micro: MICRO.RANGED,
 		weapons: [
-			{ stat: "MG1-Pillbox" }, // imaginary invisible single mg, may be found on some maps
-			{ stat: "MG2-Pillbox" }, // imaginary invisible twin mg, may be found on some maps
-			{ stat: "MG3-Pillbox" }, // mg bunker dedicated weapon
-			{ stat: "NEXUSlink" }, // nexus link (still unused)
-			{ stat: "MG4ROTARY-Pillbox" }, // ag bunker dedicated weapon
+			{ stat: "MG1-Pillbox", weight: WEIGHT.LIGHT }, // imaginary invisible single mg, may be found on some maps
+			{ stat: "MG2-Pillbox", weight: WEIGHT.LIGHT }, // imaginary invisible twin mg, may be found on some maps
+			{ stat: "MG3-Pillbox", weight: WEIGHT.MEDIUM }, // mg bunker dedicated weapon
+			{ stat: "MG4ROTARY-Pillbox", weight: WEIGHT.MEDIUM }, // ag bunker dedicated weapon
 		],
 		vtols: [],
 		defenses: [],
@@ -540,24 +558,87 @@ const weaponStats = {
 	useless_AS: {
 		roles: [ 0.0, 0.0, 1.0, 0.0 ],
 		chatalias: "useless_AS",
+		micro: MICRO.DUMB,
 		weapons: [
-			{ stat: "PlasmaHeavy" }, // plasma cannon (still unused)
+			{ stat: "PlasmaHeavy", weight: WEIGHT.ULTRAHEAVY }, // heavy plasma launcher (still unused)
 		],
 		vtols: [],
 		defenses: [],
 		templates: [],
 		extras: [],
 	},
-	useless_AA: {
+	machinegun_AA: {
 		roles: [ 0.0, 0.0, 0.0, 1.0 ],
-		chatalias: "useless_AA",
+		chatalias: "mg_AA",
+		micro: MICRO.RANGED,
 		weapons: [
-			{ stat: "QuadMg1AAGun" }, // hurricane (still unused)
-			{ stat: "QuadRotAAGun" }, // whirlwind (still unused)
+			{ res: "R-Wpn-AAGun03", stat: "QuadMg1AAGun", weight: WEIGHT.ULTRAHEAVY }, // hurricane
+			{ res: "R-Wpn-AAGun04", stat: "QuadRotAAGun", weight: WEIGHT.ULTRAHEAVY }, // whirlwind
 		],
 		vtols: [],
-		defenses: [],
+		defenses: [
+			{ res: "R-Defense-AASite-QuadMg1", stat: "AASite-QuadMg1", defrole: DEFROLE.STANDALONE }, // hurricane
+			{ res: "R-Defense-AASite-QuadRotMg", stat: "AASite-QuadRotMg", defrole: DEFROLE.STANDALONE }, // whirlwind
+			{ res: "R-Defense-WallTower-QuadRotAA", stat: "WallTower-QuadRotAAGun", defrole: DEFROLE.GATEWAY }, //whirlwind hard
+		],
+		templates: [],
+		extras: [
+			"R-Wpn-AAGun-ROF06",
+			"R-Wpn-AAGun-Damage06",
+			"R-Wpn-AAGun-Accuracy03",
+		],
+	},
+	energy: {
+		roles: [ 0.5, 0.4, 0.1, 0.0 ],
+		chatalias: "ener",
+		micro: MICRO.DUMB,
+		weapons: [
+			{ res: "R-Comp-CommandTurret01", stat: "CommandTurret1", weight: WEIGHT.LIGHT }, // command turret
+			{ res: "R-Sys-SpyTurret", stat: "SpyTurret01", weight: WEIGHT.LIGHT }, // nexus link
+		],
+		vtols: [],
+		defenses: [
+			{ res: "R-Sys-SpyTower", stat: "Sys-SpyTower", defrole: DEFROLE.STANDALONE }, // nexus link tower
+		],
+		templates: [],
+		extras: [
+			"R-Sys-Resistance-Circuits",
+		],
+	},
+	emp: {
+		roles: [ 0.7, 0.3, 0.0, 0.0 ],
+		chatalias: "emp",
+		micro: MICRO.DUMB,
+		weapons: [
+			{ res: "R-Wpn-MortarEMP", stat: "MortarEMP", weight: WEIGHT.HEAVY }, // emp mortar
+			{ res: "R-Wpn-EMPCannon", stat: "EMP-Cannon", weight: WEIGHT.ULTRAHEAVY  }, // emp cannon
+		],
+		vtols: [
+			{ res: "R-Wpn-Bomb06", stat: "Bomb6-VTOL-EMP", weight: WEIGHT.HEAVY }, // emp missile launcher
+		],
+		defenses: [
+			{ res: "R-Defense-EMPMortar", stat: "Emplacement-MortarEMP", defrole: DEFROLE.STANDALONE }, // emp mortar pit
+			{ res: "R-Defense-EMPCannon", stat: "WallTower-EMP", defrole: DEFROLE.STANDALONE }, // emp cannon hardpoint
+		],
 		templates: [],
 		extras: [],
+	},
+	plasmaCannon: {
+		roles: [ 0.9, 0.0, 0.1, 0.0 ],
+		chatalias: "plsmcan",
+		micro: MICRO.DUMB,
+		weapons: [
+			{ res: "R-Wpn-PlasmaCannon", stat: "Laser4-PlasmaCannon", weight: WEIGHT.ULTRAHEAVY  }, // plasma cannon
+		],
+		vtols: [],
+		defenses: [
+			{ res: "R-Defense-PlasmaCannon", stat: "Emplacement-PlasmaCannon", defrole: DEFROLE.STANDALONE }, // plasma cannon empl
+		],
+		templates: [],
+		extras: [
+			"R-Wpn-Cannon-ROF06",
+			"R-Wpn-Cannon-Damage09",
+			"R-Wpn-Cannon-Accuracy02",
+		],
 	},
 };
