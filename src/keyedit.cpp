@@ -506,7 +506,7 @@ static std::vector<std::reference_wrapper<const KeyMapping>> getVisibleMappings(
 		for (unsigned int slotIndex = 0; slotIndex < static_cast<unsigned int>(KeyMappingSlot::LAST); ++slotIndex)
 		{
 			const KeyMappingSlot slot = static_cast<KeyMappingSlot>(slotIndex);
-			if (const nonstd::optional<std::reference_wrapper<KeyMapping>> maybeMapping = inputManager.getMapping(info, slot))
+			if (const nonstd::optional<std::reference_wrapper<KeyMapping>> maybeMapping = inputManager.mappings().get(info, slot))
 			{
 				const KeyMapping& mapping = maybeMapping.value();
 				visibleMappings.push_back(mapping);
@@ -577,7 +577,7 @@ bool saveKeyMap(const InputManager& inputManager)
 	ini.setValue("version", 1);
 
 	ini.beginArray("mappings");
-	for (auto const &mapping : inputManager.getAllMappings())
+	for (const KeyMapping& mapping : inputManager.cmappings())
 	{
 		/* No need to save non-assignable mappings */
 		if (mapping.info.type != KeyMappingType::ASSIGNABLE)
@@ -642,8 +642,8 @@ static KeyMappingInput createInputForSource(const KeyMappingInputSource source, 
 // load keymaps from registry.
 bool loadKeyMap(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig)
 {
-	// throw away any keymaps!!
-	inputManager.clearAssignableMappings();
+	/* Clear all assignable mappings */
+	inputManager.mappings().clear(KeyMappingType::ASSIGNABLE);
 
 	WzConfig ini(KeyMapPath, WzConfig::ReadOnly);
 	if (!ini.status())
@@ -678,7 +678,7 @@ bool loadKeyMap(InputManager& inputManager, const KeyFunctionConfiguration& keyF
 		const WzString slotName = ini.value("slot", "primary").toWzString();
 		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
 
-		inputManager.addMapping(meta, input, action, *info, slot);
+		inputManager.mappings().add(meta, input, action, *info, slot);
 	}
 	ini.endArray();
 	return true;
@@ -785,7 +785,7 @@ void KeyMapForm::initialize(bool isInGame)
 			const auto button = createKeyMapButton(buttonId, slot, *data);
 			container->attach(button);
 
-			data->mappings[slotIndex] = inputManager.getMapping(info, slot);
+			data->mappings[slotIndex] = inputManager.mappings().get(info, slot);
 		}
 
 		keyMapList->addItem(container);
@@ -863,7 +863,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	}
 
 	/* Clear conflicting mappings using these keys */
-	const auto conflicts = inputManager.removeConflictingMappings(metakey, input, selectedInfo->context);
+	const auto conflicts = inputManager.mappings().removeConflicting(metakey, input, selectedInfo->context);
 	for (auto& conflict : conflicts)
 	{
 		// Update conflicting mappings' display data
@@ -875,12 +875,12 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	}
 
 	/* Try and see if the mapping already exists. Remove the old mapping first and then create a new one. */
-	const auto maybeOld = inputManager.getMapping(*selectedInfo, keyMapSelection.slot);
+	const auto maybeOld = inputManager.mappings().get(*selectedInfo, keyMapSelection.slot);
 	if (maybeOld.has_value())
 	{
-		inputManager.removeMapping(*maybeOld);
+		inputManager.mappings().remove(*maybeOld);
 	}
-	KeyMapping& newMapping = inputManager.addMapping(metakey, input, KeyAction::PRESSED, *selectedInfo, keyMapSelection.slot);
+	KeyMapping& newMapping = inputManager.mappings().add(metakey, input, KeyAction::PRESSED, *selectedInfo, keyMapSelection.slot);
 
 	// Update display data for the new mapping
 	if (auto displayData = displayDataPerInfo[selectedInfo->name])

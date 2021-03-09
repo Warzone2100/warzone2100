@@ -21,6 +21,7 @@
 #include "mapping.h"
 
 #include "lib/framework/frame.h"
+#include "lib/gamelib/gtime.h" // For gameTime
 
 #include "keyconfig.h"
 
@@ -139,4 +140,143 @@ bool operator==(const KeyMapping& lhs, const KeyMapping& rhs)
 bool operator!=(const KeyMapping& lhs, const KeyMapping& rhs)
 {
 	return !(lhs == rhs);
+}
+
+
+KeyMapping& KeyMappings::add(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
+{
+	/* Make sure the meta key is the left variant */
+	KEY_CODE leftMeta = meta;
+	if (meta == KEY_RCTRL)
+	{
+		leftMeta = KEY_LCTRL;
+	}
+	else if (meta == KEY_RALT)
+	{
+		leftMeta = KEY_LALT;
+	}
+	else if (meta == KEY_RSHIFT)
+	{
+		leftMeta = KEY_LSHIFT;
+	}
+	else if (meta == KEY_RMETA)
+	{
+		leftMeta = KEY_LMETA;
+	}
+
+	/* Create the mapping as the last element in the list */
+	keyMappings.push_back({
+		info,
+		gameTime,
+		leftMeta,
+		input,
+		action,
+		slot
+		});
+
+	/* Invalidate the sorting order and return the newly created mapping */
+	bDirty = true;
+	return keyMappings.back();
+}
+
+nonstd::optional<std::reference_wrapper<KeyMapping>> KeyMappings::get(const KeyFunctionInfo& info, const KeyMappingSlot slot)
+{
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [&info, slot](const KeyMapping& mapping) {
+		return mapping.info.name == info.name && mapping.slot == slot;
+	});
+	if (mapping != keyMappings.end())
+	{
+		return *mapping;
+	}
+
+	return nonstd::nullopt;
+}
+
+std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::find(const KEY_CODE meta, const KeyMappingInput input)
+{
+	std::vector<std::reference_wrapper<KeyMapping>> matches;
+	for (KeyMapping& mapping : keyMappings)
+	{
+		if (mapping.metaKeyCode == meta && mapping.input == input)
+		{
+			matches.push_back(mapping);
+		}
+	}
+
+	return matches;
+}
+
+bool KeyMappings::remove(const KeyMapping& mappingToRemove)
+{
+	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [mappingToRemove](const KeyMapping& mapping) {
+		return mapping == mappingToRemove;
+	});
+	if (mapping != keyMappings.end())
+	{
+		keyMappings.erase(mapping);
+		bDirty = true;
+		return true;
+	}
+	return false;
+}
+
+std::vector<KeyMapping> KeyMappings::removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
+{
+	/* Find any mapping with same keys */
+	const auto matches = find(meta, input);
+	std::vector<KeyMapping> conflicts;
+	for (KeyMapping& mapping : matches)
+	{
+		/* Clear only if the mapping is for an assignable binding. Do not clear if there is no conflict (different context) */
+		const bool bConflicts = mapping.info.context == context;
+		if (mapping.info.type == KeyMappingType::ASSIGNABLE && bConflicts)
+		{
+			conflicts.push_back(mapping);
+			remove(mapping);
+		}
+	}
+
+	return conflicts;
+}
+
+bool KeyMappings::isDirty() const
+{
+	return bDirty;
+}
+
+void KeyMappings::clear(nonstd::optional<KeyMappingType> filter)
+{
+	if (!filter.has_value())
+	{
+		keyMappings.clear();
+	}
+	else
+	{
+		keyMappings.remove_if([filter](const KeyMapping& mapping) {
+			return mapping.info.type == filter.value();
+		});
+	}
+
+	bDirty = true;
+}
+
+void KeyMappings::sort(const ContextManager& contexts)
+{
+	keyMappings.sort([&contexts](const KeyMapping& a, const KeyMapping& b) {
+		// Primary sort by priority
+		const unsigned int priorityA = contexts.getPriority(a.info.context);
+		const unsigned int priorityB = contexts.getPriority(b.info.context);
+		if (priorityA != priorityB)
+		{
+			return priorityA > priorityB;
+		}
+
+		// Sort by meta. This causes all mappings with meta to be checked before non-meta mappings,
+		// avoiding having to check for meta-conflicts in the processing loop. (e.g. if we should execute
+		// a mapping with right arrow key, depending on if another binding on shift+right-arrow is executed
+		// or not). In other words, if any mapping with meta is executed, it will consume the respective input,
+		// preventing any non-meta mappings with the same input from being executed.
+		return a.hasMeta() && !b.hasMeta();
+	});
+	bDirty = false;
 }

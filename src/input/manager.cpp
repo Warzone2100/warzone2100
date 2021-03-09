@@ -25,7 +25,6 @@
 #include "manager.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
-#include "lib/gamelib/gtime.h" // For gameTime
 
 #include "context.h"
 #include "config.h"
@@ -37,86 +36,14 @@
 #include "../qtscript.h"    // For triggerEventKeyPressed
 
 
-KeyMapping& InputManager::addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
+KeyMappings& InputManager::mappings()
 {
-	/* Make sure the meta key is the left variant */
-	KEY_CODE leftMeta = meta;
-	if (meta == KEY_RCTRL)
-	{
-		leftMeta = KEY_LCTRL;
-	}
-	else if (meta == KEY_RALT)
-	{
-		leftMeta = KEY_LALT;
-	}
-	else if (meta == KEY_RSHIFT)
-	{
-		leftMeta = KEY_LSHIFT;
-	}
-	else if (meta == KEY_RMETA)
-	{
-		leftMeta = KEY_LMETA;
-	}
-
-	/* Create the mapping as the last element in the list */
-	keyMappings.push_back({
-		info,
-		gameTime,
-		leftMeta,
-		input,
-		action,
-		slot
-	});
-
-	/* Invalidate the sorting order and return the newly created mapping */
-	bMappingsSortOrderDirty = true;
-	return keyMappings.back();
+	return keyMappings;
 }
 
-nonstd::optional<std::reference_wrapper<KeyMapping>> InputManager::getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot)
+const KeyMappings& InputManager::cmappings() const
 {
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [&info, slot](const KeyMapping& mapping) {
-		return mapping.info.name == info.name && mapping.slot == slot;
-	});
-	if (mapping != keyMappings.end())
-	{
-		return *mapping;
-	}
-
-	return nonstd::nullopt;
-}
-
-std::vector<std::reference_wrapper<KeyMapping>> InputManager::findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input)
-{
-	std::vector<std::reference_wrapper<KeyMapping>> matches;
-	for (KeyMapping& mapping : keyMappings)
-	{
-		if (mapping.metaKeyCode == meta && mapping.input == input)
-		{
-			matches.push_back(mapping);
-		}
-	}
-
-	return matches;
-}
-
-std::vector<KeyMapping> InputManager::removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
-{
-	/* Find any mapping with same keys */
-	const auto matches = findMappingsForInput(meta, input);
-	std::vector<KeyMapping> conflicts;
-	for (KeyMapping& mapping : matches)
-	{
-		/* Clear only if the mapping is for an assignable binding. Do not clear if there is no conflict (different context) */
-		const bool bConflicts = mapping.info.context == context;
-		if (mapping.info.type == KeyMappingType::ASSIGNABLE && bConflicts)
-		{
-			conflicts.push_back(mapping);
-			removeMapping(mapping);
-		}
-	}
-
-	return conflicts;
+	return keyMappings;
 }
 
 ContextManager& InputManager::contexts()
@@ -136,24 +63,12 @@ void InputManager::shutdown()
 
 bool InputManager::mappingsSortRequired() const
 {
-	return bMappingsSortOrderDirty || contextManager.isDirty();
-}
-
-void InputManager::clearAssignableMappings()
-{
-	keyMappings.remove_if([](const KeyMapping& mapping) {
-		return mapping.info.type == KeyMappingType::ASSIGNABLE;
-	});
-	bMappingsSortOrderDirty = true;
-}
-
-const std::list<KeyMapping> InputManager::getAllMappings() const
-{
-	return keyMappings;
+	return bMappingsSortOrderDirty || contextManager.isDirty() || keyMappings.isDirty();
 }
 
 void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfiguration& keyFuncConfig)
 {
+	contextManager.resetStates();
 	keyMappings.clear();
 	markerKeyFunctions.clear();
 
@@ -195,23 +110,9 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 	saveKeyMap(*this);
 }
 
-bool InputManager::removeMapping(const KeyMapping& mappingToRemove)
-{
-	auto mapping = std::find_if(keyMappings.begin(), keyMappings.end(), [mappingToRemove](const KeyMapping& mapping) {
-		return mapping == mappingToRemove;
-	});
-	if (mapping != keyMappings.end())
-	{
-		keyMappings.erase(mapping);
-		bMappingsSortOrderDirty = true;
-		return true;
-	}
-	return false;
-}
-
 bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)
 {
-	const auto psMapping = getMapping(info, slot);
+	const auto psMapping = keyMappings.get(info, slot);
 	if (psMapping.has_value())
 	{
 		// Older GCC versions flag the nonstd::optional unwrapping here as potentially uninitialized usage. This is
@@ -222,7 +123,7 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif //  __GNUC__
 		// Remove any existing mapping for this function
-		removeMapping(*psMapping);
+		keyMappings.remove(*psMapping);
 #if defined(__GNUC__) && (__GNUC__ == 5 && __GNUC_MINOR__ == 4)
 #pragma GCC diagnostic pop
 #endif // __GNUC__
@@ -230,10 +131,10 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 	}
 
 	// Clear the keys from any other mappings
-	removeConflictingMappings(metaCode, input, info.context);
+	keyMappings.removeConflicting(metaCode, input, info.context);
 
 	// Set default key mapping
-	addMapping(metaCode, input, action, info, slot);
+	keyMappings.add(metaCode, input, action, info, slot);
 	return true;
 }
 
@@ -280,7 +181,7 @@ void InputManager::updateMapMarkers()
 		return;
 	}
 
-	const auto existing = findMappingsForInput(KEY_CODE::KEY_LSHIFT, qKey);
+	const auto existing = keyMappings.find(KEY_CODE::KEY_LSHIFT, qKey);
 	if (existing.size() > 0 && std::any_of(existing.begin(), existing.end(), [](const KeyMapping& mapping) {
 		return mapping.info.name != "JumpToMapMarker";
 	}))
@@ -292,7 +193,7 @@ void InputManager::updateMapMarkers()
 	{
 		if (old.info.name == "JumpToMapMarker")
 		{
-			removeMapping(old);
+			keyMappings.remove(old);
 		}
 	}
 
@@ -317,7 +218,7 @@ void InputManager::updateMapMarkers()
 	if (maybeInfo != markerKeyFunctions.end())
 	{
 		const auto& info = maybeInfo->second;
-		addMapping(KEY_LSHIFT, qKey, KeyAction::PRESSED, info, KeyMappingSlot::PRIMARY);
+		keyMappings.add(KEY_LSHIFT, qKey, KeyAction::PRESSED, info, KeyMappingSlot::PRIMARY);
 	}
 }
 
@@ -359,34 +260,13 @@ static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseW
 /* Manages update of all the active function mappings */
 void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 {
-	/* Bomb out if there are none */
-	if (keyMappings.empty())
-	{
-		return;
-	}
-
 	/* Check if player has made new camera markers */
 	updateMapMarkers();
 
 	/* If mappings have been updated or context priorities have changed, sort the mappings by priority and whether or not they have meta keys */
 	if (mappingsSortRequired())
 	{
-		keyMappings.sort([this](const KeyMapping& a, const KeyMapping& b) {
-			// Primary sort by priority
-			const unsigned int priorityA = contextManager.getPriority(a.info.context);
-			const unsigned int priorityB = contextManager.getPriority(b.info.context);
-			if (priorityA != priorityB)
-			{
-				return priorityA > priorityB;
-			}
-
-			// Sort by meta. This causes all mappings with meta to be checked before non-meta mappings,
-			// avoiding having to check for meta-conflicts in the processing loop. (e.g. if we should execute
-			// a mapping with right arrow key, depending on if another binding on shift+right-arrow is executed
-			// or not). In other words, if any mapping with meta is executed, it will consume the respective input,
-			// preventing any non-meta mappings with the same input from being executed.
-			return a.hasMeta() && !b.hasMeta();
-		});
+		keyMappings.sort(contextManager);
 		contextManager.clearDirty();
 		bMappingsSortOrderDirty = false;
 	}

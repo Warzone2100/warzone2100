@@ -21,10 +21,16 @@
 #ifndef __INCLUDED_SRC_INPUT_MAPPING_H__
 #define __INCLUDED_SRC_INPUT_MAPPING_H__
 
+#include <list>
+#include <vector>
+#include <functional>
+#include <optional-lite/optional.hpp>
+
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 
 #include "keyconfig.h"
+#include "context.h"
 
 struct KeyMapping
 {
@@ -44,5 +50,46 @@ struct KeyMapping
 
 bool operator==(const KeyMapping& lhs, const KeyMapping& rhs);
 bool operator!=(const KeyMapping& lhs, const KeyMapping& rhs);
+
+
+class KeyMappings
+{
+public:
+	KeyMapping& add(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot);
+
+	nonstd::optional<std::reference_wrapper<KeyMapping>> get(const KeyFunctionInfo& info, const KeyMappingSlot slot);
+
+	/* Finds all mappings with matching meta and input */
+	std::vector<std::reference_wrapper<KeyMapping>> find(const KEY_CODE meta, const KeyMappingInput input);
+
+	std::vector<KeyMapping> removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
+
+	/* Removes a mapping specified by a pointer */
+	bool remove(const KeyMapping& mappingToRemove);
+
+	void clear(nonstd::optional<KeyMappingType> filter = nonstd::nullopt);
+
+private:
+	void sort(const ContextManager& contexts);
+
+	bool isDirty() const;
+
+	std::list<KeyMapping> keyMappings;
+	bool bDirty = true;
+
+	friend class InputManager;
+
+	// For range-based-for
+public:
+	auto begin() const
+	{
+		return keyMappings.cbegin();
+	}
+
+	auto end() const
+	{
+		return keyMappings.cend();
+	}
+};
 
 #endif // __INCLUDED_SRC_INPUT_MAPPING_H__
