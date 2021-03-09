@@ -83,9 +83,8 @@ public:
 		return widget;
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		controller->clearSelection();
 		controller->selectObject(controller->getObjectAt(objectIndex));
 		jump();
@@ -244,14 +243,27 @@ private:
 		return droid && droid == controller->getHighlightedObject();
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		controller->clearSelection();
 		controller->selectObject(droid);
 		controller->displayOrderForm();
+	}
+
+	void clickSecondary() override
+	{
+		auto droid = controller->getObjectAt(objectIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
+		auto highlighted = controller->getHighlightedObject();
+
+		// prevent highlighting a commander when another commander is already selected
+		if (droid == highlighted || !highlighted->selected)
+		{
+			controller->setHighlightedObject(droid);
+			controller->displayOrderForm();
+		}
 	}
 
 	std::shared_ptr<W_LABEL> assignedFactoriesLabel;

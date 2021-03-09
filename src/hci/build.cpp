@@ -163,9 +163,8 @@ public:
 		objectIndex = newObjectIndex;
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 
@@ -361,9 +360,8 @@ private:
 		return droid && (droid->selected || droid == controller->getHighlightedObject());
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 
@@ -378,6 +376,20 @@ private:
 		}
 
 		controller->displayStatsForm();
+	}
+
+	void clickSecondary() override
+	{
+		auto droid = controller->getObjectAt(objectIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
+		auto highlighted = controller->getHighlightedObject();
+
+		// prevent highlighting a builder when another builder is already selected
+		if (droid == highlighted || !highlighted->selected)
+		{
+			controller->setHighlightedObject(droid);
+			controller->displayStatsForm();
+		}
 	}
 
 	std::shared_ptr<W_LABEL> productionRunSizeLabel;
@@ -446,22 +458,25 @@ private:
 		return getStats()->powerToBuild;
 	}
 
-	void released(W_CONTEXT *context, WIDGET_KEY mouseButton = WKEY_PRIMARY) override
+	void clickPrimary() override
 	{
-		BaseWidget::released(context, mouseButton);
 		auto clickedStats = controller->getStatsAt(buildOptionIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);
 
 		auto controllerRef = controller;
-		widgScheduleTask([mouseButton, clickedStats, controllerRef]() {
-			if (mouseButton == WKEY_PRIMARY)
-			{
-				controllerRef->startBuildPosition(clickedStats);
-			}
-			else if (mouseButton == WKEY_SECONDARY)
-			{
-				controllerRef->toggleFavorites(clickedStats);
-			}
+		widgScheduleTask([clickedStats, controllerRef]() {
+			controllerRef->startBuildPosition(clickedStats);
+		});
+	}
+
+	void clickSecondary() override
+	{
+		auto clickedStats = controller->getStatsAt(buildOptionIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN(, clickedStats);
+
+		auto controllerRef = controller;
+		widgScheduleTask([clickedStats, controllerRef]() {
+			controllerRef->toggleFavorites(clickedStats);
 		});
 	}
 
