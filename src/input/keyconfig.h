@@ -175,14 +175,6 @@ struct KeyFunctionInfo
 		const KeyMappingType   type,
 		const MappableFunction function,
 		const std::string      name,
-		const std::string      displayName
-	);
-
-	KeyFunctionInfo(
-		const InputContext& context,
-		const KeyMappingType   type,
-		const MappableFunction function,
-		const std::string      name,
 		const std::string      displayName,
 		const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings
 	);
