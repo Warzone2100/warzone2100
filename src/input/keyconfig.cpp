@@ -395,8 +395,6 @@ KeyMappingInputValue::KeyMappingInputValue(const MOUSE_KEY_CODE mouseKeyCode)
 {
 }
 
-// Key mapping inputs are unions with type enum attached, so we overload the equality
-// comparison for convenience.
 bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs)
 {
 	if (lhs.source != rhs.source) {
@@ -418,8 +416,6 @@ bool operator!=(const KeyMappingInput& lhs, const KeyMappingInput& rhs)
 	return !(lhs == rhs);
 }
 
-
-// ----------------------------------------------------------------------------------
 
 KeyMappingInputSource keyMappingSourceByName(std::string const& name)
 {
@@ -453,4 +449,50 @@ KeyMappingSlot keyMappingSlotByName(std::string const& name)
 		debug(LOG_WZ, "Encountered invalid key mapping slot name '%s', falling back to using 'primary'", name.c_str());
 		return KeyMappingSlot::PRIMARY;
 	}
+}
+
+KeyCombination::KeyCombination(
+	const KEY_CODE        meta,
+	const KeyMappingInput input,
+	const KeyAction       action
+)
+	: meta(meta)
+	, input(input)
+	, action(action)
+{
+}
+
+KeyCombination::KeyCombination(
+	const KeyMappingInput input,
+	const KeyAction       action
+)
+	: KeyCombination(KEY_CODE::KEY_IGNORE, input, action)
+{
+}
+
+KeyCombination::KeyCombination(
+	const KEY_CODE        meta,
+	const KeyMappingInput input
+)
+	: KeyCombination(meta, input, KeyAction::PRESSED)
+{
+}
+
+KeyCombination::KeyCombination(
+	const KeyMappingInput input
+)
+	: KeyCombination(input, KeyAction::PRESSED)
+{
+}
+
+bool operator==(const KeyCombination& lhs, const KeyCombination& rhs)
+{
+	return lhs.input == rhs.input
+		&& lhs.meta == rhs.meta
+		&& lhs.action == rhs.action;
+}
+
+bool operator!=(const KeyCombination& lhs, const KeyCombination& rhs)
+{
+	return !(lhs == rhs);
 }

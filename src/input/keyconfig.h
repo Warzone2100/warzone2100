@@ -104,7 +104,30 @@ struct KeyCombination
 	KEY_CODE        meta;
 	KeyMappingInput input;
 	KeyAction       action;
+
+	KeyCombination(
+		const KEY_CODE        meta,
+		const KeyMappingInput input,
+		const KeyAction       action
+	);
+
+	KeyCombination(
+		const KeyMappingInput input,
+		const KeyAction       action
+	);
+
+	KeyCombination(
+		const KEY_CODE        meta,
+		const KeyMappingInput input
+	);
+
+	KeyCombination(
+		const KeyMappingInput input
+	);
 };
+
+bool operator==(const KeyCombination& lhs, const KeyCombination& rhs);
+bool operator!=(const KeyCombination& lhs, const KeyCombination& rhs);
 
 enum class KeyMappingType
 {

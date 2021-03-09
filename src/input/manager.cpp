@@ -135,7 +135,7 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 	keyMappings.removeConflicting(metaCode, input, info.context);
 
 	// Set default key mapping
-	keyMappings.add(metaCode, input, action, info, slot);
+	keyMappings.add({ metaCode, input, action }, info, slot);
 	return true;
 }
 
@@ -219,7 +219,7 @@ void InputManager::updateMapMarkers()
 	if (maybeInfo != markerKeyFunctions.end())
 	{
 		const auto& info = maybeInfo->second;
-		keyMappings.add(KEY_LSHIFT, qKey, KeyAction::PRESSED, info, KeyMappingSlot::PRIMARY);
+		keyMappings.add({ KEY_CODE::KEY_LSHIFT, qKey }, info, KeyMappingSlot::PRIMARY);
 	}
 }
 
@@ -232,12 +232,12 @@ static bool isIgnoredMapping(InputManager& inputManager, const bool bAllowMouseW
 		return true;
 	}
 
-	if (mapping.input.is(KEY_CODE::KEY_MAXSCAN))
+	if (mapping.isInvalid())
 	{
 		return true;
 	}
 
-	if (!bAllowMouseWheelEvents && (mapping.input.is(MOUSE_KEY_CODE::MOUSE_WUP) || mapping.input.is(MOUSE_KEY_CODE::MOUSE_WDN)))
+	if (!bAllowMouseWheelEvents && (mapping.keys.input.is(MOUSE_KEY_CODE::MOUSE_WUP) || mapping.keys.input.is(MOUSE_KEY_CODE::MOUSE_WDN)))
 	{
 		return true;
 	}
@@ -283,7 +283,7 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 		}
 
 		/* Skip if the input is already consumed. Handles skips for context/priority and meta-conflicts */
-		const auto bIsAlreadyConsumed = consumedInputs.find(keyToProcess.input) != consumedInputs.end();
+		const auto bIsAlreadyConsumed = consumedInputs.find(keyToProcess.keys.input) != consumedInputs.end();
 		if (bIsAlreadyConsumed)
 		{
 			continue;
@@ -293,7 +293,7 @@ void InputManager::processMappings(const bool bAllowMouseWheelEvents)
 		if (keyToProcess.isActivated())
 		{
 			keyToProcess.info.function();
-			consumedInputs.insert(keyToProcess.input);
+			consumedInputs.insert(keyToProcess.keys.input);
 		}
 	}
 
