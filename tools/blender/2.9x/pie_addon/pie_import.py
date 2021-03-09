@@ -220,8 +220,6 @@ class Importer():
 
             bpy.context.view_layer.objects.active = meshObject
 
-            meshUv = mesh.uv_layers.new()
-
             #* POINTS/POLYGONS *#
 
             pie_points = level['POINTS']
