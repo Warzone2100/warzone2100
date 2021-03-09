@@ -31,7 +31,7 @@
 //
 // NOTE: The initialization is done as a function with bunch of emplace_backs instead of an initializer list for two reasons:
 //        1.) KeyFunctionInfo is marked as non-copy to avoid unnecessarily copying them around. Using an initializer list requires
-//            types to be copyable, so we cannot use initializer lists, at all (we use move-semantics with std::move instead)
+//            types to be copyable, so we cannot use initializer lists, at all (we use move-semantics)
 //        2.) The initializer list itself would require >20kb of stack memory due to sheer size of this thing. Inserting all
 //            entries one-by-one requires only one entry on the stack at a time, mitigating the risk of a stack overflow.
 static void initializeKeyFunctions(std::vector<KeyFunctionInfo>& entries)
