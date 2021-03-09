@@ -36,32 +36,16 @@ class InputManager
 {
 	// Input processing
 public:
-	KeyMapping& addMapping(const KEY_CODE meta, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot);
-
-	nonstd::optional<std::reference_wrapper<KeyMapping>> getMapping(const KeyFunctionInfo& info, const KeyMappingSlot slot);
-
-	/* Finds all mappings with matching meta and input */
-	std::vector<std::reference_wrapper<KeyMapping>> findMappingsForInput(const KEY_CODE meta, const KeyMappingInput input);
-
-	std::vector<KeyMapping> removeConflictingMappings(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
-
-	/* Removes a mapping specified by a pointer */
-	bool removeMapping(const KeyMapping& mappingToRemove);
-
-	void processMappings(const bool bAllowMouseWheelEvents);
-
 	/* (Re-)Initializes mappings to their default values. If `bForceDefaults` is true, any existing mappings will be overwritten with the defaults */
 	void resetMappings(const bool bForceDefaults, const KeyFunctionConfiguration& keyFuncConfig);
 
-	void clearAssignableMappings();
+	void processMappings(const bool bAllowMouseWheelEvents);
 
-	const std::list<KeyMapping> getAllMappings() const;
-
-private:
-	/* Registers a new default key mapping */
-	bool addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
-
+	// Subsystems/General
 public:
+	KeyMappings& mappings();
+	const KeyMappings& cmappings() const;
+
 	ContextManager& contexts();
 
 	DebugInputManager& debugManager();
@@ -73,6 +57,9 @@ public:
 	void updateMapMarkers();
 
 private:
+	/* Registers a new default key mapping */
+	bool addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot = KeyMappingSlot::PRIMARY);
+
 	bool mappingsSortRequired() const;
 
 	/* Explicit hash fn for KEY_CODEs. Do not use std::hash<KEY_CODE> directly to avoid breaking things once/if KEY_CODE is converted to an enum class */
@@ -85,9 +72,9 @@ private:
 	};
 
 	ContextManager contextManager;
-	std::list<KeyMapping> keyMappings;
+	KeyMappings keyMappings;
 	std::unordered_map<KEY_CODE, KeyFunctionInfo, KeyCodeHash> markerKeyFunctions;
-	bool bMappingsSortOrderDirty;
+	bool bMappingsSortOrderDirty = true;
 
 	DebugInputManager dbgInputManager = DebugInputManager(MAX_PLAYERS);
 };
