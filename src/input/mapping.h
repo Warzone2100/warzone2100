@@ -69,6 +69,14 @@ public:
 
 	void clear(nonstd::optional<KeyMappingType> filter = nonstd::nullopt);
 
+	// I/O
+public:
+	/* Loads the key mappings from disk */
+	bool load(const char* path, const KeyFunctionConfiguration& keyFuncConfig);
+
+	/* Saves the key mappings to disk */
+	bool save(const char* path) const;
+
 private:
 	void sort(const ContextManager& contexts);
 

@@ -33,7 +33,5 @@ bool runKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration&
 bool runInGameKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, unsigned id);
 bool startKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, bool first);
 bool startInGameKeyMapEditor(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig, bool first);
-bool saveKeyMap(const InputManager& inputManager);
-bool loadKeyMap(InputManager& inputManager, const KeyFunctionConfiguration& keyFuncConfig);
 
 #endif // __INCLUDED_SRC_KEYEDIT_H__
