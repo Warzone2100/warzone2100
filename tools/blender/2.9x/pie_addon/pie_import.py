@@ -188,9 +188,10 @@ class Importer():
         armatureObject.show_in_front = True
 
         currentLevel = 0
-
-        if bpy.data.actions[pieFile + ' Anim']:
-            bpy.data.actions.remove(bpy.data.actions[pieFile + ' Anim'])
+        
+        for action in bpy.data.actions:
+            if action.name == pieFile + ' Anim':
+                bpy.data.actions.remove(action)
 
         for level in pieParse['LEVELS']:
             currentLevel += 1
@@ -203,6 +204,8 @@ class Importer():
             bone = armatureObject.data.edit_bones.new(nameStr)
             bone.head = (0, 0, 0)
             bone.tail = (0, 0.125, 0)
+            
+            boneName = bone.name
 
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
             
@@ -325,7 +328,7 @@ class Importer():
             bpy.context.view_layer.objects.active = armatureObject
             bpy.ops.object.mode_set(mode='POSE', toggle=False)
 
-            poseBone = armatureObject.pose.bones[bone.name]
+            poseBone = armatureObject.pose.bones[boneName]
 
             if level['ANIMOBJECT']:
 
@@ -380,7 +383,7 @@ class Importer():
 
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
 
-            bpy.data.armatures[pieFile].bones[bone.name].use_relative_parent = True
+            bpy.data.armatures[pieFile].bones[boneName].use_relative_parent = True
 
             self.pie_loadProperties(pieParse, armatureObject, pieFile)
 
