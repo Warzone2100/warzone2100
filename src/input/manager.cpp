@@ -22,10 +22,10 @@
 #include <unordered_set>
 #include <optional-lite/optional.hpp>
 
-#include "manager.h"
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
 
+#include "manager.h"
 #include "context.h"
 #include "config.h"
 #include "mapping.h"
@@ -34,6 +34,7 @@
 #include "../keyedit.h"
 #include "../display3d.h"   // For playerPos
 #include "../qtscript.h"    // For triggerEventKeyPressed
+#include "../main.h"        // For KeyMapPath
 
 
 KeyMappings& InputManager::mappings()
@@ -81,7 +82,7 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 	// load the mappings.
 	if (!bForceDefaults)
 	{
-		if (loadKeyMap(*this, keyFuncConfig))
+		if (keyMappings.load(KeyMapPath, keyFuncConfig))
 		{
 			debug(LOG_WZ, "Loaded key map successfully");
 		}
@@ -107,7 +108,7 @@ void InputManager::resetMappings(bool bForceDefaults, const KeyFunctionConfigura
 		}
 	}
 
-	saveKeyMap(*this);
+	keyMappings.save(KeyMapPath);
 }
 
 bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingInput input, const KeyAction action, const KeyFunctionInfo& info, const KeyMappingSlot slot)

@@ -21,6 +21,7 @@
 #include "mapping.h"
 
 #include "lib/framework/frame.h"
+#include "lib/framework/wzconfig.h"
 #include "lib/gamelib/gtime.h" // For gameTime
 
 #include "keyconfig.h"
@@ -279,4 +280,122 @@ void KeyMappings::sort(const ContextManager& contexts)
 		return a.hasMeta() && !b.hasMeta();
 	});
 	bDirty = false;
+}
+
+static KeyMappingInput createInputForSource(const KeyMappingInputSource source, const unsigned int keyCode)
+{
+	switch (source) {
+	case KeyMappingInputSource::KEY_CODE:
+		return (KEY_CODE)keyCode;
+	case KeyMappingInputSource::MOUSE_KEY_CODE:
+		return (MOUSE_KEY_CODE)keyCode;
+	default:
+		debug(LOG_WZ, "Encountered invalid key mapping source %u while loading keymap!", static_cast<unsigned int>(source));
+		return KEY_CODE::KEY_MAXSCAN;
+	}
+}
+
+bool KeyMappings::load(const char* path, const KeyFunctionConfiguration& keyFuncConfig)
+{
+	/* Clear all assignable mappings */
+	clear(KeyMappingType::ASSIGNABLE);
+
+	WzConfig ini(path, WzConfig::ReadOnly);
+	if (!ini.status())
+	{
+		debug(LOG_WZ, "%s not found", path);
+		return false;
+	}
+
+	for (ini.beginArray("mappings"); ini.remainingArrayItems(); ini.nextArrayItem())
+	{
+		auto meta = (KEY_CODE)ini.value("meta", 0).toInt();
+		auto sub = ini.value("sub", 0).toInt();
+		auto action = (KeyAction)ini.value("action", 0).toInt();
+		auto functionName = ini.value("function", "").toWzString();
+		auto info = keyFuncConfig.keyFunctionInfoByName(functionName.toUtf8());
+		if (!info.has_value())
+		{
+			debug(LOG_WARNING, "Skipping unknown keymap function \"%s\".", functionName.toUtf8().c_str());
+			continue;
+		}
+		else if (info->get().type != KeyMappingType::ASSIGNABLE)
+		{
+			/* No need to load non-assignable mappings */
+			debug(LOG_WARNING, "Skipping non-assignable keymap function \"%s\".", functionName.toUtf8().c_str());
+			continue;
+		}
+
+		const WzString sourceName = ini.value("source", "default").toWzString();
+		const KeyMappingInputSource source = keyMappingSourceByName(sourceName.toUtf8().c_str());
+		const KeyMappingInput input = createInputForSource(source, sub);
+
+		const WzString slotName = ini.value("slot", "primary").toWzString();
+		const KeyMappingSlot slot = keyMappingSlotByName(slotName.toUtf8().c_str());
+
+		add(meta, input, action, *info, slot);
+	}
+	ini.endArray();
+	return true;
+}
+
+bool KeyMappings::save(const char* path) const
+{
+	WzConfig ini(path, WzConfig::ReadAndWrite);
+	if (!ini.status() || !ini.isWritable())
+	{
+		// NOTE: Changed to LOG_FATAL, since we want to inform user via pop-up (windows only)
+		debug(LOG_FATAL, "Could not open %s", ini.fileName().toUtf8().c_str());
+		return false;
+	}
+
+	ini.setValue("version", 1);
+
+	ini.beginArray("mappings");
+	for (const KeyMapping& mapping : keyMappings)
+	{
+		/* No need to save non-assignable mappings */
+		if (mapping.info.type != KeyMappingType::ASSIGNABLE)
+		{
+			continue;
+		}
+
+		ini.setValue("name", mapping.info.name);
+		ini.setValue("meta", mapping.metaKeyCode);
+
+		switch (mapping.input.source) {
+		case KeyMappingInputSource::KEY_CODE:
+			ini.setValue("source", "default");
+			ini.setValue("sub", mapping.input.value.keyCode);
+			break;
+		case KeyMappingInputSource::MOUSE_KEY_CODE:
+			ini.setValue("source", "mouse_key");
+			ini.setValue("sub", mapping.input.value.mouseKeyCode);
+			break;
+		default:
+			debug(LOG_WZ, "Encountered invalid key mapping source %u while saving keymap!", static_cast<unsigned int>(mapping.input.source));
+			break;
+		}
+		switch (mapping.slot)
+		{
+		case KeyMappingSlot::PRIMARY:
+			ini.setValue("slot", "primary");
+			break;
+		case KeyMappingSlot::SECONDARY:
+			ini.setValue("slot", "secondary");
+			break;
+		default:
+			debug(LOG_WZ, "Encountered invalid key mapping slot %u while saving keymap!", static_cast<unsigned int>(mapping.slot));
+			break;
+		}
+
+		ini.setValue("action", mapping.action);
+		ini.setValue("function", mapping.info.name);
+
+		ini.nextArrayItem();
+	}
+	ini.endArray();
+
+	debug(LOG_WZ, "Keymap written ok to %s.", path);
+	return true;
 }
