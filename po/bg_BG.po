@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-09 13:59\n"
+"PO-Revision-Date: 2021-03-10 01:54\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "Тази структура съдържа технология, жизненоважна за успеха на Проекта."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -55,7 +55,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Проучете и подсигурете местността."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr ""
+msgstr "Разузнайте обозначената местност за вражески изследователски съоражения."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
@@ -136,7 +136,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr ""
+msgstr "Новата Парадигма търсят артефакти в тази околност."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
@@ -164,7 +164,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
-msgstr ""
+msgstr "Постройте защитни структури."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -172,11 +172,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "Вражески сили се приближават от изток и от север."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Задръжте базата и отблъснете всякакви атаки."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Засичаме вражески сили на тези местонахождения."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
@@ -192,7 +192,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Поздравления, Командире."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
@@ -204,7 +204,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "Първите две зони са вече подсигурени."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
@@ -268,7 +268,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "Нова цел."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
@@ -276,7 +276,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "Допълнение"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
@@ -292,7 +292,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "Декодиране е в процес....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
@@ -304,7 +304,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "Разрушете вражеска база"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
@@ -320,7 +320,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "Първоначално изследване потвърждава, че тя ще бъде от голяма полза за Проекта."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -409,16 +409,16 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "Нови технологии са налични."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "Понастоящем засичаме кодиран сигнален поток."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Декодиране..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
@@ -1631,12 +1631,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:588
 msgid "Bridge"
-msgstr ""
+msgstr "Мост"
 
 #: data/base/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:595
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "Разбит Танк"
 
 #: data/base/messages/strings/names.txt:487
 #: data/base/messages/strings/names.txt:503
@@ -1655,33 +1655,33 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:615
 #: data/mp/messages/strings/names.txt:631
 msgid "Engineering Laboratory"
-msgstr ""
+msgstr "Инженерна Лаборатория"
 
 #: data/base/messages/strings/names.txt:490
 #: data/base/messages/strings/names.txt:506
 #: data/mp/messages/strings/names.txt:616
 #: data/mp/messages/strings/names.txt:632
 msgid "Robotics Laboratory"
-msgstr ""
+msgstr "Лаборатория по Роботика"
 
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:617
 msgid "Laser Optics Laboratory"
-msgstr ""
+msgstr "Лаборатория по Лазерна Оптика"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:618
 #: data/mp/messages/strings/names.txt:630
 msgid "Electronics Laboratory"
-msgstr ""
+msgstr "Лаборатория по Електроника"
 
 #: data/base/messages/strings/names.txt:493
 #: data/base/messages/strings/names.txt:502
 #: data/mp/messages/strings/names.txt:619
 #: data/mp/messages/strings/names.txt:628
 msgid "Chemical Laboratory"
-msgstr ""
+msgstr "Химическа лаборатория"
 
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:627
@@ -1761,7 +1761,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:7
 #: po/custom/fromJson.txt:2424
 msgid "Heat resistant armored layers"
-msgstr ""
+msgstr "Термоустойчиви бронирани слоеве"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[2]
@@ -1770,7 +1770,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:8
 #: po/custom/fromJson.txt:5458
 msgid "Thermal Armor increased"
-msgstr ""
+msgstr "Топлинна Броня увеличена"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[0]
@@ -1783,7 +1783,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:16
 #: po/custom/fromJson.txt:4011
 msgid "New Cyborg Available"
-msgstr ""
+msgstr "Наличен е нов Киборг"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
@@ -1882,7 +1882,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:31
 #: po/custom/fromJson.txt:1728
 msgid "Defenses Improved"
-msgstr ""
+msgstr "Защити подобрени"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DF_WU4.text[1]
@@ -2357,7 +2357,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:163
 #: po/custom/fromJson.txt:4423
 msgid "Prevents enemy movement"
-msgstr ""
+msgstr "Предотвратява движение на врага"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[0]
@@ -2387,7 +2387,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:168
 #: po/custom/fromJson.txt:3233
 msgid "Increases Repair Speed"
-msgstr ""
+msgstr "Повишава скоростта на поправка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[3]
@@ -2539,7 +2539,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:193
 #: po/custom/fromJson.txt:3239
 msgid "Increases research speed"
-msgstr ""
+msgstr "Повишава скоростта на изследванията"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[3]
@@ -4002,7 +4002,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Унищожете всички единици на Новата Парадигма"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
@@ -4356,11 +4356,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "ЗАПАДЕН СЕКТОР"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "Изгрев, 4-ти Юли, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
@@ -4368,7 +4368,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "Нова Ера"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
@@ -4446,7 +4446,7 @@ msgstr ""
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Вие сте в нарушение на Новата Парадигма."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -4454,7 +4454,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Те са в нарушение на Новата Парадигма."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
@@ -4466,7 +4466,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
-msgstr ""
+msgstr "После разрушете базата на Новата Парадигма."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
@@ -4502,7 +4502,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "Вашата намеса в плановете ми за Новата Парадигма няма да останат ненаказани."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
@@ -4559,7 +4559,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Внимание!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -4575,7 +4575,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Край на съобщението."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
@@ -4623,7 +4623,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "ИЗТОЧЕН СЕКТОР"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
@@ -4835,7 +4835,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr ""
+msgstr "Декодиране на съобщение..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -8528,7 +8528,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Flame1Mk1.name
 #: po/custom/fromJson.txt:2074
 msgid "Flamer"
-msgstr ""
+msgstr "Огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
