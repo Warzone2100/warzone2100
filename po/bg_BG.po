@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-10 01:54\n"
+"PO-Revision-Date: 2021-03-10 14:08\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -34,15 +34,15 @@ msgstr "Тази структура съдържа технология, жиз�
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "МИСИЯ ПРИ БАЗА АЛФА: Вехтошари Нашественици"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Вехтошари нашественици наближават нашата база."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Отбранявайте базата, след което унищожете Вехтошарските лагери."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
@@ -63,7 +63,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "Новата Парадигма притежават превъзхождаща ни оръжейна технология."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
@@ -87,12 +87,12 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Проучете местността и съберете налични артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Налични са подкрепления."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
@@ -1490,7 +1490,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:361
 #: data/mp/messages/strings/names.txt:461
 msgid "Vehicle Self-Repair"
-msgstr ""
+msgstr "МПС Самопоправка"
 
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:462
@@ -2463,7 +2463,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:186
 #: po/custom/fromJson.txt:5727
 msgid "Vehicle Production Improved"
-msgstr ""
+msgstr "Производство на МПС Подобрено"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[1]
@@ -2492,7 +2492,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:428
 msgid "All vehicle factories upgraded automatically"
-msgstr ""
+msgstr "Всички фабрики за МПС надградени автоматично"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -3007,7 +3007,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:258
 #: po/custom/fromJson.txt:3037
 msgid "Improves vehicle speed"
-msgstr ""
+msgstr "Подобрява скоростта на МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[3]
@@ -3033,7 +3033,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:261
 #: po/custom/fromJson.txt:5716
 msgid "Vehicle Bodies Improved"
-msgstr ""
+msgstr "Корпуси на МПС Подобрени"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -3055,7 +3055,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:266
 #: po/custom/fromJson.txt:5755
 msgid "Vehicle Thermal Armor Improved"
-msgstr ""
+msgstr "МПС Топлинна Броня Подобрена"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[1]
@@ -3092,7 +3092,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:286
 #: po/custom/fromJson.txt:5733
 msgid "Vehicle Propulsion Improved"
-msgstr ""
+msgstr "МПС Задвижване Подобрено"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[1]
@@ -3521,7 +3521,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:358
 #: po/custom/fromJson.txt:1135
 msgid "Best Targets: Vehicles"
-msgstr ""
+msgstr "Най-добри Цели: МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
@@ -3570,7 +3570,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1106
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr ""
+msgstr "Най-добри Цели: Бункери, колесни и ховъркрафт МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3650,7 +3650,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1090
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr ""
+msgstr "Най-добри Цели: Базови Структури, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3854,7 +3854,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:413
 #: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr ""
+msgstr "Най-добри Цели: Базови структури, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -4284,7 +4284,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:56
 msgid "Now left click the Vehicle Body icon"
-msgstr ""
+msgstr "Сега кликнете с ляв бутон върху икона \"Корпус\""
 
 #: data/base/script/tutorial.js:57
 msgid "Then left click the Viper body"
@@ -9137,21 +9137,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body12.name
 #: po/custom/fromJson.txt:2450
 msgid "Heavy Body - Mantis"
-msgstr ""
+msgstr "Тежък Корпус - Богомолка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body11.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body11.name
 #: po/custom/fromJson.txt:2454
 msgid "Heavy Body - Python"
-msgstr ""
+msgstr "Тежък Корпус - Питон"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body09.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body09.name
 #: po/custom/fromJson.txt:2458
 msgid "Heavy Body - Tiger"
-msgstr ""
+msgstr "Тежък Корпус - Тигър"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body10.name
@@ -10522,14 +10522,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body04.name
 #: po/custom/fromJson.txt:3477
 msgid "Light Body - Bug"
-msgstr ""
+msgstr "Лек Корпус - Буболечка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body02.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body02.name
 #: po/custom/fromJson.txt:3481
 msgid "Light Body - Leopard"
-msgstr ""
+msgstr "Лек Корпус - Леопард"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body03.name
@@ -10543,7 +10543,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body01.name
 #: po/custom/fromJson.txt:3489
 msgid "Light Body - Viper"
-msgstr ""
+msgstr "Лек Корпус - Пепелянка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[1]
@@ -10759,14 +10759,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body05.name
 #: po/custom/fromJson.txt:3654
 msgid "Medium Body - Cobra"
-msgstr ""
+msgstr "Среден Корпус - Кобра"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body06.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body06.name
 #: po/custom/fromJson.txt:3658
 msgid "Medium Body - Panther"
-msgstr ""
+msgstr "Среден Корпус - Пантера"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body07.name
@@ -10780,7 +10780,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body08.name
 #: po/custom/fromJson.txt:3666
 msgid "Medium Body - Scorpion"
-msgstr ""
+msgstr "Среден Корпус - Скорпион"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[1]
@@ -13850,19 +13850,19 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
 #: po/custom/fromJson.txt:5743
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr ""
+msgstr "МПС Свръхплътна Топлинна Броня Мод. 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat09.name
 #: po/custom/fromJson.txt:5746
 msgid "Vehicle Superdense Thermal Armor Mk3"
-msgstr ""
+msgstr "МПС Свръхплътна Топлинна Броня Мод. 3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat07.name
 #: po/custom/fromJson.txt:5749
 msgid "Vehicle Superdense Thermal Armor"
-msgstr ""
+msgstr "МПС Свръхплътна Топлинна Броня"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Guass.name
@@ -14832,7 +14832,7 @@ msgstr ""
 
 #: src/design.cpp:441
 msgid "Vehicle Body"
-msgstr ""
+msgstr "Корпус"
 
 #: src/design.cpp:457
 msgid "Vehicle Propulsion"
