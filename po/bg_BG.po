@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-10 14:08\n"
+"PO-Revision-Date: 2021-03-11 02:05\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "Нищо за докладване."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
@@ -244,11 +244,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "ОСНОВНА ЦЕЛ"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Тази постройка е Ваша основна цел."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -296,15 +296,15 @@ msgstr "Декодиране е в процес....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "Командире."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "Разкодирахме входящото съобщение до Новата Парадигма..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr "Разрушете вражеска база"
+msgstr "Разрушете вражеската база"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
@@ -352,11 +352,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "БАЗА НА ВЕХТОШАРИ ЗАСЕЧЕНА"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "Разгромете вехтошарите и приберете всякакви артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -383,21 +383,21 @@ msgstr ""
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "МИСИЯ ПРИ БАЗА БЕТА: Източен Сектор"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "При пристигането си Вие ще поемете управлението на базата."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "Наложително е да я отбранявате и задържите."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "МИСИЯ ПРИ БАЗА БЕТА: Отбранете и Укрепете"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
@@ -1490,7 +1490,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:361
 #: data/mp/messages/strings/names.txt:461
 msgid "Vehicle Self-Repair"
-msgstr "МПС Самопоправка"
+msgstr "Самопоправка на МПС"
 
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:462
@@ -2463,7 +2463,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:186
 #: po/custom/fromJson.txt:5727
 msgid "Vehicle Production Improved"
-msgstr "Производство на МПС Подобрено"
+msgstr "Производство на МПС подобрено"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[1]
@@ -2492,7 +2492,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:428
 msgid "All vehicle factories upgraded automatically"
-msgstr "Всички фабрики за МПС надградени автоматично"
+msgstr "Всички фабрики за МПС са надградени автоматично"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -3033,7 +3033,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:261
 #: po/custom/fromJson.txt:5716
 msgid "Vehicle Bodies Improved"
-msgstr "Корпуси на МПС Подобрени"
+msgstr "Корпуси на МПС подобрени"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -3521,7 +3521,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:358
 #: po/custom/fromJson.txt:1135
 msgid "Best Targets: Vehicles"
-msgstr "Най-добри Цели: МПС"
+msgstr "Най-добри цели: МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
@@ -3570,7 +3570,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1106
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Най-добри Цели: Бункери, колесни и ховъркрафт МПС"
+msgstr "Най-добри цели: Бункери, колесни и ховъркрафт МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3650,7 +3650,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1090
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Най-добри Цели: Базови Структури, пехота, колесни МПС"
+msgstr "Най-добри цели: Базови Структури, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3854,7 +3854,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:413
 #: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr "Най-добри Цели: Базови структури, пехота, колесни МПС"
+msgstr "Най-добри цели: Базови структури, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -9137,21 +9137,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body12.name
 #: po/custom/fromJson.txt:2450
 msgid "Heavy Body - Mantis"
-msgstr "Тежък Корпус - Богомолка"
+msgstr "Тежък корпус - Богомолка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body11.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body11.name
 #: po/custom/fromJson.txt:2454
 msgid "Heavy Body - Python"
-msgstr "Тежък Корпус - Питон"
+msgstr "Тежък корпус - Питон"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body09.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body09.name
 #: po/custom/fromJson.txt:2458
 msgid "Heavy Body - Tiger"
-msgstr "Тежък Корпус - Тигър"
+msgstr "Тежък корпус - Тигър"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body10.name
@@ -10522,14 +10522,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body04.name
 #: po/custom/fromJson.txt:3477
 msgid "Light Body - Bug"
-msgstr "Лек Корпус - Буболечка"
+msgstr "Лек корпус - Буболечка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body02.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body02.name
 #: po/custom/fromJson.txt:3481
 msgid "Light Body - Leopard"
-msgstr "Лек Корпус - Леопард"
+msgstr "Лек корпус - Леопард"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body03.name
@@ -10543,7 +10543,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body01.name
 #: po/custom/fromJson.txt:3489
 msgid "Light Body - Viper"
-msgstr "Лек Корпус - Пепелянка"
+msgstr "Лек корпус - Пепелянка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[1]
@@ -10759,14 +10759,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body05.name
 #: po/custom/fromJson.txt:3654
 msgid "Medium Body - Cobra"
-msgstr "Среден Корпус - Кобра"
+msgstr "Среден корпус - Кобра"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body06.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body06.name
 #: po/custom/fromJson.txt:3658
 msgid "Medium Body - Panther"
-msgstr "Среден Корпус - Пантера"
+msgstr "Среден корпус - Пантера"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body07.name
@@ -10780,7 +10780,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body08.name
 #: po/custom/fromJson.txt:3666
 msgid "Medium Body - Scorpion"
-msgstr "Среден Корпус - Скорпион"
+msgstr "Среден корпус - Скорпион"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[1]
