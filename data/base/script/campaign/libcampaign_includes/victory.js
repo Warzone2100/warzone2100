@@ -427,6 +427,11 @@ function __camVictoryOffworld()
 	if (enumArea(lz, ENEMIES, false).length > 0)
 	{
 		const REMIND_COMPROMISED = 30; // every X seconds
+		//Protect against early access to reinforcements GUI if it shouldn't be available yet
+		if (__camVictoryData.reinforcements >= 0)
+		{
+			setReinforcementTime(LZ_COMPROMISED_TIME);
+		}
 		if (__camLZCompromisedTicker === 0)
 		{
 			camTrace("LZ compromised");
@@ -435,7 +440,6 @@ function __camVictoryOffworld()
 		{
 			var pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);
-			setReinforcementTime(LZ_COMPROMISED_TIME);
 		}
 		++__camLZCompromisedTicker;
 		if (__camRTLZTicker === 0)
