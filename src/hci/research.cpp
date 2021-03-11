@@ -60,7 +60,15 @@ void ResearchController::updateResearchOptionsList()
 	}
 
 	std::sort(stats.begin(), stats.end(), [](const RESEARCH *a, const RESEARCH *b) {
-		return mapIconToRID(a->iconID) < mapIconToRID(b->iconID);
+		auto iconIdA = mapIconToRID(a->iconID);
+		auto iconIdB = mapIconToRID(b->iconID);
+
+		if (iconIdA != iconIdB)
+		{
+			return iconIdA < iconIdB;
+		}
+
+		return a->id < b->id;
 	});
 }
 
