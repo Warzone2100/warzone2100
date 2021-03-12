@@ -187,11 +187,29 @@ WZ_DECL_WARN_UNUSED_RESULT DROID_TEMPLATE	*IdToTemplate(UDWORD tempId, UDWORD pl
 const char *getPlayerName(int player);
 bool setPlayerName(int player, const char *sName);
 const char *getPlayerColourName(int player);
-bool isHumanPlayer(int player);				//to tell if the player is a computer or not.
-bool myResponsibility(int player);
-bool responsibleFor(int player, int playerinquestion);
-int whosResponsible(int player);
-bool canGiveOrdersFor(int player, int playerInQuestion);
+
+/* Checks if the player in given slot is the host. */
+bool isHost(unsigned int player);
+
+/* Checks if the player in given slot is controlled by an AI */
+bool isHumanPlayer(unsigned int player);
+
+/* Checks if the player in given slot is responsibility of the selected player. */
+bool myResponsibility(unsigned int player);
+
+/* Checks if the player `player` is resposible for the player `playerInQuestion`. All human players are
+   responsible for themselves, while all AI players are considered to be the responsibility of the host. */
+bool responsibleFor(unsigned int player, unsigned int playerInQuestion);
+
+/* Returns the player index of the player considered to be responsible for the given player. */
+unsigned int whosResponsible(unsigned int player);
+
+/* Checks if the player `player` may give orders for droids of the player `playerInQuestion`. Normally,
+   players may only give orders to their own units. Host is allowed to command AIs (as they run on their
+   machine, meaning that `selectedPlayer` is always the host player for the AIs, too). However, if debug
+   features are enabled, any player may command any other players' units.                                */
+bool canGiveOrdersFor(unsigned int player, unsigned int playerInQuestion);
+
 int scavengerSlot();    // Returns the player number that scavengers would have if they were enabled.
 int scavengerPlayer();  // Returns the player number that the scavengers have, or -1 if disabled.
 Vector3i cameraToHome(UDWORD player, bool scroll);

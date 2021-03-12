@@ -1715,9 +1715,14 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			NETbeginDecode(playerQueue, NET_SHARE_GAME_QUEUE);
 			NETuint8_t(&player);
 			NETuint32_t(&num);
-			bool isSentByCorrectClient = responsibleFor(playerQueue.index, player);
-			isSentByCorrectClient = isSentByCorrectClient || (playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer);  // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
-			if (!isSentByCorrectClient || player >= MAX_PLAYERS)
+			const bool bIsHostAndSpoofingAnotherPlayer = playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer; // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
+			const bool bIsSentByCorrectClient = responsibleFor(playerQueue.index, player) || bIsHostAndSpoofingAnotherPlayer;
+
+			const bool bIsSentByShareUnitsTarget = true; // TODO 823-share-unit-controls
+			const bool bIsSentByShareManufactureTarget = true; // TODO 823-share-unit-controls
+			const bool bIsSharing = bIsSentByShareUnitsTarget || bIsSentByShareManufactureTarget;
+
+			if ((!bIsSentByCorrectClient && !bIsSharing) || player >= MAX_PLAYERS)
 			{
 				break;
 			}
@@ -1725,8 +1730,20 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			{
 				NETnetMessage(&message);
 
-				NETinsertMessageFromNet(NETgameQueue(player), message);
-				NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
+				// Always allow if sent by correct client. Only allow droid/structure messages for share targets.
+				bool bIsAllowedMessage = bIsSentByCorrectClient;
+				if (bIsSentByShareUnitsTarget) {
+					bIsAllowedMessage |= static_cast<MESSAGE_TYPES>(message->type) == MESSAGE_TYPES::GAME_DROIDINFO;
+				}
+				if (bIsSentByShareManufactureTarget) {
+					bIsAllowedMessage |= static_cast<MESSAGE_TYPES>(message->type) == MESSAGE_TYPES::GAME_STRUCTUREINFO;
+				}
+
+				if (bIsAllowedMessage)
+				{
+					NETinsertMessageFromNet(NETgameQueue(player), message);
+					NETlogPacket(message->type, static_cast<uint32_t>(message->rawLen()), true);
+				}
 
 				delete message;
 				message = nullptr;
@@ -1815,6 +1832,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NetPlay.players[index].ai = ai;
 					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 					NetPlay.players[index].faction = newFactionId.value();
+					// TODO 823-share-unit-controls: sync unit/manufacture controls here
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
@@ -1890,6 +1908,7 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			debug(LOG_INFO, "Player %u has left the game.", index);
 			NETplayerLeaving(index);		// need to close socket for the player that left.
 			NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_LEAVING, index);
+			// TODO 823-share-unit-controls: clear any unit share statuses for the leaving player, if applicable
 			break;
 		}
 	case NET_GAME_FLAGS:
@@ -4392,7 +4411,7 @@ const char *messageTypeToString(unsigned messageType_)
 	case NET_KICK:                      return "NET_KICK";
 	case NET_FIREUP:                    return "NET_FIREUP";
 	case NET_COLOURREQUEST:             return "NET_COLOURREQUEST";
-	case NET_FACTIONREQUEST:             return "NET_FACTIONREQUEST";
+	case NET_FACTIONREQUEST:            return "NET_FACTIONREQUEST";
 	case NET_AITEXTMSG:                 return "NET_AITEXTMSG";
 	case NET_BEACONMSG:                 return "NET_BEACONMSG";
 	case NET_TEAMREQUEST:               return "NET_TEAMREQUEST";
@@ -4442,6 +4461,11 @@ const char *messageTypeToString(unsigned messageType_)
 	case GAME_DEBUG_REMOVE_STRUCTURE:   return "GAME_DEBUG_REMOVE_STRUCTURE";
 	case GAME_DEBUG_REMOVE_FEATURE:     return "GAME_DEBUG_REMOVE_FEATURE";
 	case GAME_DEBUG_FINISH_RESEARCH:    return "GAME_DEBUG_FINISH_RESEARCH";
+
+	// Unit/control sharing
+	case GAME_UNIT_SHARE:               return "GAME_UNIT_SHARE";
+	case GAME_MANUFACTURE_SHARE:        return "GAME_MANUFACTURE_SHARE";
+
 	// End of redundant messages.
 	case GAME_MAX_TYPE:                 return "GAME_MAX_TYPE";
 	}

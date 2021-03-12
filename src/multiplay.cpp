@@ -497,7 +497,7 @@ bool isHumanPlayer(int player)
 }
 
 // returns player responsible for 'player'
-int whosResponsible(int player)
+unsigned int whosResponsible(unsigned int player)
 {
 	if (isHumanPlayer(player))
 	{
@@ -513,22 +513,29 @@ int whosResponsible(int player)
 	}
 }
 
-//returns true if selected player is responsible for 'player'
-bool myResponsibility(int player)
+// TODO 823-share-unit-control: Move this to somewhere more sensible
+static bool isHost(unsigned int player)
 {
-	return (whosResponsible(player) == selectedPlayer || whosResponsible(player) == realSelectedPlayer);
+	return player == NET_HOST_ONLY;
+}
+
+//returns true if selected player is responsible for 'player'
+bool myResponsibility(unsigned int player)
+{
+	return isHumanPlayer(player)
+		? (whosResponsible(player) == selectedPlayer || whosResponsible(player) == realSelectedPlayer)
+		: (isHost(selectedPlayer) || isHost(realSelectedPlayer));
 }
 
 //returns true if 'player' is responsible for 'playerinquestion'
-bool responsibleFor(int player, int playerinquestion)
+bool responsibleFor(unsigned int player, unsigned int playerinquestion)
 {
 	return whosResponsible(playerinquestion) == player;
 }
 
-bool canGiveOrdersFor(int player, int playerInQuestion)
+bool canGiveOrdersFor(unsigned int player, unsigned int playerInQuestion)
 {
-	return playerInQuestion >= 0 && playerInQuestion < MAX_PLAYERS &&
-	       (player == playerInQuestion || responsibleFor(player, playerInQuestion) || getDebugMappingStatus());
+	return playerInQuestion < MAX_PLAYERS && (player == playerInQuestion || responsibleFor(player, playerInQuestion) || getDebugMappingStatus());
 }
 
 int scavengerSlot()
@@ -1142,7 +1149,7 @@ bool NetworkTextMessage::receive(NETQUEUE queue)
 	NETstring(text, MAX_CONSOLE_STRING_LENGTH);
 	NETend();
 
-	if (whosResponsible(sender) != queue.index)
+	if (sender < 0 || whosResponsible(sender) != queue.index)
 	{
 		sender = queue.index;  // Fix corrupted sender.
 	}

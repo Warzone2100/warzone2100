@@ -50,8 +50,7 @@
 // stores combinations of unit components
 static std::vector<std::vector<uint32_t> > combinations;
 
-template <typename T>
-static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen)
+static unsigned selSelectUnitsIf(unsigned player, std::function<bool(DROID*)> condition, bool onlyOnScreen)
 {
 	unsigned count = 0;
 
@@ -76,8 +75,8 @@ static unsigned selSelectUnitsIf(unsigned player, T condition, bool onlyOnScreen
 	return count;
 }
 
-template <typename T, typename U>
-static unsigned selSelectUnitsIf(unsigned player, T condition, U value, bool onlyOnScreen)
+template <typename T>
+static unsigned selSelectUnitsIf(unsigned player, std::function<bool(DROID*, T)> condition, T value, bool onlyOnScreen)
 {
 	return selSelectUnitsIf(player, [condition, value](DROID *psDroid) { return condition(psDroid, value); }, onlyOnScreen);
 }
@@ -570,43 +569,43 @@ unsigned int selDroidSelection(unsigned int player, SELECTION_CLASS droidClass, 
 		switch (droidType)
 		{
 		case DST_VTOL:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_LIFT, bOnScreen);
+			retVal = selSelectUnitsIf<PROPULSION_TYPE>(player, selProp, PROPULSION_TYPE_LIFT, bOnScreen);
 			break;
 		case DST_VTOL_ARMED:
-			retVal = selSelectUnitsIf(player, selPropArmed, PROPULSION_TYPE_LIFT, bOnScreen);
+			retVal = selSelectUnitsIf<PROPULSION_TYPE>(player, selPropArmed, PROPULSION_TYPE_LIFT, bOnScreen);
 			break;
 		case DST_HOVER:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_HOVER, bOnScreen);
+			retVal = selSelectUnitsIf<PROPULSION_TYPE>(player, selProp, PROPULSION_TYPE_HOVER, bOnScreen);
 			break;
 		case DST_WHEELED:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_WHEELED, bOnScreen);
+			retVal = selSelectUnitsIf<PROPULSION_TYPE>(player, selProp, PROPULSION_TYPE_WHEELED, bOnScreen);
 			break;
 		case DST_TRACKED:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_TRACKED, bOnScreen);
+			retVal = selSelectUnitsIf<PROPULSION_TYPE>(player, selProp, PROPULSION_TYPE_TRACKED, bOnScreen);
 			break;
 		case DST_HALF_TRACKED:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
+			retVal = selSelectUnitsIf<PROPULSION_TYPE>(player, selProp, PROPULSION_TYPE_HALF_TRACKED, bOnScreen);
 			break;
 		case DST_CYBORG:
-			retVal = selSelectUnitsIf(player, selProp, PROPULSION_TYPE_LEGGED, bOnScreen);
+			retVal = selSelectUnitsIf<PROPULSION_TYPE>(player, selProp, PROPULSION_TYPE_LEGGED, bOnScreen);
 			break;
 		case DST_ENGINEER:
-			retVal = selSelectUnitsIf(player, selType, DROID_CYBORG_CONSTRUCT, bOnScreen);
+			retVal = selSelectUnitsIf<DROID_TYPE>(player, selType, DROID_CYBORG_CONSTRUCT, bOnScreen);
 			break;
 		case DST_MECHANIC:
-			retVal = selSelectUnitsIf(player, selType, DROID_CYBORG_REPAIR, bOnScreen);
+			retVal = selSelectUnitsIf<DROID_TYPE>(player, selType, DROID_CYBORG_REPAIR, bOnScreen);
 			break;
 		case DST_TRANSPORTER:
 			retVal = selSelectUnitsIf(player, selTransporter, bOnScreen);
 			break;
 		case DST_REPAIR_TANK:
-			retVal = selSelectUnitsIf(player, selType, DROID_REPAIR, bOnScreen);
+			retVal = selSelectUnitsIf<DROID_TYPE>(player, selType, DROID_REPAIR, bOnScreen);
 			break;
 		case DST_SENSOR:
-			retVal = selSelectUnitsIf(player, selType, DROID_SENSOR, bOnScreen);
+			retVal = selSelectUnitsIf<DROID_TYPE>(player, selType, DROID_SENSOR, bOnScreen);
 			break;
 		case DST_TRUCK:
-			retVal = selSelectUnitsIf(player, selType, DROID_CONSTRUCT, bOnScreen);
+			retVal = selSelectUnitsIf<DROID_TYPE>(player, selType, DROID_CONSTRUCT, bOnScreen);
 			break;
 		case DST_ALL_COMBAT:
 			retVal = selSelectUnitsIf(player, selCombat, bOnScreen);

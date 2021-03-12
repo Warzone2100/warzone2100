@@ -110,7 +110,8 @@ enum MESSAGE_TYPES
 	GAME_GAME_TIME,                 ///< Game time. Used for synchronising, so that all messages are executed at the same gameTime on all clients.
 	GAME_PLAYER_LEFT,               ///< Player has left or dropped.
 	GAME_DROIDDISEMBARK,            ///< droid disembarked from a Transporter
-	GAME_SYNC_REQUEST,		///< Game event generated from scripts that is meant to be synced
+	GAME_SYNC_REQUEST,              ///< Game event generated from scripts that is meant to be synced
+
 	// The following messages are used for debug mode.
 	GAME_DEBUG_MODE,                ///< Request enable/disable debug mode.
 	GAME_DEBUG_ADD_DROID,           ///< Add droid.
@@ -120,6 +121,11 @@ enum MESSAGE_TYPES
 	GAME_DEBUG_REMOVE_STRUCTURE,    ///< Remove structure.
 	GAME_DEBUG_REMOVE_FEATURE,      ///< Remove feature.
 	GAME_DEBUG_FINISH_RESEARCH,     ///< Research has been completed.
+
+	// Unit/control sharing
+	GAME_UNIT_SHARE,                ///< Player wants to start/stop sharing the unit control with an another player
+	GAME_MANUFACTURE_SHARE,         ///< Player wants to start/stop sharing the factory controls with an another player
+
 	// End of debug messages.
 	GAME_MAX_TYPE                   ///< Maximum+1 valid GAME_ type, *MUST* be last.
 };
@@ -259,7 +265,7 @@ struct PLAYER
 	bool                autoGame;           ///< if we are running a autogame (AI controls us)
 	std::vector<WZFile> wzFiles;            ///< for each player, we keep track of map/mod download progress
 	char                IPtextAddress[40];  ///< IP of this player
-	FactionID			faction;			///< which faction the player has
+	FactionID           faction;            ///< which faction the player has
 
 	void resetAll()
 	{
