@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-11 02:05\n"
+"PO-Revision-Date: 2021-03-12 16:52\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "Енергиен скок беше засечен на юг от нашите позиции."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
@@ -292,7 +292,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr "Декодиране е в процес....."
+msgstr "Тече декодиране....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
@@ -340,7 +340,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "АРТЕФАКТ - ЕНЕРГИЕН МОДУЛ"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
@@ -11833,7 +11833,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4392
 msgid "Power Generator"
-msgstr ""
+msgstr "Електрогенератор"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -11849,7 +11849,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowMod1.name
 #: po/custom/fromJson.txt:4402
 msgid "Power Module"
-msgstr ""
+msgstr "Енергиен модул"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -12687,7 +12687,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 #: po/custom/fromJson.txt:4967
 msgid "Scavenger Power Generator"
-msgstr ""
+msgstr "Вехтошарски електрогенератор"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
