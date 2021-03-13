@@ -1,0 +1,3 @@
+- Figure out how to support the import/export of PIE normal data
+- Figure out why ngons cause corruption in the UV data
+- Figure out how to apply texture animation groups to mirrored/arrayed geometry
