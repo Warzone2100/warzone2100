@@ -1981,7 +1981,7 @@ void resetGfxBackend(video_backend newBackend, bool displayRestartMessage = true
 
 bool wzSDLOneTimeInit()
 {
-	const Uint32 sdl_init_flags = SDL_INIT_VIDEO | SDL_INIT_TIMER;
+	const Uint32 sdl_init_flags = SDL_INIT_EVENTS | SDL_INIT_TIMER;
 	if (!(SDL_WasInit(sdl_init_flags) == sdl_init_flags))
 	{
 		if (SDL_Init(sdl_init_flags) != 0)
@@ -2008,6 +2008,21 @@ bool wzSDLOneTimeInit()
 		}
 	}
 
+	return true;
+}
+
+static bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag)
+{
+	if (SDL_WasInit(subsystem_flag) == subsystem_flag)
+	{
+		// already initialized
+		return true;
+	}
+	if (SDL_InitSubSystem(subsystem_flag) != 0)
+	{
+		debug(LOG_WZ, "SDL_InitSubSystem(%" PRIu32 ") failed", subsystem_flag);
+		return false;
+	}
 	return true;
 }
 
@@ -2089,6 +2104,14 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	// NOTE: Prior to wzMainScreenSetup being run, the display system is populated with the window width + height
 	// (i.e. not taking into account the game display scale). This function later sets the display system
 	// to the *game screen* width and height (taking into account the display scale).
+
+	// Initialize video subsystem (if not yet initialized)
+	if (!wzSDLOneTimeInitSubsystem(SDL_INIT_VIDEO))
+	{
+		debug(LOG_FATAL, "Error: Could not initialise SDL video subsystem (%s).", SDL_GetError());
+		SDL_Quit();
+		exit(EXIT_FAILURE);
+	}
 
 	if (usesSDLBackend_OpenGL)
 	{
