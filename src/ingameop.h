@@ -45,7 +45,7 @@ extern bool isKeyMapEditorUp;
 // game options
 
 // initial options
-#define INTINGAMEOP_W			150
+#define INTINGAMEOP_W			172
 #define INTINGAMEOP_H			148
 #define INTINGAMEOP_HS			112
 
@@ -64,7 +64,7 @@ extern bool isKeyMapEditorUp;
 #define INTINGAMEOPAUTO_Y_LINE(line)	(((line)-1)*INTINGAMEOPLINE_H+INTINGAMEOPMARGIN_H)
 
 // quit confirmation.
-#define INTINGAMEOP3_W			150
+#define INTINGAMEOP3_W			INTINGAMEOP_W
 #define INTINGAMEOP3_H			65
 #define INTINGAMEOP3_X			((320-(INTINGAMEOP3_W/2))+D_W)
 #define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
