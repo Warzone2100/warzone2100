@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-12 16:52\n"
+"PO-Revision-Date: 2021-03-13 04:51\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -344,11 +344,11 @@ msgstr "АРТЕФАКТ - ЕНЕРГИЕН МОДУЛ"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "Изследвайте артефакта - електрически модул."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "След това използвайте камион, за да надградите електрогенераторите си с модула."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
@@ -3530,7 +3530,7 @@ msgstr "Най-добри цели: МПС"
 #: data/mp/messages/strings/resstrings.txt:354
 #: po/custom/fromJson.txt:4710
 msgid "Replaces Medium Cannon"
-msgstr ""
+msgstr "Заменя средното оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN5.text[1]
@@ -4195,7 +4195,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:30
 msgid "To build an oil derrick, select one of your trucks"
-msgstr ""
+msgstr "За да построите нефтена помпа, изберете един от камионите си"
 
 #: data/base/script/tutorial.js:31
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
@@ -4227,7 +4227,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:39
 msgid "The other truck will now help to build the power generator"
-msgstr ""
+msgstr "Сега другият камион ще помогне при строежа на електрогенератора"
 
 #: data/base/script/tutorial.js:41
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -5688,7 +5688,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Съжалявам, аз нямам камиони."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
@@ -6233,7 +6233,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:423
 msgid "All trucks upgraded automatically"
-msgstr ""
+msgstr "Всички камиони надградени автоматично"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[3]
@@ -6331,21 +6331,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage05.name
 #: po/custom/fromJson.txt:514
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr ""
+msgstr "Кинетични оръдейни боеприпаси Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #: po/custom/fromJson.txt:518
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr ""
+msgstr "Кинетични оръдейни боеприпаси Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #: po/custom/fromJson.txt:522
 msgid "APFSDS Cannon Rounds"
-msgstr ""
+msgstr "Кинетични оръдейни боеприпаси"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyArtMissile.name
@@ -6805,7 +6805,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 #: po/custom/fromJson.txt:847
 msgid "Assault Cannon"
-msgstr ""
+msgstr "Щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
@@ -7446,14 +7446,14 @@ msgstr ""
 #: po/custom/fromJson.txt:1336
 #, no-c-format
 msgid "Cannon reload time -10%"
-msgstr ""
+msgstr "Време за презареждане на оръдие -10%"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CannonTower.name
 #. data/mp/stats/structure.json: $.A0CannonTower.name
 #: po/custom/fromJson.txt:1340
 msgid "Cannon Tower"
-msgstr ""
+msgstr "Оръдейна кула"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[0]
@@ -7546,7 +7546,7 @@ msgstr ""
 #. data/base/stats/templates.json: $.P0CobraMedCnTrks.name
 #: po/custom/fromJson.txt:1394
 msgid "Cobra Medium Cannon Tracks"
-msgstr ""
+msgstr "Кобра Средно оръдие Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSpadeTracks.name
@@ -7555,7 +7555,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0CobraSpadeTracks.name
 #: po/custom/fromJson.txt:1400
 msgid "Cobra Truck"
-msgstr ""
+msgstr "Кобра Камион"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body5REC.name
@@ -8419,7 +8419,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaFireTruck.name
 #: po/custom/fromJson.txt:1990
 msgid "Fire Truck"
-msgstr ""
+msgstr "Пожарна кола"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[1]
@@ -8650,7 +8650,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-Rail3.name
 #: po/custom/fromJson.txt:2151
 msgid "Gauss Cannon Emplacement"
-msgstr ""
+msgstr "Установка с Гаусово оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-Rail3.name
@@ -8659,13 +8659,13 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-Rail3.name
 #: po/custom/fromJson.txt:2157
 msgid "Gauss Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с Гаусово оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
 #: po/custom/fromJson.txt:2160
 msgid "Gauss Cannon Python Tracks"
-msgstr ""
+msgstr "Гаусово оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernGaussTracks.name
@@ -8680,7 +8680,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.RailGun3Mk1.name
 #: po/custom/fromJson.txt:2169
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "Гаусово оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[1]
@@ -9088,21 +9088,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage02.name
 #: po/custom/fromJson.txt:2410
 msgid "HEAT Cannon Shells Mk2"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 #: po/custom/fromJson.txt:2414
 msgid "HEAT Cannon Shells Mk3"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 #: po/custom/fromJson.txt:2418
 msgid "HEAT Cannon Shells"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage02.name
@@ -9177,14 +9177,14 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Cobra-Hover-HC.name
 #: po/custom/fromJson.txt:2472
 msgid "Heavy Cannon Cobra Hover"
-msgstr ""
+msgstr "Тежко оръдие Кобра Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHvyCnTrks.name
 #. data/mp/stats/templates.json: $.CobraHvyCnTrks.name
 #: po/custom/fromJson.txt:2476
 msgid "Heavy Cannon Cobra Tracks"
-msgstr ""
+msgstr "Тежко оръдие Кобра Вериги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN3MK1.text[1]
@@ -9200,19 +9200,19 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower04.name
 #: po/custom/fromJson.txt:2486
 msgid "Heavy Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с тежко оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
 #: po/custom/fromJson.txt:2489
 msgid "Heavy Cannon Mantis Tracks"
-msgstr ""
+msgstr "Тежко оръдие Богомолка Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-HC.name
 #: po/custom/fromJson.txt:2492
 msgid "Heavy Cannon Python Hover"
-msgstr ""
+msgstr "Тежко оръдие Питон Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonHvyCnTrks.name
@@ -9221,19 +9221,19 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2498
 msgid "Heavy Cannon Python Tracks"
-msgstr ""
+msgstr "Тежко оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-HC.name
 #: po/custom/fromJson.txt:2501
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr ""
+msgstr "Тежко оръдие Скорпион Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-HC.name
 #: po/custom/fromJson.txt:2504
 msgid "Heavy Cannon Tiger Tracks"
-msgstr ""
+msgstr "Тежко оръдие Тигър Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon3Mk1.name
@@ -9242,7 +9242,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon375mmMk1.name
 #: po/custom/fromJson.txt:2510
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "Тежко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flame2.name
@@ -9492,7 +9492,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[1]
 #: po/custom/fromJson.txt:2691
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[1]
@@ -9722,7 +9722,7 @@ msgstr ""
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2870
 msgid "HPV Cannon Python Tracks"
-msgstr ""
+msgstr "ХС оръдие оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadMg1.name
@@ -9781,26 +9781,26 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2905
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr ""
+msgstr "Установка с хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2909
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
 #: po/custom/fromJson.txt:2912
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr ""
+msgstr "Хиперскоростно оръдие Питон Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2915
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr ""
+msgstr "Хиперскоростно оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -9809,7 +9809,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
 #: po/custom/fromJson.txt:2921
 msgid "Hyper Velocity Cannon"
-msgstr ""
+msgstr "Хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10048,7 +10048,7 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[2]
 #: po/custom/fromJson.txt:3101
 msgid "Increases Cannon accuracy"
-msgstr ""
+msgstr "Увеличава точността на оръдията"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
@@ -10063,7 +10063,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[2]
 #: po/custom/fromJson.txt:3110
 msgid "Increases Cannon ROF"
-msgstr ""
+msgstr "Увеличава скорострелността на оръдията"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[2]
@@ -10559,14 +10559,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox4.name
 #: po/custom/fromJson.txt:3499
 msgid "Light Cannon Bunker"
-msgstr ""
+msgstr "Бункер с леко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraLtCnTrks.name
 #. data/mp/stats/templates.json: $.CobraLtCnTrks.name
 #: po/custom/fromJson.txt:3503
 msgid "Light Cannon Cobra Tracks"
-msgstr ""
+msgstr "Леко оръдие Кобра Вериги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[1]
@@ -10582,34 +10582,34 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower02.name
 #: po/custom/fromJson.txt:3513
 msgid "Light Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с леко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
 #. data/mp/stats/templates.json: $.PythonLtCnTrks.name
 #: po/custom/fromJson.txt:3517
 msgid "Light Cannon Python Tracks"
-msgstr ""
+msgstr "Леко оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtCannonHTracks.name
 #: po/custom/fromJson.txt:3520
 msgid "Light Cannon Viper Half-tracks"
-msgstr ""
+msgstr "Леко оръдие Пепелянка Полувериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonTracks.name
 #. data/mp/stats/templates.json: $.ViperLtCannonTracks.name
 #: po/custom/fromJson.txt:3524
 msgid "Light Cannon Viper Tracks"
-msgstr ""
+msgstr "Леко оръдие Пепелянка Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonWheels.name
 #. data/mp/stats/templates.json: $.ViperLtCannonWheels.name
 #: po/custom/fromJson.txt:3528
 msgid "Light Cannon Viper Wheels"
-msgstr ""
+msgstr "Леко оръдие Пепелянка Колела"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon1Mk1.name
@@ -10618,7 +10618,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon1Mk1.name
 #: po/custom/fromJson.txt:3534
 msgid "Light Cannon"
-msgstr ""
+msgstr "Леко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.LookOutTower.name
@@ -10865,7 +10865,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon2A-TMk1.name
 #: po/custom/fromJson.txt:3715
 msgid "Medium Cannon"
-msgstr ""
+msgstr "Средно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[0]
@@ -11707,7 +11707,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaPickUp.name
 #: po/custom/fromJson.txt:4323
 msgid "Pick-Up Truck"
-msgstr ""
+msgstr "Пикап"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade08.name
@@ -11735,7 +11735,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-PlasmaCannon.name
 #: po/custom/fromJson.txt:4339
 msgid "Plasma Cannon Emplacement"
-msgstr ""
+msgstr "Установка с плазмено оръдие"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASCAN.text[1]
@@ -11755,7 +11755,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Laser4-PlasmaCannon.name
 #: po/custom/fromJson.txt:4350
 msgid "Plasma Cannon"
-msgstr ""
+msgstr "Плазмено оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb05.name
@@ -13567,19 +13567,19 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
 #: po/custom/fromJson.txt:5546
 msgid "Truck Cobra Hover"
-msgstr ""
+msgstr "Камион Кобра Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverTruck.name
 #: po/custom/fromJson.txt:5549
 msgid "Truck Mantis Hover"
-msgstr ""
+msgstr "Камион Богомолка Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHoverTruck.name
 #: po/custom/fromJson.txt:5552
 msgid "Truck Scorpion Hover"
-msgstr ""
+msgstr "Камион Скорпион Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/base/stats/construction.json: $.Spade1Mk1.name
@@ -13588,7 +13588,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:5558
 msgid "Truck"
-msgstr ""
+msgstr "Камион"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage06.name
@@ -13643,14 +13643,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox-Cannon6.name
 #: po/custom/fromJson.txt:5603
 msgid "Twin Assault Cannon Bunker"
-msgstr ""
+msgstr "Бункер с двойно щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Cannon6TwinAslt.name
 #. data/mp/stats/weapons.json: $.Cannon6TwinAslt.name
 #: po/custom/fromJson.txt:5607
 msgid "Twin Assault Cannon"
-msgstr ""
+msgstr "Двойно щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-TwinAGun.name
@@ -13757,14 +13757,14 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[3]
 #: po/custom/fromJson.txt:5669
 msgid "Use a truck to add modules to a factory"
-msgstr ""
+msgstr "Използвайте камион, за да добавите модули към фабрика"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[3]
 #: po/custom/fromJson.txt:5673
 msgid "Use a truck to add the module to a power generator"
-msgstr ""
+msgstr "Използвайте камион, за да добавите модула към електрогенератор"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[3]
@@ -16999,7 +16999,7 @@ msgstr ""
 
 #: src/keymap.cpp:557
 msgid "Select all Trucks"
-msgstr ""
+msgstr "Изберете всички камиони"
 
 #: src/keymap.cpp:561
 msgid "Select next Factory"
@@ -18033,7 +18033,7 @@ msgstr ""
 
 #: src/selection.cpp:355
 msgid "Unable to locate any Trucks!"
-msgstr ""
+msgstr "Не можем да намерим камиони!"
 
 #: src/selection.cpp:358
 msgid "Unable to locate any Sensor Units!"
