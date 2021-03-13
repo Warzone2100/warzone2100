@@ -558,7 +558,7 @@ bool readScoreData(const char *fileName)
 	return true;
 }
 
-void stdOutGameSummary(UDWORD realTimeThrottleSeconds)
+void stdOutGameSummary(UDWORD realTimeThrottleSeconds, bool flush_output /* = true */)
 {
 	static UDWORD lastOutputRealTime = 0;
 	if (realTimeThrottleSeconds > 0 && (realTime - lastOutputRealTime < (realTimeThrottleSeconds * GAME_TICKS_PER_SEC)))
@@ -613,5 +613,9 @@ void stdOutGameSummary(UDWORD realTimeThrottleSeconds)
 		}
 	}
 	fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+	if (flush_output)
+	{
+		fflush(stdout);
+	}
 	lastOutputRealTime = realTime;
 }

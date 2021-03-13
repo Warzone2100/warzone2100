@@ -1460,6 +1460,7 @@ int realmain(int argc, char *argv[])
 			fprintf(stdout, " * NOTE: VSYNC IS DISABLED - CPU USAGE MAY BE UNBOUNDED\n");
 		}
 		fprintf(stdout, "--------------------------------------------------------------------------------------\n");
+		fflush(stdout);
 	}
 
 	// Find out where to find the data
