@@ -173,7 +173,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 
 		poly->flags = flags;
 		ASSERT_OR_RETURN(false, npnts == 3, "Invalid polygon size (%d)", npnts);
-		if (sscanf(pFileData, "%d %d %d%n", &poly->pindex[0], &poly->pindex[1], &poly->pindex[2], &cnt) != 3)
+		if (sscanf(pFileData, "%" PRIu32 "%" PRIu32 "%" PRIu32 "%n", &poly->pindex[0], &poly->pindex[1], &poly->pindex[2], &cnt) != 3)
 		{
 			debug(LOG_ERROR, "failed reading triangle, point %d", i);
 			return false;
