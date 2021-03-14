@@ -69,6 +69,7 @@ struct iSurface
 struct EDGE
 {
 	uint32_t from, to;
+	uint64_t sort_key;
 };
 
 struct ANIMFRAME
