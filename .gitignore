@@ -294,6 +294,9 @@ win32/CodeAnalyst
 /vcpkg/
 /vcpkg_installed/
 
+# ctags file
+/tags
+
 # Exclusions
 # Do not ignore the *.manifest* files that are used under the /win32 folder
 !/win32/*.manifest*
