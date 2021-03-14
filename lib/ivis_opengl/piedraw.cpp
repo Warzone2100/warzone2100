@@ -448,9 +448,27 @@ struct ShadowCache {
 
 	void addPremultipliedVertexes(const CachedShadowData& cachedData, const glm::mat4 &modelViewMatrix)
 	{
+		float mat_a = modelViewMatrix[0].x;
+		float mat_b = modelViewMatrix[1].x;
+		float mat_c = modelViewMatrix[2].x;
+		float mat_d = modelViewMatrix[3].x;
+		float mat_e = modelViewMatrix[0].y;
+		float mat_f = modelViewMatrix[1].y;
+		float mat_g = modelViewMatrix[2].y;
+		float mat_h = modelViewMatrix[3].y;
+		float mat_i = modelViewMatrix[0].z;
+		float mat_j = modelViewMatrix[1].z;
+		float mat_k = modelViewMatrix[2].z;
+		float mat_l = modelViewMatrix[3].z;
+		float premult_x;
+		float premult_y;
+		float premult_z;
 		for (auto &vertex : cachedData.vertexes)
 		{
-			vertexes.emplace_back(modelViewMatrix * glm::vec4(vertex, 1.0));
+			premult_x = vertex.x*mat_a + vertex.y*mat_b + vertex.z*mat_c + mat_d;
+			premult_y = vertex.x*mat_e + vertex.y*mat_f + vertex.z*mat_g + mat_h;
+			premult_z = vertex.x*mat_i + vertex.y*mat_j + vertex.z*mat_k + mat_l;
+			vertexes.push_back(Vector3f(premult_x, premult_y, premult_z));
 		}
 	}
 
