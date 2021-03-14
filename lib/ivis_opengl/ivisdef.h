@@ -67,7 +67,7 @@ struct iSurface
 /// Stores the from and to verticles from an edge
 struct EDGE
 {
-	int from, to;
+	uint32_t from, to;
 };
 
 struct ANIMFRAME
@@ -84,7 +84,7 @@ struct iIMDPoly
 	uint32_t flags = 0;
 	int32_t zcentre = 0;
 	Vector3f normal = Vector3f(0.f, 0.f, 0.f);
-	int pindex[3] = { 0 };
+	uint32_t pindex[3] = { 0 };
 };
 
 enum VBO_TYPE

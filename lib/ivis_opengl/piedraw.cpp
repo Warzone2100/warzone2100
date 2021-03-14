@@ -567,7 +567,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 			{
 				for (int j = 0; j < 3; ++j)
 				{
-					int current = poly.pindex[j];
+					uint32_t current = poly.pindex[j];
 					p[j] = glm::vec3(pVertices[current].x, scale_y(pVertices[current].y, flag, flag_data), pVertices[current].z);
 				}
 				if (glm::dot(glm::cross(p[2] - p[0], p[1] - p[0]), glm::vec3(light)) > 0.0f)
