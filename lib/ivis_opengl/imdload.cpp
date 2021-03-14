@@ -152,7 +152,7 @@ static bool AtEndOfFile(const char *CurPos, const char *EndOfFile)
  * \param s Pointer to shape level
  * \return false on error (memory allocation failure/bad file format), true otherwise
  */
-static bool _imd_load_polys(const WzString &filename, const char **ppFileData, iIMDShape *s, int pieVersion)
+static bool _imd_load_polys(const WzString &filename, const char **ppFileData, iIMDShape *s, int pieVersion, const uint32_t npoints)
 {
 	const char *pFileData = *ppFileData;
 
@@ -179,6 +179,12 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 			return false;
 		}
 		pFileData += cnt;
+
+		// sanity check
+		for (size_t pIdx = 0; pIdx < 3; pIdx++)
+		{
+			ASSERT_OR_RETURN(false, (poly->pindex[pIdx] < npoints), "Point index (%" PRIu32 ") exceeds max index (%" PRIu32 ")", poly->pindex[pIdx], (npoints - 1));
+		}
 
 		// calc poly normal
 		{
@@ -498,7 +504,7 @@ static void _imd_calc_bounds(iIMDShape &s)
 // END: tight bounding sphere
 }
 
-static bool _imd_load_points(const char **ppFileData, iIMDShape &s, int npoints)
+static bool _imd_load_points(const char **ppFileData, iIMDShape &s, uint32_t npoints)
 {
 	//load the points then pass through a second time to setup bounding datavalues
 	s.points.resize(npoints);
@@ -579,7 +585,7 @@ static bool ReadNormals(const char **ppFileData, std::vector<Vector3f> &pie_leve
    return true;
 }
 
-static bool _imd_load_normals(const char **ppFileData, std::vector<Vector3f> &pie_level_normals, int num_normal_lines)
+static bool _imd_load_normals(const char **ppFileData, std::vector<Vector3f> &pie_level_normals, uint32_t num_normal_lines)
 {
    // We only support triangles!
    pie_level_normals.resize(static_cast<size_t>(num_normal_lines * 3));
@@ -769,8 +775,8 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		pFileData += cnt;
 	}
 
-	int npoints = 0;
-	if (sscanf(pFileData, "%255s %d%n", buffer, &npoints, &cnt) != 2)
+	uint32_t npoints = 0;
+	if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npoints, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(2): file corrupt");
 		return nullptr;
@@ -783,8 +789,8 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	_imd_load_points(&pFileData, s, npoints);
 
-	int npolys = 0;
-	if (sscanf(pFileData, "%255s %d%n", buffer, &npolys, &cnt) != 2)
+	uint32_t npolys = 0;
+	if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npolys, &cnt) != 2)
 	{
 		debug(LOG_ERROR, "_imd_load_level(3): file corrupt");
 		return nullptr;
@@ -799,7 +805,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  		_imd_load_normals(&pFileData, pie_level_normals, npolys);
 
  		// Attemps to read polys again
- 		if (sscanf(pFileData, "%255s %d%n", buffer, &npolys, &cnt) != 2)
+ 		if (sscanf(pFileData, "%255s %" PRIu32 "%n", buffer, &npolys, &cnt) != 2)
  		{
  			debug(LOG_ERROR, "_imd_load_level(3a): file corrupt");
  			return nullptr;
@@ -812,7 +818,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	ASSERT_OR_RETURN(nullptr, strcmp(buffer, "POLYGONS") == 0, "Expecting 'POLYGONS' directive, got: %s", buffer);
 
-	_imd_load_polys(filename, &pFileData, &s, pieVersion);
+	_imd_load_polys(filename, &pFileData, &s, pieVersion, npoints);
 
 	// optional stuff : levels, object animations, connectors
 	s.objanimframes = 0;
@@ -827,7 +833,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 		if (strcmp(buffer, "LEVEL") == 0)	// check for next level
 		{
-			debug(LOG_3D, "imd[_load_level] = npoints %d, npolys %d", npoints, npolys);
+			debug(LOG_3D, "imd[_load_level] = npoints %" PRIu32 ", npolys %" PRIu32 "", npoints, npolys);
 			s.next = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels - 1, pieVersion, level + 1);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)
@@ -879,8 +885,8 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  	{
  		if (s.polys.size() * 3 != pie_level_normals.size())
  		{
- 			debug(LOG_ERROR, "imd[_load_level] = got %d npolys, but there are only %d normals! Discarding normals...",
- 			      npolys, static_cast<int>(pie_level_normals.size()));
+ 			debug(LOG_ERROR, "imd[_load_level] = got %" PRIu32 " npolys, but there are only %zu normals! Discarding normals...",
+ 			      npolys, pie_level_normals.size());
  			// This will force usage of calculated normals in addVertex
  			pie_level_normals.clear();
  		}
