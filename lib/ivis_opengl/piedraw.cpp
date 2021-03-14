@@ -45,6 +45,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "ska-sort/ska_sort.hpp"
+
 #define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
@@ -668,8 +670,14 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 			// Remove duplicate pairs from the edge list. For example, in the list ((1 2), (2 6), (6 2), (3, 4)), remove (2 6) and (6 2).
 			edgelistFlipped = edgelist;
 			std::for_each(edgelistFlipped.begin(), edgelistFlipped.end(), flipEdge);
-			std::sort(edgelist.begin(), edgelist.end(), edgeLessThan);
-			std::sort(edgelistFlipped.begin(), edgelistFlipped.end(), edgeLessThan);
+			ska_sort(edgelist.begin(), edgelist.end(), [](const EDGE & edge)
+			{
+				return std::make_tuple(edge.from, edge.to);
+			});
+			ska_sort(edgelistFlipped.begin(), edgelistFlipped.end(), [](const EDGE & edge)
+			{
+				return std::make_tuple(edge.from, edge.to);
+			});
 			edgelistFiltered.resize(edgelist.size());
 			edgelistFiltered.erase(std::set_difference(edgelist.begin(), edgelist.end(), edgelistFlipped.begin(), edgelistFlipped.end(), edgelistFiltered.begin(), edgeLessThan), edgelistFiltered.end());
 

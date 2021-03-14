@@ -180,6 +180,10 @@ Files: 3rdparty/re2/*
 Copyright: 2009 The RE2 Authors
 License: BSD-3-clause-re2
 
+Files: 3rdparty/ska-sort/*
+Copyright: 2016 Malte Skarupke
+License: BSL-1.0
+
 Files: 3rdparty/utf8proc/*
 Copyright: 2009, 2013 Public Software Group e. V., Berlin, Germany
            2014-2019 by Steven G. Johnson, Jiahao Chen, Tony Kelman, Jonas Fonseca, and other contributors listed in the git history
