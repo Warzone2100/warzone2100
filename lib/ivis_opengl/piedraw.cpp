@@ -601,8 +601,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 			}
 		}
 
-		static std::vector<Vector3f> vertexes;
-		vertexes.clear();
+		std::vector<Vector3f> vertexes;
 		vertexes.reserve(edge_count * 6);
 		for (size_t i = 0; i < edge_count; i++)
 		{
@@ -621,7 +620,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 		}
 
 		ShadowCache::CachedShadowData& cache = shadowCache.createCacheForShadowDraw(shape, flag, flag_data, light);
-		cache.vertexes = vertexes;
+		cache.vertexes = std::move(vertexes);
 		result = DRAW_SUCCESS_UNCACHED;
 		pCached = &cache;
 	}
