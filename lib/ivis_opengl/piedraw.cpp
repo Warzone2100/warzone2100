@@ -394,16 +394,18 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
 {
-	if (e1.from != e2.from)
-	{
-		return e1.from < e2.from;
-	}
-	return e1.to < e2.to;
+	return e1.sort_key < e2.sort_key;
+}
+
+static inline uint64_t edgeSortKey(uint32_t from, uint32_t to)
+{
+	return static_cast<uint64_t>(from) << 32 | to;
 }
 
 static inline void flipEdge(EDGE &e)
 {
 	std::swap(e.from, e.to);
+	e.sort_key = edgeSortKey(e.from, e.to);
 }
 
 /// scale the height according to the flags
@@ -642,7 +644,9 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 					for (int n = 0; n < 3; ++n)
 					{
 						// Add the edges
-						edgelist.push_back({poly.pindex[n], poly.pindex[(n + 1)%3]});
+						uint32_t from = poly.pindex[n];
+						uint32_t to = poly.pindex[(n + 1)%3];
+						edgelist.push_back({from, to, edgeSortKey(from, to)});
 					}
 				}
 			}
@@ -652,11 +656,11 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 			std::for_each(edgelistFlipped.begin(), edgelistFlipped.end(), flipEdge);
 			ska_sort(edgelist.begin(), edgelist.end(), [](const EDGE & edge)
 			{
-				return std::make_tuple(edge.from, edge.to);
+				return edge.sort_key;
 			});
 			ska_sort(edgelistFlipped.begin(), edgelistFlipped.end(), [](const EDGE & edge)
 			{
-				return std::make_tuple(edge.from, edge.to);
+				return edge.sort_key;
 			});
 			edgelistFiltered.resize(edgelist.size());
 			edgelistFiltered.erase(std::set_difference(edgelist.begin(), edgelist.end(), edgelistFlipped.begin(), edgelistFlipped.end(), edgelistFiltered.begin(), edgeLessThan), edgelistFiltered.end());
