@@ -27,9 +27,8 @@
  *
  */
 
-#include <string.h>
+#include <cstring>
 #include <algorithm>
-#include <utility>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/stdio_ext.h"
@@ -37,14 +36,12 @@
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "lib/ivis_opengl/piepalette.h"
-#include "lib/ivis_opengl/piestate.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/netplay/netplay.h"
 
 #include "action.h"
 #include "lib/sound/audio_id.h"
-#include "lib/sound/audio.h"
 #include "lib/widget/label.h"
 #include "lib/widget/bar.h"
 #include "lib/widget/button.h"
@@ -55,7 +52,6 @@
 #include "display.h"
 #include "display3d.h"
 #include "edit3d.h"
-#include "effects.h"
 #include "game.h"
 #include "hci.h"
 #include "ingameop.h"
@@ -66,31 +62,22 @@
 #include "loadsave.h"
 #include "loop.h"
 #include "order.h"
-#include "mapdisplay.h"
 #include "mission.h"
 #include "multimenu.h"
 #include "multiplay.h"
 #include "multigifts.h"
-#include "radar.h"
 #include "research.h"
 #include "transporter.h"
-#include "warcam.h"
 #include "main.h"
 #include "template.h"
 #include "wrappers.h"
 #include "keybind.h"
 #include "qtscript.h"
-#include "frend.h"
 #include "chat.h"
 #include "hci/build.h"
 #include "hci/research.h"
 #include "hci/manufacture.h"
 #include "hci/commander.h"
-
-// Is a button widget highlighted, either because the cursor is over it or it is flashing.
-// Do not highlight buttons while paused.
-//
-#define buttonIsHilite(p)  ((p->getState() & WBUT_HIGHLIGHT) != 0 && !gamePaused())
 
 // Empty edit window
 static bool secondaryWindowUp = false;
@@ -269,6 +256,18 @@ struct RETBUTSTATS
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
 
+static bool buttonIsClickable(uint16_t id)
+{
+	bool enabled = intCheckReticuleButEnabled(id);
+	return !gamePaused() && enabled;
+}
+
+static bool buttonIsHighlighted(W_BUTTON *p)
+{
+	bool clickable = buttonIsClickable(p->id);
+	return (p->getState() & WBUT_HIGHLIGHT) != 0 && clickable;
+}
+
 void setReticuleFlash(int ButId, bool flash)
 {
 	if (MissionResUp)
@@ -360,6 +359,27 @@ void setReticuleStats(int ButId, std::string tip, std::string filename, std::str
 	}
 }
 
+void setReticulesEnabled(bool enabled)
+{
+	for (int i = 0; i < NUMRETBUTS; i++)
+	{
+		if (retbutstats[i].filename.isEmpty()) {
+			continue;
+		}
+
+		ReticuleEnabled[i].Enabled = enabled;
+		if (enabled)
+		{
+			retbutstats[i].button->unlock();
+		}
+		else
+		{
+			unsigned state = retbutstats[i].button->getState();
+			retbutstats[i].button->setState(state | WBUT_LOCK);
+		}
+	}
+}
+
 static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	const int x = xOffset + psWidget->x();
@@ -391,9 +411,7 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 	}
 
 	bool Down = psButton->state & (WBUT_DOWN | WBUT_CLICKLOCK);
-	bool Hilight = buttonIsHilite(psButton);
-
-	if (Down && !gamePaused())
+	if (Down && buttonIsClickable(psButton->id))
 	{
 		if ((DownTime < 1) && (psWidget->UserData != RETBUT_CANCEL))
 		{
@@ -427,7 +445,9 @@ static void intDisplayReticuleButton(WIDGET *psWidget, UDWORD xOffset, UDWORD yO
 			DownTime = 0;
 		}
 	}
-	if (Hilight)
+
+	bool highlighted = buttonIsHighlighted(psButton);
+	if (highlighted)
 	{
 		if (psWidget->UserData == RETBUT_CANCEL)
 		{

@@ -199,7 +199,6 @@ static bool _intAddInGameOptions()
 	//clear out any mission widgets - timers etc that may be on the screen
 	clearMissionWidgets();
 
-
 	setWidgetsStatus(true);
 
 	//if already open, then close!
@@ -210,7 +209,7 @@ static bool _intAddInGameOptions()
 	}
 
 	intResetScreen(false);
-
+	setReticulesEnabled(false);
 
 	// Pause the game.
 	if (!gamePaused())
@@ -367,6 +366,8 @@ static void ProcessOptionFinished()
 	{
 		kf_TogglePauseMode();
 	}
+
+	setReticulesEnabled(true);
 }
 
 void intCloseInGameOptionsNoAnim()
