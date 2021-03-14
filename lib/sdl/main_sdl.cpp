@@ -2023,6 +2023,11 @@ static bool wzSDLOneTimeInitSubsystem(uint32_t subsystem_flag)
 		debug(LOG_WZ, "SDL_InitSubSystem(%" PRIu32 ") failed", subsystem_flag);
 		return false;
 	}
+	if ((SDL_IsTextInputActive() != SDL_FALSE) && (GetTextEventsOwner == nullptr))
+	{
+		// start text input disabled
+		SDL_StopTextInput();
+	}
 	return true;
 }
 
