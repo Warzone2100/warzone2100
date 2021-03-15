@@ -75,6 +75,10 @@ Files: lib/ivis_opengl/3rdparty/LRUCache11.hpp
 Copyright: 2012-2022 SAURAV MOHAPATRA
 License: ISC
 
+Files: lib/ivis_opengl/3rdparty/ska_sort.hpp
+Copyright: 2016 Malte Skarupke
+License: BSL-1.0
+
 Files: lib/ivis_opengl/3rdparty/stb_image_resize.h
 Copyright: 2017 Sean Barrett
 License: Expat
@@ -179,10 +183,6 @@ License: Expat
 Files: 3rdparty/re2/*
 Copyright: 2009 The RE2 Authors
 License: BSD-3-clause-re2
-
-Files: 3rdparty/ska-sort/*
-Copyright: 2016 Malte Skarupke
-License: BSL-1.0
 
 Files: 3rdparty/utf8proc/*
 Copyright: 2009, 2013 Public Software Group e. V., Berlin, Germany

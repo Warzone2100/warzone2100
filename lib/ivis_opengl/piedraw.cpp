@@ -45,7 +45,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "ska-sort/ska_sort.hpp"
+#include "3rdparty/ska_sort.hpp"
 
 #define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
