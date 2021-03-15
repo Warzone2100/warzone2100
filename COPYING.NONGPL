@@ -29,8 +29,6 @@ data/base/texpages/page-25-sky-urban.png
 	- MIT, Copyright (c) 2017-2020 Fabrice Bellard, Copyright (c) 2017-2020 Charlie Gordon (https://bellard.org/quickjs/)
 3rdparty/re2/*
 	- BSD-style license, Copyright (c) 2009 The RE2 Authors (https://github.com/google/re2)
-3rdparty/ska-sort/*
-	- Boost Software License 1.0, Copyright Malte Skarupke 2016 (https://github.com/skarupke/ska_sort)
 3rdparty/utf8proc/*
 	- MIT, Copyright (c) 2014-2015 by Steven G. Johnson, Jiahao Chen, Tony Kelman, Jonas Fonseca, and other contributors listed in the git history, Copyright (c) 2009, 2013 Public Software Group e. V., Berlin, Germany
 	- Unicode data license, Copyright (c) 1991-2007 Unicode, Inc. All rights reserved. Distributed under the Terms of Use in http://www.unicode.org/copyright.html
@@ -77,6 +75,8 @@ lib/ivis_opengl/3rdparty/etcpak/*
 	- BSD 3-Clause License, Copyright (c) 2013-2021, Bartosz Taudul <wolf@nereid.pl> (https://github.com/wolfpld/etcpak)
 lib/ivis_opengl/3rdparty/LRUCache11.hpp
 	- ISC License, Copyright (c) 2012-22 SAURAV MOHAPATRA (https://github.com/mohaps/lrucache11)
+lib/ivis_opengl/3rdparty/ska_sort.hpp
+	- Boost Software License 1.0, Copyright Malte Skarupke 2016 (https://github.com/skarupke/ska_sort)
 lib/ivis_opengl/3rdparty/stb_image_resize.h
 	- MIT License, Copyright (c) 2017 Sean Barrett (http://github.com/nothings/stb)
 lib/ivis_opengl/3rdparty/vk_mem_alloc.h
