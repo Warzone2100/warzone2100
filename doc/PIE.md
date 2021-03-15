@@ -227,3 +227,42 @@ NOTE: For position and rotation - but not scaling - Y and Z are swapped.
 
 If the scaling values are negative, they indicate that the animation is a legacy
 keyframe animation sequence. Do not use this in future content.
+
+### SHADOWPOINTS _(optional)_
+
+> SHADOWPOINTS n
+
+This starts a list of vertex coordinates (points) with the number of lines *n*. This is followed by the list of points. This (along with `SHADOWPOLYGONS`) is used to provide an alternate (simplified) shadow mesh to improve performance (recommended if the normal mesh is complex / high-poly-count). If unspecified, the normal mesh is used for shadows.
+
+#### Point lines
+
+> 	-4.0 4.0 8.0
+
+Each point *must* be on a separate line and *must* be indented with a tab. It *must* contain exactly 3 floating-point values in the order *x y z*. Y denotes "up".
+
+### SHADOWPOLYGONS _(optional)_
+
+> POLYGONS n
+
+This starts a list of polygon faces with the number of lines *n*. This (along with `SHADOWPOINTS`) is used to provide an alternate (simplified) shadow mesh to improve performance (recommended if the normal mesh is complex / high-poly-count). If unspecified, the normal mesh is used for shadows.
+
+#### Polygon lines
+
+> 	0 3 3 2 1
+
+Each polygon *must* be on a separate line and *must* be indented with a tab.
+
+> 	Flags Number\_of\_points Point\_order
+
+##### Flags
+
+* 0 means the polygon is untextured. Each entry in SHADOWPOLYGONS must have this flag.
+* No other flags are supported. Note that if you want a surface to display something on both sides, make two polygons, one for each side.
+
+##### Number of points
+
+* The first number is the number of points for this polygon. Only triangles are supported, so each entry *must* use 3 points.
+
+##### Point order
+
+* This is a list of indexes to the list of points given in the POINTS section.

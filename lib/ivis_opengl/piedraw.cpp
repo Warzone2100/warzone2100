@@ -553,7 +553,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 	const ShadowCache::CachedShadowData *pCached = shadowCache.findCacheForShadowDraw(shape, flag, flag_data, light);
 	if (pCached == nullptr)
 	{
-		const Vector3f *pVertices = shape->points.data();
+		const Vector3f *pVertices = shape->pShadowPoints->data();
 		if (flag & pie_STATIC_SHADOW && shape->shadowEdgeList)
 		{
 			drawlist = shape->shadowEdgeList;
@@ -563,7 +563,7 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 		{
 			edgelist.clear();
 			glm::vec3 p[3];
-			for (const iIMDPoly &poly : shape->polys)
+			for (const iIMDPoly &poly : *(shape->pShadowPolys))
 			{
 				for (int j = 0; j < 3; ++j)
 				{

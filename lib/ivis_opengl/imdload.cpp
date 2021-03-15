@@ -749,6 +749,8 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	}
 	ASSERT(models.count(key) == 0, "Duplicate model load for %s!", key.c_str());
 	iIMDShape &s = models[key]; // create entry and return reference
+	s.pShadowPoints = &s.points;
+	s.pShadowPolys = &s.polys;
 
 	scanResult = sscanf(pFileData, "%255s %n", buffer, &cnt);
 	ASSERT_OR_RETURN(nullptr, scanResult == 1, "Bad directive following LEVEL");
@@ -820,7 +822,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 
 	_imd_load_polys(filename, &pFileData, &s, pieVersion, npoints);
 
-	// optional stuff : levels, object animations, connectors
+	// optional stuff : levels, object animations, connectors, shadow points + polys
 	s.objanimframes = 0;
 	while (!AtEndOfFile(pFileData, FileDataEnd)) // check for end of file (give or take white space)
 	{
@@ -873,6 +875,30 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 				pFileData += cnt;
 			}
 		}
+		else if (strcmp(buffer, "SHADOWPOINTS") == 0)
+		{
+			ASSERT_OR_RETURN(nullptr, n > 0, "Invalid 'SHADOW_POINTS' count, got: %d", n);
+			uint32_t nShadowPoints = static_cast<uint32_t>(n);
+
+			iIMDShape tmpShadowShape;
+			_imd_load_points(&pFileData, tmpShadowShape, nShadowPoints);
+
+			s.altShadowPoints = std::move(tmpShadowShape.points);
+			s.pShadowPoints = &s.altShadowPoints;
+		}
+		else if (strcmp(buffer, "SHADOWPOLYGONS") == 0)
+		{
+			ASSERT_OR_RETURN(nullptr, s.altShadowPoints.size() > 0, "'SHADOW_POLYGONS' must follow a non-empty SHADOW_POINTS section");
+			ASSERT_OR_RETURN(nullptr, n > 0, "Invalid 'SHADOW_POLYGONS' count, got: %d", n);
+			uint32_t nShadowPolys = static_cast<uint32_t>(n);
+
+			iIMDShape tmpShadowShape;
+			tmpShadowShape.polys.resize(nShadowPolys);
+			_imd_load_polys(filename, &pFileData, &tmpShadowShape, PIE_FLOAT_VER, static_cast<uint32_t>(s.altShadowPoints.size()));
+
+			s.altShadowPolys = std::move(tmpShadowShape.polys);
+			s.pShadowPolys = &s.altShadowPolys;
+		}
 		else
 		{
 			debug(LOG_ERROR, "(_load_level) unexpected directive %s %d", buffer, n);
@@ -880,7 +906,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		}
 	}
 
-	// Sanity check
+	// Sanity checks
  	if (!pie_level_normals.empty())
  	{
  		if (s.polys.size() * 3 != pie_level_normals.size())
@@ -891,6 +917,18 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  			pie_level_normals.clear();
  		}
  	}
+	if (!s.altShadowPoints.empty())
+	{
+		if (s.altShadowPolys.empty())
+		{
+			debug(LOG_ERROR, "imd[_load_level] = %zu SHADOWPOINTS specified, but there are no SHADOWPOLYGONS! Discarding shadow points...",
+				  s.altShadowPoints.size());
+			s.altShadowPoints.clear();
+			s.altShadowPolys.clear();
+			s.pShadowPoints = &s.points;
+			s.pShadowPolys = &s.polys;
+		}
+	}
 
 	// FINALLY, massage the data into what can stream directly to OpenGL
 	vertexCount = 0;

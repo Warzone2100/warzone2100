@@ -135,6 +135,12 @@ struct iIMDShape
 	std::vector<Vector3f> points;
 	std::vector<iIMDPoly> polys;
 
+	// Data used for stencil shadows
+	std::vector<Vector3f> altShadowPoints;
+	std::vector<iIMDPoly> altShadowPolys;
+	std::vector<Vector3f> *pShadowPoints = nullptr;
+	std::vector<iIMDPoly> *pShadowPolys = nullptr;
+
 	// The new rendering data
 	gfx_api::buffer* buffers[VBO_COUNT] = { nullptr };
 	SHADER_MODE shaderProgram = SHADER_NONE; // if using specialized shader for this model
