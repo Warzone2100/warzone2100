@@ -1147,7 +1147,7 @@ struct UnsignedInplaceSorter
         {
             size_t start_offset = 0;
             It partition_begin = begin;
-            for (uint8_t * it = remaining_partitions, * end = remaining_partitions + num_partitions; it != end; ++it)
+            for (uint8_t * it = remaining_partitions, * it_end = remaining_partitions + num_partitions; it != it_end; ++it)
             {
                 size_t end_offset = partitions[*it].next_offset;
                 It partition_end = begin + end_offset;
