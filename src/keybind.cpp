@@ -2826,6 +2826,10 @@ void kf_QuickSave()
 		console("QuickSave not allowed for multiplayer or tutorial games");
 		return;
 	}
+	if (InGameOpUp || isInGamePopupUp)
+	{
+		return;
+	}
 
 	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
 	if (PHYSFS_exists(filename))
@@ -2850,6 +2854,10 @@ void kf_QuickLoad()
 	if (runningMultiplayer() || bInTutorial)
 	{
 		console("QuickLoad not allowed for multiplayer or tutorial games");
+		return;
+	}
+	if (InGameOpUp || isInGamePopupUp)
+	{
 		return;
 	}
 
