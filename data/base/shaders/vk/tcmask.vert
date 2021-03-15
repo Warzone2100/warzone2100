@@ -40,16 +40,13 @@ layout(location = 4) out vec2 texCoord;
 
 void main()
 {
-	vec3 vVertex = normalize((ModelViewMatrix * vertex).xyz);
-	vec4 position = vertex;
-
 	// Pass texture coordinates to fragment shader
 	texCoord = vertexTexCoord;
 
-	// Lighting -- we pass these to the fragment shader
+	// Lighting we pass to the fragment shader
+	vec3 eyeVec = normalize((ModelViewMatrix * vertex).xyz);
 	vec3 n = normalize((NormalMatrix * vec4(vertexNormal, 0.0)).xyz);
-	vec3 eyeVec = -vVertex;
-	lightDir = normalize(lightPosition.xyz - vVertex);
+	lightDir = normalize(lightPosition.xyz);
 
 	if (hasTangents != 0)
 	{
@@ -67,9 +64,10 @@ void main()
 	}
 
 	normal = n;
-	halfVec = normalize(lightDir - eyeVec);
+	halfVec = lightDir + eyeVec; //can be normalized for better quality
 
 	// Implement building stretching to accommodate terrain
+	vec4 position = vertex;
 	if (vertex.y <= 0.0) // use vertex here directly to help shader compiler optimization
 	{
 		position.y -= stretch;
