@@ -45,14 +45,7 @@ else()
 endif()
 
 # CXX Standard
-if(MSVC)
-	# MSVC doesn't support enforcing c++11 - the minimum it will allow is c++14
-	# See https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version
-	# However, avoid using any features not supported by c++11 or the build will fail on other platforms.
-	set(CMAKE_CXX_STANDARD 14)
-else()
-	set(CMAKE_CXX_STANDARD 11)
-endif()
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # Disable compiler-specific extensions
 
