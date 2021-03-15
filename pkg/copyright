@@ -46,10 +46,6 @@ Files: lib/exceptionhandler/exceptionhandler.*
 Copyright: 2005-2020, Warzone 2100 Project
 License: GPL-2+
 
-Files: lib/ivis_opengl/jpeg_encoder.cpp
-Copyright: 2005-2009 Surveyor Corporation
-License: GPL-2+
-
 Files: lib/exceptionhandler/include/*
        lib/framework/gettext.h
 Copyright: 1990-2007 Free Software Foundation, Inc.
