@@ -32,6 +32,7 @@
 #include "frend.h"
 #include "ingameop.h"
 #include "keymap.h"
+#include "keybind.h"
 
 #include "lib/sound/playlist.h"
 #include "lib/widget/button.h"
@@ -847,6 +848,7 @@ static bool musicManager(WIDGET *parent, bool ingame)
 
 bool startInGameMusicManager()
 {
+	bAllowOtherKeyPresses = false;
 	return musicManager(psWScreen->psForm.get(), true);
 }
 
@@ -878,12 +880,14 @@ bool runInGameMusicManager(unsigned id)
 {
 	if (id == MM_RETURN)			// return
 	{
+		bAllowOtherKeyPresses = true;
 		widgDelete(psWScreen, MM_FORM);
 		inputLoseFocus();
 		return true;
 	}
 	else if (id == MM_GO_BACK)
 	{
+		bAllowOtherKeyPresses = true;
 		widgDelete(psWScreen, MM_FORM);
 		intReopenMenuWithoutUnPausing();
 	}
