@@ -83,7 +83,7 @@ void main()
 
 	// Сalculate and combine final lightning
 	vec4 light = sceneColor;
-	vec3 L = normalize(lightDir);
+	vec3 L = lightDir; //can be normalized for better quality
 	float lambertTerm = max(dot(N, L), 0.0);
 
 	if (lambertTerm > 0.0)
