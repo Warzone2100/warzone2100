@@ -274,6 +274,9 @@
         "id": "R-Cyborg-Hvywpn-A-T",
         "msgName": "RES_CYW_H_AT",
         "name": "Super Scourge Cyborg",
+        "redComponents": [
+            "Cyb-Hvywpn-TK"
+        ],
         "requiredResearch": [
             "R-Cyborg-Metals04",
             "R-Wpn-Missile2A-T"
@@ -354,6 +357,11 @@
         "id": "R-Cyborg-Hvywpn-RailGunner",
         "msgName": "RES_CYW_H_RG",
         "name": "Super Rail-Gunner",
+        "redComponents": [
+            "Cyb-Hvywpn-HPV",
+            "Cyb-Hvywpn-Mcannon",
+            "Cyb-Hvywpn-Acannon"
+        ],
         "requiredResearch": [
             "R-Wpn-RailGun02"
         ],
@@ -5223,6 +5231,9 @@
         "imdName": "trmvtlhe.PIE",
         "msgName": "RES_W_BMB2",
         "name": "HEAP Bomb Bay",
+        "redComponents": [
+            "Bomb1-VTOL-LtHE"
+        ],
         "requiredResearch": [
             "R-Wpn-Bomb01",
             "R-Wpn-Bomb-Damage01"
@@ -5255,6 +5266,9 @@
         "imdName": "trmvtlin.PIE",
         "msgName": "RES_W_BMB4",
         "name": "Thermite Bomb Bay",
+        "redComponents": [
+            "Bomb3-VTOL-LtINC"
+        ],
         "requiredResearch": [
             "R-Wpn-Flamer-Damage05",
             "R-Wpn-Bomb03"
@@ -5271,6 +5285,9 @@
         "imdName": "trmvtlin.PIE",
         "msgName": "RES_W_BMB5",
         "name": "Plasmite Bomb",
+        "redComponents": [
+            "Bomb4-VTOL-HvyINC"
+        ],
         "requiredResearch": [
             "R-Wpn-Plasmite-Flamer",
             "R-Wpn-Bomb04"
@@ -5838,6 +5855,9 @@
         "keyTopic": 1,
         "msgName": "RES_CN3MK1",
         "name": "Heavy Cannon",
+        "redComponents": [
+            "Cannon2A-TMk1"
+        ],
         "requiredResearch": [
             "R-Wpn-Cannon-Damage05",
             "R-Struc-Factory-Module",
@@ -5857,6 +5877,10 @@
         "keyTopic": 1,
         "msgName": "RES_W_CN_4A",
         "name": "Hyper Velocity Cannon",
+        "redComponents": [
+            "Cannon1-VTOL",
+            "Cannon1Mk1"
+        ],
         "requiredResearch": [
             "R-Wpn-Cannon-Accuracy01",
             "R-Wpn-Cannon1Mk1"
@@ -5893,6 +5917,9 @@
         "keyTopic": 1,
         "msgName": "RES_W_CN6_T_A",
         "name": "Twin Assault Cannon",
+        "redComponents": [
+            "Cannon5VulcanMk1"
+        ],
         "requiredResearch": [
             "R-Wpn-Cannon5",
             "R-Struc-Research-Upgrade05"
@@ -6996,6 +7023,9 @@
         "keyTopic": 1,
         "msgName": "RES_W_MS_HART",
         "name": "Archangel Missile",
+        "redComponents": [
+            "Rocket-IDF"
+        ],
         "requiredResearch": [
             "R-Wpn-MdArtMissile",
             "R-Wpn-Missile-Damage02",
@@ -7031,6 +7061,10 @@
         "keyTopic": 1,
         "msgName": "RES_W_HLAS",
         "name": "Heavy Laser",
+        "redComponents": [
+            "Laser2PULSE-VTOL",
+            "Laser2PULSEMk1"
+        ],
         "requiredResearch": [
             "R-Wpn-Energy-Damage01"
         ],
@@ -7474,6 +7508,9 @@
         "keyTopic": 1,
         "msgName": "RES_W_MS_MART",
         "name": "Seraph Missile Array",
+        "redComponents": [
+            "Rocket-MRL"
+        ],
         "requiredResearch": [
             "R-Wpn-Missile2A-T",
             "R-Wpn-Rocket02-MRL"
@@ -7760,7 +7797,10 @@
         "name": "Scourge Missile",
         "redComponents": [
             "Rocket-LtA-T",
-            "Rocket-VTOL-LtA-T"
+            "Rocket-VTOL-LtA-T",
+            "CyborgRocket",
+            "Rocket-HvyA-T",
+            "Rocket-VTOL-HvyA-T"
         ],
         "requiredResearch": [
             "R-Wpn-Rocket07-Tank-Killer",
@@ -8537,6 +8577,11 @@
         "keyTopic": 1,
         "msgName": "RES_W_RAIL1",
         "name": "Needle Gun",
+        "redComponents": [
+            "CyborgCannon",
+            "Cannon4AUTO-VTOL",
+            "Cannon4AUTOMk1"
+        ],
         "requiredResearch": [
             "R-Wpn-Cannon4AMk1",
             "R-Struc-Research-Upgrade07",
@@ -8579,6 +8624,9 @@
         "keyTopic": 1,
         "msgName": "RES_W_RAIL3",
         "name": "Gauss Cannon",
+        "redComponents": [
+            "RailGun2Mk1"
+        ],
         "requiredResearch": [
             "R-Wpn-Rail-Damage03",
             "R-Wpn-RailGun02"
@@ -9005,6 +9053,10 @@
         "id": "R-Wpn-Rocket01-LtAT",
         "msgName": "RES_W_RK_LTAT1",
         "name": "Lancer AT Rocket",
+        "redComponents": [
+            "Rocket-Pod",
+            "Rocket-VTOL-Pod"
+        ],
         "requiredResearch": [
             "R-Wpn-Rocket-Damage03",
             "R-Wpn-Rocket-Accuracy01"
