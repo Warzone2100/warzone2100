@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-13 04:51\n"
+"PO-Revision-Date: 2021-03-16 06:55\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -34,7 +34,7 @@ msgstr "Тази структура съдържа технология, жиз�
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "МИСИЯ ПРИ БАЗА АЛФА: Вехтошари Нашественици"
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Вехтошари нашественици"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
