@@ -31,7 +31,7 @@ ${LangFileString} DESC_SecFMVs_Ger "Изтегли и инсталирай въ�
 ${LangFileString} TEXT_SecNLS "Езикови файлове"
 ${LangFileString} DESC_SecNLS "Поддръжка за други езици освен английски."
 
-${LangFileString} TEXT_SecNLS_WinFonts "Шрифтове за Уиндоус"
+${LangFileString} TEXT_SecNLS_WinFonts "Шрифтове за Windows"
 ${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
 
 ${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
