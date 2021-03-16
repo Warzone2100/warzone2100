@@ -72,6 +72,7 @@ static bool debugBoundingBoxesOnly = false;
 #ifdef DEBUG
 #include "lib/framework/demangle.hpp"
 static std::unordered_set<const WIDGET*> debugLiveWidgets;
+static std::shared_ptr<W_SCREEN> psCurrentlyRunningScreen;
 #endif
 
 struct OverlayScreen
@@ -91,6 +92,23 @@ static void runScheduledTasks()
 		task();
 	}
 }
+
+static inline void _widgDebugAssertIfRunningScreen(const char *function)
+{
+#ifdef DEBUG
+	if (psCurrentlyRunningScreen != nullptr)
+	{
+		debug(LOG_INFO, "%s is being called from within a screen's click / run handlers", function);
+		if (assertEnabled)
+		{
+			(void)wz_assert(psCurrentlyRunningScreen == nullptr);
+		}
+	}
+#else
+	// do nothing
+#endif
+}
+#define widgDebugAssertIfRunningScreen() _widgDebugAssertIfRunningScreen(__FUNCTION__)
 
 /* Initialise the widget module */
 bool widgInitialise()
@@ -648,6 +666,7 @@ void widgDelete(WIDGET *widget)
 	{
 		return;
 	}
+	widgDebugAssertIfRunningScreen();
 
 	if (auto lockedScreen = widget->screenPointer.lock())
 	{
@@ -1154,6 +1173,10 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	W_CONTEXT sContext = W_CONTEXT::ZeroContext();
 	psMouseOverWidget.reset();
 
+#ifdef DEBUG
+	psCurrentlyRunningScreen = psScreen;
+#endif
+
 	// Note which keys have been pressed
 	lastReleasedKey_DEPRECATED = WKEY_NONE;
 	if (getWidgetsStatus())
@@ -1216,6 +1239,10 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 		return true;
 	});
 	psScreen->psForm->runRecursive(&sContext);
+
+#ifdef DEBUG
+	psCurrentlyRunningScreen = nullptr;
+#endif
 
 	runScheduledTasks();
 	deleteOldWidgets();  // Delete any widgets that called deleteLater() while being run.
