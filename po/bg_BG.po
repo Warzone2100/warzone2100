@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-16 06:55\n"
+"PO-Revision-Date: 2021-03-16 18:52\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -47,7 +47,7 @@ msgstr "Отбранявайте базата, след което унищож�
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Засечен енергиен скок"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
@@ -59,7 +59,7 @@ msgstr "Проучете и подсигурете местността."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Новата Парадигма"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
@@ -96,7 +96,7 @@ msgstr "Налични са подкрепления."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "ТРАНСПОРТНА МИСИЯ: Засечени кодирани сигнали"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
@@ -156,7 +156,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Установете база на предна позиция"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
@@ -168,7 +168,7 @@ msgstr "Постройте защитни структури."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "МИСИЯ НА БАЗА АЛФА: Контраатака"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
@@ -180,7 +180,7 @@ msgstr "Задръжте базата и отблъснете всякакви �
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Входящо съобщение"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
@@ -236,7 +236,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "РАЗУЗНАВАТЕЛЕН ДОКЛАД НА БАЗА АЛФА: Вражеска атака"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
@@ -264,7 +264,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "РАЗУЗНАВАТЕЛЕН ДОКЛАД НА БАЗА АЛФА: НЕКСУС"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
@@ -427,7 +427,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "Нашият транспорт с бойни единици от екип Алфа е бил свален."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
@@ -658,7 +658,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "Убедени сме, че ракета е насочена към база Алфа."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
@@ -684,7 +684,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "База Алфа е била разрушена от ядрена ракета."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
@@ -836,7 +836,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "ТРАНСПОРТНА МИСИЯ: Засечен екип Алфа"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -2197,7 +2197,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:788
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "Бронирана подсилена точка с хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
@@ -2242,7 +2242,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:773
 msgid "Armored strongpoint with Assault Cannon"
-msgstr ""
+msgstr "Бронирана подсилена точка с щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[1]
@@ -4038,7 +4038,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-2.js:257
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Спасете екип Алфа от НЕКСУС"
 
 #: data/base/script/campaign/cam3-ab.js:216
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -4380,7 +4380,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr ""
+msgstr "Екип Алфа наближава дестинацията си"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4388,11 +4388,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Алфа - Западен сектор...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Алфа, имате разрешение за излитане."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
@@ -4635,7 +4635,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr ""
+msgstr "Екип Алфа наближава база Бета"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
@@ -4863,7 +4863,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "Личен състав от база Гама са потвърдили, че ядрените ракети, насочени към бази Алфа и Бета са били изстреляни от силоз в техния сектор."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
@@ -4891,7 +4891,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Говори екип Алфа. Повтарям, говори екип Алфа. Нуждаем се от незабавна помощ."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
@@ -4911,7 +4911,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "Командире, въоръжени сили от екип Алфа са избягали от ядрената атака над база Алфа."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
@@ -5341,7 +5341,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:2037
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "Огнехвъргач Киборг"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-MG.name
@@ -6257,13 +6257,13 @@ msgstr ""
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:473
 msgid "Alpha Campaign"
-msgstr ""
+msgstr "Кампания Алфа"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:476
 msgid "Alpha"
-msgstr ""
+msgstr "Алфа"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -6774,7 +6774,7 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Defense-RotCannon.name
 #: po/custom/fromJson.txt:828
 msgid "Assault Cannon Emplacement"
-msgstr ""
+msgstr "Установка с щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-VulcanCan.name
@@ -7403,7 +7403,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.CannonSuper.name
 #: po/custom/fromJson.txt:1311
 msgid "Cannon Fortress"
-msgstr ""
+msgstr "Оръдейна крепост"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Accuracy02.name
@@ -7540,7 +7540,7 @@ msgstr ""
 #. data/base/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:1391
 msgid "Cobra Flamer Tracks"
-msgstr ""
+msgstr "Кобра Огнехвъргачка Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraMedCnTrks.name
@@ -7867,7 +7867,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.CyborgFlamer01.name
 #: po/custom/fromJson.txt:1594
 msgid "Cyborg Flamer"
-msgstr ""
+msgstr "Киборг Огнехвъргач"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
@@ -8490,7 +8490,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:2031
 msgid "Flamer Cobra Tracks"
-msgstr ""
+msgstr "Огнехвъргачка Кобра Вериги"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
@@ -8512,14 +8512,14 @@ msgstr ""
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
 #: po/custom/fromJson.txt:2064
 msgid "Flamer Viper Half-Tracks"
-msgstr ""
+msgstr "Огнехвъргачка Пепелянка Полувериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperFlameWheels.name
 #. data/mp/stats/templates.json: $.ViperFlameWheels.name
 #: po/custom/fromJson.txt:2068
 msgid "Flamer Viper Wheels"
-msgstr ""
+msgstr "Огнехвъргачка Пепелянка Колела"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer01Mk1.name
@@ -9326,7 +9326,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2580
 msgid "Heavy Machinegun Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с тежка картечница"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -9575,21 +9575,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 #: po/custom/fromJson.txt:2767
 msgid "High Temperature Flamer Gel Mk2"
-msgstr ""
+msgstr "Високотемпературен гел за огнехвъргачка Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #: po/custom/fromJson.txt:2771
 msgid "High Temperature Flamer Gel Mk3"
-msgstr ""
+msgstr "Високотемпературен гел за огнехвъргачка Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #: po/custom/fromJson.txt:2775
 msgid "High Temperature Flamer Gel"
-msgstr ""
+msgstr "Високотемпературен гел за огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_DF_WU7.text[1]
@@ -9709,14 +9709,14 @@ msgstr ""
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2863
 msgid "HPV Cannon Emplacement"
-msgstr ""
+msgstr "Установка с ХС оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2867
 msgid "HPV Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с ХС оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
@@ -9753,21 +9753,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 #: po/custom/fromJson.txt:2889
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr ""
+msgstr "ХС кинетични оръдейни боеприпаси Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #: po/custom/fromJson.txt:2893
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr ""
+msgstr "ХС кинетични оръдейни боеприпаси Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #: po/custom/fromJson.txt:2897
 msgid "HVAPFSDS Cannon Rounds"
-msgstr ""
+msgstr "ХС кинетични оръдейни боеприпаси"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -10077,7 +10077,7 @@ msgstr ""
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:3141
 msgid "Increases Flamer ROF"
-msgstr ""
+msgstr "Увеличава скорострелността на огнехвъргачките"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[2]
@@ -13162,21 +13162,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 #: po/custom/fromJson.txt:5294
 msgid "Superhot Flamer Gel Mk2"
-msgstr ""
+msgstr "Свръхгорещ гел за огнехвъргачка Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #: po/custom/fromJson.txt:5298
 msgid "Superhot Flamer Gel Mk3"
-msgstr ""
+msgstr "Свръхгорещ гел за огнехвъргачка Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #: po/custom/fromJson.txt:5302
 msgid "Superhot Flamer Gel"
-msgstr ""
+msgstr "Свръхгорещ гел за огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
