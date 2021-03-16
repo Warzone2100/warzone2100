@@ -330,6 +330,14 @@ bool CommanderController::showInterface()
 
 void CommanderController::displayOrderForm()
 {
-	intAddOrder(getHighlightedObject());
-	intMode = INT_CMDORDER;
+	auto psWeakControllerRef = std::weak_ptr<CommanderController>(shared_from_this());
+	widgScheduleTask([psWeakControllerRef]() {
+		DROID *psDroid = nullptr;
+		if (auto strongControllerRef = psWeakControllerRef.lock())
+		{
+			psDroid = strongControllerRef->getHighlightedObject();
+		}
+		intAddOrder(psDroid);
+		intMode = INT_CMDORDER;
+	});
 }

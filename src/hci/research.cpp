@@ -552,7 +552,9 @@ private:
 		{
 			controller->startResearch(*clickedStats);
 		}
-		intRemoveStats();
+		widgScheduleTask([]() {
+			intRemoveStats();
+		});
 	}
 
 	std::shared_ptr<ResearchController> controller;
