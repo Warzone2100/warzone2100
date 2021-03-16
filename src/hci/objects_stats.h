@@ -32,12 +32,16 @@ public:
 
 	void closeInterface()
 	{
-		intResetScreen(false);
+		widgScheduleTask([]() {
+			intResetScreen(false);
+		});
 	}
 
 	void closeInterfaceNoAnim()
 	{
-		intResetScreen(true);
+		widgScheduleTask([]() {
+			intResetScreen(true);
+		});
 	}
 
 protected:
