@@ -123,6 +123,7 @@ protected:
 
 	void updateGroupSizeLabel(DROID *droid)
 	{
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		auto text = astringf("%u/%u", droid->psGroup ? droid->psGroup->getNumMembers() : 0, cmdDroidMaxGroup(droid));
 		groupSizeLabel->setString(WzString::fromUtf8(text));
 		groupSizeLabel->show();
@@ -130,6 +131,7 @@ protected:
 
 	void updateExperienceStarsLabel(DROID *droid)
 	{
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		int numStars = std::max((int)getDroidLevel(droid) - 1, 0);
 		experienceStarsLabel->setString(WzString(numStars, WzUniCodepoint::fromASCII('*')));
 		experienceStarsLabel->show();
@@ -142,7 +144,9 @@ protected:
 
 	std::string getTip() override
 	{
-		return droidGetName(controller->getObjectAt(objectIndex));
+		auto droid = controller->getObjectAt(objectIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN("", droid);
+		return droidGetName(droid);
 	}
 
 private:
@@ -205,6 +209,7 @@ protected:
 private:
 	void updateAssignedFactoriesLabel(const std::shared_ptr<W_LABEL> &label, DROID *droid, uint32_t factoryTypeShift)
 	{
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		/**
 		 * TODO Support up to MAX_FACTORY (which won't fit in the ugly secondaryOrder bitmask hack).
 		 * Comment taken from commit 34d8148e4a
@@ -259,7 +264,7 @@ private:
 		auto highlighted = controller->getHighlightedObject();
 
 		// prevent highlighting a commander when another commander is already selected
-		if (droid == highlighted || !highlighted->selected)
+		if (droid == highlighted || (highlighted && !highlighted->selected))
 		{
 			controller->setHighlightedObject(droid);
 			controller->displayOrderForm();

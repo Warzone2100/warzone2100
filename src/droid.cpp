@@ -2047,6 +2047,7 @@ UDWORD	getNumDroidsForLevel(uint32_t player, UDWORD level)
 //
 const char *droidGetName(const DROID *psDroid)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN("", psDroid);
 	return psDroid->aName;
 }
 

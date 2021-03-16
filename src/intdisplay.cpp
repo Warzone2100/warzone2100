@@ -1271,6 +1271,7 @@ void IntFancyButton::displayBlank(int xOffset, int yOffset)
 bool DroidIsBuilding(DROID *Droid)
 {
 	STRUCTURE_STATS	*Stats;
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, Droid);
 
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
 	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
@@ -1298,6 +1299,7 @@ bool DroidIsBuilding(DROID *Droid)
 bool DroidGoingToBuild(DROID *Droid)
 {
 	STRUCTURE_STATS	*Stats;
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, Droid);
 
 	if (!(droidType(Droid) == DROID_CONSTRUCT ||
 	      droidType(Droid) == DROID_CYBORG_CONSTRUCT))
@@ -1411,6 +1413,7 @@ static inline bool _structureIsManufacturingPending(Functionality const &functio
 
 bool StructureIsManufacturingPending(STRUCTURE *structure)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, structure);
 	switch (structure->pStructureType->type)
 	{
 	case REF_FACTORY:
@@ -1424,11 +1427,13 @@ bool StructureIsManufacturingPending(STRUCTURE *structure)
 
 FACTORY *StructureGetFactory(STRUCTURE *Structure)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, Structure);
 	return &Structure->pFunctionality->factory;
 }
 
 bool structureIsResearchingPending(STRUCTURE *structure)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, structure);
 	return structure->pStructureType->type == REF_RESEARCH && _structureIsManufacturingPending(structure->pFunctionality->researchFacility);
 }
 
@@ -1466,6 +1471,7 @@ RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure)
 
 DROID_TEMPLATE *FactoryGetTemplate(FACTORY *Factory)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, Factory);
 	if (Factory->psSubjectPending != nullptr)
 	{
 		return (DROID_TEMPLATE *)Factory->psSubjectPending;
