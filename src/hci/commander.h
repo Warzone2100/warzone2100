@@ -15,7 +15,8 @@ public:
 
 	DROID *getObjectAt(size_t index) const override
 	{
-		return commanders.at(index);
+		ASSERT_OR_RETURN(nullptr, index < commanders.size(), "Invalid object index (%zu); max: (%zu)", index, commanders.size());
+		return commanders[index];
 	}
 
 	bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const override

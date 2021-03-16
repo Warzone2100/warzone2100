@@ -269,7 +269,7 @@ protected:
 
 		auto factory = controller->getObjectAt(objectIndex);
 		auto production = getStats();
-		auto productionPending = StructureIsManufacturingPending(factory);
+		auto productionPending = factory && StructureIsManufacturingPending(factory);
 		auto objectImage = productionPending && production ? ImdObject::DroidTemplate(production): ImdObject::Component(nullptr);
 
 		displayIMD(Image(), objectImage, xOffset, yOffset);
@@ -313,7 +313,7 @@ private:
 	void updateProductionRunSizeLabel(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
 	{
 		auto productionRemaining = getProduction(factory, droidTemplate).numRemaining();
-		if (StructureIsManufacturingPending(factory) && productionRemaining > 0)
+		if (productionRemaining > 0 && factory && StructureIsManufacturingPending(factory))
 		{
 			productionRunSizeLabel->setString(WzString::fromUtf8(astringf("%d", productionRemaining)));
 			productionRunSizeLabel->show();
@@ -328,6 +328,7 @@ private:
 	{
 		progressBar->hide();
 
+		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
 		ASSERT_OR_RETURN(, !isDead(factory), "Factory is dead");
 
 		if (!StructureIsManufacturingPending(factory))
@@ -336,6 +337,7 @@ private:
 		}
 
 		auto manufacture = StructureGetFactory(factory);
+		ASSERT_NOT_NULLPTR_OR_RETURN(, manufacture);
 
 		if (manufacture->psSubject != nullptr && manufacture->buildPointsRemaining < calcTemplateBuild(manufacture->psSubject))
 		{

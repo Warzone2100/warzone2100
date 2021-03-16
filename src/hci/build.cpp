@@ -199,7 +199,9 @@ protected:
 
 	std::string getTip() override
 	{
-		return droidGetName(controller->getObjectAt(objectIndex));
+		auto droid = controller->getObjectAt(objectIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN("", droid);
+		return droidGetName(droid);
 	}
 
 private:
@@ -272,6 +274,7 @@ private:
 	{
 		progressBar->hide();
 
+		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
 		if (!DroidIsBuilding(droid))
 		{
 			return;
@@ -328,7 +331,7 @@ private:
 			return false;
 		};
 
-		if (processOrder(droid->order))
+		if (droid && processOrder(droid->order))
 		{
 			for (auto const &order: droid->asOrderList)
 			{

@@ -24,7 +24,8 @@ public:
 
 	STRUCTURE *getObjectAt(size_t index) const override
 	{
-		return facilities.at(index);
+		ASSERT_OR_RETURN(nullptr, index < facilities.size(), "Invalid object index (%zu); max: (%zu)", index, facilities.size());
+		return facilities[index];
 	}
 
 	bool findObject(std::function<bool (BASE_OBJECT *)> iteration) const override

@@ -334,7 +334,7 @@ protected:
 
 		auto facility = controller->getObjectAt(objectIndex);
 		auto research = controller->getObjectStatsAt(objectIndex);
-		auto researchPending = structureIsResearchingPending(facility);
+		auto researchPending = facility && structureIsResearchingPending(facility);
 		auto objectImage = researchPending && research ? getResearchObjectImage(research) : ImdObject::Component(nullptr);
 
 		displayIMD(Image(), objectImage, xOffset, yOffset);
@@ -368,8 +368,9 @@ private:
 
 	void updateProgressBar()
 	{
-		auto facility = controller->getObjectAt(objectIndex);
 		progressBar->hide();
+		auto facility = controller->getObjectAt(objectIndex);
+		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 
 		auto research = StructureGetResearch(facility);
 		if (research->psSubject == nullptr)
