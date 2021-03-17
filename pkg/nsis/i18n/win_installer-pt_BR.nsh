@@ -2,11 +2,11 @@ ${LangFileString} WZWelcomeText "Bem-vindo à instalação do Warzone 2100!\r\n\
 
 ${LangFileString} WZWelcomeText_Portable "Bem-vindo ao assistente de instalação portátil do Warzone 2100!\r\n\r\nEste assistente vai guiá-lo pelo processo de instalação da versão portátil do Warzone 2100.\r\n\r\nEsta instalação é completamente autônoma e você poderá desinstalar o programa a qualquer momento apagando a pasta.\r\n\r\nO Warzone 2100 é um programa de código aberto 100% grátis\r\n\r\nClique em Próximo para continuar."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "Visite nossa página oficial https://wz2100.net para ver a versão mais recente."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "Há uma versão de 64-bit de Warzone 2100 disponível.$\r$ \r\nPara mais detalhes, visite https://wz2100.net/ $\r$\nContinuar com a instalação de 32-bit mesmo assim?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Essa é a versão 64-bit do Warzone 2100.$\r$\nPor favor, baixe a versão 32-bit em https://wz2100.net/ $\r$\nClique em OK para sair da instalação."
 
 ${LangFileString} WZ_GPL_NEXT "Próximo"
 
@@ -37,9 +37,9 @@ ${LangFileString} DESC_SecNLS_WinFonts "Incluir a pasta de Fontes do Windows no 
 ${LangFileString} TEXT_SecMSSysLibraries "DLLs Importantes do Microsoft Runtime"
 ${LangFileString} DESC_SecMSSysLibraries "Baixar e instalar (ou atualizar) as bibliotecas redistribuíveis do Microsoft Visual C++, que alguns componentes podem requerer para serem executados."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "Baixando"
+${LangFileString} DLTEXT_SysLibDLFailed "O download da biblioteca do sistema falhou"
+${LangFileString} DLTEXT_VideosDLFailed "Falha ao baixar vídeos"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "Uma reinicialização é necessária para finalizar a instalação. Você deseja reiniciar o sistema agora?"
+${LangFileString} TEXT_MsgRebootFailed "Reinicialização falhou. Por favor, reinicie manualmente."
