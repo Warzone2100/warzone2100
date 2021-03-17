@@ -3080,6 +3080,14 @@ static bool gameLoad(const char *fileName)
 	}
 	else if (fileHeader.version <= CURRENT_VERSION_NUM)
 	{
+		//The in-game load menu was clearing level data AFTER loading in some savegame data.
+		//Hacking this in here so things make a little more sense and so that data loaded
+		//in from main.json is somewhat safe from being reset by mistake.
+		if (!levReleaseAll())
+		{
+			debug(LOG_ERROR, "Failed to unload old data. Attempting to load anyway");
+		}
+
 		//remove the file extension
 		CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
 		loadMainFile(std::string(CurrentFileName) + "/main.json");
