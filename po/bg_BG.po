@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-16 18:52\n"
+"PO-Revision-Date: 2021-03-17 06:54\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -10823,7 +10823,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower03.name
 #: po/custom/fromJson.txt:3691
 msgid "Medium Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка със средно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-MC.name
