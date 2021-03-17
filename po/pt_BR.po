@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 06:36\n"
+"PO-Revision-Date: 2021-03-17 18:58\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -5772,7 +5772,7 @@ msgstr "Falha ao obter uma resposta do lobby!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5782,35 +5782,35 @@ msgstr "Campanha"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Desafio"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "vs IA"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multijogador"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Música do Menu"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(sem título)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Copiar Caminho para Área de Transferência"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Copiar JSON para Área de Transferência"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Despejar JSON para StdOut"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -6817,7 +6817,7 @@ msgstr "Canhão de Assalto"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:851
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Defesa de Metralhadora de Assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6829,7 +6829,7 @@ msgstr "Defesa de Metralhadora de Assalto"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Torre de Metralhadora de Assalto 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -7208,7 +7208,7 @@ msgstr "Pontos de vida: Baixos"
 #: po/custom/fromJson.txt:1191
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Dano de bomba +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -8778,7 +8778,7 @@ msgstr "Serve de veículo explorador"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2219
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Ciborgue Granadeiro"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -9992,7 +9992,7 @@ msgstr "Melhoria nas lentes reduz a dispersão da luz"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3040
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Defesa de Obus Incendiário 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
@@ -10024,7 +10024,7 @@ msgstr "Obus Incendiário"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3057
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Vala de Morteiro Incendiário 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -10756,7 +10756,7 @@ msgstr "Pode ter módulos de fábrica adicionados"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3647
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Ciborgue Mecânico"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -12837,7 +12837,7 @@ msgstr "Manufatura Auto-Replicante"
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5056
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13088,7 +13088,7 @@ msgstr "AA Sunburst"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5215
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Ciborgue Atirador Super-Pesado"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13192,19 +13192,19 @@ msgstr "Gel Incendiário Super Quente"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5305
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Gel de Plasma Super Quente Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5308
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Gel de Plasma Super Quente Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5311
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Gel de Plasma Superquente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -13476,7 +13476,7 @@ msgstr "Bombas de Termite"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5485
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Ciborgue de Incendiário Termite"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -14573,20 +14573,20 @@ msgstr "Jogo de Estratégia"
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
 msgid "Allies"
-msgstr ""
+msgstr "Aliados"
 
 #: src/chat.cpp:71
 msgid "private to "
-msgstr ""
+msgstr "privado para "
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr ""
+msgstr " e "
 
 #: src/cheat.cpp:182
 #, c-format
@@ -14757,15 +14757,15 @@ msgstr "Desativar compressão de textura"
 
 #: src/clparse.cpp:362
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Definir saída do efeitos gráficos"
 
 #: src/clparse.cpp:372
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Usar depuração de saída dos efeitos gráficos"
 
 #: src/clparse.cpp:373
 msgid "Set JS backend"
-msgstr ""
+msgstr "Definir saída do JS"
 
 #: src/clparse.cpp:378
 msgid "Run games automatically for testing"
@@ -14773,7 +14773,7 @@ msgstr "Roda jogos automaticamente para teste"
 
 #: src/clparse.cpp:379
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Modo sem fio (suportado apenas quando também especificando --autogame, --autohost, --skirmish)"
 
 #: src/clparse.cpp:380
 msgid "Immediately save game and quit"
@@ -14805,23 +14805,23 @@ msgstr "autohost"
 
 #: src/clparse.cpp:384
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
-msgstr ""
+msgstr "Consultar avaliações de determinada url do servidor (contendo \"{HASH}\"), ao hospedar"
 
 #: src/clparse.cpp:384
 msgid "autorating"
-msgstr ""
+msgstr "Classificação Automática"
 
 #: src/clparse.cpp:386
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Anexar ou criar uma janela de console e exibir a saída do console (apenas no Windows)"
 
 #: src/clparse.cpp:388
 msgid "Set game server port"
-msgstr ""
+msgstr "Definir a porta do servidor do jogo"
 
 #: src/clparse.cpp:388
 msgid "port"
-msgstr ""
+msgstr "porta"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14991,7 +14991,7 @@ msgstr "Não pode construir. Poço em chamas."
 #: src/display.cpp:1569
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Pontos de Vida %d/%d - Experiência %.1f, %s, Abates %d"
 
 #: src/display.cpp:1731
 #, c-format
@@ -15071,12 +15071,12 @@ msgstr "Média"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:176
 msgid "Collective"
-msgstr ""
+msgstr "Coletividade"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
@@ -15269,31 +15269,31 @@ msgstr "Configuração das Teclas"
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:495
 msgid "Music Manager"
-msgstr ""
+msgstr "Gerenciador de Música"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Abrir Diretório de Configuração"
 
 #: src/frontend.cpp:681
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Falha ao abrir o diretório de configuração no gerenciador de arquivos padrão do sistema."
 
 #: src/frontend.cpp:683
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "Diretório de configuração é reportado como:"
 
 #: src/frontend.cpp:687
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Se estiver executando dentro de um contêiner / ambiente isolado, isso pode diferir do caminho real no disco."
 
 #: src/frontend.cpp:689
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Por favor, consulte a documentação para obter mais informações sobre como localizá-la manualmente."
 
 #: src/frontend.cpp:690
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Falha ao abrir o diretório de configurações"
 
 #: src/frontend.cpp:712
 msgid "1×"
@@ -15396,7 +15396,7 @@ msgstr "Pulo Radar"
 
 #: src/frontend.cpp:791
 msgid "Screen Shake"
-msgstr ""
+msgstr "Agitar Tela"
 
 #: src/frontend.cpp:795
 msgid "GRAPHICS OPTIONS"
@@ -15462,7 +15462,8 @@ msgstr "OPÇÕES DE ÁUDIO / ZOOM"
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "No modo Jane Sem Bordas, a resolução corresponde à do seu monitor \n"
+"(ou ao que o gerenciador de janela permite)."
 
 #: src/frontend.cpp:1093
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15470,7 +15471,7 @@ msgstr "Você pode mudar a resolução alterando a janela normalmente. (Tente ar
 
 #: src/frontend.cpp:1123
 msgid "Desktop Full"
-msgstr ""
+msgstr "Janela Sem Borda"
 
 #: src/frontend.cpp:1125
 msgid "Windowed"
@@ -15490,7 +15491,7 @@ msgstr "Proporção"
 
 #: src/frontend.cpp:1184
 msgid "Adaptive"
-msgstr ""
+msgstr "Adaptativo"
 
 #: src/frontend.cpp:1397
 msgid "* Takes effect on game restart"
@@ -15515,7 +15516,7 @@ msgstr "Cuidado: Antialias pode travar, especialmente com valores acima de 16"
 
 #: src/frontend.cpp:1441
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Saída Gráfica*"
 
 #: src/frontend.cpp:1445
 msgid "VIDEO OPTIONS"
@@ -15523,21 +15524,23 @@ msgstr "OPÇÕES DE VÍDEO"
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Não é possível alterar o Modo Janela"
 
 #: src/frontend.cpp:1488
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone falhou ao mudar o modo Janela.\n"
+"Seu sistema / drivers podem não suportar outros modos."
 
 #: src/frontend.cpp:1514
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "Não é possível alterar a sincronização vertical"
 
 #: src/frontend.cpp:1514
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone falhou ao alterar o modo de sincronização vertical.\n"
+"Seu sistema / drivers podem não suportar outros modos."
 
 #: src/frontend.cpp:1680
 msgid "Middle Mouse"
@@ -15649,38 +15652,38 @@ msgstr "Mod:"
 
 #: src/frontend.cpp:2471
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Aumentar Escala de Exibição do Jogo?"
 
 #: src/frontend.cpp:2473
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Com a sua resolução atual e configurações da escala de exibição, a interface do jogo pode parecer pequena e a perspectiva do jogo pode aparecer distorcida."
 
 #: src/frontend.cpp:2475
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Você pode corrigir isso aumentando a configuração de Escala de Exibição do jogo."
 
 #: src/frontend.cpp:2477
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Você gostaria de aumentar a Escala de Exibição do Jogo para: %u%%?"
 
 #: src/frontend.cpp:2479
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Aumentar Escala de Exibição"
 
 #: src/frontend.cpp:2496
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Escala de Exibição Aumentada para: %u%%"
 
 #: src/frontend.cpp:2497
 #: src/frontend.cpp:2513
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Você pode ajustar a Escala de Exibição a qualquer momento no menu de Opções de Vídeo."
 
 #: src/frontend.cpp:2512
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Dica: Ajustar Escala de Exibição"
 
 #: src/hci.cpp:929
 #: src/loop.cpp:244
@@ -15819,7 +15822,7 @@ msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
 #: src/keyedit.cpp:444
 #: src/musicmanager.cpp:777
 msgid "Go Back"
-msgstr ""
+msgstr "Voltar"
 
 #: src/ingameop.cpp:248
 #: src/ingameop.cpp:257
@@ -15858,7 +15861,7 @@ msgstr "Ver o Mapeamento de Teclas"
 
 #: src/ingameop.cpp:553
 msgid "Shake"
-msgstr ""
+msgstr "Agitar"
 
 #: src/ingameop.cpp:943
 msgid "Save Campaign Game"
@@ -15882,7 +15885,7 @@ msgstr "Esperando por Energia"
 #: src/intdisplay.cpp:286
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d extrator(es) inativos"
 
 #: src/intdisplay.cpp:291
 msgid "Need more resources!"
@@ -16329,39 +16332,39 @@ msgstr "Travar Cursor %s"
 
 #: src/keybind.cpp:1345
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "CAMPANHA"
 
 #: src/keybind.cpp:1349
 msgid "CHALLENGE"
-msgstr ""
+msgstr "DESAFIO"
 
 #: src/keybind.cpp:1352
 msgid "SKIRMISH"
-msgstr ""
+msgstr "vs IA"
 
 #: src/keybind.cpp:1370
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "DIFICULDADE: FÁCIL"
 
 #: src/keybind.cpp:1373
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "DIFICULDADE: NORMAL"
 
 #: src/keybind.cpp:1376
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "DIFICULDADE: DIFÍCIL"
 
 #: src/keybind.cpp:1379
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "DIFICULDADE: INSANO"
 
 #: src/keybind.cpp:1387
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "CHEATS: HABILITADOS"
 
 #: src/keybind.cpp:1389
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "CHEATS: DESABILITADOS"
 
 #: src/keybind.cpp:1445
 msgid "Researched EVERYTHING for you!"
@@ -16454,11 +16457,11 @@ msgstr "Direção da rotação vertical: Invertida"
 
 #: src/keybind.cpp:2533
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Vibrar a tela quando as coisas morrerem: Desligado"
 
 #: src/keybind.cpp:2538
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Vibrar a tela quando as coisas morrerem: Ligado"
 
 #: src/keybind.cpp:2590
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -16622,43 +16625,43 @@ msgstr "Designar Grupo 9"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Adicionar ao Grupo 0"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Adicionar ao Grupo 1"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Adicionar ao Grupo 2"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Adicionar ao Grupo 3"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Adicionar ao Grupo 4"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Adicionar ao Grupo 5"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Adicionar ao Grupo 6"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Adicionar ao Grupo 7"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Adicionar ao Grupo 8"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Adicionar ao Grupo 9"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
@@ -16874,11 +16877,11 @@ msgstr "Liga/Desliga o Histórico do Chat em Equipe"
 
 #: src/keymap.cpp:496
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Girar Edifício no sentido horário"
 
 #: src/keymap.cpp:497
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Girar Edifício no sentido anti-horário"
 
 #: src/keymap.cpp:500
 msgid "Center View on HQ"
@@ -17034,27 +17037,27 @@ msgstr "Localizar Fábrica de Ciborgues"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Selecionar próxima Fábrica de VTOL"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Ir para a próxima Fábrica"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Ir para o próximo Centro de Pesquisas"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Ir para o próximo Gerador de Energia"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Ir para a próxima Fábrica de Ciborgue"
 
 #: src/keymap.cpp:570
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Ir para a próxima Fábrica VTOL"
 
 #: src/keymap.cpp:573
 msgid "Toggle Debug Mappings"
@@ -17138,7 +17141,7 @@ msgstr "Directório do autosave (não autorizado para gravar manualmente)"
 
 #: src/loadsave.cpp:540
 msgid "cheated"
-msgstr ""
+msgstr "trapaceado"
 
 #: src/loop.cpp:251
 #: src/loop.cpp:267
@@ -17292,11 +17295,11 @@ msgstr "Impostos Limites de Estrutura."
 
 #: src/multiint.cpp:1280
 msgid "Vote"
-msgstr ""
+msgstr "Votar"
 
 #: src/multiint.cpp:1281
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Permitir que o host altere o mapa ou randomize?"
 
 #: src/multiint.cpp:1312
 msgid "Not enough votes to randomize or change the map."
@@ -17327,7 +17330,7 @@ msgstr "Mod de Mapa!"
 
 #: src/multiint.cpp:1378
 msgid "Random map!"
-msgstr ""
+msgstr "Mapa aleatório!"
 
 #: src/multiint.cpp:1395
 msgid "Click to set Password"
@@ -17444,7 +17447,7 @@ msgstr "O Hosp. chutou %s do jogo!"
 #: src/multiint.cpp:3897
 #: src/multimenu.cpp:1245
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "O anfitrião te expulsou do jogo."
 
 #: src/multiint.cpp:2486
 msgid "Click to change difficulty"
@@ -17496,7 +17499,7 @@ msgstr "Clique para alterar as cor do jogador"
 
 #: src/multiint.cpp:2661
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Clique para alterar a facção do jogador"
 
 #: src/multiint.cpp:2686
 msgid "Click to change player position"
@@ -17516,7 +17519,7 @@ msgstr "(nenhum)"
 
 #: src/multiint.cpp:2761
 msgid "Kicked from game"
-msgstr ""
+msgstr "Expulso do jogo"
 
 #: src/multiint.cpp:2960
 msgid "CHAT"
@@ -17545,7 +17548,7 @@ msgstr "Esse é um mod de para, pode mudar a sua experiência de jogo!"
 
 #: src/multiint.cpp:3762
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Este é um mapa aleatório, o que ajuda a variar sua experiência de jogo!"
 
 #: src/multiint.cpp:4025
 msgid "Host is Starting Game"
@@ -17645,7 +17648,7 @@ msgstr "Transferência de arquivo foi abortada para %d."
 
 #: src/multijoin.cpp:390
 msgid "The game is already full."
-msgstr ""
+msgstr "O jogo já está cheio."
 
 #: src/multijoin.cpp:465
 #, c-format
@@ -17654,7 +17657,7 @@ msgstr "%s (%u) possui um mod incompatível e foi expulso."
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "Seus dados não coincidem com os do host!"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17697,7 +17700,7 @@ msgstr "Limites retornaram aos valores padrão"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Limites redefinidos para valores padrão"
 
 #: src/multimenu.cpp:532
 msgid "Any number of players"
@@ -17795,12 +17798,12 @@ msgstr "Expulsando jogador %s porque tentou evitar a checagem de integridade de 
 
 #: src/multiplay.cpp:272
 msgid "Invalid data!"
-msgstr ""
+msgstr "Dados inválidos!"
 
 #: src/multiplay.cpp:895
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "Expulsando jogador automaticamente %s, comando inválido recebido."
 
 #: src/multiplay.cpp:1359
 msgid "Map was requested: SENDING MAP!"
@@ -17886,24 +17889,24 @@ msgstr "Marrom"
 
 #: src/musicmanager.cpp:492
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "JOGANDO AGORA"
 
 #: src/musicmanager.cpp:532
 #: src/musicmanager.cpp:678
 msgid "Album"
-msgstr ""
+msgstr "Álbum"
 
 #: src/musicmanager.cpp:543
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: src/musicmanager.cpp:669
 msgid "Title"
-msgstr ""
+msgstr "Titulo"
 
 #: src/musicmanager.cpp:856
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "GERENCIADOR DE MÚSICA"
 
 #: src/notifications.cpp:725
 msgid "Dismiss"
@@ -18369,5 +18372,5 @@ msgstr "VOCÊ FOI DERROTADO!"
 
 #: src/wzscriptdebug.cpp:1813
 msgid "Script Debugger"
-msgstr ""
+msgstr "Depurador de Script"
 
