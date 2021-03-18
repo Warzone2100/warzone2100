@@ -169,6 +169,7 @@ enum MOUSE_TARGET
 
 extern bool		gameStats;
 extern bool		godMode;
+extern bool		lockCameraScrollWhileRotating;
 
 extern bool getShakeStatus();
 extern void setShakeStatus(bool val);

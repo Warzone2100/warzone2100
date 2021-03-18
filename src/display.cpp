@@ -137,6 +137,7 @@ static bool cameraAccel = true;
 
 bool	rotActive = false;
 bool	gameStats = false;
+bool	lockCameraScrollWhileRotating = false;
 
 /* Hackety hack hack hack */
 static int screenShakeTable[100] =
@@ -1028,7 +1029,8 @@ static void handleCameraScrolling()
 		return;
 	}
 
-	if(rotActive){
+	if (lockCameraScrollWhileRotating && rotActive)
+	{
 		resetScroll();
 		return;
 	}
