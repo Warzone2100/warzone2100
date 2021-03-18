@@ -1327,7 +1327,6 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				// failed
 				ASSERT(false, "Failed"); // TODO:
 			}
-			JS_FreeValue(ctx, value);
 			return intVal;
 		}
 
@@ -1347,7 +1346,6 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				// failed
 				ASSERT(false, "Failed"); // TODO:
 			}
-			JS_FreeValue(ctx, value);
 			return uintVal;
 		}
 
