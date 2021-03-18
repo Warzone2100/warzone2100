@@ -1029,7 +1029,7 @@ static void handleCameraScrolling()
 		return;
 	}
 
-	if (lockCameraScrollWhileRotating && rotActive)
+	if (lockCameraScrollWhileRotating && rotActive && (scrollDirUpDown == 0 && scrollDirLeftRight == 0))
 	{
 		resetScroll();
 		return;
