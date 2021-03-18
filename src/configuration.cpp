@@ -35,7 +35,6 @@
 #include "component.h"
 #include "configuration.h"
 #include "difficulty.h"
-#include "display3d.h"
 #include "ingameop.h"
 #include "multiint.h"
 #include "multiplay.h"
@@ -48,6 +47,7 @@
 #include "nethelpers.h"
 #include "lib/framework/wzapp.h"
 #include "display3d.h" // for building animation speed
+#include "display.h"
 
 #include <type_traits>
 
@@ -462,6 +462,7 @@ bool loadConfig()
 		}
 	}
 	BlueprintTrackAnimationSpeed = iniGetInteger("BlueprintTrackAnimationSpeed", 20).value();
+	lockCameraScrollWhileRotating = iniGetBool("lockCameraScrollWhileRotating", false).value();
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -597,6 +598,7 @@ bool saveConfig()
 	iniSetString("gfxbackend", to_string(war_getGfxBackend()));
 	iniSetString("jsbackend", to_string(war_getJSBackend()));
 	iniSetInteger("BlueprintTrackAnimationSpeed", BlueprintTrackAnimationSpeed);
+	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);
