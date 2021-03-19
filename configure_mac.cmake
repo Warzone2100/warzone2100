@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.5)
 ########################################################
 
 # To ensure reproducible builds, pin to a specific vcpkg commit
-set(VCPKG_COMMIT_SHA "e25b620cf90d9bb311f91b03916b75d8798afd44")
+set(VCPKG_COMMIT_SHA "a3c09743dcd4a926c57ba0013c1b967014a71682")
 
 # WZ minimum supported macOS deployment target (this is 10.10 because of Qt 5.9.x)
 set(MIN_SUPPORTED_MACOSX_DEPLOYMENT_TARGET "10.10")
