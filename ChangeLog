@@ -1,3 +1,34 @@
+2021-03-20: Version 4.0.0 beta2
+ * General:
+   * Change: Return previous camera rotation behavior as the default. Improve the locking version and set it behind config option "lockCameraScrollWhileRotating" (commit:5b893cfc6a725a78d5b86699aad75b7b2d59ba79, commit:f2d68e5fb40dbd3f8f6f172d9f92f3de32d77799, #1640)
+   * Fix: Fix medal display which caused a crash (commit:9aa49ea227c0dda727f992737dc5d2b01d681b7d, #1584)
+   * Fix: Fix profile selection list causing new profiles to not display (commit:9ebf1ce5bcfa5223168a17156f395f801e73291f, #1585)
+   * Fix: Fix UI crashes and issues (too many commits, #1583, #1590, #1608, #1637)
+   * Fix: Close options menu, when other menu is opened. Disable reticule menus when options are open in multiplayer (commit:a6da62e419bd822f889d79cb5b117a8c153bf3f9, commit:37cffc421280f36bfb534944ec25ea03f2373aa5, #1589)
+   * Fix: Disable quicksave and quickload while option menus are open (commit:de516624eb7e8f94a6247e8e1b333d87711f7951, #1632)
+   * Fix: Unload level data before loading any save data (commit:12b64bc0e790bea88dc8d1878a82d4c1329e0bb6, #1639)
+ * Graphics:
+   * Add: Introduce the ability to specify if a model wants to interpolate frames (commit:ba731f3e43a67686485f8fcd5c3de1a8eb19a8ec, #1593)
+   * Add: New Blender 2.9x ".pie" Import-Export add-on (commit:73602cf27b1c46508b18469ab08a0928c311c1b0, #1601)
+   * Change: Minor shadow-related refactoring, imdload sanity checks (too many commits, #1623)
+   * Change: Optimized light calculations. Cleaned up shaders to save a few fps (commit:a63f76eeb215aaab672d5cf500bb7ae276db4dde, commit: cd6c32a3f30c88e487e490725e39c69d2981507a, #1628, #1629)
+   * Fix: Improve flushing in headless mode + don't initialize video subsystem (commit:cd9df7e0485c23c8eb03ab1a313eafa561be18fe, commit:5dfaf18901d4907a58ff3f2bb0b03ab1d496e877, commit:2b00ed61bf8f737b95c07e990c62af2e6e221995, #1618, #1622)
+ * Campaign:
+   * Change: Widen a sub1-d base entrance and replace MG bunkers with Assault Gun bunkers in sub3-1 map (commit:8b9a32690d7a0e1e44f0d0de9709b2d6101f6bd9, #1643)
+   * Fix: Guard against compromised timer bringing up the reinforcement button (commit:d059fdb44cd7a524bcded199fedf6e2f06a5322f, #1613)
+ * Multiplayer:
+   * Change: Improve lobby performance by not loading map addons as much (commit:bcc790b37255cda79d4007d444916899efc88b09, commit:3cea0447f5e0d7b0e7c235eb1e0839d9eedf33f8, commit:a6011af7318795f222e1b4db9ef156178d7c5ab8, #1588)
+   * Change: Improve obsolete weapon redaction (commit:edd7d1185cb01209e24bca70fab78f717c9a4894, #1634)
+ * Scripting:
+   * Fix: Prevent a potential double free with QuickJS backend (commit:19157334b5ae645017d33f0e4df7268034508b4c, #1642)
+ * AI:
+   * Fix: Add more weapon data into the NullBot standards to prevent ruleset warnings about undefined weapon info (commit:013d3a0eaf500aa5c100adfffa24c7a902f99885, #1602)
+ * Other:
+   * Change: Lock key inputs when the in-game music manager is open (commit:2a1cb3c520449b91a89692e286929129316ca87a, #1631)
+   * Change: Changed "High-Velocity" to "Hyper-Velocity" in HVAPFSDS to fit in better (commit:c6305216d09a458b373df676e6df362c543e73bb, #1636)
+   * Fix: Fix -Wnull-dereference warning in structure.cpp (commit:4b4cfe36b2f3038e895e026a21ad933fd1d5b2de, #1567)
+
+
 2021-02-28: Version 4.0.0 beta1
  * General:
    * Add: Tweak build and line build to allow diagonal building and more (commit:4b99c8f20f0c202b5b2bc797580f2a8b32361db4, commit:337103224cdb69262938b5614c0e972de87b4baa, commit:95cf4a8fe90752df809f19d5fc3537d4cec520a2, commit:b72b642757117cd11fb91b06fa39fbb3a774a51d, #996)
