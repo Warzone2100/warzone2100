@@ -162,6 +162,9 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 
 	# Default stack size is 1MB - increase to better match other platforms
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:8000000")
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GCC|Clang" AND NOT APPLE)
+	# Ensure all builds always have debug info built (Xcode is handled separately below)
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
 endif()
 
 # Treat source files as UTF-8 (unless they have a BOM) (MSVC)
