@@ -3,188 +3,188 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 06:36\n"
+"PO-Revision-Date: 2021-03-17 06:54\n"
 "Last-Translator: \n"
-"Language-Team: Slovak\n"
-"Language: sk_SK\n"
+"Language-Team: Bulgarian\n"
+"Language: bg_BG\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: warzone2100\n"
 "X-Crowdin-Project-ID: 354665\n"
-"X-Crowdin-Language: sk\n"
+"X-Crowdin-Language: bg\n"
 "X-Crowdin-File: /master/po/warzone2100.pot\n"
 "X-Crowdin-File-ID: 72\n"
 
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr "CIEĽ: Nájsť a získať technológiu neurálnych synapsií"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "Založte základňu, potom nájdite stavbu spred kolapsu."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Táto budova obsahuje technológie dôležité pre úspech Projektu."
+msgstr "Тази структура съдържа технология, жизненоважна за успеха на Проекта."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "MISIA ZÁKLADNE ALFA: Nájazdnícki Smetiari"
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Вехтошари нашественици"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr "Nájzadníckí smetiari sa približujú k tvojej základni."
+msgstr "Вехтошари нашественици наближават нашата база."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "Obráň základňu a následne znič tábory nájazdníkov."
+msgstr "Отбранявайте базата, след което унищожете Вехтошарските лагери."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "MISIA ZÁKLADNE ALFA: Zistené prepätie"
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Засечен енергиен скок"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr "Bolo zistené prepätie smerom na juh od našej pozície."
+msgstr "Енергиен скок беше засечен на юг от нашите позиции."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr "Preskúmajte a zabezpečte oblasť."
+msgstr "Проучете и подсигурете местността."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "MISIA ZÁKLADNE ALFA: Nová Paradigma"
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Новата Парадигма"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr "Nová Paradigma vlastní technológiu špičkových zbraní."
+msgstr "Новата Парадигма притежават превъзхождаща ни оръжейна технология."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "Môžu mať technológiu synaptických spojení, jej zíkanie je zásadné."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "PREPRAVNÁ MISIA: Nájdi a získaj artefakty"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr "Naložte úločné sily do transportu."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr "Po pristání skontrolujte ruiny a získajte všetky artefakty."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "PREPRAVNÁ MISIA: Preskúmajte výskumné stredisko"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Preskúmajte oblasť a získajte všetky prítomné artefakty."
+msgstr "Проучете местността и съберете налични артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr "Posily sú k dispozícii."
+msgstr "Налични са подкрепления."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr "PREPRAVNÁ MISIA: Zistené zakódované signály"
+msgstr "ТРАНСПОРТНА МИСИЯ: Засечени кодирани сигнали"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr "Pre kontrolu týchto signálov použi prieskumné jednotky."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr "Pre výstavbu obrany na svojom MV použi nákladné autá."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
-msgstr "PREPRAVNÁ MISIA: Detekované vysielania nepriateľa"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Prehľadaj oblasť kvôli nepriateľským výskumným zariadeniam."
+msgstr "Разузнайте обозначената местност за вражески изследователски съоражения."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr "Pokračuj k MV#2. Tentokrát neútoč na nepriateľské jednotky."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr "PREPRAVNÁ MISIA: Nájdenie synaptického spojenia"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr "Nová Paradigma analyzuje na tomto mieste technológiu synaptických spojení."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Zlož útočný tím a získaj technológiu synaptických spojení."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "PREPRAVNÁ MISIA: Nové ciele"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
-msgstr "Nová paradigma hľadá v tejto oblasti artefakty."
+msgstr "Новата Парадигма търсят артефакти в тази околност."
 
 #: data/base/messages/strings/cam1strings.txt:41
 msgid "Intercept them. Do not let any enemies exit this area."
-msgstr "Prenasleduj ich. Neumožni z tejo oblasti uniknúť žiadnemu nepriateľovi."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:43
 msgid "TRANSPORT MISSION: Enemy Base Under Construction"
-msgstr "PREPRAVNÁ MISIA: Nepriateľská základňa vo výstavbe"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr "Nepriateľ zriaďuje v tejto oblasti novú predsunutú základňu."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr "Znič základňu a zabezpeč oblasť."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr "MISIA ZÁKLADNE ALFA: Založ predsunutú základňu"
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Установете база на предна позиция"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
-msgstr "Vybudujte predsunutú základňu na náhornej plošine."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
-msgstr "Postav obranné objekty."
+msgstr "Постройте защитни структури."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr "MISIA ZÁKLADNE ALFA: Protiútok"
+msgstr "МИСИЯ НА БАЗА АЛФА: Контраатака"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr "Nepriateľské jednotky sa blížia z východu a severu."
+msgstr "Вражески сили се приближават от изток и от север."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr "Udrž základne a odraz akýkoľvek útok."
+msgstr "Задръжте базата и отблъснете всякакви атаки."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "МИСИЯ КЪМ БАЗА АЛФА: Входящо съобщение"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Засичаме вражески сили на тези местонахождения."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
@@ -192,7 +192,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Поздравления, Командире."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
@@ -204,7 +204,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "Първите две зони са вече подсигурени."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "Нищо за докладване."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
@@ -236,7 +236,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "РАЗУЗНАВАТЕЛЕН ДОКЛАД НА БАЗА АЛФА: Вражеска атака"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
@@ -244,11 +244,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "ОСНОВНА ЦЕЛ"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Тази постройка е Ваша основна цел."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -264,11 +264,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "РАЗУЗНАВАТЕЛЕН ДОКЛАД НА БАЗА АЛФА: НЕКСУС"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr ""
+msgstr "Нова цел."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
@@ -276,7 +276,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "Допълнение"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
@@ -288,75 +288,75 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr "PRICHÁDZAJÚCE VYSIELANIE"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr "Prebieha dekódovanie....."
+msgstr "Тече декодиране....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr "Veliteľ."
+msgstr "Командире."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr "Dekódovali sme novú správu pre Novú Paradigmu..."
+msgstr "Разкодирахме входящото съобщение до Новата Парадигма..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr "Znič nepriateľskú základňu"
+msgstr "Разрушете вражеската база"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr "Zostavte útočnú jednotku a nastúpte na transportér."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr "Zničte základňu a získajte všetky artefakty, ktoré sa v nej nachádzajú."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr "Technológia synaptických spojení bola získaná!"
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Predbežný výskum potvrdzuje, že bude veľkým prínosom pre projekt."
+msgstr "Първоначално изследване потвърждава, че тя ще бъде от голяма полза за Проекта."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr "Základňa Beta je pod ťažkým útokom, môžu potrebovať asistenciu."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr "Ďalšie správy pošleme hneď, ako dorazia."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr "Toto vysielanie bolo zachytené pred pár minútami."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr "Pochádza z východu."
+msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "АРТЕФАКТ - ЕНЕРГИЕН МОДУЛ"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "Изследвайте артефакта - електрически модул."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "След това използвайте камион, за да надградите електрогенераторите си с модула."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "БАЗА НА ВЕХТОШАРИ ЗАСЕЧЕНА"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "Разгромете вехтошарите и приберете всякакви артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -383,21 +383,21 @@ msgstr ""
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "МИСИЯ ПРИ БАЗА БЕТА: Източен Сектор"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "При пристигането си Вие ще поемете управлението на базата."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "Наложително е да я отбранявате и задържите."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "МИСИЯ ПРИ БАЗА БЕТА: Отбранете и Укрепете"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
@@ -409,16 +409,16 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "Нови технологии са налични."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "Понастоящем засичаме кодиран сигнален поток."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Декодиране..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
@@ -427,7 +427,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "Нашият транспорт с бойни единици от екип Алфа е бил свален."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
@@ -658,7 +658,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "Убедени сме, че ракета е насочена към база Алфа."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
@@ -684,7 +684,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "База Алфа е била разрушена от ядрена ракета."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
@@ -836,7 +836,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "ТРАНСПОРТНА МИСИЯ: Засечен екип Алфа"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
@@ -1158,7 +1158,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
-msgstr "Nepriateľská základňa"
+msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
@@ -1170,7 +1170,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
-msgstr "Jadrový reaktor"
+msgstr ""
 
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
@@ -1490,7 +1490,7 @@ msgstr ""
 #: data/base/messages/strings/names.txt:361
 #: data/mp/messages/strings/names.txt:461
 msgid "Vehicle Self-Repair"
-msgstr ""
+msgstr "Самопоправка на МПС"
 
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:462
@@ -1631,12 +1631,12 @@ msgstr ""
 #: data/base/messages/strings/names.txt:462
 #: data/mp/messages/strings/names.txt:588
 msgid "Bridge"
-msgstr ""
+msgstr "Мост"
 
 #: data/base/messages/strings/names.txt:469
 #: data/mp/messages/strings/names.txt:595
 msgid "Wrecked Tank"
-msgstr ""
+msgstr "Разбит Танк"
 
 #: data/base/messages/strings/names.txt:487
 #: data/base/messages/strings/names.txt:503
@@ -1655,33 +1655,33 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:615
 #: data/mp/messages/strings/names.txt:631
 msgid "Engineering Laboratory"
-msgstr ""
+msgstr "Инженерна Лаборатория"
 
 #: data/base/messages/strings/names.txt:490
 #: data/base/messages/strings/names.txt:506
 #: data/mp/messages/strings/names.txt:616
 #: data/mp/messages/strings/names.txt:632
 msgid "Robotics Laboratory"
-msgstr ""
+msgstr "Лаборатория по Роботика"
 
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:617
 msgid "Laser Optics Laboratory"
-msgstr ""
+msgstr "Лаборатория по Лазерна Оптика"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:618
 #: data/mp/messages/strings/names.txt:630
 msgid "Electronics Laboratory"
-msgstr ""
+msgstr "Лаборатория по Електроника"
 
 #: data/base/messages/strings/names.txt:493
 #: data/base/messages/strings/names.txt:502
 #: data/mp/messages/strings/names.txt:619
 #: data/mp/messages/strings/names.txt:628
 msgid "Chemical Laboratory"
-msgstr ""
+msgstr "Химическа лаборатория"
 
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:627
@@ -1761,7 +1761,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:7
 #: po/custom/fromJson.txt:2424
 msgid "Heat resistant armored layers"
-msgstr ""
+msgstr "Термоустойчиви бронирани слоеве"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[2]
@@ -1770,7 +1770,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:8
 #: po/custom/fromJson.txt:5458
 msgid "Thermal Armor increased"
-msgstr ""
+msgstr "Топлинна Броня увеличена"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[0]
@@ -1783,7 +1783,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:16
 #: po/custom/fromJson.txt:4011
 msgid "New Cyborg Available"
-msgstr "Dostupný novy kyborg"
+msgstr "Наличен е нов Киборг"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
@@ -1882,7 +1882,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:31
 #: po/custom/fromJson.txt:1728
 msgid "Defenses Improved"
-msgstr ""
+msgstr "Защити подобрени"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DF_WU4.text[1]
@@ -1976,7 +1976,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:161
 #: po/custom/fromJson.txt:4021
 msgid "New Defensive Structure Available"
-msgstr "K dispozícii nová obranná budova"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA4.text[1]
@@ -2043,7 +2043,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:129
 #: po/custom/fromJson.txt:1750
 msgid "Defensive Strength: Medium"
-msgstr "Sila obrany : stredná"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[1]
@@ -2197,7 +2197,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:788
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "Бронирана подсилена точка с хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
@@ -2224,7 +2224,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:164
 #: po/custom/fromJson.txt:1740
 msgid "Defensive Strength: High"
-msgstr "Sila obrany : vysoká"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVFL.text[1]
@@ -2242,7 +2242,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:773
 msgid "Armored strongpoint with Assault Cannon"
-msgstr ""
+msgstr "Бронирана подсилена точка с щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[1]
@@ -2357,7 +2357,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:163
 #: po/custom/fromJson.txt:4423
 msgid "Prevents enemy movement"
-msgstr ""
+msgstr "Предотвратява движение на врага"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[0]
@@ -2387,7 +2387,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:168
 #: po/custom/fromJson.txt:3233
 msgid "Increases Repair Speed"
-msgstr "Zvyšuje rýchlosť opravy"
+msgstr "Повишава скоростта на поправка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RFU1.text[3]
@@ -2463,7 +2463,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:186
 #: po/custom/fromJson.txt:5727
 msgid "Vehicle Production Improved"
-msgstr ""
+msgstr "Производство на МПС подобрено"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FU4.text[1]
@@ -2492,7 +2492,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:428
 msgid "All vehicle factories upgraded automatically"
-msgstr ""
+msgstr "Всички фабрики за МПС са надградени автоматично"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -2517,7 +2517,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:191
 #: po/custom/fromJson.txt:4740
 msgid "Research Improved"
-msgstr "Vylepšený výskum"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RU4.text[1]
@@ -2539,7 +2539,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:193
 #: po/custom/fromJson.txt:3239
 msgid "Increases research speed"
-msgstr "Zvyšuje rýchlosť výskumu"
+msgstr "Повишава скоростта на изследванията"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[3]
@@ -2594,7 +2594,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:201
 #: po/custom/fromJson.txt:4433
 msgid "Production Improved"
-msgstr "Vylepšená produkcia"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VFU1.text[1]
@@ -2814,7 +2814,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:232
 #: po/custom/fromJson.txt:4030
 msgid "New fire detection systems"
-msgstr "Nový systém detekcie ohňa"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[2]
@@ -3007,7 +3007,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:258
 #: po/custom/fromJson.txt:3037
 msgid "Improves vehicle speed"
-msgstr ""
+msgstr "Подобрява скоростта на МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[3]
@@ -3033,7 +3033,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:261
 #: po/custom/fromJson.txt:5716
 msgid "Vehicle Bodies Improved"
-msgstr ""
+msgstr "Корпуси на МПС подобрени"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[2]
@@ -3055,7 +3055,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:266
 #: po/custom/fromJson.txt:5755
 msgid "Vehicle Thermal Armor Improved"
-msgstr ""
+msgstr "МПС Топлинна Броня Подобрена"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_AH1.text[1]
@@ -3092,7 +3092,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:286
 #: po/custom/fromJson.txt:5733
 msgid "Vehicle Propulsion Improved"
-msgstr ""
+msgstr "МПС Задвижване Подобрено"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[1]
@@ -3521,7 +3521,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:358
 #: po/custom/fromJson.txt:1135
 msgid "Best Targets: Vehicles"
-msgstr "Najlepší cieľ : vozidlá"
+msgstr "Най-добри цели: МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
@@ -3530,7 +3530,7 @@ msgstr "Najlepší cieľ : vozidlá"
 #: data/mp/messages/strings/resstrings.txt:354
 #: po/custom/fromJson.txt:4710
 msgid "Replaces Medium Cannon"
-msgstr ""
+msgstr "Заменя средното оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN5.text[1]
@@ -3570,7 +3570,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1106
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr ""
+msgstr "Най-добри цели: Бункери, колесни и ховъркрафт МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3581,7 +3581,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:366
 #: po/custom/fromJson.txt:2061
 msgid "Flamer Upgrade"
-msgstr "Upgrade plameňometov"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_FL_D4.text[1]
@@ -3650,7 +3650,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1090
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr ""
+msgstr "Най-добри цели: Базови Структури, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3780,7 +3780,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:406
 #: po/custom/fromJson.txt:3574
 msgid "Machinegun Upgrade"
-msgstr "Upgrade guľometov"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_MG_D5.text[1]
@@ -3854,7 +3854,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:413
 #: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr ""
+msgstr "Най-добри цели: Базови структури, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -4002,7 +4002,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Унищожете всички единици на Новата Парадигма"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
@@ -4038,7 +4038,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-2.js:257
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Спасете екип Алфа от НЕКСУС"
 
 #: data/base/script/campaign/cam3-ab.js:216
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -4096,7 +4096,7 @@ msgstr ""
 #: data/base/script/tutorial.js:122
 #: data/mp/multiplay/script/rules/reticule.js:21
 msgid "Manufacture (F1)"
-msgstr "Výroba (F1)"
+msgstr ""
 
 #: data/base/script/rules.js:59
 #: data/base/script/tutorial.js:112
@@ -4109,7 +4109,7 @@ msgstr ""
 #: data/base/script/tutorial.js:149
 #: data/mp/multiplay/script/rules/reticule.js:48
 msgid "Research (F2)"
-msgstr "Výzkum (F2)"
+msgstr ""
 
 #: data/base/script/rules.js:109
 #: data/base/script/tutorial.js:217
@@ -4124,7 +4124,7 @@ msgstr ""
 #: data/base/script/tutorial.js:354
 #: data/mp/multiplay/script/rules/reticule.js:60
 msgid "Build (F3)"
-msgstr "Stavba (F3)"
+msgstr ""
 
 #: data/base/script/rules.js:121
 #: data/base/script/tutorial.js:277
@@ -4139,7 +4139,7 @@ msgstr ""
 #: data/base/script/tutorial.js:207
 #: data/mp/multiplay/script/rules/reticule.js:87
 msgid "Design (F4)"
-msgstr "Konštrukcia (F4)"
+msgstr ""
 
 #: data/base/script/rules.js:172
 #: data/base/script/tutorial.js:261
@@ -4151,7 +4151,7 @@ msgstr ""
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/script/rules/reticule.js:101
 msgid "Commanders (F6)"
-msgstr "Velitelia (F6)"
+msgstr ""
 
 #: data/base/script/rules.js:185
 #: data/base/script/tutorial.js:517
@@ -4177,33 +4177,33 @@ msgstr ""
 #: src/transporter.cpp:549
 #: src/wzscriptdebug.cpp:1977
 msgid "Close"
-msgstr "Zavrieť"
+msgstr ""
 
 #: data/base/script/rules.js:196
 #: data/base/script/tutorial.js:516
 #: data/mp/multiplay/script/rules/reticule.js:116
 msgid "Intelligence Display (F5)"
-msgstr "Spravodajské okno (F5)"
+msgstr ""
 
 #: data/base/script/tutorial.js:28
 msgid "In this training session you'll learn how to build an effective base"
-msgstr "V tomto kole výcviku sa naučíte ako postaviť efektívnu základňu"
+msgstr ""
 
 #: data/base/script/tutorial.js:29
 msgid "Oil resources are key to your success"
-msgstr "Zdroje ropy sú kľúčom k Vášmu úspechu"
+msgstr ""
 
 #: data/base/script/tutorial.js:30
 msgid "To build an oil derrick, select one of your trucks"
-msgstr "Na stavbu ropného vrtu vyberte niektoré zo svojich vozidiel"
+msgstr "За да построите нефтена помпа, изберете един от камионите си"
 
 #: data/base/script/tutorial.js:31
 msgid "Left click the oil pool indicated by the radar pulse to order your truck to build"
-msgstr "Kliknite ľavým tlačidlom na ropné nálezisko označené radarovým impulzom, aby ste prikázali vozidlu stavať"
+msgstr ""
 
 #: data/base/script/tutorial.js:32
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr "Ropný vrt je momentálne nevyužitý. Postavte elektráreň na premenu oleja na elektrinu"
+msgstr ""
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
@@ -4211,80 +4211,80 @@ msgstr ""
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
-msgstr "Teraz kliknite ľavým tlačidlom na elektráreň v menu stavieb naľavo"
+msgstr ""
 
 #: data/base/script/tutorial.js:36
 msgid "Position the square at your base and left click to start the build process"
-msgstr "Umiestnite štvorec niekde na základni a klikni ľavým tlačidlo pre začiatok stavby"
+msgstr ""
 
 #: data/base/script/tutorial.js:37
 msgid "To increase your build rate, select your second truck"
-msgstr "Na zvýšenie rýchlosti stavania vyberte ďalšie vozidlo"
+msgstr ""
 
 #: data/base/script/tutorial.js:38
 msgid "Now left click the power generator site"
-msgstr "Teraz kliknite ľavým tlačidlom na záložku elektrárne"
+msgstr ""
 
 #: data/base/script/tutorial.js:39
 msgid "The other truck will now help to build the power generator"
-msgstr "Ďalšie vozidlo bude teraz pomáhať postaviť elektráreň"
+msgstr "Сега другият камион ще помогне при строежа на електрогенератора"
 
 #: data/base/script/tutorial.js:41
 msgid "During missions you need to locate and recover technologies from before the Collapse"
-msgstr "Počas misie potrebuješ pred Kolapsom nájsť a získať technológie"
+msgstr ""
 
 #: data/base/script/tutorial.js:42
 msgid "Use a truck to search for the artifact indicated by the radar pulse"
-msgstr "Použi vozidlo k hľadaniu artefaktu označeného radarovým impulzom"
+msgstr ""
 
 #: data/base/script/tutorial.js:43
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr "K získaniu artefaktu premiestnite nad neho ukazovateľ a kliknite pravým tlačidlom"
+msgstr ""
 
 #: data/base/script/tutorial.js:45
 msgid "A research facility is required to research artifacts"
-msgstr "K preskúmaniu artefaktu je potrebné výskumné laboratórium"
+msgstr ""
 
 #: data/base/script/tutorial.js:46
 #: data/base/script/tutorial.js:65
 msgid "Left click the flashing BUILD icon"
-msgstr "Kliknite ľavým tlačidlom na blikajúcu ikonu STAVBA"
+msgstr ""
 
 #: data/base/script/tutorial.js:47
 msgid "Now left click the research facility and position it at your base"
-msgstr "Teraz kliknite ľavým tlačidlom na výskumné laboratórium a umiestnite ho na základňu"
+msgstr ""
 
 #: data/base/script/tutorial.js:48
 msgid "Use your other truck to help build the research facility"
-msgstr "Použi ostatné vozidlá, aby pomohli postaviť výskumné laboratórium"
+msgstr ""
 
 #: data/base/script/tutorial.js:50
 msgid "To research the artifact, left click on the flashing RESEARCH icon"
-msgstr "Na preskúmanie artefaktu kliknite ľavým tlačidlom na blikajúcu ikonu VÝSKUM"
+msgstr ""
 
 #: data/base/script/tutorial.js:51
 msgid "Now left click the machinegun artifact"
-msgstr "Teraz kliknite ľavým tlačidlom na guľometový artefakt"
+msgstr ""
 
 #: data/base/script/tutorial.js:52
 msgid "The artifact is now being researched by the facility"
-msgstr "Artefakt je preskúmavaný laboratóriom"
+msgstr ""
 
 #: data/base/script/tutorial.js:53
 msgid "The researched machinegun can now be used to design a new vehicle"
-msgstr "Vynájdený gulomet môže byť teraz použitý v návrhu nového vozidla"
+msgstr ""
 
 #: data/base/script/tutorial.js:54
 msgid "Left click the flashing DESIGN icon"
-msgstr "Kliknite ľavým tlačidlom na blikajúcu ikonu NÁVRH"
+msgstr ""
 
 #: data/base/script/tutorial.js:55
 msgid "To start your design, left click the NEW DESIGN icon"
-msgstr "Pre začatie Vašeho návrhu kliknite ľavým tlačidlom na ikonu NOVÝ NÁVRH"
+msgstr ""
 
 #: data/base/script/tutorial.js:56
 msgid "Now left click the Vehicle Body icon"
-msgstr ""
+msgstr "Сега кликнете с ляв бутон върху икона \"Корпус\""
 
 #: data/base/script/tutorial.js:57
 msgid "Then left click the Viper body"
@@ -4300,55 +4300,55 @@ msgstr ""
 
 #: data/base/script/tutorial.js:62
 msgid "To finalize your design, left click the CLOSE icon"
-msgstr "Pre dokončenie návrhu kliknite ľavým tlačidlom na ikonu ZAVRIEŤ"
+msgstr ""
 
 #: data/base/script/tutorial.js:64
 msgid "A factory is now required to manufacture your new vehicle"
-msgstr "Teraz potrebujete továreň na výrobu nových jednotiek"
+msgstr ""
 
 #: data/base/script/tutorial.js:66
 msgid "Now left click the factory icon and position it at your base"
-msgstr "Teraz kliknite ľavým tlačidlom na ikonu továrne a umiestnite ju na základni"
+msgstr ""
 
 #: data/base/script/tutorial.js:67
 msgid "Select a location for your factory"
-msgstr "Vyberte miesto pre Vašu továreň"
+msgstr ""
 
 #: data/base/script/tutorial.js:68
 msgid "The delivery point is indicated by the number 1"
-msgstr "Miesto dodania je označené číslom 1"
+msgstr ""
 
 #: data/base/script/tutorial.js:69
 msgid "All new units will drive to this location once built"
-msgstr "Všetky nové jednotky sa po dokončení budú premiestňovať na toto miesto"
+msgstr ""
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
-msgstr "Dodací bod môžete kedykoľvek premiestniť kliknutím naň ľavým tlačidlom"
+msgstr ""
 
 #: data/base/script/tutorial.js:71
 msgid "Now click where you want to position the delivery point"
-msgstr "Teraz kliknite na miesto pre určenie dodacieho bodu"
+msgstr ""
 
 #: data/base/script/tutorial.js:72
 msgid "The factory can now be ordered to build a new unit"
-msgstr "Továrni teraz môže byť nariadená výroba novej jednotky"
+msgstr ""
 
 #: data/base/script/tutorial.js:73
 msgid "Left click the flashing MANUFACTURE icon"
-msgstr "Kliknite ľavým tlačidlom na blikajúcu ikonu VÝROBA"
+msgstr ""
 
 #: data/base/script/tutorial.js:75
 msgid "Now left click the units you want to build from the menu at the left"
-msgstr "Teraz kliknite ľavým tlačidlom na jednotku, ktorú chcete postaviť z menu naľavo"
+msgstr ""
 
 #: data/base/script/tutorial.js:76
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Počkajte prosím, zatiaľ čo továreň vyrába nové jednotky"
+msgstr ""
 
 #: data/base/script/tutorial.js:78
 msgid "Congratulations commander - you are ready for your first mission"
-msgstr "Blahoželám veliteľ - ste pripravený na Vašu prvú misiu"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
@@ -4356,19 +4356,19 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "ЗАПАДЕН СЕКТОР"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr ""
+msgstr "Изгрев, 4-ти Юли, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
-msgstr "HQ projektu"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
-msgstr ""
+msgstr "Нова Ера"
 
 #: data/base/sequenceaudio/cam1/c001.txa:8
 msgid "Morning, July 4th, 2100"
@@ -4380,7 +4380,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr ""
+msgstr "Екип Алфа наближава дестинацията си"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4388,11 +4388,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Алфа - Западен сектор...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Алфа, имате разрешение за излитане."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
@@ -4446,7 +4446,7 @@ msgstr ""
 #: data/base/sequenceaudio/cam1/cam1cnp.txt:5
 #: data/base/sequenceaudio/cam1/sub13np2.txt:5
 msgid "You are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Вие сте в нарушение на Новата Парадигма."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
@@ -4454,7 +4454,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
-msgstr ""
+msgstr "Те са в нарушение на Новата Парадигма."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:7
 msgid "They must be eradicated."
@@ -4466,7 +4466,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1dp2.txt:5
 msgid "Then destroy the New Paradigm's base."
-msgstr ""
+msgstr "После разрушете базата на Новата Парадигма."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
@@ -4502,7 +4502,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:1
 msgid "Your interference in my plans for the New Paradigm will not go unpunished."
-msgstr ""
+msgstr "Вашата намеса в плановете ми за Новата Парадигма няма да останат ненаказани."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:2
 msgid "You are weak flesh-things. I am strong and have many parts."
@@ -4559,7 +4559,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Внимание!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -4575,7 +4575,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Край на съобщението."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
@@ -4623,7 +4623,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "ИЗТОЧЕН СЕКТОР"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
@@ -4635,7 +4635,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:6
 msgid "Team Alpha approaches Beta Base"
-msgstr ""
+msgstr "Екип Алфа наближава база Бета"
 
 #: data/base/sequenceaudio/cam2/c002.txa:10
 msgid "You must defend and hold it at all costs."
@@ -4835,7 +4835,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2dipl.txt:1
 msgid "Decoding Transmission..."
-msgstr ""
+msgstr "Декодиране на съобщение..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
@@ -4863,7 +4863,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
-msgstr ""
+msgstr "Личен състав от база Гама са потвърдили, че ядрените ракети, насочени към бази Алфа и Бета са били изстреляни от силоз в техния сектор."
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
@@ -4891,7 +4891,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:1
 msgid "This is Team Alpha. Repeat, this is Team Alpha. We require immediate assistance."
-msgstr ""
+msgstr "Говори екип Алфа. Повтарям, говори екип Алфа. Нуждаем се от незабавна помощ."
 
 #: data/base/sequenceaudio/cam3/cam32alp.txt:4
 msgid "We are under heavy attack from cyborgs, laser tanks, and strike VTOLs."
@@ -4911,7 +4911,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:4
 msgid "Commander, forces from Team Alpha escaped the nuclear attack on Alpha Base."
-msgstr ""
+msgstr "Командире, въоръжени сили от екип Алфа са избягали от ядрената атака над база Алфа."
 
 #: data/base/sequenceaudio/cam3/cam34mu1.txt:1
 msgid "We are experiencing some interference from NEXUS."
@@ -5100,7 +5100,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
-msgstr "Nukleárna zima"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
@@ -5341,7 +5341,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:2037
 msgid "Flamer Cyborg"
-msgstr ""
+msgstr "Огнехвъргач Киборг"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-MG.name
@@ -5569,7 +5569,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
 msgid "Command Turret II"
-msgstr "Rozkaz veži II"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -5579,7 +5579,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
 msgid "Command Turret IV"
-msgstr "Rozkaz veži IV"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:6
 #: src/multiint.cpp:1420
@@ -5595,17 +5595,17 @@ msgstr ""
 #: data/mp/multiplay/script/rules/printsettings.js:12
 #: src/multiint.cpp:1433
 msgid "No Alliances"
-msgstr "Bez spojenectiev"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:13
 #: src/multiint.cpp:1434
 msgid "Allow Alliances"
-msgstr "Povoľ spojenectvá"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:14
 #: src/multiint.cpp:1436
 msgid "Locked Teams"
-msgstr "Pevné týmy"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
 #: src/multiint.cpp:1435
@@ -5615,32 +5615,32 @@ msgstr ""
 #: data/mp/multiplay/script/rules/printsettings.js:21
 #: src/multiint.cpp:1444
 msgid "Low Power Levels"
-msgstr "Nízke energetické úrovne"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:22
 #: src/multiint.cpp:1445
 msgid "Medium Power Levels"
-msgstr "Stredné energetické úrovne"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:23
 #: src/multiint.cpp:1446
 msgid "High Power Levels"
-msgstr "Vysoké energetické úrovne"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:29
 #: src/multiint.cpp:1454
 msgid "Start with No Bases"
-msgstr "Začni bez základní"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:30
 #: src/multiint.cpp:1455
 msgid "Start with Bases"
-msgstr "Začni so základňami"
+msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:31
 #: src/multiint.cpp:1456
 msgid "Start with Advanced Bases"
-msgstr "Začni s rozvinutými základňami"
+msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:72
 msgid "EASY"
@@ -5688,7 +5688,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:122
 msgid "Sorry, I have no trucks."
-msgstr ""
+msgstr "Съжалявам, аз нямам камиони."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:125
 msgid "You can use this one."
@@ -5721,7 +5721,7 @@ msgstr ""
 #: lib/framework/i18n.cpp:102
 #: lib/framework/i18n.cpp:165
 msgid "System locale"
-msgstr "Systémové údaje"
+msgstr ""
 
 #: lib/netplay/netplay.cpp:333
 #: lib/netplay/netplay.cpp:1297
@@ -6108,7 +6108,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
 #: po/custom/fromJson.txt:223
 msgid "Advanced Repair Facility"
-msgstr "Pokročilé opravárenské zariadenie"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_RFU7.text[1]
@@ -6233,7 +6233,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:423
 msgid "All trucks upgraded automatically"
-msgstr "Všetky vozidlá upgradované automaticky"
+msgstr "Всички камиони надградени автоматично"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[3]
@@ -6257,13 +6257,13 @@ msgstr ""
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:473
 msgid "Alpha Campaign"
-msgstr ""
+msgstr "Кампания Алфа"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:476
 msgid "Alpha"
-msgstr ""
+msgstr "Алфа"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -6331,21 +6331,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage05.name
 #: po/custom/fromJson.txt:514
 msgid "APFSDS Cannon Rounds Mk2"
-msgstr ""
+msgstr "Кинетични оръдейни боеприпаси Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage06.name
 #: po/custom/fromJson.txt:518
 msgid "APFSDS Cannon Rounds Mk3"
-msgstr ""
+msgstr "Кинетични оръдейни боеприпаси Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage04.name
 #: po/custom/fromJson.txt:522
 msgid "APFSDS Cannon Rounds"
-msgstr ""
+msgstr "Кинетични оръдейни боеприпаси"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyArtMissile.name
@@ -6741,7 +6741,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_TRACK1.text[1]
 #: po/custom/fromJson.txt:810
 msgid "Armored Tracks"
-msgstr "Obranené vozidlá"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_DF_WU1.text[2]
@@ -6774,7 +6774,7 @@ msgstr ""
 #. data/base/stats/research.json: $.R-Defense-RotCannon.name
 #: po/custom/fromJson.txt:828
 msgid "Assault Cannon Emplacement"
-msgstr ""
+msgstr "Установка с щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-VulcanCan.name
@@ -6805,7 +6805,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 #: po/custom/fromJson.txt:847
 msgid "Assault Cannon"
-msgstr ""
+msgstr "Щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
@@ -7078,7 +7078,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1048
 msgid "Best Targets : Vehicles"
-msgstr "Najlepšie ciele : vozidlá"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[2]
@@ -7158,7 +7158,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[2]
 #: po/custom/fromJson.txt:1140
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Najlepšie ciele : vozidlá, oporné body"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
@@ -7221,7 +7221,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1207
 msgid "Bomb Upgrade"
-msgstr "Upgrade bômb"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHvyMortarHalftrack.name
@@ -7403,7 +7403,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.CannonSuper.name
 #: po/custom/fromJson.txt:1311
 msgid "Cannon Fortress"
-msgstr ""
+msgstr "Оръдейна крепост"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Accuracy02.name
@@ -7446,14 +7446,14 @@ msgstr ""
 #: po/custom/fromJson.txt:1336
 #, no-c-format
 msgid "Cannon reload time -10%"
-msgstr ""
+msgstr "Време за презареждане на оръдие -10%"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CannonTower.name
 #. data/mp/stats/structure.json: $.A0CannonTower.name
 #: po/custom/fromJson.txt:1340
 msgid "Cannon Tower"
-msgstr ""
+msgstr "Оръдейна кула"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[0]
@@ -7478,7 +7478,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1356
 msgid "CB Sensor Improved"
-msgstr "Vylepšený CB senzor"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Tower01.name
@@ -7540,13 +7540,13 @@ msgstr ""
 #. data/base/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:1391
 msgid "Cobra Flamer Tracks"
-msgstr ""
+msgstr "Кобра Огнехвъргачка Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraMedCnTrks.name
 #: po/custom/fromJson.txt:1394
 msgid "Cobra Medium Cannon Tracks"
-msgstr ""
+msgstr "Кобра Средно оръдие Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSpadeTracks.name
@@ -7555,7 +7555,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0CobraSpadeTracks.name
 #: po/custom/fromJson.txt:1400
 msgid "Cobra Truck"
-msgstr ""
+msgstr "Кобра Камион"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body5REC.name
@@ -7741,7 +7741,7 @@ msgstr ""
 #. data/base/messages/messages.json: $.MSG3.text[0]
 #: po/custom/fromJson.txt:1519
 msgid "Computer Research Completed"
-msgstr "Vývoj počítača dokončený"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_RESU2.text[2]
@@ -7860,14 +7860,14 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1590
 msgid "Cyborg Factory"
-msgstr "Továreň na kyborgov"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgFlamer01.name
 #. data/mp/stats/weapons.json: $.CyborgFlamer01.name
 #: po/custom/fromJson.txt:1594
 msgid "Cyborg Flamer"
-msgstr ""
+msgstr "Киборг Огнехвъргач"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
@@ -8040,14 +8040,14 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_RKT.text[3]
 #: po/custom/fromJson.txt:1734
 msgid "Defensive Strength : High"
-msgstr "Sila obrany : vysoká"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_TOWER1.text[3]
 #: po/custom/fromJson.txt:1744
 msgid "Defensive Strength: Low"
-msgstr "Sila obrany : nízka"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ADemolishStructure.name
@@ -8419,7 +8419,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaFireTruck.name
 #: po/custom/fromJson.txt:1990
 msgid "Fire Truck"
-msgstr ""
+msgstr "Пожарна кола"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[1]
@@ -8490,7 +8490,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.P0CobraFlameTracks.name
 #: po/custom/fromJson.txt:2031
 msgid "Flamer Cobra Tracks"
-msgstr ""
+msgstr "Огнехвъргачка Кобра Вериги"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
@@ -8512,14 +8512,14 @@ msgstr ""
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
 #: po/custom/fromJson.txt:2064
 msgid "Flamer Viper Half-Tracks"
-msgstr ""
+msgstr "Огнехвъргачка Пепелянка Полувериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperFlameWheels.name
 #. data/mp/stats/templates.json: $.ViperFlameWheels.name
 #: po/custom/fromJson.txt:2068
 msgid "Flamer Viper Wheels"
-msgstr ""
+msgstr "Огнехвъргачка Пепелянка Колела"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer01Mk1.name
@@ -8528,7 +8528,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Flame1Mk1.name
 #: po/custom/fromJson.txt:2074
 msgid "Flamer"
-msgstr ""
+msgstr "Огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
@@ -8650,7 +8650,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-Rail3.name
 #: po/custom/fromJson.txt:2151
 msgid "Gauss Cannon Emplacement"
-msgstr ""
+msgstr "Установка с Гаусово оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-Rail3.name
@@ -8659,13 +8659,13 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-Rail3.name
 #: po/custom/fromJson.txt:2157
 msgid "Gauss Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с Гаусово оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
 #: po/custom/fromJson.txt:2160
 msgid "Gauss Cannon Python Tracks"
-msgstr ""
+msgstr "Гаусово оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernGaussTracks.name
@@ -8680,7 +8680,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.RailGun3Mk1.name
 #: po/custom/fromJson.txt:2169
 msgid "Gauss Cannon"
-msgstr ""
+msgstr "Гаусово оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[1]
@@ -9088,21 +9088,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage02.name
 #: po/custom/fromJson.txt:2410
 msgid "HEAT Cannon Shells Mk2"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage03.name
 #: po/custom/fromJson.txt:2414
 msgid "HEAT Cannon Shells Mk3"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage01.name
 #: po/custom/fromJson.txt:2418
 msgid "HEAT Cannon Shells"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Damage02.name
@@ -9137,21 +9137,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body12.name
 #: po/custom/fromJson.txt:2450
 msgid "Heavy Body - Mantis"
-msgstr ""
+msgstr "Тежък корпус - Богомолка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body11.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body11.name
 #: po/custom/fromJson.txt:2454
 msgid "Heavy Body - Python"
-msgstr ""
+msgstr "Тежък корпус - Питон"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body09.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body09.name
 #: po/custom/fromJson.txt:2458
 msgid "Heavy Body - Tiger"
-msgstr ""
+msgstr "Тежък корпус - Тигър"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body10.name
@@ -9177,14 +9177,14 @@ msgstr ""
 #. data/mp/stats/templates.json: $.Cobra-Hover-HC.name
 #: po/custom/fromJson.txt:2472
 msgid "Heavy Cannon Cobra Hover"
-msgstr ""
+msgstr "Тежко оръдие Кобра Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraHvyCnTrks.name
 #. data/mp/stats/templates.json: $.CobraHvyCnTrks.name
 #: po/custom/fromJson.txt:2476
 msgid "Heavy Cannon Cobra Tracks"
-msgstr ""
+msgstr "Тежко оръдие Кобра Вериги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN3MK1.text[1]
@@ -9200,19 +9200,19 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower04.name
 #: po/custom/fromJson.txt:2486
 msgid "Heavy Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с тежко оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
 #: po/custom/fromJson.txt:2489
 msgid "Heavy Cannon Mantis Tracks"
-msgstr ""
+msgstr "Тежко оръдие Богомолка Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-HC.name
 #: po/custom/fromJson.txt:2492
 msgid "Heavy Cannon Python Hover"
-msgstr ""
+msgstr "Тежко оръдие Питон Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonHvyCnTrks.name
@@ -9221,19 +9221,19 @@ msgstr ""
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2498
 msgid "Heavy Cannon Python Tracks"
-msgstr ""
+msgstr "Тежко оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-HC.name
 #: po/custom/fromJson.txt:2501
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr ""
+msgstr "Тежко оръдие Скорпион Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-HC.name
 #: po/custom/fromJson.txt:2504
 msgid "Heavy Cannon Tiger Tracks"
-msgstr ""
+msgstr "Тежко оръдие Тигър Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon3Mk1.name
@@ -9242,7 +9242,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon375mmMk1.name
 #: po/custom/fromJson.txt:2510
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "Тежко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flame2.name
@@ -9326,7 +9326,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2580
 msgid "Heavy Machinegun Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с тежка картечница"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -9492,7 +9492,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_W_CN_D1.text[1]
 #: po/custom/fromJson.txt:2691
 msgid "High Explosive Anti-Tank Cannon Shells"
-msgstr ""
+msgstr "Кумулативни оръдейни снаряди"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[1]
@@ -9575,21 +9575,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 #: po/custom/fromJson.txt:2767
 msgid "High Temperature Flamer Gel Mk2"
-msgstr ""
+msgstr "Високотемпературен гел за огнехвъргачка Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #: po/custom/fromJson.txt:2771
 msgid "High Temperature Flamer Gel Mk3"
-msgstr ""
+msgstr "Високотемпературен гел за огнехвъргачка Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #: po/custom/fromJson.txt:2775
 msgid "High Temperature Flamer Gel"
-msgstr ""
+msgstr "Високотемпературен гел за огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_DF_WU7.text[1]
@@ -9709,20 +9709,20 @@ msgstr ""
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2863
 msgid "HPV Cannon Emplacement"
-msgstr ""
+msgstr "Установка с ХС оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2867
 msgid "HPV Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с ХС оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2870
 msgid "HPV Cannon Python Tracks"
-msgstr ""
+msgstr "ХС оръдие оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadMg1.name
@@ -9753,21 +9753,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 #: po/custom/fromJson.txt:2889
 msgid "HVAPFSDS Cannon Rounds Mk2"
-msgstr ""
+msgstr "ХС кинетични оръдейни боеприпаси Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #: po/custom/fromJson.txt:2893
 msgid "HVAPFSDS Cannon Rounds Mk3"
-msgstr ""
+msgstr "ХС кинетични оръдейни боеприпаси Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #: po/custom/fromJson.txt:2897
 msgid "HVAPFSDS Cannon Rounds"
-msgstr ""
+msgstr "ХС кинетични оръдейни боеприпаси"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -9781,26 +9781,26 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2905
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr ""
+msgstr "Установка с хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2909
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
 #: po/custom/fromJson.txt:2912
 msgid "Hyper Velocity Cannon Python Hover"
-msgstr ""
+msgstr "Хиперскоростно оръдие Питон Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2915
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr ""
+msgstr "Хиперскоростно оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -9809,7 +9809,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
 #: po/custom/fromJson.txt:2921
 msgid "Hyper Velocity Cannon"
-msgstr ""
+msgstr "Хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -9845,7 +9845,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[1]
 #: po/custom/fromJson.txt:2950
 msgid "Improved Engineering Techniques"
-msgstr "Zlepšuje inžiniersku techniku"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering02.name
@@ -10048,7 +10048,7 @@ msgstr ""
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[2]
 #: po/custom/fromJson.txt:3101
 msgid "Increases Cannon accuracy"
-msgstr ""
+msgstr "Увеличава точността на оръдията"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_CN_D1.text[2]
@@ -10063,7 +10063,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[2]
 #: po/custom/fromJson.txt:3110
 msgid "Increases Cannon ROF"
-msgstr ""
+msgstr "Увеличава скорострелността на оръдията"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[2]
@@ -10071,13 +10071,13 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_ENGIN3.text[2]
 #: po/custom/fromJson.txt:3115
 msgid "Increases construction speed"
-msgstr "Zvyšuje stavebnú rýchlosť"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:3141
 msgid "Increases Flamer ROF"
-msgstr ""
+msgstr "Увеличава скорострелността на огнехвъргачките"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[2]
@@ -10522,14 +10522,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body04.name
 #: po/custom/fromJson.txt:3477
 msgid "Light Body - Bug"
-msgstr ""
+msgstr "Лек корпус - Буболечка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body02.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body02.name
 #: po/custom/fromJson.txt:3481
 msgid "Light Body - Leopard"
-msgstr ""
+msgstr "Лек корпус - Леопард"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body03.name
@@ -10543,7 +10543,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body01.name
 #: po/custom/fromJson.txt:3489
 msgid "Light Body - Viper"
-msgstr ""
+msgstr "Лек корпус - Пепелянка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[1]
@@ -10559,14 +10559,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox4.name
 #: po/custom/fromJson.txt:3499
 msgid "Light Cannon Bunker"
-msgstr ""
+msgstr "Бункер с леко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraLtCnTrks.name
 #. data/mp/stats/templates.json: $.CobraLtCnTrks.name
 #: po/custom/fromJson.txt:3503
 msgid "Light Cannon Cobra Tracks"
-msgstr ""
+msgstr "Леко оръдие Кобра Вериги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[1]
@@ -10582,34 +10582,34 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower02.name
 #: po/custom/fromJson.txt:3513
 msgid "Light Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с леко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
 #. data/mp/stats/templates.json: $.PythonLtCnTrks.name
 #: po/custom/fromJson.txt:3517
 msgid "Light Cannon Python Tracks"
-msgstr ""
+msgstr "Леко оръдие Питон Вериги"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtCannonHTracks.name
 #: po/custom/fromJson.txt:3520
 msgid "Light Cannon Viper Half-tracks"
-msgstr ""
+msgstr "Леко оръдие Пепелянка Полувериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonTracks.name
 #. data/mp/stats/templates.json: $.ViperLtCannonTracks.name
 #: po/custom/fromJson.txt:3524
 msgid "Light Cannon Viper Tracks"
-msgstr ""
+msgstr "Леко оръдие Пепелянка Вериги"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonWheels.name
 #. data/mp/stats/templates.json: $.ViperLtCannonWheels.name
 #: po/custom/fromJson.txt:3528
 msgid "Light Cannon Viper Wheels"
-msgstr ""
+msgstr "Леко оръдие Пепелянка Колела"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon1Mk1.name
@@ -10618,7 +10618,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon1Mk1.name
 #: po/custom/fromJson.txt:3534
 msgid "Light Cannon"
-msgstr ""
+msgstr "Леко оръдие"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.LookOutTower.name
@@ -10759,14 +10759,14 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body05.name
 #: po/custom/fromJson.txt:3654
 msgid "Medium Body - Cobra"
-msgstr ""
+msgstr "Среден корпус - Кобра"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body06.name
 #. data/mp/stats/research.json: $.R-Vehicle-Body06.name
 #: po/custom/fromJson.txt:3658
 msgid "Medium Body - Panther"
-msgstr ""
+msgstr "Среден корпус - Пантера"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Body07.name
@@ -10780,7 +10780,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Vehicle-Body08.name
 #: po/custom/fromJson.txt:3666
 msgid "Medium Body - Scorpion"
-msgstr ""
+msgstr "Среден корпус - Скорпион"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[1]
@@ -10823,7 +10823,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower03.name
 #: po/custom/fromJson.txt:3691
 msgid "Medium Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка със средно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-MC.name
@@ -10865,7 +10865,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon2A-TMk1.name
 #: po/custom/fromJson.txt:3715
 msgid "Medium Cannon"
-msgstr ""
+msgstr "Средно оръдие"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[0]
@@ -10909,7 +10909,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3738
 msgid "Mini-Rocket Array"
-msgstr "Zoskupenie Mini-rakiet"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
@@ -11022,7 +11022,7 @@ msgstr ""
 #: po/custom/fromJson.txt:3809
 #, no-c-format
 msgid "Missile reload time -15%"
-msgstr "Čas znovunabitia rakety -15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[0]
@@ -11275,7 +11275,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:3987
 msgid "New Base Structure Available"
-msgstr "Dostupná nová základná budova"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[1]
@@ -11707,7 +11707,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaPickUp.name
 #: po/custom/fromJson.txt:4323
 msgid "Pick-Up Truck"
-msgstr ""
+msgstr "Пикап"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallUpgrade08.name
@@ -11735,14 +11735,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-PlasmaCannon.name
 #: po/custom/fromJson.txt:4339
 msgid "Plasma Cannon Emplacement"
-msgstr ""
+msgstr "Установка с плазмено оръдие"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASCAN.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASCAN.text[1]
 #: po/custom/fromJson.txt:4343
 msgid "Plasma Cannon firing plasma"
-msgstr "Plazmový kanón strieľajúci plazmu"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
@@ -11755,7 +11755,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Laser4-PlasmaCannon.name
 #: po/custom/fromJson.txt:4350
 msgid "Plasma Cannon"
-msgstr ""
+msgstr "Плазмено оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb05.name
@@ -11833,7 +11833,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4392
 msgid "Power Generator"
-msgstr ""
+msgstr "Електрогенератор"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -11849,7 +11849,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowMod1.name
 #: po/custom/fromJson.txt:4402
 msgid "Power Module"
-msgstr ""
+msgstr "Енергиен модул"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -11869,7 +11869,7 @@ msgstr ""
 #. data/base/messages/messages.json: $.MSG2.text[0]
 #: po/custom/fromJson.txt:4413
 msgid "Power Research Completed"
-msgstr "Vývoj energie dokončený"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text[1]
@@ -11888,7 +11888,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
 #: po/custom/fromJson.txt:4427
 msgid "Produces Cyborgs"
-msgstr "Vyrába kyborgov"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B11.text[0]
@@ -12289,7 +12289,7 @@ msgstr ""
 #. data/mp/stats/repair.json: $.LightRepair1.name
 #: po/custom/fromJson.txt:4696
 msgid "Repair Turret"
-msgstr "Opravná veža"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[3]
@@ -12367,14 +12367,14 @@ msgstr ""
 #: po/custom/fromJson.txt:4764
 #, no-c-format
 msgid "Research speed +30%"
-msgstr "Rýchlosť výskumu +30%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
 #: po/custom/fromJson.txt:4768
 #, no-c-format
 msgid "Research speed +85%"
-msgstr "Rýchlosť výskumu +85%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -12687,7 +12687,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 #: po/custom/fromJson.txt:4967
 msgid "Scavenger Power Generator"
-msgstr ""
+msgstr "Вехтошарски електрогенератор"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -12708,7 +12708,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaBusCan.name
 #: po/custom/fromJson.txt:4979
 msgid "School Bus"
-msgstr "Školský Autobus"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body8MBT.name
@@ -12840,21 +12840,21 @@ msgstr ""
 #: po/custom/fromJson.txt:5063
 #, no-c-format
 msgid "Sensor Range +10%"
-msgstr "Dosah senzorov +10%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[2]
 #: po/custom/fromJson.txt:5067
 #, no-c-format
 msgid "Sensor Range +15%"
-msgstr "Dosah senzorov +15%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
 #: po/custom/fromJson.txt:5071
 #, no-c-format
 msgid "Sensor Range +25%"
-msgstr "Dosah senzorov +25%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
@@ -12882,13 +12882,13 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade02.name
 #: po/custom/fromJson.txt:5093
 msgid "Sensor Upgrade Mk2"
-msgstr "Upgrade senzorov Mk2"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-Upgrade03.name
 #: po/custom/fromJson.txt:5096
 msgid "Sensor Upgrade Mk3"
-msgstr "Upgrade senzorov Mk3"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Upgrade01.name
@@ -12959,21 +12959,21 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_V_P_W1.text[2]
 #: po/custom/fromJson.txt:5145
 msgid "Speed: Fast"
-msgstr "Rýchlosť : vysoká"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_HALFT1.text[2]
 #. data/mp/messages/resmessages1.json: $.RES_HALFT1.text[2]
 #: po/custom/fromJson.txt:5149
 msgid "Speed: Medium"
-msgstr "Rýchlosť : stredná"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text[2]
 #. data/mp/messages/resmessages1.json: $.RES_TRACK1.text[2]
 #: po/custom/fromJson.txt:5153
 msgid "Speed: Slow"
-msgstr "Rýchlosť : nízka"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_V_P_V1.text[2]
@@ -13053,7 +13053,7 @@ msgstr ""
 #. data/base/messages/messages.json: $.MSG1.text[0]
 #: po/custom/fromJson.txt:5197
 msgid "Structure Research Completed"
-msgstr "Vývoj budovy dokončený"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Sunburst.name
@@ -13162,21 +13162,21 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 #: po/custom/fromJson.txt:5294
 msgid "Superhot Flamer Gel Mk2"
-msgstr ""
+msgstr "Свръхгорещ гел за огнехвъргачка Мод. 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #: po/custom/fromJson.txt:5298
 msgid "Superhot Flamer Gel Mk3"
-msgstr ""
+msgstr "Свръхгорещ гел за огнехвъргачка Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #: po/custom/fromJson.txt:5302
 msgid "Superhot Flamer Gel"
-msgstr ""
+msgstr "Свръхгорещ гел за огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
@@ -13267,7 +13267,7 @@ msgstr ""
 #. data/base/messages/messages.json: $.MSG5.text[0]
 #: po/custom/fromJson.txt:5366
 msgid "Systems Research Completed"
-msgstr "Vývoj systému dokončený"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyA-Trocket.name
@@ -13396,7 +13396,7 @@ msgstr ""
 #: po/custom/fromJson.txt:5441
 #, no-c-format
 msgid "Thermal Armor +35%"
-msgstr "Tepelné brnenie +35%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
@@ -13404,21 +13404,21 @@ msgstr "Tepelné brnenie +35%"
 #: po/custom/fromJson.txt:5446
 #, no-c-format
 msgid "Thermal Armor +40%"
-msgstr "Tepelné brnenie +40%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5450
 #, no-c-format
 msgid "Thermal armor +40%"
-msgstr "Tepelné brnenie +40%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 #: po/custom/fromJson.txt:5454
 #, no-c-format
 msgid "Thermal Armor +45%"
-msgstr "Tepelné brnenie +45%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
@@ -13567,19 +13567,19 @@ msgstr ""
 #. data/mp/stats/templates.json: $.CobraHoverTruck.name
 #: po/custom/fromJson.txt:5546
 msgid "Truck Cobra Hover"
-msgstr ""
+msgstr "Камион Кобра Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverTruck.name
 #: po/custom/fromJson.txt:5549
 msgid "Truck Mantis Hover"
-msgstr ""
+msgstr "Камион Богомолка Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHoverTruck.name
 #: po/custom/fromJson.txt:5552
 msgid "Truck Scorpion Hover"
-msgstr ""
+msgstr "Камион Скорпион Ховъркрафт"
 
 #. TRANSLATORS:
 #. data/base/stats/construction.json: $.Spade1Mk1.name
@@ -13588,7 +13588,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:5558
 msgid "Truck"
-msgstr "Nákladiak"
+msgstr "Камион"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage06.name
@@ -13643,14 +13643,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.PillBox-Cannon6.name
 #: po/custom/fromJson.txt:5603
 msgid "Twin Assault Cannon Bunker"
-msgstr ""
+msgstr "Бункер с двойно щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Cannon6TwinAslt.name
 #. data/mp/stats/weapons.json: $.Cannon6TwinAslt.name
 #: po/custom/fromJson.txt:5607
 msgid "Twin Assault Cannon"
-msgstr ""
+msgstr "Двойно щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-TwinAGun.name
@@ -13735,7 +13735,7 @@ msgstr ""
 #. data/base/messages/messages.json: $.MSG4.text[0]
 #: po/custom/fromJson.txt:5656
 msgid "Unit Research Completed"
-msgstr "Vývoj jednotky dokončený"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_C_CT2.text[1]
@@ -13757,14 +13757,14 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[3]
 #: po/custom/fromJson.txt:5669
 msgid "Use a truck to add modules to a factory"
-msgstr ""
+msgstr "Използвайте камион, за да добавите модули към фабрика"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_POWMD1.text[3]
 #: po/custom/fromJson.txt:5673
 msgid "Use a truck to add the module to a power generator"
-msgstr ""
+msgstr "Използвайте камион, за да добавите модула към електрогенератор"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[3]
@@ -13784,7 +13784,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[1]
 #: po/custom/fromJson.txt:5684
 msgid "Uses advanced cannon technology"
-msgstr "Použivá pokročilú technológiu kanónov"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text[1]
@@ -13844,25 +13844,25 @@ msgstr ""
 #: po/custom/fromJson.txt:5740
 #, no-c-format
 msgid "Vehicle speed +5%"
-msgstr "Rýchlosť vozidla +5%"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
 #: po/custom/fromJson.txt:5743
 msgid "Vehicle Superdense Thermal Armor Mk2"
-msgstr ""
+msgstr "МПС Свръхплътна Топлинна Броня Мод. 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat09.name
 #: po/custom/fromJson.txt:5746
 msgid "Vehicle Superdense Thermal Armor Mk3"
-msgstr ""
+msgstr "МПС Свръхплътна Топлинна Броня Мод. 3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat07.name
 #: po/custom/fromJson.txt:5749
 msgid "Vehicle Superdense Thermal Armor"
-msgstr ""
+msgstr "МПС Свръхплътна Топлинна Броня"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Guass.name
@@ -14341,7 +14341,7 @@ msgstr ""
 #. data/base/messages/messages.json: $.MSG6.text[0]
 #: po/custom/fromJson.txt:6055
 msgid "Weapon Research Completed"
-msgstr "Vývoj zbrane dokončený"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_W1.text[1]
@@ -14460,7 +14460,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6124
 msgctxt "rank"
 msgid "Green"
-msgstr "Zelenáč"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[8]
@@ -14603,11 +14603,11 @@ msgstr ""
 
 #: src/clparse.cpp:336
 msgid "Set configuration directory"
-msgstr "Nastaviť adresár s konfiguráciou"
+msgstr ""
 
 #: src/clparse.cpp:336
 msgid "configuration directory"
-msgstr "adresár s konfiguráciou"
+msgstr ""
 
 #: src/clparse.cpp:337
 msgid "Add data directory"
@@ -14615,23 +14615,23 @@ msgstr ""
 
 #: src/clparse.cpp:337
 msgid "data directory"
-msgstr "adresár s dátami"
+msgstr ""
 
 #: src/clparse.cpp:338
 msgid "Show debug for given level"
-msgstr "Ukáž ladiace informácie pre zvolený level"
+msgstr ""
 
 #: src/clparse.cpp:338
 msgid "debug level"
-msgstr "úroveň ladenia"
+msgstr ""
 
 #: src/clparse.cpp:339
 msgid "Log debug output to file"
-msgstr "Zapíš ladiace info do súboru"
+msgstr ""
 
 #: src/clparse.cpp:339
 msgid "file"
-msgstr "súbor"
+msgstr ""
 
 #: src/clparse.cpp:340
 msgid "Flush all debug output written to stderr"
@@ -14639,7 +14639,7 @@ msgstr ""
 
 #: src/clparse.cpp:341
 msgid "Play in fullscreen mode"
-msgstr "Hrať v celoobrazovkovom režime"
+msgstr ""
 
 #: src/clparse.cpp:342
 msgid "Load a specific game mode"
@@ -14673,7 +14673,7 @@ msgstr ""
 
 #: src/clparse.cpp:347
 msgid "Disable asserts"
-msgstr "Vypnút hlásenia"
+msgstr ""
 
 #: src/clparse.cpp:348
 msgid "Causes a crash to test the crash handler"
@@ -14686,7 +14686,7 @@ msgstr ""
 #: src/clparse.cpp:349
 #: src/clparse.cpp:350
 msgid "savegame"
-msgstr "uložená hra"
+msgstr ""
 
 #: src/clparse.cpp:350
 msgid "Load a saved campaign game"
@@ -14694,7 +14694,7 @@ msgstr ""
 
 #: src/clparse.cpp:351
 msgid "Play in windowed mode"
-msgstr "Hrať v okne"
+msgstr ""
 
 #: src/clparse.cpp:352
 msgid "Show version information and exit"
@@ -14702,27 +14702,27 @@ msgstr ""
 
 #: src/clparse.cpp:353
 msgid "Set the resolution to use"
-msgstr "Nastavte rozlíšenie"
+msgstr ""
 
 #: src/clparse.cpp:353
 msgid "WIDTHxHEIGHT"
-msgstr "ŠÍRKAxVÝŠKA"
+msgstr ""
 
 #: src/clparse.cpp:354
 msgid "Enable shadows"
-msgstr "Zapnúť tiene"
+msgstr ""
 
 #: src/clparse.cpp:355
 msgid "Disable shadows"
-msgstr "Vypnúť tiene"
+msgstr ""
 
 #: src/clparse.cpp:356
 msgid "Enable sound"
-msgstr "Zapnúť zvuk"
+msgstr ""
 
 #: src/clparse.cpp:357
 msgid "Disable sound"
-msgstr "Vypnúť zvuk"
+msgstr ""
 
 #: src/clparse.cpp:358
 msgid "Connect directly to IP/hostname"
@@ -14823,30 +14823,30 @@ msgstr ""
 #: src/configuration.cpp:369
 #: src/multistat.cpp:296
 msgid "Player"
-msgstr "Hráč"
+msgstr ""
 
 #: src/design.cpp:385
 #: src/design.cpp:396
 msgid "New Vehicle"
-msgstr "Nové vozidlo"
+msgstr ""
 
 #: src/design.cpp:441
 msgid "Vehicle Body"
-msgstr "Telo vozidla"
+msgstr "Корпус"
 
 #: src/design.cpp:457
 msgid "Vehicle Propulsion"
-msgstr "Pohon vozidla"
+msgstr ""
 
 #: src/design.cpp:474
 #: src/design.cpp:493
 #: src/design.cpp:513
 msgid "Vehicle Turret"
-msgstr "Veža vozidla"
+msgstr ""
 
 #: src/design.cpp:528
 msgid "Delete Design"
-msgstr "Zmazať návrh"
+msgstr ""
 
 #: src/design.cpp:544
 msgid "Store Template"
@@ -14855,17 +14855,17 @@ msgstr ""
 #: src/design.cpp:597
 #: src/design.cpp:637
 msgid "Kinetic Armour"
-msgstr "Pohybové brnenie"
+msgstr ""
 
 #: src/design.cpp:606
 #: src/design.cpp:647
 msgid "Thermal Armour"
-msgstr "Tepelné brnenie"
+msgstr ""
 
 #: src/design.cpp:615
 #: src/design.cpp:656
 msgid "Engine Output"
-msgstr "Exhaláty"
+msgstr ""
 
 #: src/design.cpp:623
 #: src/design.cpp:665
@@ -14884,12 +14884,12 @@ msgstr "Exhaláty"
 #: src/design.cpp:1681
 #: src/design.cpp:1714
 msgid "Weight"
-msgstr "Hmotnosť"
+msgstr ""
 
 #: src/design.cpp:693
 #: src/design.cpp:714
 msgid "Total Power Required"
-msgstr "Celkovo požadovaná energia"
+msgstr ""
 
 #: src/design.cpp:727
 #: src/design.cpp:749
@@ -14899,7 +14899,7 @@ msgstr ""
 #: src/design.cpp:851
 #: src/design.cpp:870
 msgid "Power Usage"
-msgstr "Spotreba energie"
+msgstr ""
 
 #: src/design.cpp:1120
 msgid "Hydra "
@@ -14908,7 +14908,7 @@ msgstr ""
 #: src/design.cpp:1281
 #: src/design.cpp:1301
 msgid "Sensor Range"
-msgstr "Dosah snímačov"
+msgstr ""
 
 #: src/design.cpp:1321
 #: src/design.cpp:1337
@@ -14925,12 +14925,12 @@ msgstr ""
 #: src/design.cpp:1429
 #: src/design.cpp:1465
 msgid "Range"
-msgstr "Dosah"
+msgstr ""
 
 #: src/design.cpp:1441
 #: src/design.cpp:1473
 msgid "Damage"
-msgstr "Poškodenie"
+msgstr ""
 
 #: src/design.cpp:1449
 #: src/design.cpp:1481
@@ -14940,26 +14940,26 @@ msgstr ""
 #: src/design.cpp:1615
 #: src/design.cpp:1635
 msgid "Air Speed"
-msgstr "Rýchlosť letu"
+msgstr ""
 
 #: src/design.cpp:1653
 #: src/design.cpp:1690
 msgid "Road Speed"
-msgstr "Rýchlosť na ceste"
+msgstr ""
 
 #: src/design.cpp:1663
 #: src/design.cpp:1698
 msgid "Off-Road Speed"
-msgstr "Rýchlosť na pevnine"
+msgstr ""
 
 #: src/design.cpp:1671
 #: src/design.cpp:1706
 msgid "Water Speed"
-msgstr "Rýchlosť po vode"
+msgstr ""
 
 #: src/design.cpp:1778
 msgid "Weapons"
-msgstr "Zbrane"
+msgstr ""
 
 #: src/design.cpp:1797
 msgid "Systems"
@@ -14975,7 +14975,7 @@ msgstr ""
 
 #: src/display.cpp:1551
 msgid "Cannot Build. Oil Resource Burning."
-msgstr "Nemožno stavať. Ropný vrt horí."
+msgstr ""
 
 #: src/display.cpp:1569
 #, c-format
@@ -14989,11 +14989,11 @@ msgstr ""
 
 #: src/display3d.cpp:729
 msgid "Player left"
-msgstr "Hráč odišiel"
+msgstr ""
 
 #: src/display3d.cpp:733
 msgid "Player dropped"
-msgstr "Hráč spadol"
+msgstr ""
 
 #: src/display3d.cpp:737
 #: src/multiint.cpp:2501
@@ -15017,43 +15017,35 @@ msgstr ""
 
 #: src/droid.cpp:1099
 msgid "Structure Restored"
-msgstr "Budova obnovená"
+msgstr ""
 
 #: src/droid.cpp:1829
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
-msgstr[0] "Skupina %u vybraná - %u jednotka"
-msgstr[1] "Skupina %u vybraná - %u jednotky"
-msgstr[2] "Skupina %u vybraná - %u jednotiek"
-msgstr[3] "Skupina %u vybraná - %u jednotiek"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:1838
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%u jednotka pripojená ku skupine %u"
-msgstr[1] "%u jednotky pripojené ku skupine %u"
-msgstr[2] "%u jednotiek pripojených ku skupine %u"
-msgstr[3] "%u jednotiek pripojených ku skupine %u"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:1849
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
-msgstr[0] "Zamerané na skupinu %u - %u jednotka"
-msgstr[1] "Zamerané na skupinu %u - %u jednotky"
-msgstr[2] "Zamerané na skupinu %u - %u jednotiek"
-msgstr[3] "Zamerané na skupinu %u - %u jednotiek"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:1853
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
-msgstr[0] "Vyrovananý so skupinou %u - %u jednotka"
-msgstr[1] "Vyrovnané so skupinou %u - %u jednotky"
-msgstr[2] "Vyrovnaných so skupinou %u - %u jednotiek"
-msgstr[3] "Vyrovnaných so skupinou %u - %u jednotiek"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:2934
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -15063,7 +15055,7 @@ msgstr ""
 #: src/faction.cpp:170
 #: src/frontend.cpp:1812
 msgid "Normal"
-msgstr "Normálna"
+msgstr ""
 
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
@@ -15077,26 +15069,26 @@ msgstr ""
 
 #: src/frontend.cpp:142
 msgid "Single Player"
-msgstr "Hra jedného hráča"
+msgstr ""
 
 #: src/frontend.cpp:143
 msgid "Multi Player"
-msgstr "Hra viacerých hráčov"
+msgstr ""
 
 #: src/frontend.cpp:144
 #: src/frontend.cpp:278
 msgid "Tutorial"
-msgstr "Výcvik"
+msgstr ""
 
 #: src/frontend.cpp:145
 #: src/ingameop.cpp:240
 msgid "Options"
-msgstr "Nastavenia"
+msgstr ""
 
 #: src/frontend.cpp:150
 #: src/frontend.cpp:154
 msgid "View Intro"
-msgstr "Prehrať intro"
+msgstr ""
 
 #: src/frontend.cpp:155
 msgid "Videos are missing, download them from http://wz2100.net"
@@ -15113,11 +15105,11 @@ msgstr ""
 
 #: src/frontend.cpp:167
 msgid "Quit Game"
-msgstr "Ukončiť Hru"
+msgstr ""
 
 #: src/frontend.cpp:168
 msgid "MAIN MENU"
-msgstr "HLAVNÉ MENU"
+msgstr ""
 
 #: src/frontend.cpp:170
 msgid "Official site: http://wz2100.net/"
@@ -15149,11 +15141,11 @@ msgstr ""
 
 #: src/frontend.cpp:279
 msgid "Fast Play"
-msgstr "Rýchla hra"
+msgstr ""
 
 #: src/frontend.cpp:280
 msgid "TUTORIALS"
-msgstr "VÝCVIKY"
+msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:282
@@ -15169,15 +15161,15 @@ msgstr "VÝCVIKY"
 #: src/frontend.cpp:1917
 msgctxt "menu"
 msgid "Return"
-msgstr "Späť"
+msgstr ""
 
 #: src/frontend.cpp:333
 msgid "New Campaign"
-msgstr "Nová kampaň"
+msgstr ""
 
 #: src/frontend.cpp:334
 msgid "Start Skirmish Game"
-msgstr "Začať súbojovú hru"
+msgstr ""
 
 #: src/frontend.cpp:335
 msgid "Challenges"
@@ -15193,7 +15185,7 @@ msgstr ""
 
 #: src/frontend.cpp:339
 msgid "SINGLE PLAYER"
-msgstr "HRA JEDNÉHO HRÁČA"
+msgstr ""
 
 #: src/frontend.cpp:344
 #: src/frontend.cpp:365
@@ -15216,7 +15208,7 @@ msgstr ""
 
 #: src/frontend.cpp:565
 msgid "MULTI PLAYER"
-msgstr "HRA VIACERÝCH HRÁČOV"
+msgstr ""
 
 #: src/frontend.cpp:567
 msgid "Host Game"
@@ -15224,7 +15216,7 @@ msgstr ""
 
 #: src/frontend.cpp:568
 msgid "Join Game"
-msgstr "Pripojiť sa ku hre"
+msgstr ""
 
 #: src/frontend.cpp:573
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
@@ -15233,21 +15225,21 @@ msgstr ""
 #: src/frontend.cpp:634
 #: src/multiint.cpp:1343
 msgid "OPTIONS"
-msgstr "NASTAVENIA"
+msgstr ""
 
 #: src/frontend.cpp:635
 msgid "Game Options"
-msgstr "Herné nastavenia"
+msgstr ""
 
 #: src/frontend.cpp:636
 #: src/ingameop.cpp:477
 msgid "Graphics Options"
-msgstr "Grafické nastavenia"
+msgstr ""
 
 #: src/frontend.cpp:637
 #: src/ingameop.cpp:480
 msgid "Video Options"
-msgstr "Nastavenia videa"
+msgstr ""
 
 #: src/frontend.cpp:638
 msgid "Audio / Zoom Options"
@@ -15256,12 +15248,12 @@ msgstr ""
 #: src/frontend.cpp:639
 #: src/ingameop.cpp:487
 msgid "Mouse Options"
-msgstr "Nastavenia myši"
+msgstr ""
 
 #: src/frontend.cpp:640
 #: src/ingameop.cpp:492
 msgid "Key Mappings"
-msgstr "Mapovanie kláves"
+msgstr ""
 
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:495
@@ -15303,7 +15295,7 @@ msgstr ""
 #: src/frontend.cpp:714
 #: src/frontend.cpp:1127
 msgid "Fullscreen"
-msgstr "Celá obrazovka"
+msgstr ""
 
 #: src/frontend.cpp:715
 #: src/frontend.cpp:726
@@ -15323,7 +15315,7 @@ msgstr ""
 #: src/frontend.cpp:1675
 #: src/frontend.cpp:1685
 msgid "Off"
-msgstr "Vypnuté"
+msgstr ""
 
 #: src/frontend.cpp:724
 msgid "50%"
@@ -15332,7 +15324,7 @@ msgstr ""
 #: src/frontend.cpp:725
 #: src/multiplay.cpp:1672
 msgid "Black"
-msgstr "Čierna"
+msgstr ""
 
 #: src/frontend.cpp:732
 #: src/frontend.cpp:737
@@ -15343,11 +15335,11 @@ msgstr "Čierna"
 #: src/frontend.cpp:1675
 #: src/frontend.cpp:1685
 msgid "On"
-msgstr "Zapnuté"
+msgstr ""
 
 #: src/frontend.cpp:747
 msgid "Rotating"
-msgstr "Otáčanie"
+msgstr ""
 
 #: src/frontend.cpp:747
 msgid "Fixed"
@@ -15364,7 +15356,7 @@ msgstr ""
 #: src/frontend.cpp:765
 #: src/ingameop.cpp:523
 msgid "Video Playback"
-msgstr "Prehrávanie videa"
+msgstr ""
 
 #: src/frontend.cpp:769
 #: src/ingameop.cpp:528
@@ -15374,12 +15366,12 @@ msgstr ""
 #: src/frontend.cpp:774
 #: src/ingameop.cpp:533
 msgid "Subtitles"
-msgstr "Titulky"
+msgstr ""
 
 #: src/frontend.cpp:779
 #: src/ingameop.cpp:538
 msgid "Shadows"
-msgstr "Tiene"
+msgstr ""
 
 #: src/frontend.cpp:783
 #: src/ingameop.cpp:543
@@ -15397,7 +15389,7 @@ msgstr ""
 
 #: src/frontend.cpp:795
 msgid "GRAPHICS OPTIONS"
-msgstr "NASTAVENIA GRAFIKY"
+msgstr ""
 
 #: src/frontend.cpp:895
 msgid "Disabled"
@@ -15415,17 +15407,17 @@ msgstr ""
 #: src/frontend.cpp:943
 #: src/ingameop.cpp:148
 msgid "Voice Volume"
-msgstr "Hlasitosť reči"
+msgstr ""
 
 #: src/frontend.cpp:947
 #: src/ingameop.cpp:154
 msgid "FX Volume"
-msgstr "Hlasitosť efektov"
+msgstr ""
 
 #: src/frontend.cpp:951
 #: src/ingameop.cpp:160
 msgid "Music Volume"
-msgstr "Hlasitosť hudby"
+msgstr ""
 
 #: src/frontend.cpp:955
 msgid "HRTF"
@@ -15491,11 +15483,11 @@ msgstr ""
 
 #: src/frontend.cpp:1397
 msgid "* Takes effect on game restart"
-msgstr "* Prejaví sa po reštarte hry"
+msgstr ""
 
 #: src/frontend.cpp:1414
 msgid "Texture size"
-msgstr "Veľkosť textúry"
+msgstr ""
 
 #: src/frontend.cpp:1418
 #: src/ingameop.cpp:655
@@ -15516,7 +15508,7 @@ msgstr ""
 
 #: src/frontend.cpp:1445
 msgid "VIDEO OPTIONS"
-msgstr "NASTAVENIA VIDEA"
+msgstr ""
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
@@ -15559,7 +15551,7 @@ msgstr ""
 #: src/frontend.cpp:1709
 #: src/ingameop.cpp:731
 msgid "Reverse Rotation"
-msgstr "Opačné otáčanie"
+msgstr ""
 
 #: src/frontend.cpp:1713
 #: src/ingameop.cpp:738
@@ -15569,12 +15561,12 @@ msgstr ""
 #: src/frontend.cpp:1718
 #: src/ingameop.cpp:744
 msgid "Switch Mouse Buttons"
-msgstr "Prehodiť tlačidlá myši"
+msgstr ""
 
 #: src/frontend.cpp:1723
 #: src/ingameop.cpp:749
 msgid "Rotate Screen"
-msgstr "Otočiť obrazovku"
+msgstr ""
 
 #: src/frontend.cpp:1727
 #: src/ingameop.cpp:754
@@ -15588,17 +15580,17 @@ msgstr ""
 
 #: src/frontend.cpp:1735
 msgid "MOUSE OPTIONS"
-msgstr "NASTAVENIA MYŠI"
+msgstr ""
 
 #: src/frontend.cpp:1811
 #: src/multiint.cpp:256
 msgid "Easy"
-msgstr "Ľahká"
+msgstr ""
 
 #: src/frontend.cpp:1813
 #: src/multiint.cpp:256
 msgid "Hard"
-msgstr "Ťažká"
+msgstr ""
 
 #: src/frontend.cpp:1814
 #: src/multiint.cpp:256
@@ -15608,7 +15600,7 @@ msgstr ""
 #: src/frontend.cpp:1845
 #: src/frontend.cpp:1918
 msgid "Language"
-msgstr "Jazyk"
+msgstr ""
 
 #: src/frontend.cpp:1849
 #: src/frontend.cpp:1922
@@ -15637,7 +15629,7 @@ msgstr ""
 #: src/frontend.cpp:1897
 #: src/frontend.cpp:1916
 msgid "GAME OPTIONS"
-msgstr "NASTAVENIA HRY"
+msgstr ""
 
 #: src/frontend.cpp:2029
 #: src/multiint.cpp:2964
@@ -15688,7 +15680,7 @@ msgstr ""
 #: src/hci.cpp:1327
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Hráč %u podvádza (ladiace menu) novou budovou: %s"
+msgstr ""
 
 #: src/hci.cpp:1336
 #, c-format
@@ -15709,7 +15701,7 @@ msgstr ""
 #: src/multiint.cpp:1443
 #: src/multimenu.cpp:686
 msgid "Power"
-msgstr "Energia"
+msgstr ""
 
 #: src/hci.cpp:1763
 #: src/hci/build.cpp:552
@@ -15760,11 +15752,11 @@ msgstr ""
 
 #: src/hci/manufacture.cpp:635
 msgid "Loop Production"
-msgstr "Opakovať výrobu"
+msgstr ""
 
 #: src/hci/objects_stats.cpp:109
 msgid "Progress Bar"
-msgstr "Panel priebehu"
+msgstr ""
 
 #: src/hci/research.cpp:374
 msgid "Research Progress"
@@ -15784,7 +15776,7 @@ msgstr ""
 #: src/keyedit.cpp:446
 #: src/musicmanager.cpp:778
 msgid "Resume Game"
-msgstr "Pokračovať v hre"
+msgstr ""
 
 #: src/ingameop.cpp:126
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
@@ -15818,21 +15810,21 @@ msgstr ""
 #: src/ingameop.cpp:248
 #: src/ingameop.cpp:257
 msgid "Load Game"
-msgstr "Nahraj Hru"
+msgstr ""
 
 #: src/ingameop.cpp:251
 #: src/ingameop.cpp:260
 #: src/mission.cpp:2430
 msgid "Save Game"
-msgstr "Uložiť hru"
+msgstr ""
 
 #: src/ingameop.cpp:272
 msgid "Quit"
-msgstr "Ukončiť"
+msgstr ""
 
 #: src/ingameop.cpp:340
 msgid "Host has quit the game!"
-msgstr "Hostiteľ ukončil hru!"
+msgstr ""
 
 #: src/ingameop.cpp:346
 msgid "The game can't continue without the host."
@@ -15840,11 +15832,11 @@ msgstr ""
 
 #: src/ingameop.cpp:352
 msgid "-->  QUIT  <--"
-msgstr "--> KONIEC <--"
+msgstr ""
 
 #: src/ingameop.cpp:484
 msgid "Audio Options"
-msgstr "Zvukové nastavanie"
+msgstr ""
 
 #: src/ingameop.cpp:492
 msgid "View Key Mappings"
@@ -16046,7 +16038,7 @@ msgstr ""
 #: src/intelmap.cpp:241
 #: src/keybind.cpp:1333
 msgid "PAUSED"
-msgstr "PAUZA"
+msgstr ""
 
 #: src/intelmap.cpp:326
 msgid "Research Update"
@@ -16054,7 +16046,7 @@ msgstr ""
 
 #: src/intelmap.cpp:330
 msgid "Project Goals"
-msgstr "Ciele projektu"
+msgstr ""
 
 #: src/intelmap.cpp:333
 msgid "Current Objective"
@@ -16067,32 +16059,32 @@ msgstr ""
 #: src/intorder.cpp:166
 #: src/keymap.cpp:509
 msgid "Short Range"
-msgstr "Krátky dostrel"
+msgstr ""
 
 #: src/intorder.cpp:167
 #: src/keymap.cpp:515
 msgid "Long Range"
-msgstr "Dlhý dostrel"
+msgstr ""
 
 #: src/intorder.cpp:168
 #: src/keymap.cpp:508
 msgid "Optimum Range"
-msgstr "Oprimálny dostrel"
+msgstr ""
 
 #: src/intorder.cpp:169
 #: src/keymap.cpp:527
 msgid "Retreat at Medium Damage"
-msgstr "Ústup pri strednom poškodení"
+msgstr ""
 
 #: src/intorder.cpp:170
 #: src/keymap.cpp:528
 msgid "Retreat at Heavy Damage"
-msgstr "Ústup pri ťažkom poškodení"
+msgstr ""
 
 #: src/intorder.cpp:171
 #: src/keymap.cpp:529
 msgid "Do or Die!"
-msgstr "Bojuj až do konca!"
+msgstr ""
 
 #: src/intorder.cpp:172
 msgid "Fire-At-Will"
@@ -16101,12 +16093,12 @@ msgstr ""
 #: src/intorder.cpp:173
 #: src/keymap.cpp:503
 msgid "Return Fire"
-msgstr "Opätuj paľbu"
+msgstr ""
 
 #: src/intorder.cpp:174
 #: src/keymap.cpp:501
 msgid "Hold Fire"
-msgstr "Nestrieľaj"
+msgstr ""
 
 #: src/intorder.cpp:175
 #: src/keymap.cpp:511
@@ -16121,12 +16113,12 @@ msgstr ""
 #: src/intorder.cpp:177
 #: src/keymap.cpp:505
 msgid "Guard Position"
-msgstr "Bráň pozíciu"
+msgstr ""
 
 #: src/intorder.cpp:178
 #: src/keymap.cpp:507
 msgid "Hold Position"
-msgstr "Drž pozíciu"
+msgstr ""
 
 #: src/intorder.cpp:179
 #: src/keymap.cpp:512
@@ -16140,7 +16132,7 @@ msgstr ""
 #: src/intorder.cpp:181
 #: src/keymap.cpp:514
 msgid "Go to Transport"
-msgstr "Nastúp do transportu"
+msgstr ""
 
 #: src/intorder.cpp:182
 #: src/keymap.cpp:538
@@ -16149,7 +16141,7 @@ msgstr ""
 
 #: src/intorder.cpp:183
 msgid "Recycle"
-msgstr "Recyklovať"
+msgstr ""
 
 #: src/intorder.cpp:184
 msgid "Assign Factory Production"
@@ -16169,11 +16161,11 @@ msgstr ""
 
 #: src/intorder.cpp:188
 msgid "Circle"
-msgstr "Kruh"
+msgstr ""
 
 #: src/keybind.cpp:118
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Ospravedlňujeme sa, ale cheaty sú vypnuté pre hru viacerých hráčov."
+msgstr ""
 
 #: src/keybind.cpp:151
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
@@ -16189,11 +16181,11 @@ msgstr ""
 
 #: src/keybind.cpp:285
 msgid "Lets us see what you see!"
-msgstr "Ukáž nám čo vidíš!"
+msgstr ""
 
 #: src/keybind.cpp:289
 msgid "Fine, weapon & sensor display is off!"
-msgstr "Drobnosti, zbrane a senzory sú vypnuté!"
+msgstr ""
 
 #: src/keybind.cpp:321
 msgid "View Aligned to South"
@@ -16230,11 +16222,11 @@ msgstr ""
 
 #: src/keybind.cpp:503
 msgid "Hard as nails!!!"
-msgstr "Ťažké ako nechty!"
+msgstr ""
 
 #: src/keybind.cpp:517
 msgid "Takings thing easy!"
-msgstr "Veci idú ľahko!"
+msgstr ""
 
 #: src/keybind.cpp:531
 msgid "1000 big ones!!!"
@@ -16242,11 +16234,11 @@ msgstr ""
 
 #: src/keybind.cpp:546
 msgid "Power overwhelming"
-msgstr "Ohromujúci výkon"
+msgstr ""
 
 #: src/keybind.cpp:561
 msgid "Back to normality!"
-msgstr "Späť do normálu!"
+msgstr ""
 
 #: src/keybind.cpp:574
 msgid "Getting tricky!"
@@ -16258,11 +16250,11 @@ msgstr ""
 
 #: src/keybind.cpp:598
 msgid "FPS display is enabled."
-msgstr "Zobrazovanie FPS je zapnuté."
+msgstr ""
 
 #: src/keybind.cpp:602
 msgid "FPS display is disabled."
-msgstr "Zobrazovanie FPS je vypnuté."
+msgstr ""
 
 #: src/keybind.cpp:612
 msgid "Unit count display is enabled."
@@ -16291,11 +16283,11 @@ msgstr ""
 
 #: src/keybind.cpp:794
 msgid "Fog on"
-msgstr "Zapnutá hmla"
+msgstr ""
 
 #: src/keybind.cpp:794
 msgid "Fog off"
-msgstr "Hmla vypnutá"
+msgstr ""
 
 #: src/keybind.cpp:879
 #: src/keybind.cpp:892
@@ -16371,7 +16363,7 @@ msgstr ""
 
 #: src/keybind.cpp:1509
 msgid "Researched"
-msgstr "Vyvinuté"
+msgstr ""
 
 #: src/keybind.cpp:1530
 msgid "Only displaying energy bars when selected"
@@ -16411,7 +16403,7 @@ msgstr ""
 
 #: src/keybind.cpp:1962
 msgid "All enemies destroyed by cheating!"
-msgstr "Všetci nepriatelia zničený podvádzaním!"
+msgstr ""
 
 #: src/keybind.cpp:2002
 msgid "Destroying selected droids and structures!"
@@ -16431,7 +16423,7 @@ msgstr ""
 
 #: src/keybind.cpp:2462
 msgid "Unable to locate HQ!"
-msgstr "Nedá sa nájsť HQ!"
+msgstr ""
 
 #: src/keybind.cpp:2469
 msgid "Formation speed limiting has been removed from the game due to bugs."
@@ -16455,12 +16447,12 @@ msgstr ""
 
 #: src/keybind.cpp:2590
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Prepáčte, ale hra nemôže byť zmenená v móde viacerých hráčov."
+msgstr ""
 
 #: src/keybind.cpp:2625
 #: src/keybind.cpp:2679
 msgid "Game Speed Reset"
-msgstr "Reset rýchlosti hry"
+msgstr ""
 
 #: src/keybind.cpp:2629
 #, c-format
@@ -16478,11 +16470,11 @@ msgstr ""
 
 #: src/keybind.cpp:2695
 msgid "Radar showing player colors"
-msgstr "Radar ukazuje farby hráčov"
+msgstr ""
 
 #: src/keybind.cpp:2710
 msgid "Radar showing only objects"
-msgstr "Radar ukazuje iba objekty"
+msgstr ""
 
 #: src/keybind.cpp:2713
 msgid "Radar blending terrain and height"
@@ -16490,15 +16482,15 @@ msgstr ""
 
 #: src/keybind.cpp:2716
 msgid "Radar showing terrain"
-msgstr "Radar ukazuje terén"
+msgstr ""
 
 #: src/keybind.cpp:2719
 msgid "Radar showing height"
-msgstr "Radar ukazuje výšku"
+msgstr ""
 
 #: src/keyedit.cpp:335
 msgid "KEY MAPPING"
-msgstr "MAPOVANIE KLÁVES"
+msgstr ""
 
 #: src/keyedit.cpp:427
 #: src/multiint.cpp:1521
@@ -16506,12 +16498,12 @@ msgstr "MAPOVANIE KLÁVES"
 #: src/titleui/gamefind.cpp:91
 #: src/titleui/protocol.cpp:81
 msgid "Return To Previous Screen"
-msgstr "Návrat na predchádzajúcu obrazovku"
+msgstr ""
 
 #: src/keyedit.cpp:433
 #: src/keyedit.cpp:450
 msgid "Select Default"
-msgstr "Obnoviť pôvodné"
+msgstr ""
 
 #: src/keymap.cpp:393
 msgid "Manufacture"
@@ -16519,15 +16511,15 @@ msgstr ""
 
 #: src/keymap.cpp:394
 msgid "Research"
-msgstr "Výzkum"
+msgstr ""
 
 #: src/keymap.cpp:395
 msgid "Build"
-msgstr "Stavať"
+msgstr ""
 
 #: src/keymap.cpp:396
 msgid "Design"
-msgstr "Návrh"
+msgstr ""
 
 #: src/keymap.cpp:397
 msgid "Intelligence Display"
@@ -16559,7 +16551,7 @@ msgstr ""
 
 #: src/keymap.cpp:404
 msgid "Take Screen Shot"
-msgstr "Odfotiť obrazovku"
+msgstr ""
 
 #: src/keymap.cpp:405
 msgid "Toggle Formation Speed Limiting"
@@ -16567,7 +16559,7 @@ msgstr ""
 
 #: src/keymap.cpp:406
 msgid "View Location of Previous Message"
-msgstr "Zobraziť pozíciu predchádzajúcej správy"
+msgstr ""
 
 #: src/keymap.cpp:407
 msgid "Toggle Sensor display"
@@ -16575,43 +16567,43 @@ msgstr ""
 
 #: src/keymap.cpp:411
 msgid "Assign Group 0"
-msgstr "Priradiť ku skupine 0"
+msgstr ""
 
 #: src/keymap.cpp:412
 msgid "Assign Group 1"
-msgstr "Priradiť ku skupine 1"
+msgstr ""
 
 #: src/keymap.cpp:413
 msgid "Assign Group 2"
-msgstr "Priradiť ku skupine 2"
+msgstr ""
 
 #: src/keymap.cpp:414
 msgid "Assign Group 3"
-msgstr "Priradiť ku skupine 3"
+msgstr ""
 
 #: src/keymap.cpp:415
 msgid "Assign Group 4"
-msgstr "Priradiť ku skupine 4"
+msgstr ""
 
 #: src/keymap.cpp:416
 msgid "Assign Group 5"
-msgstr "Priradiť ku skupine 6"
+msgstr ""
 
 #: src/keymap.cpp:417
 msgid "Assign Group 6"
-msgstr "Priradiť ku skupine 6"
+msgstr ""
 
 #: src/keymap.cpp:418
 msgid "Assign Group 7"
-msgstr "Priradiť ku skupine 7"
+msgstr ""
 
 #: src/keymap.cpp:419
 msgid "Assign Group 8"
-msgstr "Priradiť ku skupine 8"
+msgstr ""
 
 #: src/keymap.cpp:420
 msgid "Assign Group 9"
-msgstr "Priradiť ku skupine 9"
+msgstr ""
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
@@ -16655,83 +16647,83 @@ msgstr ""
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
-msgstr "Vybrať skupinu 0"
+msgstr ""
 
 #: src/keymap.cpp:436
 msgid "Select Group 1"
-msgstr "Vybrať skupinu 1"
+msgstr ""
 
 #: src/keymap.cpp:437
 msgid "Select Group 2"
-msgstr "Vybrať skupinu 2"
+msgstr ""
 
 #: src/keymap.cpp:438
 msgid "Select Group 3"
-msgstr "Vybrať skupinu 3"
+msgstr ""
 
 #: src/keymap.cpp:439
 msgid "Select Group 4"
-msgstr "Vybrať skupinu 4"
+msgstr ""
 
 #: src/keymap.cpp:440
 msgid "Select Group 5"
-msgstr "Vybrať skupinu 5"
+msgstr ""
 
 #: src/keymap.cpp:441
 msgid "Select Group 6"
-msgstr "Vybrať skupinu 6"
+msgstr ""
 
 #: src/keymap.cpp:442
 msgid "Select Group 7"
-msgstr "Vybrať skupinu 7"
+msgstr ""
 
 #: src/keymap.cpp:443
 msgid "Select Group 8"
-msgstr "Vybrať skupinu 8"
+msgstr ""
 
 #: src/keymap.cpp:444
 msgid "Select Group 9"
-msgstr "Vybrať skupinu 9"
+msgstr ""
 
 #: src/keymap.cpp:448
 msgid "Select Commander 0"
-msgstr "Vybrať veliteľa 0"
+msgstr ""
 
 #: src/keymap.cpp:449
 msgid "Select Commander 1"
-msgstr "Vybrať veliteľa 1"
+msgstr ""
 
 #: src/keymap.cpp:450
 msgid "Select Commander 2"
-msgstr "Vybrať veliteľa 2"
+msgstr ""
 
 #: src/keymap.cpp:451
 msgid "Select Commander 3"
-msgstr "Vybrať veliteľa 3"
+msgstr ""
 
 #: src/keymap.cpp:452
 msgid "Select Commander 4"
-msgstr "Vybrať veliteľa 4"
+msgstr ""
 
 #: src/keymap.cpp:453
 msgid "Select Commander 5"
-msgstr "Vybrať veliteľa 5"
+msgstr ""
 
 #: src/keymap.cpp:454
 msgid "Select Commander 6"
-msgstr "Vybrať veliteľa 6"
+msgstr ""
 
 #: src/keymap.cpp:455
 msgid "Select Commander 7"
-msgstr "Vybrať veliteľa 7"
+msgstr ""
 
 #: src/keymap.cpp:456
 msgid "Select Commander 8"
-msgstr "Vybrať veliteľa 8"
+msgstr ""
 
 #: src/keymap.cpp:457
 msgid "Select Commander 9"
-msgstr "Vybrať veliteľa 9"
+msgstr ""
 
 #: src/keymap.cpp:461
 msgid "Multiplayer Options / Alliance dialog"
@@ -16767,19 +16759,19 @@ msgstr ""
 
 #: src/keymap.cpp:471
 msgid "Zoom Radar Out"
-msgstr "Oddialenie radaru"
+msgstr ""
 
 #: src/keymap.cpp:472
 msgid "Zoom Radar In"
-msgstr "Priblíženie radaru"
+msgstr ""
 
 #: src/keymap.cpp:473
 msgid "Zoom In"
-msgstr "Priblížiť"
+msgstr ""
 
 #: src/keymap.cpp:474
 msgid "Zoom Out"
-msgstr "Oddialiť"
+msgstr ""
 
 #: src/keymap.cpp:475
 msgid "Pitch Forward"
@@ -16787,7 +16779,7 @@ msgstr ""
 
 #: src/keymap.cpp:476
 msgid "Rotate Left"
-msgstr "Otočiť doľava"
+msgstr ""
 
 #: src/keymap.cpp:477
 msgid "Reset Pitch"
@@ -16795,7 +16787,7 @@ msgstr ""
 
 #: src/keymap.cpp:478
 msgid "Rotate Right"
-msgstr "Otočiť doprava"
+msgstr ""
 
 #: src/keymap.cpp:479
 msgid "Pitch Back"
@@ -16803,55 +16795,55 @@ msgstr ""
 
 #: src/keymap.cpp:480
 msgid "Orders Menu"
-msgstr "Menu príkazov"
+msgstr ""
 
 #: src/keymap.cpp:481
 msgid "Decrease Game Speed"
-msgstr "Znížiť rýchlosť hry"
+msgstr ""
 
 #: src/keymap.cpp:482
 msgid "Increase Game Speed"
-msgstr "Zvýšiť rýchlosť hry"
+msgstr ""
 
 #: src/keymap.cpp:483
 msgid "Reset Game Speed"
-msgstr "Resetovat rýchlosť hry"
+msgstr ""
 
 #: src/keymap.cpp:484
 msgid "View North"
-msgstr "Pohľad na sever"
+msgstr ""
 
 #: src/keymap.cpp:485
 msgid "View South"
-msgstr "Pohľad na juh"
+msgstr ""
 
 #: src/keymap.cpp:486
 msgid "View East"
-msgstr "Pohľad na východ"
+msgstr ""
 
 #: src/keymap.cpp:487
 msgid "View West"
-msgstr "Pohľad na západ"
+msgstr ""
 
 #: src/keymap.cpp:488
 msgid "View next Oil Derrick"
-msgstr "Zobraz nasledujúcu ropnú plošinu"
+msgstr ""
 
 #: src/keymap.cpp:489
 msgid "View next Repair Unit"
-msgstr "Zobraz ďalšiu opravnú jednotku"
+msgstr ""
 
 #: src/keymap.cpp:490
 msgid "View next Truck"
-msgstr "Zobraz ďalšie vozidlo"
+msgstr ""
 
 #: src/keymap.cpp:491
 msgid "View next Sensor Unit"
-msgstr "Zobraz ďalšiu senzorovú jednotku"
+msgstr ""
 
 #: src/keymap.cpp:492
 msgid "View next Commander"
-msgstr "Zobraz ďalšieho veliteľa"
+msgstr ""
 
 #: src/keymap.cpp:493
 msgid "Toggle Overlays"
@@ -16875,19 +16867,19 @@ msgstr ""
 
 #: src/keymap.cpp:500
 msgid "Center View on HQ"
-msgstr "Vycentruj pohľad na HQ"
+msgstr ""
 
 #: src/keymap.cpp:502
 msgid "View Unassigned Units"
-msgstr "Zobraz nezačlenené jednotky"
+msgstr ""
 
 #: src/keymap.cpp:504
 msgid "Fire at Will"
-msgstr "Páliť podľa uváženia"
+msgstr ""
 
 #: src/keymap.cpp:506
 msgid "Return to HQ"
-msgstr "Zpäť na HQ"
+msgstr ""
 
 #: src/keymap.cpp:513
 msgid "Stop Droid"
@@ -16927,7 +16919,7 @@ msgstr ""
 
 #: src/keymap.cpp:533
 msgid "Select all Combat Units"
-msgstr "Vybrať všetky bojové jednotky"
+msgstr ""
 
 #: src/keymap.cpp:534
 msgid "Select all Cyborgs"
@@ -16935,27 +16927,27 @@ msgstr ""
 
 #: src/keymap.cpp:535
 msgid "Select all Heavily Damaged Units"
-msgstr "Vybrať všetky ťažko poškodené jednotky"
+msgstr ""
 
 #: src/keymap.cpp:536
 msgid "Select all Half-tracks"
-msgstr "Vybrať všetky polopásové jednotky"
+msgstr ""
 
 #: src/keymap.cpp:537
 msgid "Select all Hovers"
-msgstr "Vybrať všetky vzášadlá"
+msgstr ""
 
 #: src/keymap.cpp:539
 msgid "Select all Units on Screen"
-msgstr "Vybrať všetky jednotky na obrazovke"
+msgstr ""
 
 #: src/keymap.cpp:540
 msgid "Select all Tracks"
-msgstr "Vybrať všetny pásové jednotky"
+msgstr ""
 
 #: src/keymap.cpp:541
 msgid "Select EVERY unit"
-msgstr "Vybrať VŠETKY jednotky"
+msgstr ""
 
 #: src/keymap.cpp:542
 msgid "Select all VTOLs"
@@ -16967,7 +16959,7 @@ msgstr ""
 
 #: src/keymap.cpp:544
 msgid "Select all Wheels"
-msgstr "Vybrať všetky kolesové jednotky"
+msgstr ""
 
 #: src/keymap.cpp:545
 msgid "Show frame rate"
@@ -17007,19 +16999,19 @@ msgstr ""
 
 #: src/keymap.cpp:557
 msgid "Select all Trucks"
-msgstr ""
+msgstr "Изберете всички камиони"
 
 #: src/keymap.cpp:561
 msgid "Select next Factory"
-msgstr "Vybrať dalšiu továrňu"
+msgstr ""
 
 #: src/keymap.cpp:562
 msgid "Select next Research Facility"
-msgstr "Vybrať dalšie výskumné zariadenie"
+msgstr ""
 
 #: src/keymap.cpp:563
 msgid "Select next Power Generator"
-msgstr "Vybrať další generátor energie"
+msgstr ""
 
 #: src/keymap.cpp:564
 msgid "Select next Cyborg Factory"
@@ -17136,46 +17128,46 @@ msgstr ""
 #: src/loop.cpp:251
 #: src/loop.cpp:267
 msgid "Could not save game!"
-msgstr "Nemožno uložiť hru!"
+msgstr ""
 
 #: src/mission.cpp:1896
 msgid "Load Transport"
-msgstr "Naložit transport"
+msgstr ""
 
 #: src/mission.cpp:2254
 msgid "OBJECTIVE ACHIEVED by cheating!"
-msgstr "CIEL SPLNENÝ podvádzaním!"
+msgstr ""
 
 #: src/mission.cpp:2254
 msgid "OBJECTIVE ACHIEVED"
-msgstr "CIEĽ BOL SPLNENÝ"
+msgstr ""
 
 #: src/mission.cpp:2260
 msgid "OBJECTIVE FAILED--and you cheated!"
-msgstr "CIEL NESPLNENÝ-a podvádzal si!"
+msgstr ""
 
 #: src/mission.cpp:2260
 msgid "OBJECTIVE FAILED"
-msgstr "CIEĽ NEBOL SPLNENÝ"
+msgstr ""
 
 #: src/mission.cpp:2289
 msgid "Continue Game"
-msgstr "Pokračovat v hre"
+msgstr ""
 
 #: src/mission.cpp:2299
 #: src/mission.cpp:2335
 #: src/mission.cpp:2449
 msgid "Quit To Main Menu"
-msgstr "Skončiť do hlavého menu"
+msgstr ""
 
 #: src/mission.cpp:2329
 #: src/mission.cpp:2427
 msgid "Load Saved Game"
-msgstr "Nahrať uloženú hru"
+msgstr ""
 
 #: src/mission.cpp:2395
 msgid "GAME SAVED :"
-msgstr "HRA ULOŽENÁ!"
+msgstr ""
 
 #: src/move.cpp:1974
 #, c-format
@@ -17185,23 +17177,23 @@ msgstr ""
 #: src/multigifts.cpp:221
 #, c-format
 msgid "%s Gives You A Visibility Report"
-msgstr "%s Vám dá viditeľnú správu"
+msgstr ""
 
 #: src/multigifts.cpp:237
 #: src/multigifts.cpp:263
 #, c-format
 msgid "%s Gives you a %s"
-msgstr "%s Vám dá %s"
+msgstr ""
 
 #: src/multigifts.cpp:313
 #, c-format
 msgid "Tried to give away a non-empty %s - but this is not allowed."
-msgstr "Skúšal si dať preč neprázdnu %s - to ale nie je povolené."
+msgstr ""
 
 #: src/multigifts.cpp:354
 #, c-format
 msgid "%s Gives You Technology Documents"
-msgstr "%s Vám dá technologické dokumenty"
+msgstr ""
 
 #: src/multigifts.cpp:413
 #, c-format
@@ -17211,27 +17203,27 @@ msgstr ""
 #: src/multigifts.cpp:439
 #, c-format
 msgid "%s Requests An Alliance With You"
-msgstr "%s žiada o alianciu s Vami"
+msgstr ""
 
 #: src/multigifts.cpp:448
 #, c-format
 msgid "You Invite %s To Form An Alliance"
-msgstr "Ste pozvaný %s na vytvorenie aliancie"
+msgstr ""
 
 #: src/multigifts.cpp:469
 #, c-format
 msgid "%s Breaks The Alliance With %s"
-msgstr "%s zrušil spojenectvo s %s"
+msgstr ""
 
 #: src/multigifts.cpp:500
 #, c-format
 msgid "%s Forms An Alliance With %s"
-msgstr "%s uzavrel spojenectvo s %s"
+msgstr ""
 
 #: src/multigifts.cpp:712
 #, c-format
 msgid "You Discover Blueprints For %s"
-msgstr "Našiel si plány na %s"
+msgstr ""
 
 #: src/multiint.cpp:256
 msgid "Medium"
@@ -17306,7 +17298,7 @@ msgstr ""
 
 #: src/multiint.cpp:1356
 msgid "Select Game Name"
-msgstr "Vyber meno hry"
+msgstr ""
 
 #: src/multiint.cpp:1376
 msgid "Select Map\n"
@@ -17327,16 +17319,16 @@ msgstr ""
 
 #: src/multiint.cpp:1409
 msgid "Select Player Name"
-msgstr "Vyber meno hráča"
+msgstr ""
 
 #: src/multiint.cpp:1432
 #: src/multimenu.cpp:675
 msgid "Alliances"
-msgstr "Spojenectvá"
+msgstr ""
 
 #: src/multiint.cpp:1453
 msgid "Base"
-msgstr "Základňa"
+msgstr ""
 
 #: src/multiint.cpp:1463
 msgid "Map Preview"
@@ -17348,11 +17340,11 @@ msgstr ""
 
 #: src/multiint.cpp:1470
 msgid "Show Structure Limits"
-msgstr "Zobraz limity budovy"
+msgstr ""
 
 #: src/multiint.cpp:1470
 msgid "Set Structure Limits"
-msgstr "Nastavenie limitu budov"
+msgstr ""
 
 #: src/multiint.cpp:1484
 msgid "Random Game Options"
@@ -17386,7 +17378,7 @@ msgstr ""
 #: src/multiint.cpp:1509
 #: src/multiint.cpp:1510
 msgid "Start Hosting Game"
-msgstr "Začni hosťovať hru"
+msgstr ""
 
 #: src/multiint.cpp:1666
 msgid "DIFFICULTY"
@@ -17429,7 +17421,7 @@ msgstr ""
 #: src/multimenu.cpp:1241
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "Hostiteľ vyhodil %s z hry!"
+msgstr ""
 
 #: src/multiint.cpp:1940
 #: src/multiint.cpp:3897
@@ -17467,7 +17459,7 @@ msgstr ""
 
 #: src/multiint.cpp:2555
 msgid "PLAYERS"
-msgstr "HRÁČI"
+msgstr ""
 
 #: src/multiint.cpp:2590
 msgid "Click to change to this slot"
@@ -17540,7 +17532,7 @@ msgstr ""
 
 #: src/multiint.cpp:4025
 msgid "Host is Starting Game"
-msgstr "Hostiteľ začíná hru"
+msgstr ""
 
 #: src/multiint.cpp:4241
 msgid "You have been kicked: "
@@ -17675,12 +17667,12 @@ msgstr ""
 
 #: src/multilimit.cpp:181
 msgid "Apply Defaults and Return To Previous Screen"
-msgstr "Nastav východzie a návrat na predchádzajúcu obrazovku"
+msgstr ""
 
 #: src/multilimit.cpp:188
 #: src/titleui/protocol.cpp:169
 msgid "Accept Settings"
-msgstr "Potvrď nastavenia"
+msgstr ""
 
 #: src/multilimit.cpp:279
 msgid "Limits reset to default values"
@@ -17692,16 +17684,14 @@ msgstr ""
 
 #: src/multimenu.cpp:532
 msgid "Any number of players"
-msgstr "Ľubovolný počet hráčov"
+msgstr ""
 
 #: src/multimenu.cpp:549
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] "%d hráč"
-msgstr[1] "%d hráči"
-msgstr[2] "%d hráčov"
-msgstr[3] "%d hráčov"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/multimenu.cpp:677
 msgid "Score"
@@ -17713,11 +17703,11 @@ msgstr ""
 
 #: src/multimenu.cpp:681
 msgid "Units"
-msgstr "Jednotky"
+msgstr ""
 
 #: src/multimenu.cpp:697
 msgid "Structs"
-msgstr "Stavby"
+msgstr ""
 
 #: src/multimenu.cpp:709
 msgid "Sent/Received per sec —"
@@ -17819,31 +17809,31 @@ msgstr ""
 
 #: src/multiplay.cpp:1669
 msgid "Green"
-msgstr "Zelená"
+msgstr ""
 
 #: src/multiplay.cpp:1670
 msgid "Orange"
-msgstr "Oranžová"
+msgstr ""
 
 #: src/multiplay.cpp:1671
 msgid "Grey"
-msgstr "Šedá"
+msgstr ""
 
 #: src/multiplay.cpp:1673
 msgid "Red"
-msgstr "Červená"
+msgstr ""
 
 #: src/multiplay.cpp:1674
 msgid "Blue"
-msgstr "Modrá"
+msgstr ""
 
 #: src/multiplay.cpp:1675
 msgid "Pink"
-msgstr "Ružová"
+msgstr ""
 
 #: src/multiplay.cpp:1676
 msgid "Cyan"
-msgstr "Azurová"
+msgstr ""
 
 #: src/multiplay.cpp:1677
 msgid "Yellow"
@@ -17913,7 +17903,7 @@ msgstr ""
 #: src/research.cpp:659
 #, c-format
 msgid "Research completed: %s"
-msgstr "Výzkum dokončený: %s"
+msgstr ""
 
 #: src/research.cpp:1149
 msgid "Research Award"
@@ -17922,145 +17912,143 @@ msgstr ""
 #: src/scores.cpp:102
 #, c-format
 msgid "Own Units: %u"
-msgstr "Vlastné jednotky: %u"
+msgstr ""
 
 #: src/scores.cpp:103
 #, c-format
 msgid "Enemy Units: %u"
-msgstr "Nepriateľské jednotky: %u"
+msgstr ""
 
 #: src/scores.cpp:104
 #, c-format
 msgid "Own Structures: %u"
-msgstr "Vlastné budovy: %u"
+msgstr ""
 
 #: src/scores.cpp:105
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr "Nepriateľské budovy: %u"
+msgstr ""
 
 #: src/scores.cpp:106
 #, c-format
 msgid "Units Manufactured: %u"
-msgstr "Vyrobených jednotek: %u"
+msgstr ""
 
 #: src/scores.cpp:107
 #, c-format
 msgid "Total Units: %u"
-msgstr "Jednotiek celkom: %u"
+msgstr ""
 
 #: src/scores.cpp:108
 #, c-format
 msgid "Structures Built: %u"
-msgstr "Postavených budov: %u"
+msgstr ""
 
 #: src/scores.cpp:109
 #, c-format
 msgid "Total Structures: %u"
-msgstr "Budov celkom: %u"
+msgstr ""
 
 #: src/scores.cpp:111
 #, c-format
 msgid "Rookie: %u"
-msgstr "Nováčik: %u"
+msgstr ""
 
 #: src/scores.cpp:112
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr "Zelená: %u"
+msgstr ""
 
 #: src/scores.cpp:113
 #, c-format
 msgid "Trained: %u"
-msgstr "Trénovaný: %u"
+msgstr ""
 
 #: src/scores.cpp:114
 #, c-format
 msgid "Regular: %u"
-msgstr "Obvyklý: %u"
+msgstr ""
 
 #: src/scores.cpp:115
 #, c-format
 msgid "Professional: %u"
-msgstr "Profesionál: %u"
+msgstr ""
 
 #: src/scores.cpp:116
 #, c-format
 msgid "Veteran: %u"
-msgstr "Veterán: %u"
+msgstr ""
 
 #: src/scores.cpp:117
 #, c-format
 msgid "Elite: %u"
-msgstr "Elita: %u"
+msgstr ""
 
 #: src/scores.cpp:118
 #, c-format
 msgid "Special: %u"
-msgstr "Špeciálna: %u"
+msgstr ""
 
 #: src/scores.cpp:119
 #, c-format
 msgid "Hero: %u"
-msgstr "Hrdina: %u"
+msgstr ""
 
 #: src/scores.cpp:313
 msgid "Unit Losses"
-msgstr "Straty jednotiek"
+msgstr ""
 
 #: src/scores.cpp:315
 msgid "Structure Losses"
-msgstr "Straty budov"
+msgstr ""
 
 #: src/scores.cpp:317
 msgid "Force Information"
-msgstr "Informácie o armáde"
+msgstr ""
 
 #: src/scores.cpp:394
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr "ZÍSKANÝCH ARTEFAKTOV: %d"
+msgstr ""
 
 #: src/scores.cpp:400
 #, c-format
 msgid "Mission Time - %s"
-msgstr "Čas misie - %s"
+msgstr ""
 
 #: src/scores.cpp:406
 #, c-format
 msgid "Total Game Time - %s"
-msgstr "Celkový čas hry - %s"
+msgstr ""
 
 #: src/scores.cpp:413
 msgid "You cheated!"
-msgstr "Podvádzali ste!"
+msgstr ""
 
 #: src/selection.cpp:352
 #: src/selection.cpp:432
 msgid "Unable to locate any repair units!"
-msgstr "Nemožno nájsť žiadnu opravnú jednotku!"
+msgstr ""
 
 #: src/selection.cpp:355
 msgid "Unable to locate any Trucks!"
-msgstr "Nemožno nájsť žiadne vozidlo!"
+msgstr "Не можем да намерим камиони!"
 
 #: src/selection.cpp:358
 msgid "Unable to locate any Sensor Units!"
-msgstr "Nemožno nájsť žiadnu senzorovú jednotku!"
+msgstr ""
 
 #: src/selection.cpp:361
 msgid "Unable to locate any Commanders!"
-msgstr "Nemožno nájsť žiadneho velitela!"
+msgstr ""
 
 #: src/selection.cpp:635
 #, c-format
 msgid "%u unit selected"
 msgid_plural "%u units selected"
-msgstr[0] "%u vybraná jednotka"
-msgstr[1] "%u jednotky vybrány"
-msgstr[2] "%u jednotek vybráno"
-msgstr[3] "%u jednotek vybráno"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:2515
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -18087,8 +18075,6 @@ msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: src/structure.cpp:5252
 #, c-format
@@ -18096,8 +18082,6 @@ msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: src/structure.cpp:5257
 #: src/structure.cpp:5267
@@ -18151,11 +18135,11 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:88
 msgid "GAMES"
-msgstr "HRY"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:96
 msgid "Refresh Games List"
-msgstr "Aktualizuj zoznam hier"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:99
 msgid "Filter Games List"
@@ -18167,7 +18151,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:196
 msgid "Searching"
-msgstr "Hľadám"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:250
 msgid "Connecting to the lobby server..."
@@ -18271,7 +18255,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
-msgstr "Hráči"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
@@ -18292,11 +18276,11 @@ msgstr ""
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:171
 msgid "Cancel"
-msgstr "Zrušiť"
+msgstr ""
 
 #: src/titleui/protocol.cpp:78
 msgid "CONNECTION"
-msgstr "SPOJENIE"
+msgstr ""
 
 #: src/titleui/protocol.cpp:83
 msgid "Lobby"
@@ -18308,12 +18292,12 @@ msgstr ""
 
 #: src/titleui/protocol.cpp:182
 msgid "IP Address or Machine Name"
-msgstr "IP adresa alebo meno stroja"
+msgstr ""
 
 #: src/transporter.cpp:300
 #: src/transporter.cpp:348
 msgid "Launch Transport"
-msgstr "Spustiť transport"
+msgstr ""
 
 #: src/transporter.cpp:993
 msgid "There is not enough room in the Transport!"
@@ -18321,7 +18305,7 @@ msgstr ""
 
 #: src/transporter.cpp:1172
 msgid "Reinforcements landing"
-msgstr "Pristály posily"
+msgstr ""
 
 #: src/updatemanager.cpp:247
 msgid "Update Available"
@@ -18348,7 +18332,7 @@ msgstr ""
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:193
 msgid " - DEBUG"
-msgstr "- LADENIE"
+msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
@@ -18360,11 +18344,11 @@ msgstr ""
 
 #: src/wzapi.cpp:2320
 msgid "YOU ARE VICTORIOUS!"
-msgstr "SI VÍŤAZ!"
+msgstr ""
 
 #: src/wzapi.cpp:2325
 msgid "YOU WERE DEFEATED!"
-msgstr "BOLI STE PORAZENÝ!"
+msgstr ""
 
 #: src/wzscriptdebug.cpp:1813
 msgid "Script Debugger"
