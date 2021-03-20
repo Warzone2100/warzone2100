@@ -235,7 +235,7 @@ class Exporter():
 
                     obMatrix = ob.matrix_world
 
-                    if ob.animation_data.action:
+                    if ob.animation_data:
 
                         endFrame = 0
 
