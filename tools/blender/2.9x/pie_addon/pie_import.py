@@ -210,6 +210,8 @@ class Importer():
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
             
             mesh = bpy.data.meshes.new(nameStr)
+            mesh.uv_layers.new()
+            
             meshObject = bpy.data.objects.new(nameStr , mesh)
             meshObject.parent = armatureObject
             meshObject.parent_type = 'BONE'
@@ -315,7 +317,7 @@ class Importer():
                 connectorObject.location = connector
                 connectorObject.parent = meshObject
 
-                connectorObject.pieType = 'CONNECTOR'
+                connectorObject.pie_object_prop.pieType = 'CONNECTOR'
 
                 self.scene.collection.objects.link(connectorObject)
 
@@ -478,7 +480,14 @@ class Importer():
             else:
                 objProp.tcMask = False
 
-    def pie_import(self, scene, pieDir, pieMesh):
+    def pie_import(self, scene, pieDir):
+        self.scene = scene
+
+        pieParse = self.pie_parse(pieDir)
+
+        self.pie_generateBlenderObjects(pieParse)
+        
+    def pie_import_quick(self, scene, pieDir, pieMesh):
         self.scene = scene
 
         pieParse = self.pie_parse(pieDir + '\\\\' + pieMesh)
