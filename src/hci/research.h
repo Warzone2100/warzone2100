@@ -9,7 +9,8 @@ public:
 	RESEARCH *getObjectStatsAt(size_t objectIndex) const override;
 	RESEARCH *getStatsAt(size_t statsIndex) const override
 	{
-		return stats.at(statsIndex);
+		ASSERT_OR_RETURN(nullptr, statsIndex < stats.size(), "Invalid stats index (%zu); max: (%zu)", statsIndex, stats.size());
+		return stats[statsIndex];
 	}
 
 	size_t statsSize() const override

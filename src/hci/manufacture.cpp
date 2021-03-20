@@ -435,7 +435,7 @@ private:
 	void updateProductionRunSizeLabel(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
 	{
 		auto production = getProduction(factory, droidTemplate);
-		if (StructureIsManufacturingPending(factory) && production.isValid())
+		if (factory && StructureIsManufacturingPending(factory) && production.isValid())
 		{
 			auto productionLoops = getProductionLoops(factory);
 			auto labelText = astringf(productionLoops > 0 ? "%d/%d" : "%d", production.numRemaining(), production.quantity);
@@ -466,7 +466,8 @@ private:
 
 	uint32_t getCost() override
 	{
-		return calcTemplatePower(getStats());
+		DROID_TEMPLATE* psTemplate = getStats();
+		return psTemplate ? calcTemplatePower(psTemplate) : 0;
 	}
 
 	void clickPrimary() override

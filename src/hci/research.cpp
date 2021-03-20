@@ -537,7 +537,8 @@ private:
 
 	uint32_t getCost() override
 	{
-		return getStats()->researchPower;
+		auto research = getStats();
+		return research ? research->researchPower : 0;
 	}
 
 	void clickPrimary() override

@@ -458,7 +458,8 @@ private:
 
 	uint32_t getCost() override
 	{
-		return getStats()->powerToBuild;
+		STRUCTURE_STATS * psStats = getStats();
+		return psStats ? psStats->powerToBuild : 0;
 	}
 
 	void clickPrimary() override
