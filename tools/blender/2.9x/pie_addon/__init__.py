@@ -399,7 +399,7 @@ class PIE_ImportOperationQuick(bpy.types.Operator):
             #        if scene.pie_import_prop.pieFile + ' Anim' in action.name:
             #            self.report({'ERROR'}, 'There is already an animation which matches filename "{file}"'.format(file=scene.pie_import_prop.pieFile))
 
-        importer.pie_import(scene, scene.pie_import_prop.rootDir, scene.pie_import_prop.pieFile)
+        importer.pie_import_quick(scene, scene.pie_import_prop.rootDir, scene.pie_import_prop.pieFile)
 
         return {'FINISHED'}
 
@@ -432,7 +432,7 @@ class PIE_ImportOperation(bpy.types.Operator):
             #        if scene.pie_import_prop.pieFile + ' Anim' in action.name:
             #            self.report({'ERROR'}, 'There is already an animation which matches filename "{file}"'.format(file=scene.pie_import_prop.pieFile))
 
-        importer.pie_import(scene, self.properties.filepath, '')
+        importer.pie_import(scene, self.properties.filepath)
 
         return {'FINISHED'}
 
