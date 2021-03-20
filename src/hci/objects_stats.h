@@ -153,7 +153,8 @@ protected:
 	{
 		WzString costString = WzString::fromUtf8(_("\nCost: %1"));
 		costString.replace("%1", WzString::number(getCost()));
-		WzString tipString = getStatsName(getStats());
+		auto stats = getStats();
+		WzString tipString = (stats == nullptr) ? "" : getStatsName(stats);
 		tipString.append(costString);
 		return tipString.toUtf8();
 	}

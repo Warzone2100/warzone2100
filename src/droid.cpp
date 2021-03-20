@@ -1467,6 +1467,7 @@ UDWORD calcDroidPoints(DROID *psDroid)
 template <typename T>
 static uint32_t calcPower(const T *obj)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(0, obj);
 	return calcSum(obj, [](COMPONENT_STATS const &stat) {
 		return stat.buildPower;
 	}, [](BODY_STATS const &bodyStat, PROPULSION_STATS const &propStat) {
