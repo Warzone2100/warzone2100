@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-02-28 03:22+0000\n"
+"POT-Creation-Date: 2021-03-20 14:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1226,7 +1226,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer105.name
 #: data/base/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:2839
+#: po/custom/fromJson.txt:2835
 msgid "Howitzer Emplacement"
 msgstr ""
 
@@ -3418,7 +3418,7 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1074
+#: po/custom/fromJson.txt:1070
 msgid "Best Targets: Base Structures"
 msgstr ""
 
@@ -3691,7 +3691,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:386
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:396
-#: po/custom/fromJson.txt:2853
+#: po/custom/fromJson.txt:2849
 msgid "Howitzer Upgrade"
 msgstr ""
 
@@ -3864,7 +3864,7 @@ msgstr ""
 #. ... + 28 refs
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:1180
+#: po/custom/fromJson.txt:1185
 msgid "Body Points: Very Low"
 msgstr ""
 
@@ -4061,35 +4061,35 @@ msgstr ""
 msgid "Return to LZ"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:478
+#: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:494
+#: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:495
+#: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:496
+#: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:497
+#: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:503
+#: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:513
+#: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:518
+#: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
 msgstr ""
 
@@ -4165,9 +4165,9 @@ msgstr ""
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/script/rules/reticule.js:111
 #: src/challenge.cpp:240
-#: src/hci.cpp:1808
-#: src/hci/objects_stats.cpp:182
-#: src/hci/objects_stats.cpp:267
+#: src/hci.cpp:1834
+#: src/hci/objects_stats.cpp:213
+#: src/hci/objects_stats.cpp:298
 #: src/intelmap.cpp:406
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
@@ -5430,7 +5430,7 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
 #: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:2803
+#: po/custom/fromJson.txt:2799
 msgid "Hover Propulsion II"
 msgstr ""
 
@@ -7105,8 +7105,15 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1070
+#: po/custom/fromJson.txt:1074
 msgid "Best Targets: Base structures"
+msgstr ""
+
+#. TRANSLATORS:
+#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1094
+msgid "Best Targets: Bunkers and Hardpoints"
 msgstr ""
 
 #. TRANSLATORS:
@@ -7114,15 +7121,8 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #. ... + 4 refs
-#: po/custom/fromJson.txt:1096
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr ""
-
-#. TRANSLATORS:
-#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1100
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr ""
 
 #. TRANSLATORS:
@@ -7196,7 +7196,7 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-#: po/custom/fromJson.txt:1185
+#: po/custom/fromJson.txt:1179
 msgid "Body Points: Very low"
 msgstr ""
 
@@ -9607,55 +9607,48 @@ msgid "High tensile concrete-plastic composite"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#: po/custom/fromJson.txt:2787
-msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
-
-#. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
-#: po/custom/fromJson.txt:2791
+#: po/custom/fromJson.txt:2787
 msgid "HMG Bunker"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
-#: po/custom/fromJson.txt:2794
+#: po/custom/fromJson.txt:2790
 msgid "Hover AI"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
-#: po/custom/fromJson.txt:2797
+#: po/custom/fromJson.txt:2793
 msgid "Hover II"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
-#: po/custom/fromJson.txt:2800
+#: po/custom/fromJson.txt:2796
 msgid "Hover III"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Hover.name
-#: po/custom/fromJson.txt:2807
+#: po/custom/fromJson.txt:2803
 msgid "Hover Propulsion"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover01.name
 #. data/mp/stats/propulsion.json: $.hover01.name
-#: po/custom/fromJson.txt:2811
+#: po/custom/fromJson.txt:2807
 msgid "Hover"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[2]
-#: po/custom/fromJson.txt:2816
+#: po/custom/fromJson.txt:2812
 #, no-c-format
 msgid "Howitzer accuracy +10%"
 msgstr ""
@@ -9663,42 +9656,42 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
-#: po/custom/fromJson.txt:2820
+#: po/custom/fromJson.txt:2816
 msgid "Howitzer Autoloader Mk2"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
-#: po/custom/fromJson.txt:2824
+#: po/custom/fromJson.txt:2820
 msgid "Howitzer Autoloader Mk3"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
-#: po/custom/fromJson.txt:2828
+#: po/custom/fromJson.txt:2824
 msgid "Howitzer Autoloader"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[2]
-#: po/custom/fromJson.txt:2833
+#: po/custom/fromJson.txt:2829
 #, no-c-format
 msgid "Howitzer damage +25%"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
-#: po/custom/fromJson.txt:2842
+#: po/custom/fromJson.txt:2838
 msgid "Howitzer Fast Loader"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text[2]
-#: po/custom/fromJson.txt:2847
+#: po/custom/fromJson.txt:2843
 #, no-c-format
 msgid "Howitzer reload time -10%"
 msgstr ""
@@ -9708,27 +9701,27 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Howitzer105Mk1.name
 #. data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
-#: po/custom/fromJson.txt:2859
+#: po/custom/fromJson.txt:2855
 msgid "Howitzer"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2863
+#: po/custom/fromJson.txt:2859
 msgid "HPV Cannon Emplacement"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2867
+#: po/custom/fromJson.txt:2863
 msgid "HPV Cannon Hardpoint"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2870
+#: po/custom/fromJson.txt:2866
 msgid "HPV Cannon Python Tracks"
 msgstr ""
 
@@ -9737,7 +9730,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.AASite-QuadMg1.name
 #. data/mp/stats/research.json: $.R-Defense-AASite-QuadMg1.name
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
-#: po/custom/fromJson.txt:2876
+#: po/custom/fromJson.txt:2872
 msgid "Hurricane AA Site"
 msgstr ""
 
@@ -9746,67 +9739,67 @@ msgstr ""
 #. data/base/stats/weapons.json: $.QuadMg1AAGun.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun03.name
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
-#: po/custom/fromJson.txt:2882
+#: po/custom/fromJson.txt:2878
 msgid "Hurricane AA Turret"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
-#: po/custom/fromJson.txt:2885
+#: po/custom/fromJson.txt:2881
 msgid "Hut"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
-#: po/custom/fromJson.txt:2889
+#: po/custom/fromJson.txt:2885
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
-#: po/custom/fromJson.txt:2893
+#: po/custom/fromJson.txt:2889
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
-#: po/custom/fromJson.txt:2897
+#: po/custom/fromJson.txt:2893
 msgid "HVAPFSDS Cannon Rounds"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
-#: po/custom/fromJson.txt:2901
+#: po/custom/fromJson.txt:2897
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2905
+#: po/custom/fromJson.txt:2901
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2909
+#: po/custom/fromJson.txt:2905
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
-#: po/custom/fromJson.txt:2912
+#: po/custom/fromJson.txt:2908
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2915
+#: po/custom/fromJson.txt:2911
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr ""
 
@@ -9815,8 +9808,15 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Cannon4AUTOMk1.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon4AMk1.name
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
-#: po/custom/fromJson.txt:2921
+#: po/custom/fromJson.txt:2917
 msgid "Hyper Velocity Cannon"
+msgstr ""
+
+#. TRANSLATORS:
+#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#: po/custom/fromJson.txt:2921
+msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
 msgstr ""
 
 #. TRANSLATORS:
@@ -11462,19 +11462,19 @@ msgid "New Systems Tower Available"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4155
-msgid "New Systems Turret Available For Design"
-msgstr ""
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4161
+#: po/custom/fromJson.txt:4157
 msgid "New Systems Turret Available for Design"
+msgstr ""
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4161
+msgid "New Systems Turret Available For Design"
 msgstr ""
 
 #. TRANSLATORS:
@@ -14982,38 +14982,38 @@ msgstr ""
 msgid "Store Design"
 msgstr ""
 
-#: src/display.cpp:1551
+#: src/display.cpp:1553
 msgid "Cannot Build. Oil Resource Burning."
 msgstr ""
 
-#: src/display.cpp:1569
+#: src/display.cpp:1571
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
 msgstr ""
 
-#: src/display.cpp:1731
+#: src/display.cpp:1733
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr ""
 
-#: src/display3d.cpp:729
+#: src/display3d.cpp:742
 msgid "Player left"
 msgstr ""
 
-#: src/display3d.cpp:733
+#: src/display3d.cpp:746
 msgid "Player dropped"
 msgstr ""
 
-#: src/display3d.cpp:737
+#: src/display3d.cpp:750
 #: src/multiint.cpp:2501
 msgid "Waiting for other players"
 msgstr ""
 
-#: src/display3d.cpp:742
+#: src/display3d.cpp:755
 msgid "Out of sync"
 msgstr ""
 
-#: src/display3d.cpp:2004
+#: src/display3d.cpp:2017
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr ""
@@ -15056,7 +15056,7 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2934
+#: src/droid.cpp:2935
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -15090,7 +15090,7 @@ msgid "Tutorial"
 msgstr ""
 
 #: src/frontend.cpp:145
-#: src/ingameop.cpp:240
+#: src/ingameop.cpp:239
 msgid "Options"
 msgstr ""
 
@@ -15206,12 +15206,12 @@ msgid "CAMPAIGNS"
 msgstr ""
 
 #: src/frontend.cpp:498
-#: src/ingameop.cpp:935
+#: src/ingameop.cpp:944
 msgid "Load Campaign Saved Game"
 msgstr ""
 
 #: src/frontend.cpp:504
-#: src/ingameop.cpp:939
+#: src/ingameop.cpp:948
 msgid "Load Skirmish Saved Game"
 msgstr ""
 
@@ -15241,12 +15241,12 @@ msgid "Game Options"
 msgstr ""
 
 #: src/frontend.cpp:636
-#: src/ingameop.cpp:477
+#: src/ingameop.cpp:486
 msgid "Graphics Options"
 msgstr ""
 
 #: src/frontend.cpp:637
-#: src/ingameop.cpp:480
+#: src/ingameop.cpp:489
 msgid "Video Options"
 msgstr ""
 
@@ -15255,17 +15255,17 @@ msgid "Audio / Zoom Options"
 msgstr ""
 
 #: src/frontend.cpp:639
-#: src/ingameop.cpp:487
+#: src/ingameop.cpp:496
 msgid "Mouse Options"
 msgstr ""
 
 #: src/frontend.cpp:640
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:501
 msgid "Key Mappings"
 msgstr ""
 
 #: src/frontend.cpp:641
-#: src/ingameop.cpp:495
+#: src/ingameop.cpp:504
 msgid "Music Manager"
 msgstr ""
 
@@ -15363,32 +15363,32 @@ msgid "Tracked"
 msgstr ""
 
 #: src/frontend.cpp:765
-#: src/ingameop.cpp:523
+#: src/ingameop.cpp:532
 msgid "Video Playback"
 msgstr ""
 
 #: src/frontend.cpp:769
-#: src/ingameop.cpp:528
+#: src/ingameop.cpp:537
 msgid "Scanlines"
 msgstr ""
 
 #: src/frontend.cpp:774
-#: src/ingameop.cpp:533
+#: src/ingameop.cpp:542
 msgid "Subtitles"
 msgstr ""
 
 #: src/frontend.cpp:779
-#: src/ingameop.cpp:538
+#: src/ingameop.cpp:547
 msgid "Shadows"
 msgstr ""
 
 #: src/frontend.cpp:783
-#: src/ingameop.cpp:543
+#: src/ingameop.cpp:552
 msgid "Radar"
 msgstr ""
 
 #: src/frontend.cpp:787
-#: src/ingameop.cpp:548
+#: src/ingameop.cpp:557
 msgid "Radar Jump"
 msgstr ""
 
@@ -15500,7 +15500,7 @@ msgid "Texture size"
 msgstr ""
 
 #: src/frontend.cpp:1418
-#: src/ingameop.cpp:655
+#: src/ingameop.cpp:664
 msgid "Vertical sync"
 msgstr ""
 
@@ -15561,32 +15561,32 @@ msgid "Camera Pitch"
 msgstr ""
 
 #: src/frontend.cpp:1709
-#: src/ingameop.cpp:731
+#: src/ingameop.cpp:740
 msgid "Reverse Rotation"
 msgstr ""
 
 #: src/frontend.cpp:1713
-#: src/ingameop.cpp:738
+#: src/ingameop.cpp:747
 msgid "Trap Cursor"
 msgstr ""
 
 #: src/frontend.cpp:1718
-#: src/ingameop.cpp:744
+#: src/ingameop.cpp:753
 msgid "Switch Mouse Buttons"
 msgstr ""
 
 #: src/frontend.cpp:1723
-#: src/ingameop.cpp:749
+#: src/ingameop.cpp:758
 msgid "Rotate Screen"
 msgstr ""
 
 #: src/frontend.cpp:1727
-#: src/ingameop.cpp:754
+#: src/ingameop.cpp:763
 msgid "Colored Cursors"
 msgstr ""
 
 #: src/frontend.cpp:1731
-#: src/ingameop.cpp:759
+#: src/ingameop.cpp:768
 msgid "Scroll Event"
 msgstr ""
 
@@ -15683,113 +15683,113 @@ msgstr ""
 msgid "Tip: Adjusting Display Scale"
 msgstr ""
 
-#: src/hci.cpp:929
+#: src/hci.cpp:955
 #: src/loop.cpp:244
 #: src/loop.cpp:260
 msgid "GAME SAVED: "
 msgstr ""
 
-#: src/hci.cpp:1327
+#: src/hci.cpp:1353
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr ""
 
-#: src/hci.cpp:1336
+#: src/hci.cpp:1362
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr ""
 
-#: src/hci.cpp:1355
+#: src/hci.cpp:1381
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr ""
 
-#: src/hci.cpp:1363
+#: src/hci.cpp:1389
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
-#: src/hci.cpp:1693
+#: src/hci.cpp:1719
 #: src/multiint.cpp:1443
 #: src/multimenu.cpp:686
 msgid "Power"
 msgstr ""
 
-#: src/hci.cpp:1763
-#: src/hci/build.cpp:552
-#: src/hci/manufacture.cpp:544
+#: src/hci.cpp:1789
+#: src/hci/build.cpp:567
+#: src/hci/manufacture.cpp:577
 msgid "Hiding Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:1765
-#: src/hci/build.cpp:554
-#: src/hci/manufacture.cpp:546
+#: src/hci.cpp:1791
+#: src/hci/build.cpp:569
+#: src/hci/manufacture.cpp:579
 msgid "Showing Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:1888
+#: src/hci.cpp:1914
 msgid ""
 "\n"
 "Cost: %1"
 msgstr ""
 
-#: src/hci.cpp:2494
+#: src/hci.cpp:2520
 msgid "Chat: All"
 msgstr ""
 
-#: src/hci.cpp:2499
+#: src/hci.cpp:2525
 msgid "Chat: Team"
 msgstr ""
 
-#: src/hci/build.cpp:287
+#: src/hci/build.cpp:290
 msgid "Build Progress"
 msgstr ""
 
-#: src/hci/build.cpp:575
+#: src/hci/build.cpp:590
 msgid ""
 "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
-#: src/hci/build.cpp:577
+#: src/hci/build.cpp:592
 msgid ""
 "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
-#: src/hci/manufacture.cpp:340
+#: src/hci/manufacture.cpp:347
 msgid "Construction Progress"
 msgstr ""
 
-#: src/hci/manufacture.cpp:584
+#: src/hci/manufacture.cpp:617
 msgid "Factory Delivery Point"
 msgstr ""
 
-#: src/hci/manufacture.cpp:635
+#: src/hci/manufacture.cpp:668
 msgid "Loop Production"
 msgstr ""
 
-#: src/hci/objects_stats.cpp:109
+#: src/hci/objects_stats.cpp:122
 msgid "Progress Bar"
 msgstr ""
 
-#: src/hci/research.cpp:374
+#: src/hci/research.cpp:385
 msgid "Research Progress"
 msgstr ""
 
-#: src/hci/research.cpp:448
+#: src/hci/research.cpp:463
 msgid "Ally progress"
 msgstr ""
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:183
-#: src/ingameop.cpp:236
-#: src/ingameop.cpp:501
-#: src/ingameop.cpp:560
-#: src/ingameop.cpp:673
-#: src/ingameop.cpp:767
+#: src/ingameop.cpp:235
+#: src/ingameop.cpp:510
+#: src/ingameop.cpp:569
+#: src/ingameop.cpp:682
+#: src/ingameop.cpp:776
 #: src/keyedit.cpp:446
-#: src/musicmanager.cpp:778
+#: src/musicmanager.cpp:779
 msgid "Resume Game"
 msgstr ""
 
@@ -15798,78 +15798,78 @@ msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
 #: src/ingameop.cpp:130
-#: src/ingameop.cpp:268
+#: src/ingameop.cpp:267
 msgid "Host Quit"
 msgstr ""
 
 #: src/ingameop.cpp:170
-#: src/ingameop.cpp:970
+#: src/ingameop.cpp:979
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
 #: src/ingameop.cpp:175
-#: src/ingameop.cpp:974
+#: src/ingameop.cpp:983
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
 #: src/ingameop.cpp:180
-#: src/ingameop.cpp:498
-#: src/ingameop.cpp:557
-#: src/ingameop.cpp:669
-#: src/ingameop.cpp:763
+#: src/ingameop.cpp:507
+#: src/ingameop.cpp:566
+#: src/ingameop.cpp:678
+#: src/ingameop.cpp:772
 #: src/keyedit.cpp:444
-#: src/musicmanager.cpp:777
+#: src/musicmanager.cpp:778
 msgid "Go Back"
 msgstr ""
 
-#: src/ingameop.cpp:248
-#: src/ingameop.cpp:257
+#: src/ingameop.cpp:247
+#: src/ingameop.cpp:256
 msgid "Load Game"
 msgstr ""
 
-#: src/ingameop.cpp:251
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:250
+#: src/ingameop.cpp:259
 #: src/mission.cpp:2430
 msgid "Save Game"
 msgstr ""
 
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:271
 msgid "Quit"
 msgstr ""
 
-#: src/ingameop.cpp:340
+#: src/ingameop.cpp:339
 msgid "Host has quit the game!"
 msgstr ""
 
-#: src/ingameop.cpp:346
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr ""
 
-#: src/ingameop.cpp:352
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/ingameop.cpp:484
+#: src/ingameop.cpp:493
 msgid "Audio Options"
 msgstr ""
 
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:501
 msgid "View Key Mappings"
 msgstr ""
 
-#: src/ingameop.cpp:553
+#: src/ingameop.cpp:562
 msgid "Shake"
 msgstr ""
 
-#: src/ingameop.cpp:943
+#: src/ingameop.cpp:952
 msgid "Save Campaign Game"
 msgstr ""
 
-#: src/ingameop.cpp:947
+#: src/ingameop.cpp:956
 msgid "Save Skirmish Game"
 msgstr ""
 
-#: src/init.cpp:449
+#: src/init.cpp:450
 #, c-format
 msgid ""
 "The required mod could not be loaded: %s\n"
@@ -16511,7 +16511,7 @@ msgstr ""
 
 #: src/keyedit.cpp:427
 #: src/multiint.cpp:1521
-#: src/musicmanager.cpp:767
+#: src/musicmanager.cpp:768
 #: src/titleui/gamefind.cpp:91
 #: src/titleui/protocol.cpp:81
 msgid "Return To Previous Screen"
@@ -17780,12 +17780,12 @@ msgstr ""
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr ""
 
-#: src/multiopt.cpp:298
+#: src/multiopt.cpp:305
 #: src/multiplay.cpp:1475
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr ""
 
-#: src/multiopt.cpp:299
+#: src/multiopt.cpp:306
 #: src/multiplay.cpp:1479
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr ""
@@ -17886,24 +17886,24 @@ msgstr ""
 msgid "Brown"
 msgstr ""
 
-#: src/musicmanager.cpp:492
+#: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
 msgstr ""
 
-#: src/musicmanager.cpp:532
-#: src/musicmanager.cpp:678
+#: src/musicmanager.cpp:533
+#: src/musicmanager.cpp:679
 msgid "Album"
 msgstr ""
 
-#: src/musicmanager.cpp:543
+#: src/musicmanager.cpp:544
 msgid "Date"
 msgstr ""
 
-#: src/musicmanager.cpp:669
+#: src/musicmanager.cpp:670
 msgid "Title"
 msgstr ""
 
-#: src/musicmanager.cpp:856
+#: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
 msgstr ""
 
@@ -18344,19 +18344,19 @@ msgid "Get Update Now"
 msgstr ""
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
-#: src/version.cpp:186
+#: src/version.cpp:189
 msgid " (modified locally)"
 msgstr ""
 
 #. TRANSLATORS: Printed in Debug builds
-#: src/version.cpp:193
+#: src/version.cpp:196
 msgid " - DEBUG"
 msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:202
+#: src/version.cpp:205
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""
