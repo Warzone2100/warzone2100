@@ -213,12 +213,12 @@ class Exporter():
 
                     connectorObjects = []
                     for connector in child.children:
-                        if childProp.pieType == 'CONNECTOR':
+                        if connector.pie_object_prop.pieType == 'CONNECTOR':
                             connectorObjects.append(connector)
 
                     if connectorObjects:
                         print('Exporting {pie} level {num} connectors'.format(pie=nameStr, num=level))
-                        pieFile.write('CONNECTORS {num}\n'.format(num=len(connectorObjects)))
+                        pieFile.write('\nCONNECTORS {num}'.format(num=len(connectorObjects)))
                         for connector in connectorObjects:
 
                             val = []
