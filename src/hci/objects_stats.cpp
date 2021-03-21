@@ -84,9 +84,16 @@ void BaseStatsController::displayStatsForm()
 {
 	if (widgGetFromID(psWScreen, IDSTAT_FORM) == nullptr)
 	{
-		psWScreen->psForm->attach(makeStatsForm());
-		intMode = INT_STAT;
-		setSecondaryWindowUp(true);
+		auto newStatsForm = makeStatsForm();
+		widgScheduleTask([newStatsForm]() {
+			if (widgGetFromID(psWScreen, IDSTAT_FORM) != nullptr)
+			{
+				return;
+			}
+			psWScreen->psForm->attach(newStatsForm);
+			intMode = INT_STAT;
+			setSecondaryWindowUp(true);
+		});
 	}
 }
 
