@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-21 01:42\n"
+"PO-Revision-Date: 2021-03-21 13:44\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -459,7 +459,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr ""
+msgstr "Засичаме кодиран сигнален поток от Колектива."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
@@ -499,7 +499,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr ""
+msgstr "Смущаващи новини относно НАСДА."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
@@ -529,15 +529,15 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "Колективът обработват и унищожават цивилни в тази база."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "Ваша задача е да спасите цивилните."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "После разрушете лагера."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
@@ -566,7 +566,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "Колективът събират всички цивилни в тази зона."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
@@ -574,11 +574,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "Унищожете или подплашете транспортьора на Колектива."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr ""
+msgstr "Спасете колкото може повече цивилни."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
@@ -591,7 +591,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "Те трябва да бъдат спрени."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
@@ -599,7 +599,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "Не позволявайте на Колектива да задействат реактора."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
@@ -607,7 +607,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "Превземете централата на НАСДА преди НЕКСУС и Колективът да имат възможност да я използват."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
@@ -1125,7 +1125,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:10
 msgid "Source of Power Surge"
-msgstr ""
+msgstr "Източник на енергийния скок"
 
 #: data/base/messages/strings/genstrings.txt:13
 msgid "Landing Zone"
@@ -1158,11 +1158,11 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:23
 msgid "Enemy Base"
-msgstr ""
+msgstr "Вражеска база"
 
 #: data/base/messages/strings/genstrings.txt:27
 msgid "Incoming transmission"
-msgstr ""
+msgstr "Входящо съобщение"
 
 #: data/base/messages/strings/genstrings.txt:30
 msgid "Incoming intelligence report."
@@ -1170,12 +1170,12 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:33
 msgid "Nuclear Reactor"
-msgstr ""
+msgstr "Ядрен реактор"
 
 #: data/base/messages/strings/names.txt:12
 #: data/mp/messages/strings/names.txt:12
 msgid "New Design"
-msgstr ""
+msgstr "Нов дизайн"
 
 #: data/base/messages/strings/names.txt:103
 #: data/mp/messages/strings/names.txt:160
@@ -1187,7 +1187,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:198
 #: data/mp/messages/strings/names.txt:218
 msgid "Demolish"
-msgstr ""
+msgstr "Разруши"
 
 #. TRANSLATORS:
 #. data/mp/stats/propulsion.json: $.Naval.name
@@ -1393,7 +1393,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:409
 #: po/custom/fromJson.txt:2051
 msgid "Flamer Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
@@ -2303,7 +2303,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
 msgid "Armored hardpoint with Flamer"
-msgstr ""
+msgstr "Бронирана укрепена точка с огнехвъргачка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT7_RMG.text[1]
@@ -2321,7 +2321,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:147
 #: po/custom/fromJson.txt:696
 msgid "Armored hardpoint with Assault Cannon"
-msgstr ""
+msgstr "Бронирана укрепена точка с щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT11_HFL.text[1]
@@ -2907,7 +2907,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:246
 #: po/custom/fromJson.txt:1423
 msgid "Collective Light Body"
-msgstr ""
+msgstr "Лек копрус на Колектива"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[1]
@@ -2945,7 +2945,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:251
 #: po/custom/fromJson.txt:1427
 msgid "Collective Medium Body"
-msgstr ""
+msgstr "Среден копрус на Колектива"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[1]
@@ -3379,7 +3379,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:333
 #: po/custom/fromJson.txt:1066
 msgid "Best Targets: Base Structures and Defenses"
-msgstr ""
+msgstr "Най-подходящи цели: Постройки и защити"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB2.text[1]
@@ -3419,7 +3419,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:338
 #: po/custom/fromJson.txt:1070
 msgid "Best Targets: Base Structures"
-msgstr ""
+msgstr "Най-подходящи цели: Постройки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[3]
@@ -3458,7 +3458,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:343
 #: po/custom/fromJson.txt:1116
 msgid "Best Targets: Defenses"
-msgstr ""
+msgstr "Най-подходящи цели: Защити"
 
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346
@@ -3521,7 +3521,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:358
 #: po/custom/fromJson.txt:1135
 msgid "Best Targets: Vehicles"
-msgstr "Най-добри цели: МПС"
+msgstr "Най-подходящи цели: МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
@@ -3570,7 +3570,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1106
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Най-добри цели: Бункери, колесни и ховъркрафт МПС"
+msgstr "Най-подходящи цели: Бункери, колесни и ховъркрафт МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3650,7 +3650,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1090
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Най-добри цели: Базови Структури, пехота, колесни МПС"
+msgstr "Най-подходящи цели: Постройки, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3677,7 +3677,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:383
 #: po/custom/fromJson.txt:1078
 msgid "Best Targets: Base Structures, bunkers"
-msgstr ""
+msgstr "Най-подходящи цели: Постройки, бункери"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[0]
@@ -3854,7 +3854,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:413
 #: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr "Най-добри цели: Базови структури, пехота, колесни МПС"
+msgstr "Най-подходящи цели: Базови структури, пехота, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -4018,7 +4018,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-c.js:29
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Спасете цивилните от Колектива преди прекалено много от тях да бъдат заловени"
 
 #: data/base/script/campaign/cam2-d.js:76
 msgid "Secure the Uplink from The Collective"
@@ -4026,7 +4026,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-end.js:151
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Изпратете поне един транспортьор с камион и устойте на нападките на Колектива"
 
 #: data/base/script/campaign/cam3-1.js:162
 msgid "Move all units into the valley"
@@ -4203,7 +4203,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:32
 msgid "The oil derrick is currently dormant. Build a power generator to convert the oil into power"
-msgstr ""
+msgstr "Нефтената помпа в момента не работи. Постройте електрогенератор, за да преобразувате нефта в енергия"
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
@@ -4211,7 +4211,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
-msgstr ""
+msgstr "Сега изберете \"Електрогенератор\" от менюто вляво"
 
 #: data/base/script/tutorial.js:36
 msgid "Position the square at your base and left click to start the build process"
@@ -4223,11 +4223,11 @@ msgstr ""
 
 #: data/base/script/tutorial.js:38
 msgid "Now left click the power generator site"
-msgstr ""
+msgstr "Сега кликнете с ляв бутон върху мястото на електрогенератора"
 
 #: data/base/script/tutorial.js:39
 msgid "The other truck will now help to build the power generator"
-msgstr "Сега другият камион ще помогне при строежа на електрогенератора"
+msgstr "Другият камион ще помогне при строежа на електрогенератора"
 
 #: data/base/script/tutorial.js:41
 msgid "During missions you need to locate and recover technologies from before the Collapse"
@@ -4643,7 +4643,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr ""
+msgstr "КОЛЕКТИВЪТ"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
@@ -4759,7 +4759,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr ""
+msgstr "Войни на Колектива, издирвам местоположението на централата на НАСДА."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
@@ -4771,7 +4771,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
-msgstr ""
+msgstr "Войни на Колектива, още натрапници навлизат в територията ни."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:2
 msgid "They are not part of the machine."
@@ -4779,7 +4779,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr ""
+msgstr "Войни на Колектива, нападнете и унищножете всички, които се противопоставят на машината."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -4787,7 +4787,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:1
 msgid "Warriors of The Collective, we are ready to destroy the intruders who pollute our lands."
-msgstr ""
+msgstr "Войни на Колектива, готови сме да затрием натрапниците, които замърсяват нашите земи."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
@@ -5351,7 +5351,7 @@ msgstr "Огнехвъргач Киборг"
 #: data/mp/messages/strings/names.txt:373
 #: po/custom/fromJson.txt:3598
 msgid "Machinegunner Cyborg"
-msgstr ""
+msgstr "Картечар Киборг"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs.name
@@ -5615,17 +5615,17 @@ msgstr ""
 #: data/mp/multiplay/script/rules/printsettings.js:21
 #: src/multiint.cpp:1444
 msgid "Low Power Levels"
-msgstr ""
+msgstr "Ниски енергийни нива"
 
 #: data/mp/multiplay/script/rules/printsettings.js:22
 #: src/multiint.cpp:1445
 msgid "Medium Power Levels"
-msgstr ""
+msgstr "Средни енергийни нива"
 
 #: data/mp/multiplay/script/rules/printsettings.js:23
 #: src/multiint.cpp:1446
 msgid "High Power Levels"
-msgstr ""
+msgstr "Високи енергийни нива"
 
 #: data/mp/multiplay/script/rules/printsettings.js:29
 #: src/multiint.cpp:1454
@@ -5700,7 +5700,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:133
 msgid "Power transferred."
-msgstr ""
+msgstr "Енергия прехвърлена."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:138
 msgid "Please put a beacon!"
@@ -6626,28 +6626,28 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL3.text[1]
 #: po/custom/fromJson.txt:708
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr ""
+msgstr "Бронирана укрепена точка с Гаусово оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT4_HC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT4_HC.text[1]
 #: po/custom/fromJson.txt:712
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr ""
+msgstr "Бронирана укрепена точка с тежко оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #: po/custom/fromJson.txt:716
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr ""
+msgstr "Бронирана укрепена точка с тежка картечница"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
 #. data/mp/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
 #: po/custom/fromJson.txt:720
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr ""
+msgstr "Бронирана укрепена точка с хиперскоростно оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
@@ -6661,14 +6661,14 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_WT2_LC.text[1]
 #: po/custom/fromJson.txt:732
 msgid "Armored hardpoint with Light Cannon"
-msgstr ""
+msgstr "Бронирана укрепена точка с леко оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #: po/custom/fromJson.txt:736
 msgid "Armored hardpoint with Medium Cannon"
-msgstr ""
+msgstr "Бронирана укрепена точка със средно оръдие"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
@@ -6790,7 +6790,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Wall-VulcanCan.name
 #: po/custom/fromJson.txt:838
 msgid "Assault Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепена точка с щурмово оръдие"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
@@ -7087,7 +7087,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1054
 msgid "Best Targets: Aerial targets only"
-msgstr ""
+msgstr "Най-подходящи цели: Само въздушни цели"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[2]
@@ -7096,7 +7096,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1060
 msgid "Best Targets: Base structures and cyborgs"
-msgstr ""
+msgstr "Най-подходящи цели: Постройки и киборги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
@@ -7110,7 +7110,7 @@ msgstr ""
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1094
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr ""
+msgstr "Най-подходящи цели: Бункери и укрепени точки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7128,13 +7128,13 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS2.text[2]
 #: po/custom/fromJson.txt:1112
 msgid "Best Targets: Cyborgs"
-msgstr ""
+msgstr "Най-подходящи цели: Киборги"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Heavy cyborgs"
-msgstr ""
+msgstr "Най-подходящи цели: Тежки киборги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[2]
@@ -7143,7 +7143,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1125
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr ""
+msgstr "Най-подходящи цели: Пехота, постройки, колесни МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -7158,14 +7158,14 @@ msgstr ""
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[2]
 #: po/custom/fromJson.txt:1140
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr ""
+msgstr "Най-подходящи цели: МПС, укрепени точки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
 #: po/custom/fromJson.txt:1144
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr ""
+msgstr "Най-подходящи цели: Колесни и ховъркрафт МПС"
 
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
@@ -7583,7 +7583,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text[0]
 #: po/custom/fromJson.txt:1419
 msgid "Collective Heavy Body"
-msgstr ""
+msgstr "Тежък копрус на Колектива"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
@@ -7860,7 +7860,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1590
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "Фабрика за киборги"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgFlamer01.name
@@ -8312,7 +8312,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0FacMod1.name
 #: po/custom/fromJson.txt:1928
 msgid "Factory Module"
-msgstr ""
+msgstr "Фабричен модул"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
@@ -8341,7 +8341,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0LightFactory.name
 #: po/custom/fromJson.txt:1945
 msgid "Factory"
-msgstr ""
+msgstr "Фабрика"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
@@ -8628,20 +8628,20 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01b.name
 #: po/custom/fromJson.txt:2138
 msgid "Gas Turbine Generator Mk2"
-msgstr ""
+msgstr "Газотурбинен генератор Мод. 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01c.name
 #: po/custom/fromJson.txt:2141
 msgid "Gas Turbine Generator Mk3"
-msgstr ""
+msgstr "Газотурбинен генератор Мод. 3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Power-Upgrade01.name
 #. data/mp/stats/research.json: $.R-Struc-Power-Upgrade01.name
 #: po/custom/fromJson.txt:2145
 msgid "Gas Turbine Generator"
-msgstr ""
+msgstr "Газотурбинен генератор"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail3.name
@@ -11602,7 +11602,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResourceExtractor.name
 #: po/custom/fromJson.txt:4252
 msgid "Oil Derrick"
-msgstr ""
+msgstr "Нефтена помпа"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.OilDrum.name
@@ -11881,7 +11881,7 @@ msgstr ""
 #. data/base/stats/features.json: $.Powlab.name
 #: po/custom/fromJson.txt:4419
 msgid "Powerlab"
-msgstr ""
+msgstr "Енерголаборатория"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[2]
@@ -12659,7 +12659,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0BaBaFactory.name
 #: po/custom/fromJson.txt:4951
 msgid "Scavenger Factory"
-msgstr ""
+msgstr "Вехтошарска фабрика"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaFlameTower.name
@@ -13757,7 +13757,7 @@ msgstr ""
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[3]
 #: po/custom/fromJson.txt:5669
 msgid "Use a truck to add modules to a factory"
-msgstr "Използвайте камион, за да добавите модули към фабрика"
+msgstr "Използвайте камиони, за да добавите модули към фабриките"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[3]
@@ -14899,7 +14899,7 @@ msgstr ""
 #: src/design.cpp:851
 #: src/design.cpp:870
 msgid "Power Usage"
-msgstr ""
+msgstr "Потребление на енергия"
 
 #: src/design.cpp:1120
 msgid "Hydra "
@@ -15065,7 +15065,7 @@ msgstr ""
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:176
 msgid "Collective"
-msgstr ""
+msgstr "Колектив"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
@@ -15701,7 +15701,7 @@ msgstr ""
 #: src/multiint.cpp:1443
 #: src/multimenu.cpp:686
 msgid "Power"
-msgstr ""
+msgstr "Енергия"
 
 #: src/hci.cpp:1789
 #: src/hci/build.cpp:567
@@ -16271,11 +16271,11 @@ msgstr ""
 
 #: src/keybind.cpp:702
 msgid "Infinite power disabled"
-msgstr ""
+msgstr "Безкрайна енергия забранена"
 
 #: src/keybind.cpp:702
 msgid "Infinite power enabled"
-msgstr ""
+msgstr "Безкрайна енергия позволена"
 
 #: src/keybind.cpp:739
 msgid "All items made available"
@@ -16383,7 +16383,7 @@ msgstr ""
 
 #: src/keybind.cpp:1576
 msgid "Unable to locate any oil derricks!"
-msgstr ""
+msgstr "Не можем да намерим нефтени помпи!"
 
 #: src/keybind.cpp:1740
 msgid "Oh, the weather outside is frightful... SNOW"
@@ -16827,7 +16827,7 @@ msgstr ""
 
 #: src/keymap.cpp:488
 msgid "View next Oil Derrick"
-msgstr ""
+msgstr "Виж следващата нефтена помпа"
 
 #: src/keymap.cpp:489
 msgid "View next Repair Unit"
@@ -17003,7 +17003,7 @@ msgstr "Изберете всички камиони"
 
 #: src/keymap.cpp:561
 msgid "Select next Factory"
-msgstr ""
+msgstr "Избиране на следващата фабрика"
 
 #: src/keymap.cpp:562
 msgid "Select next Research Facility"
@@ -17011,11 +17011,11 @@ msgstr ""
 
 #: src/keymap.cpp:563
 msgid "Select next Power Generator"
-msgstr ""
+msgstr "Избиране на следващия електрогенаратор"
 
 #: src/keymap.cpp:564
 msgid "Select next Cyborg Factory"
-msgstr ""
+msgstr "Избиране на следващата фабрика за киборги"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
@@ -17031,7 +17031,7 @@ msgstr ""
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Скок до следващия електрогенаратор"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
@@ -17198,7 +17198,7 @@ msgstr ""
 #: src/multigifts.cpp:413
 #, c-format
 msgid "%s Gives You %d Power"
-msgstr ""
+msgstr "%s Ви предоставя %d единици енергия"
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -17754,7 +17754,7 @@ msgstr ""
 
 #: src/multimenu.cpp:1074
 msgid "Give Power To Player"
-msgstr ""
+msgstr "Предоставете енергия на играча"
 
 #: src/multimenu.cpp:1243
 #, c-format
