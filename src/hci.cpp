@@ -1138,6 +1138,7 @@ INT_RETVAL intRunWidgets()
 		case IDMISSIONRES_QUIT:			// mission quit
 		case INTINGAMEOP_QUIT:			// esc quit confirm
 		case IDOPT_QUIT:						// options screen quit
+			intCloseInGameOptions(false, false);
 			intResetScreen(false);
 			quitting = true;
 			break;
