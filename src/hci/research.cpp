@@ -373,12 +373,18 @@ private:
 		ASSERT_NOT_NULLPTR_OR_RETURN(, facility);
 
 		auto research = StructureGetResearch(facility);
+		if (research == nullptr)
+		{
+			return;
+		}
 		if (research->psSubject == nullptr)
 		{
 			return;
 		}
 
-		auto currentPoints = asPlayerResList[selectedPlayer][research->psSubject->index].currentPoints;
+		auto& playerResList = asPlayerResList[selectedPlayer];
+		ASSERT_OR_RETURN(, research->psSubject->index < playerResList.size(), "Invalid index");
+		auto currentPoints = playerResList[research->psSubject->index].currentPoints;
 		if (currentPoints != 0)
 		{
 			int researchRate = research->timeStartHold == 0 ? getBuildingResearchPoints(facility) : 0;

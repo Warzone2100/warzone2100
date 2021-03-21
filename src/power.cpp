@@ -127,6 +127,7 @@ static bool addPowerRequest(unsigned player, unsigned id, int64_t amount)
 
 void delPowerRequest(STRUCTURE *psStruct)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(, psStruct);
 	PlayerPower *p = &asPower[psStruct->player];
 
 	for (size_t n = 0; n < p->powerQueue.size(); ++n)
@@ -141,6 +142,7 @@ void delPowerRequest(STRUCTURE *psStruct)
 
 static int64_t checkPrecisePowerRequest(STRUCTURE *psStruct)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(-1, psStruct);
 	PlayerPower const *p = &asPower[psStruct->player];
 
 	int64_t requiredPower = 0;
