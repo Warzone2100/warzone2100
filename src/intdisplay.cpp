@@ -153,6 +153,7 @@ static void formatPowerText(W_BARGRAPH *barGraph, int neededPower)
 
 void formatPower(W_BARGRAPH *barGraph, int neededPower, int powerToBuild)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(, barGraph);
 	if (neededPower == -1 || powerToBuild == 0)
 	{
 		formatEmpty(barGraph);
@@ -1449,6 +1450,7 @@ static inline bool structureIsOnHoldPending(Functionality const &functionality)
 
 bool StructureIsOnHoldPending(STRUCTURE *structure)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, structure);
 	switch (structure->pStructureType->type)
 	{
 	case REF_FACTORY:
@@ -1465,6 +1467,8 @@ bool StructureIsOnHoldPending(STRUCTURE *structure)
 
 RESEARCH_FACILITY *StructureGetResearch(STRUCTURE *Structure)
 {
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, Structure);
+	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, Structure->pFunctionality);
 	return &Structure->pFunctionality->researchFacility;
 }
 
