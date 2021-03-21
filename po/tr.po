@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 06:36\n"
+"POT-Creation-Date: 2021-03-20 14:29+0000\n"
+"PO-Revision-Date: 2021-03-21 01:42\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -1225,7 +1225,7 @@ msgstr "Ejder'in Dişi"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer105.name
 #: data/base/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:2839
+#: po/custom/fromJson.txt:2835
 msgid "Howitzer Emplacement"
 msgstr "Obüs Mevzisi"
 
@@ -3417,7 +3417,7 @@ msgstr "Yüksek Patlayıcılı Demet Bombalarını Bırakır"
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1074
+#: po/custom/fromJson.txt:1070
 msgid "Best Targets: Base Structures"
 msgstr "Harika Hedefler: Üs Binaları"
 
@@ -3690,7 +3690,7 @@ msgstr "Harika Hedefler: Üs binaları, sığınaklar"
 #: data/mp/messages/strings/resstrings.txt:386
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:396
-#: po/custom/fromJson.txt:2853
+#: po/custom/fromJson.txt:2849
 msgid "Howitzer Upgrade"
 msgstr "Obüs Yükseltmesi"
 
@@ -3863,7 +3863,7 @@ msgstr "Harika Hedefler: Üs binaları, piyadeler, tekerlekli araçlar"
 #. ... + 28 refs
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:1180
+#: po/custom/fromJson.txt:1185
 msgid "Body Points: Very Low"
 msgstr "Gövde Puanı: Çok Düşük"
 
@@ -4060,35 +4060,35 @@ msgstr ""
 msgid "Return to LZ"
 msgstr "İniş Bölgesine Geri Dön"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:478
+#: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
 msgstr "Tüm düşman birim ve binalarını yok et"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:494
+#: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
 msgstr "Toplanan kalıntılar"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:495
+#: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
 msgstr "Yok edilen üsler"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:496
+#: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
 msgstr "Kalan düşman birimi"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:497
+#: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
 msgstr "Kalan düşman binası"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:503
+#: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
 msgstr "Gerektiği gibi İniş Alanına dön"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:513
+#: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
 msgstr "Tüm düşman birimleri ve üslerini yok et"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:518
+#: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
 msgstr "Zamanlayıcı sıfıra ulaşana kadar hayatta kal"
 
@@ -4164,9 +4164,9 @@ msgstr "Komutanlar - ilk komutanları üret"
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/script/rules/reticule.js:111
 #: src/challenge.cpp:240
-#: src/hci.cpp:1808
-#: src/hci/objects_stats.cpp:182
-#: src/hci/objects_stats.cpp:267
+#: src/hci.cpp:1834
+#: src/hci/objects_stats.cpp:213
+#: src/hci/objects_stats.cpp:298
 #: src/intelmap.cpp:406
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
@@ -5429,7 +5429,7 @@ msgstr "NEXUS Direnç Devreleri Kdm3"
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
 #: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:2803
+#: po/custom/fromJson.txt:2799
 msgid "Hover Propulsion II"
 msgstr "Hover II"
 
@@ -5773,7 +5773,7 @@ msgstr "Bekleme odası cevabı alma başarısız!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menü"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5783,23 +5783,23 @@ msgstr "Seferberlik"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Meydan Oku"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Çatışma"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Çok Oyunculu"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Menü Müziği"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(başlıksız)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
@@ -7107,24 +7107,24 @@ msgstr "Harika Hedefler: Üs binaları ve sayborglar"
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1070
+#: po/custom/fromJson.txt:1074
 msgid "Best Targets: Base structures"
 msgstr "Harika Hedefler: Üs binaları"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1094
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Harika Hedefler: Sığınaklar ve bağlama noktaları"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #. ... + 4 refs
-#: po/custom/fromJson.txt:1096
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Harika Hedefler: Sığınaklar ve bağlama noktaları"
-
-#. TRANSLATORS:
-#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1100
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Harika Hedefler: Sığınaklar ve bağlama noktaları"
 
 #. TRANSLATORS:
@@ -7198,7 +7198,7 @@ msgstr "Gövde Puanı ve Hız Arttırıldı"
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-#: po/custom/fromJson.txt:1185
+#: po/custom/fromJson.txt:1179
 msgid "Body Points: Very low"
 msgstr "Gövde Puanı: Çok düşük"
 
@@ -9610,55 +9610,48 @@ msgid "High tensile concrete-plastic composite"
 msgstr "Yüksek gerilimli plastik maden alaşımla destekli duvar"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#: po/custom/fromJson.txt:2787
-msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "Yüksek Hızda Zırh Delici Fin Stabilize Sabotaj Mermileri"
-
-#. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
-#: po/custom/fromJson.txt:2791
+#: po/custom/fromJson.txt:2787
 msgid "HMG Bunker"
 msgstr "Ağır Mk. Sığınağı"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
-#: po/custom/fromJson.txt:2794
+#: po/custom/fromJson.txt:2790
 msgid "Hover AI"
 msgstr "Hover YZ"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
-#: po/custom/fromJson.txt:2797
+#: po/custom/fromJson.txt:2793
 msgid "Hover II"
 msgstr "Hover II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
-#: po/custom/fromJson.txt:2800
+#: po/custom/fromJson.txt:2796
 msgid "Hover III"
 msgstr "Hover III"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Hover.name
-#: po/custom/fromJson.txt:2807
+#: po/custom/fromJson.txt:2803
 msgid "Hover Propulsion"
 msgstr "Hover Yürütücü"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover01.name
 #. data/mp/stats/propulsion.json: $.hover01.name
-#: po/custom/fromJson.txt:2811
+#: po/custom/fromJson.txt:2807
 msgid "Hover"
 msgstr "Hover"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[2]
-#: po/custom/fromJson.txt:2816
+#: po/custom/fromJson.txt:2812
 #, no-c-format
 msgid "Howitzer accuracy +10%"
 msgstr "Obüs hedef tuturması +%10"
@@ -9666,42 +9659,42 @@ msgstr "Obüs hedef tuturması +%10"
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
-#: po/custom/fromJson.txt:2820
+#: po/custom/fromJson.txt:2816
 msgid "Howitzer Autoloader Mk2"
 msgstr "Obüs Otomatik Yükleyici Kdm2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
-#: po/custom/fromJson.txt:2824
+#: po/custom/fromJson.txt:2820
 msgid "Howitzer Autoloader Mk3"
 msgstr "Obüs Otomatik Yükleyici Kdm3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
-#: po/custom/fromJson.txt:2828
+#: po/custom/fromJson.txt:2824
 msgid "Howitzer Autoloader"
 msgstr "Obüs Otomatik Yükleyici"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[2]
-#: po/custom/fromJson.txt:2833
+#: po/custom/fromJson.txt:2829
 #, no-c-format
 msgid "Howitzer damage +25%"
 msgstr "Obüs hasarı +%25"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
-#: po/custom/fromJson.txt:2842
+#: po/custom/fromJson.txt:2838
 msgid "Howitzer Fast Loader"
 msgstr "Obüs Hızlı Yükleme Sistemi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text[2]
-#: po/custom/fromJson.txt:2847
+#: po/custom/fromJson.txt:2843
 #, no-c-format
 msgid "Howitzer reload time -10%"
 msgstr "Obüs yeniden yükleme süresi -%10"
@@ -9711,27 +9704,27 @@ msgstr "Obüs yeniden yükleme süresi -%10"
 #. data/base/stats/weapons.json: $.Howitzer105Mk1.name
 #. data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
-#: po/custom/fromJson.txt:2859
+#: po/custom/fromJson.txt:2855
 msgid "Howitzer"
 msgstr "Obüs"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2863
+#: po/custom/fromJson.txt:2859
 msgid "HPV Cannon Emplacement"
 msgstr "YKH Topu Mevzisi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2867
+#: po/custom/fromJson.txt:2863
 msgid "HPV Cannon Hardpoint"
 msgstr "YKH Topu Mevzisi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2870
+#: po/custom/fromJson.txt:2866
 msgid "HPV Cannon Python Tracks"
 msgstr "YKH Topu Piton Paletler"
 
@@ -9740,7 +9733,7 @@ msgstr "YKH Topu Piton Paletler"
 #. data/base/stats/structure.json: $.AASite-QuadMg1.name
 #. data/mp/stats/research.json: $.R-Defense-AASite-QuadMg1.name
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
-#: po/custom/fromJson.txt:2876
+#: po/custom/fromJson.txt:2872
 msgid "Hurricane AA Site"
 msgstr "Kasırga AA Uçaksavar"
 
@@ -9749,67 +9742,67 @@ msgstr "Kasırga AA Uçaksavar"
 #. data/base/stats/weapons.json: $.QuadMg1AAGun.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun03.name
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
-#: po/custom/fromJson.txt:2882
+#: po/custom/fromJson.txt:2878
 msgid "Hurricane AA Turret"
 msgstr "Kasırga Uçaksavar Taret"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
-#: po/custom/fromJson.txt:2885
+#: po/custom/fromJson.txt:2881
 msgid "Hut"
 msgstr "Kulübe"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
-#: po/custom/fromJson.txt:2889
+#: po/custom/fromJson.txt:2885
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "YHZDFSDS Top Mermileri Kdm2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
-#: po/custom/fromJson.txt:2893
+#: po/custom/fromJson.txt:2889
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "YHZDFSDS Top Mermileri Kdm3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
-#: po/custom/fromJson.txt:2897
+#: po/custom/fromJson.txt:2893
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "YHZDFSDS Top Mermileri"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
-#: po/custom/fromJson.txt:2901
+#: po/custom/fromJson.txt:2897
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "Yüksek Hızda Zincirsilah Yükseltmesi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2905
+#: po/custom/fromJson.txt:2901
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "Yüksek Hız Topu Mevzisi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2909
+#: po/custom/fromJson.txt:2905
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "Yüksek Hız Topu Bağlama Noktası"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
-#: po/custom/fromJson.txt:2912
+#: po/custom/fromJson.txt:2908
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Yüksek Hız Topu Piton Hover"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2915
+#: po/custom/fromJson.txt:2911
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Yüksek Hız Topu Piton Paletler"
 
@@ -9818,9 +9811,16 @@ msgstr "Yüksek Hız Topu Piton Paletler"
 #. data/base/stats/weapons.json: $.Cannon4AUTOMk1.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon4AMk1.name
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
-#: po/custom/fromJson.txt:2921
+#: po/custom/fromJson.txt:2917
 msgid "Hyper Velocity Cannon"
 msgstr "Yüksek Hız Topu"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#: po/custom/fromJson.txt:2921
+msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -11465,20 +11465,20 @@ msgid "New Systems Tower Available"
 msgstr "Yeni Sistem Kulesi Kullanılabilir"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4155
-msgid "New Systems Turret Available For Design"
-msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4161
+#: po/custom/fromJson.txt:4157
 msgid "New Systems Turret Available for Design"
 msgstr "Yeni Sistem Tareti Tasarım için Hazır"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4161
+msgid "New Systems Turret Available For Design"
+msgstr "Yeni Sistem Tareti Tasarımda Kullanılabilir"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -14985,38 +14985,38 @@ msgstr "Tasarımı Kaydetme"
 msgid "Store Design"
 msgstr "Tasarımı Kaydet"
 
-#: src/display.cpp:1551
+#: src/display.cpp:1553
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "İnşa edilemiyor. Petrol Kaynağı Yanıyor."
 
-#: src/display.cpp:1569
+#: src/display.cpp:1571
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
 msgstr ""
 
-#: src/display.cpp:1731
+#: src/display.cpp:1733
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Müttefik - Hasar %d/%d - Tecrübe %d, %s"
 
-#: src/display3d.cpp:729
+#: src/display3d.cpp:742
 msgid "Player left"
 msgstr "Oyuncu çıktı"
 
-#: src/display3d.cpp:733
+#: src/display3d.cpp:746
 msgid "Player dropped"
 msgstr "Oyuncu düştü"
 
-#: src/display3d.cpp:737
+#: src/display3d.cpp:750
 #: src/multiint.cpp:2501
 msgid "Waiting for other players"
 msgstr "Diğer oyuncular bekleniyor"
 
-#: src/display3d.cpp:742
+#: src/display3d.cpp:755
 msgid "Out of sync"
 msgstr "Eşitleme bozuldu"
 
-#: src/display3d.cpp:2004
+#: src/display3d.cpp:2017
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr "Yakınlaşma %.0f olarak ayarlanıyor"
@@ -15059,7 +15059,7 @@ msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Grup %u - %u Birim atandı"
 msgstr[1] "Grup %u - %u Birim Atandı"
 
-#: src/droid.cpp:2934
+#: src/droid.cpp:2935
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr "Birim transferi başarısız -- birim sınırına ulaşıldı"
 
@@ -15093,7 +15093,7 @@ msgid "Tutorial"
 msgstr "Öğretici"
 
 #: src/frontend.cpp:145
-#: src/ingameop.cpp:240
+#: src/ingameop.cpp:239
 msgid "Options"
 msgstr "Ayarlar"
 
@@ -15209,12 +15209,12 @@ msgid "CAMPAIGNS"
 msgstr "SEFERBERLİK"
 
 #: src/frontend.cpp:498
-#: src/ingameop.cpp:935
+#: src/ingameop.cpp:944
 msgid "Load Campaign Saved Game"
 msgstr "Seferberlik Kayıtlı Oyunu Yükle"
 
 #: src/frontend.cpp:504
-#: src/ingameop.cpp:939
+#: src/ingameop.cpp:948
 msgid "Load Skirmish Saved Game"
 msgstr "Çatışma Kayıtlı Oyunu Yükle"
 
@@ -15244,12 +15244,12 @@ msgid "Game Options"
 msgstr "Oyun Ayarları"
 
 #: src/frontend.cpp:636
-#: src/ingameop.cpp:477
+#: src/ingameop.cpp:486
 msgid "Graphics Options"
 msgstr "Grafik Ayarları"
 
 #: src/frontend.cpp:637
-#: src/ingameop.cpp:480
+#: src/ingameop.cpp:489
 msgid "Video Options"
 msgstr "Video Ayarları"
 
@@ -15258,17 +15258,17 @@ msgid "Audio / Zoom Options"
 msgstr "Ses / Yakınlaştırma Seçenekleri"
 
 #: src/frontend.cpp:639
-#: src/ingameop.cpp:487
+#: src/ingameop.cpp:496
 msgid "Mouse Options"
 msgstr "Fare Ayarları"
 
 #: src/frontend.cpp:640
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:501
 msgid "Key Mappings"
 msgstr "Klavye Kısayolları"
 
 #: src/frontend.cpp:641
-#: src/ingameop.cpp:495
+#: src/ingameop.cpp:504
 msgid "Music Manager"
 msgstr ""
 
@@ -15366,32 +15366,32 @@ msgid "Tracked"
 msgstr "İzleniyor"
 
 #: src/frontend.cpp:765
-#: src/ingameop.cpp:523
+#: src/ingameop.cpp:532
 msgid "Video Playback"
 msgstr "Video Oynatma"
 
 #: src/frontend.cpp:769
-#: src/ingameop.cpp:528
+#: src/ingameop.cpp:537
 msgid "Scanlines"
 msgstr "Tarama yolları"
 
 #: src/frontend.cpp:774
-#: src/ingameop.cpp:533
+#: src/ingameop.cpp:542
 msgid "Subtitles"
 msgstr "Altyazılar"
 
 #: src/frontend.cpp:779
-#: src/ingameop.cpp:538
+#: src/ingameop.cpp:547
 msgid "Shadows"
 msgstr "Gölgeler"
 
 #: src/frontend.cpp:783
-#: src/ingameop.cpp:543
+#: src/ingameop.cpp:552
 msgid "Radar"
 msgstr "Radar"
 
 #: src/frontend.cpp:787
-#: src/ingameop.cpp:548
+#: src/ingameop.cpp:557
 msgid "Radar Jump"
 msgstr "Radar Zıplaması"
 
@@ -15502,7 +15502,7 @@ msgid "Texture size"
 msgstr "Doku kalitesi"
 
 #: src/frontend.cpp:1418
-#: src/ingameop.cpp:655
+#: src/ingameop.cpp:664
 msgid "Vertical sync"
 msgstr "Dikey eşitleme"
 
@@ -15561,32 +15561,32 @@ msgid "Camera Pitch"
 msgstr "Kamera Eğimi"
 
 #: src/frontend.cpp:1709
-#: src/ingameop.cpp:731
+#: src/ingameop.cpp:740
 msgid "Reverse Rotation"
 msgstr "Tersine Döndür"
 
 #: src/frontend.cpp:1713
-#: src/ingameop.cpp:738
+#: src/ingameop.cpp:747
 msgid "Trap Cursor"
 msgstr "İmleci Yakala"
 
 #: src/frontend.cpp:1718
-#: src/ingameop.cpp:744
+#: src/ingameop.cpp:753
 msgid "Switch Mouse Buttons"
 msgstr "Fare Düğmelerini Değiştir"
 
 #: src/frontend.cpp:1723
-#: src/ingameop.cpp:749
+#: src/ingameop.cpp:758
 msgid "Rotate Screen"
 msgstr "Ekranı Çevir"
 
 #: src/frontend.cpp:1727
-#: src/ingameop.cpp:754
+#: src/ingameop.cpp:763
 msgid "Colored Cursors"
 msgstr "Renkli İmleçler"
 
 #: src/frontend.cpp:1731
-#: src/ingameop.cpp:759
+#: src/ingameop.cpp:768
 msgid "Scroll Event"
 msgstr "Kaydırma Olayı"
 
@@ -15683,113 +15683,113 @@ msgstr ""
 msgid "Tip: Adjusting Display Scale"
 msgstr ""
 
-#: src/hci.cpp:929
+#: src/hci.cpp:955
 #: src/loop.cpp:244
 #: src/loop.cpp:260
 msgid "GAME SAVED: "
 msgstr "OYUN KAYDEDİLDİ: "
 
-#: src/hci.cpp:1327
+#: src/hci.cpp:1353
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Oyuncu %u yeni binasını hile ile (debug menü) inşa etti: %s."
 
-#: src/hci.cpp:1336
+#: src/hci.cpp:1362
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Oyuncu %u hile ile (debug menü) yeni doğal maddesini oluşturdu: %s."
 
-#: src/hci.cpp:1355
+#: src/hci.cpp:1381
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Oyuncu %u hile ile (debug menü) yeni birimini oluşturdu: %s."
 
-#: src/hci.cpp:1363
+#: src/hci.cpp:1389
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Oyuncu %u hile ile (debug menü) yeni birimini oluşturdu."
 
-#: src/hci.cpp:1693
+#: src/hci.cpp:1719
 #: src/multiint.cpp:1443
 #: src/multimenu.cpp:686
 msgid "Power"
 msgstr "Güç"
 
-#: src/hci.cpp:1763
-#: src/hci/build.cpp:552
-#: src/hci/manufacture.cpp:544
+#: src/hci.cpp:1789
+#: src/hci/build.cpp:567
+#: src/hci/manufacture.cpp:577
 msgid "Hiding Obsolete Tech"
 msgstr "Eski Teknoloji Gizleniyor"
 
-#: src/hci.cpp:1765
-#: src/hci/build.cpp:554
-#: src/hci/manufacture.cpp:546
+#: src/hci.cpp:1791
+#: src/hci/build.cpp:569
+#: src/hci/manufacture.cpp:579
 msgid "Showing Obsolete Tech"
 msgstr "Eski Teknoloji Gösteriliyor"
 
-#: src/hci.cpp:1888
+#: src/hci.cpp:1914
 msgid "\n"
 "Cost: %1"
 msgstr "\n"
 "Masraf: %1"
 
-#: src/hci.cpp:2494
+#: src/hci.cpp:2520
 msgid "Chat: All"
 msgstr "Sohbet: Herkes"
 
-#: src/hci.cpp:2499
+#: src/hci.cpp:2525
 msgid "Chat: Team"
 msgstr "Sohbet: Takım"
 
-#: src/hci/build.cpp:287
+#: src/hci/build.cpp:290
 msgid "Build Progress"
 msgstr "İnşa Devam ediyor"
 
-#: src/hci/build.cpp:575
+#: src/hci/build.cpp:590
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr "Tüm Teknolojiler Gösteriliyor\n"
 "Favorilere eklemek için sağ tıklayın"
 
-#: src/hci/build.cpp:577
+#: src/hci/build.cpp:592
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr "Sadece Favori Teknolojiler Gösteriliyor\n"
 "Favorilerden kaldırmak için sağ tıklayın"
 
-#: src/hci/manufacture.cpp:340
+#: src/hci/manufacture.cpp:347
 msgid "Construction Progress"
 msgstr "İnşaat Devam ediyor"
 
-#: src/hci/manufacture.cpp:584
+#: src/hci/manufacture.cpp:617
 msgid "Factory Delivery Point"
 msgstr "Fabrika Teslim Noktası"
 
-#: src/hci/manufacture.cpp:635
+#: src/hci/manufacture.cpp:668
 msgid "Loop Production"
 msgstr "Üretimi Tekrarla"
 
-#: src/hci/objects_stats.cpp:109
+#: src/hci/objects_stats.cpp:122
 msgid "Progress Bar"
 msgstr "İlerleme Çubuğu"
 
-#: src/hci/research.cpp:374
+#: src/hci/research.cpp:385
 msgid "Research Progress"
 msgstr "Araştırma İlerlemesi"
 
-#: src/hci/research.cpp:448
+#: src/hci/research.cpp:463
 msgid "Ally progress"
 msgstr "Müttefik ilerlemesi"
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:183
-#: src/ingameop.cpp:236
-#: src/ingameop.cpp:501
-#: src/ingameop.cpp:560
-#: src/ingameop.cpp:673
-#: src/ingameop.cpp:767
+#: src/ingameop.cpp:235
+#: src/ingameop.cpp:510
+#: src/ingameop.cpp:569
+#: src/ingameop.cpp:682
+#: src/ingameop.cpp:776
 #: src/keyedit.cpp:446
-#: src/musicmanager.cpp:778
+#: src/musicmanager.cpp:779
 msgid "Resume Game"
 msgstr "Oyuna Dön"
 
@@ -15798,78 +15798,78 @@ msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "UYARI: Kurucusunuz. Oyundan çıkarsanız, herkes için oyun biter!"
 
 #: src/ingameop.cpp:130
-#: src/ingameop.cpp:268
+#: src/ingameop.cpp:267
 msgid "Host Quit"
 msgstr "Kurucu Çıkışı"
 
 #: src/ingameop.cpp:170
-#: src/ingameop.cpp:970
+#: src/ingameop.cpp:979
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr "Taktiksel Arayüz (Hedef Kaynak Simgesi): Göster"
 
 #: src/ingameop.cpp:175
-#: src/ingameop.cpp:974
+#: src/ingameop.cpp:983
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr "Taktiksel Arayüz (Hedef Kaynak Simgesi): Gizle"
 
 #: src/ingameop.cpp:180
-#: src/ingameop.cpp:498
-#: src/ingameop.cpp:557
-#: src/ingameop.cpp:669
-#: src/ingameop.cpp:763
+#: src/ingameop.cpp:507
+#: src/ingameop.cpp:566
+#: src/ingameop.cpp:678
+#: src/ingameop.cpp:772
 #: src/keyedit.cpp:444
-#: src/musicmanager.cpp:777
+#: src/musicmanager.cpp:778
 msgid "Go Back"
 msgstr ""
 
-#: src/ingameop.cpp:248
-#: src/ingameop.cpp:257
+#: src/ingameop.cpp:247
+#: src/ingameop.cpp:256
 msgid "Load Game"
 msgstr "Oyun Yükle"
 
-#: src/ingameop.cpp:251
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:250
+#: src/ingameop.cpp:259
 #: src/mission.cpp:2430
 msgid "Save Game"
 msgstr "Oyunu Kaydet"
 
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:271
 msgid "Quit"
 msgstr "Çıkış"
 
-#: src/ingameop.cpp:340
+#: src/ingameop.cpp:339
 msgid "Host has quit the game!"
 msgstr "Kurucu oyundan çıktı!"
 
-#: src/ingameop.cpp:346
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr "Oyun kurucu olmadan devam edemez."
 
-#: src/ingameop.cpp:352
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr "-->  ÇIKIŞ  <--"
 
-#: src/ingameop.cpp:484
+#: src/ingameop.cpp:493
 msgid "Audio Options"
 msgstr "Ses Ayarları"
 
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:501
 msgid "View Key Mappings"
 msgstr "Klavye Kısayollarını Göster"
 
-#: src/ingameop.cpp:553
+#: src/ingameop.cpp:562
 msgid "Shake"
 msgstr ""
 
-#: src/ingameop.cpp:943
+#: src/ingameop.cpp:952
 msgid "Save Campaign Game"
 msgstr "Seferberlik Oyununu Kaydet"
 
-#: src/ingameop.cpp:947
+#: src/ingameop.cpp:956
 msgid "Save Skirmish Game"
 msgstr "Çatışma Oyunu Kaydet"
 
-#: src/init.cpp:449
+#: src/init.cpp:450
 #, c-format
 msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
@@ -16510,7 +16510,7 @@ msgstr "KLAVYE KISAYOLLARI"
 
 #: src/keyedit.cpp:427
 #: src/multiint.cpp:1521
-#: src/musicmanager.cpp:767
+#: src/musicmanager.cpp:768
 #: src/titleui/gamefind.cpp:91
 #: src/titleui/protocol.cpp:81
 msgid "Return To Previous Screen"
@@ -17779,12 +17779,12 @@ msgstr "Oyuncuya güç ver"
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "%s atıldı: oyundan %s ve engelli listesine kaydedildi!"
 
-#: src/multiopt.cpp:298
+#: src/multiopt.cpp:305
 #: src/multiplay.cpp:1475
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr "Uyarı, bu bir harita modu, normal oynanışı etkileyebilir."
 
-#: src/multiopt.cpp:299
+#: src/multiopt.cpp:306
 #: src/multiplay.cpp:1479
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "KURUCU oyun kodunu değiştirmiş ve güvenilemez!"
@@ -17885,24 +17885,24 @@ msgstr "Morötesi"
 msgid "Brown"
 msgstr "Kahverengi"
 
-#: src/musicmanager.cpp:492
+#: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
 msgstr ""
 
-#: src/musicmanager.cpp:532
-#: src/musicmanager.cpp:678
+#: src/musicmanager.cpp:533
+#: src/musicmanager.cpp:679
 msgid "Album"
 msgstr ""
 
-#: src/musicmanager.cpp:543
+#: src/musicmanager.cpp:544
 msgid "Date"
 msgstr ""
 
-#: src/musicmanager.cpp:669
+#: src/musicmanager.cpp:670
 msgid "Title"
 msgstr ""
 
-#: src/musicmanager.cpp:856
+#: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
 msgstr ""
 
@@ -18343,19 +18343,19 @@ msgid "Get Update Now"
 msgstr "Güncellemeyi Şimdi Edin"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
-#: src/version.cpp:186
+#: src/version.cpp:189
 msgid " (modified locally)"
 msgstr " (yerelleştirilmiş)"
 
 #. TRANSLATORS: Printed in Debug builds
-#: src/version.cpp:193
+#: src/version.cpp:196
 msgid " - DEBUG"
 msgstr " - HATA AYIKLAMA"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:202
+#: src/version.cpp:205
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Sürüm: %s, %s Yapı: %s %s"
