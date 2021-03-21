@@ -810,7 +810,7 @@ std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
 {
 	auto fp = PHYSFS_openRead(name.c_str());
 	debug(LOG_3D, "Reading...[directory: %s] %s", PHYSFS_getRealDir(name.c_str()), name.c_str());
-	assert(fp != nullptr);
+	ASSERT_OR_RETURN({}, fp != nullptr, "Could not open %s", name.c_str());
 
 	const auto filesize = PHYSFS_fileLength(fp);
 	ASSERT_OR_RETURN(std::vector<uint32_t>(), filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<PHYSFS_sint32>::max()), "\"%s\" filesize >= std::numeric_limits<PHYSFS_sint32>::max()", name.c_str());
@@ -826,6 +826,7 @@ std::vector<uint32_t> VkPSO::readShaderBuf(const std::string& name)
 vk::ShaderModule VkPSO::get_module(const std::string& name, const vk::DispatchLoaderDynamic& vkDynLoader)
 {
 	const auto tmp = readShaderBuf(name);
+	ASSERT_OR_RETURN(vk::ShaderModule(), tmp.size() > 0, "Failed to read shader: %s", name.c_str());
 	return dev.createShaderModule(
 		vk::ShaderModuleCreateInfo()
 		.setCodeSize(tmp.size() * 4)
