@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-21 01:43\n"
+"PO-Revision-Date: 2021-03-23 11:50\n"
 "Last-Translator: \n"
 "Language-Team: Norwegian Bokmal\n"
 "Language: nb_NO\n"
@@ -20,91 +20,91 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:3
 #: data/base/sequenceaudio/cam1/c001.txa:12
 msgid "OBJECTIVE: Locate and recover neural synapse technology"
-msgstr ""
+msgstr "MÅL: Lokaliser og gjenopprett neuralsynapsteknologi"
 
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr ""
+msgstr "Etabler en base og søk etter en struktur fra Pre-Kollaps."
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr ""
+msgstr "Denne strukturen inneholder teknologi som er helt nødvendig for at prosjektet skal lykkes."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr ""
+msgstr "ALFABASEOPPDRAG: Plyndreraidere"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr ""
+msgstr "Plyndreraidere nærmer seg basen vår."
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr ""
+msgstr "Beskytt basen, ødelegg deretter Plyndrecampene."
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr ""
+msgstr "ALFABASEOPPDRAG: Strømstigning Oppdaget"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "En strømstigning har blitt oppdaget sør for vår posisjon."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr ""
+msgstr "Undersøk og sikre området."
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr ""
+msgstr "ALFABASEOPPDRAG: Det Nye Paradigmet"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr ""
+msgstr "Det Nye Paradigmet har overlegen våpenteknologi."
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr ""
+msgstr "De kan ha synapselink-teknologien. Det er avgjørende at vi henter den."
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Lokaliser og bring tilbake artefakter"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Last en angrepsstyrke inn i transporten."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "Utforsk ruinene og bring tilbake alle artefakter ved landing."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Undersøk forskningssenter"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr ""
+msgstr "Undersøk området og bring tilbake alle artefakter."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
 msgid "Reinforcements are available."
-msgstr ""
+msgstr "Forsterkninger er tilgjengelig."
 
 #: data/base/messages/strings/cam1strings.txt:27
 msgid "TRANSPORT MISSION: Encoded Signals Detected"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Kodede signaler oppdaget"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "Ta en speidestyrke for å undersøke disse signalene."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
-msgstr ""
+msgstr "Bruk lastebilene for å bygge forsvarsverk ved din LS."
 
 #: data/base/messages/strings/cam1strings.txt:31
 msgid "TRANSPORT MISSION: Enemy Transmissions Detected"
@@ -13261,7 +13261,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Comp-SynapticLink.name
 #: po/custom/fromJson.txt:5363
 msgid "Synaptic Link"
-msgstr ""
+msgstr "Synapselink"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG5.text[0]
