@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-21 01:42\n"
+"PO-Revision-Date: 2021-03-23 23:54\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -4046,15 +4046,15 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-ad1.js:214
 msgid "Secure a missile silo"
-msgstr ""
+msgstr "Zabezpiecz silos rakietowy"
 
 #: data/base/script/campaign/cam3-ad2.js:271
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Chroń silosy rakietowe i zbadaj kody rakietowe"
 
 #: data/base/script/campaign/cam3-c.js:138
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Dołącz część zespołu Beta do posterunku zespołu Gamma"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -4066,11 +4066,11 @@ msgstr "Zniszcz wszystkie wrogie jednostki i budynki"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefakty zebrane"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Bazy zniszczone"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
@@ -4082,11 +4082,11 @@ msgstr "Pozostałe struktury wroga"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Powrót do SL wymagany"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Zniszcz wszystkie wrogie jednostki i budynki"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
@@ -5771,7 +5771,7 @@ msgstr "Brak odpowiedzi z serwera lobby!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5781,35 +5781,35 @@ msgstr "Kampania"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Wyzwanie"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Potyczka"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Gra wieloosobowa"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Muzyka w menu"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(bez tytułu)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Skopiuj ścieżkę do schowka"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Skopiuj JSON do schowka"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Zrzut JSON do konsoli"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -6007,7 +6007,7 @@ msgstr "Termiczne namierzanie AA"
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
 #: po/custom/fromJson.txt:157
 msgid "Adaptive AI with multiple personalities"
-msgstr ""
+msgstr "Adaptacyjna SI z wieloma cechami"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials08.name
