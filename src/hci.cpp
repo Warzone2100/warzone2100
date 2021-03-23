@@ -251,7 +251,7 @@ struct RETBUTSTATS
 	std::string tip;
 	bool flashing = false;
 	int flashTime = 0;
-	W_BUTTON *button = nullptr;
+	std::shared_ptr<W_BUTTON> button = nullptr;
 	playerCallbackFunc callbackFunc = nullptr;
 };
 static RETBUTSTATS retbutstats[NUMRETBUTS];
@@ -368,6 +368,10 @@ void setReticulesEnabled(bool enabled)
 		}
 
 		ReticuleEnabled[i].Enabled = enabled;
+
+		if (!retbutstats[i].button) {
+			continue;
+		}
 		if (enabled)
 		{
 			retbutstats[i].button->unlock();
@@ -1655,7 +1659,8 @@ bool intAddReticule()
 		retbutstats[i].downTime = 0;
 		retbutstats[i].flashing = false;
 		retbutstats[i].flashTime = 0;
-		retbutstats[i].button = widgAddButton(psWScreen, &sButInit);
+		auto pButton = widgAddButton(psWScreen, &sButInit);
+		retbutstats[i].button = (pButton) ? std::dynamic_pointer_cast<W_BUTTON>(pButton->shared_from_this()) : nullptr;
 		if (!retbutstats[i].button)
 		{
 			debug(LOG_ERROR, "Failed to add reticule button");
