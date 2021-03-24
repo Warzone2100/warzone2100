@@ -3323,17 +3323,18 @@ static void swapPlayerColours(uint32_t player1, uint32_t player2)
  */
 static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 {
+	auto selectedPlayerPosition = bShouldResetLocal? 0: NetPlay.players[selectedPlayer].position;
 	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS_IN_GUI; playerIndex++)
 	{
 		setPlayerColour(playerIndex, playerIndex);
 		swapPlayerColours(playerIndex, rand() % (playerIndex + 1));
+		NetPlay.players[playerIndex].position = playerIndex;
 
 		if (!bShouldResetLocal && playerIndex == selectedPlayer)
 		{
 			continue;
 		}
 
-		NetPlay.players[playerIndex].position = playerIndex;
 		NetPlay.players[playerIndex].team = playerIndex / playersPerTeam();
 
 		if (NetPlay.bComms)
@@ -3350,6 +3351,10 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 			/* ensure all players have a name in One Player Skirmish games */
 			sstrcpy(NetPlay.players[playerIndex].name, getAIName(playerIndex));
 		}
+	}
+
+	if (!bShouldResetLocal && selectedPlayerPosition < game.maxPlayers && selectedPlayer != selectedPlayerPosition) {
+		std::swap(NetPlay.players[selectedPlayer].position, NetPlay.players[selectedPlayerPosition].position);
 	}
 
 	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
