@@ -3086,16 +3086,16 @@ static void	drawDroidSelections()
 	}
 
 	pie_SetFogStatus(false);
-	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (auto& droid : Droids::forPlayer(selectedPlayer, true, false))
 	{
 		/* If it's selected and on screen or it's the one the mouse is over */
-		if (eitherSelected(psDroid) ||
-		    (bMouseOverOwnDroid && psDroid == (DROID *) psClickedOn) ||
-		    droidUnderRepair(psDroid) ||
+		if (eitherSelected(&droid) ||
+		    (bMouseOverOwnDroid && &droid == (DROID *) psClickedOn) ||
+		    droidUnderRepair(&droid) ||
 		    barMode == BAR_DROIDS || barMode == BAR_DROIDS_AND_STRUCTURES
 		   )
 		{
-			drawDroidSelection(psDroid, psDroid->selected);
+			drawDroidSelection(&droid, droid.selected);
 		}
 	}
 

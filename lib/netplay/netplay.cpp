@@ -258,6 +258,18 @@ NETPLAY::NETPLAY()
 	}
 }
 
+bool PLAYER::isSharingUnitsWith(const unsigned int other) const
+{
+	// TODO 823-share-unit-controls
+	return true;
+}
+
+void PLAYER::setUnitSharingState(const unsigned int other, const bool bState)
+{
+	// TODO 823-share-unit-controls
+}
+
+
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
 	return (uint32_t)NETCODE_VERSION_MAJOR == game_version_major && (uint32_t)NETCODE_VERSION_MINOR == game_version_minor;

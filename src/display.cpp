@@ -1578,8 +1578,6 @@ static void printDroidClickInfo(DROID *psDroid)
 
 static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 {
-	bool ownDroid; // Not an allied droid
-
 	if (!aiCheckAlliances(selectedPlayer, psDroid->player))
 	{
 		memset(DROIDDOING, 0x0 , sizeof(DROIDDOING)); // take over the other players droid by debug menu.
@@ -1604,15 +1602,17 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		return;
 	}
 
-	ownDroid = (selectedPlayer == psDroid->player);
+	const bool bOwnDroid = (selectedPlayer == psDroid->player);
+	const bool bIsSharedDroid = NetPlay.players[psDroid->player].isSharingUnitsWith(selectedPlayer);
+	const bool bCanGiveCommands = bOwnDroid || bIsSharedDroid;
 	// Hack to detect if sensor was assigned
 	bSensorAssigned = true;
-	if (!bRightClickOrders && ctrlShiftDown() && ownDroid)
+	if (!bRightClickOrders && ctrlShiftDown() && bCanGiveCommands)
 	{
 		// select/deselect etc. the droid
 		dealWithDroidSelect(psDroid, false);
 	}
-	else if (specialOrderKeyDown() && ownDroid)
+	else if (specialOrderKeyDown() && bCanGiveCommands)
 	{
 		// try to attack your own unit
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
@@ -1640,11 +1640,6 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		}
 		else
 		{
-			// We can order all units to use the transport now
-			if (cyborgDroidSelected(selectedPlayer))
-			{
-				// TODO add special processing for cyborgDroids
-			}
 			orderSelectedObj(selectedPlayer, (BASE_OBJECT *)psDroid);
 			FeedbackOrderGiven();
 		}
@@ -1653,7 +1648,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 	else if (psDroid->droidType == DROID_COMMAND && selection != SC_INVALID &&
 	         selection != SC_DROID_COMMAND &&
 	         selection != SC_DROID_CONSTRUCT &&
-	         !ctrlShiftDown() && ownDroid)
+	         !ctrlShiftDown() && bCanGiveCommands)
 	{
 		turnOffMultiMsg(true);
 		orderSelectedObj(selectedPlayer, (BASE_OBJECT *)psDroid);
@@ -1714,7 +1709,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		orderSelectedObjAdd(selectedPlayer, (BASE_OBJECT *)psDroid, ctrlShiftDown());
 		FeedbackOrderGiven();
 	}
-	else if (bRightClickOrders && ownDroid)
+	else if (bRightClickOrders && bCanGiveCommands)
 	{
 		if (!(psDroid->selected))
 		{
@@ -1724,7 +1719,7 @@ static void dealWithLMBDroid(DROID *psDroid, SELECTION_TYPE selection)
 		intObjectSelected((BASE_OBJECT *)psDroid);
 	}
 	// Just plain clicked on?
-	else if (ownDroid)
+	else if (bCanGiveCommands)
 	{
 		printDroidClickInfo(psDroid);
 	}
@@ -2497,24 +2492,21 @@ static UBYTE DroidSelectionWeights[NUM_DROID_WEIGHTS] =
 /* Only deals with one type of droid being selected!!!! */
 /*	We'll have to make it assess which selection is to be dominant in the case
 	of multiple selections */
-static SELECTION_TYPE	establishSelection(UDWORD _selectedPlayer)
+static SELECTION_TYPE	establishSelection(UDWORD player)
 {
 	DROID *psDominant = nullptr;
 	UBYTE CurrWeight = UBYTE_MAX;
 	SELECTION_TYPE selectionClass = SC_INVALID;
 
-	for (DROID *psDroid = apsDroidLists[_selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (DROID& droid : Droids::forPlayer(player, true, true))
 	{
 		// This works, uses the DroidSelectionWeights[] table to priorities the different
 		// droid types and find the dominant selection.
-		if (psDroid->selected)
+		ASSERT_OR_RETURN(SC_INVALID, droid.droidType < NUM_DROID_WEIGHTS, "droidType exceeds NUM_DROID_WEIGHTS");
+		if (DroidSelectionWeights[droid.droidType] < CurrWeight)
 		{
-			ASSERT_OR_RETURN(SC_INVALID, psDroid->droidType < NUM_DROID_WEIGHTS, "droidType exceeds NUM_DROID_WEIGHTS");
-			if (DroidSelectionWeights[psDroid->droidType] < CurrWeight)
-			{
-				CurrWeight = DroidSelectionWeights[psDroid->droidType];
-				psDominant = psDroid;
-			}
+			CurrWeight = DroidSelectionWeights[droid.droidType];
+			psDominant = &droid;
 		}
 	}
 
@@ -2589,15 +2581,11 @@ static bool	buildingDamaged(STRUCTURE *psStructure)
 }
 
 /*Looks through the list of selected players droids to see if one is a repair droid*/
-bool	repairDroidSelected(UDWORD player)
+bool repairDroidSelected(UDWORD player)
 {
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, true))
 	{
-		if (psCurr->selected && (
-		        psCurr->droidType == DROID_REPAIR ||
-		        psCurr->droidType == DROID_CYBORG_REPAIR))
+		if (droid.droidType == DROID_TYPE::DROID_REPAIR || droid.droidType == DROID_TYPE::DROID_CYBORG_REPAIR)
 		{
 			return true;
 		}
@@ -2608,16 +2596,14 @@ bool	repairDroidSelected(UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if one is a VTOL droid*/
-bool	vtolDroidSelected(UDWORD player)
+bool vtolDroidSelected(UDWORD player)
 {
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, true))
 	{
-		if (psCurr->selected && isVtolDroid(psCurr))
+		if (isVtolDroid(&droid))
 		{
 			// horrible hack to note one of the selected vtols
-			psSelectedVtol = psCurr;
+			psSelectedVtol = &droid;
 			return true;
 		}
 	}
@@ -2627,52 +2613,25 @@ bool	vtolDroidSelected(UDWORD player)
 }
 
 /*Looks through the list of selected players droids to see if any is selected*/
-bool	anyDroidSelected(UDWORD player)
+bool anyDroidSelected(UDWORD player)
 {
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected)
-		{
-			return true;
-		}
-	}
-
-	//didn't find one...
-	return false;
-}
-
-/*Looks through the list of selected players droids to see if one is a cyborg droid*/
-bool cyborgDroidSelected(UDWORD player)
-{
-	DROID	*psCurr;
-
-	for (psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
-	{
-		if (psCurr->selected && cyborgDroid(psCurr))
-		{
-			return true;
-		}
-	}
-
-	//didn't find one...
-	return false;
+	const auto droids = Droids::forPlayer(player, true, true);
+	return droids.begin() != droids.end();
 }
 
 /* Clear the selection flag for a player */
 void clearSelection()
 {
-	DROID			*psCurrDroid;
 	STRUCTURE		*psStruct;
 	FLAG_POSITION	*psFlagPos;
 
 	memset(DROIDDOING, 0x0 , sizeof(DROIDDOING));	// clear string when deselected
 
-	for (psCurrDroid = apsDroidLists[selectedPlayer]; psCurrDroid; psCurrDroid = psCurrDroid->psNext)
+	for (auto& droid : Droids::forPlayer(selectedPlayer, true, false))
 	{
-		psCurrDroid->selected = false;
+		droid.selected = false;
 	}
+
 	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
 	{
 		psStruct->selected = false;

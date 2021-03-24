@@ -388,14 +388,9 @@ bool OrderUp = false;
 //
 static bool BuildSelectedDroidList()
 {
-	DROID *psDroid;
-
-	for (psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	for (auto& droid : Droids::forPlayer(selectedPlayer, true, true))
 	{
-		if (psDroid->selected)
-		{
-			SelectedDroids.push_back(psDroid);
-		}
+		SelectedDroids.push_back(&droid);
 	}
 
 	return !SelectedDroids.empty();

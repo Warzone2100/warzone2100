@@ -146,17 +146,7 @@ unsigned int selDroidDeselect(unsigned int player)
 // Lets you know how many are selected for a given player
 unsigned int selNumSelected(unsigned int player)
 {
-	unsigned int count = 0;
-
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
-	{
-		if (psDroid->selected)
-		{
-			count++;
-		}
-	}
-
-	return count;
+	return Droids::forPlayer(player, true, true).count();
 }
 
 // Helper function to check whether the component stats of a unit can be found

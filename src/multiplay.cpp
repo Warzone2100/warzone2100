@@ -487,7 +487,7 @@ bool setPlayerName(int player, const char *sName)
 
 // ////////////////////////////////////////////////////////////////////////////
 // to determine human/computer players and responsibilities of each..
-bool isHumanPlayer(int player)
+bool isHumanPlayer(unsigned int player)
 {
 	if (player >= MAX_PLAYERS || player < 0)
 	{
@@ -513,8 +513,7 @@ unsigned int whosResponsible(unsigned int player)
 	}
 }
 
-// TODO 823-share-unit-control: Move this to somewhere more sensible
-static bool isHost(unsigned int player)
+bool isHost(unsigned int player)
 {
 	return player == NET_HOST_ONLY;
 }

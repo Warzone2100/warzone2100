@@ -24,6 +24,9 @@
 #ifndef __INCLUDED_SRC_OBJMEM_H__
 #define __INCLUDED_SRC_OBJMEM_H__
 
+#include <iterator>
+#include <vector>
+
 #include "objectdef.h"
 
 /* The lists of objects allocated */
@@ -37,6 +40,86 @@ extern FEATURE			*apsOilList[1];
 
 /* The list of destroyed objects */
 extern BASE_OBJECT	*psDestroyedObj;
+
+
+/* Abstract base class for iterators over object lists. */
+template<typename T>
+class ObjectIterator : public std::iterator<std::input_iterator_tag, T, T, T*, T&>
+{
+public:
+	explicit ObjectIterator(
+		const bool bSelectedOnly,
+		T* firstObject
+	);
+
+private:
+	T* currentObject;
+	bool bSelectedOnly;
+
+	// Iterator implementation
+public:
+	ObjectIterator<T>& operator++();
+	ObjectIterator<T> operator++(int);
+	bool operator==(ObjectIterator<T> other) const;
+	bool operator!=(ObjectIterator<T> other) const;
+	typename ObjectIterator<T>::reference operator*() const;
+
+	template<typename U>
+	friend class PlayerObjectIterator;
+};
+
+template <typename T>
+class PlayerObjectIterator : public std::iterator<std::input_iterator_tag, T, T, T*, T&>
+{
+public:
+	explicit PlayerObjectIterator(
+		const unsigned int playerCursor,
+		const std::vector<unsigned int> playerIndices,
+		const bool bSelectedOnly,
+		T** objectList
+	);
+
+private:
+	unsigned int playerCursor;
+	ObjectIterator<T> objIter;
+
+	const std::vector<unsigned int> playerIndices;
+	const bool bSelectedOnly;
+	T** objectList;
+
+	// Iterator implementation
+public:
+	PlayerObjectIterator<T>& operator++();
+	PlayerObjectIterator<T> operator++(int);
+	bool operator==(PlayerObjectIterator<T> other) const;
+	bool operator!=(PlayerObjectIterator<T> other) const;
+	typename PlayerObjectIterator<T>::reference operator*() const;
+};
+
+/* Convenient iterator over the droid lists. */
+class Droids
+{
+public:
+	/* Obtains a collection of droids available for the given player. Each player has their
+	   own droids that are always included in their droid collection. Other players' droids
+	   are available for a player only if the other player has shared their unit controls
+	   with the player in question (and if bIncludeShared is true).                         */
+	static Droids forPlayer(const unsigned int playerIndex, const bool bIncludeShared, const bool bSelectedOnly);
+
+public:
+	PlayerObjectIterator<DROID> begin() const;
+
+	PlayerObjectIterator<DROID> end() const;
+
+	unsigned int count() const;
+
+private:
+	explicit Droids(const std::vector<unsigned int> playerIndices, const bool bSelectedOnly);
+
+	const std::vector<unsigned int> playerIndices;
+	const bool bSelectedOnly;
+};
+
 
 /* Initialise the object heaps */
 bool objmemInitialise();

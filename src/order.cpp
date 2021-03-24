@@ -2330,7 +2330,6 @@ DROID_ORDER chooseOrderLoc(DROID *psDroid, UDWORD x, UDWORD y, bool altOrder)
  */
 void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 {
-	DROID			*psCurr;
 	DROID_ORDER		order;
 
 	//if were in build select mode ignore all other clicking
@@ -2342,25 +2341,22 @@ void orderSelectedLoc(uint32_t player, uint32_t x, uint32_t y, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, true))
 	{
-		if (psCurr->selected)
+		// can't use bMultiPlayer since multimsg could be off.
+		if (droid.droidType == DROID_SUPERTRANSPORTER && game.type == LEVEL_TYPE::CAMPAIGN)
 		{
-			// can't use bMultiPlayer since multimsg could be off.
-			if (psCurr->droidType == DROID_SUPERTRANSPORTER && game.type == LEVEL_TYPE::CAMPAIGN)
-			{
-				// Transport in campaign cannot be controlled by players
-				DeSelectDroid(psCurr);
-				continue;
-			}
+			// Transport in campaign cannot be controlled by players
+			DeSelectDroid(&droid);
+			continue;
+		}
 
-			order = chooseOrderLoc(psCurr, x, y, specialOrderKeyDown());
-			// see if the order can be added to the list
-			if (order != DORDER_NONE && !(add && orderDroidLocAdd(psCurr, order, x, y)))
-			{
-				// if not just do it straight off
-				orderDroidLoc(psCurr, order, x, y, ModeQueue);
-			}
+		order = chooseOrderLoc(&droid, x, y, specialOrderKeyDown());
+		// see if the order can be added to the list
+		if (order != DORDER_NONE && !(add && orderDroidLocAdd(&droid, order, x, y)))
+		{
+			// if not just do it straight off
+			orderDroidLoc(&droid, order, x, y, ModeQueue);
 		}
 	}
 }
@@ -2631,32 +2627,28 @@ DroidOrder chooseOrderObj(DROID *psDroid, BASE_OBJECT *psObj, bool altOrder)
 
 /** This function runs through all the player's droids and if the droid is vtol and is selected and is attacking, uses audio_QueueTrack() to play a sound.
  * @todo this function has variable psObj unused. Consider removing it from argument.
- * @todo this function runs through all the player's droids, but only uses the selected ones. Consider an efficiency improvement in here.
  * @todo current scope of this function is quite small. Consider refactoring it.
  */
 static void orderPlayOrderObjAudio(UDWORD player, BASE_OBJECT *psObj)
 {
 	/* loop over selected droids */
-	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, true))
 	{
-		if (psDroid->selected)
+		/* currently only looks for VTOL */
+		if (isVtolDroid(&droid))
 		{
-			/* currently only looks for VTOL */
-			if (isVtolDroid(psDroid))
+			switch (droid.order.type)
 			{
-				switch (psDroid->order.type)
-				{
-				case DORDER_ATTACK:
-					audio_QueueTrack(ID_SOUND_ON_OUR_WAY2);
-					break;
-				default:
-					break;
-				}
+			case DORDER_ATTACK:
+				audio_QueueTrack(ID_SOUND_ON_OUR_WAY2);
+				break;
+			default:
+				break;
 			}
-
-			/* only play audio once */
-			break;
 		}
+
+		/* only play audio once */
+		break;
 	}
 }
 
@@ -2670,41 +2662,38 @@ void orderSelectedObjAdd(UDWORD player, BASE_OBJECT *psObj, bool add)
 	// note that an order list graphic needs to be displayed
 	bOrderEffectDisplayed = false;
 
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, true))
 	{
-		if (psCurr->selected)
+		if (isBlueprint(psObj))
 		{
-			if (isBlueprint(psObj))
+			if (isConstructionDroid(&droid))
 			{
-				if (isConstructionDroid(psCurr))
-				{
-					// Help build the planned structure.
+				// Help build the planned structure.
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 // avoid false-positive "potential null pointer dereference [-Wnull-dereference]"
 // `castStructure(psObj)` will not return nullptr, because `isBlueprint(psObj)` above already checks if psObj is a structure type
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wnull-dereference"
 #endif
-					orderDroidStatsLocDirAdd(psCurr, DORDER_BUILD, castStructure(psObj)->pStructureType, psObj->pos.x, psObj->pos.y, castStructure(psObj)->rot.direction, add);
+				orderDroidStatsLocDirAdd(&droid, DORDER_BUILD, castStructure(psObj)->pStructureType, psObj->pos.x, psObj->pos.y, castStructure(psObj)->rot.direction, add);
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic pop
 #endif
-				}
-				else
-				{
-					// Help watch the structure being built.
-					orderDroidLocAdd(psCurr, DORDER_MOVE, psObj->pos.x, psObj->pos.y, add);
-				}
-				continue;
 			}
-
-			DroidOrder order = chooseOrderObj(psCurr, psObj, specialOrderKeyDown());
-			// see if the order can be added to the list
-			if (order.type != DORDER_NONE && !orderDroidObjAdd(psCurr, order, add))
+			else
 			{
-				// if not just do it straight off
-				orderDroidObj(psCurr, order.type, order.psObj, ModeQueue);
+				// Help watch the structure being built.
+				orderDroidLocAdd(&droid, DORDER_MOVE, psObj->pos.x, psObj->pos.y, add);
 			}
+			continue;
+		}
+
+		DroidOrder order = chooseOrderObj(&droid, psObj, specialOrderKeyDown());
+		// see if the order can be added to the list
+		if (order.type != DORDER_NONE && !orderDroidObjAdd(&droid, order, add))
+		{
+			// if not just do it straight off
+			orderDroidObj(&droid, order.type, order.psObj, ModeQueue);
 		}
 	}
 
@@ -2721,21 +2710,20 @@ void orderSelectedObj(UDWORD player, BASE_OBJECT *psObj)
 
 /** Given a player, this function send an order with localization and status to selected droids.
  * If add is true, the orders are queued.
- * @todo this function runs through all the player's droids, but only uses the selected ones and the ones that are construction droids. Consider an efficiency improvement.
  */
 void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x, UDWORD y, uint16_t direction, bool add)
 {
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, true))
 	{
-		if (psCurr->selected && isConstructionDroid(psCurr))
+		if (isConstructionDroid(&droid))
 		{
 			if (add)
 			{
-				orderDroidStatsLocDirAdd(psCurr, order, psStats, x, y, direction);
+				orderDroidStatsLocDirAdd(&droid, order, psStats, x, y, direction);
 			}
 			else
 			{
-				orderDroidStatsLocDir(psCurr, order, psStats, x, y, direction, ModeQueue);
+				orderDroidStatsLocDir(&droid, order, psStats, x, y, direction, ModeQueue);
 			}
 		}
 	}
@@ -2747,18 +2735,15 @@ void orderSelectedStatsLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS 
  */
 void orderSelectedStatsTwoLocDir(UDWORD player, DROID_ORDER order, STRUCTURE_STATS *psStats, UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2, uint16_t direction, bool add)
 {
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, true))
 	{
-		if (psCurr->selected)
+		if (add)
 		{
-			if (add)
-			{
-				orderDroidStatsTwoLocDirAdd(psCurr, order, psStats, x1, y1, x2, y2, direction);
-			}
-			else
-			{
-				orderDroidStatsTwoLocDir(psCurr, order, psStats, x1, y1, x2, y2, direction, ModeQueue);
-			}
+			orderDroidStatsTwoLocDirAdd(&droid, order, psStats, x1, y1, x2, y2, direction);
+		}
+		else
+		{
+			orderDroidStatsTwoLocDir(&droid, order, psStats, x1, y1, x2, y2, direction, ModeQueue);
 		}
 	}
 }
@@ -2772,18 +2757,18 @@ DROID *FindATransporter(DROID const *embarkee)
 	DROID *bestDroid = nullptr;
 	unsigned bestDist = ~0u;
 
-	for (DROID *psDroid = apsDroidLists[embarkee->player]; psDroid != nullptr; psDroid = psDroid->psNext)
+	for (auto& droid : Droids::forPlayer(embarkee->player, false, false))
 	{
-		if ((isCyborg && psDroid->droidType == DROID_TRANSPORTER) || psDroid->droidType == DROID_SUPERTRANSPORTER)
+		if ((isCyborg && droid.droidType == DROID_TRANSPORTER) || droid.droidType == DROID_SUPERTRANSPORTER)
 		{
-			unsigned dist = iHypot((psDroid->pos - embarkee->pos).xy());
-			if (!checkTransporterSpace(psDroid, embarkee, false))
+			unsigned dist = iHypot((droid.pos - embarkee->pos).xy());
+			if (!checkTransporterSpace(&droid, embarkee, false))
 			{
 				dist += 0x8000000;  // Should prefer transports that aren't full.
 			}
 			if (dist < bestDist)
 			{
-				bestDroid = psDroid;
+				bestDroid = &droid;
 				bestDist = dist;
 			}
 		}
@@ -3043,10 +3028,9 @@ static bool secondaryCheckDamageLevelDeselect(DROID *psDroid, SECONDARY_STATE re
 		// Only deselect the droid if there is another droid selected.
 		if (psDroid->selected)
 		{
-			DROID *psTempDroid;
-			for (psTempDroid = apsDroidLists[selectedPlayer]; psTempDroid; psTempDroid = psTempDroid->psNext)
+			for (auto& tempDroid : Droids::forPlayer(selectedPlayer, true, true))
 			{
-				if (psTempDroid != psDroid && psTempDroid->selected)
+				if (&tempDroid != psDroid)
 				{
 					DeSelectDroid(psDroid);
 					break;
@@ -3527,18 +3511,15 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 	return retVal;
 }
 
-/** This function assigns all droids of the group to the state.
- * @todo this function runs through all the player's droids. Consider something more efficient to select a group.
- * @todo SECONDARY_STATE argument is called "state", which is not current style. Suggestion to change it to "pState".
- */
+/** This function assigns all droids of the group to the state. */
 static void secondarySetGroupState(UDWORD player, UDWORD group, SECONDARY_ORDER sec, SECONDARY_STATE state)
 {
-	for (DROID *psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, false))
 	{
-		if (psCurr->group == group &&
-		    secondaryGetState(psCurr, sec) != state)
+		if (droid.group == group &&
+		    secondaryGetState(&droid, sec) != state)
 		{
-			secondarySetState(psCurr, sec, state);
+			secondarySetState(&droid, sec, state);
 		}
 	}
 }
@@ -3556,18 +3537,17 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 		UDWORD state, num;
 	} aStateCount[MAX_STATES];
 	SDWORD	i, numStates, max;
-	DROID	*psCurr;
 
 	// count the number of units for each state
 	numStates = 0;
 	memset(aStateCount, 0, sizeof(aStateCount));
-	for (psCurr = apsDroidLists[player]; psCurr; psCurr = psCurr->psNext)
+	for (auto& droid : Droids::forPlayer(player, true, false))
 	{
-		if (psCurr->group == group)
+		if (droid.group == group)
 		{
 			for (i = 0; i < numStates; i++)
 			{
-				if (aStateCount[i].state == (psCurr->secondaryOrder & mask))
+				if (aStateCount[i].state == (droid.secondaryOrder & mask))
 				{
 					aStateCount[i].num += 1;
 					break;
@@ -3576,7 +3556,7 @@ static SECONDARY_STATE secondaryGetAverageGroupState(UDWORD player, UDWORD group
 
 			if (i == numStates)
 			{
-				aStateCount[numStates].state = psCurr->secondaryOrder & mask;
+				aStateCount[numStates].state = droid.secondaryOrder & mask;
 				aStateCount[numStates].num = 1;
 				numStates += 1;
 			}

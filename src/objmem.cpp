@@ -23,6 +23,8 @@
  * Object memory management functions.
  *
  */
+
+#include <vector>
 #include <string.h>
 
 #include "lib/framework/frame.h"
@@ -64,6 +66,180 @@ FLAG_POSITION	*apsFlagPosLists[MAX_PLAYERS];
 
 /* The list of destroyed objects */
 BASE_OBJECT		*psDestroyedObj = nullptr;
+
+template<typename T>
+ObjectIterator<T>::ObjectIterator(
+	const bool bSelectedOnly,
+	T* firstObject
+)
+	: currentObject(firstObject)
+	, bSelectedOnly(bSelectedOnly)
+{
+	// Ensure the first object matches the selection filter
+	if (bSelectedOnly && (currentObject && !currentObject->selected))
+	{
+		ObjectIterator<T>& iter = *this;
+		++iter;
+	}
+}
+
+template<typename T>
+ObjectIterator<T>& ObjectIterator<T>::operator++()
+{
+	// Loop through the objects via next ptrs, picking only those matching selection filter
+	while (currentObject)
+	{
+		currentObject = currentObject->psNext;
+		if (!bSelectedOnly || (currentObject && currentObject->selected))
+		{
+			return *this;
+		}
+	}
+
+	// If the current player has no more suitable objects, set the current object to nullptr to signify we are at the end
+	currentObject = nullptr;
+	return *this;
+}
+
+template<typename T>
+ObjectIterator<T> ObjectIterator<T>::operator++(int)
+{
+	ObjectIterator<T> iter = *this;
+	++(*this);
+	return iter;
+}
+
+template<typename T>
+bool ObjectIterator<T>::operator==(ObjectIterator<T> other) const
+{
+	return currentObject == other.currentObject;
+}
+
+template<typename T>
+bool ObjectIterator<T>::operator!=(ObjectIterator<T> other) const
+{
+	return !(*this == other);
+}
+
+template<typename T>
+typename ObjectIterator<T>::reference ObjectIterator<T>::operator*() const
+{
+	ASSERT(currentObject != nullptr, "Attempt to dereference a past-the-end iterator");
+	return *currentObject;
+}
+
+template<typename T>
+PlayerObjectIterator<T>::PlayerObjectIterator(
+	const unsigned int playerCursor,
+	const std::vector<unsigned int> playerIndices,
+	const bool bSelectedOnly,
+	T** objectList
+)
+	: playerCursor(playerCursor)
+	, playerIndices(playerIndices)
+	, bSelectedOnly(bSelectedOnly)
+	, objectList(objectList)
+	, objIter(playerCursor >= playerIndices.size()
+		? ObjectIterator<T>(bSelectedOnly, nullptr)
+		: ObjectIterator<T>(bSelectedOnly, objectList[playerIndices[playerCursor]]))
+{
+	// Make sure the current player has any objects matching the selection filter
+	while (bSelectedOnly && this->playerCursor < playerIndices.size() && objIter.currentObject == nullptr)
+	{
+		PlayerObjectIterator<T>& iter = *this;
+		++iter;
+	}
+}
+
+template<typename T>
+PlayerObjectIterator<T>& PlayerObjectIterator<T>::operator++()
+{
+	// Select the next object via the child iterator
+	++objIter;
+
+	// If the child iterator ran out of objects, find next player with more objects.
+	while (!objIter.currentObject && playerCursor < playerIndices.size())
+	{
+		++playerCursor;
+		objIter = playerCursor >= playerIndices.size()
+			? ObjectIterator<T>(bSelectedOnly, nullptr)
+			: ObjectIterator<T>(bSelectedOnly, objectList[playerIndices[playerCursor]]);
+	}
+
+	return *this;
+}
+
+template<typename T>
+PlayerObjectIterator<T> PlayerObjectIterator<T>::operator++(int)
+{
+	PlayerObjectIterator<T> iter = *this;
+	++(*this);
+	return iter;
+}
+
+template<typename T>
+bool PlayerObjectIterator<T>::operator==(PlayerObjectIterator<T> other) const
+{
+	return bSelectedOnly == other.bSelectedOnly
+		&& objectList == other.objectList
+		&& playerCursor == other.playerCursor
+		&& objIter.currentObject == other.objIter.currentObject;
+}
+
+template<typename T>
+bool PlayerObjectIterator<T>::operator!=(PlayerObjectIterator<T> other) const
+{
+	return !(*this == other);
+}
+
+template<typename T>
+typename PlayerObjectIterator<T>::reference PlayerObjectIterator<T>::operator*() const
+{
+	ASSERT(playerCursor < playerIndices.size() && objIter.currentObject, "Attempt to dereference a past-the-end iterator");
+	return *objIter.currentObject;
+}
+
+template class ObjectIterator<DROID>;
+template class PlayerObjectIterator<DROID>;
+
+PlayerObjectIterator<DROID> Droids::begin() const
+{
+	return PlayerObjectIterator<DROID>(0, playerIndices, bSelectedOnly, apsDroidLists);
+}
+
+PlayerObjectIterator<DROID> Droids::end() const
+{
+	return PlayerObjectIterator<DROID>(playerIndices.size(), playerIndices, bSelectedOnly, apsDroidLists);
+}
+
+unsigned int Droids::count() const
+{
+	unsigned int count = 0;
+	for (auto it = begin(); it != end(); ++it)
+	{
+		++count;
+	}
+
+	return count;
+}
+
+Droids::Droids(const std::vector<unsigned int> playerIndices, const bool bSelectedOnly)
+	: playerIndices(playerIndices)
+	, bSelectedOnly(bSelectedOnly)
+{
+}
+
+Droids Droids::forPlayer(const unsigned int playerIndex, const bool bIncludeShared, const bool bSelectedOnly)
+{
+	// TODO: The current implementation "hides" the inefficient loop-over-players'-droids implementation. Droid counts are relatively small, so this should not be an issue.
+	// 	   - bSelectedOnly can be made more efficient by keeping track of selections (in a list) instead of relying on psDroid->selected
+
+	//const std::vector<unsigned int> playerIndices = { playerIndex };
+	const std::vector<unsigned int> playerIndices = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	// TODO 823-share-unit-controls: obtain a list of share targets to playerIndices
+
+	return Droids(playerIndices, bSelectedOnly);
+}
 
 /* Forward function declarations */
 #ifdef DEBUG

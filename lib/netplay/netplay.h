@@ -285,6 +285,10 @@ struct PLAYER
 		IPtextAddress[0] = '\0';
 		faction = FACTION_NORMAL;
 	}
+
+	bool isSharingUnitsWith(const unsigned int other) const;
+
+	void setUnitSharingState(const unsigned int other, const bool bState);
 };
 
 struct PlayerReference;
@@ -314,6 +318,7 @@ struct NETPLAY
 
 	NETPLAY();
 };
+
 
 struct PLAYER_IP
 {
