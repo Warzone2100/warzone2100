@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-21 01:43\n"
+"PO-Revision-Date: 2021-03-24 11:57\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -6520,14 +6520,14 @@ msgstr "Panzerung +35%, Rumpfpunkte +30%"
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D2.text[1]
 #: po/custom/fromJson.txt:632
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr "Panzerbrechende Treibspiegelgeschosse"
+msgstr "Panzerbrechende Treibkäfiggeschosse"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_D4.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text[1]
 #: po/custom/fromJson.txt:636
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Panzerbrechende flügelstabilisierte Treibspiegelgeschosse"
+msgstr "Panzerbrechende flügelstabilisierte Treibkäfiggeschosse"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_FL.text[1]
@@ -9819,7 +9819,7 @@ msgstr "Hochgeschwindigkeitskanone"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2921
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibkäfiggeschosse"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
