@@ -44,6 +44,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "3rdparty/ska_sort.hpp"
+
 #define BUFFER_OFFSET(i) (reinterpret_cast<char *>(i))
 #define SHADOW_END_DISTANCE (8000*8000) // Keep in sync with lighting.c:FOG_END
 
@@ -327,16 +329,18 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, const iI
 
 static inline bool edgeLessThan(EDGE const &e1, EDGE const &e2)
 {
-	if (e1.from != e2.from)
-	{
-		return e1.from < e2.from;
-	}
-	return e1.to < e2.to;
+	return e1.sort_key < e2.sort_key;
+}
+
+static inline uint64_t edgeSortKey(uint32_t from, uint32_t to)
+{
+	return static_cast<uint64_t>(from) << 32 | to;
 }
 
 static inline void flipEdge(EDGE &e)
 {
 	std::swap(e.from, e.to);
+	e.sort_key = edgeSortKey(e.from, e.to);
 }
 
 /// scale the height according to the flags
@@ -575,7 +579,9 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 					for (int n = 0; n < 3; ++n)
 					{
 						// Add the edges
-						edgelist.push_back({poly.pindex[n], poly.pindex[(n + 1)%3]});
+						uint32_t from = poly.pindex[n];
+						uint32_t to = poly.pindex[(n + 1)%3];
+						edgelist.push_back({from, to, edgeSortKey(from, to)});
 					}
 				}
 			}
@@ -583,8 +589,14 @@ static inline DrawShadowResult pie_DrawShadow(ShadowCache &shadowCache, iIMDShap
 			// Remove duplicate pairs from the edge list. For example, in the list ((1 2), (2 6), (6 2), (3, 4)), remove (2 6) and (6 2).
 			edgelistFlipped = edgelist;
 			std::for_each(edgelistFlipped.begin(), edgelistFlipped.end(), flipEdge);
-			std::sort(edgelist.begin(), edgelist.end(), edgeLessThan);
-			std::sort(edgelistFlipped.begin(), edgelistFlipped.end(), edgeLessThan);
+			ska_sort(edgelist.begin(), edgelist.end(), [](const EDGE & edge)
+			{
+				return edge.sort_key;
+			});
+			ska_sort(edgelistFlipped.begin(), edgelistFlipped.end(), [](const EDGE & edge)
+			{
+				return edge.sort_key;
+			});
 			edgelistFiltered.resize(edgelist.size());
 			edgelistFiltered.erase(std::set_difference(edgelist.begin(), edgelist.end(), edgelistFlipped.begin(), edgelistFlipped.end(), edgelistFiltered.begin(), edgeLessThan), edgelistFiltered.end());
 
