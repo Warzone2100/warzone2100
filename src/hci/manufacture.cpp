@@ -138,9 +138,7 @@ void ManufactureController::updateManufactureOptionsList()
 DROID_TEMPLATE *ManufactureController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto factory = getFactoryOrNullptr(getObjectAt(objectIndex));
-	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, factory);
-
-	return factory->psSubject;
+	return factory == nullptr ? nullptr : factory->psSubject;
 }
 
 void ManufactureController::refresh()
