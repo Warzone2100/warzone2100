@@ -31,7 +31,10 @@ void CommanderController::updateCommandersList()
 STRUCTURE_STATS *CommanderController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto droid = getObjectAt(objectIndex);
-	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, droid);
+	if (droid == nullptr)
+	{
+		return nullptr;
+	}
 	auto assignedFactory = droidGetCommandFactory(droid);
 	return assignedFactory == nullptr ? nullptr : assignedFactory->pStructureType;
 }

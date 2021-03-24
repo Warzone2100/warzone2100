@@ -75,9 +75,20 @@ void ResearchController::updateResearchOptionsList()
 RESEARCH *ResearchController::getObjectStatsAt(size_t objectIndex) const
 {
 	auto facility = getObjectAt(objectIndex);
-	ASSERT_NOT_NULLPTR_OR_RETURN(nullptr, facility);
+	if (facility == nullptr)
+	{
+		return nullptr;
+	}
+	if (facility->pFunctionality == nullptr)
+	{
+		return nullptr;
+	}
 
 	RESEARCH_FACILITY *psResearchFacility = &facility->pFunctionality->researchFacility;
+	if (psResearchFacility == nullptr)
+	{
+		return nullptr;
+	}
 
 	if (psResearchFacility->psSubjectPending != nullptr && !IsResearchCompleted(&asPlayerResList[facility->player][psResearchFacility->psSubjectPending->index]))
 	{
