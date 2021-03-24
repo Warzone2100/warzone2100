@@ -1099,6 +1099,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	
 	// bind the vertex buffer
 	gfx_api::TerrainDepth::get().bind();
+	gfx_api::TerrainDepth::get().bind_textures(lightmap_tex_num);
 	gfx_api::TerrainDepth::get().bind_vertex_buffers(geometryVBO);
 	gfx_api::TerrainDepth::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, glm::vec4(0.f), glm::vec4(0.f), glm::mat4(1.f), glm::mat4(1.f), 
 	glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 0 });
