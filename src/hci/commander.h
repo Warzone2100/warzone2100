@@ -8,6 +8,8 @@ class CommanderController: public BaseObjectsController, public std::enable_shar
 public:
 	STRUCTURE_STATS *getObjectStatsAt(size_t objectIndex) const override;
 
+	STRUCTURE *getAssignedFactoryAt(size_t objectIndex) const;
+
 	size_t objectsSize() const override
 	{
 		return commanders.size();
