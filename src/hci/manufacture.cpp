@@ -24,7 +24,7 @@ static uint8_t getProductionLoops(STRUCTURE *structure)
 
 	auto psFactory = getFactoryOrNullptr(structure);
 	ASSERT_NOT_NULLPTR_OR_RETURN(0, psFactory);
-	return psFactory->psSubject == nullptr ? 0 : psFactory->productionLoops;
+	return psFactory->productionLoops;
 }
 
 static std::shared_ptr<W_LABEL> makeProductionRunSizeLabel()
@@ -432,12 +432,13 @@ private:
 		attach(productionRunSizeLabel = makeProductionRunSizeLabel());
 	}
 
-	void updateProductionRunSizeLabel(STRUCTURE *factory, DROID_TEMPLATE *droidTemplate)
+	void updateProductionRunSizeLabel(STRUCTURE *structure, DROID_TEMPLATE *droidTemplate)
 	{
-		auto production = getProduction(factory, droidTemplate);
-		if (factory && StructureIsManufacturingPending(factory) && production.isValid())
+		auto production = getProduction(structure, droidTemplate);
+		auto factory = getFactoryOrNullptr(structure);
+		if (factory && factory->psSubject && StructureIsManufacturingPending(structure) && production.isValid())
 		{
-			auto productionLoops = getProductionLoops(factory);
+			auto productionLoops = getProductionLoops(structure);
 			auto labelText = astringf(productionLoops > 0 ? "%d/%d" : "%d", production.numRemaining(), production.quantity);
 			productionRunSizeLabel->setString(WzString::fromUtf8(labelText));
 			productionRunSizeLabel->show();
