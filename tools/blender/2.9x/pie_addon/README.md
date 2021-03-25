@@ -37,6 +37,8 @@ The scripts in this addon currently support importing and exporting the followin
         * PIE Animated Polygons*
     * PIE Connectors
     * PIE Anim Objects*
+    * PIE Shadow Points
+    * PIE Shadow Polygons
 
 *1: N-gons should not be used in exported meshes due to UV corruption. Quads will be triangulated correctly and are acceptable for export from Blender to PIE.
 
@@ -67,5 +69,7 @@ The following panel can be found in the Object tab of the properties editor:
             * This type is used to define the generic values of a PIE model, such as its rendering flags, textures, and events.
         3. `Level`:
             * This type is used to define the mesh and animation properties which are specific to each level such as animation rate/cycles and texture animation data for particular sets of faces. These should always be mesh objects, and also should always be within the heirarchy of a `Root` PIE object.
-        4. `Connector`:
-            * This type is used to define the location of a connector on a particular level. These should be parented directly to a `Level` PIE object.
+        4. `Shadow`:
+            * This type is used to define the shadow of a level. These should always be mesh objects, and should aso be parented directly to a `Level` PIE object. The level's `Shadow Type` must be `Custom` in order to export PIE shadows.
+        5. `Connector`:
+            * This type is used to define the location of a connector on a level. These should be parented directly to a `Level` PIE object.
