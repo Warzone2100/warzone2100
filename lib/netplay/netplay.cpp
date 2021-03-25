@@ -260,13 +260,12 @@ NETPLAY::NETPLAY()
 
 bool PLAYER::isSharingUnitsWith(const unsigned int other) const
 {
-	// TODO 823-share-unit-controls
-	return true;
+	return sharing[other].bUnits;
 }
 
 void PLAYER::setUnitSharingState(const unsigned int other, const bool bState)
 {
-	// TODO 823-share-unit-controls
+	sharing[other].bUnits = bState;
 }
 
 

@@ -24,10 +24,10 @@
 #ifndef __INCLUDED_SRC_OBJMEM_H__
 #define __INCLUDED_SRC_OBJMEM_H__
 
-#include <iterator>
 #include <vector>
 
 #include "objectdef.h"
+#include "objiter.h"
 
 /* The lists of objects allocated */
 extern DROID			*apsDroidLists[MAX_PLAYERS];
@@ -41,60 +41,6 @@ extern FEATURE			*apsOilList[1];
 /* The list of destroyed objects */
 extern BASE_OBJECT	*psDestroyedObj;
 
-
-/* Abstract base class for iterators over object lists. */
-template<typename T>
-class ObjectIterator : public std::iterator<std::input_iterator_tag, T, T, T*, T&>
-{
-public:
-	explicit ObjectIterator(
-		const bool bSelectedOnly,
-		T* firstObject
-	);
-
-private:
-	T* currentObject;
-	bool bSelectedOnly;
-
-	// Iterator implementation
-public:
-	ObjectIterator<T>& operator++();
-	ObjectIterator<T> operator++(int);
-	bool operator==(ObjectIterator<T> other) const;
-	bool operator!=(ObjectIterator<T> other) const;
-	typename ObjectIterator<T>::reference operator*() const;
-
-	template<typename U>
-	friend class PlayerObjectIterator;
-};
-
-template <typename T>
-class PlayerObjectIterator : public std::iterator<std::input_iterator_tag, T, T, T*, T&>
-{
-public:
-	explicit PlayerObjectIterator(
-		const unsigned int playerCursor,
-		const std::vector<unsigned int> playerIndices,
-		const bool bSelectedOnly,
-		T** objectList
-	);
-
-private:
-	unsigned int playerCursor;
-	ObjectIterator<T> objIter;
-
-	const std::vector<unsigned int> playerIndices;
-	const bool bSelectedOnly;
-	T** objectList;
-
-	// Iterator implementation
-public:
-	PlayerObjectIterator<T>& operator++();
-	PlayerObjectIterator<T> operator++(int);
-	bool operator==(PlayerObjectIterator<T> other) const;
-	bool operator!=(PlayerObjectIterator<T> other) const;
-	typename PlayerObjectIterator<T>::reference operator*() const;
-};
 
 /* Convenient iterator over the droid lists. */
 class Droids

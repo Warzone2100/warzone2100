@@ -3384,7 +3384,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	/* Deselect all the droids if we've released the drag box */
 	if (dragBox3D.status == DRAG_RELEASED)
 	{
-		if (inQuad(&center, &dragQuad) && psDroid->player == selectedPlayer)
+		if (inQuad(&center, &dragQuad) && NetPlay.players[psDroid->player].isSharingUnitsWith(selectedPlayer))
 		{
 			//don't allow Transporter Droids to be selected here
 			//unless we're in multiPlayer mode!!!!

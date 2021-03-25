@@ -245,6 +245,12 @@ enum class NET_LOBBY_OPT_FIELD
 	MAX
 };
 
+struct PlayerShareStatus
+{
+	bool bUnits;
+	bool bManufacture;
+};
+
 // ////////////////////////////////////////////////////////////////////////
 // Player information. Filled when players join, never re-ordered. selectedPlayer global points to
 // currently controlled player.
@@ -267,6 +273,8 @@ struct PLAYER
 	char                IPtextAddress[40];  ///< IP of this player
 	FactionID           faction;            ///< which faction the player has
 
+	std::vector<PlayerShareStatus> sharing = std::vector<PlayerShareStatus>(MAX_PLAYERS, { true, true});
+
 	void resetAll()
 	{
 		name[0] = '\0';
@@ -284,6 +292,7 @@ struct PLAYER
 		autoGame = false;
 		IPtextAddress[0] = '\0';
 		faction = FACTION_NORMAL;
+		std::fill(sharing.begin(), sharing.end(), PlayerShareStatus({ true, true }));
 	}
 
 	bool isSharingUnitsWith(const unsigned int other) const;
