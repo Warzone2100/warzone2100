@@ -1760,7 +1760,7 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	}
 	if (psComp->compType == COMP_WEAPON)
 	{
-		for (int i = 0; i < numTurrets; i++) // may be multi-weapon
+		for (int i = 0; i < std::min(numTurrets, MAX_WEAPONS); i++) // may be multi-weapon
 		{
 			result = get_first_available_component(player, SIZE_NUM, _turrets.va_list[i], COMP_WEAPON, strict);
 			if (result < 0)
