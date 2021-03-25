@@ -1604,9 +1604,15 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 				if (argc <= idx)
 					return {};
 				wzapi::va_list<ContainedType> result;
-				for (; idx < argc; idx++)
+				size_t before_idx = idx;
+				for (; idx < argc; )
 				{
+					before_idx = idx;
 					result.va_list.push_back(unbox<ContainedType>()(idx, ctx, argc, argv, function));
+					if (before_idx == idx)
+					{
+						idx++;
+					}
 				}
 				return result;
 			}
