@@ -311,8 +311,8 @@ void pie_Draw3DButton(const iIMDShape *shape, PIELIGHT teamcolour, const glm::ma
 	gfx_api::Draw3DShapeOpaque::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 	gfx_api::Draw3DShapeOpaque::get().bind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().bind_index_buffer(*shape->buffers[VBO_INDEX], gfx_api::index_type::u16);
-	gfx_api::Draw3DShapeOpaque::get().draw_elements(shape->polys.size() * 3, 0);
-	polyCount += shape->polys.size();
+	gfx_api::Draw3DShapeOpaque::get().draw_elements(shape->indicesCount, 0);
+	polyCount += shape->indicesCount / 3;
 	gfx_api::Draw3DShapeOpaque::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD], pTangentBuffer);
 	gfx_api::context::get().unbind_index_buffer(*shape->buffers[VBO_INDEX]);
 }
@@ -430,7 +430,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			AdditivePSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 		}
 		AdditivePSO::get().set_uniforms_at(2, instanceUniforms);
-		AdditivePSO::get().draw_elements(shape->polys.size() * 3, 0);
+		AdditivePSO::get().draw_elements(shape->indicesCount, 0);
 //		AdditivePSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 	}
 	else if (pieFlag & pie_TRANSLUCENT)
@@ -448,7 +448,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 				AlphaPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 			}
 			AlphaPSO::get().set_uniforms_at(2, instanceUniforms);
-			AlphaPSO::get().draw_elements(shape->polys.size() * 3, 0);
+			AlphaPSO::get().draw_elements(shape->indicesCount, 0);
 	//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 		}
 		else
@@ -464,7 +464,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 				AlphaNoDepthWRTPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 			}
 			AlphaNoDepthWRTPSO::get().set_uniforms_at(2, instanceUniforms);
-			AlphaNoDepthWRTPSO::get().draw_elements(shape->polys.size() * 3, 0);
+			AlphaNoDepthWRTPSO::get().draw_elements(shape->indicesCount, 0);
 	//		AlphaPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 		}
 	}
@@ -481,7 +481,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			PremultipliedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 		}
 		PremultipliedPSO::get().set_uniforms_at(2, instanceUniforms);
-		PremultipliedPSO::get().draw_elements(shape->polys.size() * 3, 0);
+		PremultipliedPSO::get().draw_elements(shape->indicesCount, 0);
 //		PremultipliedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 	}
 	else
@@ -497,7 +497,7 @@ static void draw3dShapeTemplated(const templatedState &lastState, ShaderOnce& gl
 			OpaquePSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap);
 		}
 		OpaquePSO::get().set_uniforms_at(2, instanceUniforms);
-		OpaquePSO::get().draw_elements(shape->polys.size() * 3, 0);
+		OpaquePSO::get().draw_elements(shape->indicesCount, 0);
 //		OpaquePSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 	}
 }
@@ -579,7 +579,7 @@ static templatedState pie_Draw3DShape2(const templatedState &lastState, ShaderOn
 		draw3dShapeTemplated<SHADER_NOLIGHT, gfx_api::Draw3DShapeNoLightAdditive, gfx_api::Draw3DShapeNoLightAlpha, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT, gfx_api::Draw3DShapeNoLightPremul, gfx_api::Draw3DShapeNoLightOpaque>(lastState, globalsOnce, globalUniforms, colour, teamcolour, stretchDepth, ecmState, globalUniforms.ViewMatrix * modelMatrix, shape, pieFlag, frame);
 	}
 
-	polyCount += shape->polys.size();
+	polyCount += (shape->indicesCount / 3);
 
 	return currentState;
 }
@@ -1412,7 +1412,7 @@ static void drawInstanced3dShapeTemplated_Inner(ShaderOnce& globalsOnce, const g
 		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
 	Draw3DInstancedPSO::get().bind_textures(&pie_Texture(textures.texpage), tcmask, normalmap, specularmap, gfx_api::context::get().getDepthTexture(), lightmapTexture);
 
-	Draw3DInstancedPSO::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
+	Draw3DInstancedPSO::get().draw_elements_instanced(shape->indicesCount, 0, instance_count);
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 }
 
@@ -1439,7 +1439,7 @@ static void drawInstanced3dShapeDepthOnly(ShaderOnce& globalsOnce, const gfx_api
 		std::make_tuple(instanceDataBuffer, instanceBufferOffset) });
 //	gfx_api::Draw3DShapeDepthOnly_Instanced::get().bind_textures(&pie_Texture(shape->texpage), tcmask, normalmap, specularmap);
 
-	gfx_api::Draw3DShapeDepthOnly_Instanced::get().draw_elements_instanced(shape->polys.size() * 3, 0, instance_count);
+	gfx_api::Draw3DShapeDepthOnly_Instanced::get().draw_elements_instanced(shape->indicesCount, 0, instance_count);
 //	Draw3DInstancedPSO::get().unbind_vertex_buffers(shape->buffers[VBO_VERTEX], shape->buffers[VBO_NORMAL], shape->buffers[VBO_TEXCOORD]);
 }
 
@@ -1534,7 +1534,7 @@ static void pie_Draw3DShape2_Instanced(ShaderOnce& globalsOnce, const gfx_api::D
 		drawInstanced3dShapeTemplated<SHADER_NOLIGHT_INSTANCED, gfx_api::Draw3DShapeNoLightAdditive_Instanced, gfx_api::Draw3DShapeNoLightAdditiveNoDepthWRT_Instanced, gfx_api::Draw3DShapeNoLightAlpha_Instanced, gfx_api::Draw3DShapeNoLightAlphaNoDepthWRT_Instanced, gfx_api::Draw3DShapeNoLightPremul_Instanced, gfx_api::Draw3DShapeNoLightOpaque_Instanced>(globalsOnce, globalUniforms, shape, pieFlag, instanceDataBuffer, instanceBufferOffset, instance_count, lightmapTexture);
 	}
 
-	polyCount += shape->polys.size();
+	polyCount += shape->indicesCount / 3;
 }
 
 void InstancedMeshRenderer::Draw3DShapes_Instanced(uint64_t currentGameFrame, ShaderOnce& globalsOnce, const gfx_api::Draw3DShapeInstancedGlobalUniforms& globalUniforms, int drawParts, bool depthPass)

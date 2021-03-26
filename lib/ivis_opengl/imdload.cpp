@@ -27,6 +27,7 @@
 #include <string>
 #include <unordered_map>
 #include <array>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
@@ -44,6 +45,8 @@
 
 #include <glm/vec4.hpp>
 using Vector4f = glm::vec4;
+
+#include <meshoptimizer/src/meshoptimizer.h>
 
 // Scale animation numbers from int to float
 #define INT_SCALE       1000
@@ -1254,6 +1257,99 @@ void finishTangentsGeneration()
    }
 }
 
+// NOTE: Only intended to be called from _imd_load_level after all buffers are ready
+static inline void _imd_load_level_optimize(iIMDShape &s)
+{
+	std::vector<meshopt_Stream> streams = {
+		{&vertices[0], sizeof(gfx_api::gfxFloat) * 3, sizeof(gfx_api::gfxFloat) * 3},
+		{&normals[0], sizeof(gfx_api::gfxFloat) * 3, sizeof(gfx_api::gfxFloat) * 3},
+		{&texcoords[0], sizeof(gfx_api::gfxFloat) * 4, sizeof(gfx_api::gfxFloat) * 4}
+	};
+	if (!tangents.empty())
+	{
+		streams.push_back({&tangents[0], sizeof(gfx_api::gfxFloat) * 4, sizeof(gfx_api::gfxFloat) * 4});
+	}
+
+	const size_t index_count = indices.size();
+
+	// convert to std::vector<unsigned int>, as expected by meshopt
+	static std::vector<unsigned int> indices_uint; // Static, to save allocations.
+	indices_uint.resize(0);
+	std::transform(indices.begin(), indices.end(), std::back_inserter(indices_uint),
+				   [](uint16_t c) -> unsigned int { return static_cast<unsigned int>(c); });
+
+	// Indexing
+	size_t initial_vertex_count = vertexCount;
+	std::vector<unsigned int> remap(index_count);
+	size_t vertex_count = meshopt_generateVertexRemapMulti(&remap[0], &indices_uint[0], index_count, initial_vertex_count, &streams[0], streams.size());
+
+	if (vertex_count != initial_vertex_count)
+	{
+		debug(LOG_3D, "imd[_load_level_optimize] = Reduced vertices: %zu -> %zu", initial_vertex_count, vertex_count);
+	}
+
+	{
+		std::vector<unsigned int> indexArray;
+		indexArray.resize(index_count);
+		meshopt_remapIndexBuffer(&indexArray[0], &indices_uint[0], index_count, &remap[0]);
+		indices_uint.swap(indexArray);
+	}
+
+	{
+		std::vector<gfx_api::gfxFloat> vertexArray;
+		vertexArray.resize(vertex_count * 3);
+		meshopt_remapVertexBuffer(&vertexArray[0], &vertices[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+		vertices.swap(vertexArray);
+	}
+
+	{
+		std::vector<gfx_api::gfxFloat> normalArray;
+		normalArray.resize(vertex_count * 3);
+		meshopt_remapVertexBuffer(&normalArray[0], &normals[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+		normals.swap(normalArray);
+	}
+
+	{
+		std::vector<gfx_api::gfxFloat> textureArray;
+		textureArray.resize(vertex_count * 4);
+		meshopt_remapVertexBuffer(&textureArray[0], &texcoords[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 4, &remap[0]);
+		texcoords.swap(textureArray);
+	}
+
+	if (!tangents.empty())
+	{
+		std::vector<gfx_api::gfxFloat> tangentArray;
+		tangentArray.resize(vertex_count * 4);
+		meshopt_remapVertexBuffer(&tangentArray[0], &tangents[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 4, &remap[0]);
+		tangents.swap(tangentArray);
+	}
+
+	// Vertex cache optimization
+	meshopt_optimizeVertexCache(&indices_uint[0], &indices_uint[0], index_count, vertex_count);
+
+	// Overdraw optimization
+	meshopt_optimizeOverdraw(&indices_uint[0], &indices_uint[0], index_count, &vertices[0], vertex_count, sizeof(gfx_api::gfxFloat) * 3, 1.05f);
+
+	// Vertex fetch optimization
+	meshopt_optimizeVertexFetchRemap(&remap[0], &indices_uint[0], index_count, vertex_count);
+	meshopt_remapIndexBuffer(&indices_uint[0], &indices_uint[0], index_count, &remap[0]);
+	meshopt_remapVertexBuffer(&vertices[0], &vertices[0], vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+	meshopt_remapVertexBuffer(&normals[0], &normals[0], vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+	meshopt_remapVertexBuffer(&texcoords[0], &texcoords[0], vertex_count, sizeof(gfx_api::gfxFloat) * 4, &remap[0]);
+	if (!tangents.empty())
+	{
+		meshopt_remapVertexBuffer(&tangents[0], &tangents[0], vertex_count, sizeof(gfx_api::gfxFloat) * 4, &remap[0]);
+	}
+
+	// update s.vertexCount
+	s.vertexCount = vertex_count;
+
+	// transform indices back
+	indices.clear();
+	std::transform(indices_uint.begin(), indices_uint.end(), std::back_inserter(indices),
+				   [](unsigned int c) -> uint16_t { return static_cast<uint16_t>(c); });
+}
+
 /*!
  * Load shape levels recursively
  * \param ppFileData Pointer to the data (usually read from a file)
@@ -1543,6 +1639,8 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 			indices.emplace_back(addVertex(s, 2, &p, npol, pie_level_normals));
 		}
 
+		ASSERT(indices.size() == s.polys.size() * 3, "???");
+		s.indicesCount = indices.size();
 		s.vertexCount = vertexCount;
 
 		// Tangents are optional, only if normals were loaded and passed sanity check above
@@ -1554,14 +1652,16 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 			for (size_t i = 0; i < indices.size(); i += 3)
 				calculateTangentsForTriangle(indices[i], indices[i+1], indices[i+2]);
 			finishTangentsGeneration();
-
-			if (!tangents.empty())
-			{
-				if (!s.buffers[VBO_TANGENT])
-					s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "tangent buffer");
-				s.buffers[VBO_TANGENT]->upload(tangents.size() * sizeof(gfx_api::gfxFloat), tangents.data());
-			}
 		}
+		else
+		{
+			tangents.resize(0);
+			bitangents.resize(0);
+		}
+
+		_imd_load_level_optimize(s);
+		s.vertexCount = vertexCount;
+		s.indicesCount = indices.size();
 
 		if (!s.buffers[VBO_VERTEX])
 			s.buffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "vertex buffer");
@@ -1594,6 +1694,13 @@ static std::unique_ptr<iIMDShape> _imd_load_level(const WzString &filename, cons
 			debug(LOG_ERROR, "_imd_load_level: file corrupt? - no texcoords?: %s (key: %s)", filename.toUtf8().c_str(), key.c_str());
 		}
 		s.buffers[VBO_TEXCOORD]->upload(texcoords.size() * sizeof(gfx_api::gfxFloat), texcoords.data());
+
+		if (!tangents.empty())
+		{
+			if (!s.buffers[VBO_TANGENT])
+				s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::static_draw, "tangent buffer");
+			s.buffers[VBO_TANGENT]->upload(tangents.size() * sizeof(gfx_api::gfxFloat), tangents.data());
+		}
 	}
 
 	indices.resize(0);
