@@ -134,11 +134,11 @@ void displayRoomNotifyMessage(char const *text);
 // GAME OPTIONS SCREEN
 
 #define MULTIOP_PLAYERS			10231
-#define MULTIOP_PLAYERSX		360
+#define MULTIOP_PLAYERSX		323
 #define MULTIOP_PLAYERSY		1
 #define MULTIOP_PLAYER_START	10232		//list of players
 #define MULTIOP_PLAYER_END		10249
-#define MULTIOP_PLAYERSW		263
+#define MULTIOP_PLAYERSW		298
 #define MULTIOP_PLAYERSH		380
 
 #define MULTIOP_ROW_WIDTH		246
@@ -163,7 +163,7 @@ void displayRoomNotifyMessage(char const *text);
 #define MULTIOP_READY_WIDTH			41
 #define MULTIOP_READY_HEIGHT		38
 
-#define MULTIOP_PLAYERWIDTH		245
+#define MULTIOP_PLAYERWIDTH		282
 #define	MULTIOP_PLAYERHEIGHT	38
 
 #define MULTIOP_OPTIONS			10250

@@ -2552,7 +2552,8 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 		psWidget->setGeometry(MULTIOP_PLAYERSX, MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
 	}));
 
-	addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("PLAYERS"));
+	// May be needed in the future.
+	//addSideText(FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, _("PLAYERS"));
 
 	if (players)
 	{
