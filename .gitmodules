@@ -65,3 +65,6 @@
 [submodule "data/terrain_overrides/high"]
 	path = data/terrain_overrides/high
 	url = https://github.com/Warzone2100/data-terrain-high.git
+[submodule "3rdparty/meshoptimizer"]
+	path = 3rdparty/meshoptimizer
+	url = https://github.com/zeux/meshoptimizer.git

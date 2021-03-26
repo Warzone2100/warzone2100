@@ -155,6 +155,10 @@ Files: 3rdparty/LRUCache11/*
 Copyright: 2012-2022 SAURAV MOHAPATRA
 License: ISC
 
+Files: 3rdparty/meshoptimizer/*
+Copyright: 2016-2023 Arseny Kapoulkine
+License: Expat
+
 Files: 3rdparty/mINI/*
 Copyright: 2018 Danijel Durakovic
 License: Expat
