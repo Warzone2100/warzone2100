@@ -31,10 +31,6 @@
 #include "cutils.h"
 #include "libregexp.h"
 
-#if defined(_WIN32)
-#include <malloc.h>
-#endif
-
 /*
   TODO:
 
@@ -469,7 +465,7 @@ static int parse_digits(const uint8_t **pp, BOOL allow_overflow)
         p++;
     }
     *pp = p;
-    return (int)v;
+    return v;
 }
 
 static int re_parse_expect(REParseState *s, const uint8_t **pp, int c)

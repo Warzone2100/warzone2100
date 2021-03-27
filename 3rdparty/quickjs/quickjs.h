@@ -1,8 +1,8 @@
 /*
  * QuickJS Javascript Engine
  *
- * Copyright (c) 2017-2020 Fabrice Bellard
- * Copyright (c) 2017-2020 Charlie Gordon
+ * Copyright (c) 2017-2021 Fabrice Bellard
+ * Copyright (c) 2017-2021 Charlie Gordon
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,11 +40,7 @@ extern "C" {
 #else
 #define js_likely(x)     (x)
 #define js_unlikely(x)   (x)
-#if defined(_MSC_VER)
-#define js_force_inline  __forceinline
-#else
 #define js_force_inline  inline
-#endif
 #define __js_printf_like(a, b)
 #endif
 
@@ -105,8 +101,6 @@ typedef struct JSRefCountHeader {
    for objective C) */
 typedef struct __JSValue *JSValue;
 typedef const struct __JSValue *JSValueConst;
-#define JS_VALUE_CONST_CAST(cVal) (JSValue)cVal
-#define JS_VALUE_MAKE_CONST(val) (JSValueConst)val
 
 #define JS_VALUE_GET_TAG(v) (int)((uintptr_t)(v) & 0xf)
 /* same as JS_VALUE_GET_TAG, but return JS_TAG_FLOAT64 with NaN boxing */
@@ -138,8 +132,6 @@ static inline JS_BOOL JS_VALUE_IS_NAN(JSValue v)
 typedef uint64_t JSValue;
 
 #define JSValueConst JSValue
-#define JS_VALUE_CONST_CAST(cVal) cVal
-#define JS_VALUE_MAKE_CONST(val) val
 
 #define JS_VALUE_GET_TAG(v) (int)((v) >> 32)
 #define JS_VALUE_GET_INT(v) (int)(v)
@@ -205,7 +197,7 @@ static inline JS_BOOL JS_VALUE_IS_NAN(JSValue v)
 typedef union JSValueUnion {
     int32_t int32;
     double float64;
-    uintptr_t ptr;
+    void *ptr;
 } JSValueUnion;
 
 typedef struct JSValue {
@@ -214,8 +206,6 @@ typedef struct JSValue {
 } JSValue;
 
 #define JSValueConst JSValue
-#define JS_VALUE_CONST_CAST(cVal) cVal
-#define JS_VALUE_MAKE_CONST(val) val
 
 #define JS_VALUE_GET_TAG(v) ((int32_t)(v).tag)
 /* same as JS_VALUE_GET_TAG, but return JS_TAG_FLOAT64 with NaN boxing */
@@ -223,19 +213,10 @@ typedef struct JSValue {
 #define JS_VALUE_GET_INT(v) ((v).u.int32)
 #define JS_VALUE_GET_BOOL(v) ((v).u.int32)
 #define JS_VALUE_GET_FLOAT64(v) ((v).u.float64)
-#define JS_VALUE_GET_PTR(v) ((void *)((v).u.ptr))
+#define JS_VALUE_GET_PTR(v) ((v).u.ptr)
 
 #define JS_MKVAL(tag, val) (JSValue){ (JSValueUnion){ .int32 = val }, tag }
-#define JS_MKPTR(tag, p) (JSValue){ (JSValueUnion){ .ptr = (uintptr_t)(void *)p }, tag }
-
-#if defined(__cplusplus)
-#undef JS_MKVAL
-#undef JS_MKPTR
-#define with(T, ...)\
-	([&]{ T t{}; __VA_ARGS__; return t; }())
-#define JS_MKVAL(tag, val) JSValue{ with(JSValueUnion, t.int32 = val), tag }
-#define JS_MKPTR(tag, p) JSValue{ with(JSValueUnion, t.ptr = (uintptr_t)(void *)p), tag }
-#endif
+#define JS_MKPTR(tag, p) (JSValue){ (JSValueUnion){ .ptr = p }, tag }
 
 #define JS_TAG_IS_FLOAT64(tag) ((unsigned)(tag) == JS_TAG_FLOAT64)
 
@@ -352,10 +333,13 @@ JSRuntime *JS_NewRuntime(void);
 void JS_SetRuntimeInfo(JSRuntime *rt, const char *info);
 void JS_SetMemoryLimit(JSRuntime *rt, size_t limit);
 void JS_SetGCThreshold(JSRuntime *rt, size_t gc_threshold);
+/* use 0 to disable maximum stack size check */
 void JS_SetMaxStackSize(JSRuntime *rt, size_t stack_size);
+/* should be called when changing thread to update the stack top value
+   used to check stack overflow. */
+void JS_UpdateStackTop(JSRuntime *rt);
 JSRuntime *JS_NewRuntime2(const JSMallocFunctions *mf, void *opaque);
 void JS_FreeRuntime(JSRuntime *rt);
-void JS_FreeRuntime2(JSRuntime *rt, void (*gc_leak_handler)(const char* msg));
 void *JS_GetRuntimeOpaque(JSRuntime *rt);
 void JS_SetRuntimeOpaque(JSRuntime *rt, void *opaque);
 typedef void JS_MarkFunc(JSRuntime *rt, JSGCObjectHeader *gp);
@@ -537,9 +521,9 @@ static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
 {
     JSValue v;
     if (val == (int32_t)val) {
-        v = JS_NewInt32(ctx, (int32_t)val);
+        v = JS_NewInt32(ctx, val);
     } else {
-        v = __JS_NewFloat64(ctx, (double)val);
+        v = __JS_NewFloat64(ctx, val);
     }
     return v;
 }
@@ -682,7 +666,7 @@ static inline JSValue JS_DupValue(JSContext *ctx, JSValueConst v)
         JSRefCountHeader *p = (JSRefCountHeader *)JS_VALUE_GET_PTR(v);
         p->ref_count++;
     }
-    return JS_VALUE_CONST_CAST(v);
+    return (JSValue)v;
 }
 
 static inline JSValue JS_DupValueRT(JSRuntime *rt, JSValueConst v)
@@ -691,7 +675,7 @@ static inline JSValue JS_DupValueRT(JSRuntime *rt, JSValueConst v)
         JSRefCountHeader *p = (JSRefCountHeader *)JS_VALUE_GET_PTR(v);
         p->ref_count++;
     }
-    return JS_VALUE_CONST_CAST(v);
+    return (JSValue)v;
 }
 
 int JS_ToBool(JSContext *ctx, JSValueConst val); /* return -1 for JS_EXCEPTION */
