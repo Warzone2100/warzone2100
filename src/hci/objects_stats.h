@@ -67,6 +67,7 @@ public:
 	virtual size_t statsSize() const = 0;
 	virtual std::shared_ptr<StatsForm> makeStatsForm() = 0;
 	void displayStatsForm();
+	static void scheduleDisplayStatsForm(const std::shared_ptr<BaseStatsController>& controller);
 	virtual BASE_STATS *getStatsAt(size_t) const = 0;
 };
 

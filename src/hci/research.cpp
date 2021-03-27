@@ -262,7 +262,7 @@ protected:
 		controller->clearStructureSelection();
 		controller->selectObject(controller->getObjectAt(objectIndex));
 		jump();
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
 	void display(int xOffset, int yOffset) override
@@ -425,7 +425,7 @@ private:
 		releaseResearch(facility, ModeQueue);
 		controller->clearStructureSelection();
 		controller->selectObject(facility);
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 		controller->refresh();
 	}
 
@@ -436,7 +436,7 @@ private:
 		controller->clearStructureSelection();
 		controller->requestResearchCancellation(facility);
 		controller->setHighlightedObject(facility);
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 		controller->refresh();
 	}
 
