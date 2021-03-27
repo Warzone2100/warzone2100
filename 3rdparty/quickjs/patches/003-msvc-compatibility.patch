@@ -226,7 +226,7 @@ diff --git a/quickjs.c b/quickjs.c
  #include <time.h>
  #include <fenv.h>
  #include <math.h>
-@@ -48,7 +55,7 @@
+@@ -50,7 +57,7 @@
  
  #define OPTIMIZE         1
  #define SHORT_OPCODES    1
@@ -235,7 +235,7 @@ diff --git a/quickjs.c b/quickjs.c
  #define DIRECT_DISPATCH  0
  #else
  #define DIRECT_DISPATCH  1
-@@ -1579,17 +1586,39 @@ static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
+@@ -1582,17 +1589,39 @@ static inline BOOL js_check_stack_overflow(JSRuntime *rt, size_t alloca_size)
      return FALSE;
  }
  #else
@@ -246,14 +246,14 @@ diff --git a/quickjs.c b/quickjs.c
 +
 +#if defined(__GNUC__) || __has_builtin(__builtin_frame_address)
  /* Note: OS and CPU dependent */
- static inline uint8_t *js_get_stack_pointer(void)
+ static inline uintptr_t js_get_stack_pointer(void)
  {
-     return __builtin_frame_address(0);
+     return (uintptr_t)__builtin_frame_address(0);
  }
 +#elif defined(_MSC_VER)
-+static inline uint8_t *js_get_stack_pointer(void)
++static inline uintptr_t js_get_stack_pointer(void)
 +{
-+    return _AddressOfReturnAddress();
++    return (uintptr_t)_AddressOfReturnAddress();
 +}
 +#else
 +static inline uint8_t *js_get_stack_pointer(void)
@@ -268,14 +268,14 @@ diff --git a/quickjs.c b/quickjs.c
 +#if defined(NO_VALID_STACK_POINTER)
 +    return FALSE;
 +#else
-     ptrdiff_t size;
-     size = rt->stack_top - js_get_stack_pointer();
-     return unlikely((size + (ptrdiff_t)alloca_size) > (ptrdiff_t)rt->stack_size);
+     uintptr_t sp;
+     sp = js_get_stack_pointer() - alloca_size;
+     return unlikely(sp < rt->stack_limit);
 +#endif
  }
  #endif
  
-@@ -10191,7 +10220,11 @@ static JSValue js_atof(JSContext *ctx, const char *str, const char **pp,
+@@ -10237,7 +10266,11 @@ static JSValue js_atof(JSContext *ctx, const char *str, const char **pp,
              } else
  #endif
              {
@@ -287,7 +287,7 @@ diff --git a/quickjs.c b/quickjs.c
                  if (is_neg)
                      d = -d;
                  val = JS_NewFloat64(ctx, d);
-@@ -41564,7 +41597,11 @@ static JSValue js_math_min_max(JSContext *ctx, JSValueConst this_val,
+@@ -41734,7 +41767,11 @@ static JSValue js_math_min_max(JSContext *ctx, JSValueConst this_val,
      uint32_t tag;
  
      if (unlikely(argc == 0)) {
@@ -299,7 +299,7 @@ diff --git a/quickjs.c b/quickjs.c
      }
  
      tag = JS_VALUE_GET_TAG(argv[0]);
-@@ -41736,6 +41773,11 @@ static JSValue js_math_random(JSContext *ctx, JSValueConst this_val,
+@@ -41906,6 +41943,11 @@ static JSValue js_math_random(JSContext *ctx, JSValueConst this_val,
      return __JS_NewFloat64(ctx, u.d - 1.0);
  }
  
@@ -311,7 +311,7 @@ diff --git a/quickjs.c b/quickjs.c
  static const JSCFunctionListEntry js_math_funcs[] = {
      JS_CFUNC_MAGIC_DEF("min", 2, js_math_min_max, 0 ),
      JS_CFUNC_MAGIC_DEF("max", 2, js_math_min_max, 1 ),
-@@ -47671,7 +47713,11 @@ static const JSCFunctionListEntry js_global_funcs[] = {
+@@ -47841,7 +47883,11 @@ static const JSCFunctionListEntry js_global_funcs[] = {
      JS_CFUNC_MAGIC_DEF("encodeURIComponent", 1, js_global_encodeURI, 1 ),
      JS_CFUNC_DEF("escape", 1, js_global_escape ),
      JS_CFUNC_DEF("unescape", 1, js_global_unescape ),
@@ -338,7 +338,7 @@ diff --git a/quickjs.h b/quickjs.h
  #define __js_printf_like(a, b)
  #endif
  
-@@ -517,9 +521,9 @@ static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
+@@ -521,9 +525,9 @@ static js_force_inline JSValue JS_NewInt64(JSContext *ctx, int64_t val)
  {
      JSValue v;
      if (val == (int32_t)val) {

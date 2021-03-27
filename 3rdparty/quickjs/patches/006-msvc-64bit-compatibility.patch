@@ -1,16 +1,16 @@
 diff --git a/quickjs.c b/quickjs.c
 --- a/quickjs.c
 +++ b/quickjs.c
-@@ -1599,7 +1599,7 @@ static inline uint8_t *js_get_stack_pointer(void)
+@@ -1600,7 +1600,7 @@ static inline uintptr_t js_get_stack_pointer(void)
  {
-     return __builtin_frame_address(0);
+     return (uintptr_t)__builtin_frame_address(0);
  }
 -#elif defined(_MSC_VER)
 +#elif defined(_MSC_VER) && !defined(_WIN64)
- static inline uint8_t *js_get_stack_pointer(void)
+ static inline uintptr_t js_get_stack_pointer(void)
  {
-     return _AddressOfReturnAddress();
-@@ -7251,7 +7251,7 @@ static int JS_DefinePrivateField(JSContext *ctx, JSValueConst obj,
+     return (uintptr_t)_AddressOfReturnAddress();
+@@ -7271,7 +7271,7 @@ static int JS_DefinePrivateField(JSContext *ctx, JSValueConst obj,
          JS_ThrowTypeErrorNotASymbol(ctx);
          goto fail;
      }
@@ -19,7 +19,7 @@ diff --git a/quickjs.c b/quickjs.c
      p = JS_VALUE_GET_OBJ(obj);
      prs = find_own_property(&pr, p, prop);
      if (prs) {
-@@ -7282,7 +7282,7 @@ static JSValue JS_GetPrivateField(JSContext *ctx, JSValueConst obj,
+@@ -7302,7 +7302,7 @@ static JSValue JS_GetPrivateField(JSContext *ctx, JSValueConst obj,
      /* safety check */
      if (unlikely(JS_VALUE_GET_TAG(name) != JS_TAG_SYMBOL))
          return JS_ThrowTypeErrorNotASymbol(ctx);
@@ -28,7 +28,7 @@ diff --git a/quickjs.c b/quickjs.c
      p = JS_VALUE_GET_OBJ(obj);
      prs = find_own_property(&pr, p, prop);
      if (!prs) {
-@@ -7309,7 +7309,7 @@ static int JS_SetPrivateField(JSContext *ctx, JSValueConst obj,
+@@ -7329,7 +7329,7 @@ static int JS_SetPrivateField(JSContext *ctx, JSValueConst obj,
          JS_ThrowTypeErrorNotASymbol(ctx);
          goto fail;
      }
@@ -37,7 +37,7 @@ diff --git a/quickjs.c b/quickjs.c
      p = JS_VALUE_GET_OBJ(obj);
      prs = find_own_property(&pr, p, prop);
      if (!prs) {
-@@ -7399,7 +7399,7 @@ static int JS_CheckBrand(JSContext *ctx, JSValueConst obj, JSValueConst func)
+@@ -7419,7 +7419,7 @@ static int JS_CheckBrand(JSContext *ctx, JSValueConst obj, JSValueConst func)
      if (unlikely(JS_VALUE_GET_TAG(obj) != JS_TAG_OBJECT))
          goto not_obj;
      p = JS_VALUE_GET_OBJ(obj);
@@ -46,7 +46,7 @@ diff --git a/quickjs.c b/quickjs.c
      if (!prs) {
          JS_ThrowTypeError(ctx, "invalid brand on object");
          return -1;
-@@ -9027,7 +9027,7 @@ int JS_DefineProperty(JSContext *ctx, JSValueConst this_obj,
+@@ -9071,7 +9071,7 @@ int JS_DefineProperty(JSContext *ctx, JSValueConst this_obj,
                  return -1;
              }
              /* this code relies on the fact that Uint32 are never allocated */
@@ -55,7 +55,7 @@ diff --git a/quickjs.c b/quickjs.c
              /* prs may have been modified */
              prs = find_own_property(&pr, p, prop);
              assert(prs != NULL);
-@@ -15983,7 +15983,7 @@ static JSValue js_call_c_function(JSContext *ctx, JSValueConst func_obj,
+@@ -16076,7 +16076,7 @@ static JSValue js_call_c_function(JSContext *ctx, JSValueConst func_obj,
  #else
      sf->js_mode = 0;
  #endif
@@ -64,7 +64,7 @@ diff --git a/quickjs.c b/quickjs.c
      sf->arg_count = argc;
      arg_buf = argv;
  
-@@ -16227,7 +16227,7 @@ static JSValue JS_CallInternal(JSContext *caller_ctx, JSValueConst func_obj,
+@@ -16320,7 +16320,7 @@ static JSValue JS_CallInternal(JSContext *caller_ctx, JSValueConst func_obj,
      sf->js_mode = b->js_mode;
      arg_buf = argv;
      sf->arg_count = argc;
@@ -73,7 +73,7 @@ diff --git a/quickjs.c b/quickjs.c
      init_list_head(&sf->var_ref_list);
      var_refs = p->u.func.var_refs;
  
-@@ -39123,8 +39123,8 @@ static int64_t JS_FlattenIntoArray(JSContext *ctx, JSValueConst target,
+@@ -39291,8 +39291,8 @@ static int64_t JS_FlattenIntoArray(JSContext *ctx, JSValueConst target,
          if (!JS_IsUndefined(mapperFunction)) {
              JSValueConst args[3] = { element, JS_NewInt64(ctx, sourceIndex), source };
              element = JS_Call(ctx, mapperFunction, thisArg, 3, args);
@@ -84,7 +84,7 @@ diff --git a/quickjs.c b/quickjs.c
              if (JS_IsException(element))
                  return -1;
          }
-@@ -40541,7 +40541,7 @@ static JSValue js_string_match(JSContext *ctx, JSValueConst this_val,
+@@ -40709,7 +40709,7 @@ static JSValue js_string_match(JSContext *ctx, JSValueConst this_val,
          str = JS_NewString(ctx, "g");
          if (JS_IsException(str))
              goto fail;
@@ -93,7 +93,7 @@ diff --git a/quickjs.c b/quickjs.c
      }
      rx = JS_CallConstructor(ctx, ctx->regexp_ctor, args_len, args);
      JS_FreeValue(ctx, str);
-@@ -45578,7 +45578,7 @@ static JSMapRecord *map_add_record(JSContext *ctx, JSMapState *s,
+@@ -45746,7 +45746,7 @@ static JSMapRecord *map_add_record(JSContext *ctx, JSMapState *s,
      } else {
          JS_DupValue(ctx, key);
      }
@@ -102,7 +102,7 @@ diff --git a/quickjs.c b/quickjs.c
      h = map_hash_key(ctx, key) & (s->hash_size - 1);
      list_add_tail(&mr->hash_link, &s->hash_table[h]);
      list_add_tail(&mr->link, &s->records);
-@@ -45800,7 +45800,7 @@ static JSValue js_map_forEach(JSContext *ctx, JSValueConst this_val,
+@@ -45968,7 +45968,7 @@ static JSValue js_map_forEach(JSContext *ctx, JSValueConst this_val,
                  args[0] = args[1];
              else
                  args[0] = JS_DupValue(ctx, mr->value);
@@ -111,7 +111,7 @@ diff --git a/quickjs.c b/quickjs.c
              ret = JS_Call(ctx, func, this_arg, 3, (JSValueConst *)args);
              JS_FreeValue(ctx, args[0]);
              if (!magic)
-@@ -46778,7 +46778,7 @@ static JSValue js_promise_all(JSContext *ctx, JSValueConst this_val,
+@@ -46946,7 +46946,7 @@ static JSValue js_promise_all(JSContext *ctx, JSValueConst this_val,
                  goto fail_reject;
              }
              resolve_element_data[0] = JS_NewBool(ctx, FALSE);
@@ -120,7 +120,7 @@ diff --git a/quickjs.c b/quickjs.c
              resolve_element_data[2] = values;
              resolve_element_data[3] = resolving_funcs[is_promise_any];
              resolve_element_data[4] = resolve_element_env;
-@@ -47137,7 +47137,7 @@ static JSValue js_async_from_sync_iterator_unwrap_func_create(JSContext *ctx,
+@@ -47305,7 +47305,7 @@ static JSValue js_async_from_sync_iterator_unwrap_func_create(JSContext *ctx,
  {
      JSValueConst func_data[1];
  
@@ -129,7 +129,7 @@ diff --git a/quickjs.c b/quickjs.c
      return JS_NewCFunctionData(ctx, js_async_from_sync_iterator_unwrap,
                                 1, 0, 1, func_data);
  }
-@@ -52504,8 +52504,8 @@ static int js_TA_cmp_generic(const void *a, const void *b, void *opaque) {
+@@ -52738,8 +52738,8 @@ static int js_TA_cmp_generic(const void *a, const void *b, void *opaque) {
              psc->exception = 1;
          }
      done:
@@ -201,7 +201,7 @@ diff --git a/quickjs.h b/quickjs.h
  #endif
  
  #define JS_TAG_IS_FLOAT64(tag) ((unsigned)(tag) == JS_TAG_FLOAT64)
-@@ -675,7 +681,7 @@ static inline JSValue JS_DupValue(JSContext *ctx, JSValueConst v)
+@@ -679,7 +685,7 @@ static inline JSValue JS_DupValue(JSContext *ctx, JSValueConst v)
          JSRefCountHeader *p = (JSRefCountHeader *)JS_VALUE_GET_PTR(v);
          p->ref_count++;
      }
@@ -210,7 +210,7 @@ diff --git a/quickjs.h b/quickjs.h
  }
  
  static inline JSValue JS_DupValueRT(JSRuntime *rt, JSValueConst v)
-@@ -684,7 +690,7 @@ static inline JSValue JS_DupValueRT(JSRuntime *rt, JSValueConst v)
+@@ -688,7 +694,7 @@ static inline JSValue JS_DupValueRT(JSRuntime *rt, JSValueConst v)
          JSRefCountHeader *p = (JSRefCountHeader *)JS_VALUE_GET_PTR(v);
          p->ref_count++;
      }
