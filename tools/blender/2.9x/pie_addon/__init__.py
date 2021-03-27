@@ -295,7 +295,7 @@ class PIE_ExportPanel(bpy.types.Panel):
 
 
 class PIE_ExportOptions(bpy.types.PropertyGroup):
-    rootDir: bpy.props.StringProperty(name='rootDir', default='C:\\Users\\John Wharton\\Documents\\', options=set())
+    rootDir: bpy.props.StringProperty(name='rootDir', default='', options=set())
 
 
 class PIE_ExportOperationQuick(bpy.types.Operator):
@@ -388,7 +388,7 @@ class PIE_ImportPanel(bpy.types.Panel):
 
 class PIE_ImportOptions(bpy.types.PropertyGroup):
     pieFile: bpy.props.StringProperty(name='pieFile', default='', options=set())
-    rootDir: bpy.props.StringProperty(name='rootDir', default='C:\\', options=set())
+    rootDir: bpy.props.StringProperty(name='rootDir', default='', options=set())
 
 
 class PIE_ImportOperationQuick(bpy.types.Operator):
@@ -431,7 +431,7 @@ class PIE_ImportOperation(bpy.types.Operator):
 
     def execute(self, context):
 
-        importer.pie_import(context.scene, self.properties.filepath, '')
+        importer.pie_import(context.scene, self.properties.filepath)
 
         return {'FINISHED'}
 
