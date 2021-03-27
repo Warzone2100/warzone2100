@@ -134,7 +134,7 @@ static const unsigned M_REQUEST_NP[] = {M_REQUEST_2P,    M_REQUEST_3P,    M_REQU
 #define M_REQUEST_W		MULTIOP_PLAYERSW
 #define M_REQUEST_H		MULTIOP_PLAYERSH
 
-#define	R_BUT_W			105//112
+#define	R_BUT_W			120//105
 #define R_BUT_H			30
 
 #define HOVER_PREVIEW_TIME 300
