@@ -196,7 +196,7 @@ public:
 		controller->clearStructureSelection();
 		controller->selectObject(controller->getObjectAt(objectIndex));
 		jump();
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
 protected:
@@ -366,7 +366,7 @@ private:
 		controller->releaseFactoryProduction(factory);
 		controller->clearStructureSelection();
 		controller->selectObject(factory);
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
 	void clickSecondary() override
@@ -377,7 +377,7 @@ private:
 		controller->cancelFactoryProduction(factory);
 		controller->setHighlightedObject(factory);
 		controller->refresh();
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
 	std::shared_ptr<ManufactureController> controller;

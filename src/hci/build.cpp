@@ -178,7 +178,7 @@ public:
 		controller->selectObject(controller->getObjectAt(objectIndex));
 		jump();
 
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
 protected:
@@ -378,7 +378,7 @@ private:
 			controller->selectObject(droid);
 		}
 
-		controller->displayStatsForm();
+		BaseStatsController::scheduleDisplayStatsForm(controller);
 	}
 
 	void clickSecondary() override
@@ -391,7 +391,7 @@ private:
 		if (droid == highlighted || !highlighted->selected)
 		{
 			controller->setHighlightedObject(droid);
-			controller->displayStatsForm();
+			BaseStatsController::scheduleDisplayStatsForm(controller);
 		}
 	}
 
