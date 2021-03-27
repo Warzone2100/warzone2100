@@ -29,6 +29,10 @@
 
 #include "cutils.h"
 
+#if defined(_MSC_VER)
+#include "win32-gettimeofday.c"
+#endif
+
 void pstrcpy(char *buf, int buf_size, const char *str)
 {
     int c;
@@ -297,7 +301,7 @@ int unicode_from_utf8(const uint8_t *p, int max_len, const uint8_t **pp)
             return -1;
         c = (c << 6) | (b & 0x3f);
     }
-    if (c < utf8_min_code[l - 1])
+    if (c < (int)utf8_min_code[l - 1])
         return -1;
     *pp = p;
     return c;
