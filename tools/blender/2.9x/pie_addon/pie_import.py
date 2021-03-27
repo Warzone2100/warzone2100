@@ -73,6 +73,8 @@ class Importer():
 
         for line in pie:
 
+            ls = line.split()
+
             if len(line) <= 1:
                     continue
 
@@ -119,58 +121,80 @@ class Importer():
                 'POLYGONS': [],
                 'CONNECTORS': [],
                 'ANIMOBJECT': [],
+                'SHADOWPOINTS': [],
+                'SHADOWPOLYGONS': [],
                 })
                 currentLevel += 1
                 continue
 
-            elif 'POINTS' in line:
+            elif ls[0] == 'POINTS':
                 currentlyReading = 'POINTS'
                 continue
 
-            elif 'NORMALS' in line:
+            elif ls[0] == 'NORMALS':
                 currentlyReading = 'NORMALS'
                 continue
 
-            elif 'POLYGONS' in line:
+            elif ls[0] == 'POLYGONS':
                 currentlyReading = 'POLYGONS'
                 continue
 
-            elif 'CONNECTORS' in line:
+            elif ls[0] == 'CONNECTORS':
                 currentlyReading = 'CONNECTORS'
                 continue
 
-            elif 'ANIMOBJECT' in line:
+            elif ls[0] == 'ANIMOBJECT':
                 currentlyReading = 'ANIMOBJECT'
-                ls = line.split()
                 pie_info['LEVELS'][currentLevel]['ANIMOBJECT'].append(tuple([float(ls[1]), float(ls[2])]))
+                continue
+
+            elif ls[0] == 'SHADOWPOINTS':
+                print('currently reading = SHADOWPOINTS')
+                currentlyReading = 'SHADOWPOINTS'
+                continue
+
+            elif ls[0] == 'SHADOWPOLYGONS':
+                print('currently reading = SHADOWPOLYGONS')
+                currentlyReading = 'SHADOWPOLYGONS'
                 continue
 
             else:
 
                 if currentlyReading is 'POINTS':
-                    l = convertStrListToNumList(line.split())
+                    l = convertStrListToNumList(ls)
                     v = (l[0] * 0.01, l[2] * 0.01, l[1] * 0.01)
 
                     pie_info['LEVELS'][currentLevel]['POINTS'].append(v)
                     continue
 
                 elif currentlyReading is 'NORMALS':
-                    pie_info['LEVELS'][currentLevel]['NORMALS'].append(tuple(convertStrListToNumList(line.split())))
+                    pie_info['LEVELS'][currentLevel]['NORMALS'].append(tuple(convertStrListToNumList(ls)))
                     continue
 
                 elif currentlyReading is 'POLYGONS':
-                    pie_info['LEVELS'][currentLevel]['POLYGONS'].append(tuple(convertStrListToNumList(line.split())))
+                    pie_info['LEVELS'][currentLevel]['POLYGONS'].append(tuple(convertStrListToNumList(ls)))
                     continue
 
                 elif currentlyReading is 'CONNECTORS':
-                    l = convertStrListToNumList(line.split())
+                    l = convertStrListToNumList(ls)
                     v = (l[0] * 0.01, l[1] * 0.01, l[2] * 0.01)
 
                     pie_info['LEVELS'][currentLevel]['CONNECTORS'].append(v)
                     continue
 
                 elif currentlyReading is 'ANIMOBJECT':
-                    pie_info['LEVELS'][currentLevel]['ANIMOBJECT'].append(tuple(convertStrListToNumList(line.split())))
+                    pie_info['LEVELS'][currentLevel]['ANIMOBJECT'].append(tuple(convertStrListToNumList(ls)))
+                    continue
+
+                elif currentlyReading is 'SHADOWPOINTS':
+                    l = convertStrListToNumList(ls)
+                    v = (l[0] * 0.01, l[2] * 0.01, l[1] * 0.01)
+
+                    pie_info['LEVELS'][currentLevel]['SHADOWPOINTS'].append(v)
+                    continue
+
+                elif currentlyReading is 'SHADOWPOLYGONS':
+                    pie_info['LEVELS'][currentLevel]['SHADOWPOLYGONS'].append(tuple(convertStrListToNumList(ls)))
                     continue
 
         return pie_info
@@ -188,7 +212,7 @@ class Importer():
         armatureObject.show_in_front = True
 
         currentLevel = 0
-        
+
         for action in bpy.data.actions:
             if action.name == pieFile + ' Anim':
                 bpy.data.actions.remove(action)
@@ -204,12 +228,16 @@ class Importer():
             bone = armatureObject.data.edit_bones.new(nameStr)
             bone.head = (0, 0, 0)
             bone.tail = (0, 0.125, 0)
-            
+
             boneName = bone.name
 
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+
+            armatureObject.data.bones[boneName].use_relative_parent = True
             
             mesh = bpy.data.meshes.new(nameStr)
+            mesh.uv_layers.new()
+
             meshObject = bpy.data.objects.new(nameStr , mesh)
             meshObject.parent = armatureObject
             meshObject.parent_type = 'BONE'
@@ -238,13 +266,13 @@ class Importer():
                 if int(poly[0]) == 200:
 
                     if pieParse['PIE'] is 3:
-                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[5], poly[6]))
-                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[7], poly[8]))
-                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[9], poly[10]))
+                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[5], -poly[6] + 1))
+                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[7], -poly[8] + 1))
+                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[9], -poly[10] + 1))
                     elif pieParse['PIE'] is 2:
-                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[5] / 256, poly[6] / 256))
-                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[7] / 256, poly[8] / 256))
-                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[9] / 256, poly[10] / 256))
+                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[5] / 256, (-poly[6] / 256) + 1))
+                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[7] / 256, (-poly[8] / 256) + 1))
+                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[9] / 256, (-poly[10] / 256) + 1))
 
                 elif int(poly[0]) == 4200:
 
@@ -264,15 +292,41 @@ class Importer():
                             
 
                     if pieParse['PIE'] is 3:
-                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[9], poly[10]))
-                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[11], poly[12]))
-                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[13], poly[14]))
+                        meshObject.data.uv_layers.active[loop + 0].uv = ((poly[9], -poly[10] + 1))
+                        meshObject.data.uv_layers.active[loop + 1].uv = ((poly[11], -poly[12] + 1))
+                        meshObject.data.uv_layers.active[loop + 2].uv = ((poly[13], -poly[14] + 1))
                     elif pieParse['PIE'] is 2:
-                        meshObject.data.uv_layers.active.data[loop + 0].uv = ((poly[9] / 256, poly[10] / 256))
-                        meshObject.data.uv_layers.active.data[loop + 1].uv = ((poly[11] / 256, poly[12] / 256))
-                        meshObject.data.uv_layers.active.data[loop + 2].uv = ((poly[13] / 256, poly[14] / 256))
+                        meshObject.data.uv_layers.active[loop + 0].uv = ((poly[9] / 256, (-poly[10] / 256) + 1))
+                        meshObject.data.uv_layers.active[loop + 1].uv = ((poly[11] / 256, (-poly[12] / 256) + 1))
+                        meshObject.data.uv_layers.active[loop + 2].uv = ((poly[13] / 256, (-poly[14] / 256) + 1))
                     
                 ii += 1
+
+            #* SHADOW POINTS/POLYGONS *#
+
+            print(level['SHADOWPOINTS'])
+            print(level['SHADOWPOLYGONS'])
+            print(len(level['POLYGONS']))
+
+            if level['SHADOWPOINTS'] and level['SHADOWPOLYGONS']:
+
+                meshObject.pie_object_prop.shadowType = 'CUSTOM'
+            
+                shadowMesh = bpy.data.meshes.new(nameStr + ' Shadow')
+                shadowMeshObject = bpy.data.objects.new(nameStr + ' Shadow' , shadowMesh)
+                shadowMeshObject.parent = meshObject
+
+                shadowMeshObject.pie_object_prop.pieType = 'SHADOW'
+
+                bpy.context.collection.objects.link(shadowMeshObject)
+
+                shadow_points = level['SHADOWPOINTS']
+                shadow_polygons = []
+                
+                for poly in level['SHADOWPOLYGONS']:
+                    shadow_polygons.append((poly[2], poly[3], poly[4]))
+
+                shadowMesh.from_pydata(shadow_points, [], shadow_polygons)
 
             #* NORMALS *#
 
@@ -315,9 +369,9 @@ class Importer():
                 connectorObject.location = connector
                 connectorObject.parent = meshObject
 
-                connectorObject.pieType = 'CONNECTOR'
+                connectorObject.pie_object_prop.pieType = 'CONNECTOR'
 
-                self.scene.collection.objects.link(connectorObject)
+                bpy.context.collection.objects.link(connectorObject)
 
                 ii += 1
 
@@ -380,8 +434,6 @@ class Importer():
             poseBone.rotation_mode = 'XYZ'
 
             bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
-
-            bpy.data.armatures[pieFile].bones[boneName].use_relative_parent = True
 
             self.pie_loadProperties(pieParse, armatureObject, pieFile)
 
@@ -478,9 +530,16 @@ class Importer():
             else:
                 objProp.tcMask = False
 
-    def pie_import(self, scene, pieDir, pieMesh):
+    def pie_import_quick(self, scene, pieDir, pieMesh):
         self.scene = scene
 
         pieParse = self.pie_parse(pieDir + '\\\\' + pieMesh)
+
+        self.pie_generateBlenderObjects(pieParse)
+
+    def pie_import(self, scene, pieDir):
+        self.scene = scene
+
+        pieParse = self.pie_parse(pieDir)
 
         self.pie_generateBlenderObjects(pieParse)

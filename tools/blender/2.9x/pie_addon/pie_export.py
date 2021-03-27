@@ -118,7 +118,7 @@ class Exporter():
 
                     bm = bmesh.new()
                     bm.from_mesh(mesh)
-                    bmesh.ops.triangulate(bm, faces=bm.faces[:])
+                    bmesh.ops.triangulate(bm, faces=bm.faces)
 
                     level += 1
 
@@ -130,7 +130,6 @@ class Exporter():
                         pieFile.write('\nPOINTS {num}'.format(num=len(bm.verts)))
 
                         for vertice in bm.verts:
-
                             val = []
 
                             for num in vertice.co:
@@ -187,18 +186,18 @@ class Exporter():
                                         v1=face.verts[0].index, v2=face.verts[1].index, v3=face.verts[2].index,
                                         tagImg=texAnimGroup.texAnimImages, tagRate=texAnimGroup.texAnimRate,
                                         tagW=texAnimGroup.texAnimWidth, tagH=texAnimGroup.texAnimHeight,
-                                        uvx1=round(uvOut[0][0], 4), uvy1=round(uvOut[0][1], 4),
-                                        uvx2=round(uvOut[1][0], 4), uvy2=round(uvOut[1][1], 4),
-                                        uvx3=round(uvOut[2][0], 4), uvy3=round(uvOut[2][1], 4),
+                                        uvx1=round(uvOut[0][0], 4), uvy1=-round(uvOut[0][1], 4) + 1,
+                                        uvx2=round(uvOut[1][0], 4), uvy2=-round(uvOut[1][1], 4) + 1,
+                                        uvx3=round(uvOut[2][0], 4), uvy3=-round(uvOut[2][1], 4) + 1,
                                     )
                                     break
                             if success is False:
                                 faceStr += '\n\t{type} 3 {v1} {v2} {v3} {uvx1} {uvy1} {uvx2} {uvy2} {uvx3} {uvy3}'.format(
                                     type=200,
                                     v1=face.verts[0].index, v2=face.verts[1].index, v3=face.verts[2].index,
-                                    uvx1=round(uvOut[0][0], 4), uvy1=round(uvOut[0][1], 4),
-                                    uvx2=round(uvOut[1][0], 4), uvy2=round(uvOut[1][1], 4),
-                                    uvx3=round(uvOut[2][0], 4), uvy3=round(uvOut[2][1], 4),
+                                    uvx1=round(uvOut[0][0], 4), uvy1=-round(uvOut[0][1], 4) + 1,
+                                    uvx2=round(uvOut[1][0], 4), uvy2=-round(uvOut[1][1], 4) + 1,
+                                    uvx3=round(uvOut[2][0], 4), uvy3=-round(uvOut[2][1], 4) + 1,
                                 )
 
                             ii += 1
@@ -208,17 +207,14 @@ class Exporter():
 
                         pieFile.write(faceStr)
 
-                    bm.free()
-
-
                     connectorObjects = []
                     for connector in child.children:
-                        if childProp.pieType == 'CONNECTOR':
+                        if connector.pie_object_prop.pieType == 'CONNECTOR':
                             connectorObjects.append(connector)
 
                     if connectorObjects:
                         print('Exporting {pie} level {num} connectors'.format(pie=nameStr, num=level))
-                        pieFile.write('CONNECTORS {num}\n'.format(num=len(connectorObjects)))
+                        pieFile.write('\nCONNECTORS {num}'.format(num=len(connectorObjects)))
                         for connector in connectorObjects:
 
                             val = []
@@ -233,16 +229,14 @@ class Exporter():
 
                             pieFile.write('\n\t{x} {y} {z}'.format(x=val[0], y=val[1], z=val[2]))
 
-                    obMatrix = ob.matrix_world
+                    print(ob.animation_data)
 
-                    if ob.animation_data.action:
+                    if ob.animation_data:
 
                         endFrame = 0
 
                         success = False
                         for fcurve in ob.animation_data.action.fcurves:
-
-                            print(fcurve)
 
                             if '["{name}"]'.format(name=child.name) in fcurve.data_path or '["{name}"]'.format(name=child.parent) in fcurve.data_path or '["{name}"]'.format(name=child.parent_bone) in fcurve.data_path:
                                 success = True
@@ -253,7 +247,7 @@ class Exporter():
 
                             restFrame = bpy.context.scene.frame_current
 
-                            print('Exporting {pie} level {num} animation'.format(pie=nameStr, num=level))
+                            print('Exporting {pie} level {num} animation = True'.format(pie=nameStr, num=level))
                             pieFile.write('\nANIMOBJECT {time} {cycles} {frames}'.format(time=childProp.animTime, cycles=childProp.animCycle, frames=endFrame + 1))
 
                             ii = 0
@@ -261,7 +255,7 @@ class Exporter():
                                 bpy.context.scene.frame_set(ii)
 
                                 childMatrix = child.matrix_world.decompose()
-                                exportMatrix = child.matrix_world - obMatrix
+                                exportMatrix = child.matrix_world - ob.matrix_world
 
                                 mLoc = exportMatrix.decompose()[0]
                                 mRot = childMatrix[1]
@@ -309,5 +303,61 @@ class Exporter():
                             bpy.context.scene.frame_set(restFrame)
                         else:
                             print('Exporting {pie} level {num} animation = False'.format(pie=nameStr, num=level))
+                    else:
+                            print('Exporting {pie} level {num} animation = False'.format(pie=nameStr, num=level))
+
+                    exportShadow = False
+                    if childProp.shadowType == 'CUSTOM':
+                        for shadow in child.children:
+                            if shadow.pie_object_prop.pieType == 'SHADOW':
+                                exportShadow = True
+                                shadowBm = bmesh.new()
+                                shadowBm.from_mesh(shadow.evaluated_get(depsgraph).data)
+                                bmesh.ops.triangulate(shadowBm, faces=shadowBm.faces)
+                                break
+
+                    #elif childProp.shadowType == 'CONVEXHULL':
+                        #exportShadow = True
+                        #shadowBm = bmesh.new()
+                        #shadowBm.from_mesh(mesh)
+                        #bmesh.ops.convex_hull(shadowBm, input=shadowBm.verts)
+
+                        #copyData = bpy.data.meshes.new('test')
+
+                        #shadowBm.to_mesh(copyData)
+
+                        #copy = bpy.data.objects.new('test', copyData)
+                        #bpy.context.collection.objects.link(copy)
+
+                    if exportShadow is not False:
+
+                        if shadowBm.verts:
+                            print('Exporting {pie} level {num} shadow points'.format(pie=nameStr, num=level))
+                            pieFile.write('\nSHADOWPOINTS {num}'.format(num=len(shadowBm.verts)))
+
+                            for vertice in shadowBm.verts:
+                                val = []
+
+                                for num in vertice.co:
+                                    num = round(num / 0.01, 4)
+
+                                    if abs(num - round(num)) <= 0.000105:
+                                        num = int(round(num))
+
+                                    val.append(num)
+
+                                pieFile.write('\n\t{x} {z} {y}'.format(x=val[0], y=val[1], z=val[2]))
+
+                        if shadowBm.faces:
+                            print('Exporting {pie} level {num} shadow polygons'.format(pie=nameStr, num=level))
+                            pieFile.write('\nSHADOWPOLYGONS {num}'.format(num=len(shadowBm.faces)))
+
+                            for face in shadowBm.faces:
+                                pieFile.write('\n\t0 3 {v1} {v2} {v3}'.format(v1=face.verts[0].index, v2=face.verts[1].index, v3=face.verts[2].index,))
+
+                        shadowBm.free()
+
+                    bm.free()
+
 
             pieFile.close()

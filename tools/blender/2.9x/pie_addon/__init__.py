@@ -57,7 +57,7 @@ class PIE_TextureAnimationGroupPanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         ob = context.object
-        return ob and (ob.pie_object_prop == 'LEVEL') and (ob.type == "MESH")
+        return ob and (ob.pie_object_prop.pieType == 'LEVEL') and (ob.type == "MESH")
 
     def draw(self, context):
         layout = self.layout
@@ -200,7 +200,14 @@ pie_object_enum = [
     ('NONE', 'None', 'None'),
     ('ROOT', 'Root', 'PIE root object'),
     ('LEVEL', 'Level', 'PIE level. These must always be a mesh and parented to a "Root" PIE object'),
-    ('CONNECTOR', 'Connector', 'PIE connector. These must always be parented to a "Level" PIE object')
+    ('SHADOW', 'Shadow (WZ2100 4.0+)', 'PIE level shadow. These must always be a mesh and parented to a "Level" PIE object'),
+    ('CONNECTOR', 'Connector', 'PIE level connector. These must always be parented to a "Level" PIE object')
+]
+
+pie_shadow_enum = [
+    ('DEFAULT', 'Default', 'The shadow will default to the level mesh'),
+    ('CUSTOM', 'Custom', 'Define the level shadow with a PIE "Shadow" mesh object. This object must be parented to the level object'),
+    #('CONVEXHULL', 'Convex Hull', 'Define the level shadow with a convex hull of the level mesh'),
 ]
 
 class PIE_ObjectPanel(bpy.types.Panel):
@@ -239,6 +246,7 @@ class PIE_ObjectPanel(bpy.types.Panel):
             layout.prop(field, 'event2', text='Event 2')
             layout.prop(field, 'event3', text='Event 3')
         elif field.pieType == 'LEVEL':
+            layout.prop(field, 'shadowType', text='Shadow Type')
             layout.use_property_split = True
             #layout.prop(field, 'exportNormal', text='Export vertex normals')
             layout.prop(field, 'animTime', text='Animation Time')
@@ -248,6 +256,7 @@ class PIE_ObjectPanel(bpy.types.Panel):
 class PIE_ObjectOptions(bpy.types.PropertyGroup):
 
     pieType: bpy.props.EnumProperty(items=pie_object_enum, options=set(), default='NONE')
+    shadowType: bpy.props.EnumProperty(items=pie_shadow_enum, options=set(), default='DEFAULT')
 
     adrOff: bpy.props.BoolProperty(name='adrOff', options=set())
     adrOn: bpy.props.BoolProperty(name='adrOn', options=set())
@@ -286,7 +295,7 @@ class PIE_ExportPanel(bpy.types.Panel):
 
 
 class PIE_ExportOptions(bpy.types.PropertyGroup):
-    rootDir: bpy.props.StringProperty(name='rootDir', default='C:\\Users\\John Wharton\\Documents\\', options=set())
+    rootDir: bpy.props.StringProperty(name='rootDir', default='', options=set())
 
 
 class PIE_ExportOperationQuick(bpy.types.Operator):
@@ -379,7 +388,7 @@ class PIE_ImportPanel(bpy.types.Panel):
 
 class PIE_ImportOptions(bpy.types.PropertyGroup):
     pieFile: bpy.props.StringProperty(name='pieFile', default='', options=set())
-    rootDir: bpy.props.StringProperty(name='rootDir', default='C:\\', options=set())
+    rootDir: bpy.props.StringProperty(name='rootDir', default='', options=set())
 
 
 class PIE_ImportOperationQuick(bpy.types.Operator):
@@ -399,7 +408,7 @@ class PIE_ImportOperationQuick(bpy.types.Operator):
             #        if scene.pie_import_prop.pieFile + ' Anim' in action.name:
             #            self.report({'ERROR'}, 'There is already an animation which matches filename "{file}"'.format(file=scene.pie_import_prop.pieFile))
 
-        importer.pie_import(scene, scene.pie_import_prop.rootDir, scene.pie_import_prop.pieFile)
+        importer.pie_import_quick(scene, scene.pie_import_prop.rootDir, scene.pie_import_prop.pieFile)
 
         return {'FINISHED'}
 
@@ -421,22 +430,13 @@ class PIE_ImportOperation(bpy.types.Operator):
     )
 
     def execute(self, context):
-        scene = context.scene
 
-        for ob in bpy.data.objects:
-            if scene.pie_import_prop.pieFile == ob.name:
-                self.report({'ERROR'}, 'There is already an object which matches filename "{file}"'.format(file=scene.pie_import_prop.pieFile))
-                return {'FINISHED'}
-            #else:
-            #    for action in bpy.data.actions:
-            #        if scene.pie_import_prop.pieFile + ' Anim' in action.name:
-            #            self.report({'ERROR'}, 'There is already an animation which matches filename "{file}"'.format(file=scene.pie_import_prop.pieFile))
-
-        importer.pie_import(scene, self.properties.filepath, '')
+        importer.pie_import(context.scene, self.properties.filepath)
 
         return {'FINISHED'}
 
     def invoke(self, context, event):
+        
         context.window_manager.fileselect_add(self)
 
         return {'RUNNING_MODAL'}
