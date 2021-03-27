@@ -1,3 +1,20 @@
+2021-03-27: Version 4.0.0 beta3
+ * General:
+   * Fix: General improvements to address UI crashes and issues (commit:7534e6c1f6df8778e337e51d460de6aeb8f2309f, commit:046b98065e5ec8add67c31e62384c75739d07103, #1653, #1664)
+   * Fix: Fix crash when using Alt + Tab (commit:82847e3dab405d1ffef7954c7df25be747dabff5, #1661)
+   * Fix: Mouse not responding as expected after multiplayer games (commit:f4672c5e24f9dfe3cf469d1cab0c4ad01c8cd998, commit:67f7bfafb7620dcf745e74a6286a3ce3882c7d37, #1666)
+   * Fix: Fix crash when backing out of save/load menus repeatedly (commit:fb27eb4e0bb0285e399dd5739e065f72f4cf96ee, #1670)
+   * Fix: Fix incorrect display of production cycles (commit:43b9b4d220da607c5c11558a63908edb1c5dc130, #1671)
+   * Fix: Fix UI crash when a factory gets destroyed (commit:17c3fb5627c175bf34b7afa0da99979b1c5b3039, #1673)
+   * Fix: Fix commander overview not showing factory modules (commit:af9612abac8959a1ee34fb9859046a6efbc28452, #1675)
+ * Graphics:
+   * Add: Add new optional .PIE sections: SHADOWPOINTS, SHADOWPOLYGONS (commit:cbdf25c8f48f45a2284ff8976b3634f6ffd9d57f, #1630)
+   * Fix: Various bug fixes for Blender 2.9x ".pie" addon (commit:ef06b7c6ce0ba449beee918a9379665dfb83fbca, #1651)
+ * Multiplayer:
+   * Fix: Fix player slot issues when switching to maps with less players in a skirmish after hosting (commit:07eb7f5a700561c1b855001aaabf2b965954f8d, #1674)
+ * Scripting:
+   * Fix: Unboxing issue could cause buildDroid() to only utilize the first turret parameter (commit:32f61a8c5cbd07bd1c4996f5bbf1b6d42f1e5828, #1676)
+
 2021-03-20: Version 4.0.0 beta2
  * General:
    * Change: Return previous camera rotation behavior as the default. Improve the locking version and set it behind config option "lockCameraScrollWhileRotating" (commit:5b893cfc6a725a78d5b86699aad75b7b2d59ba79, commit:f2d68e5fb40dbd3f8f6f172d9f92f3de32d77799, #1640)
@@ -27,7 +44,6 @@
    * Change: Lock key inputs when the in-game music manager is open (commit:2a1cb3c520449b91a89692e286929129316ca87a, #1631)
    * Change: Changed "High-Velocity" to "Hyper-Velocity" in HVAPFSDS to fit in better (commit:c6305216d09a458b373df676e6df362c543e73bb, #1636)
    * Fix: Fix -Wnull-dereference warning in structure.cpp (commit:4b4cfe36b2f3038e895e026a21ad933fd1d5b2de, #1567)
-
 
 2021-02-28: Version 4.0.0 beta1
  * General:
@@ -170,7 +186,6 @@
    * Fix: Mods cause a crash due to component type mismatch (commit:6e7374aba65a2abf4f44ca9420b4799e48214429, commit:36d91b1b082bb5e615a157e506fc9fbdcf2fefe2, commit:b05889d71199039e7f641688d134809fd28f4a57, #1529)
    * Fix: Fix Nexus link flash and shimmy effect (commit:9580252970365320b6ac33237b328490926819dd, commit:8bcdd22a7bf7e418551b76f976bfc899625b562a, #1542)
    * Fix: Fix Assault Gun Hardpoints being built way too fast (commit:277f19295ca5e22045998e8fc88007fbe682fbdf, #1552)
-
 
 2020-07-19: Version 3.4.1
  * General:
