@@ -537,7 +537,7 @@ class Importer():
 
         self.pie_generateBlenderObjects(pieParse)
 
-    def pie_import(self, scene, pieDir, pieMesh):
+    def pie_import(self, scene, pieDir):
         self.scene = scene
 
         pieParse = self.pie_parse(pieDir)
