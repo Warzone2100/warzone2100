@@ -15,6 +15,8 @@ data/base/texpages/page-25-sky-urban.png
 	- MIT, Copyright 2017 Discord, Inc.
 3rdparty/json/*
 	- MIT, Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>
+3rdparty/meshoptimizer/*
+	- MIT, Copyright (c) 2016-2020 Arseny Kapoulkine (https://github.com/zeux/meshoptimizer/)
 3rdparty/micro-ecc/*
 	- BSD, Copyright (c) 2014, Kenneth MacKay (https://github.com/kmackay/micro-ecc)
 3rdparty/sha/*

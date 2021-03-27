@@ -26,6 +26,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/string_ext.h"
@@ -44,12 +45,29 @@
 #include <glm/vec4.hpp>
 using Vector4f = glm::vec4;
 
+#include <meshoptimizer/src/meshoptimizer.h>
+
 // Scale animation numbers from int to float
 #define INT_SCALE       1000
 
 static std::unordered_map<std::string, iIMDShape> models;
 
-static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd);
+enum IMD_TYPE
+{
+	IMD_TYPE_STRUCT,
+	IMD_TYPE_MISC,
+	IMD_TYPE_EFFECT,
+	IMD_TYPE_COMP_PROP,
+	IMD_TYPE_COMP_WEAPON,
+	IMD_TYPE_COMP_BODY,
+	IMD_TYPE_FEATURE,
+	IMD_TYPE_MICNUM,
+	IMD_TYPE_MINUM,
+	IMD_TYPE_MIVNUM,
+	IMD_TYPE_RESEARCHIMD
+};
+
+static void iV_ProcessIMD(const WzString &filename, IMD_TYPE type, const char **ppFileData, const char *FileDataEnd);
 
 iIMDShape::~iIMDShape()
 {
@@ -74,7 +92,7 @@ void enumerateLoadedModels(const std::function<void (const std::string& modelNam
 	}
 }
 
-static bool tryLoad(const WzString &path, const WzString &filename)
+static bool tryLoad(const WzString &path, const WzString &filename, IMD_TYPE type)
 {
 	if (PHYSFS_exists(path + filename))
 	{
@@ -87,7 +105,7 @@ static bool tryLoad(const WzString &path, const WzString &filename)
 		}
 		fileEnd = pFileData + size;
 		const char *pFileDataPt = pFileData;
-		iV_ProcessIMD(filename, (const char **)&pFileDataPt, fileEnd);
+		iV_ProcessIMD(filename, type, (const char **)&pFileDataPt, fileEnd);
 		free(pFileData);
 		return true;
 	}
@@ -116,10 +134,10 @@ iIMDShape *modelGet(const WzString &filename)
 	{
 		return &it->second; // cached
 	}
-	else if (tryLoad("structs/", name) || tryLoad("misc/", name) || tryLoad("effects/", name)
-	         || tryLoad("components/prop/", name) || tryLoad("components/weapons/", name)
-	         || tryLoad("components/bodies/", name) || tryLoad("features/", name)
-	         || tryLoad("misc/micnum/", name) || tryLoad("misc/minum/", name) || tryLoad("misc/mivnum/", name) || tryLoad("misc/researchimds/", name))
+	else if (tryLoad("structs/", name, IMD_TYPE_STRUCT) || tryLoad("misc/", name, IMD_TYPE_MISC) || tryLoad("effects/", name, IMD_TYPE_EFFECT)
+	         || tryLoad("components/prop/", name, IMD_TYPE_COMP_PROP) || tryLoad("components/weapons/", name, IMD_TYPE_COMP_WEAPON)
+	         || tryLoad("components/bodies/", name, IMD_TYPE_COMP_BODY) || tryLoad("features/", name, IMD_TYPE_FEATURE)
+	         || tryLoad("misc/micnum/", name, IMD_TYPE_MICNUM) || tryLoad("misc/minum/", name, IMD_TYPE_MINUM) || tryLoad("misc/mivnum/", name, IMD_TYPE_MIVNUM) || tryLoad("misc/researchimds/", name, IMD_TYPE_RESEARCHIMD))
 	{
 		return &models.at(name.toStdString());
 	}
@@ -719,6 +737,200 @@ void finishTangentsGeneration()
    }
 }
 
+static inline void _imd_load_level_optimize_recalc_altshadowmesh(iIMDShape& s, const std::vector<unsigned int>& shadow_indices)
+{
+	s.altShadowPoints.resize(0);
+	s.altShadowPolys.resize(0);
+
+	auto addShadowVertex = [](iIMDShape& s, Vector3f&& v) -> uint32_t {
+		// See if we already have this defined, if so, return reference to it.
+		for (uint32_t j = 0; j < static_cast<uint32_t>(s.altShadowPoints.size()); j++)
+		{
+			if (s.altShadowPoints[j] == v)
+			{
+				return j;
+			}
+		}
+		s.altShadowPoints.push_back(v);
+		return static_cast<uint32_t>(s.altShadowPoints.size() - 1);
+	};
+	for (size_t i = 0; i < shadow_indices.size() / 3; i++)
+	{
+		iIMDPoly shadowPoly;
+		for (size_t p = 0; p < 3; p++)
+		{
+			unsigned int index = shadow_indices[(i * 3) + p];
+			gfx_api::gfxFloat* pVertex = &vertices[index * 3];
+			shadowPoly.pindex[p] = addShadowVertex(s, Vector3f{pVertex[0], pVertex[1], pVertex[2]});
+		}
+		s.altShadowPolys.push_back(std::move(shadowPoly));
+	}
+
+	s.pShadowPoints = &s.altShadowPoints;
+	s.pShadowPolys = &s.altShadowPolys;
+}
+
+// NOTE: Only intended to be called from _imd_load_level after all buffers are ready
+static inline void _imd_load_level_optimize(const WzString &filename, iIMDShape &s, IMD_TYPE type)
+{
+	// Step 1: Mesh Optimization
+
+	// TODO: Handle meshes with more than one frame.
+	if (s.numFrames > 1)
+	{
+		return;
+	}
+
+	std::vector<meshopt_Stream> streams = {
+		{&vertices[0], sizeof(gfx_api::gfxFloat) * 3, sizeof(gfx_api::gfxFloat) * 3},
+		{&normals[0], sizeof(gfx_api::gfxFloat) * 3, sizeof(gfx_api::gfxFloat) * 3},
+		{&texcoords[0], sizeof(gfx_api::gfxFloat) * 2, sizeof(gfx_api::gfxFloat) * 2}
+	};
+	if (!tangents.empty())
+	{
+		streams.push_back({&tangents[0], sizeof(gfx_api::gfxFloat) * 4, sizeof(gfx_api::gfxFloat) * 4});
+	}
+
+	const size_t index_count = indices.size();
+
+	// convert to std::vector<unsigned int>, as expected by meshopt
+	static std::vector<unsigned int> indices_uint; // Static, to save allocations.
+	indices_uint.resize(0);
+	std::transform(indices.begin(), indices.end(), std::back_inserter(indices_uint),
+				   [](uint16_t c) -> unsigned int { return static_cast<unsigned int>(c); });
+
+	// Indexing
+	size_t initial_vertex_count = vertexCount;
+	std::vector<unsigned int> remap(index_count);
+	size_t vertex_count = meshopt_generateVertexRemapMulti(&remap[0], &indices_uint[0], index_count, initial_vertex_count, &streams[0], streams.size());
+
+	if (vertex_count != initial_vertex_count)
+	{
+		debug(LOG_3D, "imd[_load_level_optimize] = Reduced vertices: %zu -> %zu", initial_vertex_count, vertex_count);
+	}
+
+	{
+		std::vector<unsigned int> indexArray;
+		indexArray.resize(index_count);
+		meshopt_remapIndexBuffer(&indexArray[0], &indices_uint[0], index_count, &remap[0]);
+		indices_uint.swap(indexArray);
+	}
+
+	{
+		std::vector<gfx_api::gfxFloat> vertexArray;
+		vertexArray.resize(vertex_count * 3);
+		meshopt_remapVertexBuffer(&vertexArray[0], &vertices[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+		vertices.swap(vertexArray);
+	}
+
+	{
+		std::vector<gfx_api::gfxFloat> normalArray;
+		normalArray.resize(vertex_count * 3);
+		meshopt_remapVertexBuffer(&normalArray[0], &normals[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+		normals.swap(normalArray);
+	}
+
+	{
+		std::vector<gfx_api::gfxFloat> textureArray;
+		textureArray.resize(vertex_count * 2);
+		meshopt_remapVertexBuffer(&textureArray[0], &texcoords[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 2, &remap[0]);
+		texcoords.swap(textureArray);
+	}
+
+	if (!tangents.empty())
+	{
+		std::vector<gfx_api::gfxFloat> tangentArray;
+		tangentArray.resize(vertex_count * 4);
+		meshopt_remapVertexBuffer(&tangentArray[0], &tangents[0], initial_vertex_count, sizeof(gfx_api::gfxFloat) * 4, &remap[0]);
+		tangents.swap(tangentArray);
+	}
+
+	// Vertex cache optimization
+	meshopt_optimizeVertexCache(&indices_uint[0], &indices_uint[0], index_count, vertex_count);
+
+	// Overdraw optimization
+	meshopt_optimizeOverdraw(&indices_uint[0], &indices_uint[0], index_count, &vertices[0], vertex_count, sizeof(gfx_api::gfxFloat) * 3, 1.05f);
+
+	// Vertex fetch optimization
+	meshopt_optimizeVertexFetchRemap(&remap[0], &indices_uint[0], index_count, vertex_count);
+	meshopt_remapIndexBuffer(&indices_uint[0], &indices_uint[0], index_count, &remap[0]);
+	meshopt_remapVertexBuffer(&vertices[0], &vertices[0], vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+	meshopt_remapVertexBuffer(&normals[0], &normals[0], vertex_count, sizeof(gfx_api::gfxFloat) * 3, &remap[0]);
+	meshopt_remapVertexBuffer(&texcoords[0], &texcoords[0], vertex_count, sizeof(gfx_api::gfxFloat) * 2, &remap[0]);
+	if (!tangents.empty())
+	{
+		meshopt_remapVertexBuffer(&tangents[0], &tangents[0], vertex_count, sizeof(gfx_api::gfxFloat) * 4, &remap[0]);
+	}
+
+	// update s.vertexCount
+	s.vertexCount = vertex_count;
+
+	// transform indices back
+	indices.clear();
+	std::transform(indices_uint.begin(), indices_uint.end(), std::back_inserter(indices),
+				   [](unsigned int c) -> uint16_t { return static_cast<uint16_t>(c); });
+
+	// Step 2: Shadow Optimization
+	if (s.pShadowPolys == &s.altShadowPolys || s.pShadowPoints == &s.altShadowPoints)
+	{
+		// An optional shadow mesh was provided, so do not override it
+		return;
+	}
+
+	bool skipShadowSimplify = false;
+	float threshold = 0.45f;
+	float target_error = 0.07f;
+	switch (type)
+	{
+		case IMD_TYPE_COMP_PROP:
+		case IMD_TYPE_COMP_WEAPON:
+		case IMD_TYPE_COMP_BODY:
+			threshold = 0.45f;
+			target_error = 0.07f;
+			break;
+		case IMD_TYPE_STRUCT:
+			// since structs don't move (much), and costly calculations can be better cached, simplify less
+			threshold = 0.5f;
+			target_error = 0.015f;
+			break;
+		default:
+			// For now, do not attempt to simplify other imd types' shadow meshes
+			skipShadowSimplify = true;
+			break;
+	}
+	if (skipShadowSimplify)
+	{
+		// skip simplifying
+		return;
+	}
+
+	size_t target_index_count = std::max(size_t(index_count * threshold), std::min<size_t>(index_count, 50 * 3 * 3));
+	if (target_index_count >= index_count)
+	{
+		// skip simplifying
+		return;
+	}
+
+	meshopt_Stream shadow_stream = {
+		&vertices[0], sizeof(gfx_api::gfxFloat) * 3, sizeof(gfx_api::gfxFloat) * 3
+	};
+
+	std::vector<unsigned int> shadow_indices(index_count);
+	meshopt_generateShadowIndexBufferMulti(&shadow_indices[0], &indices_uint[0], index_count, vertex_count, &shadow_stream, 1);
+	meshopt_optimizeVertexCache(&shadow_indices[0], &shadow_indices[0], index_count, vertex_count);
+
+	std::vector<unsigned int> lod(index_count);
+	float lod_error = 0.f;
+	lod.resize(meshopt_simplifySloppy(&lod[0], &shadow_indices[0], index_count, &vertices[0], vertex_count, sizeof(gfx_api::gfxFloat) * 3,
+		target_index_count, target_error, &lod_error));
+
+	if ((lod.size() < index_count) && (s.altShadowPolys.empty() && s.altShadowPoints.empty()))
+	{
+		_imd_load_level_optimize_recalc_altshadowmesh(s, lod);
+
+		debug(LOG_3D, "imd[_load_level_optimize] = Simplified shadow mesh polys by %f %%: %zu -> %zu", ((float)(s.polys.size() - s.altShadowPolys.size()) / (float)s.polys.size()) * 100.f, s.polys.size(), s.altShadowPolys.size());
+	}
+}
 
 /*!
  * Load shape levels recursively
@@ -729,7 +941,7 @@ void finishTangentsGeneration()
  * \pre ppFileData loaded
  * \post s allocated
  */
-static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion, int level)
+static iIMDShape *_imd_load_level(const WzString &filename, IMD_TYPE type, const char **ppFileData, const char *FileDataEnd, int nlevels, int pieVersion, int level)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX] = {'\0'};
@@ -836,7 +1048,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		if (strcmp(buffer, "LEVEL") == 0)	// check for next level
 		{
 			debug(LOG_3D, "imd[_load_level] = npoints %" PRIu32 ", npolys %" PRIu32 "", npoints, npolys);
-			s.next = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels - 1, pieVersion, level + 1);
+			s.next = _imd_load_level(filename, type, &pFileData, FileDataEnd, nlevels - 1, pieVersion, level + 1);
 		}
 		else if (strcmp(buffer, "CONNECTORS") == 0)
 		{
@@ -945,6 +1157,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 		}
 	}
 
+	s.indicesCount = s.polys.size() * 3;
 	s.vertexCount = vertexCount;
 
 	// Tangents are optional, only if normals were loaded and passed sanity check above
@@ -956,14 +1169,14 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  		for (size_t i = 0; i < indices.size(); i += 3)
  			calculateTangentsForTriangle(indices[i], indices[i+1], indices[i+2]);
  		finishTangentsGeneration();
-
- 		if (!tangents.empty())
- 		{
- 			if (!s.buffers[VBO_TANGENT])
- 				s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
- 			s.buffers[VBO_TANGENT]->upload(tangents.size() * sizeof(gfx_api::gfxFloat), tangents.data());
- 		}
  	}
+	else
+	{
+		tangents.resize(0);
+		bitangents.resize(0);
+	}
+
+	_imd_load_level_optimize(filename, s, type);
 
 	if (!s.buffers[VBO_VERTEX])
 		s.buffers[VBO_VERTEX] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
@@ -980,6 +1193,13 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 	if (!s.buffers[VBO_TEXCOORD])
 		s.buffers[VBO_TEXCOORD] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
 	s.buffers[VBO_TEXCOORD]->upload(texcoords.size() * sizeof(gfx_api::gfxFloat), texcoords.data());
+
+	if (!tangents.empty())
+	{
+		if (!s.buffers[VBO_TANGENT])
+			s.buffers[VBO_TANGENT] = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer);
+		s.buffers[VBO_TANGENT]->upload(tangents.size() * sizeof(gfx_api::gfxFloat), tangents.data());
+	}
 
 	indices.resize(0);
 	vertices.resize(0);
@@ -1000,7 +1220,7 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
  * \return The shape, constructed from the data read
  */
 // ppFileData is incremented to the end of the file on exit!
-static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, const char *FileDataEnd)
+static void iV_ProcessIMD(const WzString &filename, IMD_TYPE type, const char **ppFileData, const char *FileDataEnd)
 {
 	const char *pFileData = *ppFileData;
 	char buffer[PATH_MAX], texfile[PATH_MAX], normalfile[PATH_MAX], specfile[PATH_MAX];
@@ -1239,7 +1459,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		return;
 	}
 
-	iIMDShape *shape = _imd_load_level(filename, &pFileData, FileDataEnd, nlevels, imd_version, level);
+	iIMDShape *shape = _imd_load_level(filename, type, &pFileData, FileDataEnd, nlevels, imd_version, level);
 	if (shape == nullptr)
 	{
 		debug(LOG_ERROR, "%s: Unsuccessful", filename.toUtf8().c_str());

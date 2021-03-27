@@ -151,3 +151,9 @@ else()
 		target_compile_options(quickjs PRIVATE ${_supported_quickjs_c_compiler_flags})
 	endif()
 endif()
+
+# meshoptimizer
+add_subdirectory(meshoptimizer EXCLUDE_FROM_ALL)
+set_property(TARGET meshoptimizer PROPERTY FOLDER "3rdparty")
+set_property(TARGET meshoptimizer PROPERTY XCODE_ATTRIBUTE_CLANG_WARN_COMMA NO)	# -Wcomma
+set_property(TARGET meshoptimizer PROPERTY XCODE_ATTRIBUTE_WARNING_CFLAGS "-Wno-cast-align")

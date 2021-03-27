@@ -136,6 +136,10 @@ Files: 3rdparty/launchinfo/*
 Copyright: 2020 past-due
 License: Expat
 
+Files: 3rdparty/meshoptimizer/*
+Copyright: 2016-2020 Arseny Kapoulkine
+License: Expat
+
 Files: 3rdparty/mINI/*
 Copyright: 2018 Danijel Durakovic
 License: Expat
