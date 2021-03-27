@@ -54,13 +54,12 @@ quickjs_apply_patches(
 	PATCHES
 		"001-add-extensions.patch"
 		"002-add-disable-atomics-define.patch"
-		"003-fix-js-check-stack-overflow.patch"
-		"004-msvc-compatibility.patch"
-		"005-fix-pedantic-cxx-warnings.patch"
-		"006-bsd-compile-fixes.patch"
-		"007-msvc-64bit-compatibility.patch"
-		"008-freeruntime2.patch"
-		"009-msvc-arm64-compat.patch"
+		"003-msvc-compatibility.patch"
+		"004-fix-pedantic-cxx-warnings.patch"
+		"005-bsd-compile-fixes.patch"
+		"006-msvc-64bit-compatibility.patch"
+		"007-freeruntime2.patch"
+		"008-msvc-arm64-compat.patch"
 )
 
 message(STATUS "Finished applying patches.")
