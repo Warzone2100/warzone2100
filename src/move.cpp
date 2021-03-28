@@ -1611,9 +1611,10 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	if (moveDroidStopped(psDroid, speed))
 	{
 		if (psDroid->droidType == DROID_PERSON &&
-		    (psDroid->action == DACTION_ATTACK ||
-		     psDroid->action == DACTION_ROTATETOATTACK)
-		    && psDroid->animationEvent == ANIM_EVENT_NONE)
+			(psDroid->action == DACTION_ATTACK ||
+			psDroid->action == DACTION_ROTATETOATTACK)
+			&& psDroid->animationEvent != ANIM_EVENT_DYING
+			&& psDroid->animationEvent != ANIM_EVENT_FIRING)
 		{
 			psDroid->timeAnimationStarted = gameTime;
 			psDroid->animationEvent = ANIM_EVENT_FIRING;
@@ -1647,8 +1648,8 @@ static void moveUpdatePersonModel(DROID *psDroid, SDWORD speed, uint16_t directi
 	//set the droid height here so other routines can use it
 	psDroid->pos.z = map_Height(psDroid->pos.x, psDroid->pos.y);//jps 21july96
 
-	/* update anim if moving and not shooting */
-	if (psDroid->droidType == DROID_PERSON && speed != 0 && psDroid->animationEvent == ANIM_EVENT_NONE)
+	/* update anim if moving */
+	if (psDroid->droidType == DROID_PERSON && speed != 0 && (psDroid->animationEvent != ANIM_EVENT_ACTIVE && psDroid->animationEvent != ANIM_EVENT_DYING))
 	{
 		psDroid->timeAnimationStarted = gameTime;
 		psDroid->animationEvent = ANIM_EVENT_ACTIVE;
