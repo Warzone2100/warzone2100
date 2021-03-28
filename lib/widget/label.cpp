@@ -211,6 +211,11 @@ WzString W_LABEL::getString() const
 
 void W_LABEL::setString(WzString string)
 {
+	if ((aTextLines.size() == 1) && (aTextLines.front().text == string.toStdString()))
+	{
+		// no change - skip
+		return;
+	}
 	aTextLines.clear();
 	aTextLines.push_back({string.toStdString(), Vector2i(0,0), Vector2i(0,0)});
 	displayCache.wzText.clear();
