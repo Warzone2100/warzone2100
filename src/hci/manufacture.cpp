@@ -100,6 +100,8 @@ static inline bool compareFactories(STRUCTURE *a, STRUCTURE *b)
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, x);
 	auto y = getFactoryOrNullptr(b);
 	ASSERT_NOT_NULLPTR_OR_RETURN(false, y);
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, x->psAssemblyPoint);
+	ASSERT_NOT_NULLPTR_OR_RETURN(false, y->psAssemblyPoint);
 	if (x->psAssemblyPoint->factoryType != y->psAssemblyPoint->factoryType)
 	{
 		return x->psAssemblyPoint->factoryType < y->psAssemblyPoint->factoryType;
@@ -221,6 +223,11 @@ protected:
 		BaseWidget::updateLayout();
 		auto factory = getFactoryOrNullptr(controller->getObjectAt(objectIndex));
 		ASSERT_NOT_NULLPTR_OR_RETURN(, factory);
+		if (factory->psAssemblyPoint == nullptr)
+		{
+			factoryNumberLabel->setString("");
+			return;
+		}
 		factoryNumberLabel->setString(WzString::fromUtf8(astringf("%u", factory->psAssemblyPoint->factoryInc + 1)));
 	}
 
