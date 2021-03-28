@@ -4,7 +4,7 @@ ${LangFileString} WZWelcomeText_Portable "Bienvenue dans l'installateur portable
 
 ${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "Une version 64 bits de Warzone 2100 est disponible.$\r$\nPour plus de détails, consultez https://wz2100.net/ $\r$\nSouhaitez-vous continuer l'installation 32 bits ?"
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
 
@@ -37,7 +37,7 @@ ${LangFileString} DESC_SecNLS_WinFonts "Inclure le dossier des polices Windows d
 ${LangFileString} TEXT_SecMSSysLibraries "DLLs Microsoft Runtime importantes"
 ${LangFileString} DESC_SecMSSysLibraries "Téléchargez et installez (ou mettez à jour) les bibliothèques système redistribuables Visual C++ de Microsoft, dont certains composants peuvent avoir besoin pour fonctionner."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
+${LangFileString} DLTEXT_Downloading "En téléchargement"
 ${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
 ${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
 
