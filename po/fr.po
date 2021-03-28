@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-21 01:43\n"
+"PO-Revision-Date: 2021-03-28 11:22\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -15531,12 +15531,13 @@ msgstr "Warzone n'a pas pu changer le mode fenêtre.\n"
 
 #: src/frontend.cpp:1514
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "Impossible de modifier la Synchro Verticale"
 
 #: src/frontend.cpp:1514
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone n'a pas pu changer le mode de Synchro Verticale.\n"
+"Votre système / vos pilotes peuvent ne pas prendre en charge d'autres modes."
 
 #: src/frontend.cpp:1680
 msgid "Middle Mouse"
@@ -15818,7 +15819,7 @@ msgstr "IHM tactique: Cacher"
 #: src/keyedit.cpp:444
 #: src/musicmanager.cpp:778
 msgid "Go Back"
-msgstr ""
+msgstr "Retour"
 
 #: src/ingameop.cpp:247
 #: src/ingameop.cpp:256
@@ -16020,7 +16021,7 @@ msgstr ""
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:895
 msgid "No:"
-msgstr ""
+msgstr "N° :"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:911
@@ -16034,11 +16035,11 @@ msgstr "Dans le menu"
 #: src/integrations/wzdiscordrpc.cpp:1076
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "L'utilisateur Discord \"%s\" aimerait rejoindre votre partie."
 
 #: src/integrations/wzdiscordrpc.cpp:1078
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "Autoriser ce joueur à rejoindre votre partie ?"
 
 #: src/integrations/wzdiscordrpc.cpp:1082
 #, c-format
@@ -16328,27 +16329,27 @@ msgstr "Piéger le curseur %s"
 
 #: src/keybind.cpp:1345
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "CAMPAGNE"
 
 #: src/keybind.cpp:1349
 msgid "CHALLENGE"
-msgstr ""
+msgstr "DÉFI"
 
 #: src/keybind.cpp:1352
 msgid "SKIRMISH"
-msgstr ""
+msgstr "ESCARMOUCHE"
 
 #: src/keybind.cpp:1370
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "DIFFICULTÉ : FACILE"
 
 #: src/keybind.cpp:1373
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "DIFFICULTÉ : NORMALE"
 
 #: src/keybind.cpp:1376
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "DIFFICULTÉ : DIFFICILE"
 
 #: src/keybind.cpp:1379
 msgid "DIFFICULTY: INSANE"
