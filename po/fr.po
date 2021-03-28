@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-28 11:22\n"
+"PO-Revision-Date: 2021-03-28 23:23\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -16353,7 +16353,7 @@ msgstr "DIFFICULTÉ : DIFFICILE"
 
 #: src/keybind.cpp:1379
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "DIFFICULTÉ : DÉMENT"
 
 #: src/keybind.cpp:1387
 msgid "CHEATS: ENABLED"
@@ -17260,7 +17260,7 @@ msgstr ""
 #: src/multiint.cpp:833
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
-msgstr ""
+msgstr "Tournoi IA : %3.1f%% victoires, %3.1f%% défaites, %3.1f%% égalités"
 
 #: src/multiint.cpp:1026
 msgid "Error while joining."
@@ -17292,7 +17292,7 @@ msgstr ""
 
 #: src/multiint.cpp:1280
 msgid "Vote"
-msgstr ""
+msgstr "Voter"
 
 #: src/multiint.cpp:1281
 msgid "Allow host to change map or randomize?"
@@ -17443,7 +17443,7 @@ msgstr "L'hôte a exclu %s de la partie !"
 #: src/multiint.cpp:3897
 #: src/multimenu.cpp:1245
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "L'hôte vous a exclu de la partie."
 
 #: src/multiint.cpp:2486
 msgid "Click to change difficulty"
@@ -17515,7 +17515,7 @@ msgstr "(aucun)"
 
 #: src/multiint.cpp:2761
 msgid "Kicked from game"
-msgstr ""
+msgstr "Exclu de la partie"
 
 #: src/multiint.cpp:2960
 msgid "CHAT"
@@ -17544,7 +17544,7 @@ msgstr "Ceci est une carte-mode, l'expérience de jeu peut être altérée"
 
 #: src/multiint.cpp:3762
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Ceci est une carte aléatoire qui drastiquement modifier votre expérience de jeu !"
 
 #: src/multiint.cpp:4025
 msgid "Host is Starting Game"
@@ -17794,7 +17794,7 @@ msgstr "Le joueur %s a été exclu car il a essayé de contourner le contrôle d
 
 #: src/multiplay.cpp:272
 msgid "Invalid data!"
-msgstr ""
+msgstr "Données invalides !"
 
 #: src/multiplay.cpp:895
 #, c-format
@@ -17890,15 +17890,15 @@ msgstr ""
 #: src/musicmanager.cpp:533
 #: src/musicmanager.cpp:679
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/musicmanager.cpp:544
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: src/musicmanager.cpp:670
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 #: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
