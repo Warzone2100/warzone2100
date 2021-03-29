@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-28 23:23\n"
+"PO-Revision-Date: 2021-03-29 23:23\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -5807,7 +5807,7 @@ msgstr "Copier au format JSON dans le presse-papier"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Décharger JSON vers StdOut"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -15270,11 +15270,11 @@ msgstr "Gestionnaire de musique"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Ouvrir le répertoire de configuration"
 
 #: src/frontend.cpp:681
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Impossible d'ouvrir le répertoire de configuration dans le navigateur de fichiers par défaut du système."
 
 #: src/frontend.cpp:683
 msgid "Configuration directory is reported as:"
@@ -15282,15 +15282,15 @@ msgstr "Le répertoire de configuration est signalé en tant que :"
 
 #: src/frontend.cpp:687
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Si vous exécutez dans un conteneur / environnement isolé, cela peut différer du chemin réel sur le disque."
 
 #: src/frontend.cpp:689
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Veuillez consulter la documentation pour plus d'informations sur la façon de le localiser manuellement."
 
 #: src/frontend.cpp:690
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Impossible d'ouvrir le répertoire de configuration"
 
 #: src/frontend.cpp:712
 msgid "1×"
@@ -15662,25 +15662,25 @@ msgstr "Vous pouvez corriger cela en augmentant l'échelle d'affichage du jeu."
 #: src/frontend.cpp:2477
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Voulez-vous augmenter l'échelle d'affichage du jeu à: %u%%?"
 
 #: src/frontend.cpp:2479
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Augmenter l'échelle d'affichage"
 
 #: src/frontend.cpp:2496
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Échelle d'affichage augmentée à : %u%%"
 
 #: src/frontend.cpp:2497
 #: src/frontend.cpp:2513
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Vous pouvez régler l'échelle d'affichage à tout moment dans le menu Options Vidéo."
 
 #: src/frontend.cpp:2512
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Astuce : Ajuster l'échelle d'affichage"
 
 #: src/hci.cpp:955
 #: src/loop.cpp:244
@@ -15858,7 +15858,7 @@ msgstr "Raccourcis clavier"
 
 #: src/ingameop.cpp:562
 msgid "Shake"
-msgstr ""
+msgstr "Secouer"
 
 #: src/ingameop.cpp:952
 msgid "Save Campaign Game"
@@ -15882,7 +15882,7 @@ msgstr "Attente d'énergie"
 #: src/intdisplay.cpp:286
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d derrick(s) inactif(s)"
 
 #: src/intdisplay.cpp:291
 msgid "Need more resources!"
@@ -15951,45 +15951,45 @@ msgstr "Le lien d'invitation que vous avez suivi spécifie une connexion directe
 
 #: src/integrations/wzdiscordrpc.cpp:439
 msgid "It has not been vetted / verified by a lobby server."
-msgstr ""
+msgstr "Il n'a pas été vérifié par un serveur de lobby."
 
 #: src/integrations/wzdiscordrpc.cpp:441
 msgid "Do you wish to trust this direct connection invite?"
-msgstr ""
+msgstr "Voulez-vous faire confiance à cette invitation de connexion directe ?"
 
 #: src/integrations/wzdiscordrpc.cpp:445
 msgid "Discord: Direct Connection Invite"
-msgstr ""
+msgstr "Discord: Invitation de connexion directe"
 
 #: src/integrations/wzdiscordrpc.cpp:479
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
-msgstr ""
+msgstr "Le lien d'invitation que vous avez suivi n'est pas pris en charge par cette version de Warzone 2100."
 
 #: src/integrations/wzdiscordrpc.cpp:480
 msgid "A newer version of Warzone 2100 may be required, if available."
-msgstr ""
+msgstr "Une nouvelle version de Warzone 2100 peut être requise, si elle est disponible."
 
 #: src/integrations/wzdiscordrpc.cpp:483
 msgid "Discord: Unsupported / Invalid Invite"
-msgstr ""
+msgstr "Discord: Non pris en charge / Invitation invalide"
 
 #: src/integrations/wzdiscordrpc.cpp:549
 msgid "Playing: Campaign"
-msgstr ""
+msgstr "Jouer: Campagne"
 
 #: src/integrations/wzdiscordrpc.cpp:574
 msgid "Playing: Challenge"
-msgstr ""
+msgstr "Jouer: Challenge"
 
 #: src/integrations/wzdiscordrpc.cpp:592
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "Jouer: Escarmouche"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:597
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "Jouer: %s Escarmouche"
 
 #: src/integrations/wzdiscordrpc.cpp:600
 #: src/integrations/wzdiscordrpc.cpp:836
@@ -16015,7 +16015,7 @@ msgstr "En partie multijoueur"
 #: src/integrations/wzdiscordrpc.cpp:848
 #, c-format
 msgid "Game Name: \"%s\" by %s"
-msgstr ""
+msgstr "Nom de la partie : \"%s\" par %s"
 
 #. TRANSLATORS: "No:" to signify limits - example usage: "No: Tanks,VTOLs"
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
@@ -16044,7 +16044,7 @@ msgstr "Autoriser ce joueur à rejoindre votre partie ?"
 #: src/integrations/wzdiscordrpc.cpp:1082
 #, c-format
 msgid "Join Request from %s"
-msgstr ""
+msgstr "Rejoindre la demande de %s"
 
 #: src/integrations/wzdiscordrpc.cpp:1084
 msgid "Allow"
@@ -16273,11 +16273,11 @@ msgstr "L'affichage du nombre de frames par seconde est désactivé."
 
 #: src/keybind.cpp:612
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "L'affichage du nombre d'unités est activé."
 
 #: src/keybind.cpp:616
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "L'affichage du nombre d'unités est désactivé."
 
 #: src/keybind.cpp:668
 #, c-format
@@ -16357,11 +16357,11 @@ msgstr "DIFFICULTÉ : DÉMENT"
 
 #: src/keybind.cpp:1387
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "CHEATS : ACTIVÉ"
 
 #: src/keybind.cpp:1389
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "CHEATS : DÉSACTIVÉ"
 
 #: src/keybind.cpp:1445
 msgid "Researched EVERYTHING for you!"
@@ -16454,11 +16454,11 @@ msgstr "Sens de rotation vertical : inversé"
 
 #: src/keybind.cpp:2533
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Tremblement de l'écran lorsque les choses meurent : Désactivé"
 
 #: src/keybind.cpp:2538
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Tremblement de l'écran lorsque les choses meurent : Activé"
 
 #: src/keybind.cpp:2590
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -16546,7 +16546,7 @@ msgstr "Commandants"
 
 #: src/keymap.cpp:399
 msgid "QuickSave"
-msgstr ""
+msgstr "Sauvegarde rapide"
 
 #: src/keymap.cpp:400
 msgid "Toggle Radar"
@@ -16554,7 +16554,7 @@ msgstr "Active/désactive l'affichage de la mini-carte"
 
 #: src/keymap.cpp:401
 msgid "QuickLoad"
-msgstr ""
+msgstr "Chargement rapide"
 
 #: src/keymap.cpp:402
 msgid "Toggle Console Display"
@@ -16746,19 +16746,19 @@ msgstr "Options multijoueurs / dialogue des alliances"
 
 #: src/keymap.cpp:464
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Déplacer la caméra vers le haut"
 
 #: src/keymap.cpp:465
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Déplacer la caméra vers le bas"
 
 #: src/keymap.cpp:466
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Déplacer la caméra vers la droite"
 
 #: src/keymap.cpp:467
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Déplacer la caméra vers la gauche"
 
 #: src/keymap.cpp:468
 msgid "Snap View to North"
@@ -16874,11 +16874,11 @@ msgstr "Active/désactive l'historique du chat d'équipe"
 
 #: src/keymap.cpp:496
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Faire pivoter le bâtiment dans le sens des aiguilles d'une montre"
 
 #: src/keymap.cpp:497
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Faire pivoter le bâtiment dans le sens inverse des aiguilles d'une montre"
 
 #: src/keymap.cpp:500
 msgid "Center View on HQ"
@@ -16930,7 +16930,7 @@ msgstr "Active/désactive l'affichage ami/ennemi"
 
 #: src/keymap.cpp:524
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Afficher tous les mappages de clavier"
 
 #: src/keymap.cpp:533
 msgid "Select all Combat Units"
@@ -16982,7 +16982,7 @@ msgstr "Afficher la fréquence de rafraîchissement de l'écran"
 
 #: src/keymap.cpp:546
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "Sélectionner toutes les unités avec les mêmes composants"
 
 #: src/keymap.cpp:550
 msgid "Select all Combat Cyborgs"
@@ -17034,27 +17034,27 @@ msgstr "Sélectionner l'usine à Cyborgs suivante"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Sélectionnez la prochaine usine VTOL"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Passer à l'usine suivante"
 
 #: src/keymap.cpp:567
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Passer au centre de recherche suivant"
 
 #: src/keymap.cpp:568
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Passer au prochain groupe électrogène"
 
 #: src/keymap.cpp:569
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Passer à la prochaine usine Cyborg"
 
 #: src/keymap.cpp:570
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Passer à la prochaine usine VTOL"
 
 #: src/keymap.cpp:573
 msgid "Toggle Debug Mappings"
@@ -17126,19 +17126,19 @@ msgstr "Tracer un objet de jeu"
 
 #: src/loadsave.cpp:331
 msgid "Parent directory"
-msgstr ""
+msgstr "Dossier parent"
 
 #: src/loadsave.cpp:336
 msgid "Autosave directory"
-msgstr ""
+msgstr "Répertoire de sauvegarde automatique"
 
 #: src/loadsave.cpp:336
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "Répertoire de sauvegarde automatique (pas autorisé pour l'enregistrement)"
 
 #: src/loadsave.cpp:540
 msgid "cheated"
-msgstr ""
+msgstr "triché"
 
 #: src/loop.cpp:251
 #: src/loop.cpp:267
@@ -17251,11 +17251,11 @@ msgstr "Commandant"
 
 #: src/multiint.cpp:794
 msgid "MISSING AI NAME"
-msgstr ""
+msgstr "NOM DE L'IA MANQUANTE"
 
 #: src/multiint.cpp:819
 msgid "MISSING AI DESCRIPTION"
-msgstr ""
+msgstr "DESCRIPTION D'IA MANQUANTE"
 
 #: src/multiint.cpp:833
 #, c-format
@@ -17264,7 +17264,7 @@ msgstr "Tournoi IA : %3.1f%% victoires, %3.1f%% défaites, %3.1f%% égalités"
 
 #: src/multiint.cpp:1026
 msgid "Error while joining."
-msgstr ""
+msgstr "Erreur lors de l'enregistrement."
 
 #: src/multiint.cpp:1140
 msgid "Tanks disabled!!"
@@ -17288,7 +17288,7 @@ msgstr "Poste de commande pour satellite laser désactivé."
 
 #: src/multiint.cpp:1145
 msgid "Structure Limits Enforced."
-msgstr ""
+msgstr "Limites de structure renforcées."
 
 #: src/multiint.cpp:1280
 msgid "Vote"
@@ -17296,11 +17296,11 @@ msgstr "Voter"
 
 #: src/multiint.cpp:1281
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Autoriser l'hôte à changer de carte ou aléatoire?"
 
 #: src/multiint.cpp:1312
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Pas assez de votes pour randomiser ou modifier la carte."
 
 #: src/multiint.cpp:1348
 #: src/titleui/gamefind.cpp:579
@@ -17364,12 +17364,13 @@ msgstr "Limites de construction"
 
 #: src/multiint.cpp:1484
 msgid "Random Game Options"
-msgstr ""
+msgstr "Options de jeu aléatoire"
 
 #: src/multiint.cpp:1485
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Options de jeu aléatoires\n"
+"Peut être bloqué par les votes des joueurs"
 
 #: src/multiint.cpp:1496
 msgid "Tech"
@@ -17495,7 +17496,7 @@ msgstr "Cliquez pour changer la couleur du joueur"
 
 #: src/multiint.cpp:2661
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Cliquez pour changer la faction du joueur"
 
 #: src/multiint.cpp:2686
 msgid "Click to change player position"
@@ -17503,7 +17504,7 @@ msgstr "Cliquez pour changer la position du joueur"
 
 #: src/multiint.cpp:2693
 msgid "Click to change AI, right click to distribute choice"
-msgstr ""
+msgstr "Cliquez pour modifier l'IA, faites un clic droit pour distribuer le choix"
 
 #: src/multiint.cpp:2708
 msgid "Player ID: "
@@ -17527,7 +17528,7 @@ msgstr "Désolé ! Impossible d'héberger la partie."
 
 #: src/multiint.cpp:3610
 msgid "Game Name Updated."
-msgstr ""
+msgstr "Nom de la partie mis à jour."
 
 #: src/multiint.cpp:3738
 #, c-format
@@ -17560,11 +17561,11 @@ msgstr "Pas de connexion à l'hôte."
 
 #: src/multiint.cpp:4419
 msgid "Cannot change to a map with too few slots for all players."
-msgstr ""
+msgstr "Impossible de passer à une carte avec trop peu d'emplacements pour tous les joueurs."
 
 #: src/multiint.cpp:4424
 msgid "Cannot change to a map with fewer slots."
-msgstr ""
+msgstr "Impossible de passer à une carte avec moins d'emplacements."
 
 #: src/multiint.cpp:4518
 msgid "The host has quit."
@@ -17644,7 +17645,7 @@ msgstr "Le transfert du fichier a été suspendu pour %d."
 
 #: src/multijoin.cpp:390
 msgid "The game is already full."
-msgstr ""
+msgstr "Le jeu est déjà plein."
 
 #: src/multijoin.cpp:465
 #, c-format
@@ -17653,7 +17654,7 @@ msgstr "%s (%u) a un mod incompatible et a été exclu."
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "Vos données ne correspondent pas à celles de l'hôte !"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17666,7 +17667,7 @@ msgstr "Message du serveur :"
 
 #: src/multijoin.cpp:523
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "Une mise à jour du jeu est disponible, veuillez visiter http://wz2100.net pour la télécharger."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
@@ -17675,11 +17676,11 @@ msgstr "LIMITES"
 
 #: src/multilimit.cpp:153
 msgid "Map Can Exceed Limits"
-msgstr ""
+msgstr "La carte peut dépasser les limites"
 
 #: src/multilimit.cpp:159
 msgid "Force Limits at Start"
-msgstr ""
+msgstr "Forcer les limites au démarrage"
 
 #: src/multilimit.cpp:181
 msgid "Apply Defaults and Return To Previous Screen"
@@ -17696,7 +17697,7 @@ msgstr "Les limites ont été réinitialisées aux valeurs par défaut"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Limites réinitialisées aux valeurs par défaut"
 
 #: src/multimenu.cpp:532
 msgid "Any number of players"
@@ -17799,7 +17800,7 @@ msgstr "Données invalides !"
 #: src/multiplay.cpp:895
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "Expulsion automatique du joueur %s, commande non valide reçue."
 
 #: src/multiplay.cpp:1359
 msgid "Map was requested: SENDING MAP!"
@@ -17885,7 +17886,7 @@ msgstr "Marron"
 
 #: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "JOUER MAINTENANT"
 
 #: src/musicmanager.cpp:533
 #: src/musicmanager.cpp:679
@@ -17902,7 +17903,7 @@ msgstr "Titre"
 
 #: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "GESTIONNAIRE DE MUSIQUE"
 
 #: src/notifications.cpp:725
 msgid "Dismiss"
@@ -18068,7 +18069,7 @@ msgstr[1] "%u unités sélectionnées"
 
 #: src/structure.cpp:2515
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "Vous ne pouvez pas construire plus d'unités, la limite d'unité est atteinte - La production est stoppée"
 
 #: src/structure.cpp:2523
 #, c-format
@@ -18096,7 +18097,7 @@ msgstr[1] "%s - %u Unités assignées - Points de vie %d/%d"
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
+msgstr[0] "%s - %u Unités affectées - Dégâts %d/%d"
 msgstr[1] ""
 
 #: src/structure.cpp:5257
@@ -18330,15 +18331,15 @@ msgstr "Mise à jour disponible"
 #: src/updatemanager.cpp:250
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "Une nouvelle version de Warzone 2100 (%s) est disponible!"
 
 #: src/updatemanager.cpp:254
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "Une nouvelle version de Warzone 2100 est disponible!"
 
 #: src/updatemanager.cpp:256
 msgid "Get Update Now"
-msgstr ""
+msgstr "Mettre à jour maintenant"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:189
@@ -18368,5 +18369,5 @@ msgstr "VOUS AVEZ PERDU !"
 
 #: src/wzscriptdebug.cpp:1813
 msgid "Script Debugger"
-msgstr ""
+msgstr "Débogueur de script"
 
