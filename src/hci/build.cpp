@@ -24,11 +24,11 @@ void BuildController::updateBuildersList()
 {
 	builders.clear();
 
-	for (DROID *droid = apsDroidLists[selectedPlayer]; droid; droid = droid->psNext)
+	for (auto& droid : Droids::forPlayer(selectedPlayer, true, false))
 	{
-		if (isConstructionDroid(droid) && droid->died == 0)
+		if (isConstructionDroid(&droid) && droid.died == 0)
 		{
-			builders.push_back(droid);
+			builders.push_back(&droid);
 		}
 	}
 
