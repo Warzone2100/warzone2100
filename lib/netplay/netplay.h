@@ -273,7 +273,7 @@ struct PLAYER
 	char                IPtextAddress[40];  ///< IP of this player
 	FactionID           faction;            ///< which faction the player has
 
-	std::vector<PlayerShareStatus> sharing = std::vector<PlayerShareStatus>(MAX_PLAYERS, { true, true});
+	std::vector<PlayerShareStatus> sharing = std::vector<PlayerShareStatus>(MAX_PLAYERS, { false, false });
 
 	void resetAll()
 	{
@@ -292,7 +292,7 @@ struct PLAYER
 		autoGame = false;
 		IPtextAddress[0] = '\0';
 		faction = FACTION_NORMAL;
-		std::fill(sharing.begin(), sharing.end(), PlayerShareStatus({ true, true }));
+		std::fill(sharing.begin(), sharing.end(), PlayerShareStatus({ false, false }));
 	}
 
 	bool isSharingUnitsWith(const unsigned int other) const;

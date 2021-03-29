@@ -265,6 +265,13 @@ bool PLAYER::isSharingUnitsWith(const unsigned int other) const
 
 void PLAYER::setUnitSharingState(const unsigned int other, const bool bState)
 {
+	const bool bOnSameTeam = NetPlay.players[selectedPlayer].team == NetPlay.players[other].team;
+	if (!bOnSameTeam)
+	{
+		debug(LOG_ERROR, "Cannot share units: %d is not on your team!", other);
+		return;
+	}
+
 	sharing[other].bUnits = bState;
 }
 
