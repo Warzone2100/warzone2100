@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-29 23:23\n"
+"PO-Revision-Date: 2021-03-30 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -30,7 +30,7 @@ msgstr "Bangun sebuah markas, lalu cari struktur Pra-Runtuh."
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Struktur ini berisi teknologi penting bagi kesuksesan Proyek ini."
+msgstr "Struktur ini mengandung teknologi penting bagi kesuksesan Proyek ini."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -83,7 +83,7 @@ msgstr "Setelah mendarat, jelajahi reruntuhan dan ambil semua artefak."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
-msgstr "MISI TRANSPORT: Menyelidiki Pusat Penelitian"
+msgstr "MISI TRANSPORT: Menyelidiki Pusat Riset"
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
@@ -112,7 +112,7 @@ msgstr "MISI TRANSPORT: Transmisi Musuh Terdeteksi"
 
 #: data/base/messages/strings/cam1strings.txt:32
 msgid "Scout the designated area for enemy research facilities."
-msgstr "Intai area yang ditentukan untuk fasilitas penelitian musuh."
+msgstr "Intai area yang ditentukan untuk fasilitas riset musuh."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
@@ -132,7 +132,7 @@ msgstr "Kumpulkan sebuah tim penyerang dan peroleh teknologi tautan sinapsis."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
-msgstr "MISI TRANSPORT: Obyektif Baru"
+msgstr "MISI TRANSPORT: Objektif Baru"
 
 #: data/base/messages/strings/cam1strings.txt:40
 msgid "New Paradigm are searching for artifacts in this vicinity."
@@ -208,7 +208,7 @@ msgstr "Kedua zona pertama sudah diamankan."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr "PERBARUAN STATUS TIM PROJEK"
+msgstr "PERBARUAN STATUS TIM PROYEK"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
@@ -244,15 +244,15 @@ msgstr "Kami mendeteksi pasukan musuh di lokasi ini."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr "OBYEKTIF UTAMA"
+msgstr "OBJEKTIF UTAMA"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr "Struktur ini adalah obyektif utama Anda."
+msgstr "Struktur ini adalah tujuan utama Anda."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr "Cari dan ambil segala artefak di area ini."
+msgstr "Cari dan ambil semua artefak di area ini."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
@@ -268,7 +268,7 @@ msgstr "LAPORAN INTELIJEN MARKAS ALPHA: NEXUS"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
-msgstr "Obyektif baru."
+msgstr "Objektif baru."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
@@ -320,7 +320,7 @@ msgstr "Teknologi Tautan Sinapsis telah diperoleh kembali!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr "Riset awal mengkonfirmasi bahwa ini akan menjadi keuntungan besar bagi Projek."
+msgstr "Riset awal mengkonfirmasi bahwa ini akan menjadi keuntungan besar bagi Proyek ini."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
@@ -356,7 +356,7 @@ msgstr "MARKAS PERAMPOK TERDETEKSI"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr "Kalahkan para perampok dan ambil seluruh artefak."
+msgstr "Kalahkan para perampok dan ambil semua artefak."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
@@ -508,7 +508,7 @@ msgstr "MISI TRANSPORT: Cari dan Hancurkan Konvoi"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr "Barang kiriman yang Anda peroleh hanyalah sebuah pengalihan."
+msgstr "Barang kiriman yang telah Anda peroleh hanyalah sebuah pengalihan."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
@@ -545,7 +545,7 @@ msgstr "MISI MARKAS BETA: Hancurkan Pangkalan Udara Musuh dan Peroleh Teknologi 
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr "Hasil analisa jalur penerbangan mengindikasikan bahwa VTOL Para Kolektif berasal dari area ini."
+msgstr "Hasil analisis jalur penerbangan mengindikasikan bahwa VTOL Para Kolektif berasal dari area ini."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
@@ -557,7 +557,7 @@ msgstr "Lokasi pangkalan musuh ada di sini, ini adalah objektif utama Anda."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr "Hancurkan seluruh pasukan Para Kolektif dan ambil seluruh artefak."
+msgstr "Hancurkan semua pasukan Para Kolektif dan ambil semua artefak."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
@@ -717,7 +717,7 @@ msgstr "Selamat atas evakuasi sukses Markas Beta."
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr "NEXUS telah mendapat akses ke senjata nuklir dan bertekad untuk menghancurkan Projek."
+msgstr "NEXUS telah mendapat akses ke senjata nuklir dan bertekad untuk menghancurkan Proyek kita."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
@@ -740,7 +740,7 @@ msgstr "MISI TRANSPORT: Membangun Pangkalan Depan"
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr "Komandan, kesuksesan sang Projek ada di tangan Anda."
+msgstr "Komandan, kesuksesan sang Proyek ada di tangan Anda."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
@@ -780,7 +780,7 @@ msgstr "MISI SEKTOR UTARA: Ledakan Nuklir"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr "Seluruh unit harus keluar dari area sebelum hulu ledak nuklir diledakkan."
+msgstr "Semua unit harus keluar dari area sebelum hulu ledak nuklir diledakkan."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
@@ -840,7 +840,7 @@ msgstr "MISI TRANSPORT: Tim Alpha Terdeteksi"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr "Bawalah pasukan penyelidik ke koordinat ini dan evaluasi situasinya."
+msgstr "Bawalah pasukan pengintai ke koordinat ini dan evaluasi situasinya."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
@@ -1033,7 +1033,7 @@ msgstr "Pasukan NEXUS terdeteksi di lokasi-lokasi ini."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr "NEXUS telah dibasmi dari seluruh sistem Projek."
+msgstr "NEXUS telah dibasmi dari seluruh sistem Proyek."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
@@ -1041,7 +1041,7 @@ msgstr "Kami sedang mencoba untuk mengakses kode kendali rudal."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr "Sebuah fasilitas riset diperlukan untuk meretas kode tersebut. Alokasikan satu segera."
+msgstr "Sebuah fasilitas riset diperlukan untuk meretas kode tersebut. Tugaskan satu segera."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
@@ -1049,7 +1049,7 @@ msgstr "Lindungi silo rudal dari serangan-serangan NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr "PERBARUAN STATUS PROJEK: Kode Kendali Rudal Tingkat 1 Telah Diretas."
+msgstr "PERBARUAN STATUS PROYEK: Kode Kendali Rudal Tingkat 1 Telah Diretas."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
@@ -1061,7 +1061,7 @@ msgstr "Lebih banyak riset diperlukan untuk progres lebih lanjut."
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr "PERBARUAN STATUS PROJEK: Kode Kendali Rudal Tingkat 2 Telah Diretas."
+msgstr "PERBARUAN STATUS PROYEK: Kode Kendali Rudal Tingkat 2 Telah Diretas."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
@@ -1073,7 +1073,7 @@ msgstr "Setelah kode tingkat 3 diretas kami akan memulai prosedur peluncuran."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr "PERBARUAN STATUS PROJEK: Kode Kendali Rudal Tingkat 3 Telah Diretas."
+msgstr "PERBARUAN STATUS PROYEK: Kode Kendali Rudal Tingkat 3 Telah Diretas."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
@@ -1362,7 +1362,7 @@ msgstr "Bunker Senapan Mesin Berat"
 #: data/mp/messages/strings/names.txt:397
 #: po/custom/fromJson.txt:2080
 msgid "Flashlight Emplacement"
-msgstr "Emplasemen \"Senter\""
+msgstr "Emplasemen Laser \"Flashlight\""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower01.name
@@ -1393,37 +1393,37 @@ msgstr "Menara Penjaga dengan Roket \"Lancer\""
 #: data/mp/messages/strings/names.txt:409
 #: po/custom/fromJson.txt:2051
 msgid "Flamer Hardpoint"
-msgstr "Titik Keras Pelempar Api"
+msgstr "Titik Keras dengan Pelempar Api"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
 #: data/base/messages/strings/names.txt:330
 #: po/custom/fromJson.txt:178
 msgid "Advanced Cyborg Production"
-msgstr "Produksi Cyborg Tingkat Lanjut"
+msgstr "Produksi Cyborg Canggih"
 
 #: data/base/messages/strings/names.txt:331
 msgid "Advanced Cyborg Production Mk2"
-msgstr "Produksi Cyborg Tingkat Lanjut Mk2"
+msgstr "Produksi Cyborg Canggih Mk2"
 
 #: data/base/messages/strings/names.txt:332
 msgid "Advanced Cyborg Production Mk3"
-msgstr "Produksi Cyborg Tingkat Lanjut Mk3"
+msgstr "Produksi Cyborg Canggih Mk3"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[1]
 #: data/base/messages/strings/names.txt:334
 #: po/custom/fromJson.txt:189
 msgid "Advanced Factory Production"
-msgstr "Produksi Tingkat Lanjut"
+msgstr "Produksi Canggih"
 
 #: data/base/messages/strings/names.txt:335
 msgid "Advanced Factory Production Mk2"
-msgstr "Produksi Tingkat Lanjut Mk2"
+msgstr "Produksi Canggih Mk2"
 
 #: data/base/messages/strings/names.txt:336
 msgid "Advanced Factory Production Mk3"
-msgstr "Produksi Tingkat Lanjut Mk3"
+msgstr "Produksi Canggih Mk3"
 
 #: data/base/messages/strings/names.txt:342
 msgid "Advanced Repair Facility Upgrade"
@@ -1536,32 +1536,32 @@ msgstr "Peningkatan Sensor CB Mk3"
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:479
 msgid "VTOL CB Upgrade"
-msgstr "Peningkatan CB VTOL"
+msgstr "Peningkatan VTOL CB"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade Mk2"
-msgstr "Peningkatan CB VTOL Mk2"
+msgstr "Peningkatan VTOL CB Mk2"
 
 #: data/base/messages/strings/names.txt:380
 #: data/mp/messages/strings/names.txt:481
 msgid "VTOL CB Upgrade Mk3"
-msgstr "Peningkatan CB VTOL Mk3"
+msgstr "Peningkatan VTOL CB Mk3"
 
 #: data/base/messages/strings/names.txt:381
 #: data/mp/messages/strings/names.txt:482
 msgid "VTOL Strike Upgrade"
-msgstr "Peningkatan VTOL-Penyerang"
+msgstr "Peningkatan VTOL-Serang"
 
 #: data/base/messages/strings/names.txt:382
 #: data/mp/messages/strings/names.txt:483
 msgid "VTOL Strike Upgrade Mk2"
-msgstr "Peningkatan VTOL-Penyerang Mk2"
+msgstr "Peningkatan VTOL-Serang Mk2"
 
 #: data/base/messages/strings/names.txt:383
 #: data/mp/messages/strings/names.txt:484
 msgid "VTOL Strike Upgrade Mk3"
-msgstr "Peningkatan VTOL-Penyerang Mk3"
+msgstr "Peningkatan VTOL-Serang Mk3"
 
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:486
@@ -1739,7 +1739,7 @@ msgstr "Meningkatkan Armor Kinetik dan Body Point/HP"
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:305
 msgid "All Cyborgs upgraded automatically"
-msgstr "Seluruh Cyborg ditingkatkan secara otomatis"
+msgstr "Semua Cyborg ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -1849,7 +1849,7 @@ msgstr "Memerlukan Pabrik Cyborg untuk diproduksi"
 #: data/mp/messages/strings/resstrings.txt:17
 #: po/custom/fromJson.txt:548
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Dipersenjatai dengan Senapan Serbu Cyborg"
+msgstr "Dipersenjatai dengan Senapan Mesin Serbu Cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text[0]
@@ -1915,7 +1915,7 @@ msgstr "Meningkatkan Armor dan Body Point/HP"
 #: data/mp/messages/strings/resstrings.txt:34
 #: po/custom/fromJson.txt:311
 msgid "All defenses and walls upgraded automatically"
-msgstr "Seluruh struktur pertahanan dan tembok ditingkatkan secara otomatis"
+msgstr "Semua struktur pertahanan dan tembok ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[0]
@@ -2233,7 +2233,7 @@ msgstr "Kekuatan Defensif: Tinggi"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:792
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Emplasemen lapis baja dengan pelempar api \"Inferno\""
+msgstr "Emplasemen lapis baja dengan penyembur api \"Inferno\""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2251,7 +2251,7 @@ msgstr "Emplasemen lapis baja dengan Meriam Serbu"
 #: data/mp/messages/strings/resstrings.txt:112
 #: po/custom/fromJson.txt:4648
 msgid "Reinforced tower with Assault Gun"
-msgstr "Menara penjaga dengan Senapan Serbu"
+msgstr "Menara penjaga dengan Senapan Mesin Serbu"
 
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
@@ -2288,7 +2288,7 @@ msgstr "Menyerang musuh dalam jangkauan sensor secara otomatis"
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:122
 msgid "Armored guard tower with Flamer"
-msgstr "Menara penjaga lapis baja dengan pelempar api"
+msgstr "Menara penjaga lapis baja dengan penyembur api"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
@@ -2303,7 +2303,7 @@ msgstr "Bunker lapis baja dengan Senapan Mesin Berat"
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
 msgid "Armored hardpoint with Flamer"
-msgstr "Titik keras lapis baja dengan pelempar api"
+msgstr "Titik keras lapis baja dengan penyembur api"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT7_RMG.text[1]
@@ -2312,7 +2312,7 @@ msgstr "Titik keras lapis baja dengan pelempar api"
 #: data/mp/messages/strings/resstrings.txt:142
 #: po/custom/fromJson.txt:700
 msgid "Armored hardpoint with Assault Gun"
-msgstr "Titik keras lapis baja dengan Senapan Serbu"
+msgstr "Titik keras lapis baja dengan Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT8_RC.text[1]
@@ -2330,7 +2330,7 @@ msgstr "Titik keras lapis baja dengan Meriam Serbu"
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:724
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Titik keras lapis baja dengan pelempar api \"Inferno\""
+msgstr "Titik keras lapis baja dengan penyembur api \"Inferno\""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2398,7 +2398,7 @@ msgstr "Meningkatkan Kecepatan Perbaikan"
 #: data/mp/messages/strings/resstrings.txt:169
 #: po/custom/fromJson.txt:393
 msgid "All repair facilities upgraded automatically"
-msgstr "Seluruh fasilitas perbaikan ditingkatkan secara otomatis"
+msgstr "Semua fasilitas perbaikan ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[0]
@@ -2446,7 +2446,7 @@ msgstr "Meningkatkan output produksi Pabrik Cyborg"
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:299
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Seluruh Pabrik Cyborg ditingkatkan secara otomatis"
+msgstr "Semua Pabrik Cyborg ditingkatkan secara otomatis"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2492,7 +2492,7 @@ msgstr "Meningkatkan kecepatan produksi pabrik"
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:428
 msgid "All vehicle factories upgraded automatically"
-msgstr "Seluruh Pabrik Kendaraan ditingkatkan secara otomatis"
+msgstr "Semua Pabrik Kendaraan ditingkatkan secara otomatis"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -2528,7 +2528,7 @@ msgstr "Riset Ditingkatkan"
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:1722
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "Analisa Data Tautan Sinapsis Terdedikasi"
+msgstr "Analisis Data Tautan Sinapsis Terdedikasi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[2]
@@ -2539,7 +2539,7 @@ msgstr "Analisa Data Tautan Sinapsis Terdedikasi"
 #: data/mp/messages/strings/resstrings.txt:193
 #: po/custom/fromJson.txt:3239
 msgid "Increases research speed"
-msgstr "Meningkatkan kecepatan penelitian"
+msgstr "Meningkatkan kecepatan riset"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[3]
@@ -2550,7 +2550,7 @@ msgstr "Meningkatkan kecepatan penelitian"
 #: data/mp/messages/strings/resstrings.txt:194
 #: po/custom/fromJson.txt:399
 msgid "All research facilities upgraded automatically"
-msgstr "Seluruh fasilitas riset ditingkatkan secara otomatis"
+msgstr "Semua fasilitas riset ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[0]
@@ -2583,7 +2583,7 @@ msgstr "Material Struktur Markas yang Diperkeras"
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:275
 msgid "All base structures upgraded automatically"
-msgstr "Seluruh struktur markas ditingkatkan secara otomatis"
+msgstr "Semua struktur markas ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[0]
@@ -2625,7 +2625,7 @@ msgstr "Meningkatkan output produksi Pabrik"
 #: data/mp/messages/strings/resstrings.txt:204
 #: po/custom/fromJson.txt:446
 msgid "All VTOL factories upgraded automatically"
-msgstr "Seluruh Pabrik VTOL ditingkatkan secara otomatis"
+msgstr "Semua Pabrik VTOL ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[0]
@@ -2667,7 +2667,7 @@ msgstr "Mengurangi waktu penyiapan ulang"
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:387
 msgid "All rearming pads upgraded automatically"
-msgstr "Seluruh landasan penyiapan ulang ditingkatkan secara otomatis"
+msgstr "Semua landasan penyiapan ulang ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
@@ -2723,7 +2723,7 @@ msgstr "Meningkatkan kecepatan perbaikan"
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
 msgid "All mobile repair units upgraded automatically"
-msgstr "Seluruh unit perbaikan bergerak ditingkatkan secara otomatis"
+msgstr "Semua unit perbaikan bergerak ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[0]
@@ -2770,7 +2770,7 @@ msgstr "Dapat ditugaskan sebagai sensor untuk artileri"
 #: data/mp/messages/strings/resstrings.txt:227
 #: po/custom/fromJson.txt:5858
 msgid "VTOL CB turret detects enemy indirect fire batteries"
-msgstr "Menara kontra-artileri/CB VTOL mendeteksi baterai artileri musuh"
+msgstr "Menara kontra-baterai/CB VTOL mendeteksi baterai artileri musuh"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[2]
@@ -2803,7 +2803,7 @@ msgstr "Pesawat VTOL akan terus menyerang sampai baterai artileri musuh hancur"
 #: data/mp/messages/strings/resstrings.txt:231
 #: po/custom/fromJson.txt:5836
 msgid "VTOL CB Improved"
-msgstr "CB VTOL Ditingkatkan"
+msgstr "VTOL CB Ditingkatkan"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[1]
@@ -2825,7 +2825,7 @@ msgstr "Sistem pendeteksi tembakan baru"
 #: data/mp/messages/strings/resstrings.txt:233
 #: po/custom/fromJson.txt:1912
 msgid "Extends VTOL CB Range"
-msgstr "Meningkatkan jangkauan CB VTOL"
+msgstr "Meningkatkan jangkauan VTOL CB"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[3]
@@ -2836,7 +2836,7 @@ msgstr "Meningkatkan jangkauan CB VTOL"
 #: data/mp/messages/strings/resstrings.txt:234
 #: po/custom/fromJson.txt:440
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Seluruh sensor CB VTOL ditingkatkan secara otomatis"
+msgstr "Semua sensor VTOL CB ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[0]
@@ -2847,7 +2847,7 @@ msgstr "Seluruh sensor CB VTOL ditingkatkan secara otomatis"
 #: data/mp/messages/strings/resstrings.txt:236
 #: po/custom/fromJson.txt:5999
 msgid "VTOL Strike Improved"
-msgstr "VTOL-Penyerang Ditingkatkan"
+msgstr "VTOL-Serang Ditingkatkan"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[1]
@@ -2867,7 +2867,7 @@ msgstr "Sistem pengenalan target baru"
 #: data/mp/messages/strings/resstrings.txt:238
 #: po/custom/fromJson.txt:1918
 msgid "Extends VTOL Strike Range"
-msgstr "Meningkatkan jangkauan VTOL-Penyerang"
+msgstr "Meningkatkan jangkauan VTOL-Serang"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[3]
@@ -2878,7 +2878,7 @@ msgstr "Meningkatkan jangkauan VTOL-Penyerang"
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:452
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Seluruh sensor VTOL-Penyerang ditingkatkan secara otomatis"
+msgstr "Semua sensor VTOL-Serang ditingkatkan secara otomatis"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
@@ -2898,7 +2898,7 @@ msgstr "Meningkatkan kecepatan pengacak"
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr "Seluruh pengacak ditingkatkan secara otomatis"
+msgstr "Semua pengacak ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[0]
@@ -3022,7 +3022,7 @@ msgstr "Meningkatkan kecepatan kendaraan"
 #: data/mp/messages/strings/resstrings.txt:269
 #: po/custom/fromJson.txt:434
 msgid "All vehicles upgraded automatically"
-msgstr "Seluruh kendaraan ditingkatkan secara otomatis"
+msgstr "Semua kendaraan ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[0]
@@ -3137,7 +3137,7 @@ msgstr "Meningkatkan Body Point/HP"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:327
 msgid "All half-tracks upgraded automatically"
-msgstr "Seluruh half-track ditingkatkan secara otomatis"
+msgstr "Semua half-track ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_H2.text[3]
@@ -3148,7 +3148,7 @@ msgstr "Seluruh half-track ditingkatkan secara otomatis"
 #: data/mp/messages/strings/resstrings.txt:279
 #: po/custom/fromJson.txt:333
 msgid "All hovers upgraded automatically"
-msgstr "Seluruh hovercraft ditingkatkan secara otomatis"
+msgstr "Semua hovercraft ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_TRACK2.text[3]
@@ -3159,7 +3159,7 @@ msgstr "Seluruh hovercraft ditingkatkan secara otomatis"
 #: data/mp/messages/strings/resstrings.txt:284
 #: po/custom/fromJson.txt:417
 msgid "All tracks upgraded automatically"
-msgstr "Seluruh tank dengan roda rantai ditingkatkan secara otomatis"
+msgstr "Semua tank dengan roda rantai ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_W2.text[3]
@@ -3170,7 +3170,7 @@ msgstr "Seluruh tank dengan roda rantai ditingkatkan secara otomatis"
 #: data/mp/messages/strings/resstrings.txt:289
 #: po/custom/fromJson.txt:464
 msgid "All wheels upgraded automatically"
-msgstr "Seluruh kendaraan beroda ditingkatkan secara otomatis"
+msgstr "Semua kendaraan beroda ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[0]
@@ -3286,7 +3286,7 @@ msgstr "Meningkatkan akurasi senjata anti-pesawat"
 #: data/mp/messages/strings/resstrings.txt:324
 #: po/custom/fromJson.txt:269
 msgid "All AA weapons upgraded automatically"
-msgstr "Seluruh senjata anti-pesawat ditingkatkan secara otomatis"
+msgstr "Semua senjata anti-pesawat ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[0]
@@ -3326,7 +3326,7 @@ msgstr "Meningkatkan daya rusak meriam anti-pesawat Flak"
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:263
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Seluruh meriam anti-pesawat flak ditingkatkan secara otomatis"
+msgstr "Semua meriam anti-pesawat flak ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[1]
@@ -3484,7 +3484,7 @@ msgstr "Meningkatkan akurasi pengeboman"
 #: data/mp/messages/strings/resstrings.txt:349
 #: po/custom/fromJson.txt:281
 msgid "All bomb bays upgraded automatically"
-msgstr "Seluruh bom pesawat ditingkatkan secara otomatis"
+msgstr "Semua bom pesawat ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[0]
@@ -3581,7 +3581,7 @@ msgstr "Target Terbaik: Bunker, kendaraan beroda, dan hovercraft"
 #: data/mp/messages/strings/resstrings.txt:366
 #: po/custom/fromJson.txt:2061
 msgid "Flamer Upgrade"
-msgstr "Peningkatan pelempar api"
+msgstr "Peningkatan penyembur api"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_FL_D4.text[1]
@@ -3600,7 +3600,7 @@ msgstr "Propilen Oksida diperlakukan untuk pembakaran dalam suhu sangat tinggi"
 #: data/mp/messages/strings/resstrings.txt:368
 #: po/custom/fromJson.txt:3138
 msgid "Increases Flamer damage"
-msgstr "Meningkatkan daya rusak pelempar api"
+msgstr "Meningkatkan daya rusak penyembur api"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[3]
@@ -3611,7 +3611,7 @@ msgstr "Meningkatkan daya rusak pelempar api"
 #: data/mp/messages/strings/resstrings.txt:369
 #: po/custom/fromJson.txt:321
 msgid "All flamers upgraded automatically"
-msgstr "Seluruh pelempar api ditingkatkan secara otomatis"
+msgstr "Semua penyembur api ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[0]
@@ -3727,7 +3727,7 @@ msgstr "Meningkatkan akurasi howitzer"
 #: data/mp/messages/strings/resstrings.txt:399
 #: po/custom/fromJson.txt:339
 msgid "All howitzers upgraded automatically"
-msgstr "Seluruh howitzer ditingkatkan secara otomatis"
+msgstr "Semua howitzer ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[1]
@@ -3813,7 +3813,7 @@ msgstr "Meningkatkan daya rusak senapan mesin"
 #: data/mp/messages/strings/resstrings.txt:409
 #: po/custom/fromJson.txt:351
 msgid "All machineguns upgraded automatically"
-msgstr "Seluruh senapan mesin ditingkatkan secara otomatis"
+msgstr "Semua senapan mesin ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_MG_ROF2.text[1]
@@ -3905,7 +3905,7 @@ msgstr "Meningkatkan daya rusak mortir"
 #: data/mp/messages/strings/resstrings.txt:419
 #: po/custom/fromJson.txt:369
 msgid "All mortars upgraded automatically"
-msgstr "Seluruh mortir ditingkatkan secara otomatis"
+msgstr "Semua mortir ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[0]
@@ -3948,7 +3948,7 @@ msgstr "Meningkatkan daya rusak roket mini"
 #: data/mp/messages/strings/resstrings.txt:429
 #: po/custom/fromJson.txt:357
 msgid "All mini-rockets upgraded automatically"
-msgstr "Seluruh roket mini ditingkatkan secara otomatis"
+msgstr "Semua roket mini ditingkatkan secara otomatis"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
@@ -3998,11 +3998,11 @@ msgstr "Meningkatkan daya rusak roket"
 #: data/mp/messages/strings/resstrings.txt:434
 #: po/custom/fromJson.txt:405
 msgid "All rockets upgraded automatically"
-msgstr "Seluruh roket ditingkatkan secara otomatis"
+msgstr "Semua roket ditingkatkan secara otomatis"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr "Hancurkan seluruh unit Paradigma Baru"
+msgstr "Hancurkan semua unit Paradigma Baru"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
@@ -4030,7 +4030,7 @@ msgstr "Kirimkan setidaknya satu transporter berisi satu truk dan tahan serbuan 
 
 #: data/base/script/campaign/cam3-1.js:162
 msgid "Move all units into the valley"
-msgstr "Pindahkan seluruh unit ke lembah"
+msgstr "Pindahkan semua unit ke lembah"
 
 #: data/base/script/campaign/cam3-1.js:245
 msgid "Destroy the missile silos"
@@ -4062,7 +4062,7 @@ msgstr "Kembali ke zona pendaratan/LZ"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
-msgstr "Hancurkan seluruh unit dan struktur musuh"
+msgstr "Hancurkan semua unit dan struktur musuh"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
@@ -4086,7 +4086,7 @@ msgstr "Harus kembali ke zona pendaratan/LZ"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
-msgstr "Hancurkan seluruh unit dan pangkalan musuh"
+msgstr "Hancurkan semua unit dan pangkalan musuh"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
@@ -4124,7 +4124,7 @@ msgstr "Riset - bangun fasilitas riset terlebih dahulu"
 #: data/base/script/tutorial.js:354
 #: data/mp/multiplay/script/rules/reticule.js:60
 msgid "Build (F3)"
-msgstr "Pembangunan (F3)"
+msgstr "Konstruksi (F3)"
 
 #: data/base/script/rules.js:121
 #: data/base/script/tutorial.js:277
@@ -4320,7 +4320,7 @@ msgstr "Tempat pengantaran kendaraan diindikasikan oleh nomor 1"
 
 #: data/base/script/tutorial.js:69
 msgid "All new units will drive to this location once built"
-msgstr "Seluruh unit baru akan bergerak ke tempat pengantaran ini setelah dibangun"
+msgstr "Semua unit baru akan bergerak ke tempat pengantaran ini setelah dibangun"
 
 #: data/base/script/tutorial.js:70
 msgid "You can move the delivery point at any time by left clicking it"
@@ -4352,7 +4352,7 @@ msgstr "Selamat komandan - Anda siap untuk misi pertama Anda"
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr "CAMPAIGN SATU"
+msgstr "KAMPANYE SATU"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
@@ -4364,7 +4364,7 @@ msgstr "Fajar, Juli 4, 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
-msgstr "Markas Utama Projek"
+msgstr "Markas Utama Proyek"
 
 #: data/base/sequenceaudio/cam1/c001.txa:6
 msgid "A New Era"
@@ -4404,7 +4404,7 @@ msgstr "Mendekati Zona Pendaratan. Pengarahan Tim Alpha dimulai."
 
 #: data/base/sequenceaudio/cam1/c001.txt:9
 msgid "Commander, you lead Team Alpha, one of three expeditionary teams sent out by the Project to recover artifacts from before the Collapse."
-msgstr "Komandan, Anda memimpin Tim Alpha, satu dari tiga tim ekpedisi yang dikirim oleh Projek untuk memperoleh kembali artefak sebelum Keruntuhan."
+msgstr "Komandan, Anda memimpin Tim Alpha, satu dari tiga tim ekpedisi yang dikirim oleh Proyek untuk memperoleh kembali artefak sebelum Keruntuhan."
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
@@ -4450,7 +4450,7 @@ msgstr "Anda berada dalam pertentangan dengan Paradigma Baru."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:4
 msgid "All attack groups commence attack on enemy."
-msgstr "Seluruh grup penyerang, mulai serangan kepada musuh."
+msgstr "Semua grup penyerang, mulai serangan kepada musuh."
 
 #: data/base/sequenceaudio/cam1/cam1dnp.txt:5
 msgid "They are in contravention of the New Paradigm."
@@ -4515,7 +4515,7 @@ msgstr "Anda mungkin mengalahkan saya disini, namun saya akan bangkit kembali."
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr "Seperti saya pernah membersihkan dunia ini dengan api, saya akan menghancurkanmu dan Projek kecil Anda!!"
+msgstr "Seperti saya pernah membersihkan dunia ini dengan api, saya akan menghancurkanmu dan Proyek kecil Anda!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
@@ -4595,7 +4595,7 @@ msgstr "Kami belum dapat memastikan tujuan akhir atau fungsinya. Dalam bentuk aw
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr "Analisa lanjut dihentikan dengan penghentian sistem secara manual oleh teknisi kami untuk mencegah kontaminasi lanjut oleh Program Penyusup Nexus."
+msgstr "Analisis lanjut dihentikan dengan penghentian sistem secara manual oleh teknisi kami untuk mencegah kontaminasi lanjut oleh Program Penyusup Nexus."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
@@ -4611,7 +4611,7 @@ msgstr "Anda telah bekerja dengan baik."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:5
 msgid "Once we have analyzed and authenticated the technology, your reward  will follow."
-msgstr "Setelah kami menganalisa dan mengotentikasi teknologi ini, penghargaanmu akan mengikuti."
+msgstr "Setelah kami menganalisis dan mengotentikasi teknologi ini, imbalan Anda akan mengikuti."
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
@@ -4619,7 +4619,7 @@ msgstr "Informasi yang diterima dari markas musuh sebelumnya mengindikaskan bahw
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr "CAMPAIGN DUA"
+msgstr "KAMPANYE DUA"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
@@ -4683,7 +4683,7 @@ msgstr "Dalam serangan tersebut, satelit-satelit laser ini gagal menembak. Jika 
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
-msgstr "Seluruh rudal nuklir yang ditargetkan ke Amerika Utara mencapai target masing-masing."
+msgstr "Semua rudal nuklir yang ditargetkan ke Amerika Utara mencapai target masing-masing."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:16
 msgid "We know that Nexus is searching for NASDA Central in the Eastern Sector. This was one of the land-based control centres for the satellites."
@@ -4707,7 +4707,7 @@ msgstr "Kita harus memastikan ia tidak dapat melakukannya lagi."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:1
 msgid "Analysis indicates that these systems were part of the control system for the NASDA satellites."
-msgstr "Analisa mengindikasikan bahwa sistem-sistem ini adalah bagian dari sistem kendali bagi satelit NASDA."
+msgstr "Analisis mengindikasikan bahwa sistem-sistem ini adalah bagian dari sistem kendali bagi satelit NASDA."
 
 #: data/base/sequenceaudio/cam2/cam26afm.txt:2
 msgid "It's now certain that Nexus was responsible for The Collapse."
@@ -4735,7 +4735,7 @@ msgstr "NEXUS sekarang telah menyambungkan dirinya kembali dengan satelit-sateli
 
 #: data/base/sequenceaudio/cam2/cam26bfm.txt:5
 msgid "This poses a major threat to the Project and to our survival."
-msgstr "Ini adalah ancaman besar bagi Projek dan keselamatan kita."
+msgstr "Ini adalah ancaman besar bagi Proyek dan keselamatan kita."
 
 #: data/base/sequenceaudio/cam2/cam26pl1.txt:1
 msgid "Analysis of NASDA Central leaves no doubt that The Collective has introduced the Nexus Intruder Virus to it."
@@ -4767,7 +4767,7 @@ msgstr "Ia berada di suatu tempat di daerah kalian."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "Temukanlah bagi saya, dan saya akan memberi Anda lebih banyak senjata untuk membantu Anda dalam perangmu melawan Projek."
+msgstr "Temukanlah bagi saya, dan saya akan memberi Anda lebih banyak senjata untuk membantu Anda dalam perangmu melawan Proyek."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -4791,7 +4791,7 @@ msgstr "Pejuang-Pejuang Kolektif, kita siap untuk menghancurkan para penyusup ya
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:3
 msgid "Those of the Project are not of the machine. They have been denied its blessing. We who have embraced the power of the machine have a destiny to sweep away such weak creatures."
-msgstr "Mereka dari Projek bukanlah bagian sang mesin. Mereka tidaklah diberkati. Kita yang telah merangkul kekuatan sang mesin mempunyai takdir untuk menyapu bersih makhluk-makhluk lemah tersebut."
+msgstr "Mereka dari Proyek itu bukanlah bagian sang mesin. Mereka tidaklah diberkati. Kita yang telah merangkul kekuatan sang mesin mempunyai takdir untuk menyapu bersih makhluk-makhluk lemah tersebut."
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
@@ -4811,7 +4811,7 @@ msgstr "Pejuang-Pejuang Kolektif, Nexus telah memberi kita kekuatan sang mesin a
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:3
 msgid "Nexus now asks us to crush the Project."
-msgstr "Nexus sekarang memerintah kita untuk menghancurkan Projek."
+msgstr "Nexus sekarang memerintah kita untuk menghancurkan Proyek."
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:4
 msgid "Cleanse and destroy!!"
@@ -4827,7 +4827,7 @@ msgstr "Imbalan kalian akan segera tiba."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr "Si Projek akan lari dari pangkalan mereka dan mereka mencuri teknologi kalian."
+msgstr "Si Proyek akan lari dari pangkalan mereka dan mereka mencuri teknologi kalian."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
@@ -4839,7 +4839,7 @@ msgstr "Membaca Kode Transmisi..."
 
 #: data/base/sequenceaudio/cam3/c003.txa:1
 msgid "CAMPAIGN THREE"
-msgstr "CAMPAIGN TIGA"
+msgstr "KAMPANYE TIGA"
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
@@ -4867,7 +4867,7 @@ msgstr "Personil di Markas Gamma telah mengkonfirmasi bahwa rudal nuklir yang di
 
 #: data/base/sequenceaudio/cam3/c003.txt:4
 msgid "Team Gamma is currently scouting the silo's location and monitoring NEXUS's activity."
-msgstr "Tim Gamma sedang menyelidiki lokasi silo tersebut dan memonitor aktivitas NEXUS."
+msgstr "Tim Gamma sedang mengintai lokasi silo tersebut dan mengamati aktivitas NEXUS."
 
 #: data/base/sequenceaudio/cam3/c3ad2n2.txt:1
 msgid "Time's up commander!!"
@@ -4931,7 +4931,7 @@ msgstr "Kerja bagus Komandan, Anda telah menggagalkan peluncuran rudal terakhir 
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:2
 msgid "Such a shame. Your Project HQ would have made a wonderful target."
-msgstr "Sungguh memalukan. Markas Projek-mu adalah target yang hebat."
+msgstr "Sungguh memalukan. Markas Proyek-mu adalah target yang hebat."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:4
 msgid "But it's good of you to join me here."
@@ -4947,7 +4947,7 @@ msgstr "Karena saya tidak dapat meluncurkannya, dia akan meledak di tempat."
 
 #: data/base/sequenceaudio/cam3/cam3_1bn.txt:11
 msgid "Please note that all entrances to the underground complex have been sealed. Goodbye, Commander."
-msgstr "Jangan lupa bahwa seluruh pintu masuk ke kompleks bawah tanah sudah disegel. Selamat tinggal, Komandan."
+msgstr "Jangan lupa bahwa semua pintu masuk ke kompleks bawah tanah sudah disegel. Selamat tinggal, Komandan."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:1
 msgid "Ah, Commander, so good of you to join us here at Nexus base."
@@ -4991,7 +4991,7 @@ msgstr "Namun tidak apa-apa, karena Anda tidak akan berada di sini lebih lama la
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:6
 msgid "After much searching and reprogramming, I've finally got all my systems back on-line."
-msgstr "Setelah lama mencari dan memprogram ulang, saya akhirnya berhasil mengaktifkan kembali seluruh sistem saya."
+msgstr "Setelah lama mencari dan memprogram ulang, saya akhirnya berhasil mengaktifkan kembali semua sistem saya."
 
 #: data/base/sequenceaudio/cam3/cam3_cn.txt:8
 msgid "Once I destroyed the world with nuclear fire to clear the way for my cybernetic future."
@@ -5019,7 +5019,7 @@ msgstr "Tujuannya pada masa itu adalah mewujudkan transfer kesadaran manusia ke 
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr "Dibantu lagi oleh pihak militer, Dr. Reed memulai pekerjaannya dalam Program Penyusup NEXUS. Setelah tiga tahun dengan perkembangan minimal, pihak militer meninggalkan Projek Nexus dan mencabut pendanaan Dr. Reed."
+msgstr "Dibantu lagi oleh pihak militer, Dr. Reed memulai pekerjaannya dalam Program Penyusup NEXUS. Setelah tiga tahun dengan perkembangan minimal, pihak militer meninggalkan Proyek Nexus dan mencabut pendanaan Dr. Reed."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
@@ -5132,7 +5132,7 @@ msgstr "Laporan menyatakan bahwa NASDA mengalami suatu kesalahan dalam sebuah pe
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "Rudal-rudal nuklir tersebut diarahkan ke seluruh kota besar di dunia. NASDA telah diprogram untuk memulai Keruntuhan. Saat serangan tersebut diluncurkan, pertahanan laser dan situs anti-rudal yang berada di darat gagal."
+msgstr "Rudal-rudal nuklir tersebut diarahkan ke -kota-kota besar di seluruh dunia. NASDA telah diprogram untuk memulai Keruntuhan. Saat serangan tersebut diluncurkan, pertahanan laser dan situs anti-rudal yang berada di darat gagal."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
@@ -5148,7 +5148,7 @@ msgstr "Kami berangkat meninggalkan Seattle di awal tahun '86. Mereka memberitah
 
 #: data/base/sequenceaudio/devastation.txt:13
 msgid "After fighting off bands of marauders we came across the base. Its personnel were dead. Killed by any one of a number of virulent diseases."
-msgstr "Setelah menghalau kumpulan-kumpulan perampok kami sampai di markas. Seluruh personelnya tewas. Dibunuh oleh salah satu dari banyaknya penyakit yang cepat menyebar."
+msgstr "Setelah menghalau kumpulan-kumpulan perampok kami sampai di markas. Semua personelnya tewas. Dibunuh oleh salah satu dari banyaknya penyakit yang cepat menyebar."
 
 #: data/base/sequenceaudio/devastation.txt:15
 msgid "We cracked the doors, and cleared out the bodies inside."
@@ -5160,7 +5160,7 @@ msgstr "Kami tahu segalanya tidak akan pernah menjadi sama lagi, tapi kami berte
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr "Kami akhirnya siap untuk memulai Projek kami."
+msgstr "Kami akhirnya siap untuk memulai Proyek kami."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
@@ -5248,7 +5248,7 @@ msgstr "RISET CAM1"
 #: data/mp/messages/strings/names.txt:336
 #: po/custom/fromJson.txt:230
 msgid "ADVANCED RESEARCH"
-msgstr "RISET LANJUTAN"
+msgstr "RISET TINGKAT LANJUT"
 
 #: data/mp/messages/strings/names.txt:337
 msgid "CAM1 VEHICLES"
@@ -5341,7 +5341,7 @@ msgstr "Cyborg Penembak Meriam"
 #: data/mp/messages/strings/names.txt:372
 #: po/custom/fromJson.txt:2037
 msgid "Flamer Cyborg"
-msgstr "Cyborg Pelempar Api"
+msgstr "Cyborg Penyembur Api"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-MG.name
@@ -5351,7 +5351,7 @@ msgstr "Cyborg Pelempar Api"
 #: data/mp/messages/strings/names.txt:373
 #: po/custom/fromJson.txt:3598
 msgid "Machinegunner Cyborg"
-msgstr "Cyborg Senapan Mesin"
+msgstr "Cyborg Penembak Senapan Mesin"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs.name
@@ -5372,7 +5372,7 @@ msgstr "Menara Senapan Mesin Berat"
 
 #: data/mp/messages/strings/names.txt:405
 msgid "Flamer Tower"
-msgstr "Menara Penjaga dengan Pelempar Api"
+msgstr "Menara Penyembur Api"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower5.name
@@ -5385,7 +5385,7 @@ msgstr "Menara Roket \"Lancer\""
 
 #: data/mp/messages/strings/names.txt:428
 msgid "Advanced Manufacturing Mk3"
-msgstr "Produksi Lanjutan Mk3"
+msgstr "Produksi Canggih Mk3"
 
 #: data/mp/messages/strings/names.txt:436
 msgid "Robotic Repair Facility Mk3"
@@ -5393,11 +5393,11 @@ msgstr "Fasilitas Perbaikan Robotik Mk3"
 
 #: data/mp/messages/strings/names.txt:437
 msgid "Advanced Repair Facility Mk2"
-msgstr "Fasilitas Perbaikan Lanjutan Mk2"
+msgstr "Fasilitas Perbaikan Canggih Mk2"
 
 #: data/mp/messages/strings/names.txt:438
 msgid "Advanced Repair Facility Mk3"
-msgstr "Fasilitas Perbaikan Lanjutan Mk3"
+msgstr "Fasilitas Perbaikan Canggih Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/repair.json: $.HeavyRepair.name
@@ -5778,7 +5778,7 @@ msgstr "Menu"
 #: src/frontend.cpp:1877
 #: src/frontend.cpp:1920
 msgid "Campaign"
-msgstr "Campaign"
+msgstr "Kampanye"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
@@ -5832,7 +5832,7 @@ msgstr "Senapan mesin berat kaliber .50"
 #. data/mp/messages/resmessages23.json: $.RES_W_RHOW.text[1]
 #: po/custom/fromJson.txt:16
 msgid "105mm multi-barrel Howitzer may be assigned to a sensor"
-msgstr "Howitzer 105mm laras banyak dapat ditugaskan ke sebuah sensor"
+msgstr "Howitzer 105mm multilaras dapat ditugaskan ke sebuah sensor"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[1]
@@ -5910,7 +5910,7 @@ msgstr "Emplasemen Meriam Flak Anti-Pesawat"
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Flak Cannon Hardpoint"
-msgstr "Titik Keras Meriam Flak Anti-Pesawat"
+msgstr "Titik Keras dengan Flak Anti-Pesawat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
@@ -6045,14 +6045,14 @@ msgstr "Hulu Ledak Bom Canggih"
 #. data/mp/messages/resmessages3.json: $.RES_ENGIN3.text[1]
 #: po/custom/fromJson.txt:182
 msgid "Advanced Engineering Techniques"
-msgstr "Teknik Keinsinyuran Lanjutan"
+msgstr "Teknik Keinsinyuran Tingkat Lanjut"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering03.name
 #. data/mp/stats/research.json: $.R-Sys-Engineering03.name
 #: po/custom/fromJson.txt:186
 msgid "Advanced Engineering"
-msgstr "Keinsinyuran Lanjutan"
+msgstr "Keinsinyuran Tingkat Lanjut"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_VCBSU3.text[1]
@@ -6168,7 +6168,7 @@ msgstr "Laboratoriumaerodinamika"
 #. ... + 11 refs
 #: po/custom/fromJson.txt:287
 msgid "All cannons upgraded automatically"
-msgstr "Seluruh meriam ditingkatkan secara otomatis"
+msgstr "Semua meriam ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[3]
@@ -6177,14 +6177,14 @@ msgstr "Seluruh meriam ditingkatkan secara otomatis"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:293
 msgid "All CB sensors upgraded automatically"
-msgstr "Seluruh sensor CB ditingkatkan secara otomatis"
+msgstr "Semua sensor CB ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[3]
 #: po/custom/fromJson.txt:315
 msgid "All factories upgraded automatically"
-msgstr "Seluruh pabrik ditingkatkan secara otomatis"
+msgstr "Semua pabrik ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[3]
@@ -6193,7 +6193,7 @@ msgstr "Seluruh pabrik ditingkatkan secara otomatis"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:345
 msgid "All lasers upgraded automatically"
-msgstr "Seluruh laser ditingkatkan secara otomatis"
+msgstr "Semua laser ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[3]
@@ -6202,7 +6202,7 @@ msgstr "Seluruh laser ditingkatkan secara otomatis"
 #. ... + 7 refs
 #: po/custom/fromJson.txt:363
 msgid "All missiles upgraded automatically"
-msgstr "Seluruh rudal ditingkatkan secara otomatis"
+msgstr "Semua rudal ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[3]
@@ -6211,7 +6211,7 @@ msgstr "Seluruh rudal ditingkatkan secara otomatis"
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[3]
 #: po/custom/fromJson.txt:375
 msgid "All power generators upgraded automatically"
-msgstr "Seluruh pembangkit daya ditingkatkan secara otomatis"
+msgstr "Semua pembangkit daya ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[3]
@@ -6220,7 +6220,7 @@ msgstr "Seluruh pembangkit daya ditingkatkan secara otomatis"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:381
 msgid "All rail guns upgraded automatically"
-msgstr "Seluruh senapan rel ditingkatkan secara otomatis"
+msgstr "Semua senapan rel ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[3]
@@ -6229,7 +6229,7 @@ msgstr "Seluruh senapan rel ditingkatkan secara otomatis"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[3]
 #: po/custom/fromJson.txt:411
 msgid "All sensors upgraded automatically"
-msgstr "Seluruh sensor ditingkatkan secara otomatis"
+msgstr "Semua sensor ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[3]
@@ -6247,7 +6247,7 @@ msgstr "Semua truk ditingkatkan secara otomatis"
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[3]
 #: po/custom/fromJson.txt:458
 msgid "All VTOLs upgraded automatically"
-msgstr "Seluruh VTOL ditingkatkan secara otomatis"
+msgstr "Semua VTOL ditingkatkan secara otomatis"
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_1.name
@@ -6262,7 +6262,7 @@ msgstr "Sekutu"
 #. data/base/campaigns/alpha.json: $.name
 #: po/custom/fromJson.txt:473
 msgid "Alpha Campaign"
-msgstr "Campaign Alpha"
+msgstr "Kampanye Alpha"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_1.name
@@ -6364,7 +6364,7 @@ msgstr "Baterai Rudal Malaikat Tinggi"
 #. data/mp/stats/structure.json: $.Emplacement-HvART-pit.name
 #: po/custom/fromJson.txt:530
 msgid "Archangel Missile Emplacement"
-msgstr "Emplasemen Rudal Malaikat Tinggi"
+msgstr "Emplasemen Rudal \"Archangel\""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HvArtMissile.name
@@ -6380,7 +6380,7 @@ msgstr "Rudal Malaikat Tinggi"
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #: po/custom/fromJson.txt:544
 msgid "Armed with Cyborg assault gun"
-msgstr "Dipersenjatai dengan Meriam Serbu Cyborg"
+msgstr "Dipersenjatai dengan Senapan Mesin Serbu Cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -6394,7 +6394,7 @@ msgstr "Dipersenjatai dengan Meriam Cyborg"
 #. data/mp/messages/resmessages1.json: $.RES_CYW_FL1.text[1]
 #: po/custom/fromJson.txt:556
 msgid "Armed with Cyborg Flamer"
-msgstr "Dipersenjatai dengan Pelempar Api Cyborg"
+msgstr "Dipersenjatai dengan Penyembur Api Cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_MG1.text[1]
@@ -6425,7 +6425,7 @@ msgstr "Dipersenjatai dengan Peluncur Rudal \"Scourge\" Cyborg"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_TFL.text[1]
 #: po/custom/fromJson.txt:572
 msgid "Armed with Cyborg Thermite Flamer"
-msgstr "Dipersenjatai dengan Pelempar Api Termit Cyborg"
+msgstr "Dipersenjatai dengan Penyembur Api Termit Cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_LS1.text[1]
@@ -6534,7 +6534,7 @@ msgstr "Peluru anti-armor yang distabilkan dengan sirip, dengan sabot"
 #. data/mp/messages/resmessages1.json: $.RES_PB_FL.text[1]
 #: po/custom/fromJson.txt:644
 msgid "Armored bunker with Flamer"
-msgstr "Bunker lapis baja dengan pelempar api"
+msgstr "Bunker lapis baja dengan penyembur api"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_ATR.text[1]
@@ -6726,7 +6726,7 @@ msgstr "Emplasemen lapis baja dengan Laser Berat"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PFL.text[1]
 #: po/custom/fromJson.txt:795
 msgid "Armored strongpoint with Plasmite Flamer"
-msgstr "Emplasemen lapis baja dengan pelempar api plasmite"
+msgstr "Emplasemen lapis baja dengan penyembur api plasmit"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_PulseLas.text[1]
@@ -6795,7 +6795,7 @@ msgstr "Menara Penjaga dengan Meriam Serbu"
 #. data/mp/stats/structure.json: $.Wall-VulcanCan.name
 #: po/custom/fromJson.txt:838
 msgid "Assault Cannon Hardpoint"
-msgstr "Titik Keras Meriam Serbu"
+msgstr "Titik Keras dengan Meriam Serbu"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
@@ -6817,26 +6817,26 @@ msgstr "Meriam Serbu"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:851
 msgid "Assault Gun Bunker"
-msgstr "Bunker Senapan Serbu"
+msgstr "Bunker dengan Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:854
 msgid "Assault Gun Emplacement"
-msgstr "Emplasemen Senapan Serbu"
+msgstr "Emplasemen Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Guard Tower 2"
-msgstr "Menara Penjaga dengan Senapan Serbu 2"
+msgstr "Menara Penjaga dengan Senapan Mesin Serbu 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
 #. data/base/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:861
 msgid "Assault Gun Guard Tower"
-msgstr "Menara Penjaga dengan Senapan Serbu"
+msgstr "Menara Penjaga dengan Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Wall-RotMg.name
@@ -6845,7 +6845,7 @@ msgstr "Menara Penjaga dengan Senapan Serbu"
 #. data/mp/stats/structure.json: $.Wall-RotMg.name
 #: po/custom/fromJson.txt:867
 msgid "Assault Gun Hardpoint"
-msgstr "Titik Keras Senapan Serbu"
+msgstr "Titik Keras dengan Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
@@ -6870,7 +6870,7 @@ msgstr "Assault Gun Python Tracks"
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:880
 msgid "Assault Gun Tower"
-msgstr "Menara Senapan Serbu"
+msgstr "Menara Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG4.name
@@ -6879,7 +6879,7 @@ msgstr "Menara Senapan Serbu"
 #. data/mp/stats/weapons.json: $.MG4ROTARYMk1.name
 #: po/custom/fromJson.txt:886
 msgid "Assault Gun"
-msgstr "Senapan Serbu"
+msgstr "Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-RotMG.name
@@ -6888,7 +6888,7 @@ msgstr "Senapan Serbu"
 #. data/mp/stats/templates.json: $.CyborgRotMgGround.name
 #: po/custom/fromJson.txt:892
 msgid "Assault Gunner Cyborg"
-msgstr "Cyborg Penembak Senapan Serbu"
+msgstr "Cyborg Penembak Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VP.text[2]
@@ -7016,7 +7016,7 @@ msgstr "Pengisi ulang otomatis menggantikan sistem manual"
 #. data/mp/stats/structure.json: $.WallTower-SamSite.name
 #: po/custom/fromJson.txt:1008
 msgid "Avenger Hardpoint"
-msgstr "Titik Keras Rudal \"Avenger\""
+msgstr "Titik Keras dengan rudal \"Avenger\""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-SamSite1.name
@@ -7176,7 +7176,7 @@ msgstr "Target Terbaik: Kendaraan beroda, hovercraft"
 #. data/base/campaigns/beta.json: $.name
 #: po/custom/fromJson.txt:1147
 msgid "Beta Campaign"
-msgstr "Campaign Beta"
+msgstr "Kampanye Beta"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_2.name
@@ -7607,7 +7607,7 @@ msgstr "Insinyur tempur dengan kemampuan konstruksi"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_S_WST.text[1]
 #: po/custom/fromJson.txt:1440
 msgid "Combines standard, counter battery and VTOL sensors"
-msgstr "Menggabungkan sensor standar, kontra-artileri (CB), dan VTOL"
+msgstr "Menggabungkan sensor standar, kontra-baterai artileri (CB), dan VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CommandCentre.name
@@ -7800,21 +7800,21 @@ msgstr "Mengendalikan sampai 10 komandan"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[3]
 #: po/custom/fromJson.txt:1552
 msgid "Counter-battery fire continues until enemy battery is suppressed"
-msgstr "Tembakan kontra-artileri berlanjut sampai artileri musuh hancur"
+msgstr "Tembakan kontra-baterai berlanjut sampai baterai artileri musuh hancur"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_SY_CBSTW1.text[1]
 #: po/custom/fromJson.txt:1556
 msgid "Counter-battery tower detects enemy indirect fire batteries"
-msgstr "Menara kontra-artileri (CB) mendeteksi baterai artileri musuh"
+msgstr "Menara kontra-baterai artileri (CB) mendeteksi baterai artileri musuh"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[1]
 #: po/custom/fromJson.txt:1560
 msgid "Counter-battery turret detects enemy indirect fire batteries"
-msgstr "Turet kontra-artileri (CB) mendeteksi baterai artileri musuh"
+msgstr "Turet kontra-baterai (CB) mendeteksi baterai artileri musuh"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Metals02.name
@@ -7872,7 +7872,7 @@ msgstr "Pabrik Cyborg"
 #. data/mp/stats/weapons.json: $.CyborgFlamer01.name
 #: po/custom/fromJson.txt:1594
 msgid "Cyborg Flamer"
-msgstr "Pelempar Api Cyborg"
+msgstr "Penyembur Api Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.CyborgHeavyBody.name
@@ -7906,7 +7906,7 @@ msgstr "Armor Termal Intensitas Tinggi Cyborg"
 #. data/mp/stats/weapons.json: $.CyborgRocket.name
 #: po/custom/fromJson.txt:1613
 msgid "Cyborg Lancer"
-msgstr "Lancer Cyborg"
+msgstr "Cyborg Peluncur Roket \"Lancer\""
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.CyborgLightBody.name
@@ -8029,14 +8029,14 @@ msgstr "Turet Flak \"Cyclone\""
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade05.name
 #: po/custom/fromJson.txt:1712
 msgid "Dedicated Synaptic Link Data Analysis Mk2"
-msgstr "Analisa Data Tautan Sinapsis Terdedikasi Mk2"
+msgstr "Analisis Data Tautan Sinapsis Terdedikasi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade06.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade06.name
 #: po/custom/fromJson.txt:1716
 msgid "Dedicated Synaptic Link Data Analysis Mk3"
-msgstr "Analisa Data Tautan Sinapsis Terdedikasi Mk3"
+msgstr "Analisis Data Tautan Sinapsis Terdedikasi Mk3"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[3]
@@ -8100,7 +8100,7 @@ msgstr "Peluru Senapan Mesin Uranium Terdeplesi"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1780
 msgid "Designed with a focus on research"
-msgstr "Didesain dengan fokus pada penelitian"
+msgstr "Didesain dengan fokus pada riset"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8168,7 +8168,7 @@ msgstr "Menyerang struktur musuh secara elektronik"
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1830
 msgid "EMP Cannon Hardpoint"
-msgstr "Titik Keras Meriam EMP"
+msgstr "Titik Keras dengan Meriam EMP"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8222,28 +8222,28 @@ msgstr "Menyediakan perlindungan dari teknologi Nexus Link"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ASTRUC.text[3]
 #: po/custom/fromJson.txt:1860
 msgid "Enables self-repair in all base structures"
-msgstr "Menyediakan perbaikan otomatis pada seluruh bangunan markas"
+msgstr "Menyediakan perbaikan otomatis untuk semua bangunan markas"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_ACYB.text[3]
 #: po/custom/fromJson.txt:1864
 msgid "Enables self-repair in all Cyborgs"
-msgstr "Menyediakan perbaikan otomatis pada seluruh cyborg"
+msgstr "Menyediakan perbaikan otomatis untuk semua cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_ADEF.text[3]
 #: po/custom/fromJson.txt:1868
 msgid "Enables self-repair in all defenses"
-msgstr "Menyediakan perbaikan otomatis pada seluruh pertahanan"
+msgstr "Menyediakan perbaikan otomatis untuk semua struktur pertahanan"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
 #. data/mp/messages/resmessages3.json: $.RES_SY_AVEH.text[3]
 #: po/custom/fromJson.txt:1872
 msgid "Enables self-repair in all vehicles"
-msgstr "Menyediakan perbaikan otomatis pada seluruh kendaraan"
+msgstr "Menyediakan perbaikan otomatis untuk semua kendaraan"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_AR.text[3]
@@ -8464,21 +8464,21 @@ msgstr "Pelempar api menembakkan gel Propilen Oksida"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF02.name
 #: po/custom/fromJson.txt:2012
 msgid "Flamer Autoloader Mk2"
-msgstr "Pengisi Otomatis Pelempar Api Mk2"
+msgstr "Pengisi Otomatis Penyembur Api Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF03.name
 #: po/custom/fromJson.txt:2016
 msgid "Flamer Autoloader Mk3"
-msgstr "Pengisi Otomatis Pelempar Api Mk3"
+msgstr "Pengisi Otomatis Penyembur Api Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-ROF01.name
 #: po/custom/fromJson.txt:2020
 msgid "Flamer Autoloader"
-msgstr "Pengisi Otomatis Pelempar Api"
+msgstr "Pengisi Otomatis Penyembur Api"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox05.name
@@ -8487,7 +8487,7 @@ msgstr "Pengisi Otomatis Pelempar Api"
 #. data/mp/stats/structure.json: $.PillBox5.name
 #: po/custom/fromJson.txt:2026
 msgid "Flamer Bunker"
-msgstr "Bunker Pelempar Api"
+msgstr "Bunker Penyembur Api"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraFlameTracks.name
@@ -8504,14 +8504,14 @@ msgstr "Flamer Cobra Tracks"
 #: po/custom/fromJson.txt:2043
 #, no-c-format
 msgid "Flamer damage +25%"
-msgstr "Daya rusak pelempar api +25%"
+msgstr "Daya rusak penyembur api +25%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:2055
 #, no-c-format
 msgid "Flamer reload time -15%"
-msgstr "Waktu isi pelempar api -15%"
+msgstr "Waktu isi penyembur api -15%"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
@@ -8533,7 +8533,7 @@ msgstr "Flamer Viper Wheels"
 #. data/mp/stats/weapons.json: $.Flame1Mk1.name
 #: po/custom/fromJson.txt:2074
 msgid "Flamer"
-msgstr "Pelempar api"
+msgstr "Penyembur Api"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Laser1.name
@@ -8549,7 +8549,7 @@ msgstr "Cyborg Penembak Laser \"Flashlight\""
 #. data/base/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:2090
 msgid "Flashlight Hardpoint"
-msgstr "Titik Keras Laser \"Flashlight\""
+msgstr "Titik keras dengan Laser \"Flashlight\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
@@ -8591,7 +8591,7 @@ msgstr "Mesin Injeksi Bensin"
 #. data/base/campaigns/gamma.json: $.name
 #: po/custom/fromJson.txt:2114
 msgid "Gamma Campaign"
-msgstr "Campaign Gamma"
+msgstr "Kampanye Gamma"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.player_3.name
@@ -8664,7 +8664,7 @@ msgstr "Emplasemen Meriam Gauss"
 #. data/mp/stats/structure.json: $.WallTower-Rail3.name
 #: po/custom/fromJson.txt:2157
 msgid "Gauss Cannon Hardpoint"
-msgstr "Titik Keras Meriam Gauss"
+msgstr "Titik Keras dengan Meriam Gauss"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
@@ -8772,7 +8772,7 @@ msgstr "Basis medium tank dan kendaraan pendukung yang baik"
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[2]
 #: po/custom/fromJson.txt:2216
 msgid "Good scout vehicle"
-msgstr "Kendaraan penyelidik yang bagus"
+msgstr "Kendaraan pengintai yang bagus"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
@@ -8903,31 +8903,31 @@ msgstr "Menara Sensor yang Diperkuat"
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
 #: po/custom/fromJson.txt:2305
 msgid "Hardpoint Avenger SAM Site Available"
-msgstr "Titik Keras Rudal \"Avenger\" Tersedia"
+msgstr "Titik Keras dengan Rudal \"Avenger\" Tersedia"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[0]
 #: po/custom/fromJson.txt:2308
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Titik Keras Senapan Anti-Pesawat \"Cyclone\" Tersedia"
+msgstr "Titik Keras dengan Senapan Anti-Pesawat \"Cyclone\" Tersedia"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
 #: po/custom/fromJson.txt:2311
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Titik Keras Senapan Serbu Ganda Tersedia"
+msgstr "Titik Keras dengan Senapan Mesin Serbu Ganda Tersedia"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text[0]
 #: po/custom/fromJson.txt:2314
 msgid "Hardpoint Vindicator SAM Site Available"
-msgstr "Titik Keras Rudal \"Vindicator\" Tersedia"
+msgstr "Titik Keras dengan Rudal \"Vindicator\" Tersedia"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[0]
 #: po/custom/fromJson.txt:2317
 msgid "Hardpoint Whirlwind AA Gun Available"
-msgstr "Titik Keras Senapan Anti-Pesawat \"Whirlwind\" Tersedia"
+msgstr "Titik Keras dengan Senapan Anti-Pesawat \"Whirlwind\" Tersedia"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb-Damage01.name
@@ -9210,7 +9210,7 @@ msgstr "Meriam berat menembakkan peluru 120mm"
 #. data/mp/stats/structure.json: $.WallTower04.name
 #: po/custom/fromJson.txt:2486
 msgid "Heavy Cannon Hardpoint"
-msgstr "Titik Keras Meriam Berat"
+msgstr "Titik Keras dengan Meriam Berat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
@@ -9259,7 +9259,7 @@ msgstr "Meriam Berat"
 #. data/mp/stats/research.json: $.R-Wpn-Flame2.name
 #: po/custom/fromJson.txt:2518
 msgid "Heavy Flamer - Inferno"
-msgstr "Pelempar Api Berat - Inferno"
+msgstr "Penyembur Api Berat - Inferno"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgCannon.name
@@ -9336,7 +9336,7 @@ msgstr "Heavy Machinegun Cobra Wheels"
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2580
 msgid "Heavy Machinegun Hardpoint"
-msgstr "Titik Keras Senapan Mesin Berat"
+msgstr "Titik Keras dengan Senapan Mesin Berat"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -9585,21 +9585,21 @@ msgstr "Menggunakan banyak daya dan lambat untuk diproduksi"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage02.name
 #: po/custom/fromJson.txt:2767
 msgid "High Temperature Flamer Gel Mk2"
-msgstr "Gel Pelempar Api Temperatur Tinggi Mk2"
+msgstr "Gel Penyembur Api Temperatur Tinggi Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage03.name
 #: po/custom/fromJson.txt:2771
 msgid "High Temperature Flamer Gel Mk3"
-msgstr "Gel Pelempar Api Temperatur Tinggi Mk3"
+msgstr "Gel Penyembur Api Temperatur Tinggi Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage01.name
 #: po/custom/fromJson.txt:2775
 msgid "High Temperature Flamer Gel"
-msgstr "Gel Pelempar Api Temperatur Tinggi"
+msgstr "Gel Penyembur Api Temperatur Tinggi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_DF_WU7.text[1]
@@ -9719,7 +9719,7 @@ msgstr "Emplasemen Meriam Velositas Hiper"
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2863
 msgid "HPV Cannon Hardpoint"
-msgstr "Titik Keras Meriam Velositas Tinggi"
+msgstr "Titik Keras dengan Meriam Velositas Hiper"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
@@ -9791,7 +9791,7 @@ msgstr "Emplasemen Meriam Velositas Hiper"
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2905
 msgid "Hyper Velocity Cannon Hardpoint"
-msgstr "Titik Keras Meriam Velositas Hiper"
+msgstr "Titik Keras dengan Meriam Velositas Hiper"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
@@ -10087,7 +10087,7 @@ msgstr "Meningkatkan kecepatan kontruksi"
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 #: po/custom/fromJson.txt:3141
 msgid "Increases Flamer ROF"
-msgstr "Meningkatkan kecepatan tembak pelempar api"
+msgstr "Meningkatkan rata-rata tembak penyembur api"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[2]
@@ -10211,7 +10211,7 @@ msgstr "Armor dan Body Point/HP lebih rendah dari Viper"
 #. data/mp/stats/structure.json: $.Tower-Projector.name
 #: po/custom/fromJson.txt:3280
 msgid "Inferno Bunker"
-msgstr "Bunker Pelempar Api \"Inferno\""
+msgstr "Bunker Penyembur Api \"Inferno\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHTracks.name
@@ -10230,14 +10230,14 @@ msgstr "Inferno Cobra Hover"
 #. data/base/stats/structure.json: $.Tower-Projector.name
 #: po/custom/fromJson.txt:3290
 msgid "Inferno Emplacement"
-msgstr "Emplasemen Pelempar Api \"Inferno\""
+msgstr "Emplasemen Penyembur Api \"Inferno\""
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.WallTower-Projector.name
 #. data/mp/stats/structure.json: $.WallTower-Projector.name
 #: po/custom/fromJson.txt:3294
 msgid "Inferno Hardpoint"
-msgstr "Titik Keras Pelempar Api \"Inferno\""
+msgstr "Titik Keras dengan Pelempar Api \"Inferno\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
@@ -10373,7 +10373,7 @@ msgstr "Lancer Cobra Tracks"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:3376
 msgid "Lancer Cyborg"
-msgstr "Cyborg Penembak Roket \"Lancer\""
+msgstr "Cyborg Peluncur Roket \"Lancer\""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower06.name
@@ -10382,7 +10382,7 @@ msgstr "Cyborg Penembak Roket \"Lancer\""
 #. data/mp/stats/structure.json: $.WallTower06.name
 #: po/custom/fromJson.txt:3382
 msgid "Lancer Hardpoint"
-msgstr "Titik Keras Roket \"Lancer\""
+msgstr "Titik Keras dengan Roket \"Lancer\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -10592,7 +10592,7 @@ msgstr "Meriam ringan menembakkan peluru 40mm"
 #. data/mp/stats/structure.json: $.WallTower02.name
 #: po/custom/fromJson.txt:3513
 msgid "Light Cannon Hardpoint"
-msgstr "Titik Keras Meriam Ringan"
+msgstr "Titik Keras dengan Meriam Ringan"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
@@ -10833,7 +10833,7 @@ msgstr "Meriam sedang menembakkan peluru 76mm"
 #. data/mp/stats/structure.json: $.WallTower03.name
 #: po/custom/fromJson.txt:3691
 msgid "Medium Cannon Hardpoint"
-msgstr "Titik Keras Meriam Sedang"
+msgstr "Titik Keras dengan Meriam Sedang"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-MC.name
@@ -11174,7 +11174,7 @@ msgstr "Badan Turet Ganda - Dragon"
 #. data/mp/messages/resmessages23.json: $.RES_W_MG4.text[1]
 #: po/custom/fromJson.txt:3906
 msgid "Multi-barrel, rapid-fire machinegun"
-msgstr "Senapan mesin laras banyak dengan rata-rata tembak tinggi"
+msgstr "Senapan mesin multilaras dengan rata-rata tembak tinggi"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Nanolab.name
@@ -11511,7 +11511,7 @@ msgstr "Badan Berat NEXUS"
 #. data/mp/messages/resmessages3.json: $.RES_SY_RESU1.text[1]
 #: po/custom/fromJson.txt:4196
 msgid "NEXUS Intruder Program analyzed"
-msgstr "Program Penyusup NEXUS teranalisa"
+msgstr "Program Penyusup NEXUS teranalisis"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance.name
@@ -11668,7 +11668,7 @@ msgstr "Memerintahkan unit artileri yang ditugaskan untuk menembak ke arah bater
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4295
 msgid "Original Campaign"
-msgstr "Campaign Original"
+msgstr "Kampanye Original"
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
@@ -11690,7 +11690,7 @@ msgstr "Panther"
 #. data/mp/stats/structure.json: $.Emplacement-RotMor.name
 #: po/custom/fromJson.txt:4308
 msgid "Pepperpot Pit"
-msgstr "Parit dengan Mortir Otomatis \"Pepperpot\""
+msgstr "Parit dengan Mortir \"Pepperpot\""
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
@@ -11784,14 +11784,14 @@ msgstr "Pelempar Api Plasmit"
 #. data/mp/stats/structure.json: $.Plasmite-flamer-bunker.name
 #: po/custom/fromJson.txt:4360
 msgid "Plasmite Flamer Bunker"
-msgstr "Bunker Pelempar Api Plasmit"
+msgstr "Bunker Penyembur Api Plasmit"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Plasmite-Flamer.name
 #. data/mp/stats/weapons.json: $.PlasmiteFlamer.name
 #: po/custom/fromJson.txt:4364
 msgid "Plasmite Flamer"
-msgstr "Pelempar Api Plasmit"
+msgstr "Penyembur Api Plasmit"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-Plasmite.name
@@ -11905,21 +11905,21 @@ msgstr "Memproduksi Cyborg"
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 #: po/custom/fromJson.txt:4437
 msgid "Project Heavy Body"
-msgstr "Badan Berat Projek"
+msgstr "Badan Berat Proyek"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[0]
 #: po/custom/fromJson.txt:4441
 msgid "Project Light Body"
-msgstr "Badan Ringan Projek"
+msgstr "Badan Ringan Proyek"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[0]
 #: po/custom/fromJson.txt:4445
 msgid "Project Medium Body"
-msgstr "Badan Sedang Projek"
+msgstr "Badan Sedang Proyek"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[1]
@@ -11947,7 +11947,7 @@ msgstr "Emplasemen Laser Pulsa"
 #. data/mp/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:4466
 msgid "Pulse Laser Hardpoint"
-msgstr "Titik Keras Laser Pulsa"
+msgstr "Titik Keras dengan Laser Pulsa"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
@@ -12087,7 +12087,7 @@ msgstr "Senapan rel menembak panah anti-armor"
 #. data/mp/stats/structure.json: $.WallTower-Rail2.name
 #: po/custom/fromJson.txt:4552
 msgid "Rail Gun Hardpoint"
-msgstr "Titik Keras Senapan Rel"
+msgstr "Titik Keras dengan Senapan Rel"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
@@ -12601,7 +12601,7 @@ msgstr "Roket mengikuti designator laser ke arah target"
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
 #: po/custom/fromJson.txt:4909
 msgid "Rotary Howitzer - Hellstorm"
-msgstr "Howitzer Laras Banyak - Hellstorm"
+msgstr "Howitzer Multilaras Putar - Hellstorm"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-RotMG.name
@@ -12615,7 +12615,7 @@ msgstr "Bunker Senapan Serbu"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar3.name
 #: po/custom/fromJson.txt:4917
 msgid "Rotary Mortar - Pepperpot"
-msgstr "Mortir Laras Banyak - Pepperpot"
+msgstr "Mortir Multilaras Putar - Pepperpot"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Rotarywepslab.name
@@ -12734,7 +12734,7 @@ msgstr "Scorpion"
 #. data/mp/stats/templates.json: $.MP-Cyb-ATmiss-GRD.name
 #: po/custom/fromJson.txt:4989
 msgid "Scourge Cyborg"
-msgstr "Cyborg Penembak Rudal Scourge"
+msgstr "Cyborg Peluncur Rudal \"Scourge\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scourge-Mantis-H.name
@@ -12755,7 +12755,7 @@ msgstr "Scourge Mantis Tracks"
 #. data/mp/stats/structure.json: $.WallTower-Atmiss.name
 #: po/custom/fromJson.txt:5001
 msgid "Scourge Missile Hardpoint"
-msgstr "Titik Keras Rudal \"Scourge\""
+msgstr "Titik Keras dengan Rudal \"Scourge\""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-GuardTower-ATMiss.name
@@ -13172,21 +13172,21 @@ msgstr "Aloi Komposit Superpadat"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage05.name
 #: po/custom/fromJson.txt:5294
 msgid "Superhot Flamer Gel Mk2"
-msgstr "Gel Pelempar Api Superpanas Mk2"
+msgstr "Gel Penyembur Api Superpanas Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage06.name
 #: po/custom/fromJson.txt:5298
 msgid "Superhot Flamer Gel Mk3"
-msgstr "Gel Pelempar Api Superpanas Mk3"
+msgstr "Gel Penyembur Api Superpanas Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage04.name
 #: po/custom/fromJson.txt:5302
 msgid "Superhot Flamer Gel"
-msgstr "Gel Pelempar Api Superpanas"
+msgstr "Gel Penyembur Api Superpanas"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
@@ -13226,28 +13226,28 @@ msgstr "Tautan Sinapsis memampukan manusia untuk berintegrasi langsung dengan ko
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade02.name
 #: po/custom/fromJson.txt:5336
 msgid "Synaptic Link Data Analysis Mk2"
-msgstr "Analisa Data Tautan Sinapsis Mk2"
+msgstr "Analisis Data Tautan Sinapsis Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade03.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 #: po/custom/fromJson.txt:5340
 msgid "Synaptic Link Data Analysis Mk3"
-msgstr "Analisa Data Tautan Sinapsis Mk3"
+msgstr "Analisis Data Tautan Sinapsis Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #: po/custom/fromJson.txt:5344
 msgid "Synaptic Link Data Analysis"
-msgstr "Analisa Data Tautan Sinapsis"
+msgstr "Analisis Data Tautan Sinapsis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #: po/custom/fromJson.txt:5348
 msgid "Synaptic link data analysis"
-msgstr "Analisa Data Tautan Sinapsis"
+msgstr "Analisis Data Tautan Sinapsis"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -13295,7 +13295,7 @@ msgstr "Emplasemen Roket Pembunuh Tank"
 #. data/mp/stats/structure.json: $.WallTower-HvATrocket.name
 #: po/custom/fromJson.txt:5378
 msgid "Tank Killer Hardpoint"
-msgstr "Titik Keras Roket Pembunuh Tank"
+msgstr "Titik Keras dengan Roket Pembunuh Tank"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TK-Mantis-H.name
@@ -13335,7 +13335,7 @@ msgstr "Tank Killer Vengeance Tracks"
 #. data/mp/stats/weapons.json: $.Rocket-HvyA-T.name
 #: po/custom/fromJson.txt:5400
 msgid "Tank Killer"
-msgstr "Pembunuh Tank"
+msgstr "Roket Pembunuh Tank"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-TankTrap01.name
@@ -13476,7 +13476,7 @@ msgstr "Bom Termit"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5485
 msgid "Thermite Flamer Cyborg"
-msgstr "Cyborg Pelempar Api Termit"
+msgstr "Cyborg Penyembur Api Termit"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -13667,7 +13667,7 @@ msgstr "Meriam Serbu Ganda"
 #. data/mp/stats/structure.json: $.WallTower-TwinAssaultGun.name
 #: po/custom/fromJson.txt:5611
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Titik Keras Meriam Serbu Ganda"
+msgstr "Titik Keras dengan Senapan Mesin Serbu Ganda"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MG5.name
@@ -13733,7 +13733,7 @@ msgstr "Laser anti-pesawat laras ganda kelas medium"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGUN.text[1]
 #: po/custom/fromJson.txt:5650
 msgid "Twin Multi-barrel, rapid-fire machinegun"
-msgstr "Senapan mesin laras banyak ganda dengan rata-rata tembak tinggi"
+msgstr "Senapan mesin multilaras ganda dengan rata-rata tembak tinggi"
 
 #. TRANSLATORS:
 #. data/mp/challenges/two-faced.json: $.challenge.name
@@ -13794,7 +13794,7 @@ msgstr "Gunakan konsol komando untuk mengirim unit kembali untuk perbaikan"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[1]
 #: po/custom/fromJson.txt:5684
 msgid "Uses advanced cannon technology"
-msgstr "Menggunakan teknologi meriam canggih"
+msgstr "Menggunakan teknologi meriam tingkat lanjut"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text[1]
@@ -13939,7 +13939,7 @@ msgstr "Waktu pengisian ulang sangat lama"
 #. data/mp/stats/structure.json: $.WallTower-SamHvy.name
 #: po/custom/fromJson.txt:5792
 msgid "Vindicator Hardpoint"
-msgstr "Titik Keras Rudal \"Vindicator\""
+msgstr "Titik Keras dengan Rudal \"Vindicator\""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-SamSite2.name
@@ -14404,7 +14404,7 @@ msgstr "Turet Anti-Pesawat \"Whirlwind\""
 #. data/mp/stats/structure.json: $.WallTower-QuadRotAAGun.name
 #: po/custom/fromJson.txt:6090
 msgid "Whirlwind Hardpoint"
-msgstr "Titik Keras Turet Anti-Pesawat \"Whirlwind\""
+msgstr "Titik Keras dengan Turet Anti-Pesawat \"Whirlwind\""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-WSTower.name
@@ -14545,7 +14545,7 @@ msgstr "File Peta / Mod Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:4
 msgid "Warzone 2100 Campaign Mod File"
-msgstr "File Mod Campaign Warzone 2100"
+msgstr "File Mod Kampanye Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
@@ -14591,20 +14591,20 @@ msgstr " dan "
 #: src/cheat.cpp:182
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr "%s ingin menyalakan mode debug. Nyalakan: %s, Matikan: %s."
+msgstr "%s ingin menyalakan modus debug. Nyalakan: %s, Matikan: %s."
 
 #: src/cheat.cpp:186
 #, c-format
 msgid "%s wants to disable debug mode. Enabled: %s, Disabled: %s."
-msgstr "%s ingin mematikan mode debug. Nyalakan: %s, Matikan: %s."
+msgstr "%s ingin mematikan modus debug. Nyalakan: %s, Matikan: %s."
 
 #: src/cheat.cpp:192
 msgid "Debug mode now enabled!"
-msgstr "Mode debug dinyalakan!"
+msgstr "Modus debug dinyalakan!"
 
 #: src/cheat.cpp:198
 msgid "Debug mode now disabled!"
-msgstr "Mode debug dimatikan!"
+msgstr "Modus debug dimatikan!"
 
 #. TRANSLATORS: Summary of commandline option syntax
 #: src/clparse.cpp:153
@@ -14646,15 +14646,15 @@ msgstr "file"
 
 #: src/clparse.cpp:340
 msgid "Flush all debug output written to stderr"
-msgstr ""
+msgstr "Pindahkan semua output debug yang tertulis ke standard error"
 
 #: src/clparse.cpp:341
 msgid "Play in fullscreen mode"
-msgstr "Tampilan mode layar penuh"
+msgstr "Modus tampilan layar penuh"
 
 #: src/clparse.cpp:342
 msgid "Load a specific game mode"
-msgstr "Muat mode permainan spesifik"
+msgstr "Muat modus permainan spesifik"
 
 #: src/clparse.cpp:342
 msgid "level name"
@@ -14676,15 +14676,15 @@ msgstr "mod"
 
 #: src/clparse.cpp:345
 msgid "Enable a campaign only mod"
-msgstr "Nyalakan mod khusus campaign"
+msgstr "Nyalakan mod khusus modus kampanye"
 
 #: src/clparse.cpp:346
 msgid "Enable a multiplay only mod"
-msgstr "Nyalakan mod khusus mode multipemain"
+msgstr "Nyalakan mod khusus modus multipemain"
 
 #: src/clparse.cpp:347
 msgid "Disable asserts"
-msgstr ""
+msgstr "Matikan asersi"
 
 #: src/clparse.cpp:348
 msgid "Causes a crash to test the crash handler"
@@ -14705,7 +14705,7 @@ msgstr "Muat permainan kampanye yang tersimpan"
 
 #: src/clparse.cpp:351
 msgid "Play in windowed mode"
-msgstr "Tampilan mode jendela"
+msgstr "Modus tampilan jendela"
 
 #: src/clparse.cpp:352
 msgid "Show version information and exit"
@@ -14809,11 +14809,11 @@ msgstr "Peroleh penilaian dari url server yang diberikan (mengandung \"{HASH}\")
 
 #: src/clparse.cpp:384
 msgid "autorating"
-msgstr ""
+msgstr "penilaian otomatis"
 
 #: src/clparse.cpp:386
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Pasang atau buat jendela konsol dan tampilkan output konsol (Hanya untuk Windows)"
 
 #: src/clparse.cpp:388
 msgid "Set game server port"
@@ -15018,7 +15018,7 @@ msgstr "Tidak tersinkron"
 #: src/display3d.cpp:2017
 #, c-format
 msgid "Setting zoom to %.0f"
-msgstr "Menyetel zoom ke %.0f"
+msgstr "Menyetel perbesaran ke %.0f"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
 #: src/droid.cpp:241
@@ -15132,7 +15132,7 @@ msgstr "Donasi: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:174
 msgid "Help support the project with our server costs, Click this link."
-msgstr "Bantulah kami membayar biaya server kami untuk mendukung projek kami. Klik link disini."
+msgstr "Bantulah kami membayar biaya server kami untuk mendukung proyek kami. Klik link disini."
 
 #: src/frontend.cpp:175
 msgid "Chat with players on Discord or IRC"
@@ -15172,7 +15172,7 @@ msgstr "Kembali"
 
 #: src/frontend.cpp:333
 msgid "New Campaign"
-msgstr "Campaign Baru"
+msgstr "Kampanye Baru"
 
 #: src/frontend.cpp:334
 msgid "Start Skirmish Game"
@@ -15250,7 +15250,7 @@ msgstr "Opsi Video"
 
 #: src/frontend.cpp:638
 msgid "Audio / Zoom Options"
-msgstr "Opsi Audio / Zoom"
+msgstr "Opsi Audio / Perbesaran"
 
 #: src/frontend.cpp:639
 #: src/ingameop.cpp:496
@@ -15437,15 +15437,15 @@ msgstr "HRTF tidak didukung di perangkat / sistem / perpustakaan OpenAL Anda"
 
 #: src/frontend.cpp:966
 msgid "Map Zoom"
-msgstr ""
+msgstr "Perbesaran Peta"
 
 #: src/frontend.cpp:970
 msgid "Map Zoom Rate"
-msgstr ""
+msgstr "Kecepatan Perbesaran Peta"
 
 #: src/frontend.cpp:974
 msgid "Radar Zoom"
-msgstr "Zoom Radar"
+msgstr "Perbesaran Radar"
 
 #. TRANSLATORS: "AUDIO" options determine the volume of game sounds.
 #. "OPTIONS" means "SETTINGS".
@@ -15453,12 +15453,12 @@ msgstr "Zoom Radar"
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:985
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "OPSI AUDIO / ZOOM"
+msgstr "OPSI AUDIO / PERBESARAN"
 
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr "Dalam mode layar penuh desktop, resolusi menyesuaikan dengan desktop\n"
+msgstr "Dalam modus desktop penuh, resolusi menyesuaikan dengan desktop\n"
 "(atau yang dibolehkan manajer jendela)."
 
 #: src/frontend.cpp:1093
@@ -15467,15 +15467,15 @@ msgstr "Anda dapat mengubah resolusi dengan mengatur ukuran jendela secara manua
 
 #: src/frontend.cpp:1123
 msgid "Desktop Full"
-msgstr ""
+msgstr "Desktop Penuh"
 
 #: src/frontend.cpp:1125
 msgid "Windowed"
-msgstr "Mode jendela"
+msgstr "Modus jendela"
 
 #: src/frontend.cpp:1146
 msgid "Graphics Mode"
-msgstr "Mode Grafik"
+msgstr "Modus Grafik"
 
 #: src/frontend.cpp:1151
 msgid "Resolution"
@@ -15504,7 +15504,7 @@ msgstr "Sinkronisasi Vertikal/Vsync"
 
 #: src/frontend.cpp:1422
 msgid "Antialiasing*"
-msgstr ""
+msgstr "Antialiasing*"
 
 #: src/frontend.cpp:1429
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
@@ -15512,7 +15512,7 @@ msgstr "Peringatan: Antialiasing dapat menyebabkan crash, terutama jika nilai ya
 
 #: src/frontend.cpp:1441
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Back-end Grafis*"
 
 #: src/frontend.cpp:1445
 msgid "VIDEO OPTIONS"
@@ -15520,13 +15520,13 @@ msgstr "OPSI VIDEO"
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
-msgstr "Warzone gagal mengganti mode tampilan"
+msgstr "Warzone gagal mengganti modus tampilan"
 
 #: src/frontend.cpp:1488
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr "Warzone gagal mengganti mode tampilan\n"
-"Sistem / Driver Anda mungkin tidak mendukung mode lain."
+msgstr "Warzone gagal mengganti modus tampilan\n"
+"Sistem / Driver Anda mungkin tidak mendukung modus lain."
 
 #: src/frontend.cpp:1514
 msgid "Unable to change Vertical Sync"
@@ -15536,7 +15536,7 @@ msgstr "Tidak dapat mengganti Sinkronisasi Vertikal / Vsync"
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Warzone gagal mengganti Sinkronisasi Vertikal / Vsync.\n"
-"Sistem / Driver Anda mungkin tidak mendukung mode lain."
+"Sistem / Driver Anda mungkin tidak mendukung modus lain."
 
 #: src/frontend.cpp:1680
 msgid "Middle Mouse"
@@ -15548,7 +15548,7 @@ msgstr "Tetikus Kanan"
 
 #: src/frontend.cpp:1692
 msgid "Map/Radar Zoom"
-msgstr "Zoom Radar/Peta"
+msgstr "Perbesaran Radar/Peta"
 
 #: src/frontend.cpp:1693
 msgid "Game Speed"
@@ -15556,7 +15556,7 @@ msgstr "Kecepatan Permainan"
 
 #: src/frontend.cpp:1694
 msgid "Camera Pitch"
-msgstr ""
+msgstr "Kemiringan Kamera"
 
 #: src/frontend.cpp:1709
 #: src/ingameop.cpp:740
@@ -15746,7 +15746,7 @@ msgstr "Progres Konstruksi"
 #: src/hci/build.cpp:590
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr "Menampilkan Seluruh Teknologi\n"
+msgstr "Menampilkan Semua Teknologi\n"
 "Klik kanan untuk menambahkan ke Favorit"
 
 #: src/hci/build.cpp:592
@@ -16060,7 +16060,7 @@ msgstr "Perbaruan Status Riset"
 
 #: src/intelmap.cpp:330
 msgid "Project Goals"
-msgstr "Tujuan Projek"
+msgstr "Tujuan Proyek"
 
 #: src/intelmap.cpp:333
 msgid "Current Objective"
@@ -16098,7 +16098,7 @@ msgstr "Mundur Saat Kerusakan Berat"
 #: src/intorder.cpp:171
 #: src/keymap.cpp:529
 msgid "Do or Die!"
-msgstr ""
+msgstr "Dilarang Mundur!"
 
 #: src/intorder.cpp:172
 msgid "Fire-At-Will"
@@ -16307,15 +16307,15 @@ msgstr "Kabut mati"
 #: src/keybind.cpp:892
 #, c-format
 msgid "Setting radar zoom to %u"
-msgstr "Menyetel zoom radar ke %u"
+msgstr "Menyetel perbesaran radar ke %u"
 
 #: src/keybind.cpp:1265
 msgid "God Mode ON"
-msgstr "Mode Dewa AKTIF"
+msgstr "Modus Dewa AKTIF"
 
 #: src/keybind.cpp:1265
 msgid "God Mode OFF"
-msgstr "Mode Dewa NONAKTIF"
+msgstr "Modus Dewa NONAKTIF"
 
 #: src/keybind.cpp:1277
 msgid "View Aligned to North"
@@ -16324,7 +16324,7 @@ msgstr "Tampilan Diselaraskan ke Arah Utara"
 #: src/keybind.cpp:1301
 #, c-format
 msgid "Trap cursor %s"
-msgstr ""
+msgstr "Kursor jebak %s"
 
 #: src/keybind.cpp:1345
 msgid "CAMPAIGN"
@@ -16377,7 +16377,7 @@ msgstr "(Pemain %u) sedang menggunakan cheat :%s %s"
 
 #: src/keybind.cpp:1509
 msgid "Researched"
-msgstr ""
+msgstr "Teriset"
 
 #: src/keybind.cpp:1530
 msgid "Only displaying energy bars when selected"
@@ -16461,12 +16461,12 @@ msgstr "Layar bergetar saat sesuatu mati: Aktif"
 
 #: src/keybind.cpp:2590
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Maaf, namun kecepatan permainan tidak dapat diubah dalam mode multipemain."
+msgstr "Maaf, namun kecepatan permainan tidak dapat diubah dalam modus multipemain."
 
 #: src/keybind.cpp:2625
 #: src/keybind.cpp:2679
 msgid "Game Speed Reset"
-msgstr "Kecepatan Permainan Direset"
+msgstr "Kecepatan Permainan Diatur Ulang"
 
 #: src/keybind.cpp:2629
 #, c-format
@@ -16773,23 +16773,23 @@ msgstr "Tampilkan Opsi Dalam Permainan"
 
 #: src/keymap.cpp:471
 msgid "Zoom Radar Out"
-msgstr "Perkecil Zoom Radar"
+msgstr "Perkecil Radar"
 
 #: src/keymap.cpp:472
 msgid "Zoom Radar In"
-msgstr "Perbesar Zoom Radar"
+msgstr "Perbesar Radar"
 
 #: src/keymap.cpp:473
 msgid "Zoom In"
-msgstr "Zoom In"
+msgstr "Memperbesar"
 
 #: src/keymap.cpp:474
 msgid "Zoom Out"
-msgstr "Perkecil Zoom"
+msgstr "Memperkecil"
 
 #: src/keymap.cpp:475
 msgid "Pitch Forward"
-msgstr ""
+msgstr "Miring Ke Depan"
 
 #: src/keymap.cpp:476
 msgid "Rotate Left"
@@ -16797,7 +16797,7 @@ msgstr "Putar ke Kiri"
 
 #: src/keymap.cpp:477
 msgid "Reset Pitch"
-msgstr ""
+msgstr "Atur Ulang Kemiringan"
 
 #: src/keymap.cpp:478
 msgid "Rotate Right"
@@ -16805,7 +16805,7 @@ msgstr "Putar ke Kanan"
 
 #: src/keymap.cpp:479
 msgid "Pitch Back"
-msgstr ""
+msgstr "Miring Ke Belakang"
 
 #: src/keymap.cpp:480
 msgid "Orders Menu"
@@ -16917,7 +16917,7 @@ msgstr "Atur Nyala/Mati Bayangan"
 
 #: src/keymap.cpp:521
 msgid "Trap cursor"
-msgstr ""
+msgstr "Kursor jebak"
 
 #: src/keymap.cpp:522
 msgid "Toggle radar terrain"
@@ -17089,11 +17089,11 @@ msgstr "Munculkan cuaca"
 
 #: src/keymap.cpp:581
 msgid "Flip terrain triangle"
-msgstr ""
+msgstr "Balik segitiga medan"
 
 #: src/keymap.cpp:582
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "Buat sampel pengukuran performa"
 
 #: src/keymap.cpp:585
 msgid "Make all items available"
@@ -17105,7 +17105,7 @@ msgstr "Hancurkan Unit yang Dipilih"
 
 #: src/keymap.cpp:587
 msgid "Toggle god Mode Status"
-msgstr "Atur Nyala/Mati Status Mode Dewa"
+msgstr "Atur Nyala/Mati Status Modus Dewa"
 
 #: src/keymap.cpp:588
 msgid "Display Options Screen"
@@ -17113,7 +17113,7 @@ msgstr "Tampilkan Layar Opsi"
 
 #: src/keymap.cpp:589
 msgid "Complete current research"
-msgstr ""
+msgstr "Selesaikan riset yang sedang berjalan"
 
 #: src/keymap.cpp:590
 msgid "Reveal map at mouse position"
@@ -17121,19 +17121,19 @@ msgstr "Tampilkan peta di posisi tetikus"
 
 #: src/keymap.cpp:591
 msgid "Trace a game object"
-msgstr ""
+msgstr "Susur jejak sebuah objek permainan"
 
 #: src/loadsave.cpp:331
 msgid "Parent directory"
-msgstr ""
+msgstr "Direktori induk"
 
 #: src/loadsave.cpp:336
 msgid "Autosave directory"
-msgstr ""
+msgstr "Direktori penyimpanan otomatis"
 
 #: src/loadsave.cpp:336
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "Direktori penyimpanan otomatis (tidak diperbolehkan untuk penyimpanan)"
 
 #: src/loadsave.cpp:540
 msgid "cheated"
@@ -17503,7 +17503,7 @@ msgstr "Klik untuk mengganti posisi pemain"
 
 #: src/multiint.cpp:2693
 msgid "Click to change AI, right click to distribute choice"
-msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan ke seluruh slot"
+msgstr "Klik untuk mengganti kecerdasan buatan, klik kanan untuk mengaplikasikan ke semua slot"
 
 #: src/multiint.cpp:2708
 msgid "Player ID: "
@@ -17560,7 +17560,7 @@ msgstr "Tidak ada sambungan ke penyelenggara."
 
 #: src/multiint.cpp:4419
 msgid "Cannot change to a map with too few slots for all players."
-msgstr "Tidak dapat mengganti ke peta dengan tidak cukup ruang untuk seluruh pemain."
+msgstr "Tidak dapat mengganti ke peta dengan tidak cukup ruang untuk semua pemain."
 
 #: src/multiint.cpp:4424
 msgid "Cannot change to a map with fewer slots."
@@ -17918,7 +17918,7 @@ msgstr "Kita tidak dapat melakukan itu! Kami harus berupa Cyborg untuk menggunak
 #: src/research.cpp:659
 #, c-format
 msgid "Research completed: %s"
-msgstr "Penelitian selesai: %s"
+msgstr "Riset selesai: %s"
 
 #: src/research.cpp:1149
 msgid "Research Award"
