@@ -440,8 +440,7 @@ private:
 	void updateProductionRunSizeLabel(STRUCTURE *structure, DROID_TEMPLATE *droidTemplate)
 	{
 		auto production = getProduction(structure, droidTemplate);
-		auto factory = getFactoryOrNullptr(structure);
-		if (factory && factory->psSubject && StructureIsManufacturingPending(structure) && production.isValid())
+		if (production.isValid())
 		{
 			auto productionLoops = getProductionLoops(structure);
 			auto labelText = astringf(productionLoops > 0 ? "%d/%d" : "%d", production.numRemaining(), production.quantity);
