@@ -15658,38 +15658,38 @@ msgstr "Мод: "
 
 #: src/frontend.cpp:2471
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Увеличить масштаб элементов на экране?"
 
 #: src/frontend.cpp:2473
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "При текущих настройках разрешения и масштаба дисплея, пользовательский интерфейс игры может казаться маленьким, а перспектива игры - искаженной."
 
 #: src/frontend.cpp:2475
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Вы можете исправить это увеличив масштаб элементов на экране."
 
 #: src/frontend.cpp:2477
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Жалаете ли Вы сейчас увеличить масштаб элементов экрана до %u%%?"
 
 #: src/frontend.cpp:2479
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Увеличить машстаб"
 
 #: src/frontend.cpp:2496
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Масштаб экрана увеличен до %u%%"
 
 #: src/frontend.cpp:2497
 #: src/frontend.cpp:2513
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Вы можете настроить масштаб отображения в любое время в меню Параметров видео."
 
 #: src/frontend.cpp:2512
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Совет: Настройте масштаб экрана"
 
 #: src/hci.cpp:929
 #: src/loop.cpp:244
