@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-29 23:23\n"
+"PO-Revision-Date: 2021-03-30 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Tatar\n"
 "Language: tt_RU\n"
@@ -7264,7 +7264,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body4ABT.name
 #: po/custom/fromJson.txt:1232
 msgid "Bug"
-msgstr ""
+msgstr "Хата"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianBuggy.name
@@ -15282,11 +15282,11 @@ msgstr ""
 
 #: src/frontend.cpp:712
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:713
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:714
 #: src/frontend.cpp:1127
@@ -15315,7 +15315,7 @@ msgstr ""
 
 #: src/frontend.cpp:724
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:725
 #: src/multiplay.cpp:1672
@@ -18280,7 +18280,7 @@ msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:182
 msgid "IP Address or Machine Name"
