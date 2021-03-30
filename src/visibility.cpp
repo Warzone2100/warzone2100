@@ -367,9 +367,13 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 			MAPTILE *psTile = mapTile(tile);
 			if (TileHasWall(psTile) && !TileHasSmallStructure(psTile))
 			{
-				help->lastHeight = 2 * UBYTE_MAX * ELEVATION_SCALE;
-				help->wall = pos.xy();
-				help->numWalls++;
+				STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
+				if (psStruct->pStructureType->type != REF_GATE || psStruct->state != SAS_OPEN)
+				{
+					help->lastHeight = 2 * UBYTE_MAX * ELEVATION_SCALE;
+					help->wall = pos.xy();
+					help->numWalls++;
+				}
 			}
 		}
 	}

@@ -290,6 +290,7 @@ static inline bool TileHasWall(const MAPTILE *tile)
 {
 	return TileHasStructure(tile)
 	       && (((STRUCTURE *)tile->psObject)->pStructureType->type == REF_WALL
+	           || ((STRUCTURE *)tile->psObject)->pStructureType->type == REF_GATE
 	           || ((STRUCTURE *)tile->psObject)->pStructureType->type == REF_WALLCORNER);
 }
 
