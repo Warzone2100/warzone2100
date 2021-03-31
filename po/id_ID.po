@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-30 23:26\n"
+"PO-Revision-Date: 2021-03-31 11:23\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -232,7 +232,7 @@ msgstr "Tidak ada yang bisa dilaporkan."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr "Kami tidak menemukan artefak apapun, dan juga tidak menemukan musuh."
+msgstr "Kami tidak menemukan artefak dan juga tidak menemukan musuh."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
@@ -248,7 +248,7 @@ msgstr "OBJEKTIF UTAMA"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr "Struktur ini adalah tujuan utama Anda."
+msgstr "Struktur ini adalah objektif utama Anda."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -740,7 +740,7 @@ msgstr "MISI TRANSPORT: Membangun Pangkalan Depan"
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr "Komandan, kesuksesan sang Proyek ada di tangan Anda."
+msgstr "Komandan, kesuksesan Proyek ini ada di tangan Anda."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
@@ -828,7 +828,7 @@ msgstr "Komandan, kita telah mengalahkan NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr "Sayangnya, performa sistem kami telah terpengaruh oleh NEXUS. Kami sedang berusaha memperbaiki keadaan ini."
+msgstr "Sayangnya, performa sistem kami telah dipengaruhi oleh NEXUS. Kami sedang berusaha memperbaiki keadaan ini."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
@@ -884,7 +884,7 @@ msgstr "MISI TRANSPORT: Penyergapan Pasukan NEXUS"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr "Komandan, aksi anda yang tegas telah menghambat penyebaran NEXUS."
+msgstr "Komandan, aksi anda yang sigap telah menghambat penyebaran NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
@@ -952,7 +952,7 @@ msgstr "Mereka menyatakan bahwa mereka telah bebas dari NEXUS, dan menawarkan pa
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr "Pengunduhan koordinat markas dalam proses."
+msgstr "Pengunduhan koordinat pangkalan dalam proses."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
@@ -14961,7 +14961,7 @@ msgstr "Kecepatan Jalanan"
 #: src/design.cpp:1663
 #: src/design.cpp:1698
 msgid "Off-Road Speed"
-msgstr "Kecepatan Medan Sulit"
+msgstr "Kecepatan Medan Terjal"
 
 #: src/design.cpp:1671
 #: src/design.cpp:1706
