@@ -214,7 +214,7 @@ function research()
 
 		if (!found && getRealPower() > ((gameTime < 180000) ? MIN_POWER : (highOil ? -SUPER_LOW_POWER : SUPER_LOW_POWER)))
 		{
-			if (random(100) < ((highOil) ? 25 : 17))
+			if (random(100) < ((highOil) ? 30 : 20))
 			{
 				found = pursueResearch(lab, "R-Vehicle-Metals03");
 
@@ -231,7 +231,7 @@ function research()
 							found = evalResearch(lab, TANK_ARMOR);
 					}
 
-					if (!found && getResearch("R-Struc-Research-Upgrade03").done && (random(100) < (componentAvailable("Body8MBT") ? 40 : 20)))
+					if (!found && getResearch("R-Struc-Research-Upgrade03").done && (random(100) < (componentAvailable("Body8MBT") ? 45 : 30)))
 						found = evalResearch(lab, BODY_RESEARCH);
 				}
 			}

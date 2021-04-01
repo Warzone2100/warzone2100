@@ -76,6 +76,13 @@ function addDroidsToGroup(group, droids)
 	}
 }
 
+function nearbyStructureCount(location)
+{
+	return enumRange(location.x, location.y, 8, ALLIES, false).filter(function(obj) {
+		return obj.type === STRUCTURE;
+	}).length;
+}
+
 //Returns closest enemy object.
 function rangeStep(player)
 {
@@ -165,7 +172,7 @@ function getRealPower(player)
 	const POWER = playerPower(player) - queuedPower(player);
 	if (!currently_dead && playerAlliance(true).length > 0 && player === me && POWER < -300)
 	{
-		sendChatMessage("need Power", ALLIES);
+		sendChatMessage("need power", ALLIES);
 	}
 
 	return POWER;
