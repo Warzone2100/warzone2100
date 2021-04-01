@@ -662,7 +662,7 @@ function buildBaseStructures()
 	{
 		var haveAllies = (alliancesType === ALLIANCES_TEAMS) && (playerAlliance(true).length > 0);
 
-		if (getRealPower() < 550 && countAndBuild(structures.gen, 5))
+		if (getRealPower() < 550 && countAndBuild(structures.gen, 4))
 		{
 			return true; //a little fail-safe
 		}
@@ -690,11 +690,11 @@ function buildBaseStructures()
 		{
 			return true;
 		}
-		if (countAndBuild(structures.cyborgFactory, 3))
+		if (needPowerGenerator() && countAndBuild(structures.gen, 7))
 		{
 			return true;
 		}
-		if (needPowerGenerator() && countAndBuild(structures.gen, 7))
+		if (countAndBuild(structures.cyborgFactory, 3))
 		{
 			return true;
 		}

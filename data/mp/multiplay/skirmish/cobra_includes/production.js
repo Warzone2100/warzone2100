@@ -7,7 +7,17 @@ function havePrimaryOrArtilleryWeapon()
 	return (primary || artillery);
 }
 
-//Pick a random weapon line. May return undefined for machineguns.
+function earlyT1MachinegunChance()
+{
+	return ((getMultiTechLevel() === 1) && (gameTime < 900000) && (random(100) < 35));
+}
+
+function superLowOnProductionPower()
+{
+	return (getRealPower() < (PRODUCTION_POWER + 200));
+}
+
+//Pick a random weapon line.
 function chooseRandomWeapon()
 {
 	var weaps;
@@ -26,6 +36,11 @@ function chooseRandomWeapon()
 	if (!isDefined(weaps))
 	{
 		weaps = weaponStats.lasers;
+	}
+
+	if (!componentAvailable(weaps.weapons[0].stat))
+	{
+		weaps = subPersonalities[personality].primaryWeapon;
 	}
 
 	return weaps;
@@ -58,12 +73,12 @@ function chooseWeaponType(weaps)
 	return weaponType;
 }
 
-//Choose a random cyborg weapon line. May return undefined.
+//Choose a random cyborg weapon line.
 function chooseRandomCyborgWeapon()
 {
 	var weaps;
 
-	//grenadier cyborgs can only be built as long as Cobra does not Have
+	//grenadier cyborgs can only be built as long as Cobra does not have
 	//access to pepperpot. They are too weak after that.
 	switch (random(4))
 	{
@@ -74,10 +89,15 @@ function chooseRandomCyborgWeapon()
 		default: weaps = subPersonalities[personality].primaryWeapon; break;
 	}
 
+	if (!componentAvailable(weaps.templates[0].weapons))
+	{
+		weaps = subPersonalities[personality].primaryWeapon;
+	}
+
 	return weaps;
 }
 
-//Choose random VTOL weapon line. Defaults to bombs if undefined.
+//Choose random VTOL weapon line.
 function chooseRandomVTOLWeapon()
 {
 	var weaps;
@@ -105,6 +125,10 @@ function chooseRandomVTOLWeapon()
 	}
 
 	if (!isDefined(weaps) || (!isEMP && (weaps.vtols.length - 1 <= 0)))
+	{
+		weaps = weaponStats.bombs;
+	}
+	if (!componentAvailable(weaps.vtols[0].stat))
 	{
 		weaps = weaponStats.bombs;
 	}
@@ -201,7 +225,8 @@ function choosePersonalityWeapon(type)
 
 		// Maybe choose a machinegun.
 		if (!skip && ((!turnOffMG && (random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
-			!havePrimaryOrArtilleryWeapon()))
+			!havePrimaryOrArtilleryWeapon() ||
+			earlyT1MachinegunChance()))
 		{
 			weaponList = [];
 			var generalAntiCyborgWeapons = weaponStats.machineguns.weapons;
@@ -292,7 +317,7 @@ function pickPropulsion(weap)
 		"wheeled01", // wheels
 	];
 
-	if (random(100) < ((!(getRealPower() >= PRODUCTION_POWER + 200)) ? 85 : 66))
+	if (random(100) < ((superLowOnProductionPower()) ? 85 : 60))
 	{
 		tankProp.shift();
 	}
@@ -308,13 +333,13 @@ function pickTankBody()
 	var body;
 	var bodySwitchTime = 900000;
 
-	if (gameTime < bodySwitchTime && random(100) < 75)
+	if (gameTime < bodySwitchTime && random(100) < 80)
 	{
-		body = (random(100) < ((!(getRealPower() >= PRODUCTION_POWER + 200)) ? 60 : 30)) ? SYSTEM_BODY : VTOL_BODY;
+		body = (random(100) < ((superLowOnProductionPower()) ? 50 : 20)) ? SYSTEM_BODY : VTOL_BODY;
 	}
 	else
 	{
-		body = (random(100) < ((!(getRealPower() >= PRODUCTION_POWER + 200)) ? 57 : 37)) ? VTOL_BODY : TANK_BODY;
+		body = (random(100) < ((superLowOnProductionPower()) ? 45 : 30)) ? VTOL_BODY : TANK_BODY;
 	}
 
 	return body;
@@ -409,7 +434,8 @@ function buildCyborg(id, useEngineer)
 
 	//Choose MG instead if enemy has enough cyborgs.
 	if ((!turnOffMG && (random(100) < Math.floor(playerCyborgRatio(getMostHarmfulPlayer()) * 100))) ||
-		!havePrimaryOrArtilleryWeapon())
+		!havePrimaryOrArtilleryWeapon() ||
+		earlyT1MachinegunChance())
 	{
 		weaponLine = weaponStats.machineguns;
 	}
@@ -572,7 +598,8 @@ function produce()
 						(attackerCountsGood(false) ||
 						(gameTime < 240000 && highOilMap()) ||
 						!havePrimaryOrArtilleryWeapon() ||
-						getMultiTechLevel() > 1))
+						(getMultiTechLevel() > 1) ||
+						(gameTime > 240000 && random(100) < 25)))
 					{
 						buildSys(FC.id, "Spade1Mk1");
 					}

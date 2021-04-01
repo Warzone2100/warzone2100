@@ -671,16 +671,27 @@ function baseShuffleDefensePattern()
 
 	var area = cobraBaseArea();
 	var quad = [
-		{x1: area.x1, x2: area.x2, y1: area.y1, y2: area.y1 + 20,},
-		{x1: area.x1, x2: area.x2 + 20, y1: area.y1, y2: area.y2,},
-		{x1: area.x2 - 20, x2: area.x2, y1: area.y1, y2: area.y2,},
-		{x1: area.x1, x2: area.x2, y1: area.y2 - 20, y2: area.y2,},
+		{x1: area.x1, x2: area.x2, y1: area.y1, y2: area.y1 + 10,},
+		{x1: area.x1, x2: area.x2 + 10, y1: area.y1, y2: area.y2,},
+		{x1: area.x2 - 10, x2: area.x2, y1: area.y1, y2: area.y2,},
+		{x1: area.x1, x2: area.x2, y1: area.y2 - 10, y2: area.y2,},
 	];
-	var sector = quad[random(quad.length)];
-	var x = sector.x1 + random(sector.x2);
-	var y = sector.y1 + random(sector.y2);
 
-	if (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, x, y) || (enumRange(x, y, 7, ALLIES, false).length > 0))
+	const MAX_ATTEMPTS = 100;
+	var sector;
+	var x;
+	var y;
+	var attempts = 0;
+
+	do
+	{
+		++attempts;
+		sector = quad[random(quad.length)];
+		x = sector.x1 + random(sector.x2);
+		y = sector.y1 + random(sector.y2);
+	} while (!propulsionCanReach("wheeled01", MY_BASE.x, MY_BASE.y, x, y) && attempts < MAX_ATTEMPTS);
+
+	if (attempts > MAX_ATTEMPTS)
 	{
 		return;
 	}
@@ -703,9 +714,20 @@ function baseShuffleDefensePattern()
 	}
 	// Given that the base area has an additional 20 tiles of territory around the furthest base structure in a rectangel/square
 	// we can safely tell units to go into this territory zone to keep trucks from being obstructed, maybe.
+	const MAX_NEARBY_STRUCTURES = 2;
 	for (var i = 0, len = attackers.length; i < len; ++i)
 	{
-		orderDroidLoc(attackers[i], DORDER_SCOUT, x, y);
+		if (attackers[i].order !== DORDER_HOLD)
+		{
+			if (nearbyStructureCount({x: attackers[i].x, y: attackers[i].y}) <= MAX_NEARBY_STRUCTURES)
+			{
+				orderDroid(attackers[i], DORDER_HOLD);
+			}
+			else
+			{
+				orderDroidLoc(attackers[i], DORDER_SCOUT, x, y);
+			}
+		}
 	}
 
 	lastShuffleTime = gameTime;
