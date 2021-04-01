@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-31 11:23\n"
+"PO-Revision-Date: 2021-04-01 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -4360,7 +4360,7 @@ msgstr "SEKTOR BARAT"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
-msgstr "Fajar, Juli 4, 2100"
+msgstr "Fajar, 4 Juli 2100"
 
 #: data/base/sequenceaudio/cam1/c001.txa:5
 msgid "Project HQ"
@@ -4847,7 +4847,7 @@ msgstr "SEKTOR UTARA"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
-msgstr "Senja, Desember 3, 2100"
+msgstr "Senja, 3 Desember 2100"
 
 #: data/base/sequenceaudio/cam3/c003.txa:9
 msgid "In-flight to Northern Sector"
@@ -5079,7 +5079,7 @@ msgstr "...tidak dapat bertahan lebih lama lagi. Diulangi, kami butuh bantuan, k
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr "Senja, November 3, 2085"
+msgstr "Senja, 3 November 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
@@ -5104,7 +5104,7 @@ msgstr "Musim Dingin Nuklir"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr "Tengah Malam, April 10, 2086"
+msgstr "Tengah Malam, 10 April 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
