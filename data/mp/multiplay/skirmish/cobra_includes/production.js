@@ -20,7 +20,7 @@ function superLowOnProductionPower()
 //Pick a random weapon line.
 function chooseRandomWeapon()
 {
-	var weaps;
+	var weaps = subPersonalities[personality].primaryWeapon;
 
 	switch (random(6))
 	{
@@ -38,7 +38,7 @@ function chooseRandomWeapon()
 		weaps = weaponStats.lasers;
 	}
 
-	if (!componentAvailable(weaps.weapons[0].stat))
+	if ((weaps.weapons.length === 0) || !componentAvailable(weaps.weapons[0].stat))
 	{
 		weaps = subPersonalities[personality].primaryWeapon;
 	}
@@ -76,7 +76,7 @@ function chooseWeaponType(weaps)
 //Choose a random cyborg weapon line.
 function chooseRandomCyborgWeapon()
 {
-	var weaps;
+	var weaps = subPersonalities[personality].primaryWeapon;
 
 	//grenadier cyborgs can only be built as long as Cobra does not have
 	//access to pepperpot. They are too weak after that.
@@ -89,9 +89,14 @@ function chooseRandomCyborgWeapon()
 		default: weaps = subPersonalities[personality].primaryWeapon; break;
 	}
 
-	if (!componentAvailable(weaps.templates[0].weapons))
+	if ((weaps.templates.length === 0) || !componentAvailable(weaps.templates[0].weapons))
 	{
 		weaps = subPersonalities[personality].primaryWeapon;
+
+		if ((weaps.templates.length === 0) || !componentAvailable(weaps.templates[0].weapons))
+		{
+			weaps = subPersonalities[personality].secondaryWeapon;
+		}
 	}
 
 	return weaps;
@@ -100,8 +105,7 @@ function chooseRandomCyborgWeapon()
 //Choose random VTOL weapon line.
 function chooseRandomVTOLWeapon()
 {
-	var weaps;
-	var isEMP = false;
+	var weaps = weaponStats.bombs;
 
 	switch (random(5))
 	{
@@ -109,7 +113,7 @@ function chooseRandomVTOLWeapon()
 		case 1: if (subPersonalities[personality].useLasers === true) { weaps = weaponStats.lasers; } break;
 		case 2: weaps = subPersonalities[personality].secondaryWeapon; break;
 		case 3: weaps = weaponStats.bombs; break;
-		case 4: weaps = weaponStats.empBomb; isEMP = true; break;
+		case 4: weaps = weaponStats.empBomb; break;
 		default: weaps = weaponStats.bombs; break;
 	}
 
@@ -124,11 +128,7 @@ function chooseRandomVTOLWeapon()
 		weaps = weaponStats.rockets_AS;
 	}
 
-	if (!isDefined(weaps) || (!isEMP && (weaps.vtols.length - 1 <= 0)))
-	{
-		weaps = weaponStats.bombs;
-	}
-	if (!componentAvailable(weaps.vtols[0].stat))
+	if ((weaps.vtols.length === 0) || !componentAvailable(weaps.vtols[0].stat))
 	{
 		weaps = weaponStats.bombs;
 	}
