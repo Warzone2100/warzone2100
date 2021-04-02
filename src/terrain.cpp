@@ -110,6 +110,7 @@ static const unsigned int LIGHTMAP_REFRESH = 80;
 
 /// VBOs
 static gfx_api::buffer *geometryVBO = nullptr, *geometryIndexVBO = nullptr, *textureVBO = nullptr, *textureIndexVBO = nullptr, *decalVBO = nullptr;
+static gfx_api::buffer *normalVBO = nullptr;
 /// VBOs
 static gfx_api::buffer *waterVBO = nullptr, *waterIndexVBO = nullptr;
 /// The amount we shift the water textures so the waves appear to be moving
@@ -350,6 +351,37 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 }
 
+/// Get normal vector of grid point
+static Vector3f getGridNormal(int x, int y, bool center) {
+	auto pos = [](int x, int y) {
+		Vector3i r;
+		getGridPos(&r, x, y, false, false);
+		return Vector3f(r);
+	};
+	auto posCenter = [pos](int x, int y) {
+		return (pos(x, y) + pos(x+1, y) + pos(x+1, y+1) + pos(x, y+1))/4.0f;
+	};
+	auto res = Vector3f(0.0);
+	if (center) {
+		Vector3f p[] = {pos(x,y), pos(x+1, y), pos(x+1, y+1), pos(x, y+1)};
+		auto pc = posCenter(x, y);
+		for (int i = 0; i < 4; i++) {
+			res += glm::cross(p[(i+1)%4] - pc, p[i] - pc);
+		}
+		return glm::normalize(res);
+	} else {
+		Vector3f p[] = {
+			pos(x+1, y), posCenter(x, y),     pos(x, y+1), posCenter(x-1, y),
+			pos(x-1, y), posCenter(x-1, y-1), pos(x, y-1), posCenter(x, y-1)
+		};
+		auto pc = pos(x, y);
+		for (int i = 0; i < 8; i++) {
+			res += glm::cross(p[(i+1)%8] - pc, p[i] - pc);
+		}
+		return glm::normalize(res);
+	}
+}
+
 /// Calculate the average colour of 4 points
 static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
                                  PIELIGHT c, PIELIGHT d)
@@ -364,7 +396,7 @@ static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
  * Set the terrain and water geometry for the specified sector
  */
 static void setSectorGeometry(int x, int y,
-                              RenderVertex *geometry, RenderVertex *water,
+                              RenderVertex *geometry, RenderVertex *normals, RenderVertex *water,
                               int *geometrySize, int *waterSize)
 {
 	Vector3i pos;
@@ -378,12 +410,14 @@ static void setSectorGeometry(int x, int y,
 			geometry[*geometrySize].x = pos.x;
 			geometry[*geometrySize].y = pos.y;
 			geometry[*geometrySize].z = pos.z;
+			normals[*geometrySize] = getGridNormal(i + x * sectorSize, j + y * sectorSize, false);
 			(*geometrySize)++;
 
 			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, true, false);
 			geometry[*geometrySize].x = pos.x;
 			geometry[*geometrySize].y = pos.y;
 			geometry[*geometrySize].z = pos.z;
+			normals[*geometrySize] = getGridNormal(i + x * sectorSize, j + y * sectorSize, true);
 			(*geometrySize)++;
 
 			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, false, true);
@@ -492,7 +526,7 @@ static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize
  */
 static void updateSectorGeometry(int x, int y)
 {
-	RenderVertex *geometry;
+	RenderVertex *geometry, *normals;
 	RenderVertex *water;
 	DecalVertex *decaldata;
 	int geometrySize = 0;
@@ -500,9 +534,10 @@ static void updateSectorGeometry(int x, int y)
 	int decalSize = 0;
 
 	geometry  = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].geometrySize);
+	normals   = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].geometrySize);
 	water     = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].waterSize);
 
-	setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
+	setSectorGeometry(x, y, geometry, normals, water, &geometrySize, &waterSize);
 	ASSERT(geometrySize == sectors[x * ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
 	ASSERT(waterSize    == sectors[x * ySectors + y].waterSize   , "something went seriously wrong updating the terrain");
 
@@ -591,6 +626,11 @@ void loadTerrainTextures()
 		const auto groundType = getGroundType(layer);
 		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", groundType.textureName.c_str());
+
+		if (!groundType.normalMapTextureName.empty()) {
+			optional<size_t> texPageNormal = iV_GetTexture(groundType.normalMapTextureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
+			ASSERT(texPageNormal.has_value(), "Failed to pre-load terrain normal texture: %s", groundType.normalMapTextureName.c_str());
+		}
 	}
 }
 
@@ -604,7 +644,7 @@ bool initTerrain()
 	PIELIGHT colour[2][2], centerColour;
 	int layer = 0;
 
-	RenderVertex *geometry;
+	RenderVertex *geometry, *normals;
 	RenderVertex *water;
 	DecalVertex *decaldata;
 	int geometrySize, geometryIndexSize;
@@ -674,12 +714,14 @@ bool initTerrain()
 
 	////////////////////
 	// fill the geometry part of the sectors
-	geometry = (RenderVertex *)malloc(sizeof(RenderVertex) * xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2);
+	const int vertSize = xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2;
+	geometry = (RenderVertex *)malloc(sizeof(RenderVertex) * vertSize);
+	normals  = (RenderVertex *)malloc(sizeof(RenderVertex) * vertSize);
 	geometryIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12);
 	geometrySize = 0;
 	geometryIndexSize = 0;
 
-	water = (RenderVertex *)malloc(sizeof(RenderVertex) * xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2);
+	water = (RenderVertex *)malloc(sizeof(RenderVertex) * vertSize);
 	waterIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12);
 	waterSize = 0;
 	waterIndexSize = 0;
@@ -693,7 +735,7 @@ bool initTerrain()
 			sectors[x * ySectors + y].waterOffset = waterSize;
 			sectors[x * ySectors + y].waterSize = 0;
 
-			setSectorGeometry(x, y, geometry, water, &geometrySize, &waterSize);
+			setSectorGeometry(x, y, geometry, normals, water, &geometrySize, &waterSize);
 
 			sectors[x * ySectors + y].geometrySize = geometrySize - sectors[x * ySectors + y].geometryOffset;
 			sectors[x * ySectors + y].waterSize = waterSize - sectors[x * ySectors + y].waterOffset;
@@ -771,6 +813,12 @@ bool initTerrain()
 	geometryVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
 	geometryVBO->upload(sizeof(RenderVertex)*geometrySize, geometry);
 	free(geometry);
+
+	if (normalVBO)
+		delete normalVBO;
+	normalVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
+	normalVBO->upload(sizeof(RenderVertex)*geometrySize, normals);
+	free(normals);
 
 	if (geometryIndexVBO)
 		delete geometryIndexVBO;
@@ -973,6 +1021,8 @@ void shutdownTerrain()
 	}
 	delete geometryVBO;
 	geometryVBO = nullptr;
+	delete normalVBO;
+	normalVBO = nullptr;
 	delete geometryIndexVBO;
 	geometryIndexVBO = nullptr;
 	delete waterVBO;
@@ -1150,7 +1200,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 
 	// load the vertex (geometry) buffer
 	gfx_api::TerrainLayer::get().bind();
-	gfx_api::TerrainLayer::get().bind_vertex_buffers(geometryVBO, textureVBO);
+	gfx_api::TerrainLayer::get().bind_vertex_buffers(geometryVBO, textureVBO, normalVBO);
 	gfx_api::context::get().bind_index_buffer(*textureIndexVBO, gfx_api::index_type::u32);
 	const size_t numGroundTypes = getNumGroundTypes();
 	ASSERT_OR_RETURN(, numGroundTypes, "Ground type was not set, no textures will be seen.");
@@ -1199,7 +1249,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		}
 		finishDrawRangeElements<gfx_api::TerrainLayer>();
 	}
-	gfx_api::TerrainLayer::get().unbind_vertex_buffers(geometryVBO, textureVBO);
+	gfx_api::TerrainLayer::get().unbind_vertex_buffers(geometryVBO, textureVBO, normalVBO);
 	gfx_api::context::get().unbind_index_buffer(*textureIndexVBO);
 }
 

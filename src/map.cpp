@@ -265,12 +265,9 @@ static std::string getTextureVariant(const std::string &origTextureFilename, con
 	return "";
 }
 
-// This is the main loading routine to get all the map's parameters set.
-// Once it figures out what tileset we need, we then parse the files for that tileset.
-// Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
-static bool mapLoadGroundTypes(bool preview)
+static void mapLoadTertiles(bool preview, unsigned int tileSet, const char* tertilesFile)
 {
-	char	*pFileData = nullptr;
+	char	*pFileData = fileLoadBuffer;
 	char	tilename[MAX_STR_LENGTH] = {'\0'};
 	char	textureName[MAX_STR_LENGTH] = {'\0'};
 	char	textureType[MAX_STR_LENGTH] = {'\0'};
@@ -278,146 +275,72 @@ static bool mapLoadGroundTypes(bool preview)
 	int		numlines = 0;
 	int		cnt = 0, i = 0;
 	uint32_t	fileSize = 0;
+	// load the override terrain types
+	if (!preview && builtInMap && !loadTerrainTypeMapOverride(tileSet))
+	{
+		debug(LOG_POPUP, "Failed to load terrain type override");
+	}
+	init_tileNames(tileSet);
+	if (!loadFileToBuffer(tertilesFile, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	{
+		debug(LOG_FATAL, "%s not found, aborting.", tertilesFile);
+		abort();
+	}
 
-	pFileData = fileLoadBuffer;
+	sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
+	pFileData += cnt;
 
+	if (!strstr(tertilesFile, tilename))
+	{
+		debug(LOG_FATAL, "%s found, but was expecting %s!  Aborting.", tilename, tertilesFile);
+		abort();
+	}
+
+	debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
+	//increment the pointer to the start of the next record
+	pFileData = strchr(pFileData, '\n') + 1;
+	groundTypes.resize(numlines);
+
+	for (i = 0; i < numlines; i++)
+	{
+		sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
+		pFileData += cnt;
+		//increment the pointer to the start of the next record
+		pFileData = strchr(pFileData, '\n') + 1;
+
+		int textureTypeIdx = getTextureType(textureType);
+		groundTypes[textureTypeIdx].textureName = textureName;
+		groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
+		groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
+		groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
+	}
+}
+
+// This is the main loading routine to get all the map's parameters set.
+// Once it figures out what tileset we need, we then parse the files for that tileset.
+// Currently, we only support 3 tilesets.  Arizona, Urban, and Rockie
+static bool mapLoadGroundTypes(bool preview)
+{
 	debug(LOG_TERRAIN, "tileset: %s", tilesetDir);
 	// For Arizona
 	if (strcmp(tilesetDir, "texpages/tertilesc1hw") == 0)
 	{
 fallback:
-		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(ARIZONA))
-		{
-			debug(LOG_POPUP, "Failed to load terrain type override");
-		}
-		init_tileNames(ARIZONA);
-		if (!loadFileToBuffer("tileset/tertilesc1hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug(LOG_FATAL, "tileset/tertilesc1hwGtype.txt not found, aborting.");
-			abort();
-		}
-
-		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
-		pFileData += cnt;
-
-		if (strcmp(tilename, "tertilesc1hw"))
-		{
-			debug(LOG_FATAL, "%s found, but was expecting tertilesc1hw!  Aborting.", tilename);
-			abort();
-		}
-
-		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
-		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
-		groundTypes.resize(numlines);
-
-		for (i = 0; i < numlines; i++)
-		{
-			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
-			pFileData += cnt;
-			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData, '\n') + 1;
-
-			int textureTypeIdx = getTextureType(textureType);
-			groundTypes[textureTypeIdx].textureName = textureName;
-			groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
-			groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
-			groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
-		}
-
+		mapLoadTertiles(preview, ARIZONA, "tileset/tertilesc1hwGtype.txt");
 		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
 		SetDecals("tileset/arizonadecals.txt", "arizona_decals");
 	}
 	// for Urban
 	else if (strcmp(tilesetDir, "texpages/tertilesc2hw") == 0)
 	{
-		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(URBAN))
-		{
-			debug(LOG_POPUP, "Failed to load terrain type override");
-		}
-		init_tileNames(URBAN);
-		if (!loadFileToBuffer("tileset/tertilesc2hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug(LOG_POPUP, "tileset/tertilesc2hwGtype.txt not found, using default terrain ground types.");
-			goto fallback;
-		}
-
-		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
-		pFileData += cnt;
-
-		if (strcmp(tilename, "tertilesc2hw"))
-		{
-			debug(LOG_POPUP, "%s found, but was expecting tertilesc2hw!", tilename);
-			goto fallback;
-		}
-
-		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
-		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
-		groundTypes.resize(numlines);
-
-		for (i = 0; i < numlines; i++)
-		{
-			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
-			pFileData += cnt;
-			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData, '\n') + 1;
-
-			int textureTypeIdx = getTextureType(textureType);
-			groundTypes[textureTypeIdx].textureName = textureName;
-			groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
-			groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
-			groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
-		}
-
+		mapLoadTertiles(preview, URBAN, "tileset/tertilesc2hwGtype.txt");
 		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
 		SetDecals("tileset/urbandecals.txt", "urban_decals");
 	}
 	// for Rockie
 	else if (strcmp(tilesetDir, "texpages/tertilesc3hw") == 0)
 	{
-		// load the override terrain types
-		if (!preview && builtInMap && !loadTerrainTypeMapOverride(ROCKIE))
-		{
-			debug(LOG_POPUP, "Failed to load terrain type override");
-		}
-		init_tileNames(ROCKIE);
-		if (!loadFileToBuffer("tileset/tertilesc3hwGtype.txt", pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug(LOG_POPUP, "tileset/tertilesc3hwGtype.txt not found, using default terrain ground types.");
-			goto fallback;
-		}
-
-		sscanf(pFileData, "%255[^,'\r\n],%d%n", tilename, &numlines, &cnt);
-		pFileData += cnt;
-
-		if (strcmp(tilename, "tertilesc3hw"))
-		{
-			debug(LOG_POPUP, "%s found, but was expecting tertilesc3hw!", tilename);
-			goto fallback;
-		}
-
-		debug(LOG_TERRAIN, "tilename: %s, with %d entries", tilename, numlines);
-		//increment the pointer to the start of the next record
-		pFileData = strchr(pFileData, '\n') + 1;
-		groundTypes.resize(numlines);
-
-		for (i = 0; i < numlines; i++)
-		{
-			sscanf(pFileData, "%255[^,'\r\n],%255[^,'\r\n],%lf%n", textureType, textureName, &textureSize, &cnt);
-			pFileData += cnt;
-			//increment the pointer to the start of the next record
-			pFileData = strchr(pFileData, '\n') + 1;
-
-			int textureTypeIdx = getTextureType(textureType);
-			groundTypes[textureTypeIdx].textureName = textureName;
-			groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
-			groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
-			groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
-		}
-
+		mapLoadTertiles(preview, ROCKIE, "tileset/tertilesc3hwGtype.txt");
 		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");
 		SetDecals("tileset/rockiedecals.txt", "rockie_decals");
 	}
