@@ -29,10 +29,9 @@ layout(location = 0) in vec4 color;
 layout(location = 1) in vec2 uv1;
 layout(location = 2) in vec2 uv2;
 layout(location = 3) in float vertexDistance;
-// TODO: in tangent space:
-layout(location = 4) in vec3 normal;
-layout(location = 5) in vec3 lightDir;
-layout(location = 6) in vec3 halfVec;
+// Light in tangent space:
+layout(location = 4) in vec3 lightDir;
+layout(location = 5) in vec3 halfVec;
 
 layout(location = 0) out vec4 FragColor;
 
@@ -42,10 +41,10 @@ void main()
 	vec4 fragColor = mask * texture(tex, uv1);
 	vec3 N;
 	if (hasNormalmap != 0) {
-		// TODO: N = texture(lightmap_tex, uv2).xzy * 2 - 1;
-		N = normalize(normal);
+		vec3 normalFromMap = texture(TextureNormal, uv1).xyz;
+		N = normalize(normalFromMap * 2.0 - 1.0);
 	} else {
-		N = normalize(normal);
+		N = vec3(0,0,1); // in tangent space so normal to xy plane
 	}
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
@@ -57,7 +56,7 @@ void main()
 	exponent = -(exponent * exponent);
 	float gaussianTerm = exp(exponent);
 
-	fragColor = fragColor*(lambertTerm*0.4 + 0.5) + mask*gaussianTerm*0.3;
+	fragColor = fragColor*(lambertTerm*0.4 + 0.3) + mask*gaussianTerm*0.4;
 
 	if (fogEnabled > 0)
 	{
