@@ -314,6 +314,9 @@ void widgSetUserData2(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWO
 /** Get widget structure */
 WIDGET *widgGetFromID(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id);
 
+/* Find a widget on a form from its id number */
+std::shared_ptr<WIDGET> widgFormGetFromID(const std::shared_ptr<WIDGET>& widget, UDWORD id);
+
 /** Set tip string for a widget */
 void widgSetTip(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, std::string pTip);
 
