@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-03-21 01:42\n"
+"PO-Revision-Date: 2021-04-03 09:17\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -15282,7 +15282,7 @@ msgstr "Менеджер Музыки"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Открыть каталог конфигурации"
 
 #: src/frontend.cpp:681
 msgid "Failed to open configuration directory in system default file browser."
@@ -15290,19 +15290,19 @@ msgstr ""
 
 #: src/frontend.cpp:683
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "Конфигурационный каталог указан как:"
 
 #: src/frontend.cpp:687
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Если выполняется внутри контейнера/изолированного окружения, то это может отличаться от фактического пути на диске."
 
 #: src/frontend.cpp:689
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Более подробную информацию о том, как найти это вручную, см. в документации."
 
 #: src/frontend.cpp:690
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Не удалось открыть каталог конфигурации"
 
 #: src/frontend.cpp:712
 msgid "1×"
@@ -15537,16 +15537,18 @@ msgstr "Не удается изменить режим окна"
 #: src/frontend.cpp:1488
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Не удалось изменить на оконный режим.\n"
+"Ваша система / драйверы могут не поддерживать другие режимы."
 
 #: src/frontend.cpp:1514
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "Не удалось изменить вертикальную синхронизацию"
 
 #: src/frontend.cpp:1514
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Не удалось изменить режим Вертикальной Синхронизации.\n"
+"Ваша система / драйверы могут не поддерживать другие режимы."
 
 #: src/frontend.cpp:1680
 msgid "Middle Mouse"
@@ -15658,38 +15660,38 @@ msgstr "Мод: "
 
 #: src/frontend.cpp:2471
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Увеличить масштаб элементов на экране?"
 
 #: src/frontend.cpp:2473
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "При текущих настройках разрешения и масштаба дисплея, пользовательский интерфейс игры может казаться маленьким, а перспектива игры искаженной."
 
 #: src/frontend.cpp:2475
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Это можно исправить, увеличив масштаб элементов на экране."
 
 #: src/frontend.cpp:2477
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Жалаете ли Вы сейчас увеличить масштаб элементов экрана до %u%%?"
 
 #: src/frontend.cpp:2479
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Увеличить масштаб"
 
 #: src/frontend.cpp:2496
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Масштаб экрана увеличен до %u%%"
 
 #: src/frontend.cpp:2497
 #: src/frontend.cpp:2513
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Вы можете настроить масштаб отображения в любое время в меню Параметров видео."
 
 #: src/frontend.cpp:2512
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Совет: Настройте масштаб экрана"
 
 #: src/hci.cpp:955
 #: src/loop.cpp:244
@@ -15808,7 +15810,7 @@ msgstr "Внимание: Вы владелец этой игры. Если вы
 #: src/ingameop.cpp:130
 #: src/ingameop.cpp:267
 msgid "Host Quit"
-msgstr ""
+msgstr "Выход хоста"
 
 #: src/ingameop.cpp:170
 #: src/ingameop.cpp:979
@@ -15828,7 +15830,7 @@ msgstr "Тактический интерфейс (Цель): Спрятать"
 #: src/keyedit.cpp:444
 #: src/musicmanager.cpp:778
 msgid "Go Back"
-msgstr ""
+msgstr "Назад"
 
 #: src/ingameop.cpp:247
 #: src/ingameop.cpp:256
@@ -15867,7 +15869,7 @@ msgstr "Показать Раскладку Клавиатуры"
 
 #: src/ingameop.cpp:562
 msgid "Shake"
-msgstr ""
+msgstr "Тряска"
 
 #: src/ingameop.cpp:952
 msgid "Save Campaign Game"
