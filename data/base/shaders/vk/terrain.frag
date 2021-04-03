@@ -55,9 +55,14 @@ void main()
 	float angle = acos(dot(H, N));
 	float exponent = angle / 0.2;
 	exponent = -(exponent * exponent);
-	float gaussianTerm = exp(exponent);
+	vec4 gaussianTerm = mask*exp(exponent);
+	if (hasSpecularmap != 0) {
+		gaussianTerm *= texture(TextureSpecular, uv1);
+	} else {
+		gaussianTerm *= 0.4;
+	}
 
-	fragColor = fragColor*(lambertTerm*0.4 + 0.3) + mask*gaussianTerm*0.4;
+	fragColor = fragColor*(lambertTerm*0.4 + 0.3) + gaussianTerm;
 
 	if (fogEnabled > 0)
 	{
