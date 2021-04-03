@@ -3,6 +3,7 @@
 
 uniform mat4 ModelViewMatrix;
 uniform mat4 ModelViewProjectionMatrix;
+uniform mat4 NormalMatrix;
 
 uniform vec4 sunPosition;
 
@@ -17,9 +18,11 @@ uniform mat4 textureMatrix2;
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
 in vec4 vertexColor;
+in vec3 vertexNormal;
 #else
 attribute vec4 vertex;
 attribute vec4 vertexColor;
+attribute vec3 vertexNormal;
 #endif
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
@@ -27,11 +30,17 @@ out vec4 color;
 out vec2 uv1;
 out vec2 uv2;
 out float vertexDistance;
+// In tangent space
+out vec3 lightDir;
+out vec3 halfVec;
 #else
 varying vec4 color;
 varying vec2 uv1;
 varying vec2 uv2;
 varying float vertexDistance;
+// In tangent space
+varying vec3 lightDir;
+varying vec3 halfVec;
 #endif
 
 void main()
@@ -44,4 +53,15 @@ void main()
 	vec4 uv2_tmp = textureMatrix2 * vec4(dot(paramx2, vertex), dot(paramy2, vertex), 0., 1.);
 	uv2 = uv2_tmp.xy / uv2_tmp.w;
 	vertexDistance = position.z;
+
+	// constructing EyeSpace -> TangentSpace mat3
+	mat3 normalMat = mat3(NormalMatrix);
+	vec3 normal = normalize(normalMat * vertexNormal);
+	vec3 tangent = normalize(cross(normal, normalMat * paramy1.xyz));
+	vec3 bitangent = cross(normal, tangent);
+	mat3 eyeTangentMatrix = mat3(tangent, bitangent, normal); // aka TBN-matrix
+	// transform light to TangentSpace:
+	vec3 eyeVec = normalize((ModelViewMatrix * vertex).xyz * eyeTangentMatrix);
+	lightDir = normalize(sunPosition.xyz * eyeTangentMatrix);
+	halfVec = lightDir + eyeVec;
 }

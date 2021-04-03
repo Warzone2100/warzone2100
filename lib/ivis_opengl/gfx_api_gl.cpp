@@ -327,7 +327,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		} }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
 		{ "textureMatrix1", "textureMatrix2",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "sunPosition", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex",
+			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "sunPosition", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "hasNormalmap", "hasSpecularmap" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
@@ -1204,19 +1204,20 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(1, cbuf.textureMatrix2);
 	setUniforms(2, cbuf.ModelViewMatrix);
 	setUniforms(3, cbuf.ModelViewProjectionMatrix);
-	setUniforms(4, cbuf.sunPosition);
-	setUniforms(5, cbuf.paramX);
-	setUniforms(6, cbuf.paramY);
-	setUniforms(7, cbuf.paramXLight);
-	setUniforms(8, cbuf.paramYLight);
-	setUniforms(9, cbuf.texture0);
-	setUniforms(10, cbuf.texture1);
-	setUniforms(11, cbuf.fog_colour);
-	setUniforms(12, cbuf.fog_enabled);
-	setUniforms(13, cbuf.fog_begin);
-	setUniforms(14, cbuf.fog_end);
-	setUniforms(15, cbuf.hasNormalmap);
-	setUniforms(16, cbuf.hasSpecularmap);
+	setUniforms(4, cbuf.NormalMatrix);
+	setUniforms(5, cbuf.sunPosition);
+	setUniforms(6, cbuf.paramX);
+	setUniforms(7, cbuf.paramY);
+	setUniforms(8, cbuf.paramXLight);
+	setUniforms(9, cbuf.paramYLight);
+	setUniforms(10, cbuf.texture0);
+	setUniforms(11, cbuf.texture1);
+	setUniforms(12, cbuf.fog_colour);
+	setUniforms(13, cbuf.fog_enabled);
+	setUniforms(14, cbuf.fog_begin);
+	setUniforms(15, cbuf.fog_end);
+	setUniforms(16, cbuf.hasNormalmap);
+	setUniforms(17, cbuf.hasSpecularmap);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
