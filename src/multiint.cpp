@@ -250,6 +250,8 @@ static int difficultyIcon(int difficulty);
 static void sendRoomChatMessage(char const *text);
 
 static int factionIcon(FactionID faction);
+
+static bool multiplayPlayersReady();
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -3917,7 +3919,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 			SendReadyRequest(selectedPlayer, !NetPlay.players[player].ready);
 
 			// if hosting try to start the game if everyone is ready
-			if (NetPlay.isHost && multiplayPlayersReady(false))
+			if (NetPlay.isHost && multiplayPlayersReady())
 			{
 				startMultiplayerGame();
 				// reset flag in case people dropped/quit on join screen
@@ -4143,7 +4145,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			recvReadyRequest(queue);
 
 			// If hosting and game not yet started, try to start the game if everyone is ready.
-			if (NetPlay.isHost && multiplayPlayersReady(false))
+			if (NetPlay.isHost && multiplayPlayersReady())
 			{
 				startMultiplayerGame();
 			}
@@ -5243,31 +5245,33 @@ std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, U
 	return addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc);
 }
 
-/* Returns true if all human players clicked on the 'ready' button */
-bool multiplayPlayersReady(bool bNotifyStatus)
+/* Returns true if the multiplayer game can start (i.e. all players are ready) */
+static bool multiplayPlayersReady()
 {
-	unsigned int	player, playerID;
-	bool			bReady;
+	bool bReady = true;
+	size_t numReadyPlayers = 0;
 
-	bReady = true;
-
-	for (player = 0; player < game.maxPlayers; player++)
+	for (unsigned int player = 0; player < game.maxPlayers; player++)
 	{
 		// check if this human player is ready, ignore AIs
-		if (NetPlay.players[player].allocated && (!NetPlay.players[player].ready || ingame.PingTimes[player] >= PING_LIMIT))
+		if (NetPlay.players[player].allocated)
 		{
-			if (bNotifyStatus)
+			if ((!NetPlay.players[player].ready || ingame.PingTimes[player] >= PING_LIMIT))
 			{
-				for (playerID = 0; playerID <= game.maxPlayers && playerID != player; playerID++) ;
-
-				console("%s is not ready", getPlayerName(playerID));
+				bReady = false;
 			}
-
-			bReady = false;
+			else
+			{
+				numReadyPlayers++;
+			}
+		}
+		else if (NetPlay.players[player].ai >= 0)
+		{
+			numReadyPlayers++;
 		}
 	}
 
-	return bReady;
+	return bReady && numReadyPlayers > 0;
 }
 
 void sendRoomSystemMessage(char const *text)

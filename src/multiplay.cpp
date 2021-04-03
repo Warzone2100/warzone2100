@@ -97,7 +97,6 @@ char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player
 static bool recvBeacon(NETQUEUE queue);
 static bool recvResearch(NETQUEUE queue);
 
-bool multiplayPlayersReady(bool bNotifyStatus);
 void startMultiplayerGame();
 
 // ////////////////////////////////////////////////////////////////////////////
