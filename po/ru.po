@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-03-20 14:29+0000\n"
-"PO-Revision-Date: 2021-04-03 09:17\n"
+"PO-Revision-Date: 2021-04-03 21:13\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -4018,15 +4018,15 @@ msgstr "Найдите и спасите юнитов из подбитого т
 
 #: data/base/script/campaign/cam2-c.js:29
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Спасите мирных жителей от Альянса, прежде чем большинство попадёт в плен"
 
 #: data/base/script/campaign/cam2-d.js:76
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Защитите Пост Связи от Альянса"
 
 #: data/base/script/campaign/cam2-end.js:151
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Отправьте хотя бы одно транспортное средство с грузовиком, и отбейтесь от Альянса"
 
 #: data/base/script/campaign/cam3-1.js:162
 msgid "Move all units into the valley"
@@ -4046,15 +4046,15 @@ msgstr "Исследуйте программы сопротивления и в
 
 #: data/base/script/campaign/cam3-ad1.js:214
 msgid "Secure a missile silo"
-msgstr ""
+msgstr "Защитите ракетную шахту"
 
 #: data/base/script/campaign/cam3-ad2.js:271
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Защитите ракетную шахту и исследуйте коды запуска"
 
 #: data/base/script/campaign/cam3-c.js:138
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Доберитесь группой Бета, до аванпоста группы Гамма"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -5783,23 +5783,23 @@ msgstr "Кампания"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Испытание"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Стычка"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Сетевая игра"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Меню музыки"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(без названия)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
@@ -5811,7 +5811,7 @@ msgstr "Копировать JSON в буфер обмена"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Выгрузить JSON в StdOut"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -8101,7 +8101,7 @@ msgstr "Пули из обеднённого урана"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1780
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "С фосукировкой на исследования"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -9820,7 +9820,7 @@ msgstr "Гиперскоростная пушка"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2921
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Гиперскоростная, бронейбойная, со стабилизирующим поддоном"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -13089,13 +13089,13 @@ msgstr "Противовоздушная ракета солнечный луч"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5215
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Супертяжёлый стрелок"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5232
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Супер игломётчик"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -13193,19 +13193,19 @@ msgstr "Сверхгорячий огнемётный гель"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5305
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Сверхгорячий огнемётный гель Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5308
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Сверхгорячий огнемётный гель Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5311
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Сверхгорячий огнемётный гель"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -14611,7 +14611,7 @@ msgstr "Отладочный режим выключен!"
 #: src/clparse.cpp:153
 #, c-format
 msgid "Usage: %s [OPTION...]\n"
-msgstr ""
+msgstr "Использовать: %s [Опции..]\n"
 
 #: src/clparse.cpp:336
 msgid "Set configuration directory"
@@ -14758,11 +14758,11 @@ msgstr "Отключить сжатие текстур"
 
 #: src/clparse.cpp:362
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Установить графический движок"
 
 #: src/clparse.cpp:372
 msgid "Use gfx backend debug"
-msgstr ""
+msgstr "Использовать отладку графического движка"
 
 #: src/clparse.cpp:373
 msgid "Set JS backend"
@@ -14806,7 +14806,7 @@ msgstr "автосервер"
 
 #: src/clparse.cpp:384
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
-msgstr ""
+msgstr "Запрашивать рейтинги с заданного адреса сервера (содержащего \"{HASH}\"), при хостинге"
 
 #: src/clparse.cpp:384
 msgid "autorating"
@@ -14992,7 +14992,7 @@ msgstr "Строительство невозможно. Горит нефть."
 #: src/display.cpp:1571
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Целостность %d/%d - Опыт %.1f, %s, Убийства %d"
 
 #: src/display.cpp:1733
 #, c-format
@@ -15286,7 +15286,7 @@ msgstr "Открыть каталог конфигурации"
 
 #: src/frontend.cpp:681
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Не удалось открыть каталог конфигурации в обозревателе файлов."
 
 #: src/frontend.cpp:683
 msgid "Configuration directory is reported as:"
@@ -15471,7 +15471,8 @@ msgstr "Настройки звука / камеры"
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "В полноэкранном режиме разрешение соответсвует разрешению рабочего стола \n"
+"(или как позволит оконный менеджер)."
 
 #: src/frontend.cpp:1093
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15479,7 +15480,7 @@ msgstr "Вы можете изменить разрешение, изменив 
 
 #: src/frontend.cpp:1123
 msgid "Desktop Full"
-msgstr ""
+msgstr "Полный экран"
 
 #: src/frontend.cpp:1125
 msgid "Windowed"
@@ -15524,7 +15525,7 @@ msgstr "Внимание: сглаживание может вызвать сб�
 
 #: src/frontend.cpp:1441
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Графический движок*"
 
 #: src/frontend.cpp:1445
 msgid "VIDEO OPTIONS"
@@ -15893,7 +15894,7 @@ msgstr "Ожидание энергии"
 #: src/intdisplay.cpp:286
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d скважин(а) неактивно"
 
 #: src/intdisplay.cpp:291
 msgid "Need more resources!"
@@ -15941,11 +15942,11 @@ msgstr "Не удалось присоединиться к игре"
 
 #: src/integrations/wzdiscordrpc.cpp:364
 msgid "The invite link you have followed specifies a non-default lobby server:"
-msgstr ""
+msgstr "Ссылка по которой вы переходите, ведёт на сторонний лобби сервер:"
 
 #: src/integrations/wzdiscordrpc.cpp:367
 msgid "Do you wish to trust this lobby server, and continue?"
-msgstr ""
+msgstr "Доверяете этому лобби серверу и хотите продолжить?"
 
 #: src/integrations/wzdiscordrpc.cpp:371
 msgid "Discord: Connect to Untrusted Lobby?"
@@ -15958,15 +15959,15 @@ msgstr "Доверять и подключаться"
 
 #: src/integrations/wzdiscordrpc.cpp:438
 msgid "The invite link you have followed specifies a direct connection."
-msgstr ""
+msgstr "Ссылка по которой вы переходите, ведёт на прямое подключение."
 
 #: src/integrations/wzdiscordrpc.cpp:439
 msgid "It has not been vetted / verified by a lobby server."
-msgstr ""
+msgstr "Не был проверен / проверено лобби сервером."
 
 #: src/integrations/wzdiscordrpc.cpp:441
 msgid "Do you wish to trust this direct connection invite?"
-msgstr ""
+msgstr "Вы хотите доверяться этому приглашению прямого подключения?"
 
 #: src/integrations/wzdiscordrpc.cpp:445
 msgid "Discord: Direct Connection Invite"
@@ -15974,11 +15975,11 @@ msgstr "Discord: Приглашение на прямое соединение"
 
 #: src/integrations/wzdiscordrpc.cpp:479
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
-msgstr ""
+msgstr "Ссылка приглашения не поддерживается этой версией Warzone 2100."
 
 #: src/integrations/wzdiscordrpc.cpp:480
 msgid "A newer version of Warzone 2100 may be required, if available."
-msgstr ""
+msgstr "Может потребоваться более новая версия Warzone 2100."
 
 #: src/integrations/wzdiscordrpc.cpp:483
 msgid "Discord: Unsupported / Invalid Invite"
@@ -15994,13 +15995,13 @@ msgstr "Играет: Испытание"
 
 #: src/integrations/wzdiscordrpc.cpp:592
 msgid "Playing: Skirmish"
-msgstr ""
+msgstr "В игре: Сражение"
 
 #. TRANSLATORS: "%s" is a team description, ex. "2v2"
 #: src/integrations/wzdiscordrpc.cpp:597
 #, c-format
 msgid "Playing: %s Skirmish"
-msgstr ""
+msgstr "В игре: %s, Сражение"
 
 #: src/integrations/wzdiscordrpc.cpp:600
 #: src/integrations/wzdiscordrpc.cpp:836
@@ -16037,7 +16038,7 @@ msgstr "Нет:"
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:911
 msgid "Alliances:"
-msgstr ""
+msgstr "Союзники:"
 
 #: src/integrations/wzdiscordrpc.cpp:927
 msgid "In Menu"
@@ -16340,39 +16341,39 @@ msgstr "Захват курсора: %s"
 
 #: src/keybind.cpp:1345
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "КАМПАНИЯ"
 
 #: src/keybind.cpp:1349
 msgid "CHALLENGE"
-msgstr ""
+msgstr "ИСПЫТАНИЕ"
 
 #: src/keybind.cpp:1352
 msgid "SKIRMISH"
-msgstr ""
+msgstr "СРАЖЕНИЕ"
 
 #: src/keybind.cpp:1370
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "СЛОЖНОСТЬ: ЛЁГКАЯ"
 
 #: src/keybind.cpp:1373
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "СЛОЖНОСТЬ: СРЕДНЯЯ"
 
 #: src/keybind.cpp:1376
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "СЛОЖНОСТЬ: ТЯЖЁЛАЯ"
 
 #: src/keybind.cpp:1379
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "СЛОЖНОСТЬ: БЕЗУМНАЯ"
 
 #: src/keybind.cpp:1387
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "ЖУЛЬНИЧЕСТВО: ВКЛЮЧЕНО"
 
 #: src/keybind.cpp:1389
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "ЖУЛЬНИЧЕСТВО: ВЫКЛЮЧЕНО"
 
 #: src/keybind.cpp:1445
 msgid "Researched EVERYTHING for you!"
@@ -16437,11 +16438,11 @@ msgstr "Уничтожаю выбранные постройки и машины
 
 #: src/keybind.cpp:2371
 msgid "Reveal OFF"
-msgstr ""
+msgstr "Обнаружение ВЫКЛ"
 
 #: src/keybind.cpp:2376
 msgid "Reveal ON"
-msgstr ""
+msgstr "Обнаружение ВКЛ"
 
 #: src/keybind.cpp:2450
 msgid "Centered on player HQ, direction NORTH"
@@ -16465,11 +16466,11 @@ msgstr "Вращение по вертикали: инверсия"
 
 #: src/keybind.cpp:2533
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Дрожь экрана при уничтожении объекта: Выкл"
 
 #: src/keybind.cpp:2538
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Дрожь экрана при уничтожении объекта: Вкл"
 
 #: src/keybind.cpp:2590
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -17105,7 +17106,7 @@ msgstr "Повернуть местность треугольника"
 
 #: src/keymap.cpp:582
 msgid "Make a performance measurement sample"
-msgstr ""
+msgstr "Провести измерение производительности"
 
 #: src/keymap.cpp:585
 msgid "Make all items available"
@@ -17137,7 +17138,7 @@ msgstr "Отследить игровой объект"
 
 #: src/loadsave.cpp:331
 msgid "Parent directory"
-msgstr ""
+msgstr "Предыдущий каталог"
 
 #: src/loadsave.cpp:336
 msgid "Autosave directory"
@@ -17145,11 +17146,11 @@ msgstr "Каталог автоматических сохранений"
 
 #: src/loadsave.cpp:336
 msgid "Autosave directory (not allowed for saving)"
-msgstr ""
+msgstr "Каталог автосохранения"
 
 #: src/loadsave.cpp:540
 msgid "cheated"
-msgstr ""
+msgstr "жульничал"
 
 #: src/loop.cpp:251
 #: src/loop.cpp:267
@@ -17224,7 +17225,7 @@ msgstr "%s поделился своими исследованиями"
 #: src/multigifts.cpp:413
 #, c-format
 msgid "%s Gives You %d Power"
-msgstr ""
+msgstr "%s даёт Вам %d энергии"
 
 #: src/multigifts.cpp:439
 #, c-format
@@ -17808,12 +17809,12 @@ msgstr "Кик игрока %s за попытку обойти проверку
 
 #: src/multiplay.cpp:272
 msgid "Invalid data!"
-msgstr ""
+msgstr "Неверные данные!"
 
 #: src/multiplay.cpp:895
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "Автоотключение игрока %s, получена неверная команда."
 
 #: src/multiplay.cpp:1359
 msgid "Map was requested: SENDING MAP!"
@@ -17899,7 +17900,7 @@ msgstr "Коричневый"
 
 #: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "СЕЙЧАС ИГРАЕТ"
 
 #: src/musicmanager.cpp:533
 #: src/musicmanager.cpp:679
@@ -17916,7 +17917,7 @@ msgstr "Название"
 
 #: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "УПРАВЛЕНИЕ МУЗЫКОЙ"
 
 #: src/notifications.cpp:725
 msgid "Dismiss"
@@ -18114,10 +18115,10 @@ msgstr[3] "%s - %u Юнитов назначено - Здоровье %d/%d"
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%s - %u Юнит назначен - Урон %d/%d"
+msgstr[1] "%s - %u Юнитов назначено - Прочность %d/%d"
+msgstr[2] "%s - %u Юнитов назначено - Прочность %d/%d"
+msgstr[3] "%s - %u Юнитов назначено - Прочность %d/%d"
 
 #: src/structure.cpp:5257
 #: src/structure.cpp:5267
@@ -18147,19 +18148,19 @@ msgstr "Награда - доклад о местоположении"
 
 #: src/structure.cpp:5654
 msgid "Factory Reward - Propulsion"
-msgstr ""
+msgstr "Заводское вознаграждение - Ходовая"
 
 #: src/structure.cpp:5676
 msgid "Factory Reward - Body"
-msgstr ""
+msgstr "Заводское вознаграждение - Тело"
 
 #: src/structure.cpp:5698
 msgid "Factory Reward - Weapon"
-msgstr ""
+msgstr "Заводское вознаграждение - Орудие"
 
 #: src/structure.cpp:5706
 msgid "Factory Reward - Nothing"
-msgstr ""
+msgstr "Заводское вознаграждение - Отсутсвует"
 
 #: src/structure.cpp:5733
 msgid "Repair Facility Award - Repair"
