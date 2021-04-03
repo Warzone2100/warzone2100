@@ -194,6 +194,7 @@ bool multiintDisableLobbyRefresh = false; // if we allow lobby to be refreshed o
 static UDWORD hideTime = 0;
 static uint8_t playerVotes[MAX_PLAYERS];
 LOBBY_ERROR_TYPES LobbyError = ERROR_NOERROR;
+static bool bInActualHostedLobby = false;
 /// end of globals.
 // ////////////////////////////////////////////////////////////////////////////
 // Function protos
@@ -252,6 +253,7 @@ static void sendRoomChatMessage(char const *text);
 static int factionIcon(FactionID faction);
 
 static bool multiplayPlayersReady();
+static bool multiplayIsStartingGame();
 // ////////////////////////////////////////////////////////////////////////////
 // map previews..
 
@@ -3020,6 +3022,8 @@ static void disableMultiButs()
 ////////////////////////////////////////////////////////////////////////////
 static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 {
+	bInActualHostedLobby = false;
+
 	reloadMPConfig(); // reload own settings
 	cancelOrDismissNotificationsWithTag(VOTE_TAG);
 
@@ -3604,6 +3608,8 @@ bool WzMultiplayerOptionsTitleUI::startHost()
 		return false;
 	}
 
+	bInActualHostedLobby = true;
+
 	widgDelete(psWScreen, MULTIOP_REFRESH);
 	widgDelete(psWScreen, MULTIOP_HOST);
 	widgDelete(psWScreen, MULTIOP_FILTER_TOGGLE);
@@ -4072,6 +4078,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 {
 	NETQUEUE queue;
 	uint8_t type;
+	bool ignoredMessage = false;
 
 	while (NETrecvNet(&queue, &type))
 	{
@@ -4111,6 +4118,7 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case NET_OPTIONS:					// incoming options file.
 			recvOptions(queue);
+			bInActualHostedLobby = true;
 			ingame.localOptionsReceived = true;
 
 			if (std::dynamic_pointer_cast<WzMultiplayerOptionsTitleUI>(wzTitleUICurrent))
@@ -4126,22 +4134,47 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			break;
 
 		case NET_COLOURREQUEST:
+			if (multiplayIsStartingGame())
+			{
+				ignoredMessage = true;
+				break;
+			}
 			recvColourRequest(queue);
 			break;
 
 		case NET_FACTIONREQUEST:
+			if (multiplayIsStartingGame())
+			{
+				ignoredMessage = true;
+				break;
+			}
 			recvFactionRequest(queue);
 			break;
 
 		case NET_POSITIONREQUEST:
+			if (multiplayIsStartingGame())
+			{
+				ignoredMessage = true;
+				break;
+			}
 			recvPositionRequest(queue);
 			break;
 
 		case NET_TEAMREQUEST:
+			if (multiplayIsStartingGame())
+			{
+				ignoredMessage = true;
+				break;
+			}
 			recvTeamRequest(queue);
 			break;
 
 		case NET_READY_REQUEST:
+			if (multiplayIsStartingGame())
+			{
+				ignoredMessage = true;
+				break;
+			}
 			recvReadyRequest(queue);
 
 			// If hosting and game not yet started, try to start the game if everyone is ready.
@@ -4322,8 +4355,13 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 			break;
 
 		default:
-			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
+			ignoredMessage = true;
 			break;
+		}
+
+		if (ignoredMessage)
+		{
+			debug(LOG_ERROR, "Didn't handle %s message!", messageTypeToString(type));
 		}
 
 		NETpop(queue);
@@ -4536,7 +4574,10 @@ TITLECODE WzMultiplayerOptionsTitleUI::run()
 			WidgetTriggers const &triggers = widgRunScreen(psWScreen);
 			unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
 
-			processMultiopWidgets(id);
+			if (!triggers.empty() && (!multiplayIsStartingGame() || id == CON_CANCEL))
+			{
+				processMultiopWidgets(id);
+			}
 		}
 	}
 
@@ -4573,6 +4614,7 @@ WzMultiplayerOptionsTitleUI::WzMultiplayerOptionsTitleUI(std::shared_ptr<WzTitle
 WzMultiplayerOptionsTitleUI::~WzMultiplayerOptionsTitleUI()
 {
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
+	bInActualHostedLobby = false;
 }
 
 void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight)
@@ -5272,6 +5314,11 @@ static bool multiplayPlayersReady()
 	}
 
 	return bReady && numReadyPlayers > 0;
+}
+
+static bool multiplayIsStartingGame()
+{
+	return bInActualHostedLobby && multiplayPlayersReady();
 }
 
 void sendRoomSystemMessage(char const *text)
