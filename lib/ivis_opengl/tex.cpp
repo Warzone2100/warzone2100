@@ -175,11 +175,6 @@ std::string pie_MakeTexPageName(const std::string& filename)
 	{
 		return filename.substr(0, c + 7);
 	}
-	c = filename.find('-', 5);
-	if (c != std::string::npos)
-	{
-		return filename.substr(0, c);
-	}
 	return filename;
 }
 
