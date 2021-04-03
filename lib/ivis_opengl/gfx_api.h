@@ -679,6 +679,7 @@ namespace gfx_api
 		glm::mat4 textureMatrix2;
 		glm::mat4 ModelViewMatrix;
 		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 NormalMatrix; // ModelViewMatrix for normals
 		glm::vec4 sunPosition;
 		glm::vec4 paramX;
 		glm::vec4 paramY;

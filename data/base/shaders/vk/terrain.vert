@@ -5,6 +5,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 textureMatrix2;
 	mat4 ModelViewMatrix;
 	mat4 ModelViewProjectionMatrix;
+	mat4 NormalMatrix;
 	vec4 sunPosition; // In EyeSpace
 	vec4 paramx1; // for textures
 	vec4 paramy1;
@@ -42,10 +43,10 @@ void main()
 	vec4 uv2_tmp = textureMatrix2 * vec4(dot(paramx2, vertex), dot(paramy2, vertex), 0., 1.);
 	uv2 = uv2_tmp.xy / uv2_tmp.w;
 
-	mat3 NormalMatrix = mat3(transpose(inverse(ModelViewMatrix))); // TODO: NormalMatrix
 	// constructing EyeSpace -> TangentSpace mat3
-	vec3 normal = normalize(NormalMatrix * vertexNormal);
-	vec3 tangent = normalize(cross(normal, NormalMatrix * paramy1.xyz));
+	mat3 normalMat = mat3(NormalMatrix);
+	vec3 normal = normalize(normalMat * vertexNormal);
+	vec3 tangent = normalize(cross(normal, normalMat * paramy1.xyz));
 	vec3 bitangent = cross(normal, tangent);
 	mat3 eyeTangentMatrix = mat3(tangent, bitangent, normal); // aka TBN-matrix
 	// transform light to TangentSpace:
