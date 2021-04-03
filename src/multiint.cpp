@@ -3911,6 +3911,9 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 
 		if (player == selectedPlayer && positionChooserUp < 0)
 		{
+			// Lock the "ready" button (until the request is processed)
+			widgSetButtonState(psWScreen, id, WBUT_LOCK);
+
 			SendReadyRequest(selectedPlayer, !NetPlay.players[player].ready);
 
 			// if hosting try to start the game if everyone is ready
