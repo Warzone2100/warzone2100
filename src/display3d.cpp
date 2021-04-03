@@ -1305,13 +1305,6 @@ void disp3d_setView(iView *newView)
 	playerPos = *newView;
 }
 
-/// reset the camera rotation (used for save games <= 10)
-void disp3d_oldView()
-{
-	playerPos.r.y = OLD_INITIAL_ROTATION; // rotation
-	playerPos.p.y = OLD_START_HEIGHT; // height
-}
-
 /// get the view position for save game
 void disp3d_getView(iView *newView)
 {

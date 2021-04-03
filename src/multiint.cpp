@@ -369,6 +369,11 @@ const char *getAIName(int player)
 	}
 }
 
+void setAINameFromSave(int player, const char *name)
+{
+	strcpy(aidata[NetPlay.players[player].ai].name, name);
+}
+
 void loadMultiScripts()
 {
 	bool defaultRules = true;
@@ -749,24 +754,6 @@ void loadMapPreview(bool hideInterface)
 
 // ////////////////////////////////////////////////////////////////////////////
 // helper func
-
-int matchAIbyName(const char *name)
-{
-	int i = 0;
-
-	if (name[0] == '\0')
-	{
-		return AI_CLOSED;
-	}
-	for (auto it = aidata.cbegin(); it < aidata.cend(); ++it, i++)
-	{
-		if (strncasecmp(name, (*it).name, MAX_LEN_AI_NAME) == 0)
-		{
-			return i;
-		}
-	}
-	return AI_NOT_FOUND;
-}
 
 void readAIs()
 {

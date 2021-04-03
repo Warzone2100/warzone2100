@@ -201,12 +201,10 @@ bool	getRotActive();
 #define MINDISTANCE_CONFIG (1600)
 #define MAP_ZOOM_CONFIG_STEP (200)
 #define STARTDISTANCE	(2600)
-#define OLD_START_HEIGHT (1500) // only used in savegames <= 10
 
 #define CAMERA_PIVOT_HEIGHT (500)
 
 #define INITIAL_STARTING_PITCH (-40)
-#define OLD_INITIAL_ROTATION (-45) // only used in savegames <= 10
 
 #define	HIDDEN_FRONTEND_WIDTH	(640)
 #define	HIDDEN_FRONTEND_HEIGHT	(480)

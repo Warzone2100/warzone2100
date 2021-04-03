@@ -44,8 +44,8 @@
 #define VERSION_11              11	        // newstyle save game with extending structure checked in 13 Nov.
 #define VERSION_12              12	        // mission and order stuff checked in 20 Nov.
 //#define VERSION_13            13	        // odds and ends to 24 Nov. and hashed scripts
-#define VERSION_14              14	        // 
-#define VERSION_15              15	        // 
+#define VERSION_14              14	        //
+#define VERSION_15              15	        //
 #define VERSION_16              16	        // beta save game
 #define VERSION_17              17	        // objId and new struct stats included
 #define VERSION_18              18	        // droid name savegame validity stamps
@@ -70,8 +70,9 @@
 //#define VERSION_37            37	        // dpid changes; this had better be the last version
 #define VERSION_38              38	        // mod list!
 #define VERSION_39              39	        // lots of changes, breaking everything
+#define VERSION_40              40			// use main.json instead of loading from .game file blob. Breaks everything even more!
 
-#define CURRENT_VERSION_NUM     VERSION_39
+#define CURRENT_VERSION_NUM     VERSION_40
 
 //used in the loadGame
 #define KEEPOBJECTS				true

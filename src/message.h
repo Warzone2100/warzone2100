@@ -39,9 +39,6 @@ extern iIMDShape	*pProximityMsgIMD;
 /** The list of proximity displays allocated. */
 extern PROXIMITY_DISPLAY *apsProxDisp[MAX_PLAYERS];
 
-/** Allocates the viewdata heap. */
-bool initViewData();
-
 /** Initialise the message heaps. */
 bool initMessage();
 

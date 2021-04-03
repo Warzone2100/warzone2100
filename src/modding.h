@@ -31,7 +31,7 @@ void addSubdirs(const char *basedir, const char *subdir, const bool appendToPath
 void removeSubdirs(const char *basedir, const char *subdir);
 void printSearchPath();
 
-void setOverrideMods(char *modlist);
+void setOverrideMods(const char *modlist);
 void clearOverrideMods();
 
 void clearLoadedMods();

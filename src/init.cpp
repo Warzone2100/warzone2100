@@ -955,16 +955,6 @@ bool stageOneInitialise()
 		return false;
 	}
 
-	if (!droidInit())
-	{
-		return false;
-	}
-
-	if (!initViewData())
-	{
-		return false;
-	}
-
 	if (!grpInitialise())
 	{
 		return false;
@@ -1028,11 +1018,6 @@ bool stageOneShutDown()
 	proj_Shutdown();
 
 	releaseMission();
-
-	if (!aiShutdown())
-	{
-		return false;
-	}
 
 	if (!objShutdown())
 	{
