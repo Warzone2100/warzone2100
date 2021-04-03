@@ -10,6 +10,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 textureMatrix2;
 	mat4 ModelViewMatrix;
 	mat4 ModelViewProjectionMatrix;
+	mat4 NormalMatrix;
 	vec4 sunPosition;
 	vec4 paramx1;
 	vec4 paramy1;

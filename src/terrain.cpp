@@ -1197,6 +1197,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		renderState.fogColour.vector[2] / 255.f,
 		renderState.fogColour.vector[3] / 255.f
 	);
+	const auto NormalMatrix = glm::transpose(glm::inverse(ModelView));
 
 	// load the vertex (geometry) buffer
 	gfx_api::TerrainLayer::get().bind();
@@ -1224,7 +1225,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		gfx_api::texture* pSpecularMapTexture = texPage_specularmap.has_value() ? &pie_Texture(texPage_specularmap.value()) : nullptr;
 
 		gfx_api::TerrainLayer::get().bind_constants({ glm::mat4(1.f), textureMatrix,
-			ModelView, ModelViewProjection, glm::vec4(currentSunPos, 0.f), paramsX, paramsY, paramsXLight, paramsYLight,
+			ModelView, ModelViewProjection, NormalMatrix, glm::vec4(currentSunPos, 0.f), paramsX, paramsY, paramsXLight, paramsYLight,
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
 
 		// load the textures
