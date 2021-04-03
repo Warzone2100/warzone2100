@@ -5184,21 +5184,30 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-bool addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
-	auto button = std::make_shared<WzMultiButton>();
-	parent.attach(button);
-	button->id = id;
+	std::shared_ptr<WzMultiButton> button;
+	auto existingWidget = widgFormGetFromID(parent.shared_from_this(), id);
+	if (existingWidget)
+	{
+		button = std::dynamic_pointer_cast<WzMultiButton>(existingWidget);
+	}
+	if (button == nullptr)
+	{
+		button = std::make_shared<WzMultiButton>();
+		parent.attach(button);
+		button->id = id;
+	}
 	button->setGeometry(x, y, width, height);
 	button->setTip((tipres != nullptr) ? std::string(tipres) : std::string());
 	button->imNormal = Image(FrontImages, norm);
 	button->imDown = Image(FrontImages, down);
 	button->doHighlight = hi;
 	button->tc = tc;
-	return true;
+	return button;
 }
 
-bool addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
+std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc)
 {
 	return addMultiBut(*widgGetFromID(screen, formid), id, x, y, width, height, tipres, norm, down, hi, tc);
 }
