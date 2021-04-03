@@ -2459,19 +2459,29 @@ static void drawReadyButton(UDWORD player)
 	int disallow = allPlayersOnSameTeam(-1);
 
 	// delete 'ready' botton form
-	widgDelete(psWScreen, MULTIOP_READY_FORM_ID + player);
-
-	// add form to hold 'ready' botton
-	addBlueForm(MULTIOP_PLAYERS, MULTIOP_READY_FORM_ID + player,
-	            7 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
-	            playerBoxHeight(player),
-	            MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT);
-
 	WIDGET *parent = widgGetFromID(psWScreen, MULTIOP_READY_FORM_ID + player);
 
+	if (!parent)
+	{
+		// add form to hold 'ready' botton
+		parent = addBlueForm(MULTIOP_PLAYERS, MULTIOP_READY_FORM_ID + player,
+					7 + MULTIOP_PLAYERWIDTH - MULTIOP_READY_WIDTH,
+					playerBoxHeight(player),
+					MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT);
+	}
+
+
+	auto deleteExistingReadyButton = [player]() {
+		widgDelete(widgGetFromID(psWScreen, MULTIOP_READY_START + player));
+		widgDelete(widgGetFromID(psWScreen, MULTIOP_READY_START + MAX_PLAYERS + player)); // "Ready?" text label
+	};
+	auto deleteExistingDifficultyButton = [player]() {
+		widgDelete(widgGetFromID(psWScreen, MULTIOP_DIFFICULTY_INIT_START + player));
+	};
 
 	if (!NetPlay.players[player].allocated && NetPlay.players[player].ai >= 0)
 	{
+		deleteExistingReadyButton();
 		int playerDifficulty = static_cast<int8_t>(NetPlay.players[player].difficulty);
 		int icon = difficultyIcon(playerDifficulty);
 		char tooltip[128 + 255];
@@ -2488,11 +2498,17 @@ static void drawReadyButton(UDWORD player)
 	}
 	else if (!NetPlay.players[player].allocated)
 	{
-		return;	// closed or open
+		// closed or open - remove ready / difficulty button
+		deleteExistingReadyButton();
+		deleteExistingDifficultyButton();
+		return;
 	}
 
 	if (disallow != -1)
 	{
+		// remove ready / difficulty button
+		deleteExistingReadyButton();
+		deleteExistingDifficultyButton();
 		return;
 	}
 
@@ -2502,12 +2518,24 @@ static void drawReadyButton(UDWORD player)
 	unsigned images[2][3] = {{IMAGE_CHECK_OFF, IMAGE_CHECK_ON, IMAGE_CHECK_DOWNLOAD}, {IMAGE_CHECK_OFF_HI, IMAGE_CHECK_ON_HI, IMAGE_CHECK_DOWNLOAD_HI}};
 
 	// draw 'ready' button
-	addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
+	auto pReadyBut = addMultiBut(psWScreen, MULTIOP_READY_FORM_ID + player, MULTIOP_READY_START + player, 3, 10, MULTIOP_READY_WIDTH, MULTIOP_READY_HEIGHT,
 	            toolTips[isMe][isReady], images[0][isReady], images[0][isReady], images[isMe][isReady]);
+	ASSERT_OR_RETURN(, pReadyBut != nullptr, "Failed to create ready button");
+	pReadyBut->minClickInterval = GAME_TICKS_PER_SEC;
+	pReadyBut->unlock();
 
-	auto label = std::make_shared<W_LABEL>();
-	parent->attach(label);
-	label->id = MULTIOP_READY_START + MAX_PLAYERS + player;
+	std::shared_ptr<W_LABEL> label;
+	auto existingLabel = widgFormGetFromID(parent->shared_from_this(), MULTIOP_READY_START + MAX_PLAYERS + player);
+	if (existingLabel)
+	{
+		label = std::dynamic_pointer_cast<W_LABEL>(existingLabel);
+	}
+	if (label == nullptr)
+	{
+		label = std::make_shared<W_LABEL>();
+		parent->attach(label);
+		label->id = MULTIOP_READY_START + MAX_PLAYERS + player;
+	}
 	label->setGeometry(0, 0, MULTIOP_READY_WIDTH, 17);
 	label->setTextAlignment(WLAB_ALIGNBOTTOM);
 	label->setFont(font_small, WZCOL_TEXT_BRIGHT);
