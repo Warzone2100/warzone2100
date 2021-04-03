@@ -361,24 +361,22 @@ static Vector3f getGridNormal(int x, int y, bool center) {
 	auto posCenter = [pos](int x, int y) {
 		return (pos(x, y) + pos(x+1, y) + pos(x+1, y+1) + pos(x, y+1))/4.0f;
 	};
-	auto res = Vector3f(0.0);
-	if (center) {
-		Vector3f p[] = {pos(x,y), pos(x+1, y), pos(x+1, y+1), pos(x, y+1)};
-		auto pc = posCenter(x, y);
-		for (int i = 0; i < 4; i++) {
-			res += glm::cross(p[(i+1)%4] - pc, p[i] - pc);
+	auto calcNormal = [](Vector3f pc, std::vector<Vector3f> p) {
+		auto res = Vector3f(0.0);
+		for (int i = 0; i < p.size(); i++) {
+			auto e1 = p[(i+1)%p.size()] - pc, e2 = p[i] - pc;
+			float ang = acos(glm::dot(e1, e2) / glm::length(e1) / glm::length(e2));
+			res += glm::cross(e1, e2) * ang; // += normal * (2*area) * angle
 		}
 		return glm::normalize(res);
+	};
+	if (center) {
+		return calcNormal(posCenter(x, y), {pos(x,y), pos(x+1, y), pos(x+1, y+1), pos(x, y+1)});
 	} else {
-		Vector3f p[] = {
+		return calcNormal(pos(x, y), {
 			pos(x+1, y), posCenter(x, y),     pos(x, y+1), posCenter(x-1, y),
 			pos(x-1, y), posCenter(x-1, y-1), pos(x, y-1), posCenter(x, y-1)
-		};
-		auto pc = pos(x, y);
-		for (int i = 0; i < 8; i++) {
-			res += glm::cross(p[(i+1)%8] - pc, p[i] - pc);
-		}
-		return glm::normalize(res);
+		});
 	}
 }
 
