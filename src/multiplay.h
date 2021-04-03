@@ -267,7 +267,6 @@ bool sendResearchStatus(const STRUCTURE *psBuilding, UDWORD index, UBYTE player,
 
 bool sendBeacon(int32_t locX, int32_t locY, int32_t forPlayer, int32_t sender, const char *pStr);
 
-bool multiplayPlayersReady(bool bNotifyStatus);
 void startMultiplayerGame();
 void resetReadyStatus(bool bSendOptions, bool ignoreReadyReset = false);
 
