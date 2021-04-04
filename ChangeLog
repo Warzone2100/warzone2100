@@ -1,3 +1,18 @@
+2021-04-04: Version 4.0.0
+ * See: Version 4.0.0 beta1, beta2, beta3 for the full list of improvements since the last stable release
+ * Changes since Version 4.0.0 beta3:
+ * General:
+   * Fix: General improvements to address UI crashes and issues (commit:d7288f4c2f0c130889db4d7ea4e8229d920dc3f7, commit:5639a187f069677476ce2eb2af532d70368faf58, commit:484ebc432fdfb91f1ab0619ba46be2170f7a6e9c, commit:fe0ed076f92c6eb44aa483849eaf8046b22240cd, #1679, #1686, #1689, #1695)
+   * Fix: Fix animation system not letting scavengers out of the firing animation (commit:319ef65c7acd01111ce9d83d6b394b10343be09a, #1690)
+   * Fix: Shooting through gates after they lower (commit:aedce4ceb6059926d9bfa19fd29c522e3c81b16b, #1692)
+   * Fix: Lock UI and do not accept option changes over the network when everybody is ready (too many commits, #1701)
+ * Scripting:
+   * Change: Update QuickJS (too many commits, #1682)
+ * AI:
+   * Change: Update Cobra AI (commit:a216a60a03ef8f76817dd31f287a86801e71203f, commit:c6a22faa9253758ca489f68cbc0233b3e8e30d90, #1697, #1699)
+ * Translations:
+   * Change: Numerous translation updates (commit:f04c085d018b074d8268ea57d7eb04485c34d4dc, #1705)
+
 2021-03-27: Version 4.0.0 beta3
  * General:
    * Fix: General improvements to address UI crashes and issues (commit:7534e6c1f6df8778e337e51d460de6aeb8f2309f, commit:046b98065e5ec8add67c31e62384c75739d07103, #1653, #1664)
