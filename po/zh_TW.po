@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-02-28 06:36\n"
+"POT-Creation-Date: 2021-04-04 00:17+0000\n"
+"PO-Revision-Date: 2021-04-04 09:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -1225,7 +1225,7 @@ msgstr "龍之牙"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer105.name
 #: data/base/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:2839
+#: po/custom/fromJson.txt:2835
 msgid "Howitzer Emplacement"
 msgstr "榴彈砲砲台"
 
@@ -3648,7 +3648,7 @@ msgstr "口徑105釐米榴彈砲，可指派給雷達導引"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1090
+#: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "最佳目標：碉堡與要塞"
 
@@ -3690,7 +3690,7 @@ msgstr "最佳目標：基本建築物與碉堡"
 #: data/mp/messages/strings/resstrings.txt:386
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:396
-#: po/custom/fromJson.txt:2853
+#: po/custom/fromJson.txt:2849
 msgid "Howitzer Upgrade"
 msgstr "榴彈砲升級"
 
@@ -3852,7 +3852,7 @@ msgstr "可指派給雷達導引"
 #. ... + 4 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1084
+#: po/custom/fromJson.txt:1090
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "最佳目標：基本建築物、步兵及輪式坦克"
 
@@ -4060,35 +4060,35 @@ msgstr ""
 msgid "Return to LZ"
 msgstr "回到降落點"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:478
+#: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:494
+#: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:495
+#: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:496
+#: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:497
+#: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:503
+#: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:513
+#: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
 msgstr ""
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:518
+#: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
 msgstr ""
 
@@ -4164,9 +4164,9 @@ msgstr ""
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/script/rules/reticule.js:111
 #: src/challenge.cpp:240
-#: src/hci.cpp:1808
-#: src/hci/objects_stats.cpp:182
-#: src/hci/objects_stats.cpp:267
+#: src/hci.cpp:1840
+#: src/hci/objects_stats.cpp:226
+#: src/hci/objects_stats.cpp:311
 #: src/intelmap.cpp:406
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
@@ -5414,7 +5414,7 @@ msgstr "NEXUS入侵程式"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 #: data/mp/messages/strings/names.txt:490
-#: po/custom/fromJson.txt:4227
+#: po/custom/fromJson.txt:4230
 msgid "Nexus Resistance Circuits"
 msgstr "NEXUS 電腦入侵防禦系統一型"
 
@@ -5429,7 +5429,7 @@ msgstr "NEXUS 電腦入侵防禦系統三型"
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
 #: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:2803
+#: po/custom/fromJson.txt:2799
 msgid "Hover Propulsion II"
 msgstr "推進動力：氣墊船二型"
 
@@ -5582,63 +5582,63 @@ msgid "Command Turret IV"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:6
-#: src/multiint.cpp:1420
-#: src/multiint.cpp:1423
+#: src/multiint.cpp:1424
+#: src/multiint.cpp:1427
 msgid "Scavengers"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
-#: src/multiint.cpp:1425
+#: src/multiint.cpp:1429
 msgid "No Scavengers"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:12
-#: src/multiint.cpp:1433
+#: src/multiint.cpp:1437
 msgid "No Alliances"
 msgstr "不允許同盟"
 
 #: data/mp/multiplay/script/rules/printsettings.js:13
-#: src/multiint.cpp:1434
+#: src/multiint.cpp:1438
 msgid "Allow Alliances"
 msgstr "允許同盟"
 
 #: data/mp/multiplay/script/rules/printsettings.js:14
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1440
 msgid "Locked Teams"
 msgstr "鎖定同盟模式"
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
-#: src/multiint.cpp:1435
+#: src/multiint.cpp:1439
 msgid "Locked Teams, No Shared Research"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:21
-#: src/multiint.cpp:1444
+#: src/multiint.cpp:1448
 msgid "Low Power Levels"
 msgstr "生產能源速度：慢"
 
 #: data/mp/multiplay/script/rules/printsettings.js:22
-#: src/multiint.cpp:1445
+#: src/multiint.cpp:1449
 msgid "Medium Power Levels"
 msgstr "生產能源速度：中"
 
 #: data/mp/multiplay/script/rules/printsettings.js:23
-#: src/multiint.cpp:1446
+#: src/multiint.cpp:1450
 msgid "High Power Levels"
 msgstr "生產能源速度：快"
 
 #: data/mp/multiplay/script/rules/printsettings.js:29
-#: src/multiint.cpp:1454
+#: src/multiint.cpp:1458
 msgid "Start with No Bases"
 msgstr "開始時無基地"
 
 #: data/mp/multiplay/script/rules/printsettings.js:30
-#: src/multiint.cpp:1455
+#: src/multiint.cpp:1459
 msgid "Start with Bases"
 msgstr "開始時有基地"
 
 #: data/mp/multiplay/script/rules/printsettings.js:31
-#: src/multiint.cpp:1456
+#: src/multiint.cpp:1460
 msgid "Start with Advanced Bases"
 msgstr "開始時具規模基地"
 
@@ -7106,19 +7106,19 @@ msgid "Best Targets: Base structures"
 msgstr "最佳目標：基本建築物"
 
 #. TRANSLATORS:
+#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1094
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "最佳目標：碉堡與要塞"
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #. ... + 4 refs
-#: po/custom/fromJson.txt:1096
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr "最佳目標：碉堡與要塞"
-
-#. TRANSLATORS:
-#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1100
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "最佳目標：碉堡與要塞"
 
 #. TRANSLATORS:
@@ -9599,55 +9599,48 @@ msgid "High tensile concrete-plastic composite"
 msgstr "高張力混凝土與黏土複合牆"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#: po/custom/fromJson.txt:2787
-msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "高速尾翼穩定脫殼穿甲彈(HVAPFSDS)"
-
-#. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
-#: po/custom/fromJson.txt:2791
+#: po/custom/fromJson.txt:2787
 msgid "HMG Bunker"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
-#: po/custom/fromJson.txt:2794
+#: po/custom/fromJson.txt:2790
 msgid "Hover AI"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
-#: po/custom/fromJson.txt:2797
+#: po/custom/fromJson.txt:2793
 msgid "Hover II"
 msgstr "氣墊船二型"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
-#: po/custom/fromJson.txt:2800
+#: po/custom/fromJson.txt:2796
 msgid "Hover III"
 msgstr "氣墊船三型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Hover.name
-#: po/custom/fromJson.txt:2807
+#: po/custom/fromJson.txt:2803
 msgid "Hover Propulsion"
 msgstr "推進動力：氣墊船"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover01.name
 #. data/mp/stats/propulsion.json: $.hover01.name
-#: po/custom/fromJson.txt:2811
+#: po/custom/fromJson.txt:2807
 msgid "Hover"
 msgstr "氣墊船"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[2]
-#: po/custom/fromJson.txt:2816
+#: po/custom/fromJson.txt:2812
 #, no-c-format
 msgid "Howitzer accuracy +10%"
 msgstr ""
@@ -9655,42 +9648,42 @@ msgstr ""
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
-#: po/custom/fromJson.txt:2820
+#: po/custom/fromJson.txt:2816
 msgid "Howitzer Autoloader Mk2"
 msgstr "榴彈砲自動裝填器二型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
-#: po/custom/fromJson.txt:2824
+#: po/custom/fromJson.txt:2820
 msgid "Howitzer Autoloader Mk3"
 msgstr "榴彈砲自動裝填器三型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
-#: po/custom/fromJson.txt:2828
+#: po/custom/fromJson.txt:2824
 msgid "Howitzer Autoloader"
 msgstr "榴彈砲自動裝填器一型"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[2]
-#: po/custom/fromJson.txt:2833
+#: po/custom/fromJson.txt:2829
 #, no-c-format
 msgid "Howitzer damage +25%"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
-#: po/custom/fromJson.txt:2842
+#: po/custom/fromJson.txt:2838
 msgid "Howitzer Fast Loader"
 msgstr "迫擊砲快速裝載系統"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text[2]
-#: po/custom/fromJson.txt:2847
+#: po/custom/fromJson.txt:2843
 #, no-c-format
 msgid "Howitzer reload time -10%"
 msgstr ""
@@ -9700,27 +9693,27 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Howitzer105Mk1.name
 #. data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
-#: po/custom/fromJson.txt:2859
+#: po/custom/fromJson.txt:2855
 msgid "Howitzer"
 msgstr "榴彈砲"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2863
+#: po/custom/fromJson.txt:2859
 msgid "HPV Cannon Emplacement"
 msgstr "高速加農砲砲台"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2867
+#: po/custom/fromJson.txt:2863
 msgid "HPV Cannon Hardpoint"
 msgstr "高速加農砲要塞"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2870
+#: po/custom/fromJson.txt:2866
 msgid "HPV Cannon Python Tracks"
 msgstr "履帶式蟒蛇坦克（高速加農砲）"
 
@@ -9729,7 +9722,7 @@ msgstr "履帶式蟒蛇坦克（高速加農砲）"
 #. data/base/stats/structure.json: $.AASite-QuadMg1.name
 #. data/mp/stats/research.json: $.R-Defense-AASite-QuadMg1.name
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
-#: po/custom/fromJson.txt:2876
+#: po/custom/fromJson.txt:2872
 msgid "Hurricane AA Site"
 msgstr "颶風級高射砲"
 
@@ -9738,67 +9731,67 @@ msgstr "颶風級高射砲"
 #. data/base/stats/weapons.json: $.QuadMg1AAGun.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun03.name
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
-#: po/custom/fromJson.txt:2882
+#: po/custom/fromJson.txt:2878
 msgid "Hurricane AA Turret"
 msgstr "颶風級高射砲"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
-#: po/custom/fromJson.txt:2885
+#: po/custom/fromJson.txt:2881
 msgid "Hut"
 msgstr "茅屋"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
-#: po/custom/fromJson.txt:2889
+#: po/custom/fromJson.txt:2885
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "HVAPFSDS加農砲二型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
-#: po/custom/fromJson.txt:2893
+#: po/custom/fromJson.txt:2889
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "HVAPFSDS加農砲三型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
-#: po/custom/fromJson.txt:2897
+#: po/custom/fromJson.txt:2893
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "HVAPFSDS加農砲一型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
-#: po/custom/fromJson.txt:2901
+#: po/custom/fromJson.txt:2897
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "高階高速型鍊槍升級"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2905
+#: po/custom/fromJson.txt:2901
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2909
+#: po/custom/fromJson.txt:2905
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
-#: po/custom/fromJson.txt:2912
+#: po/custom/fromJson.txt:2908
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2915
+#: po/custom/fromJson.txt:2911
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr ""
 
@@ -9807,9 +9800,16 @@ msgstr ""
 #. data/base/stats/weapons.json: $.Cannon4AUTOMk1.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon4AMk1.name
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
-#: po/custom/fromJson.txt:2921
+#: po/custom/fromJson.txt:2917
 msgid "Hyper Velocity Cannon"
 msgstr "高速加農砲"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#: po/custom/fromJson.txt:2921
+msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -9985,17 +9985,17 @@ msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
-#: po/custom/fromJson.txt:3044
-msgid "Incendiary Howitzer Emplacement"
-msgstr ""
-
-#. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-#: po/custom/fromJson.txt:3047
+#: po/custom/fromJson.txt:3043
 msgid "Incendiary howitzer emplacement"
 msgstr "燃燒榴彈砲砲台"
+
+#. TRANSLATORS:
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
+#: po/custom/fromJson.txt:3047
+msgid "Incendiary Howitzer Emplacement"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -11454,20 +11454,20 @@ msgid "New Systems Tower Available"
 msgstr "可建造新的系統防禦工事"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4155
-msgid "New Systems Turret Available For Design"
-msgstr "可在設計選單中使用新的系統裝備"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4161
+#: po/custom/fromJson.txt:4157
 msgid "New Systems Turret Available for Design"
 msgstr "可搭載新的系統裝備"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4161
+msgid "New Systems Turret Available For Design"
+msgstr "可在設計選單中使用新的系統裝備"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -11557,7 +11557,7 @@ msgstr "NEXUS阻抗迴路三型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
-#: po/custom/fromJson.txt:4230
+#: po/custom/fromJson.txt:4227
 msgid "NEXUS Resistance Circuits"
 msgstr "NEXUS阻抗迴路"
 
@@ -13226,18 +13226,18 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr "突觸連結資料分析三型"
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#: po/custom/fromJson.txt:5344
-msgid "Synaptic Link Data Analysis"
-msgstr "突觸連結資料分析一型"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#: po/custom/fromJson.txt:5348
+#: po/custom/fromJson.txt:5344
 msgid "Synaptic link data analysis"
 msgstr "突觸連結資料分析"
+
+#. TRANSLATORS:
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#: po/custom/fromJson.txt:5348
+msgid "Synaptic Link Data Analysis"
+msgstr "突觸連結資料分析一型"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -14973,38 +14973,38 @@ msgstr ""
 msgid "Store Design"
 msgstr ""
 
-#: src/display.cpp:1551
+#: src/display.cpp:1553
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "油田燃燒中，無法建築鑽油井"
 
-#: src/display.cpp:1569
+#: src/display.cpp:1571
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
 msgstr ""
 
-#: src/display.cpp:1731
+#: src/display.cpp:1733
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr ""
 
-#: src/display3d.cpp:729
+#: src/display3d.cpp:742
 msgid "Player left"
 msgstr ""
 
-#: src/display3d.cpp:733
+#: src/display3d.cpp:746
 msgid "Player dropped"
 msgstr ""
 
-#: src/display3d.cpp:737
-#: src/multiint.cpp:2501
+#: src/display3d.cpp:750
+#: src/multiint.cpp:2521
 msgid "Waiting for other players"
 msgstr "等待其他玩家"
 
-#: src/display3d.cpp:742
+#: src/display3d.cpp:755
 msgid "Out of sync"
 msgstr ""
 
-#: src/display3d.cpp:2004
+#: src/display3d.cpp:2017
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr ""
@@ -15019,31 +15019,31 @@ msgstr ""
 msgid "Structure Restored"
 msgstr "建築物重建"
 
-#: src/droid.cpp:1829
+#: src/droid.cpp:1830
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "第 %u 隊聽令 - 共 %u  單位"
 
-#: src/droid.cpp:1838
+#: src/droid.cpp:1839
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "共 %u 單位 被指派為 第 %u 隊"
 
-#: src/droid.cpp:1849
+#: src/droid.cpp:1850
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "視角移動至第 %u  隊 - 共 %u 單位"
 
-#: src/droid.cpp:1853
+#: src/droid.cpp:1854
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Aligning with Group %u - %u 單位"
 
-#: src/droid.cpp:2934
+#: src/droid.cpp:2936
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
@@ -15077,7 +15077,7 @@ msgid "Tutorial"
 msgstr "教學模式"
 
 #: src/frontend.cpp:145
-#: src/ingameop.cpp:240
+#: src/ingameop.cpp:239
 msgid "Options"
 msgstr "選項"
 
@@ -15193,12 +15193,12 @@ msgid "CAMPAIGNS"
 msgstr ""
 
 #: src/frontend.cpp:498
-#: src/ingameop.cpp:935
+#: src/ingameop.cpp:953
 msgid "Load Campaign Saved Game"
 msgstr ""
 
 #: src/frontend.cpp:504
-#: src/ingameop.cpp:939
+#: src/ingameop.cpp:957
 msgid "Load Skirmish Saved Game"
 msgstr ""
 
@@ -15219,7 +15219,7 @@ msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
 #: src/frontend.cpp:634
-#: src/multiint.cpp:1343
+#: src/multiint.cpp:1347
 msgid "OPTIONS"
 msgstr "選項"
 
@@ -15228,12 +15228,12 @@ msgid "Game Options"
 msgstr "遊戲選項"
 
 #: src/frontend.cpp:636
-#: src/ingameop.cpp:477
+#: src/ingameop.cpp:495
 msgid "Graphics Options"
 msgstr "圖形選項"
 
 #: src/frontend.cpp:637
-#: src/ingameop.cpp:480
+#: src/ingameop.cpp:498
 msgid "Video Options"
 msgstr "顯示選項"
 
@@ -15242,17 +15242,17 @@ msgid "Audio / Zoom Options"
 msgstr ""
 
 #: src/frontend.cpp:639
-#: src/ingameop.cpp:487
+#: src/ingameop.cpp:505
 msgid "Mouse Options"
 msgstr "滑鼠選項"
 
 #: src/frontend.cpp:640
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:510
 msgid "Key Mappings"
 msgstr "鍵盤配置"
 
 #: src/frontend.cpp:641
-#: src/ingameop.cpp:495
+#: src/ingameop.cpp:513
 msgid "Music Manager"
 msgstr ""
 
@@ -15318,7 +15318,7 @@ msgid "50%"
 msgstr ""
 
 #: src/frontend.cpp:725
-#: src/multiplay.cpp:1672
+#: src/multiplay.cpp:1649
 msgid "Black"
 msgstr "黑色"
 
@@ -15350,32 +15350,32 @@ msgid "Tracked"
 msgstr ""
 
 #: src/frontend.cpp:765
-#: src/ingameop.cpp:523
+#: src/ingameop.cpp:541
 msgid "Video Playback"
 msgstr "播放影片"
 
 #: src/frontend.cpp:769
-#: src/ingameop.cpp:528
+#: src/ingameop.cpp:546
 msgid "Scanlines"
 msgstr ""
 
 #: src/frontend.cpp:774
-#: src/ingameop.cpp:533
+#: src/ingameop.cpp:551
 msgid "Subtitles"
 msgstr "字幕"
 
 #: src/frontend.cpp:779
-#: src/ingameop.cpp:538
+#: src/ingameop.cpp:556
 msgid "Shadows"
 msgstr "影子"
 
 #: src/frontend.cpp:783
-#: src/ingameop.cpp:543
+#: src/ingameop.cpp:561
 msgid "Radar"
 msgstr ""
 
 #: src/frontend.cpp:787
-#: src/ingameop.cpp:548
+#: src/ingameop.cpp:566
 msgid "Radar Jump"
 msgstr ""
 
@@ -15486,7 +15486,7 @@ msgid "Texture size"
 msgstr "貼圖精細度"
 
 #: src/frontend.cpp:1418
-#: src/ingameop.cpp:655
+#: src/ingameop.cpp:673
 msgid "Vertical sync"
 msgstr ""
 
@@ -15545,32 +15545,32 @@ msgid "Camera Pitch"
 msgstr ""
 
 #: src/frontend.cpp:1709
-#: src/ingameop.cpp:731
+#: src/ingameop.cpp:749
 msgid "Reverse Rotation"
 msgstr ""
 
 #: src/frontend.cpp:1713
-#: src/ingameop.cpp:738
+#: src/ingameop.cpp:756
 msgid "Trap Cursor"
 msgstr "捕捉滑鼠"
 
 #: src/frontend.cpp:1718
-#: src/ingameop.cpp:744
+#: src/ingameop.cpp:762
 msgid "Switch Mouse Buttons"
 msgstr ""
 
 #: src/frontend.cpp:1723
-#: src/ingameop.cpp:749
+#: src/ingameop.cpp:767
 msgid "Rotate Screen"
 msgstr ""
 
 #: src/frontend.cpp:1727
-#: src/ingameop.cpp:754
+#: src/ingameop.cpp:772
 msgid "Colored Cursors"
 msgstr ""
 
 #: src/frontend.cpp:1731
-#: src/ingameop.cpp:759
+#: src/ingameop.cpp:777
 msgid "Scroll Event"
 msgstr ""
 
@@ -15579,17 +15579,17 @@ msgid "MOUSE OPTIONS"
 msgstr ""
 
 #: src/frontend.cpp:1811
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Easy"
 msgstr "容易"
 
 #: src/frontend.cpp:1813
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Hard"
 msgstr "困難"
 
 #: src/frontend.cpp:1814
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Insane"
 msgstr ""
 
@@ -15628,7 +15628,7 @@ msgid "GAME OPTIONS"
 msgstr "遊戲選項"
 
 #: src/frontend.cpp:2029
-#: src/multiint.cpp:2964
+#: src/multiint.cpp:2997
 msgid "Mod: "
 msgstr ""
 
@@ -15667,110 +15667,110 @@ msgstr ""
 msgid "Tip: Adjusting Display Scale"
 msgstr ""
 
-#: src/hci.cpp:929
+#: src/hci.cpp:959
 #: src/loop.cpp:244
 #: src/loop.cpp:260
 msgid "GAME SAVED: "
 msgstr ""
 
-#: src/hci.cpp:1327
+#: src/hci.cpp:1358
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新建築物: %s."
 
-#: src/hci.cpp:1336
+#: src/hci.cpp:1367
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新功能: %s."
 
-#: src/hci.cpp:1355
+#: src/hci.cpp:1386
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "玩家 %u 利用作弊（除錯）模式建立了一個新droid: %s."
 
-#: src/hci.cpp:1363
+#: src/hci.cpp:1394
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
-#: src/hci.cpp:1693
-#: src/multiint.cpp:1443
+#: src/hci.cpp:1725
+#: src/multiint.cpp:1447
 #: src/multimenu.cpp:686
 msgid "Power"
 msgstr "能源"
 
-#: src/hci.cpp:1763
-#: src/hci/build.cpp:552
-#: src/hci/manufacture.cpp:544
+#: src/hci.cpp:1795
+#: src/hci/build.cpp:568
+#: src/hci/manufacture.cpp:583
 msgid "Hiding Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:1765
-#: src/hci/build.cpp:554
-#: src/hci/manufacture.cpp:546
+#: src/hci.cpp:1797
+#: src/hci/build.cpp:570
+#: src/hci/manufacture.cpp:585
 msgid "Showing Obsolete Tech"
 msgstr ""
 
-#: src/hci.cpp:1888
+#: src/hci.cpp:1920
 msgid "\n"
 "Cost: %1"
 msgstr ""
 
-#: src/hci.cpp:2494
+#: src/hci.cpp:2526
 msgid "Chat: All"
 msgstr ""
 
-#: src/hci.cpp:2499
+#: src/hci.cpp:2531
 msgid "Chat: Team"
 msgstr ""
 
-#: src/hci/build.cpp:287
+#: src/hci/build.cpp:290
 msgid "Build Progress"
 msgstr ""
 
-#: src/hci/build.cpp:575
+#: src/hci/build.cpp:591
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr ""
 
-#: src/hci/build.cpp:577
+#: src/hci/build.cpp:593
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr ""
 
-#: src/hci/manufacture.cpp:340
+#: src/hci/manufacture.cpp:352
 msgid "Construction Progress"
 msgstr ""
 
-#: src/hci/manufacture.cpp:584
+#: src/hci/manufacture.cpp:623
 msgid "Factory Delivery Point"
 msgstr "工廠單位產出點"
 
-#: src/hci/manufacture.cpp:635
+#: src/hci/manufacture.cpp:674
 msgid "Loop Production"
 msgstr "循環生產"
 
-#: src/hci/objects_stats.cpp:109
+#: src/hci/objects_stats.cpp:135
 msgid "Progress Bar"
 msgstr "進度條"
 
-#: src/hci/research.cpp:374
+#: src/hci/research.cpp:402
 msgid "Research Progress"
 msgstr ""
 
-#: src/hci/research.cpp:448
+#: src/hci/research.cpp:480
 msgid "Ally progress"
 msgstr ""
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:183
-#: src/ingameop.cpp:236
-#: src/ingameop.cpp:501
-#: src/ingameop.cpp:560
-#: src/ingameop.cpp:673
-#: src/ingameop.cpp:767
+#: src/ingameop.cpp:235
+#: src/ingameop.cpp:519
+#: src/ingameop.cpp:578
+#: src/ingameop.cpp:691
+#: src/ingameop.cpp:785
 #: src/keyedit.cpp:446
-#: src/musicmanager.cpp:778
+#: src/musicmanager.cpp:779
 msgid "Resume Game"
 msgstr "返回遊戲"
 
@@ -15779,93 +15779,93 @@ msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr ""
 
 #: src/ingameop.cpp:130
-#: src/ingameop.cpp:268
+#: src/ingameop.cpp:267
 msgid "Host Quit"
 msgstr ""
 
 #: src/ingameop.cpp:170
-#: src/ingameop.cpp:970
+#: src/ingameop.cpp:988
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr ""
 
 #: src/ingameop.cpp:175
-#: src/ingameop.cpp:974
+#: src/ingameop.cpp:992
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr ""
 
 #: src/ingameop.cpp:180
-#: src/ingameop.cpp:498
-#: src/ingameop.cpp:557
-#: src/ingameop.cpp:669
-#: src/ingameop.cpp:763
+#: src/ingameop.cpp:516
+#: src/ingameop.cpp:575
+#: src/ingameop.cpp:687
+#: src/ingameop.cpp:781
 #: src/keyedit.cpp:444
-#: src/musicmanager.cpp:777
+#: src/musicmanager.cpp:778
 msgid "Go Back"
 msgstr ""
 
-#: src/ingameop.cpp:248
-#: src/ingameop.cpp:257
+#: src/ingameop.cpp:247
+#: src/ingameop.cpp:256
 msgid "Load Game"
 msgstr "載入遊戲"
 
-#: src/ingameop.cpp:251
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:250
+#: src/ingameop.cpp:259
 #: src/mission.cpp:2430
 msgid "Save Game"
 msgstr "儲存遊戲"
 
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:271
 msgid "Quit"
 msgstr "退出"
 
-#: src/ingameop.cpp:340
+#: src/ingameop.cpp:339
 msgid "Host has quit the game!"
 msgstr ""
 
-#: src/ingameop.cpp:346
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr ""
 
-#: src/ingameop.cpp:352
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr ""
 
-#: src/ingameop.cpp:484
+#: src/ingameop.cpp:502
 msgid "Audio Options"
 msgstr "音效選項"
 
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:510
 msgid "View Key Mappings"
 msgstr ""
 
-#: src/ingameop.cpp:553
+#: src/ingameop.cpp:571
 msgid "Shake"
 msgstr ""
 
-#: src/ingameop.cpp:943
+#: src/ingameop.cpp:961
 msgid "Save Campaign Game"
 msgstr ""
 
-#: src/ingameop.cpp:947
+#: src/ingameop.cpp:965
 msgid "Save Skirmish Game"
 msgstr ""
 
-#: src/init.cpp:449
+#: src/init.cpp:450
 #, c-format
 msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr ""
 
-#: src/intdisplay.cpp:162
+#: src/intdisplay.cpp:163
 msgid "Waiting for Power"
 msgstr ""
 
-#: src/intdisplay.cpp:286
+#: src/intdisplay.cpp:287
 #, c-format
 msgid "%d derrick(s) inactive"
 msgstr ""
 
-#: src/intdisplay.cpp:291
+#: src/intdisplay.cpp:292
 msgid "Need more resources!"
 msgstr ""
 
@@ -16489,8 +16489,8 @@ msgid "KEY MAPPING"
 msgstr "鍵盤配置"
 
 #: src/keyedit.cpp:427
-#: src/multiint.cpp:1521
-#: src/musicmanager.cpp:767
+#: src/multiint.cpp:1525
+#: src/musicmanager.cpp:768
 #: src/titleui/gamefind.cpp:91
 #: src/titleui/protocol.cpp:81
 msgid "Return To Previous Screen"
@@ -17165,7 +17165,7 @@ msgstr "載入已儲存的遊戲"
 msgid "GAME SAVED :"
 msgstr ""
 
-#: src/move.cpp:1974
+#: src/move.cpp:1975
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -17221,389 +17221,389 @@ msgstr "%s 與 %s 結盟"
 msgid "You Discover Blueprints For %s"
 msgstr "你發現一個用作於 %s 的藍圖"
 
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Medium"
 msgstr ""
 
-#: src/multiint.cpp:364
-#: src/multiplay.cpp:467
+#: src/multiint.cpp:368
+#: src/multiplay.cpp:466
 msgid "Commander"
 msgstr "指揮官"
 
-#: src/multiint.cpp:794
+#: src/multiint.cpp:798
 msgid "MISSING AI NAME"
 msgstr ""
 
-#: src/multiint.cpp:819
+#: src/multiint.cpp:823
 msgid "MISSING AI DESCRIPTION"
 msgstr ""
 
-#: src/multiint.cpp:833
+#: src/multiint.cpp:837
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr ""
 
-#: src/multiint.cpp:1026
+#: src/multiint.cpp:1030
 msgid "Error while joining."
 msgstr ""
 
-#: src/multiint.cpp:1140
+#: src/multiint.cpp:1144
 msgid "Tanks disabled!!"
 msgstr ""
 
-#: src/multiint.cpp:1141
+#: src/multiint.cpp:1145
 msgid "Cyborgs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1142
+#: src/multiint.cpp:1146
 msgid "VTOLs disabled."
 msgstr ""
 
-#: src/multiint.cpp:1143
+#: src/multiint.cpp:1147
 msgid "Satellite Uplink disabled."
 msgstr ""
 
-#: src/multiint.cpp:1144
+#: src/multiint.cpp:1148
 msgid "Laser Satellite disabled."
 msgstr ""
 
-#: src/multiint.cpp:1145
+#: src/multiint.cpp:1149
 msgid "Structure Limits Enforced."
 msgstr ""
 
-#: src/multiint.cpp:1280
+#: src/multiint.cpp:1284
 msgid "Vote"
 msgstr ""
 
-#: src/multiint.cpp:1281
+#: src/multiint.cpp:1285
 msgid "Allow host to change map or randomize?"
 msgstr ""
 
-#: src/multiint.cpp:1312
+#: src/multiint.cpp:1316
 msgid "Not enough votes to randomize or change the map."
 msgstr ""
 
-#: src/multiint.cpp:1348
+#: src/multiint.cpp:1352
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
 msgstr ""
 
-#: src/multiint.cpp:1349
+#: src/multiint.cpp:1353
 msgid "One-Player Skirmish"
 msgstr ""
 
-#: src/multiint.cpp:1356
+#: src/multiint.cpp:1360
 msgid "Select Game Name"
 msgstr "選擇遊戲名稱"
 
-#: src/multiint.cpp:1376
+#: src/multiint.cpp:1380
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1377
+#: src/multiint.cpp:1381
 msgid "Map-Mod!"
 msgstr ""
 
-#: src/multiint.cpp:1378
+#: src/multiint.cpp:1382
 msgid "Random map!"
 msgstr ""
 
-#: src/multiint.cpp:1395
+#: src/multiint.cpp:1399
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.cpp:1409
+#: src/multiint.cpp:1413
 msgid "Select Player Name"
 msgstr "選擇玩家名稱"
 
-#: src/multiint.cpp:1432
+#: src/multiint.cpp:1436
 #: src/multimenu.cpp:675
 msgid "Alliances"
 msgstr "同盟"
 
-#: src/multiint.cpp:1453
+#: src/multiint.cpp:1457
 msgid "Base"
 msgstr "基地"
 
-#: src/multiint.cpp:1463
+#: src/multiint.cpp:1467
 msgid "Map Preview"
 msgstr "預覽地圖"
 
-#: src/multiint.cpp:1464
+#: src/multiint.cpp:1468
 msgid "Click to see Map"
 msgstr "按一下看地圖"
 
-#: src/multiint.cpp:1470
+#: src/multiint.cpp:1474
 msgid "Show Structure Limits"
 msgstr ""
 
-#: src/multiint.cpp:1470
+#: src/multiint.cpp:1474
 msgid "Set Structure Limits"
 msgstr "設定建築物數量限制"
 
-#: src/multiint.cpp:1484
+#: src/multiint.cpp:1488
 msgid "Random Game Options"
 msgstr ""
 
-#: src/multiint.cpp:1485
+#: src/multiint.cpp:1489
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1496
+#: src/multiint.cpp:1500
 msgid "Tech"
 msgstr ""
 
-#: src/multiint.cpp:1497
+#: src/multiint.cpp:1501
 msgid "Technology Level 1"
 msgstr ""
 
-#: src/multiint.cpp:1498
+#: src/multiint.cpp:1502
 msgid "Technology Level 2"
 msgstr ""
 
-#: src/multiint.cpp:1499
+#: src/multiint.cpp:1503
 msgid "Technology Level 3"
 msgstr ""
 
-#: src/multiint.cpp:1500
+#: src/multiint.cpp:1504
 msgid "Technology Level 4"
 msgstr ""
 
-#: src/multiint.cpp:1509
-#: src/multiint.cpp:1510
+#: src/multiint.cpp:1513
+#: src/multiint.cpp:1514
 msgid "Start Hosting Game"
 msgstr "開始遊戲"
 
-#: src/multiint.cpp:1666
+#: src/multiint.cpp:1670
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1696
+#: src/multiint.cpp:1700
 msgid "Starts disadvantaged"
 msgstr ""
 
-#: src/multiint.cpp:1697
+#: src/multiint.cpp:1701
 msgid "Plays nice"
 msgstr ""
 
-#: src/multiint.cpp:1698
+#: src/multiint.cpp:1702
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1699
+#: src/multiint.cpp:1703
 msgid "Starts with advantages"
 msgstr ""
 
-#: src/multiint.cpp:1727
+#: src/multiint.cpp:1731
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1783
+#: src/multiint.cpp:1787
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1794
+#: src/multiint.cpp:1798
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:1926
+#: src/multiint.cpp:1930
 msgid "Team"
 msgstr "隊伍"
 
-#: src/multiint.cpp:1939
-#: src/multiint.cpp:3895
+#: src/multiint.cpp:1943
+#: src/multiint.cpp:3940
 #: src/multimenu.cpp:1241
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "主玩家將 %s 踢出遊戲！"
 
-#: src/multiint.cpp:1940
-#: src/multiint.cpp:3897
+#: src/multiint.cpp:1944
+#: src/multiint.cpp:3942
 #: src/multimenu.cpp:1245
 msgid "The host has kicked you from the game."
 msgstr ""
 
-#: src/multiint.cpp:2486
+#: src/multiint.cpp:2500
 msgid "Click to change difficulty"
 msgstr ""
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Waiting for player"
 msgstr ""
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Player is ready"
 msgstr ""
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Player is downloading"
 msgstr ""
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Click when ready"
 msgstr "按一下開始"
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Waiting for download"
 msgstr ""
 
-#: src/multiint.cpp:2514
+#: src/multiint.cpp:2546
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:2555
+#: src/multiint.cpp:2587
 msgid "PLAYERS"
 msgstr "玩家"
 
-#: src/multiint.cpp:2590
+#: src/multiint.cpp:2623
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:2619
+#: src/multiint.cpp:2652
 msgid "Choose Team"
 msgstr ""
 
-#: src/multiint.cpp:2623
+#: src/multiint.cpp:2656
 msgid "Teams locked"
 msgstr ""
 
-#: src/multiint.cpp:2645
+#: src/multiint.cpp:2678
 msgid "Click to change player colour"
 msgstr ""
 
-#: src/multiint.cpp:2661
+#: src/multiint.cpp:2694
 msgid "Click to change player faction"
 msgstr ""
 
-#: src/multiint.cpp:2686
+#: src/multiint.cpp:2719
 msgid "Click to change player position"
 msgstr ""
 
-#: src/multiint.cpp:2693
+#: src/multiint.cpp:2726
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
-#: src/multiint.cpp:2708
+#: src/multiint.cpp:2741
 msgid "Player ID: "
 msgstr ""
 
-#: src/multiint.cpp:2709
+#: src/multiint.cpp:2742
 msgid "(none)"
 msgstr ""
 
-#: src/multiint.cpp:2761
+#: src/multiint.cpp:2794
 msgid "Kicked from game"
 msgstr ""
 
-#: src/multiint.cpp:2960
+#: src/multiint.cpp:2993
 msgid "CHAT"
 msgstr "聊天"
 
-#: src/multiint.cpp:3567
+#: src/multiint.cpp:3607
 msgid "Sorry! Failed to host the game."
 msgstr ""
 
-#: src/multiint.cpp:3610
+#: src/multiint.cpp:3652
 msgid "Game Name Updated."
 msgstr ""
 
-#: src/multiint.cpp:3738
+#: src/multiint.cpp:3780
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr ""
 
-#: src/multiint.cpp:3744
+#: src/multiint.cpp:3786
 msgid "*** password is NOT required! ***"
 msgstr ""
 
-#: src/multiint.cpp:3757
+#: src/multiint.cpp:3799
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:3762
+#: src/multiint.cpp:3804
 msgid "This is a random map, it can vary your playing experience!"
 msgstr ""
 
-#: src/multiint.cpp:4025
+#: src/multiint.cpp:4070
 msgid "Host is Starting Game"
 msgstr "主玩家已開始遊戲"
 
-#: src/multiint.cpp:4241
+#: src/multiint.cpp:4313
 msgid "You have been kicked: "
 msgstr ""
 
-#: src/multiint.cpp:4255
+#: src/multiint.cpp:4327
 msgid "No connection to host."
 msgstr ""
 
-#: src/multiint.cpp:4419
+#: src/multiint.cpp:4496
 msgid "Cannot change to a map with too few slots for all players."
 msgstr ""
 
-#: src/multiint.cpp:4424
+#: src/multiint.cpp:4501
 msgid "Cannot change to a map with fewer slots."
 msgstr ""
 
-#: src/multiint.cpp:4518
+#: src/multiint.cpp:4598
 msgid "The host has quit."
 msgstr ""
 
-#: src/multiint.cpp:4556
+#: src/multiint.cpp:4637
 msgid "UPnP has been enabled."
 msgstr ""
 
-#: src/multiint.cpp:4562
+#: src/multiint.cpp:4643
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr ""
 
-#: src/multiint.cpp:4566
+#: src/multiint.cpp:4647
 msgid "UPnP detection is in progress..."
 msgstr ""
 
-#: src/multiint.cpp:4573
+#: src/multiint.cpp:4654
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr ""
 
-#: src/multiint.cpp:4579
+#: src/multiint.cpp:4660
 msgid "Hit the ready box to begin your challenge!"
 msgstr ""
 
-#: src/multiint.cpp:4583
+#: src/multiint.cpp:4664
 msgid "Press the start hosting button to begin hosting a game."
 msgstr ""
 
-#: src/multiint.cpp:4744
+#: src/multiint.cpp:4825
 #, c-format
 msgid "Click to take player slot %d"
 msgstr ""
 
-#: src/multiint.cpp:4758
-#: src/multiint.cpp:4992
+#: src/multiint.cpp:4839
+#: src/multiint.cpp:5073
 msgid "Open"
 msgstr ""
 
-#: src/multiint.cpp:4758
-#: src/multiint.cpp:4993
+#: src/multiint.cpp:4839
+#: src/multiint.cpp:5074
 msgid "Closed"
 msgstr ""
 
-#: src/multiint.cpp:4834
+#: src/multiint.cpp:4915
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr ""
 
-#: src/multiint.cpp:4834
+#: src/multiint.cpp:4915
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr ""
 
-#: src/multiint.cpp:4882
+#: src/multiint.cpp:4963
 msgid "HOST"
 msgstr ""
 
-#: src/multiint.cpp:4889
+#: src/multiint.cpp:4970
 #: src/multimenu.cpp:693
 msgid "Ping"
 msgstr ""
@@ -17756,130 +17756,130 @@ msgstr "提供玩家能源"
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr ""
 
-#: src/multiopt.cpp:298
-#: src/multiplay.cpp:1475
+#: src/multiopt.cpp:305
+#: src/multiplay.cpp:1452
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr ""
 
-#: src/multiopt.cpp:299
-#: src/multiplay.cpp:1479
+#: src/multiopt.cpp:306
+#: src/multiplay.cpp:1456
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr ""
 
-#: src/multiplay.cpp:266
+#: src/multiplay.cpp:265
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr ""
 
-#: src/multiplay.cpp:272
+#: src/multiplay.cpp:271
 msgid "Invalid data!"
 msgstr ""
 
-#: src/multiplay.cpp:895
+#: src/multiplay.cpp:872
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
 msgstr ""
 
-#: src/multiplay.cpp:1359
+#: src/multiplay.cpp:1336
 msgid "Map was requested: SENDING MAP!"
 msgstr ""
 
-#: src/multiplay.cpp:1375
+#: src/multiplay.cpp:1352
 msgid "Mod was requested: SENDING MOD!"
 msgstr ""
 
-#: src/multiplay.cpp:1440
+#: src/multiplay.cpp:1417
 msgid "FILE SENT!"
 msgstr ""
 
-#: src/multiplay.cpp:1511
+#: src/multiplay.cpp:1488
 #, c-format
 msgid "Beacon %d"
 msgstr "引導指標 %d"
 
-#: src/multiplay.cpp:1618
+#: src/multiplay.cpp:1595
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "由 %s 獲得引導指標"
 
-#: src/multiplay.cpp:1669
+#: src/multiplay.cpp:1646
 msgid "Green"
 msgstr "綠色"
 
-#: src/multiplay.cpp:1670
+#: src/multiplay.cpp:1647
 msgid "Orange"
 msgstr "橙色"
 
-#: src/multiplay.cpp:1671
+#: src/multiplay.cpp:1648
 msgid "Grey"
 msgstr "灰色"
 
-#: src/multiplay.cpp:1673
+#: src/multiplay.cpp:1650
 msgid "Red"
 msgstr "紅色"
 
-#: src/multiplay.cpp:1674
+#: src/multiplay.cpp:1651
 msgid "Blue"
 msgstr "藍色"
 
-#: src/multiplay.cpp:1675
+#: src/multiplay.cpp:1652
 msgid "Pink"
 msgstr "粉紅色"
 
-#: src/multiplay.cpp:1676
+#: src/multiplay.cpp:1653
 msgid "Cyan"
 msgstr "青綠色"
 
-#: src/multiplay.cpp:1677
+#: src/multiplay.cpp:1654
 msgid "Yellow"
 msgstr ""
 
-#: src/multiplay.cpp:1678
+#: src/multiplay.cpp:1655
 msgid "Purple"
 msgstr ""
 
-#: src/multiplay.cpp:1679
+#: src/multiplay.cpp:1656
 msgid "White"
 msgstr ""
 
-#: src/multiplay.cpp:1680
+#: src/multiplay.cpp:1657
 msgid "Bright blue"
 msgstr ""
 
-#: src/multiplay.cpp:1681
+#: src/multiplay.cpp:1658
 msgid "Neon green"
 msgstr ""
 
-#: src/multiplay.cpp:1682
+#: src/multiplay.cpp:1659
 msgid "Infrared"
 msgstr ""
 
-#: src/multiplay.cpp:1683
+#: src/multiplay.cpp:1660
 msgid "Ultraviolet"
 msgstr ""
 
-#: src/multiplay.cpp:1684
+#: src/multiplay.cpp:1661
 msgid "Brown"
 msgstr ""
 
-#: src/musicmanager.cpp:492
+#: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
 msgstr ""
 
-#: src/musicmanager.cpp:532
-#: src/musicmanager.cpp:678
+#: src/musicmanager.cpp:533
+#: src/musicmanager.cpp:679
 msgid "Album"
 msgstr ""
 
-#: src/musicmanager.cpp:543
+#: src/musicmanager.cpp:544
 msgid "Date"
 msgstr ""
 
-#: src/musicmanager.cpp:669
+#: src/musicmanager.cpp:670
 msgid "Title"
 msgstr ""
 
-#: src/musicmanager.cpp:856
+#: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
 msgstr ""
 
@@ -18317,19 +18317,19 @@ msgid "Get Update Now"
 msgstr ""
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
-#: src/version.cpp:186
+#: src/version.cpp:189
 msgid " (modified locally)"
 msgstr ""
 
 #. TRANSLATORS: Printed in Debug builds
-#: src/version.cpp:193
+#: src/version.cpp:196
 msgid " - DEBUG"
 msgstr ""
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:202
+#: src/version.cpp:205
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""

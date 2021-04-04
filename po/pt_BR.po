@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-02-28 03:22+0000\n"
-"PO-Revision-Date: 2021-03-17 18:58\n"
+"POT-Creation-Date: 2021-04-04 00:17+0000\n"
+"PO-Revision-Date: 2021-04-04 09:13\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -1225,7 +1225,7 @@ msgstr "Dentes de Dragão"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer105.name
 #: data/base/messages/strings/names.txt:215
 #: data/mp/messages/strings/names.txt:251
-#: po/custom/fromJson.txt:2839
+#: po/custom/fromJson.txt:2835
 msgid "Howitzer Emplacement"
 msgstr "Defesa Obus"
 
@@ -3648,7 +3648,7 @@ msgstr "Obus de 105mm pode ser designado a um sensor"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1090
+#: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Alvo: Estruturas, infantaria, 4x4"
 
@@ -3690,7 +3690,7 @@ msgstr "Alvo: Estruturas, Defesas"
 #: data/mp/messages/strings/resstrings.txt:386
 #: data/mp/messages/strings/resstrings.txt:391
 #: data/mp/messages/strings/resstrings.txt:396
-#: po/custom/fromJson.txt:2853
+#: po/custom/fromJson.txt:2849
 msgid "Howitzer Upgrade"
 msgstr "Melhoria de Obus"
 
@@ -3852,7 +3852,7 @@ msgstr "Pode ser designado a um sensor"
 #. ... + 4 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1084
+#: po/custom/fromJson.txt:1090
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Alvo: Estruturas, Infantaria, 4x4"
 
@@ -4060,35 +4060,35 @@ msgstr "Junte uma parte da equipe Beta com um posto avançado de time Gamma"
 msgid "Return to LZ"
 msgstr "Retorne à AP"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:478
+#: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
 msgstr "Destrua todas as unidades e estruturas inimigas"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:494
+#: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
 msgstr "Artefatos coletados"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:495
+#: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
 msgstr "Bases destruídas"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:496
+#: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
 msgstr "Unidades inimigas restantes"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:497
+#: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
 msgstr "Estruturas inimigas restantes"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:503
+#: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
 msgstr "Retorno à AP obrigatório"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:513
+#: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
 msgstr "Destrua todas as unidades e bases inimigas"
 
-#: data/base/script/campaign/libcampaign_includes/victory.js:518
+#: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
 msgstr "Sobreviva até o cronômetro chegar a zero"
 
@@ -4164,9 +4164,9 @@ msgstr "Comandantes - crie comandantes primeiro"
 #: data/base/script/tutorial.js:511
 #: data/mp/multiplay/script/rules/reticule.js:111
 #: src/challenge.cpp:240
-#: src/hci.cpp:1808
-#: src/hci/objects_stats.cpp:182
-#: src/hci/objects_stats.cpp:267
+#: src/hci.cpp:1840
+#: src/hci/objects_stats.cpp:226
+#: src/hci/objects_stats.cpp:311
 #: src/intelmap.cpp:406
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
@@ -5414,7 +5414,7 @@ msgstr "Programa Intrusivo NEXUS"
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
 #: data/mp/messages/strings/names.txt:490
-#: po/custom/fromJson.txt:4227
+#: po/custom/fromJson.txt:4230
 msgid "Nexus Resistance Circuits"
 msgstr "Circuitos de Resistência ao NEXUS"
 
@@ -5429,7 +5429,7 @@ msgstr "Circuitos de Resistência ao NEXUS Mk3"
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
 #: data/mp/messages/strings/names.txt:504
-#: po/custom/fromJson.txt:2803
+#: po/custom/fromJson.txt:2799
 msgid "Hover Propulsion II"
 msgstr "Propulsão Aerobarco II"
 
@@ -5582,63 +5582,63 @@ msgid "Command Turret IV"
 msgstr "Torrete de Comando IV"
 
 #: data/mp/multiplay/script/rules/printsettings.js:6
-#: src/multiint.cpp:1420
-#: src/multiint.cpp:1423
+#: src/multiint.cpp:1424
+#: src/multiint.cpp:1427
 msgid "Scavengers"
 msgstr "Com Catadores"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
-#: src/multiint.cpp:1425
+#: src/multiint.cpp:1429
 msgid "No Scavengers"
 msgstr "Sem Catadores"
 
 #: data/mp/multiplay/script/rules/printsettings.js:12
-#: src/multiint.cpp:1433
+#: src/multiint.cpp:1437
 msgid "No Alliances"
 msgstr "Sem Alianças"
 
 #: data/mp/multiplay/script/rules/printsettings.js:13
-#: src/multiint.cpp:1434
+#: src/multiint.cpp:1438
 msgid "Allow Alliances"
 msgstr "Permitir Alianças"
 
 #: data/mp/multiplay/script/rules/printsettings.js:14
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1440
 msgid "Locked Teams"
 msgstr "Trancar Times"
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
-#: src/multiint.cpp:1435
+#: src/multiint.cpp:1439
 msgid "Locked Teams, No Shared Research"
 msgstr "Times Fixos, Pesquisa Individual"
 
 #: data/mp/multiplay/script/rules/printsettings.js:21
-#: src/multiint.cpp:1444
+#: src/multiint.cpp:1448
 msgid "Low Power Levels"
 msgstr "Nível de Energia Baixo"
 
 #: data/mp/multiplay/script/rules/printsettings.js:22
-#: src/multiint.cpp:1445
+#: src/multiint.cpp:1449
 msgid "Medium Power Levels"
 msgstr "Nível de Energia Médio"
 
 #: data/mp/multiplay/script/rules/printsettings.js:23
-#: src/multiint.cpp:1446
+#: src/multiint.cpp:1450
 msgid "High Power Levels"
 msgstr "Nível de Energia Alto"
 
 #: data/mp/multiplay/script/rules/printsettings.js:29
-#: src/multiint.cpp:1454
+#: src/multiint.cpp:1458
 msgid "Start with No Bases"
 msgstr "Iniciar sem Bases"
 
 #: data/mp/multiplay/script/rules/printsettings.js:30
-#: src/multiint.cpp:1455
+#: src/multiint.cpp:1459
 msgid "Start with Bases"
 msgstr "Iniciar com Bases"
 
 #: data/mp/multiplay/script/rules/printsettings.js:31
-#: src/multiint.cpp:1456
+#: src/multiint.cpp:1460
 msgid "Start with Advanced Bases"
 msgstr "Iniciar com Bases Avançadas"
 
@@ -7111,19 +7111,19 @@ msgid "Best Targets: Base structures"
 msgstr "Alvo: Estruturas"
 
 #. TRANSLATORS:
+#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+#: po/custom/fromJson.txt:1094
+msgid "Best Targets: Bunkers and Hardpoints"
+msgstr "Alvos: Defesas"
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #. ... + 4 refs
-#: po/custom/fromJson.txt:1096
-msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Alvos: Defesas"
-
-#. TRANSLATORS:
-#. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
-#. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1100
-msgid "Best Targets: Bunkers and Hardpoints"
+msgid "Best Targets: Bunkers and hardpoints"
 msgstr "Alvos: Defesas"
 
 #. TRANSLATORS:
@@ -9609,55 +9609,48 @@ msgid "High tensile concrete-plastic composite"
 msgstr "Concreto de alta tensão com composto de plástico"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
-#: po/custom/fromJson.txt:2787
-msgid "High-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr "Cartucho de Alta Velocidade Perfurante e Estabilizado"
-
-#. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
 #. data/mp/stats/structure.json: $.PillBox3.name
-#: po/custom/fromJson.txt:2791
+#: po/custom/fromJson.txt:2787
 msgid "HMG Bunker"
 msgstr "Bunker de Metralhadora Pesada"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_hover.json: $.AI.name
-#: po/custom/fromJson.txt:2794
+#: po/custom/fromJson.txt:2790
 msgid "Hover AI"
 msgstr "IA Aerobarco"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover02.name
-#: po/custom/fromJson.txt:2797
+#: po/custom/fromJson.txt:2793
 msgid "Hover II"
 msgstr "Aerobarco II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover03.name
-#: po/custom/fromJson.txt:2800
+#: po/custom/fromJson.txt:2796
 msgid "Hover III"
 msgstr "Aerobarco III"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Hover.name
-#: po/custom/fromJson.txt:2807
+#: po/custom/fromJson.txt:2803
 msgid "Hover Propulsion"
 msgstr "Propulsão Aerobarco"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.hover01.name
 #. data/mp/stats/propulsion.json: $.hover01.name
-#: po/custom/fromJson.txt:2811
+#: po/custom/fromJson.txt:2807
 msgid "Hover"
 msgstr "Aerobarco"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWAC1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWAC3.text[2]
-#: po/custom/fromJson.txt:2816
+#: po/custom/fromJson.txt:2812
 #, no-c-format
 msgid "Howitzer accuracy +10%"
 msgstr "Precisão do Obus +10%"
@@ -9665,42 +9658,42 @@ msgstr "Precisão do Obus +10%"
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF02.name
-#: po/custom/fromJson.txt:2820
+#: po/custom/fromJson.txt:2816
 msgid "Howitzer Autoloader Mk2"
 msgstr "Carregador Automático de Obus Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF03.name
-#: po/custom/fromJson.txt:2824
+#: po/custom/fromJson.txt:2820
 msgid "Howitzer Autoloader Mk3"
 msgstr "Carregador Automático Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF01.name
-#: po/custom/fromJson.txt:2828
+#: po/custom/fromJson.txt:2824
 msgid "Howitzer Autoloader"
 msgstr "Carregador Automático de Obus"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWD1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWD4.text[2]
-#: po/custom/fromJson.txt:2833
+#: po/custom/fromJson.txt:2829
 #, no-c-format
 msgid "Howitzer damage +25%"
 msgstr "Dano do Obus +10%"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-ROF04.name
-#: po/custom/fromJson.txt:2842
+#: po/custom/fromJson.txt:2838
 msgid "Howitzer Fast Loader"
 msgstr "Carregador de Obus Rápido"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
 #. data/mp/messages/resmessages3.json: $.RES_W_HOWRF4.text[2]
-#: po/custom/fromJson.txt:2847
+#: po/custom/fromJson.txt:2843
 #, no-c-format
 msgid "Howitzer reload time -10%"
 msgstr "Recarga de Obus -10%"
@@ -9710,27 +9703,27 @@ msgstr "Recarga de Obus -10%"
 #. data/base/stats/weapons.json: $.Howitzer105Mk1.name
 #. data/mp/stats/research.json: $.R-Wpn-HowitzerMk1.name
 #. data/mp/stats/weapons.json: $.Howitzer105Mk1.name
-#: po/custom/fromJson.txt:2859
+#: po/custom/fromJson.txt:2855
 msgid "Howitzer"
 msgstr "Obus"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2863
+#: po/custom/fromJson.txt:2859
 msgid "HPV Cannon Emplacement"
 msgstr "Defesa de Canhão de Alta Velocidade"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2867
+#: po/custom/fromJson.txt:2863
 msgid "HPV Cannon Hardpoint"
 msgstr "Muro Canhão de Alta Velocidade"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2870
+#: po/custom/fromJson.txt:2866
 msgid "HPV Cannon Python Tracks"
 msgstr "Tanque Canhão de Alta Velocidade Píton"
 
@@ -9739,7 +9732,7 @@ msgstr "Tanque Canhão de Alta Velocidade Píton"
 #. data/base/stats/structure.json: $.AASite-QuadMg1.name
 #. data/mp/stats/research.json: $.R-Defense-AASite-QuadMg1.name
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
-#: po/custom/fromJson.txt:2876
+#: po/custom/fromJson.txt:2872
 msgid "Hurricane AA Site"
 msgstr "Defesa AA Metralh. Hurricane"
 
@@ -9748,67 +9741,67 @@ msgstr "Defesa AA Metralh. Hurricane"
 #. data/base/stats/weapons.json: $.QuadMg1AAGun.name
 #. data/mp/stats/research.json: $.R-Wpn-AAGun03.name
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
-#: po/custom/fromJson.txt:2882
+#: po/custom/fromJson.txt:2878
 msgid "Hurricane AA Turret"
 msgstr "Torrete AA Metralh. Hurricane"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
-#: po/custom/fromJson.txt:2885
+#: po/custom/fromJson.txt:2881
 msgid "Hut"
 msgstr "Cabana"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage08.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage08.name
-#: po/custom/fromJson.txt:2889
+#: po/custom/fromJson.txt:2885
 msgid "HVAPFSDS Cannon Rounds Mk2"
 msgstr "Munição Pesada Perfuradora Reforçada Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage09.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage09.name
-#: po/custom/fromJson.txt:2893
+#: po/custom/fromJson.txt:2889
 msgid "HVAPFSDS Cannon Rounds Mk3"
 msgstr "Munição Pesada Perfuradora Reforçada Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Damage07.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Damage07.name
-#: po/custom/fromJson.txt:2897
+#: po/custom/fromJson.txt:2893
 msgid "HVAPFSDS Cannon Rounds"
 msgstr "Munição Pesada Perfuradora Reforçada"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF03.name
-#: po/custom/fromJson.txt:2901
+#: po/custom/fromJson.txt:2897
 msgid "Hyper Fire Chaingun Upgrade"
 msgstr "Metralhadora de Hiper Velocidade"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
-#: po/custom/fromJson.txt:2905
+#: po/custom/fromJson.txt:2901
 msgid "Hyper Velocity Cannon Emplacement"
 msgstr "Defesa reforçada de Canhão de Hiper Velocidade"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/mp/stats/structure.json: $.WallTower-HPVcannon.name
-#: po/custom/fromJson.txt:2909
+#: po/custom/fromJson.txt:2905
 msgid "Hyper Velocity Cannon Hardpoint"
 msgstr "Defesa de Canhão de Hiper Velocidade"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverHVC.name
-#: po/custom/fromJson.txt:2912
+#: po/custom/fromJson.txt:2908
 msgid "Hyper Velocity Cannon Python Hover"
 msgstr "Aerobarco Canhão de Hiper Velocidade Píton"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
-#: po/custom/fromJson.txt:2915
+#: po/custom/fromJson.txt:2911
 msgid "Hyper Velocity Cannon Python Tracks"
 msgstr "Tanque Canhão de Hiper Velocidade Píton"
 
@@ -9817,9 +9810,16 @@ msgstr "Tanque Canhão de Hiper Velocidade Píton"
 #. data/base/stats/weapons.json: $.Cannon4AUTOMk1.name
 #. data/mp/stats/research.json: $.R-Wpn-Cannon4AMk1.name
 #. data/mp/stats/weapons.json: $.Cannon4AUTOMk1.name
-#: po/custom/fromJson.txt:2921
+#: po/custom/fromJson.txt:2917
 msgid "Hyper Velocity Cannon"
 msgstr "Canhão de Hiper Velocidade"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
+#: po/custom/fromJson.txt:2921
+msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -9995,16 +9995,16 @@ msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Defesa de Obus Incendiário 2"
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
-#: po/custom/fromJson.txt:3044
-msgid "Incendiary Howitzer Emplacement"
+#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+#: po/custom/fromJson.txt:3043
+msgid "Incendiary howitzer emplacement"
 msgstr "Defesa de Obus Incendiário"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3047
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr "Defesa de Obus Incendiário"
 
 #. TRANSLATORS:
@@ -11464,19 +11464,19 @@ msgid "New Systems Tower Available"
 msgstr "Nova Torre de Sistemas Disponível"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4155
-msgid "New Systems Turret Available For Design"
-msgstr "Novo Torrete de Sistemas Disponível para Projetos"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4161
+#: po/custom/fromJson.txt:4157
 msgid "New Systems Turret Available for Design"
+msgstr "Novo Torrete de Sistemas Disponível para Projetos"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4161
+msgid "New Systems Turret Available For Design"
 msgstr "Novo Torrete de Sistemas Disponível para Projetos"
 
 #. TRANSLATORS:
@@ -11567,7 +11567,7 @@ msgstr "Circuitos de Resistência a NEXUS Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Resistance-Upgrade01.name
-#: po/custom/fromJson.txt:4230
+#: po/custom/fromJson.txt:4227
 msgid "NEXUS Resistance Circuits"
 msgstr "Circuitos de Resistência a NEXUS"
 
@@ -13236,18 +13236,18 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Análise de Dados da Conexão Sináptica Mk3"
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#: po/custom/fromJson.txt:5344
-msgid "Synaptic Link Data Analysis"
-msgstr "Análise de Dados da Conexão Sináptica"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#: po/custom/fromJson.txt:5348
+#: po/custom/fromJson.txt:5344
 msgid "Synaptic link data analysis"
 msgstr "Análise da conexão sináptica"
+
+#. TRANSLATORS:
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#: po/custom/fromJson.txt:5348
+msgid "Synaptic Link Data Analysis"
+msgstr "Análise de Dados da Conexão Sináptica"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -14984,38 +14984,38 @@ msgstr "Não Salvar Design"
 msgid "Store Design"
 msgstr "Salvar Design"
 
-#: src/display.cpp:1551
+#: src/display.cpp:1553
 msgid "Cannot Build. Oil Resource Burning."
 msgstr "Não pode construir. Poço em chamas."
 
-#: src/display.cpp:1569
+#: src/display.cpp:1571
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
 msgstr "%s - Pontos de Vida %d/%d - Experiência %.1f, %s, Abates %d"
 
-#: src/display.cpp:1731
+#: src/display.cpp:1733
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
 msgstr "%s - Aliado - Danos %d%d - Experiência %d, %s"
 
-#: src/display3d.cpp:729
+#: src/display3d.cpp:742
 msgid "Player left"
 msgstr "Jogador saiu"
 
-#: src/display3d.cpp:733
+#: src/display3d.cpp:746
 msgid "Player dropped"
 msgstr "Jogador desconectou-se"
 
-#: src/display3d.cpp:737
-#: src/multiint.cpp:2501
+#: src/display3d.cpp:750
+#: src/multiint.cpp:2521
 msgid "Waiting for other players"
 msgstr "Aguardando outros jogadores"
 
-#: src/display3d.cpp:742
+#: src/display3d.cpp:755
 msgid "Out of sync"
 msgstr "Fora de sincronia"
 
-#: src/display3d.cpp:2004
+#: src/display3d.cpp:2017
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr "Config. de zoom para %.0f"
@@ -15030,35 +15030,35 @@ msgstr "%s Perdido!"
 msgid "Structure Restored"
 msgstr "Estrutura Restaurada"
 
-#: src/droid.cpp:1829
+#: src/droid.cpp:1830
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] "Grupo %u selecionado - %u Unidade"
 msgstr[1] "Grupo %u selecionado - %u Unidades"
 
-#: src/droid.cpp:1838
+#: src/droid.cpp:1839
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] "%u unidade atribuída ao Grupo %u"
 msgstr[1] "%u unidades atribuídas ao Grupo %u"
 
-#: src/droid.cpp:1849
+#: src/droid.cpp:1850
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] "Centrado no Grupo %u - %u Unidade"
 msgstr[1] "Centrado no Grupo %u - %u Unidades"
 
-#: src/droid.cpp:1853
+#: src/droid.cpp:1854
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] "Alinhamento com o grupo %u - %u Unidade"
 msgstr[1] "Alinhamento com o grupo %u - %u Unidades"
 
-#: src/droid.cpp:2934
+#: src/droid.cpp:2936
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr "Transf. de unidade falhou -- limite de unidades excedido"
 
@@ -15092,7 +15092,7 @@ msgid "Tutorial"
 msgstr "Aprendendo a Jogar"
 
 #: src/frontend.cpp:145
-#: src/ingameop.cpp:240
+#: src/ingameop.cpp:239
 msgid "Options"
 msgstr "Opções"
 
@@ -15208,12 +15208,12 @@ msgid "CAMPAIGNS"
 msgstr "CAMPANHAS"
 
 #: src/frontend.cpp:498
-#: src/ingameop.cpp:935
+#: src/ingameop.cpp:953
 msgid "Load Campaign Saved Game"
 msgstr "Carregar Jogo de Campanha Salvo"
 
 #: src/frontend.cpp:504
-#: src/ingameop.cpp:939
+#: src/ingameop.cpp:957
 msgid "Load Skirmish Saved Game"
 msgstr "Carregar Jogo vs. Computador Salvo"
 
@@ -15234,7 +15234,7 @@ msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "A porta TCP 2100 deve estar aberta em seu firewall/roteador para hospedar jogos!"
 
 #: src/frontend.cpp:634
-#: src/multiint.cpp:1343
+#: src/multiint.cpp:1347
 msgid "OPTIONS"
 msgstr "OPÇÕES"
 
@@ -15243,12 +15243,12 @@ msgid "Game Options"
 msgstr "Opções de Jogo"
 
 #: src/frontend.cpp:636
-#: src/ingameop.cpp:477
+#: src/ingameop.cpp:495
 msgid "Graphics Options"
 msgstr "Opções Gráficas"
 
 #: src/frontend.cpp:637
-#: src/ingameop.cpp:480
+#: src/ingameop.cpp:498
 msgid "Video Options"
 msgstr "Opções de Vídeo"
 
@@ -15257,17 +15257,17 @@ msgid "Audio / Zoom Options"
 msgstr "Opções de Áudio / Zoom"
 
 #: src/frontend.cpp:639
-#: src/ingameop.cpp:487
+#: src/ingameop.cpp:505
 msgid "Mouse Options"
 msgstr "Opções de Mouse"
 
 #: src/frontend.cpp:640
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:510
 msgid "Key Mappings"
 msgstr "Configuração das Teclas"
 
 #: src/frontend.cpp:641
-#: src/ingameop.cpp:495
+#: src/ingameop.cpp:513
 msgid "Music Manager"
 msgstr "Gerenciador de Música"
 
@@ -15333,7 +15333,7 @@ msgid "50%"
 msgstr "50%"
 
 #: src/frontend.cpp:725
-#: src/multiplay.cpp:1672
+#: src/multiplay.cpp:1649
 msgid "Black"
 msgstr "Preto"
 
@@ -15365,32 +15365,32 @@ msgid "Tracked"
 msgstr "Rastreado"
 
 #: src/frontend.cpp:765
-#: src/ingameop.cpp:523
+#: src/ingameop.cpp:541
 msgid "Video Playback"
 msgstr "Tamanho de Vídeo"
 
 #: src/frontend.cpp:769
-#: src/ingameop.cpp:528
+#: src/ingameop.cpp:546
 msgid "Scanlines"
 msgstr "Linhas de Varredura"
 
 #: src/frontend.cpp:774
-#: src/ingameop.cpp:533
+#: src/ingameop.cpp:551
 msgid "Subtitles"
 msgstr "Legendas"
 
 #: src/frontend.cpp:779
-#: src/ingameop.cpp:538
+#: src/ingameop.cpp:556
 msgid "Shadows"
 msgstr "Sombras"
 
 #: src/frontend.cpp:783
-#: src/ingameop.cpp:543
+#: src/ingameop.cpp:561
 msgid "Radar"
 msgstr "Radar"
 
 #: src/frontend.cpp:787
-#: src/ingameop.cpp:548
+#: src/ingameop.cpp:566
 msgid "Radar Jump"
 msgstr "Pulo Radar"
 
@@ -15502,7 +15502,7 @@ msgid "Texture size"
 msgstr "Tamanho da Textura"
 
 #: src/frontend.cpp:1418
-#: src/ingameop.cpp:655
+#: src/ingameop.cpp:673
 msgid "Vertical sync"
 msgstr "Sincronia Vertical"
 
@@ -15563,32 +15563,32 @@ msgid "Camera Pitch"
 msgstr "Inclinação da Câmera"
 
 #: src/frontend.cpp:1709
-#: src/ingameop.cpp:731
+#: src/ingameop.cpp:749
 msgid "Reverse Rotation"
 msgstr "Reverter Rotação"
 
 #: src/frontend.cpp:1713
-#: src/ingameop.cpp:738
+#: src/ingameop.cpp:756
 msgid "Trap Cursor"
 msgstr "Travar Cursor"
 
 #: src/frontend.cpp:1718
-#: src/ingameop.cpp:744
+#: src/ingameop.cpp:762
 msgid "Switch Mouse Buttons"
 msgstr "Inverter Botões do Mouse"
 
 #: src/frontend.cpp:1723
-#: src/ingameop.cpp:749
+#: src/ingameop.cpp:767
 msgid "Rotate Screen"
 msgstr "Girar a Tela"
 
 #: src/frontend.cpp:1727
-#: src/ingameop.cpp:754
+#: src/ingameop.cpp:772
 msgid "Colored Cursors"
 msgstr "Cursores Coloridos"
 
 #: src/frontend.cpp:1731
-#: src/ingameop.cpp:759
+#: src/ingameop.cpp:777
 msgid "Scroll Event"
 msgstr "Evento de scroll"
 
@@ -15597,17 +15597,17 @@ msgid "MOUSE OPTIONS"
 msgstr "OPÇÕES DE MOUSE"
 
 #: src/frontend.cpp:1811
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Easy"
 msgstr "Fácil"
 
 #: src/frontend.cpp:1813
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Hard"
 msgstr "Difícil"
 
 #: src/frontend.cpp:1814
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Insane"
 msgstr "Insano"
 
@@ -15646,7 +15646,7 @@ msgid "GAME OPTIONS"
 msgstr "OPÇÕES DE JOGO"
 
 #: src/frontend.cpp:2029
-#: src/multiint.cpp:2964
+#: src/multiint.cpp:2997
 msgid "Mod: "
 msgstr "Mod:"
 
@@ -15685,113 +15685,113 @@ msgstr "Você pode ajustar a Escala de Exibição a qualquer momento no menu de 
 msgid "Tip: Adjusting Display Scale"
 msgstr "Dica: Ajustar Escala de Exibição"
 
-#: src/hci.cpp:929
+#: src/hci.cpp:959
 #: src/loop.cpp:244
 #: src/loop.cpp:260
 msgid "GAME SAVED: "
 msgstr "JOGO SALVO: "
 
-#: src/hci.cpp:1327
+#: src/hci.cpp:1358
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
 msgstr "Jogador %u trapaceia (menu debug) a ele mesmo uma nova estrutura: %s."
 
-#: src/hci.cpp:1336
+#: src/hci.cpp:1367
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new feature: %s."
 msgstr "Jogador %u trapaceia (menu debug) a ele mesmo um novo artefato: %s."
 
-#: src/hci.cpp:1355
+#: src/hci.cpp:1386
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid: %s."
 msgstr "Jogador %u trapaceou (menu de depuração) dando a ele mesmo um  novo droide: %s."
 
-#: src/hci.cpp:1363
+#: src/hci.cpp:1394
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Jogador %u está trapaceando (menu de depuração)! Ele/ela ganhou um novo droide."
 
-#: src/hci.cpp:1693
-#: src/multiint.cpp:1443
+#: src/hci.cpp:1725
+#: src/multiint.cpp:1447
 #: src/multimenu.cpp:686
 msgid "Power"
 msgstr "Energia"
 
-#: src/hci.cpp:1763
-#: src/hci/build.cpp:552
-#: src/hci/manufacture.cpp:544
+#: src/hci.cpp:1795
+#: src/hci/build.cpp:568
+#: src/hci/manufacture.cpp:583
 msgid "Hiding Obsolete Tech"
 msgstr "Escondendo Tecn. Obsoletas"
 
-#: src/hci.cpp:1765
-#: src/hci/build.cpp:554
-#: src/hci/manufacture.cpp:546
+#: src/hci.cpp:1797
+#: src/hci/build.cpp:570
+#: src/hci/manufacture.cpp:585
 msgid "Showing Obsolete Tech"
 msgstr "Exibindo Tecn. Obsoletas"
 
-#: src/hci.cpp:1888
+#: src/hci.cpp:1920
 msgid "\n"
 "Cost: %1"
 msgstr "\n"
 "Custo %1"
 
-#: src/hci.cpp:2494
+#: src/hci.cpp:2526
 msgid "Chat: All"
 msgstr "Chat: Todos"
 
-#: src/hci.cpp:2499
+#: src/hci.cpp:2531
 msgid "Chat: Team"
 msgstr "Chat: Time"
 
-#: src/hci/build.cpp:287
+#: src/hci/build.cpp:290
 msgid "Build Progress"
 msgstr "Progresso da Construção"
 
-#: src/hci/build.cpp:575
+#: src/hci/build.cpp:591
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
 msgstr "Mostrando Todas as Tecnologias\n"
 "Clique com o botão direito do mouse para adicionar aos Favoritos"
 
-#: src/hci/build.cpp:577
+#: src/hci/build.cpp:593
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
 msgstr "Mostrando só as Tecnologias Favoritas\n"
 "Clique com o botão direito do mouse para retirar dos Favoritos"
 
-#: src/hci/manufacture.cpp:340
+#: src/hci/manufacture.cpp:352
 msgid "Construction Progress"
 msgstr "Progresso da Construção"
 
-#: src/hci/manufacture.cpp:584
+#: src/hci/manufacture.cpp:623
 msgid "Factory Delivery Point"
 msgstr "Ponto de Entrega da Fábrica"
 
-#: src/hci/manufacture.cpp:635
+#: src/hci/manufacture.cpp:674
 msgid "Loop Production"
 msgstr "Repetir Produção"
 
-#: src/hci/objects_stats.cpp:109
+#: src/hci/objects_stats.cpp:135
 msgid "Progress Bar"
 msgstr "Barra de Progresso"
 
-#: src/hci/research.cpp:374
+#: src/hci/research.cpp:402
 msgid "Research Progress"
 msgstr "Progresso das Pesquisas"
 
-#: src/hci/research.cpp:448
+#: src/hci/research.cpp:480
 msgid "Ally progress"
 msgstr "Progresso do Aliado"
 
 #: src/ingameop.cpp:111
 #: src/ingameop.cpp:183
-#: src/ingameop.cpp:236
-#: src/ingameop.cpp:501
-#: src/ingameop.cpp:560
-#: src/ingameop.cpp:673
-#: src/ingameop.cpp:767
+#: src/ingameop.cpp:235
+#: src/ingameop.cpp:519
+#: src/ingameop.cpp:578
+#: src/ingameop.cpp:691
+#: src/ingameop.cpp:785
 #: src/keyedit.cpp:446
-#: src/musicmanager.cpp:778
+#: src/musicmanager.cpp:779
 msgid "Resume Game"
 msgstr "Resumir Jogo"
 
@@ -15800,94 +15800,94 @@ msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
 msgstr "ATENÇÃO: Você é o hospedeiro Se você sair, o jogo acaba para todos!"
 
 #: src/ingameop.cpp:130
-#: src/ingameop.cpp:268
+#: src/ingameop.cpp:267
 msgid "Host Quit"
 msgstr "Hospedeiro Saiu"
 
 #: src/ingameop.cpp:170
-#: src/ingameop.cpp:970
+#: src/ingameop.cpp:988
 msgid "Tactical UI (Target Origin Icon): Show"
 msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Exibir"
 
 #: src/ingameop.cpp:175
-#: src/ingameop.cpp:974
+#: src/ingameop.cpp:992
 msgid "Tactical UI (Target Origin Icon): Hide"
 msgstr "Interface de Usuário Tática (Icone de Origem do Alvo): Esconder"
 
 #: src/ingameop.cpp:180
-#: src/ingameop.cpp:498
-#: src/ingameop.cpp:557
-#: src/ingameop.cpp:669
-#: src/ingameop.cpp:763
+#: src/ingameop.cpp:516
+#: src/ingameop.cpp:575
+#: src/ingameop.cpp:687
+#: src/ingameop.cpp:781
 #: src/keyedit.cpp:444
-#: src/musicmanager.cpp:777
+#: src/musicmanager.cpp:778
 msgid "Go Back"
 msgstr "Voltar"
 
-#: src/ingameop.cpp:248
-#: src/ingameop.cpp:257
+#: src/ingameop.cpp:247
+#: src/ingameop.cpp:256
 msgid "Load Game"
 msgstr "Carregar Jogo"
 
-#: src/ingameop.cpp:251
-#: src/ingameop.cpp:260
+#: src/ingameop.cpp:250
+#: src/ingameop.cpp:259
 #: src/mission.cpp:2430
 msgid "Save Game"
 msgstr "Salvar"
 
-#: src/ingameop.cpp:272
+#: src/ingameop.cpp:271
 msgid "Quit"
 msgstr "Sair"
 
-#: src/ingameop.cpp:340
+#: src/ingameop.cpp:339
 msgid "Host has quit the game!"
 msgstr "O hospedeiro saiu do jogo!"
 
-#: src/ingameop.cpp:346
+#: src/ingameop.cpp:345
 msgid "The game can't continue without the host."
 msgstr "O jogo não pode continuar sem o hosp."
 
-#: src/ingameop.cpp:352
+#: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
 msgstr "--> SAIR <--"
 
-#: src/ingameop.cpp:484
+#: src/ingameop.cpp:502
 msgid "Audio Options"
 msgstr "Opções de Áudio"
 
-#: src/ingameop.cpp:492
+#: src/ingameop.cpp:510
 msgid "View Key Mappings"
 msgstr "Ver o Mapeamento de Teclas"
 
-#: src/ingameop.cpp:553
+#: src/ingameop.cpp:571
 msgid "Shake"
 msgstr "Agitar"
 
-#: src/ingameop.cpp:943
+#: src/ingameop.cpp:961
 msgid "Save Campaign Game"
 msgstr "Salvar Jogo de Campanha"
 
-#: src/ingameop.cpp:947
+#: src/ingameop.cpp:965
 msgid "Save Skirmish Game"
 msgstr "Salvar Jogo vs. Computador"
 
-#: src/init.cpp:449
+#: src/init.cpp:450
 #, c-format
 msgid "The required mod could not be loaded: %s\n\n"
 "Warzone will try to load the game without it."
 msgstr "O mod necessário não pôde ser carregado: %s \n\n"
 "Warzone tentará carregar o jogo sem ele."
 
-#: src/intdisplay.cpp:162
+#: src/intdisplay.cpp:163
 msgid "Waiting for Power"
 msgstr "Esperando por Energia"
 
-#: src/intdisplay.cpp:286
+#: src/intdisplay.cpp:287
 #, c-format
 msgid "%d derrick(s) inactive"
 msgstr "%d extrator(es) inativos"
 
-#: src/intdisplay.cpp:291
+#: src/intdisplay.cpp:292
 msgid "Need more resources!"
 msgstr "Precisa de mais recursos!"
 
@@ -16511,8 +16511,8 @@ msgid "KEY MAPPING"
 msgstr "CONFIGURAÇÃO DAS TECLAS"
 
 #: src/keyedit.cpp:427
-#: src/multiint.cpp:1521
-#: src/musicmanager.cpp:767
+#: src/multiint.cpp:1525
+#: src/musicmanager.cpp:768
 #: src/titleui/gamefind.cpp:91
 #: src/titleui/protocol.cpp:81
 msgid "Return To Previous Screen"
@@ -17187,7 +17187,7 @@ msgstr "Carregar Jogo Salvo"
 msgid "GAME SAVED :"
 msgstr "JOGO SALVO :"
 
-#: src/move.cpp:1974
+#: src/move.cpp:1975
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Você encontrou %u de energia de um tambor de petróleo."
@@ -17243,391 +17243,391 @@ msgstr "%s formou uma alliança com %s"
 msgid "You Discover Blueprints For %s"
 msgstr "Você descobre projetos para %s"
 
-#: src/multiint.cpp:256
+#: src/multiint.cpp:260
 msgid "Medium"
 msgstr "Médio"
 
-#: src/multiint.cpp:364
-#: src/multiplay.cpp:467
+#: src/multiint.cpp:368
+#: src/multiplay.cpp:466
 msgid "Commander"
 msgstr "Comandante"
 
-#: src/multiint.cpp:794
+#: src/multiint.cpp:798
 msgid "MISSING AI NAME"
 msgstr "FALTA O NOME DA IA"
 
-#: src/multiint.cpp:819
+#: src/multiint.cpp:823
 msgid "MISSING AI DESCRIPTION"
 msgstr "FALTA A DESCRIÇÃO DA IA"
 
-#: src/multiint.cpp:833
+#: src/multiint.cpp:837
 #, c-format
 msgid "AI tournament: %3.1f%% wins, %3.1f%% losses, %3.1f%% draws"
 msgstr "Torneio de IA: %3.1f%% vitórias, %3.1f%% derrotas, %3.1f%% empates"
 
-#: src/multiint.cpp:1026
+#: src/multiint.cpp:1030
 msgid "Error while joining."
 msgstr "Erro ao entrar."
 
-#: src/multiint.cpp:1140
+#: src/multiint.cpp:1144
 msgid "Tanks disabled!!"
 msgstr "Tanques desativados!!"
 
-#: src/multiint.cpp:1141
+#: src/multiint.cpp:1145
 msgid "Cyborgs disabled."
 msgstr "Ciborgues desativados."
 
-#: src/multiint.cpp:1142
+#: src/multiint.cpp:1146
 msgid "VTOLs disabled."
 msgstr "VTOL's desativados."
 
-#: src/multiint.cpp:1143
+#: src/multiint.cpp:1147
 msgid "Satellite Uplink disabled."
 msgstr "Monitoramento Via Satélite desativado."
 
-#: src/multiint.cpp:1144
+#: src/multiint.cpp:1148
 msgid "Laser Satellite disabled."
 msgstr "Satélite Laser desativado."
 
-#: src/multiint.cpp:1145
+#: src/multiint.cpp:1149
 msgid "Structure Limits Enforced."
 msgstr "Impostos Limites de Estrutura."
 
-#: src/multiint.cpp:1280
+#: src/multiint.cpp:1284
 msgid "Vote"
 msgstr "Votar"
 
-#: src/multiint.cpp:1281
+#: src/multiint.cpp:1285
 msgid "Allow host to change map or randomize?"
 msgstr "Permitir que o host altere o mapa ou randomize?"
 
-#: src/multiint.cpp:1312
+#: src/multiint.cpp:1316
 msgid "Not enough votes to randomize or change the map."
 msgstr "Não há votos suficientes para randomizar ou mudar o mapa."
 
-#: src/multiint.cpp:1348
+#: src/multiint.cpp:1352
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
 msgstr "Nome do Jogo"
 
-#: src/multiint.cpp:1349
+#: src/multiint.cpp:1353
 msgid "One-Player Skirmish"
 msgstr "Jogador vs. Computador"
 
-#: src/multiint.cpp:1356
+#: src/multiint.cpp:1360
 msgid "Select Game Name"
 msgstr "Selecionar Nome do Jogo"
 
-#: src/multiint.cpp:1376
+#: src/multiint.cpp:1380
 msgid "Select Map\n"
 "Can be blocked by players' votes"
 msgstr "Selecionar Mapa\n"
 "Pode ser bloqueado pelos votos dos jogadores"
 
-#: src/multiint.cpp:1377
+#: src/multiint.cpp:1381
 msgid "Map-Mod!"
 msgstr "Mod de Mapa!"
 
-#: src/multiint.cpp:1378
+#: src/multiint.cpp:1382
 msgid "Random map!"
 msgstr "Mapa aleatório!"
 
-#: src/multiint.cpp:1395
+#: src/multiint.cpp:1399
 msgid "Click to set Password"
 msgstr "Clique para definir uma senha"
 
-#: src/multiint.cpp:1409
+#: src/multiint.cpp:1413
 msgid "Select Player Name"
 msgstr "Selecionar o Nome do Jogador"
 
-#: src/multiint.cpp:1432
+#: src/multiint.cpp:1436
 #: src/multimenu.cpp:675
 msgid "Alliances"
 msgstr "Alianças"
 
-#: src/multiint.cpp:1453
+#: src/multiint.cpp:1457
 msgid "Base"
 msgstr "Bases"
 
-#: src/multiint.cpp:1463
+#: src/multiint.cpp:1467
 msgid "Map Preview"
 msgstr "Previsualização do Mapa"
 
-#: src/multiint.cpp:1464
+#: src/multiint.cpp:1468
 msgid "Click to see Map"
 msgstr "Clique para ver o Mapa"
 
-#: src/multiint.cpp:1470
+#: src/multiint.cpp:1474
 msgid "Show Structure Limits"
 msgstr "Exibir Limites da Estrutura"
 
-#: src/multiint.cpp:1470
+#: src/multiint.cpp:1474
 msgid "Set Structure Limits"
 msgstr "Definir Limites da Estrutura"
 
-#: src/multiint.cpp:1484
+#: src/multiint.cpp:1488
 msgid "Random Game Options"
 msgstr "Opções de Jogo Aleatórias"
 
-#: src/multiint.cpp:1485
+#: src/multiint.cpp:1489
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr "Opções de Jogo Aleatórias\n"
 "Pode ser bloqueado pelos votos dos jogadores"
 
-#: src/multiint.cpp:1496
+#: src/multiint.cpp:1500
 msgid "Tech"
 msgstr "Tec."
 
-#: src/multiint.cpp:1497
+#: src/multiint.cpp:1501
 msgid "Technology Level 1"
 msgstr "Tecnologia Nível 1"
 
-#: src/multiint.cpp:1498
+#: src/multiint.cpp:1502
 msgid "Technology Level 2"
 msgstr "Tecnologia Nível 2"
 
-#: src/multiint.cpp:1499
+#: src/multiint.cpp:1503
 msgid "Technology Level 3"
 msgstr "Tecnologia Nível 3"
 
-#: src/multiint.cpp:1500
+#: src/multiint.cpp:1504
 msgid "Technology Level 4"
 msgstr "Tecnologia Nível 4"
 
-#: src/multiint.cpp:1509
-#: src/multiint.cpp:1510
+#: src/multiint.cpp:1513
+#: src/multiint.cpp:1514
 msgid "Start Hosting Game"
 msgstr "Iniciar Hospedagem de Jogo"
 
-#: src/multiint.cpp:1666
+#: src/multiint.cpp:1670
 msgid "DIFFICULTY"
 msgstr "Dificuldade"
 
-#: src/multiint.cpp:1696
+#: src/multiint.cpp:1700
 msgid "Starts disadvantaged"
 msgstr "Iniciar com desvantagens"
 
-#: src/multiint.cpp:1697
+#: src/multiint.cpp:1701
 msgid "Plays nice"
 msgstr "Joga de boa"
 
-#: src/multiint.cpp:1698
+#: src/multiint.cpp:1702
 msgid "No holds barred"
 msgstr "Sem rodeios"
 
-#: src/multiint.cpp:1699
+#: src/multiint.cpp:1703
 msgid "Starts with advantages"
 msgstr "Iniciar com vantagens"
 
-#: src/multiint.cpp:1727
+#: src/multiint.cpp:1731
 msgid "CHOOSE AI"
 msgstr "ESCOLHER IA"
 
-#: src/multiint.cpp:1783
+#: src/multiint.cpp:1787
 msgid "Allow human players to join in this slot"
 msgstr "Permitir jogadores humanos entrar nesse slot"
 
-#: src/multiint.cpp:1794
+#: src/multiint.cpp:1798
 msgid "Leave this slot unused"
 msgstr "Deixar esse slot vazio"
 
-#: src/multiint.cpp:1926
+#: src/multiint.cpp:1930
 msgid "Team"
 msgstr "Time"
 
-#: src/multiint.cpp:1939
-#: src/multiint.cpp:3895
+#: src/multiint.cpp:1943
+#: src/multiint.cpp:3940
 #: src/multimenu.cpp:1241
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "O Hosp. chutou %s do jogo!"
 
-#: src/multiint.cpp:1940
-#: src/multiint.cpp:3897
+#: src/multiint.cpp:1944
+#: src/multiint.cpp:3942
 #: src/multimenu.cpp:1245
 msgid "The host has kicked you from the game."
 msgstr "O anfitrião te expulsou do jogo."
 
-#: src/multiint.cpp:2486
+#: src/multiint.cpp:2500
 msgid "Click to change difficulty"
 msgstr "Clique para ajustar a dificuldade"
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Waiting for player"
 msgstr "Aguardando jogador"
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Player is ready"
 msgstr "Jogador está pronto"
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Player is downloading"
 msgstr "Jogador está baixando"
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Click when ready"
 msgstr "Clique quando estiver pronto"
 
-#: src/multiint.cpp:2501
+#: src/multiint.cpp:2521
 msgid "Waiting for download"
 msgstr "Esperando pelo download"
 
-#: src/multiint.cpp:2514
+#: src/multiint.cpp:2546
 msgid "READY?"
 msgstr "PRONTO?"
 
-#: src/multiint.cpp:2555
+#: src/multiint.cpp:2587
 msgid "PLAYERS"
 msgstr "JOGADORES"
 
-#: src/multiint.cpp:2590
+#: src/multiint.cpp:2623
 msgid "Click to change to this slot"
 msgstr "Clique para mover para esse slot"
 
-#: src/multiint.cpp:2619
+#: src/multiint.cpp:2652
 msgid "Choose Team"
 msgstr "Escolher Time"
 
-#: src/multiint.cpp:2623
+#: src/multiint.cpp:2656
 msgid "Teams locked"
 msgstr "Times travados"
 
-#: src/multiint.cpp:2645
+#: src/multiint.cpp:2678
 msgid "Click to change player colour"
 msgstr "Clique para alterar as cor do jogador"
 
-#: src/multiint.cpp:2661
+#: src/multiint.cpp:2694
 msgid "Click to change player faction"
 msgstr "Clique para alterar a facção do jogador"
 
-#: src/multiint.cpp:2686
+#: src/multiint.cpp:2719
 msgid "Click to change player position"
 msgstr "Clique para alterar a posição do jogador"
 
-#: src/multiint.cpp:2693
+#: src/multiint.cpp:2726
 msgid "Click to change AI, right click to distribute choice"
 msgstr "Clique para mudar a IA, clique com o botão direito para distribuir a escolha"
 
-#: src/multiint.cpp:2708
+#: src/multiint.cpp:2741
 msgid "Player ID: "
 msgstr "ID do Jogador: "
 
-#: src/multiint.cpp:2709
+#: src/multiint.cpp:2742
 msgid "(none)"
 msgstr "(nenhum)"
 
-#: src/multiint.cpp:2761
+#: src/multiint.cpp:2794
 msgid "Kicked from game"
 msgstr "Expulso do jogo"
 
-#: src/multiint.cpp:2960
+#: src/multiint.cpp:2993
 msgid "CHAT"
 msgstr "BATE-PAPO"
 
-#: src/multiint.cpp:3567
+#: src/multiint.cpp:3607
 msgid "Sorry! Failed to host the game."
 msgstr "Desculpe! Falha ao hospedar uma sessão."
 
-#: src/multiint.cpp:3610
+#: src/multiint.cpp:3652
 msgid "Game Name Updated."
 msgstr "Nome do Jogo Atualizado."
 
-#: src/multiint.cpp:3738
+#: src/multiint.cpp:3780
 #, c-format
 msgid "*** password [%s] is now required! ***"
 msgstr "*** senha [%s] agora é necessária! ***"
 
-#: src/multiint.cpp:3744
+#: src/multiint.cpp:3786
 msgid "*** password is NOT required! ***"
 msgstr "*** senhã NÃO é necessária ***"
 
-#: src/multiint.cpp:3757
+#: src/multiint.cpp:3799
 msgid "This is a map-mod, it can change your playing experience!"
 msgstr "Esse é um mod de para, pode mudar a sua experiência de jogo!"
 
-#: src/multiint.cpp:3762
+#: src/multiint.cpp:3804
 msgid "This is a random map, it can vary your playing experience!"
 msgstr "Este é um mapa aleatório, o que ajuda a variar sua experiência de jogo!"
 
-#: src/multiint.cpp:4025
+#: src/multiint.cpp:4070
 msgid "Host is Starting Game"
 msgstr "O Hosp. iniciou o Jogo"
 
-#: src/multiint.cpp:4241
+#: src/multiint.cpp:4313
 msgid "You have been kicked: "
 msgstr "Você foi expulso: "
 
-#: src/multiint.cpp:4255
+#: src/multiint.cpp:4327
 msgid "No connection to host."
 msgstr "Sem conexão com o anfitrião."
 
-#: src/multiint.cpp:4419
+#: src/multiint.cpp:4496
 msgid "Cannot change to a map with too few slots for all players."
 msgstr "Não é possível mudar para um mapa sem slots suficientes para todos os jogadores."
 
-#: src/multiint.cpp:4424
+#: src/multiint.cpp:4501
 msgid "Cannot change to a map with fewer slots."
 msgstr "Não é possível mudar para um mapa com menos slots."
 
-#: src/multiint.cpp:4518
+#: src/multiint.cpp:4598
 msgid "The host has quit."
 msgstr "O Anfitrião saiu."
 
-#: src/multiint.cpp:4556
+#: src/multiint.cpp:4637
 msgid "UPnP has been enabled."
 msgstr "UPnP foi ativado."
 
-#: src/multiint.cpp:4562
+#: src/multiint.cpp:4643
 msgid "UPnP detection failed. You must manually configure router yourself."
 msgstr "Detecção de UPnP falhou. Você deve configurar seu roteador manualmente."
 
-#: src/multiint.cpp:4566
+#: src/multiint.cpp:4647
 msgid "UPnP detection is in progress..."
 msgstr "Detecção UPnP em progresso..."
 
-#: src/multiint.cpp:4573
+#: src/multiint.cpp:4654
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
 msgstr "Detecção de UPnP desativada pelo usuário. Config. automática na porta 2100 não será feita."
 
-#: src/multiint.cpp:4579
+#: src/multiint.cpp:4660
 msgid "Hit the ready box to begin your challenge!"
 msgstr "Marque a caixa de \"Pronto!\" para começar seu desafio!"
 
-#: src/multiint.cpp:4583
+#: src/multiint.cpp:4664
 msgid "Press the start hosting button to begin hosting a game."
 msgstr "Pressione o botão de hospedagem para hospedar um jogo."
 
-#: src/multiint.cpp:4744
+#: src/multiint.cpp:4825
 #, c-format
 msgid "Click to take player slot %d"
 msgstr "Clique para tomar o slot %d"
 
-#: src/multiint.cpp:4758
-#: src/multiint.cpp:4992
+#: src/multiint.cpp:4839
+#: src/multiint.cpp:5073
 msgid "Open"
 msgstr "Aberto"
 
-#: src/multiint.cpp:4758
-#: src/multiint.cpp:4993
+#: src/multiint.cpp:4839
+#: src/multiint.cpp:5074
 msgid "Closed"
 msgstr "Fechado"
 
-#: src/multiint.cpp:4834
+#: src/multiint.cpp:4915
 #, c-format
 msgid "Sending Map: %u%% "
 msgstr "Enviando mapa: %u%% "
 
-#: src/multiint.cpp:4834
+#: src/multiint.cpp:4915
 #, c-format
 msgid "Map: %u%% downloaded"
 msgstr "Mapa: %u%% baixado"
 
-#: src/multiint.cpp:4882
+#: src/multiint.cpp:4963
 msgid "HOST"
 msgstr "HOSPEDEIRO"
 
-#: src/multiint.cpp:4889
+#: src/multiint.cpp:4970
 #: src/multimenu.cpp:693
 msgid "Ping"
 msgstr "Latência"
@@ -17781,130 +17781,130 @@ msgstr "Fornecer Energia"
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "expulsou %s: %s do jogo, e o baniu!"
 
-#: src/multiopt.cpp:298
-#: src/multiplay.cpp:1475
+#: src/multiopt.cpp:305
+#: src/multiplay.cpp:1452
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr "Atenção, esse é um mod de mapa, pode alterar a jogabilidade normal."
 
-#: src/multiopt.cpp:299
-#: src/multiplay.cpp:1479
+#: src/multiopt.cpp:306
+#: src/multiplay.cpp:1456
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "Atenção, o HOSPEDEIRO alterou seu código de jogo, e não é confiável!"
 
-#: src/multiplay.cpp:266
+#: src/multiplay.cpp:265
 #, c-format
 msgid "Kicking player %s, because they tried to bypass data integrity check!"
 msgstr "Expulsando jogador %s porque tentou evitar a checagem de integridade de dados!"
 
-#: src/multiplay.cpp:272
+#: src/multiplay.cpp:271
 msgid "Invalid data!"
 msgstr "Dados inválidos!"
 
-#: src/multiplay.cpp:895
+#: src/multiplay.cpp:872
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
 msgstr "Expulsando jogador automaticamente %s, comando inválido recebido."
 
-#: src/multiplay.cpp:1359
+#: src/multiplay.cpp:1336
 msgid "Map was requested: SENDING MAP!"
 msgstr "Mapa requisitado: ENVIANDO MAPA!"
 
-#: src/multiplay.cpp:1375
+#: src/multiplay.cpp:1352
 msgid "Mod was requested: SENDING MOD!"
 msgstr "Mod requisitado: ENVIANDO MOD!"
 
-#: src/multiplay.cpp:1440
+#: src/multiplay.cpp:1417
 msgid "FILE SENT!"
 msgstr "ARQUIVO ENVIADO!"
 
-#: src/multiplay.cpp:1511
+#: src/multiplay.cpp:1488
 #, c-format
 msgid "Beacon %d"
 msgstr "Sinal %d"
 
-#: src/multiplay.cpp:1618
+#: src/multiplay.cpp:1595
 #, c-format
 msgid "Beacon received from %s!"
 msgstr "Sinal recebido de %s!"
 
-#: src/multiplay.cpp:1669
+#: src/multiplay.cpp:1646
 msgid "Green"
 msgstr "Verde"
 
-#: src/multiplay.cpp:1670
+#: src/multiplay.cpp:1647
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/multiplay.cpp:1671
+#: src/multiplay.cpp:1648
 msgid "Grey"
 msgstr "Cinza"
 
-#: src/multiplay.cpp:1673
+#: src/multiplay.cpp:1650
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/multiplay.cpp:1674
+#: src/multiplay.cpp:1651
 msgid "Blue"
 msgstr "Azul"
 
-#: src/multiplay.cpp:1675
+#: src/multiplay.cpp:1652
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/multiplay.cpp:1676
+#: src/multiplay.cpp:1653
 msgid "Cyan"
 msgstr "Ciano"
 
-#: src/multiplay.cpp:1677
+#: src/multiplay.cpp:1654
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: src/multiplay.cpp:1678
+#: src/multiplay.cpp:1655
 msgid "Purple"
 msgstr "Roxo"
 
-#: src/multiplay.cpp:1679
+#: src/multiplay.cpp:1656
 msgid "White"
 msgstr "Branco"
 
-#: src/multiplay.cpp:1680
+#: src/multiplay.cpp:1657
 msgid "Bright blue"
 msgstr "Azul Claro"
 
-#: src/multiplay.cpp:1681
+#: src/multiplay.cpp:1658
 msgid "Neon green"
 msgstr "Verde"
 
-#: src/multiplay.cpp:1682
+#: src/multiplay.cpp:1659
 msgid "Infrared"
 msgstr "Infravermelho"
 
-#: src/multiplay.cpp:1683
+#: src/multiplay.cpp:1660
 msgid "Ultraviolet"
 msgstr "Ultravioleta"
 
-#: src/multiplay.cpp:1684
+#: src/multiplay.cpp:1661
 msgid "Brown"
 msgstr "Marrom"
 
-#: src/musicmanager.cpp:492
+#: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
 msgstr "JOGANDO AGORA"
 
-#: src/musicmanager.cpp:532
-#: src/musicmanager.cpp:678
+#: src/musicmanager.cpp:533
+#: src/musicmanager.cpp:679
 msgid "Album"
 msgstr "Álbum"
 
-#: src/musicmanager.cpp:543
+#: src/musicmanager.cpp:544
 msgid "Date"
 msgstr "Data"
 
-#: src/musicmanager.cpp:669
+#: src/musicmanager.cpp:670
 msgid "Title"
 msgstr "Titulo"
 
-#: src/musicmanager.cpp:856
+#: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
 msgstr "GERENCIADOR DE MÚSICA"
 
@@ -18345,19 +18345,19 @@ msgid "Get Update Now"
 msgstr "Atualizar Agora"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
-#: src/version.cpp:186
+#: src/version.cpp:189
 msgid " (modified locally)"
 msgstr " (modificado localmente)"
 
 #. TRANSLATORS: Printed in Debug builds
-#: src/version.cpp:193
+#: src/version.cpp:196
 msgid " - DEBUG"
 msgstr " - DEPURAÇÃO"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:202
+#: src/version.cpp:205
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Versão: %s,%s Construído:%s%s"
