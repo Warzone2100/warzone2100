@@ -267,7 +267,7 @@ endif()
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ vcpkg install dependencies...")
 
-set(_additional_vcpkg_flags)
+set(_vcpkg_overlay_ports_path "${_repoBase}/.ci/vcpkg/overlay-ports")
 if(_HAS_VULKAN_SDK)
 	set(_additional_vcpkg_flags ${ADDITIONAL_VCPKG_FLAGS} --x-no-default-features --x-feature=vulkan)
 else()
@@ -278,7 +278,7 @@ set(_vcpkgInstallResult -1)
 set(_vcpkgAttempts 0)
 while(NOT _vcpkgInstallResult EQUAL 0 AND _vcpkgAttempts LESS 3)
 	execute_process(
-		COMMAND ./vcpkg/vcpkg install --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ ${_additional_vcpkg_flags}
+		COMMAND ./vcpkg/vcpkg install --overlay-ports=${_vcpkg_overlay_ports_path} --x-manifest-root=${_repoBase} --x-install-root=./vcpkg_installed/ ${_additional_vcpkg_flags}
 		RESULT_VARIABLE _vcpkgInstallResult
 	)
 	MATH(EXPR _vcpkgAttempts "${_vcpkgAttempts}+1")
@@ -311,6 +311,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Running CMake configure (to
 execute_process(
 	COMMAND ${CMAKE_COMMAND}
 		"-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+		"-DVCPKG_OVERLAY_PORTS=${_vcpkg_overlay_ports_path}"
 		-DGLEW_USE_STATIC_LIBS=ON
 		${_additional_configure_arguments}
 		-G Xcode
