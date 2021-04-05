@@ -48,6 +48,7 @@
 #include "lib/framework/wzapp.h"
 #include "display3d.h" // for building animation speed
 #include "display.h"
+#include "keybind.h" // for MAP_ZOOM_RATE_STEP
 
 #include <type_traits>
 
@@ -302,15 +303,18 @@ bool loadConfig()
 	}
 	if (auto value = iniGetIntegerOpt("mapZoom"))
 	{
-		war_SetMapZoom(value.value());
+		int v = value.value();
+		war_SetMapZoom((v % MAP_ZOOM_CONFIG_STEP != 0) ? STARTDISTANCE : v);
 	}
 	if (auto value = iniGetIntegerOpt("mapZoomRate"))
 	{
-		war_SetMapZoomRate(value.value());
+		int v = value.value();
+		war_SetMapZoomRate((v % MAP_ZOOM_RATE_STEP != 0) ? MAP_ZOOM_RATE_DEFAULT : v);
 	}
 	if (auto value = iniGetIntegerOpt("radarZoom"))
 	{
-		war_SetRadarZoom(value.value());
+		int v = value.value();
+		war_SetRadarZoom((v % RADARZOOM_STEP != 0) ? DEFAULT_RADARZOOM : v);
 	}
 	if (iniGeneral.has("language"))
 	{
@@ -325,7 +329,8 @@ bool loadConfig()
 	showUNITCOUNT = iniGetBool("showUNITCOUNT", false).value();
 	if (auto value = iniGetIntegerOpt("cameraSpeed"))
 	{
-		war_SetCameraSpeed(value.value());
+		int v = value.value();
+		war_SetCameraSpeed((v % CAMERASPEED_STEP != 0) ? CAMERASPEED_DEFAULT : v);
 	}
 	setShakeStatus(iniGetBool("shake", false).value());
 	setCameraAccel(iniGetBool("cameraAccel", true).value());
