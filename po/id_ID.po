@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-05 00:42\n"
+"PO-Revision-Date: 2021-04-05 12:53\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -3822,7 +3822,7 @@ msgstr "Semua senapan mesin ditingkatkan secara otomatis"
 #: data/mp/messages/strings/resstrings.txt:407
 #: po/custom/fromJson.txt:2940
 msgid "Improved chaingun mechanism"
-msgstr "Mekanisme chaingun yang ditingkatkan"
+msgstr "Mekanisme sistem rantai yang ditingkatkan"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -7285,7 +7285,7 @@ msgstr "Buggy"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ASTRUC.text[2]
 #: po/custom/fromJson.txt:1242
 msgid "Built-in diagnostic and repair systems"
-msgstr "Sistem diagnosa dan perbaikan terintegrasi"
+msgstr "Sistem diagnosis dan perbaikan terintegrasi"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Sk-CobraBBHover.name
@@ -11064,13 +11064,13 @@ msgstr "Turet Perbaikan Bergerak"
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text[1]
 #: po/custom/fromJson.txt:3835
 msgid "More armor and body points than Python"
-msgstr "Armor dan Body Point lebih tinggi dari Python"
+msgstr "Armor dan Body Point lebih baik dari Python"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[1]
 #: po/custom/fromJson.txt:3838
 msgid "More armor and body points than Vengeance"
-msgstr "Armor dan Body Point lebih tinggi dari Vengeance"
+msgstr "Armor dan Body Point lebih baik dari Vengeance"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
@@ -11640,7 +11640,7 @@ msgstr "Komputer terpasang memprediksi pergerakan target"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4268
 msgid "On-board diagnostic and repair systems"
-msgstr "Sistem diagnosa dan perbaikan terintegrasi"
+msgstr "Sistem diagnosis dan perbaikan terintegrasi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[2]
@@ -14470,7 +14470,7 @@ msgstr "Elit"
 #: po/custom/fromJson.txt:6124
 msgctxt "rank"
 msgid "Green"
-msgstr "Hijau"
+msgstr "Sedikit Pengalaman"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[8]
@@ -15024,7 +15024,7 @@ msgstr "Menyetel perbesaran ke %.0f"
 #: src/droid.cpp:241
 #, c-format
 msgid "%s Lost!"
-msgstr "%s Kalah!"
+msgstr "%s Hancur!"
 
 #: src/droid.cpp:1099
 msgid "Structure Restored"
