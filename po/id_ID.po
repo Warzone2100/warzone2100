@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:13\n"
+"PO-Revision-Date: 2021-04-05 00:42\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -5091,7 +5091,7 @@ msgstr "Keruntuhan"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr "Januari 15, 2086"
+msgstr "19 Januari 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
@@ -7422,7 +7422,7 @@ msgstr "Designator Laser Meriam"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy01.name
 #: po/custom/fromJson.txt:1319
 msgid "Cannon Laser Rangefinder"
-msgstr "Pencari Jarak Laser Meriam"
+msgstr "Pengukur Jarak Laser Meriam"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF05.name
