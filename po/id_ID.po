@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-05 12:53\n"
+"PO-Revision-Date: 2021-04-06 14:42\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -15368,7 +15368,7 @@ msgstr "Pemutaran Video"
 #: src/frontend.cpp:769
 #: src/ingameop.cpp:546
 msgid "Scanlines"
-msgstr "Garis pindai"
+msgstr "Garis Pindai"
 
 #: src/frontend.cpp:774
 #: src/ingameop.cpp:551
@@ -15404,7 +15404,7 @@ msgstr "Dinonaktifkan"
 
 #: src/frontend.cpp:898
 msgid "Enabled"
-msgstr "Diaktifkan"
+msgstr "Aktif"
 
 #: src/frontend.cpp:902
 #: src/frontend.cpp:908
@@ -15586,7 +15586,7 @@ msgstr "Kursor Berwarna"
 #: src/frontend.cpp:1731
 #: src/ingameop.cpp:777
 msgid "Scroll Event"
-msgstr "Event Gulir"
+msgstr "Event Guliran Tetikus"
 
 #: src/frontend.cpp:1735
 msgid "MOUSE OPTIONS"
@@ -16132,7 +16132,7 @@ msgstr "Lindungi Posisi"
 #: src/intorder.cpp:178
 #: src/keymap.cpp:507
 msgid "Hold Position"
-msgstr "Tahan Posisi"
+msgstr "Diam"
 
 #: src/intorder.cpp:179
 #: src/keymap.cpp:512
@@ -16529,7 +16529,7 @@ msgstr "Riset"
 
 #: src/keymap.cpp:395
 msgid "Build"
-msgstr "Bangun"
+msgstr "Konstruksi"
 
 #: src/keymap.cpp:396
 msgid "Design"
