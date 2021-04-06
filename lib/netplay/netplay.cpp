@@ -42,6 +42,7 @@
 #include <thread>
 #include <atomic>
 #include <sodium.h>
+#include <re2/re2.h>
 
 #include "netplay.h"
 #include "netlog.h"
@@ -4458,7 +4459,7 @@ static bool onBanList(const char *ip)
 	}
 	for (i = 0; i < MAX_BANS ; i++)
 	{
-		if (strcmp(ip, IPlist[i].IPAddress) == 0)
+		if (RE2::FullMatch(ip, IPlist[i].IPAddress))
 		{
 			return true;
 		}
