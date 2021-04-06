@@ -258,6 +258,26 @@ NETPLAY::NETPLAY()
 	}
 }
 
+void PLAYER::resetAll()
+{
+	name[0] = '\0';
+	position = -1;
+	colour = 0;
+	allocated = false;
+	heartattacktime = 0;
+	heartbeat = false;
+	kick = false;
+	connection = -1;
+	team = -1;
+	ready = false;
+	ai = 0;
+	difficulty = AIDifficulty::DISABLED;
+	autoGame = false;
+	IPtextAddress[0] = '\0';
+	faction = FACTION_NORMAL;
+	std::fill(sharing.begin(), sharing.end(), PlayerShareStatus({ false, false }));
+}
+
 bool PLAYER::isSharingUnitsWith(const unsigned int other) const
 {
 	return sharing[other].bUnits;

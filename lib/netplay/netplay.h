@@ -275,25 +275,7 @@ struct PLAYER
 
 	std::vector<PlayerShareStatus> sharing = std::vector<PlayerShareStatus>(MAX_PLAYERS, { false, false });
 
-	void resetAll()
-	{
-		name[0] = '\0';
-		position = -1;
-		colour = 0;
-		allocated = false;
-		heartattacktime = 0;
-		heartbeat = false;
-		kick = false;
-		connection = -1;
-		team = -1;
-		ready = false;
-		ai = 0;
-		difficulty = AIDifficulty::DISABLED;
-		autoGame = false;
-		IPtextAddress[0] = '\0';
-		faction = FACTION_NORMAL;
-		std::fill(sharing.begin(), sharing.end(), PlayerShareStatus({ false, false }));
-	}
+	void resetAll();
 
 	bool isSharingUnitsWith(const unsigned int other) const;
 

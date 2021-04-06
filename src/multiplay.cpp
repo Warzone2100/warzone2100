@@ -69,6 +69,7 @@
 #include "multirecv.h"								// incoming messages stuff
 #include "multistat.h"
 #include "multigifts.h"								// gifts and alliances.
+#include "multishare.h"								// unit sharing.
 #include "multiint.h"
 #include "keymap.h"
 #include "cheat.h"
@@ -845,6 +846,9 @@ bool recvMessage()
 			break;
 		case GAME_PLAYER_LEFT:
 			recvPlayerLeft(queue);
+			break;
+		case MESSAGE_TYPES::GAME_UNIT_SHARE:
+			recvUnitShareStatus(queue);
 			break;
 		default:
 			processedMessage2 = false;

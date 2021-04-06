@@ -54,6 +54,7 @@
 #include "multimenu.h"
 #include "multiint.h"
 #include "multigifts.h"
+#include "multishare.h"
 #include "multijoin.h"
 #include "mission.h"
 #include "scores.h"
@@ -964,6 +965,29 @@ static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffse
 	psWidget->UserData = player;
 }
 
+static void displayUnitShareState(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+	const unsigned int playerIndex = psWidget->UserData;
+
+	unsigned int a, b, c;
+	if (NetPlay.players[selectedPlayer].isSharingUnitsWith(playerIndex))
+	{
+		a = 0;
+		b = IMAGE_MULTI_NOAL_HI;
+		c = IMAGE_MULTI_NOAL;
+	}
+	else
+	{
+		a = 0;
+		b = IMAGE_MULTI_AL_HI;
+		c = IMAGE_MULTI_AL;
+	}
+
+	psWidget->UserData = PACKDWORD_TRI(a, b, c);
+	intDisplayImageHilight(psWidget, xOffset, yOffset);
+	psWidget->UserData = playerIndex;
+}
+
 static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	UDWORD player = psWidget->UserData;
@@ -1033,13 +1057,28 @@ static void addMultiPlayer(UDWORD player, UDWORD pos)
 		sButInit.width	= 35;
 		sButInit.height = 24;
 		sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
-		sButInit.pTip	= _("Toggle Alliance State");
-		sButInit.pDisplay = displayAllianceState;
 		sButInit.UserData = player;
 
-		//can't break alliances in 'Locked Teams' mode
-		if (!alliancesFixed(game.alliance))
+		// Only allow sharing units when alliances are fixed and players are on the same team
+		const bool bInSameTeamWithLocalPlayer = NetPlay.players[player].team == NetPlay.players[selectedPlayer].team;
+		if (alliancesFixed(game.alliance) && bInSameTeamWithLocalPlayer)
 		{
+			sButInit.pTip = _("Share units");
+			sButInit.pDisplay = displayUnitShareState;
+			const auto pButton = widgAddButton(psWScreen, &sButInit);
+			pButton->addOnClickHandler([=](const W_BUTTON& button) {
+				const bool bState = NetPlay.players[selectedPlayer].isSharingUnitsWith(player);
+				setUnitShareStatus(selectedPlayer, player, !bState);
+			});
+
+			// Clear the callback to not accidentally pass it to other buttons which recycle the sButInit
+			sButInit.pCallback = nullptr;
+		}
+		// can't break alliances in 'Locked Teams' mode
+		else if (!alliancesFixed(game.alliance))
+		{
+			sButInit.pTip = _("Toggle Alliance State");
+			sButInit.pDisplay = displayAllianceState;
 			widgAddButton(psWScreen, &sButInit);
 		}
 
@@ -1198,8 +1237,9 @@ void intProcessMultiMenu(UDWORD id)
 		intCloseMultiMenu();
 	}
 
-	//alliance button
-	if (id >= MULTIMENU_ALLIANCE_BASE  &&  id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS)
+	// Alliance button. Actions are handled via callbacks when alliances are fixed (the button controls unit sharing there)
+	const bool bHandledViaCallback = alliancesFixed(game.alliance);
+	if (!bHandledViaCallback && id >= MULTIMENU_ALLIANCE_BASE && id < MULTIMENU_ALLIANCE_BASE + MAX_PLAYERS)
 	{
 		i = (UBYTE)(id - MULTIMENU_ALLIANCE_BASE);
 
