@@ -30,6 +30,8 @@
 #include "lib/sound/audio_id.h"
 #include "lib/ivis_opengl/ivisdef.h"
 
+#include <limits>
+
 #include "visibility.h"
 
 #include "objects.h"

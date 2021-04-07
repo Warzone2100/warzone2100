@@ -35,6 +35,7 @@
 #include "init.h"
 #include "frend.h"
 #include <algorithm>
+#include <limits>
 
 // MARK: - Notification Ignore List
 

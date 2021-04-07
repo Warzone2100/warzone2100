@@ -23,6 +23,7 @@
 #include <cctype>
 #include <sstream>
 #include <iomanip>
+#include <limits>
 #include <utfcpp/source/utf8.h>
 #include <utf8proc/utf8proc.h>
 

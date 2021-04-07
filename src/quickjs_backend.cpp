@@ -77,6 +77,7 @@
 #include <unordered_set>
 #include "lib/framework/file.h"
 #include <unordered_map>
+#include <limits>
 
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 8
 #pragma GCC diagnostic push

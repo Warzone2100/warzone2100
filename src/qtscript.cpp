@@ -67,6 +67,7 @@
 #include <sstream>
 #include <iomanip>
 #include <queue>
+#include <limits>
 
 #include "wzscriptdebug.h"
 #include "quickjs_backend.h"

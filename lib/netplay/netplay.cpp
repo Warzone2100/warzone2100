@@ -41,6 +41,7 @@
 #include <memory>
 #include <thread>
 #include <atomic>
+#include <limits>
 #include <sodium.h>
 
 #include "netplay.h"
