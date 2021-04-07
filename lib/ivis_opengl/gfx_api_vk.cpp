@@ -47,6 +47,7 @@
 #include <set>
 #include <unordered_set>
 #include <map>
+#include <limits>
 
 // Fix #define MemoryBarrier coming from winnt.h
 #undef MemoryBarrier

@@ -40,6 +40,7 @@
 #include "netlog.h"
 #include "src/order.h"
 #include <cstring>
+#include <limits>
 
 /// There is a game queue representing each player. The game queues are synchronised among all players, so that all players process the same game queue
 /// messages at the same game time. The game queues should be used, even in single-player. Players should write to their own queue, not to other player's

@@ -34,6 +34,8 @@
 #include "frameresource.h"
 #include "input.h"
 
+#include <limits>
+
 /************************************************************************************
  *
  *	Player globals

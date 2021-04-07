@@ -35,6 +35,7 @@
 #include <chrono>
 #include <functional>
 #include <memory>
+#include <limits>
 #include <discord_rpc.h>
 #include <sodium.h>
 #include <EmbeddedJSONSignature.h>

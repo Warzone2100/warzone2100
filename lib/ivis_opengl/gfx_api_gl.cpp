@@ -30,6 +30,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <regex>
+#include <limits>
 
 #include <glm/gtc/type_ptr.hpp>
 

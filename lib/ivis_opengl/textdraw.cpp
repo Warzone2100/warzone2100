@@ -49,6 +49,7 @@ static float font_colour[4] = {1.f, 1.f, 1.f, 1.f};
 #include "ft2build.h"
 #include <unordered_map>
 #include <memory>
+#include <limits>
 
 #if defined(HB_VERSION_ATLEAST) && HB_VERSION_ATLEAST(1,0,5)
 //	#define WZ_FT_LOAD_FLAGS (FT_LOAD_DEFAULT | FT_LOAD_TARGET_LCD) // Needs further testing on low-DPI displays

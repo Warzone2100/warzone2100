@@ -27,6 +27,7 @@
 #include <physfs.h>
 #include "file.h"
 #include <sstream>
+#include <limits>
 #include "physfs_ext.h"
 
 WzConfig::~WzConfig()

@@ -39,6 +39,8 @@
 #include "lib/widget/slider.h"
 #include "lib/widget/dropdown.h"
 
+#include <limits>
+
 #include "advvis.h"
 #include "challenge.h"
 #include "component.h"

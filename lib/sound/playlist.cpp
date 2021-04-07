@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <sstream>
+#include <limits>
 
 #include <optional-lite/optional.hpp>
 using nonstd::optional;

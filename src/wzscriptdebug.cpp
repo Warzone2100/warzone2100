@@ -64,6 +64,7 @@
 
 #include <numeric>
 #include <algorithm>
+#include <limits>
 
 static std::shared_ptr<W_SCREEN> debugScreen = nullptr;
 static std::shared_ptr<WZScriptDebugger> globalDialog = nullptr;
