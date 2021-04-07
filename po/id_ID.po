@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-06 14:42\n"
+"PO-Revision-Date: 2021-04-07 02:42\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -12608,7 +12608,7 @@ msgstr "Howitzer Multilaras Putar - Hellstorm"
 #. data/mp/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:4913
 msgid "Rotary MG Bunker"
-msgstr "Bunker Senapan Serbu"
+msgstr "Bunker Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar3.name
@@ -15690,7 +15690,7 @@ msgstr "PERMAINAN TERSIMPAN: "
 #: src/hci.cpp:1358
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Pemain %u memunculkan struktur baru yaitu %s melalui menu debug."
+msgstr "Pemain %u membangun struktur baru yaitu %s melalui menu debug."
 
 #: src/hci.cpp:1367
 #, c-format
