@@ -675,16 +675,16 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_TERRAIN>
 	{
-		glm::mat4 textureMatrix1;
-		glm::mat4 textureMatrix2;
+		glm::mat4 ModelUVMatrix;
+		glm::mat4 ModelUVLightMatrix;
 		glm::mat4 ModelViewMatrix;
 		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 NormalMatrix; // ModelViewMatrix for normals
+		glm::mat4 ModelViewNormalMatrix; // ModelViewMatrix for normals
 		glm::vec4 sunPosition;
-		glm::vec4 paramX;
-		glm::vec4 paramY;
-		glm::vec4 paramXLight;
-		glm::vec4 paramYLight;
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;

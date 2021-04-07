@@ -6,6 +6,12 @@ uniform sampler2D lightmap_tex;
 uniform sampler2D TextureNormal; // normal map
 uniform sampler2D TextureSpecular; // specular map
 
+// light colors/intensity:
+uniform vec4 emissiveLight;
+uniform vec4 ambientLight;
+uniform vec4 diffuseLight;
+uniform vec4 specularLight;
+
 uniform int fogEnabled; // whether fog is enabled
 uniform float fogEnd;
 uniform float fogStart;
@@ -15,16 +21,16 @@ uniform int hasSpecularmap; // whether a specular map exists for the model
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 color;
-in vec2 uv1;
-in vec2 uv2;
+in vec2 uv;
+in vec2 uvLight;
 in float vertexDistance;
 // Light in tangent space:
 in vec3 lightDir;
 in vec3 halfVec;
 #else
 varying vec4 color;
-varying vec2 uv1;
-varying vec2 uv2;
+varying vec2 uv;
+varying vec2 uvLight;
 varying float vertexDistance;
 // Light in tangent space:
 varying vec3 lightDir;
@@ -44,13 +50,11 @@ out vec4 FragColor;
 
 void main()
 {
-	vec4 mask = color * texture(lightmap_tex, uv2);
-	vec4 fragColor = mask * texture(tex, uv1);
-
 	vec3 N;
 	if (hasNormalmap != 0) {
-		vec3 normalFromMap = texture(TextureNormal, uv1).xyz;
+		vec3 normalFromMap = texture(TextureNormal, uv).xyz;
 		N = normalize(normalFromMap * 2.0 - 1.0);
+		N.y = -N.y;
 	} else {
 		N = vec3(0,0,1); // in tangent space so normal to xy plane
 	}
@@ -62,14 +66,16 @@ void main()
 	float angle = acos(dot(H, N));
 	float exponent = angle / 0.2;
 	exponent = -(exponent * exponent);
-	vec4 gaussianTerm = mask*exp(exponent);
+	float gaussianTerm = exp(exponent);
+	vec4 gloss;
 	if (hasSpecularmap != 0) {
-		gaussianTerm *= texture(TextureSpecular, uv1);
+		gloss = texture(TextureSpecular, uv);
 	} else {
-		gaussianTerm *= 0.4;
+		gloss = vec4(vec3(0.1), 1);
 	}
 
-	fragColor = fragColor*(lambertTerm*0.4 + 0.3) + gaussianTerm;
+	vec4 fragColor = texture(tex, uv)*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
+	fragColor *= color * texture(lightmap_tex, uvLight);
 
 	if (fogEnabled > 0)
 	{

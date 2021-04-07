@@ -6,16 +6,16 @@ layout(set = 1, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 1, binding = 3) uniform sampler2D TextureSpecular; // specular map
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
-	mat4 textureMatrix1;
-	mat4 textureMatrix2;
+	mat4 ModelUVMatrix;
+	mat4 ModelUVLightMatrix;
 	mat4 ModelViewMatrix;
 	mat4 ModelViewProjectionMatrix;
-	mat4 NormalMatrix;
-	vec4 sunPosition;
-	vec4 paramx1;
-	vec4 paramy1;
-	vec4 paramx2;
-	vec4 paramy2;
+	mat4 ModelViewNormalMatrix;
+	vec4 sunPosition; // In EyeSpace
+	vec4 emissiveLight; // light colors/intensity
+	vec4 ambientLight;
+	vec4 diffuseLight;
+	vec4 specularLight;
 	vec4 fogColor;
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
@@ -27,8 +27,8 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 };
 
 layout(location = 0) in vec4 color;
-layout(location = 1) in vec2 uv1;
-layout(location = 2) in vec2 uv2;
+layout(location = 1) in vec2 uv;
+layout(location = 2) in vec2 uvLight;
 layout(location = 3) in float vertexDistance;
 // Light in tangent space:
 layout(location = 4) in vec3 lightDir;
@@ -38,12 +38,11 @@ layout(location = 0) out vec4 FragColor;
 
 void main()
 {
-	vec4 mask = color * texture(lightmap_tex, uv2);
-	vec4 fragColor = mask * texture(tex, uv1);
 	vec3 N;
 	if (hasNormalmap != 0) {
-		vec3 normalFromMap = texture(TextureNormal, uv1).xyz;
+		vec3 normalFromMap = texture(TextureNormal, uv).xyz;
 		N = normalize(normalFromMap * 2.0 - 1.0);
+		N.y = -N.y;
 	} else {
 		N = vec3(0,0,1); // in tangent space so normal to xy plane
 	}
@@ -55,14 +54,16 @@ void main()
 	float angle = acos(dot(H, N));
 	float exponent = angle / 0.2;
 	exponent = -(exponent * exponent);
-	vec4 gaussianTerm = mask*exp(exponent);
+	float gaussianTerm = exp(exponent);
+	vec4 gloss;
 	if (hasSpecularmap != 0) {
-		gaussianTerm *= texture(TextureSpecular, uv1);
+		gloss = texture(TextureSpecular, uv);
 	} else {
-		gaussianTerm *= 0.4;
+		gloss = vec4(vec3(0.1), 1);
 	}
 
-	fragColor = fragColor*(lambertTerm*0.4 + 0.3) + gaussianTerm;
+	vec4 fragColor = texture(tex, uv)*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
+	fragColor *= color * texture(lightmap_tex, uvLight);
 
 	if (fogEnabled > 0)
 	{

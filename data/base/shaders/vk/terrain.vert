@@ -1,16 +1,16 @@
 #version 450
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
-	mat4 textureMatrix1;
-	mat4 textureMatrix2;
+	mat4 ModelUVMatrix;
+	mat4 ModelUVLightMatrix;
 	mat4 ModelViewMatrix;
 	mat4 ModelViewProjectionMatrix;
-	mat4 NormalMatrix;
+	mat4 ModelViewNormalMatrix;
 	vec4 sunPosition; // In EyeSpace
-	vec4 paramx1; // for textures
-	vec4 paramy1;
-	vec4 paramx2; // for lightmap
-	vec4 paramy2;
+	vec4 emissiveLight; // light colors/intensity
+	vec4 ambientLight;
+	vec4 diffuseLight;
+	vec4 specularLight;
 	vec4 fogColor;
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
@@ -26,8 +26,8 @@ layout(location = 2) in vec4 vertexColor;
 layout(location = 3) in vec3 vertexNormal;
 
 layout(location = 0) out vec4 color;
-layout(location = 1) out vec2 uv1;
-layout(location = 2) out vec2 uv2;
+layout(location = 1) out vec2 uv;
+layout(location = 2) out vec2 uvLight;
 layout(location = 3) out float vertexDistance;
 // In tangent space
 layout(location = 4) out vec3 lightDir;
@@ -36,17 +36,15 @@ layout(location = 5) out vec3 halfVec;
 void main()
 {
 	color = vertexColor;
-	vec4 position = ModelViewProjectionMatrix * vertex;
-	gl_Position = position;
-	vec4 uv1_tmp = textureMatrix1 * vec4(dot(paramx1, vertex), dot(paramy1, vertex), 0., 1.);
-	uv1 = uv1_tmp.xy / uv1_tmp.w;
-	vec4 uv2_tmp = textureMatrix2 * vec4(dot(paramx2, vertex), dot(paramy2, vertex), 0., 1.);
-	uv2 = uv2_tmp.xy / uv2_tmp.w;
+
+	uv = (ModelUVMatrix * vertex).xy;
+	uvLight = (ModelUVLightMatrix * vertex).xy;
 
 	// constructing EyeSpace -> TangentSpace mat3
-	mat3 normalMat = mat3(NormalMatrix);
+	mat3 normalMat = mat3(ModelViewNormalMatrix);
 	vec3 normal = normalize(normalMat * vertexNormal);
-	vec3 tangent = normalize(cross(normal, normalMat * paramy1.xyz));
+	vec3 vaxis = transpose(ModelUVMatrix)[1].xyz;
+	vec3 tangent = normalize(cross(normal, normalMat * vaxis));
 	vec3 bitangent = cross(normal, tangent);
 	mat3 eyeTangentMatrix = mat3(tangent, bitangent, normal); // aka TBN-matrix
 	// transform light to TangentSpace:
@@ -54,7 +52,9 @@ void main()
 	lightDir = normalize(sunPosition.xyz * eyeTangentMatrix);
 	halfVec = lightDir + eyeVec;
 
+	vec4 position = ModelViewProjectionMatrix * vertex;
 	vertexDistance = position.z;
+	gl_Position = position;
 	gl_Position.y *= -1.;
 	gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
 }

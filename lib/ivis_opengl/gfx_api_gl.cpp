@@ -326,8 +326,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
 		} }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
-		{ "textureMatrix1", "textureMatrix2",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "sunPosition", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex",
+		{ "ModelUVMatrix", "ModelUVLightMatrix", "ModelViewMatrix", "ModelViewProjectionMatrix", "ModelViewNormalMatrix",
+			"sunPosition", "emissiveLight", "ambientLight", "diffuseLight", "specularLight", "tex", "lightmap_tex",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "hasNormalmap", "hasSpecularmap" } }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
@@ -1200,16 +1200,16 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstan
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)
 {
-	setUniforms(0, cbuf.textureMatrix1);
-	setUniforms(1, cbuf.textureMatrix2);
+	setUniforms(0, cbuf.ModelUVMatrix);
+	setUniforms(1, cbuf.ModelUVLightMatrix);
 	setUniforms(2, cbuf.ModelViewMatrix);
 	setUniforms(3, cbuf.ModelViewProjectionMatrix);
-	setUniforms(4, cbuf.NormalMatrix);
+	setUniforms(4, cbuf.ModelViewNormalMatrix);
 	setUniforms(5, cbuf.sunPosition);
-	setUniforms(6, cbuf.paramX);
-	setUniforms(7, cbuf.paramY);
-	setUniforms(8, cbuf.paramXLight);
-	setUniforms(9, cbuf.paramYLight);
+	setUniforms(6, cbuf.emissiveLight);
+	setUniforms(7, cbuf.ambientLight);
+	setUniforms(8, cbuf.diffuseLight);
+	setUniforms(9, cbuf.specularLight);
 	setUniforms(10, cbuf.texture0);
 	setUniforms(11, cbuf.texture1);
 	setUniforms(12, cbuf.fog_colour);
