@@ -351,17 +351,15 @@ static void getGridPos(Vector3i *result, int x, int y, bool center, bool water)
 	}
 }
 
+static Vector3f getGridPosf(int x, int y, bool center = false, bool water = false) {
+	Vector3i r;
+	getGridPos(&r, x, y, center, water);
+	return Vector3f(r);
+}
+
 /// Get normal vector of grid point
 static Vector3f getGridNormal(int x, int y, bool center) {
-	auto pos = [](int x, int y) {
-		Vector3i r;
-		getGridPos(&r, x, y, false, false);
-		return Vector3f(r);
-	};
-	auto posCenter = [pos](int x, int y) {
-		return (pos(x, y) + pos(x+1, y) + pos(x+1, y+1) + pos(x, y+1))/4.0f;
-	};
-	auto calcNormal = [](Vector3f pc, std::vector<Vector3f> p) {
+	auto calcNormal = [](const Vector3f &pc, const std::vector<Vector3f> &p) {
 		auto res = Vector3f(0.0);
 		for (int i = 0; i < p.size(); i++) {
 			auto e1 = p[(i+1)%p.size()] - pc, e2 = p[i] - pc;
@@ -371,11 +369,13 @@ static Vector3f getGridNormal(int x, int y, bool center) {
 		return glm::normalize(res);
 	};
 	if (center) {
-		return calcNormal(posCenter(x, y), {pos(x,y), pos(x+1, y), pos(x+1, y+1), pos(x, y+1)});
+		return calcNormal(getGridPosf(x, y, true), {
+			getGridPosf(x,y), getGridPosf(x+1, y), getGridPosf(x+1, y+1), getGridPosf(x, y+1)
+		});
 	} else {
-		return calcNormal(pos(x, y), {
-			pos(x+1, y), posCenter(x, y),     pos(x, y+1), posCenter(x-1, y),
-			pos(x-1, y), posCenter(x-1, y-1), pos(x, y-1), posCenter(x, y-1)
+		return calcNormal(getGridPosf(x, y), {
+			getGridPosf(x+1, y), getGridPosf(x, y, true),     getGridPosf(x, y+1), getGridPosf(x-1, y, true),
+			getGridPosf(x-1, y), getGridPosf(x-1, y-1, true), getGridPosf(x, y-1), getGridPosf(x, y-1, true)
 		});
 	}
 }
@@ -1186,7 +1186,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
-static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
+static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &lightTextureMatrix)
 {
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
@@ -1195,7 +1195,8 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		renderState.fogColour.vector[2] / 255.f,
 		renderState.fogColour.vector[3] / 255.f
 	);
-	const auto NormalMatrix = glm::transpose(glm::inverse(ModelView));
+	const auto ModelViewNormal = glm::transpose(glm::inverse(ModelView));
+	const auto ModelUVLight = lightTextureMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0), glm::vec4(0)));
 
 	// load the vertex (geometry) buffer
 	gfx_api::TerrainLayer::get().bind();
@@ -1213,6 +1214,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		const auto& groundType = getGroundType(layer);
 		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(groundType.textureSize), 0 );
 		const glm::vec4 paramsY(1.0f / world_coord(groundType.textureSize), 0, 0, 0 );
+		auto ModelUV = glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0), glm::vec4(0)));
 
 		// load the texture
 		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
@@ -1222,8 +1224,10 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		gfx_api::texture* pNormalMapTexture = texPage_normalmap.has_value() ? &pie_Texture(texPage_normalmap.value()) : nullptr;
 		gfx_api::texture* pSpecularMapTexture = texPage_specularmap.has_value() ? &pie_Texture(texPage_specularmap.value()) : nullptr;
 
-		gfx_api::TerrainLayer::get().bind_constants({ glm::mat4(1.f), textureMatrix,
-			ModelView, ModelViewProjection, NormalMatrix, glm::vec4(currentSunPos, 0.f), paramsX, paramsY, paramsXLight, paramsYLight,
+		gfx_api::TerrainLayer::get().bind_constants({
+			ModelUV, ModelUVLight, ModelView, ModelViewProjection, ModelViewNormal,
+			glm::vec4(currentSunPos, 0.f),
+			pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
 
 		// load the textures
