@@ -3106,7 +3106,7 @@
     },
     "R-SuperTransport": {
 	"disabledWhen": 4,
-        "iconID": "IMAGE_RES_CYBORGTECH",
+        "iconID": "IMAGE_RES_DROIDTECH",
         "id": "R-SuperTransport",
         "keyTopic": 1,
         "msgName": "RES_SUPERTRANS",
