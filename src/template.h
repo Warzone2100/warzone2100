@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2011-2020  Warzone 2100 Project
+	Copyright (C) 2011-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ bool researchedTemplate(const DROID_TEMPLATE *psCurr, int player, bool allowRedu
 
 void listTemplates();
 
-void saveTemplateCommon(WzConfig &ini, const DROID_TEMPLATE *psCurr);
+nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr);
 bool loadTemplateCommon(WzConfig &ini, DROID_TEMPLATE &outputTemplate);
 
 void checkPlayerBuiltHQ(const STRUCTURE *psStruct);

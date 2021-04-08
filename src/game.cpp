@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -4834,6 +4834,15 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 	return true;
 }
 
+static inline bool saveJSONToFile(const nlohmann::json& obj, const char* pFileName)
+{
+	std::ostringstream stream;
+	stream << obj.dump(4) << std::endl;
+	std::string jsonString = stream.str();
+	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
+	return saveFile(pFileName, jsonString.c_str(), jsonString.size());
+}
+
 // -----------------------------------------------------------------------------------------
 /*
 Writes the linked list of droids for each player to a file
@@ -4983,11 +4992,7 @@ static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 	}
 
-	std::ostringstream stream;
-	stream << mRoot.dump(4) << std::endl;
-	std::string jsonString = stream.str();
-	saveFile(pFileName, jsonString.c_str(), jsonString.size());
-	debug(LOG_SAVE, "%s %s", "Saving", pFileName);
+	saveJSONToFile(mRoot, pFileName);
 
 	return true;
 }
@@ -6082,43 +6087,47 @@ bool loadSaveTemplate(const char *pFileName)
 	return true;
 }
 
+static nlohmann::json convGameTemplateToJSON(DROID_TEMPLATE *psCurr)
+{
+	nlohmann::json templateObj = saveTemplateCommon(psCurr);
+	templateObj["ref"] = psCurr->ref;
+	templateObj["multiPlayerID"] = psCurr->multiPlayerID;
+	templateObj["enabled"] = psCurr->enabled;
+	templateObj["stored"] = psCurr->stored;
+	templateObj["prefab"] = psCurr->prefab;
+	return templateObj;
+}
+
 bool writeTemplateFile(const char *pFileName)
 {
-	WzConfig ini(pFileName, WzConfig::ReadAndWrite);
+	nlohmann::json mRoot = nlohmann::json::object();
 
-	auto writeTemplate = [&](DROID_TEMPLATE *psCurr) {
-		saveTemplateCommon(ini, psCurr);
-		ini.setValue("ref", psCurr->ref);
-		ini.setValue("multiPlayerID", psCurr->multiPlayerID);
-		ini.setValue("enabled", psCurr->enabled);
-		ini.setValue("stored", psCurr->stored);
-		ini.setValue("prefab", psCurr->prefab);
-		ini.nextArrayItem();
-	};
-
-	ini.setValue("version", 1);
+	mRoot["version"] = 1;
 	for (int player = 0; player < MAX_PLAYERS; player++)
 	{
 		if (!apsDroidLists[player] && !apsStructLists[player])	// only write out templates of players that are still 'alive'
 		{
 			continue;
 		}
-		ini.beginGroup("player_" + WzString::number(player));
-		setPlayer(ini, player);
-		ini.beginArray("templates");
-		enumerateTemplates(player, [&writeTemplate](DROID_TEMPLATE* psTemplate) {
-			writeTemplate(psTemplate);
+		nlohmann::json playerTemplatesObj = nlohmann::json::object();
+		setPlayerJSON(playerTemplatesObj, player);
+		nlohmann::json templates_array = nlohmann::json::array();
+		enumerateTemplates(player, [&templates_array](DROID_TEMPLATE* psTemplate) {
+			templates_array.push_back(convGameTemplateToJSON(psTemplate));
 			return true;
 		});
-		ini.endArray();
-		ini.endGroup();
+		playerTemplatesObj["templates"] = std::move(templates_array);
+		auto playerKey = "player_" + WzString::number(player);
+		mRoot[playerKey.toUtf8()] = std::move(playerTemplatesObj);
 	}
-	ini.beginArray("localTemplates");
+	nlohmann::json localtemplates_array = nlohmann::json::array();
 	for (auto &psCurr : localTemplates)
 	{
-		writeTemplate(&psCurr);
+		localtemplates_array.push_back(convGameTemplateToJSON(&psCurr));
 	}
-	ini.endArray();
+	mRoot["localTemplates"] = std::move(localtemplates_array);
+
+	saveJSONToFile(mRoot, pFileName);
 	return true;
 }
 
