@@ -149,6 +149,7 @@ public:
 		return mWarning == ReadAndWrite && mStatus;
 	}
 
+	void setValue(const WzString &key, const nlohmann::json &&value);
 	void setValue(const WzString &key, const nlohmann::json &value);
 	void set(const WzString &key, const nlohmann::json &value);
 
