@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -220,6 +220,28 @@ inline void from_json(const json& j, ivec3& r)
 	}
 	catch (...) {
 		debug(LOG_FATAL, "Unexpected exception encountered in Vector3i");
+	}
+}
+
+// Vector3f
+inline void to_json(json& j, const vec3 &v)
+{
+	j = nlohmann::json::array({ v.x, v.y, v.z });
+}
+
+inline void from_json(const json& j, vec3& r)
+{
+	ASSERT(j.size() == 3, "Bad Vector3f list");
+	try {
+		r.x = j.at(0).get<float>();
+		r.y = j.at(1).get<float>();
+		r.z = j.at(2).get<float>();
+	}
+	catch (const std::exception &e) {
+		ASSERT(false, "Bad Vector3f list; exception: %s", e.what());
+	}
+	catch (...) {
+		debug(LOG_FATAL, "Unexpected exception encountered in Vector3f");
 	}
 }
 } // namespace glm
