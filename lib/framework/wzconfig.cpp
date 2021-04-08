@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -491,6 +491,12 @@ void WzConfig::endArray()
 		mObjStack.pop_back();
 	}
 	mArray = nlohmann::json::array();
+}
+
+void WzConfig::setValue(const WzString &key, const nlohmann::json &&value)
+{
+	ASSERT(pCurrentObj != nullptr, "pCurrentObj is null");
+	(*pCurrentObj)[key.toUtf8()] = value;
 }
 
 void WzConfig::setValue(const WzString &key, const nlohmann::json &value)

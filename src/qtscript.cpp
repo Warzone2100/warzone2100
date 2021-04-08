@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2011-2020  Warzone 2100 Project
+	Copyright (C) 2011-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -683,7 +683,7 @@ bool scripting_engine::saveScriptStates(const char *filename)
 		saveGroups(groupsResult, instance);
 		groupsResult["me"] = instance->player();
 		groupsResult["scriptName"] = instance->scriptName();
-		ini.setValue("groups_" + WzString::number(i), groupsResult);
+		ini.setValue("groups_" + WzString::number(i), std::move(groupsResult));
 	}
 	size_t timerIdx = 0;
 	for (const auto& node : timers)
@@ -705,7 +705,7 @@ bool scripting_engine::saveScriptStates(const char *filename)
 		nodeInfo["calls"] = node->calls;
 		nodeInfo["type"] = (int)node->type;
 
-		ini.setValue("triggers_" + WzString::number(timerIdx), nodeInfo);
+		ini.setValue("triggers_" + WzString::number(timerIdx), std::move(nodeInfo));
 		++timerIdx;
 	}
 	return true;
