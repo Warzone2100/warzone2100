@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -316,58 +316,60 @@ bool initTemplates()
 	return true;
 }
 
-void saveTemplateCommon(WzConfig &ini, const DROID_TEMPLATE *psCurr)
+nlohmann::json saveTemplateCommon(const DROID_TEMPLATE *psCurr)
 {
-	ini.setValue("name", psCurr->name);
+	nlohmann::json templateObj = nlohmann::json::object();
+	templateObj["name"] = psCurr->name;
 	switch (psCurr->droidType)
 	{
-	case DROID_ECM: ini.setValue("type", "ECM"); break;
-	case DROID_SENSOR: ini.setValue("type", "SENSOR"); break;
-	case DROID_CONSTRUCT: ini.setValue("type", "CONSTRUCT"); break;
-	case DROID_WEAPON: ini.setValue("type", "WEAPON"); break;
-	case DROID_PERSON: ini.setValue("type", "PERSON"); break;
-	case DROID_CYBORG: ini.setValue("type", "CYBORG"); break;
-	case DROID_CYBORG_SUPER: ini.setValue("type", "CYBORG_SUPER"); break;
-	case DROID_CYBORG_CONSTRUCT: ini.setValue("type", "CYBORG_CONSTRUCT"); break;
-	case DROID_CYBORG_REPAIR: ini.setValue("type", "CYBORG_REPAIR"); break;
-	case DROID_TRANSPORTER: ini.setValue("type", "TRANSPORTER"); break;
-	case DROID_SUPERTRANSPORTER: ini.setValue("type", "SUPERTRANSPORTER"); break;
-	case DROID_COMMAND: ini.setValue("type", "DROID_COMMAND"); break;
-	case DROID_REPAIR: ini.setValue("type", "REPAIR"); break;
-	case DROID_DEFAULT: ini.setValue("type", "DROID"); break;
+	case DROID_ECM: templateObj["type"] = "ECM"; break;
+	case DROID_SENSOR: templateObj["type"] = "SENSOR"; break;
+	case DROID_CONSTRUCT: templateObj["type"] = "CONSTRUCT"; break;
+	case DROID_WEAPON: templateObj["type"] = "WEAPON"; break;
+	case DROID_PERSON: templateObj["type"] = "PERSON"; break;
+	case DROID_CYBORG: templateObj["type"] = "CYBORG"; break;
+	case DROID_CYBORG_SUPER: templateObj["type"] = "CYBORG_SUPER"; break;
+	case DROID_CYBORG_CONSTRUCT: templateObj["type"] = "CYBORG_CONSTRUCT"; break;
+	case DROID_CYBORG_REPAIR: templateObj["type"] = "CYBORG_REPAIR"; break;
+	case DROID_TRANSPORTER: templateObj["type"] = "TRANSPORTER"; break;
+	case DROID_SUPERTRANSPORTER: templateObj["type"] = "SUPERTRANSPORTER"; break;
+	case DROID_COMMAND: templateObj["type"] = "DROID_COMMAND"; break;
+	case DROID_REPAIR: templateObj["type"] = "REPAIR"; break;
+	case DROID_DEFAULT: templateObj["type"] = "DROID"; break;
 	default: ASSERT(false, "No such droid type \"%d\" for %s", psCurr->droidType, psCurr->name.toUtf8().c_str());
 	}
-	ini.setValue("body", (asBodyStats + psCurr->asParts[COMP_BODY])->id);
-	ini.setValue("propulsion", (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id);
+	templateObj["body"] = (asBodyStats + psCurr->asParts[COMP_BODY])->id;
+	templateObj["propulsion"] = (asPropulsionStats + psCurr->asParts[COMP_PROPULSION])->id;
 	if (psCurr->asParts[COMP_BRAIN] != 0)
 	{
-		ini.setValue("brain", (asBrainStats + psCurr->asParts[COMP_BRAIN])->id);
+		templateObj["brain"] = (asBrainStats + psCurr->asParts[COMP_BRAIN])->id;
 	}
 	if ((asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->location == LOC_TURRET) // avoid auto-repair...
 	{
-		ini.setValue("repair", (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id);
+		templateObj["repair"] = (asRepairStats + psCurr->asParts[COMP_REPAIRUNIT])->id;
 	}
 	if ((asECMStats + psCurr->asParts[COMP_ECM])->location == LOC_TURRET)
 	{
-		ini.setValue("ecm", (asECMStats + psCurr->asParts[COMP_ECM])->id);
+		templateObj["ecm"] = (asECMStats + psCurr->asParts[COMP_ECM])->id;
 	}
 	if ((asSensorStats + psCurr->asParts[COMP_SENSOR])->location == LOC_TURRET)
 	{
-		ini.setValue("sensor", (asSensorStats + psCurr->asParts[COMP_SENSOR])->id);
+		templateObj["sensor"] = (asSensorStats + psCurr->asParts[COMP_SENSOR])->id;
 	}
 	if (psCurr->asParts[COMP_CONSTRUCT] != 0)
 	{
-		ini.setValue("construct", (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id);
+		templateObj["construct"] = (asConstructStats + psCurr->asParts[COMP_CONSTRUCT])->id;
 	}
-	std::vector<WzString> weapons;
+	nlohmann::json weapons = nlohmann::json::array();
 	for (int j = 0; j < psCurr->numWeaps; j++)
 	{
 		weapons.push_back((asWeaponStats + psCurr->asWeaps[j])->id);
 	}
 	if (!weapons.empty())
 	{
-		ini.setValue("weapons", weapons);
+		templateObj["weapons"] = std::move(weapons);
 	}
+	return templateObj;
 }
 
 bool storeTemplates()
@@ -386,7 +388,7 @@ bool storeTemplates()
 		const DROID_TEMPLATE *psCurr = keyvaluepair.second.get();
 		if (psCurr->stored)
 		{
-			saveTemplateCommon(ini, psCurr);
+			ini.currentJsonValue() = saveTemplateCommon(psCurr);
 			ini.nextArrayItem();
 		}
 	}
