@@ -1,7 +1,7 @@
 /*
 	This file is part of Warzone 2100.
 	Copyright (C) 1999-2004  Eidos Interactive
-	Copyright (C) 2005-2020  Warzone 2100 Project
+	Copyright (C) 2005-2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 #include "lib/framework/frameresource.h"
 #include "lib/framework/input.h"
 #include "lib/framework/math_ext.h"
+#include "lib/framework/file.h"
 
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/pietypes.h"
@@ -2221,36 +2222,45 @@ void effectResetUpdates()
 bool writeFXData(const char *fileName)
 {
 	int i = 0;
-	WzConfig ini(WzString::fromUtf8(fileName), WzConfig::ReadAndWrite);
+	nlohmann::json mRoot = nlohmann::json::object();
 	for (auto iter = activeList.cbegin(); iter != activeList.end(); ++iter, i++)
 	{
 		EFFECT *it = *iter;
-		ini.beginGroup("effect_" + WzString::number(i));
-		ini.setValue("control", it->control);
-		ini.setValue("group", it->group);
-		ini.setValue("type", it->type);
-		ini.setValue("frameNumber", it->frameNumber);
-		ini.setValue("size", it->size);
-		ini.setValue("baseScale", it->baseScale);
-		ini.setValue("specific", it->specific);
-		ini.setVector3f("position", it->position);
-		ini.setVector3f("velocity", it->velocity);
-		ini.setVector3i("rotation", it->rotation);
-		ini.setVector3i("spin", it->spin);
-		ini.setValue("birthTime", it->birthTime);
-		ini.setValue("lastFrame", it->lastFrame);
-		ini.setValue("frameDelay", it->frameDelay);
-		ini.setValue("lifeSpan", it->lifeSpan);
-		ini.setValue("radius", it->radius);
+
+		nlohmann::json effectObj = nlohmann::json::object();
+		effectObj["control"] = it->control;
+		effectObj["group"] = it->group;
+		effectObj["type"] = it->type;
+		effectObj["frameNumber"] = it->frameNumber;
+		effectObj["size"] = it->size;
+		effectObj["baseScale"] = it->baseScale;
+		effectObj["specific"] = it->specific;
+		effectObj["position"] = it->position;
+		effectObj["velocity"] = it->velocity;
+		effectObj["rotation"] = it->rotation;
+		effectObj["spin"] = it->spin;
+		effectObj["birthTime"] = it->birthTime;
+		effectObj["lastFrame"] = it->lastFrame;
+		effectObj["frameDelay"] = it->frameDelay;
+		effectObj["lifeSpan"] = it->lifeSpan;
+		effectObj["radius"] = it->radius;
 
 		if (it->imd)
 		{
-			ini.setValue("imd_name", modelName(it->imd));
+			effectObj["imd_name"] = modelName(it->imd);
 		}
 
+		auto effectKey = "effect_" + WzString::number(i);
+		mRoot[effectKey.toUtf8()] = std::move(effectObj);
+
 		// Move on to reading the next effect
-		ini.endGroup();
 	}
+
+	std::ostringstream stream;
+	stream << mRoot.dump(4) << std::endl;
+	std::string jsonString = stream.str();
+	debug(LOG_SAVE, "%s %s", "Saving", fileName);
+	saveFile(fileName, jsonString.c_str(), jsonString.size());
 
 	// Everything is just fine!
 	return true;
