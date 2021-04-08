@@ -4897,7 +4897,8 @@ static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
 	{
 		if (psCurr->asWeaps[i].nStat > 0)
 		{
-			const std::string& numStr = WzString::number(i).toStdString();
+			auto numberWzStr = WzString::number(i);
+			const std::string& numStr = numberWzStr.toStdString();
 			droidObj["ammo/" + numStr] = psCurr->asWeaps[i].ammo;
 			droidObj["lastFired/" + numStr] = psCurr->asWeaps[i].lastFired;
 			droidObj["shotsFired/" + numStr] = psCurr->asWeaps[i].shotsFired;
