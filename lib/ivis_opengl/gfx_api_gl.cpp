@@ -31,6 +31,7 @@
 #include <unordered_map>
 #include <regex>
 #include <limits>
+#include <typeindex>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -504,12 +505,24 @@ SHADER_VERSION_ES getMaximumShaderVersionForCurrentGLESContext(SHADER_VERSION_ES
 }
 
 template<SHADER_MODE shader>
-typename std::pair<SHADER_MODE, std::function<void(const void*)>> gl_pipeline_state_object::uniform_binding_entry()
+typename std::pair<std::type_index, std::function<void(const void*, size_t)>> gl_pipeline_state_object::uniform_binding_entry()
 {
-	return std::make_pair(shader, [this](const void* buffer) { this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer)); });
+	return std::make_pair(std::type_index(typeid(gfx_api::constant_buffer_type<shader>)), [this](const void* buffer, size_t buflen) {
+		ASSERT_OR_RETURN(, buflen == sizeof(const gfx_api::constant_buffer_type<shader>), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const gfx_api::constant_buffer_type<shader>));
+		this->set_constants(*reinterpret_cast<const gfx_api::constant_buffer_type<shader>*>(buffer));
+	});
 }
 
-gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
+template<typename T>
+typename std::pair<std::type_index, std::function<void(const void*, size_t)>>gl_pipeline_state_object::uniform_setting_func()
+{
+	return std::make_pair(std::type_index(typeid(T)), [this](const void* buffer, size_t buflen) {
+		ASSERT_OR_RETURN(, buflen == sizeof(const T), "Unexpected buffer size; received %zu, expecting %zu", buflen, sizeof(const T));
+		this->set_constants(*reinterpret_cast<const T*>(buffer));
+	});
+}
+
+gl_pipeline_state_object::gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& _vertex_buffer_desc) :
 desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 {
 	std::string vertexShaderHeader;
@@ -549,7 +562,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 				  shader_to_file_table.at(shader).fragment_file,
 				  shader_to_file_table.at(shader).uniform_names);
 
-	const std::map < SHADER_MODE, std::function<void(const void*)>> uniforms_bind_table =
+	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
 		uniform_binding_entry<SHADER_COMPONENT>(),
 		uniform_binding_entry<SHADER_BUTTON>(),
@@ -568,12 +581,36 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		uniform_binding_entry<SHADER_TEXT>()
 	};
 
-	uniform_bind_function = uniforms_bind_table.at(shader);
+	for (auto& uniform_block : uniform_blocks)
+	{
+		auto it = uniforms_bind_table.find(uniform_block);
+		if (it == uniforms_bind_table.end())
+		{
+			ASSERT(false, "Missing mapping for uniform block type: %s", uniform_block.name());
+			uniform_bind_functions.push_back(nullptr);
+			continue;
+		}
+		uniform_bind_functions.push_back(it->second);
+	}
 }
 
-void gl_pipeline_state_object::set_constants(const void* buffer)
+void gl_pipeline_state_object::set_constants(const void* buffer, const size_t& size)
 {
-	uniform_bind_function(buffer);
+	uniform_bind_functions[0](buffer, size);
+}
+
+void gl_pipeline_state_object::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < uniform_bind_functions.size(); ++i)
+	{
+		const auto& uniform_bind_function = uniform_bind_functions[first + i];
+		auto* buffer = std::get<0>(uniform_blocks[i]);
+		if (buffer == nullptr)
+		{
+			continue;
+		}
+		uniform_bind_function(buffer, std::get<1>(uniform_blocks[i]));
+	}
 }
 
 
@@ -1304,10 +1341,11 @@ gfx_api::buffer * gl_context::create_buffer_object(const gfx_api::buffer::usage 
 gfx_api::pipeline_state_object * gl_context::build_pipeline(const gfx_api::state_description &state_desc,
 															const SHADER_MODE& shader_mode,
 															const gfx_api::primitive_type& primitive,
+															const std::vector<std::type_index>& uniform_blocks,
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
-	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, state_desc, shader_mode, attribute_descriptions);
+	return new gl_pipeline_state_object(gles, fragmentHighpFloatAvailable, fragmentHighpIntAvailable, state_desc, shader_mode, uniform_blocks, attribute_descriptions);
 }
 
 void gl_context::bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures)
@@ -1482,7 +1520,13 @@ void gl_context::bind_textures(const std::vector<gfx_api::texture_input>& textur
 void gl_context::set_constants(const void* buffer, const size_t& size)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
-	current_program->set_constants(buffer);
+	current_program->set_constants(buffer, size);
+}
+
+void gl_context::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
+	current_program->set_uniforms(first, uniform_blocks);
 }
 
 void gl_context::draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive)

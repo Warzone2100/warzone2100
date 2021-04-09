@@ -133,6 +133,7 @@ gfx_api::buffer * null_context::create_buffer_object(const gfx_api::buffer::usag
 gfx_api::pipeline_state_object * null_context::build_pipeline(const gfx_api::state_description &state_desc,
 															const SHADER_MODE& shader_mode,
 															const gfx_api::primitive_type& primitive,
+															const std::vector<std::type_index>& uniform_blocks,
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
@@ -202,6 +203,12 @@ void null_context::bind_textures(const std::vector<gfx_api::texture_input>& text
 }
 
 void null_context::set_constants(const void* buffer, const size_t& size)
+{
+	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
+	// no-op
+}
+
+void null_context::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
 {
 	ASSERT_OR_RETURN(, current_program != nullptr, "current_program == NULL");
 	// no-op
