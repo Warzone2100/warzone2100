@@ -713,6 +713,7 @@ bool runOptionsMenu()
 
 #include "lib/widget/button.h"
 #include "frend.h"
+#include "display3d.h"
 
 struct OptionPickButtonData {
 	std::vector<std::string> values;
@@ -763,7 +764,7 @@ static void OptionPickDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffs
 	cache.text.render(fx, fy, textColor);
 }
 
-static std::shared_ptr<W_BUTTON> makeOptionPickButton(std::string name, std::vector<std::string> options, int curr = 0) {
+static std::shared_ptr<W_BUTTON> makeOptionPickButton(std::string name, std::vector<std::string> options, int curr, std::function<void (W_BUTTON& button)> onClick) {
 	auto button = std::make_shared<W_BUTTON>();
 	button->setString(name.c_str());
 	button->FontID = font_regular;
@@ -772,6 +773,7 @@ static std::shared_ptr<W_BUTTON> makeOptionPickButton(std::string name, std::vec
 	a->values = options;
 	a->CurrentValue = curr;
 	button->pUserData = a;
+	button->addOnClickHandler(onClick);
 	button->setOnDelete([](WIDGET *psWidget) {
 		assert(psWidget->pUserData != nullptr);
 		delete static_cast<OptionPickButtonData *>(psWidget->pUserData);
@@ -793,22 +795,16 @@ void startMiscOptionsMenu() {
 	list->id = FRONTEND_MISCLIST;
 	list->setGeometry(50, 10, 480, 290);
 	list->setPadding({ 0, 0, 0, 3 });
-	for(int i = 0; i < 25; i++) {
-		std::vector<std::string> opt;
-		for(int j=0; j < 5; j++) {
-			opt.push_back(std::to_string((char)(j+'A')));
-		}
-		auto btn = makeOptionPickButton(std::to_string(i), opt);
-		btn->addOnClickHandler([](W_BUTTON& button) {
-			OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
-			if(data.CurrentValue+1 < data.values.size()) {
-				data.CurrentValue++;
-			} else {
-				data.CurrentValue = 0;
-			}
-		});
-		list->addItem(btn);
-	}
+	list->addItem(makeOptionPickButton("Show unit count", {"yes", "no"}, showUNITCOUNT, [](W_BUTTON& button) {
+		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
+		data.CurrentValue = !data.CurrentValue;
+		showUNITCOUNT = !showUNITCOUNT;
+	}));
+	list->addItem(makeOptionPickButton("Show FPS", {"yes", "no"}, showFPS, [](W_BUTTON& button) {
+		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
+		data.CurrentValue = !data.CurrentValue;
+		showFPS = !showFPS;
+	}));
 	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(list);
 }
 
