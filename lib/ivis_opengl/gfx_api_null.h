@@ -91,6 +91,7 @@ public:
 	virtual gfx_api::pipeline_state_object * build_pipeline(const gfx_api::state_description &state_desc,
 															const SHADER_MODE& shader_mode,
 															const gfx_api::primitive_type& primitive,
+															const std::vector<std::type_index>& uniform_blocks,
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
@@ -102,6 +103,7 @@ public:
 	virtual void bind_streamed_vertex_buffers(const void* data, const std::size_t size) override;
 	virtual void bind_textures(const std::vector<gfx_api::texture_input>& texture_descriptions, const std::vector<gfx_api::texture*>& textures) override;
 	virtual void set_constants(const void* buffer, const size_t& size) override;
+	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
 	virtual void draw(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive) override;
 	virtual void draw_elements(const size_t& offset, const size_t &count, const gfx_api::primitive_type &primitive, const gfx_api::index_type& index) override;
 	virtual void set_polygon_offset(const float& offset, const float& slope) override;

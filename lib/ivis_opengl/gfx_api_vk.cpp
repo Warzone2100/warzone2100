@@ -97,7 +97,7 @@ const std::vector<const char*> debugAdditionalExtensions = {
 
 const uint32_t minRequired_DescriptorSetUniformBuffers = 1;
 const uint32_t minRequired_DescriptorSetUniformBuffersDynamic = 1;
-const uint32_t minRequired_BoundDescriptorSets = 2;
+const uint32_t minRequired_BoundDescriptorSets = 4;
 const uint32_t minRequired_Viewports = 1;
 const uint32_t minRequired_ColorAttachments = 1;
 
@@ -1164,22 +1164,29 @@ VkPSO::VkPSO(vk::Device _dev,
 	const gfx_api::state_description& state_desc = createInfo.state_desc;
 	const SHADER_MODE& shader_mode = createInfo.shader_mode;
 	const gfx_api::primitive_type& primitive = createInfo.primitive;
+	const std::vector<std::type_index>& uniform_blocks = createInfo.uniform_blocks;
 	const std::vector<gfx_api::texture_input>& texture_desc = createInfo.texture_desc;
 	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions = createInfo.attribute_descriptions;
 
-	const auto cbuffer_layout_desc = std::array<vk::DescriptorSetLayoutBinding, 1>{
-		vk::DescriptorSetLayoutBinding()
-			.setBinding(0)
-			.setDescriptorCount(1)
-			.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
-			.setStageFlags(vk::ShaderStageFlagBits::eAllGraphics)
-	};
-	cbuffer_set_layout = dev.createDescriptorSetLayout(
-		vk::DescriptorSetLayoutCreateInfo()
-			.setBindingCount(1)
-			.setPBindings(cbuffer_layout_desc.data())
-		, nullptr, *pVkDynLoader);
+	auto layout_desc = std::vector<vk::DescriptorSetLayout>();
 
+	for (size_t i = 0; i < uniform_blocks.size(); i++)
+	{
+		const auto cbuffer_layout_desc = std::array<vk::DescriptorSetLayoutBinding, 1>{
+			vk::DescriptorSetLayoutBinding()
+				.setBinding(0)
+				.setDescriptorCount(1)
+				.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
+				.setStageFlags(vk::ShaderStageFlagBits::eAllGraphics)
+		};
+		auto set_layout = dev.createDescriptorSetLayout(
+			vk::DescriptorSetLayoutCreateInfo()
+				.setBindingCount(1)
+				.setPBindings(cbuffer_layout_desc.data())
+			, nullptr, *pVkDynLoader);
+		cbuffer_set_layout.push_back(set_layout);
+		layout_desc.push_back(set_layout);
+	}
 
 	auto textures_layout_desc = std::vector<vk::DescriptorSetLayoutBinding>();
 	samplers.reserve(texture_desc.size());
@@ -1201,14 +1208,15 @@ VkPSO::VkPSO(vk::Device _dev,
 			.setBindingCount(static_cast<uint32_t>(textures_layout_desc.size()))
 			.setPBindings(textures_layout_desc.data())
 		, nullptr, *pVkDynLoader);
+	textures_first_set = static_cast<uint32_t>(layout_desc.size()); // Store descriptor set index for textures
+	layout_desc.push_back(textures_set_layout);
 
-	const auto layout_desc = std::array<vk::DescriptorSetLayout, 2>{cbuffer_set_layout, textures_set_layout};
-	static_assert(minRequired_BoundDescriptorSets >= layout_desc.size(), "minRequired_BoundDescriptorSets must be >= layout_desc.size()");
 
-	layout = dev.createPipelineLayout(vk::PipelineLayoutCreateInfo()
+	const auto layoutCreateInfo = vk::PipelineLayoutCreateInfo()
 		.setPSetLayouts(layout_desc.data())
-		.setSetLayoutCount(static_cast<uint32_t>(layout_desc.size()))
-		, nullptr, *pVkDynLoader);
+		.setSetLayoutCount(static_cast<uint32_t>(layout_desc.size()));
+	ASSERT(layoutCreateInfo.setLayoutCount <= limits.maxBoundDescriptorSets, "Pipeline layout set count (%" PRIu32") exceeds limits.maxBoundDescriptorSets (%" PRIu32")", layoutCreateInfo.setLayoutCount, limits.maxBoundDescriptorSets);
+	layout = dev.createPipelineLayout(layoutCreateInfo, nullptr, *pVkDynLoader);
 
 	const auto dynamicStates = std::array<vk::DynamicState, 3>{vk::DynamicState::eScissor, vk::DynamicState::eViewport, vk::DynamicState::eDepthBias};
 	const auto multisampleState = vk::PipelineMultisampleStateCreateInfo()
@@ -1307,7 +1315,11 @@ VkPSO::~VkPSO()
 		dev.destroySampler(sampler, nullptr, *pVkDynLoader);
 	}
 	samplers.clear();
-	dev.destroyDescriptorSetLayout(cbuffer_set_layout, nullptr, *pVkDynLoader);
+	for (auto& descSetLayout : cbuffer_set_layout)
+	{
+		dev.destroyDescriptorSetLayout(descSetLayout, nullptr, *pVkDynLoader);
+	}
+	cbuffer_set_layout.clear();
 }
 
 // MARK: VkBuf
@@ -1652,11 +1664,12 @@ VkRoot::~VkRoot()
 }
 
 gfx_api::pipeline_state_object * VkRoot::build_pipeline(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+	const std::vector<std::type_index>& uniform_blocks,
 	const std::vector<gfx_api::texture_input>& texture_desc,
 	const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 {
 	// build a pipeline, return an indirect VkPSOId (to enable rebuilding pipelines if needed)
-	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, texture_desc, attribute_descriptions);
+	const gfxapi_PipelineCreateInfo createInfo(state_desc, shader_mode, primitive, uniform_blocks, texture_desc, attribute_descriptions);
 	auto pipeline = new VkPSO(dev, physDeviceProps.limits, createInfo, rp, rp_compat_info, msaaSamples, vkDynLoader);
 	createdPipelines.emplace_back(createInfo, pipeline);
 	return new VkPSOId(createdPipelines.size() - 1);
@@ -3184,7 +3197,7 @@ gfx_api::buffer* VkRoot::create_buffer_object(const gfx_api::buffer::usage &usag
 	return new VkBuf(dev, usage, *this);
 }
 
-std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(vk::DescriptorSetLayout arg)
+std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSet(vk::DescriptorSetLayout arg)
 {
 	const auto descriptorSet = std::array<vk::DescriptorSetLayout, 1>{ arg };
 	buffering_mechanism::get_current_resources().numalloc++;
@@ -3193,6 +3206,17 @@ std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(vk::DescriptorSetL
 			.setDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool)
 			.setPSetLayouts(descriptorSet.data())
 			.setDescriptorSetCount(static_cast<uint32_t>(descriptorSet.size()))
+	, vkDynLoader);
+}
+
+std::vector<vk::DescriptorSet> VkRoot::allocateDescriptorSets(std::vector<vk::DescriptorSetLayout> args)
+{
+	buffering_mechanism::get_current_resources().numalloc++;
+	return dev.allocateDescriptorSets(
+		vk::DescriptorSetAllocateInfo()
+			.setDescriptorPool(buffering_mechanism::get_current_resources().descriptorPool)
+			.setPSetLayouts(args.data())
+			.setDescriptorSetCount(static_cast<uint32_t>(args.size()))
 	, vkDynLoader);
 }
 
@@ -3227,7 +3251,7 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(textures.size() <= attribute_descriptions.size(), "Received more textures than expected");
 
-	const auto set = allocateDescriptorSets(currentPSO->textures_set_layout);
+	const auto set = allocateDescriptorSet(currentPSO->textures_set_layout);
 
 	auto image_descriptor = std::vector<vk::DescriptorImageInfo>{};
 	for (auto* texture : textures)
@@ -3252,10 +3276,15 @@ void VkRoot::bind_textures(const std::vector<gfx_api::texture_input>& attribute_
 		i++;
 	}
 	dev.updateDescriptorSets(write_info, nullptr, vkDynLoader);
-	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, 1, set, nullptr, vkDynLoader);
+	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, currentPSO->textures_first_set, set, nullptr, vkDynLoader);
 }
 
 void VkRoot::set_constants(const void* buffer, const std::size_t& size)
+{
+	set_uniforms_set(0, buffer, size);
+}
+
+void VkRoot::set_uniforms_set(const size_t& uniform_set, const void* buffer, size_t size)
 {
 	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
 	ASSERT(size <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "size (%zu) exceeds uint32_t max", size);
@@ -3265,33 +3294,55 @@ void VkRoot::set_constants(const void* buffer, const std::size_t& size)
 
 	const auto bufferInfo = vk::DescriptorBufferInfo(stagingMemory.buffer, 0, size);
 
-	std::vector<vk::DescriptorSet> sets;
+	vk::DescriptorSet descSet;
 	auto perFrame_perPSO_dynamicUniformDescriptorSets = buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.find(currentPSO);
-	if (perFrame_perPSO_dynamicUniformDescriptorSets != buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.end())
+	if ((perFrame_perPSO_dynamicUniformDescriptorSets != buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.end())
+		&& (perFrame_perPSO_dynamicUniformDescriptorSets->second.size() > uniform_set))
 	{
-		auto perFrame_perPSO_dynamicUniformDescriptorSet = perFrame_perPSO_dynamicUniformDescriptorSets->second.find(bufferInfo);
-		if (perFrame_perPSO_dynamicUniformDescriptorSet != perFrame_perPSO_dynamicUniformDescriptorSets->second.end())
+		auto &uniformSetDescriptorSets = perFrame_perPSO_dynamicUniformDescriptorSets->second[uniform_set];
+		if (uniformSetDescriptorSets.has_value() && uniformSetDescriptorSets.value().first == bufferInfo)
 		{
-			sets.push_back(perFrame_perPSO_dynamicUniformDescriptorSet->second);
+			descSet = uniformSetDescriptorSets.value().second;
 		}
 	}
 
-	if (sets.empty())
+	if (!descSet)
 	{
-		sets = allocateDescriptorSets(currentPSO->cbuffer_set_layout);
+		auto sets = allocateDescriptorSet(currentPSO->cbuffer_set_layout[uniform_set]);
+		descSet = sets[0];
 		const auto descriptorWrite = std::array<vk::WriteDescriptorSet, 1>{
 			vk::WriteDescriptorSet()
 				.setDescriptorCount(1)
 				.setDescriptorType(vk::DescriptorType::eUniformBufferDynamic)
 				.setDstBinding(0)
 				.setPBufferInfo(&bufferInfo)
-				.setDstSet(sets[0])
+				.setDstSet(descSet)
 		};
 		dev.updateDescriptorSets(descriptorWrite, nullptr, vkDynLoader);
-		buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets[currentPSO] = perFrameResources_t::DynamicUniformBufferDescriptorSets({{ bufferInfo, sets[0] }});
+		if (perFrame_perPSO_dynamicUniformDescriptorSets == buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.end())
+		{
+			auto result = buffering_mechanism::get_current_resources().perPSO_dynamicUniformBufferDescriptorSets.insert(perFrameResources_t::PerPSODynamicUniformBufferDescriptorSets::value_type(currentPSO, std::vector<optional<perFrameResources_t::DynamicUniformBufferDescriptorSets>>()));
+			perFrame_perPSO_dynamicUniformDescriptorSets = result.first;
+		}
+		perFrame_perPSO_dynamicUniformDescriptorSets->second.resize(currentPSO->cbuffer_set_layout.size());
+		perFrame_perPSO_dynamicUniformDescriptorSets->second[uniform_set] = perFrameResources_t::DynamicUniformBufferDescriptorSets( bufferInfo, descSet);
 	}
 	const auto dynamicOffsets = std::array<uint32_t, 1> { stagingMemory.offset };
-	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, 0, sets, dynamicOffsets, vkDynLoader);
+	buffering_mechanism::get_current_resources().cmdDraw.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, currentPSO->layout, static_cast<uint32_t>(uniform_set), descSet, dynamicOffsets, vkDynLoader);
+}
+
+void VkRoot::set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks)
+{
+	ASSERT_OR_RETURN(, currentPSO != nullptr, "currentPSO == NULL");
+	for (size_t i = 0, e = uniform_blocks.size(); i < e && (first + i) < currentPSO->cbuffer_set_layout.size(); ++i)
+	{
+		auto* buffer = std::get<0>(uniform_blocks[i]);
+		if (buffer == nullptr)
+		{
+			continue;
+		}
+		set_uniforms_set((first + i), buffer, std::get<1>(uniform_blocks[i]));
+	}
 }
 
 void VkRoot::bind_pipeline(gfx_api::pipeline_state_object* pso, bool /*notextures*/)

@@ -51,6 +51,7 @@
 #include <map>
 #include <vector>
 #include <unordered_map>
+#include <typeindex>
 
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
@@ -210,8 +211,9 @@ struct perFrameResources_t
 	BlockBufferAllocator streamedVertexBufferAllocator;
 	BlockBufferAllocator uniformBufferAllocator;
 
-	typedef std::unordered_map<vk::DescriptorBufferInfo, vk::DescriptorSet> DynamicUniformBufferDescriptorSets;
-	std::unordered_map<VkPSO *, DynamicUniformBufferDescriptorSets> perPSO_dynamicUniformBufferDescriptorSets;
+	typedef std::pair<vk::DescriptorBufferInfo, vk::DescriptorSet> DynamicUniformBufferDescriptorSets;
+	typedef std::unordered_map<VkPSO *, std::vector<optional<DynamicUniformBufferDescriptorSets>>> PerPSODynamicUniformBufferDescriptorSets;
+	PerPSODynamicUniformBufferDescriptorSets perPSO_dynamicUniformBufferDescriptorSets;
 
 	perFrameResources_t( const perFrameResources_t& other ) = delete; // non construction-copyable
 	perFrameResources_t& operator=( const perFrameResources_t& ) = delete; // non copyable
@@ -261,15 +263,18 @@ struct gfxapi_PipelineCreateInfo
 	gfx_api::state_description state_desc;
 	SHADER_MODE shader_mode;
 	gfx_api::primitive_type primitive;
+	std::vector<std::type_index> uniform_blocks;
 	std::vector<gfx_api::texture_input> texture_desc;
 	std::vector<gfx_api::vertex_buffer> attribute_descriptions;
 
 	gfxapi_PipelineCreateInfo(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+							  const std::vector<std::type_index>& uniform_blocks,
 							  const std::vector<gfx_api::texture_input>& texture_desc,
 							  const std::vector<gfx_api::vertex_buffer>& attribute_descriptions)
 	: state_desc(state_desc)
 	, shader_mode(shader_mode)
 	, primitive(primitive)
+	, uniform_blocks(uniform_blocks)
 	, texture_desc(texture_desc)
 	, attribute_descriptions(attribute_descriptions)
 	{}
@@ -278,7 +283,8 @@ struct gfxapi_PipelineCreateInfo
 struct VkPSO final
 {
 	vk::Pipeline object;
-	vk::DescriptorSetLayout cbuffer_set_layout;
+	std::vector<vk::DescriptorSetLayout> cbuffer_set_layout;
+	uint32_t textures_first_set = 0;
 	vk::DescriptorSetLayout textures_set_layout;
 	vk::PipelineLayout layout;
 	vk::ShaderModule vertexShader;
@@ -484,6 +490,7 @@ public:
 	~VkRoot();
 
 	virtual gfx_api::pipeline_state_object * build_pipeline(const gfx_api::state_description &state_desc, const SHADER_MODE& shader_mode, const gfx_api::primitive_type& primitive,
+															const std::vector<std::type_index>& uniform_blocks,
 															const std::vector<gfx_api::texture_input>& texture_desc,
 															const std::vector<gfx_api::vertex_buffer>& attribute_descriptions) override;
 
@@ -500,7 +507,8 @@ public:
 
 private:
 
-	std::vector<vk::DescriptorSet> allocateDescriptorSets(vk::DescriptorSetLayout arg);
+	std::vector<vk::DescriptorSet> allocateDescriptorSet(vk::DescriptorSetLayout arg);
+	std::vector<vk::DescriptorSet> allocateDescriptorSets(std::vector<vk::DescriptorSetLayout> args);
 
 	bool getSupportedInstanceExtensions(std::vector<VkExtensionProperties> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
 	bool findSupportedInstanceExtensions(std::vector<const char*> extensionsToFind, std::vector<const char*> &output, PFN_vkGetInstanceProcAddr _vkGetInstanceProcAddr);
@@ -535,6 +543,7 @@ public:
 
 public:
 	virtual void set_constants(const void* buffer, const std::size_t& size) override;
+	virtual void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks) override;
 
 	virtual void bind_pipeline(gfx_api::pipeline_state_object* pso, bool notextures) override;
 
@@ -578,6 +587,7 @@ public:
 private:
 	virtual bool _initialize(const gfx_api::backend_Impl_Factory& impl, int32_t antialiasing, swap_interval_mode mode) override;
 	std::string calculateFormattedRendererInfoString() const;
+	void set_uniforms_set(const size_t& set_idx, const void* buffer, size_t bufferSize);
 private:
 	std::string formattedRendererInfoString;
 };
