@@ -132,6 +132,7 @@ TITLECODE WzOldTitleUI::run()
 		
 	case MISC_OPTIONS:
 		runMiscOptionsMenu();
+		break;
 
 	case TITLE:
 		runTitleMenu();
