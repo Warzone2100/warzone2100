@@ -795,15 +795,46 @@ void startMiscOptionsMenu() {
 	list->id = FRONTEND_MISCLIST;
 	list->setGeometry(50, 10, 480, 290);
 	list->setPadding({ 0, 0, 0, 3 });
-	list->addItem(makeOptionPickButton("Show unit count", {"yes", "no"}, showUNITCOUNT, [](W_BUTTON& button) {
+	list->addItem(makeOptionPickButton("Show unit count", {"no", "yes"}, showUNITCOUNT, [](W_BUTTON& button) {
 		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
 		data.CurrentValue = !data.CurrentValue;
 		showUNITCOUNT = !showUNITCOUNT;
 	}));
-	list->addItem(makeOptionPickButton("Show FPS", {"yes", "no"}, showFPS, [](W_BUTTON& button) {
+	list->addItem(makeOptionPickButton("Show FPS", {"no", "yes"}, showFPS, [](W_BUTTON& button) {
 		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
 		data.CurrentValue = !data.CurrentValue;
 		showFPS = !showFPS;
+	}));
+	list->addItem(makeOptionPickButton("Camera acceleration", {"no", "yes"}, getCameraAccel(), [](W_BUTTON& button) {
+		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
+		data.CurrentValue = !data.CurrentValue;
+		setCameraAccel(!getCameraAccel());
+	}));
+	list->addItem(makeOptionPickButton("Enable UPnP", {"no", "yes"}, NetPlay.isUPNP, [](W_BUTTON& button) {
+		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
+		data.CurrentValue = !data.CurrentValue;
+		NetPlay.isUPNP = !NetPlay.isUPNP;
+	}));
+	list->addItem(makeOptionPickButton("Prefer IPv6", {"no", "yes"}, NETgetJoinPreferenceIPv6(), [](W_BUTTON& button) {
+		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
+		data.CurrentValue = !data.CurrentValue;
+		NETsetJoinPreferenceIPv6(!NETgetJoinPreferenceIPv6());
+	}));
+	// I really should've done this via special editbox widget
+	const int radzoomstart = 22;
+	std::vector<std::string> radarvals;
+	for(int v = 0; v < 25; v++) {
+		radarvals.push_back(std::to_string(radzoomstart+v*2));
+	}
+	list->addItem(makeOptionPickButton("Radar zoom", radarvals, (war_GetRadarZoom()-radzoomstart)/2, [](W_BUTTON& button) {
+		OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
+		if(data.CurrentValue+1 < data.values.size()) {
+			data.CurrentValue++;
+			war_SetRadarZoom(radzoomstart+data.CurrentValue*2);
+		} else {
+			data.CurrentValue = 0;
+			war_SetRadarZoom(radzoomstart);
+		}
 	}));
 	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(list);
 }
