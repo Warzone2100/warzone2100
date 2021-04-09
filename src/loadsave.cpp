@@ -108,6 +108,7 @@ bool				bLoadSaveUp = false;        // true when interface is up and should be r
 char				saveGameName[256];          //the name of the save game to load from the front end
 char				sRequestResult[PATH_MAX];   // filename returned;
 bool				bRequestLoad = false;
+bool				autosaveEnabled = true;
 LOADSAVE_MODE		bLoadSaveMode;
 static const char *savedTitle;
 static const char *sSaveGameExtension = ".gam";
@@ -944,7 +945,7 @@ static void freeAutoSaveSlot(const char *path)
 bool autoSave()
 {
 	// Bail out if we're running a _true_ multiplayer game or are playing a tutorial/debug/cheating/autogames
-	if (runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated || autogame_enabled())
+	if (!autosaveEnabled || runningMultiplayer() || bInTutorial || getDebugMappingStatus() || Cheated || autogame_enabled())
 	{
 		return false;
 	}
