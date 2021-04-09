@@ -641,9 +641,12 @@ void startOptionsMenu()
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_MUSICMANAGER, FRONTEND_POS8X, FRONTEND_POS8Y, _("Music Manager"), WBUT_TXTCENTRE);
-	addTextButton(FRONTEND_MISC, FRONTEND_POS8X, FRONTEND_POS8Y+10, _("Misc"), WBUT_TXTCENTRE);
+	// addTextButton(FRONTEND_MISC, FRONTEND_POS8X, FRONTEND_POS8Y+10, _("Misc"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Open Configuration Directory"), 0);
+	
+	WIDGET* pRightAlignedButton = addSmallTextButton(FRONTEND_MISC, FRONTEND_POS9X + 360, 0, _("Misc options"), 0);
+	moveToParentRightEdge(pRightAlignedButton, 6);
 }
 
 bool runOptionsMenu()
