@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:14\n"
+"PO-Revision-Date: 2021-04-09 03:53\n"
 "Last-Translator: \n"
 "Language-Team: Tatar\n"
 "Language: tt_RU\n"
@@ -4559,7 +4559,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Игътибар!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -5767,7 +5767,7 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Меню"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -7271,7 +7271,7 @@ msgstr "Хата"
 #. data/mp/stats/templates.json: $.BarbarianBuggy.name
 #: po/custom/fromJson.txt:1236
 msgid "Buggy"
-msgstr ""
+msgstr "Багги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[2]
@@ -7563,7 +7563,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1405
 msgid "Cobra"
-msgstr ""
+msgstr "Кобра"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -8592,7 +8592,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2117
 msgid "Gamma"
-msgstr ""
+msgstr "Гамма"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -9621,7 +9621,7 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.hover03.name
 #: po/custom/fromJson.txt:2796
 msgid "Hover III"
-msgstr ""
+msgstr "Ховер III"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
@@ -11687,7 +11687,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4312
 msgid "Pepperpot"
-msgstr ""
+msgstr "Пепперпот"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -12827,7 +12827,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5056
 msgid "SemperFi"
-msgstr ""
+msgstr "SemperFi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -14526,7 +14526,7 @@ msgstr ""
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14546,7 +14546,7 @@ msgstr ""
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -15362,7 +15362,7 @@ msgstr ""
 #: src/frontend.cpp:774
 #: src/ingameop.cpp:551
 msgid "Subtitles"
-msgstr ""
+msgstr "Субтитрлар"
 
 #: src/frontend.cpp:779
 #: src/ingameop.cpp:556
@@ -15417,7 +15417,7 @@ msgstr ""
 
 #: src/frontend.cpp:955
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
 #: src/frontend.cpp:960
 #: src/frontend.cpp:962
@@ -18255,7 +18255,7 @@ msgstr ""
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Дәвам итү"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
