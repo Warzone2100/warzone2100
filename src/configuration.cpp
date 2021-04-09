@@ -49,6 +49,7 @@
 #include "display3d.h" // for building animation speed
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
+#include "loadsave.h" // for autosaveEnabled
 
 #include <type_traits>
 
@@ -468,6 +469,7 @@ bool loadConfig()
 	}
 	BlueprintTrackAnimationSpeed = iniGetInteger("BlueprintTrackAnimationSpeed", 20).value();
 	lockCameraScrollWhileRotating = iniGetBool("lockCameraScrollWhileRotating", false).value();
+	autosaveEnabled = iniGetBool("autosaveEnabled", true).value();
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -604,6 +606,7 @@ bool saveConfig()
 	iniSetString("jsbackend", to_string(war_getJSBackend()));
 	iniSetInteger("BlueprintTrackAnimationSpeed", BlueprintTrackAnimationSpeed);
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
+	iniSetBool("autosaveEnabled", autosaveEnabled);
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);

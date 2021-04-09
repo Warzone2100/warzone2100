@@ -50,13 +50,14 @@ enum LOADSAVE_MODE
  */
 /***************************************************************************/
 
-extern bool		bLoadSaveUp;							// true when interface is up and should be run.
+extern bool bLoadSaveUp;							// true when interface is up and should be run.
 //the name of the save game to load from the front end
 extern char saveGameName[256];
 extern char lastSavePath[PATH_MAX];
 extern bool lastSaveMP;
-extern char	sRequestResult[PATH_MAX];
-extern bool		bRequestLoad;
+extern char sRequestResult[PATH_MAX];
+extern bool bRequestLoad;
+extern bool autosaveEnabled;
 
 /***************************************************************************/
 /*
