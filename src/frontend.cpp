@@ -641,6 +641,7 @@ void startOptionsMenu()
 	addTextButton(FRONTEND_MOUSEOPTIONS, FRONTEND_POS6X, FRONTEND_POS6Y, _("Mouse Options"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_KEYMAP,		FRONTEND_POS7X, FRONTEND_POS7Y, _("Key Mappings"), WBUT_TXTCENTRE);
 	addTextButton(FRONTEND_MUSICMANAGER, FRONTEND_POS8X, FRONTEND_POS8Y, _("Music Manager"), WBUT_TXTCENTRE);
+	addTextButton(FRONTEND_MISC, FRONTEND_POS8X, FRONTEND_POS8Y+10, _("Misc"), WBUT_TXTCENTRE);
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, _("Open Configuration Directory"), 0);
 }
@@ -673,6 +674,9 @@ bool runOptionsMenu()
 	case FRONTEND_MUSICMANAGER:
 		changeTitleMode(MUSIC_MANAGER);
 		break;
+	case FRONTEND_MISC:
+		changeTitleMode(MISC_OPTIONS);
+		break;
 	case FRONTEND_QUIT:
 		changeTitleMode(TITLE);
 		break;
@@ -703,6 +707,131 @@ bool runOptionsMenu()
 	}
 
 	widgDisplayScreen(psWScreen);						// show the widgets currently running
+
+	return true;
+}
+
+#include "lib/widget/button.h"
+#include "frend.h"
+
+struct OptionPickButtonData {
+	std::vector<std::string> values;
+	int CurrentValue = 0;
+	int WasValue = 0;
+	WzText text;
+};
+
+static void OptionPickDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset) {
+	// Any widget using TabButtonDisplayFunc must have its pUserData initialized to a (TabButtonDisplayCache*)
+	assert(psWidget->pUserData != nullptr);
+	OptionPickButtonData& cache = *static_cast<OptionPickButtonData*>(psWidget->pUserData);
+
+	W_BUTTON *psButton = dynamic_cast<W_BUTTON*>(psWidget);
+	ASSERT_OR_RETURN(, psButton, "psWidget is null");
+
+	int x0 = psButton->x() + xOffset;
+	int y0 = psButton->y() + yOffset;
+	int x1 = x0 + psButton->width();
+	int y1 = y0 + psButton->height();
+
+	bool isDown = (psButton->getState() & (WBUT_DOWN | WBUT_LOCK | WBUT_CLICKLOCK)) != 0;
+	bool isDisabled = (psButton->getState() & WBUT_DISABLE) != 0;
+	bool isHighlight = !isDisabled && ((psButton->getState() & WBUT_HIGHLIGHT) != 0);
+
+	// Display the button.
+	const PIELIGHT WZCOL_DEBUG_FILL_COLOR = pal_RGBA(25, 0, 110, 220);
+	const PIELIGHT WZCOL_DEBUG_FILL_COLOR_DARK = pal_RGBA(10, 0, 70, 250);
+	const PIELIGHT WZCOL_DEBUG_BORDER_LIGHT = pal_RGBA(255, 255, 255, 80);
+	auto light_border = WZCOL_DEBUG_BORDER_LIGHT;
+	auto fill_color = isDown || isDisabled ? WZCOL_DEBUG_FILL_COLOR_DARK : WZCOL_DEBUG_FILL_COLOR;
+	iV_ShadowBox(x0, y0, x1, y1, 0, isDown ? pal_RGBA(0,0,0,0) : light_border, isDisabled ? light_border : WZCOL_FORM_DARK, fill_color);
+	if (isHighlight)
+	{
+		iV_Box(x0 + 2, y0 + 2, x1 - 2, y1 - 2, WZCOL_FORM_HILITE);
+	}
+	
+	std::string ntext = psButton->pText.toUtf8();
+	ntext += " :: " + cache.values[cache.CurrentValue];
+	cache.text.setText(ntext, psButton->FontID);
+	int fx = x0 + psButton->height()/4;
+	int fy = y0 + (psButton->height() - cache.text.lineSize()) / 2 - cache.text.aboveBase();
+	PIELIGHT textColor = WZCOL_FORM_TEXT;
+	if (isDisabled)
+	{
+		textColor.byte.a = (textColor.byte.a / 2);
+	}
+	cache.text.render(fx, fy, textColor);
+}
+
+static std::shared_ptr<W_BUTTON> makeOptionPickButton(std::string name, std::vector<std::string> options, int curr = 0) {
+	auto button = std::make_shared<W_BUTTON>();
+	button->setString(name.c_str());
+	button->FontID = font_regular;
+	button->displayFunction = OptionPickDisplayFunc;
+	auto a = new OptionPickButtonData();
+	a->values = options;
+	a->CurrentValue = curr;
+	button->pUserData = a;
+	button->setOnDelete([](WIDGET *psWidget) {
+		assert(psWidget->pUserData != nullptr);
+		delete static_cast<OptionPickButtonData *>(psWidget->pUserData);
+		psWidget->pUserData = nullptr;
+	});
+	int minButtonWidthForText = iV_GetTextWidth(name.c_str(), button->FontID);
+	button->setGeometry(0, 0, minButtonWidthForText + 8, 30);
+	return button;
+}
+
+void startMiscOptionsMenu() {
+	addBackdrop();
+	addTopForm(false);
+	addBottomForm();
+	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MISC OPTIONS"));
+	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
+	auto list = ScrollableListWidget::make();
+	// auto list = std::make_shared<ScrollableListWidget>();
+	list->id = FRONTEND_MISCLIST;
+	list->setGeometry(50, 10, 480, 290);
+	list->setPadding({ 0, 0, 0, 3 });
+	for(int i = 0; i < 25; i++) {
+		std::vector<std::string> opt;
+		for(int j=0; j < 5; j++) {
+			opt.push_back(std::to_string((char)(j+'A')));
+		}
+		auto btn = makeOptionPickButton(std::to_string(i), opt);
+		btn->addOnClickHandler([](W_BUTTON& button) {
+			OptionPickButtonData& data = *static_cast<OptionPickButtonData*>(button.pUserData);
+			if(data.CurrentValue+1 < data.values.size()) {
+				data.CurrentValue++;
+			} else {
+				data.CurrentValue = 0;
+			}
+		});
+		list->addItem(btn);
+	}
+	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(list);
+}
+
+bool runMiscOptionsMenu() {
+	WidgetTriggers const &triggers = widgRunScreen(psWScreen);
+	unsigned id = triggers.empty() ? 0 : triggers.front().widget->id; // Just use first click here, since the next click could be on another menu.
+
+	switch (id)
+	{
+	case FRONTEND_QUIT:
+		changeTitleMode(OPTIONS);
+		break;
+
+	default:
+		break;
+	}
+
+	if (CancelPressed())
+	{
+		changeTitleMode(OPTIONS);
+	}
+
+	widgDisplayScreen(psWScreen);
 
 	return true;
 }

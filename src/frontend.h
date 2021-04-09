@@ -46,6 +46,7 @@ enum tMode
 	MOUSE_OPTIONS,          // 16 mouse options menu
 	CAMPAIGNS,              // 17 campaign selector
 	MUSIC_MANAGER,			// 18 music manager
+	MISC_OPTIONS,			// 19 misc menu
 };
 
 #define MAX_LEVEL_NAME_SIZE	(256)
@@ -62,6 +63,7 @@ bool runCampaignSelector();
 bool runMultiPlayerMenu();
 bool runGameOptionsMenu();
 bool runOptionsMenu();
+bool runMiscOptionsMenu();
 bool runGraphicsOptionsMenu();
 bool runAudioAndZoomOptionsMenu();
 bool runVideoOptionsMenu();
@@ -74,6 +76,7 @@ void startSinglePlayerMenu();
 void startCampaignSelector();
 void startMultiPlayerMenu();
 void startOptionsMenu();
+void startMiscOptionsMenu();
 void startGraphicsOptionsMenu();
 void startAudioAndZoomOptionsMenu();
 void startVideoOptionsMenu();
@@ -323,6 +326,9 @@ enum
 	FRONTEND_KEYMAP			= 26000,	// Keymap menu
 
 	FRONTEND_MUSICMANAGER   = 27000,	// Music manager menu
+	
+	FRONTEND_MISC = 28000,
+	FRONTEND_MISCLIST,
 
 	FRONTEND_NOGAMESAVAILABLE = 31666	// Used when no games are available in lobby
 
