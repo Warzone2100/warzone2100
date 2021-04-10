@@ -1245,8 +1245,9 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 	for (int layer = 0; layer < numGroundTypes; layer++)
 	{
 		const auto& groundType = getGroundType(layer);
-		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(groundType.textureSize), 0 );
-		const glm::vec4 paramsY(1.0f / world_coord(groundType.textureSize), 0, 0, 0 );
+		const float texScale = 1.0f / (groundType.textureSize * world_coord(1));
+		const glm::vec4 paramsX(0, 0, -texScale, 0 );
+		const glm::vec4 paramsY(texScale, 0, 0, 0 );
 		auto ModelUV = glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
 		// load the texture
