@@ -63,6 +63,7 @@
 #define LANG_NAME_GERMAN "Deutsch"
 #define LANG_NAME_GREEK "Ελληνικά"
 #define LANG_NAME_HUNGARIAN "magyar"
+#define LANG_NAME_INDONESIAN "Bahasa Indonesia"
 #define LANG_NAME_IRISH "Imruagadh"
 #define LANG_NAME_ITALIAN "Italiano"
 #define LANG_NAME_KOREAN "한국어"
@@ -124,6 +125,7 @@ static const struct
 	{ "ga", LANG_NAME_IRISH, LANG_IRISH, SUBLANG_IRISH_IRELAND },
 	{ "hr", LANG_NAME_CROATIAN, LANG_CROATIAN, SUBLANG_DEFAULT },
 	{ "hu", LANG_NAME_HUNGARIAN, LANG_HUNGARIAN, SUBLANG_DEFAULT },
+	{ "id_ID", LANG_NAME_INDONESIAN, LANG_INDONESIAN, SUBLANG_DEFAULT },
 	{ "it", LANG_NAME_ITALIAN, LANG_ITALIAN, SUBLANG_ITALIAN },
 	{ "ko_KR", LANG_NAME_KOREAN, LANG_KOREAN, SUBLANG_DEFAULT },
 //	{ "la", LANG_NAME_LATIN, LANG_LATIN, SUBLANG_DEFAULT },
@@ -184,6 +186,7 @@ static const struct
 	{ "ga_IE", LANG_NAME_IRISH, "ga_IE.UTF-8", "ga" },
 	{ "hr", LANG_NAME_CROATIAN, "hr_HR.UTF-8", "hr_HR" },
 	{ "hu", LANG_NAME_HUNGARIAN, "hu_HU.UTF-8", "hu_HU" },
+	{ "id_ID", LANG_NAME_INDONESIAN, "id_ID.UTF-8", "id" },
 	{ "it", LANG_NAME_ITALIAN, "it_IT.UTF-8", "it_IT" },
 	{ "ko_KR", LANG_NAME_KOREAN, "ko_KR.UTF-8", "ko" },
 	{ "la", LANG_NAME_LATIN, "la.UTF-8", "la" },
