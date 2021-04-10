@@ -1196,7 +1196,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		renderState.fogColour.vector[3] / 255.f
 	);
 	const auto ModelViewNormal = glm::transpose(glm::inverse(ModelView));
-	const auto ModelUVLight = lightTextureMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0), glm::vec4(0)));
+	const auto ModelUVLight = lightTextureMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
 	// load the vertex (geometry) buffer
 	gfx_api::TerrainLayer::get().bind();
@@ -1214,7 +1214,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		const auto& groundType = getGroundType(layer);
 		const glm::vec4 paramsX(0, 0, -1.0f / world_coord(groundType.textureSize), 0 );
 		const glm::vec4 paramsY(1.0f / world_coord(groundType.textureSize), 0, 0, 0 );
-		auto ModelUV = glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0), glm::vec4(0)));
+		auto ModelUV = glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
 		// load the texture
 		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
