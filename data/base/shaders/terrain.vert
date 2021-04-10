@@ -53,8 +53,8 @@ void main()
 	vec3 bitangent = cross(normal, tangent);
 	mat3 eyeTangentMatrix = mat3(tangent, bitangent, normal); // aka TBN-matrix
 	// transform light to TangentSpace:
-	vec3 eyeVec = normalize((ModelViewMatrix * vertex).xyz * eyeTangentMatrix);
-	lightDir = normalize(sunPosition.xyz * eyeTangentMatrix);
+	vec3 eyeVec = normalize(-(ModelViewMatrix * vertex).xyz * eyeTangentMatrix);
+	lightDir = normalize(-sunPosition.xyz * eyeTangentMatrix);
 	halfVec = lightDir + eyeVec;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;

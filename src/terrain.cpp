@@ -368,7 +368,7 @@ static Vector3f getGridNormal(int x, int y, bool center = false) {
 			float ang = acos(glm::dot(e1, e2) / glm::length(e1) / glm::length(e2));
 			res += glm::cross(e1, e2) * ang; // += normal * (2*area) * angle
 		}
-		return glm::normalize(res);
+		return -glm::normalize(res);
 	};
 	if (center) {
 		return calcNormal(getGridPosf(x, y, true), {
