@@ -1,22 +1,10 @@
 #version 450
 //#pragma debug(on)
 
-layout(set = 1, binding = 0) uniform sampler2D Texture;
-layout(std140, set = 0, binding = 0) uniform cbuffer
+layout(set = 3, binding = 0) uniform sampler2D Texture;
+layout(std140, set = 0, binding = 0) uniform globaluniforms
 {
-	vec4 colour;
-	vec4 teamcolour; // the team colour of the model
-	float stretch;
-	int tcmask; // whether a tcmask texture exists for the model
-	int fogEnabled; // whether fog is enabled
-	int normalmap; // whether a normal map exists for the model
-	int specularmap; // whether a specular map exists for the model
-	int ecmEffect; // whether ECM special effect is enabled
-	int alphaTest;
-	float graphicsCycle; // a periodically cycling value for special effects
-	mat4 ModelViewMatrix;
-	mat4 ModelViewProjectionMatrix;
-	mat4 NormalMatrix;
+	mat4 ProjectionMatrix;
 	vec4 lightPosition;
 	vec4 sceneColor;
 	vec4 ambient;
@@ -25,7 +13,27 @@ layout(std140, set = 0, binding = 0) uniform cbuffer
 	vec4 fogColor;
 	float fogEnd;
 	float fogStart;
+	float graphicsCycle;
+	int fogEnabled;
+};
+
+layout(std140, set = 1, binding = 0) uniform meshuniforms
+{
+	int tcmask;
+	int normalmap;
+	int specularmap;
 	int hasTangents;
+};
+
+layout(std140, set = 2, binding = 0) uniform instanceuniforms
+{
+	mat4 ModelViewMatrix;
+	mat4 NormalMatrix;
+	vec4 colour;
+	vec4 teamcolour;
+	float stretch;
+	int ecmEffect;
+	int alphaTest;
 };
 
 layout(location = 0) in vec2 texCoord;
