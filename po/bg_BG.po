@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-07 14:46\n"
+"PO-Revision-Date: 2021-04-10 16:42\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -15055,7 +15055,7 @@ msgstr ""
 #: src/faction.cpp:170
 #: src/frontend.cpp:1812
 msgid "Normal"
-msgstr ""
+msgstr "Нормална"
 
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
@@ -15069,11 +15069,11 @@ msgstr "Колектив"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
-msgstr ""
+msgstr "Един играч"
 
 #: src/frontend.cpp:143
 msgid "Multi Player"
-msgstr ""
+msgstr "Множество играчи"
 
 #: src/frontend.cpp:144
 #: src/frontend.cpp:278
@@ -15097,11 +15097,11 @@ msgstr "Видеата липсват, изтеглете ги от http://wz210
 #: src/frontend.cpp:160
 #: src/frontend.cpp:164
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Продължете от последната съхранена игра"
 
 #: src/frontend.cpp:165
 msgid "No last save available"
-msgstr ""
+msgstr "Не е налична последна съхранена игра"
 
 #: src/frontend.cpp:167
 msgid "Quit Game"
@@ -15113,15 +15113,15 @@ msgstr "ЗАГЛАВНО МЕНЮ"
 
 #: src/frontend.cpp:170
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Официален сайт: http://wz2100.net/"
 
 #: src/frontend.cpp:171
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Посетете форумите за всички Warzone 2100 новини! Кликнете този линк."
 
 #: src/frontend.cpp:172
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "Дарете: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:174
 msgid "Help support the project with our server costs, Click this link."
