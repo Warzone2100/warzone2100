@@ -75,7 +75,7 @@ void main()
 	}
 
 	vec4 fragColor = texture(tex, uv)*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
-	fragColor *= color * texture(lightmap_tex, uvLight);
+	fragColor = vec4(fragColor.rgb * texture(lightmap_tex, uvLight).rgb, color.a);
 
 	if (fogEnabled > 0)
 	{
