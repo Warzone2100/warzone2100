@@ -89,11 +89,13 @@ struct Sector
 
 using RenderVertex = Vector3f;
 
-/// A vertex with a position and texture coordinates
+/// A vertex with a position and texture coordinates. see gfx_api::TerrainDecals
 struct DecalVertex
 {
 	Vector3f pos = Vector3f(0.f, 0.f, 0.f);
 	Vector2f uv = Vector2f(0.f, 0.f);
+	Vector3f normal = Vector3f(0.f, 1.f, 0.f);
+	glm::vec4 tangent = glm::vec4(1.f, 0.f, 0.f, 1.f);
 };
 
 /// The lightmap texture
@@ -358,7 +360,7 @@ static Vector3f getGridPosf(int x, int y, bool center = false, bool water = fals
 }
 
 /// Get normal vector of grid point
-static Vector3f getGridNormal(int x, int y, bool center) {
+static Vector3f getGridNormal(int x, int y, bool center = false) {
 	auto calcNormal = [](const Vector3f &pc, const std::vector<Vector3f> &p) {
 		auto res = Vector3f(0.0);
 		for (int i = 0; i < p.size(); i++) {
@@ -458,62 +460,95 @@ static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize
 				getGridPos(&pos, i, j, true, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = center;
+				decaldata[*decalSize].normal = getGridNormal(i, j, true);
 				(*decalSize)++;
 				a = 0; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
 				a = 0; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
 
 				getGridPos(&pos, i, j, true, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = center;
+				decaldata[*decalSize].normal = getGridNormal(i, j, true);
 				(*decalSize)++;
 				a = 1; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
 				a = 0; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
 
 				getGridPos(&pos, i, j, true, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = center;
+				decaldata[*decalSize].normal = getGridNormal(i, j, true);
 				(*decalSize)++;
 				a = 1; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
 				a = 1; b = 1;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
 
 				getGridPos(&pos, i, j, true, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = center;
+				decaldata[*decalSize].normal = getGridNormal(i, j, true);
 				(*decalSize)++;
 				a = 0; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
 				a = 1; b = 0;
 				getGridPos(&pos, i + a, j + b, false, false);
 				decaldata[*decalSize].pos = pos;
 				decaldata[*decalSize].uv = uv[a][b];
+				decaldata[*decalSize].normal = getGridNormal(i + a, j + b);
 				(*decalSize)++;
+
+				// calc tangents
+				for (int idx = *decalSize - 3*4; idx < *decalSize; idx+=3) {
+					auto p = decaldata + idx;
+					auto e1 = p[1].pos - p[0].pos;
+					auto e2 = p[2].pos - p[0].pos;
+					auto uv1 = p[1].uv - p[0].uv;
+					auto uv2 = p[2].uv - p[0].uv;
+					float r = 1.0f / (uv1.x * uv2.y - uv2.x * uv1.y);
+					Vector3f tangent = glm::normalize(r * (uv2.y * e1 - uv1.y * e2));
+					Vector3f bitangent = glm::normalize(r * (-uv2.x * e1 + uv1.x * e2));
+					for (int k=0; k<3; k++) {
+						auto &n = p[k].normal;
+						const auto t = glm::normalize(tangent - (n * glm::dot(tangent, n)));
+						float w = 1.0f; // not mirrored
+						if (glm::dot(glm::cross(n, t), bitangent) < 0.0f) {
+							w = -1.0f; // we're mirrored
+						}
+						p[k].tangent = glm::vec4(t, w);
+					}
+				}
 			}
 		}
 	}
@@ -1186,7 +1221,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
-static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &lightTextureMatrix)
+static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &ModelViewNormal, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::mat4 &ModelUVLightmap)
 {
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
@@ -1195,8 +1230,6 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		renderState.fogColour.vector[2] / 255.f,
 		renderState.fogColour.vector[3] / 255.f
 	);
-	const auto ModelViewNormal = glm::transpose(glm::inverse(ModelView));
-	const auto ModelUVLight = lightTextureMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
 	// load the vertex (geometry) buffer
 	gfx_api::TerrainLayer::get().bind();
@@ -1225,7 +1258,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		gfx_api::texture* pSpecularMapTexture = texPage_specularmap.has_value() ? &pie_Texture(texPage_specularmap.value()) : nullptr;
 
 		gfx_api::TerrainLayer::get().bind_constants({
-			ModelUV, ModelUVLight, ModelView, ModelViewProjection, ModelViewNormal,
+			ModelUV, ModelUVLightmap, ModelView, ModelViewProjection, ModelViewNormal,
 			glm::vec4(currentSunPos, 0.f),
 			pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
@@ -1256,7 +1289,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 	gfx_api::context::get().unbind_index_buffer(*textureIndexVBO);
 }
 
-static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &paramsXLight, const glm::vec4 &paramsYLight, const glm::mat4 &textureMatrix)
+static void drawDecals(const glm::mat4 &ModelView, const glm::mat4 &ModelViewNormal, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::mat4 &ModelUVLightmap)
 {
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
@@ -1266,9 +1299,12 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 		renderState.fogColour.vector[3] / 255.f
 	);
 	gfx_api::TerrainDecals::get().bind();
-	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num);
+	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num, &pie_Texture(terrainNormalPage), &pie_Texture(terrainSpecularPage));
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
-	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, textureMatrix, paramsXLight, paramsYLight,
+	gfx_api::TerrainDecals::get().bind_constants({
+		ModelView, ModelViewNormal, ModelViewProjection, ModelUVLightmap,
+		glm::vec4(currentSunPos, 0.f),
+		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 	int size = 0;
@@ -1330,17 +1366,20 @@ void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Protection, const 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
 
+	const auto ModelViewNormal = glm::transpose(glm::inverse(ModelView));
+	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+
 	//////////////////////////////////////
 	// canvas to draw on
 	drawDepthOnly(mvp, paramsXLight, paramsYLight);
 
 	///////////////////////////////////
 	// terrain
-	drawTerrainLayers(ModelView, mvp, currentSunPos, paramsXLight, paramsYLight, lightMatrix);
+	drawTerrainLayers(ModelView, ModelViewNormal, mvp, currentSunPos, ModelUVLightmap);
 
 	//////////////////////////////////
 	// decals
-	drawDecals(mvp, paramsXLight, paramsYLight, lightMatrix);
+	drawDecals(ModelView, ModelViewNormal, mvp, currentSunPos, ModelUVLightmap);
 }
 
 /**

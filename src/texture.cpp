@@ -51,6 +51,8 @@ TILE_TEX_INFO tileTexInfo[MAX_TILES];
 
 static size_t firstPage; // the last used page before we start adding terrain textures
 size_t terrainPage; // texture ID of the terrain page
+size_t terrainNormalPage = 0; // texture ID of the terrain page for normals
+size_t terrainSpecularPage = 0; // texture ID of the terrain page for specular/gloss
 static int mipmap_max, mipmap_levels;
 static int maxTextureSize = 2048; ///< the maximum size texture we will create
 
@@ -171,7 +173,22 @@ bool texLoad(const char *fileName)
 		while (xLimit > (xSize *= 2)) {}
 		while (yLimit > (ySize *= 2)) {}
 
-		// Generate the empty texture buffer in VRAM
+		// Generate the empty texture buffers in VRAM
+		if (terrainNormalPage == 0) {
+			snprintf(fullPath, sizeof(fullPath), "%s-nm", fileName);
+			terrainNormalPage = pie_ReserveTexture(fullPath, xSize, ySize);
+			pie_AssignTexture(terrainNormalPage,
+				gfx_api::context::get().create_texture(mipmap_levels, xSize, ySize,
+					gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8));
+
+			snprintf(fullPath, sizeof(fullPath), "%s-sm", fileName);
+			terrainSpecularPage = pie_ReserveTexture(fullPath, xSize, ySize);
+			pie_AssignTexture(terrainSpecularPage,
+				gfx_api::context::get().create_texture(mipmap_levels, xSize, ySize,
+					gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8));
+
+			firstPage = pie_NumberOfPages();
+		}
 		texPage = newPage(fileName, j, xSize, ySize, 0);
 
 		sprintf(partialPath, "%s-%d", fileName, i);
@@ -204,6 +221,43 @@ bool texLoad(const char *fileName)
 				debug(LOG_TEXTURE, "  texLoad: Registering k=%d i=%d u=%f v=%f xoff=%d yoff=%d xsize=%d ysize=%d tex=%d (%s)",
 				      k, i, tileTexInfo[k].uOffset, tileTexInfo[k].vOffset, xOffset, yOffset, xSize, ySize, texPage, fullPath);
 			}
+
+			// loading normalmap
+			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d_nm.png", partialPath, k);
+			if (PHYSFS_exists(fullPath))
+			{
+				bool retval = iV_loadImage_PNG(fullPath, &tile);
+				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
+				debug(LOG_TEXTURE, "texLoad: Found normal map %s", fullPath);
+			}
+			else
+			{	// default normal map: (0,0,1)
+				int filesize = i*i * 4;
+				tile.bmp = (unsigned char*)malloc(filesize);
+				memset(tile.bmp, 0x7f, filesize);
+				for (int b=0; b<filesize; b+=4) tile.bmp[b+2] = 0xff; // blue=z
+			}
+			// Insert into normal texture page
+			pie_Texture(terrainNormalPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
+			free(tile.bmp);
+
+			// loading specularmap
+			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d_sm.png", partialPath, k);
+			if (PHYSFS_exists(fullPath))
+			{
+				bool retval = iV_loadImage_PNG(fullPath, &tile);
+				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
+				debug(LOG_TEXTURE, "texLoad: Found specular map %s", fullPath);
+			}
+			else
+			{	// default specular map: 7f7f7f7f for now
+				tile.bmp = (unsigned char*)calloc(i*i, 4);
+				memset(tile.bmp, 0x7f, i*i*4);
+			}
+			// Insert into specular texture page
+			pie_Texture(terrainSpecularPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
+			free(tile.bmp);
+
 			xOffset += i; // i is width of tile
 			if (xOffset + i > xLimit)
 			{
