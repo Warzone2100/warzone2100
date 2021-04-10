@@ -41,6 +41,8 @@ struct TILE_TEX_INFO
 
 extern TILE_TEX_INFO	tileTexInfo[MAX_TILES];
 extern size_t terrainPage;
+extern size_t terrainNormalPage;
+extern size_t terrainSpecularPage;
 
 void setTextureSize(int texSize);
 int getTextureSize();

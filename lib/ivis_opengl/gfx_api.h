@@ -711,10 +711,15 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_DECALS>
 	{
-		glm::mat4 transform_matrix;
-		glm::mat4 texture_matrix;
-		glm::vec4 param1;
-		glm::vec4 param2;
+		glm::mat4 ModelViewMatrix;
+		glm::mat4 ModelViewNormalMatrix; // ModelViewMatrix for normals
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUVLightmapMatrix;
+		glm::vec4 sunPosition;
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
@@ -726,11 +731,18 @@ namespace gfx_api
 	using TerrainDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
 	std::tuple<constant_buffer_type<SHADER_DECALS>>,
 	std::tuple<
-	vertex_buffer_description<sizeof(glm::vec3) + sizeof(glm::vec2),
+	vertex_buffer_description<2*sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec4), // DecalVertex struct
 	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
-	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(glm::vec3)>
+	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(glm::vec3)>,
+	vertex_attribute_description<normal,   gfx_api::vertex_attribute_type::float3, sizeof(glm::vec3) + sizeof(glm::vec2)>,
+	vertex_attribute_description<tangent,  gfx_api::vertex_attribute_type::float4, 2*sizeof(glm::vec3) + sizeof(glm::vec2)>
 	>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic>, texture_description<1, sampler_type::bilinear>>, SHADER_DECALS>;
+	>, std::tuple<
+	texture_description<0, sampler_type::anisotropic>,
+	texture_description<1, sampler_type::bilinear>,
+	texture_description<2, sampler_type::anisotropic>, // normal map
+	texture_description<3, sampler_type::anisotropic>  // specular map
+	>, SHADER_DECALS>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER>
