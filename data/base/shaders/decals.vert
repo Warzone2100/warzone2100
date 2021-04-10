@@ -35,6 +35,9 @@ out vec3 halfVec;
 varying vec2 uv_tex;
 varying vec2 uv_lightmap;
 varying float vertexDistance;
+// In tangent space
+out vec3 lightDir;
+out vec3 halfVec;
 #endif
 
 void main()
