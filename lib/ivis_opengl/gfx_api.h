@@ -560,9 +560,50 @@ namespace gfx_api
 		int hasTangents;
 	};
 
+	// Only change once per frame
+	struct Draw3DShapeGlobalUniforms
+	{
+		glm::mat4 ProjectionMatrix;
+		glm::vec4 sunPos;
+		glm::vec4 sceneColor;
+		glm::vec4 ambient;
+		glm::vec4 diffuse;
+		glm::vec4 specular;
+		glm::vec4 fogColour;
+		float fogEnd;
+		float fogBegin;
+		float timeState;
+		int fogEnabled;
+	};
+
+	// Only change per mesh
+	struct Draw3DShapePerMeshUniforms
+	{
+		int tcmask;
+		int normalMap;
+		int specularMap;
+		int hasTangents;
+	};
+
+	// Change per instance of mesh
+	struct Draw3DShapePerInstanceUniforms
+	{
+		glm::mat4 ModelViewMatrix;
+		glm::mat4 NormalMatrix; // can be calculated in the shader
+		glm::vec4 colour;
+		glm::vec4 teamcolour;
+		float shaderStretch;
+		int ecmState;
+		int alphaTest;
+	};
+
 	template<REND_MODE render_mode, SHADER_MODE shader>
 	using Draw3DShape = typename gfx_api::pipeline_state_helper<rasterizer_state<render_mode, DEPTH_CMP_LEQ_WRT_ON, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
-	std::tuple<constant_buffer_type<shader>>,
+	std::tuple<
+	Draw3DShapeGlobalUniforms,
+	Draw3DShapePerMeshUniforms,
+	Draw3DShapePerInstanceUniforms
+	>,
 	std::tuple<
 	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
 	vertex_buffer_description<12, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>,

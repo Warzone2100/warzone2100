@@ -142,36 +142,10 @@ private:
 
 
 	// Wish there was static reflection in C++...
-	template<typename T>
-	void set_constants_for_component(const T& cbuf)
-	{
-		setUniforms(0, cbuf.colour);
-		setUniforms(1, cbuf.teamcolour);
-		setUniforms(2, cbuf.shaderStretch);
-		setUniforms(3, cbuf.tcmask);
-		setUniforms(4, cbuf.fogEnabled);
-		setUniforms(5, cbuf.normalMap);
-		setUniforms(6, cbuf.specularMap);
-		setUniforms(7, cbuf.ecmState);
-		setUniforms(8, cbuf.alphaTest);
-		setUniforms(9, cbuf.timeState);
-		setUniforms(10, cbuf.ModelViewMatrix);
-		setUniforms(11, cbuf.ModelViewProjectionMatrix);
-		setUniforms(12, cbuf.NormalMatrix);
-		setUniforms(13, cbuf.sunPos);
-		setUniforms(14, cbuf.sceneColor);
-		setUniforms(15, cbuf.ambient);
-		setUniforms(16, cbuf.diffuse);
-		setUniforms(17, cbuf.specular);
-		setUniforms(18, cbuf.fogColour);
-		setUniforms(19, cbuf.fogEnd);
-		setUniforms(20, cbuf.fogBegin);
-		setUniforms(21, cbuf.hasTangents);
-	}
+	void set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf);
+	void set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf);
 
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_BUTTON>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_COMPONENT>& cbuf);
-	void set_constants(const gfx_api::constant_buffer_type<SHADER_NOLIGHT>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf);
 	void set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf);

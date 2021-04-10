@@ -3,7 +3,8 @@
 
 //#pragma debug(on)
 
-uniform mat4 ModelViewProjectionMatrix;
+uniform mat4 ProjectionMatrix;
+uniform mat4 ModelViewMatrix;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
@@ -27,6 +28,7 @@ void main()
 	texCoord = vertexTexCoord;
 
 	// Translate every vertex according to the Model View and Projection Matrix
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * vertex;
 	gl_Position = gposition;
 

@@ -284,17 +284,33 @@ struct program_data
 static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 {
 	std::make_pair(SHADER_COMPONENT, program_data{ "Component program", "shaders/tcmask.vert", "shaders/tcmask.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			// per-mesh uniforms
+			"tcmask", "normalmap", "specularmap", "hasTangents",
+			// per-instance uniforms
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+		} }),
+
 	std::make_pair(SHADER_BUTTON, program_data{ "Button program", "shaders/button.vert", "shaders/button.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			// per-mesh uniforms
+			"tcmask", "normalmap", "specularmap", "hasTangents",
+			// per-instance uniforms
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+		} }),
 	std::make_pair(SHADER_NOLIGHT, program_data{ "Plain program", "shaders/nolight.vert", "shaders/nolight.frag",
-		{ "colour", "teamcolour", "stretch", "tcmask", "fogEnabled", "normalmap", "specularmap", "ecmEffect", "alphaTest", "graphicsCycle",
-			"ModelViewMatrix", "ModelViewProjectionMatrix", "NormalMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular",
-			"fogColor", "fogEnd", "fogStart", "hasTangents" } }),
+		{
+			// per-frame global uniforms
+			"ProjectionMatrix", "lightPosition", "sceneColor", "ambient", "diffuse", "specular", "fogColor", "fogEnd", "fogStart", "graphicsCycle", "fogEnabled",
+			// per-mesh uniforms
+			"tcmask", "normalmap", "specularmap", "hasTangents",
+			// per-instance uniforms
+			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
+		} }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
@@ -564,9 +580,9 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 
 	const std::unordered_map < std::type_index, std::function<void(const void*, size_t)>> uniforms_bind_table =
 	{
-		uniform_binding_entry<SHADER_COMPONENT>(),
-		uniform_binding_entry<SHADER_BUTTON>(),
-		uniform_binding_entry<SHADER_NOLIGHT>(),
+		uniform_setting_func<gfx_api::Draw3DShapeGlobalUniforms>(),
+		uniform_setting_func<gfx_api::Draw3DShapePerMeshUniforms>(),
+		uniform_setting_func<gfx_api::Draw3DShapePerInstanceUniforms>(),
 		uniform_binding_entry<SHADER_TERRAIN>(),
 		uniform_binding_entry<SHADER_TERRAIN_DEPTH>(),
 		uniform_binding_entry<SHADER_DECALS>(),
@@ -1125,19 +1141,38 @@ void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const float &v)
 //	setUniforms(obj->locations[20], cbuf.fogColour);
 //}
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_BUTTON>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapeGlobalUniforms& cbuf)
 {
-	set_constants_for_component(cbuf);
+	setUniforms(0, cbuf.ProjectionMatrix);
+	setUniforms(1, cbuf.sunPos);
+	setUniforms(2, cbuf.sceneColor);
+	setUniforms(3, cbuf.ambient);
+	setUniforms(4, cbuf.diffuse);
+	setUniforms(5, cbuf.specular);
+	setUniforms(6, cbuf.fogColour);
+	setUniforms(7, cbuf.fogEnd);
+	setUniforms(8, cbuf.fogBegin);
+	setUniforms(9, cbuf.timeState);
+	setUniforms(10, cbuf.fogEnabled);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_COMPONENT>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerMeshUniforms& cbuf)
 {
-	set_constants_for_component(cbuf);
+	setUniforms(11, cbuf.tcmask);
+	setUniforms(12, cbuf.normalMap);
+	setUniforms(13, cbuf.specularMap);
+	setUniforms(14, cbuf.hasTangents);
 }
 
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_NOLIGHT>& cbuf)
+void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstanceUniforms& cbuf)
 {
-	set_constants_for_component(cbuf);
+	setUniforms(15, cbuf.ModelViewMatrix);
+	setUniforms(16, cbuf.NormalMatrix);
+	setUniforms(17, cbuf.colour);
+	setUniforms(18, cbuf.teamcolour);
+	setUniforms(19, cbuf.shaderStretch);
+	setUniforms(20, cbuf.ecmState);
+	setUniforms(21, cbuf.alphaTest);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)

@@ -3,12 +3,12 @@
 
 //#pragma debug(on)
 
-uniform float stretch;
+uniform mat4 ProjectionMatrix;
 uniform mat4 ModelViewMatrix;
-uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 NormalMatrix;
 uniform int hasTangents; // whether tangents were calculated for model
 uniform vec4 lightPosition;
+uniform float stretch;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
@@ -68,6 +68,7 @@ void main()
 	}
 
 	// Translate every vertex according to the Model View and Projection Matrix
+	mat4 ModelViewProjectionMatrix = ProjectionMatrix * ModelViewMatrix;
 	vec4 gposition = ModelViewProjectionMatrix * position;
 	gl_Position = gposition;
 
