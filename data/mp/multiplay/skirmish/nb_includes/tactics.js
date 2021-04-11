@@ -251,7 +251,7 @@ function pickVtolTarget(droid) {
 			return vtolCanHit(droid, obj);
 		}
 		var enemy = enumLivingPlayers().filter(isEnemy).random();
-		var list;
+		let list;
 		list = enumStructList(miscTargets, enemy).filter(canHit);
 		if (list.length > 0) return list.random();
 		list = enumStruct(enemy, DEFENSE).filterProperty("canHitAir", true).filter(canHit);
