@@ -93,6 +93,10 @@ public:
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
 	void display(int xOffset, int yOffset) override;
+	std::string getTip() override
+	{
+		return pTip;
+	}
 
 	unsigned getState() override;
 	void setState(unsigned state) override;
@@ -106,12 +110,6 @@ public:
 	bool isHighlighted() const;
 
 	unsigned state;                     // Button state of the form
-
-protected:
-	virtual std::string getTip()
-	{
-		return pTip;
-	}
 
 private:
 	std::string pTip;                   // Tip for the form

@@ -29,6 +29,7 @@
 #include "tip.h"
 
 #include <algorithm>
+#include <sstream>
 
 #define LABEL_DEFAULT_CACHE_EXPIRY 250
 
@@ -160,47 +161,28 @@ void W_LABEL::display(int xOffset, int yOffset)
 	}
 }
 
-/* Respond to a mouse moving over a label */
-void W_LABEL::highlight(W_CONTEXT *psContext)
+std::string W_LABEL::getTip()
 {
-	/* If there is a tip string start the tool tip */
-	if (!pTip.empty() || isTruncated)
-	{
-		std::string tipString;
-		if (isTruncated)
-		{
-			for (const auto& line : aTextLines)
-			{
-				tipString += line.text + "\n";
-			}
-		}
-		if (!pTip.empty())
-		{
-			if (isTruncated)
-			{
-				tipString += "\n(";
-			}
-			tipString += pTip;
-			if (isTruncated)
-			{
-				tipString += ")";
-			}
-		}
-		if (auto lockedScreen = screenPointer.lock())
-		{
-			tipStart(this, tipString, lockedScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
-		}
+	if (pTip.empty() && !isTruncated) {
+		return "";
 	}
-}
 
-
-/* Respond to the mouse moving off a label */
-void W_LABEL::highlightLost()
-{
-	if (!pTip.empty() || isTruncated)
-	{
-		tipStop(this);
+	if (!isTruncated) {
+		return pTip;
 	}
+
+	std::stringstream labelText;
+	for (const auto& line : aTextLines)
+	{
+		labelText << line.text << "\n";
+	}
+
+	if (!pTip.empty())
+	{
+		labelText << "\n(" << pTip << ")";
+	}
+
+	return labelText.str();
 }
 
 WzString W_LABEL::getString() const

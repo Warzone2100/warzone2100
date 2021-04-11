@@ -73,6 +73,11 @@ public:
 	using WIDGET::setString;
 	using WIDGET::setTip;
 
+	std::string getTip() override
+	{
+		return pTip;
+	}
+
 	/* The optional "onClick" callback function */
 	typedef std::function<void (W_BUTTON& button)> W_BUTTON_ONCLICK_FUNC;
 
