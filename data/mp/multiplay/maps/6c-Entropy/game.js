@@ -1,19 +1,19 @@
 'use strict';
 
-var mapWidth = 128, mapHeight = 128; //map size (works better if it's a square)
-var players = 6; //number of players (excl. scavs)
-var richness = 3; //how much oil is in the map, must be >=1
-var playerPositioningYStrictness = 0; //higher = player positioning more predictable (vertically). Values too high may cause generation to freeze. 0 = completely random
-var trucksPerPlayer = 2; //number of starting trucks for each player, must be >=1
-var minFieldSize = 10; //size of smallest areas of terrain
-var targetFieldSize = 500; //target size of generated areas of terrain
-var maxDifference = 192; //max height difference between connectable areas of terrain
-var playerPositioningIters = 400; //how many times we should try to find better positions for the players during map generation. Higher values cause longer generation times. Must be >=1
-var decorationMode = 1; //0 = no decorations, 1 = decorate everything except near structures, 2 = decorate everything
-var decorationDensity = 0.01; //how much decoration we want in the map. Must be >=0
-var decorationFreeRange = 5; //when decorationMode is set to 1, this determines the range around structures that should be free of decorations
-var minReachable = 0.75; //how much of the map should be reachable by tanks to be considered acceptable
-var noCraters = false; //if set to true, oils will not have a crater texture under them, that way you can't know where they are until they're within sensor range
+const mapWidth = 128, mapHeight = 128; //map size (works better if it's a square)
+const players = 6; //number of players (excl. scavs)
+const richness = 3; //how much oil is in the map, must be >=1
+const playerPositioningYStrictness = 0; //higher = player positioning more predictable (vertically). Values too high may cause generation to freeze. 0 = completely random
+const trucksPerPlayer = 2; //number of starting trucks for each player, must be >=1
+const minFieldSize = 10; //size of smallest areas of terrain
+const targetFieldSize = 500; //target size of generated areas of terrain
+const maxDifference = 192; //max height difference between connectable areas of terrain
+const playerPositioningIters = 400; //how many times we should try to find better positions for the players during map generation. Higher values cause longer generation times. Must be >=1
+const decorationMode = 1; //0 = no decorations, 1 = decorate everything except near structures, 2 = decorate everything
+const decorationDensity = 0.01; //how much decoration we want in the map. Must be >=0
+const decorationFreeRange = 5; //when decorationMode is set to 1, this determines the range around structures that should be free of decorations
+const minReachable = 0.75; //how much of the map should be reachable by tanks to be considered acceptable
+const noCraters = false; //if set to true, oils will not have a crater texture under them, that way you can't know where they are until they're within sensor range
 
 var mapSize = mapWidth*mapHeight;
 
@@ -68,7 +68,7 @@ function genFields() {
 		merge(mapWidth*y + x, mapWidth*y2 + x2);
 	}
 
-	var regionCount = 0;
+	let regionCount = 0;
 	var regions = {};
 	var avg = [];
 	var simpleFields = [];
@@ -161,7 +161,7 @@ function sampleTexture(array) {
 
 // Assigns each region a texture distribution and a height.
 function genRegions(fields) {
-	var tries = 0;
+	let tries = 0;
 	while (true) {  // eslint-disable-line no-constant-condition
 		++tries;
 
@@ -184,7 +184,7 @@ function genRegions(fields) {
 			}
 		}
 		queue(gameRand(fields.count));
-		var reachableArea = 0;
+		let reachableArea = 0;
 		while (next.length) {
 			var cur = next;
 			next = [];
@@ -431,7 +431,7 @@ function genStartPos(fields, regions) {
 					}
 				}
 			}
-			var score = 0;
+			let score = 0;
 			for (let b = 0; b < players; ++b) {
 				if (b !== player) {
 					var r = fields.region[mapWidth*startPos[b][1] + startPos[b][0]];
