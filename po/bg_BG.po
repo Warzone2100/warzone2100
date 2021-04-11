@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-10 16:42\n"
+"PO-Revision-Date: 2021-04-11 04:42\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -15125,27 +15125,27 @@ msgstr "Дарете: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:174
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "Помогнете на проекта да поддържа сървърите си, Кликнете този линк."
 
 #: src/frontend.cpp:175
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Общувайте с играчи в Discord или IRC"
 
 #: src/frontend.cpp:177
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Свържете се в Discord или Freenode през уеб чат чрез този линк."
 
 #: src/frontend.cpp:178
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Проверка за нова версия"
 
 #: src/frontend.cpp:279
 msgid "Fast Play"
-msgstr ""
+msgstr "Бърза игра"
 
 #: src/frontend.cpp:280
 msgid "TUTORIALS"
-msgstr ""
+msgstr "ПОКАЗНА"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:282
@@ -15165,95 +15165,95 @@ msgstr "Връщане"
 
 #: src/frontend.cpp:333
 msgid "New Campaign"
-msgstr ""
+msgstr "Нова кампания"
 
 #: src/frontend.cpp:334
 msgid "Start Skirmish Game"
-msgstr ""
+msgstr "Започнете сражение"
 
 #: src/frontend.cpp:335
 msgid "Challenges"
-msgstr ""
+msgstr "Предизвикателства"
 
 #: src/frontend.cpp:336
 msgid "Load Campaign Game"
-msgstr ""
+msgstr "Заредете кампания"
 
 #: src/frontend.cpp:337
 msgid "Load Skirmish Game"
-msgstr ""
+msgstr "Зареждане на сражение"
 
 #: src/frontend.cpp:339
 msgid "SINGLE PLAYER"
-msgstr ""
+msgstr "ЕДИН ИГРАЧ"
 
 #: src/frontend.cpp:344
 #: src/frontend.cpp:365
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
-msgstr ""
+msgstr "Видеоклиповете от кампанията липсват! Вземете ги от http://wz2100.net"
 
 #: src/frontend.cpp:360
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "КАМПАНИИ"
 
 #: src/frontend.cpp:498
 #: src/ingameop.cpp:953
 msgid "Load Campaign Saved Game"
-msgstr ""
+msgstr "Зареждане на съхранена кампания"
 
 #: src/frontend.cpp:504
 #: src/ingameop.cpp:957
 msgid "Load Skirmish Saved Game"
-msgstr ""
+msgstr "Зареждане на съхранено сражение"
 
 #: src/frontend.cpp:565
 msgid "MULTI PLAYER"
-msgstr ""
+msgstr "МНОЖЕСТВО ИГРАЧИ"
 
 #: src/frontend.cpp:567
 msgid "Host Game"
-msgstr ""
+msgstr "Хостване на игра"
 
 #: src/frontend.cpp:568
 msgid "Join Game"
-msgstr ""
+msgstr "Присъединяване към игра"
 
 #: src/frontend.cpp:573
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr ""
+msgstr "TCP порт 2100 трябва да бъде отворен в защитната Ви стена или рутера Ви, за да хоствате игра!"
 
 #: src/frontend.cpp:634
 #: src/multiint.cpp:1347
 msgid "OPTIONS"
-msgstr ""
+msgstr "НАСТРОЙКИ"
 
 #: src/frontend.cpp:635
 msgid "Game Options"
-msgstr ""
+msgstr "Настройки на играта"
 
 #: src/frontend.cpp:636
 #: src/ingameop.cpp:495
 msgid "Graphics Options"
-msgstr ""
+msgstr "Настройки на графиката"
 
 #: src/frontend.cpp:637
 #: src/ingameop.cpp:498
 msgid "Video Options"
-msgstr ""
+msgstr "Настройки на видеото"
 
 #: src/frontend.cpp:638
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "Настройки на аудиото / мащабирането"
 
 #: src/frontend.cpp:639
 #: src/ingameop.cpp:505
 msgid "Mouse Options"
-msgstr ""
+msgstr "Настройки на мишката"
 
 #: src/frontend.cpp:640
 #: src/ingameop.cpp:510
 msgid "Key Mappings"
-msgstr ""
+msgstr "Клавишни комбинации"
 
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:513
@@ -15262,11 +15262,11 @@ msgstr ""
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Отваряне на директорията за конфигурация"
 
 #: src/frontend.cpp:681
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Не може да се отвори директорията за конфигурация в системния файлов браузър."
 
 #: src/frontend.cpp:683
 msgid "Configuration directory is reported as:"
