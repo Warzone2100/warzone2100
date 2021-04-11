@@ -179,7 +179,7 @@ function eventAttacked(victim, attacker)
 			nearbyUnits.length < nearbyEnemies.length &&
 			distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, victim.x, victim.y) >= 20)
 		{
-			var run = true;
+			let run = true;
 
 			//Be more aggressive with scavenger stuff
 			if (SCAV_ATTACKER)

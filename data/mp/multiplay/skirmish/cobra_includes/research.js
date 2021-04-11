@@ -167,8 +167,8 @@ function research()
 	for (let i = 0, a = labList.length; i < a; ++i)
 	{
 		var lab = labList[i];
-		var forceLaser = false;
-		var found = false;
+		let forceLaser = false;
+		let found = false;
 
 		if (forceHover)
 			found = pursueResearch(lab, "R-Vehicle-Prop-Hover");
@@ -494,7 +494,7 @@ function research()
 			// Lasers
 			if (forceLaser || (!found && subPersonalities[personality].useLasers))
 			{
-				var foundLaser = false;
+				let foundLaser = false;
 
 				if (!turnOffCyborgs)
 					foundLaser = pursueResearch(lab, "R-Cyborg-Hvywpn-PulseLsr");

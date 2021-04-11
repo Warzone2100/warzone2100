@@ -206,7 +206,7 @@ function protectUnguardedDerricks(droid)
 
 		for (let i = 0; i < LEN; ++i)
 		{
-			var found = false;
+			let found = false;
 			var objects = enumRange(derrs[i].x, derrs[i].y, (HIGH_OIL) ? 4 : 8, me, false);
 
 			for (let c = 0, u = objects.length; c < u; ++c)
@@ -888,7 +888,7 @@ function buildOrders()
 	if (currently_dead) { return; }
 
 	var isNTW = highOilMap();
-	var skip = false;
+	let skip = false;
 	var allowFastHighTechBuild = ((gameTime > 240000) || (getRealPower() > 600));
 
 	if (findIdleTrucks(constructGroup).length === 0 && (!isNTW || findIdleTrucks(constructGroupNTWExtra).length === 0)) { return; }

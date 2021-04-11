@@ -8,7 +8,7 @@ function checkIfSeaMap()
 {
 	function uncached()
 	{
-		var hoverMap = false;
+		let hoverMap = false;
 		seaMapWithLandEnemy = false;
 
 		for (let i = 0; i < maxPlayers; ++i)
