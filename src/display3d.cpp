@@ -2198,9 +2198,9 @@ static PIELIGHT getBlueprintColour(STRUCT_STATES state)
 	switch (state)
 	{
 	case SS_BLUEPRINT_VALID:
-		return WZCOL_BLUEPRINT_VALID;
+		return WZCOL_LGREEN;
 	case SS_BLUEPRINT_INVALID:
-		return WZCOL_BLUEPRINT_INVALID;
+		return WZCOL_LRED;
 	case SS_BLUEPRINT_PLANNED:
 		return WZCOL_BLUEPRINT_PLANNED;
 	case SS_BLUEPRINT_PLANNED_BY_ALLY:
@@ -2551,7 +2551,7 @@ void renderDeliveryPoint(FLAG_POSITION *psPosition, bool blueprint, const glm::m
 
 	if (blueprint)
 	{
-		colour = deliveryReposValid() ? WZCOL_BLUEPRINT_VALID : WZCOL_BLUEPRINT_INVALID;
+		colour = deliveryReposValid() ? WZCOL_LGREEN : WZCOL_LRED;
 	}
 	else
 	{

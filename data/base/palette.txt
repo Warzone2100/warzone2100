@@ -42,8 +42,8 @@ ff,0,0,ff	// console text enemy
 1,1,1,ff	// menu shadow
 f,8,56,ff	// dark blue
 1c,9f,fb,ff	// light blue
-50,ff,78,ff	// blueprint valid
-ff,50,50,ff	// blueprint invalid
+50,ff,78,ff	// light green
+ff,50,50,ff	// light red
 32,a0,4b,ff	// blueprint planned
 0,a0,0,ff	// health high shadow
 a0,a0,0,ff	// health medium shadow
