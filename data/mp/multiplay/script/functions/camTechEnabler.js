@@ -1,6 +1,6 @@
 function completeResearchOnTime(time, playnum)
 {
-	for (var tech in allRes)
+	for (const tech in allRes)
 	{
 		if (allRes[tech] <= time)
 		{

@@ -418,7 +418,7 @@ function eventResearched(research, structure, player)
 	{
 		var v = research.results[i];
 		//debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterparam=" + v['filterParameter']);
-		for (var cname in Upgrades[player][v['class']]) // iterate over all components of this type
+		for (const cname in Upgrades[player][v['class']]) // iterate over all components of this type
 		{
 			var parameter = v['parameter'];
 			var ctype = v['class'];
