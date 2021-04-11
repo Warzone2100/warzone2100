@@ -163,7 +163,7 @@ function choosePersonalityWeapon(type)
 
 	if (type === "TANK")
 	{
-		var skip = false;
+		let skip = false;
 		weaps = chooseRandomWeapon();
 		weaponList = shuffleWeaponList(chooseWeaponType(weaps));
 
@@ -268,7 +268,7 @@ function useHover(weap)
 		return true;
 	}
 
-	var useHover = false;
+	let useHover = false;
 
 	for (let i = 0, w = weap.length; i < w; ++i)
 	{
