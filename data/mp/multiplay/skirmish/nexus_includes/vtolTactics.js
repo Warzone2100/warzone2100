@@ -41,7 +41,7 @@ function getCurrentVtolGroupTarget(groupIdx)
 
 	if (defined(targ))
 	{
-		var clearIt = false;
+		let clearIt = false;
 		var obj = getObject(targ.type, targ.player, targ.id);
 
 		if (obj === null)

@@ -411,7 +411,7 @@ function findUndefendedObjectLoc(whatToScan, defenses, objectLimit, tower)
 function derrickDefense()
 {
 	var best = bestStructureIn(STANDARD_INCENDIARIES);
-	var success = false;
+	let success = false;
 	var loc = findUndefendedObjectLoc(BASE_STRUCTURES.sensors, STANDARD_INCENDIARIES, 3, false);
 
 	if (defined(loc) && defined(best) && grabTrucksAndBuild(best, loc, 6, 4, groups.oilBuilders))
@@ -425,7 +425,7 @@ function derrickDefense()
 function sensorBuild()
 {
 	var best = bestStructureIn(BASE_STRUCTURES.sensors);
-	var success = false;
+	let success = false;
 	var loc = findUndefendedObjectLoc(BASE_STRUCTURES.derricks, BASE_STRUCTURES.sensors, Infinity, true);
 
 	if (defined(loc) && defined(best) && grabTrucksAndBuild(best, loc, 6, 4, groups.oilBuilders))
@@ -520,7 +520,7 @@ function buildBase()
 // Structures that a personality can build before the default build order.
 function personalityBuildOrder()
 {
-	var success = false;
+	let success = false;
 
 	for (let i = 0, len = nexusBranch[branch].buildOrder.length; i < len; ++i)
 	{
@@ -687,7 +687,7 @@ function buildModules()
 
 	var struct = null;
 	var moduleObject = {}; //a copy of nexusBranch[branch].moduleOrder[x]
-	var success = false;
+	let success = false;
 
 	for (let i = 0, len = nexusBranch[branch].moduleOrder.length; i < len; ++i)
 	{
@@ -767,7 +767,7 @@ function numBuildSameBuilding(x, y)
 function finishStructs()
 {
 	const MAX_REBUILD_DIST = 30; //was 20
-	var success = false;
+	let success = false;
 	var trucks = enumGroup(groups.baseBuilders);
 	var structures = enumStruct(me);
 
@@ -896,7 +896,7 @@ function findSafeGateTile(gate)
 		x2: Math.ceil((gate.x1 + gate.x2) / 2),
 		y2: Math.ceil((gate.y1 + gate.y2) / 2),
 	};
-	var verticalCheck = false;
+	let verticalCheck = false;
 
 	if (gate.x1 === gate.x2)
 	{
