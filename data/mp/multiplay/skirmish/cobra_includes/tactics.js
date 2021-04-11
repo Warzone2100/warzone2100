@@ -119,7 +119,7 @@ function repairDroid(droidID, force)
 
 	const SAFE_EXTREME_OIL_IGNORE_NUM = 80;
 
-	var forceRepairPercent = 50;
+	const forceRepairPercent = 50;
 	const EXPERIENCE_DIVISOR = 26;
 	const HEALTH_TO_REPAIR = forceRepairPercent + Math.floor(droid.experience / EXPERIENCE_DIVISOR);
 
@@ -459,7 +459,7 @@ function repairDroidTactics()
 		{
 			myDroids = myDroids.sort(sortDroidsByHealth);
 			var weakest = myDroids[0];
-			var dorder_droidrepair = 26; //FIXME: when DORDER_DROIDREPAIR can be called, remove this.
+			const dorder_droidrepair = 26; //FIXME: when DORDER_DROIDREPAIR can be called, remove this.
 
 			for (let i = 0; i < LEN; ++i)
 			{
@@ -681,7 +681,7 @@ function baseShuffleDefensePattern()
 	var sector;
 	var x;
 	var y;
-	var attempts = 0;
+	let attempts = 0;
 
 	do
 	{

@@ -219,7 +219,7 @@ function getMostHarmfulPlayer()
 
 	function uncached()
 	{
-		var mostHarmful = 0;
+		let mostHarmful = 0;
 		var enemies = findLivingEnemies();
 		var allEnemies = playerAlliance(false);
 

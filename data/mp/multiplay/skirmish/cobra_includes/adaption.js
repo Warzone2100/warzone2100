@@ -45,7 +45,7 @@ function countEnemyVTOL(player)
 	function uncached(player)
 	{
 		var enemies = isDefined(player) ? [player] : findLivingEnemies();
-		var enemyVtolCount = 0;
+		let enemyVtolCount = 0;
 
 		for (let x = 0, e = enemies.length; x < e; ++x)
 		{

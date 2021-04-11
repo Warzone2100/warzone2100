@@ -331,7 +331,7 @@ function pickTankBody()
 	//a preference towards heavy or medium bodies (if power is relatively low).
 	//This helps keep things competitive among a player rushing with small/medium bodies.
 	var body;
-	var bodySwitchTime = 900000;
+	const bodySwitchTime = 900000;
 
 	if (gameTime < bodySwitchTime && random(100) < 80)
 	{
@@ -485,9 +485,9 @@ function buildVTOL(id)
 function analyzeQueuedSystems()
 {
 	var fac = enumStruct(me, FACTORY);
-	var trucks = 0;
-	var sens = 0;
-	var reps = 0;
+	let trucks = 0;
+	let sens = 0;
+	let reps = 0;
 
 	for (let i = 0, l = fac.length; i < l; ++i)
 	{
