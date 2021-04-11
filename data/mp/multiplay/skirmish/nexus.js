@@ -38,16 +38,16 @@ const BASE = startPositions[me];
 const MAP_GATES = enumGateways();
 const DARK_ZONE_TILES = 2; //The "dark" area surrounding the map.
 
-var debugMode;
-var helpInfo;
-var defendInfo;
-var scoutInfo;
-var groups;
-var baseLimits;
-var numVtolUnits;
-var rebuildQueue;
-var targetInfo;
-var allianceTime;
+let debugMode;
+let helpInfo;
+let defendInfo;
+let scoutInfo;
+let groups;
+let baseLimits;
+let numVtolUnits;
+let rebuildQueue;
+let targetInfo;
+let allianceTime;
 
 include(NEXUS_STANDARDS + "buildDefinitions.js");
 include(NEXUS_STANDARDS + "templates.js");
