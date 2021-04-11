@@ -118,7 +118,7 @@ function tryAttackingVtolTarget(group, targetData)
 
 		var attackers = enumGroup(group);
 
-		for (var i = 0, len = attackers.length; i < len; ++i)
+		for (let i = 0, len = attackers.length; i < len; ++i)
 		{
 			var vtol = attackers[i];
 
@@ -138,7 +138,7 @@ function tryAttackingVtolTarget(group, targetData)
 
 function vtolAttack()
 {
-	for (var i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
+	for (let i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
 	{
 		var currGroup = groups.vtolAttackers[i];
 		var amtOfAttackers = enumGroup(currGroup).length;
@@ -179,7 +179,7 @@ function rearrangeAttackVtols()
 	var counter = 0;
 
 	//Simply add all the VTOLs in a group into an arrray.
-	for (var i = 0; i < NUM_GROUPS; ++i)
+	for (let i = 0; i < NUM_GROUPS; ++i)
 	{
 		var group = enumGroup(groups.vtolAttackers[i]);
 
@@ -196,7 +196,7 @@ function rearrangeAttackVtols()
 		return;
 	}
 
-	for (var i = 0; i < NUM_GROUPS; ++i)
+	for (let i = 0; i < NUM_GROUPS; ++i)
 	{
 		var groupIdx = groups.vtolAttackers[i];
 
@@ -215,19 +215,19 @@ function chooseVtolTarget(exclusive)
 	var bestScore = 0;
 	var currScore;
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i === me || allianceExistsBetween(me, i))
 		{
 			continue;
 		}
 
-		for (var j = 0, len = nexusBranch[branch].vtolTargets.length; j < len; ++j)
+		for (let j = 0, len = nexusBranch[branch].vtolTargets.length; j < len; ++j)
 		{
 			var ttype = nexusBranch[branch].vtolTargets[j].structure;
 			var structs = enumStruct(i, ttype);
 
-			for (var c = 0, len2 = structs.length; c < len2; ++c)
+			for (let c = 0, len2 = structs.length; c < len2; ++c)
 			{
 				var st = structs[c];
 				var obj = {type: st.type, player: st.player, id: st.id};
@@ -280,7 +280,7 @@ function getVtolTargetWeight(what)
 		return 0;
 	}
 
-	for (var i = 0, len = nexusBranch[branch].vtolTargets.length; i < len; ++i)
+	for (let i = 0, len = nexusBranch[branch].vtolTargets.length; i < len; ++i)
 	{
 		var type = nexusBranch[branch].vtolTargets[i];
 
@@ -315,7 +315,7 @@ function numEnemyAAInRange(x, y, range)
 	var total = 0;
 	var stuff = enumRange(x, y, range, ENEMIES, false);
 
-	for (var i = 0, len = stuff.length; i < len; ++i)
+	for (let i = 0, len = stuff.length; i < len; ++i)
 	{
 		var s = stuff[i];
 
@@ -347,7 +347,7 @@ function vtolTargetAssigned(what)
 		return false;
 	}
 
-	for (var i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
+	for (let i = 0; i < nexusBranch[branch].numVtolGroups; ++i)
 	{
 		var obj = targetInfo.vtolGroupWhat[i];
 
@@ -379,7 +379,7 @@ function vtolDefend()
 			return;
 		}
 
-		for (var i = 0; i < len; ++i)
+		for (let i = 0; i < len; ++i)
 		{
 			var vtol = defenders[i];
 
