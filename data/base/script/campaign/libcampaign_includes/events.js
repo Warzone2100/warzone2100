@@ -353,7 +353,7 @@ function cam_eventObjectTransfer(obj, from)
 {
 	if (from === CAM_HUMAN_PLAYER && obj.player === NEXUS && __camNexusActivated === true)
 	{
-		var snd;
+		let snd;
 		if (obj.type === STRUCTURE)
 		{
 			if (obj.stattype === DEFENSE)

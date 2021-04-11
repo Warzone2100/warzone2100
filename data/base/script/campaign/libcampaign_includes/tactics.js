@@ -145,7 +145,7 @@ function camStopManagingGroup(group)
 //;;
 function camOrderToString(order)
 {
-	var orderString;
+	let orderString;
 	switch(order)
 	{
 		case CAM_ORDER_ATTACK:
@@ -454,8 +454,8 @@ function __camTacticsTickForGroup(group)
 	}
 
 	//Target choosing
-	var target;
-	var patrolPos;
+	let target;
+	let patrolPos;
 
 	switch (gi.order)
 	{
@@ -579,7 +579,7 @@ function __camTacticsTickForGroup(group)
 
 		if (camDef(target) && camDist(droid.x, droid.y, target.x, target.y) >= __CAM_CLOSE_RADIUS)
 		{
-			var closeByObj;
+			let closeByObj;
 			var artilleryLike = (droid.isCB || droid.hasIndirect || droid.isSensor);
 			var closeBy = enumRange(droid.x, droid.y, __camScanRange(gi.order, droid.droidType), CAM_HUMAN_PLAYER, track);
 

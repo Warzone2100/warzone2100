@@ -54,7 +54,7 @@ function __camSpawnVtols()
 
 	var amount = MIN_VTOL_AMOUNT + camRand(MAX_RANDOM_VTOL_ADDITIONS + 1);
 	var droids = [];
-	var pos;
+	let pos;
 
 	//Make sure to catch multiple start positions also.
 	if(__camVtolStartPosition instanceof Array)

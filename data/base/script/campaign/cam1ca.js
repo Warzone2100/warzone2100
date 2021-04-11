@@ -81,7 +81,7 @@ function sendTransport()
 	// This emulates wzcam's droid count distribution.
 	var count = [ 2, 3, 4, 4, 4, 4, 4, 4, 4 ][camRand(9)];
 
-	var templates;
+	let templates;
 	if (lastHeavy)
 	{
 		lastHeavy = false;

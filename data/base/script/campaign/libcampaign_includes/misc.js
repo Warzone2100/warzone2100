@@ -276,8 +276,8 @@ function camMakeGroup(what, filter)
 	{
 		filter = ENEMIES;
 	}
-	var array;
-	var obj;
+	let array;
+	let obj;
 	if (camIsString(what)) // label
 	{
 		obj = getObject(what);

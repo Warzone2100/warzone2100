@@ -307,8 +307,8 @@ function __checkEnemyFactoryProductionTick()
 
 function __camContinueProduction(structure)
 {
-	var flabel;
-	var struct;
+	let flabel;
+	let struct;
 	if (camIsString(structure))
 	{
 		flabel = structure;

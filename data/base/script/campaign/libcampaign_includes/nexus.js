@@ -105,8 +105,8 @@ function camHackIntoPlayer(player, to)
 	if (__camLastNexusAttack === 0 || (gameTime > (__camLastNexusAttack + HACK_DELAY_TIME)) && (camRand(100) < HACK_CHANCE))
 	{
 		const GIFT_CHANCE = 70; //Else neutralized
-		var obj;
-		var objects;
+		let obj;
+		let objects;
 
 		//Try stealing the HQ first.
 		if (__camLastNexusAttack === 0)
@@ -140,7 +140,7 @@ function camHackIntoPlayer(player, to)
 			//Nexus neutralize sounds.
 			if (obj.player === CAM_HUMAN_PLAYER)
 			{
-				var snd;
+				let snd;
 				if (obj.type === STRUCTURE)
 				{
 					if (obj.stattype === DEFENSE)

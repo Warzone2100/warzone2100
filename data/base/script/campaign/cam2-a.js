@@ -45,7 +45,7 @@ function getDroidsForCOLZ()
 {
 	var droids = [];
 	const count = 6 + camRand(5);
-	var templates;
+	let templates;
 	var sensors = [cTempl.comsens, cTempl.comsens];
 	let usingHeavy = false;
 

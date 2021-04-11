@@ -51,7 +51,7 @@ function scavtick()
 				var droid = droidlist[i];
 				let current = 0;
 				let closest = 9999;
-				var clfac;		// starts undefined
+				let clfac;		// starts undefined
 
 				// Find closest factory; notice that we still have the factory list from earlier, which
 				// saves us a few expensive scripting calls

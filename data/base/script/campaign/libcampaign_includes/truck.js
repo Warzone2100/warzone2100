@@ -83,7 +83,7 @@ function __camTruckTick()
 	for (const player in __camTruckInfo)
 	{
 		var ti = __camTruckInfo[player];
-		var truck;
+		let truck;
 
 		// First, build things that were explicitly ordered.
 		while (ti.queue.length > 0)

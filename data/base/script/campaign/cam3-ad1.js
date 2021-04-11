@@ -81,7 +81,7 @@ function enableAllFactories()
 //when no target is found in the area.
 function vaporizeTarget()
 {
-	var target;
+	let target;
 	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
 		return obj.type === DROID || obj.type === STRUCTURE;
 	});

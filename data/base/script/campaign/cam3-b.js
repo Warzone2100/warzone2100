@@ -101,8 +101,8 @@ function sendNXTransporter()
 
 	const LZ_ALIAS = "CM3B_TRANS"; //1 and 2
 	var list = getDroidsForNXLZ(true);
-	var lzNum;
-	var pos;
+	let lzNum;
+	let pos;
 
 	if (camCountStructuresInArea("NXEastBaseCleanup", NEXUS) > 0)
 	{

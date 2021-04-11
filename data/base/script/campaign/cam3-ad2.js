@@ -65,8 +65,8 @@ function vtolAttack()
 //Chose a random spawn point to send ground reinforcements.
 function phantomFactorySpawn()
 {
-	var list;
-	var chosenFactory;
+	let list;
+	let chosenFactory;
 
 	switch (camRand(3))
 	{
@@ -99,7 +99,7 @@ function phantomFactorySpawn()
 //when no target is found in the area.
 function vaporizeTarget()
 {
-	var target;
+	let target;
 	var targets = enumArea(0, Y_SCROLL_LIMIT, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
 		return obj.type === DROID || obj.type === STRUCTURE;
 	});
