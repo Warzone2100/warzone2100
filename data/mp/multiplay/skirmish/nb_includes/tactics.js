@@ -42,7 +42,7 @@ function findLargestGroupIn(list) {
 			return;
 		++sizes[object.group];
 	});
-	var maxCount = 0, maxIdx = 0;
+	let maxCount = 0, maxIdx = 0;
 	for (let i = 0; i < sizes.length; ++i)
 		if (sizes[i] > maxCount) {
 			maxCount = sizes[i];

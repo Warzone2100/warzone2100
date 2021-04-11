@@ -138,7 +138,7 @@ _global.chooseAvailableWeaponPathByRoleRatings = function(paths, rating, objectT
 	paths.forEach(function(path) {
 		if (!weaponPathIsAvailable(path, objectType, defrole))
 			return;
-		var dist = 0;
+		let dist = 0;
 		for (let i = 0; i < ROLE.LENGTH; ++i) {
 			var newDist = Math.abs(rating[i] - path.roles[i])
 			if (newDist > dist)

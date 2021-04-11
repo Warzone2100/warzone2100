@@ -9,7 +9,7 @@ function eventStartLevel() {
 	if (alliancesType === ALLIANCES_TEAMS) {
 		// initialize subpersonality pseudo-randomly here
 		// to make sure teammates have the same personality
-		var j = 1, s = 0;
+		let j = 1, s = 0;
 		for (let i = 0; i < maxPlayers; ++i) {
 			if (allianceExistsBetween(me, i))
 				s += j;
