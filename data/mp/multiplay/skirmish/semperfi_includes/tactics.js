@@ -77,7 +77,7 @@ function getAliveEnemyPlayers(player)
 	}
 
 	var numEnemies = [];
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i !== me && !allianceExistsBetween(i, me))
 		{
@@ -242,10 +242,9 @@ function attackEnemy()
 			return;
 		}
 		//log("ATTACKING player " + selectedEnemy);
-		var j = 0;
 		var len = attackers.length;
 
-		for (j = 0; j < len; ++j)
+		for (let j = 0; j < len; ++j)
 		{
 			var tank = attackers[j];
 			if (tank.order !== DORDER_RECYCLE && !droidNeedsRepair(tank.id) && random(100) < 50)
@@ -259,7 +258,7 @@ function attackEnemy()
 		len = vtols.length;
 		if (len > MIN_VTOL_SIZE)
 		{
-			for (j = 0; j < len; ++j)
+			for (let j = 0; j < len; ++j)
 			{
 				var vt = vtols[j];
 				if (vtolReady(vt.id))
@@ -279,7 +278,7 @@ function attackEnemy()
 
 		if (enemyStructs.length > 0)
 		{
-			for (j = 0; j < len; ++j)
+			for (let j = 0; j < len; ++j)
 			{
 				var bust = busters[j];
 				if (bust.order !== DORDER_RECYCLE && !droidNeedsRepair(bust.id))
@@ -296,13 +295,13 @@ function isHoverMap()
 {
 	var hoverMap = false;
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (!propulsionCanReach("wheeled01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y))
 		{
 			//Check if hover can not reach this area.
 			var temp = 0;
-			for (var t = 0; t < maxPlayers; ++t)
+			for (let t = 0; t < maxPlayers; ++t)
 			{
 				var b1 = startPositions[i];
 				var b2 = startPositions[t];
@@ -343,7 +342,7 @@ function recycleDroidsForHover()
 	{
 		if (unfinishedStructures.length === 0)
 		{
-			for (var i = 0; i < NON_HOVER_SYSTEMS; ++i)
+			for (let i = 0; i < NON_HOVER_SYSTEMS; ++i)
 			{
 				orderDroid(systems[i], DORDER_RECYCLE);
 			}
@@ -361,7 +360,7 @@ function recycleDroidsForHover()
 			});
 			const NON_HOVER_TANKS = tanks.length;
 
-			for (var j = 0; j < NON_HOVER_TANKS; ++j)
+			for (let j = 0; j < NON_HOVER_TANKS; ++j)
 			{
 				orderDroid(tanks[j], DORDER_RECYCLE);
 			}
@@ -390,7 +389,7 @@ function scanForVTOLs()
 	}
 
 	var visibleEnemyDroids = enumDroid(myEnemy, DROID_WEAPON, true);
-	for (var i = 0, l = visibleEnemyDroids.length; i < l; ++i)
+	for (let i = 0, l = visibleEnemyDroids.length; i < l; ++i)
 	{
 		if (isVTOL(visibleEnemyDroids[i]))
 		{

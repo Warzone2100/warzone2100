@@ -42,7 +42,7 @@ function findIdleTrucks(obj)
 		obj = BASE;
 	}
 
-	for (var i = 0, d = builders.length; i < d; ++i)
+	for (let i = 0, d = builders.length; i < d; ++i)
 	{
 		if (conCanHelp(builders[i], obj.x, obj.y))
 		{
@@ -59,7 +59,7 @@ function demolishThis(object)
 	var success = false;
 	var droidList = findIdleTrucks(object);
 
-	for (var i = 0, d = droidList.length; i < d; ++i)
+	for (let i = 0, d = droidList.length; i < d; ++i)
 	{
 		if (orderDroidObj(droidList[i], DORDER_DEMOLISH, object))
 		{
@@ -86,7 +86,7 @@ function grabTrucksAndBuild(structure, maxBlockingTiles)
 	var droidList = findIdleTrucks();
 	var found = false;
 
-	for (var i = 0, d = droidList.length; i < d; ++i)
+	for (let i = 0, d = droidList.length; i < d; ++i)
 	{
 		var result = pickStructLocation(droidList[i], structure, BASE.x, BASE.y, maxBlockingTiles);
 		if (result)
@@ -119,7 +119,7 @@ function checkLocalJobs()
 	if (freeTrucks && structlist.length)
 	{
 		structlist = structlist.sort(sortByDistToBase);
-		for (var j = 0; j < freeTrucks; ++j)
+		for (let j = 0; j < freeTrucks; ++j)
 		{
 			if (orderDroidObj(trucks[j], DORDER_HELPBUILD, structlist[0]))
 			{
@@ -171,7 +171,7 @@ function scanAndDefendPosition(structure, droid)
 	if (random(100) < 67 && structs.length < 5)
 	{
 		var sensor;
-		for (var i = SENSOR_TOWERS.length - 1; i > -1; --i)
+		for (let i = SENSOR_TOWERS.length - 1; i > -1; --i)
 		{
 			var sen = SENSOR_TOWERS[i];
 			if (isStructureAvailable(sen))
@@ -201,9 +201,9 @@ function lookForOil()
 	var success = false;
 	//log("looking for oil... " + oils.length + " available");
 
-	for (var i = 0, oilLen = oils.length; i < oilLen; ++i)
+	for (let i = 0, oilLen = oils.length; i < oilLen; ++i)
 	{
-		for (var j = 0, drLen = droids.length; j < drLen; ++j)
+		for (let j = 0, drLen = droids.length; j < drLen; ++j)
 		{
 			var droid = droids[j];
 			var oil = oils[i];
@@ -252,7 +252,7 @@ function buildAntiAir(buildExtras)
 		return false;
 	}
 
-	for (var j = 0, s = SAM_SITES.length; j < s; ++j)
+	for (let j = 0, s = SAM_SITES.length; j < s; ++j)
 	{
 		if (grabTrucksAndBuild(SAM_SITES[j], 1))
 		{
@@ -275,8 +275,6 @@ function returnDefense(type)
 	const ELECTRONIC_CHANCE = 45;
 	var defenses;
 	var bestDefense;
-	var i = 0;
-	var t = 0;
 
 	if (type === 0 || !isStructureAvailable(artilleryDefenses[artilleryDefenses.length - 1]))
 	{
@@ -291,7 +289,7 @@ function returnDefense(type)
 	if (random(100) < ELECTRONIC_CHANCE)
 	{
 		var avail = 0;
-		for (i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
+		for (let i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
 		{
 			if (isStructureAvailable(ELECTRONIC_DEFENSES[i]))
 			{
@@ -306,7 +304,7 @@ function returnDefense(type)
 		}
 	}
 
-	for (i = 0, t = defenses.length; i < t; ++i)
+	for (let i = 0, t = defenses.length; i < t; ++i)
 	{
 		if (isStructureAvailable(defenses[i]))
 		{
@@ -442,7 +440,7 @@ function buildBasicBase()
 function factoryBuildOrder()
 {
 	const FAC_ORDER = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT,];
-	for (var x = 0; x < 2; ++x)
+	for (let x = 0; x < 2; ++x)
 	{
 		var num = 1;
 		if (x > 0)
@@ -466,7 +464,7 @@ function factoryBuildOrder()
 			}
 		}
 
-		for (var i = 0; i < 3; ++i)
+		for (let i = 0; i < 3; ++i)
 		{
 			var fac = FAC_ORDER[i];
 			if (!(fac === CYBORG_FACTORY_STAT && isSeaMap) && countStruct(fac) < num && grabTrucksAndBuild(fac, 0))
@@ -598,7 +596,7 @@ function checkResearchCompletion()
 		//log("Done researching - salvage unusable buildings");
 		researchDone = true; // and do not rebuild them
 		var labList = enumStruct(me, RES_LAB_STAT);
-		for (var i = 0, l = labList.length; i < l; ++i)
+		for (let i = 0, l = labList.length; i < l; ++i)
 		{
 			var lab = labList[i];
 			if (!structureIdle(lab))
@@ -633,12 +631,12 @@ function maintenance()
 		{"mod": "A0FacMod1", "amount": 2, "structure": VTOL_FACTORY_STAT}
 	];
 
-	for (var i = 0, l = modList.length; i < l; ++i)
+	for (let i = 0, l = modList.length; i < l; ++i)
 	{
 		if (isStructureAvailable(modList[i].mod))
 		{
 			structList = enumStruct(me, modList[i].structure).sort(sortByDistToBase);
-			for (var c = 0, s = structList.length; c < s; ++c)
+			for (let c = 0, s = structList.length; c < s; ++c)
 			{
 				if (structList[c].modules < modList[i].amount)
 				{
@@ -658,7 +656,7 @@ function maintenance()
 	{
 		//log("Found a structure to upgrade");
 		var builders = findIdleTrucks(struct);
-		for (var j = 0, t = builders.length; j < t; ++j)
+		for (let j = 0, t = builders.length; j < t; ++j)
 		{
 			var mydroid = builders[j];
 			if (conCanHelp(mydroid, struct.x, struct.y))

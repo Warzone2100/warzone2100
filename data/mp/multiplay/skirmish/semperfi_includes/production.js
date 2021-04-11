@@ -93,7 +93,7 @@ function buildAttacker(struct)
 
 	if (enumGroup(attackGroup).length > MIN_ATTACK_GSIZE && enumGroup(busterGroup).length < MIN_BUSTERS)
 	{
-		for (var i = 0; i < TANK_BUNKER_BUSTERS.length; ++i)
+		for (let i = 0; i < TANK_BUNKER_BUSTERS.length; ++i)
 		{
 			if (componentAvailable(TANK_BUNKER_BUSTERS[i]))
 			{
@@ -145,12 +145,9 @@ function produceAndResearch()
 	const FAC_LIST = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT];
 	var facsVirtual = enumStruct(me, FACTORY_STAT);
 	var virtualTrucks = 0;
-	var i = 0;
-	var x = 0;
-	var l = 0;
 
 	//Count the trucks being built so as not to build too many of them.
-	for (i = 0, l = facsVirtual.length; i < l; ++i)
+	for (let i = 0, l = facsVirtual.length; i < l; ++i)
 	{
 		var virDroid = getDroidProduction(facsVirtual[i]);
 		if (virDroid !== null)
@@ -162,14 +159,14 @@ function produceAndResearch()
 		}
 	}
 
-	for (i = 0; i < 3; ++i)
+	for (let i = 0; i < 3; ++i)
 	{
 		var facs = enumStruct(me, FAC_LIST[i]);
 		if (FAC_LIST[i] === CYBORG_FACTORY_STAT && isSeaMap === true)
 		{
 			continue;
 		}
-		for (x = 0, l = facs.length; x < l; ++x)
+		for (let x = 0, l = facs.length; x < l; ++x)
 		{
 			var fc = facs[x];
 			if (structureIdle(fc))
