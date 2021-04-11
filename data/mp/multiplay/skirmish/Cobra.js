@@ -266,54 +266,54 @@ var subPersonalities =
 };
 
 // Groups
-var attackGroup;
-var vtolGroup;
-var sensorGroup;
-var repairGroup;
-var artilleryGroup;
-var constructGroup;
-var constructGroupNTWExtra;
-var oilGrabberGroup;
-var retreatGroup;
+let attackGroup;
+let vtolGroup;
+let sensorGroup;
+let repairGroup;
+let artilleryGroup;
+let constructGroup;
+let constructGroupNTWExtra;
+let oilGrabberGroup;
+let retreatGroup;
 
-var grudgeCount; //See who bullies this bot the most and act on it. DO NOT let this use the scavenger player number.
-var personality; //What personality is this instance of Cobra using.
-var lastMsg; //The last Cobra chat message.
-var lastMsgThrottle; //Last game time a chat messge was sent - throttles Cobra AIs from talking to eachother too much.
-var forceHover; //Use hover propulsion only.
-var seaMapWithLandEnemy; //Hover map with an enemy sharing land with Cobra.
-var turnOffCyborgs; //Turn of cyborgs (hover maps/chat).
-var researchComplete; //Check if done with research.
-var turnOffMG; //This is only used for when the personalities don't have their weapons researched.
-var useArti;
-var useVtol;
-var lastAttackedByScavs;
-var currently_dead; // Used to detect if Cobra is, basically, dead. If true, the script is put in a very low perf impact state.
-var beacon; //latest friendly beacon location
-var enemyUsedElectronicWarfare; //Detect if an enemy used a Nexus Link against us... if so, research the resistance upgrades
-var startAttacking;
-var lastShuffleTime;
-var forceDerrickBuildDefense;
+let grudgeCount; //See who bullies this bot the most and act on it. DO NOT let this use the scavenger player number.
+let personality; //What personality is this instance of Cobra using.
+let lastMsg; //The last Cobra chat message.
+let lastMsgThrottle; //Last game time a chat messge was sent - throttles Cobra AIs from talking to eachother too much.
+let forceHover; //Use hover propulsion only.
+let seaMapWithLandEnemy; //Hover map with an enemy sharing land with Cobra.
+let turnOffCyborgs; //Turn of cyborgs (hover maps/chat).
+let researchComplete; //Check if done with research.
+let turnOffMG; //This is only used for when the personalities don't have their weapons researched.
+let useArti;
+let useVtol;
+let lastAttackedByScavs;
+let currently_dead; // Used to detect if Cobra is, basically, dead. If true, the script is put in a very low perf impact state.
+let beacon; //latest friendly beacon location
+let enemyUsedElectronicWarfare; //Detect if an enemy used a Nexus Link against us... if so, research the resistance upgrades
+let startAttacking;
+let lastShuffleTime;
+let forceDerrickBuildDefense;
 
 // -- Weapon research list (initializeResearchLists).
-var techlist;
-var weaponTech;
-var laserTech;
-var artilleryTech;
-var artillExtra;
-var laserExtra;
-var extraTech;
-var cyborgWeaps;
-var antiAirTech;
-var antiAirExtras;
-var extremeLaserTech;
-var secondaryWeaponTech;
-var secondaryWeaponExtra;
-var defenseTech;
-var standardDefenseTech;
-var machinegunWeaponTech;
-var machinegunWeaponExtra;
-var empWeapons;
+let techlist;
+let weaponTech;
+let laserTech;
+let artilleryTech;
+let artillExtra;
+let laserExtra;
+let extraTech;
+let cyborgWeaps;
+let antiAirTech;
+let antiAirExtras;
+let extremeLaserTech;
+let secondaryWeaponTech;
+let secondaryWeaponExtra;
+let defenseTech;
+let standardDefenseTech;
+let machinegunWeaponTech;
+let machinegunWeaponExtra;
+let empWeapons;
 
 
 //Now include everthing else.
