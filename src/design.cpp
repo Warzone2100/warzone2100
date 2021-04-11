@@ -344,7 +344,14 @@ static void intDisplayViewForm(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 class DesignStatsBar: public W_BARGRAPH
 {
 public:
-	using W_BARGRAPH::W_BARGRAPH;
+	DesignStatsBar(W_BARINIT *init): W_BARGRAPH(init) {}
+
+	static std::shared_ptr<DesignStatsBar> makeLessIsBetter(W_BARINIT *init)
+	{
+		auto widget = std::make_shared<DesignStatsBar>(init);
+		widget->lessIsBetter = true;
+		return widget;
+	}
 
 protected:
 	void display(int xOffset, int yOffset) override
@@ -379,7 +386,7 @@ protected:
 		{
 			deltaText.setText(astringf("%c%.*f", delta > 0 ? '+': '-', precision, std::abs(delta) / (float)denominator), font_small);
 			auto xDeltaText = xOffset + x() + width() - iV_GetTextWidth(deltaText.getText().c_str(), font_small) - PADDING;
-			deltaText.renderOutlined(xDeltaText, iY - 1, delta > 0 ? WZCOL_GREEN : WZCOL_RED, {0, 0, 0, 223});
+			deltaText.renderOutlined(xDeltaText, iY - 1, (delta < 0) == lessIsBetter ? WZCOL_LGREEN : WZCOL_LRED, {0, 0, 0, 223});
 		}
 	}
 
@@ -401,12 +408,20 @@ protected:
 	uint32_t maxValueTextWidth = iV_GetTextWidth("00000", font_regular);
 	Animation<float> minorAnimation = Animation<float>(realTime, EASE_IN, 200).setInitialData(0).setFinalData(0);
 	const uint32_t PADDING = 3;
+	bool lessIsBetter = false;
 };
 
 class DesignPowerBar: public DesignStatsBar
 {
 public:
-	using DesignStatsBar::DesignStatsBar;
+	DesignPowerBar(W_BARINIT *init): DesignStatsBar(init) {}
+
+	static std::shared_ptr<DesignPowerBar> makeLessIsBetter(W_BARINIT *init)
+	{
+		auto widget = std::make_shared<DesignPowerBar>(init);
+		widget->lessIsBetter = true;
+		return widget;
+	}
 
 protected:
 	void display(int xOffset, int yOffset) override
@@ -689,7 +704,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 	sBarInit.pTip = _("Weight");
 	sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-	bodyForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+	bodyForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 	/* Add the labels for the Body */
 	sLabInit.formID = IDDES_BODYFORM;
@@ -771,7 +786,7 @@ bool intAddDesign(bool bShowCentreScreen)
 	sBarInit.height = iV_GetImageHeight(IntImages, IMAGE_DES_POWERBACK);
 	sBarInit.pTip = _("Total Power Required");
 	sBarInit.iRange = DBAR_TEMPLATEMAXPOWER;//WBAR_SCALE;
-	powerForm->attach(std::make_shared<DesignPowerBar>(&sBarInit));
+	powerForm->attach(DesignPowerBar::makeLessIsBetter(&sBarInit));
 
 	/* Add the design template body points bar and label*/
 	sLabInit.formID	= IDDES_POWERFORM;
@@ -1328,7 +1343,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+		systemForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_SENSORRANGELAB;
@@ -1359,7 +1374,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+		systemForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_ECMPOWERLAB;
@@ -1390,7 +1405,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Weight");
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+		systemForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_CONSTPOINTSLAB;
@@ -1421,7 +1436,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Weight");
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+		systemForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_REPAIRPTLAB;
@@ -1468,7 +1483,7 @@ static bool intSetSystemForm(COMPONENT_STATS *psStats)
 		sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		systemForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+		systemForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_WEAPRANGELAB;
@@ -1627,7 +1642,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sBarInit.y = DES_STATBAR_Y2;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
 		sBarInit.pTip = _("Weight");
-		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+		propulsionForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_PROPAIRLAB;
@@ -1673,7 +1688,7 @@ static bool intSetPropulsionForm(PROPULSION_STATS *psStats)
 		sBarInit.y = DES_STATBAR_Y4;	//+= DES_CLICKBARHEIGHT + DES_CLICKGAP;
 		sBarInit.pTip = _("Weight");
 		sBarInit.iRange = (UWORD)getMaxComponentWeight();//DBAR_MAXWEIGHT;
-		propulsionForm->attach(std::make_shared<DesignStatsBar>(&sBarInit));
+		propulsionForm->attach(DesignStatsBar::makeLessIsBetter(&sBarInit));
 
 		/* Add the labels */
 		sLabInit.id = IDDES_PROPROADLAB;
