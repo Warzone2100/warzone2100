@@ -197,7 +197,7 @@ function lookForOil()
 	var droids = enumGroup(oilBuilders);
 	var oils = enumFeature(-1, OIL_RES_STAT).sort(sortByDistToBase); // grab closer oils first;
 	var bestDroid = null;
-	var bestDist = 99999;
+	let bestDist = 99999;
 	let success = false;
 	//log("looking for oil... " + oils.length + " available");
 
@@ -288,7 +288,7 @@ function returnDefense(type)
 	//Choose a random electronic warfare defense if possible.
 	if (random(100) < ELECTRONIC_CHANCE)
 	{
-		var avail = 0;
+		let avail = 0;
 		for (let i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
 		{
 			if (isStructureAvailable(ELECTRONIC_DEFENSES[i]))
@@ -442,7 +442,7 @@ function factoryBuildOrder()
 	const FAC_ORDER = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT,];
 	for (let x = 0; x < 2; ++x)
 	{
-		var num = 1;
+		let num = 1;
 		if (x > 0)
 		{
 			var derrNum = countStruct(DERRICK_STAT);
@@ -488,7 +488,7 @@ function buildResearchLabs()
 	var resCount = countStruct(RES_LAB_STAT);
 	if (resCount < 5)
 	{
-		var amount = 3;
+		let amount = 3;
 		var derrCount = countStruct(DERRICK_STAT);
 		if (derrCount >= 12)
 		{
@@ -549,7 +549,7 @@ function buildFundamentals2()
 	}
 
 	//Build VTOL pads if needed
-	var needVtolPads = 2 * countStruct(VTOL_PAD_STAT) < groupSizes[vtolGroup];
+	const needVtolPads = 2 * countStruct(VTOL_PAD_STAT) < groupSizes[vtolGroup];
 	if (needVtolPads && grabTrucksAndBuild(VTOL_PAD_STAT, 2))
 	{
 		return;
