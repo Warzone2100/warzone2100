@@ -117,7 +117,7 @@ function lookForResearch(tech, labParam)
 		return; //need construction droids.
 	}
 
-	var labList;
+	let labList;
 	if (labParam) // check if called with parameter or not
 	{
 		labList = [];

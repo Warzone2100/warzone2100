@@ -4,7 +4,7 @@
 const maxDroids = 25;		// max guys to handle.
 
 // scav group
-var attackGroup;
+let attackGroup;
 let lastAttack = 0;
 
 function produceDroid(fac1) {

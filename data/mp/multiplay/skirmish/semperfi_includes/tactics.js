@@ -110,7 +110,7 @@ function findNearestFactoryID(player)
 	var facs = enumStruct(player, FACTORY_STAT).sort(sortByDistToBase);
 	var cybFacs = enumStruct(player, CYBORG_FACTORY_STAT).sort(sortByDistToBase);
 	var vtolFacs = enumStruct(player, VTOL_FACTORY_STAT).sort(sortByDistToBase);
-	var target;
+	let target;
 
 	if (facs.length > 0)
 	{
@@ -132,7 +132,7 @@ function findNearestFactoryID(player)
 function findNearestConstructID(player)
 {
 	var constructs = enumDroid(player, DROID_CONSTRUCT).sort(sortByDistToBase);
-	var target;
+	let target;
 
 	if (constructs.length > 0)
 	{
@@ -145,7 +145,7 @@ function findNearestConstructID(player)
 //Return closest player derrick ID. Undefined if none.
 function findNearestDerrickID(player)
 {
-	var target;
+	let target;
 	var derr = enumStruct(player, DERRICK_STAT).sort(sortByDistToBase);
 
 	if (derr.length > 0)
@@ -217,8 +217,8 @@ function attackEnemy()
 			}
 		}
 
-		var loc;
-		var realObject;
+		let loc;
+		let realObject;
 		if (targetID)
 		{
 			if (!isDroid)
