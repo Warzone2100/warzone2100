@@ -603,8 +603,8 @@ function init(){
 
 	if(!release)research_path.forEach(function(e){debugMsg(e, 'init');});
 
-	if(!release) for ( var p = 0; p < maxPlayers; ++p ) {debugMsg("startPositions["+p+"] "+startPositions[p].x+"x"+startPositions[p].y, 'init');}
-	
+	if(!release) for (let p = 0; p < maxPlayers; ++p) {debugMsg("startPositions["+p+"] "+startPositions[p].x+"x"+startPositions[p].y, 'init');}
+
 	//Просто дебаг информация
 	var oilDrums = enumFeature(ALL_PLAYERS, "OilDrum");
 	debugMsg("На карте "+oilDrums.length+" бочек с нефтью", 'init');
