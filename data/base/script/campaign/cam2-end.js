@@ -27,7 +27,7 @@ function checkEnemyVtolArea()
 		return isVTOL(obj);
 	});
 
-	for (var i = 0, l = vtols.length; i < l; ++i)
+	for (let i = 0, l = vtols.length; i < l; ++i)
 	{
 		if ((vtols[i].weapons[0].armed < 20) || (vtols[i].health < 60))
 		{
@@ -43,7 +43,7 @@ function playLastVideo()
 		return (obj.type === DROID && !camIsTransporter(obj));
 	});
 
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (let i = 0, l = droids.length; i < l; ++i)
 	{
 		camSafeRemoveObject(droids[i], false);
 	}
@@ -57,7 +57,7 @@ function eventTransporterLaunch(transporter)
 	{
 		var cargoDroids = enumCargo(transporter);
 
-		for (var i = 0, len = cargoDroids.length; i < len; ++i)
+		for (let i = 0, len = cargoDroids.length; i < len; ++i)
 		{
 			var virDroid = cargoDroids[i];
 
@@ -76,7 +76,7 @@ function randomTemplates(list, isTransport)
 	var droids = [];
 	var size = camDef(isTransport) ? 8 + camRand(3) : 18 + camRand(8);
 
-	for (var i = 0; i < size; ++i)
+	for (let i = 0; i < size; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}

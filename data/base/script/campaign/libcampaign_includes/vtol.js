@@ -69,7 +69,7 @@ function __camSpawnVtols()
 	if (!camDef(__camVtolExtras))
 	{
 		//Pick some droids randomly.
-		for (var i = 0; i < amount; ++i)
+		for (let i = 0; i < amount; ++i)
 		{
 			droids.push(__camVtolTemplates[camRand(__camVtolTemplates.length)]);
 		}
@@ -99,7 +99,7 @@ function __camSpawnVtols()
 			}
 		}
 
-		for (var i = 0; i < lim; ++i)
+		for (let i = 0; i < lim; ++i)
 		{
 			if (!alternate)
 			{
@@ -140,10 +140,10 @@ function __camRetreatVtols()
 			return isVTOL(obj);
 		});
 
-		for (var i = 0, len = vtols.length; i < len; ++i)
+		for (let i = 0, len = vtols.length; i < len; ++i)
 		{
 			var vt = vtols[i];
-			for (var c = 0, len2 = vt.weapons.length; c < len2; ++c)
+			for (let c = 0, len2 = vt.weapons.length; c < len2; ++c)
 			{
 				if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))
 				{

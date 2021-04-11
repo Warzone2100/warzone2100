@@ -81,7 +81,7 @@ function eventTransporterLanded(transport)
 		var crew = enumRange(transport.x, transport.y, 6, NEW_PARADIGM, false).filter(function(obj) {
 			return obj.type === DROID && obj.group === artiGroup;
 		});
-		for (var i = 0, l = crew.length; i < l; ++i)
+		for (let i = 0, l = crew.length; i < l; ++i)
 		{
 			camSafeRemoveObject(crew[i], false);
 		}
@@ -144,7 +144,7 @@ function getArtifact()
 		var idx = 0;
 		var dist = Infinity;
 
-		for (var i = 0, l = artiMembers.length; i < l; ++i)
+		for (let i = 0, l = artiMembers.length; i < l; ++i)
 		{
 			var drDist = camDist(artiMembers[i], artiLoc);
 			if (drDist < dist)
@@ -178,7 +178,7 @@ function getArtifact()
 //New Paradigm truck builds six lancer hardpoints around LZ
 function buildLancers()
 {
-	for (var i = 1; i <= 6; ++i)
+	for (let i = 1; i <= 6; ++i)
 	{
 		camQueueBuilding(NEW_PARADIGM, "WallTower06", "hardPoint" + i);
 	}

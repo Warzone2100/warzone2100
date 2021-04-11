@@ -115,7 +115,7 @@ function __camCheckPlaceArtifact(obj)
 	if (ai.tech instanceof Array)
 	{
 		camTrace("Placing multi-tech granting artifact");
-		for (var i = 0; i < ai.tech.length; ++i)
+		for (let i = 0; i < ai.tech.length; ++i)
 		{
 			var techString = ai.tech[i];
 			camTrace(i, ":", techString);
@@ -152,7 +152,7 @@ function __camPickupArtifact(artifact)
 	camSafeRemoveObject(artifact);
 	if (ai.tech instanceof Array)
 	{
-		for (var i = 0; i < ai.tech.length; ++i)
+		for (let i = 0; i < ai.tech.length; ++i)
 		{
 			var techString = ai.tech[i];
 			enableResearch(techString);
@@ -193,7 +193,7 @@ function __camLetMeWinArtifacts()
 		{
 			if (ai.tech instanceof Array)
 			{
-				for (var i = 0; i < ai.tech.length; ++i)
+				for (let i = 0; i < ai.tech.length; ++i)
 				{
 					var techString = ai.tech[i];
 					enableResearch(techString);

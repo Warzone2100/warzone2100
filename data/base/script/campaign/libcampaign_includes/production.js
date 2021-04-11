@@ -89,7 +89,7 @@ function camSetFactoryData(flabel, fdata)
 	{
 		fi.group = camNewGroup();
 	}
-	for (var i = 0, l = droids.length; i < l; ++i)
+	for (let i = 0, l = droids.length; i < l; ++i)
 	{
 		var droid = droids[i];
 		groupAdd(fi.group, droid);
@@ -245,7 +245,7 @@ function __camChangePropulsionOnDiff(propulsion)
 		name = name.substring(0, name.length - 2);
 	}
 
-	for (var i = 0, l = VALID_PROPS.length; i < l; ++i)
+	for (let i = 0, l = VALID_PROPS.length; i < l; ++i)
 	{
 		var currentProp = VALID_PROPS[i];
 		if (name === currentProp)

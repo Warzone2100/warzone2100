@@ -24,9 +24,8 @@ function preDamageStuff()
 {
 	var droids = enumDroid(CAM_HUMAN_PLAYER);
 	var structures = enumStruct(CAM_HUMAN_PLAYER);
-	var x = 0;
 
-	for (x = 0; x < droids.length; ++x)
+	for (let x = 0; x < droids.length; ++x)
 	{
 		var droid = droids[x];
 		if (!camIsTransporter(droid))
@@ -35,7 +34,7 @@ function preDamageStuff()
 		}
 	}
 
-	for (x = 0; x < structures.length; ++x)
+	for (let x = 0; x < structures.length; ++x)
 	{
 		var struc = structures[x];
 		setHealth(struc, 45 + camRand(45));
@@ -60,7 +59,7 @@ function getDroidsForCOLZ()
 		usingHeavy = true;
 	}
 
-	for (var i = 0; i < count; ++i)
+	for (let i = 0; i < count; ++i)
 	{
 		if (!i && usingHeavy)
 		{
@@ -115,7 +114,7 @@ function sendPlayerTransporter()
 	var droids = [];
 	var list = [cTempl.prhct, cTempl.prhct, cTempl.prhct, cTempl.prltat, cTempl.prltat, cTempl.npcybr, cTempl.prrept];
 
-	for (var i = 0; i < 10; ++i)
+	for (let i = 0; i < 10; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -135,7 +134,7 @@ function mapEdgeDroids()
 	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.comct, cTempl.cohct];
 
 	var droids = [];
-	for (var i = 0; i < TankNum; ++i)
+	for (let i = 0; i < TankNum; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -187,7 +186,6 @@ function truckDefense()
 //Gives starting tech and research.
 function cam2Setup()
 {
-	var x = 0;
 	const COLLECTIVE_RES = [
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering02",
 		"R-Defense-WallUpgrade03", "R-Struc-Materials03",
@@ -202,12 +200,12 @@ function cam2Setup()
 		"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01"
 	];
 
-	for (x = 0; x < ALPHA_TECH.length; ++x)
+	for (let x = 0; x < ALPHA_TECH.length; ++x)
 	{
 		makeComponentAvailable(ALPHA_TECH[x], CAM_HUMAN_PLAYER);
 	}
 
-	for (x = 0; x < STRUCTS_ALPHA.length; ++x)
+	for (let x = 0; x < STRUCTS_ALPHA.length; ++x)
 	{
 		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}
@@ -229,7 +227,7 @@ function setUnitRank()
 		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
 	});
 
-	for (var j = 0, i = droids.length; j < i; ++j)
+	for (let j = 0, i = droids.length; j < i; ++j)
 	{
 		var droid = droids[j];
 		if (Math.floor(droid.experience) < MIN_TO_AWARD)

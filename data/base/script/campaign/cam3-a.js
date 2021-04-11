@@ -53,7 +53,7 @@ function setHeroUnits()
 		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
 	});
 
-	for (var j = 0, i = droids.length; j < i; ++j)
+	for (let j = 0, i = droids.length; j < i; ++j)
 	{
 		setDroidExperience(droids[j], DROID_EXP);
 	}
@@ -74,7 +74,7 @@ function enableAllFactories()
 		"NXcybFac-b3", "NXcybFac-b2-1", "NXcybFac-b2-2", "NXHvyFac-b2", "NXcybFac-b4",
 	];
 
-	for (var j = 0, i = FACTORY_NAMES.length; j < i; ++j)
+	for (let j = 0, i = FACTORY_NAMES.length; j < i; ++j)
 	{
 		camEnableFactory(FACTORY_NAMES[j]);
 	}
@@ -101,7 +101,7 @@ function sendPlayerTransporter()
 	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaacnt, cTempl.prtruck];
 
 	// send 4 Assault Guns, 2 Hyper Velocity Cannons, 2 Cyclone AA Turrets and 2 Trucks
-	for (var i = 0, d = list.length; i < 10; ++i)
+	for (let i = 0, d = list.length; i < 10; ++i)
 	{
 		droids.push(i < d * 2 ? list[i % 4] : list[0]);
 	}
@@ -159,8 +159,6 @@ function groupPatrolNoTrigger()
 //Gives starting tech and research.
 function cam3Setup()
 {
-	var x = 0;
-	var l = 0;
 	const NEXUS_RES = [
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering03", "R-Defense-WallUpgrade07",
 		"R-Struc-Materials07", "R-Struc-Factory-Upgrade06",
@@ -172,12 +170,12 @@ function cam3Setup()
 		"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
 	];
 
-	for (x = 0, l = BETA_TECH.length; x < l; ++x)
+	for (let x = 0, l = BETA_TECH.length; x < l; ++x)
 	{
 		makeComponentAvailable(BETA_TECH[x], CAM_HUMAN_PLAYER);
 	}
 
-	for (x = 0, l = STRUCTS_GAMMA.length; x < l; ++x)
+	for (let x = 0, l = STRUCTS_GAMMA.length; x < l; ++x)
 	{
 		enableStructure(STRUCTS_GAMMA[x], CAM_HUMAN_PLAYER);
 	}

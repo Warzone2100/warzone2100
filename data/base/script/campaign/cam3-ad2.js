@@ -37,18 +37,17 @@ camAreaEvent("vtolRemoveZone", function(droid)
 //Return a random assortment of droids with the given templates.
 function randomTemplates(list)
 {
-	var i = 0;
 	var extras = [cTempl.nxmsens, cTempl.nxmsamh];
 	var droids = [];
 	var size = 12 + camRand(4); //Max of 15.
 
-	for (i = 0; i < size; ++i)
+	for (let i = 0; i < size; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
 
 	//Vtol strike sensor and vindicator hovers.
-	for (i = 0; i < 4; ++i)
+	for (let i = 0; i < 4; ++i)
 	{
 		droids.push(extras[camRand(extras.length)]);
 	}
@@ -217,7 +216,7 @@ function laserSatFuzzyStrike(obj)
 //Play videos and allow winning once the final one is researched.
 function eventResearched(research, structure, player)
 {
-	for (var i = 0, l = videoInfo.length; i < l; ++i)
+	for (let i = 0, l = videoInfo.length; i < l; ++i)
 	{
 		if (research.name === videoInfo[i].res && !videoInfo[i].played)
 		{
@@ -289,7 +288,7 @@ function eventStartLevel()
 
 	//Destroy everything above limits
 	var destroyZone = enumArea(0, 0, 64, Y_SCROLL_LIMIT, CAM_HUMAN_PLAYER, false);
-	for (var i = 0, l = destroyZone.length; i < l; ++i)
+	for (let i = 0, l = destroyZone.length; i < l; ++i)
 	{
 		camSafeRemoveObject(destroyZone[i], false);
 	}

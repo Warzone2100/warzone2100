@@ -26,12 +26,12 @@ function getDroidsForNPLZ(args)
 	var heavy = heavies[camRand(heavies.length)];
 	var list = [];
 
-	for (var i = 0; i < numScouts; ++i)
+	for (let i = 0; i < numScouts; ++i)
 	{
 		list[list.length] = scouts[camRand(scouts.length)];
 	}
 
-	for (var a = numScouts; a < 8; ++a)
+	for (let a = numScouts; a < 8; ++a)
 	{
 		list[list.length] = heavy;
 	}

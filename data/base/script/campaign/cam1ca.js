@@ -56,8 +56,7 @@ function sendTransport()
 	}
 	// find an LZ that is not compromised
 	var list = [];
-	var i = 0;
-	for (i = 0; i < landingZoneList.length; ++i)
+	for (let i = 0; i < landingZoneList.length; ++i)
 	{
 		var lz = landingZoneList[i];
 		if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
@@ -68,7 +67,7 @@ function sendTransport()
 	//If all are compromised then choose the LZ randomly
 	if (list.length === 0)
 	{
-		for (i = 0; i < 2; ++i)
+		for (let i = 0; i < 2; ++i)
 		{
 			var rnd = camRand(landingZoneList.length);
 			list.push({ idx: rnd, label: landingZoneList[rnd] });
@@ -95,7 +94,7 @@ function sendTransport()
 	}
 
 	var droids = [];
-	for (i = 0; i < count; ++i)
+	for (let i = 0; i < count; ++i)
 	{
 		var t = templates[camRand(templates.length)];
 		// two droids of each template
@@ -136,7 +135,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// make sure player doesn't build on enemy LZs
-	for (var i = 1; i <= 5; ++i)
+	for (let i = 1; i <= 5; ++i)
 	{
 		var ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,

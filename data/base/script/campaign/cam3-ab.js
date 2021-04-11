@@ -44,7 +44,7 @@ function sendEdgeMapDroids()
 		edgeMapCounter = 0;
 	}
 
-	for (var i = 0; i < COUNT; ++i)
+	for (let i = 0; i < COUNT; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
@@ -79,7 +79,7 @@ function truckDefense()
 		"NX-Tower-ATMiss", "Sys-NX-CBTower",
 	];
 
-	for (var i = 0, len = droids.length; i < len; ++i)
+	for (let i = 0, len = droids.length; i < len; ++i)
 	{
 		var truck = droids[i];
 		if (truck.order !== DORDER_BUILD)
@@ -115,12 +115,12 @@ function nexusManufacture()
 		{structure: VTOL_FACTORY, temps: [cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxmheapv,]},
 	];
 
-	for (var i = 0; i < factoryType.length; ++i)
+	for (let i = 0; i < factoryType.length; ++i)
 	{
 		var factories = enumStruct(NEXUS, factoryType[i].structure);
 		var templs = factoryType[i].temps;
 
-		for (var j = 0, len = factories.length; j < len; ++j)
+		for (let j = 0, len = factories.length; j < len; ++j)
 		{
 			var fac = factories[j];
 			if (fac.status !== BUILT || !structureIdle(fac))

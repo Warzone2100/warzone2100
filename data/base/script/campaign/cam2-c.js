@@ -147,9 +147,8 @@ function captureCivilians()
 	if (shepardDroids.length > 0)
 	{
 		//add some civs
-		var i = 0;
 		var num = 1 + camRand(3);
-		for (i = 0; i < num; ++i)
+		for (let i = 0; i < num; ++i)
 		{
 			addDroid(SCAV_7, currPos.x, currPos.y, "Civilian",
 					"B1BaBaPerson01", "BaBaLegs", "", "", "BabaMG");
@@ -158,14 +157,14 @@ function captureCivilians()
 		//Only count civilians that are not in the the transporter base.
 		var civs = enumArea(0, 0, 35, mapHeight, SCAV_7, false);
 		//Move them
-		for (i = 0; i < civs.length; ++i)
+		for (let i = 0; i < civs.length; ++i)
 		{
 			orderDroidLoc(civs[i], DORDER_MOVE, currPos.x, currPos.y);
 		}
 
 		if (civilianPosIndex <= 5)
 		{
-			for (i = 0; i < shepardDroids.length; ++i)
+			for (let i = 0; i < shepardDroids.length; ++i)
 			{
 				orderDroidLoc(shepardDroids[i], DORDER_MOVE, currPos.x, currPos.y);
 			}
@@ -193,10 +192,10 @@ function civilianOrders()
 	var rescued = false;
 
 	//Check if a civilian is close to a player droid.
-	for (var i = 0; i < civs.length; ++i)
+	for (let i = 0; i < civs.length; ++i)
 	{
 		var objs = enumRange(civs[i].x, civs[i].y, 6, CAM_HUMAN_PLAYER, false);
-		for (var j = 0; j < objs.length; ++j)
+		for (let j = 0; j < objs.length; ++j)
 		{
 			if (objs[j].type === DROID)
 			{
@@ -226,7 +225,7 @@ function eventTransporterLanded(transport)
 	{
 		playSound(escaping);
 		capturedCivCount += civs.length - 1;
-		for (var i = 0; i < civs.length; ++i)
+		for (let i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
 		}
@@ -266,7 +265,7 @@ function extraVictoryCondition()
 		var lz = getObject("startPosition");
 		var civs = enumRange(lz.x, lz.y, 30, SCAV_7, false);
 
-		for (var i = 0; i < civs.length; ++i)
+		for (let i = 0; i < civs.length; ++i)
 		{
 			camSafeRemoveObject(civs[i], false);
 		}

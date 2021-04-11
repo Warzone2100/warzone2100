@@ -27,7 +27,7 @@ function camAbsorbPlayer(who, to)
 
 	var units = enumDroid(who);
 
-	for (var i = 0, len = units.length; i < len; i++)
+	for (let i = 0, len = units.length; i < len; i++)
 	{
 		var droid = units[i];
 		if (!donateObject(droid, to))
@@ -37,7 +37,7 @@ function camAbsorbPlayer(who, to)
 	}
 
 	var structs = enumStruct(who);
-	for (var i = 0, len = structs.length; i < len; i++)
+	for (let i = 0, len = structs.length; i < len; i++)
 	{
 		var structure = structs[i];
 		if (!donateObject(structure, to))
