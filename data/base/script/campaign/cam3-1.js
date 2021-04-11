@@ -102,7 +102,7 @@ function missileSilosDestroyed()
 {
 	const SILO_COUNT = 4;
 	const SILO_ALIAS = "NXMissileSilo";
-	var destroyed = 0;
+	let destroyed = 0;
 
 	for (let i = 0; i < SILO_COUNT; ++i)
 	{

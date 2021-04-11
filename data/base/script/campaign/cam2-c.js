@@ -147,7 +147,7 @@ function captureCivilians()
 	if (shepardDroids.length > 0)
 	{
 		//add some civs
-		var num = 1 + camRand(3);
+		const num = 1 + camRand(3);
 		for (let i = 0; i < num; ++i)
 		{
 			addDroid(SCAV_7, currPos.x, currPos.y, "Civilian",

@@ -44,7 +44,7 @@ function preDamageStuff()
 function getDroidsForCOLZ()
 {
 	var droids = [];
-	var count = 6 + camRand(5);
+	const count = 6 + camRand(5);
 	var templates;
 	var sensors = [cTempl.comsens, cTempl.comsens];
 	let usingHeavy = false;
@@ -130,11 +130,11 @@ function sendPlayerTransporter()
 //Continuously spawns heavy units on the north part of the map every 7 minutes
 function mapEdgeDroids()
 {
-	var TankNum = 8 + camRand(6);
+	const tankNum = 8 + camRand(6);
 	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.comct, cTempl.cohct];
 
 	var droids = [];
-	for (let i = 0; i < TankNum; ++i)
+	for (let i = 0; i < tankNum; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}

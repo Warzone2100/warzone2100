@@ -306,8 +306,8 @@ function setLimits()
 
 function resetPower()
 {
-	var powerLimit = 999999;
-	var powerProductionRate = 100;
+	let powerLimit = 999999;
+	let powerProductionRate = 100;
 
 	// set income modifier/power storage for player 0 (human)
 	if (difficulty === EASY)
@@ -436,7 +436,7 @@ function eventResearched(research, structure, player)
 	}
 }
 
-var lastHitTime = 0;
+let lastHitTime = 0;
 function eventAttacked(victim, attacker)
 {
 	if ((victim.player === selectedPlayer) && gameTime > lastHitTime + 5000)

@@ -141,7 +141,7 @@ function getArtifact()
 
 		//Find the one closest to the artifact so that one can "hold" it
 		var artiMembers = enumGroup(artiGroup);
-		var idx = 0;
+		let idx = 0;
 		var dist = Infinity;
 
 		for (let i = 0, l = artiMembers.length; i < l; ++i)

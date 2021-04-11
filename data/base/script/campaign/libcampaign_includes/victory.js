@@ -19,7 +19,7 @@ function camNextLevel(nextLevel)
 		}
 		if (bonusTime > 0)
 		{
-			var bonus = 110;
+			let bonus = 110;
 			if (difficulty === HARD)
 			{
 				bonus = 105;
@@ -256,7 +256,7 @@ function __camPlayerDead()
 	if (__camWinLossCallback === CAM_VICTORY_TIMEOUT)
 	{
 		//Make the mission fail if no units are alive on map while having no factories.
-		var droidCount = 0;
+		let droidCount = 0;
 		enumDroid(CAM_HUMAN_PLAYER).forEach(function(obj) {
 			droidCount += 1;
 			if (obj.droidType === DROID_SUPERTRANSPORTER)
@@ -481,8 +481,8 @@ function __camShowVictoryConditions(forceMessage)
 
 	const ANNIHILATE_MESSAGE = _("Destroy all enemy units and structures");
 
-	var unitsOnMap = 0;
-	var structuresOnMap = 0;
+	let unitsOnMap = 0;
+	let structuresOnMap = 0;
 
 	enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).forEach(function(obj) {
 		if (obj.type === DROID)

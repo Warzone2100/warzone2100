@@ -200,7 +200,7 @@ function camCountStructuresInArea(lab, player)
 		player = CAM_HUMAN_PLAYER;
 	}
 	var list = enumArea(lab, player, false);
-	var ret = 0;
+	let ret = 0;
 	for (let i = 0, l = list.length; i < l; ++i)
 	{
 		var object = list[i];
@@ -218,7 +218,7 @@ function camCountStructuresInArea(lab, player)
 //;;
 function camChangeOnDiff(num)
 {
-	var modifier = 0;
+	let modifier = 0;
 
 	switch (difficulty)
 	{
@@ -371,7 +371,7 @@ function __camFindClusters(list, size)
 		var x = list[i].x;
 		var y = list[i].y;
 		let found = false;
-		var n = 0;
+		let n = 0;
 		for (let j = 0; j < ret.clusters.length; ++j)
 		{
 			if (camDist(ret.xav[j], ret.yav[j], x, y) < size)

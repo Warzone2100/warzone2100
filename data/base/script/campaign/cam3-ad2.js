@@ -39,7 +39,7 @@ function randomTemplates(list)
 {
 	var extras = [cTempl.nxmsens, cTempl.nxmsamh];
 	var droids = [];
-	var size = 12 + camRand(4); //Max of 15.
+	const size = 12 + camRand(4); //Max of 15.
 
 	for (let i = 0; i < size; ++i)
 	{
