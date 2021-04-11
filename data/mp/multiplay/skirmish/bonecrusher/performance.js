@@ -119,8 +119,8 @@ function perfMonitor(){
 		debugMsg(pout, 'performance');
 		perfOrder=[];
 	}
-	
-	for(var i in perfFunc){if(perfFunc[i]){
+
+	for (const i in perfFunc) {if(perfFunc[i]){
 		debugMsg(i+'='+perfFunc[i], 'performance');
 		perfFunc[i]=0;
 		
