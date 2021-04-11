@@ -188,7 +188,7 @@ _global.checkTruckProduction = function() {
 function checkTankProduction() {
 	if (!iCanDesign())
 		return false; // don't cheat by producing tanks before design is available (also saves money for early generators)
-	var success = false;
+	let success = false;
 	enumIdleStructList(structures.factories).forEach(function(factory) {
 		success = success || produceTank(factory);
 	});
@@ -196,7 +196,7 @@ function checkTankProduction() {
 }
 
 function checkTemplateProduction() {
-	var success = false;
+	let success = false;
 	enumIdleStructList(structures.templateFactories)
 		.concat(enumIdleStructList(structures.vtolFactories))
 		.forEach(function(factory)
@@ -207,7 +207,7 @@ function checkTemplateProduction() {
 }
 
 function checkVtolProduction() {
-	var success = false;
+	let success = false;
 	if (!iCanDesign())
 		return false; // don't cheat by producing vtols before design is available
 	enumIdleStructList(structures.vtolFactories).forEach(function(factory) {

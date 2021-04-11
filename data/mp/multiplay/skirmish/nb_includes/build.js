@@ -67,7 +67,7 @@ function buildModule(struct) {
 		return BUILDRET.UNAVAILABLE;
 	if (struct.modules >= moduleInfo.count)
 		return BUILDRET.UNAVAILABLE;
-	var success = false;
+	let success = false;
 	for (let i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, moduleInfo.module, struct.x, struct.y) || success;
 	if (success)
@@ -105,7 +105,7 @@ function buildBasicStructure(statlist, importance) {
 	if (importance === IMPORTANCE.PEACETIME && !safeSpot(loc.x, loc.y))
 		return BUILDRET.FAILURE;
 	// now actually build
-	var success = false;
+	let success = false;
 	for (let i = 0; i < trucks.length; ++i)
 		success = orderDroidBuild(trucks[i], DORDER_BUILD, statlist[idx], loc.x, loc.y) || success;
 	if (success)
@@ -114,7 +114,7 @@ function buildBasicStructure(statlist, importance) {
 }
 
 function finishStructures() {
-	var success = false;
+	let success = false;
 	var list = enumStruct(me).filterProperty("status", BEING_BUILT);
 	for (let i = 0; i < list.length; ++i) {
 		if (success)

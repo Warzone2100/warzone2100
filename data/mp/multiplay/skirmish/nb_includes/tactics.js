@@ -11,7 +11,7 @@ _global.MAX_GROUPS = maxPlayers;
 _global.miscGroup = MAX_GROUPS;
 _global.vtolGroup = miscGroup + 1;
 var groupInfo = [];
-var firstTimeHarass = true;
+let firstTimeHarass = true;
 
 function GroupInfo() {
 	this.lastAttacked = undefined; // gameTime at the moment of the last combat

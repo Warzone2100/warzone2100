@@ -116,7 +116,7 @@ _global.naiveFindClusters = function(list, size) {
 	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
 	for (let i = list.length - 1; i >= 0; --i) {
 		var x = list[i].x, y = list[i].y;
-		var found = false;
+		let found = false;
 		for (let j = 0; j < ret.clusters.length; ++j) {
 			if (distance(ret.xav[j], ret.yav[j], x, y) < size) {
 				var n = ret.clusters[j].length;
