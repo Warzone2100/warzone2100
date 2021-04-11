@@ -8,7 +8,7 @@ function checkEndConditions()
 	// Losing Conditions
 	if (droids == 0 && factories == 0)
 	{
-		var gameLost = true;
+		let gameLost = true;
 
 		/* If teams enabled check if all team members have lost  */
 		if (alliancesType == ALLIANCES_TEAMS || alliancesType == ALLIANCES_UNSHARED)
@@ -37,7 +37,7 @@ function checkEndConditions()
 	}
 
 	// Winning Conditions
-	var gamewon = true;
+	let gamewon = true;
 
 	// check if all enemies defeated
 	for (let playnum = 0; playnum < maxPlayers; playnum++)

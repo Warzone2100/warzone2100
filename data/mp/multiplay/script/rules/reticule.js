@@ -1,6 +1,6 @@
 function reticuleManufactureCheck()
 {
-	var structureComplete = false;
+	let structureComplete = false;
 	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (let i = 0, len = facs.length; i < len; ++i)
@@ -28,7 +28,7 @@ function reticuleManufactureCheck()
 
 function reticuleResearchCheck()
 {
-	var structureComplete = false;
+	let structureComplete = false;
 	var labs = [RESEARCH_LAB,];
 
 	for (let i = 0, len = labs.length; i < len; ++i)
@@ -67,7 +67,7 @@ function reticuleBuildCheck()
 
 function reticuleDesignCheck()
 {
-	var structureComplete = false;
+	let structureComplete = false;
 	var HQS = [HQ,];
 
 	for (let i = 0, len = HQS.length; i < len; ++i)
@@ -119,7 +119,7 @@ function setMainReticule()
 
 function reticuleUpdate(obj, eventType)
 {
-	var update_reticule = false;
+	let update_reticule = false;
 
 	if (eventType === TRANSFER_LIKE_EVENT)
 	{

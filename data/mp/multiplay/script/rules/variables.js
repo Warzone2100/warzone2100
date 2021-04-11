@@ -1,6 +1,6 @@
 var lastHitTime = 0;
-var cheatmode = false;
-var mainReticule = false;
+let cheatmode = false;
+let mainReticule = false;
 var oilDrumData = {
 	delay: 0, // time delay to prevent multiple drums from spawning on the same frame
 	lastSpawn: 0, // time of the last successful drum added to the map
