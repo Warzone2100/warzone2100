@@ -164,8 +164,8 @@ function grabTrucksAndBuild(stat, location, tileRange, maxBlockingTiles, group)
 		group = groups.baseBuilders;
 	}
 
-	var loc2;
-	var closestDroid;
+	let loc2;
+	let closestDroid;
 	var closestDistance = Infinity;
 	let numHelpDroids = 0;
 	var droids = enumGroup(group);
@@ -250,8 +250,8 @@ function buildDerrick()
 
 	for (let i = 0, oilLen = oils.length; i < oilLen; ++i)
 	{
-		var targetOil;
-		var bestDroid;
+		let targetOil;
+		let bestDroid;
 		var bestDist = Infinity;
 
 		//And don't waste time if all trucks became busy.
@@ -530,7 +530,7 @@ function personalityBuildOrder()
 		}
 
 		var obj = nexusBranch[branch].buildOrder[i];
-		var count;
+		let count;
 
 		switch (obj.stat)
 		{
@@ -578,7 +578,7 @@ function personalityBuildOrder()
 function buildMaxsBasedOnDerricks()
 {
 	const DERRICK_COUNT = countStruct(BASE_STRUCTURES.derricks, me);
-	var amount;
+	let amount;
 
 	if (DERRICK_COUNT <= 8)
 	{
@@ -685,7 +685,7 @@ function buildModules()
 		return false;
 	}
 
-	var struct = null;
+	let struct = null;
 	var moduleObject = {}; //a copy of nexusBranch[branch].moduleOrder[x]
 	let success = false;
 
@@ -820,7 +820,7 @@ function protectCloseDerrick()
 					continue;
 				}
 				// Ok, at enemy derrick, and nobody has hurt us yet. Start being nasty.
-				var loc;
+				let loc;
 				var choice = getBestRandomDefense(STANDARD_BASIC_DEFENSES, 5);
 
 				if (defined(choice))

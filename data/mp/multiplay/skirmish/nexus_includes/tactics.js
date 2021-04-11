@@ -107,7 +107,7 @@ function findMostValuableTarget()
 		}
 	}
 
-	var bestTarget;
+	let bestTarget;
 	let bestValue = 0;
 
 	for (let i = 0, len = objects.length; i < len; ++i)
@@ -119,7 +119,7 @@ function findMostValuableTarget()
 			return 0;
 		}
 
-		var currentValue;
+		let currentValue;
 
 		if (obj.type !== STRUCTURE)
 		{

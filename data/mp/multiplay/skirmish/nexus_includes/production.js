@@ -6,7 +6,7 @@ function getVirtualSystemCount()
 	var counts = {constructs: 0, sensors: 0, repairs: 0,};
 	var factories = enumStruct(me, BASE_STRUCTURES.factories);
 	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
-	var virDroid;
+	let virDroid;
 
 	for (let i = 0, len = factories.length; i < len; ++i)
 	{
@@ -145,7 +145,7 @@ function produceConstructors()
 
 function getBestRandomTemplate(type, offset)
 {
-	var what;
+	let what;
 
 	if (!defined(type))
 	{

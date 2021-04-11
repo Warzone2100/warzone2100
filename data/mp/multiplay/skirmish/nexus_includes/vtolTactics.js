@@ -67,7 +67,7 @@ function getCurrentVtolGroupTarget(groupIdx)
 
 function tryChangingVtolGroupTarget(groupIdx)
 {
-	var newTargetWeight;
+	let newTargetWeight;
 	var currentTarget = targetInfo.vtolGroupWhat[groupIdx];
 
 
@@ -211,9 +211,9 @@ function rearrangeAttackVtols()
 //Returns an object = {type: DROID/STRUCTURE, player: player, id: id}
 function chooseVtolTarget(exclusive)
 {
-	var bestTarget;
+	let bestTarget;
 	let bestScore = 0;
-	var currScore;
+	let currScore;
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
@@ -255,7 +255,7 @@ function getVtolTargetWeight(what)
 {
 	let targetWeight = 0;
 	const penalty = 9; //NOTE: A bit much? Penality points per nearby AA structure.
-	var target;
+	let target;
 
 	if (!defined(what))
 	{
@@ -332,7 +332,7 @@ function numEnemyAAInRange(x, y, range)
 //Expects an object = {type: DROID/STRUCTURE, player: player, id: id}
 function vtolTargetAssigned(what)
 {
-	var target;
+	let target;
 
 	if (!defined(what))
 	{
