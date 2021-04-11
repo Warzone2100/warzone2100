@@ -342,9 +342,9 @@ function bc_eventAttacked(victim, attacker) {
 	
 	//Если атака с самолёта рядом с базой, строим ПВО
 	if(isFixVTOL(attacker) && distBetweenTwoPoints_p(victim.x,victim.y,base.x,base.y) < base_range) AA_queue.push({x:victim.x,y:victim.y});
-	
-	var lastImpact;
-	
+
+	let lastImpact;
+
 	//Если атака по стратегическим точкам, направляем основную армию
 	if(((victim.type == DROID && victim.droidType == DROID_CONSTRUCT) || (victim.type == STRUCTURE)) && gameTime > eventsRun['targetRegular']){
 		eventsRun['targetRegular'] = gameTime + 5000;

@@ -164,7 +164,7 @@ let vtolToPlayer = false;
 
 
 //Координаты всех ресурсов, свободных и занятых
-var allResources;
+let allResources;
 
 //Координаты нашей базы
 var base		= {x:0,y:0};
@@ -223,7 +223,7 @@ var droidsRecycle = newGroup();
 var droidsBroken = newGroup();
 var droidsFleet = newGroup();
 
-var maxFactories, maxFactoriesCyb, maxFactoriesVTOL, maxLabs, maxPads;
+let maxFactories, maxFactoriesCyb, maxFactoriesVTOL, maxLabs, maxPads;
 
 //Triggers
 let buildersTrigger = 0;

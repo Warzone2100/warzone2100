@@ -9,7 +9,7 @@ debugMsg('Module: weapons.js','init');
 function _weaponsGetGuns(num){
 	
 	var _weapons = [];
-	var _weapon, _points, _dbg;
+	let _weapon, _points, _dbg;
 
 	//Цикл по всем типам стволов
 	for (const t in guns_type) {

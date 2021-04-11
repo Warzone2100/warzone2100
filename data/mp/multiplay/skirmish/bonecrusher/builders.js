@@ -24,8 +24,8 @@ function groupBuilders(droid){
 
 
 //Подсчитываем постройки на базе
-var factory, power_gen, resource_extractor, research_lab, hq, cyborg_factory, vtol_factory, rearm_pad, uplink_center, lassat, ccontrol, repfac;
-var factory_ready, power_gen_ready, resource_extractor_ready, research_lab_ready, hq_ready, cyborg_factory_ready, vtol_factory_ready, rearm_pad_ready, uplink_center_ready, lassat_ready, ccontrol_ready, repfac_ready;
+let factory, power_gen, resource_extractor, research_lab, hq, cyborg_factory, vtol_factory, rearm_pad, uplink_center, lassat, ccontrol, repfac;
+let factory_ready, power_gen_ready, resource_extractor_ready, research_lab_ready, hq_ready, cyborg_factory_ready, vtol_factory_ready, rearm_pad_ready, uplink_center_ready, lassat_ready, ccontrol_ready, repfac_ready;
 var se_r=0; //Resource extractor length
 
 
@@ -78,7 +78,7 @@ function checkBase(){
 //Строим базу
 function builderBuild(droid, structure, rotation, position){
 	if(typeof position === 'undefined') position = false;
-	var struct;
+	let struct;
 	switch(structure){
 		case "A0LightFactory":if(enumStruct(me,FACTORY).length >= maxFactories)return false;struct = factory; break;
 		case "A0ResearchFacility":if(enumStruct(me,RESEARCH_LAB).length >= maxLabs)return false;struct = research_lab; break;
@@ -180,7 +180,7 @@ const mr_lab			= "R-Struc-Research-Module";
 */
 
 //Главная функция строителей
-var builder_targets;
+let builder_targets;
 function buildersOrder(order,target) {
 	if(!running)return false;
 	if(!func_buildersOrder)return false;
