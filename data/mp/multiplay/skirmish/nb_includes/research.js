@@ -7,7 +7,7 @@
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-var forcedResearch;
+let forcedResearch;
 
 _global.setForcedResearch = function(list) {
 	forcedResearch = list;
