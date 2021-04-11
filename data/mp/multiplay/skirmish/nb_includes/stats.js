@@ -204,7 +204,7 @@ _global.filterDataByFlag = function(data, attr_name, flag) {
 }
 
 _global.filterBodyStatsByUsage = function(usage, armor) {
-	var data;
+	let data;
     if (defined(armor))
         data = filterDataByFlag(bodyStats, 'armor', armor)
     else

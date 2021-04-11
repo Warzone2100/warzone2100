@@ -158,7 +158,7 @@ _global.checkTruckProduction = function() {
 	if (trucks.length < personality.minTrucks || myPower() > personality.maxPower
 		|| (iHaveHover() && hoverTrucksCount < personality.minHoverTrucks)
 	) {
-		var f;
+		let f;
 		f = enumFinishedStructList(structures.factories)[0];
 		if (defined(f))
 			if (structureIdle(f))
