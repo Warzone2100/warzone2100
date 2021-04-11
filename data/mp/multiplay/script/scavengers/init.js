@@ -20,7 +20,7 @@ function produceDroid(fac1) {
 		case 4: buildDroid(fac1, "Firebus", "FireBody", "BaBaProp", null, null, "BabaFlame"); break;
 		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", null, null, "BaBaMG"); break;
 		}
-	}	
+	}
 }
 
 // Regularly check back on our scavs
@@ -46,7 +46,7 @@ function scavtick()
 		{
 			// another way of dealing with lists is to iterate over them
 			// note, you must NOT use the for (... in ...) construct to iterate over an array of objects with properties!
-			for (var i = 0; i < droidlist.length; i++)
+			for (let i = 0; i < droidlist.length; i++)
 			{
 				var droid = droidlist[i];
 				var current = 0;
@@ -55,7 +55,7 @@ function scavtick()
 
 				// Find closest factory; notice that we still have the factory list from earlier, which
 				// saves us a few expensive scripting calls
-				for (var j = 0; j < factorylist.length; j++)
+				for (let j = 0; j < factorylist.length; j++)
 				{
 					var fact = factorylist[j];
 					current = distBetweenTwoPoints(fact.x, fact.y, droid.x, droid.y);
@@ -104,7 +104,7 @@ function eventAttacked(victim, attacker)
 	{
 		lastAttack = gameTime;
 		var droidlist = enumGroup(attackGroup);
-		for (var i = 0; i < droidlist.length; i++)
+		for (let i = 0; i < droidlist.length; i++)
 		{
 			var droid = droidlist[i];
 			if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < 24)
