@@ -308,7 +308,7 @@ function removeThisTimer(timer)
 {
 	if (timer instanceof Array)
 	{
-		for(var i = 0, l = timer.length; i < l; ++i)
+		for (let i = 0, l = timer.length; i < l; ++i)
 		{
 			removeTimer(timer[i]);
 		}
