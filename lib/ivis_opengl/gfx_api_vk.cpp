@@ -3337,12 +3337,7 @@ VkRoot::AcquireNextSwapchainImageResult VkRoot::acquireNextSwapchainImage()
 	}
 	if(acquireNextImageResult.result == vk::Result::eSuboptimalKHR)
 	{
-		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - recreate swapchain");
-		if (createNewSwapchainAndSwapchainSpecificStuff(acquireNextImageResult.result))
-		{
-			return AcquireNextSwapchainImageResult::eRecoveredFromError;
-		}
-		return AcquireNextSwapchainImageResult::eUnhandledFailure;
+		debug(LOG_3D, "vk::Device::acquireNextImageKHR returned eSuboptimalKHR - should probably recreate swapchain (in the future)");
 	}
 
 	currentSwapchainIndex = acquireNextImageResult.value;
@@ -3448,9 +3443,7 @@ void VkRoot::flip(int clearMode)
 	}
 	if(presentResult == vk::Result::eSuboptimalKHR)
 	{
-		debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - recreate swapchain", (int)presentResult);
-		createNewSwapchainAndSwapchainSpecificStuff(presentResult);
-		return; // end processing this flip
+		debug(LOG_3D, "presentKHR returned eSuboptimalKHR (%d) - should probably recreate swapchain (in the future)", (int)presentResult);
 	}
 
 	buffering_mechanism::swap(dev, vkDynLoader); // must be called *before* acquireNextSwapchainImage()
