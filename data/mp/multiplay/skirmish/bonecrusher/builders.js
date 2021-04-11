@@ -206,7 +206,7 @@ function buildersOrder(order,target) {
 	if(order == "AA" && AA_defence.length != 0 && target !== false){
 		var _def = AA_defence[Math.floor(Math.random()*Math.min(AA_defence.length, 3))]; //Случайная из 3 последних
 		debugMsg("Срочно строим ПВО "+_def+" "+target.x+"x"+target.y, 'builders');
-		var _build = 0;
+		let _build = 0;
 		var pos = pickStructLocation(obj,_def,target.x,target.y);
 		if(pos){
 			enumGroup(buildersMain).forEach( function(obj, iter){
@@ -225,7 +225,7 @@ function buildersOrder(order,target) {
 	*/
 	
 	var rnd = Math.floor(Math.random()*4);
-	var rotation = 0;
+	let rotation = 0;
 	switch(rnd){
 		case 0:rotation = 0;break;
 		case 1:rotation = 90;break;
@@ -440,7 +440,7 @@ function defenceQueue(){
 			function(e){
 				if(myDefence.length==0) return true; //Если защитных сооружений вообще нет, добавляем все координаты всех наших качалок
 				if(!getInfoNear(e.x,e.y,'buildDef',5,30000,false).value) return false; //Если не получается построить рядом защиту - запоминаем это на 5 минут и пропускаем
-				var defNum = 0;
+				let defNum = 0;
 				for (const i in myDefence) {
 					if (distBetweenTwoPoints_p(e.x,e.y,myDefence[i].x,myDefence[i].y) < 7) defNum++; //Если к качалке есть близко на 7 тайлов защита, считаем
 					if ( rage == EASY && defNum != 0) return false;
@@ -514,9 +514,9 @@ function oilHunt(obj, nearbase){
 	if((rage == HARD || rage == INSANE) && policy['build'] == 'rich') builder_targets = sortByDistance(builder_targets, obj);
 	
 	//Если строитель рядом с целью
-	
-	var target_range = 7;
-	var feature_try = 3;
+
+	let target_range = 7;
+	let feature_try = 3;
 	if(policy['build'] == 'rich'){
 		target_range = 20;
 		feature_try = 10;

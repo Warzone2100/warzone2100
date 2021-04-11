@@ -140,7 +140,7 @@ function doResearch_old(){
 
 	var labs = enumStruct(me,RESEARCH_LAB);
 	if ( typeof _r === "undefined" ) _r = 0;
-	var _busy = 0;
+	let _busy = 0;
 
 	var _last_r = research_way[_r][research_way[_r].length-1];
 	var _way = getResearch(_last_r);

@@ -96,44 +96,44 @@ include("multiplay/skirmish/"+vernum+"/build-normal.js");
 //Hard CPU-load algorythms
 var weakCPU = false;
 
-var base_range = 20; // В каких пределах работают основные строители (не охотники)
+let base_range = 20; // В каких пределах работают основные строители (не охотники)
 
-var buildersTimer = 25000;		//Триггер для заказа строителей (что бы не выходили пачкой сразу)
-var fixersTimer = 50000;		//Триггер для заказа рем.инженеров
-var scannersTimer = 300000;		//Триггер для заказа сенсоров
-var checkRegularArmyTimer = 10000;
-var reactRegularArmyTimer = 10000;
-var reactWarriorsTimer = 5000;
-var reactPartisanTimer = 20000;
-var fullBaseTimer = 60000;
+let buildersTimer = 25000;		//Триггер для заказа строителей (что бы не выходили пачкой сразу)
+const fixersTimer = 50000;		//Триггер для заказа рем.инженеров
+let scannersTimer = 300000;		//Триггер для заказа сенсоров
+let checkRegularArmyTimer = 10000;
+let reactRegularArmyTimer = 10000;
+let reactWarriorsTimer = 5000;
+const reactPartisanTimer = 20000;
+const fullBaseTimer = 60000;
 
-var minBuilders = 5;
+let minBuilders = 5;
 
-var builderPts = 750; //Необходимость энергии для постройки "лишнего" строителя
+let builderPts = 750; //Необходимость энергии для постройки "лишнего" строителя
 
-var maxConstructors = 15;
+let maxConstructors = 15;
 
-var minPartisans = 7;
-var maxPartisans = 15;
-var minRegular = 10;
-var maxRegular = 50;
-var maxVTOL = 40;
-var minCyborgs = 20;
-var maxCyborgs = 30;
-var maxFixers = 5;
-var maxJammers = 2;
-var maxScouts = 2;
+let minPartisans = 7;
+let maxPartisans = 15;
+let minRegular = 10;
+let maxRegular = 50;
+let maxVTOL = 40;
+let minCyborgs = 20;
+let maxCyborgs = 30;
+let maxFixers = 5;
+let maxJammers = 2;
+const maxScouts = 2;
 
-var maxExtractors = 40;
-var maxGenerators = 10;
+const maxExtractors = 40;
+let maxGenerators = 10;
 
 //Performance limits
-var ordersLimit = 100;
+const ordersLimit = 100;
 
 //functions controller for performance purpose
 let func_buildersOrder = true;
-var func_buildersOrder_timer = 5000+me*100;
-var func_buildersOrder_trigger = 0;
+let func_buildersOrder_timer = 5000+me*100;
+let func_buildersOrder_trigger = 0;
 
 /*
  * 
@@ -180,8 +180,8 @@ var rWay;
 //Массив всех приказов юнитам
 var _globalOrders = [];
 
-var build_rich = 26; //Сколько должно быть рядом нефтеточек, что бы изменить механизм постройки на rich
-var army_rich = 28; //Сколько должно быть занято нефтеточек, что бы изменить механизм армии на rich
+const build_rich = 26; //Сколько должно быть рядом нефтеточек, что бы изменить механизм постройки на rich
+const army_rich = 28; //Сколько должно быть занято нефтеточек, что бы изменить механизм армии на rich
 
 var bc_ally=[]; //Союзные ИИ BoneCrusher-ы
 
@@ -203,14 +203,14 @@ var policy = [];
 var nf = [];
 nf['policy'] = false;
 
-var enemyDist = 0;
+const enemyDist = 0;
 
 var armyPartisans = newGroup();
 var armyRegular = newGroup();
 var targRegular={x:0,y:0};
 var lastImpact=false;
 var pointRegular=false;
-var lastEnemiesSeen = 0;
+let lastEnemiesSeen = 0;
 var armySupport = newGroup();
 var armyCyborgs = newGroup();
 var armyFixers = newGroup();
@@ -226,19 +226,19 @@ var droidsFleet = newGroup();
 var maxFactories, maxFactoriesCyb, maxFactoriesVTOL, maxLabs, maxPads;
 
 //Triggers
-var buildersTrigger = 0;
-var fixersTrigger = 0;
-var scannersTrigger = 0;
-var checkRegularArmyTrigger = 0;
-var reactRegularArmyTrigger = 0;
-var reactWarriorsTrigger = 0;
-var fullBaseTrigger = 0;
-var partisanTrigger = 0;
-var fleetTrigger = 0;
+let buildersTrigger = 0;
+let fixersTrigger = 0;
+let scannersTrigger = 0;
+const checkRegularArmyTrigger = 0;
+let reactRegularArmyTrigger = 0;
+let reactWarriorsTrigger = 0;
+let fullBaseTrigger = 0;
+let partisanTrigger = 0;
+let fleetTrigger = 0;
 
 let berserk = false;
 let seer = false;
-var credit = 0;
+let credit = 0;
 
 let lassat_charged = false;
 
