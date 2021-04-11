@@ -47,7 +47,7 @@
 //;;
 function camSetFactories(factories)
 {
-	for (var flabel in factories)
+	for (const flabel in factories)
 	{
 		camSetFactoryData(flabel, factories[flabel]);
 	}
@@ -296,7 +296,7 @@ function __camBuildDroid(template, structure)
 //cam_eventDroidBuilt (or the mere act of reloading saves).
 function __checkEnemyFactoryProductionTick()
 {
-	for (var flabel in __camFactoryInfo)
+	for (const flabel in __camFactoryInfo)
 	{
 		if (getObject(flabel) !== null && __camFactoryInfo[flabel].enabled === true)
 		{

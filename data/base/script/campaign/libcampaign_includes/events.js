@@ -69,7 +69,7 @@ function cam_eventChat(from, to, message)
 	}
 	if (message === "deity")
 	{
-		for (var blabel in __camEnemyBases)
+		for (const blabel in __camEnemyBases)
 		{
 			camDetectEnemyBase(blabel);
 		}
