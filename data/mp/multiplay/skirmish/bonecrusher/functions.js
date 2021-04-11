@@ -683,7 +683,7 @@ function getNearFreeResources(pos){
 }
 
 function getNumEnemies(){
-	var enemies = 0;
+	let enemies = 0;
 	for (let e = 0; e < maxPlayers; ++e) {
 		if ( allianceExistsBetween(me,e) ) continue;
 		if ( playerSpectator(e) ) continue;
@@ -894,7 +894,7 @@ function removeDuplicates(originalArray, objKey) {
 //Возвращает кол-во производящихся на данный момент типов в заводах.
 function inProduce(type){
 	if(produceTrigger.length == 0) return 0;
-	var _prod = 0;
+	let _prod = 0;
 
 	for (const p in produceTrigger) {
 		if (produceTrigger[p] == type) _prod++;
@@ -1076,8 +1076,8 @@ function intersect_arrays(a, b) {
     var sorted_a = a.concat().sort();
     var sorted_b = b.concat().sort();
     var common = [];
-    var a_i = 0;
-    var b_i = 0;
+    let a_i = 0;
+    let b_i = 0;
 
     while (a_i < a.length
            && b_i < b.length)

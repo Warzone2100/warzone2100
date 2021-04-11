@@ -312,7 +312,7 @@ function targetCyborgs(){
 }
 
 
-var brave = 3;
+const brave = 3;
 
 //Направляем армию
 function pointRegularArmy(army){
