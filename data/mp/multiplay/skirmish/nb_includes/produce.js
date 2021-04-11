@@ -158,15 +158,14 @@ _global.checkTruckProduction = function() {
 	if (trucks.length < personality.minTrucks || myPower() > personality.maxPower
 		|| (iHaveHover() && hoverTrucksCount < personality.minHoverTrucks)
 	) {
-		let f;
-		f = enumFinishedStructList(structures.factories)[0];
+		let f = enumFinishedStructList(structures.factories)[0];
 		if (defined(f))
 			if (structureIdle(f))
 				if (produceTruck(f))
 					return true;
 		if (defined(f))
 			return false;
-		f = enumFinishedStructList(structures.templateFactories)[0];
+		let f = enumFinishedStructList(structures.templateFactories)[0];
 		if (defined(f))
 			if (structureIdle(f))
 				if (produceTemplateFromList(f, truckTemplates))
@@ -176,7 +175,7 @@ _global.checkTruckProduction = function() {
 		return false;
 	var sensors = enumDroid(me, DROID_SENSOR).length;
 	if (withChance(100 - 100 * sensors / personality.maxSensors)) {
-		f = enumFinishedStructList(structures.factories)[0];
+		let f = enumFinishedStructList(structures.factories)[0];
 		if (defined(f))
 			if (structureIdle(f))
 				if (produceTruck(f, sensorTurrets))
