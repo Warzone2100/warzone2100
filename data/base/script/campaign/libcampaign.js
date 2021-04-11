@@ -31,7 +31,7 @@
 	it's a common JS trick -
 
 		(function(global) {
-			var __camPrivateVar; // something like that
+			let __camPrivateVar; // something like that
 		})(this);
 
 	because they would break on savegame-loadgame. So let's just agree
@@ -91,12 +91,12 @@ const AI_POWER = 999999;
 const INCLUDE_PATH = "script/campaign/libcampaign_includes/";
 
 //artifact
-var __camArtifacts;
-var __camNumArtifacts;
+let __camArtifacts;
+let __camNumArtifacts;
 
 //base
-var __camEnemyBases;
-var __camNumEnemyBases;
+let __camEnemyBases;
+let __camNumEnemyBases;
 
 //reinforcements
 const CAM_REINFORCE_NONE = 0;
@@ -104,24 +104,24 @@ const CAM_REINFORCE_GROUND = 1;
 const CAM_REINFORCE_TRANSPORT = 2;
 
 //debug
-var __camMarkedTiles = {};
-var __camCheatMode = false;
-var __camDebuggedOnce = {};
-var __camTracedOnce = {};
+const __camMarkedTiles = {};
+let __camCheatMode = false;
+const __camDebuggedOnce = {};
+const __camTracedOnce = {};
 
 //events
-var __camLastHitTime = 0;
-var __camSaveLoading;
+let __camLastHitTime = 0;
+let __camSaveLoading;
 
 //group
-var __camNewGroupCounter;
-var __camNeverGroupDroids;
+let __camNewGroupCounter;
+let __camNeverGroupDroids;
 
 //hook
-var __camOriginalEvents = {};
+const __camOriginalEvents = {};
 
 //misc
-var __camCalledOnce = {};
+const __camCalledOnce = {};
 
 //nexus
 const DEFENSE_ABSORBED = "defabsrd.ogg";
@@ -136,13 +136,13 @@ const STRUCTURE_NEUTRALIZE = "strutnut.ogg";
 const SYNAPTICS_ACTIVATED = "synplnk.ogg";
 const UNIT_ABSORBED = "untabsrd.ogg";
 const UNIT_NEUTRALIZE = "untnut.ogg";
-var __camLastNexusAttack;
-var __camNexusActivated;
+let __camLastNexusAttack;
+let __camNexusActivated;
 
 //production
-var __camFactoryInfo;
-var __camFactoryQueue;
-var __camPropulsionTypeLimit;
+let __camFactoryInfo;
+let __camFactoryQueue;
+let __camPropulsionTypeLimit;
 
 //tactics
 const CAM_ORDER_ATTACK = 0;
@@ -150,7 +150,7 @@ const CAM_ORDER_DEFEND = 1;
 const CAM_ORDER_PATROL = 2;
 const CAM_ORDER_COMPROMISE = 3;
 const CAM_ORDER_FOLLOW = 4;
-var __camGroupInfo;
+let __camGroupInfo;
 const __CAM_TARGET_TRACKING_RADIUS = 7;
 const __CAM_PLAYER_BASE_RADIUS = 20;
 const __CAM_DEFENSE_RADIUS = 4;
@@ -164,43 +164,43 @@ const SECONDS_IN_MINUTE = 60;
 const MINUTES_IN_HOUR = 60;
 
 //transport
-var __camNumTransporterExits;
-var __camPlayerTransports;
-var __camIncomingTransports;
-var __camTransporterQueue;
-var __camTransporterMessage;
+let __camNumTransporterExits;
+let __camPlayerTransports;
+let __camIncomingTransports;
+let __camTransporterQueue;
+let __camTransporterMessage;
 
 //truck
-var __camTruckInfo;
+let __camTruckInfo;
 
 //victory
 const CAM_VICTORY_STANDARD = "__camVictoryStandard";
 const CAM_VICTORY_PRE_OFFWORLD = "__camVictoryPreOffworld";
 const CAM_VICTORY_OFFWORLD = "__camVictoryOffworld";
 const CAM_VICTORY_TIMEOUT = "__camVictoryTimeout";
-var __camWinLossCallback;
-var __camNextLevel;
-var __camNeedBonusTime;
-var __camDefeatOnTimeout;
-var __camVictoryData;
-var __camRTLZTicker;
-var __camLZCompromisedTicker;
-var __camLastAttackTriggered;
-var __camLevelEnded;
-var __camExtraObjectiveMessage;
-var __camVictoryMessageThrottle;
+let __camWinLossCallback;
+let __camNextLevel;
+let __camNeedBonusTime;
+let __camDefeatOnTimeout;
+let __camVictoryData;
+let __camRTLZTicker;
+let __camLZCompromisedTicker;
+let __camLastAttackTriggered;
+let __camLevelEnded;
+let __camExtraObjectiveMessage;
+let __camVictoryMessageThrottle;
 
 //video
-var __camVideoSequences;
+let __camVideoSequences;
 
 //vtol
-var __camVtolPlayer;
-var __camVtolStartPosition;
-var __camVtolTemplates;
-var __camVtolExitPosition;
-var __camVtolSpawnActive;
-var __camVtolSpawnStopObject;
-var __camVtolExtras;
+let __camVtolPlayer;
+let __camVtolStartPosition;
+let __camVtolTemplates;
+let __camVtolExitPosition;
+let __camVtolSpawnActive;
+let __camVtolSpawnStopObject;
+let __camVtolExtras;
 //////////globals vars end
 
 // A hack to make sure we do not put this variable into the savegame. It is
