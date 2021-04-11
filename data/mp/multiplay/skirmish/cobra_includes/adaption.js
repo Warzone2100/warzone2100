@@ -47,10 +47,10 @@ function countEnemyVTOL(player)
 		var enemies = isDefined(player) ? [player] : findLivingEnemies();
 		var enemyVtolCount = 0;
 
-		for (var x = 0, e = enemies.length; x < e; ++x)
+		for (let x = 0, e = enemies.length; x < e; ++x)
 		{
 			var playerDroids = enumDroid(enemies[x]);
-			for (var c = 0, l = playerDroids.length; c < l; ++c)
+			for (let c = 0, l = playerDroids.length; c < l; ++c)
 			{
 				var prop = playerDroids[c].propulsion;
 				if (prop === "V-Tol" || prop === "Helicopter")

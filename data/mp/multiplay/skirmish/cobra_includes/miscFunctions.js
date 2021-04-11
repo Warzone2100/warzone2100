@@ -70,7 +70,7 @@ function distanceToBase(obj1, obj2)
 
 function addDroidsToGroup(group, droids)
 {
-	for (var i = 0, d = droids.length; i < d; ++i)
+	for (let i = 0, d = droids.length; i < d; ++i)
 	{
 		groupAdd(group, droids[i]);
 	}
@@ -146,7 +146,7 @@ function playerAlliance(ally)
 
 	var players = [];
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (i === me)
 		{
@@ -184,7 +184,7 @@ function findLivingEnemies()
 	function uncached()
 	{
 		var alive = [];
-		for (var x = 0; x < maxPlayers; ++x)
+		for (let x = 0; x < maxPlayers; ++x)
 		{
 	 		if ((x !== me) && !allianceExistsBetween(x, me) && ((countDroid(DROID_ANY, x) > 0) || (enumStruct(x).length > 0)))
 			{
@@ -233,7 +233,7 @@ function getMostHarmfulPlayer()
 			return 0; //If nothing to attack, then attack player 0 (happens only after winning).
 		}
 
-	 	for (var x = 0, c = enemies.length; x < c; ++x)
+	 	for (let x = 0, c = enemies.length; x < c; ++x)
 		{
 	 		if((grudgeCount[enemies[x]] >= 0) && (grudgeCount[enemies[x]] > grudgeCount[mostHarmful]))
 			{
@@ -259,12 +259,12 @@ function initializeGrudgeCounter()
 {
 	grudgeCount = [];
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		grudgeCount.push(0);
 	}
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if ((!allianceExistsBetween(i, me)) && (i !== me))
 		{
@@ -367,7 +367,7 @@ function initCobraGroups()
 	addDroidsToGroup(artilleryGroup, enumDroid(me, DROID_WEAPON).filter(function(obj) { return obj.isCB; }));
 
 	var cons = enumDroid(me, DROID_CONSTRUCT);
-	for (var i = 0, l = cons.length; i < l; ++i)
+	for (let i = 0, l = cons.length; i < l; ++i)
 	{
 		var con = cons[i];
 

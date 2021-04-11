@@ -51,7 +51,7 @@ function shuffleWeaponList(weaps)
 {
 	var weaponList = [];
 
-	for (var i = 0, w = weaps.length; i < w; ++i)
+	for (let i = 0, w = weaps.length; i < w; ++i)
 	{
 		weaponList.push(weaps[i].stat);
 	}
@@ -194,7 +194,7 @@ function choosePersonalityWeapon(type)
 			if (componentAvailable(weaponStats.lasers_AA.weapons[0].stat) && (random(100) <= 50))
 			{
 				var lasers = weaponStats.lasers_AA.weapons;
-				for (var i = lasers.length - 1; i >= 0; --i)
+				for (let i = lasers.length - 1; i >= 0; --i)
 				{
 					var weapObj = lasers[i];
 	 				weaponList.push(weapObj.stat);
@@ -202,7 +202,7 @@ function choosePersonalityWeapon(type)
 			}
 
 			var aa = subPersonalities[personality].antiAir.weapons;
- 			for (var i = aa.length - 1; i >= 0; --i)
+ 			for (let i = aa.length - 1; i >= 0; --i)
 			{
 				var weapObj = aa[i];
  				weaponList.push(weapObj.stat);
@@ -216,7 +216,7 @@ function choosePersonalityWeapon(type)
 			skip = true;
 			var bunkerBusters = weaponStats.rockets_AS.weapons;
 
- 			for (var i = bunkerBusters.length - 1; i >= 0; --i)
+ 			for (let i = bunkerBusters.length - 1; i >= 0; --i)
 			{
 				var weapObj = bunkerBusters[i];
  				weaponList.push(weapObj.stat);
@@ -231,7 +231,7 @@ function choosePersonalityWeapon(type)
 			weaponList = [];
 			var generalAntiCyborgWeapons = weaponStats.machineguns.weapons;
 
- 			for (var i = generalAntiCyborgWeapons.length - 1; i >= 0; --i)
+ 			for (let i = generalAntiCyborgWeapons.length - 1; i >= 0; --i)
 			{
 				var weapObj = generalAntiCyborgWeapons[i];
  				weaponList.push(weapObj.stat);
@@ -245,7 +245,7 @@ function choosePersonalityWeapon(type)
 	else if (type === "VTOL")
 	{
 		weaps = chooseRandomVTOLWeapon();
-		for (var i = weaps.length - 1; i >= 0; --i)
+		for (let i = weaps.length - 1; i >= 0; --i)
 		{
 			weaponList.push(weaps[i].stat);
 		}
@@ -270,7 +270,7 @@ function useHover(weap)
 
 	var useHover = false;
 
-	for (var i = 0, w = weap.length; i < w; ++i)
+	for (let i = 0, w = weap.length; i < w; ++i)
 	{
 		const NAME = weap[i];
 
@@ -442,7 +442,7 @@ function buildCyborg(id, useEngineer)
 
 	if (isDefined(weaponLine))
 	{
-		for (var x = weaponLine.templates.length - 1; x >= 0; --x)
+		for (let x = weaponLine.templates.length - 1; x >= 0; --x)
 		{
 			body = weaponLine.templates[x].body;
 			prop = weaponLine.templates[x].prop;
@@ -489,7 +489,7 @@ function analyzeQueuedSystems()
 	var sens = 0;
 	var reps = 0;
 
-	for (var i = 0, l = fac.length; i < l; ++i)
+	for (let i = 0, l = fac.length; i < l; ++i)
 	{
 		var virDroid = getDroidProduction(fac[i]);
 		if (virDroid !== null)
@@ -557,7 +557,7 @@ function produce()
 		systems.truck) < minTruckCount());
 
 	//Loop through factories in the order the personality likes.
-	for (var i = 0; i < 3; ++i)
+	for (let i = 0; i < 3; ++i)
 	{
 		var facType = subPersonalities[personality].factoryOrder[i];
 		var fac = enumStruct(me, facType);
@@ -567,7 +567,7 @@ function produce()
 			{
 				continue;
 			}
-			for (var x = 0, l = fac.length; x < l; ++x)
+			for (let x = 0, l = fac.length; x < l; ++x)
 			{
 				const FC = fac[x];
 				if (!(FC && FC.status === BUILT))
