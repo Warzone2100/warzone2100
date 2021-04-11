@@ -24,7 +24,7 @@ _global.iHaveVtol = function() {
 }
 
 _global.iHaveArty = function() {
-	for (var stat in weaponStats)
+	for (const stat in weaponStats)
 		for (var i = 0; i < weaponStats[stat].defenses.length; ++i)
 			if (weaponStats[stat].defenses[i].defrole === DEFROLE.ARTY)
 				if (countStruct(weaponStats[stat].defenses[i].stat) > 0)
@@ -66,7 +66,7 @@ _global.structListLimit = function(list) {
 }
 
 _global.guessWeaponRole = function (name) {
-	for (var stat in weaponStats) {
+	for (const stat in weaponStats) {
 		if (
 			weaponStats[stat].weapons.someProperty("stat", name) ||
 			weaponStats[stat].vtols.someProperty("stat", name) ||
@@ -79,7 +79,7 @@ _global.guessWeaponRole = function (name) {
 
 function guessWeaponMicro(name) {
 	function uncached() {
-		for (var stat in weaponStats)
+		for (const stat in weaponStats)
 		{
 			if (weaponStats[stat].weapons.someProperty("stat", name))
 				return weaponStats[stat].micro;
