@@ -189,7 +189,7 @@ function attackEnemy()
 
 	if (groupSizes[attackGroup] > MIN_GROUP_SIZE)
 	{
-		var isDroid = false;
+		let isDroid = false;
 		var attackers = enumGroup(attackGroup);
 		//log("-- Military offensive --");
 		// Attack! Find a random enemy, since that is more fun.
@@ -293,7 +293,7 @@ function attackEnemy()
 //Use a slim version of the hover map checking code from Cobra AI.
 function isHoverMap()
 {
-	var hoverMap = false;
+	let hoverMap = false;
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{

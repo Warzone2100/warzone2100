@@ -56,7 +56,7 @@ function findIdleTrucks(obj)
 // Demolish object.
 function demolishThis(object)
 {
-	var success = false;
+	let success = false;
 	var droidList = findIdleTrucks(object);
 
 	for (let i = 0, d = droidList.length; i < d; ++i)
@@ -84,7 +84,7 @@ function grabTrucksAndBuild(structure, maxBlockingTiles)
 	}
 
 	var droidList = findIdleTrucks();
-	var found = false;
+	let found = false;
 
 	for (let i = 0, d = droidList.length; i < d; ++i)
 	{
@@ -107,7 +107,7 @@ function checkLocalJobs()
 {
 	var trucks = findIdleTrucks();
 	var freeTrucks = trucks.length;
-	var success = false;
+	let success = false;
 	var structlist = enumStruct(me).filter(function(obj) {
 		return (obj.status !== BUILT &&
 			obj.stattype !== RESOURCE_EXTRACTOR &&
@@ -198,7 +198,7 @@ function lookForOil()
 	var oils = enumFeature(-1, OIL_RES_STAT).sort(sortByDistToBase); // grab closer oils first;
 	var bestDroid = null;
 	var bestDist = 99999;
-	var success = false;
+	let success = false;
 	//log("looking for oil... " + oils.length + " available");
 
 	for (let i = 0, oilLen = oils.length; i < oilLen; ++i)
@@ -623,7 +623,7 @@ function maintenance()
 	var struct = null;
 	var module = "";
 	var structList = [];
-	var success = false;
+	let success = false;
 	var modList = [
 		{"mod": "A0PowMod1", "amount": 1, "structure": POW_GEN_STAT},
 		{"mod": "A0FacMod1", "amount": 2, "structure": FACTORY_STAT},
