@@ -279,7 +279,7 @@ function checkForPowGen()
 
 			//Get the truck that is building the generator and store its ID.
 			var trucks = enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT);
-			for (var i = 0, len = trucks.length; i < len; ++i)
+			for (let i = 0, len = trucks.length; i < len; ++i)
 			{
 				var truck = trucks[i];
 				if (truck.order === DORDER_BUILD)
@@ -322,7 +322,7 @@ function checkHelpBuild()
 	if (tutState === 6)
 	{
 		var objects = enumDroid(CAM_HUMAN_PLAYER);
-		for (var i = 0, l = objects.length; i < l; ++i)
+		for (let i = 0, l = objects.length; i < l; ++i)
 		{
 			var obj = objects[i];
 			if (obj.type === DROID &&
@@ -410,7 +410,7 @@ function eventSelectionChanged(objects)
 	if (tut0 || tut5)
 	{
 		//Check if they selected a truck.
-		for (var i = 0, l = objects.length; i < l; ++i)
+		for (let i = 0, l = objects.length; i < l; ++i)
 		{
 			var obj = objects[i];
 			if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)

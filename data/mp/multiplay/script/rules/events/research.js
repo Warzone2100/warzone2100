@@ -2,7 +2,7 @@ function eventResearched(research, structure, player)
 {
 	//if (research.name == "") debug("RESEARCH : " + research.fullname + "(" + research.name + ") for " + player);
 	// iterate over all results
-	for (var i = 0; i < research.results.length; i++)
+	for (let i = 0; i < research.results.length; i++)
 	{
 		var v = research.results[i];
 		//if (research.name == "") debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterval=" + v['filterValue']);
@@ -19,7 +19,7 @@ function eventResearched(research, structure, player)
 			if (Stats[ctype][cname][parameter] instanceof Array)
 			{
 				var dst = Upgrades[player][ctype][cname][parameter].slice();
-				for (var x = 0; x < dst.length; x++)
+				for (let x = 0; x < dst.length; x++)
 				{
 					dst[x] += Math.ceil(Stats[ctype][cname][parameter][x] * v['value'] / 100);
 				}

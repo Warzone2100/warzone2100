@@ -13,7 +13,7 @@ function checkEndConditions()
 		/* If teams enabled check if all team members have lost  */
 		if (alliancesType == ALLIANCES_TEAMS || alliancesType == ALLIANCES_UNSHARED)
 		{
-			for (var playnum = 0; playnum < maxPlayers; playnum++)
+			for (let playnum = 0; playnum < maxPlayers; playnum++)
 			{
 				if (playnum != selectedPlayer && allianceExistsBetween(selectedPlayer, playnum))
 				{
@@ -40,7 +40,7 @@ function checkEndConditions()
 	var gamewon = true;
 
 	// check if all enemies defeated
-	for (var playnum = 0; playnum < maxPlayers; playnum++)
+	for (let playnum = 0; playnum < maxPlayers; playnum++)
 	{
 		if (playnum != selectedPlayer && !allianceExistsBetween(selectedPlayer, playnum))	// checking enemy player
 		{

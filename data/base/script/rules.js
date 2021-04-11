@@ -15,7 +15,7 @@ function reticuleManufactureCheck()
 	var structureComplete = false;
 	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
-	for (var i = 0, len = facs.length; i < len; ++i)
+	for (let i = 0, len = facs.length; i < len; ++i)
 	{
 		var facType = facs[i];
 		var offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
@@ -23,7 +23,7 @@ function reticuleManufactureCheck()
 
 		if (offWorldFacs !== null)
 		{
-			for (var j = 0, len2 = offWorldFacs.length; j < len2; ++j)
+			for (let j = 0, len2 = offWorldFacs.length; j < len2; ++j)
 			{
 				if (offWorldFacs[j].status === BUILT)
 				{
@@ -34,7 +34,7 @@ function reticuleManufactureCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapFacs.length; j < len2; ++j)
+			for (let j = 0, len2 = onMapFacs.length; j < len2; ++j)
 			{
 				if (onMapFacs[j].status === BUILT)
 				{
@@ -65,7 +65,7 @@ function reticuleResearchCheck()
 	var structureComplete = false;
 	var labs = [RESEARCH_LAB,];
 
-	for (var i = 0, len = labs.length; i < len; ++i)
+	for (let i = 0, len = labs.length; i < len; ++i)
 	{
 		var resType = labs[i];
 		var offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
@@ -73,7 +73,7 @@ function reticuleResearchCheck()
 
 		if (offWorldLabs !== null)
 		{
-			for (var j = 0, len2 = offWorldLabs.length; j < len2; ++j)
+			for (let j = 0, len2 = offWorldLabs.length; j < len2; ++j)
 			{
 				if (offWorldLabs[j].status === BUILT)
 				{
@@ -84,7 +84,7 @@ function reticuleResearchCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapLabs.length; j < len2; ++j)
+			for (let j = 0, len2 = onMapLabs.length; j < len2; ++j)
 			{
 				if (onMapLabs[j].status === BUILT)
 				{
@@ -127,7 +127,7 @@ function reticuleDesignCheck()
 	var structureComplete = false;
 	var hqs = [HQ,];
 
-	for (var i = 0, len = hqs.length; i < len; ++i)
+	for (let i = 0, len = hqs.length; i < len; ++i)
 	{
 		var hqType = hqs[i];
 		var offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
@@ -135,7 +135,7 @@ function reticuleDesignCheck()
 
 		if (offWorldHq !== null)
 		{
-			for (var j = 0, len2 = offWorldHq.length; j < len2; ++j)
+			for (let j = 0, len2 = offWorldHq.length; j < len2; ++j)
 			{
 				if (offWorldHq[j].status === BUILT)
 				{
@@ -146,7 +146,7 @@ function reticuleDesignCheck()
 		}
 		if (!structureComplete)
 		{
-			for (var j = 0, len2 = onMapHq.length; j < len2; ++j)
+			for (let j = 0, len2 = onMapHq.length; j < len2; ++j)
 			{
 				if (onMapHq[j].status === BUILT)
 				{
@@ -287,7 +287,7 @@ function setLimits()
 	setDroidLimit(selectedPlayer, 10, DROID_COMMAND);
 	setDroidLimit(selectedPlayer, 15, DROID_CONSTRUCT);
 
-	for (var i = 0; i < maxPlayers; ++i)
+	for (let i = 0; i < maxPlayers; ++i)
 	{
 		setStructureLimits("A0PowerGenerator", 5, i);
 		setStructureLimits("A0ResourceExtractor", 200, i);
@@ -414,7 +414,7 @@ function eventResearched(research, structure, player)
 {
 	//debug("RESEARCH : " + research.fullname + "(" + research.name + ") for " + player);
 	// iterate over all results
-	for (var i = 0; i < research.results.length; i++)
+	for (let i = 0; i < research.results.length; i++)
 	{
 		var v = research.results[i];
 		//debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterparam=" + v['filterParameter']);
