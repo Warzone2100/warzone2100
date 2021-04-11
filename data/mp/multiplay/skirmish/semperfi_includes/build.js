@@ -170,7 +170,7 @@ function scanAndDefendPosition(structure, droid)
 	//Try a sensor tower
 	if (random(100) < 67 && structs.length < 5)
 	{
-		var sensor;
+		let sensor;
 		for (let i = SENSOR_TOWERS.length - 1; i > -1; --i)
 		{
 			var sen = SENSOR_TOWERS[i];
@@ -196,7 +196,7 @@ function lookForOil()
 	const UNSAFE_AREA_RANGE = 7;
 	var droids = enumGroup(oilBuilders);
 	var oils = enumFeature(-1, OIL_RES_STAT).sort(sortByDistToBase); // grab closer oils first;
-	var bestDroid = null;
+	let bestDroid = null;
 	let bestDist = 99999;
 	let success = false;
 	//log("looking for oil... " + oils.length + " available");
@@ -273,8 +273,8 @@ function returnDefense(type)
 	}
 
 	const ELECTRONIC_CHANCE = 45;
-	var defenses;
-	var bestDefense;
+	let defenses;
+	let bestDefense;
 
 	if (type === 0 || !isStructureAvailable(artilleryDefenses[artilleryDefenses.length - 1]))
 	{
@@ -620,7 +620,7 @@ function maintenance()
 	}
 	//log("Maintenance check");
 	const MIN_POWER_FOR_MODULE = -40;
-	var struct = null;
+	let struct = null;
 	var module = "";
 	var structList = [];
 	let success = false;
