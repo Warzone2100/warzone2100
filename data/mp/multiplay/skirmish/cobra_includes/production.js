@@ -153,7 +153,7 @@ function chooseRandomVTOLWeapon()
 //Also cyborgs will not return the actual stat list with this function due to how they are built.
 function choosePersonalityWeapon(type)
 {
-	var weaps;
+	let weaps;
 	var weaponList = [];
 
 	if (!isDefined(type))
@@ -330,7 +330,7 @@ function pickTankBody()
 	//Early-game now has a focus on small or medium body and will then shift
 	//a preference towards heavy or medium bodies (if power is relatively low).
 	//This helps keep things competitive among a player rushing with small/medium bodies.
-	var body;
+	let body;
 	const bodySwitchTime = 900000;
 
 	if (gameTime < bodySwitchTime && random(100) < 80)
@@ -393,7 +393,7 @@ function buildSys(id, weap)
 		weap = ARTILLERY_SENSORS;
 	}
 
-	var body;
+	let body;
 	if (gameTime > 600000)
 	{
 		body = (random(100) < 80) ? VTOL_BODY : TANK_BODY;

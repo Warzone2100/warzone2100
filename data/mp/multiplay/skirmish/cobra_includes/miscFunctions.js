@@ -95,7 +95,7 @@ function rangeStep(player)
 
 		var highOil = highOilMap();
 		var targets = [];
-		var derr;
+		let derr;
 		var struc = findNearestEnemyStructure(player);
 		var droid = findNearestEnemyDroid(player);
 
@@ -283,7 +283,7 @@ function donateFromGroup(from, group)
 	if (isDefined(group))
 	{
 		const MIN_HEALTH = 80;
-		var chosenGroup;
+		let chosenGroup;
 
 		switch (group)
 		{

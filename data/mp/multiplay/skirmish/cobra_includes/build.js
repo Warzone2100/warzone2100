@@ -87,7 +87,7 @@ function conCanHelp(mydroidID, bx, by)
 //Return all idle constructs object IDs for a given group.
 function findIdleTrucks(group)
 {
-	var builders;
+	let builders;
 	var droidlist = [];
 
 	if (!isDefined(group))
@@ -159,7 +159,7 @@ function fastDefendSpot(structure, droid)
 	//Try a sensor tower
 	if (gameTime > 900000 && random(100) < 67 && structs.length < 5)
 	{
-		var sensor;
+		let sensor;
 		//const CB_TOWER = "Sys-CB-Tower01";
 		const TOWERS = [ "Sys-SensoTowerWS", "Sys-SensoTower02" ];
 		for (let i = 0, len = TOWERS.length; i < len; ++i)
@@ -263,7 +263,7 @@ function buildStructure(droid, stat, defendThis, blocking)
 		blocking = 0;
 	}
 
-	var loc;
+	let loc;
 	if (droid)
 	{
 		if (isDefined(defendThis))
@@ -405,7 +405,7 @@ function lookForOil()
 
 	for (let i = 0, oilLen = oils.length; i < oilLen; i++)
 	{
-		var bestDroid;
+		let bestDroid;
 		var bestDist = Infinity;
 		var oil = oils[i];
 
@@ -469,7 +469,7 @@ function returnDefense(type)
 	var standardDefenses = subPersonalities[personality].primaryWeapon.defenses;
 	var artilleryDefenses = subPersonalities[personality].artillery.defenses;
 	var defenses = (type === 0) ? artilleryDefenses.concat(standardDefenses) : standardDefenses.concat(artilleryDefenses);
-	var bestDefense;
+	let bestDefense;
 
 	//Choose a random electronic warfare defense if possible.
 	if (random(100) < ELECTRONIC_CHANCE)
@@ -928,8 +928,8 @@ function maintenance(group)
 	var isNTW = highOilMap();
 	var minModulePower = (getMultiTechLevel() === 1) ? -SUPER_LOW_POWER : -200;
 
-	var modList;
-	var struct = null;
+	let modList;
+	let struct = null;
 	var module = "";
 	if (isNTW)
 	{

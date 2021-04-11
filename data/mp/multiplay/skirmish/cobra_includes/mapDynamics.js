@@ -108,7 +108,7 @@ function mapOilLevel()
 {
 	function uncached()
 	{
-		var str;
+		let str;
 		var perPlayer = averageOilPerPlayer();
 		if (perPlayer <= 10)
 		{
