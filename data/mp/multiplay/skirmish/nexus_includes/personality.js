@@ -37,7 +37,7 @@ function findPersonalityByType(type)
 		type = "land";
 	}
 
-	for (var i in nexusBranch)
+	for (const i in nexusBranch)
 	{
 		if (nexusBranch[i].type === type)
 		{
@@ -50,7 +50,7 @@ function findPersonalityByType(type)
 
 function isNexusPersonality(msg)
 {
-	for (var personality in nexusBranch)
+	for (const personality in nexusBranch)
 	{
 		if (nexusBranch[personality].name === msg)
 		{
