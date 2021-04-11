@@ -18,7 +18,7 @@ function checkIfSeaMap()
 
 				//Check if it is a map 'spotter' pit
 				//Cyborgs will turn off in divided maps with a physical barrier still
-				var temp = 0;
+				let temp = 0;
 				for (let t = 0; t < maxPlayers; ++t)
 				{
 					if (!propulsionCanReach("hover01", startPositions[i].x, startPositions[i].y, startPositions[t].x, startPositions[t].y))
@@ -89,7 +89,7 @@ function averageOilPerPlayer()
 {
 	function uncached()
 	{
-		var players = 0;
+		let players = 0;
 		//maxPlayers is useless here in case there are some empty slots.
 		for (let i = 0; i < maxPlayers; ++i)
 		{

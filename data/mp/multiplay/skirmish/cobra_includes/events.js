@@ -167,7 +167,7 @@ function eventAttacked(victim, attacker)
 	//Custom SemperFi-JS's localized regrouping code to be used to retreat away from highly outnumbered contests.
 	if (victim.type === DROID && victim.player === me)
 	{
-		var nearbyScavs = 0;
+		let nearbyScavs = 0;
 		var nearbyEnemies = enumRange(victim.x, victim.y, SCAV_ATTACKER ? (GROUP_SCAN_RADIUS * 0.75) : GROUP_SCAN_RADIUS, ENEMIES, false);
 		if (isVTOL(victim))
 		{

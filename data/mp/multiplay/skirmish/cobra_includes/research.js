@@ -106,7 +106,7 @@ function evalResearch(lab, list)
 // Funky time magic that seems to yield good times to allow research of non-grey bodies.
 function timeToResearchAdvancedBody()
 {
-	var time = 0;
+	let time = 0;
 
 	switch (getMultiTechLevel())
 	{

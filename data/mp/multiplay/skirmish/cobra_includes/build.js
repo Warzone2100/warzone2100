@@ -474,7 +474,7 @@ function returnDefense(type)
 	//Choose a random electronic warfare defense if possible.
 	if (random(100) < ELECTRONIC_CHANCE)
 	{
-		var avail = 0;
+		let avail = 0;
 		for (let i = 0, t = ELECTRONIC_DEFENSES.length; i < t; ++i)
 		{
 			if(isStructureAvailable(ELECTRONIC_DEFENSES[i]))
@@ -745,7 +745,7 @@ function factoryBuildOrder()
 
 		var derrNum = countStruct(structures.derrick);
 		var facNum = countStruct(fac);
-		var allowedAmount = 0;
+		let allowedAmount = 0;
 
 		if (derrNum >= 20)
 		{
@@ -785,7 +785,7 @@ function researchBuildOrder()
 
 	if (!researchComplete && labs < MAX_LAB_COUNT)
 	{
-		var amount = 3;
+		let amount = 3;
 		var derrCount = countStruct(structures.derrick);
 
 		if (derrCount >= 10)
@@ -845,7 +845,7 @@ function buildSpecialStructures()
 //Build the minimum repairs and any vtol pads.
 function buildExtras()
 {
-	var needVtolPads = Math.floor(1.5 * countStruct(structures.vtolPad)) < enumGroup(vtolGroup).length;
+	const needVtolPads = Math.floor(1.5 * countStruct(structures.vtolPad)) < enumGroup(vtolGroup).length;
 	if (needVtolPads && buildStuff(structures.vtolPad))
 	{
 		return true;
