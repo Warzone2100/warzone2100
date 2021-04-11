@@ -191,7 +191,7 @@ function produceDroids(){
 	}
 */
 
-	var forceproduce = false;
+	let forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
 		for (let e = 0; e < maxPlayers; ++e) {
@@ -239,8 +239,8 @@ function produceCyborgs(){
 		}
 		return;
 	}
-	
-	var forceproduce = false;
+
+	let forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
 		for (let e = 0; e < maxPlayers; ++e) {
@@ -284,8 +284,8 @@ function produceVTOL(){
 	var vtol_factories = vtol_factory.filter(function(e){if(e.status == BUILT && structureIdle(e))return true;return false;});
 	
 	if(vtol_factories.length == 0) return;
-	
-	var forceproduce = false;
+
+	let forceproduce = false;
 	if(berserk){
 		var enemyarmy = [];
 		for (let e = 0; e < maxPlayers; ++e) {

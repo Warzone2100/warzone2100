@@ -131,7 +131,7 @@ var maxGenerators = 10;
 var ordersLimit = 100;
 
 //functions controller for performance purpose
-var func_buildersOrder = true;
+let func_buildersOrder = true;
 var func_buildersOrder_timer = 5000+me*100;
 var func_buildersOrder_trigger = 0;
 
@@ -150,14 +150,14 @@ const DORDER_NONE = 0;
 
 // --- TRIGGERS --- \\
 
-var fullBase = false;
-var earlyGame = true;
-var running = false;	//Работаем?
+let fullBase = false;
+let earlyGame = true;
+let running = false;	//Работаем?
 
 var produceTrigger=[];
 
-var armyToPlayer = false;	//Передавать всю новую армию игроку №№
-var vtolToPlayer = false;
+let armyToPlayer = false;	//Передавать всю новую армию игроку №№
+let vtolToPlayer = false;
 
 
 // --- VARIABLES --- \\
@@ -236,11 +236,11 @@ var fullBaseTrigger = 0;
 var partisanTrigger = 0;
 var fleetTrigger = 0;
 
-var berserk = false;
-var seer = false;
+let berserk = false;
+let seer = false;
 var credit = 0;
 
-var lassat_charged = false;
+let lassat_charged = false;
 
 
 var eventsRun=[];

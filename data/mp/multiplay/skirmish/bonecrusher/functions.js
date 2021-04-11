@@ -429,7 +429,7 @@ function gameStop(condition){
 }
 
 function playerLoose(player){
-	var loose = false;
+	let loose = false;
 	if(enumStruct(player,"A0LightFactory").length == 0
 		&& enumDroid(player, DROID_CONSTRUCT).length == 0
 		&& enumStruct(player,"A0CyborgFactory").length == 0
@@ -438,7 +438,7 @@ function playerLoose(player){
 }
 
 function playerSpectator(player){
-	var loose = false;
+	let loose = false;
 	if( ( enumStruct(player, "A0Sat-linkCentre").length == 1 || enumStruct(player, "A0CommandCentre").length == 1 )
 		&& enumStruct(player,"A0LightFactory").length == 0
 		&& enumStruct(player,"A0CyborgFactory").length == 0
@@ -945,7 +945,7 @@ function attackObjects(targets, warriors, num, scouting){
 		for (const n in warriors) {
 			t++;
 			if ( i == targets.length ) return true;
-			var busy = false;
+			let busy = false;
 			for (const j in targets) {
 				if ( distBetweenTwoPoints_p ( targets[j].x,targets[j].y,warriors[n].x,warriors[n].y ) < 7 ) {
 					if(scouting) orderDroidLoc_p(warriors[n], DORDER_SCOUT, targets[j].x, targets[j].y);
