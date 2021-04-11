@@ -54,7 +54,6 @@ void main()
 	if (hasNormalmap != 0) {
 		vec3 normalFromMap = texture(TextureNormal, uv).xyz;
 		N = normalize(normalFromMap * 2.0 - 1.0);
-		N.y = -N.y;
 	} else {
 		N = vec3(0,0,1); // in tangent space so normal to xy plane
 	}
@@ -64,9 +63,10 @@ void main()
 	// Gaussian specular term computation
 	vec3 H = normalize(halfVec);
 	float angle = acos(dot(H, N));
-	float exponent = angle / 0.2;
+	float exponent = angle / 0.5; // shininess 0.2 is too small for dry and dirty terrain
 	exponent = -(exponent * exponent);
-	float gaussianTerm = exp(exponent);
+	float gaussianTerm = exp(exponent) * float(lambertTerm > 0);
+
 	vec4 gloss;
 	if (hasSpecularmap != 0) {
 		gloss = texture(TextureSpecular, uv);

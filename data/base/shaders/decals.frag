@@ -48,7 +48,6 @@ out vec4 FragColor;
 void main()
 {
 	vec3 N = normalize(texture(TextureNormal, uv_tex).xyz * 2.0 - 1.0);
-	N.y = -N.y;
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
 
@@ -57,7 +56,7 @@ void main()
 	float angle = acos(dot(H, N));
 	float exponent = angle / 0.2;
 	exponent = -(exponent * exponent);
-	float gaussianTerm = exp(exponent);
+	float gaussianTerm = exp(exponent) * float(lambertTerm > 0);
 	vec4 gloss = texture(TextureSpecular, uv_tex);
 
 	vec4 texColor = texture(tex, uv_tex);
