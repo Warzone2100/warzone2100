@@ -334,8 +334,8 @@ _global.buildDefenses = function() {
 }
 
 function listOutdatedDefenses() {
-	for (var path in weaponStats) {
-		for (var role in DEFROLE) {
+	for (const path in weaponStats) {
+		for (const role in DEFROLE) {
 			var list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
 			for (var i = 0; i < list.length - 2; ++i)
 				if (isAvailable(list[i + 2])) {
