@@ -21,7 +21,7 @@ _global.withChance = function distance(chancePercent) {
 //		distance(x,y, obj)
 //		distance(obj,x,y)
 _global.distance = function distance(obj1, obj2, obj3, obj4) {
-	var x1, x2, y1, y2;
+	let x1, x2, y1, y2;
 	if (defined(obj1.x)) {
 		x1 = obj1.x;
 		y1 = obj1.y;
@@ -103,7 +103,7 @@ Array.prototype.addArray = function(arr) {
 
 // returns a random property of an object
 _global.randomItem = function(obj) {
-    var ret;
+    let ret;
     let count = 0;
     for (const i in obj)
         if (Math.random() < 1/++count)

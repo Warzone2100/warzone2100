@@ -7,7 +7,7 @@
  *
  */
 
-var personality;
+let personality;
 
 include(NB_INCLUDES + "math.js");
 include(NB_INCLUDES + "intensity.js");

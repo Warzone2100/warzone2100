@@ -90,7 +90,7 @@ function produceTank(factory) {
             filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.KINETIC)
 		);
     }
-    var propulsions;
+    let propulsions;
 	var ret = scopeRatings();
 	var rnd = random(ret.land + ret.sea);
 	if (!defined(rnd)) // we need only vtols?

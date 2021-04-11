@@ -15,7 +15,7 @@ _global.fireLassat = function(structure) {
 	enumLivingPlayers().filter(isEnemy).forEach(function(i) {
 		list = list.concat(enumStruct(i), enumDroid(i));
 	});
-	var maxIdx, maxPrice = 0;
+	let maxIdx, maxPrice = 0;
 	list.forEach(function(obj, idx) {
 		var price = enumRange(obj.x, obj.y, lassatSplash / 2, ENEMIES, false).reduce(function(prev, curr) { return prev + curr.cost; }, 0);
 		if (price > maxPrice) {

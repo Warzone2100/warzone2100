@@ -85,7 +85,7 @@ function buildBasicStructure(statlist, importance) {
 		return BUILDRET.FAILURE;
 	// choose structure type (out of the statlist),
 	// together with suitable location
-	var idx, loc, avail = false;
+	let idx, loc, avail = false;
 	for (let i = 0; i < statlist.length; ++i)
 		if (isAvailable(statlist[i])) {
 			avail = true;
