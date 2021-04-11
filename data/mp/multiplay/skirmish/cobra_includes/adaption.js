@@ -126,8 +126,8 @@ function adaptToMap()
 	const HIGH_TECH_LEVEL = getMultiTechLevel() >= 2;
 	const FRIEND_COUNT = playerAlliance(true).length;
 	var highOil = highOilMap();
-	var personal;
-	var chosen;
+	let personal;
+	let chosen;
 
 	//Map to allow a higher chance for a specific personality to be chosen.
 	if (HIGH_TECH_LEVEL || highOil)

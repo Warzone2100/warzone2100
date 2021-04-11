@@ -678,9 +678,9 @@ function baseShuffleDefensePattern()
 	];
 
 	const MAX_ATTEMPTS = 100;
-	var sector;
-	var x;
-	var y;
+	let sector;
+	let x;
+	let y;
 	let attempts = 0;
 
 	do
