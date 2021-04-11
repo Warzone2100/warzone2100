@@ -876,7 +876,7 @@ function getEnemyProduction(){
 function removeDuplicates(originalArray, objKey) {
 	var trimmedArray = [];
 	var values = [];
-	var value;
+	let value;
 
 	for (let i = 0; i < originalArray.length; i++) {
 		value = originalArray[i][objKey];
@@ -1029,7 +1029,7 @@ var isFixVTOL = function(obj) {
 
 //from: http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
 function shuffle(a) {
-	var j, x;
+	let j, x;
 	for (let i = a.length; i; i--) {
 		j = Math.floor(Math.random() * i);
 		x = a[i - 1];

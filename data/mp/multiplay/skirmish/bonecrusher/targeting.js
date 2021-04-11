@@ -469,7 +469,7 @@ function targetRegularRich(target, victim){
 	reactRegularArmyTrigger = gameTime + reactRegularArmyTimer;
 	
 	var help = [];
-	var stopPoint;
+	let stopPoint;
 	if(ally.length != 0) help = getEnemyNearAlly();
 	if(help.length == 0){
 		help = getEnemyCloseBase();
