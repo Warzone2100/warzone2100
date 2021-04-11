@@ -25,7 +25,7 @@ function adaptVote(our, their, verbose) {
 	if (verbose)
 		return rating.map(function(val) { return (val + 1) / 2; });
 	var maxRating = -Infinity;
-	var maxIdx = 0;
+	let maxIdx = 0;
 	for (let i = 0; i < l; ++i)
 		if (rating[i] > maxRating) {
 			maxRating = rating[i];
@@ -119,7 +119,7 @@ var myStats = new MyStat;
 var myStatsTemp = new MyStat;
 
 var stack = [];
-var MAX_PER_CYCLE = 20;
+const MAX_PER_CYCLE = 20;
 
 function canReachBy(scope, location) {
 	switch (scope) {
