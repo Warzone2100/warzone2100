@@ -326,7 +326,7 @@ function placeNear(x, y, w, h, pad, scatter) {
 	}
 	/*
 	// Place nearby.
-	var xy;
+	let xy;
 	if (xy = consider(x, y)) {
 		return xy;
 	}
@@ -512,7 +512,7 @@ function placeStuff(regions, startPos) {
 	return {structures: structures, droids: droids, features: features};
 }
 
-var stuff = null;
+let stuff = null;
 while (stuff === null) {
 	occupied = makeOccupied();
 	var startPos = genStartPos(fields, regions);

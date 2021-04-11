@@ -431,8 +431,8 @@ function placeStuff(terrain) {
 	return {structures: structures, droids: droids, features: features};
 }
 
-var terrain;
-var stuff = null;
+let terrain;
+let stuff = null;
 while (stuff === null) {
 	terrain = genTerrain();
 	stuff = placeStuff(terrain);
