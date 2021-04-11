@@ -167,7 +167,7 @@ function grabTrucksAndBuild(stat, location, tileRange, maxBlockingTiles, group)
 	var loc2;
 	var closestDroid;
 	var closestDistance = Infinity;
-	var numHelpDroids = 0;
+	let numHelpDroids = 0;
 	var droids = enumGroup(group);
 
 	for (let i = 0, l = droids.length; i < l; ++i)
@@ -230,7 +230,7 @@ function grabTrucksAndBuild(stat, location, tileRange, maxBlockingTiles, group)
 
 function buildDerrick()
 {
-	var numBusy = 0;
+	let numBusy = 0;
 	var droids = enumGroup(groups.oilBuilders);
 	var drLen = droids.length;
 	droids.forEach(function(d) {
@@ -320,7 +320,7 @@ function getBestRandomDefense(array, range)
 	}
 
 	var count = len - 1;
-	var count2 = 0;
+	let count2 = 0;
 	var defenses = [];
 
 	while ((count2 < range) && (count >= 0))
@@ -750,7 +750,7 @@ function numBuildSameBuilding(x, y)
 {
 	return false;
 	/*
-	var numSameBuilding = 0;
+	let numSameBuilding = 0;
 	var trucks = enumGroup(groups.baseBuilders);
 	for (let i = 0, len = trucks.length; i < len; ++i)
 	{

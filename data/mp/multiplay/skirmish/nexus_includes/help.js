@@ -57,7 +57,7 @@ function defendingLocation()
 //move only ever is DORDER_MOVE when it is 'me' defending my base.
 function defendLocation(x, y, timeout, move)
 {
-	var radius = 7; //was 15
+	const radius = 7; //was 15
 
 	defendInfo.location.x = x;
 	defendInfo.location.y = y;
@@ -124,7 +124,7 @@ function attemptToHelp(player, x, y)
 
 function helpPlayer(player, x, y)
 {
-	var timeTravel = 0;
+	let timeTravel = 0;
 	var attackers = enumGroup(groups.attackers);
 
 	if (!defined(player))

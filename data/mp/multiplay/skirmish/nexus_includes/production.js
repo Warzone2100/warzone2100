@@ -79,7 +79,7 @@ function produceConstructors()
 	}
 
 	var totalTrucks = getVirtualSystemCount().constructs + enumDroid(me, DROID_CONSTRUCT).length;
-	var occupiedFactories = 0;
+	let occupiedFactories = 0;
 	let success = false;
 	var factories = enumStruct(me, BASE_STRUCTURES.factories);
 	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
@@ -176,7 +176,7 @@ function getBestRandomTemplate(type, offset)
 
 	var templates = [];
 	var count = what.length - 1;
-	var count2 = 0;
+	let count2 = 0;
 
 	if (offset > count)
 	{
@@ -190,7 +190,7 @@ function getBestRandomTemplate(type, offset)
 
 		if (componentAvailable(tmp.body) && componentAvailable(tmp.prop))
 		{
-			var num = 0;
+			let num = 0;
 
 			for (let i = 0, len = tmp.weaps.length; i < len; ++i)
 			{

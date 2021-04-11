@@ -175,8 +175,8 @@ function rearrangeAttackVtols()
 	const MAX_VTOLS_PER_GROUP = nexusBranch[branch].numVtolsPerGroup;
 	const NUM_GROUPS = nexusBranch[branch].numVtolGroups;
 	var droids = [];
-	var droidCount = 0;
-	var counter = 0;
+	let droidCount = 0;
+	let counter = 0;
 
 	//Simply add all the VTOLs in a group into an arrray.
 	for (let i = 0; i < NUM_GROUPS; ++i)
@@ -212,7 +212,7 @@ function rearrangeAttackVtols()
 function chooseVtolTarget(exclusive)
 {
 	var bestTarget;
-	var bestScore = 0;
+	let bestScore = 0;
 	var currScore;
 
 	for (let i = 0; i < maxPlayers; ++i)
@@ -253,8 +253,8 @@ function chooseVtolTarget(exclusive)
 //Expects an object = {type: DROID/STRUCTURE, player: player, id: id}
 function getVtolTargetWeight(what)
 {
-	var targetWeight = 0;
-	var penalty = 9; //NOTE: A bit much? Penality points per nearby AA structure.
+	let targetWeight = 0;
+	const penalty = 9; //NOTE: A bit much? Penality points per nearby AA structure.
 	var target;
 
 	if (!defined(what))
@@ -312,7 +312,7 @@ function numEnemyAAInRange(x, y, range)
 		range = 7;
 	}
 
-	var total = 0;
+	let total = 0;
 	var stuff = enumRange(x, y, range, ENEMIES, false);
 
 	for (let i = 0, len = stuff.length; i < len; ++i)
