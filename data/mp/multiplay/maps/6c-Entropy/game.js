@@ -1,11 +1,11 @@
 'use strict';
 
-var mapWidth = 128;
-var mapHeight = 128;
-var players = 6;
-var minFieldSize = 10;
-var targetFieldSize = 500;
-var maxDifference = 192;
+const mapWidth = 128;
+const mapHeight = 128;
+const players = 6;
+const minFieldSize = 10;
+const targetFieldSize = 500;
+const maxDifference = 192;
 
 var mapSize = mapWidth*mapHeight;
 
@@ -60,7 +60,7 @@ function genFields() {
 		merge(mapWidth*y + x, mapWidth*y2 + x2);
 	}
 
-	var regionCount = 0;
+	let regionCount = 0;
 	var regions = {};
 	var avg = [];
 	var simpleFields = [];
@@ -153,7 +153,7 @@ function sampleTexture(array) {
 
 // Assigns each region a texture distribution and a height.
 function genRegions(fields) {
-	var tries = 0;
+	let tries = 0;
 	while (true) {  // eslint-disable-line no-constant-condition
 		++tries;
 
@@ -176,7 +176,7 @@ function genRegions(fields) {
 			}
 		}
 		queue(gameRand(fields.count));
-		var reachableArea = 0;
+		let reachableArea = 0;
 		while (next.length) {
 			var cur = next;
 			next = [];
@@ -423,7 +423,7 @@ function genStartPos(fields, regions) {
 					}
 				}
 			}
-			var score = 0;
+			let score = 0;
 			for (let b = 0; b < players; ++b) {
 				if (b !== player) {
 					var r = fields.region[mapWidth*startPos[b][1] + startPos[b][0]];

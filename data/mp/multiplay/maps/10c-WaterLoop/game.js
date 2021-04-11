@@ -1,19 +1,19 @@
 'use strict';
 
-var mapWidth = 192;
-var mapHeight = 192;
-var players = 10;
-var minFieldSize = 10;
-var targetFieldSize = 500;
-var maxDifference = 192;
+const mapWidth = 192;
+const mapHeight = 192;
+const players = 10;
+const minFieldSize = 10;
+const targetFieldSize = 500;
+const maxDifference = 192;
 
 var mapSize = mapWidth*mapHeight;
 
 var verbose = false;
 
 // Maximum and average return values of gameRand().
-var RMAX = 0xffffffff;
-var RAVG = RMAX/2;
+const RMAX = 0xffffffff;
+const RAVG = RMAX/2;
 
 
 // Random vector with max length maxR.
@@ -50,8 +50,8 @@ function approxMidpoint(a, b) {
 
 // Generates a slightly fractal loop of points.
 function genLoop(subdivLevel) {
-	var s = 0.5877852522924731;  // Math.sin(2*Math.PI / players)
-	var c = 0.8090169943749475;  // Math.cos(2*Math.PI / players)
+	const s = 0.5877852522924731;  // Math.sin(2*Math.PI / players)
+	const c = 0.8090169943749475;  // Math.cos(2*Math.PI / players)
 	var xy = [-0.9510565162951535, 0.309016994374947];  // [Math.cos(2*Math.PI / players / 2), Math.sin(2*Math.PI / players / 2)]
 	var p = [];
 	for (let i = 0; i < players; ++i) {
@@ -95,7 +95,7 @@ function LayerMap() {
 LayerMap.prototype = {
 	drawCircle: function (x, y, r, plane) {  // 0 ≤ plane - base < 4
 		var edges = this.edges;
-		var v = 1 << 8*(plane - this.base);
+		const v = 1 << 8*(plane - this.base);
 		var yMin = Math.max(Math.ceil(y - r), 0), yMax = Math.min(Math.floor(y + r), mapHeight - 1);
 		for (let iy = yMin; iy <= yMax; ++iy) {
 			var dy = y - iy;
@@ -113,7 +113,7 @@ LayerMap.prototype = {
 	end: function () {
 		var edges = this.edges;
 		for (let y = 0; y < mapHeight; ++y) {
-			var c = 0;
+			let c = 0;
 			for (let x = 0; x < mapWidth; ++x) {
 				var i = mapWidth*y + x;
 				c += edges[i];
@@ -165,8 +165,8 @@ function doSmooth(height, smoothDirs, factor) {
 
 // Generates terrain and heightmap, including locations.
 function genTerrain() {
-	var subdivLevel = 6;
-	var M = 1 << subdivLevel;
+	const subdivLevel = 6;
+	const M = 1 << subdivLevel;
 	var loop = genLoop(subdivLevel);
 	var islands = genIslands(40);
 	var smallIslands = genIslands(40);
@@ -185,13 +185,13 @@ function genTerrain() {
 	for (let i = 0; i < islands.length; ++i) {
 		for (let j = gameRand(6); j < 6; ++j) {
 			var p = addVec(islands[i], randVec(2));
-			var r = 2 + 6/RMAX*gameRand();
+			const r = 2 + 6/RMAX*gameRand();
 			layers.drawCircle(p[0], p[1], r, 1 + gameRand(2));
 		}
 	}
 	for (let i = 0; i < smallIslands.length; ++i) {
 		var p = smallIslands[i];
-		var r = 2 + 1/RMAX*gameRand();
+		const r = 2 + 1/RMAX*gameRand();
 		layers.drawCircle(p[0], p[1], r, i%4 === 0? 2 : 1);
 	}
 	layers.end();
