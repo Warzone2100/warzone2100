@@ -1,4 +1,4 @@
-var lastHitTime = 0;
+let lastHitTime = 0;
 let cheatmode = false;
 let mainReticule = false;
 var oilDrumData = {

@@ -5,7 +5,7 @@ const maxDroids = 25;		// max guys to handle.
 
 // scav group
 var attackGroup;
-var lastAttack = 0;
+let lastAttack = 0;
 
 function produceDroid(fac1) {
 	if (fac1 && structureIdle(fac1) && groupSize(attackGroup) < maxDroids)
@@ -49,8 +49,8 @@ function scavtick()
 			for (let i = 0; i < droidlist.length; i++)
 			{
 				var droid = droidlist[i];
-				var current = 0;
-				var closest = 9999;
+				let current = 0;
+				let closest = 9999;
 				var clfac;		// starts undefined
 
 				// Find closest factory; notice that we still have the factory list from earlier, which
