@@ -2,8 +2,8 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 include("script/campaign/transitionTech.js");
 
-var trapActive;
-var gammaAttackCount;
+let trapActive;
+let gammaAttackCount;
 const GAMMA = 1; // Player 1 is Gamma team.
 const NEXUS_RES = [
 	"R-Defense-WallUpgrade08", "R-Struc-Materials08", "R-Struc-Factory-Upgrade06",

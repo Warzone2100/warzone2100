@@ -1,7 +1,7 @@
 include("script/campaign/libcampaign.js");
 
-var cheat;
-var powModVideoPlayed;
+let cheat;
+let powModVideoPlayed;
 
 function eventChat(from, to, message)
 {

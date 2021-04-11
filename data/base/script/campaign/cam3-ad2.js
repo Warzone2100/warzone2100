@@ -16,9 +16,9 @@ const NEXUS_RES = [
 const VTOL_POSITIONS = [
 	"vtolAppearPosW", "vtolAppearPosE",
 ];
-var winFlag;
-var mapLimit;
-var videoInfo; //holds some info about when to play a video.
+let winFlag;
+let mapLimit;
+let videoInfo; //holds some info about when to play a video.
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)

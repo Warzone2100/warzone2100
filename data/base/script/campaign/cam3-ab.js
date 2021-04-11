@@ -11,8 +11,8 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var edgeMapCounter; //how many Nexus reinforcement runs have happened.
-var winFlag;
+let edgeMapCounter; //how many Nexus reinforcement runs have happened.
+let winFlag;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)

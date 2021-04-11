@@ -18,7 +18,7 @@ const COLLEVTIVE_RES = [
 	"R-Sys-Engineering02", "R-Wpn-Howitzer-Accuracy01",
 	"R-Wpn-Howitzer-Damage01", "R-Wpn-RocketSlow-ROF01",
 ];
-var commandGroup;
+let commandGroup;
 
 camAreaEvent("vtolRemoveZone", function(droid)
 {

@@ -3,8 +3,8 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const TRANSPORT_LIMIT = 4;
-var index; //Number of transport loads sent into the level
-var startedFromMenu;
+let index; //Number of transport loads sent into the level
+let startedFromMenu;
 
 
 camAreaEvent("vtolRemoveZone", function(droid)

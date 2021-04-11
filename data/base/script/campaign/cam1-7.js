@@ -15,11 +15,11 @@ const NEW_PARADIGM_RESEARCH = [
 const SCAVENGER_RES = [
 	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage02",
 ];
-var artiGroup; //Droids that take the artifact
-var enemyHasArtifact; //Do they have the artifact
-var enemyStoleArtifact; //Reached the LZ with the artifact
-var droidWithArtiID; //The droid ID that was closest to the artifact to take it
-var artiMovePos; //where artiGroup members are moving to
+let artiGroup; //Droids that take the artifact
+let enemyHasArtifact; //Do they have the artifact
+let enemyStoleArtifact; //Reached the LZ with the artifact
+let droidWithArtiID; //The droid ID that was closest to the artifact to take it
+let artiMovePos; //where artiGroup members are moving to
 
 
 //These enable scav factories when close enough

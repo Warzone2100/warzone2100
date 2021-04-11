@@ -2,7 +2,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var NPScout; // Sensor scout
+let NPScout; // Sensor scout
 
 camAreaEvent("AttackArea1", function(droid)
 {

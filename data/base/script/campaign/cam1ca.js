@@ -4,9 +4,9 @@ include("script/campaign/templates.js");
 
 const landingZoneList = [ "NPLZ1", "NPLZ2", "NPLZ3", "NPLZ4", "NPLZ5" ];
 const landingZoneMessages = [ "C1CA_LZ1", "C1CA_LZ2", "C1CA_LZ3", "C1CA_LZ4", "C1CA_LZ5" ];
-var blipActive;
-var lastLZ, lastHeavy;
-var totalTransportLoads;
+let blipActive;
+let lastLZ, lastHeavy;
+let totalTransportLoads;
 
 //See if we have enough structures on the plateau area and toggle
 //the green objective blip on or off accordingly.

@@ -2,8 +2,8 @@ include("script/campaign/transitionTech.js");
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var index; //Number of bonus transports that have flown in.
-var startedFromMenu;
+let index; //Number of bonus transports that have flown in.
+let startedFromMenu;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)

@@ -11,8 +11,8 @@ const NEXUS_RES = [
 	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
 	"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
 ];
-var launchInfo;
-var detonateInfo;
+let launchInfo;
+let detonateInfo;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)

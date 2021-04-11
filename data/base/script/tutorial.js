@@ -1,10 +1,10 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
-var consoleVar;
-var tutState;
-var didTheyHelpBuildGen;
-var producedUnits;
-var firstTruckID;
+let consoleVar;
+let tutState;
+let didTheyHelpBuildGen;
+let producedUnits;
+let firstTruckID;
 
 //Alias for button
 const CLOSE_BUTTON = 0;

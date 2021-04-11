@@ -13,8 +13,8 @@ const NEXUS_RES = [
 	"R-Wpn-Rail-Accuracy01", "R-Wpn-Rail-Damage03", "R-Wpn-Rail-ROF03",
 	"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
-var capturedSilos; // victory flag letting us know if we captured any silos.
-var mapLimit; //LasSat slowly creeps toward missile silos.
+let capturedSilos; // victory flag letting us know if we captured any silos.
+let mapLimit; //LasSat slowly creeps toward missile silos.
 
 camAreaEvent("NEDefenseZone", function(droid) {
 	camEnableFactory("NXcyborgFac2Arti");

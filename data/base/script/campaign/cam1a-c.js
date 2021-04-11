@@ -21,8 +21,8 @@ const NEW_PARADIGM_RES = [
 	"R-Wpn-Rocket-Damage03", "R-Wpn-Rocket-ROF02", "R-Wpn-RocketSlow-Accuracy01",
 	"R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
 ];
-var index; //Current LZ (SE, N, canyon, south hill, road north of base)
-var switchLZ; //Counter for incrementing index every third landing
+let index; //Current LZ (SE, N, canyon, south hill, road north of base)
+let switchLZ; //Counter for incrementing index every third landing
 
 //Check if all enemies are gone and win after 15 transports
 function extraVictoryCondition()

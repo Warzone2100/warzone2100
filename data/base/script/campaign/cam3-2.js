@@ -14,8 +14,8 @@ const NEXUS_RES = [
 	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
 ];
 var edgeMapIndex;
-var alphaUnitIDs;
-var startExtraLoss;
+let alphaUnitIDs;
+let startExtraLoss;
 
 //Remove Nexus VTOL droids.
 camAreaEvent("vtolRemoveZone", function(droid)

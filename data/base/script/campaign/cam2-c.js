@@ -2,10 +2,10 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var capturedCivCount; //How many civilians have been captured. 59 for defeat.
-var civilianPosIndex; //Current location of civilian groups.
-var shepardGroup; //Enemy group that protects civilians.
-var lastSoundTime; //Only play the "civilian rescued" sound every so often.
+let capturedCivCount; //How many civilians have been captured. 59 for defeat.
+let civilianPosIndex; //Current location of civilian groups.
+let shepardGroup; //Enemy group that protects civilians.
+let lastSoundTime; //Only play the "civilian rescued" sound every so often.
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade03", "R-Struc-Materials04",
 	"R-Struc-Factory-Upgrade04", "R-Struc-VTOLPad-Upgrade01",

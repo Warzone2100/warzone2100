@@ -1,7 +1,7 @@
 include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
-var allowWin;
+let allowWin;
 const COLLECTIVE_RES = [
 	"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 	"R-Struc-Factory-Upgrade06", "R-Struc-VTOLPad-Upgrade03",
