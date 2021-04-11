@@ -66,7 +66,7 @@ function mainBuilders(rotation){
 //		debugMsg('modules', 'builders');
 		//Модули на здания
 		var safe = getInfoNear(base.x,base.y,'safe',(base_range/2)).value;
-		var busy = false;
+		let busy = false;
 		if((safe || berserk || policy['build'] == 'rich') && module < 3){
 			if(getResearch("R-Struc-Factory-Module").done && berserk ) { factory.forEach( function(e){ if(e.modules < 2){ if(orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y)){module++;busy=true;}}});if(busy)continue;}
 			if(getResearch("R-Struc-PowerModuleMk1").done) { power_gen.forEach( function(e){ if(e.modules < 1){ orderDroidBuild_p(obj, DORDER_BUILD, "A0PowMod1", e.x, e.y);module++;busy=true;}});}
