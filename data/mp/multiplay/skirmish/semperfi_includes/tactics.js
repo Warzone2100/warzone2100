@@ -300,7 +300,7 @@ function isHoverMap()
 		if (!propulsionCanReach("wheeled01", BASE.x, BASE.y, startPositions[i].x, startPositions[i].y))
 		{
 			//Check if hover can not reach this area.
-			var temp = 0;
+			let temp = 0;
 			for (let t = 0; t < maxPlayers; ++t)
 			{
 				var b1 = startPositions[i];

@@ -144,7 +144,7 @@ function produceAndResearch()
 
 	const FAC_LIST = [FACTORY_STAT, VTOL_FACTORY_STAT, CYBORG_FACTORY_STAT];
 	var facsVirtual = enumStruct(me, FACTORY_STAT);
-	var virtualTrucks = 0;
+	let virtualTrucks = 0;
 
 	//Count the trucks being built so as not to build too many of them.
 	for (let i = 0, l = facsVirtual.length; i < l; ++i)
