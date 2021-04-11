@@ -95,7 +95,7 @@ function eventAttacked(victim, attacker)
 
 function eventDroidIdle(droid)
 {
-	var loc;
+	let loc;
 
 	if (droid.player !== me)
 	{

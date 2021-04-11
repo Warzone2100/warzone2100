@@ -8,7 +8,7 @@ function chooseScoutArea()
 	const theta = (2 * Math.PI);
 	let xAb = 0;
 	let yAb = 0;
-	var badStuff;
+	let badStuff;
 
 	if (defined(scoutInfo.location.x) && defined(scoutInfo.location.y) && groupCanReach(groups.scouts, scoutInfo.location.x, scoutInfo.location.y))
 	{
