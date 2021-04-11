@@ -24,17 +24,17 @@ const MIN_BUSTERS = 5;
 const HELP_CONSTRUCT_AREA = 20;
 const AVG_BASE_RADIUS = 20; // Magic, but how will we determine the size of a "base" anyway.
 const BASE = startPositions[me];
-var attackGroup;
-var busterGroup;
-var vtolGroup;
-var baseBuilders;
-var oilBuilders;
-var researchDone;
-var truckRoleSwapped;
-var isSeaMap; // Used to determine if it is a hover map.
-var currentEnemy; // Current enemy SemperFi is attacking.
-var currentEnemyTick; // Last time the enemy was changed.
-var enemyHasVtol;
+let attackGroup;
+let busterGroup;
+let vtolGroup;
+let baseBuilders;
+let oilBuilders;
+let researchDone;
+let truckRoleSwapped;
+let isSeaMap; // Used to determine if it is a hover map.
+let currentEnemy; // Current enemy SemperFi is attacking.
+let currentEnemyTick; // Last time the enemy was changed.
+let enemyHasVtol;
 
 //And include the rest here.
 include("/multiplay/skirmish/semperfi_includes/performance.js");
