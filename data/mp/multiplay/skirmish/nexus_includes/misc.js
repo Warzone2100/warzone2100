@@ -115,7 +115,7 @@ function groupNearCoordinate(group, loc, range)
 		range = 4;
 	}
 
-	var count = 0;
+	let count = 0;
 	var members = enumGroup(group);
 
 	for (let i = 0, len = members.length; i < len; ++i)
@@ -171,7 +171,7 @@ function baseDetails(player)
 		player = me;
 	}
 
-	var baseRadius = 4;
+	let baseRadius = 4;
 	var tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 
 	for (let i = 0, len = STANDARD_BASE_STRUCTURES.length; i < len; ++i)
@@ -212,7 +212,7 @@ function baseDetails(player)
 	const DUMMY_X = 4;
 	const DUMMY_Y = 4;
 	// Extend the radius a few tiles for each limit
-	var extraTilesBase = 10; //6
+	const extraTilesBase = 10; //6
 	var x1 = tmpBase.x1 - extraTilesBase;
 	var y1 = tmpBase.y1 - extraTilesBase;
 	var x2 = tmpBase.x2 + extraTilesBase;
@@ -300,7 +300,7 @@ function setTechBranch()
 	const SMALL_SIDE_LENGTH = 90;
 	const MEDIUM_SIDE_LENGTH = 125;
 	const LARGE_SIDE_LENGTH =  165;
-	var chance = 0;
+	let chance = 0;
 
 	if (mapWidth >= LARGE_SIDE_LENGTH || mapHeight >= LARGE_SIDE_LENGTH)
 	{
@@ -381,7 +381,7 @@ function threatInRange(x, y, player, scanRadius, visible)
 
 function numDroidsInBase(player)
 {
-	var len = 0;
+	let len = 0;
 
 	if (!defined(player))
 	{
@@ -460,7 +460,7 @@ function numGroupSameOrder(group, order)
 		return Infinity; // Seems to be a good fail-safe.
 	}
 
-	var numSame = 0;
+	let numSame = 0;
 	var grp = enumGroup(group);
 
 	for (let i = 0, len = grp.length; i < len; ++i)
@@ -538,8 +538,8 @@ function groupCoordinateAverage(group)
 
 	var droids = enumGroup(group);
 	var len = droids.length;
-	var xTotal = 0;
-	var yTotal = 0;
+	let xTotal = 0;
+	let yTotal = 0;
 
 	for (let i = 0; i < len; ++i)
 	{

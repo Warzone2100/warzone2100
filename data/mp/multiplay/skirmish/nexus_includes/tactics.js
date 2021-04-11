@@ -108,7 +108,7 @@ function findMostValuableTarget()
 	}
 
 	var bestTarget;
-	var bestValue = 0;
+	let bestValue = 0;
 
 	for (let i = 0, len = objects.length; i < len; ++i)
 	{

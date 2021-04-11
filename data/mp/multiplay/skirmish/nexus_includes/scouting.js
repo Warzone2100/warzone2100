@@ -2,12 +2,12 @@
 function chooseScoutArea()
 {
 	const SCAN_RANGE = 6;
-	var x = 0;
-	var y = 0;
-	var r = 0;
-	var theta = (2 * Math.PI);
-	var xAb = 0;
-	var yAb = 0;
+	let x = 0;
+	let y = 0;
+	let r = 0;
+	const theta = (2 * Math.PI);
+	let xAb = 0;
+	let yAb = 0;
 	var badStuff;
 
 	if (defined(scoutInfo.location.x) && defined(scoutInfo.location.y) && groupCanReach(groups.scouts, scoutInfo.location.x, scoutInfo.location.y))
