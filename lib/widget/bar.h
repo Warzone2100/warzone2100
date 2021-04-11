@@ -34,12 +34,15 @@ class W_BARGRAPH : public WIDGET
 public:
 	W_BARGRAPH(W_BARINIT const *init);
 
-	void highlight(W_CONTEXT *psContext) override;
-	void highlightLost() override;
 	void run(W_CONTEXT *) override;
 	void display(int xOffset, int yOffset) override;
 
 	void setTip(std::string string) override;
+
+	std::string getTip() override
+	{
+		return pTip;
+	}
 
 	void setBackgroundColour(PIELIGHT colour)
 	{

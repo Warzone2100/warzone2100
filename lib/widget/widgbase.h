@@ -149,6 +149,10 @@ public:
 
 	virtual void focusLost() {}
 	virtual void clicked(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}
+	virtual std::string getTip()
+	{
+		return "";
+	}
 
 protected:
 	virtual void released(W_CONTEXT *, WIDGET_KEY = WKEY_PRIMARY) {}

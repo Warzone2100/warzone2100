@@ -41,13 +41,12 @@ public:
 	W_LABEL(W_LABINIT const *init);
 	W_LABEL();
 
-	void highlight(W_CONTEXT *psContext) override;
-	void highlightLost() override;
 	void display(int xOffset, int yOffset) override;
 
 	WzString getString() const override;
 	void setString(WzString string) override;
 	void setTip(std::string string) override;
+	std::string getTip() override;
 
 	void run(W_CONTEXT *) override;
 

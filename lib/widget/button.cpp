@@ -132,12 +132,6 @@ void W_BUTTON::clicked(W_CONTEXT *, WIDGET_KEY key)
 			state |= WBUT_DOWN;
 		}
 	}
-
-	/* Kill the tip if there is one */
-	if (!pTip.empty())
-	{
-		tipStop(this);
-	}
 }
 
 /* Respond to a mouse button up */
@@ -186,15 +180,6 @@ void W_BUTTON::highlight(W_CONTEXT *psContext)
 	{
 		AudioCallback(HilightAudioID);
 	}
-
-	/* If there is a tip string start the tool tip */
-	if (!pTip.empty())
-	{
-		if (auto lockedScreen = screenPointer.lock())
-		{
-			tipStart(this, pTip, lockedScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
-		}
-	}
 }
 
 
@@ -203,10 +188,6 @@ void W_BUTTON::highlightLost()
 {
 	state &= ~(WBUT_DOWN | WBUT_HIGHLIGHT);
 	dirty = true;
-	if (!pTip.empty())
-	{
-		tipStop(this);
-	}
 }
 
 void W_BUTTON::display(int xOffset, int yOffset)

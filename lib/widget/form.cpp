@@ -105,8 +105,6 @@ bool W_FORM::isUserMovable() const
 
 void W_FORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 {
-	// Stop the tip if there is one.
-	tipStop(this);
 	dirty = true;
 	if (isUserMovable() && key == WKEY_PRIMARY)
 	{
@@ -219,16 +217,6 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 {
 	state |= WBUT_HIGHLIGHT;
 
-	// If there is a tip string start the tool tip.
-	auto tip = getTip();
-	if (!tip.empty())
-	{
-		if (auto lockedScreen = screenPointer.lock())
-		{
-			tipStart(this, tip, lockedScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
-		}
-	}
-
 	if (AudioCallback != nullptr)
 	{
 		AudioCallback(HilightAudioID);
@@ -239,8 +227,6 @@ void W_CLICKFORM::highlight(W_CONTEXT *psContext)
 /* Respond to the mouse moving off a form */
 void W_FORM::highlightLost()
 {
-	// Clear the tool tip if there is one.
-	tipStop(this);
 	dirty = true;
 }
 

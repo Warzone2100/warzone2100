@@ -114,26 +114,6 @@ void widgSetBarRange(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWOR
 	}
 }
 
-
-/* Respond to a mouse moving over a barGraph */
-void W_BARGRAPH::highlight(W_CONTEXT *psContext)
-{
-	if (!pTip.empty())
-	{
-		if (auto lockedScreen = screenPointer.lock())
-		{
-			tipStart(this, pTip, lockedScreen->TipFontID, x() + psContext->xOffset, y() + psContext->yOffset, width(), height());
-		}
-	}
-}
-
-
-/* Respond to the mouse moving off a barGraph */
-void W_BARGRAPH::highlightLost()
-{
-	tipStop(this);
-}
-
 void W_BARGRAPH::run(W_CONTEXT *context)
 {
 	if (sizesDirty)

@@ -401,8 +401,6 @@ WIDGET::~WIDGET()
 		onDelete(this);	// Call the onDelete function to handle any extra logic
 	}
 
-	tipStop(this);  // Stop showing tooltip, if we are.
-
 #ifdef DEBUG
 	debugLiveWidgets.erase(this);
 #endif
@@ -1432,4 +1430,9 @@ WidgetGraphicsContext WidgetGraphicsContext::clippedBy(WzRect const &newRect) co
 	newContext.clipped = true;
 
 	return newContext;
+}
+
+std::weak_ptr<WIDGET> getMouseOverWidget()
+{
+	return psMouseOverWidget;
 }

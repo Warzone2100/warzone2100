@@ -387,6 +387,8 @@ void sliderEnableDrag(bool Enable);
 void setWidgetsStatus(bool var);
 bool getWidgetsStatus();
 
+std::weak_ptr<WIDGET> getMouseOverWidget();
+
 /** @} */
 
 #endif // __INCLUDED_LIB_WIDGET_WIDGET_H__

@@ -142,6 +142,18 @@ public:
 		return _topLeft.y;
 	}
 
+	// Returns the y-coordinate of the rectangle's bottom edge.
+	int bottom(void) const
+	{
+		return _bottomRight.y;
+	}
+
+	// Returns the x-coordinate of the rectangle's right edge.
+	int right(void) const
+	{
+		return _bottomRight.x;
+	}
+
 	// Returns the x-coordinate of the rectangle's left edge. Equivalent to left().
 	int x(void) const { return left(); }
 
