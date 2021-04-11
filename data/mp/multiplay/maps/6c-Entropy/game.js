@@ -281,7 +281,7 @@ function makeOccupied() {
 	return occupied;
 }
 
-var occupied;
+let occupied;
 
 // Find if a structure can be placed at [x, y], and if so, mark it occupied and return the location in world coords.
 function placeAt(x, y, w, h, pad) {
@@ -317,7 +317,7 @@ function placeAt(x, y, w, h, pad) {
 
 // Find if a structure can be placed somewhere near [x, y], and if so, mark it occupied and return where in world coords.
 var visit = [], visitC = 0;
-var placeNearFailed;
+let placeNearFailed;
 function placeNear(x, y, w, h, pad, scatter) {
 	x = Math.round(x - w/2) + w/2;
 	y = Math.round(y - h/2) + h/2;
@@ -373,7 +373,7 @@ function placeNear(x, y, w, h, pad, scatter) {
 // Pick random starting positions, which aren't too close.
 function genStartPos(fields, regions) {
 	function randPos() {
-		var x, y, i;
+		let x, y, i;
 		do {
 			x = gameRand(mapWidth);
 			y = gameRand(mapHeight);
