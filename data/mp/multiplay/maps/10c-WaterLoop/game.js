@@ -54,14 +54,14 @@ function genLoop(subdivLevel) {
 	var c = 0.8090169943749475;  // Math.cos(2*Math.PI / players)
 	var xy = [-0.9510565162951535, 0.309016994374947];  // [Math.cos(2*Math.PI / players / 2), Math.sin(2*Math.PI / players / 2)]
 	var p = [];
-	for (var i = 0; i < players; ++i) {
+	for (let i = 0; i < players; ++i) {
 		var r = .4 + .5/RMAX*gameRand();
 		p.push([mapWidth*(1 + r*xy[0])/2 | 0, mapHeight*(1 - r*xy[1])/2 | 0]);
 		xy = [c*xy[0] + s*xy[1], -s*xy[0] + c*xy[1]];
 	}
-	for (var subdiv = 0; subdiv < subdivLevel; ++subdiv) {
+	for (let subdiv = 0; subdiv < subdivLevel; ++subdiv) {
 		var q = [];
-		for (var i = 0; i < p.length; ++i) {
+		for (let i = 0; i < p.length; ++i) {
 			var j = (i + 1)%p.length;
 			q.push(p[i]);
 			q.push(approxMidpoint(p[i], p[j]));
@@ -74,7 +74,7 @@ function genLoop(subdivLevel) {
 // Generates some random points.
 function genIslands(count) {
 	var p = [];
-	for (var i = 0; i < count; ++i) {
+	for (let i = 0; i < count; ++i) {
 		p.push([3 + (mapWidth - 6)/RMAX*gameRand(), 3 + (mapHeight - 6)/RMAX*gameRand()]);
 	}
 	return p;
@@ -87,7 +87,7 @@ function LayerMap() {
 	var img = this.img = [];
 	img.length = mapSize;
 	this.base = 0;
-	for (var i = 0; i < mapSize; ++i) {
+	for (let i = 0; i < mapSize; ++i) {
 		edges[i] = 0;
 		img[i] = 0;
 	}
@@ -97,7 +97,7 @@ LayerMap.prototype = {
 		var edges = this.edges;
 		var v = 1 << 8*(plane - this.base);
 		var yMin = Math.max(Math.ceil(y - r), 0), yMax = Math.min(Math.floor(y + r), mapHeight - 1);
-		for (var iy = yMin; iy <= yMax; ++iy) {
+		for (let iy = yMin; iy <= yMax; ++iy) {
 			var dy = y - iy;
 			var dx = Math.sqrt(r*r - dy*dy);
 			var xMin = Math.max(Math.ceil(x - dx), 0), xMax = Math.min(Math.floor(x + dx), mapWidth - 1);
@@ -112,9 +112,9 @@ LayerMap.prototype = {
 	},
 	end: function () {
 		var edges = this.edges;
-		for (var y = 0; y < mapHeight; ++y) {
+		for (let y = 0; y < mapHeight; ++y) {
 			var c = 0;
-			for (var x = 0; x < mapWidth; ++x) {
+			for (let x = 0; x < mapWidth; ++x) {
 				var i = mapWidth*y + x;
 				c += edges[i];
 				if (c > 0) {
@@ -122,7 +122,7 @@ LayerMap.prototype = {
 				}
 			}
 		}
-		for (var i = 0; i < mapSize; ++i) {
+		for (let i = 0; i < mapSize; ++i) {
 			edges[i] = 0;
 		}
 	}
@@ -151,8 +151,8 @@ function sampleTexture(array) {
 function doSmooth(height, smoothDirs, factor) {
 	var newHeight = [];
 	var bits = [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4];
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			var i = mapWidth*y + x;
 			var s = smoothDirs[i];
 			var n = ((s & 1) && height[i + 1]) + ((s & 2) && height[i + mapWidth]) + ((s & 4) && height[i - 1]) + ((s & 8) && height[i - mapWidth]);
@@ -173,7 +173,7 @@ function genTerrain() {
 	var layers = new LayerMap();
 	var startPos = [];
 	layers.begin(1);
-	for (var i = 0; i < loop.length; ++i) {
+	for (let i = 0; i < loop.length; ++i) {
 		layers.drawCircle(loop[i][0], loop[i][1], i%M < M/8 || i%M >= M - M/8? 8 : 3, 4);
 		if (i%M === M/2) {
 			layers.drawCircle(loop[i][0], loop[i][1], 6, 3);
@@ -182,14 +182,14 @@ function genTerrain() {
 			startPos.push(loop[i]);
 		}
 	}
-	for (var i = 0; i < islands.length; ++i) {
-		for (var j = gameRand(6); j < 6; ++j) {
+	for (let i = 0; i < islands.length; ++i) {
+		for (let j = gameRand(6); j < 6; ++j) {
 			var p = addVec(islands[i], randVec(2));
 			var r = 2 + 6/RMAX*gameRand();
 			layers.drawCircle(p[0], p[1], r, 1 + gameRand(2));
 		}
 	}
-	for (var i = 0; i < smallIslands.length; ++i) {
+	for (let i = 0; i < smallIslands.length; ++i) {
 		var p = smallIslands[i];
 		var r = 2 + 1/RMAX*gameRand();
 		layers.drawCircle(p[0], p[1], r, i%4 === 0? 2 : 1);
@@ -202,7 +202,7 @@ function genTerrain() {
 	height.length = mapSize;
 	var smoothDirs = [];  // 1, 2, 4, 8 = right, down, left, up, applies to corners of tiles.
 	smoothDirs.length = mapSize;
-	for (var i = 0; i < mapSize; ++i) {
+	for (let i = 0; i < mapSize; ++i) {
 		smoothDirs[i] = 0;
 	}
 	var isCliffOrWater = [];  // Whether texture of tile is cliff/water.
@@ -210,8 +210,8 @@ function genTerrain() {
 	// 0 = water, 1 = land near water, 2 = hills which form cliffs next to water, 3 = land outside base, 4 = land for bases, 5 = cliffs
 	var planeTexture = [WATER, ISLAND, HIGHISLAND, RAMP, TILED, CLIFFFACE];
 	var planeHeight = [0, 2, 192, 128, 384];
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			var i00 = mapWidth*y + x, i01 = i00 + (x < mapWidth - 1), i10 = i00 + mapWidth*(y < mapHeight - 1), i11 = i01 + i10 - i00;
 			var plane00 = layers.img[i00];
 			var plane01 = layers.img[i01];
@@ -258,7 +258,7 @@ function SpaceFinder(terrain) {
 	this.isCliffOrWater = isCliffOrWater;
 	this.visit = [];
 	this.visit.length = mapSize;
-	for (var i = 0; i < mapSize; ++i) {
+	for (let i = 0; i < mapSize; ++i) {
 		this.visit[i] = 0;
 	}
 	this.visitC = 0;
@@ -266,8 +266,8 @@ function SpaceFinder(terrain) {
 
 	// Mark tiles occupied, if structures shouldn't be placed on them.
 	var occupied = [];
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			var i00 = mapWidth*y + x, i01 = i00 + 1, i10 = i00 + mapWidth, i11 = i01 + i10 - i00;
 			if (x < 3 || x >= mapWidth - 3 || y < 3 || y >= mapWidth - 3) {
 				occupied[i00] = 2;
@@ -287,27 +287,27 @@ SpaceFinder.prototype = {
 			return null;
 		}
 		var occupied = this.occupied;
-		for (var t = y - h/2; t < y + h/2; ++t) {
-			for (var s = x - w/2; s < x + w/2; ++s) {
+		for (let t = y - h/2; t < y + h/2; ++t) {
+			for (let s = x - w/2; s < x + w/2; ++s) {
 				if (occupied[mapWidth*t + s]) {
 					return null;
 				}
 			}
 		}
 		if (pad) {
-			for (var t = y - h/2; t < y + h/2; ++t) {
+			for (let t = y - h/2; t < y + h/2; ++t) {
 				if (occupied[mapWidth*t + x - w/2 - 1] >= 2 || occupied[mapWidth*t + x + w/2] >= 2) {
 					return null;
 				}
 			}
-			for (var s = x - w/2 - 1; s < x + w/2 + 1; ++s) {
+			for (let s = x - w/2 - 1; s < x + w/2 + 1; ++s) {
 				if (occupied[mapWidth*(y - h/2 - 1) + s] >= 2 || occupied[mapWidth*(y + h/2) + s] >= 2) {
 					return null;
 				}
 			}
 		}
-		for (var t = y - h/2; t < y + h/2; ++t) {
-			for (var s = x - w/2; s < x + w/2; ++s) {
+		for (let t = y - h/2; t < y + h/2; ++t) {
+			for (let s = x - w/2; s < x + w/2; ++s) {
 				occupied[mapWidth*t + s] = pad? 2 : 1;
 			}
 		}
@@ -336,7 +336,7 @@ SpaceFinder.prototype = {
 		while (next.length) {
 			var cur = next;
 			next = [];
-			for (var i = 0; i < cur.length; ++i) {
+			for (let i = 0; i < cur.length; ++i) {
 				var cx = cur[i][0], cy = cur[i][1];
 				var xy = this.consider(cx, cy, w, h, pad, scatter);
 				if (xy) {
@@ -372,22 +372,22 @@ function placeStuff(terrain) {
 	var structures = [];
 	var droids = [];
 	var features = [];
-	for (var q = 0; q < terrain.loop.length; q += 16) {
+	for (let q = 0; q < terrain.loop.length; q += 16) {
 		var r = terrain.loop[q];
 		features.push({name: "OilResource", position: placeNear(r[0], r[1], 1, 1, true), direction: 0});
 	}
-	for (var q = 0; q < terrain.smallIslands.length; ++q) {
+	for (let q = 0; q < terrain.smallIslands.length; ++q) {
 		var r = terrain.smallIslands[q];
 		features.push({name: "OilResource", position: placeNear(r[0], r[1], 1, 1, true), direction: 0});
 	}
-	for (var q = 0; q < terrain.islands.length; ++q) {
+	for (let q = 0; q < terrain.islands.length; ++q) {
 		var r = terrain.islands[q];
-		for (var i = gameRand(4); i < 4; ++i) {
+		for (let i = gameRand(4); i < 4; ++i) {
 			features.push({name: "OilResource", position: placeNear(r[0], r[1], 1, 1, true, 3), direction: 0});
 		}
 	}
 	spaceFinder.resetError();
-	for (var player = 0; player < players && !spaceFinder.checkError(); ++player) {
+	for (let player = 0; player < players && !spaceFinder.checkError(); ++player) {
 		var x = terrain.startPos[player][0], y = terrain.startPos[player][1];
 		structures.push({name: "A0CommandCentre", position: placeNear(x, y, 2, 2, true), direction: 0x4000*gameRand(4), modules: 0, player: player});
 		structures.push({name: "A0LightFactory", position: placeNear(x, y, 3, 3, true, 4), direction: 0x4000*gameRand(4), modules: 1, player: player});
@@ -398,7 +398,7 @@ function placeStuff(terrain) {
 		var gr = gameRand(4);
 		structures.push({name: "A0CyborgFactory", position: placeNear(x, y, 1 + gr%2, 2 - gr%2, true, 4), direction: 0x4000*gr, modules: 0, player: player});
 		structures.push({name: "A0RepairCentre3", position: placeNear(x, y, 1, 1, true, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
-		for (var n = 0; n < 3; ++n) {
+		for (let n = 0; n < 3; ++n) {
 			var oilPos = placeNear(x, y, 1, 1, true, 20);
 			if (oilPos === null) {  // Unlikely to be null, if so placeNearFailed is true.
 				break;
@@ -415,12 +415,12 @@ function placeStuff(terrain) {
 		return null;  // Failed to place something important.
 	}
 	var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
-	for (var i = 0; i < 150; ++i) {
+	for (let i = 0; i < 150; ++i) {
 		features.push({name: sample(featureTypes), position: placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true), direction: gameRand(0x10000)});
 	}
 
 	// Skip unimportant features which couldn't be placed anywhere, maybe was trying to place them in water far from land.
-	for (var f = 0; f < features.length; ++f) {
+	for (let f = 0; f < features.length; ++f) {
 		if (features[f].position === null) {
 			features[f] = features[features.length - 1];
 			--features.length;
@@ -439,14 +439,14 @@ while (stuff === null) {
 }
 
 // Mark oil resources with craters.
-for (var f = 0; f < stuff.features.length; ++f) {
+for (let f = 0; f < stuff.features.length; ++f) {
 	if (stuff.features[f].name === 'OilResource') {
 		var pos = stuff.features[f].position;
 		var x = (pos[0] - 64)/128, y = (pos[1] - 64)/128;
 		terrain.texture[mapWidth*y + x] = 0x38 | gameRand()&0xf800;
 	}
 }
-for (var f = 0; f < stuff.structures.length; ++f) {
+for (let f = 0; f < stuff.structures.length; ++f) {
 	if (stuff.structures[f].name === 'A0CommandCentre') {
 		var pos = stuff.structures[f].position;
 		var x = pos[0]/128, y = pos[1]/128;

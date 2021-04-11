@@ -24,7 +24,7 @@ var verbose = false;
 function genFields() {
 	var fields = [];
 	var fieldSizes = [];
-	for (var i = 0; i < mapSize; ++i) {
+	for (let i = 0; i < mapSize; ++i) {
 		fields[i] = i;
 		fieldSizes[i] = 1;
 	}
@@ -48,17 +48,17 @@ function genFields() {
 		}
 	}
 	var edges = [];
-	for (var y = 0; y < mapHeight - 1; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight - 1; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			edges.push(x << 8 | y);
 		}
 	}
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth - 1; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth - 1; ++x) {
 			edges.push(0x10000 | x << 8 | y);
 		}
 	}
-	for (var i = edges.length; i > 0; --i) {
+	for (let i = edges.length; i > 0; --i) {
 		var j = gameRand(i);
 		var e = edges[j];
 		edges[j] = edges[i - 1];
@@ -72,8 +72,8 @@ function genFields() {
 	var regions = {};
 	var avg = [];
 	var simpleFields = [];
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			var i = mapWidth*y + x;
 			var ri = rep(i);
 			var reg = regions[ri];
@@ -88,31 +88,31 @@ function genFields() {
 		}
 	}
 	var count = avg.length;
-	for (var i = 0; i < count; ++i) {
+	for (let i = 0; i < count; ++i) {
 		var sumX = avg[i][0], sumY = avg[i][1], sum = avg[i][2];
 		avg[i] = [sumX/sum, sumY/sum, sum];
 	}
 
 	// Initialise connectivity matrix between regions with 0.
 	var connectivityMatrix = [];
-	for (var j = 0; j < count; ++j) {
+	for (let j = 0; j < count; ++j) {
 		var row = [];
-		for (var i = 0; i < count; ++i) {
+		for (let i = 0; i < count; ++i) {
 			row.push(0);
 		}
 		connectivityMatrix.push(row);
 	}
 
-	for (var y = 0; y < mapHeight - 1; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight - 1; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			var i = mapWidth*y + x, j = i + mapWidth;
 			var regi = simpleFields[i], regj = simpleFields[j];
 			++connectivityMatrix[regi][regj];
 			++connectivityMatrix[regj][regi];
 		}
 	}
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth - 1; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth - 1; ++x) {
 			var i = mapWidth*y + x, j = i + 1;
 			var regi = simpleFields[i], regj = simpleFields[j];
 			++connectivityMatrix[regi][regj];
@@ -167,7 +167,7 @@ function genRegions(fields) {
 
 		// Assign regions.
 		var regions = [];
-		for (var i = 0; i < fields.count; ++i) {
+		for (let i = 0; i < fields.count; ++i) {
 			var textureType = textureTypes[gameRand(textureTypes.length)];
 			var height = textureType.isWater? 0 : gameRand(500) + 12;
 			regions.push({texture: textureType, height: height, avg: fields.avg[i], reachable: false});
@@ -188,11 +188,11 @@ function genRegions(fields) {
 		while (next.length) {
 			var cur = next;
 			next = [];
-			for (var n = 0; n < cur.length; ++n) {
+			for (let n = 0; n < cur.length; ++n) {
 				var i = cur[n];
 				var iHeight = regions[i].height;
 				reachableArea += regions[i].avg[2];
-				for (var j = 0; j < fields.count; ++j) {
+				for (let j = 0; j < fields.count; ++j) {
 					if (fields.con[i][j] >= 10 && Math.abs(iHeight - regions[j].height) <= maxDifference) {
 						queue(j);
 						//log('Connect ' + i + ' → ' + j);
@@ -219,8 +219,8 @@ var height = [];
 var smoothDirs = [];  // 1, 2, 4, 8 = right, down, left, up
 var isCliffOrWater = [];
 var isSnow = [];
-for (var y = 0; y < mapHeight; ++y) {
-	for (var x = 0; x < mapWidth; ++x) {
+for (let y = 0; y < mapHeight; ++y) {
+	for (let x = 0; x < mapWidth; ++x) {
 		var i00 = mapWidth*y + x, i01 = i00 + (x < mapWidth - 1), i10 = i00 + mapWidth*(y < mapHeight - 1), i11 = i01 + i10 - i00;
 		var reg00 = regions[fields.region[i00]], reg01 = regions[fields.region[i01]], reg10 = regions[fields.region[i10]], reg11 = regions[fields.region[i11]];
 		var minHeight = Math.min(reg00.height, reg01.height, reg10.height, reg11.height);
@@ -245,17 +245,17 @@ for (var y = 0; y < mapHeight; ++y) {
 		height[i00] = reg00.height;
 	}
 }
-for (var y = 0; y < mapHeight; ++y) {
+for (let y = 0; y < mapHeight; ++y) {
 	smoothDirs[mapWidth*y + mapWidth - 1] &= ~1;
 }
-for (var x = 0; x < mapWidth; ++x) {
+for (let x = 0; x < mapWidth; ++x) {
 	smoothDirs[mapWidth*(mapHeight - 1) + x] &= ~2;
 }
 function doSmooth(factor) {
 	var newHeight = [];
 	var bits = [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4];
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			var i = mapWidth*y + x;
 			var s = smoothDirs[i];
 			var n = ((s & 1) && height[i + 1]) + ((s & 2) && height[i + mapWidth]) + ((s & 4) && height[i - 1]) + ((s & 8) && height[i - mapWidth]);
@@ -274,8 +274,8 @@ doSmooth(2);
 // Mark tiles occupied, if structures shouldn't be placed on them.
 function makeOccupied() {
 	var occupied = [];
-	for (var y = 0; y < mapHeight; ++y) {
-		for (var x = 0; x < mapWidth; ++x) {
+	for (let y = 0; y < mapHeight; ++y) {
+		for (let x = 0; x < mapWidth; ++x) {
 			var i00 = mapWidth*y + x, i01 = i00 + 1, i10 = i00 + mapWidth, i11 = i01 + i10 - i00;
 			if (x < 3 || x >= mapWidth - 3 || y < 3 || y >= mapWidth - 3) {
 				occupied[i00] = 2;
@@ -296,27 +296,27 @@ function placeAt(x, y, w, h, pad) {
 	if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
 		return null;
 	}
-	for (var t = y - h/2; t < y + h/2; ++t) {
-		for (var s = x - w/2; s < x + w/2; ++s) {
+	for (let t = y - h/2; t < y + h/2; ++t) {
+		for (let s = x - w/2; s < x + w/2; ++s) {
 			if (occupied[mapWidth*t + s]) {
 				return null;
 			}
 		}
 	}
 	if (pad) {
-		for (var t = y - h/2; t < y + h/2; ++t) {
+		for (let t = y - h/2; t < y + h/2; ++t) {
 			if (occupied[mapWidth*t + x - w/2 - 1] >= 2 || occupied[mapWidth*t + x + w/2] >= 2) {
 				return null;
 			}
 		}
-		for (var s = x - w/2 - 1; s < x + w/2 + 1; ++s) {
+		for (let s = x - w/2 - 1; s < x + w/2 + 1; ++s) {
 			if (occupied[mapWidth*(y - h/2 - 1) + s] >= 2 || occupied[mapWidth*(y + h/2) + s] >= 2) {
 				return null;
 			}
 		}
 	}
-	for (var t = y - h/2; t < y + h/2; ++t) {
-		for (var s = x - w/2; s < x + w/2; ++s) {
+	for (let t = y - h/2; t < y + h/2; ++t) {
+		for (let s = x - w/2; s < x + w/2; ++s) {
 			occupied[mapWidth*t + s] = pad? 2 : 1;
 		}
 	}
@@ -338,8 +338,8 @@ function placeNear(x, y, w, h, pad, scatter) {
 	if (xy = consider(x, y)) {
 		return xy;
 	}
-	for (var a = 1; a < 100; ++a) {
-		for (var bq = 0; bq < 2*a; ++bq) {
+	for (let a = 1; a < 100; ++a) {
+		for (let bq = 0; bq < 2*a; ++bq) {
 			var b = (bq >> 1) ^ -bq;
 			if (xy = consider(x + a, y + b) || consider(x + b, y - a) || consider(x - a, y - b) || consider(x - b, y + a)) {
 				return xy;
@@ -360,7 +360,7 @@ function placeNear(x, y, w, h, pad, scatter) {
 	while (next.length) {
 		var cur = next;
 		next = [];
-		for (var i = 0; i < cur.length; ++i) {
+		for (let i = 0; i < cur.length; ++i) {
 			var cx = cur[i][0], cy = cur[i][1];
 			var xy = consider(cx, cy);
 			if (xy) {
@@ -390,10 +390,10 @@ function genStartPos(fields, regions) {
 		return [x, y];
 	}
 	var startPos = [];
-	for (var player = 0; player < players; ++player) {
+	for (let player = 0; player < players; ++player) {
 		startPos[player] = randPos(player);
 	}
-	for (var iter = 0; iter < playerPositioningIters; ++iter) {
+	for (let iter = 0; iter < playerPositioningIters; ++iter) {
 		var player = gameRand(players);
 		var newPos = randPos(player);
 		// Based on very rough slightly-asymmetric pathfinding approximation.
@@ -416,7 +416,7 @@ function genStartPos(fields, regions) {
 			while (next.length) {
 				var cur = next;
 				next = [];
-				for (var n = 0; n < cur.length; ++n) {
+				for (let n = 0; n < cur.length; ++n) {
 					var i = cur[n];
 					//log('from i = ' + i);
 					var iPos = regions[i].avg;
@@ -424,7 +424,7 @@ function genStartPos(fields, regions) {
 					var oldPos = visit[i][0];
 					var dx = iPos[0] - oldPos[0], dy = iPos[1] - oldPos[1];
 					var newDist = Math.sqrt(dx*dx + dy*dy) + visit[i][1];
-					for (var j = 0; j < fields.count; ++j) {
+					for (let j = 0; j < fields.count; ++j) {
 						if (i !== j && fields.con[i][j] > 0 && Math.abs(iHeight - regions[j].height) <= maxDifference) {
 							queue(j, iPos, newDist);
 						}
@@ -432,7 +432,7 @@ function genStartPos(fields, regions) {
 				}
 			}
 			var score = 0;
-			for (var b = 0; b < players; ++b) {
+			for (let b = 0; b < players; ++b) {
 				if (b !== player) {
 					var r = fields.region[mapWidth*startPos[b][1] + startPos[b][0]];
 					//log('r = ' + r + ', visit[r] = ' + visit[r] + ', regions[r].reachable = ' + regions[r].reachable);
@@ -462,12 +462,12 @@ function placeStuff(regions, startPos) {
 	var structures = [];
 	var droids = [];
 	var features = [];
-	for (var q = 0; q < regions.length; ++q) {
+	for (let q = 0; q < regions.length; ++q) {
 		var r = regions[q];
 		features.push({name: "OilResource", position: placeNear(r.avg[0], r.avg[1], 1, 1, true), direction: 0});
 	}
 	placeNearFailed = false;
-	for (var player = 0; player < players && !placeNearFailed; ++player) {
+	for (let player = 0; player < players && !placeNearFailed; ++player) {
 		//var q = gameRand(regions.length);
 		//var r = regions[q];
 		//var x = r.avg[0], y = r.avg[1];
@@ -481,7 +481,7 @@ function placeStuff(regions, startPos) {
 		var gr = gameRand(4);
 		structures.push({name: "A0CyborgFactory", position: placeNear(x, y, 1 + gr%2, 2 - gr%2, true, 4), direction: 0x4000*gr, modules: 0, player: player});
 		structures.push({name: "A0RepairCentre3", position: placeNear(x, y, 1, 1, true, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
-		for (var n = 0; n < richness; ++n) {
+		for (let n = 0; n < richness; ++n) {
 			var oilPos = placeNear(x, y, 1, 1, true, 20);
 			if (oilPos === null) {  // Unlikely to be null, if so placeNearFailed is true.
 				break;
@@ -501,7 +501,7 @@ function placeStuff(regions, startPos) {
 	if(decorationMode!=0){
 		var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
 		var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
-		for (var i = 0; i < mapSize*decorationDensity; ++i) {
+		for (let i = 0; i < mapSize*decorationDensity; ++i) {
 			var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
 			if (pos === null) {
 				continue;
@@ -509,7 +509,7 @@ function placeStuff(regions, startPos) {
 			var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
 			if(decorationMode==1){
 				var nearStructure=false;
-				for(var j=0;j<structures.length;j++){
+				for(let j=0;j<structures.length;j++){
 					var s=structures[j];
 					if(Math.sqrt(Math.pow(x-s.position[0]/128,2)+Math.pow(y-s.position[1]/128,2))<decorationFreeRange){
 						nearStructure=true;
@@ -524,7 +524,7 @@ function placeStuff(regions, startPos) {
 	}
 	
 	// Add additional oils
-	for(var i=0;i<60*(richness-3);i++){
+	for(let i=0;i<60*(richness-3);i++){
 		var oilPos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true, 20);
 		if (oilPos !== null) {  // Unlikely to be null, if so placeNearFailed is true.
 			features.push({name: "OilResource", position: oilPos, direction: 0});
@@ -532,7 +532,7 @@ function placeStuff(regions, startPos) {
 	}
 
 	// Skip unimportant features which couldn't be placed anywhere, maybe was trying to place them in water far from land.
-	for (var f = 0; f < features.length; ++f) {
+	for (let f = 0; f < features.length; ++f) {
 		if (features[f].position === null) {
 			features[f] = features[features.length - 1];
 			--features.length;
@@ -552,7 +552,7 @@ while (stuff === null) {
 
 // Mark oil resources with craters.
 if(!noCraters){
-	for (var f = 0; f < stuff.features.length; ++f) {
+	for (let f = 0; f < stuff.features.length; ++f) {
 		if (stuff.features[f].name === 'OilResource') {
 			var pos = stuff.features[f].position;
 			var x = (pos[0] - 64)/128, y = (pos[1] - 64)/128;
