@@ -80,7 +80,7 @@ function produceConstructors()
 
 	var totalTrucks = getVirtualSystemCount().constructs + enumDroid(me, DROID_CONSTRUCT).length;
 	var occupiedFactories = 0;
-	var success = false;
+	let success = false;
 	var factories = enumStruct(me, BASE_STRUCTURES.factories);
 	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
@@ -272,7 +272,7 @@ function getBestRepairTemplate(cyborgFlag)
 // Sensors and repairs can go in here, too.
 function produceGroundUnits()
 {
-	var success = false;
+	let success = false;
 	var factories = enumStruct(me, BASE_STRUCTURES.factories);
 	var totalReps = (getVirtualSystemCount().repairs + enumDroid(me, DROID_REPAIR).length);
 
@@ -324,7 +324,7 @@ function produceCyborgs()
 		return false;
 	}
 
-	var success = false;
+	let success = false;
 	var cybFactories = enumStruct(me, BASE_STRUCTURES.templateFactories);
 
 	for (let i = 0, len = cybFactories.length; i < len; ++i)
@@ -372,7 +372,7 @@ function produceVtols()
 		return false; // Have too many of them.
 	}
 
-	var success = false;
+	let success = false;
 	var vtolFactories = enumStruct(me, BASE_STRUCTURES.vtolFactories);
 
 	for (let i = 0, len = vtolFactories.length; i < len; ++i)
