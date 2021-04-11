@@ -47,7 +47,7 @@ function getDroidsForCOLZ()
 	var count = 6 + camRand(5);
 	var templates;
 	var sensors = [cTempl.comsens, cTempl.comsens];
-	var usingHeavy = false;
+	let usingHeavy = false;
 
 	if (camRand(100) < 50)
 	{

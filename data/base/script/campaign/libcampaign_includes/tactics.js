@@ -288,7 +288,7 @@ function __camTacticsTick()
 		//Remove groups with no droids.
 		if (groupSize(group) === 0)
 		{
-			var remove = true;
+			let remove = true;
 			var removable = __camGroupInfo[group].data.removable;
 			//Useful if the group has manual management (seen in cam1-3 script).
 			if (camDef(removable) && !removable)
@@ -365,7 +365,7 @@ function __camTacticsTickForGroup(group)
 		for (let i = 0, len = rawDroids.length; i < len; ++i)
 		{
 			var droid = rawDroids[i];
-			var repairLikeAction = false;
+			let repairLikeAction = false;
 
 			if (droid.order === DORDER_RTR)
 			{

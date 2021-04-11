@@ -129,7 +129,7 @@ function camSetStandardWinLossConditions(kind, nextLevel, data)
 //Checks for extra win conditions defined in level scripts, if any.
 function camCheckExtraObjective()
 {
-	var extraObjMet = true;
+	let extraObjMet = true;
 	if (camDef(__camVictoryData) && camDef(__camVictoryData.callback))
 	{
 		var result = __camGlobalContext()[__camVictoryData.callback]();
@@ -199,7 +199,7 @@ function __camGameWon()
 //in campaign at the moment.
 function __camPlayerDead()
 {
-	var dead = true;
+	let dead = true;
 	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter(function(obj) {
 		return obj.status === BUILT;
 	}).length > 0;

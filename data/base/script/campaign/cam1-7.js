@@ -187,7 +187,7 @@ function buildLancers()
 //Must destroy all of the New Paradigm droids and make sure the artifact is safe.
 function extraVictory()
 {
-	var npTransportFound = false;
+	let npTransportFound = false;
 	enumDroid(NEW_PARADIGM).forEach(function(dr) {
 		if (camIsTransporter(dr))
 		{

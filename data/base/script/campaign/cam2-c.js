@@ -189,7 +189,7 @@ function civilianOrders()
 	var lz = getObject("startPosition");
 	var rescueSound = "pcv612.ogg";	//"Civilian Rescued".
 	var civs = enumDroid(SCAV_7);
-	var rescued = false;
+	let rescued = false;
 
 	//Check if a civilian is close to a player droid.
 	for (let i = 0; i < civs.length; ++i)

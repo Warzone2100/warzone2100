@@ -5,14 +5,14 @@ receiveAllEvents(true); //Needed to allow enemy research to apply to them
 
 include("script/weather.js");
 
-var mainReticule = false;
+let mainReticule = false;
 const CREATE_LIKE_EVENT = 0;
 const DESTROY_LIKE_EVENT = 1;
 const TRANSFER_LIKE_EVENT = 2;
 
 function reticuleManufactureCheck()
 {
-	var structureComplete = false;
+	let structureComplete = false;
 	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (let i = 0, len = facs.length; i < len; ++i)
@@ -62,7 +62,7 @@ function reticuleManufactureCheck()
 
 function reticuleResearchCheck()
 {
-	var structureComplete = false;
+	let structureComplete = false;
 	var labs = [RESEARCH_LAB,];
 
 	for (let i = 0, len = labs.length; i < len; ++i)
@@ -124,7 +124,7 @@ function reticuleBuildCheck()
 
 function reticuleDesignCheck()
 {
-	var structureComplete = false;
+	let structureComplete = false;
 	var hqs = [HQ,];
 
 	for (let i = 0, len = hqs.length; i < len; ++i)
@@ -199,7 +199,7 @@ function setMainReticule()
 
 function reticuleUpdate(obj, eventType)
 {
-	var update_reticule = false;
+	let update_reticule = false;
 
 	if (eventType === TRANSFER_LIKE_EVENT)
 	{

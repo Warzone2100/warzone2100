@@ -11,7 +11,7 @@ function placeOilDrum()
 
 	// Don't allow placement of structures onto a potential drum location if a truck
 	// could suddenly built something near it.
-	var nearbyTruck = false;
+	let nearbyTruck = false;
 	const SCAN_RANGE_TRUCKS = 6;
 	var nearbyObjects = enumRange(x, y, SCAN_RANGE_TRUCKS, ALL_PLAYERS, false);
 	for (let i = 0, len = nearbyObjects.length; i < len; ++i)
@@ -30,7 +30,7 @@ function placeOilDrum()
 	const SCAN_RANGE_OCCUPIED = 3;
 	// see if the random position is valid
 	var occupied = (enumRange(x, y, SCAN_RANGE_OCCUPIED, ALL_PLAYERS, false).length > 0);
-	var unreachable = true;
+	let unreachable = true;
 	for (let i = 0; i < maxPlayers; ++i)
 	{
 		if (propulsionCanReach("hover01", x, y, startPositions[i].x, startPositions[i].y))

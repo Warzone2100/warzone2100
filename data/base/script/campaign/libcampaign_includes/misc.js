@@ -370,7 +370,7 @@ function __camFindClusters(list, size)
 	{
 		var x = list[i].x;
 		var y = list[i].y;
-		var found = false;
+		let found = false;
 		var n = 0;
 		for (let j = 0; j < ret.clusters.length; ++j)
 		{

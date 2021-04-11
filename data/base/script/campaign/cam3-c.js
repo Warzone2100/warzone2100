@@ -107,7 +107,7 @@ function betaAlive()
 		return true; //Don't need to see if Beta is still alive if reunited with base.
 	}
 
-	var alive = false;
+	let alive = false;
 	var myDroids = enumDroid(CAM_HUMAN_PLAYER);
 
 	for (let i = 0, l = betaUnitIds.length; i < l; ++i)

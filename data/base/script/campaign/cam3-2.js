@@ -223,7 +223,7 @@ function alphaTeamAlive()
 {
 	if (camDef(alphaUnitIDs) && startExtraLoss)
 	{
-		var alphaAlive = false;
+		let alphaAlive = false;
 		var alive = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
 			return obj.type === DROID;
 		});

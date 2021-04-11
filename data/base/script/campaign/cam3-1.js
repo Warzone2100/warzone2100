@@ -120,12 +120,12 @@ function nukeAndCountSurvivors()
 		return obj.type !== STRUCTURE || (obj.type === STRUCTURE && obj.group === null);
 	});
 	var safeZone = enumArea("valleySafeZone", CAM_HUMAN_PLAYER, false);
-	var foundUnit = false;
+	let foundUnit = false;
 
 	//Make em' explode!
 	for (let i = 0, len = nuked.length; i < len; ++i)
 	{
-		var nukeIt = true;
+		let nukeIt = true;
 		var obj1 = nuked[i];
 
 		//Check if it's in the safe area.
@@ -180,7 +180,7 @@ function getCountdown()
 {
 	var silosDestroyed = missileSilosDestroyed();
 	var countdownObject = silosDestroyed ? detonateInfo : launchInfo;
-	var skip = false;
+	let skip = false;
 
 	for (let i = 0, len = countdownObject.length; i < len; ++i)
 	{
