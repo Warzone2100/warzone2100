@@ -5,6 +5,7 @@ uniform sampler2D tex;
 uniform sampler2D lightmap_tex;
 uniform sampler2D TextureNormal;
 uniform sampler2D TextureSpecular;
+uniform sampler2D TextureHeight;
 
 // sun light colors/intensity:
 uniform vec4 emissiveLight;

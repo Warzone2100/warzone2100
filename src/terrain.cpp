@@ -1300,7 +1300,8 @@ static void drawDecals(const glm::mat4 &ModelView, const glm::mat4 &ModelViewNor
 		renderState.fogColour.vector[3] / 255.f
 	);
 	gfx_api::TerrainDecals::get().bind();
-	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num, &pie_Texture(terrainNormalPage), &pie_Texture(terrainSpecularPage));
+	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num,
+		&pie_Texture(terrainNormalPage), &pie_Texture(terrainSpecularPage), &pie_Texture(terrainHeightPage));
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
 	gfx_api::TerrainDecals::get().bind_constants({
 		ModelView, ModelViewNormal, ModelViewProjection, ModelUVLightmap,
