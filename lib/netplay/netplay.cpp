@@ -684,6 +684,7 @@ static void NETplayerLeaving(UDWORD index)
 	if (ingame.localJoiningInProgress)  // Only if game hasn't actually started yet.
 	{
 		NET_DestroyPlayer(index);       // sets index player's array to false
+		resetReadyStatus(false);		// reset ready status for all players
 	}
 }
 
@@ -712,6 +713,7 @@ static void NETplayerDropped(UDWORD index)
 		NETend();
 		debug(LOG_INFO, "sending NET_PLAYER_DROPPED for player %d", id);
 		NET_DestroyPlayer(id);          // just clears array
+		resetReadyStatus(false);		// reset ready status for all players
 	}
 
 	NETsetPlayerConnectionStatus(CONNECTIONSTATUS_PLAYER_DROPPED, id);
