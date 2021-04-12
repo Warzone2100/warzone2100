@@ -36,6 +36,7 @@ public:
 
 	void highlight(W_CONTEXT *psContext) override;
 	void highlightLost() override;
+	void run(W_CONTEXT *) override;
 	void display(int xOffset, int yOffset) override;
 
 	void setTip(std::string string) override;

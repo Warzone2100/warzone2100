@@ -71,30 +71,46 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	ASSERT((init->style & WBAR_DOUBLE) == 0 || init->minorSize <= WBAR_SCALE, "Minor bar size out of range");
 }
 
+static W_BARGRAPH *getBarGraph(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id)
+{
+	ASSERT_OR_RETURN(nullptr, psScreen != nullptr, "Invalid screen pointer");
+	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
+	ASSERT_OR_RETURN(nullptr, psBGraph != nullptr, "Could not find widget from ID");
+	ASSERT_OR_RETURN(nullptr, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
+
+	return psBGraph;
+}
+
 /* Set the current size of a bar graph */
 void widgSetBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
 {
-	ASSERT_OR_RETURN(, psScreen != nullptr, "Invalid screen pointer");
-	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
-	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
-
-	psBGraph->majorValue = iValue;
-	psBGraph->majorSize = WBAR_SCALE * MIN(iValue, psBGraph->iRange) / MAX(psBGraph->iRange, 1);
-	psBGraph->dirty = true;
+	if (auto psBGraph = getBarGraph(psScreen, id))
+	{
+		psBGraph->majorValue = iValue;
+		psBGraph->dirty = true;
+	}
 }
 
 
 /* Set the current size of a minor bar on a double graph */
 void widgSetMinorBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
 {
-	ASSERT_OR_RETURN(, psScreen != nullptr, "Invalid screen pointer");
-	W_BARGRAPH *psBGraph = (W_BARGRAPH *)widgGetFromID(psScreen, id);
-	ASSERT_OR_RETURN(, psBGraph != nullptr, "Could not find widget from ID");
-	ASSERT_OR_RETURN(, psBGraph->type == WIDG_BARGRAPH, "Wrong widget type");
-	psBGraph->minorValue = iValue;
-	psBGraph->minorSize = MIN(WBAR_SCALE * iValue / MAX(psBGraph->iRange, 1), WBAR_SCALE);
-	psBGraph->dirty = true;
+	if (auto psBGraph = getBarGraph(psScreen, id))
+	{
+		psBGraph->minorValue = iValue;
+		psBGraph->dirty = true;
+	}
+}
+
+
+/** Set the range on a double graph */
+void widgSetBarRange(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue)
+{
+	if (auto psBGraph = getBarGraph(psScreen, id))
+	{
+		psBGraph->iRange = iValue;
+		psBGraph->dirty = true;
+	}
 }
 
 
@@ -117,6 +133,14 @@ void W_BARGRAPH::highlightLost()
 	tipStop(this);
 }
 
+void W_BARGRAPH::run(W_CONTEXT *context)
+{
+	if (dirty)
+	{
+		majorSize = WBAR_SCALE * MIN(majorValue, iRange) / MAX(iRange, 1);
+		minorSize = MIN(WBAR_SCALE * minorValue / MAX(iRange, 1), WBAR_SCALE);
+	}
+}
 
 static void barGraphDisplayText(W_BARGRAPH *barGraph, int x0, int x1, int y1)
 {
