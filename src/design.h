@@ -58,20 +58,16 @@
 #define IDDES_PROPAIR		5108		// The propulsion air speed
 #define IDDES_PROPWEIGHT	5109		// The propulsion weight
 #define IDDES_SENSORRANGE	5110		// The sensor range
-#define IDDES_SENSORWEIGHT	5112		// The sensor weight
+#define IDDES_SYSTEMSWEIGHT	5112		// The systems weight
 #define IDDES_ECMPOWER		5115		// The ecm power
-#define IDDES_ECMWEIGHT		5116		// The ecm weight
 #define IDDES_WEAPRANGE		5120		// The weapon range
 #define IDDES_WEAPDAMAGE	5121		// The weapon damage
 #define IDDES_WEAPROF		5122		// The weapon rate of fire
-#define IDDES_WEAPWEIGHT	5123		// The weapon weight
 #define IDDES_CONSTPOINTS	5125		// The construction build points
-#define IDDES_CONSTWEIGHT	5126		// The construction weight
 //extras added AB 3/9/97
 #define IDDES_BODYPOINTS	5127		// The body points bar graph
 #define IDDES_BODYARMOUR_H	5128		// The body armour bar graph for heat weapons
 #define IDDES_REPAIRPOINTS  5129		// The Repair points
-#define IDDES_REPAIRWEIGHT	5130		// The repair weight
 
 /* Design screen bar graph labels */
 #define IDDES_BODYARMOURKLAB	5200		// The body armour (kinetic) bar graph label
@@ -83,15 +79,12 @@
 #define IDDES_PROPAIRLAB		5208		// The propulsion air speed label
 #define IDDES_PROPWEIGHTLAB		5209		// The propulsion weight label
 #define IDDES_SENSORRANGELAB	5210		// The sensor range label
-#define IDDES_SENSORWEIGHTLAB	5212		// The sensor weight label
+#define IDDES_SYSTEMSWEIGHTLAB	5212		// The systems weight label
 #define IDDES_ECMPOWERLAB		5215		// The ecm power label
-#define IDDES_ECMWEIGHTLAB		5216		// The ecm weight label
 #define IDDES_WEAPRANGELAB		5220		// The weapon range label
 #define IDDES_WEAPDAMAGELAB		5221		// The weapon damage label
 #define IDDES_WEAPROFLAB		5222		// The weapon rate of fire label
-#define IDDES_WEAPWEIGHTLAB		5223		// The weapon weight label
 #define IDDES_CONSTPOINTSLAB	5225		// The construction build points label
-#define IDDES_CONSTWEIGHTLAB	5226		// The construction weight label
 //extras added AB 3/9/97
 //#define IDDES_BODYPOINTSLAB		5227		// The body points label
 #define IDDES_BODYARMOURHLAB	5228		// The body armour (heat) bar graph label
