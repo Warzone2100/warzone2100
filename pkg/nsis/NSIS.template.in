@@ -195,6 +195,8 @@ VIAddVersionKey "ProductVersion"   "${PACKAGE_VERSION}"
   !insertmacro MUI_LANGUAGE "English" # first language is the default language
   !insertmacro LANGFILE_SPECIFIC_INCLUDE "English" "win_installer_base.nsh"
 
+  !insertmacro MUI_LANGUAGE "Croatian"
+  !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Croatian" "win_installer-hr_HR.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "Dutch"
   !insertmacro LANGFILE_SPECIFIC_INCLUDE_WITHDEFAULT "Dutch" "win_installer-nl_NL.nsh" ${WZ_LANGFILE_FALLBACK}
   !insertmacro MUI_LANGUAGE "French"
