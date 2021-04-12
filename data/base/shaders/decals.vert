@@ -3,9 +3,9 @@
 
 uniform mat4 ModelViewProjectionMatrix;
 
+uniform mat4 lightTextureMatrix;
 uniform vec4 paramxlight;
 uniform vec4 paramylight;
-uniform mat4 lightTextureMatrix;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;

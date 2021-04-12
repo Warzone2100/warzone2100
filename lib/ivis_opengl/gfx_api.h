@@ -632,9 +632,9 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_DECALS>
 	{
 		glm::mat4 transform_matrix;
+		glm::mat4 texture_matrix;
 		glm::vec4 param1;
 		glm::vec4 param2;
-		glm::mat4 texture_matrix;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
