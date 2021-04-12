@@ -1192,7 +1192,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::vec4 &pa
 	gfx_api::TerrainDecals::get().bind();
 	gfx_api::TerrainDecals::get().bind_textures(&pie_Texture(terrainPage), lightmap_tex_num);
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
-	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, paramsXLight, paramsYLight, textureMatrix,
+	gfx_api::TerrainDecals::get().bind_constants({ ModelViewProjection, textureMatrix, paramsXLight, paramsYLight,
 		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
 
 	int size = 0;
