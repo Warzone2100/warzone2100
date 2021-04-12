@@ -53,6 +53,7 @@ static size_t firstPage; // the last used page before we start adding terrain te
 size_t terrainPage; // texture ID of the terrain page
 size_t terrainNormalPage = 0; // texture ID of the terrain page for normals
 size_t terrainSpecularPage = 0; // texture ID of the terrain page for specular/gloss
+size_t terrainHeightPage = 0; // texture ID of heightmap
 static int mipmap_max, mipmap_levels;
 static int maxTextureSize = 2048; ///< the maximum size texture we will create
 
@@ -187,6 +188,12 @@ bool texLoad(const char *fileName)
 				gfx_api::context::get().create_texture(mipmap_levels, xSize, ySize,
 					gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8));
 
+			snprintf(fullPath, sizeof(fullPath), "%s-hm", fileName);
+			terrainHeightPage = pie_ReserveTexture(fullPath, xSize, ySize);
+			pie_AssignTexture(terrainHeightPage,
+				gfx_api::context::get().create_texture(mipmap_levels, xSize, ySize,
+					gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8));
+
 			firstPage = pie_NumberOfPages();
 		}
 		texPage = newPage(fileName, j, xSize, ySize, 0);
@@ -256,6 +263,22 @@ bool texLoad(const char *fileName)
 			}
 			// Insert into specular texture page
 			pie_Texture(terrainSpecularPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
+			free(tile.bmp);
+
+			// loading heightmap
+			snprintf(fullPath, sizeof(fullPath), "%s/tile-%02d_hm.png", partialPath, k);
+			if (PHYSFS_exists(fullPath))
+			{
+				bool retval = iV_loadImage_PNG(fullPath, &tile);
+				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
+				debug(LOG_TEXTURE, "texLoad: Found height map %s", fullPath);
+			}
+			else
+			{	// default height map: 0
+				tile.bmp = (unsigned char*)calloc(i*i, 4);
+			}
+			// Insert into height texture page
+			pie_Texture(terrainHeightPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
 			free(tile.bmp);
 
 			xOffset += i; // i is width of tile

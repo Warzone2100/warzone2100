@@ -741,7 +741,8 @@ namespace gfx_api
 	texture_description<0, sampler_type::anisotropic>,
 	texture_description<1, sampler_type::bilinear>,
 	texture_description<2, sampler_type::anisotropic>, // normal map
-	texture_description<3, sampler_type::anisotropic>  // specular map
+	texture_description<3, sampler_type::anisotropic>, // specular map
+	texture_description<4, sampler_type::anisotropic>  // height map
 	>, SHADER_DECALS>;
 
 	template<>
