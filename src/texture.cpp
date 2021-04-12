@@ -43,8 +43,8 @@
 #include "map.h"
 
 
-#define MIPMAP_LEVELS		4
-#define MIPMAP_MAX		128
+#define MIPMAP_LEVELS		6
+#define MIPMAP_MAX		512
 
 /* Texture page and coordinates for each tile */
 TILE_TEX_INFO tileTexInfo[MAX_TILES];
@@ -97,7 +97,7 @@ bool texLoad(const char *fileName)
 
 	firstPage = pie_NumberOfPages();
 
-	ASSERT_OR_RETURN(false, MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
+	//ASSERT_OR_RETURN(false, MIPMAP_MAX == TILE_WIDTH && MIPMAP_MAX == TILE_HEIGHT, "Bad tile sizes");
 
 	// store the filename so we can later determine which tileset we are using
 	if (tilesetDir)
