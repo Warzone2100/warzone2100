@@ -4447,6 +4447,24 @@ const char *messageTypeToString(unsigned messageType_)
 	return "(UNUSED)";
 }
 
+static bool isLoopbackIP(const char *ip)
+{
+	if (!ip) return false;
+	if (strncmp(ip, "127.", 4) == 0)
+	{
+		return true;
+	}
+	if (strcmp(ip, "::1") == 0)
+	{
+		return true;
+	}
+	if (strcmp(ip, "0000:0000:0000:0000:0000:0000:0000:0001") == 0)
+	{
+		return true;
+	}
+	return false;
+}
+
 /**
  * Check if ip is on the banned list.
  * \param ip IP address converted to text
@@ -4458,6 +4476,10 @@ static bool onBanList(const char *ip)
 	if (!IPlist)
 	{
 		return false;    //if no bans are added, then don't check.
+	}
+	if (isLoopbackIP(ip))
+	{
+		return false;	// ignore loopback IPs
 	}
 	for (i = 0; i < MAX_BANS ; i++)
 	{
@@ -4476,6 +4498,10 @@ static bool onBanList(const char *ip)
  */
 static void addToBanList(const char *ip, const char *name)
 {
+	if (isLoopbackIP(ip))
+	{
+		return;
+	}
 	if (!IPlist)
 	{
 		IPlist = (PLAYER_IP *)malloc(sizeof(PLAYER_IP) * MAX_BANS + 1);
