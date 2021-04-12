@@ -296,6 +296,9 @@ void widgSetBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD
 /** Set the current size of a minor bar on a double graph */
 void widgSetMinorBarSize(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD size);
 
+/** Set the range on a double graph */
+void widgSetBarRange(const std::shared_ptr<W_SCREEN> &psScreen, UDWORD id, UDWORD iValue);
+
 /** Return the ID of the widget the mouse was over this frame */
 UDWORD widgGetMouseOver(const std::shared_ptr<W_SCREEN> &psScreen);
 
