@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-11 16:42\n"
+"PO-Revision-Date: 2021-04-12 04:43\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -15069,11 +15069,11 @@ msgstr "Колектив"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
-msgstr "Един играч"
+msgstr "Самостоятелна игра"
 
 #: src/frontend.cpp:143
 msgid "Multi Player"
-msgstr "Множество играчи"
+msgstr "Групова игра"
 
 #: src/frontend.cpp:144
 #: src/frontend.cpp:278
@@ -15083,21 +15083,21 @@ msgstr "Показно"
 #: src/frontend.cpp:145
 #: src/ingameop.cpp:239
 msgid "Options"
-msgstr "Опции"
+msgstr "Настройки"
 
 #: src/frontend.cpp:150
 #: src/frontend.cpp:154
 msgid "View Intro"
-msgstr "Покажи интродукцията"
+msgstr "Интродукция"
 
 #: src/frontend.cpp:155
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr "Видеата липсват, изтеглете ги от http://wz2100.net"
+msgstr "Видеоклиповете липсват, изтеглете ги от http://wz2100.net"
 
 #: src/frontend.cpp:160
 #: src/frontend.cpp:164
 msgid "Continue Last Save"
-msgstr "Продължете от последната съхранена игра"
+msgstr "Продължение от посл. игра"
 
 #: src/frontend.cpp:165
 msgid "No last save available"
@@ -15177,7 +15177,7 @@ msgstr "Предизвикателства"
 
 #: src/frontend.cpp:336
 msgid "Load Campaign Game"
-msgstr "Заредете кампания"
+msgstr "Зареждане на кампания"
 
 #: src/frontend.cpp:337
 msgid "Load Skirmish Game"
@@ -15185,7 +15185,7 @@ msgstr "Зареждане на сражение"
 
 #: src/frontend.cpp:339
 msgid "SINGLE PLAYER"
-msgstr "ЕДИН ИГРАЧ"
+msgstr "САМОСТОЯТЕЛНА ИГРА"
 
 #: src/frontend.cpp:344
 #: src/frontend.cpp:365
@@ -15208,7 +15208,7 @@ msgstr "Зареждане на съхранено сражение"
 
 #: src/frontend.cpp:565
 msgid "MULTI PLAYER"
-msgstr "МНОЖЕСТВО ИГРАЧИ"
+msgstr "ГРУПОВА ИГРА"
 
 #: src/frontend.cpp:567
 msgid "Host Game"
@@ -15229,26 +15229,26 @@ msgstr "НАСТРОЙКИ"
 
 #: src/frontend.cpp:635
 msgid "Game Options"
-msgstr "Настройки на играта"
+msgstr "Игра"
 
 #: src/frontend.cpp:636
 #: src/ingameop.cpp:495
 msgid "Graphics Options"
-msgstr "Настройки на графиката"
+msgstr "Графика"
 
 #: src/frontend.cpp:637
 #: src/ingameop.cpp:498
 msgid "Video Options"
-msgstr "Настройки на видеото"
+msgstr "Видео"
 
 #: src/frontend.cpp:638
 msgid "Audio / Zoom Options"
-msgstr "Настройки на звука / мащабирането"
+msgstr "Звук / Мащабиране"
 
 #: src/frontend.cpp:639
 #: src/ingameop.cpp:505
 msgid "Mouse Options"
-msgstr "Настройки на мишката"
+msgstr "Мишка"
 
 #: src/frontend.cpp:640
 #: src/ingameop.cpp:510
@@ -15361,7 +15361,7 @@ msgstr "Възпроизвеждане на видео"
 #: src/frontend.cpp:769
 #: src/ingameop.cpp:546
 msgid "Scanlines"
-msgstr "Линии по екрана"
+msgstr "Растерни линии"
 
 #: src/frontend.cpp:774
 #: src/ingameop.cpp:551
@@ -15389,7 +15389,7 @@ msgstr "Клатене на екрана"
 
 #: src/frontend.cpp:795
 msgid "GRAPHICS OPTIONS"
-msgstr "ГРАФИЧНИ ОПЦИИ"
+msgstr "ГРАФИКА"
 
 #: src/frontend.cpp:895
 msgid "Disabled"
@@ -15402,7 +15402,7 @@ msgstr "Позволено"
 #: src/frontend.cpp:902
 #: src/frontend.cpp:908
 msgid "Auto"
-msgstr "Автоматично"
+msgstr "Авто"
 
 #: src/frontend.cpp:943
 #: src/ingameop.cpp:148
@@ -15446,7 +15446,7 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:985
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr "НАСТРОЙКИ НА ЗВУКА / МАЩАБИРАНЕТО"
+msgstr "ЗВУК / МАЩАБИРАНЕ"
 
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
@@ -15501,7 +15501,7 @@ msgstr "Заглаждане*"
 
 #: src/frontend.cpp:1429
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
-msgstr "Внимание: Заглаждането може да причини сривове, особено при стойности > 16"
+msgstr "Внимание: Заглаждането може да причини сривове, особено над 16×"
 
 #: src/frontend.cpp:1441
 msgid "Graphics Backend*"
@@ -15509,7 +15509,7 @@ msgstr "Графичен бекенд*"
 
 #: src/frontend.cpp:1445
 msgid "VIDEO OPTIONS"
-msgstr "НАСТРОЙКИ НА ВИДЕОТО"
+msgstr "ВИДЕО"
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
@@ -15564,7 +15564,7 @@ msgstr "Прихващане на курсора"
 #: src/frontend.cpp:1718
 #: src/ingameop.cpp:762
 msgid "Switch Mouse Buttons"
-msgstr "Смяна на бутоните на мишката"
+msgstr "Обръщане на бутоните"
 
 #: src/frontend.cpp:1723
 #: src/ingameop.cpp:767
@@ -15583,7 +15583,7 @@ msgstr "Колело на мишката"
 
 #: src/frontend.cpp:1735
 msgid "MOUSE OPTIONS"
-msgstr "ОПЦИИ НА МИШКАТА"
+msgstr "МИШКА"
 
 #: src/frontend.cpp:1811
 #: src/multiint.cpp:260
