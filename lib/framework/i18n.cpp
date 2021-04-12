@@ -47,6 +47,7 @@
 #endif
 // Language names (http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes)
 #define LANG_NAME_BASQUE "euskara"
+#define LANG_NAME_BULGARIAN "български език"
 #define LANG_NAME_CATALAN "català"
 #define LANG_NAME_CHINESE_SIMPLIFIED "汉语"
 #define LANG_NAME_CHINESE_TRADITIONAL "漢語"
@@ -102,6 +103,7 @@ static const struct
 {
 	{ "", N_("System locale"), LANG_NEUTRAL, SUBLANG_DEFAULT },
 #  if defined(ENABLE_NLS)
+	{ "bg", LANG_NAME_BULGARIAN, LANG_BULGARIAN, SUBLANG_DEFAULT },
 	{ "ca", LANG_NAME_CATALAN, LANG_CATALAN, SUBLANG_DEFAULT },
 	{ "cs", LANG_NAME_CZECH, LANG_CZECH, SUBLANG_DEFAULT },
 	{ "da", LANG_NAME_DANISH, LANG_DANISH, SUBLANG_DEFAULT },
@@ -166,6 +168,7 @@ static const struct
 {
 	{ "",   N_("System locale"), "", "" },
 #  if defined(ENABLE_NLS)
+	{ "bg", LANG_NAME_BULGARIAN, "bg_BG.UTF-8", "bg" },
 	{ "ca_ES", LANG_NAME_CATALAN, "ca_ES.UTF-8", "ca" },
 	{ "cs_CZ", LANG_NAME_CZECH, "cs_CZ.UTF-8", "cs" },
 	{ "da", LANG_NAME_DANISH, "da_DK.UTF-8", "da_DK" },
