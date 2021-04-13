@@ -30,6 +30,7 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 find_package (Threads REQUIRED)
+find_package (ZLIB REQUIRED)
 
 add_library(netplay STATIC ${HEADERS} ${SRC} "${_netplay_config_output_file}")
 add_dependencies(netplay autorevision_netcodeversion)
@@ -48,7 +49,7 @@ endif()
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 	target_link_libraries(netplay PRIVATE pthread)
 endif()
-target_link_libraries(netplay PRIVATE Threads::Threads)
+target_link_libraries(netplay PRIVATE Threads::Threads ZLIB::ZLIB)
 if(MSVC)
 	# C4267: 'conversion': conversion from 'type1' to 'type2', possible loss of data // FIXME!!
 	target_compile_options(netplay PRIVATE "/wd4267")
