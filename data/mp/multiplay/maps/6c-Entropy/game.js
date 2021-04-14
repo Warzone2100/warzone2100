@@ -1,11 +1,16 @@
 'use strict';
 
-var mapWidth = 128;
-var mapHeight = 128;
-var players = 6;
-var minFieldSize = 10;
-var targetFieldSize = 500;
-var maxDifference = 192;
+var mapWidth = 128, mapHeight = 128; //map size (works better if it's a square)
+var players = 6; //number of players (excl. scavs)
+var richness = 3; //how much oil is in the map, must be >=1
+var playerPositioningYStrictness = 0; //higher = player positioning more predictable (vertically). Values too high may cause generation to freeze. 0 = completely random
+var trucksPerPlayer = 2; //number of starting trucks for each player, must be >=1
+var minFieldSize = 10; //size of smallest areas of terrain
+var targetFieldSize = 500; //target size of generated areas of terrain
+var maxDifference = 192; //max height difference between connectable areas of terrain
+var playerPositioningIters = 400; //how many times we should try to find better positions for the players during map generation. Higher values cause longer generation times. Must be >=1
+var noDecorations = false; //set to true to remove trees, buildings, etc.
+var minReachable = 0.75; //how much of the map should be reachable by tanks to be considered acceptable
 
 var mapSize = mapWidth*mapHeight;
 
@@ -193,9 +198,9 @@ function genRegions(fields) {
 			}
 		}
 
-		// Accept region configuration, if it makes at least ¾ of the map reachable, else retry.
-		if (4*reachableArea >= mapSize*3) {
-			if (verbose) log('Region assignment tries = ' + tries + ', reachable area = ' + Math.round(reachableArea/mapSize*100) + '%');
+		// Accept region configuration, if it makes at least minReachable% of the map reachable, else retry.
+		if (reachableArea/mapSize >= minReachable) {
+			if (verbose) log('Region assignment tries = ' + tries + ', reachable area = ' + Math.round((reachableArea/mapSize)*100) + '%');
 			return regions;
 		}
 	}
@@ -372,22 +377,22 @@ function placeNear(x, y, w, h, pad, scatter) {
 
 // Pick random starting positions, which aren't too close.
 function genStartPos(fields, regions) {
-	function randPos() {
+	function randPos(player) {
 		var x, y, i;
-		do {
-			x = gameRand(mapWidth);
-			y = gameRand(mapHeight);
-			i = mapWidth*y + x;
-		} while (occupied[i] || !regions[fields.region[i]].reachable);
-		return [x, y];
+        do {
+            x = gameRand(mapWidth);
+            y = playerPositioningYStrictness==0?gameRand(mapHeight):(~~((((player+1)/players)*mapHeight)+gameRand(~~(mapHeight/playerPositioningYStrictness))-(mapHeight/(playerPositioningYStrictness*2))));
+            i = mapWidth*y + x;
+        } while (occupied[i] || fields.region[i]===undefined || !regions[fields.region[i]].reachable);
+        return [x, y];
 	}
 	var startPos = [];
 	for (var player = 0; player < players; ++player) {
-		startPos[player] = randPos();
+		startPos[player] = randPos(player);
 	}
-	for (var iter = 0; iter < 400; ++iter) {
+	for (var iter = 0; iter < playerPositioningIters; ++iter) {
 		var player = gameRand(players);
-		var newPos = randPos();
+		var newPos = randPos(player);
 		// Based on very rough slightly-asymmetric pathfinding approximation.
 		function scoreAt(pos) {  // eslint-disable-line no-inner-declarations
 			var next = []
@@ -473,7 +478,7 @@ function placeStuff(regions, startPos) {
 		var gr = gameRand(4);
 		structures.push({name: "A0CyborgFactory", position: placeNear(x, y, 1 + gr%2, 2 - gr%2, true, 4), direction: 0x4000*gr, modules: 0, player: player});
 		structures.push({name: "A0RepairCentre3", position: placeNear(x, y, 1, 1, true, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
-		for (var n = 0; n < 3; ++n) {
+		for (var n = 0; n < richness; ++n) {
 			var oilPos = placeNear(x, y, 1, 1, true, 20);
 			if (oilPos === null) {  // Unlikely to be null, if so placeNearFailed is true.
 				break;
@@ -482,23 +487,34 @@ function placeStuff(regions, startPos) {
 			structures.push({name: "A0ResourceExtractor", position: oilPos, direction: 0x4000*gameRand(4), modules: 0, player: player});
 			structures.push({name: "WallTower01", position: placeNear(oilPos[0]/128, oilPos[1]/128, 1, 1, false, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
 		}
-		droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
-		droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
+		for(var i=0;i<trucksPerPlayer;i++){
+            droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
+        }
 	}
 	if (placeNearFailed) {
 		if (verbose) log('Base placement failed!');
 		return null;  // Failed to place something important.
 	}
-	var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
-	var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
-	for (var i = 0; i < 150; ++i) {
-		var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
-		if (pos !== null) {
-			var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
-			var snow = isSnow[mapWidth*y + x];
-			features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
-		}
-	}
+	if(!noDecorations){
+        var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
+        var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
+        for (var i = 0; i < mapSize*0.01; ++i) {
+            var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
+            if (pos !== null) {
+                var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
+                var snow = isSnow[mapWidth*y + x];
+                features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
+            }
+        }
+    }
+	
+	// Add additional oils
+	for(var i=0;i<12*((richness-3)*5);i++){
+        var oilPos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true, 20);
+        if (oilPos !== null) {  // Unlikely to be null, if so placeNearFailed is true.
+            features.push({name: "OilResource", position: oilPos, direction: 0});
+        }
+    }
 
 	// Skip unimportant features which couldn't be placed anywhere, maybe was trying to place them in water far from land.
 	for (var f = 0; f < features.length; ++f) {
