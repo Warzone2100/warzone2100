@@ -22,8 +22,8 @@
 # pragma clang diagnostic ignored "-Wunused-variable"
 # pragma clang diagnostic ignored "-Wmissing-field-initializers"
 # pragma clang diagnostic ignored "-Wunused-private-field"
+# pragma clang diagnostic ignored "-Wcast-align"
 #  if defined(__APPLE__)
-#    pragma clang diagnostic ignored "-Wcast-align" // Warning triggered on Xcode 8.x
 #    pragma clang diagnostic ignored "-Wnullability-completeness" // Warning triggered on newer Xcode
 #  endif
 #  if defined(__has_warning)
