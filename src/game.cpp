@@ -2247,7 +2247,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "game.js");
 		bool haveScript = PHYSFS_exists(aFileName);
 		if (haveScript) {
-			data = runMapScript(aFileName, gameRandU32(), true);
+			data = runMapScript(aFileName, gameRandU32(), false);
 			syncDebug("mapSize = [%d, %d]", data.mapWidth, data.mapHeight);
 			syncDebug("crc(texture) = 0x%08x", crcSumU16(0, data.texture.data(), data.texture.size()));
 			syncDebug("crc(height) = 0x%08x", crcSumI16(0, data.height.data(), data.height.size()));
@@ -4331,6 +4331,25 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 	return 0;
 }
 
+static int remapIntPlayerNumber(int oldNumber)
+{
+	if (oldNumber < 0)
+	{
+		game.mapHasScavengers = true;
+		return scavengerSlot();
+	}
+
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (oldNumber == NetPlay.players[i].position)
+		{
+			return i;
+		}
+	}
+	ASSERT(false, "Found no player position for player %d", oldNumber);
+	return 0;
+}
+
 static int getPlayer(WzConfig &ini)
 {
 	if (ini.contains("player"))
@@ -4623,7 +4642,7 @@ static bool loadScriptDroid(ScriptMapData const &data)
 
 	for (auto &droid : data.droids)
 	{
-		unsigned player = droid.player == -1? scavengerPlayer() : droid.player;
+		unsigned player = remapIntPlayerNumber(droid.player);
 		auto psTemplate = getTemplateFromTranslatedNameNoPlayer(droid.name.toUtf8().c_str());
 		if (psTemplate == nullptr)
 		{
@@ -5243,12 +5262,7 @@ bool loadScriptStructure(ScriptMapData const &data)
 			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.toStdString().c_str());
 			continue; // skip it
 		}
-		int player = structure.player;
-		if (player < 0)
-		{
-			game.mapHasScavengers = true;
-			player = scavengerPlayer();
-		}
+		int player = remapIntPlayerNumber(structure.player);
 		STRUCTURE *psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
 		if (psStructure == nullptr)
 		{
