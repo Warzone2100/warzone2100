@@ -39,7 +39,7 @@ function eventGameInit()
 		setupBase(playnum);
 		
 		//From script/setup/setuptechlevels.js
-		seupTechLevel(playnum);
+		setupTechLevel(playnum);
 
 	}
 
