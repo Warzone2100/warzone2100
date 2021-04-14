@@ -617,11 +617,29 @@ void wzQuit()
 
 void wzGrabMouse()
 {
+	if (!WZbackend.has_value())
+	{
+		return;
+	}
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzGrabMouse called when window is not available - ignoring");
+		return;
+	}
 	SDL_SetWindowGrab(WZwindow, SDL_TRUE);
 }
 
 void wzReleaseMouse()
 {
+	if (!WZbackend.has_value())
+	{
+		return;
+	}
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzReleaseMouse called when window is not available - ignoring");
+		return;
+	}
 	SDL_SetWindowGrab(WZwindow, SDL_FALSE);
 }
 
@@ -1723,6 +1741,12 @@ unsigned int wzGetDefaultBaseDisplayScale(int displayIndex)
 
 bool wzChangeDisplayScale(unsigned int displayScale)
 {
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzChangeDisplayScale called when window is not available");
+		return false;
+	}
+
 	float newDisplayScaleFactor = (float)displayScale / 100.f;
 
 	if (wzWindowSizeIsSmallerThanMinimumRequired(windowWidth, windowHeight, newDisplayScaleFactor))
@@ -1887,7 +1911,7 @@ bool wzChangeWindowResolution(int screen, unsigned int width, unsigned int heigh
 // Returns the current window screen, width, and height
 void wzGetWindowResolution(int *screen, unsigned int *width, unsigned int *height)
 {
-	assert(WZwindow != nullptr);
+	ASSERT_OR_RETURN(, WZwindow != nullptr, "wzGetWindowResolution called when window is not available");
 
 	if (screen != nullptr)
 	{
@@ -2585,7 +2609,7 @@ void wzGetWindowToRendererScaleFactor(float *horizScaleFactor, float *vertScaleF
 		}
 		return;
 	}
-	assert(WZwindow != nullptr);
+	ASSERT_OR_RETURN(, WZwindow != nullptr, "wzGetWindowToRendererScaleFactor called when window is not available");
 
 	// Obtain the window context's drawable size in pixels
 	int drawableWidth, drawableHeight = 0;
@@ -2678,6 +2702,11 @@ void wzSetWindowIsResizable(bool resizable)
 
 bool wzIsWindowResizable()
 {
+	if (WZwindow == nullptr)
+	{
+		debug(LOG_WARNING, "wzIsWindowResizable called when window is not available");
+		return false;
+	}
 	Uint32 flags = SDL_GetWindowFlags(WZwindow);
 	if (flags & SDL_WINDOW_RESIZABLE)
 	{
