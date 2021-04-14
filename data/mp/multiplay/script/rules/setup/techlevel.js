@@ -1,4 +1,4 @@
-function seupTechLevel(player)
+function setupTechLevel(player)
 {
 	
 	//global function, doc/js-functions
