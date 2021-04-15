@@ -1927,13 +1927,6 @@ void addIntelScreen()
 	//add the power bar - for looks!
 	intShowPowerBar();
 
-	// Only do this in main game.
-	if ((GetGameMode() == GS_NORMAL) && !bMultiPlayer)
-	{
-		// Just display the 3d, no interface
-		displayWorld();
-	}
-
 	//add all the intelligence screen interface
 	(void)intAddIntelMap();
 	intMode = INT_INTELMAP;
