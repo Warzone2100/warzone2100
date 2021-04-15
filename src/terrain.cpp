@@ -1433,8 +1433,8 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &sunPos, con
 	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", true, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
-	auto getOptTex = [](const std::string &fileName) {
-		return fileName.empty() ? nullptr : &pie_Texture(iV_GetTexture(fileName.c_str()).value());
+	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName) {
+		return fileName.empty() ? nullptr : &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
 	};
 	gfx_api::WaterPSO::get().bind_textures(
 		&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()),
