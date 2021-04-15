@@ -9,8 +9,11 @@ var minFieldSize = 10; //size of smallest areas of terrain
 var targetFieldSize = 500; //target size of generated areas of terrain
 var maxDifference = 192; //max height difference between connectable areas of terrain
 var playerPositioningIters = 400; //how many times we should try to find better positions for the players during map generation. Higher values cause longer generation times. Must be >=1
-var noDecorations = false; //set to true to remove trees, buildings, etc.
+var decorationMode = 1; //0 = no decorations, 1 = decorate everything except near structures, 2 = decorate everything
+var decorationDensity = 0.01; //how much decoration we want in the map. Must be >=0
+var decorationFreeRange = 5; //when decorationMode is set to 1, this determines the range around structures that should be free of decorations
 var minReachable = 0.75; //how much of the map should be reachable by tanks to be considered acceptable
+var noCraters = false; //if set to true, oils will not have a crater texture under them, that way you can't know where they are until they're within sensor range
 
 var mapSize = mapWidth*mapHeight;
 
@@ -495,13 +498,24 @@ function placeStuff(regions, startPos) {
 		if (verbose) log('Base placement failed!');
 		return null;  // Failed to place something important.
 	}
-	if(!noDecorations){
+	if(decorationMode!=0){
 		var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
 		var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
-		for (var i = 0; i < mapSize*0.01; ++i) {
+		for (var i = 0; i < mapSize*decorationDensity; ++i) {
 			var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
 			if (pos !== null) {
 				var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
+				if(decorationMode==1){
+					var nearStructure=false;
+					for(var j=0;j<structures.length;j++){
+						var s=structures[j];
+						if(Math.sqrt(Math.pow(x-s.position[0]/128,2)+Math.pow(y-s.position[1]/128,2))<decorationFreeRange){
+							nearStructure=true;
+							break;
+						}
+					}
+					if(nearStructure) continue;
+				}
 				var snow = isSnow[mapWidth*y + x];
 				features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
 			}
@@ -536,11 +550,13 @@ while (stuff === null) {
 }
 
 // Mark oil resources with craters.
-for (var f = 0; f < stuff.features.length; ++f) {
-	if (stuff.features[f].name === 'OilResource') {
-		var pos = stuff.features[f].position;
-		var x = (pos[0] - 64)/128, y = (pos[1] - 64)/128;
-		texture[mapWidth*y + x] = 0x38 | gameRand()&0xf800;
+if(!noCraters){
+	for (var f = 0; f < stuff.features.length; ++f) {
+		if (stuff.features[f].name === 'OilResource') {
+			var pos = stuff.features[f].position;
+			var x = (pos[0] - 64)/128, y = (pos[1] - 64)/128;
+			texture[mapWidth*y + x] = 0x38 | gameRand()&0xf800;
+		}
 	}
 }
 
