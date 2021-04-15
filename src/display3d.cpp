@@ -1107,6 +1107,7 @@ static void drawTiles(iView *player)
 		glm::rotate(UNDEG(player->r.x), glm::vec3(1.f, 0.f, 0.f)) *
 		glm::rotate(UNDEG(player->r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::translate(glm::vec3(0, -player->p.y, 0));
+	const glm::mat4 &modelViewMatrix = viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z));
 
 	actualCameraPosition = Vector3i(0, 0, 0);
 
@@ -1196,7 +1197,7 @@ static void drawTiles(iView *player)
 
 	// draw it
 	// and draw it
-	drawTerrain(viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)), pie_PerspectiveGet(), theSun);
+	drawTerrain(modelViewMatrix, pie_PerspectiveGet(), theSun);
 
 	wzPerfEnd(PERF_TERRAIN);
 
@@ -1231,7 +1232,7 @@ static void drawTiles(iView *player)
 	pie_SetFogStatus(true);
 
 	// also, make sure we can use world coordinates directly
-	drawWater(pie_PerspectiveGet() * viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z)));
+	drawWater(pie_PerspectiveGet() * modelViewMatrix, getTheSun(), glm::vec3(actualCameraPosition - Vector3i(-player->p.x, 0, player->p.z)));
 	wzPerfEnd(PERF_WATER);
 
 	wzPerfBegin(PERF_MODELS, "3D scene - models");

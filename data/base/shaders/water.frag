@@ -3,6 +3,16 @@
 
 uniform sampler2D tex1;
 uniform sampler2D tex2;
+uniform sampler2D tex1_nm;
+uniform sampler2D tex2_nm;
+uniform sampler2D tex1_sm;
+uniform sampler2D tex2_sm;
+
+// light colors/intensity:
+uniform vec4 emissiveLight;
+uniform vec4 ambientLight;
+uniform vec4 diffuseLight;
+uniform vec4 specularLight;
 
 uniform int fogEnabled; // whether fog is enabled
 uniform float fogEnd;
@@ -10,31 +20,54 @@ uniform float fogStart;
 uniform vec4 fogColor;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-in vec4 color;
+#define NEWGL
+#else
+#define texture(tex,uv) texture2D(tex,uv)
+#endif
+
+#ifdef NEWGL
 in vec2 uv1;
 in vec2 uv2;
 in float vertexDistance;
+// light in tangent space:
+in vec3 lightDir;
+in vec3 halfVec;
 #else
-varying vec4 color;
 varying vec2 uv1;
 varying vec2 uv2;
 varying float vertexDistance;
+varying vec3 lightDir;
+varying vec3 halfVec;
 #endif
 
-#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
+#ifdef NEWGL
 out vec4 FragColor;
 #else
-// Uses gl_FragColor
+#define FragColor gl_FragColor
 #endif
 
 void main()
 {
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	vec4 fragColor = texture(tex1, uv1) * texture(tex2, uv2);
-	#else
-	vec4 fragColor = texture2D(tex1, uv1) * texture2D(tex2, uv2);
-	#endif
-	
+
+	vec3 N = normalize(texture(tex1_nm, uv1).xyz * 2.0 - 1.0);
+	if (N == vec3(-1,-1,-1)) {
+		N = vec3(0,0,1);
+	}
+	vec3 L = normalize(lightDir);
+	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
+
+	// Gaussian specular term computation
+	vec3 H = normalize(halfVec);
+	float angle = acos(dot(H, N));
+	float exponent = angle / 0.2;
+	exponent = -(exponent * exponent);
+	float gaussianTerm = exp(exponent) * float(lambertTerm > 0);
+
+	vec4 gloss = texture(tex1_sm, uv1);
+
+	fragColor = fragColor*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
+
 	if (fogEnabled > 0)
 	{
 		// Calculate linear fog
@@ -44,10 +77,5 @@ void main()
 		// Return fragment color
 		fragColor = mix(fragColor, vec4(1), fogFactor);
 	}
-
-	#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 	FragColor = fragColor;
-	#else
-	gl_FragColor = fragColor;
-	#endif
 }

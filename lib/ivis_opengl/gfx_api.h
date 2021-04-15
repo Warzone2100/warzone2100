@@ -748,26 +748,34 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_WATER>
 	{
-		glm::mat4 transform_matrix;
-		glm::vec4 param1;
-		glm::vec4 param2;
-		glm::vec4 param3;
-		glm::vec4 param4;
-		glm::mat4 translation;
-		glm::mat4 texture_matrix;
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat3 ModelTangentMatrix;
+		glm::mat4 ModelUV1Matrix;
+		glm::mat4 ModelUV2Matrix;
+		glm::vec3 cameraPos; // in modelSpace
+		glm::vec3 lightDirInTangent; // in tangentSpace
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		int texture0;
-		int texture1;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
 	std::tuple<constant_buffer_type<SHADER_WATER>>,
 	std::tuple<
 	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic_repeat>, texture_description<1, sampler_type::anisotropic_repeat>>, SHADER_WATER>;
+	>, std::tuple<
+	texture_description<0, sampler_type::anisotropic_repeat>, // tex1
+	texture_description<1, sampler_type::anisotropic_repeat>, // tex2
+	texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
+	texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
+	texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
+	texture_description<5, sampler_type::anisotropic_repeat>  // specular map2
+	>, SHADER_WATER>;
 
 	using gfx_tc = vertex_buffer_description<8, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, 0>>;
 	using gfx_colour = vertex_buffer_description<4, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>;
