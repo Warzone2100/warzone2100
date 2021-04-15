@@ -39,7 +39,7 @@ function camSendReinforcement(player, position, list, kind, data)
 	}
 	switch(kind)
 	{
-		case CAM_REINFORCE_GROUND:
+		case CAM_REINFORCE_GROUND: {
 			const droids = [];
 			for (let i = 0, l = list.length; i < l; ++i)
 			{
@@ -49,6 +49,7 @@ function camSendReinforcement(player, position, list, kind, data)
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
 			break;
+		}
 		case CAM_REINFORCE_TRANSPORT:
 			__camTransporterQueue.push({
 				player: player,

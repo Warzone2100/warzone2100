@@ -186,7 +186,7 @@ function __camPickTarget(group)
 				                    CAM_HUMAN_PLAYER, false);
 			}
 			// fall-through! we just don't track targets on COMPROMISE
-		case CAM_ORDER_COMPROMISE:
+		case CAM_ORDER_COMPROMISE: {
 			if (camDef(gi.data.pos))
 			{
 				for (let i = 0; i < gi.data.pos.length; ++i)
@@ -236,7 +236,8 @@ function __camPickTarget(group)
 				}
 			}
 			break;
-		case CAM_ORDER_DEFEND:
+		}
+		case CAM_ORDER_DEFEND: {
 			if (!camDef(gi.data.pos))
 			{
 				camDebug("'pos' is required for DEFEND order");
@@ -263,6 +264,7 @@ function __camPickTarget(group)
 				targets = [defendPos];
 			}
 			break;
+		}
 		default:
 			camDebug("Unsupported group order", gi.order, camOrderToString(gi.order));
 			break;
@@ -282,7 +284,7 @@ function __camPickTarget(group)
 
 function __camTacticsTick()
 {
-	const dt = CAM_TICKS_PER_FRAME;
+	let dt = CAM_TICKS_PER_FRAME;
 	for (const group in __camGroupInfo)
 	{
 		//Remove groups with no droids.
