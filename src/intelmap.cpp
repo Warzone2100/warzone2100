@@ -1218,7 +1218,6 @@ void resetIntelligencePauseState()
 		setConsolePause(false);
 		gameTimeStart();
 		screen_StopBackDrop();
-		pie_ScreenFlip(CLEAR_BLACK);
 	}
 }
 

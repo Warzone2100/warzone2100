@@ -626,12 +626,6 @@ bool intAddDesign(bool bShowCentreScreen)
 	//set which states are to be paused while design screen is up
 	setDesignPauseState();
 
-	if (GetGameMode() == GS_NORMAL && !bMultiPlayer)
-	{
-		// Just display the 3d, no interface
-		displayWorld();
-	}
-
 	auto const &parent = psWScreen->psForm;
 
 	/* Add the main design form */
@@ -3892,7 +3886,6 @@ static void resetDesignPauseState()
 		setScrollPause(false);
 		gameTimeStart();
 		screen_StopBackDrop();
-		pie_ScreenFlip(CLEAR_BLACK);
 	}
 }
 
