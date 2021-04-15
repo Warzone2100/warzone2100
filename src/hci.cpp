@@ -726,114 +726,41 @@ void intResetScreen(bool NoAnim)
 		}
 	}
 
+	intStopStructPosition();
+	if (NoAnim)
+	{
+		intRemoveOrderNoAnim();
+		intRemoveStatsNoAnim();
+		intRemoveObjectNoAnim();
+		intCloseInGameOptionsNoAnim();
+		intCloseMultiMenuNoAnim();
+		intRemoveIntelMapNoAnim();
+		intRemoveTransNoAnim();
+	}
+	else
+	{
+		intRemoveOrder();
+		intRemoveStats();
+		intRemoveObject();
+		intCloseMultiMenu();
+		intRemoveIntelMap();
+		intRemoveTrans();
+	}
+	intRemoveMissionResultNoAnim();
+	intRemoveDesign();
+	intHidePowerBar();
+
 	/* Remove whatever extra screen was displayed */
 	switch (intMode)
 	{
-	case INT_EDITSTAT:
-		intStopStructPosition();
-		if (NoAnim)
-		{
-			intRemoveStatsNoAnim();
-		}
-		else
-		{
-			intRemoveStats();
-		}
-		break;
-	case INT_OBJECT:
-		intStopStructPosition();
-		if (NoAnim)
-		{
-			intRemoveObjectNoAnim();
-		}
-		else
-		{
-			intRemoveObject();
-		}
-		break;
-	case INT_STAT:
-		if (NoAnim)
-		{
-			intRemoveStatsNoAnim();
-			intRemoveObjectNoAnim();
-		}
-		else
-		{
-			intRemoveStats();
-			intRemoveObject();
-		}
-		break;
-
-	case INT_CMDORDER:
-		if (NoAnim)
-		{
-			intRemoveOrderNoAnim();
-			intRemoveObjectNoAnim();
-		}
-		else
-		{
-			intRemoveOrder();
-			intRemoveObject();
-		}
-		break;
-	case INT_ORDER:
-		if (NoAnim)
-		{
-			intRemoveOrderNoAnim();
-		}
-		else
-		{
-			intRemoveOrder();
-		}
-		break;
-	case INT_INGAMEOP:
-		if (NoAnim) // Other menus can be opened when options menu is up, so close the options (issue #1589)
-		{
-			intCloseInGameOptionsNoAnim();
-		}
-		break;
-	case INT_MISSIONRES:
-		intRemoveMissionResultNoAnim();
-		break;
-	case INT_MULTIMENU:
-		if (NoAnim)
-		{
-			intCloseMultiMenuNoAnim();
-		}
-		else
-		{
-			intCloseMultiMenu();
-		}
-		break;
 	case INT_DESIGN:
-		intRemoveDesign();
-		intHidePowerBar();
 		gInputManager.contexts().popState();
 		triggerEvent(TRIGGER_DESIGN_QUIT);
 		break;
 	case INT_INTELMAP:
-		if (NoAnim)
-		{
-			intRemoveIntelMapNoAnim();
-		}
-		else
-		{
-			intRemoveIntelMap();
-		}
-		intHidePowerBar();
 		if (!bMultiPlayer)
 		{
 			gameTimeStart();
-		}
-		break;
-	case INT_TRANSPORTER:
-		if (NoAnim)
-		{
-			intRemoveTransNoAnim();
-		}
-		else
-		{
-			intRemoveTrans();
 		}
 		break;
 	default:
