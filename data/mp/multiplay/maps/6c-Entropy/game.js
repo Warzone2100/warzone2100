@@ -379,12 +379,12 @@ function placeNear(x, y, w, h, pad, scatter) {
 function genStartPos(fields, regions) {
 	function randPos(player) {
 		var x, y, i;
-        do {
-            x = gameRand(mapWidth);
-            y = playerPositioningYStrictness==0?gameRand(mapHeight):(~~((((player+1)/players)*mapHeight)+gameRand(~~(mapHeight/playerPositioningYStrictness))-(mapHeight/(playerPositioningYStrictness*2))));
-            i = mapWidth*y + x;
-        } while (occupied[i] || fields.region[i]===undefined || !regions[fields.region[i]].reachable);
-        return [x, y];
+		do {
+			x = gameRand(mapWidth);
+			y = playerPositioningYStrictness==0?gameRand(mapHeight):(~~((((player+1)/players)*mapHeight)+gameRand(~~(mapHeight/playerPositioningYStrictness))-(mapHeight/(playerPositioningYStrictness*2))));
+			i = mapWidth*y + x;
+		} while (occupied[i] || fields.region[i]===undefined || !regions[fields.region[i]].reachable);
+		return [x, y];
 	}
 	var startPos = [];
 	for (var player = 0; player < players; ++player) {
@@ -488,33 +488,33 @@ function placeStuff(regions, startPos) {
 			structures.push({name: "WallTower01", position: placeNear(oilPos[0]/128, oilPos[1]/128, 1, 1, false, 4), direction: 0x4000*gameRand(4), modules: 0, player: player});
 		}
 		for(var i=0;i<trucksPerPlayer;i++){
-            droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
-        }
+			droids.push({name: "ConstructionDroid", position: placeNear(x, y, 1, 1, false, 4), direction: gameRand(0x10000), player: player});
+		}
 	}
 	if (placeNearFailed) {
 		if (verbose) log('Base placement failed!');
 		return null;  // Failed to place something important.
 	}
 	if(!noDecorations){
-        var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
-        var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
-        for (var i = 0; i < mapSize*0.01; ++i) {
-            var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
-            if (pos !== null) {
-                var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
-                var snow = isSnow[mapWidth*y + x];
-                features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
-            }
-        }
-    }
+		var featureTypes = ["Tree1", "Tree2", "Tree3", "Tree1", "Tree2", "Tree3", "LogCabin1", "LogCabin2", "WaterTower"];
+		var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
+		for (var i = 0; i < mapSize*0.01; ++i) {
+			var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
+			if (pos !== null) {
+				var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
+				var snow = isSnow[mapWidth*y + x];
+				features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
+			}
+		}
+	}
 	
 	// Add additional oils
-	for(var i=0;i<12*((richness-3)*5);i++){
-        var oilPos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true, 20);
-        if (oilPos !== null) {  // Unlikely to be null, if so placeNearFailed is true.
-            features.push({name: "OilResource", position: oilPos, direction: 0});
-        }
-    }
+	for(var i=0;i<60*(richness-3);i++){
+		var oilPos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true, 20);
+		if (oilPos !== null) {  // Unlikely to be null, if so placeNearFailed is true.
+			features.push({name: "OilResource", position: oilPos, direction: 0});
+		}
+	}
 
 	// Skip unimportant features which couldn't be placed anywhere, maybe was trying to place them in water far from land.
 	for (var f = 0; f < features.length; ++f) {
