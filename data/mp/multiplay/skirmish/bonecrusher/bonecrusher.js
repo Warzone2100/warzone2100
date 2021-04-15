@@ -203,7 +203,7 @@ var policy = [];
 var nf = [];
 nf['policy'] = false;
 
-const enemyDist = 0;
+let enemyDist = 0;
 
 var armyPartisans = newGroup();
 var armyRegular = newGroup();
