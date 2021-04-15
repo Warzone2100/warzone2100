@@ -27,7 +27,7 @@ function produceDroid(fac1) {
 function scavtick()
 {
 	// enum functions now return a list of results
-	var factorylist = enumStruct(me, "A0BaBaFactory");
+	const factorylist = enumStruct(me, "A0BaBaFactory");
 
 	// one way of dealing with lists is running a function on each member of the list
 	if (factorylist)
@@ -40,7 +40,7 @@ function scavtick()
 		lastAttack = gameTime;
 
 		// Return to nearest factory (ie base)
-		var droidlist = enumGroup(attackGroup);
+		const droidlist = enumGroup(attackGroup);
 
 		if (droidlist && factorylist)
 		{
@@ -48,7 +48,7 @@ function scavtick()
 			// note, you must NOT use the for (... in ...) construct to iterate over an array of objects with properties!
 			for (let i = 0; i < droidlist.length; i++)
 			{
-				var droid = droidlist[i];
+				const droid = droidlist[i];
 				let current = 0;
 				let closest = 9999;
 				let clfac;		// starts undefined
@@ -57,7 +57,7 @@ function scavtick()
 				// saves us a few expensive scripting calls
 				for (let j = 0; j < factorylist.length; j++)
 				{
-					var fact = factorylist[j];
+					const fact = factorylist[j];
 					current = distBetweenTwoPoints(fact.x, fact.y, droid.x, droid.y);
 					if (current < closest)
 					{
@@ -103,10 +103,10 @@ function eventAttacked(victim, attacker)
 	if (victim.type == STRUCTURE && (gameTime - lastAttack) > 3000)
 	{
 		lastAttack = gameTime;
-		var droidlist = enumGroup(attackGroup);
+		const droidlist = enumGroup(attackGroup);
 		for (let i = 0; i < droidlist.length; i++)
 		{
-			var droid = droidlist[i];
+			const droid = droidlist[i];
 			if (distBetweenTwoPoints(victim.x, victim.y, attacker.x, attacker.y) < 24)
 			{
 				orderDroidLoc(droid, DORDER_SCOUT, attacker.x, attacker.y);
