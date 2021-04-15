@@ -2915,9 +2915,6 @@ static void desCreateDefaultTemplate()
 /* Remove the design widgets from the widget screen */
 void intRemoveDesign()
 {
-	//save the current design on exit if it is valid
-	saveTemplate();
-
 	widgDelete(psWScreen, IDDES_POWERFORM);
 	widgDelete(psWScreen, IDDES_NAMEBOX);
 	widgDelete(psWScreen, IDDES_TEMPLBASE);
