@@ -112,6 +112,7 @@ bool texLoad(const char *fileName)
 	mipmap_levels = MIPMAP_LEVELS;
 
 	int32_t max_texture_size = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
+	max_texture_size = std::min(max_texture_size, getTextureSize());
 
 	while (max_texture_size < mipmap_max * TILES_IN_PAGE_COLUMN)
 	{

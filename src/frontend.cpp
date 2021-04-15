@@ -1749,7 +1749,7 @@ bool runVideoOptionsMenu()
 	case FRONTEND_TEXTURESZ:
 	case FRONTEND_TEXTURESZ_R:
 		{
-			int newTexSize = pow2Cycle(getTextureSize(), 128, 2048);
+			int newTexSize = pow2Cycle(getTextureSize(), 128, 4*2048);
 
 			// Set the new size
 			setTextureSize(newTexSize);
