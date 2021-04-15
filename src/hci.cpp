@@ -781,6 +781,7 @@ void intOpenDebugMenu(OBJECT_TYPE id)
 		return;
 	}
 
+	intResetScreen(true);
 	switch (id)
 	{
 	case OBJ_DROID:
