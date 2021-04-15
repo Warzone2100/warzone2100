@@ -9,7 +9,7 @@ function completeResearchOnTime(time, playnum)
 	}
 }
 
-var allRes = {
+const allRes = {
 	"R-Vehicle-Prop-Wheels": 0,
 	"R-Sys-Spade1Mk1": 0,
 	"R-Vehicle-Body01": 0,

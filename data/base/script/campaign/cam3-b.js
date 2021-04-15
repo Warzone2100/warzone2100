@@ -54,8 +54,8 @@ function camEnemyBaseEliminated_NXWestBase()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list = [cTempl.nxmheapv, cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv];
-	var ext = {
+	const list = [cTempl.nxmheapv, cTempl.nxlscouv, cTempl.nxmtherv, cTempl.nxlscouv];
+	const ext = {
 		limit: [5, 2, 5, 2], //paired with template list
 		alternate: true,
 		altIdx: 0
@@ -79,9 +79,9 @@ function getDroidsForNXLZ(isTransport)
 	}
 
 	const COUNT = isTransport ? 10 : 10 + camRand(6);
-	var units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmlinkh, cTempl.nxmrailh, cTempl.nxmsamh];
+	const units = [cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas, cTempl.nxmlinkh, cTempl.nxmrailh, cTempl.nxmsamh];
 
-	var droids = [];
+	const droids = [];
 	for (let i = 0; i < COUNT; ++i)
 	{
 		droids.push(units[camRand(units.length)]);
@@ -100,7 +100,7 @@ function sendNXTransporter()
 	}
 
 	const LZ_ALIAS = "CM3B_TRANS"; //1 and 2
-	var list = getDroidsForNXLZ(true);
+	const list = getDroidsForNXLZ(true);
 	let lzNum;
 	let pos;
 
@@ -149,7 +149,7 @@ function sendNXlandReinforcements()
 function transferPower()
 {
     const AWARD = 5000;
-    var powerTransferSound = "power-transferred.ogg";
+    const powerTransferSound = "power-transferred.ogg";
     setPower(playerPower(CAM_HUMAN_PLAYER) + AWARD, CAM_HUMAN_PLAYER);
     playSound(powerTransferSound);
 }
@@ -240,17 +240,17 @@ function eventStartLevel()
 {
 	trapActive = false;
 	gammaAttackCount = 0;
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone");
 
-     camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
+	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_2S");
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30))); // For the rescue mission.
 
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("NXlandingZone");
-	var enemyLz2 = getObject("NXlandingZone2");
+	const enemyLz = getObject("NXlandingZone");
+	const enemyLz2 = getObject("NXlandingZone2");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 	setNoGoArea(enemyLz2.x, enemyLz2.y, enemyLz2.x2, enemyLz2.y2, 5);
 

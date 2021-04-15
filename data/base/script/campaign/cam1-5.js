@@ -19,12 +19,12 @@ const SCAVENGER_RES = [
 //Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
-	var scouts = [ cTempl.npsens, cTempl.nppod, cTempl.nphmg ];
-	var heavies = [ cTempl.npsbb, cTempl.npmmct, cTempl.npmrl ];
+	const scouts = [cTempl.npsens, cTempl.nppod, cTempl.nphmg];
+	const heavies = [cTempl.npsbb, cTempl.npmmct, cTempl.npmrl];
 
-	var numScouts = camRand(5) + 1;
-	var heavy = heavies[camRand(heavies.length)];
-	var list = [];
+	const numScouts = camRand(5) + 1;
+	const heavy = heavies[camRand(heavies.length)];
+	const list = [];
 
 	for (let i = 0; i < numScouts; ++i)
 	{
@@ -81,12 +81,12 @@ camAreaEvent("NPLZTrigger", function()
 
 function sendNPTransport()
 {
-	var tPos = getObject("NPTransportPos");
-	var nearbyDefense = enumRange(tPos.x, tPos.y, 6, NEW_PARADIGM, false);
+	const tPos = getObject("NPTransportPos");
+	const nearbyDefense = enumRange(tPos.x, tPos.y, 6, NEW_PARADIGM, false);
 
 	if (nearbyDefense.length > 0)
 	{
-		var list = getDroidsForNPLZ();
+		const list = getDroidsForNPLZ();
 		camSendReinforcement(NEW_PARADIGM, camMakePos("NPTransportPos"), list, CAM_REINFORCE_TRANSPORT, {
 			entry: { x: 2, y: 42 },
 			exit: { x: 2, y: 42 },
@@ -137,17 +137,17 @@ function eventStartLevel()
 		annihilate: true
 	});
 
-	var lz = getObject("LandingZone1"); //player lz
-	var lz2 = getObject("LandingZone2"); //new paradigm lz
-	var tent = getObject("TransporterEntry");
-	var text = getObject("TransporterExit");
+	const lz = getObject("LandingZone1"); //player lz
+	const lz2 = getObject("LandingZone2"); //new paradigm lz
+	const tent = getObject("TransporterEntry");
+	const text = getObject("TransporterExit");
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	setNoGoArea(lz2.x, lz2.y, lz2.x2, lz2.y2, NEW_PARADIGM);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
 	//Transporter is the only droid of the player's on the map
-	var transporter = enumDroid();
+	const transporter = enumDroid();
 	cameraTrack(transporter[0]);
 
 	//Make sure the New Paradigm and Scavs are allies

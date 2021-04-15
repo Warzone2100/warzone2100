@@ -72,7 +72,7 @@ function camDebug()
 //;;
 function camDebugOnce()
 {
-	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
+	const str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
 	if (camDef(__camDebuggedOnce[str]))
 	{
 		return;
@@ -113,7 +113,7 @@ function camTraceOnce()
 	{
 		return;
 	}
-	var str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
+	const str = debugGetCallerFuncName() + ": " + Array.prototype.join.call(arguments, " ");
 	if (camDef(__camTracedOnce[str]))
 	{
 		return;
@@ -167,7 +167,7 @@ function __camGenericDebug(flag, func, args, err, bt)
 	{
 		func = "<anonymous>";
 	}
-	var str = flag + ": " + func + ": " + Array.prototype.join.call(args, " ");
+	const str = flag + ": " + func + ": " + Array.prototype.join.call(args, " ");
 	debug(str);
 	if (camDef(err) && err)
 	{

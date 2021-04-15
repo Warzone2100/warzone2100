@@ -90,10 +90,10 @@ function enableAllFactories()
 
 function truckDefense()
 {
-	var truckNum = countDroid(NEXUS, DROID_CONSTRUCT);
+	const truckNum = countDroid(NEXUS, DROID_CONSTRUCT);
 	if (truckNum > 0)
 	{
-		var list = [
+		const list = [
 			"Sys-NEXUSLinkTOW", "P0-AASite-SAM2", "Emplacement-PrisLas",
 			"NX-Tower-ATMiss", "Sys-NX-CBTower", "Emplacement-HvART-pit",
 			"Sys-SensoTower02"
@@ -112,9 +112,9 @@ function truckDefense()
 
 function eventStartLevel()
 {
-	var startpos = getObject("startPosition");
-	var tpos = getObject("transportEntryExit");
-	var lz = getObject("landingZone");
+	const startpos = getObject("startPosition");
+	const tpos = getObject("transportEntryExit");
+	const lz = getObject("landingZone");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "GAMMA_OUT", {
 		area: "RTLZ",
@@ -128,7 +128,7 @@ function eventStartLevel()
 	setTransporterExit(tpos.x, tpos.y, CAM_HUMAN_PLAYER);
 	setMissionTime(-1); //Infinite time
 
-	var enemyLz = getObject("NXlandingZone");
+	const enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);

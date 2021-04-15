@@ -78,14 +78,14 @@ function cam_eventChat(from, to, message)
 	{
 		while (true) // eslint-disable-line no-constant-condition
 		{
-			var research = enumResearch();
+			const research = enumResearch();
 			if (research.length === 0)
 			{
 				break;
 			}
 			for (let i = 0, len = research.length; i < len; ++i)
 			{
-				var researchName = research[i].name;
+				const researchName = research[i].name;
 				completeResearch(researchName, CAM_HUMAN_PLAYER);
 			}
 		}
@@ -249,7 +249,7 @@ function cam_eventMissionTimeout()
 	}
 	else
 	{
-		var won = camCheckExtraObjective();
+		const won = camCheckExtraObjective();
 		if (!won)
 		{
 			__camGameLost();
@@ -270,8 +270,8 @@ function cam_eventAttacked(victim, attacker)
 			if (victim.group === null)
 			{
 				const DEFAULT_RADIUS = 6;
-				var loc = {x: victim.x, y: victim.y};
-				var droids = enumRange(loc.x, loc.y, DEFAULT_RADIUS, victim.player, false).filter(function(obj) {
+				const loc = {x: victim.x, y: victim.y};
+				const droids = enumRange(loc.x, loc.y, DEFAULT_RADIUS, victim.player, false).filter(function(obj) {
 					return (obj.type === DROID &&
 						obj.group === null &&
 						(obj.canHitGround || obj.isSensor) &&
@@ -322,7 +322,7 @@ function cam_eventGameLoaded()
 	//missions or else it reverts to the original texture.
 	for (let i = 0, l = SCAV_KEVLAR_MISSIONS.length; i < l; ++i)
 	{
-		var mission = SCAV_KEVLAR_MISSIONS[i];
+		const mission = SCAV_KEVLAR_MISSIONS[i];
 		if (__camNextLevel === mission)
 		{
 			if (tilesetType === "ARIZONA")

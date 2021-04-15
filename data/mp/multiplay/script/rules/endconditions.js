@@ -2,8 +2,8 @@
 // END CONDITIONS
 function checkEndConditions()
 {
-	var factories = countStruct("A0LightFactory") + countStruct("A0CyborgFactory");
-	var droids = countDroid(DROID_ANY);
+	let factories = countStruct("A0LightFactory") + countStruct("A0CyborgFactory");
+	let droids = countDroid(DROID_ANY);
 
 	// Losing Conditions
 	if (droids == 0 && factories == 0)

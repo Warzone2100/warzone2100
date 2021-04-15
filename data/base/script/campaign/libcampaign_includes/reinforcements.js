@@ -26,9 +26,9 @@
 //;;
 function camSendReinforcement(player, position, list, kind, data)
 {
-	var pos = camMakePos(position);
-	var order = CAM_ORDER_ATTACK;
-	var order_data = { regroup: false, count: -1 };
+	const pos = camMakePos(position);
+	let order = CAM_ORDER_ATTACK;
+	let order_data = { regroup: false, count: -1 };
 	if (camDef(data) && camDef(data.order))
 	{
 		order = data.order;
@@ -40,11 +40,11 @@ function camSendReinforcement(player, position, list, kind, data)
 	switch(kind)
 	{
 		case CAM_REINFORCE_GROUND:
-			var droids = [];
+			const droids = [];
 			for (let i = 0, l = list.length; i < l; ++i)
 			{
-				var template = list[i];
-				var prop = __camChangePropulsionOnDiff(template.prop);
+				const template = list[i];
+				const prop = __camChangePropulsionOnDiff(template.prop);
 				droids.push(addDroid(player, pos.x, pos.y, "Reinforcement", template.body, prop, "", "", template.weap));
 			}
 			camManageGroup(camMakeGroup(droids), order, order_data);
@@ -81,7 +81,7 @@ function camSetBaseReinforcements(blabel, interval, callback, kind, data)
 	{
 		camDebug("Callback name must be a string (received", callback, ")");
 	}
-	var bi = __camEnemyBases[blabel];
+	const bi = __camEnemyBases[blabel];
 	bi.reinforce_kind = kind;
 	bi.reinforce_interval = interval;
 	bi.reinforce_callback = callback;

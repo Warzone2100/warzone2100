@@ -113,13 +113,13 @@ function camEnemyBaseEliminated_NPCentralFactory()
 
 function getDroidsForNPLZ(args)
 {
-	var scouts = [ cTempl.npsens, cTempl.nppod, cTempl.nphmg ];
-	var heavies = [ cTempl.npslc, cTempl.npsmct, cTempl.npmor ];
+	const scouts = [cTempl.npsens, cTempl.nppod, cTempl.nphmg];
+	const heavies = [cTempl.npslc, cTempl.npsmct, cTempl.npmor];
 
 
-	var numScouts = camRand(5) + 1;
-	var heavy = heavies[camRand(heavies.length)];
-	var list = [];
+	const numScouts = camRand(5) + 1;
+	const heavy = heavies[camRand(heavies.length)];
+	const list = [];
 
 	for (let i = 0; i < numScouts; ++i)
 	{
@@ -165,15 +165,15 @@ camAreaEvent("NPLZ2Trigger", function()
 function eventStartLevel()
 {
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM_1CA");
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// make sure player doesn't build on enemy LZs of the next level
 	for (let i = 1; i <= 5; ++i)
 	{
-		var ph = getObject("PhantomLZ" + i);
+		const ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,
 		// note: player 1 is NP, player 7 is scavs
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);

@@ -13,13 +13,13 @@ const TRANSFER_LIKE_EVENT = 2;
 function reticuleManufactureCheck()
 {
 	let structureComplete = false;
-	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
+	const facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (let i = 0, len = facs.length; i < len; ++i)
 	{
-		var facType = facs[i];
-		var offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
-		var onMapFacs = enumStruct(selectedPlayer, facType);
+		const facType = facs[i];
+		const offWorldFacs = enumStructOffWorld(selectedPlayer, facType);
+		const onMapFacs = enumStruct(selectedPlayer, facType);
 
 		if (offWorldFacs !== null)
 		{
@@ -63,13 +63,13 @@ function reticuleManufactureCheck()
 function reticuleResearchCheck()
 {
 	let structureComplete = false;
-	var labs = [RESEARCH_LAB,];
+	const labs = [RESEARCH_LAB,];
 
 	for (let i = 0, len = labs.length; i < len; ++i)
 	{
-		var resType = labs[i];
-		var offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
-		var onMapLabs = enumStruct(selectedPlayer, resType);
+		const resType = labs[i];
+		const offWorldLabs = enumStructOffWorld(selectedPlayer, resType);
+		const onMapLabs = enumStruct(selectedPlayer, resType);
 
 		if (offWorldLabs !== null)
 		{
@@ -125,13 +125,13 @@ function reticuleBuildCheck()
 function reticuleDesignCheck()
 {
 	let structureComplete = false;
-	var hqs = [HQ,];
+	const hqs = [HQ,];
 
 	for (let i = 0, len = hqs.length; i < len; ++i)
 	{
-		var hqType = hqs[i];
-		var offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
-		var onMapHq = enumStruct(selectedPlayer, hqType);
+		const hqType = hqs[i];
+		const offWorldHq = enumStructOffWorld(selectedPlayer, hqType);
+		const onMapHq = enumStruct(selectedPlayer, hqType);
 
 		if (offWorldHq !== null)
 		{
@@ -416,13 +416,13 @@ function eventResearched(research, structure, player)
 	// iterate over all results
 	for (let i = 0; i < research.results.length; i++)
 	{
-		var v = research.results[i];
+		const v = research.results[i];
 		//debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterparam=" + v['filterParameter']);
 		for (const cname in Upgrades[player][v['class']]) // iterate over all components of this type
 		{
-			var parameter = v['parameter'];
-			var ctype = v['class'];
-			var filterparam = v['filterParameter'];
+			const parameter = v['parameter'];
+			const ctype = v['class'];
+			const filterparam = v['filterParameter'];
 			if ('filterParameter' in v && Stats[ctype][cname][filterparam] != v['filterValue']) // more specific filter
 			{
 				continue;

@@ -22,8 +22,8 @@ const COLLECTIVE_RES = [
 //Remove enemy vtols when in the remove zone area.
 function checkEnemyVtolArea()
 {
-	var pos = {"x": 127, "y": 64};
-	var vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter(function(obj) {
+	const pos = {"x": 127, "y": 64};
+	const vtols = enumRange(pos.x, pos.y, 2, THE_COLLECTIVE, false).filter(function(obj) {
 		return isVTOL(obj);
 	});
 
@@ -39,7 +39,7 @@ function checkEnemyVtolArea()
 //Play last video sequence and destroy all droids on map.
 function playLastVideo()
 {
-	var droids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+	const droids = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
 		return (obj.type === DROID && !camIsTransporter(obj));
 	});
 
@@ -55,11 +55,11 @@ function eventTransporterLaunch(transporter)
 {
 	if (!allowWin && transporter.player === CAM_HUMAN_PLAYER)
 	{
-		var cargoDroids = enumCargo(transporter);
+		const cargoDroids = enumCargo(transporter);
 
 		for (let i = 0, len = cargoDroids.length; i < len; ++i)
 		{
-			var virDroid = cargoDroids[i];
+			const virDroid = cargoDroids[i];
 
 			if (virDroid && virDroid.droidType === DROID_CONSTRUCT)
 			{
@@ -73,8 +73,8 @@ function eventTransporterLaunch(transporter)
 //Return randomly selected droid templates.
 function randomTemplates(list, isTransport)
 {
-	var droids = [];
-	var size = camDef(isTransport) ? 8 + camRand(3) : 18 + camRand(8);
+	const droids = [];
+	const size = camDef(isTransport) ? 8 + camRand(3) : 18 + camRand(8);
 
 	for (let i = 0; i < size; ++i)
 	{
@@ -94,17 +94,17 @@ function vtolAttack()
 		{"x": 36, "y": 1},
 		{"x": 1, "y": 28},
 	];
-	var vtolRemovePos = {"x": 127, "y": 64};
+	const vtolRemovePos = {"x": 127, "y": 64};
 
-	var list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat, cTempl.commorvt];
+	const list = [cTempl.commorv, cTempl.colcbv, cTempl.colagv, cTempl.comhvat, cTempl.commorvt];
 	camSetVtolData(THE_COLLECTIVE, VTOL_POSITIONS, vtolRemovePos, list, camChangeOnDiff(camSecondsToMilliseconds(30)));
 }
 
 //SouthEast attackers which are mostly cyborgs.
 function cyborgAttack()
 {
-	var southCyborgAssembly = {"x": 123, "y": 125};
-	var list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
+	const southCyborgAssembly = {"x": 123, "y": 125};
+	const list = [cTempl.npcybr, cTempl.cocybag, cTempl.npcybc, cTempl.comhltat, cTempl.cohhpv];
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(southCyborgAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
 		data: { regroup: false, count: -1 }
@@ -114,11 +114,11 @@ function cyborgAttack()
 //North road attacker consisting of powerful weaponry.
 function tankAttack()
 {
-	var northTankAssembly = {"x": 95, "y": 3};
-	//var westTankAssembly = {"x": 3, "y": 112}; //This was unused.
+	const northTankAssembly = {"x": 95, "y": 3};
+	//const westTankAssembly = {"x": 3, "y": 112}; //This was unused.
 
-	var list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
-	var pos = [];
+	const list = [cTempl.comhltat, cTempl.cohact, cTempl.cohhpv, cTempl.comagt, cTempl.cohbbt];
+	const pos = [];
 	pos.push(northTankAssembly);
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(northTankAssembly), randomTemplates(list), CAM_REINFORCE_GROUND, {
@@ -129,7 +129,7 @@ function tankAttack()
 //NOTE: this is only called once from the library's eventMissionTimeout().
 function checkIfLaunched()
 {
-	var transporters = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+	const transporters = enumArea(0, 0, mapWidth, mapHeight, CAM_HUMAN_PLAYER, false).filter(function(obj) {
 		return (obj.type === DROID && camIsTransporter(obj));
 	});
 	if (transporters.length > 0)
@@ -150,9 +150,9 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Send off at least one transporter with a truck and survive The Collective assault"));
 
-	var startpos = {"x": 88, "y": 101};
-	var lz = {"x": 86, "y": 99, "x2": 88, "y2": 101};
-	var tCoords = {"xStart": 87, "yStart": 100, "xOut": 0, "yOut": 55};
+	const startpos = {"x": 88, "y": 101};
+	const lz = {"x": 86, "y": 99, "x2": 88, "y2": 101};
+	const tCoords = {"xStart": 87, "yStart": 100, "xOut": 0, "yOut": 55};
 
 	camSetStandardWinLossConditions(CAM_VICTORY_TIMEOUT, "CAM_3A", {
 		reinforcements: camMinutesToSeconds(7), //Duration the transport "leaves" map.
@@ -162,7 +162,7 @@ function eventStartLevel()
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	camSetupTransporter(tCoords.xStart, tCoords.yStart, tCoords.xOut, tCoords.yOut);
 
-	var enemyLz = {"x": 49, "y": 83, "x2": 51, "y2": 85};
+	const enemyLz = {"x": 49, "y": 83, "x2": 51, "y2": 85};
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	setMissionTime(camMinutesToSeconds(30));

@@ -37,7 +37,7 @@ function baseEstablished()
 function extraVictoryCondition()
 {
 	const MIN_TRANSPORT_RUNS = 10;
-	var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+	const enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 	// No enemies on map and at least eleven New Paradigm transport runs.
 	if (baseEstablished() && (totalTransportLoads > MIN_TRANSPORT_RUNS) && !enemies.length)
 	{
@@ -55,10 +55,10 @@ function sendTransport()
 		lastHeavy = true;
 	}
 	// find an LZ that is not compromised
-	var list = [];
+	const list = [];
 	for (let i = 0; i < landingZoneList.length; ++i)
 	{
-		var lz = landingZoneList[i];
+		const lz = landingZoneList[i];
 		if (enumArea(lz, CAM_HUMAN_PLAYER, false).length === 0)
 		{
 			list.push({ idx: i, label: lz });
@@ -69,17 +69,17 @@ function sendTransport()
 	{
 		for (let i = 0; i < 2; ++i)
 		{
-			var rnd = camRand(landingZoneList.length);
+			const rnd = camRand(landingZoneList.length);
 			list.push({ idx: rnd, label: landingZoneList[rnd] });
 		}
 	}
-	var picked = list[camRand(list.length)];
+	const picked = list[camRand(list.length)];
 	lastLZ = picked.idx;
-	var pos = camMakePos(picked.label);
+	const pos = camMakePos(picked.label);
 
 	// (2 or 3 or 4) pairs of each droid template.
 	// This emulates wzcam's droid count distribution.
-	var count = [ 2, 3, 4, 4, 4, 4, 4, 4, 4 ][camRand(9)];
+	let count = [2, 3, 4, 4, 4, 4, 4, 4, 4][camRand(9)];
 
 	let templates;
 	if (lastHeavy)
@@ -93,10 +93,10 @@ function sendTransport()
 		templates = [ cTempl.npsmct, cTempl.npmor, cTempl.npsmc, cTempl.npmmct, cTempl.npmrl, cTempl.nphmg, cTempl.npsbb ];
 	}
 
-	var droids = [];
+	const droids = [];
 	for (let i = 0; i < count; ++i)
 	{
-		var t = templates[camRand(templates.length)];
+		const t = templates[camRand(templates.length)];
 		// two droids of each template
 		droids[droids.length] = t;
 		droids[droids.length] = t;
@@ -129,15 +129,15 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_1_4AS", {
 		callback: "extraVictoryCondition"
 	});
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
 	// make sure player doesn't build on enemy LZs
 	for (let i = 1; i <= 5; ++i)
 	{
-		var ph = getObject("PhantomLZ" + i);
+		const ph = getObject("PhantomLZ" + i);
 		// HACK: set LZs of bad players, namely 2...6,
 		// note: player 1 is NP
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);

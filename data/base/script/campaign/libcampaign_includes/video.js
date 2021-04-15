@@ -44,7 +44,7 @@ function __camEnqueueVideos()
 	}
 
 	const SOUND_IDENTIFER = ".ogg";
-	var what = __camVideoSequences[0];
+	const what = __camVideoSequences[0];
 
 	if (!camIsString(what))
 	{

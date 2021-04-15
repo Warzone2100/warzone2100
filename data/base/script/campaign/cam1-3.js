@@ -36,11 +36,11 @@ camAreaEvent("SouthConvoyTrigger", function(droid)
 		pos: camMakePos("SouthConvoyLoc"),
 		radius: 6,
 	});
-	var scout = getObject("ScoutDroid");
+	const scout = getObject("ScoutDroid");
 	if (camDef(scout) && scout)
 	{
 		camTrace("New Paradigm sensor scout retreating");
-		var pos = camMakePos("ScoutDroidTarget");
+		const pos = camMakePos("ScoutDroidTarget");
 		orderDroidLoc(scout, DORDER_MOVE, pos.x, pos.y);
 	}
 });
@@ -103,7 +103,7 @@ function eventAttacked(victim, attacker) {
 	if (victim.player === NEW_PARADIGM)
 	{
 		camCallOnce("enableNP");
-		var commander = getObject("NPCommander");
+		const commander = getObject("NPCommander");
 		if (camDef(attacker) && attacker && camDef(commander) && commander &&
 			commander.order !== DORDER_SCOUT && commander.order !== DORDER_RTR)
 		{
@@ -172,10 +172,10 @@ function eventStartLevel()
 		annihilate: true
 	});
 
-	var startpos = getObject("StartPosition");
-	var lz = getObject("LandingZone");
-	var tent = getObject("TransporterEntry");
-	var text = getObject("TransporterExit");
+	const startpos = getObject("StartPosition");
+	const lz = getObject("LandingZone");
+	const tent = getObject("TransporterEntry");
+	const text = getObject("TransporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);

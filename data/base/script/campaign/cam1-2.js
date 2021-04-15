@@ -60,10 +60,10 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	var startpos = getObject("StartPosition");
-	var lz = getObject("LandingZone");
-	var tent = getObject("TransporterEntry");
-	var text = getObject("TransporterExit");
+	const startpos = getObject("StartPosition");
+	const lz = getObject("LandingZone");
+	const tent = getObject("TransporterEntry");
+	const text = getObject("TransporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);

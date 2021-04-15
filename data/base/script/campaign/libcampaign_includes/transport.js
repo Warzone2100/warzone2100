@@ -61,11 +61,11 @@ function __camDispatchTransporterUnsafe()
 		return false;
 	}
 	const OFFSET = 2; //Increaze LZ "no go" zone area a bit
-	var args = __camTransporterQueue[0];
-	var player = args.player;
-	var pos = args.position;
-	var list = args.list;
-	var data = args.data;
+	const args = __camTransporterQueue[0];
+	const player = args.player;
+	const pos = args.position;
+	const list = args.list;
+	const data = args.data;
 	if (camDef(__camIncomingTransports[player]))
 	{
 		camTrace("Transporter already on map for player", player + ", delaying.");
@@ -81,13 +81,13 @@ function __camDispatchTransporterUnsafe()
 		                                         "V-Tol", "", "",
 		                                         "MG3-VTOL");
 	}
-	var trans = __camPlayerTransports[player];
-	var droids = [];
+	const trans = __camPlayerTransports[player];
+	const droids = [];
 	for (let i = 0, l = list.length; i < l; ++i)
 	{
-		var template = list[i];
-		var prop = __camChangePropulsionOnDiff(template.prop);
-		var droid = addDroid(player, -1, -1, "Reinforcement", template.body, prop, "", "", template.weap);
+		const template = list[i];
+		const prop = __camChangePropulsionOnDiff(template.prop);
+		const droid = addDroid(player, -1, -1, "Reinforcement", template.body, prop, "", "", template.weap);
 		droids.push(droid);
 		addDroidToTransporter(trans, droid);
 	}
@@ -130,7 +130,7 @@ function __camDispatchTransporterSafe(player, position, list, data)
 
 function __camLandTransporter(player, pos)
 {
-	var ti = __camIncomingTransports[player];
+	const ti = __camIncomingTransports[player];
 	if (!camDef(ti))
 	{
 		camDebug("Unhandled transporter for player", player);

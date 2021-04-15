@@ -12,7 +12,7 @@ function camNextLevel(nextLevel)
 {
 	if (__camNeedBonusTime)
 	{
-		var bonusTime = getMissionTime();
+		let bonusTime = getMissionTime();
 		if (difficulty === EASY || difficulty === MEDIUM)
 		{
 			bonusTime = Math.floor(bonusTime * 0.75);
@@ -132,7 +132,7 @@ function camCheckExtraObjective()
 	let extraObjMet = true;
 	if (camDef(__camVictoryData) && camDef(__camVictoryData.callback))
 	{
-		var result = __camGlobalContext()[__camVictoryData.callback]();
+		const result = __camGlobalContext()[__camVictoryData.callback]();
 		if (camDef(result))
 		{
 			if (!result)
@@ -200,7 +200,7 @@ function __camGameWon()
 function __camPlayerDead()
 {
 	let dead = true;
-	var haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter(function(obj) {
+	const haveFactories = enumStruct(CAM_HUMAN_PLAYER, FACTORY).filter(function(obj) {
 		return obj.status === BUILT;
 	}).length > 0;
 
@@ -237,13 +237,13 @@ function __camPlayerDead()
 	else
 	{
 		//Check the transporter.
-		var transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER);
+		const transporter = enumDroid(CAM_HUMAN_PLAYER, DROID_SUPERTRANSPORTER);
 		if (transporter.length > 0)
 		{
-			var cargoDroids = enumCargo(transporter[0]);
+			const cargoDroids = enumCargo(transporter[0]);
 			for (let i = 0, len = cargoDroids.length; i < len; ++i)
 			{
-				var virDroid = cargoDroids[i];
+				const virDroid = cargoDroids[i];
 				if (camDef(virDroid) && virDroid && virDroid.droidType === DROID_CONSTRUCT)
 				{
 					dead = false;
@@ -274,7 +274,7 @@ function __camTriggerLastAttack()
 {
 	if (!__camLastAttackTriggered)
 	{
-		var enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
+		let enemies = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false);
 		// Do not order systems (sensor/trucks/repairs) to attack stuff.
 		enemies = enemies.filter(function(obj) {
 			return ((obj.type === DROID) && !camIsTransporter(obj) && !camIsSystemDroid(obj));
@@ -287,7 +287,7 @@ function __camTriggerLastAttack()
 
 function __camVictoryStandard()
 {
-	var extraObj = camCheckExtraObjective();
+	const extraObj = camCheckExtraObjective();
 	// check if game is lost
 	if (__camPlayerDead())
 	{
@@ -331,21 +331,21 @@ function __camVictoryTimeout()
 
 function __camVictoryOffworld()
 {
-	var lz = __camVictoryData.area;
+	const lz = __camVictoryData.area;
 	if (!camDef(lz))
 	{
 		camDebug("Landing zone area is required for OFFWORLD");
 		return;
 	}
-	var total = countDroid(DROID_ANY, CAM_HUMAN_PLAYER); // for future use
+	const total = countDroid(DROID_ANY, CAM_HUMAN_PLAYER); // for future use
 	if (total === 0)
 	{
 		__camGameLost();
 		return;
 	}
-	var forceLZ = camDef(__camVictoryData.retlz) ? __camVictoryData.retlz : false;
-	var destroyAll = camDef(__camVictoryData.annihilate) ? __camVictoryData.annihilate : false;
-	var elimBases = camDef(__camVictoryData.eliminateBases) ? __camVictoryData.eliminateBases : false;
+	const forceLZ = camDef(__camVictoryData.retlz) ? __camVictoryData.retlz : false;
+	const destroyAll = camDef(__camVictoryData.annihilate) ? __camVictoryData.annihilate : false;
+	const elimBases = camDef(__camVictoryData.eliminateBases) ? __camVictoryData.eliminateBases : false;
 
 	if (camCheckExtraObjective() && camAllArtifactsPickedUp())
 	{
@@ -353,7 +353,7 @@ function __camVictoryOffworld()
 		{
 			if (camAllEnemyBasesEliminated())
 			{
-				var enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
+				const enemyDroids = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).filter(function(obj) {
 					return obj.type === DROID;
 				}).length;
 
@@ -371,7 +371,7 @@ function __camVictoryOffworld()
 		}
 		else
 		{
-			var enemyLen = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length;
+			const enemyLen = enumArea(0, 0, mapWidth, mapHeight, ENEMIES, false).length;
 			if (!forceLZ && !enemyLen)
 			{
 				//if there are no more enemies, win instantly unless forced to go
@@ -389,7 +389,7 @@ function __camVictoryOffworld()
 			}
 
 			//Make sure to only count droids here.
-			var atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
+			const atlz = enumArea(lz, CAM_HUMAN_PLAYER, false).filter(function(obj) {
 				return (obj.type === DROID && !camIsTransporter(obj));
 			}).length;
 			if (((!forceLZ && !destroyAll) || (forceLZ && destroyAll && !enemyLen) || (forceLZ && !destroyAll)) && (atlz === total))
@@ -416,7 +416,7 @@ function __camVictoryOffworld()
 				}
 				if (__camRTLZTicker % REMIND_RETURN === 0)
 				{
-					var pos = camMakePos(lz);
+					const pos = camMakePos(lz);
 					playSound("pcv427.ogg", pos.x, pos.y, 0);
 					console(_("Return to LZ"));
 				}
@@ -438,7 +438,7 @@ function __camVictoryOffworld()
 		}
 		if (__camLZCompromisedTicker % REMIND_COMPROMISED === 1)
 		{
-			var pos = camMakePos(lz);
+			const pos = camMakePos(lz);
 			playSound("pcv445.ogg", pos.x, pos.y, 0);
 		}
 		++__camLZCompromisedTicker;
@@ -450,7 +450,7 @@ function __camVictoryOffworld()
 	else if (__camLZCompromisedTicker > 0)
 	{
 		camTrace("LZ clear");
-		var pos = camMakePos(lz);
+		const pos = camMakePos(lz);
 		playSound("lz-clear.ogg", pos.x, pos.y, 0);
 		setReinforcementTime(__camVictoryData.reinforcements);
 		__camLZCompromisedTicker = 0;
@@ -533,7 +533,7 @@ function __camShowVictoryConditions(forceMessage)
 		{
 			for (let i = 0, len = __camExtraObjectiveMessage.length; i < len; ++i)
 			{
-				var mes = __camExtraObjectiveMessage[i];
+				const mes = __camExtraObjectiveMessage[i];
 				console(mes);
 			}
 		}

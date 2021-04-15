@@ -1,11 +1,11 @@
 function reticuleManufactureCheck()
 {
 	let structureComplete = false;
-	var facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
+	const facs = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY,];
 
 	for (let i = 0, len = facs.length; i < len; ++i)
 	{
-		var onMapFacs = enumStruct(selectedPlayer, facs[i]);
+		const onMapFacs = enumStruct(selectedPlayer, facs[i]);
 		for (let j = 0, len2 = onMapFacs.length; j < len2; ++j)
 		{
 			if (onMapFacs[j].status === BUILT)
@@ -29,11 +29,11 @@ function reticuleManufactureCheck()
 function reticuleResearchCheck()
 {
 	let structureComplete = false;
-	var labs = [RESEARCH_LAB,];
+	const labs = [RESEARCH_LAB,];
 
 	for (let i = 0, len = labs.length; i < len; ++i)
 	{
-		var onMapResLabs = enumStruct(selectedPlayer, labs[i]);
+		const onMapResLabs = enumStruct(selectedPlayer, labs[i]);
 		for (let j = 0, len2 = onMapResLabs.length; j < len2; ++j)
 		{
 			if (onMapResLabs[j].status === BUILT)
@@ -68,11 +68,11 @@ function reticuleBuildCheck()
 function reticuleDesignCheck()
 {
 	let structureComplete = false;
-	var HQS = [HQ,];
+	const HQS = [HQ,];
 
 	for (let i = 0, len = HQS.length; i < len; ++i)
 	{
-		var onMapHQ = enumStruct(selectedPlayer, HQS[i]);
+		const onMapHQ = enumStruct(selectedPlayer, HQS[i]);
 		for (let j = 0, len2 = onMapHQ.length; j < len2; ++j)
 		{
 			if (onMapHQ[j].status === BUILT)

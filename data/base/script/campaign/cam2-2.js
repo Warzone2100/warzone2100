@@ -67,8 +67,8 @@ camAreaEvent("wayPoint2Rad", function(droid)
 		return;
 	}
 
-	var point = getObject("wayPoint3");
-	var defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter(function(obj) {
+	const point = getObject("wayPoint3");
+	const defGroup = enumRange(point.x, point.y, 10, THE_COLLECTIVE, false).filter(function(obj) {
 		return (obj.droidType === DROID_WEAPON);
 	});
 
@@ -103,7 +103,7 @@ camAreaEvent("failZone", function(droid)
 
 function vtolAttack()
 {
-	var list = [cTempl.colatv, cTempl.colatv];
+	const list = [cTempl.colatv, cTempl.colatv];
 	camSetVtolData(THE_COLLECTIVE, "vtolAppearPoint", "vtolRemovePoint", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "COCommandCenter");
 }
 
@@ -122,7 +122,7 @@ function truckDefense()
 
 function showGameOver()
 {
-	var arti = camGetArtifacts();
+	const arti = camGetArtifacts();
 	camSafeRemoveObject(arti[0], false);
 	gameOverMessage(false);
 }
@@ -162,16 +162,16 @@ function eventStartLevel()
 		reinforcements: camMinutesToSeconds(3)
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tent = getObject("transporterEntry");
+	const text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	const enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	camSetArtifacts({

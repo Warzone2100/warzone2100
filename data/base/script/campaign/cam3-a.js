@@ -49,7 +49,7 @@ camAreaEvent("westFactoryTrigger", function(droid)
 function setHeroUnits()
 {
 	const DROID_EXP = 512;
-	var droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
+	const droids = enumDroid(CAM_HUMAN_PLAYER).filter(function(dr) {
 		return (!camIsSystemDroid(dr) && !camIsTransporter(dr));
 	});
 
@@ -97,8 +97,8 @@ function sendPlayerTransporter()
 		return;
 	}
 
-	var droids = [];
-	var list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaacnt, cTempl.prtruck];
+	const droids = [];
+	const list = [cTempl.prhasgnt, cTempl.prhhpvt, cTempl.prhaacnt, cTempl.prtruck];
 
 	// send 4 Assault Guns, 2 Hyper Velocity Cannons, 2 Cyclone AA Turrets and 2 Trucks
 	for (let i = 0, d = list.length; i < 10; ++i)
@@ -119,7 +119,7 @@ function sendPlayerTransporter()
 //Setup Nexus VTOL hit and runners.
 function vtolAttack()
 {
-	var list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
+	const list = [cTempl.nxlneedv, cTempl.nxlscouv, cTempl.nxmtherv];
 	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(5)), "NXCommandCenter");
 }
 
@@ -194,10 +194,10 @@ function cam3Setup()
 function eventStartLevel()
 {
 	const PLAYER_POWER = 16000;
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	const tent = getObject("transporterEntry");
+	const text = getObject("transporterExit");
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "SUB_3_1S");
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
@@ -207,7 +207,7 @@ function eventStartLevel()
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("NXlandingZone");
+	const enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camSetArtifacts({

@@ -278,10 +278,10 @@ function checkForPowGen()
 			increaseTutorialState();
 
 			//Get the truck that is building the generator and store its ID.
-			var trucks = enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT);
+			const trucks = enumDroid(CAM_HUMAN_PLAYER, DROID_CONSTRUCT);
 			for (let i = 0, len = trucks.length; i < len; ++i)
 			{
-				var truck = trucks[i];
+				const truck = trucks[i];
 				if (truck.order === DORDER_BUILD)
 				{
 					firstTruckID = truck.id;
@@ -321,10 +321,10 @@ function checkHelpBuild()
 {
 	if (tutState === 6)
 	{
-		var objects = enumDroid(CAM_HUMAN_PLAYER);
+		const objects = enumDroid(CAM_HUMAN_PLAYER);
 		for (let i = 0, l = objects.length; i < l; ++i)
 		{
-			var obj = objects[i];
+			const obj = objects[i];
 			if (obj.type === DROID &&
 				obj.droidType === DROID_CONSTRUCT &&
 				(obj.order === DORDER_HELPBUILD || obj.order === DORDER_BUILD) &&
@@ -363,7 +363,7 @@ function addToConsole()
 {
 	if (consoleVar.length)
 	{
-		var tutPhase = consoleVar[0];
+		const tutPhase = consoleVar[0];
 		if (tutPhase.state <= tutState)
 		{
 			//Check if we need to wait
@@ -404,15 +404,15 @@ function addToConsole()
 
 function eventSelectionChanged(objects)
 {
-	var tut0 = tutState === 0 && consoleVar.length;
-	var tut5 = tutState === 5 && consoleVar.length;
+	const tut0 = tutState === 0 && consoleVar.length;
+	const tut5 = tutState === 5 && consoleVar.length;
 
 	if (tut0 || tut5)
 	{
 		//Check if they selected a truck.
 		for (let i = 0, l = objects.length; i < l; ++i)
 		{
-			var obj = objects[i];
+			const obj = objects[i];
 			if (obj.type === DROID && obj.droidType === DROID_CONSTRUCT)
 			{
 				if (tut0)
@@ -480,7 +480,7 @@ function eventStartLevel()
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, undefined, {
 		callback: "noWinningForYou"
 	});
-	var startpos = getObject("startPosition");
+	const startpos = getObject("startPosition");
 	tutState = 0;
 	didTheyHelpBuildGen = false;
 	firstTruckID = 0;

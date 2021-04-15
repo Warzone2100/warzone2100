@@ -61,9 +61,9 @@ function transportBaseSetup()
 function getDroidsForNPLZ()
 {
 	const LIM = 8; //Last alpha mission always has 8 transport units
-	var templates = [ cTempl.nphct, cTempl.nphct, cTempl.npmorb, cTempl.npmorb, cTempl.npsbb ];
+	const templates = [cTempl.nphct, cTempl.nphct, cTempl.npmorb, cTempl.npmorb, cTempl.npsbb];
 
-	var droids = [];
+	const droids = [];
 	for (let i = 0; i < LIM; ++i)
 	{
 		droids.push(templates[camRand(templates.length)]);
@@ -148,10 +148,10 @@ function eventStartLevel()
 		eliminateBases: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tent = getObject("transporterEntry");
+	const text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);

@@ -26,7 +26,7 @@ function camEnemyBaseDetected_COBase2()
 {
 	hackRemoveMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER);
 
-	var vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter(function(obj) {
+	const vt = enumArea("COBase2Cleanup", THE_COLLECTIVE, false).filter(function(obj) {
 		return obj.type === DROID && isVTOL(obj);
 	});
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -46,7 +46,7 @@ function camEnemyBaseDetected_COBase4()
 
 function baseThreeVtolAttack()
 {
-	var vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter(function(obj) {
+	const vt = enumArea("vtolGroupBase3", THE_COLLECTIVE, false).filter(function(obj) {
 		return obj.type === DROID && isVTOL(obj);
 	});
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -56,7 +56,7 @@ function baseThreeVtolAttack()
 
 function baseFourVtolAttack()
 {
-	var vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter(function(obj) {
+	const vt = enumArea("vtolGroupBase4", THE_COLLECTIVE, false).filter(function(obj) {
 		return obj.type === DROID && isVTOL(obj);
 	});
 	camManageGroup(camMakeGroup(vt), CAM_ORDER_ATTACK, {
@@ -95,16 +95,16 @@ function eventStartLevel()
 		reinforcements: camMinutesToSeconds(3)
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tent = getObject("transporterEntry");
+	const text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);
 	setTransporterExit(text.x, text.y, CAM_HUMAN_PLAYER);
 
-	var enemyLz = getObject("COLandingZone");
+	const enemyLz = getObject("COLandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, THE_COLLECTIVE);
 
 	camSetArtifacts({

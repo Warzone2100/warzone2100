@@ -52,8 +52,8 @@ function __camSpawnVtols()
 	const MIN_VTOL_AMOUNT = 5;
 	const MAX_RANDOM_VTOL_ADDITIONS = 2;
 
-	var amount = MIN_VTOL_AMOUNT + camRand(MAX_RANDOM_VTOL_ADDITIONS + 1);
-	var droids = [];
+	const amount = MIN_VTOL_AMOUNT + camRand(MAX_RANDOM_VTOL_ADDITIONS + 1);
+	const droids = [];
 	let pos;
 
 	//Make sure to catch multiple start positions also.
@@ -76,7 +76,7 @@ function __camSpawnVtols()
 	}
 	else
 	{
-		var lim = amount;
+		let lim = amount;
 		let alternate = false;
 		if (camDef(__camVtolExtras.alternate))
 		{
@@ -136,13 +136,13 @@ function __camRetreatVtols()
 	{
 		const VTOL_RETURN_HEALTH = 40; // run-away if health is less than...
 		const VTOL_RETURN_ARMED = 1; // run-away if weapon ammo is less than...
-		var vtols = enumDroid(__camVtolPlayer).filter(function(obj) {
+		const vtols = enumDroid(__camVtolPlayer).filter(function(obj) {
 			return isVTOL(obj);
 		});
 
 		for (let i = 0, len = vtols.length; i < len; ++i)
 		{
-			var vt = vtols[i];
+			const vt = vtols[i];
 			for (let c = 0, len2 = vt.weapons.length; c < len2; ++c)
 			{
 				if ((vt.order === DORDER_RTB) || (vt.weapons[c].armed < VTOL_RETURN_ARMED) || (vt.health < VTOL_RETURN_HEALTH))

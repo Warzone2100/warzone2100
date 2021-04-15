@@ -1,7 +1,7 @@
 let lastHitTime = 0;
 let cheatmode = false;
 let mainReticule = false;
-var oilDrumData = {
+const oilDrumData = {
 	delay: 0, // time delay to prevent multiple drums from spawning on the same frame
 	lastSpawn: 0, // time of the last successful drum added to the map
 	maxOilDrums: 0 // maximum amount of random oil drums allowed on the map

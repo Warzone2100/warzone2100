@@ -82,7 +82,7 @@ function enableAllFactories()
 function vaporizeTarget()
 {
 	let target;
-	var targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
+	const targets = enumArea(0, 0, mapWidth, Math.floor(mapLimit), CAM_HUMAN_PLAYER, false).filter(function(obj) {
 		return obj.type === DROID || obj.type === STRUCTURE;
 	});
 
@@ -96,8 +96,8 @@ function vaporizeTarget()
 	}
 	else
 	{
-		var dr = targets.filter(function(obj) { return obj.type === DROID; });
-		var st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
+		const dr = targets.filter(function(obj) { return obj.type === DROID; });
+		const st = targets.filter(function(obj) { return obj.type === STRUCTURE; });
 
 		if (dr.length)
 		{
@@ -130,14 +130,14 @@ function laserSatFuzzyStrike(obj)
 {
 	const LOC = camMakePos(obj);
 	//Initially lock onto target
-	var xCoord = LOC.x;
-	var yCoord = LOC.y;
+	let xCoord = LOC.x;
+	let yCoord = LOC.y;
 
 	//Introduce some randomness
 	if (camRand(101) < 67)
 	{
-		var xRand = camRand(3);
-		var yRand = camRand(3);
+		const xRand = camRand(3);
+		const yRand = camRand(3);
 		xCoord = camRand(2) ? LOC.x - xRand : LOC.x + xRand;
 		yCoord = camRand(2) ? LOC.y - yRand : LOC.y + yRand;
 	}
@@ -199,10 +199,10 @@ function checkMissileSilos()
 		return true;
 	}
 
-	var siloArea = camMakePos(getObject("missileSilos"));
-	var safe = enumRange(siloArea.x, siloArea.y, 10, ALL_PLAYERS, false);
-	var enemies = safe.filter(function(obj) { return obj.player === NEXUS; });
-	var player = safe.filter(function(obj) { return obj.player === CAM_HUMAN_PLAYER; });
+	const siloArea = camMakePos(getObject("missileSilos"));
+	const safe = enumRange(siloArea.x, siloArea.y, 10, ALL_PLAYERS, false);
+	const enemies = safe.filter(function(obj) { return obj.player === NEXUS; });
+	const player = safe.filter(function(obj) { return obj.player === CAM_HUMAN_PLAYER; });
 	if (!enemies.length && player.length)
 	{
 		camCallOnce("allySiloWithPlayer");
@@ -213,10 +213,10 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Secure a missile silo"));
 
-	var siloZone = getObject("missileSilos");
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone");
-	var lz2 = getObject("landingZone2");
+	const siloZone = getObject("missileSilos");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone");
+	const lz2 = getObject("landingZone2");
 	mapLimit = 1.0;
 
 	camSetStandardWinLossConditions(CAM_VICTORY_STANDARD, "CAM3A-D2", {
@@ -229,7 +229,7 @@ function eventStartLevel()
 	setNoGoArea(siloZone.x, siloZone.y, siloZone.x2, siloZone.y2, SILO_PLAYER);
 	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 
-	var enemyLz = getObject("NXlandingZone");
+	const enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);

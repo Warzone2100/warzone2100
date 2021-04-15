@@ -69,7 +69,7 @@ function enableAllFactories()
 function discoverGammaBase()
 {
 	reunited = true;
-	var lz = getObject("landingZone");
+	const lz = getObject("landingZone");
 	setScrollLimits(0, 0, 64, 192); //top and middle portion.
 	restoreLimboMissionData();
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
@@ -90,7 +90,7 @@ function discoverGammaBase()
 
 function findBetaUnitIds()
 {
-	var droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter(function(obj) {
+	const droids = enumArea("betaUnits", CAM_HUMAN_PLAYER, false).filter(function(obj) {
 		return obj.type === DROID;
 	});
 
@@ -108,7 +108,7 @@ function betaAlive()
 	}
 
 	let alive = false;
-	var myDroids = enumDroid(CAM_HUMAN_PLAYER);
+	const myDroids = enumDroid(CAM_HUMAN_PLAYER);
 
 	for (let i = 0, l = betaUnitIds.length; i < l; ++i)
 	{
@@ -137,8 +137,8 @@ function eventStartLevel()
 {
 	camSetExtraObjectiveMessage(_("Reunite a part of Beta team with a Gamma team outpost"));
 
-	var startpos = getObject("startPosition");
-	var limboLZ = getObject("limboDroidLZ");
+	const startpos = getObject("startPosition");
+	const limboLZ = getObject("limboDroidLZ");
 	reunited = false;
 	betaUnitIds = [];
 
@@ -152,7 +152,7 @@ function eventStartLevel()
 	setNoGoArea(limboLZ.x, limboLZ.y, limboLZ.x2, limboLZ.y2, -1);
 	setMissionTime(camChangeOnDiff(camMinutesToSeconds(10)));
 
-	var enemyLz = getObject("NXlandingZone");
+	const enemyLz = getObject("NXlandingZone");
 	setNoGoArea(enemyLz.x, enemyLz.y, enemyLz.x2, enemyLz.y2, NEXUS);
 
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);

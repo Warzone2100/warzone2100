@@ -1,7 +1,7 @@
 function printGameSettings()
 {
 //add human readable method
-var human = {
+const human = {
 	scavengers : function () {
 		if ( scavengers == true) {return _("Scavengers");}
 		if ( scavengers == false) {return _("No Scavengers");}

@@ -5,7 +5,7 @@ include("script/campaign/templates.js");
 //Ambush player from scav base - triggered from middle path
 camAreaEvent("scavBaseTrigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("eastScavs", SCAV_7, false));
+	const ambushGroup = camMakeGroup(enumArea("eastScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("artifactLocation")
 	});
@@ -14,7 +14,7 @@ camAreaEvent("scavBaseTrigger", function()
 //Moves west scavs units closer to the base - triggered from right path
 camAreaEvent("ambush1Trigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("westScavs", SCAV_7, false));
+	const ambushGroup = camMakeGroup(enumArea("westScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush1")
 	});
@@ -23,7 +23,7 @@ camAreaEvent("ambush1Trigger", function()
 //Sends some units towards player LZ - triggered from left path
 camAreaEvent("ambush2Trigger", function()
 {
-	var ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAV_7, false));
+	const ambushGroup = camMakeGroup(enumArea("northWestScavs", SCAV_7, false));
 	camManageGroup(ambushGroup, CAM_ORDER_DEFEND, {
 		pos: camMakePos("ambush2")
 	});
@@ -47,10 +47,10 @@ function eventStartLevel()
 		retlz: true
 	});
 
-	var startpos = getObject("startPosition");
-	var lz = getObject("landingZone"); //player lz
-	var tent = getObject("transporterEntry");
-	var text = getObject("transporterExit");
+	const startpos = getObject("startPosition");
+	const lz = getObject("landingZone"); //player lz
+	const tent = getObject("transporterEntry");
+	const text = getObject("transporterExit");
 	centreView(startpos.x, startpos.y);
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 	startTransporterEntry(tent.x, tent.y, CAM_HUMAN_PLAYER);

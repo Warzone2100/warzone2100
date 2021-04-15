@@ -4,13 +4,13 @@ function eventResearched(research, structure, player)
 	// iterate over all results
 	for (let i = 0; i < research.results.length; i++)
 	{
-		var v = research.results[i];
+		const v = research.results[i];
 		//if (research.name == "") debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterval=" + v['filterValue']);
 		for (const cname in Upgrades[player][v['class']]) // iterate over all components of this type
 		{
-			var parameter = v['parameter'];
-			var ctype = v['class'];
-			var filterparam = v['filterParameter'];
+			const parameter = v['parameter'];
+			const ctype = v['class'];
+			const filterparam = v['filterParameter'];
 			if ('filterParameter' in v && Stats[ctype][cname][filterparam] != v['filterValue']) // more specific filter
 			{
 				//if (research.name == "") debug("    skipped param=" + parameter + " cname=" + cname);
@@ -18,7 +18,7 @@ function eventResearched(research, structure, player)
 			}
 			if (Stats[ctype][cname][parameter] instanceof Array)
 			{
-				var dst = Upgrades[player][ctype][cname][parameter].slice();
+				const dst = Upgrades[player][ctype][cname][parameter].slice();
 				for (let x = 0; x < dst.length; x++)
 				{
 					dst[x] += Math.ceil(Stats[ctype][cname][parameter][x] * v['value'] / 100);

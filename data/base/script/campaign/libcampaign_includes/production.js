@@ -63,7 +63,7 @@ function camSetFactories(factories)
 //;;
 function camSetFactoryData(flabel, fdata)
 {
-	var structure = getObject(flabel);
+	const structure = getObject(flabel);
 	if (!camDef(structure) || !structure)
 	{
 		// Not an error! It's ok if the factory is already destroyed
@@ -72,13 +72,13 @@ function camSetFactoryData(flabel, fdata)
 		return;
 	}
 	// remember the old factory group, if any
-	var droids = [];
+	let droids = [];
 	if (camDef(__camFactoryInfo[flabel]))
 	{
 		droids = enumGroup(__camFactoryInfo[flabel].group);
 	}
 	__camFactoryInfo[flabel] = fdata;
-	var fi = __camFactoryInfo[flabel];
+	const fi = __camFactoryInfo[flabel];
 	if (!camDef(fi.data))
 	{
 		fi.data = {};
@@ -91,7 +91,7 @@ function camSetFactoryData(flabel, fdata)
 	}
 	for (let i = 0, l = droids.length; i < l; ++i)
 	{
-		var droid = droids[i];
+		const droid = droids[i];
 		groupAdd(fi.group, droid);
 	}
 	if (!camDef(fi.data.count))
@@ -107,7 +107,7 @@ function camSetFactoryData(flabel, fdata)
 //;;
 function camEnableFactory(flabel)
 {
-	var fi = __camFactoryInfo[flabel];
+	const fi = __camFactoryInfo[flabel];
 	if (!camDef(fi) || !fi)
 	{
 		camDebug("Factory not managed", flabel);
@@ -121,7 +121,7 @@ function camEnableFactory(flabel)
 	}
 	camTrace("Enabling", flabel);
 	fi.enabled = true;
-	var obj = getObject(flabel);
+	const obj = getObject(flabel);
 	if (!camDef(obj) || !obj)
 	{
 		camTrace("Factory", flabel, "not found, probably already dead");
@@ -173,13 +173,13 @@ function camSetPropulsionTypeLimit(num)
 
 function __camFactoryUpdateTactics(flabel)
 {
-	var fi = __camFactoryInfo[flabel];
+	const fi = __camFactoryInfo[flabel];
 	if (!fi.enabled)
 	{
 		camDebug("Factory", flabel, "was not enabled");
 		return;
 	}
-	var droids = enumGroup(fi.group);
+	const droids = enumGroup(fi.group);
 	if (droids.length >= fi.groupSize)
 	{
 		camManageGroup(fi.group, fi.order, fi.data);
@@ -187,7 +187,7 @@ function __camFactoryUpdateTactics(flabel)
 	}
 	else
 	{
-		var pos = camMakePos(fi.assembly);
+		let pos = camMakePos(fi.assembly);
 		if (!camDef(pos))
 		{
 			pos = camMakePos(flabel);
@@ -204,19 +204,19 @@ function __camAddDroidToFactoryGroup(droid, structure)
 		return;
 	}
 	// FIXME: O(n) lookup here
-	var flabel = getLabel(structure);
+	const flabel = getLabel(structure);
 	if (!camDef(flabel) || !flabel)
 	{
 		return;
 	}
-	var fi = __camFactoryInfo[flabel];
+	const fi = __camFactoryInfo[flabel];
 	groupAdd(fi.group, droid);
 	if (camDef(fi.assembly))
 	{
 		// this is necessary in case droid is regrouped manually
 		// in the scenario code, and thus DORDER_DEFEND for assembly
 		// will not be applied in __camFactoryUpdateTactics()
-		var pos = camMakePos(fi.assembly);
+		const pos = camMakePos(fi.assembly);
 		orderDroidLoc(droid, DORDER_MOVE, pos.x, pos.y);
 	}
 	__camFactoryUpdateTactics(flabel);
@@ -233,13 +233,13 @@ function __camChangePropulsionOnDiff(propulsion)
 		return propulsion; //this mission don't want this feature then
 	}
 
-	var name = propulsion;
-	var typeModifier = difficulty === HARD ? "02" : "03";
+	let name = propulsion;
+	let typeModifier = difficulty === HARD ? "02" : "03";
 	const VALID_PROPS = [
 		"CyborgLegs", "HalfTrack", "V-Tol", "hover", "tracked", "wheeled",
 	];
 
-	var lastTwo = name.substring(name.length - 2);
+	const lastTwo = name.substring(name.length - 2);
 	if (lastTwo === "01" || lastTwo === "02" || lastTwo === "03")
 	{
 		name = name.substring(0, name.length - 2);
@@ -247,7 +247,7 @@ function __camChangePropulsionOnDiff(propulsion)
 
 	for (let i = 0, l = VALID_PROPS.length; i < l; ++i)
 	{
-		var currentProp = VALID_PROPS[i];
+		const currentProp = VALID_PROPS[i];
 		if (name === currentProp)
 		{
 			//if hard difficulty and a future template has a type III then this will
@@ -282,11 +282,11 @@ function __camBuildDroid(template, structure)
 	{
 		return false;
 	}
-	var prop = __camChangePropulsionOnDiff(template.prop);
+	const prop = __camChangePropulsionOnDiff(template.prop);
 	makeComponentAvailable(template.body, structure.player);
 	makeComponentAvailable(prop, structure.player);
 	makeComponentAvailable(template.weap, structure.player);
-	var n = [ structure.name, structure.id, template.body, prop, template.weap ].join(" ");
+	const n = [structure.name, structure.id, template.body, prop, template.weap].join(" ");
 	// multi-turret templates are not supported yet
 	return buildDroid(structure, n, template.body, prop, "", "", template.weap);
 }
@@ -333,7 +333,7 @@ function __camContinueProduction(structure)
 	{
 		return;
 	}
-	var fi = __camFactoryInfo[flabel];
+	const fi = __camFactoryInfo[flabel];
 	if (camDef(fi.maxSize) && groupSize(fi.group) >= fi.maxSize)
 	{
 		// retry later
@@ -341,7 +341,7 @@ function __camContinueProduction(structure)
 	}
 	if (camDef(fi.throttle) && camDef(fi.lastprod))
 	{
-		var throttle = gameTime - fi.lastprod;
+		const throttle = gameTime - fi.lastprod;
 		if (throttle < fi.throttle)
 		{
 			// do throttle
@@ -352,7 +352,7 @@ function __camContinueProduction(structure)
 	if (fi.state === -1)
 	{
 		fi.state = 0;
-		var p = struct.player;
+		const p = struct.player;
 		if (camDef(__camFactoryQueue[p]) && __camFactoryQueue[p].length > 0)
 		{
 			if (__camBuildDroid(__camFactoryQueue[p][0], struct))

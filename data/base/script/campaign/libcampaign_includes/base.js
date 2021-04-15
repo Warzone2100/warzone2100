@@ -36,7 +36,7 @@
 //;;
 function camSetEnemyBases(bases)
 {
-	var reload = !camDef(bases);
+	const reload = !camDef(bases);
 	if (!reload)
 	{
 		__camEnemyBases = bases;
@@ -45,8 +45,8 @@ function camSetEnemyBases(bases)
 	// convert label strings to groups and store
 	for (const blabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
-		var obj = getObject(blabel);
+		const bi = __camEnemyBases[blabel];
+		const obj = getObject(blabel);
 		if (camDef(obj) && obj) // group already defined
 		{
 			if (!camDef(bi.group))
@@ -55,11 +55,11 @@ function camSetEnemyBases(bases)
 			}
 			else
 			{
-				var structures = enumGroup(bi.group);
+				const structures = enumGroup(bi.group);
 				addLabel({ type: GROUP, id: bi.group }, blabel);
 				for (let idx = 0, len = structures.length; idx < len; ++idx)
 				{
-					var s = structures[idx];
+					const s = structures[idx];
 					if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 					{
 						continue;
@@ -73,11 +73,11 @@ function camSetEnemyBases(bases)
 			}
 			if (!camDef(bi.cleanup)) // auto-detect cleanup area
 			{
-				var objs = enumGroup(bi.group);
+				const objs = enumGroup(bi.group);
 				if (objs.length > 0)
 				{
 					const OFFSET = 2; // increases size of the auto-detected base area a bit
-					var a = {
+					const a = {
 						type: AREA,
 						x: mapWidth, y: mapHeight,
 						x2: 0, y2: 0
@@ -85,7 +85,7 @@ function camSetEnemyBases(bases)
 					// smallest rectangle to contain all objects
 					for (let idx = 0, len = objs.length; idx < len; ++idx)
 					{
-						var o = objs[idx];
+						const o = objs[idx];
 						if (o.x < a.x) a.x = o.x;
 						if (o.y < a.y) a.y = o.y;
 						if (o.x > a.x2) a.x2 = o.x;
@@ -107,10 +107,10 @@ function camSetEnemyBases(bases)
 			}
 			bi.group = camNewGroup();
 			addLabel({ type: GROUP, id: bi.group }, blabel);
-			var structs = enumArea(bi.cleanup, ENEMIES, false);
+			const structs = enumArea(bi.cleanup, ENEMIES, false);
 			for (let idx = 0, len = structs.length; idx < len; ++idx)
 			{
-				var s = structs[idx];
+				const s = structs[idx];
 				if (s.type !== STRUCTURE || __camIsValidLeftover(s))
 				{
 					continue;
@@ -144,7 +144,7 @@ function camSetEnemyBases(bases)
 //;;
 function camDetectEnemyBase(blabel)
 {
-	var bi = __camEnemyBases[blabel];
+	const bi = __camEnemyBases[blabel];
 	if (bi.detected || bi.eliminated)
 	{
 		return;
@@ -153,13 +153,13 @@ function camDetectEnemyBase(blabel)
 	bi.detected = true;
 	if (camDef(bi.detectSnd))
 	{
-		var pos = camMakePos(bi.cleanup);
+		let pos = camMakePos(bi.cleanup);
 		if (!camDef(pos)) // auto-detect sound position by group object pos
 		{
-			var objs = enumGroup(bi.group);
+			const objs = enumGroup(bi.group);
 			if (objs.length > 0)
 			{
-				var firstObject = objs[0];
+				const firstObject = objs[0];
 				pos = camMakePos(firstObject);
 			}
 		}
@@ -172,7 +172,7 @@ function camDetectEnemyBase(blabel)
 	{
 		hackAddMessage(bi.detectMsg, PROX_MSG, CAM_HUMAN_PLAYER, false);
 	}
-	var callback = __camGlobalContext()["camEnemyBaseDetected_" + blabel];
+	const callback = __camGlobalContext()["camEnemyBaseDetected_" + blabel];
 	if (camDef(callback))
 	{
 		callback();
@@ -194,7 +194,7 @@ function camAllEnemyBasesEliminated()
 
 function __camCheckBaseSeen(seen)
 {
-	var group = seen; // group?
+	let group = seen; // group?
 	if (camDef(seen.group)) // object?
 	{
 		group = seen.group;
@@ -206,7 +206,7 @@ function __camCheckBaseSeen(seen)
 	// FIXME: O(n) lookup here
 	for (const blabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
+		const bi = __camEnemyBases[blabel];
 		if (bi.group !== group)
 		{
 			continue;
@@ -236,7 +236,7 @@ function __camIsValidLeftover(obj)
 
 function __camShouldDestroyLeftover(objInfo, basePlayer)
 {
-	var object = getObject(objInfo.type, objInfo.player, objInfo.id);
+	const object = getObject(objInfo.type, objInfo.player, objInfo.id);
 	if (object === null)
 	{
 		return false;
@@ -253,8 +253,8 @@ function __camCheckBaseEliminated(group)
 	// FIXME: O(n) lookup here
 	for (const blabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
-		var leftovers = [];
+		const bi = __camEnemyBases[blabel];
+		const leftovers = [];
 		if (bi.eliminated || (bi.group !== group))
 		{
 			continue;
@@ -265,11 +265,11 @@ function __camCheckBaseEliminated(group)
 		}
 		if (camDef(bi.cleanup))
 		{
-			var objects = enumArea(bi.cleanup, ENEMIES, false);
+			const objects = enumArea(bi.cleanup, ENEMIES, false);
 			for (let i = 0, len = objects.length; i < len; ++i)
 			{
-				var object = objects[i];
-				var objInfo = {
+				const object = objects[i];
+				const objInfo = {
 					type: object.type,
 					player: object.player,
 					id: object.id
@@ -282,13 +282,13 @@ function __camCheckBaseEliminated(group)
 			for (let i = 0, len = leftovers.length; i < len; i++)
 			{
 				// remove with special effect
-				var leftover = leftovers[i];
+				const leftover = leftovers[i];
 				camSafeRemoveObject(leftover, true);
 			}
 			if (camDef(bi.eliminateSnd))
 			{
 				// play sound
-				var pos = camMakePos(bi.cleanup);
+				const pos = camMakePos(bi.cleanup);
 				playSound(bi.eliminateSnd, pos.x, pos.y, 0);
 			}
 		}
@@ -306,7 +306,7 @@ function __camCheckBaseEliminated(group)
 		// bump counter before the callback, so that it was
 		// actual during the callback
 		++__camNumEnemyBases;
-		var callback = __camGlobalContext()["camEnemyBaseEliminated_" + blabel];
+		const callback = __camGlobalContext()["camEnemyBaseEliminated_" + blabel];
 		if (camDef(callback))
 		{
 			callback();
@@ -320,7 +320,7 @@ function __camBasesTick()
 {
 	for (const blabel in __camEnemyBases)
 	{
-		var bi = __camEnemyBases[blabel];
+		const bi = __camEnemyBases[blabel];
 		if (bi.eliminated || !camDef(bi.reinforce_kind))
 		{
 			continue;
@@ -340,8 +340,8 @@ function __camBasesTick()
 			return;
 		}
 		bi.reinforce_last = gameTime;
-		var list = profile(bi.reinforce_callback);
-		var pos = camMakePos(bi.cleanup);
+		const list = profile(bi.reinforce_callback);
+		const pos = camMakePos(bi.cleanup);
 		camSendReinforcement(bi.player, pos, list, bi.reinforce_kind, bi.reinforce_data);
 	}
 }

@@ -1,22 +1,22 @@
 function placeOilDrum()
 {
-	var drums = enumFeature(-1, "OilDrum").length;
+	const drums = enumFeature(-1, "OilDrum").length;
 	if (drums >= oilDrumData.maxOilDrums)
 	{
 		return;
 	}
 
-	var x = syncRandom(mapWidth - 20) + 10;
-	var y = syncRandom(mapHeight - 20) + 10;
+	const x = syncRandom(mapWidth - 20) + 10;
+	const y = syncRandom(mapHeight - 20) + 10;
 
 	// Don't allow placement of structures onto a potential drum location if a truck
 	// could suddenly built something near it.
 	let nearbyTruck = false;
 	const SCAN_RANGE_TRUCKS = 6;
-	var nearbyObjects = enumRange(x, y, SCAN_RANGE_TRUCKS, ALL_PLAYERS, false);
+	const nearbyObjects = enumRange(x, y, SCAN_RANGE_TRUCKS, ALL_PLAYERS, false);
 	for (let i = 0, len = nearbyObjects.length; i < len; ++i)
 	{
-		var object = nearbyObjects[i];
+		const object = nearbyObjects[i];
 		if (object.type === DROID && object.droidType === DROID_CONSTRUCT)
 		{
 			nearbyTruck = true;
@@ -29,7 +29,7 @@ function placeOilDrum()
 	// tile of the object.
 	const SCAN_RANGE_OCCUPIED = 3;
 	// see if the random position is valid
-	var occupied = (enumRange(x, y, SCAN_RANGE_OCCUPIED, ALL_PLAYERS, false).length > 0);
+	const occupied = enumRange(x, y, SCAN_RANGE_OCCUPIED, ALL_PLAYERS, false).length > 0;
 	let unreachable = true;
 	for (let i = 0; i < maxPlayers; ++i)
 	{
@@ -40,7 +40,7 @@ function placeOilDrum()
 		}
 	}
 
-	var terrain = terrainType(x, y);
+	const terrain = terrainType(x, y);
 	if (terrain == TER_WATER || terrain == TER_CLIFFFACE)
 	{
 		unreachable = true;
