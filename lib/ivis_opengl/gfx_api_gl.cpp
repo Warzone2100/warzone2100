@@ -322,8 +322,10 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"sunPosition", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
-		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1", "textureMatrix2",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
+		{ "ModelViewProjectionMatrix", "ModelTangentMatrix", "ModelUV1", "ModelUV2",
+			"cameraPos", "lightDirInTangent", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart",
+			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm" } }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" } }),
 	std::make_pair(SHADER_TEXRECT, program_data{ "Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
@@ -564,7 +566,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		vertexShaderHeader = shaderVersionStr;
 		// OpenGL ES Shading Language - 4. Variables and Types - pp. 35-36
 		// https://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf?#page=41
-		// 
+		//
 		// > The fragment language has no default precision qualifier for floating point types.
 		// > Hence for float, floating point vector and matrix variable declarations, either the
 		// > declaration must include a precision qualifier or the default float precision must
@@ -1063,12 +1065,30 @@ void gl_pipeline_state_object::fetch_uniforms(const std::vector<std::string>& un
 	}
 }
 
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec3 &v)
+{
+	glUniform3f(locations[uniformIdx], v.x, v.y, v.z);
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniform3f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z);
+	}
+}
+
 void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::vec4 &v)
 {
 	glUniform4f(locations[uniformIdx], v.x, v.y, v.z, v.w);
 	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
 	{
 		glUniform4f(duplicateFragmentUniformLocations[uniformIdx], v.x, v.y, v.z, v.w);
+	}
+}
+
+void gl_pipeline_state_object::setUniforms(size_t uniformIdx, const ::glm::mat3 &m)
+{
+	glUniformMatrix3fv(locations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
+	if (duplicateFragmentUniformLocations[uniformIdx] != -1)
+	{
+		glUniformMatrix3fv(duplicateFragmentUniformLocations[uniformIdx], 1, GL_FALSE, glm::value_ptr(m));
 	}
 }
 
@@ -1235,19 +1255,27 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
 {
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.param1);
-	setUniforms(2, cbuf.param2);
-	setUniforms(3, cbuf.param3);
-	setUniforms(4, cbuf.param4);
-	setUniforms(5, cbuf.texture0);
-	setUniforms(6, cbuf.texture1);
-	setUniforms(7, cbuf.translation);
-	setUniforms(8, cbuf.texture_matrix);
-	setUniforms(9, cbuf.fog_colour);
-	setUniforms(10, cbuf.fog_enabled);
-	setUniforms(11, cbuf.fog_begin);
-	setUniforms(12, cbuf.fog_end);
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelTangentMatrix);
+	setUniforms(i++, cbuf.ModelUV1Matrix);
+	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.lightDirInTangent);
+	setUniforms(i++, cbuf.emissiveLight);
+	setUniforms(i++, cbuf.ambientLight);
+	setUniforms(i++, cbuf.diffuseLight);
+	setUniforms(i++, cbuf.specularLight);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, 0);
+	setUniforms(i++, 1);
+	setUniforms(i++, 2);
+	setUniforms(i++, 3);
+	setUniforms(i++, 4);
+	setUniforms(i++, 5);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)

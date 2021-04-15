@@ -33,6 +33,7 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/opengl.h"
+#include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/imd.h"
 #include "lib/ivis_opengl/piefunc.h"
@@ -109,6 +110,12 @@ static size_t lightmapHeight;
 static gfx_api::gfxUByte *lightmapPixmap;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
+
+// water optional texture names. empty if none
+static std::string waterTexture1_nm;
+static std::string waterTexture2_nm;
+static std::string waterTexture1_sm;
+static std::string waterTexture2_sm;
 
 /// VBOs
 static gfx_api::buffer *geometryVBO = nullptr, *geometryIndexVBO = nullptr, *textureVBO = nullptr, *textureIndexVBO = nullptr, *decalVBO = nullptr;
@@ -665,6 +672,16 @@ void loadTerrainTextures()
 			ASSERT(texPageNormal.has_value(), "Failed to pre-load terrain normal texture: %s", groundType.normalMapTextureName.c_str());
 		}
 	}
+
+	// check water optional textures
+	auto checkTex = [](const std::string &fileName) {
+		std::string fullName = "texpages/"+fileName;
+		return PHYSFS_exists(fullName.c_str()) ? fileName : "";
+	};
+	waterTexture1_nm = checkTex("page-80-water-1_nm.png");
+	waterTexture2_nm = checkTex("page-81-water-2_nm.png");
+	waterTexture1_sm = checkTex("page-80-water-1_sm.png");
+	waterTexture2_sm = checkTex("page-81-water-2_sm.png");
 }
 
 /**
@@ -1386,8 +1403,9 @@ void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Protection, const 
 
 /**
  * Draw the water.
+ * sunPos and cameraPos in Model=WorldSpace
  */
-void drawWater(const glm::mat4 &viewMatrix)
+void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &sunPos, const Vector3f &cameraPos)
 {
 	if (!waterIndexVBO)
 	{
@@ -1399,6 +1417,13 @@ void drawWater(const glm::mat4 &viewMatrix)
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
+	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
+	const auto normal = glm::vec3(0,1,0); // y
+	const auto tangent = glm::normalize(paramsY.xyz()); // x
+	const auto bitangent = glm::cross(normal, tangent); // z
+	const auto ModelTangent = glm::transpose(glm::mat3(tangent, bitangent, normal)); // xzy
+	const auto lightDirInTangent = glm::normalize(- ModelTangent * sunPos);
 	const auto &renderState = getCurrentRenderState();
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
@@ -1408,10 +1433,19 @@ void drawWater(const glm::mat4 &viewMatrix)
 	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", true, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
-	gfx_api::WaterPSO::get().bind_textures(&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()));
+	auto getOptTex = [](const std::string &fileName) {
+		return fileName.empty() ? nullptr : &pie_Texture(iV_GetTexture(fileName.c_str()).value());
+	};
+	gfx_api::WaterPSO::get().bind_textures(
+		&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()),
+		getOptTex(waterTexture1_nm), getOptTex(waterTexture2_nm),
+		getOptTex(waterTexture1_sm), getOptTex(waterTexture2_sm));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
-	gfx_api::WaterPSO::get().bind_constants({ viewMatrix, paramsX, paramsY, paramsX2, paramsY2,
-		glm::translate(glm::vec3(waterOffset, 0.f, 0.f)), glm::mat4(1.f), glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1
+	gfx_api::WaterPSO::get().bind_constants({
+		ModelViewProjection, ModelTangent, ModelUV1, ModelUV2,
+		cameraPos, lightDirInTangent,
+		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
+		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd
 	});
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 
