@@ -18,7 +18,7 @@ function sendChatMessage(msg, receiver)
 
 		if (receiver === ALLIES || receiver === ENEMIES)
 		{
-			var players = playerAlliance(receiver === ALLIES).concat(me);
+			const players = playerAlliance(receiver === ALLIES).concat(me);
 			for (let i = 0, len = players.length; i < len; ++i)
 			{
 				if (msg === "need power" && !playerData[players[i]].isAI)
@@ -80,7 +80,7 @@ function eventChat(from, to, message)
 	}
 	else if (message === "resG" || message === "resO" || message === "resD" || message === "resA")
 	{
-		var pth = "";
+		let pth = "";
 		if (message === "resG")
 		{
 			pth = "generic";
@@ -115,8 +115,8 @@ function eventChat(from, to, message)
 
 	if (message === "need truck")
 	{
-		var droids = enumGroup(constructGroup);
-		var cacheDroids = droids.length;
+		const droids = enumGroup(constructGroup);
+		const cacheDroids = droids.length;
 		if (cacheDroids >= Math.floor(MIN_TRUCKS_PER_GROUP / 2))
 		{
 			donateObject(droids[random(cacheDroids)], from);
@@ -146,7 +146,7 @@ function eventChat(from, to, message)
 	const REAL_MSG = message.slice(0, -1);
 	if (REAL_MSG === "target")
 	{
-		var num = message.slice(-1);
+		const num = message.slice(-1);
 		if (!allianceExistsBetween(num, me) && (num !== me))
 		{
 			targetPlayer(num);

@@ -146,8 +146,7 @@ const ARTILLERY_SENSORS = [
 
 
 //List of Cobra personalities:
-var subPersonalities =
-{
+const subPersonalities = {
 	AC:
 	{
 		"primaryWeapon": weaponStats.cannons,

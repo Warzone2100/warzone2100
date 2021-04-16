@@ -15,10 +15,10 @@ function updateResearchList(stat, len)
 		len = 0;
 	}
 
-	var list = [];
+	const list = [];
 	for (let x = 0, d = stat.length - len; x < d; ++x)
 	{
-		var st = stat[x];
+		const st = stat[x];
 		if (isDefined(st.res))
 		{
 			list.push(st.res);
@@ -84,7 +84,7 @@ function isPowerResearch(research)
 //one is not completed... so lets help it a bit.
 function evalResearch(lab, list)
 {
-	var sufficientPower = getRealPower() > 2500;
+	const sufficientPower = getRealPower() > 2500;
 
 	for (let i = 0, a = list.length; i < a; ++i)
 	{
@@ -146,14 +146,14 @@ function research()
 		return;
 	}
 
-	var labList = enumStruct(me, structures.lab).filter(function(lb) {
+	const labList = enumStruct(me, structures.lab).filter(function(lb) {
 		return (lb.status === BUILT && structureIdle(lb));
 	});
 
-	var enemyPlayer = getMostHarmfulPlayer();
-	var antiCyborgChance = Math.floor(playerCyborgRatio(enemyPlayer) * 100);
-	var highOil = highOilMap();
-	var haveAllies = playerAlliance(true).length > 0;
+	const enemyPlayer = getMostHarmfulPlayer();
+	let antiCyborgChance = Math.floor(playerCyborgRatio(enemyPlayer) * 100);
+	const highOil = highOilMap();
+	const haveAllies = playerAlliance(true).length > 0;
 
 	if (!startAttacking || (isDefined(scavengerPlayer) && (enemyPlayer === scavengerPlayer)))
 	{
@@ -166,7 +166,7 @@ function research()
 
 	for (let i = 0, a = labList.length; i < a; ++i)
 	{
-		var lab = labList[i];
+		const lab = labList[i];
 		let forceLaser = false;
 		let found = false;
 
@@ -297,8 +297,8 @@ function research()
 				if (!found)
 					found = evalResearch(lab, SENSOR_TECH);
 
-				var cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
-				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+				const cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
+				const len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
@@ -352,8 +352,8 @@ function research()
 				if (!found)
 					found = evalResearch(lab, extraTech);
 
-				var cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
-				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+				const cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
+				const len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
@@ -408,8 +408,8 @@ function research()
 				if (!found && useArti && random(100) < 50)
 					found = evalResearch(lab, artilleryTech);
 
-				var cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
-				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+				const cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
+				const len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
@@ -465,8 +465,8 @@ function research()
 				if (!found && useArti && random(100) < (personalityIsRocketMain() ? (componentAvailable("Missile-A-T") ? 50 : 20) : 50))
 					found = evalResearch(lab, artilleryTech);
 
-				var cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
-				var len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
+				const cyborgSecondary = updateResearchList(subPersonalities[personality].secondaryWeapon.templates);
+				const len = subPersonalities[personality].primaryWeapon.weapons.length - 1;
 				if (componentAvailable(subPersonalities[personality].primaryWeapon.weapons[len].stat))
 				{
 					if(!found && !turnOffCyborgs && cyborgSecondary.length > 0)
