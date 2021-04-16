@@ -23,3 +23,12 @@ function setupPowerModifier(player)
 		setPowerModifier(70 + 5 * powerType, player);
 	}
 }
+
+// Power modifier data is currently not saved. Reset it during eventGameLoaded for the moment.
+function setupPowerModifierGameLoaded()
+{
+	for (let i = 0; i < maxPlayers; ++i)
+	{
+		setupPowerModifier(i);
+	}
+}
