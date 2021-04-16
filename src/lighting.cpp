@@ -207,7 +207,9 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 		finalVector += normals[i];
 	}
 
-	float dotProduct = glm::dot(normalise(finalVector), theSun_ForTileIllumination)/16;
+	//float dotProduct = glm::dot(normalise(finalVector), theSun_ForTileIllumination)/16;
+	// we do this diffuse lighting in the shader now, so set dotProduct = max light = |theSun_ForTileIllumination/16| = 256
+	float dotProduct = glm::length(theSun_ForTileIllumination)/16;
 
 	// Primitive ambient occlusion calculation.
 	float ao = 0;
