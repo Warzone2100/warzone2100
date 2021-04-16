@@ -8,8 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 function randomLocation() {
-	var x = baseLocation.x + random(baseScale) - baseScale / 2;
-	var y = baseLocation.y + random(baseScale) - baseScale / 2;
+	const x = baseLocation.x + random(baseScale) - baseScale / 2;
+	const y = baseLocation.y + random(baseScale) - baseScale / 2;
 	if (x < 3 || y < 3 || x > mapWidth - 4 || y > mapHeight - 4)
 		return baseLocation;
 	return {x: x, y: y};
@@ -37,9 +37,9 @@ function truckFree(truck) {
 
 // returns one or two free trucks
 function getTwoFreeTrucks() {
-	var trucks = enumTrucks().filter(truckFree);
+	let trucks = enumTrucks().filter(truckFree);
 	if (trucks.length > 2) {
-		var ret = naiveFindClusters(trucks, baseScale / 2);
+		const ret = naiveFindClusters(trucks, baseScale / 2);
 		if (ret.maxCount >= 2)
 			trucks = ret.clusters[ret.maxIdx];
 	}
@@ -49,7 +49,7 @@ function getTwoFreeTrucks() {
 }
 
 function getFreeTruckAround(x, y) {
-	var list = enumTrucks().filter(truckFree).filter(function(droid) {
+	const list = enumTrucks().filter(truckFree).filter(function(droid) {
 		return droidCanReach(droid, x, y);
 	}).sort(function(one, two) {
 		return distance(one, x, y) - distance(two, x, y);
@@ -59,10 +59,10 @@ function getFreeTruckAround(x, y) {
 }
 
 function buildModule(struct) {
-	var trucks = getTwoFreeTrucks();
+	const trucks = getTwoFreeTrucks();
 	if (trucks.length <= 0)
 		return BUILDRET.FAILURE;
-	var moduleInfo = modules.filter(function(item) { return isAvailable(item.module) && item.base === struct.stattype; }).last();
+	const moduleInfo = modules.filter(function(item) { return isAvailable(item.module) && item.base === struct.stattype; }).last();
 	if (!defined(moduleInfo))
 		return BUILDRET.UNAVAILABLE;
 	if (struct.modules >= moduleInfo.count)
@@ -80,7 +80,7 @@ function buildBasicStructure(statlist, importance) {
 	// by default, don't try building things in dangerous locations
 	if (!defined(importance))
 		importance = IMPORTANCE.MANDATORY;
-	var trucks = getTwoFreeTrucks();
+	const trucks = getTwoFreeTrucks();
 	if (trucks.length <= 0)
 		return BUILDRET.FAILURE;
 	// choose structure type (out of the statlist),
@@ -92,7 +92,7 @@ function buildBasicStructure(statlist, importance) {
 			if (distanceToBase(trucks[0]) <= baseScale)
 				loc = pickStructLocation(trucks[0], statlist[i], trucks[0].x, trucks[0].y);
 			else {
-				var rndLoc = randomLocation();
+				const rndLoc = randomLocation();
 				loc = pickStructLocation(trucks[0], statlist[i],rndLoc.x, rndLoc.y);
 			}
 			idx = i;
@@ -115,7 +115,7 @@ function buildBasicStructure(statlist, importance) {
 
 function finishStructures() {
 	let success = false;
-	var list = enumStruct(me).filterProperty("status", BEING_BUILT);
+	const list = enumStruct(me).filterProperty("status", BEING_BUILT);
 	for (let i = 0; i < list.length; ++i) {
 		if (success)
 			return;
@@ -123,7 +123,7 @@ function finishStructures() {
 			return;
 		if (list[i].stattype === RESOURCE_EXTRACTOR)
 			return;
-		var truck = getFreeTruckAround(list[i].x, list[i].y);
+		const truck = getFreeTruckAround(list[i].x, list[i].y);
 		if (!defined(truck))
 			return;
 		if (orderDroidObj(truck, DORDER_HELPBUILD, list[i]))
@@ -135,13 +135,13 @@ function finishStructures() {
 function buildStructureAround(statlist, loc, unique) {
 	if (!defined(statlist))
 		return BUILDRET.UNAVAILABLE;
-	var truck = getFreeTruckAround(loc.x, loc.y);
+	const truck = getFreeTruckAround(loc.x, loc.y);
 	if (!defined(truck))
 		return BUILDRET.FAILURE;
-	var stat = statlist.filter(isAvailable).filter(function(s) {
+	const stat = statlist.filter(isAvailable).filter(function(s) {
 		if (unique !== true)
 			return true;
-		var list = enumStruct(me, s);
+		const list = enumStruct(me, s);
 		for (let i = 0; i < list.length; ++i)
 			if (distance(list[i], loc) < baseScale / 2)
 				return false;
@@ -149,7 +149,7 @@ function buildStructureAround(statlist, loc, unique) {
 	}).last();
 	if (!defined(stat))
 		return BUILDRET.UNAVAILABLE;
-	var loc2 = pickStructLocation(truck, stat, loc.x, loc.y);
+	const loc2 = pickStructLocation(truck, stat, loc.x, loc.y);
 	if (!defined(loc2))
 		return BUILDRET.FAILURE;
 	// if we're not into turtling, don't build too many towers
@@ -163,10 +163,10 @@ function buildStructureAround(statlist, loc, unique) {
 function captureOil(oil) {
 	if (!defined(oil))
 		return BUILDRET.FAILURE;
-	var truck = getFreeTruckAround(oil.x, oil.y);
+	const truck = getFreeTruckAround(oil.x, oil.y);
 	if (!defined(truck))
 		return BUILDRET.FAILURE;
-	var stat = structures.derricks.filter(isAvailable).last();
+	const stat = structures.derricks.filter(isAvailable).last();
 	if (!defined(stat))
 		return BUILDRET.UNAVAILABLE;
 	if (throttled(90000, oil.y * mapWidth + oil.x))
@@ -181,7 +181,7 @@ function chooseDefense(defrole) {
 }
 
 function buildTowers() {
-	var oils = enumStructList(structures.derricks);
+	const oils = enumStructList(structures.derricks);
 	if (oils.length === 0)
 		return false;
 	if (withChance(70))
@@ -191,17 +191,17 @@ function buildTowers() {
 
 function buildGateways() {
 	function uncached() {
-		var oils = countStructList(structures.derricks);
+		const oils = countStructList(structures.derricks);
 		if (oils <= 0)
 			return BUILDRET.FAILURE;
 		// lets not cycle through all gateways on the map
 		if (!areThereGW())
 			return BUILDRET.FAILURE;
-		var gates = gateways.filter(function(gate) {
-			var l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
+		const gates = gateways.filter(function(gate) {
+			let l = gate.x1 - gate.x2 + gate.y1 - gate.y2;
 			if (l < 0)
 				l = -l;
-			var cnt = enumRange(gate.x1, gate.y1, l, ALLIES).filterProperty("stattype", DEFENSE).length;
+			let cnt = enumRange(gate.x1, gate.y1, l, ALLIES).filterProperty("stattype", DEFENSE).length;
 			cnt    += enumRange(gate.x2, gate.y2, l, ALLIES).filterProperty("stattype", DEFENSE).length;
 			cnt    -= enumRange(gate.x1, gate.y1, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
 			cnt    -= enumRange(gate.x2, gate.y2, l, ENEMIES).filterProperty("stattype", DEFENSE).length;
@@ -232,7 +232,7 @@ _global.captureSomeOil = function() {
 	if (throttled(500))
 		return true;
 	function getOilList() {
-		var oils = [];
+		let oils = [];
 		oilResources.forEach(function(stat) { oils = oils.concat(enumFeature(-1, stat)); });
 		oils = oils.concat(enumStructList(structures.derricks).filterProperty("status", BEING_BUILT));
 		oils = oils.sort(function(one, two) {
@@ -242,7 +242,7 @@ _global.captureSomeOil = function() {
 			oils.length = 10;
 		return oils;
 	}
-	var oils = cached(getOilList, 5000);
+	const oils = cached(getOilList, 5000);
 	if (countFinishedStructList(structures.derricks) >= 4 * structListLimit(structures.gens))
 		return false;
 	for (let i = 0; i < oils.length; ++i)
@@ -280,8 +280,8 @@ function buildExpand() {
 }
 
 function buildEnergy() {
-	var oils = countFinishedStructList(structures.derricks);
-	var gens = countStructList(structures.gens);
+	const oils = countFinishedStructList(structures.derricks);
+	const gens = countStructList(structures.gens);
 	if (oils > 4 * gens)
 		if (buildBasicStructure(structures.gens, IMPORTANCE.PEACETIME) !== BUILDRET.UNAVAILABLE)
 			return true;
@@ -292,7 +292,7 @@ function buildEnergy() {
 }
 
 function buildModules() {
-	var str = [];
+	let str = [];
 	for (let i = 0; i < modules.length; ++i) {
 		if (modules[i].base === FACTORY && needFastestResearch() !== PROPULSIONUSAGE.GROUND)
 			continue;
@@ -336,7 +336,7 @@ _global.buildDefenses = function() {
 function listOutdatedDefenses() {
 	for (const path in weaponStats) {
 		for (const role in DEFROLE) {
-			var list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
+			const list = weaponStatsToDefenses(weaponStats[path], DEFROLE[role]);
 			for (let i = 0; i < list.length - 2; ++i)
 				if (isAvailable(list[i + 2])) {
 					if (countStruct(list[i]) > 0)
@@ -348,10 +348,10 @@ function listOutdatedDefenses() {
 }
 
 function recycleDefenses() {
-	var trucks = enumTrucks().filter(truckFree);
+	const trucks = enumTrucks().filter(truckFree);
 	if (trucks.length <= 0)
 		return false;
-	var list = listOutdatedDefenses();
+	const list = listOutdatedDefenses();
 	for (let i = 0; i < list.length; ++i)
 		for (let j = 0; j < trucks.length; ++j)
 			if (droidCanReach(trucks[j], list[i].x, list[i].y)) {

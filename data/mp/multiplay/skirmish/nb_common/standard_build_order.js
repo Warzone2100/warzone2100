@@ -2,7 +2,7 @@
 // A fallback build order for the standard ruleset.
 
 function buildOrder_StandardFallback() {
-	var derrickCount = countFinishedStructList(structures.derricks);
+	const derrickCount = countFinishedStructList(structures.derricks);
 	// might be good for Insane AI, or for rebuilding
 	if (derrickCount > 0)
 		if (buildMinimum(structures.gens, 1)) return true;
@@ -19,7 +19,7 @@ function buildOrder_StandardFallback() {
 	// make sure we have at least that much oils by now
 	if (buildMinimumDerricks(5)) return true;
 	// support hover maps
-	var ret = scopeRatings();
+	const ret = scopeRatings();
 	if (ret.land === 0 && !iHaveHover())
 		if (buildMinimum(structures.labs, 4)) return true;
 	if (ret.land === 0 && ret.sea === 0 && !iHaveVtol())
@@ -36,10 +36,10 @@ function buildOrder_StandardFallback() {
 		return false;
 	}
 	// support hover maps
-	var ret = scopeRatings();
-	if (ret.land === 0 && !iHaveHover())
+	const ret2 = scopeRatings();
+	if (ret2.land === 0 && !iHaveHover())
 		if (buildMinimum(structures.labs, 4)) return true;
-	if (ret.land === 0 && ret.sea === 0 && !iHaveVtol())
+	if (ret2.land === 0 && ret2.sea === 0 && !iHaveVtol())
 		if (buildMinimum(structures.labs, 4)) return true;
 	return true;
 }

@@ -46,7 +46,7 @@ _global.cached = function(whatToCall, interval, notes) {
 		debugGetCallerFuncObject().cachedTimes = {};
 		debugGetCallerFuncObject().cachedValues = {};
 	}
-	var t = debugGetCallerFuncObject().cachedTimes[notes];
+	const t = debugGetCallerFuncObject().cachedTimes[notes];
 	if (!defined(t) || gameTime - t >= interval) {
 		debugGetCallerFuncObject().cachedValues[notes] = whatToCall();
 		debugGetCallerFuncObject().cachedTimes[notes] = gameTime;
@@ -57,7 +57,7 @@ _global.cached = function(whatToCall, interval, notes) {
 // if you actually want your script to send debug messages, consider using this function.
 // it will only output each message only once, so your debug log will be readable.
 _global.niceDebug = function() {
-	var msg = me + ": " + Array.prototype.join.call(arguments, " ");
+	const msg = me + ": " + Array.prototype.join.call(arguments, " ");
 	if (throttled(Infinity, msg))
 		return;
 	debug(msg);

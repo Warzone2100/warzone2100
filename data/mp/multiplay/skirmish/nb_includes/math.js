@@ -84,14 +84,14 @@ Array.prototype.shuffle = function() {
 }
 
 _global.zeroArray = function(l) {
-	var ret = [];
+	const ret = [];
 	for (let i = 0; i < l; ++i)
 		ret[i] = 0;
 	return ret;
 }
 
 _global.randomUnitArray = function(l) {
-	var ret = zeroArray(l);
+	const ret = zeroArray(l);
 	ret[random(l)] = 1;
 	return ret;
 }
@@ -113,13 +113,13 @@ _global.randomItem = function(obj) {
 
 // cluster analysis happens here
 _global.naiveFindClusters = function(list, size) {
-	var ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
+	const ret = { clusters: [], xav: [], yav: [], maxIdx: 0, maxCount: 0 };
 	for (let i = list.length - 1; i >= 0; --i) {
-		var x = list[i].x, y = list[i].y;
+		const x = list[i].x, y = list[i].y;
 		let found = false;
 		for (let j = 0; j < ret.clusters.length; ++j) {
 			if (distance(ret.xav[j], ret.yav[j], x, y) < size) {
-				var n = ret.clusters[j].length;
+				const n = ret.clusters[j].length;
 				ret.clusters[j][n] = list[i];
 				ret.xav[j] = (n * ret.xav[j] + x) / (n + 1);
 				ret.yav[j] = (n * ret.yav[j] + y) / (n + 1);
@@ -132,7 +132,7 @@ _global.naiveFindClusters = function(list, size) {
 			}
 		}
 		if (!found) {
-			var n = ret.clusters.length;
+			const n = ret.clusters.length;
 			ret.clusters[n] = [list[i]];
 			ret.xav[n] = x;
 			ret.yav[n] = y;

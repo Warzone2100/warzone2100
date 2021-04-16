@@ -92,7 +92,7 @@ function guessWeaponMicro(name) {
 
 _global.guessDroidMicro = function(droid) {
 	for (let i = 0; i < droid.weapons.length; ++i) {
-		var ret = guessWeaponMicro(droid.weapons[i].name);
+		const ret = guessWeaponMicro(droid.weapons[i].name);
 		if (ret !== MICRO.RANGED)
 			return ret;
 	}
@@ -100,7 +100,7 @@ _global.guessDroidMicro = function(droid) {
 }
 
 _global.guessBodyArmor = function(name) {
-    var body = bodyStats.filterProperty("stat", name).last()
+    const body = bodyStats.filterProperty("stat", name).last()
     if (defined(body))
         return body.armor;
     else
@@ -134,13 +134,13 @@ _global.getProductionPaths = function() {
 }
 
 _global.chooseAvailableWeaponPathByRoleRatings = function(paths, rating, objectType, defrole) {
-	var minDist = Infinity, minPath;
+	let minDist = Infinity, minPath;
 	paths.forEach(function(path) {
 		if (!weaponPathIsAvailable(path, objectType, defrole))
 			return;
 		let dist = 0;
 		for (let i = 0; i < ROLE.LENGTH; ++i) {
-			var newDist = Math.abs(rating[i] - path.roles[i])
+			const newDist = Math.abs(rating[i] - path.roles[i])
 			if (newDist > dist)
 				dist = newDist;
 		}
@@ -172,7 +172,7 @@ _global.propulsionStatsToResList = function(usage) {
 _global.weaponStatsToResList = function(path, objType) {
 	if (!defined(path))
 		return [];
-	var ret = [];
+	let ret = [];
 	switch(objType) {
 		case 0:
 			ret = statsToResList(path.weapons); break;
@@ -213,7 +213,7 @@ _global.filterBodyStatsByUsage = function(usage, armor) {
 }
 
 _global.getPropulsionStatsComponents = function(usage) {
-    var data = filterDataByFlag(propulsionStats, 'usage', usage)
+	const data = filterDataByFlag(propulsionStats, 'usage', usage)
 	return data.map(function(val) { return val.stat; }).reverse()
 }
 
@@ -224,7 +224,7 @@ _global.getPropulsionStatsComponents = function(usage) {
 _global.weaponStatsToDefenses = function(stats, defrole) {
 	if (!defined(stats))
 		return [];
-	var ret = [];
+	const ret = [];
 	for (let i = 0; i < stats.defenses.length; ++i)
 		if (!defined(defrole) || stats.defenses[i].defrole === defrole)
 			ret.push(stats.defenses[i].stat);
