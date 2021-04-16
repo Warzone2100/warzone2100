@@ -2,7 +2,7 @@
 // Slightly better way of discovering research.
 function evalResearch(labID, list)
 {
-	var lab = getObject(STRUCTURE, me, labID);
+	const lab = getObject(STRUCTURE, me, labID);
 
 	if (lab === null)
 	{
@@ -22,7 +22,7 @@ function evalResearch(labID, list)
 
 function doResearch()
 {
-	var resLabs = enumStruct(me, BASE_STRUCTURES.labs);
+	const resLabs = enumStruct(me, BASE_STRUCTURES.labs);
 
 	// don't throw in half of your money on research in T3 no bases when we don't have any income yet
 	if (isStructureAvailable("A0FacMod1") && !hasPowerSource(me))
@@ -32,14 +32,14 @@ function doResearch()
 
 	for (let i = 0, len = resLabs.length; i < len; ++i)
 	{
-		var lab = resLabs[i];
+		const lab = resLabs[i];
 
 		if (lab.status !== BUILT || !structureIdle(lab) || getRealPower(me) < LOW_POWER)
 		{
 			continue;
 		}
 
-		var found = evalResearch(lab.id, nexusBranch[branch].earlyResearch);
+		let found = evalResearch(lab.id, nexusBranch[branch].earlyResearch);
 
 		if (!found)
 		{
@@ -64,12 +64,12 @@ function doResearch()
 		//Random research
 		if (!found)
 		{
-			var resList = enumResearch();
-			var len2 = resList.length;
+			const resList = enumResearch();
+			const len2 = resList.length;
 
 			if (len2 > 0)
 			{
-				var idx = Math.floor(Math.random() * len2);
+				const idx = Math.floor(Math.random() * len2);
 
 				pursueResearch(lab, resList[idx].name);
 			}
