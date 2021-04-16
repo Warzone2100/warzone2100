@@ -10,11 +10,11 @@
 (function(_global) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-var prefix = '!nb';
+const prefix = '!nb';
 
 // key: name in chat, value: function that will be executed
 // function gets two params: sender and argument
-var commandMap = {
+const commandMap = {
     set: chatSet,
     res: chatRes,
     truck: chatTruck,
@@ -25,7 +25,7 @@ var commandMap = {
 	tx: chatUnhelp,
 }
 
-var beaconInfo = [];
+const beaconInfo = [];
 
 _global.noticeBeacon = function(x, y, from) {
 	beaconInfo[from] = {
@@ -57,17 +57,17 @@ _global.handleChatMessage = function(sender, receiver, message) {
 		chatHelp(sender);
 		return;
 	}
-	var result = message.split(/ +/);
+	const result = message.split(/ +/);
 	if (result[0] !== prefix)
 		return;
-	var command = result[1];
-	var argument = result[2];
+	const command = result[1];
+	const argument = result[2];
 	if (defined(commandMap[command]))
 		chat(sender, commandMap[command](sender, argument));
 }
 
 function chatWho(sender, argument) {
-	var str = "NullBot3 (" + scriptName + ") ";
+	let str = "NullBot3 (" + scriptName + ") ";
 	switch(difficulty) {
 		case EASY: str += _("EASY"); break;
 		case MEDIUM: str=str + _("MEDIUM"); break;
@@ -80,7 +80,7 @@ function chatWho(sender, argument) {
 }
 
 function chatSet(sender, argument) {
-	var str = "";
+	let str = "";
 	for (const i in subpersonalities) {
 		if (subpersonalities[i].chatalias === argument) {
 			personality = subpersonalities[i];
@@ -104,7 +104,7 @@ function chatRes(sender, argument) {
 		setForcedResearch(fundamentalResearch);
 		return _("Researching fundamental technology.");
 	}
-	var str = " cl no fn";
+	let str = " cl no fn";
 	for (const i in weaponStats) {
 		if (weaponStats[i].chatalias === argument) {
 			setForcedResearch(weaponStatsToResList(weaponStats[i]));
@@ -117,7 +117,7 @@ function chatRes(sender, argument) {
 }
 
 function chatTruck(sender, argument) {
-	var droid = enumTrucks().random();
+	const droid = enumTrucks().random();
 	if (!defined(droid))
 		return _("Sorry, I have no trucks.");
 	if (donateObject(droid, sender)) {
@@ -128,7 +128,7 @@ function chatTruck(sender, argument) {
 }
 
 function chatMoney(sender, argument) {
-	var power = Math.round(myPower()/3);
+	const power = Math.round(myPower()/3);
 	donatePower(power, sender);
 	return _("Power transferred.");
 }

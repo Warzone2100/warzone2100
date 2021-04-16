@@ -27,7 +27,7 @@ include(NB_RULESETS + "standard.js");
 include(NB_COMMON + "standard_build_order.js");
 
 // variables defining the personality
-var subpersonalities = {
+const subpersonalities = {
 	MR: {
 		chatalias: "mr",
 		weaponPaths: [ // weapons to use; put late-game paths below!

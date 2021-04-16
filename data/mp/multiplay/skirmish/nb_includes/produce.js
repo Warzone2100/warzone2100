@@ -12,13 +12,13 @@ function ourBuildDroid(factory, name, bodies, propulsions, weapons1, weapons2, w
 }
 
 function produceTruck(factory, turrets) {
-	var turret = truckTurrets.concat();
+	let turret = truckTurrets.concat();
 	if (defined(turrets))
 		turret = turrets.concat();
 	turret.reverse();
 	// TODO: switch to using chooseBodyWeaponPair() here
-	var bodies = filterBodyStatsByUsage(BODYUSAGE.TRUCK, BODYCLASS.KINETIC).map(function(val) { return val.stat; });
-	var propulsions = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER);
+	const bodies = filterBodyStatsByUsage(BODYUSAGE.TRUCK, BODYCLASS.KINETIC).map(function(val) { return val.stat; });
+	const propulsions = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND|PROPULSIONUSAGE.HOVER);
 	return ourBuildDroid(factory, "Fancy Truck", bodies, propulsions, turret);
 }
 
@@ -26,11 +26,11 @@ function chooseWeapon(forVtol) {
 	if (!defined(forVtol))
 		forVtol = false;
 	if (forVtol) {
-		var ret = chooseAvailableWeaponPathByRoleRatings(getProductionPaths(), chooseAttackWeaponRole(), 3);
+		const ret = chooseAvailableWeaponPathByRoleRatings(getProductionPaths(), chooseAttackWeaponRole(), 3);
 		if (defined(ret))
 			return ret.vtols.concat().reverse();
 	} else {
-		var ret = chooseAvailableWeaponPathByRoleRatings(getProductionPaths(), chooseAttackWeaponRole(), 0);
+		const ret = chooseAvailableWeaponPathByRoleRatings(getProductionPaths(), chooseAttackWeaponRole(), 0);
 		if (defined(ret))
 			return ret.weapons.concat().reverse();
 	}
@@ -42,11 +42,11 @@ function chooseBodyWeaponPair(bodies, weapons) {
 	if (!defined(weapons))
 		return undefined;
 	for (let i = 0; i < weapons.length; ++i) {
-		var w = weapons[i].stat, ww = weapons[i].weight;
+		const w = weapons[i].stat, ww = weapons[i].weight;
 		if (!componentAvailable(w))
 			continue;
 		for (let j = 0; j < bodies.length; ++j) {
-			var b = bodies[j].stat, bw = bodies[j].weight;
+			const b = bodies[j].stat, bw = bodies[j].weight;
 			if (!componentAvailable(b))
 				continue;
 			/* eslint-disable no-unreachable */
@@ -78,7 +78,7 @@ function chooseBodyWeaponPair(bodies, weapons) {
 
 function produceTank(factory) {
     // TODO: needs refactoring. Make some more clever sorting.
-    var bodies = [];
+    let bodies = [];
     if (chooseBodyClass() === BODYCLASS.KINETIC) {
         bodies = bodies.concat(
 			filterBodyStatsByUsage(BODYUSAGE.GROUND, BODYCLASS.KINETIC),
@@ -91,8 +91,8 @@ function produceTank(factory) {
 		);
     }
     let propulsions;
-	var ret = scopeRatings();
-	var rnd = random(ret.land + ret.sea);
+	const ret = scopeRatings();
+	const rnd = random(ret.land + ret.sea);
 	if (!defined(rnd)) // we need only vtols?
 		return false;
 	propulsions = getPropulsionStatsComponents(PROPULSIONUSAGE.GROUND);
@@ -103,7 +103,7 @@ function produceTank(factory) {
 		if (ret.land === 0)
 			return false;
 	}
-	var bwPair = chooseBodyWeaponPair(bodies, chooseWeapon());
+	const bwPair = chooseBodyWeaponPair(bodies, chooseWeapon());
 	if (!defined(bwPair))
 		return false;
 	return ourBuildDroid(factory, "Tank", bwPair.b, propulsions, bwPair.w, bwPair.w, bwPair.w);
@@ -111,16 +111,16 @@ function produceTank(factory) {
 
 function produceVtol(factory) {
 	// TODO: consider thermal bodies
-	var bodies = filterBodyStatsByUsage(BODYUSAGE.AIR, BODYCLASS.KINETIC)
-	var propulsions = getPropulsionStatsComponents(PROPULSIONUSAGE.VTOL);
-	var bwPair = chooseBodyWeaponPair(bodies, chooseWeapon(true));
+	const bodies = filterBodyStatsByUsage(BODYUSAGE.AIR, BODYCLASS.KINETIC)
+	const propulsions = getPropulsionStatsComponents(PROPULSIONUSAGE.VTOL);
+	const bwPair = chooseBodyWeaponPair(bodies, chooseWeapon(true));
 	if (!defined(bwPair))
 		return false;
 	return ourBuildDroid(factory, "VTOL", bwPair.b, propulsions, bwPair.w, bwPair.w, bwPair.w);
 }
 
 function produceTemplateFromList(factory, list) {
-	var ret = scopeRatings();
+	const ret = scopeRatings();
 	for (let i = list.length - 1; i >= 0; --i) {
 		if (ret.land === 0 && !isHoverPropulsion(list[i].prop) && !isVtolPropulsion(list[i].prop))
 			continue;
@@ -136,17 +136,17 @@ function produceTemplateFromList(factory, list) {
 }
 
 function produceTemplate(factory) {
-	var path = chooseAvailableWeaponPathByRoleRatings(getProductionPaths(), chooseAttackWeaponRole(), 1);
+	const path = chooseAvailableWeaponPathByRoleRatings(getProductionPaths(), chooseAttackWeaponRole(), 1);
 	if (defined(path))
 		return produceTemplateFromList(factory, path.templates);
 	return false;
 }
 
 _global.checkTruckProduction = function() {
-	var trucks = enumTrucks();
-	var hoverTrucksCount = trucks.filter(function(droid) { return isHoverPropulsion(droid.propulsion); }).length;
+	const trucks = enumTrucks();
+	const hoverTrucksCount = trucks.filter(function(droid) { return isHoverPropulsion(droid.propulsion); }).length;
 	if (iHaveHover() && hoverTrucksCount < personality.minHoverTrucks) {
-		var groundTrucks = trucks.filter(function(droid) { return !isHoverPropulsion(droid.propulsion); });
+		const groundTrucks = trucks.filter(function(droid) { return !isHoverPropulsion(droid.propulsion); });
 		if (groundTrucks.length > personality.minTrucks) {
 			groundTrucks.length -= personality.minTrucks;
 			groundTrucks.forEach(function(droid) { orderDroid(droid, DORDER_RECYCLE); });
@@ -158,14 +158,14 @@ _global.checkTruckProduction = function() {
 	if (trucks.length < personality.minTrucks || myPower() > personality.maxPower
 		|| (iHaveHover() && hoverTrucksCount < personality.minHoverTrucks)
 	) {
-		let f = enumFinishedStructList(structures.factories)[0];
+		const f = enumFinishedStructList(structures.factories)[0];
 		if (defined(f))
 			if (structureIdle(f))
 				if (produceTruck(f))
 					return true;
 		if (defined(f))
 			return false;
-		let tf = enumFinishedStructList(structures.templateFactories)[0];
+		const tf = enumFinishedStructList(structures.templateFactories)[0];
 		if (defined(tf))
 			if (structureIdle(tf))
 				if (produceTemplateFromList(tf, truckTemplates))
@@ -173,9 +173,9 @@ _global.checkTruckProduction = function() {
 	}
 	if (!iHaveArty())
 		return false;
-	var sensors = enumDroid(me, DROID_SENSOR).length;
+	const sensors = enumDroid(me, DROID_SENSOR).length;
 	if (withChance(100 - 100 * sensors / personality.maxSensors)) {
-		let f = enumFinishedStructList(structures.factories)[0];
+		const f = enumFinishedStructList(structures.factories)[0];
 		if (defined(f))
 			if (structureIdle(f))
 				if (produceTruck(f, sensorTurrets))
