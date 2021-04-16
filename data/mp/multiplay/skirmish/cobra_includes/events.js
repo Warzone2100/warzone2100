@@ -15,9 +15,9 @@ function eventStartLevel()
 
 	//That (me * 100) part is to help reduce multiple Cobra AI's from coinciding stuff on the same frame. Of course,
 	//higher "me"s may impact the bot in some, hopefully, minimal manner.
-	var delay = me * 100;
+	const delay = me * 100;
 	//Make Cobra think "slower" on easy difficulty for some of its basic functions
-	var easyTimeDelay = (difficulty === EASY) ? 5000 : 0;
+	const easyTimeDelay = (difficulty === EASY) ? 5000 : 0;
 
 	setTimer("buildOrders", 300 + delay + (2 * easyTimeDelay));
 	setTimer("produce", 400 + delay + easyTimeDelay);
@@ -43,7 +43,7 @@ function eventStructureBuilt(structure, droid)
 		return;
 	}
 
-	var nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter(function(obj) {
+	const nearbyOils = enumRange(droid.x, droid.y, 8, ALL_PLAYERS, false).filter(function(obj) {
 		return (obj.type === FEATURE) && (obj.stattype === OIL_RESOURCE);
 	}).sort(distanceToBase);
 
@@ -55,7 +55,7 @@ function eventStructureBuilt(structure, droid)
 	else if (forceDerrickBuildDefense)
 	{
 		const MIN_DIST_FROM_BASE = 10;
-		var dist = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, structure.x, structure.y);
+		const dist = distBetweenTwoPoints(MY_BASE.x, MY_BASE.y, structure.x, structure.y);
 
 		if (dist >= MIN_DIST_FROM_BASE && (getRealPower() > (-3 * SUPER_LOW_POWER)))
 		{
@@ -70,7 +70,7 @@ function eventDroidIdle(droid)
 {
 	if (shouldCobraAttack() && (droid.droidType === DROID_WEAPON || droid.droidType === DROID_CYBORG || isVTOL(droid)))
 	{
-		var enemyObjects = enumRange(droid.x, droid.y, 6, ENEMIES, false);
+		let enemyObjects = enumRange(droid.x, droid.y, 6, ENEMIES, false);
 		if (enemyObjects.length > 0)
 		{
 			enemyObjects = enemyObjects.sort(distanceToBase);
@@ -80,7 +80,7 @@ function eventDroidIdle(droid)
 	else if (forceDerrickBuildDefense && droid.droidType === DROID_CONSTRUCT && droid.group === oilGrabberGroup)
 	{
 		const SCAN_RANGE = 7;
-		var enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter(function(obj) {
+		const enemyDerrs = enumRange(droid.x, droid.y, SCAN_RANGE, ENEMIES, false).filter(function(obj) {
 			return obj.type === STRUCTURE && obj.stattype === RESOURCE_EXTRACTOR;
 		});
 
@@ -97,7 +97,7 @@ function eventDroidBuilt(droid, struct)
 {
 	if (isConstruct(droid.id))
 	{
-		var isEngineer = droid.body === "CyborgLightBody";
+		const isEngineer = droid.body === "CyborgLightBody";
 
 		if (!isEngineer && baseType === CAMP_CLEAN && getMultiTechLevel() > 1 && enumGroup(oilGrabberGroup).length === 0)
 		{
@@ -160,7 +160,7 @@ function eventAttacked(victim, attacker)
 	const SCAV_ATTACKER = isDefined(scavengerPlayer) && (attacker.player === scavengerPlayer);
 	const GROUP_SCAN_RADIUS = subPersonalities[personality].retreatScanRange;
 
-	var nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter(function(obj) {
+	const nearbyUnits = enumRange(victim.x, victim.y, GROUP_SCAN_RADIUS, ALLIES, false).filter(function(obj) {
 		return obj.type === DROID;
 	});
 
@@ -168,7 +168,7 @@ function eventAttacked(victim, attacker)
 	if (victim.type === DROID && victim.player === me)
 	{
 		let nearbyScavs = 0;
-		var nearbyEnemies = enumRange(victim.x, victim.y, SCAV_ATTACKER ? (GROUP_SCAN_RADIUS * 0.75) : GROUP_SCAN_RADIUS, ENEMIES, false);
+		const nearbyEnemies = enumRange(victim.x, victim.y, SCAV_ATTACKER ? (GROUP_SCAN_RADIUS * 0.75) : GROUP_SCAN_RADIUS, ENEMIES, false);
 		if (isVTOL(victim))
 		{
 			droidReady(victim.id);
@@ -228,7 +228,7 @@ function eventAttacked(victim, attacker)
 			return;
 		}
 
-		var units = nearbyUnits.filter(function(dr) {
+		const units = nearbyUnits.filter(function(dr) {
 			return (dr.id !== victim.id &&
 				dr.group !== retreatGroup &&
 				!isConstruct(dr.id, false) &&
@@ -245,7 +245,7 @@ function eventAttacked(victim, attacker)
 			{
 				if ((subPersonalities[personality].resPath === "offensive") || (random(100) < 33))
 				{
-					var unit = units[i];
+					const unit = units[i];
 					if (unit !== null && distBetweenTwoPoints(unit.x, unit.y, attacker.x, attacker.y) < (GROUP_SCAN_RADIUS + 4))
 					{
 						orderDroidObj(unit, DORDER_ATTACK, attacker);
@@ -297,7 +297,7 @@ function eventStructureReady(structure)
 		}
 	}
 
-	var obj = returnClosestEnemyFactory();
+	let obj = returnClosestEnemyFactory();
 	//Find something that exists, if possible.
 	if (!isDefined(obj))
 	{

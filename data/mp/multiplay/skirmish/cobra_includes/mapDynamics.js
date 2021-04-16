@@ -67,7 +67,7 @@ function countAllResources()
 {
 	function uncached()
 	{
-		var amount = enumFeature(-1, OIL_RES).length;
+		let amount = enumFeature(-1, OIL_RES).length;
 		for (let i = 0; i < maxPlayers; ++i)
 		{
 			amount += enumStruct(i, structures.derrick).length;
@@ -93,7 +93,7 @@ function averageOilPerPlayer()
 		//maxPlayers is useless here in case there are some empty slots.
 		for (let i = 0; i < maxPlayers; ++i)
 		{
-			var data = playerData[i];
+			const data = playerData[i];
 			players += ((data.isHuman || data.isAI) ? 1 : 0);
 		}
 
@@ -109,7 +109,7 @@ function mapOilLevel()
 	function uncached()
 	{
 		let str;
-		var perPlayer = averageOilPerPlayer();
+		const perPlayer = averageOilPerPlayer();
 		if (perPlayer <= 10)
 		{
 			str = "LOW";
@@ -137,7 +137,7 @@ function highOilMap()
 {
 	function uncached()
 	{
-		var oil = mapOilLevel();
+		const oil = mapOilLevel();
 
 		if (oil === "HIGH" || oil === "NTW")
 		{
@@ -156,8 +156,8 @@ function cobraBaseArea()
 	function uncached()
 	{
 		const EXTRA_TILES = 20;
-		var area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
-		var baseStructures = [
+		const area = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
+		const baseStructures = [
 			structures.factory,
 			structures.cyborgFactory,
 			structures.vtolFactory,
@@ -171,12 +171,12 @@ function cobraBaseArea()
 
 		for (let i = 0, len = baseStructures.length; i < len; ++i)
 		{
-			var structureType = baseStructures[i];
-			var objects = enumStruct(me, structureType);
+			const structureType = baseStructures[i];
+			const objects = enumStruct(me, structureType);
 
 			for (let j = 0, len2 = objects.length; j < len2; ++j)
 			{
-				var structure = objects[j];
+				const structure = objects[j];
 
 				if (structure.x < area.x1)
 				{
