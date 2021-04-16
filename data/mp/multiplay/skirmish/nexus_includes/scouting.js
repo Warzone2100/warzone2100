@@ -5,7 +5,7 @@ function chooseScoutArea()
 	let x = 0;
 	let y = 0;
 	let r = 0;
-	const theta = (2 * Math.PI);
+	const theta = 2 * Math.PI;
 	let xAb = 0;
 	let yAb = 0;
 	let badStuff;
@@ -69,7 +69,7 @@ function chooseScoutArea()
 
 function expandScoutRadius()
 {
-	var badStuff = enumRange(scoutInfo.base.x, scoutInfo.base.y, scoutInfo.currentRadius, ENEMIES, true).length;
+	const badStuff = enumRange(scoutInfo.base.x, scoutInfo.base.y, scoutInfo.currentRadius, ENEMIES, true).length;
 
 	if (badStuff === 0)
 	{
@@ -89,7 +89,7 @@ function expandScoutRadius()
 		//See if we should lower the radius in case of intense enemy assault
 		if (badStuff >= MAX_FEARED_OBJECTS)
 		{
-			var diff = (scoutInfo.currentRadius - scoutInfo.expandTileRate);
+			const diff = scoutInfo.currentRadius - scoutInfo.expandTileRate;
 
 			if (diff <= 2)
 			{

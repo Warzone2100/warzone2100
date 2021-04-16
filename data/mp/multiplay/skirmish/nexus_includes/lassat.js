@@ -12,14 +12,14 @@ function tryLassatStrike(structureID)
 		return;
 	}
 
-	var lassat = getObject(STRUCTURE, me, structureID);
+	const lassat = getObject(STRUCTURE, me, structureID);
 
 	if (lassat === null)
 	{
 		return;
 	}
 
-	var tar = getObject(targetInfo.what.type, targetInfo.what.player, targetInfo.what.id);
+	const tar = getObject(targetInfo.what.type, targetInfo.what.player, targetInfo.what.id);
 
 	if (tar !== null)
 	{

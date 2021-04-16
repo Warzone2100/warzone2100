@@ -57,8 +57,8 @@ function getRealPower(player)
 
 function sortByDistToBase(obj1, obj2)
 {
-	var dist1 = distBetweenTwoPoints(BASE.x, BASE.y, obj1.x, obj1.y);
-	var dist2 = distBetweenTwoPoints(BASE.x, BASE.y, obj2.x, obj2.y);
+	const dist1 = distBetweenTwoPoints(BASE.x, BASE.y, obj1.x, obj1.y);
+	const dist2 = distBetweenTwoPoints(BASE.x, BASE.y, obj2.x, obj2.y);
 
 	return (dist1 - dist2);
 }
@@ -116,11 +116,11 @@ function groupNearCoordinate(group, loc, range)
 	}
 
 	let count = 0;
-	var members = enumGroup(group);
+	const members = enumGroup(group);
 
 	for (let i = 0, len = members.length; i < len; ++i)
 	{
-		var dr = members[i];
+		const dr = members[i];
 
 		if (distBetweenTwoPoints(dr.x, dr.y, loc.x, loc.y) <= range)
 		{
@@ -146,12 +146,12 @@ function groupCanReach(group, x, y)
 		return false;
 	}
 
-	var members = enumGroup(group);
-	var len = members.length;
+	const members = enumGroup(group);
+	const len = members.length;
 
 	for (let i = 0; i < len; ++i)
 	{
-		var dr = members[i];
+		const dr = members[i];
 
 		if (!droidCanReach(dr, x, y))
 		{
@@ -172,15 +172,15 @@ function baseDetails(player)
 	}
 
 	let baseRadius = 4;
-	var tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
+	const tmpBase = {x1: mapWidth, y1: mapHeight, x2: 0, y2: 0};
 
 	for (let i = 0, len = STANDARD_BASE_STRUCTURES.length; i < len; ++i)
 	{
-		var sObjs = enumStruct(player, STANDARD_BASE_STRUCTURES[i]);
+		const sObjs = enumStruct(player, STANDARD_BASE_STRUCTURES[i]);
 
 		for (let j = 0, len2 = sObjs.length; j < len2; ++j)
 		{
-			var struct = sObjs[j];
+			const struct = sObjs[j];
 
 			if (struct.x < tmpBase.x1)
 			{
@@ -199,7 +199,7 @@ function baseDetails(player)
 				tmpBase.y2 = struct.y;
 			}
 
-			var result = distBetweenTwoPoints(BASE.x, BASE.y, struct.x, struct.y);
+			const result = distBetweenTwoPoints(BASE.x, BASE.y, struct.x, struct.y);
 
 			if (result > baseRadius)
 			{
@@ -213,11 +213,11 @@ function baseDetails(player)
 	const DUMMY_Y = 4;
 	// Extend the radius a few tiles for each limit
 	const extraTilesBase = 10; //6
-	var x1 = tmpBase.x1 - extraTilesBase;
-	var y1 = tmpBase.y1 - extraTilesBase;
-	var x2 = tmpBase.x2 + extraTilesBase;
-	var y2 = tmpBase.y2 + extraTilesBase;
-	var rad = baseRadius + extraTilesBase;
+	let x1 = tmpBase.x1 - extraTilesBase;
+	let y1 = tmpBase.y1 - extraTilesBase;
+	let x2 = tmpBase.x2 + extraTilesBase;
+	let y2 = tmpBase.y2 + extraTilesBase;
+	const rad = baseRadius + extraTilesBase;
 
 	if (coordinatesOutOfBounds(x1, DUMMY_Y))
 	{
@@ -262,7 +262,7 @@ function insideBase(x, y, object)
 		return false;
 	}
 
-	var base = defined(object) ? object : baseLimits;
+	const base = defined(object) ? object : baseLimits;
 
 	if (!defined(base.x1) || !defined(base.y1) || !defined(base.x2) || !defined(base.y2))
 	{
@@ -288,8 +288,8 @@ function gateInBase(gate)
 		return false;
 	}
 
-	var gx = Math.floor((gate.x1 + gate.x2) / 2);
-	var gy = Math.floor((gate.y1 + gate.y2) / 2);
+	const gx = Math.floor((gate.x1 + gate.x2) / 2);
+	const gy = Math.floor((gate.y1 + gate.y2) / 2);
 
 	return insideBase(gx, gy);
 }
@@ -354,11 +354,11 @@ function threatInRange(x, y, player, scanRadius, visible)
 		visible = false;
 	}
 
-	var stuff = enumRange(x, y, scanRadius, player, visible);
+	const stuff = enumRange(x, y, scanRadius, player, visible);
 
 	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
-		var obj = stuff[i];
+		const obj = stuff[i];
 
 		if (obj.type !== FEATURE && obj.player !== me && !allianceExistsBetween(me, obj.player))
 		{
@@ -421,12 +421,12 @@ function numWeapObjectsInRange(x, y, player, scanRadius, visible)
 		visible = false;
 	}
 
-	var stuff = enumRange(x, y, scanRadius, player, visible);
-	var count = {structures: 0, droids: 0, safe: true};
+	const stuff = enumRange(x, y, scanRadius, player, visible);
+	const count = {structures: 0, droids: 0, safe: true};
 
 	for (let i = 0, l = stuff.length; i < l; ++i)
 	{
-		var obj = stuff[i];
+		const obj = stuff[i];
 
 		if (obj.type === STRUCTURE && obj.stattype === DEFENSE && obj.status === BUILT)
 		{
@@ -461,7 +461,7 @@ function numGroupSameOrder(group, order)
 	}
 
 	let numSame = 0;
-	var grp = enumGroup(group);
+	const grp = enumGroup(group);
 
 	for (let i = 0, len = grp.length; i < len; ++i)
 	{
@@ -536,8 +536,8 @@ function groupCoordinateAverage(group)
 		return {x: 0, y: 0};
 	}
 
-	var droids = enumGroup(group);
-	var len = droids.length;
+	const droids = enumGroup(group);
+	const len = droids.length;
 	let xTotal = 0;
 	let yTotal = 0;
 
@@ -552,30 +552,30 @@ function groupCoordinateAverage(group)
 
 function numAlliesInBase()
 {
-	var counts = numWeapObjectsInRange(BASE.x, BASE.y, ALLIES, BASE_THREAT_RANGE, true);
+	const counts = numWeapObjectsInRange(BASE.x, BASE.y, ALLIES, BASE_THREAT_RANGE, true);
 
 	return (counts.droids + Math.floor(counts.structures / 3));
 }
 
 function numEnemiesInBase()
 {
-	var counts = numWeapObjectsInRange(BASE.x, BASE.y, ENEMIES, BASE_THREAT_RANGE, true);
+	const counts = numWeapObjectsInRange(BASE.x, BASE.y, ENEMIES, BASE_THREAT_RANGE, true);
 
 	return (counts.droids + Math.floor(counts.structures / 4));
 }
 
 function baseInTrouble()
 {
-	var friendlyForce = numAlliesInBase();
-	var enemyForce = numEnemiesInBase();
+	const friendlyForce = numAlliesInBase();
+	const enemyForce = numEnemiesInBase();
 
 	return (enemyForce > 0 && enemyForce >= friendlyForce);
 }
 
 function initPersonalityData(personality)
 {
-	var factories = enumStruct(me, FACTORY);
-	var trucks = enumDroid(me, DROID_CONSTRUCT);
+	const factories = enumStruct(me, FACTORY);
+	const trucks = enumDroid(me, DROID_CONSTRUCT);
 
 	helpInfo = {
 		lastHelpTime: [],
@@ -643,7 +643,7 @@ function initPersonalityData(personality)
 	//Now set the scout base. Seems pointless but oh well, original.
 	if (factories.length > 0)
 	{
-		var fac = factories[0];
+		const fac = factories[0];
 		scoutInfo.base.x = fac.x;
 		scoutInfo.base.y = fac.y;
 	}
@@ -655,7 +655,7 @@ function initPersonalityData(personality)
 
 	for (let i = 0, len = trucks.length; i < len; ++i)
 	{
-		var droid = trucks[i];
+		const droid = trucks[i];
 		groupAdd(groups.baseBuilders, droid);
 	}
 

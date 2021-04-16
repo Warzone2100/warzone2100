@@ -75,7 +75,7 @@ function tooManyAlliances()
 //Specify any true parameter to only return the ones that are still alive.
 function getAllyPlayers(alive)
 {
-	var allies = [];
+	const allies = [];
 
 	if (!defined(alive))
 	{
@@ -100,11 +100,11 @@ function getAllyPlayers(alive)
 
 function tryBreakingAlliance()
 {
-	var allies = getAllyPlayers(true);
+	const allies = getAllyPlayers(true);
 
 	for (let i = 0, len = allies.length; i < len; ++i)
 	{
-		var ally = allies[i];
+		const ally = allies[i];
 		let breakIt = false;
 		//Break an alliance at random if we are allies for some amount of time.
 		if (random(30) === 0 && (gameTime - allianceTime[ally]) > minutesToMilliseconds(10))
@@ -141,8 +141,8 @@ function tryFormingAlliances()
 
 	for (let i = 0; i < maxPlayers; ++i)
 	{
-		var time = allianceTime[i];
-		var tooEarly = (gameTime - time < minutesToMilliseconds(12));
+		const time = allianceTime[i];
+		const tooEarly = gameTime - time < minutesToMilliseconds(12);
 
 		if (i !== me && !allianceExistsBetween(me, i) && (time === 0 || tooEarly === false))
 		{

@@ -67,7 +67,7 @@ function defendLocation(x, y, timeout, move)
 
 	if (enumGroup(groups.attackers).length > 0)
 	{
-		var avg = groupCoordinateAverage(groups.attackers);
+		const avg = groupCoordinateAverage(groups.attackers);
 
 		if (distBetweenTwoPoints(avg.x, avg.y, x, y) > radius)
 		{
@@ -78,7 +78,7 @@ function defendLocation(x, y, timeout, move)
 
 function stopHelpingAlly()
 {
-	var ally = helpInfo.lastHelpPlayer;
+	const ally = helpInfo.lastHelpPlayer;
 
 	helpInfo.lastHelpTime[ally] = undefined;
 	helpInfo.lastHelpRequest[ally] = undefined;
@@ -92,7 +92,7 @@ function stopHelpingAlly()
 
 function attemptToHelp(player, x, y)
 {
-	var helpingSelf = (player === me);
+	const helpingSelf = player === me;
 
 	if (!defined(player))
 	{
@@ -125,7 +125,7 @@ function attemptToHelp(player, x, y)
 function helpPlayer(player, x, y)
 {
 	let timeTravel = 0;
-	var attackers = enumGroup(groups.attackers);
+	const attackers = enumGroup(groups.attackers);
 
 	if (!defined(player))
 	{
@@ -146,7 +146,7 @@ function helpPlayer(player, x, y)
 	}
 	else
 	{
-		var avg = groupCoordinateAverage(groups.attackers);
+		const avg = groupCoordinateAverage(groups.attackers);
 		timeTravel = Math.floor(distBetweenTwoPoints(avg.x, avg.y, x, y) * 1.7 * 1000);
 	}
 
@@ -194,7 +194,7 @@ function canStopHelpingAlly()
 
 function requestHelp(x, y)
 {
-	var ally = helpInfo.lastHelpPlayer;
+	const ally = helpInfo.lastHelpPlayer;
 
 	if (!defined(ally))
 	{
