@@ -8,7 +8,7 @@ function eventChat(from, to, message)
 	if (message === "donatetruck" && allianceExistsBetween(from, to))
 	{
 		// donate first truck
-		var droids = enumDroid(me, DROID_CONSTRUCT);
+		const droids = enumDroid(me, DROID_CONSTRUCT);
 		if (droids.length > 0)
 		{
 			donateObject(droids[0], from);
