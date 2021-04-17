@@ -108,7 +108,7 @@ function bc_eventObjectSeen(sensor, gameObject) {
 	debug(sensor.name+': '.gameObject.name, 'eventSeen');
 /*	
 	if(sensor.type == DROID && sensor.droidType == DROID_SENSOR && !allianceExistsBetween(me, gameObject.player)){
-		var sensors = enumGroup(armyScanners);
+		const sensors = enumGroup(armyScanners);
 		pointRegular = armyScanners[0];
 		debug(pointRegular.x+'x'+pointRegular.y);
 	}
@@ -162,7 +162,7 @@ function bc_eventStructureBuilt(structure, droid){
 
 	/*
 	if(policy['build'] == 'rich'){
-		var _b = enumGroup(buildersMain)[0];
+		const _b = enumGroup(buildersMain)[0];
 		if(typeof _b !== 'undefined'){
 			base.x = _b.x;
 			base.y = _b.y;
@@ -189,7 +189,7 @@ function bc_eventStructureBuilt(structure, droid){
 					enumGroup(buildersMain).forEach(function(e,i){if(i!=0){groupAdd(buildersHunters, e);debugMsg("FORCE "+i+" Builder --> Hunter +1", 'group');}});
 				}
 				else if( ( ( factory_ready.length == 1 && research_lab_ready.length == 3) || research_lab_ready.length == 4 ) && policy['build'] == 'rich'){
-					var e = enumGroup(buildersMain)[0];
+					const e = enumGroup(buildersMain)[0];
 					groupAdd(buildersHunters, e);
 				}
 			}
@@ -201,12 +201,12 @@ function bc_eventStructureBuilt(structure, droid){
 
 			if(groupSize(buildersMain) != 0){
 				if( ( (factory_ready.length == 1 && research_lab_ready.length == 1) || factory_ready.length == 2 || factory_ready.length == 3) && policy['build'] == 'rich'){
-					var e = enumGroup(buildersMain)[0];
+					const e = enumGroup(buildersMain)[0];
 					groupAdd(buildersHunters, e);
 				}
 				
 	//			if(policy['build'] != 'rich'){
-					var _b = enumGroup(buildersMain)[0];
+					const _b = enumGroup(buildersMain)[0];
 					if(typeof _b !== 'undefined'){
 						base.x = _b.x;
 						base.y = _b.y;
@@ -234,7 +234,7 @@ function bc_eventDroidBuilt(droid, structure) {
 //	debugMsg("eventDroidBuilt: droidType="+droid.droidType+", name="+droid.name, 'eventDroidBuilt');
 	
 	if(produceTrigger[structure.id]){
-		var rem = produceTrigger.splice(structure.id, 1);
+		const rem = produceTrigger.splice(structure.id, 1);
 		debugMsg('BUILT: removed from '+structure.id+' '+rem, 'triggers');
 		groupArmy(droid, rem);
 		return;
@@ -313,11 +313,11 @@ function bc_eventAttacked(victim, attacker) {
 		if(victim.health < 40){
 			if(fixDroid(victim)) return;
 		}
-		
-		var myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter(function(o){if(o.player == me && o.type == DROID)return true; return false;});
+
+		let myDroids = enumRange(victim.x, victim.y, 12, ALLIES).filter(function(o){if(o.player == me && o.type == DROID)return true; return false;});
 		myDroids = myDroids.filter(function(o){if(o.droidType == DROID_CONSTRUCT && builderBusy(o))return false; return true;});
-		var enemyObjects = enumRange(attacker.x, attacker.y, 7, ENEMIES, me);
-		
+		const enemyObjects = enumRange(attacker.x, attacker.y, 7, ENEMIES, me);
+
 		debugMsg('myDroids: '+myDroids.length+', enemyObjects: '+enemyObjects.length, 'temp');
 
 		let myHP = 0
@@ -350,7 +350,7 @@ function bc_eventAttacked(victim, attacker) {
 		eventsRun['targetRegular'] = gameTime + 5000;
 		lastImpact = {x:victim.x,y:victim.y};
 		if(distBetweenTwoPoints_p(lastImpact.x, lastImpact.y, base.x, base.y) < base_range){
-			var warriors = enumRange(victim.x, victim.y, 20, ALLIES).filter(function(e){if(e.player == me && e.type == DROID && e.droidType == DROID_WEAPON)return true; return false;});
+			const warriors = enumRange(victim.x, victim.y, 20, ALLIES).filter(function(e){if(e.player == me && e.type == DROID && e.droidType == DROID_WEAPON)return true; return false;});
 			warriors.forEach(function(e){orderDroidLoc_p(e, DORDER_SCOUT, lastImpact.x, lastImpact.y);});
 		}
 		targetRegular(attacker, victim);
@@ -362,8 +362,8 @@ function bc_eventAttacked(victim, attacker) {
 	}
 	
 	if(victim.type == DROID && victim.droidType == DROID_SENSOR){
-		var point = enumDroid(me, DROID_WEAPON);
-		
+		let point = enumDroid(me, DROID_WEAPON);
+
 		//Отходим к союзникам, если союзная армия ближе
 		point = point.concat(getAllyArmy());
 		
@@ -379,8 +379,8 @@ function bc_eventAttacked(victim, attacker) {
 	if(victim.type == DROID && victim.droidType == DROID_WEAPON && !isFixVTOL(victim)){
 		lastImpact = {x:victim.x,y:victim.y};
 
-		var myDroids = enumRange(victim.x, victim.y, 10, ALLIES).filter(function(o){if(o.player == me && o.type == DROID && o.droidType == DROID_WEAPON)return true; return false;});
-		var enemyObjects = enumRange(attacker.x, attacker.y, 5, ENEMIES, me);
+		const myDroids = enumRange(victim.x, victim.y, 10, ALLIES).filter(function(o){if(o.player == me && o.type == DROID && o.droidType == DROID_WEAPON)return true; return false;});
+		const enemyObjects = enumRange(attacker.x, attacker.y, 5, ENEMIES, me);
 		let myHP = 0
 		let enemyHP = 0;
 		myDroids.forEach(function(o){myHP+=o.health;});
@@ -407,7 +407,7 @@ function bc_eventAttacked(victim, attacker) {
 		
 		//Если атакуют огнемётные войска, атакуем ими ближайшего врага
 		if(getWeaponInfo(victim.weapons[0].name).impactClass == "HEAT"){
-			var enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){if(e.type == DROID)return true; return false;});
+			const enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){if(e.type == DROID)return true; return false;});
 			if(enemies.length != 0){
 				enemies = sortByDistance(enemies, victim, 1);
 				orderDroidObj_p(victim, DORDER_ATTACK, enemies[0]);
@@ -433,7 +433,7 @@ function bc_eventAttacked(victim, attacker) {
 			fixDroid(victim);
 		}
 		eventsRun['victimCyborgs'] = gameTime + 10000;
-		var cyborgs = enumGroup(armyCyborgs);
+		const cyborgs = enumGroup(armyCyborgs);
 		cyborgs.forEach(function(e){
 			if(distBetweenTwoPoints_p(e.x,e.y,attacker.x,attacker.y) < 10)
 //			orderDroidLoc_p(e, DORDER_SCOUT, {x:attacker.x,y:attacker.y});
@@ -446,7 +446,7 @@ function bc_eventAttacked(victim, attacker) {
 function bc_eventDestroyed(obj){
 	if(obj.type == STRUCTURE && obj.stattype == FACTORY){
 		if(produceTrigger[obj.id]){
-			var rem = produceTrigger.splice(obj.id, 1);
+			const rem = produceTrigger.splice(obj.id, 1);
 			debugMsg('DESTROYED: removed from '+obj.id+' '+rem, 'triggers');
 		}
 	}
@@ -516,7 +516,7 @@ function bc_eventChat(sender, to, message) {
 				chat(sender, "I do not have free Trucks");
 			else{
 				chat(sender, "Here my new shiny Truck");
-				var truck = enumGroup(buildersMain)[0];
+				const truck = enumGroup(buildersMain)[0];
 				donateObject(truck, sender);
 			}
 			break;

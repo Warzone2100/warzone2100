@@ -2,9 +2,9 @@ debugMsg('Module: builders.js','init');
 
 function groupBuilders(droid){
 	if ( typeof order === "undefined" ) order = false;
-	var buildersMainLen = groupSize(buildersMain);
-	var buildersHuntersLen = groupSize(buildersHunters);
-	
+	const buildersMainLen = groupSize(buildersMain);
+	const buildersHuntersLen = groupSize(buildersHunters);
+
 	//распределяем строителей по группам
 	if ( droid ) {
 		
@@ -26,7 +26,7 @@ function groupBuilders(droid){
 //Подсчитываем постройки на базе
 let factory, power_gen, resource_extractor, research_lab, hq, cyborg_factory, vtol_factory, rearm_pad, uplink_center, lassat, ccontrol, repfac;
 let factory_ready, power_gen_ready, resource_extractor_ready, research_lab_ready, hq_ready, cyborg_factory_ready, vtol_factory_ready, rearm_pad_ready, uplink_center_ready, lassat_ready, ccontrol_ready, repfac_ready;
-var se_r=0; //Resource extractor length
+let se_r = 0; //Resource extractor length
 
 
 function checkBase(){
@@ -94,7 +94,7 @@ function builderBuild(droid, structure, rotation, position){
 //		case "A0ResourceExtractor":struct = resource_extractor; break;
 //		default: return false;
 	}
-	var stop=false;
+	let stop = false;
 	//Проверяем, если заданное здание уже кем-либо заложено и строится, просто едем помочь достроить
 	if ( struct.length != 0 ){struct.forEach( function (obj){
 //		debugMsg("builderBuild(): name="+obj.name+"; status="+obj.status);
@@ -106,13 +106,14 @@ function builderBuild(droid, structure, rotation, position){
 	if (isStructureAvailable(structure, me)){
 		
 		debugMsg('try '+structure, 'builders');
-		
-		if(position) var _pos = position;
-		else var _pos = base;
-		
+
+		let _pos;
+		if(position) _pos = position;
+		else _pos = base;
+
 		if(structure == "A0RepairCentre3" && !position){
 			if(repfac.length == 0){
-				var target = getUnknownResources();
+				let target = getUnknownResources();
 				target = target.concat(getSeeResources());
 				target = sortByDistance(target, base).filter(function(e){
 					if(distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) < base_range && droidCanReach(droid, e.x,e.y) )return true;return false;
@@ -124,10 +125,10 @@ function builderBuild(droid, structure, rotation, position){
 		}
 		
 		debugMsg("droid:"+droid.id+", structure:"+structure+", pos:"+_pos.x+'x'+_pos.y+", try", "builders");
-		var pos = pickStructLocation(droid,structure,_pos.x+1,_pos.y+1);
+		const pos = pickStructLocation(droid,structure,_pos.x+1,_pos.y+1);
 		if (pos && !(typeof pos === 'undefined') && (policy['build'] == 'rich' || base_range < 15 || distBetweenTwoPoints_p(pos.x,pos.y,base.x,base.y) < (base_range+10))) {
 
-			var result = orderDroidBuild_p(droid, DORDER_BUILD, structure, pos.x, pos.y, rotation);
+			const result = orderDroidBuild_p(droid, DORDER_BUILD, structure, pos.x, pos.y, rotation);
 			debugMsg("droid:"+droid.id+", structure:"+structure+", pos:"+pos.x+'x'+pos.y+", "+result, "builders");
 			if(result){
 				debugMsg("droid:"+droid.id+", structure:"+structure+", pos:"+pos.x+'x'+pos.y+", ok", "builders");	
@@ -139,7 +140,7 @@ function builderBuild(droid, structure, rotation, position){
 			}
 		}else{
 			//Перевод базы на хрен знает что..
-			var _base = sortByDistance(getSeeResources(), base).filter(function(e){
+			const _base = sortByDistance(getSeeResources(), base).filter(function(e){
 				if(distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) > base_range && droidCanReach(droid, e.x,e.y) )return true;return false;
 			});
 			if(_base.length != 0){
@@ -196,18 +197,18 @@ function buildersOrder(order,target) {
 
 //	if ( typeof order === "undefined" ) order = false;
 //	if ( typeof target === "undefined" ) target = false;
-	
-	var buildersMainLen = groupSize(buildersMain);
-	var buildersHuntersLen = groupSize(buildersHunters);
-	
+
+	const buildersMainLen = groupSize(buildersMain);
+	const buildersHuntersLen = groupSize(buildersHunters);
+
 	if(buildersMainLen == 0 && buildersHuntersLen == 0) return false;
 	
 	/*
 	if(order == "AA" && AA_defence.length != 0 && target !== false){
-		var _def = AA_defence[Math.floor(Math.random()*Math.min(AA_defence.length, 3))]; //Случайная из 3 последних
+		const _def = AA_defence[Math.floor(Math.random()*Math.min(AA_defence.length, 3))]; //Случайная из 3 последних
 		debugMsg("Срочно строим ПВО "+_def+" "+target.x+"x"+target.y, 'builders');
 		let _build = 0;
-		var pos = pickStructLocation(obj,_def,target.x,target.y);
+		const pos = pickStructLocation(obj,_def,target.x,target.y);
 		if(pos){
 			enumGroup(buildersMain).forEach( function(obj, iter){
 				if(builderBusy(obj) == true) return;
@@ -223,8 +224,8 @@ function buildersOrder(order,target) {
 		}
 	}
 	*/
-	
-	var rnd = Math.floor(Math.random()*4);
+
+	const rnd = Math.floor(Math.random()*4);
 	let rotation = 0;
 	switch(rnd){
 		case 0:rotation = 0;break;
@@ -244,8 +245,8 @@ function buildersOrder(order,target) {
 //		if(rage == HARD || rage == INSANE) builder_targets = sortByDistance(builder_targets, base);
 	}
 //	debugMsg("to capture: "+builder_targets.length, 'builders');
-//	var oil_free = builder_targets; //для дебага
-	var oil_unknown = getUnknownResources();
+//	const oil_free = builder_targets; //для дебага
+	const oil_unknown = getUnknownResources();
 	builder_targets = builder_targets.concat(oil_unknown);
 	if(earlyGame && enemyDist > 100 && policy['build'] != 'rich' && nf['policy'] != 'island') builder_targets = filterNearBase(builder_targets);
 
@@ -253,8 +254,8 @@ function buildersOrder(order,target) {
 	builder_targets = builder_targets.concat(enumFeature(me, "Crate"));
 
 	builder_targets = filterInaccessible(builder_targets);
-	
-	var oil_enemy = getEnemyResources();
+
+	const oil_enemy = getEnemyResources();
 
 	if(defence.length != 0) builder_targets = builder_targets.concat(oil_enemy);
 
@@ -273,13 +274,13 @@ function buildersOrder(order,target) {
 //				debugMsg("Нет строителей вообще! Каюк!", 'builders');
 				//TODO доработать, найти завод киборгов, построить киборга-строителя или попросить помощи у союзника
 			}else{
-				var _builders = enumGroup(buildersHunters);
+				const _builders = enumGroup(buildersHunters);
 				base = {x:_builders[0].x,y:_builders[0].y}; //Меняем место базы на первого строителя (Возможно повезёт)
 //				debugMsg("Дислокация базы! "+base.x+"x"+base.y, 'builders');
 				queue("buildersOrder", 1000);
 			}
 		}else{
-			var _hunters = enumGroup(buildersHunters);
+			let _hunters = enumGroup(buildersHunters);
 			if(_hunters.length > 2){
 				_hunters = sortByDistance(_hunters, base, 1);
 				groupAdd(buildersMain, _hunters[0]);
@@ -299,10 +300,10 @@ function buildersOrder(order,target) {
 			return;
 		}
 		*/
-		var hunters = enumGroup(buildersHunters);
-		var problemBuildings = sortByDistance(getProblemBuildings(), base);
+		const hunters = enumGroup(buildersHunters);
+		const problemBuildings = sortByDistance(getProblemBuildings(), base);
 		for (const h in hunters) {
-			var huntOnDuty = oilHunt(hunters[h]);
+			let huntOnDuty = oilHunt(hunters[h]);
 			if(huntOnDuty){
 //				debugMsg(hunters[h].id+' oilHunt', 'hunters');
 				continue;
@@ -356,7 +357,8 @@ function rigDefence(obj, nearbase){
 //		debugMsg('exit no defence avail', 'defence');
 		return false; //Количество возможных защитных башен исследовано
 	}
-	var toBuild = defence[Math.floor(Math.random()*defence.length)];
+	const toBuild = defence[Math.floor(Math.random()*defence.length)];
+
 
 	
 	defQueue = sortByDistance(defQueue,obj,0);
@@ -372,14 +374,14 @@ function rigDefence(obj, nearbase){
 	if(!getInfoNear(defQueue[0].x,defQueue[0].y,'safe').value) return false;
 	
 //	debugMsg("rigDefence(): Строителем №"+obj.id+" строим "+toBuild+" "+defQueue[0].x+"x"+defQueue[0].y);
-	var _def = getInfoNear(defQueue[0].x,defQueue[0].y,'buildDef',5,30000,false);
+	const _def = getInfoNear(defQueue[0].x,defQueue[0].y,'buildDef',5,30000,false);
 	if(_def.value && !builderBusy(obj)){
 		debugMsg('try-build: '+defQueue[0].x+'x'+defQueue[0].y+", build: "+_def.x+'x'+_def.y+', '+nearbase, 'defence');
 		orderDroidBuild_p(obj, DORDER_BUILD, toBuild, _def.x, _def.y, 0);
 		defQueue.shift();
 		return true;
 	}
-/*	var pos = pickStructLocation(obj,toBuild,posRnd(defQueue[0].x, 'x'), posRnd(defQueue[0].y, 'y'));
+/*	const pos = pickStructLocation(obj,toBuild,posRnd(defQueue[0].x, 'x'), posRnd(defQueue[0].y, 'y'));
 	if(pos && !builderBusy(obj)){
 		debugMsg('try-build: '+defQueue[0].x+'x'+defQueue[0].y+", build: "+pos.x+'x'+pos.y+', '+nearbase, 'defence');
 		orderDroidBuild_p(obj, DORDER_BUILD, toBuild, pos.x, pos.y, 0);
@@ -393,14 +395,14 @@ function rigDefence(obj, nearbase){
 }
 
 //Составляем очередь на постройку защитный сооружений
-var defQueue = [];
+let defQueue = [];
 function defenceQueue(){
 	if(!running)return;
 	if(defence.length == 0) return;
-	var myDefence = enumStruct(me,DEFENSE);
-	var onBase = myDefence.filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;});
-	var myRigs = [];
-	
+	const myDefence = enumStruct(me,DEFENSE);
+	const onBase = myDefence.filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;});
+	let myRigs = [];
+
 	if(policy['build'] == 'rich' ){
 		
 		if(rage == INSANE){
@@ -421,7 +423,7 @@ function defenceQueue(){
 	else 
 	{
 		myRigs = myRigs.concat(allResources.filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2) && onBase.length > 20) return false; return true;}));
-	//	var myRigs = enumStruct(me,RESOURCE_EXTRACTOR).filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2) && onBase.length > 20) return false; return true;});
+	//	let myRigs = enumStruct(me,RESOURCE_EXTRACTOR).filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < (base_range/2) && onBase.length > 20) return false; return true;});
 	//	myRigs = myRigs.concat(enumFeature(me, "OilResource")); //Добавляем незанятые
 		
 
@@ -431,9 +433,9 @@ function defenceQueue(){
 		myRigs = myRigs.concat(enumStruct(me, FACTORY));
 		myRigs = myRigs.concat(enumStruct(me, CYBORG_FACTORY));
 	}
-//	var myRigs = enumStruct(me,RESOURCE_EXTRACTOR);
-//	var enemyRigs = getEnemyResources();
-//	var enQueue = [];
+//	const myRigs = enumStruct(me,RESOURCE_EXTRACTOR);
+//	const enemyRigs = getEnemyResources();
+//	const enQueue = [];
 	//Добавляем в очередь все координаты, где наши качалки без защитных сооружений
 	if (myRigs.length >= 3 || policy['build'] == 'rich') {
 		defQueue = myRigs.filter(
@@ -451,7 +453,7 @@ function defenceQueue(){
 			}
 		);
 		/*
-		var enQueue = enemyRigs.filter(
+		const enQueue = enemyRigs.filter(
 			function(e){
 				if(myDefence.length==0) return true; //Если защитных сооружений вообще нет, добавляем все координаты всех наших качалок
 				for (const i in myDefence) {
@@ -474,11 +476,11 @@ function defenceQueue(){
 function AA_build(obj, nearbase){
 //	if ( typeof nearbase === "undefined" ) nearbase = false;
 	if(AA_defence.length != 0 && AA_queue.length != 0){
-		var _def = AA_defence[Math.floor(Math.random()*Math.min(AA_defence.length, 3))]; //Случайная из 3 последних
-		var target = AA_queue.shift();
+		const _def = AA_defence[Math.floor(Math.random()*Math.min(AA_defence.length, 3))]; //Случайная из 3 последних
+		const target = AA_queue.shift();
 //		debugMsg("Строим ПВО "+_def+" "+target.x+"x"+target.y, 'builders');
-		var pos = pickStructLocation(obj,_def,target.x,target.y);
-		
+		const pos = pickStructLocation(obj,_def,target.x,target.y);
+
 		if(pos){
 			if(builderBusy(obj) == true) return;
 			orderDroidBuild_p(obj, DORDER_BUILD, _def, pos.x, pos.y, 0);
@@ -493,7 +495,7 @@ function oilHunt(obj, nearbase){
 	if ( typeof nearbase === "undefined" ) nearbase = false;
 	if(builder_targets.length == 0) return false;
 	if (builderBusy(obj)) return false;
-	var myDefence = enumStruct(me,DEFENSE);
+	const myDefence = enumStruct(me,DEFENSE);
 	builder_targets = builder_targets.concat(myDefence.filter(function(e){if(e.status == 0 || e.health < 100) return true; return false;})); //Добавляем к целям недостроенные защитные сооружения
 
 
@@ -501,8 +503,8 @@ function oilHunt(obj, nearbase){
 	/*
 	if(defQueue.length != 0 && defence.length != 0) {
 		for (const i in oil_enemy) {if(distBetweenTwoPoints_p(oil_enemy[i].x,oil_enemy[i].y,obj.x,obj.y) <= 15 && !getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'defended').value && getInfoNear(oil_enemy[i].x,oil_enemy[i].y,'safe').value){
-		var toBuild = defence[Math.floor(Math.random()*defence.length)];
-		var pos = pickStructLocation(obj,toBuild,oil_enemy[i].x+Math.round(Math.random()*2-1), oil_enemy[i].y+Math.round(Math.random()*2-1));
+		const toBuild = defence[Math.floor(Math.random()*defence.length)];
+		const pos = pickStructLocation(obj,toBuild,oil_enemy[i].x+Math.round(Math.random()*2-1), oil_enemy[i].y+Math.round(Math.random()*2-1));
 		if(pos && !builderBusy(obj)){
 			orderDroidBuild_p(obj, DORDER_BUILD, toBuild, pos.x, pos.y, 0);
 			debugMsg("oilHunt(): Строим вышку у вражеского ресурса");
@@ -549,16 +551,16 @@ function oilHunt(obj, nearbase){
 					
 					//Проверяем, вдруг рядом другой строитель уже строит защитную башню
 
-					var def = enumRange(builder_targets[i].x, builder_targets[i].y, 7, ALLIES)
+					const def = enumRange(builder_targets[i].x, builder_targets[i].y, 7, ALLIES)
 					.filter(function(e){if(e.type == STRUCTURE && e.stattype == DEFENSE && e.status == BEING_BUILT)return true; return false;});
 					if(def.length != 0){
 						orderDroidObj_p(obj, DORDER_HELPBUILD, def[0]);
 						return true;
 					}
 
-					
-					var toBuild = defence[Math.floor(Math.random()*Math.min(defence.length, 3))];
-					var pos = pickStructLocation(obj,toBuild,builder_targets[i].x+Math.round(Math.random()*3-1), builder_targets[i].y+Math.round(Math.random()*3-1));
+
+					const toBuild = defence[Math.floor(Math.random()*Math.min(defence.length, 3))];
+					const pos = pickStructLocation(obj,toBuild,builder_targets[i].x+Math.round(Math.random()*3-1), builder_targets[i].y+Math.round(Math.random()*3-1));
 //                    debugMsg(JSON.stringify(pos), 'pos');
 					if(pos && !builderBusy(obj) && (!getInfoNear(builder_targets[i].x,builder_targets[i].y,'defended').value || (playerPower(me) > 500 || berserk))){
 						orderDroidBuild_p(obj, DORDER_BUILD, toBuild, pos.x, pos.y, 0);
@@ -628,7 +630,7 @@ function builderBusy(builder) {
 
 function builderRecycleWalls(builder){
 //	if (builderBusy(obj)) return false; //А зачем? В общем цикле на "занятость" уже есть проверка.
-	var myWalls = enumStruct(me, GATE);
+	let myWalls = enumStruct(me, GATE);
 	myWalls = myWalls.concat(enumStruct(me, COMMAND_CONTROL));
 	if(playerPower(me) < 700) {
 		myWalls = myWalls.concat(enumStruct(me, WALL));
@@ -649,15 +651,15 @@ function builderRecycleWalls(builder){
 /*
 
 function findRig() {
-	var myBuilders = new Array();
-	var myMainBuilders = new Array();
-	var myHelpBuilders = new Array();
+	const myBuilders = [];
+	let myMainBuilders = [];
+	let myHelpBuilders = [];
 
 	myMainBuilders = enumDroid(me, DROID_CONSTRUCT);
 	myHelpBuilders = enumDroid(me, 10);
 
-	var seeResources = getSeeResources();
-//	var unkResources = getUnknownResources();
+	let seeResources = getSeeResources();
+//	const unkResources = getUnknownResources();
 
 	seeResources = sortByDistance(seeResources,base,null);
 
