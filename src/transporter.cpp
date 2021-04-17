@@ -761,7 +761,7 @@ void intProcessTransporter(UDWORD id)
 }
 
 /* Remove the Transporter widgets from the screen */
-void intRemoveTrans()
+void intRemoveTrans(bool skipIntModeReset /*= false*/)
 {
 	// Start the window close animation.
 	IntFormAnimated *form = (IntFormAnimated *)widgGetFromID(psWScreen, IDTRANS_FORM);
@@ -772,17 +772,23 @@ void intRemoveTrans()
 
 	intRemoveTransContent();
 	intRemoveTransDroidsAvail();
-	intMode = INT_NORMAL;
+	if (!skipIntModeReset)
+	{
+		intMode = INT_NORMAL;
+	}
 }
 
 /* Remove the Transporter Content widgets from the screen w/o animation!*/
-void intRemoveTransNoAnim()
+void intRemoveTransNoAnim(bool skipIntModeReset /*= false*/)
 {
 	//remove main screen
 	widgDelete(psWScreen, IDTRANS_FORM);
 	intRemoveTransContentNoAnim();
 	intRemoveTransDroidsAvailNoAnim();
-	intMode = INT_NORMAL;
+	if (!skipIntModeReset)
+	{
+		intMode = INT_NORMAL;
+	}
 }
 
 /* Remove the Transporter Content widgets from the screen */

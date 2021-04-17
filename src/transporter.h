@@ -45,8 +45,8 @@ bool intRefreshTransporter();
 /*Add the Transporter Interface*/
 bool intAddTransporter(DROID *psSelected, bool offWorld);
 /* Remove the Transporter widgets from the screen */
-void intRemoveTrans();
-void intRemoveTransNoAnim();
+void intRemoveTrans(bool skipIntModeReset = false);
+void intRemoveTransNoAnim(bool skipIntModeReset = false);
 /* Process return codes from the Transporter Screen*/
 void intProcessTransporter(UDWORD id);
 
