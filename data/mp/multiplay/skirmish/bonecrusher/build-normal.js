@@ -2,27 +2,27 @@ debugMsg('Module: build-normal.js','init');
 
 function mainBuilders(rotation){
 //	debugMsg('mainBuilders()', 'builders_advanced');
-	
-	var helped=0;
-	var module=0;
-	var build =0;
-//	var iter=0;
-	var _b = enumGroup(buildersMain);
-	
-	var len_research_lab_ready = research_lab_ready.length;
-	var len_research_lab = research_lab.length;
 
-	var technology = enumResearch().length;
-	
+	let helped = 0;
+	let module = 0;
+	let build = 0;
+//	let iter = 0;
+	const _b = enumGroup(buildersMain);
+
+	let len_research_lab_ready = research_lab_ready.length;
+	let len_research_lab = research_lab.length;
+
+	const technology = enumResearch().length;
+
 	if(!technology) { len_research_lab_ready = Infinity; len_research_lab = Infinity;}
 	
 	//enumGroup(buildersMain).forEach( function(obj, iter){
-	var rnd = Math.round(Math.random());
+	const rnd = Math.round(Math.random());
 //	debugMsg("lab="+len_research_lab_ready+", fact="+factory_ready.length+", pow="+playerPower(me), 'builders');
 	for (let i = 0; i < _b.length; i++) {
 //		debugMsg('---', 'builders');
-		var obj = _b[i];
-//		var pos = {x:base.x, y:base.y};
+		const obj = _b[i];
+//		let pos = {x:base.x, y:base.y};
 /*
 
 		if(i==0) pos = {x:obj.x, y:obj.y};
@@ -48,8 +48,8 @@ function mainBuilders(rotation){
 //		debugMsg('helps', 'builders');
 		//ищем чего-бы достроить или починить
 		if(helped < 1){
-			var myBase = enumStruct(me);
-			var _h=false;
+			const myBase = enumStruct(me);
+			let _h = false;
 			for (const b in myBase) {
 //				if(earlyGame && distBetweenTwoPoints_p(myBase[b].x, myBase[b].y, obj.x, obj.y) > 5){continue;}
 //				if(myBase[b].status == BEING_DEMOLISHED){orderDroidObj_p(obj, DORDER_DEMOLISH, myBase[b]); helped++; _h=true; break;} //TODO
@@ -65,7 +65,7 @@ function mainBuilders(rotation){
 		
 //		debugMsg('modules', 'builders');
 		//Модули на здания
-		var safe = getInfoNear(base.x,base.y,'safe',(base_range/2)).value;
+		const safe = getInfoNear(base.x,base.y,'safe',(base_range/2)).value;
 		let busy = false;
 		if((safe || berserk || policy['build'] == 'rich') && module < 3){
 			if(getResearch("R-Struc-Factory-Module").done && berserk ) { factory.forEach( function(e){ if(e.modules < 2){ if(orderDroidBuild_p(obj, DORDER_BUILD, "A0FacMod1", e.x, e.y)){module++;busy=true;}}});if(busy)continue;}
