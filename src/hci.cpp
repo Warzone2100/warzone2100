@@ -735,7 +735,7 @@ void intResetScreen(bool NoAnim)
 		intCloseInGameOptionsNoAnim();
 		intCloseMultiMenuNoAnim();
 		intRemoveIntelMapNoAnim();
-		intRemoveTransNoAnim();
+		intRemoveTransNoAnim(true);
 	}
 	else
 	{
@@ -744,9 +744,12 @@ void intResetScreen(bool NoAnim)
 		intRemoveObject();
 		intCloseMultiMenu();
 		intRemoveIntelMap();
-		intRemoveTrans();
+		intRemoveTrans(true);
 	}
-	intRemoveMissionResultNoAnim();
+	if (intMode == INT_MISSIONRES)
+	{
+		intRemoveMissionResultNoAnim();
+	}
 	intRemoveDesign();
 	intHidePowerBar();
 

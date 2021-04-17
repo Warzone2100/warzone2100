@@ -3886,6 +3886,10 @@ static void resetDesignPauseState()
 		setScrollPause(false);
 		gameTimeStart();
 		screen_StopBackDrop();
+		if (intMode == INT_DESIGN)
+		{
+			pie_ScreenFlip(CLEAR_BLACK);
+		}
 	}
 }
 
