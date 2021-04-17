@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:13\n"
+"PO-Revision-Date: 2021-04-17 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -5772,7 +5772,7 @@ msgstr "Não houve resposta do servidor principal!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5782,35 +5782,35 @@ msgstr "Campanha"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Desafio"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Confrontos"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multijogador"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Música do Menu"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(sem título)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Copiar caminho para área de transferência"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Copiar JSON para Área de Transferência"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Dump JSON para StdOut"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -6817,7 +6817,7 @@ msgstr "Canhão de Assalto"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:851
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Bunker com Metralhadora de Assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6829,7 +6829,7 @@ msgstr "Plataforma de Metralhadora de Assalto"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Torre de Guarda com Metralhadora de Assalto 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -7208,7 +7208,7 @@ msgstr "Pontos de Chassis: Muito baixos"
 #: po/custom/fromJson.txt:1191
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Dano das bombas +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
