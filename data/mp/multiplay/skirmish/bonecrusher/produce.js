@@ -177,7 +177,7 @@ function produceDroids(){
 	if (policy['build'] != 'rich' && getInfoNear(base.x,base.y,'safe',base_range).value && groupSize(armyFixers) < maxFixers && groupSize(armyPartisans) > 5 && fixersTrigger < gameTime 
 		&& ( getResearch("R-Sys-MobileRepairTurret01").done || getResearch("R-Sys-MobileRepairTurretHvy").done) && ((playerPower(me) > 300 || berserk) || groupSize(armyFixers) == 0)){
 		fixersTrigger = gameTime + fixersTimer;
-		const _repair = "LightRepair1";
+		let _repair = "LightRepair1";
 		if(getResearch("R-Sys-MobileRepairTurretHvy").done) _repair = "HeavyRepair";
 		buildDroid(droid_factories[0], "Fixer", _body, _prop, "", DROID_REPAIR, _repair);
 		return;

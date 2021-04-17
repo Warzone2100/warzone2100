@@ -175,7 +175,7 @@ let ally = [];
 
 let enemy = [];
 
-const rWay; // TODO: never used
+// const rWay; // TODO: never used
 
 //Массив всех приказов юнитам
 const _globalOrders = [];
