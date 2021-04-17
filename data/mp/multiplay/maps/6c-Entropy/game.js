@@ -503,22 +503,23 @@ function placeStuff(regions, startPos) {
 		var snowFeatureTypes = ["TreeSnow1", "TreeSnow2", "TreeSnow3", "TreeSnow1", "TreeSnow2", "TreeSnow3", "LogCabin1", "LogCabin2", "WaterTower"];
 		for (var i = 0; i < mapSize*decorationDensity; ++i) {
 			var pos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true);
-			if (pos !== null) {
-				var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
-				if(decorationMode==1){
-					var nearStructure=false;
-					for(var j=0;j<structures.length;j++){
-						var s=structures[j];
-						if(Math.sqrt(Math.pow(x-s.position[0]/128,2)+Math.pow(y-s.position[1]/128,2))<decorationFreeRange){
-							nearStructure=true;
-							break;
-						}
-					}
-					if(nearStructure) continue;
-				}
-				var snow = isSnow[mapWidth*y + x];
-				features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
+			if (pos === null) {
+				continue;
 			}
+			var x = pos[0]/128 | 0, y = pos[1]/128 | 0;
+			if(decorationMode==1){
+				var nearStructure=false;
+				for(var j=0;j<structures.length;j++){
+					var s=structures[j];
+					if(Math.sqrt(Math.pow(x-s.position[0]/128,2)+Math.pow(y-s.position[1]/128,2))<decorationFreeRange){
+						nearStructure=true;
+						break;
+					}
+				}
+				if(nearStructure) continue;
+			}
+			var snow = isSnow[mapWidth*y + x];
+			features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
 		}
 	}
 	
