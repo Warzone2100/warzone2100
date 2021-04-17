@@ -407,7 +407,7 @@ function bc_eventAttacked(victim, attacker) {
 		
 		//Если атакуют огнемётные войска, атакуем ими ближайшего врага
 		if(getWeaponInfo(victim.weapons[0].name).impactClass == "HEAT"){
-			const enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){if(e.type == DROID)return true; return false;});
+			let enemies = enumRange(victim.x, victim.y, 3, ENEMIES).filter(function(e){if(e.type == DROID)return true; return false;});
 			if(enemies.length != 0){
 				enemies = sortByDistance(enemies, victim, 1);
 				orderDroidObj_p(victim, DORDER_ATTACK, enemies[0]);
