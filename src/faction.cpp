@@ -73,7 +73,9 @@ static const struct FACTION factions[NUM_FACTIONS] = {
 		"Collective",
 		{
 			{"blwallc1.pie", "blwallc_col.pie"},
-			{"blwallh.pie", "blwall_col.pie"},
+			{"blwallh.pie", "blwallh_col.pie"},
+			{"blwallh_t.pie", "blwallh_t_col.pie"},
+			{"blwallh_l.pie", "blwallh_l_col.pie"},
 			{"blhq.pie", "blhq_col.pie"},
 			{"blguard1.pie", "blguard_col.pie"},
 			{"blguardr.pie", "blguardr_col.pie"},
