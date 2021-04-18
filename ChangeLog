@@ -1,3 +1,25 @@
+2021-04-18: Version 4.0.1
+ * General:
+   * Fix: Fix broken map zoom cycle and repair bad config settings for some numerical cycle options (commit:825a07d3f237befc194e62e2de29ef0eab3defbb, commit:6037803287f1c9d3cd26820cc863d47ec16d5852, #1707)
+   * Fix: Improve water performance (commit:154ff47cb7a470879f716a9e9e149e6345742b40, commit:efee2d8c4a8f78aac944f7c5770909fd26e90b17, #1724)
+   * Fix: Prevent crash related to flag/rally point positions already existing (commit:db2b23da5c49cdf95140160b31ad8cb922f8fbbe, #1752)
+ * Graphics:
+   * Add: Additional Collective faction textures (commit:734bfe4336abf4489420397ca28f15a977fa16fa, #1768)
+ * Multiplayer:
+   * Change: Change multiplayer super transporter research icon to show a tank in the corner rather than a cyborg (commit:8b9d3954880eac94ac14ebe8439196d2405e7036, #1721)
+   * Change: Some improvements to 6c-Entropy for easier modding (too many commits, #1756)
+   * Fix: Reset ready status in lobby when a player leaves (commit:d7f125d51c89614f4705aa17ff94f8bbe589a6c4, #1744)
+   * Fix: Fixed incorrect player positioning in procedurally generated maps (commit:d9fd9a7888d05696641c28e54f8b9c0bec0a3796, #1755)
+   * Fix: Fix skirmish power modifier after saveload (commit:847496e22df5fa6283fa90a9ab0cd9b81014fd71, #1764)
+ * AI:
+   * Fix: AI messages wrongly targeting players (commit:5aca61614f66a8c9554b6ba482a730ae880e0f10, #1770)
+ * Balance:
+   * Change: Start splash damage at the center of intended droid targets and increase splash radii of such weapons (commit:cb34127ba35bf0fa9d85398e6c4ddf1103ff8c4b, commit:3b833e1a52cb3ebd4ef8a6e436c931708f6a266b, #1474)
+ * Other:
+   * Add: Add config option to toggle autosave feature (commit:c8008672f926fc9143eb5477865dd7b64f8f2abe, #1727)
+   * Fix: macOS ARM64 / Apple Silicon builds (SDL2 cross-compiling issue) (commit:f0934ee4e84418b583e204c595383581c12270cc, #1720)
+   * Fix: Don't crash when closing the game if the music manager is open in the main menu (commit:93094e8a3e3334ac9109b8be27a83dff695de641, #1761)
+
 2021-04-04: Version 4.0.0
  * See: Version 4.0.0 beta1, beta2, beta3 for the full list of improvements since the last stable release
  * Changes since Version 4.0.0 beta3:
