@@ -4438,7 +4438,7 @@ nlohmann::json wzapi::constructStaticPlayerData()
 		vector["isAI"] = !NetPlay.players[i].allocated && NetPlay.players[i].ai >= 0;
 		vector["isHuman"] = NetPlay.players[i].allocated;
 		vector["type"] = SCRIPT_PLAYER;
-		vector["identity"] = playerStats[i].identity.publicHashString();
+		vector["identity"] = playerStats[i].identity.empty()?"false":playerStats[i].identity.publicHashString();
 		playerData.push_back(std::move(vector));
 	}
 	return playerData;
