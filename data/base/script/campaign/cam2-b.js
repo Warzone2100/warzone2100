@@ -107,8 +107,8 @@ function truckDefense()
 function transferPower()
 {
 	//increase player power level and play sound
-     setPower(playerPower(CAM_HUMAN_PLAYER) + 4000);
-     playSound("power-transferred.ogg");
+	setPower(playerPower(CAM_HUMAN_PLAYER) + 4000);
+	playSound("power-transferred.ogg");
 }
 
 function eventStartLevel()
