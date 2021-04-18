@@ -420,7 +420,7 @@ EcKey EcKey::generate()
 std::string EcKey::publicHashString() const
 {
 	auto bytes = toBytes(EcKey::Public);
-	return bytes.empty()? std::string{} : sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
+	return bytes.empty()? std::string{} : sha256Sum(&bytes[0], bytes.size()).toString().c_str();
 }
 
 
