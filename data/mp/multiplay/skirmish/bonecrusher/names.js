@@ -4,61 +4,61 @@ debugMsg('Module: names.js','init');
 const colors = new Array("Green","Orange","Grey","Black","Red","Blue","Pink","Cyan","Yellow","Purple","White","Bright blue","Neon green","Infrared","Ultraviolet","Brown");
 
 const droidTypes = new Array(
-    "DROID_WEAPON",           ///< Weapon droid
-    "DROID_SENSOR",           ///< Sensor droid
-    "DROID_ECM",              ///< ECM droid
-    "DROID_CONSTRUCT",        ///< Constructor droid
-    "DROID_PERSON",           ///< person
-    "DROID_CYBORG",           ///< cyborg-type thang
-    "DROID_TRANSPORTER",      ///< guess what this is!
-    "DROID_COMMAND",          ///< Command droid
-    "DROID_REPAIR",           ///< Repair droid
-    "DROID_DEFAULT",          ///< Default droid
-    "DROID_CYBORG_CONSTRUCT", ///< cyborg constructor droid - new for update 28/5/99
-    "DROID_CYBORG_REPAIR",    ///< cyborg repair droid - new for update 28/5/99
-    "DROID_CYBORG_SUPER",     ///< cyborg repair droid - new for update 7/6/99
-    "DROID_SUPERTRANSPORTER", ///< SuperTransport (MP)
-    "DROID_ANY"              ///< Any droid. Used as a parameter for various stuff.
+	"DROID_WEAPON",           ///< Weapon droid
+	"DROID_SENSOR",           ///< Sensor droid
+	"DROID_ECM",              ///< ECM droid
+	"DROID_CONSTRUCT",        ///< Constructor droid
+	"DROID_PERSON",           ///< person
+	"DROID_CYBORG",           ///< cyborg-type thang
+	"DROID_TRANSPORTER",      ///< guess what this is!
+	"DROID_COMMAND",          ///< Command droid
+	"DROID_REPAIR",           ///< Repair droid
+	"DROID_DEFAULT",          ///< Default droid
+	"DROID_CYBORG_CONSTRUCT", ///< cyborg constructor droid - new for update 28/5/99
+	"DROID_CYBORG_REPAIR",    ///< cyborg repair droid - new for update 28/5/99
+	"DROID_CYBORG_SUPER",     ///< cyborg repair droid - new for update 7/6/99
+	"DROID_SUPERTRANSPORTER", ///< SuperTransport (MP)
+	"DROID_ANY"              ///< Any droid. Used as a parameter for various stuff.
 );
 
 var droidOrders = new Array(
-    "DORDER_NONE",            /**< no order set. */
-    
-    "DORDER_STOP",            /**< stop the current order. */
-    "DORDER_MOVE",            /**< 2 - move to a location. */
-    "DORDER_ATTACK",          /**< attack an enemy. */
-    "DORDER_BUILD",           /**< 4 - build a structure. */
-    "DORDER_HELPBUILD",       /**< help to build a structure. */
-    "DORDER_LINEBUILD",       /**< 6 - build a number of structures in a row (walls + bridges). */
-    "DORDER_DEMOLISH",        /**< demolish a structure. */
-    "DORDER_REPAIR",          /**< 8 - repair a structure. */
-    "DORDER_OBSERVE",         /**< keep a target in sensor view. */
-    "DORDER_FIRESUPPORT",     /**< 10 - attack whatever the linked sensor droid attacks. */
-    "DORDER_RETREAT",         /**< return to the players retreat position. */
-    "DORDER_UNUSED_2",        
-    "DORDER_RTB",             /**< return to base. */
-    "DORDER_RTR",             /**< 14 - return to repair at any repair facility. */
-    "DORDER_RUN",             /**< run away after moral failure. */
-    "DORDER_EMBARK",          /**< 16 - board a transporter. */
-    "DORDER_DISEMBARK",       /**< get off a transporter. */
-    "DORDER_ATTACKTARGET",    /**< 18 - a suggestion to attack something i.e. the target was chosen because the droid could see it. */
-    "DORDER_COMMANDERSUPPORT",/**< Assigns droid to the target commander. */
-    "DORDER_BUILDMODULE",     /**< 20 - build a module (power, research or factory). */
-    "DORDER_RECYCLE",         /**< return to factory to be recycled. */
-    "DORDER_TRANSPORTOUT",    /**< 22 - offworld transporter order. */
-    "DORDER_TRANSPORTIN",     /**< onworld transporter order. */
-    "DORDER_TRANSPORTRETURN", /**< 24 - transporter return after unloading. */
-    "DORDER_GUARD",           /**< guard a structure. */
-    "DORDER_DROIDREPAIR",     /**< 26 - repair a droid. */
-    "DORDER_RESTORE",         /**< restore resistance points for a structure. */
-    "DORDER_SCOUT",           /**< 28 - same as move, but stop if an enemy is seen. */
-    "DORDER_UNUSED_3",
-    "DORDER_UNUSED",          
-    "DORDER_PATROL",          /**< move between two way points. */
-    "DORDER_REARM",           /**< 32 - order a vtol to rearming pad. */
-    "DORDER_RECOVER",         /**< pick up an artifact. */
-    "DORDER_LEAVEMAP",        /**< 34 - vtol flying off the map. */
-    "DORDER_RTR_SPECIFIED"   /**< return to repair at a specified repair center. */
+	"DORDER_NONE",            /**< no order set. */
+
+	"DORDER_STOP",            /**< stop the current order. */
+	"DORDER_MOVE",            /**< 2 - move to a location. */
+	"DORDER_ATTACK",          /**< attack an enemy. */
+	"DORDER_BUILD",           /**< 4 - build a structure. */
+	"DORDER_HELPBUILD",       /**< help to build a structure. */
+	"DORDER_LINEBUILD",       /**< 6 - build a number of structures in a row (walls + bridges). */
+	"DORDER_DEMOLISH",        /**< demolish a structure. */
+	"DORDER_REPAIR",          /**< 8 - repair a structure. */
+	"DORDER_OBSERVE",         /**< keep a target in sensor view. */
+	"DORDER_FIRESUPPORT",     /**< 10 - attack whatever the linked sensor droid attacks. */
+	"DORDER_RETREAT",         /**< return to the players retreat position. */
+	"DORDER_UNUSED_2",
+	"DORDER_RTB",             /**< return to base. */
+	"DORDER_RTR",             /**< 14 - return to repair at any repair facility. */
+	"DORDER_RUN",             /**< run away after moral failure. */
+	"DORDER_EMBARK",          /**< 16 - board a transporter. */
+	"DORDER_DISEMBARK",       /**< get off a transporter. */
+	"DORDER_ATTACKTARGET",    /**< 18 - a suggestion to attack something i.e. the target was chosen because the droid could see it. */
+	"DORDER_COMMANDERSUPPORT",/**< Assigns droid to the target commander. */
+	"DORDER_BUILDMODULE",     /**< 20 - build a module (power, research or factory). */
+	"DORDER_RECYCLE",         /**< return to factory to be recycled. */
+	"DORDER_TRANSPORTOUT",    /**< 22 - offworld transporter order. */
+	"DORDER_TRANSPORTIN",     /**< onworld transporter order. */
+	"DORDER_TRANSPORTRETURN", /**< 24 - transporter return after unloading. */
+	"DORDER_GUARD",           /**< guard a structure. */
+	"DORDER_DROIDREPAIR",     /**< 26 - repair a droid. */
+	"DORDER_RESTORE",         /**< restore resistance points for a structure. */
+	"DORDER_SCOUT",           /**< 28 - same as move, but stop if an enemy is seen. */
+	"DORDER_UNUSED_3",
+	"DORDER_UNUSED",
+	"DORDER_PATROL",          /**< move between two way points. */
+	"DORDER_REARM",           /**< 32 - order a vtol to rearming pad. */
+	"DORDER_RECOVER",         /**< pick up an artifact. */
+	"DORDER_LEAVEMAP",        /**< 34 - vtol flying off the map. */
+	"DORDER_RTR_SPECIFIED"   /**< return to repair at a specified repair center. */
 );
 droidOrders[40] = "DORDER_CIRCLE";     /**< circles target location and engage. */
 droidOrders[41] = "DORDER_HOLD";     /**< hold position until given next order. */
