@@ -2172,15 +2172,16 @@ static void intDisplayMissionBackDrop(WIDGET *psWidget, UDWORD xOffset, UDWORD y
 
 static void missionResetInGameState()
 {
+	// Add the background
+	// get rid of reticule etc..
+	intResetScreen(false);
+
 	//stop the game if in single player mode
 	setMissionPauseState();
 
 	// reset the input state
 	resetInput();
 
-	// Add the background
-	// get rid of reticule etc..
-	intResetScreen(false);
 	forceHidePowerBar();
 	intRemoveReticule();
 	intRemoveMissionTimer();
