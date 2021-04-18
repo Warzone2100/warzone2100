@@ -103,12 +103,12 @@ Array.prototype.addArray = function(arr) {
 
 // returns a random property of an object
 _global.randomItem = function(obj) {
-    var ret;
-    var count = 0;
-    for (var i in obj)
-        if (Math.random() < 1/++count)
-           ret = i;
-    return obj[ret];
+	var ret;
+	var count = 0;
+	for (var i in obj)
+		if (Math.random() < 1/++count)
+			ret = i;
+	return obj[ret];
 }
 
 // cluster analysis happens here

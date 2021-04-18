@@ -73,9 +73,9 @@ const RESASPECTS = {
 }
 
 const PROPULSIONUSAGE = {
-    GROUND : 1,
-    HOVER: 2,
-    VTOL: 4
+	GROUND : 1,
+	HOVER: 2,
+	VTOL: 4
 }
 
 // what to use this body for? (bit field)
