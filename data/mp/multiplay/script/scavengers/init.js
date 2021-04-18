@@ -20,7 +20,7 @@ function produceDroid(fac1) {
 		case 4: buildDroid(fac1, "Firebus", "FireBody", "BaBaProp", null, null, "BabaFlame"); break;
 		default: buildDroid(fac1, "Bloke", "B1BaBaPerson01", "BaBaLegs", null, null, "BaBaMG"); break;
 		}
-	}	
+	}
 }
 
 // Regularly check back on our scavs
