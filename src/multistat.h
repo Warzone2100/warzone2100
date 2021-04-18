@@ -58,6 +58,8 @@ struct PLAYERSTATS
 	EcKey identity;
 };
 
+extern PLAYERSTATS playerStats[MAX_PLAYERS];
+
 bool saveMultiStats(const char *sFName, const char *sPlayerName, const PLAYERSTATS *playerStats);	// to disk
 bool loadMultiStats(char *sPlayerName, PLAYERSTATS *playerStats);					// form disk
 PLAYERSTATS const &getMultiStats(UDWORD player);									// get from net

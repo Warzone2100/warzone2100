@@ -75,6 +75,7 @@
 #include "order.h"
 #include "chat.h"
 #include "scores.h"
+#include "multistat.h"
 
 #include <list>
 
