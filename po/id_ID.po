@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:13\n"
+"PO-Revision-Date: 2021-04-14 09:21\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -3822,7 +3822,7 @@ msgstr "Semua senapan mesin ditingkatkan secara otomatis"
 #: data/mp/messages/strings/resstrings.txt:407
 #: po/custom/fromJson.txt:2940
 msgid "Improved chaingun mechanism"
-msgstr "Mekanisme chaingun yang ditingkatkan"
+msgstr "Mekanisme sistem rantai yang ditingkatkan"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -5091,7 +5091,7 @@ msgstr "Keruntuhan"
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr "Januari 15, 2086"
+msgstr "19 Januari 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
@@ -7285,7 +7285,7 @@ msgstr "Buggy"
 #. data/mp/messages/resmessages3.json: $.RES_SY_ASTRUC.text[2]
 #: po/custom/fromJson.txt:1242
 msgid "Built-in diagnostic and repair systems"
-msgstr "Sistem diagnosa dan perbaikan terintegrasi"
+msgstr "Sistem diagnosis dan perbaikan terintegrasi"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Sk-CobraBBHover.name
@@ -7422,7 +7422,7 @@ msgstr "Designator Laser Meriam"
 #. data/mp/stats/research.json: $.R-Wpn-Cannon-Accuracy01.name
 #: po/custom/fromJson.txt:1319
 msgid "Cannon Laser Rangefinder"
-msgstr "Pencari Jarak Laser Meriam"
+msgstr "Pengukur Jarak Laser Meriam"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF05.name
@@ -11064,13 +11064,13 @@ msgstr "Turet Perbaikan Bergerak"
 #. data/mp/messages/resmessagesall.json: $.RES_V_B09.text[1]
 #: po/custom/fromJson.txt:3835
 msgid "More armor and body points than Python"
-msgstr "Armor dan Body Point lebih tinggi dari Python"
+msgstr "Armor dan Body Point lebih baik dari Python"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[1]
 #: po/custom/fromJson.txt:3838
 msgid "More armor and body points than Vengeance"
-msgstr "Armor dan Body Point lebih tinggi dari Vengeance"
+msgstr "Armor dan Body Point lebih baik dari Vengeance"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
@@ -11640,7 +11640,7 @@ msgstr "Komputer terpasang memprediksi pergerakan target"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:4268
 msgid "On-board diagnostic and repair systems"
-msgstr "Sistem diagnosa dan perbaikan terintegrasi"
+msgstr "Sistem diagnosis dan perbaikan terintegrasi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[2]
@@ -12608,7 +12608,7 @@ msgstr "Howitzer Multilaras Putar - Hellstorm"
 #. data/mp/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:4913
 msgid "Rotary MG Bunker"
-msgstr "Bunker Senapan Serbu"
+msgstr "Bunker Senapan Mesin Serbu"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar3.name
@@ -14470,7 +14470,7 @@ msgstr "Elit"
 #: po/custom/fromJson.txt:6124
 msgctxt "rank"
 msgid "Green"
-msgstr "Hijau"
+msgstr "Sedikit Pengalaman"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[8]
@@ -15024,7 +15024,7 @@ msgstr "Menyetel perbesaran ke %.0f"
 #: src/droid.cpp:241
 #, c-format
 msgid "%s Lost!"
-msgstr "%s Kalah!"
+msgstr "%s Hancur!"
 
 #: src/droid.cpp:1099
 msgid "Structure Restored"
@@ -15368,7 +15368,7 @@ msgstr "Pemutaran Video"
 #: src/frontend.cpp:769
 #: src/ingameop.cpp:546
 msgid "Scanlines"
-msgstr "Garis pindai"
+msgstr "Garis Pindai"
 
 #: src/frontend.cpp:774
 #: src/ingameop.cpp:551
@@ -15404,7 +15404,7 @@ msgstr "Dinonaktifkan"
 
 #: src/frontend.cpp:898
 msgid "Enabled"
-msgstr "Diaktifkan"
+msgstr "Aktif"
 
 #: src/frontend.cpp:902
 #: src/frontend.cpp:908
@@ -15500,7 +15500,7 @@ msgstr "Ukuran Tekstur"
 #: src/frontend.cpp:1418
 #: src/ingameop.cpp:673
 msgid "Vertical sync"
-msgstr "Sinkronisasi Vertikal/Vsync"
+msgstr "Sinkronisasi Vertikal"
 
 #: src/frontend.cpp:1422
 msgid "Antialiasing*"
@@ -15586,7 +15586,7 @@ msgstr "Kursor Berwarna"
 #: src/frontend.cpp:1731
 #: src/ingameop.cpp:777
 msgid "Scroll Event"
-msgstr "Event Gulir"
+msgstr "Event Guliran Tetikus"
 
 #: src/frontend.cpp:1735
 msgid "MOUSE OPTIONS"
@@ -15690,7 +15690,7 @@ msgstr "PERMAINAN TERSIMPAN: "
 #: src/hci.cpp:1358
 #, c-format
 msgid "Player %u is cheating (debug menu) him/herself a new structure: %s."
-msgstr "Pemain %u memunculkan struktur baru yaitu %s melalui menu debug."
+msgstr "Pemain %u membangun struktur baru yaitu %s melalui menu debug."
 
 #: src/hci.cpp:1367
 #, c-format
@@ -16132,7 +16132,7 @@ msgstr "Lindungi Posisi"
 #: src/intorder.cpp:178
 #: src/keymap.cpp:507
 msgid "Hold Position"
-msgstr "Tahan Posisi"
+msgstr "Diam"
 
 #: src/intorder.cpp:179
 #: src/keymap.cpp:512
@@ -16529,7 +16529,7 @@ msgstr "Riset"
 
 #: src/keymap.cpp:395
 msgid "Build"
-msgstr "Bangun"
+msgstr "Konstruksi"
 
 #: src/keymap.cpp:396
 msgid "Design"

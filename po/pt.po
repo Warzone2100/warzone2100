@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:13\n"
+"PO-Revision-Date: 2021-04-18 00:28\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -5772,7 +5772,7 @@ msgstr "Não houve resposta do servidor principal!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5782,35 +5782,35 @@ msgstr "Campanha"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Desafio"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Escaramuça"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multijogador"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
-msgstr ""
+msgstr "Música do Menu"
 
 #: lib/widget/form.cpp:355
 msgid "(untitled)"
-msgstr ""
+msgstr "(sem título)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Copiar caminho para área de transferência"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Copiar JSON para Área de Transferência"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Dump JSON para StdOut"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -6520,14 +6520,14 @@ msgstr "Blindagem +35%, Integridade +30%"
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D2.text[1]
 #: po/custom/fromJson.txt:632
 msgid "Armor-Piercing Discard Sabot Bullets"
-msgstr "Balas Penetrantes com Sabot descartado"
+msgstr "Projétil Perfurante com Sabot Descartável"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_D4.text[1]
 #. data/mp/messages/resmessages12.json: $.RES_W_CN_D4.text[1]
 #: po/custom/fromJson.txt:636
 msgid "Armor-Piercing Fin-Stabilized Discarding Sabot"
-msgstr "Sabot Penetrante com Estabilizador Vertical descartado"
+msgstr "Projétil Perfurante Estabilizado com Sabot Descartável"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_PB_FL.text[1]
@@ -6817,7 +6817,7 @@ msgstr "Canhão de Assalto"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:851
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Bunker com Metralhadora de Assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
@@ -6829,7 +6829,7 @@ msgstr "Plataforma de Metralhadora de Assalto"
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:857
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Torre de Guarda com Metralhadora de Assalto 2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
@@ -7208,7 +7208,7 @@ msgstr "Pontos de Chassis: Muito baixos"
 #: po/custom/fromJson.txt:1191
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Dano das bombas +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -9819,7 +9819,7 @@ msgstr "Canhão de Alta Velocidade"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2921
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Projétil de Alta Velocidade Perfurante Estabilizado com Sabot Descartável"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -9992,7 +9992,7 @@ msgstr "Melhorias em lentes para laser reduzem dispersão da luz"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3040
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Plataforma de Obus Incendiário 2"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
@@ -10024,7 +10024,7 @@ msgstr "Obus Incendiário"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3057
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Fosso de Morteiro Incendiário 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -14573,20 +14573,20 @@ msgstr "Jogo de Estratégia"
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
 msgid "Allies"
-msgstr ""
+msgstr "Aliados"
 
 #: src/chat.cpp:71
 msgid "private to "
-msgstr ""
+msgstr "mensagem privada para "
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr ""
+msgstr " e "
 
 #: src/cheat.cpp:182
 #, c-format
@@ -14765,7 +14765,7 @@ msgstr "Usar depuração do back-end gfx"
 
 #: src/clparse.cpp:373
 msgid "Set JS backend"
-msgstr ""
+msgstr "Definir backend JS"
 
 #: src/clparse.cpp:378
 msgid "Run games automatically for testing"
@@ -14773,7 +14773,7 @@ msgstr "Correr jogo automaticamente para testar"
 
 #: src/clparse.cpp:379
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Modo Servidor (apenas suportado quando também é especificado --autogame, --autohost, --skirmish)"
 
 #: src/clparse.cpp:380
 msgid "Immediately save game and quit"
@@ -14813,15 +14813,15 @@ msgstr "autoclassificação"
 
 #: src/clparse.cpp:386
 msgid "Attach or create a console window and display console output (Windows only)"
-msgstr ""
+msgstr "Juntar ou criar uma janela de consola e exibir a saída da consola (apenas no Windows)"
 
 #: src/clparse.cpp:388
 msgid "Set game server port"
-msgstr ""
+msgstr "Definir porta do servidor do jogo"
 
 #: src/clparse.cpp:388
 msgid "port"
-msgstr ""
+msgstr "porta"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15071,12 +15071,12 @@ msgstr "Normal"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:176
 msgid "Collective"
-msgstr ""
+msgstr "Colectividade"
 
 #: src/frontend.cpp:142
 msgid "Single Player"
@@ -15269,7 +15269,7 @@ msgstr "Definir teclas"
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:513
 msgid "Music Manager"
-msgstr ""
+msgstr "Gestor de Música"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
@@ -15396,7 +15396,7 @@ msgstr "Salto de Radar"
 
 #: src/frontend.cpp:791
 msgid "Screen Shake"
-msgstr ""
+msgstr "Agitar tela"
 
 #: src/frontend.cpp:795
 msgid "GRAPHICS OPTIONS"
@@ -15462,7 +15462,8 @@ msgstr "ÁUDIO / OPÇÕES DE ZOOM"
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "No modo Ecrâ Completo, a resolução corresponde à do seu desktop \n"
+"(ou ao que o gerenciador de janela permite)."
 
 #: src/frontend.cpp:1093
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15470,7 +15471,7 @@ msgstr "Pode mudar a resolução ajustando a janela normalmente. (Tente arrastar
 
 #: src/frontend.cpp:1123
 msgid "Desktop Full"
-msgstr ""
+msgstr "Janela Completa"
 
 #: src/frontend.cpp:1125
 msgid "Windowed"
@@ -15523,12 +15524,13 @@ msgstr "OPÇÕES DE VÍDEO"
 
 #: src/frontend.cpp:1488
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Não é possível alterar o Modo Janela"
 
 #: src/frontend.cpp:1488
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone falhou ao alterar o modo de janela.\n"
+"O seu sistema ou os seus drivers podem não suportar outros modos."
 
 #: src/frontend.cpp:1514
 msgid "Unable to change Vertical Sync"
@@ -15650,38 +15652,38 @@ msgstr "Mod:"
 
 #: src/frontend.cpp:2471
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Aumentar Escala do Interface do Jogo?"
 
 #: src/frontend.cpp:2473
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Com a sua resolução atual e configurações da escala de exibição, a interface do jogo pode parecer pequena e a perspectiva do jogo pode aparecer distorcida."
 
 #: src/frontend.cpp:2475
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Isto pode ser corrigido aumentando a escala do interface nas definições."
 
 #: src/frontend.cpp:2477
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Você gostaria de aumentar a Escala do Interface do Jogo para: %u%%?"
 
 #: src/frontend.cpp:2479
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Aumentar Escala do Interface"
 
 #: src/frontend.cpp:2496
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Escala do Interface Aumentada para: %u%%"
 
 #: src/frontend.cpp:2497
 #: src/frontend.cpp:2513
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Você pode ajustar a Escala do Interface a qualquer momento no menu de Opções de Vídeo."
 
 #: src/frontend.cpp:2512
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Dica: Ajustar Escala do Interface"
 
 #: src/hci.cpp:959
 #: src/loop.cpp:244
@@ -15820,7 +15822,7 @@ msgstr "IU Táctica (Ícone de Origem do Alvo): Esconder"
 #: src/keyedit.cpp:444
 #: src/musicmanager.cpp:778
 msgid "Go Back"
-msgstr ""
+msgstr "Voltar"
 
 #: src/ingameop.cpp:247
 #: src/ingameop.cpp:256
@@ -15859,7 +15861,7 @@ msgstr "Ver o Mapeamento de Teclas"
 
 #: src/ingameop.cpp:571
 msgid "Shake"
-msgstr ""
+msgstr "Agitar"
 
 #: src/ingameop.cpp:961
 msgid "Save Campaign Game"
@@ -16330,39 +16332,39 @@ msgstr "Restringir Cursor %s"
 
 #: src/keybind.cpp:1345
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "CAMPANHA"
 
 #: src/keybind.cpp:1349
 msgid "CHALLENGE"
-msgstr ""
+msgstr "DESAFIO"
 
 #: src/keybind.cpp:1352
 msgid "SKIRMISH"
-msgstr ""
+msgstr "ESCARAMUÇA"
 
 #: src/keybind.cpp:1370
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "DIFICULDADE: FÁCIL"
 
 #: src/keybind.cpp:1373
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "DIFICULDADE: NORMAL"
 
 #: src/keybind.cpp:1376
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "DIFICULDADE: DIFÍCIL"
 
 #: src/keybind.cpp:1379
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "DIFICULDADE: INSANO"
 
 #: src/keybind.cpp:1387
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "CHEATS: HABILITADOS"
 
 #: src/keybind.cpp:1389
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "CHEATS: DESABILITADOS"
 
 #: src/keybind.cpp:1445
 msgid "Researched EVERYTHING for you!"
@@ -16455,11 +16457,11 @@ msgstr "Direcção da rotação vertical: Invertida"
 
 #: src/keybind.cpp:2533
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Agitar ecrâ quando as coisas morrerem: Desligado"
 
 #: src/keybind.cpp:2538
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Agitar ecrâ quando as coisas morrerem: Ligado"
 
 #: src/keybind.cpp:2590
 msgid "Sorry, but game speed cannot be changed in multiplayer."
@@ -17139,7 +17141,7 @@ msgstr "Directório do autosave (não autorizado para gravar manualmente)"
 
 #: src/loadsave.cpp:540
 msgid "cheated"
-msgstr ""
+msgstr "trapaceado"
 
 #: src/loop.cpp:251
 #: src/loop.cpp:267
@@ -17293,11 +17295,11 @@ msgstr "Impostos Limites de Estrutura."
 
 #: src/multiint.cpp:1284
 msgid "Vote"
-msgstr ""
+msgstr "Votação"
 
 #: src/multiint.cpp:1285
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Permitir que o host altere o mapa ou randomize?"
 
 #: src/multiint.cpp:1316
 msgid "Not enough votes to randomize or change the map."
@@ -17445,7 +17447,7 @@ msgstr "O servidor kickou %s do jogo!"
 #: src/multiint.cpp:3942
 #: src/multimenu.cpp:1245
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "O anfitrião te expulsou do jogo."
 
 #: src/multiint.cpp:2500
 msgid "Click to change difficulty"
@@ -17497,7 +17499,7 @@ msgstr "Clique para mudar a cor do jogador"
 
 #: src/multiint.cpp:2694
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Clique para alterar a facção do jogador"
 
 #: src/multiint.cpp:2719
 msgid "Click to change player position"
@@ -17517,7 +17519,7 @@ msgstr "(vazio)"
 
 #: src/multiint.cpp:2794
 msgid "Kicked from game"
-msgstr ""
+msgstr "Expulso do jogo"
 
 #: src/multiint.cpp:2993
 msgid "CHAT"
@@ -17647,7 +17649,7 @@ msgstr "Transferência de ficheiros foi abortada para %d"
 
 #: src/multijoin.cpp:390
 msgid "The game is already full."
-msgstr ""
+msgstr "O jogo já está cheio."
 
 #: src/multijoin.cpp:465
 #, c-format
@@ -17656,7 +17658,7 @@ msgstr "%s (%u) tem uma mod incompatível, e foi expulso do jogo."
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "Os seus dados não coincidem com os do anfitrião!"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17699,7 +17701,7 @@ msgstr "Limites repostos para os valores iniciais"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Limites repostos para os valores iniciais"
 
 #: src/multimenu.cpp:532
 msgid "Any number of players"
@@ -17797,12 +17799,12 @@ msgstr "Expulsou o jogador %s, porque ele tentou evitar a verificação de dados
 
 #: src/multiplay.cpp:271
 msgid "Invalid data!"
-msgstr ""
+msgstr "Dados Inválidos!"
 
 #: src/multiplay.cpp:872
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "Expulsão automática do jogador %s, comando inválido recebido."
 
 #: src/multiplay.cpp:1336
 msgid "Map was requested: SENDING MAP!"
@@ -17888,24 +17890,24 @@ msgstr "Castanho"
 
 #: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "JOGANDO AGORA"
 
 #: src/musicmanager.cpp:533
 #: src/musicmanager.cpp:679
 msgid "Album"
-msgstr ""
+msgstr "Álbum"
 
 #: src/musicmanager.cpp:544
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: src/musicmanager.cpp:670
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "GERENCIADOR DE MÚSICA"
 
 #: src/notifications.cpp:725
 msgid "Dismiss"
@@ -18371,5 +18373,5 @@ msgstr "FOSTE DERROTADO!"
 
 #: src/wzscriptdebug.cpp:1813
 msgid "Script Debugger"
-msgstr ""
+msgstr "Depurador de script"
 

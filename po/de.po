@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:14\n"
+"PO-Revision-Date: 2021-04-08 02:51\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -5786,7 +5786,7 @@ msgstr "Herausforderung"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr "Geplänkel"
+msgstr "Scharmützel"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
@@ -16341,7 +16341,7 @@ msgstr "HERAUSFORDERUNG"
 
 #: src/keybind.cpp:1352
 msgid "SKIRMISH"
-msgstr "GEPLÄNKEL"
+msgstr "SCHARMÜTZEL"
 
 #: src/keybind.cpp:1370
 msgid "DIFFICULTY: EASY"
