@@ -2737,7 +2737,7 @@ void WzMultiplayerOptionsTitleUI::addPlayerBox(bool players)
 					{
 						sButInit.pTip += "\n";
 					}
-					std::string hash = getMultiStats(i).identity.publicHashString();
+					std::string hash = getMultiStats(i).identity.publicHashString().substr(0, 20);
 					sButInit.pTip += _("Player ID: ");
 					sButInit.pTip += hash.empty()? _("(none)") : hash;
 				}
