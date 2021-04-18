@@ -1072,6 +1072,7 @@ void	kf_addInGameOptions()
 	setWidgetsStatus(true);
 	if (!isInGamePopupUp)	// they can *only* quit when popup is up.
 	{
+		intResetScreen(false);
 		intAddInGameOptions();
 	}
 }

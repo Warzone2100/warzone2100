@@ -214,7 +214,6 @@ static bool _intAddInGameOptions()
 		return true;
 	}
 
-	intResetScreen(false);
 	setReticulesEnabled(false);
 
 	// Pause the game.
