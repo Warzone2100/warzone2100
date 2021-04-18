@@ -522,7 +522,7 @@ function placeStuff(regions, startPos) {
 			features.push({name: sample(snow? snowFeatureTypes : featureTypes), position: pos, direction: gameRand(0x10000)});
 		}
 	}
-	
+
 	// Add additional oils
 	for(var i=0;i<60*(richness-3);i++){
 		var oilPos = placeNear(gameRand(mapWidth), gameRand(mapHeight), 1, 1, true, 20);
