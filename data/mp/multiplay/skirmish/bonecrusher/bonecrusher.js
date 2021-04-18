@@ -87,9 +87,9 @@ include("multiplay/skirmish/"+vernum+"/weapons.js");
 include("multiplay/skirmish/"+vernum+"/build-normal.js");
 
 /*
- * 
+ *
  * НАСТРОЙКИ
- * 
+ *
  */
 
 
@@ -136,9 +136,9 @@ var func_buildersOrder_timer = 5000+me*100;
 var func_buildersOrder_trigger = 0;
 
 /*
- * 
+ *
  * -=-=-=-
- * 
+ *
  */
 
 // --- CONSTANTS --- \\
@@ -375,54 +375,54 @@ var AA_towers=[
 function init(){
 
 	if(isHumanOverride()) {debugMsg("Human override detected..", 'init');rage=HARD;}
-	
+
 	debugMsg("ИИ №"+me+" "+vername+" "+vernum+"("+verdate+") difficulty="+rage, "init");
 	debugMsg("Warzone2100 "+version, "init");
-	
+
 	//Определеяем моды
 	debugMsg("MODS: "+modList, "init");
-	
+
 	if(modList.indexOf('oilfinite')!==-1){
 		nf['oilfinite'] = true;
 		debugMsg('Consider oilfinite mod', "init");
 	}
-	
+
 	//Определяем мусорщиков
 	//Больше не требуется, игра сама предоставляет эту переменную
 //	scavengerPlayer = (scavengers) ? Math.max(7,maxPlayers) : -1;
 	if(scavengers)debugMsg("На карте присудствуют гопники! {"+scavengerPlayer+"}", "init");
 	else debugMsg("На карте отсутствуют гопники", "init");
-	
+
 //	base = startPositions[me];
 	initBase();
 	startPos = base;
-	
+
 	var technology = enumResearch();
 	if(technology.length) debugMsg("Доступных исследований: "+technology.length, "init");
 	else debugMsg("ВНИМАНИЕ: Нет доступных исследований", "init");
-	
+
 	debugMsg('Is Multiplayer: '+isMultiplayer, 'init');
 	debugMsg('Is Human in Ally: '+isHumanAlly(), 'init');
 	debugMsg('Num Enemies: '+getNumEnemies(), 'init');
-	
+
 	//Получаем координаты всех ресурсов и занятых и свободных
 	var freeResources = getFreeResources();
 	var nearResources = freeResources.filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;});
 	nearResources = nearResources.concat(enumStruct(me, "A0ResourceExtractor").filter(function(e){if(distBetweenTwoPoints_p(base.x,base.y,e.x,e.y) < base_range) return true; return false;}));
 	debugMsg("На карте "+freeResources.length+" свободных ресурсов", 'init');
-	
+
 	allResources = getAllResources();
-	
+
 	debugMsg("На карте "+allResources.length+" всего ресурсов, рядом "+nearResources.length, 'init');
-	
+
 	_builders = enumDroid(me,DROID_CONSTRUCT);
-	
+
 	debugMsg("Игроков на карте: "+maxPlayers,2);
 	var access=false;
 	playerData.forEach( function(data, player) {
 		var msg = "Игрок №"+player+" "+colors[data.colour];
 		var dist = distBetweenTwoPoints_p(base.x,base.y,startPositions[player].x,startPositions[player].y);
-		
+
 		if (player == me) {
 			msg+=" я сам ИИ";
 			bc_ally.push(player);
@@ -444,13 +444,13 @@ function init(){
 			else if(propulsionCanReach('hover01', base.x, base.y, startPositions[player].x, startPositions[player].y)){ msg+= ", по воде"; access = 'island';}
 			else if(propulsionCanReach('V-Tol', base.x, base.y, startPositions[player].x, startPositions[player].y)){ msg+= ", по воздуху"; access = 'air';}
 			else {msg+= ", не доступен!"; access = 'island';}
-			if(!nf['policy'] || nf['policy'] == 'island' || nf['policy'] == 'air'){nf['policy'] = access;} 
+			if(!nf['policy'] || nf['policy'] == 'island' || nf['policy'] == 'air'){nf['policy'] = access;}
 		}
-		
+
 		msg+=" ["+startPositions[player].x+"x"+startPositions[player].y+"]";
 		msg+=" дист. "+dist;
 		debugMsg(msg,"init");
-		
+
 	});
 	debugMsg('bc_ally.length: '+bc_ally.length, 'init');
 
@@ -473,7 +473,7 @@ function init(){
 	}else{
 		policy['build'] = 'standart';
 	}
-	
+
 	debugMsg("Policy build order = "+policy['build'], 'init');
 	debugMsg("nf Policy = "+nf['policy'], 'init');
 
@@ -489,7 +489,7 @@ function init(){
 			var researches = [
 				research_rich2, research_rich2, research_rich2, research_rich2, research_rich2,
 				research_cannon, research_cannon,
-				research_fire2, 
+				research_fire2,
 				research_rich, research_rich, research_rich,
 				research_fire1, research_fire1,
 				research_fire3, research_fire3, research_fire3,
@@ -498,9 +498,9 @@ function init(){
 			debugMsg('Get research path #'+r+', from solo researches array', 'init');
 			research_path = researches[r];
 		}
-		
+
 		if(technology.length)cyborgs.unshift(["R-Wpn-MG1Mk1", "CyborgLightBody", "CyborgChaingun"]);
-		
+
 		buildersTimer = 7000;
 		minBuilders = 10;
 		minPartisans = 1;
@@ -520,7 +520,7 @@ function init(){
 			var researches = [
 				research_rich2,
 				research_cannon, research_cannon, research_cannon, research_cannon, research_cannon,
-				research_fire2, 
+				research_fire2,
 				research_rich,
 				research_fire1,
 				research_fire3, research_fire3,
@@ -532,10 +532,10 @@ function init(){
 			research_path = researches[r];
 		}
 	}
-	
+
 	if(nf['oilfinite'])research_path = research_earlygame.concat(["R-Sys-MobileRepairTurret01"]).concat(research_path).concat(research_lasttech);
 	else research_path = research_earlygame.concat(research_path).concat(research_lasttech);
-	
+
 	//Лимиты:
 	maxFactories = getStructureLimit("A0LightFactory", me);
 	maxLabs = getStructureLimit("A0ResearchFacility", me);
@@ -543,58 +543,58 @@ function init(){
 	maxFactoriesCyb = getStructureLimit("A0CyborgFactory", me);
 	maxFactoriesVTOL = getStructureLimit("A0VTolFactory1", me);
 	maxPads = getStructureLimit("A0VtolPad", me);
-	
-	
+
+
 	//Лёгкий режим
 	if(rage == EASY){
 		debugMsg("Похоже я играю с нубами, будем поддаваться:", 'init');
-		
+
 		//Забываем все предустановленные исследования
 		//Исследуем оружия и защиту в полном рандоме.
 //		research_way=[["R-Wpn-MG1Mk1"],["R-Struc-Research-Upgrade09"],["R-Struc-Power-Upgrade03a"]];
 		research_path = research_earlygame;
-		
+
 		//Уменьшаем размеры армий
 		(maxPartisans > 7)?maxPartisans = 7:{};
 		maxRegular = 0;
 		(maxVTOL > 5)?maxVTOL = 5:{};
 		(maxCyborgs > 5)?maxCyborgs = 5:{};
 		(maxFixers > 2)?maxFixers = 2:{};
-		
+
 		//Уменьшаем кол-во строителей
 		(maxConstructors > 7)?maxConstructors = 7:{};
 		(minBuilders > 3)?minBuilders = 3:{};
-		
+
 		//Уменьшаем размер базы
 		(maxFactories > 2)?maxFactories = 2:{};
 		(maxFactoriesCyb > 1)?maxFactoriesCyb = 1:{};
 		(maxFactoriesVTOL > 1)?maxFactoriesVTOL = 1:{};
 		(maxPads > 2)?maxPads = 2:{};
-		
+
 		maxJammers = 0;
-		
+
 		//Производим строителя раз в минуту, не раньше
 		buildersTimer = 60000;
-		
-		
-		
+
+
+
 	}else if(rage == MEDIUM){
 		buildersTimer = buildersTimer + Math.floor(Math.random()*5000 - 2000);
 		minBuilders = minBuilders + Math.floor(Math.random() * 5 - 2 );
 		builderPts = builderPts + Math.floor(Math.random() * 200 - 150);
 		minPartisans = minPartisans + Math.floor(Math.random() * 6 - 4);
-		
+
 		//Если в союзниках человек и исслоедования общий, а мы на средней сложности, то просто поддерживаем исследования (без особой ветки)
 		if(alliancesType == 2 && isHumanAlly()){research_path = research_earlygame.concat(research_lasttech);}
-		
+
 	}
 	debugMsg("minPartisans="+minPartisans+", minBuilders="+minBuilders+", builderPts="+builderPts+", buildersTimer="+buildersTimer, "init");
 	debugMsg("Лимиты базы: maxFactories="+maxFactories+"; maxFactoriesCyb="+maxFactoriesCyb+"; maxFactoriesVTOL="+maxFactoriesVTOL+"; maxPads="+maxPads+"; maxLabs="+maxLabs+"; maxGenerators="+maxGenerators+"; maxExtractors="+maxExtractors, 'init');
 	debugMsg("Лимиты юнитов: maxPartisans="+maxPartisans+"; maxRegular="+maxRegular+"; maxCyborgs="+maxCyborgs+"; maxVTOL="+maxVTOL+"; maxFixers="+maxFixers+"; maxConstructors="+maxConstructors, 'init');
-	
-	
-	
-	
+
+
+
+
 	if(nf['policy'] == 'island'){
 		debugMsg("Тактика игры: "+nf['policy'], 'init');
 		var _msg='Change policy form: '+policy['build'];
@@ -604,14 +604,14 @@ function init(){
 	if(!release)research_path.forEach(function(e){debugMsg(e, 'init');});
 
 	if(!release) for ( var p = 0; p < maxPlayers; ++p ) {debugMsg("startPositions["+p+"] "+startPositions[p].x+"x"+startPositions[p].y, 'init');}
-	
+
 	//Просто дебаг информация
 	var oilDrums = enumFeature(ALL_PLAYERS, "OilDrum");
 	debugMsg("На карте "+oilDrums.length+" бочек с нефтью", 'init');
-	
+
 	queue("welcome", 3000+me*(Math.floor(Math.random()*2000)+1500) );
 	queue("checkAlly", 2000);
-	letsRockThisFxxxingWorld(true); // <-- Жжём плазмитом сцуко!	
+	letsRockThisFxxxingWorld(true); // <-- Жжём плазмитом сцуко!
 }
 
 function welcome(){
@@ -623,12 +623,12 @@ function welcome(){
 //Старт
 function letsRockThisFxxxingWorld(init){
 	debugMsg("Старт/Run", 'init');
-	
+
 	include("multiplay/skirmish/"+vernum+"/weap-init.js");
-	
+
 	//Remove chaingun and flamer cyborgs if better available
 	cyborgs = cyborgs.filter(function(e){if( (e[2] == 'CyborgChaingun' && getResearch('R-Wpn-MG4').done) || (e[2] == 'CyborgFlamer01' && getResearch('R-Wpn-Flame2').done) )return false;return true;});
-	
+
 	//Первых военных в группу
 	enumDroid(me,DROID_CYBORG).forEach(function(e){groupAdd(armyCyborgs, e);});
 	enumDroid(me,DROID_WEAPON).forEach(function(e){groupAdd(armyCyborgs, e);}); // <-- Это не ошибка, первых бесплатных определяем как киборгов (работа у них будет киборгская)
@@ -639,11 +639,11 @@ function letsRockThisFxxxingWorld(init){
 	queue("produceDroids", 3000);
 	queue("doResearch", 3000);
 	setTimer("longCycle", 120000);
-	
+
 	running = true;
 	if(init){
 		if(rage == EASY){
-	
+
 			setTimer("produceDroids", 10000+me*100);
 			setTimer("produceVTOL", 12000+me*100);
 			setTimer("checkEventIdle", 60000+me*100);	//т.к. eventDroidIdle глючит, будем дополнительно отслежвать.
@@ -652,8 +652,8 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("produceCyborgs", 25000+me*100);
 //			setTimer("buildersOrder", 120000+me*100);
 			setTimer("targetVTOL", 120000+me*100); //Не раньше 30 сек.
-		
-	
+
+
 		} else if(rage == MEDIUM){
 
 			setTimer("produceDroids", 7000+me*100);
@@ -669,9 +669,9 @@ function letsRockThisFxxxingWorld(init){
 
 			if(policy['build'] == 'rich') func_buildersOrder_timer = 5000+me*100;
 		} else if(rage == HARD || rage == INSANE){
-		
+
 //			research_way.unshift(["R-Defense-MortarPit-Incendiary"]);
-			
+
 			setTimer("targetPartisan", 5000+me*100);
 //			setTimer("buildersOrder", 5000+me*100);
 //			setTimer("targetJammers", 5500+me*100);
@@ -684,13 +684,13 @@ function letsRockThisFxxxingWorld(init){
 			setTimer("doResearch", 12000+me*100);
 			setTimer("defenceQueue", 30000+me*100);
 			setTimer("targetVTOL", 56000+me*100); //Не раньше 30 сек.
-			
+
 			reactRegularArmyTimer = 5000;
 			checkRegularArmyTimer = 5000;
 			reactWarriorsTimer = 2000;
 			func_buildersOrder_timer = 2000+me*100;
 		}
-	
+
 		if(!release){
 			setTimer("stats", 10000); // Отключить в релизе
 		}
@@ -704,11 +704,11 @@ function initBase(){
 	//Первых строителей в группу
 	checkBase();
 	var _builders = enumDroid(me,DROID_CONSTRUCT);
-	
+
 	//Получаем свои координаты
 	var _r = Math.floor(Math.random()*_builders.length);
 	if(_builders.length != 0) base = {x:_builders[_r].x, y:_builders[_r].y};
-	
+
 	_builders.forEach(function(e){groupBuilders(e);});
 
 	if(policy['build'] == 'rich' && _builders.length > 4){
