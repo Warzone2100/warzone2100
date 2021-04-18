@@ -1218,10 +1218,6 @@ void resetIntelligencePauseState()
 		setConsolePause(false);
 		gameTimeStart();
 		screen_StopBackDrop();
-		if (intMode == INT_INTELMAP)
-		{
-			pie_ScreenFlip(CLEAR_BLACK);
-		}
 	}
 }
 

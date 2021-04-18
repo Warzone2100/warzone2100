@@ -577,3 +577,13 @@ void screenDumpToDisk(const char *path, const char *level)
 	}
 	screendump_required = true;
 }
+
+void screen_FlipIfBackDropTransition()
+{
+	static auto hadBackDrop = false;
+	if (hadBackDrop != screen_GetBackDrop())
+	{
+		pie_ScreenFlip(CLEAR_BLACK);
+		hadBackDrop = screen_GetBackDrop();
+	}
+}
