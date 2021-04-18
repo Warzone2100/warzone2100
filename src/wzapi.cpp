@@ -2020,7 +2020,7 @@ bool wzapi::chat(WZAPI_PARAMS(int target, std::string message))
 	}
 	else if (target != ALL_PLAYERS) // specific player
 	{
-		chatMessage.addPlayerByPosition(target);
+		chatMessage.addReceiverByIndex(target);
 	}
 
 	chatMessage.send();

@@ -2579,7 +2579,7 @@ static void parseChatMessageModifiers(InGameChatMessage &message)
 
 	for (; *message.text >= '0' && *message.text <= '9'; ++message.text)  // for each 0..9 numeric char encountered
 	{
-		message.addPlayerByPosition(*message.text - '0');
+		message.addReceiverByPosition(*message.text - '0');
 	}
 }
 
