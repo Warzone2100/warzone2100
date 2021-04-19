@@ -642,7 +642,7 @@ void processMouseClickInput()
 		dealWithLMBDClick();
 	}
 
-	if (mouseReleased(MOUSE_RMB) && !rotActive && !ignoreRMBC)
+	if (mouseReleased(MOUSE_RMB) && !rotActive && !panActive && !ignoreRMBC)
 	{
 		dragBox3D.status = DRAG_INACTIVE;
 		// Pretty sure we wan't set walldrag status here aswell.
