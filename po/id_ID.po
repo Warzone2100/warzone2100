@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-19 03:21\n"
+"PO-Revision-Date: 2021-04-19 15:17\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -13028,7 +13028,7 @@ msgstr "Mencuri teknologi dari struktur dan mengambil alih senjata"
 #. data/mp/messages/resmessages1.json: $.RES_TOWER1.text[1]
 #: po/custom/fromJson.txt:5177
 msgid "Steel tower with machinegun"
-msgstr "Menara baja dengan senapan mesin"
+msgstr "Menara baja dengan senapan mesin berat"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -16393,7 +16393,7 @@ msgstr "Selalu menampilkan batang energi untuk unit dan struktur"
 
 #: src/keybind.cpp:1547
 msgid "Debug menu is Open"
-msgstr "Menu Debut terbuka"
+msgstr "Menu Debug terbuka"
 
 #: src/keybind.cpp:1576
 msgid "Unable to locate any oil derricks!"
@@ -17347,7 +17347,7 @@ msgstr "Pangkalan"
 
 #: src/multiint.cpp:1467
 msgid "Map Preview"
-msgstr "Pratinjau Map"
+msgstr "Pratinjau Peta"
 
 #: src/multiint.cpp:1468
 msgid "Click to see Map"
