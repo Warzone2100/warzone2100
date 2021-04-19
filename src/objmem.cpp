@@ -101,19 +101,16 @@ Droids Droids::forPlayer(const unsigned int playerIndex, const bool bIncludeShar
 	// 	   - bSelectedOnly can be made more efficient by keeping track of selections (in a list) instead of relying on psDroid->selected
 
 	std::vector<unsigned int> playerIndices = { playerIndex };
-	auto& sharing = NetPlay.players[playerIndex].sharing;
-	for (auto it = sharing.begin(); it != sharing.end(); ++it)
+	for (unsigned int other = 0; other < MAX_PLAYERS; ++other)
 	{
-		const unsigned int index = it - sharing.begin();
-		if (index == playerIndex)
+		if (other == playerIndex)
 		{
 			continue;
 		}
 
-		PlayerShareStatus& share = *it;
-		if (share.bUnits)
+		if (NetPlay.players[other].isSharingUnitsWith(playerIndex))
 		{
-			playerIndices.push_back(index);
+			playerIndices.push_back(other);
 		}
 	}
 
