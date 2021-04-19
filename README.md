@@ -288,7 +288,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
 * **Installing prerequisites:**
    * Using `get-dependencies_linux.sh`:
-      1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`) _REQUIRED_
+      1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`, `opensuse-tumbleweed`) _REQUIRED_
       2. Specify a mode: (`build-all` (default), `build-dependencies`) _OPTIONAL_
       
       Example:
@@ -325,6 +325,38 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    4. Run CMake build:
       ```
       cmake --build . --target install
+      ```
+*  **Building with Docker:**
+   1. Note that Docker build instruction exist, and are under `docker` folder. 
+      You may want to prefer using Docker, because this doesn't require you to install _all_ the
+      dependencies (no build-dependencies, only libraries actually required to run the game).
+      After following the instructions for _your distribution_, you can manually check what libraries are needed to run the executable.
+      This is example output from openSUSE Tumbleweed installation (your will most likely be different):
+      ```
+      $ ldd build/src/warzone2100 
+      linux-vdso.so.1 (0x00007fff60a88000)
+      libcurl.so.4 => /usr/lib64/libcurl.so.4 (0x00007f81c9848000)
+      libsqlite3.so.0 => /usr/lib64/libsqlite3.so.0 (0x00007f81c96ff000)
+      libSDL2-2.0.so.0 => /usr/lib64/libSDL2-2.0.so.0 (0x00007f81c957c000)
+      ...
+      libphysfs.so.1 => not found
+      (output cut for brevity)
+      ...
+      ```
+      This shows that actually only one shared library is missing (`libphysfs.so.1 => not found`).
+      Use your package manager to install missing libraries (openSUSE Tumbleweed example below)
+      ```
+      $ zypper search libphysfs
+      S  | Name            | Summary                                                        | Type
+      ---+-----------------+----------------------------------------------------------------+--------
+         | libphysfs-devel | Libraries, includes and more to develop PhysicsFS applications | package
+         | libphysfs1      | PhysicsFS file abstraction layer for games                     | package
+      
+      $ zypper install libphysfs1
+      ```
+      Now you can run the game you just built (from root folder):
+      ```
+      ./build/src/warzone2100
       ```
 
 ### Windows using MSVC

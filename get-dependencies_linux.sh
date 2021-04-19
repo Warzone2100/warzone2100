@@ -10,11 +10,11 @@
 #
 
 if [ -z "$1" ]; then
-  echo "get-dependencies_linux.sh requires an argument specifying a linux distro: (\"ubuntu\", \"fedora\", \"alpine\", \"archlinux\")"
+  echo "get-dependencies_linux.sh requires an argument specifying a linux distro: (\"ubuntu\", \"fedora\", \"alpine\", \"archlinux\", \"opensuse-tumbleweed\")"
   exit 1
 fi
 DISTRO="$1"
-if ! [[ "$1" =~ ^(ubuntu|fedora|alpine|archlinux)$ ]]; then
+if ! [[ "$1" =~ ^(ubuntu|fedora|alpine|archlinux|opensuse-tumbleweed)$ ]]; then
   echo "This script does not currently support Linux distro (${DISTRO}). Please see the documentation."
   exit 1
 fi
@@ -110,6 +110,19 @@ if [ "${DISTRO}" == "archlinux" ]; then
   pacman -S --noconfirm cmake git p7zip gettext asciidoctor sdl2 physfs libpng openal libvorbis libogg libtheora xorg-xrandr freetype2 harfbuzz curl libsodium sqlite
 fi
 
+##################
+# OpenSUSE Tumbleweed
+##################
+if [ "${DISTRO}" == "opensuse-tumbleweed" ]; then
+
+  if [ "${MODE}" == "build-all" ]; then
+    echo "Installing build-all for OpenSUSE Tumbleweed"
+    zypper install -y gcc-c++ libc++-devel ninja pkgconf-pkg-config cmake zip git libcurl-devel
+  fi
+
+  echo "Installing build-dependencies for OpenSUSE Tumbleweed"
+  zypper install -y libSDL2-devel libphysfs-devel libpng16-devel libtheora-devel libvorbis-devel freetype-devel harfbuzz-devel openal-soft-devel libsodium-devel sqlite3-devel libtinygettext0 ruby3.0-rubygem-asciidoctor vulkan-devel
+fi
 ##################
 
 echo "get-dependencies_linux.sh: Done."
