@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-14 09:21\n"
+"PO-Revision-Date: 2021-04-19 03:21\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -5132,7 +5132,7 @@ msgstr "Laporan menyatakan bahwa NASDA mengalami suatu kesalahan dalam sebuah pe
 
 #: data/base/sequenceaudio/devastation.txt:5
 msgid "Those nukes were targeted on every major city around the world. NASDA was programmed to start the Collapse. When the counterstrikes launched, its laser defenses and anti-missile ground sites failed."
-msgstr "Rudal-rudal nuklir tersebut diarahkan ke -kota-kota besar di seluruh dunia. NASDA telah diprogram untuk memulai Keruntuhan. Saat serangan tersebut diluncurkan, pertahanan laser dan situs anti-rudal yang berada di darat gagal."
+msgstr "Rudal-rudal nuklir tersebut diarahkan ke -kota-kota besar di seluruh dunia. NASDA telah diprogram untuk memulai Keruntuhan. Saat serangan-serangan balik diluncurkan, pertahanan laser dan situs anti-rudal yang berada di darat gagal."
 
 #: data/base/sequenceaudio/devastation.txt:7
 msgid "The world as we knew it ended..."
@@ -8765,7 +8765,7 @@ msgstr "Basis tank tempur utama dan artileri yang baik"
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[2]
 #: po/custom/fromJson.txt:2212
 msgid "Good medium tank and support vehicle"
-msgstr "Basis medium tank dan kendaraan pendukung yang baik"
+msgstr "Basis tank sedang dan kendaraan pendukung yang baik"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[2]
@@ -15586,7 +15586,7 @@ msgstr "Kursor Berwarna"
 #: src/frontend.cpp:1731
 #: src/ingameop.cpp:777
 msgid "Scroll Event"
-msgstr "Event Guliran Tetikus"
+msgstr "Event Gulir Tetikus"
 
 #: src/frontend.cpp:1735
 msgid "MOUSE OPTIONS"
