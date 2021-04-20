@@ -2,9 +2,9 @@
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
+	mat4 lightTextureMatrix;
 	vec4 paramxlight;
 	vec4 paramylight;
-	mat4 lightTextureMatrix;
 	vec4 fogColor;
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;

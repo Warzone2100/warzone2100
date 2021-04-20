@@ -481,7 +481,7 @@ void TrackDetailsForm::display(int xOffset, int yOffset)
 
 static void UpdateTrackDetailsBox(TrackDetailsForm *pTrackDetailsBox)
 {
-	ASSERT(pTrackDetailsBox, "pTrackDetailsBox is null");
+	ASSERT_OR_RETURN(, pTrackDetailsBox, "pTrackDetailsBox is null");
 
 	// Add "Now Playing" label
 	if (!psNowPlaying)
@@ -923,10 +923,16 @@ bool runMusicManager()
 
 static void CDAudioEvent_UpdateCurrentTrack(const std::shared_ptr<const WZ_TRACK>& track)
 {
-	if (selectedTrack != track)
+	if (selectedTrack == track)
 	{
-		selectedTrack = track;
-		UpdateTrackDetailsBox(dynamic_cast<TrackDetailsForm *>(widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX)));
+		return;
+	}
+	selectedTrack = track;
+	if (!psWScreen) { return; }
+	auto psTrackDetailsForm = dynamic_cast<TrackDetailsForm *>(widgGetFromID(psWScreen, MULTIOP_CONSOLEBOX));
+	if (psTrackDetailsForm)
+	{
+		UpdateTrackDetailsBox(psTrackDetailsForm);
 	}
 }
 

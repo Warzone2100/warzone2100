@@ -635,7 +635,8 @@ static std::pair<bool, bool> CheckInMap(const char *archive, const char *mountpo
 					|| checkfile.compare("audio") == 0 || checkfile.compare("sequenceaudio") == 0 || checkfile.compare("misc") == 0
 					|| checkfile.compare("features") == 0 || checkfile.compare("script") == 0 || checkfile.compare("structs") == 0
 					|| checkfile.compare("tileset") == 0 || checkfile.compare("images") == 0 || checkfile.compare("texpages") == 0
-					|| checkfile.compare("skirmish") == 0)
+					|| checkfile.compare("skirmish") == 0 || checkfile.compare("shaders") == 0 || checkfile.compare("fonts") == 0
+					|| checkfile.compare("icons") == 0)
 				{
 					debug(LOG_WZ, "Detected: %s %s" , archive, checkfile.c_str());
 					mapmod = true;

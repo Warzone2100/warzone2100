@@ -154,9 +154,14 @@ void InGameChatMessage::sendToAiPlayers()
 	}
 }
 
-void InGameChatMessage::addPlayerByPosition(uint32_t position)
+void InGameChatMessage::addReceiverByPosition(uint32_t playerPosition)
 {
-	toPlayers.insert(findPlayerIndexByPosition(position));
+	toPlayers.insert(findPlayerIndexByPosition(playerPosition));
+}
+
+void InGameChatMessage::addReceiverByIndex(uint32_t playerIndex)
+{
+	toPlayers.insert(playerIndex);
 }
 
 void InGameChatMessage::send()
