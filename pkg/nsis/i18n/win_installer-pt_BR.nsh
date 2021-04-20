@@ -10,7 +10,7 @@ ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Essa é a versão 64-bit do 
 
 ${LangFileString} WZ_GPL_NEXT "Próximo"
 
-${LangFileString} TEXT_SecBase "Arquivos-Base"
+${LangFileString} TEXT_SecBase "Arquivos Base"
 ${LangFileString} DESC_SecBase "Os arquivos-base necessários para executar o Warzone 2100."
 
 ${LangFileString} TEXT_SecFMVs "Vídeos"
