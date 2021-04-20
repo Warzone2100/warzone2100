@@ -25,7 +25,7 @@
 
 void sendUnitShareStatus(uint8_t from, uint8_t to, bool bStatus)
 {
-	NETbeginEncode(NETgameQueue(selectedPlayer), MESSAGE_TYPES::GAME_UNIT_SHARE);
+	NETbeginEncode(NETgameQueue(selectedPlayer), static_cast<uint8_t>(MESSAGE_TYPES::GAME_UNIT_SHARE));
 	NETuint8_t(&from);
 	NETuint8_t(&to);
 	NETbool(&bStatus);
@@ -37,7 +37,7 @@ bool recvUnitShareStatus(NETQUEUE queue)
 	uint8_t from, to;
 	bool bStatus;
 
-	NETbeginDecode(NETgameQueue(selectedPlayer), MESSAGE_TYPES::GAME_UNIT_SHARE);
+	NETbeginDecode(queue, static_cast<uint8_t>(MESSAGE_TYPES::GAME_UNIT_SHARE));
 	NETuint8_t(&from);
 	NETuint8_t(&to);
 	NETbool(&bStatus);

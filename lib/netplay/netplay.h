@@ -279,7 +279,11 @@ struct PLAYER
 
 	bool isSharingUnitsWith(const unsigned int other) const;
 
+	bool isSharingManufactureWith(const unsigned int other) const;
+
 	void setUnitSharingState(const unsigned int other, const bool bState);
+
+	void setManufactureSharingState(const unsigned int other, const bool bState);
 };
 
 struct PlayerReference;

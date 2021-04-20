@@ -25,7 +25,7 @@
 
 void setUnitShareStatus(const unsigned int from, const unsigned int to, const bool bStatus);
 
-void sendUnitShareStatus(const unsigned int from, const unsigned int to, const bool bStatus);
+void sendUnitShareStatus(uint8_t from, uint8_t to, bool bStatus);
 bool recvUnitShareStatus(NETQUEUE queue);
 
 #endif // __INCLUDED_SRC_MULTISHARE_H__

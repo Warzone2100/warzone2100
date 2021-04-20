@@ -99,6 +99,7 @@
 #include "multimenu.h"
 #include "multilimit.h"
 #include "multigifts.h"
+#include "multishare.h"
 
 #include "titleui/titleui.h"
 
@@ -4131,6 +4132,10 @@ void WzMultiplayerOptionsTitleUI::frontendMultiMessages(bool running)
 
 		case GAME_ALLIANCE:
 			recvAlliance(queue, false);
+			break;
+
+		case MESSAGE_TYPES::GAME_UNIT_SHARE:
+			recvUnitShareStatus(queue);
 			break;
 
 		case NET_COLOURREQUEST:

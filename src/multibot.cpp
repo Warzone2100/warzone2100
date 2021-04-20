@@ -559,7 +559,7 @@ DROID_ORDER_DATA infoToOrderData(QueuedDroidInfo const &info, STRUCTURE_STATS co
 // Droid update information
 void sendDroidInfo(DROID *psDroid, DroidOrder const &order, bool add)
 {
-	if (!myResponsibility(psDroid->player))
+	if (!myResponsibility(psDroid->player) && !NetPlay.players[psDroid->player].isSharingUnitsWith(selectedPlayer))
 	{
 		return;
 	}
@@ -661,7 +661,7 @@ bool recvDroidInfo(NETQUEUE queue)
 				syncDebug("Droid %d missing", info.droidId);
 				continue;  // Can't find the droid, so skip this droid.
 			}
-			if (!canGiveOrdersFor(queue.index, psDroid->player))
+			if (!canGiveOrdersFor(queue.index, psDroid->player) && !NetPlay.players[psDroid->player].isSharingUnitsWith(queue.index))
 			{
 				debug(LOG_WARNING, "Droid order (by %d) for wrong player (%d).", queue.index, psDroid->player);
 				syncDebug("Wrong player.");

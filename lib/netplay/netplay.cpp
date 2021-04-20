@@ -295,6 +295,23 @@ void PLAYER::setUnitSharingState(const unsigned int other, const bool bState)
 	sharing[other].bUnits = bState;
 }
 
+bool PLAYER::isSharingManufactureWith(const unsigned int other) const
+{
+	return sharing[other].bManufacture;
+}
+
+void PLAYER::setManufactureSharingState(const unsigned int other, const bool bState)
+{
+	const bool bOnSameTeam = NetPlay.players[selectedPlayer].team == NetPlay.players[other].team;
+	if (!bOnSameTeam)
+	{
+		debug(LOG_ERROR, "Cannot share manufacture: %d is not on your team!", other);
+		return;
+	}
+
+	sharing[other].bManufacture = bState;
+}
+
 
 bool NETisCorrectVersion(uint32_t game_version_major, uint32_t game_version_minor)
 {
@@ -562,6 +579,16 @@ static void NETSendNPlayerInfoTo(uint32_t *index, uint32_t indexLen, unsigned to
 		NETint8_t(&NetPlay.players[index[n]].ai);
 		NETint8_t(reinterpret_cast<int8_t*>(&NetPlay.players[index[n]].difficulty));
 		NETuint8_t(reinterpret_cast<uint8_t *>(&NetPlay.players[index[n]].faction));
+
+		uint32_t shareCount = NetPlay.players[index[n]].sharing.size();
+		NETuint32_t(&shareCount);
+		for (unsigned int other = 0; other < shareCount; ++other)
+		{
+			bool bUnits = NetPlay.players[index[n]].sharing[other].bUnits;
+			bool bManufacture = NetPlay.players[index[n]].sharing[other].bManufacture;
+			NETbool(&bUnits);
+			NETbool(&bManufacture);
+		}
 	}
 	NETend();
 	ActivityManager::instance().updateMultiplayGameData(game, ingame, NETGameIsLocked());
@@ -1756,8 +1783,8 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 			const bool bIsHostAndSpoofingAnotherPlayer = playerQueue.index == NET_HOST_ONLY && playerQueue.index != selectedPlayer; // Let host spoof other people's NET_SHARE_GAME_QUEUE messages, but not our own. This allows the host to spoof a GAME_PLAYER_LEFT message (but spoofing any message when the player is still there will fail with desynch).
 			const bool bIsSentByCorrectClient = responsibleFor(playerQueue.index, player) || bIsHostAndSpoofingAnotherPlayer;
 
-			const bool bIsSentByShareUnitsTarget = true; // TODO 823-share-unit-controls
-			const bool bIsSentByShareManufactureTarget = true; // TODO 823-share-unit-controls
+			const bool bIsSentByShareUnitsTarget = NetPlay.players[player].isSharingUnitsWith(selectedPlayer);
+			const bool bIsSentByShareManufactureTarget = NetPlay.players[player].isSharingManufactureWith(selectedPlayer);
 			const bool bIsSharing = bIsSentByShareUnitsTarget || bIsSentByShareManufactureTarget;
 
 			if ((!bIsSentByCorrectClient && !bIsSharing) || player >= MAX_PLAYERS)
@@ -1870,7 +1897,17 @@ static bool NETprocessSystemMessage(NETQUEUE playerQueue, uint8_t type)
 					NetPlay.players[index].ai = ai;
 					NetPlay.players[index].difficulty = static_cast<AIDifficulty>(difficulty);
 					NetPlay.players[index].faction = newFactionId.value();
-					// TODO 823-share-unit-controls: sync unit/manufacture controls here
+					NetPlay.players[index].sharing = std::vector<PlayerShareStatus>(MAX_PLAYERS, { false, false });
+
+					uint32_t shareCount;
+					NETuint32_t(&shareCount);
+					for (unsigned int other = 0; other < shareCount; ++other)
+					{
+						bool bUnits, bManufacture;
+						NETbool(&bUnits);
+						NETbool(&bManufacture);
+						NetPlay.players[index].sharing[other] = { bUnits, bManufacture };
+					}
 				}
 
 				debug(LOG_NET, "%s for player %u (%s)", n == 0 ? "Receiving MSG_PLAYER_INFO" : "                      and", (unsigned int)index, NetPlay.players[index].allocated ? "human" : "AI");
