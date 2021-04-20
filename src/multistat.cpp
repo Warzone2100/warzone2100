@@ -309,7 +309,14 @@ static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, boo
 			std::vector<uint8_t> hashBytes = {(uint8_t)((expectedHash>>56)&0xFF),(uint8_t)((expectedHash>>48)&0xFF),(uint8_t)((expectedHash>>40)&0xFF),(uint8_t)((expectedHash>>36)&0xFF),(uint8_t)((expectedHash>>32)&0xFF),(uint8_t)((expectedHash>>24)&0xFF),(uint8_t)((expectedHash>>16)&0xFF),(uint8_t)((expectedHash>>8)&0xFF),(uint8_t)(expectedHash&0xFF)};
 			const char* expectedHashS = base64Encode(hashBytes).c_str();
 			if(strcmp(hash,expectedHashS)){
-				return false; //wrong hash, file has been altered
+                //wrong hash, file has been altered, reset stats
+                st->wins=0;
+                st->losses=0;
+                st->totalKills=0;
+                st->totalScore=0;
+                st->played=0;
+                //TODO: generate new identity?
+				return false;
 			}
 		}
 	}
