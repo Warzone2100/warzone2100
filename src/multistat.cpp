@@ -247,10 +247,23 @@ void recvMultiStats(NETQUEUE queue)
 	}
 }
 
+// Simple string hashing algorithm used to verify the sta3 profile files (see http://www.cse.yorku.ca/~oz/hash.html for more info about the algorithm)
+unsigned long djb2hash(char *str)
+{
+	unsigned long hash = 5381;
+	int c;
+
+	while ((c = *str++)){
+		hash = ((hash << 5) + hash) + c;
+	}
+
+	return hash;
+}
+
 // ////////////////////////////////////////////////////////////////////////////
 // Load Player Stats
 
-static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, bool skipLoadingIdentity = false)
+static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, bool skipLoadingIdentity = false, bool skipHash = false)
 {
 	char *pFileData = nullptr;
 	UDWORD size = 0;
@@ -266,20 +279,38 @@ static bool loadMultiStatsFile(const std::string& fileName, PLAYERSTATS *st, boo
 
 		char identity[1001];
 		identity[0] = '\0';
+		char hash[1001];
+		hash[0] = '\0';
 		if (!skipLoadingIdentity)
 		{
-			sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n%1000[A-Za-z0-9+/=]",
-			   &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played, identity);
+			if(!skipHash){
+				sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n%1000[A-Za-z0-9+/=]\n%1000[A-Za-z0-9+/=]",
+					&st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played, identity, hash);
+			}else{
+				sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n%1000[A-Za-z0-9+/=]",
+					&st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played, identity);
+			}
 		}
 		else
 		{
 			sscanf(pFileData, "WZ.STA.v3\n%u %u %u %u %u\n",
-				   &st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
+				&st->wins, &st->losses, &st->totalKills, &st->totalScore, &st->played);
 		}
 		free(pFileData);
 		if (identity[0] != '\0')
 		{
 			st->identity.fromBytes(base64Decode(identity), EcKey::Private);
+		}
+		if(hash[0] != '\0'){
+			char buffer[1000];
+			ssprintf(buffer, "WZ.STA.v3\n%u %u %u %u %u\n%s\n",
+				st->wins, st->losses, st->totalKills, st->totalScore, st->played, identity);
+			unsigned long expectedHash = djb2hash(buffer);
+			std::vector<uint8_t> hashBytes = {(uint8_t)((expectedHash>>56)&0xFF),(uint8_t)((expectedHash>>48)&0xFF),(uint8_t)((expectedHash>>40)&0xFF),(uint8_t)((expectedHash>>36)&0xFF),(uint8_t)((expectedHash>>32)&0xFF),(uint8_t)((expectedHash>>24)&0xFF),(uint8_t)((expectedHash>>16)&0xFF),(uint8_t)((expectedHash>>8)&0xFF),(uint8_t)(expectedHash&0xFF)};
+			const char* expectedHashS = base64Encode(hashBytes).c_str();
+			if(strcmp(hash,expectedHashS)){
+				return false; //wrong hash, file has been altered
+			}
 		}
 	}
 
@@ -296,11 +327,11 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 		strcpy(sPlayerName, _("Player"));
 	}
 
-	std::string fileName = std::string(MultiPlayersPath) + sPlayerName + ".sta2";
+	std::string fileName = std::string(MultiPlayersPath) + sPlayerName + ".sta3";
 
 	debug(LOG_WZ, "loadMultiStats: %s", fileName.c_str());
 
-	// check player .sta2 already exists
+	// check player .sta3 already exists
 	if (PHYSFS_exists(fileName.c_str()))
 	{
 		if (!loadMultiStatsFile(fileName, st))
@@ -310,13 +341,24 @@ bool loadMultiStats(char *sPlayerName, PLAYERSTATS *st)
 	}
 	else
 	{
-		// one-time porting of old .sta player files to .sta2
-		fileName = std::string(MultiPlayersPath) + sPlayerName + ".sta";
+		// one-time porting of old .sta/.sta2 player files to .sta3
+		fileName = std::string(MultiPlayersPath) + sPlayerName + ".sta2";
 		if (PHYSFS_exists(fileName.c_str()))
 		{
-			if (!loadMultiStatsFile(fileName, st, true))
+			if (!loadMultiStatsFile(fileName, st, false, true))
 			{
 				return false;
+			}
+		}
+		else
+		{
+			fileName = std::string(MultiPlayersPath) + sPlayerName + ".sta";
+			if (PHYSFS_exists(fileName.c_str()))
+			{
+				if (!loadMultiStatsFile(fileName, st, true))
+				{
+					return false;
+				}
 			}
 		}
 	}
@@ -347,16 +389,23 @@ bool saveMultiStats(const char *sFileName, const char *sPlayerName, const PLAYER
 {
 	if (Cheated)
 	{
-	    return false;
+		return false;
 	}
 	char buffer[1000];
 
 	ssprintf(buffer, "WZ.STA.v3\n%u %u %u %u %u\n%s\n",
-	         st->wins, st->losses, st->totalKills, st->totalScore, st->played, base64Encode(st->identity.toBytes(EcKey::Private)).c_str());
+			st->wins, st->losses, st->totalKills, st->totalScore, st->played, base64Encode(st->identity.toBytes(EcKey::Private)).c_str());
 
-	std::string fileName = std::string(MultiPlayersPath) + sFileName + ".sta2";
+	unsigned long hash = djb2hash(buffer);
+	std::vector<uint8_t> hashBytes = {(uint8_t)((hash>>56)&0xFF),(uint8_t)((hash>>48)&0xFF),(uint8_t)((hash>>40)&0xFF),(uint8_t)((hash>>36)&0xFF),(uint8_t)((hash>>32)&0xFF),(uint8_t)((hash>>24)&0xFF),(uint8_t)((hash>>16)&0xFF),(uint8_t)((hash>>8)&0xFF),(uint8_t)(hash&0xFF)};
 
-	saveFile(fileName.c_str(), buffer, strlen(buffer));
+	char buffer2[1000];
+
+	ssprintf(buffer2, "%s%s\n", buffer, base64Encode(hashBytes).c_str());
+
+	std::string fileName = std::string(MultiPlayersPath) + sFileName + ".sta3";
+
+	saveFile(fileName.c_str(), buffer2, strlen(buffer2));
 
 	return true;
 }
