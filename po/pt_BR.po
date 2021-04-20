@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:13\n"
+"PO-Revision-Date: 2021-04-20 03:23\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -8168,7 +8168,7 @@ msgstr "Ataca eletronicamente e interfere nas estruturas inimigas"
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1830
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Muro de Canhão PEM"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -9819,7 +9819,7 @@ msgstr "Canhão de Hiper Velocidade"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2921
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Munição Perfurante e Estabilizada de Alta Velocidade"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -13088,13 +13088,13 @@ msgstr "AA Sunburst"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5215
 msgid "Super Heavy-Gunner Cyborg"
-msgstr "Ciborgue Atirador Super-Pesado"
+msgstr "Ciborgue Atirador Super Pesado"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5232
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Super Ciborgue de Canhão Elétrico"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
