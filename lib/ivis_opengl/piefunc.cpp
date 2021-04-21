@@ -132,7 +132,7 @@ void pie_Skybox_Init()
 	float narrowingOfTop = 0.15f;
 	float top = 1;
 	float middle = 0.15f;
-	float baseline = -0.15f;
+	float baseline = -0.15f - 0.3f; // Additional lowering of baseline for where fog starts fading, to reduce certain artifacts
 	float bottom = -1;
 
 	// Skybox looks like this from the side:

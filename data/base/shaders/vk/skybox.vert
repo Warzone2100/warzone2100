@@ -26,7 +26,7 @@ void main()
 	if(fog_enabled > 0)
 	{
 		fog =
-		vertex.y < -0.5 ? vec4(0, 0, 0, 1) :
+		vertex.y < -0.7 ? vec4(0, 0, 0, 1) :
 		vertex.y < 0.5 ? fog_color :
 		vec4(fog_color.xyz, 0);
 	}
