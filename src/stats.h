@@ -223,20 +223,6 @@ WZ_DECL_PURE int constructorPoints(const CONSTRUCT_STATS *psStats, int player);
 WZ_DECL_PURE int bodyPower(const BODY_STATS *psStats, int player);
 WZ_DECL_PURE int bodyArmour(const BODY_STATS *psStats, int player, WEAPON_CLASS weaponClass);
 
-//Access functions for the max values to be used in the Design Screen
-UDWORD getMaxComponentWeight();
-UDWORD getMaxBodyArmour();
-UDWORD getMaxBodyPower();
-UDWORD getMaxBodyPoints();
-UDWORD getMaxSensorRange();
-UDWORD getMaxECMRange();
-UDWORD getMaxConstPoints();
-UDWORD getMaxRepairPoints();
-UDWORD getMaxWeaponRange();
-UDWORD getMaxWeaponDamage();
-UDWORD getMaxWeaponROF();
-UDWORD getMaxPropulsionSpeed();
-
 WZ_DECL_PURE bool objHasWeapon(const BASE_OBJECT *psObj);
 
 void statsInitVars();
