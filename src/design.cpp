@@ -374,13 +374,13 @@ protected:
 		auto filledWidth = MIN(majorSize * barWidth / 100, barWidth);
 		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, filledWidth, defaultProjectionMatrix(), true);
 
-		valueText.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
-		valueText.render(x0, iY, WZCOL_TEXT_BRIGHT);
-
-		if (minorSize == 0)
+		if (minorValue == 0)
 		{
 			return;
 		}
+
+		valueText.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
+		valueText.render(x0, iY, WZCOL_TEXT_BRIGHT);
 
 		//draw the comparison value - only if not zero
 		updateAnimation();
@@ -390,7 +390,7 @@ protected:
 		auto delta = minorValue - majorValue;
 		if (delta != 0)
 		{
-			deltaText.setText(astringf("%c%.*f", delta > 0 ? '+': '-', precision, std::abs(delta) / (float)denominator), font_small);
+			deltaText.setText(astringf("%+.*f", precision, delta / (float)denominator), font_small);
 			auto xDeltaText = xOffset + x() + width() - iV_GetTextWidth(deltaText.getText().c_str(), font_small) - PADDING;
 			deltaText.renderOutlined(xDeltaText, iY - 1, (delta < 0) == lessIsBetter ? WZCOL_LGREEN : WZCOL_LRED, {0, 0, 0, 192});
 		}
