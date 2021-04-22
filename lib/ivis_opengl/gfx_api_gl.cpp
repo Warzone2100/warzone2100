@@ -1596,7 +1596,7 @@ void gl_context::set_depth_range(const float& min, const float& max)
 
 int32_t gl_context::get_context_value(const context_value property)
 {
-	GLint value;
+	GLint value = 0;
 	glGetIntegerv(to_gl(property), &value);
 	return value;
 }
@@ -1810,18 +1810,28 @@ static const unsigned int channelsPerPixel = 3;
 
 bool gl_context::getScreenshot(std::function<void (std::unique_ptr<iV_Image>)> callback)
 {
+	ASSERT_OR_RETURN(false, callback.operator bool(), "Must provide a valid callback");
+
 	// IMPORTANT: Must get the size of the viewport directly from the viewport, to account for
 	//            high-DPI / display scaling factors (or only a sub-rect of the full viewport
 	//            will be captured, as the logical screenWidth/Height may differ from the
 	//            underlying viewport pixel dimensions).
-	GLint m_viewport[4];
+	GLint m_viewport[4] = {0,0,0,0};
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
+
+	if (m_viewport[2] == 0 || m_viewport[3] == 0)
+	{
+		// Failed to get useful / non-0 viewport size
+		debug(LOG_3D, "GL_VIEWPORT either failed or returned an invalid size");
+		return false;
+	}
 
 	auto image = std::unique_ptr<iV_Image>(new iV_Image());
 	image->width = m_viewport[2];
 	image->height = m_viewport[3];
 	image->depth = 8;
 	image->bmp = (unsigned char *)malloc((size_t)channelsPerPixel * (size_t)image->width * (size_t)image->height);
+	ASSERT_OR_RETURN(false, image->bmp != nullptr, "Failed to allocate buffer");
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glReadPixels(0, 0, image->width, image->height, GL_RGB, GL_UNSIGNED_BYTE, image->bmp);
@@ -2080,7 +2090,7 @@ bool gl_context::initGLContext()
 	sscanf((char const *)glGetString(GL_SHADING_LANGUAGE_VERSION), "%d.%d", &glslVersion.first, &glslVersion.second);
 
 	/* Dump information about OpenGL 2.0+ implementation to the console and the dump file */
-	GLint glMaxTIUs, glMaxTIUAs, glmaxSamples, glmaxSamplesbuf, glmaxVertexAttribs;
+	GLint glMaxTIUs = 0, glMaxTIUAs = 0, glmaxSamples = 0, glmaxSamplesbuf = 0, glmaxVertexAttribs = 0;
 
 	debug(LOG_3D, "  * OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	ssprintf(opengl.GLSLversion, "OpenGL GLSL Version : %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -2098,6 +2108,11 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "  * (current) Max vertex attribute locations is %d.", (int) glmaxVertexAttribs);
 
 	// IMPORTANT: Reserve enough slots in enabledVertexAttribIndexes based on glmaxVertexAttribs
+	if (glmaxVertexAttribs == 0)
+	{
+		debug(LOG_3D, "GL_MAX_VERTEX_ATTRIBS did not return a value - defaulting to 8");
+		glmaxVertexAttribs = 8;
+	}
 	enabledVertexAttribIndexes.resize(static_cast<size_t>(glmaxVertexAttribs), false);
 
 	if (GLAD_GL_VERSION_3_0) // if context is OpenGL 3.0+
