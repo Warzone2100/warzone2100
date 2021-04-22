@@ -288,7 +288,7 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
    * To build with Vulkan support: the full [Vulkan SDK](https://vulkan.lunarg.com/sdk/home) _(strongly recommended: ≥ 1.2.148.1)_
 * **Installing prerequisites:**
    * Using `get-dependencies_linux.sh`:
-      1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`) _REQUIRED_
+      1. Specify one of the linux distros supported by the script: (`ubuntu`, `fedora`, `alpine`, `archlinux`, `opensuse-tumbleweed`) _REQUIRED_
       2. Specify a mode: (`build-all` (default), `build-dependencies`) _OPTIONAL_
       
       Example:

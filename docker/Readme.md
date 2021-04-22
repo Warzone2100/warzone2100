@@ -13,22 +13,21 @@ For more information, see the documentation on [`docker build`](https://docs.doc
 # How to build Warzone using the docker image:
 
 Beware of line ending mismatch between Windows and Linux when cloning repo.
-Replace `${pwd}` with your pwd command on your platform.
 
 ### Ubuntu
 
 - via CMake
 ```
-docker run --rm -v ${pwd}:/code <build_image_name> cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
-docker run --rm -v ${pwd}:/code <build_image_name> cmake --build build
+docker run --rm -v $(pwd):/code <build_image_name> cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
+docker run --rm -v $(pwd):/code <build_image_name> cmake --build build
 ```
 
 ### Cross-compile (for Windows)
 
 - via CMake
 ```
-docker run --rm -v ${pwd}:/code <build_image_name> i686-w64-mingw32.static-cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
-docker run --rm -v ${pwd}:/code <build_image_name> cmake --build build --target package
+docker run --rm -v $(pwd):/code <build_image_name> i686-w64-mingw32.static-cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=Debug -G"Ninja"
+docker run --rm -v $(pwd):/code <build_image_name> cmake --build build --target package
 ```
 This will build the full Windows (portable) installer package.
 
