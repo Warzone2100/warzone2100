@@ -21,8 +21,8 @@ const USERTYPE = {
 const IDLETIME = 5 * 60 * 1000;
 
 function inOneTeam(playnum, splaynum) {
-  //	FIXME allianceExistsBetween dont correct if leave player in ALLIANCES_UNSHARED, ALLIANCES_TEAMS mode
-  //	and  team is garbage in NO_ALLIANCES, ALLIANCES mode
+//	FIXME allianceExistsBetween dont correct if leave player in ALLIANCES_UNSHARED, ALLIANCES_TEAMS mode
+//	and  team is garbage in NO_ALLIANCES, ALLIANCES mode
 	if (
 		(alliancesType == ALLIANCES_UNSHARED || alliancesType == ALLIANCES_TEAMS) &&
     playerData[playnum].team != playerData[splaynum].team
@@ -65,7 +65,6 @@ function hasFactory(playnum) {
 function hasDroid(playnum) {
 	for (let splaynum = 0; splaynum < maxPlayers; splaynum++) {
 		if (inOneTeam(playnum, splaynum) && countDroid(DROID_ANY, splaynum) > 0) {
-      // checking enemy player
 			return true;
 		}
 	}
@@ -166,9 +165,7 @@ function roomPlayability() {
 		}
 	}
 	if (unPlayability) {
-    //		debug(_("There are no opponents in the game."));
 		console(_("There are no opponents in the game"));
-    //		gameOverMessage(true);
 		return false;
 	} else {
 		return true;
@@ -179,11 +176,11 @@ function toSpectator(playnum, remove) {
 	hackNetOff();
 	setPower(0, playnum);
 	let spotter = {
-		X: mapWidth / 2,
-		Y: mapHeight / 2,
+		x: mapWidth / 2,
+		y: mapHeight / 2,
 		radius: (Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight) / 2) * 128,
 	};
-	addSpotter(spotter.X, spotter.Y, playnum, spotter.radius, 0, 0);
+	addSpotter(spotter.x, spotter.y, playnum, spotter.radius, 0, 0);
 
 	let HQstructs = enumStruct(playnum, HQ);
 	HQstructs.forEach(function (e) {
@@ -217,9 +214,6 @@ function hud() {
 	hackPlayIngameAudio();
 }
 
-// /////////////////////////////////////////////////////////////////
-// END CONDITIONS
-
 function checkPlayerVictoryStatus() {
 	for (let playnum = 0; playnum < maxPlayers; playnum++) {
 		if (playerData[playnum].usertype === USERTYPE.player.winner) {
@@ -231,23 +225,22 @@ function checkPlayerVictoryStatus() {
 		if (playerData[playnum].usertype === USERTYPE.player.loser) {
 			continue;
 		}
-    //we mark the retired players as lost and give them visibility. we save buildings
 		else if (
-			!canPlay(playnum) &&
-      playerData[playnum].usertype != USERTYPE.spectator
+			playerData[playnum].usertype != USERTYPE.spectator &&
+		!canPlay(playnum)
 		) {
-      //See loss check in function canPlay()
+		//See loss check in function canPlay()
+		//we mark the retired players as lost and give them visibility. we save buildings
 			playerData[playnum].usertype = USERTYPE.player.loser;
 			toSpectator(playnum, false);
 			if (selectedPlayer == playnum) {
 				gameOverMessage(false);
 			}
 		}
-
-    // Winning Conditions
-    // all participants except teammates (this is not the same as the allies) cannot continue the game
 	}
 
+// Winning Conditions
+// all participants except teammates (this is not the same as the allies) cannot continue the game
 	let endGame = true;
 	for (let playnum = 0; playnum < maxPlayers; playnum++) {
 		if (playerData[playnum].usertype != USERTYPE.player.fighter) {
@@ -274,9 +267,7 @@ function checkPlayerVictoryStatus() {
 			gameOverMessage(true);
 		}
 		if (playerData[selectedPlayer].usertype == USERTYPE.spectator) {
-      //			gameOverMessage(true);
 			console(_("the battle is over, you can leave the room"));
-      //			debug("the battle is over, you can leave the room");
 		}
 	}
 }
@@ -284,7 +275,7 @@ function checkPlayerVictoryStatus() {
 function co_eventGameInit() {
 	for (let playnum = 0; playnum < maxPlayers; playnum++) {
 		playerData[playnum].lastActivity = gameTime;
-    //we consider observers to players who cannot play from the beginning of the game
+		// we consider observers to players who cannot play from the beginning of the game
 		if (!canPlay(playnum)) {
 			playerData[playnum].usertype = USERTYPE.spectator;
 			toSpectator(playnum, true);
@@ -311,7 +302,6 @@ function activityAlert() {
 				"Playing passively will lead to defeat. Actions that are considered: - unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage"
 			)
 		);
-    //		debug (getMissionTime());
 		if (getMissionTime() > IDLETIME) {
 			setMissionTime(
 				(playerData[selectedPlayer].lastActivity + IDLETIME - gameTime) / 1000
