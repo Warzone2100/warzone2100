@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Prepare
+        run: |
+          # Sleep 15 seconds before executing turnstyle action to hopefully reduce the likelihood of a race condition
+          # Potential future fix: https://github.com/softprops/turnstyle/pull/31
+          sleep 15
       - name: 'Block Concurrent Executions'
         uses: past-due/turnstyle@v1
         with:
