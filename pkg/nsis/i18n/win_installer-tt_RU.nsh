@@ -19,7 +19,7 @@ ${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
 ${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
 ${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
 
-${LangFileString} TEXT_SecFMVs_Eng "English"
+${LangFileString} TEXT_SecFMVs_Eng "Инглизча"
 ${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
