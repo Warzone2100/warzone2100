@@ -11,6 +11,9 @@ charset = utf-8
 [*.{cpp,c,hpp,h}]
 insert_final_newline = true
 trim_trailing_whitespace = true
+# Specify indentation for WZ source files
+[{lib,src}/**.{cpp,c,hpp,h}]
+indent_style = tab
 
 # YAML
 [*.{yml,yaml}]
