@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-09 03:53\n"
+"PO-Revision-Date: 2021-04-23 23:00\n"
 "Last-Translator: \n"
 "Language-Team: Tatar\n"
 "Language: tt_RU\n"
@@ -4177,7 +4177,7 @@ msgstr ""
 #: src/transporter.cpp:549
 #: src/wzscriptdebug.cpp:1977
 msgid "Close"
-msgstr ""
+msgstr "Ябу"
 
 #: data/base/script/rules.js:196
 #: data/base/script/tutorial.js:516
@@ -5091,12 +5091,12 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19 гыйнвар, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Төньяк Америка"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
@@ -5116,7 +5116,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Таң, 4 апрель, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
@@ -5233,7 +5233,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:316
 msgid "Nexus Wall"
-msgstr ""
+msgstr "Нексус дивары"
 
 #: data/mp/messages/strings/names.txt:317
 msgid "Nexus Corner Wall"
@@ -6263,7 +6263,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:476
 msgid "Alpha"
-msgstr ""
+msgstr "Альфа"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -8128,7 +8128,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:1802
 msgid "Dragon"
-msgstr ""
+msgstr "Аждаһа"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
@@ -8253,7 +8253,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1881
 msgid "Enemy"
-msgstr ""
+msgstr "Душман"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -8341,7 +8341,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0LightFactory.name
 #: po/custom/fromJson.txt:1945
 msgid "Factory"
-msgstr ""
+msgstr "Фабрика"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
@@ -10273,7 +10273,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3319
 msgid "Jeep"
-msgstr ""
+msgstr "Джип"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[3]
@@ -10492,7 +10492,7 @@ msgstr ""
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3453
 msgid "LasSat"
-msgstr ""
+msgstr "Лазер спутник"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -10508,7 +10508,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3469
 msgid "Leopard"
-msgstr ""
+msgstr "Леопард"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -11565,13 +11565,13 @@ msgstr ""
 #. data/base/stats/structure.json: $.NEXUSWall.name
 #: po/custom/fromJson.txt:4233
 msgid "NEXUS Wall"
-msgstr ""
+msgstr "НЕКСУС дивары"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4236
 msgid "Nexus"
-msgstr ""
+msgstr "Нексус"
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11671,7 +11671,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4302
 msgid "Panther"
-msgstr ""
+msgstr "Пантера"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -12008,7 +12008,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body11ABT.name
 #: po/custom/fromJson.txt:4504
 msgid "Python"
-msgstr ""
+msgstr "Питон"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
@@ -14323,7 +14323,7 @@ msgstr ""
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6046
 msgid "Wall"
-msgstr ""
+msgstr "Дивар"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
@@ -14452,7 +14452,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6120
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Элит"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14468,7 +14468,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6128
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Каһарман"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14562,7 +14562,7 @@ msgstr ""
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr ""
+msgstr "Глобаль"
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
@@ -14575,7 +14575,7 @@ msgstr ""
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr ""
+msgstr " һәм "
 
 #: src/cheat.cpp:182
 #, c-format
@@ -14631,7 +14631,7 @@ msgstr ""
 
 #: src/clparse.cpp:339
 msgid "file"
-msgstr ""
+msgstr "файл"
 
 #: src/clparse.cpp:340
 msgid "Flush all debug output written to stderr"
@@ -14778,7 +14778,7 @@ msgstr ""
 
 #: src/clparse.cpp:381
 msgid "test"
-msgstr ""
+msgstr "тест"
 
 #: src/clparse.cpp:382
 msgid "Continue the last saved game"
@@ -14810,7 +14810,7 @@ msgstr ""
 
 #: src/clparse.cpp:388
 msgid "port"
-msgstr ""
+msgstr "порт"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14823,7 +14823,7 @@ msgstr ""
 #: src/configuration.cpp:369
 #: src/multistat.cpp:296
 msgid "Player"
-msgstr ""
+msgstr "Уенчы"
 
 #: src/design.cpp:385
 #: src/design.cpp:396
@@ -15051,12 +15051,12 @@ msgstr ""
 #: src/faction.cpp:170
 #: src/frontend.cpp:1812
 msgid "Normal"
-msgstr ""
+msgstr "Нормаль"
 
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:173
 msgid "NEXUS"
-msgstr ""
+msgstr "НЕКСУС"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:176
@@ -15320,7 +15320,7 @@ msgstr "50%"
 #: src/frontend.cpp:725
 #: src/multiplay.cpp:1649
 msgid "Black"
-msgstr ""
+msgstr "Кара"
 
 #: src/frontend.cpp:732
 #: src/frontend.cpp:737
@@ -15331,7 +15331,7 @@ msgstr ""
 #: src/frontend.cpp:1675
 #: src/frontend.cpp:1685
 msgid "On"
-msgstr ""
+msgstr "Каб"
 
 #: src/frontend.cpp:747
 msgid "Rotating"
@@ -15372,7 +15372,7 @@ msgstr ""
 #: src/frontend.cpp:783
 #: src/ingameop.cpp:561
 msgid "Radar"
-msgstr ""
+msgstr "Радар"
 
 #: src/frontend.cpp:787
 #: src/ingameop.cpp:566
@@ -15398,7 +15398,7 @@ msgstr ""
 #: src/frontend.cpp:902
 #: src/frontend.cpp:908
 msgid "Auto"
-msgstr ""
+msgstr "Автоматик"
 
 #: src/frontend.cpp:943
 #: src/ingameop.cpp:148
@@ -15630,7 +15630,7 @@ msgstr ""
 #: src/frontend.cpp:2029
 #: src/multiint.cpp:2997
 msgid "Mod: "
-msgstr ""
+msgstr "Мод: "
 
 #: src/frontend.cpp:2471
 msgid "Increase Game Display Scale?"
@@ -15806,17 +15806,17 @@ msgstr ""
 #: src/ingameop.cpp:247
 #: src/ingameop.cpp:256
 msgid "Load Game"
-msgstr ""
+msgstr "Уен йөкләү"
 
 #: src/ingameop.cpp:250
 #: src/ingameop.cpp:259
 #: src/mission.cpp:2430
 msgid "Save Game"
-msgstr ""
+msgstr "Уенны саклау"
 
 #: src/ingameop.cpp:271
 msgid "Quit"
-msgstr ""
+msgstr "Чыгу"
 
 #: src/ingameop.cpp:339
 msgid "Host has quit the game!"
@@ -15828,7 +15828,7 @@ msgstr ""
 
 #: src/ingameop.cpp:351
 msgid "-->  QUIT  <--"
-msgstr ""
+msgstr "-->  ЧЫГУ  <--"
 
 #: src/ingameop.cpp:502
 msgid "Audio Options"
@@ -15975,14 +15975,14 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:600
 #: src/integrations/wzdiscordrpc.cpp:836
 msgid "Map:"
-msgstr ""
+msgstr "Карта:"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:603
 #: src/integrations/wzdiscordrpc.cpp:832
 msgid "Bots:"
-msgstr ""
+msgstr "Ботлар:"
 
 #: src/integrations/wzdiscordrpc.cpp:626
 #: src/integrations/wzdiscordrpc.cpp:816
@@ -16002,7 +16002,7 @@ msgstr ""
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:895
 msgid "No:"
-msgstr ""
+msgstr "Юк:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:911
@@ -16157,7 +16157,7 @@ msgstr ""
 
 #: src/intorder.cpp:188
 msgid "Circle"
-msgstr ""
+msgstr "Түгәрәк"
 
 #: src/keybind.cpp:118
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -16527,7 +16527,7 @@ msgstr ""
 
 #: src/keymap.cpp:399
 msgid "QuickSave"
-msgstr ""
+msgstr "Тиз саклау"
 
 #: src/keymap.cpp:400
 msgid "Toggle Radar"
@@ -16535,7 +16535,7 @@ msgstr ""
 
 #: src/keymap.cpp:401
 msgid "QuickLoad"
-msgstr ""
+msgstr "Тиз йөкләү"
 
 #: src/keymap.cpp:402
 msgid "Toggle Console Display"
@@ -16563,163 +16563,163 @@ msgstr ""
 
 #: src/keymap.cpp:411
 msgid "Assign Group 0"
-msgstr ""
+msgstr "Төркем 0 билгеләү"
 
 #: src/keymap.cpp:412
 msgid "Assign Group 1"
-msgstr ""
+msgstr "Төркем 1 билгеләү"
 
 #: src/keymap.cpp:413
 msgid "Assign Group 2"
-msgstr ""
+msgstr "Төркем 2 билгеләү"
 
 #: src/keymap.cpp:414
 msgid "Assign Group 3"
-msgstr ""
+msgstr "Төркем 3 билгеләү"
 
 #: src/keymap.cpp:415
 msgid "Assign Group 4"
-msgstr ""
+msgstr "Төркем 4 билгеләү"
 
 #: src/keymap.cpp:416
 msgid "Assign Group 5"
-msgstr ""
+msgstr "Төркем 5 билгеләү"
 
 #: src/keymap.cpp:417
 msgid "Assign Group 6"
-msgstr ""
+msgstr "Төркем 6 билгеләү"
 
 #: src/keymap.cpp:418
 msgid "Assign Group 7"
-msgstr ""
+msgstr "Төркем 7 билгеләү"
 
 #: src/keymap.cpp:419
 msgid "Assign Group 8"
-msgstr ""
+msgstr "Төркем 8 билгеләү"
 
 #: src/keymap.cpp:420
 msgid "Assign Group 9"
-msgstr ""
+msgstr "Төркем 9 билгеләү"
 
 #: src/keymap.cpp:422
 msgid "Add to Group 0"
-msgstr ""
+msgstr "0 төркемгә өстәү"
 
 #: src/keymap.cpp:423
 msgid "Add to Group 1"
-msgstr ""
+msgstr "1 төркемгә өстәү"
 
 #: src/keymap.cpp:424
 msgid "Add to Group 2"
-msgstr ""
+msgstr "2 төркемгә өстәү"
 
 #: src/keymap.cpp:425
 msgid "Add to Group 3"
-msgstr ""
+msgstr "3 төркемгә өстәү"
 
 #: src/keymap.cpp:426
 msgid "Add to Group 4"
-msgstr ""
+msgstr "4 төркемгә өстәү"
 
 #: src/keymap.cpp:427
 msgid "Add to Group 5"
-msgstr ""
+msgstr "5 төркемгә өстәү"
 
 #: src/keymap.cpp:428
 msgid "Add to Group 6"
-msgstr ""
+msgstr "6 төркемгә өстәү"
 
 #: src/keymap.cpp:429
 msgid "Add to Group 7"
-msgstr ""
+msgstr "7 төркемгә өстәү"
 
 #: src/keymap.cpp:430
 msgid "Add to Group 8"
-msgstr ""
+msgstr "8 төркемгә өстәү"
 
 #: src/keymap.cpp:431
 msgid "Add to Group 9"
-msgstr ""
+msgstr "9 төркемгә өстәү"
 
 #: src/keymap.cpp:435
 msgid "Select Group 0"
-msgstr ""
+msgstr "0 төркемне сайлау"
 
 #: src/keymap.cpp:436
 msgid "Select Group 1"
-msgstr ""
+msgstr "1 төркемне сайлау"
 
 #: src/keymap.cpp:437
 msgid "Select Group 2"
-msgstr ""
+msgstr "2 төркемне сайлау"
 
 #: src/keymap.cpp:438
 msgid "Select Group 3"
-msgstr ""
+msgstr "3 төркемне сайлау"
 
 #: src/keymap.cpp:439
 msgid "Select Group 4"
-msgstr ""
+msgstr "4 төркемне сайлау"
 
 #: src/keymap.cpp:440
 msgid "Select Group 5"
-msgstr ""
+msgstr "5 төркемне сайлау"
 
 #: src/keymap.cpp:441
 msgid "Select Group 6"
-msgstr ""
+msgstr "6 төркемне сайлау"
 
 #: src/keymap.cpp:442
 msgid "Select Group 7"
-msgstr ""
+msgstr "7 төркемне сайлау"
 
 #: src/keymap.cpp:443
 msgid "Select Group 8"
-msgstr ""
+msgstr "8 төркемне сайлау"
 
 #: src/keymap.cpp:444
 msgid "Select Group 9"
-msgstr ""
+msgstr "9 төркемне сайлау"
 
 #: src/keymap.cpp:448
 msgid "Select Commander 0"
-msgstr ""
+msgstr "Командир 0 сайлау"
 
 #: src/keymap.cpp:449
 msgid "Select Commander 1"
-msgstr ""
+msgstr "Командир 1 сайлау"
 
 #: src/keymap.cpp:450
 msgid "Select Commander 2"
-msgstr ""
+msgstr "Командир 2 сайлау"
 
 #: src/keymap.cpp:451
 msgid "Select Commander 3"
-msgstr ""
+msgstr "Командир 3 сайлау"
 
 #: src/keymap.cpp:452
 msgid "Select Commander 4"
-msgstr ""
+msgstr "Командир 4 сайлау"
 
 #: src/keymap.cpp:453
 msgid "Select Commander 5"
-msgstr ""
+msgstr "Командир 5 сайлау"
 
 #: src/keymap.cpp:454
 msgid "Select Commander 6"
-msgstr ""
+msgstr "Командир 6 сайлау"
 
 #: src/keymap.cpp:455
 msgid "Select Commander 7"
-msgstr ""
+msgstr "Командир 7 сайлау"
 
 #: src/keymap.cpp:456
 msgid "Select Commander 8"
-msgstr ""
+msgstr "Командир 8 сайлау"
 
 #: src/keymap.cpp:457
 msgid "Select Commander 9"
-msgstr ""
+msgstr "Командир 9 сайлау"
 
 #: src/keymap.cpp:461
 msgid "Multiplayer Options / Alliance dialog"
@@ -17286,7 +17286,7 @@ msgstr ""
 #: src/multiint.cpp:1352
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
-msgstr ""
+msgstr "Уен исеме"
 
 #: src/multiint.cpp:1353
 msgid "One-Player Skirmish"
@@ -17353,23 +17353,23 @@ msgstr ""
 
 #: src/multiint.cpp:1500
 msgid "Tech"
-msgstr ""
+msgstr "Тех"
 
 #: src/multiint.cpp:1501
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Технология дәрәҗәсе 1"
 
 #: src/multiint.cpp:1502
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Технология дәрәҗәсе 2"
 
 #: src/multiint.cpp:1503
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Технология дәрәҗәсе 3"
 
 #: src/multiint.cpp:1504
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Технология дәрәҗәсе 4"
 
 #: src/multiint.cpp:1513
 #: src/multiint.cpp:1514
@@ -17410,7 +17410,7 @@ msgstr ""
 
 #: src/multiint.cpp:1930
 msgid "Team"
-msgstr ""
+msgstr "Төркем"
 
 #: src/multiint.cpp:1943
 #: src/multiint.cpp:3940
@@ -17582,12 +17582,12 @@ msgstr ""
 #: src/multiint.cpp:4839
 #: src/multiint.cpp:5073
 msgid "Open"
-msgstr ""
+msgstr "Ачу"
 
 #: src/multiint.cpp:4839
 #: src/multiint.cpp:5074
 msgid "Closed"
-msgstr ""
+msgstr "Ябык"
 
 #: src/multiint.cpp:4915
 #, c-format
@@ -17804,7 +17804,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1646
 msgid "Green"
-msgstr ""
+msgstr "Яшел"
 
 #: src/multiplay.cpp:1647
 msgid "Orange"
@@ -17812,11 +17812,11 @@ msgstr ""
 
 #: src/multiplay.cpp:1648
 msgid "Grey"
-msgstr ""
+msgstr "Соры"
 
 #: src/multiplay.cpp:1650
 msgid "Red"
-msgstr ""
+msgstr "Кызыл"
 
 #: src/multiplay.cpp:1651
 msgid "Blue"
@@ -17824,7 +17824,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1652
 msgid "Pink"
-msgstr ""
+msgstr "Алсу"
 
 #: src/multiplay.cpp:1653
 msgid "Cyan"
@@ -17832,15 +17832,15 @@ msgstr ""
 
 #: src/multiplay.cpp:1654
 msgid "Yellow"
-msgstr ""
+msgstr "Сары"
 
 #: src/multiplay.cpp:1655
 msgid "Purple"
-msgstr ""
+msgstr "Ачык шәмәхә"
 
 #: src/multiplay.cpp:1656
 msgid "White"
-msgstr ""
+msgstr "Ак"
 
 #: src/multiplay.cpp:1657
 msgid "Bright blue"
@@ -17860,7 +17860,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1661
 msgid "Brown"
-msgstr ""
+msgstr "Көрән"
 
 #: src/musicmanager.cpp:493
 msgid "NOW PLAYING"
@@ -17869,11 +17869,11 @@ msgstr ""
 #: src/musicmanager.cpp:533
 #: src/musicmanager.cpp:679
 msgid "Album"
-msgstr ""
+msgstr "Альбом"
 
 #: src/musicmanager.cpp:544
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: src/musicmanager.cpp:670
 msgid "Title"
@@ -18230,7 +18230,7 @@ msgstr ""
 #: src/titleui/gamefind.cpp:557
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Мод: %s"
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
@@ -18239,7 +18239,7 @@ msgstr ""
 #: src/titleui/gamefind.cpp:569
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "Версия: %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -18263,12 +18263,12 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr ""
+msgstr "ЯРАР"
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:171
 msgid "Cancel"
-msgstr ""
+msgstr "Баш тарту"
 
 #: src/titleui/protocol.cpp:78
 msgid "CONNECTION"
