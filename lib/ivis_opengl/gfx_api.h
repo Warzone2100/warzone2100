@@ -381,6 +381,11 @@ namespace gfx_api
 
 		void bind()
 		{
+			if (this->nextpso != nullptr) {
+				delete this->pso;
+				this->pso = this->nextpso;
+				this->nextpso = nullptr;
+			}
 			gfx_api::context::get().bind_pipeline(pso, std::tuple_size<texture_inputs>::value == 0);
 		}
 
@@ -436,8 +441,14 @@ namespace gfx_api
 		{
 			context::get().draw_elements(offset, count, primitive, index);
 		}
+
+		void recompile()
+		{
+			this->nextpso = gfx_api::context::get().build_pipeline(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+		}
 	private:
 		pipeline_state_object* pso;
+		pipeline_state_object* nextpso = nullptr;
 		pipeline_state_helper()
 		{
 			pso = gfx_api::context::get().build_pipeline(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));

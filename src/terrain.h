@@ -37,4 +37,7 @@ void setTileColour(int x, int y, PIELIGHT colour);
 
 void markTileDirty(int i, int j);
 
+// for debug
+void reloadTerrainTextures();
+
 #endif
