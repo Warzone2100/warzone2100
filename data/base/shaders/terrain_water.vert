@@ -40,8 +40,8 @@ void main()
 	gl_Position = position;
 	vertexDistance = position.z;
 
-	uv1 = vec2(vertex.x/512 + time/10, -vertex.z/512); // (ModelUV1 * vertex).xy;
-	uv2 = vec2(vertex.x/1024, -vertex.z/1024); // (ModelUV2 * vertex).xy;
+	uv1 = vec2(vertex.x/4/128 + time/10, -vertex.z/4/128); // (ModelUV1Matrix * vertex).xy;
+	uv2 = vec2(vertex.x/5/128, -vertex.z/5/128); // (ModelUV2Matrix * vertex).xy;
 
 	vec3 eyeVec = normalize(cameraPos - vertex.xyz);
 	lightDir = sunPos;
