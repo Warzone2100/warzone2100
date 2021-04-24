@@ -29,7 +29,7 @@ uniform vec4 fogColor;
 in vec2 uv1;
 in vec2 uv2;
 in float vertexDistance;
-// light in tangent space:
+// light in modelSpace:
 in vec3 lightDir;
 in vec3 halfVec;
 #else
@@ -50,9 +50,11 @@ void main()
 {
 	vec4 fragColor = texture(tex1, uv1) * texture(tex2, uv2);
 
-	vec3 N = normalize(texture(tex1_nm, uv1).xyz * 2.0 - 1.0);
-	if (N == vec3(-1,-1,-1)) {
-		N = vec3(0,0,1);
+	vec3 N = texture(tex1_nm, uv1).xzy; // y is up in modelSpace
+	if (N == vec3(0,0,0)) {
+		N = vec3(0,1,0);
+	} else {
+		N = normalize(N * 2.0 - 1.0);
 	}
 	vec3 L = normalize(lightDir);
 	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
@@ -64,7 +66,7 @@ void main()
 	exponent = -(exponent * exponent);
 	float gaussianTerm = exp(exponent) * float(lambertTerm > 0);
 
-	vec4 gloss = texture(tex1_sm, uv1);
+	vec4 gloss = texture(tex1_sm, uv1) * texture(tex2_sm, uv2);
 
 	fragColor = fragColor*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
 

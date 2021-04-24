@@ -749,11 +749,14 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_WATER>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat3 ModelTangentMatrix;
+		glm::mat4 ModelViewMatrix;
+		glm::mat4 ModelViewNormalMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
+		float time; // in seconds
 		glm::vec3 cameraPos; // in modelSpace
-		glm::vec3 lightDirInTangent; // in tangentSpace
+		glm::vec3 sunPos; // in modelSpace
+		glm::vec3 sunPosInView; // in viewSpace
 		glm::vec4 emissiveLight; // light colors/intensity
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
