@@ -258,9 +258,8 @@ bool texLoad(const char *fileName)
 				debug(LOG_TEXTURE, "texLoad: Found specular map %s", fullPath);
 			}
 			else
-			{	// default specular map: 7f7f7f7f for now
+			{	// default specular map: 0
 				tile.bmp = (unsigned char*)calloc(i*i, 4);
-				memset(tile.bmp, 0x7f, i*i*4);
 			}
 			// Insert into specular texture page
 			pie_Texture(terrainSpecularPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);

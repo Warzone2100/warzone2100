@@ -30,7 +30,7 @@ bool initTerrain();
 void shutdownTerrain();
 
 void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Projection, const Vector3f &currentSunPos);
-void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &sunPos, const Vector3f &cameraPos);
+void drawWater(const glm::mat4 &ModelView, const glm::mat4 &Projection, const Vector3f &cameraPos, const Vector3f &sunPos, const Vector3f &sunPosInView);
 
 PIELIGHT getTileColour(int x, int y);
 void setTileColour(int x, int y, PIELIGHT colour);

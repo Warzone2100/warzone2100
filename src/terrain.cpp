@@ -1405,25 +1405,22 @@ void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Protection, const 
  * Draw the water.
  * sunPos and cameraPos in Model=WorldSpace
  */
-void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &sunPos, const Vector3f &cameraPos)
+void drawWater(const glm::mat4 &ModelView, const glm::mat4 &Projection, const Vector3f &cameraPos, const Vector3f &sunPos, const Vector3f &sunPosInView)
 {
 	if (!waterIndexVBO)
 	{
 		return; // no water
 	}
+	const auto ModelViewProjection = Projection * ModelView;
+	const auto ModelViewNormal = glm::transpose(glm::inverse(ModelView));
 
-	int x, y;
 	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
 	const glm::vec4 paramsX2(0, 0, -1.0f / world_coord(5), 0);
 	const glm::vec4 paramsY2(1.0f / world_coord(5), 0, 0, 0);
 	const auto ModelUV1 = glm::translate(glm::vec3(waterOffset, 0.f, 0.f)) * glm::transpose(glm::mat4(paramsX, paramsY, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 	const auto ModelUV2 = glm::transpose(glm::mat4(paramsX2, paramsY2, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
-	const auto normal = glm::vec3(0,1,0); // y
-	const auto tangent = glm::normalize(paramsY.xyz()); // x
-	const auto bitangent = glm::cross(normal, tangent); // z
-	const auto ModelTangent = glm::transpose(glm::mat3(tangent, bitangent, normal)); // xzy
-	const auto lightDirInTangent = glm::normalize(- ModelTangent * sunPos);
+
 	const auto &renderState = getCurrentRenderState();
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
@@ -1442,16 +1439,17 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &sunPos, con
 		getOptTex(waterTexture1_sm), getOptTex(waterTexture2_sm));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({
-		ModelViewProjection, ModelTangent, ModelUV1, ModelUV2,
-		cameraPos, lightDirInTangent,
+		ModelViewProjection, ModelView, ModelViewNormal, ModelUV1, ModelUV2,
+		waterOffset*10,
+		cameraPos, glm::normalize(sunPos), sunPosInView,
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd
 	});
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 
-	for (x = 0; x < xSectors; x++)
+	for (int x = 0; x < xSectors; x++)
 	{
-		for (y = 0; y < ySectors; y++)
+		for (int y = 0; y < ySectors; y++)
 		{
 			if (sectors[x * ySectors + y].draw)
 			{

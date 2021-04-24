@@ -322,8 +322,9 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"sunPosition", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
-		{ "ModelViewProjectionMatrix", "ModelTangentMatrix", "ModelUV1", "ModelUV2",
-			"cameraPos", "lightDirInTangent", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+		{ "ModelViewProjectionMatrix", "ModelViewMatrix", "ModelViewNormalMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+			"time", "cameraPos", "sunPos", "sunPosInView",
+			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart",
 			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm" } }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
@@ -1257,11 +1258,14 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 {
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ModelTangentMatrix);
+	setUniforms(i++, cbuf.ModelViewMatrix);
+	setUniforms(i++, cbuf.ModelViewNormalMatrix);
 	setUniforms(i++, cbuf.ModelUV1Matrix);
 	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.time);
 	setUniforms(i++, cbuf.cameraPos);
-	setUniforms(i++, cbuf.lightDirInTangent);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.sunPosInView);
 	setUniforms(i++, cbuf.emissiveLight);
 	setUniforms(i++, cbuf.ambientLight);
 	setUniforms(i++, cbuf.diffuseLight);
