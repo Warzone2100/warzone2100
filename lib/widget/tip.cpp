@@ -34,12 +34,15 @@
 #include <vector>
 #include <string>
 
-/* Time delay before showing the tool tip in milliseconds */
-#define TIP_PAUSE	200
+/* Time (in milliseconds) after pointing widget required to show the tool tip */
+const auto TIP_PAUSE = 200;
+
+/* Time (in milliseconds) required for a tip to be refreshed since the last refresh */
+const auto TIP_REFRESH_COOLDOWN = 500;
 
 /* Size of border around tip text */
-#define TIP_HGAP	6
-#define TIP_VGAP	3
+const auto TIP_HGAP = 6;
+const auto TIP_VGAP = 3;
 
 static enum
 {
@@ -61,6 +64,7 @@ static std::string tipText;
 static WIDGET *tipSourceWidget;
 static PIELIGHT TipColour;
 static TipDisplayCache displayCache;
+static nonstd::optional<uint32_t> lastRefreshTime;
 
 /* Initialise the tool tip module */
 void tipInitialise(void)
@@ -107,18 +111,30 @@ static bool isHighlightedChanged(std::shared_ptr<WIDGET> mouseOverWidget)
 
 static void refreshTip(std::shared_ptr<WIDGET> mouseOverWidget)
 {
-	std::string newTip;
-	if (isHighlightedChanged(mouseOverWidget) || (newTip = mouseOverWidget->getTip()).empty())
+	if (isHighlightedChanged(mouseOverWidget))
 	{
 		tipStop();
 		return;
 	}
 
-	if (newTip == tipText) {
+	if (lastRefreshTime.has_value() && wzGetTicks() - lastRefreshTime.value() < TIP_REFRESH_COOLDOWN)
+	{
+		return;
+	}
+
+	auto newTip = mouseOverWidget->getTip();
+	lastRefreshTime = wzGetTicks();
+	if (newTip == tipText)
+	{
 		return;
 	}
 
 	tipText = newTip;
+	if (tipText == "")
+	{
+		return;
+	}
+
 	auto fontId = font_regular;
 	if (auto lockedScreen = mouseOverWidget->screenPointer.lock()) {
 		fontId = lockedScreen->TipFontID;
@@ -167,6 +183,7 @@ static void handleTipInactive()
 	if (wzGetTicks() - startTime > TIP_PAUSE)
 	{
 		tipState = TIP_ACTIVE;
+		lastRefreshTime = nonstd::nullopt;
 		refreshTip(mouseOverWidget);
 	}
 }
@@ -180,6 +197,11 @@ static void handleTipActive()
 	}
 
 	refreshTip(getMouseOverWidget().lock());
+
+	if (tipText.empty())
+	{
+		return;
+	}
 
 	/* Draw the tool tip */
 	iV_ShadowBox(tipRect.x(), tipRect.y(), tipRect.right(), tipRect.bottom(), 1, WZCOL_FORM_LIGHT, WZCOL_FORM_DARK, WZCOL_FORM_TIP_BACKGROUND);
