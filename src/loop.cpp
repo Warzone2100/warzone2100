@@ -84,6 +84,7 @@
 #include "notifications.h"
 #include "scores.h"
 #include "clparse.h"
+#include "statistics.h"
 
 #include "warzoneconfig.h"
 
@@ -610,6 +611,8 @@ static void gameStateUpdate()
 
 	// Must be at the end of gameStateUpdate, since countUpdate is also called randomly (unsynchronised) between gameStateUpdate calls, but should have no effect if we already called it, and recvMessage requires consistent counts on all clients.
 	countUpdate(true);
+
+	StatisticsHistoryUpdate();
 }
 
 /* The main game loop */

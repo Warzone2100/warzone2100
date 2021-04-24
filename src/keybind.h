@@ -293,4 +293,6 @@ void kf_PerformanceSample();
 void kf_QuickSave();
 void kf_QuickLoad();
 
+void kf_OpenStatisticsWindow();
+
 #endif // __INCLUDED_SRC_KEYBIND_H__
