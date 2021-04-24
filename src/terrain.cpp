@@ -1471,3 +1471,25 @@ void drawWater(const glm::mat4 &ModelView, const glm::mat4 &Projection, const Ve
 		waterOffset += graphicsTimeAdjustedIncrement(0.1f);
 	}
 }
+
+void reloadTerrainTextures()
+{
+	auto reloadTex = [&](const std::string &tex) {
+		if (!tex.empty()) {
+			WzString wzTex = WzString::fromUtf8(tex);
+			replaceTexture(wzTex, wzTex);
+		}
+	};
+	reloadTex("page-80-water-1.png");
+	reloadTex("page-81-water-2.png");
+	reloadTex(waterTexture1_nm);
+	reloadTex(waterTexture2_nm);
+	reloadTex(waterTexture1_sm);
+	reloadTex(waterTexture2_sm);
+	for (int g=0; g < getNumGroundTypes(); g++) {
+		auto ground = getGroundType(g);
+		reloadTex(ground.textureName);
+		reloadTex(ground.normalMapTextureName);
+		reloadTex(ground.specularMapTextureName);
+	}
+}

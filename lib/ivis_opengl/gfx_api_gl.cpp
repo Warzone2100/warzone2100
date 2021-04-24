@@ -615,6 +615,13 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 	}
 }
 
+gl_pipeline_state_object::~gl_pipeline_state_object()
+{
+	if (this->vertexShader) glDeleteShader(this->vertexShader);
+	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
+	glDeleteProgram(this->program);
+}
+
 void gl_pipeline_state_object::set_constants(const void* buffer, const size_t& size)
 {
 	uniform_bind_functions[0](buffer, size);
@@ -919,6 +926,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		if ((vertexShaderContents = readShaderBuf(vertexPath)))
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+			vertexShader = shader;
 
 			const char* ShaderStrings[2] = { vertex_header, vertexShaderContents };
 
@@ -955,6 +963,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		if ((fragmentShaderContents = readShaderBuf(fragmentPath)))
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+			fragmentShader = shader;
 
 			std::string fragmentShaderStr = fragmentShaderContents;
 			free(fragmentShaderContents);

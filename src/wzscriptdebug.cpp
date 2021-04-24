@@ -37,6 +37,7 @@
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #if defined(_wz_restore_libintl_vsprintf)
 #  undef _wz_restore_libintl_vsprintf
@@ -73,6 +74,7 @@
 #include "transporter.h"
 #include "template.h"
 #include "multiint.h"
+#include "lighting.h"
 
 #include "wzapi.h"
 #include "qtscript.h"
@@ -777,6 +779,66 @@ public:
 	std::shared_ptr<DropdownWidget> aiPlayerDropdown;
 	std::shared_ptr<W_BUTTON> aiAttachButton;
 	std::shared_ptr<JSONTableWidget> table;
+};
+
+class WzGraphicsPanel : public W_FORM
+{
+public:
+	WzGraphicsPanel(): W_FORM() {}
+	~WzGraphicsPanel() {}
+public:
+	virtual void display(int xOffset, int yOffset) override { }
+	virtual void geometryChanged() override {}
+public:
+	static std::shared_ptr<WzGraphicsPanel> make()
+	{
+		auto panel = std::make_shared<WzGraphicsPanel>();
+
+		panel->createButton(0, "Reload terrain and water textures", [](){
+			reloadTerrainTextures();
+			debug(LOG_INFO, "Done");
+		});
+
+		auto prevButton = panel->createButton(1, "Recompile terrain", [](){
+			debug(LOG_INFO, "Recompiling terrain");
+			gfx_api::TerrainLayer::get().recompile();
+			debug(LOG_INFO, "Done");
+		});
+		prevButton =panel->createButton(1, "Recompile decals", [](){
+			debug(LOG_INFO, "Recompiling decals");
+			gfx_api::TerrainDecals::get().recompile();
+			debug(LOG_INFO, "Done");
+		}, prevButton);
+		prevButton = panel->createButton(1, "Recompile water", [](){
+			debug(LOG_INFO, "Recompiling water");
+			gfx_api::WaterPSO::get().recompile();
+			debug(LOG_INFO, "Done");
+		}, prevButton);
+
+		prevButton = panel->createButton(2, "Rotate sun", [](){
+			auto newSun = glm::rotate(getTheSun(), glm::pi<float>()/10.f, glm::vec3(0,1,0));
+			setTheSun(newSun);
+			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
+		});
+		return panel;
+	}
+private:
+	std::shared_ptr<W_BUTTON> createButton(int row, const std::string &text, const std::function<void ()>& onClickFunc, const std::shared_ptr<W_BUTTON>& previousButton = nullptr)
+	{
+		auto button = makeDebugButton(text.c_str());
+		button->setGeometry(button->x(), button->y(), button->width() + 10, button->height());
+		attach(button);
+		button->addOnClickHandler([onClickFunc](W_BUTTON& button) {
+			widgScheduleTask([onClickFunc](){
+				onClickFunc();
+			});
+		});
+
+		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
+		button->move((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, (row * (button->height() + ACTION_BUTTON_ROW_SPACING)));
+
+		return button;
+	}
 };
 
 // MARK: - WzScriptContextsPanel
@@ -1780,6 +1842,9 @@ void WZScriptDebugger::switchPanel(WZScriptDebugger::ScriptDebuggerPanel newPane
 		case ScriptDebuggerPanel::Labels:
 			psPanel = createLabelsPanel();
 			break;
+		case ScriptDebuggerPanel::Graphics:
+			psPanel = createGraphicsPanel();
+			break;
 		default:
 			debug(LOG_ERROR, "Panel not implemented yet");
 			break;
@@ -1840,6 +1905,11 @@ void WZScriptDebugger::display(int xOffset, int yOffset)
 std::shared_ptr<W_FORM> WZScriptDebugger::createMainPanel()
 {
 	return WzMainPanel::make();
+}
+
+std::shared_ptr<W_FORM> WZScriptDebugger::createGraphicsPanel()
+{
+	return WzGraphicsPanel::make();
 }
 
 std::shared_ptr<WIDGET> WZScriptDebugger::createSelectedPanel()
@@ -2020,6 +2090,7 @@ std::shared_ptr<WZScriptDebugger> WZScriptDebugger::make(const std::shared_ptr<s
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Triggers, "Triggers");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Messages, "Messages");
 	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Labels, "Labels");
+	addTextTabButton(result->pageTabs, ScriptDebuggerPanel::Graphics, "Graphics");
 	result->pageTabs->addOnChooseHandler([](MultibuttonWidget& widget, int newValue){
 		// Switch actively-displayed "tab"
 		widgScheduleTask([newValue](){
