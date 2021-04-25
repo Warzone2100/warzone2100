@@ -63,6 +63,8 @@ public:
 //private:
 	PIELIGHT backgroundColour;
 	WzText	 wzCachedText;
+
+	bool sizesDirty = false;
 };
 
 /* The trough bar graph display function */

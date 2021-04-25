@@ -374,13 +374,13 @@ protected:
 		auto filledWidth = MIN(majorSize * barWidth / 100, barWidth);
 		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, filledWidth, defaultProjectionMatrix(), true);
 
+		valueText.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
+		valueText.render(x0, iY, WZCOL_TEXT_BRIGHT);
+
 		if (minorValue == 0)
 		{
 			return;
 		}
-
-		valueText.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
-		valueText.render(x0, iY, WZCOL_TEXT_BRIGHT);
 
 		//draw the comparison value - only if not zero
 		updateAnimation();
@@ -3631,14 +3631,14 @@ void intRunDesign()
 		case IDES_TURRET:
 		case IDES_TURRET_A:
 		case IDES_TURRET_B:
-			intSetSystemShadowStats(psStats);
 			intSetBodyShadowStats(nullptr);
 			intSetPropulsionShadowStats(nullptr);
+			intSetSystemShadowStats(psStats);
 			break;
 		case IDES_BODY:
 			intSetSystemShadowStats(nullptr);
-			intSetBodyShadowStats((BODY_STATS *)psStats);
 			intSetPropulsionShadowStats(nullptr);
+			intSetBodyShadowStats((BODY_STATS *)psStats);
 			break;
 		case IDES_PROPULSION:
 			intSetSystemShadowStats(nullptr);
