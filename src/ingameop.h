@@ -64,16 +64,21 @@ extern bool isKeyMapEditorUp;
 #define INTINGAMEOPAUTO_Y(nlines)	((240-(INTINGAMEOPAUTO_H(nlines)/2))+D_H)
 #define INTINGAMEOPAUTO_Y_LINE(line)	(((line)-1)*INTINGAMEOPLINE_H+INTINGAMEOPMARGIN_H)
 
-// quit confirmation.
+// Host quit confirmation.
 #define INTINGAMEOP3_W			150
 #define INTINGAMEOP3_H			65
 #define INTINGAMEOP3_X			((320-(INTINGAMEOP3_W/2))+D_W)
 #define INTINGAMEOP3_Y			((240-(INTINGAMEOP3_H/2))+D_H)
 
+//Singleplayer quit confirmation
+#define INTINGAMEOP4_W			400
+#define INTINGAMEOP4_X			((320-(INTINGAMEOP4_W/2))+D_W)
+
 #define PAUSEMESSAGE_YOFFSET (0)
 
 // button sizes.
 #define	INTINGAMEOP_OP_W		(INTINGAMEOP_W-10)
+#define	INTINGAMEOP4_OP_W		(INTINGAMEOP4_W-15)
 #define	INTINGAMEOP_SW_W		(INTINGAMEOP2_W - 15)
 #define	INTINGAMEOP_OP_H		15
 
@@ -82,6 +87,7 @@ enum
 	INTINGAMEOP = 10500,
 	INTINGAMEPOPUP,
 	INTINGAMEOP_HOSTQUIT,
+	INTINGAMEOP_CONFIRM_QUIT,
 	INTINGAMEOP_QUIT,               ///< The all important quit button
 	INTINGAMEOP_RESUME,
 	INTINGAMEOP_GO_BACK,

@@ -57,6 +57,7 @@ bool 	isInGamePopupUp = false;
 static bool 	isGraphicsOptionsUp = false;
 static bool 	isVideoOptionsUp = false;
 static bool 	isMouseOptionsUp = false;
+static bool		isInGameConfirmQuitUp = false;
 bool	isKeyMapEditorUp = false;
 bool	isMusicManagerUp = false;
 // ////////////////////////////////////////////////////////////////////////////
@@ -268,7 +269,7 @@ static bool _intAddInGameOptions()
 	}
 	else
 	{
-		addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
+		addIGTextButton(INTINGAMEOP_CONFIRM_QUIT, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Quit"), OPALIGN);
 	}
 
 	intMode		= INT_INGAMEOP;			// change interface mode.
@@ -284,6 +285,64 @@ bool intAddInGameOptions()
 {
 	sliderEnableDrag(true);
 	return _intAddInGameOptions();
+}
+
+static bool startInGameConfirmQuit()
+{
+	widgDelete(psWScreen, INTINGAMEOP); // get rid of the old stuff.
+	auto const& parent = psWScreen->psForm;
+
+	// add form
+	auto ingameOp = std::make_shared<IntFormAnimated>();
+	parent->attach(ingameOp);
+	ingameOp->id = INTINGAMEOP;
+
+	int row = 1;
+
+	auto label = std::make_shared<W_LABEL>();
+	ingameOp->attach(label);
+	label->setGeometry(INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, 0);
+	if (!(bMultiPlayer && NetPlay.bComms))
+	{
+		label->setString(_("Warning: Are you sure? Any unsaved progress will be lost."));
+	}
+	else
+	{
+		label->setString(_("Warning: Are you sure?")); //Do not mention saving in real multiplayer matches
+	}
+	label->setTextAlignment(WLAB_ALIGNCENTRE);
+	label->setFont(font_medium, WZCOL_YELLOW);
+
+	row++;
+
+	// add quit confirmation text
+	addIGTextButton(INTINGAMEOP_QUIT, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, _("Confirm"), OPALIGN);
+	row++;
+	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, _("Back"), OPALIGN);
+
+	ingameOp->setCalcLayout([row](WIDGET* psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
+		psWidget->setGeometry(INTINGAMEOP4_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP4_W, INTINGAMEOPAUTO_H(row));
+	});
+
+	return true;
+}
+
+static bool runInGameConfirmQuit(UDWORD id)
+{
+	switch (id)
+	{
+		case INTINGAMEOP_QUIT:
+			return true;
+
+		case INTINGAMEOP_GO_BACK:
+			intReopenMenuWithoutUnPausing();
+			break;
+
+		default:
+			break;
+	}
+
+	return false;
 }
 
 //
@@ -391,6 +450,8 @@ bool intCloseInGameOptions(bool bPutUpLoadSave, bool bResetMissionWidgets)
 	isGraphicsOptionsUp = false;
 	isVideoOptionsUp = false;
 	isMouseOptionsUp = false;
+	isInGameConfirmQuitUp = false;
+
 	if (isKeyMapEditorUp)
 	{
 		runInGameKeyMapEditor(KM_RETURN);
@@ -467,6 +528,7 @@ void intReopenMenuWithoutUnPausing()
 	isMouseOptionsUp = false;
 	isKeyMapEditorUp = false;
 	isMusicManagerUp = false;
+	isInGameConfirmQuitUp = false;
 
 	if (NetPlay.isHost)
 	{
@@ -485,6 +547,7 @@ static bool startIGOptionsMenu()
 	isMouseOptionsUp = false;
 	isKeyMapEditorUp = false;
 	isMusicManagerUp = false;
+	isInGameConfirmQuitUp = false;
 
 	// add form
 	auto ingameOp = std::make_shared<IntFormAnimated>();
@@ -890,12 +953,25 @@ void intProcessInGameOptions(UDWORD id)
 		}
 		return;
 	}
+	else if (isInGameConfirmQuitUp)
+	{
+		if (runInGameConfirmQuit(id))
+		{
+			intCloseInGameOptions(true, true);
+		}
+		return;
+	}
 
 	switch (id)
 	{
 	// NORMAL KEYS
 	case INTINGAMEOP_HOSTQUIT:				//quit was pressed
 		addHostQuitOptions();
+		break;
+
+	case INTINGAMEOP_CONFIRM_QUIT:
+		startInGameConfirmQuit();
+		isInGameConfirmQuitUp = true;
 		break;
 
 	case INTINGAMEOP_POPUP_QUIT:
