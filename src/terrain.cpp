@@ -99,6 +99,8 @@ struct DecalVertex
 	glm::vec4 tangent = glm::vec4(1.f, 0.f, 0.f, 1.f);
 };
 
+using WaterVertex = glm::vec4; // w is depth
+
 /// The lightmap texture
 static gfx_api::texture* lightmap_tex_num = nullptr;
 /// When are we going to update the lightmap next?
@@ -402,41 +404,30 @@ static inline void averageColour(PIELIGHT *average, PIELIGHT a, PIELIGHT b,
 /**
  * Set the terrain and water geometry for the specified sector
  */
-static void setSectorGeometry(int x, int y,
-                              RenderVertex *geometry, RenderVertex *normals, RenderVertex *water,
+static void setSectorGeometry(int sx, int sy,
+                              RenderVertex *geometry, RenderVertex *normals, WaterVertex *water,
                               int *geometrySize, int *waterSize)
 {
-	Vector3i pos;
-	int i, j;
-	for (i = 0; i < sectorSize + 1; i++)
+	for (int x = sx*sectorSize; x < (sx+1)*sectorSize + 1; x++)
 	{
-		for (j = 0; j < sectorSize + 1; j++)
+		for (int y = sy * sectorSize; y < (sy+1) * sectorSize + 1; y++)
 		{
 			// set up geometry
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, false, false);
-			geometry[*geometrySize].x = pos.x;
-			geometry[*geometrySize].y = pos.y;
-			geometry[*geometrySize].z = pos.z;
-			normals[*geometrySize] = getGridNormal(i + x * sectorSize, j + y * sectorSize, false);
+			auto pos = getGridPosf(x, y, false, false);
+			geometry[*geometrySize] = pos;
+			normals[*geometrySize] = getGridNormal(x, y, false);
 			(*geometrySize)++;
 
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, true, false);
-			geometry[*geometrySize].x = pos.x;
-			geometry[*geometrySize].y = pos.y;
-			geometry[*geometrySize].z = pos.z;
-			normals[*geometrySize] = getGridNormal(i + x * sectorSize, j + y * sectorSize, true);
-			(*geometrySize)++;
-
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, false, true);
-			water[*waterSize].x = pos.x;
-			water[*waterSize].y = pos.y;
-			water[*waterSize].z = pos.z;
+			float waterHeight = map_WaterHeight(x, y);
+			water[*waterSize] = glm::vec4(pos.x, waterHeight, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 
-			getGridPos(&pos, i + x * sectorSize, j + y * sectorSize, true, true);
-			water[*waterSize].x = pos.x;
-			water[*waterSize].y = pos.y;
-			water[*waterSize].z = pos.z;
+			pos = getGridPosf(x, y, true, false);
+			geometry[*geometrySize] = pos;
+			normals[*geometrySize] = getGridNormal(x, y, true);
+			(*geometrySize)++;
+
+			water[*waterSize] = glm::vec4(pos.x, waterHeight, pos.z, waterHeight - pos.y);
 			(*waterSize)++;
 		}
 	}
@@ -567,7 +558,7 @@ static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize
 static void updateSectorGeometry(int x, int y)
 {
 	RenderVertex *geometry, *normals;
-	RenderVertex *water;
+	WaterVertex *water;
 	DecalVertex *decaldata;
 	int geometrySize = 0;
 	int waterSize = 0;
@@ -575,7 +566,7 @@ static void updateSectorGeometry(int x, int y)
 
 	geometry  = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].geometrySize);
 	normals   = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].geometrySize);
-	water     = (RenderVertex *)malloc(sizeof(RenderVertex) * sectors[x * ySectors + y].waterSize);
+	water     = (WaterVertex *)malloc(sizeof(WaterVertex) * sectors[x * ySectors + y].waterSize);
 
 	setSectorGeometry(x, y, geometry, normals, water, &geometrySize, &waterSize);
 	ASSERT(geometrySize == sectors[x * ySectors + y].geometrySize, "something went seriously wrong updating the terrain");
@@ -584,8 +575,8 @@ static void updateSectorGeometry(int x, int y)
 	geometryVBO->update(sizeof(RenderVertex)*sectors[x * ySectors + y].geometryOffset,
 	                    sizeof(RenderVertex)*sectors[x * ySectors + y].geometrySize, geometry,
 						gfx_api::buffer::update_flag::non_overlapping_updates_promise);
-	waterVBO->update(sizeof(RenderVertex)*sectors[x * ySectors + y].waterOffset,
-	                 sizeof(RenderVertex)*sectors[x * ySectors + y].waterSize, water,
+	waterVBO->update(sizeof(WaterVertex)*sectors[x * ySectors + y].waterOffset,
+	                 sizeof(WaterVertex)*sectors[x * ySectors + y].waterSize, water,
 					 gfx_api::buffer::update_flag::non_overlapping_updates_promise);
 
 	free(geometry);
@@ -695,7 +686,7 @@ bool initTerrain()
 	int layer = 0;
 
 	RenderVertex *geometry, *normals;
-	RenderVertex *water;
+	WaterVertex *water;
 	DecalVertex *decaldata;
 	int geometrySize, geometryIndexSize;
 	int waterSize, waterIndexSize;
@@ -771,7 +762,7 @@ bool initTerrain()
 	geometrySize = 0;
 	geometryIndexSize = 0;
 
-	water = (RenderVertex *)malloc(sizeof(RenderVertex) * vertSize);
+	water = (WaterVertex *)malloc(sizeof(WaterVertex) * vertSize);
 	waterIndex = (GLuint *)malloc(sizeof(GLuint) * xSectors * ySectors * sectorSize * sectorSize * 12);
 	waterSize = 0;
 	waterIndexSize = 0;
@@ -879,7 +870,7 @@ bool initTerrain()
 	if (waterVBO)
 		delete waterVBO;
 	waterVBO = gfx_api::context::get().create_buffer_object(gfx_api::buffer::usage::vertex_buffer, gfx_api::context::buffer_storage_hint::dynamic_draw);
-	waterVBO->upload(sizeof(RenderVertex)*waterSize, water);
+	waterVBO->upload(sizeof(WaterVertex)*waterSize, water);
 	free(water);
 
 	if (waterIndexVBO)

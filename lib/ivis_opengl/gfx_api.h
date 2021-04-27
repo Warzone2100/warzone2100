@@ -780,7 +780,7 @@ namespace gfx_api
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
 	std::tuple<constant_buffer_type<SHADER_WATER>>,
 	std::tuple<
-	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>
+	vertex_buffer_description<sizeof(glm::vec4), vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
 	>, std::tuple<
 	texture_description<0, sampler_type::anisotropic_repeat>, // tex1
 	texture_description<1, sampler_type::anisotropic_repeat>, // tex2
