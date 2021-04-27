@@ -14,7 +14,7 @@ uniform vec3 sunPos; // in modelSpace, normalized
 uniform vec3 sunPosInView;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-in vec4 vertex;
+in vec4 vertex; // w is depth
 #else
 attribute vec4 vertex;
 #endif
@@ -22,6 +22,7 @@ attribute vec4 vertex;
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 out vec2 uv1;
 out vec2 uv2;
+out float depth;
 out float vertexDistance;
 // light in modelSpace:
 out vec3 lightDir;
@@ -29,6 +30,7 @@ out vec3 halfVec;
 #else
 varying vec2 uv1;
 varying vec2 uv2;
+varying float depth;
 varying float vertexDistance;
 varying vec3 lightDir;
 varying vec3 halfVec;
@@ -36,7 +38,8 @@ varying vec3 halfVec;
 
 void main()
 {
-	vec4 position = ModelViewProjectionMatrix * vertex;
+	depth = vertex.w;
+	vec4 position = ModelViewProjectionMatrix * vec4(vertex.xyz, 1);
 	gl_Position = position;
 	vertexDistance = position.z;
 

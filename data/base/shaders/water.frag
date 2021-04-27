@@ -28,6 +28,7 @@ uniform vec4 fogColor;
 #ifdef NEWGL
 in vec2 uv1;
 in vec2 uv2;
+in float depth;
 in float vertexDistance;
 // light in modelSpace:
 in vec3 lightDir;
@@ -35,6 +36,7 @@ in vec3 halfVec;
 #else
 varying vec2 uv1;
 varying vec2 uv2;
+varying float depth;
 varying float vertexDistance;
 varying vec3 lightDir;
 varying vec3 halfVec;
