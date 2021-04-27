@@ -68,13 +68,14 @@ struct MAPTILE
 	uint8_t         tileInfoBits;
 	PlayerMask      tileExploredBits;
 	PlayerMask      sensorBits;             ///< bit per player, who can see tile with sensor
-	uint8_t         illumination;           // How bright is this tile?
+	uint8_t         illumination;           // How bright is this tile? = diffuseSunLight * ambientOcclusion
+	float           ambientOcclusion;       // ambient occlusion. from 1 (max occlusion) to 254 (no occlusion), similary to illumination.
 	uint8_t         watchers[MAX_PLAYERS];  // player sees through fog of war here with this many objects
 	uint16_t        texture;                // Which graphics texture is on this tile
 	int32_t         height;                 ///< The height at the top left of the tile
-	float           level;                  ///< The visibility level of the top left of the tile, for this client.
+	float           level;                  ///< The visibility level of the top left of the tile, for this client. for terrain lightmap
 	BASE_OBJECT *   psObject;               // Any object sitting on the location (e.g. building)
-	PIELIGHT        colour;
+	PIELIGHT        colour;                 // color in terrain lightmap, based on tile.level and near light sources
 	uint16_t        limitedContinent;       ///< For land or sea limited propulsion types
 	uint16_t        hoverContinent;         ///< For hover type propulsions
 	uint8_t         ground;                 ///< The ground type used for the terrain renderer

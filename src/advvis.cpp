@@ -49,7 +49,7 @@ void	avUpdateTiles()
 	/* Go through the tiles */
 	for (psTile = psMapTiles; i < len; i++)
 	{
-		maxLevel = psTile->illumination;
+		maxLevel = psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
 
 		if (psTile->level > MIN_ILLUM || psTile->tileExploredBits & playermask)	// seen
 		{
@@ -107,11 +107,11 @@ void	preProcessVisibility()
 		for (int j = 0; j < mapHeight; j++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
-			psTile->level = bRevealActive ? MIN(MIN_ILLUM, psTile->illumination / 4.0f) : 0;
+			psTile->level = bRevealActive ? MIN(MIN_ILLUM, psTile->ambientOcclusion / 4.0f) : 0;
 
 			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
-				psTile->level = psTile->illumination;
+				psTile->level = psTile->ambientOcclusion;
 			}
 		}
 	}
