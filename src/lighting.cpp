@@ -98,6 +98,7 @@ void initLighting(UDWORD x1, UDWORD y1, UDWORD x2, UDWORD y2)
 			if (i == 0 || j == 0 || i >= mapWidth - 1 || j >= mapHeight - 1)
 			{
 				psTile->illumination = 16;
+				psTile->ambientOcclusion = 16.0;
 			}
 			else
 			{
@@ -207,9 +208,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 		finalVector += normals[i];
 	}
 
-	//float dotProduct = glm::dot(normalise(finalVector), theSun_ForTileIllumination)/16;
-	// we do this diffuse lighting in the shader now, so set dotProduct = max light = |theSun_ForTileIllumination/16| = 256
-	float dotProduct = glm::length(theSun_ForTileIllumination)/16;
+	float dotProduct = glm::dot(normalise(finalVector), theSun_ForTileIllumination)/16;
 
 	// Primitive ambient occlusion calculation.
 	float ao = 0;
@@ -233,7 +232,9 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	}
 	ao *= 1.f/Dirs;
 
-	mapTile(tileX, tileY)->illumination = static_cast<uint8_t>(clip<int>(static_cast<int>(abs(dotProduct*ao)), 1, 254));
+	MAPTILE *tile = mapTile(tileX, tileY);
+	tile->illumination = static_cast<uint8_t>(clip<int>(static_cast<int>(abs(dotProduct*ao)), 1, 254));
+	tile->ambientOcclusion = clip<float>(254.f*ao, 1.f, 254.f);
 }
 
 static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)
