@@ -161,7 +161,7 @@ bool texLoad(const char *fileName)
 	free(buffer);
 
 	/* Now load the actual tiles */
-
+	terrainNormalPage = terrainSpecularPage = terrainHeightPage = 0;
 	i = mipmap_max; // i is used to keep track of the tile dimensions
 	for (j = 0; j < mipmap_levels; j++)
 	{
