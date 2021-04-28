@@ -1,12 +1,11 @@
 // Version directive is set by Warzone when loading the shader
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
-uniform mat4 ModelViewMatrix;
-uniform mat4 ModelViewNormalMatrix;
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVLightmapMatrix;
 
-uniform vec4 sunPosition; // in View space
+uniform vec3 cameraPos; // in modelSpace
+uniform vec3 sunPos; // in modelSpace, normalized
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -46,15 +45,12 @@ void main()
 	uv_lightmap = (ModelUVLightmapMatrix * vertex).xy;
 
 	// constructing ModelSpace -> TangentSpace mat3
-	mat3 normalMat = mat3(ModelViewNormalMatrix);
-	vec3 normal = normalize(normalMat * vertexNormal);
-	vec3 tangent = normalize(normalMat * vertexTangent.xyz);
-	vec3 bitangent = cross(normal, tangent) * vertexTangent.w;
-	mat3 ViewTangentMatrix = mat3(tangent, bitangent, normal);
+	vec3 bitangent = cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
+	mat3 ModelTangentMatrix = mat3(vertexTangent.xyz, bitangent, vertexNormal);
 	// transform light from ModelSpace to TangentSpace:
-	vec3 eyeVec = normalize(-(ModelViewMatrix * vertex).xyz * ViewTangentMatrix);
-	lightDir = normalize(-sunPosition.xyz * ViewTangentMatrix);
-	halfVec = normalize(lightDir + eyeVec);
+	vec3 eyeVec = normalize((cameraPos - vertex.xyz) * ModelTangentMatrix);
+	lightDir = sunPos * ModelTangentMatrix;
+	halfVec = lightDir + eyeVec;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;
 	gl_Position = position;

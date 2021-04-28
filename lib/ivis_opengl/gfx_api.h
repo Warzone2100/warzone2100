@@ -685,12 +685,11 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_TERRAIN>
 	{
+		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVMatrix;
 		glm::mat4 ModelUVLightMatrix;
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 ModelViewNormalMatrix; // ModelViewMatrix for normals
-		glm::vec4 sunPosition;
+		glm::vec3 cameraPos; // in modelSpace
+		glm::vec3 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
@@ -699,8 +698,6 @@ namespace gfx_api
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		int texture0;
-		int texture1;
 		int hasNormalmap;
 		int hasSpecularmap;
 	};
@@ -721,11 +718,10 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_DECALS>
 	{
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewNormalMatrix; // ModelViewMatrix for normals
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
-		glm::vec4 sunPosition;
+		glm::vec3 cameraPos; // in modelSpace
+		glm::vec3 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
@@ -734,8 +730,6 @@ namespace gfx_api
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		int texture0;
-		int texture1;
 	};
 
 	using TerrainDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
@@ -759,14 +753,11 @@ namespace gfx_api
 	struct constant_buffer_type<SHADER_WATER>
 	{
 		glm::mat4 ModelViewProjectionMatrix;
-		glm::mat4 ModelViewMatrix;
-		glm::mat4 ModelViewNormalMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
 		float time; // in seconds
 		glm::vec3 cameraPos; // in modelSpace
 		glm::vec3 sunPos; // in modelSpace
-		glm::vec3 sunPosInView; // in viewSpace
 		glm::vec4 emissiveLight; // light colors/intensity
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;

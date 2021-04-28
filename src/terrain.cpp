@@ -1229,7 +1229,7 @@ static void drawDepthOnly(const glm::mat4 &ModelViewProjection, const glm::vec4 
 	gfx_api::context::get().unbind_index_buffer(*geometryIndexVBO);
 }
 
-static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &ModelViewNormal, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::mat4 &ModelUVLightmap)
+static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
@@ -1267,10 +1267,10 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 		gfx_api::texture* pSpecularMapTexture = texPage_specularmap.has_value() ? &pie_Texture(texPage_specularmap.value()) : nullptr;
 
 		gfx_api::TerrainLayer::get().bind_constants({
-			ModelUV, ModelUVLightmap, ModelView, ModelViewProjection, ModelViewNormal,
-			glm::vec4(currentSunPos, 0.f),
+			ModelViewProjection, ModelUV, ModelUVLightmap,
+			cameraPos, glm::normalize(sunPos),
 			pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
+			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
 
 		// load the textures
 		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_tex_num, pNormalMapTexture, pSpecularMapTexture);
@@ -1298,7 +1298,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelView, const glm::mat4 &Model
 	gfx_api::context::get().unbind_index_buffer(*textureIndexVBO);
 }
 
-static void drawDecals(const glm::mat4 &ModelView, const glm::mat4 &ModelViewNormal, const glm::mat4 &ModelViewProjection, const Vector3f &currentSunPos, const glm::mat4 &ModelUVLightmap)
+static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::mat4 &ModelUVLightmap, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	const auto &renderState = getCurrentRenderState();
 	const glm::vec4 fogColor(
@@ -1312,10 +1312,10 @@ static void drawDecals(const glm::mat4 &ModelView, const glm::mat4 &ModelViewNor
 		&pie_Texture(terrainNormalPage), &pie_Texture(terrainSpecularPage), &pie_Texture(terrainHeightPage));
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
 	gfx_api::TerrainDecals::get().bind_constants({
-		ModelView, ModelViewNormal, ModelViewProjection, ModelUVLightmap,
-		glm::vec4(currentSunPos, 0.f),
+		ModelViewProjection, ModelUVLightmap,
+		cameraPos, glm::normalize(sunPos),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, 0, 1 });
+		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd });
 
 	int size = 0;
 	int offset = 0;
@@ -1351,9 +1351,8 @@ static void drawDecals(const glm::mat4 &ModelView, const glm::mat4 &ModelViewNor
  * This function first draws the terrain in black, and then uses additive blending to put the terrain layers
  * on it one by one. Finally the decals are drawn.
  */
-void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Protection, const Vector3f &currentSunPos)
+void drawTerrain(const glm::mat4 &mvp, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
-	const glm::mat4 mvp = Protection * ModelView;
 	const glm::vec4 paramsXLight(1.0f / world_coord(mapWidth) *((float)mapWidth / (float)lightmapWidth), 0, 0, 0);
 	const glm::vec4 paramsYLight(0, 0, -1.0f / world_coord(mapHeight) *((float)mapHeight / (float)lightmapHeight), 0);
 
@@ -1375,8 +1374,6 @@ void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Protection, const 
 
 	// shift the lightmap half a tile as lights are supposed to be placed at the center of a tile
 	const glm::mat4 lightMatrix = glm::translate(glm::vec3(1.f / (float)lightmapWidth / 2, 1.f / (float)lightmapHeight / 2, 0.f));
-
-	const auto ModelViewNormal = glm::transpose(glm::inverse(ModelView));
 	const auto ModelUVLightmap = lightMatrix * glm::transpose(glm::mat4(paramsXLight, paramsYLight, glm::vec4(0,0,1,0), glm::vec4(0,0,0,1)));
 
 	//////////////////////////////////////
@@ -1385,25 +1382,23 @@ void drawTerrain(const glm::mat4 &ModelView, const glm::mat4 &Protection, const 
 
 	///////////////////////////////////
 	// terrain
-	drawTerrainLayers(ModelView, ModelViewNormal, mvp, currentSunPos, ModelUVLightmap);
+	drawTerrainLayers(mvp, ModelUVLightmap, cameraPos, sunPos);
 
 	//////////////////////////////////
 	// decals
-	drawDecals(ModelView, ModelViewNormal, mvp, currentSunPos, ModelUVLightmap);
+	drawDecals(mvp, ModelUVLightmap, cameraPos, sunPos);
 }
 
 /**
  * Draw the water.
  * sunPos and cameraPos in Model=WorldSpace
  */
-void drawWater(const glm::mat4 &ModelView, const glm::mat4 &Projection, const Vector3f &cameraPos, const Vector3f &sunPos, const Vector3f &sunPosInView)
+void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos)
 {
 	if (!waterIndexVBO)
 	{
 		return; // no water
 	}
-	const auto ModelViewProjection = Projection * ModelView;
-	const auto ModelViewNormal = glm::transpose(glm::inverse(ModelView));
 
 	const glm::vec4 paramsX(0, 0, -1.0f / world_coord(4), 0);
 	const glm::vec4 paramsY(1.0f / world_coord(4), 0, 0, 0);
@@ -1430,9 +1425,9 @@ void drawWater(const glm::mat4 &ModelView, const glm::mat4 &Projection, const Ve
 		getOptTex(waterTexture1_sm), getOptTex(waterTexture2_sm));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({
-		ModelViewProjection, ModelView, ModelViewNormal, ModelUV1, ModelUV2,
+		ModelViewProjection, ModelUV1, ModelUV2,
 		waterOffset*10,
-		cameraPos, glm::normalize(sunPos), sunPosInView,
+		cameraPos, glm::normalize(sunPos),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd
 	});
