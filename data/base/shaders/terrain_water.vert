@@ -2,8 +2,6 @@
 // (This shader supports GLSL 1.20 - 1.50 core.)
 
 uniform mat4 ModelViewProjectionMatrix;
-uniform mat3 ModelViewMatrix;
-uniform mat3 ModelViewNormalMatrix;
 uniform mat4 ModelUV1Matrix;
 uniform mat4 ModelUV2Matrix;
 
@@ -11,7 +9,6 @@ uniform float time; // in seconds
 
 uniform vec3 cameraPos; // in modelSpace
 uniform vec3 sunPos; // in modelSpace, normalized
-uniform vec3 sunPosInView;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex; // w is depth

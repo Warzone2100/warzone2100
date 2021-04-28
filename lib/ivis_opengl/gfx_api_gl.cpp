@@ -326,18 +326,20 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
 		} }),
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
-		{ "ModelUVMatrix", "ModelUVLightMatrix", "ModelViewMatrix", "ModelViewProjectionMatrix", "ModelViewNormalMatrix",
-			"sunPosition", "emissiveLight", "ambientLight", "diffuseLight", "specularLight", "tex", "lightmap_tex",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "hasNormalmap", "hasSpecularmap" } }),
+		{ "ModelViewProjectionMatrix", "ModelUVMatrix", "ModelUVLightMatrix",
+			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "hasNormalmap", "hasSpecularmap",
+			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular"} }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
-		{ "ModelViewMatrix", "ModelViewNormalMatrix", "ModelViewProjectionMatrix", "ModelUVLightmapMatrix",
-			"sunPosition", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
+		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix",
+			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart",
+			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular", "TextureHeight" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
-		{ "ModelViewProjectionMatrix", "ModelViewMatrix", "ModelViewNormalMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
-			"time", "cameraPos", "sunPos", "sunPosInView",
+		{ "ModelViewProjectionMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+			"time", "cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
 			"fogColor", "fogEnabled", "fogEnd", "fogStart",
 			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm" } }),
@@ -1233,24 +1235,26 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstan
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)
 {
-	setUniforms(0, cbuf.ModelUVMatrix);
-	setUniforms(1, cbuf.ModelUVLightMatrix);
-	setUniforms(2, cbuf.ModelViewMatrix);
-	setUniforms(3, cbuf.ModelViewProjectionMatrix);
-	setUniforms(4, cbuf.ModelViewNormalMatrix);
-	setUniforms(5, cbuf.sunPosition);
-	setUniforms(6, cbuf.emissiveLight);
-	setUniforms(7, cbuf.ambientLight);
-	setUniforms(8, cbuf.diffuseLight);
-	setUniforms(9, cbuf.specularLight);
-	setUniforms(10, cbuf.texture0);
-	setUniforms(11, cbuf.texture1);
-	setUniforms(12, cbuf.fog_colour);
-	setUniforms(13, cbuf.fog_enabled);
-	setUniforms(14, cbuf.fog_begin);
-	setUniforms(15, cbuf.fog_end);
-	setUniforms(16, cbuf.hasNormalmap);
-	setUniforms(17, cbuf.hasSpecularmap);
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelUVMatrix);
+	setUniforms(i++, cbuf.ModelUVLightMatrix);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.emissiveLight);
+	setUniforms(i++, cbuf.ambientLight);
+	setUniforms(i++, cbuf.diffuseLight);
+	setUniforms(i++, cbuf.specularLight);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.hasNormalmap);
+	setUniforms(i++, cbuf.hasSpecularmap);
+	setUniforms(i++, 0); // tex
+	setUniforms(i++, 1); // lightmap_tex
+	setUniforms(i++, 2); // TextureNormal
+	setUniforms(i++, 3); // TextureSpecular
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
@@ -1268,35 +1272,11 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf)
 {
-	setUniforms(0, cbuf.ModelViewMatrix);
-	setUniforms(1, cbuf.ModelViewNormalMatrix);
-	setUniforms(2, cbuf.ModelViewProjectionMatrix);
-	setUniforms(3, cbuf.ModelUVLightmapMatrix);
-	setUniforms(4, cbuf.sunPosition);
-	setUniforms(5, cbuf.emissiveLight);
-	setUniforms(6, cbuf.ambientLight);
-	setUniforms(7, cbuf.diffuseLight);
-	setUniforms(8, cbuf.specularLight);
-	setUniforms(9, cbuf.fog_colour);
-	setUniforms(10, cbuf.fog_enabled);
-	setUniforms(11, cbuf.fog_begin);
-	setUniforms(12, cbuf.fog_end);
-	setUniforms(13, cbuf.texture0);
-	setUniforms(14, cbuf.texture1);
-}
-
-void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
-{
 	int i = 0;
 	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
-	setUniforms(i++, cbuf.ModelViewMatrix);
-	setUniforms(i++, cbuf.ModelViewNormalMatrix);
-	setUniforms(i++, cbuf.ModelUV1Matrix);
-	setUniforms(i++, cbuf.ModelUV2Matrix);
-	setUniforms(i++, cbuf.time);
+	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
 	setUniforms(i++, cbuf.cameraPos);
 	setUniforms(i++, cbuf.sunPos);
-	setUniforms(i++, cbuf.sunPosInView);
 	setUniforms(i++, cbuf.emissiveLight);
 	setUniforms(i++, cbuf.ambientLight);
 	setUniforms(i++, cbuf.diffuseLight);
@@ -1305,6 +1285,31 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, 0); // tex
+	setUniforms(i++, 1); // lightmap_tex
+	setUniforms(i++, 2); // TextureNormal
+	setUniforms(i++, 3); // TextureSpecular
+	setUniforms(i++, 4); // TextureHeight
+}
+
+void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
+{
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelUV1Matrix);
+	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.time);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.emissiveLight);
+	setUniforms(i++, cbuf.ambientLight);
+	setUniforms(i++, cbuf.diffuseLight);
+	setUniforms(i++, cbuf.specularLight);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	 // textures:
 	setUniforms(i++, 0);
 	setUniforms(i++, 1);
 	setUniforms(i++, 2);
