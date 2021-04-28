@@ -163,7 +163,7 @@ bool texLoad(const char *fileName)
 	/* Now load the actual tiles */
 	terrainNormalPage = terrainSpecularPage = terrainHeightPage = 0;
 	i = mipmap_max; // i is used to keep track of the tile dimensions
-	for (j = 0; j < mipmap_levels; j++)
+	for (j = 0; j < 1; j++)
 	{
 		int xOffset = 0, yOffset = 0; // offsets into the texture atlas
 		int xSize = 1;
@@ -219,7 +219,7 @@ bool texLoad(const char *fileName)
 				break;
 			}
 			// Insert into texture page
-			pie_Texture(texPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
+			pie_Texture(texPage).upload_and_generate_mipmaps(xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
 			free(tile.bmp);
 			if (i == mipmap_max) // dealing with main texture page; so register coordinates
 			{
@@ -246,7 +246,7 @@ bool texLoad(const char *fileName)
 				for (int b=0; b<filesize; b+=4) tile.bmp[b+2] = 0xff; // blue=z
 			}
 			// Insert into normal texture page
-			pie_Texture(terrainNormalPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
+			pie_Texture(terrainNormalPage).upload_and_generate_mipmaps(xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
 			free(tile.bmp);
 
 			// loading specularmap
@@ -262,7 +262,7 @@ bool texLoad(const char *fileName)
 				tile.bmp = (unsigned char*)calloc(i*i, 4);
 			}
 			// Insert into specular texture page
-			pie_Texture(terrainSpecularPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
+			pie_Texture(terrainSpecularPage).upload_and_generate_mipmaps(xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
 			free(tile.bmp);
 
 			// loading heightmap
@@ -278,7 +278,7 @@ bool texLoad(const char *fileName)
 				tile.bmp = (unsigned char*)calloc(i*i, 4);
 			}
 			// Insert into height texture page
-			pie_Texture(terrainHeightPage).upload(j, xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
+			pie_Texture(terrainHeightPage).upload_and_generate_mipmaps(xOffset, yOffset, tile.width, tile.height, gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8, tile.bmp);
 			free(tile.bmp);
 
 			xOffset += i; // i is width of tile
