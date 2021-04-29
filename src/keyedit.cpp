@@ -191,7 +191,8 @@ public:
 public:
 	virtual void clicked(W_CONTEXT* psContext, WIDGET_KEY key) override
 	{
-		ASSERT_OR_RETURN(, !parentForm.expired(), "Cannot handle KeyMapButton::clicked: parent form was nullptr!");
+		const auto psParentForm = parentForm.lock();
+		ASSERT_OR_RETURN(, psParentForm != nullptr, "Cannot handle KeyMapButton::clicked: parent form was nullptr!");
 
 		const int slotIndex = static_cast<size_t>(slot);
 		const KEY_MAPPING* clickedMapping = targetFunctionData->mappings[slotIndex];
@@ -205,7 +206,6 @@ public:
 			return;
 		}
 
-		const auto psParentForm = parentForm.lock();
 		if (keyMapSelection.isSelected(targetFunctionData->function, slot))
 		{
 			psParentForm->unhighlightSelected();
