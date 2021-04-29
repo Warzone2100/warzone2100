@@ -314,15 +314,12 @@ static unsigned int getMaxKeyMapNameWidth()
 	static unsigned int max = 0;
 
 	if (maxKeyMapNameWidthDirty) {
-		WzText displayText;
-		displayText.setText(getNotBoundLabel(), font_regular);
-		max = static_cast<int>(displayText.width());
+		max = static_cast<int>(iV_GetTextWidth(getNotBoundLabel().c_str(), iV_fonts::font_regular));
 
 		char sKey[MAX_STR_LENGTH];
 		for (const KEY_MAPPING& mapping : getVisibleMappings()) {
 			mapping.toString(sKey);
-			displayText.setText(sKey, font_regular);
-			max = MAX(max, static_cast<unsigned int>(displayText.width()));
+			max = MAX(max, static_cast<int>(iV_GetTextWidth(sKey, iV_fonts::font_regular)));
 		}
 
 		maxKeyMapNameWidthDirty = false;
