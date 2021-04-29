@@ -77,6 +77,26 @@ struct KeyMappingInput {
 	KeyMappingInput(const MOUSE_KEY_CODE mouseKeyCode);
 
 	KeyMappingInput();
+
+	struct Hash
+	{
+		std::size_t operator()(KeyMappingInput const& kmi) const noexcept
+		{
+			const std::size_t hSource = std::hash<std::size_t>{}(static_cast<unsigned int>(kmi.source));
+			std::size_t hValue = 0;
+			switch (kmi.source)
+			{
+			case KeyMappingInputSource::KEY_CODE:
+				hValue += static_cast<unsigned int>(kmi.value.keyCode);
+				break;
+			case KeyMappingInputSource::MOUSE_KEY_CODE:
+				// Offset by large value to avoid conflicts with KEY_CODEs
+				hValue += 10000 + static_cast<unsigned int>(kmi.value.mouseKeyCode);
+				break;
+			}
+			return hSource ^ (hValue << 1);
+		}
+	};
 };
 
 bool operator==(const KeyMappingInput& lhs, const KeyMappingInput& rhs);

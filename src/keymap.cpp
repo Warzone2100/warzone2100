@@ -43,6 +43,7 @@
 
 #include <algorithm>
 #include <unordered_map>
+#include <unordered_set>
 
 static UDWORD asciiKeyCodeToTable(KEY_CODE code);
 static KEY_CODE getQwertyKey();
@@ -359,9 +360,9 @@ public:
 	const std::vector<std::reference_wrapper<const KeyFunctionInfo>> allKeymapEntries() const
 	{
 		std::vector<std::reference_wrapper<const KeyFunctionInfo>> entries;
-		for (std::vector<KeyFunctionInfo>::const_iterator i = ordered_list.cbegin(); i != ordered_list.cend(); ++i)
+		for (auto const &keyFunctionInfo : ordered_list)
 		{
-			entries.push_back(*i);
+			entries.push_back(keyFunctionInfo);
 		}
 		return entries;
 	}
@@ -1037,7 +1038,8 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 		});
 		bMappingsSortOrderDirty = false;
 	}
-	std::vector<KeyMappingInput> consumedInputs;
+
+	std::unordered_set<KeyMappingInput, KeyMappingInput::Hash> consumedInputs;
 
 	/* Run through all sorted mappings */
 	for (const KEY_MAPPING& keyToProcess : keyMappings)
@@ -1048,10 +1050,8 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 			continue;
 		}
 
-		/* Skip if the input is already consumed. Handles skips for context/priority and meta-conflicts */
-		const auto bIsAlreadyConsumed = std::find_if(consumedInputs.begin(), consumedInputs.end(), [keyToProcess](const KeyMappingInput& consumed) {
-			return consumed == keyToProcess.input;
-		}) != consumedInputs.end();
+		/* Skip if the input is already consumed. Handles skips for meta-conflicts */
+		const auto bIsAlreadyConsumed = consumedInputs.find(keyToProcess.input) != consumedInputs.end();
 		if (bIsAlreadyConsumed)
 		{
 			continue;
@@ -1067,7 +1067,7 @@ void keyProcessMappings(const bool bExclude, const bool bAllowMouseWheelEvents)
 
 			lastInput = keyToProcess.input;
 			keyToProcess.function();
-			consumedInputs.push_back(keyToProcess.input);
+			consumedInputs.insert(keyToProcess.input);
 		}
 	}
 
