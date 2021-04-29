@@ -143,9 +143,13 @@ public:
 	}
 };
 
+static std::string getNotBoundLabel()
+{
+	return _("<not bound>");
+}
+
 static KeyMappingSelection keyMapSelection;
 static bool maxKeyMapNameWidthDirty = true;
-static const std::string NOT_BOUND_LABEL = "<not bound>";
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -311,7 +315,7 @@ static unsigned int getMaxKeyMapNameWidth()
 
 	if (maxKeyMapNameWidthDirty) {
 		WzText displayText;
-		displayText.setText(NOT_BOUND_LABEL, font_regular);
+		displayText.setText(getNotBoundLabel(), font_regular);
 		max = static_cast<int>(displayText.width());
 
 		char sKey[MAX_STR_LENGTH];
@@ -389,7 +393,7 @@ static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset
 	}
 	else
 	{
-		strcpy(sPrimaryKey, bPrimaryIsFixed ? "\0" : NOT_BOUND_LABEL.c_str());
+		sstrcpy(sPrimaryKey, bPrimaryIsFixed ? "\0" : getNotBoundLabel().c_str());
 	}
 
 	data.wzBindingText.setText(sPrimaryKey, font_regular);
