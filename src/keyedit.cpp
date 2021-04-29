@@ -109,8 +109,6 @@ struct DisplayKeyMapData
 	std::vector<KEY_MAPPING*> mappings;
 	void (*function)();
 	const std::string name;
-
-	WzText wzNameText;
 };
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -173,8 +171,8 @@ public:
 	static std::shared_ptr<KeyMapButton> make(
 		KeyMappingSlot slot,
 		DisplayKeyMapData* targetFunctionData,
-		std::weak_ptr<KeyMapForm> parentForm)
-	{
+		std::weak_ptr<KeyMapForm> parentForm
+	) {
 		class make_shared_enabler : public KeyMapButton
 		{
 		public:
@@ -280,7 +278,7 @@ public:
 			sstrcpy(sPrimaryKey, bPrimaryIsFixed ? "\0" : getNotBoundLabel().c_str());
 		}
 
-		wzBindingText.setText(sPrimaryKey, font_regular);
+		wzBindingText.setText(sPrimaryKey, iV_fonts::font_regular);
 		wzBindingText.render(xPos, yPos + (h / 2) + 3, bindingTextColor);
 	}
 
@@ -291,6 +289,59 @@ private:
 
 	std::weak_ptr<KeyMapForm> parentForm;
 };
+
+class KeyMapLabel : public WIDGET
+{
+protected:
+	KeyMapLabel(DisplayKeyMapData* targetFunctionData)
+		: targetFunctionData(targetFunctionData)
+	{
+	}
+
+public:
+	static std::shared_ptr<KeyMapLabel> make(DisplayKeyMapData* targetFunctionData) {
+		class make_shared_enabler : public KeyMapLabel
+		{
+		public:
+			make_shared_enabler(DisplayKeyMapData* targetFunctionData)
+				: KeyMapLabel(targetFunctionData)
+			{
+			}
+		};
+		return std::make_shared<make_shared_enabler>(targetFunctionData);
+	}
+
+public:
+	virtual void display(int xOffset, int yOffset) override
+	{
+		const std::shared_ptr<WIDGET> pParent = parent();
+		ASSERT_OR_RETURN(, pParent != nullptr, "Keymap labels should have a parent container!");
+
+		// Update layout
+		const int buttonWidth = getMaxKeyMapNameWidth();
+		setGeometry(
+			0,
+			0,
+			pParent->width() - buttonWidth,
+			pParent->height()
+		);
+
+		const int xPos = xOffset + x();
+		const int yPos = yOffset + y();
+		const int w = width();
+		const int h = height();
+		drawBlueBoxInset(xPos, yPos, w, h);
+		wzNameText.setText(_(targetFunctionData->name.c_str()), iV_fonts::font_regular);
+		wzNameText.render(xPos + 2, yPos + (h / 2) + 3, WZCOL_FORM_TEXT);
+	}
+
+private:
+	WzText wzNameText;
+
+	DisplayKeyMapData* targetFunctionData;
+};
+
+
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -467,35 +518,6 @@ static unsigned int getMaxKeyMapNameWidth()
 	}
 
 	return max;
-}
-
-// ////////////////////////////////////////////////////////////////////////////
-static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	const std::shared_ptr<WIDGET> parent = psWidget->parent();
-
-	ASSERT_OR_RETURN(, psWidget != nullptr, "Cannot display keyMap label: Widget was null!");
-	ASSERT_OR_RETURN(, parent != nullptr, "Keymap labels should have a parent container!");
-
-	ASSERT(psWidget->pUserData != nullptr, "Any widget using displayKeyMapLabel must have its pUserData initialized to a (DisplayKeyMapData*)");
-	DisplayKeyMapData& data = *static_cast<DisplayKeyMapData*>(psWidget->pUserData);
-
-	// Update layout
-	const int buttonWidth = getMaxKeyMapNameWidth();
-	psWidget->setGeometry(
-		0,
-		0,
-		parent->width() - buttonWidth,
-		parent->height()
-	);
-
-	const int x = xOffset + psWidget->x();
-	const int y = yOffset + psWidget->y();
-	const int w = psWidget->width();
-	const int h = psWidget->height();
-	drawBlueBoxInset(x, y, w, h);
-	data.wzNameText.setText(_(data.name.c_str()), font_regular);
-	data.wzNameText.render(x + 2, y + (psWidget->height() / 2) + 3, WZCOL_FORM_TEXT);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -712,16 +734,9 @@ void KeyMapForm::initialize(bool isInGame)
 		const unsigned int containerId = KM_START + index * (numSlots + 2);
 		const unsigned int labelId = KM_START + index * (numSlots + 2) + 1;
 
-		auto label = std::make_shared<WIDGET>();
+		auto label = KeyMapLabel::make(data);
 		label->setGeometry(0, 0, KM_ENTRYW / 3, KM_ENTRYH);
 		label->id = labelId;
-		label->displayFunction = displayKeyMapLabel;
-		label->pUserData = data;
-		label->setOnDelete([](WIDGET* psWidget) {
-			assert(psWidget->pUserData != nullptr);
-			delete static_cast<DisplayKeyMapData*>(psWidget->pUserData);
-			psWidget->pUserData = nullptr;
-		});
 
 		auto container = std::make_shared<WIDGET>();
 		container->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH * numSlots);
