@@ -52,6 +52,8 @@
 #include "multiplay.h"
 #include "ingameop.h"
 
+static unsigned int getMaxKeyMapNameWidth();
+
 // ////////////////////////////////////////////////////////////////////////////
 // defines
 
@@ -87,13 +89,16 @@ public:
 	bool pushedKeyCombo(const KeyMappingInput input);
 
 private:
+	friend class KeyMapButton;
+
 	std::shared_ptr<ScrollableListWidget> keyMapList;
 	std::shared_ptr<W_BUTTON> createKeyMapButton(const unsigned int id, const KeyMappingSlot slot, struct DisplayKeyMapData* targetFunctionData);
 	void unhighlightSelected();
 	void addButton(int buttonId, int y, const char *text);
 };
 
-struct DisplayKeyMapData {
+struct DisplayKeyMapData
+{
 	explicit DisplayKeyMapData(void (* const function)(), const std::string name)
 		: mappings(std::vector<KEY_MAPPING*>(static_cast<unsigned int>(KeyMappingSlot::LAST), nullptr))
 		, function(function)
@@ -108,16 +113,11 @@ struct DisplayKeyMapData {
 	WzText wzNameText;
 };
 
-struct DisplayKeyMapButtonData {
-	WzText wzBindingText;
-	KeyMappingSlot slot;
-	DisplayKeyMapData* targetFunctionData;
-};
-
 // ////////////////////////////////////////////////////////////////////////////
 // variables
 
-struct KeyMappingSelection {
+struct KeyMappingSelection
+{
 	bool               hasActiveSelection;
 	KeyMappingSlot slot;
 	DisplayKeyMapData* data;
@@ -150,6 +150,147 @@ static std::string getNotBoundLabel()
 
 static KeyMappingSelection keyMapSelection;
 static bool maxKeyMapNameWidthDirty = true;
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// Widgets
+
+class KeyMapButton : public W_BUTTON
+{
+protected:
+	KeyMapButton(
+		KeyMappingSlot slot,
+		DisplayKeyMapData* targetFunctionData,
+		std::weak_ptr<KeyMapForm> parentForm
+	)
+		: slot(slot)
+		, targetFunctionData(targetFunctionData)
+		, parentForm(parentForm)
+	{
+	}
+
+public:
+	static std::shared_ptr<KeyMapButton> make(
+		KeyMappingSlot slot,
+		DisplayKeyMapData* targetFunctionData,
+		std::weak_ptr<KeyMapForm> parentForm)
+	{
+		class make_shared_enabler : public KeyMapButton
+		{
+		public:
+			make_shared_enabler(
+				KeyMappingSlot slot,
+				DisplayKeyMapData* targetFunctionData,
+				std::weak_ptr<KeyMapForm> parentForm
+			)
+				: KeyMapButton(slot, targetFunctionData, parentForm)
+			{
+			}
+		};
+		return std::make_shared<make_shared_enabler>(slot, targetFunctionData, parentForm);
+	}
+
+public:
+	virtual void clicked(W_CONTEXT* psContext, WIDGET_KEY key) override
+	{
+		ASSERT_OR_RETURN(, !parentForm.expired(), "Cannot handle KeyMapButton::clicked: parent form was nullptr!");
+
+		const int slotIndex = static_cast<size_t>(slot);
+		const KEY_MAPPING* clickedMapping = targetFunctionData->mappings[slotIndex];
+		const KEY_MAPPING* primaryMapping = targetFunctionData->mappings[static_cast<size_t>(KeyMappingSlot::PRIMARY)];
+
+		const bool bClickedIsNotAssignable = clickedMapping && clickedMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
+		const bool bPrimaryIsNotAssignable = primaryMapping && primaryMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
+		if (bClickedIsNotAssignable || bPrimaryIsNotAssignable)
+		{
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			return;
+		}
+
+		const auto psParentForm = parentForm.lock();
+		if (keyMapSelection.isSelected(targetFunctionData->function, slot))
+		{
+			psParentForm->unhighlightSelected();
+			return;
+		}
+
+		psParentForm->keyMapList->disableScroll();
+		keyMapSelection.select(slot, targetFunctionData);
+	}
+
+	virtual void display(int xOffset, int yOffset) override
+	{
+		const std::shared_ptr<WIDGET> pParent = this->parent();
+		ASSERT_OR_RETURN(, pParent != nullptr, "Keymap buttons should have a parent container!");
+
+		ASSERT_OR_RETURN(, targetFunctionData != nullptr, "KeyMapButton being rendered is missing target function data!");
+
+		// Update layout
+		const int numSlots = static_cast<int>(KeyMappingSlot::LAST);
+		const int buttonHeight = (pParent->height() / numSlots);
+		const int layoutYOffset = buttonHeight * static_cast<int>(slot);
+		const int buttonWidth = getMaxKeyMapNameWidth();
+		setGeometry(
+			pParent->width() - buttonWidth,
+			layoutYOffset,
+			buttonWidth,
+			buttonHeight
+		);
+
+		int xPos = xOffset + x();
+		int yPos = yOffset + y();
+		int h = height();
+		int w = width();
+
+		const KEY_MAPPING* primaryMapping = targetFunctionData->mappings[static_cast<unsigned int>(KeyMappingSlot::PRIMARY)];
+		const bool bPrimaryIsFixed = primaryMapping && (primaryMapping->status == KEYMAP_ALWAYS || primaryMapping->status == KEYMAP_ALWAYS_PROCESS);
+
+		const KEY_MAPPING* mapping = targetFunctionData->mappings[static_cast<unsigned int>(slot)];
+
+		// Draw base
+		if (keyMapSelection.isSelected(targetFunctionData->function, slot))
+		{
+			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_ACTIVE);
+		}
+		else if (bPrimaryIsFixed)
+		{
+			pie_BoxFill(xPos, yPos, xPos + w, yPos + h, WZCOL_KEYMAP_FIXED);
+		}
+		else
+		{
+			drawBlueBoxInset(xPos, yPos, w, h);
+		}
+
+		// Select label text and color
+		PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
+		char sPrimaryKey[MAX_STR_LENGTH];
+		sPrimaryKey[0] = '\0';
+		if (mapping && !mapping->input.isCleared())
+		{
+			// Check to see if key is on the numpad, if so tell user and change color
+			const bool isBoundToNumpad = mapping->input.source == KeyMappingInputSource::KEY_CODE && mapping->input.value.keyCode >= KEY_KP_0 && mapping->input.value.keyCode <= KEY_KPENTER;
+			if (isBoundToNumpad)
+			{
+				bindingTextColor = WZCOL_YELLOW;
+			}
+			mapping->toString(sPrimaryKey);
+		}
+		else
+		{
+			sstrcpy(sPrimaryKey, bPrimaryIsFixed ? "\0" : getNotBoundLabel().c_str());
+		}
+
+		wzBindingText.setText(sPrimaryKey, font_regular);
+		wzBindingText.render(xPos, yPos + (h / 2) + 3, bindingTextColor);
+	}
+
+private:
+	WzText wzBindingText;
+	KeyMappingSlot slot;
+	DisplayKeyMapData* targetFunctionData;
+
+	std::weak_ptr<KeyMapForm> parentForm;
+};
 
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
@@ -329,76 +470,6 @@ static unsigned int getMaxKeyMapNameWidth()
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static void displayKeyMapButton(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	const std::shared_ptr<WIDGET> parent = psWidget->parent();
-
-	ASSERT_OR_RETURN(, psWidget != nullptr, "Cannot display keyMap button: Widget was null!");
-	ASSERT_OR_RETURN(, parent != nullptr, "Keymap buttons should have a parent container!");
-
-	ASSERT_OR_RETURN(, psWidget->pUserData != nullptr, "Any widget using displayKeyMapButton must have its pUserData initialized to a (DisplayKeyMapButtonData*)");
-	DisplayKeyMapButtonData& data = *static_cast<DisplayKeyMapButtonData*>(psWidget->pUserData);
-	ASSERT_OR_RETURN(, data.targetFunctionData != nullptr, "DisplayKeyMapButtonData is missing target function data!");
-
-	// Update layout
-	const int numSlots = static_cast<int>(KeyMappingSlot::LAST);
-	const int buttonHeight = (parent->height() / numSlots);
-	const int layoutYOffset = buttonHeight * static_cast<int>(data.slot);
-	const int buttonWidth = getMaxKeyMapNameWidth();
-	psWidget->setGeometry(
-		parent->width() - buttonWidth,
-		layoutYOffset,
-		buttonWidth,
-		buttonHeight
-	);
-
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	int h = psWidget->height();
-	int w = psWidget->width();
-
-	const KEY_MAPPING* primaryMapping = data.targetFunctionData->mappings[static_cast<unsigned int>(KeyMappingSlot::PRIMARY)];
-	const bool bPrimaryIsFixed = primaryMapping && (primaryMapping->status == KEYMAP_ALWAYS || primaryMapping->status == KEYMAP_ALWAYS_PROCESS);
-
-	const KEY_MAPPING* mapping = data.targetFunctionData->mappings[static_cast<unsigned int>(data.slot)];
-
-	// Draw base
-	if (keyMapSelection.isSelected(data.targetFunctionData->function, data.slot))
-	{
-		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_ACTIVE);
-	}
-	else if (bPrimaryIsFixed)
-	{
-		pie_BoxFill(x, y, x + w, y + h, WZCOL_KEYMAP_FIXED);
-	}
-	else
-	{
-		drawBlueBoxInset(x, y, w, h);
-	}
-
-	// Select label text and color
-	PIELIGHT bindingTextColor = WZCOL_FORM_TEXT;
-	char sPrimaryKey[MAX_STR_LENGTH];
-	sPrimaryKey[0] = '\0';
-	if (mapping && !mapping->input.isCleared())
-	{
-		// Check to see if key is on the numpad, if so tell user and change color
-		const bool isBoundToNumpad = mapping->input.source == KeyMappingInputSource::KEY_CODE && mapping->input.value.keyCode >= KEY_KP_0 && mapping->input.value.keyCode <= KEY_KPENTER;
-		if (isBoundToNumpad)
-		{
-			bindingTextColor = WZCOL_YELLOW;
-		}
-		mapping->toString(sPrimaryKey);
-	}
-	else
-	{
-		sstrcpy(sPrimaryKey, bPrimaryIsFixed ? "\0" : getNotBoundLabel().c_str());
-	}
-
-	data.wzBindingText.setText(sPrimaryKey, font_regular);
-	data.wzBindingText.render(x, y + (h / 2) + 3, bindingTextColor);
-}
-
 static void displayKeyMapLabel(WIDGET* psWidget, UDWORD xOffset, UDWORD yOffset)
 {
 	const std::shared_ptr<WIDGET> parent = psWidget->parent();
@@ -573,45 +644,9 @@ bool loadKeyMap()
 
 std::shared_ptr<W_BUTTON> KeyMapForm::createKeyMapButton(const unsigned int buttonId, const KeyMappingSlot slot, DisplayKeyMapData* targetFunctionData)
 {
-	W_BUTINIT emptyInit;
-	DisplayKeyMapButtonData* buttonData = new DisplayKeyMapButtonData();
-	buttonData->slot = slot;
-	buttonData->targetFunctionData = targetFunctionData;
-
-	auto button = std::make_shared<W_BUTTON>(&emptyInit);
+	auto button = KeyMapButton::make(slot, targetFunctionData, std::static_pointer_cast<KeyMapForm>(shared_from_this()));
 	button->setGeometry(0, 0, KM_ENTRYW / 3, KM_ENTRYH); // Initially set to occupy 1/3 of the width. Display func will determine and update the actual size
 	button->id = buttonId;
-	button->displayFunction = displayKeyMapButton;
-	button->pUserData = buttonData;
-	button->setOnDelete([](WIDGET* psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayKeyMapButtonData*>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
-	});
-	button->addOnClickHandler([=](W_BUTTON& clickedButton) {
-		const DisplayKeyMapButtonData* data = static_cast<DisplayKeyMapButtonData*>(clickedButton.pUserData);
-
-		const int slotIndex = static_cast<size_t>(data->slot);
-		const KEY_MAPPING* clickedMapping = data->targetFunctionData->mappings[slotIndex];
-		const KEY_MAPPING* primaryMapping = data->targetFunctionData->mappings[static_cast<size_t>(KeyMappingSlot::PRIMARY)];
-
-		const bool bClickedIsNotAssignable = clickedMapping && clickedMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
-		const bool bPrimaryIsNotAssignable = primaryMapping && primaryMapping->status != KEY_STATUS::KEYMAP_ASSIGNABLE;
-		if (bClickedIsNotAssignable || bPrimaryIsNotAssignable)
-		{
-			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
-			return;
-		}
-		else if (keyMapSelection.isSelected(data->targetFunctionData->function, data->slot))
-		{
-			unhighlightSelected();
-			return;
-		}
-
-		keyMapList->disableScroll();
-		keyMapSelection.select(data->slot, data->targetFunctionData);
-	});
-
 	return button;
 }
 
