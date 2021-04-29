@@ -154,7 +154,7 @@ static bool maxKeyMapNameWidthDirty = true;
 // ////////////////////////////////////////////////////////////////////////////
 // funcs
 // ////////////////////////////////////////////////////////////////////////////
-static KEY_CODE scanKeyBoardForPressedBindableKey()
+static nonstd::optional<KEY_CODE> scanKeyBoardForPressedBindableKey()
 {
 	for (unsigned int i = 0; i < KEY_MAXSCAN; i++)
 	{
@@ -174,10 +174,10 @@ static KEY_CODE scanKeyBoardForPressedBindableKey()
 			}
 		}
 	}
-	return (KEY_CODE)0;
+	return nonstd::nullopt;
 }
 
-static MOUSE_KEY_CODE scanMouseForPressedBindableKey()
+static nonstd::optional<MOUSE_KEY_CODE> scanMouseForPressedBindableKey()
 {
 	for (unsigned int i = 0; i < MOUSE_KEY_CODE::MOUSE_END; i++)
 	{
@@ -192,7 +192,7 @@ static MOUSE_KEY_CODE scanMouseForPressedBindableKey()
 			}
 		}
 	}
-	return (MOUSE_KEY_CODE)0;
+	return nonstd::nullopt;
 }
 
 bool runInGameKeyMapEditor(unsigned id)
@@ -736,15 +736,14 @@ void KeyMapForm::checkPushedKeyCombo()
 {
 	if (keyMapSelection.hasActiveSelection)
 	{
-		const KEY_CODE kc = scanKeyBoardForPressedBindableKey();
-		if (kc)
+		if (const nonstd::optional<KEY_CODE> kc = scanKeyBoardForPressedBindableKey())
 		{
-			pushedKeyCombo(kc);
+			pushedKeyCombo(*kc);
 		}
-		const MOUSE_KEY_CODE mkc = scanMouseForPressedBindableKey();
-		if (mkc)
+
+		if (const nonstd::optional<MOUSE_KEY_CODE> mkc = scanMouseForPressedBindableKey())
 		{
-			pushedKeyCombo(mkc);
+			pushedKeyCombo(*mkc);
 		}
 	}
 }
