@@ -5752,8 +5752,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				setStructureTarget(psStruct, getBaseObjFromData(tid, tplayer, ttype), j, ORIGIN_UNKNOWN);
 				ASSERT(psStruct->psTarget[j], "Failed to find target");
 			}
-			if (ini.contains("Factory/commander/id"))
-			{
+		}
+		if (ini.contains("Factory/commander/id")) {
 				ASSERT(psStruct->pStructureType->type == REF_FACTORY || psStruct->pStructureType->type == REF_CYBORG_FACTORY
 				       || psStruct->pStructureType->type == REF_VTOL_FACTORY, "Bad type");
 				FACTORY *psFactory = (FACTORY *)psStruct->pFunctionality;
@@ -5771,9 +5771,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				{
 					assignFactoryCommandDroid(psStruct, psCommander);
 				}
-			}
-			if (ini.contains("Repair/target/id"))
-			{
+		}
+		if (ini.contains("Repair/target/id")){
 				ASSERT(psStruct->pStructureType->type == REF_REPAIR_FACILITY, "Bad type");
 				REPAIR_FACILITY *psRepair = ((REPAIR_FACILITY *)psStruct->pFunctionality);
 				OBJECT_TYPE ttype = (OBJECT_TYPE)ini.value("Repair/target/type", OBJ_DROID).toInt();
@@ -5782,9 +5781,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				ASSERT(tid >= 0 && tplayer >= 0, "Bad repair ID %d for player %d for building %d", tid, tplayer, id);
 				psRepair->psObj = getBaseObjFromData(tid, tplayer, ttype);
 				ASSERT(psRepair->psObj, "Repair target %d not found for building %d", tid, id);
-			}
-			if (ini.contains("Rearm/target/id"))
-			{
+		}
+		if (ini.contains("Rearm/target/id")) {
 				ASSERT(psStruct->pStructureType->type == REF_REARM_PAD, "Bad type");
 				REARM_PAD *psReArmPad = ((REARM_PAD *)psStruct->pFunctionality);
 				OBJECT_TYPE ttype = OBJ_DROID; // always, for now
@@ -5793,8 +5791,8 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				ASSERT(tid >= 0 && tplayer >= 0, "Bad rearm ID %d for player %d for building %d", tid, tplayer, id);
 				psReArmPad->psObj = getBaseObjFromData(tid, tplayer, ttype);
 				ASSERT(psReArmPad->psObj, "Rearm target %d not found for building %d", tid, id);
-			}
 		}
+		
 		ini.endGroup();
 	}
 	return true;
