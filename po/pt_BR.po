@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-20 03:23\n"
+"PO-Revision-Date: 2021-05-02 04:40\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -3231,7 +3231,7 @@ msgstr "Cano quádruplo, munição explosiva 80mm"
 #: data/mp/messages/strings/resstrings.txt:302
 #: po/custom/fromJson.txt:24
 msgid "30mm Anti-Aircraft machinegun"
-msgstr "Metralhadora Dupla 30mm Anti-Aérea"
+msgstr "Metralhadora Anti-Aérea 30mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA4.text[1]
@@ -3241,7 +3241,7 @@ msgstr "Metralhadora Dupla 30mm Anti-Aérea"
 #: data/mp/messages/strings/resstrings.txt:307
 #: po/custom/fromJson.txt:4509
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Metralhadora Quádrupla 30mm Anti-Aérea"
+msgstr "Metralhadora Anti-Aérea Quádrupla 30mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[0]
@@ -8860,7 +8860,7 @@ msgstr "Materiais Base de Estruturas atualizado Mk3"
 #. data/mp/messages/resmessages1.json: $.RES_W_MG_D1.text[1]
 #: po/custom/fromJson.txt:2280
 msgid "Hardened case machinegun bullets"
-msgstr "Cartuchos de metralhadora endurecidos"
+msgstr "Cartuchos de metralhadora reforçados"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9734,7 +9734,7 @@ msgstr "Tanque Canhão de Alta Velocidade Píton"
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
 #: po/custom/fromJson.txt:2872
 msgid "Hurricane AA Site"
-msgstr "Defesa AA Metralh. Hurricane"
+msgstr "Defesa AA de Metralhadora Furacão"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun03.name
@@ -9743,7 +9743,7 @@ msgstr "Defesa AA Metralh. Hurricane"
 #. data/mp/stats/weapons.json: $.QuadMg1AAGun.name
 #: po/custom/fromJson.txt:2878
 msgid "Hurricane AA Turret"
-msgstr "Torrete AA Metralh. Hurricane"
+msgstr "Torrete AA de Metralhadora Furacão"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbHUT.name
@@ -12024,7 +12024,7 @@ msgstr "Píton"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:4512
 msgid "Quad 80mm Anti-Aircraft machinegun"
-msgstr "Metralhadora Quádrupla Anti-Aérea de 80mm"
+msgstr "Metralhadora Anti-Aérea Quádrupla de 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
