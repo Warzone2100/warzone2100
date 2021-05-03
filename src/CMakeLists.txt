@@ -102,7 +102,7 @@ if(MSVC)
 	target_compile_options(warzone2100 PRIVATE "/wd4267")
 endif()
 
-target_link_libraries(warzone2100 exception-handler gamelib ivis-opengl netplay sdl-backend framework sequence sound widget)
+target_link_libraries(warzone2100 exception-handler gamelib maplib ivis-opengl netplay sdl-backend framework sequence sound widget)
 target_link_libraries(warzone2100 launchinfo EmbeddedJSONSignature)
 if(ENABLE_NLS)
 	target_link_libraries(warzone2100 ${Intl_LIBRARIES})

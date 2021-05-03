@@ -36,6 +36,8 @@
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/physfs_ext.h"
 
+#include "lib/maplib/map_preview.h"
+
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -89,6 +91,7 @@
 #include "qtscript.h"
 #include "random.h"
 #include "notifications.h"
+#include "radar.h"
 #include "lib/framework/wztime.h"
 
 #include "multiplay.h"
@@ -115,34 +118,6 @@
 #define MAP_PREVIEW_DISPLAY_TIME 2500	// number of milliseconds to show map in preview
 #define VOTE_TAG                 "voting"
 #define KICK_REASON_TAG          "kickReason"
-
-// ////////////////////////////////////////////////////////////////////////////
-// tertile dependent colors for map preview
-
-// C1 - Arizona type
-#define WZCOL_TERC1_CLIFF_LOW   pal_Colour(0x68, 0x3C, 0x24)
-#define WZCOL_TERC1_CLIFF_HIGH  pal_Colour(0xE8, 0x84, 0x5C)
-#define WZCOL_TERC1_WATER       pal_Colour(0x3F, 0x68, 0x9A)
-#define WZCOL_TERC1_ROAD_LOW    pal_Colour(0x24, 0x1F, 0x16)
-#define WZCOL_TERC1_ROAD_HIGH   pal_Colour(0xB2, 0x9A, 0x66)
-#define WZCOL_TERC1_GROUND_LOW  pal_Colour(0x24, 0x1F, 0x16)
-#define WZCOL_TERC1_GROUND_HIGH pal_Colour(0xCC, 0xB2, 0x80)
-// C2 - Urban type
-#define WZCOL_TERC2_CLIFF_LOW   pal_Colour(0x3C, 0x3C, 0x3C)
-#define WZCOL_TERC2_CLIFF_HIGH  pal_Colour(0x84, 0x84, 0x84)
-#define WZCOL_TERC2_WATER       WZCOL_TERC1_WATER
-#define WZCOL_TERC2_ROAD_LOW    pal_Colour(0x00, 0x00, 0x00)
-#define WZCOL_TERC2_ROAD_HIGH   pal_Colour(0x24, 0x1F, 0x16)
-#define WZCOL_TERC2_GROUND_LOW  pal_Colour(0x1F, 0x1F, 0x1F)
-#define WZCOL_TERC2_GROUND_HIGH pal_Colour(0xB2, 0xB2, 0xB2)
-// C3 - Rockies type
-#define WZCOL_TERC3_CLIFF_LOW   pal_Colour(0x3C, 0x3C, 0x3C)
-#define WZCOL_TERC3_CLIFF_HIGH  pal_Colour(0xFF, 0xFF, 0xFF)
-#define WZCOL_TERC3_WATER       WZCOL_TERC1_WATER
-#define WZCOL_TERC3_ROAD_LOW    pal_Colour(0x24, 0x1F, 0x16)
-#define WZCOL_TERC3_ROAD_HIGH   pal_Colour(0x3D, 0x21, 0x0A)
-#define WZCOL_TERC3_GROUND_LOW  pal_Colour(0x00, 0x1C, 0x0E)
-#define WZCOL_TERC3_GROUND_HIGH WZCOL_TERC3_CLIFF_HIGH
 
 // ////////////////////////////////////////////////////////////////////////////
 // vars
@@ -554,32 +529,72 @@ static void loadEmptyMapPreview()
 	free(imageData);
 }
 
+static inline WzMap::MapPreviewColor PIELIGHT_to_MapPreviewColor(PIELIGHT color)
+{
+	WzMap::MapPreviewColor previewColor;
+	previewColor.r = color.byte.r;
+	previewColor.g = color.byte.g;
+	previewColor.b = color.byte.b;
+	previewColor.a = color.byte.a;
+	return previewColor;
+}
+
+class WzLobbyPreviewPlayerColorProvider : public WzMap::MapPlayerColorProvider
+{
+public:
+	~WzLobbyPreviewPlayerColorProvider() { }
+
+	// -1 = scavs
+	virtual WzMap::MapPreviewColor getPlayerColor(int8_t mapPlayer) override
+	{
+		unsigned player = mapPlayer == -1? scavengerSlot() : mapPlayer;
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "Bad player");
+			return MapPlayerColorProvider::getPlayerColor(mapPlayer);
+		}
+		unsigned playerid = getPlayerColour(RemapPlayerNumber(player));
+		// kludge to fix black, so you can see it on some maps.
+		PIELIGHT color = playerid == 3? WZCOL_GREY : clanColours[playerid];
+		return PIELIGHT_to_MapPreviewColor(color);
+	}
+private:
+	// -----------------------------------------------------------------------------------------
+	// Remaps old player number based on position on map to new owner
+	UDWORD RemapPlayerNumber(UDWORD OldNumber)
+	{
+		int i;
+
+		if (game.type == LEVEL_TYPE::CAMPAIGN)		// don't remap for SP games
+		{
+			return OldNumber;
+		}
+
+		for (i = 0; i < MAX_PLAYERS; i++)
+		{
+			if (OldNumber == NetPlay.players[i].position)
+			{
+				return i;
+			}
+		}
+		ASSERT(false, "Found no player position for player %d", (int)OldNumber);
+		return 0;
+	}
+};
+
 /// Loads the entire map just to show a picture of it
 void loadMapPreview(bool hideInterface)
 {
-	static char		aFileName[256];
-	UDWORD			fileSize;
-	char			*pFileData = nullptr;
-	LEVEL_DATASET	*psLevel = nullptr;
-	PIELIGHT		plCliffL, plCliffH, plWater, plRoadL, plRoadH, plGroundL, plGroundH;
-	UDWORD			height;
-	UBYTE			col;
-	MAPTILE			*psTile, *WTile;
-	UDWORD oursize;
+	std::string		aFileName;
 	Vector2i playerpos[MAX_PLAYERS];	// Will hold player positions
-	char  *ptr = nullptr, *imageData = nullptr;
 
 	// absurd hack, since there is a problem with updating this crap piece of info, we're setting it to
 	// true by default for now, like it used to be
+	// TODO: Is this still needed at all?
 	game.mapHasScavengers = true; // this is really the wrong place for it, but this is where it has to be
 
-	if (psMapTiles)
-	{
-		mapShutdown();
-	}
-
 	// load the terrain types
-	psLevel = levFindDataSet(game.map, &game.hash);
+	LEVEL_DATASET *psLevel = levFindDataSet(game.map, &game.hash);
 	if (psLevel == nullptr)
 	{
 		debug(LOG_INFO, "Could not find level dataset \"%s\" %s. We %s waiting for a download.", game.map, game.hash.toString().c_str(), !NetPlay.wzFiles.empty() ? "are" : "aren't");
@@ -597,72 +612,46 @@ void loadMapPreview(bool hideInterface)
 		debug(LOG_WZ, "Loading map preview: \"%s\" in (%s)\"%s\"  %s t%d", psLevel->pName, WZ_PHYSFS_getRealDir_String(psLevel->realFileName).c_str(), psLevel->realFileName, psLevel->realFileHash.toString().c_str(), psLevel->dataDir);
 	}
 	rebuildSearchPath(psLevel->dataDir, false, psLevel->realFileName);
-	sstrcpy(aFileName, psLevel->apDataFiles[psLevel->game]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	sstrcat(aFileName, "/ttypes.ttp");
-	pFileData = fileLoadBuffer;
-
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+	const char* pGamPath = psLevel->apDataFiles[psLevel->game];
+	if (!pGamPath)
 	{
-		debug(LOG_ERROR, "Failed to load terrain types file: [%s]", aFileName);
+		debug(LOG_ERROR, "No path for level \"%s\"? (%s)", psLevel->pName, (psLevel->realFileName) ? psLevel->realFileName : "null");
+		loadEmptyMapPreview();
 		return;
 	}
-	if (!loadTerrainTypeMap(pFileData, fileSize))
+	aFileName = pGamPath;
+	// Remove the file extension (ex. ".gam")
+	auto lastPeriodPos = aFileName.rfind('.');
+	if (std::string::npos != lastPeriodPos)
 	{
-		debug(LOG_ERROR, "Failed to load terrain types");
-		return;
+		aFileName = aFileName.substr(0, std::max<size_t>(lastPeriodPos, (size_t)1));
 	}
 
 	// load the map data
-	ptr = strrchr(aFileName, '/');
-	ASSERT_OR_RETURN(, ptr, "this string was supposed to contain a /");
-	strcpy(ptr, "/game.js");
-	bool haveScript = PHYSFS_exists(aFileName);
-	ScriptMapData data;
-	if (haveScript)
+	aFileName += "/";
+	auto data = WzMap::Map::loadFromPath(aFileName, WzMap::MapType::SKIRMISH, psLevel->players, rand(), true, std::unique_ptr<WzMap::LoggingProtocol>(new WzMapDebugLogger()), std::unique_ptr<WzMapPhysFSIO>(new WzMapPhysFSIO()));
+	if (!data)
 	{
-		data = runMapScript(aFileName, rand(), true);
-	}
-	else
-	{
-		strcpy(ptr, "/game.map");
-	}
-	if (haveScript? !mapLoadFromScriptData(data, true) : !mapLoad(aFileName, true))
-	{
-		debug(LOG_ERROR, "Failed to load map");
+		debug(LOG_ERROR, "Failed to load map from path: %s", aFileName.c_str());
+		loadEmptyMapPreview();
 		return;
 	}
-	gwShutDown();
 
-	// set tileset colors
+	WzMap::MapPreviewColorScheme previewColorScheme;
+	previewColorScheme.hqColor = PIELIGHT_to_MapPreviewColor(WZCOL_MAP_PREVIEW_HQ);
+	previewColorScheme.oilResourceColor = PIELIGHT_to_MapPreviewColor(WZCOL_MAP_PREVIEW_OIL);
+	previewColorScheme.oilBarrelColor = PIELIGHT_to_MapPreviewColor(WZCOL_MAP_PREVIEW_BARREL);
+	previewColorScheme.playerColorProvider = std::unique_ptr<WzMap::MapPlayerColorProvider>(new WzLobbyPreviewPlayerColorProvider());
 	switch (guessMapTilesetType(psLevel))
 	{
 	case TILESET_ARIZONA:
-		plCliffL = WZCOL_TERC1_CLIFF_LOW;
-		plCliffH = WZCOL_TERC1_CLIFF_HIGH;
-		plWater = WZCOL_TERC1_WATER;
-		plRoadL = WZCOL_TERC1_ROAD_LOW;
-		plRoadH = WZCOL_TERC1_ROAD_HIGH;
-		plGroundL = WZCOL_TERC1_GROUND_LOW;
-		plGroundH = WZCOL_TERC1_GROUND_HIGH;
+		previewColorScheme.tilesetColors = WzMap::TilesetColorScheme::TilesetArizona();
 		break;
 	case TILESET_URBAN:
-		plCliffL = WZCOL_TERC2_CLIFF_LOW;
-		plCliffH = WZCOL_TERC2_CLIFF_HIGH;
-		plWater = WZCOL_TERC2_WATER;
-		plRoadL = WZCOL_TERC2_ROAD_LOW;
-		plRoadH = WZCOL_TERC2_ROAD_HIGH;
-		plGroundL = WZCOL_TERC2_GROUND_LOW;
-		plGroundH = WZCOL_TERC2_GROUND_HIGH;
+		previewColorScheme.tilesetColors = WzMap::TilesetColorScheme::TilesetUrban();
 		break;
 	case TILESET_ROCKIES:
-		plCliffL = WZCOL_TERC3_CLIFF_LOW;
-		plCliffH = WZCOL_TERC3_CLIFF_HIGH;
-		plWater = WZCOL_TERC3_WATER;
-		plRoadL = WZCOL_TERC3_ROAD_LOW;
-		plRoadH = WZCOL_TERC3_ROAD_HIGH;
-		plGroundL = WZCOL_TERC3_GROUND_LOW;
-		plGroundH = WZCOL_TERC3_GROUND_HIGH;
+		previewColorScheme.tilesetColors = WzMap::TilesetColorScheme::TilesetRockies();
 		break;
 	default:
 		debug(LOG_FATAL, "Invalid tileset type");
@@ -671,80 +660,63 @@ void loadMapPreview(bool hideInterface)
 		return;
 	}
 
-	oursize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
-	imageData = (char *)malloc(oursize * 3);		// used for the texture
-	if (!imageData)
-	{
-		debug(LOG_FATAL, "Out of memory for texture!");
-		abort();	// should be a fatal error ?
-		return;
-	}
-	ptr = imageData;
-	memset(ptr, 0, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
-	psTile = psMapTiles;
-
-	for (int y = 0; y < mapHeight; ++y)
-	{
-		WTile = psTile;
-		for (int x = 0; x < mapWidth; ++x)
-		{
-			char *const p = imageData + (3 * (y * BACKDROP_HACK_WIDTH + x));
-			height = WTile->height / ELEVATION_SCALE;
-			col = height;
-
-			switch (terrainType(WTile))
-			{
-			case TER_CLIFFFACE:
-				p[0] = plCliffL.byte.r + (plCliffH.byte.r - plCliffL.byte.r) * col / 256;
-				p[1] = plCliffL.byte.g + (plCliffH.byte.g - plCliffL.byte.g) * col / 256;
-				p[2] = plCliffL.byte.b + (plCliffH.byte.b - plCliffL.byte.b) * col / 256;
-				break;
-			case TER_WATER:
-				p[0] = plWater.byte.r;
-				p[1] = plWater.byte.g;
-				p[2] = plWater.byte.b;
-				break;
-			case TER_ROAD:
-				p[0] = plRoadL.byte.r + (plRoadH.byte.r - plRoadL.byte.r) * col / 256;
-				p[1] = plRoadL.byte.g + (plRoadH.byte.g - plRoadL.byte.g) * col / 256;
-				p[2] = plRoadL.byte.b + (plRoadH.byte.b - plRoadL.byte.b) * col / 256;
-				break;
-			default:
-				p[0] = plGroundL.byte.r + (plGroundH.byte.r - plGroundL.byte.r) * col / 256;
-				p[1] = plGroundL.byte.g + (plGroundH.byte.g - plGroundL.byte.g) * col / 256;
-				p[2] = plGroundL.byte.b + (plGroundH.byte.b - plGroundL.byte.b) * col / 256;
-				break;
-			}
-			WTile += 1;
-		}
-		psTile += mapWidth;
-	}
 	// Slight hack to init array with a special value used to determine how many players on map
 	for (size_t i = 0; i < MAX_PLAYERS; ++i)
 	{
 		playerpos[i] = Vector2i(0x77777777, 0x77777777);
 	}
-	// color our texture with clancolors @ correct position
-	if (haveScript)
+
+	std::unique_ptr<WzMap::LoggingProtocol> generatePreviewLogger(new WzMapDebugLogger());
+	auto mapPreviewResult = WzMap::generate2DMapPreview(*data, previewColorScheme, generatePreviewLogger.get());
+	if (!mapPreviewResult)
 	{
-		plotStructurePreviewScript(data, imageData, playerpos);
+		// Failed to generate map preview
+		debug(LOG_ERROR, "Failed to generate map preview for: %s", psLevel->pName);
+		loadEmptyMapPreview();
+		return;
 	}
-	else
+
+	// for the backdrop, we currently need to copy this to the top-left of an image that's BACKDROP_HACK_WIDTH x BACKDROP_HACK_HEIGHT
+	size_t backdropSize = sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT;
+	char *backdropData = (char *)malloc(backdropSize * 3);		// used for the texture
+	if (!backdropData)
 	{
-		plotStructurePreview16(imageData, playerpos);
+		debug(LOG_FATAL, "Out of memory for texture!");
+		abort();	// should be a fatal error ?
+		return;
+	}
+	ASSERT(mapPreviewResult->width <= BACKDROP_HACK_WIDTH, "mapData width somehow exceeds backdrop width?");
+	memset(backdropData, 0, sizeof(char) * BACKDROP_HACK_WIDTH * BACKDROP_HACK_HEIGHT * 3); //dunno about background color
+	char *imageData = reinterpret_cast<char*>(mapPreviewResult->imageData.data());
+	for (int y = 0; y < mapPreviewResult->height; ++y)
+	{
+		char *pSrc = imageData + (3 * (y * mapPreviewResult->width));
+		char *pDst = backdropData + (3 * (y * BACKDROP_HACK_WIDTH));
+		memcpy(pDst, pSrc, std::min<size_t>(mapPreviewResult->width, BACKDROP_HACK_WIDTH) * 3);
 	}
 
-	screen_enableMapPreview(mapWidth, mapHeight, playerpos);
+	for (auto kv : mapPreviewResult->playerHQPosition)
+	{
+		int8_t mapPlayer = kv.first;
+		unsigned player = mapPlayer == -1? scavengerSlot() : mapPlayer;
+		if (player >= MAX_PLAYERS)
+		{
+			debug(LOG_ERROR, "Bad player");
+			continue;
+		}
+		playerpos[player] = Vector2i(kv.second.first, kv.second.second);
+	}
 
-	screen_Upload(imageData);
+	screen_enableMapPreview(mapPreviewResult->width, mapPreviewResult->height, playerpos);
 
-	free(imageData);
+	screen_Upload(backdropData);
+
+	free(backdropData);
 
 	if (hideInterface)
 	{
 		hideTime = gameTime;
 	}
-	mapShutdown();
 }
 
 // ////////////////////////////////////////////////////////////////////////////

@@ -489,52 +489,6 @@ bool scripting_engine::updateScripts()
 	return true;
 }
 
-uint32_t ScriptMapData::crcSumStructures(uint32_t crc) const
-{
-	for (auto &o : structures)
-	{
-		crc = crcSum(crc, o.name.toUtf8().data(), o.name.toUtf8().length());
-		crc = crcSumVector2i(crc, &o.position, 1);
-		crc = crcSumU16(crc, &o.direction, 1);
-		crc = crcSum(crc, &o.modules, 1);
-		crc = crcSum(crc, &o.player, 1);
-	}
-	return crc;
-}
-
-uint32_t ScriptMapData::crcSumDroids(uint32_t crc) const
-{
-	for (auto &o : droids)
-	{
-		crc = crcSum(crc, o.name.toUtf8().data(), o.name.toUtf8().length());
-		crc = crcSumVector2i(crc, &o.position, 1);
-		crc = crcSumU16(crc, &o.direction, 1);
-		crc = crcSum(crc, &o.player, 1);
-	}
-	return crc;
-}
-
-uint32_t ScriptMapData::crcSumFeatures(uint32_t crc) const
-{
-	for (auto &o : features)
-	{
-		crc = crcSum(crc, o.name.toUtf8().data(), o.name.toUtf8().length());
-		crc = crcSumVector2i(crc, &o.position, 1);
-		crc = crcSumU16(crc, &o.direction, 1);
-	}
-	return crc;
-}
-
-ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview)
-{
-	return scripting_engine::instance().runMapScript(path, seed, preview);
-}
-
-ScriptMapData scripting_engine::runMapScript(WzString const &path, uint64_t seed, bool preview)
-{
-	return runMapScript_QuickJS(path, seed, preview);
-}
-
 wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty)
 {
 	return scripting_engine::instance().loadPlayerScript(path, player, difficulty);

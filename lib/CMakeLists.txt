@@ -1,5 +1,6 @@
 add_subdirectory(exceptionhandler)
 add_subdirectory(framework)
+add_subdirectory(maplib)
 add_subdirectory(gamelib)
 add_subdirectory(ivis_opengl)
 add_subdirectory(netplay)
