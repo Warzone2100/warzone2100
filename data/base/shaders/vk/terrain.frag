@@ -6,12 +6,11 @@ layout(set = 1, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 1, binding = 3) uniform sampler2D TextureSpecular; // specular map
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
 	mat4 ModelUVMatrix;
 	mat4 ModelUVLightMatrix;
-	mat4 ModelViewMatrix;
-	mat4 ModelViewProjectionMatrix;
-	mat4 ModelViewNormalMatrix;
-	vec4 sunPosition; // In EyeSpace
+	vec4 cameraPos; // in modelSpace
+	vec4 sunPos; // in modelSpace, normalized
 	vec4 emissiveLight; // light colors/intensity
 	vec4 ambientLight;
 	vec4 diffuseLight;
@@ -20,8 +19,6 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
-	int texture0;
-	int texture1;
 	int hasNormalmap;
 	int hasSpecularmap;
 };
@@ -52,9 +49,10 @@ void main()
 	// Gaussian specular term computation
 	vec3 H = normalize(halfVec);
 	float angle = acos(dot(H, N));
-	float exponent = angle / 0.2;
+	float exponent = angle / 0.5;
 	exponent = -(exponent * exponent);
-	float gaussianTerm = exp(exponent);
+	float gaussianTerm = exp(exponent) * float(lambertTerm > 0);
+
 	vec4 gloss;
 	if (hasSpecularmap != 0) {
 		gloss = texture(TextureSpecular, uv);
@@ -63,7 +61,8 @@ void main()
 	}
 
 	vec4 fragColor = texture(tex, uv)*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
-	fragColor *= color * texture(lightmap_tex, uvLight);
+	fragColor *= texture(lightmap_tex, uvLight);
+	fragColor.a = color.a;
 
 	if (fogEnabled > 0)
 	{
