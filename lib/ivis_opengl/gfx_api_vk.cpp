@@ -1625,7 +1625,7 @@ void VkTexture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t
 //								   STBIR_COLORSPACE_LINEAR,
 //								   nullptr);
 
-		upload(i, offset_x, offset_y, output_w, output_h, buffer_format, (const void*)output_pixels);
+		upload(i, offset_x >> i, offset_y >> i, output_w, output_h, buffer_format, (const void*)output_pixels);
 
 		if (prev_input_pixels_malloc)
 		{
