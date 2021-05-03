@@ -160,48 +160,6 @@ bool triggerEventAllianceBroken(uint8_t from, uint8_t to);
 void jsDebugSelected(const BASE_OBJECT *psObj);
 void jsDebugMessageUpdate();
 
-struct ScriptMapData
-{
-	struct Structure
-	{
-		WzString name;
-		Vector2i position;
-		uint16_t direction;
-		uint8_t modules;
-		int8_t player;  // -1 = scavs
-	};
-	struct Droid
-	{
-		WzString name;
-		Vector2i position;
-		uint16_t direction;
-		int8_t player;  // -1 = scavs
-	};
-	struct Feature
-	{
-		WzString name;
-		Vector2i position;
-		uint16_t direction;
-	};
-
-	uint32_t crcSumStructures(uint32_t crc) const;
-	uint32_t crcSumDroids(uint32_t crc) const;
-	uint32_t crcSumFeatures(uint32_t crc) const;
-
-	bool valid = false;
-	int mapWidth;
-	int mapHeight;
-	//int maxPlayers;
-	std::vector<uint16_t> texture;
-	std::vector<int16_t> height;
-	std::vector<Structure> structures;
-	std::vector<Droid> droids;
-	std::vector<Feature> features;
-
-	MersenneTwister mt;
-};
-
-ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
 //
 
 struct LABEL
@@ -341,7 +299,6 @@ public:
 	bool updateScripts();
 	bool shutdownScripts();
 
-	ScriptMapData runMapScript(WzString const &path, uint64_t seed, bool preview);
 	wzapi::scripting_instance* loadPlayerScript(const WzString& path, int player, AIDifficulty difficulty);
 
 	// Set/write variables in the script's global context, run after loading script,

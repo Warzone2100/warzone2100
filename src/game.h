@@ -51,7 +51,7 @@ bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType);
 bool loadScriptState(char *pFileName);
 
 /// Load the terrain types
-bool loadTerrainTypeMap(char *pFileData, UDWORD filesize);
+bool loadTerrainTypeMap(const char *pFilePath);
 bool loadTerrainTypeMapOverride(unsigned int tileSet);
 
 bool saveGame(const char *aFileName, GAME_TYPE saveType);
@@ -61,10 +61,6 @@ UDWORD getCampaign(const char *fileName);
 
 /*returns the current type of save game being loaded*/
 GAME_TYPE getSaveGameType();
-
-struct ScriptMapData;
-bool plotStructurePreviewScript(ScriptMapData const &data, char *backDropSprite, Vector2i playeridpos[]);
-bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[]);
 
 void gameScreenSizeDidChange(unsigned int oldWidth, unsigned int oldHeight, unsigned int newWidth, unsigned int newHeight);
 void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor);

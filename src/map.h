@@ -26,6 +26,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/debug.h"
+#include "lib/maplib/map.h"
+#include "lib/maplib/terrain_type.h"
 #include "objects.h"
 #include "terrain.h"
 #include "multiplay.h"
@@ -36,25 +38,6 @@
 #define URBAN 2
 #define ROCKIE 3
 
-/* The different types of terrain as far as the game is concerned */
-enum TYPE_OF_TERRAIN
-{
-	TER_SAND,
-	TER_SANDYBRUSH,
-	TER_BAKEDEARTH,
-	TER_GREENMUD,
-	TER_REDBRUSH,
-	TER_PINKROCK,
-	TER_ROAD,
-	TER_WATER,
-	TER_CLIFFFACE,
-	TER_RUBBLE,
-	TER_SHEETICE,
-	TER_SLUSH,
-
-	TER_MAX,
-};
-
 enum MAP_TILESET_TYPE
 {
 	TILESET_ARIZONA = 0,
@@ -64,24 +47,6 @@ enum MAP_TILESET_TYPE
 
 #define TALLOBJECT_YMAX		(200)
 #define TALLOBJECT_ADJUST	(300)
-
-/* Flags for whether texture tiles are flipped in X and Y or rotated */
-#define TILE_XFLIP		0x8000
-#define TILE_YFLIP		0x4000
-#define TILE_ROTMASK	0x3000
-#define TILE_ROTSHIFT	12
-#define TILE_TRIFLIP	0x0800	// This bit describes the direction the tile is split into 2 triangles (same as triangleFlip)
-#define TILE_NUMMASK	0x01ff
-
-static inline unsigned short TileNumber_tile(unsigned short tilenumber)
-{
-	return tilenumber & TILE_NUMMASK;
-}
-
-static inline unsigned short TileNumber_texture(unsigned short tilenumber)
-{
-	return tilenumber & ~TILE_NUMMASK;
-}
 
 #define BITS_MARKED             0x01    ///< Is this tile marked?
 #define BITS_DECAL              0x02    ///< Does this tile has a decal? If so, the tile from "texture" is drawn on top of the terrain.
@@ -342,14 +307,6 @@ static inline unsigned char terrainType(const MAPTILE *tile)
 }
 
 
-/* The maximum map size */
-
-#define MAP_MAXWIDTH	256
-#define MAP_MAXHEIGHT	256
-#define MAP_MAXAREA		(256*256)
-
-#define TILE_MAX_HEIGHT (255 * ELEVATION_SCALE)
-#define TILE_MIN_HEIGHT 0
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
@@ -358,36 +315,7 @@ extern MAPTILE *psMapTiles;
 extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
 
-/*
- * Usage-Example:
- * tile_coordinate = (world_coordinate / TILE_UNITS) = (world_coordinate >> TILE_SHIFT)
- * world_coordinate = (tile_coordinate * TILE_UNITS) = (tile_coordinate << TILE_SHIFT)
- */
-
-/* The shift on a world coordinate to get the tile coordinate */
-#define TILE_SHIFT 7
-
-/* The mask to get internal tile coords from a full coordinate */
-#define TILE_MASK 0x7f
-
-/* The number of units accross a tile */
-#define TILE_UNITS (1<<TILE_SHIFT)
-
-static inline int32_t world_coord(int32_t mapCoord)
-{
-	return (uint32_t)mapCoord << TILE_SHIFT;  // Cast because -1 << 7 is undefined, but (unsigned)-1 << 7 gives -128 as desired.
-}
-
-static inline int32_t map_coord(int32_t worldCoord)
-{
-	return worldCoord >> TILE_SHIFT;
-}
-
-/// Only for graphics!
-static inline float map_coordf(int32_t worldCoord)
-{
-	return (float)worldCoord / TILE_UNITS;
-}
+/* Additional tile <-> world coordinate overloads */
 
 static inline Vector2i world_coord(Vector2i const &mapCoord)
 {
@@ -397,11 +325,6 @@ static inline Vector2i world_coord(Vector2i const &mapCoord)
 static inline Vector2i map_coord(Vector2i const &worldCoord)
 {
 	return {map_coord(worldCoord.x), map_coord(worldCoord.y)};
-}
-
-static inline int32_t round_to_nearest_tile(int32_t worldCoord)
-{
-	return (worldCoord + TILE_UNITS/2) & ~TILE_MASK;
 }
 
 static inline Vector2i round_to_nearest_tile(Vector2i const &worldCoord)
@@ -425,16 +348,28 @@ static inline void clip_world_offmap(int *worldX, int *worldY)
 	*worldY = MIN(world_coord(mapHeight) - 1, *worldY);
 }
 
-/* maps a position down to the corner of a tile */
-#define map_round(coord) ((coord) & (TILE_UNITS - 1))
-
 /* Shutdown the map module */
 bool mapShutdown();
 
 /* Load the map data */
-bool mapLoad(char const *filename, bool preview);
+bool mapLoad(char const *filename);
 struct ScriptMapData;
-bool mapLoadFromScriptData(ScriptMapData const &, bool preview);
+bool mapLoadFromWzMapData(WzMap::MapData& mapData);
+
+class WzMapPhysFSIO : public WzMap::IOProvider
+{
+public:
+	virtual std::unique_ptr<WzMap::BinaryIOStream> openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode) override;
+	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
+	virtual bool writeFullFile(const std::string& filename, char *ppFileData, uint32_t fileSize) override;
+};
+
+class WzMapDebugLogger : public WzMap::LoggingProtocol
+{
+public:
+	virtual ~WzMapDebugLogger();
+	virtual void printLog(WzMap::LoggingProtocol::LogLevel level, const char *function, int line, const char *str) override;
+};
 
 /* Save the map data */
 bool mapSave(char **ppFileData, UDWORD *pFileSize);

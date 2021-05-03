@@ -32,6 +32,8 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
 
+#include "lib/maplib/map_terrain_types.h"
+
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/ivisdef.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -127,8 +129,6 @@ static const UDWORD NULL_ID = UDWORD_MAX;
 #define SAVEKEY_ONMISSION	0x100
 
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
-static void plotScriptFeature(ScriptMapData const &data, char *backDropSprite);
-static void plotFeature(char *backDropSprite);
 bool writeGameInfo(const char *pFileName);
 
 /** struct used to store the data for retreating. */
@@ -1620,16 +1620,15 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType);
 static bool writeGameFile(const char *fileName, SDWORD saveType);
 static bool writeMapFile(const char *fileName);
 
-static bool loadSaveDroidInit(char *pFileData, UDWORD filesize);
+static bool loadWzMapDroidInit(WzMap::Map &wzMap);
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists);
-static bool loadScriptDroid(ScriptMapData const &data);
 static bool loadSaveDroidPointers(const WzString &pFileName, DROID **ppsCurrentDroidLists);
 static bool writeDroidFile(const char *pFileName, DROID **ppsCurrentDroidLists);
 
 static bool loadSaveStructure(char *pFileData, UDWORD filesize);
 static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList);
-static bool loadScriptStructure(ScriptMapData const &data);
+static bool loadWzMapStructure(WzMap::Map& wzMap);
 static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
 
@@ -1639,7 +1638,7 @@ static bool writeTemplateFile(const char *pFileName);
 static bool loadSaveFeature(char *pFileData, UDWORD filesize);
 static bool writeFeatureFile(const char *pFileName);
 static bool loadSaveFeature2(const char *pFileName);
-static bool loadScriptFeature(ScriptMapData const &data);
+static bool loadWzMapFeature(WzMap::Map &wzMap);
 
 static bool writeTerrainTypeMapFile(char *pFileName);
 
@@ -1844,11 +1843,23 @@ static void getPlayerNames()
 	}
 }
 
+static WzMap::MapType getWzMapType(bool UserSaveGame)
+{
+	if (UserSaveGame)
+	{
+		return WzMap::MapType::SAVEGAME;
+	}
+	else
+	{
+		return (game.type == LEVEL_TYPE::CAMPAIGN) ? WzMap::MapType::CAMPAIGN : WzMap::MapType::SKIRMISH;
+	}
+}
+
 // -----------------------------------------------------------------------------------------
 // UserSaveGame ... this is true when you are loading a players save game
 bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool UserSaveGame)
 {
-	ScriptMapData data;  // Only valid if generating from 'game.js'.
+	std::unique_ptr<WzMap::Map> data;
 	std::map<WzString, DROID **> droidMap;
 	std::map<WzString, STRUCTURE **> structMap;
 	char			aFileName[256];
@@ -2073,22 +2084,11 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//load in the terrain type map
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "ttypes.ttp");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		//load the terrain type data
+		if (!loadTerrainTypeMap(aFileName))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
-		}
-
-		//load the terrain type data
-		if (pFileData)
-		{
-			if (!loadTerrainTypeMap(pFileData, fileSize))
-			{
-				debug(LOG_ERROR, "Failed with: %s", aFileName);
-				goto error;
-			}
 		}
 	}
 
@@ -2130,7 +2130,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		//load in the map file
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "mission.map");
-		if (!mapLoad(aFileName, false))
+		if (!mapLoad(aFileName))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			return false;
@@ -2238,31 +2238,37 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		}
 	}
 
+	// construct the WzMap object for loading map data
+	aFileName[fileExten] = '\0';
+	data = WzMap::Map::loadFromPath(aFileName, getWzMapType(UserSaveGame), game.maxPlayers, gameRandU32(), false, std::unique_ptr<WzMap::LoggingProtocol>(new WzMapDebugLogger()), std::unique_ptr<WzMapPhysFSIO>(new WzMapPhysFSIO()));
+
 	//if Campaign Expand then don't load in another map
 	if (gameType != GTYPE_SCENARIO_EXPAND)
 	{
 		psMapTiles = nullptr;
-		//load in the map file
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "game.js");
-		bool haveScript = PHYSFS_exists(aFileName);
-		if (haveScript) {
-			data = runMapScript(aFileName, gameRandU32(), false);
-			syncDebug("mapSize = [%d, %d]", data.mapWidth, data.mapHeight);
-			syncDebug("crc(texture) = 0x%08x", crcSumU16(0, data.texture.data(), data.texture.size()));
-			syncDebug("crc(height) = 0x%08x", crcSumI16(0, data.height.data(), data.height.size()));
-			syncDebug("crc(structures) = 0x%08x", data.crcSumStructures(0));
-			syncDebug("crc(droids) = 0x%08x", data.crcSumDroids(0));
-			syncDebug("crc(features) = 0x%08x", data.crcSumFeatures(0));
-		}
-		else
+		// load in the map file
+		if (!data)
 		{
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "game.map");
+			debug(LOG_ERROR, "Failed to load map from path: %s", aFileName);
+			return false;
 		}
-		if (haveScript? !mapLoadFromScriptData(data, false) : !mapLoad(aFileName, false))
+		auto mapData = data->mapData();
+		if (!mapData)
 		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
+			debug(LOG_ERROR, "Failed to load map data from path: %s", aFileName);
+			return false;
+		}
+		if (data->wasScriptGenerated())
+		{
+			syncDebug("mapSize = [%d, %d]", mapData->width, mapData->height);
+			syncDebug("crc(maptiles) = 0x%08x", mapData->crcSumMapTiles(0));
+			syncDebug("crc(structures) = 0x%08x", data->crcSumStructures(0));
+			syncDebug("crc(droids) = 0x%08x", data->crcSumDroids(0));
+			syncDebug("crc(features) = 0x%08x", data->crcSumFeatures(0));
+		}
+		if (!mapLoadFromWzMapData(*(mapData.get())))
+		{
+			debug(LOG_ERROR, "Failed to process map data from path: %s", aFileName);
 			return false;
 		}
 	}
@@ -2321,33 +2327,28 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		strcat(aFileName, "droid.json");
 
 		//load the data into apsDroidLists
-		if (data.valid && loadScriptDroid(data))
+		if (!UserSaveGame)
 		{
-			// Nothing to do here.
-		}
-		else if (loadSaveDroid(aFileName, apsDroidLists))
-		{
-			debug(LOG_SAVE, "Loaded new style droids");
-			droidMap[aFileName] = apsDroidLists;	// load pointers later
+			ASSERT(data != nullptr, "Expecting WzMap::Map instance");
+			if (loadWzMapDroidInit(*(data.get())))
+			{
+				debug(LOG_SAVE, "Loaded new style droids");
+				droidMap[aFileName] = apsDroidLists;	// load pointers later
+			}
+			else
+			{
+				aFileName[fileExten] = '\0';
+				debug(LOG_ERROR, "Failed to load map droid init from map directory: %s", aFileName);
+				goto error;
+			}
 		}
 		else
 		{
-			// load in the old style droid initialisation file
-			aFileName[fileExten] = '\0';
-			strcat(aFileName, "dinit.bjo");
-			/* Load in the chosen file data */
-			pFileData = fileLoadBuffer;
-			if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+			if (loadSaveDroid(aFileName, apsDroidLists))
 			{
-				debug(LOG_ERROR, "Failed with: %s", aFileName);
-				goto error;
+				debug(LOG_SAVE, "Loaded new style droids");
+				droidMap[aFileName] = apsDroidLists;	// load pointers later
 			}
-			if (!loadSaveDroidInit(pFileData, fileSize))
-			{
-				debug(LOG_ERROR, "Failed with: %s", aFileName);
-				goto error;
-			}
-			debug(LOG_SAVE, "Loaded old style droids");
 		}
 	}
 	else
@@ -2408,25 +2409,20 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 	//load in the features -do before the structures
 	aFileName[fileExten] = '\0';
-	strcat(aFileName, "feature.json");
-	if (data.valid && loadScriptFeature(data))
+	if (!UserSaveGame)
 	{
-		// Nothing to do here.
-	}
-	else if (!loadSaveFeature2(aFileName))
-	{
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "feat.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
+		ASSERT(data != nullptr, "Expecting WzMap::Map instance");
+		if (!loadWzMapFeature(*(data.get())))
 		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
+			debug(LOG_ERROR, "Failed to load map feature init from map directory: %s", aFileName);
 			goto error;
 		}
-
-		//load the data into apsFeatureLists
-		if (!loadSaveFeature(pFileData, fileSize))
+	}
+	else
+	{
+		aFileName[fileExten] = '\0';
+		strcat(aFileName, "feature.json");
+		if (!loadSaveFeature2(aFileName))
 		{
 			debug(LOG_ERROR, "Failed with: %s", aFileName);
 			goto error;
@@ -2437,32 +2433,30 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	initStructLimits();
 	aFileName[fileExten] = '\0';
 	strcat(aFileName, "struct.json");
-	if (data.valid && loadScriptStructure(data))
+	if (!UserSaveGame)
 	{
-		// Nothing to do here.
+		ASSERT(data != nullptr, "Expecting WzMap::Map instance");
+		if (game.type != LEVEL_TYPE::CAMPAIGN)
+		{
+			freeAllFlagPositions();		//clear any flags put in during level loads
+		}
+		if (!loadWzMapStructure(*(data.get())))
+		{
+			aFileName[fileExten] = '\0';
+			debug(LOG_ERROR, "Failed to load map structure init from map directory: %s", aFileName);
+			goto error;
+		}
+		if (game.type != LEVEL_TYPE::CAMPAIGN)
+		{
+			resetFactoryNumFlag();	//reset flags into the masks
+		}
 	}
 	else if (!loadSaveStructure2(aFileName, apsStructLists))
 	{
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "struct.bjo");
-		/* Load in the chosen file data */
-		pFileData = fileLoadBuffer;
-		if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
-			goto error;
-		}
-		//load the data into apsStructLists
-		if (!loadSaveStructure(pFileData, fileSize))
-		{
-			debug(LOG_ERROR, "Failed with: %s", aFileName);
-			goto error;
-		}
+		debug(LOG_ERROR, "Failed with: %s", aFileName);
+		goto error;
 	}
-	else
-	{
-		structMap[aFileName] = apsStructLists;
-	}
+	structMap[aFileName] = apsStructLists;
 
 	//if user save game then load up the current level for structs and components
 	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
@@ -4220,91 +4214,80 @@ static bool writeGameFile(const char *fileName, SDWORD saveType)
 	return status;
 }
 
-// -----------------------------------------------------------------------------------------
-// Process the droid initialisation file (dinit.bjo). Creates droids for
-// the scenario being loaded. This is *NEVER* called for a user save game
-//
-bool loadSaveDroidInit(char *pFileData, UDWORD filesize)
+static uint32_t RemapWzMapPlayerNumber(int8_t oldNumber)
 {
-	DROIDINIT_SAVEHEADER		*psHeader;
-	SAVE_DROIDINIT *pDroidInit;
-	const DROID_TEMPLATE *psTemplate;
-	DROID *psDroid;
-	UDWORD i;
-	UDWORD NumberOfSkippedDroids = 0;
-
-	/* Check the file type */
-	psHeader = (DROIDINIT_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'd' || psHeader->aFileType[1] != 'i' || psHeader->aFileType[2] != 'n' || psHeader->aFileType[3] != 't')
+	if (oldNumber < 0)
 	{
-		debug(LOG_ERROR, "Incorrect file type");
-		return false;
+		game.mapHasScavengers = true;
+		return static_cast<uint32_t>(scavengerSlot());
 	}
 
-	/* DROIDINIT_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	//increment to the start of the data
-	pFileData += DROIDINIT_HEADER_SIZE;
-
-	debug(LOG_SAVE, "fileversion is %u ", psHeader->version);
-
-	pDroidInit = (SAVE_DROIDINIT *)pFileData;
-
-	for (i = 0; i < psHeader->quantity; i++)
+	if (game.type == LEVEL_TYPE::CAMPAIGN)		// don't remap for SP games
 	{
-		/* SAVE_DROIDINIT is OBJECT_SAVE_V19 */
-		/* OBJECT_SAVE_V19 */
-		endian_udword(&pDroidInit->id);
-		endian_udword(&pDroidInit->x);
-		endian_udword(&pDroidInit->y);
-		endian_udword(&pDroidInit->z);
-		endian_udword(&pDroidInit->direction);
-		endian_udword(&pDroidInit->player);
-		endian_udword(&pDroidInit->periodicalDamageStart);
-		endian_udword(&pDroidInit->periodicalDamage);
+		return oldNumber;
+	}
 
-		pDroidInit->player = RemapPlayerNumber(pDroidInit->player);
-		if (pDroidInit->player >= MAX_PLAYERS)
+	for (uint32_t i = 0; i < MAX_PLAYERS; i++)
+	{
+		if (oldNumber == NetPlay.players[i].position)
 		{
-			pDroidInit->player = MAX_PLAYERS - 1;	// now don't lose any droids ... force them to be the last player
+			game.mapHasScavengers = game.mapHasScavengers || i == scavengerSlot();
+			return i;
+		}
+	}
+	ASSERT(false, "Found no player position for player %d", (int)oldNumber);
+	return 0;
+}
+
+static bool loadWzMapDroidInit(WzMap::Map &wzMap)
+{
+	uint32_t NumberOfSkippedDroids = 0;
+	auto pDroids = wzMap.mapDroids();
+	ASSERT_OR_RETURN(false, pDroids.get() != nullptr, "No data.");
+
+	for (auto &droid : *pDroids)
+	{
+		unsigned player = RemapWzMapPlayerNumber(droid.player);
+		if (player >= MAX_PLAYERS)
+		{
+			player = MAX_PLAYERS - 1;	// now don't lose any droids ... force them to be the last player
 			NumberOfSkippedDroids++;
 		}
-
-		psTemplate = getTemplateFromTranslatedNameNoPlayer(pDroidInit->name);
+		auto psTemplate = getTemplateFromTranslatedNameNoPlayer(droid.name.c_str());
 		if (psTemplate == nullptr)
 		{
-			debug(LOG_ERROR, "Unable to find template for %s for player %d", pDroidInit->name, pDroidInit->player);
+			debug(LOG_ERROR, "Unable to find template for %s for player %d -- unit skipped", droid.name.c_str(), player);
+			continue;
 		}
-		else
+		turnOffMultiMsg(true);
+		auto psDroid = reallyBuildDroid(psTemplate, Position(droid.position.x, droid.position.y, 0), player, false, {droid.direction, 0, 0});
+		turnOffMultiMsg(false);
+		if (psDroid == nullptr)
 		{
-			psDroid = reallyBuildDroid(psTemplate, Position((pDroidInit->x & ~TILE_MASK) + TILE_UNITS / 2, (pDroidInit->y  & ~TILE_MASK) + TILE_UNITS / 2, 0), pDroidInit->player, false);
-			if (psDroid)
-			{
-				Vector2i startpos = getPlayerStartPosition(psDroid->player);
-
-				psDroid->id = pDroidInit->id > 0 ? pDroidInit->id : 0xFEDBCA98;	// hack to remove droid id zero
-				psDroid->rot.direction = DEG(pDroidInit->direction);
-				addDroid(psDroid, apsDroidLists);
-				if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
-				{
-					scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);
-				}
-			}
-			else
-			{
-				debug(LOG_ERROR, "This droid cannot be built - %s", pDroidInit->name);
-				return false;
-			}
+			debug(LOG_ERROR, "Failed to build unit %s", droid.name.c_str());
+			continue;
 		}
-		pDroidInit++;
+		if (droid.id.has_value())
+		{
+			psDroid->id = droid.id.value() > 0 ? droid.id.value() : 0xFEDBCA98;	// hack to remove droid id zero
+		}
+		ASSERT(psDroid->id != 0, "Droid ID should never be zero here");
+
+		// HACK!!
+		Vector2i startpos = getPlayerStartPosition(player);
+		if (psDroid->droidType == DROID_CONSTRUCT && startpos.x == 0 && startpos.y == 0)
+		{
+			scriptSetStartPos(psDroid->player, psDroid->pos.x, psDroid->pos.y);	// set map start position, FIXME - save properly elsewhere!
+		}
+
+		addDroid(psDroid, apsDroidLists);
 	}
 	if (NumberOfSkippedDroids)
 	{
 		debug(LOG_ERROR, "Bad Player number in %d unit(s)... assigned to the last player!", NumberOfSkippedDroids);
 		return false;
 	}
+
 	return true;
 }
 
@@ -4328,25 +4311,6 @@ static UDWORD RemapPlayerNumber(UDWORD OldNumber)
 		}
 	}
 	ASSERT(false, "Found no player position for player %d", (int)OldNumber);
-	return 0;
-}
-
-static int remapIntPlayerNumber(int oldNumber)
-{
-	if (oldNumber < 0)
-	{
-		game.mapHasScavengers = true;
-		return scavengerSlot();
-	}
-
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (oldNumber == NetPlay.players[i].position)
-		{
-			return i;
-		}
-	}
-	ASSERT(false, "Found no player position for player %d", oldNumber);
 	return 0;
 }
 
@@ -4634,33 +4598,6 @@ static void writeSaveObjectJSON(nlohmann::json &jsonObj, BASE_OBJECT *psObj)
 			jsonObj["visible/" + WzString::number(i).toStdString()] = psObj->visible[i];
 		}
 	}
-}
-
-static bool loadScriptDroid(ScriptMapData const &data)
-{
-	ASSERT_OR_RETURN(false, data.valid, "No data.");
-
-	for (auto &droid : data.droids)
-	{
-		unsigned player = remapIntPlayerNumber(droid.player);
-		auto psTemplate = getTemplateFromTranslatedNameNoPlayer(droid.name.toUtf8().c_str());
-		if (psTemplate == nullptr)
-		{
-			debug(LOG_ERROR, "Unable to find template for %s for player %d -- unit skipped", droid.name.toUtf8().c_str(), player);
-			continue;
-		}
-		turnOffMultiMsg(true);
-		auto psDroid = reallyBuildDroid(psTemplate, {droid.position, 0}, player, false, {droid.direction, 0, 0});
-		turnOffMultiMsg(false);
-		if (psDroid == nullptr)
-		{
-			debug(LOG_ERROR, "Failed to build unit %s", droid.name.toUtf8().c_str());
-			continue;
-		}
-		addDroid(psDroid, apsDroidLists);
-	}
-
-	return true;
 }
 
 static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
@@ -5229,20 +5166,20 @@ static UDWORD getResearchIdFromName(const WzString &name)
 	return NULL_ID;
 }
 
-bool loadScriptStructure(ScriptMapData const &data)
+static bool loadWzMapStructure(WzMap::Map& wzMap)
 {
-	if (!data.valid)
+	uint32_t NumberOfSkippedStructures = 0;
+	auto pStructures = wzMap.mapStructures();
+	if (!pStructures)
 	{
 		return false;
 	}
 
-	freeAllFlagPositions();  // clear any flags put in during level loads
-
-	for (auto &structure : data.structures) {
-		auto psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats, [&](STRUCTURE_STATS &stat) { return stat.id == structure.name; });
+	for (auto &structure : *pStructures) {
+		auto psStats = std::find_if(asStructureStats, asStructureStats + numStructureStats, [&](STRUCTURE_STATS &stat) { return stat.id.compare(structure.name.c_str()) == 0; });
 		if (psStats == asStructureStats + numStructureStats)
 		{
-			debug(LOG_ERROR, "Structure type \"%s\" unknown", structure.name.toStdString().c_str());
+			debug(LOG_ERROR, "Structure type \"%s\" unknown", structure.name.c_str());
 			continue;  // ignore this
 		}
 		//for modules - need to check the base structure exists
@@ -5251,7 +5188,7 @@ bool loadScriptStructure(ScriptMapData const &data)
 			STRUCTURE *psStructure = getTileStructure(map_coord(structure.position.x), map_coord(structure.position.y));
 			if (psStructure == nullptr)
 			{
-				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", structure.name.toStdString().c_str(), structure.player);
+				debug(LOG_ERROR, "No owning structure for module - %s for player - %d", structure.name.c_str(), structure.player);
 				continue; // ignore this module
 			}
 		}
@@ -5259,22 +5196,33 @@ bool loadScriptStructure(ScriptMapData const &data)
 		if (map_coord(structure.position.x) < TOO_NEAR_EDGE || map_coord(structure.position.x) > mapWidth - TOO_NEAR_EDGE
 		 || map_coord(structure.position.y) < TOO_NEAR_EDGE || map_coord(structure.position.y) > mapHeight - TOO_NEAR_EDGE)
 		{
-			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.toStdString().c_str());
+			debug(LOG_ERROR, "Structure %s, coord too near the edge of the map", structure.name.c_str());
 			continue; // skip it
 		}
-		int player = remapIntPlayerNumber(structure.player);
+		auto player = RemapWzMapPlayerNumber(structure.player);
+		if (player >= MAX_PLAYERS)
+		{
+			player = MAX_PLAYERS - 1;
+			NumberOfSkippedStructures++;
+		}
 		STRUCTURE *psStructure = buildStructureDir(psStats, structure.position.x, structure.position.y, structure.direction, player, true);
 		if (psStructure == nullptr)
 		{
-			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.toStdString().c_str());
+			debug(LOG_ERROR, "Structure %s couldn't be built (probably on top of another structure).", structure.name.c_str());
 			continue;
+		}
+		if (structure.id.has_value())
+		{
+			// The original code here didn't work and so the scriptwriters worked round it by using the module ID - so making it work now will screw up
+			// the scripts -so in ALL CASES overwrite the ID!
+			psStructure->id = structure.id.value() > 0 ? structure.id.value() : 0xFEDBCA98; // hack to remove struct id zero
 		}
 		if (structure.modules > 0)
 		{
 			auto moduleStat = getModuleStat(psStructure);
 			if (moduleStat == nullptr)
 			{
-				debug(LOG_ERROR, "Structure %s can't have modules.", structure.name.toStdString().c_str());
+				debug(LOG_ERROR, "Structure %s can't have modules.", structure.name.c_str());
 				continue;
 			}
 			for (int i = 0; i < structure.modules; ++i)
@@ -5291,6 +5239,12 @@ bool loadScriptStructure(ScriptMapData const &data)
 		{
 			scriptSetDerrickPos(psStructure->pos.x, psStructure->pos.y);
 		}
+	}
+
+	if (NumberOfSkippedStructures > 0)
+	{
+		debug(LOG_ERROR, "structureLoad: invalid player number in %d structures ... assigned to the last player!\n\n", NumberOfSkippedStructures);
+		return false;
 	}
 
 	return true;
@@ -5925,26 +5879,27 @@ bool loadSaveFeature(char *pFileData, UDWORD filesize)
 	return true;
 }
 
-static bool loadScriptFeature(ScriptMapData const &data)
+static bool loadWzMapFeature(WzMap::Map &wzMap)
 {
-	if (!data.valid)
+	auto pFeatures = wzMap.mapFeatures();
+	if (!pFeatures)
 	{
 		return false;
 	}
 
-	for (auto &feature : data.features)
+	for (auto &feature : *pFeatures)
 	{
-		auto psStats = std::find_if(asFeatureStats, asFeatureStats + numFeatureStats, [&](FEATURE_STATS &stat) { return stat.id == feature.name; });
+		auto psStats = std::find_if(asFeatureStats, asFeatureStats + numFeatureStats, [&](FEATURE_STATS &stat) { return stat.id.compare(feature.name.c_str()) == 0; });
 		if (psStats == asFeatureStats + numFeatureStats)
 		{
-			debug(LOG_ERROR, "Feature type \"%s\" unknown", feature.name.toStdString().c_str());
+			debug(LOG_ERROR, "Feature type \"%s\" unknown", feature.name.c_str());
 			continue;  // ignore this
 		}
 		// Create the Feature
 		auto pFeature = buildFeature(psStats, feature.position.x, feature.position.y, true);
 		if (!pFeature)
 		{
-			debug(LOG_ERROR, "Unable to create feature %s", feature.name.toStdString().c_str());
+			debug(LOG_ERROR, "Unable to create feature %s", feature.name.c_str());
 			continue;
 		}
 		if (pFeature->psStats->subType == FEAT_OIL_RESOURCE)
@@ -5952,8 +5907,16 @@ static bool loadScriptFeature(ScriptMapData const &data)
 			scriptSetDerrickPos(pFeature->pos.x, pFeature->pos.y);
 		}
 		//restore values
-		pFeature->id = generateSynchronisedObjectId();
+		if (feature.id.has_value())
+		{
+			pFeature->id = feature.id.value();
+		}
+		else
+		{
+			pFeature->id = generateSynchronisedObjectId();
+		}
 		pFeature->rot.direction = feature.direction;
+		pFeature->player = (feature.player.has_value()) ? feature.player.value() : PLAYER_FEATURE;
 	}
 
 	return true;
@@ -6153,56 +6116,37 @@ bool writeTemplateFile(const char *pFileName)
 
 // -----------------------------------------------------------------------------------------
 // load up a terrain tile type map file
-// note: This function modifies pFileData directly while loading! (FIXME?)
-bool loadTerrainTypeMap(char *pFileData, UDWORD filesize)
+bool loadTerrainTypeMap(const char *pFilePath)
 {
-	TILETYPE_SAVEHEADER	*psHeader;
-	UDWORD				i;
-	UWORD				*pType;
-
-	if (filesize < TILETYPE_HEADER_SIZE)
+	ASSERT_OR_RETURN(false, pFilePath, "Null pFilePath");
+	WzMapDebugLogger logger;
+	WzMapPhysFSIO mapIO;
+	auto result = WzMap::loadTerrainTypes(pFilePath, mapIO, &logger);
+	if (!result)
 	{
-		debug(LOG_ERROR, "loadTerrainTypeMap: file too small");
+		// Failed to load terrain type map data
 		return false;
 	}
-
-	// Check the header
-	psHeader = (TILETYPE_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 't' || psHeader->aFileType[1] != 't' ||
-	    psHeader->aFileType[2] != 'y' || psHeader->aFileType[3] != 'p')
-	{
-		debug(LOG_ERROR, "loadTerrainTypeMap: Incorrect file type");
-
-		return false;
-	}
-
-	/* TILETYPE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
 
 	// reset the terrain table
 	memset(terrainTypes, 0, sizeof(terrainTypes));
 
-	// Load the terrain type mapping
-	pType = (UWORD *)(pFileData + TILETYPE_HEADER_SIZE);
-	endian_uword(pType);
-	if (psHeader->quantity >= MAX_TILE_TEXTURES)
+	size_t quantity = result->terrainTypes.size();
+	if (quantity >= MAX_TILE_TEXTURES)
 	{
 		// Workaround for fugly map editor bug, since we can't fix the map editor
-		psHeader->quantity = MAX_TILE_TEXTURES - 1;
+		quantity = MAX_TILE_TEXTURES - 1;
 	}
-	for (i = 0; i < psHeader->quantity; i++)
+	for (size_t i = 0; i < quantity; i++)
 	{
-		if (*pType > TER_MAX)
+		auto& type = result->terrainTypes[i];
+		if (type > TER_MAX)
 		{
 			debug(LOG_ERROR, "loadTerrainTypeMap: terrain type out of range");
-
 			return false;
 		}
 
-		terrainTypes[i] = (UBYTE) * pType;
-		pType++;
-		endian_uword(pType);
+		terrainTypes[i] = static_cast<UBYTE>(type);
 	}
 
 	return true;
@@ -6992,409 +6936,4 @@ static void setMapScroll()
 GAME_TYPE getSaveGameType()
 {
 	return gameType;
-}
-
-static void plotBackdropPixel(char *backDropSprite, int xx, int yy, PIELIGHT const &colour)
-{
-	xx = clip(xx, 0, BACKDROP_HACK_WIDTH - 1);
-	yy = clip(yy, 0, BACKDROP_HACK_HEIGHT - 1);
-	char *pixel = backDropSprite + (yy * BACKDROP_HACK_WIDTH + xx) * 3;
-	pixel[0] = colour.byte.r;
-	pixel[1] = colour.byte.g;
-	pixel[2] = colour.byte.b;
-}
-
-bool plotStructurePreviewScript(ScriptMapData const &data, char *backDropSprite, Vector2i playeridpos[])
-{
-	ASSERT_OR_RETURN(false, data.valid, "Missing map data");
-
-	for (auto &structure : data.structures)
-	{
-		unsigned player = structure.player == -1? scavengerSlot() : structure.player;
-		if (player >= MAX_PLAYERS)
-		{
-			debug(LOG_ERROR, "Bad player");
-			continue;
-		}
-		bool HQ = structure.name.startsWith("A0CommandCentre");
-		Vector2i pos = map_coord(structure.position);
-		if (HQ)
-		{
-			playeridpos[player] = pos;
-		}
-		unsigned playerid = getPlayerColour(RemapPlayerNumber(player));
-		// kludge to fix black, so you can see it on some maps.
-		PIELIGHT color = playerid == 3? WZCOL_GREY : clanColours[playerid];
-		if (HQ)
-		{
-			// This shows where the HQ is on the map in a special color.
-			// We could do the same for anything else (oil/whatever) also.
-			// Possible future enhancement?
-			color = WZCOL_MAP_PREVIEW_HQ;
-		}
-		// and now we blit the color to the texture
-		plotBackdropPixel(backDropSprite, pos.x, pos.y, color);
-	}
-
-	plotScriptFeature(data, backDropSprite);
-
-	return true;
-}
-
-/**
- * \param[out] backDropSprite The premade map texture.
- * \param scale               Scale of the map texture.
- * \param[out] playeridpos    Will contain the position on the map where the player's HQ are located.
- *
- * Reads the current map and colours the map preview for any structures
- * present. Additionally we load the player's HQ location into playeridpos so
- * we know the player's starting location.
- */
-bool plotStructurePreview16(char *backDropSprite, Vector2i playeridpos[])
-{
-	union
-	{
-		SAVE_STRUCTURE_V2 v2;
-		SAVE_STRUCTURE_V20 v20;
-	} sSave;  // close eyes now.
-	SAVE_STRUCTURE_V2 *psSaveStructure2   = &sSave.v2;
-	SAVE_STRUCTURE_V20 *psSaveStructure20 = &sSave.v20;
-	// ok you can open them again..
-
-	STRUCT_SAVEHEADER *psHeader;
-	char aFileName[256];
-	UDWORD xx, yy, count, fileSize, sizeOfSaveStructure = sizeof(SAVE_STRUCTURE);
-	UDWORD playerid = 0;
-	char *pFileData = nullptr;
-	LEVEL_DATASET *psLevel;
-	PIELIGHT color = WZCOL_BLACK ;
-	bool HQ = false;
-
-	psLevel = levFindDataSet(game.map, &game.hash);
-	ASSERT_OR_RETURN(false, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[0]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	strcat(aFileName, "/struct.bjo");
-
-	if (!PHYSFS_exists(aFileName))	// use new version of structure data
-	{
-		sstrcpy(aFileName, psLevel->apDataFiles[0]);
-		aFileName[strlen(aFileName) - 4] = '\0';
-		strcat(aFileName, "/struct.json");
-		WzConfig ini(aFileName, WzConfig::ReadOnly);
-		std::vector<WzString> list = ini.childGroups();
-		for (size_t i = 0; i < list.size(); ++i)
-		{
-			ini.beginGroup(list[i]);
-			WzString name = ini.value("name").toWzString();
-			Position pos = ini.vector3i("position");
-			playerid = ini.value("startpos", scavengerSlot()).toInt();  // No conversion should be going on, this is the map makers position when player X should be.
-			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
-			if (name.startsWith("A0CommandCentre"))
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x = map_coord(pos.x);
-				yy = playeridpos[playerid].y = map_coord(pos.y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(pos.x);
-				yy = map_coord(pos.y);
-			}
-			playerid = getPlayerColour(RemapPlayerNumber(playerid));
-			// kludge to fix black, so you can see it on some maps.
-			if (playerid == 3)	// in this case 3 = palette entry for black.
-			{
-				color = WZCOL_GREY;
-			}
-			else
-			{
-				color.rgba = clanColours[playerid].rgba;
-			}
-			if (HQ)
-			{
-				// This shows where the HQ is on the map in a special color.
-				// We could do the same for anything else (oil/whatever) also.
-				// Possible future enhancement?
-				color = WZCOL_MAP_PREVIEW_HQ;
-			}
-			// and now we blit the color to the texture
-			plotBackdropPixel(backDropSprite, xx, yy, color);
-			ini.endGroup();
-		}
-		// And now we need to show features.
-		plotFeature(backDropSprite);
-
-		return true;
-	}
-
-
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug(LOG_NEVER, "Failed to load file to buffer.");
-	}
-
-	/* Check the file type */
-	psHeader = (STRUCT_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 's' || psHeader->aFileType[1] != 't' ||
-	    psHeader->aFileType[2] != 'r' || psHeader->aFileType[3] != 'u')
-	{
-		debug(LOG_ERROR, "Invalid file type.");
-		return false;
-	}
-
-	/* STRUCT_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	//increment to the start of the data
-	pFileData += STRUCT_HEADER_SIZE;
-
-	if (psHeader->version < VERSION_12)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V2);
-	}
-	else if (psHeader->version < VERSION_14)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V12);
-	}
-	else if (psHeader->version <= VERSION_14)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V14);
-	}
-	else if (psHeader->version <= VERSION_16)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V15);
-	}
-	else if (psHeader->version <= VERSION_19)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V17);
-	}
-	else if (psHeader->version <= VERSION_20)
-	{
-		sizeOfSaveStructure = sizeof(SAVE_STRUCTURE_V20);
-	}
-
-	/* Load in the structure data */
-	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveStructure)
-	{
-		// we are specifically looking for the HQ, and it seems this is the only way to
-		// find it via parsing map.
-		// We store the coordinates of the structure, into a array for as many players as are on the map.
-
-		if (psHeader->version <= VERSION_19)
-		{
-			// All versions up to 19 are compatible with V2.
-			memcpy(psSaveStructure2, pFileData, sizeof(SAVE_STRUCTURE_V2));
-
-			endian_udword(&psSaveStructure2->x);
-			endian_udword(&psSaveStructure2->y);
-			endian_udword(&psSaveStructure2->player);
-			playerid = psSaveStructure2->player;
-			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
-			if (strncmp(psSaveStructure2->name, "A0CommandCentre", 15) == 0)
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x = map_coord(psSaveStructure2->x);
-				yy = playeridpos[playerid].y = map_coord(psSaveStructure2->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure2->x);
-				yy = map_coord(psSaveStructure2->y);
-			}
-		}
-		else
-		{
-			// All newer versions are compatible with V20.
-			memcpy(psSaveStructure20, pFileData, sizeof(SAVE_STRUCTURE_V20));
-
-			endian_udword(&psSaveStructure20->x);
-			endian_udword(&psSaveStructure20->y);
-			endian_udword(&psSaveStructure20->player);
-			playerid = psSaveStructure20->player;
-			ASSERT_OR_RETURN(false, playerid < MAX_PLAYERS, "Invalid player number");
-			if (strncmp(psSaveStructure20->name, "A0CommandCentre", 15) == 0)
-			{
-				HQ = true;
-				xx = playeridpos[playerid].x = map_coord(psSaveStructure20->x);
-				yy = playeridpos[playerid].y = map_coord(psSaveStructure20->y);
-			}
-			else
-			{
-				HQ = false;
-				xx = map_coord(psSaveStructure20->x);
-				yy = map_coord(psSaveStructure20->y);
-			}
-		}
-		playerid = getPlayerColour(RemapPlayerNumber(playerid));
-		// kludge to fix black, so you can see it on some maps.
-		if (playerid == 3)	// in this case 3 = palette entry for black.
-		{
-			color = WZCOL_GREY;
-		}
-		else
-		{
-			color.rgba = clanColours[playerid].rgba;
-		}
-
-		if (HQ)
-		{
-			// This shows where the HQ is on the map in a special color.
-			// We could do the same for anything else (oil/whatever) also.
-			// Possible future enhancement?
-			color = WZCOL_MAP_PREVIEW_HQ;
-		}
-
-		// and now we blit the color to the texture
-		plotBackdropPixel(backDropSprite, xx, yy, color);
-	}
-
-	// And now we need to show features.
-	plotFeature(backDropSprite);
-	return true;
-}
-
-static void plotScriptFeature(ScriptMapData const &data, char *backDropSprite) {
-	ASSERT_OR_RETURN(, data.valid, "Missing map data");
-
-	for (auto &feature : data.features)
-	{
-		PIELIGHT colour;
-		if (feature.name.startsWith("OilResource"))
-		{
-			colour = WZCOL_MAP_PREVIEW_OIL;
-		}
-		else if (feature.name.startsWith("OilDrum"))
-		{
-			colour = WZCOL_MAP_PREVIEW_BARREL;
-		}
-		else
-		{
-			continue;
-		}
-		// and now we blit the color to the texture
-		auto pos = map_coord(feature.position);
-		plotBackdropPixel(backDropSprite, pos.x, pos.y, colour);
-	}
-}
-
-// Show location of (at this time) oil on the map preview
-static void plotFeature(char *backDropSprite)
-{
-	FEATURE_SAVEHEADER	*psHeader;
-	SAVE_FEATURE_V2	*psSaveFeature;
-	LEVEL_DATASET *psLevel;
-	UDWORD xx, yy, count, fileSize;
-	UDWORD sizeOfSaveFeature = 0;
-	char *pFileData = nullptr;
-	char aFileName[256];
-	const PIELIGHT colourOil = WZCOL_MAP_PREVIEW_OIL;
-	const PIELIGHT colourBarrel = WZCOL_MAP_PREVIEW_BARREL;
-
-	psLevel = levFindDataSet(game.map, &game.hash);
-	ASSERT_OR_RETURN(, psLevel, "No level found for %s", game.map);
-	sstrcpy(aFileName, psLevel->apDataFiles[0]);
-	aFileName[strlen(aFileName) - 4] = '\0';
-	strcat(aFileName, "/feat.bjo");
-	if (!PHYSFS_exists(aFileName))	// use new version of feature data
-	{
-		sstrcpy(aFileName, psLevel->apDataFiles[0]);
-		aFileName[strlen(aFileName) - 4] = '\0';
-		strcat(aFileName, "/feature.json");
-		WzConfig ini(aFileName, WzConfig::ReadOnly);
-		if (!ini.status())
-		{
-			debug(LOG_ERROR, "Could not open %s", aFileName);
-			return;
-		}
-		std::vector<WzString> list = ini.childGroups();
-		for (size_t i = 0; i < list.size(); ++i)
-		{
-			ini.beginGroup(list[i]);
-			WzString name = ini.value("name").toWzString();
-			Position pos = ini.vector3i("position");
-
-			// we only care about oil
-			PIELIGHT const *colour = nullptr;
-			if (name.startsWith("OilResource"))
-			{
-				colour = &colourOil;
-			}
-			else if (name.startsWith("OilDrum"))
-			{
-				colour = &colourBarrel;
-			}
-			if (colour != nullptr)
-			{
-				// and now we blit the color to the texture
-				xx = map_coord(pos.x);
-				yy = map_coord(pos.y);
-				plotBackdropPixel(backDropSprite, xx, yy, *colour);
-			}
-			ini.endGroup();
-		}
-		return;
-	}
-
-	// Load in the chosen file data/
-	pFileData = fileLoadBuffer;
-	if (!loadFileToBuffer(aFileName, pFileData, FILE_LOAD_BUFFER_SIZE, &fileSize))
-	{
-		debug(LOG_ERROR, "Unable to load file %s?", aFileName);
-		return;
-	}
-
-	// Check the file type
-	psHeader = (FEATURE_SAVEHEADER *)pFileData;
-	if (psHeader->aFileType[0] != 'f' || psHeader->aFileType[1] != 'e' || psHeader->aFileType[2] != 'a' || psHeader->aFileType[3] != 't')
-	{
-		debug(LOG_ERROR, "Incorrect file type, looking at %s", aFileName);
-		return;
-	}
-
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	//increment to the start of the data
-	pFileData += FEATURE_HEADER_SIZE;
-
-	sizeOfSaveFeature = sizeof(SAVE_FEATURE_V2);
-
-	if ((sizeOfSaveFeature * psHeader->quantity + FEATURE_HEADER_SIZE) > fileSize)
-	{
-		debug(LOG_ERROR, "Unexpected end of file ?");
-		return;
-	}
-
-	// Load in the feature data
-	for (count = 0; count < psHeader->quantity; count++, pFileData += sizeOfSaveFeature)
-	{
-		// All versions up to 19 are compatible with V2.
-		psSaveFeature = (SAVE_FEATURE_V2 *) pFileData;
-
-		// we only care about oil
-		PIELIGHT const *colour = nullptr;
-		if (strncmp(psSaveFeature->name, "OilResource", 11) == 0)
-		{
-			colour = &colourOil;
-		}
-		else if (strncmp(psSaveFeature->name, "OilDrum", 7) == 0)
-		{
-			colour = &colourBarrel;
-		}
-		else
-		{
-			continue;
-		}
-		endian_udword(&psSaveFeature->x);
-		endian_udword(&psSaveFeature->y);
-		xx = map_coord(psSaveFeature->x);
-		yy = map_coord(psSaveFeature->y);
-		// and now we blit the color to the texture
-		plotBackdropPixel(backDropSprite, xx, yy, *colour);
-	}
 }
