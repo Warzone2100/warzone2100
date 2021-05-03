@@ -5,7 +5,7 @@ find_package(OpenAL REQUIRED)
 find_package(OggVorbis REQUIRED)
 find_package(Theora REQUIRED)
 
-add_library(sequence ${HEADERS} ${SRC})
+add_library(sequence STATIC ${HEADERS} ${SRC})
 set_property(TARGET sequence PROPERTY FOLDER "lib")
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(sequence PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
