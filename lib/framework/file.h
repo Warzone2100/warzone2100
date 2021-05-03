@@ -38,6 +38,9 @@ WZ_DECL_NONNULL(1) bool saveFile(const char *pFileName, const char *pFileData, U
 /** Load a file from disk into a fixed memory buffer. */
 WZ_DECL_NONNULL(1, 2) bool loadFileToBuffer(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 
+/** Load a file from disk into a vector buffer. */
+bool loadFileToBufferVector(const char *pFileName, std::vector<char>& outputBuffer, bool hard_fail, bool appendNullCharacter = true);
+
 /** Load a file from disk, but returns quietly if no file found. */
 WZ_DECL_NONNULL(1, 2) bool loadFileToBufferNoError(const char *pFileName, char *pFileBuffer, UDWORD bufferSize, UDWORD *pSize);
 
