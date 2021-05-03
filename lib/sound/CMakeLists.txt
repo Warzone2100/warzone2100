@@ -29,7 +29,7 @@ message(STATUS "OpenAL INTERFACE_INCLUDE_DIRECTORIES = \"${_openal_includes}\"")
 CHECK_INCLUDE_FILE_CXX("AL/alext.h" HAVE_OPENAL_ALEXT_H)
 cmake_pop_check_state()
 
-add_library(sound ${HEADERS} ${SRC})
+add_library(sound STATIC ${HEADERS} ${SRC})
 set_property(TARGET sound PROPERTY FOLDER "lib")
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(sound PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
