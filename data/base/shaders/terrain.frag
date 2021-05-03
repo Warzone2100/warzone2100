@@ -54,6 +54,7 @@ void main()
 	if (hasNormalmap != 0) {
 		vec3 normalFromMap = texture(TextureNormal, uv).xyz;
 		N = normalize(normalFromMap * 2.0 - 1.0);
+		N.y = -N.y;
 	} else {
 		N = vec3(0,0,1); // in tangent space so normal to xy plane
 	}

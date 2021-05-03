@@ -1,12 +1,11 @@
 #version 450
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
+	mat4 ModelViewProjectionMatrix;
 	mat4 ModelUVMatrix;
 	mat4 ModelUVLightMatrix;
-	mat4 ModelViewMatrix;
-	mat4 ModelViewProjectionMatrix;
-	mat4 ModelViewNormalMatrix;
-	vec4 sunPosition; // In EyeSpace
+	vec4 cameraPos; // in modelSpace
+	vec4 sunPos; // in modelSpace, normalized
 	vec4 emissiveLight; // light colors/intensity
 	vec4 ambientLight;
 	vec4 diffuseLight;
@@ -15,8 +14,6 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
-	int texture0;
-	int texture1;
 	int hasNormalmap;
 	int hasSpecularmap;
 };
@@ -41,15 +38,13 @@ void main()
 	uvLight = (ModelUVLightMatrix * vertex).xy;
 
 	// constructing EyeSpace -> TangentSpace mat3
-	mat3 normalMat = mat3(ModelViewNormalMatrix);
-	vec3 normal = normalize(normalMat * vertexNormal);
 	vec3 vaxis = transpose(ModelUVMatrix)[1].xyz;
-	vec3 tangent = normalize(cross(normal, normalMat * vaxis));
-	vec3 bitangent = cross(normal, tangent);
-	mat3 eyeTangentMatrix = mat3(tangent, bitangent, normal); // aka TBN-matrix
+	vec3 tangent = normalize(cross(vertexNormal, vaxis));
+	vec3 bitangent = cross(vertexNormal, tangent);
+	mat3 ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
 	// transform light to TangentSpace:
-	vec3 eyeVec = normalize((ModelViewMatrix * vertex).xyz * eyeTangentMatrix);
-	lightDir = normalize(sunPosition.xyz * eyeTangentMatrix);
+	vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
+	lightDir = sunPos.xyz * ModelTangentMatrix; // already normalized
 	halfVec = lightDir + eyeVec;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;

@@ -1268,7 +1268,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::m
 
 		gfx_api::TerrainLayer::get().bind_constants({
 			ModelViewProjection, ModelUV, ModelUVLightmap,
-			cameraPos, glm::normalize(sunPos),
+			glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 			pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
 
@@ -1313,7 +1313,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mo
 	gfx_api::TerrainDecals::get().bind_vertex_buffers(decalVBO);
 	gfx_api::TerrainDecals::get().bind_constants({
 		ModelViewProjection, ModelUVLightmap,
-		cameraPos, glm::normalize(sunPos),
+		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd });
 
@@ -1426,10 +1426,10 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({
 		ModelViewProjection, ModelUV1, ModelUV2,
-		waterOffset*10,
-		cameraPos, glm::normalize(sunPos),
+		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd
+		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+		waterOffset*10,
 	});
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 

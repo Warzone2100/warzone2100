@@ -4,8 +4,8 @@ uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVMatrix;
 uniform mat4 ModelUVLightMatrix;
 
-uniform vec3 cameraPos; // in modelSpace
-uniform vec3 sunPos; // in modelSpace, normalized
+uniform vec4 cameraPos; // in modelSpace
+uniform vec4 sunPos; // in modelSpace, normalized
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 vertex;
@@ -48,8 +48,8 @@ void main()
 	vec3 bitangent = cross(vertexNormal, tangent);
 	mat3 ModelTangentMatrix = mat3(tangent, bitangent, vertexNormal); // aka TBN-matrix
 	// transform light to TangentSpace:
-	vec3 eyeVec = normalize((cameraPos - vertex.xyz) * ModelTangentMatrix);
-	lightDir = normalize(sunPos * ModelTangentMatrix);
+	vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
+	lightDir = sunPos.xyz * ModelTangentMatrix; // already normalized
 	halfVec = lightDir + eyeVec;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;

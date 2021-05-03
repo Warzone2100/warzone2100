@@ -688,8 +688,8 @@ namespace gfx_api
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVMatrix;
 		glm::mat4 ModelUVLightMatrix;
-		glm::vec3 cameraPos; // in modelSpace
-		glm::vec3 sunPos; // in modelSpace
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
@@ -720,8 +720,8 @@ namespace gfx_api
 	{
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUVLightmapMatrix;
-		glm::vec3 cameraPos; // in modelSpace
-		glm::vec3 sunPos; // in modelSpace
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
@@ -755,9 +755,8 @@ namespace gfx_api
 		glm::mat4 ModelViewProjectionMatrix;
 		glm::mat4 ModelUV1Matrix;
 		glm::mat4 ModelUV2Matrix;
-		float time; // in seconds
-		glm::vec3 cameraPos; // in modelSpace
-		glm::vec3 sunPos; // in modelSpace
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
 		glm::vec4 emissiveLight; // light colors/intensity
 		glm::vec4 ambientLight;
 		glm::vec4 diffuseLight;
@@ -766,6 +765,7 @@ namespace gfx_api
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
+		float time; // in seconds
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,

@@ -4,8 +4,8 @@
 uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUVLightmapMatrix;
 
-uniform vec3 cameraPos; // in modelSpace
-uniform vec3 sunPos; // in modelSpace, normalized
+uniform vec4 cameraPos; // in modelSpace
+uniform vec4 sunPos; // in modelSpace, normalized
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
@@ -35,8 +35,8 @@ varying vec2 uv_tex;
 varying vec2 uv_lightmap;
 varying float vertexDistance;
 // In tangent space
-out vec3 lightDir;
-out vec3 halfVec;
+varying vec3 lightDir;
+varying vec3 halfVec;
 #endif
 
 void main()
@@ -48,8 +48,8 @@ void main()
 	vec3 bitangent = cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
 	mat3 ModelTangentMatrix = mat3(vertexTangent.xyz, bitangent, vertexNormal);
 	// transform light from ModelSpace to TangentSpace:
-	vec3 eyeVec = normalize((cameraPos - vertex.xyz) * ModelTangentMatrix);
-	lightDir = sunPos * ModelTangentMatrix;
+	vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
+	lightDir = sunPos.xyz * ModelTangentMatrix;
 	halfVec = lightDir + eyeVec;
 
 	vec4 position = ModelViewProjectionMatrix * vertex;
