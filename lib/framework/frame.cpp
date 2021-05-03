@@ -242,6 +242,60 @@ static bool loadFile2(const char *pFileName, char **ppFileData, UDWORD *pFileSiz
 	return true;
 }
 
+bool loadFileToBufferVector(const char *pFileName, std::vector<char>& outputBuffer, bool hard_fail, bool appendNullCharacter)
+{
+	if (WZ_PHYSFS_isDirectory(pFileName))
+	{
+		return false;
+	}
+
+	PHYSFS_file *pfile = openLoadFile(pFileName, hard_fail);
+	if (!pfile)
+	{
+		return false;
+	}
+
+	PHYSFS_sint64 filesize = PHYSFS_fileLength(pfile);
+	if (filesize < 0)
+	{
+		return false;  // File size could not be determined. Is a directory?
+	}
+	ASSERT_OR_RETURN(false, filesize < static_cast<PHYSFS_sint64>(std::numeric_limits<PHYSFS_sint32>::max()), "\"%s\" filesize >= std::numeric_limits<PHYSFS_sint32>::max()", pFileName);
+	ASSERT_OR_RETURN(false, static_cast<PHYSFS_uint64>(filesize) < static_cast<PHYSFS_uint64>(std::numeric_limits<size_t>::max()), "\"%s\" filesize >= std::numeric_limits<size_t>::max()", pFileName);
+
+	outputBuffer.clear();
+	outputBuffer.resize(static_cast<size_t>(filesize + ((appendNullCharacter) ? 1 : 0)));
+
+	/* Load the file data */
+	PHYSFS_sint64 length_read = WZ_PHYSFS_readBytes(pfile, outputBuffer.data(), static_cast<PHYSFS_uint32>(filesize));
+	if (length_read != filesize)
+	{
+		outputBuffer.clear();
+
+		debug(LOG_ERROR, "Reading %s short: %s", pFileName, WZ_PHYSFS_getLastError());
+		assert(false);
+		return false;
+	}
+
+	if (!PHYSFS_close(pfile))
+	{
+		outputBuffer.clear();
+
+		debug(LOG_ERROR, "Error closing %s: %s", pFileName, WZ_PHYSFS_getLastError());
+		assert(false);
+		return false;
+	}
+
+	if (appendNullCharacter)
+	{
+		outputBuffer[outputBuffer.size() - 1] = 0;
+	}
+
+	ASSERT(static_cast<PHYSFS_uint64>(filesize) <= static_cast<PHYSFS_uint64>(std::numeric_limits<UDWORD>::max()), "filesize exceeds std::numeric_limits<UDWORD>::max()");
+
+	return true;
+}
+
 PHYSFS_file *openSaveFile(const char *fileName)
 {
 	PHYSFS_file *fileHandle = PHYSFS_openWrite(fileName);
