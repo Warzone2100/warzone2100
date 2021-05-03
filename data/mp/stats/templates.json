@@ -1183,7 +1183,7 @@
     "P0cam3PyFlakHT": {
         "body": "Body11ABT",
         "id": "P0cam3PyFlakHT",
-        "name": "AA Flak Cannon Python Half-tracks",
+        "name": "AA Cyclone Flak Cannon Python Half-tracks",
         "propulsion": "HalfTrack",
         "type": "DROID",
         "weapons": [

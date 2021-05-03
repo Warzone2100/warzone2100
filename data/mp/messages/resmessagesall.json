@@ -665,7 +665,18 @@
         "sequenceName": "res_struttech.ogg",
         "text": [
             "Hardpoint Cyclone AA Gun Available",
-            "Quad 80mm Anti-Aircraft machinegun",
+            "Twin 80mm Anti-Aircraft cannon",
+            "Aerial targets only",
+            "Body Points: Medium"
+        ]
+    },
+    "RES_WT_DOUBLEAA2": {
+        "id": "RES_WT_DOUBLEAA2",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "Hardpoint Tornado AA Gun Available",
+            "Quad 80mm Anti-Aircraft cannon",
             "Aerial targets only",
             "Body Points: Medium"
         ]

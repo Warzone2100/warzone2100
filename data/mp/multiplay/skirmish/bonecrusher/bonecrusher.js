@@ -362,8 +362,8 @@ var AA_defence = [];
 var AA_queue = [];
 var AA_towers=[
 ['R-Defense-AASite-QuadMg1', 'AASite-QuadMg1'],					//Hurricane AA Site
-['R-Defense-AASite-QuadBof', 'AASite-QuadBof'],					//AA Flak Cannon Emplacement
-['R-Defense-WallTower-DoubleAAgun', 'WallTower-DoubleAAGun'],	//AA Flak Cannon Hardpoint
+['R-Defense-AASite-QuadBof', 'AASite-QuadBof'],					//AA Cyclone Flak Cannon Emplacement
+['R-Defense-WallTower-DoubleAAgun', 'WallTower-DoubleAAGun'],	//AA Cyclone Flak Cannon Hardpoint
 ['R-Defense-Sunburst', 'P0-AASite-Sunburst'],					//Sunburst AA Site
 ['R-Defense-SamSite1', 'P0-AASite-SAM1'],						//Avenger SAM Site
 ['R-Defense-SamSite2', 'P0-AASite-SAM2'],						//Vindicator SAM Site
