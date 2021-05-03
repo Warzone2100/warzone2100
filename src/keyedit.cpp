@@ -217,9 +217,7 @@ public:
 		const auto psParentForm = parentForm.lock();
 		ASSERT_OR_RETURN(, psParentForm != nullptr, "Cannot handle KeyMapButton::clicked: parent form was nullptr!");
 
-		const int slotIndex = static_cast<size_t>(slot);
 		const KeyFunctionInfo& info = targetFunctionData.info;
-
 		if (info.type != KeyMappingType::ASSIGNABLE)
 		{
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
