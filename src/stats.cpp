@@ -1246,10 +1246,10 @@ COMPONENT_STATS *getCompStatsFromName(const WzString &name)
 	}
 	/*if (!psComp)
 	{
-		debug(LOG_ERROR, "Not found: %s", name.toUtf8().constData());
-		foreach(BASE_STATS *psStat, lookupStatPtr)
+		debug(LOG_ERROR, "Not found: %s", name.toUtf8().c_str());
+		for (auto& it2 : lookupCompStatPtr)
 		{
-			debug(LOG_ERROR, "    %s", psStat->name.toUtf8().constData());
+			debug(LOG_ERROR, "    %s", it2.second->id.toUtf8().c_str());
 		}
 	}*/
 	return psComp;
