@@ -1559,7 +1559,19 @@ void actionUpdateDroid(DROID *psDroid)
 							// building a gun tower over a wall - OK
 							if (droidStartBuild(psDroid))
 							{
-								objTrace(psDroid->id, "DACTION_MOVETOBUILD: start building");
+								objTrace(psDroid->id, "DACTION_MOVETOBUILD: start building defense");
+								psDroid->action = DACTION_BUILD;
+							}
+						}
+						else if ((psStruct->pStructureType->type == REF_FACTORY && order->psStats->type == REF_FACTORY_MODULE) ||
+								(psStruct->pStructureType->type == REF_RESEARCH && order->psStats->type == REF_RESEARCH_MODULE) ||
+								(psStruct->pStructureType->type == REF_POWER_GEN && order->psStats->type == REF_POWER_MODULE) || 
+								(psStruct->pStructureType->type == REF_VTOL_FACTORY && order->psStats->type == REF_FACTORY_MODULE))
+							{
+							// upgrade current structure in a row
+							if (droidStartBuild(psDroid))
+							{
+								objTrace(psDroid->id, "DACTION_MOVETOBUILD: start building module");
 								psDroid->action = DACTION_BUILD;
 							}
 						}
@@ -1571,6 +1583,19 @@ void actionUpdateDroid(DROID *psDroid)
 #if defined(WZ_CC_GNU) && !defined(WZ_CC_INTEL) && !defined(WZ_CC_CLANG) && (7 <= __GNUC__)
 # pragma GCC diagnostic pop
 #endif
+					}
+					else if (TileHasFeature(psTile))
+					{
+						FEATURE *feature = getTileFeature(map_coord(psDroid->actionPos.x), map_coord(psDroid->actionPos.y));
+						objTrace(psDroid->id, "DACTION_MOVETOBUILD: tile has feature %d", feature->psStats->subType);
+						if (feature->psStats->subType == FEAT_OIL_RESOURCE && order->psStats->type == REF_RESOURCE_EXTRACTOR)
+						{
+							if (droidStartBuild(psDroid))
+							{
+								objTrace(psDroid->id, "DACTION_MOVETOBUILD: start building oil derrick");
+								psDroid->action = DACTION_BUILD;
+							}
+						}
 					}
 					else
 					{
