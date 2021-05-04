@@ -780,7 +780,9 @@ namespace gfx_api
 	texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
 	texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
 	texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
-	texture_description<5, sampler_type::anisotropic_repeat>  // specular map2
+	texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
+	texture_description<6, sampler_type::anisotropic_repeat>, // height map1
+	texture_description<7, sampler_type::anisotropic_repeat>  // height map2
 	>, SHADER_WATER>;
 
 	using gfx_tc = vertex_buffer_description<8, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, 0>>;

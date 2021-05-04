@@ -118,6 +118,8 @@ static std::string waterTexture1_nm;
 static std::string waterTexture2_nm;
 static std::string waterTexture1_sm;
 static std::string waterTexture2_sm;
+static std::string waterTexture1_hm;
+static std::string waterTexture2_hm;
 
 /// VBOs
 static gfx_api::buffer *geometryVBO = nullptr, *geometryIndexVBO = nullptr, *textureVBO = nullptr, *textureIndexVBO = nullptr, *decalVBO = nullptr;
@@ -672,6 +674,8 @@ void loadTerrainTextures()
 	waterTexture2_nm = checkTex("page-81-water-2_nm.png");
 	waterTexture1_sm = checkTex("page-80-water-1_sm.png");
 	waterTexture2_sm = checkTex("page-81-water-2_sm.png");
+	waterTexture1_hm = checkTex("page-80-water-1_hm.png");
+	waterTexture2_hm = checkTex("page-81-water-2_hm.png");
 }
 
 /**
@@ -1423,7 +1427,8 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 	gfx_api::WaterPSO::get().bind_textures(
 		&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()),
 		getOptTex(waterTexture1_nm), getOptTex(waterTexture2_nm),
-		getOptTex(waterTexture1_sm), getOptTex(waterTexture2_sm));
+		getOptTex(waterTexture1_sm), getOptTex(waterTexture2_sm),
+		getOptTex(waterTexture1_hm), getOptTex(waterTexture2_hm));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({
 		ModelViewProjection, ModelUV1, ModelUV2,
@@ -1473,6 +1478,8 @@ void reloadTerrainTextures()
 	reloadTex(waterTexture2_nm);
 	reloadTex(waterTexture1_sm);
 	reloadTex(waterTexture2_sm);
+	reloadTex(waterTexture1_hm);
+	reloadTex(waterTexture2_hm);
 	for (int g=0; g < getNumGroundTypes(); g++) {
 		auto ground = getGroundType(g);
 		reloadTex(ground.textureName);
