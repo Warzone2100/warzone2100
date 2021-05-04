@@ -73,6 +73,11 @@ int getTextureSize()
 	return maxTextureSize;
 }
 
+int getCurrentTileTextureSize()
+{
+	return mipmap_max;
+}
+
 // Generate a new texture page both in the texture page table, and on the graphics card
 static size_t newPage(const char *name, int level, int width, int height, int count)
 {
