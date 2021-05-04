@@ -2969,22 +2969,20 @@ error:
 // -----------------------------------------------------------------------------------------
 static bool writeMapFile(const char *fileName)
 {
-	char *pFileData = nullptr;
-	UDWORD fileSize;
+	ASSERT_OR_RETURN(false, fileName != nullptr, "filename is null");
 
 	/* Get the save data */
-	bool status = mapSave(&pFileData, &fileSize);
-
-	if (status)
+	WzMap::MapData mapData;
+	bool status = mapSaveToWzMapData(mapData);
+	if (!status)
 	{
-		/* Write the data to the file */
-		status = saveFile(fileName, pFileData, fileSize);
+		return false;
 	}
 
-	if (pFileData != nullptr)
-	{
-		free(pFileData);
-	}
+	/* Write out the map data */
+	WzMapPhysFSIO mapIO;
+	WzMapDebugLogger debugLoggerInstance;
+	status = WzMap::writeMapData(mapData, fileName, mapIO, WzMap::LatestOutputFormat, &debugLoggerInstance);
 
 	return status;
 }

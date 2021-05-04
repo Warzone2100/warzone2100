@@ -27,8 +27,9 @@
 #include <unordered_set>
 #include <limits>
 
-#define VERSION_39              39	        // lots of changes, breaking everything
-#define CURRENT_VERSION_NUM     VERSION_39
+#define VERSION_39              39	        // last game.map version in the old format (with bytes for tile height, must be multiplied by ELEVATION_SCALE)
+#define VERSION_40              40			// game.map version with full-range tile height
+#define CURRENT_VERSION_NUM     VERSION_40
 
 #define MAX_PLAYERS         11                 ///< Maximum number of players in the game.
 
@@ -55,9 +56,10 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 	debug(pCustomLogger, LOG_INFO, "Loading: %s", path);
 
 	MapData map;
+	uint32_t mapVersion = 0;
 	char aFileType[4];
 	if (pStream->readBytes(aFileType, 4) != static_cast<size_t>(4)
-		|| !pStream->readULE32(&map.mapVersion)
+		|| !pStream->readULE32(&mapVersion)
 		|| !pStream->readULE32(&map.width)
 		|| !pStream->readULE32(&map.height)
 		|| aFileType[0] != 'm'
@@ -68,14 +70,14 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 		return nullptr;
 	}
 
-	if (map.mapVersion <= 9)
+	if (mapVersion <= 9)
 	{
-		debug(pCustomLogger, LOG_ERROR, "%s: Unsupported save format version %u", path, map.mapVersion);
+		debug(pCustomLogger, LOG_ERROR, "%s: Unsupported save format version %u", path, mapVersion);
 		return nullptr;
 	}
-	if (map.mapVersion > CURRENT_VERSION_NUM)
+	if (mapVersion > CURRENT_VERSION_NUM)
 	{
-		debug(pCustomLogger, LOG_ERROR, "%s: Undefined save format version %u", path, map.mapVersion);
+		debug(pCustomLogger, LOG_ERROR, "%s: Undefined save format version %u", path, mapVersion);
 		return nullptr;
 	}
 	if ((uint64_t)map.width * map.height > MAP_MAXAREA)
@@ -92,20 +94,39 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 
 	/* Load in the map data */
 	uint32_t numMapTiles = map.width * map.height;
-	for (uint32_t i = 0; i < numMapTiles; i++)
+	map.mMapTiles.reserve(numMapTiles);
+	if (mapVersion >= VERSION_40)
 	{
-		uint16_t texture;
-		uint8_t height;
-
-		if (!pStream->readULE16(&texture) || !pStream->readULE8(&height))
+		// load full-range map tile heights
+		for (uint32_t i = 0; i < numMapTiles; i++)
 		{
-			debug(pCustomLogger, LOG_ERROR, "%s: Error during savegame load", path);
-			return nullptr;
+			MapData::MapTile currentMapTile{};
+			if (!pStream->readULE16(&(currentMapTile.texture)) || !pStream->readULE16(&(currentMapTile.height)))
+			{
+				debug(pCustomLogger, LOG_ERROR, "%s: Error during savegame load", path);
+				return nullptr;
+			}
+			map.mMapTiles.emplace_back(currentMapTile);
 		}
-		MapData::MapTile currentMapTile{};
-		currentMapTile.texture = texture;
-		currentMapTile.height = static_cast<uint32_t>(height) * ELEVATION_SCALE;
-		map.mMapTiles.emplace_back(currentMapTile);
+	}
+	else
+	{
+		// load old map tile heights where tile-heights fit into a byte (and raw value is divided by ELEVATION_SCALE)
+		for (uint32_t i = 0; i < numMapTiles; i++)
+		{
+			uint16_t texture;
+			uint8_t height;
+
+			if (!pStream->readULE16(&texture) || !pStream->readULE8(&height))
+			{
+				debug(pCustomLogger, LOG_ERROR, "%s: Error during savegame load", path);
+				return nullptr;
+			}
+			MapData::MapTile currentMapTile{};
+			currentMapTile.texture = texture;
+			currentMapTile.height = static_cast<uint16_t>(height) * ELEVATION_SCALE;
+			map.mMapTiles.emplace_back(currentMapTile);
+		}
 	}
 
 	uint32_t gwVersion;
@@ -116,6 +137,7 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 		return nullptr;
 	}
 
+	map.mGateways.reserve(numGateways);
 	for (uint32_t i = 0; i < numGateways; i++)
 	{
 		MapData::Gateway gw = {};
@@ -129,6 +151,149 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 	}
 
 	return std::make_shared<MapData>(map);
+}
+
+bool writeMapData(const MapData& map, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	const auto &path = filename.c_str();
+	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::WRITE);
+
+	if (!pStream)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed to open file for writing: %s", path);
+		return false;
+	}
+
+	debug(pCustomLogger, LOG_INFO, "Writing: %s", path);
+
+	uint32_t mapVersion = CURRENT_VERSION_NUM;
+	switch (format)
+	{
+		case OutputFormat::VER1_BINARY_OLD:
+			mapVersion = 10;
+			break;
+		case OutputFormat::VER2:
+			mapVersion = 39;
+			break;
+		case OutputFormat::VER3:
+			mapVersion = 40;
+			break;
+	}
+
+	// write header
+	char aFileType[4];
+	aFileType[0] = 'm';
+	aFileType[1] = 'a';
+	aFileType[2] = 'p';
+	aFileType[3] = ' ';
+	if (pStream->writeBytes(aFileType, 4) != static_cast<size_t>(4)
+		|| !pStream->writeULE32(mapVersion)
+		|| !pStream->writeULE32(map.width)
+		|| !pStream->writeULE32(map.height))
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed writing header to: %s", path);
+		return false;
+	}
+
+	if ((uint64_t)map.width * map.height > MAP_MAXAREA)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Map too large : %" PRIu32 " x %" PRIu32 "", map.width, map.height);
+		return false;
+	}
+	if (mapVersion <= 9)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Unsupported save format version %" PRIu32 "", mapVersion);
+		return false;
+	}
+	if (map.width <= 1 || map.height <= 1)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Map is too small : %" PRIu32 " x %" PRIu32 "", map.width, map.height);
+		return false;
+	}
+
+	/* Write out the map tiles */
+	uint32_t numMapTiles = map.width * map.height;
+	if (numMapTiles != static_cast<uint32_t>(map.mMapTiles.size()))
+	{
+		debug(pCustomLogger, LOG_ERROR, "Map width x height (%" PRIu32 " x %" PRIu32 ") != number of map tiles (%zu)", map.width, map.height, map.mMapTiles.size());
+		return false;
+	}
+
+	if (mapVersion >= VERSION_40)
+	{
+		// write new tile info, with full-range tile heights
+		for (uint32_t i = 0; i < numMapTiles; i++)
+		{
+			const auto& tile = map.mMapTiles[i];
+			if (tile.height > TILE_MAX_HEIGHT)
+			{
+				// tile height exceeds maximum
+				debug(pCustomLogger, LOG_ERROR, "Error writing maptile; tile height (%" PRIu16 ") exceeds maximum tile height (%zu)", tile.height, static_cast<size_t>(TILE_MAX_HEIGHT));
+				return false;
+			}
+			if (!pStream->writeULE16(tile.texture) || !pStream->writeULE16(tile.height))
+			{
+				debug(pCustomLogger, LOG_ERROR, "Error writing maptile to: %s", path);
+				return false;
+			}
+		}
+	}
+	else
+	{
+		// write old tile info, where tile-heights fit into a byte (and raw value is divided by ELEVATION_SCALE)
+		for (uint32_t i = 0; i < numMapTiles; i++)
+		{
+			const auto& tile = map.mMapTiles[i];
+			if (tile.height > (static_cast<uint16_t>(std::numeric_limits<uint8_t>::max()) * ELEVATION_SCALE))
+			{
+				// tile height exceeds maximum supported by this old format
+				debug(pCustomLogger, LOG_ERROR, "Error writing maptile; tile height (%" PRIu16 ") exceeds maximum supported by output format (%zu)", tile.height, static_cast<size_t>(std::numeric_limits<uint8_t>::max()));
+				return false;
+			}
+			uint8_t tileHeight = static_cast<uint8_t>(tile.height / ELEVATION_SCALE);
+			if (!pStream->writeULE16(tile.texture) || !pStream->writeULE8(tileHeight))
+			{
+				debug(pCustomLogger, LOG_ERROR, "Error writing maptile to: %s", path);
+				return false;
+			}
+		}
+	}
+
+	// Write the gateway header
+	uint32_t gwVersion = 1;
+	uint32_t numGateways = static_cast<uint32_t>(map.mGateways.size());
+	if (!pStream->writeULE32(gwVersion) || !pStream->writeULE32(numGateways))
+	{
+		debug(pCustomLogger, LOG_ERROR, "Error writing gateway header to: %s", path);
+		return false;
+	}
+
+	// Write out the gateways
+	for (uint32_t i = 0; i < numGateways; i++)
+	{
+		const MapData::Gateway& gw = map.mGateways[i];
+		if ((gw.x1 != gw.x2) && (gw.y1 != gw.y2))
+		{
+			debug(pCustomLogger, LOG_WARNING, "Invalid gateway coordinates (%u, %u, %u, %u)", static_cast<unsigned>(gw.x1), static_cast<unsigned>(gw.y1), static_cast<unsigned>(gw.x2), static_cast<unsigned>(gw.y2));
+			// for now, write anyway
+		}
+		if (gw.x1 > map.width || gw.x2 > map.width
+			|| gw.y1 > map.height || gw.y2 > map.height)
+		{
+			debug(pCustomLogger, LOG_WARNING, "Bad gateway dimensions (exceed map width or height)");
+			// for now, write anyway
+		}
+
+		if (!pStream->writeULE8(gw.x1) || !pStream->writeULE8(gw.y1) || !pStream->writeULE8(gw.x2) ||
+			!pStream->writeULE8(gw.y2))
+		{
+			debug(pCustomLogger, LOG_ERROR, "Error writing gateway to: %s", path);
+			return false;
+		}
+	}
+
+	pStream.reset();
+	return true;
 }
 
 // MARK: - Helper functions for loading JSON files
@@ -1072,7 +1237,7 @@ uint32_t MapData::crcSumMapTiles(uint32_t crc)
 {
 	for (auto &o : mMapTiles)
 	{
-		crc = crcSumU32(crc, &o.height, 1);
+		crc = crcSumU16(crc, &o.height, 1);
 		crc = crcSumU16(crc, &o.texture, 1);
 	}
 	return crc;

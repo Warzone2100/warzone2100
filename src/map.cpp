@@ -1029,96 +1029,46 @@ static bool afterMapLoad()
 }
 
 /* Save the map data */
-bool mapSave(char **ppFileData, UDWORD *pFileSize)
+bool mapSaveToWzMapData(WzMap::MapData& output)
 {
-	UDWORD	numGateways = gwNumGateways();
+	output.width = mapWidth;
+	output.height = mapHeight;
 
-	/* Allocate the data buffer */
-	static_assert(SAVE_HEADER_SIZE == (sizeof(char) * 4) + (sizeof(UDWORD) * 3), "SAVE_HEADER_SIZE doesn't match?");
-	static_assert(SAVE_TILE_SIZE == sizeof(UWORD) + sizeof(UBYTE), "SAVE_TILE_SIZE doesn't match?");
-	*pFileSize = SAVE_HEADER_SIZE + mapWidth * mapHeight * SAVE_TILE_SIZE;
-	// Add on the size of the gateway data.
-	*pFileSize += (sizeof(UDWORD) * 2) + ((sizeof(UBYTE) * 4) * numGateways);
-
-	*ppFileData = (char *)malloc(*pFileSize);
-	if (*ppFileData == nullptr)
-	{
-		debug(LOG_FATAL, "Out of memory");
-		abort();
-		return false;
-	}
-	char *pCurrFileData = *ppFileData;
-
-	auto push_uword = [&](UWORD value) {
-		endian_uword(&value);
-		memcpy(pCurrFileData, &value, sizeof(value));
-		pCurrFileData += sizeof(value);
-		ASSERT(pCurrFileData - *ppFileData <= *pFileSize, "Buffer overrun (buffer size: %" PRIu32") (writing to: %" PRIu32")", *pFileSize, static_cast<uint32_t>(pCurrFileData - *ppFileData));
-	};
-	auto push_udword = [&](UDWORD value) {
-		endian_udword(&value);
-		memcpy(pCurrFileData, &value, sizeof(value));
-		pCurrFileData += sizeof(value);
-		ASSERT(pCurrFileData - *ppFileData <= *pFileSize, "Buffer overrun (buffer size: %" PRIu32") (writing to: %" PRIu32")", *pFileSize, static_cast<uint32_t>(pCurrFileData - *ppFileData));
-	};
-
-	/* Put the file header on the file */
-	char aFileType[4];
-	aFileType[0] = 'm';
-	aFileType[1] = 'a';
-	aFileType[2] = 'p';
-	aFileType[3] = ' ';
-	memcpy(pCurrFileData, aFileType, sizeof(aFileType));
-	pCurrFileData += sizeof(aFileType);
-
-	push_udword(CURRENT_VERSION_NUM);
-	push_udword(mapWidth);
-	push_udword(mapHeight);
-
-	/* Put the map data into the buffer */
+	// Write out the map tile data
 	MAPTILE	*psTile = psMapTiles;
+	output.mMapTiles.clear();
+	output.mMapTiles.reserve(output.width * output.height);
 	for (int i = 0; i < mapWidth * mapHeight; i++)
 	{
-		UWORD	texture;
-		UBYTE	height;
-
-		texture = psTile->texture;
+		WzMap::MapData::MapTile mapDataTile = {};
+		mapDataTile.texture = psTile->texture;
 		if (terrainType(psTile) == TER_WATER)
 		{
-			height = (psTile->waterLevel + world_coord(1) / 3) / ELEVATION_SCALE;
+			mapDataTile.height = (psTile->waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
 		}
 		else
 		{
-			height = psTile->height / ELEVATION_SCALE;
+			mapDataTile.height = psTile->height;
 		}
-
-		push_uword(texture);
-		memcpy(pCurrFileData, &height, sizeof(height)); pCurrFileData += sizeof(height);
-
+		output.mMapTiles.push_back(std::move(mapDataTile));
 		psTile++;
 	}
 
-	// Put the gateway header.
-	UDWORD version = 1;
-	push_udword(version);
-	push_udword(numGateways);
-
-	// Put the gateway data.
-	UBYTE	x0, y0, x1, y1;
+	// Write out the gateway data
+	output.mGateways.clear();
+	output.mGateways.reserve(gwNumGateways());
 	for (auto psCurrGate : gwGetGateways())
 	{
-		x0 = psCurrGate->x1;
-		y0 = psCurrGate->y1;
-		x1 = psCurrGate->x2;
-		y1 = psCurrGate->y2;
-		ASSERT(x0 == x1 || y0 == y1, "Invalid gateway coordinates (%d, %d, %d, %d)",
-		       x0, y0, x1, y1);
-		ASSERT(x0 < mapWidth && y0 < mapHeight && x1 < mapWidth && y1 < mapHeight,
-		       "Bad gateway dimensions for savegame");
-		memcpy(pCurrFileData, &x0, sizeof(x0)); pCurrFileData += sizeof(x0);
-		memcpy(pCurrFileData, &y0, sizeof(y0)); pCurrFileData += sizeof(y0);
-		memcpy(pCurrFileData, &x1, sizeof(x1)); pCurrFileData += sizeof(x1);
-		memcpy(pCurrFileData, &y1, sizeof(y1)); pCurrFileData += sizeof(y1);
+		WzMap::MapData::Gateway gw = {};
+		gw.x1 = psCurrGate->x1;
+		gw.y1 = psCurrGate->y1;
+		gw.x2 = psCurrGate->x2;
+		gw.y2 = psCurrGate->y2;
+		ASSERT(gw.x1 == gw.x2 || gw.y1 == gw.y2, "Invalid gateway coordinates (%d, %d, %d, %d)",
+			   gw.x1, gw.y1, gw.x2, gw.y2);
+		ASSERT(gw.x1 < mapWidth && gw.y1 < mapHeight && gw.x2 < mapWidth && gw.y2 < mapHeight,
+			   "Bad gateway dimensions for savegame");
+		output.mGateways.push_back(std::move(gw));
 	}
 
 	return true;
