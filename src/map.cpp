@@ -313,6 +313,7 @@ static void mapLoadTertiles(bool preview, unsigned int tileSet, const char* tert
 		groundTypes[textureTypeIdx].textureSize = static_cast<float>(textureSize);
 		groundTypes[textureTypeIdx].normalMapTextureName = getTextureVariant(textureName, "_nm");
 		groundTypes[textureTypeIdx].specularMapTextureName = getTextureVariant(textureName, "_sm");
+		groundTypes[textureTypeIdx].heightMapTextureName = getTextureVariant(textureName, "_hm");
 	}
 }
 

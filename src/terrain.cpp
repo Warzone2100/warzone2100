@@ -1247,6 +1247,9 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::m
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
+	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName) {
+		return fileName.empty() ? nullptr : &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
+	};
 
 	// draw each layer separately
 	for (int layer = 0; layer < numGroundTypes; layer++)
@@ -1260,19 +1263,18 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::m
 		// load the texture
 		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", groundType.textureName.c_str());
-		optional<size_t> texPage_normalmap = !groundType.normalMapTextureName.empty() ? iV_GetTexture(groundType.normalMapTextureName.c_str()) : nullopt;
-		optional<size_t> texPage_specularmap = !groundType.specularMapTextureName.empty() ? iV_GetTexture(groundType.specularMapTextureName.c_str()) : nullopt;
-		gfx_api::texture* pNormalMapTexture = texPage_normalmap.has_value() ? &pie_Texture(texPage_normalmap.value()) : nullptr;
-		gfx_api::texture* pSpecularMapTexture = texPage_specularmap.has_value() ? &pie_Texture(texPage_specularmap.value()) : nullptr;
+		gfx_api::texture* pNormalMapTexture = getOptTex(groundType.normalMapTextureName);
+		gfx_api::texture* pSpecularMapTexture = getOptTex(groundType.specularMapTextureName);
+		gfx_api::texture* pHeightMapTexture = getOptTex(groundType.heightMapTextureName);
 
 		gfx_api::TerrainLayer::get().bind_constants({
 			ModelViewProjection, ModelUV, ModelUVLightmap,
 			glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 			pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr});
+			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr, pHeightMapTexture != nullptr});
 
 		// load the textures
-		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_tex_num, pNormalMapTexture, pSpecularMapTexture);
+		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_tex_num, pNormalMapTexture, pSpecularMapTexture, pHeightMapTexture);
 
 		// load the color buffer
 		gfx_api::context::get().bind_vertex_buffers(1, { std::make_tuple(textureVBO, static_cast<size_t>(sizeof(PIELIGHT)*xSectors * ySectors * (sectorSize + 1) * (sectorSize + 1) * 2 * layer)) });
@@ -1476,5 +1478,6 @@ void reloadTerrainTextures()
 		reloadTex(ground.textureName);
 		reloadTex(ground.normalMapTextureName);
 		reloadTex(ground.specularMapTextureName);
+		reloadTex(ground.heightMapTextureName);
 	}
 }
