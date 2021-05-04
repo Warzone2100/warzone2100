@@ -369,7 +369,7 @@ public:
 };
 
 /* Save the map data */
-bool mapSave(char **ppFileData, UDWORD *pFileSize);
+bool mapSaveToWzMapData(WzMap::MapData& output);
 
 /** Return a pointer to the tile structure at x,y in map coordinates */
 static inline WZ_DECL_PURE MAPTILE *mapTile(int32_t x, int32_t y)
