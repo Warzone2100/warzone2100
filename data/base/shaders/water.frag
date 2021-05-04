@@ -7,6 +7,8 @@ uniform sampler2D tex1_nm;
 uniform sampler2D tex2_nm;
 uniform sampler2D tex1_sm;
 uniform sampler2D tex2_sm;
+uniform sampler2D tex1_hm;
+uniform sampler2D tex2_hm;
 
 // light colors/intensity:
 uniform vec4 emissiveLight;
