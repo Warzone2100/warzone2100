@@ -923,6 +923,7 @@ bool mapLoadFromWzMapData(WzMap::MapData& loadedMap)
 	/* Load in the map data */
 	for (int i = 0; i < mapWidth * mapHeight; ++i)
 	{
+		ASSERT(loadedMap.mMapTiles[i].height <= TILE_MAX_HEIGHT, "Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", loadedMap.mMapTiles[i].height, static_cast<size_t>(TILE_MAX_HEIGHT));
 		psMapTiles[i].texture = loadedMap.mMapTiles[i].texture;
 		psMapTiles[i].height = loadedMap.mMapTiles[i].height;
 
@@ -1036,9 +1037,10 @@ bool mapSaveToWzMapData(WzMap::MapData& output)
 
 	// Write out the map tile data
 	MAPTILE	*psTile = psMapTiles;
+	uint32_t numMapTiles = output.width * output.height;
 	output.mMapTiles.clear();
-	output.mMapTiles.reserve(output.width * output.height);
-	for (int i = 0; i < mapWidth * mapHeight; i++)
+	output.mMapTiles.reserve(numMapTiles);
+	for (uint32_t i = 0; i < numMapTiles; i++)
 	{
 		WzMap::MapData::MapTile mapDataTile = {};
 		mapDataTile.texture = psTile->texture;
