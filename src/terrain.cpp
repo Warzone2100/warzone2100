@@ -233,7 +233,6 @@ void setTileColour(int x, int y, PIELIGHT colour)
 
 // NOTE:  The current (max) texture size of a tile is 128x128.  We allow up to a user defined texture size
 // of 2048.  This will cause ugly seams for the decals, if user picks a texture size bigger than the tile!
-#define MAX_TILE_TEXTURE_SIZE 128.0f
 /// Set up the texture coordinates for a tile
 static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 {
@@ -247,9 +246,9 @@ static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 	float texsize = (float)getTextureSize();
 
 	// the decals are 128x128 (at this time), we should not go above this value.  See note above
-	if (texsize > MAX_TILE_TEXTURE_SIZE)
+	if (texsize > getCurrentTileTextureSize())
 	{
-		texsize = MAX_TILE_TEXTURE_SIZE;
+		texsize = getCurrentTileTextureSize();
 	}
 	const float centertile = 0.5f / texsize;	// compute center of tile
 	const float shiftamount = (texsize - 1.0f) / texsize;	// 1 pixel border
