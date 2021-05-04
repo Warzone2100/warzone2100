@@ -308,3 +308,11 @@ bool texLoad(const char *fileName)
 	}
 	return true;
 }
+
+void reloadTileTextures()
+{
+	// TODO: remove/replace old textures
+	char *dir = strdup(tilesetDir);
+	texLoad(dir);
+	free(dir);
+}

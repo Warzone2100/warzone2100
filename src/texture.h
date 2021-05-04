@@ -51,4 +51,6 @@ int getTextureSize();
 // decal size
 int getCurrentTileTextureSize();
 
+void reloadTileTextures();
+
 #endif // __INCLUDED_SRC_TEXTURE_H__
