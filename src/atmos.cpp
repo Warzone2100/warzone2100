@@ -139,7 +139,7 @@ static void processParticle(ATPART *psPart)
 		}
 
 		/* What height is the ground under it? Only do if low enough...*/
-		if (psPart->position.y < 255 * ELEVATION_SCALE)
+		if (psPart->position.y < TILE_MAX_HEIGHT)
 		{
 			/* Get ground height */
 			groundHeight = map_Height(psPart->position.x, psPart->position.z);

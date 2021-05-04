@@ -35,8 +35,11 @@
 #define MAP_MAXHEIGHT	256
 #define MAP_MAXAREA		(256*256)
 
-#define TILE_MAX_HEIGHT (255 * ELEVATION_SCALE)
-#define TILE_MIN_HEIGHT 0
+// Multiplier for the tile height - used for older map formats (which stored tile height as a byte)
+#define ELEVATION_SCALE	2
+
+#define TILE_MAX_HEIGHT	(255 * ELEVATION_SCALE)
+#define TILE_MIN_HEIGHT	0
 
 /* Flags for whether texture tiles are flipped in X and Y or rotated */
 #define TILE_XFLIP		0x8000

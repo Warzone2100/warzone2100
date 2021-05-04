@@ -282,9 +282,6 @@ static inline bool TileHasSmallStructure(const MAPTILE *tile)
 #define CLEAR_TILE_DECAL(x)	((x)->tileInfoBits &= ~BITS_DECAL)
 #define TILE_HAS_DECAL(x)	((x)->tileInfoBits & BITS_DECAL)
 
-// Multiplier for the tile height
-#define	ELEVATION_SCALE	2
-
 /* Allows us to do if(TRI_FLIPPED(psTile)) */
 #define TRI_FLIPPED(x)		((x)->texture & TILE_TRIFLIP)
 /* Flips the triangle partition on a tile pointer */
