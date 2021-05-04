@@ -75,6 +75,7 @@
 #include "template.h"
 #include "multiint.h"
 #include "lighting.h"
+#include "texture.h"
 
 #include "wzapi.h"
 #include "qtscript.h"
@@ -794,12 +795,16 @@ public:
 	{
 		auto panel = std::make_shared<WzGraphicsPanel>();
 
-		panel->createButton(0, "Reload terrain and water textures", [](){
+		auto prevButton = panel->createButton(0, "Reload terrain and water textures", [](){
 			reloadTerrainTextures();
 			debug(LOG_INFO, "Done");
 		});
+		panel->createButton(0, "Reload decal textures", [](){
+			reloadTileTextures();
+			debug(LOG_INFO, "Done");
+		}, prevButton);
 
-		auto prevButton = panel->createButton(1, "Recompile terrain", [](){
+		prevButton = panel->createButton(1, "Recompile terrain", [](){
 			debug(LOG_INFO, "Recompiling terrain");
 			gfx_api::TerrainLayer::get().recompile();
 			debug(LOG_INFO, "Done");
