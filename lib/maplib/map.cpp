@@ -106,6 +106,11 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 				debug(pCustomLogger, LOG_ERROR, "%s: Error during savegame load", path);
 				return nullptr;
 			}
+			if (currentMapTile.height > TILE_MAX_HEIGHT)
+			{
+				debug(pCustomLogger, LOG_ERROR, "%s: Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", path, currentMapTile.height, static_cast<size_t>(TILE_MAX_HEIGHT));
+				return nullptr;
+			}
 			map.mMapTiles.emplace_back(currentMapTile);
 		}
 	}

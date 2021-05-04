@@ -143,7 +143,7 @@ bool gwNewGateway(SDWORD x1, SDWORD y1, SDWORD x2, SDWORD y2)
 }
 
 // Return the number of gateways.
-int gwNumGateways()
+size_t gwNumGateways()
 {
 	return psGateways.size();
 }
