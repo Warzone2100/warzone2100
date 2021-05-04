@@ -5,6 +5,7 @@ uniform sampler2D tex;
 uniform sampler2D lightmap_tex;
 uniform sampler2D TextureNormal; // normal map
 uniform sampler2D TextureSpecular; // specular map
+uniform sampler2D TextureHeight;
 
 // light colors/intensity:
 uniform vec4 emissiveLight;

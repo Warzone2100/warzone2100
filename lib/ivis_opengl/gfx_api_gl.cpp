@@ -328,8 +328,8 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVMatrix", "ModelUVLightMatrix",
 			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "hasNormalmap", "hasSpecularmap",
-			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular"} }),
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "hasNormalmap", "hasSpecularmap", "hasHeightmap",
+			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular", "TextureHeight"} }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
@@ -1233,10 +1233,12 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.fog_end);
 	setUniforms(i++, cbuf.hasNormalmap);
 	setUniforms(i++, cbuf.hasSpecularmap);
+	setUniforms(i++, cbuf.hasHeightmap);
 	setUniforms(i++, 0); // tex
 	setUniforms(i++, 1); // lightmap_tex
 	setUniforms(i++, 2); // TextureNormal
 	setUniforms(i++, 3); // TextureSpecular
+	setUniforms(i++, 4); // TextureHeight
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
