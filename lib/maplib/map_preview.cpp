@@ -272,7 +272,7 @@ std::unique_ptr<MapPreviewImage> generate2DMapPreview(Map& wzMap, const MapPrevi
 		for (uint32_t x = 0; x < mapData->width; ++x)
 		{
 			uint8_t *const p = imageData.data() + (3 * (y * mapData->width + x));
-			uint32_t col = WTile->height;
+			uint32_t col = WTile->height / ELEVATION_SCALE;
 
 			switch (terrainTypeWzMap(*WTile, *mapTerrainTypes))
 			{

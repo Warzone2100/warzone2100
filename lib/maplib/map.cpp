@@ -104,7 +104,7 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 		}
 		MapData::MapTile currentMapTile{};
 		currentMapTile.texture = texture;
-		currentMapTile.height = static_cast<uint32_t>(height);
+		currentMapTile.height = static_cast<uint32_t>(height) * ELEVATION_SCALE;
 		map.mMapTiles.emplace_back(currentMapTile);
 	}
 
