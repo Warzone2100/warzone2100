@@ -372,7 +372,7 @@ static bool rayLOSCallback(Vector2i pos, int32_t dist, void *data)
 				STRUCTURE *psStruct = (STRUCTURE *)psTile->psObject;
 				if (psStruct->pStructureType->type != REF_GATE || psStruct->state != SAS_OPEN)
 				{
-					help->lastHeight = 2 * UBYTE_MAX * ELEVATION_SCALE;
+					help->lastHeight = 2 * TILE_MAX_HEIGHT;
 					help->wall = pos.xy();
 					help->numWalls++;
 				}

@@ -25,8 +25,6 @@
 
 #define TILE_RAISE	1
 #define TILE_LOWER	-1
-#define MAX_TILE_HEIGHT 255
-#define MIN_TILE_HEIGHT	0
 
 typedef void (*BUILDCALLBACK)(UDWORD xPos, UDWORD yPos, void *UserData);
 
