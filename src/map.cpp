@@ -924,7 +924,7 @@ bool mapLoadFromWzMapData(WzMap::MapData& loadedMap)
 	for (int i = 0; i < mapWidth * mapHeight; ++i)
 	{
 		psMapTiles[i].texture = loadedMap.mMapTiles[i].texture;
-		psMapTiles[i].height = loadedMap.mMapTiles[i].height * ELEVATION_SCALE;
+		psMapTiles[i].height = loadedMap.mMapTiles[i].height;
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
