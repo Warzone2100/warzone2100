@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:14\n"
+"PO-Revision-Date: 2021-05-05 07:22\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -15286,11 +15286,11 @@ msgstr ""
 
 #: src/frontend.cpp:712
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:713
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:714
 #: src/frontend.cpp:1127
