@@ -38,8 +38,8 @@ ${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
 ${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
 
 ${LangFileString} DLTEXT_Downloading "Ladataan"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_SysLibDLFailed "Järjestelmäkirjaston lataus epäonnistui"
+${LangFileString} DLTEXT_VideosDLFailed "Videoiden lataus epäonnistui"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "Uudelleenkäynnistys vaaditaan asennuksen viimeistelyksi. Haluatko käynnistää järjestelmän uudelleen nyt?"
+${LangFileString} TEXT_MsgRebootFailed "Uudelleenkäynnistys epäonnistui. Käynnistä uudelleen manuaalisesti."
