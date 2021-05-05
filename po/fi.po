@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-05-05 07:22\n"
+"PO-Revision-Date: 2021-05-05 19:25\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -7264,7 +7264,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body4ABT.name
 #: po/custom/fromJson.txt:1232
 msgid "Bug"
-msgstr ""
+msgstr "Virhe"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianBuggy.name
@@ -15319,7 +15319,7 @@ msgstr "Pois päältä"
 
 #: src/frontend.cpp:724
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:725
 #: src/multiplay.cpp:1649
@@ -18271,7 +18271,7 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:171
@@ -18288,7 +18288,7 @@ msgstr "Aula"
 
 #: src/titleui/protocol.cpp:84
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:182
 msgid "IP Address or Machine Name"
