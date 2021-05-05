@@ -165,6 +165,8 @@ bool texLoad(const char *fileName)
 	while (k >= 3 && j + 6 < size);
 	free(buffer);
 
+	bool has_nm = false, has_sm = false, has_hm = false;
+
 	/* Now load the actual tiles */
 	terrainNormalPage = terrainSpecularPage = terrainHeightPage = 0;
 	i = mipmap_max; // i is used to keep track of the tile dimensions
@@ -242,6 +244,7 @@ bool texLoad(const char *fileName)
 				bool retval = iV_loadImage_PNG(fullPath, &tile);
 				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
 				debug(LOG_TEXTURE, "texLoad: Found normal map %s", fullPath);
+				has_nm  = true;
 			}
 			else
 			{	// default normal map: (0,0,1)
@@ -261,6 +264,7 @@ bool texLoad(const char *fileName)
 				bool retval = iV_loadImage_PNG(fullPath, &tile);
 				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
 				debug(LOG_TEXTURE, "texLoad: Found specular map %s", fullPath);
+				has_sm = true;
 			}
 			else
 			{	// default specular map: 0
@@ -277,6 +281,7 @@ bool texLoad(const char *fileName)
 				bool retval = iV_loadImage_PNG(fullPath, &tile);
 				ASSERT_OR_RETURN(false, retval, "Could not load %s!", fullPath);
 				debug(LOG_TEXTURE, "texLoad: Found height map %s", fullPath);
+				has_hm = true;
 			}
 			else
 			{	// default height map: 0
@@ -306,12 +311,30 @@ bool texLoad(const char *fileName)
 		      k, partialPath, i, texPage, (unsigned)pie_Texture(texPage).id());
 		i /= 2;	// halve the dimensions for the next series; OpenGL mipmaps start with largest at level zero
 	}
+	if (!has_nm) {
+		debug(LOG_TEXTURE, "texLoad: Normal maps not found");
+		auto tex = gfx_api::context::get().create_texture(1, 1, 1, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8);
+		unsigned char normal[] = {0x7f, 0x7f, 0xff}; // (0,0,1)
+		pie_AssignTexture(terrainNormalPage, tex);
+		pie_Texture(terrainNormalPage).upload_and_generate_mipmaps(0, 0, 1, 1, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, normal);
+	}
+	if (!has_sm) {
+		debug(LOG_TEXTURE, "texLoad: Spec maps not found");
+		pie_AssignTexture(terrainSpecularPage, nullptr);
+	}
+	if (!has_hm) {
+		debug(LOG_TEXTURE, "texLoad: Height maps not found");
+		pie_AssignTexture(terrainHeightPage, nullptr);
+	}
 	return true;
 }
 
 void reloadTileTextures()
 {
-	// TODO: remove/replace old textures
+	pie_AssignTexture(terrainPage, nullptr);
+	pie_AssignTexture(terrainNormalPage, nullptr);
+	pie_AssignTexture(terrainSpecularPage, nullptr);
+	pie_AssignTexture(terrainHeightPage, nullptr);
 	char *dir = strdup(tilesetDir);
 	texLoad(dir);
 	free(dir);
