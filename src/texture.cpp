@@ -79,10 +79,10 @@ int getCurrentTileTextureSize()
 	return mipmap_max;
 }
 
-int getMaxTileTextureSize(std::string tilesetDir)
+int getMaxTileTextureSize(std::string dir)
 {
 	int res = MIPMAP_MAX;
-	while (res > 0 && !PHYSFS_exists(WzString::fromUtf8(tilesetDir + "-" + std::to_string(res) + "/tile-00.png")))
+	while (res > 0 && !PHYSFS_exists(WzString::fromUtf8(dir + "-" + std::to_string(res) + "/tile-00.png")))
 		res /= 2;
 	return res;
 }
