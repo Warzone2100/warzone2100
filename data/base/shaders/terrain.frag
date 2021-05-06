@@ -19,6 +19,7 @@ uniform float fogStart;
 uniform vec4 fogColor;
 uniform int hasNormalmap; // whether a normal map exists for the model
 uniform int hasSpecularmap; // whether a specular map exists for the model
+uniform int hasHeightmap;
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 in vec4 color;
