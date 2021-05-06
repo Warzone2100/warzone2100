@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-05-06 11:47\n"
+"PO-Revision-Date: 2021-05-06 23:51\n"
 "Last-Translator: \n"
 "Language-Team: Norwegian Bokmal\n"
 "Language: nb_NO\n"
@@ -116,19 +116,19 @@ msgstr "Utforsk det angitte området etter fienders forskningsanlegg."
 
 #: data/base/messages/strings/cam1strings.txt:33
 msgid "Proceed to LZ#2. Do not engage the enemy at this time."
-msgstr ""
+msgstr "Fortsett til LZ#2. Ikke engasjer fienden på dette tidspunktet."
 
 #: data/base/messages/strings/cam1strings.txt:35
 msgid "TRANSPORT MISSION: Synaptic Link Location"
-msgstr ""
+msgstr "TRANSPORT MISSION: Synapselinkplassering"
 
 #: data/base/messages/strings/cam1strings.txt:36
 msgid "The New Paradigm are analyzing synaptic link technology at this location."
-msgstr ""
+msgstr "Det Nye Paradigmet analyserer synapselink-teknologien her."
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr ""
+msgstr "Sett sammen et angrepsteam og hent synapselink-teknologien."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
