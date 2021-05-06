@@ -228,6 +228,9 @@ bool texLoad(const char *fileName)
 		} else {
 			debug(LOG_TEXTURE, "texLoad: Spec maps not found");
 			terrainSpecularPage = pie_ReserveTexture(fullPath, 1, 1);
+			pie_AssignTexture(terrainSpecularPage, gfx_api::context::get().create_texture(1, 1, 1, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8));
+			unsigned char spec[] = {25, 25, 25};
+			pie_Texture(terrainSpecularPage).upload_and_generate_mipmaps(0, 0, 1, 1, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, spec);
 		}
 
 		snprintf(fullPath, sizeof(fullPath), "%s-hm", fileName);
