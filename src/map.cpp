@@ -792,7 +792,7 @@ public:
 		return static_cast<size_t>(result);
 	}
 
-	virtual optional<size_t> writeBytes(void *buffer, size_t len) override
+	virtual optional<size_t> writeBytes(const void *buffer, size_t len) override
 	{
 		if (!pFile) { return nullopt; }
 		PHYSFS_sint64 result = WZ_PHYSFS_writeBytes(pFile, buffer, static_cast<uint32_t>(len));
@@ -833,7 +833,7 @@ bool WzMapPhysFSIO::loadFullFile(const std::string& filename, std::vector<char>&
 	return loadFileToBufferVector(filename.c_str(), fileData, true, true);
 }
 
-bool WzMapPhysFSIO::writeFullFile(const std::string& filename, char *ppFileData, uint32_t fileSize)
+bool WzMapPhysFSIO::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)
 {
 	return saveFile(filename.c_str(), ppFileData, fileSize);
 }

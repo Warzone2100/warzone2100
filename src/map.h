@@ -358,7 +358,7 @@ class WzMapPhysFSIO : public WzMap::IOProvider
 public:
 	virtual std::unique_ptr<WzMap::BinaryIOStream> openBinaryStream(const std::string& filename, WzMap::BinaryIOStream::OpenMode mode) override;
 	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
-	virtual bool writeFullFile(const std::string& filename, char *ppFileData, uint32_t fileSize) override;
+	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
 };
 
 class WzMapDebugLogger : public WzMap::LoggingProtocol
