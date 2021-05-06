@@ -238,7 +238,7 @@ public:
 		return result;
 	};
 
-	virtual optional<size_t> writeBytes(void *buffer, size_t len) override
+	virtual optional<size_t> writeBytes(const void *buffer, size_t len) override
 	{
 		size_t result = fwrite(buffer, 1, len, pFile);
 		if (ferror(pFile))
@@ -325,7 +325,7 @@ bool StdIOProvider::loadFullFile(const std::string& filename, std::vector<char>&
 	return true;
 }
 
-bool StdIOProvider::writeFullFile(const std::string& filename, char *ppFileData, uint32_t fileSize)
+bool StdIOProvider::writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize)
 {
 	auto pStream = openBinaryStream(filename, BinaryIOStream::OpenMode::WRITE);
 	if (!pStream)

@@ -45,7 +45,7 @@ public:
 	virtual ~BinaryIOStream() {};
 
 	virtual optional<size_t> readBytes(void *buffer, size_t len) = 0;
-	virtual optional<size_t> writeBytes(void *buffer, size_t len) = 0;
+	virtual optional<size_t> writeBytes(const void *buffer, size_t len) = 0;
 	virtual bool endOfStream() = 0;
 
 	virtual bool readULE8(uint8_t *pVal);
@@ -74,7 +74,7 @@ public:
 public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) = 0;
 	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) = 0;
-	virtual bool writeFullFile(const std::string& filename, char *ppFileData, uint32_t fileSize) = 0;
+	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) = 0;
 };
 
 // MARK: - Default implementation, using C stdio
@@ -84,7 +84,7 @@ class StdIOProvider : public IOProvider
 public:
 	virtual std::unique_ptr<BinaryIOStream> openBinaryStream(const std::string& filename, BinaryIOStream::OpenMode mode) override;
 	virtual bool loadFullFile(const std::string& filename, std::vector<char>& fileData) override;
-	virtual bool writeFullFile(const std::string& filename, char *ppFileData, uint32_t fileSize) override;
+	virtual bool writeFullFile(const std::string& filename, const char *ppFileData, uint32_t fileSize) override;
 };
 
 } // namespace WzMap
