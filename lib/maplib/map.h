@@ -24,6 +24,11 @@
 #include <vector>
 #include <memory>
 
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
+#include "map_types.h"
 #include "map_debug.h"
 #include "map_io.h"
 #include "terrain_type.h"
@@ -102,80 +107,13 @@ static inline int32_t round_to_nearest_tile(int32_t worldCoord)
 
 namespace WzMap {
 
-// MARK: - Output Formats
-
-enum class OutputFormat
-{
-	VER1_BINARY_OLD, // FlaME-compatible / binary .bjo
-	VER2, // JSON format (WZ 3.4+?)
-	VER3  // JSON format + full-range game.map (WZ 4.1+)
-};
-constexpr OutputFormat LatestOutputFormat = OutputFormat::VER3;
-
 // MARK: - Handling game.map / MapData files
-
-struct MapData
-{
-	struct Gateway
-	{
-		uint8_t x1, y1, x2, y2;
-	};
-
-	/* Information stored with each tile */
-	struct MapTile
-	{
-		uint16_t height;	  // The height at the top left of the tile
-		uint16_t texture; 	  // Which graphics texture is on this tile
-	};
-
-	uint32_t crcSumMapTiles(uint32_t crc);
-
-	uint32_t height = 0;
-	uint32_t width = 0;
-	std::vector<MapTile> mMapTiles;
-
-	std::vector<Gateway> mGateways;
-};
 
 // Load the map data
 std::shared_ptr<MapData> loadMapData(const std::string &mapFile, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr);
 
 // Write the map data
 bool writeMapData(const MapData& map, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger = nullptr);
-
-// MARK: - Structures for map objects
-
-struct WorldPos
-{
-	int x = 0;
-	int y = 0;
-};
-
-struct Structure
-{
-	optional<uint32_t> id;
-	std::string name;
-	WorldPos position;
-	uint16_t direction = 0;
-	int8_t player = 0;  // -1 = scavs
-	uint8_t modules = 0; // capacity
-};
-struct Droid
-{
-	optional<uint32_t> id;
-	std::string name;
-	WorldPos position;
-	uint16_t direction = 0;
-	int8_t player = 0;  // -1 = scavs
-};
-struct Feature
-{
-	optional<uint32_t> id; // an explicit feature id# override, used by older formats
-	std::string name;
-	WorldPos position;
-	uint16_t direction = 0;
-	optional<int8_t> player;
-};
 
 // MARK: - High-level interface for loading a map
 

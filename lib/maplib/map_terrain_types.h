@@ -20,17 +20,12 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "terrain_type.h"
+#include "map_types.h"
 
 namespace WzMap {
 
 class IOProvider;
 class LoggingProtocol;
-
-struct TerrainTypeData
-{
-	std::vector<TYPE_OF_TERRAIN> terrainTypes;
-};
 
 std::unique_ptr<TerrainTypeData> loadTerrainTypes(const std::string &filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr);
 
