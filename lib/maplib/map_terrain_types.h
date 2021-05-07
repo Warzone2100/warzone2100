@@ -28,5 +28,6 @@ class IOProvider;
 class LoggingProtocol;
 
 std::unique_ptr<TerrainTypeData> loadTerrainTypes(const std::string &filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr);
+bool writeTerrainTypes(const TerrainTypeData& ttypeData, const std::string& filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger = nullptr);
 
 } // namespace WzMap

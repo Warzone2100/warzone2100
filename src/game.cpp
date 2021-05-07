@@ -6231,49 +6231,24 @@ bool loadTerrainTypeMapOverride(unsigned int tileSet)
 // Write out the terrain type map
 static bool writeTerrainTypeMapFile(char *pFileName)
 {
-	TILETYPE_SAVEHEADER		*psHeader;
-	char *pFileData;
-	UDWORD					fileSize, i;
-	UWORD					*pType;
+	ASSERT_OR_RETURN(false, pFileName != nullptr, "pFileName is null");
 
-	// Calculate the file size
-	fileSize = TILETYPE_HEADER_SIZE + sizeof(UWORD) * MAX_TILE_TEXTURES;
-	pFileData = (char *)malloc(fileSize);
-	if (!pFileData)
+	WzMap::TerrainTypeData ttypeData;
+	ttypeData.terrainTypes.reserve(MAX_TILE_TEXTURES);
+	for (size_t i = 0; i < MAX_TILE_TEXTURES; i++)
 	{
-		debug(LOG_FATAL, "writeTerrainTypeMapFile: Out of memory");
-		abort();
-		return false;
+		UBYTE &tType = terrainTypes[i];
+		if (tType > TER_MAX)
+		{
+			debug(LOG_ERROR, "Terrain type exceeds TER_MAX: %" PRIu8 "", tType);
+		}
+		ttypeData.terrainTypes.push_back(static_cast<TYPE_OF_TERRAIN>(tType));
 	}
 
-	// Put the file header on the file
-	psHeader = (TILETYPE_SAVEHEADER *)pFileData;
-	psHeader->aFileType[0] = 't';
-	psHeader->aFileType[1] = 't';
-	psHeader->aFileType[2] = 'y';
-	psHeader->aFileType[3] = 'p';
-	psHeader->version = CURRENT_VERSION_NUM;
-	psHeader->quantity = MAX_TILE_TEXTURES;
-
-	pType = (UWORD *)(pFileData + TILETYPE_HEADER_SIZE);
-	for (i = 0; i < MAX_TILE_TEXTURES; i++)
-	{
-		*pType = terrainTypes[i];
-		endian_uword(pType);
-		pType += 1;
-	}
-
-	/* TILETYPE_SAVEHEADER */
-	endian_udword(&psHeader->version);
-	endian_udword(&psHeader->quantity);
-
-	if (!saveFile(pFileName, pFileData, fileSize))
-	{
-		return false;
-	}
-	free(pFileData);
-
-	return true;
+	/* Write out the map data */
+	WzMapPhysFSIO mapIO;
+	WzMapDebugLogger debugLoggerInstance;
+	return WzMap::writeTerrainTypes(ttypeData, pFileName, mapIO, WzMap::LatestOutputFormat, &debugLoggerInstance);
 }
 
 // -----------------------------------------------------------------------------------------
