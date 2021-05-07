@@ -6,6 +6,8 @@ layout(set = 1, binding = 2) uniform sampler2D tex1_nm;
 layout(set = 1, binding = 3) uniform sampler2D tex2_nm;
 layout(set = 1, binding = 4) uniform sampler2D tex1_sm;
 layout(set = 1, binding = 5) uniform sampler2D tex2_sm;
+layout(set = 1, binding = 6) uniform sampler2D tex1_hm;
+layout(set = 1, binding = 7) uniform sampler2D tex2_hm;
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;
