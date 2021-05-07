@@ -301,7 +301,7 @@ bool writeMapData(const MapData& map, const std::string &filename, IOProvider& m
 	return true;
 }
 
-// MARK: - Helper functions for loading JSON files
+// MARK: - Helper functions for loading / saving JSON files
 static optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
 	const auto &path = filename.c_str();
@@ -346,6 +346,49 @@ static optional<nlohmann::json> loadJsonObjectFromFile(const std::string& filena
 	data.clear();
 
 	return mRoot;
+}
+
+static bool saveOrderedJsonObjectToFile(const nlohmann::ordered_json& jsonObj, const std::string& filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+{
+	std::string jsonStr = jsonObj.dump(4, ' ', false, nlohmann::ordered_json::error_handler_t::ignore);
+#if SIZE_MAX > UINT32_MAX
+	if (jsonStr.size() > static_cast<size_t>(std::numeric_limits<uint32_t>::max()))
+	{
+		debug(pCustomLogger, LOG_ERROR, "jsonString.size (%zu) exceeds uint32_t::max", jsonStr.size());
+		return false;
+	}
+#endif
+	return mapIO.writeFullFile(filename, jsonStr.c_str(), static_cast<uint32_t>(jsonStr.size()));
+}
+
+// Left-pads the current string with codepoint ch up to the minimumStringLength
+// If the current string length() is already >= minimumStringLength, no padding occurs.
+static std::string& leftPadStrToMinimumLength(std::string& str, size_t minimumStringLength, const char paddingChar = '0')
+{
+	if (str.length() >= minimumStringLength)
+	{
+		return str;
+	}
+
+	size_t leftPaddingRequired = minimumStringLength - str.length();
+	std::string strPadding;
+	for (size_t i = 0; i < leftPaddingRequired; i++)
+	{
+		strPadding.resize(leftPaddingRequired, paddingChar);
+	}
+	str = str + strPadding;
+	return str;
+}
+
+template<typename T>
+static size_t numberOfDigitsInNumber(T num)
+{
+	size_t digits = 0;
+	do {
+		num /= 10;
+		digits++;
+	} while (num != 0);
+	return digits;
 }
 
 struct JsonParsingContext
@@ -444,7 +487,65 @@ static optional<int8_t> jsonGetPlayerFromObj(const nlohmann::json& obj, MapType 
 	return nullopt;
 }
 
-uint32_t bjoScavengerSlot(uint32_t mapMaxPlayer)
+static bool jsonSetPlayerOnObject(nlohmann::json& jsonObj, MapType mapType, int8_t player)
+{
+	if (player == PLAYER_SCAVENGERS)
+	{
+		jsonObj["player"] = "scavenger";
+	}
+	else
+	{
+		if (player < 0)
+		{
+			return false;
+		}
+		switch (mapType)
+		{
+			case MapType::CAMPAIGN:
+			case MapType::SAVEGAME:
+				jsonObj["player"] = player;
+				break;
+			case MapType::SKIRMISH:
+				jsonObj["startpos"] = player;
+				break;
+		}
+	}
+
+	return true;
+}
+
+template<typename T>
+static void jsonSetBaseMapObjectInfo(nlohmann::json& jsonObj, OutputFormat format, const T& mapObj, const char *pNameKey = "name")
+{
+	assert(pNameKey != nullptr);
+	jsonObj[pNameKey] = mapObj.name;
+	if (mapObj.id.has_value())
+	{
+		jsonObj["id"] = mapObj.id.value();
+	}
+	// "position" must contain at least two components [x, y] - VER2 always expects 3 (and ignores the third)
+	nlohmann::json position = nlohmann::json::array();
+	position.push_back(mapObj.position.x);
+	position.push_back(mapObj.position.y);
+	if (format == OutputFormat::VER2)
+	{
+		position.push_back(0);
+	}
+	jsonObj["position"] = std::move(position);
+	// "rotation" must contain at least one components [x] - VER2 always expects 3 (and ignores all but the first)
+	nlohmann::json rotation = nlohmann::json::array();
+	rotation.push_back(mapObj.direction);
+	if (format == OutputFormat::VER2)
+	{
+		position.push_back(0);
+		position.push_back(0);
+	}
+	jsonObj["rotation"] = std::move(rotation);
+}
+
+// MARK: - Helper functions for loading / saving binary (BJO) files
+
+static uint32_t bjoScavengerSlot(uint32_t mapMaxPlayer)
 {
 	// For old binary file formats:
 	// Scavengers used to always be in position 7, when scavengers were only supported in less than 8 player maps.
@@ -452,7 +553,7 @@ uint32_t bjoScavengerSlot(uint32_t mapMaxPlayer)
 	return std::max<uint32_t>(mapMaxPlayer, 7);
 }
 
-int8_t bjoConvertPlayer(uint32_t bjoPlayer, uint32_t mapMaxPlayers)
+static int8_t bjoConvertPlayer(uint32_t bjoPlayer, uint32_t mapMaxPlayers)
 {
 	if (bjoScavengerSlot(mapMaxPlayers) == bjoPlayer)
 	{
@@ -460,6 +561,30 @@ int8_t bjoConvertPlayer(uint32_t bjoPlayer, uint32_t mapMaxPlayers)
 	}
 
 	return bjoPlayer;
+}
+
+static uint32_t convertPlayerToBJOPlayer(int8_t player, uint32_t mapMaxPlayers)
+{
+	if (player == PLAYER_SCAVENGERS)
+	{
+		return bjoScavengerSlot(mapMaxPlayers);
+	}
+
+	return static_cast<uint32_t>(player);
+}
+
+template<typename T>
+static uint32_t getLargestSpecifiedId(const std::vector<T>& container)
+{
+	uint32_t largestId = 0;
+	for (const auto& item : container)
+	{
+		if (item.id.has_value() && item.id.value() > largestId)
+		{
+			largestId = item.id.value();
+		}
+	}
+	return largestId;
 }
 
 // MARK: - Structure loading functions
@@ -693,6 +818,177 @@ static optional<std::vector<Structure>> loadJsonStructureInit(const std::string&
 	return result;
 }
 
+// MARK: - Structure writing functions
+
+bool writeMapStructureInitBJO(const std::vector<Structure>& structures, uint32_t mapMaxPlayers, const std::string &filename, IOProvider& mapIO, uint32_t bjoFileVersion, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	const auto &path = filename.c_str();
+
+	if (bjoFileVersion < 7 || bjoFileVersion > 8)
+	{
+		// Currently, we only support versions 7 + 8
+		debug(pCustomLogger, LOG_ERROR, "Unsupported binary struct file version: %" PRIu32 "; cannot write to: %s", bjoFileVersion, path);
+		return false;
+	}
+
+	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::WRITE);
+
+	if (!pStream)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed to open file for writing: %s", path);
+		return false;
+	}
+
+	debug(pCustomLogger, LOG_INFO, "Writing: %s", path);
+
+	// write header
+	char aFileType[4];
+	aFileType[0] = 's';
+	aFileType[1] = 't';
+	aFileType[2] = 'r';
+	aFileType[3] = 'u';
+	uint32_t quantity = static_cast<uint32_t>(structures.size());
+	if (pStream->writeBytes(aFileType, 4) != static_cast<size_t>(4)
+		|| !pStream->writeULE32(bjoFileVersion)
+		|| !pStream->writeULE32(quantity))
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed writing header to: %s", path);
+		return false;
+	}
+
+	size_t nameFieldLength = 60;
+	if (bjoFileVersion <= 19)
+	{
+		nameFieldLength = 40;
+	}
+	std::vector<char> bigZeroBuff(256, '\0');
+
+	uint32_t nextAvailableStructureId = getLargestSpecifiedId(structures) + 1;
+
+	for (uint32_t i = 0; i < quantity; i++)
+	{
+		const auto& structure = structures[i];
+		size_t nameStrWriteLen = std::min(nameFieldLength, structure.name.size());
+		if (nameStrWriteLen < structure.name.size())
+		{
+			// Warn about truncation!!
+			debug(pCustomLogger, LOG_WARNING, "Structure's name exceeds the length supported by binary struct file version: %" PRIu32 "; output will be truncated", bjoFileVersion);
+		}
+		if (pStream->writeBytes(structure.name.c_str(), nameStrWriteLen) != nameStrWriteLen)
+		{
+			// Failed to write
+			debug(pCustomLogger, LOG_ERROR, "Error writing structure %" PRIu32 "'s name to: %s", i, path);
+			return false;
+		}
+		if (nameStrWriteLen < nameFieldLength
+			&& pStream->writeBytes(bigZeroBuff.data(), (nameFieldLength - nameStrWriteLen)) != (nameFieldLength - nameStrWriteLen))
+		{
+			// Failed to pad with zeros
+			debug(pCustomLogger, LOG_ERROR, "Error writing structure %" PRIu32 " to: %s", i, path);
+			return false;
+		}
+
+		uint32_t structureId = 0;
+		if (structure.id.has_value())
+		{
+			structureId = structure.id.value();
+		}
+		else
+		{
+			structureId = nextAvailableStructureId++;
+		}
+
+		uint32_t bjoPlayer = convertPlayerToBJOPlayer(structure.player, mapMaxPlayers);
+		// TODO: Do campaign maps require scanvengers at player ID 7? (Theoretically only an issue for old campaign maps with > 7 players? And there shouldn't be any of those?)
+
+		// TODO: Better way to handle if structure.modules > 0 ?
+		if (structure.modules > 0)
+		{
+			debug(pCustomLogger, LOG_WARNING, "Structure modules (%" PRIu8 ") > 0. Conversion to old binary struct format (version: %" PRIu32 ") may be missing the modules.", structure.modules, bjoFileVersion);
+		}
+
+		if (!pStream->writeULE32(structureId)
+			|| !pStream->writeULE32(structure.position.x) || !pStream->writeULE32(structure.position.y) || !pStream->writeULE32(0)
+			|| !pStream->writeULE32(static_cast<uint32_t>(structure.direction)) // TODO: Conversion / manipulation needed?
+			|| !pStream->writeULE32(bjoPlayer)
+			|| !pStream->writeSLE32(0) // BOOL inFire
+			|| !pStream->writeULE32(0) // burnStart
+			|| !pStream->writeULE32(0) // burnDamage
+			|| !pStream->writeULE8(SS_BUILT)	// status - causes structure padding
+			// the following magic padding bytes match the behavior of flaME's structure output - they don't seem to be used, but why not?
+			|| !pStream->writeULE8(26)	// structure padding
+			|| !pStream->writeULE8(127)	// structure padding
+			|| !pStream->writeULE8(0)   // structure padding
+			//
+			|| !pStream->writeSLE32(0) // currentBuildPts - aligned on 4 byte boundary
+			|| !pStream->writeULE32(0) // body
+			|| !pStream->writeULE32(0) // armour
+			|| !pStream->writeULE32(0) // resistance
+			|| !pStream->writeULE32(0) // dummy1
+			|| !pStream->writeULE32(0) // subjectInc
+			|| !pStream->writeULE32(0) // timeStarted
+			|| !pStream->writeULE32(0) // output
+			|| !pStream->writeULE32(0) // capacity
+			|| !pStream->writeULE32(0)) // quantity
+		{
+			debug(pCustomLogger, LOG_ERROR, "Error writing structure %" PRIu32 " to: %s", i, path);
+			return false;
+		}
+	}
+
+	pStream.reset();
+	return true;
+}
+
+bool writeMapStructureInitJSON(const std::vector<Structure>& structures, MapType mapType, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	nlohmann::ordered_json mRoot = nlohmann::ordered_json::object();
+
+	size_t counter = 0;
+	size_t structureCountMinLength = std::max<size_t>(numberOfDigitsInNumber(structures.size()), 1);
+	for (const auto& structure : structures)
+	{
+		nlohmann::json structureObj = nlohmann::json::object();
+		// write base object info (name, <id>, position, rotation)
+		jsonSetBaseMapObjectInfo(structureObj, format, structure);
+		// player
+		if (!jsonSetPlayerOnObject(structureObj, mapType, structure.player))
+		{
+			debug(pCustomLogger, LOG_ERROR, "Invalid player number (%" PRIi8 ")", structure.player);
+			return false;
+		}
+		// "modules" (capacity)
+		if (structure.modules > 0)
+		{
+			structureObj["modules"] = structure.modules;
+		}
+
+		// add to the root object
+		std::string counterStr = std::to_string(counter);
+		leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
+		mRoot["structure_" + counterStr] = std::move(structureObj);
+	}
+
+	// write out to file
+	return saveOrderedJsonObjectToFile(mRoot, filename, mapIO);
+}
+
+bool writeMapStructureInit(const std::vector<Structure>& structures, uint32_t mapMaxPlayers, MapType mapType, const std::string &mapFolderPath, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	bool retVal = false;
+	switch (format)
+	{
+		case OutputFormat::VER1_BINARY_OLD:
+			retVal = writeMapStructureInitBJO(structures, mapMaxPlayers, mapFolderPath + "/struct.bjo", mapIO, 8, pCustomLogger);
+			break;
+		case OutputFormat::VER2:
+		case OutputFormat::VER3:
+			retVal = writeMapStructureInitJSON(structures, mapType, mapFolderPath + "/struct.json", mapIO, format, pCustomLogger);
+			break;
+	}
+	return retVal;
+}
+
 // MARK: - Droid loading functions
 
 static optional<std::vector<Droid>> loadBJODroidInit(const std::string& filename, uint32_t mapMaxPlayers, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
@@ -870,6 +1166,150 @@ static optional<std::vector<Droid>> loadJsonDroidInit(const std::string& filenam
 	}
 
 	return result;
+}
+
+// MARK: - Droid writing functions
+
+bool writeMapDroidInitBJO(const std::vector<Droid>& droids, uint32_t mapMaxPlayers, const std::string &filename, IOProvider& mapIO, uint32_t bjoFileVersion, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	const auto &path = filename.c_str();
+
+	if (bjoFileVersion > 39)
+	{
+		// Currently, we only support up to version 39
+		debug(pCustomLogger, LOG_ERROR, "Unsupported binary droidinit file version: %" PRIu32 "; cannot write to: %s", bjoFileVersion, path);
+		return false;
+	}
+
+	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::WRITE);
+
+	if (!pStream)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed to open file for writing: %s", path);
+		return false;
+	}
+
+	debug(pCustomLogger, LOG_INFO, "Writing: %s", path);
+
+	// write header
+	char aFileType[4];
+	aFileType[0] = 'd';
+	aFileType[1] = 'i';
+	aFileType[2] = 'n';
+	aFileType[3] = 't';
+	uint32_t quantity = static_cast<uint32_t>(droids.size());
+	if (pStream->writeBytes(aFileType, 4) != static_cast<size_t>(4)
+		|| !pStream->writeULE32(bjoFileVersion)
+		|| !pStream->writeULE32(quantity))
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed writing header to: %s", path);
+		return false;
+	}
+
+	size_t nameFieldLength = 60;
+	if (bjoFileVersion <= 19)
+	{
+		nameFieldLength = 40;
+	}
+	std::vector<char> bigZeroBuff(256, '\0');
+
+	uint32_t nextAvailableDroidId = getLargestSpecifiedId(droids) + 1;
+
+	for (uint32_t i = 0; i < quantity; i++)
+	{
+		const auto& droid = droids[i];
+		size_t nameStrWriteLen = std::min(nameFieldLength, droid.name.size());
+		if (nameStrWriteLen < droid.name.size())
+		{
+			// Warn about truncation!!
+			debug(pCustomLogger, LOG_WARNING, "Droids's name exceeds the length supported by binary struct file version: %" PRIu32 "; output will be truncated", bjoFileVersion);
+		}
+		if (pStream->writeBytes(droid.name.c_str(), nameStrWriteLen) != nameStrWriteLen)
+		{
+			// Failed to write
+			debug(pCustomLogger, LOG_ERROR, "Error writing structure %" PRIu32 "'s name to: %s", i, path);
+			return false;
+		}
+		if (nameStrWriteLen < nameFieldLength
+			&& pStream->writeBytes(bigZeroBuff.data(), (nameFieldLength - nameStrWriteLen)) != (nameFieldLength - nameStrWriteLen))
+		{
+			// Failed to pad with zeros
+			debug(pCustomLogger, LOG_ERROR, "Error writing structure %" PRIu32 " to: %s", i, path);
+			return false;
+		}
+
+		uint32_t droidId = 0;
+		if (droid.id.has_value())
+		{
+			droidId = droid.id.value();
+		}
+		else
+		{
+			droidId = nextAvailableDroidId++;
+		}
+
+		uint32_t bjoPlayer = convertPlayerToBJOPlayer(droid.player, mapMaxPlayers);
+		// TODO: Do campaign maps require scanvengers at player ID 7? (Theoretically only an issue for old campaign maps with > 7 players? And there shouldn't be any of those?)
+
+		if (!pStream->writeULE32(droidId)
+			|| !pStream->writeULE32(droid.position.x) || !pStream->writeULE32(droid.position.y) || !pStream->writeULE32(0)
+			|| !pStream->writeULE32(static_cast<uint32_t>(droid.direction)) // TODO: Conversion / manipulation needed?
+			|| !pStream->writeULE32(bjoPlayer)
+			|| !pStream->writeSLE32(0) // BOOL inFire
+			|| !pStream->writeULE32(0) // burnStart
+			|| !pStream->writeULE32(0)) // burnDamage
+		{
+			debug(pCustomLogger, LOG_ERROR, "Error writing droid %" PRIu32 " to: %s", i, path);
+			return false;
+		}
+	}
+
+	pStream.reset();
+	return true;
+}
+
+bool writeMapDroidInitJSON(const std::vector<Droid>& droids, MapType mapType, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	nlohmann::ordered_json mRoot = nlohmann::ordered_json::object();
+
+	size_t counter = 0;
+	size_t structureCountMinLength = std::max<size_t>(numberOfDigitsInNumber(droids.size()), 1);
+	for (const auto& droid : droids)
+	{
+		nlohmann::json droidObj = nlohmann::json::object();
+		// write base object info (name, <id>, position, rotation)
+		jsonSetBaseMapObjectInfo(droidObj, format, droid, "template");
+		// player
+		if (!jsonSetPlayerOnObject(droidObj, mapType, droid.player))
+		{
+			debug(pCustomLogger, LOG_ERROR, "Invalid player number (%" PRIi8 ")", droid.player);
+			return false;
+		}
+
+		// add to the root object
+		std::string counterStr = std::to_string(counter);
+		leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
+		mRoot["droid_" + counterStr] = std::move(droidObj);
+	}
+
+	// write out to file
+	return saveOrderedJsonObjectToFile(mRoot, filename, mapIO);
+}
+
+bool writeMapDroidInit(const std::vector<Droid>& droids, uint32_t mapMaxPlayers, MapType mapType, const std::string &mapFolderPath, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	bool retVal = false;
+	switch (format)
+	{
+		case OutputFormat::VER1_BINARY_OLD:
+			retVal = writeMapDroidInitBJO(droids, mapMaxPlayers, mapFolderPath + "/dinit.bjo", mapIO, 8, pCustomLogger);
+			break;
+		case OutputFormat::VER2:
+		case OutputFormat::VER3:
+			retVal = writeMapDroidInitJSON(droids, mapType, mapFolderPath + "/droid.json", mapIO, format, pCustomLogger);
+			break;
+	}
+	return retVal;
 }
 
 // MARK: - Feature loading functions
@@ -1085,6 +1525,171 @@ static optional<std::vector<Feature>> loadJsonFeatureInit(const std::string& fil
 	return result;
 }
 
+// MARK: - Feature writing functions
+
+bool writeMapFeatureInitBJO(const std::vector<Feature>& features, uint32_t mapMaxPlayers, const std::string &filename, IOProvider& mapIO, uint32_t bjoFileVersion, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	const auto &path = filename.c_str();
+
+	if (bjoFileVersion < 7 || bjoFileVersion > 19)
+	{
+		// Currently, we only support versions 7 - 19
+		debug(pCustomLogger, LOG_ERROR, "Unsupported binary feat file version: %" PRIu32 "; cannot write to: %s", bjoFileVersion, path);
+		return false;
+	}
+
+	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::WRITE);
+
+	if (!pStream)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed to open file for writing: %s", path);
+		return false;
+	}
+
+	debug(pCustomLogger, LOG_INFO, "Writing: %s", path);
+
+	// write header
+	char aFileType[4];
+	aFileType[0] = 'f';
+	aFileType[1] = 'e';
+	aFileType[2] = 'a';
+	aFileType[3] = 't';
+	uint32_t quantity = static_cast<uint32_t>(features.size());
+	if (pStream->writeBytes(aFileType, 4) != static_cast<size_t>(4)
+		|| !pStream->writeULE32(bjoFileVersion)
+		|| !pStream->writeULE32(quantity))
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed writing header to: %s", path);
+		return false;
+	}
+
+	size_t nameFieldLength = 60;
+	if (bjoFileVersion <= 19)
+	{
+		nameFieldLength = 40;
+	}
+	std::vector<char> bigZeroBuff(256, '\0');
+
+	uint32_t nextAvailableFeatureId = getLargestSpecifiedId(features) + 1;
+
+	for (uint32_t i = 0; i < quantity; i++)
+	{
+		const auto& feature = features[i];
+		size_t nameStrWriteLen = std::min(nameFieldLength, feature.name.size());
+		if (nameStrWriteLen < feature.name.size())
+		{
+			// Warn about truncation!!
+			debug(pCustomLogger, LOG_WARNING, "Droids's name exceeds the length supported by binary struct file version: %" PRIu32 "; output will be truncated", bjoFileVersion);
+		}
+		if (pStream->writeBytes(feature.name.c_str(), nameStrWriteLen) != nameStrWriteLen)
+		{
+			// Failed to write
+			debug(pCustomLogger, LOG_ERROR, "Error writing structure %" PRIu32 "'s name to: %s", i, path);
+			return false;
+		}
+		if (nameStrWriteLen < nameFieldLength
+			&& pStream->writeBytes(bigZeroBuff.data(), (nameFieldLength - nameStrWriteLen)) != (nameFieldLength - nameStrWriteLen))
+		{
+			// Failed to pad with zeros
+			debug(pCustomLogger, LOG_ERROR, "Error writing structure %" PRIu32 " to: %s", i, path);
+			return false;
+		}
+
+		uint32_t featureId = 0;
+		if (feature.id.has_value())
+		{
+			featureId = feature.id.value();
+		}
+		else
+		{
+			featureId = nextAvailableFeatureId++;
+		}
+
+		uint32_t bjoPlayer = mapMaxPlayers;
+		if (feature.player.has_value())
+		{
+			bjoPlayer = convertPlayerToBJOPlayer(feature.player.value(), mapMaxPlayers);
+		}
+		// TODO: Do campaign maps require scanvengers at player ID 7? (Theoretically only an issue for old campaign maps with > 7 players? And there shouldn't be any of those?)
+
+		if (!pStream->writeULE32(featureId)
+			|| !pStream->writeULE32(feature.position.x) || !pStream->writeULE32(feature.position.y) || !pStream->writeULE32(0)
+			|| !pStream->writeULE32(static_cast<uint32_t>(feature.direction)) // TODO: Conversion / manipulation needed?
+			|| !pStream->writeULE32(bjoPlayer)
+			|| !pStream->writeSLE32(0) // BOOL inFire
+			|| !pStream->writeULE32(0) // burnStart
+			|| !pStream->writeULE32(0)) // burnDamage
+		{
+			debug(pCustomLogger, LOG_ERROR, "Error writing feature %" PRIu32 " to: %s", i, path);
+			return false;
+		}
+		if (bjoFileVersion >= 14 && pStream->writeBytes(bigZeroBuff.data(), 8) != static_cast<size_t>(8))
+		{
+			debug(pCustomLogger, LOG_ERROR, "Error writing feature %" PRIu32 " visibility to: %s", i, path);
+			return false;
+		}
+	}
+
+	pStream.reset();
+	return true;
+}
+
+bool writeMapFeatureInitJSON(const std::vector<Feature>& features, MapType mapType, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	nlohmann::ordered_json mRoot = nlohmann::ordered_json::object();
+
+	size_t counter = 0;
+	size_t structureCountMinLength = std::max<size_t>(numberOfDigitsInNumber(features.size()), 1);
+	for (const auto& feature : features)
+	{
+		nlohmann::json featureObj = nlohmann::json::object();
+		// write base object info (name, <id>, position, rotation)
+		jsonSetBaseMapObjectInfo(featureObj, format, feature);
+		// Optional:
+		// the player is extracted from "player" *only*
+		if (feature.player.has_value())
+		{
+			if (mapType == MapType::CAMPAIGN || mapType == MapType::SAVEGAME)
+			{
+				if (!jsonSetPlayerOnObject(featureObj, mapType, feature.player.value()))
+				{
+					debug(pCustomLogger, LOG_ERROR, "Invalid player number (%" PRIi8 ")", feature.player.value());
+					return false;
+				}
+			}
+			else
+			{
+				// player assignment for features is not expected for skirmish map init
+				debug(pCustomLogger, LOG_WARNING, "Ignoring assigned player (%" PRIu8 ") for feature #%zu", feature.player.value(), counter);
+			}
+		}
+
+		// add to the root object
+		std::string counterStr = std::to_string(counter);
+		leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
+		mRoot["feature_" + counterStr] = std::move(featureObj);
+	}
+
+	// write out to file
+	return saveOrderedJsonObjectToFile(mRoot, filename, mapIO);
+}
+
+bool writeMapFeatureInit(const std::vector<Feature>& features, uint32_t mapMaxPlayers, MapType mapType, const std::string &mapFolderPath, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	bool retVal = false;
+	switch (format)
+	{
+		case OutputFormat::VER1_BINARY_OLD:
+			retVal = writeMapFeatureInitBJO(features, mapMaxPlayers, mapFolderPath + "/feat.bjo", mapIO, 8, pCustomLogger);
+			break;
+		case OutputFormat::VER2:
+		case OutputFormat::VER3:
+			retVal = writeMapFeatureInitJSON(features, mapType, mapFolderPath + "/feature.json", mapIO, format, pCustomLogger);
+			break;
+	}
+	return retVal;
+}
+
 // MARK: - High-level Map implementation
 
 // Construct an empty Map, for modification
@@ -1139,6 +1744,77 @@ std::unique_ptr<Map> Map::loadFromPath(const std::string& mapFolderPath, MapType
 	// Otherwise, construct a lazy-loading Map
 	std::unique_ptr<Map> pMap = std::unique_ptr<Map>(new Map(mapFolderPath, mapType, mapMaxPlayers, std::move(logger), std::move(mapIO)));
 	return pMap;
+}
+
+bool Map::exportMapToPath(Map& map, const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, OutputFormat format, std::unique_ptr<LoggingProtocol> logger, std::unique_ptr<IOProvider> mapIO)
+{
+	if (!mapIO)
+	{
+		debug(logger.get(), LOG_ERROR, "Missing required mapIO");
+		return false;
+	}
+
+	auto mapData = map.mapData();
+	if (!mapData)
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to load / retrieve map data from: %s", map.mapFolderPath().c_str());
+		return false;
+	}
+	if (!writeMapData(*(mapData.get()), mapFolderPath + "/game.map", *(mapIO.get()), format, logger.get()))
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to write map data to path: %s", mapFolderPath.c_str());
+		return false;
+	}
+
+	auto mapTerrainTypes = map.mapTerrainTypes();
+	if (!mapTerrainTypes)
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to load / retrieve map terrain type data from: %s", map.mapFolderPath().c_str());
+		return false;
+	}
+	if (!writeTerrainTypes(*(mapTerrainTypes.get()), mapFolderPath + "/ttypes.ttp", *(mapIO.get()), format, logger.get()))
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to write map terrain type data to path: %s", mapFolderPath.c_str());
+		return false;
+	}
+
+	auto mapDroids = map.mapDroids();
+	if (!mapDroids)
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to load / retrieve map droids from: %s", map.mapFolderPath().c_str());
+		return false;
+	}
+	if (!writeMapDroidInit(*(mapDroids.get()), mapMaxPlayers, mapType, mapFolderPath, *(mapIO.get()), format, logger.get()))
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to write map droids to path: %s", mapFolderPath.c_str());
+		return false;
+	}
+
+	auto mapFeatures = map.mapFeatures();
+	if (!mapFeatures)
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to load / retrieve map features from: %s", map.mapFolderPath().c_str());
+		return false;
+	}
+	if (!writeMapFeatureInit(*(mapFeatures.get()), mapMaxPlayers, mapType, mapFolderPath, *(mapIO.get()), format, logger.get()))
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to write map features to path: %s", mapFolderPath.c_str());
+		return false;
+	}
+
+	auto mapStructures = map.mapStructures();
+	if (!mapStructures)
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to load / retrieve map structures from: %s", map.mapFolderPath().c_str());
+		return false;
+	}
+	if (!writeMapStructureInit(*(mapStructures.get()), mapMaxPlayers, mapType, mapFolderPath, *(mapIO.get()), format, logger.get()))
+	{
+		debug(logger.get(), LOG_ERROR, "Failed to write map structures to path: %s", mapFolderPath.c_str());
+		return false;
+	}
+
+	return true;
 }
 
 // Get the map data
