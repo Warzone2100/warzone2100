@@ -57,6 +57,12 @@ std::unique_ptr<TerrainTypeData> loadTerrainTypes(const std::string &filename, I
 		return nullptr;
 	}
 
+	if (version < 7 || version > 39)
+	{
+		debug(pCustomLogger, LOG_ERROR, "%s: Unsupported binary ttp file version: %" PRIu32 "", path, version);
+		return nullptr;
+	}
+
 	if (quantity >= MAX_TILE_TEXTURES)
 	{
 		// Workaround for fugly map editor bug, since we can't fix the map editor
@@ -89,6 +95,62 @@ std::unique_ptr<TerrainTypeData> loadTerrainTypes(const std::string &filename, I
 	}
 
 	return result;
+}
+
+bool writeTerrainTypes(const TerrainTypeData& ttypeData, const std::string& filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	const auto &path = filename.c_str();
+	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::WRITE);
+
+	if (!pStream)
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed to open file for writing: %s", path);
+		return false;
+	}
+
+	debug(pCustomLogger, LOG_INFO, "Writing: %s", path);
+
+	uint32_t fileVersion = 8; // the format hasn't really changed
+	switch (format)
+	{
+		case OutputFormat::VER1_BINARY_OLD:
+			fileVersion = 8;	// flaME expects version 8
+			break;
+		case OutputFormat::VER2:
+			fileVersion = 8; 	// stick with version 8 for now
+			break;
+		case OutputFormat::VER3:
+			fileVersion = 39;	// use version 39 (the last version before maplib refactor) for now
+			break;
+	}
+	uint32_t numTtypes = static_cast<uint32_t>(ttypeData.terrainTypes.size());
+
+	// write header
+	char aFileType[4];
+	aFileType[0] = 't';
+	aFileType[1] = 't';
+	aFileType[2] = 'y';
+	aFileType[3] = 'p';
+	if (pStream->writeBytes(aFileType, 4) != static_cast<size_t>(4)
+		|| !pStream->writeULE32(fileVersion)
+		|| !pStream->writeULE32(numTtypes))
+	{
+		debug(pCustomLogger, LOG_ERROR, "Failed writing header to: %s", path);
+		return false;
+	}
+
+	for (uint32_t i = 0; i < numTtypes; i++)
+	{
+		const auto& ttype = ttypeData.terrainTypes[i];
+		uint16_t pType = static_cast<uint16_t>(ttype);
+		if (!pStream->writeULE16(pType))
+		{
+			debug(pCustomLogger, LOG_ERROR, "Error writing terrain type data to: %s", path);
+			return false;
+		}
+	}
+
+	return true;
 }
 
 } // namespace WzMap
