@@ -136,9 +136,7 @@ private:
 	 * accepting glm structures.
 	 * Please do not use directly, use pie_ActivateShader below.
 	 */
-	void setUniforms(size_t uniformIdx, const ::glm::vec3 &v);
 	void setUniforms(size_t uniformIdx, const ::glm::vec4 &v);
-	void setUniforms(size_t uniformIdx, const ::glm::mat3 &m);
 	void setUniforms(size_t uniformIdx, const ::glm::mat4 &m);
 	void setUniforms(size_t uniformIdx, const Vector2i &v);
 	void setUniforms(size_t uniformIdx, const Vector2f &v);

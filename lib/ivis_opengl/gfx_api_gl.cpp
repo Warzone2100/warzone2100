@@ -831,12 +831,10 @@ void gl_pipeline_state_object::getLocs()
 	GLint locTex1 = glGetUniformLocation(program, "TextureTcmask");
 	GLint locTex2 = glGetUniformLocation(program, "TextureNormal");
 	GLint locTex3 = glGetUniformLocation(program, "TextureSpecular");
-	GLint locTex4 = glGetUniformLocation(program, "TextureHeight");
 	glUniform1i(locTex0, 0);
 	glUniform1i(locTex1, 1);
 	glUniform1i(locTex2, 2);
 	glUniform1i(locTex3, 3);
-	glUniform1i(locTex4, 4);
 }
 
 static std::unordered_set<std::string> getUniformNamesFromSource(const char* shaderContents)

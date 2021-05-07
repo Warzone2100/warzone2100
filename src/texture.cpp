@@ -122,7 +122,7 @@ bool texLoad(const char *fileName)
 	// reset defaults
 	const int maxTileTexSize = getMaxTileTextureSize(fileName);
 	mipmap_max = maxTileTexSize;
-	mipmap_levels = log2(mipmap_max / 8); // 4 for 128
+	mipmap_levels = (int)log2(mipmap_max / 8); // 4 for 128
 
 	int32_t max_texture_size = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 

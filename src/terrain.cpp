@@ -651,18 +651,21 @@ void loadTerrainTextures()
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
+	auto preload = [&](const char *type, std::string texName) {
+		if (texName.empty()) return;
+		optional<size_t> texPage = iV_GetTexture(texName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
+		ASSERT(texPage.has_value(), "Failed to pre-load terrain %s texture: %s", type, texName.c_str());
+	};
+
 	// for each terrain layer
 	for (int layer = 0; layer < getNumGroundTypes(); layer++)
 	{
 		// pre-load the texture
 		const auto groundType = getGroundType(layer);
-		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
-		ASSERT(texPage.has_value(), "Failed to pre-load terrain texture: %s", groundType.textureName.c_str());
-
-		if (!groundType.normalMapTextureName.empty()) {
-			optional<size_t> texPageNormal = iV_GetTexture(groundType.normalMapTextureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
-			ASSERT(texPageNormal.has_value(), "Failed to pre-load terrain normal texture: %s", groundType.normalMapTextureName.c_str());
-		}
+		preload("", groundType.textureName);
+		preload("normapmap", groundType.normalMapTextureName);
+		preload("specmap", groundType.specularMapTextureName);
+		preload("heightmap", groundType.heightMapTextureName);
 	}
 
 	// check water optional textures
