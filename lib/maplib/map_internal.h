@@ -26,6 +26,24 @@
 
 namespace WzMap {
 
+#if defined __GNUC__ && defined __GNUC_MINOR__
+#  define MAPLIB_CC_GNU_PREREQ(maj, min) \
+	((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+#else
+#  define MAPLIB_CC_GNU_PREREQ(maj, min) 0
+#endif
+
+/*! \def MAPLIB_DECL_FORMAT
+ * GCC: "The format attribute specifies that a function takes printf, scanf, strftime or strfmon
+ *       style arguments which should be type-checked against a format string."
+ */
+#if MAPLIB_CC_GNU_PREREQ(2,5) && !defined(__INTEL_COMPILER)
+#  define MAPLIB_DECL_FORMAT(archetype, string_index, first_to_check) \
+	__attribute__((__format__(archetype, string_index, first_to_check)))
+#else
+#  define MAPLIB_DECL_FORMAT(archetype, string_index, first_to_check)
+#endif
+
 #define LOG_INFO_VERBOSE LoggingProtocol::LogLevel::Info_Verbose
 #define LOG_INFO LoggingProtocol::LogLevel::Info
 #define LOG_SYNTAX_WARNING LoggingProtocol::LogLevel::Warning
@@ -34,6 +52,10 @@ namespace WzMap {
 template <unsigned N>
 static inline int vssprintf(char (&dest)[N], char const *format, va_list params) { return vsnprintf(dest, N, format, params); }
 #define debug(logger, part, ...) do { _printLog(logger, __LINE__, part, __FUNCTION__, __VA_ARGS__); } while(0)
-void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol::LogLevel level, const char *function, const char *str, ...);
+#if defined(__GNUC__) && (defined(__MINGW32__) || defined(__MINGW64__))
+void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol::LogLevel level, const char *function, const char *str, ...) MAPLIB_DECL_FORMAT(__MINGW_PRINTF_FORMAT, 5, 6);
+#else
+void _printLog(WzMap::LoggingProtocol* logger, int line, WzMap::LoggingProtocol::LogLevel level, const char *function, const char *str, ...) MAPLIB_DECL_FORMAT(printf, 5, 6);
+#endif
 
 } // namespace WzMap
