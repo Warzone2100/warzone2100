@@ -57,9 +57,19 @@ uint32_t ScrollableListWidget::snappedOffset()
 {
 	for (auto child : listView->children())
 	{
-		if (child->y() >= scrollBar->position())
+		if (child->geometry().bottom() < scrollBar->position())
 		{
-			return child->y();
+			continue;
+		}
+
+		const auto childOffsets = child->getScrollSnapOffsets().value_or(std::vector<uint32_t>{0});
+		for (const auto childOffset: childOffsets)
+		{
+			const auto y = child->y() + childOffset;
+			if (y >= scrollBar->position())
+			{
+				return y;
+			}
 		}
 	}
 
