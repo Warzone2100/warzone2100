@@ -452,6 +452,12 @@ void iV_DrawImage2(const WzString &filename, float x, float y, float width, floa
 	if (filename.isEmpty()) { return; }
 	ImageDef *image = iV_GetImage(filename);
 	ASSERT_OR_RETURN(, image != nullptr, "No image found for filename: %s", filename.toUtf8().c_str());
+	iV_DrawImage2(image, x, y, width, height);
+}
+
+void iV_DrawImage2(const ImageDef *image, float x, float y, float width, float height)
+{
+	ASSERT_NOT_NULLPTR_OR_RETURN(, image);
 	const gfx_api::gfxFloat invTextureSize = image->invTextureSize;
 	const int tu = image->Tu;
 	const int tv = image->Tv;
