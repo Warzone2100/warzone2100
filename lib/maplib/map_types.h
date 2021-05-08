@@ -38,7 +38,7 @@ enum class OutputFormat
 {
 	VER1_BINARY_OLD, // FlaME-compatible / binary .bjo
 	VER2, // JSON format (WZ 3.4+?)
-	VER3  // JSON format + full-range game.map (WZ 4.1+)
+	VER3  // JSONv2 format + full-range game.map (WZ 4.1+)
 };
 constexpr OutputFormat LatestOutputFormat = OutputFormat::VER3;
 

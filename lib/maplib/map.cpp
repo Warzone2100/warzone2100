@@ -42,7 +42,20 @@
 
 namespace WzMap {
 
-std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
+template<typename T>
+struct FileLoadResult
+{
+	std::vector<T> objects;
+	uint32_t fileFormatVersion = 0;
+};
+
+struct MapDataLoadResult
+{
+	MapData mapData;
+	uint32_t fileFormatVersion = 0;
+};
+
+static optional<MapDataLoadResult> loadMapData_Internal(const std::string &filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
 	const auto &path = filename.c_str();
 	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::READ);
@@ -50,7 +63,7 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 	if (!pStream)
 	{
 		debug(pCustomLogger, LOG_ERROR, "%s not found", path);
-		return nullptr;
+		return nullopt;
 	}
 
 	debug(pCustomLogger, LOG_INFO, "Loading: %s", path);
@@ -67,29 +80,29 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 		|| aFileType[2] != 'p')
 	{
 		debug(pCustomLogger, LOG_ERROR, "Bad header in %s", path);
-		return nullptr;
+		return nullopt;
 	}
 
 	if (mapVersion <= 9)
 	{
 		debug(pCustomLogger, LOG_ERROR, "%s: Unsupported save format version %u", path, mapVersion);
-		return nullptr;
+		return nullopt;
 	}
 	if (mapVersion > CURRENT_VERSION_NUM)
 	{
 		debug(pCustomLogger, LOG_ERROR, "%s: Undefined save format version %u", path, mapVersion);
-		return nullptr;
+		return nullopt;
 	}
 	if ((uint64_t)map.width * map.height > MAP_MAXAREA)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Map %s too large : %d %d", path, map.width, map.height);
-		return nullptr;
+		return nullopt;
 	}
 
 	if (map.width <= 1 || map.height <= 1)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Map %s is too small : %u, %u", path, map.width, map.height);
-		return nullptr;
+		return nullopt;
 	}
 
 	/* Load in the map data */
@@ -104,12 +117,12 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 			if (!pStream->readULE16(&(currentMapTile.texture)) || !pStream->readULE16(&(currentMapTile.height)))
 			{
 				debug(pCustomLogger, LOG_ERROR, "%s: Error during savegame load", path);
-				return nullptr;
+				return nullopt;
 			}
 			if (currentMapTile.height > TILE_MAX_HEIGHT)
 			{
 				debug(pCustomLogger, LOG_ERROR, "%s: Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", path, currentMapTile.height, static_cast<size_t>(TILE_MAX_HEIGHT));
-				return nullptr;
+				return nullopt;
 			}
 			map.mMapTiles.emplace_back(currentMapTile);
 		}
@@ -125,7 +138,7 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 			if (!pStream->readULE16(&texture) || !pStream->readULE8(&height))
 			{
 				debug(pCustomLogger, LOG_ERROR, "%s: Error during savegame load", path);
-				return nullptr;
+				return nullopt;
 			}
 			MapData::MapTile currentMapTile{};
 			currentMapTile.texture = texture;
@@ -139,7 +152,7 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 	if (!pStream->readULE32(&gwVersion) || !pStream->readULE32(&numGateways) || gwVersion != 1)
 	{
 		debug(pCustomLogger, LOG_ERROR, "Bad gateway in %s", path);
-		return nullptr;
+		return nullopt;
 	}
 
 	map.mGateways.reserve(numGateways);
@@ -150,12 +163,25 @@ std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& ma
 			!pStream->readULE8(&gw.y2))
 		{
 			debug(pCustomLogger, LOG_ERROR, "%s: Failed to read gateway info", path);
-			return nullptr;
+			return nullopt;
 		}
 		map.mGateways.emplace_back(gw);
 	}
 
-	return std::make_shared<MapData>(map);
+	MapDataLoadResult result;
+	result.mapData = std::move(map);
+	result.fileFormatVersion = mapVersion;
+	return result;
+}
+
+std::shared_ptr<MapData> loadMapData(const std::string &filename, IOProvider& mapIO, LoggingProtocol* pCustomLogger /*= nullptr*/)
+{
+	auto result = loadMapData_Internal(filename, mapIO, pCustomLogger);
+	if (!result.has_value())
+	{
+		return nullptr;
+	}
+	return std::make_shared<MapData>(result.value().mapData);
 }
 
 bool writeMapData(const MapData& map, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
@@ -397,8 +423,56 @@ struct JsonParsingContext
 	const char* jsonPath;
 };
 
+static inline nlohmann::json* jsonGetRootMapObjectsContainer(const std::string& filename, nlohmann::json& rootObject, uint32_t jsonFileFormat, const char *pRootContainerName, LoggingProtocol* pCustomLogger = nullptr)
+{
+	assert(pRootContainerName != nullptr);
+	nlohmann::json& mMapObjectsContainer = rootObject;
+	if (jsonFileFormat > 1)
+	{
+		if (!rootObject.contains(pRootContainerName))
+		{
+			// Missing required "droid" key for list of droids
+			debug(pCustomLogger, LOG_ERROR, "%s: Missing required \"%s\" key in root object", filename.c_str(), pRootContainerName);
+			return nullptr;
+		}
+		mMapObjectsContainer = rootObject.at(pRootContainerName);
+		if (!mMapObjectsContainer.is_array())
+		{
+			debug(pCustomLogger, LOG_ERROR, "%s: \"%s\" value should be an array", filename.c_str(), pRootContainerName);
+			return nullptr;
+		}
+	}
+	return &mMapObjectsContainer;
+}
+
+static inline optional<uint32_t> jsonGetFileFormatVersion(const std::string& filename, nlohmann::json& rootObject, LoggingProtocol* pCustomLogger = nullptr, uint32_t maxSupportedFileFormatVersion = 2)
+{
+	uint32_t fileFormatVersion = 1;
+	auto it_version = rootObject.find("version");
+	if (it_version != rootObject.end())
+	{
+		if (!it_version->is_number())
+		{
+			debug(pCustomLogger, LOG_ERROR, "%s: \"version\" key is not a number", filename.c_str());
+			return nullopt;
+		}
+		fileFormatVersion = it_version->get<uint32_t>();
+		if (fileFormatVersion == 1)
+		{
+			debug(pCustomLogger, LOG_ERROR, "%s: Unsupported file \"version\" (%" PRIu32 ") - version 1 lacks a \"version\" key", filename.c_str(), fileFormatVersion);
+			return nullopt;
+		}
+		if (fileFormatVersion == 0 || (fileFormatVersion > maxSupportedFileFormatVersion))
+		{
+			debug(pCustomLogger, LOG_ERROR, "%s: Unsupported file \"version\" (%" PRIu32 ")", filename.c_str(), fileFormatVersion);
+			return nullopt;
+		}
+	}
+	return fileFormatVersion;
+}
+
 template <typename T>
-static inline optional<std::vector<T>> jsonGetListOfType(const nlohmann::json& obj, const std::string& key, size_t minItems, size_t maxItems, const JsonParsingContext& jsonContext, LoggingProtocol* pCustomLogger = nullptr)
+static inline optional<std::vector<T>> jsonGetListOfType(const nlohmann::json& obj, const std::string& key, size_t minItems, size_t maxItems, const JsonParsingContext& jsonContext, LoggingProtocol* pCustomLogger = nullptr, bool allowNonList = false)
 {
 	std::vector<T> result;
 	auto it = obj.find(key);
@@ -416,14 +490,32 @@ static inline optional<std::vector<T>> jsonGetListOfType(const nlohmann::json& o
 
 	if (!it->is_array())
 	{
-		// Invalid value - expecting an array
-		debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"%s\" (expecting an array) for: %s", jsonContext.filename, key.c_str(), jsonContext.jsonPath);
-		return nullopt;
+		if (!allowNonList)
+		{
+			// Invalid value - expecting an array
+			debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"%s\" (expecting an array) for: %s", jsonContext.filename, key.c_str(), jsonContext.jsonPath);
+			return nullopt;
+		}
+		// process non-array
+		try {
+			result.push_back(it->get<T>());
+		}
+		catch (const std::exception &e) {
+			debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"%s\" (unable to convert to desired output type) for: %s; error: %s", jsonContext.filename, key.c_str(), jsonContext.jsonPath, e.what());
+			return nullopt;
+		}
+		return result;
 	}
 
-	for (size_t idx = 0; idx < minItems; idx++)
-	{
-		result.push_back(it->at(idx).get<T>());
+	try {
+		for (size_t idx = 0; idx < minItems; idx++)
+		{
+			result.push_back(it->at(idx).get<T>());
+		}
+	}
+	catch (const std::exception &e) {
+		debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"%s\" (unable to convert to desired output type) for: %s; error: %s", jsonContext.filename, key.c_str(), jsonContext.jsonPath, e.what());
+		return nullopt;
 	}
 
 	if (it->size() > maxItems)
@@ -434,12 +526,17 @@ static inline optional<std::vector<T>> jsonGetListOfType(const nlohmann::json& o
 	else if (it->size() > minItems)
 	{
 		// check for non-zero additional members, and warn that they are being ignored
-		for (size_t idx = minItems; idx < it->size(); idx++)
-		{
-			if (it->at(idx).get<T>() != 0)
+		try {
+			for (size_t idx = minItems; idx < it->size(); idx++)
 			{
-				debug(pCustomLogger, LOG_INFO_VERBOSE, "%s: Ignoring non-0 \"%s[%zu]\" for: %s", jsonContext.filename, key.c_str(), idx, jsonContext.jsonPath);
+				if (it->at(idx).get<T>() != 0)
+				{
+					debug(pCustomLogger, LOG_INFO_VERBOSE, "%s: Ignoring non-0 \"%s[%zu]\" for: %s", jsonContext.filename, key.c_str(), idx, jsonContext.jsonPath);
+				}
 			}
+		}
+		catch (const std::exception &e) {
+			debug(pCustomLogger, LOG_WARNING, "%s: Invalid ignored \"%s\" member (unable to convert to desired output type) for: %s; error: %s", jsonContext.filename, key.c_str(), jsonContext.jsonPath, e.what());
 		}
 	}
 	return result;
@@ -494,7 +591,7 @@ static optional<int8_t> jsonGetPlayerFromObj(const nlohmann::json& obj, MapType 
 	return nullopt;
 }
 
-static bool jsonSetPlayerOnObject(nlohmann::json& jsonObj, MapType mapType, int8_t player)
+static bool jsonSetPlayerOnObject(nlohmann::ordered_json& jsonObj, MapType mapType, int8_t player)
 {
 	if (player == PLAYER_SCAVENGERS)
 	{
@@ -522,7 +619,76 @@ static bool jsonSetPlayerOnObject(nlohmann::json& jsonObj, MapType mapType, int8
 }
 
 template<typename T>
-static void jsonSetBaseMapObjectInfo(nlohmann::json& jsonObj, OutputFormat format, const T& mapObj, const char *pNameKey = "name")
+static inline bool jsonGetBaseMapObjectInfo(T& mapObj, uint32_t jsonFileVersion, const nlohmann::json& jsonObj, const JsonParsingContext& jsonContext, LoggingProtocol* pCustomLogger = nullptr, const char *pNameKey = "name")
+{
+	assert(pNameKey != nullptr);
+	size_t maxComponentsPosition = 3;
+	size_t maxComponentsRotation = 3;
+	bool rotationAllowNonArray = false;
+	if (jsonFileVersion > 1)
+	{
+		maxComponentsPosition = 2; // [x, y] only
+		maxComponentsRotation = 1; // [x] only
+		rotationAllowNonArray = true;
+	}
+	auto it_name = jsonObj.find(pNameKey);
+	if (it_name == jsonObj.end())
+	{
+		// Missing required "template" key for map object
+		debug(pCustomLogger, LOG_ERROR, "%s: Missing required \"%s\" key for: %s", jsonContext.filename, pNameKey, jsonContext.jsonPath);
+		return false;
+	}
+	if (!it_name->is_string())
+	{
+		// Expecting a string value for name
+		debug(pCustomLogger, LOG_ERROR, "%s: Unexpected type of required \"%s\" key (expecting string) for: %s", jsonContext.filename, pNameKey, jsonContext.jsonPath);
+		return false;
+	}
+	mapObj.name = it_name->get<std::string>();
+	// "id" is explicitly optional - synchronized unit ids will be generated if it is omitted
+	auto it_id = jsonObj.find("id");
+	if (it_id != jsonObj.end())
+	{
+		if (!it_id->is_number())
+		{
+			// Expecting a numeric value for id
+			debug(pCustomLogger, LOG_ERROR, "%s: Unexpected type of \"id\" key (expecting number) for: %s", jsonContext.filename, jsonContext.jsonPath);
+			return false;
+		}
+		uint32_t id = jsonObj["id"].get<uint32_t>();
+		if (id == 0)
+		{
+			// Invalid droid id - cannot be 0
+			debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"id\" = 0 for: %s", jsonContext.filename, jsonContext.jsonPath);
+			return false;
+		}
+		mapObj.id = id;
+	}
+	// "position" must contain at least two components [x, y]
+	auto position = jsonGetListOfType<int>(jsonObj, "position", 2, maxComponentsPosition, jsonContext, pCustomLogger);
+	if (position.has_value())
+	{
+		mapObj.position.x = position.value()[0];
+		mapObj.position.y = position.value()[1];
+	}
+	else
+	{
+		// Missing required "position" key for map object
+		debug(pCustomLogger, LOG_ERROR, "%s: Missing required \"position\" key for: %s", jsonContext.filename, jsonContext.jsonPath);
+		return false;
+	}
+	// "rotation" must contain at least one components [x]
+	auto rotation = jsonGetListOfType<uint16_t>(jsonObj, "rotation", 1, maxComponentsRotation, jsonContext, pCustomLogger, rotationAllowNonArray);
+	if (rotation.has_value())
+	{
+		mapObj.direction = rotation.value()[0];
+	}
+
+	return true;
+}
+
+template<typename T>
+static void jsonSetBaseMapObjectInfo(nlohmann::ordered_json& jsonObj, uint32_t jsonFileVersion, const T& mapObj, const char *pNameKey = "name")
 {
 	assert(pNameKey != nullptr);
 	jsonObj[pNameKey] = mapObj.name;
@@ -530,22 +696,28 @@ static void jsonSetBaseMapObjectInfo(nlohmann::json& jsonObj, OutputFormat forma
 	{
 		jsonObj["id"] = mapObj.id.value();
 	}
-	// "position" must contain at least two components [x, y] - VER2 always expects 3 (and ignores the third)
-	nlohmann::json position = nlohmann::json::array();
+	// "position" must contain at least two components [x, y] - jsonFileVersion_v1 always expects 3 (and ignores the third)
+	nlohmann::ordered_json position = nlohmann::ordered_json::array();
 	position.push_back(mapObj.position.x);
 	position.push_back(mapObj.position.y);
-	if (format == OutputFormat::VER2)
+	if (jsonFileVersion == 1)
 	{
 		position.push_back(0);
 	}
 	jsonObj["position"] = std::move(position);
-	// "rotation" must contain at least one components [x] - VER2 always expects 3 (and ignores all but the first)
-	nlohmann::json rotation = nlohmann::json::array();
-	rotation.push_back(mapObj.direction);
-	if (format == OutputFormat::VER2)
+	nlohmann::ordered_json rotation;
+	if (jsonFileVersion == 1)
 	{
+		// "rotation" must contain at least one components [x] - jsonFileVersion_v1 always expects 3 (and ignores all but the first)
+		rotation = nlohmann::ordered_json::array();
+		rotation.push_back(mapObj.direction);
 		position.push_back(0);
 		position.push_back(0);
+	}
+	else
+	{
+		// "rotation" - v2+ JSON file format supports direct (non-array) single value
+		rotation = mapObj.direction;
 	}
 	jsonObj["rotation"] = std::move(rotation);
 }
@@ -598,9 +770,9 @@ static uint32_t getLargestSpecifiedId(const std::vector<T>& container)
 
 #define SS_BUILT 1
 
-static optional<std::vector<Structure>> loadBJOStructureInit(const std::string& filename, uint32_t mapMaxPlayers, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+static optional<FileLoadResult<Structure>> loadBJOStructureInit(const std::string& filename, uint32_t mapMaxPlayers, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
-	std::vector<Structure> result;
+	FileLoadResult<Structure> result;
 	const auto &path = filename.c_str();
 
 	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::READ);
@@ -626,6 +798,7 @@ static optional<std::vector<Structure>> loadBJOStructureInit(const std::string& 
 		debug(pCustomLogger, LOG_ERROR, "%s: Bad header", path);
 		return nullopt;
 	}
+	result.fileFormatVersion = version;
 
 	if (version < 7 || version > 8)
 	{
@@ -717,7 +890,7 @@ static optional<std::vector<Structure>> loadBJOStructureInit(const std::string& 
 			debug(pCustomLogger, LOG_WARNING, "%s: Ignoring capacity(%" PRIu32 ") for struct %" PRIu32 "", path, capacity, i);
 		}
 		// TODO: Sanity check struct position ?
-		result.push_back(std::move(structure));
+		result.objects.push_back(std::move(structure));
 	}
 	// Check: extra bytes at end
 	if (!pStream->endOfStream())
@@ -729,9 +902,9 @@ static optional<std::vector<Structure>> loadBJOStructureInit(const std::string& 
 
 static const std::unordered_set<std::string> knownStructureJSONKeys = { "name", "id", "position", "rotation", "player", "startpos", "modules" };
 
-static optional<std::vector<Structure>> loadJsonStructureInit(const std::string& filename, MapType mapType, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+static optional<FileLoadResult<Structure>> loadJsonStructureInit(const std::string& filename, MapType mapType, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
-	std::vector<Structure> result;
+	FileLoadResult<Structure> result;
 	const auto &path = filename.c_str();
 
 	auto loadedResult = loadJsonObjectFromFile(filename, mapIO, pCustomLogger);
@@ -744,7 +917,23 @@ static optional<std::vector<Structure>> loadJsonStructureInit(const std::string&
 	debug(pCustomLogger, LOG_INFO, "Loading: %s", path);
 
 	nlohmann::json& mRoot = loadedResult.value();
-	for (auto it : mRoot.items())
+
+	auto detectedFormatVersion = jsonGetFileFormatVersion(filename, mRoot, pCustomLogger, 2);
+	if (!detectedFormatVersion.has_value())
+	{
+		// jsonGetFileFormatVersion should have already logged the reason
+		return nullopt;
+	}
+	result.fileFormatVersion = detectedFormatVersion.value();
+
+	nlohmann::json* pStructuresRoot = jsonGetRootMapObjectsContainer(filename, mRoot, result.fileFormatVersion, "structures");
+	if (!pStructuresRoot)
+	{
+		// jsonGetRootMapObjectsContainer should have already logged the reason
+		return nullopt;
+	}
+
+	for (auto it : pStructuresRoot->items())
 	{
 		nlohmann::json& structureJson = it.value();
 		if (!structureJson.is_object())
@@ -752,37 +941,10 @@ static optional<std::vector<Structure>> loadJsonStructureInit(const std::string&
 			continue;
 		}
 		Structure structure;
-		if (!structureJson.contains("name"))
+		if (!jsonGetBaseMapObjectInfo(structure, result.fileFormatVersion, structureJson, {path, it.key().c_str()}, pCustomLogger, "name"))
 		{
-			// Missing required "template" key for droid
-			debug(pCustomLogger, LOG_ERROR, "%s: Missing required \"name\" key for structure: %s", path, it.key().c_str());
+			// jsonGetBaseMapObjectInfo should have handled logging an error
 			continue;
-		}
-		structure.name = structureJson["name"].get<std::string>();
-		// "id" is explicitly optional - synchronized unit ids will be generated if it is omitted
-		if (structureJson.contains("id"))
-		{
-			uint32_t id = structureJson["id"].get<uint32_t>();
-			if (id == 0)
-			{
-				// Invalid droid id - cannot be 0
-				debug(pCustomLogger, LOG_ERROR, "%s: Structure has invalid \"id\" = 0: %s", path, it.key().c_str());
-				continue;
-			}
-			structure.id = id;
-		}
-		// "position" must contain at least two components [x, y]
-		auto position = jsonGetListOfType<int>(structureJson, "position", 2, 3, {path, it.key().c_str()}, pCustomLogger);
-		if (position.has_value())
-		{
-			structure.position.x = position.value()[0];
-			structure.position.y = position.value()[1];
-		}
-		// "rotation" must contain at least one components [x]
-		auto rotation = jsonGetListOfType<uint16_t>(structureJson, "rotation", 1, 3, {path, it.key().c_str()}, pCustomLogger);
-		if (rotation.has_value())
-		{
-			structure.direction = rotation.value()[0];
 		}
 		// the player is extracted from either "player" or "startpos" - see jsonGetPlayerFromObj
 		auto player = jsonGetPlayerFromObj(structureJson, mapType, {path, it.key().c_str()}, pCustomLogger);
@@ -800,6 +962,11 @@ static optional<std::vector<Structure>> loadJsonStructureInit(const std::string&
 		auto it_modules = structureJson.find("modules");
 		if (it_modules != structureJson.end())
 		{
+			if (!it_modules->is_number())
+			{
+				debug(pCustomLogger, LOG_ERROR, "%s: Unexpected type of \"modules\" key (expecting number) for: %s", path, it.key().c_str());
+				continue;
+			}
 			nlohmann::json::number_unsigned_t modulesCount = it_modules->get<nlohmann::json::number_unsigned_t>();
 			if (modulesCount > static_cast<nlohmann::json::number_unsigned_t>(std::numeric_limits<uint8_t>::max()))
 			{
@@ -819,7 +986,7 @@ static optional<std::vector<Structure>> loadJsonStructureInit(const std::string&
 			}
 		}
 
-		result.push_back(std::move(structure));
+		result.objects.push_back(std::move(structure));
 	}
 
 	return result;
@@ -947,17 +1114,34 @@ bool writeMapStructureInitBJO(const std::vector<Structure>& structures, uint32_t
 	return true;
 }
 
-bool writeMapStructureInitJSON(const std::vector<Structure>& structures, MapType mapType, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+bool writeMapStructureInitJSON(const std::vector<Structure>& structures, MapType mapType, const std::string &filename, IOProvider& mapIO, uint32_t jsonFileVersion, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
+	const auto &path = filename.c_str();
+	if (jsonFileVersion > 2)
+	{
+		// Currently, we only support up to version 2 JSON files
+		debug(pCustomLogger, LOG_ERROR, "Unsupported JSON structure file version: %" PRIu32 "; cannot write to: %s", jsonFileVersion, path);
+		return false;
+	}
+
 	nlohmann::ordered_json mRoot = nlohmann::ordered_json::object();
+	nlohmann::ordered_json* pStructuresRoot = &mRoot;
+	if (jsonFileVersion > 1)
+	{
+		// Version 2+ JSON format contains a "version" key
+		// And stores the objects in an array
+		mRoot["version"] = jsonFileVersion;
+		mRoot["structures"] = nlohmann::ordered_json::array();
+		pStructuresRoot = &(mRoot.at("structures"));
+	}
 
 	size_t counter = 0;
 	size_t structureCountMinLength = std::max<size_t>(numberOfDigitsInNumber(structures.size()), 1);
 	for (const auto& structure : structures)
 	{
-		nlohmann::json structureObj = nlohmann::json::object();
+		nlohmann::ordered_json structureObj = nlohmann::ordered_json::object();
 		// write base object info (name, <id>, position, rotation)
-		jsonSetBaseMapObjectInfo(structureObj, format, structure);
+		jsonSetBaseMapObjectInfo(structureObj, jsonFileVersion, structure, "name");
 		// player
 		if (!jsonSetPlayerOnObject(structureObj, mapType, structure.player))
 		{
@@ -970,10 +1154,17 @@ bool writeMapStructureInitJSON(const std::vector<Structure>& structures, MapType
 			structureObj["modules"] = structure.modules;
 		}
 
-		// add to the root object
-		std::string counterStr = std::to_string(counter);
-		leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
-		mRoot["structure_" + counterStr] = std::move(structureObj);
+		if (pStructuresRoot->is_object())
+		{
+			// add to the root object
+			std::string counterStr = std::to_string(counter);
+			leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
+			(*pStructuresRoot)["structure_" + counterStr] = std::move(structureObj);
+		}
+		else //if (pStructuresRoot->is_array())
+		{
+			pStructuresRoot->push_back(std::move(structureObj));
+		}
 	}
 
 	// write out to file
@@ -989,8 +1180,10 @@ bool writeMapStructureInit(const std::vector<Structure>& structures, uint32_t ma
 			retVal = writeMapStructureInitBJO(structures, mapMaxPlayers, mapFolderPath + "/struct.bjo", mapIO, 8, pCustomLogger);
 			break;
 		case OutputFormat::VER2:
+			retVal = writeMapStructureInitJSON(structures, mapType, mapFolderPath + "/struct.json", mapIO, 1, pCustomLogger);
+			break;
 		case OutputFormat::VER3:
-			retVal = writeMapStructureInitJSON(structures, mapType, mapFolderPath + "/struct.json", mapIO, format, pCustomLogger);
+			retVal = writeMapStructureInitJSON(structures, mapType, mapFolderPath + "/struct.json", mapIO, 2, pCustomLogger);
 			break;
 	}
 	return retVal;
@@ -998,9 +1191,9 @@ bool writeMapStructureInit(const std::vector<Structure>& structures, uint32_t ma
 
 // MARK: - Droid loading functions
 
-static optional<std::vector<Droid>> loadBJODroidInit(const std::string& filename, uint32_t mapMaxPlayers, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+static optional<FileLoadResult<Droid>> loadBJODroidInit(const std::string& filename, uint32_t mapMaxPlayers, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
-	std::vector<Droid> result;
+	FileLoadResult<Droid> result;
 	const auto &path = filename.c_str();
 
 	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::READ);
@@ -1026,6 +1219,7 @@ static optional<std::vector<Droid>> loadBJODroidInit(const std::string& filename
 		debug(pCustomLogger, LOG_ERROR, "%s: Bad header", path);
 		return nullopt;
 	}
+	result.fileFormatVersion = version;
 
 	size_t nameLength = 60;
 	if (version <= 19)
@@ -1079,7 +1273,7 @@ static optional<std::vector<Droid>> loadBJODroidInit(const std::string& filename
 			debug(pCustomLogger, LOG_WARNING, "%s: Ignoring periodicalDamage(%" PRIu32 ") for droid %" PRIu32 "", path, periodicalDamage, i);
 		}
 		// TODO: Sanity check droid position ?
-		result.push_back(std::move(droid));
+		result.objects.push_back(std::move(droid));
 	}
 	// Check: extra bytes at end
 	if (!pStream->endOfStream())
@@ -1091,9 +1285,9 @@ static optional<std::vector<Droid>> loadBJODroidInit(const std::string& filename
 
 static const std::unordered_set<std::string> knownDroidJSONKeys = { "template", "id", "position", "rotation", "player", "startpos" };
 
-static optional<std::vector<Droid>> loadJsonDroidInit(const std::string& filename, MapType mapType, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+static optional<FileLoadResult<Droid>> loadJsonDroidInit(const std::string& filename, MapType mapType, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
-	std::vector<Droid> result;
+	FileLoadResult<Droid> result;
 	const auto &path = filename.c_str();
 
 	auto loadedResult = loadJsonObjectFromFile(filename, mapIO, pCustomLogger);
@@ -1106,8 +1300,23 @@ static optional<std::vector<Droid>> loadJsonDroidInit(const std::string& filenam
 	debug(pCustomLogger, LOG_INFO, "Loading: %s", path);
 
 	nlohmann::json& mRoot = loadedResult.value();
-	
-	for (auto it : mRoot.items())
+
+	auto detectedFormatVersion = jsonGetFileFormatVersion(filename, mRoot, pCustomLogger, 2);
+	if (!detectedFormatVersion.has_value())
+	{
+		// jsonGetFileFormatVersion should have already logged the reason
+		return nullopt;
+	}
+	result.fileFormatVersion = detectedFormatVersion.value();
+
+	nlohmann::json* pDroidsRoot = jsonGetRootMapObjectsContainer(filename, mRoot, result.fileFormatVersion, "droids");
+	if (!pDroidsRoot)
+	{
+		// jsonGetRootMapObjectsContainer should have already logged the reason
+		return nullopt;
+	}
+
+	for (auto it : pDroidsRoot->items())
 	{
 		nlohmann::json& droidJson = it.value();
 		if (!droidJson.is_object())
@@ -1115,37 +1324,10 @@ static optional<std::vector<Droid>> loadJsonDroidInit(const std::string& filenam
 			continue;
 		}
 		Droid droid;
-		if (!droidJson.contains("template"))
+		if (!jsonGetBaseMapObjectInfo(droid, result.fileFormatVersion, droidJson, {path, it.key().c_str()}, pCustomLogger, "template"))
 		{
-			// Missing required "template" key for droid
-			debug(pCustomLogger, LOG_ERROR, "%s: Missing required \"template\" key for droid: %s", path, it.key().c_str());
+			// jsonGetBaseMapObjectInfo should have handled logging an error
 			continue;
-		}
-		droid.name = droidJson["template"].get<std::string>();
-		// "id" is explicitly optional - synchronized unit ids will be generated if it is omitted
-		if (droidJson.contains("id"))
-		{
-			uint32_t id = droidJson["id"].get<uint32_t>();
-			if (id == 0)
-			{
-				// Invalid droid id - cannot be 0
-				debug(pCustomLogger, LOG_ERROR, "%s: Droid has invalid \"id\" = 0: %s", path, it.key().c_str());
-				continue;
-			}
-			droid.id = id;
-		}
-		// "position" must contain at least two components [x, y]
-		auto position = jsonGetListOfType<int>(droidJson, "position", 2, 3, {path, it.key().c_str()}, pCustomLogger);
-		if (position.has_value())
-		{
-			droid.position.x = position.value()[0];
-			droid.position.y = position.value()[1];
-		}
-		// "rotation" must contain at least one components [x]
-		auto rotation = jsonGetListOfType<uint16_t>(droidJson, "rotation", 1, 3, {path, it.key().c_str()}, pCustomLogger);
-		if (rotation.has_value())
-		{
-			droid.direction = rotation.value()[0];
 		}
 		// the player is extracted from either "player" or "startpos" - see jsonGetPlayerFromObj
 		auto player = jsonGetPlayerFromObj(droidJson, mapType, {path, it.key().c_str()}, pCustomLogger);
@@ -1169,7 +1351,7 @@ static optional<std::vector<Droid>> loadJsonDroidInit(const std::string& filenam
 			}
 		}
 
-		result.push_back(std::move(droid));
+		result.objects.push_back(std::move(droid));
 	}
 
 	return result;
@@ -1275,17 +1457,34 @@ bool writeMapDroidInitBJO(const std::vector<Droid>& droids, uint32_t mapMaxPlaye
 	return true;
 }
 
-bool writeMapDroidInitJSON(const std::vector<Droid>& droids, MapType mapType, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+bool writeMapDroidInitJSON(const std::vector<Droid>& droids, MapType mapType, const std::string &filename, IOProvider& mapIO, uint32_t jsonFileVersion, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
+	const auto &path = filename.c_str();
+	if (jsonFileVersion > 2)
+	{
+		// Currently, we only support up to version 2 JSON files
+		debug(pCustomLogger, LOG_ERROR, "Unsupported JSON droidinit file version: %" PRIu32 "; cannot write to: %s", jsonFileVersion, path);
+		return false;
+	}
+
 	nlohmann::ordered_json mRoot = nlohmann::ordered_json::object();
+	nlohmann::ordered_json* pDroidsRoot = &mRoot;
+	if (jsonFileVersion > 1)
+	{
+		// Version 2+ JSON format contains a "version" key
+		// And stores the objects in an array
+		mRoot["version"] = jsonFileVersion;
+		mRoot["droids"] = nlohmann::ordered_json::array();
+		pDroidsRoot = &(mRoot.at("droids"));
+	}
 
 	size_t counter = 0;
 	size_t structureCountMinLength = std::max<size_t>(numberOfDigitsInNumber(droids.size()), 1);
 	for (const auto& droid : droids)
 	{
-		nlohmann::json droidObj = nlohmann::json::object();
+		nlohmann::ordered_json droidObj = nlohmann::ordered_json::object();
 		// write base object info (name, <id>, position, rotation)
-		jsonSetBaseMapObjectInfo(droidObj, format, droid, "template");
+		jsonSetBaseMapObjectInfo(droidObj, jsonFileVersion, droid, "template");
 		// player
 		if (!jsonSetPlayerOnObject(droidObj, mapType, droid.player))
 		{
@@ -1293,10 +1492,17 @@ bool writeMapDroidInitJSON(const std::vector<Droid>& droids, MapType mapType, co
 			return false;
 		}
 
-		// add to the root object
-		std::string counterStr = std::to_string(counter);
-		leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
-		mRoot["droid_" + counterStr] = std::move(droidObj);
+		if (pDroidsRoot->is_object())
+		{
+			// add to the root object
+			std::string counterStr = std::to_string(counter);
+			leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
+			(*pDroidsRoot)["droid_" + counterStr] = std::move(droidObj);
+		}
+		else //if (pDroidsRoot->is_array())
+		{
+			pDroidsRoot->push_back(std::move(droidObj));
+		}
 	}
 
 	// write out to file
@@ -1312,8 +1518,10 @@ bool writeMapDroidInit(const std::vector<Droid>& droids, uint32_t mapMaxPlayers,
 			retVal = writeMapDroidInitBJO(droids, mapMaxPlayers, mapFolderPath + "/dinit.bjo", mapIO, 8, pCustomLogger);
 			break;
 		case OutputFormat::VER2:
+			retVal = writeMapDroidInitJSON(droids, mapType, mapFolderPath + "/droid.json", mapIO, 1, pCustomLogger);
+			break;
 		case OutputFormat::VER3:
-			retVal = writeMapDroidInitJSON(droids, mapType, mapFolderPath + "/droid.json", mapIO, format, pCustomLogger);
+			retVal = writeMapDroidInitJSON(droids, mapType, mapFolderPath + "/droid.json", mapIO, 2, pCustomLogger);
 			break;
 	}
 	return retVal;
@@ -1321,9 +1529,9 @@ bool writeMapDroidInit(const std::vector<Droid>& droids, uint32_t mapMaxPlayers,
 
 // MARK: - Feature loading functions
 
-static optional<std::vector<Feature>> loadBJOFeatureInit(const std::string& filename, uint32_t mapMaxPlayers, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+static optional<FileLoadResult<Feature>> loadBJOFeatureInit(const std::string& filename, uint32_t mapMaxPlayers, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
-	std::vector<Feature> result;
+	FileLoadResult<Feature> result;
 	const auto &path = filename.c_str();
 
 	auto pStream = mapIO.openBinaryStream(filename, BinaryIOStream::OpenMode::READ);
@@ -1349,6 +1557,7 @@ static optional<std::vector<Feature>> loadBJOFeatureInit(const std::string& file
 		debug(pCustomLogger, LOG_ERROR, "%s: Bad header", path);
 		return nullopt;
 	}
+	result.fileFormatVersion = version;
 
 	if (version < 7 || version > 19)
 	{
@@ -1432,7 +1641,7 @@ static optional<std::vector<Feature>> loadBJOFeatureInit(const std::string& file
 			}
 		}
 		// TODO: Sanity check feature position ?
-		result.push_back(std::move(feature));
+		result.objects.push_back(std::move(feature));
 	}
 	// Check: extra bytes at end
 	if (!pStream->endOfStream())
@@ -1444,9 +1653,9 @@ static optional<std::vector<Feature>> loadBJOFeatureInit(const std::string& file
 
 static const std::unordered_set<std::string> knownFeatureJSONKeys = { "name", "id", "position", "rotation", "player" };
 
-static optional<std::vector<Feature>> loadJsonFeatureInit(const std::string& filename, MapType mapType, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
+static optional<FileLoadResult<Feature>> loadJsonFeatureInit(const std::string& filename, MapType mapType, IOProvider& mapIO, LoggingProtocol* pCustomLogger = nullptr)
 {
-	std::vector<Feature> result;
+	FileLoadResult<Feature> result;
 	const auto &path = filename.c_str();
 
 	auto loadedResult = loadJsonObjectFromFile(filename, mapIO, pCustomLogger);
@@ -1460,7 +1669,22 @@ static optional<std::vector<Feature>> loadJsonFeatureInit(const std::string& fil
 
 	nlohmann::json& mRoot = loadedResult.value();
 
-	for (auto it : mRoot.items())
+	auto detectedFormatVersion = jsonGetFileFormatVersion(filename, mRoot, pCustomLogger, 2);
+	if (!detectedFormatVersion.has_value())
+	{
+		// jsonGetFileFormatVersion should have already logged the reason
+		return nullopt;
+	}
+	result.fileFormatVersion = detectedFormatVersion.value();
+
+	nlohmann::json* pFeaturesRoot = jsonGetRootMapObjectsContainer(filename, mRoot, result.fileFormatVersion, "features");
+	if (!pFeaturesRoot)
+	{
+		// jsonGetRootMapObjectsContainer should have already logged the reason
+		return nullopt;
+	}
+
+	for (auto it : pFeaturesRoot->items())
 	{
 		nlohmann::json& featureJson = it.value();
 		if (!featureJson.is_object())
@@ -1468,37 +1692,10 @@ static optional<std::vector<Feature>> loadJsonFeatureInit(const std::string& fil
 			continue;
 		}
 		Feature feature;
-		if (!featureJson.contains("name"))
+		if (!jsonGetBaseMapObjectInfo(feature, result.fileFormatVersion, featureJson, {path, it.key().c_str()}, pCustomLogger, "name"))
 		{
-			// Missing required "template" key for droid
-			debug(pCustomLogger, LOG_ERROR, "%s: Missing required \"name\" key for feature: %s", path, it.key().c_str());
+			// jsonGetBaseMapObjectInfo should have handled logging an error
 			continue;
-		}
-		feature.name = featureJson["name"].get<std::string>();
-		// "id" is explicitly optional - synchronized object ids will be generated if it is omitted
-		if (featureJson.contains("id"))
-		{
-			uint32_t id = featureJson["id"].get<uint32_t>();
-			if (id == 0)
-			{
-				// Invalid droid id - cannot be 0
-				debug(pCustomLogger, LOG_ERROR, "%s: Feature has invalid \"id\" = 0: %s", path, it.key().c_str());
-				continue;
-			}
-			feature.id = id;
-		}
-		// "position" must contain at least two components [x, y]
-		auto position = jsonGetListOfType<int>(featureJson, "position", 2, 3, {path, it.key().c_str()}, pCustomLogger);
-		if (position.has_value())
-		{
-			feature.position.x = position.value()[0];
-			feature.position.y = position.value()[1];
-		}
-		// "rotation" must contain at least one components [x]
-		auto rotation = jsonGetListOfType<uint16_t>(featureJson, "rotation", 1, 3, {path, it.key().c_str()}, pCustomLogger);
-		if (rotation.has_value())
-		{
-			feature.direction = rotation.value()[0];
 		}
 		// Optional:
 		// the player is extracted from "player" *only*
@@ -1526,7 +1723,7 @@ static optional<std::vector<Feature>> loadJsonFeatureInit(const std::string& fil
 			}
 		}
 
-		result.push_back(std::move(feature));
+		result.objects.push_back(std::move(feature));
 	}
 
 	return result;
@@ -1641,17 +1838,34 @@ bool writeMapFeatureInitBJO(const std::vector<Feature>& features, uint32_t mapMa
 	return true;
 }
 
-bool writeMapFeatureInitJSON(const std::vector<Feature>& features, MapType mapType, const std::string &filename, IOProvider& mapIO, OutputFormat format, LoggingProtocol* pCustomLogger /*= nullptr*/)
+bool writeMapFeatureInitJSON(const std::vector<Feature>& features, MapType mapType, const std::string &filename, IOProvider& mapIO, uint32_t jsonFileVersion, LoggingProtocol* pCustomLogger /*= nullptr*/)
 {
+	const auto &path = filename.c_str();
+	if (jsonFileVersion > 2)
+	{
+		// Currently, we only support up to version 2 JSON files
+		debug(pCustomLogger, LOG_ERROR, "Unsupported JSON feature file version: %" PRIu32 "; cannot write to: %s", jsonFileVersion, path);
+		return false;
+	}
+
 	nlohmann::ordered_json mRoot = nlohmann::ordered_json::object();
+	nlohmann::ordered_json *pFeaturesRoot = &mRoot;
+	if (jsonFileVersion > 1)
+	{
+		// Version 2+ JSON format contains a "version" key
+		// And stores the objects in an array
+		mRoot["version"] = jsonFileVersion;
+		mRoot["features"] = nlohmann::ordered_json::array();
+		pFeaturesRoot = &(mRoot.at("features"));
+	}
 
 	size_t counter = 0;
 	size_t structureCountMinLength = std::max<size_t>(numberOfDigitsInNumber(features.size()), 1);
 	for (const auto& feature : features)
 	{
-		nlohmann::json featureObj = nlohmann::json::object();
+		nlohmann::ordered_json featureObj = nlohmann::ordered_json::object();
 		// write base object info (name, <id>, position, rotation)
-		jsonSetBaseMapObjectInfo(featureObj, format, feature);
+		jsonSetBaseMapObjectInfo(featureObj, jsonFileVersion, feature, "name");
 		// Optional:
 		// the player is extracted from "player" *only*
 		if (feature.player.has_value())
@@ -1671,10 +1885,17 @@ bool writeMapFeatureInitJSON(const std::vector<Feature>& features, MapType mapTy
 			}
 		}
 
-		// add to the root object
-		std::string counterStr = std::to_string(counter);
-		leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
-		mRoot["feature_" + counterStr] = std::move(featureObj);
+		if (pFeaturesRoot->is_object())
+		{
+			// add to the root object
+			std::string counterStr = std::to_string(counter);
+			leftPadStrToMinimumLength(counterStr, structureCountMinLength, '0');
+			(*pFeaturesRoot)["feature_" + counterStr] = std::move(featureObj);
+		}
+		else //if (pFeaturesRoot->is_array())
+		{
+			pFeaturesRoot->push_back(std::move(featureObj));
+		}
 	}
 
 	// write out to file
@@ -1690,8 +1911,10 @@ bool writeMapFeatureInit(const std::vector<Feature>& features, uint32_t mapMaxPl
 			retVal = writeMapFeatureInitBJO(features, mapMaxPlayers, mapFolderPath + "/feat.bjo", mapIO, 8, pCustomLogger);
 			break;
 		case OutputFormat::VER2:
+			retVal = writeMapFeatureInitJSON(features, mapType, mapFolderPath + "/feature.json", mapIO, 1, pCustomLogger);
+			break;
 		case OutputFormat::VER3:
-			retVal = writeMapFeatureInitJSON(features, mapType, mapFolderPath + "/feature.json", mapIO, format, pCustomLogger);
+			retVal = writeMapFeatureInitJSON(features, mapType, mapFolderPath + "/feature.json", mapIO, 2, pCustomLogger);
 			break;
 	}
 	return retVal;
@@ -1832,8 +2055,13 @@ std::shared_ptr<MapData> Map::mapData()
 
 	// otherwise, load the map data on first request
 	if (!m_mapIO) { return nullptr; }
-	m_mapData = loadMapData(m_mapFolderPath + "/" + "game.map", *m_mapIO, m_logger.get());
-	return m_mapData;
+	auto loadResult = loadMapData_Internal(m_mapFolderPath + "/" + "game.map", *m_mapIO, m_logger.get());
+	if (loadResult.has_value())
+	{
+		m_mapData = std::make_shared<MapData>(std::move(loadResult.value().mapData));
+		return m_mapData;
+	}
+	return nullptr;
 }
 
 // Get the structures
@@ -1853,7 +2081,7 @@ std::shared_ptr<std::vector<Structure>> Map::mapStructures()
 	}
 	if (loadResult.has_value())
 	{
-		m_structures = std::make_shared<std::vector<Structure>>(std::move(loadResult.value()));
+		m_structures = std::make_shared<std::vector<Structure>>(std::move(loadResult.value().objects));
 		return m_structures;
 	}
 	return nullptr;
@@ -1876,7 +2104,7 @@ std::shared_ptr<std::vector<Droid>> Map::mapDroids()
 	}
 	if (loadResult.has_value())
 	{
-		m_droids = std::make_shared<std::vector<Droid>>(std::move(loadResult.value()));
+		m_droids = std::make_shared<std::vector<Droid>>(std::move(loadResult.value().objects));
 		return m_droids;
 	}
 	return nullptr;
@@ -1899,7 +2127,7 @@ std::shared_ptr<std::vector<Feature>> Map::mapFeatures()
 	}
 	if (loadResult.has_value())
 	{
-		m_features = std::make_shared<std::vector<Feature>>(std::move(loadResult.value()));
+		m_features = std::make_shared<std::vector<Feature>>(std::move(loadResult.value().objects));
 		return m_features;
 	}
 	return nullptr;
