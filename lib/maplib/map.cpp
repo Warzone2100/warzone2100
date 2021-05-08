@@ -409,8 +409,15 @@ static inline optional<std::vector<T>> jsonGetListOfType(const nlohmann::json& o
 
 	if (it->size() < minItems)
 	{
-		// Invalid rotation - requires at least one components (x)
-		debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"%s\" (requires at least %zu array members) for: %s", jsonContext.filename, key.c_str(), minItems, jsonContext.jsonPath);
+		// Invalid value - requires at least minItems components
+		debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"%s\" (requires at least %zu members) for: %s", jsonContext.filename, key.c_str(), minItems, jsonContext.jsonPath);
+		return nullopt;
+	}
+
+	if (!it->is_array())
+	{
+		// Invalid value - expecting an array
+		debug(pCustomLogger, LOG_ERROR, "%s: Invalid \"%s\" (expecting an array) for: %s", jsonContext.filename, key.c_str(), jsonContext.jsonPath);
 		return nullopt;
 	}
 
