@@ -30,6 +30,7 @@
 #include <vector>
 #include <functional>
 #include <string>
+#include <optional-lite/optional.hpp>
 #include "lib/framework/geometry.h"
 #include "lib/framework/wzstring.h"
 
@@ -294,6 +295,11 @@ public:
 
 	void setTransparentToClicks(bool hasClickTransparency);
 	bool transparentToClicks() const;
+
+	virtual nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets()
+	{
+		return nonstd::nullopt;
+	}
 
 	UDWORD                  id;                     ///< The user set ID number for the widget. This is returned when e.g. a button is pressed.
 	WIDGET_TYPE             type;                   ///< The widget type
