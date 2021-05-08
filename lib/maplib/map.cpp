@@ -2059,6 +2059,7 @@ std::shared_ptr<MapData> Map::mapData()
 	if (loadResult.has_value())
 	{
 		m_mapData = std::make_shared<MapData>(std::move(loadResult.value().mapData));
+		m_fileVersions[MapFile::MapData] = LoadedFileVersion(LoadedFileVersion::FileType::BinaryBJO, loadResult.value().fileFormatVersion);
 		return m_mapData;
 	}
 	return nullptr;
@@ -2073,15 +2074,18 @@ std::shared_ptr<std::vector<Structure>> Map::mapStructures()
 	// Otherwise, load the data on first request
 	if (!m_mapIO) { return nullptr; }
 	// Try JSON first
+	auto fileType = LoadedFileVersion::FileType::JSON;
 	auto loadResult = loadJsonStructureInit(m_mapFolderPath + "/" + "struct.json", m_mapType, *m_mapIO, m_logger.get());
 	if (!loadResult.has_value())
 	{
 		// Fallback to .bjo (old binary format)
+		fileType = LoadedFileVersion::FileType::BinaryBJO;
 		loadResult = loadBJOStructureInit(m_mapFolderPath + "/" + "struct.bjo", m_mapMaxPlayers, *m_mapIO, m_logger.get());
 	}
 	if (loadResult.has_value())
 	{
 		m_structures = std::make_shared<std::vector<Structure>>(std::move(loadResult.value().objects));
+		m_fileVersions[MapFile::Structures] = LoadedFileVersion(fileType, loadResult.value().fileFormatVersion);
 		return m_structures;
 	}
 	return nullptr;
@@ -2096,15 +2100,18 @@ std::shared_ptr<std::vector<Droid>> Map::mapDroids()
 	// Otherwise, load the data on first request
 	if (!m_mapIO) { return nullptr; }
 	// Try JSON first
+	auto fileType = LoadedFileVersion::FileType::JSON;
 	auto loadResult = loadJsonDroidInit(m_mapFolderPath + "/" + "droid.json", m_mapType, *m_mapIO, m_logger.get());
 	if (!loadResult.has_value())
 	{
 		// Fallback to .bjo (old binary format)
+		fileType = LoadedFileVersion::FileType::BinaryBJO;
 		loadResult = loadBJODroidInit(m_mapFolderPath + "/" + "dinit.bjo", m_mapMaxPlayers, *m_mapIO, m_logger.get());
 	}
 	if (loadResult.has_value())
 	{
 		m_droids = std::make_shared<std::vector<Droid>>(std::move(loadResult.value().objects));
+		m_fileVersions[MapFile::Droids] = LoadedFileVersion(fileType, loadResult.value().fileFormatVersion);
 		return m_droids;
 	}
 	return nullptr;
@@ -2119,15 +2126,18 @@ std::shared_ptr<std::vector<Feature>> Map::mapFeatures()
 	// Otherwise, load the data on first request
 	if (!m_mapIO) { return nullptr; }
 	// Try JSON first
+	auto fileType = LoadedFileVersion::FileType::JSON;
 	auto loadResult = loadJsonFeatureInit(m_mapFolderPath + "/" + "feature.json", m_mapType, *m_mapIO, m_logger.get());
 	if (!loadResult.has_value())
 	{
 		// Fallback to .bjo (old binary format)
+		fileType = LoadedFileVersion::FileType::BinaryBJO;
 		loadResult = loadBJOFeatureInit(m_mapFolderPath + "/" + "feat.bjo", m_mapMaxPlayers, *m_mapIO, m_logger.get());
 	}
 	if (loadResult.has_value())
 	{
 		m_features = std::make_shared<std::vector<Feature>>(std::move(loadResult.value().objects));
+		m_fileVersions[MapFile::Features] = LoadedFileVersion(fileType, loadResult.value().fileFormatVersion);
 		return m_features;
 	}
 	return nullptr;
@@ -2222,6 +2232,114 @@ uint32_t Map::crcSumFeatures(uint32_t crc)
 		}
 	}
 	return crc;
+}
+
+optional<Map::LoadedFormat> Map::loadedMapFormat()
+{
+	// make sure we have all the pieces of a valid map
+	if (!mapData()) { return nullopt; }
+	if (!mapTerrainTypes()) { return nullopt; }
+	if (!mapDroids()) { return nullopt; }
+	if (!mapFeatures()) { return nullopt; }
+	if (!mapStructures()) { return nullopt; }
+
+	if (m_wasScriptGenerated)
+	{
+		return Map::LoadedFormat::SCRIPT_GENERATED;
+	}
+
+	auto getFileVersion = [this](MapFile file) -> optional<LoadedFileVersion>
+	{
+		auto it = m_fileVersions.find(file);
+		if (it == m_fileVersions.end())
+		{
+			return nullopt;
+		}
+		return it->second;
+	};
+
+	// process the loaded map object file versions
+	std::unordered_map<LoadedFileVersion::FileType, size_t, FileTypeFileHash> numFilesOfType;
+	optional<uint32_t> lastFileVersion;
+	for (auto& it : m_fileVersions)
+	{
+		// skip MapData and TerrainData, which are currently always binary file types
+		if (it.first == MapFile::MapData || it.first == MapFile::TerrainTypes)
+		{
+			continue;
+		}
+		const auto& fileType = it.second.fileType();
+		numFilesOfType[fileType]++;
+		// check if there are any other file types
+		for (auto& it_ft : numFilesOfType)
+		{
+			if (it_ft.first != fileType && it_ft.second > 0)
+			{
+				return Map::LoadedFormat::MIXED;
+			}
+		}
+		if (fileType == LoadedFileVersion::FileType::JSON)
+		{
+			// Need to check for consistent version
+			if (lastFileVersion.has_value())
+			{
+				if (lastFileVersion.value() != it.second.fileVersion())
+				{
+					// File version is different from all prior file versions - JSON maps are expected to have files of the same version
+					return Map::LoadedFormat::MIXED;
+				}
+			}
+			else
+			{
+				lastFileVersion = it.second.fileVersion();
+			}
+		}
+	}
+
+	// if we reached here, we should have all map object files of the same FileType
+	if (numFilesOfType.size() != 1 || !lastFileVersion.has_value())
+	{
+		// or not? (presumably this isn't a loaded map)
+		return nullopt;
+	}
+
+	auto fileType = numFilesOfType.begin()->first;
+	switch (fileType)
+	{
+		case LoadedFileVersion::FileType::BinaryBJO:
+			// for now, just return that everything is in binary file format
+			return Map::LoadedFormat::BINARY_OLD;
+			break;
+		case LoadedFileVersion::FileType::JSON:
+		{
+			auto mapDataFileVersionResult = getFileVersion(MapFile::MapData);
+			if (!mapDataFileVersionResult.has_value())
+			{
+				// should not happen
+				return nullopt;
+			}
+			auto mapDataFileVersion = mapDataFileVersionResult.value();
+			if (lastFileVersion.value() == 1)
+			{
+				return ((mapDataFileVersion.fileType() == LoadedFileVersion::FileType::BinaryBJO) && (mapDataFileVersion.fileVersion() < VERSION_40)) ? Map::LoadedFormat::JSON_v1 : Map::LoadedFormat::MIXED;
+			}
+			else if (lastFileVersion.value() == 2)
+			{
+				return ((mapDataFileVersion.fileType() == LoadedFileVersion::FileType::BinaryBJO) && (mapDataFileVersion.fileVersion() == VERSION_40)) ? Map::LoadedFormat::JSON_v2 : Map::LoadedFormat::MIXED;
+			}
+			else
+			{
+				// unknown JSON file version?
+				return nullopt;
+			}
+			break;
+		}
+		case LoadedFileVersion::FileType::ScriptGenerated:
+			return Map::LoadedFormat::SCRIPT_GENERATED;
+			break;
+	}
+
+	return nullopt; // silence warning
 }
 
 } // namespace WzMap

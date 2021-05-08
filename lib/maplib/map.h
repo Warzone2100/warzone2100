@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <unordered_map>
 
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
@@ -169,6 +170,19 @@ public:
 	uint32_t crcSumDroids(uint32_t crc);
 	uint32_t crcSumFeatures(uint32_t crc);
 
+	// Map Format information (for a loaded map)
+	enum class LoadedFormat
+	{
+		MIXED,				// Doesn't fully fit a map format - may have a mix of files from different formats / versions (loadable, but not ideal)
+		BINARY_OLD,			// Old binary .bjo
+		JSON_v1, 			// JSON (v1) format (WZ 3.4+?)
+		SCRIPT_GENERATED,	// Script-generated map (WZ 4.0+)
+		JSON_v2				// JSON (v2) format + full-range game.map (WZ 4.1+)
+	};
+	// Obtain the map format of a loaded map
+	// Returns nullopt if loading the map data failed, the format can't be determined, or if this WzMap instance was not created by loading a map
+	optional<LoadedFormat> loadedMapFormat();
+
 	// Other Map instance data
 	bool wasScriptGenerated() const { return m_wasScriptGenerated; }
 	const std::string& mapFolderPath() const { return m_mapFolderPath; }
@@ -185,6 +199,57 @@ private:
 	std::shared_ptr<std::vector<Droid>> m_droids;
 	std::shared_ptr<std::vector<Feature>> m_features;
 	std::shared_ptr<TerrainTypeData> m_terrainTypes;
+private:
+	// Info about loaded file versions
+	struct LoadedFileVersion
+	{
+		enum FileType
+		{
+			BinaryBJO,
+			JSON,
+			ScriptGenerated
+		};
+	public:
+		LoadedFileVersion()
+		{ }
+		LoadedFileVersion(FileType type, uint32_t version)
+		: m_fileType(type)
+		, m_fileVersion(version)
+		{ }
+	public:
+		inline FileType fileType() const { return m_fileType; }
+		inline uint32_t fileVersion() const { return m_fileVersion; }
+	private:
+		FileType m_fileType = FileType::ScriptGenerated;
+		uint32_t m_fileVersion = 0;
+	};
+
+	struct FileTypeFileHash
+	{
+		std::size_t operator()(LoadedFileVersion::FileType t) const
+		{
+			return static_cast<std::size_t>(t);
+		}
+	};
+
+	enum class MapFile
+	{
+		MapData,
+		Structures,
+		Droids,
+		Features,
+		TerrainTypes
+	};
+
+	struct MapFileHash
+	{
+		std::size_t operator()(MapFile t) const
+		{
+			return static_cast<std::size_t>(t);
+		}
+	};
+
+	std::unordered_map<MapFile, LoadedFileVersion, MapFileHash> m_fileVersions;
 };
 
 } // namespace WzMap
