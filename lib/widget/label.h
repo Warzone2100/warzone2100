@@ -83,6 +83,8 @@ public:
 
 	using WIDGET::setTip;
 
+	int requiredHeight();
+
 private:
 	std::vector<TextLine> aTextLines;   // text lines on the label
 	int maxLineWidth = -1;
