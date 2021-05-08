@@ -173,7 +173,7 @@ void printSearchPath()
 	PHYSFS_freeList(searchPath);
 }
 
-void setOverrideMods(char *modlist)
+void setOverrideMods(const char *modlist)
 {
 	override_mods = split(modlist, ", ");
 	override_mod_list = modlist;

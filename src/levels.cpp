@@ -614,14 +614,6 @@ const char *getLevelName()
 bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYPE saveType)
 {
 	debug(LOG_WZ, "Loading level %s hash %s (%s, type %d)", name, hash == nullptr ? "builtin" : hash->toString().c_str(), pSaveName, (int)saveType);
-	if (saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION)
-	{
-		if (!levReleaseAll())
-		{
-			debug(LOG_ERROR, "Failed to unload old data");
-			return false;
-		}
-	}
 
 	// Ensure that the LC_NUMERIC locale setting is "C"
 	ASSERT(strcmp(setlocale(LC_NUMERIC, NULL), "C") == 0, "The LC_NUMERIC locale is not \"C\" - this may break level-data parsing depending on the user's system locale settings");

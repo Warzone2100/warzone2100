@@ -43,7 +43,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 
 /*This just loads up the .gam file to determine which level data to set up - split up
 so can be called in levLoadData when starting a game from a load save game*/
-bool loadGameInit(const char *fileName);
+bool loadGameInit(const char *fileName, bool fromRealSave);
 
 bool loadMissionExtras(const char* pGameToLoad, LEVEL_TYPE levelType);
 

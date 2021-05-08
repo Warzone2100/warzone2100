@@ -248,12 +248,6 @@ bool messageInitVars()
 	return true;
 }
 
-//allocates the viewdata heap
-bool initViewData()
-{
-	return true;
-}
-
 /* Adds a beacon message. A wrapper for addMessage() */
 MESSAGE *addBeaconMessage(MESSAGE_TYPE msgType, bool proxPos, UDWORD player)
 {

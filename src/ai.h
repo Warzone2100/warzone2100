@@ -57,9 +57,6 @@ extern PlayerMask satuplinkbits;
 /* Initialise the AI system */
 bool aiInitialise();
 
-/* Shutdown the AI system */
-bool aiShutdown();
-
 /* Do the AI for a droid */
 void aiUpdateDroid(DROID *psDroid);
 

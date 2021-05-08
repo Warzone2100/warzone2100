@@ -119,53 +119,26 @@ void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor)
 	iV_TextUpdateScaleFactor(horizGameToRendererScaleFactor, vertGameToRendererScaleFactor);
 }
 
+static unsigned int currentGameVersion = 400;
+static unsigned int minSupportVersion = 400;
 
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
 
 static const UDWORD NULL_ID = UDWORD_MAX;
 #define SAVEKEY_ONMISSION	0x100
+static uint32_t campaignSaveKey;
 
 static UDWORD RemapPlayerNumber(UDWORD OldNumber);
 static void plotScriptFeature(ScriptMapData const &data, char *backDropSprite);
 static void plotFeature(char *backDropSprite);
 bool writeGameInfo(const char *pFileName);
 
-/** struct used to store the data for retreating. */
-struct RUN_DATA
-{
-	Vector2i sPos = Vector2i(0, 0); ///< position to where units should flee to.
-	uint8_t forceLevel = 0;  ///< number of units below which others might flee.
-	uint8_t healthLevel = 0; ///< health percentage value below which it might flee. This value is used for groups only.
-	uint8_t leadership = 0;  ///< basic value that will be used on calculations of the flee probability.
-};
-
-// return positions for vtols, at one time.
-Vector2i asVTOLReturnPos[MAX_PLAYERS];
-
 struct GAME_SAVEHEADER
 {
 	char        aFileType[4];
 	uint32_t    version;
 };
-
-static bool serializeSaveGameHeader(PHYSFS_file *fileHandle, const GAME_SAVEHEADER *serializeHeader)
-{
-	if (WZ_PHYSFS_writeBytes(fileHandle, serializeHeader->aFileType, 4) != 4)
-	{
-		return false;
-	}
-
-	// Write version numbers below version 35 as little-endian, and those above as big-endian
-	if (serializeHeader->version < VERSION_35)
-	{
-		return PHYSFS_writeULE32(fileHandle, serializeHeader->version);
-	}
-	else
-	{
-		return PHYSFS_writeUBE32(fileHandle, serializeHeader->version);
-	}
-}
 
 static bool deserializeSaveGameHeader(PHYSFS_file *fileHandle, GAME_SAVEHEADER *serializeHeader)
 {
@@ -254,1204 +227,6 @@ struct TILETYPE_SAVEHEADER : public GAME_SAVEHEADER
 	int32_t		inFire; \
 	UDWORD				periodicalDamageStart; \
 	UDWORD				periodicalDamage
-
-struct SAVE_POWER
-{
-	uint32_t    currentPower;
-	uint32_t    extractedPower; // used for hacks
-};
-
-static bool serializeSavePowerData(PHYSFS_file *fileHandle, const SAVE_POWER *serializePower)
-{
-	return (PHYSFS_writeUBE32(fileHandle, serializePower->currentPower)
-	        && PHYSFS_writeUBE32(fileHandle, serializePower->extractedPower));
-}
-
-static bool deserializeSavePowerData(PHYSFS_file *fileHandle, SAVE_POWER *serializePower)
-{
-	return (PHYSFS_readUBE32(fileHandle, &serializePower->currentPower)
-	        && PHYSFS_readUBE32(fileHandle, &serializePower->extractedPower));
-}
-
-static bool serializeVector3i(PHYSFS_file *fileHandle, const Vector3i *serializeVector)
-{
-	return (PHYSFS_writeSBE32(fileHandle, serializeVector->x)
-	        && PHYSFS_writeSBE32(fileHandle, serializeVector->y)
-	        && PHYSFS_writeSBE32(fileHandle, serializeVector->z));
-}
-
-static bool deserializeVector3i(PHYSFS_file *fileHandle, Vector3i *serializeVector)
-{
-	int32_t x, y, z;
-
-	if (!PHYSFS_readSBE32(fileHandle, &x)
-	    || !PHYSFS_readSBE32(fileHandle, &y)
-	    || !PHYSFS_readSBE32(fileHandle, &z))
-	{
-		return false;
-	}
-
-	serializeVector-> x = x;
-	serializeVector-> y = y;
-	serializeVector-> z = z;
-
-	return true;
-}
-
-static bool serializeVector2i(PHYSFS_file *fileHandle, const Vector2i *serializeVector)
-{
-	return (PHYSFS_writeSBE32(fileHandle, serializeVector->x)
-	        && PHYSFS_writeSBE32(fileHandle, serializeVector->y));
-}
-
-static bool deserializeVector2i(PHYSFS_file *fileHandle, Vector2i *serializeVector)
-{
-	int32_t x, y;
-
-	if (!PHYSFS_readSBE32(fileHandle, &x)
-	    || !PHYSFS_readSBE32(fileHandle, &y))
-	{
-		return false;
-	}
-
-	serializeVector-> x = x;
-	serializeVector-> y = y;
-
-	return true;
-}
-
-static bool serializeiViewData(PHYSFS_file *fileHandle, const iView *serializeView)
-{
-	return (serializeVector3i(fileHandle, &serializeView->p)
-	        && serializeVector3i(fileHandle, &serializeView->r));
-}
-
-static bool deserializeiViewData(PHYSFS_file *fileHandle, iView *serializeView)
-{
-	return (deserializeVector3i(fileHandle, &serializeView->p)
-	        && deserializeVector3i(fileHandle, &serializeView->r));
-}
-
-static bool serializeRunData(PHYSFS_file *fileHandle, const RUN_DATA *serializeRun)
-{
-	return (serializeVector2i(fileHandle, &serializeRun->sPos)
-	        && PHYSFS_writeUBE8(fileHandle, serializeRun->forceLevel)
-	        && PHYSFS_writeUBE8(fileHandle, serializeRun->healthLevel)
-	        && PHYSFS_writeUBE8(fileHandle, serializeRun->leadership));
-}
-
-static bool deserializeRunData(PHYSFS_file *fileHandle, RUN_DATA *serializeRun)
-{
-	return (deserializeVector2i(fileHandle, &serializeRun->sPos)
-	        && PHYSFS_readUBE8(fileHandle, &serializeRun->forceLevel)
-	        && PHYSFS_readUBE8(fileHandle, &serializeRun->healthLevel)
-	        && PHYSFS_readUBE8(fileHandle, &serializeRun->leadership));
-}
-
-static bool serializeLandingZoneData(PHYSFS_file *fileHandle, const LANDING_ZONE *serializeLandZone)
-{
-	return (PHYSFS_writeUBE8(fileHandle, serializeLandZone->x1)
-	        && PHYSFS_writeUBE8(fileHandle, serializeLandZone->y1)
-	        && PHYSFS_writeUBE8(fileHandle, serializeLandZone->x2)
-	        && PHYSFS_writeUBE8(fileHandle, serializeLandZone->y2));
-}
-
-static bool deserializeLandingZoneData(PHYSFS_file *fileHandle, LANDING_ZONE *serializeLandZone)
-{
-	return (PHYSFS_readUBE8(fileHandle, &serializeLandZone->x1)
-	        && PHYSFS_readUBE8(fileHandle, &serializeLandZone->y1)
-	        && PHYSFS_readUBE8(fileHandle, &serializeLandZone->x2)
-	        && PHYSFS_readUBE8(fileHandle, &serializeLandZone->y2));
-}
-
-static bool serializeMultiplayerGame(PHYSFS_file *fileHandle, const MULTIPLAYERGAME *serializeMulti)
-{
-	const char *dummy8c = "DUMMYSTRING";
-
-	if (!PHYSFS_writeUBE8(fileHandle, static_cast<uint8_t>(serializeMulti->type))
-	    || WZ_PHYSFS_writeBytes(fileHandle, serializeMulti->map, 128) != 128
-	    || WZ_PHYSFS_writeBytes(fileHandle, dummy8c, 8) != 8
-	    || !PHYSFS_writeUBE8(fileHandle, serializeMulti->maxPlayers)
-	    || WZ_PHYSFS_writeBytes(fileHandle, serializeMulti->name, 128) != 128
-	    || !PHYSFS_writeSBE32(fileHandle, 0)
-	    || !PHYSFS_writeUBE32(fileHandle, serializeMulti->power)
-	    || !PHYSFS_writeUBE8(fileHandle, serializeMulti->base)
-	    || !PHYSFS_writeUBE8(fileHandle, serializeMulti->alliance)
-	    || !PHYSFS_writeUBE8(fileHandle, serializeMulti->hash.Bytes)
-	    || !WZ_PHYSFS_writeBytes(fileHandle, serializeMulti->hash.bytes, serializeMulti->hash.Bytes)
-	    || !PHYSFS_writeUBE16(fileHandle, 0)	// dummy, was bytesPerSec
-	    || !PHYSFS_writeUBE8(fileHandle, 0)	// dummy, was packetsPerSec
-	    || !PHYSFS_writeUBE8(fileHandle, challengeActive))	// reuse available field, was encryptKey
-	{
-		return false;
-	}
-
-	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		// dummy, was `skDiff` for each player
-		if (!PHYSFS_writeUBE8(fileHandle, 0))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeMultiplayerGame(PHYSFS_file *fileHandle, MULTIPLAYERGAME *serializeMulti)
-{
-	int32_t boolFog;
-	uint8_t dummy8;
-	uint16_t dummy16;
-	char dummy8c[8];
-	uint8_t hashSize;
-
-	serializeMulti->hash.setZero();
-
-	if (!PHYSFS_readUBE8(fileHandle, reinterpret_cast<uint8_t*>(&serializeMulti->type))
-	    || WZ_PHYSFS_readBytes(fileHandle, serializeMulti->map, 128) != 128
-	    || WZ_PHYSFS_readBytes(fileHandle, dummy8c, 8) != 8
-	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->maxPlayers)
-	    || WZ_PHYSFS_readBytes(fileHandle, serializeMulti->name, 128) != 128
-	    || !PHYSFS_readSBE32(fileHandle, &boolFog)
-	    || !PHYSFS_readUBE32(fileHandle, &serializeMulti->power)
-	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->base)
-	    || !PHYSFS_readUBE8(fileHandle, &serializeMulti->alliance)
-	    || !PHYSFS_readUBE8(fileHandle, &hashSize)
-	    || (hashSize == serializeMulti->hash.Bytes && !WZ_PHYSFS_readBytes(fileHandle, serializeMulti->hash.bytes, serializeMulti->hash.Bytes))
-	    || !PHYSFS_readUBE16(fileHandle, &dummy16)	// dummy, was bytesPerSec
-	    || !PHYSFS_readUBE8(fileHandle, &dummy8)	// dummy, was packetsPerSec
-	    || !PHYSFS_readUBE8(fileHandle, &dummy8))	// reused for challenge, was encryptKey
-	{
-		return false;
-	}
-	challengeActive = dummy8;	// hack
-
-	for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		// dummy, was `skDiff` for each player
-		if (!PHYSFS_readUBE8(fileHandle, &dummy8))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool serializePlayer(PHYSFS_file *fileHandle, const PLAYER *serializePlayer, int player)
-{
-	return (PHYSFS_writeUBE32(fileHandle, serializePlayer->position)
-	        && WZ_PHYSFS_writeBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
-	        && WZ_PHYSFS_writeBytes(fileHandle, getAIName(player), MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
-	        && PHYSFS_writeSBE8(fileHandle, static_cast<int8_t>(serializePlayer->difficulty))
-	        && PHYSFS_writeUBE8(fileHandle, (uint8_t)serializePlayer->allocated)
-	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->colour)
-	        && PHYSFS_writeUBE32(fileHandle, serializePlayer->team));
-}
-
-static bool deserializePlayer(PHYSFS_file *fileHandle, PLAYER *serializePlayer, int player)
-{
-	char aiName[MAX_LEN_AI_NAME] = { "THEREISNOAI" };
-	uint32_t position = 0, colour = 0, team = 0;
-	bool retval = false;
-	uint8_t allocated = 0;
-
-	retval = (PHYSFS_readUBE32(fileHandle, &position)
-	          && WZ_PHYSFS_readBytes(fileHandle, serializePlayer->name, StringSize) == StringSize
-	          && WZ_PHYSFS_readBytes(fileHandle, aiName, MAX_LEN_AI_NAME) == MAX_LEN_AI_NAME
-	          && PHYSFS_readSBE8(fileHandle, reinterpret_cast<int8_t*>(&serializePlayer->difficulty))
-	          && PHYSFS_readUBE8(fileHandle, &allocated)
-	          && PHYSFS_readUBE32(fileHandle, &colour)
-	          && PHYSFS_readUBE32(fileHandle, &team));
-
-	serializePlayer->allocated = allocated;
-	if (player < game.maxPlayers)
-	{
-		serializePlayer->ai = matchAIbyName(aiName);
-		ASSERT(serializePlayer->ai != AI_NOT_FOUND, "AI \"%s\" not found -- script loading will fail (player %d / %d)",
-		       aiName, player, game.maxPlayers);
-	}
-	serializePlayer->position = position;
-	serializePlayer->colour = colour;
-	serializePlayer->team = team;
-	return retval;
-}
-
-static bool serializeNetPlay(PHYSFS_file *fileHandle, const NETPLAY *serializeNetPlay)
-{
-	unsigned int i;
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!serializePlayer(fileHandle, &serializeNetPlay->players[i], i))
-		{
-			return false;
-		}
-	}
-
-	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
-	        && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->playercount)
-	        && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->hostPlayer)
-	        && PHYSFS_writeUBE32(fileHandle, selectedPlayer)
-	        && PHYSFS_writeUBE32(fileHandle, (uint32_t)game.scavengers)
-	        && PHYSFS_writeUBE32(fileHandle, 0)
-	        && PHYSFS_writeUBE32(fileHandle, 0));
-}
-
-static bool deserializeNetPlay(PHYSFS_file *fileHandle, NETPLAY *serializeNetPlay)
-{
-	unsigned int i;
-	uint32_t dummy, scavs = game.scavengers;
-	bool retv;
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!deserializePlayer(fileHandle, &serializeNetPlay->players[i], i))
-		{
-			return false;
-		}
-	}
-
-	serializeNetPlay->isHost = true;	// only host can load
-	retv = (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
-	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->playercount)
-	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->hostPlayer)
-	        && PHYSFS_readUBE32(fileHandle, &selectedPlayer)
-	        && PHYSFS_readUBE32(fileHandle, &scavs)
-	        && PHYSFS_readUBE32(fileHandle, &dummy)
-	        && PHYSFS_readUBE32(fileHandle, &dummy));
-	game.scavengers = scavs;
-	return retv;
-}
-
-struct SAVE_GAME_V7
-{
-	uint32_t    gameTime;
-	uint32_t    GameType;                   /* Type of game , one of the GTYPE_... enums. */
-	int32_t     ScrollMinX;                 /* Scroll Limits */
-	int32_t     ScrollMinY;
-	uint32_t    ScrollMaxX;
-	uint32_t    ScrollMaxY;
-	char        levelName[MAX_LEVEL_SIZE];  //name of the level to load up when mid game
-};
-
-static bool serializeSaveGameV7Data(PHYSFS_file *fileHandle, const SAVE_GAME_V7 *serializeGame)
-{
-	return (PHYSFS_writeUBE32(fileHandle, serializeGame->gameTime)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->GameType)
-	        && PHYSFS_writeSBE32(fileHandle, serializeGame->ScrollMinX)
-	        && PHYSFS_writeSBE32(fileHandle, serializeGame->ScrollMinY)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->ScrollMaxX)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->ScrollMaxY)
-	        && WZ_PHYSFS_writeBytes(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE) == MAX_LEVEL_SIZE);
-}
-
-static bool deserializeSaveGameV7Data(PHYSFS_file *fileHandle, SAVE_GAME_V7 *serializeGame)
-{
-	return (PHYSFS_readUBE32(fileHandle, &serializeGame->gameTime)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->GameType)
-	        && PHYSFS_readSBE32(fileHandle, &serializeGame->ScrollMinX)
-	        && PHYSFS_readSBE32(fileHandle, &serializeGame->ScrollMinY)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->ScrollMaxX)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->ScrollMaxY)
-	        && WZ_PHYSFS_readBytes(fileHandle, serializeGame->levelName, MAX_LEVEL_SIZE) == MAX_LEVEL_SIZE);
-}
-
-struct SAVE_GAME_V10 : public SAVE_GAME_V7
-{
-	SAVE_POWER  power[MAX_PLAYERS];
-};
-
-static bool serializeSaveGameV10Data(PHYSFS_file *fileHandle, const SAVE_GAME_V10 *serializeGame)
-{
-	unsigned int i;
-
-	if (!serializeSaveGameV7Data(fileHandle, (const SAVE_GAME_V7 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!serializeSavePowerData(fileHandle, &serializeGame->power[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV10Data(PHYSFS_file *fileHandle, SAVE_GAME_V10 *serializeGame)
-{
-	unsigned int i;
-
-	if (!deserializeSaveGameV7Data(fileHandle, (SAVE_GAME_V7 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!deserializeSavePowerData(fileHandle, &serializeGame->power[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-struct SAVE_GAME_V11 : public SAVE_GAME_V10
-{
-	iView currentPlayerPos;
-};
-
-static bool serializeSaveGameV11Data(PHYSFS_file *fileHandle, const SAVE_GAME_V11 *serializeGame)
-{
-	return (serializeSaveGameV10Data(fileHandle, (const SAVE_GAME_V10 *) serializeGame)
-	        && serializeiViewData(fileHandle, &serializeGame->currentPlayerPos));
-}
-
-static bool deserializeSaveGameV11Data(PHYSFS_file *fileHandle, SAVE_GAME_V11 *serializeGame)
-{
-	return (deserializeSaveGameV10Data(fileHandle, (SAVE_GAME_V10 *) serializeGame)
-	        && deserializeiViewData(fileHandle, &serializeGame->currentPlayerPos));
-}
-
-struct SAVE_GAME_V12 : public SAVE_GAME_V11
-{
-	uint32_t    missionTime;
-	uint32_t    saveKey;
-};
-
-static bool serializeSaveGameV12Data(PHYSFS_file *fileHandle, const SAVE_GAME_V12 *serializeGame)
-{
-	return (serializeSaveGameV11Data(fileHandle, (const SAVE_GAME_V11 *) serializeGame)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->missionTime)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->saveKey));
-}
-
-static bool deserializeSaveGameV12Data(PHYSFS_file *fileHandle, SAVE_GAME_V12 *serializeGame)
-{
-	return (deserializeSaveGameV11Data(fileHandle, (SAVE_GAME_V11 *) serializeGame)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->missionTime)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->saveKey));
-}
-
-struct SAVE_GAME_V14 : public SAVE_GAME_V12
-{
-	int32_t     missionOffTime;
-	int32_t     missionETA;
-	uint16_t    missionHomeLZ_X;
-	uint16_t    missionHomeLZ_Y;
-	int32_t     missionPlayerX;
-	int32_t     missionPlayerY;
-	uint16_t    iTranspEntryTileX[MAX_PLAYERS];
-	uint16_t    iTranspEntryTileY[MAX_PLAYERS];
-	uint16_t    iTranspExitTileX[MAX_PLAYERS];
-	uint16_t    iTranspExitTileY[MAX_PLAYERS];
-	uint32_t    aDefaultSensor[MAX_PLAYERS];
-	uint32_t    aDefaultECM[MAX_PLAYERS];
-	uint32_t    aDefaultRepair[MAX_PLAYERS];
-};
-
-static bool serializeSaveGameV14Data(PHYSFS_file *fileHandle, const SAVE_GAME_V14 *serializeGame)
-{
-	unsigned int i;
-
-	if (!serializeSaveGameV12Data(fileHandle, (const SAVE_GAME_V12 *) serializeGame)
-	    || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionOffTime)
-	    || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionETA)
-	    || !PHYSFS_writeUBE16(fileHandle, serializeGame->missionHomeLZ_X)
-	    || !PHYSFS_writeUBE16(fileHandle, serializeGame->missionHomeLZ_Y)
-	    || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionPlayerX)
-	    || !PHYSFS_writeSBE32(fileHandle, serializeGame->missionPlayerY))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileX[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspEntryTileY[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileX[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE16(fileHandle, serializeGame->iTranspExitTileY[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultSensor[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultECM[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->aDefaultRepair[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV14Data(PHYSFS_file *fileHandle, SAVE_GAME_V14 *serializeGame)
-{
-	unsigned int i;
-
-	if (!deserializeSaveGameV12Data(fileHandle, (SAVE_GAME_V12 *) serializeGame)
-	    || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionOffTime)
-	    || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionETA)
-	    || !PHYSFS_readUBE16(fileHandle, &serializeGame->missionHomeLZ_X)
-	    || !PHYSFS_readUBE16(fileHandle, &serializeGame->missionHomeLZ_Y)
-	    || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionPlayerX)
-	    || !PHYSFS_readSBE32(fileHandle, &serializeGame->missionPlayerY))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileX[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspEntryTileY[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileX[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE16(fileHandle, &serializeGame->iTranspExitTileY[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultSensor[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultECM[i]))
-		{
-			return false;
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->aDefaultRepair[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-struct SAVE_GAME_V15 : public SAVE_GAME_V14
-{
-	int32_t    offWorldKeepLists;	// was BOOL (which was a int)
-	uint8_t     aDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
-	uint32_t    RubbleTile;
-	uint32_t    WaterTile;
-	uint32_t    fogColour;
-	uint32_t    fogState;
-};
-
-static bool serializeSaveGameV15Data(PHYSFS_file *fileHandle, const SAVE_GAME_V15 *serializeGame)
-{
-	unsigned int i, j;
-
-	if (!serializeSaveGameV14Data(fileHandle, (const SAVE_GAME_V14 *) serializeGame)
-	    || !PHYSFS_writeSBE32(fileHandle, serializeGame->offWorldKeepLists))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
-		{
-			if (!PHYSFS_writeUBE8(fileHandle, 0)) // no longer saved in binary form
-			{
-				return false;
-			}
-		}
-	}
-
-	return (PHYSFS_writeUBE32(fileHandle, serializeGame->RubbleTile)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->WaterTile)
-	        && PHYSFS_writeUBE32(fileHandle, 0)
-	        && PHYSFS_writeUBE32(fileHandle, 0));
-}
-
-static bool deserializeSaveGameV15Data(PHYSFS_file *fileHandle, SAVE_GAME_V15 *serializeGame)
-{
-	unsigned int i, j;
-	int32_t boolOffWorldKeepLists;
-
-	if (!deserializeSaveGameV14Data(fileHandle, (SAVE_GAME_V14 *) serializeGame)
-	    || !PHYSFS_readSBE32(fileHandle, &boolOffWorldKeepLists))
-	{
-		return false;
-	}
-
-	serializeGame->offWorldKeepLists = boolOffWorldKeepLists;
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
-		{
-			uint8_t tmp;
-			if (!PHYSFS_readUBE8(fileHandle, &tmp))
-			{
-				return false;
-			}
-			if (tmp > 0)
-			{
-				add_to_experience_queue(i, tmp * 65536);
-			}
-		}
-	}
-
-	return (PHYSFS_readUBE32(fileHandle, &serializeGame->RubbleTile)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->WaterTile)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->fogColour)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->fogState));
-}
-
-struct SAVE_GAME_V16 : public SAVE_GAME_V15
-{
-	LANDING_ZONE   sLandingZone[MAX_NOGO_AREAS];
-};
-
-static bool serializeSaveGameV16Data(PHYSFS_file *fileHandle, const SAVE_GAME_V16 *serializeGame)
-{
-	unsigned int i;
-
-	if (!serializeSaveGameV15Data(fileHandle, (const SAVE_GAME_V15 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_NOGO_AREAS; ++i)
-	{
-		if (!serializeLandingZoneData(fileHandle, &serializeGame->sLandingZone[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV16Data(PHYSFS_file *fileHandle, SAVE_GAME_V16 *serializeGame)
-{
-	unsigned int i;
-
-	if (!deserializeSaveGameV15Data(fileHandle, (SAVE_GAME_V15 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_NOGO_AREAS; ++i)
-	{
-		if (!deserializeLandingZoneData(fileHandle, &serializeGame->sLandingZone[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-struct SAVE_GAME_V17 : public SAVE_GAME_V16
-{
-	uint32_t    objId;
-};
-
-static bool serializeSaveGameV17Data(PHYSFS_file *fileHandle, const SAVE_GAME_V17 *serializeGame)
-{
-	return (serializeSaveGameV16Data(fileHandle, (const SAVE_GAME_V16 *) serializeGame)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->objId));
-}
-
-static bool deserializeSaveGameV17Data(PHYSFS_file *fileHandle, SAVE_GAME_V17 *serializeGame)
-{
-	return (deserializeSaveGameV16Data(fileHandle, (SAVE_GAME_V16 *) serializeGame)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->objId));
-}
-
-struct SAVE_GAME_V18 : public SAVE_GAME_V17
-{
-	char        buildDate[MAX_STR_LENGTH];
-	uint32_t    oldestVersion;
-	uint32_t    validityKey;
-};
-
-static bool serializeSaveGameV18Data(PHYSFS_file *fileHandle, const SAVE_GAME_V18 *serializeGame)
-{
-	return (serializeSaveGameV17Data(fileHandle, (const SAVE_GAME_V17 *) serializeGame)
-	        && WZ_PHYSFS_writeBytes(fileHandle, serializeGame->buildDate, MAX_STR_LENGTH) == MAX_STR_LENGTH
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->oldestVersion)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->validityKey));
-}
-
-static bool deserializeSaveGameV18Data(PHYSFS_file *fileHandle, SAVE_GAME_V18 *serializeGame)
-{
-	return (deserializeSaveGameV17Data(fileHandle, (SAVE_GAME_V17 *) serializeGame)
-	        && WZ_PHYSFS_readBytes(fileHandle, serializeGame->buildDate, MAX_STR_LENGTH) == MAX_STR_LENGTH
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->oldestVersion)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->validityKey));
-}
-
-struct SAVE_GAME_V19 : public SAVE_GAME_V18
-{
-	uint8_t     alliances[MAX_PLAYERS][MAX_PLAYERS];
-	uint8_t     playerColour[MAX_PLAYERS];
-	uint8_t     radarZoom;
-};
-
-static bool serializeSaveGameV19Data(PHYSFS_file *fileHandle, const SAVE_GAME_V19 *serializeGame)
-{
-	unsigned int i, j;
-
-	if (!serializeSaveGameV18Data(fileHandle, (const SAVE_GAME_V18 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		for (j = 0; j < MAX_PLAYERS; ++j)
-		{
-			if (!PHYSFS_writeUBE8(fileHandle, serializeGame->alliances[i][j]))
-			{
-				return false;
-			}
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE8(fileHandle, serializeGame->playerColour[i]))
-		{
-			return false;
-		}
-	}
-
-	return PHYSFS_writeUBE8(fileHandle, serializeGame->radarZoom);
-}
-
-static bool deserializeSaveGameV19Data(PHYSFS_file *fileHandle, SAVE_GAME_V19 *serializeGame)
-{
-	unsigned int i, j;
-
-	if (!deserializeSaveGameV18Data(fileHandle, (SAVE_GAME_V18 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		for (j = 0; j < MAX_PLAYERS; ++j)
-		{
-			if (!PHYSFS_readUBE8(fileHandle, &serializeGame->alliances[i][j]))
-			{
-				return false;
-			}
-		}
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE8(fileHandle, &serializeGame->playerColour[i]))
-		{
-			return false;
-		}
-	}
-
-	return PHYSFS_readUBE8(fileHandle, &serializeGame->radarZoom);
-}
-
-struct SAVE_GAME_V20 : public SAVE_GAME_V19
-{
-	uint8_t     bDroidsToSafetyFlag;
-	Vector2i    asVTOLReturnPos[MAX_PLAYERS];
-};
-
-static bool serializeSaveGameV20Data(PHYSFS_file *fileHandle, const SAVE_GAME_V20 *serializeGame)
-{
-	unsigned int i;
-
-	if (!serializeSaveGameV19Data(fileHandle, (const SAVE_GAME_V19 *) serializeGame)
-	    || !PHYSFS_writeUBE8(fileHandle, serializeGame->bDroidsToSafetyFlag))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!serializeVector2i(fileHandle, &serializeGame->asVTOLReturnPos[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV20Data(PHYSFS_file *fileHandle, SAVE_GAME_V20 *serializeGame)
-{
-	unsigned int i;
-
-	if (!deserializeSaveGameV19Data(fileHandle, (SAVE_GAME_V19 *) serializeGame)
-	    || !PHYSFS_readUBE8(fileHandle, &serializeGame->bDroidsToSafetyFlag))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!deserializeVector2i(fileHandle, &serializeGame->asVTOLReturnPos[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-struct SAVE_GAME_V22 : public SAVE_GAME_V20
-{
-	RUN_DATA asRunData[MAX_PLAYERS];
-};
-
-static bool serializeSaveGameV22Data(PHYSFS_file *fileHandle, const SAVE_GAME_V22 *serializeGame)
-{
-	unsigned int i;
-
-	if (!serializeSaveGameV20Data(fileHandle, (const SAVE_GAME_V20 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!serializeRunData(fileHandle, &serializeGame->asRunData[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV22Data(PHYSFS_file *fileHandle, SAVE_GAME_V22 *serializeGame)
-{
-	unsigned int i;
-
-	if (!deserializeSaveGameV20Data(fileHandle, (SAVE_GAME_V20 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!deserializeRunData(fileHandle, &serializeGame->asRunData[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-struct SAVE_GAME_V24 : public SAVE_GAME_V22
-{
-	uint32_t    reinforceTime;
-	uint8_t     bPlayCountDown;
-	uint8_t     bPlayerHasWon;
-	uint8_t     bPlayerHasLost;
-	uint8_t     dummy3;
-};
-
-static bool serializeSaveGameV24Data(PHYSFS_file *fileHandle, const SAVE_GAME_V24 *serializeGame)
-{
-	return (serializeSaveGameV22Data(fileHandle, (const SAVE_GAME_V22 *) serializeGame)
-	        && PHYSFS_writeUBE32(fileHandle, serializeGame->reinforceTime)
-	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bPlayCountDown)
-	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bPlayerHasWon)
-	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bPlayerHasLost)
-	        && PHYSFS_writeUBE8(fileHandle, serializeGame->dummy3));
-}
-
-static bool deserializeSaveGameV24Data(PHYSFS_file *fileHandle, SAVE_GAME_V24 *serializeGame)
-{
-	return (deserializeSaveGameV22Data(fileHandle, (SAVE_GAME_V22 *) serializeGame)
-	        && PHYSFS_readUBE32(fileHandle, &serializeGame->reinforceTime)
-	        && PHYSFS_readUBE8(fileHandle, &serializeGame->bPlayCountDown)
-	        && PHYSFS_readUBE8(fileHandle, &serializeGame->bPlayerHasWon)
-	        && PHYSFS_readUBE8(fileHandle, &serializeGame->bPlayerHasLost)
-	        && PHYSFS_readUBE8(fileHandle, &serializeGame->dummy3));
-}
-
-struct SAVE_GAME_V27 : public SAVE_GAME_V24
-{
-	uint16_t    awDroidExperience[MAX_PLAYERS][MAX_RECYCLED_DROIDS];
-};
-
-static bool serializeSaveGameV27Data(PHYSFS_file *fileHandle, const SAVE_GAME_V27 *serializeGame)
-{
-	unsigned int i, j;
-
-	if (!serializeSaveGameV24Data(fileHandle, (const SAVE_GAME_V24 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
-		{
-			if (!PHYSFS_writeUBE16(fileHandle, 0))
-			{
-				return false;
-			}
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV27Data(PHYSFS_file *fileHandle, SAVE_GAME_V27 *serializeGame)
-{
-	unsigned int i, j;
-
-	if (!deserializeSaveGameV24Data(fileHandle, (SAVE_GAME_V24 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		for (j = 0; j < MAX_RECYCLED_DROIDS; ++j)
-		{
-			uint16_t tmp;
-			if (!PHYSFS_readUBE16(fileHandle, &tmp))
-			{
-				return false;
-			}
-			if (tmp > 0)
-			{
-				add_to_experience_queue(i, tmp * 65536);
-			}
-		}
-	}
-
-	return true;
-}
-
-struct SAVE_GAME_V29 : public SAVE_GAME_V27
-{
-	uint16_t    missionScrollMinX;
-	uint16_t    missionScrollMinY;
-	uint16_t    missionScrollMaxX;
-	uint16_t    missionScrollMaxY;
-};
-
-static bool serializeSaveGameV29Data(PHYSFS_file *fileHandle, const SAVE_GAME_V29 *serializeGame)
-{
-	return (serializeSaveGameV27Data(fileHandle, (const SAVE_GAME_V27 *) serializeGame)
-	        && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMinX)
-	        && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMinY)
-	        && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMaxX)
-	        && PHYSFS_writeUBE16(fileHandle, serializeGame->missionScrollMaxY));
-}
-
-static bool deserializeSaveGameV29Data(PHYSFS_file *fileHandle, SAVE_GAME_V29 *serializeGame)
-{
-	return (deserializeSaveGameV27Data(fileHandle, (SAVE_GAME_V27 *) serializeGame)
-	        && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMinX)
-	        && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMinY)
-	        && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMaxX)
-	        && PHYSFS_readUBE16(fileHandle, &serializeGame->missionScrollMaxY));
-}
-
-struct SAVE_GAME_V30 : public SAVE_GAME_V29
-{
-	int32_t     scrGameLevel;
-	uint8_t     bExtraVictoryFlag;
-	uint8_t     bExtraFailFlag;
-	uint8_t     bTrackTransporter;
-};
-
-static bool serializeSaveGameV30Data(PHYSFS_file *fileHandle, const SAVE_GAME_V30 *serializeGame)
-{
-	return (serializeSaveGameV29Data(fileHandle, (const SAVE_GAME_V29 *) serializeGame)
-	        && PHYSFS_writeSBE32(fileHandle, serializeGame->scrGameLevel)
-	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bExtraVictoryFlag)
-	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bExtraFailFlag)
-	        && PHYSFS_writeUBE8(fileHandle, serializeGame->bTrackTransporter));
-}
-
-static bool deserializeSaveGameV30Data(PHYSFS_file *fileHandle, SAVE_GAME_V30 *serializeGame)
-{
-	return (deserializeSaveGameV29Data(fileHandle, (SAVE_GAME_V29 *) serializeGame)
-	        && PHYSFS_readSBE32(fileHandle, &serializeGame->scrGameLevel)
-	        && PHYSFS_readUBE8(fileHandle, &serializeGame->bExtraVictoryFlag)
-	        && PHYSFS_readUBE8(fileHandle, &serializeGame->bExtraFailFlag)
-	        && PHYSFS_readUBE8(fileHandle, &serializeGame->bTrackTransporter));
-}
-
-//extra code for the patch - saves out whether cheated with the mission timer
-struct SAVE_GAME_V31 : public SAVE_GAME_V30
-{
-	int32_t     missionCheatTime;
-};
-
-
-static bool serializeSaveGameV31Data(PHYSFS_file *fileHandle, const SAVE_GAME_V31 *serializeGame)
-{
-	return (serializeSaveGameV30Data(fileHandle, (const SAVE_GAME_V30 *) serializeGame)
-	        && PHYSFS_writeSBE32(fileHandle, serializeGame->missionCheatTime));
-}
-
-static bool deserializeSaveGameV31Data(PHYSFS_file *fileHandle, SAVE_GAME_V31 *serializeGame)
-{
-	return (deserializeSaveGameV30Data(fileHandle, (SAVE_GAME_V30 *) serializeGame)
-	        && PHYSFS_readSBE32(fileHandle, &serializeGame->missionCheatTime));
-}
-
-// alexl. skirmish saves
-struct SAVE_GAME_V33 : public SAVE_GAME_V31
-{
-	MULTIPLAYERGAME sGame;
-	NETPLAY         sNetPlay;
-	uint32_t        savePlayer;
-	char            sPName[32];
-	int32_t         multiPlayer;	// was BOOL (int) ** see warning about conversion
-	uint32_t        sPlayerIndex[MAX_PLAYERS];
-};
-
-static bool serializeSaveGameV33Data(PHYSFS_file *fileHandle, const SAVE_GAME_V33 *serializeGame)
-{
-	unsigned int i;
-
-	if (!serializeSaveGameV31Data(fileHandle, (const SAVE_GAME_V31 *) serializeGame)
-	    || !serializeMultiplayerGame(fileHandle, &serializeGame->sGame)
-	    || !serializeNetPlay(fileHandle, &serializeGame->sNetPlay)
-	    || !PHYSFS_writeUBE32(fileHandle, serializeGame->savePlayer)
-	    || WZ_PHYSFS_writeBytes(fileHandle, serializeGame->sPName, 32) != 32
-	    || !PHYSFS_writeSBE32(fileHandle, serializeGame->multiPlayer))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_writeUBE32(fileHandle, serializeGame->sPlayerIndex[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV33Data(PHYSFS_file *fileHandle, SAVE_GAME_V33 *serializeGame)
-{
-	unsigned int i;
-	int32_t boolMultiPlayer;
-
-	if (!deserializeSaveGameV31Data(fileHandle, (SAVE_GAME_V31 *) serializeGame)
-	    || !deserializeMultiplayerGame(fileHandle, &serializeGame->sGame)
-	    || !deserializeNetPlay(fileHandle, &serializeGame->sNetPlay)
-	    || !PHYSFS_readUBE32(fileHandle, &serializeGame->savePlayer)
-	    || WZ_PHYSFS_readBytes(fileHandle, serializeGame->sPName, 32) != 32
-	    || !PHYSFS_readSBE32(fileHandle, &boolMultiPlayer))
-	{
-		return false;
-	}
-
-	serializeGame->multiPlayer = boolMultiPlayer;
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (!PHYSFS_readUBE32(fileHandle, &serializeGame->sPlayerIndex[i]))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-//Now holds AI names for multiplayer
-struct SAVE_GAME_V34 : public SAVE_GAME_V33
-{
-	char sPlayerName[MAX_PLAYERS][StringSize];
-};
-
-
-static bool serializeSaveGameV34Data(PHYSFS_file *fileHandle, const SAVE_GAME_V34 *serializeGame)
-{
-	unsigned int i;
-	if (!serializeSaveGameV33Data(fileHandle, (const SAVE_GAME_V33 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (WZ_PHYSFS_writeBytes(fileHandle, serializeGame->sPlayerName[i], StringSize) != StringSize)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV34Data(PHYSFS_file *fileHandle, SAVE_GAME_V34 *serializeGame)
-{
-	unsigned int i;
-	if (!deserializeSaveGameV33Data(fileHandle, (SAVE_GAME_V33 *) serializeGame))
-	{
-		return false;
-	}
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, serializeGame->sPlayerName[i], StringSize) != StringSize)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-// First version to utilize (de)serialization API and first to be big-endian (instead of little-endian)
-struct SAVE_GAME_V35 : public SAVE_GAME_V34
-{
-};
-
-static bool serializeSaveGameV35Data(PHYSFS_file *fileHandle, const SAVE_GAME_V35 *serializeGame)
-{
-	return serializeSaveGameV34Data(fileHandle, (const SAVE_GAME_V34 *) serializeGame);
-}
-
-static bool deserializeSaveGameV35Data(PHYSFS_file *fileHandle, SAVE_GAME_V35 *serializeGame)
-{
-	return deserializeSaveGameV34Data(fileHandle, (SAVE_GAME_V34 *) serializeGame);
-}
-
-// Store loaded mods in savegame
-struct SAVE_GAME_V38 : public SAVE_GAME_V35
-{
-	char modList[modlist_string_size];
-};
-
-static bool serializeSaveGameV38Data(PHYSFS_file *fileHandle, const SAVE_GAME_V38 *serializeGame)
-{
-	if (!serializeSaveGameV35Data(fileHandle, (const SAVE_GAME_V35 *) serializeGame))
-	{
-		return false;
-	}
-
-	if (WZ_PHYSFS_writeBytes(fileHandle, serializeGame->modList, modlist_string_size) != modlist_string_size)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-static bool deserializeSaveGameV38Data(PHYSFS_file *fileHandle, SAVE_GAME_V38 *serializeGame)
-{
-	if (!deserializeSaveGameV35Data(fileHandle, (SAVE_GAME_V35 *) serializeGame))
-	{
-		return false;
-	}
-
-	if (WZ_PHYSFS_readBytes(fileHandle, serializeGame->modList, modlist_string_size) != modlist_string_size)
-	{
-		return false;
-	}
-
-	return true;
-}
-
-// Current save game version
-typedef SAVE_GAME_V38 SAVE_GAME;
-
-static bool serializeSaveGameData(PHYSFS_file *fileHandle, const SAVE_GAME *serializeGame)
-{
-	return serializeSaveGameV38Data(fileHandle, (const SAVE_GAME_V38 *) serializeGame);
-}
-
-static bool deserializeSaveGameData(PHYSFS_file *fileHandle, SAVE_GAME *serializeGame)
-{
-	return deserializeSaveGameV38Data(fileHandle, (SAVE_GAME_V38 *) serializeGame);
-}
 
 struct DROIDINIT_SAVEHEADER : public GAME_SAVEHEADER
 {
@@ -1588,6 +363,60 @@ struct SAVE_FEATURE_V14
 	FEATURE_SAVE_V14;
 };
 
+struct SAVE_GAME_DATA
+{
+	uint32_t gameTime;
+	uint32_t GameType;
+	uint32_t saveType;
+	int32_t ScrollMinX;
+	int32_t ScrollMinY;
+	uint32_t ScrollMaxX;
+	uint32_t ScrollMaxY;
+	uint32_t power[MAX_PLAYERS];
+	iView currentPlayerPos;
+	uint32_t missionTime;
+	int32_t missionOffTime;
+	int32_t missionETA;
+	uint16_t missionHomeLZ_X;
+	uint16_t missionHomeLZ_Y;
+	int32_t missionPlayerX;
+	int32_t missionPlayerY;
+	uint16_t iTranspEntryTileX[MAX_PLAYERS];
+	uint16_t iTranspEntryTileY[MAX_PLAYERS];
+	uint16_t iTranspExitTileX[MAX_PLAYERS];
+	uint16_t iTranspExitTileY[MAX_PLAYERS];
+	uint32_t aDefaultSensor[MAX_PLAYERS];
+	uint32_t aDefaultECM[MAX_PLAYERS];
+	uint32_t aDefaultRepair[MAX_PLAYERS];
+	int32_t offWorldKeepLists;
+	uint32_t RubbleTile;
+	uint32_t WaterTile;
+	LANDING_ZONE sLandingZone[MAX_NOGO_AREAS];
+	uint32_t objId;
+	uint8_t alliances[MAX_PLAYERS][MAX_PLAYERS];
+	uint8_t playerColour[MAX_PLAYERS];
+	uint8_t radarZoom;
+	uint8_t bDroidsToSafetyFlag;
+	uint32_t reinforceTime;
+	uint8_t bPlayCountDown;
+	uint8_t bPlayerHasWon;
+	uint8_t bPlayerHasLost;
+	uint16_t missionScrollMinX;
+	uint16_t missionScrollMinY;
+	uint16_t missionScrollMaxX;
+	uint16_t missionScrollMaxY;
+	int32_t missionCheatTime;
+	MULTIPLAYERGAME sGame;
+	NETPLAY sNetPlay;
+	int32_t multiPlayer;
+	bool radarPermitted;
+	bool allowDesign;
+	bool challengeActive;
+	bool scavengers;
+};
+
+static SAVE_GAME_DATA saveGameData;
+
 /***************************************************************************/
 /*
  *	Local Variables
@@ -1598,10 +427,7 @@ extern uint32_t synchObjID;    // unique ID creation thing..
 
 static UDWORD			saveGameVersion = 0;
 static bool				saveGameOnMission = false;
-static SAVE_GAME		saveGameData;
 
-static UDWORD		savedGameTime;
-static UDWORD		savedObjId;
 static SDWORD		startX, startY;
 static UDWORD		width, height;
 static GAME_TYPE	gameType;
@@ -1612,12 +438,12 @@ static bool IsScenario;
  *	Local ProtoTypes
  */
 /***************************************************************************/
+static std::string getMainJsonFromFile(const char *fileName);
+static void getSavedGameFileVersion(const char *fileName);
 static bool gameLoadV7(PHYSFS_file *fileHandle);
-static bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version);
-static bool loadMainFile(const std::string &fileName);
-static bool loadMainFileFinal(const std::string &fileName);
+static bool gameLoadV(const char *fileName, bool save);
+static bool loadMainFile(const std::string &fileName, const bool getCampaignVersionOnly);
 static bool writeMainFile(const std::string &fileName, SDWORD saveType);
-static bool writeGameFile(const char *fileName, SDWORD saveType);
 static bool writeMapFile(const char *fileName);
 
 static bool loadSaveDroidInit(char *pFileData, UDWORD filesize);
@@ -1663,7 +489,7 @@ static bool writeFiresupportDesignators(const char *pFileName);
 
 static bool writeScriptState(const char *pFileName);
 
-static bool gameLoad(const char *fileName);
+static bool gameLoad(const char *fileName, bool fromSave);
 
 /* set the global scroll values to use for the save game */
 static void setMapScroll();
@@ -1677,15 +503,11 @@ static char *getSaveStructNameV19(SAVE_STRUCTURE_V17 *psSaveStructure)
 so can be called in levLoadData when starting a game from a load save game*/
 
 // -----------------------------------------------------------------------------------------
-bool loadGameInit(const char *fileName)
+bool loadGameInit(const char *fileName, bool fromRealSave)
 {
-	if (!gameLoad(fileName))
+	if (!gameLoad(fileName, fromRealSave))
 	{
 		debug(LOG_ERROR, "Corrupted / unsupported savegame file %s, Unable to load!", fileName);
-		// NOTE: why do we start the game clock on a *failed* load?
-		// Start the game clock
-		gameTimeStart();
-
 		return false;
 	}
 
@@ -1816,7 +638,6 @@ static void allocatePlayers()
 	{
 		NetPlay.players[i].ai = saveGameData.sNetPlay.players[i].ai;
 		NetPlay.players[i].difficulty = saveGameData.sNetPlay.players[i].difficulty;
-//		NetPlay.players[i].faction; // read and initialized by loadMainFile
 		sstrcpy(NetPlay.players[i].name, saveGameData.sNetPlay.players[i].name);
 		NetPlay.players[i].position = saveGameData.sNetPlay.players[i].position;
 		if (NetPlay.players[i].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && i == 0))
@@ -1832,15 +653,115 @@ static void allocatePlayers()
 	}
 }
 
-static void getPlayerNames()
+static void getSavedPlayerNames()
 {
-	/* Get human and AI players names */
-	if (saveGameVersion >= VERSION_34)
+	for (unsigned i = 0; i < MAX_PLAYERS; ++i)
 	{
-		for (unsigned i = 0; i < MAX_PLAYERS; ++i)
+		(void)setPlayerName(i, saveGameData.sNetPlay.players[i].name);
+	}
+}
+
+// this just sets most of the data that was read in from main.json during the loading process mess.
+static void initMainGlobalsFromSave()
+{
+	//initialise the lists
+	for (unsigned int player = 0; player < MAX_PLAYERS; player++)
+	{
+		apsLimboDroids[player] = nullptr;
+		mission.apsDroidLists[player] = nullptr;
+		mission.apsStructLists[player] = nullptr;
+		mission.apsFeatureLists[player] = nullptr;
+		mission.apsFlagPosLists[player] = nullptr;
+		mission.apsExtractorLists[player] = nullptr;
+	}
+	mission.apsOilList[0] = nullptr;
+	mission.apsSensorList[0] = nullptr;
+
+	bMultiMessages = bMultiPlayer = saveGameData.multiPlayer;
+	mission.startTime = saveGameData.missionTime;
+
+	//set the scroll varaibles
+	scrollMinX = startX = saveGameData.ScrollMinX;
+	scrollMinY = startY = saveGameData.ScrollMinY;
+	scrollMaxX = saveGameData.ScrollMaxX;
+	scrollMaxY = saveGameData.ScrollMaxY;
+	width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
+	height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
+	gameType = static_cast<GAME_TYPE>(saveGameData.saveType);
+
+	disp3d_getView(&(saveGameData.currentPlayerPos));
+
+	//mission data
+	mission.time = saveGameData.missionOffTime;
+	mission.ETA = saveGameData.missionETA;
+	mission.homeLZ_X = saveGameData.missionHomeLZ_X;
+	mission.homeLZ_Y = saveGameData.missionHomeLZ_Y;
+	mission.playerX = saveGameData.missionPlayerX;
+	mission.playerY = saveGameData.missionPlayerY;
+	//mission data
+	for (unsigned int player = 0; player < MAX_PLAYERS; player++)
+	{
+		aDefaultSensor[player] = saveGameData.aDefaultSensor[player];
+		aDefaultECM[player] = saveGameData.aDefaultECM[player];
+		aDefaultRepair[player] = saveGameData.aDefaultRepair[player];
+		//check for self repair having been set
+		if (aDefaultRepair[player] != 0 && asRepairStats[aDefaultRepair[player]].location == LOC_DEFAULT)
 		{
-			(void)setPlayerName(i, saveGameData.sPlayerName[i]);
+			enableSelfRepair(player);
 		}
+		missionSetTransporterEntry(player, saveGameData.iTranspEntryTileX[player], saveGameData.iTranspEntryTileY[player]);
+		missionSetTransporterExit(player, saveGameData.iTranspExitTileX[player], saveGameData.iTranspExitTileY[player]);
+	}
+
+	offWorldKeepLists = saveGameData.offWorldKeepLists;
+	setRubbleTile(saveGameData.RubbleTile);
+	setUnderwaterTile(saveGameData.WaterTile);
+
+	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+	{
+		for (unsigned int j = 0; j < MAX_PLAYERS; j++)
+		{
+			alliances[i][j] = saveGameData.alliances[i][j];
+			if (i == j)
+			{
+				alliances[i][j] = ALLIANCE_FORMED;
+			}
+			if (bMultiPlayer && alliancesSharedVision(game.alliance) && alliances[i][j] == ALLIANCE_FORMED)
+			{
+				alliancebits[i] |= 1 << j;
+			}
+		}
+	}
+
+	for (unsigned int i = 0; i < MAX_PLAYERS; i++)
+	{
+		setPlayerColour(i, saveGameData.playerColour[i]);
+	}
+
+	SetRadarZoom(saveGameData.radarZoom);
+	setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
+	missionSetReinforcementTime(saveGameData.reinforceTime);
+	setPlayCountDown(saveGameData.bPlayCountDown);
+	setPlayerHasWon(saveGameData.bPlayerHasWon);
+	setPlayerHasLost(saveGameData.bPlayerHasLost);
+
+	//mission data
+	mission.cheatTime = saveGameData.missionCheatTime;
+
+	// skirmish saves.
+	game.type = static_cast<LEVEL_TYPE>(saveGameData.GameType);
+	game.scavengers = saveGameData.scavengers;
+	productionPlayer = selectedPlayer;
+	NetPlay.bComms = saveGameData.sNetPlay.bComms;
+
+	allocatePlayers();
+	getSavedPlayerNames();
+
+	if (bMultiPlayer)
+	{
+		PLAYERSTATS playerStats;
+		loadMultiStats(saveGameData.sNetPlay.players[selectedPlayer].name, &playerStats);
+		setMultiStats(selectedPlayer, playerStats, true);
 	}
 }
 
@@ -1855,7 +776,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	size_t			fileExten;
 	UDWORD			fileSize;
 	char			*pFileData = nullptr;
-	UDWORD			player, inc, i, j;
+	UDWORD			player, inc;
 	DROID           *psCurr;
 	UWORD           missionScrollMinX = 0, missionScrollMinY = 0,
 	                missionScrollMaxX = 0, missionScrollMaxY = 0;
@@ -1863,10 +784,9 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	/* Stop the game clock */
 	gameTimeStop();
 
-	if ((gameType == GTYPE_SAVE_START) ||
-	    (gameType == GTYPE_SAVE_MIDMISSION))
+	if ((gameType == GTYPE_SAVE_START) || (gameType == GTYPE_SAVE_MIDMISSION))
 	{
-		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
+		gameTimeReset(saveGameData.gameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
 	}
 
 	/* Clear all the objects off the map and free up the map memory */
@@ -1902,158 +822,13 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		initFactoryNumFlag();
 	}
 
-	if (UserSaveGame)//always !keepObjects
+	if (UserSaveGame) //always !keepObjects
 	{
-		//initialise the lists
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			apsLimboDroids[player] = nullptr;
-			mission.apsDroidLists[player] = nullptr;
-			mission.apsStructLists[player] = nullptr;
-			mission.apsFeatureLists[player] = nullptr;
-			mission.apsFlagPosLists[player] = nullptr;
-			mission.apsExtractorLists[player] = nullptr;
-		}
-		mission.apsOilList[0] = nullptr;
-		mission.apsSensorList[0] = nullptr;
-
-		// Stuff added after level load to avoid being reset or initialised during load
-		// always !keepObjects
-
-		if (saveGameVersion >= VERSION_33)
-		{
-			bMultiPlayer = saveGameData.multiPlayer;
-		}
-
-		if (saveGameVersion >= VERSION_12)
-		{
-			mission.startTime = saveGameData.missionTime;
-		}
-
-		//set the scroll varaibles
-		startX = saveGameData.ScrollMinX;
-		startY = saveGameData.ScrollMinY;
-		width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
-		height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
-		gameType = static_cast<GAME_TYPE>(saveGameData.GameType);
-
-		if (saveGameVersion >= VERSION_14)
-		{
-			//mission data
-			mission.time		=	saveGameData.missionOffTime;
-			mission.ETA			=	saveGameData.missionETA;
-			mission.homeLZ_X	=	saveGameData.missionHomeLZ_X;
-			mission.homeLZ_Y	=	saveGameData.missionHomeLZ_Y;
-			mission.playerX		=	saveGameData.missionPlayerX;
-			mission.playerY		=	saveGameData.missionPlayerY;
-			//mission data
-			for (player = 0; player < MAX_PLAYERS; player++)
-			{
-				aDefaultSensor[player]				= saveGameData.aDefaultSensor[player];
-				aDefaultECM[player]					= saveGameData.aDefaultECM[player];
-				aDefaultRepair[player]				= saveGameData.aDefaultRepair[player];
-				//check for self repair having been set
-				if (aDefaultRepair[player] != 0
-				    && asRepairStats[aDefaultRepair[player]].location == LOC_DEFAULT)
-				{
-					enableSelfRepair((UBYTE)player);
-				}
-				mission.iTranspEntryTileX[player]	= saveGameData.iTranspEntryTileX[player];
-				mission.iTranspEntryTileY[player]	= saveGameData.iTranspEntryTileY[player];
-				mission.iTranspExitTileX[player]	= saveGameData.iTranspExitTileX[player];
-				mission.iTranspExitTileY[player]	= saveGameData.iTranspExitTileY[player];
-			}
-		}
-
-		if (saveGameVersion >= VERSION_15)//V21
-		{
-			offWorldKeepLists	= saveGameData.offWorldKeepLists;
-			setRubbleTile(saveGameData.RubbleTile);
-			setUnderwaterTile(saveGameData.WaterTile);
-		}
-		if (saveGameVersion >= VERSION_19)//V21
-		{
-			for (i = 0; i < MAX_PLAYERS; i++)
-			{
-				for (j = 0; j < MAX_PLAYERS; j++)
-				{
-					alliances[i][j] = saveGameData.alliances[i][j];
-					if (i == j)
-					{
-						alliances[i][j] = ALLIANCE_FORMED;    // hack to fix old savegames
-					}
-					if (bMultiPlayer && alliancesSharedVision(game.alliance) && alliances[i][j] == ALLIANCE_FORMED)
-					{
-						alliancebits[i] |= 1 << j;
-					}
-				}
-			}
-			for (i = 0; i < MAX_PLAYERS; i++)
-			{
-				setPlayerColour(i, saveGameData.playerColour[i]);
-			}
-			SetRadarZoom(saveGameData.radarZoom);
-		}
-
-		if (saveGameVersion >= VERSION_20)//V21
-		{
-			setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
-		}
-
-		if (saveGameVersion >= VERSION_24)//V24
-		{
-			missionSetReinforcementTime(saveGameData.reinforceTime);
-			// horrible hack to catch savegames that were saving garbage into these fields
-			if (saveGameData.bPlayCountDown <= 1)
-			{
-				setPlayCountDown(saveGameData.bPlayCountDown);
-			}
-			if (saveGameData.bPlayerHasWon <= 1)
-			{
-				setPlayerHasWon(saveGameData.bPlayerHasWon);
-			}
-			if (saveGameData.bPlayerHasLost <= 1)
-			{
-				setPlayerHasLost(saveGameData.bPlayerHasLost);
-			}
-		}
-
-		//extra code added for the first patch (v1.1) to save out if mission time is not being counted
-		if (saveGameVersion >= VERSION_31)
-		{
-			//mission data
-			mission.cheatTime = saveGameData.missionCheatTime;
-		}
-
-		// skirmish saves.
-		if (saveGameVersion >= VERSION_33)
-		{
-			PLAYERSTATS		playerStats;
-			bool scav = game.scavengers;
-
-			game			= saveGameData.sGame;
-			game.scavengers = scav;	// ok, so this is butt ugly. but i'm just getting inspiration from the rest of the code around here. ok? - per
-			productionPlayer = selectedPlayer;
-			bMultiMessages	= bMultiPlayer;
-
-			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
-
-			allocatePlayers();
-
-			if (bMultiPlayer)
-			{
-				loadMultiStats(saveGameData.sPName, &playerStats);				// stats stuff
-				setMultiStats(selectedPlayer, playerStats, false);
-				setMultiStats(selectedPlayer, playerStats, true);
-			}
-		}
+		initMainGlobalsFromSave();
 	}
 
-	getPlayerNames();
-
 	//clear the player Power structs
-	if ((gameType != GTYPE_SAVE_START) && (gameType != GTYPE_SAVE_MIDMISSION) &&
-	    (!keepObjects))
+	if ((gameType != GTYPE_SAVE_START) && (gameType != GTYPE_SAVE_MIDMISSION) && (!keepObjects))
 	{
 		clearPlayerPower();
 	}
@@ -2271,8 +1046,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	if (saveGameVersion > VERSION_12)
 	{
 		//if user save game then load up the FX
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if ((gameType == GTYPE_SAVE_START) || (gameType == GTYPE_SAVE_MIDMISSION))
 		{
 			//load in the message list file
 			aFileName[fileExten] = '\0';
@@ -2488,8 +1262,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	if (saveGameVersion >= VERSION_11)
 	{
 		//if user save game then load up the Visibility
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if ((gameType == GTYPE_SAVE_START) || (gameType == GTYPE_SAVE_MIDMISSION))
 		{
 			//load in the visibility file
 			aFileName[fileExten] = '\0';
@@ -2507,8 +1280,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	if (saveGameVersion >= VERSION_16)
 	{
 		//if user save game then load up the FX
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if ((gameType == GTYPE_SAVE_START) || (gameType == GTYPE_SAVE_MIDMISSION))
 		{
 			aFileName[fileExten] = '\0';
 			strcat(aFileName, "score.json");
@@ -2525,8 +1297,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	if (saveGameVersion >= VERSION_21)
 	{
 		//rebuild the apsCommandDesignation AFTER all droids and structures are loaded
-		if ((gameType == GTYPE_SAVE_START) ||
-		    (gameType == GTYPE_SAVE_MIDMISSION))
+		if ((gameType == GTYPE_SAVE_START) || (gameType == GTYPE_SAVE_MIDMISSION))
 		{
 			//load in the command list file
 			aFileName[fileExten] = '\0';
@@ -2591,17 +1362,16 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	loadLabels(aFileName);
 
 	//if user save game then reset the time - BEWARE IF YOU USE IT
-	if ((gameType == GTYPE_SAVE_START) ||
-	    (gameType == GTYPE_SAVE_MIDMISSION))
+	if ((gameType == GTYPE_SAVE_START) || (gameType == GTYPE_SAVE_MIDMISSION))
 	{
-		ASSERT(gameTime == savedGameTime, "loadGame; game time modified during load");
-		gameTimeReset(savedGameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
+		ASSERT(gameTime == saveGameData.gameTime, "loadGame; game time modified during load");
+		gameTimeReset(saveGameData.gameTime);//added 14 may 98 JPS to solve kev's problem with no firing droids
 
 		//reset the objId for new objects
 		if (saveGameVersion >= VERSION_17)
 		{
-			unsynchObjID = (savedObjId + 1) / 2; // Make new object ID start at savedObjId*8.
-			synchObjID   = savedObjId * 4;      // Make new object ID start at savedObjId*8.
+			unsynchObjID = (saveGameData.objId + 1) / 2; // Make new object ID start at savedObjId*8.
+			synchObjID   = saveGameData.objId * 4;      // Make new object ID start at savedObjId*8.
 		}
 
 		if (getDroidsToSafetyFlag())
@@ -2689,12 +1459,15 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 	gameTimeStop();
 	sanityUpdate();
 
-	/* Write the data to the file */
-	if (!writeGameFile(CurrentFileName, saveType))
+	//.gam save file exists as a crutch to load games ATM
+	PHYSFS_file *fileHandle = openSaveFile(aFileName);
+	if (!fileHandle)
 	{
-		debug(LOG_ERROR, "writeGameFile(\"%s\") failed", CurrentFileName);
-		goto error;
+		debug(LOG_ERROR, "openSaveFile(\"%s\") failed", aFileName);
+		return false;
 	}
+	PHYSFS_writeULE32(fileHandle, 1); //junk data write
+	PHYSFS_close(fileHandle);
 
 	//remove the file extension
 	CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
@@ -2996,11 +1769,38 @@ static bool writeMapFile(const char *fileName)
 }
 
 // -----------------------------------------------------------------------------------------
-static bool gameLoad(const char *fileName)
+static std::string getMainJsonFromFile(const char *fileName)
+{
+	char CurrentFileName[PATH_MAX];
+	strcpy(CurrentFileName, fileName);
+	CurrentFileName[strlen(CurrentFileName) - 4] = '\0'; // remove the extension
+
+	return (std::string(CurrentFileName) + "/main.json");
+}
+
+static void getSavedGameFileVersion(const char *fileName)
+{
+	std::string main = getMainJsonFromFile(fileName);
+
+	if (PHYSFS_exists(main.c_str()))
+	{
+		WzConfig save(WzString::fromUtf8(main), WzConfig::ReadOnly);
+		saveGameVersion = save.value("version").toUInt();
+	}
+	else
+	{
+		saveGameVersion = CURRENT_VERSION_NUM;
+	}
+}
+
+// -----------------------------------------------------------------------------------------
+static bool gameLoad(const char *fileName, bool fromSave)
 {
 	char CurrentFileName[PATH_MAX];
 	strcpy(CurrentFileName, fileName);
 	GAME_SAVEHEADER fileHeader;
+
+	debug(LOG_WZ, "gameLoad");
 
 	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
 	if (!fileHandle)
@@ -3008,34 +1808,35 @@ static bool gameLoad(const char *fileName)
 		// Failure to open the file is a failure to load the specified savegame
 		return false;
 	}
-	debug(LOG_WZ, "gameLoad");
 
-	// Read the header from the file
-	if (!deserializeSaveGameHeader(fileHandle, &fileHeader))
+	//.gam files are useless stubs now that data is all in the main.json file.
+	if (!fromSave)
 	{
-		debug(LOG_ERROR, "gameLoad: error while reading header from file (%s): %s", fileName, WZ_PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
+		// Read the header from the file
+		if (!deserializeSaveGameHeader(fileHandle, &fileHeader))
+		{
+			debug(LOG_ERROR, "gameLoad: error while reading header from file (%s): %s", fileName, WZ_PHYSFS_getLastError());
+			PHYSFS_close(fileHandle);
+			return false;
+		}
+		// Check the header to see if we've been given a file of the right type
+		if (fileHeader.aFileType[0] != 'g'
+		    || fileHeader.aFileType[1] != 'a'
+		    || fileHeader.aFileType[2] != 'm'
+		    || fileHeader.aFileType[3] != 'e')
+		{
+			debug(LOG_ERROR, "gameLoad: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'g' 'a' 'm' 'e')",
+			      fileHeader.aFileType[0],
+			      fileHeader.aFileType[1],
+			      fileHeader.aFileType[2],
+			      fileHeader.aFileType[3]);
+
+			PHYSFS_close(fileHandle);
+
+			return false;
+		}
+		debug(LOG_NEVER, "gl .gam file is version %u\n", fileHeader.version);
 	}
-
-	// Check the header to see if we've been given a file of the right type
-	if (fileHeader.aFileType[0] != 'g'
-	    || fileHeader.aFileType[1] != 'a'
-	    || fileHeader.aFileType[2] != 'm'
-	    || fileHeader.aFileType[3] != 'e')
-	{
-		debug(LOG_ERROR, "gameLoad: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'g' 'a' 'm' 'e')",
-		      fileHeader.aFileType[0],
-		      fileHeader.aFileType[1],
-		      fileHeader.aFileType[2],
-		      fileHeader.aFileType[3]);
-
-		PHYSFS_close(fileHandle);
-
-		return false;
-	}
-
-	debug(LOG_NEVER, "gl .gam file is version %u\n", fileHeader.version);
 
 	// Prior to getting here, the directory structure has been set to wherever the
 	// map or savegame is loaded from, so we will get the right ruleset file.
@@ -3062,288 +1863,73 @@ static bool gameLoad(const char *fileName)
 	}
 
 	//set main version Id from game file
-	saveGameVersion = fileHeader.version;
-	debug(LOG_SAVE, "file version is %u, (%s)", fileHeader.version, fileName);
+	if (fromSave)
+	{
+		getSavedGameFileVersion(fileName);
+		debug(LOG_SAVE, "Main.json file version is %u, (%s)", saveGameVersion, fileName);
+	}
+	else
+	{
+		saveGameVersion = fileHeader.version;
+		debug(LOG_SAVE, "file version is %u, (%s)", fileHeader.version, fileName);
+	}
+
 	/* Check the file version */
-	if (fileHeader.version < VERSION_7)
+	if (saveGameVersion < VERSION_7)
 	{
 		debug(LOG_ERROR, "gameLoad: unsupported save format version %d", fileHeader.version);
 		PHYSFS_close(fileHandle);
 
 		return false;
 	}
-	else if (fileHeader.version < VERSION_9)
+	else if (!fromSave || (saveGameVersion < VERSION_9))
 	{
 		bool retVal = gameLoadV7(fileHandle);
 		PHYSFS_close(fileHandle);
 		return retVal;
 	}
-	else if (fileHeader.version <= CURRENT_VERSION_NUM)
+	else if (saveGameVersion >= minSupportVersion)
 	{
-		//The in-game load menu was clearing level data AFTER loading in some savegame data.
-		//Hacking this in here so things make a little more sense and so that data loaded
-		//in from main.json is somewhat safe from being reset by mistake.
-		if (!levReleaseAll())
-		{
-			debug(LOG_ERROR, "Failed to unload old data. Attempting to load anyway");
-		}
-
-		//remove the file extension
-		CurrentFileName[strlen(CurrentFileName) - 4] = '\0';
-		loadMainFile(std::string(CurrentFileName) + "/main.json");
-
-		bool retVal = gameLoadV(fileHandle, fileHeader.version);
+		bool retVal = gameLoadV(fileName, fromSave);
 		PHYSFS_close(fileHandle);
-
-		loadMainFileFinal(std::string(CurrentFileName) + "/main.json");
-
-		challengeFileName = "";
 		return retVal;
 	}
 	else
 	{
-		debug(LOG_ERROR, "Unsupported main save format version %u", fileHeader.version);
+		debug(LOG_ERROR, "Unsupported main save format version %u", saveGameVersion);
 		PHYSFS_close(fileHandle);
-
 		return false;
 	}
 }
 
-// Fix endianness of a savegame
-static void endian_SaveGameV(SAVE_GAME *psSaveGame, UDWORD version)
-{
-	unsigned int i;
-	/* SAVE_GAME is GAME_SAVE_V33 */
-	/* GAME_SAVE_V33 includes GAME_SAVE_V31 */
-	if (version >= VERSION_33)
-	{
-		endian_udword(&psSaveGame->sGame.power);
-		endian_udword(&psSaveGame->sNetPlay.playercount);
-		endian_udword(&psSaveGame->savePlayer);
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			endian_udword(&psSaveGame->sPlayerIndex[i]);
-		}
-	}
-	/* GAME_SAVE_V31 includes GAME_SAVE_V30 */
-	if (version >= VERSION_31)
-	{
-		endian_sdword(&psSaveGame->missionCheatTime);
-	}
-	/* GAME_SAVE_V30 includes GAME_SAVE_V29 */
-	if (version >= VERSION_30)
-	{
-		endian_sdword(&psSaveGame->scrGameLevel);
-	}
-	/* GAME_SAVE_V29 includes GAME_SAVE_V27 */
-	if (version >= VERSION_29)
-	{
-		endian_uword(&psSaveGame->missionScrollMinX);
-		endian_uword(&psSaveGame->missionScrollMinY);
-		endian_uword(&psSaveGame->missionScrollMaxX);
-		endian_uword(&psSaveGame->missionScrollMaxY);
-	}
-	/* GAME_SAVE_V24 includes GAME_SAVE_V22 */
-	if (version >= VERSION_24)
-	{
-		endian_udword(&psSaveGame->reinforceTime);
-	}
-	/* GAME_SAVE_V19 includes GAME_SAVE_V18 */
-	if (version >= VERSION_19)
-	{
-	}
-	/* GAME_SAVE_V18 includes GAME_SAVE_V17 */
-	if (version >= VERSION_18)
-	{
-		endian_udword(&psSaveGame->oldestVersion);
-		endian_udword(&psSaveGame->validityKey);
-	}
-	/* GAME_SAVE_V17 includes GAME_SAVE_V16 */
-	if (version >= VERSION_17)
-	{
-		endian_udword(&psSaveGame->objId);
-	}
-	/* GAME_SAVE_V16 includes GAME_SAVE_V15 */
-	if (version >= VERSION_16)
-	{
-	}
-	/* GAME_SAVE_V15 includes GAME_SAVE_V14 */
-	if (version >= VERSION_15)
-	{
-		endian_udword(&psSaveGame->RubbleTile);
-		endian_udword(&psSaveGame->WaterTile);
-	}
-	/* GAME_SAVE_V14 includes GAME_SAVE_V12 */
-	if (version >= VERSION_14)
-	{
-		endian_sdword(&psSaveGame->missionOffTime);
-		endian_sdword(&psSaveGame->missionETA);
-		endian_uword(&psSaveGame->missionHomeLZ_X);
-		endian_uword(&psSaveGame->missionHomeLZ_Y);
-		endian_sdword(&psSaveGame->missionPlayerX);
-		endian_sdword(&psSaveGame->missionPlayerY);
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			endian_uword(&psSaveGame->iTranspEntryTileX[i]);
-			endian_uword(&psSaveGame->iTranspEntryTileY[i]);
-			endian_uword(&psSaveGame->iTranspExitTileX[i]);
-			endian_uword(&psSaveGame->iTranspExitTileY[i]);
-			endian_udword(&psSaveGame->aDefaultSensor[i]);
-			endian_udword(&psSaveGame->aDefaultECM[i]);
-			endian_udword(&psSaveGame->aDefaultRepair[i]);
-		}
-	}
-	/* GAME_SAVE_V12 includes GAME_SAVE_V11 */
-	if (version >= VERSION_12)
-	{
-		endian_udword(&psSaveGame->missionTime);
-		endian_udword(&psSaveGame->saveKey);
-	}
-	/* GAME_SAVE_V11 includes GAME_SAVE_V10 */
-	if (version >= VERSION_11)
-	{
-		endian_sdword(&psSaveGame->currentPlayerPos.p.x);
-		endian_sdword(&psSaveGame->currentPlayerPos.p.y);
-		endian_sdword(&psSaveGame->currentPlayerPos.p.z);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.x);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.y);
-		endian_sdword(&psSaveGame->currentPlayerPos.r.z);
-	}
-	/* GAME_SAVE_V10 includes GAME_SAVE_V7 */
-	if (version >= VERSION_10)
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			endian_udword(&psSaveGame->power[i].currentPower);
-			endian_udword(&psSaveGame->power[i].extractedPower);
-		}
-	}
-	/* GAME_SAVE_V7 */
-	if (version >= VERSION_7)
-	{
-		endian_udword(&psSaveGame->gameTime);
-		endian_udword(&psSaveGame->GameType);
-		endian_sdword(&psSaveGame->ScrollMinX);
-		endian_sdword(&psSaveGame->ScrollMinY);
-		endian_udword(&psSaveGame->ScrollMaxX);
-		endian_udword(&psSaveGame->ScrollMaxY);
-	}
-}
-
 // -----------------------------------------------------------------------------------------
-// Get campaign number stuff is not needed in this form on the PSX (thank you very much)
-static UDWORD getCampaignV(PHYSFS_file *fileHandle, unsigned int version)
-{
-	SAVE_GAME_V14 saveGame;
-
-	debug(LOG_SAVE, "getCampaignV: version = %u", version);
-
-	if (version < VERSION_14)
-	{
-		return 0;
-	}
-	// We only need VERSION 12 data (saveGame.saveKey)
-	else if (version <= VERSION_34)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGame, sizeof(SAVE_GAME_V14)) != sizeof(SAVE_GAME_V14))
-		{
-			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", WZ_PHYSFS_getLastError());
-
-			return 0;
-		}
-
-		// Convert from little-endian to native byte-order
-		endian_SaveGameV((SAVE_GAME *)&saveGame, VERSION_14);
-	}
-	else if (version <= CURRENT_VERSION_NUM)
-	{
-		if (!deserializeSaveGameV14Data(fileHandle, &saveGame))
-		{
-			debug(LOG_ERROR, "getCampaignV: error while reading file: %s", WZ_PHYSFS_getLastError());
-
-			return 0;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Bad savegame version %u", version);
-		return 0;
-	}
-
-	return saveGame.saveKey & (SAVEKEY_ONMISSION - 1);
-}
-
-// -----------------------------------------------------------------------------------------
-// Returns the campaign number  --- apparently this is does alot less than it look like
-/// it now does even less than it looks like on the psx ... cause its pc only
+// Returns the campaign number and sets the savegame version
 UDWORD getCampaign(const char *fileName)
 {
-	GAME_SAVEHEADER fileHeader;
-
-	PHYSFS_file *fileHandle = openLoadFile(fileName, true);
-	if (!fileHandle)
-	{
-		// Failure to open the file is a failure to load the specified savegame
-		return false;
-	}
-
 	debug(LOG_WZ, "getCampaign: %s", fileName);
+	getSavedGameFileVersion(fileName);
+	debug(LOG_SAVE, "fileversion is %u, (%s) ", saveGameVersion, fileName);
 
-	// Read the header from the file
-	if (!deserializeSaveGameHeader(fileHandle, &fileHeader))
+	if (saveGameVersion >= minSupportVersion)
 	{
-		debug(LOG_ERROR, "getCampaign: error while reading header from file (%s): %s", fileName, WZ_PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
+		std::string main = getMainJsonFromFile(fileName);
+		if (!PHYSFS_exists(main.c_str()))
+		{
+			debug(LOG_ERROR, "getCampaign: main.json does not exist!");
+			return 0;
+		}
 
-	// Check the header to see if we've been given a file of the right type
-	if (fileHeader.aFileType[0] != 'g'
-	    || fileHeader.aFileType[1] != 'a'
-	    || fileHeader.aFileType[2] != 'm'
-	    || fileHeader.aFileType[3] != 'e')
-	{
-		debug(LOG_ERROR, "getCampaign: Weird file type found? Has header letters - '%c' '%c' '%c' '%c' (should be 'g' 'a' 'm' 'e')",
-		      fileHeader.aFileType[0],
-		      fileHeader.aFileType[1],
-		      fileHeader.aFileType[2],
-		      fileHeader.aFileType[3]);
+		if (!loadMainFile(main, true))
+		{
+			debug(LOG_ERROR, "Unable to extract campaign save key!");
+			return false;
+		}
 
-		PHYSFS_close(fileHandle);
-
-		return false;
-	}
-
-	debug(LOG_NEVER, "gl .gam file is version %d\n", fileHeader.version);
-
-	//set main version Id from game file
-	saveGameVersion = fileHeader.version;
-
-	debug(LOG_SAVE, "fileversion is %u, (%s) ", fileHeader.version, fileName);
-	/* Check the file version */
-	if (fileHeader.version < VERSION_14)
-	{
-		PHYSFS_close(fileHandle);
-		return 0;
-	}
-
-	// what the arse bollocks is this
-	// the campaign number is fine prior to saving
-	// you save it out in a skirmish save and
-	// then don't bother putting it back in again
-	// when loading so it screws loads of stuff?!?
-	// don't check skirmish saves.
-	if (fileHeader.version <= CURRENT_VERSION_NUM)
-	{
-		UDWORD retVal = getCampaignV(fileHandle, fileHeader.version);
-		PHYSFS_close(fileHandle);
-		return retVal;
+		return static_cast<unsigned int>(campaignSaveKey & (SAVEKEY_ONMISSION - 1));
 	}
 	else
 	{
-		debug(LOG_ERROR, "getCampaign: undefined save format version %d", fileHeader.version);
-		PHYSFS_close(fileHandle);
-
+		debug(LOG_ERROR, "getCampaign: undefined save format version %d", saveGameVersion);
 		return 0;
 	}
 }
@@ -3352,6 +1938,17 @@ UDWORD getCampaign(const char *fileName)
 /* code specific to version 7 of a save game */
 bool gameLoadV7(PHYSFS_file *fileHandle)
 {
+	struct SAVE_GAME_V7
+	{
+		uint32_t gameTime;
+		uint32_t GameType;
+		int32_t ScrollMinX;
+		int32_t ScrollMinY;
+		uint32_t ScrollMaxX;
+		uint32_t ScrollMaxY;
+		char levelName[MAX_LEVEL_SIZE];
+	};
+
 	SAVE_GAME_V7 saveGame;
 
 	if (WZ_PHYSFS_readBytes(fileHandle, &saveGame, sizeof(saveGame)) != sizeof(saveGame))
@@ -3369,7 +1966,7 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 	endian_udword(&saveGame.ScrollMaxX);
 	endian_udword(&saveGame.ScrollMaxY);
 
-	savedGameTime = saveGame.gameTime;
+	saveGameData.gameTime = saveGame.gameTime;
 
 	//set the scroll varaibles
 	startX = saveGame.ScrollMinX;
@@ -3419,408 +2016,69 @@ bool gameLoadV7(PHYSFS_file *fileHandle)
 
 // -----------------------------------------------------------------------------------------
 /* non specific version of a save game */
-bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
+
+bool gameLoadV(const char *fileName, bool save)
 {
-	unsigned int i, j;
-	static	SAVE_POWER	powerSaved[MAX_PLAYERS];
-	UDWORD			player;
-
-	debug(LOG_WZ, "gameLoadV: version %u", version);
-
-	// Version 7 and earlier are loaded separately in gameLoadV7
-
-	//size is now variable so only check old save games
-	if (version <= VERSION_10)
+	// Make sure to unload level data (especially for in-game menu loading) before loading in anything, for sanity reasons
+	if (!levReleaseAll())
 	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V10)) != sizeof(SAVE_GAME_V10))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
+		debug(LOG_WARNING, "Failed to unload old data. Attempting to load anyway");
 	}
-	else if (version == VERSION_11)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V11)) != sizeof(SAVE_GAME_V11))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
 
-			return false;
-		}
-	}
-	else if (version <= VERSION_12)
+	std::string mainName = getMainJsonFromFile(fileName);
+	if (save && PHYSFS_exists(mainName.c_str()) && !loadMainFile(mainName, false))
 	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V12)) != sizeof(SAVE_GAME_V12))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_14)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V14)) != sizeof(SAVE_GAME_V14))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_15)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V15)) != sizeof(SAVE_GAME_V15))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_16)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V16)) != sizeof(SAVE_GAME_V16))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_17)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V17)) != sizeof(SAVE_GAME_V17))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_18)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V18)) != sizeof(SAVE_GAME_V18))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_19)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V19)) != sizeof(SAVE_GAME_V19))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_21)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V20)) != sizeof(SAVE_GAME_V20))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_23)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V22)) != sizeof(SAVE_GAME_V22))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_26)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V24)) != sizeof(SAVE_GAME_V24))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_28)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V27)) != sizeof(SAVE_GAME_V27))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_29)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V29)) != sizeof(SAVE_GAME_V29))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_30)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V30)) != sizeof(SAVE_GAME_V30))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_32)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V31)) != sizeof(SAVE_GAME_V31))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_33)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V33)) != sizeof(SAVE_GAME_V33))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version <= VERSION_34)
-	{
-		if (WZ_PHYSFS_readBytes(fileHandle, &saveGameData, sizeof(SAVE_GAME_V34)) != sizeof(SAVE_GAME_V34))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading file (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else if (version < VERSION_39)
-	{
-		debug(LOG_ERROR, "Unsupported savegame version");
-		return false;
-	}
-	else if (version <= CURRENT_VERSION_NUM)
-	{
-		if (!deserializeSaveGameData(fileHandle, &saveGameData))
-		{
-			debug(LOG_ERROR, "gameLoadV: error while reading data from file for deserialization (with version number %u): %s", version, WZ_PHYSFS_getLastError());
-
-			return false;
-		}
-	}
-	else
-	{
-		debug(LOG_ERROR, "Unsupported version number (%u) for savegame", version);
-
+		debug(LOG_ERROR, "Unable to load main.json file!");
 		return false;
 	}
 
-	debug(LOG_SAVE, "Savegame is of type: %u", static_cast<uint8_t>(saveGameData.sGame.type));
-	game.type = saveGameData.sGame.type;
-	/* Test mod list */
-	if (version >= VERSION_38)
+	if ((gameType == GTYPE_SAVE_START) || (gameType == GTYPE_SAVE_MIDMISSION))
 	{
-		setOverrideMods(saveGameData.modList);
-	}
-
-	// All savegames from version 34 or before are little endian so swap them. All
-	// from version 35, and onward, are already swapped to the native byte-order
-	// by the (de)serialization API
-	if (version <= VERSION_34)
-	{
-		endian_SaveGameV(&saveGameData, version);
-	}
-
-	savedGameTime = saveGameData.gameTime;
-
-	if (version >= VERSION_12)
-	{
-		mission.startTime = saveGameData.missionTime;
-		if (saveGameData.saveKey & SAVEKEY_ONMISSION)
-		{
-			saveGameOnMission = true;
-		}
-		else
-		{
-			saveGameOnMission = false;
-		}
-
-	}
-	else
-	{
-		saveGameOnMission = false;
-	}
-	//set the scroll varaibles
-	startX = saveGameData.ScrollMinX;
-	startY = saveGameData.ScrollMinY;
-	width = saveGameData.ScrollMaxX - saveGameData.ScrollMinX;
-	height = saveGameData.ScrollMaxY - saveGameData.ScrollMinY;
-	gameType = static_cast<GAME_TYPE>(saveGameData.GameType);
-
-	if (version >= VERSION_11)
-	{
-		//camera position
-		disp3d_setView(&saveGameData.currentPlayerPos);
-	}
-	else
-	{
-		disp3d_oldView();
-	}
-
-	//load mission data from save game these values reloaded after load game
-
-	if (version >= VERSION_14)
-	{
-		//mission data
-		mission.time     = saveGameData.missionOffTime;
-		mission.ETA      = saveGameData.missionETA;
-		mission.homeLZ_X = saveGameData.missionHomeLZ_X;
-		mission.homeLZ_Y = saveGameData.missionHomeLZ_Y;
-		mission.playerX  = saveGameData.missionPlayerX;
-		mission.playerY  = saveGameData.missionPlayerY;
-
-		for (player = 0; player < MAX_PLAYERS; player++)
-		{
-			mission.iTranspEntryTileX[player]	= saveGameData.iTranspEntryTileX[player];
-			mission.iTranspEntryTileY[player]	= saveGameData.iTranspEntryTileY[player];
-			mission.iTranspExitTileX[player]	= saveGameData.iTranspExitTileX[player];
-			mission.iTranspExitTileY[player]	= saveGameData.iTranspExitTileY[player];
-			aDefaultSensor[player]				= saveGameData.aDefaultSensor[player];
-			aDefaultECM[player]					= saveGameData.aDefaultECM[player];
-			aDefaultRepair[player]				= saveGameData.aDefaultRepair[player];
-		}
-	}
-
-	if (version >= VERSION_15)
-	{
-		offWorldKeepLists	= saveGameData.offWorldKeepLists;
-		setRubbleTile(saveGameData.RubbleTile);
-		setUnderwaterTile(saveGameData.WaterTile);
-	}
-
-	if (version >= VERSION_17)
-	{
-		unsynchObjID = (saveGameData.objId + 1) / 2; // Make new object ID start at savedObjId*8.
-		synchObjID   = saveGameData.objId * 4;      // Make new object ID start at savedObjId*8.
-		savedObjId = saveGameData.objId;
-	}
-
-	if (version >= VERSION_19)//version 19
-	{
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			for (j = 0; j < MAX_PLAYERS; j++)
-			{
-				alliances[i][j] = saveGameData.alliances[i][j];
-			}
-		}
-		for (i = 0; i < MAX_PLAYERS; i++)
-		{
-			setPlayerColour(i, saveGameData.playerColour[i]);
-		}
-	}
-
-	if (version >= VERSION_20)//version 20
-	{
-		setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
-	}
-
-	if (saveGameVersion >= VERSION_24)//V24
-	{
-		missionSetReinforcementTime(saveGameData.reinforceTime);
-
-		// horrible hack to catch savegames that were saving garbage into these fields
-		if (saveGameData.bPlayCountDown <= 1)
-		{
-			setPlayCountDown(saveGameData.bPlayCountDown);
-		}
-		if (saveGameData.bPlayerHasWon <= 1)
-		{
-			setPlayerHasWon(saveGameData.bPlayerHasWon);
-		}
-		if (saveGameData.bPlayerHasLost <= 1)
-		{
-			setPlayerHasLost(saveGameData.bPlayerHasLost);
-		}
-	}
-
-	if (saveGameVersion >= VERSION_29)
-	{
-		mission.scrollMinX = saveGameData.missionScrollMinX;
-		mission.scrollMinY = saveGameData.missionScrollMinY;
-		mission.scrollMaxX = saveGameData.missionScrollMaxX;
-		mission.scrollMaxY = saveGameData.missionScrollMaxY;
-	}
-
-	if (saveGameVersion >= VERSION_31)
-	{
-		mission.cheatTime = saveGameData.missionCheatTime;
-	}
-
-	droidInit();
-
-	//set IsScenario to true if not a user saved game
-	if ((gameType == GTYPE_SAVE_START) ||
-	    (gameType == GTYPE_SAVE_MIDMISSION))
-	{
-		for (i = 0; i < MAX_PLAYERS; ++i)
-		{
-			powerSaved[i].currentPower = saveGameData.power[i].currentPower;
-			powerSaved[i].extractedPower = saveGameData.power[i].extractedPower;
-		}
-
 		allocatePlayers();
 
 		IsScenario = false;
-		//copy the level name across
-		sstrcpy(aLevelName, saveGameData.levelName);
-		//load up the level dataset
+
 		// Not sure what aLevelName is, in relation to game.map. But need to use aLevelName here, to be able to start the right map for campaign, and need game.hash, to start the right non-campaign map, if there are multiple identically named maps.
-		if (!levLoadData(aLevelName, &saveGameData.sGame.hash, saveGameName, (GAME_TYPE)gameType))
+		if (!levLoadData(aLevelName, &game.hash, saveGameName, static_cast<GAME_TYPE>(gameType)))
 		{
 			return false;
 		}
 
-		if (saveGameVersion >= VERSION_33)
-		{
-			PLAYERSTATS		playerStats;
-			bool scav = game.scavengers; // loaded earlier, keep it over struct copy below
+		//Figure out if we really need these two lines here.
+		radarPermitted = saveGameData.radarPermitted;
+		allowDesign = saveGameData.allowDesign;
 
-			bMultiPlayer	= saveGameData.multiPlayer;
-			bMultiMessages	= bMultiPlayer;
-			productionPlayer = selectedPlayer;
-			game			= saveGameData.sGame;  // why do this again????
-			game.scavengers = scav;
-			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
-			if (bMultiPlayer)
+		challengeActive = saveGameData.challengeActive; //stageThreeInit resets this so put this here for now
+		bMultiMessages = bMultiPlayer = saveGameData.multiPlayer;
+		productionPlayer = selectedPlayer;
+
+		getSavedPlayerNames();
+
+		if (bMultiPlayer)
+		{
+			PLAYERSTATS	playerStats;
+			loadMultiStats(saveGameData.sNetPlay.players[selectedPlayer].name, &playerStats);
+			setMultiStats(selectedPlayer, playerStats, true);
+		}
+
+		clearPlayerPower();
+		//don't adjust any power if a camStart (gameType is set to GTYPE_SCENARIO_START when a camChange saveGame is loaded)
+		if (gameType != GTYPE_SCENARIO_START)
+		{
+			for (unsigned int i = 0; i < MAX_PLAYERS; ++i)
 			{
-				loadMultiStats(saveGameData.sPName, &playerStats);				// stats stuff
-				setMultiStats(selectedPlayer, playerStats, false);
-				setMultiStats(selectedPlayer, playerStats, true);
+				//only overwrite selectedPlayer's power on a startMission save game
+				if (gameType == GTYPE_SAVE_MIDMISSION || i == selectedPlayer)
+				{
+					setPower(i, saveGameData.power[i]);
+				}
 			}
 		}
 	}
 	else
 	{
-		IsScenario = true;
+		IsScenario = true; //set IsScenario to true if not a user saved game. See startMission()
 	}
-
-	getPlayerNames();
-
-	clearPlayerPower();
-	//don't adjust any power if a camStart (gameType is set to GTYPE_SCENARIO_START when a camChange saveGame is loaded)
-	if (gameType != GTYPE_SCENARIO_START)
-	{
-		//set the players power
-		for (i = 0; i < MAX_PLAYERS; ++i)
-		{
-			//only overwrite selectedPlayer's power on a startMission save game
-			if (gameType == GTYPE_SAVE_MIDMISSION || i == selectedPlayer)
-			{
-				setPower(i, powerSaved[i].currentPower);
-			}
-		}
-	}
-	radarPermitted = (bool)powerSaved[0].extractedPower; // nice hack, eh? don't want to break savegames now...
-	allowDesign = (bool)powerSaved[1].extractedPower; // nice hack, eh? don't want to break savegames now...
 
 	return true;
 }
@@ -3828,50 +2086,138 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 // -----------------------------------------------------------------------------------------
 // Load main game data from JSON. Only implement stuff here that we actually use instead of
 // the binary blobbery.
-static bool loadMainFile(const std::string &fileName)
+
+static bool loadMainFile(const std::string &fileName, const bool getCampaignVersionOnly)
 {
 	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
-
-	if (save.contains("playerBuiltHQ"))
+	if (save.value("version").toInt() < minSupportVersion)
 	{
-		playerBuiltHQ = save.value("playerBuiltHQ").toBool();
-	}
-	if (save.contains("challengeFileName"))
-	{
-		challengeFileName = save.string("challengeFileName");
-	}
-	if (save.contains("builtInMap"))
-	{
-		builtInMap = save.value("builtInMap").toBool();
+		debug(LOG_ERROR, "This save file is too old and not supported!");
+		return false;
 	}
 
-	save.beginArray("players");
+	campaignSaveKey = save.value("saveKey").toUInt();
+	saveGameOnMission = (campaignSaveKey & SAVEKEY_ONMISSION) ? true : false;
+	if (getCampaignVersionOnly)
+	{
+		return true; //This could be jank because the original loaded all the data from V14 on down (see below)
+	}
+
+	droidInit(); //NOTE: All this really does is clear the experience array
+
+	saveGameData.gameTime = save.value("gameTime").toUInt();
+	gameType = static_cast<GAME_TYPE>(save.value("saveType").toUInt());
+	game.type = static_cast<LEVEL_TYPE>(save.value("gameType").toUInt());
+	saveGameData.GameType = static_cast<uint32_t>(gameType);
+
+	Vector2i minScroll = save.vector2i("scrollMin");
+	scrollMinX = startX = saveGameData.ScrollMinX = minScroll.x;
+	scrollMinY = startY = saveGameData.ScrollMinY =  minScroll.y;
+
+	Vector2i maxScroll = save.vector2i("scrollMax");
+	scrollMaxX = saveGameData.ScrollMaxX = maxScroll.x;
+	scrollMaxY = saveGameData.ScrollMaxY = maxScroll.y;
+
+	width = scrollMaxX - scrollMinX;
+	height = scrollMaxY - scrollMinY;
+
+	sstrcpy(aLevelName, save.string("levelName").toUtf8().c_str());
+
+	iView currentPlayerPos;
+	currentPlayerPos.p = saveGameData.currentPlayerPos.p = save.vector3i("camera_position");
+	currentPlayerPos.r = saveGameData.currentPlayerPos.r = save.vector3i("camera_rotation");
+	disp3d_setView(&currentPlayerPos); //Not needed?
+
+	mission.startTime = saveGameData.missionTime = save.value("missionTime").toUInt();
+	saveGameData.radarPermitted = save.value("radarPermitted").toBool();
+	saveGameData.allowDesign = save.value("allowDesign").toBool();
+	mission.time = saveGameData.missionOffTime = save.value("missionOffTime").toUInt();
+	mission.ETA = saveGameData.missionETA = save.value("missionETA").toUInt();
+
+	Vector2i missionHomeLZ = save.vector2i("missionHomeLZ");
+	mission.homeLZ_X = saveGameData.missionHomeLZ_X =  missionHomeLZ.x;
+	mission.homeLZ_Y = saveGameData.missionHomeLZ_Y = missionHomeLZ.y;
+
+	Vector2i missionPlayerPos = save.vector2i("missionPlayerPos");
+	mission.playerX = saveGameData.missionPlayerX = missionPlayerPos.x;
+	mission.playerY = saveGameData.missionPlayerY = missionPlayerPos.y;
+
+	//load above if campaign version loader is stupid and actually requires the above + sensor/ecm/repair and transporter entry/exit tiles in loop
+	saveGameData.offWorldKeepLists = save.value("offWorldKeepLists").toUInt();
+	offWorldKeepLists = saveGameData.offWorldKeepLists;
+	saveGameData.RubbleTile = save.value("rubbleTile").toUInt();
+	setRubbleTile(saveGameData.RubbleTile);
+	saveGameData.WaterTile = save.value("waterTile").toUInt();
+	setUnderwaterTile(saveGameData.WaterTile);
+
+	save.beginArray("landing_zones");
+	int inc = 0;
 	while (save.remainingArrayItems() > 0)
 	{
-		int index = save.value("index").toInt();
-		if (!(index >= 0 && index < MAX_PLAYERS))
-		{
-			debug(LOG_ERROR, "Invalid player index: %d", index);
-			save.nextArrayItem();
-			continue;
-		}
-		unsigned int FactionValue = save.value("faction", static_cast<uint8_t>(FACTION_NORMAL)).toUInt();
-		NetPlay.players[index].faction = static_cast<FactionID>(FactionValue);
+		Vector2i start = save.vector2i("start");
+		Vector2i end = save.vector2i("end");
+		saveGameData.sLandingZone[inc].x1 = start.x;
+		saveGameData.sLandingZone[inc].y1 = start.y;
+		saveGameData.sLandingZone[inc].x2 = end.x;
+		saveGameData.sLandingZone[inc].y2 = end.y;
+		++inc;
 		save.nextArrayItem();
 	}
 	save.endArray();
 
-	return true;
-}
+	saveGameData.objId = save.value("objId").toUInt();
+	unsynchObjID = (saveGameData.objId + 1) / 2; // Make new object ID start at savedObjId*8.
+	synchObjID = saveGameData.objId * 4;      // Make new object ID start at savedObjId*8.
+	saveGameData.radarZoom = save.value("radarZoom").toInt();
 
-static bool loadMainFileFinal(const std::string &fileName)
-{
-	WzConfig save(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
+	saveGameData.bDroidsToSafetyFlag = save.value("droidsToSafetyFlag").toBool();
+	setDroidsToSafetyFlag(saveGameData.bDroidsToSafetyFlag);
+	saveGameData.reinforceTime = save.value("reinforceTime").toUInt();
+	missionSetReinforcementTime(saveGameData.reinforceTime);
+	saveGameData.bPlayCountDown = save.value("playCountDown").toInt();
+	setPlayCountDown(saveGameData.bPlayCountDown);
+	saveGameData.bPlayerHasWon = save.value("playerHasWon").toBool();
+	setPlayerHasWon(saveGameData.bPlayerHasWon);
+	saveGameData.bPlayerHasLost = save.value("playerHasLost").toBool();
+	setPlayerHasLost(saveGameData.bPlayerHasLost);
 
-	if (save.contains("techLevel"))
-	{
-		game.techLevel = save.value("techLevel").toInt();
-	}
+	Vector2i missionScrollMin = save.vector2i("missionScrollMin");
+	mission.scrollMinX = saveGameData.missionScrollMinX = missionScrollMin.x;
+	mission.scrollMinY = saveGameData.missionScrollMinY = missionScrollMin.y;
+
+	Vector2i missionScrollMax = save.vector2i("missionScrollMax");
+	mission.scrollMaxX = saveGameData.missionScrollMaxX = missionScrollMax.x;
+	mission.scrollMaxY =saveGameData.missionScrollMaxY = missionScrollMax.y;
+
+	mission.cheatTime = saveGameData.missionCheatTime = save.value("missionCheatTime").toUInt();
+
+	game.hash.setZero();
+
+	//game.hash = saveGameData.sGame.hash = save.string("gameHash");
+	strcpy(game.map, save.string("mapName").toUtf8().c_str());
+	strcpy(saveGameData.sGame.map, save.string("mapName").toUtf8().c_str());
+	game.maxPlayers = saveGameData.sGame.maxPlayers = save.value("maxPlayers").toUInt();
+	strcpy(game.name, save.string("gameName").toUtf8().c_str());
+	strcpy(saveGameData.sGame.name, save.string("gameName").toUtf8().c_str());
+	game.power = saveGameData.sGame.power = save.value("powerSetting").toInt();
+	game.base = saveGameData.sGame.base = save.value("baseSetting").toUInt();
+	game.alliance = saveGameData.sGame.alliance = save.value("allianceSetting").toUInt();
+	game.scavengers = saveGameData.sGame.scavengers = save.value("scavengers").toBool();
+	game.mapHasScavengers = saveGameData.sGame.mapHasScavengers = save.value("mapHasScavengers").toBool();
+	game.isMapMod = saveGameData.sGame.isMapMod = save.value("mapMod").toBool();
+	game.isRandom = saveGameData.sGame.isRandom = save.value("mapRandom").toBool();
+	game.techLevel = saveGameData.sGame.techLevel = save.value("techLevel").toInt();
+
+	challengeActive = save.value("challengeActive").toBool();
+	saveGameData.challengeActive = challengeActive;
+	bMultiMessages = bMultiPlayer = save.value("multiplayer").toBool();
+	saveGameData.multiPlayer = bMultiPlayer;
+	productionPlayer = selectedPlayer = save.value("selectedPlayer").toInt();
+
+	NetPlay.isHost = true;
+	NetPlay.playercount = saveGameData.sNetPlay.playercount = save.value("playerCount").toUInt();
+	NetPlay.hostPlayer = saveGameData.sNetPlay.hostPlayer = save.value("hostPlayer").toUInt();
+	NetPlay.bComms = saveGameData.sNetPlay.bComms = save.value("bComms").toBool();
 
 	save.beginArray("players");
 	while (save.remainingArrayItems() > 0)
@@ -3883,14 +2229,69 @@ static bool loadMainFileFinal(const std::string &fileName)
 			save.nextArrayItem();
 			continue;
 		}
+
+		saveGameData.power[index] = save.value("power").toUInt();
+
+		Vector2i transporterEntry = save.vector2i("iTranspEntryTile");
+		saveGameData.iTranspEntryTileX[index] = transporterEntry.x;
+		saveGameData.iTranspEntryTileY[index] = transporterEntry.y;
+
+		Vector2i transporterExit = save.vector2i("iTranspExitTile");
+		saveGameData.iTranspExitTileX[index] = transporterExit.x;
+		saveGameData.iTranspExitTileY[index] = transporterExit.y;
+
+		aDefaultSensor[index] = saveGameData.aDefaultSensor[index] = save.value("aDefaultSensor").toUInt();
+		aDefaultECM[index] = saveGameData.aDefaultECM[index] = save.value("aDefaultECM").toUInt();
+		aDefaultRepair[index] = saveGameData.aDefaultRepair[index] = save.value("aDefaultRepair").toUInt();
+
 		auto value = save.value("recycled_droids").jsonValue();
 		for (const auto &v : value)
 		{
 			add_to_experience_queue(index, json_variant(v).toInt());
 		}
+		value = save.value("alliances").jsonValue();
+		unsigned int j = 0;
+		for (const auto &v : value)
+		{
+			alliances[index][j] = saveGameData.alliances[index][j] = json_variant(v).toInt();
+			++j;
+		}
+
+		saveGameData.playerColour[index] = save.value("colour").toUInt();
+		setPlayerColour(index, saveGameData.playerColour[index]);
+
+		NetPlay.players[index].difficulty = saveGameData.sNetPlay.players[index].difficulty = static_cast<AIDifficulty>(save.value("difficulty").toInt());
+		NetPlay.players[index].position = saveGameData.sNetPlay.players[index].position = save.value("position").toUInt();
+		NetPlay.players[index].allocated = saveGameData.sNetPlay.players[index].allocated = save.value("allocated").toBool();
+		if (NetPlay.players[index].difficulty == AIDifficulty::HUMAN || (game.type == LEVEL_TYPE::CAMPAIGN && index == 0))
+		{
+			NetPlay.players[index].allocated = saveGameData.sNetPlay.players[index].allocated = true;
+			//processDebugMappings ensures game does not start in DEBUG mode
+			processDebugMappings(index, false);
+		}
+		NetPlay.players[index].faction = saveGameData.sNetPlay.players[index].faction = static_cast<FactionID>(save.value("faction", static_cast<uint8_t>(FACTION_NORMAL)).toUInt());
+		NetPlay.players[index].team = saveGameData.sNetPlay.players[index].team = save.value("team").toUInt();
+		NetPlay.players[index].ai = saveGameData.sNetPlay.players[index].ai = save.value("ai").toInt();
+		NetPlay.players[index].autoGame = saveGameData.sNetPlay.players[index].autoGame = save.value("autoGame").toBool();
+		strcpy(NetPlay.players[index].IPtextAddress, save.string("ip").toUtf8().c_str());
+		strcpy(saveGameData.sNetPlay.players[index].IPtextAddress, save.string("ip").toUtf8().c_str());
+		strcpy(NetPlay.players[index].name, save.string("name").toUtf8().c_str());
+		strcpy(saveGameData.sNetPlay.players[index].name, save.string("name").toUtf8().c_str());
+
+		if (NetPlay.players[index].ai >= 0 && NetPlay.players[index].ai != AI_CUSTOM)
+		{
+			setAINameFromSave(index, save.string("nameAI").toUtf8().c_str());
+		}
+
 		save.nextArrayItem();
 	}
 	save.endArray();
+
+	playerBuiltHQ = save.value("playerBuiltHQ").toBool();
+	challengeFileName = save.string("challengeFileName");
+	builtInMap = save.value("builtInMap").toBool();
+
+	setOverrideMods(save.string("modList").toUtf8().c_str());
 
 	return true;
 }
@@ -3916,13 +2317,15 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	}
 
 	/* Put the save game data into the buffer */
-	save.setValue("version", 1); // version of this file
+	save.setValue("version", currentGameVersion); // game version save was made on
+	save.setValue("versionFile", 2); // version of this file. Bump for significant changes
 	save.setValue("saveKey", saveKey);
 	save.setValue("gameTime", gameTime);
 	save.setValue("missionTime", mission.startTime);
 	save.setVector2i("scrollMin", Vector2i(scrollMinX, scrollMinY));
 	save.setVector2i("scrollMax", Vector2i(scrollMaxX, scrollMaxY));
 	save.setValue("saveType", saveType);
+	ASSERT_OR_RETURN(false, strlen(aLevelName) < MAX_LEVEL_SIZE, "Unable to save level name - too long (max %d) - %s", (int)MAX_LEVEL_SIZE, aLevelName);
 	save.setValue("levelName", aLevelName);
 	save.setValue("radarPermitted", radarPermitted);
 	save.setValue("allowDesign", allowDesign);
@@ -3952,7 +2355,6 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("aDefaultSensor", aDefaultSensor[i]);
 		save.setValue("aDefaultECM", aDefaultECM[i]);
 		save.setValue("aDefaultRepair", aDefaultRepair[i]);
-		save.setValue("colour", getPlayerColour(i));
 
 		std::priority_queue<int> experience = copy_experience_queue(i);
 		nlohmann::json recycled_droids = nlohmann::json::array();
@@ -3970,16 +2372,16 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		}
 		save.set("alliances", allies);
 		save.setValue("difficulty", NetPlay.players[i].difficulty);
-
 		save.setValue("position", NetPlay.players[i].position);
-		save.setValue("colour", NetPlay.players[i].colour);
+		save.setValue("colour", getPlayerColour(i));
 		save.setValue("allocated", NetPlay.players[i].allocated);
 		save.setValue("faction", NetPlay.players[i].faction);
 		save.setValue("team", NetPlay.players[i].team);
 		save.setValue("ai", NetPlay.players[i].ai);
 		save.setValue("autoGame", NetPlay.players[i].autoGame);
 		save.setValue("ip", NetPlay.players[i].IPtextAddress);
-		save.setValue("name", getPlayerName(selectedPlayer));
+		save.setValue("name", getPlayerName(i));
+		save.setValue("nameAI", getAIName(i));
 
 		save.nextArrayItem();
 	}
@@ -3994,17 +2396,14 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	for (int i = 0; i < MAX_NOGO_AREAS; ++i)
 	{
 		LANDING_ZONE *psLandingZone = getLandingZone(i);
-		save.setVector2i("start", Vector2i(psLandingZone->x1, psLandingZone->x2));
-		save.setVector2i("end", Vector2i(psLandingZone->y1, psLandingZone->y2));
+		save.setVector2i("start", Vector2i(psLandingZone->x1, psLandingZone->y1));
+		save.setVector2i("end", Vector2i(psLandingZone->x2, psLandingZone->y2));
 		save.nextArrayItem();
 	}
 	save.endArray();
 
 	save.setValue("playerHasWon", testPlayerHasWon());
 	save.setValue("playerHasLost", testPlayerHasLost());
-	save.setValue("gameLevel", 0);
-	save.setValue("failFlag", 0);
-	save.setValue("trackTransporter", 0);
 	save.setValue("gameType", game.type);
 	save.setValue("scavengers", game.scavengers);
 	save.setValue("mapName", game.map);
@@ -4015,6 +2414,9 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("allianceSetting", game.alliance);
 	save.setValue("mapHasScavengers", game.mapHasScavengers);
 	save.setValue("mapMod", game.isMapMod);
+	save.setValue("mapRandom", game.isRandom);
+	save.setValue("techLevel", game.techLevel);
+	save.setValue("gameHash", game.hash.toString());
 	save.setValue("selectedPlayer", selectedPlayer);
 	save.setValue("multiplayer", bMultiPlayer);
 	save.setValue("playerCount", NetPlay.playercount);
@@ -4022,202 +2424,11 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("bComms", NetPlay.bComms);
 	save.setValue("modList", getModList().c_str());
 	save.setValue("playerBuiltHQ", playerBuiltHQ);
-	save.setValue("techLevel", game.techLevel);
 	save.setValue("challengeFileName", challengeFileName.toUtf8().c_str());
+	save.setValue("challengeActive", challengeActive);
 	save.setValue("builtInMap", builtInMap);
 
 	return true;
-}
-
-static bool writeGameFile(const char *fileName, SDWORD saveType)
-{
-	GAME_SAVEHEADER fileHeader;
-	SAVE_GAME       saveGame;
-	bool            status;
-	unsigned int    i, j;
-
-	PHYSFS_file *fileHandle = openSaveFile(fileName);
-	if (!fileHandle)
-	{
-		debug(LOG_ERROR, "openSaveFile(\"%s\") failed", fileName);
-		return false;
-	}
-
-	WZ_PHYSFS_SETBUFFER(fileHandle, 4096)//;
-
-	fileHeader.aFileType[0] = 'g';
-	fileHeader.aFileType[1] = 'a';
-	fileHeader.aFileType[2] = 'm';
-	fileHeader.aFileType[3] = 'e';
-
-	fileHeader.version = CURRENT_VERSION_NUM;
-
-	debug(LOG_SAVE, "fileversion is %u, (%s) ", fileHeader.version, fileName);
-
-	if (!serializeSaveGameHeader(fileHandle, &fileHeader))
-	{
-		debug(LOG_ERROR, "could not write header to %s; PHYSFS error: %s", fileName, WZ_PHYSFS_getLastError());
-		PHYSFS_close(fileHandle);
-		return false;
-	}
-
-	ASSERT(saveType == GTYPE_SAVE_START || saveType == GTYPE_SAVE_MIDMISSION, "invalid save type");
-	saveGame.saveKey = getCampaignNumber();
-	if (missionIsOffworld())
-	{
-		saveGame.saveKey |= SAVEKEY_ONMISSION;
-		saveGameOnMission = true;
-	}
-	else
-	{
-		saveGameOnMission = false;
-	}
-
-
-	/* Put the save game data into the buffer */
-	saveGame.gameTime = gameTime;
-	saveGame.missionTime = mission.startTime;
-
-	//put in the scroll data
-	saveGame.ScrollMinX = scrollMinX;
-	saveGame.ScrollMinY = scrollMinY;
-	saveGame.ScrollMaxX = scrollMaxX;
-	saveGame.ScrollMaxY = scrollMaxY;
-
-	saveGame.GameType = saveType;
-
-	//save the current level so we can load up the STARTING point of the mission
-	ASSERT_OR_RETURN(false, strlen(aLevelName) < MAX_LEVEL_SIZE, "Unable to save level name - too long (max %d) - %s",
-	                 (int)MAX_LEVEL_SIZE, aLevelName);
-	sstrcpy(saveGame.levelName, aLevelName);
-
-	//save out the players power
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		saveGame.power[i].currentPower = getPower(i);
-	}
-	saveGame.power[0].extractedPower = radarPermitted; // hideous hack, don't want to break savegames now...
-	saveGame.power[1].extractedPower = allowDesign; // hideous hack, don't want to break savegames now...
-
-	//camera position
-	disp3d_getView(&(saveGame.currentPlayerPos));
-
-	//mission data
-	saveGame.missionOffTime =		mission.time;
-	saveGame.missionETA =			mission.ETA;
-	saveGame.missionCheatTime =		mission.cheatTime;
-	saveGame.missionHomeLZ_X =		mission.homeLZ_X;
-	saveGame.missionHomeLZ_Y =		mission.homeLZ_Y;
-	saveGame.missionPlayerX =		mission.playerX;
-	saveGame.missionPlayerY =		mission.playerY;
-	saveGame.missionScrollMinX = (UWORD)mission.scrollMinX;
-	saveGame.missionScrollMinY = (UWORD)mission.scrollMinY;
-	saveGame.missionScrollMaxX = (UWORD)mission.scrollMaxX;
-	saveGame.missionScrollMaxY = (UWORD)mission.scrollMaxY;
-
-	saveGame.offWorldKeepLists = offWorldKeepLists;
-	saveGame.RubbleTile	= getRubbleTileNum();
-	saveGame.WaterTile	= getWaterTileNum();
-
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		saveGame.iTranspEntryTileX[i] = mission.iTranspEntryTileX[i];
-		saveGame.iTranspEntryTileY[i] = mission.iTranspEntryTileY[i];
-		saveGame.iTranspExitTileX[i]  = mission.iTranspExitTileX[i];
-		saveGame.iTranspExitTileY[i]  = mission.iTranspExitTileY[i];
-		saveGame.aDefaultSensor[i]    = aDefaultSensor[i];
-		saveGame.aDefaultECM[i]       = aDefaultECM[i];
-		saveGame.aDefaultRepair[i]    = aDefaultRepair[i];
-	}
-
-	for (i = 0; i < MAX_NOGO_AREAS; ++i)
-	{
-		LANDING_ZONE *psLandingZone = getLandingZone(i);
-		saveGame.sLandingZone[i].x1	= psLandingZone->x1; // in case struct changes
-		saveGame.sLandingZone[i].x2	= psLandingZone->x2;
-		saveGame.sLandingZone[i].y1	= psLandingZone->y1;
-		saveGame.sLandingZone[i].y2	= psLandingZone->y2;
-	}
-
-	//version 17
-	saveGame.objId = MAX(unsynchObjID * 2, (synchObjID + 3) / 4);
-
-	//version 18
-	memset(saveGame.buildDate, 0, sizeof(saveGame.buildDate));
-	saveGame.oldestVersion = 0;
-	saveGame.validityKey = 0;
-
-	//version 19
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		for (j = 0; j < MAX_PLAYERS; j++)
-		{
-			saveGame.alliances[i][j] = alliances[i][j];
-		}
-	}
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		saveGame.playerColour[i] = getPlayerColour(i);
-	}
-	saveGame.radarZoom = (UBYTE)GetRadarZoom();
-
-	//version 20
-	saveGame.bDroidsToSafetyFlag = (UBYTE)getDroidsToSafetyFlag();
-
-	//version 24
-	saveGame.reinforceTime = missionGetReinforcementTime();
-	saveGame.bPlayCountDown = (UBYTE)getPlayCountDown();
-	saveGame.bPlayerHasWon = (UBYTE)testPlayerHasWon();
-	saveGame.bPlayerHasLost = (UBYTE)testPlayerHasLost();
-
-	//version 30
-	saveGame.scrGameLevel = 0;
-	saveGame.bExtraFailFlag = 0;
-	saveGame.bExtraVictoryFlag = 0;
-	saveGame.bTrackTransporter = 0;
-
-	// version 33
-	saveGame.sGame		= game;
-	saveGame.savePlayer	= selectedPlayer;
-	saveGame.multiPlayer = bMultiPlayer;
-	saveGame.sNetPlay	= NetPlay;
-	sstrcpy(saveGame.sPName, getPlayerName(selectedPlayer));
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		saveGame.sPlayerIndex[i] = i;
-	}
-
-	//version 34
-	for (i = 0; i < MAX_PLAYERS; ++i)
-	{
-		sstrcpy(saveGame.sPlayerName[i], getPlayerName(i));
-	}
-
-	//version 38
-	sstrcpy(saveGame.modList, getModList().c_str());
-	// Attempt to see if we have a corrupted game structure in campaigns.
-	if (saveGame.sGame.type == LEVEL_TYPE::CAMPAIGN)
-	{
-		// player 0 is always a human in campaign games
-		for (i = 1; i < MAX_PLAYERS; i++)
-		{
-			if (saveGame.sNetPlay.players[i].difficulty == AIDifficulty::HUMAN)
-			{
-				ASSERT(!"savegame corruption!", "savegame corruption!");
-				debug(LOG_ERROR, "Savegame corruption detected, trying to salvage.  Please Report this issue @ wz2100.net");
-				debug(LOG_ERROR, "players[i].difficulty was %d, level %s / %s, ", (int) static_cast<int8_t>(saveGame.sNetPlay.players[i].difficulty), saveGame.levelName, saveGame.sGame.map);
-				saveGame.sNetPlay.players[i].difficulty = AIDifficulty::DISABLED;
-			}
-		}
-	}
-
-	status = serializeSaveGameData(fileHandle, &saveGame);
-
-	// Close the file
-	PHYSFS_close(fileHandle);
-
-	// Return our success status with writing out the file!
-	return status;
 }
 
 // -----------------------------------------------------------------------------------------

@@ -409,7 +409,7 @@ bool startMission(LEVEL_TYPE missionType, char *pGame)
 	//load the game file for all types of mission except a Between Mission
 	if (missionType != LEVEL_TYPE::LDS_BETWEEN)
 	{
-		loadGameInit(pGame);
+		loadGameInit(pGame, false);
 	}
 
 	//all proximity messages are removed between missions now

@@ -157,12 +157,6 @@ bool aiInitialise()
 	return true;
 }
 
-/* Shutdown the AI system */
-bool aiShutdown()
-{
-	return true;
-}
-
 /** Search the global list of sensors for a possible target for psObj. */
 static BASE_OBJECT *aiSearchSensorTargets(BASE_OBJECT *psObj, int weapon_slot, WEAPON_STATS *psWStats, TARGET_ORIGIN *targetOrigin)
 {
