@@ -164,7 +164,8 @@ void jsDebugMessageUpdate();
 
 struct LABEL
 {
-	Vector2i p1, p2;	// world coordinates
+	Vector2i p1 = Vector2i(0, 0);	// world coordinates
+	Vector2i p2 = Vector2i(0, 0);	// world coordinates
 	int id;
 	int type;
 	int player;
