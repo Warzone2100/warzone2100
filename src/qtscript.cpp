@@ -1956,9 +1956,9 @@ bool scripting_engine::loadLabels(const char *filename)
 			p.type = SCRIPT_POSITION;
 			p.player = ALL_PLAYERS;
 			p.id = -1;
-			p.triggered = -1; // always deactivated
-			labels[label] = p;
 			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+			p.subscriber = ALL_PLAYERS;
+			labels[label] = p;
 		}
 		else if (list[i].startsWith("area"))
 		{
@@ -1982,16 +1982,15 @@ bool scripting_engine::loadLabels(const char *filename)
 			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
 			p.id = -1;
 			labels[label] = p;
-			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 		}
 		else if (list[i].startsWith("object"))
 		{
 			p.id = ini.value("id").toInt();
 			p.type = ini.value("type").toInt();
 			p.player = ini.value("player").toInt();
-			labels[label] = p;
 			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
 			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			labels[label] = p;
 		}
 		else if (list[i].startsWith("group"))
 		{
@@ -2007,8 +2006,9 @@ bool scripting_engine::loadLabels(const char *filename)
 				       id, p.player, list[i].toUtf8().c_str());
 				p.idlist.push_back(id);
 			}
-			labels[label] = p;
 			p.triggered = ini.value("triggered", -1).toInt(); // deactivated by default
+			p.subscriber = ini.value("subscriber", ALL_PLAYERS).toInt();
+			labels[label] = p;
 		}
 		else
 		{
