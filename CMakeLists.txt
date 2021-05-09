@@ -753,6 +753,7 @@ add_subdirectory(icons)
 add_subdirectory(po)
 add_subdirectory(src)
 add_subdirectory(pkg)
+add_subdirectory(tools/map)
 
 # Install base text / info files
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
