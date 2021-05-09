@@ -238,14 +238,17 @@ jobs:
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build (Portable Build)
+      working-directory: '${{ github.workspace }}\build'
       env:
         CXXFLAGS: '/MP'
       run: |
-        & cmake --build build --config Release --target package -- /m
+        echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\msvc.json"
+        & cmake --build . --config Release --target package -- /m
+        echo "::remove-matcher owner=msvc::"
         # Rename the portable installer
-        Move-Item -LiteralPath ".\build\warzone2100_portable.exe" -Destination ".\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
+        Move-Item -LiteralPath "${{ github.workspace }}\build\warzone2100_portable.exe" -Destination "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
         # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
-        cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off ".\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "$($pwd)\build\src\*.pdb" "$($pwd)\build\src\*.sym"
+        cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "${{ github.workspace }}\build\src\*.pdb" "${{ github.workspace }}\build\src\*.sym"
     - name: Collect Failure Logs
       if: failure()
       run: |
