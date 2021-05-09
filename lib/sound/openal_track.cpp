@@ -1322,16 +1322,24 @@ static void sound_DestroyStream(AUDIO_STREAM *stream)
 	// Detach all buffers and retrieve their ID numbers
 	if (buffer_count > 0)
 	{
-		if (buffer_count <= (1024 / sizeof(ALuint))) // See CMakeLists.txt for value of -Walloca-larger-than=<N>
+#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 7
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloca-larger-than="
+#endif
+		const size_t buffer_count_sizet = static_cast<size_t>(buffer_count);
+		if (buffer_count_sizet <= (1024 / sizeof(ALuint))) // See CMakeLists.txt for value of -Walloca-larger-than=<N>
 		{
-			buffers = (ALuint *)alloca(buffer_count * sizeof(ALuint));
+			buffers = (ALuint *)alloca(buffer_count_sizet * sizeof(ALuint));
 		}
 		else
 		{
 			// Too many buffers - don't allocate on the stack!
-			buffers = (ALuint *)malloc(buffer_count * sizeof(ALuint));
+			buffers = (ALuint *)malloc(buffer_count_sizet * sizeof(ALuint));
 			freeBuffers = true;
 		}
+#if !defined(__clang__) && defined(__GNUC__) && __GNUC__ >= 7
+#pragma GCC diagnostic pop
+#endif
 		alSourceUnqueueBuffers(stream->source, buffer_count, buffers);
 		sound_GetError();
 
