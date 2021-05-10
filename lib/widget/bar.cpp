@@ -67,7 +67,14 @@ W_BARGRAPH::W_BARGRAPH(W_BARINIT const *init)
 	}
 
 	ASSERT((init->style & ~(WBAR_PLAIN | WBAR_TROUGH | WBAR_DOUBLE | WIDG_HIDDEN)) == 0, "Unknown bar graph style");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wlogical-op" // Older GCC (at least GCC 5.4) triggers a warning on this
+#endif
 	ASSERT(init->orientation >= WBAR_LEFT || init->orientation <= WBAR_BOTTOM, "Unknown orientation");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic pop
+#endif
 	ASSERT(init->size <= WBAR_SCALE, "Bar size out of range");
 	ASSERT((init->style & WBAR_DOUBLE) == 0 || init->minorSize <= WBAR_SCALE, "Minor bar size out of range");
 }

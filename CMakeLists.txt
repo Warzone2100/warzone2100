@@ -585,6 +585,10 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wstringop-truncation" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
 		check_compiler_flags_output("-Werror -Wstringop-truncation -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wstringop-truncation" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
+		# Enable -Wlogical-op (GCC 4.3+)
+		check_compiler_flags_output("-Werror -Wlogical-op -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "-Wlogical-op" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
+		check_compiler_flags_output("-Werror -Wlogical-op -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "-Wlogical-op" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
+
 		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
 			# Enable -Werror (if supported)
 			check_compiler_flags_output("-Werror" COMPILER_TYPE C   OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
@@ -592,10 +596,6 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		else()
 			message( STATUS "WZ will *NOT* enable -Werror" )
 		endif()
-
-		# Enable -Wlogical-op (if supported) (warning-only for now)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}logical-op -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}logical-op" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
-		check_compiler_flags_output("-Werror ${WZ_Wno_}logical-op -Wno-error=cpp" COMPILER_TYPE CXX OUTPUT_FLAGS "${WZ_Wno_}logical-op" OUTPUT_VARIABLE _supported_cxx_compiler_flags APPEND)
 
 		# Handle -Wfloat-conversion	(warning-only for now)
 		check_compiler_flags_output("-Werror ${WZ_Wno_}float-conversion -Wno-error=cpp" COMPILER_TYPE C   OUTPUT_FLAGS "${WZ_Wno_}float-conversion" OUTPUT_VARIABLE _supported_c_compiler_flags APPEND)
