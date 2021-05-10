@@ -4708,6 +4708,14 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 			psDroid->id = id; // force correct ID, unless ID is set to eg -1, in which case we should keep new ID (useful for starting units in campaign)
 		}
 		ASSERT(id != 0, "Droid ID should never be zero here");
+		// conditional check so that existing saved games don't break
+		if (ini.contains("originalBody"))
+		{
+			// we need to set "originalBody" before setting "body", otherwise CHECK_DROID throws assertion errors
+			// we cannot use droidUpgradeBody here to calculate "originalBody", because upgrades aren't loaded yet
+			// so it's much simplier just store/retrieve originalBody value
+			psDroid->originalBody = ini.value("originalBody").toInt();
+		}
 		psDroid->body = healthValue(ini, psDroid->originalBody);
 		ASSERT(psDroid->body != 0, "%s : %d has zero hp!", pFileName, i);
 		psDroid->experience = ini.value("experience", 0).toInt();
@@ -4834,7 +4842,7 @@ static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
 {
 	nlohmann::json droidObj = nlohmann::json::object();
 	droidObj["name"] = psCurr->aName;
-
+	droidObj["originalBody"] = psCurr->originalBody;
 	// write common BASE_OBJECT info
 	writeSaveObjectJSON(droidObj, psCurr);
 
