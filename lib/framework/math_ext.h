@@ -139,8 +139,8 @@ static inline void solveDifferential2ndOrder(float *y_, float *dydt_, double acc
 	std::complex<double> e2     = std::exp(h2 * dt);
 	std::complex<double> g1     = (dydt - h2 * y) / (h1 - h2);
 	std::complex<double> g2     = (dydt - h1 * y) / (h2 - h1);
-	*y_    = (g1 * e1    + g2 * e2).real(); // .imag() should be 0.
-	*dydt_ = (g1 * h1 * e1 + g2 * h2 * e2).real(); // .imag() should be 0.
+	*y_    = static_cast<float>((g1 * e1    + g2 * e2).real()); // .imag() should be 0.
+	*dydt_ = static_cast<float>((g1 * h1 * e1 + g2 * h2 * e2).real()); // .imag() should be 0.
 }
 
 // Windows unfortunately appears to do this, so do this too for compatibility...
