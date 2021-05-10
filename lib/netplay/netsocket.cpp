@@ -36,6 +36,10 @@
 #endif
 #include <zlib.h>
 
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wshorten-64-to-32" // FIXME!!
+#endif
+
 enum
 {
 	SOCK_CONNECTION,

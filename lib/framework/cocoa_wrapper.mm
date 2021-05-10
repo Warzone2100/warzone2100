@@ -59,7 +59,7 @@ int cocoaShowAlert(const char *message, const char *information, unsigned style,
 
         buttonID = [alert runModal];
     }
-    return buttonID - NSAlertFirstButtonReturn;
+    return static_cast<int>(buttonID - NSAlertFirstButtonReturn);
 }
 
 bool cocoaSelectFileInFinder(const char *filename)

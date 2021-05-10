@@ -21,6 +21,9 @@
 	#pragma warning( disable : 4244 ) // warning C4244: '=': conversion from 'int' to 'yytype_int16', possible loss of data
 	#pragma warning( disable : 4267 )
 #endif
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+#endif
 
 /* All symbols defined below should begin with yy or YY, to avoid
    infringing on user name space.  This should be done even for local

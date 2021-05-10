@@ -2143,8 +2143,9 @@ int NETsendFile(WZFile &file, unsigned player)
 	memset(inBuff, 0x0, sizeof(inBuff));
 
 	// read some bytes.
-	uint32_t bytesToRead = WZ_PHYSFS_readBytes(file.handle, inBuff, MAX_FILE_TRANSFER_PACKET);
-	ASSERT_OR_RETURN(100, (int32_t)bytesToRead >= 0, "Error reading file.");
+	PHYSFS_sint64 readBytesResult = WZ_PHYSFS_readBytes(file.handle, inBuff, MAX_FILE_TRANSFER_PACKET);
+	ASSERT_OR_RETURN(100, readBytesResult >= 0, "Error reading file.");
+	uint32_t bytesToRead = static_cast<uint32_t>(readBytesResult);
 
 	NETbeginEncode(NETnetQueue(player), NET_FILE_PAYLOAD);
 	NETbin(file.hash.bytes, file.hash.Bytes);
@@ -2161,7 +2162,7 @@ int NETsendFile(WZFile &file, unsigned player)
 		file.handle = nullptr;  // We are done sending to this client.
 	}
 
-	return (uint64_t)file.pos * 100 / file.size;
+	return static_cast<int>((uint64_t)file.pos * 100 / file.size);
 }
 
 bool validateReceivedFile(const WZFile& file)

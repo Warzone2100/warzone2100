@@ -113,22 +113,22 @@ int32_t iCos(uint16_t a)
 
 int32_t iSinR(uint16_t a, int32_t r)
 {
-	return ((int64_t)r * iSin(a)) / 65536;
+	return static_cast<int32_t>(((int64_t)r * iSin(a)) / 65536);
 }
 
 int32_t iCosR(uint16_t a, int32_t r)
 {
-	return ((int64_t)r * iCos(a)) / 65536;
+	return static_cast<int32_t>(((int64_t)r * iCos(a)) / 65536);
 }
 
 int32_t iSinSR(int32_t a, int32_t s, int32_t r)
 {
-	return ((int64_t)r * iSin(((int64_t)a << 16) / s)) / 65536;
+	return static_cast<int32_t>(((int64_t)r * iSin(((int64_t)a << 16) / s)) / 65536);
 }
 
 int32_t iCosSR(int32_t a, int32_t s, int32_t r)
 {
-	return ((int64_t)r * iCos(((int64_t)a << 16) / s)) / 65536;
+	return static_cast<int32_t>(((int64_t)r * iCos(((int64_t)a << 16) / s)) / 65536);
 }
 
 uint16_t iAtan2(int32_t s, int32_t c)
@@ -186,7 +186,7 @@ int32_t i64Sqrt(uint64_t n)
 	// Check that we got the right result.
 	ASSERT((int64_t)(r * r - n) <= 0 && (int64_t)((r + 1) * (r + 1) - n) > 0, "Too badly broken sqrt function, i64Sqrt(%" PRIu64") = %" PRIu64".", n, r);
 
-	return r;
+	return static_cast<int32_t>(r);
 }
 
 int32_t iHypot(int32_t x, int32_t y)
