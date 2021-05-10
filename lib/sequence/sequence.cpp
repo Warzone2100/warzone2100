@@ -163,7 +163,7 @@ static int buffer_data(PHYSFS_file *in, ogg_sync_state *oy)
 	// read in 256K chunks
 	const int size = 262144;
 	char *buffer = ogg_sync_buffer(oy, size);
-	int bytes = WZ_PHYSFS_readBytes(in, buffer, size);
+	int bytes = static_cast<int>(WZ_PHYSFS_readBytes(in, buffer, size));
 
 	ogg_sync_wrote(oy, bytes);
 	return (bytes);
@@ -199,7 +199,7 @@ static void open_audio(void)
 {
 	float volume = 1.0;
 
-	audiodata.audiofd_fragsize = (((videodata.vi.channels * 16) / 8) * videodata.vi.rate);
+	audiodata.audiofd_fragsize = static_cast<int>((((videodata.vi.channels * 16) / 8) * videodata.vi.rate));
 	audiobuf = (ogg_int16_t *)malloc(audiodata.audiofd_fragsize);
 
 	// FIX ME:  This call will fail, since we have, most likely, already
@@ -429,7 +429,7 @@ static void audio_write(void)
 		}
 
 		alBufferData(oldbuffer, (videodata.vi.channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16),
-		             audiobuf, audiodata.audiobuf_fill, videodata.vi.rate);
+		             audiobuf, audiodata.audiobuf_fill, static_cast<ALsizei>(videodata.vi.rate));
 
 		alSourceQueueBuffers(audiodata.source, 1, &oldbuffer);
 		audiodata.totbufstarted++;

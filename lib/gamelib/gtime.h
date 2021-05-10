@@ -141,7 +141,7 @@ static inline int WZ_DECL_PURE quantiseFraction(int numerator, int denominator, 
 {
 	int64_t newValue = (int64_t)newTime * numerator / denominator;
 	int64_t oldValue = (int64_t)oldTime * numerator / denominator;
-	return newValue - oldValue;
+	return static_cast<int>(newValue - oldValue);
 }
 /// Returns numerator/denominator * (newTime - oldTime). Rounds up or down such that the average return value is right, if oldTime is always the previous newTime.
 static inline Vector3i WZ_DECL_PURE quantiseFraction(Vector3i numerator, int denominator, int newTime, int oldTime)

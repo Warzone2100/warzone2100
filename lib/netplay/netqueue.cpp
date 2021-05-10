@@ -24,6 +24,9 @@
 #include "lib/framework/frame.h"
 #include "netqueue.h"
 
+#include <limits>
+#include <cstdint>
+
 // See comments in netqueue.h.
 
 
@@ -102,25 +105,28 @@ bool decode_uint32_t(uint8_t b, uint32_t &v, unsigned n)
 
 uint8_t *NetMessage::rawDataDup() const
 {
-	unsigned encodedLengthOfSize = encodedlength_uint32_t(data.size());
+#if SIZE_MAX > UINT32_MAX
+	ASSERT(data.size() <= static_cast<size_t>(std::numeric_limits<uint32_t>::max()), "Trying to duplicate a very large packet (%zu bytes).", data.size());
+#endif
+	uint32_t dataSizeU32 = static_cast<uint32_t>(data.size());
+	unsigned encodedLengthOfSize = encodedlength_uint32_t(dataSizeU32);
 
-	uint8_t *ret = new uint8_t[1 + encodedLengthOfSize + data.size()];
+	uint8_t *ret = new uint8_t[1 + encodedLengthOfSize + dataSizeU32];
 
 	ret[0] = type;
-
-	uint32_t len = data.size();
+	uint32_t len = dataSizeU32;
 	for (unsigned n = 0; n < encodedLengthOfSize; ++n)
 	{
 		encode_uint32_t(ret[n + 1], len, n);
 	}
 
-	std::copy(data.begin(), data.end(), ret + 1 + encodedLengthOfSize);
+	std::copy(data.begin(), data.begin() + dataSizeU32, ret + 1 + encodedLengthOfSize);
 	return ret;
 }
 
 size_t NetMessage::rawLen() const
 {
-	return 1 + static_cast<size_t>(encodedlength_uint32_t(data.size())) + data.size();
+	return 1 + static_cast<size_t>(encodedlength_uint32_t(static_cast<uint32_t>(data.size()))) + data.size();
 }
 
 NetQueue::NetQueue()

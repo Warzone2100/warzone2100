@@ -126,15 +126,15 @@ Affine3F &Affine3F::Trans(Vector3i tr)
 
 Affine3F &Affine3F::Scale(int32_t s)
 {
-	m[0][0] = ((int64_t)m[0][0] * s) / FP_MULTIPLIER;
-	m[0][1] = ((int64_t)m[0][1] * s) / FP_MULTIPLIER;
-	m[0][2] = ((int64_t)m[0][2] * s) / FP_MULTIPLIER;
-	m[1][0] = ((int64_t)m[1][0] * s) / FP_MULTIPLIER;
-	m[1][1] = ((int64_t)m[1][1] * s) / FP_MULTIPLIER;
-	m[1][2] = ((int64_t)m[1][2] * s) / FP_MULTIPLIER;
-	m[2][0] = ((int64_t)m[2][0] * s) / FP_MULTIPLIER;
-	m[2][1] = ((int64_t)m[2][1] * s) / FP_MULTIPLIER;
-	m[2][2] = ((int64_t)m[2][2] * s) / FP_MULTIPLIER;
+	m[0][0] = static_cast<int32_t>(((int64_t)m[0][0] * s) / FP_MULTIPLIER);
+	m[0][1] = static_cast<int32_t>(((int64_t)m[0][1] * s) / FP_MULTIPLIER);
+	m[0][2] = static_cast<int32_t>(((int64_t)m[0][2] * s) / FP_MULTIPLIER);
+	m[1][0] = static_cast<int32_t>(((int64_t)m[1][0] * s) / FP_MULTIPLIER);
+	m[1][1] = static_cast<int32_t>(((int64_t)m[1][1] * s) / FP_MULTIPLIER);
+	m[1][2] = static_cast<int32_t>(((int64_t)m[1][2] * s) / FP_MULTIPLIER);
+	m[2][0] = static_cast<int32_t>(((int64_t)m[2][0] * s) / FP_MULTIPLIER);
+	m[2][1] = static_cast<int32_t>(((int64_t)m[2][1] * s) / FP_MULTIPLIER);
+	m[2][2] = static_cast<int32_t>(((int64_t)m[2][2] * s) / FP_MULTIPLIER);
 	return *this;
 }
 
@@ -159,9 +159,9 @@ Vector3i Affine3F::translation() const
 Vector3i Affine3F::operator*(const Vector3i v) const
 {
 	Vector3i s;
-	s.x = ((int64_t)v.x * m[0][0] + (int64_t)v.y * m[0][1] + (int64_t)v.z * m[0][2] + m[0][3]) / FP_MULTIPLIER;
-	s.y = ((int64_t)v.x * m[1][0] + (int64_t)v.y * m[1][1] + (int64_t)v.z * m[1][2] + m[1][3]) / FP_MULTIPLIER;
-	s.z = ((int64_t)v.x * m[2][0] + (int64_t)v.y * m[2][1] + (int64_t)v.z * m[2][2] + m[2][3]) / FP_MULTIPLIER;
+	s.x = static_cast<int>(((int64_t)v.x * m[0][0] + (int64_t)v.y * m[0][1] + (int64_t)v.z * m[0][2] + m[0][3]) / FP_MULTIPLIER);
+	s.y = static_cast<int>(((int64_t)v.x * m[1][0] + (int64_t)v.y * m[1][1] + (int64_t)v.z * m[1][2] + m[1][3]) / FP_MULTIPLIER);
+	s.z = static_cast<int>(((int64_t)v.x * m[2][0] + (int64_t)v.y * m[2][1] + (int64_t)v.z * m[2][2] + m[2][3]) / FP_MULTIPLIER);
 	return s;
 }
 
@@ -169,20 +169,20 @@ Affine3F Affine3F::operator*(const Affine3F &rhs) const
 {
 	Affine3F tr;
 #define i64 int64_t
-	tr.m[0][0] = ((i64)m[0][0] * rhs.m[0][0] + (i64)m[0][1] * rhs.m[1][0] + (i64)m[0][2] * rhs.m[2][0]) / FP_MULTIPLIER;
-	tr.m[0][1] = ((i64)m[0][0] * rhs.m[0][1] + (i64)m[0][1] * rhs.m[1][1] + (i64)m[0][2] * rhs.m[2][1]) / FP_MULTIPLIER;
-	tr.m[0][2] = ((i64)m[0][0] * rhs.m[0][2] + (i64)m[0][1] * rhs.m[1][2] + (i64)m[0][2] * rhs.m[2][2]) / FP_MULTIPLIER;
-	tr.m[0][3] = ((i64)m[0][0] * rhs.m[0][3] + (i64)m[0][1] * rhs.m[1][3] + (i64)m[0][2] * rhs.m[2][3]) / FP_MULTIPLIER + m[0][3];
+	tr.m[0][0] = static_cast<int32_t>(((i64)m[0][0] * rhs.m[0][0] + (i64)m[0][1] * rhs.m[1][0] + (i64)m[0][2] * rhs.m[2][0]) / FP_MULTIPLIER);
+	tr.m[0][1] = static_cast<int32_t>(((i64)m[0][0] * rhs.m[0][1] + (i64)m[0][1] * rhs.m[1][1] + (i64)m[0][2] * rhs.m[2][1]) / FP_MULTIPLIER);
+	tr.m[0][2] = static_cast<int32_t>(((i64)m[0][0] * rhs.m[0][2] + (i64)m[0][1] * rhs.m[1][2] + (i64)m[0][2] * rhs.m[2][2]) / FP_MULTIPLIER);
+	tr.m[0][3] = static_cast<int32_t>(((i64)m[0][0] * rhs.m[0][3] + (i64)m[0][1] * rhs.m[1][3] + (i64)m[0][2] * rhs.m[2][3]) / FP_MULTIPLIER + m[0][3]);
 
-	tr.m[1][0] = ((i64)m[1][0] * rhs.m[0][0] + (i64)m[1][1] * rhs.m[1][0] + (i64)m[1][2] * rhs.m[2][0]) / FP_MULTIPLIER;
-	tr.m[1][1] = ((i64)m[1][0] * rhs.m[0][1] + (i64)m[1][1] * rhs.m[1][1] + (i64)m[1][2] * rhs.m[2][1]) / FP_MULTIPLIER;
-	tr.m[1][2] = ((i64)m[1][0] * rhs.m[0][2] + (i64)m[1][1] * rhs.m[1][2] + (i64)m[1][2] * rhs.m[2][2]) / FP_MULTIPLIER;
-	tr.m[1][3] = ((i64)m[1][0] * rhs.m[0][3] + (i64)m[1][1] * rhs.m[1][3] + (i64)m[1][2] * rhs.m[2][3]) / FP_MULTIPLIER  + m[1][3];
+	tr.m[1][0] = static_cast<int32_t>(((i64)m[1][0] * rhs.m[0][0] + (i64)m[1][1] * rhs.m[1][0] + (i64)m[1][2] * rhs.m[2][0]) / FP_MULTIPLIER);
+	tr.m[1][1] = static_cast<int32_t>(((i64)m[1][0] * rhs.m[0][1] + (i64)m[1][1] * rhs.m[1][1] + (i64)m[1][2] * rhs.m[2][1]) / FP_MULTIPLIER);
+	tr.m[1][2] = static_cast<int32_t>(((i64)m[1][0] * rhs.m[0][2] + (i64)m[1][1] * rhs.m[1][2] + (i64)m[1][2] * rhs.m[2][2]) / FP_MULTIPLIER);
+	tr.m[1][3] = static_cast<int32_t>(((i64)m[1][0] * rhs.m[0][3] + (i64)m[1][1] * rhs.m[1][3] + (i64)m[1][2] * rhs.m[2][3]) / FP_MULTIPLIER  + m[1][3]);
 
-	tr.m[2][0] = ((i64)m[2][0] * rhs.m[0][0] + (i64)m[2][1] * rhs.m[1][0] + (i64)m[2][2] * rhs.m[2][0]) / FP_MULTIPLIER;
-	tr.m[2][1] = ((i64)m[2][0] * rhs.m[0][1] + (i64)m[2][1] * rhs.m[1][1] + (i64)m[2][2] * rhs.m[2][1]) / FP_MULTIPLIER;
-	tr.m[2][2] = ((i64)m[2][0] * rhs.m[0][2] + (i64)m[2][1] * rhs.m[1][2] + (i64)m[2][2] * rhs.m[2][2]) / FP_MULTIPLIER;
-	tr.m[2][3] = ((i64)m[2][0] * rhs.m[0][3] + (i64)m[2][1] * rhs.m[1][3] + (i64)m[2][2] * rhs.m[2][3]) / FP_MULTIPLIER  + m[2][3];
+	tr.m[2][0] = static_cast<int32_t>(((i64)m[2][0] * rhs.m[0][0] + (i64)m[2][1] * rhs.m[1][0] + (i64)m[2][2] * rhs.m[2][0]) / FP_MULTIPLIER);
+	tr.m[2][1] = static_cast<int32_t>(((i64)m[2][0] * rhs.m[0][1] + (i64)m[2][1] * rhs.m[1][1] + (i64)m[2][2] * rhs.m[2][1]) / FP_MULTIPLIER);
+	tr.m[2][2] = static_cast<int32_t>(((i64)m[2][0] * rhs.m[0][2] + (i64)m[2][1] * rhs.m[1][2] + (i64)m[2][2] * rhs.m[2][2]) / FP_MULTIPLIER);
+	tr.m[2][3] = static_cast<int32_t>(((i64)m[2][0] * rhs.m[0][3] + (i64)m[2][1] * rhs.m[1][3] + (i64)m[2][2] * rhs.m[2][3]) / FP_MULTIPLIER  + m[2][3]);
 #undef i64
 	return tr;
 }
@@ -190,8 +190,8 @@ Affine3F Affine3F::operator*(const Affine3F &rhs) const
 Vector3i Affine3F::InvRot(const Vector3i v) const
 {
 	Vector3i s;
-	s.x = ((int64_t)v.x * m[0][0] + (int64_t)v.y * m[1][0] + (int64_t)v.z * m[2][0]) / FP_MULTIPLIER;
-	s.y = ((int64_t)v.x * m[0][1] + (int64_t)v.y * m[1][1] + (int64_t)v.z * m[2][1]) / FP_MULTIPLIER;
-	s.z = ((int64_t)v.x * m[0][2] + (int64_t)v.y * m[1][2] + (int64_t)v.z * m[2][2]) / FP_MULTIPLIER;
+	s.x = static_cast<int>(((int64_t)v.x * m[0][0] + (int64_t)v.y * m[1][0] + (int64_t)v.z * m[2][0]) / FP_MULTIPLIER);
+	s.y = static_cast<int>(((int64_t)v.x * m[0][1] + (int64_t)v.y * m[1][1] + (int64_t)v.z * m[2][1]) / FP_MULTIPLIER);
+	s.z = static_cast<int>(((int64_t)v.x * m[0][2] + (int64_t)v.y * m[1][2] + (int64_t)v.z * m[2][2]) / FP_MULTIPLIER);
 	return s;
 }

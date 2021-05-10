@@ -31,6 +31,10 @@
 #define OGG_ENDIAN 0
 #endif
 
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wshorten-64-to-32" // FIXME!!
+#endif
+
 #include "oggvorbis.h"
 
 struct OggVorbisDecoderState
