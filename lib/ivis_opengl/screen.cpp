@@ -352,13 +352,13 @@ void screen_GenerateCoordinatesAndVBOs()
 
 	if (aspect < backdropAspect)
 	{
-		int offset = (screenWidth - screenHeight * backdropAspect) / 2;
+		int offset = static_cast<int>((screenWidth - screenHeight * backdropAspect) / 2);
 		x1 += offset;
 		x2 -= offset;
 	}
 	else
 	{
-		int offset = (screenHeight - screenWidth / backdropAspect) / 2;
+		int offset = static_cast<int>((screenHeight - screenWidth / backdropAspect) / 2);
 		y1 += offset;
 		y2 -= offset;
 	}

@@ -70,7 +70,7 @@ static STAR newStar()
 {
 	STAR s;
 	s.xPos = rand() % barRightX;
-	s.speed = (rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0;
+	s.speed = static_cast<int>((rand() % 30 + 6) * pie_GetVideoBufferWidth() / 640.0);
 	s.colour = pal_SetBrightness(150 + rand() % 100);
 	return s;
 }
@@ -82,9 +82,9 @@ static void setupLoadingScreen()
 	int h = pie_GetVideoBufferHeight();
 	int offset;
 
-	boxHeight = h / 40.0;
+	boxHeight = static_cast<int>(h / 40.0);
 	offset = boxHeight;
-	boxWidth = w - 2.0 * offset;
+	boxWidth = w - 2 * offset;
 
 	barRightX = w - offset;
 	barRightY = h - offset;
@@ -93,7 +93,7 @@ static void setupLoadingScreen()
 	barLeftY = barRightY - boxHeight;
 
 	starsNum = boxWidth / boxHeight;
-	starHeight = 2.0 * h / 640.0;
+	starHeight = static_cast<int>(2.0 * h / 640.0);
 
 	if (!stars)
 	{

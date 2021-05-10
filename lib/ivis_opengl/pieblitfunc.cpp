@@ -286,12 +286,12 @@ void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 
 /***************************************************************************/
 
-void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour)
+void pie_BoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour)
 {
 	pie_DrawRect<gfx_api::BoxFillPSO>(x0, y0, x1, y1, colour);
 }
 
-void pie_BoxFill_alpha(int x0, int y0, int x1, int y1, PIELIGHT colour)
+void pie_BoxFill_alpha(float x0, float y0, float x1, float y1, PIELIGHT colour)
 {
 	pie_DrawRect<gfx_api::BoxFillAlphaPSO>(x0, y0, x1, y1, colour);
 }
@@ -342,14 +342,14 @@ void iV_DrawImageAnisotropic(gfx_api::texture& TextureID, Vector2i Position, Vec
 	iv_DrawImageImpl<gfx_api::DrawImageAnisotropicPSO>(TextureID, offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp);
 }
 
-void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour)
+void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour)
 {
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
 
 	iv_DrawImageImpl<gfx_api::DrawImageTextPSO>(TextureID, offset, size, Vector2f(0.f, 0.f), Vector2f(1.f, 1.f), colour, mvp, SHADER_TEXT);
 }
 
-void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect)
+void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect)
 {
 	glm::mat4 mvp = defaultProjectionMatrix() * glm::translate(glm::vec3(Position.x, Position.y, 0)) * glm::rotate(RADIANS(angle), glm::vec3(0.f, 0.f, 1.f));
 
@@ -450,8 +450,8 @@ void iV_DrawImage2(const WzString &filename, float x, float y, float width, floa
 	const gfx_api::gfxFloat invTextureSize = image->invTextureSize;
 	const int tu = image->Tu;
 	const int tv = image->Tv;
-	const int w = width > 0 ? width : image->Width;
-	const int h = height > 0 ? height : image->Height;
+	const int w = width > 0 ? static_cast<int>(width) : static_cast<int>(image->Width);
+	const int h = height > 0 ? static_cast<int>(height) : static_cast<int>(image->Height);
 	x += image->XOffset;
 	y += image->YOffset;
 

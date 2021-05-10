@@ -943,15 +943,15 @@ void startAudioAndZoomOptionsMenu()
 
 	// 2d audio
 	addTextButton(FRONTEND_FX, FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Voice Volume"), 0);
-	addFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS2M -20, FRONTEND_POS2Y + 5, AUDIO_VOL_MAX, sound_GetUIVolume() * 100.0);
+	addFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS2M -20, FRONTEND_POS2Y + 5, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetUIVolume() * 100.0f));
 
 	// 3d audio
 	addTextButton(FRONTEND_3D_FX, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("FX Volume"), 0);
-	addFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS3M -20, FRONTEND_POS3Y + 5, AUDIO_VOL_MAX, sound_GetEffectsVolume() * 100.0);
+	addFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS3M -20, FRONTEND_POS3Y + 5, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetEffectsVolume() * 100.0f));
 
 	// cd audio
 	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Music Volume"), 0);
-	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M -20, FRONTEND_POS4Y + 5, AUDIO_VOL_MAX, sound_GetMusicVolume() * 100.0);
+	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M -20, FRONTEND_POS4Y + 5, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetMusicVolume() * 100.0f));
 
 	// HRTF
 	addTextButton(FRONTEND_SOUND_HRTF, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("HRTF"), WBUT_SECONDARY);
@@ -1009,15 +1009,15 @@ bool runAudioAndZoomOptionsMenu()
 		break;
 
 	case FRONTEND_FX_SL:
-		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, FRONTEND_FX_SL) / 100.0);
+		sound_SetUIVolume((float)widgGetSliderPos(psWScreen, FRONTEND_FX_SL) / 100.0f);
 		break;
 
 	case FRONTEND_3D_FX_SL:
-		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, FRONTEND_3D_FX_SL) / 100.0);
+		sound_SetEffectsVolume((float)widgGetSliderPos(psWScreen, FRONTEND_3D_FX_SL) / 100.0f);
 		break;
 
 	case FRONTEND_MUSIC_SL:
-		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, FRONTEND_MUSIC_SL) / 100.0);
+		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, FRONTEND_MUSIC_SL) / 100.0f);
 		break;
 
 	case FRONTEND_SOUND_HRTF:

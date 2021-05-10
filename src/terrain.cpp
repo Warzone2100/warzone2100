@@ -55,6 +55,13 @@
 #include "hci.h"
 #include "loop.h"
 
+// TODO: Fix and remove after merging terrain rendering changes
+#if defined(__clang__)
+	#pragma clang diagnostic ignored "-Wfloat-conversion"
+#elif defined(__GNUC__)
+	#pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif
+
 /**
  * A sector contains all information to draw a square piece of the map.
  * The actual geometry and texture data is not stored in here but in large VBO's.
@@ -233,7 +240,7 @@ static Vector2f getTileTexCoords(Vector2f *uv, unsigned int tileNumber)
 		texsize = MAX_TILE_TEXTURE_SIZE;
 	}
 	const float centertile = 0.5f / texsize;	// compute center of tile
-	const float shiftamount = (texsize - 1.0) / texsize;	// 1 pixel border
+	const float shiftamount = (texsize - 1.0f) / texsize;	// 1 pixel border
 	// bump the texture coords, for 1 pixel border, so our range is [.5,(texsize - .5)]
 	const float one = 1.0f / (TILES_IN_PAGE_COLUMN * texsize) + centertile * shiftamount;
 

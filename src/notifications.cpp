@@ -843,7 +843,7 @@ W_NOTIFICATION::~W_NOTIFICATION()
 
 gfx_api::texture* makeTexture(unsigned int width, unsigned int height, const gfx_api::pixel_format& format, const void *image)
 {
-	size_t mip_count = floor(log(std::max(width, height))) + 1;
+	size_t mip_count = static_cast<size_t>(floor(log(std::max(width, height)))) + 1;
 	gfx_api::texture* mTexture = gfx_api::context::get().create_texture(mip_count, width, height, format);
 	if (image != nullptr)
 		mTexture->upload_and_generate_mipmaps(0u, 0u, width, height, format, image);
@@ -895,7 +895,7 @@ gfx_api::texture* W_NOTIFICATION::loadImage(const WZ_Notification_Image& image)
 
 float EaseOutElastic(float p)
 {
-	return sin(-13 * M_PI_2 * (p + 1)) * pow(2, -10 * p) + 1;
+	return static_cast<float>(sin(-13 * M_PI_2 * (p + 1)) * pow(2, -10 * p) + 1);
 }
 
 float EaseOutQuint(float p)
@@ -936,7 +936,7 @@ bool W_NOTIFICATION::calculateNotificationWidgetPos()
 			uint32_t endTime = startTime + uint32_t(openAnimationDuration);
 			if (realTime < endTime)
 			{
-				y = (-height()) + (EaseOutQuint((float(realTime) - float(startTime)) / float(openAnimationDuration)) * (endingYPosition + height())) + 1;
+				y = static_cast<int>((-height()) + (EaseOutQuint((float(realTime) - float(startTime)) / float(openAnimationDuration)) * (endingYPosition + height())) + 1);
 				if (!(y + getDragOffset().y >= endingYPosition))
 				{
 					break;
@@ -985,7 +985,7 @@ bool W_NOTIFICATION::calculateNotificationWidgetPos()
 				{
 					percentComplete = EaseInCubic(percentComplete);
 				}
-				y = endingYPosition - (percentComplete * (endingYPosition + height()));
+				y = static_cast<int>(endingYPosition - (percentComplete * (endingYPosition + height())));
 				if ((y + getDragOffset().y) > -height())
 				{
 					break;
@@ -1042,7 +1042,7 @@ void W_NOTIFICATION::run(W_CONTEXT *psContext)
 			// dragging down
 			const int verticalLimit = 10;
 			int distanceY = currMouseY - dragStartY;
-			dragOffset.y = verticalLimit * (1 + log10(float(distanceY) / float(verticalLimit)));
+			dragOffset.y = static_cast<int>(verticalLimit * (1 + log10(float(distanceY) / float(verticalLimit))));
 //			debug(LOG_GUI, "dragging down, dragOffset.y: (%d)", dragOffset.y);
 		}
 		else

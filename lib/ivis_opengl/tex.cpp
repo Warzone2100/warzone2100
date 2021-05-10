@@ -121,7 +121,7 @@ static size_t pie_AddTexPage_Impl(iV_Image *s, const char *filename, bool gameTe
 		gfx_api::pixel_format format = iV_getPixelFormat(s);
 		if (_TEX_PAGE[page].id)
 			delete _TEX_PAGE[page].id;
-		size_t mip_count = floor(log(std::max(s->width, s->height))) + 1;
+		size_t mip_count = static_cast<size_t>(floor(log(std::max(s->width, s->height)))) + 1;
 		_TEX_PAGE[page].id = gfx_api::context::get().create_texture(mip_count, s->width, s->height, format, filename);
 		pie_Texture(page).upload_and_generate_mipmaps(0u, 0u, s->width, s->height, iV_getPixelFormat(s), s->bmp);
 	}

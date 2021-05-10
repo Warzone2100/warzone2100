@@ -141,8 +141,8 @@ static inline void iV_Box(int x0, int y0, int x1, int y1, PIELIGHT first)
 {
 	iV_Box2(x0, y0, x1, y1, first, first);
 }
-void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour);
-void pie_BoxFill_alpha(int x0, int y0, int x1, int y1, PIELIGHT colour);
+void pie_BoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour);
+void pie_BoxFill_alpha(float x0, float y0, float x1, float y1, PIELIGHT colour);
 struct PIERECT_DrawRequest
 {
 	PIERECT_DrawRequest(int x0, int y0, int x1, int y1, PIELIGHT color)
@@ -216,8 +216,8 @@ private:
 };
 
 void iV_DrawImageAnisotropic(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
-void iV_DrawImageText(gfx_api::texture& TextureID, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
-void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2i Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect);
+void iV_DrawImageText(gfx_api::texture& TextureID, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour);
+void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, Vector2f Position, Vector2f offset, Vector2f size, float angle, PIELIGHT colour, WzRect clippingRect);
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImage2(const WzString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());

@@ -196,13 +196,13 @@ public:
 		_fullButString = fullButString;
 		_widgetWidth = widgetWidth;
 	}
-	void renderCachedText(Vector2i position, PIELIGHT colour, float rotation = 0.0f)
+	void renderCachedText(Vector2f position, PIELIGHT colour, float rotation = 0.0f)
 	{
 		wzText.render(position, colour, rotation);
 	}
 	void renderCachedText(int x, int y, PIELIGHT colour, float rotation = 0.0f)
 	{
-		renderCachedText(Vector2i{x,y}, colour, rotation);
+		renderCachedText(Vector2f{x,y}, colour, rotation);
 	}
 };
 

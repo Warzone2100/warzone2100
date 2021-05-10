@@ -852,7 +852,7 @@ static void pie_DrawShadows(uint64_t currentGameFrame)
 
 	PIELIGHT grey;
 	grey.byte = { 0, 0, 0, 128 };
-	pie_BoxFill_alpha(0, 0, width, height, grey);
+	pie_BoxFill_alpha(0.f, 0.f, width, height, grey);
 
 	scshapes.resize(0);
 	shadowCache.removeUnused();

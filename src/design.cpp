@@ -24,6 +24,7 @@
  *
  */
 #include <string.h>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/input.h"
@@ -371,7 +372,7 @@ protected:
 
 		//draw current value section
 		int barWidth = width() - maxValueTextWidth - 2 * PADDING;
-		auto filledWidth = MIN(majorSize * barWidth / 100, barWidth);
+		auto filledWidth = std::min<int>((int)majorSize * barWidth / 100, barWidth);
 		iV_DrawImageRepeatX(IntImages, IMAGE_DES_STATSCURR, iX, y0, filledWidth, defaultProjectionMatrix(), true);
 
 		valueText.setText(astringf("%.*f", precision, majorValue / (float)denominator), font_regular);
@@ -384,7 +385,7 @@ protected:
 
 		//draw the comparison value - only if not zero
 		updateAnimation();
-		filledWidth = MIN(minorAnimation.getCurrent() * barWidth / 100, barWidth);
+		filledWidth = std::min<int>(static_cast<int>(minorAnimation.getCurrent() * barWidth / 100), barWidth);
 		iV_DrawImage(IntImages, IMAGE_DES_STATSCOMP, iX + filledWidth, y0 - 1);
 
 		auto delta = minorValue - majorValue;

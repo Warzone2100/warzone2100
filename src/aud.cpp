@@ -73,7 +73,7 @@ Vector3f audio_GetPlayerPos()
  */
 void audio_Get3DPlayerRotAboutVerticalAxis(float *angle)
 {
-	*angle = ((float) playerPos.r.y / DEG_1) * M_PI / 180.0f;
+	*angle = static_cast<float>(((float) playerPos.r.y / DEG_1) * M_PI / 180.0f);
 }
 
 /**

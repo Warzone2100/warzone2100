@@ -764,7 +764,7 @@ bool seq_Update()
 			{
 				for (j = 0; j < videodata.vi.channels; j++)
 				{
-					int val = nearbyint(pcm[j][i] * 32767.f);
+					int val = static_cast<int>(nearbyint(pcm[j][i] * 32767.f));
 
 					if (val > 32767)
 					{
@@ -991,7 +991,7 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 
 		if (aspect > videoAspect) // x offset
 		{
-			int offset = (screenWidth - screenHeight * videoAspect) / 2;
+			int offset = static_cast<int>((screenWidth - screenHeight * videoAspect) / 2);
 			vertices[1][0] += offset;
 			vertices[3][0] += offset;
 			vertices[0][0] -= offset;
@@ -999,7 +999,7 @@ void seq_SetDisplaySize(int sizeX, int sizeY, int posX, int posY)
 		}
 		else // y offset
 		{
-			int offset = (screenHeight - screenWidth / videoAspect) / 2;
+			int offset = static_cast<int>((screenHeight - screenWidth / videoAspect) / 2);
 			vertices[0][1] += offset;
 			vertices[1][1] += offset;
 			vertices[2][1] -= offset;

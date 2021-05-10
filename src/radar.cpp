@@ -125,9 +125,9 @@ static void setViewingWindow();
 
 static void radarSize(int ZoomLevel)
 {
-	float zoom = (float)ZoomLevel * RadarZoomMultiplier / 16.0;
-	radarWidth = radarTexWidth * zoom;
-	radarHeight = radarTexHeight * zoom;
+	float zoom = static_cast<float>(ZoomLevel) * RadarZoomMultiplier / 16.0f;
+	radarWidth = static_cast<size_t>(radarTexWidth * zoom);
+	radarHeight = static_cast<size_t>(radarTexHeight * zoom);
 	if (rotateRadar)
 	{
 		radarCenterX = pie_GetVideoBufferWidth() - BASE_GAP * 4 - static_cast<int>(MAX(radarHeight, radarWidth)) / 2;
@@ -183,7 +183,7 @@ bool resizeRadar()
 	}
 	debug(LOG_WZ, "Setting radar zoom to %u", RadarZoom);
 	radarSize(RadarZoom);
-	pie_SetRadar(-static_cast<float>(radarWidth) / 2.0 - 1, -static_cast<float>(radarHeight) / 2.0 - 1, static_cast<float>(radarWidth), static_cast<float>(radarHeight), radarTexWidth, radarTexHeight);
+	pie_SetRadar(-static_cast<float>(radarWidth) / 2.0f - 1, -static_cast<float>(radarHeight) / 2.0f - 1, static_cast<float>(radarWidth), static_cast<float>(radarHeight), radarTexWidth, radarTexHeight);
 
 	return true;
 }
@@ -238,12 +238,12 @@ void CalcRadarPosition(int mX, int mY, int *PosX, int *PosY)
 	{
 		pos = Vector2f_Rotate2f(pos, -playerPos.r.y);
 	}
-	pos.x += radarWidth / 2.0;
-	pos.y += radarHeight / 2.0;
+	pos.x += radarWidth / 2.0f;
+	pos.y += radarHeight / 2.0f;
 
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
-	sPosX = pos.x / pixSizeH;	// adjust for pixel size
-	sPosY = pos.y / pixSizeV;
+	sPosX = static_cast<int>(pos.x / pixSizeH);	// adjust for pixel size
+	sPosY = static_cast<int>(pos.y / pixSizeV);
 	sPosX += scrollMinX;		// adjust for scroll limits
 	sPosY += scrollMinY;
 
@@ -293,12 +293,12 @@ void drawRadar()
 
 	pie_RenderRadar(orthoMatrix * radarMatrix);
 	DrawRadarExtras(orthoMatrix * radarMatrix * glm::translate(glm::vec3(-static_cast<float>(radarWidth) / 2.f - 1.f, -static_cast<float>(radarHeight) / 2.f - 1.f, 0.f)));
-	drawRadarBlips(-static_cast<int>(radarWidth) / 2.0 - 1, -static_cast<int>(radarHeight) / 2.0 - 1, pixSizeH, pixSizeV, orthoMatrix * radarMatrix);
+	drawRadarBlips(static_cast<int>(-static_cast<int>(radarWidth) / 2.f - 1), static_cast<int>(-static_cast<int>(radarHeight) / 2.f - 1), pixSizeH, pixSizeV, orthoMatrix * radarMatrix);
 }
 
 static void DrawNorth(const glm::mat4 &modelViewProjectionMatrix)
 {
-	iV_DrawImage(IntImages, RADAR_NORTH, -((radarWidth / 2.0) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1), -(radarHeight / 2.0), modelViewProjectionMatrix);
+	iV_DrawImage(IntImages, RADAR_NORTH, static_cast<int>(-((radarWidth / 2.f) + iV_GetImageWidth(IntImages, RADAR_NORTH) + 1)), static_cast<int>(-(radarHeight / 2.f)), modelViewProjectionMatrix);
 }
 
 static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
@@ -318,9 +318,9 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrtf(col.byte.r * WTile->illumination);
-			col.byte.b = sqrtf(col.byte.b * WTile->illumination);
-			col.byte.g = sqrtf(col.byte.g * WTile->illumination);
+			col.byte.r = static_cast<uint8_t>(sqrtf(col.byte.r * WTile->illumination));
+			col.byte.b = static_cast<uint8_t>(sqrtf(col.byte.b * WTile->illumination));
+			col.byte.g = static_cast<uint8_t>(sqrtf(col.byte.g * WTile->illumination));
 			if (terrainType(WTile) == TER_CLIFFFACE)
 			{
 				col.byte.r /= 2;
@@ -347,9 +347,9 @@ static PIELIGHT appliedRadarColour(RADAR_DRAW_MODE drawMode, MAPTILE *WTile)
 			// draw radar terrain on/off feature
 			PIELIGHT col = tileColours[TileNumber_tile(WTile->texture)];
 
-			col.byte.r = sqrtf(col.byte.r * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2);
-			col.byte.b = sqrtf(col.byte.b * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2);
-			col.byte.g = sqrtf(col.byte.g * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2);
+			col.byte.r = static_cast<uint8_t>(sqrtf(col.byte.r * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2));
+			col.byte.b = static_cast<uint8_t>(sqrtf(col.byte.b * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2));
+			col.byte.g = static_cast<uint8_t>(sqrtf(col.byte.g * (WTile->illumination + WTile->height / ELEVATION_SCALE) / 2));
 			if (terrainType(WTile) == TER_CLIFFFACE)
 			{
 				col.byte.r /= 2;
@@ -557,14 +557,14 @@ static void RotateVector2D(Vector3i *Vector, Vector3i *TVector, Vector3i *Pos, i
 
 static SDWORD getDistanceAdjust()
 {
-	int dif = std::max<int>(MAXDISTANCE - getViewDistance(), 0);
+	int dif = std::max<int>(static_cast<int>(MAXDISTANCE - getViewDistance()), 0);
 
 	return dif / 100;
 }
 
 static SDWORD getLengthAdjust()
 {
-	const int pitch = 360 - (playerPos.r.x / DEG_1);
+	const int pitch = static_cast<int>(360 - (playerPos.r.x / DEG_1));
 
 	// Max at
 	const int lookingDown = (0 - MIN_PLAYER_X_ANGLE);
@@ -589,13 +589,13 @@ static void setViewingWindow()
 	int	dif2 = getLengthAdjust();
 	PIELIGHT colour;
 	CalcRadarPixelSize(&pixSizeH, &pixSizeV);
-	int x = playerPos.p.x * pixSizeH / TILE_UNITS;
-	int y = playerPos.p.z * pixSizeV / TILE_UNITS;
+	int x = static_cast<int>(playerPos.p.x * pixSizeH / TILE_UNITS);
+	int y = static_cast<int>(playerPos.p.z * pixSizeV / TILE_UNITS);
 
-	shortX = ((visibleTiles.x / 4) - (dif / 6)) * pixSizeH;
-	longX = ((visibleTiles.x / 2) - (dif / 4)) * pixSizeH;
-	yDropVar = ((visibleTiles.y / 2) - (dif2 / 3)) * pixSizeV;
-	yDrop = ((visibleTiles.y / 2) - dif2 / 3) * pixSizeV;
+	shortX = static_cast<int>(((visibleTiles.x / 4) - (dif / 6)) * pixSizeH);
+	longX = static_cast<int>(((visibleTiles.x / 2) - (dif / 4)) * pixSizeH);
+	yDropVar = static_cast<int>(((visibleTiles.y / 2) - (dif2 / 3)) * pixSizeV);
+	yDrop = static_cast<int>(((visibleTiles.y / 2) - dif2 / 3) * pixSizeV);
 
 	v[0].x = longX;
 	v[0].y = -yDropVar;
@@ -609,8 +609,8 @@ static void setViewingWindow()
 	v[3].x = -shortX;
 	v[3].y = yDrop;
 
-	centre.x = x - scrollMinX * pixSizeH;
-	centre.y = y - scrollMinY * pixSizeV;
+	centre.x = static_cast<int>(x - scrollMinX * pixSizeH);
+	centre.y = static_cast<int>(y - scrollMinY * pixSizeV);
 
 	RotateVector2D(v, tv, &centre, playerPos.r.y, 4);
 
@@ -658,8 +658,8 @@ bool CoordInRadar(int x, int y)
 	{
 		pos = Vector2f_Rotate2f(pos, -playerPos.r.y);
 	}
-	pos.x += radarWidth / 2.0;
-	pos.y += radarHeight / 2.0;
+	pos.x += radarWidth / 2.f;
+	pos.y += radarHeight / 2.f;
 
 	if (pos.x < 0 || pos.y < 0 || pos.x >= radarWidth || pos.y >= radarHeight)
 	{

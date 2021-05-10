@@ -426,7 +426,7 @@ bool drawShape(BASE_OBJECT *psObj, iIMDShape *strImd, int colour, PIELIGHT build
 
 		if (strImd->interpolate == 1)
 		{
-			const float frameFraction = fmod(elapsed / (float)strImd->objanimtime, strImd->objanimframes) - frame;
+			const float frameFraction = static_cast<float>(fmod(elapsed / (float)strImd->objanimtime, strImd->objanimframes) - frame);
 			const int nextFrame = (frame + 1) % strImd->objanimframes;
 			const ANIMFRAME &nextState = strImd->objanimdata.at(nextFrame);
 
@@ -559,7 +559,7 @@ static PIELIGHT structureBrightness(STRUCTURE *psStructure)
 	}
 	else
 	{
-		buildingBrightness = pal_SetBrightness(200 - 100 / 65536.f * getStructureDamage(psStructure));
+		buildingBrightness = pal_SetBrightness(static_cast<UBYTE>(200 - 100 / 65536.f * getStructureDamage(psStructure)));
 
 		/* If it's selected, then it's brighter */
 		if (psStructure->selected)
@@ -1102,10 +1102,10 @@ static void drawTiles(iView *player)
 	actualCameraPosition = Vector3i(0, 0, 0);
 
 	/* Set the camera position */
-	actualCameraPosition.z -= distance;
+	actualCameraPosition.z -= static_cast<int>(distance);
 
 	// Now, scale the world according to what resolution we're running in
-	actualCameraPosition.z /= pie_GetResScalingFactor() / 100.f;
+	actualCameraPosition.z /= static_cast<int>(pie_GetResScalingFactor() / 100.f);
 
 	/* Rotate for the player */
 	rotateSomething(actualCameraPosition.x, actualCameraPosition.y, -player->r.z);
@@ -1140,7 +1140,7 @@ static void drawTiles(iView *player)
 				MAPTILE *psTile = mapTile(playerXTile + j, playerZTile + i);
 
 				pos.y = map_TileHeight(playerXTile + j, playerZTile + i);
-				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness(psTile->level));
+				setTileColour(playerXTile + j, playerZTile + i, pal_SetBrightness(static_cast<UBYTE>(psTile->level)));
 			}
 			tileScreenInfo[idx][jdx].z = pie_RotateProject(&pos, viewMatrix, &screen);
 			tileScreenInfo[idx][jdx].x = screen.x;
@@ -1429,7 +1429,7 @@ bool clipShapeOnScreen(const iIMDShape *pIMD, const glm::mat4& viewModelMatrix, 
 	origin = Vector3i(0, wsRadius, 0); // take the center of the object
 
 	/* get the screen coordinates */
-	const float cZ = pie_RotateProject(&origin, viewModelMatrix, &center) * 0.1;
+	const float cZ = pie_RotateProject(&origin, viewModelMatrix, &center) * 0.1f;
 
 	// avoid division by zero
 	if (cZ > 0)
@@ -2520,7 +2520,7 @@ void renderStructure(STRUCTURE *psStructure, const glm::mat4 &viewMatrix)
 			pie_Draw3DShape(getFactionIMD(faction, psStructure->prebuiltImd), 0, colour, buildingBrightness, pie_SHADOW, 0,
 				viewModelMatrix);
 		}
-		pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, structHeightScale(psStructure) * pie_RAISE_SCALE, viewModelMatrix);
+		pie_Draw3DShape(getFactionIMD(faction, strImd), 0, colour, buildingBrightness, pie_HEIGHT_SCALED | pie_SHADOW, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewModelMatrix);
 		setScreenDisp(&psStructure->sDisplay, viewModelMatrix);
 		return;
 	}
@@ -2643,7 +2643,7 @@ static bool renderWallSection(STRUCTURE *psStructure, const glm::mat4 &viewMatri
 	if (psStructure->status == SS_BEING_BUILT)
 	{
 		pie_Draw3DShape(getFactionIMD(faction, psStructure->sDisplay.imd), 0, getPlayerColour(psStructure->player),
-		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, structHeightScale(psStructure) * pie_RAISE_SCALE, viewMatrix * modelMatrix);
+		                brightness, pie_HEIGHT_SCALED | pie_SHADOW | ecmFlag, static_cast<int>(structHeightScale(psStructure) * pie_RAISE_SCALE), viewMatrix * modelMatrix);
 	}
 	else
 	{
@@ -2698,7 +2698,7 @@ static void	drawDragBox()
 
 	PIELIGHT color = WZCOL_UNIT_SELECT_BOX;
 
-	color.byte.a = (float)color.byte.a * (1 - (dragBox3D.pulse / BOX_PULSE_SIZE)); // alpha relative to max pulse size
+	color.byte.a = static_cast<uint8_t>((float)color.byte.a * (1 - (dragBox3D.pulse / BOX_PULSE_SIZE))); // alpha relative to max pulse size
 
 	pie_UniTransBoxFill(X2, Y1, X2 + dragBox3D.pulse, Y2 + dragBox3D.pulse, color); // east side + south-east corner
 	pie_UniTransBoxFill(X1 - dragBox3D.pulse, Y2, X2, Y2 + dragBox3D.pulse, color); // south side + south-west corner
@@ -2736,7 +2736,7 @@ static void drawWeaponReloadBar(BASE_OBJECT *psObj, WEAPON *psWeap, int weapon_s
 		{
 			mulH = 100.f;
 		}
-		firingStage = mulH;
+		firingStage = static_cast<int>(mulH);
 		firingStage = ((((2 * scrR) * 10000) / 100) * firingStage) / 10000;
 		if (firingStage >= (UDWORD)(2 * scrR))
 		{
@@ -2856,7 +2856,7 @@ static void drawStructureHealth(STRUCTURE *psStruct)
 	else
 	{
 		//show body points
-		health = (1. - getStructureDamage(psStruct) / 65536.f) * 100;
+		health = static_cast<UDWORD>((1. - getStructureDamage(psStruct) / 65536.f) * 100);
 
 		// If structure is incomplete, make bar correspondingly thinner.
 		int maxBody = structureBody(psStruct);
@@ -3055,7 +3055,7 @@ void drawDroidSelection(DROID *psDroid, bool drawBox){
 		powerColShadow = WZCOL_HEALTH_LOW_SHADOW;
 	}
 
-	damage = (float)psDroid->body / (float)psDroid->originalBody * (float)psDroid->sDisplay.screenR;
+	damage = static_cast<UDWORD>((float)psDroid->body / (float)psDroid->originalBody * (float)psDroid->sDisplay.screenR);
 	if (damage > psDroid->sDisplay.screenR)
 	{
 		damage = psDroid->sDisplay.screenR;
@@ -3191,7 +3191,7 @@ static void	drawDroidSelections()
 				{
 					mulH = (float)psDroid->body / (float)psDroid->originalBody;
 				}
-				damage = mulH * (float)psDroid->sDisplay.screenR;// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
+				damage = static_cast<UDWORD>(mulH * (float)psDroid->sDisplay.screenR);// (((psDroid->sDisplay.screenR*10000)/100)*damage)/10000;
 				if (damage > psDroid->sDisplay.screenR)
 				{
 					damage = psDroid->sDisplay.screenR;
@@ -3403,7 +3403,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	origin = Vector3i(0, wsRadius, 0); // take the center of the object
 
 	/* get the screen coordinates */
-	const float cZ = pie_RotateProject(&origin, viewMatrix, &center) * 0.1;
+	const float cZ = pie_RotateProject(&origin, viewMatrix, &center) * 0.1f;
 
 	// avoid division by zero
 	if (cZ > 0)
@@ -3432,7 +3432,7 @@ void calcScreenCoords(DROID *psDroid, const glm::mat4 &viewMatrix)
 	/* Store away the screen coordinates so we can select the droids without doing a transform */
 	psDroid->sDisplay.screenX = center.x;
 	psDroid->sDisplay.screenY = center.y;
-	psDroid->sDisplay.screenR = radius;
+	psDroid->sDisplay.screenR = static_cast<UDWORD>(radius);
 }
 
 /**

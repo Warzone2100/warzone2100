@@ -280,15 +280,15 @@ bool loadConfig()
 	debug(LOG_WZ, "Reading configuration from: %s", fileStreamGenerator->realPath().c_str());
 	if (auto value = iniGetIntegerOpt("voicevol"))
 	{
-		sound_SetUIVolume(static_cast<double>(value.value()) / 100.0);
+		sound_SetUIVolume(static_cast<float>(value.value()) / 100.0f);
 	}
 	if (auto value = iniGetIntegerOpt("fxvol"))
 	{
-		sound_SetEffectsVolume(static_cast<double>(value.value()) / 100.0);
+		sound_SetEffectsVolume(static_cast<float>(value.value()) / 100.0f);
 	}
 	if (auto value = iniGetIntegerOpt("cdvol"))
 	{
-		sound_SetMusicVolume(static_cast<double>(value.value()) / 100.0);
+		sound_SetMusicVolume(static_cast<float>(value.value()) / 100.0f);
 	}
 	if (auto value = iniGetBoolOpt("music_enabled"))
 	{

@@ -154,7 +154,7 @@ void W_LABEL::display(int xOffset, int yOffset)
 		if (lineWidthLimit > -1)
 		{
 			// Render ellipsis
-			iV_DrawEllipsis(FontID, Vector2i(textBoundingBoxOffset.x + fx + lineWidthLimit + 2, fy), fontColour);
+			iV_DrawEllipsis(FontID, Vector2f(textBoundingBoxOffset.x + fx + lineWidthLimit + 2, fy), fontColour);
 			isTruncated = true;
 		}
 		jy += wzTextLine->lineSize() + lineSpacing;

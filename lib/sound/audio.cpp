@@ -722,7 +722,7 @@ static bool audio_Play3DTrack(SDWORD iX, SDWORD iY, SDWORD iZ, int iTrack, SIMPL
 	distance = sqrtf(dX * dX + dY * dY + dZ * dZ); // Pythagorean theorem
 
 	// compute gain
-	gain = (1.0 - (distance * ATTENUATION_FACTOR)) ;//* 1.0f * sfx3d_volume
+	gain = (1.0f - (distance * ATTENUATION_FACTOR)) ;//* 1.0f * sfx3d_volume
 	if (gain > 1.0f)
 	{
 		gain = 1.0f;
