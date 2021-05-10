@@ -1526,10 +1526,10 @@ void handleWindowSizeChange(unsigned int oldWidth, unsigned int oldHeight, unsig
 	// NOTE: This function receives the window size in the window's logical units, but not accounting for the interface scale factor.
 	// Therefore, the provided old/newWidth/Height must be divided by the interface scale factor to calculate the new
 	// *game* screen logical width / height.
-	unsigned int oldScreenWidth = oldWidth / current_displayScaleFactor;
-	unsigned int oldScreenHeight = oldHeight / current_displayScaleFactor;
-	unsigned int newScreenWidth = newWidth / current_displayScaleFactor;
-	unsigned int newScreenHeight = newHeight / current_displayScaleFactor;
+	unsigned int oldScreenWidth = static_cast<unsigned int>(oldWidth / current_displayScaleFactor);
+	unsigned int oldScreenHeight = static_cast<unsigned int>(oldHeight / current_displayScaleFactor);
+	unsigned int newScreenWidth = static_cast<unsigned int>(newWidth / current_displayScaleFactor);
+	unsigned int newScreenHeight = static_cast<unsigned int>(newHeight / current_displayScaleFactor);
 
 	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
 
@@ -1572,7 +1572,7 @@ float wzGetMaximumDisplayScaleFactorForWindowSize(unsigned int width, unsigned i
 unsigned int wzGetMaximumDisplayScaleForWindowSize(unsigned int width, unsigned int height)
 {
 	float maxDisplayScaleFactor = wzGetMaximumDisplayScaleFactorForWindowSize(width, height);
-	unsigned int maxDisplayScalePercentage = floor(maxDisplayScaleFactor * 100.f);
+	unsigned int maxDisplayScalePercentage = static_cast<unsigned int>(floor(maxDisplayScaleFactor * 100.f));
 
 	auto availableDisplayScales = wzAvailableDisplayScales();
 	std::sort(availableDisplayScales.begin(), availableDisplayScales.end());
@@ -1798,10 +1798,10 @@ bool wzChangeDisplayScale(unsigned int displayScale)
 	// Update the game's logical screen size
 	unsigned int oldScreenWidth = screenWidth, oldScreenHeight = screenHeight;
 	unsigned int newScreenWidth = windowWidth, newScreenHeight = windowHeight;
-	if (newDisplayScaleFactor > 1.0)
+	if (newDisplayScaleFactor > 1.0f)
 	{
-		newScreenWidth = windowWidth / newDisplayScaleFactor;
-		newScreenHeight = windowHeight / newDisplayScaleFactor;
+		newScreenWidth = static_cast<unsigned int>(windowWidth / newDisplayScaleFactor);
+		newScreenHeight = static_cast<unsigned int>(windowHeight / newDisplayScaleFactor);
 	}
 	handleGameScreenSizeChange(oldScreenWidth, oldScreenHeight, newScreenWidth, newScreenHeight);
 	gameDisplayScaleFactorDidChange(newDisplayScaleFactor);
@@ -2422,8 +2422,8 @@ optional<SDL_gfx_api_Impl_Factory::Configuration> wzMainScreenSetup_CreateVideoW
 	screenHeight = windowHeight;
 	if (current_displayScaleFactor > 1.0f)
 	{
-		screenWidth = windowWidth / current_displayScaleFactor;
-		screenHeight = windowHeight / current_displayScaleFactor;
+		screenWidth = static_cast<unsigned int>(windowWidth / current_displayScaleFactor);
+		screenHeight = static_cast<unsigned int>(windowHeight / current_displayScaleFactor);
 	}
 	pie_SetVideoBufferWidth(screenWidth);
 	pie_SetVideoBufferHeight(screenHeight);

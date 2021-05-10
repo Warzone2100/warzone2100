@@ -154,7 +154,7 @@ uint16_t iAtan2(int32_t s, int32_t c)
 
 int32_t iSqrt(uint32_t n)
 {
-	uint32_t r = sqrt((double)n);          // Calculate square root, rounded down. Excess precision does not change the result.
+	uint32_t r = (uint32_t) sqrt((double)n);          // Calculate square root, rounded down. Excess precision does not change the result.
 
 	// Check that we got the right result.
 	ASSERT((int32_t)(r * r - n) <= 0 && (int32_t)((r + 1) * (r + 1) - n) > 0, "Too badly broken sqrt function, iSqrt(%u) = %u.", (unsigned)n, (unsigned)r);

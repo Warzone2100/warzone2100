@@ -398,14 +398,20 @@ void	camAlignWithTarget(DROID *psDroid)
 	trackingCamera.target = psDroid;
 
 	/* Save away all the view angles */
-	trackingCamera.oldView.r.x = trackingCamera.rotation.x = (float)playerPos.r.x;
-	trackingCamera.oldView.r.y = trackingCamera.rotation.y = (float)playerPos.r.y;
-	trackingCamera.oldView.r.z = trackingCamera.rotation.z = (float)playerPos.r.z;
+	trackingCamera.rotation.x = (float)playerPos.r.x;
+	trackingCamera.rotation.y = (float)playerPos.r.y;
+	trackingCamera.rotation.z = (float)playerPos.r.z;
+	trackingCamera.oldView.r.x = playerPos.r.x;
+	trackingCamera.oldView.r.y = playerPos.r.y;
+	trackingCamera.oldView.r.z = playerPos.r.z;
 
 	/* Store away the old positions and set the start position too */
-	trackingCamera.oldView.p.x = trackingCamera.position.x = (float)playerPos.p.x;
-	trackingCamera.oldView.p.y = trackingCamera.position.y = (float)playerPos.p.y;
-	trackingCamera.oldView.p.z = trackingCamera.position.z = (float)playerPos.p.z;
+	trackingCamera.position.x = (float)playerPos.p.x;
+	trackingCamera.position.y = (float)playerPos.p.y;
+	trackingCamera.position.z = (float)playerPos.p.z;
+	trackingCamera.oldView.p.x = playerPos.p.x;
+	trackingCamera.oldView.p.y = playerPos.p.y;
+	trackingCamera.oldView.p.z = playerPos.p.z;
 
 	//	trackingCamera.rotation.x = player.r.x = DEG(-90);
 	/* No initial velocity for moving */
@@ -686,7 +692,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 		}
 
 		/* Which way are we facing? */
-		worldAngle = trackingCamera.rotation.y;
+		worldAngle = static_cast<SDWORD>(trackingCamera.rotation.y);
 		separation = angleDelta(yConcern - worldAngle);
 
 		/* Make new acceleration */
@@ -713,7 +719,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 		{
 			trackingCamera.rotation.x += DEG(360);
 		}
-		worldAngle =  trackingCamera.rotation.x;
+		worldAngle = static_cast<SDWORD>(trackingCamera.rotation.x);
 		separation = angleDelta(xConcern - worldAngle);
 
 		/* Make new acceleration */
@@ -737,7 +743,7 @@ static void updateCameraRotationAcceleration(UBYTE update)
 		{
 			trackingCamera.rotation.z += DEG(360);
 		}
-		worldAngle =  trackingCamera.rotation.z;
+		worldAngle = static_cast<SDWORD>(trackingCamera.rotation.z);
 		separation = (float)((zConcern - worldAngle));
 		if (separation < DEG(-180))
 		{
@@ -840,14 +846,14 @@ static bool camTrackCamera()
 	}
 
 	/* Update the position that's now stored in trackingCamera.position */
-	playerPos.p.x = trackingCamera.position.x;
-	playerPos.p.y = trackingCamera.position.y;
-	playerPos.p.z = trackingCamera.position.z;
+	playerPos.p.x = static_cast<int>(trackingCamera.position.x);
+	playerPos.p.y = static_cast<int>(trackingCamera.position.y);
+	playerPos.p.z = static_cast<int>(trackingCamera.position.z);
 
 	/* Update the rotations that're now stored in trackingCamera.rotation */
-	playerPos.r.x = trackingCamera.rotation.x;
-	playerPos.r.y = trackingCamera.rotation.y;
-	playerPos.r.z = trackingCamera.rotation.z;
+	playerPos.r.x = static_cast<int>(trackingCamera.rotation.x);
+	playerPos.r.y = static_cast<int>(trackingCamera.rotation.y);
+	playerPos.r.z = static_cast<int>(trackingCamera.rotation.z);
 
 	/* There's a minimum for this - especially when John's VTOL code lets them land vertically on cliffs */
 	if (playerPos.r.x > DEG(360 + MAX_PLAYER_X_ANGLE))
@@ -951,7 +957,7 @@ void requestRadarTrack(SDWORD x, SDWORD y)
 {
 	auto initialPosition = Vector3f(playerPos.p);
 	auto targetPosition = Vector3f(x, calculateCameraHeightAt(map_coord(x), map_coord(y)), y);
-	auto animationDuration = glm::log(glm::length(targetPosition - initialPosition)) * 100;
+	auto animationDuration = static_cast<uint32_t>(glm::log(glm::length(targetPosition - initialPosition)) * 100);
 	auto finalRotation = trackingCamera.status == CAM_TRACK_DROID ? trackingCamera.oldView.r : playerPos.r;
 	finalRotation.z = 0;
 

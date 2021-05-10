@@ -74,9 +74,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 	switch (objectType)
 	{
 	case RENDER_PARTICLE:
-		position.x = ((ATPART *)pObject)->position.x;
-		position.y = ((ATPART *)pObject)->position.y;
-		position.z = ((ATPART *)pObject)->position.z;
+		position.x = static_cast<int>(((ATPART *)pObject)->position.x);
+		position.y = static_cast<int>(((ATPART *)pObject)->position.y);
+		position.z = static_cast<int>(((ATPART *)pObject)->position.z);
 
 		position.x = position.x - playerPos.p.x;
 		position.z = -(position.z - playerPos.p.z);
@@ -251,9 +251,9 @@ static SDWORD bucketCalculateZ(RENDER_TYPE objectType, void *pObject, const glm:
 		}
 		break;
 	case RENDER_EFFECT:
-		position.x = ((EFFECT *)pObject)->position.x - playerPos.p.x;
-		position.z = -(((EFFECT *)pObject)->position.z - playerPos.p.z);
-		position.y = ((EFFECT *)pObject)->position.y;
+		position.x = static_cast<int>(((EFFECT *)pObject)->position.x - playerPos.p.x);
+		position.z = static_cast<int>(-(((EFFECT *)pObject)->position.z - playerPos.p.z));
+		position.y = static_cast<int>(((EFFECT *)pObject)->position.y);
 
 		/* 16 below is HACK!!! */
 		z = pie_RotateProject(&position, viewMatrix, &pixel) - 16;

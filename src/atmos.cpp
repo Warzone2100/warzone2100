@@ -142,7 +142,7 @@ static void processParticle(ATPART *psPart)
 		if (psPart->position.y < TILE_MAX_HEIGHT)
 		{
 			/* Get ground height */
-			groundHeight = map_Height(psPart->position.x, psPart->position.z);
+			groundHeight = map_Height(static_cast<int>(psPart->position.x), static_cast<int>(psPart->position.z));
 
 			/* Are we below ground? */
 			if ((int)psPart->position.y < groundHeight
@@ -152,13 +152,13 @@ static void processParticle(ATPART *psPart)
 				psPart->status = APS_INACTIVE;
 				if (psPart->type == AP_RAIN)
 				{
-					x = map_coord(psPart->position.x);
-					y = map_coord(psPart->position.z);
+					x = map_coord(static_cast<int32_t>(psPart->position.x));
+					y = map_coord(static_cast<int32_t>(psPart->position.z));
 					psTile = mapTile(x, y);
 					if (terrainType(psTile) == TER_WATER && TEST_TILE_VISIBLE(selectedPlayer, psTile))
 					{
-						pos.x = psPart->position.x;
-						pos.z = psPart->position.z;
+						pos.x = static_cast<int>(psPart->position.x);
+						pos.z = static_cast<int>(psPart->position.z);
 						pos.y = groundHeight;
 						effectSetSize(60);
 						addEffect(&pos, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_SPLASH), 0);
@@ -273,7 +273,7 @@ void atmosUpdateSystem()
 			accumulatedParticlesToAdd += ((weather == WT_SNOWING) ? 2.0 : 4.0) * gameTimeModVal;
 		}
 
-		numberToAdd = accumulatedParticlesToAdd;
+		numberToAdd = static_cast<UDWORD>(accumulatedParticlesToAdd);
 		accumulatedParticlesToAdd -= numberToAdd;
 
 		/* Temporary stuff - just adds a few particles! */
@@ -323,7 +323,7 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix)
 		if (asAtmosParts[i].status == APS_ACTIVE)
 		{
 			/* Is it visible on the screen? */
-			if (clipXYZ(asAtmosParts[i].position.x, asAtmosParts[i].position.z, asAtmosParts[i].position.y, viewMatrix))
+			if (clipXYZ(static_cast<int>(asAtmosParts[i].position.x), static_cast<int>(asAtmosParts[i].position.z), static_cast<int>(asAtmosParts[i].position.y), viewMatrix))
 			{
 				renderParticle(&asAtmosParts[i], viewMatrix);
 			}
@@ -333,7 +333,7 @@ void atmosDrawParticles(const glm::mat4 &viewMatrix)
 
 void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 {
-	Vector3i dv;
+	glm::vec3 dv;
 
 	/* Transform it */
 	dv.x = psPart->position.x - playerPos.p.x;
@@ -341,7 +341,7 @@ void renderParticle(ATPART *psPart, const glm::mat4 &viewMatrix)
 	dv.z = -(psPart->position.z - playerPos.p.z);
 	/* Make it face camera */
 	/* Scale it... */
-	const glm::mat4 modelMatrix = glm::translate(glm::vec3(dv)) *
+	const glm::mat4 modelMatrix = glm::translate(dv) *
 		glm::rotate(UNDEG(-playerPos.r.y), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::rotate(UNDEG(-playerPos.r.x), glm::vec3(0.f, 1.f, 0.f)) *
 		glm::scale(glm::vec3(psPart->size / 100.f));

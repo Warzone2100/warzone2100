@@ -78,11 +78,11 @@ int32_t pie_RotateProject(const Vector3i *v3d, const glm::mat4& matrix, Vector2i
 	}
 	else
 	{
-		v2d->x = (.5 + .5 * xx) * pie_GetVideoBufferWidth();
-		v2d->y = (.5 - .5 * yy) * pie_GetVideoBufferHeight();
+		v2d->x = static_cast<int>((.5 + .5 * xx) * pie_GetVideoBufferWidth());
+		v2d->y = static_cast<int>((.5 - .5 * yy) * pie_GetVideoBufferHeight());
 	}
 
-	return v.w;
+	return static_cast<int32_t>(v.w);
 }
 
 const glm::mat4& pie_PerspectiveGet()

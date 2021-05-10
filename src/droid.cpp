@@ -2195,7 +2195,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 					case REF_REARM_PAD:
 
 						if (range < 0
-						    || world_coord(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y))) < range)	//enemy in range
+						    || world_coord(static_cast<int32_t>(hypotf(tx - map_coord(psStruct->pos.x), ty - map_coord(psStruct->pos.y)))) < range)	//enemy in range
 						{
 							return true;
 						}
@@ -2223,7 +2223,7 @@ static bool ThreatInRange(SDWORD player, SDWORD range, SDWORD rangeX, SDWORD ran
 				}
 
 				if (range < 0
-				    || world_coord(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y))) < range)	//enemy in range
+				    || world_coord(static_cast<int32_t>(hypotf(tx - map_coord(psDroid->pos.x), ty - map_coord(psDroid->pos.y)))) < range)	//enemy in range
 				{
 					return true;
 				}

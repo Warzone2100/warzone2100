@@ -44,7 +44,7 @@
 // These magic values determine the fog
 #define FOG_BEGIN 4000
 #define FOG_END 8000
-#define FOG_ALTITUDE_COEFFICIENT 1.3
+#define FOG_ALTITUDE_COEFFICIENT 1.3f
 
 /*	The vector that holds the sun's lighting direction - planar */
 static Vector3f theSun(0.f, 0.f, 0.f);
@@ -222,7 +222,7 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	for (int dir = 0; dir < Dirs; ++dir) {
 		float maxTangent = 0;
 		for (int dist = 1; dist < 9; ++dist) {
-			float tangent = (map_Height(clip<int>(cx + dx[dir]*dist, 0, maxX), clip<int>(cy + dy[dir]*dist, 0, maxY)) - height)/(I*dist);
+			float tangent = (map_Height(clip<int>(static_cast<int>(cx + dx[dir]*dist), 0, maxX), clip<int>(static_cast<int>(cy + dy[dir]*dist), 0, maxY)) - height)/(I*dist);
 			maxTangent = std::max(maxTangent, tangent);
 		}
 		// Ambient light in this direction is proportional to the integral from tan(φ) = tangent to tan(φ) = ∞ of dφ cos(φ).
@@ -231,15 +231,15 @@ static void calcTileIllum(UDWORD tileX, UDWORD tileY)
 	}
 	ao *= 1.f/Dirs;
 
-	mapTile(tileX, tileY)->illumination = static_cast<uint8_t>(clip<int>(abs(dotProduct*ao), 1, 254));
+	mapTile(tileX, tileY)->illumination = static_cast<uint8_t>(clip<int>(static_cast<int>(abs(dotProduct*ao)), 1, 254));
 }
 
 static void colourTile(SDWORD xIndex, SDWORD yIndex, PIELIGHT light_colour, double fraction)
 {
 	PIELIGHT colour = getTileColour(xIndex, yIndex);
-	colour.byte.r = MIN(255, colour.byte.r + light_colour.byte.r * fraction);
-	colour.byte.g = MIN(255, colour.byte.g + light_colour.byte.g * fraction);
-	colour.byte.b = MIN(255, colour.byte.b + light_colour.byte.b * fraction);
+	colour.byte.r = static_cast<uint8_t>(MIN(255, colour.byte.r + light_colour.byte.r * fraction));
+	colour.byte.g = static_cast<uint8_t>(MIN(255, colour.byte.g + light_colour.byte.g * fraction));
+	colour.byte.b = static_cast<uint8_t>(MIN(255, colour.byte.b + light_colour.byte.b * fraction));
 	setTileColour(xIndex, yIndex, colour);
 }
 
@@ -253,7 +253,7 @@ void processLight(LIGHT *psLight)
 
 	const int tileX = psLight->position.x / TILE_UNITS;
 	const int tileY = psLight->position.z / TILE_UNITS;
-	const int rangeSkip = sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1;
+	const int rangeSkip = static_cast<int>(sqrtf(psLight->range * psLight->range * 2) / TILE_UNITS + 1);
 
 	/* Rough guess? */
 	int startX = tileX - rangeSkip;
@@ -350,7 +350,7 @@ void calcDroidIllumination(DROID *psDroid)
 	presVal = psDroid->illumination;
 	adjust = (float)lightVal - (float)presVal;
 	adjust *= graphicsTimeAdjustedIncrement(DROID_SEEK_LIGHT_SPEED);
-	retVal = presVal + adjust;
+	retVal = static_cast<int>(presVal + adjust);
 	if (retVal > 255)
 	{
 		retVal = 255;

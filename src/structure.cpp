@@ -3446,7 +3446,7 @@ static bool canSmoke(const STRUCTURE *psStruct)
 
 static float CalcStructureSmokeInterval(float damage)
 {
-	return (((1. - damage) + 0.1) * 10) * STRUCTURE_DAMAGE_SCALING;
+	return static_cast<float>((((1. - damage) + 0.1) * 10) * STRUCTURE_DAMAGE_SCALING);
 }
 
 void _syncDebugStructure(const char *function, STRUCTURE const *psStruct, char ch)
@@ -3690,7 +3690,7 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 		// Is there any damage?
 		if (damage > 0.)
 		{
-			emissionInterval = CalcStructureSmokeInterval(damage / 65536.f);
+			emissionInterval = static_cast<UDWORD>(CalcStructureSmokeInterval(damage / 65536.f));
 			unsigned effectTime = std::max(gameTime - deltaGameTime + 1, psBuilding->lastEmission + emissionInterval);
 			if (gameTime >= effectTime)
 			{
@@ -3773,10 +3773,10 @@ void structureUpdate(STRUCTURE *psBuilding, bool bMission)
 
 				pointIndex = rand() % (psBuilding->sDisplay.imd->points.size() - 1);
 				point = &(psBuilding->sDisplay.imd->points.at(pointIndex));
-				position.x = psBuilding->pos.x + point->x;
-				realY = structHeightScale(psBuilding) * point->y;
+				position.x = static_cast<int>(psBuilding->pos.x + point->x);
+				realY = static_cast<SDWORD>(structHeightScale(psBuilding) * point->y);
 				position.y = psBuilding->pos.z + realY;
-				position.z = psBuilding->pos.y - point->z;
+				position.z = static_cast<int>(psBuilding->pos.y - point->z);
 
 				effectSetSize(30);
 				addEffect(&position, EFFECT_EXPLOSION, EXPLOSION_TYPE_SPECIFIED, true, getImdFromIndex(MI_PLASMA), 0, gameTime - deltaGameTime + rand() % deltaGameTime);
@@ -4406,7 +4406,7 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 	unsigned burnDuration = bMinor ? burnDurationWall : bDerrick ? burnDurationOilWell : burnDurationOther;
 	if (psDel->status == SS_BEING_BUILT)
 	{
-		burnDuration = burnDuration * structureCompletionProgress(*psDel);
+		burnDuration = static_cast<unsigned>(burnDuration * structureCompletionProgress(*psDel));
 	}
 
 	/* Only add if visible */
@@ -5566,7 +5566,7 @@ unsigned structureBodyBuilt(const STRUCTURE *psStructure)
 	{
 		// Calculate the body points the structure would have, if not damaged.
 		unsigned unbuiltBody = (maxBody + 9) / 10;  // See droidStartBuild() in droid.cpp.
-		unsigned deltaBody = maxBody * 9 * structureCompletionProgress(*psStructure) / 10;  // See structureBuild() in structure.cpp.
+		unsigned deltaBody = static_cast<unsigned>(maxBody * 9 * structureCompletionProgress(*psStructure) / 10);  // See structureBuild() in structure.cpp.
 		maxBody = unbuiltBody + deltaBody;
 	}
 

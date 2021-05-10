@@ -183,8 +183,8 @@ void intDisplayPowerBar(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	lastRealTime = realTime;
 
 	ManPow = ManuPower / POWERBAR_SCALE;
-	Avail = (displayPower + 1e-8) / POWERBAR_SCALE;
-	realPower = (displayPower + 1e-8) - ManuPower;
+	Avail = static_cast<SDWORD>((displayPower + 1e-8) / POWERBAR_SCALE);
+	realPower = static_cast<SDWORD>((displayPower + 1e-8) - ManuPower);
 	ManuPower = 0;
 
 	BarWidth = BarGraph->width();
@@ -1097,11 +1097,11 @@ void IntFancyButton::displayIMD(Image image, ImdObject imdObject, int xOffset, i
 			BASE_STATS *psStats = (BASE_STATS *)Object;
 			if (psStats->id.compare("SuperTransportBody") == 0)
 			{
-				model.scale *= .4;
+				model.scale = static_cast<int>(model.scale * .4f);
 			}
 			else if (psStats->id.compare("TransporterBody") == 0)
 			{
-				model.scale *= .6;
+				model.scale = static_cast<int>(model.scale * .6f);
 			}
 		}
 		else if (IMDType == IMDTYPE_RESEARCH)
@@ -1761,13 +1761,13 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 		{
 			const VIEW_PROXIMITY *psViewProx = (VIEW_PROXIMITY *)psProxDisp->psMessage->pViewData->pData;
 
-			x = (psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH;
-			y = (psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV;
+			x = static_cast<int>((psViewProx->x / TILE_UNITS - scrollMinX) * pixSizeH);
+			y = static_cast<int>((psViewProx->y / TILE_UNITS - scrollMinY) * pixSizeV);
 		}
 		else if (psProxDisp->type == POS_PROXOBJ)
 		{
-			x = (psProxDisp->psMessage->psObj->pos.x / TILE_UNITS - scrollMinX) * pixSizeH;
-			y = (psProxDisp->psMessage->psObj->pos.y / TILE_UNITS - scrollMinY) * pixSizeV;
+			x = static_cast<int>((psProxDisp->psMessage->psObj->pos.x / TILE_UNITS - scrollMinX) * pixSizeH);
+			y = static_cast<int>((psProxDisp->psMessage->psObj->pos.y / TILE_UNITS - scrollMinY) * pixSizeV);
 		}
 		else
 		{
@@ -1789,8 +1789,8 @@ void drawRadarBlips(int radarX, int radarY, float pixSizeH, float pixSizeV, cons
 	{
 		unsigned        animationLength = ARRAY_SIZE(imagesEnemy) - 1;
 		int             strobe = (realTime / delay) % animationLength;
-		x = (x / TILE_UNITS - scrollMinX) * pixSizeH;
-		y = (y / TILE_UNITS - scrollMinY) * pixSizeV;
+		x = static_cast<int>((x / TILE_UNITS - scrollMinX) * pixSizeH);
+		y = static_cast<int>((y / TILE_UNITS - scrollMinY) * pixSizeV);
 		imageID = imagesEnemy[strobe];
 
 		// NOTE:  On certain missions (limbo & expand), there is still valid data that is stored outside the

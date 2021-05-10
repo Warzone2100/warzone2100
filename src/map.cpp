@@ -284,7 +284,7 @@ fallback:
 			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = textureSize ;
+			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
 		}
 
 		SetGroundForTile("tileset/arizonaground.txt", "arizona_ground");
@@ -328,7 +328,7 @@ fallback:
 			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
+			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
 		}
 
 		SetGroundForTile("tileset/urbanground.txt", "urban_ground");
@@ -372,7 +372,7 @@ fallback:
 			pFileData = strchr(pFileData, '\n') + 1;
 
 			psGroundTypes[getTextureType(textureType)].textureName = strdup(textureName);
-			psGroundTypes[getTextureType(textureType)].textureSize = textureSize;
+			psGroundTypes[getTextureType(textureType)].textureSize = static_cast<float>(textureSize);
 		}
 
 		SetGroundForTile("tileset/rockieground.txt", "rockie_ground");

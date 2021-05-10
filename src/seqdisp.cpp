@@ -522,8 +522,8 @@ static bool seq_AddTextFromFile(const char *pTextName, SEQ_TEXT_POSITIONING text
 				// Since all the positioning was hardcoded to specific values, we now calculate the
 				// ratio of our screen, compared to what the game expects and multiply that to x, y.
 				// This makes the text always take up the full screen, instead of original style.
-				xOffset = (double)pie_GetVideoBufferWidth() / 640. * (double)xOffset;
-				yOffset = (double)pie_GetVideoBufferHeight() / 480. * (double)yOffset;
+				xOffset = static_cast<SDWORD>((double)pie_GetVideoBufferWidth() / 640. * (double)xOffset);
+				yOffset = static_cast<SDWORD>((double)pie_GetVideoBufferHeight() / 480. * (double)yOffset);
 				//get the text
 				pText = strrchr(pCurrentLine, '"');
 				ASSERT(pText != nullptr, "error parsing text file");

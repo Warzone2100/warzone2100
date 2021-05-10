@@ -397,7 +397,7 @@ static gfx_api::texture* loadImageToTexture(const std::string& imagePath)
 		return nullptr;
 	}
 	auto pixel_format = iV_getPixelFormat(&ivImage);
-	size_t mip_count = floor(log(std::max(ivImage.width, ivImage.height))) + 1;
+	size_t mip_count = static_cast<size_t>(floor(log(std::max(ivImage.width, ivImage.height)))) + 1;
 	gfx_api::texture* pAlbumCoverTexture = gfx_api::context::get().create_texture(mip_count, ivImage.width, ivImage.height, pixel_format);
 	pAlbumCoverTexture->upload_and_generate_mipmaps(0u, 0u, ivImage.width, ivImage.height, pixel_format, ivImage.bmp);
 	iV_unloadImage(&ivImage);

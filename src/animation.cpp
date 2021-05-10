@@ -86,7 +86,7 @@ int ValueTracker::getCurrent()
 	{
 		return this->target;
 	}
-	return this->current;
+	return static_cast<int>(this->current);
 }
 int ValueTracker::getCurrentDelta()
 {
@@ -94,7 +94,7 @@ int ValueTracker::getCurrentDelta()
 	{
 		return this->targetDelta;
 	}
-	return this->current - this->initial;
+	return static_cast<int>(this->current - this->initial);
 }
 int ValueTracker::getInitial()
 {
@@ -202,7 +202,7 @@ Animation<AnimatableData> &Animation<AnimatableData>::setEasing(EasingType easin
 template <class AnimatableData>
 Animation<AnimatableData> &Animation<AnimatableData>::setDuration(uint32_t durationMilliseconds)
 {
-	duration = durationMilliseconds * 0.001 * GAME_TICKS_PER_SEC;
+	duration = static_cast<uint32_t>(durationMilliseconds * 0.001 * GAME_TICKS_PER_SEC);
 	return *this;
 }
 
@@ -224,9 +224,9 @@ void RotationAnimation::start()
 {
 	finalData = Vector3f((uint16_t)finalData.x, (uint16_t)finalData.y, (uint16_t)finalData.z);
 	initialData = Vector3f(
-		calculateRelativeAngle(initialData.x, finalData.x),
-		calculateRelativeAngle(initialData.y, finalData.y),
-		calculateRelativeAngle(initialData.z, finalData.z)
+		calculateRelativeAngle(static_cast<uint16_t>(initialData.x), static_cast<uint16_t>(finalData.x)),
+		calculateRelativeAngle(static_cast<uint16_t>(initialData.y), static_cast<uint16_t>(finalData.y)),
+		calculateRelativeAngle(static_cast<uint16_t>(initialData.z), static_cast<uint16_t>(finalData.z))
 	);
 	Animation::start();
 }

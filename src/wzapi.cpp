@@ -359,7 +359,7 @@ bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string 
 	uint16_t uint_direction = 0;
 	if (_direction.has_value())
 	{
-		uint_direction = DEG(_direction.value());
+		uint_direction = static_cast<uint16_t>(DEG(_direction.value()));
 	}
 
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
@@ -449,7 +449,7 @@ bool wzapi::setSky(WZAPI_PARAMS(std::string page, float wind, float scale))
 //--
 bool wzapi::cameraSlide(WZAPI_PARAMS(float x, float y))
 {
-	requestRadarTrack(x, y);
+	requestRadarTrack(static_cast<SDWORD>(x), static_cast<SDWORD>(y));
 	return true;
 }
 
@@ -570,7 +570,7 @@ bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY
 	{
 		DROID *psDroid = (DROID *)psObject;
 		SCRIPT_ASSERT(false, context, psDroid, "No such droid id %d belonging to player %d", id, player);
-		psDroid->body = health * (double)psDroid->originalBody / 100;
+		psDroid->body = static_cast<UDWORD>(health * (double)psDroid->originalBody / 100);
 	}
 	else if (type == OBJ_STRUCTURE)
 	{
@@ -3046,7 +3046,7 @@ wzapi::no_return_value wzapi::loadLevel(WZAPI_PARAMS(std::string levelName))
 wzapi::no_return_value wzapi::setDroidExperience(WZAPI_PARAMS(DROID *psDroid, double experience))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
-	psDroid->experience = experience * 65536;
+	psDroid->experience = static_cast<uint32_t>(experience * 65536);
 	return {};
 }
 

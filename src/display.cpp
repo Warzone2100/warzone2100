@@ -180,7 +180,7 @@ void animateToViewDistance(float target, float speed)
 		.setInitialData(getViewDistance())
 		.setFinalData(target)
 		.setEasing(viewDistanceAnimation.isActive() ? EASE_OUT : EASE_IN_OUT)
-		.setDuration(speed <= 0 ? 0 : glm::log(std::abs(target - getViewDistance())) * 100 * DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED / speed)
+		.setDuration(speed <= 0 ? 0 : static_cast<uint32_t>(glm::log(std::abs(target - getViewDistance())) * 100 * DEFAULT_VIEW_DISTANCE_ANIMATION_SPEED / speed))
 		.start();
 }
 
@@ -956,26 +956,26 @@ static void calcScroll(float *y, float *dydt, float accel, float decel, float ta
 	// Decelerate if needed.
 	tMid = (0 - *dydt) / decel;
 	CLIP(tMid, 0, dt);
-	*y += *dydt * tMid + decel / 2 * tMid * tMid;
+	*y += static_cast<float>(*dydt * tMid + decel / 2 * tMid * tMid);
 	if (cameraAccel)
 	{
-		*dydt += decel * tMid;
+		*dydt += static_cast<float>(decel * tMid);
 	}
-	dt -= tMid;
+	dt -= static_cast<float>(tMid);
 
 	// Accelerate if needed.
 	tMid = (targetVelocity - *dydt) / accel;
 	CLIP(tMid, 0, dt);
-	*y += *dydt * tMid + accel / 2 * tMid * tMid;
+	*y += static_cast<float>(*dydt * tMid + accel / 2 * tMid * tMid);
 	if (cameraAccel)
 	{
-		*dydt += accel * tMid;
+		*dydt += static_cast<float>(accel * tMid);
 	}
 	else
 	{
 		*dydt = targetVelocity;
 	}
-	dt -= tMid;
+	dt -= static_cast<float>(tMid);
 
 	// Continue at target velocity.
 	*y += *dydt * dt;
@@ -1155,12 +1155,12 @@ void displayWorld()
 			float horizontalMovement = panXTracker->setTargetDelta(mouseDeltaX * panningSpeed)->update()->getCurrentDelta();
 			float verticalMovement = -1 * panZTracker->setTargetDelta(mouseDeltaY * panningSpeed)->update()->getCurrentDelta();
 
-			playerPos.p.x = panXTracker->getInitial()
+			playerPos.p.x = static_cast<int>(panXTracker->getInitial()
 				+ cos(-playerPos.r.y * (M_PI / 32768)) * horizontalMovement
-				+ sin(-playerPos.r.y * (M_PI / 32768)) * verticalMovement;
-			playerPos.p.z = panZTracker->getInitial()
+				+ sin(-playerPos.r.y * (M_PI / 32768)) * verticalMovement);
+			playerPos.p.z = static_cast<int>(panZTracker->getInitial()
 				+ sin(-playerPos.r.y * (M_PI / 32768)) * horizontalMovement
-				- cos(-playerPos.r.y * (M_PI / 32768)) * verticalMovement;
+				- cos(-playerPos.r.y * (M_PI / 32768)) * verticalMovement);
 			CheckScrollLimits();
 		}
 	}
@@ -1170,14 +1170,14 @@ void displayWorld()
 		float mouseDeltaX = mouseX() - rotX;
 		float mouseDeltaY = mouseY() - rotY;
 
-		playerPos.r.y = rotationHorizontalTracker->setTargetDelta(DEG(-mouseDeltaX) / 4)->update()->getCurrent();
+		playerPos.r.y = rotationHorizontalTracker->setTargetDelta(static_cast<int>(DEG(-mouseDeltaX) / 4))->update()->getCurrent();
 
 		if(bInvertMouse)
 		{
 			mouseDeltaY *= -1;
 		}
 
-		playerPos.r.x = rotationVerticalTracker->setTargetDelta(DEG(mouseDeltaY) / 4)->update()->getCurrent();
+		playerPos.r.x = rotationVerticalTracker->setTargetDelta(static_cast<int>(DEG(mouseDeltaY) / 4))->update()->getCurrent();
 		playerPos.r.x = glm::clamp(playerPos.r.x, DEG(360 + MIN_PLAYER_X_ANGLE), DEG(360 + MAX_PLAYER_X_ANGLE));
 	}
 
