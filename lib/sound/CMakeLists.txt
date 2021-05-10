@@ -2,11 +2,13 @@ file(GLOB HEADERS "*.h")
 file(GLOB SRC "*.cpp")
 
 set(_openal_config_required)
+set(_openal_config_quiet QUIET)
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	# CONFIG mode should be REQUIRED (to avoid the deprecated OpenAL.framework)
 	set(_openal_config_required REQUIRED)
+	set(_openal_config_quiet)
 endif()
-find_package(OpenAL CONFIG ${_openal_config_required}) # explicitly try via CONFIG mode first
+find_package(OpenAL CONFIG ${_openal_config_quiet} ${_openal_config_required}) # explicitly try via CONFIG mode first
 if (NOT TARGET OpenAL::OpenAL)
 	find_package(OpenAL MODULE REQUIRED)
 	# Since FindOpenAL.cmake may not define an imported target, do it here
