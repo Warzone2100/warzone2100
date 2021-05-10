@@ -250,7 +250,7 @@ static bool _imd_load_polys(const WzString &filename, const char **ppFileData, i
 					poly->texAnim.x /= OLD_TEXTURE_SIZE_FIX;
 					poly->texAnim.y /= OLD_TEXTURE_SIZE_FIX;
 				}
-				framesPerLine = 1 / poly->texAnim.x;
+				framesPerLine = static_cast<int>(1 / poly->texAnim.x);
 			}
 			else
 			{
@@ -345,29 +345,29 @@ static void _imd_calc_bounds(iIMDShape &s)
 	{
 		if (p.x > s.max.x)
 		{
-			s.max.x = p.x;
+			s.max.x = static_cast<int>(p.x);
 		}
 		if (p.x < s.min.x)
 		{
-			s.min.x = p.x;
+			s.min.x = static_cast<int>(p.x);
 		}
 
 		if (p.y > s.max.y)
 		{
-			s.max.y = p.y;
+			s.max.y = static_cast<int>(p.y);
 		}
 		if (p.y < s.min.y)
 		{
-			s.min.y = p.y;
+			s.min.y = static_cast<int>(p.y);
 		}
 
 		if (p.z > s.max.z)
 		{
-			s.max.z = p.z;
+			s.max.z = static_cast<int>(p.z);
 		}
 		if (p.z < s.min.z)
 		{
-			s.min.z = p.z;
+			s.min.z = static_cast<int>(p.z);
 		}
 
 		// for tight sphere calculations
@@ -420,7 +420,7 @@ static void _imd_calc_bounds(iIMDShape &s)
 	zmax = MAX(s.max.z, -s.min.z);
 
 	s.radius = MAX(xmax, MAX(ymax, zmax));
-	s.sradius = sqrtf(xmax * xmax + ymax * ymax + zmax * zmax);
+	s.sradius = static_cast<int>(sqrtf(xmax * xmax + ymax * ymax + zmax * zmax));
 
 // START: tight bounding sphere
 
@@ -462,9 +462,9 @@ static void _imd_calc_bounds(iIMDShape &s)
 	}
 
 	// dia1, dia2 diameter of initial sphere
-	cen.x = (dia1.x + dia2.x) / 2.;
-	cen.y = (dia1.y + dia2.y) / 2.;
-	cen.z = (dia1.z + dia2.z) / 2.;
+	cen.x = (dia1.x + dia2.x) / 2.f;
+	cen.y = (dia1.y + dia2.y) / 2.f;
+	cen.z = (dia1.z + dia2.z) / 2.f;
 
 	// calc initial radius
 	dx = dia2.x - cen.x;
@@ -493,9 +493,9 @@ static void _imd_calc_bounds(iIMDShape &s)
 			rad_sq = rad * rad;
 			old_to_new = old_to_p - rad;
 			// centre of new sphere
-			cen.x = (rad * cen.x + old_to_new * p.x) / old_to_p;
-			cen.y = (rad * cen.y + old_to_new * p.y) / old_to_p;
-			cen.z = (rad * cen.z + old_to_new * p.z) / old_to_p;
+			cen.x = static_cast<float>((rad * cen.x + old_to_new * p.x) / old_to_p);
+			cen.y = static_cast<float>((rad * cen.y + old_to_new * p.y) / old_to_p);
+			cen.z = static_cast<float>((rad * cen.z + old_to_new * p.z) / old_to_p);
 		}
 	}
 
@@ -869,9 +869,9 @@ static iIMDShape *_imd_load_level(const WzString &filename, const char **ppFileD
 				s.objanimdata[i].pos.x = pos.x / INT_SCALE;
 				s.objanimdata[i].pos.y = pos.z / INT_SCALE;
 				s.objanimdata[i].pos.z = pos.y / INT_SCALE;
-				s.objanimdata[i].rot.pitch = -(rot.x * DEG_1 / INT_SCALE);
-				s.objanimdata[i].rot.direction = -(rot.z * DEG_1 / INT_SCALE);
-				s.objanimdata[i].rot.roll = -(rot.y * DEG_1 / INT_SCALE);
+				s.objanimdata[i].rot.pitch = static_cast<uint16_t>(-(rot.x * DEG_1 / INT_SCALE));
+				s.objanimdata[i].rot.direction = static_cast<uint16_t>(-(rot.z * DEG_1 / INT_SCALE));
+				s.objanimdata[i].rot.roll = static_cast<uint16_t>(-(rot.y * DEG_1 / INT_SCALE));
 				pFileData += cnt;
 			}
 		}
