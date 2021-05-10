@@ -62,7 +62,14 @@ W_SLIDER::W_SLIDER(W_SLDINIT const *init)
 	, pTip(init->pTip)
 {
 	ASSERT((init->style & ~(WBAR_PLAIN | WIDG_HIDDEN)) == 0, "Unknown style");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wlogical-op" // Older GCC (at least GCC 5.4) triggers a warning on this
+#endif
 	ASSERT(init->orientation >= WSLD_LEFT || init->orientation <= WSLD_BOTTOM, "Unknown orientation");
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__) && (__GNUC__ < 7)
+# pragma GCC diagnostic pop
+#endif
 	bool horizontal = init->orientation == WSLD_LEFT || init->orientation == WSLD_RIGHT;
 	bool vertical = init->orientation == WSLD_TOP || init->orientation == WSLD_BOTTOM;
 	ASSERT((!horizontal || init->numStops <= init->width  - init->barSize) &&
