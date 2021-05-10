@@ -21,10 +21,12 @@
 #  pragma clang diagnostic push
 #  pragma clang diagnostic ignored "-Wcast-qual"
 #  pragma clang diagnostic ignored "-Wcast-align"
+#  pragma clang diagnostic ignored "-Wfloat-conversion"
 #elif defined(__GNUC__)
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wcast-qual"
 #  pragma GCC diagnostic ignored "-Wcast-align"
+#  pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
