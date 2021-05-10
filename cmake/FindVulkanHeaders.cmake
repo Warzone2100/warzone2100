@@ -13,7 +13,7 @@
 
 set(VK_HEADER_VERSION_STRING "")
 
-find_package(Vulkan)
+find_package(Vulkan QUIET)
 if(NOT Vulkan_FOUND)
 	# Try to find *just* the headers
 	find_path(Vulkan_INCLUDE_DIRS
