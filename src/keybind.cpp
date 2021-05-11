@@ -412,6 +412,29 @@ void kf_CloneSelected(int limit)
 	}
 }
 
+void kf_MakeMeHero()
+{
+#ifndef DEBUG
+	// Bail out if we're running a _true_ multiplayer game (to prevent MP cheating)
+	if (runningMultiplayer())
+	{
+		noMPCheatMsg();
+		return;
+	}
+#endif
+	for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected && psDroid->droidType == DROID_COMMAND)
+		{
+			psDroid->experience = 8 * 65536 * 128;
+		} 
+		else if (psDroid->selected)
+		{
+			psDroid->experience = 4 * 65536 * 128;
+		}
+	}
+}
+
 void kf_TeachSelected()
 {
 #ifndef DEBUG
