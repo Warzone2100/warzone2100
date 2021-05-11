@@ -271,6 +271,8 @@ enum INT_RETVAL
 	INT_QUIT,		// The game should quit
 };
 
+void intDoScreenRefresh();
+
 /* Run the widgets for the in game interface */
 INT_RETVAL intRunWidgets();
 

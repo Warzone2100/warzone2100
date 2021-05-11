@@ -144,6 +144,9 @@ static GAMECODE renderLoop()
 	INT_RETVAL intRetVal = INT_NONE;
 	if (!paused)
 	{
+		/* Always refresh the widgets' backing stores if needed, even if we don't process clicks below */
+		intDoScreenRefresh();
+
 		/* Run the in game interface and see if it grabbed any mouse clicks */
 		if (!getRotActive() && getWidgetsStatus() && dragBox3D.status != DRAG_DRAGGING && wallDrag.status != DRAG_DRAGGING)
 		{
