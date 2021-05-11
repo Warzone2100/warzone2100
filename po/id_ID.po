@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-19 15:17\n"
+"PO-Revision-Date: 2021-05-11 03:01\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -100,7 +100,7 @@ msgstr "MISI TRANSPORT: Sinyal Tersandi Terdeteksi"
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr "Ambil pasukan pengintai untuk menyelidiki sinyal-sinyal ini."
+msgstr "Bawa pasukan pengintai untuk menyelidiki sinyal-sinyal ini."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
@@ -128,7 +128,7 @@ msgstr "Paradigma Baru sedang menganalisis teknologi tautan sinapsis di lokasi i
 
 #: data/base/messages/strings/cam1strings.txt:37
 msgid "Assemble an attack team and recover the synaptic link technology."
-msgstr "Kumpulkan sebuah tim penyerang dan peroleh teknologi tautan sinapsis."
+msgstr "Kumpulkan tim penyerang dan pulihkan teknologi tautan synaptic."
 
 #: data/base/messages/strings/cam1strings.txt:39
 msgid "TRANSPORT MISSION: New Objectives"
