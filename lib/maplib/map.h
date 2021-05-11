@@ -134,7 +134,7 @@ public:
 	// Construct an empty Map, for modification
 	Map();
 
-	// Load a map from a specified folder path + mayType + maxPlayers + random seed (only used for script-generated maps), optionally supplying:
+	// Load a map from a specified folder path + mapType + maxPlayers + random seed (only used for script-generated maps), optionally supplying:
 	// - previewOnly (set to true to shortcut processing of map details that don't factor into preview generation)
 	// - a logger
 	// - a WzMap::IOProvider
