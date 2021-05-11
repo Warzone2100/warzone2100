@@ -593,7 +593,7 @@ static FLAG_POSITION *intFindSelectedDelivPoint()
 
 // Refresh widgets once per game cycle if pending flag is set.
 //
-static void intDoScreenRefresh()
+void intDoScreenRefresh()
 {
 	if (!IntRefreshPending)
 	{
@@ -939,8 +939,6 @@ static void reticuleCallback(int retbut)
 INT_RETVAL intRunWidgets()
 {
 	bool			quitting = false;
-
-	intDoScreenRefresh();
 
 	if (bLoadSaveUp && runLoadSave(true) && strlen(sRequestResult) > 0)
 	{
