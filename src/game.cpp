@@ -4709,6 +4709,7 @@ static bool loadSaveDroid(const char *pFileName, DROID **ppsCurrentDroidLists)
 		}
 		ASSERT(id != 0, "Droid ID should never be zero here");
 		// conditional check so that existing saved games don't break
+		// TODO remove conditional someplace in future
 		if (ini.contains("originalBody"))
 		{
 			// we need to set "originalBody" before setting "body", otherwise CHECK_DROID throws assertion errors
@@ -5457,7 +5458,14 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList)
 		default:
 			break;
 		}
-		psStructure->body = healthValue(ini, structureBody(psStructure));
+		// conditionally check so we don't break existnig saves
+		// TODO remove conditional someplace in future
+		if (ini.contains("upgradeHitpoints"))
+		{
+			psStructure->pStructureType->upgrade[psStructure->player].hitpoints = ini.value("upgradeHitpoints").toInt();
+		}
+		
+		psStructure->body =  healthValue(ini, structureBody(psStructure));
 		psStructure->currentBuildPts = ini.value("currentBuildPts", structureBuildPointsToCompletion(*psStructure)).toInt();
 		if (psStructure->status == SS_BUILT)
 		{
@@ -5549,7 +5557,7 @@ bool writeStructFile(const char *pFileName)
 		{
 			ini.beginGroup("structure_" + (WzString::number(counter++).leftPadToMinimumLength(WzUniCodepoint::fromASCII('0'), 10)));  // Zero padded so that alphabetical sort works.
 			ini.setValue("name", psCurr->pStructureType->id);
-
+			ini.setValue("upgradeHitpoints", psCurr->pStructureType->upgrade[psCurr->player].hitpoints);
 			writeSaveObject(ini, psCurr);
 
 			if (psCurr->resistance > 0)
