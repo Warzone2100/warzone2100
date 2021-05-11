@@ -111,7 +111,13 @@ protected:
 		updateLayout();
 		auto droid = controller->getObjectAt(objectIndex);
 		ASSERT_NOT_NULLPTR_OR_RETURN(, droid);
-		ASSERT_OR_RETURN(, !isDead(droid), "Droid is dead");
+		if (isDead(droid))
+		{
+			ASSERT_FAILURE(!isDead(droid), "!isDead(droid)", AT_MACRO, __FUNCTION__, "Droid is dead");
+			// ensure the backing information is refreshed before the next draw
+			intRefreshScreen();
+			return;
+		}
 		displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
