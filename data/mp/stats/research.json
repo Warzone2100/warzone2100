@@ -715,7 +715,7 @@
         "requiredResearch": [
             "R-Wpn-AAGun02"
         ],
-        "researchPoints": 5520,
+        "researchPoints": 3864,
         "researchPower": 250,
         "resultStructures": [
             "AASite-QuadBof02"
@@ -1566,7 +1566,7 @@
         "requiredResearch": [
             "R-Wpn-AAGun02"
         ],
-        "researchPoints": 6010,
+        "researchPoints": 4207,
         "researchPower": 325,
         "resultStructures": [
             "WallTower-DoubleAAGun02"
@@ -5099,8 +5099,8 @@
             "R-Wpn-Cannon3Mk1",
             "R-Struc-Research-Upgrade07"
         ],
-        "researchPoints": 7200,
-        "researchPower": 250,
+        "researchPoints": 5040,
+        "researchPower": 350,
         "resultComponents": [
             "AAGun2Mk1Quad"
         ],
