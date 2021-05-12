@@ -286,12 +286,17 @@ void iV_Box2(int x0, int y0, int x1, int y1, PIELIGHT first, PIELIGHT second)
 
 /***************************************************************************/
 
-void pie_BoxFill(float x0, float y0, float x1, float y1, PIELIGHT colour)
+void pie_BoxFill(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_DrawRect<gfx_api::BoxFillPSO>(x0, y0, x1, y1, colour);
 }
 
-void pie_BoxFill_alpha(float x0, float y0, float x1, float y1, PIELIGHT colour)
+void pie_BoxFillf(float x0, float y0, float x1, float y1, PIELIGHT colour)
+{
+	pie_DrawRect<gfx_api::BoxFillPSO>(x0, y0, x1, y1, colour);
+}
+
+void pie_BoxFill_alpha(int x0, int y0, int x1, int y1, PIELIGHT colour)
 {
 	pie_DrawRect<gfx_api::BoxFillAlphaPSO>(x0, y0, x1, y1, colour);
 }
