@@ -262,6 +262,7 @@ void kf_SlowDown();
 void kf_NormalSpeed();
 
 void kf_TeachSelected();
+void kf_MakeMeHero();
 void kf_Unselectable();
 void kf_CloneSelected(int);
 void kf_Reload();

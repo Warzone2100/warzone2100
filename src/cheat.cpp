@@ -48,6 +48,7 @@ static CHEAT_ENTRY cheatCodes[] =
 	{"templates", listTemplates}, // print templates
 	{"jsdebug", jsShowDebug}, // show scripting states
 	{"teach us", kf_TeachSelected}, // give experience to selected units
+	{"makemehero", kf_MakeMeHero}, // make selected units Heros
 	{"untouchable", kf_Unselectable}, // make selected droids unselectable
 	{"clone wars", []{ kf_CloneSelected(10); }}, // clone selected units
 	{"clone wars!", []{ kf_CloneSelected(40); }}, // clone selected units
