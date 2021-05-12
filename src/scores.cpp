@@ -353,9 +353,9 @@ void scoreDataToScreen(WIDGET *psWidget, ScoreDataToScreenCache& cache)
 				                  (float)(realTime - dispST) / (float)BAR_CRAWL_TIME
 				                  : 1.f;
 
-				const float length = (float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul;
+				const int length = static_cast<int>((float)infoBars[index].percent / 100.f * (float)infoBars[index].width * mul);
 
-				if ((int)length > 4)
+				if (length > 4)
 				{
 
 					/* Black shadow */
