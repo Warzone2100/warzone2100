@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-05-05 19:25\n"
+"PO-Revision-Date: 2021-05-12 10:55\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -5773,7 +5773,7 @@ msgstr ""
 #: src/frontend.cpp:1877
 #: src/frontend.cpp:1920
 msgid "Campaign"
-msgstr ""
+msgstr "Kampanja"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
@@ -15069,16 +15069,16 @@ msgstr ""
 
 #: src/frontend.cpp:142
 msgid "Single Player"
-msgstr ""
+msgstr "Yksinpeli"
 
 #: src/frontend.cpp:143
 msgid "Multi Player"
-msgstr ""
+msgstr "Moninpeli"
 
 #: src/frontend.cpp:144
 #: src/frontend.cpp:278
 msgid "Tutorial"
-msgstr ""
+msgstr "Tutoriaali"
 
 #: src/frontend.cpp:145
 #: src/ingameop.cpp:239
@@ -15092,7 +15092,7 @@ msgstr ""
 
 #: src/frontend.cpp:155
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr ""
+msgstr "Videot puuttuvat, lataa ne osoitteesta http://wz2100.net"
 
 #: src/frontend.cpp:160
 #: src/frontend.cpp:164
