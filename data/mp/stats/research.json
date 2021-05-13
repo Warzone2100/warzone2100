@@ -716,7 +716,7 @@
             "R-Wpn-AAGun02"
         ],
         "researchPoints": 3864,
-        "researchPower": 250,
+        "researchPower": 120,
         "resultStructures": [
             "AASite-QuadBof02"
         ],
@@ -1549,7 +1549,7 @@
             "R-Wpn-AAGun01"
         ],
         "researchPoints": 5520,
-        "researchPower": 250,
+        "researchPower": 173,
         "resultStructures": [
             "WallTower-DoubleAAGun"
         ],
@@ -1567,7 +1567,7 @@
             "R-Wpn-AAGun02"
         ],
         "researchPoints": 4207,
-        "researchPower": 325,
+        "researchPower": 140,
         "resultStructures": [
             "WallTower-DoubleAAGun02"
         ],
@@ -1630,7 +1630,7 @@
             "R-Defense-AASite-QuadRotMg"
         ],
         "researchPoints": 6900,
-        "researchPower": 287,
+        "researchPower": 216,
         "resultStructures": [
             "WallTower-QuadRotAAGun"
         ],
@@ -1682,7 +1682,7 @@
             "R-Defense-WallUpgrade07"
         ],
         "researchPoints": 26496,
-        "researchPower": 550,
+        "researchPower": 450,
         "resultStructures": [
             "WallTower-SamHvy"
         ],
@@ -1698,7 +1698,7 @@
             "R-Defense-SamSite1"
         ],
         "researchPoints": 13248,
-        "researchPower": 550,
+        "researchPower": 414,
         "resultStructures": [
             "WallTower-SamSite"
         ],
@@ -5100,7 +5100,7 @@
             "R-Struc-Research-Upgrade07"
         ],
         "researchPoints": 5040,
-        "researchPower": 350,
+        "researchPower": 157,
         "resultComponents": [
             "AAGun2Mk1Quad"
         ],
@@ -7756,7 +7756,7 @@
             "R-Wpn-Missile2A-T"
         ],
         "researchPoints": 11520,
-        "researchPower": 450,
+        "researchPower": 360,
         "resultComponents": [
             "Missile-LtSAM"
         ],
