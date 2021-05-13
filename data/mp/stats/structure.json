@@ -1561,7 +1561,7 @@
     "P0-AASite-Laser": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 550,
+        "buildPoints": 400,
         "buildPower": 300,
         "height": 2,
         "hitpoints": 600,
