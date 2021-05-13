@@ -28,6 +28,7 @@ uniform vec4 fogColor;
 in vec2 uv_tex;
 in vec2 uv_lightmap;
 in float vertexDistance;
+//flat in int tile;
 // Light in tangent space:
 in vec3 lightDir;
 in vec3 halfVec;
@@ -35,6 +36,7 @@ in vec3 halfVec;
 varying vec2 uv_tex;
 varying vec2 uv_lightmap;
 varying float vertexDistance;
+//flat varying int tile;
 // Light in tangent space:
 varying vec3 lightDir;
 varying vec3 halfVec;

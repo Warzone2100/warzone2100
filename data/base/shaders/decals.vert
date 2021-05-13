@@ -16,17 +16,20 @@ in vec4 vertex;
 in vec2 vertexTexCoord;
 in vec3 vertexNormal;
 in vec4 vertexTangent;
+in int tileNo;
 #else
 attribute vec4 vertex;
 attribute vec2 vertexTexCoord;
 attribute vec3 vertexNormal;
 attribute vec4 vertexTangent;
+attribute int tileNo;
 #endif
 
 #ifdef NEWGL
 out vec2 uv_tex;
 out vec2 uv_lightmap;
 out float vertexDistance;
+//flat out int tile;
 // In tangent space
 out vec3 lightDir;
 out vec3 halfVec;
@@ -34,6 +37,7 @@ out vec3 halfVec;
 varying vec2 uv_tex;
 varying vec2 uv_lightmap;
 varying float vertexDistance;
+//flat varying int tile;
 // In tangent space
 varying vec3 lightDir;
 varying vec3 halfVec;
@@ -41,6 +45,7 @@ varying vec3 halfVec;
 
 void main()
 {
+	//tile = tileNo;
 	uv_tex = vertexTexCoord;
 	uv_lightmap = (ModelUVLightmapMatrix * vertex).xy;
 

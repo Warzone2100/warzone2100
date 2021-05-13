@@ -1061,6 +1061,8 @@ vk::Format VkPSO::to_vk(const gfx_api::vertex_attribute_type& type)
 		return vk::Format::eR32G32Sfloat;
 	case gfx_api::vertex_attribute_type::u8x4_norm:
 		return vk::Format::eR8G8B8A8Unorm;
+	case gfx_api::vertex_attribute_type::int1:
+		return vk::Format::eR32Sint;
 	}
 	debug(LOG_FATAL, "Unsupported vertex_attribute_type");
 	return vk::Format::eUndefined;

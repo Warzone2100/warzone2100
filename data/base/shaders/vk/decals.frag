@@ -26,6 +26,7 @@ layout(location = 1) in vec2 uv_lightmap;
 layout(location = 2) in float vertexDistance;
 layout(location = 3) in vec3 lightDir;
 layout(location = 4) in vec3 halfVec;
+//layout(location = 5) flat in int tile;
 
 layout(location = 0) out vec4 FragColor;
 

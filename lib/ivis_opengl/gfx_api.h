@@ -203,6 +203,7 @@ namespace gfx_api
 		float3,
 		float4,
 		u8x4_norm,
+		int1,
 	};
 
 	struct vertex_buffer_input
@@ -485,6 +486,7 @@ namespace gfx_api
 	constexpr std::size_t color = 2;
 	constexpr std::size_t normal = 3;
 	constexpr std::size_t tangent = 4;
+	constexpr std::size_t tileNo = 5;
 
 	using notexture = std::tuple<>;
 
@@ -737,11 +739,12 @@ namespace gfx_api
 	using TerrainDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
 	std::tuple<constant_buffer_type<SHADER_DECALS>>,
 	std::tuple<
-	vertex_buffer_description<2*sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec4), // DecalVertex struct
+	vertex_buffer_description<2*sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec4) + sizeof(int32_t), // DecalVertex struct
 	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
 	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(glm::vec3)>,
 	vertex_attribute_description<normal,   gfx_api::vertex_attribute_type::float3, sizeof(glm::vec3) + sizeof(glm::vec2)>,
-	vertex_attribute_description<tangent,  gfx_api::vertex_attribute_type::float4, 2*sizeof(glm::vec3) + sizeof(glm::vec2)>
+	vertex_attribute_description<tangent,  gfx_api::vertex_attribute_type::float4, 2*sizeof(glm::vec3) + sizeof(glm::vec2)>,
+	vertex_attribute_description<tileNo,   gfx_api::vertex_attribute_type::int1,   2*sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec4)>
 	>
 	>, std::tuple<
 	texture_description<0, sampler_type::anisotropic>,
