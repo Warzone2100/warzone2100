@@ -60,7 +60,7 @@ if(GLSLC)
 	add_custom_target(glsl_compilation DEPENDS ${SHADER_LIST})
 	set_property(TARGET glsl_compilation PROPERTY FOLDER "data")
 else()
-	message(WARNING "Unable to find glslc")
+	message(STATUS "Unable to find glslc")
 endif()
 
 set(_glsl_generatedfiles_PATHS)
