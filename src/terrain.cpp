@@ -97,6 +97,7 @@ struct DecalVertex
 	Vector2f uv = Vector2f(0.f, 0.f);
 	Vector3f normal = Vector3f(0.f, 1.f, 0.f);
 	glm::vec4 tangent = glm::vec4(1.f, 0.f, 0.f, 1.f);
+	int32_t tile = 0;
 };
 
 using WaterVertex = glm::vec4; // w is depth
@@ -455,6 +456,7 @@ static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize
 			if (TILE_HAS_DECAL(mapTile(i, j)))
 			{
 				center = getTileTexCoords(*uv, mapTile(i, j)->texture);
+				const auto tile = TileNumber_tile(mapTile(i, j)->texture);
 
 				getGridPos(&pos, i, j, true, false);
 				decaldata[*decalSize].pos = pos;
@@ -546,6 +548,7 @@ static void setSectorDecals(int x, int y, DecalVertex *decaldata, int *decalSize
 							w = -1.0f; // we're mirrored
 						}
 						p[k].tangent = glm::vec4(t, w);
+						p[k].tile = tile;
 					}
 				}
 			}

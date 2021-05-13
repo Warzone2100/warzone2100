@@ -19,15 +19,18 @@ layout(location = 0) in vec4 vertex;
 layout(location = 1) in vec2 vertexTexCoord;
 layout(location = 3) in vec3 vertexNormal;
 layout(location = 4) in vec4 vertexTangent;
+layout(location = 5) in int tileNo;
 
 layout(location = 0) out vec2 uv_tex;
 layout(location = 1) out vec2 uv_lightmap;
 layout(location = 2) out float vertexDistance;
 layout(location = 3) out vec3 lightDir;
 layout(location = 4) out vec3 halfVec;
+//layout(location = 5) flat out int tile;
 
 void main()
 {
+	//tile = tileNo;
 	uv_tex = vertexTexCoord;
 	uv_lightmap = (ModelUVLightmapMatrix * vertex).xy;
 
