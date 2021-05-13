@@ -85,7 +85,7 @@
 	},
     "AAGunLaser": {
         "buildPoints": 1600,
-        "buildPower": 500,
+        "buildPower": 350,
         "damage": 225,
         "designable": 1,
         "effectSize": 100,
