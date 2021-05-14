@@ -7,6 +7,15 @@
 /* Define to 1 if you have the <alloca.h> header file. */
 #cmakedefine HAVE_ALLOCA_H @HAVE_ALLOCA_H@
 
+/* Define if the bswap16() function is already present. */
+#cmakedefine HAVE_BSWAP16
+
+/* Define if the bswap32() function is already present. */
+#cmakedefine HAVE_BSWAP32
+
+/* Define if the bswap64() function is already present. */
+#cmakedefine HAVE_BSWAP64
+
 /* Define if the GNU dcgettext() function is already present or preinstalled.
    */
 #cmakedefine HAVE_DCGETTEXT
