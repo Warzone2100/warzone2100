@@ -675,11 +675,11 @@
         "armour": 12,
         "breadth": 1,
         "buildPoints": 300,
-        "buildPower": 300,
+        "buildPower": 225,
         "height": 1,
         "hitpoints": 600,
         "id": "AASite-QuadBof",
-        "name": "AA Flak Cannon Emplacement",
+        "name": "AA Cyclone Flak Cannon Emplacement",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
         "strength": "HARD",
@@ -690,6 +690,28 @@
         "type": "DEFENSE",
         "weapons": [
             "AAGun2Mk1"
+        ],
+        "width": 1
+    },
+    "AASite-QuadBof02": {
+        "armour": 12,
+        "breadth": 1,
+        "buildPoints": 350,
+        "buildPower": 275,
+        "height": 1,
+        "hitpoints": 600,
+        "id": "AASite-QuadBof02",
+        "name": "AA Tornado Flak Cannon Emplacement",
+        "resistance": 150,
+        "sensorID": "DefaultSensor1Mk1",
+        "strength": "HARD",
+        "structureModel": [
+            "Blaamnt2.PIE"
+        ],
+        "thermal": 12,
+        "type": "DEFENSE",
+        "weapons": [
+            "AAGun2Mk1Quad"
         ],
         "width": 1
     },
@@ -719,7 +741,7 @@
         "armour": 12,
         "breadth": 1,
         "buildPoints": 275,
-        "buildPower": 175,
+        "buildPower": 200,
         "height": 1,
         "hitpoints": 400,
         "id": "AASite-QuadRotMg",
@@ -1539,8 +1561,8 @@
     "P0-AASite-Laser": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 550,
-        "buildPower": 350,
+        "buildPoints": 400,
+        "buildPower": 300,
         "height": 2,
         "hitpoints": 600,
         "id": "P0-AASite-Laser",
@@ -1561,7 +1583,7 @@
     "P0-AASite-SAM1": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 450,
+        "buildPoints": 350,
         "buildPower": 250,
         "height": 2,
         "hitpoints": 400,
@@ -1583,7 +1605,7 @@
     "P0-AASite-SAM2": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 550,
+        "buildPoints": 450,
         "buildPower": 350,
         "height": 2,
         "hitpoints": 600,
@@ -1605,8 +1627,8 @@
     "P0-AASite-Sunburst": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 450,
-        "buildPower": 250,
+        "buildPoints": 350,
+        "buildPower": 200,
         "height": 2,
         "hitpoints": 400,
         "id": "P0-AASite-Sunburst",
@@ -2151,12 +2173,12 @@
         "armour": 15,
         "breadth": 1,
         "buildPoints": 400,
-        "buildPower": 450,
+        "buildPower": 300,
         "combinesWithWall": true,
         "height": 2,
         "hitpoints": 800,
         "id": "WallTower-DoubleAAGun",
-        "name": "AA Flak Cannon Hardpoint",
+        "name": "AA Cyclone Flak Cannon Hardpoint",
         "resistance": 150,
         "sensorID": "DefaultSensor1Mk1",
         "strength": "HARD",
@@ -2167,6 +2189,29 @@
         "type": "DEFENSE",
         "weapons": [
             "AAGun2Mk1"
+        ],
+        "width": 1
+    },
+    "WallTower-DoubleAAGun02": {
+        "armour": 15,
+        "breadth": 1,
+        "buildPoints": 450,
+        "buildPower": 350,
+        "combinesWithWall": true,
+        "height": 2,
+        "hitpoints": 800,
+        "id": "WallTower-DoubleAAGun02",
+        "name": "AA Tornado Flak Cannon Hardpoint",
+        "resistance": 150,
+        "sensorID": "DefaultSensor1Mk1",
+        "strength": "HARD",
+        "structureModel": [
+            "BLGUARD1.pie"
+        ],
+        "thermal": 15,
+        "type": "DEFENSE",
+        "weapons": [
+            "AAGun2Mk1Quad"
         ],
         "width": 1
     },
@@ -2287,11 +2332,11 @@
     "WallTower-QuadRotAAGun": {
         "armour": 15,
         "breadth": 1,
-        "buildPoints": 400,
-        "buildPower": 400,
+        "buildPoints": 375,
+        "buildPower": 300,
         "combinesWithWall": true,
         "height": 2,
-        "hitpoints": 800,
+        "hitpoints": 600,
         "id": "WallTower-QuadRotAAGun",
         "name": "Whirlwind Hardpoint",
         "resistance": 150,
@@ -2356,8 +2401,8 @@
     "WallTower-SamHvy": {
         "armour": 15,
         "breadth": 1,
-        "buildPoints": 400,
-        "buildPower": 400,
+        "buildPoints": 550,
+        "buildPower": 450,
         "combinesWithWall": true,
         "height": 2,
         "hitpoints": 800,
@@ -2379,11 +2424,11 @@
     "WallTower-SamSite": {
         "armour": 15,
         "breadth": 1,
-        "buildPoints": 400,
-        "buildPower": 400,
+        "buildPoints": 450,
+        "buildPower": 350,
         "combinesWithWall": true,
         "height": 2,
-        "hitpoints": 800,
+        "hitpoints": 600,
         "id": "WallTower-SamSite",
         "name": "Avenger Hardpoint",
         "resistance": 150,

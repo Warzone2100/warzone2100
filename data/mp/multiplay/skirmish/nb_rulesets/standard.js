@@ -309,12 +309,15 @@ const weaponStats = {
 		chatalias: "ca",
 		micro: MICRO.RANGED,
 		weapons: [
-			{ res: "R-Wpn-AAGun02", stat: "AAGun2Mk1", weight: WEIGHT.HEAVY },
+			{ res: "R-Wpn-AAGun01", stat: "AAGun2Mk1", weight: WEIGHT.MEDIUM },
+			{ res: "R-Wpn-AAGun02", stat: "AAGun2Mk1Quad", weight: WEIGHT.HEAVY },
 		],
 		vtols: [],
 		defenses: [
 			{ res: "R-Defense-AASite-QuadBof", stat: "AASite-QuadBof", defrole: DEFROLE.STANDALONE },
 			{ res: "R-Defense-WallTower-DoubleAAgun", stat: "WallTower-DoubleAAGun", defrole: DEFROLE.GATEWAY },
+			{ res: "R-Defense-AASite-QuadBof02", stat: "AASite-QuadBof02", defrole: DEFROLE.STANDALONE },
+			{ res: "R-Defense-WallTower-DoubleAAgun02", stat: "WallTower-DoubleAAGun02", defrole: DEFROLE.GATEWAY },
 		],
 		templates: [],
 		extras: [],
@@ -572,8 +575,8 @@ const weaponStats = {
 		chatalias: "mg_AA",
 		micro: MICRO.RANGED,
 		weapons: [
-			{ res: "R-Wpn-AAGun03", stat: "QuadMg1AAGun", weight: WEIGHT.ULTRAHEAVY }, // hurricane
-			{ res: "R-Wpn-AAGun04", stat: "QuadRotAAGun", weight: WEIGHT.ULTRAHEAVY }, // whirlwind
+			{ res: "R-Wpn-AAGun03", stat: "QuadMg1AAGun", weight: WEIGHT.MEDIUM }, // hurricane
+			{ res: "R-Wpn-AAGun04", stat: "QuadRotAAGun", weight: WEIGHT.HEAVY }, // whirlwind
 		],
 		vtols: [],
 		defenses: [

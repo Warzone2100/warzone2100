@@ -73,7 +73,7 @@ const research_test = [
 "R-Cyborg-Metals09",
 "R-Struc-VTOLPad",
 "R-Wpn-Bomb04",
-"R-Defense-WallTower-DoubleAAgun"		// #107  AA Flak Cannon Hardpoint
+"R-Defense-WallTower-DoubleAAgun"		// #107  AA Cyclone Flak Cannon Hardpoint
 ];*/
 
 const research_rich2 = [
@@ -356,8 +356,8 @@ const research_rich = [
 "R-Wpn-Bomb03",		// #122  Phosphor Bomb Bay
 "R-Wpn-Flamer-Damage05",		// #123  Superhot Flamer Gel Mk2
 "R-Wpn-Bomb04",		// #124  Thermite Bomb Bay
-"R-Wpn-AAGun02",		// #125  AA Flak Cannon
-"R-Defense-WallTower-DoubleAAgun",		// #126  AA Flak Cannon Hardpoint
+"R-Wpn-AAGun01",		// #125  AA Cyclone Flak Cannon
+"R-Defense-WallTower-DoubleAAgun",		// #126  AA Cyclone Flak Cannon Hardpoint
 ];
 
 const research_cannon = [
@@ -400,7 +400,7 @@ const research_cannon = [
 "R-Cyborg-Metals09",
 "R-Struc-VTOLPad",
 "R-Wpn-Bomb04",
-"R-Defense-WallTower-DoubleAAgun"		// #107  AA Flak Cannon Hardpoint
+"R-Defense-WallTower-DoubleAAgun"		// #107  AA Cyclone Flak Cannon Hardpoint
 ];
 
 //Flamer-cannon-vtols

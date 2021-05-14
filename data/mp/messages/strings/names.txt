@@ -271,7 +271,8 @@ CyborgCannon01			"*Cyborg Cannon*"
 TUTMG						_("Machinegun")
 
 
-AAGun1Mk1					_("Tornado Flak Turret")
+AAGun1Mk1					_("Cyclone Flak Turret")
+AAGun1Mk1Quad				_("Tornado Flak Turret")
 AAGun2Mk1-VTOL				_("VTOL Flak Cannon")
 
 //Supergun					"*Supergun*"
@@ -512,7 +513,8 @@ R-Vehicle-Prop-VTOL02			_("VTOL Propulsion II")
 R-Vehicle-Prop-Wheels02			_("Wheeled Propulsion II")
 //R-Vehicle-Prop-Wheels03			_("Wheeled Propulsion III")
 
-R-Wpn-AAGun01				_("Tornado Flak Turret")
+R-Wpn-AAGun01				_("Cyclone Flak Turret")
+R-Wpn-AAGun02				_("Tornado Flak Turret")
 
 //R-Wpn-Pbomb					_("Proximity Bomb Turret")
 //R-Wpn-SPBomb				_("Proximity Superbomb Turret")

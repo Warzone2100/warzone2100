@@ -193,12 +193,15 @@ const weaponStats =
 	{
 		alias: "cnaa",
 		weapons: [
-			{ res: "R-Wpn-AAGun02", stat: "AAGun2Mk1" },
+			{ res: "R-Wpn-AAGun01", stat: "AAGun2Mk1" },
+			{ res: "R-Wpn-AAGun02", stat: "AAGun2Mk1Quad" },
 		],
 		vtols: [],
 		defenses: [
 			{ res: "R-Defense-AASite-QuadBof", stat: "AASite-QuadBof" },
 			//{ res: "R-Defense-WallTower-DoubleAAgun", stat: "WallTower-DoubleAAGun" },
+			{ res: "R-Defense-AASite-QuadBof02", stat: "AASite-QuadBof02" },
+			//{ res: "R-Defense-WallTower-DoubleAAgun02", stat: "WallTower-DoubleAAGun02" },
 		],
 		templates: [],
 		extras: [

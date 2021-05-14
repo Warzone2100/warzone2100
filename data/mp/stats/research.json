@@ -693,9 +693,9 @@
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-AASite-QuadBof",
         "msgName": "RES_EMP_AA1",
-        "name": "AA Flak Cannon Emplacement",
+        "name": "AA Cyclone Flak Cannon Emplacement",
         "requiredResearch": [
-            "R-Wpn-AAGun02"
+            "R-Wpn-AAGun01"
         ],
         "researchPoints": 4800,
         "researchPower": 150,
@@ -703,6 +703,24 @@
             "AASite-QuadBof"
         ],
         "statID": "AASite-QuadBof"
+    },
+    "R-Defense-AASite-QuadBof02": {
+        "iconID": "IMAGE_RES_DEFENCE",
+        "id": "R-Defense-AASite-QuadBof02",
+        "msgName": "RES_EMP_AA4",
+        "name": "AA Tornado Flak Cannon Emplacement",
+        "redStructures": [
+            "AASite-QuadBof"
+        ],
+        "requiredResearch": [
+            "R-Wpn-AAGun02"
+        ],
+        "researchPoints": 3864,
+        "researchPower": 120,
+        "resultStructures": [
+            "AASite-QuadBof02"
+        ],
+        "statID": "AASite-QuadBof02"
     },
     "R-Defense-AASite-QuadMg1": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -1345,7 +1363,7 @@
         "requiredResearch": [
             "R-Wpn-Missile-HvSAM"
         ],
-        "researchPoints": 28800,
+        "researchPoints": 23040,
         "researchPower": 450,
         "resultStructures": [
             "P0-AASite-SAM2"
@@ -1526,16 +1544,34 @@
         "iconID": "IMAGE_RES_DEFENCE",
         "id": "R-Defense-WallTower-DoubleAAgun",
         "msgName": "RES_WT_DOUBLEAA",
-        "name": "AA Flak Cannon Hardpoint",
+        "name": "AA Cyclone Flak Cannon Hardpoint",
         "requiredResearch": [
-            "R-Wpn-AAGun02"
+            "R-Wpn-AAGun01"
         ],
-        "researchPoints": 30000,
-        "researchPower": 450,
+        "researchPoints": 5520,
+        "researchPower": 173,
         "resultStructures": [
             "WallTower-DoubleAAGun"
         ],
         "statID": "WallTower-DoubleAAGun"
+    },
+    "R-Defense-WallTower-DoubleAAgun02": {
+        "iconID": "IMAGE_RES_DEFENCE",
+        "id": "R-Defense-WallTower-DoubleAAgun02",
+        "msgName": "RES_WT_DOUBLEAA2",
+        "name": "AA Tornado Flak Cannon Hardpoint",
+        "redStructures": [
+            "WallTower-DoubleAAGun"
+        ],
+        "requiredResearch": [
+            "R-Wpn-AAGun02"
+        ],
+        "researchPoints": 4207,
+        "researchPower": 140,
+        "resultStructures": [
+            "WallTower-DoubleAAGun02"
+        ],
+        "statID": "WallTower-DoubleAAGun02"
     },
     "R-Defense-WallTower-HPVcannon": {
         "iconID": "IMAGE_RES_DEFENCE",
@@ -1593,8 +1629,8 @@
         "requiredResearch": [
             "R-Defense-AASite-QuadRotMg"
         ],
-        "researchPoints": 30000,
-        "researchPower": 450,
+        "researchPoints": 6900,
+        "researchPower": 216,
         "resultStructures": [
             "WallTower-QuadRotAAGun"
         ],
@@ -1645,7 +1681,7 @@
             "R-Wpn-Missile-HvSAM",
             "R-Defense-WallUpgrade07"
         ],
-        "researchPoints": 30000,
+        "researchPoints": 26496,
         "researchPower": 450,
         "resultStructures": [
             "WallTower-SamHvy"
@@ -1661,8 +1697,8 @@
             "R-Defense-WallUpgrade07",
             "R-Defense-SamSite1"
         ],
-        "researchPoints": 30000,
-        "researchPower": 450,
+        "researchPoints": 13248,
+        "researchPower": 414,
         "resultStructures": [
             "WallTower-SamSite"
         ],
@@ -5031,13 +5067,13 @@
         "subgroupIconID": "IMAGE_RES_GRPROF",
         "techCode": 1
     },
-    "R-Wpn-AAGun02": {
+    "R-Wpn-AAGun01": {
 	"disabledWhen": 4,
         "iconID": "IMAGE_RES_WEAPONTECH",
-        "id": "R-Wpn-AAGun02",
+        "id": "R-Wpn-AAGun01",
         "keyTopic": 1,
-        "msgName": "RES_W_AA2",
-        "name": "AA Flak Cannon",
+        "msgName": "RES_W_AA1",
+        "name": "AA Cyclone Flak Cannon",
         "requiredResearch": [
             "R-Wpn-Cannon4AMk1"
         ],
@@ -5047,6 +5083,28 @@
             "AAGun2Mk1"
         ],
         "statID": "AAGun2Mk1"
+    },
+    "R-Wpn-AAGun02": {
+        "disabledWhen": 4,
+        "iconID": "IMAGE_RES_WEAPONTECH",
+        "id": "R-Wpn-AAGun02",
+        "keyTopic": 1,
+        "msgName": "RES_W_AA2",
+        "name": "AA Tornado Flak Cannon",
+        "redComponents": [
+            "AAGun2Mk1"
+        ],
+        "requiredResearch": [
+            "R-Wpn-AAGun01",
+            "R-Wpn-Cannon3Mk1",
+            "R-Struc-Research-Upgrade07"
+        ],
+        "researchPoints": 5040,
+        "researchPower": 157,
+        "resultComponents": [
+            "AAGun2Mk1Quad"
+        ],
+        "statID": "AAGun2Mk1Quad"
     },
     "R-Wpn-AAGun03": {
 	"disabledWhen": 4,
@@ -7697,8 +7755,8 @@
             "R-Sys-Sensor-Upgrade02",
             "R-Wpn-Missile2A-T"
         ],
-        "researchPoints": 14400,
-        "researchPower": 450,
+        "researchPoints": 11520,
+        "researchPower": 360,
         "resultComponents": [
             "Missile-LtSAM"
         ],
