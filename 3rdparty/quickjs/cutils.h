@@ -36,6 +36,10 @@
   #include <intrin.h>
 #endif
 
+#if defined(__FreeBSD__)
+  #include <sys/endian.h>
+#endif
+
 #include "config.h"
 
 /* set if CPU is big endian */
