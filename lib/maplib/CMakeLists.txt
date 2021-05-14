@@ -17,7 +17,7 @@ if(MSVC)
 	target_compile_definitions(maplib PRIVATE "_CRT_SECURE_NO_WARNINGS")
 endif()
 # for optional-lite + nlohmann::json header-only libraries
-target_include_directories(maplib PRIVATE "../../3rdparty/")
+target_include_directories(maplib PUBLIC "../../3rdparty/")
 
 if(NOT TARGET quickjs)
 	add_subdirectory("../../3rdparty/quickjs" "3rdparty/quickjs" EXCLUDE_FROM_ALL)
