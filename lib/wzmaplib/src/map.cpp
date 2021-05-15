@@ -1929,6 +1929,7 @@ Map::Map()
 	m_structures = std::make_shared<std::vector<Structure>>();
 	m_droids = std::make_shared<std::vector<Droid>>();
 	m_features = std::make_shared<std::vector<Feature>>();
+	m_terrainTypes = std::make_shared<TerrainTypeData>();
 }
 
 Map::Map(const std::string& mapFolderPath, MapType mapType, uint32_t mapMaxPlayers, std::unique_ptr<LoggingProtocol> logger, std::unique_ptr<IOProvider> mapIO)
