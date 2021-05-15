@@ -5,9 +5,9 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 	cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-if(NOT TARGET maplib)
+if(NOT TARGET wzmaplib)
 	# Not embedded in parent main WZ build system - must manually include maplib
-	add_subdirectory("../../lib/maplib" "lib/maplib" EXCLUDE_FROM_ALL)
+	add_subdirectory("../../lib/wzmaplib" "lib/wzmaplib" EXCLUDE_FROM_ALL)
 endif()
 
 find_package(PNG 1.2 REQUIRED)
@@ -25,7 +25,7 @@ endif ()
 # maptools
 add_executable(maptools
 				maptools.cpp pngsave.cpp pngsave.h)
-target_link_libraries(maptools PRIVATE maplib PNG::PNG)
+target_link_libraries(maptools PRIVATE wzmaplib PNG::PNG)
 
 if(MSVC)
 	target_compile_definitions(maptools PRIVATE "_CRT_SECURE_NO_WARNINGS")
