@@ -17,9 +17,9 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "map_preview.h"
-#include "map.h"
-#include "map_debug.h"
+#include "../include/wzmaplib/map_preview.h"
+#include "../include/wzmaplib/map.h"
+#include "../include/wzmaplib/map_debug.h"
 #include "map_internal.h"
 
 namespace WzMap {

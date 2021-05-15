@@ -18,8 +18,8 @@
 */
 
 #include "map_script.h"
-#include "map.h"
-#include "map_debug.h"
+#include "../include/wzmaplib/map.h"
+#include "../include/wzmaplib/map_debug.h"
 #include "map_internal.h"
 
 #include <cinttypes>

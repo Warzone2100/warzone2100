@@ -26,8 +26,8 @@
 #if defined(__GNUC__)
 # pragma GCC diagnostic pop
 #endif
-#include "lib/maplib/map.h"
-#include "lib/maplib/map_preview.h"
+#include <wzmaplib/map.h>
+#include <wzmaplib/map_preview.h>
 #include <iostream>
 #include <string>
 #include <cstdlib>

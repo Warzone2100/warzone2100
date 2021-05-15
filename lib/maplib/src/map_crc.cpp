@@ -19,7 +19,7 @@
 */
 
 #include "map_crc.h"
-#include "map.h"
+#include "../include/wzmaplib/map.h"
 
 namespace WzMap {
 

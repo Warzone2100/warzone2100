@@ -36,7 +36,7 @@
 #include "lib/framework/stdio_ext.h"
 #include "lib/framework/physfs_ext.h"
 
-#include "lib/maplib/map_preview.h"
+#include <wzmaplib/map_preview.h>
 
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/bitimage.h"

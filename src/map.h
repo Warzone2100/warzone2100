@@ -26,8 +26,8 @@
 
 #include "lib/framework/frame.h"
 #include "lib/framework/debug.h"
-#include "lib/maplib/map.h"
-#include "lib/maplib/terrain_type.h"
+#include <wzmaplib/map.h>
+#include <wzmaplib/terrain_type.h>
 #include "objects.h"
 #include "terrain.h"
 #include "multiplay.h"

@@ -32,7 +32,7 @@
 #include "lib/framework/strres.h"
 #include "lib/framework/frameresource.h"
 
-#include "lib/maplib/map_terrain_types.h"
+#include <wzmaplib/map_terrain_types.h>
 
 #include "lib/gamelib/gtime.h"
 #include "lib/ivis_opengl/ivisdef.h"

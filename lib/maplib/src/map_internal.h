@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "map_debug.h"
+#include "../include/wzmaplib/map_debug.h"
 #include <cstdarg>
 #include <cstdio>
 

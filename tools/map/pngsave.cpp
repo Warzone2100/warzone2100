@@ -19,7 +19,7 @@
 */
 
 #include "pngsave.h"
-#include "lib/maplib/map_debug.h"
+#include <wzmaplib/map_debug.h>
 #include <png.h>
 #include <cstdlib>
 #include <cstdarg>
