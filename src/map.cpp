@@ -31,7 +31,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/ivis_opengl/tex.h"
 #include "lib/netplay/netplay.h"  // For syncDebug
-#include "lib/maplib/map.h"
+#include <wzmaplib/map.h>
 
 #include "map.h"
 #include "hci.h"

@@ -5,10 +5,11 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 	cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-file(GLOB HEADERS "*.h")
-file(GLOB SRC "*.cpp")
+file(GLOB PUBLIC_HEADERS "include/wzmaplib/*.h")
+file(GLOB PRIVATE_HEADERS "src/*.h")
+file(GLOB SRC "src/*.cpp")
 
-add_library(maplib STATIC ${HEADERS} ${SRC})
+add_library(maplib STATIC ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SRC})
 set_property(TARGET maplib PROPERTY FOLDER "lib")
 if(WZ_TARGET_ADDITIONAL_PROPERTIES)
 	SET_TARGET_PROPERTIES(maplib PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
@@ -16,6 +17,7 @@ endif()
 if(MSVC)
 	target_compile_definitions(maplib PRIVATE "_CRT_SECURE_NO_WARNINGS")
 endif()
+target_include_directories(maplib PUBLIC "include")
 # for optional-lite + nlohmann::json header-only libraries
 target_include_directories(maplib PUBLIC "../../3rdparty/")
 
