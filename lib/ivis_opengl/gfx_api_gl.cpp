@@ -327,7 +327,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 		{ "ModelViewProjectionMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "time",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
 			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm", "tex1_hm", "tex2_hm" } }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" } }),
@@ -1269,7 +1269,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
-	setUniforms(i++, cbuf.time);
+	setUniforms(i++, cbuf.timeSec);
 	 // textures:
 	setUniforms(i++, 0);
 	setUniforms(i++, 1);

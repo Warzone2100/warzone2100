@@ -1101,7 +1101,7 @@ static void drawTiles(iView *player)
 	const glm::mat4 &modelViewMatrix = viewMatrix * glm::translate(glm::vec3(-player->p.x, 0, player->p.z));
 	const glm::mat4 &mvpMatrix = pie_PerspectiveGet() * modelViewMatrix;
 
-	auto cameraPos = glm::inverse(modelViewMatrix) * glm::vec4(0,0,0,1); // `actualCameraPosition` is not accurate enough due to int calc
+	const glm::vec3 cameraPos = (glm::inverse(modelViewMatrix) * glm::vec4(0,0,0,1)).xyz(); // `actualCameraPosition` is not accurate enough due to int calc
 	actualCameraPosition = Vector3i(0, 0, 0);
 
 	/* Set the camera position */

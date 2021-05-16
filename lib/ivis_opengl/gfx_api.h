@@ -382,7 +382,7 @@ namespace gfx_api
 		void bind()
 		{
 			if (this->nextpso != nullptr) {
-				delete this->pso;
+				if (this->pso != nullptr) delete this->pso;
 				this->pso = this->nextpso;
 				this->nextpso = nullptr;
 			}
@@ -447,11 +447,11 @@ namespace gfx_api
 			this->nextpso = gfx_api::context::get().build_pipeline(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
 		}
 	private:
-		pipeline_state_object* pso;
+		pipeline_state_object* pso = nullptr;
 		pipeline_state_object* nextpso = nullptr;
 		pipeline_state_helper()
 		{
-			pso = gfx_api::context::get().build_pipeline(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+			recompile();
 		}
 
 //		// Requires C++14 (+)
@@ -770,7 +770,7 @@ namespace gfx_api
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		float time; // in seconds
+		float timeSec;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,

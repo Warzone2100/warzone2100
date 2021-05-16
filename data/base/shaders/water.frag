@@ -60,8 +60,7 @@ void main()
 	} else {
 		N = normalize(N * 2.0 - 1.0);
 	}
-	vec3 L = normalize(lightDir);
-	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
+	float lambertTerm = max(dot(N, lightDir), 0.0); // diffuse lighting
 
 	// Gaussian specular term computation
 	vec3 H = normalize(halfVec);
