@@ -1252,8 +1252,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 	    (psDroid->psGroup->type == GT_COMMAND) &&
 	    (psOrder->type != DORDER_GUARD) &&  //(psOrder->psObj == NULL)) &&
 	    (psOrder->type != DORDER_RTR) &&
-	    (psOrder->type != DORDER_RECYCLE) &&
-	    (psOrder->type != DORDER_MOVE))
+	    (psOrder->type != DORDER_RECYCLE))
 	{
 		if (psOrder->type == DORDER_ATTACK)
 		{
