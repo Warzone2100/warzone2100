@@ -4,6 +4,7 @@ layout(set = 1, binding = 0) uniform sampler2D tex;
 layout(set = 1, binding = 1) uniform sampler2D lightmap_tex;
 layout(set = 1, binding = 2) uniform sampler2D TextureNormal; // normal map
 layout(set = 1, binding = 3) uniform sampler2D TextureSpecular; // specular map
+layout(set = 1, binding = 4) uniform sampler2D TextureHeight;
 
 layout(std140, set = 0, binding = 0) uniform cbuffer {
 	mat4 ModelViewProjectionMatrix;

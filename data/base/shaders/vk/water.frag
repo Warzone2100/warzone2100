@@ -23,7 +23,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
-	float time; // in seconds
+	float timeSec;
 };
 
 layout(location = 1) in vec2 uv1;
@@ -45,8 +45,7 @@ void main()
 	} else {
 		N = normalize(N * 2.0 - 1.0);
 	}
-	vec3 L = normalize(lightDir);
-	float lambertTerm = max(dot(N, L), 0.0); // diffuse lighting
+	float lambertTerm = max(dot(N, lightDir), 0.0); // diffuse lighting
 
 	// Gaussian specular term computation
 	vec3 H = normalize(halfVec);

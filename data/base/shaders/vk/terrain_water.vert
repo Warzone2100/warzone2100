@@ -14,7 +14,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
-	float time; // in seconds
+	float timeSec;
 };
 
 layout(location = 0) in vec4 vertex; // .w is depth
@@ -30,7 +30,7 @@ void main()
 {
 	depth = vertex.w;
 
-	uv1 = vec2(vertex.x/4/128 + time/10, -vertex.z/4/128); // (ModelUV1Matrix * vertex).xy;
+	uv1 = vec2(vertex.x/4/128 + timeSec/10, -vertex.z/4/128); // (ModelUV1Matrix * vertex).xy;
 	uv2 = vec2(vertex.x/5/128, -vertex.z/5/128); // (ModelUV2Matrix * vertex).xy;
 
 	vec3 eyeVec = normalize(cameraPos.xyz - vertex.xyz);

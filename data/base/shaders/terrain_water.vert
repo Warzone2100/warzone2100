@@ -5,7 +5,7 @@ uniform mat4 ModelViewProjectionMatrix;
 uniform mat4 ModelUV1Matrix;
 uniform mat4 ModelUV2Matrix;
 
-uniform float time; // in seconds
+uniform float timeSec;
 
 uniform vec4 cameraPos; // in modelSpace
 uniform vec4 sunPos; // in modelSpace, normalized
@@ -40,7 +40,7 @@ void main()
 	gl_Position = position;
 	vertexDistance = position.z;
 
-	uv1 = vec2(vertex.x/4/128 + time/10, -vertex.z/4/128); // (ModelUV1Matrix * vertex).xy;
+	uv1 = vec2(vertex.x/4/128 + timeSec/10, -vertex.z/4/128); // (ModelUV1Matrix * vertex).xy;
 	uv2 = vec2(vertex.x/5/128, -vertex.z/5/128); // (ModelUV2Matrix * vertex).xy;
 
 	vec3 eyeVec = normalize(cameraPos.xyz - vertex.xyz);
