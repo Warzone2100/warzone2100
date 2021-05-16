@@ -314,7 +314,7 @@ jobs:
     #####################################################
     - name: 'Upload Artifact - (Portable Build)'
       uses: actions/upload-artifact@v2
-      if: success() && (github.repository == 'amelentev/warzone2100')
+      if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_win_${{ matrix.architecture }}_portable
         path: '${{ github.workspace }}\output\portable'
