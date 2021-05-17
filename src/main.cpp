@@ -1279,6 +1279,90 @@ void osSpecificFirstChanceProcessSetup_Win()
 	}
 #endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
 }
+
+static bool winCheckIfRunningUnderWine(std::string* output_wineinfostr = nullptr, std::string* output_platform = nullptr)
+{
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+	typedef const char* (CDECL *WineGetVersionFunction)(void);
+	typedef void (CDECL *WineGetHostVersionFunction)(const char **sysname, const char **release);
+
+	HMODULE hntdll = GetModuleHandleW(L"ntdll.dll");
+	if (!hntdll)
+	{
+		return false;
+	}
+
+	WineGetVersionFunction pWineGetVersion = reinterpret_cast<WineGetVersionFunction>(reinterpret_cast<void*>(GetProcAddress(hntdll, "wine_get_version")));
+	WineGetHostVersionFunction pWineGetHostVersion = reinterpret_cast<WineGetHostVersionFunction>(reinterpret_cast<void*>(GetProcAddress(hntdll, "wine_get_host_version")));
+
+	if (pWineGetVersion == nullptr)
+	{
+		return false;
+	}
+
+	std::string resultWineVersionInfo = "Wine";
+	const char* pWineVer = pWineGetVersion();
+	if (pWineVer != nullptr)
+	{
+		resultWineVersionInfo += std::string(" ") + pWineVer;
+	}
+
+	const char* pSysname = nullptr;
+	const char* pSysversion = nullptr;
+	if (pWineGetHostVersion != nullptr)
+	{
+		pWineGetHostVersion(&pSysname, &pSysversion);
+	}
+	if (pSysname != nullptr)
+	{
+		if (output_platform)
+		{
+			(*output_platform) = pSysname;
+		}
+		resultWineVersionInfo += std::string(" (under ") + pSysname;
+		if (pSysversion != nullptr)
+		{
+			resultWineVersionInfo += std::string(" ") + pSysversion;
+		}
+		resultWineVersionInfo += ")";
+	}
+
+	if (output_wineinfostr)
+	{
+		(*output_wineinfostr) = resultWineVersionInfo;
+	}
+
+	return true;
+#else
+	return false;
+#endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
+}
+
+void osSpecificPostInit_Win()
+{
+	std::string wineInfoStr;
+	std::string wineHostPlatform;
+	if (winCheckIfRunningUnderWine(&wineInfoStr, &wineHostPlatform))
+	{
+		const char* pWineNativeAvailableMsg = "You are running the Windows version of Warzone 2100 under Wine.\n\nA native version for your platform is likely available (and will perform better).\n\nPlease visit: https://wz2100.net";
+		// Display a messagebox that a native version is available for this platform
+		if (!wineHostPlatform.empty())
+		{
+			if (strncasecmp(wineHostPlatform.c_str(), "Darwin", std::min<size_t>(wineHostPlatform.size(), strlen("Darwin"))) == 0)
+			{
+				// macOS
+				pWineNativeAvailableMsg = "You are running the Windows version of Warzone 2100 under Wine.\n\nA native version for macOS is available.\n\nPlease visit: https://wz2100.net";
+			}
+			if (strncasecmp(wineHostPlatform.c_str(), "Linux", std::min<size_t>(wineHostPlatform.size(), strlen("Linux"))) == 0)
+			{
+				// Linux
+				pWineNativeAvailableMsg = "You are running the Windows version of Warzone 2100 under Wine.\n\nNative builds for Linux are available.\n\nPlease visit: https://wz2100.net";
+			}
+		}
+
+		wzDisplayDialog(Dialog_Information, "Warzone 2100 under Wine", pWineNativeAvailableMsg);
+	}
+}
 #endif /* defined(WZ_OS_WIN) */
 
 void osSpecificFirstChanceProcessSetup()
@@ -1296,6 +1380,15 @@ void osSpecificFirstChanceProcessSetup()
 
 	// Initialize time conversion information
 	tzset();
+#else
+	// currently, no-op
+#endif
+}
+
+void osSpecificPostInit()
+{
+#if defined(WZ_OS_WIN)
+	osSpecificPostInit_Win();
 #else
 	// currently, no-op
 #endif
@@ -1654,6 +1747,8 @@ int realmain(int argc, char *argv[])
 		cocoaTransformToBackgroundApplication();
 	}
 #endif
+
+	osSpecificPostInit();
 
 	wzMainEventLoop();
 	ActivityManager::instance().preSystemShutdown();
