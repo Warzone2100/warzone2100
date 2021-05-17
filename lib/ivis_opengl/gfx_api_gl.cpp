@@ -314,20 +314,20 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVMatrix", "ModelUVLightMatrix",
 			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "hasNormalmap", "hasSpecularmap", "hasHeightmap",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality", "hasNormalmap", "hasSpecularmap", "hasHeightmap",
 			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular", "TextureHeight"} }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix",
 			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
 			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular", "TextureHeight" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
 		{ "ModelViewProjectionMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
 			"cameraPos", "sunPos",
 			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec", "quality",
 			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm", "tex1_hm", "tex2_hm" } }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" } }),
@@ -1208,6 +1208,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.quality);
 	setUniforms(i++, cbuf.hasNormalmap);
 	setUniforms(i++, cbuf.hasSpecularmap);
 	setUniforms(i++, cbuf.hasHeightmap);
@@ -1246,6 +1247,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.fog_enabled);
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.quality);
 	setUniforms(i++, 0); // tex
 	setUniforms(i++, 1); // lightmap_tex
 	setUniforms(i++, 2); // TextureNormal
@@ -1270,6 +1272,7 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 	setUniforms(i++, cbuf.fog_begin);
 	setUniforms(i++, cbuf.fog_end);
 	setUniforms(i++, cbuf.timeSec);
+	setUniforms(i++, cbuf.quality);
 	 // textures:
 	setUniforms(i++, 0);
 	setUniforms(i++, 1);

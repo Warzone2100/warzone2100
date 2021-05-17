@@ -700,6 +700,7 @@ namespace gfx_api
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
+		int quality;
 		int hasNormalmap;
 		int hasSpecularmap;
 		int hasHeightmap;
@@ -734,6 +735,7 @@ namespace gfx_api
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
+		int quality;
 	};
 
 	using TerrainDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
@@ -771,6 +773,7 @@ namespace gfx_api
 		float fog_begin;
 		float fog_end;
 		float timeSec;
+		int quality;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,

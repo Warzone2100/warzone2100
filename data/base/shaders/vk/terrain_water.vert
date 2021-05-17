@@ -15,6 +15,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogEnd;
 	float fogStart;
 	float timeSec;
+	int quality;
 };
 
 layout(location = 0) in vec4 vertex; // .w is depth

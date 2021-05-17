@@ -19,6 +19,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	int fogEnabled; // whether fog is enabled
 	float fogEnd;
 	float fogStart;
+	int quality;
 };
 
 layout(location = 0) in vec2 uv_tex;
@@ -30,7 +31,12 @@ layout(location = 4) in vec3 halfVec;
 
 layout(location = 0) out vec4 FragColor;
 
-void main()
+vec4 main_classic()
+{
+	return texture(tex, uv_tex) * texture(lightmap_tex, uv_lightmap);
+}
+
+vec4 main_bumpMapping()
 {
 	vec3 N = normalize(texture(TextureNormal, uv_tex).xyz * 2.0 - 1.0);
 	vec3 L = normalize(lightDir);
@@ -45,8 +51,20 @@ void main()
 	vec4 gloss = texture(TextureSpecular, uv_tex);
 
 	vec4 texColor = texture(tex, uv_tex);
-	vec4 fragColor = texColor*(ambientLight + diffuseLight*lambertTerm) + vec4(1,1,1,texColor.a)*specularLight*gloss*gaussianTerm;
+	vec4 fragColor = texColor*(ambientLight*0.5 + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
 	fragColor *= texture(lightmap_tex, uv_lightmap);
+	fragColor.a = texColor.a;
+	return fragColor;
+}
+
+void main()
+{
+	vec4 fragColor;
+	if (quality == 1) {
+		fragColor = main_bumpMapping();
+	} else {
+		fragColor = main_classic();
+	}
 
 	if (fogEnabled > 0)
 	{

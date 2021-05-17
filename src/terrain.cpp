@@ -154,6 +154,8 @@ GLsizei dreCount;
 /// Are we actually drawing something using the DrawRangeElements functions?
 bool drawRangeElementsStarted = false;
 
+TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::CLASSIC;
+
 #define MIN_TERRAIN_TEXTURE_SIZE 512
 
 /// Pass all remaining triangles to OpenGL
@@ -1281,7 +1283,8 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::m
 			ModelViewProjection, ModelUV, ModelUVLightmap,
 			glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 			pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr, pHeightMapTexture != nullptr});
+			fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
+			terrainShaderQuality, pNormalMapTexture != nullptr, pSpecularMapTexture != nullptr, pHeightMapTexture != nullptr});
 
 		// load the textures
 		gfx_api::TerrainLayer::get().bind_textures(&pie_Texture(texPage.value()), lightmap_tex_num, pNormalMapTexture, pSpecularMapTexture, pHeightMapTexture);
@@ -1326,7 +1329,7 @@ static void drawDecals(const glm::mat4 &ModelViewProjection, const glm::mat4 &Mo
 		ModelViewProjection, ModelUVLightmap,
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
-		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd });
+		fogColor, renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd, terrainShaderQuality });
 
 	int size = 0;
 	int offset = 0;
@@ -1441,7 +1444,7 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 		glm::vec4(cameraPos, 0), glm::vec4(glm::normalize(sunPos), 0),
 		pie_GetLighting0(LIGHT_EMISSIVE), pie_GetLighting0(LIGHT_AMBIENT), pie_GetLighting0(LIGHT_DIFFUSE), pie_GetLighting0(LIGHT_SPECULAR),
 		glm::vec4(0.f), renderState.fogEnabled, renderState.fogBegin, renderState.fogEnd,
-		waterOffset*10,
+		waterOffset*10, terrainShaderQuality
 	});
 	gfx_api::context::get().bind_index_buffer(*waterIndexVBO, gfx_api::index_type::u32);
 

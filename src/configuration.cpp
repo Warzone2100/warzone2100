@@ -50,6 +50,7 @@
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
+#include "terrain.h"
 
 #include <type_traits>
 
@@ -466,6 +467,10 @@ bool loadConfig()
 	BlueprintTrackAnimationSpeed = iniGetInteger("BlueprintTrackAnimationSpeed", 20).value();
 	lockCameraScrollWhileRotating = iniGetBool("lockCameraScrollWhileRotating", false).value();
 	autosaveEnabled = iniGetBool("autosaveEnabled", true).value();
+	if (auto value = iniGetIntegerOpt("terrainShaderQuality"))
+	{
+		terrainShaderQuality = static_cast<TerrainShaderQuality>(value.value());
+	}
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -602,6 +607,7 @@ bool saveConfig()
 	iniSetInteger("BlueprintTrackAnimationSpeed", BlueprintTrackAnimationSpeed);
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
 	iniSetBool("autosaveEnabled", autosaveEnabled);
+	iniSetInteger("terrainShaderQuality", terrainShaderQuality);
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);

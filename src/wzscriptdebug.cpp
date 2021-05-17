@@ -825,6 +825,10 @@ public:
 			setTheSun(newSun);
 			debug(LOG_INFO, "Sun at %f,%f,%f", newSun.x, newSun.y, newSun.z);
 		});
+		prevButton = panel->createButton(2, "Change terrain quality", [](){ // TODO: move to config
+			terrainShaderQuality = static_cast<TerrainShaderQuality>((terrainShaderQuality + 1) % TerrainShaderQuality::END);
+			debug(LOG_INFO, "terrainShaderQuality=%d", (int)terrainShaderQuality);
+		}, prevButton);
 		return panel;
 	}
 private:

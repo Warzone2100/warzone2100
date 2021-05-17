@@ -37,6 +37,14 @@
 /// for scripts, since campaign may still want total darkness on unexplored tiles.
 static bool bRevealActive = true;
 
+inline float getTileIllumination(const MAPTILE *psTile)
+{
+	switch (terrainShaderQuality) {
+		case TerrainShaderQuality::BUMP_MAPPING: return psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
+		default: return psTile->illumination;
+	}
+}
+
 // ------------------------------------------------------------------------------------
 void	avUpdateTiles()
 {
@@ -49,7 +57,7 @@ void	avUpdateTiles()
 	/* Go through the tiles */
 	for (psTile = psMapTiles; i < len; i++)
 	{
-		maxLevel = psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
+		maxLevel = getTileIllumination(psTile);
 
 		if (psTile->level > MIN_ILLUM || psTile->tileExploredBits & playermask)	// seen
 		{
@@ -107,11 +115,11 @@ void	preProcessVisibility()
 		for (int j = 0; j < mapHeight; j++)
 		{
 			MAPTILE *psTile = mapTile(i, j);
-			psTile->level = bRevealActive ? MIN(MIN_ILLUM, psTile->ambientOcclusion / 4.0f) : 0;
+			psTile->level = bRevealActive ? MIN(MIN_ILLUM, getTileIllumination(psTile) / 4.0f) : 0;
 
 			if (TEST_TILE_VISIBLE(selectedPlayer, psTile))
 			{
-				psTile->level = psTile->ambientOcclusion;
+				psTile->level = getTileIllumination(psTile);
 			}
 		}
 	}

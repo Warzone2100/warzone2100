@@ -24,6 +24,7 @@ layout(std140, set = 0, binding = 0) uniform cbuffer {
 	float fogEnd;
 	float fogStart;
 	float timeSec;
+	int quality;
 };
 
 layout(location = 1) in vec2 uv1;
@@ -35,7 +36,12 @@ layout(location = 6) in float depth;
 
 layout(location = 0) out vec4 FragColor;
 
-void main()
+vec4 main_classic()
+{
+	return texture(tex1, uv1) * texture(tex2, uv2);
+}
+
+vec4 main_bumpMapping()
 {
 	vec4 fragColor = texture(tex1, uv1) * texture(tex2, uv2);
 
@@ -49,14 +55,22 @@ void main()
 
 	// Gaussian specular term computation
 	vec3 H = normalize(halfVec);
-	float angle = acos(dot(H, N));
-	float exponent = angle / 0.2;
-	exponent = -(exponent * exponent);
-	float gaussianTerm = exp(exponent) * float(lambertTerm > 0);
+	float exponent = acos(dot(H, N)) / 0.2;
+	float gaussianTerm = exp(-(exponent * exponent)) * float(lambertTerm > 0);
 
 	vec4 gloss = texture(tex1_sm, uv1) * texture(tex2_sm, uv2);
 
-	fragColor = fragColor*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
+	return fragColor*(ambientLight*0.5 + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
+}
+
+void main()
+{
+	vec4 fragColor;
+	if (quality == 1) {
+		fragColor = main_bumpMapping();
+	} else {
+		fragColor = main_classic();
+	}
 
 	if (fogEnabled > 0)
 	{
