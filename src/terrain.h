@@ -37,6 +37,15 @@ void setTileColour(int x, int y, PIELIGHT colour);
 
 void markTileDirty(int i, int j);
 
+enum TerrainShaderQuality
+{
+	CLASSIC = 0,
+	BUMP_MAPPING = 1,
+	END = 2
+};
+
+extern TerrainShaderQuality terrainShaderQuality;
+
 // for debug
 void reloadTerrainTextures();
 

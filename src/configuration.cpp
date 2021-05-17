@@ -52,6 +52,7 @@
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
 #include "clparse.h" // for autoratingUrl
+#include "terrain.h"
 
 #include <type_traits>
 
@@ -483,6 +484,18 @@ bool loadConfig()
 	}
 	war_setAutoLagKickSeconds(iniGetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds()).value());
 	war_setDisableReplayRecording(iniGetBool("disableReplayRecord", war_getDisableReplayRecording()).value());
+	if (auto value = iniGetIntegerOpt("terrainShaderQuality"))
+	{
+		auto intValue = value.value();
+		if (intValue >= 0 && intValue < TerrainShaderQuality::END)
+		{
+			terrainShaderQuality = static_cast<TerrainShaderQuality>(intValue);
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainShaderQuality value: %d; defaulting to: %d", intValue, static_cast<int>(terrainShaderQuality));
+		}
+	}
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -624,6 +637,7 @@ bool saveConfig()
 	iniSetBool("fog", pie_GetFogEnabled());
 	iniSetInteger("hostAutoLagKickSeconds", war_getAutoLagKickSeconds());
 	iniSetBool("disableReplayRecord", war_getDisableReplayRecording());
+	iniSetInteger("terrainShaderQuality", terrainShaderQuality);
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);

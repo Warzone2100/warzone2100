@@ -18,6 +18,8 @@ uniform float fogEnd;
 uniform float fogStart;
 uniform vec4 fogColor;
 
+uniform int quality; // 0-classic, 1-bumpmapping
+
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
 #define NEWGL
 #else
@@ -48,7 +50,12 @@ out vec4 FragColor;
 #define FragColor gl_FragColor
 #endif
 
-void main()
+vec4 main_classic()
+{
+	return texture(tex, uv_tex) * texture(lightmap_tex, uv_lightmap);
+}
+
+vec4 main_bumpMapping()
 {
 	vec3 N = normalize(texture(TextureNormal, uv_tex).xyz * 2.0 - 1.0);
 	vec3 L = normalize(lightDir);
@@ -63,9 +70,20 @@ void main()
 	vec4 gloss = texture(TextureSpecular, uv_tex);
 
 	vec4 texColor = texture(tex, uv_tex);
-	vec4 fragColor = texColor*(ambientLight + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
+	vec4 fragColor = texColor*(ambientLight*0.5 + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
 	fragColor *= texture(lightmap_tex, uv_lightmap);
 	fragColor.a = texColor.a;
+	return fragColor;
+}
+
+void main()
+{
+	vec4 fragColor;
+	if (quality == 1) {
+		fragColor = main_bumpMapping();
+	} else {
+		fragColor = main_classic();
+	}
 
 	if (fogEnabled > 0)
 	{

@@ -18,7 +18,7 @@ attribute vec3 vertexNormal;
 #endif
 
 #if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-out vec4 color;
+out float colora;
 out vec2 uv;
 out vec2 uvLight;
 out float vertexDistance;
@@ -26,7 +26,7 @@ out float vertexDistance;
 out vec3 lightDir;
 out vec3 halfVec;
 #else
-varying vec4 color;
+varying float colora;
 varying vec2 uv;
 varying vec2 uvLight;
 varying float vertexDistance;
@@ -37,7 +37,7 @@ varying vec3 halfVec;
 
 void main()
 {
-	color = vertexColor;
+	colora = vertexColor.a;
 
 	uv = (ModelUVMatrix * vertex).xy;
 	uvLight = (ModelUVLightMatrix * vertex).xy;
