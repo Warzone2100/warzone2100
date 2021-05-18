@@ -154,7 +154,7 @@ GLsizei dreCount;
 /// Are we actually drawing something using the DrawRangeElements functions?
 bool drawRangeElementsStarted = false;
 
-TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::CLASSIC;
+TerrainShaderQuality terrainShaderQuality = TerrainShaderQuality::NORMAL_MAPPING;
 
 #define MIN_TERRAIN_TEXTURE_SIZE 512
 
@@ -1260,7 +1260,8 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::m
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName) {
-		return fileName.empty() ? nullptr : &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
+		if (fileName.empty() || terrainShaderQuality == TerrainShaderQuality::CLASSIC) return (gfx_api::texture*)nullptr;
+		return &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
 	};
 
 	// draw each layer separately
@@ -1431,7 +1432,8 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
 	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName) {
-		return fileName.empty() ? nullptr : &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
+		if (fileName.empty() || terrainShaderQuality == TerrainShaderQuality::CLASSIC) return (gfx_api::texture*)nullptr;
+		return &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
 	};
 	gfx_api::WaterPSO::get().bind_textures(
 		&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()),

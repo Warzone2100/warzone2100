@@ -40,7 +40,7 @@ static bool bRevealActive = true;
 inline float getTileIllumination(const MAPTILE *psTile)
 {
 	switch (terrainShaderQuality) {
-		case TerrainShaderQuality::BUMP_MAPPING: return psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
+		case TerrainShaderQuality::NORMAL_MAPPING: return psTile->ambientOcclusion; // sunlight is handled by shaders so only AO needed for lightmap
 		default: return psTile->illumination;
 	}
 }
