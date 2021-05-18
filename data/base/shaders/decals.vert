@@ -50,7 +50,7 @@ void main()
 	uv_lightmap = (ModelUVLightmapMatrix * vertex).xy;
 
 	// constructing ModelSpace -> TangentSpace mat3
-	vec3 bitangent = cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
+	vec3 bitangent = -cross(vertexNormal, vertexTangent.xyz) * vertexTangent.w;
 	mat3 ModelTangentMatrix = mat3(vertexTangent.xyz, bitangent, vertexNormal);
 	// transform light from ModelSpace to TangentSpace:
 	vec3 eyeVec = normalize((cameraPos.xyz - vertex.xyz) * ModelTangentMatrix);
