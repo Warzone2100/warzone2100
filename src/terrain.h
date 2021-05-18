@@ -40,7 +40,7 @@ void markTileDirty(int i, int j);
 enum TerrainShaderQuality
 {
 	CLASSIC = 0,
-	BUMP_MAPPING = 1,
+	NORMAL_MAPPING = 1,
 	END = 2
 };
 
