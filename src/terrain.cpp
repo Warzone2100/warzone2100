@@ -668,9 +668,11 @@ void loadTerrainTextures()
 		// pre-load the texture
 		const auto groundType = getGroundType(layer);
 		preload("", groundType.textureName);
-		preload("normapmap", groundType.normalMapTextureName);
-		preload("specmap", groundType.specularMapTextureName);
-		preload("heightmap", groundType.heightMapTextureName);
+		if (terrainShaderQuality != TerrainShaderQuality::CLASSIC) {
+			preload("normapmap", groundType.normalMapTextureName);
+			preload("specmap", groundType.specularMapTextureName);
+			preload("heightmap", groundType.heightMapTextureName);
+		}
 	}
 
 	// check water optional textures

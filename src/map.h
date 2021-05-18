@@ -58,9 +58,9 @@ struct GROUND_TYPE
 {
 	std::string textureName;
 	float textureSize;
-	std::string normalMapTextureName;
-	std::string specularMapTextureName;
-	std::string heightMapTextureName;
+	std::string normalMapTextureName = "";
+	std::string specularMapTextureName = "";
+	std::string heightMapTextureName = "";
 };
 
 /* Information stored with each tile */
