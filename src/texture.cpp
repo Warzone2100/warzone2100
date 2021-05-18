@@ -191,17 +191,19 @@ bool texLoad(const char *fileName)
 		sprintf(partialPath, "%s-%d", fileName, maxTileTexSize);
 
 		bool has_nm = false, has_sm = false, has_hm = false;
-		WZ_PHYSFS_enumerateFiles(partialPath, [&](const char *fileName) -> bool {
-			size_t len = strlen(fileName);
-			auto hasSuffix = [&](const char *suf) -> bool {
-				size_t l = strlen(suf);
-				return strncmp(fileName + len - l, suf, l) == 0;
-			};
-			has_nm |= hasSuffix("_nm.png");
-			has_sm |= hasSuffix("_sm.png");
-			has_hm |= hasSuffix("_hm.png");
-			return !has_nm || !has_sm || !has_hm;
-		});
+		if (terrainShaderQuality != TerrainShaderQuality::CLASSIC) {
+			WZ_PHYSFS_enumerateFiles(partialPath, [&](const char *fileName) -> bool {
+				size_t len = strlen(fileName);
+				auto hasSuffix = [&](const char *suf) -> bool {
+					size_t l = strlen(suf);
+					return strncmp(fileName + len - l, suf, l) == 0;
+				};
+				has_nm |= hasSuffix("_nm.png");
+				has_sm |= hasSuffix("_sm.png");
+				has_hm |= hasSuffix("_hm.png");
+				return !has_nm || !has_sm || !has_hm;
+			});
+		}
 
 		snprintf(fullPath, sizeof(fullPath), "%s-nm", fileName);
 		if (has_nm) {
