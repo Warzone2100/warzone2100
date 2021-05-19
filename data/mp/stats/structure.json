@@ -843,8 +843,8 @@
     "Emplacement-Howitzer-Incendiary": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 550,
-        "buildPower": 400,
+        "buildPoints": 575,
+        "buildPower": 350,
         "height": 1,
         "hitpoints": 400,
         "id": "Emplacement-Howitzer-Incendiary",
@@ -909,8 +909,8 @@
     "Emplacement-Howitzer150": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 600,
-        "buildPower": 425,
+        "buildPoints": 625,
+        "buildPower": 400,
         "height": 1,
         "hitpoints": 400,
         "id": "Emplacement-Howitzer150",
@@ -1261,8 +1261,8 @@
     "Emplacement-RotHow": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 650,
-        "buildPower": 525,
+        "buildPoints": 600,
+        "buildPower": 375,
         "height": 1,
         "hitpoints": 400,
         "id": "Emplacement-RotHow",
@@ -1283,8 +1283,8 @@
     "Emplacement-RotMor": {
         "armour": 10,
         "breadth": 1,
-        "buildPoints": 500,
-        "buildPower": 325,
+        "buildPoints": 425,
+        "buildPower": 150,
         "height": 1,
         "hitpoints": 300,
         "id": "Emplacement-RotMor",
