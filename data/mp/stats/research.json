@@ -1328,10 +1328,11 @@
             "Emplacement-MortarPit01"
         ],
         "requiredResearch": [
+            "R-Defense-MortarPit",
             "R-Wpn-Mortar3"
         ],
-        "researchPoints": 4800,
-        "researchPower": 150,
+        "researchPoints": 3600,
+        "researchPower": 112,
         "resultStructures": [
             "Emplacement-RotMor"
         ],
@@ -6801,11 +6802,11 @@
         "msgName": "RES_W_HOWD4",
         "name": "HEAP Howitzer Shells",
         "requiredResearch": [
-            "R-Wpn-Howitzer03-Rot",
+            "R-Wpn-Howitzer-Damage03",
             "R-Wpn-Cannon-Damage07"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 14000,
+        "researchPower": 437,
         "results": [
             {
                 "class": "Weapon",
@@ -6839,8 +6840,8 @@
         "requiredResearch": [
             "R-Wpn-Howitzer-Damage04"
         ],
-        "researchPoints": 12000,
-        "researchPower": 375,
+        "researchPoints": 18000,
+        "researchPower": 450,
         "results": [
             {
                 "class": "Weapon",
@@ -6875,8 +6876,8 @@
         "requiredResearch": [
             "R-Wpn-Howitzer-Damage05"
         ],
-        "researchPoints": 14000,
-        "researchPower": 437,
+        "researchPoints": 20000,
+        "researchPower": 450,
         "results": [
             {
                 "class": "Weapon",
@@ -6911,9 +6912,8 @@
         "msgName": "RES_W_INH",
         "name": "Incendiary Howitzer",
         "requiredResearch": [
-            "R-Wpn-Flame2",
-            "R-Wpn-Howitzer-Damage03",
-            "R-Wpn-HvyHowitzer"
+            "R-Wpn-Mortar-Incendiary",
+            "R-Wpn-Howitzer-Damage01"
         ],
         "researchPoints": 12000,
         "researchPower": 375,
@@ -6928,7 +6928,8 @@
         "msgName": "RES_W_HOWRF1",
         "name": "Howitzer Autoloader",
         "requiredResearch": [
-            "R-Wpn-HvyHowitzer"
+            "R-Wpn-HowitzerMk1",
+            "R-Wpn-Howitzer-Damage01"
         ],
         "researchPoints": 6000,
         "researchPower": 187,
@@ -6956,10 +6957,11 @@
         "id": "R-Wpn-Howitzer-ROF02",
         "name": "Howitzer Autoloader Mk2",
         "requiredResearch": [
-            "R-Wpn-Howitzer-ROF01"
+            "R-Wpn-Howitzer-ROF01",
+            "R-Wpn-Howitzer03-Rot"
         ],
-        "researchPoints": 8000,
-        "researchPower": 250,
+        "researchPoints": 9000,
+        "researchPower": 281,
         "results": [
             {
                 "class": "Weapon",
@@ -6987,8 +6989,8 @@
         "requiredResearch": [
             "R-Wpn-Howitzer-ROF02"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 12000,
+        "researchPower": 375,
         "results": [
             {
                 "class": "Weapon",
@@ -7017,8 +7019,8 @@
         "requiredResearch": [
             "R-Wpn-Howitzer-ROF03"
         ],
-        "researchPoints": 12000,
-        "researchPower": 375,
+        "researchPoints": 16000,
+        "researchPower": 450,
         "results": [
             {
                 "class": "Weapon",
@@ -7048,8 +7050,8 @@
             "Howitzer105Mk1"
         ],
         "requiredResearch": [
-            "R-Wpn-Howitzer-Damage03",
-            "R-Wpn-HvyHowitzer"
+            "R-Wpn-Howitzer-ROF01",
+            "R-Wpn-Mortar3"
         ],
         "researchPoints": 12000,
         "researchPower": 375,
@@ -7103,11 +7105,12 @@
         "msgName": "RES_W_HH1",
         "name": "Heavy Howitzer - Ground Shaker",
         "requiredResearch": [
-            "R-Wpn-Howitzer-Damage02",
+            "R-Wpn-Howitzer-Damage05",
+            "R-Wpn-Howitzer-Accuracy02",
             "R-Wpn-HowitzerMk1"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 24400,
+        "researchPower": 450,
         "resultComponents": [
             "Howitzer150Mk1"
         ],
@@ -7913,8 +7916,8 @@
             "R-Wpn-Mortar-Acc01",
             "R-Struc-Research-Upgrade04"
         ],
-        "researchPoints": 7200,
-        "researchPower": 225,
+        "researchPoints": 5000,
+        "researchPower": 156,
         "results": [
             {
                 "class": "Weapon",
@@ -7941,11 +7944,11 @@
         "msgName": "RES_W_M_AC3",
         "name": "Target Acquisition Mortar Shells",
         "requiredResearch": [
-            "R-Struc-Research-Upgrade08",
+            "R-Struc-Research-Upgrade05",
             "R-Wpn-Mortar-Acc02"
         ],
-        "researchPoints": 9200,
-        "researchPower": 287,
+        "researchPoints": 8800,
+        "researchPower": 275,
         "results": [
             {
                 "class": "Weapon",
@@ -8117,8 +8120,8 @@
         "requiredResearch": [
             "R-Wpn-Mortar-Damage04"
         ],
-        "researchPoints": 11200,
-        "researchPower": 350,
+        "researchPoints": 9300,
+        "researchPower": 290,
         "results": [
             {
                 "class": "Weapon",
@@ -8153,8 +8156,8 @@
         "requiredResearch": [
             "R-Wpn-Mortar-Damage05"
         ],
-        "researchPoints": 13200,
-        "researchPower": 412,
+        "researchPoints": 9400,
+        "researchPower": 293,
         "results": [
             {
                 "class": "Weapon",
@@ -8234,7 +8237,7 @@
         "name": "Mortar Autoloader Mk2",
         "requiredResearch": [
             "R-Wpn-Mortar-ROF01",
-            "R-Wpn-Mortar02Hvy"
+            "R-Wpn-Mortar3"
         ],
         "researchPoints": 6000,
         "researchPower": 187,
@@ -8265,8 +8268,8 @@
         "requiredResearch": [
             "R-Wpn-Mortar-ROF02"
         ],
-        "researchPoints": 8000,
-        "researchPower": 250,
+        "researchPoints": 6300,
+        "researchPower": 196,
         "results": [
             {
                 "class": "Weapon",
@@ -8296,8 +8299,8 @@
             "R-Wpn-Mortar-ROF03",
             "R-Wpn-Cannon-ROF03"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 6600,
+        "researchPower": 206,
         "results": [
             {
                 "class": "Weapon",
@@ -8362,11 +8365,12 @@
             "Mortar1Mk1"
         ],
         "requiredResearch": [
-            "R-Wpn-Mortar02Hvy",
-            "R-Wpn-Mortar-ROF03"
+            "R-Vehicle-Metals01",
+            "R-Wpn-Mortar-Damage02",
+            "R-Wpn-Mortar01Lt"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 7200,
+        "researchPower": 225,
         "resultComponents": [
             "Mortar3ROTARYMk1"
         ],
