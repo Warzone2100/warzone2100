@@ -296,6 +296,26 @@ public:
 	void setTransparentToClicks(bool hasClickTransparency);
 	bool transparentToClicks() const;
 
+	virtual int32_t idealWidth()
+	{
+		if (!defaultIdealWidth.has_value())
+		{
+			defaultIdealWidth = width();
+		}
+
+		return defaultIdealWidth.value();
+	}
+
+	virtual int32_t idealHeight()
+	{
+		if (!defaultIdealHeight.has_value())
+		{
+			defaultIdealHeight = height();
+		}
+
+		return defaultIdealHeight.value();
+	}
+
 	virtual nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets()
 	{
 		return nonstd::nullopt;
@@ -309,6 +329,10 @@ public:
 	void                   *pUserData;              ///< Pointer to a user data block (if any)
 	UDWORD                  UserData;               ///< User data (if any)
 	std::weak_ptr<W_SCREEN> screenPointer;          ///< Pointer to screen the widget is on (if attached).
+
+protected:
+	nonstd::optional<int32_t> defaultIdealWidth;
+	nonstd::optional<int32_t> defaultIdealHeight;
 
 private:
 	WIDGET_CALCLAYOUT_FUNC  calcLayout;				///< Optional calc layout callback

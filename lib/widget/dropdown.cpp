@@ -51,7 +51,6 @@ public:
 void DropdownItemWrapper::initialize(const std::shared_ptr<WIDGET> &newItem, DropdownOnSelectHandler newOnSelect)
 {
 	item = newItem;
-	setGeometry(item->geometry());
 	attach(item);
 	onSelect = newOnSelect;
 }
@@ -60,7 +59,7 @@ bool DropdownItemWrapper::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY
 {
 	auto result = WIDGET::processClickRecursive(psContext, key, wasPressed);
 
-	if (key != WKEY_NONE && wasPressed && item->isMouseOverWidget())
+	if (key != WKEY_NONE && wasPressed && this->hitTest(psContext->mx, psContext->my))
 	{
 		onSelect(std::static_pointer_cast<DropdownItemWrapper>(shared_from_this()));
 	}
@@ -70,12 +69,7 @@ bool DropdownItemWrapper::processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY
 
 void DropdownItemWrapper::geometryChanged()
 {
-	item->setGeometry(
-		padding.left,
-		padding.top,
-		width() - padding.left - padding.right,
-		height() - padding.top - padding.bottom
-	);
+	item->setGeometry(0, 0, width(), height());
 }
 
 void DropdownItemWrapper::display(int xOffset, int yOffset)
@@ -182,8 +176,6 @@ void DropdownWidget::addItem(const std::shared_ptr<WIDGET> &item)
 	};
 
 	auto wrapper = DropdownItemWrapper::make(item, itemOnSelect);
-	wrapper->setPadding(itemPadding);
-	wrapper->setGeometry(0, 0, width(), height());
 
 	items.push_back(wrapper);
 	itemsList->addItem(wrapper);

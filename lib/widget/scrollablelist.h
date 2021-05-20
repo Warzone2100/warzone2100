@@ -61,6 +61,7 @@ public:
 	int getScrollbarWidth() const;
 	uint16_t getScrollPosition() const;
 	void setScrollPosition(uint16_t newPosition);
+	int32_t idealWidth() override;
 
 protected:
 	void geometryChanged() override;
