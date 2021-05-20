@@ -55,14 +55,19 @@ public:
 		return item;
 	}
 
-	void setPadding(const Padding &value)
-	{
-		padding = value;
-	}
-
 	void setSelected(bool value)
 	{
 		selected = value;
+	}
+
+	int32_t idealWidth() override
+	{
+		return item->idealWidth();
+	}
+
+	int32_t idealHeight() override
+	{
+		return item->idealHeight();
 	}
 
 protected:
@@ -71,7 +76,6 @@ protected:
 private:
 	std::shared_ptr<WIDGET> item;
 	DropdownOnSelectHandler onSelect;
-	Padding padding;
 	bool selected = false;
 };
 
@@ -91,10 +95,6 @@ public:
 	void setListHeight(uint32_t value)
 	{
 		itemsList->setGeometry(itemsList->x(), itemsList->y(), itemsList->width(), value);
-	}
-	void setItemPadding(const Padding &value)
-	{
-		itemPadding = value;
 	}
 	void setSelectedIndex(size_t index)
 	{
@@ -136,12 +136,16 @@ public:
 		return itemsList->getScrollbarWidth();
 	}
 
+	int32_t idealWidth() override
+	{
+		return itemsList->idealWidth();
+	}
+
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
 	std::shared_ptr<ScrollableListWidget> itemsList;
 	std::shared_ptr<W_SCREEN> overlayScreen;
 	std::shared_ptr<DropdownItemWrapper> selectedItem;
-	Padding itemPadding = {0, 0, 0, 0};
 	std::function<void(DropdownWidget&)> onChange;
 
 	void select(const std::shared_ptr<DropdownItemWrapper> &selected)

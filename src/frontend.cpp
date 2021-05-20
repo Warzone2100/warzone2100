@@ -38,6 +38,8 @@
 #include "lib/widget/label.h"
 #include "lib/widget/slider.h"
 #include "lib/widget/dropdown.h"
+#include "lib/widget/gridlayout.h"
+#include "lib/widget/margin.h"
 
 #include <limits>
 
@@ -89,7 +91,8 @@ bool			bLimiterLoaded = false;
 // Forward definitions
 
 static W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
-static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style);
+static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style);
+static std::shared_ptr<WIDGET> addMargin(std::shared_ptr<WIDGET> widget);
 
 // ////////////////////////////////////////////////////////////////////////////
 // Helper functions
@@ -1100,20 +1103,20 @@ static char const *videoOptionsResolutionGetReadOnlyTooltip()
 
 static void videoOptionsDisableResolutionButtons()
 {
-	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL);
-	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY);
+	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL_CONTAINER);
+	widgReveal(psWScreen, FRONTEND_RESOLUTION_READONLY_CONTAINER);
 	auto readonlyResolutionTooltip = videoOptionsResolutionGetReadOnlyTooltip();
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL, readonlyResolutionTooltip);
 	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY, readonlyResolutionTooltip);
-	widgHide(psWScreen, FRONTEND_RESOLUTION_DROPDOWN_LABEL);
+	widgHide(psWScreen, FRONTEND_RESOLUTION_DROPDOWN_LABEL_CONTAINER);
 	widgHide(psWScreen, FRONTEND_RESOLUTION_DROPDOWN);
 }
 
 static void videoOptionsEnableResolutionButtons()
 {
-	widgHide(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL);
-	widgHide(psWScreen, FRONTEND_RESOLUTION_READONLY);
-	widgReveal(psWScreen, FRONTEND_RESOLUTION_DROPDOWN_LABEL);
+	widgHide(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL_CONTAINER);
+	widgHide(psWScreen, FRONTEND_RESOLUTION_READONLY_CONTAINER);
+	widgReveal(psWScreen, FRONTEND_RESOLUTION_DROPDOWN_LABEL_CONTAINER);
 	widgReveal(psWScreen, FRONTEND_RESOLUTION_DROPDOWN);
 }
 
@@ -1351,20 +1354,20 @@ void refreshCurrentVideoOptionsValues()
 	}
 }
 
-static void addResolutionDropdown()
+static std::shared_ptr<WIDGET> makeResolutionDropdown()
 {
 	auto dropdown = std::make_shared<DropdownWidget>();
 	dropdown->id = FRONTEND_RESOLUTION_DROPDOWN;
-	uint32_t dropdownLeftPadding = 10;
-	auto dropdownX = FRONTEND_POS3M - 20 - dropdownLeftPadding;
-	dropdown->setGeometry(dropdownX, FRONTEND_POS3Y, FRONTEND_BOTFORMW - dropdownX - FRONTEND_POS3X, FRONTEND_BUTHEIGHT);
 	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
-	dropdown->setItemPadding({ 0, 0, 0, dropdownLeftPadding });
+	const auto paddingSize = 10;
 
 	ScreenResolutionsModel screenResolutionsModel;
 	for (auto resolution: screenResolutionsModel)
 	{
-		dropdown->addItem(makeTextButton(0, 0, 0, ScreenResolutionsModel::resolutionString(resolution), 0));
+		auto item = makeTextButton(0, ScreenResolutionsModel::resolutionString(resolution), 0);
+		auto padding = std::make_shared<MarginWidget>(0, paddingSize, 0, paddingSize);
+		padding->attach(item);
+		dropdown->addItem(padding);
 	}
 
 	auto closestResolution = screenResolutionsModel.findResolutionClosestToCurrent();
@@ -1380,7 +1383,9 @@ static void addResolutionDropdown()
 		}
 	});
 
-	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(dropdown);
+	auto margin = std::make_shared<MarginWidget>(0, -paddingSize, 0, -paddingSize);
+	margin->attach(dropdown);
+	return margin;
 }
 
 void startVideoOptionsMenu()
@@ -1399,30 +1404,49 @@ void startVideoOptionsMenu()
 	label->setString(_("* Takes effect on game restart"));
 	label->setTextAlignment(WLAB_ALIGNBOTTOMLEFT);
 
+	auto grid = std::make_shared<GridLayout>();
+	grid_allocation::slot row(0);
+
 	// Fullscreen/windowed
-	addTextButton(FRONTEND_WINDOWMODE, FRONTEND_POS2X - 35, FRONTEND_POS2Y, videoOptionsWindowModeLabel(), WBUT_SECONDARY);
-	addTextButton(FRONTEND_WINDOWMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, videoOptionsWindowModeString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_WINDOWMODE, videoOptionsWindowModeLabel(), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_WINDOWMODE_R, videoOptionsWindowModeString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// Resolution
-	addTextButton(FRONTEND_RESOLUTION_READONLY_LABEL, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY | WBUT_DISABLE);
-	addTextButton(FRONTEND_RESOLUTION_READONLY, FRONTEND_POS3M - 55, FRONTEND_POS3Y, ScreenResolutionsModel::currentResolutionString(), WBUT_SECONDARY | WBUT_DISABLE);
-	auto readonlyResolutionTooltip = videoOptionsResolutionGetReadOnlyTooltip();
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY_LABEL, readonlyResolutionTooltip);
-	widgSetTip(psWScreen, FRONTEND_RESOLUTION_READONLY, readonlyResolutionTooltip);
-	addTextButton(FRONTEND_RESOLUTION_DROPDOWN_LABEL, FRONTEND_POS3X - 35, FRONTEND_POS3Y, videoOptionsResolutionLabel(), WBUT_SECONDARY);
-	addResolutionDropdown();
+	auto resolutionReadonlyLabel = makeTextButton(FRONTEND_RESOLUTION_READONLY_LABEL, videoOptionsResolutionLabel(), WBUT_SECONDARY | WBUT_DISABLE);
+	resolutionReadonlyLabel->setTip(videoOptionsResolutionGetReadOnlyTooltip());
+	auto resolutionReadonlyLabelContainer = addMargin(resolutionReadonlyLabel);
+	resolutionReadonlyLabelContainer->id = FRONTEND_RESOLUTION_READONLY_LABEL_CONTAINER;
+
+	auto resolutionReadonlyValue = makeTextButton(FRONTEND_RESOLUTION_READONLY, ScreenResolutionsModel::currentResolutionString(), WBUT_SECONDARY | WBUT_DISABLE);
+	resolutionReadonlyValue->setTip(videoOptionsResolutionGetReadOnlyTooltip());
+	auto resolutionReadonlyValueContainer = addMargin(resolutionReadonlyValue);
+	resolutionReadonlyValueContainer->id = FRONTEND_RESOLUTION_READONLY_CONTAINER;
+
+	grid->place({0}, row, resolutionReadonlyLabelContainer);
+	grid->place({1, 1, false}, row, resolutionReadonlyValueContainer);
+
+	auto resolutionDropdownLabel = makeTextButton(FRONTEND_RESOLUTION_DROPDOWN_LABEL, videoOptionsResolutionLabel(), WBUT_SECONDARY);
+	auto resolutionDropdownLabelContainer = addMargin(resolutionDropdownLabel);
+	resolutionDropdownLabelContainer->id = FRONTEND_RESOLUTION_DROPDOWN_LABEL_CONTAINER;
+	grid->place({0}, row, resolutionDropdownLabelContainer);
+	grid->place({1, 1, false}, row, addMargin(makeResolutionDropdown()));
+	row.start++;
 
 	// Texture size
-	addTextButton(FRONTEND_TEXTURESZ, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Texture size"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_TEXTURESZ_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, videoOptionsTextureSizeString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_TEXTURESZ, _("Texture size"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_TEXTURESZ_R, videoOptionsTextureSizeString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// Vsync
-	addTextButton(FRONTEND_VSYNC, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Vertical sync"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_VSYNC_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, videoOptionsVsyncString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_VSYNC, _("Vertical sync"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_VSYNC_R, videoOptionsVsyncString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// Antialiasing
-	addTextButton(FRONTEND_FSAA, FRONTEND_POS5X - 35, FRONTEND_POS6Y, _("Antialiasing*"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_FSAA_R, FRONTEND_POS5M - 55, FRONTEND_POS6Y, videoOptionsAntialiasingString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FSAA, _("Antialiasing*"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_FSAA_R, videoOptionsAntialiasingString(), WBUT_SECONDARY)));
+	row.start++;
 
 	auto antialiasing_label = std::make_shared<W_LABEL>();
 	parent->attach(antialiasing_label);
@@ -1435,13 +1459,22 @@ void startVideoOptionsMenu()
 	const bool showDisplayScale = wzAvailableDisplayScales().size() > 1;
 	if (showDisplayScale)
 	{
-		addTextButton(FRONTEND_DISPLAYSCALE, FRONTEND_POS7X - 35, FRONTEND_POS7Y, videoOptionsDisplayScaleLabel(), WBUT_SECONDARY);
-		addTextButton(FRONTEND_DISPLAYSCALE_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, videoOptionsDisplayScaleString(), WBUT_SECONDARY);
+		grid->place({0}, row, addMargin(makeTextButton(FRONTEND_DISPLAYSCALE, videoOptionsDisplayScaleLabel(), WBUT_SECONDARY)));
+		grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_DISPLAYSCALE_R, videoOptionsDisplayScaleString(), WBUT_SECONDARY)));
+		row.start++;
 	}
 
 	// Gfx Backend
-	addTextButton(FRONTEND_GFXBACKEND, ((showDisplayScale) ? FRONTEND_POS8X : FRONTEND_POS7X) - 35, ((showDisplayScale) ? FRONTEND_POS8Y : FRONTEND_POS7Y), _("Graphics Backend*"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_GFXBACKEND_R, ((showDisplayScale) ? FRONTEND_POS8M : FRONTEND_POS7M) - 55, ((showDisplayScale) ? FRONTEND_POS8Y : FRONTEND_POS7Y), videoOptionsGfxBackendString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_GFXBACKEND, _("Graphics Backend*"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_GFXBACKEND_R, videoOptionsGfxBackendString(), WBUT_SECONDARY)));
+	row.start++;
+
+	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
+
+	auto scrollableList = ScrollableListWidget::make();
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->addItem(grid);
+	parent->attach(scrollableList);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("VIDEO OPTIONS"));
@@ -2276,25 +2309,21 @@ W_LABEL *addSideText(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt)
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
+static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style)
 {
 	W_BUTINIT sButInit;
 
 	sButInit.formID = FRONTEND_BOTFORM;
 	sButInit.id = id;
-	sButInit.x = (short)PosX;
-	sButInit.y = (short)PosY;
 
 	// Align
 	if (!(style & WBUT_TXTCENTRE))
 	{
-		sButInit.width = (short)(iV_GetTextWidth(txt.c_str(), font_large) + 10);
-		sButInit.x += 35;
+		sButInit.width = (short)iV_GetTextWidth(txt.c_str(), font_large);
 	}
 	else
 	{
 		sButInit.style |= WBUT_TXTCENTRE;
-		sButInit.width = FRONTEND_BUTWIDTH;
 	}
 
 	// Enable right clicks
@@ -2326,9 +2355,26 @@ static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id,  UDWORD PosX, UDWORD 
 	return button;
 }
 
+static std::shared_ptr<WIDGET> addMargin(std::shared_ptr<WIDGET> widget)
+{
+	auto margin = std::make_shared<MarginWidget>(0, 20, 0, 20);
+	margin->attach(widget);
+	return margin;
+}
+
 void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)
 {
-	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(makeTextButton(id, PosX, PosY, txt, style));
+	auto button = makeTextButton(id, txt, style);
+	if (style & WBUT_TXTCENTRE)
+	{
+		button->setGeometry(PosX, PosY, FRONTEND_BUTWIDTH, button->height());
+	}
+	else
+	{
+		button->move(PosX + 35, PosY);
+	}
+
+	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(button);
 }
 
 W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style)
