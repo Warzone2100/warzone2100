@@ -1,8 +1,8 @@
 #
-# Copyright © 2018 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2021 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
-# Script Version: 2021-02-04a
+# Script Version: 2021-05-21a
 #
 
 # ADD_TARGET_LINK_FLAGS_IF_SUPPORTED( TARGET <target>
@@ -116,7 +116,12 @@ function(CHECK_C_LINKER_FLAGS _FLAGS _RESULT)
 	set(_multiValueArgs)
 	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
 
-	set(CMAKE_REQUIRED_FLAGS "${_FLAGS}")
+	set(_cmake_required_link_options_varname "CMAKE_REQUIRED_LINK_OPTIONS")
+	if (CMAKE_VERSION VERSION_LESS 3.14)
+		# CMake < 3.14 does not support CMAKE_REQUIRED_LINK_OPTIONS, so use CMAKE_REQUIRED_FLAGS (but this may fail in some cases)
+		set(_cmake_required_link_options_varname "CMAKE_REQUIRED_FLAGS")
+	endif()
+	set(${_cmake_required_link_options_varname} "${_FLAGS}")
 	if(_parsedArguments_QUIET)
 		set(CMAKE_REQUIRED_QUIET ON)
 	endif()
@@ -129,7 +134,7 @@ function(CHECK_C_LINKER_FLAGS _FLAGS _RESULT)
 	if(_parsedArguments_QUIET)
 		unset(CMAKE_REQUIRED_QUIET)
 	endif()
-	set(CMAKE_REQUIRED_FLAGS "")
+	set(${_cmake_required_link_options_varname} "")
 endfunction(CHECK_C_LINKER_FLAGS)
 
 INCLUDE(CheckCXXSourceRuns)
@@ -142,7 +147,12 @@ function(CHECK_CXX_LINKER_FLAGS _FLAGS _RESULT)
 	set(_multiValueArgs)
 	CMAKE_PARSE_ARGUMENTS(_parsedArguments "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
 
-	set(CMAKE_REQUIRED_FLAGS "${_FLAGS}")
+	set(_cmake_required_link_options_varname "CMAKE_REQUIRED_LINK_OPTIONS")
+	if (CMAKE_VERSION VERSION_LESS 3.14)
+		# CMake < 3.14 does not support CMAKE_REQUIRED_LINK_OPTIONS, so use CMAKE_REQUIRED_FLAGS (but this may fail in some cases)
+		set(_cmake_required_link_options_varname "CMAKE_REQUIRED_FLAGS")
+	endif()
+	set(${_cmake_required_link_options_varname} "${_FLAGS}")
 	if(_parsedArguments_QUIET)
 		set(CMAKE_REQUIRED_QUIET ON)
 	endif()
@@ -155,5 +165,5 @@ function(CHECK_CXX_LINKER_FLAGS _FLAGS _RESULT)
 	if(_parsedArguments_QUIET)
 		unset(CMAKE_REQUIRED_QUIET)
 	endif()
-	set(CMAKE_REQUIRED_FLAGS "")
+	set(${_cmake_required_link_options_varname} "")
 endfunction(CHECK_CXX_LINKER_FLAGS)
