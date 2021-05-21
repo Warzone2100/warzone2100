@@ -434,14 +434,14 @@ std::string wzBindTextDomain(const char *domainname, const char *dirname)
 	if (wstr_len <= 0)
 	{
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", dwError, dirname);
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %lu: %s\n", dwError, dirname);
 		return std::string();
 	}
 	auto wstr_dirname = std::vector<wchar_t>(wstr_len, L'\0');
 	if (MultiByteToWideChar(CP_UTF8, 0, dirname, -1, &wstr_dirname[0], wstr_len) == 0)
 	{
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", dwError, dirname);
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %lu: %s\n", dwError, dirname);
 		return std::string();
 	}
 
@@ -460,7 +460,7 @@ std::string wzBindTextDomain(const char *domainname, const char *dirname)
 	{
 		// Encoding conversion error
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string to UTF-8; WideCharToMultiByte failed with error %d\n", dwError);
+		debug(LOG_ERROR, "Could not not convert string to UTF-8; WideCharToMultiByte failed with error %lu\n", dwError);
 		return std::string();
 	}
 	utf8Buffer.resize(utf8Len, 0);
@@ -468,7 +468,7 @@ std::string wzBindTextDomain(const char *domainname, const char *dirname)
 	{
 		// Encoding conversion error
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string to UTF-8; WideCharToMultiByte[2] failed with error %d\n", dwError);
+		debug(LOG_ERROR, "Could not not convert string to UTF-8; WideCharToMultiByte[2] failed with error %lu\n", dwError);
 		return std::string();
 	}
 	return std::string(utf8Buffer.data(), utf8Len - 1);

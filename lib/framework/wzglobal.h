@@ -544,7 +544,9 @@
 #    include <unistd.h>
 #    include <sys/param.h>
 #    include <w32api.h>
-#    define _WIN32_IE IE5
+#    if !defined(_WIN32_IE)
+#      define _WIN32_IE IE5
+#    endif
 // Required for alloca
 #    include <malloc.h>
 
@@ -582,6 +584,8 @@
 
 #    define PATH_MAX MAX_PATH
 
+#  endif /* WZ_CC_MSVC */
+
 // These are useless for MSVC builds, since we don't populate them / use them at this time.
 #ifndef PACKAGE_DISTRIBUTOR
 # define PACKAGE_DISTRIBUTOR "UNKNOWN"
@@ -592,9 +596,6 @@
 #ifndef PACKAGE
 # define PACKAGE "Warzone"
 #endif
-
-
-#  endif /* WZ_CC_MSVC */
 
 /* Make sure that PATH_MAX is large enough to use as the size for return
  * buffers for Windows API calls
