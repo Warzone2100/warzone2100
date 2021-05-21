@@ -24,10 +24,25 @@
 
 #include "wzscriptdebug.h"
 
+#if (defined(WZ_OS_WIN) && defined(WZ_CC_MINGW))
+#  if (defined(vsprintf) && !defined(_GL_STDIO_H) && defined(_LIBINTL_H))
+// On mingw / MXE builds, libintl's define of vsprintf breaks string_cast.hpp
+// So undef it here and restore it later (HACK)
+#    define _wz_restore_libintl_vsprintf
+#    undef vsprintf
+#  endif
+#endif
+
 #ifndef GLM_ENABLE_EXPERIMENTAL
 	#define GLM_ENABLE_EXPERIMENTAL
 #endif
 #include <glm/gtx/string_cast.hpp>
+
+#if defined(_wz_restore_libintl_vsprintf)
+#  undef _wz_restore_libintl_vsprintf
+#  undef vsprintf
+#  define vsprintf libintl_vsprintf
+#endif
 
 #include "lib/framework/frame.h"
 #include "lib/framework/wzapp.h"
