@@ -162,13 +162,13 @@ private:
 		int wstr_len = MultiByteToWideChar(CP_UTF8, 0, pStr, -1, NULL, 0);
 		if (wstr_len <= 0)
 		{
-			fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", GetLastError(), pStr);
+			fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %lu: %s\n", GetLastError(), pStr);
 			return nullopt;
 		}
 		std::vector<wchar_t> wstr_filename(wstr_len, 0);
 		if (MultiByteToWideChar(CP_UTF8, 0, pStr, -1, &wstr_filename[0], wstr_len) == 0)
 		{
-			fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", GetLastError(), pStr);
+			fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %lu: %s\n", GetLastError(), pStr);
 			return nullopt;
 		}
 		return wstr_filename;
