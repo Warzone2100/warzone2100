@@ -526,6 +526,36 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--nxcompat" CACHED_RESULT_NAME LINK_FLAG_WL_NXCOMPAT_SUPPORTED)
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "/DYNAMICBASE" CACHED_RESULT_NAME LINK_FLAG_SLASH_DYNAMICBASE_SUPPORTED)
 	ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--dynamicbase" CACHED_RESULT_NAME LINK_FLAG_WL_DYNAMICBASE_SUPPORTED)
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8 OR CMAKE_SIZEOF_VOID_P GREATER 8)
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--high-entropy-va" CACHED_RESULT_NAME LINK_FLAG_WL_HIGHENTROPYVA_SUPPORTED)
+	endif()
+
+	if(MINGW)
+		# Fix: Allow DATA imports from a DLL with a non-zero offset
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--enable-runtime-pseudo-reloc" CACHED_RESULT_NAME LINK_FLAG_WL_RUNTIME_PSEUDO_RELOC_SUPPORTED)
+		# Fix: Disable automatic image base calculation (not needed because of ASLR)
+		# See: https://lists.ffmpeg.org/pipermail/ffmpeg-cvslog/2015-September/094018.html
+		# See: https://sourceware.org/bugzilla/show_bug.cgi?id=19011
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--disable-auto-image-base" CACHED_RESULT_NAME LINK_FLAG_WL_DISABLE_AUTO_IMAGE_BASE_SUPPORTED)
+		# Workaround a weird bug with relocation information by enabling --pic-executable
+		# See: https://sourceforge.net/p/mingw-w64/mailman/message/31035280/
+		ADD_TARGET_LINK_FLAGS_IF_SUPPORTED(TARGET warzone2100 LINK_FLAGS "-Wl,--pic-executable" CACHED_RESULT_NAME LINK_FLAG_WL_PICEXECUTABLE_SUPPORTED)
+		# Fix: MinGW's LD forgets the entry point when used with pic-executable.
+		# See: https://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=91b668a
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8 OR CMAKE_SIZEOF_VOID_P GREATER 8)
+			set_property(TARGET warzone2100 APPEND_STRING PROPERTY "LINK_FLAGS" " -Wl,-e,mainCRTStartup")
+		else()
+			set_property(TARGET warzone2100 APPEND_STRING PROPERTY "LINK_FLAGS" " -Wl,-e,_mainCRTStartup")
+		endif()
+		# Fix: Opt-in to extra entropy when using High-Entropy ASLR by setting the image base > 4GB
+		# See: https://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=a58c22d
+		if(CMAKE_SIZEOF_VOID_P EQUAL 8 OR CMAKE_SIZEOF_VOID_P GREATER 8)
+			# Note: The image base should be:
+			#	0x140000000 - for exes
+			#	0x180000000 - for DLLs
+			set_property(TARGET warzone2100 APPEND_STRING PROPERTY "LINK_FLAGS" " -Wl,--image-base,0x140000000")
+		endif()
+	endif()
 endif()
 
 if(NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
