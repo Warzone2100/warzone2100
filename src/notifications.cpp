@@ -23,6 +23,9 @@
  *
  */
 
+#include <3rdparty/json/json.hpp> // Must come before WZ includes
+using json = nlohmann::json;
+
 #include "lib/framework/frame.h"
 #include "notifications.h"
 #include "lib/gamelib/gtime.h"
@@ -38,9 +41,6 @@
 #include <limits>
 
 // MARK: - Notification Ignore List
-
-#include <3rdparty/json/json.hpp>
-using json = nlohmann::json;
 
 #include <typeinfo>
 #include <physfs.h>

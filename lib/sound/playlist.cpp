@@ -17,6 +17,9 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+#include <3rdparty/json/json.hpp> // Must come before WZ includes
+
 #include "lib/framework/frame.h"
 #include "lib/framework/file.h"
 #include "lib/framework/string_ext.h"
@@ -26,7 +29,6 @@
 #include "playlist.h"
 #include "cdaudio.h"
 
-#include <3rdparty/json/json.hpp>
 #include <algorithm>
 #include <unordered_map>
 #include <sstream>

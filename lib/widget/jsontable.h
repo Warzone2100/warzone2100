@@ -26,7 +26,23 @@
 
 #include "widget.h"
 #include "form.h"
+
+#if (defined(WZ_OS_WIN) && defined(WZ_CC_MINGW))
+#  if (defined(snprintf) && !defined(_GL_STDIO_H) && defined(_LIBINTL_H))
+// On mingw / MXE builds, libintl's define of snprintf breaks json.hpp
+// So undef it here and restore it later (HACK)
+#    define _wz_restore_libintl_snprintf
+#    undef snprintf
+#  endif
+#endif
+
 #include <3rdparty/json/json.hpp>
+
+#if defined(_wz_restore_libintl_snprintf)
+#  undef _wz_restore_libintl_snprintf
+#  undef snprintf
+#  define snprintf libintl_snprintf
+#endif
 
 #include <vector>
 #include <memory>
