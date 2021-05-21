@@ -2244,13 +2244,13 @@ bool markAsDownloadedFile(const std::string &filename)
 	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, fullFilePath.c_str(), -1, NULL, 0);
 	if (wstr_len <= 0)
 	{
-		debug(LOG_ERROR, "Could not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		debug(LOG_ERROR, "Could not convert string from UTF-8; MultiByteToWideChar failed with error %lu: %s\n", GetLastError(), fullFilePath.c_str());
 		return false;
 	}
 	std::vector<wchar_t> wstr_filename(wstr_len, 0);
 	if (MultiByteToWideChar(CP_UTF8, 0, fullFilePath.c_str(), -1, &wstr_filename[0], wstr_len) == 0)
 	{
-		debug(LOG_ERROR, "Could not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		debug(LOG_ERROR, "Could not convert string from UTF-8; MultiByteToWideChar[2] failed with error %lu: %s\n", GetLastError(), fullFilePath.c_str());
 		return false;
 	}
 	std::wstring fullFilePathUTF16(wstr_filename.data());
@@ -2260,7 +2260,7 @@ bool markAsDownloadedFile(const std::string &filename)
 	if(hStream == INVALID_HANDLE_VALUE)
 	{
 		// Failed to open stream
-		debug(LOG_ERROR, "Could not open stream; failed with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		debug(LOG_ERROR, "Could not open stream; failed with error %lu: %s\n", GetLastError(), fullFilePath.c_str());
 		return false;
 	}
 
@@ -2269,7 +2269,7 @@ bool markAsDownloadedFile(const std::string &filename)
 	DWORD dwNumberOfBytesWritten;
 	if (WriteFile(hStream, kWindowsZoneIdentifierADSDataInternetZone, static_cast<DWORD>(strlen(kWindowsZoneIdentifierADSDataInternetZone)), &dwNumberOfBytesWritten, NULL) == 0)
 	{
-		debug(LOG_ERROR, "Failed to write to stream with error %d: %s\n", GetLastError(), fullFilePath.c_str());
+		debug(LOG_ERROR, "Failed to write to stream with error %lu: %s\n", GetLastError(), fullFilePath.c_str());
 		CloseHandle(hStream);
 		return false;
 	}
