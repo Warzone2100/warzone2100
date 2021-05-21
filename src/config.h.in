@@ -41,6 +41,9 @@
 /* Define to 1 if you have the `environ' declaration. */
 #cmakedefine HAVE_ENVIRON_DECL @HAVE_ENVIRON_DECL@
 
+/* Define to 1 if you have `std::thread'. */
+#cmakedefine HAVE_STD_THREAD @HAVE_STD_THREAD@
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H @HAVE_STDINT_H@
 
