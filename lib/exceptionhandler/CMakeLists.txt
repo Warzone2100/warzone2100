@@ -16,6 +16,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 		# Compiling with MSVC (etc) on Windows
 		target_sources(exception-handler PRIVATE "3rdparty/StackWalker.cpp" "exchndl_win.cpp")
 		target_link_libraries(exception-handler PRIVATE dbghelp version shlwapi)
+		if (MINGW AND NOT MSVC)
+			# Disable some warnings
+			set_source_files_properties("3rdparty/StackWalker.cpp" PROPERTIES COMPILE_FLAGS "-Wno-unknown-pragmas -Wno-switch")
+			# Define _MSC_VER
+			set_source_files_properties("3rdparty/StackWalker.cpp" PROPERTIES COMPILE_DEFINITIONS "_MSC_VER=1900")
+		endif()
 	endif()
 endif()
 
