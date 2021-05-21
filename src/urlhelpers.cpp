@@ -81,14 +81,14 @@ bool utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr)
 	if (wstr_len <= 0)
 	{
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", dwError, str);
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %lu: %s\n", dwError, str);
 		return false;
 	}
 	outputWStr = std::vector<wchar_t>(wstr_len, L'\0');
 	if (MultiByteToWideChar(CP_UTF8, 0, str, -1, &outputWStr[0], wstr_len) == 0)
 	{
 		DWORD dwError = GetLastError();
-		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", dwError, str);
+		debug(LOG_ERROR, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %lu: %s\n", dwError, str);
 		return false;
 	}
 	return true;
@@ -166,7 +166,7 @@ bool openURLInBrowser(char const *url)
 		return false;
 	}
 	HRESULT coInitResult = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-	SHELLEXECUTEINFOW ShExecInfo = {0};
+	SHELLEXECUTEINFOW ShExecInfo = {};
 	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
 	ShExecInfo.fMask = SEE_MASK_NOASYNC;
 	ShExecInfo.lpVerb = L"open";
@@ -176,7 +176,7 @@ bool openURLInBrowser(char const *url)
 	if (!::ShellExecuteExW(&ShExecInfo))
 	{
 		DWORD dwError = ::GetLastError();
-		debug(LOG_ERROR, "ShellExecuteEx failed with error: %d", dwError);
+		debug(LOG_ERROR, "ShellExecuteEx failed with error: %lu", dwError);
 		bShellExecuteFailure = true;
 	}
 	if (coInitResult == S_OK || coInitResult == S_FALSE)
@@ -235,7 +235,7 @@ bool openFolderInDefaultFileManager(const char* path)
 	}
 
 	HRESULT coInitResult = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-	SHELLEXECUTEINFOW ShExecInfo = {0};
+	SHELLEXECUTEINFOW ShExecInfo = {};
 	ShExecInfo.cbSize = sizeof(ShExecInfo);
 	ShExecInfo.fMask = SEE_MASK_NOASYNC;
 	ShExecInfo.hwnd = nullptr;
@@ -246,7 +246,7 @@ bool openFolderInDefaultFileManager(const char* path)
 	if (!::ShellExecuteExW(&ShExecInfo))
 	{
 		DWORD dwError = ::GetLastError();
-		debug(LOG_ERROR, "ShellExecuteEx failed with error: %d", dwError);
+		debug(LOG_ERROR, "ShellExecuteEx failed with error: %lu", dwError);
 		bShellExecuteFailure = true;
 	}
 	if (coInitResult == S_OK || coInitResult == S_FALSE)
