@@ -267,8 +267,12 @@ static std::string getProgramPath(const char *programCommand)
 #else
 	// Earlier SDKs don't have the concept of families - provide simple implementation
 	// that treats everything as "desktop"
-	#define WINAPI_PARTITION_DESKTOP			0x00000001
-	#define WINAPI_FAMILY_PARTITION(Partition)	((WINAPI_PARTITION_DESKTOP & Partition) == Partition)
+	#if !defined(WINAPI_PARTITION_DESKTOP)
+		#define WINAPI_PARTITION_DESKTOP			0x00000001
+	#endif
+	#if !defined(WINAPI_FAMILY_PARTITION)
+		#define WINAPI_FAMILY_PARTITION(Partition)	((WINAPI_PARTITION_DESKTOP & Partition) == Partition)
+	#endif
 #endif
 
 #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
@@ -372,7 +376,7 @@ static std::string getWindowsVersionString()
 
 static std::string getWindowsProcessorArchitecture()
 {
-	SYSTEM_INFO siSysInfo = {0};
+	SYSTEM_INFO siSysInfo = {};
 	GetNativeSystemInfo(&siSysInfo);
 
 	std::string machine;

@@ -822,7 +822,7 @@ bool OverrideRPTDirectory(const char *newPath)
 		    0, NULL);
 
 		wsprintf(szBuffer, _T("Exception handler failed setting new directory with error %d: %s\n"), dw, lpMsgBuf);
-		MessageBox((HWND)MB_ICONEXCLAMATION, szBuffer, _T("Error"), MB_OK);
+		MessageBox(NULL, szBuffer, _T("Error"), MB_OK | MB_ICONEXCLAMATION);
 
 		LocalFree(lpMsgBuf);
 
