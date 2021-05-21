@@ -420,7 +420,7 @@ public:
   LPSTR   m_szSymPath;
 
 #pragma pack(push, 8)
-  typedef struct IMAGEHLP_MODULE64_V3
+  typedef struct _tagIMAGEHLP_MODULE64_V3
   {
     DWORD    SizeOfStruct;         // set to sizeof(IMAGEHLP_MODULE64)
     DWORD64  BaseOfImage;          // base load address of module
@@ -447,9 +447,9 @@ public:
     // new elements: 17-Dec-2003
     BOOL SourceIndexed; // pdb supports source server
     BOOL Publics;       // contains public symbols
-  };
+  } IMAGEHLP_MODULE64_V3;
 
-  typedef struct IMAGEHLP_MODULE64_V2
+  typedef struct _tagIMAGEHLP_MODULE64_V2
   {
     DWORD    SizeOfStruct;         // set to sizeof(IMAGEHLP_MODULE64)
     DWORD64  BaseOfImage;          // base load address of module
@@ -461,7 +461,7 @@ public:
     CHAR     ModuleName[32];       // module name
     CHAR     ImageName[256];       // image name
     CHAR     LoadedImageName[256]; // symbol file name
-  };
+  } IMAGEHLP_MODULE64_V2;
 #pragma pack(pop)
 
   // SymCleanup()
