@@ -146,7 +146,11 @@ inline void wzAsyncExecOnMainThread(const std::function<void ()> &execFunc)
 	// receiver handles deleting the parameter on the main thread after doExecOnMainThread() has been called
 }
 
-#if !defined(WZ_CC_MINGW)
+#if !defined(HAVE_STD_THREAD)
+# define HAVE_STD_THREAD 0
+#endif
+
+#if !defined(WZ_CC_MINGW) || HAVE_STD_THREAD
 
 #include <mutex>
 #include <future>
