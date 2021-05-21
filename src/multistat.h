@@ -26,7 +26,7 @@
 #define __INCLUDED_SRC_MULTISTATS_H__
 
 #include "lib/netplay/netplay.h"
-#include <3rdparty/json/json.hpp>
+#include <3rdparty/json/json_fwd.hpp>
 #include <map>
 
 struct PLAYERSTATS
