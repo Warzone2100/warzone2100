@@ -166,6 +166,12 @@ elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "GCC|Clang" AND NOT APPLE)
 	# Ensure all builds always have debug info built (Xcode is handled separately below)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g")
 endif()
+if(MINGW AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
+	# Ensure LLVM/Clang-based MINGW produces debug info in codeview format (for PDB)
+	add_compile_options("-gcodeview")
+	# Ensure a PDB file is created in the same location as the module
+	add_link_options("-Wl,-pdb=")
+endif()
 
 # Treat source files as UTF-8 (unless they have a BOM) (MSVC)
 # NOTE: For MSVC, this also sets the executable character set.
