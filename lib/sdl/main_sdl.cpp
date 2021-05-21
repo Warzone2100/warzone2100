@@ -1666,7 +1666,7 @@ static bool win_IsProcessDPIAware()
 	HMODULE hShcore = LoadLibraryW(L"Shcore.dll");
 	if (hShcore != NULL)
 	{
-		const auto* func_getProcessDpiAwareness = reinterpret_cast<GetProcessDpiAwarenessFunction>(reinterpret_cast<void*>(GetProcAddress(hShcore, "GetProcessDpiAwareness")));
+		GetProcessDpiAwarenessFunction func_getProcessDpiAwareness = reinterpret_cast<GetProcessDpiAwarenessFunction>(reinterpret_cast<void*>(GetProcAddress(hShcore, "GetProcessDpiAwareness")));
 		if (func_getProcessDpiAwareness)
 		{
 			PROCESS_DPI_AWARENESS result = PROCESS_DPI_UNAWARE;
@@ -1680,7 +1680,7 @@ static bool win_IsProcessDPIAware()
 	}
 	HMODULE hUser32 = LoadLibraryW(L"User32.dll");
 	ASSERT_OR_RETURN(false, hUser32 != NULL, "Unable to get handle to User32?");
-	const auto* func_isProcessDPIAware = reinterpret_cast<IsProcessDPIAwareFunction>(reinterpret_cast<void*>(GetProcAddress(hUser32, "IsProcessDPIAware")));
+	IsProcessDPIAwareFunction func_isProcessDPIAware = reinterpret_cast<IsProcessDPIAwareFunction>(reinterpret_cast<void*>(GetProcAddress(hUser32, "IsProcessDPIAware")));
 	bool bIsProcessDPIAware = false;
 	if (func_isProcessDPIAware)
 	{
