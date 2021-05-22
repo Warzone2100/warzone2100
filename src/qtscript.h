@@ -135,6 +135,7 @@ bool triggerEventStructDemolish(STRUCTURE *psStruct, DROID *psDroid);
 bool triggerEventDroidIdle(DROID *psDroid);
 bool triggerEventDestroyed(BASE_OBJECT *psVictim);
 bool triggerEventStructureReady(STRUCTURE *psStruct);
+bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct);
 bool triggerEventSeen(BASE_OBJECT *psViewer, BASE_OBJECT *psSeen);
 bool triggerEventObjectTransfer(BASE_OBJECT *psObj, int from);
 bool triggerEventChat(int from, int to, const char *message);
@@ -349,7 +350,7 @@ public:
 		}
 		return removedTimerIDs;
 	}
-	
+
 	bool removeTimer(uniqueTimerID timerID);
 public:
 	// Monitoring performance of function calls
@@ -498,7 +499,7 @@ protected:
 	std::unordered_map<wzapi::scripting_instance *, nlohmann::json> debug_GetGlobalsSnapshot() const;
 	std::vector<scripting_engine::timerNodeSnapshot> debug_GetTimersSnapshot() const;
 	std::vector<scripting_engine::LabelInfo> debug_GetLabelInfo() const;
-	
+
 	/// Show all labels or all currently active labels
 	void markAllLabels(bool only_active);
 	/// Mark and show label

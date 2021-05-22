@@ -1252,6 +1252,25 @@ bool triggerEventStructureReady(STRUCTURE *psStruct)
 	return true;
 }
 
+//__ ## eventStructureUpgradeStarted(structure)
+//__
+//__ An event that is run every time a structure starts to be upgraded.
+//__
+bool triggerEventStructureUpgradeStarted(STRUCTURE *psStruct)
+{
+	ASSERT(scriptsReady, "Scripts not initialized yet");
+	for (auto *instance : scripts)
+	{
+		int player = instance->player();
+		bool receiveAll = instance->isReceivingAllEvents();
+		if (player == psStruct->player || receiveAll)
+		{
+			instance->handle_eventStructureUpgradeStarted(psStruct);
+		}
+	}
+	return true;
+}
+
 //__ ## eventAttacked(victim, attacker)
 //__
 //__ An event that is run when an object belonging to the script's controlling player is
