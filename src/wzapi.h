@@ -384,6 +384,12 @@ namespace wzapi
 		//__
 		virtual bool handle_eventStructureReady(const STRUCTURE *psStruct) = 0;
 
+		//__ ## eventStructureUpgradeStarted(structure)
+		//__
+		//__ An event that is run every time a structure starts to be upgraded.
+		//__
+		virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) = 0;
+
 		//__ ## eventAttacked(victim, attacker)
 		//__
 		//__ An event that is run when an object belonging to the script's controlling player is

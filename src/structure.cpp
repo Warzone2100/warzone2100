@@ -854,14 +854,12 @@ void structureBuild(STRUCTURE *psStruct, DROID *psDroid, int buildPoints, int bu
 		if (prevStatus == SS_BUILT)
 		{
 			// Starting to demolish.
-			if (psDroid)
+			triggerEventStructDemolish(psStruct, psDroid);
+			if (psStruct->player == selectedPlayer)
 			{
-				triggerEventStructDemolish(psStruct, psDroid);
+				intRefreshScreen();
 			}
-			else
-			{
-				triggerEventStructDemolish(psStruct, nullptr);
-			}
+
 			switch (psStruct->pStructureType->type)
 			{
 			case REF_POWER_GEN:
@@ -1722,9 +1720,15 @@ STRUCTURE *buildStructureDir(STRUCTURE_STATS *pStructureType, UDWORD x, UDWORD y
 			//start building again
 			psBuilding->status = SS_BEING_BUILT;
 			psBuilding->buildRate = 1;  // Don't abandon the structure first tick, so set to nonzero.
-			if (psBuilding->player == selectedPlayer && !FromSave)
+
+			if (!FromSave)
 			{
-				intRefreshScreen();
+				triggerEventStructureUpgradeStarted(psBuilding);
+
+				if (psBuilding->player == selectedPlayer)
+				{
+					intRefreshScreen();
+				}
 			}
 		}
 		intNotifyResearchButton(prevResearchState);

@@ -385,6 +385,14 @@ function eventStructureDemolish(struct, droid)
 	}
 }
 
+function eventStructureUpgradeStarted(struct)
+{
+	if (struct.player === selectedPlayer)
+	{
+		reticuleUpdate(struct, TRANSFER_LIKE_EVENT);
+	}
+}
+
 function eventDestroyed(victim)
 {
 	if (victim.player === selectedPlayer)

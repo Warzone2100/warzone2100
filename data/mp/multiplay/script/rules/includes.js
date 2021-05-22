@@ -52,6 +52,7 @@ include("multiplay/script/rules/events/demolish.js");
 include("multiplay/script/rules/events/destroyed.js");
 include("multiplay/script/rules/events/transfer.js");
 include("multiplay/script/rules/events/research.js");
+include("multiplay/script/rules/events/upgrade.js");
 include("multiplay/script/rules/events/cheat.js");
 include("multiplay/script/rules/events/chat.js");
 

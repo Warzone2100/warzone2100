@@ -469,6 +469,12 @@ public:
 	//__
 	virtual bool handle_eventStructureReady(const STRUCTURE *psStruct) override;
 
+	//__ ## eventStructureUpgradeStarted(structure)
+	//__
+	//__ An event that is run every time a structure starts to be upgraded.
+	//__
+	virtual bool handle_eventStructureUpgradeStarted(const STRUCTURE *psStruct) override;
+
 	//__ ## eventAttacked(victim, attacker)
 	//__
 	//__ An event that is run when an object belonging to the script's controlling player is
@@ -2932,6 +2938,7 @@ IMPL_EVENT_HANDLER(eventDroidBuilt, const DROID *, optional<const STRUCTURE *>)
 IMPL_EVENT_HANDLER(eventStructureBuilt, const STRUCTURE *, optional<const DROID *>)
 IMPL_EVENT_HANDLER(eventStructureDemolish, const STRUCTURE *, optional<const DROID *>)
 IMPL_EVENT_HANDLER(eventStructureReady, const STRUCTURE *)
+IMPL_EVENT_HANDLER(eventStructureUpgradeStarted, const STRUCTURE *)
 IMPL_EVENT_HANDLER(eventAttacked, const BASE_OBJECT *, const BASE_OBJECT *)
 IMPL_EVENT_HANDLER(eventResearched, const wzapi::researchResult&, wzapi::event_nullable_ptr<const STRUCTURE>, int)
 IMPL_EVENT_HANDLER(eventDestroyed, const BASE_OBJECT *)
