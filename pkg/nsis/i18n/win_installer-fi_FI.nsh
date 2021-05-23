@@ -4,9 +4,9 @@ ${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable i
 
 ${LangFileString} WZWelcomeHomepageLink "Vieraile virallisella kotisivullamme https://wz2100.net nähdäksesi viimeisimmän version."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "64-bittinen versio Warzone 2100:sta on saatavilla.$\r$\nLisätietoja osoitteessa https://wz2100.net/ $\r$\nJatketaanko 32-bittistä asennusta joka tapauksessa?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Tämä on 64-bittinen versio Warzone 2100.$\r$\nLataa 32-bittinen versio osoitteesta https://wz2100. et/ $\r$\nNapsauta OK lopettaaksesi asennus."
 
 ${LangFileString} WZ_GPL_NEXT "Seuraava"
 
@@ -19,7 +19,7 @@ ${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
 ${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
 ${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
 
-${LangFileString} TEXT_SecFMVs_Eng "English"
+${LangFileString} TEXT_SecFMVs_Eng "Englanti"
 ${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
