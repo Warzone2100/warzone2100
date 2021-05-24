@@ -163,6 +163,11 @@ static bool addAudioOptions()
 	            AUDIO_VOL_MAX, (int)(sound_GetMusicVolume() * 100));
 	row++;
 
+	// Subtitles
+	addIGTextButton(INTINGAMEOP_SUBTITLES,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Subtitles"), WBUT_PLAIN);
+	addIGTextButton(INTINGAMEOP_SUBTITLES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsSubtitlesString(), WBUT_PLAIN);
+	row++;
+
 #ifdef DEBUG
 	// Tactical UI: Target Origin
 	if (tuiTargetOrigin)
@@ -610,11 +615,6 @@ static bool startIGGraphicsOptionsMenu()
 	addIGTextButton(INTINGAMEOP_SCANLINES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsScanlinesString(), WBUT_PLAIN);
 	row++;
 
-	// Subtitles
-	addIGTextButton(INTINGAMEOP_SUBTITLES,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Subtitles"), WBUT_PLAIN);
-	addIGTextButton(INTINGAMEOP_SUBTITLES_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsSubtitlesString(), WBUT_PLAIN);
-	row++;
-
 	// Shadows
 	addIGTextButton(INTINGAMEOP_SHADOWS,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Shadows"), WBUT_PLAIN);
 	addIGTextButton(INTINGAMEOP_SHADOWS_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, graphicsOptionsShadowsString(), WBUT_PLAIN);
@@ -651,12 +651,6 @@ static bool runIGGraphicsOptionsMenu(UDWORD id)
 {
 	switch (id)
 	{
-	case INTINGAMEOP_SUBTITLES:
-	case INTINGAMEOP_SUBTITLES_R:
-		seq_SetSubtitles(!seq_GetSubtitles());
-		widgSetString(psWScreen, INTINGAMEOP_SUBTITLES_R, graphicsOptionsSubtitlesString());
-		break;
-
 	case INTINGAMEOP_SHADOWS:
 	case INTINGAMEOP_SHADOWS_R:
 		setDrawShadows(!getDrawShadows());
@@ -1044,6 +1038,11 @@ void intProcessInGameOptions(UDWORD id)
 		break;
 	case INTINGAMEOP_CDVOL_S:
 		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, INTINGAMEOP_CDVOL_S) / 100.0f);
+		break;
+	case INTINGAMEOP_SUBTITLES:
+	case INTINGAMEOP_SUBTITLES_R:
+		seq_SetSubtitles(!seq_GetSubtitles());
+		widgSetString(psWScreen, INTINGAMEOP_SUBTITLES_R, graphicsOptionsSubtitlesString());
 		break;
 
 	case INTINGAMEOP_TUI_TARGET_ORIGIN_SW:

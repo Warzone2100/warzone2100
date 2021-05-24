@@ -783,12 +783,6 @@ void startGraphicsOptionsMenu()
 	row.start++;
 
 	////////////
-	//subtitle mode.
-	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SUBTITLES, _("Subtitles"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SUBTITLES_R, graphicsOptionsSubtitlesString(), WBUT_SECONDARY)));
-	row.start++;
-
-	////////////
 	//shadows
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SHADOWS, _("Shadows"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SHADOWS_R, graphicsOptionsShadowsString(), WBUT_SECONDARY)));
@@ -843,12 +837,6 @@ bool runGraphicsOptionsMenu()
 	{
 	case FRONTEND_QUIT:
 		changeTitleMode(OPTIONS);
-		break;
-
-	case FRONTEND_SUBTITLES:
-	case FRONTEND_SUBTITLES_R:
-		seq_SetSubtitles(!seq_GetSubtitles());
-		widgSetString(psWScreen, FRONTEND_SUBTITLES_R, graphicsOptionsSubtitlesString());
 		break;
 
 	case FRONTEND_SHADOWS:
@@ -984,6 +972,12 @@ void startAudioAndZoomOptionsMenu()
 	grid->place({1, 1, false}, row, addMargin(makeFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetMusicVolume() * 100.0f))));
 	row.start++;
 
+	////////////
+	//subtitle mode.
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SUBTITLES, _("Subtitles"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SUBTITLES_R, graphicsOptionsSubtitlesString(), WBUT_SECONDARY)));
+	row.start++;
+
 	// HRTF
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SOUND_HRTF, _("HRTF"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SOUND_HRTF_R, audioAndZoomOptionsSoundHRTFMode(), WBUT_SECONDARY)));
@@ -1060,6 +1054,12 @@ bool runAudioAndZoomOptionsMenu()
 
 	case FRONTEND_MUSIC_SL:
 		sound_SetMusicVolume((float)widgGetSliderPos(psWScreen, FRONTEND_MUSIC_SL) / 100.0f);
+		break;
+
+	case FRONTEND_SUBTITLES:
+	case FRONTEND_SUBTITLES_R:
+		seq_SetSubtitles(!seq_GetSubtitles());
+		widgSetString(psWScreen, FRONTEND_SUBTITLES_R, graphicsOptionsSubtitlesString());
 		break;
 
 	case FRONTEND_SOUND_HRTF:
