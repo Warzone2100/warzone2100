@@ -92,6 +92,7 @@ bool			bLimiterLoaded = false;
 
 static W_BUTTON * addSmallTextButton(UDWORD id, UDWORD PosX, UDWORD PosY, const char *txt, unsigned int style);
 static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &txt, unsigned int style);
+static std::shared_ptr<W_SLIDER> makeFESlider(UDWORD id, UDWORD parent, UDWORD stops, UDWORD pos);
 static std::shared_ptr<WIDGET> addMargin(std::shared_ptr<WIDGET> widget);
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -963,21 +964,30 @@ void startAudioAndZoomOptionsMenu()
 	addTopForm(false);
 	addBottomForm();
 
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	auto grid = std::make_shared<GridLayout>();
+	grid_allocation::slot row(0);
+
 	// 2d audio
-	addTextButton(FRONTEND_FX, FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Voice Volume"), 0);
-	addFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS2M -20, FRONTEND_POS2Y + 5, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetUIVolume() * 100.0f));
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FX, _("Voice Volume"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetUIVolume() * 100.0f))));
+	row.start++;
 
 	// 3d audio
-	addTextButton(FRONTEND_3D_FX, FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("FX Volume"), 0);
-	addFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, FRONTEND_POS3M -20, FRONTEND_POS3Y + 5, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetEffectsVolume() * 100.0f));
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_3D_FX, _("FX Volume"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetEffectsVolume() * 100.0f))));
+	row.start++;
 
 	// cd audio
-	addTextButton(FRONTEND_MUSIC, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Music Volume"), 0);
-	addFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, FRONTEND_POS4M -20, FRONTEND_POS4Y + 5, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetMusicVolume() * 100.0f));
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_MUSIC, _("Music Volume"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetMusicVolume() * 100.0f))));
+	row.start++;
 
 	// HRTF
-	addTextButton(FRONTEND_SOUND_HRTF, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("HRTF"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SOUND_HRTF_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, audioAndZoomOptionsSoundHRTFMode(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SOUND_HRTF, _("HRTF"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SOUND_HRTF_R, audioAndZoomOptionsSoundHRTFMode(), WBUT_SECONDARY)));
+	row.start++;
 	if (sound_GetHRTFMode() == HRTFMode::Unsupported)
 	{
 		widgSetButtonState(psWScreen, FRONTEND_SOUND_HRTF, WBUT_DISABLE);
@@ -987,16 +997,26 @@ void startAudioAndZoomOptionsMenu()
 	}
 
 	// map zoom
-	addTextButton(FRONTEND_MAP_ZOOM, FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Map Zoom"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_MAP_ZOOM_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, audioAndZoomOptionsMapZoomString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_MAP_ZOOM, _("Map Zoom"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_MAP_ZOOM_R, audioAndZoomOptionsMapZoomString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// map zoom rate
-	addTextButton(FRONTEND_MAP_ZOOM_RATE, FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Map Zoom Rate"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_MAP_ZOOM_RATE_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, audioAndZoomOptionsMapZoomRateString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_MAP_ZOOM_RATE, _("Map Zoom Rate"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_MAP_ZOOM_RATE_R, audioAndZoomOptionsMapZoomRateString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// radar zoom
-	addTextButton(FRONTEND_RADAR_ZOOM, FRONTEND_POS8X - 35, FRONTEND_POS8Y, _("Radar Zoom"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RADAR_ZOOM_R, FRONTEND_POS8M - 55, FRONTEND_POS8Y, audioAndZoomOptionsRadarZoomString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_RADAR_ZOOM, _("Radar Zoom"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_RADAR_ZOOM_R, audioAndZoomOptionsRadarZoomString(), WBUT_SECONDARY)));
+	row.start++;
+
+	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
+
+	auto scrollableList = ScrollableListWidget::make();
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->addItem(grid);
+	parent->attach(scrollableList);
 
 	// quit.
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -2446,13 +2466,11 @@ W_BUTTON * addSmallTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const char *
 }
 
 // ////////////////////////////////////////////////////////////////////////////
-void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
+static std::shared_ptr<W_SLIDER> makeFESlider(UDWORD id, UDWORD parent, UDWORD stops, UDWORD pos)
 {
 	W_SLDINIT sSldInit;
 	sSldInit.formID		= parent;
 	sSldInit.id			= id;
-	sSldInit.x			= (short)x;
-	sSldInit.y			= (short)y;
 	sSldInit.width		= iV_GetImageWidth(IntImages, IMAGE_SLIDER_BIG);
 	sSldInit.height		= iV_GetImageHeight(IntImages, IMAGE_SLIDER_BIG);
 	sSldInit.numStops	= (UBYTE) stops;
@@ -2460,7 +2478,16 @@ void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDW
 	sSldInit.pos		= (UBYTE) pos;
 	sSldInit.pDisplay	= displayBigSlider;
 	sSldInit.pCallback  = intUpdateQuantitySlider;
-	widgAddSlider(psWScreen, &sSldInit);
+
+	auto slider = std::make_shared<W_SLIDER>(&sSldInit);
+	return slider;
+}
+
+void addFESlider(UDWORD id, UDWORD parent, UDWORD x, UDWORD y, UDWORD stops, UDWORD pos)
+{
+	auto slider = makeFESlider(id, parent, stops, pos);
+	slider->move(x, y);
+	widgGetFromID(psWScreen, parent)->attach(slider);
 }
 
 // ////////////////////////////////////////////////////////////////////////////
