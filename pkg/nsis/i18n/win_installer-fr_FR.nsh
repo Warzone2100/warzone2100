@@ -2,11 +2,11 @@ ${LangFileString} WZWelcomeText "Bienvenue dans l'installateur de Warzone 2100 !
 
 ${LangFileString} WZWelcomeText_Portable "Bienvenue dans l'installateur portable Warzone 2100 !\r\n\r\nCet assistant vous guidera dans l'installation de la version portable de Warzone 2100.\r\n\r\nCette installation est entièrement autonome et vous pouvez à tout moment désinstaller le programme en supprimant le répertoire.\r\n\r\nWarzone 2100 est un programme 100% gratuit, entièrement Open Source ! \r\n\r\nCliquez sur Suivant pour continuer."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "Visitez notre page officielle https://wz2100.net pour la dernière version."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "Une version 64 bits de Warzone 2100 est disponible.$\r$\nPour plus de détails, consultez https://wz2100.net/ $\r$\nSouhaitez-vous continuer l'installation 32 bits ?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Ceci est la version 64 bits de Warzone 2100.$\r$\nVeuillez télécharger la version 32 bits de https://wz2100.net/ $\r$\nCliquez sur OK pour quitter la configuration."
 
 ${LangFileString} WZ_GPL_NEXT "Suivant"
 
@@ -37,9 +37,9 @@ ${LangFileString} DESC_SecNLS_WinFonts "Inclure le dossier des polices Windows d
 ${LangFileString} TEXT_SecMSSysLibraries "DLLs Microsoft Runtime importantes"
 ${LangFileString} DESC_SecMSSysLibraries "Téléchargez et installez (ou mettez à jour) les bibliothèques système redistribuables Visual C++ de Microsoft, dont certains composants peuvent avoir besoin pour fonctionner."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "En téléchargement"
+${LangFileString} DLTEXT_SysLibDLFailed "Échec du téléchargement de la bibliothèque système"
+${LangFileString} DLTEXT_VideosDLFailed "Le téléchargement des vidéos a échoué"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "Un redémarrage est nécessaire pour terminer l'installation. Voulez-vous redémarrer le système maintenant ?"
+${LangFileString} TEXT_MsgRebootFailed "Le redémarrage a échoué. Veuillez redémarrer manuellement."
