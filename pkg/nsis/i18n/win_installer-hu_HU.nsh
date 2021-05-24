@@ -2,11 +2,11 @@ ${LangFileString} WZWelcomeText "Üdvözöljük a Warzone 2100 telepítőjében!
 
 ${LangFileString} WZWelcomeText_Portable "Üdvözöljük a Warzone 2100 hordozható telepítőjében!\r\n\r\nA varázsló végigvezeti a Warzone 2100 hordozható verziójának telepítésén.\r\n\r\nA telepítő teljesen önálló, és a programot bármikor eltávolíthatja a könyvtára törlésével.\r\n\r\nA Warzone 2100 egy teljesen szabad és nyílt forráskódú program.\r\n\r\nKattintson a folytatáshoz."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "A legfrissebb verzióért keresse fel a hivatalos honlapunkat, a https://wz2100.net címen."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "Elérhető a Warzone 2100 64 bites verziója.$\r$\nA részletekért keresse fel a https://wz2100.net/ oldalt.$\r$\nMindenképp folytatja a 32 bites telepítést?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Ez a Warzone 2100 64 bites verziója.$\r$\nTöltse le a 32 bites verziót a https://wz2100.net/ oldalról.$\r$\nA telepítésből történő kilépéshez kattintson az OK gombra."
 
 ${LangFileString} WZ_GPL_NEXT "Következő"
 
@@ -37,9 +37,9 @@ ${LangFileString} DESC_SecNLS_WinFonts "A Windows betűkészletmappájának hozz
 ${LangFileString} TEXT_SecMSSysLibraries "Fontos Microsoft Runtime DLL-ek"
 ${LangFileString} DESC_SecMSSysLibraries "A Microsoft Visual C++ terjeszthető rendszer-programkönyvtárak letöltése és telepítése (vagy frissítése), amely az egyes komponensek futtatásához szükséges lehet."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "Letöltés"
+${LangFileString} DLTEXT_SysLibDLFailed "A rendszer-programkönyvtár letöltése sikertelen"
+${LangFileString} DLTEXT_VideosDLFailed "A videók letöltése sikertelen"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "Újraindítás szükséges a telepítés befejezéséhez. Újraindítja most a rendszert?"
+${LangFileString} TEXT_MsgRebootFailed "Újraindítás sikertelen. Indítsa újra kézzel."
