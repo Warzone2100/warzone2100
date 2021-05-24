@@ -765,36 +765,55 @@ void startGraphicsOptionsMenu()
 	addTopForm(false);
 	addBottomForm();
 
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	auto grid = std::make_shared<GridLayout>();
+	grid_allocation::slot row(0);
+
 	////////////
 	//FMV mode.
-	addTextButton(FRONTEND_FMVMODE,   FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Video Playback"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_FMVMODE_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, graphicsOptionsFmvmodeString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FMVMODE, _("Video Playback"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_FMVMODE_R, graphicsOptionsFmvmodeString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// Scanlines
-	addTextButton(FRONTEND_SCANLINES,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Scanlines"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SCANLINES_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, graphicsOptionsScanlinesString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SCANLINES, _("Scanlines"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SCANLINES_R, graphicsOptionsScanlinesString(), WBUT_SECONDARY)));
+	row.start++;
 
 	////////////
 	//subtitle mode.
-	addTextButton(FRONTEND_SUBTITLES,   FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Subtitles"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SUBTITLES_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, graphicsOptionsSubtitlesString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SUBTITLES, _("Subtitles"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SUBTITLES_R, graphicsOptionsSubtitlesString(), WBUT_SECONDARY)));
+	row.start++;
 
 	////////////
 	//shadows
-	addTextButton(FRONTEND_SHADOWS,   FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Shadows"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SHADOWS_R, FRONTEND_POS5M - 55, FRONTEND_POS5Y, graphicsOptionsShadowsString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SHADOWS, _("Shadows"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SHADOWS_R, graphicsOptionsShadowsString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// Radar
-	addTextButton(FRONTEND_RADAR,   FRONTEND_POS6X - 35, FRONTEND_POS6Y, _("Radar"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RADAR_R, FRONTEND_POS6M - 55, FRONTEND_POS6Y, graphicsOptionsRadarString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_RADAR, _("Radar"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_RADAR_R, graphicsOptionsRadarString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// RadarJump
-	addTextButton(FRONTEND_RADAR_JUMP,   FRONTEND_POS7X - 35, FRONTEND_POS7Y, _("Radar Jump"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_RADAR_JUMP_R, FRONTEND_POS7M - 55, FRONTEND_POS7Y, graphicsOptionsRadarJumpString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_RADAR_JUMP, _("Radar Jump"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_RADAR_JUMP_R, graphicsOptionsRadarJumpString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// screenshake
-	addTextButton(FRONTEND_SSHAKE,   FRONTEND_POS8X - 35, FRONTEND_POS8Y, _("Screen Shake"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_SSHAKE_R, FRONTEND_POS8M - 55, FRONTEND_POS8Y, graphicsOptionsScreenShakeString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SSHAKE, _("Screen Shake"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SSHAKE_R, graphicsOptionsScreenShakeString(), WBUT_SECONDARY)));
+	row.start++;
+
+	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
+
+	auto scrollableList = ScrollableListWidget::make();
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->addItem(grid);
+	parent->attach(scrollableList);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("GRAPHICS OPTIONS"));
