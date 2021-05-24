@@ -748,6 +748,11 @@ char const *graphicsOptionsShadowsString()
 	return getDrawShadows() ? _("On") : _("Off");
 }
 
+char const *graphicsOptionsFogString()
+{
+	return pie_GetFogEnabled() ? _("On") : _("Off");
+}
+
 char const *graphicsOptionsRadarString()
 {
 	return rotateRadar ? _("Rotating") : _("Fixed");
@@ -786,6 +791,11 @@ void startGraphicsOptionsMenu()
 	//shadows
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_SHADOWS, _("Shadows"), WBUT_SECONDARY)));
 	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_SHADOWS_R, graphicsOptionsShadowsString(), WBUT_SECONDARY)));
+	row.start++;
+
+	// fog
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FOG, _("Fog"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_FOG_R, graphicsOptionsFogString(), WBUT_SECONDARY)));
 	row.start++;
 
 	// Radar
@@ -843,6 +853,20 @@ bool runGraphicsOptionsMenu()
 	case FRONTEND_SHADOWS_R:
 		setDrawShadows(!getDrawShadows());
 		widgSetString(psWScreen, FRONTEND_SHADOWS_R, graphicsOptionsShadowsString());
+		break;
+
+	case FRONTEND_FOG:
+	case FRONTEND_FOG_R:
+		if (pie_GetFogEnabled())
+		{
+			pie_SetFogStatus(false);
+			pie_EnableFog(false);
+		}
+		else
+		{
+			pie_EnableFog(true);
+		}
+		widgSetString(psWScreen, FRONTEND_FOG_R, graphicsOptionsFogString());
 		break;
 
 	case FRONTEND_FMVMODE:
