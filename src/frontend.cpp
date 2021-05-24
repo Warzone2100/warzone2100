@@ -1767,28 +1767,45 @@ void startMouseOptionsMenu()
 	addTopForm(false);
 	addBottomForm();
 
+	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+
+	auto grid = std::make_shared<GridLayout>();
+	grid_allocation::slot row(0);
+
 	////////////
 	// mouseflip
-	addTextButton(FRONTEND_MFLIP,   FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Reverse Rotation"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_MFLIP_R, FRONTEND_POS2M - 55, FRONTEND_POS2Y, mouseOptionsMflipString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_MFLIP, _("Reverse Rotation"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_MFLIP_R, mouseOptionsMflipString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// Cursor trapping
-	addTextButton(FRONTEND_TRAP,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Trap Cursor"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_TRAP_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, mouseOptionsTrapString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_TRAP, _("Trap Cursor"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_TRAP_R, mouseOptionsTrapString(), WBUT_SECONDARY)));
+	row.start++;
 
 	////////////
 	// left-click orders
-	addTextButton(FRONTEND_MBUTTONS,   FRONTEND_POS2X - 35, FRONTEND_POS4Y, _("Switch Mouse Buttons"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_MBUTTONS_R, FRONTEND_POS2M - 55, FRONTEND_POS4Y, mouseOptionsMbuttonsString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_MBUTTONS, _("Switch Mouse Buttons"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_MBUTTONS_R, mouseOptionsMbuttonsString(), WBUT_SECONDARY)));
+	row.start++;
 
 	////////////
 	// middle-click rotate
-	addTextButton(FRONTEND_MMROTATE,   FRONTEND_POS2X - 35, FRONTEND_POS5Y, _("Rotate Screen"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_MMROTATE_R, FRONTEND_POS2M - 55, FRONTEND_POS5Y, mouseOptionsMmrotateString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_MMROTATE, _("Rotate Screen"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_MMROTATE_R, mouseOptionsMmrotateString(), WBUT_SECONDARY)));
+	row.start++;
 
 	// Hardware / software cursor toggle
-	addTextButton(FRONTEND_CURSORMODE,   FRONTEND_POS4X - 35, FRONTEND_POS6Y, _("Colored Cursors"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_CURSORMODE_R, FRONTEND_POS4M - 55, FRONTEND_POS6Y, mouseOptionsCursorModeString(), WBUT_SECONDARY);
+	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_CURSORMODE, _("Colored Cursors"), WBUT_SECONDARY)));
+	grid->place({1, 1, false}, row, addMargin(makeTextButton(FRONTEND_CURSORMODE_R, mouseOptionsCursorModeString(), WBUT_SECONDARY)));
+	row.start++;
+
+	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
+
+	auto scrollableList = ScrollableListWidget::make();
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->addItem(grid);
+	parent->attach(scrollableList);
 
 	// Add some text down the side of the form
 	addSideText(FRONTEND_SIDETEXT, FRONTEND_SIDEX, FRONTEND_SIDEY, _("MOUSE OPTIONS"));
