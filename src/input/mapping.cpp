@@ -226,23 +226,40 @@ bool KeyMappings::remove(const KeyMapping& mappingToRemove)
 	return false;
 }
 
-std::vector<KeyMapping> KeyMappings::removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
+std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
 {
 	/* Find any mapping with same keys */
 	const auto matches = find(meta, input);
-	std::vector<KeyMapping> conflicts;
+	std::vector<std::reference_wrapper<KeyMapping>> conflicts;
 	for (KeyMapping& mapping : matches)
 	{
-		/* Clear only if the mapping is for an assignable binding. Do not clear if there is no conflict (different context) */
-		const bool bConflicts = mapping.info.context == context;
-		if (mapping.info.type == KeyMappingType::ASSIGNABLE && bConflicts)
+		/* Keys conflict if they are for the same context. ALWAYS_ACTIVE is special (always has highest priority), so those keys will always conflict. */
+		const bool bConflicts = mapping.info.context == InputContext::ALWAYS_ACTIVE || mapping.info.context == context;
+		if (bConflicts)
 		{
 			conflicts.push_back(mapping);
-			remove(mapping);
 		}
 	}
 
 	return conflicts;
+}
+
+std::vector<KeyMapping> KeyMappings::removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
+{
+	/* Find any mapping with same keys */
+	const auto conflicting = findConflicting(meta, input, context);
+	std::vector<KeyMapping> removed;
+	for (KeyMapping& mapping : conflicting)
+	{
+		/* Clear only if the mapping is for an assignable binding */
+		if (mapping.info.type == KeyMappingType::ASSIGNABLE)
+		{
+			removed.push_back(mapping);
+			remove(mapping);
+		}
+	}
+
+	return removed;
 }
 
 bool KeyMappings::isDirty() const

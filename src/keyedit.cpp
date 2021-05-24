@@ -726,6 +726,18 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		return false;
 	}
 
+	/* Disallow conflicts with ALWAYS_ACTIVE keybinds, as that context always has max priority, preventing
+	   any conflicting keys from triggering. */
+	for (const KeyMapping& mapping : inputManager.mappings().findConflicting(metakey, input, selectedInfo->context))
+	{
+		if (mapping.info.context == InputContext::ALWAYS_ACTIVE)
+		{
+			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
+			unhighlightSelected();
+			return false;
+		}
+	}
+
 	/* Clear conflicting mappings using these keys */
 	const auto conflicts = inputManager.mappings().removeConflicting(metakey, input, selectedInfo->context);
 	for (auto& conflict : conflicts)
