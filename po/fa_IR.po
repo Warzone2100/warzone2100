@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-05-23 08:51\n"
+"PO-Revision-Date: 2021-05-25 19:56\n"
 "Last-Translator: \n"
 "Language-Team: Persian\n"
 "Language: fa_IR\n"
@@ -5200,7 +5200,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:213
 #: po/custom/fromJson.txt:5077
 msgid "Sensor Tower"
-msgstr ""
+msgstr "برجک سنسور"
 
 #: data/mp/messages/strings/names.txt:226
 msgid "Tornado AA Site"
@@ -5214,7 +5214,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:271
 #: po/custom/fromJson.txt:3592
 msgid "Machinegun"
-msgstr ""
+msgstr "مسلسل"
 
 #: data/mp/messages/strings/names.txt:275
 msgid "VTOL Flak Cannon"
@@ -6805,7 +6805,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 #: po/custom/fromJson.txt:847
 msgid "Assault Cannon"
-msgstr ""
+msgstr "توپ حمله"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
@@ -6874,7 +6874,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG4ROTARYMk1.name
 #: po/custom/fromJson.txt:886
 msgid "Assault Gun"
-msgstr ""
+msgstr "اسلحه‌ی حمله"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-RotMG.name
@@ -7487,7 +7487,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-CB-Tower01.name
 #: po/custom/fromJson.txt:1362
 msgid "CB Tower"
-msgstr ""
+msgstr "برجک CB"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Turret01.name
@@ -7609,14 +7609,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0CommandCentre.name
 #: po/custom/fromJson.txt:1444
 msgid "Command Center"
-msgstr ""
+msgstr "مرکز فرماندهی"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ComDroidControl.name
 #. data/mp/stats/structure.json: $.A0ComDroidControl.name
 #: po/custom/fromJson.txt:1448
 msgid "Command Relay Center"
-msgstr ""
+msgstr "مرکز رله‌ی فرمان"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-CommandRelay.name
@@ -7860,7 +7860,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1590
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "کارخانه‌ی سایبورگ"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgFlamer01.name
@@ -8312,7 +8312,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0FacMod1.name
 #: po/custom/fromJson.txt:1928
 msgid "Factory Module"
-msgstr ""
+msgstr "ماژول کارخانه"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
@@ -8341,7 +8341,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0LightFactory.name
 #: po/custom/fromJson.txt:1945
 msgid "Factory"
-msgstr ""
+msgstr "کارخانه"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
@@ -8808,21 +8808,21 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0HardcreteMk1CWall.name
 #: po/custom/fromJson.txt:2250
 msgid "Hardcrete Corner Wall"
-msgstr ""
+msgstr "دیوار گوشه‌ای سخت"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HardcreteGate.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Gate.name
 #: po/custom/fromJson.txt:2254
 msgid "Hardcrete Gate"
-msgstr ""
+msgstr "دروازه‌ی سخت"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Wall.name
 #: po/custom/fromJson.txt:2258
 msgid "Hardcrete Wall"
-msgstr ""
+msgstr "دیوار سخت"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HardcreteWall.name
@@ -8887,7 +8887,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2302
 msgid "Hardened Sensor Tower"
-msgstr ""
+msgstr "برجک سنسور مقاوم"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
@@ -9242,7 +9242,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon375mmMk1.name
 #: po/custom/fromJson.txt:2510
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "توپ سنگین"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flame2.name
@@ -9369,7 +9369,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG3Mk1.name
 #: po/custom/fromJson.txt:2609
 msgid "Heavy Machinegun"
-msgstr ""
+msgstr "مسلسل سنگین"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar02Hvy.name
@@ -10618,7 +10618,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon1Mk1.name
 #: po/custom/fromJson.txt:3534
 msgid "Light Cannon"
-msgstr ""
+msgstr "توپ سبک"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.LookOutTower.name
@@ -10865,7 +10865,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon2A-TMk1.name
 #: po/custom/fromJson.txt:3715
 msgid "Medium Cannon"
-msgstr ""
+msgstr "توپ متوسّط"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[0]
@@ -11602,7 +11602,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResourceExtractor.name
 #: po/custom/fromJson.txt:4252
 msgid "Oil Derrick"
-msgstr ""
+msgstr "دکل نفت"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.OilDrum.name
@@ -11755,7 +11755,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Laser4-PlasmaCannon.name
 #: po/custom/fromJson.txt:4350
 msgid "Plasma Cannon"
-msgstr ""
+msgstr "توپ پلاسما"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb05.name
@@ -11833,7 +11833,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4392
 msgid "Power Generator"
-msgstr ""
+msgstr "مولّد برق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -11849,7 +11849,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowMod1.name
 #: po/custom/fromJson.txt:4402
 msgid "Power Module"
-msgstr ""
+msgstr "ماژول برق"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -12033,7 +12033,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
 #: po/custom/fromJson.txt:4526
 msgid "Radar Detector Tower"
-msgstr ""
+msgstr "برجک راداریاب"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-RadarDetector01.name
@@ -12235,7 +12235,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0RepairCentre3.name
 #: po/custom/fromJson.txt:4666
 msgid "Repair Facility"
-msgstr ""
+msgstr "مرکز تعمیرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
@@ -12328,7 +12328,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResearchFacility.name
 #: po/custom/fromJson.txt:4734
 msgid "Research Facility"
-msgstr ""
+msgstr "مرکز تحقیقات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[3]
@@ -12358,7 +12358,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResearchModule1.name
 #: po/custom/fromJson.txt:4758
 msgid "Research Module"
-msgstr ""
+msgstr "ماژول تحقیقات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[2]
@@ -13334,7 +13334,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:5406
 msgid "Tank Traps"
-msgstr ""
+msgstr "تله‌های تانک"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
@@ -13650,7 +13650,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon6TwinAslt.name
 #: po/custom/fromJson.txt:5607
 msgid "Twin Assault Cannon"
-msgstr ""
+msgstr "توپ حمله‌ی دوقلو"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-TwinAGun.name
@@ -13664,7 +13664,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG5TWINROTARY.name
 #: po/custom/fromJson.txt:5615
 msgid "Twin Assault Gun"
-msgstr ""
+msgstr "اسلحه‌ی حمله‌ی دوقلو"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox2.name
@@ -13710,7 +13710,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG2Mk1.name
 #: po/custom/fromJson.txt:5643
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "مسلسل دوقلو"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
@@ -14077,7 +14077,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0VTolFactory1.name
 #: po/custom/fromJson.txt:5887
 msgid "VTOL Factory"
-msgstr ""
+msgstr "کارخانه‌ی عمودپرواز"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAM-VTOL.name
@@ -14238,7 +14238,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0VtolPad.name
 #: po/custom/fromJson.txt:5979
 msgid "VTOL Rearming Pad"
-msgstr ""
+msgstr "پد مسلّح‌ساز عمودپرواز"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[2]
