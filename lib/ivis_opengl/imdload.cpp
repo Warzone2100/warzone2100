@@ -1284,7 +1284,20 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		{
 			std::string tcmask_name = pie_MakeTexPageTCMaskName(texfile);
 			tcmask_name += ".png";
-			optional<size_t> texpage_mask = iV_GetTexture(tcmask_name.c_str());
+			optional<size_t> texpage_mask = iV_GetTransformTexture(tcmask_name.c_str(), [filename, tcmask_name](iV_Image& sSprite){
+				ASSERT_OR_RETURN(, sSprite.depth == 4, "(%s) tcmask png (%s) does not have 4 channels, as expected", filename.toUtf8().c_str(), tcmask_name.c_str());
+				auto originalBmpData = sSprite.bmp;
+				const size_t numPixels = static_cast<size_t>(sSprite.height) * static_cast<size_t>(sSprite.width);
+				// copy just the alpha channel over
+				sSprite.bmp = (unsigned char *)malloc(numPixels);
+				for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
+				{
+					sSprite.bmp[pixelIdx] = originalBmpData[(pixelIdx * 4) + 3];
+				}
+				sSprite.depth = 1;
+				// free the original bitmap data
+				free(originalBmpData);
+			});
 
 			ASSERT_OR_RETURN(, texpage_mask.has_value(), "%s could not load tcmask %s", filename.toUtf8().c_str(), tcmask_name.c_str());
 

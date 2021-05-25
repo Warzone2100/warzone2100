@@ -114,10 +114,10 @@ void main()
 	if (tcmask != 0)
 	{
 		// Get mask for team colors from texture
-		vec4 mask = texture(TextureTcmask, texCoord);
+		float maskAlpha = texture(TextureTcmask, texCoord).r;
 
 		// Apply color using grain merge with tcmask
-		fragColour = (light + (teamcolour - 0.5) * mask.a) * colour;
+		fragColour = (light + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{

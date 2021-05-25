@@ -50,10 +50,10 @@ void main()
 	if (tcmask == 1)
 	{
 		// Get tcmask information from texture unit 1
-		vec4 mask = texture(TextureTcmask, texCoord);
+		float maskAlpha = texture(TextureTcmask, texCoord).r;
 
 		// Apply colour using grain merge with tcmask
-		fragColour = (texColour + (teamcolour - 0.5) * mask.a) * colour;
+		fragColour = (texColour + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{

@@ -36,13 +36,13 @@ void main()
 	{
 		// Get tcmask information from texture unit 1
 		#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-		vec4 mask = texture(TextureTcmask, texCoord);
+		float maskAlpha = texture(TextureTcmask, texCoord).r;
 		#else
-		vec4 mask = texture2D(TextureTcmask, texCoord);
+		float maskAlpha = texture2D(TextureTcmask, texCoord).r;
 		#endif
 
 		// Apply colour using grain merge with tcmask
-		fragColour = (texColour + (teamcolour - 0.5) * mask.a) * colour;
+		fragColour = (texColour + (teamcolour - 0.5) * maskAlpha) * colour;
 	}
 	else
 	{
