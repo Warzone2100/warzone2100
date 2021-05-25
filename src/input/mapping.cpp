@@ -286,20 +286,19 @@ void KeyMappings::clear(nonstd::optional<KeyMappingType> filter)
 void KeyMappings::sort(const ContextManager& contexts)
 {
 	keyMappings.sort([&contexts](const KeyMapping& a, const KeyMapping& b) {
-		// Primary sort by priority
-		const unsigned int priorityA = contexts.getPriority(a.info.context);
-		const unsigned int priorityB = contexts.getPriority(b.info.context);
-		if (priorityA != priorityB)
-		{
-			return priorityA > priorityB;
-		}
-
 		// Sort by meta. This causes all mappings with meta to be checked before non-meta mappings,
 		// avoiding having to check for meta-conflicts in the processing loop. (e.g. if we should execute
 		// a mapping with right arrow key, depending on if another binding on shift+right-arrow is executed
 		// or not). In other words, if any mapping with meta is executed, it will consume the respective input,
 		// preventing any non-meta mappings with the same input from being executed.
-		return a.hasMeta() && !b.hasMeta();
+		if (a.hasMeta() != b.hasMeta()) {
+			return a.hasMeta() && !b.hasMeta();
+		}
+
+		// Sort by priority
+		const unsigned int priorityA = contexts.getPriority(a.info.context);
+		const unsigned int priorityB = contexts.getPriority(b.info.context);
+		return priorityA > priorityB;
 	});
 	bDirty = false;
 }
