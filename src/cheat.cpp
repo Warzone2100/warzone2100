@@ -221,11 +221,13 @@ void recvProcessDebugMappings(NETQUEUE queue)
 	{
 		addConsoleMessage(_("Debug mode now enabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 		Cheated = true;
+		gInputManager.contexts().set(InputContext::__DEBUG, InputContext::State::ACTIVE);
 		triggerEventCheatMode(true);
 	}
 	else if (oldDebugMode && !newDebugMode)
 	{
 		addConsoleMessage(_("Debug mode now disabled!"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
+		gInputManager.contexts().set(InputContext::__DEBUG, InputContext::State::INACTIVE);
 		triggerEventCheatMode(false);
 	}
 }
