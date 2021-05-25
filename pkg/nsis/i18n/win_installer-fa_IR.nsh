@@ -1,45 +1,45 @@
 ${LangFileString} WZWelcomeText "به نصّاب وارزون ۲۱۰۰ خوش آمدید!\r\n\r\nاین ویزارد شما را در نصب وارزون ۲۱۰۰ راهنمایی می‌کند.\r\n\r\nپیشنهاد می‌شود قبل از ادامه‌ی این نصب بقیه‌ی برنامه‌ها را ببندید. این کار به‌روزرسانی پرونده‌های سیستمی مربوطه را بدون نیاز به راه‌اندازی مجدّد رایانه‌تان ممکن می‌کند.\r\n\r\nوارزون ۲۱۰۰ برنامه‌ای ۱۰۰٪ رایگان و کاملاً متن‌باز است\r\n\r\nبرای ادامه روی «بعدی» کلید کنید."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "به نصّاب نسخه‌ی قابل حمل وارزون ۲۱۰۰ خوش آمدید!\r\n\r\nاین ویزارد شما را در نصب نسخه‌ی قابل حمل وارزون ۲۱۰۰ راهنمایی می‌کند.\r\n\r\nاین نصب کاملاً جامع است و شما می‌توانید در هر زمان با حذف موقعیّت برنامه آن را حذف نصب کنید.\r\n\r\nوارزون ۲۱۰۰ برنامه‌ای ۱۰۰٪ رایگان و کاملاً متن‌باز است!\r\n\r\nبرای ادامه روی «بعدی» کلید کنید."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "برای دریافت آخرین نسخه به وبگاه رسمی ما https://wz2100.net مراجعه کنید."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "یک نسخه‌ی ۶۴بیت از وارزون ۲۱۰۰ موجود است.$\r$\nبرای اطّلاعات به https://wz2100.net/ مراجعه کنید $\r$\nهم‌چنان نصب نسخه‌ی ۳۲بیت را ادامه می‌دهید؟"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "این نسخه‌ی ۶۴بیت وارزون ۲۱۰۰ است.$\r$\nلطفاً نسخه‌ی ۳۲بیت را از https://wz2100.net/ دانلود کنید. $\r$\nبرای خروج روی «تأیید» کلید کنید."
 
-${LangFileString} WZ_GPL_NEXT "Next"
+${LangFileString} WZ_GPL_NEXT "بعدی"
 
-${LangFileString} TEXT_SecBase "Core files"
-${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
+${LangFileString} TEXT_SecBase "پرونده‌های بخش اصلی"
+${LangFileString} DESC_SecBase "پرونده‌های بخش اصلی برای اجرای وارزون ۲۱۰۰ لازم هستند."
 
-${LangFileString} TEXT_SecFMVs "Videos"
-${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
+${LangFileString} TEXT_SecFMVs "فیلم‌ها"
+${LangFileString} DESC_SecFMVs "بارگیری و نصب میان‌پرده‌های درون بازی."
 
-${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
-${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngHi "انگلیسی (HQ)"
+${LangFileString} DESC_SecFMVs_EngHi "بارگیری و نصب بالاترین کیفیت میان‌پرده‌های انگلیسی درون بازی."
 
-${LangFileString} TEXT_SecFMVs_Eng "English"
-${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Eng "انگلیسی"
+${LangFileString} DESC_SecFMVs_Eng "بارگیری و نصب میان‌پرده‌های انگلیسی درون بازی."
 
-${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"
-${LangFileString} DESC_SecFMVs_EngLo "Download and install a low-quality version of English in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_EngLo "انگلیسی (LQ)"
+${LangFileString} DESC_SecFMVs_EngLo "بارگیری و نصب یک نسخه‌ی کیفیت پایین از میان‌پرده‌های انگلیسی درون بازی."
 
-${LangFileString} TEXT_SecFMVs_Ger "German"
-${LangFileString} DESC_SecFMVs_Ger "Download and install German in-game cutscenes."
+${LangFileString} TEXT_SecFMVs_Ger "آلمانی"
+${LangFileString} DESC_SecFMVs_Ger "بارگیری و نصب میان‌پرده‌های آلمانی درون بازی."
 
-${LangFileString} TEXT_SecNLS "Language files"
-${LangFileString} DESC_SecNLS "Support for languages other than English."
+${LangFileString} TEXT_SecNLS "پرونده‌های زبان"
+${LangFileString} DESC_SecNLS "پشتیبانی از زبان‌های دیگر به‌جز انگلیسی."
 
-${LangFileString} TEXT_SecNLS_WinFonts "WinFonts"
-${LangFileString} DESC_SecNLS_WinFonts "Include Windows Fonts folder into the search path. Enable this if you want to use custom fonts in config file or having troubles with standard font. Can be slow on Vista and later!"
+${LangFileString} TEXT_SecNLS_WinFonts "فونت‌های ویندوز"
+${LangFileString} DESC_SecNLS_WinFonts "قرار دادن پوشه‌ی فونت‌های ویندوز در مسیر جستجو. اگر می‌خواهید از فونت‌های دلخواه در پرونده‌ی پیکربندی استفاده کنید یا با فونت‌های استاندارد مشکل دارید آن را فعّال کنید. در ویستا و جدیدتر از آن می‌تواند کند باشد!"
 
-${LangFileString} TEXT_SecMSSysLibraries "Important Microsoft Runtime DLLs"
-${LangFileString} DESC_SecMSSysLibraries "Download and install (or update) Microsoft's Visual C++ redistributable system libraries, which some components may require to run."
+${LangFileString} TEXT_SecMSSysLibraries "Runtime DLLهای مهم مایکروسافت"
+${LangFileString} DESC_SecMSSysLibraries "بارگیری و نصب (یا به‌روزرسانی) کتابخانه‌های سیستمی Visual C++ redistributable مایکروسافت، که بعضی از آن‌ها برای اجرا لازم هستند."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "در حال بارگیری"
+${LangFileString} DLTEXT_SysLibDLFailed "بارگیری کتابخانه‌های سیستمی ناموفّق بود"
+${LangFileString} DLTEXT_VideosDLFailed "بارگیری فیلم‌ها ناموفّق بود"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "یک راه‌اندازی مجدّد برای اتمام فراید نصب لازم است. آیا اکنون سیستم را راه‌اندازی مجدّد می‌کنید؟"
+${LangFileString} TEXT_MsgRebootFailed "راه‌اندازی مجدّد ناموفّق بود. لطفاً به صورت دستی راه‌اندازی مجدّد کنید."
