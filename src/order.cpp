@@ -1532,6 +1532,8 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 				moveToRearm(psDroid);
 				break;
 			}
+			// if already has a target repair, don't override it: it might be different
+			// and we don't want come back and forth between 2 repair points
 			if (psDroid->order.type == DORDER_RTR && psOrder->psObj != nullptr && !psOrder->psObj->died)
 			{
 				objTrace(psDroid->id, "DONE FOR NOW");
@@ -1546,16 +1548,7 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 			{
 				rtrData = RtrBestResult(psOrder);
 			}
-			
-			/*if (psDroid->order.type == DORDER_RTR && rtrData.type == RTR_TYPE_REPAIR_FACILITY && rtrData.psObj == psDroid->order.psObj)
-			{
-				// droids doing a DORDER_RTR periodically give themselves a DORDER_RTR so that
-				// they always go to the nearest repair facility
-				// this stops the unit doing anything more if the same repair facility gets chosen
-				objTrace(psDroid->id, "DONE FOR NOW");
-				break;
-			}*/
-			
+					
 			/* give repair order if repair facility found */
 			if (rtrData.type == RTR_TYPE_REPAIR_FACILITY)
 			{
