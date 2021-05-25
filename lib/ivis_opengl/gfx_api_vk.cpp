@@ -1424,6 +1424,8 @@ size_t VkTexture::format_size(const gfx_api::pixel_format& format)
 			return 4;
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			return 3;
+		case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			return 1;
 		default:
 			debug(LOG_FATAL, "Unrecognized pixel format");
 	}
@@ -1434,6 +1436,7 @@ size_t VkTexture::format_size(const vk::Format& format)
 {
 	switch (format)
 	{
+	case vk::Format::eR8Unorm: return sizeof(uint8_t);
 	case vk::Format::eR8G8B8Unorm: return 3 * sizeof(uint8_t);
 	case vk::Format::eB8G8R8A8Unorm:
 	case vk::Format::eR8G8B8A8Unorm: return 4 * sizeof(uint8_t);
@@ -3176,6 +3179,8 @@ vk::Format VkRoot::get_format(const gfx_api::pixel_format& format)
 	{
 	case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 		return supports_rgb ? vk::Format::eR8G8B8Unorm : vk::Format::eR8G8B8A8Unorm;
+	case gfx_api::pixel_format::FORMAT_R8_UNORM:
+		return vk::Format::eR8Unorm;
 	case gfx_api::pixel_format::FORMAT_RGBA8_UNORM_PACK8:
 		return vk::Format::eR8G8B8A8Unorm;
 	case gfx_api::pixel_format::FORMAT_BGRA8_UNORM_PACK8:

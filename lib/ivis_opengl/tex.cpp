@@ -248,7 +248,7 @@ bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-optional<size_t> iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void (iV_Image&)> transformImageData, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(filename != nullptr, "filename must not be null");
 	iV_Image sSprite;
@@ -270,9 +270,18 @@ optional<size_t> iV_GetTexture(const char *filename, bool compression, int maxWi
 		return nullopt;
 	}
 	scaleImageMaxSize(&sSprite, maxWidth, maxHeight);
+	if (transformImageData)
+	{
+		transformImageData(sSprite);
+	}
 	size_t page = pie_AddTexPage(&sSprite, path.c_str(), compression);
 	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
 	return optional<size_t>(page);
+}
+
+optional<size_t> iV_GetTexture(const char *filename, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+{
+	return iV_GetTransformTexture(filename, nullptr, compression, maxWidth, maxHeight);
 }
 
 bool replaceTexture(const WzString &oldfile, const WzString &newfile)
@@ -335,6 +344,8 @@ gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image)
 {
 	switch (image->depth)
 	{
+	case 1:
+		return gfx_api::pixel_format::FORMAT_R8_UNORM;
 	case 3:
 		return gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8;
 	case 4:

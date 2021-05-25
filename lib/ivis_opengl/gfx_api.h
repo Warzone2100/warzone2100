@@ -83,6 +83,7 @@ namespace gfx_api
 		FORMAT_RGBA8_UNORM_PACK8,
 		FORMAT_BGRA8_UNORM_PACK8,
 		FORMAT_RGB8_UNORM_PACK8,
+		FORMAT_R8_UNORM,
 	};
 
 	struct texture

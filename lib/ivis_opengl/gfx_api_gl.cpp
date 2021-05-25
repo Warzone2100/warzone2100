@@ -61,6 +61,8 @@ static std::pair<GLenum, GLenum> to_gl(const gfx_api::pixel_format& format)
 			return std::make_pair(GL_RGBA8, GL_BGRA);
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			return std::make_pair(GL_RGB8, GL_RGB);
+		case gfx_api::pixel_format::FORMAT_R8_UNORM:
+			return std::make_pair(GL_R8, GL_RED);
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}

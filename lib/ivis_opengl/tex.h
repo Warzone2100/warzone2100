@@ -24,6 +24,7 @@
 #include "gfx_api.h"
 #include "png_util.h"
 
+#include <functional>
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -45,6 +46,7 @@ void pie_AssignTexture(size_t page, gfx_api::texture* texture);
 bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight);
 
 optional<size_t> iV_GetTexture(const char *filename, bool compression = true, int maxWidth = -1, int maxHeight = -1);
+optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void (iV_Image&)> transformImageData = nullptr, bool compression = true, int maxWidth = -1, int maxHeight = -1);
 void iV_unloadImage(iV_Image *image);
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
