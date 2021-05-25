@@ -392,7 +392,7 @@ Defending against VTOLs
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 VTOLs are not ground-based units, so most ground weapons cannot hit them. They
-an only be hit by either anti-air (often abbreviated AA, which can only hit airunits)
+an only be hit by either anti-air (often abbreviated AA, which can only hit air units)
 or versatile (can hit air or ground) weapons.
 
 There are only a few weapons that are versatile: machineguns, lasers, and
