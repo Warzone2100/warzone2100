@@ -22,7 +22,6 @@
 #define __INCLUDED_SRC_INPUT_CONTEXT_H__
 
 #include <string>
-#include <list>
 #include <vector>
 
 struct ContextPriority
@@ -79,18 +78,31 @@ struct InputContext
 		INACTIVE,
 	};
 
+	/* Predicate for checking if the context should be prioritized. */
+	typedef std::function<bool()> PriorityCondition;
+
 	/* Display name to be shown in e.g. edit keymap options */
 	const std::string getDisplayName() const;
+
+	/* Returns boolean indicating whether or not the context is always active. Always active contexts
+	   cannot be disabled e.g. via `ContextManager::makeAllInactive()`. This also means that any mappings
+	   in always active contexts will conflict with mappings from other contexts (as they would override
+	   them anyway). */
+	const bool isAlwaysActive() const;
 
 private:
 	static InputContexts contexts;
 
-	InputContext(const ContextPriority priority, const State initialState, const char* const displayName);
+	InputContext(const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName);
 
+	InputContext(const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName, const PriorityCondition condition);
+
+	const bool bIsAlwaysActive;
 	const ContextPriority priority;
 	const unsigned int index;
 	const std::string displayName;
 	const State defaultState;
+	const PriorityCondition condition;
 
 	friend bool operator==(const InputContext& lhs, const InputContext& rhs);
 	friend class ContextManager;
@@ -109,6 +121,13 @@ public:
 	/* Makes all contexts inactive. Used to disable key mappings while in design screen. */
 	void makeAllInactive();
 
+	/* Pushes the current state of the input contexts to a state stack. More specifically, creates
+	   a copy of the current context states and pushes the copy at the top of the stack. */
+	void pushState();
+
+	/* Pops state of the input contexts from the state stack. */
+	void popState();
+
 	/* Updates the state of a single context. Use this to prioritize/enable/disable contexts. */
 	void set(const InputContext& context, const InputContext::State state);
 
@@ -121,12 +140,15 @@ public:
 	/* Priority of the context when resolving collisions. Context with highest priority wins */
 	unsigned int getPriority(const InputContext& context) const;
 
+	/* Updates the priority status (ACTIVE/PRIORITIZED) of contexts based on their conditions */
+	void updatePriorityStatus();
+
 private:
 	bool isDirty() const;
 
 	void clearDirty();
 
-	std::vector<InputContext::State> states;
+	std::vector<std::vector<InputContext::State>> states;
 	bool bDirty;
 
 	friend class InputManager;

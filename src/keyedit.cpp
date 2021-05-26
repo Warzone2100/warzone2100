@@ -730,7 +730,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	   any conflicting keys from triggering. */
 	for (const KeyMapping& mapping : inputManager.mappings().findConflicting(metakey, input, selectedInfo->context))
 	{
-		if (mapping.info.context == InputContext::ALWAYS_ACTIVE)
+		if (mapping.info.context.isAlwaysActive())
 		{
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 			unhighlightSelected();

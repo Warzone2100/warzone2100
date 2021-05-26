@@ -233,8 +233,8 @@ std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(con
 	std::vector<std::reference_wrapper<KeyMapping>> conflicts;
 	for (KeyMapping& mapping : matches)
 	{
-		/* Keys conflict if they are for the same context. ALWAYS_ACTIVE is special (always has highest priority), so those keys will always conflict. */
-		const bool bConflicts = mapping.info.context == InputContext::ALWAYS_ACTIVE || mapping.info.context == context;
+		/* Keys conflict if they are for the same context. Always active contexts are special (always have highest priority), so those keys will always conflict. */
+		const bool bConflicts = mapping.info.context.isAlwaysActive() || mapping.info.context == context;
 		if (bConflicts)
 		{
 			conflicts.push_back(mapping);
