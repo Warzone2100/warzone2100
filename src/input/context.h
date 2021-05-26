@@ -22,6 +22,7 @@
 #define __INCLUDED_SRC_INPUT_CONTEXT_H__
 
 #include <string>
+#include <list>
 #include <vector>
 
 struct ContextPriority
