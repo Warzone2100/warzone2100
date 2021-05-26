@@ -443,15 +443,7 @@ void processInput()
 		}
 	}
 
-	if (intMode != INTMODE::INT_DESIGN)
-	{
-		gInputManager.contexts().set(
-			InputContext::RADAR,
-			isMouseOverRadar()
-				? InputContext::State::PRIORITIZED
-				: InputContext::State::ACTIVE
-		);
-	}
+	gInputManager.contexts().updatePriorityStatus();
 
 	if (!isInTextInputMode())
 	{
