@@ -69,7 +69,7 @@ const std::string InputContext::getDisplayName() const
 	return displayName;
 }
 
-const bool InputContext::isAlwaysActive() const
+bool InputContext::isAlwaysActive() const
 {
 	return bIsAlwaysActive;
 }

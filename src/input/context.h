@@ -88,7 +88,7 @@ struct InputContext
 	   cannot be disabled e.g. via `ContextManager::makeAllInactive()`. This also means that any mappings
 	   in always active contexts will conflict with mappings from other contexts (as they would override
 	   them anyway). */
-	const bool isAlwaysActive() const;
+	bool isAlwaysActive() const;
 
 private:
 	static InputContexts contexts;
