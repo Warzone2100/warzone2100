@@ -6470,6 +6470,8 @@ bool loadSaveResearch(const char *pFileName)
 		if (!found)
 		{
 			//ignore this record
+			debug(LOG_SAVE, "Skipping unknown research named '%s'", name.toStdString().c_str());
+			ini.endGroup();
 			continue;
 		}
 		auto researchedList = ini.value("researched").jsonValue();
