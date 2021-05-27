@@ -3,17 +3,19 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NEW_PARADIGM_RES = [
-	"R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
-	"R-Struc-Materials02", "R-Struc-Factory-Upgrade01",
-	"R-Vehicle-Engine02",
-	"R-Vehicle-Metals01", "R-Cyborg-Metals01", "R-Wpn-Cannon-Damage02",
-	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
-	"R-Wpn-Mortar-Damage01", "R-Wpn-Rocket-Accuracy02",
-	"R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF01",
-	"R-Wpn-RocketSlow-Damage01", "R-Struc-RprFac-Upgrade03",
+	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
+	"R-Sys-Engineering01", "R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Cannon-Damage02",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Defense-WallUpgrade03","R-Struc-Materials03", "R-Vehicle-Engine02",
+	"R-Struc-RprFac-Upgrade02", "R-Wpn-Rocket-Damage01", "R-Wpn-Rocket-ROF03",
+	"R-Vehicle-Metals01", "R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01",
+	"R-Wpn-RocketSlow-Damage01", "R-Wpn-Mortar-ROF01",
 ];
 const SCAVENGER_RES = [
-	"R-Wpn-MG-Damage02", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage01",
+	"R-Wpn-Flamer-Damage02", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage03", "R-Wpn-MG-ROF01", "R-Wpn-Rocket-Damage01",
+	"R-Wpn-Cannon-Damage02", "R-Wpn-Mortar-Damage02", "R-Wpn-Mortar-ROF01",
+	"R-Wpn-Rocket-ROF03", "R-Defense-WallUpgrade03","R-Struc-Materials03",
 ];
 
 function sendRocketForce()
@@ -179,11 +181,28 @@ function eventStartLevel()
 		setNoGoArea(ph.x, ph.y, ph.x2, ph.y2, i + 1);
 	}
 
+	if (difficulty === HARD)
+	{
+		setMissionTime(camMinutesToSeconds(100));
+	}
+	else if (difficulty === INSANE)
+	{
+		setMissionTime(camMinutesToSeconds(90));
+	}
+	else
+	{
+		setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
+	}
+
 	setReinforcementTime(-1);
-	setMissionTime(camChangeOnDiff(camHoursToSeconds(2)));
 	setAlliance(NEW_PARADIGM, SCAV_7, true);
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
+
+	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, SCAV_7);
 
 	camSetEnemyBases({
 		"ScavSouthDerrickGroup": {
@@ -260,7 +279,7 @@ function eventStartLevel()
 	camPlayVideos(["MB1C_MSG", "MB1C2_MSG"]);
 
 	camSetArtifacts({
-		"ScavSouthFactory": { tech: "R-Wpn-Rocket05-MiniPod" },
+		"ScavSouthFactory": { tech: ["R-Wpn-Rocket05-MiniPod", "R-Wpn-Cannon2Mk1"] },
 		"NPResearchFacility": { tech: "R-Struc-Research-Module" },
 		"NPCentralFactory": { tech: "R-Vehicle-Prop-Tracks" },
 		"NPNorthFactory": { tech: "R-Vehicle-Engine01" },
@@ -271,22 +290,22 @@ function eventStartLevel()
 			assembly: "ScavSouthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.buscan, cTempl.rbjeep, cTempl.trike, cTempl.buggy ]
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
+			templates: [ cTempl.buscan, cTempl.rbjeep8, cTempl.trikeheavy, cTempl.buggyheavy ]
 		},
 		"ScavCentralFactory": {
 			assembly: "ScavCentralFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeep, cTempl.bloke ]
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
+			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.bjeepheavy, cTempl.blokeheavy ]
 		},
 		"ScavNorthFactory": {
 			assembly: "ScavNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trike ]
+			templates: [ cTempl.firecan, cTempl.rbuggy, cTempl.buscan, cTempl.trikeheavy ]
 		},
 		"NPCentralFactory": {
 			assembly: "NPCentralFactoryAssembly",
@@ -304,7 +323,7 @@ function eventStartLevel()
 			assembly: "NPNorthFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			data: {
 				regroup: false,
 				repair: 66,

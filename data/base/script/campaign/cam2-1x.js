@@ -9,12 +9,15 @@ var victoryFlag;
 
 const TRANSPORT_TEAM = 1;
 const COLLECTIVE_RES = [
-	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Vehicle-Engine04",
-	"R-Vehicle-Metals04", "R-Cyborg-Metals04", "R-Wpn-Cannon-Accuracy02",
-	"R-Wpn-Cannon-Damage04", "R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage04", "R-Wpn-Flamer-ROF01",
-	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Sys-Sensor-Upgrade01",
-	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01", "R-Wpn-RocketSlow-Accuracy03",
-	"R-Wpn-RocketSlow-Damage03",
+	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
+	"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage05", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
+	"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage04",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
+	"R-Wpn-RocketSlow-Damage04", "R-Sys-Sensor-Upgrade01"
 ];
 
 //trigger event when droid reaches the downed transport.
@@ -67,14 +70,8 @@ function setupCyborgGroups()
 		regroup: false
 	});
 
-	//East cyborg group patrols around the bombard pits
-	camManageGroup(camMakeGroup("cyborgPositionEast"), CAM_ORDER_PATROL, {
-		pos: [
-			camMakePos ("cybEastPatrol1"),
-			camMakePos ("cybEastPatrol2"),
-			camMakePos ("cybEastPatrol3"),
-		],
-		interval: camSecondsToMilliseconds(20),
+	//create group of cyborgs and send them on war path
+	camManageGroup(camMakeGroup("cyborgPositionEast"), CAM_ORDER_ATTACK, {
 		regroup: false
 	});
 }
@@ -140,7 +137,7 @@ function eventStartLevel()
 	changePlayerColour(TRANSPORT_TEAM, 0);
 
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	camCompleteRequiredResearch(ALPHA_RESEARCH, TRANSPORT_TEAM);
+	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, TRANSPORT_TEAM);
 	camCompleteRequiredResearch(PLAYER_RES_BETA, TRANSPORT_TEAM);
 
 	camSetEnemyBases({

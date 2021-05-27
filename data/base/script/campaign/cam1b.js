@@ -3,6 +3,9 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 var NPScout; // Sensor scout
+const SCAVENGER_RES = [
+	"R-Wpn-Flamer-Damage01", "R-Wpn-Flamer-Range01", "R-Wpn-MG-Damage01", "R-Wpn-MG-ROF01",
+];
 
 camAreaEvent("AttackArea1", function(droid)
 {
@@ -21,8 +24,8 @@ camAreaEvent("AttackArea1", function(droid)
 		data: { pos: "playerBase" }, // changes
 		groupSize: 10, // changes
 		maxSize: 10,
-		throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
-		templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bloke, ] // changes
+		throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
+		templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin, ] // changes
 	});
 	camEnableFactory("base2factory"); // re-enable
 });
@@ -80,6 +83,9 @@ function eventStartLevel()
 	setAlliance(NEW_PARADIGM, SCAV_7, true);
 	setAlliance(SCAV_6, SCAV_7, true);
 
+	camCompleteRequiredResearch(SCAVENGER_RES, 6);
+	camCompleteRequiredResearch(SCAVENGER_RES, 7);
+
 	camSetArtifacts({
 		"base1factory": { tech: "R-Wpn-Flamer-Damage01" },
 		"base2factory": { tech: "R-Wpn-MG2Mk1" },
@@ -124,8 +130,8 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
 			groupSize: 6,
 			maxSize: 6,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
-			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bloke ]
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(8)),
+			templates: [ cTempl.triketwin, cTempl.bloketwin, cTempl.buggytwin, cTempl.bloketwin ]
 		},
 		"base2factory": { // the hill harass factory
 			assembly: "assembly2",
@@ -137,8 +143,8 @@ function eventStartLevel()
 			group: camMakeGroup("hillForce"), // will override later
 			groupSize: 4, // will override later
 			maxSize: 10,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
-			templates: [ cTempl.bloke ] // will override later
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(18)),
+			templates: [ cTempl.bloketwin ] // will override later
 		},
 		"base4factory": {
 			assembly: "assembly4",
@@ -146,8 +152,8 @@ function eventStartLevel()
 			data: { pos: "playerBase" },
  			groupSize: 8,
 			maxSize: 8,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(25)),
-			templates: [ cTempl.trike, cTempl.bloke, cTempl.buggy, cTempl.bjeep ]
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(12)),
+			templates: [ cTempl.trike, cTempl.bloketwin, cTempl.buggytwin, cTempl.bjeeptwin ]
 		},
 	});
 	camEnableFactory("base2factory");

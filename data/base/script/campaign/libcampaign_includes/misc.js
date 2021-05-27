@@ -232,7 +232,7 @@ function camChangeOnDiff(num)
 			modifier = 0.80;
 			break;
 		case INSANE:
-			modifier = 0.67;
+			modifier = 0.70;
 			break;
 		default:
 			modifier = 1.00;
@@ -353,6 +353,106 @@ function camBreakAlliances()
 			}
 		}
 	}
+}
+
+// Picks a random coordinate anywhere on the edge of the map.
+function camGenerateRandomMapEdgeCoordinate(reachPosition)
+{
+	let limits = getScrollLimits();
+	let loc;
+
+	do
+	{
+		let location = {x: 0, y: 0};
+		let xWasRandom = false;
+
+		if (camRand(100) < 50)
+		{
+			location.x = camRand(limits.x2 + 1);
+			if (location.x < (limits.x + 2))
+			{
+				location.x = limits.x + 2;
+			}
+			else if (location.x > (limits.x2 - 2))
+			{
+				location.x = limits.x2 - 2;
+			}
+			xWasRandom = true;
+		}
+		else
+		{
+			location.x = (camRand(100) < 50) ? (limits.x2 - 2) : (limits.x + 2);
+		}
+
+		if (!xWasRandom && (camRand(100) < 50))
+		{
+			location.y = camRand(limits.y2 + 1);
+			if (location.y < (limits.y + 2))
+			{
+				location.y = limits.y + 2;
+			}
+			else if (location.y > (limits.y2 - 2))
+			{
+				location.y = limits.y2 - 2;
+			}
+		}
+		else
+		{
+			location.y = (camRand(100) < 50) ? (limits.y2 - 2) : (limits.y + 2);
+		}
+
+		loc = location;
+	} while (camDef(reachPosition) && reachPosition && !propulsionCanReach("wheeled01", reachPosition.x, reachPosition.y, loc.x, loc.y));
+
+
+	return loc;
+}
+
+// Picks a random coordinate anywhere on the map.
+function camGenerateRandomMapCoordinate(reachPosition, distFromReach, scanObjectRadius)
+{
+	if (!camDef(distFromReach))
+	{
+		distFromReach = 10;
+	}
+	if (!camDef(scanObjectRadius))
+	{
+		scanObjectRadius = 2;
+	}
+
+	let limits = getScrollLimits();
+	let pos;
+
+	do
+	{
+		let randomPos = {x: camRand(limits.x2), y: camRand(limits.y2)};
+
+		if (randomPos.x < (limits.x + 2))
+		{
+			randomPos.x = limits.x + 2;
+		}
+		else if (randomPos.x > (limits.x2 - 2))
+		{
+			randomPos.x = limits.x2 - 2;
+		}
+
+		if (randomPos.y < (limits.y + 2))
+		{
+			randomPos.y = limits.y;
+		}
+		else if (randomPos.y > (limits.y2 - 2))
+		{
+			randomPos.y = limits.y2 - 2;
+		}
+
+		pos = randomPos;
+	} while (camDef(reachPosition) &&
+		reachPosition &&
+		!propulsionCanReach("wheeled01", reachPosition.x, reachPosition.y, pos.x, pos.y) &&
+		(camDist(pos, reachPosition) < distFromReach) &&
+		(enumRange(pos.x, pos.y, scanObjectRadius, ALL_PLAYERS, false).length !== 0));
+
+	return pos;
 }
 
 //////////// privates

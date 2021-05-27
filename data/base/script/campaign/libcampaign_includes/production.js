@@ -169,6 +169,70 @@ function camSetPropulsionTypeLimit(num)
 	}
 }
 
+//;; ## camUpgradeOnMapTemplates(template1, template2, player, [excluded object IDs])
+//;;
+//;; Search for template1, save its coordinates, remove it, and then replace with it
+//;; with template2. Template objects are expected to follow the component properties
+//;; as used in templates.js. A fourth parameter can be specified to ignore specific object
+//;; IDs. Useful if a droid is assigned to an object label. It can be either an array
+//;; or a single ID number.
+//;;
+function camUpgradeOnMapTemplates(t1, t2, player, excluded)
+{
+	if (!camDef(t1) || !camDef(t2) || !camDef(player))
+	{
+		camDebug("Not enough parameters specified for upgrading on map templates");
+		return;
+	}
+
+	var droidsOnMap = enumDroid(player);
+
+	for (var i = 0, l = droidsOnMap.length; i < l; ++i)
+	{
+		var dr = droidsOnMap[i];
+		if (!camDef(dr.weapons[0]))
+		{
+			continue; //don't handle systems
+		}
+		var body = dr.body;
+		var prop = dr.propulsion;
+		var weap = dr.weapons[0].name;
+		var skip = false;
+		if (body === t1.body && prop === t1.prop && weap === t1.weap)
+		{
+			//Check if this object should be excluded from the upgrades
+			if (camDef(excluded))
+			{
+				if (excluded instanceof Array)
+				{
+					for (var j = 0, c = excluded.length; j < c; ++j)
+					{
+						if (dr.id === excluded[j])
+						{
+							skip = true;
+							break;
+						}
+					}
+					if (skip === true)
+					{
+						continue;
+					}
+				}
+				else if (dr.id === excluded)
+				{
+					continue;
+				}
+			}
+
+			//Replace it
+			let droidInfo = {x: dr.x, y: dr.y, name: dr.name};
+			camSafeRemoveObject(dr, false);
+			addDroid(player, droidInfo.x, droidInfo.y, droidInfo.name, t2.body,
+				__camChangePropulsionOnDiff(t2.prop), "", "", t2.weap);
+		}
+	}
+}
+
 //////////// privates
 
 function __camFactoryUpdateTactics(flabel)

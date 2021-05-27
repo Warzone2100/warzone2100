@@ -139,6 +139,13 @@
 		"pos2": [2688, 11108]
 	},
 
+	"object_0": {
+		"label": "NXartiCyborg",
+		"id": 312,
+		"player": 3,
+		"type": 0
+	},
+
 	"radius_0": {
 		"label": "vtolRemoveZone",
 		"subscriber": 3,

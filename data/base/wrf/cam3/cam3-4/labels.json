@@ -73,7 +73,7 @@
 	},
 	"position_18": {
 		"label": "NX-NWFactory2Assembly",
-		"pos": [1984, 2368]
+		"pos": [1984, 1728]
 	},
 	"position_19": {
 		"label": "NX-NEFactoryAssembly",
@@ -101,7 +101,7 @@
 	},
 	"position_25": {
 		"label": "NX-SWCyborgFactory1Assembly",
-		"pos": [1856, 10944]
+		"pos": [1600, 10944]
 	},
 	"position_26": {
 		"label": "NX-SWCyborgFactory2Assembly",

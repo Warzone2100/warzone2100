@@ -3,39 +3,60 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NEW_PARADIGM_RES = [
-	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
-	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
-	"R-Vehicle-Engine02",
-	"R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Damage03",
-	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01", "R-Wpn-Mortar-Damage03",
-	"R-Wpn-Mortar-Acc01", "R-Wpn-Rocket-Accuracy01", "R-Wpn-Rocket-Damage03",
-	"R-Wpn-Rocket-ROF02", "R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
+	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
+	"R-Sys-Engineering01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Cannon-Damage03",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Defense-WallUpgrade03","R-Struc-Materials03", "R-Vehicle-Engine02",
+	"R-Struc-RprFac-Upgrade03", "R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF03",
+	"R-Vehicle-Metals02", "R-Wpn-Mortar-Damage03", "R-Wpn-Rocket-Accuracy02",
+	"R-Wpn-RocketSlow-Damage02", "R-Wpn-Mortar-ROF01", "R-Cyborg-Metals03",
+	"R-Wpn-Mortar-Acc01", "R-Wpn-RocketSlow-Accuracy01", "R-Wpn-Cannon-Accuracy01",
 ];
-
 const SCAVENGER_RES = [
-	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02", "R-Wpn-Cannon-Damage02",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Wpn-Rocket-Damage02",
+	"R-Wpn-Cannon-Damage03", "R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
+	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-ROF03", "R-Vehicle-Metals02",
+	"R-Defense-WallUpgrade03", "R-Struc-Materials03", "R-Wpn-Cannon-Accuracy01",
+	"R-Wpn-Mortar-Acc01",
 ];
+var useHeavyReinforcement;
 
 //Get some droids for the New Paradigm transport
 function getDroidsForNPLZ(args)
 {
-	var scouts = [ cTempl.npsens, cTempl.nppod, cTempl.nphmg ];
-	var heavies = [ cTempl.npsbb, cTempl.npmmct, cTempl.npmrl ];
-
-	var numScouts = camRand(5) + 1;
-	var heavy = heavies[camRand(heavies.length)];
+	const LIGHT_ATTACKER_LIMIT = 8;
+	const HEAVY_ATTACKER_LIMIT = 3;
+	var unitTemplates;
 	var list = [];
 
-	for (var i = 0; i < numScouts; ++i)
+	if (useHeavyReinforcement)
 	{
-		list[list.length] = scouts[camRand(scouts.length)];
+		var artillery = [cTempl.npmor];
+		var other = [cTempl.npmmct];
+		if (camRand(2) > 0)
+		{
+			//Add a sensor if artillery was chosen for the heavy units
+			list.push(cTempl.npsens);
+			unitTemplates = artillery;
+		}
+		else
+		{
+			unitTemplates = other;
+		}
+	}
+	else
+	{
+		unitTemplates = [cTempl.nppod, cTempl.npmrl, cTempl.nphmgt];
 	}
 
-	for (var a = numScouts; a < 8; ++a)
+	var lim = useHeavyReinforcement ? HEAVY_ATTACKER_LIMIT : LIGHT_ATTACKER_LIMIT;
+	for (var i = 0; i < lim; ++i)
 	{
-		list[list.length] = heavy;
+		list.push(unitTemplates[camRand(unitTemplates.length)]);
 	}
 
+	useHeavyReinforcement = !useHeavyReinforcement; //switch it
 	return list;
 }
 
@@ -81,8 +102,9 @@ camAreaEvent("NPLZTrigger", function()
 
 function sendNPTransport()
 {
-	var tPos = getObject("NPTransportPos");
-	var nearbyDefense = enumRange(tPos.x, tPos.y, 6, NEW_PARADIGM, false);
+	var nearbyDefense = enumArea("LandingZone2", NEW_PARADIGM, false).filter(function(obj) {
+		return (obj.type === STRUCTURE && obj.stattype === DEFENSE);
+	});
 
 	if (nearbyDefense.length > 0)
 	{
@@ -137,6 +159,7 @@ function eventStartLevel()
 		annihilate: true
 	});
 
+	useHeavyReinforcement = false; //Start with a light unit reinforcement first
 	var lz = getObject("LandingZone1"); //player lz
 	var lz2 = getObject("LandingZone2"); //new paradigm lz
 	var tent = getObject("TransporterEntry");
@@ -156,6 +179,11 @@ function eventStartLevel()
 	camCompleteRequiredResearch(NEW_PARADIGM_RES, NEW_PARADIGM);
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 
+	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, SCAV_7);
 
 	camSetEnemyBases({
 		"ScavNorthGroup": {
@@ -186,9 +214,8 @@ function eventStartLevel()
 	});
 
 	camSetArtifacts({
-		"NPCyborgFactory": { tech: "R-Struc-Factory-Upgrade03" },
 		"NPRightFactory": { tech: "R-Vehicle-Engine02" },
-		"NPLeftFactory": { tech: "R-Vehicle-Body08" }, //scorpion body
+		"NPLeftFactory": { tech: "R-Struc-Factory-Upgrade03" },
 		"NPResearchFacility": { tech: "R-Comp-SynapticLink" },
 	});
 
@@ -198,7 +225,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
-			templates: [ cTempl.npmrl, cTempl.npmmct, cTempl.npsbb, cTempl.nphmg ],
+			templates: [ cTempl.npmrl, cTempl.npmmct, cTempl.nphmgt, cTempl.nppod ],
 			data: {
 				regroup: false,
 				repair: 40,
@@ -210,7 +237,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
-			templates: [ cTempl.npmor, cTempl.npsens, cTempl.npsbb, cTempl.nphmg ],
+			templates: [ cTempl.npmor, cTempl.npsens, cTempl.nphmgt ],
 			data: {
 				regroup: false,
 				repair: 40,
@@ -234,7 +261,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
+			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ],
 			data: {
 				regroup: false,
 				count: -1,
@@ -245,7 +272,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
+			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ],
 			data: {
 				regroup: false,
 				count: -1,
@@ -256,7 +283,7 @@ function eventStartLevel()
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(15)),
-			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.rbuggy, cTempl.bloke ],
+			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.rbuggy, cTempl.blokeheavy ],
 			data: {
 				regroup: false,
 				count: -1,

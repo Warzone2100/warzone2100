@@ -35,6 +35,14 @@
 		"label": "ScoutDroidTarget",
 		"pos": [5312, 3904]
 	},
+	"position_9": {
+		"label": "NPReinforcementPos",
+		"pos": [5312, 128]
+	},
+	"position_10": {
+		"label": "ScavAssemblySouth",
+		"pos": [6400, 7296]
+	},
 
 	"area_0": {
 		"label": "LandingZone",
@@ -104,6 +112,11 @@
 		"pos1": [192, 5568],
 		"pos2": [2624, 7488]
 	},
+	"area_13": {
+		"label": "SouthScavBase",
+		"pos1": [4736, 6080],
+		"pos2": [8000, 8000]
+	},
 
 	"object_0": {
 		"label": "NPHQ",
@@ -130,16 +143,28 @@
 		"type": 1
 	},
 	"object_4": {
+		"label": "NPLab",
+		"id": 507,
+		"player": 1,
+		"type": 1
+	},
+	"object_5": {
 		"label": "NPCommander",
 		"id": 544,
 		"player": 1,
 		"type": 0
 	},
-	"object_5": {
+	"object_6": {
 		"label": "ScoutDroid",
 		"id": 639,
 		"player": 1,
 		"type": 0
+	},
+	"object_7": {
+		"label": "ScavFactorySouth",
+		"id": 649,
+		"player": 7,
+		"type": 1
 	},
 
 	"radius_0": {

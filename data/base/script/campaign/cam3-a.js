@@ -159,33 +159,27 @@ function groupPatrolNoTrigger()
 //Gives starting tech and research.
 function cam3Setup()
 {
-	var x = 0;
-	var l = 0;
 	const NEXUS_RES = [
-		"R-Wpn-MG1Mk1", "R-Sys-Engineering03", "R-Defense-WallUpgrade07",
-		"R-Struc-Materials07", "R-Struc-Factory-Upgrade06",
-		"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals07",
-		"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat03", "R-Cyborg-Armor-Heat03",
+		"R-Sys-Engineering03", "R-Defense-WallUpgrade07", "R-Struc-Materials07",
+		"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
 		"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
-		"R-Wpn-Bomb-Damage03", "R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01",
-		"R-Sys-Sensor-Upgrade01", "R-Sys-NEXUSrepair", "R-Wpn-Rail-Damage01",
-		"R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01", "R-Wpn-Flamer-Damage06",
+		"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage08", "R-Wpn-Mortar-ROF04",
+		"R-Vehicle-Engine07", "R-Vehicle-Metals07", "R-Vehicle-Armor-Heat04",
+		"R-Cyborg-Metals07", "R-Cyborg-Armor-Heat04", "R-Wpn-RocketSlow-ROF04",
+		"R-Wpn-AAGun-Damage05", "R-Wpn-AAGun-ROF04", "R-Wpn-Howitzer-Damage05",
+		"R-Wpn-Cannon-Damage07", "R-Wpn-Cannon-ROF04",
+		"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
+		"R-Wpn-Rail-Damage01", "R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01",
+		"R-Wpn-Energy-Damage02", "R-Wpn-Energy-ROF01", "R-Wpn-Energy-Accuracy01",
 	];
 
-	for (x = 0, l = BETA_TECH.length; x < l; ++x)
+	for (var x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
 	{
-		makeComponentAvailable(BETA_TECH[x], CAM_HUMAN_PLAYER);
+		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}
 
-	for (x = 0, l = STRUCTS_GAMMA.length; x < l; ++x)
-	{
-		enableStructure(STRUCTS_GAMMA[x], CAM_HUMAN_PLAYER);
-	}
-
-	camCompleteRequiredResearch(ALPHA_RESEARCH, CAM_HUMAN_PLAYER);
-	camCompleteRequiredResearch(ALPHA_RESEARCH, NEXUS);
-
-	camCompleteRequiredResearch(PLAYER_RES_GAMMA, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(GAMMA_ALLY_RES, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(GAMMA_ALLY_RES, NEXUS);
 	camCompleteRequiredResearch(NEXUS_RES, NEXUS);
 
 	enableResearch("R-Wpn-Howitzer03-Rot", CAM_HUMAN_PLAYER);
@@ -270,7 +264,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
 			group: camMakeGroup("cybAttackers"),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
@@ -319,7 +313,7 @@ function eventStartLevel()
 				count: -1,
 			},
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
 			templates: [cTempl.nxcyrail, cTempl.nxcyscou]
 		},
 	});
