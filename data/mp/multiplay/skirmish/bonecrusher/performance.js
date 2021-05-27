@@ -45,14 +45,14 @@ function orderDroidObj_p(who, order, obj){
 function orderDroidObj_p(who, order, obj){
 
 	if(weakCPU && perfFunc["orderDroidObj"] > ordersLimit) return false;
-	
+
 	if(!perfFunc["orderDroidObj"])perfFunc["orderDroidObj"]=1;
 	else perfFunc["orderDroidObj"]++;
-	
-	
+
+
 	var type_order = droidTypes[who.droidType]+'_'+droidOrders[order];
 	var orders = perfOrder[type_order];
-	
+
 	if (typeof orders != 'number'){
 		orders = 1;
 	}
@@ -60,22 +60,22 @@ function orderDroidObj_p(who, order, obj){
 //		debugMsg('Obj-else', 'performance');
 		orders++;
 	}
-	
+
 	if(!release)perfOrder[type_order] = orders;
 	var result = orderDroidObj(who, order, obj);
 	return result;
 }
 
 function orderDroidLoc_p(who, order, x, y){
-		
+
 	if(weakCPU && perfFunc["orderDroidLoc"] > ordersLimit) return false;
-	
+
 	if(!perfFunc["orderDroidLoc"])perfFunc["orderDroidLoc"]=1;
 	else perfFunc["orderDroidLoc"]++;
-	
+
 	var type_order = droidTypes[who.droidType]+'_'+droidOrders[order];
 	var orders = perfOrder[type_order];
-	
+
 	if (typeof orders != 'number'){
 		orders = 1;
 	}
@@ -83,7 +83,7 @@ function orderDroidLoc_p(who, order, x, y){
 //		debugMsg('Loc-else', 'performance');
 		orders++;
 	}
-	
+
 	if(!release)perfOrder[type_order] = orders;
 	var result = orderDroidLoc(who, order, x, y);
 //	debugMsg('orderDroidLoc: '+droidTypes[who.droidType]+'; '+droidOrders[order]+'; '+x+'x'+y+'; '+result, 'performance');
@@ -102,7 +102,7 @@ function orderDroidBuild_p(who, order, building, x, y, rotation){
 	else {
 		orders++;
 	}
-	
+
 	if(!release)perfOrder[type_order] = orders;
 	var result = orderDroidBuild(who, order, building, x, y, rotation);
 	return result;
@@ -119,11 +119,11 @@ function perfMonitor(){
 		debugMsg(pout, 'performance');
 		perfOrder=[];
 	}
-	
+
 	for(var i in perfFunc){if(perfFunc[i]){
 		debugMsg(i+'='+perfFunc[i], 'performance');
 		perfFunc[i]=0;
-		
+
 	}}
 }
 */

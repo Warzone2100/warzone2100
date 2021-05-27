@@ -15,11 +15,11 @@ var prefix = '!nb';
 // key: name in chat, value: function that will be executed
 // function gets two params: sender and argument
 var commandMap = {
-    set: chatSet,
-    res: chatRes,
-    truck: chatTruck,
-    power: chatMoney,
-    money: chatMoney, // alias for "power"
+	set: chatSet,
+	res: chatRes,
+	truck: chatTruck,
+	power: chatMoney,
+	money: chatMoney, // alias for "power"
 	help: chatHelp,
 	go: chatHelp, // alias for "help"
 	tx: chatUnhelp,

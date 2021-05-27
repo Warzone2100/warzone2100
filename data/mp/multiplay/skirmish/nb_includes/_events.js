@@ -95,7 +95,7 @@ function eventStructureReady(structure) {
 function eventChat(from, to, message) {
 	// we are not case-sensitive
 	message = message.toLowerCase();
-    handleChatMessage(from, to, message)
+	handleChatMessage(from, to, message)
 }
 
 function eventObjectTransfer(object, from) {
