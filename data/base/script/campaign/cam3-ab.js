@@ -2,16 +2,21 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NEXUS_RES = [
-	"R-Defense-WallUpgrade09", "R-Struc-Materials09", "R-Struc-Factory-Upgrade06",
-	"R-Struc-VTOLPad-Upgrade06", "R-Vehicle-Engine09", "R-Vehicle-Metals07",
-	"R-Cyborg-Metals07", "R-Vehicle-Armor-Heat05", "R-Cyborg-Armor-Heat05",
-	"R-Sys-Engineering03", "R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02",
-	"R-Wpn-Bomb-Damage03", "R-Wpn-Energy-Accuracy01", "R-Wpn-Energy-Damage02",
-	"R-Wpn-Energy-ROF02", "R-Wpn-Missile-Accuracy01", "R-Wpn-Missile-Damage02",
-	"R-Wpn-Rail-Damage02", "R-Wpn-Rail-ROF02", "R-Sys-Sensor-Upgrade01",
-	"R-Sys-NEXUSrepair", "R-Wpn-Flamer-Damage06",
+	"R-Sys-Engineering03", "R-Defense-WallUpgrade09", "R-Struc-Materials09",
+	"R-Struc-VTOLPad-Upgrade06", "R-Wpn-Bomb-Damage03", "R-Sys-NEXUSrepair",
+	"R-Vehicle-Prop-Hover02", "R-Vehicle-Prop-VTOL02", "R-Cyborg-Legs02",
+	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
+	"R-Vehicle-Engine08", "R-Vehicle-Metals08", "R-Vehicle-Armor-Heat05",
+	"R-Cyborg-Metals08", "R-Cyborg-Armor-Heat05", "R-Wpn-RocketSlow-ROF06",
+	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF06", "R-Wpn-Howitzer-Damage06",
+	"R-Wpn-Howitzer-ROF04", "R-Wpn-Cannon-Damage09", "R-Wpn-Cannon-ROF06",
+	"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
+	"R-Wpn-Rail-Damage01", "R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01",
+	"R-Wpn-Energy-Damage03", "R-Wpn-Energy-ROF03", "R-Wpn-Energy-Accuracy01",
+	"R-Wpn-AAGun-Accuracy03", "R-Wpn-Howitzer-Accuracy03",
 ];
 var edgeMapCounter; //how many Nexus reinforcement runs have happened.
+var hackFailChance; //chance the Nexus Intruder Program will fail
 var winFlag;
 
 //Remove Nexus VTOL droids.
@@ -30,13 +35,21 @@ camAreaEvent("vtolRemoveZone", function(droid)
 
 function sendEdgeMapDroids()
 {
-	const COUNT = 16 + camRand(5); // 16 - 20.
+	var unitCount = 16 + camRand(5); // 16 - 20.
+	if (difficulty === INSANE)
+	{
+		unitCount = 14 + camRand(3); // 14 - 16.
+	}
 	const EDGE = ["SWPhantomFactory", "NWPhantomFactory"];
 	var list = [
 		cTempl.nxcyrail, cTempl.nxcyscou, cTempl.nxcylas,
 		cTempl.nxlflash, cTempl.nxmrailh, cTempl.nxmlinkh,
-		cTempl.nxmscouh, cTempl.nxmsamh, cTempl.nxmsens,
+		cTempl.nxmscouh, cTempl.nxmsamh,
 	];
+	if (difficulty >= HARD)
+	{
+		list = list.concat(cTempl.nxmangel);
+	}
 	var droids = [];
 
 	if (!camDef(edgeMapCounter))
@@ -44,10 +57,12 @@ function sendEdgeMapDroids()
 		edgeMapCounter = 0;
 	}
 
-	for (var i = 0; i < COUNT; ++i)
+	for (var i = 0; i < unitCount; ++i)
 	{
 		droids.push(list[camRand(list.length)]);
 	}
+
+	droids = droids.concat(cTempl.nxmsens);
 
 	camSendReinforcement(NEXUS, camMakePos(EDGE[camRand(EDGE.length)]), droids,
 		CAM_REINFORCE_GROUND, {
@@ -67,7 +82,7 @@ function vtolAttack()
 		alternate: true,
 		altIdx: 0
 	};
-	camSetVtolData(NEXUS, "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
+	camSetVtolData(NEXUS, (difficulty === INSANE) ? undefined : "vtolAppearPos", "vtolRemovePos", list, camChangeOnDiff(camMinutesToMilliseconds(2)), undefined, ext);
 }
 
 // Order any absorbed trucks to start building defenses near themselves.
@@ -176,11 +191,16 @@ function eventResearched(research, structure, player)
 {
 	if (research.name === "R-Sys-Resistance-Upgrade01")
 	{
-		camSetNexusState(false);
+		hackFailChance = 55;
 	}
-	if (research.name === "R-Sys-Resistance-Upgrade03")
+	else if (research.name === "R-Sys-Resistance-Upgrade02")
+	{
+		hackFailChance = 80;
+	}
+	else if (research.name === "R-Sys-Resistance-Upgrade03")
 	{
 		winFlag = true;
+		camSetNexusState(false);
 	}
 }
 
@@ -189,6 +209,10 @@ function hackPlayer()
 	if (!camGetNexusState())
 	{
 		removeTimer("hackPlayer");
+		return;
+	}
+	if (camRand(100) < hackFailChance)
+	{
 		return;
 	}
 
@@ -236,6 +260,7 @@ function eventStartLevel()
 
 	enableResearch("R-Sys-Resistance-Upgrade01", CAM_HUMAN_PLAYER);
 	winFlag = false;
+	hackFailChance = 30;
 
 	vtolAttack();
 
@@ -244,7 +269,7 @@ function eventStartLevel()
 	queue("sendEdgeMapDroids", camSecondsToMilliseconds(15));
 
 	setTimer("truckDefense", camSecondsToMilliseconds(2));
-	setTimer("hackPlayer", camSecondsToMilliseconds(8));
+	setTimer("hackPlayer", camSecondsToMilliseconds((difficulty <= HARD) ? 8 : 5));
 	setTimer("nexusManufacture", camSecondsToMilliseconds(10));
 	setTimer("sendEdgeMapDroids", camChangeOnDiff(camMinutesToMilliseconds(3)));
 }

@@ -61,9 +61,13 @@ function __camSpawnVtols()
 	{
 		pos = __camVtolStartPosition[camRand(__camVtolStartPosition.length)];
 	}
-	else
+	else if (camDef(__camVtolStartPosition) && __camVtolStartPosition)
 	{
 		pos = __camVtolStartPosition;
+	}
+	else
+	{
+		pos = camGenerateRandomMapEdgeCoordinate();
 	}
 
 	if (!camDef(__camVtolExtras))

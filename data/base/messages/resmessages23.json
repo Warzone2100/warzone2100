@@ -32,6 +32,17 @@
             "All power generators upgraded automatically"
         ]
     },
+    "RES_W_SRK_ROF4": {
+        "id": "RES_W_SRK_ROF4",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Rocket Upgrade",
+            "Rapid Loader increases reload rate",
+            "Increases Rocket ROF",
+            "All rockets upgraded automatically"
+        ]
+    },
     "RES_SY_CBSU2": {
         "id": "RES_SY_CBSU2",
         "imdName": "MICAPSUL.PIE",
@@ -138,7 +149,7 @@
         "text": [
             "New Bomb Bay Available",
             "Drops incendiary bombs",
-            "Best Targets: Bunkers and Hardpoints",
+            "Best Targets: Bunkers, Emplacements, Infantry",
             "Body Points: Low"
         ]
     },

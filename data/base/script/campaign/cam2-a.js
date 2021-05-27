@@ -187,34 +187,29 @@ function truckDefense()
 //Gives starting tech and research.
 function cam2Setup()
 {
-	var x = 0;
 	const COLLECTIVE_RES = [
 		"R-Wpn-MG1Mk1", "R-Sys-Engineering02",
-		"R-Defense-WallUpgrade03", "R-Struc-Materials03",
-		"R-Struc-Factory-Upgrade03",
+		"R-Defense-WallUpgrade06", "R-Struc-Materials06",
 		"R-Vehicle-Engine03", "R-Vehicle-Metals03", "R-Cyborg-Metals03",
-		"R-Wpn-Cannon-Accuracy01", "R-Wpn-Cannon-Damage03",
+		"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage04",
 		"R-Wpn-Cannon-ROF01", "R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
-		"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
+		"R-Wpn-MG-Damage05", "R-Wpn-MG-ROF02", "R-Wpn-Mortar-Acc01",
 		"R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
-		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage03",
+		"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage04",
 		"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-		"R-Wpn-RocketSlow-Damage03", "R-Sys-Sensor-Upgrade01"
+		"R-Wpn-RocketSlow-Damage04", "R-Sys-Sensor-Upgrade01"
 	];
 
-	for (x = 0; x < ALPHA_TECH.length; ++x)
-	{
-		makeComponentAvailable(ALPHA_TECH[x], CAM_HUMAN_PLAYER);
-	}
-
-	for (x = 0; x < STRUCTS_ALPHA.length; ++x)
+	for (var x = 0, l = STRUCTS_ALPHA.length; x < l; ++x)
 	{
 		enableStructure(STRUCTS_ALPHA[x], CAM_HUMAN_PLAYER);
 	}
 
 	camCompleteRequiredResearch(PLAYER_RES_BETA, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, THE_COLLECTIVE);
 	camCompleteRequiredResearch(COLLECTIVE_RES, THE_COLLECTIVE);
-	camCompleteRequiredResearch(ALPHA_RESEARCH, CAM_HUMAN_PLAYER);
+	camCompleteRequiredResearch(ALPHA_RESEARCH_NEW, CAM_HUMAN_PLAYER);
+
 	enableResearch("R-Wpn-Cannon-Damage04", CAM_HUMAN_PLAYER);
 	enableResearch("R-Wpn-Rocket-Damage04", CAM_HUMAN_PLAYER);
 	preDamageStuff();

@@ -368,13 +368,6 @@ function cam_eventObjectTransfer(obj, from)
 			{
 				snd = STRUCTURE_ABSORBED;
 			}
-
-			if (obj.stattype === FACTORY ||
-				obj.stattype === CYBORG_FACTORY ||
-				obj.stattype === VTOL_FACTORY)
-			{
-				//TODO: add to the factory list.
-			}
 		}
 		else if (obj.type === DROID)
 		{

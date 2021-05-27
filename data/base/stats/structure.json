@@ -37,7 +37,7 @@
 		"thermal": 12,
 		"type": "DEFENSE",
 		"weapons": [
-			"MG3Mk1"
+			"MG3-Tower"
 		],
 		"width": 1
 	},
@@ -48,7 +48,7 @@
 		"buildPower": 20,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 200,
+		"hitpoints": 175,
 		"id": "A0BaBaFactory",
 		"name": "Scavenger Factory",
 		"productionPoints": 10,
@@ -70,7 +70,7 @@
 		"buildPower": 100,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 200,
+		"hitpoints": 150,
 		"id": "A0BaBaFlameTower",
 		"name": "Scavenger Flame Tower",
 		"resistance": 150,
@@ -82,7 +82,7 @@
 		"thermal": 7,
 		"type": "DEFENSE",
 		"weapons": [
-			"Flame1Mk1"
+			"BabaFlame"
 		],
 		"width": 1
 	},
@@ -93,7 +93,7 @@
 		"buildPower": 100,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 200,
+		"hitpoints": 150,
 		"id": "A0BaBaGunTower",
 		"name": "Scavenger Gun Tower",
 		"resistance": 150,
@@ -116,7 +116,7 @@
 		"buildPower": 20,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 200,
+		"hitpoints": 150,
 		"id": "A0BaBaGunTowerEND",
 		"name": "*Scavenger End Tower*",
 		"resistance": 150,
@@ -139,11 +139,11 @@
 		"buildPower": 10,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 150,
+		"hitpoints": 100,
 		"id": "A0BaBaHorizontalWall",
 		"name": "Scavenger Horizontal Wall",
 		"sensorID": "BaBaSensor",
-		"strength": "SOFT",
+		"strength": "MEDIUM",
 		"structureModel": [
 			"BLBRBWLH.PIE"
 		],
@@ -158,7 +158,7 @@
 		"buildPower": 10,
 		"ecmID": "ZNULLECM",
 		"height": 1,
-		"hitpoints": 250,
+		"hitpoints": 180,
 		"id": "A0BaBaMortarPit",
 		"name": "*BaBaMortarPit*",
 		"resistance": 150,
@@ -167,7 +167,7 @@
 		"structureModel": [
 			"BLBRMRTP.PIE"
 		],
-		"thermal": 10,
+		"thermal": 8,
 		"type": "DEFENSE",
 		"weapons": [
 			"Mortar1Mk1"
@@ -181,14 +181,14 @@
 		"buildPower": 10,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 200,
+		"hitpoints": 150,
 		"id": "A0BaBaPowerGenerator",
 		"name": "Scavenger Power Generator",
 		"powerPoints": 50,
 		"modulePowerPoints": 25,
 		"resistance": 150,
 		"sensorID": "BaBaSensor",
-		"strength": "SOFT",
+		"strength": "MEDIUM",
 		"structureModel": [
 			"BLBRBGEN.PIE"
 		],
@@ -203,7 +203,7 @@
 		"buildPower": 10,
 		"ecmID": "ZNULLECM",
 		"height": 1,
-		"hitpoints": 250,
+		"hitpoints": 180,
 		"id": "A0BaBaRocketPit",
 		"name": "Scavenger Rocket Pit",
 		"resistance": 150,
@@ -212,7 +212,7 @@
 		"structureModel": [
 			"EXROCKET.PIE"
 		],
-		"thermal": 10,
+		"thermal": 8,
 		"type": "DEFENSE",
 		"weapons": [
 			"BabaPitRocket"
@@ -226,7 +226,7 @@
 		"buildPower": 10,
 		"ecmID": "ZNULLECM",
 		"height": 1,
-		"hitpoints": 250,
+		"hitpoints": 180,
 		"id": "A0BaBaRocketPitAT",
 		"name": "Scavenger AT-Rocket Pit",
 		"resistance": 150,
@@ -235,7 +235,7 @@
 		"structureModel": [
 			"EXROCKET.PIE"
 		],
-		"thermal": 10,
+		"thermal": 8,
 		"type": "DEFENSE",
 		"weapons": [
 			"BabaPitRocketAT"
@@ -249,11 +249,11 @@
 		"buildPower": 20,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 150,
+		"hitpoints": 100,
 		"id": "A0BabaCornerWall",
 		"name": "Scavenger CornerWall",
 		"sensorID": "ZNULLSENSOR",
-		"strength": "SOFT",
+		"strength": "MEDIUM",
 		"structureModel": [
 			"BLBRBCR1.PIE"
 		],
@@ -277,7 +277,7 @@
 		"structureModel": [
 			"BLBRTOWR.PIE"
 		],
-		"thermal": 10,
+		"thermal": 8,
 		"type": "DEFENSE",
 		"weapons": [
 			"BabaCannon"
@@ -415,7 +415,7 @@
 	"A0FacMod1": {
 		"armour": 10,
 		"breadth": 3,
-		"buildPoints": 500,
+		"buildPoints": 250,
 		"buildPower": 100,
 		"ecmID": "ZNULLECM",
 		"height": 2,
@@ -504,7 +504,7 @@
 	"A0PowMod1": {
 		"armour": 10,
 		"breadth": 2,
-		"buildPoints": 500,
+		"buildPoints": 250,
 		"ecmID": "ZNULLECM",
 		"height": 2,
 		"hitpoints": 500,
@@ -595,7 +595,7 @@
 	"A0ResearchModule1": {
 		"armour": 10,
 		"breadth": 2,
-		"buildPoints": 500,
+		"buildPoints": 250,
 		"buildPower": 100,
 		"ecmID": "ZNULLECM",
 		"height": 2,
@@ -882,7 +882,7 @@
 		"thermal": 12,
 		"type": "DEFENSE",
 		"weapons": [
-			"MG3Mk1"
+			"MG3-Tower"
 		],
 		"width": 1
 	},
@@ -1499,36 +1499,36 @@
 		"width": 1
 	},
 	"GuardTower1": {
-		"armour": 10,
+		"armour": 8,
 		"breadth": 1,
 		"buildPoints": 300,
 		"buildPower": 100,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 300,
+		"hitpoints": 210,
 		"id": "GuardTower1",
-		"name": "Heavy Machinegun Guard Tower",
+		"name": "Machinegun Guard Tower",
 		"resistance": 150,
 		"sensorID": "DefaultSensor1Mk1",
 		"strength": "MEDIUM",
 		"structureModel": [
 			"BLGUARDM.PIE"
 		],
-		"thermal": 10,
+		"thermal": 8,
 		"type": "DEFENSE",
 		"weapons": [
-			"MG3Mk1"
+			"MG1-Tower"
 		],
 		"width": 1
 	},
 	"GuardTower2": {
-		"armour": 10,
+		"armour": 8,
 		"breadth": 1,
-		"buildPoints": 400,
-		"buildPower": 100,
+		"buildPoints": 320,
+		"buildPower": 110,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 300,
+		"hitpoints": 210,
 		"id": "GuardTower2",
 		"name": "Twin Machinegun Guard Tower",
 		"resistance": 150,
@@ -1537,7 +1537,7 @@
 		"structureModel": [
 			"BLGUARDM.PIE"
 		],
-		"thermal": 10,
+		"thermal": 8,
 		"type": "DEFENSE",
 		"weapons": [
 			"MG2Mk1"
@@ -1545,48 +1545,94 @@
 		"width": 1
 	},
 	"GuardTower3": {
-		"armour": 15,
+		"armour": 8,
 		"breadth": 1,
-		"buildPoints": 400,
-		"buildPower": 100,
+		"buildPoints": 300,
+		"buildPower": 120,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 400,
+		"hitpoints": 250,
 		"id": "GuardTower3",
 		"name": "Heavy Machinegun Tower",
 		"resistance": 150,
 		"sensorID": "DefaultSensor1Mk1",
 		"strength": "MEDIUM",
 		"structureModel": [
-			"BLGUARDR.pie"
+			"BLGUARDM.PIE"
+		],
+		"thermal": 8,
+		"type": "DEFENSE",
+		"weapons": [
+			"MG3-Tower"
+		],
+		"width": 1
+	},
+	"GuardTower3H": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 350,
+		"buildPower": 140,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 400,
+		"id": "GuardTower3",
+		"name": "Hardened Heavy Machinegun Tower",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"BLGUARDR.PIE"
 		],
 		"thermal": 15,
 		"type": "DEFENSE",
 		"weapons": [
-			"MG3Mk1"
+			"MG3-Tower"
 		],
 		"width": 1
 	},
 	"GuardTower4": {
-		"armour": 15,
+		"armour": 8,
 		"breadth": 1,
-		"buildPoints": 400,
+		"buildPoints": 300,
 		"buildPower": 100,
 		"ecmID": "ZNULLECM",
 		"height": 2,
-		"hitpoints": 400,
+		"hitpoints": 250,
 		"id": "GuardTower4",
 		"name": "Flamer Guard Tower",
 		"resistance": 150,
 		"sensorID": "DefaultSensor1Mk1",
 		"strength": "MEDIUM",
 		"structureModel": [
-			"BLGUARDR.pie"
+			"BLGUARDM.PIE"
+		],
+		"thermal": 8,
+		"type": "DEFENSE",
+		"weapons": [
+			"Flame1Mk1-Tower"
+		],
+		"width": 1
+	},
+	"GuardTower4H": {
+		"armour": 15,
+		"breadth": 1,
+		"buildPoints": 400,
+		"buildPower": 140,
+		"ecmID": "ZNULLECM",
+		"height": 2,
+		"hitpoints": 400,
+		"id": "GuardTower4",
+		"name": "Hardened Flamer Guard Tower",
+		"resistance": 150,
+		"sensorID": "DefaultSensor1Mk1",
+		"strength": "MEDIUM",
+		"structureModel": [
+			"BLGUARDR.PIE"
 		],
 		"thermal": 15,
 		"type": "DEFENSE",
 		"weapons": [
-			"Flame1Mk1"
+			"Flame1Mk1-Tower"
 		],
 		"width": 1
 	},
@@ -2711,7 +2757,7 @@
 		"thermal": 15,
 		"type": "DEFENSE",
 		"weapons": [
-			"MG3Mk1"
+			"MG3-Tower"
 		],
 		"width": 1
 	},

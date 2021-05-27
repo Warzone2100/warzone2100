@@ -3,18 +3,20 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const NEW_PARADIGM_RES = [
-	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Defense-WallUpgrade02",
-	"R-Struc-Materials02", "R-Struc-Factory-Upgrade02",
-	"R-Vehicle-Engine02",
-	"R-Vehicle-Metals02", "R-Cyborg-Metals02", "R-Wpn-Cannon-Damage03",
-	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-ROF01",
-	"R-Wpn-Mortar-Damage02", "R-Wpn-Rocket-Accuracy01",
-	"R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF01",
-	"R-Wpn-RocketSlow-Damage02", "R-Struc-RprFac-Upgrade03",
+	"R-Wpn-MG1Mk1", "R-Vehicle-Body01", "R-Sys-Spade1Mk1", "R-Vehicle-Prop-Wheels",
+	"R-Sys-Engineering01", "R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Wpn-Cannon-Damage03",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Defense-WallUpgrade03","R-Struc-Materials03", "R-Vehicle-Engine02",
+	"R-Struc-RprFac-Upgrade03", "R-Wpn-Rocket-Damage02", "R-Wpn-Rocket-ROF03",
+	"R-Vehicle-Metals02", "R-Wpn-Mortar-Damage03",
+	"R-Wpn-RocketSlow-Damage02", "R-Wpn-Mortar-ROF01",
 ];
-
 const SCAVENGER_RES = [
-	"R-Wpn-MG-Damage03", "R-Wpn-Rocket-Damage02",
+	"R-Wpn-Flamer-Damage03", "R-Wpn-Flamer-Range01", "R-Wpn-Flamer-ROF01",
+	"R-Wpn-MG-Damage04", "R-Wpn-MG-ROF01", "R-Wpn-Rocket-Damage02",
+	"R-Wpn-Cannon-Damage02", "R-Wpn-Mortar-Damage03", "R-Wpn-Mortar-ROF01",
+	"R-Wpn-Rocket-ROF03", "R-Vehicle-Metals02",
+	"R-Defense-WallUpgrade03", "R-Struc-Materials03",
 ];
 
 //Pursue player when nearby but do not go too far away from defense zone.
@@ -41,10 +43,6 @@ camAreaEvent("NPBaseDetectTrigger", function()
 camAreaEvent("removeRedObjectiveBlip", function()
 {
 	hackRemoveMessage("C1-4_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER); //Remove mission objective.
-});
-
-camAreaEvent("triggerLZ2Blip", function()
-{
 	hackAddMessage("C1-4_LZ", PROX_MSG, CAM_HUMAN_PLAYER, false);
 });
 
@@ -56,8 +54,8 @@ camAreaEvent("LandingZoneTrigger", function()
 	var lz = getObject("LandingZone2"); // will override later
 	setNoGoArea(lz.x, lz.y, lz.x2, lz.y2, CAM_HUMAN_PLAYER);
 
-	// Give extra 30 minutes.
-	setMissionTime(camChangeOnDiff(camMinutesToSeconds(30)) + getMissionTime());
+	// Give extra 40 minutes.
+	setMissionTime(camChangeOnDiff(camMinutesToSeconds(40)) + getMissionTime());
 	camSetStandardWinLossConditions(CAM_VICTORY_OFFWORLD, "SUB_1_5S", {
 		area: "RTLZ",
 		message: "C1-4_LZ",
@@ -75,16 +73,14 @@ camAreaEvent("LandingZoneTrigger", function()
 function NPBaseDetect()
 {
 	// Send tanks
-	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_DEFEND, {
+	camManageGroup(camMakeGroup("AttackGroupLight"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("nearSensor"),
 		radius: 10,
-		regroup: true
 	});
 
-	camManageGroup(camMakeGroup("AttackGroupMedium"), CAM_ORDER_DEFEND, {
+	camManageGroup(camMakeGroup("AttackGroupMedium"), CAM_ORDER_ATTACK, {
 		pos: camMakePos("nearSensor"),
 		radius: 10,
-		regroup: true
 	});
 
 	camEnableFactory("HeavyNPFactory");
@@ -131,6 +127,12 @@ function eventStartLevel()
 	camCompleteRequiredResearch(SCAVENGER_RES, SCAV_7);
 	setAlliance(NEW_PARADIGM, SCAV_7, true);
 
+	camUpgradeOnMapTemplates(cTempl.bloke, cTempl.blokeheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.trike, cTempl.trikeheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.buggy, cTempl.buggyheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.bjeep, cTempl.bjeepheavy, SCAV_7);
+	camUpgradeOnMapTemplates(cTempl.rbjeep, cTempl.rbjeep8, SCAV_7);
+
 	camSetEnemyBases({
 		"SouthScavBaseGroup": {
 			cleanup: "SouthScavBase",
@@ -156,8 +158,9 @@ function eventStartLevel()
 
 	camSetArtifacts({
 		"NPCommandCenter": { tech: "R-Vehicle-Metals01" },
-		"NPResearchFacility": { tech: "R-Vehicle-Body04" },
+		"NPResearchFacility": { tech: "R-Wpn-MG-Damage04" },
 		"MediumNPFactory": { tech: "R-Wpn-Rocket02-MRL" },
+		"HeavyNPFactory": { tech: "R-Wpn-Rocket-Damage02" },
 	});
 
 	camSetFactories({
@@ -167,7 +170,7 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.rbuggy, cTempl.bjeep, cTempl.buscan, cTempl.trike ]
+			templates: [ cTempl.rbuggy, cTempl.bjeepheavy, cTempl.buscan, cTempl.trikeheavy ]
 		},
 		"NorthScavFactory": {
 			assembly: "NorthScavFactoryAssembly",
@@ -179,22 +182,22 @@ function eventStartLevel()
 			groupSize: 4,
 			maxSize: 6,
 			throttle: camChangeOnDiff(camSecondsToMilliseconds(20)),
-			templates: [ cTempl.firecan, cTempl.rbjeep, cTempl.bloke, cTempl.buggy ]
+			templates: [ cTempl.firecan, cTempl.rbjeep8, cTempl.blokeheavy, cTempl.buggyheavy ]
 		},
 		"HeavyNPFactory": {
 			assembly: "HeavyNPFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,         // this one was exclusively producing trucks
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),    // but we simplify this out
-			templates: [ cTempl.npmmct, cTempl.npsmct, cTempl.npsmc ]
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(60)),    // but we simplify this out
+			templates: [ cTempl.npsmc, cTempl.npmmct, cTempl.npsmc, cTempl.npsmct ]
 		},
 		"MediumNPFactory": {
 			assembly: "MediumNPFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
 			maxSize: 6,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(40)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
 			templates: [ cTempl.npmrl, cTempl.nphmg, cTempl.npsbb, cTempl.npmor ]
 		},
 	});

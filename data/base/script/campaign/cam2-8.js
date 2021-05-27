@@ -2,19 +2,17 @@ include("script/campaign/libcampaign.js");
 include("script/campaign/templates.js");
 
 const COLLECTIVE_RES = [
-	"R-Defense-WallUpgrade05", "R-Struc-Materials06",
-	"R-Struc-Factory-Upgrade06", "R-Struc-VTOLPad-Upgrade03",
-	"R-Vehicle-Engine05", "R-Vehicle-Metals05", "R-Cyborg-Metals06",
-	"R-Vehicle-Armor-Heat02", "R-Cyborg-Armor-Heat02",
-	"R-Sys-Engineering02", "R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage05",
-	"R-Wpn-Cannon-ROF03", "R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03",
-	"R-Wpn-MG-Damage07", "R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02",
-	"R-Wpn-Mortar-Damage06", "R-Wpn-Mortar-ROF03",
-	"R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
-	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03",
-	"R-Wpn-RocketSlow-Damage06", "R-Sys-Sensor-Upgrade01",
-	"R-Wpn-Howitzer-Accuracy02", "R-Wpn-RocketSlow-ROF03",
-	"R-Wpn-Howitzer-Damage03",
+	"R-Defense-WallUpgrade06", "R-Struc-Materials06", "R-Sys-Engineering02",
+	"R-Vehicle-Engine06", "R-Vehicle-Metals06", "R-Cyborg-Metals06",
+	"R-Wpn-Cannon-Accuracy02", "R-Wpn-Cannon-Damage06","R-Wpn-Cannon-ROF03",
+	"R-Wpn-Flamer-Damage06", "R-Wpn-Flamer-ROF03", "R-Wpn-MG-Damage07",
+	"R-Wpn-MG-ROF03", "R-Wpn-Mortar-Acc02", "R-Wpn-Mortar-Damage06",
+	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
+	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
+	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF03", "R-Wpn-Howitzer-ROF03",
+	"R-Wpn-Howitzer-Damage03", "R-Cyborg-Armor-Heat03", "R-Vehicle-Armor-Heat03",
+	"R-Wpn-Bomb-Damage02", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
+	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-Accuracy02", "R-Struc-VTOLPad-Upgrade03",
 ];
 
 function vtolAttack()

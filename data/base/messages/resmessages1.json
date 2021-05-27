@@ -362,6 +362,28 @@
             "Defensive Strength: Low"
         ]
     },
+    "RES_TOWER3": {
+        "id": "RES_TOWER3",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Steel tower with heavy machinegun",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: Low"
+        ]
+    },
+    "RES_TOWER4": {
+        "id": "RES_TOWER4",
+        "imdName": "MICAPSUL.pie",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Steel tower with flamer",
+            "Automatically targets enemies within sensor range",
+            "Defensive Strength: Low"
+        ]
+    },
     "RES_TRACK1": {
         "id": "RES_TRACK1",
         "imdName": "MICAPSUL.pie",
@@ -546,6 +568,17 @@
             "Flamer Upgrade",
             "Propylene Oxide gel treated to burn at higher temperatures",
             "Increases Flamer damage",
+            "All flamers upgraded automatically"
+        ]
+    },
+    "RES_W_FL_R1": {
+        "id": "RES_W_FL_R1",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "Flamer Upgrade",
+			"High-pressure gas throws the flamer gel further",
+            "Increases Flamer range",
             "All flamers upgraded automatically"
         ]
     },
