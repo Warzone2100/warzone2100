@@ -512,6 +512,21 @@ static void PopoverMenuButtonDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWOR
 	}
 }
 
+static void PopoverMenuSeparatorDisplayFunc(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
+{
+
+	int x0 = psWidget->x() + xOffset + (MENU_BUTTONS_PADDING / 4);
+	int y0 = psWidget->y() + yOffset + (psWidget->height() / 2);
+	int width = psWidget->width() - (MENU_BUTTONS_PADDING / 2);
+
+	iV_Line(x0, y0, x0 + width, y0, pal_RGBA(150, 150, 150, 180));
+}
+
+void JSONTableWidget::addCustomOptionsMenuItem(const MenuItemClickCallbackFunc& menuItemClickHandler, const std::string& text, bool enabled /*= true*/)
+{
+	customMenuItems.push_back(CustomMenuItem{menuItemClickHandler, text, enabled});
+}
+
 std::shared_ptr<WIDGET> JSONTableWidget::createOptionsPopoverForm()
 {
 	// create all the buttons / option rows
@@ -541,8 +556,16 @@ std::shared_ptr<WIDGET> JSONTableWidget::createOptionsPopoverForm()
 		});
 		return button;
 	};
+	auto createSeparatorLine = [weakJSONTableWidget]() -> std::shared_ptr<W_LABEL> {
+		auto separatorLabel = std::make_shared<W_LABEL>();
+		WzString text = "------";
+		separatorLabel->setString(text);
+		separatorLabel->displayFunction = PopoverMenuSeparatorDisplayFunc;
+		separatorLabel->setGeometry(0, 0, separatorLabel->getMaxLineWidth() + MENU_BUTTONS_PADDING, 6);
+		return separatorLabel;
+	};
 
-	std::vector<std::shared_ptr<W_BUTTON>> buttons;
+	std::vector<std::shared_ptr<WIDGET>> buttons;
 	if (pathBar && pathBar->visible())
 	{
 		buttons.push_back(createOptionsButton(_("Copy Path to Clipboard"), [weakJSONTableWidget](W_BUTTON& button){
@@ -566,12 +589,39 @@ std::shared_ptr<WIDGET> JSONTableWidget::createOptionsPopoverForm()
 			fprintf(stdout, "[Dumped JSON from path]: %s\n%s\n", JSONTableWidget->currentJSONPathStr().c_str(), dumpedData.c_str());
 		}
 	}));
+	if (!customMenuItems.empty())
+	{
+		// Add separator
+		buttons.push_back(createSeparatorLine());
+
+		// Add custom menu items
+		for (size_t i = 0; i < customMenuItems.size(); i++)
+		{
+			buttons.push_back(createOptionsButton(WzString::fromUtf8(customMenuItems[i].text), [weakJSONTableWidget, i](W_BUTTON& button){
+				if (auto JSONTableWidget = weakJSONTableWidget.lock())
+				{
+					if (i >= JSONTableWidget->customMenuItems.size())
+					{
+						return;
+					}
+					if (JSONTableWidget->customMenuItems[i].clickHandler)
+					{
+						JSONTableWidget->customMenuItems[i].clickHandler(*JSONTableWidget, JSONTableWidget->customMenuItems[i]);
+					}
+				}
+			}));
+			if (!customMenuItems[i].enabled)
+			{
+				std::dynamic_pointer_cast<W_BUTTON>(buttons.back())->setState(WBUT_DISABLE);
+			}
+		}
+	}
 
 	// determine required height for all buttons
-	int totalButtonHeight = std::accumulate(buttons.begin(), buttons.end(), 0, [](int a, const std::shared_ptr<W_BUTTON>& b) {
+	int totalButtonHeight = std::accumulate(buttons.begin(), buttons.end(), 0, [](int a, const std::shared_ptr<WIDGET>& b) {
 		return a + b->height();
 	});
-	int maxButtonWidth = (*(std::max_element(buttons.begin(), buttons.end(), [](const std::shared_ptr<W_BUTTON>& a, const std::shared_ptr<W_BUTTON>& b){
+	int maxButtonWidth = (*(std::max_element(buttons.begin(), buttons.end(), [](const std::shared_ptr<WIDGET>& a, const std::shared_ptr<WIDGET>& b){
 		return a->width() < b->width();
 	})))->width();
 

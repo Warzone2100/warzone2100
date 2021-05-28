@@ -97,6 +97,14 @@ public:
 		TYPE_DESCRIPTION
 	};
 	typedef std::unordered_map<std::string, SpecialJSONStringTypes> SpecialStrings;
+	struct CustomMenuItem;
+	typedef std::function<void (JSONTableWidget&, CustomMenuItem&)> MenuItemClickCallbackFunc;
+	struct CustomMenuItem
+	{
+		MenuItemClickCallbackFunc clickHandler;
+		std::string text;
+		bool enabled;
+	};
 public:
 	JSONTableWidget() : W_FORM() {}
 	~JSONTableWidget();
@@ -111,6 +119,7 @@ public:
 	std::string dumpDataAtCurrentPath() const;
 	void setUpdateButtonFunc(const CallbackFunc& updateButtonFunc, optional<UDWORD> automaticUpdateInterval = nullopt);
 	void setAutomaticUpdateInterval(optional<UDWORD> newAutomaticUpdateInterval = nullopt);
+	void addCustomOptionsMenuItem(const MenuItemClickCallbackFunc& menuItemClickHandler, const std::string& text, bool enabled = true);
 
 public:
 	virtual void display(int xOffset, int yOffset) override;
@@ -154,6 +163,8 @@ private:
 
 	std::vector<int>						currentMaxColumnWidths = {0,0,0};
 	std::vector<std::string>				actualPushedPathComponents;
+
+	std::vector<CustomMenuItem>				customMenuItems;
 
 private:
 	template<typename json_type>
