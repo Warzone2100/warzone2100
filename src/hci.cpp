@@ -726,6 +726,22 @@ void intResetScreen(bool NoAnim)
 		}
 	}
 
+	switch (intMode)
+	{
+	case INT_DESIGN:
+		gInputManager.contexts().popState();
+		triggerEvent(TRIGGER_DESIGN_QUIT);
+		break;
+	case INT_INTELMAP:
+		if (!bMultiPlayer)
+		{
+			gameTimeStart();
+		}
+		break;
+	default:
+		break;
+	}
+
 	intStopStructPosition();
 	if (NoAnim)
 	{
@@ -753,22 +769,6 @@ void intResetScreen(bool NoAnim)
 	intRemoveDesign();
 	intHidePowerBar();
 
-	/* Remove whatever extra screen was displayed */
-	switch (intMode)
-	{
-	case INT_DESIGN:
-		gInputManager.contexts().popState();
-		triggerEvent(TRIGGER_DESIGN_QUIT);
-		break;
-	case INT_INTELMAP:
-		if (!bMultiPlayer)
-		{
-			gameTimeStart();
-		}
-		break;
-	default:
-		break;
-	}
 	interfaceController = nullptr;
 	setSecondaryWindowUp(false);
 	intMode = INT_NORMAL;
