@@ -203,10 +203,10 @@ function lookForOil()
 
 	for (let i = 0, oilLen = oils.length; i < oilLen; ++i)
 	{
+		const oil = oils[i];
 		for (let j = 0, drLen = droids.length; j < drLen; ++j)
 		{
 			const droid = droids[j];
-			const oil = oils[i];
 			const dist = distBetweenTwoPoints(droid.x, droid.y, oil.x, oil.y);
 			const unsafe = enumRange(oil.x, oil.y, UNSAFE_AREA_RANGE, ENEMIES, false).filter(isUnsafeEnemyObject);
 			if (droidCanReach(droid, oil.x, oil.y) &&
