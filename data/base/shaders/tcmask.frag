@@ -94,10 +94,11 @@ void main()
 		if (specularmap != 0)
 		{
 			#if (!defined(GL_ES) && (__VERSION__ >= 130)) || (defined(GL_ES) && (__VERSION__ >= 300))
-			vec4 specularFromMap = texture(TextureSpecular, texCoord);
+			float specularMapValue = texture(TextureSpecular, texCoord).r;
 			#else
-			vec4 specularFromMap = texture2D(TextureSpecular, texCoord);
+			float specularMapValue = texture2D(TextureSpecular, texCoord).r;
 			#endif
+			vec4 specularFromMap = vec4(specularMapValue, specularMapValue, specularMapValue, 1.0);
 
 			// Gaussian specular term computation
 			vec3 H = normalize(halfVec);
