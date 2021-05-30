@@ -89,7 +89,8 @@ void main()
 
 		if (specularmap != 0)
 		{
-			vec4 specularFromMap = texture(TextureSpecular, texCoord);
+			float specularMapValue = texture(TextureSpecular, texCoord).r;
+			vec4 specularFromMap = vec4(specularMapValue, specularMapValue, specularMapValue, 1.0);
 
 			// Gaussian specular term computation
 			vec3 H = normalize(halfVec);
