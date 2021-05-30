@@ -62,7 +62,19 @@ static std::pair<GLenum, GLenum> to_gl(const gfx_api::pixel_format& format)
 		case gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8:
 			return std::make_pair(GL_RGB8, GL_RGB);
 		case gfx_api::pixel_format::FORMAT_R8_UNORM:
-			return std::make_pair(GL_R8, GL_RED);
+			if (GLAD_GL_VERSION_3_0 || GLAD_GL_ES_VERSION_3_0)
+			{
+				// OpenGL 3.0+ or OpenGL ES 3.0+
+				return std::make_pair(GL_R8, GL_RED);
+			}
+			else
+			{
+				// older version fallback
+				// use GL_LUMINANCE because:
+				// (a) it's available and
+				// (b) it ensures the single channel value ends up in "red" so the shaders don't have to care
+				return std::make_pair(GL_LUMINANCE, GL_LUMINANCE);
+			}
 		default:
 			debug(LOG_FATAL, "Unrecognised pixel format");
 	}
