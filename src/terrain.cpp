@@ -668,9 +668,9 @@ void loadTerrainTextures()
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
 
-	auto preload = [&](const char *type, std::string texName) {
+	auto preload = [&](const char *type, std::string texName, void (*pTransformFunc)(iV_Image&, const char *)) {
 		if (texName.empty()) return;
-		optional<size_t> texPage = iV_GetTexture(texName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
+		optional<size_t> texPage = iV_GetTransformTexture(texName.c_str(), pTransformFunc, true, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT(texPage.has_value(), "Failed to pre-load terrain %s texture: %s", type, texName.c_str());
 	};
 
@@ -679,11 +679,11 @@ void loadTerrainTextures()
 	{
 		// pre-load the texture
 		const auto groundType = getGroundType(layer);
-		preload("", groundType.textureName);
+		preload("", groundType.textureName, nullptr);
 		if (terrainShaderQuality != TerrainShaderQuality::CLASSIC) {
-			preload("normapmap", groundType.normalMapTextureName);
-			preload("specmap", groundType.specularMapTextureName);
-			preload("heightmap", groundType.heightMapTextureName);
+			preload("normapmap", groundType.normalMapTextureName, nullptr);
+			preload("specmap", groundType.specularMapTextureName, &iV_TransformSpecularTextureFunction);
+			preload("heightmap", groundType.heightMapTextureName, nullptr);
 		}
 	}
 
@@ -1276,9 +1276,9 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::m
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
-	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName) {
+	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName, void (*pTransformFunc)(iV_Image&, const char *)) {
 		if (fileName.empty() || terrainShaderQuality == TerrainShaderQuality::CLASSIC) return (gfx_api::texture*)nullptr;
-		return &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
+		return &pie_Texture(iV_GetTransformTexture(fileName.c_str(), pTransformFunc, true, maxTerrainTextureSize, maxTerrainTextureSize).value());
 	};
 
 	// draw each layer separately
@@ -1293,9 +1293,9 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::m
 		// load the texture
 		optional<size_t> texPage = iV_GetTexture(groundType.textureName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize);
 		ASSERT_OR_RETURN(, texPage.has_value(), "Failed to retrieve terrain texture: %s", groundType.textureName.c_str());
-		gfx_api::texture* pNormalMapTexture = getOptTex(groundType.normalMapTextureName);
-		gfx_api::texture* pSpecularMapTexture = getOptTex(groundType.specularMapTextureName);
-		gfx_api::texture* pHeightMapTexture = getOptTex(groundType.heightMapTextureName);
+		gfx_api::texture* pNormalMapTexture = getOptTex(groundType.normalMapTextureName, nullptr);
+		gfx_api::texture* pSpecularMapTexture = getOptTex(groundType.specularMapTextureName, &iV_TransformSpecularTextureFunction);
+		gfx_api::texture* pHeightMapTexture = getOptTex(groundType.heightMapTextureName, nullptr);
 
 		gfx_api::TerrainLayer::get().bind_constants({
 			ModelViewProjection, ModelUV, ModelUVLightmap,
@@ -1453,15 +1453,15 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 	optional<size_t> water2_texPage = iV_GetTexture("page-81-water-2.png", true, maxTerrainTextureSize, maxTerrainTextureSize);
 	ASSERT_OR_RETURN(, water1_texPage.has_value() && water2_texPage.has_value(), "Failed to load water texture");
 	gfx_api::WaterPSO::get().bind();
-	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName) {
+	auto getOptTex = [&maxTerrainTextureSize](const std::string &fileName, void (*pTransformFunc)(iV_Image&, const char *)) {
 		if (fileName.empty() || terrainShaderQuality == TerrainShaderQuality::CLASSIC) return (gfx_api::texture*)nullptr;
-		return &pie_Texture(iV_GetTexture(fileName.c_str(), true, maxTerrainTextureSize, maxTerrainTextureSize).value());
+		return &pie_Texture(iV_GetTransformTexture(fileName.c_str(), pTransformFunc, true, maxTerrainTextureSize, maxTerrainTextureSize).value());
 	};
 	gfx_api::WaterPSO::get().bind_textures(
 		&pie_Texture(water1_texPage.value()), &pie_Texture(water2_texPage.value()),
-		getOptTex(waterTexture1_nm), getOptTex(waterTexture2_nm),
-		getOptTex(waterTexture1_sm), getOptTex(waterTexture2_sm),
-		getOptTex(waterTexture1_hm), getOptTex(waterTexture2_hm));
+		getOptTex(waterTexture1_nm, nullptr), getOptTex(waterTexture2_nm, nullptr),
+		getOptTex(waterTexture1_sm, &iV_TransformSpecularTextureFunction), getOptTex(waterTexture2_sm, &iV_TransformSpecularTextureFunction),
+		getOptTex(waterTexture1_hm, nullptr), getOptTex(waterTexture2_hm, nullptr));
 	gfx_api::WaterPSO::get().bind_vertex_buffers(waterVBO);
 	gfx_api::WaterPSO::get().bind_constants({
 		ModelViewProjection, ModelUV1, ModelUV2,
@@ -1497,27 +1497,29 @@ void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, 
 	}
 }
 
+static void reloadTex(const std::string &tex, void (*pTransformFunc)(iV_Image&, const char *) = nullptr)
+{
+	if (!tex.empty()) {
+		WzString wzTex = WzString::fromUtf8(tex);
+		replaceTexture(wzTex, wzTex, pTransformFunc);
+	}
+}
+
 void reloadTerrainTextures()
 {
-	auto reloadTex = [&](const std::string &tex) {
-		if (!tex.empty()) {
-			WzString wzTex = WzString::fromUtf8(tex);
-			replaceTexture(wzTex, wzTex);
-		}
-	};
 	reloadTex("page-80-water-1.png");
 	reloadTex("page-81-water-2.png");
 	reloadTex(waterTexture1_nm);
 	reloadTex(waterTexture2_nm);
-	reloadTex(waterTexture1_sm);
-	reloadTex(waterTexture2_sm);
+	reloadTex(waterTexture1_sm, &iV_TransformSpecularTextureFunction);
+	reloadTex(waterTexture2_sm, &iV_TransformSpecularTextureFunction);
 	reloadTex(waterTexture1_hm);
 	reloadTex(waterTexture2_hm);
 	for (int g=0; g < getNumGroundTypes(); g++) {
 		auto ground = getGroundType(g);
 		reloadTex(ground.textureName);
 		reloadTex(ground.normalMapTextureName);
-		reloadTex(ground.specularMapTextureName);
+		reloadTex(ground.specularMapTextureName, &iV_TransformSpecularTextureFunction);
 		reloadTex(ground.heightMapTextureName);
 	}
 }

@@ -61,7 +61,7 @@ vec4 main_bumpMapping()
 
 	vec4 gloss;
 	if (hasSpecularmap != 0) {
-		gloss = texture(TextureSpecular, uv);
+		gloss = vec4(vec3(texture(TextureSpecular, uv).r), 1);
 	} else {
 		gloss = vec4(vec3(0.1), 1);
 	}

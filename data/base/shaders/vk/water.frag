@@ -58,7 +58,7 @@ vec4 main_bumpMapping()
 	float exponent = acos(dot(H, N)) / 0.2;
 	float gaussianTerm = exp(-(exponent * exponent)) * float(lambertTerm > 0);
 
-	vec4 gloss = texture(tex1_sm, uv1) * texture(tex2_sm, uv2);
+	vec4 gloss = vec4(vec3(texture(tex1_sm, uv1).r), 1) * vec4(vec3(texture(tex2_sm, uv2).r), 1);
 
 	return fragColor*(ambientLight*0.5 + diffuseLight*lambertTerm) + specularLight*gloss*gaussianTerm;
 }
