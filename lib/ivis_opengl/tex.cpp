@@ -243,7 +243,7 @@ bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight)
  *  @return a non-negative index number for the texture, negative if no texture
  *          with the given filename could be found
  */
-optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void (iV_Image&)> transformImageData, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
+optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void (iV_Image&, const char *filename)> transformImageData, bool compression, int maxWidth /*= -1*/, int maxHeight /*= -1*/)
 {
 	ASSERT(filename != nullptr, "filename must not be null");
 	iV_Image sSprite;
@@ -267,7 +267,7 @@ optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void
 	scaleImageMaxSize(&sSprite, maxWidth, maxHeight);
 	if (transformImageData)
 	{
-		transformImageData(sSprite);
+		transformImageData(sSprite, filename);
 	}
 	size_t page = pie_AddTexPage(&sSprite, path.c_str(), compression);
 	resDoResLoadCallback(); // ensure loading screen doesn't freeze when loading large images
@@ -279,7 +279,38 @@ optional<size_t> iV_GetTexture(const char *filename, bool compression, int maxWi
 	return iV_GetTransformTexture(filename, nullptr, compression, maxWidth, maxHeight);
 }
 
-bool replaceTexture(const WzString &oldfile, const WzString &newfile)
+void iV_TransformSpecularTextureFunction(iV_Image& sSprite, const char *filename)
+{
+	if (sSprite.depth == 1) { return; }
+	// Otherwise, expecting 3 or 4-channel (RGB/RGBA)
+	ASSERT_OR_RETURN(, sSprite.depth == 3 || sSprite.depth == 4, "(%s): Does not have 1, 3 or 4 channels", filename);
+	auto originalBmpData = sSprite.bmp;
+	const size_t numPixels = static_cast<size_t>(sSprite.height) * static_cast<size_t>(sSprite.width);
+	sSprite.bmp = (unsigned char *)malloc(numPixels);
+	for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
+	{
+		uint32_t red = originalBmpData[(pixelIdx * sSprite.depth)];
+		uint32_t green = originalBmpData[(pixelIdx * sSprite.depth) + 1];
+		uint32_t blue = originalBmpData[(pixelIdx * sSprite.depth) + 2];
+		if (red == green && red == blue)
+		{
+			// all channels are the same - just use the first channel
+			sSprite.bmp[pixelIdx] = static_cast<unsigned char>(red);
+		}
+		else
+		{
+			// quick approximation of a weighted RGB -> Luma method
+			// (R+R+B+G+G+G)/6
+			uint32_t lum = (red+red+blue+green+green+green) / 6;
+			sSprite.bmp[pixelIdx] = static_cast<unsigned char>(std::min<uint32_t>(lum, 255));
+		}
+	}
+	sSprite.depth = 1;
+	// free the original bitmap data
+	free(originalBmpData);
+}
+
+bool replaceTexture(const WzString &oldfile, const WzString &newfile, std::function<void (iV_Image&, const char *filename)> transformImageData /*= nullptr*/)
 {
 	// Load new one to replace it
 	iV_Image image;
@@ -296,6 +327,10 @@ bool replaceTexture(const WzString &oldfile, const WzString &newfile)
 		gfx_api::context::get().debugStringMarker("Replacing texture");
 		size_t page = it->second;
 		debug(LOG_TEXTURE, "Replacing texture %s with %s from index %zu (tex id %u)", it->first.c_str(), newfile.toUtf8().c_str(), page, _TEX_PAGE[page].id->id());
+		if (transformImageData)
+		{
+			transformImageData(image, newfile.toUtf8().c_str());
+		}
 		tmpname = pie_MakeTexPageName(newfile.toUtf8());
 		pie_AddTexPage(&image, tmpname.c_str(), true, page);
 		iV_unloadImage(&image);

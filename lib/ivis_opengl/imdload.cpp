@@ -1265,35 +1265,7 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		if (specfile[0] != '\0')
 		{
 			debug(LOG_TEXTURE, "Loading specular map %s for %s", specfile, filename.toUtf8().c_str());
-			specpage = iV_GetTransformTexture(specfile, [filename, specfile](iV_Image& sSprite){
-				if (sSprite.depth == 1) { return; }
-				// Otherwise, expecting 3 or 4-channel (RGB/RGBA)
-				ASSERT_OR_RETURN(, sSprite.depth == 3 || sSprite.depth == 4, "(%s): Does not have 1, 3 or 4 channels", specfile);
-				auto originalBmpData = sSprite.bmp;
-				const size_t numPixels = static_cast<size_t>(sSprite.height) * static_cast<size_t>(sSprite.width);
-				sSprite.bmp = (unsigned char *)malloc(numPixels);
-				for (size_t pixelIdx = 0; pixelIdx < numPixels; pixelIdx++)
-				{
-					uint32_t red = originalBmpData[(pixelIdx * sSprite.depth)];
-					uint32_t green = originalBmpData[(pixelIdx * sSprite.depth) + 1];
-					uint32_t blue = originalBmpData[(pixelIdx * sSprite.depth) + 2];
-					if (red == green && red == blue)
-					{
-						// all channels are the same - just use the first channel
-						sSprite.bmp[pixelIdx] = static_cast<unsigned char>(red);
-					}
-					else
-					{
-						// quick approximation of a weighted RGB -> Luma method
-						// (R+R+B+G+G+G)/6
-						uint32_t lum = (red+red+blue+green+green+green) / 6;
-						sSprite.bmp[pixelIdx] = static_cast<unsigned char>(std::min<uint32_t>(lum, 255));
-					}
-				}
-				sSprite.depth = 1;
-				// free the original bitmap data
-				free(originalBmpData);
-			});
+			specpage = iV_GetTransformTexture(specfile, iV_TransformSpecularTextureFunction);
 			ASSERT_OR_RETURN(, specpage.has_value(), "%s could not load tex page %s", filename.toUtf8().c_str(), specfile);
 		}
 
@@ -1312,8 +1284,8 @@ static void iV_ProcessIMD(const WzString &filename, const char **ppFileData, con
 		{
 			std::string tcmask_name = pie_MakeTexPageTCMaskName(texfile);
 			tcmask_name += ".png";
-			optional<size_t> texpage_mask = iV_GetTransformTexture(tcmask_name.c_str(), [filename, tcmask_name](iV_Image& sSprite){
-				ASSERT_OR_RETURN(, sSprite.depth == 4, "(%s) tcmask png (%s) does not have 4 channels, as expected", filename.toUtf8().c_str(), tcmask_name.c_str());
+			optional<size_t> texpage_mask = iV_GetTransformTexture(tcmask_name.c_str(), [filename](iV_Image& sSprite, const char *tcmask_name){
+				ASSERT_OR_RETURN(, sSprite.depth == 4, "(%s) tcmask png (%s) does not have 4 channels, as expected", filename.toUtf8().c_str(), tcmask_name);
 				auto originalBmpData = sSprite.bmp;
 				const size_t numPixels = static_cast<size_t>(sSprite.height) * static_cast<size_t>(sSprite.width);
 				// copy just the alpha channel over

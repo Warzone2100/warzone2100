@@ -46,11 +46,12 @@ void pie_AssignTexture(size_t page, gfx_api::texture* texture);
 bool scaleImageMaxSize(iV_Image *s, int maxWidth, int maxHeight);
 
 optional<size_t> iV_GetTexture(const char *filename, bool compression = true, int maxWidth = -1, int maxHeight = -1);
-optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void (iV_Image&)> transformImageData = nullptr, bool compression = true, int maxWidth = -1, int maxHeight = -1);
+optional<size_t> iV_GetTransformTexture(const char *filename, std::function<void (iV_Image&, const char *filename)> transformImageData = nullptr, bool compression = true, int maxWidth = -1, int maxHeight = -1);
+void iV_TransformSpecularTextureFunction(iV_Image& image, const char *filename);
 void iV_unloadImage(iV_Image *image);
 gfx_api::pixel_format iV_getPixelFormat(const iV_Image *image);
 
-bool replaceTexture(const WzString &oldfile, const WzString &newfile);
+bool replaceTexture(const WzString &oldfile, const WzString &newfile, std::function<void (iV_Image&, const char *filename)> transformImageData = nullptr);
 size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture);
 size_t pie_AddTexPage(iV_Image *s, const char *filename, bool gameTexture, size_t page);
 void pie_TexInit();
