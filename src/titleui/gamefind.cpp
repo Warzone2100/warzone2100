@@ -457,7 +457,7 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	assert(psWidget->pUserData != nullptr);
 	DisplayRemoteGameCache& cache = *static_cast<DisplayRemoteGameCache*>(psWidget->pUserData);
 
-	if ((getLobbyError() != ERROR_NOERROR) && (bMultiPlayer && !NetPlay.bComms))
+	if (getLobbyError() != ERROR_NOERROR && bMultiPlayer && !NetPlay.bComms)
 	{
 		addConsoleMessage(_("Can't connect to lobby server!"), DEFAULT_JUSTIFY, NOTIFY_MESSAGE);
 		return;

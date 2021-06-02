@@ -489,7 +489,7 @@ static bool serializeNetPlay(PHYSFS_file *fileHandle, const NETPLAY *serializeNe
 		}
 	}
 
-	return (PHYSFS_writeUBE32(fileHandle, serializeNetPlay->bComms)
+	return (PHYSFS_writeUBE32(fileHandle, (uint32_t)serializeNetPlay->bComms)
 	        && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->playercount)
 	        && PHYSFS_writeUBE32(fileHandle, serializeNetPlay->hostPlayer)
 	        && PHYSFS_writeUBE32(fileHandle, selectedPlayer)
@@ -501,7 +501,6 @@ static bool serializeNetPlay(PHYSFS_file *fileHandle, const NETPLAY *serializeNe
 static bool deserializeNetPlay(PHYSFS_file *fileHandle, NETPLAY *serializeNetPlay)
 {
 	unsigned int i;
-	uint32_t dummy, scavs = game.scavengers;
 	bool retv;
 
 	for (i = 0; i < MAX_PLAYERS; ++i)
@@ -512,14 +511,17 @@ static bool deserializeNetPlay(PHYSFS_file *fileHandle, NETPLAY *serializeNetPla
 		}
 	}
 
+	uint32_t dummy, bComms = serializeNetPlay->bComms, scavs = game.scavengers;
+
 	serializeNetPlay->isHost = true;	// only host can load
-	retv = (PHYSFS_readUBE32(fileHandle, &serializeNetPlay->bComms)
+	retv = (PHYSFS_readUBE32(fileHandle, &bComms)
 	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->playercount)
 	        && PHYSFS_readUBE32(fileHandle, &serializeNetPlay->hostPlayer)
 	        && PHYSFS_readUBE32(fileHandle, &selectedPlayer)
 	        && PHYSFS_readUBE32(fileHandle, &scavs)
 	        && PHYSFS_readUBE32(fileHandle, &dummy)
 	        && PHYSFS_readUBE32(fileHandle, &dummy));
+	serializeNetPlay->bComms = bComms;
 	game.scavengers = scavs;
 	return retv;
 }
@@ -2047,7 +2049,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			productionPlayer = selectedPlayer;
 			bMultiMessages	= bMultiPlayer;
 
-			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			NetPlay.bComms = saveGameData.sNetPlay.bComms;
 
 			allocatePlayers();
 
@@ -3781,7 +3783,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 			productionPlayer = selectedPlayer;
 			game			= saveGameData.sGame;  // why do this again????
 			game.scavengers = scav;
-			NetPlay.bComms = (saveGameData.sNetPlay).bComms;
+			NetPlay.bComms = saveGameData.sNetPlay.bComms;
 			if (bMultiPlayer)
 			{
 				loadMultiStats(saveGameData.sPName, &playerStats);				// stats stuff

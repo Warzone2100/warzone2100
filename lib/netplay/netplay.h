@@ -290,7 +290,7 @@ struct NETPLAY
 	std::vector<PLAYER>	players;	///< The array of players.
 	uint32_t	playercount;		///< Number of players in game.
 	uint32_t	hostPlayer;		///< Index of host in player array
-	uint32_t	bComms;			///< Actually do the comms?
+	bool		bComms;			///< Actually do the comms?
 	bool		isHost;			///< True if we are hosting the game
 	bool		isUPNP;				// if we want the UPnP detection routines to run
 	bool		isUPNP_CONFIGURED;	// if UPnP was successful

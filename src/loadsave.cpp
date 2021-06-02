@@ -208,7 +208,7 @@ bool addLoadSave(LOADSAVE_MODE savemode, const char *title)
 	    || (bLoadSaveMode == LOAD_INGAME_SKIRMISH) || (bLoadSaveMode == SAVE_INGAME_SKIRMISH)
 	    || (bLoadSaveMode == LOAD_INGAME_MISSION_AUTO) || (bLoadSaveMode == LOAD_INGAME_SKIRMISH_AUTO))
 	{
-		if (!bMultiPlayer || (NetPlay.bComms == 0))
+		if (!bMultiPlayer || !NetPlay.bComms)
 		{
 			gameTimeStop();
 			if (GetGameMode() == GS_NORMAL)
@@ -419,7 +419,7 @@ bool closeLoadSave(bool goBack)
 		{
 			intReopenMenuWithoutUnPausing();
 		}
-		if (!bMultiPlayer || (NetPlay.bComms == 0))
+		if (!bMultiPlayer || !NetPlay.bComms)
 		{
 			setGameUpdatePause(false);
 			if (!goBack)
