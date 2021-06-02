@@ -30,6 +30,7 @@
 #include "lib/sound/sounddefs.h"
 #include "lib/ivis_opengl/screen.h"
 #include "lib/ivis_opengl/pieclip.h"
+#include "lib/ivis_opengl/piestate.h" // for fog
 
 #include "ai.h"
 #include "component.h"
@@ -466,6 +467,16 @@ bool loadConfig()
 	BlueprintTrackAnimationSpeed = iniGetInteger("BlueprintTrackAnimationSpeed", 20).value();
 	lockCameraScrollWhileRotating = iniGetBool("lockCameraScrollWhileRotating", false).value();
 	autosaveEnabled = iniGetBool("autosaveEnabled", true).value();
+	bool fogEnabled = iniGetBool("fog", false).value();
+	if (fogEnabled)
+	{
+		pie_EnableFog(true);
+	}
+	else
+	{
+		pie_SetFogStatus(false);
+		pie_EnableFog(false);
+	}
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -602,6 +613,7 @@ bool saveConfig()
 	iniSetInteger("BlueprintTrackAnimationSpeed", BlueprintTrackAnimationSpeed);
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
 	iniSetBool("autosaveEnabled", autosaveEnabled);
+	iniSetBool("fog", pie_GetFogEnabled());
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);

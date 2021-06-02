@@ -1687,6 +1687,7 @@ int realmain(int argc, char *argv[])
 		war_SetHeight(windowHeight);
 	}
 
+	bool fogConfigOption = pie_GetFogEnabled();
 	pie_SetFogStatus(false);
 	pie_ScreenFlip(CLEAR_BLACK);
 
@@ -1699,6 +1700,12 @@ int realmain(int argc, char *argv[])
 	if (!systemInitialise(horizScaleFactor, vertScaleFactor))
 	{
 		return EXIT_FAILURE;
+	}
+
+	// The systemInitialise() above sets fog to disabled as default so this must be after it
+	if (fogConfigOption)
+	{
+		pie_EnableFog(true);
 	}
 
 	//set all the pause states to false
