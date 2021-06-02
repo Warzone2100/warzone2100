@@ -593,7 +593,7 @@ void KeyMapForm::initialize(bool isInGame)
 
 		addButton(KM_RETURN, KM_H - 24, _("Resume Game"));
 
-		if (!(bMultiPlayer && NetPlay.bComms != 0)) // no editing in true multiplayer
+		if (!bMultiPlayer || !NetPlay.bComms) // no editing in true multiplayer
 		{
 			addButton(KM_DEFAULT, KM_H - 8, _("Select Default"));
 		}

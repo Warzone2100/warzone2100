@@ -1318,17 +1318,17 @@ static void addGameOptions()
 	addSideText(FRONTEND_SIDETEXT3, MULTIOP_OPTIONSX - 3 , MULTIOP_OPTIONSY, _("OPTIONS"));
 
 	// game name box
-	if (!NetPlay.bComms)
+	if (NetPlay.bComms)
+	{
+		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
+	}
+	else
 	{
 		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Game Name"),
 		                challengeActive ? game.name : _("One-Player Skirmish"), IMAGE_EDIT_GAME,
 		                IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 		// disable for one-player skirmish
 		widgSetButtonState(psWScreen, MULTIOP_GNAME, WEDBS_DISABLE);
-	}
-	else
-	{
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_GNAME, MCOL0, MROW2, _("Select Game Name"), game.name, IMAGE_EDIT_GAME, IMAGE_EDIT_GAME_HI, MULTIOP_GNAME_ICON);
 	}
 	widgSetButtonState(psWScreen, MULTIOP_GNAME_ICON, WBUT_DISABLE);
 
@@ -1721,9 +1721,6 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 		psWidget->pUserData = nullptr;
 	};
 
-	// only need this button in (true) mp games
-	int mpbutton = NetPlay.bComms ? 1 : 0;
-
 	auto openCloseOnClickHandler = [psWeakTitleUI, player](W_BUTTON& clickedButton) {
 		auto pStrongPtr = psWeakTitleUI.lock();
 		ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
@@ -1752,7 +1749,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	};
 
 	// Open button
-	if (mpbutton)
+	if (NetPlay.bComms)
 	{
 		sButInit.id = MULTIOP_AI_OPEN;
 		sButInit.pTip = _("Allow human players to join in this slot");
@@ -1769,7 +1766,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	sButInit.pTip = _("Leave this slot unused");
 	sButInit.id = MULTIOP_AI_CLOSED;
 	sButInit.UserData = (UDWORD)AI_CLOSED;
-	if (mpbutton)
+	if (NetPlay.bComms)
 	{
 		sButInit.y = sButInit.y + sButInit.height;
 	}
@@ -1790,7 +1787,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	int aiListStartYPos = (sButInit.height + sButInit.y) + 10;
 	int aiListEntryHeight = sButInit.height;
 	int aiListEntryWidth = sButInit.width;
-	int aiListHeight = aiListEntryHeight * (mpbutton ? 7 : 8);
+	int aiListHeight = aiListEntryHeight * (NetPlay.bComms ? 7 : 8);
 	pAIScrollableList->setCalcLayout([aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
 		psWidget->setGeometry(aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight);
 	});
@@ -1844,7 +1841,7 @@ void WzMultiplayerOptionsTitleUI::openTeamChooser(uint32_t player)
 	int disallow = allPlayersOnSameTeam(player);
 
 	bool canChangeTeams = !locked.teams;
-	bool canKickPlayer = (player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated);
+	bool canKickPlayer = player != selectedPlayer && NetPlay.bComms && NetPlay.isHost && NetPlay.players[player].allocated;
 	if (!canChangeTeams && !canKickPlayer)
 	{
 		return;
@@ -3446,7 +3443,7 @@ static void randomizeOptions()
 	resetPlayerPositions();
 
 	// Don't randomize the map once hosting for true multiplayer has started
-	if (!NetPlay.isHost || !(bMultiPlayer && NetPlay.bComms != 0))
+	if (!NetPlay.isHost || !bMultiPlayer || !NetPlay.bComms)
 	{
 		// Pick a map for a number of players and tech level
 		game.techLevel = (rand() % 4) + 1;

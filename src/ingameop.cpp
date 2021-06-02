@@ -224,15 +224,13 @@ static bool _intAddInGameOptions()
 
 	auto const &parent = psWScreen->psForm;
 
-	bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
-
 	// add form
 	auto ingameOp = std::make_shared<IntFormAnimated>();
 	parent->attach(ingameOp);
 	ingameOp->id = INTINGAMEOP;
 	ingameOp->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		bool s = (bMultiPlayer && NetPlay.bComms != 0) || bInTutorial;
-		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(s? 3 : 5), INTINGAMEOP_W, INTINGAMEOPAUTO_H(s? 3 : 5));
+		int lines = ((bMultiPlayer && NetPlay.bComms) || bInTutorial) ? 3 : 5;
+		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(lines), INTINGAMEOP_W, INTINGAMEOPAUTO_H(lines));
 	}));
 
 	int row = 1;
@@ -244,24 +242,24 @@ static bool _intAddInGameOptions()
 	addIGTextButton(INTINGAMEOP_OPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Options"), OPALIGN);
 	row++;
 
-	if (!s)
+	if (!((bMultiPlayer && NetPlay.bComms) || bInTutorial))
 	{
-		if (!bMultiPlayer)
-		{
-			// add 'load'
-			addIGTextButton(INTINGAMEOP_LOAD_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
-			row++;
-			// add 'save'
-			addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
-			row++;
-		}
-		else
+		if (bMultiPlayer)
 		{
 			// add 'load'
 			addIGTextButton(INTINGAMEOP_LOAD_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
 			row++;
 			// add 'save'
 			addIGTextButton(INTINGAMEOP_SAVE_SKIRMISH, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
+			row++;
+		}
+		else
+		{
+			// add 'load'
+			addIGTextButton(INTINGAMEOP_LOAD_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Load Game"), OPALIGN);
+			row++;
+			// add 'save'
+			addIGTextButton(INTINGAMEOP_SAVE_MISSION, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Save Game"), OPALIGN);
 			row++;
 		}
 	}
@@ -306,13 +304,13 @@ static bool startInGameConfirmQuit()
 	auto label = std::make_shared<W_LABEL>();
 	ingameOp->attach(label);
 	label->setGeometry(INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, 0);
-	if (!(bMultiPlayer && NetPlay.bComms))
+	if (bMultiPlayer && NetPlay.bComms)
 	{
-		label->setString(_("Warning: Are you sure? Any unsaved progress will be lost."));
+		label->setString(_("Warning: Are you sure?")); //Do not mention saving in real multiplayer matches
 	}
 	else
 	{
-		label->setString(_("Warning: Are you sure?")); //Do not mention saving in real multiplayer matches
+		label->setString(_("Warning: Are you sure? Any unsaved progress will be lost."));
 	}
 	label->setTextAlignment(WLAB_ALIGNCENTRE);
 	label->setFont(font_medium, WZCOL_YELLOW);
@@ -572,9 +570,8 @@ static bool startIGOptionsMenu()
 	addIGTextButton(INTINGAMEOP_MOUSEOPTIONS, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Mouse Options"), OPALIGN);
 	row++;
 
-	bool s = bMultiPlayer && NetPlay.bComms != 0;
 	// Key map editor does not allow editing for true multiplayer
-	addIGTextButton(INTINGAMEOP_KEYMAP, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, s? _("View Key Mappings") : _("Key Mappings"), OPALIGN);
+	addIGTextButton(INTINGAMEOP_KEYMAP, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, (bMultiPlayer && NetPlay.bComms) ? _("View Key Mappings") : _("Key Mappings"), OPALIGN);
 	row++;
 
 	addIGTextButton(INTINGAMEOP_MUSICMANAGER, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Music Manager"), OPALIGN);
@@ -806,8 +803,7 @@ static bool startIGMouseOptionsMenu()
 	addIGTextButton(INTINGAMEOP_MFLIP_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsMflipString(), WBUT_PLAIN);
 	row++;
 
-	bool s = bMultiPlayer && NetPlay.bComms != 0;
-	if (!s) // Cursor trapping does not work for true multiplayer
+	if (!bMultiPlayer || !NetPlay.bComms) // Cursor trapping does not work for true multiplayer
 	{
 		addIGTextButton(INTINGAMEOP_TRAP,   INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Trap Cursor"), WBUT_PLAIN);
 		addIGTextButton(INTINGAMEOP_TRAP_R, INTINGAMEOP_MID, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, mouseOptionsTrapString(), WBUT_PLAIN);

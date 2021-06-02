@@ -104,12 +104,7 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE Sta
  */
 bool runningMultiplayer()
 {
-	if (!bMultiPlayer || !NetPlay.bComms)
-	{
-		return false;
-	}
-
-	return true;
+	return bMultiPlayer && NetPlay.bComms;
 }
 
 static void noMPCheatMsg()
