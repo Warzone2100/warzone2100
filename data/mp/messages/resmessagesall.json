@@ -307,6 +307,17 @@
             "Defensive Strength: Medium"
         ]
     },
+    "RES_EMP_PLASLAUNCH": {
+        "id": "RES_EMP_PLASLAUNCH",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_struttech.ogg",
+        "text": [
+            "New Defensive Structure Available",
+            "Heavy Plasma Launcher firing plasma",
+            "Best Targets : Vehicles and cyborgs",
+            "Defensive Strength: Medium"
+        ]
+    },
     "RES_EMP_RKT": {
         "id": "RES_EMP_RKT",
         "imdName": "MICAPSUL.pie",
@@ -811,6 +822,17 @@
             "Plasma Cannon firing plasma",
             "Best Targets: Vehicles",
             "Body Points: Medium"
+        ]
+    },
+    "RES_W_PLASLAUNCH": {
+        "id": "RES_W_PLASLAUNCH",
+        "imdName": "MICAPSUL.PIE",
+        "sequenceName": "res_weapons.ogg",
+        "text": [
+            "New Weapon Turret Available",
+            "Heavy Plasma Launcher firing plasma",
+            "Best Targets: Vehicles and cyborgs",
+            "Body Points: Very Low"
         ]
     },
     "RES_W_RK_HVAT1": {
