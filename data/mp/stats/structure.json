@@ -1148,6 +1148,28 @@
         ],
         "width": 1
     },
+    "Emplacement-HeavyPlasmaLauncher": {
+        "armour": 10,
+        "breadth": 1,
+        "buildPoints": 525,
+        "buildPower": 425,
+        "height": 1,
+        "hitpoints": 400,
+        "id": "Emplacement-HeavyPlasmaLauncher",
+        "name": "Heavy Plasma Launcher Emplacement",
+        "resistance": 150,
+        "sensorID": "DefaultSensor1Mk1",
+        "strength": "HARD",
+        "structureModel": [
+            "Blaamnt2.PIE"
+        ],
+        "thermal": 10,
+        "type": "DEFENSE",
+        "weapons": [
+            "PlasmaHeavy"
+        ],
+        "width": 1
+    },
     "Emplacement-PrisLas": {
         "armour": 10,
         "breadth": 1,
