@@ -437,7 +437,7 @@ bool wzapi::setSunIntensity(WZAPI_PARAMS(float ambient_r, float ambient_g, float
 
 //-- ## setWeather(weather type)
 //--
-//-- Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR. (3.2+ only)
+//-- Set the current weather. This should be one of ```WEATHER_RAIN```, ```WEATHER_SNOW``` or ```WEATHER_CLEAR```. (3.2+ only)
 //--
 bool wzapi::setWeather(WZAPI_PARAMS(int weather))
 {
@@ -476,7 +476,7 @@ bool wzapi::cameraZoom(WZAPI_PARAMS(float viewDistance, float speed))
 	return true;
 }
 
-//-- ## cameraTrack(droid)
+//-- ## cameraTrack([droid])
 //--
 //-- Make the camera follow the given droid object around. Pass in a null object to stop. (3.2+ only)
 //--
@@ -765,7 +765,7 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 
 //-- ## hackGetObj(type, player, id)
 //--
-//-- Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
+//-- Function to find and return a game object of ```DROID```, ```FEATURE``` or ```STRUCTURE``` types, if it exists.
 //-- Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
 //--
 wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED
@@ -799,7 +799,7 @@ wzapi::no_return_value wzapi::hackAssert(WZAPI_PARAMS(bool condition, va_list_tr
 	return {};
 }
 
-//-- ## receiveAllEvents(bool)
+//-- ## receiveAllEvents([enabled])
 //--
 //-- Make the current script receive all events, even those not meant for 'me'. (3.2+ only)
 //--
@@ -849,7 +849,7 @@ wzapi::no_return_value wzapi::hackStopIngameAudio(WZAPI_NO_PARAMS)
 
 //-- ## hackMarkTiles([label | x, y[, x2, y2]])
 //--
-//-- Mark the given tile(s) on the map. Either give a POSITION or AREA label,
+//-- Mark the given tile(s) on the map. Either give a ```POSITION``` or ```AREA``` label,
 //-- or a tile x, y position, or four positions for a square area. If no parameter
 //-- is given, all marked tiles are cleared. (3.2+ only)
 //--
@@ -1222,8 +1222,8 @@ wzapi::researchResults wzapi::enumResearch(WZAPI_NO_PARAMS)
 //-- ## enumRange(x, y, range[, filter[, seen]])
 //--
 //-- Returns an array of game objects seen within range of given position that passes the optional filter
-//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
-//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
+//-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
+//-- ```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
 //-- returned; by default only visible objects are returned. Calling this function is much faster than
 //-- iterating over all game objects using other enum functions. (3.2+ only)
 //--
@@ -1352,7 +1352,7 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 	return false; // none found
 }
 
-//-- ## findResearch(research, [player])
+//-- ## findResearch(research[, player])
 //--
 //-- Return list of research items remaining to be researched for the given research item. (3.2+ only)
 //-- (Optional second argument 3.2.3+ only)
@@ -1547,7 +1547,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 //-- ## pickStructLocation(droid, structure type, x, y[, maxBlockingTiles])
 //--
 //-- Pick a location for constructing a certain type of building near some given position.
-//-- Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
+//-- Returns an object containing "type" ```POSITION```, and "x" and "y" values, if successful.
 //--
 optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles))
 {
@@ -1667,7 +1667,7 @@ bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, 
 
 //-- ## terrainType(x, y)
 //--
-//-- Returns tile type of a given map tile, such as TER_WATER for water tiles or TER_CLIFFFACE for cliffs.
+//-- Returns tile type of a given map tile, such as ```TER_WATER``` for water tiles or ```TER_CLIFFFACE``` for cliffs.
 //-- Tile types regulate which units may pass through this tile. (3.2+ only)
 //--
 int wzapi::terrainType(WZAPI_PARAMS(int x, int y))
@@ -1971,7 +1971,7 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 	return psFeature;
 }
 
-//-- ## componentAvailable([component type,] component name)
+//-- ## componentAvailable([component type, ]component name)
 //--
 //-- Checks whether a given component is available to the current player. The first argument is
 //-- optional and deprecated.
@@ -2008,7 +2008,7 @@ bool wzapi::safeDest(WZAPI_PARAMS(int player, int x, int y))
 	return (!(auxTile(x, y, player) & AUXBITS_DANGER));
 }
 
-//-- ## activateStructure(structure, [target[, ability]])
+//-- ## activateStructure(structure[, target])
 //--
 //-- Activate a special ability on a structure. Currently only works on the lassat.
 //-- The lassat needs a target.
@@ -2172,8 +2172,8 @@ int wzapi::getExperienceModifier(WZAPI_PARAMS(int player))
 //-- ## setDroidLimit(player, value[, droid type])
 //--
 //-- Set the maximum number of droids that this player can produce. If a third
-//-- parameter is added, this is the droid type to limit. It can be DROID_ANY
-//-- for droids in general, DROID_CONSTRUCT for constructors, or DROID_COMMAND
+//-- parameter is added, this is the droid type to limit. It can be ```DROID_ANY```
+//-- for droids in general, ```DROID_CONSTRUCT``` for constructors, or ```DROID_COMMAND```
 //-- for commanders. (3.2+ only)
 //--
 bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int value, optional<int> _droidType))
@@ -2335,7 +2335,7 @@ bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional
 	return true;
 }
 
-//-- ## gameOverMessage(won, showBackDrop, showOutro)
+//-- ## gameOverMessage(won[, showBackDrop[, showOutro]])
 //--
 //-- End game in victory or defeat.
 //--
@@ -2480,7 +2480,7 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 //--
 //-- Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
 //-- is removed and the timer stopped. Time is in seconds.
-//-- If time equals to the magic LZ_COMPROMISED_TIME constant, reinforcement GUI ticker
+//-- If time equals to the magic ```LZ_COMPROMISED_TIME``` constant, reinforcement GUI ticker
 //-- is set to "--:--" and reinforcements are suppressed until this function is called
 //-- again with a regular time value.
 //--
@@ -2518,7 +2518,7 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _value))
 	return {};
 }
 
-//-- ## completeResearch(research[, player [, forceResearch]])
+//-- ## completeResearch(research[, player[, forceResearch]])
 //--
 //-- Finish a research for the given player.
 //-- forceResearch will allow a research topic to be researched again. 3.3+
@@ -2630,7 +2630,7 @@ wzapi::no_return_value wzapi::setPowerStorageMaximum(WZAPI_PARAMS(int power, opt
 	return {};
 }
 
-//-- ## extraPowerTime(time, player)
+//-- ## extraPowerTime(time[, player])
 //--
 //-- Increase a player's power as if that player had power income equal to current income
 //-- over the given amount of extra time. (3.2+ only)
@@ -2760,7 +2760,7 @@ wzapi::no_return_value wzapi::setMiniMap(WZAPI_PARAMS(bool visible))
 	return {};
 }
 
-//-- ## setReticuleButton(id, tooltip, filename, filenameHigh, callback)
+//-- ## setReticuleButton(id, tooltip, filename, filenameHigh[, callback])
 //--
 //-- Add reticule button. id is which button to change, where zero is zero is the middle button, then going clockwise from the
 //-- uppermost button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when
@@ -3021,7 +3021,7 @@ unsigned int wzapi::getStructureLimit(WZAPI_PARAMS(std::string structureName, op
 //-- ## countStruct(structure type[, player])
 //--
 //-- Count the number of structures of a given type.
-//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+//-- The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 //--
 int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _player))
 {
@@ -3047,8 +3047,8 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 //-- ## countDroid([droid type[, player]])
 //--
 //-- Count the number of droids that a given player has. Droid type must be either
-//-- DROID_ANY, DROID_COMMAND or DROID_CONSTRUCT.
-//-- The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+//-- ```DROID_ANY```, ```DROID_COMMAND``` or ```DROID_CONSTRUCT```.
+//-- The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 //--
 int wzapi::countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _player))
 {
@@ -3230,7 +3230,7 @@ wzapi::no_return_value wzapi::setTransporterExit(WZAPI_PARAMS(int x, int y, int 
 //--
 //-- Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
 //-- needs wrapping in a syncRequest. (3.3+ only.)
-//-- Recognized object flags: OBJECT_FLAG_UNSELECTABLE - makes object unavailable for selection from player UI.
+//-- Recognized object flags: ```OBJECT_FLAG_UNSELECTABLE``` - makes object unavailable for selection from player UI.
 //--
 wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool value)) MULTIPLAY_SYNCREQUEST_REQUIRED
 {
