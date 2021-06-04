@@ -637,15 +637,6 @@ public:
 			JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
 			return JS_NULL; } } while (0)
 
-#define SCRIPT_ASSERT_AND_RETURNERROR(context, expr, ...) \
-	do { bool _wzeval = (expr); \
-		if (!_wzeval) { debug(LOG_ERROR, __VA_ARGS__); \
-			return JS_ThrowReferenceError(context, "%s failed in %s at line %d", #expr, __FUNCTION__, __LINE__); \
-			} } while (0)
-
-#define SCRIPT_ASSERT_PLAYER(_context, _player) \
-	SCRIPT_ASSERT(_context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
-
 
 // ----------------------------------------------------------------------------------------
 // Utility functions -- not called directly from scripts
