@@ -4,17 +4,20 @@ This section describes functions that can be called from scripts to make
 things happen in the game (usually called our script 'API').
 
 ## profile(function[, arguments])
+
 Calls a function with given arguments, measures time it took to evaluate the function,
 and adds this time to performance monitor statistics. Transparently returns the
 function's return value. The function to run is the first parameter, and it
 _must be quoted_. (3.2+ only)
 
 ## include(file)
+
 Includes another source code file at this point. You should generally only specify the filename,
 not try to specify its path, here.
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 
 ## includeJSON(file)
+
 Reads a JSON file and returns an object. You should generally only specify the filename,
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 
@@ -53,12 +56,14 @@ parameter can be a **game object** to pass to the queued function. If the **game
 dies before the queued call runs, nothing happens.
 
 ## namespace(prefix)
+
 Registers a new event namespace. All events can now have this prefix. This is useful for
 code libraries, to implement event that do not conflict with events in main code. This
 function should be called from global; do not (for hopefully obvious reasons) put it
 inside an event.
 
 ## debugGetCallerFuncName()
+
 Returns the function name of the caller of the current context as a string (if available).
 ex.
 ```javascript
@@ -82,22 +87,19 @@ Return an array containing all the buildable templates for the given player. (3.
 
 Remove reticule button. DO NOT USE FOR ANYTHING.
 
-## removeBeacon(target player)
-
-Remove a beacon message sent to target player. Target may also be ```ALLIES```.
-Returns a boolean that is true on success. (3.2+ only)
-
 ## resetLabel(label[, filter])
 
 Reset the trigger on an label. Next time a unit enters the area, it will trigger
 an area event. Next time an object or a group is seen, it will trigger a seen event.
 Optionally add a filter on it in the second parameter, which can
-be a specific player to watch for, or ALL_PLAYERS by default.
+be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
+
 ## resetArea(label[, filter])
+
 Reset the trigger on an area. Next time a unit enters the area, it will trigger
 an area event. Optionally add a filter on it in the second parameter, which can
-be a specific player to watch for, or ALL_PLAYERS by default.
+be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
 
 ## enumLabels([filter])
@@ -128,14 +130,14 @@ Fetch something denoted by a label, a map position or its object ID. A label ref
 a position or a **game object** on the map defined using the map editor and stored
 together with the map. In this case, the only argument is a text label. The function
 returns an object that has a type variable defining what it is (in case this is
-unclear). This type will be one of DROID, STRUCTURE, FEATURE, AREA, GROUP or POSITION.
-The AREA has defined 'x', 'y', 'x2', and 'y2', while POSITION has only defined 'x' and 'y'.
-The GROUP type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
+unclear). This type will be one of ```DROID```, ```STRUCTURE```, ```FEATURE```, ```AREA```, ```GROUP``` or ```POSITION```.
+The ```AREA``` has defined 'x', 'y', 'x2', and 'y2', while ```POSITION``` has only defined 'x' and 'y'.
+The ```GROUP``` type has defined 'type' and 'id' of the group, which can be passed to enumGroup().
 This is a fast operation of O(log n) algorithmic complexity. If the label is not found, an
 undefined value is returned. If whatever object the label should point at no longer exists,
 a null value is returned.
 
-You can also fetch a STRUCTURE or FEATURE type game object from a given map position (if any).
+You can also fetch a ```STRUCTURE``` or ```FEATURE``` type game object from a given map position (if any).
 This is a very fast operation of O(1) algorithmic complexity. Droids cannot be fetched in this
 manner, since they do not have a unique placement on map tiles. Finally, you can fetch an object using
 its ID, in which case you need to pass its type, owner and unique object ID. This is an
@@ -144,10 +146,10 @@ operation of O(n) algorithmic complexity. (3.2+ only)
 ## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
 
 Returns an array of game objects seen within the given area that passes the optional filter
-which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
-ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
+which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
+```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
 returned; by default only visible objects are returned. The label can either be actual
-positions or a label to an AREA. Calling this function is much faster than iterating over all
+positions or a label to an ```AREA```. Calling this function is much faster than iterating over all
 game objects using other enum functions. (3.2+ only)
 
 ## enumGroup(group)
@@ -215,7 +217,7 @@ Set the ambient, diffuse and specular colour intensities of the Sun lighting sou
 
 ## setWeather(weather type)
 
-Set the current weather. This should be one of WEATHER_RAIN, WEATHER_SNOW or WEATHER_CLEAR. (3.2+ only)
+Set the current weather. This should be one of ```WEATHER_RAIN```, ```WEATHER_SNOW``` or ```WEATHER_CLEAR```. (3.2+ only)
 
 ## setSky(texture file, wind speed, skybox scale)
 
@@ -318,7 +320,7 @@ See wzscript docs for info, to the extent any exist. (3.2+ only)
 
 ## hackGetObj(type, player, id)
 
-Function to find and return a game object of DROID, FEATURE or STRUCTURE types, if it exists.
+Function to find and return a game object of ```DROID```, ```FEATURE``` or ```STRUCTURE``` types, if it exists.
 Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
 
 ## hackAssert(condition, message...)
@@ -346,7 +348,7 @@ Currently only used from the tutorial.
 
 ## hackMarkTiles([label | x, y[, x2, y2]])
 
-Mark the given tile(s) on the map. Either give a POSITION or AREA label,
+Mark the given tile(s) on the map. Either give a ```POSITION``` or ```AREA``` label,
 or a tile x, y position, or four positions for a square area. If no parameter
 is given, all marked tiles are cleared. (3.2+ only)
 
@@ -428,8 +430,8 @@ Returns an array of all research objects that are currently and immediately avai
 ## enumRange(x, y, range[, filter[, seen]])
 
 Returns an array of game objects seen within range of given position that passes the optional filter
-which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
-ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
+which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
+```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
 returned; by default only visible objects are returned. Calling this function is much faster than
 iterating over all game objects using other enum functions. (3.2+ only)
 
@@ -441,7 +443,7 @@ second parameter is the technology to pursue, as a text string as defined in "re
 The second parameter may also be an array of such strings. The first technology that has
 not yet been researched in that list will be pursued.
 
-## findResearch(research, [player])
+## findResearch(research[, player])
 
 Return list of research items remaining to be researched for the given research item. (3.2+ only)
 (Optional second argument 3.2.3+ only)
@@ -469,7 +471,7 @@ Returns true if given structure can be built. It checks both research and unit l
 ## pickStructLocation(droid, structure type, x, y[, maxBlockingTiles])
 
 Pick a location for constructing a certain type of building near some given position.
-Returns an object containing "type" POSITION, and "x" and "y" values, if successful.
+Returns an object containing "type" ```POSITION```, and "x" and "y" values, if successful.
 
 ## droidCanReach(droid, x, y)
 
@@ -483,7 +485,7 @@ Does not take player built blockades into account. (3.2+ only)
 
 ## terrainType(x, y)
 
-Returns tile type of a given map tile, such as TER_WATER for water tiles or TER_CLIFFFACE for cliffs.
+Returns tile type of a given map tile, such as ```TER_WATER``` for water tiles or ```TER_CLIFFFACE``` for cliffs.
 Tile types regulate which units may pass through this tile. (3.2+ only)
 
 ## tileIsBurning(x, y)
@@ -542,7 +544,7 @@ Returns true if given droid is a VTOL (not including transports).
 Returns true if given player is safe from hostile fire at the given location, to
 the best of that player's map knowledge. Does not work in campaign at the moment.
 
-## activateStructure(structure, [target[, ability]])
+## activateStructure(structure[, target])
 
 Activate a special ability on a structure. Currently only works on the lassat.
 The lassat needs a target.
@@ -583,7 +585,7 @@ Get the percentage of experience this player droids are going to gain. (3.2+ onl
 
 Set the maximum number of droids that this player can produce. If a third
 parameter is added, this is the droid type to limit. It can be DROID_ANY
-for droids in general, DROID_CONSTRUCT for constructors, or DROID_COMMAND
+for droids in general, ```DROID_CONSTRUCT``` for constructors, or ```DROID_COMMAND```
 for commanders. (3.2+ only)
 
 ## setCommanderLimit(player, value)
@@ -616,7 +618,7 @@ Center the player's camera at the given position.
 
 Play a sound, optionally at a location.
 
-## gameOverMessage(won, showBackDrop, showOutro)
+## gameOverMessage(won[, showBackDrop[, showOutro]])
 
 End game in victory or defeat.
 
@@ -640,11 +642,11 @@ Get time remaining on mission countdown in seconds. (3.2+ only)
 
 Set time for reinforcements to arrive. If time is negative, the reinforcement GUI
 is removed and the timer stopped. Time is in seconds.
-If time equals to the magic LZ_COMPROMISED_TIME constant, reinforcement GUI ticker
+If time equals to the magic ```LZ_COMPROMISED_TIME``` constant, reinforcement GUI ticker
 is set to "--:--" and reinforcements are suppressed until this function is called
 again with a regular time value.
 
-## completeResearch(research[, player [, forceResearch]])
+## completeResearch(research[, player[, forceResearch]])
 
 Finish a research for the given player.
 forceResearch will allow a research topic to be researched again. 3.3+
@@ -669,7 +671,7 @@ Set a player's power modifier percentage. (Do not use this in an AI script.) (3.
 
 Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ only)
 
-## extraPowerTime(time, player)
+## extraPowerTime(time[, player])
 
 Increase a player's power as if that player had power income equal to current income
 over the given amount of extra time. (3.2+ only)
@@ -694,7 +696,7 @@ Remove a template.
 
 Turns visible minimap on or off in the GUI.
 
-## setReticuleButton(id, tooltip, filename, filenameHigh, callback)
+## setReticuleButton(id, tooltip, filename, filenameHigh[, callback])
 
 Add reticule button. id is which button to change, where zero is zero is the middle button, then going clockwise from the
 uppermost button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when
@@ -766,13 +768,13 @@ Returns build limits for a structure.
 ## countStruct(structure type[, player])
 
 Count the number of structures of a given type.
-The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 
 ## countDroid([droid type[, player]])
 
 Count the number of droids that a given player has. Droid type must be either
-DROID_ANY, DROID_COMMAND or DROID_CONSTRUCT.
-The player parameter can be a specific player, ALL_PLAYERS, ALLIES or ENEMIES.
+```DROID_ANY```, ```DROID_COMMAND``` or ```DROID_CONSTRUCT```.
+The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 
 ## loadLevel(level name)
 
@@ -813,7 +815,7 @@ Set the exit position for the mission transporter. (3.2+ only)
 
 Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
 needs wrapping in a syncRequest. (3.3+ only.)
-Recognized object flags: OBJECT_FLAG_UNSELECTABLE - makes object unavailable for selection from player UI.
+Recognized object flags: ```OBJECT_FLAG_UNSELECTABLE``` - makes object unavailable for selection from player UI.
 
 ## fireWeaponAtLoc(weapon, x, y[, player])
 
@@ -824,4 +826,3 @@ may have different friendly fire logic for a few weapons (like the lassat).
 ## fireWeaponAtObj(weapon, game object[, player])
 
 Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
-
