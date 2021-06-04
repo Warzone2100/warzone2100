@@ -381,7 +381,7 @@ public:
 	nlohmann::json constructStartPositions();
 public:
 	// Label functions
-	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string label, optional<int> filter));
+	static wzapi::no_return_value resetLabel(WZAPI_PARAMS(std::string label, optional<int> playerFilter));
 	static std::vector<std::string> enumLabels(WZAPI_PARAMS(optional<int> filterLabelType));
 
 	static wzapi::no_return_value addLabel(WZAPI_PARAMS(generic_script_object object, std::string label, optional<int> _triggered));

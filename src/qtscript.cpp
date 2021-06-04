@@ -2133,26 +2133,26 @@ bool scripting_engine::writeLabels(const char *filename)
 #define SCRIPT_ASSERT_PLAYER(retval, _context, _player) \
 	SCRIPT_ASSERT(retval, _context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
-//-- ## resetLabel(label[, filter])
+//-- ## resetLabel(label[, playerFilter])
 //--
 //-- Reset the trigger on an label. Next time a unit enters the area, it will trigger
 //-- an area event. Next time an object or a group is seen, it will trigger a seen event.
 //-- Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ALL_PLAYERS by default.
+//-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-//-- ## resetArea(label[, filter])
+//-- ## resetArea(label[, playerFilter])
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
-//-- be a specific player to watch for, or ALL_PLAYERS by default.
+//-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. DEPRECATED - use resetLabel instead. (3.2+ only)
 //--
-wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> filter))
+wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string labelName, optional<int> playerFilter))
 {
 	LABELMAP& labels = scripting_engine::instance().labels;
 	SCRIPT_ASSERT({}, context, labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
 	LABEL &l = labels[labelName];
 	l.triggered = 0; // make active again
-	l.subscriber = (filter.has_value()) ? filter.value() : ALL_PLAYERS;
+	l.subscriber = (playerFilter.has_value()) ? playerFilter.value() : ALL_PLAYERS;
 	return {};
 }
 
@@ -2478,8 +2478,8 @@ generic_script_object scripting_engine::getObjectFromLabel(WZAPI_PARAMS(const st
 //-- ## enumArea(<x1, y1, x2, y2 | label>[, filter[, seen]])
 //--
 //-- Returns an array of game objects seen within the given area that passes the optional filter
-//-- which can be one of a player index, ALL_PLAYERS, ALLIES or ENEMIES. By default, filter is
-//-- ALL_PLAYERS. Finally an optional parameter can specify whether only visible objects should be
+//-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
+//-- ```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
 //-- returned; by default only visible objects are returned. The label can either be actual
 //-- positions or a label to an AREA. Calling this function is much faster than iterating over all
 //-- game objects using other enum functions. (3.2+ only)
