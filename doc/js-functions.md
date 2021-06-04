@@ -87,7 +87,7 @@ Return an array containing all the buildable templates for the given player. (3.
 
 Remove reticule button. DO NOT USE FOR ANYTHING.
 
-## resetLabel(label[, filter])
+## resetLabel(label[, playerFilter])
 
 Reset the trigger on an label. Next time a unit enters the area, it will trigger
 an area event. Next time an object or a group is seen, it will trigger a seen event.
@@ -95,7 +95,7 @@ Optionally add a filter on it in the second parameter, which can
 be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
 
-## resetArea(label[, filter])
+## resetArea(label[, playerFilter])
 
 Reset the trigger on an area. Next time a unit enters the area, it will trigger
 an area event. Optionally add a filter on it in the second parameter, which can
@@ -372,7 +372,7 @@ Clear the console. (3.3+ only)
 
 Is given structure idle?
 
-## enumStruct([player[, structure type[, looking player]]])
+## enumStruct([player[, structure type[, playerFilter]]])
 
 Returns an array of structure objects. If no parameters given, it will
 return all of the structures for the current player. The second parameter
@@ -381,7 +381,7 @@ can be either a string with the name of the structure type as defined in
 third parameter can be used to filter by visibility, the default is not
 to filter.
 
-## enumStructOffWorld([player[, structure type[, looking player]]])
+## enumStructOffWorld([player[, structure type[, playerFilter]]])
 
 Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 If no parameters given, it will return all of the structures for the current player.
@@ -390,14 +390,14 @@ in "structures.json", or a stattype as defined in ```Structure```.
 The third parameter can be used to filter by visibility, the default is not
 to filter.
 
-## enumDroid([player[, droid type[, looking player]]])
+## enumDroid([player[, droid type[, playerFilter]]])
 
 Returns an array of droid objects. If no parameters given, it will
 return all of the droids for the current player. The second, optional parameter
 is the name of the droid type. The third parameter can be used to filter by
 visibility - the default is not to filter.
 
-## enumFeature(player[, name])
+## enumFeature(playerFilter[, name])
 
 Returns an array of all features seen by player of given name, as defined in "features.json".
 If player is ```ALL_PLAYERS```, it will return all features irrespective of visibility to any player. If
@@ -427,7 +427,7 @@ its definition in "research.json". If not found, returns null.
 
 Returns an array of all research objects that are currently and immediately available for research.
 
-## enumRange(x, y, range[, filter[, seen]])
+## enumRange(x, y, range[, playerFilter[, seen]])
 
 Returns an array of game objects seen within range of given position that passes the optional filter
 which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
@@ -549,17 +549,17 @@ the best of that player's map knowledge. Does not work in campaign at the moment
 Activate a special ability on a structure. Currently only works on the lassat.
 The lassat needs a target.
 
-## chat(target player, message)
+## chat(playerFilter, message)
 
 Send a message to target player. Target may also be ```ALL_PLAYERS``` or ```ALLIES```.
 Returns a boolean that is true on success. (3.2+ only)
 
-## addBeacon(x, y, target player[, message])
+## addBeacon(x, y, playerFilter[, message])
 
 Send a beacon message to target player. Target may also be ```ALLIES```.
 Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
 
-## removeBeacon(target player)
+## removeBeacon(playerFilter)
 
 Remove a beacon message sent to target player. Target may also be ```ALLIES```.
 Returns a boolean that is true on success. (3.2+ only)
@@ -765,16 +765,16 @@ use as addStructure(structure id, players, x*128, y*128)
 
 Returns build limits for a structure.
 
-## countStruct(structure type[, player])
+## countStruct(structure type[, playerFilter])
 
 Count the number of structures of a given type.
-The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 
-## countDroid([droid type[, player]])
+## countDroid([droid type[, playerFilter]])
 
 Count the number of droids that a given player has. Droid type must be either
 ```DROID_ANY```, ```DROID_COMMAND``` or ```DROID_CONSTRUCT```.
-The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 
 ## loadLevel(level name)
 
@@ -784,20 +784,20 @@ Load the level with the given name.
 
 Set the amount of experience a droid has. Experience is read using floating point precision.
 
-## donateObject(object, to)
+## donateObject(object, player)
 
 Donate a game object (restricted to droids before 3.2.3) to another player. Returns true if
 donation was successful. May return false if this donation would push the receiving player
 over unit limits. (3.2+ only)
 
-## donatePower(amount, to)
+## donatePower(amount, player)
 
 Donate power to another player. Returns true. (3.2+ only)
 
-## setNoGoArea(x1, y1, x2, y2, player)
+## setNoGoArea(x1, y1, x2, y2, playerFilter)
 
 Creates an area on the map on which nothing can be built. If player is zero,
-then landing lights are placed. If player is -1, then a limbo landing zone
+then landing lights are placed. If player is ```ALL_PLAYERS```, then a limbo landing zone
 is created and limbo droids placed.
 
 ## startTransporterEntry(x, y, player)
