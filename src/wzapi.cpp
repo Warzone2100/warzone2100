@@ -989,14 +989,14 @@ bool wzapi::structureIdle(WZAPI_PARAMS(const STRUCTURE *psStruct))
 	return ::structureIdle(psStruct);
 }
 
-std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _looking), STRUCTURE **psStructLists)
+std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _player, optional<wzapi::STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter), STRUCTURE **psStructLists)
 {
 	std::vector<const STRUCTURE *> matches;
 	WzString statsName;
 	STRUCTURE_TYPE type = NUM_DIFF_BUILDINGS;
 
 	int player = (_player.has_value()) ? _player.value() : context.player();
-	int looking = (_looking.has_value()) ? _looking.value() : ALL_PLAYERS;
+	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
 
 	if (_structureType.has_value())
 	{
@@ -1005,10 +1005,10 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 	}
 
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	SCRIPT_ASSERT({}, context, (looking >= 0 && looking < MAX_PLAYERS) || looking == ALL_PLAYERS, "Looking player index out of range: %d", looking);
+	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
 	for (STRUCTURE *psStruct = psStructLists[player]; psStruct; psStruct = psStruct->psNext)
 	{
-		if ((looking == ALL_PLAYERS || psStruct->visible[looking])
+		if ((playerFilter == ALL_PLAYERS || psStruct->visible[playerFilter])
 		    && !psStruct->died
 		    && (type == NUM_DIFF_BUILDINGS || type == psStruct->pStructureType->type)
 		    && (statsName.isEmpty() || statsName.compare(psStruct->pStructureType->id) == 0))
@@ -1020,7 +1020,7 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 	return matches;
 }
 
-//-- ## enumStruct([player[, structure type[, looking player]]])
+//-- ## enumStruct([player[, structure type[, playerFilter]]])
 //--
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
@@ -1029,12 +1029,12 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 //-- third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
-std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _looking))
+std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter))
 {
-	return _enumStruct_fromList(context, _player, _structureType, _looking, apsStructLists);
+	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, apsStructLists);
 }
 
-//-- ## enumStructOffWorld([player[, structure type[, looking player]]])
+//-- ## enumStructOffWorld([player[, structure type[, playerFilter]]])
 //--
 //-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 //-- If no parameters given, it will return all of the structures for the current player.
@@ -1043,26 +1043,26 @@ std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _pla
 //-- The third parameter can be used to filter by visibility, the default is not
 //-- to filter.
 //--
-std::vector<const STRUCTURE *> wzapi::enumStructOffWorld(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _looking))
+std::vector<const STRUCTURE *> wzapi::enumStructOffWorld(WZAPI_PARAMS(optional<int> _player, optional<STRUCTURE_TYPE_or_statsName_string> _structureType, optional<int> _playerFilter))
 {
-	return _enumStruct_fromList(context, _player, _structureType, _looking, (mission.apsStructLists));
+	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, (mission.apsStructLists));
 }
 
-//-- ## enumDroid([player[, droid type[, looking player]]])
+//-- ## enumDroid([player[, droid type[, playerFilter]]])
 //--
 //-- Returns an array of droid objects. If no parameters given, it will
 //-- return all of the droids for the current player. The second, optional parameter
 //-- is the name of the droid type. The third parameter can be used to filter by
 //-- visibility - the default is not to filter.
 //--
-std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType, optional<int> _looking))
+std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType, optional<int> _playerFilter))
 {
 	std::vector<const DROID *> matches;
 	DROID_TYPE droidType = DROID_ANY;
 	DROID_TYPE droidType2;
 
 	int player = (_player.has_value()) ? _player.value() : context.player();
-	int looking = (_looking.has_value()) ? _looking.value() : ALL_PLAYERS;
+	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
 
 	if (_droidType.has_value())
 	{
@@ -1084,10 +1084,10 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 		break;
 	}
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	SCRIPT_ASSERT({}, context, (looking >= 0 && looking < MAX_PLAYERS) || looking == ALL_PLAYERS, "Looking player index out of range: %d", looking);
+	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
 	for (DROID *psDroid = apsDroidLists[player]; psDroid; psDroid = psDroid->psNext)
 	{
-		if ((looking == ALL_PLAYERS || psDroid->visible[looking])
+		if ((playerFilter == ALL_PLAYERS || psDroid->visible[playerFilter])
 		    && !psDroid->died
 		    && (droidType == DROID_ANY || droidType == psDroid->droidType || droidType2 == psDroid->droidType))
 		{
@@ -1097,15 +1097,15 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 	return matches;
 }
 
-//-- ## enumFeature(player[, name])
+//-- ## enumFeature(playerFilter[, name])
 //--
 //-- Returns an array of all features seen by player of given name, as defined in "features.json".
 //-- If player is ```ALL_PLAYERS```, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
 //--
-std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int looking, optional<std::string> _statsName))
+std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, optional<std::string> _statsName))
 {
-	SCRIPT_ASSERT({}, context, (looking >= 0 && looking < MAX_PLAYERS) || looking == ALL_PLAYERS, "Looking player index out of range: %d", looking);
+	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
 	WzString statsName;
 	if (_statsName.has_value())
 	{
@@ -1115,7 +1115,7 @@ std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int looking, option
 	std::vector<const FEATURE *> matches;
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 	{
-		if ((looking == ALL_PLAYERS || psFeat->visible[looking])
+		if ((playerFilter == ALL_PLAYERS || psFeat->visible[playerFilter])
 		    && !psFeat->died
 		    && (statsName.isEmpty() || statsName.compare(psFeat->psStats->id) == 0))
 		{
@@ -1219,24 +1219,24 @@ wzapi::researchResults wzapi::enumResearch(WZAPI_NO_PARAMS)
 	return result;
 }
 
-//-- ## enumRange(x, y, range[, filter[, seen]])
+//-- ## enumRange(x, y, range[, playerFilter[, seen]])
 //--
-//-- Returns an array of game objects seen within range of given position that passes the optional filter
-//-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, filter is
+//-- Returns an array of game objects seen within range of given position that passes the optional playerFilter
+//-- which can be one of a player index, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```. By default, playerFilter is
 //-- ```ALL_PLAYERS```. Finally an optional parameter can specify whether only visible objects should be
 //-- returned; by default only visible objects are returned. Calling this function is much faster than
 //-- iterating over all game objects using other enum functions. (3.2+ only)
 //--
-std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, int _range, optional<int> _filter, optional<bool> _seen))
+std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, int _range, optional<int> _playerFilter, optional<bool> _seen))
 {
 	int player = context.player();
 	int x = world_coord(_x);
 	int y = world_coord(_y);
 	int range = world_coord(_range);
-	int filter = (_filter.has_value()) ? _filter.value() : ALL_PLAYERS;
+	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
 	bool seen = (_seen.has_value()) ? _seen.value() : true;
 
-	SCRIPT_ASSERT({}, context, (filter >= 0 && filter < MAX_PLAYERS) || filter == ALL_PLAYERS || filter == ALLIES || filter == ENEMIES, "Filter player index out of range: %d", filter);
+	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Filter player index out of range: %d", playerFilter);
 
 	static GridList gridList;  // static to avoid allocations. // WARNING: THREAD-SAFETY
 	gridList = gridStartIterate(x, y, range);
@@ -1246,9 +1246,9 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 		const BASE_OBJECT *psObj = *gi;
 		if ((psObj->visible[player] || !seen) && !psObj->died)
 		{
-			if ((filter >= 0 && psObj->player == filter) || filter == ALL_PLAYERS
-			    || (filter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
-			    || (filter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
+			if ((playerFilter >= 0 && psObj->player == playerFilter) || playerFilter == ALL_PLAYERS
+			    || (playerFilter == ALLIES && psObj->type != OBJ_FEATURE && aiCheckAlliances(psObj->player, player))
+			    || (playerFilter == ENEMIES && psObj->type != OBJ_FEATURE && !aiCheckAlliances(psObj->player, player)))
 			{
 				list.push_back(psObj);
 			}
@@ -2024,35 +2024,35 @@ bool wzapi::activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OB
 	return true;
 }
 
-//-- ## chat(target player, message)
+//-- ## chat(playerFilter, message)
 //--
-//-- Send a message to target player. Target may also be ```ALL_PLAYERS``` or ```ALLIES```.
+//-- Send a message to playerFilter. playerFilter may also be ```ALL_PLAYERS``` or ```ALLIES```.
 //-- Returns a boolean that is true on success. (3.2+ only)
 //--
-bool wzapi::chat(WZAPI_PARAMS(int target, std::string message))
+bool wzapi::chat(WZAPI_PARAMS(int playerFilter, std::string message))
 {
 	int player = context.player();
-	SCRIPT_ASSERT(false, context, (target >= 0 && target < MAX_PLAYERS) || target == ALL_PLAYERS || target == ALLIES, "Message to invalid player %d", target);
+	SCRIPT_ASSERT(false, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES, "Message to invalid player %d", playerFilter);
 	auto chatMessage = InGameChatMessage(player, message.c_str());
-	if (target == ALLIES) // allies
+	if (playerFilter == ALLIES) // allies
 	{
 		chatMessage.toAllies = true;
 	}
-	else if (target != ALL_PLAYERS) // specific player
+	else if (playerFilter != ALL_PLAYERS) // specific player
 	{
-		chatMessage.addReceiverByIndex(target);
+		chatMessage.addReceiverByIndex(playerFilter);
 	}
 
 	chatMessage.send();
 	return true;
 }
 
-//-- ## addBeacon(x, y, target player[, message])
+//-- ## addBeacon(x, y, playerFilter[, message])
 //--
 //-- Send a beacon message to target player. Target may also be ```ALLIES```.
 //-- Message is currently unused. Returns a boolean that is true on success. (3.2+ only)
 //--
-bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int target, optional<std::string> _message))
+bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int playerFilter, optional<std::string> _message))
 {
 	int x = world_coord(_x);
 	int y = world_coord(_y);
@@ -2063,10 +2063,10 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int target, optional<std::str
 		message = _message.value();
 	}
 	int me = context.player();
-	SCRIPT_ASSERT(false, context, (target >= 0 && target < MAX_PLAYERS) || target == ALLIES, "Message to invalid player %d", target);
+	SCRIPT_ASSERT(false, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALLIES, "Message to invalid player filter %d", playerFilter);
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (i != me && (i == target || (target == ALLIES && aiCheckAlliances(i, me))))
+		if (i != me && (i == playerFilter || (playerFilter == ALLIES && aiCheckAlliances(i, me))))
 		{
 			debug(LOG_MSG, "adding script beacon to %d from %d", i, me);
 			sendBeaconToPlayer(x, y, i, me, message.c_str());
@@ -2075,19 +2075,19 @@ bool wzapi::addBeacon(WZAPI_PARAMS(int _x, int _y, int target, optional<std::str
 	return true;
 }
 
-//-- ## removeBeacon(target player)
+//-- ## removeBeacon(playerFilter)
 //--
-//-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
+//-- Remove a beacon message sent to playerFilter. Target may also be ```ALLIES```.
 //-- Returns a boolean that is true on success. (3.2+ only)
 //--
-bool wzapi::removeBeacon(WZAPI_PARAMS(int target))
+bool wzapi::removeBeacon(WZAPI_PARAMS(int playerFilter))
 {
 	int me = context.player();
 
-	SCRIPT_ASSERT(false, context, (target >= 0 && target < MAX_PLAYERS) || target == ALLIES, "Message to invalid player %d", target);
+	SCRIPT_ASSERT(false, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALLIES, "Message to invalid player filter %d", playerFilter);
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (i == target || (target == ALLIES && aiCheckAlliances(i, me)))
+		if (i == playerFilter || (playerFilter == ALLIES && aiCheckAlliances(i, me)))
 		{
 			MESSAGE *psMessage = findBeaconMsg(i, me);
 			if (psMessage)
@@ -3017,25 +3017,25 @@ unsigned int wzapi::getStructureLimit(WZAPI_PARAMS(std::string structureName, op
 	return (asStructureStats[index].upgrade[player].limit);
 }
 
-//-- ## countStruct(structure type[, player])
+//-- ## countStruct(structure type[, playerFilter])
 //--
 //-- Count the number of structures of a given type.
-//-- The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+//-- The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 //--
-int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _player))
+int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _playerFilter))
 {
 	int index = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
 	SCRIPT_ASSERT(-1, context, index < numStructureStats && index >= 0, "Structure %s not found", structureName.c_str());
 	int me = context.player();
-	int player = (_player.has_value()) ? _player.value() : me;
-	SCRIPT_ASSERT(-1, context, (player >= 0 && player < MAX_PLAYERS) || player == ALL_PLAYERS || player == ALLIES || player == ENEMIES, "Player index out of range: %d", player);
+	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : me;
+	SCRIPT_ASSERT(-1, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Player filter index out of range: %d", playerFilter);
 
 	int quantity = 0;
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (player == i || player == ALL_PLAYERS
-		    || (player == ALLIES && aiCheckAlliances(i, me))
-		    || (player == ENEMIES && !aiCheckAlliances(i, me)))
+		if (playerFilter == i || playerFilter == ALL_PLAYERS
+		    || (playerFilter == ALLIES && aiCheckAlliances(i, me))
+		    || (playerFilter == ENEMIES && !aiCheckAlliances(i, me)))
 		{
 			quantity += asStructureStats[index].curCount[i];
 		}
@@ -3043,26 +3043,26 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 	return quantity;
 }
 
-//-- ## countDroid([droid type[, player]])
+//-- ## countDroid([droid type[, playerFilter]])
 //--
 //-- Count the number of droids that a given player has. Droid type must be either
 //-- ```DROID_ANY```, ```DROID_COMMAND``` or ```DROID_CONSTRUCT```.
-//-- The player parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
+//-- The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 //--
-int wzapi::countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _player))
+int wzapi::countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _playerFilter))
 {
 	int type = (_type.has_value()) ? _type.value() : DROID_ANY;
 	SCRIPT_ASSERT(-1, context, type <= DROID_ANY, "Bad droid type parameter");
 	int me = context.player();
-	int player = (_player.has_value()) ? _player.value() : me;
-	SCRIPT_ASSERT(-1, context, (player >= 0 && player < MAX_PLAYERS) || player == ALL_PLAYERS || player == ALLIES || player == ENEMIES, "Player index out of range: %d", player);
+	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : me;
+	SCRIPT_ASSERT(-1, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Player index out of range: %d", playerFilter);
 
 	int quantity = 0;
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (player == i || player == ALL_PLAYERS
-		    || (player == ALLIES && aiCheckAlliances(i, me))
-		    || (player == ENEMIES && !aiCheckAlliances(i, me)))
+		if (playerFilter == i || playerFilter == ALL_PLAYERS
+		    || (playerFilter == ALLIES && aiCheckAlliances(i, me))
+		    || (playerFilter == ENEMIES && !aiCheckAlliances(i, me)))
 		{
 			if (type == DROID_ANY)
 			{
@@ -3110,20 +3110,20 @@ wzapi::no_return_value wzapi::setDroidExperience(WZAPI_PARAMS(DROID *psDroid, do
 	return {};
 }
 
-//-- ## donateObject(object, to)
+//-- ## donateObject(object, player)
 //--
 //-- Donate a game object (restricted to droids before 3.2.3) to another player. Returns true if
 //-- donation was successful. May return false if this donation would push the receiving player
 //-- over unit limits. (3.2+ only)
 //--
-bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int toPlayer))
+bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int player))
 {
 	SCRIPT_ASSERT(false, context, psObject, "No valid object provided");
-	SCRIPT_ASSERT_PLAYER(false, context, toPlayer);
+	SCRIPT_ASSERT_PLAYER(false, context, player);
 
 	uint32_t object_id = psObject->id;
 	uint8_t from = psObject->player;
-	uint8_t to = static_cast<uint8_t>(toPlayer);
+	uint8_t to = static_cast<uint8_t>(player);
 	uint8_t giftType = 0;
 	if (psObject->type == OBJ_DROID)
 	{
@@ -3160,41 +3160,41 @@ bool wzapi::donateObject(WZAPI_PARAMS(BASE_OBJECT *psObject, int toPlayer))
 	return true;
 }
 
-//-- ## donatePower(amount, to)
+//-- ## donatePower(amount, player)
 //--
 //-- Donate power to another player. Returns true. (3.2+ only)
 //--
-bool wzapi::donatePower(WZAPI_PARAMS(int amount, int toPlayer))
+bool wzapi::donatePower(WZAPI_PARAMS(int amount, int player))
 {
 	int from = context.player();
-	giftPower(from, toPlayer, amount, true);
+	giftPower(from, player, amount, true);
 	return true;
 }
 
-//-- ## setNoGoArea(x1, y1, x2, y2, player)
+//-- ## setNoGoArea(x1, y1, x2, y2, playerFilter)
 //--
-//-- Creates an area on the map on which nothing can be built. If player is zero,
-//-- then landing lights are placed. If player is ```ALL_PLAYERS```, then a limbo landing zone
+//-- Creates an area on the map on which nothing can be built. If playerFilter is zero,
+//-- then landing lights are placed. If playerFilter is ```ALL_PLAYERS```, then a limbo landing zone
 //-- is created and limbo droids placed.
 //--
 // FIXME: missing a way to call initNoGoAreas(); check if we can call this in
 // every level start instead of through scripts
-wzapi::no_return_value wzapi::setNoGoArea(WZAPI_PARAMS(int x1, int y1, int x2, int y2, int player))
+wzapi::no_return_value wzapi::setNoGoArea(WZAPI_PARAMS(int x1, int y1, int x2, int y2, int playerFilter))
 {
 	SCRIPT_ASSERT({}, context, x1 >= 0, "Minimum scroll x value %d is less than zero - ", x1);
 	SCRIPT_ASSERT({}, context, y1 >= 0, "Minimum scroll y value %d is less than zero - ", y1);
 	SCRIPT_ASSERT({}, context, x2 <= mapWidth, "Maximum scroll x value %d is greater than mapWidth %d", x2, (int)mapWidth);
 	SCRIPT_ASSERT({}, context, y2 <= mapHeight, "Maximum scroll y value %d is greater than mapHeight %d", y2, (int)mapHeight);
-	SCRIPT_ASSERT({}, context, (player >= 0 && player < MAX_PLAYERS) || player == ALL_PLAYERS, "Bad player value %d", player);
+	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Bad player filter value %d", playerFilter);
 
-	if (player == ALL_PLAYERS)
+	if (playerFilter == ALL_PLAYERS)
 	{
 		::setNoGoArea(x1, y1, x2, y2, LIMBO_LANDING);
 		placeLimboDroids();	// this calls the Droids from the Limbo list onto the map
 	}
 	else
 	{
-		::setNoGoArea(x1, y1, x2, y2, player);
+		::setNoGoArea(x1, y1, x2, y2, playerFilter);
 	}
 	return {};
 }
