@@ -781,8 +781,8 @@
         "requiredResearch": [
             "R-Wpn-EMPCannon"
         ],
-        "researchPoints": 28800,
-        "researchPower": 450,
+        "researchPoints": 5000,
+        "researchPower": 156,
         "resultStructures": [
             "WallTower-EMP"
         ],
@@ -796,8 +796,8 @@
         "requiredResearch": [
             "R-Wpn-MortarEMP"
         ],
-        "researchPoints": 28800,
-        "researchPower": 450,
+        "researchPoints": 8000,
+        "researchPower": 250,
         "resultStructures": [
             "Emplacement-MortarEMP"
         ],
@@ -3350,7 +3350,7 @@
         "requiredResearch": [
             "R-Sys-Engineering03",
             "R-Struc-Research-Upgrade08",
-            "R-Sys-Sensor-WS"
+            "R-Sys-SpyTurret"
         ],
         "researchPoints": 14400,
         "researchPower": 450,
@@ -3578,12 +3578,10 @@
         "msgName": "RES_SY_SPT",
         "name": "Nexus Link Turret",
         "requiredResearch": [
-            "R-Sys-Engineering03",
-            "R-Struc-Research-Upgrade08",
-            "R-Sys-Sensor-WS"
+            "R-Comp-CommandTurret02"
         ],
-        "researchPoints": 14400,
-        "researchPower": 450,
+        "researchPoints": 10000,
+        "researchPower": 312,
         "resultComponents": [
             "SpyTurret01"
         ],
@@ -5380,11 +5378,12 @@
         "msgName": "RES_W_BMB6",
         "name": "EMP Missile Launcher",
         "requiredResearch": [
-            "R-Wpn-EMPCannon",
-            "R-Wpn-Bomb04"
+            "R-Comp-CommandTurret01",
+            "R-Struc-Research-Upgrade04",
+            "R-Wpn-Bomb01"
         ],
-        "researchPoints": 25000,
-        "researchPower": 450,
+        "researchPoints": 9200,
+        "researchPower": 287,
         "resultComponents": [
             "Bomb6-VTOL-EMP"
         ],
@@ -6011,10 +6010,12 @@
         "msgName": "RES_EMP_CANT",
         "name": "EMP Cannon",
         "requiredResearch": [
-            "R-Sys-SpyTurret"
+            "R-Comp-CommandTurret01",
+            "R-Struc-Research-Upgrade04",
+            "R-Wpn-Cannon2Mk1"
         ],
-        "researchPoints": 28800,
-        "researchPower": 450,
+        "researchPoints": 7200,
+        "researchPower": 225,
         "resultComponents": [
             "EMP-Cannon"
         ],
@@ -8397,10 +8398,12 @@
         "msgName": "RES_W_M2",
         "name": "EMP Mortar",
         "requiredResearch": [
-            "R-Wpn-EMPCannon"
+            "R-Comp-CommandTurret01",
+            "R-Struc-Research-Upgrade06",
+            "R-Wpn-Mortar01Lt"
         ],
-        "researchPoints": 20000,
-        "researchPower": 450,
+        "researchPoints": 10000,
+        "researchPower": 312,
         "resultComponents": [
             "MortarEMP"
         ],
