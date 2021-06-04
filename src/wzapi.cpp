@@ -2767,9 +2767,8 @@ wzapi::no_return_value wzapi::setMiniMap(WZAPI_PARAMS(bool visible))
 //-- you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
 //-- for such changes to take effect. (3.2+ only)
 //--
-wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int buttonID, std::string tooltip, std::string filename, std::string filenameDown, optional<std::string> callbackFuncName))
+wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int button, std::string tooltip, std::string filename, std::string filenameDown, optional<std::string> callbackFuncName))
 {
-	int button = buttonID;
 	SCRIPT_ASSERT({}, context, button >= 0 && button <= 6, "Invalid button %d", button);
 
 	WzString func;
