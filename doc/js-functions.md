@@ -680,7 +680,7 @@ over the given amount of extra time. (3.2+ only)
 
 Sets a number of restrictions appropriate for tutorial if set to true.
 
-## setDesign(allowDesign)
+## setDesign(allowDesignValue)
 
 Whether to allow player to design stuff.
 
@@ -733,7 +733,7 @@ The given component is made available for research for the given player.
 The given component is made available to the given player. This means the player can
 actually build designs with it.
 
-## allianceExistsBetween(player, player)
+## allianceExistsBetween(player1, player2)
 
 Returns true if an alliance exists between the two players, or they are the same player.
 
