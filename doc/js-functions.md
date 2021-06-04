@@ -294,7 +294,7 @@ Return the current mission type. (3.3+ only)
 
 Return the current fog reveal status. (3.3+ only)
 
-## setRevealStatus(bool)
+## setRevealStatus(status)
 
 Set the fog reveal status. (3.3+ only)
 
@@ -327,7 +327,7 @@ Otherwise, it will return null. This function is deprecated by getObject(). (3.2
 
 Function to perform unit testing. It will throw a script error and a game assert. (3.2+ only)
 
-## receiveAllEvents(bool)
+## receiveAllEvents([enabled])
 
 Make the current script receive all events, even those not meant for 'me'. (3.2+ only)
 
@@ -676,11 +676,11 @@ Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ o
 Increase a player's power as if that player had power income equal to current income
 over the given amount of extra time. (3.2+ only)
 
-## setTutorialMode(bool)
+## setTutorialMode(enableTutorialMode)
 
 Sets a number of restrictions appropriate for tutorial if set to true.
 
-## setDesign(bool)
+## setDesign(allowDesign)
 
 Whether to allow player to design stuff.
 
@@ -692,7 +692,7 @@ Enable a specific template (even if design is disabled).
 
 Remove a template.
 
-## setMiniMap(bool)
+## setMiniMap(visible)
 
 Turns visible minimap on or off in the GUI.
 

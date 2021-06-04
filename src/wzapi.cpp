@@ -661,7 +661,7 @@ bool wzapi::getRevealStatus(WZAPI_NO_PARAMS)
 	return ::getRevealStatus();
 }
 
-//-- ## setRevealStatus(bool)
+//-- ## setRevealStatus(status)
 //--
 //-- Set the fog reveal status. (3.3+ only)
 //--
@@ -2644,36 +2644,36 @@ wzapi::no_return_value wzapi::extraPowerTime(WZAPI_PARAMS(int time, optional<int
 	return {};
 }
 
-//-- ## setTutorialMode(bool)
+//-- ## setTutorialMode(enableTutorialMode)
 //--
 //-- Sets a number of restrictions appropriate for tutorial if set to true.
 //--
-wzapi::no_return_value wzapi::setTutorialMode(WZAPI_PARAMS(bool tutorialMode))
+wzapi::no_return_value wzapi::setTutorialMode(WZAPI_PARAMS(bool enableTutorialMode))
 {
-	bInTutorial = tutorialMode;
+	bInTutorial = enableTutorialMode;
 	return {};
 }
 
-//-- ## setDesign(bool)
+//-- ## setDesign(allowDesign)
 //--
 //-- Whether to allow player to design stuff.
 //--
-wzapi::no_return_value wzapi::setDesign(WZAPI_PARAMS(bool allowDesignValue))
+wzapi::no_return_value wzapi::setDesign(WZAPI_PARAMS(bool allowDesign))
 {
 	DROID_TEMPLATE *psCurr;
 	if (selectedPlayer >= MAX_PLAYERS) { return {}; }
 	// Switch on or off future templates
 	// FIXME: This dual data structure for templates is just plain insane.
-	enumerateTemplates(selectedPlayer, [allowDesignValue](DROID_TEMPLATE * psTempl) {
+	enumerateTemplates(selectedPlayer, [allowDesign](DROID_TEMPLATE * psTempl) {
 		bool researched = researchedTemplate(psTempl, selectedPlayer, true);
-		psTempl->enabled = (researched || allowDesignValue);
+		psTempl->enabled = (researched || allowDesign);
 		return true;
 	});
 	for (auto &localTemplate : localTemplates)
 	{
 		psCurr = &localTemplate;
 		bool researched = researchedTemplate(psCurr, selectedPlayer, true);
-		psCurr->enabled = (researched || allowDesignValue);
+		psCurr->enabled = (researched || allowDesign);
 	}
 	return {};
 }
@@ -2750,7 +2750,7 @@ bool wzapi::removeTemplate(WZAPI_PARAMS(std::string _templateName))
 	return true;
 }
 
-//-- ## setMiniMap(bool)
+//-- ## setMiniMap(visible)
 //--
 //-- Turns visible minimap on or off in the GUI.
 //--
