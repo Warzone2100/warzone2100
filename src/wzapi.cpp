@@ -766,7 +766,7 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 //-- ## hackGetObj(type, player, id)
 //--
 //-- Function to find and return a game object of ```DROID```, ```FEATURE``` or ```STRUCTURE``` types, if it exists.
-//-- Otherwise, it will return null. This function is deprecated by getObject(). (3.2+ only)
+//-- Otherwise, it will return null. This function is DEPRECATED by getObject(). (3.2+ only)
 //--
 wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED
 {
@@ -2202,7 +2202,7 @@ bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int value, optional<int> _dro
 //-- Set the maximum number of commanders that this player can produce.
 //-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 //--
-bool wzapi::setCommanderLimit(WZAPI_PARAMS(int player, int value))
+bool wzapi::setCommanderLimit(WZAPI_PARAMS(int player, int value)) WZAPI_DEPRECATED
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	setMaxCommanders(player, value);
@@ -2214,7 +2214,7 @@ bool wzapi::setCommanderLimit(WZAPI_PARAMS(int player, int value))
 //-- Set the maximum number of constructors that this player can produce.
 //-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 //--
-bool wzapi::setConstructorLimit(WZAPI_PARAMS(int player, int value))
+bool wzapi::setConstructorLimit(WZAPI_PARAMS(int player, int value)) WZAPI_DEPRECATED
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	setMaxConstructors(player, value);
@@ -2888,7 +2888,7 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 //-- ## removeStruct(structure)
 //--
 //-- Immediately remove the given structure from the map. Returns a boolean that is true on success.
-//-- No special effects are applied. Deprecated since 3.2. Use `removeObject` instead.
+//-- No special effects are applied. DEPRECATED since 3.2. Use `removeObject` instead.
 //--
 bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 {
