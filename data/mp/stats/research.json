@@ -295,7 +295,7 @@
         "name": "Super Auto-Cannon Cyborg",
         "requiredResearch": [
             "R-Wpn-Cannon5",
-            "R-Cyborg-Hvywpn-HPV"
+            "R-Cyborg-Hvywpn-Mcannon"
         ],
         "researchPoints": 4000,
         "researchPower": 125,
