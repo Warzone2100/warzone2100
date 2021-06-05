@@ -1514,7 +1514,6 @@
         "flightGfx": "FXTracer.PIE",
         "flightSpeed": 1400,
         "hitGfx": "FXMNExp.PIE",
-
         "hitpoints": 70,
         "id": "Cyb-Wpn-Grenade",
         "lightWorld": 1,
