@@ -331,7 +331,7 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality", "hasNormalmap", "hasSpecularmap", "hasHeightmap",
 			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular", "TextureHeight"} }),
 	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
-		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2" } }),
+		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
 		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix",
 			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
