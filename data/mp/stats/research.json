@@ -381,8 +381,8 @@
             "R-Cyborg-Metals04",
             "R-Wpn-Rocket07-Tank-Killer"
         ],
-        "researchPoints": 5000,
-        "researchPower": 156,
+        "researchPoints": 4500,
+        "researchPower": 141,
         "resultComponents": [
             "Cyb-Hvywpn-TK"
         ],
@@ -7884,7 +7884,7 @@
             "R-Wpn-RocketSlow-Accuracy02",
             "R-Struc-Research-Upgrade07"
         ],
-        "researchPoints": 14400,
+        "researchPoints": 16400,
         "researchPower": 450,
         "resultComponents": [
             "Cyb-Wpn-Atmiss",
@@ -9244,8 +9244,8 @@
             "R-Wpn-RocketSlow-Accuracy01",
             "R-Wpn-Rocket-Damage06"
         ],
-        "researchPoints": 10000,
-        "researchPower": 312,
+        "researchPoints": 7200,
+        "researchPower": 225,
         "resultComponents": [
             "Rocket-HvyA-T",
             "Rocket-VTOL-HvyA-T"
