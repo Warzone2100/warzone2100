@@ -364,6 +364,8 @@ void intAddInGamePopup()
 		return;
 	}
 
+	intCloseInGameOptions(false, false); //clear out option-like menus
+
 	audio_StopAll();
 
 	if (!gamePaused())
