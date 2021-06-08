@@ -25,53 +25,53 @@ msgstr "目标：搜寻并获得神经突触科技"
 #: data/base/messages/strings/cam1strings.txt:4
 #: data/base/sequenceaudio/cam1/c001.txa:13
 msgid "Establish a base, then search for a Pre-Collapse structure."
-msgstr "建立一个基地并搜寻文明的遗迹"
+msgstr "建立基地并搜寻文明遗迹。"
 
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "这个遗迹存在着对我们的计画来说相当重要的科技"
+msgstr "此遗迹有对项目成功至关重要的技术。"
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
-msgstr "ALPHA基地任务：拾荒者入侵！"
+msgstr "ALPHA 基地任务：拾荒者入侵！"
 
 #: data/base/messages/strings/cam1strings.txt:8
 msgid "Scavenger raiders are approaching our base."
-msgstr "拾荒者正准备入侵我们的基地"
+msgstr "拾荒者正准备入侵我们的基地。"
 
 #: data/base/messages/strings/cam1strings.txt:9
 msgid "Defend the base then destroy the Scavenger camps."
-msgstr "防卫基地并摧毁拾荒者的营地"
+msgstr "保卫基地，然后摧毁拾荒者的营地。"
 
 #: data/base/messages/strings/cam1strings.txt:11
 #: data/base/messages/strings/cam1strings.txt:65
 msgid "ALPHA BASE MISSION: Power Surge Detected"
-msgstr "ALPHA 基地任务：发现能源！"
+msgstr "ALPHA 基地任务：侦测能源"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr "在我们所在位置的南方发现了有能源的迹象"
+msgstr "在我们位置南边检测到能源迹象。"
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
-msgstr "调查此区域并确保其安全"
+msgstr "调查并确保该地区的安全。"
 
 #: data/base/messages/strings/cam1strings.txt:15
 msgid "ALPHA BASE MISSION: The New Paradigm"
-msgstr "ALPHA基地任务：New Paradigm"
+msgstr "ALPHA 基地任务：New Paradigm"
 
 #: data/base/messages/strings/cam1strings.txt:16
 msgid "The New Paradigm control superior weapons technology."
-msgstr "New Paradigm掌握着优异的武器技术"
+msgstr "New Paradigm控制卓越武器技术。"
 
 #: data/base/messages/strings/cam1strings.txt:17
 msgid "They may have the synaptic link technology, it's vital we retrieve it."
-msgstr "他们可能拥有研发「突触连接科技」的技术，这技术相当的重要，我们必须要找回来"
+msgstr "他们可能拥有突触链接技术，我们必须要找回来"
 
 #: data/base/messages/strings/cam1strings.txt:19
 msgid "TRANSPORT MISSION: Locate and Recover Artifacts"
-msgstr "运输任务：找到并回收遗留科技"
+msgstr "运输任务：寻找并回收遗失科技"
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
