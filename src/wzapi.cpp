@@ -358,18 +358,14 @@ bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string 
 	SCRIPT_ASSERT(false, context, order == DORDER_BUILD, "Invalid order");
 	SCRIPT_ASSERT(false, context, psStats->id.compare("A0ADemolishStructure") != 0, "Cannot build demolition");
 
-	uint16_t uint_direction = 0;
-	if (_direction.has_value())
-	{
-		uint_direction = static_cast<uint16_t>(DEG(_direction.value()));
-	}
+	uint16_t direction = static_cast<uint16_t>(DEG(_direction.value_or(0)));
 
 	DROID_ORDER_DATA *droidOrder = &psDroid->order;
 	if (droidOrder->type == order && psDroid->actionPos.x == world_coord(x) && psDroid->actionPos.y == world_coord(y))
 	{
 		return true;
 	}
-	orderDroidStatsLocDir(psDroid, (DROID_ORDER)order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, uint_direction, ModeQueue);
+	orderDroidStatsLocDir(psDroid, (DROID_ORDER)order, psStats, world_coord(x) + TILE_UNITS / 2, world_coord(y) + TILE_UNITS / 2, direction, ModeQueue);
 	return true;
 }
 
@@ -471,11 +467,7 @@ bool wzapi::cameraZoom(WZAPI_PARAMS(float viewDistance, float speed))
 //--
 bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _targetDroid))
 {
-	if (!_targetDroid.has_value())
-	{
-		setWarCamActive(false);
-	}
-	else
+	if (_targetDroid.has_value())
 	{
 		DROID *targetDroid = _targetDroid.value();
 		SCRIPT_ASSERT(false, context, targetDroid, "No valid droid provided");
@@ -484,6 +476,10 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _targetDroid))
 			psDroid->selected = (psDroid == targetDroid); // select only the target droid
 		}
 		setWarCamActive(true);
+	}
+	else
+	{
+		setWarCamActive(false);
 	}
 	return true;
 }
@@ -983,8 +979,8 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 	WzString statsName;
 	STRUCTURE_TYPE type = NUM_DIFF_BUILDINGS;
 
-	int player = (_player.has_value()) ? _player.value() : context.player();
-	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
+	int player = _player.value_or(context.player());
+	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
 
 	if (_structureType.has_value())
 	{
@@ -1046,16 +1042,12 @@ std::vector<const STRUCTURE *> wzapi::enumStructOffWorld(WZAPI_PARAMS(optional<i
 std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType, optional<int> _playerFilter))
 {
 	std::vector<const DROID *> matches;
-	DROID_TYPE droidType = DROID_ANY;
 	DROID_TYPE droidType2;
 
-	int player = (_player.has_value()) ? _player.value() : context.player();
-	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
+	int player = _player.value_or(context.player());
+	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
 
-	if (_droidType.has_value())
-	{
-		droidType = (DROID_TYPE)_droidType.value();
-	}
+	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
 
 	switch (droidType) // hide some engine craziness
 	{
@@ -1176,7 +1168,7 @@ GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
 wzapi::researchResult wzapi::getResearch(WZAPI_PARAMS(std::string resName, optional<int> _player))
 {
 	researchResult result;
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 
 	result.psResearch = ::getResearch(resName.c_str());
 	result.player = player;
@@ -1217,8 +1209,8 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 	int x = world_coord(_x);
 	int y = world_coord(_y);
 	int range = world_coord(_range);
-	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : ALL_PLAYERS;
-	bool seen = (_seen.has_value()) ? _seen.value() : true;
+	int playerFilter = _playerFilter.value_or(ALL_PLAYERS);
+	bool seen = _seen.value_or(true);
 
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Filter player index out of range: %d", playerFilter);
 
@@ -1343,7 +1335,7 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 //--
 wzapi::researchResults wzapi::findResearch(WZAPI_PARAMS(std::string resName, optional<int> _player))
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 
 	researchResults result;
@@ -1445,7 +1437,7 @@ bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structName, optional<i
 {
 	int index = getStructStatFromName(WzString::fromUtf8(structName));
 	SCRIPT_ASSERT(false, context, index >= 0, "%s not found", structName.c_str());
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 
 	int status = apStructTypeLists[player][index];
 	return ((status == AVAILABLE || status == REDUNDANT)
@@ -1546,14 +1538,9 @@ optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDro
 	int numIterations = 30;
 	bool found = false;
 	int incX, incY, x, y;
-	int maxBlockingTiles = 0;
+	int maxBlockingTiles = _maxBlockingTiles.value_or(0);
 
 	SCRIPT_ASSERT({}, context, startX >= 0 && startX < mapWidth && startY >= 0 && startY < mapHeight, "Bad position (%d, %d)", startX, startY);
-
-	if (_maxBlockingTiles.has_value())
-	{
-		maxBlockingTiles = _maxBlockingTiles.value();
-	}
 
 	x = startX;
 	y = startY;
@@ -2002,7 +1989,7 @@ bool wzapi::activateStructure(WZAPI_PARAMS(STRUCTURE *psStruct, optional<BASE_OB
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
 	int player = psStruct->player;
 	// ... and then do nothing with psStruct yet
-	BASE_OBJECT *psTarget = (_psTarget.has_value()) ? _psTarget.value() : nullptr;
+	BASE_OBJECT *psTarget = _psTarget.value_or(nullptr);
 	SCRIPT_ASSERT(false, context, psTarget, "No valid target provided");
 	orderStructureObj(player, psTarget);
 	return true;
@@ -2125,7 +2112,7 @@ std::unique_ptr<const DROID> wzapi::getDroidProduction(WZAPI_PARAMS(const STRUCT
 //--
 int wzapi::getDroidLimit(WZAPI_PARAMS(optional<int> _player, optional<int> _unitType))
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	if (_unitType.has_value())
 	{
@@ -2163,7 +2150,7 @@ int wzapi::getExperienceModifier(WZAPI_PARAMS(int player))
 bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int value, optional<int> _droidType))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	DROID_TYPE type = (_droidType.has_value()) ? (DROID_TYPE)_droidType.value() : DROID_ANY;
+	DROID_TYPE type = (DROID_TYPE)_droidType.value_or(DROID_ANY);
 
 	switch (type)
 	{
@@ -2287,8 +2274,8 @@ bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional
 	if (_x.has_value())
 	{
 		int x = world_coord(_x.value());
-		int y = world_coord((_y.has_value()) ? _y.value() : 0);
-		int z = world_coord((_z.has_value()) ? _z.value() : 0);
+		int y = world_coord(_y.value_or(0));
+		int z = world_coord(_z.value_or(0));
 		audio_QueueTrackPos(soundID, x, y, z);
 	}
 	else
@@ -2306,16 +2293,8 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 {
 	int player = context.player();
 	const MESSAGE_TYPE msgType = MSG_MISSION;	// always
-	bool showOutro = false;
-	bool showBackDrop = true;
-	if (_showBackDrop.has_value())
-	{
-		showBackDrop = _showBackDrop.value();
-	}
-	if (_showOutro.has_value())
-	{
-		showOutro = _showOutro.value();
-	}
+	bool showBackDrop = _showBackDrop.value_or(true);
+	bool showOutro = _showOutro.value_or(false);
 	VIEWDATA *psViewData;
 	if (gameWon)
 	{
@@ -2376,7 +2355,7 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 bool wzapi::setStructureLimits(WZAPI_PARAMS(std::string building, int limit, optional<int> _player))
 {
 	int structInc = getStructStatFromName(WzString::fromUtf8(building));
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	SCRIPT_ASSERT(false, context, limit < LOTS_OF && limit >= 0, "Invalid limit");
 	SCRIPT_ASSERT(false, context, structInc < numStructureStats && structInc >= 0, "Invalid structure");
@@ -2475,9 +2454,9 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _value))
 //--
 wzapi::no_return_value wzapi::completeResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player, optional<bool> _forceResearch))
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	bool forceIt = (_forceResearch.has_value()) ? _forceResearch.value() : false;
+	bool forceIt = _forceResearch.value_or(false);
 	RESEARCH *psResearch = ::getResearch(researchName.c_str());
 	SCRIPT_ASSERT({}, context, psResearch, "No such research %s for player %d", researchName.c_str(), player);
 	SCRIPT_ASSERT({}, context, psResearch->index < asResearch.size(), "Research index out of bounds");
@@ -2504,7 +2483,7 @@ wzapi::no_return_value wzapi::completeResearch(WZAPI_PARAMS(std::string research
 //--
 wzapi::no_return_value wzapi::completeAllResearch(WZAPI_PARAMS(optional<int> _player))
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	for (int i = 0; i < asResearch.size(); i++)
 	{
@@ -2532,7 +2511,7 @@ wzapi::no_return_value wzapi::completeAllResearch(WZAPI_PARAMS(optional<int> _pl
 //--
 bool wzapi::enableResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player))
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	RESEARCH *psResearch = ::getResearch(researchName.c_str());
 	SCRIPT_ASSERT(false, context, psResearch, "No such research %s for player %d", researchName.c_str(), player);
@@ -2550,7 +2529,7 @@ bool wzapi::enableResearch(WZAPI_PARAMS(std::string researchName, optional<int> 
 //--
 wzapi::no_return_value wzapi::setPower(WZAPI_PARAMS(int power, optional<int> _player)) WZAPI_AI_UNSAFE
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	::setPower(player, power);
 	return {};
@@ -2562,7 +2541,7 @@ wzapi::no_return_value wzapi::setPower(WZAPI_PARAMS(int power, optional<int> _pl
 //--
 wzapi::no_return_value wzapi::setPowerModifier(WZAPI_PARAMS(int power, optional<int> _player)) WZAPI_AI_UNSAFE
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	::setPowerModifier(player, power);
 	return {};
@@ -2574,7 +2553,7 @@ wzapi::no_return_value wzapi::setPowerModifier(WZAPI_PARAMS(int power, optional<
 //--
 wzapi::no_return_value wzapi::setPowerStorageMaximum(WZAPI_PARAMS(int power, optional<int> _player)) WZAPI_AI_UNSAFE
 {
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	::setPowerMaxStorage(player, power);
 	return {};
@@ -2588,7 +2567,7 @@ wzapi::no_return_value wzapi::setPowerStorageMaximum(WZAPI_PARAMS(int power, opt
 wzapi::no_return_value wzapi::extraPowerTime(WZAPI_PARAMS(int time, optional<int> _player))
 {
 	int ticks = time * GAME_UPDATES_PER_SEC;
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	updatePlayerPower(player, ticks);
 	return {};
@@ -2781,7 +2760,7 @@ wzapi::no_return_value wzapi::hideInterface(WZAPI_NO_PARAMS)
 wzapi::no_return_value wzapi::enableStructure(WZAPI_PARAMS(std::string structureName, optional<int> _player))
 {
 	int index = getStructStatFromName(WzString::fromUtf8(structureName));
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	SCRIPT_ASSERT({}, context, index >= 0 && index < numStructureStats, "Invalid structure stat");
 	// enable the appropriate structure
@@ -2849,7 +2828,7 @@ bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 bool wzapi::removeObject(WZAPI_PARAMS(BASE_OBJECT *psObj, optional<bool> _sfx))
 {
 	SCRIPT_ASSERT(false, context, psObj, "No valid object provided");
-	bool sfx = (_sfx.has_value()) ? _sfx.value() : false;
+	bool sfx = _sfx.value_or(false);
 
 	bool retval = false;
 	if (sfx)
@@ -2957,7 +2936,7 @@ unsigned int wzapi::getStructureLimit(WZAPI_PARAMS(std::string structureName, op
 {
 	int index = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
 	SCRIPT_ASSERT(0, context, index >= 0, "%s not found", structureName.c_str());
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(0, context, player);
 	return (asStructureStats[index].upgrade[player].limit);
 }
@@ -2972,7 +2951,7 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 	int index = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
 	SCRIPT_ASSERT(-1, context, index < numStructureStats && index >= 0, "Structure %s not found", structureName.c_str());
 	int me = context.player();
-	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : me;
+	int playerFilter = _playerFilter.value_or(me);
 	SCRIPT_ASSERT(-1, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Player filter index out of range: %d", playerFilter);
 
 	int quantity = 0;
@@ -2996,10 +2975,10 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 //--
 int wzapi::countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _playerFilter))
 {
-	int type = (_type.has_value()) ? _type.value() : DROID_ANY;
+	int type = _type.value_or(DROID_ANY);
 	SCRIPT_ASSERT(-1, context, type <= DROID_ANY, "Bad droid type parameter");
 	int me = context.player();
-	int playerFilter = (_playerFilter.has_value()) ? _playerFilter.value() : me;
+	int playerFilter = _playerFilter.value_or(me);
 	SCRIPT_ASSERT(-1, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Player index out of range: %d", playerFilter);
 
 	int quantity = 0;
@@ -3200,7 +3179,7 @@ wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponNam
 	int xLocation = x;
 	int yLocation = y;
 
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 
 	Vector3i target;
@@ -3225,7 +3204,7 @@ wzapi::no_return_value wzapi::fireWeaponAtObj(WZAPI_PARAMS(std::string weaponNam
 	SCRIPT_ASSERT({}, context, weapon > 0, "No such weapon: %s", weaponName.c_str());
 	SCRIPT_ASSERT({}, context, psObj, "No valid object provided");
 
-	int player = (_player.has_value()) ? _player.value() : context.player();
+	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 
 	Vector3i target = psObj->pos;
