@@ -417,10 +417,19 @@ EcKey EcKey::generate()
 	return ret;
 }
 
-std::string EcKey::publicHashString() const
+std::string EcKey::publicHashString(size_t truncateToLength /*= 0*/) const
 {
 	auto bytes = toBytes(EcKey::Public);
-	return bytes.empty()? std::string{} : sha256Sum(&bytes[0], bytes.size()).toString().substr(0, 20).c_str();
+	if (bytes.empty())
+	{
+		return std::string{};
+	}
+	auto shaStr = sha256Sum(&bytes[0], bytes.size()).toString();
+	if (truncateToLength > 0 && truncateToLength < shaStr.length())
+	{
+		return shaStr.substr(0, truncateToLength);
+	}
+	return shaStr;
 }
 
 
