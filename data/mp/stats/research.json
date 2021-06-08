@@ -7553,11 +7553,11 @@
             "MG4ROTARYMk1"
         ],
         "requiredResearch": [
-            "R-Struc-Research-Upgrade07",
+            "R-Struc-Research-Upgrade06",
             "R-Wpn-MG4"
         ],
-        "researchPoints": 15000,
-        "researchPower": 450,
+        "researchPoints": 12000,
+        "researchPower": 375,
         "resultComponents": [
             "MG5TWINROTARY"
         ],
