@@ -402,6 +402,8 @@ void orderUpdateDroid(DROID *psDroid)
 					/* clear order */
 					psDroid->order = DroidOrder(DORDER_NONE);
 				}
+
+				psDroid->sMove.speed = 0; // Prevent radical movement vector when adjusting from home to away map exit and entry coordinates.
 			}
 		}
 		break;
