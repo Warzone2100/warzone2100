@@ -48,8 +48,8 @@
 	},
 	"area_2": {
 		"label": "LandingZone2",
-		"pos1": [6016, 2688],
-		"pos2": [6272, 2432]
+		"pos1": [5760, 2176],
+		"pos2": [6528, 2944]
 	},
 	"area_3": {
 		"label": "ScavNorth",
