@@ -31,12 +31,12 @@ dies, the timer stops running. The minimum number of milliseconds is 100, but su
 fast timers are strongly discouraged as they may deteriorate the game performance.
 
 ```javascript
-  function conDroids()
-  {
-     ... do stuff ...
-  }
-  // call conDroids every 4 seconds
-  setTimer("conDroids", 4000);
+function conDroids()
+{
+  ... do stuff ...
+}
+// call conDroids every 4 seconds
+setTimer("conDroids", 4000);
 ```
 
 ## removeTimer(function)
@@ -67,16 +67,16 @@ inside an event.
 Returns the function name of the caller of the current context as a string (if available).
 ex.
 ```javascript
-  function FuncA() {
-    var callerFuncName = debugGetCallerFuncName();
-    debug(callerFuncName);
-  }
-  function FuncB() {
-    FuncA();
-  }
-  FuncB();
+function funcA() {
+  const callerFuncName = debugGetCallerFuncName();
+  debug(callerFuncName);
+}
+function funcB() {
+  funcA();
+}
+funcB();
 ```
-Will output: "FuncB"
+Will output: "funcB"
 Useful for debug logging.
 
 ## enumTemplates(player)

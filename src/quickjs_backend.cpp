@@ -2401,12 +2401,12 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 //-- fast timers are strongly discouraged as they may deteriorate the game performance.
 //--
 //-- ```javascript
-//--   function conDroids()
-//--   {
-//--      ... do stuff ...
-//--   }
-//--   // call conDroids every 4 seconds
-//--   setTimer("conDroids", 4000);
+//-- function conDroids()
+//-- {
+//--   ... do stuff ...
+//-- }
+//-- // call conDroids every 4 seconds
+//-- setTimer("conDroids", 4000);
 //-- ```
 //--
 static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
@@ -2557,16 +2557,16 @@ static JSValue debugGetCallerFuncObject(JSContext *ctx, JSValueConst this_val, i
 //-- Returns the function name of the caller of the current context as a string (if available).
 //-- ex.
 //-- ```javascript
-//--   function FuncA() {
-//--     var callerFuncName = debugGetCallerFuncName();
-//--     debug(callerFuncName);
-//--   }
-//--   function FuncB() {
-//--     FuncA();
-//--   }
-//--   FuncB();
+//-- function funcA() {
+//--   const callerFuncName = debugGetCallerFuncName();
+//--   debug(callerFuncName);
+//-- }
+//-- function funcB() {
+//--   funcA();
+//-- }
+//-- funcB();
 //-- ```
-//-- Will output: "FuncB"
+//-- Will output: "funcB"
 //-- Useful for debug logging.
 //--
 static JSValue debugGetCallerFuncName(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv)
