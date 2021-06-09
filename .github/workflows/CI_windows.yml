@@ -228,31 +228,40 @@ jobs:
         # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
-    - name: CMake Configure (Portable Build)
+    - name: CMake Configure
       working-directory: '${{ github.workspace }}\build'
       env:
         CXXFLAGS: '/MP'
       run: |
-        # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform (portable build)
+        # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
-        cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=ON -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
+        cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
         echo "::remove-matcher owner=cmake::"
-    - name: CMake Build (Portable Build)
+    - name: CMake Build
       working-directory: '${{ github.workspace }}\build'
       env:
         CXXFLAGS: '/MP'
       run: |
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\msvc.json"
-        & cmake --build . --config Release --target package -- /m
+        & cmake --build . --config Release --target warzone2100 -- /m
         echo "::remove-matcher owner=msvc::"
+        # Package the .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
+        cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z" "${{ github.workspace }}\build\src\*.pdb" "${{ github.workspace }}\build\src\*.sym"
+    - name: Package Portable Installer
+      working-directory: '${{ github.workspace }}\build'
+      run: |
+        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_portable" -D CPACK_WZ_PORTABLE=ON -G NSIS -C "Release"
         # Rename the portable installer
-        Move-Item -LiteralPath "${{ github.workspace }}\build\warzone2100_portable.exe" -Destination "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
-        # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
-        cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" "${{ github.workspace }}\build\src\*.pdb" "${{ github.workspace }}\build\src\*.sym"
+        Move-Item -LiteralPath ".\warzone2100_portable.exe" -Destination "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe"
     - name: Collect Failure Logs
       if: failure()
       run: |
         $NSIS_Log = "build\_CPack_Packages\win32\NSIS\NSISOutput.log"
+        if (Test-Path $NSIS_Log -PathType Leaf)
+        {
+          Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
+        }
+        $NSIS_Log = "build\_CPack_Packages\win64\NSIS\NSISOutput.log"
         if (Test-Path $NSIS_Log -PathType Leaf)
         {
           Copy-Item -LiteralPath "$NSIS_Log" -Destination ".\output\error_logs"
@@ -264,51 +273,27 @@ jobs:
         name: win_${{ matrix.architecture }}_error_logs
         path: '${{ github.workspace }}\output\error_logs'
         if-no-files-found: 'warn'
-    - name: CMake Configure (Regular Installer)
+    - name: Package Full Installer
       working-directory: '${{ github.workspace }}\build'
-      env:
-        CXXFLAGS: '/MP'
       run: |
-        # Re-run CMake configure for non-portable (regular) installer
-        echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
-        cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DWZ_PORTABLE:BOOL=OFF -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_installer" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
-        echo "::remove-matcher owner=cmake::"
-    - name: CMake Build (Regular Installer)
-      env:
-        CXXFLAGS: '/MP'
-      run: |
-        & cmake --build build --config Release --target package
-        # Rename the regular installer
-        Move-Item -LiteralPath ".\build\warzone2100_installer.exe" -Destination ".\output\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe"
-        # Package the portable .pdb and .sym files into a "DEBUGSYMBOLS" .7z archive (do not include metadata / timestamps)
-        cmd /c 7z a -t7z -m0=lzma -mx=9 -mtc=off -mtm=off -mta=off ".\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" "$($pwd)\build\src\*.pdb" "$($pwd)\build\src\*.sym"
-    - name: Compare Build Outputs
-      working-directory: '${{ github.workspace }}\output'
-      run: |
-        # Compare the two DEBUGSYMBOLS.7z files
-        # If they are equal (as they should be if only the installer was rebuilt), keep only one and remove the "PORTABLE/INSTALLER" suffix
-        # If they are not equal, we have to keep both (but output a notice, as the CMake build should probably be tweaked to avoid this)
-        if ((Get-FileHash -LiteralPath ".\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash -eq (Get-FileHash -LiteralPath ".\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Algorithm SHA512).Hash) {
-          # The two archives' hashes match - delete one, and rename the other
-          Write-Host "DEBUGSYMBOLS.7z files match"
-          Remove-Item -LiteralPath ".\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_installer.DEBUGSYMBOLS.7z" -Force -ErrorAction SilentlyContinue
-          Rename-Item -LiteralPath ".\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC)_portable.DEBUGSYMBOLS.7z" -NewName "warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z"
-        }
-        else {
-          Write-Warning "The DEBUGSYMBOLS.7z files for the portable + regular builds do not match. This may mean that the executable was rebuilt when switching portable / non-portable mode. (Check the CMake scripts to fix.)"
-        }
-
-        # Log hashes of the setup EXEs
-        Write-Host "SHA512 Hashes:"
-        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_portable.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
-        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_installer.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
-        Write-Host ""
+        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_installer" -D CPACK_WZ_PORTABLE=OFF -G NSIS -C "Release"
+        # Rename the archive
+        Move-Item -LiteralPath ".\warzone2100_installer.exe" -Destination "${{ github.workspace }}\output\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe"
     - name: Archive .ZIP of Regular build
       working-directory: '${{ github.workspace }}\build'
       run: |
         cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=OFF -G ZIP -C "Release"
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
+    - name: Compare Build Outputs
+      working-directory: '${{ github.workspace }}\output'
+      run: |
+        # Log hashes of the setup EXEs
+        Write-Host "SHA512 Hashes:"
+        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_portable.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe").Length)"
+        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_installer.exe`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe").Length)"
+        Write-Host "`nwarzone2100_$($env:WZ_BUILD_DESC)_archive.zip`n`t-> SHA512: $((Get-FileHash -LiteralPath ".\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip" -Algorithm SHA512).Hash)`n`t`-> Size (bytes): $((Get-Item -LiteralPath ".\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip").Length)"
+        Write-Host ""
     #####################################################
     # Upload build artifacts
     #####################################################
