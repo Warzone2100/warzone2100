@@ -73,8 +73,24 @@ endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++Setting CPACK_PACKAGE_VERSION: ${CPACK_PACKAGE_VERSION}")
 
+if(CPACK_WZ_PORTABLE)
+	list(APPEND CPACK_COMPONENTS_ALL PortableConfig)
+else()
+	list(REMOVE_ITEM CPACK_COMPONENTS_ALL PortableConfig)
+endif()
+
 if(CPACK_GENERATOR MATCHES "NSIS")
 	# For the NSIS installer
+
+	if(CPACK_WZ_PORTABLE)
+		set(PACKAGE_NAME "Warzone 2100 Portable")
+	else()
+		set(PACKAGE_NAME "Warzone 2100")
+	endif()
+	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++PACKAGE_NAME: ${PACKAGE_NAME}")
+	set(CPACK_PACKAGE_NAME "${PACKAGE_NAME}")
+	set(CPACK_NSIS_DISPLAY_NAME "${PACKAGE_NAME}")
+	set(CPACK_NSIS_PACKAGE_NAME "${PACKAGE_NAME}")
 
 	# Compute the installer version #
 	set(INSTALLER_VERSION "${CPACK_PACKAGE_VERSION}.0" CACHE STRING "NSIS version")

@@ -117,6 +117,11 @@ set(CPACK_COMPONENT_FONTS_REQUIRED ON)
 set(CPACK_COMPONENT_FONTS_DESCRIPTION "Fonts")
 set(CPACK_COMPONENT_FONTS_GROUP "CoreGroup")
 
+set(CPACK_COMPONENT_PORTABLECONFIG_DISPLAY_NAME "Portable Configuration")
+set(CPACK_COMPONENT_PORTABLECONFIG_DESCRIPTION "Portable Configuration")
+set(CPACK_COMPONENT_PORTABLECONFIG_GROUP "CoreGroup")
+set(CPACK_COMPONENT_PORTABLECONFIG_HIDDEN ON)
+
 set(CPACK_COMPONENT_MANPAGES_GROUP "CoreGroup")
 
 set(CPACK_COMPONENT_GROUP_COREGROUP_DISPLAY_NAME "Core files")
@@ -155,19 +160,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	endif()
 
 	set(PACKAGE "${_warzone_target_output_name}")
-	if(WZ_PORTABLE)
-		set(PACKAGE_NAME "Warzone 2100 Portable")
 
-		# For the portable build, install `launch_warzone.bat` in the base folder
-		install(FILES
-			"${CMAKE_CURRENT_SOURCE_DIR}/nsis/launch_warzone.bat"
-			COMPONENT Core DESTINATION "."
-		)
-	else()
-		set(PACKAGE_NAME "Warzone 2100")
-	endif()
-	set(CPACK_NSIS_DISPLAY_NAME PACKAGE_NAME)
-	set(CPACK_NSIS_PACKAGE_NAME PACKAGE_NAME)
+	# For the portable build, install `launch_warzone.bat` in the base folder
+	install(FILES
+		"${CMAKE_CURRENT_SOURCE_DIR}/nsis/launch_warzone.bat"
+		COMPONENT PortableConfig DESTINATION "."
+	)
 
 	set(SOURCE_DIR "${CMAKE_SOURCE_DIR}")
 	set(BUILD_DIR "${CMAKE_BINARY_DIR}")

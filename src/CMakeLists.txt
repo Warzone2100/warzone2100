@@ -597,9 +597,8 @@ endif()
 # Install
 install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
 
-if(WZ_PORTABLE)
-	install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable")
-endif()
+# For Portable packages only, copy the ".portable" file that triggers portable mode (Windows-only)
+install(FILES "${CMAKE_SOURCE_DIR}/pkg/portable.in" COMPONENT PortableConfig DESTINATION "${WZ_APP_INSTALL_DEST}" RENAME ".portable")
 
 #####################
 # Installing Required Runtime Dependencies
