@@ -1426,8 +1426,8 @@
         "weight": 120
     },
     "Cyb-Hvywpn-TK": {
-        "buildPoints": 700,
-        "buildPower": 250,
+        "buildPoints": 600,
+        "buildPower": 200,
         "damage": 300,
         "effectSize": 50,
         "explosionWav": "lrgexpl.ogg",
@@ -3904,7 +3904,7 @@
         "weight": 250
     },
     "Rocket-HvyA-T": {
-        "buildPoints": 1250,
+        "buildPoints": 1000,
         "buildPower": 200,
         "damage": 180,
         "designable": 1,
