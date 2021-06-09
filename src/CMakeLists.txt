@@ -575,7 +575,7 @@ endif()
 #######################
 # Supporting google-breakpad tools for processing minidumps
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windows" AND WZ_WIN_HAS_PDB)
 	# Find dump_syms.exe
 	find_program(DUMP_SYMS dump_syms HINTS "${CMAKE_BINARY_DIR}" "${PROJECT_SOURCE_DIR}")
 	if(DUMP_SYMS)
@@ -587,7 +587,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windo
 		)
 
 		# Install the .sym file (to ensure it's always with the .exe)
-		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+		install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.sym" COMPONENT DebugSymbols DESTINATION "${WZ_APP_INSTALL_DEST}")
 	else()
 		message( WARNING "Could not find dump_syms.exe. Unable to generate a Breakpad .sym file from .pdb" )
 	endif()
@@ -710,9 +710,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			message( STATUS "CMAKE_CROSSCOMPILING is defined - skipping BundleUtilities" )
 		endif()
 
-		if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+		if(WZ_WIN_HAS_PDB)
 			# Must install the PDB file or crash dumps won't be as useful
-			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+			install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${_mainexename}.pdb" COMPONENT DebugSymbols DESTINATION "${WZ_APP_INSTALL_DEST}")
 		endif()
 	else()
 		message( WARNING "Unable to get OUTPUT_NAME from warzone2100 target" )
