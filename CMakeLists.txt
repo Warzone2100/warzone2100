@@ -14,11 +14,6 @@ include(CMakeDependentOption)
 
 OPTION(ENABLE_DOCS "Enable documentation generation" ON)
 OPTION(ENABLE_NLS "Native Language Support" ON)
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-	set(_enableOSOptions_Windows TRUE)
-endif()
-cmake_dependent_option(WZ_PORTABLE "Portable build (Windows-only)" ON "_enableOSOptions_Windows" OFF)
-unset(_enableOSOptions_Windows)
 OPTION(WZ_ENABLE_WARNINGS "Enable (additional) warnings" OFF)
 OPTION(WZ_ENABLE_WARNINGS_AS_ERRORS "Enable compiler flags that treat (most) warnings as errors" ON)
 OPTION(WZ_ENABLE_BACKEND_VULKAN "Enable Vulkan backend" ON)
@@ -31,12 +26,6 @@ endif()
 set(WZ_DISTRIBUTOR "UNKNOWN" CACHE STRING "Name of distributor compiling this package")
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-# Handle options
-if(WZ_PORTABLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
-	message( WARNING "Portable build is only supported on Windows; Ignoring WZ_PORTABLE option" )
-	unset(WZ_PORTABLE CACHE)
-endif()
 
 # Disallow in-source builds
 include(DisallowInSourceBuilds)
