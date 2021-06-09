@@ -1614,7 +1614,7 @@
         "shortRange": 768,
         "waterGfx": "FXFlecht.PIE",
         "weaponClass": "KINETIC",
-        "weaponEffect": "ANTI AIRCRAFT",
+        "weaponEffect": "ALL ROUNDER",
         "weaponSubClass": "GAUSS",
         "weaponWav": "gaussgun.ogg",
         "weight": 120
@@ -1693,7 +1693,7 @@
         "shortRange": 512,
         "waterGfx": "FXSSplsh.PIE",
         "weaponClass": "KINETIC",
-        "weaponEffect": "ANTI AIRCRAFT",
+        "weaponEffect": "ALL ROUNDER",
         "weaponSubClass": "CANNON",
         "weaponWav": "smlcan.ogg",
         "weight": 120
@@ -1883,7 +1883,7 @@
         "shortRange": 768,
         "waterGfx": "FXSFlms.PIE",
         "weaponClass": "KINETIC",
-        "weaponEffect": "ANTI AIRCRAFT",
+        "weaponEffect": "ALL ROUNDER",
         "weaponSubClass": "EMP",
         "weaponWav": "emp.ogg",
         "weight": 10000
