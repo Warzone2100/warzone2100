@@ -138,6 +138,7 @@ elseif(POLICY CMP0083)
 	cmake_policy(SET CMP0083 NEW) # Apply -pie link flag if supported
 endif()
 
+set(WZ_WIN_HAS_PDB FALSE)
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 	# Set better-than-default optimization flags
 	add_compile_options("$<$<CONFIG:RELWITHDEBINFO>:/Ob2>")
@@ -148,6 +149,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 	# Ensure all builds always have debug info built
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /Zi")
 	set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF" CACHE STRING "Flags used by the linker (Release builds)" FORCE)
+	set(WZ_WIN_HAS_PDB TRUE)
 
 	# Default stack size is 1MB - increase to better match other platforms
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:8000000")
@@ -160,6 +162,7 @@ if(MINGW AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
 	add_compile_options("-gcodeview")
 	# Ensure a PDB file is created in the same location as the module
 	add_link_options("-Wl,-pdb=")
+	set(WZ_WIN_HAS_PDB TRUE)
 endif()
 
 # Treat source files as UTF-8 (unless they have a BOM) (MSVC)
