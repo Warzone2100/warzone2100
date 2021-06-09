@@ -1614,7 +1614,7 @@
         "shortRange": 768,
         "waterGfx": "FXFlecht.PIE",
         "weaponClass": "KINETIC",
-        "weaponEffect": "ALL ROUNDER",
+        "weaponEffect": "ANTI AIRCRAFT",
         "weaponSubClass": "GAUSS",
         "weaponWav": "gaussgun.ogg",
         "weight": 120
@@ -1693,7 +1693,7 @@
         "shortRange": 512,
         "waterGfx": "FXSSplsh.PIE",
         "weaponClass": "KINETIC",
-        "weaponEffect": "ALL ROUNDER",
+        "weaponEffect": "ANTI AIRCRAFT",
         "weaponSubClass": "CANNON",
         "weaponWav": "smlcan.ogg",
         "weight": 120
@@ -1851,7 +1851,7 @@
         "weight": 120
     },
     "EMP-Cannon": {
-        "buildPoints": 1200,
+        "buildPoints": 800,
         "buildPower": 200,
         "damage": 70,
         "designable": 1,
@@ -1883,10 +1883,10 @@
         "shortRange": 768,
         "waterGfx": "FXSFlms.PIE",
         "weaponClass": "KINETIC",
-        "weaponEffect": "ALL ROUNDER",
+        "weaponEffect": "ANTI AIRCRAFT",
         "weaponSubClass": "EMP",
         "weaponWav": "emp.ogg",
-        "weight": 5000
+        "weight": 10000
     },
     "Flame1Mk1": {
         "buildPoints": 200,
