@@ -22,6 +22,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 			# Define _MSC_VER
 			set_source_files_properties("3rdparty/StackWalker.cpp" PROPERTIES COMPILE_DEFINITIONS "_MSC_VER=1900")
 		endif()
+		set_property(SOURCE "3rdparty/StackWalker.h" "3rdparty/StackWalker.cpp" APPEND PROPERTY COMPILE_DEFINITIONS "WIN32_LEAN_AND_MEAN" "NOCRYPT" "NOMINMAX" "WIN32_EXTRA_LEAN")
 	endif()
 endif()
 
