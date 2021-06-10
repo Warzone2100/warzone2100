@@ -22,7 +22,7 @@
         "winssl",
         "ssl"
       ],
-      "platform": "windows"
+      "platform": "windows | mingw"
     },
     {
       "name": "curl",
@@ -39,7 +39,7 @@
       "features": [
         "ssl"
       ],
-      "platform": "!windows & !osx"
+      "platform": "!windows & !mingw & !osx"
     },
     {
       "name": "angle",
