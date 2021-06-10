@@ -57,6 +57,10 @@ If ( -not (Test-Path (Join-Path "$($ScriptRoot)" "launch.vs.json") ) )
 	Copy-Item (Join-Path "$($ScriptRoot)" "win32\launch.vs.json") -Destination "$($ScriptRoot)"
 }
 
+# Create build-dir vcpkg overlay folders
+$tripletOverlayFolder = (Join-Path (pwd) vcpkg_overlay_triplets)
+if (!(Test-Path -path $tripletOverlayFolder)) {New-Item $tripletOverlayFolder -Type Directory}
+
 # Download & build vcpkg (+ dependencies)
 If ( -not (Test-Path (Join-Path (pwd) vcpkg\.git) -PathType Container) )
 {
@@ -77,14 +81,15 @@ pushd vcpkg;
 git reset --hard $VCPKG_COMMIT_SHA;
 .\bootstrap-vcpkg.bat;
 
-If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
+$triplet = "x86-windows"; # vcpkg default
+If (-not ([string]::IsNullOrEmpty($env:VCPKG_DEFAULT_TRIPLET)))
 {
-	# Add VCPKG_BUILD_TYPE to the specified triplet
-	$triplet = "x86-windows"; # vcpkg default
-	If (-not ([string]::IsNullOrEmpty($env:VCPKG_DEFAULT_TRIPLET)))
-	{
-		$triplet = "$env:VCPKG_DEFAULT_TRIPLET";
-	}
+	$triplet = "$env:VCPKG_DEFAULT_TRIPLET";
+}
+
+If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE))))
+{
+	# Need to create a copy of the triplet and modify it
 	$tripletFile = "triplets\$($triplet).cmake";
 	If (!(Test-Path $tripletFile -PathType Leaf))
 	{
@@ -94,11 +99,20 @@ If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
 			Write-Error "Unable to find VCPKG_DEFAULT_TRIPLET: $env:VCPKG_DEFAULT_TRIPLET"
 		}
 	}
-	$setString = Select-String -Quiet -Pattern "set(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")" -SimpleMatch -Path $tripletFile;
-	if (-not $setString)
+	Copy-Item "$tripletFile" -Destination "$tripletOverlayFolder"
+	$tripletFileName = Split-Path -Leaf "$tripletFile"
+	$overlayTripletFile = "$tripletOverlayFolder\$tripletFileName"
+	If ($triplet.Contains("mingw"))
 	{
-		Add-Content -Path $tripletFile -Value "`r`nset(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")";
+		# A fix for libtool issues with mingw-clang
+		Add-Content -Path $overlayTripletFile -Value "`r`nlist(APPEND VCPKG_MAKE_CONFIGURE_OPTIONS `"lt_cv_deplibs_check_method=pass_all`")";
 	}
+	If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
+	{
+		Add-Content -Path $overlayTripletFile -Value "`r`nset(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")";
+	}
+	# Setup environment variable so vcpkg uses the overlay triplets folder
+	$env:VCPKG_OVERLAY_TRIPLETS = "$tripletOverlayFolder"
 }
 
 popd;
