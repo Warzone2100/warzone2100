@@ -289,7 +289,7 @@ jobs:
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
         # Run CPack
-        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=OFF -G ZIP -C "Release"
+        cpack -D CPACK_PACKAGE_FILE_NAME="warzone2100_archive" -D CPACK_INCLUDE_TOPLEVEL_DIRECTORY=OFF -D CPACK_ARCHIVE_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE=ON -G ZIP -C "Release"
         # Rename the archive
         Move-Item -LiteralPath ".\warzone2100_archive.zip" -Destination "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
     - name: Archive Debug Symbols
