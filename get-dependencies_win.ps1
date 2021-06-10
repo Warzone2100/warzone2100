@@ -86,6 +86,14 @@ If (-not ([string]::IsNullOrEmpty($VCPKG_BUILD_TYPE)))
 		$triplet = "$env:VCPKG_DEFAULT_TRIPLET";
 	}
 	$tripletFile = "triplets\$($triplet).cmake";
+	If (!(Test-Path $tripletFile -PathType Leaf))
+	{
+		$tripletFile = "triplets\community\$($triplet).cmake";
+		If (!(Test-Path $tripletFile -PathType Leaf))
+		{
+			Write-Error "Unable to find VCPKG_DEFAULT_TRIPLET: $env:VCPKG_DEFAULT_TRIPLET"
+		}
+	}
 	$setString = Select-String -Quiet -Pattern "set(VCPKG_BUILD_TYPE `"$VCPKG_BUILD_TYPE`")" -SimpleMatch -Path $tripletFile;
 	if (-not $setString)
 	{
