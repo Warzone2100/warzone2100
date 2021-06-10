@@ -311,14 +311,14 @@ static bool getCurrentDir(char *const dest, size_t const size)
 	if (len == 0)
 	{
 		// Retrieve Windows' error number
-		const int err = GetLastError();
+		const DWORD err = GetLastError();
 		char *err_string = NULL;
 
 		// Retrieve a string describing the error number (uses LocalAlloc() to allocate memory for err_string)
 		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char *)&err_string, 0, NULL);
 
 		// Print an error message with the above description
-		debug(LOG_ERROR, "GetCurrentDirectory failed (error code: %d): %s", err, err_string);
+		debug(LOG_ERROR, "GetCurrentDirectory failed (error code: %lu): %s", err, err_string);
 
 		// Free our chunk of memory FormatMessageA gave us
 		LocalFree(err_string);
@@ -1131,13 +1131,13 @@ bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ
 
 	if (wargv == NULL)
 	{
-		const int err = GetLastError();
+		const DWORD err = GetLastError();
 		char *err_string;
 
 		// Retrieve a (locally encoded) string describing the error (uses LocalAlloc() to allocate memory)
 		FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err, 0, (char *)&err_string, 0, NULL);
 
-		debug(LOG_FATAL, "CommandLineToArgvW failed: %s (code:%d)", err_string, err);
+		debug(LOG_FATAL, "CommandLineToArgvW failed: %s (code:%lu)", err_string, err);
 
 		LocalFree(err_string); // Free the chunk of memory FormatMessageA gave us
 		LocalFree(wargv);
