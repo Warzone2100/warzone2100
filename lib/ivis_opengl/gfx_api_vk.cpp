@@ -110,7 +110,7 @@ void _vk_setenv(const _vkl_env_text_type& name, const _vkl_env_text_type& value)
 	{
 		// Failed to set environment variable
 		DWORD lastError = GetLastError();
-		debug(LOG_ERROR, "SetEnvironmentVariableW failed with error: %d", lastError);
+		debug(LOG_ERROR, "SetEnvironmentVariableW failed with error: %lu", lastError);
 	}
 }
 #else

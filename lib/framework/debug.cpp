@@ -226,13 +226,13 @@ bool debug_callback_file_init(void **data)
 	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, WZDebugfilename.toUtf8().c_str(), -1, NULL, 0);
 	if (wstr_len <= 0)
 	{
-		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %d: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
+		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar failed with error %lu: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
 		return false;
 	}
 	std::vector<wchar_t> wstr_filename(wstr_len, 0);
 	if (MultiByteToWideChar(CP_UTF8, 0, WZDebugfilename.toUtf8().c_str(), -1, &wstr_filename[0], wstr_len) == 0)
 	{
-		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %d: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
+		fprintf(stderr, "Could not not convert string from UTF-8; MultiByteToWideChar[2] failed with error %lu: %s\n", GetLastError(), WZDebugfilename.toUtf8().c_str());
 		return false;
 	}
 	FILE *const logfile = _wfopen(&wstr_filename[0], L"w");
