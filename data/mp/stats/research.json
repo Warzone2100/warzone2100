@@ -781,8 +781,8 @@
         "requiredResearch": [
             "R-Wpn-EMPCannon"
         ],
-        "researchPoints": 28800,
-        "researchPower": 450,
+        "researchPoints": 7200,
+        "researchPower": 225,
         "resultStructures": [
             "WallTower-EMP"
         ],
@@ -796,8 +796,8 @@
         "requiredResearch": [
             "R-Wpn-MortarEMP"
         ],
-        "researchPoints": 28800,
-        "researchPower": 450,
+        "researchPoints": 7200,
+        "researchPower": 225,
         "resultStructures": [
             "Emplacement-MortarEMP"
         ],
@@ -6011,9 +6011,10 @@
         "msgName": "RES_EMP_CANT",
         "name": "EMP Cannon",
         "requiredResearch": [
-            "R-Sys-SpyTurret"
+            "R-Sys-Sensor-Upgrade03",
+	    "R-Struc-Research-Upgrade08"
         ],
-        "researchPoints": 28800,
+        "researchPoints": 14400,
         "researchPower": 450,
         "resultComponents": [
             "EMP-Cannon"
@@ -8399,7 +8400,7 @@
         "requiredResearch": [
             "R-Wpn-EMPCannon"
         ],
-        "researchPoints": 20000,
+        "researchPoints": 28800,
         "researchPower": 450,
         "resultComponents": [
             "MortarEMP"
