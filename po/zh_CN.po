@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-04-04 09:13\n"
+"PO-Revision-Date: 2021-06-10 08:47\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -5772,7 +5772,7 @@ msgstr "游戏响应失败!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "菜单"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1877
@@ -5782,7 +5782,7 @@ msgstr "情节"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "挑战"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
@@ -5790,7 +5790,7 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "联机模式"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
