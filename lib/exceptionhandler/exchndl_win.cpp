@@ -21,6 +21,9 @@
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0501
 #endif
+#if !defined(NOCRYPT)
+#define NOCRYPT
+#endif
 #include "lib/framework/frame.h"
 #include "dumpinfo.h"
 #include "exchndl.h"
