@@ -1238,8 +1238,8 @@ static bool recvVote(NETQUEUE queue)
 	// there is no "votes" that disallows map change so assume they are all allowing
 	if(newVote == 1) {
 		char msg[128] = {0};
-		snprintf(msg, 127, _("%s (%d) allowed map change. Total: %d/%d"), NetPlay.players[player].name, player, static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
-		sendRoomChatMessage(msg);
+		ssprintf(msg, _("%s (%d) allowed map change. Total: %d/%d"), NetPlay.players[player].name, player, static_cast<int>(getVoteTotal()), static_cast<int>(NET_numHumanPlayers()));
+		sendRoomSystemMessage(msg);
 	}
 
 	return true;
