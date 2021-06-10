@@ -14,12 +14,23 @@ jobs:
   windows-build:
     strategy:
       matrix:
-        compiler: ["MSVC_2019"]
-        architecture: ["x86", "x64", "arm64"]
-        deploy_release: [true]
+        include:
+          - compiler: "MSVC_2019"
+            architecture: "x86"
+            deploy_release: true
+          - compiler: "MSVC_2019"
+            architecture: "x64"
+            deploy_release: true
+          - compiler: "MSVC_2019"
+            architecture: "arm64"
+            deploy_release: true
+          - compiler: "MINGW_CLANG"
+            architecture: "x64"
+            artifact_description: "mingw_x64"
+            deploy_release: false
       fail-fast: false
     env:
-      WZ_MSVC_VER: ${{ matrix.compiler }}
+      WZ_COMPILER_VER: ${{ matrix.compiler }}
       WZ_TARGET_ARCH: ${{ matrix.architecture }}
       VSCMD_SKIP_SENDTELEMETRY: 1
       # MSVC parallel builds: https://devblogs.microsoft.com/cppblog/improved-parallelism-in-msbuild/
@@ -46,7 +57,16 @@ jobs:
     #     Write-Host "------------------------------------------------------"
     #     & gci env:* | sort-object name
     - name: Install Asciidoctor
-      run: gem install asciidoctor -v 2.0.12 --no-document
+      id: asciidoctor-dl
+      run: |
+        echo "Installing Asciidoctor"
+        gem install asciidoctor -v 2.0.12 --no-document | Out-Null
+        echo "Installing Asciidoctor... finished"
+        $AsciidoctorBat = (Get-Command asciidoctor.bat).Path
+        echo "Asciidoctor.bat: ${AsciidoctorBat}"
+        $AsciidoctorBatPath = Split-Path -Path "${AsciidoctorBat}"
+        echo "Asciidoctor.bat path: ${AsciidoctorBatPath}"
+        echo "::set-output name=ASCIIDOCTOR_PATH::${AsciidoctorBatPath}"
     - name: Install NSIS
       run: choco install nsis -y
     - name: Generate Settings for Run [${{ matrix.compiler }}:${{ matrix.architecture }}]
@@ -57,23 +77,54 @@ jobs:
 
         $WZ_VC_TARGET_PLATFORMNAME = "$env:WZ_TARGET_ARCH"
         $WZ_BUILD_DESC = "win_${env:WZ_TARGET_ARCH}"
+        if (-not ([string]::IsNullOrEmpty("${{ matrix.artifact_description }}")))
+        {
+          $WZ_BUILD_DESC = "win_${{ matrix.artifact_description }}"
+        }
 
-        if ($env:WZ_TARGET_ARCH -eq "x86") {
-          $VCPKG_DEFAULT_TRIPLET = "x86-windows"
-          $WZ_VC_TARGET_PLATFORMNAME = "Win32" # special case, map "x86" -> "Win32"
+        if ($env:WZ_COMPILER_VER -eq "MINGW_CLANG") {
+          $WZ_USING_MINGW = "true"
+          if ($env:WZ_TARGET_ARCH -eq "x86") {
+            $VCPKG_DEFAULT_TRIPLET = "x86-mingw-dynamic"
+            $MSYSTEM = "CLANG32"
+            $WZ_MINGW_PKG_PREFIX = "mingw-w64-clang-i686"
+          }
+          elseif ($env:WZ_TARGET_ARCH -eq "x64") {
+            $VCPKG_DEFAULT_TRIPLET = "x64-mingw-dynamic"
+            $MSYSTEM = "CLANG64"
+            $WZ_MINGW_PKG_PREFIX = "mingw-w64-clang-x86_64"
+          }
+          elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
+            $VCPKG_DEFAULT_TRIPLET = "arm64-mingw-dynamic"
+            $MSYSTEM = "CLANGARM64" # NOTE: Will not work on GitHub Actions CI currently as it requires a native ARM64 runner
+            $WZ_MINGW_PKG_PREFIX = "mingw-w64-clang-aarch64"
+          }
         }
-        elseif ($env:WZ_TARGET_ARCH -eq "x64") {
-          $VCPKG_DEFAULT_TRIPLET = "x64-windows"
+        else {
+          $WZ_USING_MINGW = "false"
+          if ($env:WZ_TARGET_ARCH -eq "x86") {
+            $VCPKG_DEFAULT_TRIPLET = "x86-windows"
+            $WZ_VC_TARGET_PLATFORMNAME = "Win32" # special case, map "x86" -> "Win32"
+          }
+          elseif ($env:WZ_TARGET_ARCH -eq "x64") {
+            $VCPKG_DEFAULT_TRIPLET = "x64-windows"
+          }
+          elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
+            $VCPKG_DEFAULT_TRIPLET = "arm64-windows"
+          }
         }
-        elseif ($env:WZ_TARGET_ARCH -eq "arm64") {
-          $VCPKG_DEFAULT_TRIPLET = "arm64-windows"
-        }
+        
+        $WZ_FULL_POWERSHELL_PATH = (Get-Command powershell.exe).Path
+        $WZ_FULL_GIT_PATH = Split-Path -Path ((Get-Command git.exe).Path)
+        echo "WZ_FULL_GIT_PATH=${WZ_FULL_GIT_PATH}"
+        $WZ_FULL_CMAKE_PATH = Split-Path -Path ((Get-Command cmake.exe).Path)
+        echo "WZ_FULL_CMAKE_PATH=${WZ_FULL_CMAKE_PATH}"
 
         # ------------------------------
         # MSVC version / generator info
 
         $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
-        if ($env:WZ_MSVC_VER -eq "MSVC_2019") {
+        if ($env:WZ_COMPILER_VER -eq "MSVC_2019") {
           $WZ_VC_GENERATOR = "Visual Studio 16 2019"
           #$env:WZ_VC_TOOLCHAIN = "v142"
           # Get the installation path for a specific version of MSVC (2019)
@@ -84,7 +135,7 @@ jobs:
             $WZ_VISUAL_STUDIO_INSTALL_PATH = ""
           }
         }
-        elseif ($env:WZ_MSVC_VER -eq "MSVC_2017") {
+        elseif ($env:WZ_COMPILER_VER -eq "MSVC_2017") {
           $WZ_VC_GENERATOR = "Visual Studio 15 2017"
           #$env:WZ_VC_TOOLCHAIN = "v141"
           # Get the installation path for a specific version of MSVC (2017)
@@ -99,7 +150,9 @@ jobs:
         if ([string]::IsNullOrWhitespace(${WZ_VISUAL_STUDIO_INSTALL_PATH}))
         {
           $WZ_VISUAL_STUDIO_INSTALL_PATH = & "vswhere.exe" -latest -property installationPath
-          echo "::warning ::Default to 'latest' MSVC: `"${WZ_VISUAL_STUDIO_INSTALL_PATH}`""
+          if ($env:WZ_COMPILER_VER -ne "MINGW_CLANG") {
+            echo "::warning ::Default to 'latest' MSVC: `"${WZ_VISUAL_STUDIO_INSTALL_PATH}`""
+          }
         }
         
         $WZ_VISUAL_STUDIO_INSTALL_VERSION = & "vswhere.exe" -path "${WZ_VISUAL_STUDIO_INSTALL_PATH}" -property installationVersion
@@ -126,11 +179,21 @@ jobs:
 
         # ----------------
         # Export Variables
+        
+        $WZ_REPO_PATH = "${{ github.workspace }}\src"
 
         # Export everything important to environment variables (for future steps)
-        echo "WZ_REPO_PATH=${{ github.workspace }}\src" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "::set-output name=WZ_USING_MINGW::${WZ_USING_MINGW}"
+        echo "::set-output name=WZ_MINGW_PKG_PREFIX::${WZ_MINGW_PKG_PREFIX}"
+        echo "::set-output name=WZ_FULL_POWERSHELL_PATH::${WZ_FULL_POWERSHELL_PATH}"
+        echo "::set-output name=WZ_FULL_GIT_PATH::${WZ_FULL_GIT_PATH}"
+        echo "::set-output name=WZ_FULL_CMAKE_PATH::${WZ_FULL_CMAKE_PATH}"
+        echo "::set-output name=MSYSTEM::${MSYSTEM}"
+        echo "::set-output name=WZ_REPO_PATH::${WZ_REPO_PATH}"
+        echo "WZ_REPO_PATH=${WZ_REPO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_TARGET_PLATFORMNAME=${WZ_VC_TARGET_PLATFORMNAME}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "::set-output name=WZ_BUILD_DESC::${WZ_BUILD_DESC}"
         echo "WZ_BUILD_DESC=${WZ_BUILD_DESC}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_GENERATOR=${WZ_VC_GENERATOR}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         #echo "WZ_VC_TOOLCHAIN=${WZ_VC_TOOLCHAIN}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -204,6 +267,68 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\error_logs"
+    - name: 'Download & Install Ninja-Build'
+      id: ninja-dl
+      run: |
+        Start-Sleep -Milliseconds 1 # See: https://stackoverflow.com/a/49859001
+
+        $VerbosePreference = "Continue"
+        . "${env:WZ_REPO_PATH}\.ci\powershell\request.ps1"
+
+        Write-Host "Current value of env:VULKAN_SDK:${env:VULKAN_SDK}"
+
+        $NINJA_DL_URL = "https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-win.zip"
+        $NINJA_DL_SHA512 = "6004140d92e86afbb17b49c49037ccd0786ce238f340f7d0e62b4b0c29ed0d6ad0bab11feda2094ae849c387d70d63504393714ed0a1f4d3a1f155af7a4f1ba3"
+
+        $NINJA_DL_BASEDIR = "${{ github.workspace }}\dl"
+        $NINJA_DL_PATH = "${NINJA_DL_BASEDIR}\ninja-win.zip"
+        if (!(Test-Path -Path "$NINJA_DL_BASEDIR")) { New-Item -ItemType Directory -Force -Path "$NINJA_DL_BASEDIR" }
+
+        $req = Req -Params @{ 'Method'='GET';'Uri'="$NINJA_DL_URL";'OutFile'="${NINJA_DL_PATH}" } -Retries 3 -SecondsDelay 10
+
+        $ninja_zip_hash = Get-FileHash -LiteralPath "${NINJA_DL_PATH}" -Algorithm SHA512
+        if ($ninja_zip_hash.Hash -eq $NINJA_DL_SHA512) {
+          Write-Host "Successfully downloaded Ninja-Build .zip"
+        } Else {
+          Write-Error "The downloaded Ninja-build zip hash '$($ninja_zip_hash.Hash)' does not match the expected hash: '$NINJA_DL_SHA512'"
+        }
+
+        Write-Host "Extracting Ninja-Build..."
+        $NINJA_INSTALL_PATH = "${{ github.workspace }}\buildtools\ninja"
+        New-Item -ItemType Directory -Force -Path "${NINJA_INSTALL_PATH}"
+        Expand-Archive -LiteralPath "${NINJA_DL_PATH}" -DestinationPath "${NINJA_INSTALL_PATH}"
+
+        # Export the NINJA executable path
+        echo "::set-output name=NINJA_INSTALL_PATH::${NINJA_INSTALL_PATH}"
+        echo "NINJA_INSTALL_PATH=${NINJA_INSTALL_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    - name: Setup MSYS2 environment
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ steps.settings.outputs.MSYSTEM }}
+        path-type: minimal
+        release: true
+        update: true
+        install: >-
+          ${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}-toolchain
+          ${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}-libssp
+    - name: Prep MINGW Environment
+      id: mingwsettings
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
+      working-directory: '${{ github.workspace }}\build'
+      shell: msys2 {0}
+      run: |
+        echo "PATH=${PATH}"
+        WZ_FULL_GIT_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_GIT_PATH }}')"
+        echo "WZ_FULL_GIT_PATH=${WZ_FULL_GIT_PATH}"
+        NINJA_INSTALL_PATH="$(cygpath '${{ steps.ninja-dl.outputs.NINJA_INSTALL_PATH }}')"
+        echo "NINJA_INSTALL_PATH=${NINJA_INSTALL_PATH}"
+        ASCIIDOCTOR_PATH="$(cygpath '${{ steps.asciidoctor-dl.outputs.ASCIIDOCTOR_PATH }}')"
+        echo "ASCIIDOCTOR_PATH=${ASCIIDOCTOR_PATH}"
+        WZ_MINGW_ENV_PATH="${PATH/:\/usr\/bin:\/bin:/:}:${WZ_FULL_GIT_PATH}:${NINJA_INSTALL_PATH}:${ASCIIDOCTOR_PATH}"
+        echo "WZ_MINGW_ENV_PATH=\"${WZ_MINGW_ENV_PATH}\""
+        echo "WZ_MINGW_ENV_PATH=${WZ_MINGW_ENV_PATH}" >> $GITHUB_ENV
+        echo "::set-output name=WZ_MINGW_ENV_PATH::${WZ_MINGW_ENV_PATH}"
     - name: Cache vcpkg dependencies
       id: vcpkg-cache
       if: success() && !(github.event_name == 'push' && contains(github.ref, 'refs/tags/'))
@@ -213,7 +338,8 @@ jobs:
         key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.architecture }}-${{ steps.settings.outputs.WZ_VISUAL_STUDIO_INSTALL_VERSION }}-${{ hashFiles('**/get-dependencies_win.ps1') }}-${{ hashFiles('**/vcpkg.json') }}
         restore-keys: |
           ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.architecture }}-${{ steps.settings.outputs.WZ_VISUAL_STUDIO_INSTALL_VERSION }}-${{ hashFiles('**/get-dependencies_win.ps1') }}-
-    - name: Build vcpkg + dependencies
+    - name: Build vcpkg + dependencies (MSVC)
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
       run: |
         Write-Host "env:VCPKG_DEFAULT_TRIPLET=`"${env:VCPKG_DEFAULT_TRIPLET}`""
@@ -228,7 +354,30 @@ jobs:
         # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
         . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
         Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
-    - name: CMake Configure
+    - name: Build vcpkg + dependencies (MINGW)
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
+      working-directory: '${{ github.workspace }}\build'
+      shell: msys2 {0}
+      run: |
+        echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}"
+        echo "VCPKG_BINARY_SOURCES=${VCPKG_BINARY_SOURCES}"
+        WZ_FULL_POWERSHELL_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_POWERSHELL_PATH }}')"
+        echo "WZ_FULL_POWERSHELL_PATH=${WZ_FULL_POWERSHELL_PATH}"
+        WZ_REPO_PATH="$(cygpath '${{ steps.settings.outputs.WZ_REPO_PATH }}')"
+        echo "WZ_REPO_PATH=${WZ_REPO_PATH}"
+        echo "WZ_MINGW_ENV_PATH=${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}"
+        PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_POWERSHELL_PATH}" "${WZ_REPO_PATH}/get-dependencies_win.ps1" -VCPKG_BUILD_TYPE "release"
+    - name: Clean vcpkg temp files
+      working-directory: '${{ github.workspace }}\build'
+      run: |
+        # Remove the vcpkg\buildtrees folder. (Once all dependencies are installed, it isn't needed, and it takes up a lot of space in the cache.)
+        if (Test-Path .\vcpkg\buildtrees) { Remove-Item .\vcpkg\buildtrees -Force -Recurse -ErrorAction SilentlyContinue; }
+
+        # Clean the build remnants of vcpkg itself. (Since it's rebuilt fresh - even from a cached vcpkg directory - these aren't needed.)
+        . "${env:WZ_REPO_PATH}\.ci\powershell\importVCvars.ps1"
+        Import-VCVarsEnv "${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" "-arch=${env:WZ_TARGET_ARCH} -host_arch=x64"
+    - name: CMake Configure (MSVC)
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
       env:
         CXXFLAGS: '/MP'
@@ -237,7 +386,17 @@ jobs:
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
         cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
         echo "::remove-matcher owner=cmake::"
-    - name: CMake Build
+    - name: CMake Configure (MINGW)
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
+      working-directory: '${{ github.workspace }}\build'
+      shell: msys2 {0}
+      run: |
+        WZ_FULL_CMAKE_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}')"
+        echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
+        PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_CMAKE_PATH}/cmake.exe" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        echo "::remove-matcher owner=cmake::"
+    - name: CMake Build (MSVC)
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
       working-directory: '${{ github.workspace }}\build'
       env:
         CXXFLAGS: '/MP'
@@ -245,6 +404,15 @@ jobs:
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\msvc.json"
         & cmake --build . --config Release --target warzone2100 -- /m
         echo "::remove-matcher owner=msvc::"
+    - name: CMake Build (MINGW)
+      if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
+      working-directory: '${{ github.workspace }}\build'
+      shell: msys2 {0}
+      run: |
+        WZ_FULL_CMAKE_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}')"
+        echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\clang.json"
+        PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_CMAKE_PATH}/cmake.exe" --build . --config Release --target warzone2100
+        echo "::remove-matcher owner=clang::"
     - name: Package Portable Installer
       working-directory: '${{ github.workspace }}\build'
       run: |
@@ -317,28 +485,28 @@ jobs:
       uses: actions/upload-artifact@v2
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
-        name: warzone2100_win_${{ matrix.architecture }}_portable
+        name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_portable
         path: '${{ github.workspace }}\output\portable'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Regular Installer)'
       uses: actions/upload-artifact@v2
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
-        name: warzone2100_win_${{ matrix.architecture }}_installer
+        name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_installer
         path: '${{ github.workspace }}\output\installer'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Debug Symbols)'
       uses: actions/upload-artifact@v2
       if: success() && (github.repository == 'Warzone2100/warzone2100')
       with:
-        name: warzone2100_win_${{ matrix.architecture }}_DEBUGSYMBOLS
+        name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_DEBUGSYMBOLS
         path: '${{ github.workspace }}\output\debugsymbols'
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
       uses: actions/upload-artifact@v2
       if: success() && startsWith(github.ref, 'refs/tags/') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
-        name: warzone2100_win_${{ matrix.architecture }}_archive
+        name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive
         path: '${{ github.workspace }}\output\archive'
         if-no-files-found: 'error'
     #####################################################
