@@ -199,7 +199,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(CPACK_COMPONENT_LANGUAGES_DISPLAY_NAME "$(TEXT_SecNLS)")
 	set(CPACK_COMPONENT_LANGUAGES_DESCRIPTION "$(DESC_SecNLS)")
 
-	if(MSVC)
+	if(MSVC OR MINGW) # MINGW may link with the Universal C Runtime, and the VC runtime installer can be used to ensure that system component is installed
 		set(NSIS_MSVCRUNTIME "on")
 		# Determine the latest available version of the MSVC runtime
 		# Fetch https://aka.ms/vs/16/release/vc_redist.x64.exe
