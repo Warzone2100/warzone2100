@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-06-10 20:53\n"
+"PO-Revision-Date: 2021-06-12 18:22\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -443,7 +443,7 @@ msgstr "飞行途中简报"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr "Beta 中队正在寻找垂直起降 (VTOL) 科技。"
+msgstr "Beta 中队正在寻找 VTOL(垂直起降) 科技。"
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
@@ -451,7 +451,7 @@ msgstr "据信这项科技应该在这个旧空军基地当中"
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr "Beta 中队遭猛烈的火力攻击"
+msgstr "Beta 中队正遭猛烈攻击"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
@@ -4002,23 +4002,23 @@ msgstr "自动升级所有火箭系武器"
 
 #: data/base/script/campaign/cam1-7.js:239
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "摧毁所有的 Paradigm 部队"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "摧毁所有的 Paradigm 增援部队"
 
 #: data/base/script/campaign/cam1ca.js:125
 msgid "Build non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "在高原上建造非墙体建筑，并摧毁所有的 Paradigm 增援部队"
 
 #: data/base/script/campaign/cam2-1x.js:114
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "从被击落的运输机中救援你的部队"
 
 #: data/base/script/campaign/cam2-c.js:29
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "在过多人被俘之前，从 Collective 营拯平民。"
 
 #: data/base/script/campaign/cam2-d.js:76
 msgid "Secure the Uplink from The Collective"
@@ -4030,7 +4030,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:162
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "将所有部队移到山谷中"
 
 #: data/base/script/campaign/cam3-1.js:245
 msgid "Destroy the missile silos"
@@ -4062,7 +4062,7 @@ msgstr "回到降落点"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "摧毁所有敌方部队和建筑"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
@@ -4074,7 +4074,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "剩余敌方部队"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
@@ -4086,7 +4086,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "摧毁敌方所有部队和基地"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
@@ -4096,20 +4096,20 @@ msgstr ""
 #: data/base/script/tutorial.js:122
 #: data/mp/multiplay/script/rules/reticule.js:21
 msgid "Manufacture (F1)"
-msgstr "生产新的单位 （F1）"
+msgstr "生产(F1)"
 
 #: data/base/script/rules.js:59
 #: data/base/script/tutorial.js:112
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/script/rules/reticule.js:25
 msgid "Manufacture - build factory first"
-msgstr "制造-首先建立工厂"
+msgstr "请先建造工厂"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
 #: data/mp/multiplay/script/rules/reticule.js:48
 msgid "Research (F2)"
-msgstr "研发新科技（F2）"
+msgstr "研发(F2)"
 
 #: data/base/script/rules.js:109
 #: data/base/script/tutorial.js:217
@@ -4124,7 +4124,7 @@ msgstr ""
 #: data/base/script/tutorial.js:354
 #: data/mp/multiplay/script/rules/reticule.js:60
 msgid "Build (F3)"
-msgstr "建造新的建筑物 （F3）"
+msgstr "建造(F3)"
 
 #: data/base/script/rules.js:121
 #: data/base/script/tutorial.js:277
@@ -4133,13 +4133,13 @@ msgstr "建造新的建筑物 （F3）"
 #: data/base/script/tutorial.js:514
 #: data/mp/multiplay/script/rules/reticule.js:64
 msgid "Build - manufacture constructor droids first"
-msgstr ""
+msgstr "请先制造工程车或工程师"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
 #: data/mp/multiplay/script/rules/reticule.js:87
 msgid "Design (F4)"
-msgstr "设计新的单位（F4）"
+msgstr "设计(F4)"
 
 #: data/base/script/rules.js:172
 #: data/base/script/tutorial.js:261
@@ -4151,13 +4151,13 @@ msgstr ""
 #: data/base/script/rules.js:181
 #: data/mp/multiplay/script/rules/reticule.js:101
 msgid "Commanders (F6)"
-msgstr "指挥命令 （F6）"
+msgstr "指挥(F6)"
 
 #: data/base/script/rules.js:185
 #: data/base/script/tutorial.js:517
 #: data/mp/multiplay/script/rules/reticule.js:105
 msgid "Commanders - manufacture commanders first"
-msgstr ""
+msgstr "请先制造指挥坦克"
 
 #: data/base/script/rules.js:191
 #: data/base/script/tutorial.js:251
@@ -4183,7 +4183,7 @@ msgstr "关闭"
 #: data/base/script/tutorial.js:516
 #: data/mp/multiplay/script/rules/reticule.js:116
 msgid "Intelligence Display (F5)"
-msgstr "显示任务及情报（F5）"
+msgstr "任务情报(F5)"
 
 #: data/base/script/tutorial.js:28
 msgid "In this training session you'll learn how to build an effective base"
@@ -4795,7 +4795,7 @@ msgstr "这些项目并不是机器。他们一直拒绝它的祝福。我们这
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:6
 msgid "They shall fall before the might of The Collective."
-msgstr "他们会在The Collective.的力量下倒下。"
+msgstr "他们将在 Collective 的力量面前倒下。"
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:8
 msgid "Attack and destroy all who resist the machine."
@@ -4819,7 +4819,7 @@ msgstr "净化和摧毁！！"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:1
 msgid "Warriors of the Collective. You have performed well."
-msgstr "the Collective 的战士们， 你们做的很好。"
+msgstr "Collective 的勇士们，你们表现得非常好。"
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:2
 msgid "Your just reward is on its way."
@@ -5218,7 +5218,7 @@ msgstr "机枪"
 
 #: data/mp/messages/strings/names.txt:275
 msgid "VTOL Flak Cannon"
-msgstr "VTOL（轻型加农炮） "
+msgstr "VTOL 高射炮"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveWall.name
@@ -5420,11 +5420,11 @@ msgstr "NEXUS 电脑入侵防御系统一型"
 
 #: data/mp/messages/strings/names.txt:491
 msgid "Nexus Resistance Circuits Mk2"
-msgstr "NEXUS 电脑入侵防御系统二型"
+msgstr "Nexus 电脑入侵防御系统二型"
 
 #: data/mp/messages/strings/names.txt:492
 msgid "Nexus Resistance Circuits Mk3"
-msgstr "NEXUS 电脑入侵防御系统三型"
+msgstr "Nexus 电脑入侵防御系统三型"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
@@ -5569,7 +5569,7 @@ msgstr "超级生化人步兵（天谴导弹）"
 #: data/mp/messages/strings/names.txt:827
 #: data/mp/messages/strings/names.txt:828
 msgid "Command Turret II"
-msgstr "指挥塔 II "
+msgstr "指挥塔 II"
 
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
@@ -5782,7 +5782,7 @@ msgstr "战役"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr "挑战"
+msgstr "七擒七纵"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
@@ -7061,7 +7061,7 @@ msgstr "野蛮人推进动力"
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1035
 msgid "Back to Basics"
-msgstr "返回基地"
+msgstr "打道回府"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -9483,7 +9483,7 @@ msgstr "高能激光发射极一型"
 #. data/mp/challenges/hidebehind.json: $.challenge.name
 #: po/custom/fromJson.txt:2683
 msgid "Hide Behind Me"
-msgstr "藏在我身后"
+msgstr "露影藏形"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
@@ -10730,7 +10730,7 @@ msgstr "拥有最强大的防御能力及HP"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
 #: po/custom/fromJson.txt:3635
 msgid "May be assigned to follow units"
-msgstr ""
+msgstr "可能被分配到以下部队"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[1]
@@ -11582,7 +11582,7 @@ msgstr "小试牛刀"
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4239
 msgid "No Place To Hide"
-msgstr "无处可藏"
+msgstr "猛龙过江"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
@@ -13734,7 +13734,7 @@ msgstr "双管多膛快速击发的机枪"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5653
 msgid "Two-faced"
-msgstr ""
+msgstr "两面三刀"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -13979,7 +13979,7 @@ msgstr "VTOL（突击枪）"
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
 #: po/custom/fromJson.txt:5819
 msgid "VTOL Bunker Buster Bug VTOL"
-msgstr "毒虫VTOL（碉堡终结者） "
+msgstr "飞虫 碉堡终结者 战机"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-BB.name
@@ -14042,7 +14042,7 @@ msgstr "VTOL反炮兵雷达"
 #. data/mp/stats/templates.json: $.V-Bug-ClusterBomb.name
 #: po/custom/fromJson.txt:5865
 msgid "VTOL Cluster Bomb Bay Bug VTOL"
-msgstr "VTOL（集束炸弹舱)"
+msgstr "飞虫 集束炸弹 战机"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-ClusterBomb.name
@@ -14322,7 +14322,7 @@ msgstr "VTOL（双管机枪）"
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6037
 msgid "VTOL"
-msgstr ""
+msgstr "垂直起降"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
@@ -14481,7 +14481,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6132
 msgctxt "rank"
 msgid "Professional"
-msgstr ""
+msgstr "专家"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[3]
@@ -14497,7 +14497,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6140
 msgctxt "rank"
 msgid "Rookie"
-msgstr ""
+msgstr "菜鸟"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[7]
@@ -14586,7 +14586,7 @@ msgstr ""
 #: src/cheat.cpp:182
 #, c-format
 msgid "%s wants to enable debug mode. Enabled: %s, Disabled: %s."
-msgstr "%s希望使用调试模式。激活;%s,关闭：%s。"
+msgstr "%s 想启用调试模式，激活：%s，关闭：%s。"
 
 #: src/cheat.cpp:186
 #, c-format
@@ -14696,7 +14696,7 @@ msgstr "储存游戏"
 
 #: src/clparse.cpp:350
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "载入战役"
 
 #: src/clparse.cpp:351
 msgid "Play in windowed mode"
@@ -14788,7 +14788,7 @@ msgstr ""
 
 #: src/clparse.cpp:382
 msgid "Continue the last saved game"
-msgstr "继续最近保存的游戏"
+msgstr "载入最近存档"
 
 #: src/clparse.cpp:383
 msgid "Start host game with given settings file"
@@ -14900,7 +14900,7 @@ msgstr "全部所需能源"
 #: src/design.cpp:727
 #: src/design.cpp:749
 msgid "Total Body Points"
-msgstr "HP"
+msgstr "耐久度"
 
 #: src/design.cpp:851
 #: src/design.cpp:870
@@ -14973,11 +14973,11 @@ msgstr "系统装备"
 
 #: src/design.cpp:3881
 msgid "Do Not Store Design"
-msgstr ""
+msgstr "不存储设计"
 
 #: src/design.cpp:3886
 msgid "Store Design"
-msgstr ""
+msgstr "存储设计"
 
 #: src/display.cpp:1553
 msgid "Cannot Build. Oil Resource Burning."
@@ -14986,12 +14986,12 @@ msgstr "油田燃烧中，无法建筑钻油井"
 #: src/display.cpp:1571
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - 耐久度 %d/%d - 经验 %.1f, %s, 杀敌 %d"
 
 #: src/display.cpp:1733
 #, c-format
 msgid "%s - Allied - Hitpoints %d/%d - Experience %d, %s"
-msgstr ""
+msgstr "%s - 盟军 - 耐久度 - %d/%d - 经验 %d, %s"
 
 #: src/display3d.cpp:742
 msgid "Player left"
@@ -15099,7 +15099,7 @@ msgstr "战役视频丢失！从 http://wz2100.net 获取"
 #: src/frontend.cpp:160
 #: src/frontend.cpp:164
 msgid "Continue Last Save"
-msgstr "继续最近保存的游戏"
+msgstr "载入最近存档"
 
 #: src/frontend.cpp:165
 msgid "No last save available"
@@ -15179,11 +15179,11 @@ msgstr "挑战"
 
 #: src/frontend.cpp:336
 msgid "Load Campaign Game"
-msgstr "载入战役游戏"
+msgstr "载入战役"
 
 #: src/frontend.cpp:337
 msgid "Load Skirmish Game"
-msgstr "载入短兵相接游戏"
+msgstr "载入短兵相接"
 
 #: src/frontend.cpp:339
 msgid "SINGLE PLAYER"
@@ -15196,7 +15196,7 @@ msgstr "战役视频丢失！请从 http://wz2100.net 获取"
 
 #: src/frontend.cpp:360
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "战役"
 
 #: src/frontend.cpp:498
 #: src/ingameop.cpp:953
@@ -15245,7 +15245,7 @@ msgstr "显示选项"
 
 #: src/frontend.cpp:638
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "音频/缩放选项"
 
 #: src/frontend.cpp:639
 #: src/ingameop.cpp:505
@@ -15260,7 +15260,7 @@ msgstr "键盘配置"
 #: src/frontend.cpp:641
 #: src/ingameop.cpp:513
 msgid "Music Manager"
-msgstr ""
+msgstr "音乐选项"
 
 #: src/frontend.cpp:643
 msgid "Open Configuration Directory"
@@ -15448,7 +15448,7 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:985
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "音频/缩放选项"
 
 #: src/frontend.cpp:1091
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
@@ -15709,13 +15709,13 @@ msgstr "能源"
 #: src/hci/build.cpp:568
 #: src/hci/manufacture.cpp:583
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "隐藏过时科技"
 
 #: src/hci.cpp:1797
 #: src/hci/build.cpp:570
 #: src/hci/manufacture.cpp:585
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "显示过时科技"
 
 #: src/hci.cpp:1920
 msgid "\n"
@@ -16321,7 +16321,7 @@ msgstr ""
 
 #: src/keybind.cpp:1349
 msgid "CHALLENGE"
-msgstr ""
+msgstr "七擒七纵"
 
 #: src/keybind.cpp:1352
 msgid "SKIRMISH"
@@ -16345,11 +16345,11 @@ msgstr ""
 
 #: src/keybind.cpp:1387
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "作弊：启用"
 
 #: src/keybind.cpp:1389
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "作弊：禁用"
 
 #: src/keybind.cpp:1445
 msgid "Researched EVERYTHING for you!"
@@ -16958,7 +16958,7 @@ msgstr "选择所有VTOL 单位"
 
 #: src/keymap.cpp:543
 msgid "Select all fully-armed VTOLs"
-msgstr ""
+msgstr "选择所有全副武装的 VTOLs"
 
 #: src/keymap.cpp:544
 msgid "Select all Wheels"
@@ -16970,7 +16970,7 @@ msgstr "显示帧率"
 
 #: src/keymap.cpp:546
 msgid "Select all units with the same components"
-msgstr ""
+msgstr "选择所有具有相同组件的部队"
 
 #: src/keymap.cpp:550
 msgid "Select all Combat Cyborgs"
@@ -17022,7 +17022,7 @@ msgstr "选择下一个生化人工厂"
 
 #: src/keymap.cpp:565
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "选择下一个 VTOL 工厂"
 
 #: src/keymap.cpp:566
 msgid "Jump to next Factory"
@@ -17042,7 +17042,7 @@ msgstr ""
 
 #: src/keymap.cpp:570
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "跳转到下一个 VTOL 工厂"
 
 #: src/keymap.cpp:573
 msgid "Toggle Debug Mappings"
@@ -17126,7 +17126,7 @@ msgstr ""
 
 #: src/loadsave.cpp:540
 msgid "cheated"
-msgstr ""
+msgstr "作弊"
 
 #: src/loop.cpp:251
 #: src/loop.cpp:267
@@ -17890,7 +17890,7 @@ msgstr ""
 
 #: src/musicmanager.cpp:858
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "音乐选项"
 
 #: src/notifications.cpp:725
 msgid "Dismiss"
@@ -18055,7 +18055,7 @@ msgstr[0] "已选取 %u 单位"
 
 #: src/structure.cpp:2515
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
-msgstr ""
+msgstr "不能再建造任何部队了，已达限制--生产停止了"
 
 #: src/structure.cpp:2523
 #, c-format
@@ -18076,7 +18076,7 @@ msgstr ""
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
-msgstr[0] ""
+msgstr[0] "%s - %u 已分配单位 - 耐久度 %d/%d"
 
 #: src/structure.cpp:5252
 #, c-format
@@ -18093,12 +18093,12 @@ msgstr[0] ""
 #: src/structure.cpp:5324
 #, c-format
 msgid "%s - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - 耐久度 %d/%d"
 
 #: src/structure.cpp:5290
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
-msgstr ""
+msgstr "%s - 连接 %u of %u - 耐久度 %d/%d"
 
 #: src/structure.cpp:5445
 #: src/structure.cpp:5490
@@ -18341,7 +18341,7 @@ msgstr ""
 #: src/version.cpp:205
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "版本: %s,%s 构建 %s%s"
 
 #: src/wzapi.cpp:2320
 msgid "YOU ARE VICTORIOUS!"
