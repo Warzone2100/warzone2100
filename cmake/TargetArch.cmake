@@ -29,21 +29,32 @@
 #
 # WZ Modifications:
 # - Clean-up arch.c after use
+# - Add support for arm64 / armv8
 #
 
 # Based on the Qt 5 processor detection code, so should be very accurate
 # https://qt.gitorious.org/qt/qtbase/blobs/master/src/corelib/global/qprocessordetection.h
-# Currently handles arm (v5, v6, v7), x86 (32/64), ia64, and ppc (32/64)
+# Currently handles arm (v5, v6, v7, v8), x86 (32/64), ia64, and ppc (32/64)
 
 # Regarding POWER/PowerPC, just as is noted in the Qt source,
 # "There are many more known variants/revisions that we do not handle/detect."
 
 set(archdetect_c_code "
-#if defined(__arm__) || defined(__TARGET_ARCH_ARM)
-    #if defined(__ARM_ARCH_7__) \\
+#if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(_M_ARM) || defined(_M_ARM64) || defined(__aarch64__) || defined(__ARM64__)
+	#if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
+		#error cmake_ARCH arm64
+	#endif
+	#if defined(__ARM64_ARCH_8__) \\
+        || defined(__aarch64__) \\
+        || defined(__ARMv8__) \\
+        || defined(__ARMv8_A__) \\
+        || (defined(__TARGET_ARCH_ARM) && __TARGET_ARCH_ARM-0 >= 8)
+        #error cmake_ARCH armv8
+    #elif defined(__ARM_ARCH_7__) \\
         || defined(__ARM_ARCH_7A__) \\
         || defined(__ARM_ARCH_7R__) \\
         || defined(__ARM_ARCH_7M__) \\
+        || defined(__ARM_ARCH_7S__) \\
         || (defined(__TARGET_ARCH_ARM) && __TARGET_ARCH_ARM-0 >= 7)
         #error cmake_ARCH armv7
     #elif defined(__ARM_ARCH_6__) \\
