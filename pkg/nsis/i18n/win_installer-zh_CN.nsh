@@ -41,5 +41,5 @@ ${LangFileString} DLTEXT_Downloading "正在下载"
 ${LangFileString} DLTEXT_SysLibDLFailed "系统库下载失败"
 ${LangFileString} DLTEXT_VideosDLFailed "视频下载失败"
 
-${LangFileString} TEXT_PromptRebootNeeded "需要重启系统才能完成安装，现在整不？"
+${LangFileString} TEXT_PromptRebootNeeded "需要重启系统才能完成安装，现在开始？"
 ${LangFileString} TEXT_MsgRebootFailed "重启失败，请手动重启。"
