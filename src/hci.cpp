@@ -1925,6 +1925,8 @@ void addIntelScreen()
 {
 	intResetScreen(false);
 
+	intMode = INT_INTELMAP;
+
 	//lock the reticule button
 	widgSetButtonState(psWScreen, IDRET_INTEL_MAP, WBUT_CLICKLOCK);
 
@@ -1933,7 +1935,6 @@ void addIntelScreen()
 
 	//add all the intelligence screen interface
 	(void)intAddIntelMap();
-	intMode = INT_INTELMAP;
 }
 
 //sets up the Transporter Screen as far as the interface is concerned
