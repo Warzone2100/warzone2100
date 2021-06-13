@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-05-25 19:56\n"
+"PO-Revision-Date: 2021-06-13 09:01\n"
 "Last-Translator: \n"
 "Language-Team: Persian\n"
 "Language: fa_IR\n"
@@ -2561,7 +2561,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:196
 #: po/custom/fromJson.txt:3127
 msgid "Increases Damage Resistance"
-msgstr ""
+msgstr "مقاومت در برابر آسیب را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
@@ -2698,7 +2698,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:982
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "به‌طور خودکار بخش‌های آسیب دیده را ترمیم می‌کند"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
