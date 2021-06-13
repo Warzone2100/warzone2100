@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-04-04 00:17+0000\n"
-"PO-Revision-Date: 2021-06-13 09:01\n"
+"PO-Revision-Date: 2021-06-13 21:01\n"
 "Last-Translator: \n"
 "Language-Team: Persian\n"
 "Language: fa_IR\n"
@@ -2708,7 +2708,7 @@ msgstr "به‌طور خودکار بخش‌های آسیب دیده را ترم
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:4276
 msgid "Or damaged units may be selected as target"
-msgstr ""
+msgstr "یا بخش‌های آسیب‌دیده به عنوان هدف انتخاب می‌شوند"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
@@ -3800,7 +3800,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:403
 #: po/custom/fromJson.txt:3180
 msgid "Increases Machinegun damage"
-msgstr ""
+msgstr "آسیب مسلسل را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[3]
@@ -3987,7 +3987,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:433
 #: po/custom/fromJson.txt:3248
 msgid "Increases Rocket damage"
-msgstr ""
+msgstr "آسیب موشک را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[3]
@@ -7203,7 +7203,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1191
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "آسیب بمب + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7212,7 +7212,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1197
 #, no-c-format
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "آسیب بمب + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[0]
@@ -7358,7 +7358,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1284
 #, no-c-format
 msgid "Cannon accuracy +10%"
-msgstr ""
+msgstr "دقّت توپ + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
@@ -7388,7 +7388,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1302
 #, no-c-format
 msgid "Cannon damage +25%"
-msgstr ""
+msgstr "آسیب توپ + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireCan.name
@@ -7764,7 +7764,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1533
 #, no-c-format
 msgid "Construction speed +10%"
-msgstr ""
+msgstr "سرعت ساخت و ساز + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[2]
@@ -7772,7 +7772,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1538
 #, no-c-format
 msgid "Construction speed +20%"
-msgstr ""
+msgstr "سرعت ساخت و ساز + ۲۰٪"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -10056,7 +10056,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[2]
 #: po/custom/fromJson.txt:3106
 msgid "Increases Cannon damage"
-msgstr ""
+msgstr "آسیب توپ را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text[2]
@@ -10089,7 +10089,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text[2]
 #: po/custom/fromJson.txt:3171
 msgid "Increases Laser damage"
-msgstr ""
+msgstr "آسیب لیزر را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text[2]
@@ -10442,14 +10442,14 @@ msgstr ""
 #: po/custom/fromJson.txt:3424
 #, no-c-format
 msgid "Laser accuracy +10%"
-msgstr ""
+msgstr "دقّت لیزر + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text[2]
 #: po/custom/fromJson.txt:3428
 #, no-c-format
 msgid "Laser damage +25%"
-msgstr ""
+msgstr "آسیب لیزر + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
@@ -10658,7 +10658,7 @@ msgstr ""
 #: po/custom/fromJson.txt:3562
 #, no-c-format
 msgid "Machinegun damage +25%"
-msgstr ""
+msgstr "آسیب مسلسل + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11856,14 +11856,14 @@ msgstr "ماژول برق"
 #: po/custom/fromJson.txt:4406
 #, no-c-format
 msgid "Power output +25%"
-msgstr ""
+msgstr "برق خروجی + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[2]
 #: po/custom/fromJson.txt:4410
 #, no-c-format
 msgid "Power output +30%"
-msgstr ""
+msgstr "برق خروجی + ۳۰٪"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text[0]
@@ -12250,7 +12250,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4675
 #, no-c-format
 msgid "Repair Speed +100%"
-msgstr ""
+msgstr "سرعت ترمیم + ۱۰۰٪"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12367,14 +12367,14 @@ msgstr "ماژول تحقیقات"
 #: po/custom/fromJson.txt:4764
 #, no-c-format
 msgid "Research speed +30%"
-msgstr ""
+msgstr "سرعت تحقیقات + ۳۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
 #: po/custom/fromJson.txt:4768
 #, no-c-format
 msgid "Research speed +85%"
-msgstr ""
+msgstr "سرعت تحقیقات + ۸۵٪"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -12503,7 +12503,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4851
 #, no-c-format
 msgid "Rocket accuracy +10%"
-msgstr ""
+msgstr "دقّت موشک + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
@@ -12548,7 +12548,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4878
 #, no-c-format
 msgid "Rocket damage +25%"
-msgstr ""
+msgstr "آسیب موشک + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
@@ -12840,21 +12840,21 @@ msgstr ""
 #: po/custom/fromJson.txt:5063
 #, no-c-format
 msgid "Sensor Range +10%"
-msgstr ""
+msgstr "برد سنسور + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[2]
 #: po/custom/fromJson.txt:5067
 #, no-c-format
 msgid "Sensor Range +15%"
-msgstr ""
+msgstr "برد سنسور + ۱۵٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
 #: po/custom/fromJson.txt:5071
 #, no-c-format
 msgid "Sensor Range +25%"
-msgstr ""
+msgstr "برد سنسور + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13396,7 +13396,7 @@ msgstr ""
 #: po/custom/fromJson.txt:5441
 #, no-c-format
 msgid "Thermal Armor +35%"
-msgstr ""
+msgstr "سپر حرارتی + ۳۵٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
@@ -13404,21 +13404,21 @@ msgstr ""
 #: po/custom/fromJson.txt:5446
 #, no-c-format
 msgid "Thermal Armor +40%"
-msgstr ""
+msgstr "سپر حرارتی + ۴۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5450
 #, no-c-format
 msgid "Thermal armor +40%"
-msgstr ""
+msgstr "سپر حرارتی + ۴۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 #: po/custom/fromJson.txt:5454
 #, no-c-format
 msgid "Thermal Armor +45%"
-msgstr ""
+msgstr "سپر حرارتی + ۴۵٪"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
@@ -13844,7 +13844,7 @@ msgstr ""
 #: po/custom/fromJson.txt:5740
 #, no-c-format
 msgid "Vehicle speed +5%"
-msgstr ""
+msgstr "سرعت وسیله‌ی نقلیه + ۵٪"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -14930,7 +14930,7 @@ msgstr ""
 #: src/design.cpp:1441
 #: src/design.cpp:1473
 msgid "Damage"
-msgstr ""
+msgstr "آسیب"
 
 #: src/design.cpp:1449
 #: src/design.cpp:1481
@@ -15319,7 +15319,7 @@ msgstr ""
 
 #: src/frontend.cpp:724
 msgid "50%"
-msgstr ""
+msgstr "۵۰٪"
 
 #: src/frontend.cpp:725
 #: src/multiplay.cpp:1649
@@ -15651,7 +15651,7 @@ msgstr ""
 #: src/frontend.cpp:2477
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "آیا دوست دارید مقیاس نمایش بازی را افزایش دهید به: %u%%؟"
 
 #: src/frontend.cpp:2479
 msgid "Increase Display Scale"
@@ -15660,7 +15660,7 @@ msgstr ""
 #: src/frontend.cpp:2496
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "مقیاس نمایش افزایش یافت به: %u%%"
 
 #: src/frontend.cpp:2497
 #: src/frontend.cpp:2513
