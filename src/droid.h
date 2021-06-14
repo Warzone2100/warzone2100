@@ -30,6 +30,7 @@
 #include "objectdef.h"
 #include "stats.h"
 #include "visibility.h"
+#include "selection.h"
 
 #include <queue>
 
@@ -165,6 +166,8 @@ DROID_TYPE droidType(DROID *psDroid);
 DROID_TYPE droidTemplateType(const DROID_TEMPLATE *psTemplate);
 
 void assignDroidsToGroup(UDWORD	playerNumber, UDWORD groupNumber, bool clearGroup);
+
+bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen);
 
 bool activateGroup(UDWORD playerNumber, UDWORD groupNumber);
 
