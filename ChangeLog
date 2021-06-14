@@ -1,3 +1,56 @@
+2021-06-18: Version 4.1.0-beta1:
+ * General:
+   * Add: New design menu stats delta system (too many commits, #1781, #1790)
+   * Add: Add a single player quit confirmation screen (commit:bc46a4287b0d6047ceb4ba5a40819421cb55205b, #1792)
+   * Add: Allow building modules/derricks in a row (with drag & build) (commit:931fad8bd5cb5730a6e0c4883c4fa45e9fa0b737, #1797)
+   * Add: Provide a self-contained map loading library that can be used by outside tools (too many commits, #1807)
+   * Add: Allow scrollable menu options (too many commits, #1823, #1851)
+   * Add: Add support for binding same keys to multiple actions in non-conflicting contexts (too many commits, #1508, #1852)
+   * Add: Add selection without group hotkeys (commit:afe1da9f777d2da726a4eba391bb3b35470735b9, #1893)
+   * Change: Allow assigning key bindings to mouse keys / huge keymapping refactor (too many commits, #1745)
+   * Change: Move the whole group to the target location, not only the command droid (commit:2f964fc01e6e168ef1063c0eac00e9081a5514be, #1831)
+   * Fix: Refresh tooltips every 500 milliseconds (commit:de53db956aea1bdcf1b509a4db4a8b9ea486c45e, commit:6675a64216e7dcfc57bc3be7108fe43604a0e3b5, #1735)
+   * Fix: Fix crash if dead object is in a widget menu (commit:4be967fe914b18a07932eac592998942311a9f55, commit:18b04b8501a6d8f1ddff8997f0f5065a8cb129e3, #1819)
+   * Fix: Fix droid health values sometimes restored to maximum after loading saves (commit:a2ee458b3fa08993ed614608a297d156ff72d9ec, #1816)
+   * Fix: Do not handle RMB click while panning the camera (commit:da4321625e83b2a78c676807a98c3d1666895357, #1822)
+   * Fix: Fix unclosable panels and flicker when using the Intelligence map and Design menus (too many commits, #1763, #1892)
+   * Fix: Clean up option menus that are open when a host quits to prevent softlocks (commit:628bcf2149d26fe1630fa247b54a265d03b3c53d, #1879)
+ * Graphics:
+   * Change: Use a single-component texture for the tcmask (commit:df2dffffed30ede55b71c4b64c2876b2994fceed, #1854)
+   * Change: [OpenGL] Provide GL_R8 fallback for OpenGL < 3.0 and OpenGL ES 2.0 (commit:9f88111e845c8ed584634d66971099d12a56101a, commit:79637a5bdc67cbadae6b10001d81004d40afa016, #1864)
+   * Change: Use a single-component texture for specular maps (commit:023229ba3d49aa146ddd1b7735ee828a2d367f98, #1865)
+   * Fix: Fix fog and add menu option to toggle it (too many commits, #1275, #1851, #1870)
+ * Campaign:
+   * Fix: Set transporter speed to zero when moving to away mission maps to prevent flying backwards (commit:71d884c9d3c546041e4d0e667f635160e1bb6681, #1881)
+ * Multiplayer:
+   * Change: Revision of some visual effects to distinguish kinetic and thermal weapons better (commit:b71b1ab2c509a0488aeb9f3b7dc98275cde665f2, #1874)
+   * Add: Chat messages when players vote (commit:8866b0f651b8bb1f0f6ce5c84568137167ee41b4, commit:a9686c74ea8ee08ef592ba5d3ddd651ce696f79e, #1572)
+ * Scripting:
+   * Fix: Fixes for uninitialized values in labels (commit:870043f8b6f63e32bacdb3d3caeca1d4792ff8b1, #1821)
+ * Balance:
+   * Add: Balance and add Heavy Plasma Launcher to multiplayer (commit:3426158b3e454786baac86cb036fef2441d83a60, #1871)
+   * Change: Revamp multiplayer anti-aircraft weapons and add Tornado Flak cannon (commit:fc6104a28d3a9bbd8017ef5ce8549de878e22b22, #1804, #1842)
+   * Change: Campaign rebalance aka "camBalance" merged (commit:ecd1a1612e73883b0d43169c169a027849c2ac1b, #1857, #1882)
+   * Change: Make howitzers less overpowered / rework mortar and howitzer tech tree (commit:eeee16c751c2c5e33a4981cca7511842d7d2e023, #1842)
+   * Change: Fix Wide Spectrum Sensor production and cost (commit:85963f5d9c68ef512a6f4782910d1a754892ee0f, #1842)
+   * Change: Improved combat parameters of weak VTOL weapons and removed obsolete (commit:97f70c2f0d77f702b13887c35dbbceafc58192fd, #1868)
+   * Change: Improving the parameters of the obsolete Super Auto-Cannon Cyborg (commit:0ad20ab65fc85f32699fc040b71e41651f5c7ce3, #1875)
+   * Change: Moving the obsolete Twin Assault Gun to come earlier (commit:a11a1010c7d1336be6c303eb5deba87a9afad404, #1877)
+   * Change: Raising the potential of Tank Killer Rocket and Super Tank Killer Cyborg (commit:712fa7b710bc7ad61f5f01b5dd8b25ff6d56c382, #1884)
+ * Other:
+   * Add: New cheat "makemehero" makes selected units hero rank (commit:e49a9f950eaa0bc3e6235013365f1d46d0a312d9, #1820)
+   * Add: Initial MINGW/Clang build for Windows x64 (too many commits, #1891)
+   * Change: [CMake] Ensure WZ-specific internal libs are built statically (commit:edb455fb8ccf6ee6848a7601e2af2bbd62fa0d88, #1805)
+   * Change: Fix various compilation warnings (too many commits, #1818)
+   * Change: Performance improvement when saving (commit:73937e2905a6e3c0c49ee27dea5bb30c623dd254, commit:05359b406f216e7a3eb09e05ef012691fe299b26, commit:3371524dcbd018fe03ee2b85d2f33a4574beb5a6, commit:2b47e9a55d21d7fb630ec395c77d059df8ed8b37, #1726)
+   * Fix: QuickJS Patch: Fix NetBSD compilation (commit:65d9993304b496478701fb6048167f7fe0227e91, #1827)
+   * Fix: Fix deactivation of research/manufacture buttons / GUI warning (commit:53efc73af592b13e2a81b7e81c70e43ef08167db, #1848)
+   * Fix: Many Mingw-w64/Clang compatibility fixes (too many commits, #1846)
+   * Fix: CMake packaging improvements for Windows (too many commits, #1888)
+   * Fix: Fix odd name placement with empty elo autorating string (commit:2b4830ef5af8c37a1e7fc3c8c4bf531fc8377555, #1900)
+   * Fix: Format json indentation (commit:40be939910ca7e44a5ec3cb6de769f95173d1303, #1901)
+   * Fix: Store more required save data into the main.json file (commit:6ad788d2c4de402e0b9ea962b33380a2f7d85272, #1902)
+
 2021-04-18: Version 4.0.1
  * General:
    * Fix: Fix broken map zoom cycle and repair bad config settings for some numerical cycle options (commit:825a07d3f237befc194e62e2de29ef0eab3defbb, commit:6037803287f1c9d3cd26820cc863d47ec16d5852, #1707)
