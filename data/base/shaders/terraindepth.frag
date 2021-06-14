@@ -34,7 +34,7 @@ void main()
 		// Calculate linear fog
 		float fogFactor = (fogEnd - vertexDistance) / (fogEnd - fogStart);
 
-		if(fogFactor > 1)
+		if(fogFactor > 1.f)
 		{
 			discard;
 		}
