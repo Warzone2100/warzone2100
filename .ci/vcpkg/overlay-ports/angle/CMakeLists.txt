@@ -57,6 +57,9 @@ endif()
 configure_file(angle_commit.h include/id/commit.h COPYONLY)
 #include_directories(include src ${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories("$<INSTALL_INTERFACE:include>" "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>" "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>")
+if(MINGW)
+	include_directories(AFTER SYSTEM "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/wz-mingw-headers>")
+endif()
 ##########
 # angle::common
 if(WINDOWS_DESKTOP)
