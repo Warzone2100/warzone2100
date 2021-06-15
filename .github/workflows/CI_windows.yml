@@ -20,14 +20,14 @@ jobs:
             deploy_release: true
           - compiler: "MSVC_2019"
             architecture: "x64"
-            deploy_release: true
+            artifact_description: "msvc_x64"
+            deploy_release: false
           - compiler: "MSVC_2019"
             architecture: "arm64"
             deploy_release: true
           - compiler: "MINGW_CLANG"
             architecture: "x64"
-            artifact_description: "mingw_x64"
-            deploy_release: false
+            deploy_release: true
       fail-fast: false
     env:
       WZ_COMPILER_VER: ${{ matrix.compiler }}
