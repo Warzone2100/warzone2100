@@ -43,7 +43,7 @@
     },
     {
       "name": "angle",
-      "platform": "windows"
+      "platform": "windows | mingw"
     }
   ],
   "default-features": [
