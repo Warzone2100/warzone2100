@@ -431,11 +431,11 @@ public:
 	//__
 	virtual bool handle_eventObjectRecycled(const BASE_OBJECT *psObj) override;
 
-	//__ ## eventPlayerLeft(player index)
+	//__ ## eventPlayerLeft(player)
 	//__
 	//__ An event that is run after a player has left the game.
 	//__
-	virtual bool handle_eventPlayerLeft(int id) override;
+	virtual bool handle_eventPlayerLeft(int player) override;
 
 	//__ ## eventCheatMode(entered)
 	//__
@@ -3080,7 +3080,7 @@ IMPL_JS_FUNC(setReticuleFlash, wzapi::setReticuleFlash)
 IMPL_JS_FUNC(showInterface, wzapi::showInterface)
 IMPL_JS_FUNC(hideInterface, wzapi::hideInterface)
 
-//-- ## removeReticuleButton(button type)
+//-- ## removeReticuleButton(buttonId)
 //--
 //-- Remove reticule button. DO NOT USE FOR ANYTHING.
 //--
@@ -3118,7 +3118,7 @@ IMPL_JS_FUNC(enumRange, wzapi::enumRange)
 IMPL_JS_FUNC(enumArea, scripting_engine::enumAreaJS)
 IMPL_JS_FUNC(addBeacon, wzapi::addBeacon)
 
-//-- ## removeBeacon(target player)
+//-- ## removeBeacon(playerFilter)
 //--
 //-- Remove a beacon message sent to target player. Target may also be ```ALLIES```.
 //-- Returns a boolean that is true on success. (3.2+ only)

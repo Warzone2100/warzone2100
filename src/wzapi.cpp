@@ -290,13 +290,13 @@ int32_t wzapi::syncRandom(WZAPI_PARAMS(uint32_t limit))
 	return gameRand(limit);
 }
 
-//-- ## setAlliance(player1, player2, value)
+//-- ## setAlliance(player1, player2, areAllies)
 //--
 //-- Set alliance status between two players to either true or false. (3.2+ only)
 //--
-bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool value))
+bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool areAllies))
 {
-	if (value)
+	if (areAllies)
 	{
 		formAlliance(player1, player2, true, false, true);
 	}
@@ -311,11 +311,11 @@ bool wzapi::setAlliance(WZAPI_PARAMS(int player1, int player2, bool value))
 //--
 //-- Send an alliance request to a player. (3.3+ only)
 //--
-wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player2))
+wzapi::no_return_value wzapi::sendAllianceRequest(WZAPI_PARAMS(int player))
 {
 	if (!alliancesFixed(game.alliance))
 	{
-		requestAlliance(context.player(), player2, true, true);
+		requestAlliance(context.player(), player, true, true);
 	}
 	return wzapi::no_return_value();
 }
@@ -354,17 +354,17 @@ bool wzapi::orderDroid(WZAPI_PARAMS(DROID* psDroid, int order))
 	return true;
 }
 
-//-- ## orderDroidBuild(droid, order, structure type, x, y[, direction])
+//-- ## orderDroidBuild(droid, order, structureName, x, y[, direction])
 //--
 //-- Give a droid an order to build something at the given position. Returns true if allowed.
 //--
-bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string statName, int x, int y, optional<float> _direction))
+bool wzapi::orderDroidBuild(WZAPI_PARAMS(DROID* psDroid, int order, std::string structureName, int x, int y, optional<float> _direction))
 {
 	SCRIPT_ASSERT(false, context, psDroid, "No valid droid provided");
 
-	int index = getStructStatFromName(WzString::fromUtf8(statName));
-	SCRIPT_ASSERT(false, context, index >= 0, "%s not found", statName.c_str());
-	STRUCTURE_STATS	*psStats = &asStructureStats[index];
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
+	STRUCTURE_STATS	*psStats = &asStructureStats[structureIndex];
 
 	SCRIPT_ASSERT(false, context, order == DORDER_BUILD, "Invalid order");
 	SCRIPT_ASSERT(false, context, psStats->id.compare("A0ADemolishStructure") != 0, "Cannot build demolition");
@@ -404,7 +404,7 @@ bool wzapi::setSunPosition(WZAPI_PARAMS(float x, float y, float z))
 	return true;
 }
 
-//-- ## setSunIntensity(ambient r, g, b, diffuse r, g, b, specular r, g, b)
+//-- ## setSunIntensity(ambient_r, ambient_g, ambient_b, diffuse_r, diffuse_g, diffuse_b, specular_r, specular_g, specular_b)
 //--
 //-- Set the ambient, diffuse and specular colour intensities of the Sun lighting source. (3.2+ only)
 //--
@@ -431,24 +431,24 @@ bool wzapi::setSunIntensity(WZAPI_PARAMS(float ambient_r, float ambient_g, float
 	return true;
 }
 
-//-- ## setWeather(weather type)
+//-- ## setWeather(weatherType)
 //--
 //-- Set the current weather. This should be one of ```WEATHER_RAIN```, ```WEATHER_SNOW``` or ```WEATHER_CLEAR```. (3.2+ only)
 //--
-bool wzapi::setWeather(WZAPI_PARAMS(int weather))
+bool wzapi::setWeather(WZAPI_PARAMS(int weatherType))
 {
-	SCRIPT_ASSERT(false, context, weather >= 0 && weather <= WT_NONE, "Bad weather type");
-	atmosSetWeatherType((WT_CLASS)weather);
+	SCRIPT_ASSERT(false, context, weatherType >= 0 && weatherType <= WT_NONE, "Bad weather type");
+	atmosSetWeatherType((WT_CLASS)weatherType);
 	return true;
 }
 
-//-- ## setSky(texture file, wind speed, skybox scale)
+//-- ## setSky(textureFilename, windSpeed, scale)
 //--
 //-- Change the skybox. (3.2+ only)
 //--
-bool wzapi::setSky(WZAPI_PARAMS(std::string page, float wind, float scale))
+bool wzapi::setSky(WZAPI_PARAMS(std::string textureFilename, float windSpeed, float scale))
 {
-	setSkyBox(page.c_str(), wind, scale);
+	setSkyBox(textureFilename.c_str(), windSpeed, scale);
 	return true; // TODO: modify setSkyBox to return bool, success / failure
 }
 
@@ -462,7 +462,7 @@ bool wzapi::cameraSlide(WZAPI_PARAMS(float x, float y))
 	return true;
 }
 
-//-- ## cameraZoom(z, speed)
+//-- ## cameraZoom(viewDistance, speed)
 //--
 //-- Slide the camera to the given zoom distance. Normal camera zoom ranges between 500 and 5000. (3.2+ only)
 //--
@@ -476,16 +476,16 @@ bool wzapi::cameraZoom(WZAPI_PARAMS(float viewDistance, float speed))
 //--
 //-- Make the camera follow the given droid object around. Pass in a null object to stop. (3.2+ only)
 //--
-bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _targetDroid))
+bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _droid))
 {
-	if (_targetDroid.has_value())
+	if (_droid.has_value())
 	{
-		DROID *targetDroid = _targetDroid.value();
-		SCRIPT_ASSERT(false, context, targetDroid, "No valid droid provided");
+		DROID *droid = _droid.value();
+		SCRIPT_ASSERT(false, context, droid, "No valid droid provided");
 		SCRIPT_ASSERT(false, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
 		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
-			psDroid->selected = psDroid == targetDroid; // select only the target droid
+			psDroid->selected = psDroid == droid; // select only the target droid
 		}
 		setWarCamActive(true);
 	}
@@ -496,10 +496,10 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _targetDroid))
 	return true;
 }
 
-//-- ## addSpotter(x, y, player, range, type, expiry)
+//-- ## addSpotter(x, y, player, range, radar, expiry)
 //--
-//-- Add an invisible viewer at a given position for given player that shows map in given range. ```type```
-//-- is zero for vision reveal, or one for radar reveal. The difference is that a radar reveal can be obstructed
+//-- Add an invisible viewer at a given position for given player that shows map in given range. ```radar```
+//-- is false for vision reveal, or false for radar reveal. The difference is that a radar reveal can be obstructed
 //-- by ECM jammers. ```expiry```, if non-zero, is the game time at which the spotter shall automatically be
 //-- removed. The function returns a unique ID that can be used to remove the spotter with ```removeSpotter```. (3.2+ only)
 //--
@@ -508,16 +508,16 @@ uint32_t wzapi::addSpotter(WZAPI_PARAMS(int x, int y, int player, int range, boo
 	return ::addSpotter(x, y, player, range, radar, expiry);
 }
 
-//-- ## removeSpotter(id)
+//-- ## removeSpotter(spotterId)
 //--
 //-- Remove a spotter given its unique ID. (3.2+ only)
 //--
-bool wzapi::removeSpotter(WZAPI_PARAMS(uint32_t id))
+bool wzapi::removeSpotter(WZAPI_PARAMS(uint32_t spotterId))
 {
-	return ::removeSpotter(id);
+	return ::removeSpotter(spotterId);
 }
 
-//-- ## syncRequest(req_id, x, y[, obj[, obj2]])
+//-- ## syncRequest(req_id, x, y[, object[, object2]])
 //--
 //-- Generate a synchronized event request that is sent over the network to all clients and executed simultaneously.
 //-- Must be caught in an eventSyncRequest() function. All sync requests must be validated when received, and always
@@ -542,14 +542,14 @@ bool wzapi::syncRequest(WZAPI_PARAMS(int32_t req_id, int32_t _x, int32_t _y, opt
 	return true;
 }
 
-//-- ## replaceTexture(old_filename, new_filename)
+//-- ## replaceTexture(oldFilename, newFilename)
 //--
 //-- Replace one texture with another. This can be used to for example give buildings on a specific tileset different
 //-- looks, or to add variety to the looks of droids in campaign missions. (3.2+ only)
 //--
-bool wzapi::replaceTexture(WZAPI_PARAMS(std::string oldfile, std::string newfile))
+bool wzapi::replaceTexture(WZAPI_PARAMS(std::string oldFilename, std::string newFilename))
 {
-	return replaceTexture(WzString::fromUtf8(oldfile), WzString::fromUtf8(newfile));
+	return replaceTexture(WzString::fromUtf8(oldFilename), WzString::fromUtf8(newFilename));
 }
 
 //-- ## changePlayerColour(player, colour)
@@ -573,15 +573,15 @@ bool wzapi::setHealth(WZAPI_PARAMS(BASE_OBJECT* psObject, int health)) MULTIPLAY
 	SCRIPT_ASSERT(false, context, health >= 1, "Bad health value %d", health);
 	int id = psObject->id;
 	int player = psObject->player;
-	OBJECT_TYPE type = psObject->type;
-	SCRIPT_ASSERT(false, context, type == OBJ_DROID || type == OBJ_STRUCTURE || type == OBJ_FEATURE, "Bad object type");
-	if (type == OBJ_DROID)
+	OBJECT_TYPE objectType = psObject->type;
+	SCRIPT_ASSERT(false, context, objectType == OBJ_DROID || objectType == OBJ_STRUCTURE || objectType == OBJ_FEATURE, "Bad object type");
+	if (objectType == OBJ_DROID)
 	{
 		DROID *psDroid = (DROID *)psObject;
 		SCRIPT_ASSERT(false, context, psDroid, "No such droid id %d belonging to player %d", id, player);
 		psDroid->body = static_cast<UDWORD>(health * (double)psDroid->originalBody / 100);
 	}
-	else if (type == OBJ_STRUCTURE)
+	else if (objectType == OBJ_STRUCTURE)
 	{
 		STRUCTURE *psStruct = (STRUCTURE *)psObject;
 		SCRIPT_ASSERT(false, context, psStruct, "No such structure id %d belonging to player %d", id, player);
@@ -628,13 +628,13 @@ uint32_t wzapi::getMultiTechLevel(WZAPI_NO_PARAMS)
 	return game.techLevel;
 }
 
-//-- ## setCampaignNumber(num)
+//-- ## setCampaignNumber(campaignNumber)
 //--
 //-- Set the campaign number. (3.3+ only)
 //--
-bool wzapi::setCampaignNumber(WZAPI_PARAMS(int num))
+bool wzapi::setCampaignNumber(WZAPI_PARAMS(int campaignNumber))
 {
-	::setCampaignNumber(num);
+	::setCampaignNumber(campaignNumber);
 	return true;
 }
 
@@ -700,13 +700,13 @@ wzapi::no_return_value wzapi::hackNetOn(WZAPI_NO_PARAMS)
 	return {};
 }
 
-//-- ## hackAddMessage(message, type, player, immediate)
+//-- ## hackAddMessage(message, messageType, player, immediate)
 //--
 //-- See wzscript docs for info, to the extent any exist. (3.2+ only)
 //--
-wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, int type, int player, bool immediate))
+wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, int messageType, int player, bool immediate))
 {
-	MESSAGE_TYPE msgType = (MESSAGE_TYPE)type;
+	MESSAGE_TYPE msgType = (MESSAGE_TYPE)messageType;
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	MESSAGE *psMessage = addMessage(msgType, false, player);
 	if (psMessage)
@@ -734,13 +734,13 @@ wzapi::no_return_value wzapi::hackAddMessage(WZAPI_PARAMS(std::string message, i
 	return {};
 }
 
-//-- ## hackRemoveMessage(message, type, player)
+//-- ## hackRemoveMessage(message, messageType, player)
 //--
 //-- See wzscript docs for info, to the extent any exist. (3.2+ only)
 //--
-wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message, int type, int player))
+wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message, int messageType, int player))
 {
-	MESSAGE_TYPE msgType = (MESSAGE_TYPE)type;
+	MESSAGE_TYPE msgType = (MESSAGE_TYPE)messageType;
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 	VIEWDATA *psViewData = getViewData(WzString::fromUtf8(message));
 	SCRIPT_ASSERT({}, context, psViewData, "Viewdata not found");
@@ -758,16 +758,16 @@ wzapi::no_return_value wzapi::hackRemoveMessage(WZAPI_PARAMS(std::string message
 	return {};
 }
 
-//-- ## hackGetObj(type, player, id)
+//-- ## hackGetObj(objectType, player, id)
 //--
 //-- Function to find and return a game object of ```DROID```, ```FEATURE``` or ```STRUCTURE``` types, if it exists.
 //-- Otherwise, it will return null. This function is DEPRECATED by getObject(). (3.2+ only)
 //--
-wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _type, int player, int id)) WZAPI_DEPRECATED
+wzapi::returned_nullable_ptr<const BASE_OBJECT> wzapi::hackGetObj(WZAPI_PARAMS(int _objectType, int player, int id)) WZAPI_DEPRECATED
 {
-	OBJECT_TYPE type = (OBJECT_TYPE)_type;
+	OBJECT_TYPE objectType = (OBJECT_TYPE)_objectType;
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
-	return IdToObject(type, id, player);
+	return IdToObject(objectType, id, player);
 }
 
 //-- ## hackAssert(condition, message...)
@@ -948,13 +948,13 @@ bool wzapi::console(WZAPI_PARAMS(va_list_treat_as_strings strings))
 	if (player == selectedPlayer)
 	{
 		std::string result;
-		for (const auto & s : strings.strings)
+		for (const auto & str : strings.strings)
 		{
 			if (!result.empty())
 			{
 				result.append(" ");
 			}
-			result.append(s);
+			result.append(str);
 		}
 		//permitNewConsoleMessages(true);
 		//setConsolePermanence(true,true);
@@ -1015,7 +1015,7 @@ std::vector<const STRUCTURE *> _enumStruct_fromList(WZAPI_PARAMS(optional<int> _
 	return matches;
 }
 
-//-- ## enumStruct([player[, structure type[, playerFilter]]])
+//-- ## enumStruct([player[, structureType[, playerFilter]]])
 //--
 //-- Returns an array of structure objects. If no parameters given, it will
 //-- return all of the structures for the current player. The second parameter
@@ -1029,7 +1029,7 @@ std::vector<const STRUCTURE *> wzapi::enumStruct(WZAPI_PARAMS(optional<int> _pla
 	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, apsStructLists);
 }
 
-//-- ## enumStructOffWorld([player[, structure type[, playerFilter]]])
+//-- ## enumStructOffWorld([player[, structureType[, playerFilter]]])
 //--
 //-- Returns an array of structure objects in your base when on an off-world mission, NULL otherwise.
 //-- If no parameters given, it will return all of the structures for the current player.
@@ -1043,7 +1043,7 @@ std::vector<const STRUCTURE *> wzapi::enumStructOffWorld(WZAPI_PARAMS(optional<i
 	return _enumStruct_fromList(context, _player, _structureType, _playerFilter, (mission.apsStructLists));
 }
 
-//-- ## enumDroid([player[, droid type[, playerFilter]]])
+//-- ## enumDroid([player[, droidType[, playerFilter]]])
 //--
 //-- Returns an array of droid objects. If no parameters given, it will
 //-- return all of the droids for the current player. The second, optional parameter
@@ -1088,19 +1088,19 @@ std::vector<const DROID *> wzapi::enumDroid(WZAPI_PARAMS(optional<int> _player, 
 	return matches;
 }
 
-//-- ## enumFeature(playerFilter[, name])
+//-- ## enumFeature(playerFilter[, featureName])
 //--
 //-- Returns an array of all features seen by player of given name, as defined in "features.json".
 //-- If player is ```ALL_PLAYERS```, it will return all features irrespective of visibility to any player. If
 //-- name is empty, it will return any feature.
 //--
-std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, optional<std::string> _statsName))
+std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, optional<std::string> _featureName))
 {
 	SCRIPT_ASSERT({}, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS, "Player filter index out of range: %d", playerFilter);
-	WzString statsName;
-	if (_statsName.has_value())
+	WzString featureName;
+	if (_featureName.has_value())
 	{
-		statsName = WzString::fromUtf8(_statsName.value());
+		featureName = WzString::fromUtf8(_featureName.value());
 	}
 
 	std::vector<const FEATURE *> matches;
@@ -1108,7 +1108,7 @@ std::vector<const FEATURE *> wzapi::enumFeature(WZAPI_PARAMS(int playerFilter, o
 	{
 		if ((playerFilter == ALL_PLAYERS || psFeat->visible[playerFilter])
 		    && !psFeat->died
-		    && (statsName.isEmpty() || statsName.compare(psFeat->psStats->id) == 0))
+		    && (featureName.isEmpty() || featureName.compare(psFeat->psStats->id) == 0))
 		{
 			matches.push_back(psFeat);
 		}
@@ -1175,15 +1175,15 @@ GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
 	return gwGetGateways();
 }
 
-//-- ## getResearch(research[, player])
+//-- ## getResearch(researchName[, player])
 //--
 //-- Fetch information about a given technology item, given by a string that matches
 //-- its definition in "research.json". If not found, returns null.
 //--
-wzapi::researchResult wzapi::getResearch(WZAPI_PARAMS(std::string resName, optional<int> _player))
+wzapi::researchResult wzapi::getResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player))
 {
 	researchResult result;
-	result.psResearch = ::getResearch(resName.c_str());
+	result.psResearch = ::getResearch(researchName.c_str());
 	result.player = _player.value_or(context.player());
 	return result;
 }
@@ -1246,7 +1246,7 @@ std::vector<const BASE_OBJECT *> wzapi::enumRange(WZAPI_PARAMS(int _x, int _y, i
 	return list;
 }
 
-//-- ## pursueResearch(lab, research)
+//-- ## pursueResearch(labStructure, research)
 //--
 //-- Start researching the first available technology on the way to the given technology.
 //-- First parameter is the structure to research in, which must be a research lab. The
@@ -1260,10 +1260,10 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 	int player = psStruct->player;
 
 	RESEARCH *psResearch = nullptr;  // Dummy initialisation.
-	for (const auto& resName : research.strings)
+	for (const auto& researchName : research.strings)
 	{
-		RESEARCH *psCurrResearch = ::getResearch(resName.c_str());
-		SCRIPT_ASSERT(false, context, psCurrResearch, "No such research: %s", resName.c_str());
+		RESEARCH *psCurrResearch = ::getResearch(researchName.c_str());
+		SCRIPT_ASSERT(false, context, psCurrResearch, "No such research: %s", researchName.c_str());
 		PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psCurrResearch->index];
 		if (!IsResearchStartedPending(plrRes) && !IsResearchCompleted(plrRes))
 		{
@@ -1290,63 +1290,63 @@ bool wzapi::pursueResearch(WZAPI_PARAMS(const STRUCTURE *psStruct, string_or_str
 	SCRIPT_ASSERT(false, context, psResLab->psSubject == nullptr, "Research lab not ready");
 	// Go down the requirements list for the desired tech
 	std::list<RESEARCH *> reslist;
-	RESEARCH *cur = psResearch;
+	RESEARCH *curResearch = psResearch;
 	int iterations = 0;  // Only used to assert we're not stuck in the loop.
-	while (cur)
+	while (curResearch)
 	{
-		if (researchAvailable(cur->index, player, ModeQueue))
+		if (researchAvailable(curResearch->index, player, ModeQueue))
 		{
 			bool started = false;
 			for (int i = 0; i < game.maxPlayers; i++)
 			{
 				if (i == player || (aiCheckAlliances(player, i) && alliancesSharedResearch(game.alliance)))
 				{
-					int bits = asPlayerResList[i][cur->index].ResearchStatus;
+					int bits = asPlayerResList[i][curResearch->index].ResearchStatus;
 					started = started || (bits & STARTED_RESEARCH) || (bits & STARTED_RESEARCH_PENDING)
 					          || (bits & RESBITS_PENDING_ONLY) || (bits & RESEARCHED);
 				}
 			}
 			if (!started) // found relevant item on the path?
 			{
-				sendResearchStatus(psStruct, cur->index, player, true);
+				sendResearchStatus(psStruct, curResearch->index, player, true);
 #if defined (DEBUG)
 				char sTemp[128];
-				snprintf(sTemp, sizeof(sTemp), "player:%d starts topic from script: %s", player, getID(cur));
+				snprintf(sTemp, sizeof(sTemp), "player:%d starts topic from script: %s", player, getID(curResearch));
 				NETlogEntry(sTemp, SYNC_FLAG, 0);
 #endif
 				debug(LOG_SCRIPT, "Started research in %d's %s(%d) of %s", player,
-				      objInfo(psStruct), psStruct->id, getStatsName(cur));
+				      objInfo(psStruct), psStruct->id, getStatsName(curResearch));
 				return true;
 			}
 		}
-		RESEARCH *prev = cur;
-		cur = nullptr;
-		if (!prev->pPRList.empty())
+		RESEARCH *prevResearch = curResearch;
+		curResearch = nullptr;
+		if (!prevResearch->pPRList.empty())
 		{
-			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
+			curResearch = &asResearch[prevResearch->pPRList[0]]; // get first pre-req
 		}
-		for (int i = 1; i < prev->pPRList.size(); i++)
+		for (int i = 1; i < prevResearch->pPRList.size(); i++)
 		{
 			// push any other pre-reqs on the stack
-			reslist.push_back(&asResearch[prev->pPRList[i]]);
+			reslist.push_back(&asResearch[prevResearch->pPRList[i]]);
 		}
-		if (!cur && !reslist.empty())
+		if (!curResearch && !reslist.empty())
 		{
-			cur = reslist.front(); // retrieve options from the stack
+			curResearch = reslist.front(); // retrieve options from the stack
 			reslist.pop_front();
 		}
-		ASSERT_OR_RETURN(false, ++iterations < asResearch.size() * 100 || !cur, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", getStatsName(cur));
+		ASSERT_OR_RETURN(false, ++iterations < asResearch.size() * 100 || !curResearch, "Possible cyclic dependencies in prerequisites, possibly of research \"%s\".", getStatsName(curResearch));
 	}
 	debug(LOG_SCRIPT, "No research topic found for %s(%d)", objInfo(psStruct), psStruct->id);
 	return false; // none found
 }
 
-//-- ## findResearch(research[, player])
+//-- ## findResearch(researchName[, player])
 //--
 //-- Return list of research items remaining to be researched for the given research item. (3.2+ only)
 //-- (Optional second argument 3.2.3+ only)
 //--
-wzapi::researchResults wzapi::findResearch(WZAPI_PARAMS(std::string resName, optional<int> _player))
+wzapi::researchResults wzapi::findResearch(WZAPI_PARAMS(std::string researchName, optional<int> _player))
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
@@ -1354,40 +1354,40 @@ wzapi::researchResults wzapi::findResearch(WZAPI_PARAMS(std::string resName, opt
 	researchResults result;
 	result.player = player;
 
-	RESEARCH *psTarget = ::getResearch(resName.c_str());
-	SCRIPT_ASSERT({}, context, psTarget, "No such research: %s", resName.c_str());
+	RESEARCH *psTarget = ::getResearch(researchName.c_str());
+	SCRIPT_ASSERT({}, context, psTarget, "No such research: %s", researchName.c_str());
 	PLAYER_RESEARCH *plrRes = &asPlayerResList[player][psTarget->index];
 	if (IsResearchStartedPending(plrRes) || IsResearchCompleted(plrRes))
 	{
-		debug(LOG_SCRIPT, "Find reqs for %s for player %d - research pending or completed", resName.c_str(), player);
+		debug(LOG_SCRIPT, "Find reqs for %s for player %d - research pending or completed", researchName.c_str(), player);
 		return result; // return empty array
 	}
-	debug(LOG_SCRIPT, "Find reqs for %s for player %d", resName.c_str(), player);
+	debug(LOG_SCRIPT, "Find reqs for %s for player %d", researchName.c_str(), player);
 	// Go down the requirements list for the desired tech
 	std::list<RESEARCH *> reslist;
-	RESEARCH *cur = psTarget;
-	while (cur)
+	RESEARCH *curResearch = psTarget;
+	while (curResearch)
 	{
-		if (!(asPlayerResList[player][cur->index].ResearchStatus & RESEARCHED))
+		if (!(asPlayerResList[player][curResearch->index].ResearchStatus & RESEARCHED))
 		{
-			debug(LOG_SCRIPT, "Added research in %d's %s for %s", player, getID(cur), getID(psTarget));
-			result.resList.push_back(cur);
+			debug(LOG_SCRIPT, "Added research in %d's %s for %s", player, getID(curResearch), getID(psTarget));
+			result.resList.push_back(curResearch);
 		}
-		RESEARCH *prev = cur;
-		cur = nullptr;
-		if (!prev->pPRList.empty())
+		RESEARCH *prevResearch = curResearch;
+		curResearch = nullptr;
+		if (!prevResearch->pPRList.empty())
 		{
-			cur = &asResearch[prev->pPRList[0]]; // get first pre-req
+			curResearch = &asResearch[prevResearch->pPRList[0]]; // get first pre-req
 		}
-		for (int i = 1; i < prev->pPRList.size(); i++)
+		for (int i = 1; i < prevResearch->pPRList.size(); i++)
 		{
 			// push any other pre-reqs on the stack
-			reslist.push_back(&asResearch[prev->pPRList[i]]);
+			reslist.push_back(&asResearch[prevResearch->pPRList[i]]);
 		}
-		if (!cur && !reslist.empty())
+		if (!curResearch && !reslist.empty())
 		{
 			// retrieve options from the stack
-			cur = reslist.front();
+			curResearch = reslist.front();
 			reslist.pop_front();
 		}
 	}
@@ -1442,19 +1442,19 @@ int wzapi::queuedPower(WZAPI_PARAMS(int player))
 	return getQueuedPower(player);
 }
 
-//-- ## isStructureAvailable(structure type[, player])
+//-- ## isStructureAvailable(structureName[, player])
 //--
 //-- Returns true if given structure can be built. It checks both research and unit limits.
 //--
-bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structName, optional<int> _player))
+bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structureName, optional<int> _player))
 {
-	int index = getStructStatFromName(WzString::fromUtf8(structName));
-	SCRIPT_ASSERT(false, context, index >= 0, "%s not found", structName.c_str());
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	int player = _player.value_or(context.player());
 
-	int status = apStructTypeLists[player][index];
+	int status = apStructTypeLists[player][structureIndex];
 	return (status == AVAILABLE || status == REDUNDANT)
-		&& asStructureStats[index].curCount[player] < asStructureStats[index].upgrade[player].limit;
+		&& asStructureStats[structureIndex].curCount[player] < asStructureStats[structureIndex].upgrade[player].limit;
 }
 
 // additional structure check
@@ -1533,20 +1533,20 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	return false;
 }
 
-//-- ## pickStructLocation(droid, structure type, x, y[, maxBlockingTiles])
+//-- ## pickStructLocation(droid, structureName, x, y[, maxBlockingTiles])
 //--
 //-- Pick a location for constructing a certain type of building near some given position.
 //-- Returns an object containing "type" ```POSITION```, and "x" and "y" values, if successful.
 //--
-optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string statName, int startX, int startY, optional<int> _maxBlockingTiles))
+optional<scr_position> wzapi::pickStructLocation(WZAPI_PARAMS(const DROID *psDroid, std::string structureName, int startX, int startY, optional<int> _maxBlockingTiles))
 {
 	SCRIPT_ASSERT({}, context, psDroid, "No valid droid provided");
 	const int player = psDroid->player;
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	int index = getStructStatFromName(WzString::fromUtf8(statName));
-	SCRIPT_ASSERT({}, context, index >= 0, "%s not found", statName.c_str());
-	STRUCTURE_STATS	*psStat = &asStructureStats[index];
-	SCRIPT_ASSERT({}, context, psStat, "No such stat found: %s", statName.c_str());
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
+	SCRIPT_ASSERT({}, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
+	STRUCTURE_STATS	*psStat = &asStructureStats[structureIndex];
+	SCRIPT_ASSERT({}, context, psStat, "No such stat found: %s", structureName.c_str());
 
 	int numIterations = 30;
 	bool found = false;
@@ -1636,16 +1636,16 @@ bool wzapi::droidCanReach(WZAPI_PARAMS(const DROID *psDroid, int x, int y))
 	return fpathCheck(psDroid->pos, Vector3i(world_coord(x), world_coord(y), 0), psPropStats->propulsionType);
 }
 
-//-- ## propulsionCanReach(propulsion, x1, y1, x2, y2)
+//-- ## propulsionCanReach(propulsionName, x1, y1, x2, y2)
 //--
 //-- Return true if a droid with a given propulsion is able to travel from (x1, y1) to (x2, y2).
 //-- Does not take player built blockades into account. (3.2+ only)
 //--
 bool wzapi::propulsionCanReach(WZAPI_PARAMS(std::string propulsionName, int x1, int y1, int x2, int y2))
 {
-	int propulsion = getCompFromName(COMP_PROPULSION, WzString::fromUtf8(propulsionName));
-	SCRIPT_ASSERT(false, context, propulsion > 0, "No such propulsion: %s", propulsionName.c_str());
-	const PROPULSION_STATS *psPropStats = asPropulsionStats + propulsion;
+	int propulsionIndex = getCompFromName(COMP_PROPULSION, WzString::fromUtf8(propulsionName));
+	SCRIPT_ASSERT(false, context, propulsionIndex > 0, "No such propulsion: %s", propulsionName.c_str());
+	const PROPULSION_STATS *psPropStats = asPropulsionStats + propulsionIndex;
 	return fpathCheck(Vector3i(world_coord(x1), world_coord(y1), 0), Vector3i(world_coord(x2), world_coord(y2), 0), psPropStats->propulsionType);
 }
 
@@ -1689,29 +1689,29 @@ bool wzapi::orderDroidObj(WZAPI_PARAMS(DROID *psDroid, int _order, BASE_OBJECT *
 	return true;
 }
 
-static int get_first_available_component(int player, int capacity, const wzapi::string_or_string_list& list, COMPONENT_TYPE type, bool strict)
+static int get_first_available_component(int player, int capacity, const wzapi::string_or_string_list& list, COMPONENT_TYPE componentType, bool strict)
 {
-	for (const auto& compName : list.strings)
+	for (const auto& componentName : list.strings)
 	{
-		int result = getCompFromName(type, WzString::fromUtf8(compName));
-		if (result >= 0)
+		int componentIndex = getCompFromName(componentType, WzString::fromUtf8(componentName));
+		if (componentIndex >= 0)
 		{
-			int status = apCompLists[player][type][result];
+			int status = apCompLists[player][componentType][componentIndex];
 			if ((status == AVAILABLE || status == REDUNDANT || !strict)
-				&& (type != COMP_BODY || asBodyStats[result].size <= capacity))
+				&& (componentType != COMP_BODY || asBodyStats[componentIndex].size <= capacity))
 			{
-				return result; // found one!
+				return componentIndex; // found one!
 			}
 		}
-		if (result < 0)
+		if (componentIndex < 0)
 		{
-			debug(LOG_ERROR, "No such component: %s", compName.c_str());
+			debug(LOG_ERROR, "No such component: %s", componentName.c_str());
 		}
 	}
 	return -1; // no available component found in list
 }
 
-static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::string &templName, const wzapi::string_or_string_list& _body, const wzapi::string_or_string_list& _propulsion, const wzapi::va_list<wzapi::string_or_string_list>& _turrets, int capacity, bool strict)
+static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::string &templateName, const wzapi::string_or_string_list& _body, const wzapi::string_or_string_list& _propulsion, const wzapi::va_list<wzapi::string_or_string_list>& _turrets, int capacity, bool strict)
 {
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE);
 	size_t numTurrets = _turrets.va_list.size();
@@ -1723,14 +1723,14 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	if (body < 0)
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s but body types all unavailable",
-		      templName.c_str());
+		      templateName.c_str());
 		return nullptr; // no component available
 	}
 	int prop = get_first_available_component(player, capacity, _propulsion, COMP_PROPULSION, strict);
 	if (prop < 0)
 	{
 		debug(LOG_SCRIPT, "Wanted to build %s but propulsion types all unavailable",
-		      templName.c_str());
+		      templateName.c_str());
 		return nullptr; // no component available
 	}
 	psTemplate->asParts[COMP_BODY] = body;
@@ -1745,14 +1745,14 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	// Find first turret component type (assume every component in list is same type)
 	if (_turrets.va_list.empty() || _turrets.va_list[0].strings.empty())
 	{
-		debug(LOG_SCRIPT, "Wanted to build %s but no turrets provided", templName.c_str());
+		debug(LOG_SCRIPT, "Wanted to build %s but no turrets provided", templateName.c_str());
 		return nullptr;
 	}
-	std::string compName = _turrets.va_list[0].strings[0];
-	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(compName.c_str()));
+	std::string componentName = _turrets.va_list[0].strings[0];
+	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(componentName.c_str()));
 	if (psComp == nullptr)
 	{
-		debug(LOG_ERROR, "Wanted to build %s but %s does not exist", templName.c_str(), compName.c_str());
+		debug(LOG_ERROR, "Wanted to build %s but %s does not exist", templateName.c_str(), componentName.c_str());
 		return nullptr;
 	}
 	if (psComp->droidTypeOverride != DROID_ANY)
@@ -1766,7 +1766,7 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 			result = get_first_available_component(player, SIZE_NUM, _turrets.va_list[i], COMP_WEAPON, strict);
 			if (result < 0)
 			{
-				debug(LOG_SCRIPT, "Wanted to build %s but no weapon available", templName.c_str());
+				debug(LOG_SCRIPT, "Wanted to build %s but no weapon available", templateName.c_str());
 				return nullptr;
 			}
 			psTemplate->asWeaps[i] = result;
@@ -1782,24 +1782,24 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 		result = get_first_available_component(player, SIZE_NUM, _turrets.va_list[0], psComp->compType, strict);
 		if (result < 0)
 		{
-			debug(LOG_SCRIPT, "Wanted to build %s but turret unavailable", templName.c_str());
+			debug(LOG_SCRIPT, "Wanted to build %s but turret unavailable", templateName.c_str());
 			return nullptr;
 		}
 		psTemplate->asParts[psComp->compType] = result;
 	}
-	bool valid = intValidTemplate(psTemplate.get(), templName.c_str(), true, player);
+	bool valid = intValidTemplate(psTemplate.get(), templateName.c_str(), true, player);
 	if (valid)
 	{
 		return psTemplate;
 	}
 	else
 	{
-		debug(LOG_ERROR, "Invalid template %s", templName.c_str());
+		debug(LOG_ERROR, "Invalid template %s", templateName.c_str());
 		return nullptr;
 	}
 }
 
-//-- ## buildDroid(factory, name, body, propulsion, reserved, reserved, turrets...)
+//-- ## buildDroid(factory, templateName, body, propulsion, reserved, reserved, turrets...)
 //--
 //-- Start factory production of new droid with the given name, body, propulsion and turrets.
 //-- The reserved parameter should be passed **null** for now. The components can be
@@ -1808,7 +1808,7 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 //-- It is now unused and in 3.2+ should be passed "", while in 3.1 it should be the
 //-- droid type to be built. Returns a boolean that is true if production was started.
 //--
-bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets))
+bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets))
 {
 	STRUCTURE *psStruct = psFactory;
 	SCRIPT_ASSERT(false, context, psStruct, "No valid structure provided");
@@ -1818,19 +1818,19 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	const int capacity = psStruct->capacity; // body size limit
 	SCRIPT_ASSERT(false, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
-	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, capacity, true);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, capacity, true);
 	if (psTemplate)
 	{
 		SCRIPT_ASSERT(false, context, validTemplateForFactory(psTemplate.get(), psStruct, true),
 		              "Invalid template %s for factory %s",
 		              getStatsName(psTemplate), getStatsName(psStruct->pStructureType));
 		// Delete similar template from existing list before adding this one
-		for (auto t : apsTemplateList)
+		for (auto templ : apsTemplateList)
 		{
-			if (t->name.compare(psTemplate->name) == 0)
+			if (templ->name.compare(psTemplate->name) == 0)
 			{
-				debug(LOG_SCRIPT, "deleting %s for player %d", getStatsName(t), player);
-				deleteTemplateFromProduction(t, player, ModeQueue); // duplicate? done below?
+				debug(LOG_SCRIPT, "deleting %s for player %d", getStatsName(templ), player);
+				deleteTemplateFromProduction(templ, player, ModeQueue); // duplicate? done below?
 				break;
 			}
 		}
@@ -1848,7 +1848,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 	return false;
 }
 
-//-- ## addDroid(player, x, y, name, body, propulsion, reserved, reserved, turrets...)
+//-- ## addDroid(player, x, y, templateName, body, propulsion, reserved, reserved, turrets...)
 //--
 //-- Create and place a droid at the given x, y position as belonging to the given player, built with
 //-- the given components. Currently does not support placing droids in multiplayer, doing so will
@@ -1856,13 +1856,13 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 //-- reserved parameters is recommended. In 3.2+ only, to create droids in off-world (campaign mission list),
 //-- pass -1 as both x and y.
 //--
-wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
+wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int player, int x, int y, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, reservedParam reserved2, va_list<string_or_string_list> turrets)) MUTLIPLAY_UNSAFE
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	bool onMission = (x == -1) && (y == -1);
 	SCRIPT_ASSERT(nullptr, context, (onMission || (x >= 0 && y >= 0)), "Invalid coordinates (%d, %d) for droid", x, y);
 	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
-	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, false);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, SIZE_NUM, false);
 	if (psTemplate)
 	{
 		DROID *psDroid = nullptr;
@@ -1877,7 +1877,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 			}
 			else
 			{
-				debug(LOG_ERROR, "Invalid droid %s", templName.c_str());
+				debug(LOG_ERROR, "Invalid droid %s", templateName.c_str());
 			}
 		}
 		else
@@ -1890,7 +1890,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 			}
 			else
 			{
-				debug(LOG_ERROR, "Invalid droid %s", templName.c_str());
+				debug(LOG_ERROR, "Invalid droid %s", templateName.c_str());
 			}
 		}
 		bMultiMessages = oldMulti; // ugh
@@ -1899,17 +1899,17 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 	return nullptr;
 }
 
-//-- ## makeTemplate(player, name, body, propulsion, reserved, turrets...)
+//-- ## makeTemplate(player, templateName, body, propulsion, reserved, turrets...)
 //--
 //-- Create a template (virtual droid) with the given components. Can be useful for calculating the cost
 //-- of droids before putting them into production, for instance. Will fail and return null if template
 //-- could not possibly be built using current research. (3.2+ only)
 //--
-std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets))
+std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templateName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets))
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
-	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, true);
+	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templateName, body, propulsion, turrets, SIZE_NUM, true);
 	return std::unique_ptr<const DROID_TEMPLATE>(std::move(psTemplate));
 }
 
@@ -1937,14 +1937,14 @@ bool wzapi::addDroidToTransporter(WZAPI_PARAMS(game_object_identifier transporte
 	return true;
 }
 
-//-- ## addFeature(name, x, y)
+//-- ## addFeature(featureName, x, y)
 //--
 //-- Create and place a feature at the given x, y position. Will cause a desync in multiplayer.
 //-- Returns the created game object on success, null otherwise. (3.2+ only)
 //--
-wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::string featName, int x, int y)) MUTLIPLAY_UNSAFE
+wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::string featureName, int x, int y)) MUTLIPLAY_UNSAFE
 {
-	int feature = getFeatureStatFromName(WzString::fromUtf8(featName));
+	int feature = getFeatureStatFromName(WzString::fromUtf8(featureName));
 	FEATURE_STATS *psStats = &asFeatureStats[feature];
 	for (FEATURE *psFeat = apsFeatureLists[0]; psFeat; psFeat = psFeat->psNext)
 	{
@@ -1955,17 +1955,17 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 	return psFeature;
 }
 
-//-- ## componentAvailable([component type, ]component name)
+//-- ## componentAvailable([componentType, ]componentName)
 //--
 //-- Checks whether a given component is available to the current player. The first argument is
 //-- optional and deprecated.
 //--
-bool wzapi::componentAvailable(WZAPI_PARAMS(std::string arg1, optional<std::string> arg2))
+bool wzapi::componentAvailable(WZAPI_PARAMS(std::string componentType, optional<std::string> _componentName))
 {
 	int player = context.player();
-	std::string &id = arg2.has_value() ? arg2.value() : arg1;
-	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(id.c_str()));
-	SCRIPT_ASSERT(false, context, psComp, "No such component: %s", id.c_str());
+	std::string &componentName = _componentName.has_value() ? _componentName.value() : componentType;
+	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(componentName.c_str()));
+	SCRIPT_ASSERT(false, context, psComp, "No such component: %s", componentName.c_str());
 	int status = apCompLists[player][psComp->compType][psComp->index];
 	return status == AVAILABLE || status == REDUNDANT;
 }
@@ -2115,26 +2115,26 @@ std::unique_ptr<const DROID> wzapi::getDroidProduction(WZAPI_PARAMS(const STRUCT
 	return std::unique_ptr<const DROID>(psDroid);
 }
 
-//-- ## getDroidLimit([player[, unit type]])
+//-- ## getDroidLimit([player[, droidType]])
 //--
 //-- Return maximum number of droids that this player can produce. This limit is usually
 //-- fixed throughout a game and the same for all players. If no arguments are passed,
-//-- returns general unit limit for the current player. If a second, unit type argument
-//-- is passed, the limit for this unit type is returned, which may be different from
-//-- the general unit limit (eg for commanders and construction droids). (3.2+ only)
+//-- returns general droid limit for the current player. If a second, droid type argument
+//-- is passed, the limit for this droid type is returned, which may be different from
+//-- the general droid limit (eg for commanders and construction droids). (3.2+ only)
 //--
-int wzapi::getDroidLimit(WZAPI_PARAMS(optional<int> _player, optional<int> _unitType))
+int wzapi::getDroidLimit(WZAPI_PARAMS(optional<int> _player, optional<int> _droidType))
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	if (_unitType.has_value())
+	if (_droidType.has_value())
 	{
-		DROID_TYPE type = (DROID_TYPE)_unitType.value();
-		if (type == DROID_COMMAND)
+		DROID_TYPE droidType = (DROID_TYPE)_droidType.value();
+		if (droidType == DROID_COMMAND)
 		{
 			return getMaxCommanders(player);
 		}
-		else if (type == DROID_CONSTRUCT)
+		else if (droidType == DROID_CONSTRUCT)
 		{
 			return getMaxConstructors(player);
 		}
@@ -2153,55 +2153,55 @@ int wzapi::getExperienceModifier(WZAPI_PARAMS(int player))
 	return getExpGain(player);
 }
 
-//-- ## setDroidLimit(player, value[, droid type])
+//-- ## setDroidLimit(player, maxNumber[, droidType])
 //--
 //-- Set the maximum number of droids that this player can produce. If a third
 //-- parameter is added, this is the droid type to limit. It can be ```DROID_ANY```
 //-- for droids in general, ```DROID_CONSTRUCT``` for constructors, or ```DROID_COMMAND```
 //-- for commanders. (3.2+ only)
 //--
-bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int value, optional<int> _droidType))
+bool wzapi::setDroidLimit(WZAPI_PARAMS(int player, int maxNumber, optional<int> _droidType))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	DROID_TYPE type = (DROID_TYPE)_droidType.value_or(DROID_ANY);
+	DROID_TYPE droidType = (DROID_TYPE)_droidType.value_or(DROID_ANY);
 
-	switch (type)
+	switch (droidType)
 	{
 	case DROID_CONSTRUCT:
-		setMaxConstructors(player, value);
+		setMaxConstructors(player, maxNumber);
 		break;
 	case DROID_COMMAND:
-		setMaxCommanders(player, value);
+		setMaxCommanders(player, maxNumber);
 		break;
 	default:
 	case DROID_ANY:
-		setMaxDroids(player, value);
+		setMaxDroids(player, maxNumber);
 		break;
 	}
 	return true;
 }
 
-//-- ## setCommanderLimit(player, value)
+//-- ## setCommanderLimit(player, maxNumber)
 //--
 //-- Set the maximum number of commanders that this player can produce.
 //-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 //--
-bool wzapi::setCommanderLimit(WZAPI_PARAMS(int player, int value)) WZAPI_DEPRECATED
+bool wzapi::setCommanderLimit(WZAPI_PARAMS(int player, int maxNumber)) WZAPI_DEPRECATED
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	setMaxCommanders(player, value);
+	setMaxCommanders(player, maxNumber);
 	return true;
 }
 
-//-- ## setConstructorLimit(player, value)
+//-- ## setConstructorLimit(player, maxNumber)
 //--
 //-- Set the maximum number of constructors that this player can produce.
 //-- THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED! (3.2+ only)
 //--
-bool wzapi::setConstructorLimit(WZAPI_PARAMS(int player, int value)) WZAPI_DEPRECATED
+bool wzapi::setConstructorLimit(WZAPI_PARAMS(int player, int maxNumber)) WZAPI_DEPRECATED
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
-	setMaxConstructors(player, value);
+	setMaxConstructors(player, maxNumber);
 	return true;
 }
 
@@ -2216,7 +2216,7 @@ bool wzapi::setExperienceModifier(WZAPI_PARAMS(int player, int percent))
 	return true;
 }
 
-//-- ## enumCargo(transport droid)
+//-- ## enumCargo(transporterDroid)
 //--
 //-- Returns an array of droid objects inside given transport. (3.2+ only)
 //--
@@ -2258,17 +2258,17 @@ bool wzapi::isSpectator(WZAPI_PARAMS(int player))
 	return true;
 }
 
-//-- ## getWeaponInfo(weapon id)
+//-- ## getWeaponInfo(weaponName)
 //--
 //-- Return information about a particular weapon type. DEPRECATED - query the Stats object instead. (3.2+ only)
 //--
-nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponID)) WZAPI_DEPRECATED
+nlohmann::json wzapi::getWeaponInfo(WZAPI_PARAMS(std::string weaponName)) WZAPI_DEPRECATED
 {
-	int idx = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponID));
-	SCRIPT_ASSERT(nlohmann::json(), context, idx >= 0, "No such weapon: %s", weaponID.c_str());
-	WEAPON_STATS *psStats = asWeaponStats + idx;
+	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
+	SCRIPT_ASSERT(nlohmann::json(), context, weaponIndex >= 0, "No such weapon: %s", weaponName.c_str());
+	WEAPON_STATS *psStats = asWeaponStats + weaponIndex;
 	nlohmann::json result = nlohmann::json::object();
-	result["id"] = weaponID;
+	result["id"] = weaponName;
 	result["name"] = psStats->name;
 	result["impactClass"] = psStats->weaponClass == WC_KINETIC ? "KINETIC" : "HEAT";
 	result["damage"] = psStats->base.damage;
@@ -2319,7 +2319,7 @@ bool wzapi::playSound(WZAPI_PARAMS(std::string sound, optional<int> _x, optional
 	return true;
 }
 
-//-- ## gameOverMessage(won[, showBackDrop[, showOutro]])
+//-- ## gameOverMessage(gameWon[, showBackDrop[, showOutro]])
 //--
 //-- End game in victory or defeat.
 //--
@@ -2394,19 +2394,19 @@ bool wzapi::gameOverMessage(WZAPI_PARAMS(bool gameWon, optional<bool> _showBackD
 
 // MARK: - Global state manipulation -- not for use with skirmish AI (unless you want it to cheat, obviously)
 
-//-- ## setStructureLimits(structure type, limit[, player])
+//-- ## setStructureLimits(structureName, limit[, player])
 //--
 //-- Set build limits for a structure.
 //--
-bool wzapi::setStructureLimits(WZAPI_PARAMS(std::string building, int limit, optional<int> _player))
+bool wzapi::setStructureLimits(WZAPI_PARAMS(std::string structureName, int limit, optional<int> _player))
 {
-	int structInc = getStructStatFromName(WzString::fromUtf8(building));
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	SCRIPT_ASSERT(false, context, limit < LOTS_OF && limit >= 0, "Invalid limit");
-	SCRIPT_ASSERT(false, context, structInc < numStructureStats && structInc >= 0, "Invalid structure");
+	SCRIPT_ASSERT(false, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 
-	asStructureStats[structInc].upgrade[player].limit = limit;
+	asStructureStats[structureIndex].upgrade[player].limit = limit;
 
 	return true;
 }
@@ -2424,11 +2424,11 @@ bool wzapi::applyLimitSet(WZAPI_NO_PARAMS)
 //--
 //-- Set mission countdown in seconds.
 //--
-wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _value))
+wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _time))
 {
-	int value = _value * GAME_TICKS_PER_SEC;
+	int time = _time * GAME_TICKS_PER_SEC;
 	mission.startTime = gameTime;
-	mission.time = value;
+	mission.time = time;
 	setMissionCountDown();
 	if (mission.time >= 0)
 	{
@@ -2460,18 +2460,18 @@ int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 //-- is set to "--:--" and reinforcements are suppressed until this function is called
 //-- again with a regular time value.
 //--
-wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _value))
+wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _time))
 {
-	int value = _value * GAME_TICKS_PER_SEC;
-	SCRIPT_ASSERT({}, context, value == LZ_COMPROMISED_TIME || value < 60 * 60 * GAME_TICKS_PER_SEC,
+	int time = _time * GAME_TICKS_PER_SEC;
+	SCRIPT_ASSERT({}, context, time == LZ_COMPROMISED_TIME || time < 60 * 60 * GAME_TICKS_PER_SEC,
 	              "The transport timer cannot be set to more than 1 hour!");
 	SCRIPT_ASSERT({}, context, selectedPlayer < MAX_PLAYERS, "Invalid selectedPlayer for current client: %" PRIu32 "", selectedPlayer);
-	mission.ETA = value;
+	mission.ETA = time;
 	if (missionCanReEnforce())
 	{
 		addTransporterTimerInterface();
 	}
-	if (value < 0)
+	if (time < 0)
 	{
 		DROID *psDroid;
 
@@ -2494,7 +2494,7 @@ wzapi::no_return_value wzapi::setReinforcementTime(WZAPI_PARAMS(int _value))
 	return {};
 }
 
-//-- ## completeResearch(research[, player[, forceResearch]])
+//-- ## completeResearch(researchName[, player[, forceResearch]])
 //--
 //-- Finish a research for the given player.
 //-- forceResearch will allow a research topic to be researched again. 3.3+
@@ -2552,7 +2552,7 @@ wzapi::no_return_value wzapi::completeAllResearch(WZAPI_PARAMS(optional<int> _pl
 	return {};
 }
 
-//-- ## enableResearch(research[, player])
+//-- ## enableResearch(researchName[, player])
 //--
 //-- Enable a research for the given player, allowing it to be researched.
 //--
@@ -2582,27 +2582,27 @@ wzapi::no_return_value wzapi::setPower(WZAPI_PARAMS(int power, optional<int> _pl
 	return {};
 }
 
-//-- ## setPowerModifier(power[, player])
+//-- ## setPowerModifier(powerModifier[, player])
 //--
 //-- Set a player's power modifier percentage. (Do not use this in an AI script.) (3.2+ only)
 //--
-wzapi::no_return_value wzapi::setPowerModifier(WZAPI_PARAMS(int power, optional<int> _player)) WZAPI_AI_UNSAFE
+wzapi::no_return_value wzapi::setPowerModifier(WZAPI_PARAMS(int powerModifier, optional<int> _player)) WZAPI_AI_UNSAFE
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	::setPowerModifier(player, power);
+	::setPowerModifier(player, powerModifier);
 	return {};
 }
 
-//-- ## setPowerStorageMaximum(maximum[, player])
+//-- ## setPowerStorageMaximum(powerMaximum[, player])
 //--
 //-- Set a player's power storage maximum. (Do not use this in an AI script.) (3.2+ only)
 //--
-wzapi::no_return_value wzapi::setPowerStorageMaximum(WZAPI_PARAMS(int power, optional<int> _player)) WZAPI_AI_UNSAFE
+wzapi::no_return_value wzapi::setPowerStorageMaximum(WZAPI_PARAMS(int powerMaximum, optional<int> _player)) WZAPI_AI_UNSAFE
 {
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	::setPowerMaxStorage(player, power);
+	::setPowerMaxStorage(player, powerMaximum);
 	return {};
 }
 
@@ -2654,7 +2654,7 @@ wzapi::no_return_value wzapi::setDesign(WZAPI_PARAMS(bool allowDesignValue))
 	return {};
 }
 
-//-- ## enableTemplate(template name)
+//-- ## enableTemplate(templateName)
 //--
 //-- Enable a specific template (even if design is disabled).
 //--
@@ -2690,7 +2690,7 @@ bool wzapi::enableTemplate(WZAPI_PARAMS(std::string _templateName))
 	return true;
 }
 
-//-- ## removeTemplate(template name)
+//-- ## removeTemplate(templateName)
 //--
 //-- Remove a template.
 //--
@@ -2736,16 +2736,16 @@ wzapi::no_return_value wzapi::setMiniMap(WZAPI_PARAMS(bool visible))
 	return {};
 }
 
-//-- ## setReticuleButton(id, tooltip, filename, filenameHigh[, callback])
+//-- ## setReticuleButton(buttonId, tooltip, filename, filenameDown[, callback])
 //--
-//-- Add reticule button. id is which button to change, where zero is zero is the middle button, then going clockwise from the
-//-- uppermost button. filename is button graphics and filenameHigh is for highlighting. The tooltip is the text you see when
+//-- Add reticule button. buttonId is which button to change, where zero is zero is the middle button, then going clockwise from
+//-- the uppermost button. filename is button graphics and filenameDown is for highlighting. The tooltip is the text you see when
 //-- you mouse over the button. Finally, the callback is which scripting function to call. Hide and show the user interface
 //-- for such changes to take effect. (3.2+ only)
 //--
-wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int button, std::string tooltip, std::string filename, std::string filenameDown, optional<std::string> callbackFuncName))
+wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int buttonId, std::string tooltip, std::string filename, std::string filenameDown, optional<std::string> callbackFuncName))
 {
-	SCRIPT_ASSERT({}, context, button >= 0 && button <= 6, "Invalid button %d", button);
+	SCRIPT_ASSERT({}, context, buttonId >= 0 && buttonId <= 6, "Invalid button %d", buttonId);
 
 	WzString func;
 	if (callbackFuncName.has_value())
@@ -2756,29 +2756,29 @@ wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int button, std::st
 	{
 		return {}; // no-op
 	}
-	setReticuleStats(button, tooltip, filename, filenameDown, func.isEmpty() ? nullptr : context.getNamedScriptCallback(func));
+	setReticuleStats(buttonId, tooltip, filename, filenameDown, func.isEmpty() ? nullptr : context.getNamedScriptCallback(func));
 	return {};
 }
 
-//-- ## setReticuleFlash(id, flash)
+//-- ## setReticuleFlash(buttonId, flash)
 //--
 //-- Set reticule flash on or off. (3.2.3+ only)
 //--
-wzapi::no_return_value wzapi::setReticuleFlash(WZAPI_PARAMS(int button, bool flash))
+wzapi::no_return_value wzapi::setReticuleFlash(WZAPI_PARAMS(int buttonId, bool flash))
 {
-	SCRIPT_ASSERT({}, context, button >= 0 && button <= 6, "Invalid button %d", button);
-	::setReticuleFlash(button, flash);
+	SCRIPT_ASSERT({}, context, buttonId >= 0 && buttonId <= 6, "Invalid button %d", buttonId);
+	::setReticuleFlash(buttonId, flash);
 	return {};
 }
 
-//-- ## showReticuleWidget(id)
+//-- ## showReticuleWidget(buttonId)
 //--
 //-- Open the reticule menu widget. (3.3+ only)
 //--
-wzapi::no_return_value wzapi::showReticuleWidget(WZAPI_PARAMS(int button))
+wzapi::no_return_value wzapi::showReticuleWidget(WZAPI_PARAMS(int buttonId))
 {
-	SCRIPT_ASSERT({}, context, button >= 0 && button <= 6, "Invalid button %d", button);
-	intShowWidget(button);
+	SCRIPT_ASSERT({}, context, buttonId >= 0 && buttonId <= 6, "Invalid button %d", buttonId);
+	intShowWidget(buttonId);
 	return {};
 }
 
@@ -2804,30 +2804,30 @@ wzapi::no_return_value wzapi::hideInterface(WZAPI_NO_PARAMS)
 	return {};
 }
 
-//-- ## enableStructure(structure type[, player])
+//-- ## enableStructure(structureName[, player])
 //--
 //-- The given structure type is made available to the given player. It will appear in the
 //-- player's build list.
 //--
 wzapi::no_return_value wzapi::enableStructure(WZAPI_PARAMS(std::string structureName, optional<int> _player))
 {
-	int index = getStructStatFromName(WzString::fromUtf8(structureName));
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName));
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
-	SCRIPT_ASSERT({}, context, index >= 0 && index < numStructureStats, "Invalid structure stat");
+	SCRIPT_ASSERT({}, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	// enable the appropriate structure
-	apStructTypeLists[player][index] = AVAILABLE;
+	apStructTypeLists[player][structureIndex] = AVAILABLE;
 	return {};
 }
 
-static void setComponent(const std::string& name, int player, int value)
+static void setComponent(const std::string& componentName, int player, int availability)
 {
-	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(name));
-	ASSERT_OR_RETURN(, psComp, "Bad component %s", name.c_str());
-	apCompLists[player][psComp->compType][psComp->index] = value;
+	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(componentName));
+	ASSERT_OR_RETURN(, psComp, "Bad component %s", componentName.c_str());
+	apCompLists[player][psComp->compType][psComp->index] = availability;
 }
 
-//-- ## enableComponent(component, player)
+//-- ## enableComponent(componentName, player)
 //--
 //-- The given component is made available for research for the given player.
 //--
@@ -2838,7 +2838,7 @@ wzapi::no_return_value wzapi::enableComponent(WZAPI_PARAMS(std::string component
 	return {};
 }
 
-//-- ## makeComponentAvailable(component, player)
+//-- ## makeComponentAvailable(componentName, player)
 //--
 //-- The given component is made available to the given player. This means the player can
 //-- actually build designs with it.
@@ -2872,7 +2872,7 @@ bool wzapi::removeStruct(WZAPI_PARAMS(STRUCTURE *psStruct)) WZAPI_DEPRECATED
 	return removeStruct(psStruct, true);
 }
 
-//-- ## removeObject(game object[, special effects?])
+//-- ## removeObject(gameObject[, sfx])
 //--
 //-- Remove the given game object with special effects. Returns a boolean that is true on success.
 //-- A second, optional boolean parameter specifies whether special effects are to be applied. (3.2+ only)
@@ -2957,19 +2957,19 @@ scr_area wzapi::getScrollLimits(WZAPI_NO_PARAMS)
 	return limits;
 }
 
-//-- ## addStructure(structure id, player, x, y)
+//-- ## addStructure(structureName, player, x, y)
 //--
 //-- Create a structure on the given position. Returns the structure on success, null otherwise.
 //-- Position uses world coordinates, if you want use position based on Map Tiles, then
-//-- use as addStructure(structure id, players, x*128, y*128)
+//-- use as addStructure(structureName, players, x*128, y*128)
 //--
 wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(std::string structureName, int player, int x, int y))
 {
-	int index = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
-	SCRIPT_ASSERT(nullptr, context, index >= 0, "%s not found", structureName.c_str());
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
+	SCRIPT_ASSERT(nullptr, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 
-	STRUCTURE_STATS *psStat = &asStructureStats[index];
+	STRUCTURE_STATS *psStat = &asStructureStats[structureIndex];
 	STRUCTURE *psStruct = buildStructure(psStat, x, y, player, false);
 	if (psStruct)
 	{
@@ -2980,28 +2980,28 @@ wzapi::returned_nullable_ptr<const STRUCTURE> wzapi::addStructure(WZAPI_PARAMS(s
 	return nullptr;
 }
 
-//-- ## getStructureLimit(structure type[, player])
+//-- ## getStructureLimit(structureName[, player])
 //--
 //-- Returns build limits for a structure.
 //--
 unsigned int wzapi::getStructureLimit(WZAPI_PARAMS(std::string structureName, optional<int> _player))
 {
-	int index = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
-	SCRIPT_ASSERT(0, context, index >= 0, "%s not found", structureName.c_str());
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
+	SCRIPT_ASSERT(0, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(0, context, player);
-	return asStructureStats[index].upgrade[player].limit;
+	return asStructureStats[structureIndex].upgrade[player].limit;
 }
 
-//-- ## countStruct(structure type[, playerFilter])
+//-- ## countStruct(structureName[, playerFilter])
 //--
 //-- Count the number of structures of a given type.
 //-- The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 //--
 int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _playerFilter))
 {
-	int index = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
-	SCRIPT_ASSERT(-1, context, index < numStructureStats && index >= 0, "Structure %s not found", structureName.c_str());
+	int structureIndex = getStructStatFromName(WzString::fromUtf8(structureName.c_str()));
+	SCRIPT_ASSERT(-1, context, structureIndex >= 0 && structureIndex < numStructureStats, "Structure %s not found", structureName.c_str());
 	int me = context.player();
 	int playerFilter = _playerFilter.value_or(me);
 	SCRIPT_ASSERT(-1, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Player filter index out of range: %d", playerFilter);
@@ -3013,22 +3013,22 @@ int wzapi::countStruct(WZAPI_PARAMS(std::string structureName, optional<int> _pl
 		    || (playerFilter == ALLIES && aiCheckAlliances(i, me))
 		    || (playerFilter == ENEMIES && !aiCheckAlliances(i, me)))
 		{
-			quantity += asStructureStats[index].curCount[i];
+			quantity += asStructureStats[structureIndex].curCount[i];
 		}
 	}
 	return quantity;
 }
 
-//-- ## countDroid([droid type[, playerFilter]])
+//-- ## countDroid([droidType[, playerFilter]])
 //--
 //-- Count the number of droids that a given player has. Droid type must be either
 //-- ```DROID_ANY```, ```DROID_COMMAND``` or ```DROID_CONSTRUCT```.
 //-- The playerFilter parameter can be a specific player, ```ALL_PLAYERS```, ```ALLIES``` or ```ENEMIES```.
 //--
-int wzapi::countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _playerFilter))
+int wzapi::countDroid(WZAPI_PARAMS(optional<int> _droidType, optional<int> _playerFilter))
 {
-	int type = _type.value_or(DROID_ANY);
-	SCRIPT_ASSERT(-1, context, type <= DROID_ANY, "Bad droid type parameter");
+	int droidType = _droidType.value_or(DROID_ANY);
+	SCRIPT_ASSERT(-1, context, droidType <= DROID_ANY, "Bad droid type parameter");
 	int me = context.player();
 	int playerFilter = _playerFilter.value_or(me);
 	SCRIPT_ASSERT(-1, context, (playerFilter >= 0 && playerFilter < MAX_PLAYERS) || playerFilter == ALL_PLAYERS || playerFilter == ALLIES || playerFilter == ENEMIES, "Player index out of range: %d", playerFilter);
@@ -3040,15 +3040,15 @@ int wzapi::countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _playerFil
 		    || (playerFilter == ALLIES && aiCheckAlliances(i, me))
 		    || (playerFilter == ENEMIES && !aiCheckAlliances(i, me)))
 		{
-			if (type == DROID_ANY)
+			if (droidType == DROID_ANY)
 			{
 				quantity += getNumDroids(i);
 			}
-			else if (type == DROID_CONSTRUCT)
+			else if (droidType == DROID_CONSTRUCT)
 			{
 				quantity += getNumConstructorDroids(i);
 			}
-			else if (type == DROID_COMMAND)
+			else if (droidType == DROID_COMMAND)
 			{
 				quantity += getNumCommandDroids(i);
 			}
@@ -3057,7 +3057,7 @@ int wzapi::countDroid(WZAPI_PARAMS(optional<int> _type, optional<int> _playerFil
 	return quantity;
 }
 
-//-- ## loadLevel(level name)
+//-- ## loadLevel(levelName)
 //--
 //-- Load the level with the given name.
 //--
@@ -3201,23 +3201,23 @@ wzapi::no_return_value wzapi::setTransporterExit(WZAPI_PARAMS(int x, int y, int 
 	return {};
 }
 
-//-- ## setObjectFlag(object, flag, value)
+//-- ## setObjectFlag(object, flag, flagValue)
 //--
 //-- Set or unset an object flag on a given game object. Does not take care of network sync, so for multiplayer games,
 //-- needs wrapping in a syncRequest. (3.3+ only.)
 //-- Recognized object flags: ```OBJECT_FLAG_UNSELECTABLE``` - makes object unavailable for selection from player UI.
 //--
-wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool value)) MULTIPLAY_SYNCREQUEST_REQUIRED
+wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool flagValue)) MULTIPLAY_SYNCREQUEST_REQUIRED
 {
 	SCRIPT_ASSERT({}, context, psObj, "No valid object provided");
 	SCRIPT_ASSERT({}, context, psObj->type == OBJ_DROID || psObj->type == OBJ_STRUCTURE || psObj->type == OBJ_FEATURE, "Bad object type");
 	OBJECT_FLAG flag = (OBJECT_FLAG)_flag;
 	SCRIPT_ASSERT({}, context, flag >= 0 && flag < OBJECT_FLAG_COUNT, "Bad flag value %d", flag);
-	psObj->flags.set(flag, value);
+	psObj->flags.set(flag, flagValue);
 	return {};
 }
 
-//-- ## fireWeaponAtLoc(weapon, x, y[, player])
+//-- ## fireWeaponAtLoc(weaponName, x, y[, player])
 //--
 //-- Fires a weapon at the given coordinates (3.3+ only). The player is who owns the projectile.
 //-- Please use fireWeaponAtObj() to damage objects as multiplayer and campaign
@@ -3225,35 +3225,32 @@ wzapi::no_return_value wzapi::setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int
 //--
 wzapi::no_return_value wzapi::fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player))
 {
-	int weapon = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
-	SCRIPT_ASSERT({}, context, weapon > 0, "No such weapon: %s", weaponName.c_str());
-
-	int xLocation = x;
-	int yLocation = y;
+	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
+	SCRIPT_ASSERT({}, context, weaponIndex > 0, "No such weapon: %s", weaponName.c_str());
 
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER({}, context, player);
 
 	Vector3i target;
-	target.x = world_coord(xLocation);
-	target.y = world_coord(yLocation);
-	target.z = map_Height(xLocation, yLocation);
+	target.x = world_coord(x);
+	target.y = world_coord(y);
+	target.z = map_Height(x, y);
 
 	WEAPON sWeapon;
-	sWeapon.nStat = weapon;
+	sWeapon.nStat = weaponIndex;
 
 	proj_SendProjectile(&sWeapon, nullptr, player, target, nullptr, true, 0);
 	return {};
 }
 
-//-- ## fireWeaponAtObj(weapon, game object[, player])
+//-- ## fireWeaponAtObj(weaponName, gameObject[, player])
 //--
 //-- Fires a weapon at a game object (3.3+ only). The player is who owns the projectile.
 //--
 wzapi::no_return_value wzapi::fireWeaponAtObj(WZAPI_PARAMS(std::string weaponName, BASE_OBJECT *psObj, optional<int> _player))
 {
-	int weapon = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
-	SCRIPT_ASSERT({}, context, weapon > 0, "No such weapon: %s", weaponName.c_str());
+	int weaponIndex = getCompFromName(COMP_WEAPON, WzString::fromUtf8(weaponName));
+	SCRIPT_ASSERT({}, context, weaponIndex > 0, "No such weapon: %s", weaponName.c_str());
 	SCRIPT_ASSERT({}, context, psObj, "No valid object provided");
 
 	int player = _player.value_or(context.player());
@@ -3262,7 +3259,7 @@ wzapi::no_return_value wzapi::fireWeaponAtObj(WZAPI_PARAMS(std::string weaponNam
 	Vector3i target = psObj->pos;
 
 	WEAPON sWeapon;
-	sWeapon.nStat = weapon;
+	sWeapon.nStat = weaponIndex;
 
 	proj_SendProjectile(&sWeapon, nullptr, player, target, psObj, true, 0);
 	return {};
@@ -4313,12 +4310,12 @@ nlohmann::json wzapi::constructStatsObject()
 		stats["Weapon"] = std::move(wbase);
 
 		//==   * ```WeaponClass``` Defined weapon classes
-		nlohmann::json weaptypes = nlohmann::json::array(); //engine->newArray(WSC_NUM_WEAPON_SUBCLASSES);
+		nlohmann::json weaponTypes = nlohmann::json::array(); //engine->newArray(WSC_NUM_WEAPON_SUBCLASSES);
 		for (int j = 0; j < WSC_NUM_WEAPON_SUBCLASSES; j++)
 		{
-			weaptypes.push_back(getWeaponSubClass((WEAPON_SUBCLASS)j));
+			weaponTypes.push_back(getWeaponSubClass((WEAPON_SUBCLASS)j));
 		}
-		stats["WeaponClass"] = std::move(weaptypes);
+		stats["WeaponClass"] = std::move(weaponTypes);
 
 		//==   * ```Building``` Buildings
 		nlohmann::json structbase = nlohmann::json::object();
