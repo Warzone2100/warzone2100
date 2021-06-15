@@ -1123,16 +1123,16 @@ bool triggerEvent(SCRIPT_TRIGGER_TYPE trigger, BASE_OBJECT *psObj)
 	return true;
 }
 
-//__ ## eventPlayerLeft(player index)
+//__ ## eventPlayerLeft(player)
 //__
 //__ An event that is run after a player has left the game.
 //__
-bool triggerEventPlayerLeft(int id)
+bool triggerEventPlayerLeft(int player)
 {
 	ASSERT(scriptsReady, "Scripts not initialized yet");
 	for (auto *instance : scripts)
 	{
-		instance->handle_eventPlayerLeft(id);
+		instance->handle_eventPlayerLeft(player);
 	}
 	return true;
 }
@@ -2133,14 +2133,14 @@ bool scripting_engine::writeLabels(const char *filename)
 #define SCRIPT_ASSERT_PLAYER(retval, _context, _player) \
 	SCRIPT_ASSERT(retval, _context, _player >= 0 && _player < MAX_PLAYERS, "Invalid player index %d", _player);
 
-//-- ## resetLabel(label[, playerFilter])
+//-- ## resetLabel(labelName[, playerFilter])
 //--
 //-- Reset the trigger on an label. Next time a unit enters the area, it will trigger
 //-- an area event. Next time an object or a group is seen, it will trigger a seen event.
 //-- Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
 //-- This is a fast operation of O(log n) algorithmic complexity. (3.2+ only)
-//-- ## resetArea(label[, playerFilter])
+//-- ## resetArea(labelName[, playerFilter])
 //-- Reset the trigger on an area. Next time a unit enters the area, it will trigger
 //-- an area event. Optionally add a filter on it in the second parameter, which can
 //-- be a specific player to watch for, or ```ALL_PLAYERS``` by default.
@@ -2150,13 +2150,13 @@ wzapi::no_return_value scripting_engine::resetLabel(WZAPI_PARAMS(std::string lab
 {
 	LABELMAP& labels = scripting_engine::instance().labels;
 	SCRIPT_ASSERT({}, context, labels.count(labelName) > 0, "Label %s not found", labelName.c_str());
-	LABEL &l = labels[labelName];
-	l.triggered = 0; // make active again
-	l.subscriber = (playerFilter.has_value()) ? playerFilter.value() : ALL_PLAYERS;
+	LABEL &label = labels[labelName];
+	label.triggered = 0; // make active again
+	label.subscriber = (playerFilter.has_value()) ? playerFilter.value() : ALL_PLAYERS;
 	return {};
 }
 
-//-- ## enumLabels([filter])
+//-- ## enumLabels([filterLabelType])
 //--
 //-- Returns a string list of labels that exist for this map. The optional filter
 //-- parameter can be used to only return labels of one specific type. (3.2+ only)
@@ -2170,8 +2170,8 @@ std::vector<std::string> scripting_engine::enumLabels(WZAPI_PARAMS(optional<int>
 		SCRIPT_TYPE type = (SCRIPT_TYPE)filterLabelType.value();
 		for (LABELMAP::const_iterator i = labels.begin(); i != labels.end(); i++)
 		{
-			const LABEL &l = i->second;
-			if (l.type == type)
+			const LABEL &label = i->second;
+			if (label.type == type)
 			{
 				matches.push_back(i->first);
 			}
@@ -2549,7 +2549,7 @@ std::vector<const BASE_OBJECT *> scripting_engine::enumAreaJS(WZAPI_PARAMS(scrip
 	}
 }
 
-//-- ## enumGroup(group)
+//-- ## enumGroup(groupId)
 //--
 //-- Return an array containing all the members of a given group.
 //--
@@ -2579,7 +2579,7 @@ int scripting_engine::newGroup(WZAPI_NO_PARAMS)
 	return i;
 }
 
-//-- ## groupAddArea(group, x1, y1, x2, y2)
+//-- ## groupAddArea(groupId, x1, y1, x2, y2)
 //--
 //-- Add any droids inside the given area to the given group. (3.2+ only)
 //--
@@ -2601,7 +2601,7 @@ wzapi::no_return_value scripting_engine::groupAddArea(WZAPI_PARAMS(int groupId, 
 	return {};
 }
 
-//-- ## groupAddDroid(group, droid)
+//-- ## groupAddDroid(groupId, droid)
 //--
 //-- Add given droid to given group. Deprecated since 3.2 - use groupAdd() instead.
 //--
@@ -2612,7 +2612,7 @@ wzapi::no_return_value scripting_engine::groupAddDroid(WZAPI_PARAMS(int groupId,
 	return {};
 }
 
-//-- ## groupAdd(group, object)
+//-- ## groupAdd(groupId, object)
 //--
 //-- Add given game object to the given group.
 //--
@@ -2623,7 +2623,7 @@ wzapi::no_return_value scripting_engine::groupAdd(WZAPI_PARAMS(int groupId, cons
 	return {};
 }
 
-//-- ## groupSize(group)
+//-- ## groupSize(groupId)
 //--
 //-- Return the number of droids currently in the given group. Note that you can use groupSizes[] instead.
 //--

@@ -120,7 +120,7 @@ be empty.
 
 An event that is run when an object (ex. droid, structure) is recycled.
 
-## eventPlayerLeft(player index)
+## eventPlayerLeft(player)
 
 An event that is run after a player has left the game.
 
