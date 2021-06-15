@@ -24,6 +24,7 @@ vcpkg_from_github(
     PATCHES
         001-fix-uwp.patch
         002-fix-builder-error.patch
+        wz-mingw-headers.patch
 )
 
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt DESTINATION ${SOURCE_PATH})
