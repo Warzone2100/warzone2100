@@ -473,7 +473,7 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _targetDroid))
 		SCRIPT_ASSERT(false, context, targetDroid, "No valid droid provided");
 		for (DROID *psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
 		{
-			psDroid->selected = (psDroid == targetDroid); // select only the target droid
+			psDroid->selected = psDroid == targetDroid; // select only the target droid
 		}
 		setWarCamActive(true);
 	}
@@ -493,8 +493,7 @@ bool wzapi::cameraTrack(WZAPI_PARAMS(optional<DROID *> _targetDroid))
 //--
 uint32_t wzapi::addSpotter(WZAPI_PARAMS(int x, int y, int player, int range, bool radar, uint32_t expiry))
 {
-	uint32_t id = ::addSpotter(x, y, player, range, radar, expiry);
-	return id;
+	return ::addSpotter(x, y, player, range, radar, expiry);
 }
 
 //-- ## removeSpotter(id)
@@ -913,13 +912,13 @@ wzapi::no_return_value wzapi::debugOutputStrings(WZAPI_PARAMS(wzapi::va_list_tre
 {
 	for (size_t idx = 0; idx < strings.strings.size(); idx++)
 	{
-		if (idx != 0)
+		if (idx == 0)
 		{
-			fprintf(stderr, " %s", strings.strings[idx].c_str());
+			fprintf(stderr, "%s", strings.strings[idx].c_str());
 		}
 		else
 		{
-			fprintf(stderr, "%s", strings.strings[idx].c_str());
+			fprintf(stderr, " %s", strings.strings[idx].c_str());
 		}
 	}
 	fprintf(stderr, "\n");
@@ -1168,10 +1167,8 @@ GATEWAY_LIST wzapi::enumGateways(WZAPI_NO_PARAMS)
 wzapi::researchResult wzapi::getResearch(WZAPI_PARAMS(std::string resName, optional<int> _player))
 {
 	researchResult result;
-	int player = _player.value_or(context.player());
-
 	result.psResearch = ::getResearch(resName.c_str());
-	result.player = player;
+	result.player = _player.value_or(context.player());
 	return result;
 }
 
@@ -1440,8 +1437,8 @@ bool wzapi::isStructureAvailable(WZAPI_PARAMS(std::string structName, optional<i
 	int player = _player.value_or(context.player());
 
 	int status = apStructTypeLists[player][index];
-	return ((status == AVAILABLE || status == REDUNDANT)
-	                    && asStructureStats[index].curCount[player] < asStructureStats[index].upgrade[player].limit);
+	return (status == AVAILABLE || status == REDUNDANT)
+		&& asStructureStats[index].curCount[player] < asStructureStats[index].upgrade[player].limit;
 }
 
 // additional structure check
@@ -1463,7 +1460,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 		{
 			for (y = yy; y <= yBR; y++)
 			{
-				if ((x >= psGate->x1 && x <= psGate->x2) && (y >= psGate->y1 && y <= psGate->y2))
+				if (x >= psGate->x1 && x <= psGate->x2 && y >= psGate->y1 && y <= psGate->y2)
 				{
 					return false;
 				}
@@ -1513,7 +1510,7 @@ static bool structDoubleCheck(BASE_STATS *psStat, UDWORD xx, UDWORD yy, SDWORD m
 	}
 
 	//make sure this location is not blocked from too many sides
-	if ((count <= maxBlockingTiles) || (maxBlockingTiles == -1))
+	if (count <= maxBlockingTiles || maxBlockingTiles == -1)
 	{
 		return true;
 	}
@@ -1684,7 +1681,7 @@ static int get_first_available_component(int player, int capacity, const wzapi::
 		if (result >= 0)
 		{
 			int status = apCompLists[player][type][result];
-			if (((status == AVAILABLE || status == REDUNDANT) || !strict)
+			if ((status == AVAILABLE || status == REDUNDANT || !strict)
 				&& (type != COMP_BODY || asBodyStats[result].size <= capacity))
 			{
 				return result; // found one!
@@ -1950,11 +1947,11 @@ wzapi::returned_nullable_ptr<const FEATURE> wzapi::addFeature(WZAPI_PARAMS(std::
 bool wzapi::componentAvailable(WZAPI_PARAMS(std::string arg1, optional<std::string> arg2))
 {
 	int player = context.player();
-	std::string &id = (arg2.has_value()) ? arg2.value() : arg1;
+	std::string &id = arg2.has_value() ? arg2.value() : arg1;
 	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(id.c_str()));
 	SCRIPT_ASSERT(false, context, psComp, "No such component: %s", id.c_str());
 	int status = apCompLists[player][psComp->compType][psComp->index];
-	return (status == AVAILABLE || status == REDUNDANT);
+	return status == AVAILABLE || status == REDUNDANT;
 }
 
 //-- ## isVTOL(droid)
@@ -1976,7 +1973,7 @@ bool wzapi::safeDest(WZAPI_PARAMS(int player, int x, int y))
 {
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	SCRIPT_ASSERT(false, context, tileOnMap(x, y), "Out of bounds coordinates(%d, %d)", x, y);
-	return (!(auxTile(x, y, player) & AUXBITS_DANGER));
+	return !(auxTile(x, y, player) & AUXBITS_DANGER);
 }
 
 //-- ## activateStructure(structure[, target])
@@ -2403,7 +2400,7 @@ wzapi::no_return_value wzapi::setMissionTime(WZAPI_PARAMS(int _value))
 //--
 int wzapi::getMissionTime(WZAPI_NO_PARAMS)
 {
-	return ((mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC);
+	return (mission.time - (gameTime - mission.startTime)) / GAME_TICKS_PER_SEC;
 }
 
 //-- ## setReinforcementTime(time)
@@ -2704,7 +2701,7 @@ wzapi::no_return_value wzapi::setReticuleButton(WZAPI_PARAMS(int button, std::st
 	{
 		func = WzString::fromUtf8(callbackFuncName.value());
 	}
-	setReticuleStats(button, tooltip, filename, filenameDown, (!func.isEmpty()) ? context.getNamedScriptCallback(func) : nullptr);
+	setReticuleStats(button, tooltip, filename, filenameDown, func.isEmpty() ? nullptr : context.getNamedScriptCallback(func));
 	return {};
 }
 
@@ -2806,7 +2803,7 @@ bool wzapi::allianceExistsBetween(WZAPI_PARAMS(int player1, int player2))
 {
 	SCRIPT_ASSERT_PLAYER({}, context, player1);
 	SCRIPT_ASSERT_PLAYER({}, context, player2);
-	return (alliances[player1][player2] == ALLIANCE_FORMED);
+	return alliances[player1][player2] == ALLIANCE_FORMED;
 }
 
 //-- ## removeStruct(structure)
@@ -2938,7 +2935,7 @@ unsigned int wzapi::getStructureLimit(WZAPI_PARAMS(std::string structureName, op
 	SCRIPT_ASSERT(0, context, index >= 0, "%s not found", structureName.c_str());
 	int player = _player.value_or(context.player());
 	SCRIPT_ASSERT_PLAYER(0, context, player);
-	return (asStructureStats[index].upgrade[player].limit);
+	return asStructureStats[index].upgrade[player].limit;
 }
 
 //-- ## countStruct(structure type[, playerFilter])

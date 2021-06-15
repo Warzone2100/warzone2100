@@ -2279,7 +2279,7 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 
 static bool strEndsWith(const std::string &str, const std::string &suffix)
 {
-	return (str.size() >= suffix.size()) && (str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0);
+	return str.size() >= suffix.size() && str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
 }
 
 //-- ## include(file)
@@ -2458,7 +2458,7 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 	std::vector<uniqueTimerID> removedTimerIDs = scripting_engine::instance().removeTimersIf(
 		[instance, function, player](const scripting_engine::timerNode& node)
 	{
-		return (node.instance == instance) && (node.timerName == function) && (node.player == player);
+		return node.instance == instance && node.timerName == function && node.player == player;
 	});
 	if (removedTimerIDs.empty())
 	{
@@ -2787,8 +2787,8 @@ nlohmann::json quickjs_scripting_instance::debugGetAllScriptGlobals()
 	QuickJS_EnumerateObjectProperties(ctx, global_obj, [this, &globals](const char *key, JSAtom &atom) {
         JSValue jsVal = JS_GetProperty(ctx, global_obj, atom);
 		std::string nameStr = key;
-		if (((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
-			/*&& !it.value().equals(engine->globalObject()*/))
+		if ((internalNamespace.count(nameStr) == 0 && !JS_IsFunction(ctx, jsVal)
+			/*&& !it.value().equals(engine->globalObject())*/)
 			|| nameStr == "Upgrades" || nameStr == "Stats")
 		{
 			globals[nameStr] = JSContextValue{ctx, jsVal, false}; // uses to_json JSContextValue implementation
@@ -3552,7 +3552,7 @@ void to_json(nlohmann::json& j, const JSContextValue& v) {
 		case JS_TAG_STRING:
 		{
 			const char* pStr = JS_ToCString(v.ctx, v.value);
-			j = json((pStr) ? pStr : "");
+			j = json(pStr ? pStr : "");
 			JS_FreeCString(v.ctx, pStr);
 			break;
 		}
