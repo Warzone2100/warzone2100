@@ -117,16 +117,17 @@ If (($triplet.Contains("mingw")) -or (-not ([string]::IsNullOrEmpty($VCPKG_BUILD
 
 popd;
 
+$overlay_ports_path = (Join-Path "$($ScriptRoot)" ".ci\vcpkg\overlay-ports");
 $additional_vcpkg_flags = @("--x-no-default-features");
 $VCPKG_INSTALL_FEATURES | ForEach-Object { $additional_vcpkg_flags += "--x-feature=${PSItem}" };
 
 $vcpkg_succeeded = -1;
 $vcpkg_attempts = 0;
-Write-Output "vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ $additional_vcpkg_flags";
+Write-Output "vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ --overlay-ports=$($overlay_ports_path) $additional_vcpkg_flags";
 
 While (($vcpkg_succeeded -ne 0) -and ($vcpkg_attempts -le 2))
 {
-	& .\vcpkg\vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ $additional_vcpkg_flags;
+	& .\vcpkg\vcpkg install --x-manifest-root=$($ScriptRoot) --x-install-root=.\vcpkg_installed\ --overlay-ports=$($overlay_ports_path) $additional_vcpkg_flags;
 	$vcpkg_succeeded = $LastExitCode;
 	$vcpkg_attempts++;
 }
