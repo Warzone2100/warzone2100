@@ -110,37 +110,37 @@
 		"weight": 1
 	},
 	"BabaBuggyTwinMG": {
-	   "buildPoints": 11,
-	   "buildPower": 3,
-	   "damage": 14,
-	   "effectSize": 100,
-	   "facePlayer": 1,
-	   "firePause": 6,
-	   "flightGfx": "fxtracer_twin.pie",
-	   "flightSpeed": 1000,
-	   "hitGfx": "FXMETHIT.PIE",
-	   "hitpoints": 1,
-	   "id": "BabaBuggyTwinMG",
-	   "longHit": 60,
-	   "longRange": 768,
-	   "maxElevation": 90,
-	   "minElevation": -30,
-	   "minimumDamage": 33,
-	   "missGfx": "FXDIRTsp.PIE",
-	   "movement": "DIRECT",
-	   "muzzleGfx": "FXLMgun2.PIE",
-	   "name": "*Buggy Twin MG*",
-	   "numExplosions": 1,
-	   "recoilValue": 100,
-	   "rotate": 180,
-	   "shortHit": 75,
-	   "shortRange": 512,
-	   "waterGfx": "FXSSplsh.PIE",
-	   "weaponClass": "KINETIC",
-	   "weaponEffect": "ANTI PERSONNEL",
-	   "weaponSubClass": "MACHINE GUN",
-	   "weaponWav": "mgbar3.ogg",
-	   "weight": 1
+		"buildPoints": 11,
+		"buildPower": 3,
+		"damage": 14,
+		"effectSize": 100,
+		"facePlayer": 1,
+		"firePause": 6,
+		"flightGfx": "fxtracer_twin.pie",
+		"flightSpeed": 1000,
+		"hitGfx": "FXMETHIT.PIE",
+		"hitpoints": 1,
+		"id": "BabaBuggyTwinMG",
+		"longHit": 60,
+		"longRange": 768,
+		"maxElevation": 90,
+		"minElevation": -30,
+		"minimumDamage": 33,
+		"missGfx": "FXDIRTsp.PIE",
+		"movement": "DIRECT",
+		"muzzleGfx": "FXLMgun2.PIE",
+		"name": "*Buggy Twin MG*",
+		"numExplosions": 1,
+		"recoilValue": 100,
+		"rotate": 180,
+		"shortHit": 75,
+		"shortRange": 512,
+		"waterGfx": "FXSSplsh.PIE",
+		"weaponClass": "KINETIC",
+		"weaponEffect": "ANTI PERSONNEL",
+		"weaponSubClass": "MACHINE GUN",
+		"weaponWav": "mgbar3.ogg",
+		"weight": 1
 	},
 	"BabaBusCannon": {
 		"buildPoints": 10,
@@ -287,7 +287,7 @@
 		"weaponWav": "mgheavy.ogg",
 		"weight": 1
 	},
-	 "BabaJeepHeavyMG": {
+	"BabaJeepHeavyMG": {
 		"buildPoints": 16,
 		"buildPower": 4,
 		"damage": 18,
@@ -320,7 +320,7 @@
 		"weaponWav": "mgheavy.ogg",
 		"weight": 1
 	},
-	 "BabaJeepMG": {
+	"BabaJeepMG": {
 		"buildPoints": 16,
 		"buildPower": 4,
 		"damage": 10,
@@ -386,7 +386,7 @@
 		"weaponWav": "mgbar3.ogg",
 		"weight": 1
 	},
-	 "BabaMG": {
+	"BabaMG": {
 		"buildPoints": 1,
 		"buildPower": 1,
 		"damage": 10,
@@ -711,7 +711,7 @@
 		"weaponWav": "mgbar3.ogg",
 		"weight": 1
 	},
-	 "BabaTwinMG": {
+	"BabaTwinMG": {
 		"buildPoints": 1,
 		"buildPower": 1,
 		"damage": 14,
