@@ -72,6 +72,7 @@
 #include "multigifts.h"
 #include "loadsave.h"
 #include "game.h"
+#include "droid.h"
 
 #include "activity.h"
 
@@ -1847,6 +1848,14 @@ MappableFunction kf_SelectUnits(const SELECTIONTYPE selectionType, const SELECTI
 {
 	return [selectionClass, selectionType, bOnScreen]() {
 		selDroidSelection(selectedPlayer, selectionClass, selectionType, bOnScreen);
+	};
+}
+
+// --------------------------------------------------------------------------
+MappableFunction kf_SelectNoGroupUnits(const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen)
+{
+	return [selectionClass, selectionType, bOnScreen]() {
+		activateNoGroup(selectedPlayer, selectionType, selectionClass, bOnScreen);
 	};
 }
 

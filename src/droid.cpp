@@ -1786,6 +1786,34 @@ bool activateGroupAndMove(UDWORD playerNumber, UDWORD groupNumber)
 	return selected;
 }
 
+bool activateNoGroup(UDWORD playerNumber, const SELECTIONTYPE selectionType, const SELECTION_CLASS selectionClass, const bool bOnScreen) {
+	DROID	*psDroid;
+	bool selected = false;
+	FLAG_POSITION	*psFlagPos;
+	SELECTIONTYPE dselectionType = selectionType;
+	SELECTION_CLASS dselectionClass = selectionClass;
+	bool dbOnScreen = bOnScreen;
+	selDroidSelection(selectedPlayer, dselectionClass, dselectionType, dbOnScreen);
+	for (psDroid = apsDroidLists[playerNumber]; psDroid; psDroid = psDroid->psNext)
+	{
+		/* Wipe out the ones in the wrong group */
+		if (psDroid->selected && psDroid->group != UBYTE_MAX)
+		{
+			DeSelectDroid(psDroid);
+		}
+	}
+	if (selected)
+	{
+		//clear the Deliv Point if one
+		for (psFlagPos = apsFlagPosLists[selectedPlayer]; psFlagPos;
+		     psFlagPos = psFlagPos->psNext)
+		{
+			psFlagPos->selected = false;
+		}
+	}
+	return selected;
+}
+
 bool activateGroup(UDWORD playerNumber, UDWORD groupNumber)
 {
 	DROID	*psDroid;
