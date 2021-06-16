@@ -120,6 +120,7 @@ void gameDisplayScaleFactorDidChange(float newDisplayScaleFactor)
 	iV_TextUpdateScaleFactor(horizGameToRendererScaleFactor, vertGameToRendererScaleFactor);
 }
 
+static unsigned int currentGameVersion = 410;
 
 #define MAX_SAVE_NAME_SIZE_V19	40
 #define MAX_SAVE_NAME_SIZE	60
@@ -3908,13 +3909,15 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	}
 
 	/* Put the save game data into the buffer */
-	save.setValue("version", 1); // version of this file
+	save.setValue("version", currentGameVersion); // game version save was made on
+	save.setValue("versionFile", 2); // version of this file. Bump for significant changes
 	save.setValue("saveKey", saveKey);
 	save.setValue("gameTime", gameTime);
 	save.setValue("missionTime", mission.startTime);
 	save.setVector2i("scrollMin", Vector2i(scrollMinX, scrollMinY));
 	save.setVector2i("scrollMax", Vector2i(scrollMaxX, scrollMaxY));
 	save.setValue("saveType", saveType);
+	ASSERT_OR_RETURN(false, strlen(aLevelName) < MAX_LEVEL_SIZE, "Unable to save level name - too long (max %d) - %s", (int)MAX_LEVEL_SIZE, aLevelName);
 	save.setValue("levelName", aLevelName);
 	save.setValue("radarPermitted", radarPermitted);
 	save.setValue("allowDesign", allowDesign);
@@ -3944,7 +3947,6 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		save.setValue("aDefaultSensor", aDefaultSensor[i]);
 		save.setValue("aDefaultECM", aDefaultECM[i]);
 		save.setValue("aDefaultRepair", aDefaultRepair[i]);
-		save.setValue("colour", getPlayerColour(i));
 
 		std::priority_queue<int> experience = copy_experience_queue(i);
 		nlohmann::json recycled_droids = nlohmann::json::array();
@@ -3962,16 +3964,16 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 		}
 		save.set("alliances", allies);
 		save.setValue("difficulty", NetPlay.players[i].difficulty);
-
 		save.setValue("position", NetPlay.players[i].position);
-		save.setValue("colour", NetPlay.players[i].colour);
+		save.setValue("colour", getPlayerColour(i));
 		save.setValue("allocated", NetPlay.players[i].allocated);
 		save.setValue("faction", NetPlay.players[i].faction);
 		save.setValue("team", NetPlay.players[i].team);
 		save.setValue("ai", NetPlay.players[i].ai);
 		save.setValue("autoGame", NetPlay.players[i].autoGame);
 		save.setValue("ip", NetPlay.players[i].IPtextAddress);
-		save.setValue("name", getPlayerName(selectedPlayer));
+		save.setValue("name", getPlayerName(i));
+		save.setValue("nameAI", getAIName(i));
 
 		save.nextArrayItem();
 	}
@@ -3986,17 +3988,14 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	for (int i = 0; i < MAX_NOGO_AREAS; ++i)
 	{
 		LANDING_ZONE *psLandingZone = getLandingZone(i);
-		save.setVector2i("start", Vector2i(psLandingZone->x1, psLandingZone->x2));
-		save.setVector2i("end", Vector2i(psLandingZone->y1, psLandingZone->y2));
+		save.setVector2i("start", Vector2i(psLandingZone->x1, psLandingZone->y1));
+		save.setVector2i("end", Vector2i(psLandingZone->x2, psLandingZone->y2));
 		save.nextArrayItem();
 	}
 	save.endArray();
 
 	save.setValue("playerHasWon", testPlayerHasWon());
 	save.setValue("playerHasLost", testPlayerHasLost());
-	save.setValue("gameLevel", 0);
-	save.setValue("failFlag", 0);
-	save.setValue("trackTransporter", 0);
 	save.setValue("gameType", game.type);
 	save.setValue("scavengers", game.scavengers);
 	save.setValue("mapName", game.map);
@@ -4007,6 +4006,9 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("allianceSetting", game.alliance);
 	save.setValue("mapHasScavengers", game.mapHasScavengers);
 	save.setValue("mapMod", game.isMapMod);
+	save.setValue("mapRandom", game.isRandom);
+	save.setValue("techLevel", game.techLevel);
+	save.setValue("gameHash", game.hash.toString());
 	save.setValue("selectedPlayer", selectedPlayer);
 	save.setValue("multiplayer", bMultiPlayer);
 	save.setValue("playerCount", NetPlay.playercount);
@@ -4014,8 +4016,8 @@ static bool writeMainFile(const std::string &fileName, SDWORD saveType)
 	save.setValue("bComms", NetPlay.bComms);
 	save.setValue("modList", getModList().c_str());
 	save.setValue("playerBuiltHQ", playerBuiltHQ);
-	save.setValue("techLevel", game.techLevel);
 	save.setValue("challengeFileName", challengeFileName.toUtf8().c_str());
+	save.setValue("challengeActive", challengeActive);
 	save.setValue("builtInMap", builtInMap);
 
 	return true;
@@ -5774,7 +5776,7 @@ bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList)
 				psReArmPad->psObj = getBaseObjFromData(tid, tplayer, ttype);
 				ASSERT(psReArmPad->psObj, "Rearm target %d not found for building %d", tid, id);
 		}
-		
+
 		ini.endGroup();
 	}
 	return true;
