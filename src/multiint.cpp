@@ -4971,7 +4971,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		}
 
 		int H = 5;
-		cache.wzMainText.render(x + nameX, y + 22 - H*!subText.empty() - H*ar.valid, colour);
+		cache.wzMainText.render(x + nameX, y + 22 - H*!subText.empty() - H*(ar.valid && !ar.elo.empty()), colour);
 		if (!subText.empty())
 		{
 			cache.wzSubText.setText(subText, font_small);
