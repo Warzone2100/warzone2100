@@ -721,11 +721,13 @@ if(NOT DISABLE_INSTALL_HEADERS)
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.inc"
+        PATTERN "CL" EXCLUDE
         PATTERN "GLSLANG" EXCLUDE
         PATTERN "egl.h" EXCLUDE
         PATTERN "eglext.h" EXCLUDE
         PATTERN "eglplatform.h" EXCLUDE
         PATTERN "KHR" EXCLUDE
+        PATTERN "WGL" EXCLUDE
         PATTERN "export.h" EXCLUDE
     )
 endif()
