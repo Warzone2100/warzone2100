@@ -66,18 +66,18 @@ _("AA Chainfeed Loader")
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-AASite-QuadBof.name
 // data/mp/stats/structure.json: $.AASite-QuadBof.name
-_("AA Flak Cannon Emplacement")  
+_("AA Cyclone Flak Cannon Emplacement")  
 // TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 // data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
-_("AA Flak Cannon Hardpoint")  
+_("AA Cyclone Flak Cannon Hardpoint")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
-_("AA Flak Cannon Python Half-tracks")  
+_("AA Cyclone Flak Cannon Python Half-tracks")  
 // TRANSLATORS: 
-// data/mp/stats/research.json: $.R-Wpn-AAGun02.name
+// data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 // data/mp/stats/weapons.json: $.AAGun2Mk1.name
-_("AA Flak Cannon")  
+_("AA Cyclone Flak Cannon")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_W_AAD4.text[2]
@@ -146,6 +146,18 @@ _("AA Target Prediction Computer")
 // data/base/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
 // data/mp/stats/research.json: $.R-Wpn-AAGun-Accuracy01.name
 _("AA Thermal Imaging Sensor")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Defense-AASite-QuadBof02.name
+// data/mp/stats/structure.json: $.AASite-QuadBof02.name
+_("AA Tornado Flak Cannon Emplacement")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
+// data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
+_("AA Tornado Flak Cannon Hardpoint")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-AAGun02.name
+// data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
+_("AA Tornado Flak Cannon")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[0]
 // data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[0]
@@ -246,7 +258,7 @@ _("Advancedmaterialslab")
 // data/base/messages/resmessages2.json: $.RES_W_AA1.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_AA2.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_AA3.text[2]
-// ... + 8 refs
+// ... + 9 refs
 _("Aerial targets only")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CY_JP1.text[1]
@@ -315,9 +327,9 @@ _("All defenses and walls upgraded automatically")
 _("All factories upgraded automatically")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[3]
+// data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[3]
-// data/base/messages/resmessages2.json: $.RES_W_FL_D4.text[3]
-// ... + 4 refs
+// ... + 5 refs
 _("All flamers upgraded automatically")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_HALFT2.text[3]
@@ -401,7 +413,7 @@ _("All research facilities upgraded automatically")
 // data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[3]
 // data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[3]
 // data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[3]
-// ... + 13 refs
+// ... + 14 refs
 _("All rockets upgraded automatically")  
 // TRANSLATORS: 
 // data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[3]
@@ -539,13 +551,13 @@ _("Archangel Missile")
 // data/mp/messages/resmessages2.json: $.RES_CYW_BB1.text[1]
 _("Armed with Bunker Buster rocket")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-_("Armed with Cyborg assault gun")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 _("Armed with Cyborg Assault Gun")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+// data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
+_("Armed with Cyborg assault gun")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -586,13 +598,15 @@ _("Armed with grenades")
 // data/mp/messages/resmessagesall.json: $.RES_CYW_H_HPV.text[1]
 _("Armed with hyper velocity cannon")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 _("Armed with Lance Anti-Tank rocket")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
 // data/mp/messages/resmessages3.json: $.RES_CYJ_RKT.text[1]
 _("Armed with Lancer anti-tank missile")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
+_("Armed with Lancer Anti-Tank rocket")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
 // data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[1]
@@ -990,7 +1004,7 @@ _("Automatically targets enemies in range")
 // data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
 // data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[2]
 // data/base/messages/resmessages1.json: $.RES_PB_ATR.text[2]
-// ... + 43 refs
+// ... + 45 refs
 _("Automatically targets enemies within sensor range")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[2]
@@ -1041,6 +1055,9 @@ _("based off the original AI, now for beginners")
 // data/mp/messages/resmessagesall.json: $.RES_REPTU1.text[1]
 _("Battlefield repair unit")  
 // TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
+_("Best Targets : Vehicles and cyborgs")  
+// TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_EMP_CANT.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_EMP_MD.text[2]
@@ -1065,23 +1082,17 @@ _("Best Targets: Base structures and cyborgs")
 // data/mp/messages/resmessages2.json: $.RES_W_PBMB2.text[2]
 _("Best Targets: Base Structures and Defenses")  
 // TRANSLATORS: 
-// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-_("Best Targets: Base structures")  
-// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 _("Best Targets: Base Structures")  
 // TRANSLATORS: 
+// data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+// data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
+_("Best Targets: Base structures")  
+// TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_IHOW.text[2]
 _("Best Targets: Base Structures, bunkers")  
-// TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
-// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
-// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
-// ... + 4 refs
-_("Best Targets: Base Structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MORTA1.text[2]
 // data/base/messages/resmessages12.json: $.RES_W_M2.text[2]
@@ -1089,15 +1100,26 @@ _("Best Targets: Base Structures, infantry, wheeled vehicles")
 // ... + 4 refs
 _("Best Targets: Base structures, infantry, wheeled vehicles")  
 // TRANSLATORS: 
-// data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
+// data/base/messages/resmessages2.json: $.RES_W_HMK1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_RHOW.text[2]
+// ... + 4 refs
+_("Best Targets: Base Structures, infantry, wheeled vehicles")  
+// TRANSLATORS: 
+// data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
+// data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
+// data/mp/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
+// ... + 3 refs
+_("Best Targets: Bunkers and hardpoints")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 _("Best Targets: Bunkers and Hardpoints")  
 // TRANSLATORS: 
-// data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
 // data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
-// data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
-// ... + 4 refs
-_("Best Targets: Bunkers and hardpoints")  
+_("Best Targets: Bunkers, emplacements, Infantry")  
+// TRANSLATORS: 
+// data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
+_("Best Targets: Bunkers, Emplacements, Infantry")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_FLAME1.text[2]
 // data/base/messages/resmessages2.json: $.RES_FLAME2.text[2]
@@ -1123,6 +1145,9 @@ _("Best Targets: Heavy cyborgs")
 // data/base/messages/resmessages12.json: $.RES_MG3MK1.text[2]
 // ... + 7 refs
 _("Best Targets: Infantry, base structures, wheeled vehicles")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
+_("Best Targets: Vehicles and cyborgs")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
 // data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -1158,7 +1183,7 @@ _("Body Points and Speed Increased")
 // data/base/messages/resmessages1.json: $.RES_C_CT1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CN3MK1.text[3]
 // data/base/messages/resmessages1.json: $.RES_TRACK1.text[3]
-// ... + 11 refs
+// ... + 12 refs
 _("Body Points: High")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_MG1MK1.text[3]
@@ -1170,19 +1195,19 @@ _("Body Points: Low")
 // data/base/messages/resmessages1.json: $.RES_CN1MK1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CN2MK1.text[3]
 // data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[2]
-// ... + 75 refs
+// ... + 76 refs
 _("Body Points: Medium")  
-// TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
-// data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[3]
-// data/base/messages/resmessages12.json: $.RES_W_M2.text[3]
-// ... + 28 refs
-_("Body Points: Very Low")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 // data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 // data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
 _("Body Points: Very low")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
+// data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[3]
+// data/base/messages/resmessages12.json: $.RES_W_M2.text[3]
+// ... + 29 refs
+_("Body Points: Very Low")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
 // data/base/messages/resmessages23.json: $.RES_W_BDMG2.text[2]
@@ -1740,13 +1765,15 @@ _("Defensive Strength : High")
 _("Defensive Strength: High")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_TOWER1.text[3]
+// data/base/messages/resmessages1.json: $.RES_TOWER3.text[3]
+// data/base/messages/resmessages1.json: $.RES_TOWER4.text[3]
 // data/mp/messages/resmessages1.json: $.RES_TOWER1.text[3]
 _("Defensive Strength: Low")  
 // TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[3]
 // data/base/messages/resmessages1.json: $.RES_TTRAP1.text[3]
 // data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[3]
-// ... + 56 refs
+// ... + 57 refs
 _("Defensive Strength: Medium")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.A0ADemolishStructure.name
@@ -2042,6 +2069,7 @@ _("Flamer Cyborg")
 // xgettext:no-c-format
 _("Flamer damage +25%")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-Tower04.name
 // data/base/stats/structure.json: $.GuardTower4.name
 // data/mp/stats/structure.json: $.GuardTower4.name
 _("Flamer Guard Tower")  
@@ -2054,10 +2082,13 @@ _("Flamer Hardpoint")
 // xgettext:no-c-format
 _("Flamer reload time -15%")  
 // TRANSLATORS: 
+// data/base/stats/weapons.json: $.Flame1Mk1-Tower.name
+_("Flamer Tower")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
+// data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[0]
 // data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[0]
-// data/base/messages/resmessages2.json: $.RES_W_FL_D4.text[0]
-// ... + 4 refs
+// ... + 5 refs
 _("Flamer Upgrade")  
 // TRANSLATORS: 
 // data/mp/stats/templates.json: $.ViperFlameHalfTracks.name
@@ -2279,6 +2310,12 @@ _("Hardened Base Structure Materials")
 // data/mp/messages/resmessages1.json: $.RES_W_MG_D1.text[1]
 _("Hardened case machinegun bullets")  
 // TRANSLATORS: 
+// data/base/stats/structure.json: $.GuardTower4H.name
+_("Hardened Flamer Guard Tower")  
+// TRANSLATORS: 
+// data/base/stats/structure.json: $.GuardTower3H.name
+_("Hardened Heavy Machinegun Tower")  
+// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
 // data/mp/stats/research.json: $.R-Wpn-MG-Damage01.name
 _("Hardened MG Bullets")  
@@ -2306,6 +2343,9 @@ _("Hardpoint Avenger SAM Site Available")
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[0]
 _("Hardpoint Cyclone AA Gun Available")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
+_("Hardpoint Tornado AA Gun Available")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
 _("Hardpoint Twin Assault Gun Available")  
@@ -2567,8 +2607,7 @@ _("Heavy Machinegun Cobra Tracks")
 // data/mp/stats/templates.json: $.A-Cobra-Wheels-HMG.name
 _("Heavy Machinegun Cobra Wheels")  
 // TRANSLATORS: 
-// data/base/stats/research.json: $.R-Defense-Tower01.name
-// data/base/stats/structure.json: $.GuardTower1.name
+// data/base/stats/research.json: $.R-Defense-Tower03.name
 // data/mp/stats/research.json: $.R-Defense-Tower01.name
 // data/mp/stats/structure.json: $.GuardTower1.name
 _("Heavy Machinegun Guard Tower")  
@@ -2586,6 +2625,7 @@ _("Heavy Machinegun Scorpion Half Tracks")
 _("Heavy Machinegun Scorpion Tracks")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.GuardTower3.name
+// data/base/stats/weapons.json: $.MG3-Tower.name
 // data/mp/stats/structure.json: $.GuardTower3.name
 _("Heavy Machinegun Tower")  
 // TRANSLATORS: 
@@ -2611,6 +2651,18 @@ _("Heavy Machinegun")
 // data/base/stats/research.json: $.R-Wpn-Mortar02Hvy.name
 // data/mp/stats/research.json: $.R-Wpn-Mortar02Hvy.name
 _("Heavy Mortar - Bombard")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Defense-HeavyPlasmaLauncher.name
+// data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
+_("Heavy Plasma Launcher Emplacement")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
+// data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
+_("Heavy Plasma Launcher firing plasma")  
+// TRANSLATORS: 
+// data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
+// data/mp/stats/weapons.json: $.PlasmaHeavy.name
+_("Heavy Plasma Launcher")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -2777,6 +2829,12 @@ _("High Temperature Flamer Gel")
 // data/base/messages/resmessages3.json: $.RES_DF_WU7.text[1]
 // data/mp/messages/resmessages3.json: $.RES_DF_WU7.text[1]
 _("High tensile concrete-plastic composite")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
+_("High-Pressure Gas Container")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
+_("High-pressure gas throws the flamer gel further")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_DF_WU4.text[1]
 // data/mp/messages/resmessages2.json: $.RES_DF_WU4.text[1]
@@ -3039,12 +3097,12 @@ _("Improves vehicle speed")
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 _("Incendiary Howitzer Emplacement 2")  
 // TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-_("Incendiary howitzer emplacement")  
-// TRANSLATORS: 
 // data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
 // data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 _("Incendiary Howitzer Emplacement")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+_("Incendiary howitzer emplacement")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 _("Incendiary Howitzer may be assigned to a sensor")  
@@ -3136,6 +3194,9 @@ _("Increases factory production rate")
 // data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[2]
 // data/base/messages/resmessages2.json: $.RES_W_FL_D4.text[2]
 _("Increases Flamer damage")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
+_("Increases Flamer range")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
 _("Increases Flamer ROF")  
@@ -3248,6 +3309,7 @@ _("Increases Rocket accuracy")
 _("Increases Rocket damage")  
 // TRANSLATORS: 
 // data/base/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[2]
+// data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[2]
 _("Increases Rocket ROF")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_V_AH1.text[2]
@@ -3560,6 +3622,10 @@ _("Machinegun Bunker")
 // ... + 2 refs
 // xgettext:no-c-format
 _("Machinegun damage +25%")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Defense-Tower01.name
+// data/base/stats/structure.json: $.GuardTower1.name
+_("Machinegun Guard Tower")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
 // data/mp/messages/resmessages2.json: $.RES_W_MG_ROF2.text[2]
@@ -3895,6 +3961,9 @@ _("Mortar Upgrade")
 // data/mp/stats/weapons.json: $.Mortar1Mk1.name
 _("Mortar")  
 // TRANSLATORS: 
+// data/base/stats/weapons.json: $.MG1-Tower.name
+_("Mounted Machinegun")  
+// TRANSLATORS: 
 // data/base/stats/structure.json: $.Emplacement-MRL-pit.name
 _("MRL Emplacement")  
 // TRANSLATORS: 
@@ -4017,7 +4086,7 @@ _("New Cyborg Research Available")
 // data/base/messages/resmessages1.json: $.RES_DF_P1.text[0]
 // data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[0]
 // data/base/messages/resmessages1.json: $.RES_PB_ATR.text[0]
-// ... + 107 refs
+// ... + 110 refs
 _("New Defensive Structure Available")  
 // TRANSLATORS: 
 // data/mp/messages/resmessagesall.json: $.RES_SY_RC.text[0]
@@ -4181,7 +4250,7 @@ _("New VTOL Missile Launcher")
 // data/base/messages/resmessages1.json: $.RES_CN1MK1.text[0]
 // data/base/messages/resmessages1.json: $.RES_CN2MK1.text[0]
 // data/base/messages/resmessages1.json: $.RES_CN3MK1.text[0]
-// ... + 24 refs
+// ... + 25 refs
 _("New Weapon Turret Available")  
 // TRANSLATORS: 
 // data/base/stats/structure.json: $.NEXUSCWall.name
@@ -4508,8 +4577,8 @@ _("Python")
 // data/mp/messages/resmessagesall.json: $.RES_WT_QUADAA.text[1]
 _("Quad 30mm Anti-Aircraft machinegun")  
 // TRANSLATORS: 
-// data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
-_("Quad 80mm Anti-Aircraft machinegun")  
+// data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
+_("Quad 80mm Anti-Aircraft cannon")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_AA2.text[1]
 // data/mp/messages/resmessages2.json: $.RES_W_AA2.text[1]
@@ -4601,6 +4670,9 @@ _("Rapid Fire Chaingun")
 // data/base/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 _("Rapid fire rail gun firing needle darts")  
+// TRANSLATORS: 
+// data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
+_("Rapid Loader increases reload rate")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
 // data/mp/messages/resmessages3.json: $.RES_ST_VPU4.text[2]
@@ -4705,7 +4777,6 @@ _("Replaces all machineguns")
 // data/mp/messages/resmessages2.json: $.RES_SY_STW2.text[2]
 _("Replaces existing sensor tower")  
 // TRANSLATORS: 
-// data/base/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
 // data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
 _("Replaces Medium Cannon")  
 // TRANSLATORS: 
@@ -4889,6 +4960,15 @@ _("Rocket Jeep")
 // data/mp/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
 _("Rocket Laser Designator")  
 // TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
+_("Rocket Rapid Loader Mk2")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
+_("Rocket Rapid Loader Mk3")  
+// TRANSLATORS: 
+// data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
+_("Rocket Rapid Loader")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
 // data/mp/messages/resmessages12.json: $.RES_W_SRK_ROF1.text[2]
 // xgettext:no-c-format
@@ -4901,7 +4981,7 @@ _("Rocket tracks the laser designator to the target")
 // data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[0]
 // data/base/messages/resmessages1.json: $.RES_W_SRK_D1.text[0]
 // data/base/messages/resmessages12.json: $.RES_W_SRK_AC2.text[0]
-// ... + 13 refs
+// ... + 14 refs
 _("Rocket Upgrade")  
 // TRANSLATORS: 
 // data/base/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
@@ -5172,6 +5252,12 @@ _("Steals technology from enemies")
 // data/mp/messages/resmessagesall.json: $.RES_SY_SPT.text[3]
 _("Steals technology from structures and takes control of weapons")  
 // TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
+_("Steel tower with flamer")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
+_("Steel tower with heavy machinegun")  
+// TRANSLATORS: 
 // data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_TOWER1.text[1]
 _("Steel tower with machinegun")  
@@ -5339,13 +5425,13 @@ _("Synaptic Link Data Analysis Mk2")
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade03.name
 _("Synaptic Link Data Analysis Mk3")  
 // TRANSLATORS: 
-// data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-// data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-_("Synaptic link data analysis")  
-// TRANSLATORS: 
 // data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
 // data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 _("Synaptic Link Data Analysis")  
+// TRANSLATORS: 
+// data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+// data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+_("Synaptic link data analysis")  
 // TRANSLATORS: 
 // data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
 // data/mp/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -5440,14 +5526,14 @@ _("The VTOL returns to the selected pad for rearming")
 // xgettext:no-c-format
 _("Thermal Armor +35%")  
 // TRANSLATORS: 
+// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
+// xgettext:no-c-format
+_("Thermal armor +40%")  
+// TRANSLATORS: 
 // data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
 // data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
 // xgettext:no-c-format
 _("Thermal Armor +40%")  
-// TRANSLATORS: 
-// data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-// xgettext:no-c-format
-_("Thermal armor +40%")  
 // TRANSLATORS: 
 // data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 // xgettext:no-c-format
@@ -5593,6 +5679,9 @@ _("Turtle AI")
 // data/base/messages/resmessages1.json: $.RES_MG2MK1.text[1]
 // data/mp/messages/resmessages1.json: $.RES_MG2MK1.text[1]
 _("Twin 7.62mm machineguns")  
+// TRANSLATORS: 
+// data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
+_("Twin 80mm Anti-Aircraft cannon")  
 // TRANSLATORS: 
 // data/base/messages/resmessages2.json: $.RES_W_AA1.text[1]
 // data/mp/messages/resmessages2.json: $.RES_W_AA1.text[1]

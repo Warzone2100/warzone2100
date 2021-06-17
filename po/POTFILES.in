@@ -153,6 +153,7 @@ data/mp/multiplay/script/rules/events/gameloaded.js
 data/mp/multiplay/script/rules/events/research.js
 data/mp/multiplay/script/rules/events/structurebuilt.js
 data/mp/multiplay/script/rules/events/transfer.js
+data/mp/multiplay/script/rules/events/upgrade.js
 data/mp/multiplay/script/rules/includes.js
 data/mp/multiplay/script/rules/init.js
 data/mp/multiplay/script/rules/oildrum.js
@@ -322,6 +323,8 @@ lib/widget/cliprect.cpp
 lib/widget/dropdown.cpp
 lib/widget/editbox.cpp
 lib/widget/form.cpp
+lib/widget/gridallocation.cpp
+lib/widget/gridlayout.cpp
 lib/widget/jsontable.cpp
 lib/widget/label.cpp
 lib/widget/listwidget.cpp
@@ -333,6 +336,14 @@ lib/widget/slider.cpp
 lib/widget/table.cpp
 lib/widget/tip.cpp
 lib/widget/widget.cpp
+lib/wzmaplib/src/map.cpp
+lib/wzmaplib/src/map_crc.cpp
+lib/wzmaplib/src/map_debug.cpp
+lib/wzmaplib/src/map_internal.cpp
+lib/wzmaplib/src/map_io.cpp
+lib/wzmaplib/src/map_preview.cpp
+lib/wzmaplib/src/map_script.cpp
+lib/wzmaplib/src/map_terrain_types.cpp
 po/custom/fromJson.txt
 po/custom/mac-infoplist.txt
 po/custom/warzone2100.desktop.txt
@@ -381,7 +392,10 @@ src/hci/research.cpp
 src/ingameop.cpp
 src/init.cpp
 src/input/context.cpp
+src/input/debugmappings.cpp
 src/input/keyconfig.cpp
+src/input/manager.cpp
+src/input/mapping.cpp
 src/intdisplay.cpp
 src/integrations/wzdiscordrpc.cpp
 src/intelmap.cpp
