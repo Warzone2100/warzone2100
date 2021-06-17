@@ -192,7 +192,19 @@ function(ExtractDMG filename directory)
 	)
 
 	if(NOT rv EQUAL 0)
-		message(FATAL_ERROR "error: hdiutil failed to mount the DMG: '${filename}'")
+		message(STATUS "warning: hdiutil failed to mount the DMG: '${filename}' - attempting again in verbose mode")
+
+		execute_process(COMMAND ${CMAKE_COMMAND} -E sleep 5)
+
+		message(STATUS "info: Mounting DMG: \"${filename}\" -> \"${_MountPoint}\"")
+		execute_process(
+			COMMAND ${HDIUTIL_COMMAND} attach -verbose -mountpoint "${_MountPoint}" "${filename}"
+			RESULT_VARIABLE rv
+		)
+
+		if(NOT rv EQUAL 0)
+			message(FATAL_ERROR "error: hdiutil failed to mount the DMG: '${filename}'")
+		endif()
 	endif()
 
 	# copy the contents of the DMG to the expected "extraction" directory
