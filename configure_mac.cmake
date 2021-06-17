@@ -60,6 +60,9 @@ set(_HAS_VULKAN_SDK FALSE)
 
 if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREATER_EQUAL "18.0"))
 
+	if(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "::group::Download Vulkan SDK")
+	endif()
 	execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++ Download Vulkan SDK...")
 
 	set(_vulkan_sdk_out_dir "vulkansdk-macos")
@@ -78,6 +81,9 @@ if((CMAKE_HOST_SYSTEM_NAME MATCHES "^Darwin$") AND (DARWIN_VERSION VERSION_GREAT
 		message(FATAL_ERROR "Failed to download Vulkan SDK")
 	endif()
 
+	if(DEFINED ENV{GITHUB_ACTIONS} AND "$ENV{GITHUB_ACTIONS}" STREQUAL "true")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E echo "::endgroup::")
+	endif()
 
 	# Set VULKAN_SDK environment variable, so vcpkg and CMake pick up the appropriate location
 	set(ENV{VULKAN_SDK} "${CMAKE_CURRENT_SOURCE_DIR}/macosx/external/${_vulkan_sdk_out_dir}/macOS")
