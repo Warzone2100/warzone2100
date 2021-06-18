@@ -603,7 +603,8 @@ Function .onInit
         !error "MSVCRT14_BLD_MINIMUM is not defined"
       !endif
 
-      ${If} ${RunningX64}
+      ${If} "${VS_PLATFORM_NAME}" == "x64"
+      ${AndIf} ${RunningX64}
         SetRegView 64
         ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Bld"
         SetRegView lastused
@@ -613,7 +614,8 @@ Function .onInit
         ${EndIf}
       ${EndIf}
       StrCpy $R1 ""
-      ${If} ${RunningX64}
+      ${If} "${VS_PLATFORM_NAME}" == "arm64"
+      ${AndIf} ${RunningX64}
         SetRegView 64
         ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\ARM64" "Bld" ; is this the right registry key to check for ARM64?
         SetRegView lastused
@@ -622,13 +624,15 @@ Function .onInit
           StrCpy $MSVCRT16_ARM64_NotPresent 1
         ${EndIf}
       ${EndIf}
-      StrCpy $R1 ""
-      SetRegView 32
-      ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Bld"
-      ; MessageBox MB_OK|MB_ICONSTOP "x86 VC14 Runtime Bld: $R1"
-      SetRegView lastused
-      ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
-        StrCpy $MSVCRT16_x86_NotPresent 1
+      ${If} "${VS_PLATFORM_NAME}" == "Win32"
+        StrCpy $R1 ""
+        SetRegView 32
+        ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86" "Bld"
+        ; MessageBox MB_OK|MB_ICONSTOP "x86 VC14 Runtime Bld: $R1"
+        SetRegView lastused
+        ${If} $R1 < ${MSVCRT14_BLD_MINIMUM}
+          StrCpy $MSVCRT16_x86_NotPresent 1
+        ${EndIf}
       ${EndIf}
 
       ${If} $MSVCRT16_x64_NotPresent = 1
