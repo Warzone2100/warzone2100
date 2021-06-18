@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:09\n"
+"PO-Revision-Date: 2021-06-18 15:05\n"
 "Last-Translator: \n"
 "Language-Team: Finnish\n"
 "Language: fi_FI\n"
@@ -15228,7 +15228,7 @@ msgstr ""
 #: src/faction.cpp:198
 #: src/frontend.cpp:1901
 msgid "Normal"
-msgstr ""
+msgstr "Normaali"
 
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:201
@@ -15270,11 +15270,11 @@ msgstr "Videot puuttuvat, lataa ne osoitteesta http://wz2100.net"
 #: src/frontend.cpp:166
 #: src/frontend.cpp:170
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Jatka viimeisintä tallennusta"
 
 #: src/frontend.cpp:171
 msgid "No last save available"
-msgstr ""
+msgstr "Viimeisintä tallennusta ei saatavilla"
 
 #: src/frontend.cpp:173
 msgid "Quit Game"
@@ -15286,23 +15286,23 @@ msgstr "PÄÄVALIKKO"
 
 #: src/frontend.cpp:176
 msgid "Official site: http://wz2100.net/"
-msgstr ""
+msgstr "Virallinen sivusto: http://wz2100.net/"
 
 #: src/frontend.cpp:177
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Käy foorumeilla ja lue uusimmat Warzone 2100 uutiset! Napsauta tätä linkkiä."
 
 #: src/frontend.cpp:178
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "Lahjoita: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:180
 msgid "Help support the project with our server costs, Click this link."
-msgstr ""
+msgstr "Tue projektia palvelin kustannuksissa. Napsauta tätä linkkiä."
 
 #: src/frontend.cpp:181
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Keskustele pelaajien kanssa Discordissa tai IRC:issä"
 
 #: src/frontend.cpp:183
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
@@ -15318,7 +15318,7 @@ msgstr ""
 
 #: src/frontend.cpp:286
 msgid "TUTORIALS"
-msgstr ""
+msgstr "TUTORIAALIT"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
 #: src/frontend.cpp:288
@@ -15346,7 +15346,7 @@ msgstr ""
 
 #: src/frontend.cpp:341
 msgid "Challenges"
-msgstr ""
+msgstr "Haasteet"
 
 #: src/frontend.cpp:342
 msgid "Load Campaign Game"
@@ -15367,7 +15367,7 @@ msgstr ""
 
 #: src/frontend.cpp:366
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "KAMPANJAT"
 
 #: src/frontend.cpp:504
 #: src/ingameop.cpp:1009
@@ -15385,7 +15385,7 @@ msgstr "MONINPELI"
 
 #: src/frontend.cpp:573
 msgid "Host Game"
-msgstr ""
+msgstr "Isännöi peli"
 
 #: src/frontend.cpp:574
 msgid "Join Game"
@@ -15758,7 +15758,7 @@ msgstr "Vaikea"
 #: src/frontend.cpp:1903
 #: src/multiint.cpp:234
 msgid "Insane"
-msgstr ""
+msgstr "Hyvin vaikea"
 
 #: src/frontend.cpp:1934
 #: src/frontend.cpp:2007
@@ -15768,17 +15768,17 @@ msgstr "Kieli"
 #: src/frontend.cpp:1938
 #: src/frontend.cpp:2011
 msgid "Campaign Difficulty"
-msgstr ""
+msgstr "Kampanjan vaikeustaso"
 
 #: src/frontend.cpp:1942
 #: src/frontend.cpp:2012
 msgid "Camera Speed"
-msgstr ""
+msgstr "Kameran nopeus"
 
 #: src/frontend.cpp:1946
 #: src/frontend.cpp:2008
 msgid "Unit Colour:"
-msgstr ""
+msgstr "Yksikön väri:"
 
 #: src/frontend.cpp:1976
 #: src/frontend.cpp:2010
@@ -15787,7 +15787,7 @@ msgstr ""
 
 #: src/frontend.cpp:1983
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Klikkaa avataksesi verkkosivu."
 
 #: src/frontend.cpp:1986
 #: src/frontend.cpp:2005
