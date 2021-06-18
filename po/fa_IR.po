@@ -5,15 +5,15 @@ msgstr ""
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
 "PO-Revision-Date: 2021-06-18 03:08\n"
 "Last-Translator: \n"
-"Language-Team: Tatar\n"
-"Language: tt_RU\n"
+"Language-Team: Persian\n"
+"Language: fa_IR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: warzone2100\n"
 "X-Crowdin-Project-ID: 354665\n"
-"X-Crowdin-Language: tt-RU\n"
+"X-Crowdin-Language: fa\n"
 "X-Crowdin-File: /master/po/warzone2100.pot\n"
 "X-Crowdin-File-ID: 72\n"
 
@@ -2561,7 +2561,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:196
 #: po/custom/fromJson.txt:3185
 msgid "Increases Damage Resistance"
-msgstr ""
+msgstr "مقاومت در برابر آسیب را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_MAT4.text[1]
@@ -2698,7 +2698,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:213
 #: po/custom/fromJson.txt:996
 msgid "Automatically Repairs Damaged Units"
-msgstr ""
+msgstr "به‌طور خودکار بخش‌های آسیب دیده را ترمیم می‌کند"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_REPTU1.text[3]
@@ -2708,7 +2708,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:214
 #: po/custom/fromJson.txt:4345
 msgid "Or damaged units may be selected as target"
-msgstr ""
+msgstr "یا بخش‌های آسیب‌دیده به عنوان هدف انتخاب می‌شوند"
 
 #: data/base/messages/strings/resstrings.txt:449
 #: data/mp/messages/strings/resstrings.txt:216
@@ -3799,7 +3799,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:403
 #: po/custom/fromJson.txt:3241
 msgid "Increases Machinegun damage"
-msgstr ""
+msgstr "آسیب مسلسل را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[3]
@@ -3986,7 +3986,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:433
 #: po/custom/fromJson.txt:3309
 msgid "Increases Rocket damage"
-msgstr ""
+msgstr "آسیب موشک را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[3]
@@ -4180,7 +4180,7 @@ msgstr ""
 #: src/transporter.cpp:549
 #: src/wzscriptdebug.cpp:1993
 msgid "Close"
-msgstr "Ябу"
+msgstr ""
 
 #: data/base/script/rules.js:196
 #: data/base/script/tutorial.js:516
@@ -4562,7 +4562,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr "Игътибар!"
+msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -5094,12 +5094,12 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr "19 гыйнвар, 2086"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr "Төньяк Америка"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
@@ -5119,7 +5119,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr "Таң, 4 апрель, 2100"
+msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
@@ -5203,7 +5203,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:213
 #: po/custom/fromJson.txt:5157
 msgid "Sensor Tower"
-msgstr ""
+msgstr "برجک سنسور"
 
 #: data/mp/messages/strings/names.txt:226
 msgid "Tornado AA Site"
@@ -5217,7 +5217,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:271
 #: po/custom/fromJson.txt:3658
 msgid "Machinegun"
-msgstr ""
+msgstr "مسلسل"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun02.name
@@ -5245,7 +5245,7 @@ msgstr ""
 
 #: data/mp/messages/strings/names.txt:317
 msgid "Nexus Wall"
-msgstr "Нексус дивары"
+msgstr ""
 
 #: data/mp/messages/strings/names.txt:318
 msgid "Nexus Corner Wall"
@@ -5783,7 +5783,7 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr "Меню"
+msgstr ""
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1966
@@ -6300,7 +6300,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_1.name
 #: po/custom/fromJson.txt:488
 msgid "Alpha"
-msgstr "Альфа"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_P_H1.text[1]
@@ -6847,7 +6847,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 #: po/custom/fromJson.txt:861
 msgid "Assault Cannon"
-msgstr ""
+msgstr "توپ حمله"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
@@ -6916,7 +6916,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG4ROTARYMk1.name
 #: po/custom/fromJson.txt:900
 msgid "Assault Gun"
-msgstr ""
+msgstr "اسلحه‌ی حمله"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-RotMG.name
@@ -7268,7 +7268,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1216
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "آسیب بمب + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7277,7 +7277,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1222
 #, no-c-format
 msgid "Bomb damage +25%"
-msgstr ""
+msgstr "آسیب بمب + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[0]
@@ -7329,14 +7329,14 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body4ABT.name
 #: po/custom/fromJson.txt:1257
 msgid "Bug"
-msgstr "Хата"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BarbarianBuggy.name
 #. data/mp/stats/templates.json: $.BarbarianBuggy.name
 #: po/custom/fromJson.txt:1261
 msgid "Buggy"
-msgstr "Багги"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ADEF.text[2]
@@ -7423,7 +7423,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1309
 #, no-c-format
 msgid "Cannon accuracy +10%"
-msgstr ""
+msgstr "دقّت توپ + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-ROF02.name
@@ -7453,7 +7453,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1327
 #, no-c-format
 msgid "Cannon damage +25%"
-msgstr ""
+msgstr "آسیب توپ + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaFireCan.name
@@ -7552,7 +7552,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-CB-Tower01.name
 #: po/custom/fromJson.txt:1387
 msgid "CB Tower"
-msgstr ""
+msgstr "برجک CB"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-CBSensor-Turret01.name
@@ -7628,7 +7628,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body5REC.name
 #: po/custom/fromJson.txt:1430
 msgid "Cobra"
-msgstr "Кобра"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MG_D10.text[1]
@@ -7674,14 +7674,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0CommandCentre.name
 #: po/custom/fromJson.txt:1469
 msgid "Command Center"
-msgstr ""
+msgstr "مرکز فرماندهی"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ComDroidControl.name
 #. data/mp/stats/structure.json: $.A0ComDroidControl.name
 #: po/custom/fromJson.txt:1473
 msgid "Command Relay Center"
-msgstr ""
+msgstr "مرکز رله‌ی فرمان"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-CommandRelay.name
@@ -7829,7 +7829,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1558
 #, no-c-format
 msgid "Construction speed +10%"
-msgstr ""
+msgstr "سرعت ساخت و ساز + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_ENGIN2.text[2]
@@ -7837,7 +7837,7 @@ msgstr ""
 #: po/custom/fromJson.txt:1563
 #, no-c-format
 msgid "Construction speed +20%"
-msgstr ""
+msgstr "سرعت ساخت و ساز + ۲۰٪"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Spade1Mk1.name
@@ -7925,7 +7925,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1615
 msgid "Cyborg Factory"
-msgstr ""
+msgstr "کارخانه‌ی سایبورگ"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgFlamer01.name
@@ -8188,7 +8188,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:1829
 msgid "Dragon"
-msgstr "Аждаһа"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
@@ -8313,7 +8313,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1908
 msgid "Enemy"
-msgstr "Душман"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Engineering01.name
@@ -8372,7 +8372,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0FacMod1.name
 #: po/custom/fromJson.txt:1955
 msgid "Factory Module"
-msgstr ""
+msgstr "ماژول کارخانه"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_FM1.text[2]
@@ -8401,7 +8401,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0LightFactory.name
 #: po/custom/fromJson.txt:1972
 msgid "Factory"
-msgstr "Фабрика"
+msgstr "کارخانه"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_RDST1.text[3]
@@ -8652,7 +8652,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2148
 msgid "Gamma"
-msgstr "Гамма"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -8868,21 +8868,21 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0HardcreteMk1CWall.name
 #: po/custom/fromJson.txt:2281
 msgid "Hardcrete Corner Wall"
-msgstr ""
+msgstr "دیوار گوشه‌ای سخت"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HardcreteGate.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Gate.name
 #: po/custom/fromJson.txt:2285
 msgid "Hardcrete Gate"
-msgstr ""
+msgstr "دروازه‌ی سخت"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0HardcreteMk1Wall.name
 #. data/mp/stats/structure.json: $.A0HardcreteMk1Wall.name
 #: po/custom/fromJson.txt:2289
 msgid "Hardcrete Wall"
-msgstr ""
+msgstr "دیوار سخت"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HardcreteWall.name
@@ -8959,7 +8959,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:2339
 msgid "Hardened Sensor Tower"
-msgstr ""
+msgstr "برجک سنسور مقاوم"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
@@ -9320,7 +9320,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon375mmMk1.name
 #: po/custom/fromJson.txt:2550
 msgid "Heavy Cannon"
-msgstr ""
+msgstr "توپ سنگین"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Flame2.name
@@ -9447,7 +9447,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG3Mk1.name
 #: po/custom/fromJson.txt:2649
 msgid "Heavy Machinegun"
-msgstr ""
+msgstr "مسلسل سنگین"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar02Hvy.name
@@ -9732,7 +9732,7 @@ msgstr ""
 #. data/base/stats/propulsion.json: $.hover03.name
 #: po/custom/fromJson.txt:2854
 msgid "Hover III"
-msgstr "Ховер III"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover.name
@@ -10167,7 +10167,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_W_CN_D7.text[2]
 #: po/custom/fromJson.txt:3164
 msgid "Increases Cannon damage"
-msgstr ""
+msgstr "آسیب توپ را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CN_ROF1.text[2]
@@ -10206,7 +10206,7 @@ msgstr ""
 #. data/base/messages/resmessages3.json: $.RES_LASD1.text[2]
 #: po/custom/fromJson.txt:3232
 msgid "Increases Laser damage"
-msgstr ""
+msgstr "آسیب لیزر را افزایش می‌دهد"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text[2]
@@ -10391,7 +10391,7 @@ msgstr ""
 #. data/mp/stats/templates.json: $.BabaJeep.name
 #: po/custom/fromJson.txt:3381
 msgid "Jeep"
-msgstr "Джип"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CY_JP1.text[3]
@@ -10560,14 +10560,14 @@ msgstr ""
 #: po/custom/fromJson.txt:3486
 #, no-c-format
 msgid "Laser accuracy +10%"
-msgstr ""
+msgstr "دقّت لیزر + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_LASD1.text[2]
 #: po/custom/fromJson.txt:3490
 #, no-c-format
 msgid "Laser damage +25%"
-msgstr ""
+msgstr "آسیب لیزر + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_CNAC2.text[1]
@@ -10610,7 +10610,7 @@ msgstr ""
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3515
 msgid "LasSat"
-msgstr "Лазер спутник"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -10626,7 +10626,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3531
 msgid "Leopard"
-msgstr "Леопард"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -10736,7 +10736,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon1Mk1.name
 #: po/custom/fromJson.txt:3596
 msgid "Light Cannon"
-msgstr ""
+msgstr "توپ سبک"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.LookOutTower.name
@@ -10776,7 +10776,7 @@ msgstr ""
 #: po/custom/fromJson.txt:3624
 #, no-c-format
 msgid "Machinegun damage +25%"
-msgstr ""
+msgstr "آسیب مسلسل + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower01.name
@@ -10990,7 +10990,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon2A-TMk1.name
 #: po/custom/fromJson.txt:3781
 msgid "Medium Cannon"
-msgstr ""
+msgstr "توپ متوسّط"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[0]
@@ -11696,13 +11696,13 @@ msgstr ""
 #. data/base/stats/structure.json: $.NEXUSWall.name
 #: po/custom/fromJson.txt:4302
 msgid "NEXUS Wall"
-msgstr "НЕКСУС дивары"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.name
 #: po/custom/fromJson.txt:4305
 msgid "Nexus"
-msgstr "Нексус"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/challenges/noplace.json: $.challenge.name
@@ -11733,7 +11733,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResourceExtractor.name
 #: po/custom/fromJson.txt:4321
 msgid "Oil Derrick"
-msgstr ""
+msgstr "دکل نفت"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.OilDrum.name
@@ -11802,7 +11802,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body6SUPP.name
 #: po/custom/fromJson.txt:4371
 msgid "Panther"
-msgstr "Пантера"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMor.name
@@ -11818,7 +11818,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4381
 msgid "Pepperpot"
-msgstr "Пепперпот"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -11886,7 +11886,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Laser4-PlasmaCannon.name
 #: po/custom/fromJson.txt:4419
 msgid "Plasma Cannon"
-msgstr ""
+msgstr "توپ پلاسما"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Bomb05.name
@@ -11964,7 +11964,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4461
 msgid "Power Generator"
-msgstr ""
+msgstr "مولّد برق"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -11980,21 +11980,21 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowMod1.name
 #: po/custom/fromJson.txt:4471
 msgid "Power Module"
-msgstr ""
+msgstr "ماژول برق"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_POWU1.text[2]
 #: po/custom/fromJson.txt:4475
 #, no-c-format
 msgid "Power output +25%"
-msgstr ""
+msgstr "برق خروجی + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[2]
 #: po/custom/fromJson.txt:4479
 #, no-c-format
 msgid "Power output +30%"
-msgstr ""
+msgstr "برق خروجی + ۳۰٪"
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG2.text[0]
@@ -12139,7 +12139,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body11ABT.name
 #: po/custom/fromJson.txt:4573
 msgid "Python"
-msgstr "Питон"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
@@ -12164,7 +12164,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Sys-RadarDetector01.name
 #: po/custom/fromJson.txt:4595
 msgid "Radar Detector Tower"
-msgstr ""
+msgstr "برجک راداریاب"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-RadarDetector01.name
@@ -12372,7 +12372,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0RepairCentre3.name
 #: po/custom/fromJson.txt:4738
 msgid "Repair Facility"
-msgstr ""
+msgstr "مرکز تعمیرات"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
@@ -12387,7 +12387,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4747
 #, no-c-format
 msgid "Repair Speed +100%"
-msgstr ""
+msgstr "سرعت ترمیم + ۱۰۰٪"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraRepairTrks.name
@@ -12465,7 +12465,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResearchFacility.name
 #: po/custom/fromJson.txt:4805
 msgid "Research Facility"
-msgstr ""
+msgstr "مرکز تحقیقات"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY1.text[3]
@@ -12495,7 +12495,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0ResearchModule1.name
 #: po/custom/fromJson.txt:4829
 msgid "Research Module"
-msgstr ""
+msgstr "ماژول تحقیقات"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[2]
@@ -12504,14 +12504,14 @@ msgstr ""
 #: po/custom/fromJson.txt:4835
 #, no-c-format
 msgid "Research speed +30%"
-msgstr ""
+msgstr "سرعت تحقیقات + ۳۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RM1.text[2]
 #: po/custom/fromJson.txt:4839
 #, no-c-format
 msgid "Research speed +85%"
-msgstr ""
+msgstr "سرعت تحقیقات + ۸۵٪"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body3MBT.name
@@ -12640,7 +12640,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4922
 #, no-c-format
 msgid "Rocket accuracy +10%"
-msgstr ""
+msgstr "دقّت موشک + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[1]
@@ -12685,7 +12685,7 @@ msgstr ""
 #: po/custom/fromJson.txt:4949
 #, no-c-format
 msgid "Rocket damage +25%"
-msgstr ""
+msgstr "آسیب موشک + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_SRK_AC3.text[1]
@@ -12982,7 +12982,7 @@ msgstr ""
 #. data/mp/multiplay/skirmish/semperfi.json: $.AI.name
 #: po/custom/fromJson.txt:5136
 msgid "SemperFi"
-msgstr "SemperFi"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
@@ -12995,21 +12995,21 @@ msgstr ""
 #: po/custom/fromJson.txt:5143
 #, no-c-format
 msgid "Sensor Range +10%"
-msgstr ""
+msgstr "برد سنسور + ۱۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU2.text[2]
 #: po/custom/fromJson.txt:5147
 #, no-c-format
 msgid "Sensor Range +15%"
-msgstr ""
+msgstr "برد سنسور + ۱۵٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU1.text[2]
 #: po/custom/fromJson.txt:5151
 #, no-c-format
 msgid "Sensor Range +25%"
-msgstr ""
+msgstr "برد سنسور + ۲۵٪"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
@@ -13501,7 +13501,7 @@ msgstr ""
 #. ... + 3 refs
 #: po/custom/fromJson.txt:5492
 msgid "Tank Traps"
-msgstr ""
+msgstr "تله‌های تانک"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
@@ -13563,14 +13563,14 @@ msgstr ""
 #: po/custom/fromJson.txt:5527
 #, no-c-format
 msgid "Thermal Armor +35%"
-msgstr ""
+msgstr "سپر حرارتی + ۳۵٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5531
 #, no-c-format
 msgid "Thermal armor +40%"
-msgstr ""
+msgstr "سپر حرارتی + ۴۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
@@ -13578,14 +13578,14 @@ msgstr ""
 #: po/custom/fromJson.txt:5536
 #, no-c-format
 msgid "Thermal Armor +40%"
-msgstr ""
+msgstr "سپر حرارتی + ۴۰٪"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CY_AH1.text[2]
 #: po/custom/fromJson.txt:5540
 #, no-c-format
 msgid "Thermal Armor +45%"
-msgstr ""
+msgstr "سپر حرارتی + ۴۵٪"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Armor-Heat02.name
@@ -13823,7 +13823,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.Cannon6TwinAslt.name
 #: po/custom/fromJson.txt:5696
 msgid "Twin Assault Cannon"
-msgstr ""
+msgstr "توپ حمله‌ی دوقلو"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-TwinAGun.name
@@ -13837,7 +13837,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG5TWINROTARY.name
 #: po/custom/fromJson.txt:5704
 msgid "Twin Assault Gun"
-msgstr ""
+msgstr "اسلحه‌ی حمله‌ی دوقلو"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox2.name
@@ -13883,7 +13883,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.MG2Mk1.name
 #: po/custom/fromJson.txt:5732
 msgid "Twin Machinegun"
-msgstr ""
+msgstr "مسلسل دوقلو"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_AALAS.text[1]
@@ -14017,7 +14017,7 @@ msgstr ""
 #: po/custom/fromJson.txt:5829
 #, no-c-format
 msgid "Vehicle speed +5%"
-msgstr ""
+msgstr "سرعت وسیله‌ی نقلیه + ۵٪"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Armor-Heat08.name
@@ -14250,7 +14250,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0VTolFactory1.name
 #: po/custom/fromJson.txt:5976
 msgid "VTOL Factory"
-msgstr ""
+msgstr "کارخانه‌ی عمودپرواز"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Laser3BEAM-VTOL.name
@@ -14411,7 +14411,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0VtolPad.name
 #: po/custom/fromJson.txt:6068
 msgid "VTOL Rearming Pad"
-msgstr ""
+msgstr "پد مسلّح‌ساز عمودپرواز"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[2]
@@ -14496,7 +14496,7 @@ msgstr ""
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6135
 msgid "Wall"
-msgstr "Дивар"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
@@ -14625,7 +14625,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6209
 msgctxt "rank"
 msgid "Elite"
-msgstr "Элит"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14641,7 +14641,7 @@ msgstr ""
 #: po/custom/fromJson.txt:6217
 msgctxt "rank"
 msgid "Hero"
-msgstr "Каһарман"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14699,7 +14699,7 @@ msgstr ""
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr "Warzone 2100"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14719,7 +14719,7 @@ msgstr ""
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr "Warzone"
+msgstr ""
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14735,7 +14735,7 @@ msgstr ""
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr "Глобаль"
+msgstr ""
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
@@ -14748,7 +14748,7 @@ msgstr ""
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr " һәм "
+msgstr ""
 
 #: src/cheat.cpp:203
 #, c-format
@@ -14804,7 +14804,7 @@ msgstr ""
 
 #: src/clparse.cpp:343
 msgid "file"
-msgstr "файл"
+msgstr ""
 
 #: src/clparse.cpp:344
 msgid "Flush all debug output written to stderr"
@@ -14951,7 +14951,7 @@ msgstr ""
 
 #: src/clparse.cpp:385
 msgid "test"
-msgstr "тест"
+msgstr ""
 
 #: src/clparse.cpp:386
 msgid "Continue the last saved game"
@@ -14983,7 +14983,7 @@ msgstr ""
 
 #: src/clparse.cpp:392
 msgid "port"
-msgstr "порт"
+msgstr ""
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -14996,7 +14996,7 @@ msgstr ""
 #: src/configuration.cpp:372
 #: src/multistat.cpp:298
 msgid "Player"
-msgstr "Уенчы"
+msgstr ""
 
 #: src/design.cpp:653
 #: src/design.cpp:664
@@ -15103,7 +15103,7 @@ msgstr ""
 #: src/design.cpp:1649
 #: src/design.cpp:1674
 msgid "Damage"
-msgstr ""
+msgstr "آسیب"
 
 #: src/design.cpp:1655
 #: src/design.cpp:1682
@@ -15197,24 +15197,28 @@ msgstr ""
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:1867
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:1878
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:1882
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/droid.cpp:2964
 msgid "Unit transfer failed -- unit limits exceeded"
@@ -15224,12 +15228,12 @@ msgstr ""
 #: src/faction.cpp:198
 #: src/frontend.cpp:1901
 msgid "Normal"
-msgstr "Нормаль"
+msgstr ""
 
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:201
 msgid "NEXUS"
-msgstr "НЕКСУС"
+msgstr ""
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
@@ -15455,11 +15459,11 @@ msgstr ""
 
 #: src/frontend.cpp:718
 msgid "1×"
-msgstr "1×"
+msgstr ""
 
 #: src/frontend.cpp:719
 msgid "2×"
-msgstr "2×"
+msgstr ""
 
 #: src/frontend.cpp:720
 #: src/frontend.cpp:1195
@@ -15489,12 +15493,12 @@ msgstr ""
 
 #: src/frontend.cpp:730
 msgid "50%"
-msgstr "50%"
+msgstr "۵۰٪"
 
 #: src/frontend.cpp:731
 #: src/multiplay.cpp:1651
 msgid "Black"
-msgstr "Кара"
+msgstr ""
 
 #: src/frontend.cpp:738
 #: src/frontend.cpp:743
@@ -15506,7 +15510,7 @@ msgstr "Кара"
 #: src/frontend.cpp:1773
 #: src/frontend.cpp:1783
 msgid "On"
-msgstr "Каб"
+msgstr ""
 
 #: src/frontend.cpp:758
 msgid "Rotating"
@@ -15547,7 +15551,7 @@ msgstr ""
 #: src/ingameop.cpp:622
 #: src/input/context.cpp:42
 msgid "Radar"
-msgstr "Радар"
+msgstr ""
 
 #: src/frontend.cpp:807
 #: src/ingameop.cpp:627
@@ -15573,7 +15577,7 @@ msgstr ""
 #: src/frontend.cpp:939
 #: src/frontend.cpp:945
 msgid "Auto"
-msgstr "Автоматик"
+msgstr ""
 
 #: src/frontend.cpp:985
 #: src/ingameop.cpp:149
@@ -15593,11 +15597,11 @@ msgstr ""
 #: src/frontend.cpp:1001
 #: src/ingameop.cpp:167
 msgid "Subtitles"
-msgstr "Субтитрлар"
+msgstr ""
 
 #: src/frontend.cpp:1006
 msgid "HRTF"
-msgstr "HRTF"
+msgstr ""
 
 #: src/frontend.cpp:1012
 #: src/frontend.cpp:1014
@@ -15793,7 +15797,7 @@ msgstr ""
 #: src/frontend.cpp:2118
 #: src/multiint.cpp:2965
 msgid "Mod: "
-msgstr "Мод: "
+msgstr ""
 
 #: src/frontend.cpp:2580
 msgid "Increase Game Display Scale?"
@@ -15810,7 +15814,7 @@ msgstr ""
 #: src/frontend.cpp:2586
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "آیا دوست دارید مقیاس نمایش بازی را افزایش دهید به: %u%%؟"
 
 #: src/frontend.cpp:2588
 msgid "Increase Display Scale"
@@ -15819,7 +15823,7 @@ msgstr ""
 #: src/frontend.cpp:2605
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "مقیاس نمایش افزایش یافت به: %u%%"
 
 #: src/frontend.cpp:2606
 #: src/frontend.cpp:2622
@@ -15969,17 +15973,17 @@ msgstr ""
 #: src/ingameop.cpp:250
 #: src/ingameop.cpp:259
 msgid "Load Game"
-msgstr "Уен йөкләү"
+msgstr ""
 
 #: src/ingameop.cpp:253
 #: src/ingameop.cpp:262
 #: src/mission.cpp:2430
 msgid "Save Game"
-msgstr "Уенны саклау"
+msgstr ""
 
 #: src/ingameop.cpp:274
 msgid "Quit"
-msgstr "Чыгу"
+msgstr ""
 
 #: src/ingameop.cpp:309
 msgid "Warning: Are you sure?"
@@ -16007,7 +16011,7 @@ msgstr ""
 
 #: src/ingameop.cpp:414
 msgid "-->  QUIT  <--"
-msgstr "-->  ЧЫГУ  <--"
+msgstr ""
 
 #: src/ingameop.cpp:569
 msgid "Audio Options"
@@ -16077,7 +16081,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:45
 msgid "QuickSave"
-msgstr "Тиз саклау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:46
 msgid "Toggle Radar"
@@ -16085,7 +16089,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:47
 msgid "QuickLoad"
-msgstr "Тиз йөкләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:48
 msgid "Toggle Console Display"
@@ -16113,163 +16117,163 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:55
 msgid "Assign Group 0"
-msgstr "Төркем 0 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:56
 msgid "Assign Group 1"
-msgstr "Төркем 1 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:57
 msgid "Assign Group 2"
-msgstr "Төркем 2 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:58
 msgid "Assign Group 3"
-msgstr "Төркем 3 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:59
 msgid "Assign Group 4"
-msgstr "Төркем 4 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:60
 msgid "Assign Group 5"
-msgstr "Төркем 5 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:61
 msgid "Assign Group 6"
-msgstr "Төркем 6 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:62
 msgid "Assign Group 7"
-msgstr "Төркем 7 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:63
 msgid "Assign Group 8"
-msgstr "Төркем 8 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:64
 msgid "Assign Group 9"
-msgstr "Төркем 9 билгеләү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:66
 msgid "Add to Group 0"
-msgstr "0 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:67
 msgid "Add to Group 1"
-msgstr "1 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:68
 msgid "Add to Group 2"
-msgstr "2 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:69
 msgid "Add to Group 3"
-msgstr "3 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:70
 msgid "Add to Group 4"
-msgstr "4 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:71
 msgid "Add to Group 5"
-msgstr "5 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:72
 msgid "Add to Group 6"
-msgstr "6 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:73
 msgid "Add to Group 7"
-msgstr "7 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:74
 msgid "Add to Group 8"
-msgstr "8 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:75
 msgid "Add to Group 9"
-msgstr "9 төркемгә өстәү"
+msgstr ""
 
 #: src/input/keyconfig.cpp:77
 msgid "Select Group 0"
-msgstr "0 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:78
 msgid "Select Group 1"
-msgstr "1 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:79
 msgid "Select Group 2"
-msgstr "2 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:80
 msgid "Select Group 3"
-msgstr "3 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:81
 msgid "Select Group 4"
-msgstr "4 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:82
 msgid "Select Group 5"
-msgstr "5 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:83
 msgid "Select Group 6"
-msgstr "6 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:84
 msgid "Select Group 7"
-msgstr "7 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:85
 msgid "Select Group 8"
-msgstr "8 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:86
 msgid "Select Group 9"
-msgstr "9 төркемне сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:88
 msgid "Select Commander 0"
-msgstr "Командир 0 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:89
 msgid "Select Commander 1"
-msgstr "Командир 1 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:90
 msgid "Select Commander 2"
-msgstr "Командир 2 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:91
 msgid "Select Commander 3"
-msgstr "Командир 3 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:92
 msgid "Select Commander 4"
-msgstr "Командир 4 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:93
 msgid "Select Commander 5"
-msgstr "Командир 5 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:94
 msgid "Select Commander 6"
-msgstr "Командир 6 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:95
 msgid "Select Commander 7"
-msgstr "Командир 7 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:96
 msgid "Select Commander 8"
-msgstr "Командир 8 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:97
 msgid "Select Commander 9"
-msgstr "Командир 9 сайлау"
+msgstr ""
 
 #: src/input/keyconfig.cpp:99
 msgid "Multiplayer Options / Alliance dialog"
@@ -16877,14 +16881,14 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:601
 #: src/integrations/wzdiscordrpc.cpp:837
 msgid "Map:"
-msgstr "Карта:"
+msgstr ""
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:604
 #: src/integrations/wzdiscordrpc.cpp:833
 msgid "Bots:"
-msgstr "Ботлар:"
+msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:627
 #: src/integrations/wzdiscordrpc.cpp:817
@@ -16904,7 +16908,7 @@ msgstr ""
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:896
 msgid "No:"
-msgstr "Юк:"
+msgstr ""
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:912
@@ -16984,7 +16988,7 @@ msgstr ""
 
 #: src/intorder.cpp:188
 msgid "Circle"
-msgstr "Түгәрәк"
+msgstr ""
 
 #: src/keybind.cpp:113
 msgid "Sorry, that cheat is disabled in multiplayer games."
@@ -17520,7 +17524,7 @@ msgstr ""
 #: src/multiint.cpp:1334
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
-msgstr "Уен исеме"
+msgstr ""
 
 #: src/multiint.cpp:1335
 msgid "One-Player Skirmish"
@@ -17583,23 +17587,23 @@ msgstr ""
 
 #: src/multiint.cpp:1478
 msgid "Tech"
-msgstr "Тех"
+msgstr ""
 
 #: src/multiint.cpp:1479
 msgid "Technology Level 1"
-msgstr "Технология дәрәҗәсе 1"
+msgstr ""
 
 #: src/multiint.cpp:1480
 msgid "Technology Level 2"
-msgstr "Технология дәрәҗәсе 2"
+msgstr ""
 
 #: src/multiint.cpp:1481
 msgid "Technology Level 3"
-msgstr "Технология дәрәҗәсе 3"
+msgstr ""
 
 #: src/multiint.cpp:1482
 msgid "Technology Level 4"
-msgstr "Технология дәрәҗәсе 4"
+msgstr ""
 
 #: src/multiint.cpp:1491
 #: src/multiint.cpp:1492
@@ -17640,7 +17644,7 @@ msgstr ""
 
 #: src/multiint.cpp:1905
 msgid "Team"
-msgstr "Төркем"
+msgstr ""
 
 #: src/multiint.cpp:1918
 #: src/multiint.cpp:3908
@@ -17812,12 +17816,12 @@ msgstr ""
 #: src/multiint.cpp:4807
 #: src/multiint.cpp:5041
 msgid "Open"
-msgstr "Ачу"
+msgstr ""
 
 #: src/multiint.cpp:4807
 #: src/multiint.cpp:5042
 msgid "Closed"
-msgstr "Ябык"
+msgstr ""
 
 #: src/multiint.cpp:4883
 #, c-format
@@ -17917,6 +17921,7 @@ msgstr ""
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/multimenu.cpp:676
 msgid "Score"
@@ -18034,7 +18039,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1648
 msgid "Green"
-msgstr "Яшел"
+msgstr ""
 
 #: src/multiplay.cpp:1649
 msgid "Orange"
@@ -18042,11 +18047,11 @@ msgstr ""
 
 #: src/multiplay.cpp:1650
 msgid "Grey"
-msgstr "Соры"
+msgstr ""
 
 #: src/multiplay.cpp:1652
 msgid "Red"
-msgstr "Кызыл"
+msgstr ""
 
 #: src/multiplay.cpp:1653
 msgid "Blue"
@@ -18054,7 +18059,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1654
 msgid "Pink"
-msgstr "Алсу"
+msgstr ""
 
 #: src/multiplay.cpp:1655
 msgid "Cyan"
@@ -18062,15 +18067,15 @@ msgstr ""
 
 #: src/multiplay.cpp:1656
 msgid "Yellow"
-msgstr "Сары"
+msgstr ""
 
 #: src/multiplay.cpp:1657
 msgid "Purple"
-msgstr "Ачык шәмәхә"
+msgstr ""
 
 #: src/multiplay.cpp:1658
 msgid "White"
-msgstr "Ак"
+msgstr ""
 
 #: src/multiplay.cpp:1659
 msgid "Bright blue"
@@ -18090,7 +18095,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1663
 msgid "Brown"
-msgstr "Көрән"
+msgstr ""
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
@@ -18099,11 +18104,11 @@ msgstr ""
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:680
 msgid "Album"
-msgstr "Альбом"
+msgstr ""
 
 #: src/musicmanager.cpp:545
 msgid "Date"
-msgstr "Дата"
+msgstr ""
 
 #: src/musicmanager.cpp:671
 msgid "Title"
@@ -18273,6 +18278,7 @@ msgstr ""
 msgid "%u unit selected"
 msgid_plural "%u units selected"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:2518
 msgid "Can't build any more units, Unit Limit Reached — Production Halted"
@@ -18298,12 +18304,14 @@ msgstr ""
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:5257
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
+msgstr[1] ""
 
 #: src/structure.cpp:5262
 #: src/structure.cpp:5272
@@ -18460,7 +18468,7 @@ msgstr ""
 #: src/titleui/gamefind.cpp:557
 #, c-format
 msgid "Mods: %s"
-msgstr "Мод: %s"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
@@ -18469,7 +18477,7 @@ msgstr ""
 #: src/titleui/gamefind.cpp:569
 #, c-format
 msgid "Version: %s"
-msgstr "Версия: %s"
+msgstr ""
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
@@ -18485,7 +18493,7 @@ msgstr ""
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr "Дәвам итү"
+msgstr ""
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
@@ -18493,12 +18501,12 @@ msgstr ""
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr "ЯРАР"
+msgstr ""
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:171
 msgid "Cancel"
-msgstr "Баш тарту"
+msgstr ""
 
 #: src/titleui/protocol.cpp:78
 msgid "CONNECTION"
@@ -18510,7 +18518,7 @@ msgstr ""
 
 #: src/titleui/protocol.cpp:84
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: src/titleui/protocol.cpp:182
 msgid "IP Address or Machine Name"

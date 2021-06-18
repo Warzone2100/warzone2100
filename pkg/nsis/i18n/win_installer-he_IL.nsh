@@ -1,6 +1,6 @@
-${LangFileString} WZWelcomeText "Welcome to the Warzone 2100 installer!\r\n\r\nThis wizard will guide you through the installation of Warzone 2100.\r\n\r\nIt is recommended that you close all other applications before continuing this installation. This will make it possible to update relevant system files without having to reboot your computer.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program\r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText "ברוך הבא לתוכנית ההתקנה שלWarzone 2100!\r\n\r\n אשף זה ידריך אותך בהתקנת Warzone 2100.\r\n\r\nמומלץ לסגור את כל היישומים האחרים לפני שתמשיך בהתקנה זו. זה יאפשר לעדכן קבצי מערכת רלוונטיים מבלי להפעיל מחדש את המחשב.\r\n\r\nWarzone 2100 הוא 100% חינם, ולגמרי קוד פתוח\r\n\r\nלחץ על הבא כדי להמשיך."
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "ברוך הבא למתקין הנייד של איזור מלחמה 2100! \r\n\r\nאשף זה ידריך אותך בהתקנת הגרסה הניידת של איזור מלחמה 2100.\r\n\r\nהתקנה זו הינה עצמאית לחלוטין ותוכל להסיר את ההתקנה של התוכנית בכל עת על ידי מחיקת הספרייה.\r\n\r\nאיזור מלחמה 2100 היא תוכנית קוד פתוח 100% חופשית!\r\n\r\nלחץ על הבא כדי להמשיך."
 
 ${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
 
@@ -8,18 +8,18 @@ ${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 
 
 ${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
 
-${LangFileString} WZ_GPL_NEXT "Киләсе"
+${LangFileString} WZ_GPL_NEXT "הבא"
 
-${LangFileString} TEXT_SecBase "Core files"
+${LangFileString} TEXT_SecBase "קבצי בסיס"
 ${LangFileString} DESC_SecBase "The core files required to run Warzone 2100."
 
-${LangFileString} TEXT_SecFMVs "Видеолар"
+${LangFileString} TEXT_SecFMVs "וידאו"
 ${LangFileString} DESC_SecFMVs "Download and install in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngHi "English (HQ)"
 ${LangFileString} DESC_SecFMVs_EngHi "Download and install higher-quality English in-game cutscenes."
 
-${LangFileString} TEXT_SecFMVs_Eng "Инглизча"
+${LangFileString} TEXT_SecFMVs_Eng "English"
 ${LangFileString} DESC_SecFMVs_Eng "Download and install English in-game cutscenes."
 
 ${LangFileString} TEXT_SecFMVs_EngLo "English (LQ)"

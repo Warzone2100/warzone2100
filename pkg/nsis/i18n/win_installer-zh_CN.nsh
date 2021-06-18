@@ -1,12 +1,12 @@
-${LangFileString} WZWelcomeText "欢迎使用Warzone 2100安装程序！\r\n\r\n此向导将引导你安装Warzone 2100\r\n\r\n建议您在在安装之前关闭所有其他应用程序，以确保更新相关的系统文件，避免后续需要重启您的计算机。\r\n\r\nWarzone 2100是完全免费的，完全开放源码程序\r\n\r\n点击下一步以继续。"
+${LangFileString} WZWelcomeText "欢迎来到 Warzone 2100！\r\n\r\n此处将引导你完成游戏的安装\r\n\r\n建议安装前关闭其他应用程序，以确保相关系统文件的更新、避免后续重启。\r\n\r\nWarzone 2100 是免费的，且完全开放源代码\r\n\r\n下一步继续。"
 
-${LangFileString} WZWelcomeText_Portable "Welcome to the Warzone 2100 portable installer!\r\n\r\nThis wizard will guide you through the installation of the portable version of Warzone 2100.\r\n\r\nThis install is fully self-contained and you can uninstall the program at any time by deleting the directory.\r\n\r\nWarzone 2100 is 100% free, fully open sourced program! \r\n\r\nClick Next to continue."
+${LangFileString} WZWelcomeText_Portable "海内存知己，天涯若比邻！\r\n\r\n此处将引导您安装 Warzone 2100。\r\n\r\n游戏可以随时删除、卸载。\r\n\r\n免费、开源、有趣的战争！\r\n\r\n下一步继续。"
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "最新版本请访问官方主页 https://wz2100.net。"
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "有 64 位版本的 Warzone 21100，$\r$\n详情请访问 https://wz2100.net/ $\r$\n仍要继续安装 32 位的吗？"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "这是 64 位版本的 Warzone 2100.$\r\n请从 https://wz2100.net/ 下载 32 位版本。 /$\r$\n点击确定以退出。"
 
 ${LangFileString} WZ_GPL_NEXT "下一步"
 
@@ -37,9 +37,9 @@ ${LangFileString} DESC_SecNLS_WinFonts "在搜索路径中包含 Windows 字体�
 ${LangFileString} TEXT_SecMSSysLibraries "重要的 Microsoft 运行时间期限"
 ${LangFileString} DESC_SecMSSysLibraries "下载并安装(或更新)微软的Visual C++可再发行的系统库，其中可能需要运行部分内容。"
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "正在下载"
+${LangFileString} DLTEXT_SysLibDLFailed "系统库下载失败"
+${LangFileString} DLTEXT_VideosDLFailed "视频下载失败"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "需要重启系统才能完成安装，现在开始？"
+${LangFileString} TEXT_MsgRebootFailed "重启失败，请手动重启。"
