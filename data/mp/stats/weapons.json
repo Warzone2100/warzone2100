@@ -662,7 +662,7 @@
         "name": "VTOL EMP Missile Launcher",
         "numAttackRuns": 1,
         "numExplosions": 1,
-	"radius": 512,
+	    "radius": 512,
         "radiusLife": 10,
         "recoilValue": 10,
         "rotate": 180,
