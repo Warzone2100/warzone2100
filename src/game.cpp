@@ -1632,8 +1632,6 @@ static bool loadSaveStructure2(const char *pFileName, STRUCTURE **ppList);
 static bool loadScriptStructure(ScriptMapData const &data);
 static bool loadSaveStructurePointers(const WzString& filename, STRUCTURE **ppList);
 static bool writeStructFile(const char *pFileName);
-static bool writeStatsFile(const char* pFileName);
-static bool loadStatsFile(const char* pFileName);
 
 static bool loadSaveTemplate(const char *pFileName);
 static bool writeTemplateFile(const char *pFileName);
@@ -2355,15 +2353,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	}
 	else
 	{
-		aFileName[fileExten] = '\0';
-		strcat(aFileName, "stats.json");
-		// this is wrongs
-		if (!loadStatsFile(aFileName))
-		{
-			debug(LOG_ERROR,"failed to load %s", aFileName);
-			goto error;
-		}
-
 		//load in the droids
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "droid.json");
@@ -2804,14 +2793,7 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 		debug(LOG_ERROR, "saveGame: writeCompListFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
-	//create stats (upgrades) file
-	CurrentFileName[fileExtension] = '\0';
-	strcat(CurrentFileName, "stats.json");
-	if (!writeStatsFile(CurrentFileName))
-	{
-		debug(LOG_ERROR, "saveGame: writeStatsFile(\"%s\") failed", CurrentFileName);
-		goto error;
-	}
+
 	//create the structure type lists filename
 	CurrentFileName[fileExtension] = '\0';
 	strcat(CurrentFileName, "strtype.json");
@@ -6378,64 +6360,6 @@ bool loadSaveCompList(const char *pFileName)
 	}
 	return true;
 }
-
-
-// -----------------------------------------------------------------------------------------
-// Load stats file
-static bool loadStatsFile(const char *fileName)
-{
-	/*WzConfig ini(WzString::fromUtf8(fileName), WzConfig::ReadOnly);
-	for (int player = 0; player < MAX_PLAYERS; player++)
-	{
-		ASSERT(ini.contains("player_" + WzString::number(player)), "No player info found in stats.json file");
-		ini.beginGroup("player_" + WzString::number(player));
-		ASSERT(ini.contains("body_stats"), "No body_stats info found stats.json file");
-		ini.beginGroup("body_stats");
-		for (int i = 0; i < numBodyStats; i++)
-		{
-			BODY_STATS *psStats = (BODY_STATS *)(asBodyStats + i);
-			if (ini.contains(psStats->id))
-			{
-				ini.beginGroup(psStats->id);
-				psStats->upgrade[player].power = ini.value("power").toInt();
-				psStats->upgrade[player].armour = ini.value("armour").toInt();
-				psStats->upgrade[player].thermal = ini.value("thermal").toInt();
-				psStats->upgrade[player].resistance = ini.value("resistance").toInt();
-				ini.endGroup();
-			}
-		}
-		ini.endGroup();
-		ini.endGroup();
-		
-	}*/
-	return true;
-}
-
-// -----------------------------------------------------------------------------------------
-// Write out the current state of stats (upgrades...) per player
-static bool writeStatsFile(const char *fileName)
-{
-	WzConfig ini(WzString::fromUtf8(fileName), WzConfig::ReadAndWrite);
-	for (int player = 0; player < MAX_PLAYERS; player++)
-	{
-		ini.beginGroup("player_" + WzString::number(player));
-		ini.beginGroup("body_stats");
-		for (int i = 0; i < numBodyStats; i++)
-		{
-			BODY_STATS *psStats = (BODY_STATS *)(asBodyStats + i);
-			ini.beginGroup(psStats->id);
-			ini.setValue("power", psStats->upgrade[player].power);
-			ini.setValue("armour", psStats->upgrade[player].armour);
-			ini.setValue("thermal", psStats->upgrade[player].thermal);
-			ini.setValue("resistance", psStats->upgrade[player].resistance);
-			ini.endGroup();
-		}
-		ini.endGroup();
-		ini.endGroup();
-	}
-	return true;
-}
-
 
 // -----------------------------------------------------------------------------------------
 // Write out the current state of the Comp lists per player

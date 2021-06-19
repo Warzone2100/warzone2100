@@ -1032,8 +1032,8 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// droids were actually loaded before (during stageThreeInitialise) upgrades.
-	// So to apply upgrades, we ll iterate over all droids, and re-calculate, once again,
-	// their upgradable parts (body, propulsion)
+	// So to actually apply them, we ll iterate over all droids, and re-calculate, once again,
+	// their upgradable parts.
 	// Without that, both Campaing and Skirmish saves are broken.
 	for (int player=0; player < MAX_PLAYERS; player++)
 	{
@@ -1044,7 +1044,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			DROID_TEMPLATE sTemplate;
 			templateSetParts(psCurr, &sTemplate);
 			psCurr->baseSpeed = calcDroidBaseSpeed(&sTemplate, psCurr->weight, player);
-			//droidBodyUpgrade(psCurr);
+			// setting this flag will trigger droidBodyUpgrade in droid.cpp, which does the work
 			psCurr->flags.set(OBJECT_FLAG_DIRTY);
 		}
 	}
