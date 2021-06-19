@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:08\n"
+"PO-Revision-Date: 2021-06-19 03:01\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -1207,7 +1207,7 @@ msgstr "Pusat Perbaikan"
 #: data/base/messages/strings/names.txt:307
 #: data/mp/messages/strings/names.txt:389
 msgid "Tornado AA Flak Site"
-msgstr "Situs Anti-Pesawat \"Tornado\""
+msgstr "Situs Anti-Pesawat Flak \"Tornado\""
 
 #: data/base/messages/strings/names.txt:204
 #: data/base/messages/strings/names.txt:205
@@ -4041,7 +4041,7 @@ msgstr "Selamatkan Tim Alpha dari Nexus"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "Hancurkan markas Nexus untuk mematikan Program Penyusup Nexus"
 
 #: data/base/script/campaign/cam3-ab.js:240
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -6039,7 +6039,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "Meriam Anti-Pesawat Flak \"Tornado\""
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6508,7 +6508,7 @@ msgstr "Dipersenjatai dengan Rudal Anti-Tank \"Lancer\""
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Dipersenjatai dengan Roket Anti-Tank \"Lancer\""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -7122,7 +7122,7 @@ msgstr "Unit perbaikan medan tempur"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Target Terbaik: Kendaraan dan Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7177,13 +7177,13 @@ msgstr "Target Terbaik: Bunker dan Titik Keras"
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, emplacements, Infantry"
-msgstr ""
+msgstr "Target Terbaik: Bunker, Emplasemen, Infanteri"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1122
 msgid "Best Targets: Bunkers, Emplacements, Infantry"
-msgstr ""
+msgstr "Target Terbaik: Bunker, Emplasemen, Infanteri"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7213,7 +7213,7 @@ msgstr "Target Terbaik: Infanteri, struktur markas, kendaraan beroda"
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1150
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "Target Terbaik: Kendaraan dan Cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -8926,13 +8926,13 @@ msgstr "Peluru senapan mesin keras"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2314
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Menara Penyembur Api yang Diperkeras"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2317
 msgid "Hardened Heavy Machinegun Tower"
-msgstr ""
+msgstr "Menara Senapan Mesin Berat yang Diperkeras"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -8987,7 +8987,7 @@ msgstr "Titik Keras dengan Senapan Anti-Pesawat \"Cyclone\" Tersedia"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2348
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Titik Keras dengan Senapan Anti-Pesawat \"Tornado\" Tersedia"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9471,21 +9471,21 @@ msgstr "Mortir Berat - Bombard"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2657
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Emplasemen Peluncur Plasma Berat"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2661
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Peluncur Plasma Berat menembakkan plasma"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2665
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Peluncur Plasma Berat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9711,13 +9711,13 @@ msgstr "Komposit beton-plastik elastisitas tinggi"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2834
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Kontainer Gas Bertekanan Tinggi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2837
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Gas bertekanan tinggi menembakkan gel pelempar api lebih jauh"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
@@ -10198,7 +10198,7 @@ msgstr "Meningkatkan kecepatan kontruksi"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3199
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Meningkatkan jarak tembak penyembur api"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10793,7 +10793,7 @@ msgstr "Daya rusak senapan mesin +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3628
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Menara Penjaga dengan Senapan Mesin"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11286,7 +11286,7 @@ msgstr "Mortir"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3965
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Senapan Mesin"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
@@ -12155,7 +12155,7 @@ msgstr "Python"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4581
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Meriam anti-pesawat 80mm laras empat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12314,7 +12314,7 @@ msgstr "Senapan rel tembak-cepat, menembakkan panah jarum"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4675
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "Pengisi cepat meningkatkan kecepatan isi ulang"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -15552,7 +15552,7 @@ msgstr "Bayangan"
 
 #: src/frontend.cpp:797
 msgid "Fog"
-msgstr ""
+msgstr "Kabut"
 
 #: src/frontend.cpp:802
 #: src/ingameop.cpp:622
@@ -16000,19 +16000,19 @@ msgstr "Keluar"
 
 #: src/ingameop.cpp:309
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Peringatan: Apakah anda yakin?"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Peringatan: Apakah anda yakin? Kemajuan yang tidak tersimpan akan hilang."
 
 #: src/ingameop.cpp:321
 msgid "Confirm"
-msgstr ""
+msgstr "Konfirmasi"
 
 #: src/ingameop.cpp:323
 msgid "Back"
-msgstr ""
+msgstr "Kembali"
 
 #: src/ingameop.cpp:402
 msgid "Host has quit the game!"
@@ -16067,7 +16067,7 @@ msgstr ""
 
 #: src/input/context.cpp:43
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
