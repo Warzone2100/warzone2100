@@ -1032,12 +1032,12 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	}
 
 	// droids were actually loaded before (during stageThreeInitialise) upgrades.
-	// So to actually apply them, we ll iterate over all droids, and re-calculate, once again,
+	// So to actually apply them, we'll iterate over all droids, and re-calculate, once again,
 	// their upgradable parts.
-	// Without that, both Campaing and Skirmish saves are broken.
+	// Without that, both Campaign and Skirmish saves are broken.
 	for (int player=0; player < MAX_PLAYERS; player++)
 	{
-			// one of these lists is empty when on mission
+		// one of these lists is empty when on mission
 		DROID *psdroidList = apsDroidLists[player] != nullptr ? apsDroidLists[player] : mission.apsDroidLists[player];
 		for (DROID *psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
 		{

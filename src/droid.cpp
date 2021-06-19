@@ -1424,7 +1424,6 @@ UDWORD calcDroidBaseSpeed(const DROID_TEMPLATE *psTemplate, UDWORD weight, UBYTE
 }
 
 
-
 /* Calculate the speed of a droid over a terrain */
 UDWORD calcDroidSpeed(UDWORD baseSpeed, UDWORD terrainType, UDWORD propIndex, UDWORD level)
 {
