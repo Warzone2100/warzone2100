@@ -98,6 +98,7 @@ void ContextManager::set(const InputContext& context, const InputContext::State 
 
 bool ContextManager::isActive(const InputContext& context) const
 {
+	ASSERT_OR_RETURN(false, !states.empty(), "No InputContext::States available");
 	const auto& state = states.back();
 	return state[context.index] != InputContext::State::INACTIVE;
 }
@@ -165,6 +166,7 @@ void ContextManager::pushState()
 
 void ContextManager::popState()
 {
+	ASSERT_OR_RETURN(, states.size() > 1, "Unbalanced push / pop");
 	states.pop_back();
 	bDirty = true;
 }
