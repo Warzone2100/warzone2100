@@ -2305,7 +2305,6 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 	if (gameType == GTYPE_SAVE_START || gameType == GTYPE_SAVE_MIDMISSION)
 	{
 		//load in the research list file
-		debug(LOG_INFO, "loading resstate.json");
 		aFileName[fileExten] = '\0';
 		strcat(aFileName, "resstate.json");
 		if (!loadSaveResearch(aFileName))
