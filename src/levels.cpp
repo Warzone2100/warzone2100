@@ -1044,8 +1044,6 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			DROID_TEMPLATE sTemplate;
 			templateSetParts(psCurr, &sTemplate);
 			psCurr->baseSpeed = calcDroidBaseSpeed(&sTemplate, psCurr->weight, player);
-			// setting this flag will trigger droidBodyUpgrade in droid.cpp, which does the work
-			psCurr->flags.set(OBJECT_FLAG_DIRTY);
 		}
 	}
 
