@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:08\n"
+"PO-Revision-Date: 2021-06-19 03:01\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -4210,7 +4210,7 @@ msgstr "Platforma wydobywcza jest na razie bezczynna. Zbuduj generator by zmieni
 
 #: data/base/script/tutorial.js:34
 msgid "Left click the flashing build icon"
-msgstr ""
+msgstr "Kliknij lewym przyciskiem na święcącą ikonkę budowania"
 
 #: data/base/script/tutorial.js:35
 msgid "Now left click the power generator in the build menu on the left"
@@ -5260,7 +5260,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:337
 #: po/custom/fromJson.txt:242
 msgid "ADVANCED RESEARCH"
-msgstr ""
+msgstr "ZAAWANSOWANE BADANIE"
 
 #: data/mp/messages/strings/names.txt:338
 msgid "CAM1 VEHICLES"
@@ -5692,7 +5692,7 @@ msgstr ""
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:105
 msgid "Researching fundamental technology."
-msgstr ""
+msgstr "Badanie podstawowych technologii."
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:111
 msgid "Researching "
@@ -5728,7 +5728,7 @@ msgstr "Nadchodzę!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:142
 msgid "Sorry, I don't have any free forces to send for help!"
-msgstr ""
+msgstr "Wybacz, nie mam żadnych wolnych oddziałów, aby wysłać pomoc!"
 
 #: data/mp/multiplay/skirmish/nb_includes/chat.js:147
 msgid "Any time, big boss!"
@@ -5747,7 +5747,7 @@ msgstr "Wpisz hasło tutaj"
 #: lib/netplay/netplay.cpp:1204
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
-msgstr ""
+msgstr "Nie można otworzyć wymaganego portu (%s) na (%s)"
 
 #: lib/netplay/netplay.cpp:1208
 msgid "You must manually configure your router & firewall to\n"
@@ -5759,11 +5759,12 @@ msgstr "Musisz ręcznie skonfigurować router i zaporę aby\n"
 #, c-format
 msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
-msgstr ""
+msgstr "Port gry skonfigurowany poprawnie (%s) na (%s)\n"
+"Twój zewnętrzny adres IP to %s"
 
 #: lib/netplay/netplay.cpp:2005
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
-msgstr ""
+msgstr "Nie znaleziono urządzenia wykorzystującego UPnP. Skonfiguruj router/firewall, aby otworzyć port 2100!"
 
 #: lib/netplay/netplay.cpp:2602
 #, c-format
@@ -14703,12 +14704,13 @@ msgstr ""
 #: po/custom/mac-infoplist.txt:1
 msgid "Copyright © 1999-2004 Eidos Interactive.\n"
 "Copyright © 2005-2020 The Warzone 2100 Project"
-msgstr ""
+msgstr "Copyright © 1999-2004 Eidos Interactive.\n"
+"Copyright © 2005-2020 The Warzone 2100 Project"
 
 #: po/custom/mac-infoplist.txt:2
 #: po/custom/warzone2100.desktop.txt:2
 msgid "Warzone 2100"
-msgstr ""
+msgstr "Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:3
 msgid "Warzone 2100 Map / Mod File"
@@ -14728,7 +14730,7 @@ msgstr "Plik globalnej modyfikacji Warzone 2100"
 
 #: po/custom/mac-infoplist.txt:7
 msgid "Warzone"
-msgstr ""
+msgstr "Warzone"
 
 #: po/custom/mac-infoplist.txt:8
 msgid "Warzone 2100 Music Mod File"
@@ -14863,7 +14865,7 @@ msgstr "Powoduje awarię w celu sprawdzenia obsługi awarii"
 
 #: src/clparse.cpp:353
 msgid "Load a saved skirmish game"
-msgstr ""
+msgstr "Wczytaj zapisany pojedynek"
 
 #: src/clparse.cpp:353
 #: src/clparse.cpp:354
@@ -14872,7 +14874,7 @@ msgstr "zapisana gra"
 
 #: src/clparse.cpp:354
 msgid "Load a saved campaign game"
-msgstr ""
+msgstr "Wczytaj zapisaną kampanię"
 
 #: src/clparse.cpp:355
 msgid "Play in windowed mode"
@@ -14908,7 +14910,7 @@ msgstr "Wyłącz dźwięk"
 
 #: src/clparse.cpp:362
 msgid "Connect directly to IP/hostname"
-msgstr ""
+msgstr "Podłącz bezpośrednio do adresu IP/hosta"
 
 #: src/clparse.cpp:362
 msgid "host"
@@ -14988,11 +14990,11 @@ msgstr ""
 
 #: src/clparse.cpp:392
 msgid "Set game server port"
-msgstr ""
+msgstr "Ustaw port serwera gry"
 
 #: src/clparse.cpp:392
 msgid "port"
-msgstr ""
+msgstr "port"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15282,16 +15284,16 @@ msgstr "Zobacz intro"
 
 #: src/frontend.cpp:161
 msgid "Videos are missing, download them from http://wz2100.net"
-msgstr ""
+msgstr "Brakuje plików wideo, pobierz je ze strony http://wz2100.net"
 
 #: src/frontend.cpp:166
 #: src/frontend.cpp:170
 msgid "Continue Last Save"
-msgstr ""
+msgstr "Wczytaj ostatni zapis"
 
 #: src/frontend.cpp:171
 msgid "No last save available"
-msgstr ""
+msgstr "Brak ostatniego zapisu"
 
 #: src/frontend.cpp:173
 msgid "Quit Game"
@@ -15307,11 +15309,11 @@ msgstr "Oficjalna strona: http://wz2100.net/"
 
 #: src/frontend.cpp:177
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
-msgstr ""
+msgstr "Przejrzyj fora i wszystkie newsy o Warzone 2100! Kliknij ten link."
 
 #: src/frontend.cpp:178
 msgid "Donate: http://donations.wz2100.net/"
-msgstr ""
+msgstr "Dotacja: http://donations.wz2100.net/"
 
 #: src/frontend.cpp:180
 msgid "Help support the project with our server costs, Click this link."
@@ -15327,7 +15329,7 @@ msgstr ""
 
 #: src/frontend.cpp:184
 msgid "Check for a newer version"
-msgstr ""
+msgstr "Sprawdź czy jest nowa wersja"
 
 #: src/frontend.cpp:285
 msgid "Fast Play"
@@ -15384,7 +15386,7 @@ msgstr "Materiały wideo kampanii są niedostępne! Pobierz je z http://wz2100.n
 
 #: src/frontend.cpp:366
 msgid "CAMPAIGNS"
-msgstr ""
+msgstr "KAMPANIE"
 
 #: src/frontend.cpp:504
 #: src/ingameop.cpp:1009
@@ -15433,7 +15435,7 @@ msgstr "Ustawienia obrazu"
 
 #: src/frontend.cpp:644
 msgid "Audio / Zoom Options"
-msgstr ""
+msgstr "Opcje dźwięku / powiększania"
 
 #: src/frontend.cpp:645
 #: src/ingameop.cpp:572
@@ -15452,35 +15454,35 @@ msgstr ""
 
 #: src/frontend.cpp:649
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Otwórz katalog konfiguracyjny"
 
 #: src/frontend.cpp:687
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Nie udało się otworzyć katalogu konfiguracyjnego w domyślnej przeglądarce plików."
 
 #: src/frontend.cpp:689
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "Obecny katalog konfiguracyjny to:"
 
 #: src/frontend.cpp:693
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "W przypadku gry uruchomionej wewnątrz piaskownicy / izolowanego środowiska, może się to różnić od rzeczywistej ścieżki na dysku."
 
 #: src/frontend.cpp:695
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Proszę zapoznać się z dokumentacją, aby uzyskać więcej informacji o tym, jak ręcznie zlokalizować ścieżkę."
 
 #: src/frontend.cpp:696
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Nie udało się otworzyć katalogu konfiguracyjnego"
 
 #: src/frontend.cpp:718
 msgid "1×"
-msgstr ""
+msgstr "1×"
 
 #: src/frontend.cpp:719
 msgid "2×"
-msgstr ""
+msgstr "2×"
 
 #: src/frontend.cpp:720
 #: src/frontend.cpp:1195
@@ -15510,7 +15512,7 @@ msgstr "Wyłącz"
 
 #: src/frontend.cpp:730
 msgid "50%"
-msgstr ""
+msgstr "50%"
 
 #: src/frontend.cpp:731
 #: src/multiplay.cpp:1651
@@ -15562,7 +15564,7 @@ msgstr "Cienie"
 
 #: src/frontend.cpp:797
 msgid "Fog"
-msgstr ""
+msgstr "Mgła"
 
 #: src/frontend.cpp:802
 #: src/ingameop.cpp:622
@@ -15577,7 +15579,7 @@ msgstr ""
 
 #: src/frontend.cpp:812
 msgid "Screen Shake"
-msgstr ""
+msgstr "Wstrząśnięcia ekranem"
 
 #: src/frontend.cpp:824
 msgid "GRAPHICS OPTIONS"
@@ -15585,16 +15587,16 @@ msgstr "USTAWIENIA GRAFIKI"
 
 #: src/frontend.cpp:932
 msgid "Disabled"
-msgstr ""
+msgstr "Wyłączone"
 
 #: src/frontend.cpp:935
 msgid "Enabled"
-msgstr ""
+msgstr "Włączone"
 
 #: src/frontend.cpp:939
 #: src/frontend.cpp:945
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #: src/frontend.cpp:985
 #: src/ingameop.cpp:149
@@ -15618,16 +15620,16 @@ msgstr "Napisy"
 
 #: src/frontend.cpp:1006
 msgid "HRTF"
-msgstr ""
+msgstr "HRTF"
 
 #: src/frontend.cpp:1012
 #: src/frontend.cpp:1014
 msgid "HRTF is not supported on your device / system / OpenAL library"
-msgstr ""
+msgstr "HRTF nie jest obsługiwane na Twoim urządzeniu, systemie lub bibliotece OpenAL"
 
 #: src/frontend.cpp:1018
 msgid "Map Zoom"
-msgstr ""
+msgstr "Powiększenie mapy"
 
 #: src/frontend.cpp:1023
 msgid "Map Zoom Rate"
@@ -15643,12 +15645,13 @@ msgstr ""
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
 #: src/frontend.cpp:1047
 msgid "AUDIO / ZOOM OPTIONS"
-msgstr ""
+msgstr "OPCJE DŹWIĘKU / POWIĘKSZANIA"
 
 #: src/frontend.cpp:1159
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "W trybie pełnoekranowym rozdzielczość dopasowuje się do rozdzielczości Twojego pulpitu \n"
+"(lub do tego, na co pozwala systemowy menedżer okien)."
 
 #: src/frontend.cpp:1161
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15902,11 +15905,11 @@ msgstr ""
 
 #: src/hci.cpp:2455
 msgid "Chat: All"
-msgstr ""
+msgstr "Czat: Wszyscy"
 
 #: src/hci.cpp:2460
 msgid "Chat: Team"
-msgstr ""
+msgstr "Czat: Drużyna"
 
 #: src/hci/build.cpp:296
 msgid "Build Progress"
@@ -15915,12 +15918,14 @@ msgstr "Postępy budowania"
 #: src/hci/build.cpp:597
 msgid "Showing All Tech\n"
 "Right-click to add to Favorites"
-msgstr ""
+msgstr "Wyświetlanie wszystkich technologii\n"
+"Kliknij prawym przyciskiem myszy, aby dodać do ulubionych"
 
 #: src/hci/build.cpp:599
 msgid "Showing Only Favorite Tech\n"
 "Right-click to remove from Favorites"
-msgstr ""
+msgstr "Pokazywanie tylko ulubionych technologii\n"
+"Kliknij prawym przyciskiem myszy, aby usunąć z Ulubionych"
 
 #: src/hci/manufacture.cpp:358
 msgid "Construction Progress"
@@ -15985,7 +15990,7 @@ msgstr "UI taktyczne (ikona pochodzenia celu): Ukryj"
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:779
 msgid "Go Back"
-msgstr ""
+msgstr "Wróć"
 
 #: src/ingameop.cpp:250
 #: src/ingameop.cpp:259
@@ -16004,19 +16009,19 @@ msgstr "Wyjdź"
 
 #: src/ingameop.cpp:309
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Uwaga: Jesteś pewien?"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Uwaga: Jesteś pewien? Wszelkie niezapisane postępy zostaną utracone."
 
 #: src/ingameop.cpp:321
 msgid "Confirm"
-msgstr ""
+msgstr "Potwierdź"
 
 #: src/ingameop.cpp:323
 msgid "Back"
-msgstr ""
+msgstr "Wstecz"
 
 #: src/ingameop.cpp:402
 msgid "Host has quit the game!"
@@ -16036,7 +16041,7 @@ msgstr "Ustawienia dźwięku"
 
 #: src/ingameop.cpp:576
 msgid "View Key Mappings"
-msgstr ""
+msgstr "Zobacz skróty klawiszowe"
 
 #: src/ingameop.cpp:632
 msgid "Shake"
@@ -16059,19 +16064,19 @@ msgstr "Wymagany mod nie mógł zostać załadowany: %s\n\n"
 
 #: src/input/context.cpp:39
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Globalne skróty klawiszowe"
 
 #: src/input/context.cpp:40
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Inne skróty klawiszowe"
 
 #: src/input/context.cpp:41
 msgid "Gameplay"
-msgstr ""
+msgstr "Rozgrywka"
 
 #: src/input/context.cpp:43
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16099,7 +16104,7 @@ msgstr "Dowódcy"
 
 #: src/input/keyconfig.cpp:45
 msgid "QuickSave"
-msgstr ""
+msgstr "SzybkiZapis"
 
 #: src/input/keyconfig.cpp:46
 msgid "Toggle Radar"
@@ -16107,7 +16112,7 @@ msgstr "Przełącz radar"
 
 #: src/input/keyconfig.cpp:47
 msgid "QuickLoad"
-msgstr ""
+msgstr "SzybkieWczytanie"
 
 #: src/input/keyconfig.cpp:48
 msgid "Toggle Console Display"
@@ -16175,43 +16180,43 @@ msgstr "Przypisz grupę 9"
 
 #: src/input/keyconfig.cpp:66
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Dodaj do grupy 0"
 
 #: src/input/keyconfig.cpp:67
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Dodaj do grupy 1"
 
 #: src/input/keyconfig.cpp:68
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Dodaj do grupy 2"
 
 #: src/input/keyconfig.cpp:69
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Dodaj do grupy 3"
 
 #: src/input/keyconfig.cpp:70
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Dodaj do grupy 4"
 
 #: src/input/keyconfig.cpp:71
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Dodaj do grupy 5"
 
 #: src/input/keyconfig.cpp:72
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Dodaj do grupy 6"
 
 #: src/input/keyconfig.cpp:73
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Dodaj do grupy 7"
 
 #: src/input/keyconfig.cpp:74
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Dodaj do grupy 8"
 
 #: src/input/keyconfig.cpp:75
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Dodaj do grupy 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Select Group 0"
@@ -16299,19 +16304,19 @@ msgstr "Dialog opcji gry wieloosobowej / sojuszy"
 
 #: src/input/keyconfig.cpp:101
 msgid "Move Camera Up"
-msgstr ""
+msgstr "Przesuń kamerę w górę"
 
 #: src/input/keyconfig.cpp:102
 msgid "Move Camera Down"
-msgstr ""
+msgstr "Przesuń kamerę w dół"
 
 #: src/input/keyconfig.cpp:103
 msgid "Move Camera Right"
-msgstr ""
+msgstr "Przesuń kamerę w prawo"
 
 #: src/input/keyconfig.cpp:104
 msgid "Move Camera Left"
-msgstr ""
+msgstr "Przesuń kamerę w lewo"
 
 #: src/input/keyconfig.cpp:105
 msgid "Snap View to North"
@@ -16419,19 +16424,19 @@ msgstr "Przełącz nakładki"
 
 #: src/input/keyconfig.cpp:131
 msgid "Toggle Console History "
-msgstr ""
+msgstr "Przełącz historię konsoli "
 
 #: src/input/keyconfig.cpp:132
 msgid "Toggle Team Chat History"
-msgstr ""
+msgstr "Przełącz historię czatu drużynowego"
 
 #: src/input/keyconfig.cpp:133
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Obróć budynek zgodnie z ruchem wskazówek zegara"
 
 #: src/input/keyconfig.cpp:134
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Obróć budynek w kierunku przeciwnym do ruchu wskazówek zegara"
 
 #: src/input/keyconfig.cpp:136
 msgid "Center View on HQ"
@@ -16510,11 +16515,11 @@ msgstr "Daleki zasięg"
 
 #: src/input/keyconfig.cpp:152
 msgid "Send Global Text Message"
-msgstr ""
+msgstr "Wyślij wiadomość globalną"
 
 #: src/input/keyconfig.cpp:153
 msgid "Send Team Text Message"
-msgstr ""
+msgstr "Wyślij wiadomość drużynową"
 
 #: src/input/keyconfig.cpp:154
 msgid "Drop a beacon"
@@ -16538,7 +16543,7 @@ msgstr "Przełącz widok radaru przyjaciel-wróg"
 
 #: src/input/keyconfig.cpp:159
 msgid "Show all keyboard mappings"
-msgstr ""
+msgstr "Pokaż wszystkie skróty klawiszowe"
 
 #: src/input/keyconfig.cpp:161
 #: src/intorder.cpp:169
@@ -16819,7 +16824,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:263
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
+msgstr "Gra została już rozpoczęta lub host zamknął lobby gry."
 
 #: src/integrations/wzdiscordrpc.cpp:266
 msgid "Failed to Find Game"
@@ -16920,40 +16925,40 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:849
 #, c-format
 msgid "Game Name: \"%s\" by %s"
-msgstr ""
+msgstr "Nazwa gry: \"%s\" autorstwa %s"
 
 #. TRANSLATORS: "No:" to signify limits - example usage: "No: Tanks,VTOLs"
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:896
 msgid "No:"
-msgstr ""
+msgstr "Bez:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:912
 msgid "Alliances:"
-msgstr ""
+msgstr "Sojusze:"
 
 #: src/integrations/wzdiscordrpc.cpp:928
 msgid "In Menu"
-msgstr ""
+msgstr "W menu"
 
 #: src/integrations/wzdiscordrpc.cpp:1077
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "Użytkownik Discorda \"%s\" chciałby dołączyć do Twojej gry."
 
 #: src/integrations/wzdiscordrpc.cpp:1079
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "Zezwolić temu graczowi na dołączenie do Twojej gry?"
 
 #: src/integrations/wzdiscordrpc.cpp:1083
 #, c-format
 msgid "Join Request from %s"
-msgstr ""
+msgstr "Prośba o dołączenie od gracza %s"
 
 #: src/integrations/wzdiscordrpc.cpp:1085
 msgid "Allow"
-msgstr ""
+msgstr "Zezwól"
 
 #: src/intelmap.cpp:241
 #: src/keybind.cpp:1235
@@ -17034,15 +17039,15 @@ msgstr "Dobra, pokazywanie broni i radarów wyłączone!"
 
 #: src/keybind.cpp:316
 msgid "View Aligned to South"
-msgstr ""
+msgstr "Widok ustawiony na południe"
 
 #: src/keybind.cpp:326
 msgid "View Aligned to East"
-msgstr ""
+msgstr "Widok ustawiony na wschód"
 
 #: src/keybind.cpp:336
 msgid "View Aligned to West"
-msgstr ""
+msgstr "Widok ustawiony na zachód"
 
 #: src/keybind.cpp:400
 #, c-format
@@ -17157,39 +17162,39 @@ msgstr "Złap kursor %s"
 
 #: src/keybind.cpp:1247
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "KAMPANIA"
 
 #: src/keybind.cpp:1251
 msgid "CHALLENGE"
-msgstr ""
+msgstr "WYZWANIE"
 
 #: src/keybind.cpp:1254
 msgid "SKIRMISH"
-msgstr ""
+msgstr "POJEDYNEK"
 
 #: src/keybind.cpp:1272
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "POZIOM: ŁATWY"
 
 #: src/keybind.cpp:1275
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "POZIOM: NORMALNY"
 
 #: src/keybind.cpp:1278
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "POZIOM: TRUDNY"
 
 #: src/keybind.cpp:1281
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "POZIOM: BARDZO TRUDNY"
 
 #: src/keybind.cpp:1290
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "OSZUSTWA: WŁĄCZONE"
 
 #: src/keybind.cpp:1292
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "OSZUSTWA: WYŁĄCZONE"
 
 #: src/keybind.cpp:1348
 msgid "Researched EVERYTHING for you!"
@@ -17492,7 +17497,7 @@ msgstr ""
 
 #: src/multiint.cpp:1001
 msgid "Error while joining."
-msgstr ""
+msgstr "Wystąpił błąd podczas dołączania."
 
 #: src/multiint.cpp:1115
 msgid "Tanks disabled!!"
@@ -17529,11 +17534,11 @@ msgstr ""
 
 #: src/multiint.cpp:1263
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Zezwolić hostowi na zmianę mapy lub jej wylosowanie?"
 
 #: src/multiint.cpp:1294
 msgid "Not enough votes to randomize or change the map."
-msgstr ""
+msgstr "Za mało głosów, aby wylosować lub zmienić mapę."
 
 #: src/multiint.cpp:1330
 msgid "Select Game Name"
@@ -17542,7 +17547,7 @@ msgstr "Wybierz nazwę gry"
 #: src/multiint.cpp:1334
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
-msgstr ""
+msgstr "Nazwa gry"
 
 #: src/multiint.cpp:1335
 msgid "One-Player Skirmish"
@@ -17551,7 +17556,8 @@ msgstr "Potyczka"
 #: src/multiint.cpp:1358
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr ""
+msgstr "Wybierz mapę\n"
+"Może być zablokowana przez głosy graczy"
 
 #: src/multiint.cpp:1359
 msgid "Map-Mod!"
@@ -17559,7 +17565,7 @@ msgstr ""
 
 #: src/multiint.cpp:1360
 msgid "Random map!"
-msgstr ""
+msgstr "Losowa mapa!"
 
 #: src/multiint.cpp:1377
 msgid "Click to set Password"
@@ -17596,7 +17602,7 @@ msgstr "Ustaw limit struktur"
 
 #: src/multiint.cpp:1466
 msgid "Random Game Options"
-msgstr ""
+msgstr "Opcje gry losowej"
 
 #: src/multiint.cpp:1467
 msgid "Random Game Options\n"
@@ -17812,15 +17818,15 @@ msgstr ""
 
 #: src/multiint.cpp:4615
 msgid "UPnP detection is in progress..."
-msgstr ""
+msgstr "Wykrywanie urządzeń UPnP w toku..."
 
 #: src/multiint.cpp:4622
 msgid "UPnP detection disabled by user. Autoconfig of port 2100 will not happen."
-msgstr ""
+msgstr "Wykrywanie urządzeń UPnP wyłączone przez użytkownika. Auto-konfiguracja portu 2100 nie zostanie wykonana."
 
 #: src/multiint.cpp:4628
 msgid "Hit the ready box to begin your challenge!"
-msgstr ""
+msgstr "Naciśnij przycisk gotowości, aby rozpocząć wyzwanie!"
 
 #: src/multiint.cpp:4632
 msgid "Press the start hosting button to begin hosting a game."
@@ -17853,12 +17859,12 @@ msgstr "Mapa: %u%% pobrane"
 
 #: src/multiint.cpp:4931
 msgid "HOST"
-msgstr ""
+msgstr "HOST"
 
 #: src/multiint.cpp:4938
 #: src/multimenu.cpp:693
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: src/multijoin.cpp:113
 msgid "Players Still Joining"
@@ -17876,7 +17882,7 @@ msgstr "Transfer pliku został anulowany dla %d."
 
 #: src/multijoin.cpp:390
 msgid "The game is already full."
-msgstr ""
+msgstr "Ta gra jest już pełna."
 
 #: src/multijoin.cpp:465
 #, c-format
@@ -17885,7 +17891,7 @@ msgstr "%s (%u) ma niekompatybilny mod i został wyrzucony."
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "Twoje dane nie zgadzają się z danymi hosta!"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17898,12 +17904,12 @@ msgstr "Wiadomość serwera:"
 
 #: src/multijoin.cpp:523
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "Dostępna jest aktualizacja gry, odwiedź https://wz2100.net, aby pobrać nową wersję."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
 msgid "LIMITS"
-msgstr ""
+msgstr "OGRANICZENIA"
 
 #: src/multilimit.cpp:153
 msgid "Map Can Exceed Limits"
@@ -18028,7 +18034,7 @@ msgstr "Gracz %s wyrzucony z powodu próby pominięcia sprawdzenia integralnośc
 
 #: src/multiplay.cpp:270
 msgid "Invalid data!"
-msgstr ""
+msgstr "Nieprawidłowe dane!"
 
 #: src/multiplay.cpp:872
 #, c-format
@@ -18045,7 +18051,7 @@ msgstr ""
 
 #: src/multiplay.cpp:1419
 msgid "FILE SENT!"
-msgstr ""
+msgstr "PLIK WYSŁANY!"
 
 #: src/multiplay.cpp:1490
 #, c-format
@@ -18119,32 +18125,32 @@ msgstr "Brązowy"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "TERAZ W GRZE"
 
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:680
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/musicmanager.cpp:545
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: src/musicmanager.cpp:671
 msgid "Title"
-msgstr ""
+msgstr "Tytuł"
 
 #: src/musicmanager.cpp:860
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "MENADŻER MUZYKI"
 
 #: src/notifications.cpp:726
 msgid "Dismiss"
-msgstr ""
+msgstr "Odrzuć"
 
 #: src/notifications.cpp:807
 msgid "Do not show again"
-msgstr ""
+msgstr "Nie pokazuj ponownie"
 
 #: src/order.cpp:777
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -18399,11 +18405,11 @@ msgstr "Odśwież listę gier"
 
 #: src/titleui/gamefind.cpp:99
 msgid "Filter Games List"
-msgstr ""
+msgstr "Filtruj listę gier"
 
 #: src/titleui/gamefind.cpp:170
 msgid "Refreshing..."
-msgstr ""
+msgstr "Odświeżanie..."
 
 #: src/titleui/gamefind.cpp:196
 msgid "Searching"
@@ -18415,7 +18421,7 @@ msgstr "Łączenie z serwerem lobby..."
 
 #: src/titleui/gamefind.cpp:261
 msgid "Your version of Warzone is incompatible with this game."
-msgstr ""
+msgstr "Twoja wersja Warzone jest niekompatybilna z tą grą."
 
 #: src/titleui/gamefind.cpp:312
 msgid "[Password required]"
@@ -18445,15 +18451,15 @@ msgstr "Hostowana przez %s —%s"
 
 #: src/titleui/gamefind.cpp:362
 msgid "Can't find any games for your version."
-msgstr ""
+msgstr "Nie można znaleźć żadnych gier do Twojej wersji."
 
 #: src/titleui/gamefind.cpp:378
 msgid "There appears to be a game update available!"
-msgstr ""
+msgstr "Wygląda na to, że dostępna jest aktualizacja gry!"
 
 #: src/titleui/gamefind.cpp:382
 msgid "No games are available for your version"
-msgstr ""
+msgstr "Brak gier dostępnych do Twojej wersji"
 
 #: src/titleui/gamefind.cpp:386
 msgid "Game is full"
@@ -18507,19 +18513,19 @@ msgstr "Wersja %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
-msgstr ""
+msgstr "Nazwa mapy"
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
-msgstr ""
+msgstr "Gracze"
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Kontynuuj"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
@@ -18527,7 +18533,7 @@ msgstr "Wpisz hasło:"
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:171
@@ -18540,11 +18546,11 @@ msgstr "POŁĄCZENIE"
 
 #: src/titleui/protocol.cpp:83
 msgid "Lobby"
-msgstr ""
+msgstr "Lobby"
 
 #: src/titleui/protocol.cpp:84
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:182
 msgid "IP Address or Machine Name"
@@ -18565,20 +18571,20 @@ msgstr "Posiłki lądują"
 
 #: src/updatemanager.cpp:247
 msgid "Update Available"
-msgstr ""
+msgstr "Dostępna aktualizacja"
 
 #: src/updatemanager.cpp:250
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "Dostępne jest nowe wydanie Warzone 2100 (%s)!"
 
 #: src/updatemanager.cpp:254
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "Dostępne jest nowe wydanie Warzone 2100!"
 
 #: src/updatemanager.cpp:256
 msgid "Get Update Now"
-msgstr ""
+msgstr "Zaktualizuj teraz"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:189
@@ -18588,7 +18594,7 @@ msgstr " (zmodyfikowany lokalnie)"
 #. TRANSLATORS: Printed in Debug builds
 #: src/version.cpp:196
 msgid " - DEBUG"
-msgstr ""
+msgstr " - DEBUG"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
@@ -18596,7 +18602,7 @@ msgstr ""
 #: src/version.cpp:205
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
-msgstr ""
+msgstr "Wersja: %s,%s Wydanie: %s%s"
 
 #: src/wzapi.cpp:2320
 msgid "YOU ARE VICTORIOUS!"
@@ -18608,5 +18614,5 @@ msgstr "ZOSTAŁEŚ POKONANY!"
 
 #: src/wzscriptdebug.cpp:1829
 msgid "Script Debugger"
-msgstr ""
+msgstr "Debuger skryptu"
 
