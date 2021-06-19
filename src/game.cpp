@@ -2792,7 +2792,6 @@ bool saveGame(const char *aFileName, GAME_TYPE saveType)
 		debug(LOG_ERROR, "saveGame: writeCompListFile(\"%s\") failed", CurrentFileName);
 		goto error;
 	}
-
 	//create the structure type lists filename
 	CurrentFileName[fileExtension] = '\0';
 	strcat(CurrentFileName, "strtype.json");
