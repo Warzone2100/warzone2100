@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-19 03:01\n"
+"PO-Revision-Date: 2021-06-19 15:01\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -1207,7 +1207,7 @@ msgstr "Pusat Perbaikan"
 #: data/base/messages/strings/names.txt:307
 #: data/mp/messages/strings/names.txt:389
 msgid "Tornado AA Flak Site"
-msgstr "Situs Anti-Pesawat Flak \"Tornado\""
+msgstr "Situs Flak Anti-Pesawat \"Tornado\""
 
 #: data/base/messages/strings/names.txt:204
 #: data/base/messages/strings/names.txt:205
@@ -1985,7 +1985,7 @@ msgstr "Struktur Defensif Baru Tersedia"
 #: data/mp/messages/strings/resstrings.txt:37
 #: po/custom/fromJson.txt:132
 msgid "AA Site with Tornado Flak Turret"
-msgstr "Situs Anti-Pesawat dengan Turet Anti-Pesawat \"Tornado\""
+msgstr "Situs Anti-Pesawat dengan Turet Flak Anti-Pesawat \"Tornado\""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[2]
@@ -2052,7 +2052,7 @@ msgstr "Kekuatan Defensif: Sedang"
 #: data/mp/messages/strings/resstrings.txt:42
 #: po/custom/fromJson.txt:124
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "Situs Anti-Pesawat dengan Turet Anti-Pesawat \"Cyclone\""
+msgstr "Situs Anti-Pesawat dengan Turet Flak Anti-Pesawat \"Cyclone\""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[1]
@@ -3196,7 +3196,7 @@ msgstr "Turet Anti-Pesawat Baru Tersedia"
 #: data/mp/messages/strings/resstrings.txt:292
 #: po/custom/fromJson.txt:5688
 msgid "Twin 80mm flak weapon"
-msgstr "Senjata Anti-Pesawat Flak 80mm laras ganda"
+msgstr "Senjata Flak Anti-Pesawat 80mm laras ganda"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[2]
@@ -3222,7 +3222,7 @@ msgstr "Hanya menyerang pesawat"
 #: data/mp/messages/strings/resstrings.txt:297
 #: po/custom/fromJson.txt:4585
 msgid "Quad 80mm flak weapon"
-msgstr "Senjata Anti-Pesawat 80mm laras empat"
+msgstr "Senjata Flak Anti-Pesawat 80mm laras empat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA3.text[1]
@@ -4009,7 +4009,7 @@ msgstr "Hancurkan seluruh bala bantuan Paradigma Baru"
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Bangun setidaknya 7 struktur non-tembok di dataran tinggi dan hancurkan seluruh bala bantuan Paradigma Baru"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
@@ -5919,27 +5919,27 @@ msgstr "Pengisi Peluru Sistem Rantai AA"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "Emplasemen Meriam Flak Anti-Pesawat \"Cyclone\""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Titik Keras dengan Flak Anti-Pesawat \"Cyclone\""
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "AA Cyclone Flak Cannon Python Half-tracks"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "Meriam Flak Anti-Pesawat \"Cyclone\""
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6025,14 +6025,14 @@ msgstr "Sensor Pencitraan Termal Anti-Pesawat"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "Emplasemen Meriam Flak Anti-Pesawat \"Tornado\""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Titik Keras dengan Flak Anti-Pesawat \"Tornado\""
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
@@ -12722,19 +12722,19 @@ msgstr "Designator Laser Roket"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4964
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Pengisi Cepat Roket Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4967
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Pengisi Cepat Roket Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4970
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "Pengisi Cepat Roket"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -13182,13 +13182,13 @@ msgstr "Mencuri teknologi dari struktur dan mengambil alih senjata"
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5256
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Menara baja dengan penyembur api"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5259
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Menara baja dengan senapan mesin berat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13819,7 +13819,7 @@ msgstr "Senapan mesin 7.62mm laras ganda"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5684
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Meriam Anti-Pesawat 80mm laras ganda"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -16055,11 +16055,11 @@ msgstr "Mod yang diperlukan tidak dapat dimuat: %s\n\n"
 
 #: src/input/context.cpp:39
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Pintasan umum"
 
 #: src/input/context.cpp:40
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Pintasan lain"
 
 #: src/input/context.cpp:41
 msgid "Gameplay"
@@ -16569,7 +16569,7 @@ msgstr "Pilih Semua Half-track"
 
 #: src/input/keyconfig.cpp:169
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "Pilih seluruh Half-tracks tanpa grup"
 
 #: src/input/keyconfig.cpp:170
 msgid "Select all Hovers"
@@ -16590,7 +16590,7 @@ msgstr "Pilih Semua Unit Beroda Rantai"
 
 #: src/input/keyconfig.cpp:174
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "Pilih seluruh Roda Rantai tanpa grup"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select EVERY unit"
@@ -16606,7 +16606,7 @@ msgstr "Pilih Semua VTOL siap tempur"
 
 #: src/input/keyconfig.cpp:178
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "Pilih seluruh VTOL siap tanpa grup"
 
 #: src/input/keyconfig.cpp:179
 msgid "Select all Wheels"
@@ -16626,7 +16626,7 @@ msgstr "Pilih Semua Cyborg Tempur"
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "Pilih seluruh Cyborg Tempur tanpa grup"
 
 #: src/input/keyconfig.cpp:185
 msgid "Select all Engineers"
@@ -16638,7 +16638,7 @@ msgstr "Pilih Semua Unit Tempur Darat"
 
 #: src/input/keyconfig.cpp:187
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "Pilih seluruh Unit Tempur Darat tanpa grup"
 
 #: src/input/keyconfig.cpp:188
 msgid "Select all Mechanics"
@@ -16658,7 +16658,7 @@ msgstr "Pilih Semua Unit Sensor"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "Pilih seluruh Unit Sensor tanpa grup"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Trucks"
@@ -16774,7 +16774,7 @@ msgstr "Susur jejak sebuah objek permainan"
 
 #: src/input/keyconfig.cpp:226
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Alihkan ke layar penuh"
 
 #: src/intdisplay.cpp:163
 msgid "Waiting for Power"
@@ -17517,7 +17517,7 @@ msgstr "Batas Jumlah Struktur Diterapkan."
 #: src/multiint.cpp:1241
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr ""
+msgstr "%s (%d) membolehkan perubahan peta. Total: %d/%d"
 
 #: src/multiint.cpp:1262
 msgid "Vote"
