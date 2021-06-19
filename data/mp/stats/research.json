@@ -6012,7 +6012,7 @@
         "name": "EMP Cannon",
         "requiredResearch": [
             "R-Sys-Sensor-Upgrade03",
-	    "R-Struc-Research-Upgrade08"
+	        "R-Struc-Research-Upgrade08"
         ],
         "researchPoints": 14400,
         "researchPower": 450,
