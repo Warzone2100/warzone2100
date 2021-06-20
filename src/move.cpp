@@ -1055,6 +1055,11 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 				// ignore transporters
 				continue;
 			}
+			if ((!isFlying(psDroid) && isFlying((DROID *)psObj)) || (!isFlying((DROID *) psObj) && isFlying(psDroid)))
+			{
+				// ground unit can't bump into a flying saucer..
+				continue;
+			}
 			if (!bLegs && ((DROID *)psObj)->droidType == DROID_PERSON)
 			{
 				// everything else doesn't avoid people
