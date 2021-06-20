@@ -213,8 +213,8 @@ void gameTimeUpdate(bool mayUpdate)
 		updateLatency();
 		if (crcError)
 		{
-			//debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
-			//debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
+			debug(LOG_ERROR, "Synch error, gameTimes were: {%s}", listToString("%7u", ", ", gameQueueCheckTime, gameQueueCheckTime + game.maxPlayers).c_str());
+			debug(LOG_ERROR, "Synch error, CRCs were:      {%s}", listToString(" 0x%04X", ", ", gameQueueCheckCrc, gameQueueCheckCrc + game.maxPlayers).c_str());
 			crcError = false;
 		}
 	}
