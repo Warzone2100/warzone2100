@@ -1051,7 +1051,7 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		if (psObj->type == OBJ_DROID)
 		{
 			DROID * psObjcast = static_cast<DROID*> (psObj);
-			int32_t objR = moveObjRadius(psObj);
+			objR = moveObjRadius(psObj);
 			if (isTransporter(psObjcast))
 			{
 				// ignore transporters
