@@ -1051,13 +1051,14 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		if (psObj->type == OBJ_DROID)
 		{
 			DROID * psObjcast = static_cast<DROID*> (psObj);
+			int32_t objR = moveObjRadius(psObj);
 			if (isTransporter(psObjcast))
 			{
 				// ignore transporters
 				continue;
 			}
-			if ((!isFlying(psDroid) && isFlying(psObjcast) && psObjcast->pos.z > psDroid->pos.z) || 
-			    (!isFlying(psObjcast) && isFlying(psDroid) && psDroid->pos.z > psObjcast->pos.z))
+			if ((!isFlying(psDroid) && isFlying(psObjcast) && psObjcast->pos.z > (psDroid->pos.z + droidR)) || 
+			    (!isFlying(psObjcast) && isFlying(psDroid) && psDroid->pos.z > (psObjcast->pos.z + objR)))
 			{
 				// ground unit can't bump into a flying saucer..
 				continue;
