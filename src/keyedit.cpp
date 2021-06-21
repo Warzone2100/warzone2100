@@ -762,11 +762,21 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		return defaultMapping.first == KeyMappingSlot::PRIMARY;
 	});
 
+	const auto foundMatch = std::find_if(selectedInfo->defaultMappings.cbegin(), selectedInfo->defaultMappings.cend(), [&input](const std::pair<KeyMappingSlot, KeyCombination>& defaultMapping) {
+		const KeyCombination combination = defaultMapping.second;
+		return combination.input == input;
+	});
+
 	KeyAction action = KeyAction::PRESSED;
-	if (foundPrimary != selectedInfo->defaultMappings.cend())
+	if (foundMatch != selectedInfo->defaultMappings.cend())
+	{
+		action = foundMatch->second.action;
+	}
+	else if (foundPrimary != selectedInfo->defaultMappings.cend())
 	{
 		action = foundPrimary->second.action;
 	}
+
 
 	/* Finally, create the new mapping */
 	KeyMapping& newMapping = inputManager.mappings().add({ metakey, input, action }, *selectedInfo, keyMapSelection.slot);
