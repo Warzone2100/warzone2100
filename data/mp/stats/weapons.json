@@ -3223,7 +3223,7 @@
 		"numAttackRuns": 1,
 		"numExplosions": 1,
 		"numRounds": 2,
-		"radius": 192,
+		"radius": 160,
 		"radiusDamage": 480,
 		"radiusLife": 10,
 		"recoilValue": 20,
