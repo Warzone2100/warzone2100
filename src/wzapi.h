@@ -110,6 +110,7 @@ namespace wzapi
 #define WZAPI_NO_PARAMS_NO_CONTEXT
 #define WZAPI_NO_PARAMS const wzapi::execution_context& context
 #define WZAPI_PARAMS(...) const wzapi::execution_context& context, __VA_ARGS__
+#define WZAPI_BASE_PARAMS(...) const wzapi::execution_context_base& context, __VA_ARGS__
 
 #define SCRIPTING_EVENT_NON_REQUIRED { return false; }
 
@@ -657,7 +658,15 @@ namespace wzapi
 		bool m_isReceivingAllEvents = false;
 	};
 
-	class execution_context
+	class execution_context_base
+	{
+	public:
+		virtual ~execution_context_base();
+	public:
+		virtual void throwError(const char *expr, int line, const char *function) const = 0;
+	};
+
+	class execution_context : public execution_context_base
 	{
 	public:
 		virtual ~execution_context();
@@ -666,7 +675,6 @@ namespace wzapi
 		int player() const;
 		void set_isReceivingAllEvents(bool value) const;
 		bool get_isReceivingAllEvents() const;
-		virtual void throwError(const char *expr, int line, const char *function) const = 0;
 		virtual playerCallbackFunc getNamedScriptCallback(const WzString& func) const = 0;
 		virtual void doNotSaveGlobal(const std::string &global) const = 0;
 	};
@@ -847,8 +855,8 @@ namespace wzapi
 		{ }
 	public:
 		using value_type = nlohmann::json;
-		value_type getPropertyValue(const wzapi::execution_context& context, const std::string& name) const;
-		value_type setPropertyValue(const wzapi::execution_context& context, const std::string& name, const value_type& newValue);
+		value_type getPropertyValue(const wzapi::execution_context_base& context, const std::string& name) const;
+		value_type setPropertyValue(const wzapi::execution_context_base& context, const std::string& name, const value_type& newValue);
 	public:
 		inline NameToTypeMap::const_iterator begin() const
 		{
@@ -1078,8 +1086,8 @@ namespace wzapi
 	no_return_value setObjectFlag(WZAPI_PARAMS(BASE_OBJECT *psObj, int _flag, bool value)) MULTIPLAY_SYNCREQUEST_REQUIRED;
 	no_return_value fireWeaponAtLoc(WZAPI_PARAMS(std::string weaponName, int x, int y, optional<int> _player));
 	no_return_value fireWeaponAtObj(WZAPI_PARAMS(std::string weaponName, BASE_OBJECT *psObj, optional<int> _player));
-	bool setUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue));
-	nlohmann::json getUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index));
+	bool setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue));
+	nlohmann::json getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index));
 
 	// MARK: - Used for retrieving information to set up script instance environments
 	nlohmann::json constructStatsObject();
