@@ -4539,7 +4539,8 @@ bool destroyStruct(STRUCTURE *psDel, unsigned impactTime)
 		{
 			scoreUpdateVar(WD_STR_LOST);
 		}
-		else
+		// only counts as a kill if structure doesn't belong to our ally
+		else if (!aiCheckAlliances(psDel->player, selectedPlayer))
 		{
 			scoreUpdateVar(WD_STR_KILLED);
 		}

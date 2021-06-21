@@ -243,7 +243,8 @@ int32_t droidDamage(DROID *psDroid, unsigned damage, WEAPON_CLASS weaponClass, W
 			audio_QueueTrackMinDelayPos(ID_SOUND_UNIT_DESTROYED, UNIT_LOST_DELAY,
 			                            psDroid->pos.x, psDroid->pos.y, psDroid->pos.z);
 		}
-		else
+		// only counts as a kill if it's not our ally
+		else if (!aiCheckAlliances(psDroid->player, selectedPlayer))
 		{
 			scoreUpdateVar(WD_UNITS_KILLED);
 		}
