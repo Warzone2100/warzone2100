@@ -453,7 +453,11 @@ KeyCombination::KeyCombination(
 )
 	: meta(meta)
 	, input(input)
-	, action(action)
+	, action(
+		input.is(MOUSE_KEY_CODE::MOUSE_WUP) || input.is(MOUSE_KEY_CODE::MOUSE_WDN)
+			? KeyAction::PRESSED
+			: action
+	)
 {
 }
 
