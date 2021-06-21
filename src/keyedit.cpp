@@ -600,11 +600,13 @@ void KeyMapForm::initialize(bool isInGame)
 	}
 
 	auto infos = getVisibleKeyFunctionEntries(keyFuncConfig);
-	std::sort(infos.begin(), infos.end(), [](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
+	std::sort(infos.begin(), infos.end(), [&](const KeyFunctionInfo& a, const KeyFunctionInfo& b) {
 		const bool bContextsAreSame = a.context == b.context;
+		const InputContext& contextA = inputManager.contexts().get(a.context);
+		const InputContext& contextB = inputManager.contexts().get(b.context);
 		return bContextsAreSame
 			? a.displayName < b.displayName
-			: a.context.getDisplayName() < b.context.getDisplayName();
+			: contextA.getDisplayName() < contextB.getDisplayName();
 	});
 
 	/* Add key mappings to the form */
@@ -620,7 +622,7 @@ void KeyMapForm::initialize(bool isInGame)
 			auto separator = std::make_shared<W_LABEL>();
 			separator->setGeometry(0, 0, KM_ENTRYW, KM_ENTRYH * 2);
 			separator->setTextAlignment(WzTextAlignment::WLAB_ALIGNBOTTOMLEFT);
-			separator->setFormattedString(_(info.context.getDisplayName().c_str()), KM_ENTRYW, iV_fonts::font_large);
+			separator->setFormattedString(_(inputManager.contexts().get(info.context).getDisplayName().c_str()), KM_ENTRYW, iV_fonts::font_large);
 			keyMapList->addItem(separator);
 		}
 
@@ -728,9 +730,10 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 
 	/* Disallow conflicts with ALWAYS_ACTIVE keybinds, as that context always has max priority, preventing
 	   any conflicting keys from triggering. */
-	for (const KeyMapping& mapping : inputManager.mappings().findConflicting(metakey, input, selectedInfo->context))
+	for (const KeyMapping& mapping : inputManager.mappings().findConflicting(metakey, input, selectedInfo->context, inputManager.contexts()))
 	{
-		if (mapping.info.context.isAlwaysActive())
+		const InputContext context = inputManager.contexts().get(mapping.info.context);
+		if (context.isAlwaysActive())
 		{
 			audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 			unhighlightSelected();
@@ -739,7 +742,7 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 	}
 
 	/* Clear conflicting mappings using these keys */
-	const auto conflicts = inputManager.mappings().removeConflicting(metakey, input, selectedInfo->context);
+	const auto conflicts = inputManager.mappings().removeConflicting(metakey, input, selectedInfo->context, inputManager.contexts());
 	for (auto& conflict : conflicts)
 	{
 		// Update conflicting mappings' display data

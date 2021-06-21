@@ -62,9 +62,9 @@ public:
 	/* Finds all mappings with matching meta and input */
 	std::vector<std::reference_wrapper<KeyMapping>> find(const KEY_CODE meta, const KeyMappingInput input);
 
-	std::vector<std::reference_wrapper<KeyMapping>> findConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
+	std::vector<std::reference_wrapper<KeyMapping>> findConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId contextId, const ContextManager& contexts);
 
-	std::vector<KeyMapping> removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context);
+	std::vector<KeyMapping> removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId& contextId, const ContextManager& contexts);
 
 	/* Removes a mapping specified by a pointer */
 	bool remove(const KeyMapping& mappingToRemove);

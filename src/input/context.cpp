@@ -27,8 +27,6 @@
 #include "lib/framework/frame.h"
 #include "../hci.h" // for intMode
 
-InputContexts InputContext::contexts = InputContexts();
-
 extern bool isMouseOverRadar();
 
 static bool isInDesignScreen()
@@ -36,33 +34,43 @@ static bool isInDesignScreen()
 	return intMode == INTMODE::INT_DESIGN;
 }
 
-static const unsigned int MAX_ICONTEXT_PRIORITY = std::numeric_limits<unsigned int>::max();
-const InputContext InputContext::ALWAYS_ACTIVE =    { true,  MAX_ICONTEXT_PRIORITY,         InputContext::State::ACTIVE,    N_("Global Hotkeys") };
-const InputContext InputContext::BACKGROUND =       { false, 0,                             InputContext::State::ACTIVE,    N_("Other Hotkeys")  };
-const InputContext InputContext::GAMEPLAY =         { false, 1,                             InputContext::State::ACTIVE,    N_("Gameplay")       };
-const InputContext InputContext::RADAR =            { false, { 2, 0 },                      InputContext::State::ACTIVE,    N_("Radar"),         []() { return isMouseOverRadar() && !isInDesignScreen(); }};
-const InputContext InputContext::__DEBUG =          { false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug"),         []() { return gDebugPrioritized; }};
+const ContextId InputContext::ALWAYS_ACTIVE = "ALWAYS_ACTIVE";
+const ContextId InputContext::BACKGROUND = "BACKGROUND";
+const ContextId InputContext::GAMEPLAY = "GAMEPLAY";
+const ContextId InputContext::RADAR = "RADAR";
+const ContextId InputContext::__DEBUG = "__DEBUG";
 
-InputContext::InputContext(const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName)
-	: InputContext(bIsAlwaysActive, priority, initialState, displayName, []() { return false; })
+void registerDefaultContexts(ContextManager& contextManager, DebugInputManager& dbgInputManager)
+{
+	static const unsigned int MAX_ICONTEXT_PRIORITY = std::numeric_limits<unsigned int>::max();
+	const InputContext alwaysActive =   { InputContext::ALWAYS_ACTIVE,  true,  MAX_ICONTEXT_PRIORITY,         InputContext::State::ACTIVE,    N_("Global Hotkeys") };
+	const InputContext background =     { InputContext::BACKGROUND,     false, 0,                             InputContext::State::ACTIVE,    N_("Other Hotkeys")  };
+	const InputContext gameplay =       { InputContext::GAMEPLAY,       false, 1,                             InputContext::State::ACTIVE,    N_("Gameplay")       };
+	const InputContext radar =          { InputContext::RADAR,          false, { 2, 0 },                      InputContext::State::ACTIVE,    N_("Radar"),         []() { return isMouseOverRadar() && !isInDesignScreen(); }};
+	const InputContext debug =          { InputContext::__DEBUG,        false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug"),         [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); }};
+
+	contextManager.registerContext(alwaysActive);
+	contextManager.registerContext(background);
+	contextManager.registerContext(gameplay);
+	contextManager.registerContext(radar);
+	contextManager.registerContext(debug);
+}
+
+InputContext::InputContext(const ContextId id, const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName)
+	: InputContext(id, bIsAlwaysActive, priority, initialState, displayName, []() { return false; })
 {
 }
 
 static unsigned int inputCtxIndexCounter = 0;
-InputContext::InputContext(const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName, const PriorityCondition condition)
-	: bIsAlwaysActive(bIsAlwaysActive)
+InputContext::InputContext(const ContextId id, const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName, const PriorityCondition condition)
+	: id(id)
+	, bIsAlwaysActive(bIsAlwaysActive)
 	, priority(priority)
 	, index(inputCtxIndexCounter++)
 	, displayName(displayName)
 	, defaultState(initialState)
 	, condition(condition)
 {
-	contexts.push_back(std::ref(*this));
-}
-
-const InputContexts InputContext::getAllContexts()
-{
-	return contexts;
 }
 
 const std::string InputContext::getDisplayName() const
@@ -85,9 +93,26 @@ bool operator!=(const InputContext& lhs, const InputContext& rhs)
 	return !(lhs == rhs);
 }
 
-
-void ContextManager::set(const InputContext& context, const InputContext::State newState)
+const InputContext& ContextManager::get(const ContextId& contextId) const
 {
+	const auto found = contexts.find(contextId);
+	if (found != contexts.cend())
+	{
+		return found->second;
+	}
+	else
+	{
+		debug(LOG_WARNING, "Tried to get missing input context \"%s\". Returning null context instead!", contextId);
+
+		static const InputContext NULL_CONTEXT = InputContext("__NULL", false, 0, InputContext::State::INACTIVE, "\0");
+		return NULL_CONTEXT;
+	}
+}
+
+void ContextManager::set(const ContextId& contextId, const InputContext::State newState)
+{
+	const InputContext& context = get(contextId);
+
 	auto& state = states.back();
 	const InputContext::State oldState = state[context.index];
 	if (oldState != newState)
@@ -97,15 +122,19 @@ void ContextManager::set(const InputContext& context, const InputContext::State 
 	}
 }
 
-bool ContextManager::isActive(const InputContext& context) const
+bool ContextManager::isActive(const ContextId& contextId) const
 {
+	const InputContext& context = get(contextId);
+
 	ASSERT_OR_RETURN(false, !states.empty(), "No InputContext::States available");
 	const auto& state = states.back();
 	return state[context.index] != InputContext::State::INACTIVE;
 }
 
-unsigned int ContextManager::getPriority(const InputContext& context) const
+unsigned int ContextManager::getPriority(const ContextId contextId) const
 {
+	const InputContext& context = get(contextId);
+
 	switch (states.back()[context.index])
 	{
 	case InputContext::State::PRIORITIZED:
@@ -120,10 +149,10 @@ unsigned int ContextManager::getPriority(const InputContext& context) const
 
 void ContextManager::resetStates()
 {
-	const auto contexts = InputContext::getAllContexts();
 	auto state = std::vector<InputContext::State>(contexts.size(), InputContext::State::INACTIVE);
-	for (const InputContext& context : contexts)
+	for (const auto& keyValuePair : contexts)
 	{
+		const InputContext& context = keyValuePair.second;
 		state[context.index] = context.defaultState;
 	}
 	states.clear();
@@ -134,11 +163,12 @@ void ContextManager::resetStates()
 
 void ContextManager::makeAllInactive()
 {
-	for (const InputContext& context : InputContext::getAllContexts())
+	for (const auto& keyValuePair : contexts)
 	{
+		const InputContext& context = keyValuePair.second;
 		if (!context.isAlwaysActive())
 		{
-			set(context, InputContext::State::INACTIVE);
+			set(context.id, InputContext::State::INACTIVE);
 		}
 	}
 
@@ -147,15 +177,21 @@ void ContextManager::makeAllInactive()
 
 void ContextManager::updatePriorityStatus()
 {
-	for (const InputContext& context : InputContext::getAllContexts())
+	for (const auto& keyValuePair : contexts)
 	{
-		if (isActive(context))
+		const InputContext& context = keyValuePair.second;
+		if (isActive(context.id))
 		{
-			set(context, context.condition()
+			set(context.id, context.condition()
 				? InputContext::State::PRIORITIZED
 				: InputContext::State::ACTIVE);
 		}
 	}
+}
+
+void ContextManager::registerContext(InputContext context)
+{
+	contexts.insert({ context.id, context });
 }
 
 void ContextManager::pushState()

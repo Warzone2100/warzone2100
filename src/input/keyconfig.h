@@ -155,7 +155,7 @@ typedef std::function<void()> MappableFunction;
 
 struct KeyFunctionInfo
 {
-	const InputContext& context;
+	const ContextId&       context;
 	const KeyMappingType   type;
 	const MappableFunction function;
 	const std::string      name;
@@ -164,14 +164,14 @@ struct KeyFunctionInfo
 	const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings;
 
 	KeyFunctionInfo(
-		const InputContext& context,
+		const ContextId&       context,
 		const KeyMappingType   type,
 		const MappableFunction function,
 		const std::string      name
 	);
 
 	KeyFunctionInfo(
-		const InputContext& context,
+		const ContextId&       context,
 		const KeyMappingType   type,
 		const MappableFunction function,
 		const std::string      name,

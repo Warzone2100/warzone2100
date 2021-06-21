@@ -57,6 +57,11 @@ DebugInputManager& InputManager::debugManager()
 	return dbgInputManager;
 }
 
+InputManager::InputManager()
+{
+	registerDefaultContexts(contextManager, dbgInputManager);
+}
+
 void InputManager::shutdown()
 {
 	keyMappings.clear();
@@ -132,7 +137,7 @@ bool InputManager::addDefaultMapping(const KEY_CODE metaCode, const KeyMappingIn
 	}
 
 	// Clear the keys from any other mappings
-	keyMappings.removeConflicting(metaCode, input, info.context);
+	keyMappings.removeConflicting(metaCode, input, info.context, contextManager);
 
 	// Set default key mapping
 	keyMappings.add({ metaCode, input, action }, info, slot);

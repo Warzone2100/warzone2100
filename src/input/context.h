@@ -22,8 +22,10 @@
 #define __INCLUDED_SRC_INPUT_CONTEXT_H__
 
 #include <string>
-#include <list>
 #include <vector>
+#include <unordered_map>
+
+void registerDefaultContexts(class ContextManager& contextManager, class DebugInputManager& dbgInputManager);
 
 struct ContextPriority
 {
@@ -41,24 +43,21 @@ struct ContextPriority
 	}
 };
 
-struct InputContext;
-typedef std::list<std::reference_wrapper<InputContext>> InputContexts;
+typedef const char* ContextId;
 
 struct InputContext
 {
 	/* Always enabled. Actions in this context will always execute. Bindings with collisions to ALWAYS_ACTIVE keybinds are not valid, as they would never get executed */
-	static const InputContext ALWAYS_ACTIVE;
+	static const ContextId ALWAYS_ACTIVE;
 	/* Background-level keybinds. These run at the lowest priority, and are not executed if _anything_ else is bound to the keys */
-	static const InputContext BACKGROUND;
+	static const ContextId BACKGROUND;
 	/* Generic gameplay (main viewport) keybindings. Unit commands etc. */
-	static const InputContext GAMEPLAY;
+	static const ContextId GAMEPLAY;
 	/* Active while player hovers over the radar. */
-	static const InputContext RADAR;
+	static const ContextId RADAR;
 
 	/* For debug-only bindings. */
-	static const InputContext __DEBUG;
-
-	static const InputContexts getAllContexts();
+	static const ContextId __DEBUG;
 
 	enum class State
 	{
@@ -91,13 +90,13 @@ struct InputContext
 	   them anyway). */
 	bool isAlwaysActive() const;
 
+public:
+	InputContext(const ContextId id, const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName);
+
+	InputContext(const ContextId id, const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName, const PriorityCondition condition);
+
 private:
-	static InputContexts contexts;
-
-	InputContext(const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName);
-
-	InputContext(const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName, const PriorityCondition condition);
-
+	const ContextId id;
 	const bool bIsAlwaysActive;
 	const ContextPriority priority;
 	const unsigned int index;
@@ -129,26 +128,33 @@ public:
 	/* Pops state of the input contexts from the state stack. */
 	void popState();
 
+	/* Gets the information about the context with the given ID */
+	const InputContext& get(const ContextId& contextId) const;
+
 	/* Updates the state of a single context. Use this to prioritize/enable/disable contexts. */
-	void set(const InputContext& context, const InputContext::State state);
+	void set(const ContextId& contextId, const InputContext::State state);
 
 	/*
 	 Gets the status of the context. If this returns `false`, any bindings belonging to the context
 	 should not be processed.
 	 */
-	bool isActive(const InputContext& context) const;
+	bool isActive(const ContextId& context) const;
 
 	/* Priority of the context when resolving collisions. Context with highest priority wins */
-	unsigned int getPriority(const InputContext& context) const;
+	unsigned int getPriority(const ContextId context) const;
 
 	/* Updates the priority status (ACTIVE/PRIORITIZED) of contexts based on their conditions */
 	void updatePriorityStatus();
+
+public:
+	void registerContext(InputContext context);
 
 private:
 	bool isDirty() const;
 
 	void clearDirty();
 
+	std::unordered_map<std::string, InputContext> contexts;
 	std::vector<std::vector<InputContext::State>> states;
 	bool bDirty;
 
