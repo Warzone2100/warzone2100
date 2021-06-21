@@ -2333,6 +2333,7 @@ int NETrecvFile(NETQUEUE queue)
 			debug(LOG_ERROR, "Could not close file handle after trying to terminate download: %s", WZ_PHYSFS_getLastError());
 		}
 		file->handle = nullptr;
+		PHYSFS_delete(file->filename.c_str());
 		sendCancelFileDownload(file->hash);
 		NetPlay.wzFiles.erase(file);
 	};
