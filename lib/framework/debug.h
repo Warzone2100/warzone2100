@@ -195,6 +195,7 @@ enum code_part
 	LOG_POPUP,	// special, on by default, for both debug & release builds (used for OS dependent popup code)
 	LOG_CONSOLE,	// send console messages to file
 	LOG_ACTIVITY,
+	LOG_RESEARCH,
 	LOG_LAST /**< _must_ be last! */
 };
 

@@ -420,28 +420,7 @@ function eventTransporterLanded(transport)
 
 function eventResearched(research, structure, player)
 {
-	//debug("RESEARCH : " + research.fullname + "(" + research.name + ") for " + player);
-	// iterate over all results
-	for (var i = 0; i < research.results.length; i++)
-	{
-		var v = research.results[i];
-		//debug("    RESULT : class=" + v['class'] + " parameter=" + v['parameter'] + " value=" + v['value'] + " filter=" + v['filterParameter'] + " filterparam=" + v['filterParameter']);
-		for (var cname in Upgrades[player][v['class']]) // iterate over all components of this type
-		{
-			var parameter = v['parameter'];
-			var ctype = v['class'];
-			var filterparam = v['filterParameter'];
-			if ('filterParameter' in v && Stats[ctype][cname][filterparam] != v['filterValue']) // more specific filter
-			{
-				continue;
-			}
-			if (Stats[ctype][cname][parameter] > 0) // only applies if stat has above zero value already
-			{
-				Upgrades[player][ctype][cname][parameter] += Math.ceil(Stats[ctype][cname][parameter] * v['value'] / 100);
-				//debug("      upgraded " + cname + " to " + Upgrades[player][ctype][cname][parameter] + " by " + Math.ceil(Stats[ctype][cname][parameter] * v['value'] / 100));
-			}
-		}
-	}
+	// NOTE: Research upgrades are handled by the C++ core game engine since 4.1.0
 }
 
 var lastHitTime = 0;

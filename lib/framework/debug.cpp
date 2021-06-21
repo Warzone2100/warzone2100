@@ -107,6 +107,7 @@ static const char *code_part_names[] =
 	"popup",
 	"console",
 	"activity",
+	"research",
 	"last"
 };
 

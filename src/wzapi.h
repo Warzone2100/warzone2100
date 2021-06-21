@@ -923,6 +923,15 @@ namespace wzapi
 		{
 			return upgrades[entityClass];
 		}
+		inline const GameEntityRuleContainer* find(const GameEntityClass& entityClass) const
+		{
+			auto it = upgrades.find(entityClass);
+			if (it == upgrades.end())
+			{
+				return nullptr;
+			}
+			return &(it->second);
+		}
 		inline int getPlayer() const { return player; }
 		inline std::map<GameEntityClass, GameEntityRuleContainer>::const_iterator begin() const
 		{
