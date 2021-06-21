@@ -23,6 +23,8 @@
 
 #include <vector>
 
+extern bool gDebugPrioritized;
+
 class DebugInputManager
 {
 public:
@@ -34,6 +36,12 @@ public:
 	bool getPlayerWantsDebugMappings(const unsigned int playerIndex) const;
 
 	void setPlayerWantsDebugMappings(const unsigned int playerIndex, const bool bWants);
+
+	bool toggleDebugMappingPriority()
+	{
+		gDebugPrioritized = !gDebugPrioritized;
+		return gDebugPrioritized;
+	}
 
 private:
 	bool bDoingDebugMappings;

@@ -77,6 +77,7 @@ void kf_addMultiMenu();
 MappableFunction kf_JumpToMapMarker(const unsigned int x, const unsigned int z, const int yaw);
 void kf_TogglePowerBar();
 void kf_ToggleDebugMappings();
+void kf_PrioritizeDebugMappings();
 void kf_ToggleGodMode();
 MappableFunction kf_ScrollCamera(const int horizontal, const int vertical);
 void kf_SeekNorth();

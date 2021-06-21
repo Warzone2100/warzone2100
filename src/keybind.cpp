@@ -1116,6 +1116,16 @@ void kf_ToggleDebugMappings()
 	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
 	sendProcessDebugMappings(!dbgInputManager.getPlayerWantsDebugMappings(selectedPlayer));
 }
+
+/* Toggles the local debug mapping context prioritization status */
+void kf_PrioritizeDebugMappings()
+{
+	DebugInputManager& dbgInputManager = gInputManager.debugManager();
+	const auto status = dbgInputManager.toggleDebugMappingPriority()
+		? "TRUE"
+		: "FALSE";
+	CONPRINTF("%s%s", _("Toggling debug mapping priority: "), status);
+}
 // --------------------------------------------------------------------------
 
 void	kf_ToggleGodMode()

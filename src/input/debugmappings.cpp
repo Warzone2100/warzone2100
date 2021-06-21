@@ -22,6 +22,7 @@
 
 #include "lib/netplay/netplay.h"
 
+bool gDebugPrioritized = false;
 
 DebugInputManager::DebugInputManager(const unsigned int maxPlayers)
 	: bDoingDebugMappings(false)
