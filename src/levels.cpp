@@ -1040,7 +1040,17 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		// those are droids present on the map
 		for (DROID *psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			recalcDroidBaseSpeed(psCurr, player);
+			if (isTransporter(psCurr) && psCurr->psGroup)
+			{
+				// and those within a transporter...
+				for (DROID *psDroidInTransport = psCurr->psGroup->psList; psDroidInTransport != nullptr; psDroidInTransport = psDroidInTransport->psGrpNext)
+				{
+					recalcDroidBaseSpeed(psDroidInTransport, player);
+				}
+			} else
+			{
+				recalcDroidBaseSpeed(psCurr, player);
+			}
 		}
 		// those are droids stuck at base, if any ("away" missions)
 		for (DROID *psCurr = mission.apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
@@ -1060,7 +1070,17 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 		// also limbdo droids
 		for (DROID *psCurr = apsLimboDroids[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			recalcDroidBaseSpeed(psCurr, player);
+			if (isTransporter(psCurr) && psCurr->psGroup)
+			{
+				// and those within a transporter... is this even possible?..
+				for (DROID *psDroidInTransport = psCurr->psGroup->psList; psDroidInTransport != nullptr; psDroidInTransport = psDroidInTransport->psGrpNext)
+				{
+					recalcDroidBaseSpeed(psDroidInTransport, player);
+				}
+			} else
+			{
+				recalcDroidBaseSpeed(psCurr, player);
+			}
 		}
 	}
 	dataClearSaveFlag();
