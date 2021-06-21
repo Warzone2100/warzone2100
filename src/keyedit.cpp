@@ -750,13 +750,26 @@ bool KeyMapForm::pushedKeyCombo(const KeyMappingInput input)
 		}
 	}
 
-	/* Try and see if the mapping already exists. Remove the old mapping first and then create a new one. */
+	/* Try and see if the mapping already exists. Remove the old mapping if one does exist */
 	const auto maybeOld = inputManager.mappings().get(*selectedInfo, keyMapSelection.slot);
 	if (maybeOld.has_value())
 	{
 		inputManager.mappings().remove(*maybeOld);
 	}
-	KeyMapping& newMapping = inputManager.mappings().add({ metakey, input }, *selectedInfo, keyMapSelection.slot);
+
+	/* Figure out which `KeyAction` the mapping should use */
+	const auto foundPrimary = std::find_if(selectedInfo->defaultMappings.cbegin(), selectedInfo->defaultMappings.cend(), [](const std::pair<KeyMappingSlot, KeyCombination>& defaultMapping) {
+		return defaultMapping.first == KeyMappingSlot::PRIMARY;
+	});
+
+	KeyAction action = KeyAction::PRESSED;
+	if (foundPrimary != selectedInfo->defaultMappings.cend())
+	{
+		action = foundPrimary->second.action;
+	}
+
+	/* Finally, create the new mapping */
+	KeyMapping& newMapping = inputManager.mappings().add({ metakey, input, action }, *selectedInfo, keyMapSelection.slot);
 
 	// Update display data for the new mapping
 	if (auto displayData = displayDataPerInfo[selectedInfo->name])
