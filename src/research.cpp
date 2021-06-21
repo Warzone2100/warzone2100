@@ -46,9 +46,12 @@
 #include "template.h"
 #include "qtscript.h"
 #include "stats.h"
+#include "wzapi.h"
 
 // The stores for the research stats
 std::vector<RESEARCH> asResearch;
+nlohmann::json cachedStatsObject = nlohmann::json(nullptr);
+std::vector<wzapi::PerPlayerUpgrades> cachedPerPlayerUpgrades;
 
 //used for Callbacks to say which topic was last researched
 RESEARCH                *psCBLastResearch;
@@ -87,6 +90,8 @@ bool researchInitVars()
 	psCBLastResStructure = nullptr;
 	CBResFacilityOwner = -1;
 	asResearch.clear();
+	cachedStatsObject = nlohmann::json(nullptr);
+	cachedPerPlayerUpgrades.clear();
 
 	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
@@ -552,6 +557,209 @@ std::vector<uint16_t> fillResearchList(UDWORD playerID, nonstd::optional<UWORD> 
 	return list;
 }
 
+static inline nlohmann::json* cachedStatsObjGetValue(const std::string& entityClass, const wzapi::GameEntityRuleContainer::GameEntityName& entityName, const std::string& parameter)
+{
+	const auto statsEntityClassObj = cachedStatsObject.find(entityClass);
+	if (statsEntityClassObj == cachedStatsObject.end())
+	{
+		return nullptr;
+	}
+	const auto statsEntityObj = statsEntityClassObj->find(entityName);
+	if (statsEntityObj == statsEntityClassObj->end())
+	{
+		return nullptr;
+	}
+	const auto statsEntityParameter = statsEntityObj->find(parameter);
+	if (statsEntityParameter == statsEntityObj->end())
+	{
+		return nullptr;
+	}
+	return &(statsEntityParameter.value());
+}
+
+static inline bool cachedStatsObjFilterParameterMatch(const std::string& entityClass, const wzapi::GameEntityRuleContainer::GameEntityName& entityName, const std::string& filterParameter, const nlohmann::json& expectedValue)
+{
+	const auto statsEntityParameter = cachedStatsObjGetValue(entityClass, entityName, filterParameter);
+	if (statsEntityParameter == nullptr)
+	{
+		return false;
+	}
+	return (*statsEntityParameter) == expectedValue;
+}
+
+class internal_execution_context_base : public wzapi::execution_context_base
+{
+public:
+	virtual ~internal_execution_context_base() { }
+public:
+	virtual void throwError(const char *expr, int line, const char *function) const override
+	{
+		// do nothing, since the error was already logged and we're not actually running a script
+	}
+};
+
+static inline int64_t iDivCeil(int64_t dividend, int64_t divisor)
+{
+	ASSERT_OR_RETURN(0, divisor != 0, "Divide by 0");
+	bool hasPosQuotient = (dividend >= 0) == (divisor >= 0);
+	// C++11 defines the behavior of % to be truncated
+	return (dividend / divisor) + static_cast<int64_t>((dividend % divisor != 0 && hasPosQuotient));
+}
+
+static void eventResearchedHandleUpgrades(const RESEARCH *psResearch, const STRUCTURE *psStruct, int player)
+{
+	if (cachedStatsObject.is_null()) { cachedStatsObject = wzapi::constructStatsObject(); }
+	if (cachedPerPlayerUpgrades.empty()) { cachedPerPlayerUpgrades = wzapi::getUpgradesObject(); }
+	internal_execution_context_base temp_no_throw_context;
+
+	debug(LOG_RESEARCH, "RESEARCH : %s(%s) for %d", psResearch->name.toUtf8().c_str(), psResearch->id.toUtf8().c_str(), player);
+
+	ASSERT_OR_RETURN(, player >= 0 && player < cachedPerPlayerUpgrades.size(), "Player %d does not exist in per-player upgrades?", player);
+
+	// iterate over all research results
+	for (size_t i = 0; i < psResearch->results.size(); i++)
+	{
+		auto& v = psResearch->results[i];
+		// Required members of research upgrades: "class", "parameter", "value"
+#define RS_GET_REQUIRED_RESULT_PROPERTY(resultVar, name, typecheckFuncName) \
+	auto resultVar = v.find(name); \
+	if (resultVar == v.end()) \
+	{ \
+		ASSERT(false, "Research(\"%s\").results[%zu]: Missing required parameter: \"%s\"", psResearch->id.toUtf8().c_str(), i, name); \
+		continue; \
+	} \
+	if (!resultVar->typecheckFuncName()) \
+	{ \
+		ASSERT(false, "Research(\"%s\").results[%zu][\"%s\"]: Unexpected value type: \"%s\"", psResearch->id.toUtf8().c_str(), i, name, resultVar->type_name()); \
+		continue; \
+	}
+		RS_GET_REQUIRED_RESULT_PROPERTY(it_ctype, "class", is_string)
+		RS_GET_REQUIRED_RESULT_PROPERTY(it_parameter, "parameter", is_string)
+		RS_GET_REQUIRED_RESULT_PROPERTY(it_value, "value", is_number_integer)
+		std::string ctype = it_ctype->get<std::string>();
+		std::string parameter = it_parameter->get<std::string>();
+		int64_t value = it_value->get<int64_t>();
+		auto it_filterparam = v.find("filterParameter"); // optional
+		auto it_filtervalue = v.find("filterValue"); // required if "filterParameter" is specified
+		if (it_filterparam != v.end())
+		{
+			if (!it_filterparam->is_string())
+			{
+				ASSERT(false, "Research(\"%s\").results[%zu][\"%s\"]: Unexpected value type: \"%s\"", psResearch->id.toUtf8().c_str(), i, "filterParameter", it_parameter->type_name());
+				continue;
+			}
+			if (it_filtervalue == v.end())
+			{
+				// ERROR: Supplied a filterParameter but not a filterValue
+				ASSERT(false, "Research(\"%s\").results[%zu]: Missing \"%s\" property (required when \"filterParameter\" is specified)", psResearch->id.toUtf8().c_str(), i, "filterParameter");
+				continue;
+			}
+		}
+		debug(LOG_RESEARCH, "    RESULT : class=\"%s\" parameter=\"%s\" value=%" PRIi64 " filter=\"%s\" filterval=%s", ctype.c_str(), parameter.c_str(), value, (it_filterparam != v.end()) ? it_filterparam->get<std::string>().c_str() : "", (it_filtervalue != v.end()) ? it_filtervalue->dump().c_str() : "");
+
+		auto pPlayerEntityClass = cachedPerPlayerUpgrades[player].find(ctype);
+		if (!pPlayerEntityClass)
+		{
+			ASSERT(pPlayerEntityClass, "Unknown entity class: %s", ctype.c_str());
+			continue;
+		}
+		for (auto cname : *pPlayerEntityClass) // iterate over all components of this type
+		{
+			if (it_filterparam != v.end())
+			{
+				std::string filterparam = it_filterparam.value().get<std::string>();
+				if (!cachedStatsObjFilterParameterMatch(ctype, cname.first, filterparam, it_filtervalue.value())) // more specific filter
+				{
+					continue;
+				}
+			}
+			const auto pStatsParameterValue = cachedStatsObjGetValue(ctype, cname.first, parameter);
+			if (pStatsParameterValue == nullptr)
+			{
+				// Did not find it??
+				ASSERT(false, "Parameter \"%s\" does not exist in Stats[%s][%s] ?", parameter.c_str(), ctype.c_str(), cname.first.c_str());
+				continue;
+			}
+			if (pStatsParameterValue->is_array()) // (ex. modifying "RankThresholds")
+			{
+				nlohmann::json dst = cname.second.getPropertyValue(temp_no_throw_context, parameter);
+				if (!dst.is_array() || (dst.size() != pStatsParameterValue->size()))
+				{
+					// The Upgrades parameter unexpectedly is not an array, or not the same array size
+					ASSERT(false, "Upgrades parameter \"%s\" value (type %s) does not match Stats[%s][%s] value type (%s) or size (%zu)", parameter.c_str(), dst.type_name(), ctype.c_str(), cname.first.c_str(), pStatsParameterValue->type_name(), pStatsParameterValue->size());
+					continue;
+				}
+				for (size_t x = 0; x < dst.size(); x++)
+				{
+					const auto& statsOriginalValueX = pStatsParameterValue->at(x);
+					if (!statsOriginalValueX.is_number_integer())
+					{
+						ASSERT(false, "Unexpected parameter \"%s[%zu]\" value type (%s) in Stats[%s][%s]", parameter.c_str(), x, pStatsParameterValue->type_name(), ctype.c_str(), cname.first.c_str());
+						continue;
+					}
+					const auto& currentUpgradesValue_json = dst[x];
+					if (!currentUpgradesValue_json.is_number_integer())
+					{
+						// The Upgrades parameter unexpectedly is not an integer
+						ASSERT(false, "Upgrades parameter \"%s[%zu]\" value type (%s) does not match Stats[%s][%s] value type (%s)", parameter.c_str(), x, currentUpgradesValue_json.type_name(), ctype.c_str(), cname.first.c_str(), pStatsParameterValue->type_name());
+						continue;
+					}
+					int64_t currentUpgradesValue = currentUpgradesValue_json.get<int64_t>();
+					int64_t newUpgradesChange = iDivCeil((statsOriginalValueX.get<int64_t>() * value), 100);
+					int64_t newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
+					if (currentUpgradesValue_json.is_number_unsigned())
+					{
+						// original was unsigned integer - round anything less than 0 up to 0
+						newUpgradesValue = std::max<int64_t>(newUpgradesValue, 0);
+						dst[x] = static_cast<uint64_t>(newUpgradesValue);
+					}
+					else
+					{
+						dst[x] = newUpgradesValue;
+					}
+				}
+				cname.second.setPropertyValue(temp_no_throw_context, parameter, dst);
+				debug(LOG_RESEARCH, "    upgraded to : %s", dst.dump().c_str());
+			}
+			else if (pStatsParameterValue->is_number_integer())
+			{
+				const int64_t statsOriginalValue = pStatsParameterValue->get<int64_t>();
+				if (statsOriginalValue > 0) // only applies if stat has above zero value already
+				{
+					nlohmann::json currentUpgradesValue_json = cname.second.getPropertyValue(temp_no_throw_context, parameter);
+					if (!currentUpgradesValue_json.is_number_integer())
+					{
+						// The Upgrades parameter unexpectedly is not an integer
+						ASSERT(false, "Upgrades parameter \"%s\" value type (%s) does not match Stats[%s][%s] value type (%s)", parameter.c_str(), currentUpgradesValue_json.type_name(), ctype.c_str(), cname.first.c_str(), pStatsParameterValue->type_name());
+						continue;
+					}
+					int64_t currentUpgradesValue = currentUpgradesValue_json.get<int64_t>();
+					int64_t newUpgradesChange = iDivCeil((statsOriginalValue * value), 100);
+					int64_t newUpgradesValue = (currentUpgradesValue + newUpgradesChange);
+					if (currentUpgradesValue_json.is_number_unsigned())
+					{
+						// original was unsigned integer - round anything less than 0 up to 0
+						newUpgradesValue = std::max<int64_t>(newUpgradesValue, 0);
+						cname.second.setPropertyValue(temp_no_throw_context, parameter, static_cast<uint64_t>(newUpgradesValue));
+					}
+					else
+					{
+						cname.second.setPropertyValue(temp_no_throw_context, parameter, newUpgradesValue);
+					}
+					debug(LOG_RESEARCH, "      upgraded \"%s\" to %" PRIi64 " by %" PRIi64 "", cname.first.c_str(), newUpgradesValue, newUpgradesChange);
+				}
+			}
+			else
+			{
+				// unexpected type
+				// Research stats / upgrades are not supposed to expose non-integer types, as the core stats / game state calculations must use integer arithmetic
+				ASSERT(false, "Unexpected parameter \"%s\" value type (%s) in Stats[%s][%s]", parameter.c_str(), pStatsParameterValue->type_name(), ctype.c_str(), cname.first.c_str());
+				continue;
+			}
+		}
+	}
+}
+
 /* process the results of a completed research topic */
 void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE *psResearchFacility, bool bTrigger)
 {
@@ -664,6 +872,9 @@ void researchResult(UDWORD researchIndex, UBYTE player, bool bDisplay, STRUCTURE
 	{
 		psResearchFacility->pFunctionality->researchFacility.psSubject = nullptr;		// Make sure topic is cleared
 	}
+
+	eventResearchedHandleUpgrades(pResearch, psResearchFacility, player);
+
 	triggerEventResearched(pResearch, psResearchFacility, player);
 }
 
@@ -682,6 +893,8 @@ void ResearchRelease()
 	{
 		i.clear();
 	}
+	cachedStatsObject = nlohmann::json(nullptr);
+	cachedPerPlayerUpgrades.clear();
 }
 
 /*puts research facility on hold*/
