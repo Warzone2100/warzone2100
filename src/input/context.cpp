@@ -23,6 +23,7 @@
 #include <functional>
 
 #include "context.h"
+#include "debugmappings.h"
 #include "lib/framework/frame.h"
 #include "../hci.h" // for intMode
 
@@ -36,11 +37,11 @@ static bool isInDesignScreen()
 }
 
 static const unsigned int MAX_ICONTEXT_PRIORITY = std::numeric_limits<unsigned int>::max();
-const InputContext InputContext::ALWAYS_ACTIVE =    { true,  MAX_ICONTEXT_PRIORITY, InputContext::State::ACTIVE,    N_("Global Hotkeys") };
-const InputContext InputContext::BACKGROUND =       { false, 0,                     InputContext::State::ACTIVE,    N_("Other Hotkeys")  };
-const InputContext InputContext::GAMEPLAY =         { false, 1,                     InputContext::State::ACTIVE,    N_("Gameplay")       };
-const InputContext InputContext::RADAR =            { false, { 2, 0 },              InputContext::State::ACTIVE,    N_("Radar"),         []() { return isMouseOverRadar() && !isInDesignScreen(); }};
-const InputContext InputContext::__DEBUG =          { false, MAX_ICONTEXT_PRIORITY, InputContext::State::INACTIVE,  N_("Debug")          };
+const InputContext InputContext::ALWAYS_ACTIVE =    { true,  MAX_ICONTEXT_PRIORITY,         InputContext::State::ACTIVE,    N_("Global Hotkeys") };
+const InputContext InputContext::BACKGROUND =       { false, 0,                             InputContext::State::ACTIVE,    N_("Other Hotkeys")  };
+const InputContext InputContext::GAMEPLAY =         { false, 1,                             InputContext::State::ACTIVE,    N_("Gameplay")       };
+const InputContext InputContext::RADAR =            { false, { 2, 0 },                      InputContext::State::ACTIVE,    N_("Radar"),         []() { return isMouseOverRadar() && !isInDesignScreen(); }};
+const InputContext InputContext::__DEBUG =          { false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug"),         []() { return gDebugPrioritized; }};
 
 InputContext::InputContext(const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName)
 	: InputContext(bIsAlwaysActive, priority, initialState, displayName, []() { return false; })
