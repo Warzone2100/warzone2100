@@ -257,7 +257,7 @@ const KeyFunctionEntries KeyFunctionConfiguration::allKeyFunctionEntries() const
 
 
 KeyFunctionInfo::KeyFunctionInfo(
-	const InputContext& context,
+	const ContextId& context,
 	const KeyMappingType type,
 	const MappableFunction function,
 	const std::string name,
@@ -274,7 +274,7 @@ KeyFunctionInfo::KeyFunctionInfo(
 }
 
 KeyFunctionInfo::KeyFunctionInfo(
-	const InputContext& context,
+	const ContextId& context,
 	const KeyMappingType type,
 	const MappableFunction function,
 	const std::string name

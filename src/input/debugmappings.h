@@ -23,8 +23,6 @@
 
 #include <vector>
 
-extern bool gDebugPrioritized;
-
 class DebugInputManager
 {
 public:
@@ -39,11 +37,17 @@ public:
 
 	bool toggleDebugMappingPriority()
 	{
-		gDebugPrioritized = !gDebugPrioritized;
-		return gDebugPrioritized;
+		bDebugPrioritized = !bDebugPrioritized;
+		return bDebugPrioritized;
+	}
+
+	bool isDebugPrioritized() const
+	{
+		return bDebugPrioritized;
 	}
 
 private:
+	bool bDebugPrioritized;
 	bool bDoingDebugMappings;
 	std::vector<bool> playerWantsDebugMappings;
 };

@@ -226,15 +226,17 @@ bool KeyMappings::remove(const KeyMapping& mappingToRemove)
 	return false;
 }
 
-std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
+std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId contextId, const ContextManager& contexts)
 {
 	/* Find any mapping with same keys */
 	const auto matches = find(meta, input);
 	std::vector<std::reference_wrapper<KeyMapping>> conflicts;
 	for (KeyMapping& mapping : matches)
 	{
+		const InputContext mappingContext = contexts.get(mapping.info.context);
+
 		/* Keys conflict if they are for the same context. Always active contexts are special (always have highest priority), so those keys will always conflict. */
-		const bool bConflicts = mapping.info.context.isAlwaysActive() || mapping.info.context == context;
+		const bool bConflicts = mappingContext.isAlwaysActive() || std::string(mapping.info.context) == std::string(contextId);
 		if (bConflicts)
 		{
 			conflicts.push_back(mapping);
@@ -244,10 +246,10 @@ std::vector<std::reference_wrapper<KeyMapping>> KeyMappings::findConflicting(con
 	return conflicts;
 }
 
-std::vector<KeyMapping> KeyMappings::removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const InputContext context)
+std::vector<KeyMapping> KeyMappings::removeConflicting(const KEY_CODE meta, const KeyMappingInput input, const ContextId& contextId, const ContextManager& contexts)
 {
 	/* Find any mapping with same keys */
-	const auto conflicting = findConflicting(meta, input, context);
+	const auto conflicting = findConflicting(meta, input, contextId, contexts);
 	std::vector<KeyMapping> removed;
 	for (KeyMapping& mapping : conflicting)
 	{
