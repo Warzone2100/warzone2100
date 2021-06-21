@@ -201,6 +201,8 @@ void wzapi::scripting_instance::dumpScriptLog(const std::string &info, int me)
 	}
 }
 
+wzapi::execution_context_base::~execution_context_base()
+{ }
 wzapi::execution_context::~execution_context()
 { }
 int wzapi::execution_context::player() const
@@ -3279,7 +3281,7 @@ enum Scrcb {
 	SCRCB_LAST = SCRCB_LIMIT
 };
 
-bool wzapi::setUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue))
+bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index, const nlohmann::json& newValue))
 {
 	int value = json_variant(newValue).toInt();
 	syncDebug("stats[p%d,t%d,%s,i%d] = %d", player, type, name.c_str(), index, value);
@@ -3623,7 +3625,7 @@ bool wzapi::setUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, in
 	return true;
 }
 
-nlohmann::json wzapi::getUpgradeStats(WZAPI_PARAMS(int player, const std::string& name, int type, unsigned index))
+nlohmann::json wzapi::getUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& name, int type, unsigned index))
 {
 	if (type == COMP_BODY)
 	{
@@ -3901,7 +3903,7 @@ nlohmann::json wzapi::getUpgradeStats(WZAPI_PARAMS(int player, const std::string
 }
 
 
-wzapi::GameEntityRules::value_type wzapi::GameEntityRules::getPropertyValue(const wzapi::execution_context& context, const std::string& name) const
+wzapi::GameEntityRules::value_type wzapi::GameEntityRules::getPropertyValue(const wzapi::execution_context_base& context, const std::string& name) const
 {
 	auto it = propertyNameToTypeMap.find(name);
 	if (it == propertyNameToTypeMap.end())
@@ -3913,7 +3915,7 @@ wzapi::GameEntityRules::value_type wzapi::GameEntityRules::getPropertyValue(cons
 	return wzapi::getUpgradeStats(context, getPlayer(), name, type, getIndex());
 }
 
-wzapi::GameEntityRules::value_type wzapi::GameEntityRules::setPropertyValue(const wzapi::execution_context& context, const std::string& name, const value_type& newValue)
+wzapi::GameEntityRules::value_type wzapi::GameEntityRules::setPropertyValue(const wzapi::execution_context_base& context, const std::string& name, const value_type& newValue)
 {
 	auto it = propertyNameToTypeMap.find(name);
 	if (it == propertyNameToTypeMap.end())
