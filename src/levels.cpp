@@ -80,7 +80,7 @@ static LEVEL_DATASET	sSingleWRF = { LEVEL_TYPE::LDS_COMPLETE, 0, 0, nullptr, mod
 char *pLevToken;
 LEVEL_TYPE levVal;
 static GAME_TYPE levelLoadType;
-
+static inline void recalcDroidBaseSpeed(DROID *psCurr, int player);
 // modes for the parser
 enum LEVELPARSER_STATE
 {
@@ -1037,16 +1037,32 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 	// Without that, both Campaign and Skirmish saves are broken.
 	for (int player=0; player < MAX_PLAYERS; player++)
 	{
-		// one of these lists is empty when on mission
-		DROID *psdroidList = apsDroidLists[player] != nullptr ? apsDroidLists[player] : mission.apsDroidLists[player];
-		for (DROID *psCurr = psdroidList; psCurr != nullptr; psCurr = psCurr->psNext)
+		// those are droids present on the map
+		for (DROID *psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
-			DROID_TEMPLATE sTemplate;
-			templateSetParts(psCurr, &sTemplate);
-			psCurr->baseSpeed = calcDroidBaseSpeed(&sTemplate, psCurr->weight, player);
+			recalcDroidBaseSpeed(psCurr, player);
+		}
+		// those are droids stuck at base, if any ("away" missions)
+		for (DROID *psCurr = mission.apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			if (isTransporter(psCurr) && psCurr->psGroup)
+			{
+				// and those within a transporter...
+				for (DROID *psDroidInTransport = psCurr->psGroup->psList; psDroidInTransport != nullptr; psDroidInTransport = psDroidInTransport->psGrpNext)
+				{
+					recalcDroidBaseSpeed(psDroidInTransport, player);
+				}
+			} else
+			{
+				recalcDroidBaseSpeed(psCurr, player);
+			}
+		}
+		// also limbdo droids
+		for (DROID *psCurr = apsLimboDroids[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			recalcDroidBaseSpeed(psCurr, player);
 		}
 	}
-
 	dataClearSaveFlag();
 
 	//restore the level name for comparisons on next mission load up
@@ -1078,7 +1094,14 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 	return true;
 }
+static inline void recalcDroidBaseSpeed(DROID *psCurr, int player)
+{
 
+	DROID_TEMPLATE sTemplate;
+	templateSetParts(psCurr, &sTemplate);
+	psCurr->baseSpeed = calcDroidBaseSpeed(&sTemplate, psCurr->weight, player);
+
+}
 std::string mapNameWithoutTechlevel(const char *mapName)
 {
 	ASSERT_OR_RETURN("", mapName != nullptr, "null mapName provided");
