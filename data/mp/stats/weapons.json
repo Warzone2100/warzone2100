@@ -938,7 +938,7 @@
 		"name": "VTOL Hyper Velocity Cannon",
 		"numAttackRuns": 4,
 		"numExplosions": 1,
-		"radius": 96,
+		"radius": 64,
 		"radiusDamage": 70,
 		"radiusLife": 10,
 		"recoilValue": 100,
