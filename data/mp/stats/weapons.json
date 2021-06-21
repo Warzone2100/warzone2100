@@ -980,7 +980,7 @@
 		"muzzleGfx": "FXCan20A.PIE",
 		"name": "Hyper Velocity Cannon",
 		"numExplosions": 1,
-		"radius": 64,
+		"radius": 32,
 		"radiusDamage": 35,
 		"radiusLife": 10,
 		"recoilValue": 100,
@@ -1035,7 +1035,7 @@
 		"weight": 1250
 	},
 	"Cannon5VulcanMk1": {
-		"buildPoints": 800,
+		"buildPoints": 700,
 		"buildPower": 150,
 		"damage": 40,
 		"designable": 1,
@@ -1296,7 +1296,7 @@
 		"muzzleGfx": "FXCan20A.PIE",
 		"name": "Super HPV Cyborg",
 		"numExplosions": 1,
-		"radius": 64,
+		"radius": 32,
 		"radiusDamage": 25,
 		"recoilValue": 100,
 		"rotate": 180,
