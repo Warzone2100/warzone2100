@@ -1718,7 +1718,7 @@ static int get_first_available_component(int player, int capacity, const wzapi::
 static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::string &templName, const wzapi::string_or_string_list& _body, const wzapi::string_or_string_list& _propulsion, const wzapi::va_list<wzapi::string_or_string_list>& _turrets, int capacity, bool strict)
 {
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = std::unique_ptr<DROID_TEMPLATE>(new DROID_TEMPLATE);
-	int numTurrets = _turrets.va_list.size();
+	size_t numTurrets = _turrets.va_list.size();
 	int result;
 
 	memset(psTemplate->asParts, 0, sizeof(psTemplate->asParts)); // reset to defaults
@@ -1741,12 +1741,17 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	psTemplate->asParts[COMP_PROPULSION] = prop;
 
 	psTemplate->numWeaps = 0;
-	numTurrets = MIN(numTurrets, asBodyStats[body].weaponSlots); // Restrict max no. turrets
+	numTurrets = std::min<size_t>(numTurrets, asBodyStats[body].weaponSlots); // Restrict max no. turrets
 	if (asBodyStats[body].droidTypeOverride != DROID_ANY)
 	{
 		psTemplate->droidType = asBodyStats[body].droidTypeOverride; // set droidType based on body
 	}
 	// Find first turret component type (assume every component in list is same type)
+	if (_turrets.va_list.empty() || _turrets.va_list[0].strings.empty())
+	{
+		debug(LOG_SCRIPT, "Wanted to build %s but no turrets provided", templName.c_str());
+		return nullptr;
+	}
 	std::string compName = _turrets.va_list[0].strings[0];
 	COMPONENT_STATS *psComp = getCompStatsFromName(WzString::fromUtf8(compName.c_str()));
 	if (psComp == nullptr)
@@ -1760,7 +1765,7 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	}
 	if (psComp->compType == COMP_WEAPON)
 	{
-		for (int i = 0; i < std::min(numTurrets, MAX_WEAPONS); i++) // may be multi-weapon
+		for (size_t i = 0; i < std::min<size_t>(numTurrets, MAX_WEAPONS); i++) // may be multi-weapon
 		{
 			result = get_first_available_component(player, SIZE_NUM, _turrets.va_list[i], COMP_WEAPON, strict);
 			if (result < 0)
@@ -1816,6 +1821,7 @@ bool wzapi::buildDroid(WZAPI_PARAMS(STRUCTURE *psFactory, std::string templName,
 	int player = psStruct->player;
 	SCRIPT_ASSERT_PLAYER(false, context, player);
 	const int capacity = psStruct->capacity; // body size limit
+	SCRIPT_ASSERT(false, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, capacity, true);
 	if (psTemplate)
 	{
@@ -1859,6 +1865,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
 	bool onMission = (x == -1) && (y == -1);
 	SCRIPT_ASSERT(nullptr, context, (onMission || (x >= 0 && y >= 0)), "Invalid coordinates (%d, %d) for droid", x, y);
+	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, false);
 	if (psTemplate)
 	{
@@ -1905,6 +1912,7 @@ wzapi::returned_nullable_ptr<const DROID> wzapi::addDroid(WZAPI_PARAMS(int playe
 std::unique_ptr<const DROID_TEMPLATE> wzapi::makeTemplate(WZAPI_PARAMS(int player, std::string templName, string_or_string_list body, string_or_string_list propulsion, reservedParam reserved1, va_list<string_or_string_list> turrets))
 {
 	SCRIPT_ASSERT_PLAYER(nullptr, context, player);
+	SCRIPT_ASSERT(nullptr, context, !turrets.va_list.empty() && !turrets.va_list[0].strings.empty(), "No turrets provided");
 	std::unique_ptr<DROID_TEMPLATE> psTemplate = ::makeTemplate(player, templName, body, propulsion, turrets, SIZE_NUM, true);
 	return std::unique_ptr<const DROID_TEMPLATE>(std::move(psTemplate));
 }
