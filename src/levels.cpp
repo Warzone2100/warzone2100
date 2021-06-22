@@ -1067,7 +1067,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 				recalcDroidBaseSpeed(psCurr, player);
 			}
 		}
-		// also limbdo droids
+		// also limbo droids
 		for (DROID *psCurr = apsLimboDroids[player]; psCurr != nullptr; psCurr = psCurr->psNext)
 		{
 			if (isTransporter(psCurr) && psCurr->psGroup)
