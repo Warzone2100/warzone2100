@@ -1050,17 +1050,26 @@ static void moveCalcDroidSlide(DROID *psDroid, int *pmx, int *pmy)
 		}
 		if (psObj->type == OBJ_DROID)
 		{
-			if (isTransporter((DROID *)psObj))
+			DROID * psObjcast = static_cast<DROID*> (psObj);
+			objR = moveObjRadius(psObj);
+			if (isTransporter(psObjcast))
 			{
 				// ignore transporters
 				continue;
 			}
-			if (!bLegs && ((DROID *)psObj)->droidType == DROID_PERSON)
+			if ((!isFlying(psDroid) && isFlying(psObjcast) && psObjcast->pos.z > (psDroid->pos.z + droidR)) || 
+			    (!isFlying(psObjcast) && isFlying(psDroid) && psDroid->pos.z > (psObjcast->pos.z + objR)))
+			{
+				// ground unit can't bump into a flying saucer..
+				continue;
+
+			}
+			if (!bLegs && (psObjcast)->droidType == DROID_PERSON)
 			{
 				// everything else doesn't avoid people
 				continue;
 			}
-			if (psObj->player == psDroid->player
+			if (psObjcast->player == psDroid->player
 			    && psDroid->lastFrustratedTime > 0
 			    && gameTime - psDroid->lastFrustratedTime < FRUSTRATED_TIME)
 			{

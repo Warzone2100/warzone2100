@@ -977,7 +977,7 @@ static void objListIntegCheck()
 			ASSERT(psCurr->type == OBJ_STRUCTURE &&
 			       (SDWORD)psCurr->player == player,
 			       "objListIntegCheck: misplaced %s(%p) in the structure list for player %d, is owned by %d",
-			       objInfo(psCurr), psCurr, player, (int)psCurr->player);
+			       objInfo(psCurr), (void*) psCurr, player, (int)psCurr->player);
 		}
 	}
 	for (psCurr = (BASE_OBJECT *)apsFeatureLists[0]; psCurr; psCurr = psCurr->psNext)
