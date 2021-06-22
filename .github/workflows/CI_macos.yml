@@ -313,12 +313,10 @@ jobs:
           mv "./warzone2100_macOS_universal/warzone2100_macOS_universal.zip" "./warzone2100_macOS.zip"
           mv "./warzone2100_macOS_universal_novideos/warzone2100_macOS_universal_novideos.zip" "./warzone2100_macOS_novideos.zip"
       - name: Upload to release
-        uses: past-due/action-gh-release@master
-        with:
-          # Do not explicitly specify a tag_name, so this action takes the github.ref and parses it for just the tag
-          files: |
-            ./warzone2100_macOS.zip
-            ./warzone2100_macOS_novideos.zip
-          draft: true
+        run: |
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+          gh release upload "${SOURCE_TAG}" "./warzone2100_macOS.zip" "./warzone2100_macOS_novideos.zip"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          WZ_GITHUB_REF: ${{ github.ref }}
