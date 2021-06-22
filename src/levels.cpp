@@ -80,7 +80,7 @@ static LEVEL_DATASET	sSingleWRF = { LEVEL_TYPE::LDS_COMPLETE, 0, 0, nullptr, mod
 char *pLevToken;
 LEVEL_TYPE levVal;
 static GAME_TYPE levelLoadType;
-
+static inline void recalcDroidBaseSpeed(DROID *psCurr, int player);
 // modes for the parser
 enum LEVELPARSER_STATE
 {
@@ -1024,13 +1024,65 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			return false;
 		}
 	}
-
+	// this will trigger upgrades 
 	if (!stageThreeInitialise())
 	{
 		debug(LOG_ERROR, "Failed stageThreeInitialise()!");
 		return false;
 	}
 
+	// droids were actually loaded before (during stageThreeInitialise) upgrades.
+	// So to actually apply them, we'll iterate over all droids, and re-calculate, once again,
+	// their upgradable parts.
+	// Without that, both Campaign and Skirmish saves are broken.
+	for (int player=0; player < MAX_PLAYERS; player++)
+	{
+		// those are droids present on the map
+		for (DROID *psCurr = apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			if (isTransporter(psCurr) && psCurr->psGroup)
+			{
+				// and those within a transporter...
+				for (DROID *psDroidInTransport = psCurr->psGroup->psList; psDroidInTransport != nullptr; psDroidInTransport = psDroidInTransport->psGrpNext)
+				{
+					recalcDroidBaseSpeed(psDroidInTransport, player);
+				}
+			} else
+			{
+				recalcDroidBaseSpeed(psCurr, player);
+			}
+		}
+		// those are droids stuck at base, if any ("away" missions)
+		for (DROID *psCurr = mission.apsDroidLists[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			if (isTransporter(psCurr) && psCurr->psGroup)
+			{
+				// and those within a transporter...
+				for (DROID *psDroidInTransport = psCurr->psGroup->psList; psDroidInTransport != nullptr; psDroidInTransport = psDroidInTransport->psGrpNext)
+				{
+					recalcDroidBaseSpeed(psDroidInTransport, player);
+				}
+			} else
+			{
+				recalcDroidBaseSpeed(psCurr, player);
+			}
+		}
+		// also limbo droids
+		for (DROID *psCurr = apsLimboDroids[player]; psCurr != nullptr; psCurr = psCurr->psNext)
+		{
+			if (isTransporter(psCurr) && psCurr->psGroup)
+			{
+				// and those within a transporter... is this even possible?..
+				for (DROID *psDroidInTransport = psCurr->psGroup->psList; psDroidInTransport != nullptr; psDroidInTransport = psDroidInTransport->psGrpNext)
+				{
+					recalcDroidBaseSpeed(psDroidInTransport, player);
+				}
+			} else
+			{
+				recalcDroidBaseSpeed(psCurr, player);
+			}
+		}
+	}
 	dataClearSaveFlag();
 
 	//restore the level name for comparisons on next mission load up
@@ -1062,7 +1114,14 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 
 	return true;
 }
+static inline void recalcDroidBaseSpeed(DROID *psCurr, int player)
+{
 
+	DROID_TEMPLATE sTemplate;
+	templateSetParts(psCurr, &sTemplate);
+	psCurr->baseSpeed = calcDroidBaseSpeed(&sTemplate, psCurr->weight, player);
+
+}
 std::string mapNameWithoutTechlevel(const char *mapName)
 {
 	ASSERT_OR_RETURN("", mapName != nullptr, "null mapName provided");
