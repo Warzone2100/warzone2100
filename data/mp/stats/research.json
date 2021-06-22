@@ -3313,10 +3313,11 @@
 		"msgName": "RES_REPTUHVY",
 		"name": "Heavy Repair Turret",
 		"requiredResearch": [
-			"R-Sys-Engineering02"
+			"R-Sys-MobileRepairTurret01",
+			"R-Struc-Factory-Cyborg"
 		],
-		"researchPoints": 600,
-		"researchPower": 18,
+		"researchPoints": 1200,
+		"researchPower": 37,
 		"resultComponents": [
 			"HeavyRepair"
 		],
