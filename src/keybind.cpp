@@ -1126,6 +1126,23 @@ void kf_PrioritizeDebugMappings()
 		: "FALSE";
 	CONPRINTF("%s%s", _("Toggling debug mapping priority: "), status);
 }
+
+void kf_ToggleLevelEditor()
+{
+	ContextManager& contexts = gInputManager.contexts();
+	const bool bIsActive = contexts.isActive(InputContext::DEBUG_LEVEL_EDITOR);
+
+	if (bIsActive)
+	{
+		CONPRINTF("%s", _("Disabling level editor"));
+		contexts.set(InputContext::DEBUG_LEVEL_EDITOR, InputContext::State::INACTIVE);
+	}
+	else
+	{
+		CONPRINTF("%s", _("Enabling level editor"));
+		contexts.set(InputContext::DEBUG_LEVEL_EDITOR, InputContext::State::ACTIVE);
+	}
+}
 // --------------------------------------------------------------------------
 
 void	kf_ToggleGodMode()

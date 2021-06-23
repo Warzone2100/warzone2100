@@ -56,8 +56,13 @@ struct InputContext
 	/* Active while player hovers over the radar. */
 	static const ContextId RADAR;
 
-	/* For debug-only bindings. */
-	static const ContextId __DEBUG;
+	/* Debug only, "level editor" mappings */
+	static const ContextId DEBUG_LEVEL_EDITOR;
+	/* Debug only, active when a unit is selected */
+	static const ContextId DEBUG_HAS_SELECTION;
+	/* Debug only, other mappings */
+	static const ContextId DEBUG_MISC;
+
 
 	enum class State
 	{
