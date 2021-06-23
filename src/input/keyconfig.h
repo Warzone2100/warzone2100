@@ -163,6 +163,8 @@ struct KeyFunctionInfo
 
 	const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings;
 
+	const bool bIsDebugOnly;
+
 	KeyFunctionInfo(
 		const ContextId&       context,
 		const KeyMappingType   type,
@@ -176,7 +178,8 @@ struct KeyFunctionInfo
 		const MappableFunction function,
 		const std::string      name,
 		const std::string      displayName,
-		const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings
+		const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings,
+		const bool             bIsDebugOnly = false
 	);
 
 	// Prevent copies. The entries are immutable and thus should never be copied around.

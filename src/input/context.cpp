@@ -34,26 +34,32 @@ static bool isInDesignScreen()
 	return intMode == INTMODE::INT_DESIGN;
 }
 
-const ContextId InputContext::ALWAYS_ACTIVE = "ALWAYS_ACTIVE";
-const ContextId InputContext::BACKGROUND = "BACKGROUND";
-const ContextId InputContext::GAMEPLAY = "GAMEPLAY";
-const ContextId InputContext::RADAR = "RADAR";
-const ContextId InputContext::__DEBUG = "__DEBUG";
+const ContextId InputContext::ALWAYS_ACTIVE         = "ALWAYS_ACTIVE";
+const ContextId InputContext::BACKGROUND            = "BACKGROUND";
+const ContextId InputContext::GAMEPLAY              = "GAMEPLAY";
+const ContextId InputContext::RADAR                 = "RADAR";
+const ContextId InputContext::DEBUG_MISC            = "DEBUG_MISC";
+const ContextId InputContext::DEBUG_LEVEL_EDITOR    = "DEBUG_LEVEL_EDITOR";
+const ContextId InputContext::DEBUG_HAS_SELECTION   = "DEBUG_HAS_SELECTION";
 
 void registerDefaultContexts(ContextManager& contextManager, DebugInputManager& dbgInputManager)
 {
 	static const unsigned int MAX_ICONTEXT_PRIORITY = std::numeric_limits<unsigned int>::max();
-	const InputContext alwaysActive =   { InputContext::ALWAYS_ACTIVE,  true,  MAX_ICONTEXT_PRIORITY,         InputContext::State::ACTIVE,    N_("Global Hotkeys") };
-	const InputContext background =     { InputContext::BACKGROUND,     false, 0,                             InputContext::State::ACTIVE,    N_("Other Hotkeys")  };
-	const InputContext gameplay =       { InputContext::GAMEPLAY,       false, 1,                             InputContext::State::ACTIVE,    N_("Gameplay")       };
-	const InputContext radar =          { InputContext::RADAR,          false, { 2, 0 },                      InputContext::State::ACTIVE,    N_("Radar"),         []() { return isMouseOverRadar() && !isInDesignScreen(); }};
-	const InputContext debug =          { InputContext::__DEBUG,        false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug"),         [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); }};
+	const InputContext alwaysActive   = { InputContext::ALWAYS_ACTIVE,          true,  MAX_ICONTEXT_PRIORITY,         InputContext::State::ACTIVE,    N_("Global Hotkeys")          };
+	const InputContext background     = { InputContext::BACKGROUND,             false, 0,                             InputContext::State::ACTIVE,    N_("Other Hotkeys")           };
+	const InputContext gameplay       = { InputContext::GAMEPLAY,               false, 1,                             InputContext::State::ACTIVE,    N_("Gameplay")                };
+	const InputContext radar          = { InputContext::RADAR,                  false, { 2, 0 },                      InputContext::State::ACTIVE,    N_("Radar"),                  []() { return isMouseOverRadar() && !isInDesignScreen(); } };
+	const InputContext debug          = { InputContext::DEBUG_MISC,             false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug"),                  [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
+	const InputContext debugLvlEditor = { InputContext::DEBUG_LEVEL_EDITOR,     false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug (level editor)"),   [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
+	const InputContext debugSelection = { InputContext::DEBUG_HAS_SELECTION,    false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug (selection)"),      [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
 
 	contextManager.registerContext(alwaysActive);
 	contextManager.registerContext(background);
 	contextManager.registerContext(gameplay);
 	contextManager.registerContext(radar);
 	contextManager.registerContext(debug);
+	contextManager.registerContext(debugLvlEditor);
+	contextManager.registerContext(debugSelection);
 }
 
 InputContext::InputContext(const ContextId id, const bool bIsAlwaysActive, const ContextPriority priority, const State initialState, const char* const displayName)
