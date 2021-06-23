@@ -407,6 +407,29 @@ void resetInput()
 	gInputManager.contexts().resetStates();
 }
 
+static bool localPlayerHasSelection()
+{
+	unsigned int count = 0;
+
+	for (DROID* psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
+	{
+		if (psDroid->selected)
+		{
+			return true;
+		}
+	}
+
+	for (STRUCTURE* psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
+	{
+		if (psStruct->selected)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 /* Process the user input. This just processes the key input and jumping around the radar*/
 void processInput()
 {
@@ -443,6 +466,10 @@ void processInput()
 		}
 	}
 
+	gInputManager.contexts().set(
+		InputContext::DEBUG_HAS_SELECTION,
+		localPlayerHasSelection() ? InputContext::State::ACTIVE : InputContext::State::INACTIVE
+	);
 	gInputManager.contexts().updatePriorityStatus();
 
 	if (!isInTextInputMode())
