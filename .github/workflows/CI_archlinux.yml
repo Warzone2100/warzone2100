@@ -15,11 +15,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: ":LATEST (CMake) [GCC]"
+          - name: "Arch :LATEST [GCC]"
             compiler: 'gcc'
             cc: '/usr/bin/gcc'
             cxx: '/usr/bin/g++'
-          - name: ":LATEST (CMake) [Clang]"
+          - name: "Arch :LATEST [Clang]"
             compiler: 'clang'
             cc: '/usr/bin/clang'
             cxx: '/usr/bin/clang++'
