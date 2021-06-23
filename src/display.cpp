@@ -409,8 +409,6 @@ void resetInput()
 
 static bool localPlayerHasSelection()
 {
-	unsigned int count = 0;
-
 	for (DROID* psDroid = apsDroidLists[selectedPlayer]; psDroid; psDroid = psDroid->psNext)
 	{
 		if (psDroid->selected)
