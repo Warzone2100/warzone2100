@@ -11,57 +11,48 @@ on:
     # Match all pull requests
 
 jobs:
-  ubuntu-16-04-gcc:
-    name: Ubuntu 16.04 (CMake) [GCC]
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        path: 'src'
-    - name: Prepare Git Repo for autorevision
-      working-directory: '${{ github.workspace }}/src'
-      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
-    - name: Init Git Submodules
-      working-directory: '${{ github.workspace }}/src'
-      run: git submodule update --init --recursive
-    - name: Debug Output
-      run: |
-        echo "GITHUB_REF=${GITHUB_REF}"
-        echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
-    - name: Build the Docker image
-      working-directory: '${{ github.workspace }}/src'
-      run: |
-        docker build -f docker/ubuntu-16.04/Dockerfile -t ubuntu .
-    - name: Prep Directories
-      run: |
-        mkdir -p "${{ github.workspace }}/build"
-    - name: CMake Configure
-      working-directory: '${{ github.workspace }}/build'
-      run: |
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
-        echo "::remove-matcher owner=cmake::"
-    - name: CMake Build
-      working-directory: '${{ github.workspace }}/build'
-      run: |
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/gcc.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
-        echo "::remove-matcher owner=gcc::"
-
-  ubuntu-gcc-build-and-package:
+  ubuntu-build:
     strategy:
       matrix:
         include:
+          # Builds with GCC (uploaded as artifacts, and published as release DEBs)
           - name: "Ubuntu 18.04 (CMake) [GCC]"
             docker: "ubuntu-18.04"
             arch: "amd64"
             output-suffix: "ubuntu18.04"
+            compiler: gcc
+            publish_artifact: true
+            deploy_release: true
           - name: "Ubuntu 20.04 (CMake) [GCC]"
             docker: "ubuntu-20.04"
             arch: "amd64"
+            compiler: gcc
             output-suffix: "ubuntu20.04"
+            publish_artifact: true
+            deploy_release: true
+          # Older builds with GCC (not uploaded)
+          - name: "Ubuntu 16.04 (CMake) [GCC]"
+            docker: "ubuntu-16.04"
+            arch: "amd64"
+            output-suffix: "ubuntu16.04"
+            compiler: gcc
+            publish_artifact: false
+            deploy_release: false
+          # Builds with Clang (not uploaded)
+          - name: "Ubuntu 18.04 (CMake) [Clang]"
+            docker: "ubuntu-18.04"
+            arch: "amd64"
+            output-suffix: "ubuntu18.04"
+            compiler: clang
+            publish_artifact: false
+            deploy_release: false
+          - name: "Ubuntu 20.04 (CMake) [Clang]"
+            docker: "ubuntu-20.04"
+            arch: "amd64"
+            compiler: clang
+            output-suffix: "ubuntu20.04"
+            publish_artifact: false
+            deploy_release: false
       fail-fast: false
     name: '${{ matrix.name }}'
     runs-on: ubuntu-latest
@@ -103,6 +94,20 @@ jobs:
         fi
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}"
         echo "WZ_DISTRIBUTOR=${WZ_DISTRIBUTOR}" >> $GITHUB_ENV
+        
+        if [ "${{ matrix.compiler }}" == "gcc" ]; then
+          WZ_CC="/usr/bin/gcc"
+          WZ_CXX="/usr/bin/g++"
+        elif [ "${{ matrix.compiler }}" == "clang" ]; then
+          WZ_CC="/usr/bin/clang"
+          WZ_CXX="/usr/bin/clang++"
+        else
+          echo "Unknown / invalid matrix.compiler: \"${{ matrix.compiler }}\""
+        fi
+        echo "WZ_CC=${WZ_CC}"
+        echo "WZ_CC=${WZ_CC}" >> $GITHUB_ENV
+        echo "WZ_CXX=${WZ_CXX}"
+        echo "WZ_CXX=${WZ_CXX}" >> $GITHUB_ENV
     - name: Prep Directories
       run: |
         mkdir -p "${{ github.workspace }}/build"
@@ -110,14 +115,14 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja" "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build
       working-directory: '${{ github.workspace }}/build'
       run: |
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/gcc.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
-        echo "::remove-matcher owner=gcc::"
+        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/${{ matrix.compiler }}.json"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
+        echo "::remove-matcher owner=${{ matrix.compiler }}::"
     - name: Package .DEB
       working-directory: '${{ github.workspace }}/build'
       run: |
@@ -140,13 +145,13 @@ jobs:
         echo "  -> Size (bytes): $(stat -c %s "${OUTPUT_DIR}/${OUTPUT_FILE_NAME}")"
         echo "WZ_FULL_OUTPUT_DEB_PATH=${OUTPUT_DIR}/${OUTPUT_FILE_NAME}" >> $GITHUB_ENV
     - uses: actions/upload-artifact@v2
-      if: success()
+      if: success() && (matrix.publish_artifact == true)
       with:
         name: "warzone2100_${{ matrix.output-suffix }}_${{ matrix.arch }}_deb"
         path: ${{ env.OUTPUT_DIR }}
         if-no-files-found: 'error'
     - name: Upload artifact to release
-      if: success() && startsWith(github.ref, 'refs/tags/')
+      if: success() && startsWith(github.ref, 'refs/tags/') && (matrix.deploy_release == true)
       run: |
         SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
         gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_DEB_PATH }}"
@@ -160,6 +165,10 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
+    - name: Debug Output
+      run: |
+        echo "GITHUB_REF=${GITHUB_REF}"
+        echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -215,96 +224,6 @@ jobs:
         name: warzone2100_src
         path: ${{ env.OUTPUT_DIR }}
         if-no-files-found: 'error'
-
-  ubuntu-18-04-clang:
-    name: Ubuntu 18.04 (CMake) [Clang]
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        path: 'src'
-    - name: Prepare Git Repo for autorevision
-      working-directory: '${{ github.workspace }}/src'
-      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
-    - name: Init Git Submodules
-      working-directory: '${{ github.workspace }}/src'
-      run: git submodule update --init --recursive
-    - name: Build the Docker image
-      working-directory: '${{ github.workspace }}/src'
-      run: |
-        docker build -f docker/ubuntu-18.04/Dockerfile -t ubuntu .
-    - name: Prep Directories
-      run: |
-        mkdir -p "${{ github.workspace }}/build"
-    - name: CMake Configure
-      working-directory: '${{ github.workspace }}/build'
-      run: |
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
-        echo "::remove-matcher owner=cmake::"
-    - name: CMake Build
-      working-directory: '${{ github.workspace }}/build'
-      run: |
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/clang.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
-        echo "::remove-matcher owner=clang::"
-
-  # ubuntu-20-04-gcc:
-  #   name: Ubuntu 20.04 (CMake) [GCC]
-  #   runs-on: ubuntu-latest
-  #   if: "!contains(github.event.head_commit.message, '[ci skip]')"
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     with:
-  #       fetch-depth: 0
-  #   - name: Prepare Git Repo for autorevision
-  #     run: cmake -P .ci/githubactions/prepare_git_repo.cmake
-  #   - name: Init Git Submodules
-  #     run: git submodule update --init --recursive
-  #   - name: Build the Docker image
-  #     run: |
-  #       docker build -f docker/ubuntu-20.04/Dockerfile -t ubuntu .
-  #   - name: CMake Configure
-  #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake '-H.' -Bbuild -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja"
-  #   - name: CMake Build
-  #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
-
-  ubuntu-20-04-clang:
-    name: Ubuntu 20.04 (CMake) [Clang]
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        path: 'src'
-    - name: Prepare Git Repo for autorevision
-      working-directory: '${{ github.workspace }}/src'
-      run: cmake -P .ci/githubactions/prepare_git_repo.cmake
-    - name: Init Git Submodules
-      working-directory: '${{ github.workspace }}/src'
-      run: git submodule update --init --recursive
-    - name: Build the Docker image
-      working-directory: '${{ github.workspace }}/src'
-      run: |
-        docker build -f docker/ubuntu-20.04/Dockerfile -t ubuntu .
-    - name: Prep Directories
-      run: |
-        mkdir -p "${{ github.workspace }}/build"
-    - name: CMake Configure
-      working-directory: '${{ github.workspace }}/build'
-      run: |
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWZ_ENABLE_WARNINGS:BOOL=ON -G"Ninja" "${{ github.workspace }}/src"
-        echo "::remove-matcher owner=cmake::"
-    - name: CMake Build
-      working-directory: '${{ github.workspace }}/build'
-      run: |
-        echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/clang.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=/usr/bin/clang" -e "CXX=/usr/bin/clang++" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
-        echo "::remove-matcher owner=clang::"
 
   # # NOTE: This uses qemu, and is much slower than a native ARM64 build
   # ubuntu-20-04-gcc-arm64:
