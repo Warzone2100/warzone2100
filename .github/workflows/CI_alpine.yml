@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: ":LATEST (CMake) [GCC]"
+          - name: "Alpine :LATEST [GCC]"
             compiler: 'gcc'
             cc: '/usr/bin/gcc'
             cxx: '/usr/bin/g++'

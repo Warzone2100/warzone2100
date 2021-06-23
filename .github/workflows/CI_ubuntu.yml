@@ -16,14 +16,14 @@ jobs:
       matrix:
         include:
           # Builds with GCC (uploaded as artifacts, and published as release DEBs)
-          - name: "Ubuntu 18.04 (CMake) [GCC]"
+          - name: "Ubuntu 18.04 [GCC]"
             docker: "ubuntu-18.04"
             arch: "amd64"
             output-suffix: "ubuntu18.04"
             compiler: gcc
             publish_artifact: true
             deploy_release: true
-          - name: "Ubuntu 20.04 (CMake) [GCC]"
+          - name: "Ubuntu 20.04 [GCC]"
             docker: "ubuntu-20.04"
             arch: "amd64"
             compiler: gcc
@@ -31,7 +31,7 @@ jobs:
             publish_artifact: true
             deploy_release: true
           # Older builds with GCC (not uploaded)
-          - name: "Ubuntu 16.04 (CMake) [GCC]"
+          - name: "Ubuntu 16.04 [GCC]"
             docker: "ubuntu-16.04"
             arch: "amd64"
             output-suffix: "ubuntu16.04"
@@ -39,14 +39,14 @@ jobs:
             publish_artifact: false
             deploy_release: false
           # Builds with Clang (not uploaded)
-          - name: "Ubuntu 18.04 (CMake) [Clang]"
+          - name: "Ubuntu 18.04 [Clang]"
             docker: "ubuntu-18.04"
             arch: "amd64"
             output-suffix: "ubuntu18.04"
             compiler: clang
             publish_artifact: false
             deploy_release: false
-          - name: "Ubuntu 20.04 (CMake) [Clang]"
+          - name: "Ubuntu 20.04 [Clang]"
             docker: "ubuntu-20.04"
             arch: "amd64"
             compiler: clang
@@ -161,7 +161,7 @@ jobs:
         WZ_GITHUB_REF: ${{ github.ref }}
 
   package-source:
-    name: Package Source (Ubuntu 18.04, CMake) [GCC]
+    name: Package Source (Ubuntu 18.04) [GCC]
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
