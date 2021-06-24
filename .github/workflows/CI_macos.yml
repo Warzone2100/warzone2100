@@ -4,11 +4,16 @@ on:
   push:
     branches-ignore:
       - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - '*'
   pull_request:
     # Match all pull requests
+  # Support running after "Draft Tag Release" workflow completes, as part of automated release process
+  workflow_run:
+    workflows: ["Draft Tag Release"]
+    push:
+      tags:
+        - '*'
+    types: 
+      - completed
 
 jobs:
   macos-build:
@@ -56,6 +61,14 @@ jobs:
       with:
         fetch-depth: 0
         path: 'src'
+    - name: Configure Repo Checkout
+      id: checkout-config
+      working-directory: ./src
+      env:
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      run: |
+        . .ci/githubactions/checkout_config.sh
     - name: Prepare Git Repo for autorevision
       working-directory: ./src
       run: cmake -P .ci/githubactions/prepare_git_repo.cmake
@@ -173,7 +186,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          fetch-depth: 0
           path: 'src'
+      - name: Configure Repo Checkout
+        id: checkout-config
+        working-directory: ./src
+        env:
+          WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          . .ci/githubactions/checkout_config.sh
       - name: Prep Environment
         run: |
           mkdir dl-artifacts
@@ -243,8 +265,18 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: "warzone2100_macOS_universal"
-          path: ${{ env.OUTPUT_DIR }}
+          path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
           if-no-files-found: 'error'
+      - name: Upload "universal" to release
+        if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
+        run: |
+          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+          echo "Uploading: ${WZ_FULL_OUTPUT_ZIP_PATH}"
+          gh release upload "${SOURCE_TAG}" "${WZ_FULL_OUTPUT_ZIP_PATH}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
       - name: Clear OUTPUT_DIR
         run: |
           echo "OUTPUT_DIR=${OUTPUT_DIR}"
@@ -284,39 +316,22 @@ jobs:
           ZIP_SIZE="$(stat -f '%z' "${OUTPUT_DIR}/${DESIRED_ZIP_NAME}")"
           echo "  -> SHA512: ${ZIP_HASH}"
           echo "  -> Size (bytes): ${ZIP_SIZE}"
+          
+          echo "WZ_FULL_OUTPUT_ZIP_PATH=${OUTPUT_DIR}/${DESIRED_ZIP_NAME}" >> $GITHUB_ENV
 
           exit 0
       - uses: actions/upload-artifact@v2
         with:
           name: "warzone2100_macOS_universal_novideos"
-          path: ${{ env.OUTPUT_DIR }}
+          path: ${{ env.WZ_FULL_OUTPUT_ZIP_PATH }}
           if-no-files-found: 'error'
-
-  upload_release_artifacts:
-    if: startsWith(github.ref, 'refs/tags/') && (github.repository == 'Warzone2100/warzone2100')
-    name: Upload Release Artifacts
-    needs: macos_universal_combine
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download macOS universal artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: warzone2100_macOS_universal
-          path: warzone2100_macOS_universal
-      - name: Download macOS universal (no videos) artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: warzone2100_macOS_universal_novideos
-          path: warzone2100_macOS_universal_novideos
-      - name: Rename artifact zips
-        run: |
-          mv "./warzone2100_macOS_universal/warzone2100_macOS_universal.zip" "./warzone2100_macOS.zip"
-          mv "./warzone2100_macOS_universal_novideos/warzone2100_macOS_universal_novideos.zip" "./warzone2100_macOS_novideos.zip"
-      - name: Upload to release
+      - name: Upload "universal_novideos" to release
+        if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (github.repository == 'Warzone2100/warzone2100')
         run: |
           SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
-          gh release upload "${SOURCE_TAG}" "./warzone2100_macOS.zip" "./warzone2100_macOS_novideos.zip"
+          echo "Uploading: ${WZ_FULL_OUTPUT_ZIP_PATH}"
+          gh release upload "${SOURCE_TAG}" "${WZ_FULL_OUTPUT_ZIP_PATH}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          WZ_GITHUB_REF: ${{ github.ref }}
+          WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}

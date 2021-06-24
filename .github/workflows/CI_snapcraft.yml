@@ -4,11 +4,16 @@ on:
   push:
     branches-ignore:
       - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - '*'
   pull_request:
     # Match all pull requests
+  # Support running after "Draft Tag Release" workflow completes, as part of automated release process
+  workflow_run:
+    workflows: ["Draft Tag Release"]
+    push:
+      tags:
+        - '*'
+    types: 
+      - completed
 
 jobs:
   snapcraft:
@@ -24,6 +29,13 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    - name: Configure Repo Checkout
+      id: checkout-config
+      env:
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      run: |
+        . .ci/githubactions/checkout_config.sh
     - name: Prepare Git Repo for autorevision
       run: cmake -P .ci/githubactions/prepare_git_repo.cmake
     - name: Init Git Submodules
@@ -66,10 +78,10 @@ jobs:
         GITHUB_ACTIONS="$GITHUB_ACTIONS"
         GITHUB_REPOSITORY="$GITHUB_REPOSITORY"
         GITHUB_WORKSPACE="$GITHUB_WORKSPACE"
-        GITHUB_SHA="$GITHUB_SHA"
-        GITHUB_REF="$GITHUB_REF"
-        GITHUB_HEAD_REF="$GITHUB_HEAD_REF"
-        GITHUB_BASE_REF="$GITHUB_BASE_REF"
+        GITHUB_SHA="$WZ_GITHUB_SHA"
+        GITHUB_REF="$WZ_GITHUB_REF"
+        GITHUB_HEAD_REF="$WZ_GITHUB_HEAD_REF"
+        GITHUB_BASE_REF="$WZ_GITHUB_BASE_REF"
         MAKEFLAGS="$MAKEFLAGS"
         SNAP_VERSION_SAFE_DESC_PREFIX="$SNAP_VERSION_SAFE_DESC_PREFIX"
         WZ_SHORT_SHA="$WZ_SHORT_SHA"
@@ -98,11 +110,11 @@ jobs:
         path: '${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}'
         if-no-files-found: 'error'
     - name: Upload artifact to release
-      if: success() && startsWith(github.ref, 'refs/tags/')
+      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
       run: |
         SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
         gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_SNAP_PATH }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
-        WZ_GITHUB_REF: ${{ github.ref }}
+        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
