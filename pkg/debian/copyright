@@ -181,6 +181,7 @@ License: GPL-2+
 Files: data/base/images/notifications/connect_wait.png
        data/base/images/notifications/exclamation_triangle.png
        data/base/images/notifications/shield_questionmark.png
+       data/base/images/notifications/skull_crossbones.png
        data/base/images/notifications/user_questionmark.png
 Copyright: Font Awesome Free by @fontawesome
 License: CC-BY-4.0

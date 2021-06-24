@@ -2031,7 +2031,7 @@ bool runGameOptionsMenu()
 				notification.contentTitle = _("Insane Difficulty");
 				notification.contentText = _("This difficulty is for very experienced players!");
 				notification.tag = DIFF_TAG;
-				notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
+				notification.largeIcon = WZ_Notification_Image("images/notifications/skull_crossbones.png");
 
 				addNotification(notification, WZ_Notification_Trigger::Immediate());
 			}
