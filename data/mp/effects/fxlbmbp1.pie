@@ -3,11 +3,11 @@ TYPE 200
 TEXTURE 0 page-17-droid-weapons.png 256 256
 LEVELS 1
 LEVEL 1
-POINTS 5 
-	0 3 0 
-	0 0 17 
-	-4 -1 0 
-	4 -1 0 
+POINTS 5
+	0 3 0
+	0 0 17
+	-4 -1 0
+	4 -1 0
 	0 0 -7
 POLYGONS 6
 	200 3 2 1 0 202 228 204 239 215 228
