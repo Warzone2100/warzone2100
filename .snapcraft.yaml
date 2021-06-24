@@ -156,7 +156,8 @@ parts:
       - usr/share/metainfo/warzone2100.appdata.xml
     override-pull: |
       snapcraftctl pull
-      snapcraftctl set-version "$(git describe --always)"
+      SNAP_VERSION_DESC=$(git describe --always | sed 's/[^a-zA-Z0-9\.\:\+\~\-]/~/g')
+      snapcraftctl set-version "${SNAP_VERSION_DESC}"
       git submodule update --init
     override-build: |
       echo "SNAPCRAFT_TARGET_ARCH=${SNAPCRAFT_TARGET_ARCH}"
