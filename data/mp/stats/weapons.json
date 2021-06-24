@@ -660,7 +660,7 @@
 		"movement": "DIRECT",
 		"muzzleGfx": "FXLRocPd.PIE",
 		"name": "VTOL EMP Missile Launcher",
-		"numAttackRuns": 2,
+		"numAttackRuns": 1,
 		"numExplosions": 1,
 		"radius": 512,
 		"radiusLife": 10,
@@ -1851,13 +1851,13 @@
 		"weight": 120
 	},
 	"EMP-Cannon": {
-		"buildPoints": 800,
-		"buildPower": 200,
+		"buildPoints": 1000,
+		"buildPower": 400,
 		"damage": 70,
 		"designable": 1,
 		"effectSize": 1,
 		"facePlayer": 1,
-		"firePause": 80,
+		"firePause": 130,
 		"flightGfx": "FXBeam.PIE",
 		"flightSpeed": 1500,
 		"hitGfx": "FXSFlms.PIE",
@@ -3453,7 +3453,7 @@
 		"weight": 3000
 	},
 	"MortarEMP": {
-		"buildPoints": 2000,
+		"buildPoints": 1400,
 		"buildPower": 200,
 		"damage": 60,
 		"designable": 1,
@@ -3472,7 +3472,7 @@
 		"maxElevation": 90,
 		"minRange": 128,
 		"minimumDamage": 33,
-		"missGfx": "FXLExp.PIE",
+		"missGfx": "FXSFlms.PIE",
 		"model": "gnhmorte.PIE",
 		"mountModel": "TRHRMORT.PIE",
 		"movement": "INDIRECT",
