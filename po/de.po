@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:09\n"
+"PO-Revision-Date: 2021-06-24 08:53\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -16060,11 +16060,11 @@ msgstr "Die benötigte Mod konnte nicht geladen werden: %s\n\n"
 
 #: src/input/context.cpp:39
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Globale Tastenkombinationen"
 
 #: src/input/context.cpp:40
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Andere Tastenkombinationen"
 
 #: src/input/context.cpp:41
 msgid "Gameplay"
