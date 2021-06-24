@@ -2020,6 +2020,22 @@ bool runGameOptionsMenu()
 	case FRONTEND_DIFFICULTY_R:
 		setDifficultyLevel(seqCycle(getDifficultyLevel(), DL_EASY, 1, DL_INSANE));
 		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
+		if (getDifficultyLevel() == DL_INSANE)
+		{
+			const std::string DIFF_TAG = "difficulty";
+
+			if (!hasNotificationsWithTag(DIFF_TAG))
+			{
+				WZ_Notification notification;
+				notification.duration = 10 * GAME_TICKS_PER_SEC;;
+				notification.contentTitle = _("Insane Difficulty");
+				notification.contentText = _("This difficulty is for very experienced players!");
+				notification.tag = DIFF_TAG;
+				notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
+
+				addNotification(notification, WZ_Notification_Trigger::Immediate());
+			}
+		}
 		break;
 
 	case FRONTEND_CAMERASPEED:
