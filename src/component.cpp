@@ -369,7 +369,9 @@ void drawMuzzleFlash(WEAPON sWeap, iIMDShape *weaponImd, iIMDShape *flashImd, PI
 	else if (graphicsTime >= sWeap.lastFired)
 	{
 		// animated muzzle
-		int frame = (graphicsTime - sWeap.lastFired) / flashImd->animInterval;
+		const int DEFAULT_ANIM_INTERVAL = 17; // A lot of PIE files specify 1, which is too small, so set something bigger as a fallback
+		int animRate = MAX(flashImd->animInterval, DEFAULT_ANIM_INTERVAL);
+		int frame = (graphicsTime - sWeap.lastFired) / animRate;
 		if (frame < flashImd->numFrames)
 		{
 			pie_Draw3DShape(flashImd, frame, colour, buildingBrightness, pieFlag | pie_ADDITIVE, EFFECT_MUZZLE_ADDITIVE, viewMatrix * modelMatrix);
