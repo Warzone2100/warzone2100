@@ -10,7 +10,7 @@ Of course, it is always nice to gather up enough volunteers to test before you a
 
 Starting off
 ------------
-We currently do releases off git master.
+We do releases off of the git `master` branch.
 
     git pull origin master
 
@@ -103,6 +103,17 @@ Since everything works (since you tested it), it is time to make the **annotated
 
 Where `4.0.0` is the name of the tag.
 
+> ### Expected tag version format
+> The expected tag version format is: `<SEMVER>(<prereleaseversion>)`
+>
+> Where `<SEMVER>` is `#.#.#` (examples: `4.0.0`, `4.0.1`, `4.9.12`)
+> 
+> And the _optional_ `<prereleaseversion>` is a hyphen-prefixed pre-release identifier + version like: `-beta1` or `-rc1`
+>
+> #### Valid tag examples:
+> - Normal releases: `4.0.0`, `4.0.1`, `4.0.22`
+> - Pre-releases: `4.0.1-beta1`, `4.0.1-rc2`
+
 > ### Always forwards
 > _Do **NOT** re-use an existing tag / tag that was previously used!_
 > If you make a mistake, or a bug is found, (etc), increment the version _again_.
@@ -113,7 +124,8 @@ Where `4.0.0` is the name of the tag.
 GitHub will then **automatically**:
 - create a Draft release in **[GitHub Releases](https://github.com/Warzone2100/warzone2100/releases)** for the new tag
    - (may take a minute or so to complete)
-- trigger the CI builds
+   - (uses [/.github/workflows/draft_tag_release.yml](/.github/workflows/draft_tag_release.yml))
+- trigger the CI builds (as `workflow_run` event runs, after the "Draft Tag Release" workflow completes)
 
 
 Download & verify the tag / release builds
@@ -128,7 +140,7 @@ Download & verify the tag / release builds
 download the appropriate artifact(s) following the same instructions you used to download the master
 branch artifacts above.
 <br />
-- Just make sure you download artifacts from the CI runs for the <b>tag</b> you created.
+- Just make sure you download artifacts from the CI runs for the <b>tag</b> you created. This will be in "[`workflow_run`](https://github.com/Warzone2100/warzone2100/actions?query=branch%3Amaster+event%3Aworkflow_run)" event CI runs.
 <br />
 <b>You should <i>NOT</i> have to manually upload artifacts to the GitHub Release</b> (unless
 the CI -> GitHub integration breaks).
@@ -145,19 +157,19 @@ the CI -> GitHub integration breaks).
       - [x] `warzone2100_win_x64.DEBUGSYMBOLS.7z`
       - [x] `warzone2100_win_x64_installer.exe`
       - [x] `warzone2100_win_x64_portable.exe`
-   - [x] Verify the SHA512 hashes towards the end of the [Windows workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+event%3Apush) log match the files you downloaded.
+   - [x] Verify the SHA512 hashes towards the end of the most recent [`workflow_run` Windows workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AWindows+event%3Aworkflow_run) log match the files you downloaded.
       - [x] **Make sure you are viewing the build for the _tag_ you just made**
       - [x] Select the appropriate job (x86, x64, etc).
       - [x] Expand the "Compare Build Outputs" step, which outputs the SHA512 hashes at the bottom of its output.
    - [x] Download the macOS build from the draft release:
       - [x] `warzone2100_macOS.zip`
-   - [x] Verify the SHA512 hash towards the end of the [macOS workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+event%3Apush) log matches the file you downloaded.
+   - [x] Verify the SHA512 hash towards the end of the most recent [`workflow_run` macOS workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AmacOS+event%3Aworkflow_run) log matches the file you downloaded.
       - [x] **Make sure you are viewing the build for the _tag_ you just made**
       - [x] Select the `Package Universal Binary` job
       - [x] Scroll down to the `Output Build Info` step(s), which output the SHA512 at the bottom of their output.
    - [x] Download the tag's source tarball from the draft release:
       - [x] `warzone2100_src.tar.xz`
-   - [x] Verify the SHA512 hash towards the end of the [Ubuntu workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+event%3Apush+) ("Package Source" job) log matches the file you downloaded.
+   - [x] Verify the SHA512 hash towards the end of the most recent [`workflow_run` Ubuntu workflow's](https://github.com/Warzone2100/warzone2100/actions?query=workflow%3AUbuntu+event%3Aworkflow_run) ("Package Source" job) log matches the file you downloaded.
       - [x] **Make sure you are viewing the build for the _tag_ you just made**
       - [x] Select the "Package Source" job
       - [x] Expand the "Rename Tarball & Output Info" step, which outputs the SHA512 at the bottom of its output.
