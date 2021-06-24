@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-24 08:53\n"
+"PO-Revision-Date: 2021-06-24 21:01\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15437,7 +15437,7 @@ msgstr "Mauseinstellungen"
 #: src/frontend.cpp:646
 #: src/ingameop.cpp:576
 msgid "Key Mappings"
-msgstr "Tastenzuordnung"
+msgstr "Tastenbelegungen"
 
 #: src/frontend.cpp:647
 #: src/ingameop.cpp:579
@@ -16037,7 +16037,7 @@ msgstr "Audioeinstellungen"
 
 #: src/ingameop.cpp:576
 msgid "View Key Mappings"
-msgstr "Zeige Tastenzuordnungen"
+msgstr "Zeige Tastenbelegungen"
 
 #: src/ingameop.cpp:632
 msgid "Shake"
@@ -17334,11 +17334,11 @@ msgstr "Minikarte zeigt Höheninformation"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "<unbelegt>"
 
 #: src/keyedit.cpp:544
 msgid "KEY MAPPING"
-msgstr "TASTENZUORDNUNG"
+msgstr "TASTENBELEGUNG"
 
 #: src/keyedit.cpp:575
 #: src/multiint.cpp:1503
