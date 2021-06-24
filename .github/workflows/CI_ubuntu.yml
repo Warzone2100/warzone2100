@@ -4,11 +4,16 @@ on:
   push:
     branches-ignore:
       - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - '*'
   pull_request:
     # Match all pull requests
+  # Support running after "Draft Tag Release" workflow completes, as part of automated release process
+  workflow_run:
+    workflows: ["Draft Tag Release"]
+    push:
+      tags:
+        - '*'
+    types: 
+      - completed
 
 jobs:
   ubuntu-build:
@@ -62,6 +67,14 @@ jobs:
       with:
         fetch-depth: 0
         path: 'src'
+    - name: Configure Repo Checkout
+      id: checkout-config
+      working-directory: ./src
+      env:
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      run: |
+        . .ci/githubactions/checkout_config.sh
     - name: Prepare Git Repo for autorevision
       working-directory: '${{ github.workspace }}/src'
       run: cmake -P .ci/githubactions/prepare_git_repo.cmake
@@ -115,13 +128,13 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja" "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Release -DWZ_ENABLE_WARNINGS:BOOL=ON -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_OUTPUT_NAME_SUFFIX="${WZ_OUTPUT_NAME_SUFFIX}" -DWZ_NAME_SUFFIX="${WZ_NAME_SUFFIX}" -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/${{ matrix.compiler }}.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CC=${WZ_CC}" -e "CXX=${WZ_CXX}" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build .
         echo "::remove-matcher owner=${{ matrix.compiler }}::"
     - name: Package .DEB
       working-directory: '${{ github.workspace }}/build'
@@ -151,14 +164,14 @@ jobs:
         path: ${{ env.OUTPUT_DIR }}
         if-no-files-found: 'error'
     - name: Upload artifact to release
-      if: success() && startsWith(github.ref, 'refs/tags/') && (matrix.deploy_release == true)
+      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true)
       run: |
         SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
         gh release upload "${SOURCE_TAG}" "${{ env.WZ_FULL_OUTPUT_DEB_PATH }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
-        WZ_GITHUB_REF: ${{ github.ref }}
+        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
 
   package-source:
     name: Package Source (Ubuntu 18.04) [GCC]
@@ -173,6 +186,14 @@ jobs:
       with:
         fetch-depth: 0
         path: 'src'
+    - name: Configure Repo Checkout
+      id: checkout-config
+      working-directory: ./src
+      env:
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      run: |
+        . .ci/githubactions/checkout_config.sh
     - name: Prepare Git Repo for autorevision
       working-directory: '${{ github.workspace }}/src'
       run: cmake -P .ci/githubactions/prepare_git_repo.cmake
@@ -190,11 +211,11 @@ jobs:
       working-directory: '${{ github.workspace }}/build'
       run: |
         echo "::add-matcher::${GITHUB_WORKSPACE}/src/.ci/githubactions/pattern_matchers/cmake.json"
-        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Debug -G"Ninja" "${{ github.workspace }}/src"
+        docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake -DCMAKE_BUILD_TYPE=Debug -G"Ninja" "${{ github.workspace }}/src"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Package Source
       working-directory: '${{ github.workspace }}/build'
-      run: docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build . --target package_source
+      run: docker run --rm -w "${GITHUB_WORKSPACE}/build" -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e GITHUB_WORKSPACE -e "GITHUB_SHA=${WZ_GITHUB_SHA}" -e "GITHUB_REF=${WZ_GITHUB_REF}" -e "GITHUB_HEAD_REF=${WZ_GITHUB_HEAD_REF}" -e "GITHUB_BASE_REF=${WZ_GITHUB_BASE_REF}" -e MAKEFLAGS -v "${GITHUB_WORKSPACE}:${GITHUB_WORKSPACE}" ubuntu cmake --build . --target package_source
     - name: Extract & Build Packaged Source
       working-directory: '${{ github.workspace }}/build'
       run: |
@@ -224,6 +245,15 @@ jobs:
         name: warzone2100_src
         path: ${{ env.OUTPUT_DIR }}
         if-no-files-found: 'error'
+    - name: Upload source tarball to release
+      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
+      run: |
+        SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
+        gh release upload "${SOURCE_TAG}" "${OUTPUT_DIR}/warzone2100_src.tar.xz"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
 
   # # NOTE: This uses qemu, and is much slower than a native ARM64 build
   # ubuntu-20-04-gcc-arm64:
@@ -250,22 +280,3 @@ jobs:
   #   - name: CMake Build
   #     run: docker run --rm -e "CI=true" -e GITHUB_WORKFLOW -e GITHUB_ACTIONS -e GITHUB_REPOSITORY -e "GITHUB_WORKSPACE=/code" -e GITHUB_SHA -e GITHUB_REF -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e MAKEFLAGS -v $(pwd):/code ubuntu cmake --build build
 
-  upload_release_artifacts:
-    if: startsWith(github.ref, 'refs/tags/')
-    name: Upload Release Artifacts
-    needs: package-source
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download source tarball
-        uses: actions/download-artifact@v2
-        with:
-          name: warzone2100_src
-          path: warzone2100_src
-      - name: Upload source tarball to release
-        run: |
-          SOURCE_TAG="${WZ_GITHUB_REF#refs/tags/}"
-          gh release upload "${SOURCE_TAG}" "./warzone2100_src/warzone2100_src.tar.xz"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          WZ_GITHUB_REF: ${{ github.ref }}

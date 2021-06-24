@@ -4,11 +4,16 @@ on:
   push:
     branches-ignore:
       - 'l10n_**' # Push events to translation service branches (that begin with "l10n_")
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - '*'
   pull_request:
     # Match all pull requests
+  # Support running after "Draft Tag Release" workflow completes, as part of automated release process
+  workflow_run:
+    workflows: ["Draft Tag Release"]
+    push:
+      tags:
+        - '*'
+    types: 
+      - completed
 
 jobs:
   windows-build:
@@ -44,6 +49,15 @@ jobs:
       with:
         fetch-depth: 0
         path: 'src'
+    - name: Configure Repo Checkout
+      id: checkout-config
+      working-directory: '${{ github.workspace }}\src'
+      shell: bash
+      env:
+        WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      run: |
+        . .ci/githubactions/checkout_config.sh
     - name: Prepare Git Repo for autorevision
       working-directory: '${{ github.workspace }}\src'
       run: cmake -P .ci/githubactions/prepare_git_repo.cmake
@@ -324,7 +338,7 @@ jobs:
         echo "::set-output name=WZ_MINGW_ENV_PATH::${WZ_MINGW_ENV_PATH}"
     - name: Cache vcpkg dependencies
       id: vcpkg-cache
-      if: success() && !(github.event_name == 'push' && contains(github.ref, 'refs/tags/'))
+      if: success() && !(github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release')
       uses: actions/cache@v2
       with:
         path: ${{ steps.settings.outputs.VCPKG_BINARYCACHE_DIR }}
@@ -497,7 +511,7 @@ jobs:
         if-no-files-found: 'error'
     - name: 'Upload Artifact - (Archive)'
       uses: actions/upload-artifact@v2
-      if: success() && startsWith(github.ref, 'refs/tags/') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
+      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       with:
         name: warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive
         path: '${{ github.workspace }}\output\archive'
@@ -506,14 +520,14 @@ jobs:
     # Upload Release assets (if a release tag)
     #####################################################
     - name: Upload Release Assets
-      if: success() && startsWith(github.ref, 'refs/tags/') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
+      if: success() && (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release') && (matrix.deploy_release == true) && (github.repository == 'Warzone2100/warzone2100')
       run: |
         $SOURCE_TAG = "$($env:WZ_GITHUB_REF -replace "refs/tags/")"
         gh release upload "${SOURCE_TAG}" "${{ github.workspace }}\output\portable\warzone2100_$($env:WZ_BUILD_DESC)_portable.exe" "${{ github.workspace }}\output\installer\warzone2100_$($env:WZ_BUILD_DESC)_installer.exe" "${{ github.workspace }}\output\debugsymbols\warzone2100_$($env:WZ_BUILD_DESC).DEBUGSYMBOLS.7z" "${{ github.workspace }}\output\archive\warzone2100_$($env:WZ_BUILD_DESC)_archive.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
-        WZ_GITHUB_REF: ${{ github.ref }}
+        WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
   trigger-updates-json:
     # For this job to work, the following secrets must be set:
     # SITE_DISPATCH_ACCESS_TOKEN
