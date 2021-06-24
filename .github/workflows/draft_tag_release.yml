@@ -23,8 +23,8 @@ jobs:
         run: |
           # Take the github.ref and parse it for just the tag
           SOURCE_TAG="${GITHUB_REF#refs/tags/}"
-          # Verify tag format (three-component version + optional trailing qualifier like "-beta1" or "-rc1")          
-          regex="^([0-9][0-9]*\\.[0-9][0-9]*\\.[0-9][0-9]*)([\-_].*)?$";
+          # Verify tag format (three-component version + optional trailing qualifier like "-beta1" or "-rc1")
+          regex="^([0-9][0-9]*\\.[0-9][0-9]*\\.[0-9][0-9]*)([\-][A-Za-z0-9]+)?$";
           if [[ ! "${SOURCE_TAG}" =~ $regex ]]; then
             echo "Invalid tag version format: \"${SOURCE_TAG}\""
             exit 1
