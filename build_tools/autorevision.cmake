@@ -9,7 +9,7 @@ cmake_policy(SET CMP0054 NEW)
 # COPYING.md for licence terms.
 #
 # autorevision.CMake:
-# Copyright © 2018-2020 pastdue ( https://github.com/past-due/ ) and contributors
+# Copyright © 2018-2021 pastdue ( https://github.com/past-due/ ) and contributors
 # License: MIT License ( https://opensource.org/licenses/MIT )
 #
 #
@@ -466,34 +466,49 @@ macro(_githubActionsCIBuild)
 	# - When merging a pull request, or manually building on a branch: refs/heads/master
 	# - Tag: refs/tags/v0.1.0
 
+	# NOTE:
+	# For automated release purposes, we prioritize "WZ_"-prefixed versions of these environment variables. (i.e. WZ_GITHUB_REF)
+	# The WZ GitHub Actions workflows are expected to set these if needed (as GitHub Actions does not permit overriding GITHUB_* environment variables directly).
+
+	set(_wz_github_head_ref_var "GITHUB_HEAD_REF")
+	if (DEFINED ENV{WZ_GITHUB_HEAD_REF} AND NOT "$ENV{WZ_GITHUB_HEAD_REF}" STREQUAL "")
+		set(_wz_github_head_ref_var "WZ_GITHUB_HEAD_REF")
+	endif()
+	set(_wz_github_ref_var "GITHUB_REF")
+	if (DEFINED ENV{WZ_GITHUB_REF} AND NOT "$ENV{WZ_GITHUB_REF}" STREQUAL "")
+		set(_wz_github_ref_var "WZ_GITHUB_REF")
+	endif()
+
 	# Determine VCS_BRANCH
-	if (DEFINED ENV{GITHUB_HEAD_REF} AND NOT "$ENV{GITHUB_HEAD_REF}" STREQUAL "")
+	if (DEFINED ENV{${_wz_github_head_ref_var}} AND NOT "$ENV{${_wz_github_head_ref_var}}" STREQUAL "")
 		# On a PR build, GITHUB_REF is set to "refs/pull/<number>/merge"
 		# Use GITHUB_HEAD_REF to get the source branch
-		if("$ENV{GITHUB_HEAD_REF}" MATCHES "^refs/heads/(.*)")
+		if("$ENV{${_wz_github_head_ref_var}}" MATCHES "^refs/heads/(.*)")
 			set(VCS_BRANCH "${CMAKE_MATCH_1}")
 		else()
-			message( WARNING "GITHUB_HEAD_REF is set ('${GITHUB_HEAD_REF}'), but not parsed as expected; VCS_BRANCH may be empty" )
+			if(NOT LOGGING_QUIET)
+				message( WARNING "${_wz_github_head_ref_var} is set ('$ENV{${_wz_github_head_ref_var}}'), but not parsed as expected; VCS_BRANCH may be empty" )
+			endif()
 		endif()
 	else()
-		# In the normal case, parse GITHUB_REF
-		if (DEFINED ENV{GITHUB_REF} AND NOT "$ENV{GITHUB_REF}" STREQUAL "")
-			if("$ENV{GITHUB_REF}" MATCHES "^refs/heads/(.*)")
+		# In the normal case, parse (WZ_)GITHUB_REF
+		if (DEFINED ENV{${_wz_github_ref_var}} AND NOT "$ENV{${_wz_github_ref_var}}" STREQUAL "")
+			if("$ENV{${_wz_github_ref_var}}" MATCHES "^refs/heads/(.*)")
 				set(VCS_BRANCH "${CMAKE_MATCH_1}")
 			endif()
 		else()
 			if(NOT LOGGING_QUIET)
-				message( WARNING "GITHUB_REF is empty; VCS_BRANCH may be empty" )
+				message( WARNING "${_wz_github_ref_var} is empty; VCS_BRANCH may be empty" )
 			endif()
 		endif()
 	endif()
 
 	# Determine VCS_TAG
-	if (DEFINED ENV{GITHUB_REF} AND "$ENV{GITHUB_REF}" MATCHES "^refs/tags/(.*)")
+	if (DEFINED ENV{${_wz_github_ref_var}} AND "$ENV{${_wz_github_ref_var}}" MATCHES "^refs/tags/(.*)")
 		set(_extracted_tag_name "${CMAKE_MATCH_1}")
 		if(DEFINED VCS_TAG AND NOT "${VCS_TAG}" STREQUAL "")
 			if(NOT LOGGING_QUIET)
-				message( STATUS "VCS_TAG is already set to '${VCS_TAG}'; overwriting it with ('${_extracted_tag_name}'), extracted from: ENV:GITHUB_REF ('$ENV{GITHUB_REF}')" )
+				message( STATUS "VCS_TAG is already set to '${VCS_TAG}'; overwriting it with ('${_extracted_tag_name}'), extracted from: ENV:${_wz_github_ref_var} ('$ENV{${_wz_github_ref_var}}')" )
 			endif()
 		endif()
 		set(VCS_TAG "${_extracted_tag_name}")
