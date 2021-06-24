@@ -51,6 +51,7 @@ data/base/components/prop/prhlwhl1.pie
 data/base/images/notifications/connect_wait.png
 data/base/images/notifications/exclamation_triangle.png
 data/base/images/notifications/shield_questionmark.png
+data/base/images/notifications/skull_crossbones.png
 data/base/images/notifications/user_questionmark.png
 	- CC BY 4.0 - Font Awesome Free by @fontawesome (https://fontawesome.com/license/free)
 lib/exceptionhandler/3rdparty/StackWalker.*
