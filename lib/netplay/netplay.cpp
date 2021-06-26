@@ -332,8 +332,8 @@ void NETsetGamePassword(const char *password)
 //	Resets the game password
 void NETresetGamePassword()
 {
-	sstrcpy(NetPlay.gamePassword, _("Enter password here"));
-	debug(LOG_NET, "password reset to 'Enter password here'");
+	NetPlay.gamePassword[0] = '\0';
+	debug(LOG_NET, "password was reset");
 	NETGameLocked(false);
 }
 
@@ -1298,7 +1298,6 @@ int NETinit(bool bFirstCall)
 		NetPlay.HaveUpgrade = false;
 		NetPlay.gamePassword[0] = '\0';
 		NetPlay.MOTD = nullptr;
-		sstrcpy(NetPlay.gamePassword, _("Enter password here"));
 		NETstartLogging();
 	}
 

@@ -39,9 +39,6 @@
 /* Size of the overwrite cursor */
 #define WEDB_CURSORSIZE		8
 
-/* Whether the cursor blinks or not */
-#define CURSOR_BLINK		1
-
 /* The time the cursor blinks for */
 #define WEDB_BLINKRATE		800
 
@@ -549,6 +546,12 @@ void W_EDITBOX::setString(WzString string)
 	dirty = true;
 }
 
+void W_EDITBOX::setPlaceholder(WzString value)
+{
+	placeholderText = value;
+	dirty = true;
+}
+
 void W_EDITBOX::simulateClick(W_CONTEXT *psContext, bool silenceClickAudio /*= false*/, WIDGET_KEY key /*= WKEY_PRIMARY*/)
 {
 	if (silenceClickAudio)
@@ -683,44 +686,33 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 	displayedText.remove(0, printStart);  // Erase anything there isn't room to display.
 	displayedText.remove(printChars, displayedText.length());
 
-	displayCache.wzDisplayedText.setText(displayedText.toUtf8(), FontID);
-	displayCache.wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
+	if (aText.isEmpty() && !placeholderText.isEmpty())
+	{
+		wzDisplayedText.setText(placeholderText.toUtf8(), FontID);
+		wzDisplayedText.render(fx, fy, (state & WEDBS_MASK) == WEDBS_FIXED ? WZCOL_FORM_TEXT : WZCOL_GREY);
+	}
+	else
+	{
+		wzDisplayedText.setText(displayedText.toUtf8(), FontID);
+		wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
+	}
 
 	// Display the cursor if editing
-#if CURSOR_BLINK
-	bool blink = !(((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2);
-	if ((state & WEDBS_MASK) == WEDBS_INSERT && blink)
-#else
-	if ((state & WEDBS_MASK) == WEDBS_INSERT)
-#endif
+	if (((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2 == 0)
 	{
-		// insert mode
-		WzString tmp = aText;
-		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, printStart);
+		auto visibleTextBeforeCursor = aText.substr(printStart, insPos - printStart).toUtf8().c_str();
+		int cursorX = x0 + WEDB_XGAP + iV_GetTextWidth(visibleTextBeforeCursor, FontID);
+		int cursorY = fy;
 
-		displayCache.modeText.setText(tmp.toUtf8(), FontID);
-
-		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
-		int cy = fy;
-		iV_Line(cx, cy + iV_GetTextAboveBase(FontID), cx, cy - iV_GetTextBelowBase(FontID), WZCOL_FORM_CURSOR);
-	}
-#if CURSOR_BLINK
-	else if ((state & WEDBS_MASK) == WEDBS_OVER && blink)
-#else
-	else if ((state & WEDBS_MASK) == WEDBS_OVER)
-#endif
-	{
-		// overwrite mode
-		WzString tmp = aText;
-		tmp.remove(insPos, tmp.length());         // Erase from the cursor on, to find where the cursor should be.
-		tmp.remove(0, printStart);
-
-		displayCache.modeText.setText(tmp.toUtf8(), FontID);
-
-		int cx = x0 + WEDB_XGAP + displayCache.modeText.width();
-		int cy = fy;
-		iV_Line(cx, cy, cx + WEDB_CURSORSIZE, cy, WZCOL_FORM_CURSOR);
+		if ((state & WEDBS_MASK) == WEDBS_INSERT)
+		{
+			// insert mode
+			iV_Line(cursorX, cursorY + iV_GetTextAboveBase(FontID), cursorX, cursorY - iV_GetTextBelowBase(FontID), WZCOL_FORM_CURSOR);
+		}
+		else if ((state & WEDBS_MASK) == WEDBS_OVER)
+		{
+			iV_Line(cursorX, cursorY, cursorX + WEDB_CURSORSIZE, cursorY, WZCOL_FORM_CURSOR);
+		}
 	}
 
 	if (pBoxDisplay == nullptr)
