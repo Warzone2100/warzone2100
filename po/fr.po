@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:08\n"
+"PO-Revision-Date: 2021-06-26 18:01\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -4009,7 +4009,7 @@ msgstr "Détruisez tous les renforts du Nouveau Paradigme"
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Construire au moins 7 structures non murales sur le plateau et détruire tous les renforts du Nouveau Paradigme"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4041,7 +4041,7 @@ msgstr "Secourez l'équipe Alpha face à Nexus"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "Détruire le QG de Nexus pour désactiver le programme d'intrusion Nexus"
 
 #: data/base/script/campaign/cam3-ab.js:240
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -5916,27 +5916,27 @@ msgstr "Chargeur chaîné pour DCA"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "Emplacement à DCA Cyclone"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Point défensif à canon DCA Cyclone"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "Canon DCA Cyclone Python autochenilles"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "Canon DCA Cyclone"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6022,21 +6022,21 @@ msgstr "Détecteur thermique pour DCA"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "Emplacement à canon DCA Tornade"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Point défensif à canon DCA Tornade"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "Canon DCA Tornade"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6505,7 +6505,7 @@ msgstr "Armé d'un lance-roquettes anti-char"
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Armé d'un lance-roquettes anti-char"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -7119,7 +7119,7 @@ msgstr "Unité de réparation mobile"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Efficace contre: Véhicules et cyborgs"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7174,13 +7174,13 @@ msgstr "Efficace contre : bunkers et ponts défensifs"
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, emplacements, Infantry"
-msgstr ""
+msgstr "Efficace contre : Bunkers, emplacements, Infanterie"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1122
 msgid "Best Targets: Bunkers, Emplacements, Infantry"
-msgstr ""
+msgstr "Efficace contre : Bunkers, Emplacements, Infanterie"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7210,7 +7210,7 @@ msgstr "Efficace contre : infanterie, bâtiments, véhicules à roues"
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1150
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "Efficace contre: Véhicules et cyborgs"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -8923,13 +8923,13 @@ msgstr "Balles à enveloppe renforcée pour mitrailleuses"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2314
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Tour de garde de lance-flammes renforcée"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2317
 msgid "Hardened Heavy Machinegun Tower"
-msgstr ""
+msgstr "Tour à mitrailleuse lourde renforcée"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -8984,7 +8984,7 @@ msgstr "Pont défensif à DCA Cyclone disponible"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2348
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Pont défensif DCA Tornade"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9468,21 +9468,21 @@ msgstr "Mortier lourd - Bombarde"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2657
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Emplacement de lance-plasma lourd"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2661
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Lance-plasma lourd tirant du plasma"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2665
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Lance-plasma lourd"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9708,13 +9708,13 @@ msgstr "Composé mixte béton-plastique HLE"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2834
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Conteneur à gaz haute pression"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2837
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Le gaz à haute pression propulse le gel enflammé plus loin"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
@@ -9927,7 +9927,7 @@ msgstr "Canon hypersonique"
 #. data/mp/messages/resmessages3.json: $.RES_W_CN_D7.text[1]
 #: po/custom/fromJson.txt:2979
 msgid "Hyper-Velocity Armor-Piercing Fin-Stabilised Discarding Sabot"
-msgstr ""
+msgstr "Obus perforant haute vitesse à sabot détachable stabilisé par ailettes"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_LASSAT.text[2]
@@ -10195,7 +10195,7 @@ msgstr "Augmente la vitesse de construction"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3199
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Augmente la portée des lance-flammes"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10790,7 +10790,7 @@ msgstr "Dégâts des mitrailleuses : +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3628
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Tour de garde à mitrailleuse"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11283,7 +11283,7 @@ msgstr "Mortier"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3965
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Mitrailleuse montée"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
@@ -12152,7 +12152,7 @@ msgstr "Python"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4581
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Quadruple canon AA de 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12311,7 +12311,7 @@ msgstr "Canon électrique à tir rapide projetant des aiguilles métalliques"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4675
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "Chargeur rapide augmente la vitesse de rechargement"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -12719,19 +12719,19 @@ msgstr "Roquettes à viseur laser"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4964
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Chargeur rapide pour fusées Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4967
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Chargeur rapide pour fusées Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4970
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "Chargeur rapide pour fusées"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -13179,13 +13179,13 @@ msgstr "Prend le contrôle des unités/défenses et copie la technologie des bâ
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5256
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Tour en acier avec lance-flamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5259
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Tour en acier avec mitrailleuse lourde"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13816,7 +13816,7 @@ msgstr "Mitrailleuses jumelées de calibre 7,62mm"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5684
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Double canon DCA de 80mm"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -15553,7 +15553,7 @@ msgstr "Ombres"
 
 #: src/frontend.cpp:797
 msgid "Fog"
-msgstr ""
+msgstr "Brouillard"
 
 #: src/frontend.cpp:802
 #: src/ingameop.cpp:622
@@ -15693,7 +15693,7 @@ msgstr "Attention: l'Anticrénelage peut provoquer des crashs, surtout avec des 
 
 #: src/frontend.cpp:1531
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Backend Graphique*"
 
 #: src/frontend.cpp:1543
 msgid "VIDEO OPTIONS"
@@ -16013,7 +16013,7 @@ msgstr "Confirmer"
 
 #: src/ingameop.cpp:323
 msgid "Back"
-msgstr ""
+msgstr "Précédent"
 
 #: src/ingameop.cpp:402
 msgid "Host has quit the game!"
@@ -16056,11 +16056,11 @@ msgstr "Le mod requis ne peut pas être chargé : %s\n\n"
 
 #: src/input/context.cpp:39
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Raccourcis clavier globaux"
 
 #: src/input/context.cpp:40
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Autres raccourcis clavier"
 
 #: src/input/context.cpp:41
 msgid "Gameplay"
@@ -16068,7 +16068,7 @@ msgstr ""
 
 #: src/input/context.cpp:43
 msgid "Debug"
-msgstr ""
+msgstr "Débogage"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16570,7 +16570,7 @@ msgstr "Sélectionner tous les véhicules à autochenilles"
 
 #: src/input/keyconfig.cpp:169
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "Sélectionner toutes les autochenilles sans groupe"
 
 #: src/input/keyconfig.cpp:170
 msgid "Select all Hovers"
@@ -16591,7 +16591,7 @@ msgstr "Sélectionner tous les véhicules à chenilles"
 
 #: src/input/keyconfig.cpp:174
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "Sélectionner toutes les chenilles sans group"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select EVERY unit"
@@ -16607,7 +16607,7 @@ msgstr "Sélectionner tous les VTOLs rechargés"
 
 #: src/input/keyconfig.cpp:178
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "Sélectionner tous les VTOLs armés sans groupe"
 
 #: src/input/keyconfig.cpp:179
 msgid "Select all Wheels"
@@ -16627,7 +16627,7 @@ msgstr "Sélectionner tous les Cyborgs de combat"
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "Sélectionner tous les Cyborgs de Combat sans groupe"
 
 #: src/input/keyconfig.cpp:185
 msgid "Select all Engineers"
@@ -16639,7 +16639,7 @@ msgstr "Sélectionner toutes les unités de combat au sol"
 
 #: src/input/keyconfig.cpp:187
 msgid "Select all Land Combat Units without group"
-msgstr ""
+msgstr "Sélectionner toutes les unités terrestres sans groupe"
 
 #: src/input/keyconfig.cpp:188
 msgid "Select all Mechanics"
@@ -16659,7 +16659,7 @@ msgstr "Sélectionner toutes les unités radar"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "Sélectionner toutes les unités radars sans group"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Trucks"
@@ -16775,7 +16775,7 @@ msgstr "Tracer un objet de jeu"
 
 #: src/input/keyconfig.cpp:226
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Basculer en plein écran"
 
 #: src/intdisplay.cpp:163
 msgid "Waiting for Power"
@@ -17518,7 +17518,7 @@ msgstr "Limites de structure renforcées."
 #: src/multiint.cpp:1241
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr ""
+msgstr "%s (%d) a autorisé le changement de carte. Total : %d/%d"
 
 #: src/multiint.cpp:1262
 msgid "Vote"
