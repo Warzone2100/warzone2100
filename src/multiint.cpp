@@ -174,7 +174,7 @@ static bool bInActualHostedLobby = false;
 // Function protos
 
 // widget functions
-static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
+static W_EDITBOX* addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid);
 static W_FORM * addBlueForm(UDWORD parent, UDWORD id, UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 static void drawReadyButton(UDWORD player);
 
@@ -1374,7 +1374,8 @@ static void addGameOptions()
 	// password box
 	if (NetPlay.bComms && ingame.side == InGameSide::HOST_OR_SINGLEPLAYER)
 	{
-		addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+		auto editBox = addMultiEditBox(MULTIOP_OPTIONS, MULTIOP_PASSWORD_EDIT, MCOL0, MROW4, _("Click to set Password"), NetPlay.gamePassword, IMAGE_UNLOCK_BLUE, IMAGE_LOCK_BLUE, MULTIOP_PASSWORD_BUT);
+		editBox->setPlaceholder(_("Enter password here"));
 		auto *pPasswordButton = dynamic_cast<WzMultiButton*>(widgGetFromID(psWScreen, MULTIOP_PASSWORD_BUT));
 		if (pPasswordButton)
 		{
@@ -5206,7 +5207,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 /////////////////////////////////////////////////////////////////////////////////////////
 // common widgets
 
-static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
+static W_EDITBOX* addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char const *tip, char const *tipres, UDWORD icon, UDWORD iconhi, UDWORD iconid)
 {
 	W_EDBINIT sEdInit;                           // editbox
 	sEdInit.formID = formid;
@@ -5217,13 +5218,14 @@ static bool addMultiEditBox(UDWORD formid, UDWORD id, UDWORD x, UDWORD y, char c
 	sEdInit.height = MULTIOP_EDITBOXH;
 	sEdInit.pText = tipres;
 	sEdInit.pBoxDisplay = displayMultiEditBox;
-	if (!widgAddEditBox(psWScreen, &sEdInit))
+	auto editBox = widgAddEditBox(psWScreen, &sEdInit);
+	if (!editBox)
 	{
-		return false;
+		return nullptr;
 	}
 
 	addMultiBut(psWScreen, MULTIOP_OPTIONS, iconid, x + MULTIOP_EDITBOXW + 2, y + 2, MULTIOP_EDITBOXH, MULTIOP_EDITBOXH, tip, icon, iconhi, iconhi);
-	return true;
+	return editBox;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
