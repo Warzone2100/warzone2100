@@ -3734,7 +3734,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 				char buf[255];
 
 				UDWORD currentButState = widgGetButtonState(psWScreen, MULTIOP_PASSWORD_BUT);
-				bool willSet = currentButState == 0;
+				bool willSet = (currentButState & WBUT_CLICKLOCK) == 0;
 				char game_password[password_string_size] = {0};
 				sstrcpy(game_password, widgGetString(psWScreen, MULTIOP_PASSWORD_EDIT));
 				const size_t passLength = strlen(game_password) > 0;
