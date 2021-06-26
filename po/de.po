@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-24 21:01\n"
+"PO-Revision-Date: 2021-06-26 18:01\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -16009,7 +16009,7 @@ msgstr "Warnung: Bist Du sicher?"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr "Warnung: Bist Du sicher? Jeder nicht gespeicherte Fortschritt geht verloren."
+msgstr "Bist Du sicher? Ungespeicherter Fortschritt geht verloren."
 
 #: src/ingameop.cpp:321
 msgid "Confirm"
