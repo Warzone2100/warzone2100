@@ -2050,8 +2050,8 @@
 		"weight": 5000
 	},
 	"Howitzer-Incendiary": {
-		"buildPoints": 1100,
-		"buildPower": 300,
+		"buildPoints": 1500,
+		"buildPower": 350,
 		"damage": 200,
 		"designable": 1,
 		"effectSize": 150,
@@ -2097,8 +2097,8 @@
 		"weight": 10000
 	},
 	"Howitzer03-Rot": {
-		"buildPoints": 1700,
-		"buildPower": 300,
+		"buildPoints": 2000,
+		"buildPower": 500,
 		"damage": 200,
 		"designable": 1,
 		"effectSize": 225,
@@ -2179,8 +2179,8 @@
 		"weight": 10000
 	},
 	"Howitzer150Mk1": {
-		"buildPoints": 1600,
-		"buildPower": 350,
+		"buildPoints": 2000,
+		"buildPower": 500,
 		"damage": 350,
 		"designable": 1,
 		"effectSize": 350,
@@ -3015,7 +3015,7 @@
 		"weight": 400
 	},
 	"Missile-HvyArt": {
-		"buildPoints": 1900,
+		"buildPoints": 2500,
 		"buildPower": 500,
 		"damage": 160,
 		"designable": 1,
