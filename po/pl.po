@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-26 06:00\n"
+"PO-Revision-Date: 2021-06-27 06:00\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -5626,7 +5626,7 @@ msgstr "Zablokowane drużyny"
 #: data/mp/multiplay/script/rules/printsettings.js:15
 #: src/multiint.cpp:1417
 msgid "Locked Teams, No Shared Research"
-msgstr ""
+msgstr "Zablokowane drużyny, bez dzielonych badań"
 
 #: data/mp/multiplay/script/rules/printsettings.js:21
 #: src/multiint.cpp:1426
@@ -8160,7 +8160,7 @@ msgstr "Uranowe pociski karabinu"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
 #: po/custom/fromJson.txt:1807
 msgid "Designed with a focus on research"
-msgstr ""
+msgstr "Zaprojektowane z naciskiem na badania"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[1]
@@ -8926,13 +8926,13 @@ msgstr "Utwardzone pociski karabinowe"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2314
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Wzmocniona wieża z miotaczem"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2317
 msgid "Hardened Heavy Machinegun Tower"
-msgstr ""
+msgstr "Wzmocniona wieża z ciężkim karabinem"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -10636,7 +10636,7 @@ msgstr "Pokryte warstwą kompozytową i absorbującą energię fibrą"
 #. data/mp/stats/body.json: $.Body2SUP.name
 #: po/custom/fromJson.txt:3531
 msgid "Leopard"
-msgstr ""
+msgstr "Leopard"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B12.text[1]
@@ -10793,7 +10793,7 @@ msgstr "Obrażenia zadawane przez karabin +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3628
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Wieża strażnicza z karabinem maszynowym"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -10881,7 +10881,7 @@ msgstr "Może być ulepszona przez moduł fabryki"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3713
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Mechanik"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -11286,7 +11286,7 @@ msgstr "Moździerz"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3965
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Zamontowany karabin maszynowy"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
@@ -11718,19 +11718,19 @@ msgstr "Nexus"
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4308
 msgid "No Place To Hide"
-msgstr ""
+msgstr "Brak miejsca do ukrycia"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
 #: po/custom/fromJson.txt:4311
 msgid "Non-Cheating. Hard. Fun. Crush!"
-msgstr ""
+msgstr "Non-Cheating. Hard. Fun. Crush!"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.name
 #: po/custom/fromJson.txt:4314
 msgid "NullBot"
-msgstr ""
+msgstr "NullBot"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[2]
@@ -11799,7 +11799,7 @@ msgstr "Rozkazuje twojej artylerii atak na baterię wroga"
 #. data/base/ruleset.json: $.name
 #: po/custom/fromJson.txt:4364
 msgid "Original Campaign"
-msgstr ""
+msgstr "Oryginalna Kampania"
 
 #. TRANSLATORS:
 #. data/mp/ruleset.json: $.name
@@ -11828,7 +11828,7 @@ msgstr "Stanowisko moździerza Pepperpot"
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4381
 msgid "Pepperpot"
-msgstr ""
+msgstr "Pepperpot"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -13182,13 +13182,13 @@ msgstr "Kradnie technologie z struktur i przejmuje kontrolę nad uzbrojeniem"
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5256
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Stalowa wieża z miotaczem"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5259
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Stalowa wieża z ciężkim karabinem"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13912,7 +13912,7 @@ msgstr "Podwójny, wielolufowy szybkostrzelny karabin"
 #. data/mp/challenges/two-faced.json: $.challenge.name
 #: po/custom/fromJson.txt:5742
 msgid "Two-faced"
-msgstr ""
+msgstr "W potrzasku "
 
 #. TRANSLATORS:
 #. data/base/messages/messages.json: $.MSG4.text[0]
@@ -14318,13 +14318,13 @@ msgstr "Działo HPV VTOL"
 #. data/base/stats/propulsion.json: $.V-Tol02.name
 #: po/custom/fromJson.txt:6007
 msgid "VTOL II"
-msgstr ""
+msgstr "VTOL II"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol03.name
 #: po/custom/fromJson.txt:6010
 msgid "VTOL III"
-msgstr ""
+msgstr "VTOL III"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-Lancer.name
@@ -14500,19 +14500,19 @@ msgstr "Podwójny karabin VTOL"
 #. data/mp/stats/propulsion.json: $.V-Tol.name
 #: po/custom/fromJson.txt:6126
 msgid "VTOL"
-msgstr ""
+msgstr "VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Wall.name
 #: po/custom/fromJson.txt:6135
 msgid "Wall"
-msgstr ""
+msgstr "Mur"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.WallCorner.name
 #: po/custom/fromJson.txt:6138
 msgid "Wallcorner"
-msgstr ""
+msgstr "Róg muru"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.BarbWarehouse1.name
@@ -14635,7 +14635,7 @@ msgstr "Wywerna"
 #: po/custom/fromJson.txt:6209
 msgctxt "rank"
 msgid "Elite"
-msgstr ""
+msgstr "Elita"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[1]
@@ -14651,7 +14651,7 @@ msgstr "Zielony"
 #: po/custom/fromJson.txt:6217
 msgctxt "rank"
 msgid "Hero"
-msgstr ""
+msgstr "Heros"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.ranks[4]
@@ -14795,7 +14795,7 @@ msgstr "katalog z konfiguracją"
 
 #: src/clparse.cpp:341
 msgid "Add data directory"
-msgstr ""
+msgstr "Dodaj katalog danych"
 
 #: src/clparse.cpp:341
 msgid "data directory"
@@ -14827,11 +14827,11 @@ msgstr "Graj na pełnym ekranie"
 
 #: src/clparse.cpp:346
 msgid "Load a specific game mode"
-msgstr ""
+msgstr "Załaduj określony tryb gry"
 
 #: src/clparse.cpp:346
 msgid "level name"
-msgstr ""
+msgstr "nazwa poziomu"
 
 #: src/clparse.cpp:347
 msgid "Show options and exit"
@@ -14845,7 +14845,7 @@ msgstr "Włącz mod globalny"
 #: src/clparse.cpp:349
 #: src/clparse.cpp:350
 msgid "mod"
-msgstr ""
+msgstr "mod"
 
 #: src/clparse.cpp:349
 msgid "Enable a campaign only mod"
@@ -14914,11 +14914,11 @@ msgstr "Podłącz bezpośrednio do adresu IP/hosta"
 
 #: src/clparse.cpp:362
 msgid "host"
-msgstr ""
+msgstr "host"
 
 #: src/clparse.cpp:363
 msgid "Go directly to host screen"
-msgstr ""
+msgstr "Przejdź bezpośrednio do ekranu hosta"
 
 #: src/clparse.cpp:364
 msgid "Enable texture compression"
@@ -14942,31 +14942,31 @@ msgstr ""
 
 #: src/clparse.cpp:382
 msgid "Run games automatically for testing"
-msgstr ""
+msgstr "Uruchom grę automatycznie do testowania"
 
 #: src/clparse.cpp:383
 msgid "Headless mode (only supported when also specifying --autogame, --autohost, --skirmish)"
-msgstr ""
+msgstr "Tryb serwera (uruchamiany wyłącznie z parametrami --autogame, --autohost, --skirmish)"
 
 #: src/clparse.cpp:384
 msgid "Immediately save game and quit"
-msgstr ""
+msgstr "Natychmiast zapisz grę i wyjdź"
 
 #: src/clparse.cpp:384
 msgid "save name"
-msgstr ""
+msgstr "zapisz grę"
 
 #: src/clparse.cpp:385
 msgid "Start skirmish game with given settings file"
-msgstr ""
+msgstr "Rozpocznij potyczkę z wybranym plikiem ustawień"
 
 #: src/clparse.cpp:385
 msgid "test"
-msgstr ""
+msgstr "test"
 
 #: src/clparse.cpp:386
 msgid "Continue the last saved game"
-msgstr ""
+msgstr "Kontynuuj ostatnio zapisaną grę"
 
 #: src/clparse.cpp:387
 msgid "Start host game with given settings file"
@@ -14974,7 +14974,7 @@ msgstr ""
 
 #: src/clparse.cpp:387
 msgid "autohost"
-msgstr ""
+msgstr "autohost"
 
 #: src/clparse.cpp:388
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
@@ -15197,7 +15197,7 @@ msgstr ""
 #: src/droid.cpp:241
 #, c-format
 msgid "%s Lost!"
-msgstr ""
+msgstr "Jednostka %s utracona!"
 
 #: src/droid.cpp:1099
 msgid "Structure Restored"
@@ -15241,7 +15241,7 @@ msgstr[3] "Wyrównanie z grupą %u - %u jednostek"
 
 #: src/droid.cpp:2964
 msgid "Unit transfer failed -- unit limits exceeded"
-msgstr ""
+msgstr "Transport jednostki nie powiódł się – przekroczony limit jednostek"
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
@@ -15321,11 +15321,11 @@ msgstr ""
 
 #: src/frontend.cpp:181
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Czat z graczami na Discordzie lub IRC"
 
 #: src/frontend.cpp:183
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Połącz się z Discordem lub Freenode, klikając ten link."
 
 #: src/frontend.cpp:184
 msgid "Check for a newer version"
@@ -15450,7 +15450,7 @@ msgstr "Skróty klawiszowe"
 #: src/frontend.cpp:647
 #: src/ingameop.cpp:579
 msgid "Music Manager"
-msgstr ""
+msgstr "Menedżer muzyki"
 
 #: src/frontend.cpp:649
 msgid "Open Configuration Directory"
@@ -15817,38 +15817,38 @@ msgstr "USTAWIENIA GRY"
 #: src/frontend.cpp:2118
 #: src/multiint.cpp:2965
 msgid "Mod: "
-msgstr ""
+msgstr "Mod: "
 
 #: src/frontend.cpp:2580
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Zwiększyć skalę wyświetlania?"
 
 #: src/frontend.cpp:2582
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Z aktualną rozdzielczością i ustawieniami skali wyświetlania, interfejs gry może być mały, a perspektywa gry może być zniekształcona."
 
 #: src/frontend.cpp:2584
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Możesz to naprawić poprzez zmianę skali wyświetlania gry."
 
 #: src/frontend.cpp:2586
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Czy chcesz zwiększyć skalę wyświetlania gry do %u%%?"
 
 #: src/frontend.cpp:2588
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Zwiększ skalę wyświetlania"
 
 #: src/frontend.cpp:2605
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Skala wyświetlania zwiększona do: %u%%"
 
 #: src/frontend.cpp:2606
 #: src/frontend.cpp:2622
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Możesz dostosować skalę wyświetlania w dowolnym momencie w menu w ustawieniach obrazu."
 
 #: src/frontend.cpp:2621
 msgid "Tip: Adjusting Display Scale"
@@ -15890,18 +15890,19 @@ msgstr "Energia"
 #: src/hci/build.cpp:574
 #: src/hci/manufacture.cpp:589
 msgid "Hiding Obsolete Tech"
-msgstr ""
+msgstr "Ukrywanie przestarzałej technologii"
 
 #: src/hci.cpp:1730
 #: src/hci/build.cpp:576
 #: src/hci/manufacture.cpp:591
 msgid "Showing Obsolete Tech"
-msgstr ""
+msgstr "Wyświetlanie przestarzałej technologii"
 
 #: src/hci.cpp:1853
 msgid "\n"
 "Cost: %1"
-msgstr ""
+msgstr "\n"
+"Koszt: %s"
 
 #: src/hci.cpp:2455
 msgid "Chat: All"
@@ -16695,23 +16696,23 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:200
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Przejdź do następnej fabryki"
 
 #: src/input/keyconfig.cpp:201
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Przejdź do następnej stacji badawczej"
 
 #: src/input/keyconfig.cpp:202
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Przejdź do następnego generatora energii"
 
 #: src/input/keyconfig.cpp:203
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Przejdź do następnej fabryki cyborgów"
 
 #: src/input/keyconfig.cpp:204
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Przejdź do następnej fabryki VTOL"
 
 #: src/input/keyconfig.cpp:206
 msgid "Toggle Debug Mappings"
@@ -16783,7 +16784,7 @@ msgstr "Śledź obiekt gry"
 
 #: src/input/keyconfig.cpp:226
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Przełącz na pełny ekran"
 
 #: src/intdisplay.cpp:163
 msgid "Waiting for Power"
@@ -16800,7 +16801,7 @@ msgstr "Potrzeba więcej zasobów!"
 
 #: src/integrations/wzdiscordrpc.cpp:202
 msgid "Discord: Can't Join Game"
-msgstr ""
+msgstr "Discord: Nie można dołączyć do gry"
 
 #: src/integrations/wzdiscordrpc.cpp:203
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
