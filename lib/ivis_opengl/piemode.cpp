@@ -39,6 +39,8 @@
 #include "lib/ivis_opengl/pieclip.h"
 #include "screen.h"
 
+#include <algorithm>
+
 /***************************************************************************/
 /*
  *	Source
@@ -104,13 +106,15 @@ void pie_ScreenFlip(int clearMode)
 /***************************************************************************/
 UDWORD	pie_GetResScalingFactor()
 {
+	UDWORD result = 0;
 	if (pie_GetVideoBufferWidth() * 4 > pie_GetVideoBufferHeight() * 5)
 	{
-		return pie_GetVideoBufferHeight() * 5 / 4 / 6;
+		result = pie_GetVideoBufferHeight() * 5 / 4 / 6;
 	}
 	else
 	{
-		return pie_GetVideoBufferWidth() / 6;
+		result = pie_GetVideoBufferWidth() / 6;
 	}
+	return std::max<UDWORD>(result, 1);
 }
 
