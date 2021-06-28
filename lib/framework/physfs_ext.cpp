@@ -20,6 +20,10 @@
 #include "physfs_ext.h"
 #include "frame.h"
 
+#include <optional-lite/optional.hpp>
+using nonstd::optional;
+using nonstd::nullopt;
+
 bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* file)>& enumFunc)
 {
 	char **files = PHYSFS_enumerateFiles(dir);
@@ -36,5 +40,53 @@ bool WZ_PHYSFS_enumerateFiles(const char *dir, const std::function<bool (char* f
 		}
 	}
 	PHYSFS_freeList(files);
+	return true;
+}
+
+bool WZ_PHYSFS_createPlatformPrefDir(const WzString& basePath, const WzString& appendPath)
+{
+	// Get the existing writeDir if any (to properly reset it after)
+	optional<std::string> originalWriteDir;
+	const char* pTmp = PHYSFS_getWriteDir();
+	if (pTmp)
+	{
+		originalWriteDir = std::string(pTmp);
+	}
+	pTmp = nullptr;
+
+	// Create the folders within the basePath if they don't exist
+
+	if (!PHYSFS_setWriteDir(basePath.toUtf8().c_str())) // Workaround for PhysFS not creating the writedir as expected.
+	{
+		debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
+			  basePath.toUtf8().c_str(), WZ_PHYSFS_getLastError());
+		return false;
+	}
+
+	WzString currentBasePath = basePath;
+	const std::vector<WzString> appendPaths = appendPath.split(PHYSFS_getDirSeparator());
+	for (const auto &folder : appendPaths)
+	{
+		if (!PHYSFS_mkdir(folder.toUtf8().c_str()))
+		{
+			debug(LOG_FATAL, "Error creating directory \"%s\" in \"%s\": %s",
+				  folder.toUtf8().c_str(), PHYSFS_getWriteDir(), WZ_PHYSFS_getLastError());
+			return false;
+		}
+
+		currentBasePath += PHYSFS_getDirSeparator();
+		currentBasePath += folder;
+
+		if (!PHYSFS_setWriteDir(currentBasePath.toUtf8().c_str())) // Workaround for PhysFS not creating the writedir as expected.
+		{
+			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
+				  currentBasePath.toUtf8().c_str(), WZ_PHYSFS_getLastError());
+			return false;
+		}
+	}
+
+	// Reset to original write dir
+	PHYSFS_setWriteDir((originalWriteDir.has_value()) ? originalWriteDir.value().c_str() : nullptr);
+
 	return true;
 }
