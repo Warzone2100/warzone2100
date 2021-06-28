@@ -273,4 +273,6 @@ static inline char *PHYSFS_fgets(char *s, int size, PHYSFS_file *stream)
 	return nullptr;
 }
 
+bool WZ_PHYSFS_createPlatformPrefDir(const WzString& basePath, const WzString& appendPath);
+
 #endif // _physfs_ext_h

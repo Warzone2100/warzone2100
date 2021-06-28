@@ -36,6 +36,21 @@
 	#pragma warning( pop )
 #  endif
 #  include <shellapi.h> /* CommandLineToArgvW */
+
+#  include <ntverp.h>				// Windows SDK - include for access to VER_PRODUCTBUILD
+#  if VER_PRODUCTBUILD >= 9200
+	// 9200 is the Windows SDK 8.0 (which introduced family support)
+	#include <winapifamily.h>	// Windows SDK
+#  else
+	// Earlier SDKs don't have the concept of families - provide simple implementation
+	// that treats everything as "desktop"
+	#if !defined(WINAPI_PARTITION_DESKTOP)
+		#define WINAPI_PARTITION_DESKTOP			0x00000001
+	#endif
+	#if !defined(WINAPI_FAMILY_PARTITION)
+		#define WINAPI_FAMILY_PARTITION(Partition)	((WINAPI_PARTITION_DESKTOP & Partition) == Partition)
+	#endif
+#  endif
 #elif defined(WZ_OS_UNIX)
 #  include <errno.h>
 #endif // WZ_OS_WIN
@@ -93,6 +108,7 @@
 #if defined(ENABLE_DISCORD)
 #include "integrations/wzdiscordrpc.h"
 #endif
+#include "wzpropertyproviders.h"
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -346,6 +362,30 @@ static bool getCurrentDir(char *const dest, size_t const size)
 }
 #endif
 
+#if defined(WZ_OS_WIN)
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) || !defined(WZ_PHYSFS_2_1_OR_GREATER)
+static bool win_wcharConvToUtf8(wchar_t *pwStr, std::string &outputUtf8)
+{
+	std::vector<char> utf8Buffer;
+	int utf8Len = WideCharToMultiByte(CP_UTF8, 0, pwStr, -1, NULL, 0, NULL, NULL);
+	if ( utf8Len <= 0 )
+	{
+		// Encoding conversion error
+		return false;
+	}
+	utf8Buffer.resize(utf8Len, 0);
+	if ( (utf8Len = WideCharToMultiByte(CP_UTF8, 0, pwStr, -1, &utf8Buffer[0], utf8Len, NULL, NULL)) <= 0 )
+	{
+		// Encoding conversion error
+		return false;
+	}
+	outputUtf8 = std::string(utf8Buffer.data(), utf8Len - 1);
+	return true;
+}
+#endif
+#endif
+
+
 // Fallback method for earlier PhysFS verions that do not support PHYSFS_getPrefDir
 // Importantly, this creates the folders if they do not exist
 #if !defined(WZ_PHYSFS_2_1_OR_GREATER)
@@ -360,12 +400,13 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 
 	if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, tmpWStr)))
 	{
-		if (WideCharToMultiByte(CP_UTF8, 0, tmpWStr, -1, tmpstr, size, NULL, NULL) == 0)
+		std::string utf8Path;
+		if (!win_wcharConvToUtf8(tmpWStr, utf8Path))
 		{
 			debug(LOG_FATAL, "Config directory encoding conversion error.");
 			exit(1);
 		}
-		basePath = WzString::fromUtf8(tmpstr);
+		basePath = WzString::fromUtf8(utf8Path);
 
 		appendPath = WzString();
 		// Must append org\app to APPDATA path
@@ -433,34 +474,11 @@ static std::string getPlatformPrefDir_Fallback(const char *org, const char *app)
 	}
 
 	// Create the folders within the basePath if they don't exist
-
-	if (!PHYSFS_setWriteDir(basePath.toUtf8().c_str())) // Workaround for PhysFS not creating the writedir as expected.
+	if (!WZ_PHYSFS_createPlatformPrefDir(basePath, appendPath))
 	{
-		debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-			  basePath.toUtf8().c_str(), WZ_PHYSFS_getLastError());
+		debug(LOG_FATAL, "Failed to create platform config dir: %s/%s",
+			  basePath.toUtf8().c_str(), appendPath.toUtf8().c_str());
 		exit(1);
-	}
-
-	WzString currentBasePath = basePath;
-	const std::vector<WzString> appendPaths = appendPath.split(PHYSFS_getDirSeparator());
-	for (const auto &folder : appendPaths)
-	{
-		if (!PHYSFS_mkdir(folder.toUtf8().c_str()))
-		{
-			debug(LOG_FATAL, "Error creating directory \"%s\" in \"%s\": %s",
-				  folder.toUtf8().c_str(), PHYSFS_getWriteDir(), WZ_PHYSFS_getLastError());
-			exit(1);
-		}
-
-		currentBasePath += PHYSFS_getDirSeparator();
-		currentBasePath += folder;
-
-		if (!PHYSFS_setWriteDir(currentBasePath.toUtf8().c_str())) // Workaround for PhysFS not creating the writedir as expected.
-		{
-			debug(LOG_FATAL, "Error setting write directory to \"%s\": %s",
-				  currentBasePath.toUtf8().c_str(), WZ_PHYSFS_getLastError());
-			exit(1);
-		}
 	}
 
 	return (basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator()).toUtf8();
@@ -503,6 +521,55 @@ static std::string getPlatformPrefDir(const char * org, const std::string &app)
 
 		return prefixPath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator();
 	}
+
+#if defined(WZ_OS_WIN)
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+	BuildPropertyProvider buildPropProvider;
+	std::string win_package_fullname;
+	if (buildPropProvider.getPropertyValue("WIN_PACKAGE_FULLNAME", win_package_fullname) && !win_package_fullname.empty())
+	{
+		// Running as a packaged Windows desktop app - to behave nicely, we should always use the redirected app data folder location
+		// (so it can be cleanly uninstalled)
+		# if !defined(KF_FLAG_FORCE_APP_DATA_REDIRECTION)
+		#  define KF_FLAG_FORCE_APP_DATA_REDIRECTION 0x00080000
+		# endif
+		wchar_t* appData = nullptr;
+		HRESULT result = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE | KF_FLAG_FORCE_APP_DATA_REDIRECTION, NULL, &appData);
+		if (result == S_OK)
+		{
+			std::string utf8Path;
+			win_wcharConvToUtf8(appData, utf8Path);
+			CoTaskMemFree(appData);
+			appData = nullptr;
+			WzString basePath = WzString::fromUtf8(utf8Path);
+
+			WzString appendPath = WzString();
+			// Must append org\app to APPDATA path
+			appendPath += org;
+			appendPath += PHYSFS_getDirSeparator();
+			appendPath += WzString::fromUtf8(app);
+
+			// Create the folders within the basePath if they don't exist
+			if (!WZ_PHYSFS_createPlatformPrefDir(basePath, appendPath))
+			{
+				debug(LOG_FATAL, "Failed to create platform config dir: %s/%s",
+					  basePath.toUtf8().c_str(), appendPath.toUtf8().c_str());
+				abort();
+			}
+
+			return (basePath + PHYSFS_getDirSeparator() + appendPath + PHYSFS_getDirSeparator()).toUtf8();
+		}
+		else
+		{
+			// log the failure
+			debug(LOG_INFO, "Unable to obtain the new AppModel paths - defaulting to the old method");
+			CoTaskMemFree(appData);
+			appData = nullptr;
+			// proceed to the default method
+		}
+	}
+#endif // WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+#endif // defined(WZ_OS_WIN)
 
 #if defined(WZ_PHYSFS_2_1_OR_GREATER)
 	const char * prefsDir = PHYSFS_getPrefDir(org, app.c_str());
@@ -1170,21 +1237,6 @@ bool getUTF8CmdLine(int *const utfargc WZ_DECL_UNUSED, char *** const utfargv WZ
 }
 
 #if defined(WZ_OS_WIN)
-
-#include <ntverp.h>				// Windows SDK - include for access to VER_PRODUCTBUILD
-#if VER_PRODUCTBUILD >= 9200
-	// 9200 is the Windows SDK 8.0 (which introduced family support)
-	#include <winapifamily.h>	// Windows SDK
-#else
-	// Earlier SDKs don't have the concept of families - provide simple implementation
-	// that treats everything as "desktop"
-	#if !defined(WINAPI_PARTITION_DESKTOP)
-		#define WINAPI_PARTITION_DESKTOP			0x00000001
-	#endif
-	#if !defined(WINAPI_FAMILY_PARTITION)
-		#define WINAPI_FAMILY_PARTITION(Partition)	((WINAPI_PARTITION_DESKTOP & Partition) == Partition)
-	#endif
-#endif
 
 typedef BOOL (WINAPI *SetDefaultDllDirectoriesFunction)(
   DWORD DirectoryFlags
