@@ -1024,7 +1024,7 @@ bool levLoadData(char const *name, Sha256 const *hash, char *pSaveName, GAME_TYP
 			return false;
 		}
 	}
-
+	// this will trigger upgrades
 	if (!stageThreeInitialise())
 	{
 		debug(LOG_ERROR, "Failed stageThreeInitialise()!");

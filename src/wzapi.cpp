@@ -3318,6 +3318,7 @@ bool wzapi::setUpgradeStats(WZAPI_BASE_PARAMS(int player, const std::string& nam
 		else if (name == "Power")
 		{
 			psStats->upgrade[player].power = value;
+			dirtyAllDroids(player);
 		}
 		else if (name == "Resistance")
 		{
