@@ -20,7 +20,7 @@ function droidReady(droidID)
 //Check if a passed in weapon name is a plasma cannon.
 function isPlasmaCannon(weaponName)
 {
-	return isDefined(weaponName) && (weaponName.name === "Laser4-PlasmaCannon");
+	return isDefined(weaponName) && (weaponName === "Laser4-PlasmaCannon");
 }
 
 //Check if the area around the active beacon has anything worth investigating.
@@ -54,9 +54,9 @@ function returnClosestEnemyFactory(enemyNumber)
 			enemyNumber = getMostHarmfulPlayer();
 		}
 
-		var facs = enumStruct(enemyNumber, FACTORY);
-		facs.concat(enumStruct(enemyNumber, CYBORG_FACTORY));
-		facs.concat(enumStruct(enemyNumber, VTOL_FACTORY));
+		var facs = enumStruct(enemyNumber, FACTORY)
+		.concat(enumStruct(enemyNumber, CYBORG_FACTORY))
+		.concat(enumStruct(enemyNumber, VTOL_FACTORY));
 
 		if (facs.length > 0)
 		{
@@ -108,6 +108,11 @@ function repairDroid(droidID, force)
 	if (droid === null)
 	{
 		return true; //pretend it is busy
+	}
+
+	if (droid.droidType === DROID_WEAPON && isPlasmaCannon(droid.weapons[0].name))
+	{
+		return false; //Plasma Cannon shall never repair
 	}
 
 	var highOil = highOilMap();
@@ -569,7 +574,7 @@ function attackThisObject(droidID, target)
 
 		if (!((t.type === DROID) && isVTOL(t) && (isVTOL(d) && !d.weapons[0].canHitAir)))
 		{
-			if (!isPlasmaCannon(d.weapons[0].name) && (t.type === DROID || (t.type === STRUCTURE && t.stattype !== WALL)))
+			if (t.type === DROID || (t.type === STRUCTURE && t.stattype !== WALL))
 			{
 				orderDroidLoc(d, DORDER_SCOUT, t.x, t.y);
 			}

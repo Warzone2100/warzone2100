@@ -6,6 +6,7 @@ const structures = {
 	lab: "A0ResearchFacility",
 	gen: "A0PowerGenerator",
 	hq: "A0CommandCentre",
+	relay: "A0ComDroidControl",
 	vtolPad: "A0VtolPad",
 	derrick: "A0ResourceExtractor",
 	repair: "A0RepairCentre3",
@@ -107,7 +108,6 @@ const weaponStats =
 			"R-Wpn-Flamer-ROF01",
 			"R-Wpn-Flamer-Damage03",
 			"R-Wpn-Flamer-ROF03",
-			"R-Wpn-Flamer-Damage06", //Damage06 is otherwise never researched
 			"R-Wpn-Flamer-Damage09",
 		],
 	},
@@ -199,9 +199,9 @@ const weaponStats =
 		vtols: [],
 		defenses: [
 			{ res: "R-Defense-AASite-QuadBof", stat: "AASite-QuadBof" },
-			//{ res: "R-Defense-WallTower-DoubleAAgun", stat: "WallTower-DoubleAAGun" },
+			{ res: "R-Defense-WallTower-DoubleAAgun", stat: "WallTower-DoubleAAGun" },
 			{ res: "R-Defense-AASite-QuadBof02", stat: "AASite-QuadBof02" },
-			//{ res: "R-Defense-WallTower-DoubleAAgun02", stat: "WallTower-DoubleAAGun02" },
+			{ res: "R-Defense-WallTower-DoubleAAgun02", stat: "WallTower-DoubleAAGun02" },
 		],
 		templates: [],
 		extras: [
@@ -220,8 +220,8 @@ const weaponStats =
 		alias: "mor",
 		weapons: [
 			{ res: "R-Wpn-Mortar01Lt", stat: "Mortar1Mk1" },
-			{ res: "R-Wpn-Mortar02Hvy", stat: "Mortar2Mk1" },
 			{ res: "R-Wpn-Mortar3", stat: "Mortar3ROTARYMk1" },
+			{ res: "R-Wpn-Mortar02Hvy", stat: "Mortar2Mk1" },
 			{ res: "R-Wpn-HowitzerMk1", stat: "Howitzer105Mk1" },
 			{ res: "R-Wpn-Howitzer03-Rot", stat: "Howitzer03-Rot" },
 			{ res: "R-Wpn-HvyHowitzer", stat: "Howitzer150Mk1" },
@@ -291,10 +291,14 @@ const weaponStats =
 	{
 		alias: "fmor",
 		weapons: [
+			{ res: "R-Wpn-Mortar01Lt", stat: "Mortar1Mk1" },
+			{ res: "R-Wpn-Mortar3", stat: "Mortar3ROTARYMk1" },
+			{ res: "R-Wpn-Mortar02Hvy", stat: "Mortar2Mk1" },
 			{ res: "R-Wpn-Mortar-Incendiary", stat: "Mortar-Incendiary" },
 			{ res: "R-Wpn-Howitzer-Incendiary", stat: "Howitzer-Incendiary" },
 		],
 		fastFire: [
+			{ res: "R-Wpn-Mortar3", stat: "Mortar3ROTARYMk1" },
 			{ res: "R-Wpn-Howitzer03-Rot", stat: "Howitzer03-Rot" },
 		],
 		vtols: [
@@ -318,6 +322,7 @@ const weaponStats =
 			"R-Wpn-Howitzer-Accuracy03",
 			"R-Wpn-Howitzer-ROF04",
 			"R-Wpn-Howitzer-Damage06",
+			"R-Wpn-Flamer-Damage09",
 		],
 	},
 	rockets_AT:
@@ -551,11 +556,12 @@ const weaponStats =
 		alias: "as",
 		weapons: [
 			{ res: "R-Wpn-PlasmaCannon", stat: "Laser4-PlasmaCannon" }, // plasma cannon
-			//{ res: "", stat: "PlasmaHeavy" }, // Heavy Plasma launcher
+			{ res: "R-Wpn-HeavyPlasmaLauncher", stat: "PlasmaHeavy" }, // Heavy Plasma launcher
 		],
 		vtols: [],
 		defenses: [
 		    { res: "R-Defense-PlasmaCannon", stat: "Emplacement-PlasmaCannon" },
+			{ res: "R-Defense-HeavyPlasmaLauncher", stat: "Emplacement-HeavyPlasmaLauncher" },
 		],
 		templates: [],
 		extras: [
@@ -567,6 +573,8 @@ const weaponStats =
 			"R-Wpn-Cannon-Accuracy02",
 			"R-Wpn-Cannon-ROF06",
 			"R-Wpn-Cannon-Damage09",
+			"R-Wpn-Flamer-ROF03",
+			"R-Wpn-Flamer-Damage09",
 		],
 	},
 	bombs:
@@ -589,6 +597,7 @@ const weaponStats =
 			"R-Struc-VTOLPad-Upgrade03",
 			"R-Wpn-Bomb-Damage03",
 			"R-Struc-VTOLPad-Upgrade06",
+			"R-Wpn-Flamer-Damage09",
 		],
 	},
 	AA:
@@ -608,12 +617,12 @@ const weaponStats =
 		],
 		templates: [],
 		extras: [
-			"R-Wpn-AAGun-ROF02",
+			"R-Wpn-AAGun-ROF01",
 			"R-Wpn-AAGun-Damage02",
 			"R-Wpn-AAGun-Accuracy01",
-			"R-Wpn-AAGun-ROF06",
 			"R-Wpn-AAGun-Damage06",
 			"R-Wpn-AAGun-Accuracy03",
+			"R-Wpn-AAGun-ROF06", //due to how upgrades work, and because hurricane and whirlwind already has such a low firePause, the last 5 ROF upgrades are a waste of time.
 		],
 	},
 	nexusTech:
@@ -621,8 +630,9 @@ const weaponStats =
 		alias: "nex",
 		weapons: [
 			{ res: "R-Wpn-EMPCannon", stat: "EMP-Cannon" },
-			//{ res: "R-Wpn-MortarEMP", stat: "MortarEMP" },
+			{ res: "R-Wpn-MortarEMP", stat: "MortarEMP" },
 			{ res: "R-Sys-SpyTurret", stat: "SpyTurret01" },
+			{ res: "R-Sys-SpyTurret", stat: "SpyTurret01" }, // weighted to favor Nexus Link
 		],
 		vtols: [],
 		defenses: [

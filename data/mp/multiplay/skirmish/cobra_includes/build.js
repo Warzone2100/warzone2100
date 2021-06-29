@@ -437,7 +437,7 @@ function buildAAForPersonality()
 	const VTOL_COUNT = countEnemyVTOL();
 
 	//Use stormbringer if we have it.
-	if (countAndBuild("P0-AASite-Laser", Math.floor(VTOL_COUNT / 3)))
+	if (countAndBuild("P0-AASite-Laser", Math.floor(VTOL_COUNT / 2)))
 	{
 		return true;
 	}
@@ -446,7 +446,7 @@ function buildAAForPersonality()
 		var aaType = subPersonalities[personality].antiAir.defenses;
 		for (var i = aaType.length - 1; i >= 0; --i)
 		{
-			if (countAndBuild(aaType[i].stat, Math.floor(VTOL_COUNT / 3)))
+			if (countAndBuild(aaType[i].stat, Math.floor(VTOL_COUNT / 2)))
 			{
 				return true;
 			}
@@ -662,6 +662,10 @@ function buildBaseStructures()
 	{
 		var haveAllies = (alliancesType === ALLIANCES_TEAMS) && (playerAlliance(true).length > 0);
 
+		if ((!GOOD_POWER_LEVEL || getMultiTechLevel() > 1) && countAndBuild(structures.gen, 1))
+		{
+			return true;
+		}
 		if (getRealPower() < 550 && countAndBuild(structures.gen, 4))
 		{
 			return true; //a little fail-safe
@@ -678,11 +682,11 @@ function buildBaseStructures()
 		{
 			return true; //a little fail-safe
 		}
-		if (countAndBuild(structures.factory, 3))
+		if (countAndBuild(structures.hq, 1))
 		{
 			return true;
 		}
-		if (countAndBuild(structures.hq, 1))
+		if (countAndBuild(structures.factory, 3))
 		{
 			return true;
 		}
@@ -889,7 +893,6 @@ function buildOrders()
 
 	var isNTW = highOilMap();
 	var skip = false;
-	var allowFastHighTechBuild = ((gameTime > 240000) || (getRealPower() > 600));
 
 	if (findIdleTrucks(constructGroup).length === 0 && (!isNTW || findIdleTrucks(constructGroupNTWExtra).length === 0)) { return; }
 
@@ -905,9 +908,9 @@ function buildOrders()
 
 	if (isNTW && buildNTWPhase2()) { return; }
 
-	if (allowFastHighTechBuild && random(100) < 33 && buildAAForPersonality()) { return; }
-	if (allowFastHighTechBuild && buildExtras()) { return; }
-	if (allowFastHighTechBuild && random(100) < 33 && buildSpecialStructures()) { return; }
+	if (random(100) < 70 && buildAAForPersonality()) { return; }
+	if (buildExtras()) { return; }
+	if (random(100) < 33 && buildSpecialStructures()) { return; }
 	if (buildBaseStructures2()) { return; }
 
 	buildDefenses(undefined, false);
