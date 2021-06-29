@@ -65,6 +65,27 @@ function chooseWeaponType(weaps)
 {
 	var weaponType = weaps.weapons;
 
+	// "good enough" randomization of electronic/super weapons cause these are hard to say which is best
+	if (weaps.alias === "nex" || weaps.alias === "as")
+	{
+		if (weaps.alias === "as" && !getResearch("R-Wpn-HeavyPlasmaLauncher").done)
+		{
+			weaponType = [weaps.weapons[0]]; // to account for Cobra's Hard/Insane difficulty cheat behavior with heavy plasma launcher
+		}
+		else
+		{
+			var rdm = [];
+
+			while (rdm.length !== weaps.weapons.length)
+			{
+
+				rdm.push(weaps.weapons[random(weaps.weapons.length)]);
+			}
+
+			weaponType = rdm;
+		}
+	}
+
 	if (isDefined(weaps.fastFire) && (random(100) < 50))
 	{
 		weaponType = weaps.fastFire;
@@ -79,13 +100,13 @@ function chooseRandomCyborgWeapon()
 	var weaps = subPersonalities[personality].primaryWeapon;
 
 	//grenadier cyborgs can only be built as long as Cobra does not have
-	//access to pepperpot. They are too weak after that.
+	//access to howitzer. They are too weak after that.
 	switch (random(4))
 	{
 		case 0: weaps = subPersonalities[personality].primaryWeapon; break;
 		case 1: if (subPersonalities[personality].useLasers === true) { weaps = weaponStats.lasers; } break;
 		case 2: weaps = subPersonalities[personality].secondaryWeapon; break;
-		case 3: if (!componentAvailable("Mortar3ROTARYMk1") && useArti) { weaps = subPersonalities[personality].artillery; } break;
+		case 3: if (!componentAvailable("Howitzer105Mk1") && useArti) { weaps = subPersonalities[personality].artillery; } break;
 		default: weaps = subPersonalities[personality].primaryWeapon; break;
 	}
 
@@ -185,7 +206,7 @@ function choosePersonalityWeapon(type)
 		}
 
 		// Choose an anti-air weapon instead... checks target player and then total player vtols.
-		if (!skip && ((playerVtolRatio(getMostHarmfulPlayer()) >= 0.12) || (countEnemyVTOL() > 20)) && random(100) < 20)
+		if (!skip && ((playerVtolRatio(getMostHarmfulPlayer()) >= 0.06) || (countEnemyVTOL() >= 7)) && random(100) < 20)
 		{
 			weaponList = [];
 			skip = true;
@@ -268,6 +289,17 @@ function useHover(weap)
 		return true;
 	}
 
+	var propulsions = playerLandPropRatio(getMostHarmfulPlayer());
+
+	if (Math.floor(propulsions.hover * 100) >= 30 && random(100) < 20)
+	{
+		return true;
+	}
+	if (Math.floor(propulsions.track * 100) >= 50 && random(100) < 80)
+	{
+		return false;
+	}
+
 	var useHover = false;
 
 	for (var i = 0, w = weap.length; i < w; ++i)
@@ -276,19 +308,19 @@ function useHover(weap)
 
 		if ((NAME === "Flame1Mk1") || (NAME === "Flame2") || (NAME === "PlasmiteFlamer"))
 		{
-			useHover = (random(100) <= 60);
+			useHover = (random(100) <= 40);
 			break;
 		}
 
 		if ((NAME === "Rocket-LtA-T") || (NAME === "Rocket-HvyA-T") || (NAME === "Missile-A-T"))
 		{
-			useHover = (random(100) <= 75);
+			useHover = (random(100) <= 33);
 			break;
 		}
 
 		if ((NAME === "Laser3BEAMMk1") || (NAME === "Laser2PULSEMk1") || (NAME === "HeavyLaser"))
 		{
-			useHover = (random(100) <= 55);
+			useHover = (random(100) <= 40);
 			break;
 		}
 	}
@@ -317,7 +349,9 @@ function pickPropulsion(weap)
 		"wheeled01", // wheels
 	];
 
-	if (random(100) < ((superLowOnProductionPower()) ? 85 : 60))
+	var propulsions = playerLandPropRatio(getMostHarmfulPlayer());
+
+	if (Math.floor(propulsions.track * 100) <= 55 && random(100) < ((superLowOnProductionPower()) ? 85 : 60))
 	{
 		tankProp.shift();
 	}
@@ -332,14 +366,21 @@ function pickTankBody()
 	//This helps keep things competitive among a player rushing with small/medium bodies.
 	var body;
 	var bodySwitchTime = 900000;
+	var sizeRatio = playerBodySizeRatio(getMostHarmfulPlayer());
 
-	if (gameTime < bodySwitchTime && random(100) < 80)
+	if ((Math.floor(sizeRatio.small * 100) >= 66 && random(100) < 40) || (gameTime < bodySwitchTime && random(100) < 80))
 	{
 		body = (random(100) < ((superLowOnProductionPower()) ? 50 : 20)) ? SYSTEM_BODY : VTOL_BODY;
 	}
 	else
 	{
-		body = (random(100) < ((superLowOnProductionPower()) ? 45 : 30)) ? VTOL_BODY : TANK_BODY;
+		body = (random(100) < 30) ? VTOL_BODY : TANK_BODY;
+	}
+
+	// If they go super big, we go super big
+	if (Math.floor(sizeRatio.heavy * 100) >= 45 && random(100) < 66)
+	{
+		body = TANK_BODY;
 	}
 
 	return body;
@@ -363,15 +404,10 @@ function buildAttacker(id)
 	var secondary = choosePersonalityWeapon("TANK");
 	var fac = getObject(STRUCTURE, me, id);
 
-	if (isDefined(weap) && isDefined(secondary) && (secondary[0] !== "Laser4-PlasmaCannon"))
+	if (isDefined(weap) && isDefined(secondary))
 	{
 		if (fac !== null)
 		{
-			if (!random(3) && componentAvailable("Body14SUP") && componentAvailable("EMP-Cannon"))
-			{
-				secondary = "EMP-Cannon";
-			}
-
 			return getRealPower() > PRODUCTION_POWER && buildDroid(fac, "Droid", pickTankBody(), pickPropulsion(weap), "", "", weap, secondary);
 		}
 	}

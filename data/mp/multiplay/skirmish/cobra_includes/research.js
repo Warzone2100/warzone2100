@@ -39,7 +39,8 @@ function initializeResearchLists()
 	techlist = subPersonalities[personality].res;
 	antiAirTech = updateResearchList(subPersonalities[personality].antiAir.defenses);
 	antiAirExtras = updateResearchList(subPersonalities[personality].antiAir.extras);
-	extremeLaserTech = updateResearchList(weaponStats.AS.extras);
+	extremeLaserTech = updateResearchList(weaponStats.AS.weapons);
+	extremeLaserExtra = updateResearchList(weaponStats.AS.extras);
 	laserTech = updateResearchList(weaponStats.lasers.weapons);
 	laserExtra = updateResearchList(weaponStats.lasers.extras);
 	weaponTech = updateResearchList(subPersonalities[personality].primaryWeapon.weapons);
@@ -185,11 +186,11 @@ function research()
 		if (!found)
 			found = evalResearch(lab, techlist);
 		//Careful not to focus too much on these research topics since offensive capability can be harmed
-		if ((random(100) < ((haveAllies || highOil || (gameTime > 2400000)) ? 45 : 20)))
+		if ((random(100) < ((haveAllies || highOil || (gameTime > 2400000)) ? 60 : 20)))
 		{
 			if (!found && getResearch("R-Struc-Research-Upgrade02").done)
 				found = pursueResearch(lab, "R-Vehicle-Body11");
-			if (!found && random(100) < ((highOil || haveAllies) ? 60 : 33))
+			if (!found && random(100) < ((highOil || haveAllies) ? 75 : 33))
 				found = evalResearch(lab, ESSENTIALS_2);
 			if (!found && random(100) < (getResearch("R-Struc-Research-Upgrade04").done ? 40 : 15))
 				found = evalResearch(lab, ESSENTIALS_3);
@@ -214,7 +215,7 @@ function research()
 
 		if (!found && getRealPower() > ((gameTime < 180000) ? MIN_POWER : (highOil ? -SUPER_LOW_POWER : SUPER_LOW_POWER)))
 		{
-			if (random(100) < ((highOil) ? 30 : 20))
+			if (random(100) < ((highOil) ? 35 : 20))
 			{
 				found = pursueResearch(lab, "R-Vehicle-Metals03");
 
@@ -236,8 +237,21 @@ function research()
 				}
 			}
 
-			if (!found && getResearch("R-Struc-Research-Upgrade08").done && random(100) < 5)
-				found = evalResearch(lab, empWeapons);
+			if (!found && getResearch("R-Struc-Research-Upgrade05").done && random(100) < 15)
+			{
+				found = pursueResearch(lab, extremeLaserTech);
+
+				if (!found && componentAvailable("PlasmaHeavy") && random(100) < 70)
+					found = evalResearch(lab, FLAMER);
+
+				if (componentAvailable("Laser4-PlasmaCannon"))
+				{
+					if (!found)
+						found = evalResearch(lab, empWeapons);
+					if (!found && random(100) < 80)
+						found = evalResearch(lab, extremeLaserExtra);
+				}
+			}
 
 			if (!found &&
 				((subPersonalities[personality].resPath === "defensive") ||
@@ -379,9 +393,9 @@ function research()
 					}
 				}
 
-				if (!found && random(100) < 33)
+				if (!found && random(100) < 40)
 					found = evalResearch(lab, weaponTech);
-				if (!found && !turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && random(100) < 20)
+				if (!found && !turnOffCyborgs && getResearch("R-Struc-Research-Upgrade04").done && random(100) < 30)
 					found = evalResearch(lab, cyborgWeaps);
 				if (!found && random(100) < 60)
 					found = evalResearch(lab, extraTech);
@@ -482,12 +496,12 @@ function research()
 				found = evalResearch(lab, empWeapons);
 
 			if (!found)
-				found = pursueResearch(lab, "R-Wpn-PlasmaCannon");
+				found = pursueResearch(lab, extremeLaserTech);
 			if (componentAvailable("Laser4-PlasmaCannon"))
 			{
 				if(!found)
-					found = evalResearch(lab, extremeLaserTech);
-				if(!found)
+					found = evalResearch(lab, extremeLaserExtra);
+				if (!found && componentAvailable("PlasmaHeavy"))
 					found = evalResearch(lab, FLAMER);
 			}
 

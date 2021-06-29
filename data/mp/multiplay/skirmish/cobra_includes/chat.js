@@ -18,7 +18,7 @@ function sendChatMessage(msg, receiver)
 
 		if (receiver === ALLIES || receiver === ENEMIES)
 		{
-			var players = playerAlliance(receiver === ALLIES).concat(me);
+			var players = playerAlliance(receiver === ALLIES);
 			for (var i = 0, len = players.length; i < len; ++i)
 			{
 				if (msg === "need power" && !playerData[players[i]].isAI)
@@ -124,7 +124,7 @@ function eventChat(from, to, message)
 	}
 	else if (message === "need power")
 	{
-		if (playerPower(me) > 300)
+		if (getRealPower(me) > 100)
 		{
 			donatePower(playerPower(me) / 5, from);
 		}

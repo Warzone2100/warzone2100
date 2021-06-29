@@ -96,6 +96,93 @@ function playerStructureUnitRatio(player)
 	return cacheThis(uncached, [player], "playerStructureUnitRatio" + player, 30000);
 }
 
+function playerBodySizeRatio(player)
+{
+	if (!isDefined(player))
+	{
+		player = getMostHarmfulPlayer();
+	}
+
+	function uncached(player)
+	{
+		var small = 0;
+		var medium = 0;
+		var heavy = 0;
+		var attackers = enumDroid(player, DROID_WEAPON);
+		for (var i = 0, len = attackers.length; i < len; ++i)
+		{
+			var body = attackers[i].body;
+
+			if (body === "Body1REC" || body === "Body2SUP" || body === "Body4ABT" || body === "Body3MBT")
+			{
+				++small;
+			}
+			else if (body === "Body5REC" || body === "Body6SUPP" || body === "Body8MBT" || body === "Body7ABT")
+			{
+				++medium;
+			}
+			else if (body === "Body11ABT" || body === "Body9REC" || body === "Body13SUP" || body === "Body14SUP" || body ==="Body12SUP" || body === "Body10MBT")
+			{
+				++heavy;
+			}
+		}
+
+		return {
+			small: small / (attackers.length + 1),
+			medium: medium / (attackers.length + 1),
+			heavy: heavy / (attackers.length + 1),
+		};
+	}
+
+	return cacheThis(uncached, [player], "playerBodySizeRatio" + player, 40000);
+}
+
+function playerLandPropRatio(player)
+{
+	if (!isDefined(player))
+	{
+		player = getMostHarmfulPlayer();
+	}
+
+	function uncached(player)
+	{
+		var wheel = 0;
+		var halftrack = 0;
+		var track = 0;
+		var hover = 0;
+		var attackers = enumDroid(player, DROID_WEAPON);
+		for (var i = 0, len = attackers.length; i < len; ++i)
+		{
+			var prop = attackers[i].propulsion;
+
+			if (prop === "wheeled01")
+			{
+				++wheel;
+			}
+			else if (prop === "HalfTrack")
+			{
+				++halftrack;
+			}
+			else if (prop === "tracked01")
+			{
+				++track;
+			}
+			else if (prop === "hover01")
+			{
+				++hover;
+			}
+		}
+
+		return {
+			wheel: wheel / (attackers.length + 1),
+			halftrack: halftrack / (attackers.length + 1),
+			track: track / (attackers.length + 1),
+			hover: hover / (attackers.length + 1),
+		};
+	}
+
+	return cacheThis(uncached, [player], "playerLandPropRatio" + player, 40000);
+}
 
 //Choose the personality as described in the global subPersonalities.
 //When called from chat it will switch to that one directly.
