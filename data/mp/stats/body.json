@@ -377,7 +377,7 @@
 		"id": "Body2SUP",
 		"model": "drlbod02.pie",
 		"name": "Leopard",
-		"powerOutput": 4000,
+		"powerOutput": 6500,
 		"propulsionExtraModels": {
 			"HalfTrack": {
 				"left": "prllhtr1.pie",
@@ -561,7 +561,7 @@
 		"id": "Body6SUPP",
 		"model": "drmbod06.pie",
 		"name": "Panther",
-		"powerOutput": 13000,
+		"powerOutput": 18000,
 		"propulsionExtraModels": {
 			"HalfTrack": {
 				"left": "prmlhtr2.pie",
