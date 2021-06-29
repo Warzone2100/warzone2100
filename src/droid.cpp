@@ -129,6 +129,10 @@ static void droidBodyUpgrade(DROID *psDroid)
 	psDroid->originalBody = calcDroidBaseBody(psDroid);
 	int increase = psDroid->originalBody * factor / prev;
 	psDroid->body = MIN(psDroid->originalBody, (psDroid->body * increase) / factor + 1);
+	DROID_TEMPLATE sTemplate;
+	templateSetParts(psDroid, &sTemplate);
+	// update engine too
+	psDroid->baseSpeed = calcDroidBaseSpeed(&sTemplate, psDroid->weight, psDroid->player);
 	if (isTransporter(psDroid))
 	{
 		for (DROID *psCurr = psDroid->psGroup->psList; psCurr != nullptr; psCurr = psCurr->psGrpNext)
