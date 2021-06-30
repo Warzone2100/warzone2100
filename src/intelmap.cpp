@@ -29,6 +29,9 @@
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/button.h"
+#include "lib/widget/paragraph.h"
+#include "lib/widget/label.h"
+#include "lib/widget/scrollablelist.h"
 #include "lib/sound/mixer.h" //for sound_GetUIVolume()
 /* Includes direct access to render library */
 #include "lib/ivis_opengl/pieblitfunc.h"
@@ -128,9 +131,9 @@
 
 /*dimensions for SEQTEXT view relative to IDINTMAP_MSGVIEW*/
 #define INTMAP_SEQTEXTX			0
-#define INTMAP_SEQTEXTY			0
+#define INTMAP_SEQTEXTY			30
 #define INTMAP_SEQTEXTWIDTH		INTMAP_RESEARCHWIDTH
-#define INTMAP_SEQTEXTHEIGHT		INTMAP_RESEARCHHEIGHT
+#define INTMAP_SEQTEXTHEIGHT		INTMAP_RESEARCHHEIGHT - INTMAP_SEQTEXTY
 
 /*dimensions for SEQTEXT tab view relative to IDINTMAP_SEQTEXT*/
 #define INTMAP_SEQTEXTTABX		0
@@ -158,6 +161,7 @@ static bool				playCurrent;
 
 /* functions declarations ****************/
 static bool intAddMessageForm(bool playCurrent);
+static const char* getMessageTitle(const MESSAGE& message);
 /*Displays the buttons used on the intelligence map */
 class IntMessageButton : public IntFancyButton
 {
@@ -169,6 +173,11 @@ public:
 	void setMessage(MESSAGE *msg)
 	{
 		psMsg = msg;
+	}
+
+	std::string getTip() override
+	{
+		return getMessageTitle(*psMsg);
 	}
 
 protected:
@@ -183,14 +192,6 @@ static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
-
-static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
-                                      UDWORD x0, UDWORD y0,
-                                      UDWORD width, UDWORD height,
-                                      bool render,
-                                      size_t *major, size_t *minor);
-
 
 /*********************** VARIABLES ****************************/
 // The current message being displayed
@@ -311,31 +312,6 @@ static bool intAddMessageForm(bool _playCurrent)
 		button->setMessage(psMessage);
 		msgList->addWidgetToLayout(button);
 
-		/* Set the tip and add the button */
-		RESEARCH *psResearch;
-		switch (psMessage->type)
-		{
-		case MSG_RESEARCH:
-			psResearch = getResearchForMsg(psMessage->pViewData);
-			if (psResearch)
-			{
-				button->setTip(_(psResearch->name.toUtf8().c_str()));
-			}
-			else
-			{
-				button->setTip(_("Research Update"));
-			}
-			break;
-		case MSG_CAMPAIGN:
-			button->setTip(_("Project Goals"));
-			break;
-		case MSG_MISSION:
-			button->setTip(_("Current Objective"));
-			break;
-		default:
-			break;
-		}
-
 		/* if the current message matches psSelected lock the button */
 		if (psMessage == psCurrentMsg)
 		{
@@ -413,31 +389,32 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
 	{
-		VIEW_REPLAY	*psViewReplay;
+		auto title = std::make_shared<W_LABEL>();
+		title->setGeometry(0, 0, INTMAP_SEQTEXTWIDTH, 30);
+		title->setString(getMessageTitle(*psMessage));
+		title->setFontColour(WZCOL_YELLOW);
+		title->setTextAlignment(WLAB_ALIGNCENTRE);
+		title->setFont(font_medium, WZCOL_YELLOW);
+		intMapMsgView->attach(title);
 
-		psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
+		auto messages = ScrollableListWidget::make();
+		messages->setGeometry(INTMAP_SEQTEXTX, INTMAP_SEQTEXTY, INTMAP_SEQTEXTWIDTH, INTMAP_SEQTEXTHEIGHT);
+		messages->setPadding({0, 10, 10, 10});
+		messages->setItemSpacing(5);
 
-		/* Add a big tabbed text box for the subtitle text */
-		auto seqList = IntListTabWidget::make();
-		intMapMsgView->attach(seqList);
-		seqList->setChildSize(INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTTABHEIGHT);
-		seqList->setChildSpacing(2, 2);
-		seqList->setGeometry(INTMAP_SEQTEXTX, INTMAP_SEQTEXTY, INTMAP_SEQTEXTWIDTH, INTMAP_SEQTEXTHEIGHT);
-		seqList->setTabPosition(ListTabWidget::Bottom);
-		// Don't think the tabs are actually ever used...
-
-		size_t cur_seq = 0, cur_seqpage = 0;
-		int nextPageId = IDINTMAP_SEQTEXTSTART;
-		do
+		auto psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
+		for (const auto &seq: psViewReplay->seqList)
 		{
-			auto page = std::make_shared<W_FORM>();
-			seqList->attach(page);
-			page->id = nextPageId++;
-			page->displayFunction = intDisplaySeqTextView;
-			page->pUserData = psViewReplay;
-			seqList->addWidgetToLayout(page);
+			for (const auto &msg: seq.textMsg)
+			{
+				auto message = std::make_shared<Paragraph>();
+				message->setFontColour(WZCOL_TEXT_BRIGHT);
+				message->addText(msg.toUtf8());
+				messages->addItem(message);
+			}
 		}
-		while (!intDisplaySeqTextViewPage(psViewReplay, 0, 0, INTMAP_SEQTEXTTABWIDTH, INTMAP_SEQTEXTHEIGHT, false, &cur_seq, &cur_seqpage));
+
+		intMapMsgView->attach(messages);
 
 		return true;
 	}
@@ -544,73 +521,6 @@ void intProcessIntelMap(UDWORD id)
 	{
 		intProcessMultiMenu(id);
 	}
-}
-
-/**
- * Draws the text for the intelligence display window.
- */
-static bool intDisplaySeqTextViewPage(VIEW_REPLAY *psViewReplay,
-                                      UDWORD x0, UDWORD y0,
-                                      UDWORD width, UDWORD height,
-                                      bool render,
-                                      size_t *cur_seq, size_t *cur_seqpage)
-{
-	if (!psViewReplay)
-	{
-		return true;	/* nothing to do */
-	}
-
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-	unsigned cur_y = y0 + iV_GetTextLineSize(font_regular) / 2 + 2 * TEXT_YINDENT;
-
-	/* add each message */
-	size_t i;
-	size_t sequence;
-	for (sequence = *cur_seq, i = *cur_seqpage; sequence < psViewReplay->seqList.size(); sequence++)
-	{
-		const SEQ_DISPLAY *psSeqDisplay = &psViewReplay->seqList.at(sequence);
-		for (; i < psSeqDisplay->textMsg.size(); i++)
-		{
-			if (render)
-			{
-				cur_y = iV_DrawFormattedText(psSeqDisplay->textMsg[i].toUtf8().c_str(),
-				                             x0 + TEXT_XINDENT, cur_y, width, false, font_regular);
-			}
-			else
-			{
-				cur_y += iV_GetTextLineSize(font_regular);
-			}
-			if (cur_y > y0 + height)
-			{
-				/* run out of room - need to make new tab */
-				*cur_seq = sequence;
-				*cur_seqpage = i;
-				return false;
-			}
-		}
-		i = 0;
-	}
-
-	return true;		/* done */
-}
-
-/**
- * Draw the text window for the intelligence display
- */
-static void intDisplaySeqTextView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	VIEW_REPLAY *psViewReplay = (VIEW_REPLAY *)psWidget->pUserData;
-	size_t cur_seq, cur_seqpage;
-
-	int x0 = xOffset + psWidget->x();
-	int y0 = yOffset + psWidget->y();
-
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, psWidget->width(), psWidget->height());
-
-	/* work out where we're up to in the text */
-	cur_seq = cur_seqpage = 0;
-
-	intDisplaySeqTextViewPage(psViewReplay, x0, y0, psWidget->width() - 40, psWidget->height(), true, &cur_seq, &cur_seqpage);
 }
 
 
@@ -1094,8 +1004,8 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 /**
  * Displays the TEXT view for the current message.
- * If this function breaks, please merge it with intDisplaySeqTextViewPage
- * which presumably does almost the same.
+ *
+ * TODO: The functionality provided by this function can probably be replaced by a few widgets.
  */
 void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 {
@@ -1264,4 +1174,24 @@ void intRunIntelMap()
 		// clear key press so we don't enter in-game options
 		inputLoseFocus();
 	}
+}
+
+static const char* getMessageTitle(const MESSAGE& message)
+{
+	RESEARCH* research;
+
+	switch (message.type)
+	{
+	case MSG_RESEARCH:
+		research = getResearchForMsg(message.pViewData);
+		return research ? _(research->name.toUtf8().c_str()) : _("Research Update");
+	case MSG_CAMPAIGN:
+		return _("Project Goals");
+	case MSG_MISSION:
+		return _("Current Objective");
+	default:
+		return nullptr;
+	}
+
+	return nullptr;
 }
