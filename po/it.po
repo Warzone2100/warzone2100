@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-30 09:53\n"
+"PO-Revision-Date: 2021-06-30 21:52\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1566,17 +1566,17 @@ msgstr "Miglioramento dei Sensori d'Attacco VTOL Mk3"
 #: data/base/messages/strings/names.txt:385
 #: data/mp/messages/strings/names.txt:487
 msgid "Improved Scrambler"
-msgstr "Disturbatore Migliorato"
+msgstr "Disturbatore migliorato"
 
 #: data/base/messages/strings/names.txt:386
 #: data/mp/messages/strings/names.txt:488
 msgid "Scrambler Turret Mk2"
-msgstr "Torretta di Disturbo Mk2"
+msgstr "Torretta di disturbo Mk2"
 
 #: data/base/messages/strings/names.txt:389
 #: data/mp/messages/strings/names.txt:495
 msgid "Sensor Lock"
-msgstr "Sensore Agganciato"
+msgstr "Sensore agganciato"
 
 #: data/base/messages/strings/names.txt:417
 #: data/mp/messages/strings/names.txt:529
@@ -1643,7 +1643,7 @@ msgstr "Carro distrutto"
 #: data/mp/messages/strings/names.txt:615
 #: data/mp/messages/strings/names.txt:631
 msgid "Cyborg Laboratory"
-msgstr "Laboratorio Cyborg"
+msgstr "Laboratorio cyborg"
 
 #: data/base/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:616
@@ -1655,38 +1655,38 @@ msgstr "Laboratorio per Guerra Avanzata"
 #: data/mp/messages/strings/names.txt:617
 #: data/mp/messages/strings/names.txt:633
 msgid "Engineering Laboratory"
-msgstr "Laboratorio di Ingegneria"
+msgstr "Laboratorio di ingegneria"
 
 #: data/base/messages/strings/names.txt:490
 #: data/base/messages/strings/names.txt:506
 #: data/mp/messages/strings/names.txt:618
 #: data/mp/messages/strings/names.txt:634
 msgid "Robotics Laboratory"
-msgstr "Laboratorio di Robotica"
+msgstr "Laboratorio di robotica"
 
 #: data/base/messages/strings/names.txt:491
 #: data/mp/messages/strings/names.txt:619
 msgid "Laser Optics Laboratory"
-msgstr "Laboratorio di Ottica Laser"
+msgstr "Laboratorio di ottica laser"
 
 #: data/base/messages/strings/names.txt:492
 #: data/base/messages/strings/names.txt:504
 #: data/mp/messages/strings/names.txt:620
 #: data/mp/messages/strings/names.txt:632
 msgid "Electronics Laboratory"
-msgstr "Laboratorio di Elettronica"
+msgstr "Laboratorio di elettronica"
 
 #: data/base/messages/strings/names.txt:493
 #: data/base/messages/strings/names.txt:502
 #: data/mp/messages/strings/names.txt:621
 #: data/mp/messages/strings/names.txt:630
 msgid "Chemical Laboratory"
-msgstr "Laboratorio Chimico"
+msgstr "Laboratorio di chimica"
 
 #: data/base/messages/strings/names.txt:501
 #: data/mp/messages/strings/names.txt:629
 msgid "Advanced Warfare"
-msgstr "Guerra Avanzata"
+msgstr "Guerra avanzata"
 
 #: data/base/messages/strings/names.txt:553
 #: data/mp/messages/strings/names.txt:705
@@ -2732,7 +2732,7 @@ msgstr "Tutte le unità da riparazione mobili sono state aggiornate automaticame
 #: data/mp/messages/strings/resstrings.txt:221
 #: po/custom/fromJson.txt:3062
 msgid "Improved Sensor Tower Available"
-msgstr "Torre Sensoria migliorata disponibile"
+msgstr "Torre sensoria migliorata disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[1]
@@ -2750,7 +2750,7 @@ msgstr "Nuove tecniche di costruzione migliorano la torre"
 #: data/mp/messages/strings/resstrings.txt:223
 #: po/custom/fromJson.txt:4778
 msgid "Replaces existing sensor tower"
-msgstr "Rimpiazza l'esistente Torre Sensoria"
+msgstr "Rimpiazza la torre sensoria esistente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[3]
@@ -3379,7 +3379,7 @@ msgstr "Torretta bomba che esplode in prossimità del nemico"
 #: data/mp/messages/strings/resstrings.txt:333
 #: po/custom/fromJson.txt:1083
 msgid "Best Targets: Base Structures and Defenses"
-msgstr "Migliori Bersagli: Stutture e Difese"
+msgstr "Bersagli migliori: strutture e difese"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB2.text[1]
@@ -3419,7 +3419,7 @@ msgstr "Sgancia bombe a grappolo ad alto esplosivo"
 #: data/mp/messages/strings/resstrings.txt:338
 #: po/custom/fromJson.txt:1087
 msgid "Best Targets: Base Structures"
-msgstr "Migliori Bersagli: Strutture"
+msgstr "Bersagli migliori: strutture"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[3]
@@ -3458,7 +3458,7 @@ msgstr "Sgancia bombe perforanti ad alto esplosivo"
 #: data/mp/messages/strings/resstrings.txt:343
 #: po/custom/fromJson.txt:1138
 msgid "Best Targets: Defenses"
-msgstr "Migliori Bersagli: Difese"
+msgstr "Bersagli migliori: difese"
 
 #: data/base/messages/strings/resstrings.txt:713
 #: data/mp/messages/strings/resstrings.txt:346
@@ -3521,7 +3521,7 @@ msgstr "Cannone automatico da 88mm ad iper velocità"
 #: data/mp/messages/strings/resstrings.txt:358
 #: po/custom/fromJson.txt:1160
 msgid "Best Targets: Vehicles"
-msgstr "Migliori bersagli: Veicoli"
+msgstr "Bersagli migliori: veicoli"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[3]
@@ -3569,7 +3569,7 @@ msgstr "Lancia-fiamme pesante ad ossido di propilene"
 #: data/mp/messages/strings/resstrings.txt:363
 #: po/custom/fromJson.txt:1128
 msgid "Best Targets: Bunkers, wheeled and hover vehicles"
-msgstr "Migliori Bersagli: Bunker,veicoli su ruote e hovercraft"
+msgstr "Bersagli migliori: bunker, veicoli su ruote e hovercraft"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[0]
@@ -3636,7 +3636,7 @@ msgstr "Nuova arma a fuoco indiretto disponibile"
 #: data/mp/messages/strings/resstrings.txt:372
 #: po/custom/fromJson.txt:12
 msgid "105mm Howitzer may be assigned to a sensor"
-msgstr "L'Obice da 105mm può essere assegnato a un sensore"
+msgstr "L'obice da 105 mm può essere assegnato a un sensore"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[2]
@@ -3649,7 +3649,7 @@ msgstr "L'Obice da 105mm può essere assegnato a un sensore"
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1107
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Migliori Bersagli: Strutture, fanteria ,veicoli su ruote"
+msgstr "Bersagli migliori: strutture, fanteria, veicoli su ruote"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3658,7 +3658,7 @@ msgstr "Migliori Bersagli: Strutture, fanteria ,veicoli su ruote"
 #: data/mp/messages/strings/resstrings.txt:377
 #: po/custom/fromJson.txt:20
 msgid "155mm Howitzer may be assigned to a sensor"
-msgstr "L'Obice da 155mm può essere assegnato a un sensore"
+msgstr "L'obice da 105 mm può essere assegnato a un sensore"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[1]
@@ -3676,7 +3676,7 @@ msgstr "Obice incendiario da 105mm, può essere assegnato a un sensore"
 #: data/mp/messages/strings/resstrings.txt:383
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base Structures, bunkers"
-msgstr "Migliori Bersagli: Strutture, bunker"
+msgstr "Bersagli migliori: strutture e bunker"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[0]
@@ -3853,7 +3853,7 @@ msgstr "Può essere assegnato a un sensore"
 #: data/mp/messages/strings/resstrings.txt:413
 #: po/custom/fromJson.txt:1101
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
-msgstr "Migliori bersagli: Strutture,fanteria,veicoli su ruote"
+msgstr "Bersagli migliori: strutture, fanteria e veicoli su ruote"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[3]
@@ -4001,11 +4001,11 @@ msgstr "Tutti i razzi sono stai aggiornati automaticamente"
 
 #: data/base/script/campaign/cam1-7.js:244
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Distruggi tutte le unità del Nuovo Paradigma"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Distruggi tutti i rinforzi del Nuovo Paradigma"
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
@@ -4017,7 +4017,7 @@ msgstr "Individua e salva le unità dal trasportatore abbattuto"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
-msgstr ""
+msgstr "Salva i civili dal Collettivo prima che ne vengano catturati troppi"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
@@ -4025,7 +4025,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-end.js:190
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Invia almeno un trasportatore con un camion e sopravvivi all'assalto del Collettivo"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
@@ -4041,7 +4041,7 @@ msgstr "Salva la squadra Alfa da Nexus"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "Distruggi il quartier generale di Nexus per disabilitare il Programma d'intrusione NEXUS"
 
 #: data/base/script/campaign/cam3-ab.js:240
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -4085,7 +4085,7 @@ msgstr "Strutture nemiche rimanenti"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
-msgstr ""
+msgstr "Richiesto ritorno alla zona di atterraggio"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
@@ -4093,7 +4093,7 @@ msgstr "Distruggi tutte le unità e le basi nemiche"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
-msgstr ""
+msgstr "Sopravvivi fino a quando il timer arriva a zero"
 
 #: data/base/script/rules.js:55
 #: data/base/script/tutorial.js:122
@@ -4558,7 +4558,7 @@ msgstr "Il collegamento sinpatico permise ai soldati di essere messi in corazze 
 
 #: data/base/sequenceaudio/cam1/map1a_c.txt:14
 msgid "Unfortunately, this technology has fallen into the hands of the New Paradigm. It is imperative that you research and develop synaptic link technologies."
-msgstr "Sfortunatamente, questa tecnologia è caduta in mano al New Paradigm. E' imperativo che voi ricerchiate e sviluppiate tecnologie a collegamento sinaptico."
+msgstr "Sfortunatamente, questa tecnologia è caduta nelle mani del Nuovo Paradigma. E' imperativo che ricerchi e sviluppi delle tecnologie a collegamento sinaptico."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
@@ -4598,15 +4598,15 @@ msgstr "Non siamo stati in grado di accertare il suo ultimo scopo o funzione. Ne
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:8
 msgid "Further analysis was prevented by the manual shutdown of the system by our technicians to prevent additional contamination by the Nexus Intruder Program."
-msgstr "Ulteriori analisi sono state impossibili a causa dello spegnimento manuale del sistema da parte dei nostri tecnici per prevenire ulteriori contaminazioni dal Programma Intruso Nexus."
+msgstr "Ulteriori analisi sono state impedite dallo spegnimento manuale del sistema eseguito dai nostri tecnici, per prevenire ulteriori contaminazioni da parte del Programma d'intrusione Nexus."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:10
 msgid "However, the spread of the Nexus Intruder Program was not checked by New Paradigm. We need to capture New Paradigm's core systems to further investigate Nexus and determine its origins."
-msgstr "Comunque, la dispersione del Programma Intruso Nexus non è stata verificata dal New Paradigm. Dobbiamo catturare i sistemi centrali del New Paradigm per compiere ulteriori investigazioni su Nexus e determinare le sue origini."
+msgstr "Comunque, la dispersione del Programma d'intrusione Nexus non è stata verificata dal Nuovo Paradigma. Dobbiamo catturare i sistemi centrali del Nuovo Paradigma, in modo da compiere ulteriori investigazioni su Nexus e determinare le sue origini."
 
 #: data/base/sequenceaudio/cam1/sub17fmv.txt:12
 msgid "Commander, you are to curtail the New Paradigm's activities in this sector and locate their main base."
-msgstr "Comandante, dovete ostacolare le attività del New Paradigm in questo settore e localizzare la loro base principale."
+msgstr "Comandante, deve ostacolare le attività del Nuovo Paradigma in questo settore e localizzare la loro base principale."
 
 #: data/base/sequenceaudio/cam1/sub1_4bn.txt:4
 msgid "You have done well."
@@ -4618,7 +4618,7 @@ msgstr "Una volta che avremo analizzato e autenticato la tecnologia, la vostra r
 
 #: data/base/sequenceaudio/cam1/sub1_5pl.txt:4
 msgid "Information discovered at the previous enemy base indicates that the New Paradigm recovered two synaptic link artifacts."
-msgstr "Informazione scoperte dalla precedente base nemica indicano che il New Paradigm ha recuperato due manufatti del collegamento sinaptico."
+msgstr "Le informazioni scoperte nella precedente base nemica indicano che il Nuovo Paradigma ha recuperato due artefatti del collegamento sinaptico."
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
@@ -4646,7 +4646,7 @@ msgstr "Dovrete difenderla e tenerla ad ogni costo."
 
 #: data/base/sequenceaudio/cam2/c002.txa:12
 msgid "THE COLLECTIVE"
-msgstr "IL COLLECTIVE"
+msgstr "IL COLLETTIVO"
 
 #: data/base/sequenceaudio/cam2/c2diif2.txt:1
 msgid "Commander, a new launch has been detected."
@@ -4762,7 +4762,7 @@ msgstr "Possiamo solo assumere che Nexus abbia preso controllo di questo sito. N
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:1
 msgid "Warriors of the Collective, I seek the location of NASDA Central."
-msgstr "Guerrieri del Collective, sto cercando la località della Centrale NASDA."
+msgstr "Guerrieri del Collettivo, sto cercando la posizione della Centrale NASDA."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:2
 msgid "It lies somewhere in your territory."
@@ -4782,7 +4782,7 @@ msgstr "Non sono parte della macchina."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:4
 msgid "Warriors of The Collective, attack and destroy kill all who resist the machine."
-msgstr "Guerrieri del Collective,attaccate e distruggete uccidete chiunque si opponga alla Macchina."
+msgstr "Guerrieri del Collettivo, attaccate, distruggete e uccidete chiunque si opponga alla Macchina."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:5
 msgid "Attack! Erase their presence from this area!"
@@ -4970,7 +4970,7 @@ msgstr "Grazie per tutte le utili tecnologie che avete recuperato."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:8
 msgid "You and not those fools in the New Paradigm and the Collective."
-msgstr "Voi e non quegli stupidi del New Paradigm e del Collective."
+msgstr "Voi e non quegli stupidi del Nuovo Paradigma o del Collettivo."
 
 #: data/base/sequenceaudio/cam3/cam3_bn.txt:10
 msgid "I'm now activating all your synaptic links so that your forces can meld with Nexus."
@@ -5010,7 +5010,7 @@ msgstr "I miei Satelliti Laser si stanno caricando. Intendo testarli su di voi p
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:1
 msgid "The Reed Corporation was founded by Dr Allan Reed. In 2080, Dr Reed landed a contract with the US Military to develop the synaptic link technology."
-msgstr "La Corporazione Reed fu fondata dal Dr Allan Reed. Nel 2080, il Dr Reed stipulò un contratto con i militari statunitensi per sviluppare la tecnologia del collegamento sinaptico."
+msgstr "La Corporazione Reed fu fondata dal dottor Allan Reed. Nel 2080 il dottor Reed stipulò un contratto con i militari statunitensi per sviluppare la tecnologia del collegamento sinaptico."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:3
 msgid "After patenting the synaptic link five years later, Dr Reed continued his researches into cybernetics."
@@ -5022,7 +5022,7 @@ msgstr "Questa volta il suo obbiettivo era di poter trasferire la coscienza uman
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:7
 msgid "Backed again by the military, Dr Reed began work on the NEXUS Intruder Program. After three years with little progress, the military abandoned the Nexus Project and cut Dr Reed's funding."
-msgstr "Supportato nuovamente dai militari, il Dr Reed iniziò a lavorare sul Programma Intruso NEXUS. Dopo 3 anni con pochi progressi, i militari abbandonarono il Progetto Nexus e tagliarono i fondi al Dr Reed."
+msgstr "Supportato nuovamente dai militari, il dottor Reed iniziò a lavorare sul Programma d'intrusione NEXUS. Dopo 3 anni con pochi progressi, i militari abbandonarono il Progetto Nexus e tagliarono i fondi al dottor Reed."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:9
 msgid "Reports from the time claim that Dr Reed was furious and vowed to have his revenge on all who got in his way."
@@ -5030,7 +5030,7 @@ msgstr "Rapporti del tempo dicono che il Dr Reed era furioso e che giurò vendet
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:11
 msgid "It appears that Dr Reed may have succeeded in his goals and completed the Nexus Intruder Program."
-msgstr "Sembra che il Dr Reed ebbe successo nei suoi scopi e completò il Programma Intruso Nexus."
+msgstr "Sembra che il dottor Reed possa essere riuscito nei suoi obiettivi e aver completato il Programma d'intrusione Nexus."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:12
 msgid "The similarity between NEXUS and Dr Reed is striking."
@@ -5042,7 +5042,7 @@ msgstr "Che interessante lezione di storia. Ora permettetemi di aggiornarvi."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:15
 msgid "The NEXUS Intruder Program was created in order to control fools like you."
-msgstr "Il Programma Intruso NEXUS fu creato per controllare gli stupidi come voi."
+msgstr "Il Programma d'intrusione NEXUS fu creato per controllare gli stupidi come voi."
 
 #: data/base/sequenceaudio/cam3/cam3abf.txt:17
 msgid "It's very simple for me to infiltrate your systems and take them over. It's so simple, in fact, that you wouldn't even know I'm there. That is until I activate parts of myself etched into your core systems."
@@ -5203,7 +5203,7 @@ msgstr "Mitragliatrice Viper Ruote"
 #: data/mp/messages/strings/names.txt:213
 #: po/custom/fromJson.txt:5157
 msgid "Sensor Tower"
-msgstr "Torre Sensoria"
+msgstr "Torre sensoria"
 
 #: data/mp/messages/strings/names.txt:226
 msgid "Tornado AA Site"
@@ -5363,7 +5363,7 @@ msgstr "Cyborg con Lanciafiamme"
 #: data/mp/messages/strings/names.txt:374
 #: po/custom/fromJson.txt:3664
 msgid "Machinegunner Cyborg"
-msgstr "Mitragliere"
+msgstr "Cyborg mitragliere"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.CyborgLegs.name
@@ -5381,7 +5381,7 @@ msgstr "Propulsione Cyborg"
 #: data/mp/messages/strings/names.txt:405
 #: po/custom/fromJson.txt:2630
 msgid "Heavy Machinegun Tower"
-msgstr "Torre con Mitragliatrice Pesante"
+msgstr "Torre con mitragliatrice pesante"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Flame1Mk1-Tower.name
@@ -5425,7 +5425,7 @@ msgstr "Torretta Riparatrice Pesante"
 
 #: data/mp/messages/strings/names.txt:490
 msgid "Nexus Intruder Program"
-msgstr "Programma intruso NEXUS"
+msgstr "Programma d'intrusione Nexus"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Resistance-Circuits.name
@@ -5496,7 +5496,7 @@ msgstr "Manufatto della Mitragliatrice"
 #: data/mp/messages/strings/names.txt:571
 #: po/custom/fromJson.txt:4126
 msgid "New Paradigm Command Center"
-msgstr "Centro di Comando del New Paradigm"
+msgstr "Centro di Comando del Nuovo Paradigma"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0CommandCentreCO.name
@@ -5795,7 +5795,7 @@ msgstr "Campagna"
 
 #: lib/sound/cdaudio.cpp:65
 msgid "Challenge"
-msgstr ""
+msgstr "Sfida"
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
@@ -5803,7 +5803,7 @@ msgstr "Schermaglia"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr ""
+msgstr "Multigiocatore"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
@@ -6254,7 +6254,7 @@ msgstr "Tutti i generatori sono stati aggiornati automaticamente"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:393
 msgid "All rail guns upgraded automatically"
-msgstr "Tutti i cannoni a massa sono stati aggiornati automaticamente"
+msgstr "Tutti i cannoni a rotaia sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[3]
@@ -6447,7 +6447,7 @@ msgstr "Armato con Laser a Impulso per Cyborg"
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_RG.text[1]
 #: po/custom/fromJson.txt:578
 msgid "Armed with Cyborg Rail Gun"
-msgstr "Armato con Cannone a Massa Cyborg"
+msgstr "Armato con Cyborg con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYW_H_AT.text[1]
@@ -6719,7 +6719,7 @@ msgstr "Postazione corazzata con Cannone Medio"
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
 #: po/custom/fromJson.txt:754
 msgid "Armored hardpoint with Rail Gun"
-msgstr "Postazione corazzata con Cannone a Massa"
+msgstr "Postazione corazzata con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT9_ATM.text[1]
@@ -6778,7 +6778,7 @@ msgstr "Posizione corazzata con Laser a Impulsi"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_Rail2.text[1]
 #: po/custom/fromJson.txt:816
 msgid "Armored strongpoint with Rail Gun"
-msgstr "Posizione corazzata con Cannone a Massa"
+msgstr "Posizione corazzata con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TRACK1.text[1]
@@ -6818,7 +6818,7 @@ msgstr "Batteria d'artiglieria che spara missili Novastorm"
 #. data/base/stats/research.json: $.R-Defense-RotCannon.name
 #: po/custom/fromJson.txt:842
 msgid "Assault Cannon Emplacement"
-msgstr "Postazione con Cannone d'Assalto"
+msgstr "Postazione con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-VulcanCan.name
@@ -6849,20 +6849,20 @@ msgstr "Cannone d'Assalto Mantis Hover"
 #. data/mp/stats/weapons.json: $.Cannon5VulcanMk1.name
 #: po/custom/fromJson.txt:861
 msgid "Assault Cannon"
-msgstr "Cannone d'Assalto"
+msgstr "Cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Pillbox-RotMG.name
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:865
 msgid "Assault Gun Bunker"
-msgstr ""
+msgstr "Bunker con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:868
 msgid "Assault Gun Emplacement"
-msgstr "Postazione con Mitragliatrice d'Assalto"
+msgstr "Postazione con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-RotMg.name
@@ -6875,7 +6875,7 @@ msgstr ""
 #. data/base/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:875
 msgid "Assault Gun Guard Tower"
-msgstr "Torre di Guardia con Mitragliatrice d'Assalto"
+msgstr "Torre di guardia con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Wall-RotMg.name
@@ -6909,7 +6909,7 @@ msgstr "Mitragliatrice d'Assalto Python Cingoli"
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:894
 msgid "Assault Gun Tower"
-msgstr "Torre con Mitragliatrice d'Assalto"
+msgstr "Torre con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG4.name
@@ -6918,7 +6918,7 @@ msgstr "Torre con Mitragliatrice d'Assalto"
 #. data/mp/stats/weapons.json: $.MG4ROTARYMk1.name
 #: po/custom/fromJson.txt:900
 msgid "Assault Gun"
-msgstr "Mitragliatrice d'Assalto"
+msgstr "Cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-RotMG.name
@@ -7128,7 +7128,7 @@ msgstr "Bersagli migliori: veicoli e cyborg"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1065
 msgid "Best Targets : Vehicles"
-msgstr "Bersagli Migliori: Veicoli"
+msgstr "Bersagli Migliori: veicoli"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HvSAM1.text[2]
@@ -7137,7 +7137,7 @@ msgstr "Bersagli Migliori: Veicoli"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1071
 msgid "Best Targets: Aerial targets only"
-msgstr "Migliori Bersagli: solo bersagli aerei"
+msgstr "Bersagli migliori: solo bersagli aerei"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[2]
@@ -7146,14 +7146,14 @@ msgstr "Migliori Bersagli: solo bersagli aerei"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1077
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Migliori Bersagli: Strutture e Cyborg"
+msgstr "Bersagli migliori: strutture e cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #: po/custom/fromJson.txt:1091
 msgid "Best Targets: Base structures"
-msgstr "Bersagli Migliori: Strutture della base"
+msgstr "Bersagli Migliori: strutture della base"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7162,13 +7162,13 @@ msgstr "Bersagli Migliori: Strutture della base"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1113
 msgid "Best Targets: Bunkers and hardpoints"
-msgstr "Migliori Bersagli: Bunker e postazioni"
+msgstr "Bersagli migliori: bunker e postazioni"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1116
 msgid "Best Targets: Bunkers and Hardpoints"
-msgstr "Migliori Bersagli: Bunker e Postazioni"
+msgstr "Bersagli migliori: bunker e postazioni"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
@@ -7189,13 +7189,13 @@ msgstr "Bersagli migliori: bunker, postazioni e fanteria"
 #. data/mp/messages/resmessages3.json: $.RES_W_LAS2.text[2]
 #: po/custom/fromJson.txt:1134
 msgid "Best Targets: Cyborgs"
-msgstr "Migliori Bersagli: Cyborg"
+msgstr "Bersagli migliori: cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_HLAS.text[2]
 #: po/custom/fromJson.txt:1141
 msgid "Best Targets: Heavy cyborgs"
-msgstr "Bersagli Migliori: Cyborg Pesanti"
+msgstr "Bersagli migliori: cyborg pesanti"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[2]
@@ -7204,7 +7204,7 @@ msgstr "Bersagli Migliori: Cyborg Pesanti"
 #. ... + 7 refs
 #: po/custom/fromJson.txt:1147
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr "Migliori bersagli: Fanteria,strutture,veicoli su ruote"
+msgstr "Bersagli migliori: fanteria, strutture e veicoli su ruote"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
@@ -7217,7 +7217,7 @@ msgstr "Bersagli migliori: veicoli e cyborg"
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
 #: po/custom/fromJson.txt:1154
 msgid "Best Targets: Vehicles and Emplacements"
-msgstr "Migliori bersagli: Veicoli e Postazioni"
+msgstr "Bersagli migliori: veicoli e postazioni"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text[2]
@@ -7225,14 +7225,14 @@ msgstr "Migliori bersagli: Veicoli e Postazioni"
 #. data/mp/messages/resmessages2.json: $.RES_W_CN_4A.text[2]
 #: po/custom/fromJson.txt:1165
 msgid "Best Targets: Vehicles, Hardpoints"
-msgstr "Migliori bersagli: Veicoli e Postazioni"
+msgstr "Bersagli migliori: veicoli e postazioni"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_MP1.text[2]
 #: po/custom/fromJson.txt:1169
 msgid "Best Targets: Wheeled and hover vehicles"
-msgstr "Bersagli Migliori: Veicoli su ruote e hover"
+msgstr "Bersagli migliori: veicoli su ruote e hover"
 
 #. TRANSLATORS:
 #. data/base/campaigns/beta.json: $.name
@@ -7470,7 +7470,7 @@ msgstr "Camion dei Pompieri con Cannone"
 #. data/mp/stats/weapons.json: $.CannonSuper.name
 #: po/custom/fromJson.txt:1336
 msgid "Cannon Fortress"
-msgstr "Fortezza con Cannone"
+msgstr "Fortezza con cannone"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon-Accuracy02.name
@@ -8184,7 +8184,7 @@ msgstr "Non offre bersagliamento di sensori"
 #. data/mp/stats/structure.json: $.WreckedTransporter.name
 #: po/custom/fromJson.txt:1826
 msgid "Downed Transport"
-msgstr "Trasporto Abbattuto"
+msgstr "Trasporto abbattuto"
 
 #. TRANSLATORS:
 #. data/mp/stats/body.json: $.Body14SUP.name
@@ -8770,7 +8770,7 @@ msgstr "Ottiene ~ 100% in più di potenza per ogni torre di trivellazione del pe
 msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
-msgstr "Ottiene ~ 100% in più di potenza per ogni torre di trivellazione del petrolio\n"
+msgstr "Ottiene ~ 100% in più di potenza per ogni derrick\n"
 "Utilizza il Launcher al Plasma Pesante e Mortaio EMP\n"
 "Inizia con strutture difensive e torri di trivellazione del petrolio"
 
@@ -8923,13 +8923,13 @@ msgstr "Proiettili rinforzati per mitragliatrice"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2314
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Torre di guardia con lanciafiamme rinforzata"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2317
 msgid "Hardened Heavy Machinegun Tower"
-msgstr ""
+msgstr "Torre con mitragliatrice pesante rinforzata"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -9489,7 +9489,7 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
 #: po/custom/fromJson.txt:2669
 msgid "Heavy rail gun firing large kinetic energy darts"
-msgstr "Cannone a Massa pesante che spara grossi dardi ad energia cinetica"
+msgstr "Cannone a rotaia pesante che spara grossi dardi ad energia cinetica"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHRepairHover.name
@@ -9708,13 +9708,13 @@ msgstr "Composito di cemento-plastica ad alta resistenza"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2834
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Contenitore di gas ad alta pressione"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2837
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Il gas ad alta pressione lancia ulteriormente il gel del lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
@@ -10153,7 +10153,7 @@ msgstr "Mortaio Incendiario"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[1]
 #: po/custom/fromJson.txt:3127
 msgid "Increased gauss output speeds up reload time"
-msgstr "L'incremento della potenza di Gauss velocizza la ricarica."
+msgstr "L'incremento della potenza di Gauss velocizza la ricarica"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[2]
@@ -10195,7 +10195,7 @@ msgstr "Aumenta la velocità di costruzione"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3199
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Aumenta la portata del lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10272,13 +10272,13 @@ msgstr "Aumenta il rateo di fuoco del Mortaio"
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
 #: po/custom/fromJson.txt:3283
 msgid "Increases Rail Gun accuracy"
-msgstr "Aumenta la precisione del Cannone a Massa"
+msgstr "Aumenta la precisione del cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_D1.text[2]
 #: po/custom/fromJson.txt:3286
 msgid "Increases Rail Gun damage"
-msgstr "Aumenta il danno causato dal Cannone a Massa"
+msgstr "Aumenta i danni del cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[2]
@@ -10865,7 +10865,7 @@ msgstr "Può essere assegnato a seguire unità"
 #. data/mp/messages/resmessagesall.json: $.RES_IMORT.text[1]
 #: po/custom/fromJson.txt:3706
 msgid "May be targeted directly or assigned to a sensor turret or tower"
-msgstr "Può attaccare direttamente o può essere assegnato a un sensore"
+msgstr "Può essere mirato direttamente o assegnato a una torretta o una torre sensoria"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[3]
@@ -11465,21 +11465,21 @@ msgstr "Nuova torretta con missili disponibile"
 #. data/mp/messages/resmessages1.json: $.RES_V_B12.text[0]
 #: po/custom/fromJson.txt:4130
 msgid "New Paradigm Heavy Body"
-msgstr "Corpo pesante del New Paradigm"
+msgstr "Corpo pesante del Nuovo Paradigma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B04.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B04.text[0]
 #: po/custom/fromJson.txt:4134
 msgid "New Paradigm Light Body"
-msgstr "Corpo leggero del New Paradigm"
+msgstr "Corpo leggero del Nuovo Paradigma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B08.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B08.text[0]
 #: po/custom/fromJson.txt:4138
 msgid "New Paradigm Medium body"
-msgstr "Corpo medio del New Paradigm"
+msgstr "Corpo medio del Nuovo Paradigma"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[1]
@@ -11520,7 +11520,7 @@ msgstr "Nuova propulsione disponbile"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4170
 msgid "New Rail Gun Available"
-msgstr "Nuovo Cannone a Massa disponibile"
+msgstr "Disponibile nuovo cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_REPAI1.text[1]
@@ -12185,28 +12185,28 @@ msgstr "Rilevatore Radar"
 #: po/custom/fromJson.txt:4603
 #, no-c-format
 msgid "Rail Gun accuracy +10%"
-msgstr "Precisione del Cannone a Massa +10%"
+msgstr "Precisione del cannone a rotaia +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_D1.text[2]
 #: po/custom/fromJson.txt:4607
 #, no-c-format
 msgid "Rail Gun damage +25%"
-msgstr "Danni del Cannone a Massa +25%"
+msgstr "Danni del cannone a rotaia +25%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Rail2.name
 #. data/mp/stats/research.json: $.R-Defense-Rail2.name
 #: po/custom/fromJson.txt:4611
 msgid "Rail Gun Emplacement"
-msgstr "Postazione con Cannone a Massa"
+msgstr "Postazione con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL2.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL2.text[1]
 #: po/custom/fromJson.txt:4615
 msgid "Rail gun firing armor-piercing darts"
-msgstr "Cannone a Massa che spara dardi perforanti"
+msgstr "Cannone a rotaia che spara dardi perforanti"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-Rail2.name
@@ -12215,7 +12215,7 @@ msgstr "Cannone a Massa che spara dardi perforanti"
 #. data/mp/stats/structure.json: $.WallTower-Rail2.name
 #: po/custom/fromJson.txt:4621
 msgid "Rail Gun Hardpoint"
-msgstr "Postazione con Cannone a Massa"
+msgstr "Postazione con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
@@ -12264,7 +12264,7 @@ msgstr "Cannone a Massa Tiger Hover"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:4649
 msgid "Rail Gun Upgrade"
-msgstr "Miglioramento del Cannone a Massa"
+msgstr "Miglioramento del cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun02.name
@@ -12273,7 +12273,7 @@ msgstr "Miglioramento del Cannone a Massa"
 #. data/mp/stats/weapons.json: $.RailGun2Mk1.name
 #: po/custom/fromJson.txt:4655
 msgid "Rail Gun"
-msgstr "Cannone a Massa"
+msgstr "Cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rail-Accuracy01.name
@@ -12286,7 +12286,7 @@ msgstr "Computer di Previsione dei Bersagli"
 #. data/mp/stats/structure.json: $.Emplacement-Rail2.name
 #: po/custom/fromJson.txt:4662
 msgid "Railgun Emplacement"
-msgstr "Postazione con Cannone a  Massa"
+msgstr "Postazione con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF02.name
@@ -12305,7 +12305,7 @@ msgstr "Mitragliatrice a Fuoco Rapido"
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL1.text[1]
 #: po/custom/fromJson.txt:4672
 msgid "Rapid fire rail gun firing needle darts"
-msgstr "Cannone a Massa a fuoco rapido che spara dardi ad ago"
+msgstr "Cannone a rotaia a fuoco rapido che spara dardi ad ago"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
@@ -12828,7 +12828,7 @@ msgstr "Fabbrica degli Sciacalli"
 #. data/mp/stats/structure.json: $.A0BaBaFlameTower.name
 #: po/custom/fromJson.txt:5035
 msgid "Scavenger Flame Tower"
-msgstr "Torre con Inceneritore degli Sciacalli"
+msgstr "Torre con lanciafiamme degli Sciacalli"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaGunTower.name
@@ -13640,7 +13640,7 @@ msgstr "Bombe alla Termite"
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
 #: po/custom/fromJson.txt:5571
 msgid "Thermite Flamer Cyborg"
-msgstr ""
+msgstr "Cyborg con lanciafiamme alla termite"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Energy-ROF02.name
@@ -13837,14 +13837,14 @@ msgstr "Doppio Cannone D'Assalto"
 #. data/mp/stats/structure.json: $.WallTower-TwinAssaultGun.name
 #: po/custom/fromJson.txt:5700
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Postazione Corazzata con Doppia Mitragliatrice d'Assalto"
+msgstr "Postazione corazzata con doppio cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MG5.name
 #. data/mp/stats/weapons.json: $.MG5TWINROTARY.name
 #: po/custom/fromJson.txt:5704
 msgid "Twin Assault Gun"
-msgstr "Doppia Mitragliatrice d'Assalto"
+msgstr "Cannone d'assalto doppio"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox2.name
@@ -14148,7 +14148,7 @@ msgstr "Cannone d'Assalto VTOL"
 #. data/mp/stats/weapons.json: $.MG4ROTARY-VTOL.name
 #: po/custom/fromJson.txt:5905
 msgid "VTOL Assault Gun"
-msgstr "Mitragliatrice d'Assalto VTOL"
+msgstr "Cannone d'assalto per VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14409,7 +14409,7 @@ msgstr "Torre Radar VTOL"
 #. data/mp/stats/weapons.json: $.RailGun2-VTOL.name
 #: po/custom/fromJson.txt:6062
 msgid "VTOL Rail Gun"
-msgstr "Cannone a Massa VTOL"
+msgstr "Cannone a rotaia per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad.name
@@ -14581,7 +14581,7 @@ msgstr "Postazione Corazzata con AA Whirlwind"
 #. data/mp/stats/structure.json: $.Sys-SensoTowerWS.name
 #: po/custom/fromJson.txt:6183
 msgid "Wide Spectrum Sensor Tower"
-msgstr "Torre Sensoria ad Ampio Spettro"
+msgstr "Torre sensoria ad ampio spettro"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Sys-Sensor-WS.name
@@ -15031,7 +15031,7 @@ msgstr "Cancella il Progetto"
 
 #: src/design.cpp:812
 msgid "Store Template"
-msgstr "Salva il Progetto"
+msgstr "Salva il modello"
 
 #: src/design.cpp:859
 #: src/design.cpp:888
@@ -15161,7 +15161,7 @@ msgstr "Impossibile costruire. Risorsa d'olio in fiamme."
 #: src/display.cpp:1526
 #, c-format
 msgid "%s - Hitpoints %d/%d - Experience %.1f, %s, Kills %d"
-msgstr ""
+msgstr "%s - Punti vita %d/%d - Esperienza %.1f, %s, Uccisioni %d"
 
 #: src/display.cpp:1689
 #, c-format
@@ -15211,8 +15211,8 @@ msgstr[1] "Gruppo %u selezionato - %u Unità"
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
-msgstr[0] "%u unità assegnata al Gruppo %u"
-msgstr[1] "%u unità assegnata al Gruppo %u"
+msgstr[0] "%u unità assegnata al gruppo %u"
+msgstr[1] "%u unità assegnate al gruppo %u"
 
 #: src/droid.cpp:1878
 #, c-format
@@ -15434,7 +15434,7 @@ msgstr "Opzioni del mouse"
 #: src/frontend.cpp:646
 #: src/ingameop.cpp:576
 msgid "Key Mappings"
-msgstr "Assegnazione dei Tasti"
+msgstr "Mappature dei tasti"
 
 #: src/frontend.cpp:647
 #: src/ingameop.cpp:579
@@ -15664,7 +15664,7 @@ msgstr "Risoluzione"
 
 #: src/frontend.cpp:1224
 msgid "Display Scale"
-msgstr "Scala del Display"
+msgstr "Scala del display"
 
 #: src/frontend.cpp:1252
 msgid "Adaptive"
@@ -15701,12 +15701,13 @@ msgstr "OPZIONI VIDEO"
 
 #: src/frontend.cpp:1586
 msgid "Unable to change Window Mode"
-msgstr ""
+msgstr "Impossibile modificare la modalità a finestra"
 
 #: src/frontend.cpp:1586
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone non è riuscito a modificare la modalità a finestra.\n"
+"Il sistema o il driver potrebbero non supportare altre modalità."
 
 #: src/frontend.cpp:1612
 msgid "Unable to change Vertical Sync"
@@ -15811,38 +15812,38 @@ msgstr "Mod:"
 
 #: src/frontend.cpp:2580
 msgid "Increase Game Display Scale?"
-msgstr ""
+msgstr "Aumentare la scala del display del gioco?"
 
 #: src/frontend.cpp:2582
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr ""
+msgstr "Con le impostazioni di risoluzione e di scala del display correnti, l'interfaccia del gioco può apparire piccola, mentre la prospettiva di gioco può apparire distorta."
 
 #: src/frontend.cpp:2584
 msgid "You can fix this by increasing the game's Display Scale setting."
-msgstr ""
+msgstr "Puoi sistemare aumentando l'impostazione della scala del display del gioco."
 
 #: src/frontend.cpp:2586
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
-msgstr ""
+msgstr "Vuoi aumentare la scala del display del gioco a: %u%%?"
 
 #: src/frontend.cpp:2588
 msgid "Increase Display Scale"
-msgstr ""
+msgstr "Aumenta la scala del display"
 
 #: src/frontend.cpp:2605
 #, c-format
 msgid "Display Scale Increased to: %u%%"
-msgstr ""
+msgstr "Scala del display aumentata a: %u%%"
 
 #: src/frontend.cpp:2606
 #: src/frontend.cpp:2622
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
-msgstr ""
+msgstr "Puoi regolare la scala del display in qualsiasi momento nel menu delle opzioni video."
 
 #: src/frontend.cpp:2621
 msgid "Tip: Adjusting Display Scale"
-msgstr ""
+msgstr "Suggerimento: regolazione della scala del display"
 
 #: src/hci.cpp:889
 #: src/loop.cpp:249
@@ -16004,7 +16005,7 @@ msgstr "Attenzione: sei sicuro?"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Attenzione: sei sicuro? I progressi non salvati verranno persi."
 
 #: src/ingameop.cpp:321
 msgid "Confirm"
@@ -16032,11 +16033,11 @@ msgstr "Opzioni Audio"
 
 #: src/ingameop.cpp:576
 msgid "View Key Mappings"
-msgstr "Mostra Assegnamento Tasti"
+msgstr "Mostra le mappature dei tasti"
 
 #: src/ingameop.cpp:632
 msgid "Shake"
-msgstr ""
+msgstr "Scuoti"
 
 #: src/ingameop.cpp:1017
 msgid "Save Campaign Game"
@@ -16483,12 +16484,12 @@ msgstr "Inseguire"
 #: src/input/keyconfig.cpp:147
 #: src/intorder.cpp:175
 msgid "Patrol"
-msgstr "Pattugliare"
+msgstr "Pattuglia"
 
 #: src/input/keyconfig.cpp:148
 #: src/intorder.cpp:179
 msgid "Return For Repair"
-msgstr "Rientrare per riparazioni"
+msgstr "Rientra per la riparazione"
 
 #: src/input/keyconfig.cpp:149
 msgid "Stop Droid"
@@ -16534,7 +16535,7 @@ msgstr "Visualizza visione radar alleato-nemico"
 
 #: src/input/keyconfig.cpp:159
 msgid "Show all keyboard mappings"
-msgstr "Mostra tutti gli assegnamenti della tastiera"
+msgstr "Mostra tutte le mappature dei tasti della tastiera"
 
 #: src/input/keyconfig.cpp:161
 #: src/intorder.cpp:169
@@ -16799,11 +16800,11 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:233
 msgid "Discord: Finding & Connecting to Game"
-msgstr ""
+msgstr "Discord: ricerca e connessione al gioco"
 
 #: src/integrations/wzdiscordrpc.cpp:234
 msgid "Attempting to find & connect to the game specified by the Discord invite."
-msgstr ""
+msgstr "Tentativo di ricerca e di connessione al gioco specificato dall'invito di Discord."
 
 #: src/integrations/wzdiscordrpc.cpp:236
 msgid "This may take a moment..."
@@ -16815,15 +16816,15 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:263
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr ""
+msgstr "Il gioco potrebbe già essere stato avviato, oppure l'host potrebbe aver sciolto la lobby del gioco."
 
 #: src/integrations/wzdiscordrpc.cpp:266
 msgid "Failed to Find Game"
-msgstr ""
+msgstr "Impossibile trovare il gioco"
 
 #: src/integrations/wzdiscordrpc.cpp:294
 msgid "Failed to join the game from the specified invite link, with error:"
-msgstr ""
+msgstr "Impossibile unirsi al gioco del collegamento d'invito specificato con errore:"
 
 #: src/integrations/wzdiscordrpc.cpp:298
 msgid "Failed to Join Game"
@@ -16864,15 +16865,15 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:480
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
-msgstr ""
+msgstr "Il collegamento d'invito che hai seguito non è supportato in questa versione di Warzone 2100."
 
 #: src/integrations/wzdiscordrpc.cpp:481
 msgid "A newer version of Warzone 2100 may be required, if available."
-msgstr ""
+msgstr "Potrebbe essere necessaria una versione più recente di Warzone 2100, se disponibile."
 
 #: src/integrations/wzdiscordrpc.cpp:484
 msgid "Discord: Unsupported / Invalid Invite"
-msgstr ""
+msgstr "Discord: invito non supportato o non valido"
 
 #: src/integrations/wzdiscordrpc.cpp:550
 msgid "Playing: Campaign"
@@ -16895,14 +16896,14 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:601
 #: src/integrations/wzdiscordrpc.cpp:837
 msgid "Map:"
-msgstr ""
+msgstr "Mappa:"
 
 #. TRANSLATORS: AI Bots. (Used to describe the number of bot players.)
 #. Should be a fairly short string - space is limited. Use an abbreviation / acronym if necessary.
 #: src/integrations/wzdiscordrpc.cpp:604
 #: src/integrations/wzdiscordrpc.cpp:833
 msgid "Bots:"
-msgstr ""
+msgstr "Bot:"
 
 #: src/integrations/wzdiscordrpc.cpp:627
 #: src/integrations/wzdiscordrpc.cpp:817
@@ -16916,18 +16917,18 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:849
 #, c-format
 msgid "Game Name: \"%s\" by %s"
-msgstr ""
+msgstr "Nome del gioco: \"%s\" di %s"
 
 #. TRANSLATORS: "No:" to signify limits - example usage: "No: Tanks,VTOLs"
 #. Should be a short string - space is limited. Use an abbreviation / symbol if necessary.
 #: src/integrations/wzdiscordrpc.cpp:896
 msgid "No:"
-msgstr ""
+msgstr "No:"
 
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:912
 msgid "Alliances:"
-msgstr ""
+msgstr "Alleanze:"
 
 #: src/integrations/wzdiscordrpc.cpp:928
 msgid "In Menu"
@@ -16936,11 +16937,11 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:1077
 #, c-format
 msgid "Discord user \"%s\" would like to join your game."
-msgstr ""
+msgstr "L'utente di Discord \"%s\" vorrebbe unirsi al gioco."
 
 #: src/integrations/wzdiscordrpc.cpp:1079
 msgid "Allow this player to join your game?"
-msgstr ""
+msgstr "Permetti a questo giocatore di unirsi al gioco?"
 
 #: src/integrations/wzdiscordrpc.cpp:1083
 #, c-format
@@ -16949,7 +16950,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:1085
 msgid "Allow"
-msgstr ""
+msgstr "Permetti"
 
 #: src/intelmap.cpp:241
 #: src/keybind.cpp:1235
@@ -16978,7 +16979,7 @@ msgstr "Fuoco a volontà"
 
 #: src/intorder.cpp:180
 msgid "Return To HQ"
-msgstr "Rientrare al QG"
+msgstr "Rientra al QG"
 
 #: src/intorder.cpp:183
 msgid "Recycle"
@@ -17010,7 +17011,7 @@ msgstr "Spiacente, quel trucco è disabilitato nelle partite multigiocatore."
 
 #: src/keybind.cpp:146
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
-msgstr "Attenzione! Questo trucco è buggato. Raccomandiamo di NON usarlo."
+msgstr "Attenzione! Questo trucco è difettoso. Raccomandiamo di NON usarlo."
 
 #: src/keybind.cpp:208
 msgid "Ouch! Droid's health is down 20%!"
@@ -17043,7 +17044,7 @@ msgstr "Vista Allineata ad Ovest"
 #: src/keybind.cpp:400
 #, c-format
 msgid "Player %u is cheating a new droid army of: %d × %s."
-msgstr "Giocatore %u sta truccando un nuovo esercito di droidi di: %d × %s."
+msgstr "Il giocatore %u sta ottenendo per mezzo di trucchi un nuovo esercito di droidi di: %d × %s."
 
 #: src/keybind.cpp:520
 #: src/keybind.cpp:548
@@ -17107,7 +17108,7 @@ msgstr ""
 #: src/keybind.cpp:686
 #, c-format
 msgid "(Player %u) is using a cheat :Num Droids: %d  Num Structures: %d  Num Features: %d"
-msgstr "(Il player %u) usa un trucco:Unità %d Strut.re %d Caratt. %d"
+msgstr "(Il giocatore %u) sta usando un trucco: num droidi %d num strutture %d num caratteristiche %d"
 
 #: src/keybind.cpp:720
 msgid "Infinite power disabled"
@@ -17153,39 +17154,39 @@ msgstr "Blocca il Cursore %s"
 
 #: src/keybind.cpp:1247
 msgid "CAMPAIGN"
-msgstr ""
+msgstr "CAMPAGNA"
 
 #: src/keybind.cpp:1251
 msgid "CHALLENGE"
-msgstr ""
+msgstr "SFIDA"
 
 #: src/keybind.cpp:1254
 msgid "SKIRMISH"
-msgstr ""
+msgstr "SCHERMAGLIA"
 
 #: src/keybind.cpp:1272
 msgid "DIFFICULTY: EASY"
-msgstr ""
+msgstr "DIFFICOLTÀ: SEMPLICE"
 
 #: src/keybind.cpp:1275
 msgid "DIFFICULTY: NORMAL"
-msgstr ""
+msgstr "DIFFICOLTÀ: NORMALE"
 
 #: src/keybind.cpp:1278
 msgid "DIFFICULTY: HARD"
-msgstr ""
+msgstr "DIFFICOLTÀ: DIFFICILE"
 
 #: src/keybind.cpp:1281
 msgid "DIFFICULTY: INSANE"
-msgstr ""
+msgstr "DIFFICOLTÀ: PAZZO"
 
 #: src/keybind.cpp:1290
 msgid "CHEATS: ENABLED"
-msgstr ""
+msgstr "TRUCCHI: ABILITATI"
 
 #: src/keybind.cpp:1292
 msgid "CHEATS: DISABLED"
-msgstr ""
+msgstr "TRUCCHI: DISABILITATI"
 
 #: src/keybind.cpp:1348
 msgid "Researched EVERYTHING for you!"
@@ -17198,7 +17199,7 @@ msgstr "Edifici selezionati ricaricati immediatamente!"
 #: src/keybind.cpp:1412
 #, c-format
 msgid "(Player %u) is using cheat :%s %s"
-msgstr "(Il giocatore %u) sta usando il trucco:%s %s"
+msgstr "(Il giocatore %u) sta usando il trucco: %s %s"
 
 #: src/keybind.cpp:1412
 msgid "Researched"
@@ -17242,7 +17243,7 @@ msgstr "Attenzione! Questo può avere conseguenze drastiche se usato non corrett
 
 #: src/keybind.cpp:1711
 msgid "All enemies destroyed by cheating!"
-msgstr "Nemici distrutti con i trucchi!"
+msgstr "Tutti i nemici sono stati distrutti con dei trucchi!"
 
 #: src/keybind.cpp:1751
 msgid "Destroying selected droids and structures!"
@@ -17282,7 +17283,7 @@ msgstr ""
 
 #: src/keybind.cpp:2045
 msgid "Screen shake when things die: On"
-msgstr ""
+msgstr "Scuotimento dello schermo quando qualcosa muore: Acceso"
 
 #: src/keybind.cpp:2098
 msgid "Sorry, but game speed cannot be changed in multiplayer."
