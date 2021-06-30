@@ -2901,9 +2901,8 @@ void ChatBoxWidget::initializeMessages(bool preserveOldChat)
 
 void ChatBoxWidget::displayMessage(RoomMessage const &message)
 {
-	W_INIT paragraphInit;
-	paragraphInit.width = messages->calculateListViewWidth();
-	auto paragraph = std::make_shared<Paragraph>(&paragraphInit);
+	auto paragraph = std::make_shared<Paragraph>();
+	paragraph->setGeometry(0, 0, messages->calculateListViewWidth(), 0);
 
 	switch (message.type)
 	{
