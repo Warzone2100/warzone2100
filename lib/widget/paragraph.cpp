@@ -29,16 +29,16 @@
 class FlowLayoutElementDescriptor
 {
 public:
-    virtual ~FlowLayoutElementDescriptor() = default;
-    virtual unsigned int getWidth(size_t position, size_t length) const = 0;
-    virtual size_t size() const = 0;
-    virtual bool isWhitespace(size_t position) const = 0;
-    virtual bool isLineBreak(size_t position) const = 0;
+	virtual ~FlowLayoutElementDescriptor() = default;
+	virtual unsigned int getWidth(size_t position, size_t length) const = 0;
+	virtual size_t size() const = 0;
+	virtual bool isWhitespace(size_t position) const = 0;
+	virtual bool isLineBreak(size_t position) const = 0;
 
-    virtual bool isWord(size_t position) const
-    {
-        return position < size() && !isWhitespace(position) && !isLineBreak(position);
-    }
+	virtual bool isWord(size_t position) const
+	{
+		return position < size() && !isWhitespace(position) && !isLineBreak(position);
+	}
 };
 
 /**
@@ -59,168 +59,168 @@ public:
 struct FlowLayout
 {
 private:
-    bool shouldMergeFragment()
-    {
-        return !currentLine.empty() && !partialWord.empty() && currentLine.back().elementId == partialWord.front().elementId;
-    }
+	bool shouldMergeFragment()
+	{
+		return !currentLine.empty() && !partialWord.empty() && currentLine.back().elementId == partialWord.front().elementId;
+	}
 
-    void endWord()
-    {
-        if (shouldMergeFragment())
-        {
-            auto partialWordFront = &partialWord.front();
-            auto currentLineBack = currentLine.back();
-            currentLine.pop_back();
-            partialWordFront->length = partialWordFront->length + partialWordFront->begin - currentLineBack.begin;
-            partialWordFront->width = partialWordFront->offset + partialWordFront->width - currentLineBack.offset;
-            partialWordFront->begin = currentLineBack.begin;
-            partialWordFront->offset = currentLineBack.offset;
-        }
+	void endWord()
+	{
+		if (shouldMergeFragment())
+		{
+			auto partialWordFront = &partialWord.front();
+			auto currentLineBack = currentLine.back();
+			currentLine.pop_back();
+			partialWordFront->length = partialWordFront->length + partialWordFront->begin - currentLineBack.begin;
+			partialWordFront->width = partialWordFront->offset + partialWordFront->width - currentLineBack.offset;
+			partialWordFront->begin = currentLineBack.begin;
+			partialWordFront->offset = currentLineBack.offset;
+		}
 
-        for (auto fragment: partialWord)
-        {
-            currentLine.push_back(fragment);
-        }
+		for (auto fragment: partialWord)
+		{
+			currentLine.push_back(fragment);
+		}
 
-        nextOffset += partialWordWidth;
-        partialWordWidth = 0;
-        partialWord.clear();
-    }
+		nextOffset += partialWordWidth;
+		partialWordWidth = 0;
+		partialWord.clear();
+	}
 
-    void pushFragment(FlowLayoutElementDescriptor const &elementDescriptor, size_t begin, size_t end)
-    {
-        auto width = elementDescriptor.getWidth(begin, end - begin);
-        partialWord.push_back({currentElementId, begin, end - begin, width, nextOffset + partialWordWidth});
-        partialWordWidth += width;
-    }
+	void pushFragment(FlowLayoutElementDescriptor const &elementDescriptor, size_t begin, size_t end)
+	{
+		auto width = elementDescriptor.getWidth(begin, end - begin);
+		partialWord.push_back({currentElementId, begin, end - begin, width, nextOffset + partialWordWidth});
+		partialWordWidth += width;
+	}
 
-    void placeLine(FlowLayoutElementDescriptor const &elementDescriptor, size_t begin, size_t end)
-    {
-        auto current = begin;
+	void placeLine(FlowLayoutElementDescriptor const &elementDescriptor, size_t begin, size_t end)
+	{
+		auto current = begin;
 
-        while (current < end)
-        {
-            long long fragmentFits;
+		while (current < end)
+		{
+			long long fragmentFits;
 
-            if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, end - current) > maxWidth)
-            // fragment doesn't fit completely in the current line
-            {
-                fragmentFits = current - 1;
-                size_t fragmentDoesntFit = end;
-                while (fragmentDoesntFit - fragmentFits > 1)
-                {
-                    auto middle = (fragmentFits + fragmentDoesntFit) / 2;
-                    if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, middle - current) > maxWidth)
-                    {
-                        fragmentDoesntFit = middle;
-                    } else {
-                        fragmentFits = middle;
-                    }
-                }
-            }
-            else
-            {
-                fragmentFits = end;
-            }
+			if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, end - current) > maxWidth)
+			// fragment doesn't fit completely in the current line
+			{
+				fragmentFits = current - 1;
+				size_t fragmentDoesntFit = end;
+				while (fragmentDoesntFit - fragmentFits > 1)
+				{
+					auto middle = (fragmentFits + fragmentDoesntFit) / 2;
+					if (nextOffset + partialWordWidth + elementDescriptor.getWidth(current, middle - current) > maxWidth)
+					{
+						fragmentDoesntFit = middle;
+					} else {
+						fragmentFits = middle;
+					}
+				}
+			}
+			else
+			{
+				fragmentFits = end;
+			}
 
-            auto whitespacePosition = fragmentFits + 1;
-            while (whitespacePosition > elementDescriptor.size() || (whitespacePosition > current && !elementDescriptor.isWhitespace(whitespacePosition - 1)))
-            {
-                whitespacePosition--;
-            }
+			auto whitespacePosition = fragmentFits + 1;
+			while (whitespacePosition > elementDescriptor.size() || (whitespacePosition > current && !elementDescriptor.isWhitespace(whitespacePosition - 1)))
+			{
+				whitespacePosition--;
+			}
 
-            if (whitespacePosition > current)
-            // the fragment ending with a whitespace fits within the line
-            {
-                pushFragment(elementDescriptor, current, whitespacePosition - 1);
-                endWord();
-                nextOffset += elementDescriptor.getWidth(whitespacePosition - 1, 1);
-                current = whitespacePosition;
-            }
-            else if (fragmentFits == end)
-            // the fragment is a single word, and fits in the line,
-            // but it doesn't end in whitespace and the next element might be part of this word
-            {
-                pushFragment(elementDescriptor, current, fragmentFits);
-                current = fragmentFits;
-            }
-            else if (nextOffset > 0)
-            // word doesn't fit in the current line
-            {
-                 breakLine();
-            }
-            else
-            // word doesn't fit in an empty line
-            {
-                auto fragmentEnd = std::max((size_t)fragmentFits, current + 1);
-                pushFragment(elementDescriptor, current, fragmentEnd);
-                current = fragmentEnd;
-                breakLine();
-            }
-        }
-    }
+			if (whitespacePosition > current)
+			// the fragment ending with a whitespace fits within the line
+			{
+				pushFragment(elementDescriptor, current, whitespacePosition - 1);
+				endWord();
+				nextOffset += elementDescriptor.getWidth(whitespacePosition - 1, 1);
+				current = whitespacePosition;
+			}
+			else if (fragmentFits == end)
+			// the fragment is a single word, and fits in the line,
+			// but it doesn't end in whitespace and the next element might be part of this word
+			{
+				pushFragment(elementDescriptor, current, fragmentFits);
+				current = fragmentFits;
+			}
+			else if (nextOffset > 0)
+			// word doesn't fit in the current line
+			{
+				 breakLine();
+			}
+			else
+			// word doesn't fit in an empty line
+			{
+				auto fragmentEnd = std::max((size_t)fragmentFits, current + 1);
+				pushFragment(elementDescriptor, current, fragmentEnd);
+				current = fragmentEnd;
+				breakLine();
+			}
+		}
+	}
 
 public:
-    FlowLayout(unsigned int maxWidth): maxWidth(maxWidth)
-    {
+	FlowLayout(unsigned int maxWidth): maxWidth(maxWidth)
+	{
 
-    }
+	}
 
-    void append(FlowLayoutElementDescriptor const &elementDescriptor)
-    {
-        size_t position = 0;
-        while (position < elementDescriptor.size())
-        {
-            auto lineEnd = position;
+	void append(FlowLayoutElementDescriptor const &elementDescriptor)
+	{
+		size_t position = 0;
+		while (position < elementDescriptor.size())
+		{
+			auto lineEnd = position;
 
-            while (lineEnd < elementDescriptor.size() && !elementDescriptor.isLineBreak(lineEnd))
-            {
-                lineEnd++;
-            }
+			while (lineEnd < elementDescriptor.size() && !elementDescriptor.isLineBreak(lineEnd))
+			{
+				lineEnd++;
+			}
 
-            placeLine(elementDescriptor, position, lineEnd);
+			placeLine(elementDescriptor, position, lineEnd);
 
-            if (lineEnd < elementDescriptor.size())
-            {
-                breakLine();
-            }
+			if (lineEnd < elementDescriptor.size())
+			{
+				breakLine();
+			}
 
-            position = lineEnd + 1;
-        }
+			position = lineEnd + 1;
+		}
 
-        currentElementId++;
-    }
+		currentElementId++;
+	}
 
-    void end()
-    {
-        endWord();
+	void end()
+	{
+		endWord();
 
-        if (!currentLine.empty()) {
-            breakLine();
-        }
-    }
+		if (!currentLine.empty()) {
+			breakLine();
+		}
+	}
 
-    void breakLine()
-    {
-        endWord();
-        lines.push_back(currentLine);
-        currentLine.clear();
-        nextOffset = 0;
-    }
+	void breakLine()
+	{
+		endWord();
+		lines.push_back(currentLine);
+		currentLine.clear();
+		nextOffset = 0;
+	}
 
-    std::vector<std::vector<FlowLayoutFragment>> getLines()
-    {
-        return lines;
-    }
+	std::vector<std::vector<FlowLayoutFragment>> getLines()
+	{
+		return lines;
+	}
 
 private:
-    std::vector<FlowLayoutFragment> currentLine;
-    std::vector<std::vector<FlowLayoutFragment>> lines;
-    unsigned int maxWidth;
-    unsigned int currentElementId = 0;
-    unsigned int nextOffset = 0;
-    std::vector<FlowLayoutFragment> partialWord;
-    unsigned int partialWordWidth = 0;
+	std::vector<FlowLayoutFragment> currentLine;
+	std::vector<std::vector<FlowLayoutFragment>> lines;
+	unsigned int maxWidth;
+	unsigned int currentElementId = 0;
+	unsigned int nextOffset = 0;
+	std::vector<FlowLayoutFragment> partialWord;
+	unsigned int partialWordWidth = 0;
 };
 
 /**
@@ -259,25 +259,25 @@ private:
 
 class FlowLayoutStringDescriptor : public FlowLayoutElementDescriptor
 {
-    WzString text;
-    std::vector<uint32_t> textUtf32;
+	WzString text;
+	std::vector<uint32_t> textUtf32;
 	iV_fonts font;
 
 public:
-    FlowLayoutStringDescriptor(WzString const &newText, iV_fonts newFont): text(newText), textUtf32(newText.toUtf32()), font(newFont) {}
+	FlowLayoutStringDescriptor(WzString const &newText, iV_fonts newFont): text(newText), textUtf32(newText.toUtf32()), font(newFont) {}
 
-    unsigned int getWidth(size_t position, size_t length) const
-    {
-        return iV_GetTextWidth(text.substr(position, length).toUtf8().c_str(), font);
-    }
+	unsigned int getWidth(size_t position, size_t length) const
+	{
+		return iV_GetTextWidth(text.substr(position, length).toUtf8().c_str(), font);
+	}
 
-    size_t size() const
-    {
-        return textUtf32.size();
-    }
+	size_t size() const
+	{
+		return textUtf32.size();
+	}
 
-    bool isWhitespace(size_t position) const
-    {
+	bool isWhitespace(size_t position) const
+	{
 		switch (textUtf32[position])
 		{
 		case ' ':
@@ -286,12 +286,12 @@ public:
 		default:
 			return false;
 		}
-    }
+	}
 
-    bool isLineBreak(size_t position) const
-    {
-        return textUtf32[position] == '\n';
-    }
+	bool isLineBreak(size_t position) const
+	{
+		return textUtf32[position] == '\n';
+	}
 };
 
 struct ParagraphTextElement: public ParagraphElement
@@ -346,25 +346,25 @@ struct ParagraphWidgetElement: public ParagraphElement, FlowLayoutElementDescrip
 	{
 	}
 
-    unsigned int getWidth(size_t position, size_t length) const override
-    {
-        return position == 0 ? widget->width() : 0;
-    }
+	unsigned int getWidth(size_t position, size_t length) const override
+	{
+		return position == 0 ? widget->width() : 0;
+	}
 
-    size_t size() const override
-    {
-        return 1;
-    }
+	size_t size() const override
+	{
+		return 1;
+	}
 
-    bool isWhitespace(size_t position) const override
-    {
+	bool isWhitespace(size_t position) const override
+	{
 		return false;
-    }
+	}
 
-    bool isLineBreak(size_t position) const override
-    {
-        return false;
-    }
+	bool isLineBreak(size_t position) const override
+	{
+		return false;
+	}
 
 	void appendTo(FlowLayout &layout) override
 	{
@@ -461,7 +461,7 @@ void Paragraph::updateLayout()
 
 std::vector<std::vector<FlowLayoutFragment>> Paragraph::calculateLinesLayout()
 {
-    FlowLayout flowLayout(width());
+	FlowLayout flowLayout(width());
 	for (auto &element: elements)
 	{
 		element->appendTo(flowLayout);
