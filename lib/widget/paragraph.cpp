@@ -439,7 +439,12 @@ void Paragraph::updateLayout()
 			auto fragmentAboveBase = -elements[fragmentDescriptor.elementId]->getAboveBase();
 			aboveBase = std::max(aboveBase, fragmentAboveBase);
 			belowBase = std::max(belowBase, fragment->height() - fragmentAboveBase);
-			fragment->setGeometry(fragmentDescriptor.offset, nextLineOffset - fragmentAboveBase, fragment->width(), fragment->height());
+			fragment->setGeometry(
+				fragmentDescriptor.offset,
+				nextLineOffset - fragmentAboveBase,
+				std::min(width(), fragment->width()),
+				fragment->height()
+			);
 			lineFragments.push_back(fragment.get());
 		}
 
