@@ -399,10 +399,6 @@ private:
 	int32_t aboveBase;
 };
 
-Paragraph::Paragraph(W_INIT const *init): WIDGET(init)
-{
-}
-
 bool Paragraph::hasElementWithLayoutDirty() const
 {
 	for (auto &element: elements)

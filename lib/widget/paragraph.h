@@ -99,7 +99,7 @@ struct FlowLayoutFragment
 class Paragraph : public WIDGET
 {
 public:
-	Paragraph(W_INIT const *init);
+	Paragraph(): WIDGET() {}
 
 	void addText(std::string const &text);
 	void addWidget(const std::shared_ptr<WIDGET> &widget, int32_t aboveBase);
