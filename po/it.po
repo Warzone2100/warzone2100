@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:09\n"
+"PO-Revision-Date: 2021-06-30 09:53\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1739,7 +1739,7 @@ msgstr "Aumenta l'Armatura Cinetica e i Punti Corazza"
 #: data/mp/messages/strings/resstrings.txt:9
 #: po/custom/fromJson.txt:317
 msgid "All Cyborgs upgraded automatically"
-msgstr "Tutti i Cyborg saranno aggiornati automaticamente"
+msgstr "Tutti i cyborg sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[0]
@@ -1750,7 +1750,7 @@ msgstr "Tutti i Cyborg saranno aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:6
 #: po/custom/fromJson.txt:1699
 msgid "Cyborg Thermal Armor Improved"
-msgstr "Armatura termica dei Cyborg migliorata"
+msgstr "Armatura termica dei cyborg migliorata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CY_AH1.text[1]
@@ -2433,7 +2433,7 @@ msgstr "Produzione di Cyborg Robotizzata"
 #: data/mp/messages/strings/resstrings.txt:178
 #: po/custom/fromJson.txt:3179
 msgid "Increases Cyborg factory output"
-msgstr "Aumenta la velocità di produzione dei Cyborg"
+msgstr "Aumenta la velocità di produzione dei cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[3]
@@ -2446,7 +2446,7 @@ msgstr "Aumenta la velocità di produzione dei Cyborg"
 #: data/mp/messages/strings/resstrings.txt:179
 #: po/custom/fromJson.txt:311
 msgid "All Cyborg factories upgraded automatically"
-msgstr "Tutte le fabbriche di Cyborg saranno aggiornate automaticamente"
+msgstr "Tutte le fabbriche di cyborg sono state aggiornate automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:356
 #: data/mp/messages/strings/resstrings.txt:177
@@ -2492,7 +2492,7 @@ msgstr "Aumenta la velocità di produzione della fabbrica"
 #: data/mp/messages/strings/resstrings.txt:189
 #: po/custom/fromJson.txt:440
 msgid "All vehicle factories upgraded automatically"
-msgstr "Tutte le fabbriche di veicoli saranno aggiornate automaticamente"
+msgstr "Tutte le fabbriche di veicoli sono state aggiornate automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:374
 #: data/mp/messages/strings/resstrings.txt:187
@@ -2550,7 +2550,7 @@ msgstr "Aumenta la velocità di ricerca"
 #: data/mp/messages/strings/resstrings.txt:194
 #: po/custom/fromJson.txt:411
 msgid "All research facilities upgraded automatically"
-msgstr "Tutte le strutture di ricerca saranno aggiornate automaticamente"
+msgstr "Tutte le strutture di ricerca sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[0]
@@ -2583,7 +2583,7 @@ msgstr "Materiali da Costruzione Rinforzati"
 #: data/mp/messages/strings/resstrings.txt:199
 #: po/custom/fromJson.txt:287
 msgid "All base structures upgraded automatically"
-msgstr "Tutte le strutture saranno aggiornate automaticamente"
+msgstr "Tutte le strutture di base sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[0]
@@ -2625,7 +2625,7 @@ msgstr "Aumenta la velocità di produzione della fabbrica di VTOL"
 #: data/mp/messages/strings/resstrings.txt:204
 #: po/custom/fromJson.txt:458
 msgid "All VTOL factories upgraded automatically"
-msgstr "Tutte le fabbriche di VTOL saranno aggiornate automaticamente"
+msgstr "Tutte le fabbriche di VTOL sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[0]
@@ -2667,7 +2667,7 @@ msgstr "Riduce i tempi di riarmo"
 #: data/mp/messages/strings/resstrings.txt:209
 #: po/custom/fromJson.txt:399
 msgid "All rearming pads upgraded automatically"
-msgstr "Tutti le piattaforme di riarmo saranno aggiornate automaticamente"
+msgstr "Tutti le piattaforme di riarmo sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSTU1.text[0]
@@ -2723,7 +2723,7 @@ msgstr "Aumenta la velocità di riparazione"
 #: data/base/messages/strings/resstrings.txt:452
 #: data/mp/messages/strings/resstrings.txt:219
 msgid "All mobile repair units upgraded automatically"
-msgstr "Tutte le unità da riparazione mobili saranno aggiornate automaticamente"
+msgstr "Tutte le unità da riparazione mobili sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[0]
@@ -2836,7 +2836,7 @@ msgstr "Aumenta il raggio dei sensori CB VTOL"
 #: data/mp/messages/strings/resstrings.txt:234
 #: po/custom/fromJson.txt:452
 msgid "All VTOL CB sensors upgraded automatically"
-msgstr "Tutti i sensori CB VTOL saranno aggiornati automaticamente"
+msgstr "Tutti i sensori CB VTOL sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[0]
@@ -2878,7 +2878,7 @@ msgstr "Estende la portata della Torretta d'attacco VTOL"
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:464
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Tutte i Sensori d'Attacco VTOL saranno aggiornati automaticamente"
+msgstr "Tutte i Sensori d'Attacco VTOL sono stati aggiornati automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
@@ -2898,7 +2898,7 @@ msgstr "Aumenta il rateo di fuoco del disturbatore"
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
 msgid "All scramblers upgraded automatically"
-msgstr "Tutti i disturbatori saranno aggiornati automaticamente"
+msgstr "Tutti i disturbatori sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B02.text[0]
@@ -3022,7 +3022,7 @@ msgstr "Migliora la velocità dei veicoli"
 #: data/mp/messages/strings/resstrings.txt:269
 #: po/custom/fromJson.txt:446
 msgid "All vehicles upgraded automatically"
-msgstr "Tutti i veicoli saranno aggiornati automaticamente"
+msgstr "Tutti i veicoli sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_MET1.text[0]
@@ -3137,7 +3137,7 @@ msgstr "Aumenta i Punti Corazza"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:339
 msgid "All half-tracks upgraded automatically"
-msgstr "Tutti i veicoli su semicingoli saranno aggiornati automaticamente"
+msgstr "Tutti i semicingoli sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_H2.text[3]
@@ -3148,7 +3148,7 @@ msgstr "Tutti i veicoli su semicingoli saranno aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:279
 #: po/custom/fromJson.txt:345
 msgid "All hovers upgraded automatically"
-msgstr "Tutti gli hovercraft saranno aggiornati automaticamente"
+msgstr "Tutti gli hovercraft sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_TRACK2.text[3]
@@ -3159,7 +3159,7 @@ msgstr "Tutti gli hovercraft saranno aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:284
 #: po/custom/fromJson.txt:429
 msgid "All tracks upgraded automatically"
-msgstr "Tutti i veicoli su cingoli saranno aggiornati automaticamente"
+msgstr "Tutti i cingoli sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_W2.text[3]
@@ -3170,7 +3170,7 @@ msgstr "Tutti i veicoli su cingoli saranno aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:289
 #: po/custom/fromJson.txt:476
 msgid "All wheels upgraded automatically"
-msgstr "Tutti i veicoli su ruote saranno aggiornati automaticamente"
+msgstr "Tutte le ruote sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA1.text[0]
@@ -3286,7 +3286,7 @@ msgstr "Aumenta la precisione delle antiaeree"
 #: data/mp/messages/strings/resstrings.txt:324
 #: po/custom/fromJson.txt:281
 msgid "All AA weapons upgraded automatically"
-msgstr "Tutte le armi antiaeree saranno aggiornate automaticamente"
+msgstr "Tutte le armi antiaeree sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAD1.text[0]
@@ -3326,7 +3326,7 @@ msgstr "Aumenta i danni delle antiaeree"
 #: data/mp/messages/strings/resstrings.txt:319
 #: po/custom/fromJson.txt:275
 msgid "All AA flak weapons upgraded automatically"
-msgstr "Tutte le armi antiaeree saranno aggiornate automaticamente"
+msgstr "Tutte le armi antiaeree sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAROF1.text[1]
@@ -3484,7 +3484,7 @@ msgstr "Aumenta la precisione dei bombardamenti"
 #: data/mp/messages/strings/resstrings.txt:349
 #: po/custom/fromJson.txt:293
 msgid "All bomb bays upgraded automatically"
-msgstr "Tutte le bombe saranno aggiornate automaticamente"
+msgstr "Tutti gli alloggiamenti per bombe sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[0]
@@ -3610,7 +3610,7 @@ msgstr "Aumenta i danni del Lanciafiamme"
 #: data/mp/messages/strings/resstrings.txt:369
 #: po/custom/fromJson.txt:333
 msgid "All flamers upgraded automatically"
-msgstr "Tutti gli inceneritori saranno aggiornati automaticamente"
+msgstr "Tutti i lanciafiamme sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MORTA1.text[0]
@@ -3726,7 +3726,7 @@ msgstr "Aumenta la precisione dell'Obice"
 #: data/mp/messages/strings/resstrings.txt:399
 #: po/custom/fromJson.txt:351
 msgid "All howitzers upgraded automatically"
-msgstr "Tutti gli obici saranno aggiornati automaticamente"
+msgstr "Tutti gli obici sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[1]
@@ -3812,7 +3812,7 @@ msgstr "Aumenta i danni della mitragliatrice"
 #: data/mp/messages/strings/resstrings.txt:409
 #: po/custom/fromJson.txt:363
 msgid "All machineguns upgraded automatically"
-msgstr "Tutte le mitragliatrici saranno aggiornate automaticamente"
+msgstr "Tutte le mitragliatrici sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_MG_ROF2.text[1]
@@ -3904,7 +3904,7 @@ msgstr "Aumenta il danno del Mortaio"
 #: data/mp/messages/strings/resstrings.txt:419
 #: po/custom/fromJson.txt:381
 msgid "All mortars upgraded automatically"
-msgstr "Tutti i mortai saranno aggiornati automaticamente"
+msgstr "Tutti i mortai sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[0]
@@ -3947,7 +3947,7 @@ msgstr "Aumenta i danni dei Minirazzi"
 #: data/mp/messages/strings/resstrings.txt:429
 #: po/custom/fromJson.txt:369
 msgid "All mini-rockets upgraded automatically"
-msgstr "Tutti i minirazzi saranno aggiornati automaticamente"
+msgstr "Tutti i minirazzi sono stati aggiornati automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
@@ -3997,7 +3997,7 @@ msgstr "Aumenta il danno dei Razzi"
 #: data/mp/messages/strings/resstrings.txt:434
 #: po/custom/fromJson.txt:417
 msgid "All rockets upgraded automatically"
-msgstr "Tutti i razzi sono aggiornati automaticamente"
+msgstr "Tutti i razzi sono stai aggiornati automaticamente"
 
 #: data/base/script/campaign/cam1-7.js:244
 msgid "Destroy all New Paradigm units"
@@ -4013,7 +4013,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Individua e salva le unità dal trasportatore abbattuto"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
@@ -4029,15 +4029,15 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Sposta tutte le unità nella valle"
 
 #: data/base/script/campaign/cam3-1.js:248
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Distruggi i silos missilistici"
 
 #: data/base/script/campaign/cam3-2.js:261
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Salva la squadra Alfa da Nexus"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
@@ -4045,19 +4045,19 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-ab.js:240
 msgid "Research resistance circuits and survive the assault from Nexus"
-msgstr ""
+msgstr "Ricerca i circuiti di resistenza e sopravvivi all'assalto del Nexus"
 
 #: data/base/script/campaign/cam3-ad1.js:223
 msgid "Secure a missile silo"
-msgstr ""
+msgstr "Proteggi un silo missilistico"
 
 #: data/base/script/campaign/cam3-ad2.js:280
 msgid "Protect the missile silos and research for the missile codes"
-msgstr ""
+msgstr "Proteggi i silos missilistici e ricerca i codici missilistici"
 
 #: data/base/script/campaign/cam3-c.js:142
 msgid "Reunite a part of Beta team with a Gamma team outpost"
-msgstr ""
+msgstr "Riunisci una parte della squadra Beta con un avamposto della squadra Gamma"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:421
 msgid "Return to LZ"
@@ -4065,23 +4065,23 @@ msgstr "Ritorna alla Zona di Atterraggio"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Distruggi tutte le unità e le strutture nemiche"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Artefatti raccolti"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Basi distrutte"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
-msgstr ""
+msgstr "Unità nemiche rimanenti"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Strutture nemiche rimanenti"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
@@ -4089,7 +4089,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:517
 msgid "Destroy all enemy units and bases"
-msgstr ""
+msgstr "Distruggi tutte le unità e le basi nemiche"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:522
 msgid "Survive until the timer reaches zero"
@@ -4119,7 +4119,7 @@ msgstr "Ricerca (F2)"
 #: data/base/script/tutorial.js:513
 #: data/mp/multiplay/script/rules/reticule.js:52
 msgid "Research - build research facility first"
-msgstr "Ricerca - costruisci una struttura di ricerca prima"
+msgstr "Ricerca - costruisci prima un centro di ricerca"
 
 #: data/base/script/rules.js:117
 #: data/base/script/tutorial.js:141
@@ -5785,7 +5785,7 @@ msgstr "Fallita la ricezione della risposta dalla lobby."
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
 #: src/frontend.cpp:1966
@@ -5799,7 +5799,7 @@ msgstr ""
 
 #: lib/sound/cdaudio.cpp:67
 msgid "Skirmish"
-msgstr ""
+msgstr "Schermaglia"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
@@ -5811,15 +5811,15 @@ msgstr ""
 
 #: lib/widget/form.cpp:341
 msgid "(untitled)"
-msgstr ""
+msgstr "(senza titolo)"
 
 #: lib/widget/jsontable.cpp:548
 msgid "Copy Path to Clipboard"
-msgstr ""
+msgstr "Copia il percorso negli appunti"
 
 #: lib/widget/jsontable.cpp:555
 msgid "Copy JSON to Clipboard"
-msgstr ""
+msgstr "Copia JSON negli appunti"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
@@ -6202,7 +6202,7 @@ msgstr "Piastraaerodinamica"
 #. ... + 11 refs
 #: po/custom/fromJson.txt:299
 msgid "All cannons upgraded automatically"
-msgstr "Tutti i cannoni saranno aggiornati automaticamente"
+msgstr "Tutti i cannoni sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSU1.text[3]
@@ -6211,14 +6211,14 @@ msgstr "Tutti i cannoni saranno aggiornati automaticamente"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:305
 msgid "All CB sensors upgraded automatically"
-msgstr "Tutti i sensori CB saranno aggiornati automaticamente"
+msgstr "Tutti i sensori CB sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_FU4.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FU7.text[3]
 #: po/custom/fromJson.txt:327
 msgid "All factories upgraded automatically"
-msgstr "Tutte le fabbriche saranno aggiornate automaticamente"
+msgstr "Tutte le fabbriche sono state aggiornate automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[3]
@@ -6227,7 +6227,7 @@ msgstr "Tutte le fabbriche saranno aggiornate automaticamente"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:357
 msgid "All lasers upgraded automatically"
-msgstr "Tutti i laser saranno aggiornati automaticamente"
+msgstr "Tutti i laser sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[3]
@@ -6236,7 +6236,7 @@ msgstr "Tutti i laser saranno aggiornati automaticamente"
 #. ... + 7 refs
 #: po/custom/fromJson.txt:375
 msgid "All missiles upgraded automatically"
-msgstr "Tutti i missili saranno aggiornati automaticamente"
+msgstr "Tutti i missili sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[3]
@@ -6245,7 +6245,7 @@ msgstr "Tutti i missili saranno aggiornati automaticamente"
 #. data/mp/messages/resmessages3.json: $.RES_POWU2.text[3]
 #: po/custom/fromJson.txt:387
 msgid "All power generators upgraded automatically"
-msgstr "Tutti i generatori saranno aggiornati automaticamente"
+msgstr "Tutti i generatori sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[3]
@@ -6254,7 +6254,7 @@ msgstr "Tutti i generatori saranno aggiornati automaticamente"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:393
 msgid "All rail guns upgraded automatically"
-msgstr "Tutti i Cannoni a Massa sono aggiornati automaticamenti"
+msgstr "Tutti i cannoni a massa sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[3]
@@ -6263,7 +6263,7 @@ msgstr "Tutti i Cannoni a Massa sono aggiornati automaticamenti"
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[3]
 #: po/custom/fromJson.txt:423
 msgid "All sensors upgraded automatically"
-msgstr "Tutti i sensori saranno aggiornati automaticamente"
+msgstr "Tutti i sensori sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[3]
@@ -6272,7 +6272,7 @@ msgstr "Tutti i sensori saranno aggiornati automaticamente"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:435
 msgid "All trucks upgraded automatically"
-msgstr "Tutti i camion saranno aggiornati automaticamente"
+msgstr "Tutti i camion sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[3]
@@ -6281,7 +6281,7 @@ msgstr "Tutti i camion saranno aggiornati automaticamente"
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[3]
 #: po/custom/fromJson.txt:470
 msgid "All VTOLs upgraded automatically"
-msgstr "Tutti i VTOL saranno aggiornati automaticamente"
+msgstr "Tutti i VTOL sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/mp/challenges/hidebehind.json: $.player_1.name
@@ -7027,7 +7027,7 @@ msgstr "Centro di Riparazione Automatizzato Mk3"
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade01.name
 #: po/custom/fromJson.txt:967
 msgid "Automated Repair Facility"
-msgstr "Centro di Riparazione Automatizzato"
+msgstr "Centro di riparazione automatizzato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-VTOLPad-Upgrade02.name
@@ -7119,7 +7119,7 @@ msgstr "Unità da riparazione sul campo"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Bersagli migliori: veicoli e cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7174,13 +7174,13 @@ msgstr "Migliori Bersagli: Bunker e Postazioni"
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, emplacements, Infantry"
-msgstr ""
+msgstr "Bersagli migliori: bunker, postazioni e fanteria"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1122
 msgid "Best Targets: Bunkers, Emplacements, Infantry"
-msgstr ""
+msgstr "Bersagli migliori: bunker, postazioni e fanteria"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7210,7 +7210,7 @@ msgstr "Migliori bersagli: Fanteria,strutture,veicoli su ruote"
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1150
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "Bersagli migliori: veicoli e cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -7270,7 +7270,7 @@ msgstr "Punti Corazza: Pochissimi"
 #: po/custom/fromJson.txt:1216
 #, no-c-format
 msgid "Bomb damage +10%"
-msgstr ""
+msgstr "Danno delle bombe +10%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7656,7 +7656,7 @@ msgstr "Corpo pesante del Collective"
 #. data/mp/stats/templates.json: $.Cyb-ComEng.name
 #: po/custom/fromJson.txt:1458
 msgid "Combat Engineer Cyborg"
-msgstr ""
+msgstr "Ingegnere da combattimento Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_CEN.text[1]
@@ -8835,7 +8835,7 @@ msgstr "Buon veicolo da esplorazione"
 #. data/mp/stats/templates.json: $.Cyb-Gren.name
 #: po/custom/fromJson.txt:2250
 msgid "Grenadier Cyborg"
-msgstr ""
+msgstr "Cyborg granatiere"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Howitzer150Mk1.name
@@ -10030,7 +10030,7 @@ msgstr "Migliorati i circuiti di resistenza a NEXUS"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:3048
 msgid "Improved Power Generator Performance"
-msgstr "Migliorate le prestazioni del generatore"
+msgstr "Prestazioni del generatore di corrente migliorate"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-Accuracy01.name
@@ -10878,7 +10878,7 @@ msgstr "Può essere aggiornata con i moduli di produzione"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3713
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Cyborg Meccanico"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -11971,7 +11971,7 @@ msgstr "Costi e tempi di produzione uguali a quelli del Pyhton"
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4461
 msgid "Power Generator"
-msgstr "Generatore di Potenza"
+msgstr "Generatore di corrente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -12379,7 +12379,7 @@ msgstr "Riparazione Cobra Tracks"
 #. data/mp/stats/structure.json: $.A0RepairCentre3.name
 #: po/custom/fromJson.txt:4738
 msgid "Repair Facility"
-msgstr "Centro di Riparazione"
+msgstr "Centro di riparazione"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
@@ -12849,7 +12849,7 @@ msgstr "Muro degli Sciacalli"
 #. data/mp/stats/structure.json: $.A0BaBaPowerGenerator.name
 #: po/custom/fromJson.txt:5047
 msgid "Scavenger Power Generator"
-msgstr "Generatore degli Sciacalli"
+msgstr "Generatore di corrente degli sciacalli"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0BaBaRocketPit.name
@@ -13179,13 +13179,13 @@ msgstr "Ruba tecnologie dalle strutture e prende il controllo delle armi"
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5256
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Torre d'acciaio con lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5259
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Torre d'acciaio con mitragliatrice pesante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13368,7 +13368,7 @@ msgstr ""
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
 #: po/custom/fromJson.txt:5397
 msgid "Superhot Plasmite Gel"
-msgstr ""
+msgstr "Gel supercaldo alla Plasmite"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_LtSAM1.text[1]
@@ -14743,12 +14743,12 @@ msgstr "Gioco di Strategia"
 
 #: src/chat.cpp:59
 msgid "Global"
-msgstr ""
+msgstr "Globale"
 
 #: src/chat.cpp:63
 #: src/chat.cpp:69
 msgid "Allies"
-msgstr ""
+msgstr "Alleati"
 
 #: src/chat.cpp:71
 msgid "private to "
@@ -14756,7 +14756,7 @@ msgstr ""
 
 #: src/chat.cpp:78
 msgid " and "
-msgstr ""
+msgstr " e "
 
 #: src/cheat.cpp:203
 #, c-format
@@ -14927,7 +14927,7 @@ msgstr "Disabilita la compressione delle texture"
 
 #: src/clparse.cpp:366
 msgid "Set gfx backend"
-msgstr ""
+msgstr "Imposta il motore gfx"
 
 #: src/clparse.cpp:376
 msgid "Use gfx backend debug"
@@ -14935,7 +14935,7 @@ msgstr ""
 
 #: src/clparse.cpp:377
 msgid "Set JS backend"
-msgstr ""
+msgstr "Imposta il motore JS"
 
 #: src/clparse.cpp:382
 msgid "Run games automatically for testing"
@@ -14987,11 +14987,11 @@ msgstr ""
 
 #: src/clparse.cpp:392
 msgid "Set game server port"
-msgstr ""
+msgstr "Imposta la porta del server del gioco"
 
 #: src/clparse.cpp:392
 msgid "port"
-msgstr ""
+msgstr "porta"
 
 #: src/cmddroid.cpp:113
 msgid "Commander needs a higher level to command more units"
@@ -15241,12 +15241,12 @@ msgstr "Normale"
 #. TRANSLATORS: "NEXUS" Faction
 #: src/faction.cpp:201
 msgid "NEXUS"
-msgstr ""
+msgstr "NEXUS"
 
 #. TRANSLATORS: "Collective" Faction
 #: src/faction.cpp:204
 msgid "Collective"
-msgstr ""
+msgstr "Collettivo"
 
 #: src/frontend.cpp:148
 msgid "Single Player"
@@ -15310,11 +15310,11 @@ msgstr "Supporta il progetto aiutandoci con i costi dei server, Clicca questo li
 
 #: src/frontend.cpp:181
 msgid "Chat with players on Discord or IRC"
-msgstr ""
+msgstr "Conversa con i giocatori su Discord o su IRC"
 
 #: src/frontend.cpp:183
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
-msgstr ""
+msgstr "Connettiti a Discord o a Freenode tramite webchat facendo clic su questo collegamento."
 
 #: src/frontend.cpp:184
 msgid "Check for a newer version"
@@ -15439,31 +15439,31 @@ msgstr "Assegnazione dei Tasti"
 #: src/frontend.cpp:647
 #: src/ingameop.cpp:579
 msgid "Music Manager"
-msgstr ""
+msgstr "Gestore della musica"
 
 #: src/frontend.cpp:649
 msgid "Open Configuration Directory"
-msgstr ""
+msgstr "Apri la cartella di configurazione"
 
 #: src/frontend.cpp:687
 msgid "Failed to open configuration directory in system default file browser."
-msgstr ""
+msgstr "Impossibile aprire la cartella di configurazione nel navigatore dei file predefinito."
 
 #: src/frontend.cpp:689
 msgid "Configuration directory is reported as:"
-msgstr ""
+msgstr "La cartella di configurazione è riportata come:"
 
 #: src/frontend.cpp:693
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
-msgstr ""
+msgstr "Se eseguito all'interno di un contenitore o di ambiente isolato, allora potrebbe differire dal percorso effettivo sul disco."
 
 #: src/frontend.cpp:695
 msgid "Please see the documentation for more information on how to locate it manually."
-msgstr ""
+msgstr "Consulta la documentazione per maggiori informazioni su come individuarla manualmente."
 
 #: src/frontend.cpp:696
 msgid "Failed to open configuration directory"
-msgstr ""
+msgstr "Impossibile aprire la cartella di configurazione"
 
 #: src/frontend.cpp:718
 msgid "1×"
@@ -15553,7 +15553,7 @@ msgstr "Ombre"
 
 #: src/frontend.cpp:797
 msgid "Fog"
-msgstr ""
+msgstr "Nebbia"
 
 #: src/frontend.cpp:802
 #: src/ingameop.cpp:622
@@ -15568,7 +15568,7 @@ msgstr "Salto Radar"
 
 #: src/frontend.cpp:812
 msgid "Screen Shake"
-msgstr ""
+msgstr "Scuotimento dello schermo"
 
 #: src/frontend.cpp:824
 msgid "GRAPHICS OPTIONS"
@@ -15639,7 +15639,8 @@ msgstr "OPZIONI AUDIO / ZOOM"
 #: src/frontend.cpp:1159
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
-msgstr ""
+msgstr "Nella modalità desktop a schermo intero, la risoluzione corrisponde a quella del desktop \n"
+"(o a quella consentita dal gestore delle finestre)."
 
 #: src/frontend.cpp:1161
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
@@ -15647,7 +15648,7 @@ msgstr "Puoi cambiare la risoluzione ridimensionando la finestra. (Prova a trasc
 
 #: src/frontend.cpp:1191
 msgid "Desktop Full"
-msgstr ""
+msgstr "Desktop pieno"
 
 #: src/frontend.cpp:1193
 msgid "Windowed"
@@ -15667,7 +15668,7 @@ msgstr "Scala del Display"
 
 #: src/frontend.cpp:1252
 msgid "Adaptive"
-msgstr ""
+msgstr "Adattivo"
 
 #: src/frontend.cpp:1467
 msgid "* Takes effect on game restart"
@@ -15692,7 +15693,7 @@ msgstr "Attenzione: Antialiasing può causare crash, specialmente con valori > 1
 
 #: src/frontend.cpp:1531
 msgid "Graphics Backend*"
-msgstr ""
+msgstr "Motore grafico*"
 
 #: src/frontend.cpp:1543
 msgid "VIDEO OPTIONS"
@@ -15709,12 +15710,13 @@ msgstr ""
 
 #: src/frontend.cpp:1612
 msgid "Unable to change Vertical Sync"
-msgstr ""
+msgstr "Impossibile modificare la sincronizzazione verticale"
 
 #: src/frontend.cpp:1612
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
-msgstr ""
+msgstr "Warzone non è riuscito a modificare la modalità di sincronizzazione verticale.\n"
+"Il sistema o il driver potrebbe non supportare altre modalità."
 
 #: src/frontend.cpp:1778
 msgid "Middle Mouse"
@@ -15795,7 +15797,7 @@ msgstr "Schermaglia/Multiplayer"
 
 #: src/frontend.cpp:1983
 msgid "Click to open webpage."
-msgstr ""
+msgstr "Fai clic per aprire la pagina web."
 
 #: src/frontend.cpp:1986
 #: src/frontend.cpp:2005
@@ -15979,7 +15981,7 @@ msgstr "UI Tattica (Icona dell'Origine del bersaglio): Nascondi"
 #: src/keyedit.cpp:592
 #: src/musicmanager.cpp:779
 msgid "Go Back"
-msgstr ""
+msgstr "Indietro"
 
 #: src/ingameop.cpp:250
 #: src/ingameop.cpp:259
@@ -15998,7 +16000,7 @@ msgstr "Abbandona"
 
 #: src/ingameop.cpp:309
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Attenzione: sei sicuro?"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
@@ -16006,11 +16008,11 @@ msgstr ""
 
 #: src/ingameop.cpp:321
 msgid "Confirm"
-msgstr ""
+msgstr "Conferma"
 
 #: src/ingameop.cpp:323
 msgid "Back"
-msgstr ""
+msgstr "Indietro"
 
 #: src/ingameop.cpp:402
 msgid "Host has quit the game!"
@@ -16053,19 +16055,19 @@ msgstr "Il mod richiesto non può essere caricato: %s\n\n"
 
 #: src/input/context.cpp:39
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Scorciatoie globali"
 
 #: src/input/context.cpp:40
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Altre scorciatoie"
 
 #: src/input/context.cpp:41
 msgid "Gameplay"
-msgstr ""
+msgstr "Dinamica di gioco"
 
 #: src/input/context.cpp:43
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16169,43 +16171,43 @@ msgstr "Assegna il gruppo 9"
 
 #: src/input/keyconfig.cpp:66
 msgid "Add to Group 0"
-msgstr ""
+msgstr "Aggiungi al gruppo 0"
 
 #: src/input/keyconfig.cpp:67
 msgid "Add to Group 1"
-msgstr ""
+msgstr "Aggiungi al gruppo 1"
 
 #: src/input/keyconfig.cpp:68
 msgid "Add to Group 2"
-msgstr ""
+msgstr "Aggiungi al gruppo 2"
 
 #: src/input/keyconfig.cpp:69
 msgid "Add to Group 3"
-msgstr ""
+msgstr "Aggiungi al gruppo 3"
 
 #: src/input/keyconfig.cpp:70
 msgid "Add to Group 4"
-msgstr ""
+msgstr "Aggiungi al gruppo 4"
 
 #: src/input/keyconfig.cpp:71
 msgid "Add to Group 5"
-msgstr ""
+msgstr "Aggiungi al gruppo 5"
 
 #: src/input/keyconfig.cpp:72
 msgid "Add to Group 6"
-msgstr ""
+msgstr "Aggiungi al gruppo 6"
 
 #: src/input/keyconfig.cpp:73
 msgid "Add to Group 7"
-msgstr ""
+msgstr "Aggiungi al gruppo 7"
 
 #: src/input/keyconfig.cpp:74
 msgid "Add to Group 8"
-msgstr ""
+msgstr "Aggiungi al gruppo 8"
 
 #: src/input/keyconfig.cpp:75
 msgid "Add to Group 9"
-msgstr ""
+msgstr "Aggiungi al gruppo 9"
 
 #: src/input/keyconfig.cpp:77
 msgid "Select Group 0"
@@ -16421,11 +16423,11 @@ msgstr "Mostra Storico Chat Squadra"
 
 #: src/input/keyconfig.cpp:133
 msgid "Rotate Building Clockwise"
-msgstr ""
+msgstr "Ruota l'edificio in senso orario"
 
 #: src/input/keyconfig.cpp:134
 msgid "Rotate Building Anticlockwise"
-msgstr ""
+msgstr "Ruota l'edificio in senso antiorario"
 
 #: src/input/keyconfig.cpp:136
 msgid "Center View on HQ"
@@ -16668,11 +16670,11 @@ msgstr "Seleziona la prossima Fabbrica"
 
 #: src/input/keyconfig.cpp:196
 msgid "Select next Research Facility"
-msgstr "Seleziona il prossimo Centro di Ricerca"
+msgstr "Seleziona il centro di ricerca successivo"
 
 #: src/input/keyconfig.cpp:197
 msgid "Select next Power Generator"
-msgstr "Seleziona il prossimo Generatore di Energia"
+msgstr "Seleziona il generatore di corrente successivo"
 
 #: src/input/keyconfig.cpp:198
 msgid "Select next Cyborg Factory"
@@ -16680,27 +16682,27 @@ msgstr "Seleziona la prossima Fabbrica di Cyborg"
 
 #: src/input/keyconfig.cpp:199
 msgid "Select next VTOL Factory"
-msgstr ""
+msgstr "Seleziona la fabbrica successiva"
 
 #: src/input/keyconfig.cpp:200
 msgid "Jump to next Factory"
-msgstr ""
+msgstr "Vai alla fabbrica successiva"
 
 #: src/input/keyconfig.cpp:201
 msgid "Jump to next Research Facility"
-msgstr ""
+msgstr "Vai al centro di ricerca successivo"
 
 #: src/input/keyconfig.cpp:202
 msgid "Jump to next Power Generator"
-msgstr ""
+msgstr "Vai al generatore di corrente suceesivo"
 
 #: src/input/keyconfig.cpp:203
 msgid "Jump to next Cyborg Factory"
-msgstr ""
+msgstr "Vai alla fabbrica di cyborg successiva"
 
 #: src/input/keyconfig.cpp:204
 msgid "Jump to next VTOL Factory"
-msgstr ""
+msgstr "Vai alla fabbrica di VTOL successiva"
 
 #: src/input/keyconfig.cpp:206
 msgid "Toggle Debug Mappings"
@@ -16772,7 +16774,7 @@ msgstr "Traccia un oggetto del gioco"
 
 #: src/input/keyconfig.cpp:226
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Passa a schermo intero"
 
 #: src/intdisplay.cpp:163
 msgid "Waiting for Power"
@@ -16781,7 +16783,7 @@ msgstr "In attesa di Energia"
 #: src/intdisplay.cpp:287
 #, c-format
 msgid "%d derrick(s) inactive"
-msgstr ""
+msgstr "%d derrick inattivi"
 
 #: src/intdisplay.cpp:292
 msgid "Need more resources!"
@@ -16789,7 +16791,7 @@ msgstr "Necessiti di più risorse!"
 
 #: src/integrations/wzdiscordrpc.cpp:202
 msgid "Discord: Can't Join Game"
-msgstr ""
+msgstr "Discord: impossibile unirsi al gioco"
 
 #: src/integrations/wzdiscordrpc.cpp:203
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
@@ -16805,7 +16807,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:236
 msgid "This may take a moment..."
-msgstr ""
+msgstr "Potrebbe metterci un po'..."
 
 #: src/integrations/wzdiscordrpc.cpp:261
 msgid "Failed to find game in the lobby server: "
@@ -16825,7 +16827,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:298
 msgid "Failed to Join Game"
-msgstr ""
+msgstr "Impossibile unirsi al gioco"
 
 #: src/integrations/wzdiscordrpc.cpp:365
 msgid "The invite link you have followed specifies a non-default lobby server:"
@@ -17519,11 +17521,11 @@ msgstr ""
 
 #: src/multiint.cpp:1262
 msgid "Vote"
-msgstr ""
+msgstr "Vota"
 
 #: src/multiint.cpp:1263
 msgid "Allow host to change map or randomize?"
-msgstr ""
+msgstr "Consenti all'host di cambiare mappa o di renderla casuale?"
 
 #: src/multiint.cpp:1294
 msgid "Not enough votes to randomize or change the map."
@@ -17554,7 +17556,7 @@ msgstr "Mod-Mappa!"
 
 #: src/multiint.cpp:1360
 msgid "Random map!"
-msgstr ""
+msgstr "Mappa casuale!"
 
 #: src/multiint.cpp:1377
 msgid "Click to set Password"
@@ -17601,23 +17603,23 @@ msgstr "Opzioni Gioco Casuali\n"
 
 #: src/multiint.cpp:1478
 msgid "Tech"
-msgstr ""
+msgstr "Tecnologia"
 
 #: src/multiint.cpp:1479
 msgid "Technology Level 1"
-msgstr ""
+msgstr "Livello tecnologico 1"
 
 #: src/multiint.cpp:1480
 msgid "Technology Level 2"
-msgstr ""
+msgstr "Livello tecnologico 2"
 
 #: src/multiint.cpp:1481
 msgid "Technology Level 3"
-msgstr ""
+msgstr "Livello tecnologico 3"
 
 #: src/multiint.cpp:1482
 msgid "Technology Level 4"
-msgstr ""
+msgstr "Livello tecnologico 4"
 
 #: src/multiint.cpp:1491
 #: src/multiint.cpp:1492
@@ -17671,7 +17673,7 @@ msgstr "L'host ha espulso %s dalla partita!"
 #: src/multiint.cpp:3910
 #: src/multimenu.cpp:1246
 msgid "The host has kicked you from the game."
-msgstr ""
+msgstr "L'host ti ha cacciato dal gioco."
 
 #: src/multiint.cpp:2475
 msgid "Click to change difficulty"
@@ -17723,7 +17725,7 @@ msgstr "Clicca per cambiare il colore del giocatore"
 
 #: src/multiint.cpp:2669
 msgid "Click to change player faction"
-msgstr ""
+msgstr "Fai clic per cambiare la fazione del giocatore"
 
 #: src/multiint.cpp:2694
 msgid "Click to change player position"
@@ -17743,7 +17745,7 @@ msgstr "(nessuno)"
 
 #: src/multiint.cpp:2769
 msgid "Kicked from game"
-msgstr ""
+msgstr "Cacciato dal gioco"
 
 #: src/multiint.cpp:2961
 msgid "CHAT"
@@ -17772,7 +17774,7 @@ msgstr "Questa è una Map-Mod, può cambiare la tua esperienza di gioco!"
 
 #: src/multiint.cpp:3772
 msgid "This is a random map, it can vary your playing experience!"
-msgstr ""
+msgstr "Questa è una mappa casuale, può variare la tua esperienza di gioco!"
 
 #: src/multiint.cpp:4038
 msgid "Host is Starting Game"
@@ -17872,7 +17874,7 @@ msgstr "Il trasferimento del file è stato annullato per %d"
 
 #: src/multijoin.cpp:390
 msgid "The game is already full."
-msgstr ""
+msgstr "Il gioco è già al completo."
 
 #: src/multijoin.cpp:465
 #, c-format
@@ -17881,7 +17883,7 @@ msgstr "%s (%u) ha un mod incompatibile, ed è stato espulso."
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr ""
+msgstr "I tuoi dati non corrispondono a quelli dell'host!"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17894,7 +17896,7 @@ msgstr "Messaggio del server:"
 
 #: src/multijoin.cpp:523
 msgid "There is an update to the game, please visit https://wz2100.net to download new version."
-msgstr ""
+msgstr "C'è un aggiornamento per il gioco, visita https://wz2100.net per scaricare la nuova versione."
 
 #. TRANSLATORS: Sidetext of structure limits screen
 #: src/multilimit.cpp:139
@@ -18022,7 +18024,7 @@ msgstr "Il giocatore %s sarà kickato perchè hanno cercato di bypassare il cont
 
 #: src/multiplay.cpp:270
 msgid "Invalid data!"
-msgstr ""
+msgstr "Dati non validi!"
 
 #: src/multiplay.cpp:872
 #, c-format
@@ -18113,32 +18115,32 @@ msgstr "Marrone"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
-msgstr ""
+msgstr "IN RIPRODUZIONE"
 
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:680
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: src/musicmanager.cpp:545
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: src/musicmanager.cpp:671
 msgid "Title"
-msgstr ""
+msgstr "Titolo"
 
 #: src/musicmanager.cpp:860
 msgid "MUSIC MANAGER"
-msgstr ""
+msgstr "GESTORE DELLA MUSICA"
 
 #: src/notifications.cpp:726
 msgid "Dismiss"
-msgstr ""
+msgstr "Scarta"
 
 #: src/notifications.cpp:807
 msgid "Do not show again"
-msgstr ""
+msgstr "Non mostrare più"
 
 #: src/order.cpp:777
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -18553,20 +18555,20 @@ msgstr "I rinforzi stanno atterrando"
 
 #: src/updatemanager.cpp:247
 msgid "Update Available"
-msgstr ""
+msgstr "Aggiornamento disponibile"
 
 #: src/updatemanager.cpp:250
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
-msgstr ""
+msgstr "È disponibile una nuova versione di Warzone (%s)!"
 
 #: src/updatemanager.cpp:254
 msgid "A new build of Warzone 2100 is available!"
-msgstr ""
+msgstr "È disponibile una nuova versione di Warzone!"
 
 #: src/updatemanager.cpp:256
 msgid "Get Update Now"
-msgstr ""
+msgstr "Aggiorna adesso"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:189
@@ -18596,5 +18598,5 @@ msgstr "SEI STATO SCONFITTO"
 
 #: src/wzscriptdebug.cpp:1829
 msgid "Script Debugger"
-msgstr ""
+msgstr "Debugger di script"
 
