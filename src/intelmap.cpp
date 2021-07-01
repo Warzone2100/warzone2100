@@ -28,6 +28,8 @@
 #include "lib/framework/frame.h"
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
+#include "lib/widget/gridlayout.h"
+#include "lib/widget/alignment.h"
 #include "lib/widget/button.h"
 #include "lib/widget/paragraph.h"
 #include "lib/widget/label.h"
@@ -104,42 +106,13 @@
 
 #define	INTMAP_RESEARCHWIDTH	440
 #define INTMAP_RESEARCHHEIGHT	288
-
-/*dimensions for Title view section relative to IDINTMAP_MSGVIEW*/
-/*dimensions for PIE view section relative to IDINTMAP_MSGVIEW*/
-
-#define	INTMAP_TITLEX			0
-#define INTMAP_TITLEY			0
-#define	INTMAP_TITLEWIDTH		INTMAP_RESEARCHWIDTH
-#define INTMAP_TITLEHEIGHT		18
-#define	INTMAP_PIEX				3
-#define INTMAP_PIEY				24
+#define INTMAP_TITLEHEIGHT		25
 
 /*dimensions for FLIC view section relative to IDINTMAP_MSGVIEW*/
 #define	INTMAP_FLICX			245
 #define INTMAP_FLICY			24
 #define	INTMAP_FLICWIDTH		192
 #define INTMAP_FLICHEIGHT		170
-/*dimensions for TEXT view section relative to IDINTMAP_MSGVIEW*/
-
-#define	INTMAP_TEXTX			0
-#define INTMAP_TEXTY			200
-#define	INTMAP_TEXTWIDTH		INTMAP_RESEARCHWIDTH
-#define INTMAP_TEXTHEIGHT		88
-#define TEXT_XINDENT				5
-#define TEXT_YINDENT				5
-
-/*dimensions for SEQTEXT view relative to IDINTMAP_MSGVIEW*/
-#define INTMAP_SEQTEXTX			0
-#define INTMAP_SEQTEXTY			30
-#define INTMAP_SEQTEXTWIDTH		INTMAP_RESEARCHWIDTH
-#define INTMAP_SEQTEXTHEIGHT		INTMAP_RESEARCHHEIGHT - INTMAP_SEQTEXTY
-
-/*dimensions for SEQTEXT tab view relative to IDINTMAP_SEQTEXT*/
-#define INTMAP_SEQTEXTTABX		0
-#define INTMAP_SEQTEXTTABY		0
-#define INTMAP_SEQTEXTTABWIDTH		INTMAP_SEQTEXTWIDTH
-#define INTMAP_SEQTEXTTABHEIGHT		INTMAP_SEQTEXTHEIGHT
 
 //position for text on full screen video
 #define VIDEO_TEXT_TOP_X				20
@@ -168,7 +141,7 @@ class IntMessageButton : public IntFancyButton
 public:
 	IntMessageButton();
 
-	virtual void display(int xOffset, int yOffset);
+	virtual void display(int xOffset, int yOffset) override;
 
 	void setMessage(MESSAGE *msg)
 	{
@@ -190,7 +163,6 @@ static void intIntelButtonPressed(bool proxMsg, UDWORD id);
 
 static void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
-static void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
 static void addVideoText(SEQ_DISPLAY *psSeqDisplay, UDWORD sequence);
 
 /*********************** VARIABLES ****************************/
@@ -348,8 +320,7 @@ static bool intAddMessageForm(bool _playCurrent)
 /*Add the 3D world view for the particular message */
 bool intAddMessageView(MESSAGE *psMessage)
 {
-	bool			Animate = true;
-	RESEARCH		*psResearch;
+	bool Animate = true;
 
 	// Is the form already up?
 	if (widgGetFromID(psWScreen, IDINTMAP_MSGVIEW) != nullptr)
@@ -373,7 +344,6 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	/* Add the close box */
 	W_BUTINIT sButInit;
-	sButInit.formID = IDINTMAP_MSGVIEW;
 	sButInit.id = IDINTMAP_CLOSE;
 	sButInit.x = intMapMsgView->width() - OPT_GAP - CLOSE_SIZE;
 	sButInit.y = OPT_GAP;
@@ -382,26 +352,26 @@ bool intAddMessageView(MESSAGE *psMessage)
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
+	auto closeButton = std::make_shared<W_BUTTON>(&sButInit);
+	intMapMsgView->attach(closeButton);
+
+	auto title = std::make_shared<W_LABEL>();
+	title->setGeometry(0, 0, INTMAP_RESEARCHWIDTH, INTMAP_TITLEHEIGHT);
+	title->setFontColour(WZCOL_YELLOW);
+	title->setTextAlignment(WLAB_ALIGNCENTRE);
+	title->setFont(font_regular, WZCOL_YELLOW);
+	title->setString(getMessageTitle(*psMessage));
+	intMapMsgView->attach(title);
+
+	auto grid = std::make_shared<GridLayout>();
+	intMapMsgView->attach(grid);
+	grid->setGeometry(1, INTMAP_TITLEHEIGHT, INTMAP_RESEARCHWIDTH - 2, INTMAP_RESEARCHHEIGHT - 1 - INTMAP_TITLEHEIGHT);
+
+	auto messages = ScrollableListWidget::make();
+	messages->setItemSpacing(3);
 
 	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
 	{
-		auto title = std::make_shared<W_LABEL>();
-		title->setGeometry(0, 0, INTMAP_SEQTEXTWIDTH, 30);
-		title->setString(getMessageTitle(*psMessage));
-		title->setFontColour(WZCOL_YELLOW);
-		title->setTextAlignment(WLAB_ALIGNCENTRE);
-		title->setFont(font_medium, WZCOL_YELLOW);
-		intMapMsgView->attach(title);
-
-		auto messages = ScrollableListWidget::make();
-		messages->setGeometry(INTMAP_SEQTEXTX, INTMAP_SEQTEXTY, INTMAP_SEQTEXTWIDTH, INTMAP_SEQTEXTHEIGHT);
-		messages->setPadding({0, 10, 10, 10});
-		messages->setItemSpacing(5);
-
 		auto psViewReplay = (VIEW_REPLAY *)psMessage->pViewData->pData;
 		for (const auto &seq: psViewReplay->seqList)
 		{
@@ -414,50 +384,26 @@ bool intAddMessageView(MESSAGE *psMessage)
 			}
 		}
 
-		intMapMsgView->attach(messages);
+		messages->setPadding({0, 10, 10, 10});
+		grid->place({0, 1, false}, {0, 1, true}, messages);
 
 		return true;
 	}
 
-	/*add the Label for the title box*/
-	W_LABINIT sLabInit;
-	sLabInit.id = IDINTMAP_TITLELABEL;
-	sLabInit.formID = IDINTMAP_MSGVIEW;
-	sLabInit.x = INTMAP_TITLEX + TEXT_XINDENT;
-	sLabInit.y = INTMAP_TITLEY + TEXT_YINDENT;
-	sLabInit.width = INTMAP_TITLEWIDTH;
-	sLabInit.height = INTMAP_TITLEHEIGHT;
-	//print research name in title bar
-
 	ASSERT_OR_RETURN(false, psMessage->type != MSG_PROXIMITY, "Invalid message type for research");
-
-	psResearch = getResearchForMsg(psMessage->pViewData);
-
-	ASSERT_OR_RETURN(false, psResearch != nullptr, "Research not found");
-	//sLabInit.pText=psResearch->pName;
-	sLabInit.pText = WzString::fromUtf8(_(psResearch->name.toUtf8().c_str()));
-
-	sLabInit.FontID = font_regular;
-	if (!widgAddLabel(psWScreen, &sLabInit))
-	{
-		return false;
-	}
 
 	/*Add the PIE box*/
 	W_FORMINIT sFormInit;
-	sFormInit.formID = IDINTMAP_MSGVIEW;
 	sFormInit.id = IDINITMAP_PIEVIEW;
 	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = INTMAP_PIEX;
-	sFormInit.y = INTMAP_PIEY;
 	sFormInit.width = INTMAP_PIEWIDTH;
 	sFormInit.height = INTMAP_PIEHEIGHT;
 	sFormInit.pDisplay = intDisplayPIEView;
 	sFormInit.pUserData = psMessage;
-	if (!widgAddForm(psWScreen, &sFormInit))
-	{
-		return false;
-	}
+	auto form3dView = std::make_shared<W_CLICKFORM>(&sFormInit);
+	auto alignment = std::make_shared<AlignmentWidget>(VerticalAlignment::Center, HorizontalAlignment::Center);
+	alignment->attach(form3dView);
+	grid->place({0, 1, false}, {0, 1, false}, alignment);
 
 	/*Add the Flic box if videos are installed */
 	if (PHYSFS_exists("sequences/devastation.ogg"))
@@ -479,22 +425,16 @@ bool intAddMessageView(MESSAGE *psMessage)
 	}
 
 	/*Add the text box*/
-	sFormInit = W_FORMINIT();
-
-	sFormInit.formID = IDINTMAP_MSGVIEW;
-
-	sFormInit.id = IDINTMAP_TEXTVIEW;
-	sFormInit.style = WFORM_PLAIN;
-	sFormInit.x = INTMAP_TEXTX;
-	sFormInit.y = INTMAP_TEXTY;
-	sFormInit.width = INTMAP_TEXTWIDTH;
-	sFormInit.height = INTMAP_TEXTHEIGHT;
-	sFormInit.pDisplay = intDisplayTEXTView;
-	sFormInit.pUserData = psMessage;
-	if (!widgAddForm(psWScreen, &sFormInit))
+	for (const auto &msg: psMessage->pViewData->textMsg)
 	{
-		return false;
+		auto message = std::make_shared<Paragraph>();
+		message->setFontColour(WZCOL_TEXT_BRIGHT);
+		message->addText(msg.toUtf8());
+		messages->addItem(message);
 	}
+
+	messages->setPadding({5, 10, 5, 10});
+	grid->place({0, 1, false}, {1, 1, true}, messages);
 
 	return true;
 }
@@ -999,49 +939,6 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		seq_SetDisplaySize(192, 168, x0, y0);
 		//render a frame of the current movie *must* force above resolution!
 		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_HOLD);
-	}
-}
-
-/**
- * Displays the TEXT view for the current message.
- *
- * TODO: The functionality provided by this function can probably be replaced by a few widgets.
- */
-void intDisplayTEXTView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	MESSAGE *psMessage = (MESSAGE *)psWidget->pUserData;
-
-	int x0 = xOffset + psWidget->x();
-	int y0 = yOffset + psWidget->y();
-	int x1 = x0 + psWidget->width();
-	int y1 = y0 + psWidget->height();
-	int ty = y0;
-
-	RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
-
-	if (psMessage)
-	{
-		/* Get the travel to the next line */
-		int linePitch = iV_GetTextLineSize(font_regular);
-		/* Fix for spacing.... */
-		linePitch += 3;
-		ty += 3;
-		/* Fix for spacing.... */
-
-		iV_SetTextColour(WZCOL_TEXT_BRIGHT);
-		//add each message
-		for (unsigned i = 0; i < psMessage->pViewData->textMsg.size(); i++)
-		{
-			//check haven't run out of room first!
-			if (i * linePitch > psWidget->height())
-			{
-				ASSERT(false, "intDisplayTEXTView: Run out of room!");
-				return;
-			}
-			//need to check the string will fit!
-			iV_DrawText(_(psMessage->pViewData->textMsg[i].toUtf8().c_str()), x0 + TEXT_XINDENT,
-			            (ty + TEXT_YINDENT * 3) + (i * linePitch), font_regular);
-		}
 	}
 }
 
