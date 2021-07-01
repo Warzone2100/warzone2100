@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-07-01 09:53\n"
+"PO-Revision-Date: 2021-07-01 22:04\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1306,7 +1306,7 @@ msgstr "Mitragliere d'assalto con JetPack"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
-msgstr "Cybrog con Cannone ad Ago JetPack"
+msgstr "Cybrog con cannone ad ago jetpack"
 
 #: data/base/messages/strings/names.txt:294
 msgid "Jump Scourge"
@@ -1495,12 +1495,12 @@ msgstr "Autoriparazione Veicoli"
 #: data/base/messages/strings/names.txt:362
 #: data/mp/messages/strings/names.txt:463
 msgid "Automated Vehicle Repair Mk2"
-msgstr "Riparazione Veicoli Automatizzata Mk2"
+msgstr "Riparazione automatizzata di veicoli Mk2"
 
 #: data/base/messages/strings/names.txt:363
 #: data/mp/messages/strings/names.txt:464
 msgid "Automated Vehicle Repair Mk3"
-msgstr "Riparazione Veicoli Automatizzata Mk3"
+msgstr "Riparazione automatizzata di veicoli Mk3"
 
 #: data/base/messages/strings/names.txt:368
 msgid "Heavy Mobile Repair Turret"
@@ -1591,17 +1591,17 @@ msgstr "Focalizzatore Laser Migliorato Mk3"
 #: data/base/messages/strings/names.txt:429
 #: data/mp/messages/strings/names.txt:542
 msgid "HEAP Missile Warhead"
-msgstr "Testata HEAP per Missili"
+msgstr "Testata missilistica HEAP"
 
 #: data/base/messages/strings/names.txt:430
 #: data/mp/messages/strings/names.txt:543
 msgid "HEAP Missile Warhead Mk2"
-msgstr "Testata HEAP per Missili Mk2"
+msgstr "Testata missilistica HEAP Mk2"
 
 #: data/base/messages/strings/names.txt:431
 #: data/mp/messages/strings/names.txt:544
 msgid "HEAP Missile Warhead Mk3"
-msgstr "Testata HEAP per Missili Mk3"
+msgstr "Testata missilistica HEAP Mk3"
 
 #: data/base/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:545
@@ -3137,7 +3137,7 @@ msgstr "Aumenta i Punti Corazza"
 #: data/mp/messages/strings/resstrings.txt:274
 #: po/custom/fromJson.txt:339
 msgid "All half-tracks upgraded automatically"
-msgstr "Tutti i semicingoli sono stati aggiornati automaticamente"
+msgstr "Tutti i semicingolati sono stati aggiornati automaticamente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_P_H2.text[3]
@@ -5193,7 +5193,7 @@ msgstr "Lentamente, risorgeremo dalle ceneri..."
 #: data/mp/messages/strings/names.txt:15
 #: po/custom/fromJson.txt:3652
 msgid "Machinegun Viper Wheels"
-msgstr "Mitragliatrice Viper Ruote"
+msgstr "Mitragliatrice Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Tower01.name
@@ -5461,7 +5461,7 @@ msgstr "Propulsione su Semi-cingoli II"
 #: data/mp/messages/strings/names.txt:509
 #: po/custom/fromJson.txt:5600
 msgid "Tracked Propulsion II"
-msgstr "Propulsione su Cingoli II"
+msgstr "Propulsione su cingoli II"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-VTOL02.name
@@ -5803,7 +5803,7 @@ msgstr "Schermaglia"
 
 #: lib/sound/cdaudio.cpp:69
 msgid "Multiplayer"
-msgstr "Multigiocatore"
+msgstr "Più giocatori"
 
 #: lib/sound/cdaudio.cpp:164
 msgid "Menu Music"
@@ -6042,7 +6042,7 @@ msgstr "Cannone antiaereo Tornado"
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
 #: po/custom/fromJson.txt:169
 msgid "Adaptive AI with multiple personalities"
-msgstr "IA adattiva con multiple personalità"
+msgstr "IA adattiva con personalità multiple"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Materials08.name
@@ -6127,21 +6127,21 @@ msgstr "Sistema Avanzato di Allocazione dei Missili"
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage02.name
 #: po/custom/fromJson.txt:224
 msgid "Advanced Missile Warhead Mk2"
-msgstr "Testata Avanzata per Missili Mk2"
+msgstr "Testata missilistica avanzata Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Damage03.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage03.name
 #: po/custom/fromJson.txt:228
 msgid "Advanced Missile Warhead Mk3"
-msgstr "Testata Avanzata per Missili Mk3"
+msgstr "Testata missilistica avanzata Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile-Damage01.name
 #. data/mp/stats/research.json: $.R-Wpn-Missile-Damage01.name
 #: po/custom/fromJson.txt:232
 msgid "Advanced Missile Warhead"
-msgstr "Testata Avanzata per Missili"
+msgstr "Testata missilistica avanzata"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Struc-RprFac-Upgrade06.name
@@ -6527,7 +6527,7 @@ msgstr "Armato con Cannone Medio"
 #. data/mp/messages/resmessages3.json: $.RES_CYW_RL1.text[1]
 #: po/custom/fromJson.txt:622
 msgid "Armed with Needle Gun"
-msgstr "Armato con Cannone ad Ago"
+msgstr "Armato con cannone ad ago"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text[1]
@@ -6599,7 +6599,7 @@ msgstr "Bunker corazzato con Mitragliatrice"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMPM.text[1]
 #: po/custom/fromJson.txt:672
 msgid "Armored EMP Mortar battery pit"
-msgstr "Postazione Corazzata per batteria di Mortaio EMP"
+msgstr "Fossa corazzata per batteria di mortaio EMP"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
@@ -6630,7 +6630,7 @@ msgstr "Torre di guardia corazzata con Minirazzi"
 #. data/mp/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
 #: po/custom/fromJson.txt:692
 msgid "Armored guard tower with Needle Gun"
-msgstr "Torre di guardia corazzata con Cannone ad Ago"
+msgstr "Torre di guardia corazzata con cannone ad ago"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SPYT.text[1]
@@ -6684,7 +6684,7 @@ msgstr "Postazione corazzata con Cannone Pesante"
 #. data/mp/messages/resmessages12.json: $.RES_DF_WT1.text[1]
 #: po/custom/fromJson.txt:730
 msgid "Armored hardpoint with Heavy Machinegun"
-msgstr "Postazione corazzata con Mitragliatrice Pesante"
+msgstr "Postazione corazzata con mitragliatrice pesante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
@@ -6732,7 +6732,7 @@ msgstr "Postazione corazzata con Missile anticarro Scourge"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text[1]
 #: po/custom/fromJson.txt:775
 msgid "Armored Incendiary Mortar battery pit"
-msgstr "Postazione Corazzata per batteria di Mortaio Incendiario"
+msgstr "Fossa per batteria di mortaio incendiario corazzato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_EMP_Mpit.text[1]
@@ -6890,7 +6890,7 @@ msgstr "Postazione con mitragliatrice d'assalto"
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
 #: po/custom/fromJson.txt:884
 msgid "Assault Gun Python Half Track"
-msgstr "Mitragliatrice d'assalto Python Semi-cingoli"
+msgstr "Mitragliatrice d'assalto Python semicingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHoverAssGun.name
@@ -6903,7 +6903,7 @@ msgstr "Mitragliatrice d'assalto Python Hover"
 #. data/mp/stats/templates.json: $.P0cam3PyAsltGnTrk.name
 #: po/custom/fromJson.txt:891
 msgid "Assault Gun Python Tracks"
-msgstr "Mitragliatrice d'Assalto Python Cingoli"
+msgstr "Mitragliatrice d'assalto Python cingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
@@ -7295,7 +7295,7 @@ msgstr "Miglioramento delle bombe"
 #. data/mp/stats/templates.json: $.CobraHvyMortarHalftrack.name
 #: po/custom/fromJson.txt:1236
 msgid "Bombard Cobra Half-tracks"
-msgstr "Bombarda Cobra Semi-Cingoli"
+msgstr "Bombarda Cobra semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyMor.name
@@ -7359,13 +7359,13 @@ msgstr "Cobra Hover con Bunker Buster"
 #. data/mp/stats/templates.json: $.CobraBBTracks.name
 #: po/custom/fromJson.txt:1273
 msgid "Bunker Buster Cobra Tracks"
-msgstr "Bunker Buster Cobra Cingoli"
+msgstr "Bunker buster Cobra cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisBBTracks.name
 #: po/custom/fromJson.txt:1276
 msgid "Bunker Buster Mantis Tracks"
-msgstr "Bunker Buster Mantis Cingoli"
+msgstr "Bunker buster Mantis cingolato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[1]
@@ -7391,7 +7391,7 @@ msgstr "Bunker Buster Viper Ruote"
 #. data/mp/stats/templates.json: $.ScorpBBTracks.name
 #: po/custom/fromJson.txt:1290
 msgid "Bunker Buster Scorpion Tracks"
-msgstr "Bunker Buster Scorpion Cingoli"
+msgstr "Bunker buster Scorpion cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-BB.name
@@ -7582,7 +7582,7 @@ msgstr "Il meccanismo a catena rimpiazza l'alimentazione a nastro"
 #. data/mp/stats/research.json: $.R-Wpn-MG-ROF01.name
 #: po/custom/fromJson.txt:1403
 msgid "Chaingun Upgrade"
-msgstr "Miglioramento Mitragliatrice"
+msgstr "Miglioramento della mitragliatrice"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BaBaCivilian.name
@@ -7613,7 +7613,7 @@ msgstr "Cobra Lanciafiamme Cingoli"
 #. data/base/stats/templates.json: $.P0CobraMedCnTrks.name
 #: po/custom/fromJson.txt:1419
 msgid "Cobra Medium Cannon Tracks"
-msgstr "Cobra Cannone Medio Cingoli"
+msgstr "Cannone medio Cobra cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraSpadeTracks.name
@@ -7697,19 +7697,19 @@ msgstr "Ripetitore di Comandi"
 #. data/mp/stats/templates.json: $.CobraComHalftrack.name
 #: po/custom/fromJson.txt:1481
 msgid "Command Turret Cobra Half-tracks"
-msgstr "Torretta di Comando Cobra Semicingoli"
+msgstr "Torretta di comando Cobra semicingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cobra-Trk-Com.name
 #: po/custom/fromJson.txt:1484
 msgid "Command Turret Cobra Tracks"
-msgstr "Torretta di Comando Cobra Cingoli"
+msgstr "Torretta di comando Cobra cingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Mantis-Trk-Com.name
 #: po/custom/fromJson.txt:1487
 msgid "Command Turret Mantis Tracks"
-msgstr "Torretta di Comando Mantis Cingoli"
+msgstr "Torretta di comando Mantis cingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0PythonComTracks.name
@@ -7718,13 +7718,13 @@ msgstr "Torretta di Comando Mantis Cingoli"
 #. data/mp/stats/templates.json: $.PythonComTracks.name
 #: po/custom/fromJson.txt:1493
 msgid "Command Turret Python Tracks"
-msgstr "Torretta di Comando Python Cingoli"
+msgstr "Torretta di comando Python semicingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scorp-Trk-Com.name
 #: po/custom/fromJson.txt:1496
 msgid "Command Turret Scorpion Tracks"
-msgstr "Torretta di Comando Scorpion Cingoli"
+msgstr "Torretta di comando Scorpion cingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Comp-CommandTurret02.name
@@ -7736,7 +7736,7 @@ msgstr "Aggiornamento Torre di Comando"
 #. data/mp/stats/templates.json: $.Viper-Trk-Com.name
 #: po/custom/fromJson.txt:1502
 msgid "Command Turret Viper Tracks"
-msgstr "Torretta di Comando Viper Cingoli"
+msgstr "Torretta di comando Viper cingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/brain.json: $.CommandBrain01.name
@@ -8077,7 +8077,7 @@ msgstr "Sito Contraereo Flak Cyclone"
 #. data/base/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:1729
 msgid "Cyclone AA Python Half-tracks"
-msgstr "Torretta Contraerea Cyclone Python Semi-Cingoli"
+msgstr "Torretta antiaerea Python semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade05.name
@@ -8151,7 +8151,7 @@ msgstr "Proiettili ad energia cinetica ad uranio impoverito"
 #. data/mp/stats/research.json: $.R-Wpn-MG-Damage08.name
 #: po/custom/fromJson.txt:1804
 msgid "Depleted Uranium MG Bullets"
-msgstr "Proiettili di Mitragliatrice ad Uranio Impoverito"
+msgstr "Proiettili della mitragliatrice a uranio impoverito"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.tip
@@ -8245,7 +8245,7 @@ msgstr "Lanciamissili EMP"
 #. data/mp/stats/structure.json: $.Emplacement-MortarEMP.name
 #: po/custom/fromJson.txt:1868
 msgid "EMP Mortar Pit"
-msgstr "Postazione con Mortaio EMP"
+msgstr "Fossa per mortaio EMP"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MortarEMP.name
@@ -8727,13 +8727,13 @@ msgstr "Postazione Corazzata con Cannone Gauss"
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
 #: po/custom/fromJson.txt:2191
 msgid "Gauss Cannon Python Tracks"
-msgstr "Cannone Gauss Python Cingoli"
+msgstr "Cannone Gauss Python cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernGaussTracks.name
 #: po/custom/fromJson.txt:2194
 msgid "Gauss Cannon Wyvern Tracks"
-msgstr "Cannone Gauss Wyvern Cingoli"
+msgstr "Cannone Gauss Wyvern cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun03.name
@@ -8849,7 +8849,7 @@ msgstr "Ground Shaker"
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Halftracks.name
 #: po/custom/fromJson.txt:2267
 msgid "Half-tracked Propulsion"
-msgstr "Propulsione su Semi-cingoli"
+msgstr "Propulsione semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.HalfTrack02.name
@@ -9269,7 +9269,7 @@ msgstr "Cannone Pesante Cobra Hover"
 #. data/mp/stats/templates.json: $.CobraHvyCnTrks.name
 #: po/custom/fromJson.txt:2516
 msgid "Heavy Cannon Cobra Tracks"
-msgstr "Cannone Pesante Cobra Cingoli"
+msgstr "Cannone pesante Cobra cingolato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN3MK1.text[1]
@@ -9291,7 +9291,7 @@ msgstr "Postazione Corazzata con Cannone Pesante"
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
 #: po/custom/fromJson.txt:2529
 msgid "Heavy Cannon Mantis Tracks"
-msgstr "Cannone Pesante Mantis Cingoli"
+msgstr "Cannone pesante Mantis cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-HC.name
@@ -9306,19 +9306,19 @@ msgstr "Cannone Pesante Python Hover"
 #. ... + 2 refs
 #: po/custom/fromJson.txt:2538
 msgid "Heavy Cannon Python Tracks"
-msgstr "Cannone Pesante Python Cingoli"
+msgstr "Cannone pesante Python cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-HC.name
 #: po/custom/fromJson.txt:2541
 msgid "Heavy Cannon Scorpion Tracks"
-msgstr "Cannone Pesante Scorpion Cingoli"
+msgstr "Cannone pesante Scorpion cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-HC.name
 #: po/custom/fromJson.txt:2544
 msgid "Heavy Cannon Tiger Tracks"
-msgstr "Cannone Pesante Tiger Cingoli"
+msgstr "Cannone pesante Tiger cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon3Mk1.name
@@ -9361,13 +9361,13 @@ msgstr "Fortificazione con laser pesante"
 #. data/mp/stats/templates.json: $.TigerHvLaserTracks.name
 #: po/custom/fromJson.txt:2579
 msgid "Heavy Laser Tiger Tracks"
-msgstr "Laser Pesante Tiger Cingoli"
+msgstr "Laser pesante Tiger cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.WyvernHvLaserTracks.name
 #: po/custom/fromJson.txt:2582
 msgid "Heavy Laser Wyvern Tracks"
-msgstr "Laser Pesante Wyvern Cingoli"
+msgstr "Laser pesante Wyvern cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HvyLaser.name
@@ -9383,7 +9383,7 @@ msgstr "Laser Pesante"
 #. data/mp/stats/templates.json: $.P0CobraHvyMGHtrack.name
 #: po/custom/fromJson.txt:2598
 msgid "Heavy Machinegun Cobra Half-tracks"
-msgstr "Mitragliatrice Pesante Cobra Semicingoli"
+msgstr "Mitragliatrice pesante Cobra semicingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-HMG.name
@@ -9396,7 +9396,7 @@ msgstr "Mitragliatrice Pesante Cobra Hover"
 #. data/mp/stats/templates.json: $.CobraHMGTracks.name
 #: po/custom/fromJson.txt:2605
 msgid "Heavy Machinegun Cobra Tracks"
-msgstr "Mitragliatrice Pesante Cobra Cingoli"
+msgstr "Mitragliatrice pesante Cobra cingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Wheels-HMG.name
@@ -9417,20 +9417,20 @@ msgstr "Postazione Corazzata con Mitragliatrice Pesante"
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
 #: po/custom/fromJson.txt:2622
 msgid "Heavy Machinegun Scorpion Half Tracks"
-msgstr "Mitragliatrice Pesante Scorpion Semi-cingoli"
+msgstr "Mitragliatrice pesante Scorpion semicingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpTrkHMG.name
 #: po/custom/fromJson.txt:2625
 msgid "Heavy Machinegun Scorpion Tracks"
-msgstr "Mitragliatrice Pesante Scorpion Cingoli"
+msgstr "Mitragliatrice pesante Scorpion cingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGHalftrack.name
 #. data/mp/stats/templates.json: $.ViperHMGHalftrack.name
 #: po/custom/fromJson.txt:2634
 msgid "Heavy Machinegun Viper Half-tracks"
-msgstr "Mitragliatrice Pesante Viper Semicingoli"
+msgstr "Mitragliatrice pesante Viper semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperHMGTracks.name
@@ -9438,7 +9438,7 @@ msgstr "Mitragliatrice Pesante Viper Semicingoli"
 #. data/mp/stats/templates.json: $.ViperHMGTracks.name
 #: po/custom/fromJson.txt:2639
 msgid "Heavy Machinegun Viper Tracks"
-msgstr "Mitragliatrice Pesante Viper Cingoli"
+msgstr "Mitragliatrice pesante Viper cingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Wheels-HMG.name
@@ -9833,7 +9833,7 @@ msgstr "Postazione Corazzata con Cannone ad Ipervelocità"
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2924
 msgid "HPV Cannon Python Tracks"
-msgstr "Cannone ad Ipervelocità Python Cingoli"
+msgstr "Cannone a iper velocità Python cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-AASite-QuadMg1.name
@@ -9911,7 +9911,7 @@ msgstr "Cannone ad Ipervelocità Python Hover"
 #. data/mp/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2969
 msgid "Hyper Velocity Cannon Python Tracks"
-msgstr "Cannone ad Iper Velocità Python Cingoli"
+msgstr "Cannone a iper velocità Python cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon4AMk1.name
@@ -10132,7 +10132,7 @@ msgstr "Obice Incendiario"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
 #: po/custom/fromJson.txt:3115
 msgid "Incendiary Mortar Pit 2"
-msgstr ""
+msgstr "Fossa per mortaio incendiario 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-MortarPit-Incendiary.name
@@ -10332,7 +10332,7 @@ msgstr "Bunker con Inferno"
 #. data/mp/stats/templates.json: $.CobraInfernoHTracks.name
 #: po/custom/fromJson.txt:3345
 msgid "Inferno Cobra Half-Tracks"
-msgstr "Inferno Cobra Semi-Cingoli"
+msgstr "Inferno Cobra semicingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraInfernoHover.name
@@ -10473,13 +10473,13 @@ msgstr "Bunker con Lancer"
 #. data/mp/stats/templates.json: $.P0CobraLtATRktHtrack.name
 #: po/custom/fromJson.txt:3429
 msgid "Lancer Cobra Half-tracks"
-msgstr "Lancer Cobra Semi-Cingoli"
+msgstr "Lanciatore Cobra semicingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraTrkLancer.name
 #: po/custom/fromJson.txt:3432
 msgid "Lancer Cobra Tracks"
-msgstr "Lancer Cobra Cingoli"
+msgstr "Lanciatore Cobra cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Rocket.name
@@ -10503,19 +10503,19 @@ msgstr "Postazione Corazzata con Lancer"
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
 #: po/custom/fromJson.txt:3447
 msgid "Lancer Mantis Tracks"
-msgstr "Lancer Mantis Cingoli"
+msgstr "Lanciatore Mantis cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Trk-Lancer.name
 #: po/custom/fromJson.txt:3450
 msgid "Lancer Python Tracks"
-msgstr "Lancer Python Cingoli"
+msgstr "Lanciatore Python cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-Trk-Lancer.name
 #: po/custom/fromJson.txt:3453
 msgid "Lancer Scorpion Tracks"
-msgstr "Lancer Scorpion Cingoli"
+msgstr "Lanciatore Scorpion cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.H-Scorp-VTOL-Lancer.name
@@ -10527,7 +10527,7 @@ msgstr "VTOL Scorpione con Lancer"
 #. data/mp/stats/templates.json: $.ViperTrkLancer.name
 #: po/custom/fromJson.txt:3464
 msgid "Lancer Viper Tracks"
-msgstr "Lancer Viper Cingoli"
+msgstr "Lanciatore Viper cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtA-Twheels.name
@@ -10691,7 +10691,7 @@ msgstr "Bunker con Cannone Leggero"
 #. data/mp/stats/templates.json: $.CobraLtCnTrks.name
 #: po/custom/fromJson.txt:3565
 msgid "Light Cannon Cobra Tracks"
-msgstr "Cannone Leggero Cobra Cingoli"
+msgstr "Cannone leggero Cobra cingolato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[1]
@@ -10714,20 +10714,20 @@ msgstr "Postazione Corazzata con Cannone Leggero"
 #. data/mp/stats/templates.json: $.PythonLtCnTrks.name
 #: po/custom/fromJson.txt:3579
 msgid "Light Cannon Python Tracks"
-msgstr "Cannone Leggero Python Cingoli"
+msgstr "Cannone leggero Python cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperLtCannonHTracks.name
 #: po/custom/fromJson.txt:3582
 msgid "Light Cannon Viper Half-tracks"
-msgstr "Cannone Leggero Viper Semicingoli"
+msgstr "Cannone leggero Viper semicingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonTracks.name
 #. data/mp/stats/templates.json: $.ViperLtCannonTracks.name
 #: po/custom/fromJson.txt:3586
 msgid "Light Cannon Viper Tracks"
-msgstr "Cannone Leggero Viper Cingoli"
+msgstr "Cannone Leggero Viper cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperLtCannonWheels.name
@@ -10805,13 +10805,13 @@ msgstr "Tempo di Ricarica delle Mitragliatrici -15%"
 #. data/mp/stats/templates.json: $.ViperLtMGHalfTracks.name
 #: po/custom/fromJson.txt:3643
 msgid "Machinegun Viper Half-Tracks"
-msgstr "Mitragliatrice Viper Semicingoli"
+msgstr "Mitragliatrice Viper semicingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Trk-MG.name
 #: po/custom/fromJson.txt:3646
 msgid "Machinegun Viper Tracks"
-msgstr "Mitragliatrice Viper Cingoli"
+msgstr "Mitragliatrice Viper cingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.CyborgChaingun.name
@@ -10925,7 +10925,7 @@ msgstr "Il corpo medio aumenta i punti corazza e l'armatura"
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
 #: po/custom/fromJson.txt:3739
 msgid "Medium Cannon Cobra Half Track"
-msgstr "Cannone Medio Cobra Semi-cingoli"
+msgstr "Cannone medio Cobra semicingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Cobra-Hover-MC.name
@@ -10939,7 +10939,7 @@ msgstr "Cannone Medio Cobra Hover"
 #. data/mp/stats/templates.json: $.P0CobraMedCnTrks.name
 #: po/custom/fromJson.txt:3747
 msgid "Medium Cannon Cobra Tracks"
-msgstr "Cannone Medio Cobra Cingoli"
+msgstr "Cannone medio Cobra cingolato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN2MK1.text[1]
@@ -10969,7 +10969,7 @@ msgstr "Cannone Medio Python Hover"
 #. data/mp/stats/templates.json: $.PythonMedCnTrks.name
 #: po/custom/fromJson.txt:3765
 msgid "Medium Cannon Python Tracks"
-msgstr "Cannone Medio Python Cingoli"
+msgstr "Cannone medio Python cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Scorp-Hover-MC.name
@@ -10981,14 +10981,14 @@ msgstr "Cannone Medio Scorpion Hover"
 #. data/mp/stats/templates.json: $.A-Scorp-Trk-MC.name
 #: po/custom/fromJson.txt:3771
 msgid "Medium Cannon Scorpion Tracks"
-msgstr "Cannone Medio Scorpion Cingoli"
+msgstr "Cannone medio Scorpion cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMedCnTrks.name
 #. data/mp/stats/templates.json: $.ViperMedCnTrks.name
 #: po/custom/fromJson.txt:3775
 msgid "Medium Cannon Viper Tracks"
-msgstr "Cannone Medio Viper Cingoli"
+msgstr "Cannone medio Viper cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon2Mk1.name
@@ -11016,19 +11016,19 @@ msgstr "Posizione corazzata con Minirazzi"
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3791
 msgid "Mini-Rocket Array Cobra Half-tracks"
-msgstr "Artiglieria di Minirazzi Cobra Semicingoli"
+msgstr "Batteria semicingolata di mini-razzi Cobra"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLTracks.name
 #: po/custom/fromJson.txt:3794
 msgid "Mini-Rocket Array Cobra Tracks"
-msgstr "Batteria di Minirazzi Cobra Cingoli"
+msgstr "Batteria cingolata di mini-razzi Cobra"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLHalfTracks.name
 #: po/custom/fromJson.txt:3797
 msgid "Mini-Rocket Array Viper Half Track"
-msgstr "Batteria di Minirazzi Viper Semi-cingoli"
+msgstr "Batteria semicingolata di mini-razzi Viper"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperMRLWheels.name
@@ -11068,19 +11068,19 @@ msgstr "Artiglieria a Minirazzi"
 #. data/mp/stats/structure.json: $.Emplacement-MRL-pit.name
 #: po/custom/fromJson.txt:3819
 msgid "Mini-Rocket Battery"
-msgstr "Batteria di Minirazzi"
+msgstr "Batteria di mini-razzi"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODHTracks.name
 #: po/custom/fromJson.txt:3822
 msgid "Mini-Rocket Cobra Half-Tracks"
-msgstr "Minirazzi Cobra Semi-cingoli"
+msgstr "Mini-razzi Cobra semicingolati"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraPODTracks.name
 #: po/custom/fromJson.txt:3825
 msgid "Mini-Rocket Cobra Tracks"
-msgstr "Minirazzi Cobra Cingoli"
+msgstr "Mini-razzi Cobra cingolati"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Tower06.name
@@ -11109,7 +11109,7 @@ msgstr "Torre con Minirazzi"
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
 #: po/custom/fromJson.txt:3848
 msgid "Mini-Rocket Viper Half Track"
-msgstr "Minirazzi Viper Semi-cingoli"
+msgstr "Mini-razzi Viper semicingolati"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperPODWheels.name
@@ -11229,7 +11229,7 @@ msgstr "Autocaricatore per Mortaio"
 #. data/mp/stats/templates.json: $.CobraMortarHalfTrack.name
 #: po/custom/fromJson.txt:3926
 msgid "Mortar Cobra Half-tracks"
-msgstr "Mortaio Cobra Semi-cingoli"
+msgstr "Mortaio Cobra semicingolato"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_M_D1.text[2]
@@ -11253,7 +11253,7 @@ msgstr "Caricatore Rapido per Mortaio"
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit01.name
 #: po/custom/fromJson.txt:3941
 msgid "Mortar Pit"
-msgstr "Postazione con Mortaio"
+msgstr "Fossa per mortaio"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
@@ -11320,13 +11320,13 @@ msgstr "Area di effetto stretta"
 #. data/mp/stats/templates.json: $.A-Retrib-Trk-Needle.name
 #: po/custom/fromJson.txt:3987
 msgid "Needle Gun Retribution Tracks"
-msgstr "Cannone ad Ago Retribution Cingoli "
+msgstr "Cannone ad ago Retribution cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Tiger-Trk-Needle.name
 #: po/custom/fromJson.txt:3990
 msgid "Needle Gun Tiger Tracks"
-msgstr "Cannone ad Ago Tiger Cingoli"
+msgstr "Cannone ad ago Tiger cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-GuardTower-Rail1.name
@@ -11335,13 +11335,13 @@ msgstr "Cannone ad Ago Tiger Cingoli"
 #. data/mp/stats/structure.json: $.GuardTower-Rail1.name
 #: po/custom/fromJson.txt:3996
 msgid "Needle Gun Tower"
-msgstr "Torre con Cannone ad Ago"
+msgstr "Torre con cannone ad ago"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Veng-Trk-Needle.name
 #: po/custom/fromJson.txt:3999
 msgid "Needle Gun Vengeance Tracks"
-msgstr "Cannone ad Ago Vengeance Cingoli"
+msgstr "Cannone ad ago Vengeance cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RailGun01.name
@@ -11350,7 +11350,7 @@ msgstr "Cannone ad Ago Vengeance Cingoli"
 #. data/mp/stats/weapons.json: $.RailGun1Mk1.name
 #: po/custom/fromJson.txt:4005
 msgid "Needle Gun"
-msgstr "Cannone ad Ago"
+msgstr "Cannone ad ago"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-Rail1.name
@@ -11359,7 +11359,7 @@ msgstr "Cannone ad Ago"
 #. data/mp/stats/templates.json: $.MP-Cyb-Needle-GRD.name
 #: po/custom/fromJson.txt:4011
 msgid "Needle Gunner Cyborg"
-msgstr "Cyborg con Cannone ad Ago"
+msgstr "Cyborg con cannone ad ago"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-Research-Upgrade08.name
@@ -11818,7 +11818,7 @@ msgstr "Pantera"
 #. data/mp/stats/structure.json: $.Emplacement-RotMor.name
 #: po/custom/fromJson.txt:4377
 msgid "Pepperpot Pit"
-msgstr "Postazione con Pepperpot"
+msgstr "Fossa per Pepperpot"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Mortar3ROTARYMk1.name
@@ -11886,7 +11886,7 @@ msgstr "Cannone al Plasma che spara plasma"
 #. data/mp/stats/templates.json: $.WyvernPlasmaCTracks.name
 #: po/custom/fromJson.txt:4415
 msgid "Plasma Cannon Wyvern Tracks"
-msgstr "Cannone al Plasma Wyvern Cingoli"
+msgstr "Cannone al plasma Wyvern cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-PlasmaCannon.name
@@ -12087,7 +12087,7 @@ msgstr "Laser a Impulso Leopard Hover"
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Pulse.name
 #: po/custom/fromJson.txt:4541
 msgid "Pulse Laser Mantis Tracks"
-msgstr "Laser a Impulso Mantis Cingoli"
+msgstr "Laser a impulso Mantis cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PantherHoverPulseLas.name
@@ -12099,7 +12099,7 @@ msgstr "Laser a Impulso Panther Hover"
 #. data/mp/stats/templates.json: $.PythonPulseTracks.name
 #: po/custom/fromJson.txt:4547
 msgid "Pulse Laser Python Tracks"
-msgstr "Laser a Impulso Python Cingoli"
+msgstr "Laser a impulso Python cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverPulseLas.name
@@ -12111,7 +12111,7 @@ msgstr "Laser a Impulso Tiger Hover"
 #. data/mp/stats/templates.json: $.TigerPulseTracks.name
 #: po/custom/fromJson.txt:4553
 msgid "Pulse Laser Tiger Tracks"
-msgstr "Laser a Impulso Tiger Cingoli"
+msgstr "Laser a impulso Tiger cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-PulseLas.name
@@ -12124,7 +12124,7 @@ msgstr "Torre con Laser a Impulso"
 #. data/mp/stats/templates.json: $.WyvernPulseTracks.name
 #: po/custom/fromJson.txt:4560
 msgid "Pulse Laser Wyvern Tracks"
-msgstr "Laser a Impulso Wyvern Cingoli"
+msgstr "Laser a impulso Wyvern cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Laser02.name
@@ -12139,7 +12139,7 @@ msgstr "Laser a Impulso"
 #. data/base/stats/templates.json: $.P0PythonHvyCnTrks.name
 #: po/custom/fromJson.txt:4569
 msgid "Python Heavy Cannon Tracks"
-msgstr "Python Cannone Pesante Cingoli"
+msgstr "Cannone pesante Python cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/body.json: $.Body11ABT.name
@@ -12221,7 +12221,7 @@ msgstr "Postazione con cannone a rotaia"
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Rail.name
 #: po/custom/fromJson.txt:4624
 msgid "Rail Gun Mantis Tracks"
-msgstr "Cannone a Massa Mantis Cingoli"
+msgstr "Cannone a rotaia Mantis cingolato"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[2]
@@ -12370,7 +12370,7 @@ msgstr "Torre Centro di Riparazione"
 #. data/mp/stats/templates.json: $.P0CobraRepairTrks.name
 #: po/custom/fromJson.txt:4726
 msgid "Repair Cobra Tracks"
-msgstr "Riparazione Cobra Tracks"
+msgstr "Ripara i cingoli Cobra"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Struc-RepairFacility.name
@@ -12385,7 +12385,7 @@ msgstr "Centro di riparazione"
 #. data/mp/stats/templates.json: $.ScorpRepairTrk.name
 #: po/custom/fromJson.txt:4741
 msgid "Repair Scorpion Tracks"
-msgstr "Torretta Riparatrice Cobra Tracks"
+msgstr "Ripara i cingoli Scorpion"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_ST_RFU1.text[2]
@@ -12401,25 +12401,25 @@ msgstr "Velocità di Riparazione +100%"
 #. data/mp/stats/templates.json: $.A-Rep-Cobra-Trk.name
 #: po/custom/fromJson.txt:4751
 msgid "Repair Turret Cobra Tracks"
-msgstr "Torretta Riparatrice Cobra Tracks"
+msgstr "Ripara i cingoli della torretta Cobra"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Rep-Mantis-Trk.name
 #: po/custom/fromJson.txt:4754
 msgid "Repair Turret Mantis Tracks"
-msgstr "Torretta Riparatrice Mantis Cingoli"
+msgstr "Ripara i cingoli della torretta Mantis"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4757
 msgid "Repair Turret Viper Half-track"
-msgstr "Torretta Riparatrice Viper Semicingoli"
+msgstr "Torretta riparatrice Viper semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairHalftrack.name
 #: po/custom/fromJson.txt:4760
 msgid "Repair Turret Viper Half-tracks"
-msgstr "Torretta Riparatrice Viper Semicingoli"
+msgstr "Torretta riparatrice Viper semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperRepairWheels.name
@@ -12746,7 +12746,7 @@ msgstr "Tempo di Ricarica dei Razzi -15%"
 #. data/mp/messages/resmessages12.json: $.RES_W_SRK_AC2.text[1]
 #: po/custom/fromJson.txt:4979
 msgid "Rocket tracks the laser designator to the target"
-msgstr "Il razzi traccia il designatore laser verso il bersaglio"
+msgstr "Il missile segue il designatore laser verso il bersaglio"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer03-Rot.name
@@ -12898,7 +12898,7 @@ msgstr "Hover con Calamità Mantide"
 #. data/mp/stats/templates.json: $.MantisScourgeTracks.name
 #: po/custom/fromJson.txt:5075
 msgid "Scourge Mantis Tracks"
-msgstr "Scourge Mantis Cingoli"
+msgstr "Scourge Mantis cingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-A-Tmiss.name
@@ -12922,7 +12922,7 @@ msgstr "Torre con Missile Scourge"
 #. data/mp/stats/templates.json: $.WyvernScourgeTracks.name
 #: po/custom/fromJson.txt:5090
 msgid "Scourge Missile Wyvern Tracks"
-msgstr "Missile Scourge Wyvern Cingoli"
+msgstr "Missile Scourge Wyvern cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Missile2A-T.name
@@ -12937,7 +12937,7 @@ msgstr "Scourge"
 #. data/mp/stats/templates.json: $.PythonScourgeTracks.name
 #: po/custom/fromJson.txt:5099
 msgid "Scourge Python Tracks"
-msgstr "Scourge Python Cingoli"
+msgstr "Scourge Python cingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retal-VTOL-Scourge.name
@@ -12995,7 +12995,7 @@ msgstr "SemperFi"
 #. data/base/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5139
 msgid "Sensor Cobra Half-tracks"
-msgstr "Sensore Cobra Semi-Cingoli"
+msgstr "Sensore Cobra semicingolato"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SU3.text[2]
@@ -13022,7 +13022,7 @@ msgstr "Raggio dei Sensori +25%"
 #. data/mp/stats/templates.json: $.CobraSensorHalftrack.name
 #: po/custom/fromJson.txt:5160
 msgid "Sensor Turret Cobra Half-tracks"
-msgstr "Torretta Sensoria Cobra Semi-Cingoli"
+msgstr "Torretta sensoria Cobra semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperSensorWheels.name
@@ -13356,13 +13356,13 @@ msgstr "Gel Supercaldo"
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage08.name
 #: po/custom/fromJson.txt:5391
 msgid "Superhot Plasmite Gel Mk2"
-msgstr ""
+msgstr "Gel super caldo alla plasmite Mk2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage09.name
 #: po/custom/fromJson.txt:5394
 msgid "Superhot Plasmite Gel Mk3"
-msgstr ""
+msgstr "Gel super caldo alla plasmite Mk3"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Flamer-Damage07.name
@@ -13471,7 +13471,7 @@ msgstr "Tank Killer Mantis Hover "
 #. data/mp/stats/templates.json: $.MantisTKTracks.name
 #: po/custom/fromJson.txt:5470
 msgid "Tank Killer Mantis Tracks"
-msgstr "Tank Killer Mantis Cingoli"
+msgstr "Tank Killer Mantis cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHvyATTrk.name
@@ -13479,7 +13479,7 @@ msgstr "Tank Killer Mantis Cingoli"
 #. data/mp/stats/templates.json: $.PythonTKTracks.name
 #: po/custom/fromJson.txt:5475
 msgid "Tank Killer Python Tracks"
-msgstr "Tank Killer Python Cingoli"
+msgstr "Tank Killer Python cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket07-Tank-Killer.name
@@ -13492,7 +13492,7 @@ msgstr "Razzo Tank Killer"
 #. data/mp/stats/templates.json: $.A-Veng-Trk-TK.name
 #: po/custom/fromJson.txt:5482
 msgid "Tank Killer Vengeance Tracks"
-msgstr "Tank Killer Vengeance Cingoli"
+msgstr "Tank Killer Vengeance cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-HvyA-T.name
@@ -13688,7 +13688,7 @@ msgstr "IA Torri Belliche, basata su NullBot"
 #. data/mp/stats/research.json: $.R-Vehicle-Prop-Tracks.name
 #: po/custom/fromJson.txt:5604
 msgid "Tracked Propulsion"
-msgstr "Propulsione su Cingoli"
+msgstr "Propulsione su cingoli"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[1]
@@ -13867,7 +13867,7 @@ msgstr "Torre di Guardia con Doppia mitragliatrice"
 #. data/mp/stats/templates.json: $.ViperMG02Halftrack.name
 #: po/custom/fromJson.txt:5718
 msgid "Twin Machinegun Viper Half-tracks"
-msgstr "Doppia Mitragliatrice Viper Semicingoli"
+msgstr "Doppia mitragliatrice Viper semicingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Viper-Trk-TMG.name
@@ -14719,7 +14719,7 @@ msgstr "Warzone 2100 File Mod Campagna"
 
 #: po/custom/mac-infoplist.txt:5
 msgid "Warzone 2100 Multiplayer Mod File"
-msgstr "Warzone 2100 File Mod Multigiocatore"
+msgstr "File mod per Warzone 2100 più giocatori"
 
 #: po/custom/mac-infoplist.txt:6
 msgid "Warzone 2100 Global Mod File"
@@ -14752,7 +14752,7 @@ msgstr "Alleati"
 
 #: src/chat.cpp:71
 msgid "private to "
-msgstr ""
+msgstr "messaggio privato a "
 
 #: src/chat.cpp:78
 msgid " and "
@@ -14911,7 +14911,7 @@ msgstr "Collegati direttamente a IP/hostname"
 
 #: src/clparse.cpp:362
 msgid "host"
-msgstr "Ospita"
+msgstr "ospita"
 
 #: src/clparse.cpp:363
 msgid "Go directly to host screen"
@@ -14967,11 +14967,11 @@ msgstr "Continua ultima partita salvata"
 
 #: src/clparse.cpp:387
 msgid "Start host game with given settings file"
-msgstr "Ospira partita con il file di configurazione dato"
+msgstr "Inizia ad ospitare una partita con il file di configurazione dato"
 
 #: src/clparse.cpp:387
 msgid "autohost"
-msgstr "auto ospita"
+msgstr "ospita automaticamente"
 
 #: src/clparse.cpp:388
 msgid "Query ratings from given server url (containing \"{HASH}\"), when hosting"
@@ -15254,7 +15254,7 @@ msgstr "Giocatore singolo"
 
 #: src/frontend.cpp:149
 msgid "Multi Player"
-msgstr "Multi Giocatore"
+msgstr "Più giocatori"
 
 #: src/frontend.cpp:150
 #: src/frontend.cpp:284
@@ -15389,7 +15389,7 @@ msgstr "Carica una schermaglia salvata"
 
 #: src/frontend.cpp:571
 msgid "MULTI PLAYER"
-msgstr "MULTIGIOCATORE"
+msgstr "PIÙ GIOCATORI"
 
 #: src/frontend.cpp:573
 msgid "Host Game"
@@ -15401,7 +15401,7 @@ msgstr "Unisciti a una partita"
 
 #: src/frontend.cpp:579
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
-msgstr "La porta TCP 2100 deve essere aperta sul tuo firewall o router per ospitare partite!"
+msgstr "La porta TCP 2100 deve essere aperta nel tuo firewall o router per ospitare partite!"
 
 #: src/frontend.cpp:640
 #: src/multiint.cpp:1325
@@ -15794,7 +15794,7 @@ msgstr "Colore delle Unità:"
 #: src/frontend.cpp:1976
 #: src/frontend.cpp:2010
 msgid "Skirmish/Multiplayer"
-msgstr "Schermaglia/Multiplayer"
+msgstr "Schermaglia / più giocatori"
 
 #: src/frontend.cpp:1983
 msgid "Click to open webpage."
@@ -15957,12 +15957,12 @@ msgstr "Riprendi la partita"
 
 #: src/ingameop.cpp:127
 msgid "WARNING: You're the host. If you quit, the game ends for everyone!"
-msgstr "ATTENZIONE: Sei l'host. Se tu abbandoni, la partita termina per tutti!"
+msgstr "ATTENZIONE: sei l'ospitante. Se abbandoni, la partita termina per tutti!"
 
 #: src/ingameop.cpp:131
 #: src/ingameop.cpp:270
 msgid "Host Quit"
-msgstr "Host Uscito"
+msgstr "Ospitante uscito"
 
 #: src/ingameop.cpp:176
 #: src/ingameop.cpp:1049
@@ -16017,11 +16017,11 @@ msgstr "Indietro"
 
 #: src/ingameop.cpp:402
 msgid "Host has quit the game!"
-msgstr "L'host ha abbandonato la partita!"
+msgstr "L'ospitante ha abbandonato la partita!"
 
 #: src/ingameop.cpp:408
 msgid "The game can't continue without the host."
-msgstr "Il gioco non può continuare senza l'host."
+msgstr "Il gioco non può continuare senza l'ospitante."
 
 #: src/ingameop.cpp:414
 msgid "-->  QUIT  <--"
@@ -16292,7 +16292,7 @@ msgstr "Seleziona il Comandante 9"
 
 #: src/input/keyconfig.cpp:99
 msgid "Multiplayer Options / Alliance dialog"
-msgstr "Opzioni Multigiocatore/ Dialogo d'Alleanza"
+msgstr "Opzioni più giocatori / Dialogo d'alleanza"
 
 #: src/input/keyconfig.cpp:101
 msgid "Move Camera Up"
@@ -16570,7 +16570,7 @@ msgstr "Seleziona tutti i semicingoli"
 
 #: src/input/keyconfig.cpp:169
 msgid "Select all Half-tracks without group"
-msgstr ""
+msgstr "Seleziona tutti i semicingolati senza gruppo"
 
 #: src/input/keyconfig.cpp:170
 msgid "Select all Hovers"
@@ -16591,7 +16591,7 @@ msgstr "Seleziona tutti i Cingoli"
 
 #: src/input/keyconfig.cpp:174
 msgid "Select all Tracks without group"
-msgstr ""
+msgstr "Seleziona tutti i cingolati senza gruppo"
 
 #: src/input/keyconfig.cpp:175
 msgid "Select EVERY unit"
@@ -16816,7 +16816,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:263
 msgid "The game may have already started, or the host may have disbanded the game lobby."
-msgstr "Il gioco potrebbe già essere stato avviato, oppure l'host potrebbe aver sciolto la lobby del gioco."
+msgstr "Il gioco potrebbe già essere stato avviato, oppure l'ospitante potrebbe aver sciolto la lobby del gioco."
 
 #: src/integrations/wzdiscordrpc.cpp:266
 msgid "Failed to Find Game"
@@ -16908,11 +16908,11 @@ msgstr "Bot:"
 #: src/integrations/wzdiscordrpc.cpp:627
 #: src/integrations/wzdiscordrpc.cpp:817
 msgid "In Multiplayer Lobby"
-msgstr ""
+msgstr "Nella lobby a più giocatori"
 
 #: src/integrations/wzdiscordrpc.cpp:653
 msgid "In Multiplayer Game"
-msgstr ""
+msgstr "Nel gioco a più giocatori"
 
 #: src/integrations/wzdiscordrpc.cpp:849
 #, c-format
@@ -16932,7 +16932,7 @@ msgstr "Alleanze:"
 
 #: src/integrations/wzdiscordrpc.cpp:928
 msgid "In Menu"
-msgstr ""
+msgstr "Nel menu"
 
 #: src/integrations/wzdiscordrpc.cpp:1077
 #, c-format
@@ -17007,7 +17007,7 @@ msgstr "Sorvola"
 
 #: src/keybind.cpp:113
 msgid "Sorry, that cheat is disabled in multiplayer games."
-msgstr "Spiacente, quel trucco è disabilitato nelle partite multigiocatore."
+msgstr "Spiacente, questo trucco è disabilitato nelle partite a più giocatori."
 
 #: src/keybind.cpp:146
 msgid "Warning! This cheat is buggy.  We recommend to NOT use it."
@@ -17099,11 +17099,11 @@ msgstr "La visualizzazione del frame rate è disattivata."
 
 #: src/keybind.cpp:630
 msgid "Unit count display is enabled."
-msgstr ""
+msgstr "La visualizzazione del conteggio delle unità è abilitata."
 
 #: src/keybind.cpp:634
 msgid "Unit count display is disabled."
-msgstr ""
+msgstr "La visualizzazione del conteggio delle unità è disabilitata."
 
 #: src/keybind.cpp:686
 #, c-format
@@ -17279,15 +17279,15 @@ msgstr "Direzione di rotazione verticale: Capovolta"
 
 #: src/keybind.cpp:2040
 msgid "Screen shake when things die: Off"
-msgstr ""
+msgstr "Scuotimento dello schermo quando qualcosa muore: Disabilitato"
 
 #: src/keybind.cpp:2045
 msgid "Screen shake when things die: On"
-msgstr "Scuotimento dello schermo quando qualcosa muore: Acceso"
+msgstr "Scuotimento dello schermo quando qualcosa muore: Abilitato"
 
 #: src/keybind.cpp:2098
 msgid "Sorry, but game speed cannot be changed in multiplayer."
-msgstr "Spiacente, ma la velocità del gioco non può essere cambiata in multiplayer."
+msgstr "Spiacente, ma la velocità del gioco non può essere modificata nella modalità a più giocatori."
 
 #: src/keybind.cpp:2133
 #: src/keybind.cpp:2187
@@ -17518,7 +17518,7 @@ msgstr "Limiti Strutture Applicati."
 #: src/multiint.cpp:1241
 #, c-format
 msgid "%s (%d) allowed map change. Total: %d/%d"
-msgstr ""
+msgstr "%s (%d) ha permesso una modifica alla mappa. Totale: %d/%d"
 
 #: src/multiint.cpp:1262
 msgid "Vote"
@@ -17526,7 +17526,7 @@ msgstr "Vota"
 
 #: src/multiint.cpp:1263
 msgid "Allow host to change map or randomize?"
-msgstr "Consenti all'host di cambiare mappa o di renderla casuale?"
+msgstr "Consenti all'ospitante di cambiare mappa o di renderla casuale?"
 
 #: src/multiint.cpp:1294
 msgid "Not enough votes to randomize or change the map."
@@ -17625,7 +17625,7 @@ msgstr "Livello tecnologico 4"
 #: src/multiint.cpp:1491
 #: src/multiint.cpp:1492
 msgid "Start Hosting Game"
-msgstr "Inizia ad ospitare la Partita"
+msgstr "Inizia ad ospitare la partita"
 
 #: src/multiint.cpp:1648
 msgid "DIFFICULTY"
@@ -17668,13 +17668,13 @@ msgstr "Squadra"
 #: src/multimenu.cpp:1242
 #, c-format
 msgid "The host has kicked %s from the game!"
-msgstr "L'host ha espulso %s dalla partita!"
+msgstr "L'ospitante ha espulso %s dalla partita!"
 
 #: src/multiint.cpp:1919
 #: src/multiint.cpp:3910
 #: src/multimenu.cpp:1246
 msgid "The host has kicked you from the game."
-msgstr "L'host ti ha cacciato dal gioco."
+msgstr "L'ospitante ti ha cacciato dal gioco."
 
 #: src/multiint.cpp:2475
 msgid "Click to change difficulty"
@@ -17754,7 +17754,7 @@ msgstr "CHAT"
 
 #: src/multiint.cpp:3575
 msgid "Sorry! Failed to host the game."
-msgstr "Spiacente! Host della partita fallito."
+msgstr "Spiacente! Impossibile ospitare la partita."
 
 #: src/multiint.cpp:3620
 msgid "Game Name Updated."
@@ -17779,7 +17779,7 @@ msgstr "Questa è una mappa casuale, può variare la tua esperienza di gioco!"
 
 #: src/multiint.cpp:4038
 msgid "Host is Starting Game"
-msgstr "L'host sta avviando la partita"
+msgstr "L'ospitante sta avviando la partita"
 
 #: src/multiint.cpp:4281
 msgid "You have been kicked: "
@@ -17787,7 +17787,7 @@ msgstr "Sei stato cacciato: "
 
 #: src/multiint.cpp:4295
 msgid "No connection to host."
-msgstr "Nessuna connessione con l'host."
+msgstr "Nessuna connessione con l'ospitante."
 
 #: src/multiint.cpp:4464
 msgid "Cannot change to a map with too few slots for all players."
@@ -17799,7 +17799,7 @@ msgstr "Impossibile passare a una mappa con meno slot."
 
 #: src/multiint.cpp:4566
 msgid "The host has quit."
-msgstr "L'host ha lasciato la partita."
+msgstr "L'ospitante ha lasciato la partita."
 
 #: src/multiint.cpp:4605
 msgid "UPnP has been enabled."
@@ -17823,7 +17823,7 @@ msgstr "Premi il pulsante Pronto per iniziare la tua sfida!"
 
 #: src/multiint.cpp:4632
 msgid "Press the start hosting button to begin hosting a game."
-msgstr "Premi il pulsante \"Inizia hosting\" per iniziare ad ospitare una partita."
+msgstr "Premi il pulsante \"Inizia ad ospitare la partita\" per iniziare ad ospitare una partita."
 
 #: src/multiint.cpp:4793
 #, c-format
@@ -17884,7 +17884,7 @@ msgstr "%s (%u) ha un mod incompatibile, ed è stato espulso."
 
 #: src/multijoin.cpp:469
 msgid "Your data doesn't match the host's!"
-msgstr "I tuoi dati non corrispondono a quelli dell'host!"
+msgstr "I tuoi dati non corrispondono a quelli dell'ospitante!"
 
 #: src/multijoin.cpp:498
 #, c-format
@@ -17910,7 +17910,7 @@ msgstr "La mappa può superare i limiti"
 
 #: src/multilimit.cpp:159
 msgid "Force Limits at Start"
-msgstr "Forza Limiti all'Inizio"
+msgstr "Forza limiti all'Inizio"
 
 #: src/multilimit.cpp:181
 msgid "Apply Defaults and Return To Previous Screen"
@@ -18016,7 +18016,7 @@ msgstr "Attenzione, questa è una Map-Mod, può alterare il normale gameplay."
 #: src/multiopt.cpp:306
 #: src/multiplay.cpp:1458
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
-msgstr "Attenzione, l'host ha alterato il codice di gioco e non può essere ritenuto affidabile!"
+msgstr "Attenzione, l'ospitante ha alterato il codice di gioco e non può essere ritenuto affidabile!"
 
 #: src/multiplay.cpp:264
 #, c-format
@@ -18030,7 +18030,7 @@ msgstr "Dati non validi!"
 #: src/multiplay.cpp:872
 #, c-format
 msgid "Auto kicking player %s, invalid command received."
-msgstr ""
+msgstr "Cacciata automatica del giocatore %s, ricevuto comando non valido."
 
 #: src/multiplay.cpp:1338
 msgid "Map was requested: SENDING MAP!"
@@ -18427,12 +18427,12 @@ msgstr "[No VTOL]"
 #: src/titleui/gamefind.cpp:329
 #, c-format
 msgid "Hosted by %s"
-msgstr "Hostato da %s"
+msgstr "Ospitato da %s"
 
 #: src/titleui/gamefind.cpp:333
 #, c-format
 msgid "Hosted by %s —%s"
-msgstr "Hostato da %s —%s"
+msgstr "Ospitato da %s —%s"
 
 #: src/titleui/gamefind.cpp:362
 msgid "Can't find any games for your version."
@@ -18464,7 +18464,7 @@ msgstr "Hai un mod incompatibile."
 
 #: src/titleui/gamefind.cpp:400
 msgid "Host couldn't send file?"
-msgstr "L'Host non può mandare il file?"
+msgstr "L'ospite non ha potuto inviare il file?"
 
 #: src/titleui/gamefind.cpp:404
 msgid "Incorrect Password!"
@@ -18472,7 +18472,7 @@ msgstr "Password non corretta!"
 
 #: src/titleui/gamefind.cpp:407
 msgid "Host has dropped connection!"
-msgstr "L'host ha terminato la connessione!"
+msgstr "L'ospite ha terminato la connessione!"
 
 #: src/titleui/gamefind.cpp:411
 msgid "Connection Error"
