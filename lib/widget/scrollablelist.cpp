@@ -38,7 +38,7 @@ void ScrollableListWidget::initialize()
 void ScrollableListWidget::geometryChanged()
 {
 	scrollBar->setGeometry(width() - SCROLLBAR_WIDTH, 0, SCROLLBAR_WIDTH, height());
-	scrollBar->setViewSize(calculateListViewHeight());
+	scrollBar->setViewSize(height());
 	layoutDirty = true;
 }
 
@@ -113,7 +113,7 @@ void ScrollableListWidget::updateLayout()
 		listView->setGeometry(padding.left, padding.top, listViewWidthWithoutScrollBar, listViewHeight);
 	}
 
-	scrollBar->setScrollableSize(scrollableHeight);
+	scrollBar->setScrollableSize(scrollableHeight + padding.top + padding.bottom);
 }
 
 void ScrollableListWidget::resizeChildren(uint32_t width)
