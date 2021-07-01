@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-30 21:52\n"
+"PO-Revision-Date: 2021-07-01 09:53\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1302,7 +1302,7 @@ msgstr "Cyborg con Lancer JetPack"
 
 #: data/base/messages/strings/names.txt:292
 msgid "Jump Assault Gunner"
-msgstr "Mitragliere d'Assalto con JetPack"
+msgstr "Mitragliere d'assalto con JetPack"
 
 #: data/base/messages/strings/names.txt:293
 msgid "Jump Needle Gunner"
@@ -4009,7 +4009,7 @@ msgstr "Distruggi tutti i rinforzi del Nuovo Paradigma"
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Costruisci almeno 7 strutture non murarie sull'altopiano e distruggi tutti i nuovi rinforzi del Nuovo Paradigma"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4021,7 +4021,7 @@ msgstr "Salva i civili dal Collettivo prima che ne vengano catturati troppi"
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Proteggi il collegamento dal Collettivo"
 
 #: data/base/script/campaign/cam2-end.js:190
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
@@ -5230,7 +5230,7 @@ msgstr "Torretta Contraerea Cyclone"
 
 #: data/mp/messages/strings/names.txt:276
 msgid "VTOL Flak Cannon"
-msgstr "Cannone Antiaereo VTOL"
+msgstr "Cannone antiaereo per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.CollectiveWall.name
@@ -5554,7 +5554,7 @@ msgstr "Super Cyborg con Tank Killer"
 #: data/mp/messages/strings/names.txt:790
 #: po/custom/fromJson.txt:5015
 msgid "Satellite Uplink Center"
-msgstr "Centro di Collegamento Satellitare"
+msgstr "Centro di collegamento satellitare"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-PulseLsr.name
@@ -5823,7 +5823,7 @@ msgstr "Copia JSON negli appunti"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr ""
+msgstr "Estrai JSON in StdOut"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -5923,7 +5923,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Postazione con cannone antiaereo Ciclone"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
@@ -5936,7 +5936,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "Cannone antiaereo Ciclone"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6029,14 +6029,14 @@ msgstr ""
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Postazione con cannone antiaereo Tornado"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "Cannone antiaereo Tornado"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6321,7 +6321,7 @@ msgstr "Batteria di Missili Angel"
 #. data/base/stats/structure.json: $.Emplacement-MdART-pit.name
 #: po/custom/fromJson.txt:498
 msgid "Angel Missile Emplacement"
-msgstr "Postazione per Missili Angel"
+msgstr "Fortificazione con missili Angel"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MdArtMissile.name
@@ -6398,7 +6398,7 @@ msgstr "Batteria di Missili Archangel"
 #. data/mp/stats/structure.json: $.Emplacement-HvART-pit.name
 #: po/custom/fromJson.txt:542
 msgid "Archangel Missile Emplacement"
-msgstr "Postazione per Missili Archangel"
+msgstr "Fortificazione con missili Archangel"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-HvArtMissile.name
@@ -6414,7 +6414,7 @@ msgstr "Missile Archangel"
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #: po/custom/fromJson.txt:560
 msgid "Armed with Cyborg assault gun"
-msgstr "Armato con mitragliatrice d'assalto Cyborg"
+msgstr "Armato con mitragliatrice d'assalto cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[1]
@@ -6605,7 +6605,7 @@ msgstr "Postazione Corazzata per batteria di Mortaio EMP"
 #. data/mp/messages/resmessagesall.json: $.RES_DEF_EMP.text[1]
 #: po/custom/fromJson.txt:679
 msgid "Armored guard tower with EMP Cannon"
-msgstr "Torre di guardia corazzata con Cannone EMP"
+msgstr "Torre di guardia corazzata con cannone EMP"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_PB_ATR.text[1]
@@ -6818,7 +6818,7 @@ msgstr "Batteria d'artiglieria che spara missili Novastorm"
 #. data/base/stats/research.json: $.R-Defense-RotCannon.name
 #: po/custom/fromJson.txt:842
 msgid "Assault Cannon Emplacement"
-msgstr "Postazione con cannone d'assalto"
+msgstr "Fortificazione con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-VulcanCan.name
@@ -6856,26 +6856,26 @@ msgstr "Cannone d'assalto"
 #. data/base/stats/structure.json: $.Pillbox-RotMG.name
 #: po/custom/fromJson.txt:865
 msgid "Assault Gun Bunker"
-msgstr "Bunker con cannone d'assalto"
+msgstr "Bunker con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:868
 msgid "Assault Gun Emplacement"
-msgstr "Postazione con cannone d'assalto"
+msgstr "Fortificazione con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Tower-RotMg.name
 #: po/custom/fromJson.txt:871
 msgid "Assault Gun Guard Tower 2"
-msgstr ""
+msgstr "Torre di guardia 2 con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotMG.name
 #. data/base/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:875
 msgid "Assault Gun Guard Tower"
-msgstr "Torre di guardia con cannone d'assalto"
+msgstr "Torre di guardia con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Wall-RotMg.name
@@ -6884,19 +6884,19 @@ msgstr "Torre di guardia con cannone d'assalto"
 #. data/mp/stats/structure.json: $.Wall-RotMg.name
 #: po/custom/fromJson.txt:881
 msgid "Assault Gun Hardpoint"
-msgstr "Postazione Corazzata con Mitragliatrice d'Assalto"
+msgstr "Postazione con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHTrackAssGun.name
 #: po/custom/fromJson.txt:884
 msgid "Assault Gun Python Half Track"
-msgstr "Mitragliatrice d'Assalto Python Semi-cingoli"
+msgstr "Mitragliatrice d'assalto Python Semi-cingoli"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PhytonHoverAssGun.name
 #: po/custom/fromJson.txt:887
 msgid "Assault Gun Python Hover"
-msgstr "Mitragliatrice d'Assalto Python Hover"
+msgstr "Mitragliatrice d'assalto Python Hover"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyAsltGnTrk.name
@@ -6909,7 +6909,7 @@ msgstr "Mitragliatrice d'Assalto Python Cingoli"
 #. data/mp/stats/structure.json: $.GuardTower-RotMg.name
 #: po/custom/fromJson.txt:894
 msgid "Assault Gun Tower"
-msgstr "Torre con cannone d'assalto"
+msgstr "Torre con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG4.name
@@ -6918,7 +6918,7 @@ msgstr "Torre con cannone d'assalto"
 #. data/mp/stats/weapons.json: $.MG4ROTARYMk1.name
 #: po/custom/fromJson.txt:900
 msgid "Assault Gun"
-msgstr "Cannone d'assalto"
+msgstr "Mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Cyborg-Wpn-RotMG.name
@@ -6927,7 +6927,7 @@ msgstr "Cannone d'assalto"
 #. data/mp/stats/templates.json: $.CyborgRotMgGround.name
 #: po/custom/fromJson.txt:906
 msgid "Assault Gunner Cyborg"
-msgstr "Mitragliere D'Assalto"
+msgstr "Mitragliere d'assalto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VP.text[2]
@@ -7100,7 +7100,7 @@ msgstr "PropBaBa"
 #. data/mp/challenges/b2basics.json: $.challenge.name
 #: po/custom/fromJson.txt:1049
 msgid "Back to Basics"
-msgstr "Ritorno alle Basi"
+msgstr "Ritorno alle basi"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nexus.json: $.AI.tip
@@ -7174,13 +7174,13 @@ msgstr "Bersagli migliori: bunker e postazioni"
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, emplacements, Infantry"
-msgstr "Bersagli migliori: bunker, postazioni e fanteria"
+msgstr "Bersagli migliori: bunker, fortificazioni e fanteria"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1122
 msgid "Best Targets: Bunkers, Emplacements, Infantry"
-msgstr "Bersagli migliori: bunker, postazioni e fanteria"
+msgstr "Bersagli migliori: bunker, fortificazioni e fanteria"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7217,7 +7217,7 @@ msgstr "Bersagli migliori: veicoli e cyborg"
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
 #: po/custom/fromJson.txt:1154
 msgid "Best Targets: Vehicles and Emplacements"
-msgstr "Bersagli migliori: veicoli e postazioni"
+msgstr "Bersagli migliori: veicoli e fortificazioni"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CN2MK1.text[2]
@@ -8225,7 +8225,7 @@ msgstr "Attacca elettronicamente e interrompe i collegamenti tra le strutture ne
 #. data/mp/stats/structure.json: $.WallTower-EMP.name
 #: po/custom/fromJson.txt:1857
 msgid "EMP Cannon Hardpoint"
-msgstr ""
+msgstr "Postazione con cannone EMP"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-EMPCannon.name
@@ -8712,7 +8712,7 @@ msgstr "Generatore a Turbina a Gas"
 #. data/mp/stats/structure.json: $.Emplacement-Rail3.name
 #: po/custom/fromJson.txt:2182
 msgid "Gauss Cannon Emplacement"
-msgstr "Postazione con Cannone Gauss"
+msgstr "Fortificazione con cannone Gauss"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-Rail3.name
@@ -8771,8 +8771,8 @@ msgid "Gets ~ 100% more power from each oil derrick\n"
 "Uses the Heavy Plasma Launcher and EMP Mortar\n"
 "Starts with defensive structures and oil derricks"
 msgstr "Ottiene ~ 100% in più di potenza per ogni derrick\n"
-"Utilizza il Launcher al Plasma Pesante e Mortaio EMP\n"
-"Inizia con strutture difensive e torri di trivellazione del petrolio"
+"Utilizza il lanciatore al plasma pesante e il mortaio EMP\n"
+"Inizia dalle strutture difensive e dai derrick"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.easy_tip
@@ -8990,7 +8990,7 @@ msgstr ""
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
 #: po/custom/fromJson.txt:2351
 msgid "Hardpoint Twin Assault Gun Available"
-msgstr "Postazione Corazzata con Doppia Mitragliatrice d'Assalto disponibile"
+msgstr "Postazione con doppia mitragliatrice d'assalto disponibile"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM2WT.text[0]
@@ -9355,7 +9355,7 @@ msgstr "Obice Pesante - Ground Shaker"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyLaser.name
 #: po/custom/fromJson.txt:2576
 msgid "Heavy Laser Emplacement"
-msgstr "Postazione con Laser Pesante"
+msgstr "Fortificazione con laser pesante"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHvLaserTracks.name
@@ -9468,21 +9468,21 @@ msgstr "Mortaio Pesante - Bombarda"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2657
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Fortificazione con lanciatore al plasma pesante"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2661
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Lanciatore al plasma pesante che spara plasma"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2665
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Lanciatore al plasma pesante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9584,7 +9584,7 @@ msgstr "Emettitore Laser ad Alta Energia"
 #. data/mp/challenges/hidebehind.json: $.challenge.name
 #: po/custom/fromJson.txt:2735
 msgid "Hide Behind Me"
-msgstr "Nasconditi Dietro di Me"
+msgstr "Nasconditi dietro di me"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_ST_MAT10.text[1]
@@ -9820,7 +9820,7 @@ msgstr "Obice"
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2917
 msgid "HPV Cannon Emplacement"
-msgstr "Postazione con Cannone ad Ipervelocità"
+msgstr "Fortificazione con cannone a iper velocità"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
@@ -9892,7 +9892,7 @@ msgstr "Miglioramento Mitragliatrice a Fuoco Iper Rapido"
 #. data/mp/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2959
 msgid "Hyper Velocity Cannon Emplacement"
-msgstr "Postazione con Cannone ad Iper Velocità"
+msgstr "Fortificazione con cannone a iper velocità"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
@@ -10107,13 +10107,13 @@ msgstr ""
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3102
 msgid "Incendiary Howitzer Emplacement"
-msgstr "Postazione con Obice Incendiario"
+msgstr "Fortificazione con obice incendiario"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
 #: po/custom/fromJson.txt:3105
 msgid "Incendiary howitzer emplacement"
-msgstr "Postazione con obice incendiario"
+msgstr "Fortificazione con obice incendiario"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -10790,7 +10790,7 @@ msgstr "Danni delle Mitragliatrici +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3628
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Torre di guardia con mitragliatrice"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11283,13 +11283,13 @@ msgstr "Mortaio"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3965
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Mitragliatrice montata"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
 #: po/custom/fromJson.txt:3968
 msgid "MRL Emplacement"
-msgstr "Postazione con Artiglieria a Minirazzi"
+msgstr "Fortificazione con artiglieria a mini-razzi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
@@ -11715,7 +11715,7 @@ msgstr "Nexus"
 #. data/mp/challenges/noplace.json: $.challenge.name
 #: po/custom/fromJson.txt:4308
 msgid "No Place To Hide"
-msgstr "Nessun Posto Dove Nascondersi"
+msgstr "Nessun posto dove nascondersi"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/bonecrusher.json: $.AI.tip
@@ -11873,7 +11873,7 @@ msgstr "Plastitan"
 #. data/mp/stats/structure.json: $.Emplacement-PlasmaCannon.name
 #: po/custom/fromJson.txt:4408
 msgid "Plasma Cannon Emplacement"
-msgstr "Postazione con Cannone al Plasma"
+msgstr "Fortificazione con cannone al plasma"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASCAN.text[1]
@@ -12068,7 +12068,7 @@ msgstr "Prototipo di IA specializzato su missili e razzi"
 #. data/mp/stats/structure.json: $.Emplacement-PulseLaser.name
 #: po/custom/fromJson.txt:4531
 msgid "Pulse Laser Emplacement"
-msgstr "Postazione con Laser a Impulsi"
+msgstr "Fortificazione con laser a impulsi"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-PulseLas.name
@@ -12199,7 +12199,7 @@ msgstr "Danni del cannone a rotaia +25%"
 #. data/mp/stats/research.json: $.R-Defense-Rail2.name
 #: po/custom/fromJson.txt:4611
 msgid "Rail Gun Emplacement"
-msgstr "Postazione con cannone a rotaia"
+msgstr "Fortificazione con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL2.text[1]
@@ -12286,7 +12286,7 @@ msgstr "Computer di Previsione dei Bersagli"
 #. data/mp/stats/structure.json: $.Emplacement-Rail2.name
 #: po/custom/fromJson.txt:4662
 msgid "Railgun Emplacement"
-msgstr "Postazione con cannone a rotaia"
+msgstr "Fortificazione con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF02.name
@@ -12311,7 +12311,7 @@ msgstr "Cannone a rotaia a fuoco rapido che spara dardi ad ago"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4675
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "Il caricatore rapido aumenta la velocità di ricarica"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -13206,7 +13206,7 @@ msgstr "Laser AA Stormbringer"
 #. data/mp/stats/structure.json: $.P0-AASite-Laser.name
 #: po/custom/fromJson.txt:5271
 msgid "Stormbringer Emplacement"
-msgstr "Postazione Stormbringer"
+msgstr "Fortificazione con Stormbringer"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_SY_VSTW1.text[3]
@@ -13450,7 +13450,7 @@ msgstr "Ricerca dei sistemi completata"
 #. data/mp/stats/structure.json: $.Emplacement-HvyATrocket.name
 #: po/custom/fromJson.txt:5458
 msgid "Tank Killer Emplacement"
-msgstr "Postazione con Tank Killer"
+msgstr "Fortificazione con Tank Killer"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HvyA-Trocket.name
@@ -13837,14 +13837,14 @@ msgstr "Doppio Cannone D'Assalto"
 #. data/mp/stats/structure.json: $.WallTower-TwinAssaultGun.name
 #: po/custom/fromJson.txt:5700
 msgid "Twin Assault Gun Hardpoint"
-msgstr "Postazione corazzata con doppio cannone d'assalto"
+msgstr "Postazione con doppia mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-MG5.name
 #. data/mp/stats/weapons.json: $.MG5TWINROTARY.name
 #: po/custom/fromJson.txt:5704
 msgid "Twin Assault Gun"
-msgstr "Cannone d'assalto doppio"
+msgstr "Doppia mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox2.name
@@ -13930,7 +13930,7 @@ msgstr "Aggiornato il sistema di computer del campo di battaglia"
 #. data/mp/stats/sensor.json: $.UplinkSensor.name
 #: po/custom/fromJson.txt:5754
 msgid "Uplink Sensor"
-msgstr "Sensore di Collegamento"
+msgstr "Sensore di collegamento"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FM1.text[3]
@@ -13988,7 +13988,7 @@ msgstr "Usa tecnologia avanzata per razzi"
 #. data/mp/multiplay/skirmish/Cobra.json: $.AI.hard_tip
 #: po/custom/fromJson.txt:5785
 msgid "Uses the Heavy Plasma Launcher"
-msgstr "Usa il Lanciaplasma Pesante"
+msgstr "Usa il lanciatore al plasma pesante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_POWU2.text[2]
@@ -14141,14 +14141,14 @@ msgstr "Vipera"
 #. data/mp/stats/weapons.json: $.Cannon5Vulcan-VTOL.name
 #: po/custom/fromJson.txt:5901
 msgid "VTOL Assault Cannon"
-msgstr "Cannone d'Assalto VTOL"
+msgstr "Cannone d'assalto per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG4ROTARY-VTOL.name
 #. data/mp/stats/weapons.json: $.MG4ROTARY-VTOL.name
 #: po/custom/fromJson.txt:5905
 msgid "VTOL Assault Gun"
-msgstr "Cannone d'assalto per VTOL"
+msgstr "Mitragliatrice d'assalto per VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-BB.name
@@ -14174,7 +14174,7 @@ msgstr "Bunker Buster VTOL"
 #. data/mp/stats/weapons.json: $.Cannon1-VTOL.name
 #: po/custom/fromJson.txt:5919
 msgid "VTOL Cannon"
-msgstr "Cannone VTOL"
+msgstr "Cannone per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/sensor.json: $.Sys-VTOLCBTower01.name
@@ -14284,32 +14284,32 @@ msgstr "Laser Pesante VTOL"
 #. data/mp/stats/weapons.json: $.MG3-VTOL.name
 #: po/custom/fromJson.txt:5991
 msgid "VTOL Heavy Machinegun"
-msgstr "Mitragliatrice Pesante VTOL"
+msgstr "Mitragliatrice pesante per VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Bug-HPV.name
 #: po/custom/fromJson.txt:5994
 msgid "VTOL Hyper Velocity Cannon Bug VTOL"
-msgstr "Cannone ad ipervelocità Bug VTOL"
+msgstr "Cannone a iper velocità per VTOL Bug"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Mantis-HPV.name
 #: po/custom/fromJson.txt:5997
 msgid "VTOL Hyper Velocity Cannon Mantis VTOL"
-msgstr "Cannone ad Ipervelocità Mantis VTOL"
+msgstr "Cannone a iper velocità per VTOL Mantis"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.V-Scor-HPV.name
 #: po/custom/fromJson.txt:6000
 msgid "VTOL Hyper Velocity Cannon Scorpion VTOL"
-msgstr "Cannone ad Iper Velocità Scorpion VTOL"
+msgstr "Cannone a iper velocità per VTOL Scorpion"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 #. data/mp/stats/weapons.json: $.Cannon4AUTO-VTOL.name
 #: po/custom/fromJson.txt:6004
 msgid "VTOL Hyper Velocity Cannon"
-msgstr "Cannone ad Ipervelocità VTOL"
+msgstr "Cannone a iper velocità per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol02.name
@@ -14353,7 +14353,7 @@ msgstr "Lancer VTOL"
 #. data/mp/stats/weapons.json: $.MG1-VTOL.name
 #: po/custom/fromJson.txt:6027
 msgid "VTOL Machinegun"
-msgstr "Mitragliatrice VTOL"
+msgstr "Mitragliatrice per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-VTOL-Pod.name
@@ -14367,7 +14367,7 @@ msgstr "Minirazzi VTOL"
 #. data/mp/stats/weapons.json: $.RailGun1-VTOL.name
 #: po/custom/fromJson.txt:6035
 msgid "VTOL Needle Gun"
-msgstr "Cannone ad Ago VTOL"
+msgstr "Cannone ad ago per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
@@ -14490,7 +14490,7 @@ msgstr "Bombe alla Termite"
 #. data/mp/stats/weapons.json: $.MG2-VTOL.name
 #: po/custom/fromJson.txt:6122
 msgid "VTOL Twin Machinegun"
-msgstr "Doppia mitragliatrice VTOL"
+msgstr "Doppia mitragliatrice per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/propulsion.json: $.V-Tol.name
@@ -15420,7 +15420,7 @@ msgstr "Opzioni Grafiche"
 #: src/frontend.cpp:643
 #: src/ingameop.cpp:565
 msgid "Video Options"
-msgstr "Opzioni video."
+msgstr "Opzioni video"
 
 #: src/frontend.cpp:644
 msgid "Audio / Zoom Options"
@@ -15539,7 +15539,7 @@ msgstr "Tracciato"
 #: src/frontend.cpp:781
 #: src/ingameop.cpp:607
 msgid "Video Playback"
-msgstr "Riproduzione dei Video"
+msgstr "Riproduzione dei video"
 
 #: src/frontend.cpp:786
 #: src/ingameop.cpp:612
@@ -15618,11 +15618,11 @@ msgstr "HRTF non è supportato sul tuo dispositivo / sistema / libreria OpenAL"
 
 #: src/frontend.cpp:1018
 msgid "Map Zoom"
-msgstr "Ingrandimento Mappa"
+msgstr "Ingrandimento mappa"
 
 #: src/frontend.cpp:1023
 msgid "Map Zoom Rate"
-msgstr "Frequenza di Ingrandimento Mappa"
+msgstr "Velocità d'ingrandimento mappa"
 
 #: src/frontend.cpp:1028
 msgid "Radar Zoom"
@@ -16796,7 +16796,7 @@ msgstr "Discord: impossibile unirsi al gioco"
 
 #: src/integrations/wzdiscordrpc.cpp:203
 msgid "You can't join a game while you're in a game. Please save / quit your current game, exit to the main menu, and try again."
-msgstr ""
+msgstr "Non puoi unirti a un gioco mentre stai giocando. Salva e esci dal gioco attuale, vai al menu principale e riprova."
 
 #: src/integrations/wzdiscordrpc.cpp:233
 msgid "Discord: Finding & Connecting to Game"
@@ -16946,7 +16946,7 @@ msgstr "Permetti a questo giocatore di unirsi al gioco?"
 #: src/integrations/wzdiscordrpc.cpp:1083
 #, c-format
 msgid "Join Request from %s"
-msgstr ""
+msgstr "Richiesta di unione da %s"
 
 #: src/integrations/wzdiscordrpc.cpp:1085
 msgid "Allow"
@@ -17059,7 +17059,7 @@ msgstr "Il giocatore %u sta ottenendo per mezzo di trucchi un nuovo esercito di 
 #: src/keybind.cpp:1750
 #, c-format
 msgid "(Player %u) is using cheat :%s"
-msgstr "(Il giocatore %u) sta usando il trucco:%s"
+msgstr "(Il giocatore %u) sta usando il trucco: %s"
 
 #: src/keybind.cpp:521
 msgid "Hard as nails!!!"
@@ -17505,7 +17505,7 @@ msgstr "VTOL disabilitati."
 
 #: src/multiint.cpp:1118
 msgid "Satellite Uplink disabled."
-msgstr "Collegamento Satellitare disabilitato."
+msgstr "Collegamento satellitare disabilitato."
 
 #: src/multiint.cpp:1119
 msgid "Laser Satellite disabled."
@@ -17548,7 +17548,7 @@ msgstr "Schermaglia a Un Giocatore"
 #: src/multiint.cpp:1358
 msgid "Select Map\n"
 "Can be blocked by players' votes"
-msgstr "Scegli Mappa\n"
+msgstr "Scegli mappa\n"
 "Può essere bloccata dai voti dei giocatori"
 
 #: src/multiint.cpp:1359
@@ -17578,11 +17578,11 @@ msgstr "Base"
 
 #: src/multiint.cpp:1445
 msgid "Map Preview"
-msgstr "Anteprima Mappa"
+msgstr "Anteprima mappa"
 
 #: src/multiint.cpp:1446
 msgid "Click to see Map"
-msgstr "Clicca per visualizzare la Mappa"
+msgstr "Clicca per visualizzare la mappa"
 
 #: src/multiint.cpp:1452
 msgid "Show Structure Limits"
@@ -17678,7 +17678,7 @@ msgstr "L'host ti ha cacciato dal gioco."
 
 #: src/multiint.cpp:2475
 msgid "Click to change difficulty"
-msgstr "Clicca per modificare la difficoltà"
+msgstr "Fai clic per modificare la difficoltà"
 
 #: src/multiint.cpp:2496
 msgid "Waiting for player"
@@ -17694,7 +17694,7 @@ msgstr "Il giocatore sta eseguendo il download"
 
 #: src/multiint.cpp:2496
 msgid "Click when ready"
-msgstr "Clicca quando sei pronto"
+msgstr "Fai clic quando sei pronto"
 
 #: src/multiint.cpp:2496
 msgid "Waiting for download"
@@ -17710,7 +17710,7 @@ msgstr "GIOCATORI"
 
 #: src/multiint.cpp:2598
 msgid "Click to change to this slot"
-msgstr "Clicca per cambiare a questo slot"
+msgstr "Fai clic per passare a questo slot"
 
 #: src/multiint.cpp:2627
 msgid "Choose Team"
@@ -17722,7 +17722,7 @@ msgstr "Squadre bloccate"
 
 #: src/multiint.cpp:2653
 msgid "Click to change player colour"
-msgstr "Clicca per cambiare il colore del giocatore"
+msgstr "Fai clic per cambiare il colore del giocatore"
 
 #: src/multiint.cpp:2669
 msgid "Click to change player faction"
@@ -17730,11 +17730,11 @@ msgstr "Fai clic per cambiare la fazione del giocatore"
 
 #: src/multiint.cpp:2694
 msgid "Click to change player position"
-msgstr "Clicca per cambiare la posizione del giocatore"
+msgstr "Fai clic per cambiare la posizione del giocatore"
 
 #: src/multiint.cpp:2701
 msgid "Click to change AI, right click to distribute choice"
-msgstr "Clicca per cambiare IA, clicca con il tasto destro per distribuire la scelta"
+msgstr "Fai clic per cambiare IA, e con il tasto destro per distribuire la scelta"
 
 #: src/multiint.cpp:2716
 msgid "Player ID: "
@@ -17795,7 +17795,7 @@ msgstr "Non puoi passare ad una mappa senza abbastanza posti per tutti i giocato
 
 #: src/multiint.cpp:4469
 msgid "Cannot change to a map with fewer slots."
-msgstr ""
+msgstr "Impossibile passare a una mappa con meno slot."
 
 #: src/multiint.cpp:4566
 msgid "The host has quit."
@@ -17828,7 +17828,7 @@ msgstr "Premi il pulsante \"Inizia hosting\" per iniziare ad ospitare una partit
 #: src/multiint.cpp:4793
 #, c-format
 msgid "Click to take player slot %d"
-msgstr "Clicca per prendere lo slot del player %d"
+msgstr "Fai clic per prendere lo slot del giocatore %d"
 
 #: src/multiint.cpp:4807
 #: src/multiint.cpp:5041
@@ -17906,7 +17906,7 @@ msgstr "LIMITI"
 
 #: src/multilimit.cpp:153
 msgid "Map Can Exceed Limits"
-msgstr "Mappa Può Superare Limiti"
+msgstr "La mappa può superare i limiti"
 
 #: src/multilimit.cpp:159
 msgid "Force Limits at Start"
@@ -18498,7 +18498,7 @@ msgstr "Versione: %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
-msgstr "Nome Mappa"
+msgstr "Nome mappa"
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
