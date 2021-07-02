@@ -175,7 +175,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 		matrix,
 		glm::transpose(glm::inverse(matrix)),
 		pal_PIELIGHTtoVec4(colour), pal_PIELIGHTtoVec4(teamcolour),
-		0.f, 0, 0
+		0.f, 0, !(shape->flags & pie_PREMULTIPLIED)
 	};
 
 	gfx_api::Draw3DShapeOpaque::get().set_uniforms(globalUniforms, meshUniforms, instanceUniforms);
