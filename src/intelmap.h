@@ -30,12 +30,6 @@
 #define IDINTMAP_FORM			6000	//The intelligence map base form
 #define IDINTMAP_MSGVIEW		6002	//The message 3D view for the intelligence screen
 
-/*dimensions for PIE view section relative to IDINTMAP_MSGVIEW*/
-
-#define	INTMAP_PIEWIDTH			238
-#define INTMAP_PIEHEIGHT		169
-
-
 // The current message being displayed
 extern MESSAGE			*psCurrentMsg;
 
