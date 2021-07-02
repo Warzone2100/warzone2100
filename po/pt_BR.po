@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-20 03:01\n"
+"PO-Revision-Date: 2021-07-02 22:04\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -4009,7 +4009,7 @@ msgstr "Destrua todos os reforços do Novo Paradigma"
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr "Construa pelo menos 7 estruturas não-paredes no planalto e destrua todos os reforços do Novo Paradigma"
+msgstr "Construa pelo menos 7 estruturas não-muros no planalto e destrua todos os reforços do Novo Paradigma"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
@@ -6025,21 +6025,21 @@ msgstr "Sensor AA de Imagem Infravermelho"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr "Defesa de Canhão Flak Tornado"
+msgstr "Defesa de Canhão AA Flak Tornado"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr "Muro de Canhão Flak Tornado"
+msgstr "Muro de Canhão AA Flak Tornado"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr "Canhão Flak Tornado"
+msgstr "Canhão AA Flak Tornado"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
