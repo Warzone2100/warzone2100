@@ -1,3 +1,36 @@
+2021-07-04: Version 4.1.0:
+ * General:
+   * Change: Move research upgrade code to C++ away from Javascript. May fix a late-game desync (commit:7b4e1d110ec9427ea070ea3395db252ef8547127, commit:3ddc0356b0de20ccee34727dec4f96677e02eb1c, commit:b2da3338db951361a20969e2a55542e310d299c9, #1925)
+   * Fix: Prevent crash when resuming game from the Music Manager (commit:757db8dc266eeddbe1a47f36d0610d93070ae5df, #1913)
+   * Fix: Fix vtol collision with ground units (commit:614a62f9eb5df8eec6a32a214559b37885a45626, #1917)
+   * Fix: Fix updating certain key mappings making the keys unusable (commit:f493fa8fe521a37c81623edbe565ef3f6b07b654, commit:0859366c77e19b4f0944987b04706cce772c75ed, commit:7355f730e3cf986217e1f409669a6aca47a09dbf, #1922)
+   * Fix: Update unit speed when researching engine upgrades and when reloading saves (commit:4db7674c093acde144cad384edaca9633d243868, #1953)
+   * Fix: Stop heavy CPU usage on the Intelligence map (too many commits, #1958, #1962)
+ * Graphics:
+   * Fix: Fix floating turrets on Heavy Plasma Launcher and Tornado Flak (commit:c02c5e198cd74ea153ed769c9085e5a92a9236ca, #1932)
+   * Fix: Fix and show various muzzle flash effects for Gauss, laser, and all kinds of weapons (commit:c99cadf51a280e565979ad8dc3f74ad92e20a915, commit:453d69d3b805a833ae56bde33aef20cec73a3128, commit:0d4b8b5e04b5a27ae87358b7c63b6707722c518c, #1935)
+   * Fix: Normalmapping of 3D models in menus / buttons (commit:32fb024c9d261fc35a1018a893bba78704a648d4, commit:e536d1f639f3fd8b9e63042b33def23c2d5ab09a, #1930)
+ * Campaign:
+   * Add: Add warning when selecting Insane campaign difficulty (commit:4ac34dbbfa89d1954859686c290bbb94cfd0d6c8, commit:37402723cef4da511d46644f9fd02a91f4787933, #1938)
+ * Multiplayer:
+   * Fix: Don't incorporate ally losses into enemy kill count (commit:5b5114083ed232ff6b0d36e61988b9d3b5a32e9c, #1916)
+   * Fix: Improve handling of corrupt map archives / delete partially downloaded map files (commit:bc18010d044c9ac211c5d364c72578575ab4d257, commit:7850af11528b0e94ababf5c4065d3b7e0e05a683, #1919)
+   * Fix: Implement editbox placeholder for password box and can set password by clicking icon (commit:eca46698c0acb9b0d69bddcc24c0c90c18f48695, commit:1c1fc3a7b5609f069b7fec037bd81e822b83fcb7, #1950)
+ * Scripting:
+   * Fix: Prevent a crash if passing in no turrets to a few API functions (commit:ad082fb475f465de53286755dee892971998ac09, #1929)
+ * AI:
+   * Fix: General improvements to Cobra AI / accounts for new balance changes (commit:1c2b422c88f28d78bc85e6ff951e06724cb4488e, #1954)
+ * Balance:
+   * Change: Make the Heavy Repair Turret come earlier (commit:7465e1b97da4a3c2ffbf4b6968f882898268efa4, #1927)
+   * Change: Weaken the VTOL rail weapons so they aren't overpowered (commit:ba6cc666178fe28cb0832dbf880a9054a6d05ebc, #1928)
+   * Change: Balance and move EMP weapons to come earlier (commit:405c4ba6eb13e860919925db1671c7704c465195, #1939)
+   * Change: Increase cost/buildtime of Howitzers and Archangel Missiles (commit:9b26877e1aa73129e23f0cdd2fe0a03a074b0371, commit:dd4360fa2b0e36a550451ee1daa77ef92ad284cb, #1952)
+   * Change: Balance VTOL Lancer-line to be less overpowered and remove splash damage from Hyper Velocity Cannons (commit:8a423d54c53465f3701314ef14876da416ac4a3a, #1915)
+   * Change: Make Leopard and Panther have higher engine power output thus move faster with more weapons (commit:8786263d96ad0168969e10029e19e596e9d790af, #1955)
+ * Other:
+   * Fix: Make "help us translate" message translatable (commit:cf697c6896d56d6e761621d8e14830d6e6ab2fb6, #1961)
+
+
 2021-06-18: Version 4.1.0-beta1:
  * General:
    * Add: New design menu stats delta system (too many commits, #1781, #1790)
