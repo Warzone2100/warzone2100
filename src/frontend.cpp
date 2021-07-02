@@ -86,6 +86,7 @@ char			aLevelName[MAX_LEVEL_NAME_SIZE + 1];	//256];			// vital! the wrf file to 
 bool			bLimiterLoaded = false;
 
 #define TUTORIAL_LEVEL "TUTORIAL3"
+#define TRANSLATION_URL "https://translate.wz2100.net"
 
 // ////////////////////////////////////////////////////////////////////////////
 // Forward definitions
@@ -1979,7 +1980,8 @@ void startGameOptionsMenu()
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
 
 	// "Help Us Translate" link
-	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, "Help us improve translations of Warzone 2100: https://translate.wz2100.net", 0);
+	const auto helpTranslateMessage = astringf(_("Help us improve translations of Warzone 2100: %s"), TRANSLATION_URL);
+	addSmallTextButton(FRONTEND_HYPERLINK, FRONTEND_POS9X, FRONTEND_POS9Y, helpTranslateMessage.c_str(), 0);
 	widgSetTip(psWScreen, FRONTEND_HYPERLINK, _("Click to open webpage."));
 
 	// Add some text down the side of the form
@@ -1994,7 +1996,7 @@ bool runGameOptionsMenu()
 	switch (id)
 	{
 	case FRONTEND_HYPERLINK:
-		openURLInBrowser("https://translate.wz2100.net");
+		openURLInBrowser(TRANSLATION_URL);
 		break;
 	case FRONTEND_LANGUAGE:
 	case FRONTEND_LANGUAGE_R:
