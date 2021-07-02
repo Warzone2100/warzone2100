@@ -29,7 +29,6 @@
 #include "lib/framework/strres.h"
 #include "lib/widget/widget.h"
 #include "lib/widget/gridlayout.h"
-#include "lib/widget/alignment.h"
 #include "lib/widget/button.h"
 #include "lib/widget/paragraph.h"
 #include "lib/widget/label.h"
@@ -109,10 +108,12 @@
 #define INTMAP_TITLEHEIGHT		25
 
 /*dimensions for FLIC view section relative to IDINTMAP_MSGVIEW*/
-#define	INTMAP_FLICX			245
-#define INTMAP_FLICY			24
 #define	INTMAP_FLICWIDTH		192
-#define INTMAP_FLICHEIGHT		170
+#define INTMAP_FLICHEIGHT		168
+
+/*dimensions for PIE view section relative to IDINTMAP_MSGVIEW*/
+#define	INTMAP_PIEWIDTH			238
+#define INTMAP_PIEHEIGHT		INTMAP_FLICHEIGHT
 
 //position for text on full screen video
 #define VIDEO_TEXT_TOP_X				20
@@ -369,6 +370,8 @@ bool intAddMessageView(MESSAGE *psMessage)
 
 	auto messages = ScrollableListWidget::make();
 	messages->setItemSpacing(3);
+	messages->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
+	messages->setPadding({10, 10, 10, 10});
 
 	if (psMessage->type != MSG_RESEARCH && psMessage->pViewData->type == VIEW_RPL)
 	{
@@ -384,7 +387,6 @@ bool intAddMessageView(MESSAGE *psMessage)
 			}
 		}
 
-		messages->setPadding({0, 10, 10, 10});
 		grid->place({0, 1, false}, {0, 1, true}, messages);
 
 		return true;
@@ -401,27 +403,25 @@ bool intAddMessageView(MESSAGE *psMessage)
 	sFormInit.pDisplay = intDisplayPIEView;
 	sFormInit.pUserData = psMessage;
 	auto form3dView = std::make_shared<W_CLICKFORM>(&sFormInit);
-	auto alignment = std::make_shared<AlignmentWidget>(VerticalAlignment::Center, HorizontalAlignment::Center);
-	alignment->attach(form3dView);
-	grid->place({0, 1, false}, {0, 1, false}, alignment);
 
 	/*Add the Flic box if videos are installed */
 	if (PHYSFS_exists("sequences/devastation.ogg"))
 	{
 		sFormInit = W_FORMINIT();
-		sFormInit.formID = IDINTMAP_MSGVIEW;
 		sFormInit.id = IDINTMAP_FLICVIEW;
 		sFormInit.style = WFORM_PLAIN;
-		sFormInit.x = INTMAP_FLICX;
-		sFormInit.y = INTMAP_FLICY;
 		sFormInit.width = INTMAP_FLICWIDTH;
 		sFormInit.height = INTMAP_FLICHEIGHT;
 		sFormInit.pDisplay = intDisplayFLICView;
 		sFormInit.pUserData = psMessage;
-		if (!widgAddForm(psWScreen, &sFormInit))
-		{
-			return false;
-		}
+		auto flicView = std::make_shared<W_FORM>(&sFormInit);
+
+		grid->place({0, 2, true}, {0, 1, false}, form3dView);
+		grid->place({2, 1, false}, {0, 1, false}, flicView);
+	}
+	else
+	{
+		grid->place({1, 1, false}, {0, 1, false}, form3dView);
 	}
 
 	/*Add the text box*/
@@ -433,8 +433,7 @@ bool intAddMessageView(MESSAGE *psMessage)
 		messages->addItem(message);
 	}
 
-	messages->setPadding({5, 10, 5, 10});
-	grid->place({0, 1, false}, {1, 1, true}, messages);
+	grid->place({0, 3, true}, {1, 1, true}, messages);
 
 	return true;
 }
@@ -883,11 +882,11 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	{
 		int x0 = xOffset + psWidget->x();
 		int y0 = yOffset + psWidget->y();
-		int x1 = x0 + psWidget->width();
-		int y1 = y0 + psWidget->height();
+		int width = psWidget->width();
+		int height = psWidget->height();
 
 		//moved from after close render
-		RenderWindowFrame(FRAME_NORMAL, x0 - 1, y0 - 1, x1 - x0 + 2, y1 - y0 + 2);
+		RenderWindowFrame(FRAME_NORMAL, x0, y0, width, height);
 
 		if (psMessage->pViewData->type != VIEW_RES)
 		{
@@ -897,13 +896,13 @@ void intDisplayPIEView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 
 		//render an object
 		psResearch = getResearchForMsg(psCurrentMsg->pViewData);
-		renderResearchToBuffer(psResearch, x0 + (x1 - x0) / 2, y0 + (y1 - y0) / 2);
+		renderResearchToBuffer(psResearch, x0 + width / 2, y0 + height / 2);
 
 		//draw image icon in top left of window
 		image = (SWORD)getResearchForMsg(psMessage->pViewData)->iconID;
 		if (image > 0)
 		{
-			iV_DrawImage(IntImages, image, x0, y0);
+			iV_DrawImage(IntImages, image, x0 + 3, y0 + 3);
 		}
 	}
 }
@@ -936,7 +935,7 @@ void intDisplayFLICView(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		RenderWindowFrame(FRAME_NORMAL, x0, y0, x1 - x0, y1 - y0);
 		psViewResearch = (VIEW_RESEARCH *)psCurrentMsg->pViewData->pData;
 		// set the dimensions to window size & position
-		seq_SetDisplaySize(192, 168, x0, y0);
+		seq_SetDisplaySize(INTMAP_FLICWIDTH, INTMAP_FLICHEIGHT, x0, y0);
 		//render a frame of the current movie *must* force above resolution!
 		seq_RenderVideoToBuffer(psViewResearch->sequenceName, SEQUENCE_HOLD);
 	}
