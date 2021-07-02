@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-07-01 22:04\n"
+"PO-Revision-Date: 2021-07-02 09:59\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1521,22 +1521,22 @@ msgstr "Miglioramento della Riparazione Mobile Mk2"
 #: data/base/messages/strings/names.txt:373
 #: data/mp/messages/strings/names.txt:475
 msgid "CB Sensor Upgrade"
-msgstr "Miglioramento dei Sensori CB"
+msgstr "Miglioramento dei sensori CB"
 
 #: data/base/messages/strings/names.txt:374
 #: data/mp/messages/strings/names.txt:476
 msgid "CB Sensor Upgrade Mk2"
-msgstr "Miglioramento dei Sensori CB Mk2"
+msgstr "Miglioramento dei sensori CB Mk2"
 
 #: data/base/messages/strings/names.txt:375
 #: data/mp/messages/strings/names.txt:477
 msgid "CB Sensor Upgrade Mk3"
-msgstr "Miglioramento dei Sensori CB Mk3"
+msgstr "Miglioramento dei sensori CB Mk3"
 
 #: data/base/messages/strings/names.txt:378
 #: data/mp/messages/strings/names.txt:480
 msgid "VTOL CB Upgrade"
-msgstr "Miglioramento dei Sensori CB VTOL"
+msgstr "Miglioramento dei sensori CB per VTOL"
 
 #: data/base/messages/strings/names.txt:379
 #: data/mp/messages/strings/names.txt:481
@@ -1611,17 +1611,17 @@ msgstr "Sistema di Caricamento Missili Migliorato"
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
 msgid "Rapid Fire Mini-Rockets"
-msgstr "Minirazzi a Fuoco Rapido"
+msgstr "Mini-razzi a fuoco rapido"
 
 #: data/base/messages/strings/names.txt:441
 #: data/mp/messages/strings/names.txt:554
 msgid "Rapid Fire Mini-Rockets Mk2"
-msgstr "Minirazzi a Fuoco Rapido Mk2"
+msgstr "Mini-razzi a fuoco rapido Mk2"
 
 #: data/base/messages/strings/names.txt:442
 #: data/mp/messages/strings/names.txt:555
 msgid "Rapid Fire Mini-Rockets Mk3"
-msgstr "Minirazzi a Fuoco Rapido Mk3"
+msgstr "Mini-razzi a fuoco rapido Mk3"
 
 #: data/base/messages/strings/names.txt:451
 #: data/mp/messages/strings/names.txt:579
@@ -3344,7 +3344,7 @@ msgstr "Caricatore a rinculo per antiaerea"
 #: data/mp/messages/strings/resstrings.txt:323
 #: po/custom/fromJson.txt:3140
 msgid "Increases AA ROF"
-msgstr "Aumenta il rateo di fuoco delle antiaeree"
+msgstr "Aumenta la cadenza di tiro delle antiaeree"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[0]
@@ -3766,7 +3766,7 @@ msgstr "Il meccanismo di ricarica automatico sostituisce la ricarica manuale"
 #: data/mp/messages/strings/resstrings.txt:398
 #: po/custom/fromJson.txt:3214
 msgid "Increases Howitzer ROF"
-msgstr "Aumenta il rateo di fuoco dell'Obice"
+msgstr "Aumenta la cadenza di tiro dell'obice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_MG_D1.text[0]
@@ -3831,7 +3831,7 @@ msgstr "Meccanismo della mitragliatrice migliorato"
 #: data/mp/messages/strings/resstrings.txt:408
 #: po/custom/fromJson.txt:3246
 msgid "Increases Machinegun ROF"
-msgstr "Aumenta il rateo di fuoco della mitragliatrice"
+msgstr "Aumenta la cadenza di tiro della mitragliatrice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M2.text[1]
@@ -3875,7 +3875,7 @@ msgstr "Punti corazza: Pochissimi"
 #: data/mp/messages/strings/resstrings.txt:416
 #: po/custom/fromJson.txt:3956
 msgid "Mortar Upgrade"
-msgstr "Miglioramento del Mortaio"
+msgstr "Aggiornamento del mortaio"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_M_D4.text[1]
@@ -3917,7 +3917,7 @@ msgstr "Tutti i mortai sono stati aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:426
 #: po/custom/fromJson.txt:3845
 msgid "Mini-Rocket Upgrade"
-msgstr "Aggiornamento dei Minirazzi"
+msgstr "Aggiornamento dei mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_RK_D4.text[1]
@@ -3934,7 +3934,7 @@ msgstr "Testate perforanti ad alto esplosivo"
 #: data/mp/messages/strings/resstrings.txt:423
 #: po/custom/fromJson.txt:3253
 msgid "Increases Mini-Rocket damage"
-msgstr "Aumenta i danni dei Minirazzi"
+msgstr "Aumenta i danni dei mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[3]
@@ -3947,7 +3947,7 @@ msgstr "Aumenta i danni dei Minirazzi"
 #: data/mp/messages/strings/resstrings.txt:429
 #: po/custom/fromJson.txt:369
 msgid "All mini-rockets upgraded automatically"
-msgstr "Tutti i minirazzi sono stati aggiornati automaticamente"
+msgstr "Tutti i mini-razzi sono stati aggiornati automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:952
 #: data/mp/messages/strings/resstrings.txt:427
@@ -3957,7 +3957,7 @@ msgstr "Sistema di Ricarica Robotica"
 #: data/base/messages/strings/resstrings.txt:953
 #: data/mp/messages/strings/resstrings.txt:428
 msgid "Increases Mini-Rocket ROF"
-msgstr "Aumenta il rateo di fuoco dell'artiglieria a Minirazzi"
+msgstr "Aumenta la cadenza di tiro dell'artiglieria a mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[0]
@@ -5475,7 +5475,7 @@ msgstr "Propulsione VTOL II"
 #: data/mp/messages/strings/names.txt:513
 #: po/custom/fromJson.txt:6147
 msgid "Wheeled Propulsion II"
-msgstr "Propulsione su Ruote II"
+msgstr "Propulsione su ruote II"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage09.name
@@ -5916,7 +5916,7 @@ msgstr "Caricatore a Catena AA"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "Fortificazione con cannone antiaereo Ciclone"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
@@ -5929,7 +5929,7 @@ msgstr "Postazione con cannone antiaereo Ciclone"
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "Cannone antiaereo Ciclone Python semicingolato"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
@@ -6505,7 +6505,7 @@ msgstr "Armato con missile anticarro Lancer"
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Armato con lanciatore di razzi anticarro"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -6617,13 +6617,13 @@ msgstr "Torre di guardia corazzata con razzo AT Lancer"
 #. data/base/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:685
 msgid "Armored guard tower with Mini-Pod Rocket"
-msgstr "Torre di guardia corazzata con Minirazzi"
+msgstr "Torre di guardia corazzata con mini-razzi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_EMP_PODTOW.text[1]
 #: po/custom/fromJson.txt:688
 msgid "Armored guard tower with Mini-Rocket Pod"
-msgstr "Torre di guardia corazzata con Minirazzi"
+msgstr "Torre di guardia corazzata con mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_EMP_RL1TOW.text[1]
@@ -7385,7 +7385,7 @@ msgstr "Razzo Bunker Buster"
 #. data/mp/stats/templates.json: $.ViperBBWheels.name
 #: po/custom/fromJson.txt:1287
 msgid "Bunker Buster Rockets Viper Wheels"
-msgstr "Bunker Buster Viper Ruote"
+msgstr "Bunker buster Viper a razzi su ruote"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpBBTracks.name
@@ -7403,7 +7403,7 @@ msgstr "VTOL Scorpione con Bunker Buster"
 #. data/base/stats/templates.json: $.ViperBBWheels.name
 #: po/custom/fromJson.txt:1296
 msgid "Bunker Buster Viper Wheels"
-msgstr "Bunker Buster Viper Ruote"
+msgstr "Bunker buster Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-BB.name
@@ -8415,19 +8415,19 @@ msgstr "Portata più estesa rispetto ad altri sensori"
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF02.name
 #: po/custom/fromJson.txt:1978
 msgid "Fast Fire Mini-Rockets Mk2"
-msgstr "Minirazzi a Fuoco Veloce Mk2"
+msgstr "Mini-razzi a fuoco veloce Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF03.name
 #: po/custom/fromJson.txt:1981
 msgid "Fast Fire Mini-Rockets Mk3"
-msgstr "Minirazzi a Fuoco Veloce Mk3"
+msgstr "Mini-razzi a fuoco veloce Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-ROF01.name
 #: po/custom/fromJson.txt:1984
 msgid "Fast Fire Mini-Rockets"
-msgstr "Minirazzi a Fuoco Veloce"
+msgstr "Mini-razzi a fuoco veloce"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_MP1.text[1]
@@ -8507,7 +8507,7 @@ msgstr "Spara impulsi di luce laser"
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[1]
 #: po/custom/fromJson.txt:2031
 msgid "Fires salvoes of mini-rockets"
-msgstr "Spara salve di minirazzi"
+msgstr "Spara mini-razzi a salve"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[1]
@@ -8984,7 +8984,7 @@ msgstr "Postazione Corazzata con Cannone AA Cyclone disponibile"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2348
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Postazione con cannone antiaereo Tornado disponibile"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9036,19 +9036,19 @@ msgstr "Proiettili HE per Obice"
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage02.name
 #: po/custom/fromJson.txt:2376
 msgid "HE Mini-Rockets Mk2"
-msgstr "Minirazzi HE Mk2"
+msgstr "Mini-razzi HE Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage03.name
 #: po/custom/fromJson.txt:2379
 msgid "HE Mini-Rockets Mk3"
-msgstr "Minirazzi HE Mk3"
+msgstr "Mini-razzi HE Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage01.name
 #: po/custom/fromJson.txt:2382
 msgid "HE Mini-Rockets"
-msgstr "Minirazzi HE"
+msgstr "Mini-razzi HE"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage02.name
@@ -9133,19 +9133,19 @@ msgstr "Proiettili HEAP per Obice HEAP"
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage05.name
 #: po/custom/fromJson.txt:2428
 msgid "HEAP Mini-Rockets Mk2"
-msgstr "Minirazzi HEAP Mk2"
+msgstr "Mini-razzi HEAP Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage06.name
 #: po/custom/fromJson.txt:2431
 msgid "HEAP Mini-Rockets Mk3"
-msgstr "Minirazzi HEAP Mk3"
+msgstr "Mini-razzi HEAP Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Damage04.name
 #: po/custom/fromJson.txt:2434
 msgid "HEAP Mini-Rockets"
-msgstr "Minirazzi HEAP"
+msgstr "Mini-razzi HEAP"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-Damage05.name
@@ -9402,7 +9402,7 @@ msgstr "Mitragliatrice pesante Cobra cingolata"
 #. data/mp/stats/templates.json: $.A-Cobra-Wheels-HMG.name
 #: po/custom/fromJson.txt:2608
 msgid "Heavy Machinegun Cobra Wheels"
-msgstr "Mitragliatrice Pesante Viper Ruote"
+msgstr "Mitragliatrice pesante Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower01.name
@@ -9445,7 +9445,7 @@ msgstr "Mitragliatrice pesante Viper cingolata"
 #. data/mp/stats/templates.json: $.ViperHMGWheels.name
 #: po/custom/fromJson.txt:2643
 msgid "Heavy Machinegun Viper Wheels"
-msgstr "Mitragliatrice Pesante Viper Ruote"
+msgstr "Mitragliatrice pesante Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG3Mk1.name
@@ -10100,7 +10100,7 @@ msgstr "Miglioramenti nell'ottica dei laser riducono la dispersione di luce"
 #. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incenediary.name
 #: po/custom/fromJson.txt:3098
 msgid "Incendiary Howitzer Emplacement 2"
-msgstr ""
+msgstr "Fortificazione con obice Incendiario 2"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
@@ -10119,14 +10119,14 @@ msgstr "Fortificazione con obice incendiario"
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
 #: po/custom/fromJson.txt:3108
 msgid "Incendiary Howitzer may be assigned to a sensor"
-msgstr "L'Obice Incendiario può essere assegnato a un sensore"
+msgstr "L'Obice incendiario può essere assegnato a un sensore"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Howitzer-Incendiary.name
 #. data/mp/stats/weapons.json: $.Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3112
 msgid "Incendiary Howitzer"
-msgstr "Obice Incendiario"
+msgstr "Obice incendiario"
 
 #. TRANSLATORS:
 #. data/mp/stats/structure.json: $.Emplacement-MortarPit-Incenediary.name
@@ -10181,7 +10181,7 @@ msgstr "Aumenta il danno dei cannoni"
 #. data/base/messages/resmessages3.json: $.RES_W_CN_ROF4.text[2]
 #: po/custom/fromJson.txt:3168
 msgid "Increases Cannon ROF"
-msgstr "Aumenta il rateo di fuoco dei cannoni"
+msgstr "Aumenta la cadenza di tiro dei cannoni"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_ENGIN1.text[2]
@@ -10219,19 +10219,19 @@ msgstr "Aumenta il danno dei Laser"
 #. data/base/messages/resmessages3.json: $.RES_LASROF1.text[2]
 #: po/custom/fromJson.txt:3235
 msgid "Increases Laser ROF"
-msgstr "Aumenta il rateo di fuoco dei Laser"
+msgstr "Aumenta la cadenza di tiro dei laser"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_AC1.text[2]
 #: po/custom/fromJson.txt:3249
 msgid "Increases Mini-Rocket accuracy"
-msgstr "Aumenta la precisione dei Minirazzi"
+msgstr "Aumenta la precisione dei mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
 #: po/custom/fromJson.txt:3256
 msgid "Increases Mini-Rockets ROF"
-msgstr "Aumenta il rateo di fuoco dei Minirazzi"
+msgstr "Aumenta la cadenza di tiro dei mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_AC1.text[2]
@@ -10251,7 +10251,7 @@ msgstr "Aumenta i danni dei missili"
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[2]
 #: po/custom/fromJson.txt:3267
 msgid "Increases Missile ROF"
-msgstr "Aumenta il rateo di fuoco dei missili"
+msgstr "Aumenta la cadenza di tiro dei missili"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
@@ -10266,7 +10266,7 @@ msgstr "Aumenta la precisione del Mortaio"
 #. data/base/messages/resmessages3.json: $.RES_W_M_ROF4.text[2]
 #: po/custom/fromJson.txt:3280
 msgid "Increases Mortar ROF"
-msgstr "Aumenta il rateo di fuoco del Mortaio"
+msgstr "Aumenta la cadenza di tiro del mortaio"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_AC1.text[2]
@@ -10284,7 +10284,7 @@ msgstr "Aumenta i danni del cannone a rotaia"
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[2]
 #: po/custom/fromJson.txt:3289
 msgid "Increases Rail Gun ROF"
-msgstr "Aumenta il Rateo di Fuoco del Cannone a Massa"
+msgstr "Aumenta la cadenza di tiro del cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_SRK_AC1.text[2]
@@ -10299,7 +10299,7 @@ msgstr "Aumenta la precisione dei Razzi"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[2]
 #: po/custom/fromJson.txt:3313
 msgid "Increases Rocket ROF"
-msgstr "Aumenta il rateo di fuoco dei Razzi"
+msgstr "Aumenta la cadenza di tiro dei razzi"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Indirectlab.name
@@ -10534,7 +10534,7 @@ msgstr "Lanciatore Viper cingolato"
 #. data/mp/stats/templates.json: $.ViperLtA-Twheels.name
 #: po/custom/fromJson.txt:3468
 msgid "Lancer Viper Wheels"
-msgstr "Lancer Viper Ruote"
+msgstr "Lanciatore Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Rocket-LtA-T.name
@@ -10734,7 +10734,7 @@ msgstr "Cannone Leggero Viper cingolato"
 #. data/mp/stats/templates.json: $.ViperLtCannonWheels.name
 #: po/custom/fromJson.txt:3590
 msgid "Light Cannon Viper Wheels"
-msgstr "Cannone Leggero Viper Ruote"
+msgstr "Cannone leggero Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Cannon1Mk1.name
@@ -11010,7 +11010,7 @@ msgstr "Corpo Super Pesante Medio"
 #. data/mp/messages/resmessages12.json: $.RES_EMP_MRL.text[1]
 #: po/custom/fromJson.txt:3788
 msgid "Mini-rocket armored strongpoint"
-msgstr "Posizione corazzata con Minirazzi"
+msgstr "Posizione corazzata con mini-razzi"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMRLHalftrack.name
@@ -11034,33 +11034,33 @@ msgstr "Batteria semicingolata di mini-razzi Viper"
 #. data/mp/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3800
 msgid "Mini-Rocket Array Viper Wheels"
-msgstr "Artiglieria di Minirazzi Viper Ruote"
+msgstr "Batteria di mini-razzi Viper su ruote"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket02-MRL.name
 #. data/mp/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3804
 msgid "Mini-Rocket Array"
-msgstr "Batteria di Artiglieria a Minirazzi"
+msgstr "Batteria di mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.CobraMRLHalftrack.name
 #: po/custom/fromJson.txt:3807
 msgid "Mini-Rocket Artillery Cobra Half-tracks"
-msgstr "Artiglieria di Minirazzi Cobra Semicingoli"
+msgstr "Artiglieria di mini-razzi Cobra semicingolata"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMRLWheels.name
 #: po/custom/fromJson.txt:3810
 msgid "Mini-Rocket Artillery Viper Wheels"
-msgstr "Artiglieria di Minirazzi Viper Ruote"
+msgstr "Artiglieria di mini-razzi Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket02-MRL.name
 #. data/base/stats/weapons.json: $.Rocket-MRL.name
 #: po/custom/fromJson.txt:3814
 msgid "Mini-Rocket Artillery"
-msgstr "Artiglieria a Minirazzi"
+msgstr "Artiglieria a mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-MRL.name
@@ -11086,7 +11086,7 @@ msgstr "Mini-razzi Cobra cingolati"
 #. data/base/stats/research.json: $.R-Defense-Tower06.name
 #: po/custom/fromJson.txt:3828
 msgid "Mini-Rocket Guard Tower"
-msgstr "Torre di Guardia con Minirazzi"
+msgstr "Torre di guardia con mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket05-MiniPod.name
@@ -11095,7 +11095,7 @@ msgstr "Torre di Guardia con Minirazzi"
 #. data/mp/stats/weapons.json: $.Rocket-Pod.name
 #: po/custom/fromJson.txt:3834
 msgid "Mini-Rocket Pod"
-msgstr "Minirazzi"
+msgstr "Mini-razzi"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower6.name
@@ -11103,7 +11103,7 @@ msgstr "Minirazzi"
 #. data/mp/stats/structure.json: $.GuardTower6.name
 #: po/custom/fromJson.txt:3839
 msgid "Mini-Rocket Tower"
-msgstr "Torre con Minirazzi"
+msgstr "Torre con mini-razzi"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ViperPODHalfTracks.name
@@ -11116,7 +11116,7 @@ msgstr "Mini-razzi Viper semicingolati"
 #. data/mp/stats/templates.json: $.ViperPODWheels.name
 #: po/custom/fromJson.txt:3852
 msgid "Mini-Rocket Viper Wheels"
-msgstr "Minirazzi Viper Ruote"
+msgstr "Mini-razzi Viper su ruote"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_AC1.text[2]
@@ -11289,7 +11289,7 @@ msgstr "Mitragliatrice montata"
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
 #: po/custom/fromJson.txt:3968
 msgid "MRL Emplacement"
-msgstr "Fortificazione con artiglieria a mini-razzi"
+msgstr "Fortificazione con lanciarazzi multiplo"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Vehicle-Body14.name
@@ -11619,7 +11619,7 @@ msgstr "Nuovo rilevamento delle emissioni termiche"
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB6.text[0]
 #: po/custom/fromJson.txt:4248
 msgid "New VTOL Missile Launcher"
-msgstr "Nuovo Lanciamissili per VTOL"
+msgstr "Nuovo lanciamissili per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.NEXUSCWall.name
@@ -12235,21 +12235,21 @@ msgstr "Tempo di ricarica del Cannone a Massa -15%"
 #. data/mp/stats/research.json: $.R-Wpn-Rail-ROF02.name
 #: po/custom/fromJson.txt:4632
 msgid "Rail Gun ROF Mk2"
-msgstr "Rateo di fuoco del Cannone a Massa Mk2"
+msgstr "Cadenza di tiro del cannone a rotaia Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF03.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-ROF03.name
 #: po/custom/fromJson.txt:4636
 msgid "Rail Gun ROF Mk3"
-msgstr "Rateo di fuoco del Cannone a Massa Mk3"
+msgstr "Cadenza di tiro del cannone a rotaia Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rail-ROF01.name
 #. data/mp/stats/research.json: $.R-Wpn-Rail-ROF01.name
 #: po/custom/fromJson.txt:4640
 msgid "Rail Gun ROF"
-msgstr "Rateo di fuoco del Cannone a Massa"
+msgstr "Cadenza di tiro del cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.TigerHoverRailGun.name
@@ -13029,7 +13029,7 @@ msgstr "Torretta sensoria Cobra semicingolata"
 #. data/mp/stats/templates.json: $.ViperSensorWheels.name
 #: po/custom/fromJson.txt:5164
 msgid "Sensor Turret Viper Wheels"
-msgstr "Torretta Sensoria Viper Ruote"
+msgstr "Torretta sensoria Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Sys-Sensor-Turret01.name
@@ -13148,13 +13148,13 @@ msgstr "Velocità: VTOL"
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy02.name
 #: po/custom/fromJson.txt:5240
 msgid "Stabilized Mini-Rockets Mk2"
-msgstr "Minirazzi Stabilizzati Mk2"
+msgstr "Mini-razzi stabilizzati Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
 #: po/custom/fromJson.txt:5243
 msgid "Stabilized Mini-Rockets"
-msgstr "Minirazzi Stabilizzati"
+msgstr "Mini-razzi stabilizzati"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Rocket-Accuracy01.name
@@ -13881,7 +13881,7 @@ msgstr "Doppia Mitragliatrice Viper Cingoli"
 #. data/mp/stats/templates.json: $.ViperMG02Wheels.name
 #: po/custom/fromJson.txt:5726
 msgid "Twin Machinegun Viper Wheels"
-msgstr "Doppia Mitragliatrice Viper Ruote"
+msgstr "Doppia mitragliatrice Viper su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG2Mk1.name
@@ -14360,7 +14360,7 @@ msgstr "Mitragliatrice per VTOL"
 #. data/mp/stats/weapons.json: $.Rocket-VTOL-Pod.name
 #: po/custom/fromJson.txt:6031
 msgid "VTOL Mini-Rocket"
-msgstr "Minirazzi VTOL"
+msgstr "Mini-razzi per VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.RailGun1-VTOL.name
@@ -16603,11 +16603,11 @@ msgstr "Seleziona tutti i VTOL"
 
 #: src/input/keyconfig.cpp:177
 msgid "Select all fully-armed VTOLs"
-msgstr "Mostra tutti i VTOL armati a pieno"
+msgstr "Seleziona tutti i VTOL completamente armati"
 
 #: src/input/keyconfig.cpp:178
 msgid "Select all fully-armed VTOLs without group"
-msgstr ""
+msgstr "Seleziona tutti i VTOL completamente armati senza gruppo"
 
 #: src/input/keyconfig.cpp:179
 msgid "Select all Wheels"
@@ -16623,11 +16623,11 @@ msgstr "Seleziona tutte le unità con gli stessi componenti"
 
 #: src/input/keyconfig.cpp:183
 msgid "Select all Combat Cyborgs"
-msgstr "Seleziona tutte i Cyborg da combattimento"
+msgstr "Seleziona tutti i cyborg da combattimento"
 
 #: src/input/keyconfig.cpp:184
 msgid "Select all Combat Cyborgs without group"
-msgstr ""
+msgstr "Seleziona tutti i cyborg da combattimento senza gruppo"
 
 #: src/input/keyconfig.cpp:185
 msgid "Select all Engineers"
