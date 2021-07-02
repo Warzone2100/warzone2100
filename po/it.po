@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-07-02 09:59\n"
+"PO-Revision-Date: 2021-07-02 22:04\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -6022,7 +6022,7 @@ msgstr "Sensore Termico AA"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "Fortificazione con cannone antiaereo Tornado"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
@@ -12152,7 +12152,7 @@ msgstr "Pitone"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4581
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Quadruplo cannone antiaereo da 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -13816,7 +13816,7 @@ msgstr "Doppia mitragliatrice da 7,62mm"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5684
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Doppio cannone antiaereo da 80mm"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -15600,7 +15600,7 @@ msgstr "Volume Effetti"
 #: src/frontend.cpp:995
 #: src/ingameop.cpp:161
 msgid "Music Volume"
-msgstr "Volume Musica"
+msgstr "Volume musica"
 
 #: src/frontend.cpp:1001
 #: src/ingameop.cpp:167
