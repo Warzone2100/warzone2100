@@ -822,40 +822,6 @@ std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD 
 	return lineDrawResults;
 }
 
-/** Draws formatted text with word wrap, long word splitting, embedded newlines
- *  (uses '@' rather than '\n') and colour toggle mode ('#') which enables or
- *  disables font colouring.
- *
- *  @param String   the string to display.
- *  @param x,y      X and Y coordinates of top left of formatted text.
- *  @param width    the maximum width of the formatted text (beyond which line
- *                  wrapping is used).
- *  @param justify  The alignment style to use, which is one of the following:
- *                  FTEXT_LEFTJUSTIFY, FTEXT_CENTRE or FTEXT_RIGHTJUSTIFY.
- *  @return the Y coordinate for the next text line.
- */
-int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, iV_fonts fontID)
-{
-	auto formattedTextLines = iV_FormatText(String, Width, Justify, fontID, bMultiPlayer);
-
-	int jy = y;
-	for (const auto& lineDetails : formattedTextLines)
-	{
-		const auto& lineString = lineDetails.text;
-		const auto& lineDrawOffset = lineDetails.offset;
-
-		// draw the text.
-		iV_DrawText(lineString.c_str(), x + lineDrawOffset.x, y + lineDrawOffset.y, fontID);
-	}
-
-	if (!formattedTextLines.empty())
-	{
-		jy = y + formattedTextLines.back().offset.y + iV_GetTextLineSize(fontID);
-	}
-
-	return jy;
-}
-
 void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotation, iV_fonts fontID)
 {
 	ASSERT_OR_RETURN(, string, "Couldn't render string!");
@@ -883,41 +849,6 @@ void iV_DrawTextRotated(const char *string, float XPos, float YPos, float rotati
 		iV_DrawImageText(*textureID, Vector2f(XPos, YPos), Vector2f((float)drawResult.text.offset_x / _horizScaleFactor, (float)drawResult.text.offset_y / _vertScaleFactor), Vector2f((float)drawResult.text.width / _horizScaleFactor, (float)drawResult.text.height / _vertScaleFactor), rotation, color);
 	}
 }
-
-#if 0
-static void iV_DrawTextRotatedFv(float x, float y, float rotation, const char *format, va_list ap, iV_fonts fontID)
-{
-	va_list aq;
-	size_t size;
-	char *str;
-
-	/* Required because we're using the va_list ap twice otherwise, which
-	 * results in undefined behaviour. See stdarg(3) for details.
-	 */
-	va_copy(aq, ap);
-
-	// Allocate a buffer large enough to hold our string on the stack
-	size = vsnprintf(NULL, 0, format, ap);
-	str = (char *)alloca(size + 1);
-
-	// Print into our newly created string buffer
-	vsprintf(str, format, aq);
-
-	va_end(aq);
-
-	// Draw the produced string to the screen at the given position and rotation
-	iV_DrawTextRotated(str, x, y, rotation, fontID);
-}
-
-void iV_DrawTextF(float x, float y, const char *format, ...)
-{
-	va_list ap;
-
-	va_start(ap, format);
-	iV_DrawTextRotatedFv(x, y, 0.f, format, ap);
-	va_end(ap);
-}
-#endif
 
 int WzText::width()
 {

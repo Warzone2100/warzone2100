@@ -141,7 +141,7 @@ unsigned int iV_GetCharWidth(uint32_t charCode, iV_fonts fontID);
 unsigned int iV_GetTextHeight(const char *string, iV_fonts fontID);
 void iV_SetTextColour(PIELIGHT colour);
 
-/// Valid values for "Justify" argument of iV_DrawFormattedText().
+/// Valid values for "Justify" argument of iV_FormatText().
 enum
 {
 	FTEXT_LEFTJUSTIFY,			// Left justify.
@@ -156,7 +156,6 @@ struct TextLine
 	Vector2i offset;
 };
 std::vector<TextLine> iV_FormatText(const char *String, UDWORD MaxWidth, UDWORD Justify, iV_fonts fontID, bool ignoreNewlines = false);
-int iV_DrawFormattedText(const char *String, UDWORD x, UDWORD y, UDWORD Width, UDWORD Justify, iV_fonts fontID);
 void iV_DrawTextRotated(const char *string, float x, float y, float rotation, iV_fonts fontID);
 
 /// Draws text with a printf syntax to the screen.
