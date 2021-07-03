@@ -2235,7 +2235,7 @@ static JSValue callFunction(JSContext *ctx, const std::string &function, std::ve
 
 // Wraps a QuickJS instance
 
-//-- ## profile(function[, arguments])
+//-- ## profile(functionName[, arguments])
 //-- Calls a function with given arguments, measures time it took to evaluate the function,
 //-- and adds this time to performance monitor statistics. Transparently returns the
 //-- function's return value. The function to run is the first parameter, and it
@@ -2245,13 +2245,13 @@ static JSValue js_profile(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 {
 	SCRIPT_ASSERT(ctx, argc >= 1, "Must have at least one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Profiled functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	std::vector<JSValue> args;
 	for (int i = 1; i < argc; ++i)
 	{
 		args.push_back(argv[i]);
 	}
-	return callFunction(ctx, funcName, args);
+	return callFunction(ctx, functionName, args);
 }
 
 static std::string QuickJS_DumpObject(JSContext *ctx, JSValue obj)
@@ -2289,7 +2289,7 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 	return result;
 }
 
-//-- ## include(file)
+//-- ## include(filePath)
 //-- Includes another source code file at this point. You should generally only specify the filename,
 //-- not try to specify its path, here.
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
@@ -2334,7 +2334,7 @@ static JSValue js_include(JSContext *ctx, JSValueConst this_val, int argc, JSVal
 	return JS_TRUE;
 }
 
-//-- ## includeJSON(file)
+//-- ## includeJSON(filePath)
 //-- Reads a JSON file and returns an object. You should generally only specify the filename,
 //-- However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 //--
@@ -2391,7 +2391,7 @@ static uniqueTimerID SetQuickJSTimer(JSContext *ctx, int player, const std::stri
 	, std::unique_ptr<timerAdditionalData>(new quickjs_timer_additionaldata(stringArg)));
 }
 
-//-- ## setTimer(function, milliseconds[, object])
+//-- ## setTimer(functionName, milliseconds[, object])
 //--
 //-- Set a function to run repeated at some given time interval. The function to run
 //-- is the first parameter, and it _must be quoted_, otherwise the function will
@@ -2413,15 +2413,15 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 {
 	SCRIPT_ASSERT(ctx, argc >= 2, "Must have at least two parameters");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 	int32_t ms = JSValueToInt32(ctx, argv[1]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 	int player = QuickJS_GetInt32(ctx, global_obj, "me");
 
-	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, funcName.c_str()); // check existence
-	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", funcName.c_str());
+	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
 	JS_FreeValue(ctx, funcObj);
 
 	std::string stringArg;
@@ -2441,12 +2441,12 @@ static JSValue js_setTimer(JSContext *ctx, JSValueConst this_val, int argc, JSVa
 		}
 	}
 
-	SetQuickJSTimer(ctx, player, funcName, ms, stringArg, psObj, TIMER_REPEAT);
+	SetQuickJSTimer(ctx, player, functionName, ms, stringArg, psObj, TIMER_REPEAT);
 
 	return JS_TRUE;
 }
 
-//-- ## removeTimer(function)
+//-- ## removeTimer(functionName)
 //--
 //-- Removes an existing timer. The first parameter is the function timer to remove,
 //-- and its name _must be quoted_.
@@ -2455,7 +2455,7 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 {
 	SCRIPT_ASSERT(ctx, argc == 1, "Must have one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Timer functions must be quoted");
-	std::string function = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
@@ -2463,21 +2463,21 @@ static JSValue js_removeTimer(JSContext *ctx, JSValueConst this_val, int argc, J
 
 	wzapi::scripting_instance* instance = engineToInstanceMap.at(ctx);
 	std::vector<uniqueTimerID> removedTimerIDs = scripting_engine::instance().removeTimersIf(
-		[instance, function, player](const scripting_engine::timerNode& node)
+		[instance, functionName, player](const scripting_engine::timerNode& node)
 	{
-		return node.instance == instance && node.timerName == function && node.player == player;
+		return node.instance == instance && node.timerName == functionName && node.player == player;
 	});
 	if (removedTimerIDs.empty())
 	{
 		// Friendly warning
-		std::string warnName = function;
+		std::string warnName = functionName;
 		debug(LOG_ERROR, "Did not find timer %s to remove", warnName.c_str());
 		return JS_FALSE;
 	}
 	return JS_TRUE;
 }
 
-//-- ## queue(function[, milliseconds[, object]])
+//-- ## queue(functionName[, milliseconds[, object]])
 //--
 //-- Queues up a function to run at a later game frame. This is useful to prevent
 //-- stuttering during the game, which can happen if too much script processing is
@@ -2494,13 +2494,13 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 {
 	SCRIPT_ASSERT(ctx, argc >= 1, "Must have at least one parameter");
 	SCRIPT_ASSERT(ctx, JS_IsString(argv[0]), "Queued functions must be quoted");
-	std::string funcName = JSValueToStdString(ctx, argv[0]);
+	std::string functionName = JSValueToStdString(ctx, argv[0]);
 
 	JSValue global_obj = JS_GetGlobalObject(ctx);
 	auto free_global_obj = gsl::finally([ctx, global_obj] { JS_FreeValue(ctx, global_obj); });  // establish exit action
 
-	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, funcName.c_str()); // check existence
-	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", funcName.c_str());
+	JSValue funcObj = JS_GetPropertyStr(ctx, global_obj, functionName.c_str()); // check existence
+	SCRIPT_ASSERT(ctx, JS_IsFunction(ctx, funcObj), "No such function: %s", functionName.c_str());
 	JS_FreeValue(ctx, funcObj);
 
 	int32_t ms = 0;
@@ -2527,7 +2527,7 @@ static JSValue js_queue(JSContext *ctx, JSValueConst this_val, int argc, JSValue
 		}
 	}
 
-	SetQuickJSTimer(ctx, player, funcName, ms, stringArg, psObj, TIMER_ONESHOT_READY);
+	SetQuickJSTimer(ctx, player, functionName, ms, stringArg, psObj, TIMER_ONESHOT_READY);
 
 	return JS_TRUE;
 }
