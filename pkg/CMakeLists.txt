@@ -308,6 +308,13 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 endif()
 
 #####################
+# Archive settings
+
+# Always use component install for archives
+# See: https://stackoverflow.com/a/55601955
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+
+#####################
 # RPM Settings
 
 set(CPACK_RPM_PACKAGE_SUMMARY   "Innovative 3D real-time strategy")
