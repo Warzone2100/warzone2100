@@ -1729,7 +1729,7 @@ static std::unique_ptr<DROID_TEMPLATE> makeTemplate(int player, const std::strin
 	// Find first turret component type (assume every component in list is same type)
 	if (_turrets.va_list.empty() || _turrets.va_list[0].strings.empty())
 	{
-		debug(LOG_SCRIPT, "Wanted to build %s but no turrets provided", templName.c_str());
+		debug(LOG_SCRIPT, "Wanted to build %s but no turrets provided", templateName.c_str());
 		return nullptr;
 	}
 	std::string componentName = _turrets.va_list[0].strings[0];

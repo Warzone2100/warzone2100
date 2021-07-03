@@ -3,25 +3,25 @@
 This section describes functions that can be called from scripts to make
 things happen in the game (usually called our script 'API').
 
-## profile(function[, arguments])
+## profile(functionName[, arguments])
 
 Calls a function with given arguments, measures time it took to evaluate the function,
 and adds this time to performance monitor statistics. Transparently returns the
 function's return value. The function to run is the first parameter, and it
 _must be quoted_. (3.2+ only)
 
-## include(file)
+## include(filePath)
 
 Includes another source code file at this point. You should generally only specify the filename,
 not try to specify its path, here.
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 
-## includeJSON(file)
+## includeJSON(filePath)
 
 Reads a JSON file and returns an object. You should generally only specify the filename,
 However, *if* you specify sub-paths / sub-folders, the path separator should **always** be forward-slash ("/").
 
-## setTimer(function, milliseconds[, object])
+## setTimer(functionName, milliseconds[, object])
 
 Set a function to run repeated at some given time interval. The function to run
 is the first parameter, and it _must be quoted_, otherwise the function will
@@ -39,12 +39,12 @@ function conDroids()
 setTimer("conDroids", 4000);
 ```
 
-## removeTimer(function)
+## removeTimer(functionName)
 
 Removes an existing timer. The first parameter is the function timer to remove,
 and its name _must be quoted_.
 
-## queue(function[, milliseconds[, object]])
+## queue(functionName[, milliseconds[, object]])
 
 Queues up a function to run at a later game frame. This is useful to prevent
 stuttering during the game, which can happen if too much script processing is
