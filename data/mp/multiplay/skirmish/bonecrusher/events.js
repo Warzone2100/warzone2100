@@ -422,6 +422,7 @@ function bc_eventAttacked(victim, attacker) {
 		if(fleetTrigger < gameTime){
 			fleetsReturn();
 			fleetTrigger = gameTime + 1000;
+			return;
 		}
 		fleetDroid(victim);
 //		orderDroidLoc_p(victim, DORDER_MOVE, base.x, base.y);
