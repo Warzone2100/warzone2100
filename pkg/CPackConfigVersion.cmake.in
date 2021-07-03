@@ -73,7 +73,7 @@ endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++Setting CPACK_PACKAGE_VERSION: ${CPACK_PACKAGE_VERSION}")
 
-if(CPACK_WZ_PORTABLE)
+if(DEFINED CPACK_WZ_PORTABLE AND CPACK_WZ_PORTABLE)
 	list(APPEND CPACK_COMPONENTS_ALL PortableConfig)
 else()
 	list(REMOVE_ITEM CPACK_COMPONENTS_ALL PortableConfig)
@@ -121,7 +121,7 @@ if(CPACK_GENERATOR STREQUAL "DEB")
 
 	############################################
 	# Support component DEB install
-	set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+	# - If desired, set the following at configure-time: -D CPACK_DEB_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_GROUPING=ONE_PER_GROUP
 
 	# "warzone2100" package ("Core" group)
 	# - members
@@ -157,8 +157,7 @@ if(CPACK_GENERATOR STREQUAL "RPM")
 
 	############################################
 	# Support component RPM install
-	# - If desired, set the following at configure-time: -D CPACK_RPM_COMPONENT_INSTALL=ON
-	set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+	# - If desired, set the following at configure-time: -D CPACK_RPM_COMPONENT_INSTALL=ON -D CPACK_COMPONENTS_GROUPING=ONE_PER_GROUP
 
 	# "warzone2100" package ("Core" group)
 	# - members
@@ -190,3 +189,5 @@ if (WZ_DEVELOPMENT_BUILD)
 	set(CPACK_RPM_PACKAGE_DESCRIPTION "Development build of Warzone 2100 (Built: ${_current_date})\nFor more information, and the latest development (and release!) builds, please see: https://github.com/Warzone2100/warzone2100")
 	set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "Innovative 3D real-time strategy (development build)\n Development build of Warzone 2100 (Built: ${_current_date})\n .\n For more information, and the latest development (and release!) builds, please see: https://github.com/Warzone2100/warzone2100")
 endif()
+
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "++CPACK_COMPONENTS_ALL: ${CPACK_COMPONENTS_ALL}")
