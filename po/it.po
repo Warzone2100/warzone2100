@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-07-02 22:04\n"
+"PO-Revision-Date: 2021-07-03 10:02\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -4770,7 +4770,7 @@ msgstr "Si trova da qualche parte nel vostro territorio."
 
 #: data/base/sequenceaudio/cam2/cam2_2n.txt:4
 msgid "Find it for me and I shall provide you with further weapons to aid you in your war against the Project."
-msgstr "Trovatela per me e vi darò altre armi per aiutarvi nella vostra guerra contro il Project."
+msgstr "Trovala per me e ti darò altre armi per aiutarti nella tua guerra contro il Progetto."
 
 #: data/base/sequenceaudio/cam2/cam2acol.txt:1
 msgid "Warriors of The Collective, more intruders are entering our territory."
@@ -4830,7 +4830,7 @@ msgstr "La vostra ricompensa è in arrivo."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:4
 msgid "The Project is fleeing its base and stealing your technology."
-msgstr "Il Project stà abbandonando la sua base e rubando le vostre tecnologie."
+msgstr "Il Progetto sta abbandonando la sua base e rubando le vostre tecnologie."
 
 #: data/base/sequenceaudio/cam2/cam2diin.txt:5
 msgid "You must stop them!"
@@ -5163,7 +5163,7 @@ msgstr "Sapevamo che le cose non sarebbero mai più state le stesse, ma eravamo 
 
 #: data/base/sequenceaudio/devastation.txt:19
 msgid "We were finally ready to begin the Project."
-msgstr "Eravamo finalmente pronti a iniziare il Project."
+msgstr "Eravamo finalmente pronti a iniziare il Progetto."
 
 #: data/base/sequenceaudio/outro.txt:1
 msgid "After many long months of struggle, we defeated NEXUS."
@@ -12033,21 +12033,21 @@ msgstr "Produce Cyborg"
 #. data/mp/messages/resmessages1.json: $.RES_V_B11.text[0]
 #: po/custom/fromJson.txt:4506
 msgid "Project Heavy Body"
-msgstr "Progetto Corpo Pesante"
+msgstr "Corpo pesante del Progetto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B01.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B01.text[0]
 #: po/custom/fromJson.txt:4510
 msgid "Project Light Body"
-msgstr "Progetto Corpo Leggero"
+msgstr "Corpo Leggero del Progetto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_B05.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[0]
 #: po/custom/fromJson.txt:4514
 msgid "Project Medium Body"
-msgstr "Corpo medio del Project"
+msgstr "Corpo medio del Progetto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[1]
@@ -15306,7 +15306,7 @@ msgstr "Dona: https://donations.wz2100.net"
 
 #: src/frontend.cpp:180
 msgid "Help support the project with our server costs, Click this link."
-msgstr "Supporta il progetto aiutandoci con i costi dei server, Clicca questo link."
+msgstr "Supporta il progetto aiutandoci con i costi dei server, fai clic questo collegamento."
 
 #: src/frontend.cpp:181
 msgid "Chat with players on Discord or IRC"
@@ -16963,7 +16963,7 @@ msgstr "Aggiornamento della Ricerca"
 
 #: src/intelmap.cpp:330
 msgid "Project Goals"
-msgstr "Obiettivi del Project"
+msgstr "Obiettivi del Progetto"
 
 #: src/intelmap.cpp:333
 msgid "Current Objective"
@@ -18257,7 +18257,7 @@ msgstr "Informazioni sulla Forza"
 #: src/scores.cpp:394
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr "MANUFATTI RECUPERATI: %d"
+msgstr "ARTEFATTI RECUPERATI: %d"
 
 #: src/scores.cpp:400
 #, c-format
