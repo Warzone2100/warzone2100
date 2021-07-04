@@ -8,6 +8,8 @@ on:
       - deleted
       - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
 
+concurrency: release_tasks
+
 jobs:
   trigger-site-update:
     # For this job to work, the following secrets must be set:
