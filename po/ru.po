@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:08\n"
+"POT-Creation-Date: 2021-07-03 19:45+0000\n"
+"PO-Revision-Date: 2021-07-04 09:51\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -3647,7 +3647,7 @@ msgstr "105мм гаубицу можно привязать к радару"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1107
+#: po/custom/fromJson.txt:1101
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Лучшие цели: Постройки, пехота, колёсный транспорт"
 
@@ -3851,7 +3851,7 @@ msgstr "Можно привязать к радару"
 #. ... + 4 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1101
+#: po/custom/fromJson.txt:1107
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Лучшие цели: постройки, пехота, колёсный транспорт"
 
@@ -3862,7 +3862,7 @@ msgstr "Лучшие цели: постройки, пехота, колёсны�
 #. ... + 29 refs
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:1210
+#: po/custom/fromJson.txt:1205
 msgid "Body Points: Very Low"
 msgstr "Прочность корпуса: Очень низкая"
 
@@ -4009,7 +4009,7 @@ msgstr "Уничтожьте все подкрепления Новой Пара
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Постройте не менее 7ми не-стенных сооружений на плато и уничтожьте все подкрепления Новой Парадигмы"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
@@ -4041,7 +4041,7 @@ msgstr "Спасите команду Альфа от Нексуса"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "Уничтожьте командый центр чтобы остановить программу проникновения Нексуса"
 
 #: data/base/script/campaign/cam3-ab.js:240
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -4170,7 +4170,7 @@ msgstr "Командиры - сначала произведите команд�
 #: src/hci.cpp:1773
 #: src/hci/objects_stats.cpp:226
 #: src/hci/objects_stats.cpp:311
-#: src/intelmap.cpp:406
+#: src/intelmap.cpp:353
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
 #: src/multimenu.cpp:435
@@ -5598,63 +5598,63 @@ msgid "Command Turret IV"
 msgstr "Командная IV"
 
 #: data/mp/multiplay/script/rules/printsettings.js:6
-#: src/multiint.cpp:1402
-#: src/multiint.cpp:1405
+#: src/multiint.cpp:1403
+#: src/multiint.cpp:1406
 msgid "Scavengers"
 msgstr "Мусорщики"
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
-#: src/multiint.cpp:1407
+#: src/multiint.cpp:1408
 msgid "No Scavengers"
 msgstr "Нет Мусорщиков"
 
 #: data/mp/multiplay/script/rules/printsettings.js:12
-#: src/multiint.cpp:1415
+#: src/multiint.cpp:1416
 msgid "No Alliances"
 msgstr "Без Союзов"
 
 #: data/mp/multiplay/script/rules/printsettings.js:13
-#: src/multiint.cpp:1416
+#: src/multiint.cpp:1417
 msgid "Allow Alliances"
 msgstr "Позволить Союзы"
 
 #: data/mp/multiplay/script/rules/printsettings.js:14
-#: src/multiint.cpp:1418
+#: src/multiint.cpp:1419
 msgid "Locked Teams"
 msgstr "Закрытые Команды"
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
-#: src/multiint.cpp:1417
+#: src/multiint.cpp:1418
 msgid "Locked Teams, No Shared Research"
 msgstr "Закрытые Команды, раздельные исследования"
 
 #: data/mp/multiplay/script/rules/printsettings.js:21
-#: src/multiint.cpp:1426
+#: src/multiint.cpp:1427
 msgid "Low Power Levels"
 msgstr "Низкий уровень энергии"
 
 #: data/mp/multiplay/script/rules/printsettings.js:22
-#: src/multiint.cpp:1427
+#: src/multiint.cpp:1428
 msgid "Medium Power Levels"
 msgstr "Средний уровень энергии"
 
 #: data/mp/multiplay/script/rules/printsettings.js:23
-#: src/multiint.cpp:1428
+#: src/multiint.cpp:1429
 msgid "High Power Levels"
 msgstr "Высокий уровень энергии"
 
 #: data/mp/multiplay/script/rules/printsettings.js:29
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1437
 msgid "Start with No Bases"
 msgstr "Начать без Базы"
 
 #: data/mp/multiplay/script/rules/printsettings.js:30
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1438
 msgid "Start with Bases"
 msgstr "Начать с Базой"
 
 #: data/mp/multiplay/script/rules/printsettings.js:31
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1439
 msgid "Start with Advanced Bases"
 msgstr "Начать с Продвинутой Базой"
 
@@ -5739,11 +5739,6 @@ msgstr "В любое время, большой босс!"
 msgid "System locale"
 msgstr "Системный"
 
-#: lib/netplay/netplay.cpp:335
-#: lib/netplay/netplay.cpp:1301
-msgid "Enter password here"
-msgstr "Введите пароль"
-
 #: lib/netplay/netplay.cpp:1204
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
@@ -5762,7 +5757,7 @@ msgid "Game configured port (%s) correctly on (%s)\n"
 msgstr "Игровой порт настроен правильно (%s) на (%s)\n"
 "Ваш внешний IP %s"
 
-#: lib/netplay/netplay.cpp:2005
+#: lib/netplay/netplay.cpp:2004
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr "Устройство UPnP не найдено. \n"
 "Настройте свой маршрутизатор/брандмауэр, чтобы открыть порт 2100!"
@@ -5792,8 +5787,8 @@ msgid "Menu"
 msgstr "Меню"
 
 #: lib/sound/cdaudio.cpp:63
-#: src/frontend.cpp:1966
-#: src/frontend.cpp:2009
+#: src/frontend.cpp:1967
+#: src/frontend.cpp:2011
 msgid "Campaign"
 msgstr "Кампания"
 
@@ -5920,27 +5915,27 @@ msgstr "Цепная подача снарядов ПВО"
 #. data/mp/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:69
 msgid "AA Cyclone Flak Cannon Emplacement"
-msgstr ""
+msgstr "Зенитная установка Циклон"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun.name
 #: po/custom/fromJson.txt:73
 msgid "AA Cyclone Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепточка с зениткой Циклон"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.P0cam3PyFlakHT.name
 #: po/custom/fromJson.txt:76
 msgid "AA Cyclone Flak Cannon Python Half-tracks"
-msgstr ""
+msgstr "Зенитка Циклон Питон Полугусеницы"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun01.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "Зенитка Циклон"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6026,21 +6021,21 @@ msgstr "Тепловой сенсор ПВО"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "Установка с зениткой Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепточка с зениткой Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "Зенитка Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6509,7 +6504,7 @@ msgstr "Вооружён противотанковой ракетой Ланс�
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Вооружён противотанковой ракетой Лансер"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -7123,7 +7118,7 @@ msgstr "Боевой Ремонтный Юнит"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Лучшая цель: машины и киборги"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -7178,13 +7173,13 @@ msgstr "Лучшие цели: Бункеры и Укреплённые точк
 #. data/base/messages/resmessages3.json: $.RES_W_BMB4.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, emplacements, Infantry"
-msgstr ""
+msgstr "Лучшая цель: Бункеры, орудийные установки и пехота"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_W_BMB3.text[2]
 #: po/custom/fromJson.txt:1122
 msgid "Best Targets: Bunkers, Emplacements, Infantry"
-msgstr ""
+msgstr "Лучшая цель: Бункеры, орудийные установки и пехота"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7214,7 +7209,7 @@ msgstr "Лучшие цели: пехота, постройки, колёсны�
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1150
 msgid "Best Targets: Vehicles and cyborgs"
-msgstr ""
+msgstr "Лучшая цель: наземный транспорт и киборги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_RK_IDF.text[2]
@@ -7263,7 +7258,7 @@ msgstr "Увеличены прочность корпуса и скорость
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-#: po/custom/fromJson.txt:1204
+#: po/custom/fromJson.txt:1210
 msgid "Body Points: Very low"
 msgstr "Прочность корпуса: Очень низкая"
 
@@ -8927,13 +8922,13 @@ msgstr "Пули с твёрдой оболочкой"
 #. data/base/stats/structure.json: $.GuardTower4H.name
 #: po/custom/fromJson.txt:2314
 msgid "Hardened Flamer Guard Tower"
-msgstr ""
+msgstr "Укреплённая башня с огнемётом"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.GuardTower3H.name
 #: po/custom/fromJson.txt:2317
 msgid "Hardened Heavy Machinegun Tower"
-msgstr ""
+msgstr "Укреплённая башня с тяжёлым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage01.name
@@ -8988,7 +8983,7 @@ msgstr "Доступна Укрепточка с зениткой Циклон"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
 #: po/custom/fromJson.txt:2348
 msgid "Hardpoint Tornado AA Gun Available"
-msgstr ""
+msgstr "Укрепточка с зениткой Торнадо"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_TWINAGHP.text[0]
@@ -9472,21 +9467,21 @@ msgstr "Тяжёлый миномёт- Бомбард"
 #. data/mp/stats/structure.json: $.Emplacement-HeavyPlasmaLauncher.name
 #: po/custom/fromJson.txt:2657
 msgid "Heavy Plasma Launcher Emplacement"
-msgstr ""
+msgstr "Установка с тяжёлым плазмомётом"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[1]
 #: po/custom/fromJson.txt:2661
 msgid "Heavy Plasma Launcher firing plasma"
-msgstr ""
+msgstr "Тяжёлый плазмомёт"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-HeavyPlasmaLauncher.name
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2665
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Тяжёлый плазмомёт"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9712,13 +9707,13 @@ msgstr "Высокоэластичная смесь бетона и пласти
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2834
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Газовый резервуар под высоким давлением"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
 #: po/custom/fromJson.txt:2837
 msgid "High-pressure gas throws the flamer gel further"
-msgstr ""
+msgstr "Газ под высоким давлением выталкивает огнемётный гель дальше"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.PillBox3.name
@@ -10107,17 +10102,17 @@ msgid "Incendiary Howitzer Emplacement 2"
 msgstr "Установка Адской гаубицы 2"
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
-#: po/custom/fromJson.txt:3102
-msgid "Incendiary Howitzer Emplacement"
-msgstr "Установка Адской гаубицы"
-
-#. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
-#: po/custom/fromJson.txt:3105
+#: po/custom/fromJson.txt:3101
 msgid "Incendiary howitzer emplacement"
 msgstr "Установка Адской Гаубицы"
+
+#. TRANSLATORS:
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
+#: po/custom/fromJson.txt:3105
+msgid "Incendiary Howitzer Emplacement"
+msgstr "Установка Адской гаубицы"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_INH.text[1]
@@ -10199,7 +10194,7 @@ msgstr "Увеличивает скорость строительства"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3199
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Увеличивает дальность огнемётов"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10794,7 +10789,7 @@ msgstr "Урон пулемёта +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3628
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Башня с пулемётом"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -11287,7 +11282,7 @@ msgstr "Миномёт"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3965
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Пулемёт"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
@@ -11596,20 +11591,20 @@ msgid "New Systems Tower Available"
 msgstr "Доступна новая системная башня"
 
 #. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4224
+msgid "New Systems Turret Available For Design"
+msgstr "Доступна новая системная башня для дизайна"
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4226
+#: po/custom/fromJson.txt:4230
 msgid "New Systems Turret Available for Design"
 msgstr "Доступна турельная установка"
-
-#. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4230
-msgid "New Systems Turret Available For Design"
-msgstr "Доступна новая системная башня для дизайна"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -12156,7 +12151,7 @@ msgstr "Питон"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4581
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Счетверённая 80мм зенитка"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12315,7 +12310,7 @@ msgstr "Скоростное рельсовое орудие стреляет ш
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4675
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "Увеличивает скорость перезарядки"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -12723,19 +12718,19 @@ msgstr "Ракетный лазерный целеуказатель"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4964
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Быстрый загрузчик ракет Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4967
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Быстрый загрузчик ракет Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4970
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "Быстрый загрузчик ракет"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -13183,13 +13178,13 @@ msgstr "Технология кражи из зданий даёт контро�
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5256
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Стальная башня с огнемётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5259
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Стальная башня с тяжелым пулемётом"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13404,18 +13399,18 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr "Анализ нейросвязи Мk3"
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#: po/custom/fromJson.txt:5430
-msgid "Synaptic Link Data Analysis"
-msgstr "Анализ нейросвязи"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#: po/custom/fromJson.txt:5434
+#: po/custom/fromJson.txt:5430
 msgid "Synaptic link data analysis"
 msgstr "Анализ синаптической связи"
+
+#. TRANSLATORS:
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#: po/custom/fromJson.txt:5434
+msgid "Synaptic Link Data Analysis"
+msgstr "Анализ нейросвязи"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_SY_ST1.text[1]
@@ -13820,7 +13815,7 @@ msgstr "Спаренный 7,62 мм пулемёт"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5684
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "Двойная 80-мм зенитная пушка"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -15181,7 +15176,7 @@ msgid "Player dropped"
 msgstr "Игрок исчез"
 
 #: src/display3d.cpp:749
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Waiting for other players"
 msgstr "Ожидание других игроков"
 
@@ -15195,16 +15190,16 @@ msgid "Setting zoom to %.0f"
 msgstr "Установка увеличения на %.0f"
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
-#: src/droid.cpp:241
+#: src/droid.cpp:245
 #, c-format
 msgid "%s Lost!"
 msgstr "%s потерян!"
 
-#: src/droid.cpp:1099
+#: src/droid.cpp:1104
 msgid "Structure Restored"
 msgstr "Постройка восстановлена"
 
-#: src/droid.cpp:1858
+#: src/droid.cpp:1863
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
@@ -15213,7 +15208,7 @@ msgstr[1] "Выбрана группа %u - %u юнита"
 msgstr[2] "Выбрана группа %u - %u юнитов"
 msgstr[3] "Выбрана группа %u - %u юнитов"
 
-#: src/droid.cpp:1867
+#: src/droid.cpp:1872
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
@@ -15222,7 +15217,7 @@ msgstr[1] "%u юнита назначено группе %u"
 msgstr[2] "%u юнитов назначено группе %u"
 msgstr[3] "%u юнитов назначено группе %u"
 
-#: src/droid.cpp:1878
+#: src/droid.cpp:1883
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
@@ -15231,7 +15226,7 @@ msgstr[1] "Фокус на группе %u - %u юнита"
 msgstr[2] "Фокус на группе %u - %u юнитов"
 msgstr[3] "Фокус на группе %u - %u юнитов"
 
-#: src/droid.cpp:1882
+#: src/droid.cpp:1887
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
@@ -15240,13 +15235,13 @@ msgstr[1] "Соединить с группой %u - %u юнита"
 msgstr[2] "Соединить с группой %u - %u юнитов"
 msgstr[3] "Соединить с группой %u - %u юнитов"
 
-#: src/droid.cpp:2964
+#: src/droid.cpp:2969
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr "Передача юнитов невозможна -- превышены лимиты юнитов"
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
-#: src/frontend.cpp:1901
+#: src/frontend.cpp:1902
 msgid "Normal"
 msgstr "Нормальная"
 
@@ -15260,383 +15255,383 @@ msgstr "НЕКСУС"
 msgid "Collective"
 msgstr "Альянс"
 
-#: src/frontend.cpp:148
+#: src/frontend.cpp:149
 msgid "Single Player"
 msgstr "Один игрок"
 
-#: src/frontend.cpp:149
+#: src/frontend.cpp:150
 msgid "Multi Player"
 msgstr "Многопользовательская игра"
 
-#: src/frontend.cpp:150
-#: src/frontend.cpp:284
+#: src/frontend.cpp:151
+#: src/frontend.cpp:285
 msgid "Tutorial"
 msgstr "Обучение"
 
-#: src/frontend.cpp:151
+#: src/frontend.cpp:152
 #: src/ingameop.cpp:242
 msgid "Options"
 msgstr "Параметры"
 
-#: src/frontend.cpp:156
-#: src/frontend.cpp:160
+#: src/frontend.cpp:157
+#: src/frontend.cpp:161
 msgid "View Intro"
 msgstr "Показать Вступление"
 
-#: src/frontend.cpp:161
+#: src/frontend.cpp:162
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr "Видео из кампании отсутствуют! Скачайте их на http://wz2100.net"
 
-#: src/frontend.cpp:166
-#: src/frontend.cpp:170
+#: src/frontend.cpp:167
+#: src/frontend.cpp:171
 msgid "Continue Last Save"
 msgstr "Продолжить последнюю сохранённую игру"
 
-#: src/frontend.cpp:171
+#: src/frontend.cpp:172
 msgid "No last save available"
 msgstr "Нет последнего сохранения"
 
-#: src/frontend.cpp:173
+#: src/frontend.cpp:174
 msgid "Quit Game"
 msgstr "Выйти из игры"
 
-#: src/frontend.cpp:174
+#: src/frontend.cpp:175
 msgid "MAIN MENU"
 msgstr "ГЛАВНОЕ МЕНЮ"
 
-#: src/frontend.cpp:176
+#: src/frontend.cpp:177
 msgid "Official site: http://wz2100.net/"
 msgstr "Посетите наш официальный сайт: http://wz2100.net/"
 
-#: src/frontend.cpp:177
+#: src/frontend.cpp:178
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr "Заходите на форум и все новости Warzone 2100! Нажмите на эту ссылку."
 
-#: src/frontend.cpp:178
+#: src/frontend.cpp:179
 msgid "Donate: http://donations.wz2100.net/"
 msgstr "Пожертвования: http://donations.wz2100.net/"
 
-#: src/frontend.cpp:180
+#: src/frontend.cpp:181
 msgid "Help support the project with our server costs, Click this link."
 msgstr "Помогите поддержать проект, нажмите на эту ссылку."
 
-#: src/frontend.cpp:181
+#: src/frontend.cpp:182
 msgid "Chat with players on Discord or IRC"
 msgstr "Общайтесь с игроками в Discord или IRC"
 
-#: src/frontend.cpp:183
+#: src/frontend.cpp:184
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
 msgstr "Подключитесь к Discord или Freenode через веб-чат, нажав на эту ссылку."
 
-#: src/frontend.cpp:184
+#: src/frontend.cpp:185
 msgid "Check for a newer version"
 msgstr "Проверить обновление игры"
 
-#: src/frontend.cpp:285
+#: src/frontend.cpp:286
 msgid "Fast Play"
 msgstr "Быстрая игра"
 
-#: src/frontend.cpp:286
+#: src/frontend.cpp:287
 msgid "TUTORIALS"
 msgstr "ОБУЧЕНИЕ"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:288
-#: src/frontend.cpp:346
-#: src/frontend.cpp:367
-#: src/frontend.cpp:576
-#: src/frontend.cpp:648
-#: src/frontend.cpp:828
-#: src/frontend.cpp:1040
-#: src/frontend.cpp:1546
-#: src/frontend.cpp:1838
-#: src/frontend.cpp:1979
-#: src/frontend.cpp:2006
+#: src/frontend.cpp:289
+#: src/frontend.cpp:347
+#: src/frontend.cpp:368
+#: src/frontend.cpp:577
+#: src/frontend.cpp:649
+#: src/frontend.cpp:829
+#: src/frontend.cpp:1041
+#: src/frontend.cpp:1547
+#: src/frontend.cpp:1839
+#: src/frontend.cpp:1980
+#: src/frontend.cpp:2008
 msgctxt "menu"
 msgid "Return"
 msgstr "Назад"
 
-#: src/frontend.cpp:339
+#: src/frontend.cpp:340
 msgid "New Campaign"
 msgstr "Новая кампания"
 
-#: src/frontend.cpp:340
+#: src/frontend.cpp:341
 msgid "Start Skirmish Game"
 msgstr "Начать Сражение"
 
-#: src/frontend.cpp:341
+#: src/frontend.cpp:342
 msgid "Challenges"
 msgstr "Испытания"
 
-#: src/frontend.cpp:342
+#: src/frontend.cpp:343
 msgid "Load Campaign Game"
 msgstr "Загрузить Кампанию"
 
-#: src/frontend.cpp:343
+#: src/frontend.cpp:344
 msgid "Load Skirmish Game"
 msgstr "Загрузить Сражение"
 
-#: src/frontend.cpp:345
+#: src/frontend.cpp:346
 msgid "SINGLE PLAYER"
 msgstr "ОДИНОЧНАЯ ИГРА"
 
-#: src/frontend.cpp:350
-#: src/frontend.cpp:371
+#: src/frontend.cpp:351
+#: src/frontend.cpp:372
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr "Видео из кампании отсутствуют! Скачайте их на http://wz2100.net"
 
-#: src/frontend.cpp:366
+#: src/frontend.cpp:367
 msgid "CAMPAIGNS"
 msgstr "КАМПАНИИ"
 
-#: src/frontend.cpp:504
+#: src/frontend.cpp:505
 #: src/ingameop.cpp:1009
 msgid "Load Campaign Saved Game"
 msgstr "Загрузить сохранённую Кампанию"
 
-#: src/frontend.cpp:510
+#: src/frontend.cpp:511
 #: src/ingameop.cpp:1013
 msgid "Load Skirmish Saved Game"
 msgstr "Загрузить сохранённую Схватку"
 
-#: src/frontend.cpp:571
+#: src/frontend.cpp:572
 msgid "MULTI PLAYER"
 msgstr "МУЛЬТИПЛЕЕР"
 
-#: src/frontend.cpp:573
+#: src/frontend.cpp:574
 msgid "Host Game"
 msgstr "Создать игру"
 
-#: src/frontend.cpp:574
+#: src/frontend.cpp:575
 msgid "Join Game"
 msgstr "Присоединиться"
 
-#: src/frontend.cpp:579
+#: src/frontend.cpp:580
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr "TCP-порт 2100 должен быть открыт в брандмауэре и маршрутизаторе для создания игр!"
 
-#: src/frontend.cpp:640
+#: src/frontend.cpp:641
 #: src/multiint.cpp:1325
 msgid "OPTIONS"
 msgstr "ПАРАМЕТРЫ"
 
-#: src/frontend.cpp:641
+#: src/frontend.cpp:642
 msgid "Game Options"
 msgstr "Настройки игры"
 
-#: src/frontend.cpp:642
+#: src/frontend.cpp:643
 #: src/ingameop.cpp:562
 msgid "Graphics Options"
 msgstr "Настройки графики"
 
-#: src/frontend.cpp:643
+#: src/frontend.cpp:644
 #: src/ingameop.cpp:565
 msgid "Video Options"
 msgstr "Настройки видео"
 
-#: src/frontend.cpp:644
+#: src/frontend.cpp:645
 msgid "Audio / Zoom Options"
 msgstr "Настройки звука и карты"
 
-#: src/frontend.cpp:645
+#: src/frontend.cpp:646
 #: src/ingameop.cpp:572
 msgid "Mouse Options"
 msgstr "Настройки Мыши"
 
-#: src/frontend.cpp:646
+#: src/frontend.cpp:647
 #: src/ingameop.cpp:576
 msgid "Key Mappings"
 msgstr "Раскладка клавиатуры"
 
-#: src/frontend.cpp:647
+#: src/frontend.cpp:648
 #: src/ingameop.cpp:579
 msgid "Music Manager"
 msgstr "Менеджер Музыки"
 
-#: src/frontend.cpp:649
+#: src/frontend.cpp:650
 msgid "Open Configuration Directory"
 msgstr "Открыть каталог конфигурации"
 
-#: src/frontend.cpp:687
+#: src/frontend.cpp:688
 msgid "Failed to open configuration directory in system default file browser."
 msgstr "Не удалось открыть каталог конфигурации в обозревателе файлов."
 
-#: src/frontend.cpp:689
+#: src/frontend.cpp:690
 msgid "Configuration directory is reported as:"
 msgstr "Конфигурационный каталог указан как:"
 
-#: src/frontend.cpp:693
+#: src/frontend.cpp:694
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
 msgstr "Если выполняется внутри контейнера/изолированного окружения, то это может отличаться от фактического пути на диске."
 
-#: src/frontend.cpp:695
+#: src/frontend.cpp:696
 msgid "Please see the documentation for more information on how to locate it manually."
 msgstr "Более подробную информацию о том, как найти это вручную, см. в документации."
 
-#: src/frontend.cpp:696
+#: src/frontend.cpp:697
 msgid "Failed to open configuration directory"
 msgstr "Не удалось открыть каталог конфигурации"
 
-#: src/frontend.cpp:718
+#: src/frontend.cpp:719
 msgid "1×"
 msgstr "1×"
 
-#: src/frontend.cpp:719
+#: src/frontend.cpp:720
 msgid "2×"
 msgstr "2×"
 
-#: src/frontend.cpp:720
-#: src/frontend.cpp:1195
+#: src/frontend.cpp:721
+#: src/frontend.cpp:1196
 msgid "Fullscreen"
 msgstr "Полный экран"
 
-#: src/frontend.cpp:721
-#: src/frontend.cpp:732
-#: src/frontend.cpp:929
-#: src/frontend.cpp:1905
+#: src/frontend.cpp:722
+#: src/frontend.cpp:733
+#: src/frontend.cpp:930
+#: src/frontend.cpp:1906
 msgid "Unsupported"
 msgstr "Не поддерживается"
 
-#: src/frontend.cpp:729
-#: src/frontend.cpp:738
-#: src/frontend.cpp:743
-#: src/frontend.cpp:748
-#: src/frontend.cpp:753
-#: src/frontend.cpp:1204
-#: src/frontend.cpp:1248
-#: src/frontend.cpp:1763
-#: src/frontend.cpp:1768
-#: src/frontend.cpp:1773
-#: src/frontend.cpp:1783
+#: src/frontend.cpp:730
+#: src/frontend.cpp:739
+#: src/frontend.cpp:744
+#: src/frontend.cpp:749
+#: src/frontend.cpp:754
+#: src/frontend.cpp:1205
+#: src/frontend.cpp:1249
+#: src/frontend.cpp:1764
+#: src/frontend.cpp:1769
+#: src/frontend.cpp:1774
+#: src/frontend.cpp:1784
 msgid "Off"
 msgstr "Выкл."
 
-#: src/frontend.cpp:730
+#: src/frontend.cpp:731
 msgid "50%"
 msgstr "50%"
 
-#: src/frontend.cpp:731
+#: src/frontend.cpp:732
 #: src/multiplay.cpp:1651
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/frontend.cpp:738
-#: src/frontend.cpp:743
-#: src/frontend.cpp:748
-#: src/frontend.cpp:753
-#: src/frontend.cpp:1250
-#: src/frontend.cpp:1763
-#: src/frontend.cpp:1768
-#: src/frontend.cpp:1773
-#: src/frontend.cpp:1783
+#: src/frontend.cpp:739
+#: src/frontend.cpp:744
+#: src/frontend.cpp:749
+#: src/frontend.cpp:754
+#: src/frontend.cpp:1251
+#: src/frontend.cpp:1764
+#: src/frontend.cpp:1769
+#: src/frontend.cpp:1774
+#: src/frontend.cpp:1784
 msgid "On"
 msgstr "Вкл."
 
-#: src/frontend.cpp:758
+#: src/frontend.cpp:759
 msgid "Rotating"
 msgstr "Вращение"
 
-#: src/frontend.cpp:758
+#: src/frontend.cpp:759
 msgid "Fixed"
 msgstr "Зафиксирован"
 
-#: src/frontend.cpp:763
+#: src/frontend.cpp:764
 msgid "Instant"
 msgstr "Мгновенный"
 
-#: src/frontend.cpp:763
+#: src/frontend.cpp:764
 msgid "Tracked"
 msgstr "Плавный"
 
-#: src/frontend.cpp:781
+#: src/frontend.cpp:782
 #: src/ingameop.cpp:607
 msgid "Video Playback"
 msgstr "Видео"
 
-#: src/frontend.cpp:786
+#: src/frontend.cpp:787
 #: src/ingameop.cpp:612
 msgid "Scanlines"
 msgstr "Туман Войны"
 
-#: src/frontend.cpp:792
+#: src/frontend.cpp:793
 #: src/ingameop.cpp:617
 msgid "Shadows"
 msgstr "Тени"
 
-#: src/frontend.cpp:797
+#: src/frontend.cpp:798
 msgid "Fog"
 msgstr "Туман"
 
-#: src/frontend.cpp:802
+#: src/frontend.cpp:803
 #: src/ingameop.cpp:622
 #: src/input/context.cpp:42
 msgid "Radar"
 msgstr "Радар"
 
-#: src/frontend.cpp:807
+#: src/frontend.cpp:808
 #: src/ingameop.cpp:627
 msgid "Radar Jump"
 msgstr "Переход по карте"
 
-#: src/frontend.cpp:812
+#: src/frontend.cpp:813
 msgid "Screen Shake"
 msgstr "Встряхивание экрана"
 
-#: src/frontend.cpp:824
+#: src/frontend.cpp:825
 msgid "GRAPHICS OPTIONS"
 msgstr "Настройки графики"
 
-#: src/frontend.cpp:932
+#: src/frontend.cpp:933
 msgid "Disabled"
 msgstr "Отключено"
 
-#: src/frontend.cpp:935
+#: src/frontend.cpp:936
 msgid "Enabled"
 msgstr "Включено"
 
-#: src/frontend.cpp:939
-#: src/frontend.cpp:945
+#: src/frontend.cpp:940
+#: src/frontend.cpp:946
 msgid "Auto"
 msgstr "Авто"
 
-#: src/frontend.cpp:985
+#: src/frontend.cpp:986
 #: src/ingameop.cpp:149
 msgid "Voice Volume"
 msgstr "Громкость голоса"
 
-#: src/frontend.cpp:990
+#: src/frontend.cpp:991
 #: src/ingameop.cpp:155
 msgid "FX Volume"
 msgstr "Громкость эффектов"
 
-#: src/frontend.cpp:995
+#: src/frontend.cpp:996
 #: src/ingameop.cpp:161
 msgid "Music Volume"
 msgstr "Громкость музыки"
 
-#: src/frontend.cpp:1001
+#: src/frontend.cpp:1002
 #: src/ingameop.cpp:167
 msgid "Subtitles"
 msgstr "Субтитры"
 
-#: src/frontend.cpp:1006
+#: src/frontend.cpp:1007
 msgid "HRTF"
 msgstr "Объёмный звук"
 
-#: src/frontend.cpp:1012
-#: src/frontend.cpp:1014
+#: src/frontend.cpp:1013
+#: src/frontend.cpp:1015
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "HRTF(объёмный звук для наушников) не поддерживается на вашем устройстве / системе / библиотеке OpenAL"
 
-#: src/frontend.cpp:1018
+#: src/frontend.cpp:1019
 msgid "Map Zoom"
 msgstr "Дальность камеры"
 
-#: src/frontend.cpp:1023
+#: src/frontend.cpp:1024
 msgid "Map Zoom Rate"
 msgstr "Шаг изменения камеры"
 
-#: src/frontend.cpp:1028
+#: src/frontend.cpp:1029
 msgid "Radar Zoom"
 msgstr "Увеличение миникарты"
 
@@ -15644,216 +15639,229 @@ msgstr "Увеличение миникарты"
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:1047
+#: src/frontend.cpp:1048
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr "Настройки звука / камеры"
 
-#: src/frontend.cpp:1159
+#: src/frontend.cpp:1160
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr "В полноэкранном режиме разрешение соответсвует разрешению рабочего стола \n"
 "(или как позволит оконный менеджер)."
 
-#: src/frontend.cpp:1161
+#: src/frontend.cpp:1162
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr "Вы можете изменить разрешение, изменив размер окна в обычном режиме. (Попробуйте перетащить угол / край.)"
 
-#: src/frontend.cpp:1191
+#: src/frontend.cpp:1192
 msgid "Desktop Full"
 msgstr "Полный экран"
 
-#: src/frontend.cpp:1193
+#: src/frontend.cpp:1194
 msgid "Windowed"
 msgstr "В окне"
 
-#: src/frontend.cpp:1214
+#: src/frontend.cpp:1215
 msgid "Graphics Mode"
 msgstr "Графический режим"
 
-#: src/frontend.cpp:1219
+#: src/frontend.cpp:1220
 msgid "Resolution"
 msgstr "Разрешение"
 
-#: src/frontend.cpp:1224
+#: src/frontend.cpp:1225
 msgid "Display Scale"
 msgstr "Масштаб экрана"
 
-#: src/frontend.cpp:1252
+#: src/frontend.cpp:1253
 msgid "Adaptive"
 msgstr "Адаптивный"
 
-#: src/frontend.cpp:1467
+#: src/frontend.cpp:1468
 msgid "* Takes effect on game restart"
 msgstr "* Применится после перезагрузки игры"
 
-#: src/frontend.cpp:1500
+#: src/frontend.cpp:1501
 msgid "Texture size"
 msgstr "Размер текстур"
 
-#: src/frontend.cpp:1505
+#: src/frontend.cpp:1506
 #: src/ingameop.cpp:728
 msgid "Vertical sync"
 msgstr "Верт. синхронизация"
 
-#: src/frontend.cpp:1510
+#: src/frontend.cpp:1511
 msgid "Antialiasing*"
 msgstr "Сглаживание*"
 
-#: src/frontend.cpp:1518
+#: src/frontend.cpp:1519
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr "Внимание: сглаживание может вызвать сбои, особенно при значениях> 16"
 
-#: src/frontend.cpp:1531
+#: src/frontend.cpp:1532
 msgid "Graphics Backend*"
 msgstr "Графический движок*"
 
-#: src/frontend.cpp:1543
+#: src/frontend.cpp:1544
 msgid "VIDEO OPTIONS"
 msgstr "Настройки видео"
 
-#: src/frontend.cpp:1586
+#: src/frontend.cpp:1587
 msgid "Unable to change Window Mode"
 msgstr "Не удается изменить режим окна"
 
-#: src/frontend.cpp:1586
+#: src/frontend.cpp:1587
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Не удалось изменить на оконный режим.\n"
 "Ваша система / драйверы могут не поддерживать другие режимы."
 
-#: src/frontend.cpp:1612
+#: src/frontend.cpp:1613
 msgid "Unable to change Vertical Sync"
 msgstr "Не удалось изменить вертикальную синхронизацию"
 
-#: src/frontend.cpp:1612
+#: src/frontend.cpp:1613
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Не удалось изменить режим Вертикальной Синхронизации.\n"
 "Ваша система / драйверы могут не поддерживать другие режимы."
 
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1779
 msgid "Middle Mouse"
 msgstr "Средняя кнопка Мыши"
 
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1779
 msgid "Right Mouse"
 msgstr "Правая кнопка"
 
-#: src/frontend.cpp:1801
+#: src/frontend.cpp:1802
 #: src/ingameop.cpp:804
 msgid "Reverse Rotation"
 msgstr "Инверсия мыши"
 
-#: src/frontend.cpp:1806
+#: src/frontend.cpp:1807
 #: src/ingameop.cpp:810
 msgid "Trap Cursor"
 msgstr "Захват курсора"
 
-#: src/frontend.cpp:1812
+#: src/frontend.cpp:1813
 #: src/ingameop.cpp:816
 msgid "Switch Mouse Buttons"
 msgstr "Настройки Мыши"
 
-#: src/frontend.cpp:1818
+#: src/frontend.cpp:1819
 #: src/ingameop.cpp:821
 msgid "Rotate Screen"
 msgstr "Вращение камеры"
 
-#: src/frontend.cpp:1823
+#: src/frontend.cpp:1824
 #: src/ingameop.cpp:826
 msgid "Colored Cursors"
 msgstr "Цветной указатель"
 
-#: src/frontend.cpp:1835
+#: src/frontend.cpp:1836
 msgid "MOUSE OPTIONS"
 msgstr "Настройки мыши"
 
-#: src/frontend.cpp:1900
+#: src/frontend.cpp:1901
 #: src/multiint.cpp:234
 msgid "Easy"
 msgstr "Лёгкая"
 
-#: src/frontend.cpp:1902
+#: src/frontend.cpp:1903
 #: src/multiint.cpp:234
 msgid "Hard"
 msgstr "Тяжёлая"
 
-#: src/frontend.cpp:1903
+#: src/frontend.cpp:1904
 #: src/multiint.cpp:234
 msgid "Insane"
 msgstr "Безумная"
 
-#: src/frontend.cpp:1934
-#: src/frontend.cpp:2007
+#: src/frontend.cpp:1935
+#: src/frontend.cpp:2009
 msgid "Language"
 msgstr "Язык"
 
-#: src/frontend.cpp:1938
-#: src/frontend.cpp:2011
+#: src/frontend.cpp:1939
+#: src/frontend.cpp:2013
 msgid "Campaign Difficulty"
 msgstr "Сложность"
 
-#: src/frontend.cpp:1942
-#: src/frontend.cpp:2012
+#: src/frontend.cpp:1943
+#: src/frontend.cpp:2014
 msgid "Camera Speed"
 msgstr "Скорость камеры"
 
-#: src/frontend.cpp:1946
-#: src/frontend.cpp:2008
+#: src/frontend.cpp:1947
+#: src/frontend.cpp:2010
 msgid "Unit Colour:"
 msgstr "Цвет юнита:"
 
-#: src/frontend.cpp:1976
-#: src/frontend.cpp:2010
+#: src/frontend.cpp:1977
+#: src/frontend.cpp:2012
 msgid "Skirmish/Multiplayer"
 msgstr "Сражение"
 
 #: src/frontend.cpp:1983
+#, c-format
+msgid "Help us improve translations of Warzone 2100: %s"
+msgstr "Помогите нам улучшить переводы Warzone 2100: %s"
+
+#: src/frontend.cpp:1985
 msgid "Click to open webpage."
 msgstr "Открыть веб-страницу."
 
-#: src/frontend.cpp:1986
-#: src/frontend.cpp:2005
+#: src/frontend.cpp:1988
+#: src/frontend.cpp:2007
 msgid "GAME OPTIONS"
 msgstr "НАСТРОЙКИ ИГРЫ"
 
-#: src/frontend.cpp:2118
+#: src/frontend.cpp:2033
+msgid "Insane Difficulty"
+msgstr "Безумная сложность"
+
+#: src/frontend.cpp:2034
+msgid "This difficulty is for very experienced players!"
+msgstr "Эта сложность для очень опытных игроков!"
+
+#: src/frontend.cpp:2136
 #: src/multiint.cpp:2965
 msgid "Mod: "
 msgstr "Мод: "
 
-#: src/frontend.cpp:2580
+#: src/frontend.cpp:2598
 msgid "Increase Game Display Scale?"
 msgstr "Увеличить масштаб элементов на экране?"
 
-#: src/frontend.cpp:2582
+#: src/frontend.cpp:2600
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
 msgstr "При текущих настройках разрешения и масштаба дисплея, пользовательский интерфейс игры может казаться маленьким, а перспектива игры искаженной."
 
-#: src/frontend.cpp:2584
+#: src/frontend.cpp:2602
 msgid "You can fix this by increasing the game's Display Scale setting."
 msgstr "Это можно исправить, увеличив масштаб элементов на экране."
 
-#: src/frontend.cpp:2586
+#: src/frontend.cpp:2604
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
 msgstr "Жалаете ли Вы сейчас увеличить масштаб элементов экрана до %u%%?"
 
-#: src/frontend.cpp:2588
+#: src/frontend.cpp:2606
 msgid "Increase Display Scale"
 msgstr "Увеличить масштаб"
 
-#: src/frontend.cpp:2605
+#: src/frontend.cpp:2623
 #, c-format
 msgid "Display Scale Increased to: %u%%"
 msgstr "Масштаб экрана увеличен до %u%%"
 
-#: src/frontend.cpp:2606
-#: src/frontend.cpp:2622
+#: src/frontend.cpp:2624
+#: src/frontend.cpp:2640
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
 msgstr "Вы можете настроить масштаб отображения в любое время в меню Параметров видео."
 
-#: src/frontend.cpp:2621
+#: src/frontend.cpp:2639
 msgid "Tip: Adjusting Display Scale"
 msgstr "Совет: Настройте масштаб экрана"
 
@@ -15884,7 +15892,7 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr "Игрок %u сжульничал и создал себе нового дроида."
 
 #: src/hci.cpp:1658
-#: src/multiint.cpp:1425
+#: src/multiint.cpp:1426
 #: src/multimenu.cpp:686
 msgid "Power"
 msgstr "Энергия"
@@ -16013,11 +16021,11 @@ msgstr "Выход"
 
 #: src/ingameop.cpp:309
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Предупреждение: Вы уверены?"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Предупреждение: Вы уверены? Любой несохраненный прогресс будет потерян."
 
 #: src/ingameop.cpp:321
 msgid "Confirm"
@@ -16068,19 +16076,19 @@ msgstr "Требуемый мод не может быть загружен: %s\
 
 #: src/input/context.cpp:39
 msgid "Global Hotkeys"
-msgstr ""
+msgstr "Глобальные горячие клавиши"
 
 #: src/input/context.cpp:40
 msgid "Other Hotkeys"
-msgstr ""
+msgstr "Другие горячие клавиши"
 
 #: src/input/context.cpp:41
 msgid "Gameplay"
-msgstr ""
+msgstr "Игра"
 
 #: src/input/context.cpp:43
 msgid "Debug"
-msgstr ""
+msgstr "Режим отладки"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16964,26 +16972,26 @@ msgstr "Заявка на участие от %s"
 msgid "Allow"
 msgstr "Разрешить"
 
-#: src/intelmap.cpp:241
+#: src/intelmap.cpp:215
 #: src/keybind.cpp:1235
 msgid "PAUSED"
 msgstr "ПАУЗА"
 
-#: src/intelmap.cpp:326
+#: src/intelmap.cpp:1047
+msgid "New Intelligence Report"
+msgstr "Поступил доклад разведки"
+
+#: src/intelmap.cpp:1083
 msgid "Research Update"
 msgstr "Обновить исследование"
 
-#: src/intelmap.cpp:330
+#: src/intelmap.cpp:1085
 msgid "Project Goals"
 msgstr "Победы проекта"
 
-#: src/intelmap.cpp:333
+#: src/intelmap.cpp:1087
 msgid "Current Objective"
 msgstr "Текущие задачи"
-
-#: src/intelmap.cpp:1241
-msgid "New Intelligence Report"
-msgstr "Поступил доклад разведки"
 
 #: src/intorder.cpp:172
 msgid "Fire-At-Will"
@@ -17349,7 +17357,7 @@ msgid "KEY MAPPING"
 msgstr "РАСКЛАДКА КЛАВИАТУРЫ"
 
 #: src/keyedit.cpp:575
-#: src/multiint.cpp:1503
+#: src/multiint.cpp:1504
 #: src/musicmanager.cpp:769
 #: src/titleui/gamefind.cpp:91
 #: src/titleui/protocol.cpp:81
@@ -17421,7 +17429,7 @@ msgstr "Загрузить Игру"
 msgid "GAME SAVED :"
 msgstr "ИГРА СОХРАНЕНА:"
 
-#: src/move.cpp:1975
+#: src/move.cpp:1984
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr "Ты нашёл %u энергии в бочке с горючим."
@@ -17575,188 +17583,192 @@ msgstr "Случайная карта!"
 msgid "Click to set Password"
 msgstr "Щёлкни чтобы задать пароль"
 
-#: src/multiint.cpp:1391
+#: src/multiint.cpp:1378
+msgid "Enter password here"
+msgstr "Введите пароль"
+
+#: src/multiint.cpp:1392
 msgid "Select Player Name"
 msgstr "Выбор имени игрока"
 
-#: src/multiint.cpp:1414
+#: src/multiint.cpp:1415
 #: src/multimenu.cpp:674
 msgid "Alliances"
 msgstr "Союзники"
 
-#: src/multiint.cpp:1435
+#: src/multiint.cpp:1436
 msgid "Base"
 msgstr "База"
 
-#: src/multiint.cpp:1445
+#: src/multiint.cpp:1446
 msgid "Map Preview"
 msgstr "Просмотр карты"
 
-#: src/multiint.cpp:1446
+#: src/multiint.cpp:1447
 msgid "Click to see Map"
 msgstr "Нажмите для просмотра карты"
 
-#: src/multiint.cpp:1452
+#: src/multiint.cpp:1453
 msgid "Show Structure Limits"
 msgstr "Показать лимиты сооружений"
 
-#: src/multiint.cpp:1452
+#: src/multiint.cpp:1453
 msgid "Set Structure Limits"
 msgstr "Установить лимиты сооружений"
 
-#: src/multiint.cpp:1466
+#: src/multiint.cpp:1467
 msgid "Random Game Options"
 msgstr "Случайные настройки игры"
 
-#: src/multiint.cpp:1467
+#: src/multiint.cpp:1468
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr "Случайные настройки игры\n"
 "Может быть заблокировано голосами игроков"
 
-#: src/multiint.cpp:1478
+#: src/multiint.cpp:1479
 msgid "Tech"
 msgstr "Технологии"
 
-#: src/multiint.cpp:1479
+#: src/multiint.cpp:1480
 msgid "Technology Level 1"
 msgstr "Уровень технологий 1"
 
-#: src/multiint.cpp:1480
+#: src/multiint.cpp:1481
 msgid "Technology Level 2"
 msgstr "Уровень технологий 2"
 
-#: src/multiint.cpp:1481
+#: src/multiint.cpp:1482
 msgid "Technology Level 3"
 msgstr "Уровень технологий 3"
 
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1483
 msgid "Technology Level 4"
 msgstr "Уровень технологий 4"
 
-#: src/multiint.cpp:1491
 #: src/multiint.cpp:1492
+#: src/multiint.cpp:1493
 msgid "Start Hosting Game"
 msgstr "Начать хостинг игры"
 
-#: src/multiint.cpp:1648
+#: src/multiint.cpp:1649
 msgid "DIFFICULTY"
 msgstr "СЛОЖНОСТЬ"
 
-#: src/multiint.cpp:1678
+#: src/multiint.cpp:1679
 msgid "Starts disadvantaged"
 msgstr "Играет без преимущества"
 
-#: src/multiint.cpp:1679
+#: src/multiint.cpp:1680
 msgid "Plays nice"
 msgstr "Играет красиво"
 
-#: src/multiint.cpp:1680
+#: src/multiint.cpp:1681
 msgid "No holds barred"
 msgstr "Нет запрещённых приёмов"
 
-#: src/multiint.cpp:1681
+#: src/multiint.cpp:1682
 msgid "Starts with advantages"
 msgstr "Начать с преимуществом"
 
-#: src/multiint.cpp:1709
+#: src/multiint.cpp:1710
 msgid "CHOOSE AI"
 msgstr "ВЫБЕРИТЕ ИИ"
 
-#: src/multiint.cpp:1762
+#: src/multiint.cpp:1763
 msgid "Allow human players to join in this slot"
 msgstr "Позволить игрокам присоединиться в этот слот"
 
-#: src/multiint.cpp:1773
+#: src/multiint.cpp:1774
 msgid "Leave this slot unused"
 msgstr "Оставить этот слот неиспользуемым"
 
-#: src/multiint.cpp:1905
+#: src/multiint.cpp:1906
 msgid "Team"
 msgstr "Команда"
 
-#: src/multiint.cpp:1918
+#: src/multiint.cpp:1919
 #: src/multiint.cpp:3908
 #: src/multimenu.cpp:1242
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Хост выкинул %s из игры!"
 
-#: src/multiint.cpp:1919
+#: src/multiint.cpp:1920
 #: src/multiint.cpp:3910
 #: src/multimenu.cpp:1246
 msgid "The host has kicked you from the game."
 msgstr "Хост выгнал вас из игры."
 
-#: src/multiint.cpp:2475
+#: src/multiint.cpp:2476
 msgid "Click to change difficulty"
 msgstr "Нажмите для изменения сложности"
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Waiting for player"
 msgstr "Ожидание игрока"
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Player is ready"
 msgstr "Игрок готов"
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Player is downloading"
 msgstr "Игрок загружает"
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Click when ready"
 msgstr "Щёлкни когда будешь готов"
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Waiting for download"
 msgstr "Ожидание загрузки"
 
-#: src/multiint.cpp:2521
+#: src/multiint.cpp:2522
 msgid "READY?"
 msgstr "ГОТОВ?"
 
-#: src/multiint.cpp:2562
+#: src/multiint.cpp:2563
 msgid "PLAYERS"
 msgstr "ИГРОКИ"
 
-#: src/multiint.cpp:2598
+#: src/multiint.cpp:2599
 msgid "Click to change to this slot"
 msgstr "Нажмите, чтобы выбрать этот слот"
 
-#: src/multiint.cpp:2627
+#: src/multiint.cpp:2628
 msgid "Choose Team"
 msgstr "Выбрать команду"
 
-#: src/multiint.cpp:2631
+#: src/multiint.cpp:2632
 msgid "Teams locked"
 msgstr "Фиксированные команды"
 
-#: src/multiint.cpp:2653
+#: src/multiint.cpp:2654
 msgid "Click to change player colour"
 msgstr "Нажмите, чтобы изменить цвет игрока"
 
-#: src/multiint.cpp:2669
+#: src/multiint.cpp:2670
 msgid "Click to change player faction"
 msgstr "Нажмите, чтобы изменить фракцию игрока"
 
-#: src/multiint.cpp:2694
+#: src/multiint.cpp:2695
 msgid "Click to change player position"
 msgstr "Нажмите, чтобы изменить позицию игрока"
 
-#: src/multiint.cpp:2701
+#: src/multiint.cpp:2702
 msgid "Click to change AI, right click to distribute choice"
 msgstr "Нажмите, чтобы добавить ИИ, ПКМ для распространения выбора на другой ИИ"
 
-#: src/multiint.cpp:2716
+#: src/multiint.cpp:2717
 msgid "Player ID: "
 msgstr "ID игрока: "
 
-#: src/multiint.cpp:2717
+#: src/multiint.cpp:2718
 msgid "(none)"
 msgstr "(нет)"
 
-#: src/multiint.cpp:2769
+#: src/multiint.cpp:2770
 msgid "Kicked from game"
 msgstr "Кикнут из игры"
 
@@ -17980,18 +17992,18 @@ msgstr "Всего отправлено/принято —"
 
 #: src/multimenu.cpp:714
 #, c-format
-msgid "Traf: %u/%u"
-msgstr "Тренированных: %u/%u"
+msgid "Traf: %lu/%lu"
+msgstr "Траффик: %lu/%lu"
 
 #: src/multimenu.cpp:718
 #, c-format
-msgid "Uncompressed: %u/%u"
-msgstr "Несжатый: %u/%u"
+msgid "Uncompressed: %lu/%lu"
+msgstr "Распаковано: %lu/%lu"
 
 #: src/multimenu.cpp:722
 #, c-format
-msgid "Pack: %u/%u"
-msgstr "Пак: %u/%u"
+msgid "Pack: %lu/%lu"
+msgstr "Пакеты: %lu/%lu"
 
 #: src/multimenu.cpp:1023
 msgid "Channel"
@@ -18161,12 +18173,12 @@ msgstr "Больше не показывать"
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr "Мы не киборги, чтобы использовать Транспорт киборгов!"
 
-#: src/research.cpp:659
+#: src/research.cpp:867
 #, c-format
 msgid "Research completed: %s"
 msgstr "Завершено исследование: %s"
 
-#: src/research.cpp:1149
+#: src/research.cpp:1362
 msgid "Research Award"
 msgstr "Награда исследования"
 
@@ -18332,7 +18344,7 @@ msgstr "Не могу построить \"%s\", достигнут предел
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr "Невозможно построить \"%s\", достигнут предел строительных войск — производство приостановлено"
 
-#: src/structure.cpp:5238
+#: src/structure.cpp:5239
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
@@ -18341,7 +18353,7 @@ msgstr[1] "%s - %u Юнита назначено - Здоровье %d/%d"
 msgstr[2] "%s - %u Юнитов назначено - Здоровье %d/%d"
 msgstr[3] "%s - %u Юнитов назначено - Здоровье %d/%d"
 
-#: src/structure.cpp:5257
+#: src/structure.cpp:5258
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
@@ -18350,53 +18362,53 @@ msgstr[1] "%s - %u Юнитов назначено - Прочность %d/%d"
 msgstr[2] "%s - %u Юнитов назначено - Прочность %d/%d"
 msgstr[3] "%s - %u Юнитов назначено - Прочность %d/%d"
 
-#: src/structure.cpp:5262
-#: src/structure.cpp:5272
-#: src/structure.cpp:5279
-#: src/structure.cpp:5305
-#: src/structure.cpp:5314
-#: src/structure.cpp:5321
-#: src/structure.cpp:5329
+#: src/structure.cpp:5263
+#: src/structure.cpp:5273
+#: src/structure.cpp:5280
+#: src/structure.cpp:5306
+#: src/structure.cpp:5315
+#: src/structure.cpp:5322
+#: src/structure.cpp:5330
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr "%s - Жизни %d/%d"
 
-#: src/structure.cpp:5295
+#: src/structure.cpp:5296
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr "%s - Подключено %u из %u - Здоровье %d/%d"
 
-#: src/structure.cpp:5450
-#: src/structure.cpp:5495
+#: src/structure.cpp:5451
+#: src/structure.cpp:5496
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Электронные повреждения"
 
-#: src/structure.cpp:5620
+#: src/structure.cpp:5621
 msgid "Electronic Reward - Visibility Report"
 msgstr "Награда - доклад о местоположении"
 
-#: src/structure.cpp:5659
+#: src/structure.cpp:5660
 msgid "Factory Reward - Propulsion"
 msgstr "Заводское вознаграждение - Ходовая"
 
-#: src/structure.cpp:5681
+#: src/structure.cpp:5682
 msgid "Factory Reward - Body"
 msgstr "Заводское вознаграждение - Тело"
 
-#: src/structure.cpp:5703
+#: src/structure.cpp:5704
 msgid "Factory Reward - Weapon"
 msgstr "Заводское вознаграждение - Орудие"
 
-#: src/structure.cpp:5711
+#: src/structure.cpp:5712
 msgid "Factory Reward - Nothing"
 msgstr "Заводское вознаграждение - Отсутсвует"
 
-#: src/structure.cpp:5738
+#: src/structure.cpp:5739
 msgid "Repair Facility Award - Repair"
 msgstr "награда мастерской - ремонт"
 
-#: src/structure.cpp:5744
+#: src/structure.cpp:5745
 msgid "Repair Facility Award - Nothing"
 msgstr "награда мастерской - ничего"
 
@@ -18609,11 +18621,11 @@ msgstr " - ОТЛАДКА"
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Version: %s,%s Built: %s%s"
 
-#: src/wzapi.cpp:2320
+#: src/wzapi.cpp:2330
 msgid "YOU ARE VICTORIOUS!"
 msgstr "ПОБЕДА!"
 
-#: src/wzapi.cpp:2325
+#: src/wzapi.cpp:2335
 msgid "YOU WERE DEFEATED!"
 msgstr "ВЫ ПРОИГРАЛИ!"
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-06-17 20:56+0000\n"
-"PO-Revision-Date: 2021-06-18 03:08\n"
+"POT-Creation-Date: 2021-07-03 19:45+0000\n"
+"PO-Revision-Date: 2021-07-03 21:42\n"
 "Last-Translator: \n"
 "Language-Team: Norwegian Bokmal\n"
 "Language: nb_NO\n"
@@ -148,123 +148,123 @@ msgstr "TRANSPORTOPPDRAG: Fiendebase Under Konstruksjon"
 
 #: data/base/messages/strings/cam1strings.txt:44
 msgid "Enemy forces are establishing a forward base at this location."
-msgstr ""
+msgstr "Fiendestyrker etablerer en fremoverbase i denne sonen."
 
 #: data/base/messages/strings/cam1strings.txt:45
 msgid "Eradicate the base and secure the area."
-msgstr ""
+msgstr "Ødelegg basen og sikre området."
 
 #: data/base/messages/strings/cam1strings.txt:48
 msgid "ALPHA BASE MISSION: Establish a Forward Base"
-msgstr ""
+msgstr "ALFABASEOPPDRAG: Etabler en Fremoverbase"
 
 #: data/base/messages/strings/cam1strings.txt:49
 msgid "Establish a forward base on the plateau."
-msgstr ""
+msgstr "Etabler en fremoverbase på platået."
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
-msgstr ""
+msgstr "Bygg defensive bygninger."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
-msgstr ""
+msgstr "ALFABASEOPPDRAG: Motangrep"
 
 #: data/base/messages/strings/cam1strings.txt:53
 msgid "Enemy forces are approaching from the east and north."
-msgstr ""
+msgstr "Fiendestyrker nærmer seg fra øst og nord."
 
 #: data/base/messages/strings/cam1strings.txt:54
 msgid "Hold the bases and repulse any attacks."
-msgstr ""
+msgstr "Hold basene og driv tilbake angriperne."
 
 #: data/base/messages/strings/cam1strings.txt:56
 msgid "ALPHA BASE MISSION: Incoming Transmission"
-msgstr ""
+msgstr "ALFABASEOPPDRAG: Innkommende Overføring"
 
 #: data/base/messages/strings/cam1strings.txt:57
 msgid "We are detecting enemy forces at these locations."
-msgstr ""
+msgstr "Vi har oppdaget fiendestyrker på disse plassene."
 
 #: data/base/messages/strings/cam1strings.txt:58
 msgid "This is our chance to defeat the New Paradigm and destroy their base."
-msgstr ""
+msgstr "Dette er vår sjanse til å beseire den Nye Paradigmen og ødelegge basen deres."
 
 #: data/base/messages/strings/cam1strings.txt:66
 msgid "Congratulations Commander."
-msgstr ""
+msgstr "Gratulerer Kommandør."
 
 #: data/base/messages/strings/cam1strings.txt:67
 msgid "We now have a further task for you."
-msgstr ""
+msgstr "Vi har enda en oppgave til deg."
 
 #: data/base/messages/strings/cam1strings.txt:70
 msgid "ALPHA BASE MISSION: Locate and Recover Artifacts"
-msgstr ""
+msgstr "ALFABASEOPPDRAG: Lokaliser og bring tilbake artefakter"
 
 #: data/base/messages/strings/cam1strings.txt:71
 msgid "The first two zones are now secure."
-msgstr ""
+msgstr "De to første sonene er nå sikre."
 
 #: data/base/messages/strings/cam1strings.txt:75
 msgid "PROJECT TEAM UPDATES"
-msgstr ""
+msgstr "PROSJEKT TEAMOPPDATERING"
 
 #: data/base/messages/strings/cam1strings.txt:78
 msgid "TEAM BETA UPDATE"
-msgstr ""
+msgstr "TEAM BETA OPPDATERING"
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "Vi har bragt tilbake noen artefakter."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "Det er en bedre utrustet styrke i dette området."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
-msgstr ""
+msgstr "TEAM GAMMA OPPDATERING"
 
 #: data/base/messages/strings/cam1strings.txt:84
 msgid "Nothing to report."
-msgstr ""
+msgstr "Ingenting å rapportere."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "Vi oppdaget ingen artefakter og møtte ingen fiender."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
-msgstr ""
+msgstr "ALFABASE INTELLIGENSRAPPORT: Fiendeangrep"
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "Vi har oppdaget en fiendtlig angrepsstyrke på denne plassen."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
-msgstr ""
+msgstr "HOVEDMÅL"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr ""
+msgstr "Denne bygningen er ditt primære mål."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Søk etter og bring tilbake alle artefakter her."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
-msgstr ""
+msgstr "FIENDE LS"
 
 #: data/base/messages/strings/cam1strings.txt:98
 msgid "Destroy this LZ to prevent enemy landings."
-msgstr ""
+msgstr "Ødelegg denne LS for å hindre fiender i å lande."
 
 #: data/base/messages/strings/cam1strings.txt:101
 msgid "ALPHA BASE INTELLIGENCE REPORT: NEXUS"
-msgstr ""
+msgstr "ALFABASE INTELLIGENSRAPPORT: NEXUS"
 
 #: data/base/messages/strings/cam1strings.txt:102
 msgid "New objective."
@@ -272,840 +272,840 @@ msgstr "Nytt mål."
 
 #: data/base/messages/strings/cam1strings.txt:103
 msgid "We have detected and isolated an intruder program."
-msgstr ""
+msgstr "Vi har oppdaget og isolert et inntrengerprogram."
 
 #: data/base/messages/strings/cam1strings.txt:108
 msgid "Supplemental"
-msgstr ""
+msgstr "Supplerende"
 
 #: data/base/messages/strings/cam1strings.txt:109
 msgid "The synaptic link technology was at this location but was removed."
-msgstr ""
+msgstr "Synapselink-teknologien var her, men har blitt fjernet."
 
 #: data/base/messages/strings/cam1strings.txt:111
 msgid "Establish a forward base then continue the search for the synaptic link."
-msgstr ""
+msgstr "Etabler en fremoverbase og fortsett søket etter synapselinken."
 
 #: data/base/messages/strings/cam1strings.txt:114
 msgid "INCOMING TRANSMISSION"
-msgstr ""
+msgstr "INNKOMMENDE OVERFØRING"
 
 #: data/base/messages/strings/cam1strings.txt:115
 msgid "Decoding in progress....."
-msgstr ""
+msgstr "Dekoding pågår....."
 
 #: data/base/messages/strings/cam1strings.txt:119
 msgid "Commander."
-msgstr ""
+msgstr "Kommandør."
 
 #: data/base/messages/strings/cam1strings.txt:120
 msgid "We have decoded the incoming message to the New Paradigm..."
-msgstr ""
+msgstr "Vi har dekodet den innkommende meldingen til det Nye Paradigmet..."
 
 #: data/base/messages/strings/cam1strings.txt:123
 msgid "Destroy Enemy Base"
-msgstr ""
+msgstr "Ødelegge Fiendens Base"
 
 #: data/base/messages/strings/cam1strings.txt:124
 msgid "Assemble an attack force and board the transport."
-msgstr ""
+msgstr "Sett sammen en angrepsstyrke og gå om bord transporten."
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "Ødelegg basen og bring tilbake alle artefakter."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
-msgstr ""
+msgstr "Synapselink-teknologien har blitt bragt tilbake!"
 
 #: data/base/messages/strings/cam1strings.txt:129
 msgid "Initial research confirms it will be of great benefit to the Project."
-msgstr ""
+msgstr "Tidlig forskning bekrefter at det vil være til stor fordel for Prosjektet."
 
 #: data/base/messages/strings/cam1strings.txt:132
 msgid "Base Beta is under heavy attack, they may need assistance."
-msgstr ""
+msgstr "Base Beta er under hardt angrep, de kan trenge assistanse."
 
 #: data/base/messages/strings/cam1strings.txt:133
 msgid "We will send further updates as they arrive."
-msgstr ""
+msgstr "Vi sender ytterligere oppdateringer når de ankommer."
 
 #: data/base/messages/strings/cam1strings.txt:136
 msgid "This transmission was intercepted a few minutes ago."
-msgstr ""
+msgstr "Denne overføringen ble fanget opp for noen minutter siden."
 
 #: data/base/messages/strings/cam1strings.txt:137
 msgid "It originates from the east."
-msgstr ""
+msgstr "Den stammer fra øst."
 
 #: data/base/messages/strings/cam1strings.txt:140
 msgid "POWER MODULE ARTIFACT"
-msgstr ""
+msgstr "KRAFTMODUL-ARTEFAKT"
 
 #: data/base/messages/strings/cam1strings.txt:141
 msgid "Research the power module artifact."
-msgstr ""
+msgstr "Forsk på kraftmodul-artefakten."
 
 #: data/base/messages/strings/cam1strings.txt:142
 msgid "Then use a truck to upgrade your power generator with the module."
-msgstr ""
+msgstr "Bruk så en lastebil for å oppgradere din kraftgenerator med modulen."
 
 #: data/base/messages/strings/cam1strings.txt:145
 msgid "SCAVENGER BASE DETECTED"
-msgstr ""
+msgstr "PLYNDRERBASE OPPDAGET"
 
 #: data/base/messages/strings/cam1strings.txt:146
 msgid "Defeat the scavengers and retrieve any artifacts."
-msgstr ""
+msgstr "Beseire plyndrerne og bring tilbake alle artefakter."
 
 #: data/base/messages/strings/cam1strings.txt:150
 msgid "Congratulations on defeating the New Paradigm, this sector is now secure."
-msgstr ""
+msgstr "Gratulerer med å beseire det Nye Paradigmet, denne sektoren er nå sikret."
 
 #: data/base/messages/strings/cam1strings.txt:151
 msgid "The Nexus Intruder Program was in the New Paradigm system."
-msgstr ""
+msgstr "Nexus Inntrengerprogrammet var i det Nye Paradigmets system."
 
 #: data/base/messages/strings/cam1strings.txt:152
 msgid "We recorded two conversations with it, extracts follow..."
-msgstr ""
+msgstr "Vi tok opp to samtaler med det, uttrekk følger..."
 
 #: data/base/messages/strings/cam1strings.txt:155
 msgid "We'll keep you informed of further developments"
-msgstr ""
+msgstr "Vi holder deg orientert om videre utvikling"
 
 #: data/base/messages/strings/cam1strings.txt:157
 #: data/base/sequenceaudio/cam1/c001end.txt:7
 msgid "Commander you are to assist Team Beta"
-msgstr ""
+msgstr "Kommandør, du skal assistere Team Beta"
 
 #: data/base/messages/strings/cam2strings.txt:4
 #: data/base/sequenceaudio/cam2/c002.txa:8
 #: data/base/sequenceaudio/cam2/c002.txa:14
 msgid "BETA BASE MISSION: Eastern Sector"
-msgstr ""
+msgstr "BETABASEOPPDRAG: Østre Sektor"
 
 #: data/base/messages/strings/cam2strings.txt:5
 #: data/base/sequenceaudio/cam2/c002.txa:9
 msgid "Upon arrival you are to assume command of the base."
-msgstr ""
+msgstr "Ved ankomst skal du ta kommando av basen."
 
 #: data/base/messages/strings/cam2strings.txt:6
 msgid "You must defend it and hold it."
-msgstr ""
+msgstr "Du må forsvare og holde den."
 
 #: data/base/messages/strings/cam2strings.txt:9
 #: data/base/sequenceaudio/cam2/c002.txa:16
 msgid "BETA BASE MISSION: Defend and Fortify"
-msgstr ""
+msgstr "BETABASEOPPDRAG: Beskytt og Forsterk"
 
 #: data/base/messages/strings/cam2strings.txt:10
 #: data/base/messages/strings/cam2strings.txt:33
 #: data/base/sequenceaudio/cam2/c002.txa:17
 msgid "Be sure to fortify the perimeter and establish anti-aircraft defenses."
-msgstr ""
+msgstr "Sørg for å forsterke området og etabler et luftvern."
 
 #: data/base/messages/strings/cam2strings.txt:11
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr ""
+msgstr "Nye teknologier er tilgjengelige."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
-msgstr ""
+msgstr "Vi oppdager for øyeblikket kodede bitstream-signaler."
 
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr ""
+msgstr "Dekoder..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Transport Nede"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
-msgstr ""
+msgstr "Transporten vår som fraktet enheter fra team Alfabase har blitt skutt ned."
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
+msgstr "Det er under angrep av Kollektivet på denne plasseringen."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
+msgstr "Sett sammen et redningslag for å bringe tilbake transporten og lasten."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr ""
+msgstr "BRIEFING I LUFTA"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
-msgstr ""
+msgstr "Team Beta søker etter Vertikal Takeoff- og Landingsteknologi (VTOL)."
 
 #: data/base/messages/strings/cam2strings.txt:29
 msgid "It's believed to be at a pre-Collapse airbase in this area."
-msgstr ""
+msgstr "Det antas å være en luftbase fra pre-Kollapsen i dette området."
 
 #: data/base/messages/strings/cam2strings.txt:32
 msgid "Team Beta under heavy attack"
-msgstr ""
+msgstr "Team Beta er under hardt angrep"
 
 #: data/base/messages/strings/cam2strings.txt:37
 msgid "BETA BASE MISSION: Hold at all costs"
-msgstr ""
+msgstr "BETABASEOPPDRAG: Hold, koste hva det koste vil"
 
 #: data/base/messages/strings/cam2strings.txt:38
 msgid "We are detecting coded bitstream signals from the Collective."
-msgstr ""
+msgstr "Vi oppdager kodede bitstream-signaler fra Kollektivet."
 
 #: data/base/messages/strings/cam2strings.txt:42
 msgid "BETA BASE MISSION: Hold At All Costs"
-msgstr ""
+msgstr "BETABASEOPPDRAG: Hold, koste hva det koste vil"
 
 #: data/base/messages/strings/cam2strings.txt:43
 msgid "We are detecting ground and aerial forces from the north."
-msgstr ""
+msgstr "Vi oppdager land- og luftstyrker fra nord."
 
 #: data/base/messages/strings/cam2strings.txt:44
 msgid "Hold your position and repulse these attacks, then eradicate the enemy's northern base."
-msgstr ""
+msgstr "Hold posisjonen og slå disse angrepene tilbake. Utslett deretter fiendens nordlige base."
 
 #: data/base/messages/strings/cam2strings.txt:47
 msgid "TRANSPORT MISSION: Intercept convoy."
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Avskjær konvoi."
 
 #: data/base/messages/strings/cam2strings.txt:48
 msgid "Data from the Collective's base indicates the presence of the NEXUS intruder program."
-msgstr ""
+msgstr "Data fra Kollektivets base indikerer tilstedeværelsen av NEXUS inntrengerprogram."
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "Før NEXUS gikk over til offline fikk vi tilgang til følgende."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
-msgstr ""
+msgstr "En fiendekommandør henter en forsendelse fra NEXUS på denne plasseringen."
 
 #: data/base/messages/strings/cam2strings.txt:52
 msgid "Once at the LZ, eradicate the enemy commander and recover the shipment."
-msgstr ""
+msgstr "Når du ankommer LS, utslett fiendekommandøren og hent forsendelsen."
 
 #: data/base/messages/strings/cam2strings.txt:53
 msgid "Then return to the LZ."
-msgstr ""
+msgstr "Returner deretter til LS."
 
 #: data/base/messages/strings/cam2strings.txt:55
 msgid "Disturbing news regarding NASDA."
-msgstr ""
+msgstr "Forstyrrende nyheter angående NASDA."
 
 #: data/base/messages/strings/cam2strings.txt:58
 #: data/base/messages/strings/cam2strings.txt:63
 msgid "TRANSPORT MISSION: Search for and Destroy Convoy"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Søk etter og Ødelegg Konvoi"
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr ""
+msgstr "Forsendelsen du hentet inn var en avledning."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
-msgstr ""
+msgstr "Vi har oppdaget enda en konvoi som følger elven."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr ""
+msgstr "Du skal avskjære konvoien og hente inn lasten."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
-msgstr ""
+msgstr "Fiende-VTOLer flyr mest sannsynlig i nærheten som eskorte."
 
 #: data/base/messages/strings/cam2strings.txt:68
 #: data/base/messages/strings/cam2strings.txt:72
 msgid "TRANSPORT MISSION: Rescue civilians from Containment Camp"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Redd sivilister fra Konsentrasjonsleir"
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr ""
+msgstr "Kollektivet behandler og utrydder sivilister i denne basen."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
-msgstr ""
+msgstr "Du skal redde sivilistene."
 
 #: data/base/messages/strings/cam2strings.txt:74
 msgid "Then destroy the camp."
-msgstr ""
+msgstr "Ødelegg deretter leiren."
 
 #: data/base/messages/strings/cam2strings.txt:77
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs."
-msgstr ""
+msgstr "BETABASEOPPDRAG: Ødelegg Fiendens Luftbase og Hent Inn VTOLer."
 
 #: data/base/messages/strings/cam2strings.txt:78
 msgid "Analysis of flight paths indicate that The Collective's VTOLs originate from here."
-msgstr ""
+msgstr "Analyse av flybaner indikerer at Kollektivets VTOLer stammer herfra."
 
 #: data/base/messages/strings/cam2strings.txt:81
 msgid "BETA BASE MISSION: Destroy Enemy Air Base and Recover VTOLs"
-msgstr ""
+msgstr "BETABASEOPPDRAG: Ødelegg Fiendens Luftbase og Hent Inn VTOLer"
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "Plasseringen på fiendens luftbase er her; dette er ditt hobedmål."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
-msgstr ""
+msgstr "Utrydd alle Kollektivets styrker og bring tilbake alle artefakter."
 
 #: data/base/messages/strings/cam2strings.txt:86
 #: data/base/messages/strings/cam2strings.txt:91
 msgid "SECONDARY MISSION: Destroy or Drive Off Enemy Transport"
-msgstr ""
+msgstr "SIDEOPPDRAG: Ødelegg eller Avkjør Fiendens Transport"
 
 #: data/base/messages/strings/cam2strings.txt:87
 msgid "The Collective are rounding up all civilians in this area."
-msgstr ""
+msgstr "Kollektivet samler alle sivilister i dette området."
 
 #: data/base/messages/strings/cam2strings.txt:88
 msgid "They are then flying them to an unknown location."
-msgstr ""
+msgstr "Så flyr de dem til et ukjent sted."
 
 #: data/base/messages/strings/cam2strings.txt:92
 msgid "Destroy or drive off The Collective's transport."
-msgstr ""
+msgstr "Ødelegg eller avkjør Kollektivets transport."
 
 #: data/base/messages/strings/cam2strings.txt:93
 msgid "Rescue as many civilians as possible."
-msgstr ""
+msgstr "Redde så mange sivile som mulig."
 
 #: data/base/messages/strings/cam2strings.txt:96
 #: data/base/messages/strings/cam2strings.txt:101
 msgid "TRANSPORT MISSION: Destroy Reactor"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Ødelegg Reaktor"
 
 #: data/base/messages/strings/cam2strings.txt:97
 msgid "The Collective are searching for knowledge of nuclear reactors."
-msgstr ""
+msgstr "Kollektivet leter etter kunnskap om kjernereaktorer."
 
 #: data/base/messages/strings/cam2strings.txt:98
 msgid "They must be stopped."
-msgstr ""
+msgstr "De må stoppes."
 
 #: data/base/messages/strings/cam2strings.txt:102
 msgid "Proceed from the LZ to the reactor and destroy it."
-msgstr ""
+msgstr "Fortsett fra LS til reaktoren og ødelegg den."
 
 #: data/base/messages/strings/cam2strings.txt:103
 msgid "Do not allow the Collective to bring the reactor on-line."
-msgstr ""
+msgstr "Ikke la Kollektivet sette reaktoren til online."
 
 #: data/base/messages/strings/cam2strings.txt:106
 msgid "BETA BASE MISSION: Capture NASDA Central"
-msgstr ""
+msgstr "BETABASEOPPDRAG: Ta over NASDA-sentral"
 
 #: data/base/messages/strings/cam2strings.txt:107
 msgid "Capture NASDA central before NEXUS and the Collective can use it."
-msgstr ""
+msgstr "Ta over NASDA-sentral før NEXUS og Kollektivet kan bruke det."
 
 #: data/base/messages/strings/cam2strings.txt:111
 #: data/base/messages/strings/cam2strings.txt:116
 #: data/base/messages/strings/cam2strings.txt:121
 msgid "TRANSPORT MISSION: Satellite Uplink Site"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Satellittkommunikasjonsstasjon"
 
 #: data/base/messages/strings/cam2strings.txt:112
 msgid "NEXUS is searching for still functioning memory banks."
-msgstr ""
+msgstr "NEXUS leter etter funksjonelle minnebanker."
 
 #: data/base/messages/strings/cam2strings.txt:113
 msgid "Part of its consciousness has moved to a remote NASDA control-site."
-msgstr ""
+msgstr "Deler av dets bevissthet har flyttet seg til et eksternt NASDA kontrollsted."
 
 #: data/base/messages/strings/cam2strings.txt:117
 msgid "We are detecting transmissions from this site that are reaching high orbit."
-msgstr ""
+msgstr "Vi oppdager overføringer fra dette området som når ut i høy bane."
 
 #: data/base/messages/strings/cam2strings.txt:118
 msgid "NEXUS has now reconnected itself with the NASDA satellites."
-msgstr ""
+msgstr "NEXUS har nå koblet seg tilbake til NASDA-satellittene."
 
 #: data/base/messages/strings/cam2strings.txt:122
 msgid "Use the transport to carry a strike force to this site."
-msgstr ""
+msgstr "Bruk transporten for å bringe en kampstyrke til denne plassen."
 
 #: data/base/messages/strings/cam2strings.txt:123
 msgid "Destroy the site and return to your base."
-msgstr ""
+msgstr "Ødelegg stedet og dra tilbake til basen din."
 
 #: data/base/messages/strings/cam2strings.txt:126
 msgid "TRANSPORT MISSION: Destroy Enemy SAM Sites"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Ødelegg fiendens luftvernmissilområdet"
 
 #: data/base/messages/strings/cam2strings.txt:127
 msgid "If you are to escape, eradicate the surface-to-air missile sites around your base."
-msgstr ""
+msgstr "Hvis du vil rømme må du ødelegge luftvernmissilområdene rundt basen din."
 
 #: data/base/messages/strings/cam2strings.txt:128
 msgid "Fly to the LZ, then head overland to destroy the SAM sites."
-msgstr ""
+msgstr "Fly til LS, reis så over landet for å ødelegge luftvernmissilområdene."
 
 #: data/base/messages/strings/cam2strings.txt:131
 #: data/base/messages/strings/cam2strings.txt:136
 msgid "TRANSPORT MISSION: Establish Safe Haven"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Etabler en trygg havn"
 
 #: data/base/messages/strings/cam2strings.txt:132
 msgid "We can confirm a missile is heading for Alpha Base."
-msgstr ""
+msgstr "Vi kan bekrefte at et missil er på vet mot Alfabasen."
 
 #: data/base/messages/strings/cam2strings.txt:133
 msgid "You are to establish a safe haven for evacuation of Beta Base."
-msgstr ""
+msgstr "Du skal etablere en trygg havn for evakuering av Betabasen."
 
 #: data/base/messages/strings/cam2strings.txt:137
 msgid "Eradicate any enemy and secure the area."
-msgstr ""
+msgstr "Utslett alle fiender og sikre området."
 
 #: data/base/messages/strings/cam2strings.txt:138
 msgid "Once a safe haven is established, return to the LZ for further orders."
-msgstr ""
+msgstr "Når en trygg havn er etablert, returner til LS for videre ordre."
 
 #: data/base/messages/strings/cam2strings.txt:141
 #: data/base/messages/strings/cam2strings.txt:146
 #: data/base/messages/strings/cam2strings.txt:151
 msgid "BETA BASE MISSION: Evacuate!"
-msgstr ""
+msgstr "BETABASEOPPDRAG: Evakuer!"
 
 #: data/base/messages/strings/cam2strings.txt:142
 msgid "Commander, we have grave news."
-msgstr ""
+msgstr "Kommandør, vi har dårlige nyheter."
 
 #: data/base/messages/strings/cam2strings.txt:143
 msgid "Alpha base has been destroyed by nuclear missile attack."
-msgstr ""
+msgstr "Alfabasen har blitt ødelagt av et atommissilangrep."
 
 #: data/base/messages/strings/cam2strings.txt:147
 msgid "The Collective are unaware of the nuclear attack and have air units heading for your base."
-msgstr ""
+msgstr "Kollektivet vet ikke om atomangrepet og har luftstyrker på vei mot din base."
 
 #: data/base/messages/strings/cam2strings.txt:148
 msgid "This message was intercepted a few moments ago..."
-msgstr ""
+msgstr "Denne beskjeden ble fanget opp for litt siden..."
 
 #: data/base/messages/strings/cam2strings.txt:152
 msgid "You must transport as many of your forces as possible."
-msgstr ""
+msgstr "Du må transportere så mange som mulig av dine styrker."
 
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "Lykke til, kommandør."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
 #: data/base/sequenceaudio/cam3/c003.txa:14
 msgid "TRANSPORT MISSION: Northern Sector"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Nordre Sektor"
 
 #: data/base/messages/strings/cam3strings.txt:5
 #: data/base/sequenceaudio/cam3/c003.txa:5
 msgid "Congratulations on your successful evacuation of Beta Base."
-msgstr ""
+msgstr "Gratulerer med en vellykket evakuering av Betabasen."
 
 #: data/base/messages/strings/cam3strings.txt:6
 #: data/base/sequenceaudio/cam3/c003.txa:6
 msgid "NEXUS has gained access to nuclear weapons and is determined to destroy the Project."
-msgstr ""
+msgstr "NEXUS har skaffet seg tilgang til atomvåpen og har bestemt seg for å ødelegge Prosjektet."
 
 #: data/base/messages/strings/cam3strings.txt:9
 msgid "Take your forces to the Northern Sector"
-msgstr ""
+msgstr "Ta dine styrker til Nordre Sektor"
 
 #: data/base/messages/strings/cam3strings.txt:10
 #: data/base/sequenceaudio/cam3/c003.txa:15
 msgid "Once at the mountains secure an LZ. Then establish a forward base."
-msgstr ""
+msgstr "Sikre en LS når du når fjellene. Etabler deretter en fremoverbase."
 
 #: data/base/messages/strings/cam3strings.txt:11
 #: data/base/sequenceaudio/cam3/c003.txa:16
 msgid "Team Gamma will contact you there."
-msgstr ""
+msgstr "Team Gamma vil kontakte deg der."
 
 #: data/base/messages/strings/cam3strings.txt:14
 msgid "TRANSPORT MISSION: Establish A Forward Base"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Etabler en fremoverbase"
 
 #: data/base/messages/strings/cam3strings.txt:15
 #: data/base/sequenceaudio/cam3/c003.txt:7
 msgid "Commander, the success of the Project lies with you."
-msgstr ""
+msgstr "Kommandør, Prosjektets suksess ligger i dine hender."
 
 #: data/base/messages/strings/cam3strings.txt:16
 msgid "Secure an LZ, then establish a forward base."
-msgstr ""
+msgstr "Sikre en LS og etabler en fremoverbase."
 
 #: data/base/messages/strings/cam3strings.txt:19
 #: data/base/messages/strings/cam3strings.txt:28
 msgid "TRANSPORT MISSION: Missile Launch Site Coordinates"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Koordinator til sted for missilavfyring"
 
 #: data/base/messages/strings/cam3strings.txt:20
 msgid "We have located the site of the missile launches."
-msgstr ""
+msgstr "Vi har funnet stedet for missilavfyring."
 
 #: data/base/messages/strings/cam3strings.txt:21
 msgid "There were one or more missiles at this NASDA site."
-msgstr ""
+msgstr "Det var en eller flere missiler på dette NASDA-stedet."
 
 #: data/base/messages/strings/cam3strings.txt:24
 msgid "We are transmitting coordinates of an LZ near the silos."
-msgstr ""
+msgstr "Vi sender koordinatene til en LS nær siloene."
 
 #: data/base/messages/strings/cam3strings.txt:25
 #: data/base/messages/strings/cam3strings.txt:61
 #: data/base/sequenceaudio/cam3/cam32pl2.txt:1
 msgid "Coordinate Download Completed."
-msgstr ""
+msgstr "Nedlastning av koordinater fullført."
 
 #: data/base/messages/strings/cam3strings.txt:29
 msgid "Secure your LZ, then head overland to destroy the missile silo."
-msgstr ""
+msgstr "Sikre din LS, reis så over landet for å ødelegge missilsiloen."
 
 #: data/base/messages/strings/cam3strings.txt:33
 #: data/base/messages/strings/cam3strings.txt:38
 msgid "NORTHERN SECTOR MISSION: Nuclear Blast"
-msgstr ""
+msgstr "NORDRE SEKTOR OPPDRAG: Atomsmell"
 
 #: data/base/messages/strings/cam3strings.txt:34
 msgid "All units must escape the area before the warhead detonates."
-msgstr ""
+msgstr "Alle enheter må flykte fra området før stridshodet detonerer."
 
 #: data/base/messages/strings/cam3strings.txt:35
 msgid "Air-lift by transport is not possible. You'll have to head overland."
-msgstr ""
+msgstr "Å hentes opp i lufta med transport er umulig. Du må dra over land."
 
 #: data/base/messages/strings/cam3strings.txt:39
 msgid "The mountain range to the east should shield you from the blast."
-msgstr ""
+msgstr "Fjellkjeden i øst burde skjerme dere fra smellet."
 
 #: data/base/messages/strings/cam3strings.txt:40
 msgid "The valley is your only chance of escape."
-msgstr ""
+msgstr "Dalen er deres eneste sjanse for å rømme."
 
 #: data/base/messages/strings/cam3strings.txt:43
 msgid "AWAY TEAM UPDATE"
-msgstr ""
+msgstr "BORTETEAM OPPDATERING"
 
 #: data/base/messages/strings/cam3strings.txt:44
 msgid "All communication with the away team was lost after the nuclear explosions."
-msgstr ""
+msgstr "All kommunikasjon med borteteamet gikk tapt etter atomeksplosjonen."
 
 #: data/base/messages/strings/cam3strings.txt:45
 msgid "Their last transmission indicated they were heading back to base."
-msgstr ""
+msgstr "Deres siste overføring indikerer at de var på vei tilbake til basen."
 
 #: data/base/messages/strings/cam3strings.txt:48
 msgid "NORTHERN SECTOR MISSION: Assist Team Gamma"
-msgstr ""
+msgstr "NORDRE SEKTOR OPPDRAG: Assister Team Gamma"
 
 #: data/base/messages/strings/cam3strings.txt:49
 msgid "You are to assist Team Gamma."
-msgstr ""
+msgstr "Du skal assistere Team Gamma."
 
 #: data/base/messages/strings/cam3strings.txt:50
 msgid "On reaching Gamma Base, help secure the area from further NEXUS attacks."
-msgstr ""
+msgstr "Når du når Gammabasen skal du hjelpe til å sikre området fra videre NEXUS-angrep."
 
 #: data/base/messages/strings/cam3strings.txt:53
 msgid "NEXUS DEFEATED"
-msgstr ""
+msgstr "NEXUS BESEIRET"
 
 #: data/base/messages/strings/cam3strings.txt:54
 msgid "Commander, we have defeated NEXUS."
-msgstr ""
+msgstr "Kommandør, vi har beseiret NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:55
 msgid "Unfortunately, our systems' performance has been affected by NEXUS. We are trying to rectify this."
-msgstr ""
+msgstr "Dessverre har ytelsen til våre systemer blitt påvirket av NEXUS. Vi prøver å rette opp i dette."
 
 #: data/base/messages/strings/cam3strings.txt:58
 msgid "We are currently receiving this transmission."
-msgstr ""
+msgstr "Vi mottar for øyeblikket denne overføringen."
 
 #: data/base/messages/strings/cam3strings.txt:64
 msgid "TRANSPORT MISSION: Team Alpha Detected"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Team Alfa Oppdaget"
 
 #: data/base/messages/strings/cam3strings.txt:65
 msgid "Take a scout force to these coordinates and evaluate the situation."
-msgstr ""
+msgstr "Ta en speidestyrke til disse koordinatene og evaluer situasjonen."
 
 #: data/base/messages/strings/cam3strings.txt:66
 msgid "Determine whether they are Team Alpha. If so, rescue and escort them back to the LZ."
-msgstr ""
+msgstr "Finn ut om de er Team Alfa. Hvis de er det, redd dem og eskorter dem tilbake til LS."
 
 #: data/base/messages/strings/cam3strings.txt:68
 msgid "This group are part of Team Alpha, Rescue them and escort them to the LZ."
-msgstr ""
+msgstr "Denne gruppen er en del av Team Alfa. Redd dem og eskorter dem til LS."
 
 #: data/base/messages/strings/cam3strings.txt:71
 msgid "NORTHERN SECTOR MISSION: Team Alpha Debrief"
-msgstr ""
+msgstr "NORDRE SEKTOR OPPDRAG: Team Alfa Debrief"
 
 #: data/base/messages/strings/cam3strings.txt:72
 msgid "Team Alpha power transfer in progress."
-msgstr ""
+msgstr "Team Alfa kraftoverføring pågår."
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
+msgstr "Kommandør, etter du forlot Vestre Sektor fant vi denne artefakten."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
-msgstr ""
+msgstr "Fordelene ved å forske på den kan være store."
 
 #: data/base/messages/strings/cam3strings.txt:79
 msgid "Enemy forces are ....... from these coordinates."
-msgstr ""
+msgstr "Fiendestyrker er ....... fra disse koordinatene."
 
 #: data/base/messages/strings/cam3strings.txt:80
 msgid "Defend the base and ........ the ......."
-msgstr ""
+msgstr "Forsvar basen og ........ ......."
 
 #: data/base/messages/strings/cam3strings.txt:81
 msgid "Search and destroy ...."
-msgstr ""
+msgstr "Søk og ødelegg ...."
 
 #: data/base/messages/strings/cam3strings.txt:84
 msgid "TRANSPORT MISSION: Ambush NEXUS Forces"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Bakholdsangrip NEXUS-styrker"
 
 #: data/base/messages/strings/cam3strings.txt:85
 msgid "Commander, your decisive actions halted the spread of NEXUS."
-msgstr ""
+msgstr "Kommandør, dine avgjørende tiltak stanset spredningen av NEXUS."
 
 #: data/base/messages/strings/cam3strings.txt:86
 msgid "Before NEXUS was expelled, we intercepted this message - Decoding completed."
-msgstr ""
+msgstr "Før NEXUS ble utvist fikk vi tak i denne meldingen - dekoding fullført."
 
 #: data/base/messages/strings/cam3strings.txt:89
 msgid "A NEXUS task force is heading for these coordinates."
-msgstr ""
+msgstr "En NEXUS innsatsstyrke er på vei til disse koordinatene."
 
 #: data/base/messages/strings/cam3strings.txt:90
 msgid "You have an opportunity to destroy NEXUS before they get there."
-msgstr ""
+msgstr "Du har en mulighet til å ødelegge NEXUS før de ankommer."
 
 #: data/base/messages/strings/cam3strings.txt:91
 msgid "Take an attack force and ambush NEXUS task force at ....... the  ......."
-msgstr ""
+msgstr "Ta en angrepsstyrke og bakholdsangrip NEXUS' innsatsstyrke ved ......."
 
 #: data/base/messages/strings/cam3strings.txt:94
 msgid "TRANSPORT MISSION: Away Team"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Borteteam"
 
 #: data/base/messages/strings/cam3strings.txt:95
 msgid "Commander, your attack on ...."
-msgstr ""
+msgstr "Kommandør, ditt angrep på ...."
 
 #: data/base/messages/strings/cam3strings.txt:98
 msgid "NEXUS exiting system."
-msgstr ""
+msgstr "NEXUS går ut av system."
 
 #: data/base/messages/strings/cam3strings.txt:101
 msgid "Incoming transmission from away team."
-msgstr ""
+msgstr "Innkommende overføring fra borteteam."
 
 #: data/base/messages/strings/cam3strings.txt:104
 msgid "Commander, we are attempting to return to base."
-msgstr ""
+msgstr "Kommandør, vi forsøker å returnere til basen."
 
 #: data/base/messages/strings/cam3strings.txt:105
 msgid "This is our current position."
-msgstr ""
+msgstr "Dette er vår nåværende posisjon."
 
 #: data/base/messages/strings/cam3strings.txt:106
 msgid "Take control of our forces and lead us."
-msgstr ""
+msgstr "Ta kontroll over våre styrker og led oss."
 
 #: data/base/messages/strings/cam3strings.txt:109
 msgid "Control transfer successful."
-msgstr ""
+msgstr "Kontrolloverføringen vellykket."
 
 #: data/base/messages/strings/cam3strings.txt:110
 msgid "Entering new zone."
-msgstr ""
+msgstr "Går inn i ny sone."
 
 #: data/base/messages/strings/cam3strings.txt:113
 msgid "Incoming Transmission..."
-msgstr ""
+msgstr "Innkommende overføring..."
 
 #: data/base/messages/strings/cam3strings.txt:116
 msgid "Elements of Team Gamma have contacted us."
-msgstr ""
+msgstr "Elementer i Team Gamma har kontaktet oss."
 
 #: data/base/messages/strings/cam3strings.txt:117
 msgid "They claim to be free of NEXUS, and offer their base as a site of operations."
-msgstr ""
+msgstr "De påstår de er frie fra NEXUS og tilbyr sin base som operasjonsområde."
 
 #: data/base/messages/strings/cam3strings.txt:118
 msgid "Base coordinates download in progress."
-msgstr ""
+msgstr "Nedlastning av basekoordinater pågår."
 
 #: data/base/messages/strings/cam3strings.txt:121
 msgid "NORTHERN SECTOR MISSION: Laser Satellites"
-msgstr ""
+msgstr "NORDRE SEKTOR OPPDRAG: Lasersatellitter"
 
 #: data/base/messages/strings/cam3strings.txt:122
 msgid "We are detecting strong energy surges from orbit."
-msgstr ""
+msgstr "Vi oppdager sterke energiøkninger fra atmosfæren."
 
 #: data/base/messages/strings/cam3strings.txt:123
 msgid "The laser satellites are charged and moving towards our position."
-msgstr ""
+msgstr "Lasersatellittene er ladet opp og beveger seg mot vår posisjon."
 
 #: data/base/messages/strings/cam3strings.txt:126
 msgid "The 2nd Team Gamma base is at this location."
-msgstr ""
+msgstr "Den andre Team Gamma basen er på denne plassen."
 
 #: data/base/messages/strings/cam3strings.txt:127
 msgid "We have limited time to evacuate this base and move to Gamma Base."
-msgstr ""
+msgstr "Vi har begrenset tid til å evakuere denne basen og flytte til Gamma Base."
 
 #: data/base/messages/strings/cam3strings.txt:130
 msgid "The laser satellites are not functioning properly, they are misfiring."
-msgstr ""
+msgstr "Lasersatellittene fungerer ikke som de skal, de feilskyter."
 
 #: data/base/messages/strings/cam3strings.txt:131
 msgid "They are directing their fire towards this position."
-msgstr ""
+msgstr "De sikter skuddene sine mot denne posisjonen."
 
 #: data/base/messages/strings/cam3strings.txt:132
 msgid "We will need to evacuate this base shortly."
-msgstr ""
+msgstr "Vi må evakuere denne basen innen kort tid."
 
 #: data/base/messages/strings/cam3strings.txt:135
 msgid "Team Gamma reports a missile silo at this location."
-msgstr ""
+msgstr "Team Gamma rapporterer en missilsilo på denne plassen."
 
 #: data/base/messages/strings/cam3strings.txt:136
 msgid "They believe that the silo contains missiles capable of reaching high orbit."
-msgstr ""
+msgstr "De tror siloen inneholder missiler som kan nå høyt i atmosfæren."
 
 #: data/base/messages/strings/cam3strings.txt:137
 msgid "Capture this silo at all costs."
-msgstr ""
+msgstr "Ta over denne siloen, koste hva det koste vil."
 
 #: data/base/messages/strings/cam3strings.txt:140
 msgid "Missile silos captured."
-msgstr ""
+msgstr "Missilsilo tatt over."
 
 #: data/base/messages/strings/cam3strings.txt:143
 #: data/base/messages/strings/cam3strings.txt:161
 msgid "NORTHERN SECTOR MISSION: Missile Codes"
-msgstr ""
+msgstr "NORDRE SEKTOR OPPDRAG: Missilkoder"
 
 #: data/base/messages/strings/cam3strings.txt:144
 msgid "Commander, there are missiles present at the silos."
-msgstr ""
+msgstr "Kommandør, det er missiler til stede i siloene."
 
 #: data/base/messages/strings/cam3strings.txt:145
 msgid "Nexus is preventing us from accessing the missile control code."
-msgstr ""
+msgstr "Nexus hindrer oss i å få tilgang til missilkontrollkoden."
 
 #: data/base/messages/strings/cam3strings.txt:148
 msgid "NEXUS is present in our systems."
-msgstr ""
+msgstr "NEXUS finnes i våre systemer."
 
 #: data/base/messages/strings/cam3strings.txt:149
 msgid "To defeat NEXUS we must research the Nexus Intruder Program."
-msgstr ""
+msgstr "For å bekjempe NEXUS må vi forske frem Nexus Inntrengerprogram."
 
 #: data/base/messages/strings/cam3strings.txt:150
 msgid "Assign this task to a research facility."
-msgstr ""
+msgstr "Tildel denne oppgaven til et forskningsanlegg."
 
 #: data/base/messages/strings/cam3strings.txt:153
 msgid "NEXUS forces detected at these locations."
-msgstr ""
+msgstr "NEXUS-styrker oppdaget på disse plassene."
 
 #: data/base/messages/strings/cam3strings.txt:157
 msgid "NEXUS has been eradicated from all Project systems."
-msgstr ""
+msgstr "NEXUS har blitt utryddet fra alle Prosjekt-systemer."
 
 #: data/base/messages/strings/cam3strings.txt:158
 msgid "We are attempting to access the missile control codes."
-msgstr ""
+msgstr "Vi prøver å få tilgang til missilkontrollkodene."
 
 #: data/base/messages/strings/cam3strings.txt:162
 msgid "A research facility is required to crack the code. Allocate one immediately."
-msgstr ""
+msgstr "Et forskningsanlegg krever for å knekke koden. Sett en opp umiddelbart."
 
 #: data/base/messages/strings/cam3strings.txt:163
 msgid "Protect the missile silos from NEXUS attacks."
-msgstr ""
+msgstr "Beskytt missilsiloen fra NEXUS-angrep."
 
 #: data/base/messages/strings/cam3strings.txt:166
 msgid "PROJECT UPDATE: 1st Level Missile Code Cracked."
-msgstr ""
+msgstr "PROSJEKTOPPDATERING: 1. Nivå Missilkode Knekt."
 
 #: data/base/messages/strings/cam3strings.txt:167
 msgid "Missile arming in progress."
-msgstr ""
+msgstr "Missilarmering pågår."
 
 #: data/base/messages/strings/cam3strings.txt:168
 msgid "More research is required to proceed further."
-msgstr ""
+msgstr "Mer forskning krever for å fortsette."
 
 #: data/base/messages/strings/cam3strings.txt:171
 msgid "PROJECT UPDATE: 2nd Level Missile Code Cracked."
-msgstr ""
+msgstr "PROSJEKTOPPDATERING: 2. Nivå Missilkode Knekt."
 
 #: data/base/messages/strings/cam3strings.txt:172
 msgid "Missile target programming in progress."
-msgstr ""
+msgstr "Programmering av missilsikte pågår."
 
 #: data/base/messages/strings/cam3strings.txt:173
 msgid "Once level 3 codes are cracked we initiate launch procedures."
-msgstr ""
+msgstr "Når nivå 3 kodene er knekt kan vi initiere avfyringsprosedyrer."
 
 #: data/base/messages/strings/cam3strings.txt:176
 msgid "PROJECT UPDATE: 3rd Level Missile Code Cracked."
-msgstr ""
+msgstr "PROSJEKTOPPDATERING: 3. Nivå Missilkode Knekt."
 
 #: data/base/messages/strings/cam3strings.txt:177
 msgid "Missile launch sequence initiated."
-msgstr ""
+msgstr "Missilavfyringssekvens startet."
 
 #: data/base/messages/strings/cam3strings.txt:180
 msgid "TRANSPORT MISSION: Attack NEXUS Final Base"
-msgstr ""
+msgstr "TRANSPORTOPPDRAG: Angrip NEXUS' Siste Base"
 
 #: data/base/messages/strings/cam3strings.txt:181
 msgid "We have located NEXUS' base at this location."
-msgstr ""
+msgstr "Vi har lokalisert NEXUS' base på denne plassen."
 
 #: data/base/messages/strings/cam3strings.txt:184
 msgid "This area contains numerous NEXUS structures."
-msgstr ""
+msgstr "Dette området har mange NEXUS-strukturer."
 
 #: data/base/messages/strings/cam3strings.txt:185
 msgid "We are certain that NEXUS's core systems are located here."
-msgstr ""
+msgstr "Vi er sikre på at NEXUS' kjernesystemer kan finnes her."
 
 #: data/base/messages/strings/cam3strings.txt:188
 msgid "Establish an LZ."
-msgstr ""
+msgstr "Etabler en LS."
 
 #: data/base/messages/strings/cam3strings.txt:189
 msgid "Begin your attacks on NEXUS. You must destroy his core systems."
-msgstr ""
+msgstr "Begynn angrepet på NEXUS. Du må ødelegge kjernesystemene."
 
 #: data/base/messages/strings/cam3strings.txt:192
 msgid "Incoming intelligence report... Team Gamma"
-msgstr ""
+msgstr "Innkommende informasjonsrapport... Team Gamma"
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
@@ -3647,7 +3647,7 @@ msgstr ""
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1107
+#: po/custom/fromJson.txt:1101
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr ""
 
@@ -3851,7 +3851,7 @@ msgstr ""
 #. ... + 4 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1101
+#: po/custom/fromJson.txt:1107
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr ""
 
@@ -3862,7 +3862,7 @@ msgstr ""
 #. ... + 29 refs
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:1210
+#: po/custom/fromJson.txt:1205
 msgid "Body Points: Very Low"
 msgstr ""
 
@@ -4170,7 +4170,7 @@ msgstr ""
 #: src/hci.cpp:1773
 #: src/hci/objects_stats.cpp:226
 #: src/hci/objects_stats.cpp:311
-#: src/intelmap.cpp:406
+#: src/intelmap.cpp:353
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
 #: src/multimenu.cpp:435
@@ -5598,63 +5598,63 @@ msgid "Command Turret IV"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:6
-#: src/multiint.cpp:1402
-#: src/multiint.cpp:1405
+#: src/multiint.cpp:1403
+#: src/multiint.cpp:1406
 msgid "Scavengers"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:7
-#: src/multiint.cpp:1407
+#: src/multiint.cpp:1408
 msgid "No Scavengers"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:12
-#: src/multiint.cpp:1415
+#: src/multiint.cpp:1416
 msgid "No Alliances"
 msgstr "Ingen allianser"
 
 #: data/mp/multiplay/script/rules/printsettings.js:13
-#: src/multiint.cpp:1416
+#: src/multiint.cpp:1417
 msgid "Allow Alliances"
 msgstr "Aktiver allianser"
 
 #: data/mp/multiplay/script/rules/printsettings.js:14
-#: src/multiint.cpp:1418
+#: src/multiint.cpp:1419
 msgid "Locked Teams"
 msgstr "Låste lag"
 
 #: data/mp/multiplay/script/rules/printsettings.js:15
-#: src/multiint.cpp:1417
+#: src/multiint.cpp:1418
 msgid "Locked Teams, No Shared Research"
 msgstr ""
 
 #: data/mp/multiplay/script/rules/printsettings.js:21
-#: src/multiint.cpp:1426
+#: src/multiint.cpp:1427
 msgid "Low Power Levels"
 msgstr "Lavt energinivå"
 
 #: data/mp/multiplay/script/rules/printsettings.js:22
-#: src/multiint.cpp:1427
+#: src/multiint.cpp:1428
 msgid "Medium Power Levels"
 msgstr "Middels energinivå"
 
 #: data/mp/multiplay/script/rules/printsettings.js:23
-#: src/multiint.cpp:1428
+#: src/multiint.cpp:1429
 msgid "High Power Levels"
 msgstr "Høyt energinivå"
 
 #: data/mp/multiplay/script/rules/printsettings.js:29
-#: src/multiint.cpp:1436
+#: src/multiint.cpp:1437
 msgid "Start with No Bases"
 msgstr "Start uten baser"
 
 #: data/mp/multiplay/script/rules/printsettings.js:30
-#: src/multiint.cpp:1437
+#: src/multiint.cpp:1438
 msgid "Start with Bases"
 msgstr "Start med baser"
 
 #: data/mp/multiplay/script/rules/printsettings.js:31
-#: src/multiint.cpp:1438
+#: src/multiint.cpp:1439
 msgid "Start with Advanced Bases"
 msgstr "Start med avanserte baser"
 
@@ -5739,11 +5739,6 @@ msgstr ""
 msgid "System locale"
 msgstr "Systemspråk"
 
-#: lib/netplay/netplay.cpp:335
-#: lib/netplay/netplay.cpp:1301
-msgid "Enter password here"
-msgstr ""
-
 #: lib/netplay/netplay.cpp:1204
 #, c-format
 msgid "Could not open required port (%s) on  (%s)"
@@ -5760,7 +5755,7 @@ msgid "Game configured port (%s) correctly on (%s)\n"
 "Your external IP is %s"
 msgstr ""
 
-#: lib/netplay/netplay.cpp:2005
+#: lib/netplay/netplay.cpp:2004
 msgid "No UPnP device found. Configure your router/firewall to open port 2100!"
 msgstr ""
 
@@ -5786,8 +5781,8 @@ msgid "Menu"
 msgstr ""
 
 #: lib/sound/cdaudio.cpp:63
-#: src/frontend.cpp:1966
-#: src/frontend.cpp:2009
+#: src/frontend.cpp:1967
+#: src/frontend.cpp:2011
 msgid "Campaign"
 msgstr ""
 
@@ -7257,7 +7252,7 @@ msgstr ""
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-#: po/custom/fromJson.txt:1204
+#: po/custom/fromJson.txt:1210
 msgid "Body Points: Very low"
 msgstr ""
 
@@ -10096,16 +10091,16 @@ msgid "Incendiary Howitzer Emplacement 2"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
-#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
-#: po/custom/fromJson.txt:3102
-msgid "Incendiary Howitzer Emplacement"
+#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+#: po/custom/fromJson.txt:3101
+msgid "Incendiary howitzer emplacement"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessagesall.json: $.RES_EMP_INH.text[1]
+#. data/mp/stats/research.json: $.R-Defense-Howitzer-Incendiary.name
+#. data/mp/stats/structure.json: $.Emplacement-Howitzer-Incendiary.name
 #: po/custom/fromJson.txt:3105
-msgid "Incendiary howitzer emplacement"
+msgid "Incendiary Howitzer Emplacement"
 msgstr ""
 
 #. TRANSLATORS:
@@ -11585,19 +11580,19 @@ msgid "New Systems Tower Available"
 msgstr ""
 
 #. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4224
+msgid "New Systems Turret Available For Design"
+msgstr ""
+
+#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4226
-msgid "New Systems Turret Available for Design"
-msgstr ""
-
-#. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
 #: po/custom/fromJson.txt:4230
-msgid "New Systems Turret Available For Design"
+msgid "New Systems Turret Available for Design"
 msgstr ""
 
 #. TRANSLATORS:
@@ -13393,17 +13388,17 @@ msgid "Synaptic Link Data Analysis Mk3"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
-#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
 #: po/custom/fromJson.txt:5430
-msgid "Synaptic Link Data Analysis"
+msgid "Synaptic link data analysis"
 msgstr ""
 
 #. TRANSLATORS:
-#. data/base/messages/resmessages1.json: $.RES_ST_RU1.text[1]
-#. data/mp/messages/resmessages1.json: $.RES_ST_RU1.text[1]
+#. data/base/stats/research.json: $.R-Struc-Research-Upgrade01.name
+#. data/mp/stats/research.json: $.R-Struc-Research-Upgrade01.name
 #: po/custom/fromJson.txt:5434
-msgid "Synaptic link data analysis"
+msgid "Synaptic Link Data Analysis"
 msgstr ""
 
 #. TRANSLATORS:
@@ -15169,7 +15164,7 @@ msgid "Player dropped"
 msgstr ""
 
 #: src/display3d.cpp:749
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Waiting for other players"
 msgstr ""
 
@@ -15183,50 +15178,50 @@ msgid "Setting zoom to %.0f"
 msgstr ""
 
 #. TRANSLATORS:	Refers to the loss of a single unit, known by its name
-#: src/droid.cpp:241
+#: src/droid.cpp:245
 #, c-format
 msgid "%s Lost!"
 msgstr ""
 
-#: src/droid.cpp:1099
+#: src/droid.cpp:1104
 msgid "Structure Restored"
 msgstr ""
 
-#: src/droid.cpp:1858
+#: src/droid.cpp:1863
 #, c-format
 msgid "Group %u selected - %u Unit"
 msgid_plural "Group %u selected - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:1867
+#: src/droid.cpp:1872
 #, c-format
 msgid "%u unit assigned to Group %u"
 msgid_plural "%u units assigned to Group %u"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:1878
+#: src/droid.cpp:1883
 #, c-format
 msgid "Centered on Group %u - %u Unit"
 msgid_plural "Centered on Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:1882
+#: src/droid.cpp:1887
 #, c-format
 msgid "Aligning with Group %u - %u Unit"
 msgid_plural "Aligning with Group %u - %u Units"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/droid.cpp:2964
+#: src/droid.cpp:2969
 msgid "Unit transfer failed -- unit limits exceeded"
 msgstr ""
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
-#: src/frontend.cpp:1901
+#: src/frontend.cpp:1902
 msgid "Normal"
 msgstr ""
 
@@ -15240,383 +15235,383 @@ msgstr ""
 msgid "Collective"
 msgstr ""
 
-#: src/frontend.cpp:148
+#: src/frontend.cpp:149
 msgid "Single Player"
 msgstr ""
 
-#: src/frontend.cpp:149
+#: src/frontend.cpp:150
 msgid "Multi Player"
 msgstr ""
 
-#: src/frontend.cpp:150
-#: src/frontend.cpp:284
+#: src/frontend.cpp:151
+#: src/frontend.cpp:285
 msgid "Tutorial"
 msgstr "Introduksjon"
 
-#: src/frontend.cpp:151
+#: src/frontend.cpp:152
 #: src/ingameop.cpp:242
 msgid "Options"
 msgstr "Alternativer"
 
-#: src/frontend.cpp:156
-#: src/frontend.cpp:160
+#: src/frontend.cpp:157
+#: src/frontend.cpp:161
 msgid "View Intro"
 msgstr ""
 
-#: src/frontend.cpp:161
+#: src/frontend.cpp:162
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:166
-#: src/frontend.cpp:170
+#: src/frontend.cpp:167
+#: src/frontend.cpp:171
 msgid "Continue Last Save"
 msgstr ""
 
-#: src/frontend.cpp:171
+#: src/frontend.cpp:172
 msgid "No last save available"
 msgstr ""
 
-#: src/frontend.cpp:173
+#: src/frontend.cpp:174
 msgid "Quit Game"
 msgstr "Avslutt"
 
-#: src/frontend.cpp:174
+#: src/frontend.cpp:175
 msgid "MAIN MENU"
 msgstr "HOVEDMENY"
 
-#: src/frontend.cpp:176
+#: src/frontend.cpp:177
 msgid "Official site: http://wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:177
+#: src/frontend.cpp:178
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr ""
 
-#: src/frontend.cpp:178
+#: src/frontend.cpp:179
 msgid "Donate: http://donations.wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:180
+#: src/frontend.cpp:181
 msgid "Help support the project with our server costs, Click this link."
 msgstr ""
 
-#: src/frontend.cpp:181
+#: src/frontend.cpp:182
 msgid "Chat with players on Discord or IRC"
 msgstr ""
 
-#: src/frontend.cpp:183
+#: src/frontend.cpp:184
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
 msgstr ""
 
-#: src/frontend.cpp:184
+#: src/frontend.cpp:185
 msgid "Check for a newer version"
 msgstr ""
 
-#: src/frontend.cpp:285
+#: src/frontend.cpp:286
 msgid "Fast Play"
 msgstr ""
 
-#: src/frontend.cpp:286
+#: src/frontend.cpp:287
 msgid "TUTORIALS"
 msgstr "INTRODUKSJON"
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:288
-#: src/frontend.cpp:346
-#: src/frontend.cpp:367
-#: src/frontend.cpp:576
-#: src/frontend.cpp:648
-#: src/frontend.cpp:828
-#: src/frontend.cpp:1040
-#: src/frontend.cpp:1546
-#: src/frontend.cpp:1838
-#: src/frontend.cpp:1979
-#: src/frontend.cpp:2006
+#: src/frontend.cpp:289
+#: src/frontend.cpp:347
+#: src/frontend.cpp:368
+#: src/frontend.cpp:577
+#: src/frontend.cpp:649
+#: src/frontend.cpp:829
+#: src/frontend.cpp:1041
+#: src/frontend.cpp:1547
+#: src/frontend.cpp:1839
+#: src/frontend.cpp:1980
+#: src/frontend.cpp:2008
 msgctxt "menu"
 msgid "Return"
 msgstr ""
 
-#: src/frontend.cpp:339
+#: src/frontend.cpp:340
 msgid "New Campaign"
 msgstr ""
 
-#: src/frontend.cpp:340
+#: src/frontend.cpp:341
 msgid "Start Skirmish Game"
 msgstr ""
 
-#: src/frontend.cpp:341
+#: src/frontend.cpp:342
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.cpp:342
+#: src/frontend.cpp:343
 msgid "Load Campaign Game"
 msgstr ""
 
-#: src/frontend.cpp:343
+#: src/frontend.cpp:344
 msgid "Load Skirmish Game"
 msgstr ""
 
-#: src/frontend.cpp:345
+#: src/frontend.cpp:346
 msgid "SINGLE PLAYER"
 msgstr "SOLOSPILL"
 
-#: src/frontend.cpp:350
-#: src/frontend.cpp:371
+#: src/frontend.cpp:351
+#: src/frontend.cpp:372
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:366
+#: src/frontend.cpp:367
 msgid "CAMPAIGNS"
 msgstr ""
 
-#: src/frontend.cpp:504
+#: src/frontend.cpp:505
 #: src/ingameop.cpp:1009
 msgid "Load Campaign Saved Game"
 msgstr ""
 
-#: src/frontend.cpp:510
+#: src/frontend.cpp:511
 #: src/ingameop.cpp:1013
 msgid "Load Skirmish Saved Game"
 msgstr ""
 
-#: src/frontend.cpp:571
+#: src/frontend.cpp:572
 msgid "MULTI PLAYER"
 msgstr "SAMSPILL"
 
-#: src/frontend.cpp:573
+#: src/frontend.cpp:574
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.cpp:574
+#: src/frontend.cpp:575
 msgid "Join Game"
 msgstr "Bli med i spill"
 
-#: src/frontend.cpp:579
+#: src/frontend.cpp:580
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:640
+#: src/frontend.cpp:641
 #: src/multiint.cpp:1325
 msgid "OPTIONS"
 msgstr "ALTERNATIVER"
 
-#: src/frontend.cpp:641
+#: src/frontend.cpp:642
 msgid "Game Options"
 msgstr "Spillalternativer"
 
-#: src/frontend.cpp:642
+#: src/frontend.cpp:643
 #: src/ingameop.cpp:562
 msgid "Graphics Options"
 msgstr "Grafikkalternativer"
 
-#: src/frontend.cpp:643
+#: src/frontend.cpp:644
 #: src/ingameop.cpp:565
 msgid "Video Options"
 msgstr ""
 
-#: src/frontend.cpp:644
+#: src/frontend.cpp:645
 msgid "Audio / Zoom Options"
 msgstr ""
 
-#: src/frontend.cpp:645
+#: src/frontend.cpp:646
 #: src/ingameop.cpp:572
 msgid "Mouse Options"
 msgstr ""
 
-#: src/frontend.cpp:646
+#: src/frontend.cpp:647
 #: src/ingameop.cpp:576
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.cpp:647
+#: src/frontend.cpp:648
 #: src/ingameop.cpp:579
 msgid "Music Manager"
 msgstr ""
 
-#: src/frontend.cpp:649
+#: src/frontend.cpp:650
 msgid "Open Configuration Directory"
 msgstr ""
 
-#: src/frontend.cpp:687
+#: src/frontend.cpp:688
 msgid "Failed to open configuration directory in system default file browser."
 msgstr ""
 
-#: src/frontend.cpp:689
+#: src/frontend.cpp:690
 msgid "Configuration directory is reported as:"
 msgstr ""
 
-#: src/frontend.cpp:693
+#: src/frontend.cpp:694
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
 msgstr ""
 
-#: src/frontend.cpp:695
+#: src/frontend.cpp:696
 msgid "Please see the documentation for more information on how to locate it manually."
 msgstr ""
 
-#: src/frontend.cpp:696
+#: src/frontend.cpp:697
 msgid "Failed to open configuration directory"
 msgstr ""
 
-#: src/frontend.cpp:718
+#: src/frontend.cpp:719
 msgid "1×"
 msgstr ""
 
-#: src/frontend.cpp:719
+#: src/frontend.cpp:720
 msgid "2×"
 msgstr ""
 
-#: src/frontend.cpp:720
-#: src/frontend.cpp:1195
+#: src/frontend.cpp:721
+#: src/frontend.cpp:1196
 msgid "Fullscreen"
 msgstr ""
 
-#: src/frontend.cpp:721
-#: src/frontend.cpp:732
-#: src/frontend.cpp:929
-#: src/frontend.cpp:1905
+#: src/frontend.cpp:722
+#: src/frontend.cpp:733
+#: src/frontend.cpp:930
+#: src/frontend.cpp:1906
 msgid "Unsupported"
 msgstr ""
 
-#: src/frontend.cpp:729
-#: src/frontend.cpp:738
-#: src/frontend.cpp:743
-#: src/frontend.cpp:748
-#: src/frontend.cpp:753
-#: src/frontend.cpp:1204
-#: src/frontend.cpp:1248
-#: src/frontend.cpp:1763
-#: src/frontend.cpp:1768
-#: src/frontend.cpp:1773
-#: src/frontend.cpp:1783
+#: src/frontend.cpp:730
+#: src/frontend.cpp:739
+#: src/frontend.cpp:744
+#: src/frontend.cpp:749
+#: src/frontend.cpp:754
+#: src/frontend.cpp:1205
+#: src/frontend.cpp:1249
+#: src/frontend.cpp:1764
+#: src/frontend.cpp:1769
+#: src/frontend.cpp:1774
+#: src/frontend.cpp:1784
 msgid "Off"
 msgstr "Av"
 
-#: src/frontend.cpp:730
+#: src/frontend.cpp:731
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:731
+#: src/frontend.cpp:732
 #: src/multiplay.cpp:1651
 msgid "Black"
 msgstr "Svart"
 
-#: src/frontend.cpp:738
-#: src/frontend.cpp:743
-#: src/frontend.cpp:748
-#: src/frontend.cpp:753
-#: src/frontend.cpp:1250
-#: src/frontend.cpp:1763
-#: src/frontend.cpp:1768
-#: src/frontend.cpp:1773
-#: src/frontend.cpp:1783
+#: src/frontend.cpp:739
+#: src/frontend.cpp:744
+#: src/frontend.cpp:749
+#: src/frontend.cpp:754
+#: src/frontend.cpp:1251
+#: src/frontend.cpp:1764
+#: src/frontend.cpp:1769
+#: src/frontend.cpp:1774
+#: src/frontend.cpp:1784
 msgid "On"
 msgstr "På"
 
-#: src/frontend.cpp:758
+#: src/frontend.cpp:759
 msgid "Rotating"
 msgstr ""
 
-#: src/frontend.cpp:758
+#: src/frontend.cpp:759
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:763
+#: src/frontend.cpp:764
 msgid "Instant"
 msgstr ""
 
-#: src/frontend.cpp:763
+#: src/frontend.cpp:764
 msgid "Tracked"
 msgstr ""
 
-#: src/frontend.cpp:781
+#: src/frontend.cpp:782
 #: src/ingameop.cpp:607
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.cpp:786
+#: src/frontend.cpp:787
 #: src/ingameop.cpp:612
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:792
+#: src/frontend.cpp:793
 #: src/ingameop.cpp:617
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.cpp:797
+#: src/frontend.cpp:798
 msgid "Fog"
 msgstr ""
 
-#: src/frontend.cpp:802
+#: src/frontend.cpp:803
 #: src/ingameop.cpp:622
 #: src/input/context.cpp:42
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:807
+#: src/frontend.cpp:808
 #: src/ingameop.cpp:627
 msgid "Radar Jump"
 msgstr ""
 
-#: src/frontend.cpp:812
+#: src/frontend.cpp:813
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.cpp:824
+#: src/frontend.cpp:825
 msgid "GRAPHICS OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:932
+#: src/frontend.cpp:933
 msgid "Disabled"
 msgstr ""
 
-#: src/frontend.cpp:935
+#: src/frontend.cpp:936
 msgid "Enabled"
 msgstr ""
 
-#: src/frontend.cpp:939
-#: src/frontend.cpp:945
+#: src/frontend.cpp:940
+#: src/frontend.cpp:946
 msgid "Auto"
 msgstr ""
 
-#: src/frontend.cpp:985
+#: src/frontend.cpp:986
 #: src/ingameop.cpp:149
 msgid "Voice Volume"
 msgstr "Stemmevolum"
 
-#: src/frontend.cpp:990
+#: src/frontend.cpp:991
 #: src/ingameop.cpp:155
 msgid "FX Volume"
 msgstr "Lydeffektvolum"
 
-#: src/frontend.cpp:995
+#: src/frontend.cpp:996
 #: src/ingameop.cpp:161
 msgid "Music Volume"
 msgstr "Musikkvolum"
 
-#: src/frontend.cpp:1001
+#: src/frontend.cpp:1002
 #: src/ingameop.cpp:167
 msgid "Subtitles"
 msgstr ""
 
-#: src/frontend.cpp:1006
+#: src/frontend.cpp:1007
 msgid "HRTF"
 msgstr ""
 
-#: src/frontend.cpp:1012
-#: src/frontend.cpp:1014
+#: src/frontend.cpp:1013
+#: src/frontend.cpp:1015
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr ""
 
-#: src/frontend.cpp:1018
+#: src/frontend.cpp:1019
 msgid "Map Zoom"
 msgstr ""
 
-#: src/frontend.cpp:1023
+#: src/frontend.cpp:1024
 msgid "Map Zoom Rate"
 msgstr ""
 
-#: src/frontend.cpp:1028
+#: src/frontend.cpp:1029
 msgid "Radar Zoom"
 msgstr ""
 
@@ -15624,213 +15619,226 @@ msgstr ""
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:1047
+#: src/frontend.cpp:1048
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1159
+#: src/frontend.cpp:1160
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr ""
 
-#: src/frontend.cpp:1161
+#: src/frontend.cpp:1162
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr ""
 
-#: src/frontend.cpp:1191
+#: src/frontend.cpp:1192
 msgid "Desktop Full"
 msgstr ""
 
-#: src/frontend.cpp:1193
+#: src/frontend.cpp:1194
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.cpp:1214
+#: src/frontend.cpp:1215
 msgid "Graphics Mode"
 msgstr ""
 
-#: src/frontend.cpp:1219
+#: src/frontend.cpp:1220
 msgid "Resolution"
 msgstr ""
 
-#: src/frontend.cpp:1224
+#: src/frontend.cpp:1225
 msgid "Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:1252
+#: src/frontend.cpp:1253
 msgid "Adaptive"
 msgstr ""
 
-#: src/frontend.cpp:1467
+#: src/frontend.cpp:1468
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.cpp:1500
+#: src/frontend.cpp:1501
 msgid "Texture size"
 msgstr ""
 
-#: src/frontend.cpp:1505
+#: src/frontend.cpp:1506
 #: src/ingameop.cpp:728
 msgid "Vertical sync"
 msgstr ""
 
-#: src/frontend.cpp:1510
+#: src/frontend.cpp:1511
 msgid "Antialiasing*"
 msgstr ""
 
-#: src/frontend.cpp:1518
+#: src/frontend.cpp:1519
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
-#: src/frontend.cpp:1531
+#: src/frontend.cpp:1532
 msgid "Graphics Backend*"
 msgstr ""
 
-#: src/frontend.cpp:1543
+#: src/frontend.cpp:1544
 msgid "VIDEO OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1586
+#: src/frontend.cpp:1587
 msgid "Unable to change Window Mode"
 msgstr ""
 
-#: src/frontend.cpp:1586
+#: src/frontend.cpp:1587
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
 msgstr ""
 
-#: src/frontend.cpp:1612
+#: src/frontend.cpp:1613
 msgid "Unable to change Vertical Sync"
 msgstr ""
 
-#: src/frontend.cpp:1612
+#: src/frontend.cpp:1613
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr ""
 
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1779
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1778
+#: src/frontend.cpp:1779
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1801
+#: src/frontend.cpp:1802
 #: src/ingameop.cpp:804
 msgid "Reverse Rotation"
 msgstr ""
 
-#: src/frontend.cpp:1806
+#: src/frontend.cpp:1807
 #: src/ingameop.cpp:810
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.cpp:1812
+#: src/frontend.cpp:1813
 #: src/ingameop.cpp:816
 msgid "Switch Mouse Buttons"
 msgstr ""
 
-#: src/frontend.cpp:1818
+#: src/frontend.cpp:1819
 #: src/ingameop.cpp:821
 msgid "Rotate Screen"
 msgstr ""
 
-#: src/frontend.cpp:1823
+#: src/frontend.cpp:1824
 #: src/ingameop.cpp:826
 msgid "Colored Cursors"
 msgstr ""
 
-#: src/frontend.cpp:1835
+#: src/frontend.cpp:1836
 msgid "MOUSE OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1900
+#: src/frontend.cpp:1901
 #: src/multiint.cpp:234
 msgid "Easy"
 msgstr "Enkel"
 
-#: src/frontend.cpp:1902
+#: src/frontend.cpp:1903
 #: src/multiint.cpp:234
 msgid "Hard"
 msgstr "Tøff"
 
-#: src/frontend.cpp:1903
+#: src/frontend.cpp:1904
 #: src/multiint.cpp:234
 msgid "Insane"
 msgstr ""
 
-#: src/frontend.cpp:1934
-#: src/frontend.cpp:2007
+#: src/frontend.cpp:1935
+#: src/frontend.cpp:2009
 msgid "Language"
 msgstr ""
 
-#: src/frontend.cpp:1938
-#: src/frontend.cpp:2011
+#: src/frontend.cpp:1939
+#: src/frontend.cpp:2013
 msgid "Campaign Difficulty"
 msgstr ""
 
-#: src/frontend.cpp:1942
-#: src/frontend.cpp:2012
+#: src/frontend.cpp:1943
+#: src/frontend.cpp:2014
 msgid "Camera Speed"
 msgstr ""
 
-#: src/frontend.cpp:1946
-#: src/frontend.cpp:2008
+#: src/frontend.cpp:1947
+#: src/frontend.cpp:2010
 msgid "Unit Colour:"
 msgstr ""
 
-#: src/frontend.cpp:1976
-#: src/frontend.cpp:2010
+#: src/frontend.cpp:1977
+#: src/frontend.cpp:2012
 msgid "Skirmish/Multiplayer"
 msgstr ""
 
 #: src/frontend.cpp:1983
+#, c-format
+msgid "Help us improve translations of Warzone 2100: %s"
+msgstr ""
+
+#: src/frontend.cpp:1985
 msgid "Click to open webpage."
 msgstr ""
 
-#: src/frontend.cpp:1986
-#: src/frontend.cpp:2005
+#: src/frontend.cpp:1988
+#: src/frontend.cpp:2007
 msgid "GAME OPTIONS"
 msgstr "SPILLALTERNATIVER"
 
-#: src/frontend.cpp:2118
+#: src/frontend.cpp:2033
+msgid "Insane Difficulty"
+msgstr ""
+
+#: src/frontend.cpp:2034
+msgid "This difficulty is for very experienced players!"
+msgstr ""
+
+#: src/frontend.cpp:2136
 #: src/multiint.cpp:2965
 msgid "Mod: "
 msgstr ""
 
-#: src/frontend.cpp:2580
+#: src/frontend.cpp:2598
 msgid "Increase Game Display Scale?"
 msgstr ""
 
-#: src/frontend.cpp:2582
+#: src/frontend.cpp:2600
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
 msgstr ""
 
-#: src/frontend.cpp:2584
+#: src/frontend.cpp:2602
 msgid "You can fix this by increasing the game's Display Scale setting."
 msgstr ""
 
-#: src/frontend.cpp:2586
+#: src/frontend.cpp:2604
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
 msgstr ""
 
-#: src/frontend.cpp:2588
+#: src/frontend.cpp:2606
 msgid "Increase Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:2605
+#: src/frontend.cpp:2623
 #, c-format
 msgid "Display Scale Increased to: %u%%"
 msgstr ""
 
-#: src/frontend.cpp:2606
-#: src/frontend.cpp:2622
+#: src/frontend.cpp:2624
+#: src/frontend.cpp:2640
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
 msgstr ""
 
-#: src/frontend.cpp:2621
+#: src/frontend.cpp:2639
 msgid "Tip: Adjusting Display Scale"
 msgstr ""
 
@@ -15861,7 +15869,7 @@ msgid "Player %u is cheating (debug menu) him/herself a new droid."
 msgstr ""
 
 #: src/hci.cpp:1658
-#: src/multiint.cpp:1425
+#: src/multiint.cpp:1426
 #: src/multimenu.cpp:686
 msgid "Power"
 msgstr "Energi"
@@ -16937,25 +16945,25 @@ msgstr ""
 msgid "Allow"
 msgstr ""
 
-#: src/intelmap.cpp:241
+#: src/intelmap.cpp:215
 #: src/keybind.cpp:1235
 msgid "PAUSED"
 msgstr "PAUSE"
 
-#: src/intelmap.cpp:326
+#: src/intelmap.cpp:1047
+msgid "New Intelligence Report"
+msgstr ""
+
+#: src/intelmap.cpp:1083
 msgid "Research Update"
 msgstr ""
 
-#: src/intelmap.cpp:330
+#: src/intelmap.cpp:1085
 msgid "Project Goals"
 msgstr ""
 
-#: src/intelmap.cpp:333
+#: src/intelmap.cpp:1087
 msgid "Current Objective"
-msgstr ""
-
-#: src/intelmap.cpp:1241
-msgid "New Intelligence Report"
 msgstr ""
 
 #: src/intorder.cpp:172
@@ -17322,7 +17330,7 @@ msgid "KEY MAPPING"
 msgstr ""
 
 #: src/keyedit.cpp:575
-#: src/multiint.cpp:1503
+#: src/multiint.cpp:1504
 #: src/musicmanager.cpp:769
 #: src/titleui/gamefind.cpp:91
 #: src/titleui/protocol.cpp:81
@@ -17394,7 +17402,7 @@ msgstr "Last inn spill"
 msgid "GAME SAVED :"
 msgstr ""
 
-#: src/move.cpp:1975
+#: src/move.cpp:1984
 #, c-format
 msgid "You found %u power in an oil drum."
 msgstr ""
@@ -17547,187 +17555,191 @@ msgstr ""
 msgid "Click to set Password"
 msgstr ""
 
-#: src/multiint.cpp:1391
+#: src/multiint.cpp:1378
+msgid "Enter password here"
+msgstr ""
+
+#: src/multiint.cpp:1392
 msgid "Select Player Name"
 msgstr "Velg spillernavn"
 
-#: src/multiint.cpp:1414
+#: src/multiint.cpp:1415
 #: src/multimenu.cpp:674
 msgid "Alliances"
 msgstr "Allianser"
 
-#: src/multiint.cpp:1435
+#: src/multiint.cpp:1436
 msgid "Base"
 msgstr ""
 
-#: src/multiint.cpp:1445
+#: src/multiint.cpp:1446
 msgid "Map Preview"
 msgstr "Forhåndsvisning av kart"
 
-#: src/multiint.cpp:1446
+#: src/multiint.cpp:1447
 msgid "Click to see Map"
 msgstr "Trykk for å se kartet"
 
-#: src/multiint.cpp:1452
+#: src/multiint.cpp:1453
 msgid "Show Structure Limits"
 msgstr ""
 
-#: src/multiint.cpp:1452
+#: src/multiint.cpp:1453
 msgid "Set Structure Limits"
 msgstr "Sett strukturbegrensninger"
 
-#: src/multiint.cpp:1466
+#: src/multiint.cpp:1467
 msgid "Random Game Options"
 msgstr ""
 
-#: src/multiint.cpp:1467
+#: src/multiint.cpp:1468
 msgid "Random Game Options\n"
 "Can be blocked by players' votes"
 msgstr ""
 
-#: src/multiint.cpp:1478
+#: src/multiint.cpp:1479
 msgid "Tech"
 msgstr ""
 
-#: src/multiint.cpp:1479
+#: src/multiint.cpp:1480
 msgid "Technology Level 1"
 msgstr ""
 
-#: src/multiint.cpp:1480
+#: src/multiint.cpp:1481
 msgid "Technology Level 2"
 msgstr ""
 
-#: src/multiint.cpp:1481
+#: src/multiint.cpp:1482
 msgid "Technology Level 3"
 msgstr ""
 
-#: src/multiint.cpp:1482
+#: src/multiint.cpp:1483
 msgid "Technology Level 4"
 msgstr ""
 
-#: src/multiint.cpp:1491
 #: src/multiint.cpp:1492
+#: src/multiint.cpp:1493
 msgid "Start Hosting Game"
 msgstr ""
 
-#: src/multiint.cpp:1648
+#: src/multiint.cpp:1649
 msgid "DIFFICULTY"
 msgstr ""
 
-#: src/multiint.cpp:1678
+#: src/multiint.cpp:1679
 msgid "Starts disadvantaged"
 msgstr ""
 
-#: src/multiint.cpp:1679
+#: src/multiint.cpp:1680
 msgid "Plays nice"
 msgstr ""
 
-#: src/multiint.cpp:1680
+#: src/multiint.cpp:1681
 msgid "No holds barred"
 msgstr ""
 
-#: src/multiint.cpp:1681
+#: src/multiint.cpp:1682
 msgid "Starts with advantages"
 msgstr ""
 
-#: src/multiint.cpp:1709
+#: src/multiint.cpp:1710
 msgid "CHOOSE AI"
 msgstr ""
 
-#: src/multiint.cpp:1762
+#: src/multiint.cpp:1763
 msgid "Allow human players to join in this slot"
 msgstr ""
 
-#: src/multiint.cpp:1773
+#: src/multiint.cpp:1774
 msgid "Leave this slot unused"
 msgstr ""
 
-#: src/multiint.cpp:1905
+#: src/multiint.cpp:1906
 msgid "Team"
 msgstr ""
 
-#: src/multiint.cpp:1918
+#: src/multiint.cpp:1919
 #: src/multiint.cpp:3908
 #: src/multimenu.cpp:1242
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Verten har kastet ut %s fra spillet!"
 
-#: src/multiint.cpp:1919
+#: src/multiint.cpp:1920
 #: src/multiint.cpp:3910
 #: src/multimenu.cpp:1246
 msgid "The host has kicked you from the game."
 msgstr ""
 
-#: src/multiint.cpp:2475
+#: src/multiint.cpp:2476
 msgid "Click to change difficulty"
 msgstr ""
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Waiting for player"
 msgstr ""
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Player is ready"
 msgstr ""
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Player is downloading"
 msgstr ""
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Click when ready"
 msgstr ""
 
-#: src/multiint.cpp:2496
+#: src/multiint.cpp:2497
 msgid "Waiting for download"
 msgstr ""
 
-#: src/multiint.cpp:2521
+#: src/multiint.cpp:2522
 msgid "READY?"
 msgstr ""
 
-#: src/multiint.cpp:2562
+#: src/multiint.cpp:2563
 msgid "PLAYERS"
 msgstr "SPILLERE"
 
-#: src/multiint.cpp:2598
+#: src/multiint.cpp:2599
 msgid "Click to change to this slot"
 msgstr ""
 
-#: src/multiint.cpp:2627
+#: src/multiint.cpp:2628
 msgid "Choose Team"
 msgstr ""
 
-#: src/multiint.cpp:2631
+#: src/multiint.cpp:2632
 msgid "Teams locked"
 msgstr ""
 
-#: src/multiint.cpp:2653
+#: src/multiint.cpp:2654
 msgid "Click to change player colour"
 msgstr ""
 
-#: src/multiint.cpp:2669
+#: src/multiint.cpp:2670
 msgid "Click to change player faction"
 msgstr ""
 
-#: src/multiint.cpp:2694
+#: src/multiint.cpp:2695
 msgid "Click to change player position"
 msgstr ""
 
-#: src/multiint.cpp:2701
+#: src/multiint.cpp:2702
 msgid "Click to change AI, right click to distribute choice"
 msgstr ""
 
-#: src/multiint.cpp:2716
+#: src/multiint.cpp:2717
 msgid "Player ID: "
 msgstr ""
 
-#: src/multiint.cpp:2717
+#: src/multiint.cpp:2718
 msgid "(none)"
 msgstr ""
 
-#: src/multiint.cpp:2769
+#: src/multiint.cpp:2770
 msgid "Kicked from game"
 msgstr ""
 
@@ -17949,17 +17961,17 @@ msgstr ""
 
 #: src/multimenu.cpp:714
 #, c-format
-msgid "Traf: %u/%u"
+msgid "Traf: %lu/%lu"
 msgstr ""
 
 #: src/multimenu.cpp:718
 #, c-format
-msgid "Uncompressed: %u/%u"
+msgid "Uncompressed: %lu/%lu"
 msgstr ""
 
 #: src/multimenu.cpp:722
 #, c-format
-msgid "Pack: %u/%u"
+msgid "Pack: %lu/%lu"
 msgstr ""
 
 #: src/multimenu.cpp:1023
@@ -18130,12 +18142,12 @@ msgstr ""
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
-#: src/research.cpp:659
+#: src/research.cpp:867
 #, c-format
 msgid "Research completed: %s"
 msgstr ""
 
-#: src/research.cpp:1149
+#: src/research.cpp:1362
 msgid "Research Award"
 msgstr ""
 
@@ -18299,67 +18311,67 @@ msgstr ""
 msgid "Can't build any more \"%s\", Construction Unit Limit Reached — Production Halted"
 msgstr ""
 
-#: src/structure.cpp:5238
+#: src/structure.cpp:5239
 #, c-format
 msgid "%s - %u Unit assigned - Hitpoints %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.cpp:5257
+#: src/structure.cpp:5258
 #, c-format
 msgid "%s - %u Unit assigned - Damage %d/%d"
 msgid_plural "%s - %u Units assigned - Hitpoints %d/%d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/structure.cpp:5262
-#: src/structure.cpp:5272
-#: src/structure.cpp:5279
-#: src/structure.cpp:5305
-#: src/structure.cpp:5314
-#: src/structure.cpp:5321
-#: src/structure.cpp:5329
+#: src/structure.cpp:5263
+#: src/structure.cpp:5273
+#: src/structure.cpp:5280
+#: src/structure.cpp:5306
+#: src/structure.cpp:5315
+#: src/structure.cpp:5322
+#: src/structure.cpp:5330
 #, c-format
 msgid "%s - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5295
+#: src/structure.cpp:5296
 #, c-format
 msgid "%s - Connected %u of %u - Hitpoints %d/%d"
 msgstr ""
 
-#: src/structure.cpp:5450
-#: src/structure.cpp:5495
+#: src/structure.cpp:5451
+#: src/structure.cpp:5496
 #, c-format
 msgid "%s - Electronically Damaged"
 msgstr "%s - Elektrisk skadet"
 
-#: src/structure.cpp:5620
+#: src/structure.cpp:5621
 msgid "Electronic Reward - Visibility Report"
 msgstr ""
 
-#: src/structure.cpp:5659
+#: src/structure.cpp:5660
 msgid "Factory Reward - Propulsion"
 msgstr ""
 
-#: src/structure.cpp:5681
+#: src/structure.cpp:5682
 msgid "Factory Reward - Body"
 msgstr ""
 
-#: src/structure.cpp:5703
+#: src/structure.cpp:5704
 msgid "Factory Reward - Weapon"
 msgstr ""
 
-#: src/structure.cpp:5711
+#: src/structure.cpp:5712
 msgid "Factory Reward - Nothing"
 msgstr ""
 
-#: src/structure.cpp:5738
+#: src/structure.cpp:5739
 msgid "Repair Facility Award - Repair"
 msgstr ""
 
-#: src/structure.cpp:5744
+#: src/structure.cpp:5745
 msgid "Repair Facility Award - Nothing"
 msgstr ""
 
@@ -18572,11 +18584,11 @@ msgstr ""
 msgid "Version: %s,%s Built: %s%s"
 msgstr ""
 
-#: src/wzapi.cpp:2320
+#: src/wzapi.cpp:2330
 msgid "YOU ARE VICTORIOUS!"
 msgstr "DU HAR VUNNET!"
 
-#: src/wzapi.cpp:2325
+#: src/wzapi.cpp:2335
 msgid "YOU WERE DEFEATED!"
 msgstr "DU HAR TAPT!"
 

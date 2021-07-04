@@ -2,11 +2,11 @@ ${LangFileString} WZWelcomeText "Benvenuto nell'installatore Warzone 2100!\r\n\r
 
 ${LangFileString} WZWelcomeText_Portable "Benvenuti a Warzone 2100 portatile di installazione!\r\n\r\nQuesta procedura guidata vi guiderà attraverso l'installazione della versione portatile di Warzone 2100.\r\n\r\nQuesta installazione è completamente autonoma ed è possibile disinstallare il programma in qualsiasi momento cancellando la sua cartella.\r\n\r\nWarzone 2100 è gratuito al 100%, completamente open source!\r\n\r\nfare Clic su Avanti per continuare."
 
-${LangFileString} WZWelcomeHomepageLink "Visit our Official Homepage https://wz2100.net for the latest version."
+${LangFileString} WZWelcomeHomepageLink "Visita la nostra pagina home ufficiale https://wz2100.net per l'ultima versione."
 
-${LangFileString} WZ_64BIT_AVAILABLE "There is a 64-bit version of Warzone 2100 available.$\r$\nFor details visit https://wz2100.net/ $\r$\nProceed with 32-bit installation anyway?"
+${LangFileString} WZ_64BIT_AVAILABLE "È disponibile una versione a 64 bit di Warzone 2100.$\r$\nPer i dettagli visita https://wz2100.net/ $\r$\nProcedere comunque con l'installazione a 32 bit?"
 
-${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "This is the 64-bit version of Warzone 2100.$\r$\nPlease download the 32-bit version from https://wz2100.net/ $\r$\nClick OK to quit Setup."
+${LangFileString} WZ_64BIT_INSTALL_32BIT_AVAILABLE "Questa è una versione a 64 bit di Warzone 2100.$\r$\nScarica la versione a 32 bit da https://wz2100.net/ $\r$\nFai clic su OK per uscire dall'installazione."
 
 ${LangFileString} WZ_GPL_NEXT "Avanti"
 
@@ -28,7 +28,7 @@ ${LangFileString} DESC_SecFMVs_EngLo "Scarica e installa una versione a bassa qu
 ${LangFileString} TEXT_SecFMVs_Ger "Tedesco"
 ${LangFileString} DESC_SecFMVs_Ger "Scarica e installa i filmati di gioco in Tedesco."
 
-${LangFileString} TEXT_SecNLS "File di lingua"
+${LangFileString} TEXT_SecNLS "File della lingua"
 ${LangFileString} DESC_SecNLS "Supporto per altre lingue diverse dall'inglese."
 
 ${LangFileString} TEXT_SecNLS_WinFonts "WinFont"
@@ -37,9 +37,9 @@ ${LangFileString} DESC_SecNLS_WinFonts "Includi la cartella font di Windows nel 
 ${LangFileString} TEXT_SecMSSysLibraries "Importanti DLL Runtime di Microsoft"
 ${LangFileString} DESC_SecMSSysLibraries "Scarica e installa (o aggiorna) le librerie di sistema Microsoft Visual C++ redistributable, che alcuni componenti potrebbero richiedere per funzionare."
 
-${LangFileString} DLTEXT_Downloading "Downloading"
-${LangFileString} DLTEXT_SysLibDLFailed "Download of system library failed"
-${LangFileString} DLTEXT_VideosDLFailed "Download of videos failed"
+${LangFileString} DLTEXT_Downloading "Scaricamento"
+${LangFileString} DLTEXT_SysLibDLFailed "Scaricamento della libreria di sistema non riuscito"
+${LangFileString} DLTEXT_VideosDLFailed "Scaricamento dei video non riuscito"
 
-${LangFileString} TEXT_PromptRebootNeeded "A reboot is needed to finish the installation. Do you wish to reboot the system now?"
-${LangFileString} TEXT_MsgRebootFailed "Reboot failed. Please reboot manually."
+${LangFileString} TEXT_PromptRebootNeeded "È necessario un riavvio per terminare l'installazione. Vuoi riavviare il sistema adesso?"
+${LangFileString} TEXT_MsgRebootFailed "Riavvio non riuscito. Riavvia manualmente."
