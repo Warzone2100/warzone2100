@@ -40,6 +40,7 @@
 #include "lib/widget/dropdown.h"
 #include "lib/widget/gridlayout.h"
 #include "lib/widget/margin.h"
+#include "lib/widget/alignment.h"
 
 #include <limits>
 
@@ -979,22 +980,28 @@ void startAudioAndZoomOptionsMenu()
 
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
 
+	auto addSliderWrap = [](std::shared_ptr<WIDGET> widget) {
+		auto alignment = std::make_shared<AlignmentWidget>(VerticalAlignment::Center, HorizontalAlignment::Left);
+		alignment->attach(addMargin(widget));
+		return alignment;
+	};
+
 	auto grid = std::make_shared<GridLayout>();
 	grid_allocation::slot row(0);
 
 	// 2d audio
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_FX, _("Voice Volume"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetUIVolume() * 100.0f))));
+	grid->place({1, 1, false}, row, addSliderWrap(makeFESlider(FRONTEND_FX_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetUIVolume() * 100.0f))));
 	row.start++;
 
 	// 3d audio
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_3D_FX, _("FX Volume"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetEffectsVolume() * 100.0f))));
+	grid->place({1, 1, false}, row, addSliderWrap(makeFESlider(FRONTEND_3D_FX_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetEffectsVolume() * 100.0f))));
 	row.start++;
 
 	// cd audio
 	grid->place({0}, row, addMargin(makeTextButton(FRONTEND_MUSIC, _("Music Volume"), WBUT_SECONDARY)));
-	grid->place({1, 1, false}, row, addMargin(makeFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetMusicVolume() * 100.0f))));
+	grid->place({1, 1, false}, row, addSliderWrap(makeFESlider(FRONTEND_MUSIC_SL, FRONTEND_BOTFORM, AUDIO_VOL_MAX, static_cast<UDWORD>(sound_GetMusicVolume() * 100.0f))));
 	row.start++;
 
 	////////////
