@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-03 21:42\n"
+"PO-Revision-Date: 2021-07-04 09:51\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -17982,17 +17982,17 @@ msgstr "Tot. Env./Receb. —"
 #: src/multimenu.cpp:714
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "Tráfego: %lu/%lu"
 
 #: src/multimenu.cpp:718
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Descompactado: %lu/%lu"
 
 #: src/multimenu.cpp:722
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Compactado: %lu/%lu"
 
 #: src/multimenu.cpp:1023
 msgid "Channel"
