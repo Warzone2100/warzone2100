@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-03 21:41\n"
+"PO-Revision-Date: 2021-07-04 21:51\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -5519,7 +5519,7 @@ msgstr "Silo Missilistico"
 #: data/mp/messages/strings/names.txt:777
 #: po/custom/fromJson.txt:5305
 msgid "Super Heavy-Gunner"
-msgstr "Super Cyborg con Cannone"
+msgstr "Cannoniere super pesante"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Cyborg-Hvywpn-Acannon.name
@@ -12714,19 +12714,19 @@ msgstr "Designatore Laser per Razzi"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4964
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Caricatore rapido per missile Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4967
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Caricatore rapido per missile Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4970
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "Caricatore rapido per missile"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -13247,13 +13247,13 @@ msgstr "AA Splendente"
 #. data/mp/stats/templates.json: $.Cyb-Hvy-Mcannon.name
 #: po/custom/fromJson.txt:5301
 msgid "Super Heavy-Gunner Cyborg"
-msgstr ""
+msgstr "Cyborg con cannone super pesante"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
 #: po/custom/fromJson.txt:5318
 msgid "Super Rail-Gunner Cyborg"
-msgstr ""
+msgstr "Super cyborg con cannone a rotaia"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SUPERTRANS.text[0]
@@ -14974,7 +14974,7 @@ msgstr ""
 
 #: src/clparse.cpp:388
 msgid "autorating"
-msgstr ""
+msgstr "valutazione automatica"
 
 #: src/clparse.cpp:390
 msgid "Attach or create a console window and display console output (Windows only)"
@@ -15774,7 +15774,7 @@ msgstr "Lingua"
 #: src/frontend.cpp:1939
 #: src/frontend.cpp:2013
 msgid "Campaign Difficulty"
-msgstr "Difficoltà Campagna"
+msgstr "Difficoltà della campagna"
 
 #: src/frontend.cpp:1943
 #: src/frontend.cpp:2014
@@ -15794,7 +15794,7 @@ msgstr "Schermaglia / più giocatori"
 #: src/frontend.cpp:1983
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Aiutaci a migliorare le traduzioni di Warzone 2100: %s"
 
 #: src/frontend.cpp:1985
 msgid "Click to open webpage."
@@ -15807,11 +15807,11 @@ msgstr "OPZIONI DI GIOCO"
 
 #: src/frontend.cpp:2033
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Difficoltà Pazzo"
 
 #: src/frontend.cpp:2034
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Questa difficoltà è per i giocatori molto esperti!"
 
 #: src/frontend.cpp:2136
 #: src/multiint.cpp:2965
@@ -16820,7 +16820,7 @@ msgstr "Potrebbe metterci un po'..."
 
 #: src/integrations/wzdiscordrpc.cpp:261
 msgid "Failed to find game in the lobby server: "
-msgstr ""
+msgstr "Impossibile trovare il gioco nel server della lobby: "
 
 #: src/integrations/wzdiscordrpc.cpp:263
 msgid "The game may have already started, or the host may have disbanded the game lobby."
@@ -16844,7 +16844,7 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:368
 msgid "Do you wish to trust this lobby server, and continue?"
-msgstr ""
+msgstr "Vuoi fidarti di questo server della lobby e continuare?"
 
 #: src/integrations/wzdiscordrpc.cpp:372
 msgid "Discord: Connect to Untrusted Lobby?"
@@ -16853,11 +16853,11 @@ msgstr ""
 #: src/integrations/wzdiscordrpc.cpp:374
 #: src/integrations/wzdiscordrpc.cpp:448
 msgid "Trust & Connect"
-msgstr ""
+msgstr "Fidati e connettiti"
 
 #: src/integrations/wzdiscordrpc.cpp:439
 msgid "The invite link you have followed specifies a direct connection."
-msgstr ""
+msgstr "Il collegamento d'invito che hai seguito specifica una connessione diretta."
 
 #: src/integrations/wzdiscordrpc.cpp:440
 msgid "It has not been vetted / verified by a lobby server."
@@ -16865,11 +16865,11 @@ msgstr ""
 
 #: src/integrations/wzdiscordrpc.cpp:442
 msgid "Do you wish to trust this direct connection invite?"
-msgstr ""
+msgstr "Vuoi fidarti di questo invito a una connessione diretta?"
 
 #: src/integrations/wzdiscordrpc.cpp:446
 msgid "Discord: Direct Connection Invite"
-msgstr ""
+msgstr "Discord: invito a connessione diretta"
 
 #: src/integrations/wzdiscordrpc.cpp:480
 msgid "The invite link you have followed isn't supported by this version of Warzone 2100."
@@ -17935,11 +17935,11 @@ msgstr "Accetta le Impostazioni"
 
 #: src/multilimit.cpp:279
 msgid "Limits reset to default values"
-msgstr "Limiti resettati ai valori di default"
+msgstr "Limiti ripristinati ai valori predefiniti"
 
 #: src/multilimit.cpp:283
 msgid "Limits Reset To Default Values"
-msgstr ""
+msgstr "Limiti ripristinati ai valori predefiniti"
 
 #: src/multimenu.cpp:531
 msgid "Any number of players"
@@ -17984,12 +17984,12 @@ msgstr ""
 #: src/multimenu.cpp:718
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Non compresso: %lu/%lu"
 
 #: src/multimenu.cpp:722
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Pacchetto: %lu/%lu"
 
 #: src/multimenu.cpp:1023
 msgid "Channel"
