@@ -45,7 +45,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   generate_stable_snap_config:
     needs: pre-ci
-    environment: snap_stable_build_deploy
     name: 'Generate Snap Stable Config'
     runs-on: ubuntu-latest
     steps:
@@ -71,6 +70,7 @@ jobs:
           echo "::set-output name=RELEASES_DATA::$HOME/data/github_releases_info"
           mkdir -p "$HOME/temp/github_releases_info"
           echo "::set-output name=RELEASES_TEMP::$HOME/temp/github_releases_info"
+          mkdir -p "${{ github.workspace }}/diff"
       - name: Fetch latest GitHub Release info
         uses: past-due/fetch-release-info@master
         with:
@@ -104,7 +104,6 @@ jobs:
           repository: 'Warzone2100/snap-stable-build'
           ref: master
           path: snap-stable-build
-          ssh-key: '${{ secrets.SNAP_STABLE_BUILD_REPO_GH_DEPLOY_KEY }}'
       - name: Generate Snap Stable Config
         run: |
           BASE_SNAPCRAFT_YAML=".snapcraft.yaml"
@@ -150,6 +149,10 @@ jobs:
           timestamp=$(date -u)
           git commit -m "Snap stable build config for ${LATEST_GITHUB_RELEASE_TAG}" || { echo "::set-output name=PROCESS_DEPLOYMENT::false" && exit 0; }
           echo "::set-output name=PROCESS_DEPLOYMENT::true"
+          # Get the new commit's SHA
+          NEW_COMMIT_SHA=$(git rev-parse --verify HEAD)
+          echo "NEW_COMMIT_SHA=${NEW_COMMIT_SHA}"
+          echo "::set-output name=GH_SNAPSTABLEBUILD_COMMIT_SHA::${NEW_COMMIT_SHA}"
           exit 0
       - name: Snap build stable config (w/ most recent stable version)
         id: build-stable
@@ -171,6 +174,51 @@ jobs:
             # Output a warning that this stable config will *not* work with the current stable release (but, presumably, with the next?)
             echo "::warning ::Snap stable config failed to build (for: ${LATEST_GITHUB_RELEASE_TAG}). This may be acceptable, assuming it works for the next release."
           fi
+      - name: Create diff artifact
+        id: create-diff
+        if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
+        env:
+          GH_SNAPSTABLEBUILD_COMMIT_SHA: '${{ steps.commit-snap-changes.outputs.GH_SNAPSTABLEBUILD_COMMIT_SHA }}'
+        working-directory: "${{ github.workspace }}/snap-stable-build"
+        run: |
+          git format-patch -k -1 --stdout "${GH_SNAPSTABLEBUILD_COMMIT_SHA}" > "${{ github.workspace }}/diff/snapstablebuild.diff"
+          DIFF_HASH="$(sha512sum "${{ github.workspace }}/diff/snapstablebuild.diff")"
+          echo "::set-output name=DIFF_HASH::${DIFF_HASH}"
+          echo "snapstablebuild.diff (SHA512: ${DIFF_HASH}):"
+          cat "${{ github.workspace }}/diff/snapstablebuild.diff"
+      - name: Upload diff artifact
+        uses: actions/upload-artifact@v2
+        if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true')
+        with:
+          name: snap_stable_build_diff
+          path: '${{ github.workspace }}/diff/snapstablebuild.diff'
+          if-no-files-found: 'error'
+  deploy_stable_snap_config:
+    needs: generate_stable_snap_config
+    environment: snap_stable_build_deploy
+    name: 'Deploy Snap Stable Config'
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'release') || (github.event_name == 'workflow_dispatch')
+    steps:
+      - name: Checkout snap-stable-build@master
+        uses: actions/checkout@v2
+        with:
+          repository: 'Warzone2100/snap-stable-build'
+          ref: master
+          path: snap-stable-build
+          ssh-key: '${{ secrets.SNAP_STABLE_BUILD_REPO_GH_DEPLOY_KEY }}'
+      - name: Fetch Snap Stable Config Changes
+        uses: actions/download-artifact@v2
+        with:
+          name: snap_stable_build_diff
+          path: '${{ github.workspace }}/diff'
+      - name: Apply Changes
+        working-directory: "${{ github.workspace }}/snap-stable-build"
+        run: |
+          git am -k "${{ github.workspace }}/diff/snapstablebuild.diff"
+      - name: Debug output generated config
+        run: |
+          cat "${GITHUB_WORKSPACE}/snap-stable-build/.snapcraft.yaml"
       - name: Push config to snap-stable-build
         if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true') && (steps.config.outputs.PUBLISH_CONFIG == 'true')
         id: push-snap-changes
