@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-03 21:41\n"
+"PO-Revision-Date: 2021-07-04 09:51\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -4009,11 +4009,11 @@ msgstr "Pusztítsa el az Új Paradigma erősítését"
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Építsen legalább 7 nem falszerkezetet a fennsíkon, és tedd tönkre az összes új paradigma megerősítést"
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr ""
+msgstr "Keresse meg és mentse meg egységeit a lelőtt szállítótól"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
@@ -4025,23 +4025,23 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-end.js:190
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
-msgstr ""
+msgstr "Küldjön el legalább egy szállítót teherautóval, és élje túl a kollektív támadást"
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Vigye az összes egységet a völgybe"
 
 #: data/base/script/campaign/cam3-1.js:248
 msgid "Destroy the missile silos"
-msgstr ""
+msgstr "Pusztìtsd el a rakéta silókat"
 
 #: data/base/script/campaign/cam3-2.js:261
 msgid "Rescue Alpha team from Nexus"
-msgstr ""
+msgstr "Mentsd meg az Alfa csapatot a Nexusból"
 
 #: data/base/script/campaign/cam3-4.js:81
 msgid "Destroy the Nexus HQ to disable the Nexus Intruder Program"
-msgstr ""
+msgstr "A Nexus főhadszállás megsemmisítésével letilthatja a Nexus behatoló programot"
 
 #: data/base/script/campaign/cam3-ab.js:240
 msgid "Research resistance circuits and survive the assault from Nexus"
@@ -5934,7 +5934,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.AAGun2Mk1.name
 #: po/custom/fromJson.txt:80
 msgid "AA Cyclone Flak Cannon"
-msgstr ""
+msgstr "AA Cyclone légelhárìró ágyú"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_W_AAD1.text[2]
@@ -6020,21 +6020,21 @@ msgstr "Légvédelmi hőkép érzékelő"
 #. data/mp/stats/structure.json: $.AASite-QuadBof02.name
 #: po/custom/fromJson.txt:152
 msgid "AA Tornado Flak Cannon Emplacement"
-msgstr ""
+msgstr "AA Tornádó légelhárító ágyú talapzat"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-DoubleAAgun02.name
 #. data/mp/stats/structure.json: $.WallTower-DoubleAAGun02.name
 #: po/custom/fromJson.txt:156
 msgid "AA Tornado Flak Cannon Hardpoint"
-msgstr ""
+msgstr "Légelhárító ágyú talapzat"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AAGun02.name
 #. data/mp/stats/weapons.json: $.AAGun2Mk1Quad.name
 #: po/custom/fromJson.txt:160
 msgid "AA Tornado Flak Cannon"
-msgstr ""
+msgstr "AA Tornado légelhárìtó Ágyú"
 
 #. TRANSLATORS:
 #. data/mp/multiplay/skirmish/nb_generic.json: $.AI.tip
@@ -6503,7 +6503,7 @@ msgstr "Tankelhárító rakétával felszerelt"
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr ""
+msgstr "Tankelhárító rakétával szerelt"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -7117,7 +7117,7 @@ msgstr "Harctéri szerviz egység"
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_PLASLAUNCH.text[2]
 #: po/custom/fromJson.txt:1059
 msgid "Best Targets : Vehicles and cyborgs"
-msgstr ""
+msgstr "Célok: bázis járművek és cyborgok"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_CAN.text[2]
@@ -9480,7 +9480,7 @@ msgstr ""
 #. data/mp/stats/weapons.json: $.PlasmaHeavy.name
 #: po/custom/fromJson.txt:2665
 msgid "Heavy Plasma Launcher"
-msgstr ""
+msgstr "Nehéz plazmavető"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL3.text[1]
@@ -9706,7 +9706,7 @@ msgstr "Nagy szilárdságú vasbeton műanyag kompozit"
 #. data/base/stats/research.json: $.R-Wpn-Flamer-Range01.name
 #: po/custom/fromJson.txt:2834
 msgid "High-Pressure Gas Container"
-msgstr ""
+msgstr "Nagy nyomású gáz tároló"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[1]
@@ -10193,7 +10193,7 @@ msgstr "Megnövekedett építési sebesség"
 #. data/base/messages/resmessages1.json: $.RES_W_FL_R1.text[2]
 #: po/custom/fromJson.txt:3199
 msgid "Increases Flamer range"
-msgstr ""
+msgstr "Megnövekedett lángszóró sebzés"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_FL_ROF1.text[2]
@@ -10615,7 +10615,7 @@ msgstr "Lézeroptikai laboratórium"
 #. data/base/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3515
 msgid "LasSat"
-msgstr ""
+msgstr "LasSat"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[1]
@@ -10788,7 +10788,7 @@ msgstr "Gépfegyver sebzés +25%"
 #. data/base/stats/structure.json: $.GuardTower1.name
 #: po/custom/fromJson.txt:3628
 msgid "Machinegun Guard Tower"
-msgstr ""
+msgstr "Iker gépfegyveres őrtorony"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_MG_ROF1.text[2]
@@ -10876,7 +10876,7 @@ msgstr "Fejlesztéshez használd a gyármodulokat"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3713
 msgid "Mechanic Cyborg"
-msgstr ""
+msgstr "Mehanikus Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
@@ -11281,7 +11281,7 @@ msgstr "Aknavető"
 #. data/base/stats/weapons.json: $.MG1-Tower.name
 #: po/custom/fromJson.txt:3965
 msgid "Mounted Machinegun"
-msgstr ""
+msgstr "Felszerelt géppuska"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.Emplacement-MRL-pit.name
@@ -12150,7 +12150,7 @@ msgstr "Piton"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[1]
 #: po/custom/fromJson.txt:4581
 msgid "Quad 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "80mm négyes légvédelmi gépfegyver"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_SMS_ROF1.text[1]
@@ -12309,7 +12309,7 @@ msgstr "Gyorstüzelésű sínágyú nyíllövedékekkel tüzel"
 #. data/base/messages/resmessages23.json: $.RES_W_SRK_ROF4.text[1]
 #: po/custom/fromJson.txt:4675
 msgid "Rapid Loader increases reload rate"
-msgstr ""
+msgstr "Automatikus újratöltés felgyorsítja az újratöltést"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -12717,19 +12717,19 @@ msgstr "Lézeres rakéta célkijelölés"
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF05.name
 #: po/custom/fromJson.txt:4964
 msgid "Rocket Rapid Loader Mk2"
-msgstr ""
+msgstr "Gyors ágyútöltés Mk2"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF06.name
 #: po/custom/fromJson.txt:4967
 msgid "Rocket Rapid Loader Mk3"
-msgstr ""
+msgstr "Gyors ágyútöltés Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-RocketSlow-ROF04.name
 #: po/custom/fromJson.txt:4970
 msgid "Rocket Rapid Loader"
-msgstr ""
+msgstr "Gyors ágyútöltés"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_W_RK_ROF1.text[2]
@@ -13177,13 +13177,13 @@ msgstr "Ellopja a technológiát az építményekből és átveszi a fegyverek i
 #. data/base/messages/resmessages1.json: $.RES_TOWER4.text[1]
 #: po/custom/fromJson.txt:5256
 msgid "Steel tower with flamer"
-msgstr ""
+msgstr "Acél torony lángszóróval"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER3.text[1]
 #: po/custom/fromJson.txt:5259
 msgid "Steel tower with heavy machinegun"
-msgstr ""
+msgstr "Gépfegyver torony nehéz gépfegyverrel"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TOWER1.text[1]
@@ -13814,7 +13814,7 @@ msgstr "7.62mm-es iker gépfegyverek"
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[1]
 #: po/custom/fromJson.txt:5684
 msgid "Twin 80mm Anti-Aircraft cannon"
-msgstr ""
+msgstr "80mm négyes légvédelmi gépfegyver"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-Cannon6.name
@@ -15551,7 +15551,7 @@ msgstr "Árnyékok"
 
 #: src/frontend.cpp:798
 msgid "Fog"
-msgstr ""
+msgstr "Köd"
 
 #: src/frontend.cpp:803
 #: src/ingameop.cpp:622
@@ -15794,7 +15794,7 @@ msgstr "Többjátékos mód"
 #: src/frontend.cpp:1983
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Segìtsd nekünk fejleszeni a Warzone 2100 játèkot: %s"
 
 #: src/frontend.cpp:1985
 msgid "Click to open webpage."
@@ -15807,11 +15807,11 @@ msgstr "JÁTÉK OPCIÓK"
 
 #: src/frontend.cpp:2033
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Nagyon nehéz"
 
 #: src/frontend.cpp:2034
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Ez a nehézség csak haladó játékosoknak!"
 
 #: src/frontend.cpp:2136
 #: src/multiint.cpp:2965
@@ -16007,19 +16007,19 @@ msgstr "Kilépés"
 
 #: src/ingameop.cpp:309
 msgid "Warning: Are you sure?"
-msgstr ""
+msgstr "Figyelem: Biztos akarod?"
 
 #: src/ingameop.cpp:313
 msgid "Warning: Are you sure? Any unsaved progress will be lost."
-msgstr ""
+msgstr "Figyelem: Biztos akarod? Nem mentett eredmény elveszik."
 
 #: src/ingameop.cpp:321
 msgid "Confirm"
-msgstr ""
+msgstr "Jóváhagy"
 
 #: src/ingameop.cpp:323
 msgid "Back"
-msgstr ""
+msgstr "Vissza"
 
 #: src/ingameop.cpp:402
 msgid "Host has quit the game!"
@@ -16070,11 +16070,11 @@ msgstr ""
 
 #: src/input/context.cpp:41
 msgid "Gameplay"
-msgstr ""
+msgstr "Játékmenet"
 
 #: src/input/context.cpp:43
 msgid "Debug"
-msgstr ""
+msgstr "Hibakeresés"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16781,7 +16781,7 @@ msgstr "Játékcél felkutatása"
 
 #: src/input/keyconfig.cpp:226
 msgid "Toggle fullscreen"
-msgstr ""
+msgstr "Teljes képernyő váltás"
 
 #: src/intdisplay.cpp:163
 msgid "Waiting for Power"
@@ -17336,7 +17336,7 @@ msgstr "Radar mutatja a magasságot"
 
 #: src/keyedit.cpp:165
 msgid "<not bound>"
-msgstr ""
+msgstr "Nem kapcsolt"
 
 #: src/keyedit.cpp:544
 msgid "KEY MAPPING"
@@ -17975,17 +17975,17 @@ msgstr "Teljes Elküldött/Érkezett —"
 #: src/multimenu.cpp:714
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "Edzett: %lu/%lu"
 
 #: src/multimenu.cpp:718
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Tömörìtetlen: %lu/%lu"
 
 #: src/multimenu.cpp:722
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Csomag:%lu/%lu"
 
 #: src/multimenu.cpp:1023
 msgid "Channel"
