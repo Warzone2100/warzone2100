@@ -45,6 +45,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   generate_stable_snap_config:
     needs: pre-ci
+    environment: snap_stable_build_deploy
     name: 'Generate Snap Stable Config'
     runs-on: ubuntu-latest
     steps:

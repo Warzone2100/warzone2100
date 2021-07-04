@@ -27,6 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   mirror-to-sourceforge:
     needs: pre-ci
+    environment: sourceforge_deploy
     # For this job to work, the following secrets must be set:
     # SF_SSH_KEY
     # SF_FRS_USERNAME
