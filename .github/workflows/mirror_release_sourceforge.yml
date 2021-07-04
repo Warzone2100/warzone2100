@@ -8,6 +8,8 @@ on:
       - deleted
       - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
 
+concurrency: sourceforge_deploy
+
 jobs:
   # Wait for up to 10 minutes for previous workflow run to complete, abort if not done by then
   pre-ci:
