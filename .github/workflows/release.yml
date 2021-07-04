@@ -12,11 +12,12 @@ concurrency: release_tasks
 
 jobs:
   trigger-site-update:
-    # For this job to work, the following secrets must be set:
-    # SITE_DISPATCH_ACCESS_TOKEN
     name: 'Trigger Site Update'
     runs-on: ubuntu-latest
     if: (github.repository == 'Warzone2100/warzone2100')
+    environment: update_dispatch
+    # For this job to work, the following secrets must be set in the 'update_dispatch' environment:
+    # SITE_DISPATCH_ACCESS_TOKEN
     steps:
       - name: 'Trigger wz2100.net update'
         run: |

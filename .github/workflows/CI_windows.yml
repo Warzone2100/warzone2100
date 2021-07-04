@@ -529,12 +529,13 @@ jobs:
         GH_REPO: ${{ github.repository }}
         WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
   trigger-updates-json:
-    # For this job to work, the following secrets must be set:
-    # SITE_DISPATCH_ACCESS_TOKEN
     name: 'Trigger Info Update'
     runs-on: ubuntu-latest
     if: (github.repository == 'Warzone2100/warzone2100') && (github.ref == 'refs/heads/master')
     needs: windows-build
+    environment: update_dispatch
+    # For this job to work, the following secrets must be set in the 'update_dispatch' environment:
+    # SITE_DISPATCH_ACCESS_TOKEN
     steps:
       - name: 'Trigger updates.json update'
         run: |
