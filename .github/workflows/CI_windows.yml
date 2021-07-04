@@ -74,7 +74,7 @@ jobs:
       id: asciidoctor-dl
       run: |
         echo "Installing Asciidoctor"
-        gem install asciidoctor -v 2.0.12 --no-document | Out-Null
+        gem install asciidoctor -v 2.0.15 --no-document | Out-Null
         echo "Installing Asciidoctor... finished"
         $AsciidoctorBat = (Get-Command asciidoctor.bat).Path
         echo "Asciidoctor.bat: ${AsciidoctorBat}"
