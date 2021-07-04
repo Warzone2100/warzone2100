@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-03 21:41\n"
+"PO-Revision-Date: 2021-07-04 09:51\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -15794,7 +15794,7 @@ msgstr "Escarmouche/Multijoueurs"
 #: src/frontend.cpp:1983
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Aidez-nous à améliorer les traductions de Warzone 2100 : %s"
 
 #: src/frontend.cpp:1985
 msgid "Click to open webpage."
@@ -15811,7 +15811,7 @@ msgstr ""
 
 #: src/frontend.cpp:2034
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Cette difficulté s'adresse aux joueurs très expérimentés !"
 
 #: src/frontend.cpp:2136
 #: src/multiint.cpp:2965
@@ -17989,7 +17989,7 @@ msgstr ""
 #: src/multimenu.cpp:722
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Pack : %lu/%lu"
 
 #: src/multimenu.cpp:1023
 msgid "Channel"
