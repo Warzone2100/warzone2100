@@ -18,6 +18,7 @@ jobs:
     environment: update_dispatch
     # For this job to work, the following secrets must be set in the 'update_dispatch' environment:
     # SITE_DISPATCH_ACCESS_TOKEN
+    # DEPLOY_DISPATCH_ACCESS_TOKEN
     steps:
       - name: 'Trigger wz2100.net update'
         run: |
@@ -30,4 +31,10 @@ jobs:
           curl -X POST https://api.github.com/repos/Warzone2100/update-data/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.SITE_DISPATCH_ACCESS_TOKEN }} \
+          --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+      - name: 'Trigger itch.io deployment'
+        run: |
+          curl -X POST https://api.github.com/repos/Warzone2100/itch-build/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.DEPLOY_DISPATCH_ACCESS_TOKEN }} \
           --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
