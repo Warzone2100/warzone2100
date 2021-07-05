@@ -222,7 +222,7 @@ jobs:
         run: |
           cat "${GITHUB_WORKSPACE}/snap-stable-build/.snapcraft.yaml"
       - name: Push config to snap-stable-build
-        if: success() && (github.repository == 'Warzone2100/warzone2100') && (steps.commit-snap-changes.outputs.PROCESS_DEPLOYMENT == 'true') && (steps.config.outputs.PUBLISH_CONFIG == 'true')
+        if: success() && (github.repository == 'Warzone2100/warzone2100')
         id: push-snap-changes
         working-directory: "${{ github.workspace }}/snap-stable-build"
         run: |
