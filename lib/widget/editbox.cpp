@@ -688,20 +688,21 @@ void W_EDITBOX::display(int xOffset, int yOffset)
 
 	if (aText.isEmpty() && !placeholderText.isEmpty())
 	{
-		wzDisplayedText.setText(placeholderText.toUtf8(), FontID);
-		wzDisplayedText.render(fx, fy, (state & WEDBS_MASK) == WEDBS_FIXED ? WZCOL_FORM_TEXT : WZCOL_GREY);
+		displayCache.wzDisplayedText.setText(placeholderText.toUtf8(), FontID);
+		displayCache.wzDisplayedText.render(fx, fy, (state & WEDBS_MASK) == WEDBS_FIXED ? WZCOL_FORM_TEXT : WZCOL_GREY);
 	}
 	else
 	{
-		wzDisplayedText.setText(displayedText.toUtf8(), FontID);
-		wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
+		displayCache.wzDisplayedText.setText(displayedText.toUtf8(), FontID);
+		displayCache.wzDisplayedText.render(fx, fy, WZCOL_FORM_TEXT);
 	}
 
 	// Display the cursor if editing
 	if (((wzGetTicks() - blinkOffset) / WEDB_BLINKRATE) % 2 == 0)
 	{
 		auto visibleTextBeforeCursor = aText.substr(printStart, insPos - printStart);
-		int cursorX = x0 + WEDB_XGAP + iV_GetTextWidth(visibleTextBeforeCursor.toUtf8().c_str(), FontID);
+		displayCache.modeText.setText(visibleTextBeforeCursor.toUtf8(), FontID);
+		int cursorX = x0 + WEDB_XGAP + displayCache.modeText.width();
 		int cursorY = fy;
 
 		if ((state & WEDBS_MASK) == WEDBS_INSERT)

@@ -36,6 +36,11 @@
 #define WEDBS_HILITE	0x0010		//
 #define WEDBS_DISABLE   0x0020		// disable button from selection
 
+struct EditBoxDisplayCache {
+	WzText wzDisplayedText;
+	WzText modeText;
+};
+
 class W_EDITBOX : public WIDGET
 {
 
@@ -88,7 +93,7 @@ private:
 	void setCursorPosPixels(int xPos);
 
 	PIELIGHT boxColourFirst, boxColourSecond, boxColourBackground;
-	WzText wzDisplayedText;
+	EditBoxDisplayCache displayCache;
 	bool suppressAudioCallback = false;
 };
 
