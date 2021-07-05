@@ -215,6 +215,8 @@ jobs:
       - name: Apply Changes
         working-directory: "${{ github.workspace }}/snap-stable-build"
         run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
           git am -k "${{ github.workspace }}/diff/snapstablebuild.diff"
       - name: Debug output generated config
         run: |
