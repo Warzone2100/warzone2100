@@ -1819,7 +1819,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 			auto pStrongPtr = psWeakTitleUI.lock();
 			ASSERT_OR_RETURN(, pStrongPtr.operator bool(), "WzMultiplayerOptionsTitleUI no longer exists");
 			NetPlay.players[player].ai = aiIdx;
-			sstrcpy(NetPlay.players[player].name, getAIName(player));
+			setPlayerName(player, getAIName(player));
 			NetPlay.players[player].difficulty = AIDifficulty::MEDIUM;
 			NETBroadcastPlayerInfo(player);
 			pStrongPtr->closeAiChooser();
@@ -3228,11 +3228,11 @@ static void loadMapPlayerSettings(WzConfig& ini)
 		/* Try finding a name field, if not found use AI names for AI players if in SP skirmish */
 		if (ini.contains("name"))
 		{
-			sstrcpy(NetPlay.players[i].name, ini.value("name").toWzString().toUtf8().c_str());
+			setPlayerName(i, ini.value("name").toWzString().toUtf8().c_str());
 		}
 		else if (!NetPlay.bComms && i != selectedPlayer)
 		{
-			sstrcpy(NetPlay.players[i].name, getAIName(i));
+			setPlayerName(i, getAIName(i));
 		}
 
 		NetPlay.players[i].position = MAX_PLAYERS;  // Invalid value, fix later.
@@ -3352,7 +3352,7 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 			NetPlay.players[playerIndex].ai = 0;
 
 			/* ensure all players have a name in One Player Skirmish games */
-			sstrcpy(NetPlay.players[playerIndex].name, getAIName(playerIndex));
+			setPlayerName(playerIndex, getAIName(playerIndex));
 		}
 	}
 
@@ -3360,7 +3360,7 @@ static void resetPlayerConfiguration(const bool bShouldResetLocal = false)
 		std::swap(NetPlay.players[selectedPlayer].position, NetPlay.players[selectedPlayerPosition].position);
 	}
 
-	sstrcpy(NetPlay.players[selectedPlayer].name, sPlayer);
+	setPlayerName(selectedPlayer, sPlayer);
 
 	for (unsigned playerIndex = 0; playerIndex < MAX_PLAYERS; playerIndex++)
 	{
@@ -3960,7 +3960,7 @@ void WzMultiplayerOptionsTitleUI::processMultiopWidgets(UDWORD id)
 					{
 						NetPlay.players[i].ai = NetPlay.players[player].ai;
 						NetPlay.players[i].difficulty = NetPlay.players[player].difficulty;
-						sstrcpy(NetPlay.players[i].name, getAIName(player));
+						setPlayerName(i, getAIName(player));
 						NETBroadcastPlayerInfo(i);
 					}
 				}
@@ -5040,7 +5040,7 @@ void displayPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 		{
 		case AI_OPEN: sstrcpy(aitext, _("Open")); break;
 		case AI_CLOSED: sstrcpy(aitext, _("Closed")); break;
-		default: sstrcpy(aitext, NetPlay.players[j].name ); break;
+		default: sstrcpy(aitext, NetPlay.players[j].name); break;
 		}
 		cache.wzMainText.setText(aitext, font_regular);
 		cache.wzMainText.render(x + nameX, y + 22, WZCOL_FORM_TEXT);

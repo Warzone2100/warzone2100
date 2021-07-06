@@ -595,7 +595,7 @@ static int NET_CreatePlayer(char const *name, bool forceTakeLowestAvailablePlaye
 	NETlogEntry(buf, SYNC_FLAG, index);
 	NET_InitPlayer(index, false);  // re-init everything
 	NetPlay.players[index].allocated = true;
-	sstrcpy(NetPlay.players[index].name, name);
+	setPlayerName(index, name);
 	++NetPlay.playercount;
 	++sync_counter.joins;
 	return index;
@@ -747,13 +747,13 @@ bool NETchangePlayerName(UDWORD index, char *newName)
 {
 	if (!NetPlay.bComms)
 	{
-		sstrcpy(NetPlay.players[0].name, newName);
+		setPlayerName(0, newName);
 		return true;
 	}
 	debug(LOG_NET, "Requesting a change of player name for pid=%u to %s", index, newName);
 	NETlogEntry("Player wants a name change.", SYNC_FLAG, index);
 
-	sstrcpy(NetPlay.players[index].name, newName);
+	setPlayerName(index, newName);
 	if (NetPlay.isHost)
 	{
 		NETSendAllPlayerInfoTo(NET_ALL_PLAYERS);
@@ -3760,7 +3760,7 @@ bool NETjoinGame(const char *host, uint32_t port, const char *playername)
 			}
 
 			NetPlay.players[index].allocated = true;
-			sstrcpy(NetPlay.players[index].name, playername);
+			setPlayerName(index, playername);
 			NetPlay.players[index].heartbeat = true;
 
 			return true;
