@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-04 09:51\n"
+"PO-Revision-Date: 2021-07-05 09:50\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -15798,7 +15798,7 @@ msgstr "Geplänkel/Mehrspieler"
 #: src/frontend.cpp:1983
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Hilf uns, die Übersetzungen von Warzone 2100 zu verbessern: %s"
 
 #: src/frontend.cpp:1985
 msgid "Click to open webpage."
@@ -15811,7 +15811,7 @@ msgstr "SPIELEINSTELLUNGEN"
 
 #: src/frontend.cpp:2033
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Schwierigkeit: Verrückt"
 
 #: src/frontend.cpp:2034
 msgid "This difficulty is for very experienced players!"
