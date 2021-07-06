@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
 	<assemblyIdentity type="win32" name="Warzone2100Project.Warzone2100" version="@MANIFEST_assemblyIdentityVersion@"/>
 	<dependency>
 		<dependentAssembly>
@@ -21,11 +21,11 @@
 			</requestedPrivileges>
 		</security>
 	</trustInfo>
-	<asmv3:application xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
+	<asmv3:application>
 		<asmv3:windowsSettings>
-			<!-- Specify DPI Awareness (matching Qt5+ defaults) -->
+			<!-- Specify DPI Awareness -->
 			<dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware> <!-- legacy, Windows Vista through 8.1 -->
-			<dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">permonitorv2,permonitor</dpiAwareness>
+			<dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2, PerMonitor</dpiAwareness>
 		</asmv3:windowsSettings>
 	</asmv3:application>
 	<compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
