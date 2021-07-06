@@ -325,17 +325,24 @@ static const std::map<SHADER_MODE, program_data> shader_to_file_table =
 			// per-instance uniforms
 			"ModelViewMatrix", "NormalMatrix", "colour", "teamcolour", "stretch", "ecmEffect", "alphaTest"
 		} }),
-	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain_water.vert", "shaders/terrain.frag",
-		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex", "lightmap_tex", "textureMatrix1", "textureMatrix2",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
-	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_water.vert", "shaders/terraindepth.frag",
+	std::make_pair(SHADER_TERRAIN, program_data{ "terrain program", "shaders/terrain.vert", "shaders/terrain.frag",
+		{ "ModelViewProjectionMatrix", "ModelUVMatrix", "ModelUVLightMatrix",
+			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality", "hasNormalmap", "hasSpecularmap", "hasHeightmap",
+			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular", "TextureHeight"} }),
+	std::make_pair(SHADER_TERRAIN_DEPTH, program_data{ "terrain_depth program", "shaders/terrain_depth.vert", "shaders/terraindepth.frag",
 		{ "ModelViewProjectionMatrix", "paramx2", "paramy2", "lightmap_tex", "paramx2", "paramy2", "fogEnabled", "fogEnd", "fogStart" } }),
 	std::make_pair(SHADER_DECALS, program_data{ "decals program", "shaders/decals.vert", "shaders/decals.frag",
-		{ "ModelViewProjectionMatrix", "lightTextureMatrix", "paramxlight", "paramylight",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart", "tex", "lightmap_tex" } }),
+		{ "ModelViewProjectionMatrix", "ModelUVLightmapMatrix",
+			"cameraPos", "sunPos", "emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "quality",
+			"tex", "lightmap_tex", "TextureNormal", "TextureSpecular", "TextureHeight" } }),
 	std::make_pair(SHADER_WATER, program_data{ "water program", "shaders/terrain_water.vert", "shaders/water.frag",
-		{ "ModelViewProjectionMatrix", "paramx1", "paramy1", "paramx2", "paramy2", "tex1", "tex2", "textureMatrix1", "textureMatrix2",
-			"fogColor", "fogEnabled", "fogEnd", "fogStart" } }),
+		{ "ModelViewProjectionMatrix", "ModelUV1Matrix", "ModelUV2Matrix",
+			"cameraPos", "sunPos",
+			"emissiveLight", "ambientLight", "diffuseLight", "specularLight",
+			"fogColor", "fogEnabled", "fogEnd", "fogStart", "timeSec", "quality",
+			"tex1", "tex2", "tex1_nm", "tex2_nm", "tex1_sm", "tex2_sm", "tex1_hm", "tex2_hm" } }),
 	std::make_pair(SHADER_RECT, program_data{ "Rect program", "shaders/rect.vert", "shaders/rect.frag",
 		{ "transformationMatrix", "color" } }),
 	std::make_pair(SHADER_TEXRECT, program_data{ "Textured rect program", "shaders/rect.vert", "shaders/texturedrect.frag",
@@ -576,7 +583,7 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		vertexShaderHeader = shaderVersionStr;
 		// OpenGL ES Shading Language - 4. Variables and Types - pp. 35-36
 		// https://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf?#page=41
-		// 
+		//
 		// > The fragment language has no default precision qualifier for floating point types.
 		// > Hence for float, floating point vector and matrix variable declarations, either the
 		// > declaration must include a precision qualifier or the default float precision must
@@ -622,6 +629,13 @@ desc(_desc), vertex_buffer_desc(_vertex_buffer_desc)
 		}
 		uniform_bind_functions.push_back(it->second);
 	}
+}
+
+gl_pipeline_state_object::~gl_pipeline_state_object()
+{
+	if (this->vertexShader) glDeleteShader(this->vertexShader);
+	if (this->fragmentShader) glDeleteShader(this->fragmentShader);
+	glDeleteProgram(this->program);
 }
 
 void gl_pipeline_state_object::set_constants(const void* buffer, const size_t& size)
@@ -915,6 +929,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 	glBindAttribLocation(program, 2, "vertexColor");
 	glBindAttribLocation(program, 3, "vertexNormal");
 	glBindAttribLocation(program, 4, "vertexTangent");
+	glBindAttribLocation(program, 5, "tileNo");
 	ASSERT_OR_RETURN(, program, "Could not create shader program!");
 
 	char* vertexShaderContents = nullptr;
@@ -926,6 +941,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		if ((vertexShaderContents = readShaderBuf(vertexPath)))
 		{
 			GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+			vertexShader = shader;
 
 			const char* ShaderStrings[2] = { vertex_header, vertexShaderContents };
 
@@ -962,6 +978,7 @@ void gl_pipeline_state_object::build_program(bool fragmentHighpFloatAvailable, b
 		if ((fragmentShaderContents = readShaderBuf(fragmentPath)))
 		{
 			GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+			fragmentShader = shader;
 
 			std::string fragmentShaderStr = fragmentShaderContents;
 			free(fragmentShaderContents);
@@ -1191,19 +1208,29 @@ void gl_pipeline_state_object::set_constants(const gfx_api::Draw3DShapePerInstan
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN>& cbuf)
 {
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.paramX);
-	setUniforms(2, cbuf.paramY);
-	setUniforms(3, cbuf.paramXLight);
-	setUniforms(4, cbuf.paramYLight);
-	setUniforms(5, cbuf.texture0);
-	setUniforms(6, cbuf.texture1);
-	setUniforms(7, cbuf.unused);
-	setUniforms(8, cbuf.texture_matrix);
-	setUniforms(9, cbuf.fog_colour);
-	setUniforms(10, cbuf.fog_enabled);
-	setUniforms(11, cbuf.fog_begin);
-	setUniforms(12, cbuf.fog_end);
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelUVMatrix);
+	setUniforms(i++, cbuf.ModelUVLightMatrix);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.emissiveLight);
+	setUniforms(i++, cbuf.ambientLight);
+	setUniforms(i++, cbuf.diffuseLight);
+	setUniforms(i++, cbuf.specularLight);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.quality);
+	setUniforms(i++, cbuf.hasNormalmap);
+	setUniforms(i++, cbuf.hasSpecularmap);
+	setUniforms(i++, cbuf.hasHeightmap);
+	setUniforms(i++, 0); // tex
+	setUniforms(i++, 1); // lightmap_tex
+	setUniforms(i++, 2); // TextureNormal
+	setUniforms(i++, 3); // TextureSpecular
+	setUniforms(i++, 4); // TextureHeight
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_TERRAIN_DEPTH>& cbuf)
@@ -1221,33 +1248,54 @@ void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_DECALS>& cbuf)
 {
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.texture_matrix);
-	setUniforms(2, cbuf.param1);
-	setUniforms(3, cbuf.param2);
-	setUniforms(4, cbuf.fog_colour);
-	setUniforms(5, cbuf.fog_enabled);
-	setUniforms(6, cbuf.fog_begin);
-	setUniforms(7, cbuf.fog_end);
-	setUniforms(8, cbuf.texture0);
-	setUniforms(9, cbuf.texture1);
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelUVLightmapMatrix);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.emissiveLight);
+	setUniforms(i++, cbuf.ambientLight);
+	setUniforms(i++, cbuf.diffuseLight);
+	setUniforms(i++, cbuf.specularLight);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.quality);
+	setUniforms(i++, 0); // tex
+	setUniforms(i++, 1); // lightmap_tex
+	setUniforms(i++, 2); // TextureNormal
+	setUniforms(i++, 3); // TextureSpecular
+	setUniforms(i++, 4); // TextureHeight
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_WATER>& cbuf)
 {
-	setUniforms(0, cbuf.transform_matrix);
-	setUniforms(1, cbuf.param1);
-	setUniforms(2, cbuf.param2);
-	setUniforms(3, cbuf.param3);
-	setUniforms(4, cbuf.param4);
-	setUniforms(5, cbuf.texture0);
-	setUniforms(6, cbuf.texture1);
-	setUniforms(7, cbuf.translation);
-	setUniforms(8, cbuf.texture_matrix);
-	setUniforms(9, cbuf.fog_colour);
-	setUniforms(10, cbuf.fog_enabled);
-	setUniforms(11, cbuf.fog_begin);
-	setUniforms(12, cbuf.fog_end);
+	int i = 0;
+	setUniforms(i++, cbuf.ModelViewProjectionMatrix);
+	setUniforms(i++, cbuf.ModelUV1Matrix);
+	setUniforms(i++, cbuf.ModelUV2Matrix);
+	setUniforms(i++, cbuf.cameraPos);
+	setUniforms(i++, cbuf.sunPos);
+	setUniforms(i++, cbuf.emissiveLight);
+	setUniforms(i++, cbuf.ambientLight);
+	setUniforms(i++, cbuf.diffuseLight);
+	setUniforms(i++, cbuf.specularLight);
+	setUniforms(i++, cbuf.fog_colour);
+	setUniforms(i++, cbuf.fog_enabled);
+	setUniforms(i++, cbuf.fog_begin);
+	setUniforms(i++, cbuf.fog_end);
+	setUniforms(i++, cbuf.timeSec);
+	setUniforms(i++, cbuf.quality);
+	 // textures:
+	setUniforms(i++, 0);
+	setUniforms(i++, 1);
+	setUniforms(i++, 2);
+	setUniforms(i++, 3);
+	setUniforms(i++, 4);
+	setUniforms(i++, 5);
+	setUniforms(i++, 6);
+	setUniforms(i++, 7);
 }
 
 void gl_pipeline_state_object::set_constants(const gfx_api::constant_buffer_type<SHADER_RECT>& cbuf)
@@ -1312,6 +1360,8 @@ GLint get_size(const gfx_api::vertex_attribute_type& type)
 {
 	switch (type)
 	{
+		case gfx_api::vertex_attribute_type::int1:
+			return 1;
 		case gfx_api::vertex_attribute_type::float2:
 			return 2;
 		case gfx_api::vertex_attribute_type::float3:
@@ -1334,6 +1384,8 @@ GLenum get_type(const gfx_api::vertex_attribute_type& type)
 			return GL_FLOAT;
 		case gfx_api::vertex_attribute_type::u8x4_norm:
 			return GL_UNSIGNED_BYTE;
+		case gfx_api::vertex_attribute_type::int1:
+			return GL_INT;
 	}
 	debug(LOG_FATAL, "get_type(%d) failed", (int)type);
 	return GL_INVALID_ENUM; // silence warning
@@ -1346,6 +1398,7 @@ GLboolean get_normalisation(const gfx_api::vertex_attribute_type& type)
 		case gfx_api::vertex_attribute_type::float2:
 		case gfx_api::vertex_attribute_type::float3:
 		case gfx_api::vertex_attribute_type::float4:
+		case gfx_api::vertex_attribute_type::int1:
 			return GL_FALSE;
 		case gfx_api::vertex_attribute_type::u8x4_norm:
 			return true;
@@ -1441,7 +1494,11 @@ void gl_context::bind_vertex_buffers(const std::size_t& first, const std::vector
 		for (const auto& attribute : buffer_desc.attributes)
 		{
 			enableVertexAttribArray(static_cast<GLuint>(attribute.id));
-			glVertexAttribPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), static_cast<GLsizei>(buffer_desc.stride), reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
+			if (get_type(attribute.type) == GL_INT) {
+				glVertexAttribIPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), static_cast<GLsizei>(buffer_desc.stride), reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
+			} else {
+				glVertexAttribPointer(static_cast<GLuint>(attribute.id), get_size(attribute.type), get_type(attribute.type), get_normalisation(attribute.type), static_cast<GLsizei>(buffer_desc.stride), reinterpret_cast<void*>(attribute.offset + std::get<1>(vertex_buffers_offset[i])));
+			}
 		}
 	}
 }

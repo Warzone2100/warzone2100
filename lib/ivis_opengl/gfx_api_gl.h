@@ -90,6 +90,8 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 {
 	gfx_api::state_description desc;
 	GLuint program;
+	GLuint vertexShader = 0;
+	GLuint fragmentShader = 0;
 	std::vector<gfx_api::vertex_buffer> vertex_buffer_desc;
 	std::vector<GLint> locations;
 	std::vector<GLint> duplicateFragmentUniformLocations;
@@ -103,6 +105,7 @@ struct gl_pipeline_state_object final : public gfx_api::pipeline_state_object
 	typename std::pair<std::type_index, std::function<void(const void*, size_t)>> uniform_setting_func();
 
 	gl_pipeline_state_object(bool gles, bool fragmentHighpFloatAvailable, bool fragmentHighpIntAvailable, const gfx_api::state_description& _desc, const SHADER_MODE& shader, const std::vector<std::type_index>& uniform_blocks, const std::vector<gfx_api::vertex_buffer>& vertex_buffer_desc);
+	~gl_pipeline_state_object();
 	void set_constants(const void* buffer, const size_t& size);
 	void set_uniforms(const size_t& first, const std::vector<std::tuple<const void*, size_t>>& uniform_blocks);
 

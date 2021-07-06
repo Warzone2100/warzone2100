@@ -29,12 +29,24 @@ void loadTerrainTextures();
 bool initTerrain();
 void shutdownTerrain();
 
-void drawTerrain(const glm::mat4 &ModelViewProjection);
-void drawWater(const glm::mat4 &viewMatrix);
+void drawTerrain(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos);
+void drawWater(const glm::mat4 &ModelViewProjection, const Vector3f &cameraPos, const Vector3f &sunPos);
 
 PIELIGHT getTileColour(int x, int y);
 void setTileColour(int x, int y, PIELIGHT colour);
 
 void markTileDirty(int i, int j);
+
+enum TerrainShaderQuality
+{
+	CLASSIC = 0,
+	NORMAL_MAPPING = 1,
+	END = 2
+};
+
+extern TerrainShaderQuality terrainShaderQuality;
+
+// for debug
+void reloadTerrainTextures();
 
 #endif

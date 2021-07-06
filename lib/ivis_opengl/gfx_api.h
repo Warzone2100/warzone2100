@@ -204,6 +204,7 @@ namespace gfx_api
 		float3,
 		float4,
 		u8x4_norm,
+		int1,
 	};
 
 	struct vertex_buffer_input
@@ -381,6 +382,11 @@ namespace gfx_api
 
 		void bind()
 		{
+			if (this->nextpso != nullptr) {
+				if (this->pso != nullptr) delete this->pso;
+				this->pso = this->nextpso;
+				this->nextpso = nullptr;
+			}
 			gfx_api::context::get().bind_pipeline(pso, std::tuple_size<texture_inputs>::value == 0);
 		}
 
@@ -436,11 +442,17 @@ namespace gfx_api
 		{
 			context::get().draw_elements(offset, count, primitive, index);
 		}
+
+		void recompile()
+		{
+			this->nextpso = gfx_api::context::get().build_pipeline(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+		}
 	private:
-		pipeline_state_object* pso;
+		pipeline_state_object* pso = nullptr;
+		pipeline_state_object* nextpso = nullptr;
 		pipeline_state_helper()
 		{
-			pso = gfx_api::context::get().build_pipeline(rasterizer::get(), shader, primitive, untuple_typeinfo(uniform_inputs{}), untuple<texture_input>(texture_inputs{}), untuple<vertex_buffer>(vertex_buffer_inputs{}));
+			recompile();
 		}
 
 //		// Requires C++14 (+)
@@ -475,6 +487,7 @@ namespace gfx_api
 	constexpr std::size_t color = 2;
 	constexpr std::size_t normal = 3;
 	constexpr std::size_t tangent = 4;
+	constexpr std::size_t tileNo = 5;
 
 	using notexture = std::tuple<>;
 
@@ -675,75 +688,109 @@ namespace gfx_api
 	template<>
 	struct constant_buffer_type<SHADER_TERRAIN>
 	{
-		glm::mat4 transform_matrix;
-		glm::vec4 paramX;
-		glm::vec4 paramY;
-		glm::vec4 paramXLight;
-		glm::vec4 paramYLight;
-		glm::mat4 unused;
-		glm::mat4 texture_matrix;
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUVMatrix;
+		glm::mat4 ModelUVLightMatrix;
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		int texture0;
-		int texture1;
+		int quality;
+		int hasNormalmap;
+		int hasSpecularmap;
+		int hasHeightmap;
 	};
 
 	using TerrainLayer = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ADDITIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
 	std::tuple<constant_buffer_type<SHADER_TERRAIN>>,
 	std::tuple<
 	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>,
-	vertex_buffer_description<4, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic_repeat>, texture_description<1, sampler_type::bilinear>>, SHADER_TERRAIN>;
+	vertex_buffer_description<4, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>,
+	vertex_buffer_description<12, vertex_attribute_description<normal, gfx_api::vertex_attribute_type::float3, 0>>
+	>, std::tuple<
+	texture_description<0, sampler_type::anisotropic_repeat>,
+	texture_description<1, sampler_type::bilinear>,
+	texture_description<2, sampler_type::anisotropic_repeat>, // normal map
+	texture_description<3, sampler_type::anisotropic_repeat>, // specular map
+	texture_description<4, sampler_type::anisotropic_repeat> // height map
+	>, SHADER_TERRAIN>;
 
 	template<>
 	struct constant_buffer_type<SHADER_DECALS>
 	{
-		glm::mat4 transform_matrix;
-		glm::mat4 texture_matrix;
-		glm::vec4 param1;
-		glm::vec4 param2;
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUVLightmapMatrix;
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		int texture0;
-		int texture1;
+		int quality;
 	};
 
 	using TerrainDecals = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_ALPHA, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u16,
 	std::tuple<constant_buffer_type<SHADER_DECALS>>,
 	std::tuple<
-	vertex_buffer_description<sizeof(glm::vec3) + sizeof(glm::vec2),
+	vertex_buffer_description<2*sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec4) + sizeof(int32_t), // DecalVertex struct
 	vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>,
-	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(glm::vec3)>
+	vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, sizeof(glm::vec3)>,
+	vertex_attribute_description<normal,   gfx_api::vertex_attribute_type::float3, sizeof(glm::vec3) + sizeof(glm::vec2)>,
+	vertex_attribute_description<tangent,  gfx_api::vertex_attribute_type::float4, 2*sizeof(glm::vec3) + sizeof(glm::vec2)>,
+	vertex_attribute_description<tileNo,   gfx_api::vertex_attribute_type::int1,   2*sizeof(glm::vec3) + sizeof(glm::vec2) + sizeof(glm::vec4)>
 	>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic>, texture_description<1, sampler_type::bilinear>>, SHADER_DECALS>;
+	>, std::tuple<
+	texture_description<0, sampler_type::anisotropic>,
+	texture_description<1, sampler_type::bilinear>,
+	texture_description<2, sampler_type::anisotropic>, // normal map
+	texture_description<3, sampler_type::anisotropic>, // specular map
+	texture_description<4, sampler_type::anisotropic>  // height map
+	>, SHADER_DECALS>;
 
 	template<>
 	struct constant_buffer_type<SHADER_WATER>
 	{
-		glm::mat4 transform_matrix;
-		glm::vec4 param1;
-		glm::vec4 param2;
-		glm::vec4 param3;
-		glm::vec4 param4;
-		glm::mat4 translation;
-		glm::mat4 texture_matrix;
+		glm::mat4 ModelViewProjectionMatrix;
+		glm::mat4 ModelUV1Matrix;
+		glm::mat4 ModelUV2Matrix;
+		glm::vec4 cameraPos; // in modelSpace
+		glm::vec4 sunPos; // in modelSpace
+		glm::vec4 emissiveLight; // light colors/intensity
+		glm::vec4 ambientLight;
+		glm::vec4 diffuseLight;
+		glm::vec4 specularLight;
 		glm::vec4 fog_colour;
 		int fog_enabled;
 		float fog_begin;
 		float fog_end;
-		int texture0;
-		int texture1;
+		float timeSec;
+		int quality;
 	};
 
 	using WaterPSO = typename gfx_api::pipeline_state_helper<rasterizer_state<REND_MULTIPLICATIVE, DEPTH_CMP_LEQ_WRT_OFF, 255, polygon_offset::disabled, stencil_mode::stencil_disabled, cull_mode::back>, primitive_type::triangles, index_type::u32,
 	std::tuple<constant_buffer_type<SHADER_WATER>>,
 	std::tuple<
-	vertex_buffer_description<12, vertex_attribute_description<position, gfx_api::vertex_attribute_type::float3, 0>>
-	>, std::tuple<texture_description<0, sampler_type::anisotropic_repeat>, texture_description<1, sampler_type::anisotropic_repeat>>, SHADER_WATER>;
+	vertex_buffer_description<sizeof(glm::vec4), vertex_attribute_description<position, gfx_api::vertex_attribute_type::float4, 0>> // WaterVertex, w is depth
+	>, std::tuple<
+	texture_description<0, sampler_type::anisotropic_repeat>, // tex1
+	texture_description<1, sampler_type::anisotropic_repeat>, // tex2
+	texture_description<2, sampler_type::anisotropic_repeat>, // normal map1
+	texture_description<3, sampler_type::anisotropic_repeat>, // normal map2
+	texture_description<4, sampler_type::anisotropic_repeat>, // specular map1
+	texture_description<5, sampler_type::anisotropic_repeat>, // specular map2
+	texture_description<6, sampler_type::anisotropic_repeat>, // height map1
+	texture_description<7, sampler_type::anisotropic_repeat>  // height map2
+	>, SHADER_WATER>;
 
 	using gfx_tc = vertex_buffer_description<8, vertex_attribute_description<texcoord, gfx_api::vertex_attribute_type::float2, 0>>;
 	using gfx_colour = vertex_buffer_description<4, vertex_attribute_description<color, gfx_api::vertex_attribute_type::u8x4_norm, 0>>;

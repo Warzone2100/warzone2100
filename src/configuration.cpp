@@ -51,6 +51,7 @@
 #include "display.h"
 #include "keybind.h" // for MAP_ZOOM_RATE_STEP
 #include "loadsave.h" // for autosaveEnabled
+#include "terrain.h"
 
 #include <type_traits>
 
@@ -477,6 +478,18 @@ bool loadConfig()
 		pie_SetFogStatus(false);
 		pie_EnableFog(false);
 	}
+	if (auto value = iniGetIntegerOpt("terrainShaderQuality"))
+	{
+		auto intValue = value.value();
+		if (intValue >= 0 && intValue < TerrainShaderQuality::END)
+		{
+			terrainShaderQuality = static_cast<TerrainShaderQuality>(intValue);
+		}
+		else
+		{
+			debug(LOG_WARNING, "Unsupported / invalid terrainShaderQuality value: %d; defaulting to: %d", intValue, static_cast<int>(terrainShaderQuality));
+		}
+	}
 	ActivityManager::instance().endLoadingSettings();
 	return true;
 }
@@ -614,6 +627,7 @@ bool saveConfig()
 	iniSetBool("lockCameraScrollWhileRotating", lockCameraScrollWhileRotating);
 	iniSetBool("autosaveEnabled", autosaveEnabled);
 	iniSetBool("fog", pie_GetFogEnabled());
+	iniSetInteger("terrainShaderQuality", terrainShaderQuality);
 
 	// write out ini file changes
 	bool result = saveIniFile(file, ini);

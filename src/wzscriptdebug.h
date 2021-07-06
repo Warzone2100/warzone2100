@@ -82,6 +82,7 @@ private:
 	std::shared_ptr<WIDGET> createTriggersPanel();
 	std::shared_ptr<WIDGET> createMessagesPanel();
 	std::shared_ptr<WIDGET> createLabelsPanel();
+	std::shared_ptr<W_FORM> createGraphicsPanel();
 
 private:
 	enum class ScriptDebuggerPanel {
@@ -91,7 +92,8 @@ private:
 		Players,
 		Triggers,
 		Messages,
-		Labels
+		Labels,
+		Graphics
 	};
 	static void addTextTabButton(const std::shared_ptr<MultibuttonWidget>& mbw, ScriptDebuggerPanel value, const char* text);
 	void switchPanel(ScriptDebuggerPanel newPanel);

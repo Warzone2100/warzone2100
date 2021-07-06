@@ -1061,6 +1061,8 @@ vk::Format VkPSO::to_vk(const gfx_api::vertex_attribute_type& type)
 		return vk::Format::eR32G32Sfloat;
 	case gfx_api::vertex_attribute_type::u8x4_norm:
 		return vk::Format::eR8G8B8A8Unorm;
+	case gfx_api::vertex_attribute_type::int1:
+		return vk::Format::eR32Sint;
 	}
 	debug(LOG_FATAL, "Unsupported vertex_attribute_type");
 	return vk::Format::eUndefined;
@@ -1628,7 +1630,7 @@ void VkTexture::upload_and_generate_mipmaps(const size_t& offset_x, const size_t
 //								   STBIR_COLORSPACE_LINEAR,
 //								   nullptr);
 
-		upload(i, offset_x, offset_y, output_w, output_h, buffer_format, (const void*)output_pixels);
+		upload(i, offset_x >> i, offset_y >> i, output_w, output_h, buffer_format, (const void*)output_pixels);
 
 		if (prev_input_pixels_malloc)
 		{
