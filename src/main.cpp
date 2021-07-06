@@ -1272,6 +1272,16 @@ typedef BOOL (WINAPI *SetProcessDEPPolicyFunction)(
 # define PROCESS_DEP_ENABLE		0x00000001
 #endif
 
+#if !defined(DPI_AWARENESS_CONTEXT)
+# define DPI_AWARENESS_CONTEXT HANDLE
+#endif
+#if !defined(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)
+# define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((DPI_AWARENESS_CONTEXT)-4)
+#endif
+typedef BOOL (WINAPI *SetProcessDpiAwarenessContextFunction)(
+  DPI_AWARENESS_CONTEXT value
+);
+
 void osSpecificFirstChanceProcessSetup_Win()
 {
 #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
@@ -1330,6 +1340,22 @@ void osSpecificFirstChanceProcessSetup_Win()
 		_SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
 	}
 #endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP) */
+
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+	// Ensure process is set to DPI-aware on Windows 10+
+	// NOTE: Although this is set in the app manifest, there may be situations where it isn't detected - so don't just rely on the app manifest
+	HMODULE hUser32 = LoadLibraryW(L"User32.dll");
+	ASSERT(hUser32 != NULL, "Unable to get handle to User32?");
+	if (hUser32)
+	{
+		SetProcessDpiAwarenessContextFunction _SetProcessDpiAwarenessContext = reinterpret_cast<SetProcessDpiAwarenessContextFunction>(reinterpret_cast<void*>(GetProcAddress(hUser32, "SetProcessDpiAwarenessContext")));
+		if (_SetProcessDpiAwarenessContext)
+		{
+			_SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+		}
+		FreeLibrary(hUser32);
+	}
+#endif
 }
 
 static bool winCheckIfRunningUnderWine(std::string* output_wineinfostr = nullptr, std::string* output_platform = nullptr)
