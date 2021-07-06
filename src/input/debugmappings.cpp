@@ -22,7 +22,6 @@
 
 #include "lib/netplay/netplay.h"
 
-
 DebugInputManager::DebugInputManager(const unsigned int maxPlayers)
 	: bDoingDebugMappings(false)
 	, playerWantsDebugMappings(maxPlayers, false)

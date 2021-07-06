@@ -35,7 +35,19 @@ public:
 
 	void setPlayerWantsDebugMappings(const unsigned int playerIndex, const bool bWants);
 
+	bool toggleDebugMappingPriority()
+	{
+		bDebugPrioritized = !bDebugPrioritized;
+		return bDebugPrioritized;
+	}
+
+	bool isDebugPrioritized() const
+	{
+		return bDebugPrioritized;
+	}
+
 private:
+	bool bDebugPrioritized;
 	bool bDoingDebugMappings;
 	std::vector<bool> playerWantsDebugMappings;
 };

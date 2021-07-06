@@ -155,7 +155,7 @@ typedef std::function<void()> MappableFunction;
 
 struct KeyFunctionInfo
 {
-	const InputContext& context;
+	const ContextId&       context;
 	const KeyMappingType   type;
 	const MappableFunction function;
 	const std::string      name;
@@ -163,20 +163,23 @@ struct KeyFunctionInfo
 
 	const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings;
 
+	const bool bIsDebugOnly;
+
 	KeyFunctionInfo(
-		const InputContext& context,
+		const ContextId&       context,
 		const KeyMappingType   type,
 		const MappableFunction function,
 		const std::string      name
 	);
 
 	KeyFunctionInfo(
-		const InputContext& context,
+		const ContextId&       context,
 		const KeyMappingType   type,
 		const MappableFunction function,
 		const std::string      name,
 		const std::string      displayName,
-		const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings
+		const std::vector<std::pair<KeyMappingSlot, KeyCombination>> defaultMappings,
+		const bool             bIsDebugOnly = false
 	);
 
 	// Prevent copies. The entries are immutable and thus should never be copied around.
