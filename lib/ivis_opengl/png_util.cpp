@@ -68,6 +68,11 @@ static void wzpng_flush_data(png_structp png_ptr)
 
 	PHYSFS_flush(fileHandle);
 }
+
+static void PNGCBAPI iv_png_user_warn_fn(png_structp png_ptr, png_const_charp warning_msg)
+{
+	debug(LOG_ERROR, "libpng warning: %s", warning_msg);
+}
 // End of PNG callbacks
 
 static inline void PNGReadCleanup(png_infop *info_ptr, png_structp *png_ptr, PHYSFS_file *fileHandle)
@@ -136,7 +141,7 @@ bool iV_loadImage_PNG(const char *fileName, iV_Image *image)
 		return false;
 	}
 
-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, iv_png_user_warn_fn);
 	if (png_ptr == nullptr)
 	{
 		debug(LOG_FATAL, "pie_PNGLoadMem: Unable to create png struct");
