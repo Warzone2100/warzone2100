@@ -2901,7 +2901,6 @@ static void drawStructureBuildProgress(STRUCTURE *psStruct)
 static void	drawStructureSelections()
 {
 	STRUCTURE	*psStruct;
-	SDWORD		scrX, scrY;
 	UDWORD		i;
 	BASE_OBJECT	*psClickedOn;
 	bool		bMouseOverStructure = false;
@@ -2929,7 +2928,42 @@ static void	drawStructureSelections()
 			    (bMouseOverOwnStructure && psStruct == (STRUCTURE *)psClickedOn)
 			   )
 			{
+
 				drawStructureHealth(psStruct);
+
+				if(psStruct->selected){
+					Vector2i position = {
+						psStruct->pos.x - world_coord(psStruct->pStructureType->baseWidth) / 2,
+						psStruct->pos.y - world_coord(psStruct->pStructureType->baseBreadth) / 2
+					};
+					
+					int mapX = map_coord(position.x - player.p.x) + visibleTiles.x / 2;
+					int mapY = map_coord(position.y - player.p.z) + visibleTiles.y / 2;
+					if (mapX < 0 || mapY < 0)
+					{
+						continue;
+					}
+					if (mapX > visibleTiles.x || mapY > visibleTiles.y)
+					{
+						continue;
+					}
+
+					auto aa = tileScreenInfo[mapY][mapX];
+					auto ba = tileScreenInfo[mapY][mapX + psStruct->pStructureType->baseWidth];
+					auto ab = tileScreenInfo[mapY + psStruct->pStructureType->baseBreadth][mapX];
+					auto bb = tileScreenInfo[mapY + psStruct->pStructureType->baseBreadth][mapX + psStruct->pStructureType->baseWidth];
+
+					auto left = glm::min(aa.x, glm::min(ba.x, glm::min(ab.x, bb.x)));
+					auto right = glm::max(aa.x, glm::max(ba.x, glm::max(ab.x, bb.x)));
+					auto bottom = glm::max(aa.y, glm::max(ba.y, glm::max(ab.y, bb.y)));
+
+					std::vector<PIERECT_DrawRequest> rectsToDraw; // batch rect drawing
+					rectsToDraw.push_back(PIERECT_DrawRequest(left, bottom - 7, left + 1, bottom, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(left, bottom, left + 7, bottom + 1, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(right - 7, bottom, right, bottom + 1, WZCOL_WHITE));
+					rectsToDraw.push_back(PIERECT_DrawRequest(right, bottom - 7, right + 1, bottom + 1, WZCOL_WHITE));
+					pie_DrawMultiRect(rectsToDraw);
+				}
 
 				for (i = 0; i < psStruct->numWeaps; i++)
 				{
@@ -2953,9 +2987,7 @@ static void	drawStructureSelections()
 			if (psStruct->flags.test(OBJECT_FLAG_TARGETED)
 			    && psStruct->sDisplay.frameNumber == currentGameFrame)
 			{
-				scrX = psStruct->sDisplay.screenX;
-				scrY = psStruct->sDisplay.screenY;
-				iV_DrawImage(IntImages, getTargettingGfx(), scrX, scrY);
+				iV_DrawImage(IntImages, getTargettingGfx(), psStruct->sDisplay.screenX, psStruct->sDisplay.screenY);
 			}
 		}
 	}
