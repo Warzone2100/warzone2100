@@ -90,6 +90,9 @@ void WzOldTitleUI::start()
 	case MUSIC_MANAGER:
 		startMusicManager();
 		break;
+	case MISC_OPTIONS:
+		startMiscOptionsMenu();
+		break;
 	case STARTGAME:
 	case QUIT:
 	case LOADSAVEGAME:
@@ -124,6 +127,10 @@ TITLECODE WzOldTitleUI::run()
 
 	case MUSIC_MANAGER:
 		runMusicManager();
+		break;
+		
+	case MISC_OPTIONS:
+		runMiscOptionsMenu();
 		break;
 
 	case TITLE:
