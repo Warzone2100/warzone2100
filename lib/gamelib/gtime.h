@@ -33,7 +33,7 @@ struct NETQUEUE;
 /// The number of time units per second of the game clock.
 #define GAME_TICKS_PER_SEC 1000
 /// The number of game state updates per second of the game clock.
-#define GAME_UPDATES_PER_SEC 10
+#define GAME_UPDATES_PER_SEC 20
 /// The number of time units per game tick.
 #define GAME_TICKS_PER_UPDATE (GAME_TICKS_PER_SEC/GAME_UPDATES_PER_SEC)
 
