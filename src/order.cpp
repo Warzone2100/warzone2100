@@ -717,7 +717,8 @@ void orderUpdateDroid(DROID *psDroid)
 		}
 		else if ((psDroid->action == DACTION_MOVETOATTACK) &&
 		         !isVtolDroid(psDroid) &&
-		         !actionVisibleTarget(psDroid, psDroid->order.psObj, 0))
+		         !actionVisibleTarget(psDroid, psDroid->order.psObj, 0) &&
+				 secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD)
 		{
 			// lost sight of the target while chasing it - change to a move action so
 			// that the unit will fire on other things while moving
@@ -735,11 +736,11 @@ void orderUpdateDroid(DROID *psDroid)
 		else if ((psDroid->action == DACTION_NONE) ||
 		         (psDroid->action == DACTION_CLEARREARMPAD))
 		{
-			if (psDroid->order.type == DORDER_ATTACKTARGET
+			if ((psDroid->order.type == DORDER_ATTACKTARGET || psDroid->order.type == DORDER_ATTACK)
 				&& secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD
 				&& !actionInRange(psDroid, psDroid->order.psObj, 0))
 			{
-				// on hold orders give up
+				// target is not in range and DSS_HALT_HOLD: give up, don't move
 				psDroid->order = DroidOrder(DORDER_NONE);
 			}
 			else if (!isVtolDroid(psDroid) || allVtolsRearmed(psDroid))
@@ -1375,8 +1376,9 @@ void orderDroidBase(DROID *psDroid, DROID_ORDER_DATA *psOrder)
 
 			if (isVtolDroid(psDroid)
 				|| actionInRange(psDroid, psOrder->psObj, 0)
-				|| (psOrder->type == DORDER_ATTACKTARGET && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
+				|| ((psOrder->type == DORDER_ATTACKTARGET || psOrder->type == DORDER_ATTACK)  && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD))
 			{
+				// when DSS_HALT_HOLD, don't move to attack
 				actionDroid(psDroid, DACTION_ATTACK, psOrder->psObj);
 			}
 			else
@@ -3256,8 +3258,7 @@ bool secondarySetState(DROID *psDroid, SECONDARY_ORDER sec, SECONDARY_STATE Stat
 					moveToRearm(psDroid);
 				}
 			}
-			else if (orderState(psDroid, DORDER_GUARD) &&
-			         droidAttacking(psDroid))
+			else if (droidAttacking(psDroid))	 
 			{
 				// send the unit back to the guard position
 				actionDroid(psDroid, DACTION_NONE);

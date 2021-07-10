@@ -1132,9 +1132,14 @@ void actionUpdateDroid(DROID *psDroid)
 					psDroid->action = DACTION_NONE;
 				}
 			}
-			else
+			else if (secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD)
 			{
 				psDroid->action = DACTION_MOVETOATTACK;	// out of range - chase it
+			}
+			else
+			{
+				psDroid->order.psObj = nullptr;
+				psDroid->action = DACTION_NONE;
 			}
 		}
 
@@ -2222,11 +2227,10 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 					moveTurnDroid(psDroid, psDroid->psActionTarget[0]->pos.x, psDroid->psActionTarget[0]->pos.y);
 				}
 			}
-			else if (order->type != DORDER_HOLD)
+			else if (order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD)
 			{
 				int pbx = 0;
 				int pby = 0;
-
 				/* direct fire - try and extend the range */
 				psDroid->action = DACTION_MOVETOATTACK;
 				actionCalcPullBackPoint(psDroid, psAction->psObj, &pbx, &pby);
@@ -2236,12 +2240,16 @@ static void actionDroidBase(DROID *psDroid, DROID_ACTION_DATA *psAction)
 				turnOffMultiMsg(false);
 			}
 		}
-		else if (order->type != DORDER_HOLD) // approach closer?
+		else if (order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) != DSS_HALT_HOLD) // approach closer?
 		{
 			psDroid->action = DACTION_MOVETOATTACK;
 			turnOffMultiMsg(true);
 			moveDroidTo(psDroid, psAction->psObj->pos.x, psAction->psObj->pos.y);
 			turnOffMultiMsg(false);
+		}
+		else if (order->type != DORDER_HOLD && secondaryGetState(psDroid, DSO_HALTTYPE) == DSS_HALT_HOLD)
+		{
+			psDroid->action = DACTION_ATTACK;
 		}
 		break;
 
