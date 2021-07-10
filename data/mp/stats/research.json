@@ -7512,6 +7512,10 @@
 			"MG2-VTOL",
 			"MG2Mk1"
 		],
+		"redComponents": [
+			"MG1-VTOL",
+			"MG1Mk1"
+		],
 		"statID": "MG2Mk1"
 	},
 	"R-Wpn-MG3Mk1": {
@@ -7530,6 +7534,11 @@
 			"MG3-VTOL",
 			"MG3Mk1"
 		],
+		"redComponents": [
+			"CyborgChaingun",
+			"MG2-VTOL",
+			"MG2Mk1"
+		],
 		"statID": "MG3Mk1"
 	},
 	"R-Wpn-MG4": {
@@ -7540,10 +7549,6 @@
 		"name": "Assault Gun",
 		"redComponents": [
 			"CyborgChaingun",
-			"MG1-VTOL",
-			"MG1Mk1",
-			"MG2-VTOL",
-			"MG2Mk1",
 			"MG3-VTOL",
 			"MG3Mk1"
 		],
