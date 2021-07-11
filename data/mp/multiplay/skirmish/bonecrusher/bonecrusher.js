@@ -390,7 +390,7 @@ function init(){
 	//Определяем мусорщиков
 	//Больше не требуется, игра сама предоставляет эту переменную
 //	scavengerPlayer = (scavengers) ? Math.max(7,maxPlayers) : -1;
-	if(scavengers)debugMsg("На карте присудствуют гопники! {"+scavengerPlayer+"}", "init");
+	if(scavengers != NO_SCAVENGERS)debugMsg("На карте присудствуют гопники! {"+scavengerPlayer+"}", "init");
 	else debugMsg("На карте отсутствуют гопники", "init");
 	
 //	base = startPositions[me];

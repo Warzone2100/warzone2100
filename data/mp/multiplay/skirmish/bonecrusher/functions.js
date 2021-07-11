@@ -499,7 +499,7 @@ function getEnemyNearAlly(){
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumDroid(scavengerPlayer, DROID_WEAPON, me));
 	}
 	
@@ -530,7 +530,7 @@ function getEnemyNearPos(x,y,r){
 		if ( e == me ) continue;
 		targ = targ.concat(enumDroid(e, DROID_WEAPON, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumDroid(scavengerPlayer, DROID_WEAPON, me));
 	}
 	
@@ -564,7 +564,7 @@ function getFreeResources(){
 function getAllResources(){
 	var resources = getFreeResources();
 	for ( var e = 0; e < maxPlayers; ++e ) resources = resources.concat(enumStruct(e,RESOURCE_EXTRACTOR));
-	if(scavengers == true){
+	if(scavengers != NO_SCAVENGERS){
 		resources = resources.concat(enumStruct(scavengerPlayer, "A0ResourceExtractor"));
 	}
 	return resources;
@@ -618,7 +618,7 @@ function getEnemyFactories(){
 		targ = targ.concat(enumStruct(e, FACTORY, me));
 		targ = targ.concat(enumStruct(e, CYBORG_FACTORY, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumStruct(scavengerPlayer, FACTORY, me));
 		targ = targ.concat(enumStruct(scavengerPlayer, CYBORG_FACTORY, me));
 	}
@@ -651,7 +651,7 @@ function getEnemyNearBase(){
 		targ = targ.concat(enumDroid(e, DROID_ANY, me));
 		targ = targ.concat(enumStruct(e, DEFENSE, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumStruct(scavengerPlayer, DROID_ANY, me));
 		targ = targ.concat(enumStruct(scavengerPlayer, DEFENSE, me));
 	}
@@ -663,7 +663,7 @@ function getEnemyCloseBase(){
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumDroid(e, DROID_ANY, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumStruct(scavengerPlayer, DROID_ANY, me));
 	}
 	return targ.filter(function(e){if(distBetweenTwoPoints_p(e.x,e.y,base.x,base.y) < (base_range/2) && !isFixVTOL(e))return true; return false;});
@@ -794,7 +794,7 @@ function getEnemyDefences(){
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, DEFENSE, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumStruct(scavengerPlayer, DEFENSE, me));
 		targ = targ.concat(enumStruct(scavengerPlayer, WALL, me));
 	}
@@ -820,7 +820,7 @@ function getEnemyStructures(){
 		targ = targ.concat(enumStruct(e, SAT_UPLINK, me));
 		targ = targ.concat(enumStruct(e, VTOL_FACTORY, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumStruct(scavengerPlayer, DEFENSE, me));
 		targ = targ.concat(enumStruct(scavengerPlayer, WALL, me));
 	}
@@ -833,7 +833,7 @@ function getEnemyWalls(){
 		if ( allianceExistsBetween(me,e) ) continue;
 		targ = targ.concat(enumStruct(e, WALL, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumStruct(scavengerPlayer, WALL, me));
 	}
 	return targ;
@@ -847,7 +847,7 @@ function getEnemyResources(){
 		var tmp = enumStruct(e, RESOURCE_EXTRACTOR, me);
 		enemyRigs = enemyRigs.concat(tmp);
 	}
-	if(scavengers == true) enemyRigs = enemyRigs.concat(enumStruct(scavengerPlayer, RESOURCE_EXTRACTOR, me));
+	if(scavengers != NO_SCAVENGERS) enemyRigs = enemyRigs.concat(enumStruct(scavengerPlayer, RESOURCE_EXTRACTOR, me));
 
 	return enemyRigs;
 }
@@ -863,7 +863,7 @@ function getEnemyProduction(){
 		targ = targ.concat(enumStruct(e, FACTORY, me));
 		targ = targ.concat(enumStruct(e, CYBORG_FACTORY, me));
 	}
-	if(scavengers == true) {
+	if(scavengers != NO_SCAVENGERS) {
 		targ = targ.concat(enumStruct(scavengerPlayer, RESOURCE_EXTRACTOR, me));
 		targ = targ.concat(enumDroid(scavengerPlayer, DROID_CONSTRUCT, me));
 		targ = targ.concat(enumDroid(scavengerPlayer, 10, me)); // Киборг-строитель

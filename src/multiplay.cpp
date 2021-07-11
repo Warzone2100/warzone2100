@@ -540,7 +540,7 @@ int scavengerSlot()
 
 int scavengerPlayer()
 {
-	return game.scavengers ? scavengerSlot() : -1;
+	return (game.scavengers != NO_SCAVENGERS) ? scavengerSlot() : -1;
 }
 
 // ////////////////////////////////////////////////////////////////////////////
