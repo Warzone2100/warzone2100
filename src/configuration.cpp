@@ -381,7 +381,7 @@ bool loadConfig()
 	game.power = iniGetInteger("powerLevel", LEV_MED).value();
 	game.base = iniGetInteger("base", CAMP_BASE).value();
 	game.alliance = iniGetInteger("alliance", NO_ALLIANCES).value();
-	game.scavengers = iniGetBool("scavengers", false).value();
+	game.scavengers = iniGetInteger("newScavengers", SCAVENGERS).value();
 	bEnemyAllyRadarColor = iniGetBool("radarObjectMode", false).value();
 	radarDrawMode = (RADAR_DRAW_MODE)iniGetInteger("radarTerrainMode", RADAR_MODE_DEFAULT).value();
 	radarDrawMode = (RADAR_DRAW_MODE)MIN(NUM_RADAR_MODES - 1, radarDrawMode); // restrict to allowed values
@@ -602,7 +602,7 @@ bool saveConfig()
 			iniSetInteger("powerLevel", game.power);				// power
 			iniSetInteger("base", game.base);				// size of base
 			iniSetInteger("alliance", (int)game.alliance);		// allow alliances
-			iniSetBool("scavengers", game.scavengers);
+			iniSetInteger("newScavengers", game.scavengers);
 		}
 		iniSetString("playerName", (char *)sPlayer);		// player name
 	}

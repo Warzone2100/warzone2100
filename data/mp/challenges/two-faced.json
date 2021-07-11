@@ -7,7 +7,7 @@
 		"maxPlayers": 4,
 		"name": "Two-faced",
 		"powerLevel": 2,
-		"scavengers": "false",
+		"scavengers": 0,
 		"version": 0,
 		"techLevel": 1
 	},

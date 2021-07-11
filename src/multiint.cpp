@@ -454,7 +454,7 @@ void loadMultiScripts()
 	}
 
 	// Load scavengers
-	if (game.scavengers && myResponsibility(scavengerPlayer()))
+	if (game.scavengers != NO_SCAVENGERS && myResponsibility(scavengerPlayer()))
 	{
 		debug(LOG_SAVE, "Loading scavenger AI for player %d", scavengerPlayer());
 		loadPlayerScript("multiplay/script/scavengers/init.js", scavengerPlayer(), AIDifficulty::EASY);
@@ -1403,9 +1403,10 @@ static void addGameOptions()
 	scavengerChoice->setLabel(_("Scavengers"));
 	if (game.mapHasScavengers)
 	{
-		addMultiButton(scavengerChoice, true, Image(FrontImages, IMAGE_SCAVENGERS_ON), Image(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
+		addMultiButton(scavengerChoice, ULTIMATE_SCAVENGERS, Image(FrontImages, IMAGE_SCAVENGERS_ULTIMATE_ON), Image(FrontImages, IMAGE_SCAVENGERS_ULTIMATE_ON_HI), _("Ultimate Scavengers"));
+		addMultiButton(scavengerChoice, SCAVENGERS, Image(FrontImages, IMAGE_SCAVENGERS_ON), Image(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
 	}
-	addMultiButton(scavengerChoice, false, Image(FrontImages, IMAGE_SCAVENGERS_OFF), Image(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
+	addMultiButton(scavengerChoice, NO_SCAVENGERS, Image(FrontImages, IMAGE_SCAVENGERS_OFF), Image(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
 	scavengerChoice->enable(!locked.scavengers);
 	optionsList->addWidgetToLayout(scavengerChoice);
 
@@ -3155,7 +3156,7 @@ static void loadMapChallengeSettings(WzConfig& ini)
 			{
 				game.maxPlayers = std::min(std::max((uint8_t)1u, configuredMaxPlayers), game.maxPlayers);
 			}
-			game.scavengers = ini.value("scavengers", game.scavengers).toBool();
+			game.scavengers = ini.value("scavengers", game.scavengers).toInt();
 			game.alliance = ini.value("alliances", ALLIANCES_TEAMS).toInt();
 			game.power = ini.value("powerLevel", game.power).toInt();
 			game.base = ini.value("bases", game.base + 1).toInt() - 1;		// count from 1 like the humans do
@@ -3172,7 +3173,7 @@ static void loadMapChallengeSettings(WzConfig& ini)
 	{
 		ini.beginGroup("defaults");
 		{
-			game.scavengers = ini.value("scavengers", game.scavengers).toBool();
+			game.scavengers = ini.value("scavengers", game.scavengers).toInt();
 			game.base = ini.value("bases", game.base).toInt();
 			game.alliance = ini.value("alliances", game.alliance).toInt();
 			game.power = ini.value("powerLevel", game.power).toInt();
@@ -3538,7 +3539,7 @@ static void randomizeOptions()
 	// Game options
 	if (!locked.scavengers && game.mapHasScavengers)
 	{
-		game.scavengers = rand() % 2;
+		game.scavengers = rand() % 3;
 		((MultichoiceWidget *)widgGetFromID(psWScreen, MULTIOP_GAMETYPE))->choose(game.scavengers);
 	}
 

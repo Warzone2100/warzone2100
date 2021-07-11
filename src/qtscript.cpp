@@ -583,7 +583,7 @@ wzapi::scripting_instance* scripting_engine::loadPlayerScript(const WzString& pa
 	globalVars["powerType"] = game.power;
 	//== * ```maxPlayers``` The number of active players in this game.
 	globalVars["maxPlayers"] = game.maxPlayers;
-	//== * ```scavengers``` Whether or not scavengers are activated in this game.
+	//== * ```scavengers``` Whether or not scavengers are activated in this game, and, if so, which type.
 	globalVars["scavengers"] = game.scavengers;
 	//== * ```mapWidth``` Width of map in tiles.
 	globalVars["mapWidth"] = mapWidth;
