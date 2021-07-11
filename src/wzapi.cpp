@@ -4363,6 +4363,9 @@ nlohmann::json wzapi::getUsefulConstants()
 	constants["ALLIANCES"] = ALLIANCES;
 	constants["ALLIANCES_TEAMS"] = ALLIANCES_TEAMS;
 	constants["ALLIANCES_UNSHARED"] = ALLIANCES_UNSHARED;
+	constants["NO_SCAVENGERS"] = NO_SCAVENGERS;
+	constants["SCAVENGERS"] = SCAVENGERS;
+	constants["ULTIMATE_SCAVENGERS"] = ULTIMATE_SCAVENGERS;
 	constants["BEING_BUILT"] = SS_BEING_BUILT;
 	constants["BUILT"] = SS_BUILT;
 	constants["DROID_CONSTRUCT"] = DROID_CONSTRUCT;

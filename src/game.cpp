@@ -2043,7 +2043,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 		if (saveGameVersion >= VERSION_33)
 		{
 			PLAYERSTATS		playerStats;
-			bool scav = game.scavengers;
+			uint32_t scav = game.scavengers;
 
 			game			= saveGameData.sGame;
 			game.scavengers = scav;	// ok, so this is butt ugly. but i'm just getting inspiration from the rest of the code around here. ok? - per
@@ -3777,7 +3777,7 @@ bool gameLoadV(PHYSFS_file *fileHandle, unsigned int version)
 		if (saveGameVersion >= VERSION_33)
 		{
 			PLAYERSTATS		playerStats;
-			bool scav = game.scavengers; // loaded earlier, keep it over struct copy below
+			uint32_t scav = game.scavengers; // loaded earlier, keep it over struct copy below
 
 			bMultiPlayer	= saveGameData.multiPlayer;
 			bMultiMessages	= bMultiPlayer;

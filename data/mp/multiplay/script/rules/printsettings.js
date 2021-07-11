@@ -3,8 +3,11 @@ function printGameSettings()
 //add human readable method
 var human = {
 	scavengers : function () {
-		if ( scavengers == true) {return _("Scavengers");}
-		if ( scavengers == false) {return _("No Scavengers");}
+		switch (scavengers) {
+			case ULTIMATE_SCAVENGERS: return _("Ultimate Scavengers");
+			case SCAVENGERS: return _("Scavengers");
+			case NO_SCAVENGERS: return _("No Scavengers");
+			}
 		},
 
 	alliancesType : function () {

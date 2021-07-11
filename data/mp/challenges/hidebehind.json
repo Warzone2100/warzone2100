@@ -7,7 +7,7 @@
 		"maxPlayers": 8,
 		"name": "Hide Behind Me",
 		"powerLevel": 1,
-		"scavengers": "false",
+		"scavengers": 0,
 		"techLevel": 1,
 		"version": 2
 	},
