@@ -904,6 +904,21 @@
 		],
 		"statID": "Emplacement-HeavyLaser"
 	},
+	"R-Defense-HeavyPlasmaLauncher": {
+		"iconID": "IMAGE_RES_DEFENCE",
+		"id": "R-Defense-HeavyPlasmaLauncher",
+		"msgName": "RES_EMP_PLASLAUNCH",
+		"name": "Heavy Plasma Launcher Emplacement",
+		"requiredResearch": [
+			"R-Wpn-HeavyPlasmaLauncher"
+		],
+		"researchPoints": 6000,
+		"researchPower": 187,
+		"resultStructures": [
+			"Emplacement-HeavyPlasmaLauncher"
+		],
+		"statID": "Emplacement-HeavyPlasmaLauncher"
+	},
 	"R-Defense-Howitzer": {
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Howitzer",
@@ -1219,21 +1234,6 @@
 			"Plasmite-flamer-bunker"
 		],
 		"statID": "Plasmite-flamer-bunker"
-	},
-	"R-Defense-HeavyPlasmaLauncher": {
-		"iconID": "IMAGE_RES_DEFENCE",
-		"id": "R-Defense-HeavyPlasmaLauncher",
-		"msgName": "RES_EMP_PLASLAUNCH",
-		"name": "Heavy Plasma Launcher Emplacement",
-		"requiredResearch": [
-			"R-Wpn-HeavyPlasmaLauncher"
-		],
-		"researchPoints": 6000,
-		"researchPower": 187,
-		"resultStructures": [
-			"Emplacement-HeavyPlasmaLauncher"
-		],
-		"statID": "Emplacement-HeavyPlasmaLauncher"
 	},
 	"R-Defense-PrisLas": {
 		"iconID": "IMAGE_RES_DEFENCE",
@@ -6616,6 +6616,23 @@
 		],
 		"statID": "Flame1Mk1"
 	},
+	"R-Wpn-HeavyPlasmaLauncher": {
+		"iconID": "IMAGE_RES_WEAPONTECH",
+		"id": "R-Wpn-HeavyPlasmaLauncher",
+		"keyTopic": 1,
+		"msgName": "RES_W_PLASLAUNCH",
+		"name": "Heavy Plasma Launcher",
+		"requiredResearch": [
+			"R-Wpn-Flamer-Damage07",
+			"R-Wpn-PlasmaCannon"
+		],
+		"researchPoints": 9400,
+		"researchPower": 293,
+		"resultComponents": [
+			"PlasmaHeavy"
+		],
+		"statID": "PlasmaHeavy"
+	},
 	"R-Wpn-Howitzer-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
 		"id": "R-Wpn-Howitzer-Accuracy01",
@@ -8445,23 +8462,6 @@
 			"PlasmiteFlamer"
 		],
 		"statID": "PlasmiteFlamer"
-	},
-	"R-Wpn-HeavyPlasmaLauncher": {
-		"iconID": "IMAGE_RES_WEAPONTECH",
-		"id": "R-Wpn-HeavyPlasmaLauncher",
-		"keyTopic": 1,
-		"msgName": "RES_W_PLASLAUNCH",
-		"name": "Heavy Plasma Launcher",
-		"requiredResearch": [
-			"R-Wpn-Flamer-Damage07",
-			"R-Wpn-PlasmaCannon"
-		],
-		"researchPoints": 9400,
-		"researchPower": 293,
-		"resultComponents": [
-			"PlasmaHeavy"
-		],
-		"statID": "PlasmaHeavy"
 	},
 	"R-Wpn-Rail-Accuracy01": {
 		"iconID": "IMAGE_RES_WEAPONTECH",
