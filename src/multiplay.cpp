@@ -74,6 +74,7 @@
 #include "main.h"								// for gamemode
 #include "multiint.h"
 #include "activity.h"
+#include "challenge.h"
 #include "lib/framework/wztime.h"
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -88,7 +89,6 @@ MULTIPLAYERGAME				game;									//info to describe game.
 MULTIPLAYERINGAME			ingame;
 
 char						beaconReceiveMsg[MAX_PLAYERS][MAX_CONSOLE_STRING_LENGTH];	//beacon msg for each player
-char								playerName[MAX_PLAYERS][MAX_STR_LENGTH];	//Array to store all player names (humans and AIs)
 
 // ////////////////////////////////////////////////////////////////////////////
 // Local Prototypes
@@ -453,18 +453,12 @@ const char *getPlayerName(int player)
 {
 	ASSERT_OR_RETURN(nullptr, player < MAX_PLAYERS , "Wrong player index: %u", player);
 
-	// playerName is created through setPlayerName()
-	if (strcmp(playerName[player], "") != 0)
-	{
-		return (char *)&playerName[player];
-	}
-
-	if (strlen(NetPlay.players[player].name) == 0)
+	if (!bMultiPlayer && strlen(NetPlay.players[player].name) == 0)
 	{
 		// for campaign and tutorials
 		return _("Commander");
 	}
-	else if (NetPlay.players[player].ai >= 0 && !NetPlay.players[player].allocated)
+	else if (NetPlay.players[player].ai >= 0 && !NetPlay.players[player].allocated && GetGameMode() == GS_NORMAL && !challengeActive)
 	{
 		static char names[MAX_PLAYERS][StringSize];  // Must be static, since the getPlayerName() return value is used in tool tips... Long live the widget system.
 		// Add colour to player name.
@@ -480,7 +474,7 @@ const char *getPlayerName(int player)
 bool setPlayerName(int player, const char *sName)
 {
 	ASSERT_OR_RETURN(false, player < MAX_PLAYERS && player >= 0, "Player index (%u) out of range", player);
-	sstrcpy(playerName[player], sName);
+	sstrcpy(NetPlay.players[player].name, sName);
 	return true;
 }
 
@@ -1635,7 +1629,7 @@ static bool recvBeacon(NETQUEUE queue)
 
 	debug(LOG_WZ, "Received beacon for player: %d, from: %d", receiver, sender);
 
-	sstrcat(msg, NetPlay.players[sender].name);    // name
+	sstrcat(msg, getPlayerName(sender));    // name
 	sstrcpy(beaconReceiveMsg[sender], msg);
 
 	return addBeaconBlip(locX, locY, receiver, sender, beaconReceiveMsg[sender]);

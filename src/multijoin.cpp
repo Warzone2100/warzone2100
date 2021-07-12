@@ -180,7 +180,7 @@ void clearPlayer(UDWORD player, bool quietly)
 	ingame.JoiningInProgress[player] = false;	// if they never joined, reset the flag
 	ingame.DataIntegrity[player] = false;
 
-	(void)setPlayerName(player, "");				//clear custom player name (will use default instead)
+	NetPlay.players[player].name[0] = '\0';			//clear custom player name (will use default instead)
 
 	for (i = 0; i < MAX_PLAYERS; i++)				// remove alliances
 	{

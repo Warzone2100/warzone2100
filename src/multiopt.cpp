@@ -341,7 +341,7 @@ bool hostCampaign(const char *SessionName, char *hostPlayerName, bool skipResetA
 	}
 
 	NetPlay.players[selectedPlayer].ready = false;
-	sstrcpy(NetPlay.players[selectedPlayer].name, hostPlayerName);
+	setPlayerName(selectedPlayer, hostPlayerName);
 
 	ingame.localJoiningInProgress = true;
 	ingame.JoiningInProgress[selectedPlayer] = true;
