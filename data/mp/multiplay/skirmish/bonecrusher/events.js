@@ -305,7 +305,7 @@ function bc_eventAttacked(victim, attacker) {
 //	debugMsg(JSON.stringify(victim), 'temp');
 	if(allianceExistsBetween(me, attacker.player)) return;
 	
-	if(scavengers && attacker.player == scavengerPlayer && victim.type == DROID && !isFixVTOL(victim)){
+	if(scavengers != NO_SCAVENGERS && attacker.player == scavengerPlayer && victim.type == DROID && !isFixVTOL(victim)){
 		
 		if(victim.health < 10){
 			if(recycleDroid(victim)) return;

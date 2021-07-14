@@ -52,7 +52,7 @@ struct STRUCTURE;
 struct MULTIPLAYERGAME
 {
 	LEVEL_TYPE	type;						// DMATCH/CAMPAIGN/SKIRMISH/TEAMPLAY etc...
-	bool		scavengers;					// whether scavengers are on or off
+	uint8_t		scavengers;					// ultimate scavengers, scavengers, no scavengers
 	char		map[128];					// name of multiplayer map being used.
 	uint8_t		maxPlayers;					// max players to allow
 	char		name[128];					// game name   (to be used)
@@ -158,6 +158,10 @@ extern UBYTE bDisplayMultiJoiningStatus;	// draw load progress?
 
 
 #define ANYPLAYER				99
+
+#define NO_SCAVENGERS			0
+#define SCAVENGERS				1
+#define ULTIMATE_SCAVENGERS		2
 
 #define CAMP_CLEAN				0			// campaign subtypes
 #define CAMP_BASE				1

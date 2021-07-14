@@ -88,7 +88,7 @@ void sendOptions()
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	NETbool(&game.scavengers);
+	NETuint8_t(&game.scavengers);
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
 
@@ -159,7 +159,7 @@ void recvOptions(NETQUEUE queue)
 	NETuint32_t(&game.power);
 	NETuint8_t(&game.base);
 	NETuint8_t(&game.alliance);
-	NETbool(&game.scavengers);
+	NETuint8_t(&game.scavengers);
 	NETbool(&game.isMapMod);
 	NETuint32_t(&game.techLevel);
 

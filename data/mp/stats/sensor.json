@@ -1,4 +1,19 @@
 {
+	"ScavSensor": {
+		"buildPoints": 100,
+		"buildPower": 20,
+		"droidType": "DROID_SENSOR",
+		"hitpoints": 200,
+		"id": "ScavSensor",
+		"location": "TURRET",
+		"mountModel": "trlrcktg.pie",
+		"name": "*BaBa Sensor*",
+		"power": 1000,
+		"range": 1536,
+		"sensorModel": "gnlsnsr1.pie",
+		"type": "STANDARD",
+		"weight": 100
+	},
 	"BaBaSensor": {
 		"buildPoints": 1,
 		"buildPower": 1,
