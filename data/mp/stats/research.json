@@ -663,7 +663,6 @@
 		"msgName": "RES_CYTRANS",
 		"name": "Cyborg Transport",
 		"requiredResearch": [
-			"R-Struc-Factory-Cyborg",
 			"R-Struc-VTOLFactory"
 		],
 		"researchPoints": 3600,
@@ -1424,7 +1423,6 @@
 		"name": "Missile Fortress",
 		"requiredResearch": [
 			"R-Defense-WallUpgrade10",
-			"R-Wpn-Missile2A-T",
 			"R-Wpn-Missile-ROF03"
 		],
 		"researchPoints": 50000,
@@ -1510,7 +1508,6 @@
 			"WallTower01"
 		],
 		"requiredResearch": [
-			"R-Wpn-MG4",
 			"R-Defense-RotMG"
 		],
 		"researchPoints": 4800,
@@ -1745,7 +1742,6 @@
 		"name": "Heavy Machinegun Hardpoint",
 		"requiredResearch": [
 			"R-Defense-Pillbox01",
-			"R-Defense-HardcreteWall",
 			"R-Wpn-MG3Mk1"
 		],
 		"researchPoints": 1200,
@@ -1917,7 +1913,6 @@
 		"name": "Supercrete",
 		"requiredResearch": [
 			"R-Sys-Engineering02",
-			"R-Struc-Research-Upgrade04",
 			"R-Defense-WallUpgrade03"
 		],
 		"researchPoints": 6000,
@@ -3023,7 +3018,6 @@
 		"msgName": "RES_ST_VP",
 		"name": "VTOL Rearming Pad",
 		"requiredResearch": [
-			"R-Vehicle-Prop-VTOL",
 			"R-Struc-VTOLFactory"
 		],
 		"researchPoints": 3600,
@@ -3164,8 +3158,7 @@
 		"msgName": "RES_SUPERTRANS",
 		"name": "Super Transport",
 		"requiredResearch": [
-			"R-Cyborg-Transport",
-			"R-Struc-VTOLFactory"
+			"R-Cyborg-Transport"
 		],
 		"researchPoints": 4000,
 		"researchPower": 125,
@@ -3350,7 +3343,6 @@
 		"name": "Nexus Resistance Circuits",
 		"requiredResearch": [
 			"R-Sys-Engineering03",
-			"R-Struc-Research-Upgrade08",
 			"R-Sys-Sensor-WS"
 		],
 		"researchPoints": 14400,
@@ -3428,7 +3420,6 @@
 		"msgName": "RES_SY_S_UP",
 		"name": "Satellite Uplink Center",
 		"requiredResearch": [
-			"R-Struc-Research-Upgrade08",
 			"R-Sys-Sensor-WS",
 			"R-Sys-Engineering03"
 		],
@@ -3447,8 +3438,7 @@
 		"msgName": "RES_SY_SU1",
 		"name": "Sensor Upgrade",
 		"requiredResearch": [
-			"R-Struc-Research-Upgrade04",
-			"R-Sys-Sensor-Tower01"
+			"R-Struc-Research-Upgrade04"
 		],
 		"researchPoints": 1800,
 		"researchPower": 56,
@@ -3513,10 +3503,7 @@
 		"name": "Wide Spectrum Sensor",
 		"requiredResearch": [
 			"R-Struc-Research-Upgrade07",
-			"R-Sys-VTOLCBS-Turret01",
-			"R-Sys-CBSensor-Turret01",
-			"R-Sys-VTOLStrike-Turret01",
-			"R-Sys-Sensor-Turret01"
+			"R-Sys-VTOLCBS-Turret01"
 		],
 		"researchPoints": 14400,
 		"researchPower": 450,
@@ -3580,7 +3567,6 @@
 		"name": "Nexus Link Turret",
 		"requiredResearch": [
 			"R-Sys-Engineering03",
-			"R-Struc-Research-Upgrade08",
 			"R-Sys-Sensor-WS"
 		],
 		"researchPoints": 14400,
@@ -3646,7 +3632,6 @@
 		"msgName": "RES_SY_VSTU1",
 		"name": "VTOL Strike Turret",
 		"requiredResearch": [
-			"R-Sys-Sensor-Turret01",
 			"R-Struc-VTOLPad",
 			"R-Sys-Sensor-Upgrade01"
 		],
@@ -3990,7 +3975,6 @@
 		"msgName": "RES_V_B09",
 		"name": "Heavy Body - Tiger",
 		"requiredResearch": [
-			"R-Vehicle-Metals04",
 			"R-Vehicle-Body11",
 			"R-Vehicle-Body06"
 		],
@@ -4058,10 +4042,8 @@
 		"msgName": "RES_V_B13",
 		"name": "Heavy Body - Wyvern",
 		"requiredResearch": [
-			"R-Vehicle-Metals09",
 			"R-Vehicle-Engine09",
-			"R-Vehicle-Armor-Heat06",
-			"R-Vehicle-Body10"
+			"R-Vehicle-Armor-Heat06"
 		],
 		"researchPoints": 50000,
 		"researchPower": 450,
@@ -4077,9 +4059,6 @@
 		"msgName": "RES_V_B14",
 		"name": "Multi Turret Body - Dragon",
 		"requiredResearch": [
-			"R-Vehicle-Metals09",
-			"R-Vehicle-Engine09",
-			"R-Vehicle-Armor-Heat06",
 			"R-Vehicle-Body13"
 		],
 		"researchPoints": 55000,
@@ -5310,7 +5289,6 @@
 			"Bomb1-VTOL-LtHE"
 		],
 		"requiredResearch": [
-			"R-Wpn-Bomb01",
 			"R-Wpn-Bomb-Damage01"
 		],
 		"researchPoints": 7200,
@@ -5935,7 +5913,6 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-Cannon-Damage05",
-			"R-Struc-Factory-Module",
 			"R-Vehicle-Metals03",
 			"R-Wpn-Cannon2Mk1"
 		],
@@ -5957,8 +5934,7 @@
 			"Cannon1Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Cannon-Accuracy01",
-			"R-Wpn-Cannon1Mk1"
+			"R-Wpn-Cannon-Accuracy01"
 		],
 		"researchPoints": 4800,
 		"researchPower": 150,
@@ -5975,7 +5951,6 @@
 		"msgName": "RES_W_CN5",
 		"name": "Assault Cannon",
 		"requiredResearch": [
-			"R-Wpn-Cannon1Mk1",
 			"R-Wpn-Cannon-ROF01"
 		],
 		"researchPoints": 8000,
@@ -6236,8 +6211,7 @@
 			"CyborgFlamer01"
 		],
 		"requiredResearch": [
-			"R-Wpn-Flamer-Damage04",
-			"R-Wpn-Flamer01Mk1"
+			"R-Wpn-Flamer-Damage04"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -6668,7 +6642,6 @@
 		"id": "R-Wpn-Howitzer-Accuracy02",
 		"name": "Target Acquisition Artillery Shells Mk2",
 		"requiredResearch": [
-			"R-Struc-Research-Upgrade04",
 			"R-Wpn-Howitzer-Accuracy01"
 		],
 		"researchPoints": 9200,
@@ -6962,7 +6935,6 @@
 		"msgName": "RES_W_HOWRF1",
 		"name": "Howitzer Autoloader",
 		"requiredResearch": [
-			"R-Wpn-HowitzerMk1",
 			"R-Wpn-Howitzer-Damage01"
 		],
 		"researchPoints": 6000,
@@ -6991,7 +6963,6 @@
 		"id": "R-Wpn-Howitzer-ROF02",
 		"name": "Howitzer Autoloader Mk2",
 		"requiredResearch": [
-			"R-Wpn-Howitzer-ROF01",
 			"R-Wpn-Howitzer03-Rot"
 		],
 		"researchPoints": 9000,
@@ -7140,8 +7111,7 @@
 		"name": "Heavy Howitzer - Ground Shaker",
 		"requiredResearch": [
 			"R-Wpn-Howitzer-Damage05",
-			"R-Wpn-Howitzer-Accuracy02",
-			"R-Wpn-HowitzerMk1"
+			"R-Wpn-Howitzer-Accuracy02"
 		],
 		"researchPoints": 24400,
 		"researchPower": 450,
@@ -7280,8 +7250,7 @@
 		"id": "R-Wpn-MG-Damage03",
 		"name": "APDSB MG Bullets Mk2",
 		"requiredResearch": [
-			"R-Wpn-MG2Mk1",
-			"R-Wpn-MG-Damage02"
+			"R-Wpn-MG2Mk1"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -7542,8 +7511,7 @@
 		"msgName": "RES_MG3MK1",
 		"name": "Heavy Machinegun",
 		"requiredResearch": [
-			"R-Wpn-MG-Damage03",
-			"R-Wpn-MG2Mk1"
+			"R-Wpn-MG-Damage03"
 		],
 		"researchPoints": 2400,
 		"researchPower": 75,
@@ -8383,8 +8351,7 @@
 		"name": "Heavy Mortar - Bombard",
 		"requiredResearch": [
 			"R-Vehicle-Metals01",
-			"R-Wpn-Mortar-Damage02",
-			"R-Wpn-Mortar01Lt"
+			"R-Wpn-Mortar-Damage02"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -8404,8 +8371,7 @@
 		],
 		"requiredResearch": [
 			"R-Vehicle-Metals01",
-			"R-Wpn-Mortar-Damage02",
-			"R-Wpn-Mortar01Lt"
+			"R-Wpn-Mortar-Damage02"
 		],
 		"researchPoints": 7200,
 		"researchPower": 225,
@@ -8559,7 +8525,6 @@
 		"id": "R-Wpn-Rail-Damage03",
 		"name": "Hardened Rail Dart Mk3",
 		"requiredResearch": [
-			"R-Wpn-Rail-Damage02",
 			"R-Wpn-RailGun02"
 		],
 		"researchPoints": 43200,
@@ -8707,8 +8672,7 @@
 			"RailGun1Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Rail-Damage02",
-			"R-Wpn-RailGun01"
+			"R-Wpn-Rail-Damage02"
 		],
 		"researchPoints": 28800,
 		"researchPower": 450,
@@ -8728,8 +8692,7 @@
 			"RailGun2Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Rail-Damage03",
-			"R-Wpn-RailGun02"
+			"R-Wpn-Rail-Damage03"
 		],
 		"researchPoints": 43200,
 		"researchPower": 450,
