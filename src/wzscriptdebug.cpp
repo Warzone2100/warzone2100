@@ -353,73 +353,107 @@ nlohmann::ordered_json componentToString(const COMPONENT_STATS *psStats, int pla
 	key["^Hit points"] = psStats->getUpgrade(player).hitpoints;
 	key["^Hit points +% of total"] = psStats->getUpgrade(player).hitpointPct;
 	key["^Designable"] = psStats->designable;
-	if (psStats->compType == COMP_BODY)
+	switch (psStats->compType)
 	{
-		const BODY_STATS *psBody = (const BODY_STATS *)psStats;
-		key["^Size"] = psBody->size;
-		key["^Max weapons"] = psBody->weaponSlots;
-		key["^Body class"] = psBody->bodyClass.toUtf8();
-	}
-	else if (psStats->compType == COMP_PROPULSION)
-	{
-		const PROPULSION_STATS *psProp = (const PROPULSION_STATS *)psStats;
-		key["^Hit points +% of body"] = psProp->upgrade[player].hitpointPctOfBody;
-		key["^Max speed"] = psProp->maxSpeed;
-		key["^Propulsion type"] = psProp->propulsionType;
-		key["^Turn speed"] = psProp->turnSpeed;
-		key["^Spin speed"] = psProp->spinSpeed;
-		key["^Spin angle"] = psProp->spinAngle;
-		key["^Skid decelaration"] = psProp->skidDeceleration;
-		key["^Deceleration"] = psProp->deceleration;
-		key["^Acceleration"] = psProp->acceleration;
-	}
-	else if (psStats->compType == COMP_BRAIN)
-	{
-		const BRAIN_STATS *psBrain = (const BRAIN_STATS *)psStats;
-		std::string ranks;
-		for (const std::string &s : psBrain->rankNames)
+	case COMP_BODY:
 		{
-			if (!ranks.empty())
-			{
-				ranks += ", ";
-			}
-			ranks += s;
+			const BODY_STATS *psBody = (const BODY_STATS *)psStats;
+			key["^Size"] = psBody->size;
+			key["^Max weapons"] = psBody->weaponSlots;
+			key["^Body class"] = psBody->bodyClass.toUtf8();
+			break;
 		}
-		std::string thresholds;
-		for (int t : psBrain->upgrade[player].rankThresholds)
+	case COMP_PROPULSION:
 		{
-			if (!thresholds.empty())
-			{
-				thresholds += ", ";
-			}
-			thresholds += WzString::number(t).toUtf8();
+			const PROPULSION_STATS *psProp = (const PROPULSION_STATS *)psStats;
+			key["^Hit points +% of body"] = psProp->upgrade[player].hitpointPctOfBody;
+			key["^Max speed"] = psProp->maxSpeed;
+			key["^Propulsion type"] = psProp->propulsionType;
+			key["^Turn speed"] = psProp->turnSpeed;
+			key["^Spin speed"] = psProp->spinSpeed;
+			key["^Spin angle"] = psProp->spinAngle;
+			key["^Skid decelaration"] = psProp->skidDeceleration;
+			key["^Deceleration"] = psProp->deceleration;
+			key["^Acceleration"] = psProp->acceleration;
+			break;
 		}
-		key["^Base command limit"] = psBrain->upgrade[player].maxDroids;
-		key["^Extra command limit by level"] = psBrain->upgrade[player].maxDroidsMult;
-		key["^Rank names"] = ranks;
-		key["^Rank thresholds"] = thresholds;
-	}
-	else if (psStats->compType == COMP_REPAIRUNIT)
-	{
-		const REPAIR_STATS *psRepair = (const REPAIR_STATS *)psStats;
-		key["^Repair time"] = psRepair->time;
-		key["^Base repair points"] = psRepair->upgrade[player].repairPoints;
-	}
-	else if (psStats->compType == COMP_ECM)
-	{
-		const ECM_STATS *psECM = (const ECM_STATS *)psStats;
-		key["^Base range"] = psECM->upgrade[player].range;
-	}
-	else if (psStats->compType == COMP_SENSOR)
-	{
-		const SENSOR_STATS *psSensor = (const SENSOR_STATS *)psStats;
-		key["^Sensor type"] = psSensor->type;
-		key["^Base range"] = psSensor->upgrade[player].range;
-	}
-	else if (psStats->compType == COMP_CONSTRUCT)
-	{
-		const CONSTRUCT_STATS *psCon = (const CONSTRUCT_STATS *)psStats;
-		key["^Base construct points"] = psCon->upgrade[player].constructPoints;
+	case COMP_BRAIN:
+		{
+			const BRAIN_STATS *psBrain = (const BRAIN_STATS *)psStats;
+			std::string ranks;
+			for (const std::string &s : psBrain->rankNames)
+			{
+				if (!ranks.empty())
+				{
+					ranks += ", ";
+				}
+				ranks += s;
+			}
+			std::string thresholds;
+			for (int t : psBrain->upgrade[player].rankThresholds)
+			{
+				if (!thresholds.empty())
+				{
+					thresholds += ", ";
+				}
+				thresholds += WzString::number(t).toUtf8();
+			}
+			key["^Base command limit"] = psBrain->upgrade[player].maxDroids;
+			key["^Extra command limit by level"] = psBrain->upgrade[player].maxDroidsMult;
+			key["^Rank names"] = ranks;
+			key["^Rank thresholds"] = thresholds;
+			break;
+		}
+	case COMP_REPAIRUNIT:
+		{
+			const REPAIR_STATS *psRepair = (const REPAIR_STATS *)psStats;
+			key["^Repair time"] = psRepair->time;
+			key["^Base repair points"] = psRepair->upgrade[player].repairPoints;
+			break;
+		}
+	case COMP_ECM:
+		{
+			const ECM_STATS *psECM = (const ECM_STATS *)psStats;
+			key["^Base range"] = psECM->upgrade[player].range;
+			break;
+		}
+	case COMP_SENSOR:
+		{
+			const SENSOR_STATS *psSensor = (const SENSOR_STATS *)psStats;
+			key["^Sensor type"] = psSensor->type;
+			key["^Base range"] = psSensor->upgrade[player].range;
+			break;
+		}
+	case COMP_CONSTRUCT:
+		{
+			const CONSTRUCT_STATS *psCon = (const CONSTRUCT_STATS *)psStats;
+			key["^Base construct points"] = psCon->upgrade[player].constructPoints;
+			break;
+		}
+	case COMP_WEAPON:
+		{
+			const WEAPON_STATS *psWeap = (const WEAPON_STATS *)psStats;
+			key["Max range"] = psWeap->upgrade[player].maxRange;
+			key["Min range"] = psWeap->upgrade[player].minRange;
+			key["Radius"] = psWeap->upgrade[player].radius;
+			key["Number of Rounds"] = psWeap->upgrade[player].numRounds;
+			key["Damage"] = psWeap->upgrade[player].damage;
+			key["Minimum damage"] = psWeap->upgrade[player].minimumDamage;
+			key["Periodical damage"] = psWeap->upgrade[player].periodicalDamage;
+			key["Periodical damage radius"] = psWeap->upgrade[player].periodicalDamageRadius;
+			key["Periodical damage time"] = psWeap->upgrade[player].periodicalDamageTime;
+			key["Radius damage"] = psWeap->upgrade[player].radiusDamage;
+			key["Reload time"] = psWeap->upgrade[player].reloadTime;
+			key["Hit chance"] = psWeap->upgrade[player].hitChance;
+			key["Short hit chance"] = psWeap->upgrade[player].shortHitChance;
+			key["Short range"] = psWeap->upgrade[player].shortRange;
+			break;
+		}
+	case COMP_NUMCOMPONENTS:
+		ASSERT_OR_RETURN(key, "%s", "Invalid component: COMP_NUMCOMPONENTS!");
+		break;
+		// no "default" case because modern compiler plus "-Werror" 
+		// will raise error if a switch is forgotten
 	}
 	return key;
 }
