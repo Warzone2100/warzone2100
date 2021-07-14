@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-07-03 19:45+0000\n"
+"POT-Creation-Date: 2021-07-14 16:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5785,8 +5785,8 @@ msgid "Menu"
 msgstr ""
 
 #: lib/sound/cdaudio.cpp:63
-#: src/frontend.cpp:1967
-#: src/frontend.cpp:2011
+#: src/frontend.cpp:1974
+#: src/frontend.cpp:2018
 msgid "Campaign"
 msgstr ""
 
@@ -15230,7 +15230,7 @@ msgstr ""
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
-#: src/frontend.cpp:1902
+#: src/frontend.cpp:1909
 msgid "Normal"
 msgstr ""
 
@@ -15244,383 +15244,383 @@ msgstr ""
 msgid "Collective"
 msgstr ""
 
-#: src/frontend.cpp:149
+#: src/frontend.cpp:150
 msgid "Single Player"
 msgstr ""
 
-#: src/frontend.cpp:150
+#: src/frontend.cpp:151
 msgid "Multi Player"
 msgstr ""
 
-#: src/frontend.cpp:151
-#: src/frontend.cpp:285
+#: src/frontend.cpp:152
+#: src/frontend.cpp:286
 msgid "Tutorial"
 msgstr ""
 
-#: src/frontend.cpp:152
+#: src/frontend.cpp:153
 #: src/ingameop.cpp:242
 msgid "Options"
 msgstr ""
 
-#: src/frontend.cpp:157
-#: src/frontend.cpp:161
+#: src/frontend.cpp:158
+#: src/frontend.cpp:162
 msgid "View Intro"
 msgstr ""
 
-#: src/frontend.cpp:162
+#: src/frontend.cpp:163
 msgid "Videos are missing, download them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:167
-#: src/frontend.cpp:171
+#: src/frontend.cpp:168
+#: src/frontend.cpp:172
 msgid "Continue Last Save"
 msgstr ""
 
-#: src/frontend.cpp:172
+#: src/frontend.cpp:173
 msgid "No last save available"
 msgstr ""
 
-#: src/frontend.cpp:174
+#: src/frontend.cpp:175
 msgid "Quit Game"
 msgstr ""
 
-#: src/frontend.cpp:175
+#: src/frontend.cpp:176
 msgid "MAIN MENU"
 msgstr ""
 
-#: src/frontend.cpp:177
+#: src/frontend.cpp:178
 msgid "Official site: http://wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:178
+#: src/frontend.cpp:179
 msgid "Come visit the forums and all Warzone 2100 news! Click this link."
 msgstr ""
 
-#: src/frontend.cpp:179
+#: src/frontend.cpp:180
 msgid "Donate: http://donations.wz2100.net/"
 msgstr ""
 
-#: src/frontend.cpp:181
+#: src/frontend.cpp:182
 msgid "Help support the project with our server costs, Click this link."
 msgstr ""
 
-#: src/frontend.cpp:182
+#: src/frontend.cpp:183
 msgid "Chat with players on Discord or IRC"
 msgstr ""
 
-#: src/frontend.cpp:184
+#: src/frontend.cpp:185
 msgid "Connect to Discord or Freenode through webchat by clicking this link."
 msgstr ""
 
-#: src/frontend.cpp:185
+#: src/frontend.cpp:186
 msgid "Check for a newer version"
 msgstr ""
 
-#: src/frontend.cpp:286
+#: src/frontend.cpp:287
 msgid "Fast Play"
 msgstr ""
 
-#: src/frontend.cpp:287
+#: src/frontend.cpp:288
 msgid "TUTORIALS"
 msgstr ""
 
 #. TRANSLATORS: "Return", in this context, means "return to previous screen/menu"
-#: src/frontend.cpp:289
-#: src/frontend.cpp:347
-#: src/frontend.cpp:368
-#: src/frontend.cpp:577
-#: src/frontend.cpp:649
-#: src/frontend.cpp:829
-#: src/frontend.cpp:1041
-#: src/frontend.cpp:1547
-#: src/frontend.cpp:1839
-#: src/frontend.cpp:1980
-#: src/frontend.cpp:2008
+#: src/frontend.cpp:290
+#: src/frontend.cpp:348
+#: src/frontend.cpp:369
+#: src/frontend.cpp:578
+#: src/frontend.cpp:650
+#: src/frontend.cpp:830
+#: src/frontend.cpp:1048
+#: src/frontend.cpp:1554
+#: src/frontend.cpp:1846
+#: src/frontend.cpp:1987
+#: src/frontend.cpp:2015
 msgctxt "menu"
 msgid "Return"
 msgstr ""
 
-#: src/frontend.cpp:340
+#: src/frontend.cpp:341
 msgid "New Campaign"
 msgstr ""
 
-#: src/frontend.cpp:341
+#: src/frontend.cpp:342
 msgid "Start Skirmish Game"
 msgstr ""
 
-#: src/frontend.cpp:342
+#: src/frontend.cpp:343
 msgid "Challenges"
 msgstr ""
 
-#: src/frontend.cpp:343
+#: src/frontend.cpp:344
 msgid "Load Campaign Game"
 msgstr ""
 
-#: src/frontend.cpp:344
+#: src/frontend.cpp:345
 msgid "Load Skirmish Game"
 msgstr ""
 
-#: src/frontend.cpp:346
+#: src/frontend.cpp:347
 msgid "SINGLE PLAYER"
 msgstr ""
 
-#: src/frontend.cpp:351
-#: src/frontend.cpp:372
+#: src/frontend.cpp:352
+#: src/frontend.cpp:373
 msgid "Campaign videos are missing! Get them from http://wz2100.net"
 msgstr ""
 
-#: src/frontend.cpp:367
+#: src/frontend.cpp:368
 msgid "CAMPAIGNS"
 msgstr ""
 
-#: src/frontend.cpp:505
+#: src/frontend.cpp:506
 #: src/ingameop.cpp:1009
 msgid "Load Campaign Saved Game"
 msgstr ""
 
-#: src/frontend.cpp:511
+#: src/frontend.cpp:512
 #: src/ingameop.cpp:1013
 msgid "Load Skirmish Saved Game"
 msgstr ""
 
-#: src/frontend.cpp:572
+#: src/frontend.cpp:573
 msgid "MULTI PLAYER"
 msgstr ""
 
-#: src/frontend.cpp:574
+#: src/frontend.cpp:575
 msgid "Host Game"
 msgstr ""
 
-#: src/frontend.cpp:575
+#: src/frontend.cpp:576
 msgid "Join Game"
 msgstr ""
 
-#: src/frontend.cpp:580
+#: src/frontend.cpp:581
 msgid "TCP port 2100 must be opened in your firewall or router to host games!"
 msgstr ""
 
-#: src/frontend.cpp:641
+#: src/frontend.cpp:642
 #: src/multiint.cpp:1325
 msgid "OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:642
+#: src/frontend.cpp:643
 msgid "Game Options"
 msgstr ""
 
-#: src/frontend.cpp:643
+#: src/frontend.cpp:644
 #: src/ingameop.cpp:562
 msgid "Graphics Options"
 msgstr ""
 
-#: src/frontend.cpp:644
+#: src/frontend.cpp:645
 #: src/ingameop.cpp:565
 msgid "Video Options"
 msgstr ""
 
-#: src/frontend.cpp:645
+#: src/frontend.cpp:646
 msgid "Audio / Zoom Options"
 msgstr ""
 
-#: src/frontend.cpp:646
+#: src/frontend.cpp:647
 #: src/ingameop.cpp:572
 msgid "Mouse Options"
 msgstr ""
 
-#: src/frontend.cpp:647
+#: src/frontend.cpp:648
 #: src/ingameop.cpp:576
 msgid "Key Mappings"
 msgstr ""
 
-#: src/frontend.cpp:648
+#: src/frontend.cpp:649
 #: src/ingameop.cpp:579
 msgid "Music Manager"
 msgstr ""
 
-#: src/frontend.cpp:650
+#: src/frontend.cpp:651
 msgid "Open Configuration Directory"
 msgstr ""
 
-#: src/frontend.cpp:688
+#: src/frontend.cpp:689
 msgid "Failed to open configuration directory in system default file browser."
 msgstr ""
 
-#: src/frontend.cpp:690
+#: src/frontend.cpp:691
 msgid "Configuration directory is reported as:"
 msgstr ""
 
-#: src/frontend.cpp:694
+#: src/frontend.cpp:695
 msgid "If running inside a container / isolated environment, this may differ from the actual path on disk."
 msgstr ""
 
-#: src/frontend.cpp:696
+#: src/frontend.cpp:697
 msgid "Please see the documentation for more information on how to locate it manually."
 msgstr ""
 
-#: src/frontend.cpp:697
+#: src/frontend.cpp:698
 msgid "Failed to open configuration directory"
 msgstr ""
 
-#: src/frontend.cpp:719
+#: src/frontend.cpp:720
 msgid "1×"
 msgstr ""
 
-#: src/frontend.cpp:720
+#: src/frontend.cpp:721
 msgid "2×"
 msgstr ""
 
-#: src/frontend.cpp:721
-#: src/frontend.cpp:1196
+#: src/frontend.cpp:722
+#: src/frontend.cpp:1203
 msgid "Fullscreen"
 msgstr ""
 
-#: src/frontend.cpp:722
-#: src/frontend.cpp:733
-#: src/frontend.cpp:930
-#: src/frontend.cpp:1906
+#: src/frontend.cpp:723
+#: src/frontend.cpp:734
+#: src/frontend.cpp:931
+#: src/frontend.cpp:1913
 msgid "Unsupported"
 msgstr ""
 
-#: src/frontend.cpp:730
-#: src/frontend.cpp:739
-#: src/frontend.cpp:744
-#: src/frontend.cpp:749
-#: src/frontend.cpp:754
-#: src/frontend.cpp:1205
-#: src/frontend.cpp:1249
-#: src/frontend.cpp:1764
-#: src/frontend.cpp:1769
-#: src/frontend.cpp:1774
-#: src/frontend.cpp:1784
+#: src/frontend.cpp:731
+#: src/frontend.cpp:740
+#: src/frontend.cpp:745
+#: src/frontend.cpp:750
+#: src/frontend.cpp:755
+#: src/frontend.cpp:1212
+#: src/frontend.cpp:1256
+#: src/frontend.cpp:1771
+#: src/frontend.cpp:1776
+#: src/frontend.cpp:1781
+#: src/frontend.cpp:1791
 msgid "Off"
 msgstr ""
 
-#: src/frontend.cpp:731
+#: src/frontend.cpp:732
 msgid "50%"
 msgstr ""
 
-#: src/frontend.cpp:732
+#: src/frontend.cpp:733
 #: src/multiplay.cpp:1651
 msgid "Black"
 msgstr ""
 
-#: src/frontend.cpp:739
-#: src/frontend.cpp:744
-#: src/frontend.cpp:749
-#: src/frontend.cpp:754
-#: src/frontend.cpp:1251
-#: src/frontend.cpp:1764
-#: src/frontend.cpp:1769
-#: src/frontend.cpp:1774
-#: src/frontend.cpp:1784
+#: src/frontend.cpp:740
+#: src/frontend.cpp:745
+#: src/frontend.cpp:750
+#: src/frontend.cpp:755
+#: src/frontend.cpp:1258
+#: src/frontend.cpp:1771
+#: src/frontend.cpp:1776
+#: src/frontend.cpp:1781
+#: src/frontend.cpp:1791
 msgid "On"
 msgstr ""
 
-#: src/frontend.cpp:759
+#: src/frontend.cpp:760
 msgid "Rotating"
 msgstr ""
 
-#: src/frontend.cpp:759
+#: src/frontend.cpp:760
 msgid "Fixed"
 msgstr ""
 
-#: src/frontend.cpp:764
+#: src/frontend.cpp:765
 msgid "Instant"
 msgstr ""
 
-#: src/frontend.cpp:764
+#: src/frontend.cpp:765
 msgid "Tracked"
 msgstr ""
 
-#: src/frontend.cpp:782
+#: src/frontend.cpp:783
 #: src/ingameop.cpp:607
 msgid "Video Playback"
 msgstr ""
 
-#: src/frontend.cpp:787
+#: src/frontend.cpp:788
 #: src/ingameop.cpp:612
 msgid "Scanlines"
 msgstr ""
 
-#: src/frontend.cpp:793
+#: src/frontend.cpp:794
 #: src/ingameop.cpp:617
 msgid "Shadows"
 msgstr ""
 
-#: src/frontend.cpp:798
+#: src/frontend.cpp:799
 msgid "Fog"
 msgstr ""
 
-#: src/frontend.cpp:803
+#: src/frontend.cpp:804
 #: src/ingameop.cpp:622
 #: src/input/context.cpp:42
 msgid "Radar"
 msgstr ""
 
-#: src/frontend.cpp:808
+#: src/frontend.cpp:809
 #: src/ingameop.cpp:627
 msgid "Radar Jump"
 msgstr ""
 
-#: src/frontend.cpp:813
+#: src/frontend.cpp:814
 msgid "Screen Shake"
 msgstr ""
 
-#: src/frontend.cpp:825
+#: src/frontend.cpp:826
 msgid "GRAPHICS OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:933
+#: src/frontend.cpp:934
 msgid "Disabled"
 msgstr ""
 
-#: src/frontend.cpp:936
+#: src/frontend.cpp:937
 msgid "Enabled"
 msgstr ""
 
-#: src/frontend.cpp:940
-#: src/frontend.cpp:946
+#: src/frontend.cpp:941
+#: src/frontend.cpp:947
 msgid "Auto"
 msgstr ""
 
-#: src/frontend.cpp:986
+#: src/frontend.cpp:993
 #: src/ingameop.cpp:149
 msgid "Voice Volume"
 msgstr ""
 
-#: src/frontend.cpp:991
+#: src/frontend.cpp:998
 #: src/ingameop.cpp:155
 msgid "FX Volume"
 msgstr ""
 
-#: src/frontend.cpp:996
+#: src/frontend.cpp:1003
 #: src/ingameop.cpp:161
 msgid "Music Volume"
 msgstr ""
 
-#: src/frontend.cpp:1002
+#: src/frontend.cpp:1009
 #: src/ingameop.cpp:167
 msgid "Subtitles"
 msgstr ""
 
-#: src/frontend.cpp:1007
+#: src/frontend.cpp:1014
 msgid "HRTF"
 msgstr ""
 
-#: src/frontend.cpp:1013
-#: src/frontend.cpp:1015
+#: src/frontend.cpp:1020
+#: src/frontend.cpp:1022
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr ""
 
-#: src/frontend.cpp:1019
+#: src/frontend.cpp:1026
 msgid "Map Zoom"
 msgstr ""
 
-#: src/frontend.cpp:1024
+#: src/frontend.cpp:1031
 msgid "Map Zoom Rate"
 msgstr ""
 
-#: src/frontend.cpp:1029
+#: src/frontend.cpp:1036
 msgid "Radar Zoom"
 msgstr ""
 
@@ -15628,229 +15628,229 @@ msgstr ""
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:1048
+#: src/frontend.cpp:1055
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1160
+#: src/frontend.cpp:1167
 msgid ""
 "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr ""
 
-#: src/frontend.cpp:1162
+#: src/frontend.cpp:1169
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr ""
 
-#: src/frontend.cpp:1192
+#: src/frontend.cpp:1199
 msgid "Desktop Full"
 msgstr ""
 
-#: src/frontend.cpp:1194
+#: src/frontend.cpp:1201
 msgid "Windowed"
 msgstr ""
 
-#: src/frontend.cpp:1215
+#: src/frontend.cpp:1222
 msgid "Graphics Mode"
 msgstr ""
 
-#: src/frontend.cpp:1220
+#: src/frontend.cpp:1227
 msgid "Resolution"
 msgstr ""
 
-#: src/frontend.cpp:1225
+#: src/frontend.cpp:1232
 msgid "Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:1253
+#: src/frontend.cpp:1260
 msgid "Adaptive"
 msgstr ""
 
-#: src/frontend.cpp:1468
+#: src/frontend.cpp:1475
 msgid "* Takes effect on game restart"
 msgstr ""
 
-#: src/frontend.cpp:1501
+#: src/frontend.cpp:1508
 msgid "Texture size"
 msgstr ""
 
-#: src/frontend.cpp:1506
+#: src/frontend.cpp:1513
 #: src/ingameop.cpp:728
 msgid "Vertical sync"
 msgstr ""
 
-#: src/frontend.cpp:1511
+#: src/frontend.cpp:1518
 msgid "Antialiasing*"
 msgstr ""
 
-#: src/frontend.cpp:1519
+#: src/frontend.cpp:1526
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr ""
 
-#: src/frontend.cpp:1532
+#: src/frontend.cpp:1539
 msgid "Graphics Backend*"
 msgstr ""
 
-#: src/frontend.cpp:1544
+#: src/frontend.cpp:1551
 msgid "VIDEO OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1587
+#: src/frontend.cpp:1594
 msgid "Unable to change Window Mode"
 msgstr ""
 
-#: src/frontend.cpp:1587
+#: src/frontend.cpp:1594
 msgid ""
 "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
 msgstr ""
 
-#: src/frontend.cpp:1613
+#: src/frontend.cpp:1620
 msgid "Unable to change Vertical Sync"
 msgstr ""
 
-#: src/frontend.cpp:1613
+#: src/frontend.cpp:1620
 msgid ""
 "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr ""
 
-#: src/frontend.cpp:1779
+#: src/frontend.cpp:1786
 msgid "Middle Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1779
+#: src/frontend.cpp:1786
 msgid "Right Mouse"
 msgstr ""
 
-#: src/frontend.cpp:1802
+#: src/frontend.cpp:1809
 #: src/ingameop.cpp:804
 msgid "Reverse Rotation"
 msgstr ""
 
-#: src/frontend.cpp:1807
+#: src/frontend.cpp:1814
 #: src/ingameop.cpp:810
 msgid "Trap Cursor"
 msgstr ""
 
-#: src/frontend.cpp:1813
+#: src/frontend.cpp:1820
 #: src/ingameop.cpp:816
 msgid "Switch Mouse Buttons"
 msgstr ""
 
-#: src/frontend.cpp:1819
+#: src/frontend.cpp:1826
 #: src/ingameop.cpp:821
 msgid "Rotate Screen"
 msgstr ""
 
-#: src/frontend.cpp:1824
+#: src/frontend.cpp:1831
 #: src/ingameop.cpp:826
 msgid "Colored Cursors"
 msgstr ""
 
-#: src/frontend.cpp:1836
+#: src/frontend.cpp:1843
 msgid "MOUSE OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:1901
+#: src/frontend.cpp:1908
 #: src/multiint.cpp:234
 msgid "Easy"
 msgstr ""
 
-#: src/frontend.cpp:1903
+#: src/frontend.cpp:1910
 #: src/multiint.cpp:234
 msgid "Hard"
 msgstr ""
 
-#: src/frontend.cpp:1904
+#: src/frontend.cpp:1911
 #: src/multiint.cpp:234
 msgid "Insane"
 msgstr ""
 
-#: src/frontend.cpp:1935
-#: src/frontend.cpp:2009
+#: src/frontend.cpp:1942
+#: src/frontend.cpp:2016
 msgid "Language"
 msgstr ""
 
-#: src/frontend.cpp:1939
-#: src/frontend.cpp:2013
+#: src/frontend.cpp:1946
+#: src/frontend.cpp:2020
 msgid "Campaign Difficulty"
 msgstr ""
 
-#: src/frontend.cpp:1943
-#: src/frontend.cpp:2014
+#: src/frontend.cpp:1950
+#: src/frontend.cpp:2021
 msgid "Camera Speed"
 msgstr ""
 
-#: src/frontend.cpp:1947
-#: src/frontend.cpp:2010
+#: src/frontend.cpp:1954
+#: src/frontend.cpp:2017
 msgid "Unit Colour:"
 msgstr ""
 
-#: src/frontend.cpp:1977
-#: src/frontend.cpp:2012
+#: src/frontend.cpp:1984
+#: src/frontend.cpp:2019
 msgid "Skirmish/Multiplayer"
 msgstr ""
 
-#: src/frontend.cpp:1983
+#: src/frontend.cpp:1990
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
 msgstr ""
 
-#: src/frontend.cpp:1985
+#: src/frontend.cpp:1992
 msgid "Click to open webpage."
 msgstr ""
 
-#: src/frontend.cpp:1988
-#: src/frontend.cpp:2007
+#: src/frontend.cpp:1995
+#: src/frontend.cpp:2014
 msgid "GAME OPTIONS"
 msgstr ""
 
-#: src/frontend.cpp:2033
+#: src/frontend.cpp:2040
 msgid "Insane Difficulty"
 msgstr ""
 
-#: src/frontend.cpp:2034
+#: src/frontend.cpp:2041
 msgid "This difficulty is for very experienced players!"
 msgstr ""
 
-#: src/frontend.cpp:2136
+#: src/frontend.cpp:2143
 #: src/multiint.cpp:2965
 msgid "Mod: "
 msgstr ""
 
-#: src/frontend.cpp:2598
+#: src/frontend.cpp:2605
 msgid "Increase Game Display Scale?"
 msgstr ""
 
-#: src/frontend.cpp:2600
+#: src/frontend.cpp:2607
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
 msgstr ""
 
-#: src/frontend.cpp:2602
+#: src/frontend.cpp:2609
 msgid "You can fix this by increasing the game's Display Scale setting."
 msgstr ""
 
-#: src/frontend.cpp:2604
+#: src/frontend.cpp:2611
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
 msgstr ""
 
-#: src/frontend.cpp:2606
+#: src/frontend.cpp:2613
 msgid "Increase Display Scale"
 msgstr ""
 
-#: src/frontend.cpp:2623
+#: src/frontend.cpp:2630
 #, c-format
 msgid "Display Scale Increased to: %u%%"
 msgstr ""
 
-#: src/frontend.cpp:2624
-#: src/frontend.cpp:2640
+#: src/frontend.cpp:2631
+#: src/frontend.cpp:2647
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
 msgstr ""
 
-#: src/frontend.cpp:2639
+#: src/frontend.cpp:2646
 msgid "Tip: Adjusting Display Scale"
 msgstr ""
 
@@ -18157,7 +18157,7 @@ msgstr ""
 msgid "Do not show again"
 msgstr ""
 
-#: src/order.cpp:777
+#: src/order.cpp:778
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
 msgstr ""
 
