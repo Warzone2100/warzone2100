@@ -58,7 +58,7 @@ enum DroidOrderType
 	DORDER_UNUSED_4,
 	DORDER_UNUSED_2,
 	DORDER_RTB,             /**< return to base. */
-	DORDER_RTR,             /**< 14 - return to repair at any repair facility. */
+	DORDER_RTR,             /**< 14 - return to repair at any repair facility*/
 	DORDER_UNUSED_5,
 	DORDER_EMBARK,          /**< 16 - board a transporter. */
 	DORDER_DISEMBARK,       /**< get off a transporter. */
@@ -152,6 +152,14 @@ enum SECONDARY_STATE
 
 struct STRUCTURE_STATS;
 
+enum RTR_DATA_TYPE
+{
+	RTR_TYPE_NO_RESULT,
+	RTR_TYPE_REPAIR_FACILITY,
+	RTR_TYPE_DROID,
+	RTR_TYPE_HQ,
+};
+
 /** Struct that stores data of an order.
  * This struct is needed to send orders that comes with information, such as position, target, etc.
  * This struct is used to issue orders to droids.
@@ -159,25 +167,32 @@ struct STRUCTURE_STATS;
 struct DroidOrder
 {
 	explicit DroidOrder(DroidOrderType type = DORDER_NONE)
-		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     psObj(nullptr),  psStats(nullptr)    {}
+		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     rtrType(RTR_TYPE_NO_RESULT),	 psObj(nullptr),  psStats(nullptr)    {}
 	DroidOrder(DroidOrderType type, Vector2i pos)
-		: type(type), pos(pos),  pos2(0, 0), direction(0),         index(0),     psObj(nullptr),  psStats(nullptr)    {}
+		: type(type), pos(pos),  pos2(0, 0), direction(0),         index(0),     rtrType(RTR_TYPE_NO_RESULT),    psObj(nullptr),  psStats(nullptr)    {}
+	DroidOrder(DroidOrderType type, Vector2i pos, RTR_DATA_TYPE rtrType)
+		: type(type), pos(pos),  pos2(0, 0), direction(0),         index(0),     rtrType(rtrType),    			 psObj(nullptr),  psStats(nullptr)    {}
 	DroidOrder(DroidOrderType type, STRUCTURE_STATS *psStats, Vector2i pos, uint16_t direction)
-		: type(type), pos(pos),  pos2(0, 0), direction(direction), index(0),     psObj(nullptr),  psStats(psStats) {}
+		: type(type), pos(pos),  pos2(0, 0), direction(direction), index(0),     rtrType(RTR_TYPE_NO_RESULT),    psObj(nullptr),  psStats(psStats) {}
 	DroidOrder(DroidOrderType type, STRUCTURE_STATS *psStats, Vector2i pos, Vector2i pos2, uint16_t direction)
-		: type(type), pos(pos),  pos2(pos2), direction(direction), index(0),     psObj(nullptr),  psStats(psStats) {}
+		: type(type), pos(pos),  pos2(pos2), direction(direction), index(0),     rtrType(RTR_TYPE_NO_RESULT),    psObj(nullptr),  psStats(psStats) {}
 	DroidOrder(DroidOrderType type, BASE_OBJECT *psObj)
-		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     psObj(psObj), psStats(nullptr)    {}
+		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     rtrType(RTR_TYPE_NO_RESULT),    psObj(psObj), psStats(nullptr)    {}
+	DroidOrder(DroidOrderType type, BASE_OBJECT *psObj, RTR_DATA_TYPE rtrType)
+		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(0),     rtrType(rtrType),    			 psObj(psObj), psStats(nullptr)    {}
 	DroidOrder(DroidOrderType type, BASE_OBJECT *psObj, uint32_t index)
-		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(index), psObj(psObj), psStats(nullptr)    {}
+		: type(type), pos(0, 0), pos2(0, 0), direction(0),         index(index), rtrType(RTR_TYPE_NO_RESULT),    psObj(psObj), psStats(nullptr)    {}
+
 
 	DroidOrderType   type;       /**< the actual order. */
 	Vector2i         pos;        /**< the order's position. */
 	Vector2i         pos2;       /**< the order's second position, in case those exist. */
 	uint16_t         direction;  /**< the order's direction, in case it exist. */
 	uint32_t         index;      ///< Module index, with DORDER_BUILDMODULE.
+	RTR_DATA_TYPE	 rtrType;	 /**< specifies where to repair. */
 	BASE_OBJECT     *psObj;      /**< the order's target, in case it exist. */
 	STRUCTURE_STATS *psStats;    /**< order structure stats. */
+
 };
 
 typedef DroidOrder DROID_ORDER_DATA;
