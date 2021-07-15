@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-04 21:51\n"
+"PO-Revision-Date: 2021-07-15 06:19\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -418,12 +418,12 @@ msgstr "Stiamo attualmente rilevando segnali bitstream in codice."
 #: data/base/messages/strings/cam2strings.txt:15
 #: data/base/messages/strings/cam2strings.txt:39
 msgid "Decoding..."
-msgstr "Decodificazione in corso..."
+msgstr "Decodifica..."
 
 #: data/base/messages/strings/cam2strings.txt:18
 #: data/base/messages/strings/cam2strings.txt:22
 msgid "TRANSPORT MISSION: Transport Down"
-msgstr "MISSIONE DI TRASPORTO: Trasporto Abbattuto"
+msgstr "MISSIONE DI TRASPORTO: Trasporto abbattuto"
 
 #: data/base/messages/strings/cam2strings.txt:19
 msgid "Our transport carrying units from team Alpha Base has been shot down."
@@ -1393,7 +1393,7 @@ msgstr "Torretta di Guardia con Lancer"
 #: data/mp/messages/strings/names.txt:410
 #: po/custom/fromJson.txt:2079
 msgid "Flamer Hardpoint"
-msgstr "Postazione Corazzata con Lanciafiamme"
+msgstr "Postazione corazzata con lanciafiamme"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
@@ -2303,7 +2303,7 @@ msgstr "Bunker corazzato con Mitragliatrice Pesante"
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
 msgid "Armored hardpoint with Flamer"
-msgstr "Postazione corazzata con Lanciafiamme"
+msgstr "Postazione corazzata con lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT7_RMG.text[1]
@@ -2312,7 +2312,7 @@ msgstr "Postazione corazzata con Lanciafiamme"
 #: data/mp/messages/strings/resstrings.txt:142
 #: po/custom/fromJson.txt:714
 msgid "Armored hardpoint with Assault Gun"
-msgstr "Postazione corazzata con Mitragliatrice d'Assalto"
+msgstr "Postazione corazzata con mitragliatrice d'assalto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT8_RC.text[1]
@@ -6672,7 +6672,7 @@ msgstr "Postazione corazzata con Cannone Gauss"
 #. data/mp/messages/resmessages1.json: $.RES_WT4_HC.text[1]
 #: po/custom/fromJson.txt:726
 msgid "Armored hardpoint with Heavy Cannon"
-msgstr "Postazione corazzata con Cannone Pesante"
+msgstr "Postazione corazzata con cannone pesante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_DF_WT1.text[1]
@@ -6686,7 +6686,7 @@ msgstr "Postazione corazzata con mitragliatrice pesante"
 #. data/mp/messages/resmessages23.json: $.RES_WT13_HPV.text[1]
 #: po/custom/fromJson.txt:734
 msgid "Armored hardpoint with Hyper-Velocity Cannon"
-msgstr "Postazione corazzata con Cannone ad Ipervelocità"
+msgstr "Postazione corazzata con cannone a iper-velocità"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
@@ -6700,14 +6700,14 @@ msgstr "Postazione corazzata con razzo anticarro Lancer"
 #. data/mp/messages/resmessages1.json: $.RES_WT2_LC.text[1]
 #: po/custom/fromJson.txt:746
 msgid "Armored hardpoint with Light Cannon"
-msgstr "Postazione corazzata con Cannone Leggero"
+msgstr "Postazione corazzata con cannone leggero"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #. data/mp/messages/resmessages1.json: $.RES_WT3_MC.text[1]
 #: po/custom/fromJson.txt:750
 msgid "Armored hardpoint with Medium Cannon"
-msgstr "Postazione corazzata con Cannone Medio"
+msgstr "Postazione corazzata con cannone medio"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_WT15_RL2.text[1]
@@ -6721,7 +6721,7 @@ msgstr "Postazione corazzata con cannone a rotaia"
 #. data/mp/messages/resmessages3.json: $.RES_WT9_ATM.text[1]
 #: po/custom/fromJson.txt:758
 msgid "Armored hardpoint with Scourge AT Missile"
-msgstr "Postazione corazzata con Missile anticarro Scourge"
+msgstr "Postazione corazzata con missile anticarro Scourge"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_EMP_IMP.text[1]
@@ -6829,7 +6829,7 @@ msgstr "Torre di Guardia con Cannone d'Assalto"
 #. data/mp/stats/structure.json: $.Wall-VulcanCan.name
 #: po/custom/fromJson.txt:852
 msgid "Assault Cannon Hardpoint"
-msgstr "Postazione corazzata con Cannone d'Assalto"
+msgstr "Postazione con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisHoverAC.name
@@ -8601,7 +8601,7 @@ msgstr "Cyborg con Flashlight"
 #. data/base/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:2121
 msgid "Flashlight Hardpoint"
-msgstr "Postazione Corazzata con Flashlight"
+msgstr "Postazione con Flashlight"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.RetreHoverFlashLight.name
@@ -8716,7 +8716,7 @@ msgstr "Fortificazione con cannone Gauss"
 #. data/mp/stats/structure.json: $.WallTower-Rail3.name
 #: po/custom/fromJson.txt:2188
 msgid "Gauss Cannon Hardpoint"
-msgstr "Postazione Corazzata con Cannone Gauss"
+msgstr "Postazione con cannone Gauss"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonGaussTracks.name
@@ -8967,13 +8967,13 @@ msgstr "Torre Sensoria Rinforzata"
 #. data/mp/messages/resmessagesall.json: $.RES_MS_SAM1WT.text[0]
 #: po/custom/fromJson.txt:2342
 msgid "Hardpoint Avenger SAM Site Available"
-msgstr "Postazione Corazzata con SAM Avenger disponibile"
+msgstr "Postazione con SAM Avenger disponibile"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA.text[0]
 #: po/custom/fromJson.txt:2345
 msgid "Hardpoint Cyclone AA Gun Available"
-msgstr "Postazione Corazzata con Cannone AA Cyclone disponibile"
+msgstr "Postazione con cannone antiaereo Cyclone disponibile"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_WT_DOUBLEAA2.text[0]
@@ -9280,7 +9280,7 @@ msgstr "Cannone pesante da 120mm"
 #. data/mp/stats/structure.json: $.WallTower04.name
 #: po/custom/fromJson.txt:2526
 msgid "Heavy Cannon Hardpoint"
-msgstr "Postazione Corazzata con Cannone Pesante"
+msgstr "Postazione con cannone pesante"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.MantisTrkHC.name
@@ -9406,7 +9406,7 @@ msgstr "Mitragliatrice pesante Viper su ruote"
 #. data/mp/stats/structure.json: $.WallTower01.name
 #: po/custom/fromJson.txt:2619
 msgid "Heavy Machinegun Hardpoint"
-msgstr "Postazione Corazzata con Mitragliatrice Pesante"
+msgstr "Postazione con mitragliatrice pesante"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.ScorpHTrackHMG.name
@@ -9822,7 +9822,7 @@ msgstr "Fortificazione con cannone a iper velocità"
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2921
 msgid "HPV Cannon Hardpoint"
-msgstr "Postazione Corazzata con Cannone ad Ipervelocità"
+msgstr "Postazione con cannone a iper velocità"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
@@ -10347,7 +10347,7 @@ msgstr "Postazione con Inferno"
 #. data/mp/stats/structure.json: $.WallTower-Projector.name
 #: po/custom/fromJson.txt:3356
 msgid "Inferno Hardpoint"
-msgstr "Postazione Corazzata con Inferno"
+msgstr "Postazione con Inferno"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.PythonHoverInferno.name
@@ -10492,7 +10492,7 @@ msgstr "Cyborg con Lancer"
 #. data/mp/stats/structure.json: $.WallTower06.name
 #: po/custom/fromJson.txt:3444
 msgid "Lancer Hardpoint"
-msgstr "Postazione Corazzata con Lancer"
+msgstr "Postazione con Lancer"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Mantis-Trk-Lancer.name
@@ -10702,7 +10702,7 @@ msgstr "Cannone leggero da 40mm"
 #. data/mp/stats/structure.json: $.WallTower02.name
 #: po/custom/fromJson.txt:3575
 msgid "Light Cannon Hardpoint"
-msgstr "Postazione Corazzata con Cannone Leggero"
+msgstr "Postazione con cannone leggero"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.PythonLtCnTrks.name
@@ -10950,7 +10950,7 @@ msgstr "Cannone medio da 76mm"
 #. data/mp/stats/structure.json: $.WallTower03.name
 #: po/custom/fromJson.txt:3757
 msgid "Medium Cannon Hardpoint"
-msgstr "Postazione Corazzata con Cannone Medio"
+msgstr "Postazione con cannone medio"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.A-Python-Hover-MC.name
@@ -12070,7 +12070,7 @@ msgstr "Fortificazione con laser a impulsi"
 #. data/mp/stats/structure.json: $.WallTower-PulseLas.name
 #: po/custom/fromJson.txt:4535
 msgid "Pulse Laser Hardpoint"
-msgstr "Postazione Corazzata con Laser a Impulso"
+msgstr "Postazione con laser a impulso"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.LeopardHoverPulseLas.name
