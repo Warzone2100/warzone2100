@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-15 18:20\n"
+"PO-Revision-Date: 2021-07-16 06:15\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -3357,7 +3357,7 @@ msgstr "Aumenta la cadenza di tiro delle antiaeree"
 #: data/mp/messages/strings/resstrings.txt:331
 #: po/custom/fromJson.txt:4164
 msgid "New Proximity Bomb Turret Available"
-msgstr "Nuova torretta bomba di prossimità disponbile"
+msgstr "Nuova torretta bomba di prossimità disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
@@ -4136,7 +4136,7 @@ msgstr "Costruzione (F3)"
 #: data/base/script/tutorial.js:514
 #: data/mp/multiplay/script/rules/reticule.js:64
 msgid "Build - manufacture constructor droids first"
-msgstr "Costruisci - produci droidi costruttori prima"
+msgstr "Costruisci - prima produci dei droidi costruttori"
 
 #: data/base/script/rules.js:167
 #: data/base/script/tutorial.js:207
@@ -4347,7 +4347,7 @@ msgstr "Ora seleziona col tasto sinistro le unità che vuoi costruire dal menu a
 
 #: data/base/script/tutorial.js:76
 msgid "Please wait whilst the factory manufactures the new unit(s)"
-msgstr "Per favore attendi mentre la fabbrica produce la nuova unità"
+msgstr "Per favore attendi mentre la fabbrica produce le nuove unità"
 
 #: data/base/script/tutorial.js:78
 msgid "Congratulations commander - you are ready for your first mission"
@@ -5179,7 +5179,7 @@ msgstr "Abbiamo recuperato molte delle tecnologie che cercavamo."
 
 #: data/base/sequenceaudio/outro.txt:7
 msgid "It is now time to use them to rebuild the world."
-msgstr "E' ora di usarle per ricostruire il mondo"
+msgstr "E' ora di usarle per ricostruire il mondo."
 
 #: data/base/sequenceaudio/outro.txt:9
 msgid "Slowly, out of the ashes we will rise again..."
@@ -5245,11 +5245,11 @@ msgstr "Angolo di muro del Collettivo"
 
 #: data/mp/messages/strings/names.txt:317
 msgid "Nexus Wall"
-msgstr "Muro di NEXUS"
+msgstr "Muro di Nexus"
 
 #: data/mp/messages/strings/names.txt:318
 msgid "Nexus Corner Wall"
-msgstr "Angolo di muro di NEXUS"
+msgstr "Angolo di muro di Nexus"
 
 #: data/mp/messages/strings/names.txt:336
 msgid "CAM1 RESEARCH"
@@ -5432,15 +5432,15 @@ msgstr "Programma d'intrusione Nexus"
 #: data/mp/messages/strings/names.txt:491
 #: po/custom/fromJson.txt:4299
 msgid "Nexus Resistance Circuits"
-msgstr "Circuiti Resistenti a NEXUS"
+msgstr "Circuiti Resistenti a Nexus"
 
 #: data/mp/messages/strings/names.txt:492
 msgid "Nexus Resistance Circuits Mk2"
-msgstr "Circuiti resistenti a NEXUS Mk2"
+msgstr "Circuiti resistenti a Nexus Mk2"
 
 #: data/mp/messages/strings/names.txt:493
 msgid "Nexus Resistance Circuits Mk3"
-msgstr "Circuiti resistenti a NEXUS Mk3"
+msgstr "Circuiti resistenti a Nexus Mk3"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-Hover02.name
@@ -5585,17 +5585,17 @@ msgstr "Super Cyborg con Scourge"
 #: data/mp/messages/strings/names.txt:829
 #: data/mp/messages/strings/names.txt:830
 msgid "Command Turret II"
-msgstr "Torretta di Comando MkII"
+msgstr "Torretta di comando MkII"
 
 #: data/mp/messages/strings/names.txt:831
 #: data/mp/messages/strings/names.txt:832
 msgid "Command Turret III"
-msgstr "Torretta di Comando MkIII"
+msgstr "Torretta di comando MkIII"
 
 #: data/mp/messages/strings/names.txt:833
 #: data/mp/messages/strings/names.txt:834
 msgid "Command Turret IV"
-msgstr "Torretta di Comando MkIV"
+msgstr "Torretta di comando MkIV"
 
 #: data/mp/multiplay/script/rules/printsettings.js:6
 #: src/multiint.cpp:1403
@@ -5772,11 +5772,14 @@ msgid "Error connecting to the lobby server: %s.\n"
 "Make sure port %d can receive incoming connections.\n"
 "If you're using a router configure it to use UPnP\n"
 " or to forward the port to your system."
-msgstr "Errore nella connessione al server della lobby: %s. Fai in modo che la porta %d possa ricevere connessioni in entrata. Se stai usando un router configuralo per usare l'UPnP, o esegui il port forward al tuo sistema."
+msgstr "Errore nella connessione al server della lobby: %s.\n"
+"Fai in modo che la porta %d possa ricevere connessioni in entrata.\n"
+"Se stai usando un router configuralo per usare l'UPnP, o esegui il\n"
+"port forward al tuo sistema."
 
 #: lib/netplay/netplay.cpp:3484
 msgid "Failed to get a lobby response!"
-msgstr "Fallita la ricezione della risposta dalla lobby."
+msgstr "Impossibile avere risposte della lobby!"
 
 #: lib/sound/cdaudio.cpp:61
 msgid "Menu"
@@ -7050,7 +7053,7 @@ msgstr "Il caricatore automatico sostituisce la ricarica manuale"
 #. data/mp/stats/structure.json: $.WallTower-SamSite.name
 #: po/custom/fromJson.txt:1022
 msgid "Avenger Hardpoint"
-msgstr "Postazione Corazzata con SAM Avenger"
+msgstr "Postazione con Avenger"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-SamSite1.name
@@ -10873,7 +10876,7 @@ msgstr "Può essere aggiornata con i moduli di produzione"
 #. data/mp/stats/templates.json: $.Cyb-Mechanic.name
 #: po/custom/fromJson.txt:3713
 msgid "Mechanic Cyborg"
-msgstr "Cyborg Meccanico"
+msgstr "Cyborg meccanico"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYS_MCH.text[1]
