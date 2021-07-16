@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-16 06:15\n"
+"PO-Revision-Date: 2021-07-16 18:16\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1393,7 +1393,7 @@ msgstr "Torre di guardia con lanciatore"
 #: data/mp/messages/strings/names.txt:410
 #: po/custom/fromJson.txt:2079
 msgid "Flamer Hardpoint"
-msgstr "Postazione corazzata con lanciafiamme"
+msgstr "Postazione con lanciafiamme"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_ST_FCY7.text[1]
@@ -2129,7 +2129,7 @@ msgstr "Postazione corazzata per batteria di Bombarda"
 #: data/mp/messages/strings/resstrings.txt:67
 #: po/custom/fromJson.txt:783
 msgid "Armored Pepperpot mortar battery pit"
-msgstr "Postazione corazzata per batteria di Mortaio Pepperpot"
+msgstr "Postazione corazzata con batteria di mortai Pepperpot"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HOW.text[1]
@@ -2321,7 +2321,7 @@ msgstr "Postazione corazzata con mitragliatrice d'assalto"
 #: data/mp/messages/strings/resstrings.txt:147
 #: po/custom/fromJson.txt:710
 msgid "Armored hardpoint with Assault Cannon"
-msgstr "Postazione corazzata con Cannone d'Assalto"
+msgstr "Postazione corazzata con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT11_HFL.text[1]
@@ -2330,7 +2330,7 @@ msgstr "Postazione corazzata con Cannone d'Assalto"
 #: data/mp/messages/strings/resstrings.txt:152
 #: po/custom/fromJson.txt:738
 msgid "Armored hardpoint with Inferno flamer"
-msgstr "Postazione corazzata con Lanciafiamme"
+msgstr "Postazione corazzata con lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_WT12_HAT.text[1]
@@ -2339,7 +2339,7 @@ msgstr "Postazione corazzata con Lanciafiamme"
 #: data/mp/messages/strings/resstrings.txt:157
 #: po/custom/fromJson.txt:762
 msgid "Armored hardpoint with Tank Killer AT missile"
-msgstr "Postazione corazzata con missile AT Tank Killer"
+msgstr "Postazione corazzata con missile Tank Killer anticarro"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_TTRAP1.text[1]
@@ -6668,7 +6668,7 @@ msgstr "Postazione corazzata con Laser Flashlight"
 #. data/mp/messages/resmessages3.json: $.RES_WT15_RL3.text[1]
 #: po/custom/fromJson.txt:722
 msgid "Armored hardpoint with Gauss Cannon"
-msgstr "Postazione corazzata con Cannone Gauss"
+msgstr "Postazione corazzata con cannone Gauss"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT4_HC.text[1]
@@ -6696,7 +6696,7 @@ msgstr "Postazione corazzata con cannone a iper-velocità"
 #. data/mp/messages/resmessages12.json: $.RES_WT6_ATR.text[1]
 #: po/custom/fromJson.txt:742
 msgid "Armored hardpoint with Lancer AT missile"
-msgstr "Postazione corazzata con lancia razzi anticarro"
+msgstr "Postazione corazzata con lanciamissili anticarro"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_WT2_LC.text[1]
@@ -10144,7 +10144,7 @@ msgstr "Fossa per mortaio incendiario"
 #. data/mp/stats/weapons.json: $.Mortar-Incendiary.name
 #: po/custom/fromJson.txt:3123
 msgid "Incendiary Mortar"
-msgstr "Mortaio Incendiario"
+msgstr "Mortaio incendiario"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_RAIL_ROF1.text[1]
@@ -10257,7 +10257,7 @@ msgstr "Aumenta la cadenza di tiro dei missili"
 #. data/base/messages/resmessages3.json: $.RES_W_M_AC3.text[2]
 #: po/custom/fromJson.txt:3272
 msgid "Increases Mortar accuracy"
-msgstr "Aumenta la precisione del Mortaio"
+msgstr "Aumenta la precisione del mortaio"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_M_ROF1.text[2]
@@ -11199,7 +11199,7 @@ msgstr "Più armatura e punti vita del Vengeance"
 #: po/custom/fromJson.txt:3910
 #, no-c-format
 msgid "Mortar accuracy +10%"
-msgstr "Precisione dei Mortai +10%"
+msgstr "Precisione dei mortai +10%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF02.name
@@ -11235,7 +11235,7 @@ msgstr "Mortaio Cobra semicingolato"
 #: po/custom/fromJson.txt:3931
 #, no-c-format
 msgid "Mortar damage +25%"
-msgstr "Danni dei Mortai +25%"
+msgstr "Danni dei mortai +25%"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Mortar-ROF04.name
@@ -11823,7 +11823,7 @@ msgstr "Fossa per Pepperpot"
 #. data/mp/stats/weapons.json: $.Mortar3ROTARYMk1.name
 #: po/custom/fromJson.txt:4381
 msgid "Pepperpot"
-msgstr "Pepaiola"
+msgstr "Pepperpot"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
@@ -12765,7 +12765,7 @@ msgstr "Bunker con Mitragliatrice d'Assalto"
 #. data/mp/stats/research.json: $.R-Wpn-Mortar3.name
 #: po/custom/fromJson.txt:4997
 msgid "Rotary Mortar - Pepperpot"
-msgstr "Mortaio Rotante-Pepperpot"
+msgstr "Mortaio rotante - Pepperpot"
 
 #. TRANSLATORS:
 #. data/base/stats/features.json: $.Rotarywepslab.name
