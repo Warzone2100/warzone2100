@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-03 21:42\n"
+"PO-Revision-Date: 2021-07-16 06:15\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -15793,7 +15793,7 @@ msgstr "Skirmish/Multipemain"
 #: src/frontend.cpp:1983
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
-msgstr ""
+msgstr "Bantu kami meningkatkan pengalihbahasaan Warzone 2100: %s"
 
 #: src/frontend.cpp:1985
 msgid "Click to open webpage."
@@ -15806,11 +15806,11 @@ msgstr "PILIHAN PERMAINAN"
 
 #: src/frontend.cpp:2033
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Tingkat Kesulitan Gila"
 
 #: src/frontend.cpp:2034
 msgid "This difficulty is for very experienced players!"
-msgstr ""
+msgstr "Tingkat kesulitan ini diperuntukkan untuk pemain yang sudah berpengalaman!"
 
 #: src/frontend.cpp:2136
 #: src/multiint.cpp:2965
@@ -17982,7 +17982,7 @@ msgstr ""
 #: src/multimenu.cpp:718
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Tidak Terkompres: %lu/%lu"
 
 #: src/multimenu.cpp:722
 #, c-format
