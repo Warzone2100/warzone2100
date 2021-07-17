@@ -26,6 +26,7 @@
 #include "lib/framework/wzconfig.h"
 #include "lib/framework/wzpaths.h"
 #include "lib/framework/fixedpoint.h"
+#include "lib/framework/string_ext.h"
 #include "lib/sound/audio.h"
 #include "lib/sound/cdaudio.h"
 #include "lib/netplay/netplay.h"
@@ -2284,11 +2285,6 @@ static std::string QuickJS_DumpError(JSContext *ctx)
 	}
     JS_FreeValue(ctx, exception_val);
 	return result;
-}
-
-static bool strEndsWith(const std::string &str, const std::string &suffix)
-{
-	return (str.size() >= suffix.size()) && (str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0);
 }
 
 //-- ## include(file)

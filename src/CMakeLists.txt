@@ -606,6 +606,14 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows" AND CMAKE_HOST_SYSTEM_NAME MATCHES "Windo
 	endif()
 endif()
 
+# Support crashpad sentry backend - requires installation of helper binary to handle crashes
+if(TARGET crashpad_handler)
+	if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+		message(FATAL_ERROR "crashpad_handler is not currently supported for macOS builds")
+	endif()
+	install(TARGETS crashpad_handler COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")
+endif()
+
 #######################
 # Install
 install(TARGETS warzone2100 COMPONENT Core DESTINATION "${WZ_APP_INSTALL_DEST}")

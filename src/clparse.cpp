@@ -331,6 +331,7 @@ typedef enum
 	CLI_WIN_ENABLE_CONSOLE,
 #endif
 	CLI_GAMEPORT,
+	CLI_WZ_CRASH_RPT,
 } CLI_OPTIONS;
 
 static const struct poptOption *getOptionsTable()
@@ -390,6 +391,7 @@ static const struct poptOption *getOptionsTable()
 		{ "enableconsole", POPT_ARG_NONE, CLI_WIN_ENABLE_CONSOLE,   N_("Attach or create a console window and display console output (Windows only)"), nullptr },
 #endif
 		{ "gameport", POPT_ARG_STRING, CLI_GAMEPORT,   N_("Set game server port"), N_("port") },
+		{ "wz-crash-rpt", POPT_ARG_NONE, CLI_WZ_CRASH_RPT, nullptr, nullptr },
 		// Terminating entry
 		{ nullptr, 0, 0,              nullptr,                                    nullptr },
 	};
@@ -516,6 +518,9 @@ bool ParseCommandLineEarly(int argc, const char * const *argv)
 			SetStdOutToConsole_Win();
 			break;
 #endif
+		case CLI_WZ_CRASH_RPT:
+			// this is currently a no-op because it must be parsed even earlier than ParseCommandLineEarly
+			break;
 		default:
 			break;
 		};
@@ -553,6 +558,7 @@ bool ParseCommandLine(int argc, const char * const *argv)
 #if defined(WZ_OS_WIN)
 		case CLI_WIN_ENABLE_CONSOLE:
 #endif
+		case CLI_WZ_CRASH_RPT:
 			// These options are parsed in ParseCommandLineEarly() already, so ignore them
 			break;
 

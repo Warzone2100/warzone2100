@@ -1,6 +1,6 @@
 /*
 	This file is part of Warzone 2100.
-	Copyright (C) 2020  Warzone 2100 Project
+	Copyright (C) 2021  Warzone 2100 Project
 
 	Warzone 2100 is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -16,21 +16,17 @@
 	along with Warzone 2100; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-#ifndef __INCLUDED_SRC_URL_HELPERS_H__
-#define __INCLUDED_SRC_URL_HELPERS_H__
+#ifndef _WZ_CRASHHANDLING_PROVIDERS_H_
+#define _WZ_CRASHHANDLING_PROVIDERS_H_
 
 #include <string>
-#include <vector>
+#include <3rdparty/json/json_fwd.hpp>
 
-bool openURLInBrowser(char const *url);
-std::string urlEncode(const char* urlFragment);
-bool urlHasHTTPorHTTPSPrefix(char const *url);
+bool useCrashHandlingProvider(int argc, const char * const *argv);
+bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::string& defaultLogFilePath);
+bool shutdownCrashHandlingProvider();
 
-bool openFolderInDefaultFileManager(const char* path);
+bool crashHandlingProviderSetTag(const std::string& key, const std::string& value);
+bool crashHandlingProviderSetContext(const std::string& key, const nlohmann::json& contextDictionary);
 
-#if defined(WZ_OS_WIN)
-bool win_utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr);
-#endif
-
-#endif // __INCLUDED_SRC_URL_HELPERS_H__
+#endif //_WZ_CRASHHANDLING_PROVIDERS_H_

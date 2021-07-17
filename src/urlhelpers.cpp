@@ -75,7 +75,7 @@ bool urlHasHTTPorHTTPSPrefix(char const *url)
 }
 
 #if defined(WZ_OS_WIN)
-bool utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr)
+bool win_utf8ToUtf16(const char* str, std::vector<wchar_t>& outputWStr)
 {
 	int wstr_len = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
 	if (wstr_len <= 0)
@@ -136,7 +136,7 @@ bool openURLInBrowser(char const *url)
 
 #if defined(WZ_OS_WIN)
 	std::vector<wchar_t> wUrl;
-	if (!utf8ToUtf16(url, wUrl))
+	if (!win_utf8ToUtf16(url, wUrl))
 	{
 		return false;
 	}
@@ -229,7 +229,7 @@ bool openFolderInDefaultFileManager(const char* path)
 {
 #if defined(WZ_OS_WIN)
 	std::vector<wchar_t> wPath;
-	if (!utf8ToUtf16(path, wPath))
+	if (!win_utf8ToUtf16(path, wPath))
 	{
 		return false;
 	}
