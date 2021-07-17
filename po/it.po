@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-17 06:41\n"
+"PO-Revision-Date: 2021-07-17 18:42\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1276,12 +1276,12 @@ msgstr "Torretta Flak Tornado"
 #: data/base/messages/strings/names.txt:247
 #: data/mp/messages/strings/names.txt:289
 msgid "Proximity Bomb Turret"
-msgstr "Torretta Bomba di Prossimità"
+msgstr "Torretta con bomba di prossimità"
 
 #: data/base/messages/strings/names.txt:248
 #: data/mp/messages/strings/names.txt:290
 msgid "Proximity Superbomb Turret"
-msgstr "Torretta Superbomba di Prossimità"
+msgstr "Torretta con super bomba di prossimità"
 
 #: data/base/messages/strings/names.txt:287
 #: data/mp/messages/strings/names.txt:371
@@ -1726,7 +1726,7 @@ msgstr "Leghe composite dense stratificate e fibre ad assorbimento di energia"
 #: data/mp/messages/strings/resstrings.txt:3
 #: po/custom/fromJson.txt:3220
 msgid "Increases Kinetic Armor and Body Points"
-msgstr "Aumenta l'Armatura Cinetica e i Punti Corazza"
+msgstr "Aumenta l'armatura cinetica e i punti corazza"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYMET1.text[3]
@@ -1823,7 +1823,7 @@ msgstr "Armato con razzo Bunker Buster"
 #: data/mp/messages/strings/resstrings.txt:334
 #: po/custom/fromJson.txt:1199
 msgid "Body Points: Medium"
-msgstr "Punti Corazza: Medi"
+msgstr "Punti corazza: medi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CYW_CN1.text[3]
@@ -1849,7 +1849,7 @@ msgstr "Richiede la Fabbrica di Cyborg per essere prodotto"
 #: data/mp/messages/strings/resstrings.txt:17
 #: po/custom/fromJson.txt:556
 msgid "Armed with Cyborg Assault Gun"
-msgstr "Armato con Cannone d'Assalto Cyborg"
+msgstr "Armato con mitragliatrice d'assalto Cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_ATM.text[0]
@@ -1904,7 +1904,7 @@ msgstr "Cemento ad alta resistenza rinforzato al boro"
 #: data/mp/messages/strings/resstrings.txt:198
 #: po/custom/fromJson.txt:3146
 msgid "Increases Armor and Body Points"
-msgstr "Aumenta l'Armatura e i Punti Corazza"
+msgstr "Aumenta l'armatura e i punti corazza"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[3]
@@ -2256,7 +2256,7 @@ msgstr "Torre rinforzata con mitragliatrice d'assalto"
 #: data/base/messages/strings/resstrings.txt:234
 #: data/mp/messages/strings/resstrings.txt:117
 msgid "Armored guard tower with Heavy Machinegun"
-msgstr "Torre di guardia corazzata con Mitragliatrice Pesante"
+msgstr "Torre di guardia corazzata con mitragliatrice pesante"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[2]
@@ -2288,17 +2288,17 @@ msgstr "Bersaglia automaticamente tutti i nemici a portata dei sensori"
 #: data/base/messages/strings/resstrings.txt:240
 #: data/mp/messages/strings/resstrings.txt:122
 msgid "Armored guard tower with Flamer"
-msgstr "Torre di guardia corazzata con Lanciafiamme"
+msgstr "Torre di guardia corazzata con lanciafiamme"
 
 #: data/base/messages/strings/resstrings.txt:246
 #: data/mp/messages/strings/resstrings.txt:127
 msgid "Armored guard tower with Lancer AT Rocket"
-msgstr "Torre di guardia corazzata con Razzo AT Lancer"
+msgstr "Torre di guardia corazzata con lanciamissili anticarro"
 
 #: data/base/messages/strings/resstrings.txt:260
 #: data/mp/messages/strings/resstrings.txt:132
 msgid "Armored bunker with Heavy Machinegun"
-msgstr "Bunker corazzato con Mitragliatrice Pesante"
+msgstr "Bunker corazzato con mitragliatrice pesante"
 
 #: data/base/messages/strings/resstrings.txt:280
 #: data/mp/messages/strings/resstrings.txt:137
@@ -2368,7 +2368,7 @@ msgstr "Impedisce i movimenti nemici"
 #: data/mp/messages/strings/resstrings.txt:166
 #: po/custom/fromJson.txt:4732
 msgid "Repair Facility Improved"
-msgstr "Centro di Riparazione migliorato"
+msgstr "Centro di riparazione migliorato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_RFU4.text[1]
@@ -2411,7 +2411,7 @@ msgstr "Tutti i centri di riparazione sono stati aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:176
 #: po/custom/fromJson.txt:1654
 msgid "Cyborg Production Improved"
-msgstr "Produzione dei Cyborg migliorata"
+msgstr "Produzione dei cyborg migliorata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_FCY4.text[1]
@@ -2420,7 +2420,7 @@ msgstr "Produzione dei Cyborg migliorata"
 #: data/mp/messages/strings/resstrings.txt:172
 #: po/custom/fromJson.txt:4867
 msgid "Robotic Cyborg Production"
-msgstr "Produzione di Cyborg Robotizzata"
+msgstr "Produzione di cyborg robotizzata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_FCY01.text[2]
@@ -2528,7 +2528,7 @@ msgstr "Ricerca migliorata"
 #: data/mp/messages/strings/resstrings.txt:192
 #: po/custom/fromJson.txt:1747
 msgid "Dedicated Synaptic Link Data Analysis"
-msgstr "Analisi a Collegamento Sinaptico Dedicato"
+msgstr "Analisi dei dati del collegamento sinaptico dedicato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_RM1.text[2]
@@ -2572,7 +2572,7 @@ msgstr "Aumenta la resistenza ai danni"
 #: data/mp/messages/strings/resstrings.txt:197
 #: po/custom/fromJson.txt:2307
 msgid "Hardened Base Structure Materials"
-msgstr "Materiali da Costruzione Rinforzati"
+msgstr "Materiali da costruzione rinforzati"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_ST_MAT1.text[3]
@@ -2647,7 +2647,7 @@ msgstr "Tempi di riarmo dei VTOL ridotti"
 #: data/mp/messages/strings/resstrings.txt:207
 #: po/custom/fromJson.txt:981
 msgid "Automated VTOL Rearming"
-msgstr "Riarmo VTOL automatizzato"
+msgstr "Riarmo dei VTOL automatizzato"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_ST_VPU1.text[2]
@@ -2750,7 +2750,7 @@ msgstr "Nuove tecniche di costruzione migliorano la torre"
 #: data/mp/messages/strings/resstrings.txt:223
 #: po/custom/fromJson.txt:4778
 msgid "Replaces existing sensor tower"
-msgstr "Rimpiazza la torre sensoria esistente"
+msgstr "Sostituisce la torre sensoria esistente"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_STW2.text[3]
@@ -2792,7 +2792,7 @@ msgstr "Ordina ai VTOL assegnati di attaccare le batterie nemiche"
 #: data/mp/messages/strings/resstrings.txt:229
 #: po/custom/fromJson.txt:6132
 msgid "VTOLs attack until enemy battery is suppressed"
-msgstr "I VTOL continuano ad attaccare fino a quando le batterie nemiche non sono distrutte"
+msgstr "I VTOL attaccano finché le batterie nemiche sono distrutte"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VCBSU1.text[0]
@@ -2847,7 +2847,7 @@ msgstr "Tutti i sensori CB VTOL sono stati aggiornati automaticamente"
 #: data/mp/messages/strings/resstrings.txt:236
 #: po/custom/fromJson.txt:6088
 msgid "VTOL Strike Improved"
-msgstr "Torretta d'attacco VTOL migliorata"
+msgstr "Colpi dei VTOL migliorati"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[1]
@@ -2867,7 +2867,7 @@ msgstr "Nuovi sistemi di riconoscimento dei bersagli"
 #: data/mp/messages/strings/resstrings.txt:238
 #: po/custom/fromJson.txt:1945
 msgid "Extends VTOL Strike Range"
-msgstr "Estende la portata della Torretta d'attacco VTOL"
+msgstr "Estende la portata dei colpi dei VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_SY_VS1.text[3]
@@ -2878,7 +2878,7 @@ msgstr "Estende la portata della Torretta d'attacco VTOL"
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:464
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Tutte i Sensori d'Attacco VTOL sono stati aggiornati automaticamente"
+msgstr "Tutte i sensori d'attacco dei VTOL sono stati aggiornati automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
@@ -2893,7 +2893,7 @@ msgstr "Miglioramento nella tecnologia del collegamento sinaptico"
 #: data/base/messages/strings/resstrings.txt:513
 #: data/mp/messages/strings/resstrings.txt:243
 msgid "Increases scrambler rate"
-msgstr "Aumenta il rateo di fuoco del disturbatore"
+msgstr "Aumenta il tasso del disturbatore"
 
 #: data/base/messages/strings/resstrings.txt:514
 #: data/mp/messages/strings/resstrings.txt:244
@@ -2965,7 +2965,7 @@ msgstr "Punti corazza e armatura superiori rispetto al Cobra"
 #: data/mp/messages/strings/resstrings.txt:253
 #: po/custom/fromJson.txt:5205
 msgid "Slower than Cobra"
-msgstr "Più lento del cobra"
+msgstr "Più lento del Cobra"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_V_B06.text[3]
@@ -2996,7 +2996,7 @@ msgstr "Miglioramento dei motori dei veicoli"
 #: data/mp/messages/strings/resstrings.txt:257
 #: po/custom/fromJson.txt:5674
 msgid "Turbo-Charged Engine"
-msgstr "Motore Turbo"
+msgstr "Motore turbo"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_V_EN1.text[2]
@@ -3126,7 +3126,7 @@ msgstr "Nuova struttura corazzata"
 #: data/mp/messages/strings/resstrings.txt:288
 #: po/custom/fromJson.txt:3155
 msgid "Increases Body Points"
-msgstr "Aumenta i Punti Corazza"
+msgstr "Aumenta i punti corazza"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_HALFT2.text[3]
@@ -3213,7 +3213,7 @@ msgstr "Doppio cannone antiaereo da 80mm"
 #: data/mp/messages/strings/resstrings.txt:308
 #: po/custom/fromJson.txt:262
 msgid "Aerial targets only"
-msgstr "Solo obiettivi aerei"
+msgstr "Solo bersagli aerei"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA2.text[1]
@@ -3222,7 +3222,7 @@ msgstr "Solo obiettivi aerei"
 #: data/mp/messages/strings/resstrings.txt:297
 #: po/custom/fromJson.txt:4585
 msgid "Quad 80mm flak weapon"
-msgstr "Cannone antiaereo quadruplo da 80mm"
+msgstr "Quadruplo cannone antiaereo da 80mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AA3.text[1]
@@ -3241,7 +3241,7 @@ msgstr "Mitragliatrice antiaerea da 30mm"
 #: data/mp/messages/strings/resstrings.txt:307
 #: po/custom/fromJson.txt:4578
 msgid "Quad 30mm Anti-Aircraft machinegun"
-msgstr "Mitragliatrice antiaerea quadrupla da 30mm"
+msgstr "Quadrupla mitragliatrice antiaerea da 30mm"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_AAAC1.text[0]
@@ -3357,7 +3357,7 @@ msgstr "Aumenta la cadenza di tiro delle antiaeree"
 #: data/mp/messages/strings/resstrings.txt:331
 #: po/custom/fromJson.txt:4164
 msgid "New Proximity Bomb Turret Available"
-msgstr "Nuova torretta bomba di prossimità disponibile"
+msgstr "Nuova torretta con bomba di prossimità disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[1]
@@ -3366,7 +3366,7 @@ msgstr "Nuova torretta bomba di prossimità disponibile"
 #: data/mp/messages/strings/resstrings.txt:327
 #: po/custom/fromJson.txt:1226
 msgid "Bomb turret explodes in proximity to enemy"
-msgstr "Torretta bomba che esplode in prossimità del nemico"
+msgstr "La torretta con bomba esplode in prossimità del nemico"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB1.text[2]
@@ -3388,7 +3388,7 @@ msgstr "Bersagli migliori: strutture e difese"
 #: data/mp/messages/strings/resstrings.txt:332
 #: po/custom/fromJson.txt:5346
 msgid "Superbomb turret explodes in proximity to enemy"
-msgstr "Torretta superbomba esplode in prossimità del nemico"
+msgstr "La torretta con super bomba esplode in prossimità del nemico"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB1.text[0]
@@ -3401,7 +3401,7 @@ msgstr "Torretta superbomba esplode in prossimità del nemico"
 #: data/mp/messages/strings/resstrings.txt:341
 #: po/custom/fromJson.txt:4066
 msgid "New Bomb Bay Available"
-msgstr "Nuova bomba disponibile"
+msgstr "Nuovo alloggiamento per bomba disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB1.text[1]
@@ -3440,7 +3440,7 @@ msgstr "Bersagli migliori: strutture"
 #: data/mp/messages/strings/resstrings.txt:384
 #: po/custom/fromJson.txt:1193
 msgid "Body Points: Low"
-msgstr "Punti Corazza: Pochi"
+msgstr "Punti corazza: bassi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BMB2.text[1]
@@ -3549,7 +3549,7 @@ msgstr "Cannone automatico a 4 canne ad alta velocità da 76mm"
 #: data/mp/messages/strings/resstrings.txt:359
 #: po/custom/fromJson.txt:1187
 msgid "Body Points: High"
-msgstr "Punti Corazza: Alti"
+msgstr "Punti corazza: alti"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_FLAME2.text[1]
@@ -3558,7 +3558,7 @@ msgstr "Punti Corazza: Alti"
 #: data/mp/messages/strings/resstrings.txt:362
 #: po/custom/fromJson.txt:2554
 msgid "Heavy Flame-thrower firing Propylene Oxide gel"
-msgstr "Lancia-fiamme pesante ad ossido di propilene"
+msgstr "Lanciafiamme pesante a gel di ossido di propilene"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[2]
@@ -3599,7 +3599,7 @@ msgstr "Ossido di propilene trattato in modo che bruci a temperature molto alte"
 #: data/mp/messages/strings/resstrings.txt:368
 #: po/custom/fromJson.txt:3196
 msgid "Increases Flamer damage"
-msgstr "Aumenta i danni del Lanciafiamme"
+msgstr "Aumenta i danni del lanciafiamme"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_FL_D1.text[3]
@@ -3667,7 +3667,7 @@ msgstr "L'obice da 105 mm può essere assegnato a un sensore"
 #: data/mp/messages/strings/resstrings.txt:382
 #: po/custom/fromJson.txt:8
 msgid "105m Howitzer firing incendiaries, may be assigned to a sensor"
-msgstr "Obice incendiario da 105mm, può essere assegnato a un sensore"
+msgstr "L'obice incendiario da 105mm può essere assegnato a un sensore"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_IHOW.text[2]
@@ -3691,7 +3691,7 @@ msgstr "Bersagli migliori: strutture e bunker"
 #: data/mp/messages/strings/resstrings.txt:396
 #: po/custom/fromJson.txt:2907
 msgid "Howitzer Upgrade"
-msgstr "Aggiornamento dell'Obice"
+msgstr "Aggiornamento dell'obice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[1]
@@ -3711,7 +3711,7 @@ msgstr "Colpi a razzo auto-guidati"
 #: data/mp/messages/strings/resstrings.txt:388
 #: po/custom/fromJson.txt:3206
 msgid "Increases Howitzer accuracy"
-msgstr "Aumenta la precisione dell'Obice"
+msgstr "Aumenta la precisione dell'obice"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[3]
@@ -3757,7 +3757,7 @@ msgstr "Aumenta i danni dell'obice"
 #: data/mp/messages/strings/resstrings.txt:397
 #: po/custom/fromJson.txt:991
 msgid "Automatic loading mechanism replaces manual loader"
-msgstr "Il meccanismo di ricarica automatica sostituisce la ricarica manuale"
+msgstr "Il meccanismo di ricarica automatica sostituisce quello manuale"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWRF1.text[2]
@@ -3864,7 +3864,7 @@ msgstr "Bersagli migliori: strutture, fanteria e veicoli su ruote"
 #: data/mp/messages/strings/resstrings.txt:414
 #: po/custom/fromJson.txt:1205
 msgid "Body Points: Very Low"
-msgstr "Punti corazza: Pochissimi"
+msgstr "Punti corazza: molto bassi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_W_M_D1.text[0]
@@ -6823,7 +6823,7 @@ msgstr "Fortificazione con cannone d'assalto"
 #. data/mp/stats/structure.json: $.Tower-VulcanCan.name
 #: po/custom/fromJson.txt:846
 msgid "Assault Cannon Guard Tower"
-msgstr "Torre di guardia con cannone d'Assalto"
+msgstr "Torre di guardia con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Wall-VulcanCan.name
@@ -7251,7 +7251,7 @@ msgstr "Beta"
 #. data/mp/messages/resmessages3.json: $.RES_V_P_V3.text[2]
 #: po/custom/fromJson.txt:1181
 msgid "Body Points and Speed Increased"
-msgstr "Aumenta i Punti Corazza e la Velocità"
+msgstr "Aumenta i punti corazza e la velocità"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
@@ -7259,7 +7259,7 @@ msgstr "Aumenta i Punti Corazza e la Velocità"
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
 #: po/custom/fromJson.txt:1210
 msgid "Body Points: Very low"
-msgstr "Punti Corazza: Pochissimi"
+msgstr "Punti corazza: molto bassi"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_BDMG1.text[2]
@@ -7593,13 +7593,13 @@ msgstr "Civile"
 #. data/mp/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1410
 msgid "Cluster Bomb Bay"
-msgstr "Bombe a grappolo"
+msgstr "Alloggiamento per bomba a grappolo"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb01.name
 #: po/custom/fromJson.txt:1413
 msgid "Cluster Bombs Bay"
-msgstr "Bombe a Grappolo"
+msgstr "Alloggiamento per bombe a grappolo"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0CobraFlameTracks.name
@@ -9091,20 +9091,20 @@ msgstr "Razzi HE"
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-HBB.name
 #: po/custom/fromJson.txt:2406
 msgid "Heap Bomb Bay Mantis VTOL"
-msgstr "Bombe HEAP Mantis VTOL"
+msgstr "Alloggiamento per bomba HEAP per Mantis su VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.SK-Retre-VTOL-HBB.name
 #: po/custom/fromJson.txt:2409
 msgid "Heap Bomb Bay Retribution VTOL"
-msgstr "Bombe HEAP Retribution VTOL"
+msgstr "Alloggiamento per bomba HEAP per Retribution su VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb02.name
 #. data/mp/stats/research.json: $.R-Wpn-Bomb02.name
 #: po/custom/fromJson.txt:2413
 msgid "HEAP Bomb Bay"
-msgstr "Bombe HEAP"
+msgstr "Alloggiamento per bomba HEAP"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Damage05.name
@@ -10157,7 +10157,7 @@ msgstr "L'incremento della potenza di Gauss velocizza la ricarica"
 #. data/base/messages/resmessages1.json: $.RES_DF_WU1.text[2]
 #: po/custom/fromJson.txt:3149
 msgid "Increases Armour and Body Points"
-msgstr "Aumenta l'Armatura e i Punti Corazza"
+msgstr "Aumenta l'armatura e i punti corazza"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages12.json: $.RES_W_CNAC1.text[2]
@@ -10317,7 +10317,7 @@ msgstr "Armatura e punti corazza inferiori al Cobra"
 #. data/mp/messages/resmessages1.json: $.RES_V_B04.text[1]
 #: po/custom/fromJson.txt:3338
 msgid "Inferior armor and body points to Viper"
-msgstr "Minore armatura e punti corazza rispetto al Viper"
+msgstr "Armatura e punti corazza inferiori al Viper"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-HvyFlamer.name
@@ -10422,14 +10422,14 @@ msgstr "Tiene sotto controllo intere aree della mappa"
 #: po/custom/fromJson.txt:3398
 #, no-c-format
 msgid "Kinetic armor +30%, body points +30%"
-msgstr "Armatura Cinetica +30%, Punti Corazza +30%"
+msgstr "Armatura cinetica +30%, punti corazza +30%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages2.json: $.RES_CYMET4.text[2]
 #: po/custom/fromJson.txt:3402
 #, no-c-format
 msgid "Kinetic Armor +35%, and Body Points +35%"
-msgstr "Armatura Cinetica +35%, Punti Corazza +35%"
+msgstr "Armatura cinetica +35%, punti corazza +35%"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages1.json: $.RES_CYMET1.text[2]
@@ -10438,7 +10438,7 @@ msgstr "Armatura Cinetica +35%, Punti Corazza +35%"
 #: po/custom/fromJson.txt:3408
 #, no-c-format
 msgid "Kinetic Armor +35%, Body Points +35%"
-msgstr "Armatura Cinetica +35%, Punti Corazza +35%"
+msgstr "Armatura cinetica +35%, punti corazza +35%"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYMET10.text[1]
@@ -10849,7 +10849,7 @@ msgstr "Conduttore di Massa"
 #. data/mp/messages/resmessagesall.json: $.RES_V_B14.text[1]
 #: po/custom/fromJson.txt:3686
 msgid "Maximum armor and body points"
-msgstr "Armatura e punti vita massimi"
+msgstr "Armatura e punti corazza massimi"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_SY_SUE1.text[3]
@@ -10917,7 +10917,7 @@ msgstr "Corpo Medio - Scorpion"
 #. data/mp/messages/resmessages1.json: $.RES_V_B05.text[1]
 #: po/custom/fromJson.txt:3736
 msgid "Medium body increases armor and body points"
-msgstr "Il corpo medio aumenta i punti corazza e l'armatura"
+msgstr "Il corpo medio aumenta l'armatura e i punti corazza"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.CobraMedCnHTrks.name
@@ -11190,7 +11190,7 @@ msgstr "Punti corazza e armatura superiori al Python"
 #. data/mp/messages/resmessagesall.json: $.RES_V_B13.text[1]
 #: po/custom/fromJson.txt:3904
 msgid "More armor and body points than Vengeance"
-msgstr "Più armatura e punti vita del Vengeance"
+msgstr "Punti corazza e armatura superiori al Vengeance"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_M_AC1.text[2]
@@ -11829,14 +11829,14 @@ msgstr "Pepperpot"
 #. data/mp/stats/templates.json: $.SK-Mantis-VTOL-PBB.name
 #: po/custom/fromJson.txt:4384
 msgid "Phosphor Bomb Bay Mantis VTOL"
-msgstr "Bombe al Fosforo Mantis VTOL"
+msgstr "Alloggiamento per bomba al fosforo per Mantis su VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Bomb03.name
 #. data/mp/stats/research.json: $.R-Wpn-Bomb03.name
 #: po/custom/fromJson.txt:4388
 msgid "Phosphor Bomb Bay"
-msgstr "Bombe al Fosforo"
+msgstr "Alloggiamento per bomba al fosforo"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.BabaPickUp.name
@@ -13632,7 +13632,7 @@ msgstr "Razzi a Visione Termica"
 #. data/mp/stats/research.json: $.R-Wpn-Bomb04.name
 #: po/custom/fromJson.txt:5568
 msgid "Thermite Bomb Bay"
-msgstr "Bombe alla Termite"
+msgstr "Alloggiamento per bomba alla termite"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Thermite.name
@@ -13821,14 +13821,14 @@ msgstr "Doppio cannone antiaereo da 80mm"
 #. data/mp/stats/structure.json: $.PillBox-Cannon6.name
 #: po/custom/fromJson.txt:5692
 msgid "Twin Assault Cannon Bunker"
-msgstr "Bunker Con Doppio Cannone D'Assalto"
+msgstr "Bunker con cannone d'assalto doppio"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-Cannon6TwinAslt.name
 #. data/mp/stats/weapons.json: $.Cannon6TwinAslt.name
 #: po/custom/fromJson.txt:5696
 msgid "Twin Assault Cannon"
-msgstr "Doppio Cannone D'Assalto"
+msgstr "Cannone d'assalto doppio"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Defense-WallTower-TwinAGun.name
@@ -14227,13 +14227,13 @@ msgstr "Bombe a Grappolo Scorpion VTOL"
 #. data/mp/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
 #: po/custom/fromJson.txt:5960
 msgid "VTOL Cluster Bomb Bay"
-msgstr "Bombe a grappolo"
+msgstr "Alloggiamento per bomba a grappolo su VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Bomb1-VTOL-LtHE.name
 #: po/custom/fromJson.txt:5963
 msgid "VTOL Cluster Bombs Bay"
-msgstr "Bombe a Grappolo"
+msgstr "Alloggiamento per bombe a grappolo su VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Bomb6-VTOL-EMP.name
@@ -14269,7 +14269,7 @@ msgstr "Flashlight VTOL"
 #. data/mp/stats/weapons.json: $.Bomb2-VTOL-HvHE.name
 #: po/custom/fromJson.txt:5984
 msgid "VTOL Heap Bomb Bay"
-msgstr "Bombe HEAP"
+msgstr "Alloggiamento per bomba HEAP su VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.HeavyLaser-VTOL.name
@@ -14372,13 +14372,13 @@ msgstr "Cannone ad ago per VTOL"
 #. data/mp/stats/weapons.json: $.Bomb3-VTOL-LtINC.name
 #: po/custom/fromJson.txt:6039
 msgid "VTOL Phosphor Bomb Bay"
-msgstr "Bombe al Fosforo"
+msgstr "Alloggiamento per bomba al fosforo su VTOL"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Bomb5-VTOL-Plasmite.name
 #: po/custom/fromJson.txt:6042
 msgid "VTOL Plasmite Bomb Bay"
-msgstr "Bombe alla Plasmite"
+msgstr "Alloggiamento per bomba alla plasmite su VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Vehicle-Prop-VTOL.name
@@ -14481,7 +14481,7 @@ msgstr "Tank Killer VTOL"
 #. data/mp/stats/weapons.json: $.Bomb4-VTOL-HvyINC.name
 #: po/custom/fromJson.txt:6118
 msgid "VTOL Thermite Bomb Bay"
-msgstr "Bombe alla Termite"
+msgstr "Alloggiamento per bomba alla termite su VTOL"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.MG2-VTOL.name
@@ -15073,7 +15073,7 @@ msgstr "Energia Totale Necessaria"
 #: src/design.cpp:969
 #: src/design.cpp:984
 msgid "Total Body Points"
-msgstr "Punti Corazza totali"
+msgstr "Punti corazza totali"
 
 #: src/design.cpp:1083
 #: src/design.cpp:1102
