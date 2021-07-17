@@ -3,9 +3,8 @@ set(SRC "dumpinfo.cpp" "exceptionhandler.cpp")
 
 add_library(exception-handler STATIC ${HEADERS} ${SRC})
 set_property(TARGET exception-handler PROPERTY FOLDER "lib")
-if(WZ_TARGET_ADDITIONAL_PROPERTIES)
-	SET_TARGET_PROPERTIES(exception-handler PROPERTIES ${WZ_TARGET_ADDITIONAL_PROPERTIES})
-endif()
+include(WZTargetConfiguration)
+WZ_TARGET_CONFIGURATION(exception-handler)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 	if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" AND ${CMAKE_CROSSCOMPILING})

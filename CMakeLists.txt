@@ -218,6 +218,8 @@ endif()
 include(CheckCompilerFlagsOutput)
 
 set(WZ_TARGET_ADDITIONAL_PROPERTIES) # Set below to any additional properties that should be added to Warzone targets (src/, lib/*/)
+set(WZ_TARGET_ADDITIONAL_C_BUILD_FLAGS) # Set below to any additional C build flags that should be added to Warzone targets (src/, lib/*/)
+set(WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS) # Set below to any additional CXX build flags that should be added to Warzone targets (src/, lib/*/)
 
 # Configure compiler warnings for WZ
 # NOTE: This should be called after the 3rdparty/ libs are added, so it only affects WZ code & frameworks
@@ -227,45 +229,45 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 
 		# Enable /W4
 		# NOTE: Do not use /Wall, as it enables *many* warnings that are off by default. MS recommends /W4 (max)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/W4")
 
 		# Enable some additional MSVC warnings (if compiling at warning level 3+)
 		# C4204: nonstandard extension used : non-constant aggregate initializer
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34204")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34204")
 		# C4512: 'class' : assignment operator could not be generated
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34512")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34512")
 
 		# Enable some additional MSVC warnings (that are off by default)
 		# C4005: 'identifier' : macro redefinition
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /we4005")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/we4005")
 		# C4191: unsafe conversion from 'type of expression' to 'type required'
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34191")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34191")
 		# C4263: 'function': member function does not override any base class virtual member function
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34263")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34263")
 		# C4264: 'virtual_function': no override available for virtual member function from base 'class'; function is hidden
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34264")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34264")
 		# C4265: 'class': class has virtual functions, but destructor is not virtual
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34265")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34265")
 		# C4266: 'function' : no override available for virtual member function from base 'type'; function is hidden
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w34266")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w34266")
 		# C4905: wide string literal cast to 'LPSTR'
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14905")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14905")
 		# C4906: string literal cast to 'LPWSTR'
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14906")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14906")
 		# C4928: illegal copy-initialization; more than one user-defined conversion has been implicitly applied
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14928")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14928")
 
 		# C4289: nonstandard extension used : 'var' : loop control variable declared in the for-loop is used outside the for-loop scope
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w44289")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w44289")
 		# C4836: nonstandard extension used : 'type' : local types or unnamed types cannot be used as template arguments
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14836")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14836")
 
 		# C4946: reinterpret_cast used between related classes: 'class1' and 'class2'
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w14946")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/w14946")
 
 		if (WZ_ENABLE_WARNINGS_AS_ERRORS)
 			# Enable /WX
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
+			list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/WX")
 		else()
 			message( STATUS "WZ will *NOT* enable /WX" )
 		endif()
@@ -273,19 +275,19 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		# Disable some warnings for WZ (permanently)
 		# C4800: 'type' : forcing value to bool 'true' or 'false' (performance warning)
 		# This warning is no longer generated in Visual Studio 2017+
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4800")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4800")
 
 		# Disable some warnings for WZ (FIXME)
 		# C4100: unreferenced formal parameter
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4100")
 		# C4244: 'conversion' conversion from 'type1' to 'type2', possible loss of data // FIXME!!
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4244")
 		# C4702: unreachable code
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4702")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4702")
 		# C4245: 'conversion' : conversion from 'type1' to 'type2', signed/unsigned mismatch
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4245")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4245")
 		# C4706: assignment within conditional expression
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4706")
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS "/wd4706")
 
 	elseif(CMAKE_GENERATOR STREQUAL "Xcode")
 		# Set Xcode generator project-level configuration + warning flags
@@ -620,8 +622,11 @@ macro(CONFIGURE_WZ_COMPILER_WARNINGS)
 		message( STATUS "Supported C compiler_flags=${_supported_c_compiler_flags}" )
 		message( STATUS "Supported CXX compiler_flags=${_supported_cxx_compiler_flags}" )
 
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${_supported_c_compiler_flags}")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_supported_cxx_compiler_flags}")
+		string(REPLACE " " ";" _supported_c_compiler_flags "${_supported_c_compiler_flags}")
+		string(REPLACE " " ";" _supported_cxx_compiler_flags "${_supported_cxx_compiler_flags}")
+
+		list(APPEND WZ_TARGET_ADDITIONAL_C_BUILD_FLAGS ${_supported_c_compiler_flags})
+		list(APPEND WZ_TARGET_ADDITIONAL_CXX_BUILD_FLAGS ${_supported_cxx_compiler_flags})
 
 	endif()
 endmacro(CONFIGURE_WZ_COMPILER_WARNINGS)
