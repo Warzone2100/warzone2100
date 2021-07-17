@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <vector>
 #include <regex>
+#include <utility>
 #include <optional-lite/optional.hpp>
 using nonstd::optional;
 using nonstd::nullopt;
@@ -178,6 +179,57 @@ const char *version_getVersionString()
 	}
 
 	return version_string;
+}
+
+static std::pair<std::string, std::string> version_getBuildReleaseData()
+{
+	static std::string buildReleaseStr;
+	static std::string buildReleaseEnvironmentStr;
+	if (buildReleaseStr.empty() || buildReleaseEnvironmentStr.empty())
+	{
+		buildReleaseStr = "warzone2100@";
+		if (strlen(vcs_tag))
+		{
+			optional<TagVer> tagVersion = extractVersionNumberFromTag(vcs_tag);
+			if (tagVersion.has_value() && !tagVersion.value().qualifier.empty())
+			{
+				buildReleaseEnvironmentStr = "preview";
+			}
+			else
+			{
+				buildReleaseEnvironmentStr = "release";
+			}
+			// always use the tag directlry
+			buildReleaseStr += vcs_tag;
+		}
+		else
+		{
+			// if not a tag, use the full commit hash
+			buildReleaseStr += VCS_FULL_HASH;
+			buildReleaseEnvironmentStr = "development";
+		}
+	}
+	return std::pair<std::string, std::string>(buildReleaseStr, buildReleaseEnvironmentStr);
+}
+
+// Should follow the form:
+// - warzone2100@TAG_NAME (for tagged builds)
+// - warzone2100@FULL_COMMIT_HASH (for other builds)
+std::string version_getBuildIdentifierReleaseString()
+{
+	auto result = version_getBuildReleaseData();
+	return result.first;
+}
+
+// For tagged builds this will return either:
+//	- "release" (for release tags)
+//	- "preview" (for tags with a trailing qualifier, like "4.0.0-beta1")
+// For other builds, this will return:
+//	- "development"
+std::string version_getBuildIdentifierReleaseEnvironment()
+{
+	auto result = version_getBuildReleaseData();
+	return result.second;
 }
 
 /** Composes a nicely formatted version string.
