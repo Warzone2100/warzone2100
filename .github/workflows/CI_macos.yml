@@ -104,6 +104,8 @@ jobs:
         echo "MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET}"
     - name: configure_mac.cmake
       working-directory: ./build
+      env:
+        SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
       run: |
         ADDITIONAL_CMAKE_ARGUMENTS="-DCMAKE_OSX_ARCHITECTURES=${WZ_OSX_TARGET_ARCH};-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=-;-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO"
         echo "WZ_INCLUDE_VIDEOS=${WZ_INCLUDE_VIDEOS}"
@@ -113,6 +115,20 @@ jobs:
           ADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS};-DWZ_INCLUDE_VIDEOS:BOOL=OFF"
         fi
         echo "ADDITIONAL_CMAKE_ARGUMENTS=${ADDITIONAL_CMAKE_ARGUMENTS}"
+
+        WZ_ENABLE_SENTRY="false"
+        if [[ "${GITHUB_EVENT_NAME}" == "push" ]] && [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
+          WZ_ENABLE_SENTRY="true"
+        fi
+        if [[ "${GITHUB_EVENT_NAME}" == "workflow_run" ]]; then
+          WZ_ENABLE_SENTRY="true"
+        fi
+        # Always build Sentry anyway, even if we don't pass the configuration to actually enable it
+        ADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS};-DWZ_BUILD_SENTRY:BOOL=ON"
+        if [[ "${WZ_ENABLE_SENTRY}" == "true" ]] && [[ ! -z "${SENTRY_IO_DSN}" ]]; then
+          # Pass the configuration to enable it
+          ADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS};-DSENTRY_IO_DSN:STRING=${SENTRY_IO_DSN}"
+        fi
 
         echo "-DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING=\"${WZ_DISTRIBUTOR}\" -DADDITIONAL_CMAKE_ARGUMENTS=\"${ADDITIONAL_CMAKE_ARGUMENTS}\" -P ../src/configure_mac.cmake"
         #cmake -DVCPKG_BUILD_TYPE=release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DADDITIONAL_CMAKE_ARGUMENTS="${ADDITIONAL_CMAKE_ARGUMENTS}" -P ../src/configure_mac.cmake
