@@ -108,7 +108,9 @@
 #if defined(ENABLE_DISCORD)
 #include "integrations/wzdiscordrpc.h"
 #endif
+#include "wzcrashhandlingproviders.h"
 #include "wzpropertyproviders.h"
+#include "3rdparty/gsl_finally.h"
 
 #if defined(WZ_OS_UNIX)
 # include <signal.h>
@@ -599,13 +601,18 @@ bool endsWith (std::string const &fullString, std::string const &endString) {
 	}
 }
 
+static std::string getWzPlatformPrefDir()
+{
+	return getPlatformPrefDir("Warzone 2100 Project", version_getVersionedAppDirFolderName());
+}
+
 static void initialize_ConfigDir()
 {
 	std::string configDir;
 
 	if (strlen(configdir) == 0)
 	{
-		configDir = getPlatformPrefDir("Warzone 2100 Project", version_getVersionedAppDirFolderName());
+		configDir = getWzPlatformPrefDir();
 	}
 	else
 	{
@@ -1446,6 +1453,40 @@ void osSpecificPostInit()
 #endif
 }
 
+static std::string getDefaultLogFilePath(const char *platformDirSeparator)
+{
+	static std::string defaultLogFileName;
+	if (defaultLogFileName.empty()) // only generate this once per run, so multiple callers get the same value
+	{
+		time_t aclock;
+		struct tm newtime;
+		char buf[PATH_MAX];
+
+		time(&aclock);						// Get time in seconds
+		newtime = getLocalTime(aclock);		// Convert time to struct
+		snprintf(buf, sizeof(buf), "WZlog-%02d%02d_%02d%02d%02d.txt",
+				 newtime.tm_mon + 1, newtime.tm_mday, newtime.tm_hour, newtime.tm_min, newtime.tm_sec);
+		defaultLogFileName = buf;
+	}
+	// log name is logs/(or \)WZlog-MMDD_HHMMSS.txt
+	return std::string("logs") + platformDirSeparator + defaultLogFileName;
+}
+
+static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
+{
+	std::string gfxBackendString = "null backend";
+	if (gfxbackend.has_value())
+	{
+		gfxBackendString = to_string(gfxbackend.value());
+	}
+	crashHandlingProviderSetTag("wz.gfx_backend", gfxBackendString);
+	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
+	nlohmann::json jsonBackendInfo = backendInfo;
+	crashHandlingProviderSetContext("wz.gfx", jsonBackendInfo);
+
+	return true;
+}
+
 // for backend detection
 extern const char *BACKEND;
 
@@ -1473,6 +1514,15 @@ int realmain(int argc, char *argv[])
 	/*** Initialize PhysicsFS ***/
 	initialize_PhysicsFS(utfargv[0]);
 
+	/** Initialize crash-handling provider, if configured */
+	/** NOTE: Should come as early as possible in process init, but needs to be after initialize_PhysicsFS because we need the platform pref dir for storing temporary crash files... */
+	bool bCrashHandlingProvider = useCrashHandlingProvider(utfargc, utfargv);
+	if (bCrashHandlingProvider)
+	{
+		bCrashHandlingProvider = initCrashHandlingProvider(getWzPlatformPrefDir(), getDefaultLogFilePath(PHYSFS_getDirSeparator()));
+	}
+	auto shutdown_crash_handling_provider_on_return = gsl::finally([bCrashHandlingProvider] { if (bCrashHandlingProvider) { shutdownCrashHandlingProvider(); } });
+
 	/*** Initialize translations ***/
 	/*** NOTE: Should occur before any use of gettext / libintl translation routines. ***/
 	initI18n();
@@ -1480,7 +1530,10 @@ int realmain(int argc, char *argv[])
 	wzMain(argc, argv);		// init Qt integration first
 
 	LaunchInfo::initialize(argc, argv);
-	setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(false), version_getVersionedAppDirFolderName(), isPortableMode());
+	if (!bCrashHandlingProvider)
+	{
+		setupExceptionHandler(utfargc, utfargv, version_getFormattedVersionString(false), version_getVersionedAppDirFolderName(), isPortableMode());
+	}
 
 	/*** Initialize sodium library ***/
 	if (sodium_init() < 0) {
@@ -1545,20 +1598,11 @@ int realmain(int argc, char *argv[])
 	{
 		// there was no custom debug file specified  (--debug-file=blah)
 		// so we use our write directory to store our logs.
-		time_t aclock;
-		struct tm newtime;
-		char buf[PATH_MAX];
-
-		time(&aclock);					// Get time in seconds
-		newtime = getLocalTime(aclock);		// Convert time to struct
-		// Note: We are using fopen(), and not physfs routines to open the file
-		// log name is logs/(or \)WZlog-MMDD_HHMMSS.txt
-		snprintf(buf, sizeof(buf), "%slogs%sWZlog-%02d%02d_%02d%02d%02d.txt", PHYSFS_getWriteDir(), PHYSFS_getDirSeparator(),
-		         newtime.tm_mon + 1, newtime.tm_mday, newtime.tm_hour, newtime.tm_min, newtime.tm_sec);
-		WzString debug_filename = buf;
+		WzString debug_filename = PHYSFS_getWriteDir();
+		debug_filename.append(WzString::fromUtf8(getDefaultLogFilePath(PHYSFS_getDirSeparator())));
 		debug_register_callback(debug_callback_file, debug_callback_file_init, debug_callback_file_exit, &debug_filename); // note: by the time this function returns, all use of debug_filename has completed
 
-		debug(LOG_WZ, "Using %s debug file", buf);
+		debug(LOG_WZ, "Using %s debug file", debug_filename.toUtf8().c_str());
 	}
 
 	// Initialize random number generators
@@ -1699,6 +1743,8 @@ int realmain(int argc, char *argv[])
 		saveConfig(); // ensure any setting changes are persisted on failure
 		return EXIT_FAILURE;
 	}
+
+	initializeCrashHandlingContext(gfxbackend);
 
 	debug(LOG_WZ, "Warzone 2100 - %s", version_getFormattedVersionString(false));
 	debug(LOG_WZ, "Using language: %s", getLanguage());

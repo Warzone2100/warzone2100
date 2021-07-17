@@ -68,5 +68,7 @@ src/3rdparty/integer_sequence.hpp
 	- CC0, Written in 2017 by Simon Brand (@TartanLlama)
 src/3rdparty/physfs.hpp
 	- Zlib, Copyright (c) 2013 Kevin Howell and others, Copyright (c) 2018 Arthur Brainville (Ybalrid), Copyright (c) 2021 Warzone 2100 Project
+sentry-native
+	- MIT License, Copyright (c) 2019 Sentry (https://sentry.io) and individual contributors. (https://github.com/getsentry/sentry-native)
 ANGLE (libGLESv2, libEGL)
 	- BSD 3-Clause License, Copyright 2018 The ANGLE Project Authors. (https://chromium.googlesource.com/angle/angle)
