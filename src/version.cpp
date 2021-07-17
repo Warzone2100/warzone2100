@@ -42,6 +42,7 @@ struct TagVer
 	std::string major;
 	std::string minor;
 	std::string revision;
+	std::string qualifier; // -beta1, -rc1, (etc)
 };
 
 static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
@@ -58,7 +59,7 @@ static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
 	}
 
 	std::smatch base_match;
-	const std::regex semver_regex("^([0-9]+)(.[0-9]+)?(.[0-9]+)?.*");
+	const std::regex semver_regex("^([0-9]+)(.[0-9]+)?(.[0-9]+)?(.*)?");
 	if (!std::regex_match(tagStr, base_match, semver_regex))
 	{
 		// regex failure
@@ -70,6 +71,9 @@ static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
 	const size_t matchCount = base_match.size();
 	switch (matchCount)
 	{
+		case 5:
+			result.qualifier = base_match[4].str();
+			// fallthrough
 		case 4:
 			result.revision = base_match[3].str().substr(1); // remove the "." prefix
 			// fallthrough
