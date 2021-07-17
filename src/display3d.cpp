@@ -1245,10 +1245,7 @@ static void drawTiles(iView *player)
 /// Initialise the fog, skybox and some other stuff
 bool init3DView()
 {
-	/* Arbitrary choice - from direct read! */
-	const Vector3f theSun(225.0f, -600.0f, 450.0f);
-
-	setTheSun(theSun);
+	setTheSun(getDefaultSunPosition());
 
 	/* There are no drag boxes */
 	dragBox3D.status = DRAG_INACTIVE;

@@ -50,6 +50,8 @@ static RENDER_STATE rendStates;
 static int32_t ecmState = 0;
 static gfx_api::gfxFloat timeState = 0.0f;
 
+const Vector3f defaultSunPosition(225.0f, -600.0f, 450.0f);
+
 void rendStatesRendModeHack()
 {
 	rendStates.rendMode = REND_ALPHA;
@@ -200,4 +202,9 @@ int pie_GetMaxAntialiasing()
 {
 	int32_t maxSamples = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_SAMPLES);
 	return maxSamples;
+}
+
+const Vector3f& getDefaultSunPosition()
+{
+	return defaultSunPosition;
 }
