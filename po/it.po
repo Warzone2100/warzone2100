@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-16 18:16\n"
+"PO-Revision-Date: 2021-07-17 06:41\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1207,7 +1207,7 @@ msgstr "Centro di Riparazione"
 #: data/base/messages/strings/names.txt:307
 #: data/mp/messages/strings/names.txt:389
 msgid "Tornado AA Flak Site"
-msgstr "Sito Contraereo Flak Tornado"
+msgstr "Postazione antiaerea con Tornado"
 
 #: data/base/messages/strings/names.txt:204
 #: data/base/messages/strings/names.txt:205
@@ -1606,7 +1606,7 @@ msgstr "Testata missilistica HEAP Mk3"
 #: data/base/messages/strings/names.txt:432
 #: data/mp/messages/strings/names.txt:545
 msgid "Improved Missile Loading System"
-msgstr "Sistema di Caricamento Missili Migliorato"
+msgstr "Sistema di caricamento missili migliorato"
 
 #: data/base/messages/strings/names.txt:440
 #: data/mp/messages/strings/names.txt:553
@@ -1648,7 +1648,7 @@ msgstr "Laboratorio cyborg"
 #: data/base/messages/strings/names.txt:488
 #: data/mp/messages/strings/names.txt:616
 msgid "Advanced Warfare Laboratory"
-msgstr "Laboratorio per Guerra Avanzata"
+msgstr "Laboratorio per la guerra avanzata"
 
 #: data/base/messages/strings/names.txt:489
 #: data/base/messages/strings/names.txt:505
@@ -1702,7 +1702,7 @@ msgstr "Bunker Blaster"
 #: data/mp/messages/strings/resstrings.txt:1
 #: po/custom/fromJson.txt:1648
 msgid "Cyborg Materials Improved"
-msgstr "Materiali dei Cyborg migliorati"
+msgstr "Materiali dei cyborg migliorati"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_CYMET4.text[1]
@@ -1985,7 +1985,7 @@ msgstr "Nuova Struttura Difensiva disponibile"
 #: data/mp/messages/strings/resstrings.txt:37
 #: po/custom/fromJson.txt:132
 msgid "AA Site with Tornado Flak Turret"
-msgstr "Postazione AA con Torretta Tornato Flak"
+msgstr "Postazione antiaerea con torretta Tornado"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA1.text[2]
@@ -2052,7 +2052,7 @@ msgstr "Forza Difensiva: Media"
 #: data/mp/messages/strings/resstrings.txt:42
 #: po/custom/fromJson.txt:124
 msgid "AA Site with Cyclone Flak Turret"
-msgstr "Postazione AA con Torretta Flak Cyclone"
+msgstr "Postazione antiaerea con torretta Cyclone"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[1]
@@ -2061,7 +2061,7 @@ msgstr "Postazione AA con Torretta Flak Cyclone"
 #: data/mp/messages/strings/resstrings.txt:47
 #: po/custom/fromJson.txt:128
 msgid "AA Site with Hurricane Gun Turret"
-msgstr "Postazione AA con Torretta Cannone Hurricane"
+msgstr "Postazione antiaerea con torretta Hurricane"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA2.text[2]
@@ -2070,7 +2070,7 @@ msgstr "Postazione AA con Torretta Cannone Hurricane"
 #: data/mp/messages/strings/resstrings.txt:48
 #: po/custom/fromJson.txt:1012
 msgid "Automatically targets VTOL"
-msgstr "Bersaglia automaticamente VTOL"
+msgstr "Bersaglia automaticamente i VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_AA3.text[1]
@@ -2079,7 +2079,7 @@ msgstr "Bersaglia automaticamente VTOL"
 #: data/mp/messages/strings/resstrings.txt:52
 #: po/custom/fromJson.txt:136
 msgid "AA Site with Whirlwind Gun Turret"
-msgstr "Postazione AA con Torretta Cannone Whirlwind"
+msgstr "Postazione antiaerea con torretta Whirlwind"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_IDFR.text[1]
@@ -2197,7 +2197,7 @@ msgstr "Aggancia automaticamente i nemici a portata di tiro"
 #: data/mp/messages/strings/resstrings.txt:97
 #: po/custom/fromJson.txt:802
 msgid "Armored strongpoint with Hyper-Velocity Cannon"
-msgstr "Posizione corazzata con Cannone ad Ipervelocità"
+msgstr "Posizione corazzata con cannone a iper-velocità"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_DF_P1.text[3]
@@ -2224,7 +2224,7 @@ msgstr "Posizione corazzata con Cannone ad Ipervelocità"
 #: data/mp/messages/strings/resstrings.txt:164
 #: po/custom/fromJson.txt:1765
 msgid "Defensive Strength: High"
-msgstr "Forza Difensiva: Elevata"
+msgstr "Forza difensiva: elevata"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_HVFL.text[1]
@@ -2233,7 +2233,7 @@ msgstr "Forza Difensiva: Elevata"
 #: data/mp/messages/strings/resstrings.txt:102
 #: po/custom/fromJson.txt:806
 msgid "Armored strongpoint with Inferno Flamer"
-msgstr "Posizione corazzata con Lanciafiamme Inferno"
+msgstr "Posizione corazzata con lanciafiamme Inferno"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_EMP_RotCan.text[1]
@@ -2242,7 +2242,7 @@ msgstr "Posizione corazzata con Lanciafiamme Inferno"
 #: data/mp/messages/strings/resstrings.txt:107
 #: po/custom/fromJson.txt:787
 msgid "Armored strongpoint with Assault Cannon"
-msgstr "Posizione corazzata con Cannone d'Assalto"
+msgstr "Posizione corazzata con cannone d'assalto"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_DEF_RotMG.text[1]
@@ -8069,7 +8069,7 @@ msgstr "I Cyborg possono essere ricercati"
 #. data/base/stats/structure.json: $.AASite-QuadBof.name
 #: po/custom/fromJson.txt:1726
 msgid "Cyclone AA Flak Site"
-msgstr "Sito Contraereo Flak Cyclone"
+msgstr "Sito contraereo Cyclone"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyFlakHT.name
@@ -9840,7 +9840,7 @@ msgstr "Cannone a iper velocità Python cingolato"
 #. data/mp/stats/structure.json: $.AASite-QuadMg1.name
 #: po/custom/fromJson.txt:2930
 msgid "Hurricane AA Site"
-msgstr "Sito Contraereo Hurricane"
+msgstr "Sito contraereo Hurricane"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun03.name
@@ -13238,7 +13238,7 @@ msgstr "Batteria di Razzi AA Sunburst."
 #. data/mp/stats/structure.json: $.P0-AASite-Sunburst.name
 #: po/custom/fromJson.txt:5290
 msgid "Sunburst AA Site"
-msgstr "Sito Contraereo Sunburst"
+msgstr "Sito contraereo Sunburst"
 
 #. TRANSLATORS:
 #. data/mp/stats/weapons.json: $.Rocket-Sunburst.name
@@ -14556,7 +14556,7 @@ msgstr "Ruote"
 #. data/mp/stats/structure.json: $.AASite-QuadRotMg.name
 #: po/custom/fromJson.txt:6169
 msgid "Whirlwind AA Site"
-msgstr "Sito Contraereo Whirlwind"
+msgstr "Sito contraereo Whirlwind"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun04.name
