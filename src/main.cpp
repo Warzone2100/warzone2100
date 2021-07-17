@@ -1760,6 +1760,8 @@ int realmain(int argc, char *argv[])
 		pie_EnableFog(true);
 	}
 
+	pie_InitLighting();
+
 	//set all the pause states to false
 	setAllPauseStates(false);
 

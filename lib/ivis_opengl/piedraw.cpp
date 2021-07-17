@@ -162,7 +162,7 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 
 	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
 		pie_PerspectiveGet(),
-		glm::vec4(currentSunPosition, 0.f),
+		glm::vec4(getDefaultSunPosition(), 0.f),
 		sceneColor, ambient, diffuse, specular, glm::vec4(0.f),
 		0.f, 0.f, 0.f, 0
 	};
