@@ -23,16 +23,19 @@ jobs:
           - compiler: "MSVC_2019"
             architecture: "x86"
             deploy_release: true
+            support_sentry : true
           - compiler: "MSVC_2019"
             architecture: "x64"
             artifact_description: "msvc_x64"
             deploy_release: false
+            support_sentry : true
           - compiler: "MSVC_2019"
             architecture: "arm64"
             deploy_release: true
           - compiler: "MINGW_CLANG"
             architecture: "x64"
             deploy_release: true
+            support_sentry : true
       fail-fast: false
     env:
       WZ_COMPILER_VER: ${{ matrix.compiler }}
@@ -85,6 +88,8 @@ jobs:
       run: choco install nsis -y
     - name: Generate Settings for Run [${{ matrix.compiler }}:${{ matrix.architecture }}]
       id: settings
+      env:
+        BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
       run: |
         # Basic variable setup
         # --------------------
@@ -176,6 +181,20 @@ jobs:
         #$CMAKE_GENERATOR_INSTANCE = "${WZ_VISUAL_STUDIO_INSTALL_PATH}"
 
         # -------------
+        # Sentry crash-handler support
+        
+        $WZ_ENABLE_SENTRY = "false"
+        if ("${env:BUILD_SENTRY_SUPPORT}" -eq "true") {
+          # Fully enable for master branch pushes (development builds) and workflow runs (draft tag release builds)
+          if (("${env:GITHUB_EVENT_NAME}" -eq "push") -and ("${env:GITHUB_REF}" -eq "refs/heads/master")) {
+            $WZ_ENABLE_SENTRY = "true"
+          }
+          elseif (("${env:GITHUB_EVENT_NAME}" -eq "workflow_run")) {
+            $WZ_ENABLE_SENTRY = "true"
+          }
+        }
+
+        # -------------
         # Distributor
 
         $WZ_DISTRIBUTOR = "UNKNOWN"
@@ -204,6 +223,7 @@ jobs:
         echo "::set-output name=WZ_FULL_CMAKE_PATH::${WZ_FULL_CMAKE_PATH}"
         echo "::set-output name=MSYSTEM::${MSYSTEM}"
         echo "::set-output name=WZ_REPO_PATH::${WZ_REPO_PATH}"
+        echo "::set-output name=WZ_ENABLE_SENTRY::${WZ_ENABLE_SENTRY}"
         echo "WZ_REPO_PATH=${WZ_REPO_PATH}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "VCPKG_DEFAULT_TRIPLET=${VCPKG_DEFAULT_TRIPLET}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         echo "WZ_VC_TARGET_PLATFORMNAME=${WZ_VC_TARGET_PLATFORMNAME}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -323,8 +343,15 @@ jobs:
       id: mingwsettings
       if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
       working-directory: '${{ github.workspace }}\build'
+      env:
+        BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
+        WZ_MINGW_PKG_PREFIX: ${{ steps.settings.outputs.WZ_MINGW_PKG_PREFIX }}
       shell: msys2 {0}
       run: |
+        if [[ "${BUILD_SENTRY_SUPPORT}" == "true" ]]; then
+          # Also need the uasm package
+          pacman --noconfirm -S --needed "${WZ_MINGW_PKG_PREFIX}-uasm"
+        fi
         echo "PATH=${PATH}"
         WZ_FULL_GIT_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_GIT_PATH }}')"
         echo "WZ_FULL_GIT_PATH=${WZ_FULL_GIT_PATH}"
@@ -388,19 +415,42 @@ jobs:
       working-directory: '${{ github.workspace }}\build'
       env:
         CXXFLAGS: '/MP'
+        BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
+        WZ_ENABLE_SENTRY: ${{ steps.settings.outputs.WZ_ENABLE_SENTRY }}
+        SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
       run: |
+        $ADDITIONAL_CMAKE_PARAMS = ""
+        $WZ_BUILD_SENTRY_VALUE = "OFF"
+        if ("${env:BUILD_SENTRY_SUPPORT}" -eq "true") {
+          $WZ_BUILD_SENTRY_VALUE = "ON"
+          if (("${env:WZ_ENABLE_SENTRY}" -eq "true") -and (-not ([string]::IsNullOrEmpty("${env:SENTRY_IO_DSN}")))) {
+            $ADDITIONAL_CMAKE_PARAMS = "-DSENTRY_IO_DSN:STRING=${env:SENTRY_IO_DSN}"
+          }
+        }
         # Use CMake to configure with the appropriate Visual Studio (MSBUILD) generator, toolchain, and target platform
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
-        cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
+        cmake -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCPACK_PACKAGE_FILE_NAME:STRING="warzone2100_portable" -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -DCMAKE_GENERATOR_INSTANCE="${env:WZ_VISUAL_STUDIO_INSTALL_PATH}" -DWZ_BUILD_SENTRY:BOOL="${WZ_BUILD_SENTRY_VALUE}" ${ADDITIONAL_CMAKE_PARAMS} -G "${env:WZ_VC_GENERATOR}" -A "${env:WZ_VC_TARGET_PLATFORMNAME}" "${env:WZ_REPO_PATH}"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Configure (MINGW)
       if: success() && (steps.settings.outputs.WZ_USING_MINGW == 'true')
       working-directory: '${{ github.workspace }}\build'
       shell: msys2 {0}
+      env:
+        BUILD_SENTRY_SUPPORT: ${{ matrix.support_sentry }}
+        WZ_ENABLE_SENTRY: ${{ steps.settings.outputs.WZ_ENABLE_SENTRY }}
+        SENTRY_IO_DSN: '${{ secrets.CRASHREPORTING_SENTRY_IO_DSN }}'
       run: |
+        ADDITIONAL_CMAKE_PARAMS=""
+        WZ_BUILD_SENTRY_VALUE="OFF"
+        if [[ "${BUILD_SENTRY_SUPPORT}" == "true" ]]; then
+          WZ_BUILD_SENTRY_VALUE="ON"
+          if [[ "${WZ_ENABLE_SENTRY}" == "true" ]] && [[ ! -z "${SENTRY_IO_DSN}" ]]; then
+            ADDITIONAL_CMAKE_PARAMS="-DSENTRY_IO_DSN:STRING=${SENTRY_IO_DSN}"
+          fi
+        fi
         WZ_FULL_CMAKE_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}')"
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
-        PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_CMAKE_PATH}/cmake.exe" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_CMAKE_PATH}/cmake.exe" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -DWZ_BUILD_SENTRY:BOOL=${WZ_BUILD_SENTRY_VALUE} ${ADDITIONAL_CMAKE_PARAMS} -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build (MSVC)
       if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
