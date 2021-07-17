@@ -400,7 +400,7 @@ jobs:
       run: |
         WZ_FULL_CMAKE_PATH="$(cygpath '${{ steps.settings.outputs.WZ_FULL_CMAKE_PATH }}')"
         echo "::add-matcher::${{ github.workspace }}\src\.ci\githubactions\pattern_matchers\cmake.json"
-        PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_CMAKE_PATH}/cmake.exe" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${env:WZ_DISTRIBUTOR}" -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
+        PATH="${{ steps.mingwsettings.outputs.WZ_MINGW_ENV_PATH }}" "${WZ_FULL_CMAKE_PATH}/cmake.exe" -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\build\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE=Release -DWZ_DISTRIBUTOR:STRING="${WZ_DISTRIBUTOR}" -G "Ninja" "${{ steps.settings.outputs.WZ_REPO_PATH }}"
         echo "::remove-matcher owner=cmake::"
     - name: CMake Build (MSVC)
       if: success() && (steps.settings.outputs.WZ_USING_MINGW != 'true')
