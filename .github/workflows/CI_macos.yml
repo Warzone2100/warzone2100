@@ -351,3 +351,40 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
+
+  upload-debug-symbols:
+    name: 'Upload Debug Symbols'
+    runs-on: ubuntu-latest
+    # Run on push to master branch (development build), or tag release automation build
+    if: (github.repository == 'Warzone2100/warzone2100') && ((github.event_name == 'push' && github.ref == 'refs/heads/master') || (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Draft Tag Release'))
+    needs: macos_universal_combine
+    environment: upload_symbols
+    # For this job to work, the following secrets must be set in the 'upload_symbols' environment:
+    # SENTRY_AUTH_TOKEN
+    steps:
+      - name: Prep Environment
+        run: |
+          mkdir dl-archive
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: 'warzone2100_macOS_universal_novideos'
+          path: ./dl-archive
+      - name: Extract archive
+        id: extract
+        run: |
+          OUTPUTDIR="wz-macOS"
+          ZIPFILE="./dl-archive/warzone2100_macOS_universal_novideos.zip"
+          unzip -o "${ZIPFILE}" -d "${OUTPUTDIR}" && rm "${ZIPFILE}"
+          echo "::set-output name=ARCHIVEDIR::${OUTPUTDIR}"
+      - name: 'Upload debug symbols'
+        env:
+          SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
+          WZ_ARCHIVE_DIR: '${{ steps.extract.outputs.ARCHIVEDIR }}'
+        run: |
+          if [[ -z "${SENTRY_AUTH_TOKEN}" ]]; then
+            echo "No SENTRY_AUTH_TOKEN - skipping"
+            exit 0
+          fi
+          docker pull getsentry/sentry-cli
+          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
