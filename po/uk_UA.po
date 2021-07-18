@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-03 21:42\n"
+"PO-Revision-Date: 2021-07-18 17:31\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4001,11 +4001,11 @@ msgstr "Всі ракети покращуються автоматично"
 
 #: data/base/script/campaign/cam1-7.js:244
 msgid "Destroy all New Paradigm units"
-msgstr ""
+msgstr "Знищити всі одиниці Нової Парадигми"
 
 #: data/base/script/campaign/cam1a-c.js:140
 msgid "Destroy all New Paradigm reinforcements"
-msgstr ""
+msgstr "Знищити всі підкріплення Нової Парадигми"
 
 #: data/base/script/campaign/cam1ca.js:137
 msgid "Build at least 7 non-wall structures on the plateau and destroy all New Paradigm reinforcements"
