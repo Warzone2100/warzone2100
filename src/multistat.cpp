@@ -111,34 +111,43 @@ void lookupRatingAsync(uint32_t playerIndex)
 	req.url = url;
 	debug(LOG_INFO, "Requesting \"%s\"", req.url.c_str());
 	req.onSuccess = [playerIndex, hash](std::string const &url, HTTPResponseDetails const &response, std::shared_ptr<MemoryStruct> const &data) {
-		wzAsyncExecOnMainThread([playerIndex, hash, url, response, data] {
-			if (response.httpStatusCode() != 200 || !data || data->size == 0)
-			{
-				debug(LOG_WARNING, "Failed to retrieve data from \"%s\", got [%ld].", url.c_str(), response.httpStatusCode());
-				return;
-			}
+		long httpStatusCode = response.httpStatusCode();
+		std::string urlCopy = url;
+		if (httpStatusCode != 200 || !data || data->size == 0)
+		{
+			wzAsyncExecOnMainThread([urlCopy, httpStatusCode] {
+				debug(LOG_WARNING, "Failed to retrieve data from \"%s\", got [%ld].", urlCopy.c_str(), httpStatusCode);
+			});
+			return;
+		}
+
+		std::shared_ptr<MemoryStruct> dataCopy = data;
+		wzAsyncExecOnMainThread([playerIndex, hash, urlCopy, dataCopy] {
 			if (playerStats[playerIndex].identity.publicHashString() != hash)
 			{
-				debug(LOG_WARNING, "Got data from \"%s\", but player is already gone.", url.c_str());
+				debug(LOG_WARNING, "Got data from \"%s\", but player is already gone.", urlCopy.c_str());
 				return;
 			}
 			try {
-				playerStats[playerIndex].autorating = nlohmann::json::parse(data->memory, data->memory + data->size);
+				playerStats[playerIndex].autorating = nlohmann::json::parse(dataCopy->memory, dataCopy->memory + dataCopy->size);
 				if (playerStats[playerIndex].autorating.valid)
 				{
 					setMultiStats(playerIndex, playerStats[playerIndex], false);
 				}
 			}
 			catch (const std::exception &e) {
-				debug(LOG_WARNING, "JSON document from \"%s\" is invalid: %s", url.c_str(), e.what());
+				debug(LOG_WARNING, "JSON document from \"%s\" is invalid: %s", urlCopy.c_str(), e.what());
 			}
 			catch (...) {
-				debug(LOG_FATAL, "Unexpected exception parsing JSON \"%s\"", url.c_str());
+				debug(LOG_FATAL, "Unexpected exception parsing JSON \"%s\"", urlCopy.c_str());
 			}
 		});
 	};
 	req.onFailure = [](std::string const &url, WZ_DECL_UNUSED URLRequestFailureType type, WZ_DECL_UNUSED optional<HTTPResponseDetails> transferDetails) {
-		debug(LOG_WARNING, "Failure fetching \"%s\".", url.c_str());
+		std::string urlCopy = url;
+		wzAsyncExecOnMainThread([urlCopy] {
+			debug(LOG_WARNING, "Failure fetching \"%s\".", urlCopy.c_str());
+		});
 	};
 	req.maxDownloadSizeLimit = 4096;
 	urlRequestData(req);
