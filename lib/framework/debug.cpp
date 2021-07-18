@@ -34,6 +34,7 @@
 #include "wzapp.h"
 #include <map>
 #include <string>
+#include <regex>
 
 #if defined(WZ_OS_LINUX) && defined(__GLIBC__)
 #include <execinfo.h>  // Nonfatal runtime backtraces.
@@ -204,6 +205,24 @@ void debug_callback_file(void **data, const char *outputBuffer)
 	}
 }
 
+static WzString replaceUsernameInPath(WzString path)
+{
+	// Some common forms:
+	// C:\Users\<USERNAME>\... (Windows Vista+)
+	// C:\Documents and Settings\<USERNAME>\... (Windows XP)
+	// /Users/<USERNAME>/... (macOS)
+	// /home/<USERNAME>/... (Linux)
+
+	// First pass, do a simple string regex replacement
+	const auto win_re = std::regex("^[A-Za-z]:\\\\(Users|Documents and Settings)\\\\[^\\\\]+", std::regex_constants::ECMAScript);
+	auto result = std::regex_replace(path.toUtf8(), win_re, "[WIN_USER_FOLDER]");
+	const auto unix_re = std::regex("^\\/(Users|home)\\/[^\\/]+", std::regex_constants::ECMAScript);
+	result = std::regex_replace(result, unix_re, "[USER_HOME]");
+
+	// POSSIBLE FUTURE TODO: Do OS-specific handling where we query the "home"/user folder?
+	return WzString::fromUtf8(result);
+}
+
 char WZ_DBGFile[PATH_MAX] = {0};	//Used to save path of the created log file
 /**
  * Setup the file callback
@@ -254,7 +273,8 @@ bool debug_callback_file_init(void **data)
 #endif
 	snprintf(WZ_DBGFile, sizeof(WZ_DBGFile), "%s", WZDebugfilename.toUtf8().c_str());
 	setbuf(logfile, nullptr);
-	fprintf(logfile, "--- Starting log [%s]---\n", WZDebugfilename.toUtf8().c_str());
+	WzString fileNameStripped = replaceUsernameInPath(WZDebugfilename);
+	fprintf(logfile, "--- Starting log [%s]---\n", fileNameStripped.toUtf8().c_str());
 	*data = logfile;
 
 	return true;
