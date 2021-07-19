@@ -56,6 +56,7 @@ static size_t pieCount = 0;
 static size_t polyCount = 0;
 static bool shadows = false;
 static gfx_api::gfxFloat lighting0[LIGHT_MAX][4];
+static gfx_api::gfxFloat lightingDefault[LIGHT_MAX][4];
 
 /*
  *	Source
@@ -72,6 +73,7 @@ void pie_InitLighting()
 		{1.0f, 1.0f, 1.0f, 1.0f}  // LIGHT_SPECULAR
 	};
 	memcpy(lighting0, defaultLight, sizeof(lighting0));
+	memcpy(lightingDefault, defaultLight, sizeof(lightingDefault));
 }
 
 void pie_Lighting0(LIGHTING_TYPE entry, const float value[4])
@@ -154,10 +156,10 @@ static void pie_Draw3DButton(iIMDShape *shape, PIELIGHT teamcolour, const glm::m
 	gfx_api::buffer* pTangentBuffer = (shape->buffers[VBO_TANGENT] != nullptr) ? shape->buffers[VBO_TANGENT] : getZeroedVertexBuffer(shape->vertexCount * 4 * sizeof(gfx_api::gfxFloat));
 
 	const PIELIGHT colour = WZCOL_WHITE;
-	glm::vec4 sceneColor(lighting0[LIGHT_EMISSIVE][0], lighting0[LIGHT_EMISSIVE][1], lighting0[LIGHT_EMISSIVE][2], lighting0[LIGHT_EMISSIVE][3]);
-	glm::vec4 ambient(lighting0[LIGHT_AMBIENT][0], lighting0[LIGHT_AMBIENT][1], lighting0[LIGHT_AMBIENT][2], lighting0[LIGHT_AMBIENT][3]);
-	glm::vec4 diffuse(lighting0[LIGHT_DIFFUSE][0], lighting0[LIGHT_DIFFUSE][1], lighting0[LIGHT_DIFFUSE][2], lighting0[LIGHT_DIFFUSE][3]);
-	glm::vec4 specular(lighting0[LIGHT_SPECULAR][0], lighting0[LIGHT_SPECULAR][1], lighting0[LIGHT_SPECULAR][2], lighting0[LIGHT_SPECULAR][3]);
+	glm::vec4 sceneColor(lightingDefault[LIGHT_EMISSIVE][0], lightingDefault[LIGHT_EMISSIVE][1], lightingDefault[LIGHT_EMISSIVE][2], lightingDefault[LIGHT_EMISSIVE][3]);
+	glm::vec4 ambient(lightingDefault[LIGHT_AMBIENT][0], lightingDefault[LIGHT_AMBIENT][1], lightingDefault[LIGHT_AMBIENT][2], lightingDefault[LIGHT_AMBIENT][3]);
+	glm::vec4 diffuse(lightingDefault[LIGHT_DIFFUSE][0], lightingDefault[LIGHT_DIFFUSE][1], lightingDefault[LIGHT_DIFFUSE][2], lightingDefault[LIGHT_DIFFUSE][3]);
+	glm::vec4 specular(lightingDefault[LIGHT_SPECULAR][0], lightingDefault[LIGHT_SPECULAR][1], lightingDefault[LIGHT_SPECULAR][2], lightingDefault[LIGHT_SPECULAR][3]);
 	gfx_api::Draw3DShapeOpaque::get().bind();
 
 	gfx_api::Draw3DShapeGlobalUniforms globalUniforms {
