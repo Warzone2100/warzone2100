@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-05 09:50\n"
+"PO-Revision-Date: 2021-07-19 17:38\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -5821,7 +5821,7 @@ msgstr "JSON in die Zwischenablage kopieren"
 
 #: lib/widget/jsontable.cpp:562
 msgid "Dump JSON to StdOut"
-msgstr "Gib JSON auf der Konsole aus"
+msgstr "Gib JSON auf StdOut in der Konsole aus"
 
 #: lib/widget/listwidget.cpp:60
 msgid "Tab Scroll left"
@@ -17983,7 +17983,7 @@ msgstr "Insgesamt Gesendet/Empfangen —"
 #: src/multimenu.cpp:714
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "Datenverkehr: %lu/%lu"
 
 #: src/multimenu.cpp:718
 #, c-format
@@ -17993,7 +17993,7 @@ msgstr "Unkomprimiert: %lu/%lu"
 #: src/multimenu.cpp:722
 #, c-format
 msgid "Pack: %lu/%lu"
-msgstr ""
+msgstr "Datenpakete: %lu/%lu"
 
 #: src/multimenu.cpp:1023
 msgid "Channel"
@@ -18132,7 +18132,7 @@ msgstr "Braun"
 
 #: src/musicmanager.cpp:494
 msgid "NOW PLAYING"
-msgstr "JETZT SPIELEN"
+msgstr "AKTUELLER TITEL"
 
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:680
