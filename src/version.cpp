@@ -76,10 +76,18 @@ static optional<TagVer> extractVersionNumberFromTag(const std::string& tag)
 			result.qualifier = base_match[4].str();
 			// fallthrough
 		case 4:
-			result.revision = base_match[3].str().substr(1); // remove the "." prefix
+			result.revision = base_match[3].str();
+			if (!result.revision.empty())
+			{
+				result.revision = result.revision.substr(1); // remove the "." prefix
+			}
 			// fallthrough
 		case 3:
-			result.minor = base_match[2].str().substr(1); // remove the "." prefix
+			result.minor = base_match[2].str();
+			if (!result.minor.empty())
+			{
+				result.minor = result.minor.substr(1); // remove the "." prefix
+			}
 			result.major = base_match[1].str();
 			break;
 		default:
