@@ -2137,13 +2137,20 @@ bool NETrecvGame(NETQUEUE *queue, uint8_t *type)
 int NETsendFile(WZFile &file, unsigned player)
 {
 	ASSERT_OR_RETURN(100, NetPlay.isHost, "Trying to send a file and we are not the host!");
+	ASSERT_OR_RETURN(100, file.handle != nullptr, "Null file handle");
 
 	uint8_t inBuff[MAX_FILE_TRANSFER_PACKET];
 	memset(inBuff, 0x0, sizeof(inBuff));
 
 	// read some bytes.
 	PHYSFS_sint64 readBytesResult = WZ_PHYSFS_readBytes(file.handle, inBuff, MAX_FILE_TRANSFER_PACKET);
-	ASSERT_OR_RETURN(100, readBytesResult >= 0, "Error reading file.");
+	if (readBytesResult < 0)
+	{
+		ASSERT(readBytesResult >= 0, "Error reading file.");
+		PHYSFS_close(file.handle);
+		file.handle = nullptr;
+		return 100;
+	}
 	uint32_t bytesToRead = static_cast<uint32_t>(readBytesResult);
 
 	NETbeginEncode(NETnetQueue(player), NET_FILE_PAYLOAD);

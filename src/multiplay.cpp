@@ -1339,6 +1339,7 @@ bool recvMapFileRequested(NETQUEUE queue)
 
 		LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
 		ASSERT_OR_RETURN(false, mapData, "levFindDataSet failed for game.map: %s", game.map);
+		ASSERT_OR_RETURN(false, mapData->realFileName != nullptr, "levFindDataSet found game.map: %s; but realFileName is empty - requesting a built-in map??", game.map);
 		filename = mapData->realFileName;
 		debug(LOG_INFO, "Map was requested. Looking for %s", filename.c_str());
 	}
