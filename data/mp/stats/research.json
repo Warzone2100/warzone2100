@@ -308,7 +308,7 @@
 		"iconID": "IMAGE_RES_CYBORGTECH",
 		"id": "R-Cyborg-Hvywpn-HPV",
 		"msgName": "RES_CYW_H_HPV",
-		"name": "Super HPV Cyborg",
+		"name": "Super HVC Cyborg",
 		"requiredResearch": [
 			"R-Cyborg-Hvywpn-Mcannon",
 			"R-Wpn-Cannon4AMk1"

@@ -760,7 +760,7 @@
 		"available": true,
 		"body": "CyborgHeavyBody",
 		"id": "Cyb-Hvy-HPV",
-		"name": "Super HPV Cyborg",
+		"name": "Super HVC Cyborg",
 		"propulsion": "CyborgLegs",
 		"type": "CYBORG_SUPER",
 		"weapons": [
