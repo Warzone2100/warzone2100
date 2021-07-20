@@ -1878,6 +1878,7 @@ MappableFunction kf_OrderDroid(const DroidOrderType order)
 				orderDroid(psDroid, order, ModeQueue);
 			}
 		}
+		intRefreshOrder();
 	};
 }
 
@@ -1914,6 +1915,7 @@ static void kfsf_SetSelectedDroidsState(SECONDARY_ORDER sec, SECONDARY_STATE sta
 			secondarySetState(psDroid, sec, state);
 		}
 	}
+	intRefreshOrder();
 }
 
 // --------------------------------------------------------------------------
