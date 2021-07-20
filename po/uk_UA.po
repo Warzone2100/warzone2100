@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-19 05:30\n"
+"PO-Revision-Date: 2021-07-20 05:33\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4021,7 +4021,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam2-d.js:74
 msgid "Secure the Uplink from The Collective"
-msgstr ""
+msgstr "Захистіть пост Зв'язку від Альянсу"
 
 #: data/base/script/campaign/cam2-end.js:190
 msgid "Send off at least one transporter with a truck and survive The Collective assault"
@@ -4069,11 +4069,11 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
-msgstr ""
+msgstr "Артефакти зібрані"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:499
 msgid "Bases destroyed"
-msgstr ""
+msgstr "Бази знищено"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:500
 msgid "Enemy units remaining"
@@ -4562,7 +4562,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:4
 msgid "Warning!"
-msgstr ""
+msgstr "Увага!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
@@ -4578,7 +4578,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
-msgstr ""
+msgstr "Повідомлення завершенно."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
@@ -4626,7 +4626,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
-msgstr ""
+msgstr "СХІДНИЙ СЕКТОР"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
@@ -4846,7 +4846,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:2
 msgid "NORTHERN SECTOR"
-msgstr ""
+msgstr "ПІВНІЧНИЙ СЕКТОР"
 
 #: data/base/sequenceaudio/cam3/c003.txa:8
 msgid "Dusk, December 3rd, 2100"
