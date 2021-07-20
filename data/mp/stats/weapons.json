@@ -3516,7 +3516,7 @@
 		"muzzleGfx": "FXHBLas.PIE",
 		"name": "Heavy Plasma Launcher",
 		"numExplosions": 10,
-		"periodicalDamage": 70,
+		"periodicalDamage": 50,
 		"periodicalDamageRadius": 128,
 		"periodicalDamageTime": 60,
 		"radiusLife": 10,
