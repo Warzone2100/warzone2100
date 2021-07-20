@@ -105,6 +105,7 @@ size_t loopPolyCount;
  */
 static bool paused = false;
 static bool video = false;
+static unsigned short int skipCounter = 0;
 
 //holds which pause is valid at any one time
 struct PAUSE_STATE
@@ -679,8 +680,13 @@ void videoLoop()
 	videoFinished = !seq_UpdateFullScreenVideo(nullptr);
 	pie_ScreenFlip(CLEAR_BLACK);
 
+	if (skipCounter <= SEQUENCE_MIN_SKIP_DELAY)
+	{
+		skipCounter += 1; // "time" is stopped so we will count via loop iterations.
+	}
+
 	// should we stop playing?
-	if (videoFinished || keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))
+	if (videoFinished || (skipCounter > SEQUENCE_MIN_SKIP_DELAY && (keyPressed(KEY_ESC) || mouseReleased(MOUSE_LMB))))
 	{
 		seq_StopFullScreenVideo();
 
@@ -709,6 +715,7 @@ void videoLoop()
 
 void loop_SetVideoPlaybackMode()
 {
+	skipCounter = 0;
 	videoMode += 1;
 	paused = true;
 	video = true;
@@ -723,6 +730,7 @@ void loop_SetVideoPlaybackMode()
 
 void loop_ClearVideoPlaybackMode()
 {
+	skipCounter = 0;
 	videoMode -= 1;
 	paused = false;
 	video = false;
