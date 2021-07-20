@@ -42,7 +42,11 @@ const ContextId InputContext::DEBUG_MISC            = "DEBUG_MISC";
 const ContextId InputContext::DEBUG_LEVEL_EDITOR    = "DEBUG_LEVEL_EDITOR";
 const ContextId InputContext::DEBUG_HAS_SELECTION   = "DEBUG_HAS_SELECTION";
 
-static const InputContext NULL_CONTEXT = InputContext("__NULL", false, 0, InputContext::State::INACTIVE, "null");
+static const InputContext& nullContext()
+{
+	static const InputContext NULL_CONTEXT = InputContext("__NULL", false, 0, InputContext::State::INACTIVE, "null");
+	return NULL_CONTEXT;
+}
 
 void registerDefaultContexts(ContextManager& contextManager, DebugInputManager& dbgInputManager)
 {
@@ -55,7 +59,7 @@ void registerDefaultContexts(ContextManager& contextManager, DebugInputManager& 
 	const InputContext debugLvlEditor = { InputContext::DEBUG_LEVEL_EDITOR,     false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug (level editor)"),   [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
 	const InputContext debugSelection = { InputContext::DEBUG_HAS_SELECTION,    false, { MAX_ICONTEXT_PRIORITY, 0 },  InputContext::State::INACTIVE,  N_("Debug (selection)"),      [&dbgInputManager]() { return dbgInputManager.isDebugPrioritized(); } };
 
-	contextManager.registerContext(NULL_CONTEXT);
+	contextManager.registerContext(nullContext());
 	contextManager.registerContext(alwaysActive);
 	contextManager.registerContext(background);
 	contextManager.registerContext(gameplay);
@@ -112,7 +116,7 @@ const InputContext& ContextManager::get(const ContextId& contextId) const
 	else
 	{
 		debug(LOG_WARNING, "Tried to get missing input context \"%s\". Returning null context instead!", contextId);
-		return NULL_CONTEXT;
+		return nullContext();
 	}
 }
 
