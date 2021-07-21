@@ -30,6 +30,7 @@
 
 #include "version.h"
 #include "urlhelpers.h"
+#include "activity.h"
 
 /* Crash-handling providers */
 
@@ -44,6 +45,7 @@
 #  define WZ_CRASHHANDLING_PROVIDER_SENTRY_DSN ""
 # endif
 static bool enabledSentryProvider = false;
+# define WZ_SENTRY_MAX_BREADCRUMBS 50
 #endif
 
 const size_t tagKeyMaxLength = 32;
@@ -101,6 +103,12 @@ static bool initCrashHandlingProvider_Sentry(const std::string& platformPrefDir_
 #else
 	sentry_options_add_attachment(options, logFileFullPath.c_str());
 #endif
+	// limit max breadcrumbs to WZ_SENTRY_MAX_BREADCRUMBS (if default exceeds it)
+	size_t maxBreadcrumbs = sentry_options_get_max_breadcrumbs(options);
+	if (maxBreadcrumbs > WZ_SENTRY_MAX_BREADCRUMBS)
+	{
+		sentry_options_set_max_breadcrumbs(options, WZ_SENTRY_MAX_BREADCRUMBS);
+	}
 	int result = sentry_init(options);
 	return result == 0;
 }
@@ -191,6 +199,121 @@ static bool crashHandlingProviderSetContext_Sentry(const std::string& key, const
 	return true;
 }
 
+class SentryCrashHandlerActivitySink : public ActivitySink {
+private:
+	std::string lastGameState = "/";
+private:
+	void gameStateChange(const std::string& newGameState, nlohmann::json additionalData = nlohmann::json::object())
+	{
+		sentry_value_t crumb = sentry_value_new_breadcrumb("navigation", NULL);
+		sentry_value_set_by_key(crumb, "category", sentry_value_new_string("navigation"));
+		sentry_value_t data;
+		if (additionalData.is_object())
+		{
+			data = mapJsonObjectToSentryValue(additionalData);
+		}
+		else
+		{
+			data = sentry_value_new_object();
+		}
+		sentry_value_set_by_key(data, "from", sentry_value_new_string(lastGameState.c_str()));
+		sentry_value_set_by_key(data, "to", sentry_value_new_string(newGameState.c_str()));
+		sentry_value_set_by_key(crumb, "data", data);
+		sentry_add_breadcrumb(crumb);
+		lastGameState = newGameState;
+	}
+	void gameStateToMenus()
+	{
+		gameStateChange("/menus");
+	}
+public:
+	SentryCrashHandlerActivitySink()
+	{
+		gameStateToMenus();
+	}
+
+	// campaign games
+	virtual void startedCampaignMission(const std::string& campaign, const std::string& levelName) override
+	{
+		gameStateChange(std::string("/campaign/") + campaign + "/" + levelName);
+	}
+	virtual void endedCampaignMission(const std::string& campaign, const std::string& levelName, GameEndReason result, END_GAME_STATS_DATA stats, bool cheatsUsed) override
+	{
+		if (result == GameEndReason::QUIT)
+		{
+			gameStateToMenus();
+			return;
+		}
+	}
+
+	// challenges
+	virtual void startedChallenge(const std::string& challengeName) override
+	{
+		nlohmann::json additionalData = nlohmann::json::object();
+		additionalData["name"] = challengeName;
+		gameStateChange("/challenge", additionalData);
+	}
+
+	virtual void endedChallenge(const std::string& challengeName, GameEndReason result, const END_GAME_STATS_DATA& stats, bool cheatsUsed) override
+	{
+		gameStateToMenus();
+	}
+
+	virtual void startedSkirmishGame(const SkirmishGameInfo& info) override
+	{
+		std::string stateStr = "/skirmish";
+
+		nlohmann::json additionalData = nlohmann::json::object();
+		additionalData["map"] = info.game.map;
+		additionalData["bots"] = info.numAIBotPlayers;
+		std::string teamDescription = ActivitySink::getTeamDescription(info);
+		if (!teamDescription.empty())
+		{
+			additionalData["teams"] = teamDescription;
+		}
+
+		gameStateChange(stateStr, additionalData);
+	}
+
+	virtual void endedSkirmishGame(const SkirmishGameInfo& info, GameEndReason result, const END_GAME_STATS_DATA& stats) override
+	{
+		gameStateToMenus();
+	}
+
+	// multiplayer
+	virtual void hostingMultiplayerGame(const MultiplayerGameInfo& info) override
+	{
+		gameStateChange("/multiplayerlobby/host");
+	}
+	virtual void joinedMultiplayerGame(const MultiplayerGameInfo& info) override
+	{
+		gameStateChange("/multiplayerlobby/join");
+	}
+	virtual void updateMultiplayerGameInfo(const MultiplayerGameInfo& info) override
+	{
+		// currently, no-op
+	}
+	virtual void leftMultiplayerGameLobby(bool wasHost, LOBBY_ERROR_TYPES type) override
+	{
+		gameStateToMenus();
+	}
+	virtual void startedMultiplayerGame(const MultiplayerGameInfo& info) override
+	{
+		nlohmann::json additionalData = nlohmann::json::object();
+		additionalData["isHost"] = info.isHost;
+		additionalData["map"] = info.game.map;
+		additionalData["bots"] = info.numAIBotPlayers;
+		additionalData["settings"] = "T" + std::to_string(info.game.techLevel) + "P" + std::to_string(info.game.power) + "B" + std::to_string(info.game.base);
+		additionalData["players"] = info.maxPlayers - info.numAvailableSlots;
+		additionalData["maxplayers"] = info.maxPlayers;
+		gameStateChange("/multiplayer", additionalData);
+	}
+	virtual void endedMultiplayerGame(const MultiplayerGameInfo& info, GameEndReason result, const END_GAME_STATS_DATA& stats) override
+	{
+		gameStateToMenus();
+	}
+};
+
 #endif // defined(WZ_CRASHHANDLING_PROVIDER_SENTRY)
 
 bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::string& defaultLogFilePath)
@@ -201,6 +324,10 @@ bool initCrashHandlingProvider(const std::string& platformPrefDir, const std::st
 	// Sentry crash-handling provider
 	ASSERT_OR_RETURN(true, !enabledSentryProvider, "Called more than once");
 	enabledSentryProvider = initCrashHandlingProvider_Sentry(platformPrefDir, defaultLogFilePath);
+	if (enabledSentryProvider)
+	{
+		ActivityManager::instance().addActivitySink(std::make_shared<SentryCrashHandlerActivitySink>());
+	}
 	return enabledSentryProvider;
 #else
 	#error No available init for crash handling provider
