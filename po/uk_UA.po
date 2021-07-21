@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-20 05:33\n"
+"PO-Revision-Date: 2021-07-21 05:56\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4029,7 +4029,7 @@ msgstr ""
 
 #: data/base/script/campaign/cam3-1.js:165
 msgid "Move all units into the valley"
-msgstr ""
+msgstr "Перемістити всі підрозділи у долину"
 
 #: data/base/script/campaign/cam3-1.js:248
 msgid "Destroy the missile silos"
@@ -4065,7 +4065,7 @@ msgstr "Повертайтесь до Зони Висадки"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
-msgstr ""
+msgstr "Знищити всі ворожі підрозділи та будівлі"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
@@ -4355,11 +4355,11 @@ msgstr "Поздоровляємо, командире - тепер ви гот�
 
 #: data/base/sequenceaudio/cam1/c001.txa:1
 msgid "CAMPAIGN ONE"
-msgstr ""
+msgstr "ПЕРША КАМПАНІЯ"
 
 #: data/base/sequenceaudio/cam1/c001.txa:2
 msgid "WESTERN SECTOR"
-msgstr ""
+msgstr "ЗАХІДНИЙ СЕКТОР"
 
 #: data/base/sequenceaudio/cam1/c001.txa:4
 msgid "Dawn, July 4th, 2100"
@@ -13750,7 +13750,7 @@ msgstr "Всюдихідний Скорпіон Інженер"
 #. ... + 5 refs
 #: po/custom/fromJson.txt:5644
 msgid "Truck"
-msgstr "Інженер"
+msgstr "Вантажівка"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage06.name
