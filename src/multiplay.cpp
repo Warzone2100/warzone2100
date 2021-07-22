@@ -1341,6 +1341,11 @@ bool recvMapFileRequested(NETQUEUE queue)
 		ASSERT_OR_RETURN(false, mapData, "levFindDataSet failed for game.map: %s", game.map);
 		ASSERT_OR_RETURN(false, mapData->realFileName != nullptr, "levFindDataSet found game.map: %s; but realFileName is empty - requesting a built-in map??", game.map);
 		filename = mapData->realFileName;
+		if (filename.empty())
+		{
+			debug(LOG_INFO, "Unknown map requested by %u.", player);
+			return false;
+		}
 		debug(LOG_INFO, "Map was requested. Looking for %s", filename.c_str());
 	}
 	else
