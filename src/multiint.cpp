@@ -3021,8 +3021,10 @@ static void stopJoining(std::shared_ptr<WzTitleUI> parent)
 		// if we were in a midle of transferring a file, then close the file handle
 		for (auto const &file : NetPlay.wzFiles)
 		{
-			debug(LOG_NET, "closing aborted file");		// no need to delete it, we do size check on (map) file
+			debug(LOG_NET, "closing aborted file");
 			PHYSFS_close(file.handle);
+			ASSERT(!file.filename.empty(), "filename must not be empty");
+			PHYSFS_delete(file.filename.c_str()); 		// delete incomplete (map) file
 		}
 		NetPlay.wzFiles.clear();
 		ingame.localJoiningInProgress = false;			// reset local flags
