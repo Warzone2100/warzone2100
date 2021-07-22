@@ -80,45 +80,37 @@ bool loadFeatureStats(WzConfig &ini)
 		p->name = ini.string(WzString::fromUtf8("name"));
 		p->id = list[i];
 		WzString subType = ini.value("type").toWzString();
-		if (subType == "TANK WRECK")
+		switch (subType) 
 		{
-			p->subType = FEAT_TANK;
-		}
-		else if (subType == "GENERIC ARTEFACT")
-		{
-			p->subType = FEAT_GEN_ARTE;
-		}
-		else if (subType == "OIL RESOURCE")
-		{
-			p->subType = FEAT_OIL_RESOURCE;
-		}
-		else if (subType == "BOULDER")
-		{
-			p->subType = FEAT_BOULDER;
-		}
-		else if (subType == "VEHICLE")
-		{
-			p->subType = FEAT_VEHICLE;
-		}
-		else if (subType == "BUILDING")
-		{
-			p->subType = FEAT_BUILDING;
-		}
-		else if (subType == "OIL DRUM")
-		{
-			p->subType = FEAT_OIL_DRUM;
-		}
-		else if (subType == "TREE")
-		{
-			p->subType = FEAT_TREE;
-		}
-		else if (subType == "SKYSCRAPER")
-		{
-			p->subType = FEAT_SKYSCRAPER;
-		}
-		else
-		{
-			ASSERT(false, "Unknown feature type: %s", subType.toUtf8().c_str());
+			case "TANK WRECK":
+				p->subType = FEAT_TANK;
+				break;
+			case "GENERIC ARTEFACT":
+				p->subType = FEAT_GEN_ARTE;
+				break;
+			case "OIL RESOURCE":
+				p->subType = FEAT_OIL_RESOURCE;
+				break;
+			case "BOULDER":
+				p->subType = FEAT_BOULDER;
+				break;
+			case "VEHICLE":
+				p->subType = FEAT_VEHICLE;
+				break;
+			case "BUILDING":
+				p->subType = FEAT_BUILDING;
+				break;
+			case "OIL DRUM":
+				p->subType = FEAT_OIL_DRUM;
+				break;
+			case "TREE":
+				p->subType = FEAT_TREE;
+				break;
+			case "SKYSCRAPER":
+				p->subType = FEAT_SKYSCRAPER;
+				break;
+			default:
+				ASSERT(false, "Unknown feature type: %s", subType.toUtf8().c_str());
 		}
 		p->psImd = modelGet(ini.value("model").toWzString());
 		p->baseWidth = ini.value("width", 1).toInt();
