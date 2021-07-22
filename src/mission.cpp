@@ -3040,9 +3040,31 @@ void clearMissionWidgets()
 	intRemoveTransporterLaunch();
 }
 
+/**
+ * Try to find a transporter among the player's droids, or in the mission list (transporter waiting to come back).
+ */
+static DROID *find_transporter()
+{
+	for (auto droid_list : {apsDroidLists[selectedPlayer], mission.apsDroidLists[selectedPlayer]})
+	{
+		for (auto droid = droid_list; droid != nullptr; droid = droid->psNext)
+		{
+			if (isTransporter(droid))
+			{
+				return droid;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 void resetMissionWidgets()
 {
-	DROID       *psDroid;
+	if (mission.type == LEVEL_TYPE::LDS_NONE)
+	{
+		return;
+	}
 
 	//add back any widgets that should be up due to the missions
 	if (mission.time > 0)
@@ -3059,27 +3081,9 @@ void resetMissionWidgets()
 	//check not a typical reinforcement mission
 	else if (!missionForReInforcements())
 	{
-		for (psDroid = apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
+		if (auto transporter = find_transporter())
 		{
-			if (isTransporter(psDroid))
-			{
-				intAddTransporterLaunch(psDroid);
-				break;
-			}
-		}
-		/*if we got to the end without adding a transporter - there might be
-		one sitting in the mission list which is waiting to come back in*/
-		if (!psDroid)
-		{
-			for (psDroid = mission.apsDroidLists[selectedPlayer]; psDroid != nullptr; psDroid = psDroid->psNext)
-			{
-				if (isTransporter(psDroid) &&
-				    psDroid->action == DACTION_TRANSPORTWAITTOFLYIN)
-				{
-					intAddTransporterLaunch(psDroid);
-					break;
-				}
-			}
+			intAddTransporterLaunch(transporter);
 		}
 	}
 
