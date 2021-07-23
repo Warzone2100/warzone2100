@@ -3582,7 +3582,7 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-Emplacement-HPVcannon",
 		"msgName": "RES_EMP_HPV",
-		"name": "HPV Cannon Emplacement",
+		"name": "HVC Cannon Emplacement",
 		"requiredResearch": [
 			"R-Wpn-Cannon4AMk1"
 		],
@@ -3776,7 +3776,7 @@
 		"iconID": "IMAGE_RES_DEFENCE",
 		"id": "R-Defense-WallTower-HPVcannon",
 		"msgName": "RES_WT13_HPV",
-		"name": "HPV Cannon Hardpoint",
+		"name": "HVC Cannon Hardpoint",
 		"redStructures": [
 			"WallTower04"
 		],

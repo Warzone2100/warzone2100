@@ -1290,7 +1290,7 @@
 		"mountModel": "scbody.pie",
 		"movement": "DIRECT",
 		"muzzleGfx": "FXCan20A.PIE",
-		"name": "Super HPV Cyborg",
+		"name": "Super HVC Cyborg",
 		"numExplosions": 1,
 		"recoilValue": 100,
 		"rotate": 180,
