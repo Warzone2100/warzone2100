@@ -25,7 +25,7 @@
 
 bool openURLInBrowser(char const *url);
 std::string urlEncode(const char* urlFragment);
-bool urlHasHTTPorHTTPSPrefix(char const *url);
+bool urlHasAcceptableProtocol(char const *url);
 
 bool openFolderInDefaultFileManager(const char* path);
 
