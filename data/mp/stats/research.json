@@ -7113,7 +7113,7 @@
 			"R-Wpn-Howitzer-Damage05",
 			"R-Wpn-Howitzer-Accuracy02"
 		],
-		"researchPoints": 24400,
+		"researchPoints": 21100,
 		"researchPower": 450,
 		"resultComponents": [
 			"Howitzer150Mk1"
@@ -8088,7 +8088,6 @@
 		"msgName": "RES_W_M_D4",
 		"name": "HEAP Mortar Shells",
 		"requiredResearch": [
-			"R-Wpn-Mortar02Hvy",
 			"R-Wpn-Mortar-Damage03"
 		],
 		"researchPoints": 9200,
@@ -8198,11 +8197,11 @@
 		"msgName": "RES_IMORT",
 		"name": "Incendiary Mortar",
 		"requiredResearch": [
-			"R-Wpn-Mortar02Hvy",
+			"R-Wpn-Mortar-Damage02",
 			"R-Wpn-Flame2"
 		],
-		"researchPoints": 3600,
-		"researchPower": 112,
+		"researchPoints": 4200,
+		"researchPower": 131,
 		"resultComponents": [
 			"Mortar-Incendiary"
 		],
@@ -8242,8 +8241,7 @@
 		"id": "R-Wpn-Mortar-ROF02",
 		"name": "Mortar Autoloader Mk2",
 		"requiredResearch": [
-			"R-Wpn-Mortar-ROF01",
-			"R-Wpn-Mortar3"
+			"R-Wpn-Mortar-ROF01"
 		],
 		"researchPoints": 6000,
 		"researchPower": 187,
