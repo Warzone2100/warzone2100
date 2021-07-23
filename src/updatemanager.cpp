@@ -232,7 +232,7 @@ WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json
 							updateLink = updateLinkJson.get<std::string>();
 						}
 					}
-					bool hasValidURLPrefix = urlHasHTTPorHTTPSPrefix(updateLink.c_str());
+					bool hasValidURLPrefix = urlHasAcceptableProtocol(updateLink.c_str());
 					if (!validSignature || !validExpiry || updateLink.empty() || !hasValidURLPrefix)
 					{
 						// use default update link

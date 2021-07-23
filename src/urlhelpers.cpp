@@ -59,11 +59,15 @@
 
 #include <vector>
 
+#if defined(WZ_OS_WIN)
+static const std::vector<std::string> validLinkPrefixes = { "http://", "https://", "ms-windows-store://" };
+#else
 static const std::vector<std::string> validLinkPrefixes = { "http://", "https://" };
+#endif
 
-bool urlHasHTTPorHTTPSPrefix(char const *url)
+bool urlHasAcceptableProtocol(char const *url)
 {
-	// Verify URL starts with http:// or https://
+	// Verify URL starts with a validLinkPrefixes (examples: http:// or https:// )
 	bool bValidLinkPrefix = false;
 	for (const auto& validLinkPrefix : validLinkPrefixes)
 	{
@@ -127,8 +131,8 @@ bool openURLInBrowser(char const *url)
 {
 	if (!url || !*url) return false;
 
-	// Verify URL starts with http:// or https://
-	if (!urlHasHTTPorHTTPSPrefix(url))
+	// Verify URL starts with an acceptable protocol - ex: http:// or https://
+	if (!urlHasAcceptableProtocol(url))
 	{
 		debug(LOG_ERROR, "Rejecting attempt to open link with URL: %s", url);
 		return false;
