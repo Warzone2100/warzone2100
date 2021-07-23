@@ -18,8 +18,8 @@ endif()
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO google/angle
-    REF 3d4f87ab5b9ba4c720cedf1f219cc0884038b140 # chromium/4472
-    SHA512 30970d38770c2f9eee0b7fb9f9553e4c0b38877a47dccf7c87f912cba7822c6dd5a7728b66a5fefeee2281c250299638f24122f41f464be986105084112fec0d
+    REF d15be77864e18f407c317be6f6bc06ee2b7d070a # chromium/4472
+    SHA512 aad8563ee65458a7865ec7c668d1f90ac2891583c569a22dcd2c557263b72b26386f56b74a7294398be2cf5c548df513159e4be53f3f096f19819ca06227d9ac
     # On update check headers against opengl-registry
     PATCHES
         001-fix-uwp.patch
