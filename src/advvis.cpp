@@ -47,8 +47,9 @@ void	avUpdateTiles()
 	MAPTILE *psTile;
 
 	/* Go through the tiles */
-	for (psTile = psMapTiles; i < len; i++)
+	for (; i < len; i++)
 	{
+		psTile = &psMapTiles[i];
 		maxLevel = psTile->illumination;
 
 		if (psTile->level > MIN_ILLUM || psTile->tileExploredBits & playermask)	// seen
@@ -67,7 +68,6 @@ void	avUpdateTiles()
 				psTile->level = MIN(psTile->level + increment, maxLevel);
 			}
 		}
-		psTile++;
 	}
 }
 

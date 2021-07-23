@@ -2269,7 +2269,7 @@ bool loadGame(const char *pGameToLoad, bool keepObjects, bool freeMem, bool User
 			syncDebug("crc(droids) = 0x%08x", data->crcSumDroids(0));
 			syncDebug("crc(features) = 0x%08x", data->crcSumFeatures(0));
 		}
-		if (!mapLoadFromWzMapData(*(mapData.get())))
+		if (!mapLoadFromWzMapData(mapData))
 		{
 			debug(LOG_ERROR, "Failed to process map data from path: %s", aFileName);
 			return false;

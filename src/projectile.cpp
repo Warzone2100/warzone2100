@@ -97,7 +97,7 @@ static const uint32_t ProjectileTrackerID = 0xdead0000;
 static uint32_t projectileTrackerIDIncrement = 0;
 
 /* The list of projectiles in play */
-static std::vector<PROJECTILE *> psProjectileList;
+static std::vector<PROJECTILE*> psProjectileList;
 
 /* The next projectile to give out in the proj_First / proj_Next methods */
 static ProjectileIterator psProjectileNext;
@@ -211,6 +211,10 @@ proj_InitSystem()
 void
 proj_FreeAllProjectiles()
 {
+	for (auto proj: psProjectileList)
+	{
+		delete proj;
+	}
 	psProjectileList.clear();
 	psProjectileNext = psProjectileList.end();
 }

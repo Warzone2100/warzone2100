@@ -85,9 +85,10 @@ struct MAPTILE
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
-extern MAPTILE *psMapTiles;
+
+extern std::unique_ptr<MAPTILE[]> psMapTiles;
 extern float waterLevel;
-extern GROUND_TYPE *psGroundTypes;
+extern std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
 extern int numGroundTypes;
 extern char *tilesetDir;
 
@@ -111,8 +112,8 @@ extern char *tilesetDir;
 #define AUX_DANGERMAP	2
 #define AUX_MAX		3
 
-extern uint8_t *psBlockMap[AUX_MAX];
-extern uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];	// yes, we waste one element... eyes wide open... makes API nicer
+extern std::unique_ptr<uint8_t[]> psBlockMap[AUX_MAX];
+extern std::unique_ptr<uint8_t[]> psAuxMap[MAX_PLAYERS + AUX_MAX];	// yes, we waste one element... eyes wide open... makes API nicer
 
 /// Find aux bitfield for a given tile
 WZ_DECL_ALWAYS_INLINE static inline uint8_t auxTile(int x, int y, int player)
@@ -129,8 +130,8 @@ WZ_DECL_ALWAYS_INLINE static inline uint8_t blockTile(int x, int y, int slot)
 /// Store a shadow copy of a player's aux map for use in threaded calculations
 static inline void auxMapStore(int player, int slot)
 {
-	memcpy(psBlockMap[slot], psBlockMap[0], sizeof(*psBlockMap[player]) * mapWidth * mapHeight);
-	memcpy(psAuxMap[MAX_PLAYERS + slot], psAuxMap[player], sizeof(*psAuxMap[player]) * mapWidth * mapHeight);
+	memcpy(psBlockMap[slot].get(), psBlockMap[0].get(), sizeof(uint8_t) * mapWidth * mapHeight);
+	memcpy(psAuxMap[MAX_PLAYERS + slot].get(), psAuxMap[player].get(), sizeof(uint8_t) * mapWidth * mapHeight);
 }
 
 /// Restore selected fields from the shadow copy of a player's aux map (ignoring the block map)
@@ -307,9 +308,6 @@ static inline unsigned char terrainType(const MAPTILE *tile)
 
 /* The size and contents of the map */
 extern SDWORD	mapWidth, mapHeight;
-extern MAPTILE *psMapTiles;
-
-extern GROUND_TYPE *psGroundTypes;
 extern int numGroundTypes;
 
 /* Additional tile <-> world coordinate overloads */
@@ -351,7 +349,7 @@ bool mapShutdown();
 /* Load the map data */
 bool mapLoad(char const *filename);
 struct ScriptMapData;
-bool mapLoadFromWzMapData(WzMap::MapData& mapData);
+bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> mapData);
 
 class WzMapPhysFSIO : public WzMap::IOProvider
 {
