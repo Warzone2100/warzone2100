@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-03 19:45+0000\n"
-"PO-Revision-Date: 2021-07-21 05:56\n"
+"PO-Revision-Date: 2021-07-23 05:46\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4106,7 +4106,7 @@ msgstr "Виробництво (F1)"
 #: data/base/script/tutorial.js:512
 #: data/mp/multiplay/script/rules/reticule.js:25
 msgid "Manufacture - build factory first"
-msgstr ""
+msgstr "Виробництво - спочатку збудуйте фабрику"
 
 #: data/base/script/rules.js:105
 #: data/base/script/tutorial.js:149
@@ -4391,7 +4391,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:2
 msgid "Alpha - Western Sector...."
-msgstr ""
+msgstr "Альфа - Західний Сектор...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
@@ -4411,11 +4411,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txt:11
 msgid "Your destination lies in the western zone."
-msgstr ""
+msgstr "Ваша ціль знаходиться в західній зоні."
 
 #: data/base/sequenceaudio/cam1/c001end.txt:1
 msgid "Incoming Transmission"
-msgstr ""
+msgstr "Вхідне Повідомлення"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
@@ -4493,7 +4493,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:9
 msgid "Open your systems to me and you will be strong."
-msgstr ""
+msgstr "Надайте мені доступ до Ваших систем, і Ви станете сильнішими."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:10
 msgid "I can raise you as gods upon the blasted earth."
@@ -4566,15 +4566,15 @@ msgstr "Увага!"
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:5
 msgid "You are entering a restricted area."
-msgstr ""
+msgstr "Ви входите в заборонену територію."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:7
 msgid "Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Поверніться до зони призначення, або будете знищені."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:8
 msgid "Repeat. Return to your designated zone or be destroyed."
-msgstr ""
+msgstr "Повторюю. Поверніться до зони призначення, або будете знищені."
 
 #: data/base/sequenceaudio/cam1/sub13np1.txt:9
 msgid "Message Ends."
@@ -4582,7 +4582,7 @@ msgstr "Повідомлення завершенно."
 
 #: data/base/sequenceaudio/cam1/sub13np2.txt:8
 msgid "You will be destroyed."
-msgstr ""
+msgstr "Вас буде знищено."
 
 #: data/base/sequenceaudio/cam1/sub14anp.txt:4
 msgid "NEXUS, the synaptic technology you required has been recovered and sent for collection."
@@ -4622,7 +4622,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/c002.txa:1
 msgid "CAMPAIGN TWO"
-msgstr ""
+msgstr "Кампанія друга"
 
 #: data/base/sequenceaudio/cam2/c002.txa:2
 msgid "EASTERN SECTOR"
@@ -4630,7 +4630,7 @@ msgstr "СХІДНИЙ СЕКТОР"
 
 #: data/base/sequenceaudio/cam2/c002.txa:4
 msgid "Morning, September 1st, 2100"
-msgstr ""
+msgstr "Ранок, 1 вересня 2100"
 
 #: data/base/sequenceaudio/cam2/c002.txa:5
 msgid "In-flight to Eastern Sector"
