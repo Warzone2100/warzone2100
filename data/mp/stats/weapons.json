@@ -3444,7 +3444,7 @@
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "MORTARS",
 		"weaponWav": "mortar.ogg",
-		"weight": 3000
+		"weight": 2000
 	},
 	"MortarEMP": {
 		"buildPoints": 1400,
