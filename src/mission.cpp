@@ -254,11 +254,11 @@ void initMission()
 	mission.mapWidth = 0;
 	for (auto &i : mission.psBlockMap)
 	{
-		i = nullptr;
+		i.reset();
 	}
 	for (auto &i : mission.psAuxMap)
 	{
-		i = nullptr;
+		i.reset();
 	}
 
 	//init all the landing zones
@@ -317,20 +317,16 @@ bool missionShutDown()
 		mission.apsSensorList[0] = nullptr;
 		mission.apsOilList[0] = nullptr;
 
-		psMapTiles = mission.psMapTiles;
+		psMapTiles = std::move(mission.psMapTiles);
 		mapWidth = mission.mapWidth;
 		mapHeight = mission.mapHeight;
 		for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
 		{
-			free(psBlockMap[i]);
-			psBlockMap[i] = mission.psBlockMap[i];
-			mission.psBlockMap[i] = nullptr;
+			psBlockMap[i] = std::move(mission.psBlockMap[i]);
 		}
 		for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
 		{
-			free(psAuxMap[i]);
-			psAuxMap[i] = mission.psAuxMap[i];
-			mission.psAuxMap[i] = nullptr;
+			psAuxMap[i] = std::move(mission.psAuxMap[i]);
 		}
 		std::swap(mission.psGateways, gwGetGateways());
 	}
@@ -669,16 +665,16 @@ static void saveMissionData()
 	audio_StopAll();
 
 	//save the mission data
-	mission.psMapTiles = psMapTiles;
+	mission.psMapTiles = std::move(psMapTiles);
 	mission.mapWidth = mapWidth;
 	mission.mapHeight = mapHeight;
 	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
 	{
-		mission.psBlockMap[i] = psBlockMap[i];
+		mission.psBlockMap[i] = std::move(psBlockMap[i]);
 	}
 	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
 	{
-		mission.psAuxMap[i] = psAuxMap[i];
+		mission.psAuxMap[i] = std::move(psAuxMap[i]);
 	}
 	mission.scrollMinX = scrollMinX;
 	mission.scrollMinY = scrollMinY;
@@ -824,19 +820,17 @@ void restoreMissionData()
 	mission.apsSensorList[0] = nullptr;
 	//swap mission data over
 
-	psMapTiles = mission.psMapTiles;
+	psMapTiles = std::move(mission.psMapTiles);
 
 	mapWidth = mission.mapWidth;
 	mapHeight = mission.mapHeight;
 	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
 	{
-		psBlockMap[i] = mission.psBlockMap[i];
-		mission.psBlockMap[i] = nullptr;
+		psBlockMap[i] = std::move(mission.psBlockMap[i]);
 	}
 	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
 	{
-		psAuxMap[i] = mission.psAuxMap[i];
-		mission.psAuxMap[i] = nullptr;
+		psAuxMap[i] = std::move(mission.psAuxMap[i]);
 	}
 	scrollMinX = mission.scrollMinX;
 	scrollMinY = mission.scrollMinY;
@@ -1332,6 +1326,7 @@ void swapMissionPointers()
 	}
 	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
 	{
+		
 		std::swap(psAuxMap[i],   mission.psAuxMap[i]);
 	}
 	//swap gateway zones

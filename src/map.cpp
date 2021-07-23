@@ -24,6 +24,7 @@
  *
  */
 #include <time.h>
+#include <algorithm>
 
 #include "lib/framework/frame.h"
 #include "lib/framework/endian_hack.h"
@@ -108,9 +109,9 @@ struct GATEWAY_SAVE
 
 /* The size and contents of the map */
 SDWORD	mapWidth = 0, mapHeight = 0;
-MAPTILE	*psMapTiles = nullptr;
-uint8_t *psBlockMap[AUX_MAX];
-uint8_t *psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
+std::unique_ptr<MAPTILE[]> psMapTiles;
+std::unique_ptr<uint8_t[]> psBlockMap[AUX_MAX];
+std::unique_ptr<uint8_t[]> psAuxMap[MAX_PLAYERS + AUX_MAX];        // yes, we waste one element... eyes wide open... makes API nicer
 
 #define WATER_MIN_DEPTH 500
 #define WATER_MAX_DEPTH (WATER_MIN_DEPTH + 400)
@@ -122,14 +123,14 @@ static void SetDecals(const char *filename, const char *decal_type);
 static void init_tileNames(int type);
 
 /// The different ground types
-GROUND_TYPE *psGroundTypes;
+std::unique_ptr<GROUND_TYPE[]> psGroundTypes;
 int numGroundTypes;
 char *tilesetDir = nullptr;
 static int numTile_names;
-static char *Tile_names = nullptr;
-
-static int *map;			// 3D array pointer that holds the texturetype
-static bool *mapDecals;           // array that tells us what tile is a decal
+static std::unique_ptr<char[]> Tile_names = nullptr;
+	
+static std::unique_ptr<int[]> map; // 3D array pointer that holds the texturetype
+static std::unique_ptr<bool[]> mapDecals;           // array that tells us what tile is a decal
 #define MAX_TERRAIN_TILES 0x0200  // max that we support (for now), see TILE_NUMMASK
 
 /* Look up table that returns the terrain type of a given tile texture */
@@ -215,9 +216,7 @@ static void init_tileNames(int type)
 	numTile_names = numlines;
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
-
-	Tile_names = (char *)malloc(numlines * sizeof(char[MAX_STR_LENGTH]));
-	memset(Tile_names, 0x0, (numlines * sizeof(char[MAX_STR_LENGTH])));
+	Tile_names = std::unique_ptr<char[]>(new char[numlines * MAX_STR_LENGTH]());
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -274,7 +273,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -318,7 +317,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -362,7 +361,7 @@ fallback:
 		//increment the pointer to the start of the next record
 		pFileData = strchr(pFileData, '\n') + 1;
 		numGroundTypes = numlines;
-		psGroundTypes = (GROUND_TYPE *)malloc(sizeof(GROUND_TYPE) * numlines);
+		psGroundTypes = std::unique_ptr<GROUND_TYPE[]> (new GROUND_TYPE[numlines]());
 
 		for (i = 0; i < numlines; i++)
 		{
@@ -419,7 +418,7 @@ static void SetGroundForTile(const char *filename, const char *nametype)
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
 
-	map = (int *)malloc(sizeof(int) * numlines * 2 * 2);	// this is a 3D array map[numlines][2][2]
+	map = std::unique_ptr<int[]> (new int[numlines * 2 * 2]());
 
 	for (i = 0; i < numlines; i++)
 	{
@@ -611,9 +610,9 @@ static void SetDecals(const char *filename, const char *decal_type)
 	debug(LOG_TERRAIN, "reading: %s, with %d entries", filename, numlines);
 	//increment the pointer to the start of the next record
 	pFileData = strchr(pFileData, '\n') + 1;
-	mapDecals = new bool[MAX_TERRAIN_TILES];
-	std::fill_n(mapDecals, MAX_TERRAIN_TILES, false);  // set everything to false.
-
+	// value initialization sets everything to false.
+	mapDecals = std::unique_ptr<bool[]>(new bool[MAX_TERRAIN_TILES]());
+	
 	for (i = 0; i < numlines; i++)
 	{
 		tiledecal = -1;
@@ -877,24 +876,24 @@ bool mapLoad(char const *filename)
 		// loadMapData call handles logging errors
 		return false;
 	}
+	return mapLoadFromWzMapData(loadedMap);
 
-	return mapLoadFromWzMapData(*(loadedMap.get()));
 }
 
 ///* Initialise the map structure */
-bool mapLoadFromWzMapData(WzMap::MapData& loadedMap)
+bool mapLoadFromWzMapData(std::shared_ptr<WzMap::MapData> loadedMap)
 {
 	uint32_t		width, height;
 	const bool		preview = false;
 
-	width = loadedMap.width;
-	height = loadedMap.height;
+	width = loadedMap->width;
+	height = loadedMap->height;
 
 	/* See if this is the first time a map has been loaded */
 	ASSERT(psMapTiles == nullptr, "Map has not been cleared before calling mapLoad()!");
 
 	/* Allocate the memory for the map */
-	psMapTiles = (MAPTILE *)calloc((size_t)width * height, sizeof(MAPTILE));
+	psMapTiles = std::unique_ptr<MAPTILE[]>(new MAPTILE[width * height]());
 	ASSERT(psMapTiles != nullptr, "Out of memory");
 
 	mapWidth = width;
@@ -923,9 +922,9 @@ bool mapLoadFromWzMapData(WzMap::MapData& loadedMap)
 	/* Load in the map data */
 	for (int i = 0; i < mapWidth * mapHeight; ++i)
 	{
-		ASSERT(loadedMap.mMapTiles[i].height <= TILE_MAX_HEIGHT, "Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", loadedMap.mMapTiles[i].height, static_cast<size_t>(TILE_MAX_HEIGHT));
-		psMapTiles[i].texture = loadedMap.mMapTiles[i].texture;
-		psMapTiles[i].height = loadedMap.mMapTiles[i].height;
+		ASSERT(loadedMap->mMapTiles[i].height <= TILE_MAX_HEIGHT, "Tile height (%" PRIu16 ") exceeds TILE_MAX_HEIGHT (%zu)", loadedMap->mMapTiles[i].height, static_cast<size_t>(TILE_MAX_HEIGHT));
+		psMapTiles[i].texture = loadedMap->mMapTiles[i].texture;
+		psMapTiles[i].height = loadedMap->mMapTiles[i].height;
 
 		// Visibility stuff
 		memset(psMapTiles[i].watchers, 0, sizeof(psMapTiles[i].watchers));
@@ -943,7 +942,7 @@ bool mapLoadFromWzMapData(WzMap::MapData& loadedMap)
 	}
 
 	size_t gwIdx = 0;
-	for (const auto gateway : loadedMap.mGateways)
+	for (const auto gateway : loadedMap->mGateways)
 	{
 		if (!gwNewGateway(gateway.x1, gateway.y1, gateway.x2, gateway.y2))
 		{
@@ -985,12 +984,12 @@ static bool afterMapLoad()
 	/* Allocate aux maps */
 	ASSERT(mapWidth >= 0 && mapHeight >= 0, "Invalid mapWidth or mapHeight (%d x %d)", mapWidth, mapHeight);
 	const size_t mapSize = static_cast<size_t>(mapWidth) * static_cast<size_t>(mapHeight);
-	psBlockMap[AUX_MAP] = (uint8_t *)malloc(mapSize * sizeof(*psBlockMap[0]));
-	psBlockMap[AUX_ASTARMAP] = (uint8_t *)malloc(mapSize * sizeof(*psBlockMap[0]));
-	psBlockMap[AUX_DANGERMAP] = (uint8_t *)malloc(mapSize * sizeof(*psBlockMap[0]));
+	psBlockMap[AUX_MAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
+	psBlockMap[AUX_ASTARMAP] =  std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
+	psBlockMap[AUX_DANGERMAP] = std::unique_ptr<uint8_t[]>(new uint8_t[mapSize]());
 	for (int x = 0; x < MAX_PLAYERS + AUX_MAX; ++x)
 	{
-		psAuxMap[x] = (uint8_t *)malloc(mapSize * sizeof(*psAuxMap[0]));
+		psAuxMap[x] = std::unique_ptr<uint8_t[]> (new uint8_t[mapSize]());
 	}
 
 	// Set our blocking bits
@@ -1036,24 +1035,22 @@ bool mapSaveToWzMapData(WzMap::MapData& output)
 	output.height = mapHeight;
 
 	// Write out the map tile data
-	MAPTILE	*psTile = psMapTiles;
 	uint32_t numMapTiles = output.width * output.height;
 	output.mMapTiles.clear();
 	output.mMapTiles.reserve(numMapTiles);
 	for (uint32_t i = 0; i < numMapTiles; i++)
 	{
 		WzMap::MapData::MapTile mapDataTile = {};
-		mapDataTile.texture = psTile->texture;
-		if (terrainType(psTile) == TER_WATER)
+		mapDataTile.texture = psMapTiles[i].texture;
+		if (terrainType(&psMapTiles[i]) == TER_WATER)
 		{
-			mapDataTile.height = (psTile->waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
+			mapDataTile.height = (psMapTiles[i].waterLevel + world_coord(1) / 3); // this magic number stuff should match afterMapLoad()'s handling of water tiles (??)
 		}
 		else
 		{
-			mapDataTile.height = psTile->height;
+			mapDataTile.height = psMapTiles[i].height;
 		}
 		output.mMapTiles.push_back(std::move(mapDataTile));
-		psTile++;
 	}
 
 	// Write out the gateway data
@@ -1094,22 +1091,14 @@ bool mapShutdown()
 		dangerDoneSemaphore = nullptr;
 	}
 
-	free(psMapTiles);
-	delete[] mapDecals;
-	free(psGroundTypes);
-	free(map);
-	free(Tile_names);
-	free(psBlockMap[AUX_MAP]);
+	mapDecals = nullptr;
 	psBlockMap[AUX_MAP] = nullptr;
-	free(psBlockMap[AUX_ASTARMAP]);
 	psBlockMap[AUX_ASTARMAP] = nullptr;
-	free(psBlockMap[AUX_DANGERMAP]);
 	free(floodbucket);
 	psBlockMap[AUX_DANGERMAP] = nullptr;
 	for (x = 0; x < MAX_PLAYERS + AUX_MAX; x++)
 	{
-		free(psAuxMap[x]);
-		psAuxMap[x] = nullptr;
+		psAuxMap[x].reset();
 	}
 
 	map = nullptr;

@@ -77,10 +77,10 @@ struct Sector
 	int waterSize;           ///< The size of the water geometry
 	int waterIndexOffset;    ///< The point in the water index VBO where the water triangles start
 	int waterIndexSize;      ///< The size of our water triangles
-	int *textureOffset;      ///< An array containing the offsets into the texture VBO for each terrain layer
-	int *textureSize;        ///< The size of the geometry for this layer for each layer
-	int *textureIndexOffset; ///< The offset into the index VBO for the texture for each layer
-	int *textureIndexSize;   ///< The size of the indices for each layer
+	std::unique_ptr<int[]> textureOffset;      ///< An array containing the offsets into the texture VBO for each terrain layer
+	std::unique_ptr<int[]> textureSize;        ///< The size of the geometry for this layer for each layer
+	std::unique_ptr<int[]> textureIndexOffset; ///< The offset into the index VBO for the texture for each layer
+	std::unique_ptr<int[]> textureIndexSize;   ///< The size of the indices for each layer
 	int decalOffset;         ///< Index into the decal VBO
 	int decalSize;           ///< Size of the part of the decal VBO we are going to use
 	bool draw;               ///< Do we draw this sector this frame?
@@ -104,7 +104,7 @@ static unsigned int lightmapLastUpdate;
 static size_t lightmapWidth;
 static size_t lightmapHeight;
 /// Lightmap image
-static gfx_api::gfxUByte *lightmapPixmap;
+static std::unique_ptr<gfx_api::gfxUByte[]> lightmapPixmap;
 /// Ticks per lightmap refresh
 static const unsigned int LIGHTMAP_REFRESH = 80;
 
@@ -119,7 +119,7 @@ static float waterOffset;
 static int32_t GLmaxElementsVertices, GLmaxElementsIndices;
 
 /// The sectors are stored here
-static Sector *sectors;
+static std::unique_ptr<Sector[]> sectors;
 /// The default sector size (a sector is sectorSize x sectorSize)
 static int sectorSize = 15;
 /// What is the distance we can see
@@ -579,7 +579,7 @@ void markTileDirty(int i, int j)
 
 void loadTerrainTextures()
 {
-	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
+	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -669,7 +669,7 @@ bool initTerrain()
 	// Create the sectors
 	xSectors = (mapWidth + sectorSize - 1) / sectorSize;
 	ySectors = (mapHeight + sectorSize - 1) / sectorSize;
-	sectors = (Sector *)malloc(sizeof(Sector) * xSectors * ySectors);
+	sectors = std::unique_ptr<Sector[]> (new Sector[xSectors * ySectors]());
 
 	////////////////////
 	// fill the geometry part of the sectors
@@ -811,10 +811,10 @@ bool initTerrain()
 			{
 				if (layer == 0)
 				{
-					sectors[x * ySectors + y].textureOffset = (int *)malloc(sizeof(int) * numGroundTypes);
-					sectors[x * ySectors + y].textureSize = (int *)malloc(sizeof(int) * numGroundTypes);
-					sectors[x * ySectors + y].textureIndexOffset = (int *)malloc(sizeof(int) * numGroundTypes);
-					sectors[x * ySectors + y].textureIndexSize = (int *)malloc(sizeof(int) * numGroundTypes);
+					sectors[x * ySectors + y].textureOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
+					sectors[x * ySectors + y].textureSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
+					sectors[x * ySectors + y].textureIndexOffset = std::unique_ptr<int[]> (new int[numGroundTypes]());
+					sectors[x * ySectors + y].textureIndexSize = std::unique_ptr<int[]> (new int[numGroundTypes]());
 				}
 
 				sectors[x * ySectors + y].textureOffset[layer] = textureSize;
@@ -942,7 +942,7 @@ bool initTerrain()
 	debug(LOG_TERRAIN, "lightmap texture size is %zu x %zu", lightmapWidth, lightmapHeight);
 
 	// Prepare the lightmap pixmap and texture
-	lightmapPixmap = (gfx_api::gfxUByte *)calloc(lightmapWidth * lightmapHeight, 3 * sizeof(gfx_api::gfxUByte));
+	lightmapPixmap = std::unique_ptr<gfx_api::gfxUByte[]> (new gfx_api::gfxUByte[lightmapWidth * lightmapHeight * 3]());
 	if (lightmapPixmap == nullptr)
 	{
 		debug(LOG_FATAL, "Out of memory!");
@@ -953,8 +953,7 @@ bool initTerrain()
 		delete lightmap_tex_num;
 	lightmap_tex_num = gfx_api::context::get().create_texture(1, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8);
 
-	lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap);
-
+	lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
 	terrainInitialised = true;
 
 	return true;
@@ -988,17 +987,15 @@ void shutdownTerrain()
 	{
 		for (int y = 0; y < ySectors; y++)
 		{
-			free(sectors[x * ySectors + y].textureOffset);
-			free(sectors[x * ySectors + y].textureSize);
-			free(sectors[x * ySectors + y].textureIndexOffset);
-			free(sectors[x * ySectors + y].textureIndexSize);
+			sectors[x * ySectors + y].textureOffset = nullptr;
+			sectors[x * ySectors + y].textureSize = nullptr;
+			sectors[x * ySectors + y].textureIndexOffset = nullptr;
+			sectors[x * ySectors + y].textureIndexSize = nullptr;
 		}
 	}
-	free(sectors);
 	sectors = nullptr;
 	delete lightmap_tex_num;
 	lightmap_tex_num = nullptr;
-	free(lightmapPixmap);
 	lightmapPixmap = nullptr;
 
 	terrainInitialised = false;
@@ -1150,7 +1147,7 @@ static void drawTerrainLayers(const glm::mat4 &ModelViewProjection, const glm::v
 	gfx_api::TerrainLayer::get().bind();
 	gfx_api::TerrainLayer::get().bind_vertex_buffers(geometryVBO, textureVBO);
 	gfx_api::context::get().bind_index_buffer(*textureIndexVBO, gfx_api::index_type::u32);
-	ASSERT_OR_RETURN(, psGroundTypes, "Ground type was not set, no textures will be seen.");
+	ASSERT_OR_RETURN(, psGroundTypes.get(), "Ground type was not set, no textures will be seen.");
 
 	int32_t maxGfxTextureSize = gfx_api::context::get().get_context_value(gfx_api::context::context_value::MAX_TEXTURE_SIZE);
 	int maxTerrainTextureSize = std::max(std::min({getTextureSize(), maxGfxTextureSize}), MIN_TERRAIN_TEXTURE_SIZE);
@@ -1254,7 +1251,7 @@ void drawTerrain(const glm::mat4 &mvp)
 		lightmapLastUpdate = realTime;
 		updateLightMap();
 
-		lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap);
+		lightmap_tex_num->upload(0, 0, 0, lightmapWidth, lightmapHeight, gfx_api::pixel_format::FORMAT_RGB8_UNORM_PACK8, lightmapPixmap.get());
 	}
 
 	///////////////////////////////////
