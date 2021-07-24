@@ -47,6 +47,14 @@
 		"label": "hoverPos2",
 		"pos": [3392, 4288]
 	},
+	"position_12": {
+		"label": "buildPos1",
+		"pos": [7296, 3200]
+	},
+	"position_13": {
+		"label": "buildPos2",
+		"pos": [2688, 512]
+	},
 
 	"area_0": {
 		"label": "landingZone",

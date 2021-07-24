@@ -8,11 +8,11 @@
 		"Wheeled": 110
 	},
 	"ANTI PERSONNEL": {
-		"Half-Tracked": 75,
+		"Half-Tracked": 65,
 		"Hover": 100,
 		"Legged": 120,
 		"Lift": 25,
-		"Tracked": 60,
+		"Tracked": 50,
 		"Wheeled": 100
 	},
 	"ANTI TANK": {

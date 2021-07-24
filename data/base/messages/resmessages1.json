@@ -6,7 +6,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"Light Cannon firing 40mm rounds",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: Medium"
 		]
 	},
@@ -17,7 +17,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"Medium Cannon firing 76mm rounds",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: Medium"
 		]
 	},
@@ -28,7 +28,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"Heavy Cannon firing 120 mm rounds",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: High"
 		]
 	},
@@ -171,7 +171,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"7.62mm machinegun",
-			"Best Targets: Infantry, base structures, wheeled vehicles",
+			"Best Targets: Infantry, wheeled and hover vehicles",
 			"Body Points: Low"
 		]
 	},
@@ -182,7 +182,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"Twin 7.62mm machineguns",
-			"Best Targets: Infantry, base structures, wheeled vehicles",
+			"Best Targets: Infantry, wheeled and hover vehicles",
 			"Body Points: Low"
 		]
 	},
@@ -358,6 +358,17 @@
 		"text": [
 			"New Defensive Structure Available",
 			"Steel tower with machinegun",
+			"Automatically targets enemies within sensor range",
+			"Defensive Strength: Low"
+		]
+	},
+	"RES_TOWER2": {
+		"id": "RES_TOWER2",
+		"imdName": "MICAPSUL.pie",
+		"sequenceName": "res_struttech.ogg",
+		"text": [
+			"New Defensive Structure Available",
+			"Steel tower with twin machinegun",
 			"Automatically targets enemies within sensor range",
 			"Defensive Strength: Low"
 		]
@@ -644,7 +655,7 @@
 		"text": [
 			"New Rocket Available",
 			"Fast firing light anti-vehicle rockets",
-			"Best Targets: Wheeled and hover vehicles",
+			"Best Targets: Vehicles",
 			"Body Points: Very Low"
 		]
 	},

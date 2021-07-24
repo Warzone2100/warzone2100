@@ -149,7 +149,7 @@
 		"text": [
 			"New Bomb Bay Available",
 			"Drops incendiary bombs",
-			"Best Targets: Bunkers, Emplacements, Infantry",
+			"Best Targets: Bunkers, wheeled and hover vehicles",
 			"Body Points: Low"
 		]
 	},
@@ -160,7 +160,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"Multi-barrel, rapid-fire machinegun",
-			"Best Targets: Infantry, base structures, wheeled vehicles",
+			"Best Targets: Infantry, wheeled and hover vehicles",
 			"Replaces all machineguns"
 		]
 	},

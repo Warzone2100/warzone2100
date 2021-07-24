@@ -10,7 +10,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF02", "R-Wpn-Howitzer-ROF01",
-	"R-Wpn-Howitzer-Damage01", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
+	"R-Wpn-Howitzer-Damage07", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
 	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade02"
 ];
@@ -137,19 +137,19 @@ function eventStartLevel()
 			assembly: "COMediumFactoryAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 4,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(50)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(55)),
 			data: {
 				regroup: false,
 				repair: 20,
 				count: -1,
 			},
-			templates: [cTempl.comct, cTempl.comatt, cTempl.comhpv]
+			templates: [cTempl.commrp, cTempl.comatt, cTempl.comhpv]
 		},
 		"COCyborgFactoryL": {
 			assembly: "COCyborgFactoryLAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(35)),
 			data: {
 				regroup: false,
 				repair: 30,
@@ -161,7 +161,7 @@ function eventStartLevel()
 			assembly: "COCyborgFactoryRAssembly",
 			order: CAM_ORDER_ATTACK,
 			groupSize: 5,
-			throttle: camChangeOnDiff(camSecondsToMilliseconds(30)),
+			throttle: camChangeOnDiff(camSecondsToMilliseconds(45)),
 			data: {
 				regroup: false,
 				repair: 30,

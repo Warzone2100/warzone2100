@@ -15,7 +15,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Mortar-ROF02", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage05",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF01", "R-Wpn-Howitzer-ROF01",
-	"R-Wpn-Howitzer-Damage01", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
+	"R-Wpn-Howitzer-Damage07", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
 	"R-Wpn-Bomb-Damage01", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF02",
 	"R-Wpn-AAGun-Accuracy01", "R-Struc-VTOLPad-Upgrade01"
 ];
@@ -126,7 +126,7 @@ function truckDefense()
 		return;
 	}
 
-	const LIST = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
+	const LIST = ["CO-Tower-LtATRkt", "PillBox1", "CO-WallTower-HvCan"];
 	camQueueBuilding(THE_COLLECTIVE, LIST[camRand(LIST.length)]);
 }
 
