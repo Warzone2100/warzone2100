@@ -470,5 +470,6 @@ src/warzoneconfig.cpp
 src/wavecast.cpp
 src/wrappers.cpp
 src/wzapi.cpp
+src/wzcrashhandlingproviders.cpp
 src/wzpropertyproviders.cpp
 src/wzscriptdebug.cpp
