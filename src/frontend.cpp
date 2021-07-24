@@ -981,9 +981,8 @@ void startAudioAndZoomOptionsMenu()
 	WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
 
 	auto addSliderWrap = [](std::shared_ptr<WIDGET> widget) {
-		auto alignment = std::make_shared<AlignmentWidget>(VerticalAlignment::Center, HorizontalAlignment::Left);
-		alignment->attach(addMargin(widget));
-		return alignment;
+		Alignment sliderAlignment(Alignment::Vertical::Center, Alignment::Horizontal::Left);
+		return sliderAlignment.wrap(addMargin(widget));
 	};
 
 	auto grid = std::make_shared<GridLayout>();
@@ -1436,9 +1435,7 @@ static std::shared_ptr<WIDGET> makeResolutionDropdown()
 	for (auto resolution: screenResolutionsModel)
 	{
 		auto item = makeTextButton(0, ScreenResolutionsModel::resolutionString(resolution), 0);
-		auto padding = std::make_shared<MarginWidget>(0, paddingSize, 0, paddingSize);
-		padding->attach(item);
-		dropdown->addItem(padding);
+		dropdown->addItem(Margin(0, paddingSize).wrap(item));
 	}
 
 	auto closestResolution = screenResolutionsModel.findResolutionClosestToCurrent();
@@ -1454,9 +1451,7 @@ static std::shared_ptr<WIDGET> makeResolutionDropdown()
 		}
 	});
 
-	auto margin = std::make_shared<MarginWidget>(0, -paddingSize, 0, -paddingSize);
-	margin->attach(dropdown);
-	return margin;
+	return Margin(0, -paddingSize).wrap(dropdown);
 }
 
 void startVideoOptionsMenu()
@@ -2462,9 +2457,7 @@ static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &tx
 
 static std::shared_ptr<WIDGET> addMargin(std::shared_ptr<WIDGET> widget)
 {
-	auto margin = std::make_shared<MarginWidget>(0, 20, 0, 20);
-	margin->attach(widget);
-	return margin;
+	return Margin(0, 20).wrap(widget);
 }
 
 void addTextButton(UDWORD id,  UDWORD PosX, UDWORD PosY, const std::string &txt, unsigned int style)

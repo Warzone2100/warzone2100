@@ -22,53 +22,40 @@
 
 #include "lib/widget/widget.h"
 
+class MarginWidget;
+struct Margin
+{
+public:
+    Margin(int32_t top, int32_t right, int32_t bottom, int32_t left)
+        : top(top)
+        , right(right)
+        , bottom(bottom)
+        , left(left)
+        {}
+
+    Margin(int32_t vertical, int32_t horizontal): Margin(vertical, horizontal, vertical, horizontal) {}
+    explicit Margin(int32_t value): Margin(value, value) {}
+
+    std::shared_ptr<MarginWidget> wrap(std::shared_ptr<WIDGET> widget);
+
+    int32_t top;
+    int32_t right;
+    int32_t bottom;
+    int32_t left;
+};
+
 class MarginWidget: public WIDGET
 {
-private:
-    struct Margin
-    {
-        int32_t top;
-        int32_t right;
-        int32_t bottom;
-        int32_t left;
-    };
-
 public:
-	MarginWidget(int32_t top, int32_t right, int32_t bottom, int32_t left)
-		: WIDGET()
-        , margin({top, right, bottom, left})
+	explicit MarginWidget(Margin margin): WIDGET(), margin(margin)
 	{
         setTransparentToClicks(true);
 	}
 
-	MarginWidget(uint32_t value): MarginWidget(value, value, value, value) {}
-
 protected:
-    void geometryChanged() override
-    {
-        if (!children().empty())
-        {
-            auto &child = children().front();
-            child->setGeometry(
-                margin.left,
-                margin.top,
-                std::max(0, width() - margin.left - margin.right),
-                std::max(0, height() - margin.top - margin.bottom)
-            );
-        }
-    }
-
-    int32_t idealWidth() override
-    {
-        auto innerWidth = children().empty() ? 0: children().front()->idealWidth();
-        return innerWidth + margin.left + margin.right;
-    }
-
-    int32_t idealHeight() override
-    {
-        auto innerHeight = children().empty() ? 0: children().front()->idealHeight();
-        return innerHeight + margin.top + margin.bottom;
-    }
+    void geometryChanged() override;
+    int32_t idealWidth() override;
+    int32_t idealHeight() override;
 
 private:
     Margin margin;

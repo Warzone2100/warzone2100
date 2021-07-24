@@ -43,9 +43,11 @@ public:
 	int32_t idealWidth() override;
 	int32_t idealHeight() override;
 	nonstd::optional<std::vector<uint32_t>> getScrollSnapOffsets() override;
+	const std::map<uint32_t, int32_t> &getColumnOffsets();
+	const std::map<uint32_t, int32_t> &getRowOffsets();
 
 protected:
-	void run(W_CONTEXT *context) override;
+	void displayRecursive(WidgetGraphicsContext const &context) override;
 	void geometryChanged() override;
 
 private:
@@ -66,6 +68,8 @@ private:
 	std::vector<Placement> placements;
 	bool layoutDirty = false;
 	std::vector<uint32_t> scrollSnapOffsets;
+	std::map<uint32_t, int32_t> columnOffsets;
+	std::map<uint32_t, int32_t> rowOffsets;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_GRIDLAYOUT_H__
