@@ -643,20 +643,20 @@ void JSONTableWidget::displayOptionsOverlay(const std::shared_ptr<WIDGET>& psPar
 
 	// Position the pop-over form
 	std::weak_ptr<WIDGET> weakParent = psParent;
-	optionsPopOver->setCalcLayout([weakParent](WIDGET *psWidget, unsigned int, unsigned int, unsigned int newScreenWidth, unsigned int newScreenHeight){
+	optionsPopOver->setCalcLayout([weakParent](WIDGET *psWidget) {
 		auto psParent = weakParent.lock();
 		ASSERT_OR_RETURN(, psParent != nullptr, "parent is null");
 		// (Ideally, with its left aligned with the left side of the "parent" widget, but ensure full visibility on-screen)
 		int popOverX0 = psParent->screenPosX();
-		if (popOverX0 + psWidget->width() > newScreenWidth)
+		if (popOverX0 + psWidget->width() > screenWidth)
 		{
-			popOverX0 = newScreenWidth - psWidget->width();
+			popOverX0 = screenWidth - psWidget->width();
 		}
 		// (Ideally, with its top aligned with the bottom of the "parent" widget, but ensure full visibility on-screen)
 		int popOverY0 = psParent->screenPosY() + psParent->height();
-		if (popOverY0 + psWidget->height() > newScreenHeight)
+		if (popOverY0 + psWidget->height() > screenHeight)
 		{
-			popOverY0 = newScreenHeight - psWidget->height();
+			popOverY0 = screenHeight - psWidget->height();
 		}
 		psWidget->move(popOverX0, popOverY0);
 	});

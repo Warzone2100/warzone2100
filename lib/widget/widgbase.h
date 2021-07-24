@@ -58,12 +58,12 @@ typedef void (*WIDGET_CALLBACK)(WIDGET *psWidget, W_CONTEXT *psContext);
 typedef void (*WIDGET_AUDIOCALLBACK)(int AudioID);
 
 /* The optional "calc layout" callback function, to support runtime layout recalculation */
-typedef std::function<void (WIDGET *psWidget, unsigned int oldScreenWidth, unsigned int oldScreenHeight, unsigned int newScreenWidth, unsigned int newScreenHeight)> WIDGET_CALCLAYOUT_FUNC;
+typedef std::function<void (WIDGET *psWidget)> WIDGET_CALCLAYOUT_FUNC;
 
 // To avoid typing, use the following define to construct a lambda for WIDGET_CALCLAYOUT_FUNC
 // psWidget is the widget
 // The { } are still required (for clarity).
-#define LAMBDA_CALCLAYOUT_SIMPLE(x) [](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) x
+#define LAMBDA_CALCLAYOUT_SIMPLE(x) [](WIDGET *psWidget) x
 
 /* The optional "onDelete" callback function */
 typedef std::function<void (WIDGET *psWidget)> WIDGET_ONDELETE_FUNC;

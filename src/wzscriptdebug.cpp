@@ -452,7 +452,7 @@ nlohmann::ordered_json componentToString(const COMPONENT_STATS *psStats, int pla
 	case COMP_NUMCOMPONENTS:
 		ASSERT_OR_RETURN(key, "%s", "Invalid component: COMP_NUMCOMPONENTS!");
 		break;
-		// no "default" case because modern compiler plus "-Werror" 
+		// no "default" case because modern compiler plus "-Werror"
 		// will raise error if a switch is forgotten
 	}
 	return key;
@@ -611,7 +611,7 @@ public:
 			}
 		});
 		int contextDropdownX0 = selectedPlayerLabel->x() + selectedPlayerLabel->width() + ACTION_BUTTON_SPACING;
-		panel->playersDropdown->setCalcLayout([contextDropdownX0, bottomOfButtonRows](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		panel->playersDropdown->setCalcLayout([contextDropdownX0, bottomOfButtonRows](WIDGET *psWidget) {
 			auto psParent = psWidget->parent();
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			psWidget->setGeometry(contextDropdownX0, bottomOfButtonRows, psParent->width() - contextDropdownX0 - ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
@@ -722,7 +722,7 @@ public:
 			panel->aiPlayerDropdown->addItem(button);
 		}
 		panel->aiPlayerDropdown->setSelectedIndex(0);
-		panel->aiPlayerDropdown->setCalcLayout([maxButtonTextWidth](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		panel->aiPlayerDropdown->setCalcLayout([maxButtonTextWidth](WIDGET *psWidget) {
 			auto pAiPlayerDropdown = static_cast<DropdownWidget *>(psWidget);
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
@@ -745,7 +745,7 @@ public:
 			panel->aiDropdown->addItem(button);
 		}
 		panel->aiDropdown->setSelectedIndex(0);
-		panel->aiDropdown->setCalcLayout([](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		panel->aiDropdown->setCalcLayout([](WIDGET *psWidget) {
 			auto pAiDropdown = static_cast<DropdownWidget *>(psWidget);
 			auto psParent = std::dynamic_pointer_cast<WzMainPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
@@ -878,7 +878,7 @@ public:
 			}
 		});
 		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
-		result->contextDropdown->setCalcLayout([contextDropdownX0](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		result->contextDropdown->setCalcLayout([contextDropdownX0](WIDGET *psWidget) {
 			auto psParent = std::dynamic_pointer_cast<WzScriptContextsPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			psWidget->setGeometry(contextDropdownX0, 0, psParent->width() - contextDropdownX0, TAB_BUTTONS_HEIGHT);
@@ -1047,7 +1047,7 @@ public:
 			}
 		});
 		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
-		result->playersDropdown->setCalcLayout([contextDropdownX0](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		result->playersDropdown->setCalcLayout([contextDropdownX0](WIDGET *psWidget) {
 			auto psParent = std::dynamic_pointer_cast<WzScriptPlayersPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			psWidget->setGeometry(contextDropdownX0, 0, psParent->width() - contextDropdownX0, TAB_BUTTONS_HEIGHT);
@@ -1176,7 +1176,7 @@ public:
 			}
 		});
 		int contextDropdownX0 = contextLabel->x() + contextLabel->width();
-		result->contextDropdown->setCalcLayout([contextDropdownX0](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		result->contextDropdown->setCalcLayout([contextDropdownX0](WIDGET *psWidget) {
 			auto psParent = std::dynamic_pointer_cast<WzScriptTriggersPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			psWidget->setGeometry(contextDropdownX0, 0, psParent->updateButton->x() - contextDropdownX0 - ACTION_BUTTON_SPACING, TAB_BUTTONS_HEIGHT);
@@ -1713,7 +1713,7 @@ private:
 		});
 		int previousButtonRight = (previousButton) ? previousButton->x() + previousButton->width() : 0;
 		button->move((previousButtonRight > 0) ? previousButtonRight + ACTION_BUTTON_SPACING : 0, height() - button->height());
-		button->setCalcLayout([](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		button->setCalcLayout([](WIDGET *psWidget) {
 			auto psParent = std::dynamic_pointer_cast<WzScriptLabelsPanel>(psWidget->parent());
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			psWidget->move(psWidget->x(), psParent->height() - psWidget->height());
@@ -1821,7 +1821,7 @@ void WZScriptDebugger::switchPanel(WZScriptDebugger::ScriptDebuggerPanel newPane
 	if (psPanel)
 	{
 		attach(psPanel);
-		psPanel->setCalcLayout([pageTabsBottom](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
+		psPanel->setCalcLayout([pageTabsBottom](WIDGET *psWidget) {
 			auto psParent = psWidget->parent();
 			ASSERT_OR_RETURN(, psParent != nullptr, "No parent");
 			int y0 = pageTabsBottom + 20;

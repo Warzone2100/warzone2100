@@ -188,7 +188,7 @@ static bool addAudioOptions()
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
-	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
 	});
 
@@ -322,7 +322,7 @@ static bool startInGameConfirmQuit()
 	row++;
 	addIGTextButton(INTINGAMEOP_GO_BACK, INTINGAMEOP_2_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP4_OP_W, _("Back"), OPALIGN);
 
-	ingameOp->setCalcLayout([row](WIDGET* psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
+	ingameOp->setCalcLayout([row](WIDGET* psWidget) {
 		psWidget->setGeometry(INTINGAMEOP4_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP4_W, INTINGAMEOPAUTO_H(row));
 	});
 
@@ -584,7 +584,7 @@ static bool startIGOptionsMenu()
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_OP_W, _("Resume Game"), OPALIGN);
 
-	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP_W, INTINGAMEOPAUTO_H(row));
 	});
 
@@ -638,7 +638,7 @@ static bool startIGGraphicsOptionsMenu()
 
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
-	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
 	});
 
@@ -745,7 +745,7 @@ static bool startIGVideoOptionsMenu()
 	// Quit/return
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
-	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
 	});
 
@@ -833,7 +833,7 @@ static bool startIGMouseOptionsMenu()
 	// Quit/return
 	addIGTextButton(INTINGAMEOP_RESUME, INTINGAMEOP_1_X, INTINGAMEOPAUTO_Y_LINE(row), INTINGAMEOP_SW_W, _("Resume Game"), OPALIGN);
 
-	ingameOp->setCalcLayout([row](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	ingameOp->setCalcLayout([row](WIDGET *psWidget) {
 		psWidget->setGeometry(INTINGAMEOP2_X, INTINGAMEOPAUTO_Y(row), INTINGAMEOP2_W, INTINGAMEOPAUTO_H(row));
 	});
 

@@ -1080,7 +1080,7 @@ static void addInlineChooserBlueForm(const std::shared_ptr<W_SCREEN> &psScreen, 
 	sFormInit.pDisplay =  intDisplayFeBox;
 
 	std::weak_ptr<WIDGET> psWeakParent(psParent->shared_from_this());
-	sFormInit.calcLayout = [x, y, psWeakParent](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	sFormInit.calcLayout = [x, y, psWeakParent](WIDGET *psWidget) {
 		if (auto psParent = psWeakParent.lock())
 		{
 			psWidget->move(psParent->screenPosX() + x, psParent->screenPosY() + y);
@@ -1608,7 +1608,7 @@ IntFormAnimated* WzMultiplayerOptionsTitleUI::initRightSideChooser(const char* s
 	auto aiForm = std::make_shared<IntFormAnimated>(false);
 	chooserParent->attach(aiForm);
 	aiForm->id = MULTIOP_AI_FORM;
-	aiForm->setCalcLayout([psWeakParent](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	aiForm->setCalcLayout([psWeakParent](WIDGET *psWidget) {
 		if (auto psParent = psWeakParent.lock())
 		{
 			psWidget->setGeometry(psParent->screenPosX() + MULTIOP_PLAYERSX, psParent->screenPosY() + MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -1618,7 +1618,7 @@ IntFormAnimated* WzMultiplayerOptionsTitleUI::initRightSideChooser(const char* s
 	W_LABEL *psSideTextLabel = addSideText(psInlineChooserOverlayScreen, MULTIOP_INLINE_OVERLAY_ROOT_FRM, FRONTEND_SIDETEXT2, MULTIOP_PLAYERSX - 3, MULTIOP_PLAYERSY, sideText);
 	if (psSideTextLabel)
 	{
-		psSideTextLabel->setCalcLayout([psWeakParent](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+		psSideTextLabel->setCalcLayout([psWeakParent](WIDGET *psWidget) {
 			if (auto psParent = psWeakParent.lock())
 			{
 				psWidget->setGeometry(psParent->screenPosX() + MULTIOP_PLAYERSX - 3, psParent->screenPosY() + MULTIOP_PLAYERSY, MULTIOP_PLAYERSW, MULTIOP_PLAYERSH);
@@ -1796,7 +1796,7 @@ void WzMultiplayerOptionsTitleUI::openAiChooser(uint32_t player)
 	int aiListEntryHeight = sButInit.height;
 	int aiListEntryWidth = sButInit.width;
 	int aiListHeight = aiListEntryHeight * (NetPlay.bComms ? 7 : 8);
-	pAIScrollableList->setCalcLayout([aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	pAIScrollableList->setCalcLayout([aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight](WIDGET *psWidget) {
 		psWidget->setGeometry(aiListStartXPos, aiListStartYPos, aiListEntryWidth, aiListHeight);
 	});
 
@@ -4637,14 +4637,14 @@ static void printHostHelpMessagesToConsole()
 	displayRoomNotifyMessage(buf);
 }
 
-void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget, unsigned int, unsigned int, unsigned int newScreenWidth, unsigned int newScreenHeight)
+void calcBackdropLayoutForMultiplayerOptionsTitleUI(WIDGET *psWidget)
 {
-	auto height = newScreenHeight - 80;
+	auto height = screenHeight - 80;
 	CLIP(height, HIDDEN_FRONTEND_HEIGHT, HIDDEN_FRONTEND_WIDTH);
 
 	psWidget->setGeometry(
-		((newScreenWidth - HIDDEN_FRONTEND_WIDTH) / 2),
-		((newScreenHeight - height) / 2),
+		((screenWidth - HIDDEN_FRONTEND_WIDTH) / 2),
+		((screenHeight - height) / 2),
 		HIDDEN_FRONTEND_WIDTH - 1,
 		height
 	);

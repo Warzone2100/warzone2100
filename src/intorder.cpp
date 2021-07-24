@@ -811,7 +811,7 @@ bool intAddOrder(BASE_OBJECT *psObj)
 
 	// Now we know how many orders there are we can resize the form accordingly.
 	int newHeight = Height + CLOSE_HEIGHT + ORDER_BUTGAP;
-	orderForm->setCalcLayout([newHeight](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
+	orderForm->setCalcLayout([newHeight](WIDGET *psWidget) {
 		psWidget->setGeometry(psWidget->x(), ORDER_BOTTOMY - newHeight, psWidget->width(), newHeight);
 	});
 
