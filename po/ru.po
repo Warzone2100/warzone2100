@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-24 21:48\n"
+"PO-Revision-Date: 2021-07-24 22:31\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -7149,7 +7149,7 @@ msgstr "Лучшие цели: постройки"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Лучшие цели: базовые постройки, огневые точки, киборги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7170,7 +7170,7 @@ msgstr "Лучшие цели: Бункеры и Укреплённые точк
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base buildings"
-msgstr ""
+msgstr "Лучшие цели: бункеры, оборонительные сооружения, базовые постройки"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7203,7 +7203,7 @@ msgstr "Лучшие цели: пехота, постройки, колёсны�
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Лучшие цели: пехота, колесная и парящая техника"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7212,7 +7212,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Лучшие цели: Нет. Средний урон по всем целям"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
@@ -9871,20 +9871,20 @@ msgstr "HVAPFSDS Снаряды Пушки"
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Cannon Emplacement"
-msgstr ""
+msgstr "Установка ГС пушки"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Cannon Hardpoint"
-msgstr ""
+msgstr "Укрепточка ГС пушки"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Cannon Python Tracks"
-msgstr ""
+msgstr "ГС пушка Питон Гусеницы"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -13199,7 +13199,7 @@ msgstr "Стальная башня с пулемётом"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5270
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Стальная башня со спаренным пулеметом"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13267,7 +13267,7 @@ msgstr "Супертяжёлый стрелок"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5317
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Супер ГСП стрелок"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13882,7 +13882,7 @@ msgstr "Башня с двойным пулемётом"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5725
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Башня со спаренным пулеметом"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -16115,11 +16115,11 @@ msgstr "Режим отладки"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Отладка (редактор уровня)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Отладка (выбор)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16766,7 +16766,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:208
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Переключить редактор уровней"
 
 #: src/input/keyconfig.cpp:209
 msgid "Toggle display of droid path"
@@ -17200,11 +17200,11 @@ msgstr ""
 
 #: src/keybind.cpp:1137
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Отключение редактора уровня"
 
 #: src/keybind.cpp:1142
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Включение редактора уровня"
 
 #: src/keybind.cpp:1202
 msgid "God Mode ON"
