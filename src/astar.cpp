@@ -57,7 +57,7 @@
 /// A coordinate.
 struct PathCoord
 {
-	PathCoord() {}
+	PathCoord(): x(0), y(0) {}
 	PathCoord(int16_t x_, int16_t y_) : x(x_), y(y_) {}
 	bool operator ==(PathCoord const &z) const
 	{
