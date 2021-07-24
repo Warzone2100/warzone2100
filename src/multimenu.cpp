@@ -26,7 +26,12 @@
 #include "lib/framework/wzapp.h"
 #include "lib/framework/strres.h"
 #include "lib/framework/physfs_ext.h"
+#include "lib/widget/gridlayout.h"
+#include "lib/widget/alignment.h"
+#include "lib/widget/minsize.h"
+#include "lib/widget/margin.h"
 #include "lib/widget/button.h"
+#include "lib/widget/label.h"
 #include "lib/widget/widget.h"
 
 #include "display3d.h"
@@ -73,25 +78,7 @@ static UDWORD	current_context = 0;
 UDWORD	current_numplayers = 4;
 static std::string current_searchString;
 
-#define MULTIMENU_FORM_X		10 + D_W
 #define MULTIMENU_FORM_Y		23 + D_H
-#define MULTIMENU_FORM_W		620
-
-#define MULTIMENU_PLAYER_H		32
-#define MULTIMENU_FONT_OSET		20
-
-#define MULTIMENU_C0			(MULTIMENU_C2+95)
-#define MULTIMENU_C1			30
-#define MULTIMENU_C2			(MULTIMENU_C1+30)
-#define MULTIMENU_C3			(MULTIMENU_C0+36)
-#define MULTIMENU_C4			(MULTIMENU_C3+36)
-#define MULTIMENU_C5			(MULTIMENU_C4+32)
-#define MULTIMENU_C6			(MULTIMENU_C5+32)
-#define MULTIMENU_C7			(MULTIMENU_C6+32)
-#define MULTIMENU_C8			(MULTIMENU_C7+45)
-#define MULTIMENU_C9			(MULTIMENU_C8+95)
-#define MULTIMENU_C10			(MULTIMENU_C9+50)
-#define MULTIMENU_C11			(MULTIMENU_C10+45)
 
 #define MULTIMENU_CLOSE			(MULTIMENU+1)
 #define MULTIMENU_PLAYER		(MULTIMENU+2)
@@ -638,298 +625,6 @@ bool runMultiRequester(UDWORD id, UDWORD *mode, WzString *chosen, LEVEL_DATASET 
 // Multiplayer in game menu stuff
 
 // ////////////////////////////////////////////////////////////////////////////
-// Display Functions
-
-struct ExtraGubbinsCache {
-	WzText wzTimerText;
-	WzText wzTitleText_Alliances;
-	WzText wzTitleText_Score;
-	WzText wzTitleText_Kills;
-	WzText wzTitleText_Units;
-	WzText wzTitleText_RightColumn; // purpose differs depending on mode
-};
-
-static void displayExtraGubbins(UDWORD height, ExtraGubbinsCache& cache)
-{
-	char str[128];
-
-	// draw grid
-	const std::vector<glm::ivec4> lines = {
-	         glm::ivec4(MULTIMENU_FORM_X + MULTIMENU_C0 - 6 , MULTIMENU_FORM_Y, MULTIMENU_FORM_X + MULTIMENU_C0 - 6 , MULTIMENU_FORM_Y + height),
-	         glm::ivec4(MULTIMENU_FORM_X + MULTIMENU_C8 - 6 , MULTIMENU_FORM_Y, MULTIMENU_FORM_X + MULTIMENU_C8 - 6 , MULTIMENU_FORM_Y + height),
-	         glm::ivec4(MULTIMENU_FORM_X + MULTIMENU_C9 - 6 , MULTIMENU_FORM_Y, MULTIMENU_FORM_X + MULTIMENU_C9 - 6 , MULTIMENU_FORM_Y + height),
-	         glm::ivec4(MULTIMENU_FORM_X + MULTIMENU_C10 - 6 , MULTIMENU_FORM_Y, MULTIMENU_FORM_X + MULTIMENU_C10 - 6 , MULTIMENU_FORM_Y + height),
-	         glm::ivec4(MULTIMENU_FORM_X + MULTIMENU_C11 - 6 , MULTIMENU_FORM_Y, MULTIMENU_FORM_X + MULTIMENU_C11 - 6 , MULTIMENU_FORM_Y + height),
-	         glm::ivec4(MULTIMENU_FORM_X, MULTIMENU_FORM_Y + MULTIMENU_PLAYER_H, MULTIMENU_FORM_X + MULTIMENU_FORM_W, MULTIMENU_FORM_Y + MULTIMENU_PLAYER_H) };
-	iV_Lines(lines, WZCOL_BLACK);
-
-	iV_SetTextColour(WZCOL_TEXT_BRIGHT);			// main wz text color
-
-	// draw timer
-	getAsciiTime(str, gameTime);
-	cache.wzTimerText.setText(str, font_regular);
-	cache.wzTimerText.render(MULTIMENU_FORM_X + MULTIMENU_C2, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
-
-	// draw titles.
-	cache.wzTitleText_Alliances.setText(_("Alliances"), font_regular);
-	cache.wzTitleText_Alliances.render(MULTIMENU_FORM_X + MULTIMENU_C0, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
-	cache.wzTitleText_Score.setText(_("Score"), font_regular);
-	cache.wzTitleText_Score.render(MULTIMENU_FORM_X + MULTIMENU_C8, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
-	cache.wzTitleText_Kills.setText(_("Kills"), font_regular);
-	cache.wzTitleText_Kills.render(MULTIMENU_FORM_X + MULTIMENU_C9, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
-	cache.wzTitleText_Units.setText(_("Units"), font_regular);
-	cache.wzTitleText_Units.render(MULTIMENU_FORM_X + MULTIMENU_C10, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
-
-	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if (dbgInputManager.debugMappingsAllowed())
-	{
-		cache.wzTitleText_RightColumn.setText(_("Power"), font_regular);
-	}
-	else
-	{
-		// ping is useless for non MP games, so display something useful depending on mode.
-		if (runningMultiplayer())
-		{
-			cache.wzTitleText_RightColumn.setText(_("Ping"), font_regular);
-		}
-		else
-		{
-			cache.wzTitleText_RightColumn.setText(_("Structs"), font_regular);
-		}
-	}
-	cache.wzTitleText_RightColumn.render(MULTIMENU_FORM_X + MULTIMENU_C11, MULTIMENU_FORM_Y + MULTIMENU_FONT_OSET, WZCOL_TEXT_BRIGHT);
-
-#ifdef DEBUG
-	for (unsigned q = 0; q < 2; ++q)
-	{
-		unsigned xPos = 0;
-		unsigned yPos = q * 12;
-		bool isTotal = q != 0;
-
-		char const *srText[2] = {_("Sent/Received per sec —"), _("Total Sent/Received —")};
-		snprintf(str, sizeof(str), "%s", srText[q]);
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
-		xPos += iV_GetTextWidth(str, font_small) + 20;
-
-		snprintf(str, sizeof(str), _("Traf: %lu/%lu"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
-		xPos += iV_GetTextWidth(str, font_small) + 20;
-
-		snprintf(str, sizeof(str), _("Uncompressed: %lu/%lu"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
-		xPos += iV_GetTextWidth(str, font_small) + 20;
-
-		snprintf(str, sizeof(str), _("Pack: %lu/%lu"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
-		iV_DrawText(str, MULTIMENU_FORM_X + xPos, MULTIMENU_FORM_Y + height + yPos, font_small);
-	}
-#endif
-	return;
-}
-
-
-struct DisplayMultiPlayerData {
-	ExtraGubbinsCache extraGubbinsCache;
-	WzText wzPosAndNameText;
-	WzText wzScoreText;
-	WzText wzKillsText;
-	WzText wzUnitsText;
-	WzText wzRightmostColumnText; // purpose differs depending on mode
-};
-
-static void displayMultiPlayer(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
-{
-	// Any widget using displayMultiPlayer must have its pUserData initialized to a (DisplayMultiPlayerData*)
-	assert(psWidget->pUserData != nullptr);
-	DisplayMultiPlayerData& data = *static_cast<DisplayMultiPlayerData *>(psWidget->pUserData);
-
-	char str[128];
-	int x = xOffset + psWidget->x();
-	int y = yOffset + psWidget->y();
-	unsigned player = psWidget->UserData;  // Get the in game player number.
-
-	if (responsibleFor(player, 0))
-	{
-		displayExtraGubbins(widgGetFromID(psWScreen, MULTIMENU_FORM)->height(), data.extraGubbinsCache);
-	}
-
-	const bool isHuman = isHumanPlayer(player);
-	const bool isAlly = aiCheckAlliances(selectedPlayer, player);
-	const bool isSelectedPlayer = player == selectedPlayer;
-
-	PIELIGHT playerTextColor = GetPlayerTextColor(alliances[selectedPlayer][player], player);
-
-	if (isHuman || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers))
-	{
-		ssprintf(str, "%d: %s", NetPlay.players[player].position, getPlayerName(player));
-
-		while (iV_GetTextWidth(str, font_regular) >= MULTIMENU_C0 - MULTIMENU_C2 - 10)
-		{
-			str[strlen(str) - 1] = '\0';
-		}
-		data.wzPosAndNameText.setText(str, font_regular);
-		data.wzPosAndNameText.render(x + MULTIMENU_C2, y + MULTIMENU_FONT_OSET, playerTextColor);
-
-		//c3-7 alliance
-		//manage buttons by showing or hiding them. gifts only in campaign,
-		if (alliancesCanGiveAnything(game.alliance))
-		{
-			if (isAlly && !isSelectedPlayer && !giftsUp[player])
-			{
-				if (alliancesCanGiveResearchAndRadar(game.alliance))
-				{
-					widgReveal(psWScreen, MULTIMENU_GIFT_RAD + player);
-					widgReveal(psWScreen, MULTIMENU_GIFT_RES + player);
-				}
-				widgReveal(psWScreen, MULTIMENU_GIFT_DRO + player);
-				widgReveal(psWScreen, MULTIMENU_GIFT_POW + player);
-				giftsUp[player] = true;
-			}
-			else if (!isAlly && !isSelectedPlayer && giftsUp[player])
-			{
-				if (alliancesCanGiveResearchAndRadar(game.alliance))
-				{
-					widgHide(psWScreen, MULTIMENU_GIFT_RAD + player);
-					widgHide(psWScreen, MULTIMENU_GIFT_RES + player);
-				}
-				widgHide(psWScreen, MULTIMENU_GIFT_DRO + player);
-				widgHide(psWScreen, MULTIMENU_GIFT_POW + player);
-				giftsUp[player] = false;
-			}
-		}
-	}
-
-	// Let's use the real score for MP games
-	if (NetPlay.bComms)
-	{
-		if (Cheated)
-		{
-			sprintf(str, "(cheated)");
-		}
-		else
-		{
-			sprintf(str, "%d", getMultiStats(player).recentScore);
-		}
-		data.wzScoreText.setText(str, font_regular);
-
-		//c9:kills,
-		sprintf(str, "%d", getMultiStats(player).recentKills);
-		data.wzKillsText.setText(str, font_regular);
-	}
-	else
-	{
-		// estimate of score for skirmish games
-		sprintf(str, "%d", ingame.skScores[player][0]);
-		data.wzScoreText.setText(str, font_regular);
-		// estimated kills
-		sprintf(str, "%d", ingame.skScores[player][1]);
-		data.wzKillsText.setText(str, font_regular);
-	}
-	data.wzScoreText.render(x + MULTIMENU_C8, y + MULTIMENU_FONT_OSET, playerTextColor);
-	data.wzKillsText.render(x + MULTIMENU_C9, y + MULTIMENU_FONT_OSET, playerTextColor);
-
-	//only show player's and allies' unit counts, and nobody elses.
-	//c10:units
-	const DebugInputManager& dbgInputManager = gInputManager.debugManager();
-	if (isAlly || dbgInputManager.debugMappingsAllowed())
-	{
-		sprintf(str, "%d", getNumDroids(player) + getNumTransporterDroids(player));
-		data.wzUnitsText.setText(str, font_regular);
-		data.wzUnitsText.render(x + MULTIMENU_C10, y + MULTIMENU_FONT_OSET, playerTextColor);
-	}
-
-	/* Display player power instead of number of played games
-	  * and number of units instead of ping when in debug mode
-	  */
-	if (dbgInputManager.debugMappingsAllowed())  //Won't pass this when in both release and multiplayer modes
-	{
-		//c11: Player power
-		sprintf(str, "%u", (int)getPower(player));
-		data.wzRightmostColumnText.setText(str, font_regular);
-		data.wzRightmostColumnText.render(MULTIMENU_FORM_X + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, playerTextColor);
-	}
-	else if (runningMultiplayer())
-	{
-		//c11:ping
-		if (!isSelectedPlayer && isHuman)
-		{
-			if (ingame.PingTimes[player] < PING_LIMIT)
-			{
-				sprintf(str, "%03d", ingame.PingTimes[player]);
-			}
-			else
-			{
-				sprintf(str, "∞");
-			}
-			data.wzRightmostColumnText.setText(str, font_regular);
-			data.wzRightmostColumnText.render(x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, playerTextColor);
-		}
-	}
-	else
-	{
-		//c11: Structures
-		if (isAlly || dbgInputManager.debugMappingsAllowed())
-		{
-			// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
-			int num = 0;
-			for (STRUCTURE *temp = apsStructLists[player]; temp != nullptr; temp = temp->psNext)
-			{
-				++num;
-			}
-			sprintf(str, "%d", num);
-			data.wzRightmostColumnText.setText(str, font_regular);
-			data.wzRightmostColumnText.render(x + MULTIMENU_C11, y + MULTIMENU_FONT_OSET, playerTextColor);
-		}
-	}
-
-	// a droid of theirs.
-	DROID *displayDroid = apsDroidLists[player];
-	while (displayDroid != nullptr && !displayDroid->visible[selectedPlayer])
-	{
-		displayDroid = displayDroid->psNext;
-	}
-	if (displayDroid)
-	{
-		pie_SetGeometricOffset(MULTIMENU_FORM_X + MULTIMENU_C1 , y + MULTIMENU_PLAYER_H);
-		Vector3i rotation(-15, 45, 0);
-		Position position(0, 0, BUTTON_DEPTH);  // Scale them.
-		if (displayDroid->droidType == DROID_SUPERTRANSPORTER)
-		{
-			position.z = 7850;
-		}
-		else if (displayDroid->droidType == DROID_TRANSPORTER)
-		{
-			position.z = 4100;
-		}
-
-		displayComponentButtonObject(displayDroid, &rotation, &position, 100);
-	}
-	else if (apsDroidLists[player])
-	{
-		// Show that they have droids, but not which droids, since we can't see them.
-		iV_DrawImageTc(IntImages, IMAGE_GENERIC_TANK, IMAGE_GENERIC_TANK_TC, MULTIMENU_FORM_X + MULTIMENU_C1 - iV_GetImageWidth(IntImages, IMAGE_GENERIC_TANK) / 2, y + MULTIMENU_PLAYER_H - iV_GetImageHeight(IntImages, IMAGE_GENERIC_TANK), pal_GetTeamColour(getPlayerColour(player)));
-	}
-
-	// clean up widgets if player leaves while menu is up.
-	if (!isHuman && !(game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers))
-	{
-		if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + player) != nullptr)
-		{
-			widgDelete(psWScreen, MULTIMENU_CHANNEL + player);
-		}
-
-		if (widgGetFromID(psWScreen, MULTIMENU_ALLIANCE_BASE + player) != nullptr)
-		{
-			widgDelete(psWScreen, MULTIMENU_ALLIANCE_BASE + player);
-			widgDelete(psWScreen, MULTIMENU_GIFT_RAD + player);
-			widgDelete(psWScreen, MULTIMENU_GIFT_RES + player);
-			widgDelete(psWScreen, MULTIMENU_GIFT_DRO + player);
-			widgDelete(psWScreen, MULTIMENU_GIFT_POW + player);
-			giftsUp[player] = false;
-		}
-	}
-}
-
-// ////////////////////////////////////////////////////////////////////////////
 // alliance display funcs
 
 static void displayAllianceState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
@@ -984,106 +679,454 @@ static void displayChannelState(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset
 
 // ////////////////////////////////////////////////////////////////////////////
 
-static void addMultiPlayer(UDWORD player, UDWORD pos)
+class MultiMenuDroidView: public WIDGET
 {
-	UDWORD			y, id;
-	y	= MULTIMENU_PLAYER_H * (pos + 1);					// this is the top of the pos.
-	id	= MULTIMENU_PLAYER + player;
+public:
+	MultiMenuDroidView(uint32_t player): player(player)
+	{
+		setGeometry(0, 0, 60, 32);
+	}
 
-	// add the whole thing.
-	W_FORMINIT sFormInit;
-	sFormInit.formID		  = MULTIMENU_FORM;
-	sFormInit.id			  = id;
-	sFormInit.style			  = WFORM_PLAIN;
-	sFormInit.x				  = 2;
-	sFormInit.y				  = (short)y;
-	sFormInit.width			  = MULTIMENU_FORM_W - 4;
-	sFormInit.height		  = MULTIMENU_PLAYER_H;
-	sFormInit.pDisplay		  = displayMultiPlayer;
-	sFormInit.UserData		  = player;
-	sFormInit.pUserData = new DisplayMultiPlayerData();
-	sFormInit.onDelete = [](WIDGET *psWidget) {
-		assert(psWidget->pUserData != nullptr);
-		delete static_cast<DisplayMultiPlayerData *>(psWidget->pUserData);
-		psWidget->pUserData = nullptr;
+	void display(int xOffset, int yOffset) override
+	{
+		// a droid of theirs.
+		DROID *displayDroid = apsDroidLists[player];
+		while (displayDroid != nullptr && !displayDroid->visible[selectedPlayer])
+		{
+			displayDroid = displayDroid->psNext;
+		}
+
+		auto centerX = xOffset + x() + width() / 2;
+		auto y0 = yOffset + y();
+		if (displayDroid)
+		{
+			pie_SetGeometricOffset(centerX, y0 + height() * 3 / 4);
+			Vector3i rotation(-15, 45, 0);
+			Position position(0, 0, BUTTON_DEPTH);  // Scale them.
+			if (displayDroid->droidType == DROID_SUPERTRANSPORTER)
+			{
+				position.z = 7850;
+			}
+			else if (displayDroid->droidType == DROID_TRANSPORTER)
+			{
+				position.z = 4100;
+			}
+
+			displayComponentButtonObject(displayDroid, &rotation, &position, 100);
+		}
+		else if (apsDroidLists[player])
+		{
+			// Show that they have droids, but not which droids, since we can't see them.
+			iV_DrawImageTc(
+				IntImages,
+				IMAGE_GENERIC_TANK,
+				IMAGE_GENERIC_TANK_TC,
+				centerX - iV_GetImageWidth(IntImages, IMAGE_GENERIC_TANK) / 2,
+				y0 + height() / 2 - iV_GetImageHeight(IntImages, IMAGE_GENERIC_TANK) / 2,
+				pal_GetTeamColour(getPlayerColour(player))
+			);
+		}
+	}
+
+private:
+	uint32_t player;
+};
+
+class MultiMenuGrid: public GridLayout
+{
+protected:
+	MultiMenuGrid(): GridLayout() {}
+
+public:
+	static std::shared_ptr<MultiMenuGrid> make()
+	{
+		class make_shared_enabler: public MultiMenuGrid {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize();
+		return widget;
+	}
+
+private:
+	const int32_t CELL_HORIZONTAL_PADDING = 8;
+
+	struct PlayerWidgets
+	{
+		uint32_t player;
+		std::shared_ptr<W_LABEL> name;
+		std::shared_ptr<W_LABEL> score;
+		std::shared_ptr<W_LABEL> kills;
+		std::shared_ptr<W_LABEL> units;
+		std::shared_ptr<W_LABEL> lastColumn;
 	};
-	widgAddForm(psWScreen, &sFormInit);
 
-	W_BUTINIT sButInit;
-
-	// add channel opener.
-	if (player != selectedPlayer)
+	void initialize()
 	{
-		sButInit.formID = id;
-		sButInit.x		= MULTIMENU_C0;
-		sButInit.y		= 5;
-		sButInit.width	= 35;
-		sButInit.height = 24;
-		sButInit.id		= MULTIMENU_CHANNEL + player;
-		sButInit.pTip	= _("Channel");
-		sButInit.pDisplay = displayChannelState;
-		sButInit.UserData = player;
-		widgAddButton(psWScreen, &sButInit);
+		auto margin = Margin(10, CELL_HORIZONTAL_PADDING);
+		auto lastMargin = margin;
+		lastMargin.right = CLOSE_WIDTH + 5;
+		timerLabel = makeLabel("");
+		powerLabel = makeLabel(_("Power"));
+		pingLabel = makeLabel(_("Ping"));
+		structsLabel = makeLabel(_("Structs"));
+		place({0}, {0}, margin.wrap(Alignment::center().wrap(timerLabel)));
+		place({1}, {0}, margin.wrap(makeLabel(_("Alliances"))));
+		place({2}, {0}, MinSize::minWidth(100).wrap(margin.wrap(makeLabel(_("Score")))));
+		place({3}, {0}, MinSize::minWidth(50).wrap(margin.wrap(makeLabel(_("Kills")))));
+		place({4}, {0}, MinSize::minWidth(50).wrap(margin.wrap(makeLabel(_("Units")))));
+		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(powerLabel)));
+		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(pingLabel)));
+		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(structsLabel)));
+
+		uint32_t row = 1;
+		for (auto player = 0; player < MAX_PLAYERS; player++)
+		{
+			if (isHumanPlayer(player) || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers && NetPlay.players[player].difficulty != AIDifficulty::DISABLED))
+			{
+				addPlayerWidgets(player, row);
+				row++;
+			}
+		}
 	}
 
-	if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer)
+	std::shared_ptr<W_LABEL> makeLabel(const char *text)
 	{
-		//alliance
-		sButInit.x		= MULTIMENU_C3;
-		sButInit.y		= 5;
-		sButInit.width	= 35;
-		sButInit.height = 24;
-		sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
-		sButInit.pTip	= _("Toggle Alliance State");
-		sButInit.pDisplay = displayAllianceState;
-		sButInit.UserData = player;
-
-		//can't break alliances in 'Locked Teams' mode
-		if (!alliancesFixed(game.alliance))
-		{
-			widgAddButton(psWScreen, &sButInit);
-		}
-
-		sButInit.pDisplay = intDisplayImageHilight;
-
-		// add the gift buttons.
-		sButInit.y		+= 1;	// move down a wee bit.
-
-		if (alliancesCanGiveResearchAndRadar(game.alliance))
-		{
-			sButInit.id		= MULTIMENU_GIFT_RAD + player;
-			sButInit.x		= MULTIMENU_C4;
-			sButInit.pTip	= _("Give Visibility Report");
-			sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_VIS_HI, IMAGE_MULTI_VIS);
-			widgAddButton(psWScreen, &sButInit);
-
-			sButInit.id		= MULTIMENU_GIFT_RES + player;
-			sButInit.x		= MULTIMENU_C5;
-			sButInit.pTip	= _("Leak Technology Documents");
-			sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_TEK_HI , IMAGE_MULTI_TEK);
-			widgAddButton(psWScreen, &sButInit);
-		}
-
-		sButInit.id		= MULTIMENU_GIFT_DRO + player;
-		sButInit.x		= MULTIMENU_C6;
-		sButInit.pTip	= _("Hand Over Selected Units");
-		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_DRO_HI , IMAGE_MULTI_DRO);
-		widgAddButton(psWScreen, &sButInit);
-
-		sButInit.id		= MULTIMENU_GIFT_POW + player;
-		sButInit.x		= MULTIMENU_C7;
-		sButInit.pTip	= _("Give Power To Player");
-		sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_POW_HI , IMAGE_MULTI_POW);
-		widgAddButton(psWScreen, &sButInit);
-
-		giftsUp[player] = true;				// note buttons are up!
+		auto label = std::make_shared<W_LABEL>();
+		label->setString(text);
+		label->setCanTruncate(true);
+		label->setFontColour(WZCOL_TEXT_BRIGHT);
+		return label;
 	}
-}
+
+	std::shared_ptr<WIDGET> wrapGift(std::shared_ptr<WIDGET> gift)
+	{
+		auto alignment = Alignment(Alignment::Vertical::Center, Alignment::Horizontal::Center);
+		return alignment.wrap(Margin(0, 1, 0, 0).wrap(gift));
+	}
+
+	void addPlayerWidgets(uint32_t player, uint32_t row)
+	{
+		auto nameGrid = std::make_shared<GridLayout>();
+		char name[128];
+		ssprintf(name, "%d: %s", NetPlay.players[player].position, getPlayerName(player));
+		nameGrid->place({0, 1, false}, {0}, std::make_shared<MultiMenuDroidView>(player));
+		auto nameLabel = makeLabel(name);
+		nameGrid->place({1}, {0}, nameLabel);
+
+		auto alliancesGrid = std::make_shared<GridLayout>();
+
+		// add channel opener.
+		if (player != selectedPlayer)
+		{
+			W_BUTINIT sButInit;
+			sButInit.width	= 35;
+			sButInit.height = 24;
+			sButInit.id		= MULTIMENU_CHANNEL + player;
+			sButInit.pTip	= _("Channel");
+			sButInit.pDisplay = displayChannelState;
+			sButInit.UserData = player;
+			alliancesGrid->place({0}, {0}, Margin(0, 1, 0, 0).wrap(std::make_shared<W_BUTTON>(&sButInit)));
+		}
+
+		if (alliancesCanGiveAnything(game.alliance) && player != selectedPlayer)
+		{
+			W_BUTINIT sButInit;
+			//alliance
+			sButInit.id		= MULTIMENU_ALLIANCE_BASE + player;
+			sButInit.pTip	= _("Toggle Alliance State");
+			sButInit.pDisplay = displayAllianceState;
+			sButInit.UserData = player;
+			sButInit.width	= 35;
+			sButInit.height = 24;
+
+			//can't break alliances in 'Locked Teams' mode
+			if (!alliancesFixed(game.alliance))
+			{
+				alliancesGrid->place({1}, {0}, Margin(0, 1, 0, 0).wrap(std::make_shared<W_BUTTON>(&sButInit)));
+			}
+
+			sButInit.pDisplay = intDisplayImageHilight;
+
+			// add the gift buttons.
+			sButInit.width	= 31;
+			sButInit.height = 21;
+
+			if (alliancesCanGiveResearchAndRadar(game.alliance))
+			{
+				sButInit.id		= MULTIMENU_GIFT_RAD + player;
+				sButInit.pTip	= _("Give Visibility Report");
+				sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_VIS_HI, IMAGE_MULTI_VIS);
+				alliancesGrid->place({2}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+
+				sButInit.id		= MULTIMENU_GIFT_RES + player;
+				sButInit.pTip	= _("Leak Technology Documents");
+				sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_TEK_HI , IMAGE_MULTI_TEK);
+				alliancesGrid->place({3}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+			}
+
+			sButInit.id		= MULTIMENU_GIFT_DRO + player;
+			sButInit.pTip	= _("Hand Over Selected Units");
+			sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_DRO_HI , IMAGE_MULTI_DRO);
+			alliancesGrid->place({4}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+
+			sButInit.id		= MULTIMENU_GIFT_POW + player;
+			sButInit.pTip	= _("Give Power To Player");
+			sButInit.UserData = PACKDWORD_TRI(0, IMAGE_MULTI_POW_HI , IMAGE_MULTI_POW);
+			alliancesGrid->place({5}, {0}, wrapGift(std::make_shared<W_BUTTON>(&sButInit)));
+
+			giftsUp[player] = true;				// note buttons are up!
+		}
+
+		auto scoreLabel = makeLabel("");
+		scoreLabel->setTextAlignment(WzTextAlignment::WLAB_ALIGNRIGHT);
+		auto killsLabel = makeLabel("");
+		killsLabel->setTextAlignment(WzTextAlignment::WLAB_ALIGNRIGHT);
+		auto unitsLabel = makeLabel("");
+		unitsLabel->setTextAlignment(WzTextAlignment::WLAB_ALIGNRIGHT);
+		auto lastColumnLabel = makeLabel("");
+		lastColumnLabel->setTextAlignment(WzTextAlignment::WLAB_ALIGNRIGHT);
+		playersWidgets.push_back({
+			player,
+			nameLabel,
+			scoreLabel,
+			killsLabel,
+			unitsLabel,
+			lastColumnLabel,
+		});
+
+		Margin margin(0, CELL_HORIZONTAL_PADDING);
+		place({0}, {row}, Margin(0, CELL_HORIZONTAL_PADDING, 0, 0).wrap(nameGrid));
+		place({1}, {row}, margin.wrap(Alignment::center().wrap(alliancesGrid)));
+		place({2}, {row}, margin.wrap(scoreLabel));
+		place({3}, {row}, margin.wrap(killsLabel));
+		place({4}, {row}, margin.wrap(unitsLabel));
+		place({5}, {row}, margin.wrap(lastColumnLabel));
+	}
+
+	void updatePlayersWidgets()
+	{
+		for (auto &playerWidget: playersWidgets)
+		{
+			const auto color = GetPlayerTextColor(alliances[selectedPlayer][playerWidget.player], playerWidget.player);
+			const bool isHuman = isHumanPlayer(playerWidget.player);
+			const bool isAlly = aiCheckAlliances(selectedPlayer, playerWidget.player);
+			const bool isSelectedPlayer = playerWidget.player == selectedPlayer;
+
+			playerWidget.name->setFontColour(color);
+			playerWidget.score->setFontColour(color);
+			playerWidget.kills->setFontColour(color);
+			playerWidget.units->setFontColour(color);
+			playerWidget.lastColumn->setFontColour(color);
+
+			char scoreString[128];
+			char killsString[20];
+			char unitsString[20] = {0};
+			char lastString[20] = {0};
+
+			// Let's use the real score for MP games
+			if (NetPlay.bComms)
+			{
+				if (Cheated)
+				{
+					sstrcpy(scoreString, "(cheated)");
+				}
+				else
+				{
+					ssprintf(scoreString, "%d", getMultiStats(playerWidget.player).recentScore);
+				}
+
+				ssprintf(killsString, "%d", getMultiStats(playerWidget.player).recentKills);
+			}
+			else
+			{
+				// estimate of scores and kills for skirmish games
+				ssprintf(scoreString, "%d", ingame.skScores[playerWidget.player][0]);
+				ssprintf(killsString, "%d", ingame.skScores[playerWidget.player][1]);
+			}
+
+			//only show player's and allies' unit counts, and nobody elses.
+			if (isAlly || gInputManager.debugManager().debugMappingsAllowed())
+			{
+				ssprintf(unitsString, "%d", getNumDroids(playerWidget.player) + getNumTransporterDroids(playerWidget.player));
+			}
+
+			/* Display player power instead of number of played games
+			 * and number of units instead of ping when in debug mode
+			 */
+			if (gInputManager.debugManager().debugMappingsAllowed())  //Won't pass this when in both release and multiplayer modes
+			{
+				// Player power
+				ssprintf(lastString, "%u", (int)getPower(playerWidget.player));
+			}
+			else if (runningMultiplayer())
+			{
+				// ping
+				if (!isSelectedPlayer && isHuman)
+				{
+					if (ingame.PingTimes[playerWidget.player] < PING_LIMIT)
+					{
+						ssprintf(lastString, "%d", ingame.PingTimes[playerWidget.player]);
+					}
+					else
+					{
+						sstrcpy(lastString, "∞");
+					}
+				}
+			}
+			else
+			{
+				// Structures
+				if (isAlly || gInputManager.debugManager().debugMappingsAllowed())
+				{
+					// NOTE, This tallys up *all* the structures you have. Test out via 'start with no base'.
+					int num = 0;
+					for (STRUCTURE *temp = apsStructLists[playerWidget.player]; temp != nullptr; temp = temp->psNext)
+					{
+						++num;
+					}
+					ssprintf(lastString, "%d", num);
+				}
+			}
+
+			playerWidget.score->setString(scoreString);
+			playerWidget.kills->setString(killsString);
+			playerWidget.units->setString(unitsString);
+			playerWidget.lastColumn->setString(lastString);
+
+			if (isHuman || (game.type == LEVEL_TYPE::SKIRMISH && playerWidget.player < game.maxPlayers))
+			{
+				// alliance
+				// manage buttons by showing or hiding them. gifts only in campaign,
+				if (alliancesCanGiveAnything(game.alliance))
+				{
+					if (isAlly && !isSelectedPlayer && !giftsUp[playerWidget.player])
+					{
+						if (alliancesCanGiveResearchAndRadar(game.alliance))
+						{
+							widgReveal(psWScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
+							widgReveal(psWScreen, MULTIMENU_GIFT_RES + playerWidget.player);
+						}
+						widgReveal(psWScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
+						widgReveal(psWScreen, MULTIMENU_GIFT_POW + playerWidget.player);
+						giftsUp[playerWidget.player] = true;
+					}
+					else if (!isAlly && !isSelectedPlayer && giftsUp[playerWidget.player])
+					{
+						if (alliancesCanGiveResearchAndRadar(game.alliance))
+						{
+							widgHide(psWScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
+							widgHide(psWScreen, MULTIMENU_GIFT_RES + playerWidget.player);
+						}
+						widgHide(psWScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
+						widgHide(psWScreen, MULTIMENU_GIFT_POW + playerWidget.player);
+						giftsUp[playerWidget.player] = false;
+					}
+				}
+			}
+
+			// clean up widgets if player leaves while menu is up.
+			if (!isHuman && !(game.type == LEVEL_TYPE::SKIRMISH && playerWidget.player < game.maxPlayers))
+			{
+				if (widgGetFromID(psWScreen, MULTIMENU_CHANNEL + playerWidget.player) != nullptr)
+				{
+					widgDelete(psWScreen, MULTIMENU_CHANNEL + playerWidget.player);
+				}
+
+				if (widgGetFromID(psWScreen, MULTIMENU_ALLIANCE_BASE + playerWidget.player) != nullptr)
+				{
+					widgDelete(psWScreen, MULTIMENU_ALLIANCE_BASE + playerWidget.player);
+					widgDelete(psWScreen, MULTIMENU_GIFT_RAD + playerWidget.player);
+					widgDelete(psWScreen, MULTIMENU_GIFT_RES + playerWidget.player);
+					widgDelete(psWScreen, MULTIMENU_GIFT_DRO + playerWidget.player);
+					widgDelete(psWScreen, MULTIMENU_GIFT_POW + playerWidget.player);
+					giftsUp[playerWidget.player] = false;
+				}
+			}
+		}
+	}
+
+public:
+	void display(int xOffset, int yOffset) override
+	{
+		auto x0 = xOffset + x();
+		auto y0 = yOffset + y();
+
+		auto columns = getColumnOffsets();
+		auto rows = getRowOffsets();
+		const std::vector<glm::ivec4> lines = {
+			glm::ivec4(x0, y0 + rows[1], x0 + width(), y0 + rows[1]),
+			glm::ivec4(x0 + columns[1], y0, x0 + columns[1], y0 + height()),
+			glm::ivec4(x0 + columns[2], y0, x0 + columns[2], y0 + height()),
+			glm::ivec4(x0 + columns[3], y0, x0 + columns[3], y0 + height()),
+			glm::ivec4(x0 + columns[4], y0, x0 + columns[4], y0 + height()),
+			glm::ivec4(x0 + columns[5], y0, x0 + columns[5], y0 + height()),
+		};
+
+		iV_Lines(lines, WZCOL_BLACK);
+
+#ifdef DEBUG
+		char str[128];
+		int x0 = xOffset + x();
+		int y0 = yOffset + y();
+
+		for (unsigned q = 0; q < 2; ++q)
+		{
+			unsigned xPos = 0;
+			unsigned yPos = q * 12;
+			bool isTotal = q != 0;
+
+			char const *srText[2] = {_("Sent/Received per sec —"), _("Total Sent/Received —")};
+			ssprintf(str, "%s", srText[q]);
+			iV_DrawText(str, x0 + xPos, y0 + height() + yPos, font_small);
+			xPos += iV_GetTextWidth(str, font_small) + 20;
+
+			ssprintf(str, _("Traf: %lu/%lu"), NETgetStatistic(NetStatisticRawBytes, true, isTotal), NETgetStatistic(NetStatisticRawBytes, false, isTotal));
+			iV_DrawText(str, x0 + xPos, y0 + height() + yPos, font_small);
+			xPos += iV_GetTextWidth(str, font_small) + 20;
+
+			ssprintf(str, _("Uncompressed: %lu/%lu"), NETgetStatistic(NetStatisticUncompressedBytes, true, isTotal), NETgetStatistic(NetStatisticUncompressedBytes, false, isTotal));
+			iV_DrawText(str, x0 + xPos, y0 + height() + yPos, font_small);
+			xPos += iV_GetTextWidth(str, font_small) + 20;
+
+			ssprintf(str, _("Pack: %lu/%lu"), NETgetStatistic(NetStatisticPackets, true, isTotal), NETgetStatistic(NetStatisticPackets, false, isTotal));
+			iV_DrawText(str, x0 + xPos, y0 + height() + yPos, font_small);
+	}
+#endif
+	}
+
+	void run(W_CONTEXT *context) override
+	{
+		char timerStr[128];
+		getAsciiTime(timerStr, gameTime);
+		timerLabel->setString(timerStr);
+		updatePlayersWidgets();
+
+		powerLabel->hide();
+		pingLabel->hide();
+		structsLabel->hide();
+		if (gInputManager.debugManager().debugMappingsAllowed())
+		{
+			powerLabel->show();
+		}
+		else if (runningMultiplayer())
+		{
+			pingLabel->show();
+		}
+		else
+		{
+			structsLabel->show();
+		}
+	}
+
+private:
+	std::shared_ptr<W_LABEL> timerLabel;
+	std::shared_ptr<W_LABEL> powerLabel;
+	std::shared_ptr<W_LABEL> pingLabel;
+	std::shared_ptr<W_LABEL> structsLabel;
+	std::vector<PlayerWidgets> playersWidgets;
+};
 
 bool intAddMultiMenu()
 {
-	UDWORD			i;
-
 	//check for already open.
 	if (widgGetFromID(psWScreen, MULTIMENU_FORM))
 	{
@@ -1096,40 +1139,29 @@ bool intAddMultiMenu()
 		intResetScreen(false);
 	}
 
-	auto const &parent = psWScreen->psForm;
-
-	// add form
-	auto multiMenuForm = std::make_shared<IntFormAnimated>();
-	parent->attach(multiMenuForm);
-	multiMenuForm->id = MULTIMENU_FORM;
-	multiMenuForm->setCalcLayout(LAMBDA_CALCLAYOUT_SIMPLE({
-		psWidget->setGeometry(MULTIMENU_FORM_X, MULTIMENU_FORM_Y, MULTIMENU_FORM_W, MULTIMENU_PLAYER_H * game.maxPlayers + MULTIMENU_PLAYER_H + 7);
-	}));
-
-	// add any players
-	for (i = 0; i < MAX_PLAYERS; i++)
-	{
-		if (isHumanPlayer(i) || (game.type == LEVEL_TYPE::SKIRMISH && i < game.maxPlayers && NetPlay.players[i].difficulty != AIDifficulty::DISABLED))
-		{
-			addMultiPlayer(i, NetPlay.players[i].position);
-		}
-	}
+	auto form = std::make_shared<IntFormAnimated>();
+	form->id = MULTIMENU_FORM;
 
 	// Add the close button.
 	W_BUTINIT sButInit;
-	sButInit.formID = MULTIMENU_FORM;
 	sButInit.id = MULTIMENU_CLOSE;
-	sButInit.x = MULTIMENU_FORM_W - CLOSE_WIDTH;
-	sButInit.y = 0;
-	sButInit.width = CLOSE_WIDTH;
-	sButInit.height = CLOSE_HEIGHT;
 	sButInit.pTip = _("Close");
 	sButInit.pDisplay = intDisplayImageHilight;
 	sButInit.UserData = PACKDWORD_TRI(0, IMAGE_CLOSEHILIGHT , IMAGE_CLOSE);
-	if (!widgAddButton(psWScreen, &sButInit))
-	{
-		return false;
-	}
+	auto closeButton = std::make_shared<W_BUTTON>(&sButInit);
+	form->attach(closeButton);
+
+	auto grid = MultiMenuGrid::make();
+	form->attach(grid);
+
+	form->setCalcLayout([closeButton, grid](WIDGET *form) {
+		auto width = std::min((int32_t)screenWidth - 20, grid->idealWidth());
+		auto height = grid->idealHeight();
+		grid->setGeometry(0, 0, width, height);
+		form->setGeometry((screenWidth - width) / 2, MULTIMENU_FORM_Y, width, height);
+		closeButton->setGeometry(width - CLOSE_WIDTH, 0, CLOSE_WIDTH, CLOSE_HEIGHT);
+	});
+	psWScreen->psForm->attach(form);
 
 	intShowPowerBar();						// add power bar
 

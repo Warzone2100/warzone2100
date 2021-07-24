@@ -17,50 +17,42 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef __INCLUDED_LIB_WIDGET_ALIGNMENT_H__
-#define __INCLUDED_LIB_WIDGET_ALIGNMENT_H__
+#ifndef __INCLUDED_LIB_WIDGET_MINSIZE_H__
+#define __INCLUDED_LIB_WIDGET_MINSIZE_H__
 
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "widget.h"
+#include <optional-lite/optional.hpp>
 
-class AlignmentWidget;
-struct Alignment
+class MinSizeWidget;
+struct MinSize
 {
-    enum class Vertical
-    {
-        Top,
-        Center,
-        Bottom
-    };
-
-    enum class Horizontal
-    {
-        Left,
-        Center,
-        Right
-    };
-
-    Alignment(Vertical vertical, Horizontal horizontal)
-        : vertical(vertical)
-        , horizontal(horizontal)
+    MinSize(nonstd::optional<int32_t> width, nonstd::optional<int32_t> height)
+        : width(width)
+        , height(height)
         {}
 
-    static Alignment center()
-    {
-        return { Vertical::Center, Horizontal::Center };
-    }
+	static MinSize minWidth(int32_t width)
+	{
+		return MinSize(width, nonstd::nullopt);
+	}
 
-    std::shared_ptr<AlignmentWidget> wrap(std::shared_ptr<WIDGET> widget);
+	static MinSize minHeight(int32_t height)
+	{
+		return MinSize(nonstd::nullopt, height);
+	}
 
-    Vertical vertical;
-    Horizontal horizontal;
+    std::shared_ptr<MinSizeWidget> wrap(std::shared_ptr<WIDGET> widget);
+
+    nonstd::optional<int32_t> width;
+    nonstd::optional<int32_t> height;
 };
 
-class AlignmentWidget: public WIDGET
+class MinSizeWidget: public WIDGET
 {
 public:
-    explicit AlignmentWidget(Alignment alignment): alignment(alignment) {}
+    explicit MinSizeWidget(MinSize minSize): minSize(minSize) {}
 
 protected:
     void geometryChanged() override;
@@ -68,7 +60,7 @@ protected:
     int32_t idealHeight() override;
 
 private:
-    Alignment alignment;
+    MinSize minSize;
 };
 
-#endif // __INCLUDED_LIB_WIDGET_ALIGNMENT_H__
+#endif // __INCLUDED_LIB_WIDGET_MINSIZE_H__

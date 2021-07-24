@@ -52,9 +52,10 @@ nonstd::optional<std::vector<uint32_t>> GridLayout::getScrollSnapOffsets()
 	return scrollSnapOffsets;
 }
 
-void GridLayout::run(W_CONTEXT *context)
+void GridLayout::displayRecursive(WidgetGraphicsContext const &context)
 {
 	updateLayout();
+	WIDGET::displayRecursive(context);
 }
 
 void GridLayout::geometryChanged()
@@ -71,8 +72,8 @@ void GridLayout::updateLayout()
 
 	layoutDirty = false;
 
-	auto columnOffsets = getColumnAllocator().calculate_offsets(width());
-	auto rowOffsets = getRowAllocator().calculate_offsets(height());
+	columnOffsets = getColumnAllocator().calculate_offsets(width());
+	rowOffsets = getRowAllocator().calculate_offsets(height());
 	scrollSnapOffsets.resize(rowOffsets.size());
 	size_t i = 0;
 	for (auto offset: rowOffsets)
@@ -88,6 +89,18 @@ void GridLayout::updateLayout()
 		auto bottom = rowOffsets[placement.row.start + placement.row.span];
 		placement.widget->setGeometry(left, top, right - left, bottom - top);
 	}
+}
+
+const std::map<uint32_t, int32_t> &GridLayout::getColumnOffsets()
+{
+	updateLayout();
+	return columnOffsets;
+}
+
+const std::map<uint32_t, int32_t> &GridLayout::getRowOffsets()
+{
+	updateLayout();
+	return rowOffsets;
 }
 
 void GridLayout::invalidateLayout()
