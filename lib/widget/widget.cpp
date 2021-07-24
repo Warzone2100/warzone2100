@@ -446,7 +446,7 @@ void WIDGET::callCalcLayout()
 {
 	if (calcLayout)
 	{
-		calcLayout(this, screenWidth, screenHeight, screenWidth, screenHeight);
+		calcLayout(this);
 	}
 #ifdef DEBUG
 //	// FOR DEBUGGING:

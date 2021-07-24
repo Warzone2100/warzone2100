@@ -696,7 +696,7 @@ static void addTrackList(WIDGET *parent, bool ingame)
 	auto pTracksScrollableList = ScrollableListWidget::make();
 	parent->attach(pTracksScrollableList);
 	pTracksScrollableList->setBackgroundColor(WZCOL_TRANSPARENT_BOX);
-	pTracksScrollableList->setCalcLayout([ingame](WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int){
+	pTracksScrollableList->setCalcLayout([ingame](WIDGET *psWidget) {
 		psWidget->setGeometry(GetTrackListStartXPos(ingame), TL_Y, TL_ENTRYW, GetNumVisibleTracks() * TL_ENTRYH);
 	});
 
@@ -813,7 +813,7 @@ protected:
 		sButInit.id			= id;
 		sButInit.y			= y;
 		sButInit.pText		= text;
-		sButInit.calcLayout = [y] (WIDGET *psWidget, unsigned int, unsigned int, unsigned int, unsigned int) {
+		sButInit.calcLayout = [y] (WIDGET *psWidget) {
 			psWidget->move(0, y);
 		};
 
