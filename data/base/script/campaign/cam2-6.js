@@ -10,7 +10,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage05",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF02", "R-Wpn-Howitzer-ROF02",
-	"R-Wpn-Howitzer-Damage02", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
+	"R-Wpn-Howitzer-Damage08", "R-Cyborg-Armor-Heat01", "R-Vehicle-Armor-Heat01",
 	"R-Wpn-Bomb-Damage02", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-Accuracy01", "R-Struc-VTOLPad-Upgrade03",
 ];
@@ -23,14 +23,10 @@ function camEnemyBaseDetected_COMainBase()
 		regroup: false,
 	});
 
-	camManageGroup(camMakeGroup("southEastGroup"), CAM_ORDER_PATROL, {
+	camManageGroup(camMakeGroup("southEastGroup"), CAM_ORDER_COMPROMISE, {
 		pos: [
 			camMakePos("playerLZ"),
-			camMakePos("grp2Pos2"),
-			camMakePos("uplinkBaseCorner"),
 		],
-		interval: camSecondsToMilliseconds(40),
-		//fallback: camMakePos("heavyFacAssembly"),
 		repair: 40,
 		regroup: false,
 	});
@@ -38,8 +34,19 @@ function camEnemyBaseDetected_COMainBase()
 	camEnableFactory("COCyborgFactory-b1");
 	camEnableFactory("COCyborgFactory-b2");
 	camEnableFactory("COHeavyFactory-b2R");
-	enableTimeBasedFactories(); //Might as well since the player is attacking.
 }
+
+camAreaEvent("factoryTriggerWest", function(droid)
+{
+	enableTimeBasedFactories();
+
+});
+
+camAreaEvent("factoryTriggerEast", function(droid)
+{
+	enableTimeBasedFactories();
+
+});
 
 function camEnemyBaseEliminated_COUplinkBase()
 {
@@ -56,6 +63,19 @@ function camEnemyBaseDetected_COMediumBase()
 	camManageGroup(camMakeGroup(droids), CAM_ORDER_ATTACK, {
 		regroup: false,
 	});
+}
+
+function truckDefense()
+{
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
+	{
+		removeTimer("truckDefense");
+		return;
+	}
+
+	var list = ["Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-CB-Tower01", "Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-SensoTower02"];
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
 }
 
 function northWestAttack()
@@ -215,7 +235,18 @@ function eventStartLevel()
 
 	hackAddMessage("C26_OBJ1", PROX_MSG, CAM_HUMAN_PLAYER, true);
 
+	if (difficulty >= HARD)
+	{
+		addDroid(THE_COLLECTIVE, 26, 27, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
+		addDroid(THE_COLLECTIVE, 42, 4, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
+
+		camManageTrucks(THE_COLLECTIVE);
+		queue("truckDefense", camSecondsToMilliseconds(10));
+
+		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(6)));
+	}
+
 	queue("northWestAttack", camMinutesToMilliseconds(2));
 	queue("mainBaseAttackGroup", camMinutesToMilliseconds(3));
-	queue("enableTimeBasedFactories", camChangeOnDiff(camMinutesToMilliseconds(10)));
+	queue("enableTimeBasedFactories", camChangeOnDiff(camMinutesToMilliseconds(5)));
 }

@@ -133,7 +133,7 @@ function cam_eventStartLevel()
 	__camAiPowerReset(); //grant power to the AI
 	setTimer("__checkEnemyFactoryProductionTick", camSecondsToMilliseconds(0.8));
 	setTimer("__camTick", camSecondsToMilliseconds(1)); // campaign pollers
-	setTimer("__camTruckTick", camSecondsToMilliseconds(40) + camSecondsToMilliseconds(0.1)); // some slower campaign pollers
+	setTimer("__camTruckTick", camSecondsToMilliseconds(10) + camSecondsToMilliseconds(0.1)); // some slower campaign pollers
 	setTimer("__camAiPowerReset", camMinutesToMilliseconds(3)); //reset AI power every so often
 	setTimer("__camShowVictoryConditions", camMinutesToMilliseconds(5));
 	setTimer("__camTacticsTick", camSecondsToMilliseconds(0.1));

@@ -10,7 +10,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF03", "R-Wpn-Howitzer-ROF02",
-	"R-Wpn-Howitzer-Damage02", "R-Cyborg-Armor-Heat02", "R-Vehicle-Armor-Heat02",
+	"R-Wpn-Howitzer-Damage08", "R-Cyborg-Armor-Heat02", "R-Vehicle-Armor-Heat02",
 	"R-Wpn-Bomb-Damage02", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-Accuracy01", "R-Struc-VTOLPad-Upgrade03",
 ];
@@ -82,6 +82,19 @@ function enableFactoriesAndHovers()
 		interval: camSecondsToMilliseconds(22),
 		regroup: false,
 	});
+}
+
+function truckDefense()
+{
+	if (enumDroid(THE_COLLECTIVE, DROID_CONSTRUCT).length === 0)
+	{
+		removeTimer("truckDefense");
+		return;
+	}
+
+	var list = ["Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-CB-Tower01", "Emplacement-Howitzer105", "Emplacement-Rocket06-IDF", "Sys-SensoTower02"];
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos1"));
+	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)], camMakePos("buildPos2"));
 }
 
 function eventStartLevel()
@@ -187,7 +200,7 @@ function eventStartLevel()
 				repair: 20,
 				count: -1,
 			},
-			templates: [cTempl.comrotmh, cTempl.comhltat, cTempl.cohct]
+			templates: [cTempl.comrotmh, cTempl.comhltat, cTempl.cohact, cTempl.cohhpv]
 		},
 		"COCyborgFac-b4": {
 			assembly: "base4CybAssembly",
@@ -221,6 +234,16 @@ function eventStartLevel()
 	hackAddMessage("C27_OBJECTIVE2", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C27_OBJECTIVE3", PROX_MSG, CAM_HUMAN_PLAYER, true);
 	hackAddMessage("C27_OBJECTIVE4", PROX_MSG, CAM_HUMAN_PLAYER, true);
+
+	if (difficulty >= HARD)
+	{
+		addDroid(THE_COLLECTIVE, 55, 25, "Truck Panther Tracks", "Body6SUPP", "tracked01", "", "", "Spade1Mk1");
+
+		camManageTrucks(THE_COLLECTIVE);
+		queue("truckDefense", camSecondsToMilliseconds(10));
+
+		setTimer("truckDefense", camChangeOnDiff(camMinutesToMilliseconds(4.5)));
+	}
 
 	queue("baseThreeVtolAttack", camSecondsToMilliseconds(30));
 	queue("baseFourVtolAttack", camMinutesToMilliseconds(1));

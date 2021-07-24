@@ -8,7 +8,7 @@ const NEXUS_RES = [
 	"R-Wpn-Mortar-Acc03", "R-Wpn-MG-Damage09", "R-Wpn-Mortar-ROF04",
 	"R-Vehicle-Engine07", "R-Vehicle-Metals07", "R-Vehicle-Armor-Heat04",
 	"R-Cyborg-Metals07", "R-Cyborg-Armor-Heat04", "R-Wpn-RocketSlow-ROF05",
-	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF05", "R-Wpn-Howitzer-Damage05",
+	"R-Wpn-AAGun-Damage06", "R-Wpn-AAGun-ROF05", "R-Wpn-Howitzer-Damage09",
 	"R-Wpn-Howitzer-ROF04", "R-Wpn-Cannon-Damage08", "R-Wpn-Cannon-ROF04",
 	"R-Wpn-Missile-Damage01", "R-Wpn-Missile-ROF01", "R-Wpn-Missile-Accuracy01",
 	"R-Wpn-Rail-Damage01", "R-Wpn-Rail-ROF01", "R-Wpn-Rail-Accuracy01",

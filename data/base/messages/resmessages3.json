@@ -787,7 +787,7 @@
 		"text": [
 			"New Bomb Bay Available",
 			"Drops high intensity thermite bombs",
-			"Best Targets: Bunkers, emplacements, Infantry",
+			"Best Targets: Bunkers, wheeled and hover vehicles",
 			"Body Points: Low"
 		]
 	},
@@ -930,7 +930,7 @@
 		"text": [
 			"New Artillery Missile Turret Available",
 			"High explosive heavy artillery missile",
-			"Best Targets: Base structures and cyborgs",
+			"Best Targets: Base structures, emplacements, cyborgs",
 			"Body Points: Very Low"
 		]
 	},
@@ -963,7 +963,7 @@
 		"text": [
 			"New Artillery Missile Turret Available",
 			"High explosive artillery missile",
-			"Best Targets: Base structures and cyborgs",
+			"Best Targets: Base structures, emplacements, cyborgs",
 			"Body Points: Very Low"
 		]
 	},
@@ -1007,7 +1007,7 @@
 		"text": [
 			"New Rail Gun Available",
 			"Rapid fire rail gun firing needle darts",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: Medium"
 		]
 	},
@@ -1018,7 +1018,7 @@
 		"text": [
 			"New Rail Gun Available",
 			"Rail gun firing armor-piercing darts",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: Medium"
 		]
 	},
@@ -1029,7 +1029,7 @@
 		"text": [
 			"New Rail Gun Available",
 			"Heavy rail gun firing large kinetic energy darts",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: High"
 		]
 	},

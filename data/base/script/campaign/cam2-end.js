@@ -11,7 +11,7 @@ const COLLECTIVE_RES = [
 	"R-Wpn-Mortar-ROF03", "R-Wpn-Rocket-Accuracy02", "R-Wpn-Rocket-Damage06",
 	"R-Wpn-Rocket-ROF03", "R-Wpn-RocketSlow-Accuracy03", "R-Wpn-RocketSlow-Damage06",
 	"R-Sys-Sensor-Upgrade01", "R-Wpn-RocketSlow-ROF03", "R-Wpn-Howitzer-ROF03",
-	"R-Wpn-Howitzer-Damage03", "R-Cyborg-Armor-Heat03", "R-Vehicle-Armor-Heat03",
+	"R-Wpn-Howitzer-Damage09", "R-Cyborg-Armor-Heat03", "R-Vehicle-Armor-Heat03",
 	"R-Wpn-Bomb-Damage02", "R-Wpn-AAGun-Damage03", "R-Wpn-AAGun-ROF03",
 	"R-Wpn-AAGun-Accuracy02", "R-Wpn-Howitzer-Accuracy02", "R-Struc-VTOLPad-Upgrade03",
 ];
@@ -155,7 +155,7 @@ function tankAttackWest()
 
 function transporterAttack()
 {
-	var droids = [cTempl.cohact, cTempl.comhltat, cTempl.cohbbt, cTempl.cohct, cTempl.cohhpv];
+	var droids = [cTempl.cohact, cTempl.comhltat, cTempl.cohbbt, cTempl.cohhpv];
 
 	camSendReinforcement(THE_COLLECTIVE, camMakePos(camGenerateRandomMapCoordinate(startpos, 10, 1)), randomTemplates(droids, true),
 		CAM_REINFORCE_TRANSPORT, {

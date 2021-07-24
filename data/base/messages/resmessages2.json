@@ -600,7 +600,7 @@
 		"text": [
 			"New Bomb Bay Available",
 			"Drops High Explosive Cluster bombs",
-			"Best Targets: Base Structures",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
 			"Body Points: Low"
 		]
 	},
@@ -611,7 +611,7 @@
 		"text": [
 			"New Bomb Bay Available",
 			"Drops High Explosive Armor Piercing bombs",
-			"Best Targets: Defenses",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
 			"Body Points: Low"
 		]
 	},
@@ -622,7 +622,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"76mm hyper-velocity quad-barrel automatic-cannon",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: High"
 		]
 	},
@@ -633,7 +633,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			"Hyper-velocity automatic-cannon firing 88mm rounds",
-			"Best Targets: Vehicles",
+			"Best Targets: None. Average damage against all targets",
 			"Body Points: High"
 		]
 	},

@@ -101,7 +101,7 @@ function truckDefense()
 		return;
 	}
 
-	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-Tower-MdCan", "CO-Tower-LtATRkt"];
+	const list = ["CO-Tower-MG3", "CO-Tower-LtATRkt", "CO-WallTower-HvCan", "CO-Tower-LtATRkt"];
 	camQueueBuilding(THE_COLLECTIVE, list[camRand(list.length)]);
 }
 
@@ -175,7 +175,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.comatt, cTempl.cohct, cTempl.comct]
+			templates: [cTempl.comatt, cTempl.cohct, cTempl.commrp]
 		},
 		"COHeavyFacR-b1": {
 			assembly: "COHeavyFacR-b1Assembly",
@@ -187,7 +187,7 @@ function eventStartLevel()
 				repair: 30,
 				count: -1,
 			},
-			templates: [cTempl.comatt, cTempl.cohct, cTempl.comct]
+			templates: [cTempl.comatt, cTempl.cohct, cTempl.commrp]
 		},
 		"COCybFacL-b2": {
 			assembly: "COCybFacL-b2Assembly",

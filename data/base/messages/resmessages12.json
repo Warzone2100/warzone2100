@@ -50,7 +50,7 @@
 		"text": [
 			"New Weapon Turret Available",
 			".50-calibre heavy machinegun",
-			"Best Targets: Infantry, base structures, wheeled vehicles",
+			"Best Targets: Infantry, wheeled and hover vehicles",
 			"Body Points: Medium"
 		]
 	},
@@ -193,7 +193,7 @@
 		"text": [
 			"New Rocket Available",
 			"Rocket artillery; can be assigned to a sensor",
-			"Best Targets: Vehicles and Emplacements",
+			"Best Targets: Vehicles",
 			"Body Points: Very Low"
 		]
 	},
@@ -204,7 +204,7 @@
 		"text": [
 			"New Rocket Available",
 			"Fires salvoes of mini-rockets",
-			"Best Targets: Base structures",
+			"Best Targets: Base structures, infantry, wheeled vehicles",
 			"Body Points: Very Low"
 		]
 	},

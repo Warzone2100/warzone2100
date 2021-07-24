@@ -56,7 +56,7 @@ function getDroidsForCOLZ()
 	}
 	else
 	{
-		templates = [cTempl.cohct, cTempl.comct, cTempl.comorb];
+		templates = [cTempl.cohct, cTempl.commrl, cTempl.comorb];
 		usingHeavy = true;
 	}
 
@@ -132,7 +132,7 @@ function sendPlayerTransporter()
 function mapEdgeDroids()
 {
 	var TankNum = 8 + camRand(6);
-	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.comct, cTempl.cohct];
+	var list = [cTempl.npcybm, cTempl.npcybr, cTempl.commrp, cTempl.cohct];
 
 	var droids = [];
 	for (var i = 0; i < TankNum; ++i)
@@ -180,7 +180,7 @@ function truckDefense()
 		return;
 	}
 
-	const DEFENSES = ["CO-Tower-LtATRkt", "PillBox1", "CO-Tower-MdCan"];
+	const DEFENSES = ["CO-Tower-LtATRkt", "PillBox1", "CO-WallTower-HvCan"];
 	camQueueBuilding(THE_COLLECTIVE, DEFENSES[camRand(DEFENSES.length)]);
 }
 
