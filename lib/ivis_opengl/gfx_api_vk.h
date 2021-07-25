@@ -233,10 +233,10 @@ struct buffering_mechanism
 	static size_t currentFrame;
 
 	static perFrameResources_t& get_current_resources();
-	static perFrameResources_t* get_current_resources_pt();
 	static void init(vk::Device dev, const VmaAllocator& allocator, size_t swapchainImageCount, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader);
 	static void destroy(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
 	static void swap(vk::Device dev, const vk::DispatchLoaderDynamic& vkDynLoader);
+	static bool isInitialized();
 };
 
 VKAPI_ATTR VkBool32 VKAPI_CALL messageCallback(
