@@ -8,9 +8,6 @@ on:
       - deleted
       - released # See: https://github.community/t5/GitHub-API-Development-and/Webhook-ReleaseEvent-prerelease-gt-release-notification/m-p/22612
 
-# temporary
-  workflow_dispatch:
-
 concurrency: release_tasks
 
 jobs:
@@ -42,7 +39,7 @@ jobs:
           -u ${{ secrets.DEPLOY_DISPATCH_ACCESS_TOKEN }} \
           --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
       - name: 'Trigger MSIX deployment'
-        if: (github.event_name == 'workflow_dispatch') || (github.event.action == 'published') || (github.event.action == 'released')
+        if: (github.event.action == 'published') || (github.event.action == 'released')
         run: |
           curl -X POST https://api.github.com/repos/wz-packaging/wz-ms-packaging/dispatches \
           -H 'Accept: application/vnd.github.everest-preview+json' \
