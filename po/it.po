@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-24 21:47\n"
+"PO-Revision-Date: 2021-07-25 10:31\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -2878,7 +2878,7 @@ msgstr "Estende la portata dei colpi dei VTOL"
 #: data/mp/messages/strings/resstrings.txt:239
 #: po/custom/fromJson.txt:464
 msgid "All VTOL Strike sensors upgraded automatically"
-msgstr "Tutte i Sensori d'Attacco VTOL sono stati aggiornati automaticamente"
+msgstr "Tutte i sensori d'attacco dei VTOL sono stati aggiornati automaticamente"
 
 #: data/base/messages/strings/resstrings.txt:511
 #: data/mp/messages/strings/resstrings.txt:241
@@ -4011,7 +4011,7 @@ msgstr "Costruisci almeno 7 strutture non murarie sull'altopiano e distruggi tut
 
 #: data/base/script/campaign/cam2-1x.js:111
 msgid "Locate and rescue your units from the shot down transporter"
-msgstr "Individua e salva le unità dal trasportatore abbattuto"
+msgstr "Individua e salva le unità del trasportatore abbattuto"
 
 #: data/base/script/campaign/cam2-c.js:27
 msgid "Rescue the civilians from The Collective before too many are captured"
@@ -6496,7 +6496,7 @@ msgstr "Armato con missile anticarro Lancer"
 #. data/base/messages/resmessages1.json: $.RES_CYW_RK1.text[1]
 #: po/custom/fromJson.txt:609
 msgid "Armed with Lancer Anti-Tank rocket"
-msgstr "Armato con lanciatore di razzi anticarro"
+msgstr "Armato con lanciarazzi anticarro"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_CYTRANS.text[1]
@@ -15850,7 +15850,7 @@ msgstr "Aumentare la scala del display del gioco?"
 
 #: src/frontend.cpp:2607
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
-msgstr "Con le impostazioni di risoluzione e di scala del display correnti, l'interfaccia del gioco può apparire piccola, mentre la prospettiva di gioco può apparire distorta."
+msgstr "Con le impostazioni di risoluzione e di scala del display correnti l'interfaccia del gioco può apparire piccola e la prospettiva di gioco distorta."
 
 #: src/frontend.cpp:2609
 msgid "You can fix this by increasing the game's Display Scale setting."
