@@ -1879,6 +1879,7 @@ int realmain(int argc, char *argv[])
 #if defined(ENABLE_DISCORD)
 	discordRPCShutdown();
 #endif
+	urlRequestShutdown();
 	systemShutdown();
 #ifdef WZ_OS_WIN	// clean up the memory allocated for the command line conversion
 	for (int i = 0; i < argc; i++)
@@ -1890,7 +1891,6 @@ int realmain(int argc, char *argv[])
 #endif
 	ActivityManager::instance().shutdown();
 	wzShutdown();
-	urlRequestShutdown();
 	debug(LOG_MAIN, "Completed shutting down Warzone 2100");
 	return EXIT_SUCCESS;
 }
