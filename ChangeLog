@@ -1,3 +1,27 @@
+2021-07-25: Version 4.1.1:
+ * General:
+   * Fix: Fix chat cursor position (commit:10f32bc6fc8e22e1046bb5f37ed5e5fda72189d7, commit:042e4c2276aa4569bf1687c00bd72d2834f02bc5, #1979)
+   * Fix: Respect Hold & Fire at will better (commit:8de662f45b6b0f88ab03f852e8cb089bdd0f41ca, commit:05f5f1c71c7fcd0d79d5a448432e0e4c2d9fb90e, #1987)
+   * Fix: Refresh order buttons on hotkey press (commit:ddf25c084007b2ead4beee698f62dece6f1df447, #2010)
+   * Fix: Make other hotkeys override debug hotkeys by default (too many commits, #1931)
+ * Graphics:
+   * Fix: Fix structure limits screen lighting and hardcode sun position and lighting for 3D buttons (commit:d2dbcac2e29e2128ba9660ea0e3b77f466a6b448, commit:e198438b00a51fe49fa09fbcf532cae6334c1dcb, #2001)
+   * Change: Use faction models for UI buttons (commit:f477d76a5a6ad633c4926241304632e6447740b3, #2015)
+ * Campaign:
+   * Add: Add a small delay for allowing video skipping (commit:37828b78f46f1c292bb1b55e88358c31fd54fd18, #2011)
+   * Change: Merge updates from camBalance to encompass mostly Beta campaign tweaks (commit:4268f4426e62226092c1cbc58e254a42ecc9aa21, #2027)
+   * Fix: Do not show transport button in objective achieved screen (commit:6f0e7f0beaa436edbfe71d9e97a040c1c674ef68, #2014)
+ * Multiplayer:
+   * Fix: Fixed obsolescence of machine guns Technology (commit:26918596ad2670d49178ffea121b36ed9f20b759, #1989)
+ * Balance:
+   * Change: Make Heavy Plasma Launcher more useful with an "all rounder" role and reduce price of Plasma Cannon significantly (commit:0b4f37365ed551efc14fc70b4e9b58a8a3043f0d, #2009)
+   * Change: Tweak mortar research paths to decouple Bombard/Pepperpot from damage/ROF upgrades and Incendiary Mortar and reduce Pepperpot weight (commit:e0c17f814747dade806ab64e533feecd9ddf1a67, #2021)
+   * Change: Rebalance HVC and HVC Cyborg to have more ROF and 1 tile less range (commit:2edbb1b34a51eab38427ead1f4be21374febf9d3, #2022)
+   * Change: Tweak accuracy and splash values on Sunburst and Cyclone anti-air weapons (commit:0ce8587c47e9c2dc0643a47eb1d04974d5b63819, #2032)
+ * Other:
+   * Add: Add weapon info into debug window (commit:0a626c31e7dc82f9095e22ee0484111188e3c94c, #1998)
+   * Change: Replacing the abbreviation HPV for the Hyper Velocity Cannon with HVC (commit:d9794c0e23f342ec707f5c3bd2b31353569eca4a, #2005)
+
 2021-07-04: Version 4.1.0:
  * General:
    * Change: Move research upgrade code to C++ away from Javascript. May fix a late-game desync (commit:7b4e1d110ec9427ea070ea3395db252ef8547127, commit:3ddc0356b0de20ccee34727dec4f96677e02eb1c, commit:b2da3338db951361a20969e2a55542e310d299c9, #1925)
