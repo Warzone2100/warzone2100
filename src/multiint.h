@@ -120,6 +120,7 @@ void displayRoomNotifyMessage(char const *text);
 // ////////////////////////////////////////////////////////////////
 // GAME FIND SCREEN
 
+#define GAMES_GAMEHEADER	10200
 #define GAMES_GAMESTART		10201
 #define GAMES_GAMEEND		GAMES_GAMESTART+20
 #define GAMES_GAMEWIDTH		540

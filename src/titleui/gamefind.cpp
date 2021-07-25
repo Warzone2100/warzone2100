@@ -42,13 +42,6 @@
 #include "../loadsave.h"			// for blueboxes.
 #include "../activity.h"
 
-struct DisplayRemoteGameHeaderCache
-{
-	WzText wzHeaderText_GameName;
-	WzText wzHeaderText_MapName;
-	WzText wzHeaderText_Players;
-	WzText wzHeaderText_Status;
-};
 struct DisplayRemoteGameCache
 {
 	WzText wzText_CurrentVsMaxNumPlayers;
@@ -57,8 +50,6 @@ struct DisplayRemoteGameCache
 	WidthLimitedWzText wzText_ModNames;
 	WidthLimitedWzText wzText_VersionString;
 };
-
-static DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
 
 // find games
 static void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset);
@@ -255,6 +246,60 @@ void WzGameFindTitleUI::addConsoleBox()
 // ////////////////////////////////////////////////////////////////////////////
 // Game Chooser Screen.
 
+class GameListHeader : public WIDGET
+{
+protected:
+	GameListHeader()
+	{ }
+
+public:
+	static std::shared_ptr<GameListHeader> make() {
+		class make_shared_enabler : public GameListHeader
+		{
+		public:
+			make_shared_enabler()
+				: GameListHeader()
+			{
+			}
+		};
+		return std::make_shared<make_shared_enabler>();
+	}
+
+public:
+	virtual void display(int xOffset, int yOffset) override
+	{
+		const int xPos = xOffset + x();
+		const int yPos = yOffset + y();
+		const int w = width();
+		const int h = height();
+
+		// draw the 'header' for the table...
+		drawBlueBox(xPos, yPos, w, h);
+
+		remoteGameListHeaderCache.wzHeaderText_GameName.setText(_("Game Name"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_GameName.render(xPos - 2 + GAMES_GAMENAME_START + 48, yPos + 9, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_MapName.setText(_("Map Name"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_MapName.render(xPos - 2 + GAMES_MAPNAME_START + 48, yPos + 9, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_Players.setText(_("Players"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_Players.render(xPos - 2 + GAMES_PLAYERS_START, yPos + 9, WZCOL_YELLOW);
+
+		remoteGameListHeaderCache.wzHeaderText_Status.setText(_("Status"), font_small);
+		remoteGameListHeaderCache.wzHeaderText_Status.render(xPos - 2 + GAMES_STATUS_START + 48, yPos + 9, WZCOL_YELLOW);
+	}
+
+private:
+	struct DisplayRemoteGameHeaderCache
+	{
+		WzText wzHeaderText_GameName;
+		WzText wzHeaderText_MapName;
+		WzText wzHeaderText_Players;
+		WzText wzHeaderText_Status;
+	};
+	DisplayRemoteGameHeaderCache remoteGameListHeaderCache;
+};
+
 void WzGameFindTitleUI::addGames()
 {
 	size_t added = 0;
@@ -276,6 +321,7 @@ void WzGameFindTitleUI::addGames()
 	};
 
 	// we want the old games deleted, and only list games when we should
+	widgDelete(psWScreen, GAMES_GAMEHEADER);
 	for (size_t i = 0; i < MaxGames; i++)
 	{
 		widgDelete(psWScreen, GAMES_GAMESTART + i);	// remove old widget
@@ -290,6 +336,18 @@ void WzGameFindTitleUI::addGames()
 	// only have to do this if we have any games available.
 	if (!getLobbyError() && gcount)
 	{
+		// add header
+		auto headerWidget = GameListHeader::make();
+		headerWidget->setGeometry(20, 45 - 12, GAMES_GAMEWIDTH, 12);
+		headerWidget->id = GAMES_GAMEHEADER;
+
+		WIDGET *parent = widgGetFromID(psWScreen, FRONTEND_BOTFORM);
+		ASSERT(parent != nullptr && parent->type == WIDG_FORM, "Could not find parent form from formID");
+		if (parent)
+		{
+			parent->attach(headerWidget);
+		}
+
 		for (size_t i = 0; i < gamesList.size(); i++)				// draw games
 		{
 			if (gamesList[i].desc.dwSize != 0)
@@ -569,24 +627,5 @@ void displayRemoteGame(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	ssprintf(name, _("Version: %s"), gamesList[gameID].versionstring);
 	cache.wzText_VersionString.setTruncatableText(name, font_small, (GAMES_MAPNAME_START - 6 - GAMES_GAMENAME_START - 4));
 	cache.wzText_VersionString.render(x + GAMES_GAMENAME_START + 6, y + 24, textColor);
-
-	// crappy hack to only draw this once for the header.  TODO fix GUI
-	if (gameID == 0)
-	{
-		// make the 'header' for the table...
-		drawBlueBox(x , y - 12 , GAMES_GAMEWIDTH, 12);
-
-		remoteGameListHeaderCache.wzHeaderText_GameName.setText(_("Game Name"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_GameName.render(x - 2 + GAMES_GAMENAME_START + 48, y - 3, WZCOL_YELLOW);
-
-		remoteGameListHeaderCache.wzHeaderText_MapName.setText(_("Map Name"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_MapName.render(x - 2 + GAMES_MAPNAME_START + 48, y - 3, WZCOL_YELLOW);
-
-		remoteGameListHeaderCache.wzHeaderText_Players.setText(_("Players"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_Players.render(x - 2 + GAMES_PLAYERS_START, y - 3, WZCOL_YELLOW);
-
-		remoteGameListHeaderCache.wzHeaderText_Status.setText(_("Status"), font_small);
-		remoteGameListHeaderCache.wzHeaderText_Status.render(x - 2 + GAMES_STATUS_START + 48, y - 3, WZCOL_YELLOW);
-	}
 }
 
