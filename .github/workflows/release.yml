@@ -38,3 +38,10 @@ jobs:
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.DEPLOY_DISPATCH_ACCESS_TOKEN }} \
           --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+      - name: 'Trigger MSIX deployment'
+        if: (github.event.action == "published") || (github.event.action == "released")
+        run: |
+          curl -X POST https://api.github.com/repos/wz-packaging/wz-ms-packaging/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.DEPLOY_DISPATCH_ACCESS_TOKEN }} \
+          --data '{"event_type": "github_release_update", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
