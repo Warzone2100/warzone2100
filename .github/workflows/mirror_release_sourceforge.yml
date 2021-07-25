@@ -11,24 +11,7 @@ on:
 concurrency: sourceforge_deploy
 
 jobs:
-  # Wait for up to 10 minutes for previous workflow run to complete, abort if not done by then
-  pre-ci:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Prepare
-        run: |
-          # Sleep 15 seconds before executing turnstyle action to hopefully reduce the likelihood of a race condition
-          # Potential future fix: https://github.com/softprops/turnstyle/pull/31
-          sleep 15
-      - name: 'Block Concurrent Executions'
-        uses: past-due/turnstyle@v1
-        with:
-          poll-interval-seconds: 30
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   mirror-to-sourceforge:
-    needs: pre-ci
     environment: sourceforge_deploy
     # For this job to work, the following secrets must be set:
     # SF_SSH_KEY
