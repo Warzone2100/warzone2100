@@ -707,6 +707,11 @@ perFrameResources_t& buffering_mechanism::get_current_resources()
 	return *perFrameResources[currentFrame];
 }
 
+bool buffering_mechanism::isInitialized()
+{
+	return !perFrameResources.empty();
+}
+
 // MARK: buffering_mechanism
 
 void buffering_mechanism::init(vk::Device dev, const VmaAllocator& allocator, size_t swapChainImageCount, const uint32_t& graphicsQueueFamilyIndex, const vk::DispatchLoaderDynamic& vkDynLoader)
@@ -1371,8 +1376,16 @@ void VkBuf::allocateBufferObject(const std::size_t& size)
 
 VkBuf::~VkBuf()
 {
-	buffering_mechanism::get_current_resources().buffer_to_delete.emplace_back(std::move(object));
-	buffering_mechanism::get_current_resources().vmamemory_to_free.push_back(allocation);
+	// All buffers must be properly released before gfx_api::context::shutdown()
+	if (buffering_mechanism::isInitialized())
+	{
+		buffering_mechanism::get_current_resources().buffer_to_delete.emplace_back(std::move(object));
+		buffering_mechanism::get_current_resources().vmamemory_to_free.push_back(allocation);
+	}
+//	else
+//	{
+//		// ~VkBuf called too late! - probably after gfx_api::context::shutdown()
+//	}
 }
 
 void VkBuf::upload(const size_t & size, const void * data)
@@ -1489,10 +1502,17 @@ VkTexture::VkTexture(const VkRoot& root, const std::size_t& mipmap_count, const 
 VkTexture::~VkTexture()
 {
 	// All textures must be properly released before gfx_api::context::shutdown()
-	auto& frameResources = buffering_mechanism::get_current_resources();
-	frameResources.image_view_to_delete.emplace_back(std::move(view));
-	frameResources.image_to_delete.emplace_back(std::move(object));
-	frameResources.vmamemory_to_free.push_back(allocation);
+	if (buffering_mechanism::isInitialized())
+	{
+		auto& frameResources = buffering_mechanism::get_current_resources();
+		frameResources.image_view_to_delete.emplace_back(std::move(view));
+		frameResources.image_to_delete.emplace_back(std::move(object));
+		frameResources.vmamemory_to_free.push_back(allocation);
+	}
+//	else
+//	{
+//		// ~VkTexture called too late! - probably after gfx_api::context::shutdown()
+//	}
 }
 
 void VkTexture::bind() {}
