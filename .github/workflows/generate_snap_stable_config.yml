@@ -31,20 +31,10 @@ on:
         description: Git Ref of Snapcraft Config (Optional)    
         required: false
 
+concurrency: 'snap_stable_config_${{ github.event_name }}'
+
 jobs:
-  # Wait for up to 20 minutes for previous workflow run to complete, abort if not done by then
-  pre-ci:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: 'Block Concurrent'
-        uses: softprops/turnstyle@v1
-        with:
-          poll-interval-seconds: 30
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   generate_stable_snap_config:
-    needs: pre-ci
     name: 'Generate Snap Stable Config'
     runs-on: ubuntu-latest
     steps:
