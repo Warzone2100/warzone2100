@@ -552,7 +552,7 @@ void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD mo
 	}
 }
 
-static void closeMultiRequester()
+void closeMultiRequester()
 {
 	multiRequestUp = false;
 	resetReadyStatus(false);
