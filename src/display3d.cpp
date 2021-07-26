@@ -1320,6 +1320,7 @@ void shutdown3DView()
 	txtDebugStatus = WzText();
 	txtCurrentTime = WzText();
 	txtShowFPS = WzText();
+	txtUnits = WzText();
 	// show Samples text
 	txtShowSamples_Que = WzText();
 	txtShowSamples_Lst = WzText();
