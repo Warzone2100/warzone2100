@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-24 21:47\n"
+"PO-Revision-Date: 2021-07-26 12:19\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -7148,7 +7148,7 @@ msgstr "Target Terbaik: Struktur markas"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Target Terbaik: Struktur Markas, Emplasemen, Cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7169,7 +7169,7 @@ msgstr "Target Terbaik: Bunker dan Titik Keras"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base buildings"
-msgstr ""
+msgstr "Target Terbaik: Bunker, Pertahanan, Struktur Markas"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7202,7 +7202,7 @@ msgstr "Target Terbaik: Infanteri, struktur markas, kendaraan beroda"
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Target Terbaik: Infanteri, kendaraan beroda, dan hovercraft"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7211,7 +7211,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Target Terbaik: Tidak ada, kerusakan sedang terhadap semua target"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
@@ -9870,20 +9870,20 @@ msgstr "Peluru Meriam HVAPFSDS"
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Cannon Emplacement"
-msgstr ""
+msgstr "Emplasemen Meriam Velositas Hiper"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Cannon Hardpoint"
-msgstr ""
+msgstr "Titik Keras dengan Meriam Velositas Hiper"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Cannon Python Tracks"
-msgstr ""
+msgstr "HVC Cannon Python Tracks"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -13198,7 +13198,7 @@ msgstr "Menara baja dengan senapan mesin berat"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5270
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Menara baja dengan senapan mesin ganda"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13266,7 +13266,7 @@ msgstr "Cyborg Penembak Meriam Super"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5317
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Cyborg Penembak HVC Super"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13881,7 +13881,7 @@ msgstr "Menara Penjaga dengan Senapan Mesin Ganda"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5725
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Menara Senapan Mesin Ganda"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -16102,11 +16102,11 @@ msgstr "Debug"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Debug (editor level)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Debug (pilihan)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16749,11 +16749,11 @@ msgstr "Atur Nyala/Mati Pemetaan Debug"
 
 #: src/input/keyconfig.cpp:207
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Prioritaskan Pemetaan Debug"
 
 #: src/input/keyconfig.cpp:208
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Atur Nyala/Mati Editor Level"
 
 #: src/input/keyconfig.cpp:209
 msgid "Toggle display of droid path"
@@ -17183,15 +17183,15 @@ msgstr "Menyetel perbesaran radar ke %u"
 
 #: src/keybind.cpp:1127
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Mengatur prioritas pemetaan debug: "
 
 #: src/keybind.cpp:1137
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Menonaktifkan editor level"
 
 #: src/keybind.cpp:1142
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Mengaktifkan editor level"
 
 #: src/keybind.cpp:1202
 msgid "God Mode ON"
