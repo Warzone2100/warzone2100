@@ -166,6 +166,10 @@ if(MINGW AND ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
 	add_link_options("-Wl,-pdb=")
 	set(WZ_WIN_HAS_PDB TRUE)
 endif()
+if(MINGW)
+	# Set default stack size to better match other platforms
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,8000000")
+endif()
 
 # Treat source files as UTF-8 (unless they have a BOM) (MSVC)
 # NOTE: For MSVC, this also sets the executable character set.
