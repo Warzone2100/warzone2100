@@ -219,13 +219,17 @@ void recvOptions(NETQUEUE queue)
 		buildMapList();
 	}
 
-	bool haveData = true;
-	auto requestFile = [&haveData](Sha256 &hash, char const *filename) {
+	enum class FileRequestResult {
+		StartingDownload,
+		DownloadInProgress,
+		FileExists,
+		FailedToOpenFileForWriting
+	};
+	auto requestFile = [](Sha256 &hash, char const *filename) -> FileRequestResult {
 		if (std::any_of(NetPlay.wzFiles.begin(), NetPlay.wzFiles.end(), [&hash](WZFile const &file) { return file.hash == hash; }))
 		{
 			debug(LOG_INFO, "Already requested file, continue waiting.");
-			haveData = false;
-			return false;  // Downloading the file already
+			return FileRequestResult::DownloadInProgress;  // Downloading the file already
 		}
 
 		if (!PHYSFS_exists(filename))
@@ -238,15 +242,15 @@ void recvOptions(NETQUEUE queue)
 		}
 		else
 		{
-			pal_Init(); // Palette could be modded.
-			return false;  // Have the file already.
+			pal_Init(); // Palette could be modded. // Why is this here - isn't there a better place for it?
+			return FileRequestResult::FileExists;  // Have the file already.
 		}
 
 		PHYSFS_file *pFileHandle = PHYSFS_openWrite(filename);
 		if (pFileHandle == nullptr)
 		{
 			debug(LOG_ERROR, "Failed to open %s for writing: %s", filename, WZ_PHYSFS_getLastError());
-			return false;
+			return FileRequestResult::FailedToOpenFileForWriting;
 		}
 
 		NetPlay.wzFiles.emplace_back(pFileHandle, filename, hash);
@@ -256,8 +260,7 @@ void recvOptions(NETQUEUE queue)
 		NETbin(hash.bytes, hash.Bytes);
 		NETend();
 
-		haveData = false;
-		return true;  // Starting download now.
+		return FileRequestResult::StartingDownload;  // Starting download now.
 	};
 
 	LEVEL_DATASET *mapData = levFindDataSet(game.map, &game.hash);
@@ -275,15 +278,25 @@ void recvOptions(NETQUEUE queue)
 		char filename[256];
 		ssprintf(filename, "maps/%dc-%s-%s.wz", game.maxPlayers, mapName, game.hash.toString().c_str());  // Wonder whether game.maxPlayers is initialised already?
 
-		if (requestFile(game.hash, filename))
+		auto requestResult = requestFile(game.hash, filename);
+		switch (requestResult)
 		{
-			debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
-			addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
-		}
-		else
-		{
-			debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
-			abort();
+			case FileRequestResult::StartingDownload:
+				debug(LOG_INFO, "Map was not found, requesting map %s from host, type %d", game.map, game.isMapMod);
+				addConsoleMessage("MAP REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				break;
+			case FileRequestResult::DownloadInProgress:
+				// do nothing - just wait
+				break;
+			case FileRequestResult::FileExists:
+				debug(LOG_FATAL, "Can't load map %s, even though we downloaded %s", game.map, filename);
+				abort();
+				break;
+			case FileRequestResult::FailedToOpenFileForWriting:
+				// TODO: How best to handle? Ideally, message + back out of lobby?
+				debug(LOG_FATAL, "Failed to open file for writing - unable to download file: %s", filename);
+				abort();
+				break;
 		}
 	}
 
@@ -292,10 +305,24 @@ void recvOptions(NETQUEUE queue)
 		char filename[256];
 		ssprintf(filename, "mods/downloads/%s", hash.toString().c_str());
 
-		if (requestFile(hash, filename))
+		auto requestResult = requestFile(hash, filename);
+		switch (requestResult)
 		{
-			debug(LOG_INFO, "Mod was not found, requesting mod %s from host", hash.toString().c_str());
-			addConsoleMessage("MOD REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+			case FileRequestResult::StartingDownload:
+				debug(LOG_INFO, "Mod was not found, requesting mod %s from host", hash.toString().c_str());
+				addConsoleMessage("MOD REQUESTED!", DEFAULT_JUSTIFY, SYSTEM_MESSAGE);
+				break;
+			case FileRequestResult::DownloadInProgress:
+				// do nothing - just wait
+				break;
+			case FileRequestResult::FileExists:
+				// Mod already exists / downloaded
+				break;
+			case FileRequestResult::FailedToOpenFileForWriting:
+				// TODO: How best to handle? Ideally, message + back out of lobby?
+				debug(LOG_FATAL, "Failed to open file for writing - unable to download file: %s", filename);
+				abort();
+				break;
 		}
 	}
 
