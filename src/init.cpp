@@ -921,6 +921,7 @@ bool frontendShutdown()
 		return false;
 	}
 
+	changeTitleUI(nullptr);
 	interfaceShutDown();
 
 	//do this before shutting down the iV library

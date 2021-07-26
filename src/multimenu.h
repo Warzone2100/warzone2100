@@ -29,6 +29,7 @@
 
 // requester
 void addMultiRequest(const char *searchDir, const char *fileExtension, UDWORD id, UBYTE numPlayers, std::string const &searchString = std::string());
+void closeMultiRequester();
 
 extern bool multiRequestUp;
 extern std::shared_ptr<W_SCREEN> psRScreen; // requester stuff.

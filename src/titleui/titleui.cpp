@@ -41,8 +41,13 @@ void WzTitleUI::screenSizeDidChange(unsigned int oldWidth, unsigned int oldHeigh
 void changeTitleUI(std::shared_ptr<WzTitleUI> target)
 {
 	wzTitleUICurrent = target;
-	// Deletes the backdrop, which in turn deletes the rest of the UI from whatever was on screen before this UI
-	widgDelete(psWScreen, FRONTEND_BACKDROP);
+	if (psWScreen)
+	{
+		// Deletes the backdrop, which in turn deletes the rest of the UI from whatever was on screen before this UI
+		widgDelete(psWScreen, FRONTEND_BACKDROP);
+	}
 	if (target)
+	{
 		target->start();
+	}
 }
