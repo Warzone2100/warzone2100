@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-25 10:31\n"
+"PO-Revision-Date: 2021-07-26 12:19\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -7148,7 +7148,7 @@ msgstr "Bersagli Migliori: strutture della base"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Bersagli migliori: strutture, fortificazioni e cyborg"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7169,7 +7169,7 @@ msgstr "Bersagli migliori: bunker e postazioni"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base buildings"
-msgstr ""
+msgstr "Bersagli migliori: bunker, difese ed edifici"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7202,7 +7202,7 @@ msgstr "Bersagli migliori: fanteria, strutture e veicoli su ruote"
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Bersagli migliori: fanteria, veicoli a ruote e hover"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7211,7 +7211,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Bersagli migliori: nessuno. Danni medi a tutti i bersagli"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
@@ -9870,20 +9870,20 @@ msgstr "Colpi HVAPFSDS per Cannone"
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Cannon Emplacement"
-msgstr ""
+msgstr "Fortificazione con cannone HCV"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Cannon Hardpoint"
-msgstr ""
+msgstr "Postazione con cannone HCV"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Cannon Python Tracks"
-msgstr ""
+msgstr "Cannone HCV Python su ruote"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -13198,7 +13198,7 @@ msgstr "Torre d'acciaio con mitragliatrice"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5270
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Torre in acciaio con mitragliatrice doppia"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13266,7 +13266,7 @@ msgstr "Cyborg con cannone super pesante"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5317
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Cyborg con super HVC"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13881,7 +13881,7 @@ msgstr "Torre di Guardia con Doppia mitragliatrice"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5725
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Torre con mitragliatrice doppia"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -16106,11 +16106,11 @@ msgstr "Debug"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Debug (editor di livelli)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Debug (selezione)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16697,11 +16697,11 @@ msgstr "Seleziona tutti i carri da Riparazione"
 
 #: src/input/keyconfig.cpp:191
 msgid "Select all Sensor Units"
-msgstr "Seleziona tutte le unità con sensori"
+msgstr "Seleziona tutte le unità sensorie"
 
 #: src/input/keyconfig.cpp:192
 msgid "Select all Sensor Units without group"
-msgstr ""
+msgstr "Seleziona tutte le unità sensorie senza gruppo"
 
 #: src/input/keyconfig.cpp:193
 msgid "Select all Trucks"
@@ -16757,7 +16757,7 @@ msgstr ""
 
 #: src/input/keyconfig.cpp:208
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Attiva/disattiva editor di livelli"
 
 #: src/input/keyconfig.cpp:209
 msgid "Toggle display of droid path"
@@ -17191,11 +17191,11 @@ msgstr ""
 
 #: src/keybind.cpp:1137
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Disabilita l'editor di livelli"
 
 #: src/keybind.cpp:1142
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Abilita l'editor di livelli"
 
 #: src/keybind.cpp:1202
 msgid "God Mode ON"
