@@ -306,8 +306,7 @@ function activityAlert()
 	if (playersTeam[selectedPlayer].lastActivity + IDLETIME / 2 < gameTime)
 	{
 		console(
-			_(
-				"Playing passively will lead to defeat. Actions that are considered: - unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage")
+			_("Playing passively will lead to defeat. Actions that are considered: - unit building - research completion - construction of base structures (factories, power plants, laboratories, modules and oil derricks) - dealing damage")
 		);
 		if (getMissionTime() > IDLETIME)
 		{
