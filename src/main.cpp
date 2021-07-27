@@ -1481,6 +1481,16 @@ static bool initializeCrashHandlingContext(optional<video_backend> gfxbackend)
 	}
 	crashHandlingProviderSetTag("wz.gfx_backend", gfxBackendString);
 	auto backendInfo = gfx_api::context::get().getBackendGameInfo();
+	// Truncate absurdly long backend info values (if needed - common culprit is GL_EXTENSIONS)
+	const size_t MAX_BACKENDINFO_VALUE_LENGTH = 2048;
+	for (auto& it : backendInfo)
+	{
+		if (it.second.size() > MAX_BACKENDINFO_VALUE_LENGTH)
+		{
+			size_t remainingLength = it.second.size() - MAX_BACKENDINFO_VALUE_LENGTH;
+			it.second = it.second.substr(0, MAX_BACKENDINFO_VALUE_LENGTH) + "[...] (+ " + std::to_string(remainingLength) + " chars)";
+		}
+	}
 	nlohmann::json jsonBackendInfo = backendInfo;
 	crashHandlingProviderSetContext("wz.gfx", jsonBackendInfo);
 
