@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-24 21:48\n"
+"PO-Revision-Date: 2021-07-27 00:28\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4381,7 +4381,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001.txa:10
 msgid "Team Alpha nears its destination"
-msgstr ""
+msgstr "Команда Альфа наближається до цілі"
 
 #: data/base/sequenceaudio/cam1/c001.txt:1
 msgid "Transport destinations follow:"
@@ -4393,7 +4393,7 @@ msgstr "Альфа - Західний Сектор...."
 
 #: data/base/sequenceaudio/cam1/c001.txt:4
 msgid "Alpha you are cleared for take-off."
-msgstr ""
+msgstr "Альфа, можете розпочинати."
 
 #: data/base/sequenceaudio/cam1/c001.txt:5
 msgid "Good luck and good hunting."
@@ -4417,7 +4417,7 @@ msgstr "Вхідне Повідомлення"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:3
 msgid "Transmission from Beta Base"
-msgstr ""
+msgstr "Трансляція з Бази Бета"
 
 #: data/base/sequenceaudio/cam1/c001end.txt:4
 msgid "Mayday! Mayday!"
@@ -4425,7 +4425,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/c001end.txt:5
 msgid "Please assist!..."
-msgstr ""
+msgstr "Прошу підтримки!..."
 
 #: data/base/sequenceaudio/cam1/cam1ccom.txt:4
 msgid "Commander, we have recovered a command turret from the New Paradigm."
@@ -4471,7 +4471,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:1
 msgid "Open your systems to me."
-msgstr ""
+msgstr "Надайте мені доступ до Ваших систем."
 
 #: data/base/sequenceaudio/cam1/cam1out2.txt:2
 msgid "Let me meld with your machines and cyborgs."
