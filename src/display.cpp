@@ -2138,14 +2138,10 @@ static void dealWithRMB()
 					}
 				}
 			}
-			else
+			else if (bMultiPlayer && isHumanPlayer(psDroid->player))
 			{
-				handleDeselectionClick();
-				if (bMultiPlayer && isHumanPlayer(psDroid->player))
-				{
-					console("%s", droidGetName(psDroid));
-					FeedbackOrderGiven();
-				}
+				console("%s", droidGetName(psDroid));
+				FeedbackOrderGiven();
 			}
 		}	// end if its a droid
 		else if (psClickedOn->type == OBJ_STRUCTURE)
@@ -2208,13 +2204,10 @@ static void dealWithRMB()
 						intObjectSelected((BASE_OBJECT *)psStructure);
 					}
 				}
-			} else {
-				handleDeselectionClick();
 			}
 		}	// end if its a structure
 		else
 		{
-			handleDeselectionClick();
 			/* And if it's not a feature, then we're in trouble! */
 			ASSERT(psClickedOn->type == OBJ_FEATURE, "Weird selection from RMB - type of clicked object is %d", (int)psClickedOn->type);
 		}
