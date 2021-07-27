@@ -457,7 +457,7 @@ bool loadDroidTemplates(const char *filename)
 					DROID_TEMPLATE *psCurr = &*it;
 					if (psCurr->multiPlayerID == design.multiPlayerID)
 					{
-						debug(LOG_ERROR, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getStatsName(&design), playerIdx);
+						debug(LOG_WARNING, "Design id:%d (%s) *NOT* added to UI list (duplicate), player= %d", design.multiPlayerID, getStatsName(&design), playerIdx);
 						break;
 					}
 				}
