@@ -208,6 +208,10 @@ class Team
 	setState(state)
 	{
 		this.state = state;
+		if (alliancesType == ALLIANCES)
+		{
+			return; // dont open map in ALLIANCES mode
+		}
 		this.players.forEach(
 			(player) =>
 			{
@@ -269,9 +273,9 @@ function inOneTeam(playnum, splaynum)
 	return true;
 }
 
-
-function conditions_eventGameInit()
+function createTeams()
 {
+	teams = [];
 	const inTeamPlayNums = new Array(maxPlayers).fill(false);
 	for (let playNum = 0; playNum < maxPlayers; playNum++)
 	{
@@ -292,7 +296,6 @@ function conditions_eventGameInit()
 		teams.push(new Team(members));
 	}
 
-	setTimer("activityAlert", 10*1000);
 }
 
 function activityAlert()
@@ -317,6 +320,16 @@ function activityAlert()
 	if (playersTeam[selectedPlayer].lastActivity + IDLETIME / 2 > gameTime)
 	{
 		setMissionTime(-1); // remove timer widget
+	}
+}
+
+function conditions_eventGameInit()
+{
+	createTeams();
+	setTimer("activityAlert", 10*1000);
+	if (alliancesType == ALLIANCES)
+	{
+		setTimer("createTeams", 60*1000); //rebild teams with ALLIANCES mode
 	}
 }
 
