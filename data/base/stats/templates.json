@@ -1348,7 +1348,7 @@
 	"P0cam3PyHPVcanTrk": {
 		"body": "Body11ABT",
 		"id": "P0cam3PyHPVcanTrk",
-		"name": "HVC Cannon Python Tracks",
+		"name": "HVC Python Tracks",
 		"propulsion": "tracked01",
 		"type": "DROID",
 		"weapons": [
