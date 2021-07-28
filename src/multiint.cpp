@@ -4585,6 +4585,7 @@ WzMultiplayerOptionsTitleUI::~WzMultiplayerOptionsTitleUI()
 {
 	closeMultiRequester();
 	widgRemoveOverlayScreen(psInlineChooserOverlayScreen);
+	closeAllChoosers();
 	bInActualHostedLobby = false;
 }
 
