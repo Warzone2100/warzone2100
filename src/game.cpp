@@ -4871,7 +4871,7 @@ static nlohmann::json writeDroid(DROID *psCurr, bool onMission, int &counter)
 			droidObj["rotation/" + numStr] = toVector(psCurr->asWeaps[i].rot);
 		}
 	}
-	for (unsigned i = 0; i < psCurr->numWeaps; i++)
+	for (unsigned i = 0; i < MAX_WEAPONS; i++)
 	{
 		setIniBaseObject(droidObj, "actionTarget/" + WzString::number(i), psCurr->psActionTarget[i]);
 	}
