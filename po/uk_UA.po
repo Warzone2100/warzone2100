@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-27 00:28\n"
+"PO-Revision-Date: 2021-07-28 15:27\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk_UA\n"
@@ -4511,12 +4511,12 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:4
 msgid "You may defeat me here, but I shall rise again."
-msgstr ""
+msgstr "Ви можете перемогти мене, але я воскресну знову."
 
 #: data/base/sequenceaudio/cam1/cam1out4.txt:5
 #: data/base/sequenceaudio/cam2/cam2_2n2.txt:1
 msgid "As I once cleansed the world with fire, I will destroy you and your puny Project!!"
-msgstr ""
+msgstr "Я знищу твоє нікчемне Творіння, як колись знищив цей світ вогнем!!"
 
 #: data/base/sequenceaudio/cam1/cam1out5.txt:4
 msgid "Nexus then removed itself from the system, destroying its memory banks, and removing all traces of its external connections."
