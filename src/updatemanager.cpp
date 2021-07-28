@@ -21,6 +21,7 @@
 using json = nlohmann::json;
 
 #include "updatemanager.h"
+#include "version.h"
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -70,6 +71,8 @@ private:
 const std::string WZ_UPDATES_VERIFY_KEY = "5d9P+Z1SirsWSsYICZAr7QFlPB01s6tzXkhPZ+X/FQ4=";
 const std::string WZ_DEFAULT_UPDATE_LINK = "https://warzone2100.github.io/update-data/redirect/updatelink.html";
 #define WZ_UPDATES_CACHE_DIR "cache"
+#define WZ_CACHE_INFO_JSON_PATH WZ_UPDATES_CACHE_DIR "/cache_info.json"
+#define WZ_CACHE_INFO_JSON_WZVERSION_KEY "wz_version"
 #define WZ_UPDATES_JSON_CACHE_PATH WZ_UPDATES_CACHE_DIR "/wz2100_updates.json"
 #define WZ_UPDATES_JSON_MAX_SIZE (1 << 25)
 
@@ -299,11 +302,12 @@ WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json
 	return ProcessResult::NO_MATCHING_CHANNEL;
 }
 
-static json loadUpdatesJsonObject(const std::string updateJsonStr)
+template<typename T>
+static json loadUpdatesJsonObject(T&& updateJsonStr)
 {
 	json updateData;
 	try {
-		updateData = json::parse(updateJsonStr);
+		updateData = json::parse(std::forward<T>(updateJsonStr));
 	}
 	catch (const std::exception &e) {
 		std::string errorStr = e.what();
@@ -325,10 +329,64 @@ static json loadUpdatesJsonObject(const std::string updateJsonStr)
 	return updateData;
 }
 
+static bool cacheInfoIsUsable()
+{
+	// Check if cache was written by the same version of WZ - if not, ignore it
+	if (PHYSFS_exists(WZ_CACHE_INFO_JSON_PATH))
+	{
+		try {
+			// Open the file + read the data
+			PHYSFS_file *fileHandle = PHYSFS_openRead(WZ_CACHE_INFO_JSON_PATH);
+			PHYSFS_sint64 filesize = PHYSFS_fileLength(fileHandle);
+			if (filesize <= 0)
+			{
+				// Invalid file size
+				throw std::runtime_error("Invalid filesize");
+			}
+			std::vector<char> fileData(static_cast<size_t>(filesize + 1), '\0');
+			if (WZ_PHYSFS_readBytes(fileHandle, fileData.data(), static_cast<PHYSFS_uint32>(filesize)) != filesize)
+			{
+				// Read failed
+				throw std::runtime_error("Read failed");
+			}
+			PHYSFS_close(fileHandle);
+
+			// Parse the json
+			json updateData = loadUpdatesJsonObject(fileData.data());
+
+			// Retrieve the version of WZ used to write the cache
+			auto it = updateData.find(WZ_CACHE_INFO_JSON_WZVERSION_KEY);
+			if (it == updateData.end())
+			{
+				return false;
+			}
+
+			if (!it.value().is_string())
+			{
+				return false;
+			}
+			if (it.value().get<std::string>() != version_getBuildIdentifierReleaseString())
+			{
+				return false;
+			}
+
+			// passed all checks
+			return true;
+		}
+		catch (const std::exception &e) {
+			std::string errorStr = e.what();
+			wzAsyncExecOnMainThread([errorStr]{
+				debug(LOG_WZ, "Cache info file: %s", errorStr.c_str());
+			});
+		}
+	}
+	return false;
+}
+
 // May be called from a background thread
 void WzUpdateManager::initUpdateCheck()
 {
-	if (PHYSFS_exists(WZ_UPDATES_JSON_CACHE_PATH))
+	if (PHYSFS_exists(WZ_UPDATES_JSON_CACHE_PATH) && cacheInfoIsUsable())
 	{
 		try {
 			// Open the file + read the data
@@ -474,6 +532,23 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 					// Failed to write data to file
 					wzAsyncExecOnMainThread([]{
 						debug(LOG_ERROR, "Failed to write cache file: %s", WZ_UPDATES_JSON_CACHE_PATH);
+					});
+				}
+				PHYSFS_close(fileHandle);
+			}
+			// Also write out the cache info file (which contains the version of WZ used to write the cache)
+			json cacheInfoObj = json::object();
+			cacheInfoObj[WZ_CACHE_INFO_JSON_WZVERSION_KEY] = version_getBuildIdentifierReleaseString();
+			std::string cacheInfoData = cacheInfoObj.dump(2, ' ', true, json::error_handler_t::replace);
+			size = static_cast<PHYSFS_uint32>(cacheInfoData.size());
+			fileHandle = PHYSFS_openWrite(WZ_CACHE_INFO_JSON_PATH);
+			if (fileHandle)
+			{
+				if (WZ_PHYSFS_writeBytes(fileHandle, cacheInfoData.data(), size) != size)
+				{
+					// Failed to write data to file
+					wzAsyncExecOnMainThread([]{
+						debug(LOG_ERROR, "Failed to write cache info file: %s", WZ_CACHE_INFO_JSON_PATH);
 					});
 				}
 				PHYSFS_close(fileHandle);
