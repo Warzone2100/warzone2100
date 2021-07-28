@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-24 21:47\n"
+"PO-Revision-Date: 2021-07-28 03:31\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -7148,7 +7148,7 @@ msgstr "Beste Ziele: Basisgebäude"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Beste Ziele: Basisgebäude, Stellungen, Cyborgs"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7169,7 +7169,7 @@ msgstr "Beste Ziele: Bunker und Aufhängungen"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base buildings"
-msgstr ""
+msgstr "Beste Ziele: Bunker, Verteidigungsanlagen, Basisgebäude"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7202,7 +7202,7 @@ msgstr "Beste Ziele: Infanterie, Basisgebäude, Radfahrzeuge"
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Beste Ziele: Infanterie, Rad- und Hoverfahrzeuge"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7211,7 +7211,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Beste Ziele: Keine. Durchschnittlicher Schaden gegen alle Ziele"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
@@ -9870,20 +9870,20 @@ msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelges
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Cannon Emplacement"
-msgstr ""
+msgstr "Stellung mit Hochgeschwindigkeitskanone"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Cannon Hardpoint"
-msgstr ""
+msgstr "Aufhängung mit Hochgeschwindigkeitskanone"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Cannon Python Tracks"
-msgstr ""
+msgstr "Hochgeschwindigkeitskanone Python Ketten"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -13198,7 +13198,7 @@ msgstr "Stahlturm mit Maschinengewehr"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5270
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Stahlturm mit Zwillingsmaschinengewehr"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13266,7 +13266,7 @@ msgstr "Schwerer Superschütze"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5317
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Hochgeschwindigkeitskanonensupercyborg"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13881,7 +13881,7 @@ msgstr "Wachturm mit Zwillingsmaschinengewehr"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5725
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Turm mit Zwillingsmaschinengewehr"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -16107,11 +16107,11 @@ msgstr "Debug"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Debug (Level Editor)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Debug (Auswahl)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16754,11 +16754,11 @@ msgstr "Debug-Tastaturbelegung umschalten"
 
 #: src/input/keyconfig.cpp:207
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Debug Tastenbelegungen priorisieren"
 
 #: src/input/keyconfig.cpp:208
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Level Editor umschalten"
 
 #: src/input/keyconfig.cpp:209
 msgid "Toggle display of droid path"
@@ -17188,15 +17188,15 @@ msgstr "Setze Minikartenzoom auf %u"
 
 #: src/keybind.cpp:1127
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Priorität der Debug Tastenbelegungen umschalten: "
 
 #: src/keybind.cpp:1137
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Level Editor deaktivieren"
 
 #: src/keybind.cpp:1142
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Level Editor aktivieren"
 
 #: src/keybind.cpp:1202
 msgid "God Mode ON"
