@@ -93,6 +93,16 @@ static void runScheduledTasks()
 	}
 }
 
+static void deleteOldWidgets()
+{
+	while (!widgetDeletionQueue.empty())
+	{
+		std::shared_ptr<WIDGET> guiltyWidget = widgetDeletionQueue.front();
+		widgDelete(guiltyWidget.get());
+		widgetDeletionQueue.pop_front();
+	}
+}
+
 static inline void _widgDebugAssertIfRunningScreen(const char *function)
 {
 #ifdef DEBUG
@@ -135,6 +145,7 @@ void widgShutDown(void)
 	overlays.clear();
 	overlaySet.clear();
 	overlaysToDelete.clear();
+	deleteOldWidgets();
 #ifdef DEBUG
 	if (!debugLiveWidgets.empty())
 	{
@@ -317,16 +328,6 @@ bool isMouseClickDownOnScreenOverlayChild()
 {
 	if (!psClickDownWidgetScreen) { return false; }
 	return isScreenARegisteredOverlay(psClickDownWidgetScreen);
-}
-
-static void deleteOldWidgets()
-{
-	while (!widgetDeletionQueue.empty())
-	{
-		std::shared_ptr<WIDGET> guiltyWidget = widgetDeletionQueue.front();
-		widgDelete(guiltyWidget.get());
-		widgetDeletionQueue.pop_front();
-	}
 }
 
 W_INIT::W_INIT()
