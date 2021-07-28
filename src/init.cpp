@@ -922,6 +922,10 @@ bool frontendShutdown()
 	}
 
 	changeTitleUI(nullptr);
+	if (challengesUp)
+	{
+		closeChallenges(); // TODO: Ideally this would not be required here (refactor challenge.cpp / frontend.cpp?)
+	}
 	interfaceShutDown();
 
 	//do this before shutting down the iV library
