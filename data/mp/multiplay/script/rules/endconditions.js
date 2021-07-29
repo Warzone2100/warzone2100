@@ -15,7 +15,7 @@ const STRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY]; // structures in which 
 // - construction of base structures (factories, power plants, laboratories, modules and oil rigs)
 // - dealing damage
 const IDLETIME = 5 * 60 * 1000;
-const BASESTRUCTS = {[FACTORY]: true, [CYBORG_FACTORY]: true, [VTOL_FACTORY]: true, [HQ]: true, [RESOURCE_EXTRACTOR]: true, [POWER_GEN]: true, [RESEARCH_LAB]: true};
+const BASESTRUCTS = [FACTORY, CYBORG_FACTORY, VTOL_FACTORY, HQ, RESOURCE_EXTRACTOR, POWER_GEN, RESEARCH_LAB];
 
 const SPOTTER = {
 	x: mapWidth / 2,
@@ -199,7 +199,7 @@ class Team
 
 	updateState()
 	{
-		if (this.state == STATE_contender && !this.canPlay())
+		if (this.state === STATE_contender && !this.canPlay())
 		{
 			this.setState(STATE_loser);
 		}
@@ -208,7 +208,7 @@ class Team
 	setState(state)
 	{
 		this.state = state;
-		if (alliancesType == ALLIANCES)
+		if (alliancesType === ALLIANCES)
 		{
 			return; // dont open map in ALLIANCES mode
 		}
@@ -223,7 +223,7 @@ class Team
 
 	isContender()
 	{
-		return this.state == STATE_contender;
+		return this.state === STATE_contender;
 	}
 }
 
@@ -237,7 +237,7 @@ function checkEndConditions()
 	{
 		return team.isContender();
 	}).length;
-	if (numTeamContender == 1)
+	if (numTeamContender === 1)
 	{// game end
 		teams.find((team) =>
 		{
@@ -252,18 +252,18 @@ function inOneTeam(playnum, splaynum)
 //	FIXME allianceExistsBetween dont correct if leave player in ALLIANCES_UNSHARED, ALLIANCES_TEAMS mode
 //	and  team is garbage in NO_ALLIANCES, ALLIANCES mode
 	if (
-		(alliancesType == ALLIANCES_UNSHARED || alliancesType == ALLIANCES_TEAMS) &&
+		(alliancesType === ALLIANCES_UNSHARED || alliancesType === ALLIANCES_TEAMS) &&
     playerData[playnum].team != playerData[splaynum].team
 	)
 	{
 		return false;
 	}
-	else if (alliancesType == NO_ALLIANCES && playnum != splaynum)
+	else if (alliancesType === NO_ALLIANCES && playnum != splaynum)
 	{
 		return false;
 	}
 	else if (
-		alliancesType == ALLIANCES &&
+		alliancesType === ALLIANCES &&
     !allianceExistsBetween(playnum, splaynum)
 	)
 	{
@@ -280,7 +280,7 @@ function createTeams()
 	const inTeamPlayNums = new Array(maxPlayers).fill(false);
 	for (let playNum = 0; playNum < maxPlayers; playNum++)
 	{
-		if (inTeamPlayNums[playNum] != false)
+		if (inTeamPlayNums[playNum] === true)
 		{
 			continue;
 		}
@@ -288,7 +288,7 @@ function createTeams()
 		const members =[playNum];
 		for (let splayNum = 0; splayNum < maxPlayers; splayNum++)
 		{
-			if ( inTeamPlayNums[splayNum] == false && inOneTeam(playNum, splayNum) == true)
+			if ( inTeamPlayNums[splayNum] === false && inOneTeam(playNum, splayNum) === true)
 			{
 				members.push(splayNum);
 				inTeamPlayNums[splayNum] = true;
@@ -328,7 +328,7 @@ function conditions_eventGameInit()
 {
 	createTeams();
 	setTimer("activityAlert", 10*1000);
-	if (alliancesType == ALLIANCES)
+	if (alliancesType === ALLIANCES)
 	{
 		setTimer("createTeams", 60*1000); //rebild teams with ALLIANCES mode
 	}
@@ -343,7 +343,7 @@ function conditions_eventDroidBuilt(droid)
 }
 function conditions_eventStructureBuilt(structure)
 {
-	if (structure.player != scavengerPlayer && BASESTRUCTS[structure.stattype] == true)
+	if (structure.player != scavengerPlayer && BASESTRUCTS.includes(structure.stattype) === true)
 	{
 		playersTeam[structure.player].lastActivity = gameTime;
 	}
