@@ -180,8 +180,8 @@ class Team
 		);
 	}
 
-	canPlay()
-	{ // TODO skip check if no new events.
+	canPlay() // TODO skip check if no new events.
+	{
 		if (!this.activeGame())
 		{
 			return false;
@@ -237,8 +237,8 @@ function checkEndConditions()
 	{
 		return team.isContender();
 	}).length;
-	if (numTeamContender === 1)
-	{// game end
+	if (numTeamContender === 1) // game end
+	{
 		teams.find((team) =>
 		{
 			return team.isContender();
@@ -246,11 +246,11 @@ function checkEndConditions()
 	}
 }
 
-
-function inOneTeam(playnum, splaynum)
-{
 //	FIXME allianceExistsBetween dont correct if leave player in ALLIANCES_UNSHARED, ALLIANCES_TEAMS mode
 //	and  team is garbage in NO_ALLIANCES, ALLIANCES mode
+function inOneTeam(playnum, splaynum)
+{
+
 	if (
 		(alliancesType === ALLIANCES_UNSHARED || alliancesType === ALLIANCES_TEAMS) &&
     playerData[playnum].team != playerData[splaynum].team
@@ -330,7 +330,7 @@ function conditions_eventGameInit()
 	setTimer("activityAlert", 10*1000);
 	if (alliancesType === ALLIANCES)
 	{
-		setTimer("createTeams", 60*1000); //rebild teams with ALLIANCES mode
+		setTimer("createTeams", 10*1000); //rebild teams with ALLIANCES mode
 	}
 }
 
