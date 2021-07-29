@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-29 03:22\n"
+"PO-Revision-Date: 2021-07-29 15:23\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -409,7 +409,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:34
 #: data/base/sequenceaudio/cam2/c002.txa:18
 msgid "New technologies are available."
-msgstr "Нови технологии са налични."
+msgstr "Налични са нови технологии."
 
 #: data/base/messages/strings/cam2strings.txt:14
 msgid "We are currently detecting coded bitstream signals."
@@ -16033,7 +16033,7 @@ msgstr ""
 
 #: src/ingameop.cpp:323
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: src/ingameop.cpp:402
 msgid "Host has quit the game!"
@@ -16963,7 +16963,7 @@ msgstr ""
 #. TRANSLATORS: Should be a fairly short string - space is limited. Use an abbreviation if necessary.
 #: src/integrations/wzdiscordrpc.cpp:912
 msgid "Alliances:"
-msgstr ""
+msgstr "Съюзи:"
 
 #: src/integrations/wzdiscordrpc.cpp:928
 msgid "In Menu"
@@ -16990,7 +16990,7 @@ msgstr ""
 #: src/intelmap.cpp:215
 #: src/keybind.cpp:1262
 msgid "PAUSED"
-msgstr ""
+msgstr "НА ПАУЗА"
 
 #: src/intelmap.cpp:1047
 msgid "New Intelligence Report"
@@ -17586,7 +17586,7 @@ msgstr ""
 #: src/multiint.cpp:1334
 #: src/titleui/gamefind.cpp:579
 msgid "Game Name"
-msgstr ""
+msgstr "Име на играта"
 
 #: src/multiint.cpp:1335
 msgid "One-Player Skirmish"
@@ -17755,7 +17755,7 @@ msgstr ""
 
 #: src/multiint.cpp:2563
 msgid "PLAYERS"
-msgstr ""
+msgstr "ИГРАЧИ"
 
 #: src/multiint.cpp:2599
 msgid "Click to change to this slot"
@@ -17999,11 +17999,11 @@ msgstr ""
 
 #: src/multimenu.cpp:680
 msgid "Units"
-msgstr "Бойни единици"
+msgstr "Единици"
 
 #: src/multimenu.cpp:697
 msgid "Structs"
-msgstr "Структури"
+msgstr "Съоръжения"
 
 #: src/multimenu.cpp:709
 msgid "Sent/Received per sec —"
@@ -18030,7 +18030,7 @@ msgstr ""
 
 #: src/multimenu.cpp:1023
 msgid "Channel"
-msgstr ""
+msgstr "Канал"
 
 #: src/multimenu.cpp:1037
 msgid "Toggle Alliance State"
@@ -18074,7 +18074,7 @@ msgstr ""
 
 #: src/multiplay.cpp:270
 msgid "Invalid data!"
-msgstr ""
+msgstr "Невалидни данни!"
 
 #: src/multiplay.cpp:872
 #, c-format
@@ -18096,7 +18096,7 @@ msgstr ""
 #: src/multiplay.cpp:1496
 #, c-format
 msgid "Beacon %d"
-msgstr ""
+msgstr "Маяк %d"
 
 #: src/multiplay.cpp:1603
 #, c-format
@@ -18170,15 +18170,15 @@ msgstr ""
 #: src/musicmanager.cpp:534
 #: src/musicmanager.cpp:680
 msgid "Album"
-msgstr ""
+msgstr "Албум"
 
 #: src/musicmanager.cpp:545
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: src/musicmanager.cpp:671
 msgid "Title"
-msgstr ""
+msgstr "Заглавие"
 
 #: src/musicmanager.cpp:860
 msgid "MUSIC MANAGER"
@@ -18186,11 +18186,11 @@ msgstr ""
 
 #: src/notifications.cpp:726
 msgid "Dismiss"
-msgstr ""
+msgstr "Отхвърляне"
 
 #: src/notifications.cpp:807
 msgid "Do not show again"
-msgstr ""
+msgstr "Не показвай отново"
 
 #: src/order.cpp:778
 msgid "We can't do that! We must be a Cyborg unit to use a Cyborg Transport!"
@@ -18213,17 +18213,17 @@ msgstr "Собствени единици: %u"
 #: src/scores.cpp:103
 #, c-format
 msgid "Enemy Units: %u"
-msgstr "Противникови единици: %u"
+msgstr "Вражески единици: %u"
 
 #: src/scores.cpp:104
 #, c-format
 msgid "Own Structures: %u"
-msgstr ""
+msgstr "Собствени съоръжения: %u"
 
 #: src/scores.cpp:105
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr ""
+msgstr "Вражески съоръжения: %u"
 
 #: src/scores.cpp:106
 #, c-format
@@ -18238,66 +18238,66 @@ msgstr "Общо единици: %u"
 #: src/scores.cpp:108
 #, c-format
 msgid "Structures Built: %u"
-msgstr ""
+msgstr "Построени съоръжения: %u"
 
 #: src/scores.cpp:109
 #, c-format
 msgid "Total Structures: %u"
-msgstr ""
+msgstr "Общо съоръжения: %u"
 
 #: src/scores.cpp:111
 #, c-format
 msgid "Rookie: %u"
-msgstr ""
+msgstr "Новобранци: %u"
 
 #: src/scores.cpp:112
 #, c-format
 msgctxt "rank"
 msgid "Green: %u"
-msgstr ""
+msgstr "Неопитни: %u"
 
 #: src/scores.cpp:113
 #, c-format
 msgid "Trained: %u"
-msgstr ""
+msgstr "Подготвени: %u"
 
 #: src/scores.cpp:114
 #, c-format
 msgid "Regular: %u"
-msgstr ""
+msgstr "Редовни: %u"
 
 #: src/scores.cpp:115
 #, c-format
 msgid "Professional: %u"
-msgstr ""
+msgstr "Професионални: %u"
 
 #: src/scores.cpp:116
 #, c-format
 msgid "Veteran: %u"
-msgstr ""
+msgstr "Ветерани: %u"
 
 #: src/scores.cpp:117
 #, c-format
 msgid "Elite: %u"
-msgstr ""
+msgstr "Елитни: %u"
 
 #: src/scores.cpp:118
 #, c-format
 msgid "Special: %u"
-msgstr ""
+msgstr "Специални: %u"
 
 #: src/scores.cpp:119
 #, c-format
 msgid "Hero: %u"
-msgstr ""
+msgstr "Герои: %u"
 
 #: src/scores.cpp:313
 msgid "Unit Losses"
-msgstr "Загубени бойни единици"
+msgstr "Жертви"
 
 #: src/scores.cpp:315
 msgid "Structure Losses"
-msgstr ""
+msgstr "Щети"
 
 #: src/scores.cpp:317
 msgid "Force Information"
@@ -18320,7 +18320,7 @@ msgstr ""
 
 #: src/scores.cpp:413
 msgid "You cheated!"
-msgstr ""
+msgstr "Измамихте!"
 
 #: src/selection.cpp:352
 #: src/selection.cpp:432
@@ -18431,7 +18431,7 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:88
 msgid "GAMES"
-msgstr ""
+msgstr "ИГРИ"
 
 #: src/titleui/gamefind.cpp:96
 msgid "Refresh Games List"
@@ -18443,11 +18443,11 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:170
 msgid "Refreshing..."
-msgstr ""
+msgstr "Опресняване..."
 
 #: src/titleui/gamefind.cpp:196
 msgid "Searching"
-msgstr ""
+msgstr "Търсене"
 
 #: src/titleui/gamefind.cpp:250
 msgid "Connecting to the lobby server..."
@@ -18459,11 +18459,11 @@ msgstr ""
 
 #: src/titleui/gamefind.cpp:312
 msgid "[Password required]"
-msgstr ""
+msgstr "[Изисква се парола]"
 
 #: src/titleui/gamefind.cpp:316
 msgid "[No Tanks]"
-msgstr ""
+msgstr "[Без танкове]"
 
 #: src/titleui/gamefind.cpp:320
 msgid "[No Cyborgs]"
@@ -18534,24 +18534,24 @@ msgstr ""
 #: src/titleui/gamefind.cpp:557
 #, c-format
 msgid "Mods: %s"
-msgstr ""
+msgstr "Модове: %s"
 
 #: src/titleui/gamefind.cpp:563
 msgid "Mods: None!"
-msgstr ""
+msgstr "Модове: Няма!"
 
 #: src/titleui/gamefind.cpp:569
 #, c-format
 msgid "Version: %s"
-msgstr ""
+msgstr "Версия: %s"
 
 #: src/titleui/gamefind.cpp:582
 msgid "Map Name"
-msgstr ""
+msgstr "Име на картата"
 
 #: src/titleui/gamefind.cpp:585
 msgid "Players"
-msgstr ""
+msgstr "Играчи"
 
 #: src/titleui/gamefind.cpp:588
 msgid "Status"
@@ -18559,32 +18559,32 @@ msgstr ""
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
-msgstr ""
+msgstr "Продължаване"
 
 #: src/titleui/passbox.cpp:77
 msgid "Enter Password:"
-msgstr ""
+msgstr "Въведете парола:"
 
 #: src/titleui/passbox.cpp:91
 msgid "OK"
-msgstr ""
+msgstr "ОК"
 
 #: src/titleui/passbox.cpp:97
 #: src/titleui/protocol.cpp:171
 msgid "Cancel"
-msgstr ""
+msgstr "Отказ"
 
 #: src/titleui/protocol.cpp:78
 msgid "CONNECTION"
-msgstr ""
+msgstr "ВРЪЗКА"
 
 #: src/titleui/protocol.cpp:83
 msgid "Lobby"
-msgstr ""
+msgstr "Лоби"
 
 #: src/titleui/protocol.cpp:84
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: src/titleui/protocol.cpp:182
 msgid "IP Address or Machine Name"
