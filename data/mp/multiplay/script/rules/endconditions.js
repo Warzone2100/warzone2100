@@ -23,8 +23,8 @@ const SPOTTER = {
 	radius: (Math.sqrt(mapWidth * mapWidth + mapHeight * mapHeight) / 2) * 128,
 };
 
-var teams = []; // array class instance Team
-var playersTeam = new Array(maxPlayers); // array class instancePlayer
+var teams; // array class instance Team
+var playersTeam; // array class instancePlayer
 
 class Player
 {
@@ -276,6 +276,7 @@ function inOneTeam(playnum, splaynum)
 function createTeams()
 {
 	teams = [];
+	playersTeam = new Array(maxPlayers);
 	const inTeamPlayNums = new Array(maxPlayers).fill(false);
 	for (let playNum = 0; playNum < maxPlayers; playNum++)
 	{
