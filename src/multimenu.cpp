@@ -1065,8 +1065,6 @@ public:
 
 #ifdef DEBUG
 		char str[128];
-		int x0 = xOffset + x();
-		int y0 = yOffset + y();
 
 		for (unsigned q = 0; q < 2; ++q)
 		{
