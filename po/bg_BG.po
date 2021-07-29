@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-24 21:47\n"
+"PO-Revision-Date: 2021-07-29 03:22\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -75,11 +75,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "Качете нападателен отряд в транспортьора."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
-msgstr ""
+msgstr "След кацане обиколете руините и приберете всички артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:23
 msgid "TRANSPORT MISSION: Investigate Research Center"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:24
 msgid "Investigate the area and recover any artifacts present."
-msgstr "Проучете местността и съберете налични артефакти."
+msgstr "Проучете местността и приберете наличните артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:25
 #: data/base/messages/strings/cam1strings.txt:147
@@ -100,7 +100,7 @@ msgstr "ТРАНСПОРТНА МИСИЯ: Засечени кодирани с�
 
 #: data/base/messages/strings/cam1strings.txt:28
 msgid "Take a scout force to investigate these signals."
-msgstr ""
+msgstr "Вземете разузнавателна сила и изследвайте тези сигнали."
 
 #: data/base/messages/strings/cam1strings.txt:29
 msgid "Use your trucks to build defenses at your LZ."
@@ -216,11 +216,11 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:79
 msgid "We have recovered some artifacts."
-msgstr ""
+msgstr "Прибрали сме някои артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:80
 msgid "There is a better equipped force operating in this area."
-msgstr ""
+msgstr "В тази зона действа по-добре оборудвана сила."
 
 #: data/base/messages/strings/cam1strings.txt:83
 msgid "TEAM GAMMA UPDATE"
@@ -232,7 +232,7 @@ msgstr "Нищо за докладване."
 
 #: data/base/messages/strings/cam1strings.txt:85
 msgid "We've discovered no artifacts and encountered no hostiles."
-msgstr ""
+msgstr "Не сме открили никакви артефакти и не сме срещнали враждебни сили."
 
 #: data/base/messages/strings/cam1strings.txt:88
 msgid "ALPHA BASE INTELLIGENCE REPORT: Enemy Attack"
@@ -240,7 +240,7 @@ msgstr "РАЗУЗНАВАТЕЛЕН ДОКЛАД НА БАЗА АЛФА: Вра
 
 #: data/base/messages/strings/cam1strings.txt:89
 msgid "We are detecting an enemy attack force at this location."
-msgstr ""
+msgstr "Засичаме вражеска атака на това местонахождение."
 
 #: data/base/messages/strings/cam1strings.txt:93
 msgid "PRIMARY OBJECTIVE"
@@ -252,7 +252,7 @@ msgstr "Тази постройка е Ваша основна цел."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
-msgstr ""
+msgstr "Потърсете и приберете всякакви артефакти тук."
 
 #: data/base/messages/strings/cam1strings.txt:97
 msgid "ENEMY LZ"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:125
 msgid "Destroy the base and recover any artifacts present."
-msgstr ""
+msgstr "Разрушете базата и приберете наличните артефакти."
 
 #: data/base/messages/strings/cam1strings.txt:128
 msgid "The synaptic link technology has been recovered!"
@@ -431,15 +431,15 @@ msgstr "Нашият транспорт с бойни единици от еки
 
 #: data/base/messages/strings/cam2strings.txt:23
 msgid "It is under attack from The Collective at this location."
-msgstr ""
+msgstr "В момента е под нападение от Колектива на това място."
 
 #: data/base/messages/strings/cam2strings.txt:24
 msgid "Assemble a rescue team to recover the transport and its cargo."
-msgstr ""
+msgstr "Съберете спасителен отряд за прибиране на транспортьора и товара му."
 
 #: data/base/messages/strings/cam2strings.txt:27
 msgid "IN-FLIGHT BRIEFING"
-msgstr ""
+msgstr "ИНСТРУКТАЖ В ПОЛЕТ"
 
 #: data/base/messages/strings/cam2strings.txt:28
 msgid "Team Beta are searching for Vertical Takeoff and Landing (VTOL) technology."
@@ -483,7 +483,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:49
 msgid "Before NEXUS switched itself off-line we accessed the following."
-msgstr ""
+msgstr "Преду НЕКСУС да се самоизключи ние успяхме да стигнем до следното."
 
 #: data/base/messages/strings/cam2strings.txt:51
 msgid "An enemy commander is collecting a shipment from NEXUS at this location."
@@ -508,15 +508,15 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:59
 msgid "The shipment you recovered was a decoy."
-msgstr ""
+msgstr "Пратката, която прибрахте, е била примамка."
 
 #: data/base/messages/strings/cam2strings.txt:60
 msgid "We have detected another convoy proceeding along the river."
-msgstr ""
+msgstr "Засякохме друг конвой да се движи по протежение на реката."
 
 #: data/base/messages/strings/cam2strings.txt:64
 msgid "You are to intercept the convoy and recover its cargo."
-msgstr ""
+msgstr "Ваша задача е да прихванете конвоя и да приберете товара му."
 
 #: data/base/messages/strings/cam2strings.txt:65
 msgid "Enemy VTOLs are likely to be flying close escort."
@@ -529,7 +529,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:69
 msgid "The Collective are processing and exterminating civilians at this base."
-msgstr "Колективът обработват и унищожават цивилни в тази база."
+msgstr "Колективът обработват и заличават цивилни в тази база."
 
 #: data/base/messages/strings/cam2strings.txt:73
 msgid "You are to rescue the civilians."
@@ -553,7 +553,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam2strings.txt:82
 msgid "The location of the enemy airbase is here; this is your primary objective."
-msgstr ""
+msgstr "Местоположението на вражеската въздушна база е тук; Това е главната ви цел."
 
 #: data/base/messages/strings/cam2strings.txt:83
 msgid "Eradicate all Collective forces and recover all artifacts."
@@ -860,7 +860,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam3strings.txt:75
 msgid "Commander, after you left the Western Sector we recovered this artifact."
-msgstr ""
+msgstr "Командире, след като напуснахте Западния сектор, ние прибрахме този артефакт."
 
 #: data/base/messages/strings/cam3strings.txt:76
 msgid "The benefits from researching it could be vast."
@@ -1109,7 +1109,7 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:4
 msgid "Briefing Commences:"
-msgstr ""
+msgstr "Следва инструктаж:"
 
 #: data/base/messages/strings/genstrings.txt:7
 msgid "Scavenger Outpost"
@@ -4240,7 +4240,7 @@ msgstr ""
 
 #: data/base/script/tutorial.js:43
 msgid "Move the pointer over the artifact and left click to recover it"
-msgstr ""
+msgstr "Преместете курсора върху артефакта и кликнете с ляв бутон, за да го приберете"
 
 #: data/base/script/tutorial.js:45
 msgid "A research facility is required to research artifacts"
@@ -4860,7 +4860,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam3/c003.txa:12
 msgid "Briefing Commences"
-msgstr ""
+msgstr "Следва инструктаж"
 
 #: data/base/sequenceaudio/cam3/c003.txt:1
 msgid "Personnel at Gamma Base have confirmed that the nuclear missiles targeted at Alpha and Beta bases were launched from a silo in their sector."
@@ -18306,7 +18306,7 @@ msgstr ""
 #: src/scores.cpp:394
 #, c-format
 msgid "ARTIFACTS RECOVERED: %d"
-msgstr ""
+msgstr "ПРИБРАНИ АРТЕФАКТИ: %d"
 
 #: src/scores.cpp:400
 #, c-format
