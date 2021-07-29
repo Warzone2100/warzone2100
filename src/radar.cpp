@@ -109,6 +109,7 @@ static PIELIGHT flashColours[] =
 	{{254, 37, 37, 200}},   // Player E
 	{{254, 37, 37, 200}},   // Player F
 };
+static PIELIGHT selectedColour = { 255,255,255,255 }; // white
 
 static size_t radarWidth, radarHeight, radarTexWidth, radarTexHeight;
 static SDWORD radarCenterX, radarCenterY;
@@ -419,6 +420,7 @@ static void DrawRadarObjects()
 	UBYTE				clan;
 	PIELIGHT			playerCol;
 	PIELIGHT			flashCol;
+	PIELIGHT			selCol = selectedColour;
 
 	/* Show droids on map - go through all players */
 	for (clan = 0; clan < MAX_PLAYERS; clan++)
@@ -467,6 +469,10 @@ static void DrawRadarObjects()
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psDroid->timeLastHit < HIT_NOTIFICATION)
 				{
 					radarBuffer[pos] = flashCol.rgba;
+				}
+				else if (psDroid->selected)
+				{
+					radarBuffer[pos] = selCol.rgba;
 				}
 				else
 				{
@@ -519,6 +525,10 @@ static void DrawRadarObjects()
 				if (clan == selectedPlayer && gameTime > HIT_NOTIFICATION && gameTime - psStruct->timeLastHit < HIT_NOTIFICATION)
 				{
 					radarBuffer[pos] = flashCol.rgba;
+				}
+				else if (psStruct->selected)
+				{
+					radarBuffer[pos] = selCol.rgba;
 				}
 				else
 				{
