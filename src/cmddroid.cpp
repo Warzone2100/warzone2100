@@ -104,11 +104,11 @@ void cmdDroidAddDroid(DROID *psCommander, DROID *psDroid)
 
 		orderDroidObj(psDroid, DORDER_GUARD, (BASE_OBJECT *)psCommander, ModeImmediate);
 	}
-	else
+	else if (psCommander->player == selectedPlayer)
 	{
 		audio_PlayTrack(ID_SOUND_BUILD_FAIL);
 		//Do not potentially spam the console with this message
-		if (psCommander->player == selectedPlayer && lastMaxCmdLimitMsgTime + MAX_COMMAND_LIMIT_MESSAGE_PAUSE < gameTime)
+		if (lastMaxCmdLimitMsgTime + MAX_COMMAND_LIMIT_MESSAGE_PAUSE < gameTime)
 		{
 			addConsoleMessage(_("Commander needs a higher level to command more units"), DEFAULT_JUSTIFY,  SYSTEM_MESSAGE);
 			lastMaxCmdLimitMsgTime = gameTime;
