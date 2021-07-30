@@ -1632,6 +1632,9 @@ int realmain(int argc, char *argv[])
 #endif
 	urlRequestOutputDebugInfo();
 
+	// Initialize ActivityManager
+	ActivityManager::instance().initialize();
+
 	/* Put in the writedir root */
 	sstrcpy(KeyMapPath, "keymap.json");
 
@@ -1740,8 +1743,6 @@ int realmain(int argc, char *argv[])
 			}
 		}
 	}
-
-	ActivityManager::instance().initialize();
 
 	optional<video_backend> gfxbackend;
 	if (!headlessGameMode())

@@ -143,6 +143,15 @@ public:
 std::string to_string(const ActivitySink::GameEndReason& reason);
 std::string to_string(const END_GAME_STATS_DATA& stats);
 
+// Thread-safe class for retrieving and setting ActivityRecord data
+class ActivityDBProtocol
+{
+public:
+	virtual ~ActivityDBProtocol();
+public:
+	virtual std::string getFirstLaunchDate() const = 0;
+};
+
 // ActivityManager accepts numerous event callbacks from the core game and synthesizes
 // a (more) sensible stream of higher-level event callbacks to subscribed ActivitySinks.
 //
@@ -191,10 +200,13 @@ public:
 	void addActivitySink(std::shared_ptr<ActivitySink> sink);
 	void removeActivitySink(const std::shared_ptr<ActivitySink>& sink);
 	ActivitySink::GameMode getCurrentGameMode() const;
+	inline std::shared_ptr<ActivityDBProtocol> getRecord() { return activityDatabase; }
 private:
+	ActivityManager();
 	void _endedMission(ActivitySink::GameEndReason result, END_GAME_STATS_DATA stats, bool cheatsUsed);
 private:
 	std::vector<std::shared_ptr<ActivitySink>> activitySinks;
+	std::shared_ptr<ActivityDBProtocol> activityDatabase;
 
 	// storing current game state, to aide in synthesizing events
 	bool bIsLoadingConfiguration = false;
