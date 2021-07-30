@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-29 15:23\n"
+"PO-Revision-Date: 2021-07-30 03:23\n"
 "Last-Translator: \n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: data/base/messages/strings/cam1strings.txt:5
 #: data/base/sequenceaudio/cam1/c001.txa:14
 msgid "This structure contains technology vital for the success of the Project."
-msgstr "Тази структура съдържа технология, жизненоважна за успеха на Проекта."
+msgstr "Това съоръжение съдържа технология, жизненоважна за успеха на Проекта."
 
 #: data/base/messages/strings/cam1strings.txt:7
 msgid "ALPHA BASE MISSION: Scavenger Raiders"
@@ -164,7 +164,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:50
 msgid "Build defensive structures."
-msgstr "Постройте защитни структури."
+msgstr "Постройте защитни съоръжения."
 
 #: data/base/messages/strings/cam1strings.txt:52
 msgid "ALPHA BASE MISSION: Counter Attack"
@@ -248,7 +248,7 @@ msgstr "ОСНОВНА ЦЕЛ"
 
 #: data/base/messages/strings/cam1strings.txt:94
 msgid "This structure is your primary objective."
-msgstr "Тази постройка е Ваша основна цел."
+msgstr "Това съоръжение е Вашата основна цел."
 
 #: data/base/messages/strings/cam1strings.txt:95
 msgid "Search for and recover any artifacts here."
@@ -701,7 +701,7 @@ msgstr ""
 #: data/base/messages/strings/cam2strings.txt:153
 #: data/base/messages/strings/cam3strings.txt:30
 msgid "Good luck, Commander."
-msgstr ""
+msgstr "Успех, Командире."
 
 #: data/base/messages/strings/cam3strings.txt:4
 #: data/base/sequenceaudio/cam3/c003.txa:4
@@ -1146,11 +1146,11 @@ msgstr ""
 
 #: data/base/messages/strings/genstrings.txt:18
 msgid "Mission Failed"
-msgstr ""
+msgstr "Мисията се провали"
 
 #: data/base/messages/strings/genstrings.txt:19
 msgid "Mission Successful"
-msgstr ""
+msgstr "Мисията е успешна"
 
 #: data/base/messages/strings/genstrings.txt:22
 msgid "Enemy Landing Zone"
@@ -3379,7 +3379,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:333
 #: po/custom/fromJson.txt:1081
 msgid "Best Targets: Base Structures and Defenses"
-msgstr "Най-подходящи цели: Постройки и защити"
+msgstr "Най-добри цели: Базови и защитни съоръжения"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_PBMB2.text[1]
@@ -3418,7 +3418,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:338
 #: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base Structures"
-msgstr "Най-подходящи цели: Постройки"
+msgstr "Най-добри цели: Базови съоръжения"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[3]
@@ -3647,7 +3647,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:378
 #: po/custom/fromJson.txt:1107
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
-msgstr "Най-подходящи цели: Постройки, пехота, колесни МПС"
+msgstr "Най-добри цели: Базови съоръжения, пехота и МПС"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HH1.text[1]
@@ -3674,7 +3674,7 @@ msgstr ""
 #: data/mp/messages/strings/resstrings.txt:383
 #: po/custom/fromJson.txt:1091
 msgid "Best Targets: Base Structures, bunkers"
-msgstr "Най-подходящи цели: Постройки, бункери"
+msgstr "Най-добри цели: Базови съоръжения и бункери"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages2.json: $.RES_W_HOWAC1.text[0]
@@ -4063,7 +4063,7 @@ msgstr ""
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:482
 msgid "Destroy all enemy units and structures"
-msgstr "Унищожете всички противникови бойни единици и постройки"
+msgstr "Унищожете всички противникови единици и съоръжения"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:498
 msgid "Artifacts collected"
@@ -4079,7 +4079,7 @@ msgstr "Оставащи вражески бойни единици"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:501
 msgid "Enemy structures remaining"
-msgstr ""
+msgstr "Оставащи противникови съоръжения"
 
 #: data/base/script/campaign/libcampaign_includes/victory.js:507
 msgid "Return to LZ required"
@@ -4804,7 +4804,7 @@ msgstr ""
 
 #: data/base/sequenceaudio/cam2/cam2bcol.txt:9
 msgid "Attack!"
-msgstr ""
+msgstr "Атака!"
 
 #: data/base/sequenceaudio/cam2/cam2dico.txt:1
 msgid "Warriors of the Collective, Nexus has given us the power of the machine so that we can destroy all that oppose us."
@@ -5080,11 +5080,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:4
 msgid "Dusk, November 3rd, 2085"
-msgstr ""
+msgstr "Привечер, 3-ти Ноември, 2085"
 
 #: data/base/sequenceaudio/devastation.txa:5
 msgid "Earth, High Orbit"
-msgstr ""
+msgstr "Висока околоземна орбита"
 
 #: data/base/sequenceaudio/devastation.txa:6
 msgid "The Collapse"
@@ -5092,20 +5092,20 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:8
 msgid "January 19th, 2086"
-msgstr ""
+msgstr "19-ти Януари, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:9
 #: data/base/sequenceaudio/devastation.txa:17
 msgid "North America"
-msgstr ""
+msgstr "Северна Америка"
 
 #: data/base/sequenceaudio/devastation.txa:10
 msgid "Nuclear Winter"
-msgstr ""
+msgstr "Ядрена зима"
 
 #: data/base/sequenceaudio/devastation.txa:12
 msgid "Midnight, April 10th, 2086"
-msgstr ""
+msgstr "Полунощ, 10-ти Април, 2086"
 
 #: data/base/sequenceaudio/devastation.txa:13
 msgid "Rocky Mountains"
@@ -5117,11 +5117,11 @@ msgstr ""
 
 #: data/base/sequenceaudio/devastation.txa:16
 msgid "Dawn, April 4th, 2100"
-msgstr ""
+msgstr "Разсъмване, 4-ти Април, 2100"
 
 #: data/base/sequenceaudio/devastation.txa:18
 msgid "A New Beginning"
-msgstr ""
+msgstr "Ново начало"
 
 #: data/base/sequenceaudio/devastation.txt:1
 msgid "The NASDA system was developed to protect us. It was to be the ultimate nuclear deterrent. As it turned out, it was our executioner."
@@ -5215,7 +5215,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:271
 #: po/custom/fromJson.txt:3664
 msgid "Machinegun"
-msgstr ""
+msgstr "Картечница"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-AAGun02.name
@@ -5379,7 +5379,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:405
 #: po/custom/fromJson.txt:2636
 msgid "Heavy Machinegun Tower"
-msgstr ""
+msgstr "Кула с тежка картечница"
 
 #. TRANSLATORS:
 #. data/base/stats/weapons.json: $.Flame1Mk1-Tower.name
@@ -6321,14 +6321,14 @@ msgstr ""
 #. data/mp/messages/resmessages3.json: $.RES_W_ASM_AT.text[1]
 #: po/custom/fromJson.txt:506
 msgid "Anti-tank missile"
-msgstr ""
+msgstr "Противотанков ракетен снаряд"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_LTAT1.text[1]
 #. data/mp/messages/resmessagesall.json: $.RES_W_RK_LTAT1.text[1]
 #: po/custom/fromJson.txt:510
 msgid "Anti-tank rocket"
-msgstr ""
+msgstr "Противотанкова ракета"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-Damage03.name
@@ -7130,20 +7130,20 @@ msgstr "Най-подходящи цели: Само въздушни цели"
 #. data/mp/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1075
 msgid "Best Targets: Base structures and cyborgs"
-msgstr "Най-подходящи цели: Постройки и киборги"
+msgstr "Най-добри цели: Базови съоръжения и киборги"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
 #: po/custom/fromJson.txt:1087
 msgid "Best Targets: Base structures"
-msgstr ""
+msgstr "Най-добри цели: Базови съоръжения"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_MS_HART.text[2]
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Най-добри цели: Базови съоръжения, гнезда и киборги"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7188,7 +7188,7 @@ msgstr "Най-подходящи цели: Тежки киборги"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:1143
 msgid "Best Targets: Infantry, base structures, wheeled vehicles"
-msgstr "Най-подходящи цели: Пехота, постройки, колесни МПС"
+msgstr "Най-подходящи цели: Пехота, базови съоръжения, МПС с колела"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_MG1MK1.text[2]
@@ -7244,7 +7244,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_2.name
 #: po/custom/fromJson.txt:1181
 msgid "Beta"
-msgstr ""
+msgstr "Бета"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_V_P_V2.text[2]
@@ -7676,7 +7676,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0CommandCentre.name
 #: po/custom/fromJson.txt:1475
 msgid "Command Center"
-msgstr ""
+msgstr "Команден център"
 
 #. TRANSLATORS:
 #. data/base/stats/structure.json: $.A0ComDroidControl.name
@@ -8190,7 +8190,7 @@ msgstr ""
 #. data/mp/stats/body.json: $.Body14SUP.name
 #: po/custom/fromJson.txt:1835
 msgid "Dragon"
-msgstr ""
+msgstr "Дракон"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_BMB5.text[1]
@@ -8654,7 +8654,7 @@ msgstr ""
 #. data/mp/challenges/two-faced.json: $.player_3.name
 #: po/custom/fromJson.txt:2154
 msgid "Gamma"
-msgstr ""
+msgstr "Гама"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages23.json: $.RES_POWU1.text[2]
@@ -11403,7 +11403,7 @@ msgstr ""
 #. ... + 7 refs
 #: po/custom/fromJson.txt:4060
 msgid "New Base Structure Available"
-msgstr ""
+msgstr "Налично е ново базово съоръжение"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[1]
@@ -11961,7 +11961,7 @@ msgstr ""
 #. data/mp/stats/structure.json: $.A0PowerGenerator.name
 #: po/custom/fromJson.txt:4465
 msgid "Power Generator"
-msgstr "Електрогенератор"
+msgstr "Енергиен генератор"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_POWMD1.text[0]
@@ -15208,7 +15208,7 @@ msgstr ""
 
 #: src/droid.cpp:1104
 msgid "Structure Restored"
-msgstr ""
+msgstr "Съоръжението е възстановено"
 
 #: src/droid.cpp:1863
 #, c-format
@@ -17636,11 +17636,11 @@ msgstr ""
 
 #: src/multiint.cpp:1453
 msgid "Show Structure Limits"
-msgstr ""
+msgstr "Покажи ограниченията на съоръженията"
 
 #: src/multiint.cpp:1453
 msgid "Set Structure Limits"
-msgstr ""
+msgstr "Задай ограничения на съоръженията"
 
 #: src/multiint.cpp:1467
 msgid "Random Game Options"
@@ -18223,7 +18223,7 @@ msgstr "Собствени съоръжения: %u"
 #: src/scores.cpp:105
 #, c-format
 msgid "Enemy Structures: %u"
-msgstr "Вражески съоръжения: %u"
+msgstr "Противникови съоръжения: %u"
 
 #: src/scores.cpp:106
 #, c-format
@@ -18297,7 +18297,7 @@ msgstr "Жертви"
 
 #: src/scores.cpp:315
 msgid "Structure Losses"
-msgstr "Щети"
+msgstr "Загубени съоръжения"
 
 #: src/scores.cpp:317
 msgid "Force Information"
