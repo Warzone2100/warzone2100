@@ -29,12 +29,31 @@
 
 #include "version.h"
 #include "build_tools/autorevision.h"
+#include "urlhelpers.h"
+#include "activity.h"
 
 #include <LaunchInfo.h>
 
 #ifndef PACKAGE_DISTRIBUTOR
 # define PACKAGE_DISTRIBUTOR "UNKNOWN"
 #endif
+
+// Includes for Windows
+
+#if defined(WZ_OS_WIN)
+#ifndef WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef WIN32_EXTRA_LEAN
+# define WIN32_EXTRA_LEAN
+#endif
+# undef NOMINMAX
+# define NOMINMAX 1
+#include <windows.h>
+#include <psapi.h>
+#endif
+
+// MARK: - BuildPropertyProvider
 
 enum class BuildProperty {
 	GIT_BRANCH,
@@ -221,3 +240,257 @@ bool BuildPropertyProvider::getPropertyValue(const std::string& property, std::s
 	output_value = GetCurrentBuildPropertyValue(it->second);
 	return true;
 }
+
+// MARK: - EnvironmentPropertyProvider
+
+static const std::unordered_map<std::string, EnvironmentPropertyProvider::EnvironmentProperty> strToEnvironmentPropertyMap = {
+	{"FIRST_LAUNCH", EnvironmentPropertyProvider::EnvironmentProperty::FIRST_LAUNCH},
+	{"INSTALLED_PATH", EnvironmentPropertyProvider::EnvironmentProperty::INSTALLED_PATH},
+	{"WIN_INSTALLED_BINARIES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_INSTALLED_BINARIES},
+	{"WIN_LOADEDMODULES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULES},
+	{"WIN_LOADEDMODULENAMES", EnvironmentPropertyProvider::EnvironmentProperty::WIN_LOADEDMODULENAMES}
+};
+
+#if defined(WZ_OS_WIN)
+
+static bool win_Utf16toUtf8(const wchar_t* buffer, std::vector<char>& u8_buffer)
+{
+	// Convert the UTF-16 to UTF-8
+	int outputLength = WideCharToMultiByte(CP_UTF8, 0, buffer, -1, NULL, 0, NULL, NULL);
+	if (outputLength <= 0)
+	{
+//		debug(LOG_ERROR, "Encoding conversion error.");
+		return false;
+	}
+	if (u8_buffer.size() < static_cast<size_t>(outputLength))
+	{
+		u8_buffer.resize(outputLength, 0);
+	}
+	if (WideCharToMultiByte(CP_UTF8, 0, buffer, -1, &u8_buffer[0], outputLength, NULL, NULL) <= 0)
+	{
+//		debug(LOG_ERROR, "Encoding conversion error.");
+		return false;
+	}
+	return true;
+}
+
+static std::vector<std::string> Get_WinInstalledBinaries()
+{
+	std::vector<std::string> files;
+
+	// Get the full path to the folder containing this executable
+	std::string binPath = LaunchInfo::getCurrentProcessDetails().imageFileName.dirname();
+	if (binPath.empty())
+	{
+		return {};
+	}
+
+	// List files in the same directory as this executable
+	std::string findFileStr = binPath + "\\*";
+	std::vector<wchar_t> wFindFileStr;
+	if (!win_utf8ToUtf16(findFileStr.c_str(), wFindFileStr))
+	{
+		return {};
+	}
+	WIN32_FIND_DATAW ffd;
+	HANDLE hFind = FindFirstFileW(wFindFileStr.data(), &ffd);
+	if (hFind == INVALID_HANDLE_VALUE)
+	{
+		return {};
+	}
+	std::vector<char> u8_buffer(MAX_PATH, 0);
+	do {
+		if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			// convert ffd.cFileName to UTF-8
+			if (!win_Utf16toUtf8(ffd.cFileName, u8_buffer))
+			{
+//				debug(LOG_ERROR, "Encoding conversion error.");
+				continue;
+			}
+			files.push_back(std::string(u8_buffer.data()));
+		}
+	} while (FindNextFileW(hFind, &ffd) != 0);
+	FindClose(hFind);
+
+	return files;
+}
+
+#define WIN_MAX_EXTENDED_PATH 32767
+
+static std::vector<std::string> Get_WinProcessModules(bool filenamesOnly = false)
+{
+	std::vector<std::string> processModules;
+	std::vector<HMODULE> hMods(2048);
+	DWORD cbNeeded = 2048 * sizeof(HMODULE);
+	do {
+		hMods.resize(cbNeeded / sizeof(HMODULE));
+		DWORD currentSize = static_cast<DWORD>(hMods.size() * sizeof(HMODULE));
+		if(EnumProcessModulesEx(GetCurrentProcess(), hMods.data(), currentSize, &cbNeeded, LIST_MODULES_ALL) == 0)
+		{
+			// EnumProcessModulesEx failed
+			return {};
+		}
+	} while (cbNeeded > static_cast<DWORD>(hMods.size() * sizeof(HMODULE)));
+
+	std::vector<wchar_t> buffer(WIN_MAX_EXTENDED_PATH + 1, 0);
+	std::vector<char> u8_buffer(WIN_MAX_EXTENDED_PATH, 0);
+	for (size_t i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
+	{
+		// Get the full path to the module's file.
+		DWORD moduleFileNameLen = GetModuleFileNameW(hMods[i], &buffer[0], buffer.size() - 1);
+		DWORD lastError = GetLastError();
+		if ((moduleFileNameLen == 0) && (lastError != ERROR_SUCCESS))
+		{
+			// GetModuleFileName failed
+//			debug(LOG_ERROR, "GetModuleFileName failed: %lu", moduleFileNameLen);
+			continue;
+		}
+		else if (moduleFileNameLen > (buffer.size() - 1))
+		{
+//			debug(LOG_ERROR, "GetModuleFileName returned a length: %lu >= buffer length: %zu", moduleFileNameLen, buffer.size());
+			continue;
+		}
+
+		// Because Windows XP's GetModuleFileName does not guarantee null-termination,
+		// always append a null-terminator
+		buffer[moduleFileNameLen] = 0;
+
+		if (!win_Utf16toUtf8(buffer.data(), u8_buffer))
+		{
+//			debug(LOG_ERROR, "Encoding conversion error.");
+			continue;
+		}
+		if (!filenamesOnly)
+		{
+			processModules.push_back(std::string(u8_buffer.data()));
+			continue;
+		}
+		// otherwise, get the filename only
+		size_t u8BufferLength = strlen(u8_buffer.data());
+		if (u8BufferLength == 0)
+		{
+			continue;
+		}
+		std::string filename;
+		for (size_t idx = u8BufferLength - 1; idx > 0; idx--)
+		{
+			if (u8_buffer[idx] == '\\' && (idx < (u8BufferLength - 1)))
+			{
+				filename = std::string(&u8_buffer[idx + 1]);
+				break;
+			}
+		}
+		if (filename.empty())
+		{
+			filename = std::string(u8_buffer.data());
+		}
+
+		processModules.push_back(std::move(filename));
+	}
+
+	return processModules;
+}
+#endif // defined(WZ_OS_WIN)
+
+std::string EnvironmentPropertyProvider::GetCurrentEnvironmentPropertyValue(const EnvironmentProperty& property)
+{
+	using EP = EnvironmentProperty;
+	switch (property)
+	{
+		case EP::FIRST_LAUNCH:
+		{
+			if (firstLaunchDateStr.empty())
+			{
+				auto record = ActivityManager::instance().getRecord();
+				if (record)
+				{
+					firstLaunchDateStr = record->getFirstLaunchDate();
+				}
+			}
+			return firstLaunchDateStr;
+		}
+		case EP::INSTALLED_PATH:
+			return LaunchInfo::getCurrentProcessDetails().imageFileName.dirname();
+		case EP::WIN_INSTALLED_BINARIES:
+		{
+#if defined(WZ_OS_WIN)
+			if (binDirFilesStr.empty())
+			{
+				auto binDirFiles = Get_WinInstalledBinaries();
+				for (const auto& fileName : binDirFiles)
+				{
+					if (!binDirFilesStr.empty()) binDirFilesStr += ";";
+					binDirFilesStr += "\"";
+					binDirFilesStr += WzString::fromUtf8(fileName).replace("\"", "\\\"").toStdString();
+					binDirFilesStr += "\"";
+				}
+			}
+#endif
+			return binDirFilesStr;
+		}
+		case EP::WIN_LOADEDMODULES:
+		{
+#if defined(WZ_OS_WIN)
+			if (processModulesStr.empty())
+			{
+				auto processModules = Get_WinProcessModules(false);
+				for (const auto& modulePath : processModules)
+				{
+					if (!processModulesStr.empty()) processModulesStr += ";";
+					processModulesStr += "\"";
+					processModulesStr += WzString::fromUtf8(modulePath).replace("\"", "\\\"").toStdString();
+					processModulesStr += "\"";
+				}
+			}
+#endif
+			return processModulesStr;
+		}
+		case EP::WIN_LOADEDMODULENAMES:
+		{
+#if defined(WZ_OS_WIN)
+			if (processModuleNamesStr.empty())
+			{
+				auto processModuleNames = Get_WinProcessModules(true);
+				for (const auto& fileName : processModuleNames)
+				{
+					if (!processModuleNamesStr.empty()) processModuleNamesStr += ";";
+					processModuleNamesStr += "\"";
+					processModuleNamesStr += WzString::fromUtf8(fileName).replace("\"", "\\\"").toStdString();
+					processModuleNamesStr += "\"";
+				}
+			}
+#endif
+			return processModuleNamesStr;
+		}
+	}
+	return ""; // silence warning
+}
+
+EnvironmentPropertyProvider::~EnvironmentPropertyProvider() { }
+bool EnvironmentPropertyProvider::getPropertyValue(const std::string& property, std::string& output_value)
+{
+	auto it = strToEnvironmentPropertyMap.find(property);
+	if (it == strToEnvironmentPropertyMap.end())
+	{
+		return false;
+	}
+	output_value = GetCurrentEnvironmentPropertyValue(it->second);
+	return true;
+}
+
+// MARK: - CombinedPropertyProvider
+
+CombinedPropertyProvider::~CombinedPropertyProvider() { }
+bool CombinedPropertyProvider::getPropertyValue(const std::string& property, std::string& output_value)
+{
+	for (auto& provider : propertyProviders)
+	{
+		if (provider->getPropertyValue(property, output_value))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+

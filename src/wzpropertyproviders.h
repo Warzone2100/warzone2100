@@ -20,11 +20,51 @@
 #define _WZ_PROPERTY_PROVIDERS_H_
 
 #include "3rdparty/propertymatcher.h"
+#include <vector>
+#include <memory>
 
 class BuildPropertyProvider : public PropertyMatcher::PropertyProvider {
 public:
 	virtual ~BuildPropertyProvider();
 	bool getPropertyValue(const std::string& property, std::string& output_value) override;
+};
+
+class EnvironmentPropertyProvider : public PropertyMatcher::PropertyProvider {
+public:
+	virtual ~EnvironmentPropertyProvider();
+	bool getPropertyValue(const std::string& property, std::string& output_value) override;
+public:
+	enum class EnvironmentProperty {
+		FIRST_LAUNCH,
+		INSTALLED_PATH,
+		WIN_INSTALLED_BINARIES,
+		WIN_LOADEDMODULES,
+		WIN_LOADEDMODULENAMES,
+	};
+private:
+	std::string GetCurrentEnvironmentPropertyValue(const EnvironmentProperty& property);
+private:
+	// caches
+	std::string firstLaunchDateStr;
+	std::string binDirFilesStr;
+	std::string processModulesStr;
+	std::string processModuleNamesStr;
+};
+
+class CombinedPropertyProvider : public PropertyMatcher::PropertyProvider {
+public:
+	CombinedPropertyProvider(const std::vector<std::shared_ptr<PropertyMatcher::PropertyProvider>>& providers)
+	{
+		for (auto& provider : providers)
+		{
+			if (!provider) continue;
+			propertyProviders.push_back(provider);
+		}
+	}
+	virtual ~CombinedPropertyProvider();
+	bool getPropertyValue(const std::string& property, std::string& output_value) override;
+private:
+	std::vector<std::shared_ptr<PropertyMatcher::PropertyProvider>> propertyProviders;
 };
 
 #endif //_WZ_PROPERTY_PROVIDERS_H_
