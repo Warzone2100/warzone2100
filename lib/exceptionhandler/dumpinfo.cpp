@@ -500,7 +500,7 @@ static void createHeader(int const argc, const char * const *argv, const char *p
 	os << "Ancestors: " << endl;
 	for (const auto& parent : parentProcesses)
 	{
-		os << "- (" << parent.pid << ") " << parent.imageFileName << endl;
+		os << "- (" << parent.pid << ") " << parent.imageFileName.fullPath() << endl;
 	}
 	os << "Version: "     << packageVersion << endl
 	   << "Distributor: " PACKAGE_DISTRIBUTOR << endl

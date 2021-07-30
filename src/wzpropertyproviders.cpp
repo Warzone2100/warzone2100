@@ -169,7 +169,7 @@ static std::string GetCurrentBuildPropertyValue(const BuildProperty& property)
 		case BP::PLATFORM:
 			return wzGetPlatform().toUtf8();
 		case BP::PARENTPROCESS:
-			return LaunchInfo::getParentImageName();
+			return LaunchInfo::getParentImageName().fullPath();
 		case BP::ANCESTORS:
 		{
 			auto ancestors = LaunchInfo::getAncestorProcesses();
@@ -178,7 +178,7 @@ static std::string GetCurrentBuildPropertyValue(const BuildProperty& property)
 			{
 				if (!ancestorsStr.empty()) ancestorsStr += ";";
 				ancestorsStr += "\"";
-				ancestorsStr += WzString::fromUtf8(ancestor.imageFileName).replace("\"", "\\\"").toStdString();
+				ancestorsStr += WzString::fromUtf8(ancestor.imageFileName.fullPath()).replace("\"", "\\\"").toStdString();
 				ancestorsStr += "\"";
 			}
 			return ancestorsStr;
