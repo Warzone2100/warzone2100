@@ -25,6 +25,9 @@
 #include "mission.h"
 #include "challenge.h"
 #include <algorithm>
+#include <mutex>
+
+#include <SQLiteCpp/SQLiteCpp.h>
 
 std::string ActivitySink::getTeamDescription(const ActivitySink::SkirmishGameInfo& info)
 {
@@ -165,6 +168,153 @@ public:
 	}
 };
 
+ActivityDBProtocol::~ActivityDBProtocol()
+{ }
+
+// Should be thread-safe
+class ActivityDatabase : public ActivityDBProtocol
+{
+private:
+	#define FIRST_LAUNCH_DATE_KEY "first_launch"
+public:
+	// Caller is expected to handle thrown exceptions
+	ActivityDatabase(const std::string& activityDatabasePath)
+	{
+		db = std::unique_ptr<SQLite::Database>(new SQLite::Database(activityDatabasePath, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE));
+		db->exec("PRAGMA journal_mode=WAL");
+		createTables();
+		query_findValueByName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "SELECT value FROM general_kv_storage WHERE name = ?"));
+		query_insertValueForName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "INSERT OR IGNORE INTO general_kv_storage(name, value) VALUES(?, ?)"));
+		query_updateValueForName = std::unique_ptr<SQLite::Statement>(new SQLite::Statement(*db, "UPDATE general_kv_storage SET value = ? WHERE name = ?"));
+	}
+public:
+	// Must be thread-safe
+	virtual std::string getFirstLaunchDate() const override
+	{
+		auto result = getValue(FIRST_LAUNCH_DATE_KEY);
+		ASSERT_OR_RETURN("", result.has_value(), "Should always be initialized");
+		return result.value();
+	}
+
+private:
+	// Must be thread-safe
+	optional<std::string> getValue(const std::string& name) const
+	{
+		if (name.empty())
+		{
+			return nullopt;
+		}
+
+		std::lock_guard<std::mutex> guard(db_mutex);
+
+		optional<std::string> result;
+		try {
+			query_findValueByName->bind(1, name);
+			if (query_findValueByName->executeStep())
+			{
+				result = query_findValueByName->getColumn(0).getString();
+			}
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failure to query database for key; error: %s", e.what());
+			result = nullopt;
+		}
+		try {
+			query_findValueByName->reset();
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failed to reset prepared statement; error: %s", e.what());
+		}
+		return result;
+	}
+
+	// Must be thread-safe
+	bool setValue(std::string const &name, std::string const& value)
+	{
+		if (name.empty())
+		{
+			return false;
+		}
+
+		std::lock_guard<std::mutex> guard(db_mutex);
+
+		try {
+			// Begin transaction
+			SQLite::Transaction transaction(*db);
+
+			query_insertValueForName->bind(1, name);
+			query_insertValueForName->bind(2, value);
+			if (query_insertValueForName->exec() == 0)
+			{
+				query_updateValueForName->bind(1, value);
+				query_updateValueForName->bind(2, name);
+				if (query_updateValueForName->exec() == 0)
+				{
+					debug(LOG_WARNING, "Failed to update value for key (%s)", name.c_str());
+				}
+				query_updateValueForName->reset();
+			}
+			query_insertValueForName->reset();
+
+			// Commit transaction
+			transaction.commit();
+			return true;
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Update / insert failed; error: %s", e.what());
+			// continue on to try to reset prepared statements
+		}
+
+		try {
+			query_updateValueForName->reset();
+			query_insertValueForName->reset();
+		}
+		catch (const std::exception& e) {
+			debug(LOG_ERROR, "Failed to reset prepared statement; error: %s", e.what());
+		}
+		return false;
+	}
+
+private:
+	void createTables()
+	{
+		SQLite::Transaction transaction(*db);
+		if (!db->tableExists("general_kv_storage"))
+		{
+			db->exec("CREATE TABLE general_kv_storage (local_id INTEGER PRIMARY KEY, name TEXT UNIQUE, value TEXT)");
+		}
+		// initialize first launch date if it doesn't exist
+		db->exec("INSERT OR IGNORE INTO general_kv_storage(name, value) VALUES(\"" FIRST_LAUNCH_DATE_KEY "\", date('now'))");
+		transaction.commit();
+	}
+
+private:
+	mutable std::mutex db_mutex;
+	std::unique_ptr<SQLite::Database> db; // Must be the first-listed SQLite member variable so it is destructed last
+	std::unique_ptr<SQLite::Statement> query_findValueByName;
+	std::unique_ptr<SQLite::Statement> query_insertValueForName;
+	std::unique_ptr<SQLite::Statement> query_updateValueForName;
+};
+
+ActivityManager::ActivityManager()
+{
+	ASSERT_OR_RETURN(, PHYSFS_isInit() != 0, "PHYSFS must be initialized before the ActivityManager is created");
+	// init ActivityDatabase
+	const char *pWriteDir = PHYSFS_getWriteDir();
+	ASSERT(pWriteDir != nullptr, "PHYSFS_getWriteDir returned null");
+	if (pWriteDir)
+	{
+		std::string statsDBPath = std::string(pWriteDir) + PHYSFS_getDirSeparator() + "stats.db";
+		try {
+			activityDatabase = std::make_shared<ActivityDatabase>(statsDBPath);
+		}
+		catch (std::exception& e) {
+			// error loading SQLite database
+			debug(LOG_ERROR, "Unable to load or initialize SQLite3 database (%s); error: %s", statsDBPath.c_str(), e.what());
+		}
+	}
+}
+
 ActivityManager& ActivityManager::instance()
 {
 	static ActivityManager sharedInstance = ActivityManager();
@@ -181,6 +331,9 @@ void ActivityManager::shutdown()
 {
 	// Free up the activity sinks
 	activitySinks.clear();
+
+	// Close activityDatabase
+	activityDatabase.reset();
 }
 
 void ActivityManager::addActivitySink(std::shared_ptr<ActivitySink> sink)
