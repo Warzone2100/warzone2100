@@ -916,6 +916,11 @@ float EaseInCubic(float p)
 
 bool W_NOTIFICATION::calculateNotificationWidgetPos()
 {
+	if (request == nullptr)
+	{
+		return false;
+	}
+
 	// center horizontally in window
 	int x = std::max<int>((screenWidth - width()) / 2, 0);
 	int y = 0; // set below
@@ -1060,7 +1065,7 @@ void W_NOTIFICATION::run(W_CONTEXT *psContext)
 			dragOffsetEnded = dragOffset;
 			notificationDidStopDragOnNotification();
 		}
-		if (request->status.state != WZ_Notification_Status::NotificationState::closing)
+		if (request && (request->status.state != WZ_Notification_Status::NotificationState::closing))
 		{
 			// decay drag offset
 			const uint32_t dragDecayDuration = GAME_TICKS_PER_SEC * 1;
@@ -1076,6 +1081,8 @@ void W_NOTIFICATION::run(W_CONTEXT *psContext)
 
 void W_NOTIFICATION::clicked(W_CONTEXT *psContext, WIDGET_KEY key)
 {
+	ASSERT_OR_RETURN(, request != nullptr, "request is null");
+
 	if (request->status.state == WZ_Notification_Status::NotificationState::closing)
 	{
 		// if clicked while closing, set state to shown
