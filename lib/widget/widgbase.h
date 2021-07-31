@@ -379,14 +379,14 @@ struct W_SCREEN: public std::enable_shared_from_this<W_SCREEN>
 protected:
 	W_SCREEN(): TipFontID(font_regular) {}
 	virtual ~W_SCREEN();
-	void initialize();
+	void initialize(const std::shared_ptr<W_FORM>& customRootForm);
 
 public:
-	static std::shared_ptr<W_SCREEN> make()
+	static std::shared_ptr<W_SCREEN> make(std::shared_ptr<W_FORM> customRootForm = nullptr)
 	{
 		class make_shared_enabler: public W_SCREEN {};
 		auto screen = std::make_shared<make_shared_enabler>();
-		screen->initialize();
+		screen->initialize(customRootForm);
 		return screen;
 	}
 
