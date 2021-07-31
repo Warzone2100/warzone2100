@@ -1105,7 +1105,7 @@ static void drawTiles(iView *player)
 	actualCameraPosition.z -= static_cast<int>(distance);
 
 	// Now, scale the world according to what resolution we're running in
-	actualCameraPosition.z /= static_cast<int>(pie_GetResScalingFactor() / 100.f);
+	actualCameraPosition.z /= std::max<int>(static_cast<int>(pie_GetResScalingFactor() / 100.f), 1);
 
 	/* Rotate for the player */
 	rotateSomething(actualCameraPosition.x, actualCameraPosition.y, -player->r.z);
