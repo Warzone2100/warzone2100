@@ -79,15 +79,25 @@ private:
 	static ProcessResult processUpdateJSONFile(const json& updateData, bool validSignature, bool validExpiry);
 };
 
+class WzCompatCheckManager {
+public:
+	static void initCompatCheck();
+private:
+	static ProcessResult processCompatCheckJSONFile(const json& updateData, bool validSignature, bool validExpiry);
+};
+
 const std::string WZ_UPDATES_VERIFY_KEY = "5d9P+Z1SirsWSsYICZAr7QFlPB01s6tzXkhPZ+X/FQ4=";
 const std::string WZ_DEFAULT_UPDATE_LINK = "https://warzone2100.github.io/update-data/redirect/updatelink.html";
+const std::string WZ_DEFAULT_COMPATINFO_LINK = "https://warzone2100.github.io/update-data/redirect/compatinfolink.html";
 #define WZ_UPDATES_CACHE_DIR "cache"
 #define WZ_CACHE_INFO_JSON_WZVERSION_KEY "wz_version"
 #define WZ_UPDATES_JSON_MAX_SIZE (1 << 25)
 
 static const char updatesCacheDataPath[] = WZ_UPDATES_CACHE_DIR "/wz2100_updates.json";
 static const char cacheInfoPath[] = WZ_UPDATES_CACHE_DIR "/cache_info.json";
+static const char compatDataPath[] = WZ_UPDATES_CACHE_DIR "/wz2100_compat.json";
 static CachePaths updatesCachePaths = CachePaths{updatesCacheDataPath, cacheInfoPath};
+static CachePaths compatCachePaths = CachePaths{compatDataPath, nullptr};
 
 template<class Duration>
 date::sys_time<Duration> parse_ISO_8601(const std::string& timeStr)
@@ -320,6 +330,161 @@ void WzUpdateManager::initUpdateCheck()
 {
 	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100.json", "https://warzone2100.github.io/update-data/wz2100.json"};
 	initProcessData(updateDataUrls, WzUpdateManager::processUpdateJSONFile, updatesCachePaths);
+}
+
+// May be called from a background thread
+ProcessResult WzCompatCheckManager::processCompatCheckJSONFile(const json& updateData, bool validSignature, bool validExpiry)
+{
+	if (!updateData.is_object())
+	{
+		wzAsyncExecOnMainThread([]{ debug(LOG_WARNING, "Update data is not an object"); });
+		return ProcessResult::INVALID_JSON;
+	}
+	const auto& channels = updateData["channels"];
+	if (!channels.is_array())
+	{
+		wzAsyncExecOnMainThread([]{ debug(LOG_WARNING, "Channels should be an array"); });
+		return ProcessResult::INVALID_JSON;
+	}
+	auto buildPropProvider = std::make_shared<BuildPropertyProvider>();
+	CombinedPropertyProvider propProvider({buildPropProvider, std::make_shared<EnvironmentPropertyProvider>()});
+	for (const auto& channel : channels)
+	{
+		try
+		{
+			if (!channel.is_object()) continue;
+			const auto& channelName = channel.at("channel");
+			if (!channelName.is_string()) continue;
+			std::string channelNameStr = channelName.get<std::string>();
+			const auto& channelConditional = channel.at("channelConditional");
+			if (!channelConditional.is_string()) continue;
+			if (!PropertyMatcher::evaluateConditionString(channelConditional.get<std::string>(), propProvider))
+			{
+				// non-matching channel conditional
+				continue;
+			}
+			const auto& compatNotices = channel.at("compatNotices");
+			if (!compatNotices.is_array()) continue;
+			for (const auto& compatNotice : compatNotices)
+			{
+				try
+				{
+					const auto& propertyMatch = compatNotice.at("propertyMatch");
+					if (!propertyMatch.is_string()) continue;
+					if (!PropertyMatcher::evaluateConditionString(propertyMatch.get<std::string>(), propProvider))
+					{
+						// non-matching compatNotice propertyMatch
+						continue;
+					}
+					// it matches - current system matches a compatibility notice
+					// verify the compatNotice has the required properties
+					const auto& compatNoticeId = compatNotice.at("id");
+					if (!compatNoticeId.is_string())
+					{
+						// compatNoticeId is not a string
+						continue;
+					}
+					std::string compatNoticeIdStr = compatNoticeId.get<std::string>();
+					json notificationInfo;
+					if (compatNotice.contains("notification"))
+					{
+						notificationInfo = compatNotice["notification"];
+					}
+					if (!notificationInfo.is_object())
+					{
+						// TODO: Handle lack of notification info?
+					}
+					std::string infoLink;
+					if (compatNotice.contains("infoLink"))
+					{
+						const auto& updateLinkJson = compatNotice["infoLink"];
+						if (updateLinkJson.is_string())
+						{
+							infoLink = updateLinkJson.get<std::string>();
+						}
+					}
+					bool hasValidURLPrefix = urlHasAcceptableProtocol(infoLink.c_str());
+					if (!validSignature || !validExpiry || infoLink.empty() || !hasValidURLPrefix)
+					{
+						// use default compat info link
+						infoLink = WZ_DEFAULT_COMPATINFO_LINK;
+					}
+					infoLink = configureLinkURL(infoLink, (*buildPropProvider.get()));
+					// submit notification (on main thread)
+					wzAsyncExecOnMainThread([validSignature, channelNameStr, compatNoticeIdStr, notificationInfo, infoLink]{
+						debug(LOG_WZ, "Found a matching compatibility notice (%s) in channel (%s)", compatNoticeIdStr.c_str(), channelNameStr.c_str());
+						WZ_Notification notification;
+						notification.duration = 0;
+						notification.contentTitle = _("Compatibility Warning");
+						notification.contentText = _("An issue has been detected that may affect Warzone 2100's operation / performance.");
+						notification.contentText += "\n\n";
+						notification.contentText += _("Please click the button below for more information on how to fix it.");
+						if (validSignature)
+						{
+							notification.contentText += "\n\n";
+							notification.contentText += astringf(_("(Notice ID: %s)"), compatNoticeIdStr.c_str());
+						}
+						notification.action = WZ_Notification_Action(_("More Information"), [infoLink](const WZ_Notification&){
+							// Open the infoLink url
+							wzAsyncExecOnMainThread([infoLink]{
+								if (!openURLInBrowser(infoLink.c_str()))
+								{
+									debug(LOG_ERROR, "Failed to open url in browser: \"%s\"", infoLink.c_str());
+								}
+							});
+						});
+						notification.largeIcon = WZ_Notification_Image("images/notifications/exclamation_triangle.png");
+						if (notificationInfo.is_object())
+						{
+							const auto& notificationBase = notificationInfo["base"];
+							const auto& notificationId = notificationInfo["id"];
+							const auto& minTimesShown = notificationInfo["minShown"];
+							if (notificationBase.is_string() && notificationId.is_string())
+							{
+								const std::string notificationIdentifierPrefix = notificationBase.get<std::string>() + "::";
+								const std::string notificationIdentifier = notificationIdentifierPrefix + notificationId.get<std::string>();
+								removeNotificationPreferencesIf([&notificationIdentifierPrefix, &notificationIdentifier](const std::string &uniqueNotificationIdentifier) -> bool {
+									bool hasPrefix = (strncmp(uniqueNotificationIdentifier.c_str(), notificationIdentifierPrefix.c_str(), notificationIdentifierPrefix.size()) == 0);
+									return hasPrefix && (notificationIdentifier != uniqueNotificationIdentifier);
+								});
+								uint8_t minTimesShownValue = 3;
+								if (minTimesShown.is_number_integer())
+								{
+									auto intValue = minTimesShown.get<json::number_integer_t>();
+									if (intValue >= 0)
+									{
+										minTimesShownValue = static_cast<uint8_t>(std::min<json::number_integer_t>(intValue, 10));
+									}
+								}
+								notification.displayOptions = WZ_Notification_Display_Options::makeIgnorable(notificationIdentifier, minTimesShownValue);
+							}
+						}
+						addNotification(notification, WZ_Notification_Trigger::Immediate());
+					});
+					return ProcessResult::UPDATE_FOUND;
+				}
+				catch (const std::exception&)
+				{
+					// Parsing compatNotice failed - skip to next
+					continue;
+				}
+			}
+			return ProcessResult::MATCHED_CHANNEL_NO_UPDATE;
+		}
+		catch (const std::exception&)
+		{
+			// Parsing channel failed - skip to next
+			continue;
+		}
+	}
+	return ProcessResult::NO_MATCHING_CHANNEL;
+}
+
+// May be called from a background thread
+void WzCompatCheckManager::initCompatCheck()
+{
+	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100_compat.json", "https://warzone2100.github.io/update-data/wz2100_compat.json"};
+	initProcessData(updateDataUrls, WzCompatCheckManager::processCompatCheckJSONFile, compatCachePaths);
 }
 
 template<typename T>
@@ -647,6 +812,13 @@ static int updateManagerThreadFunc(void *)
 	return 0;
 }
 
+/** This runs in a separate thread */
+static int compatManagerThreadFunc(void *)
+{
+	WzCompatCheckManager::initCompatCheck();
+	return 0;
+}
+
 void WzInfoManager::initialize()
 {
 	// Create the cache dir if it doesn't exist
@@ -662,6 +834,10 @@ void WzInfoManager::initialize()
 	WZ_THREAD* updateManagerThread = wzThreadCreate(updateManagerThreadFunc, nullptr);
 	wzThreadStart(updateManagerThread);
 	wzThreadDetach(updateManagerThread);
+
+	WZ_THREAD* compatManagerThread = wzThreadCreate(compatManagerThreadFunc, nullptr);
+	wzThreadStart(compatManagerThread);
+	wzThreadDetach(compatManagerThread);
 }
 
 void WzInfoManager::shutdown()
