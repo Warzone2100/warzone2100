@@ -689,6 +689,13 @@ void KeyMapForm::checkPushedKeyCombo()
 	{
 		if (const nonstd::optional<KEY_CODE> kc = scanKeyBoardForPressedBindableKey())
 		{
+			if (kc.value() == KEY_ESC)
+			{
+				// Special-handling for ESC - unhighlight the selection
+				inputLoseFocus();	// clear the input buffer.
+				unhighlightSelected();
+				return;
+			}
 			pushedKeyCombo(*kc);
 		}
 
