@@ -468,6 +468,12 @@ void W_FULLSCREENOVERLAY_CLICKFORM::clicked(W_CONTEXT *psContext, WIDGET_KEY key
 
 void W_FULLSCREENOVERLAY_CLICKFORM::display(int xOffset, int yOffset)
 {
+	if (!visible())
+	{
+		// skip if hidden
+		return;
+	}
+
 	if (backgroundColor.rgba == 0)
 	{
 		return;
