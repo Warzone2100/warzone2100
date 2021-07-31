@@ -25,6 +25,7 @@ using json = nlohmann::json;
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <functional>
 
 #include "lib/framework/wzglobal.h" // required for config.h
 #include "lib/framework/frame.h"
@@ -52,29 +53,41 @@ using json = nlohmann::json;
 # pragma GCC diagnostic pop
 #endif
 
+enum class ProcessResult {
+	INVALID_JSON,
+	NO_MATCHING_CHANNEL,
+	MATCHED_CHANNEL_NO_UPDATE,
+	UPDATE_FOUND
+};
+
+typedef std::function<ProcessResult (const json& updateData, bool validSignature, bool validExpiry)> ProcessJSONDataFileFunc;
+
+struct CachePaths {
+	const char* cache_data_path;
+	const char* cache_info_path;
+};
+
+static std::string configureLinkURL(const std::string& url, BuildPropertyProvider& propProvider);
+static bool isValidExpiry(const json& updateData);
+static void initProcessData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths);
+static void fetchLatestData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths);
+
 class WzUpdateManager {
 public:
 	static void initUpdateCheck();
 private:
-	enum class ProcessResult {
-		INVALID_JSON,
-		NO_MATCHING_CHANNEL,
-		MATCHED_CHANNEL_NO_UPDATE,
-		UPDATE_FOUND
-	};
-	static bool isValidExpiry(const json& updateData);
 	static ProcessResult processUpdateJSONFile(const json& updateData, bool validSignature, bool validExpiry);
-	static std::string configureUpdateLinkURL(const std::string& url, BuildPropertyProvider& propProvider);
-	static void fetchUpdateData(const std::vector<std::string> &updateDataUrls);
 };
 
 const std::string WZ_UPDATES_VERIFY_KEY = "5d9P+Z1SirsWSsYICZAr7QFlPB01s6tzXkhPZ+X/FQ4=";
 const std::string WZ_DEFAULT_UPDATE_LINK = "https://warzone2100.github.io/update-data/redirect/updatelink.html";
 #define WZ_UPDATES_CACHE_DIR "cache"
-#define WZ_CACHE_INFO_JSON_PATH WZ_UPDATES_CACHE_DIR "/cache_info.json"
 #define WZ_CACHE_INFO_JSON_WZVERSION_KEY "wz_version"
-#define WZ_UPDATES_JSON_CACHE_PATH WZ_UPDATES_CACHE_DIR "/wz2100_updates.json"
 #define WZ_UPDATES_JSON_MAX_SIZE (1 << 25)
+
+static const char updatesCacheDataPath[] = WZ_UPDATES_CACHE_DIR "/wz2100_updates.json";
+static const char cacheInfoPath[] = WZ_UPDATES_CACHE_DIR "/cache_info.json";
+static CachePaths updatesCachePaths = CachePaths{updatesCacheDataPath, cacheInfoPath};
 
 template<class Duration>
 date::sys_time<Duration> parse_ISO_8601(const std::string& timeStr)
@@ -98,7 +111,7 @@ date::sys_time<Duration> parse_ISO_8601(const std::string& timeStr)
 // Replaces specific build property keys with their values in a URL string
 // Build property keys are surrounded by "{{}}" - i.e. "{{PLATFORM}}" is replaced with the value of the PLATFORM build property
 // May be called from a background thread
-std::string WzUpdateManager::configureUpdateLinkURL(const std::string& url, BuildPropertyProvider& propProvider)
+static std::string configureLinkURL(const std::string& url, BuildPropertyProvider& propProvider)
 {
 	const std::unordered_set<std::string> permittedBuildPropertySubstitutions = { "PLATFORM", "VERSION_STRING", "GIT_BRANCH" };
 
@@ -140,7 +153,7 @@ std::string WzUpdateManager::configureUpdateLinkURL(const std::string& url, Buil
 }
 
 // May be called from a background thread
-bool WzUpdateManager::isValidExpiry(const json& updateData)
+static bool isValidExpiry(const json& updateData)
 {
 	if (!updateData.is_object())
 	{
@@ -166,7 +179,7 @@ bool WzUpdateManager::isValidExpiry(const json& updateData)
 }
 
 // May be called from a background thread
-WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, bool validSignature, bool validExpiry)
+ProcessResult WzUpdateManager::processUpdateJSONFile(const json& updateData, bool validSignature, bool validExpiry)
 {
 	if (!updateData.is_object())
 	{
@@ -241,7 +254,7 @@ WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json
 						// use default update link
 						updateLink = WZ_DEFAULT_UPDATE_LINK;
 					}
-					updateLink = configureUpdateLinkURL(updateLink, buildPropProvider);
+					updateLink = configureLinkURL(updateLink, buildPropProvider);
 					// submit notification (on main thread)
 					wzAsyncExecOnMainThread([validSignature, channelNameStr, releaseVersionStr, notificationInfo, updateLink]{
 						debug(LOG_INFO, "Found an available update (%s) in channel (%s)", releaseVersionStr.c_str(), channelNameStr.c_str());
@@ -302,8 +315,15 @@ WzUpdateManager::ProcessResult WzUpdateManager::processUpdateJSONFile(const json
 	return ProcessResult::NO_MATCHING_CHANNEL;
 }
 
+// May be called from a background thread
+void WzUpdateManager::initUpdateCheck()
+{
+	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100.json", "https://warzone2100.github.io/update-data/wz2100.json"};
+	initProcessData(updateDataUrls, WzUpdateManager::processUpdateJSONFile, updatesCachePaths);
+}
+
 template<typename T>
-static json loadUpdatesJsonObject(T&& updateJsonStr)
+static json loadDataJsonObject(T&& updateJsonStr)
 {
 	json updateData;
 	try {
@@ -329,14 +349,19 @@ static json loadUpdatesJsonObject(T&& updateJsonStr)
 	return updateData;
 }
 
-static bool cacheInfoIsUsable()
+static bool cacheInfoIsUsable(CachePaths& paths)
 {
+	if (!paths.cache_info_path)
+	{
+		return true;
+	}
+
 	// Check if cache was written by the same version of WZ - if not, ignore it
-	if (PHYSFS_exists(WZ_CACHE_INFO_JSON_PATH))
+	if (PHYSFS_exists(paths.cache_info_path))
 	{
 		try {
 			// Open the file + read the data
-			PHYSFS_file *fileHandle = PHYSFS_openRead(WZ_CACHE_INFO_JSON_PATH);
+			PHYSFS_file *fileHandle = PHYSFS_openRead(paths.cache_info_path);
 			PHYSFS_sint64 filesize = PHYSFS_fileLength(fileHandle);
 			if (filesize <= 0)
 			{
@@ -352,20 +377,15 @@ static bool cacheInfoIsUsable()
 			PHYSFS_close(fileHandle);
 
 			// Parse the json
-			json updateData = loadUpdatesJsonObject(fileData.data());
+			json updateData = loadDataJsonObject(fileData.data());
 
 			// Retrieve the version of WZ used to write the cache
-			auto it = updateData.find(WZ_CACHE_INFO_JSON_WZVERSION_KEY);
-			if (it == updateData.end())
+			const auto& wz_version = updateData.at(WZ_CACHE_INFO_JSON_WZVERSION_KEY);
+			if (!wz_version.is_string())
 			{
 				return false;
 			}
-
-			if (!it.value().is_string())
-			{
-				return false;
-			}
-			if (it.value().get<std::string>() != version_getBuildIdentifierReleaseString())
+			if (wz_version.get<std::string>() != version_getBuildIdentifierReleaseString())
 			{
 				return false;
 			}
@@ -384,13 +404,13 @@ static bool cacheInfoIsUsable()
 }
 
 // May be called from a background thread
-void WzUpdateManager::initUpdateCheck()
+static void initProcessData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths)
 {
-	if (PHYSFS_exists(WZ_UPDATES_JSON_CACHE_PATH) && cacheInfoIsUsable())
+	if (PHYSFS_exists(outputPaths.cache_data_path) && cacheInfoIsUsable(outputPaths))
 	{
 		try {
 			// Open the file + read the data
-			PHYSFS_file *fileHandle = PHYSFS_openRead(WZ_UPDATES_JSON_CACHE_PATH);
+			PHYSFS_file *fileHandle = PHYSFS_openRead(outputPaths.cache_data_path);
 			PHYSFS_sint64 filesize = PHYSFS_fileLength(fileHandle);
 			if (filesize < 0 || filesize > WZ_UPDATES_JSON_MAX_SIZE)
 			{
@@ -415,7 +435,7 @@ void WzUpdateManager::initUpdateCheck()
 			}
 
 			// Parse the remaining json (minus the digital signature)
-			json updateData = loadUpdatesJsonObject(updateJsonStr);
+			json updateData = loadDataJsonObject(updateJsonStr);
 
 			// Determine if the JSON is still valid
 			bool validExpiry = isValidExpiry(updateData);
@@ -426,8 +446,12 @@ void WzUpdateManager::initUpdateCheck()
 			}
 
 			// Process the updates JSON, notify if new version is available
-			const auto processResult = WzUpdateManager::processUpdateJSONFile(updateData, validSignature, validExpiry);
-			if (processResult == WzUpdateManager::ProcessResult::INVALID_JSON)
+			if (!processDataFunc)
+			{
+				throw std::runtime_error("Missing processDataFunc");
+			}
+			const auto processResult = processDataFunc(updateData, validSignature, validExpiry);
+			if (processResult == ProcessResult::INVALID_JSON)
 			{
 				throw std::runtime_error("Invalid JSON");
 			}
@@ -445,12 +469,11 @@ void WzUpdateManager::initUpdateCheck()
 	}
 
 	// Fall-back to URL request for the latest data
-	std::vector<std::string> updateDataUrls = {"https://data.wz2100.net/wz2100.json", "https://warzone2100.github.io/update-data/wz2100.json"};
-	WzUpdateManager::fetchUpdateData(updateDataUrls);
+	fetchLatestData(updateDataUrls, processDataFunc, outputPaths);
 }
 
 // May be called from a background thread
-void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateDataUrls)
+static void fetchLatestData(const std::vector<std::string> &updateDataUrls, ProcessJSONDataFileFunc processDataFunc, CachePaths outputPaths)
 {
 	if (updateDataUrls.empty())
 	{
@@ -464,7 +487,7 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 	URLDataRequest* pRequest = new URLDataRequest();
 	pRequest->url = updateDataUrls.front();
 	std::vector<std::string> additionalUrls(updateDataUrls.begin() + 1, updateDataUrls.end());
-	pRequest->onSuccess = [additionalUrls](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
+	pRequest->onSuccess = [additionalUrls, processDataFunc, outputPaths](const std::string& url, const HTTPResponseDetails& responseDetails, const std::shared_ptr<MemoryStruct>& data) {
 
 		long httpStatusCode = responseDetails.httpStatusCode();
 		if (httpStatusCode != 200)
@@ -472,7 +495,7 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 			wzAsyncExecOnMainThread([httpStatusCode]{
 				debug(LOG_WARNING, "Update check returned HTTP status code: %ld", httpStatusCode);
 			});
-			WzUpdateManager::fetchUpdateData(additionalUrls);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
 			return;
 		}
 
@@ -483,14 +506,14 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 		// Parse the remaining json (minus the digital signature)
 		json updateData;
 		try {
-			updateData = loadUpdatesJsonObject(updateJsonStr);
+			updateData = loadDataJsonObject(updateJsonStr);
 		}
 		catch (const std::exception &e) {
 			std::string errorStr = e.what();
 			wzAsyncExecOnMainThread([url, errorStr]{
 				debug(LOG_NET, "%s; %s", errorStr.c_str(), url.c_str());
 			});
-			WzUpdateManager::fetchUpdateData(additionalUrls);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
 			return;
 		}
 
@@ -501,7 +524,7 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 		{
 			// signature is invalid, or data is expired, and there are further urls to try to fetch
 			// instead of proceeding, try the next url
-			WzUpdateManager::fetchUpdateData(additionalUrls);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
 			return;
 		}
 
@@ -510,52 +533,64 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 		// so it can decide how to trust the parts of the data
 
 		// Process the updates JSON, notify if new version is available
-		const auto processResult = WzUpdateManager::processUpdateJSONFile(updateData, validSignature, validExpiry);
-
-		if (validSignature && (processResult != WzUpdateManager::ProcessResult::INVALID_JSON) && isValidExpiry(updateData))
+		if (!processDataFunc)
 		{
-			// Cache the updates JSON on disk
+			wzAsyncExecOnMainThread([]{
+				debug(LOG_ERROR, "Missing processDataFunc");
+			});
+			return;
+		}
+		const auto processResult = processDataFunc(updateData, validSignature, validExpiry);
+
+		if (validSignature && (processResult != ProcessResult::INVALID_JSON) && isValidExpiry(updateData))
+		{
+			// Cache the data JSON on disk
 			if (!WZ_PHYSFS_isDirectory(WZ_UPDATES_CACHE_DIR))
 			{
-				if (PHYSFS_mkdir(WZ_UPDATES_CACHE_DIR) == 0)
+				// Cache dir should have already been created?
+				return;
+			}
+			if (outputPaths.cache_data_path)
+			{
+				PHYSFS_uint32 size = data->size;
+				PHYSFS_file *fileHandle = PHYSFS_openWrite(outputPaths.cache_data_path);
+				if (fileHandle)
 				{
-					// PHYSFS_mkdir failed?
-					return;
+					if (WZ_PHYSFS_writeBytes(fileHandle, data->memory, size) != size)
+					{
+						// Failed to write data to file
+						std::string pathStr = outputPaths.cache_data_path;
+						wzAsyncExecOnMainThread([pathStr]{
+							debug(LOG_ERROR, "Failed to write cache file: %s", pathStr.c_str());
+						});
+					}
+					PHYSFS_close(fileHandle);
 				}
 			}
-			PHYSFS_uint32 size = data->size;
-			PHYSFS_file *fileHandle = PHYSFS_openWrite(WZ_UPDATES_JSON_CACHE_PATH);
-			if (fileHandle)
+			if (outputPaths.cache_info_path)
 			{
-				if (WZ_PHYSFS_writeBytes(fileHandle, data->memory, size) != size)
+				// Also write out the cache info file (which contains the version of WZ used to write the cache)
+				json cacheInfoObj = json::object();
+				cacheInfoObj[WZ_CACHE_INFO_JSON_WZVERSION_KEY] = version_getBuildIdentifierReleaseString();
+				std::string cacheInfoData = cacheInfoObj.dump(2, ' ', true, json::error_handler_t::replace);
+				PHYSFS_uint32 size = static_cast<PHYSFS_uint32>(cacheInfoData.size());
+				PHYSFS_file *fileHandle = PHYSFS_openWrite(outputPaths.cache_info_path);
+				if (fileHandle)
 				{
-					// Failed to write data to file
-					wzAsyncExecOnMainThread([]{
-						debug(LOG_ERROR, "Failed to write cache file: %s", WZ_UPDATES_JSON_CACHE_PATH);
-					});
+					if (WZ_PHYSFS_writeBytes(fileHandle, cacheInfoData.data(), size) != size)
+					{
+						// Failed to write data to file
+						std::string pathStr = outputPaths.cache_info_path;
+						wzAsyncExecOnMainThread([pathStr]{
+							debug(LOG_ERROR, "Failed to write cache info file: %s", pathStr.c_str());
+						});
+					}
+					PHYSFS_close(fileHandle);
 				}
-				PHYSFS_close(fileHandle);
-			}
-			// Also write out the cache info file (which contains the version of WZ used to write the cache)
-			json cacheInfoObj = json::object();
-			cacheInfoObj[WZ_CACHE_INFO_JSON_WZVERSION_KEY] = version_getBuildIdentifierReleaseString();
-			std::string cacheInfoData = cacheInfoObj.dump(2, ' ', true, json::error_handler_t::replace);
-			size = static_cast<PHYSFS_uint32>(cacheInfoData.size());
-			fileHandle = PHYSFS_openWrite(WZ_CACHE_INFO_JSON_PATH);
-			if (fileHandle)
-			{
-				if (WZ_PHYSFS_writeBytes(fileHandle, cacheInfoData.data(), size) != size)
-				{
-					// Failed to write data to file
-					wzAsyncExecOnMainThread([]{
-						debug(LOG_ERROR, "Failed to write cache info file: %s", WZ_CACHE_INFO_JSON_PATH);
-					});
-				}
-				PHYSFS_close(fileHandle);
 			}
 		}
 	};
-	pRequest->onFailure = [additionalUrls](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
+	pRequest->onFailure = [additionalUrls, processDataFunc, outputPaths](const std::string& url, URLRequestFailureType type, optional<HTTPResponseDetails> transferDetails) {
 		bool tryNextUrl = false;
 		switch (type)
 		{
@@ -595,7 +630,7 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 		}
 		if (tryNextUrl)
 		{
-			WzUpdateManager::fetchUpdateData(additionalUrls);
+			fetchLatestData(additionalUrls, processDataFunc, outputPaths);
 		}
 	};
 	pRequest->maxDownloadSizeLimit = WZ_UPDATES_JSON_MAX_SIZE; // 32 MB (the response should never be this big)
@@ -606,7 +641,7 @@ void WzUpdateManager::fetchUpdateData(const std::vector<std::string> &updateData
 }
 
 /** This runs in a separate thread */
-static int infoManagerThreadFunc(void *)
+static int updateManagerThreadFunc(void *)
 {
 	WzUpdateManager::initUpdateCheck();
 	return 0;
@@ -614,9 +649,19 @@ static int infoManagerThreadFunc(void *)
 
 void WzInfoManager::initialize()
 {
-	WZ_THREAD* infoManagerThread = wzThreadCreate(infoManagerThreadFunc, nullptr);
-	wzThreadStart(infoManagerThread);
-	wzThreadDetach(infoManagerThread);
+	// Create the cache dir if it doesn't exist
+	if (!WZ_PHYSFS_isDirectory(WZ_UPDATES_CACHE_DIR))
+	{
+		if (PHYSFS_mkdir(WZ_UPDATES_CACHE_DIR) == 0)
+		{
+			// PHYSFS_mkdir failed?
+			debug(LOG_ERROR, "Failed to create cache folder");
+		}
+	}
+
+	WZ_THREAD* updateManagerThread = wzThreadCreate(updateManagerThreadFunc, nullptr);
+	wzThreadStart(updateManagerThread);
+	wzThreadDetach(updateManagerThread);
 }
 
 void WzInfoManager::shutdown()
