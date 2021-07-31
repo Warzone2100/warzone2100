@@ -1256,6 +1256,7 @@ WidgetTriggers const &widgRunScreen(const std::shared_ptr<W_SCREEN> &psScreen)
 	forEachOverlayScreen([&sContext](const OverlayScreen& overlay) -> bool
 	{
 		overlay.psScreen->psForm->runRecursive(&sContext);
+		overlay.psScreen->psForm->run(&sContext); // ensure run() is called on root form
 		return true;
 	});
 	psScreen->psForm->runRecursive(&sContext);
