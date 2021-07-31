@@ -548,8 +548,20 @@ W_SCREEN::~W_SCREEN()
 	psFocus.reset();
 }
 
-void W_SCREEN::initialize()
+void W_SCREEN::initialize(const std::shared_ptr<W_FORM>& customRootForm)
 {
+	if (customRootForm)
+	{
+		auto customRootFormParent = customRootForm->parent();
+		if (customRootFormParent)
+		{
+			customRootFormParent->detach(customRootForm);
+		}
+		psForm = customRootForm;
+		psForm->screenPointer = shared_from_this();
+		return;
+	}
+
 	W_FORMINIT sInit;
 	sInit.id = 0;
 	sInit.style = WFORM_PLAIN | WFORM_INVISIBLE;
