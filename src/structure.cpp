@@ -6130,13 +6130,13 @@ void factoryProdAdjust(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate, bool 
  */
 ProductionRunEntry getProduction(STRUCTURE *psStructure, DROID_TEMPLATE *psTemplate)
 {
-	if (psStructure == nullptr || psStructure->player != productionPlayer || psTemplate == nullptr)
+	if (psStructure == nullptr || psStructure->player != productionPlayer || psTemplate == nullptr || !StructIsFactory(psStructure))
 	{
 		return ProductionRunEntry();  // Not producing any NULL pointers.
 	}
 
 	FACTORY *psFactory = &psStructure->pFunctionality->factory;
-	if (psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
+	if (!(psFactory->psAssemblyPoint) || psFactory->psAssemblyPoint->factoryInc >= asProductionRun[psFactory->psAssemblyPoint->factoryType].size())
 	{
 		return ProductionRunEntry();  // Don't have a production list.
 	}
