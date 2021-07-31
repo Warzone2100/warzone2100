@@ -4593,8 +4593,6 @@ void WzMultiplayerOptionsTitleUI::screenSizeDidChange(unsigned int oldWidth, uns
 {
 	// NOTE: To properly support resizing the inline overlay screen based on underlying screen layer recalculations
 	// frontendScreenSizeDidChange() should be called after intScreenSizeDidChange() in gameScreenSizeDidChange()
-	if (psInlineChooserOverlayScreen == nullptr) return;
-	psInlineChooserOverlayScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
 }
 
 static void printHostHelpMessagesToConsole()

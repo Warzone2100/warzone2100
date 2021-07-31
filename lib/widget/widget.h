@@ -244,6 +244,8 @@ bool isMouseClickDownOnScreenOverlayChild();
 bool isMouseOverSomeWidget(const std::shared_ptr<W_SCREEN> &psScreen);
 void widgScheduleTask(std::function<void ()> f);
 
+void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
+
 /** Add a form to the widget screen */
 WZ_DECL_NONNULL(2) W_FORM *widgAddForm(const std::shared_ptr<W_SCREEN> &psScreen, const W_FORMINIT *psInit);
 

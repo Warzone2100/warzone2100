@@ -137,7 +137,4 @@ void jsDebugUpdateLabels();
 
 // jsDebugSelected() and jsDebugMessageUpdate() defined in qtscript.h since it is used widely
 
-/* Tell the script debugger when the screen has been resized */
-void scriptDebuggerScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight);
-
 #endif

@@ -2311,14 +2311,3 @@ void jsDebugCreate(const std::shared_ptr<scripting_engine::DebugInterface>& debu
 	globalDialog = WZScriptDebugger::make(debugInterface);
 	debugScreen->psForm->attach(globalDialog);
 }
-
-void scriptDebuggerScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
-{
-	// NOTE:
-	// By setting the appropriate calcLayout functions on all interface elements,
-	// they should automatically recalculate their layout on screen resize.
-	if (globalDialog)
-	{
-		globalDialog->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
-	}
-}
