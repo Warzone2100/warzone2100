@@ -4451,7 +4451,7 @@ foundDroid:
 			ASSERT(tid >= 0 && tplayer >= 0, "Bad ID");
 			BASE_OBJECT *psObj = getBaseObjFromData(tid, tplayer, ttype);
 			ASSERT(psObj, "Failed to find droid base structure");
-			ASSERT(psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
+			ASSERT(!psObj || psObj->type == OBJ_STRUCTURE, "Droid base structure not a structure");
 			setSaveDroidBase(psDroid, (STRUCTURE *)psObj);
 		}
 		if (ini.contains("commander"))
