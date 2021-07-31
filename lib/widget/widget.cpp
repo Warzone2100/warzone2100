@@ -284,6 +284,15 @@ static inline void forEachOverlayScreenBottomUp(const std::function<bool (const 
 	iterateOverlayScreens(overlays.crbegin(), overlays.crend(), func);
 }
 
+void widgOverlaysScreenSizeDidChange(int oldWidth, int oldHeight, int newWidth, int newHeight)
+{
+	forEachOverlayScreen([oldWidth, oldHeight, newWidth, newHeight](const OverlayScreen& overlay) -> bool
+	{
+		overlay.psScreen->screenSizeDidChange(oldWidth, oldHeight, newWidth, newHeight);
+		return true; // keep enumerating
+	});
+}
+
 static bool isScreenARegisteredOverlay(const std::shared_ptr<W_SCREEN> &psScreen)
 {
 	if (!psScreen) { return false; }
