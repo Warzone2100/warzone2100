@@ -317,6 +317,7 @@ lib/sound/openal_info.cpp
 lib/sound/openal_track.cpp
 lib/sound/playlist.cpp
 lib/sound/track.cpp
+lib/widget/alignment.cpp
 lib/widget/bar.cpp
 lib/widget/button.cpp
 lib/widget/cliprect.cpp
@@ -328,6 +329,8 @@ lib/widget/gridlayout.cpp
 lib/widget/jsontable.cpp
 lib/widget/label.cpp
 lib/widget/listwidget.cpp
+lib/widget/margin.cpp
+lib/widget/minsize.cpp
 lib/widget/multibutform.cpp
 lib/widget/paragraph.cpp
 lib/widget/scrollablelist.cpp
