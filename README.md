@@ -358,7 +358,6 @@ Do **not** use GitHub's "Download Zip" option, as it does not contain submodules
       - This creates `CMakeSettings.json`
    4. Add the following variables to `CMakeSettings.json`:
       - To `cmakeCommandArgs`, add: `-DCMAKE_TOOLCHAIN_FILE=vcpkg\scripts\buildsystems\vcpkg.cmake`
-      - If you're running a 64-bit platform, you need to set the compilation to 32-bit by setting `inheritEnvironments` to `[ "msvc_x86_x64" ]`
       - Note: Visual Studio automatically escapes and turns each `\` into `\\`
    5. After letting Visual Studio re-run CMake configure with the new settings, you can build using the **CMake** menu.
 
