@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-26 12:19\n"
+"POT-Creation-Date: 2021-08-01 03:46+0000\n"
+"PO-Revision-Date: 2021-08-01 06:23\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1847,7 +1847,7 @@ msgstr "Richiede la Fabbrica di Cyborg per essere prodotto"
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:556
+#: po/custom/fromJson.txt:560
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Armato con mitragliatrice d'assalto Cyborg"
 
@@ -3416,7 +3416,7 @@ msgstr "Sgancia bombe a grappolo ad alto esplosivo"
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1084
+#: po/custom/fromJson.txt:1087
 msgid "Best Targets: Base Structures"
 msgstr "Bersagli migliori: strutture"
 
@@ -3645,7 +3645,7 @@ msgstr "L'obice da 105 mm può essere assegnato a un sensore"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1107
+#: po/custom/fromJson.txt:1101
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Bersagli migliori: strutture, fanteria e veicoli su ruote"
 
@@ -3849,7 +3849,7 @@ msgstr "Può essere assegnato a un sensore"
 #. ... + 7 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1101
+#: po/custom/fromJson.txt:1107
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Bersagli migliori: strutture, fanteria e veicoli su ruote"
 
@@ -3860,7 +3860,7 @@ msgstr "Bersagli migliori: strutture, fanteria e veicoli su ruote"
 #. ... + 29 refs
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:1211
+#: po/custom/fromJson.txt:1216
 msgid "Body Points: Very Low"
 msgstr "Punti corazza: molto bassi"
 
@@ -4171,8 +4171,8 @@ msgstr "Comandanti - prima produci dei comandanti"
 #: src/intelmap.cpp:353
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
-#: src/multimenu.cpp:435
-#: src/multimenu.cpp:1126
+#: src/multimenu.cpp:422
+#: src/multimenu.cpp:1146
 #: src/transporter.cpp:202
 #: src/transporter.cpp:263
 #: src/transporter.cpp:549
@@ -5779,8 +5779,8 @@ msgid "Menu"
 msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
-#: src/frontend.cpp:1974
-#: src/frontend.cpp:2018
+#: src/frontend.cpp:1969
+#: src/frontend.cpp:2013
 msgid "Campaign"
 msgstr "Campagna"
 
@@ -6403,7 +6403,7 @@ msgstr "Missile Archangel"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:560
+#: po/custom/fromJson.txt:556
 msgid "Armed with Cyborg assault gun"
 msgstr "Armato con mitragliatrice d'assalto cyborg"
 
@@ -7139,7 +7139,7 @@ msgstr "Bersagli migliori: strutture e cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1087
+#: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base structures"
 msgstr "Bersagli Migliori: strutture della base"
 
@@ -7168,8 +7168,8 @@ msgstr "Bersagli migliori: bunker e postazioni"
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
-msgid "Best Targets: Bunkers, defenses, base buildings"
-msgstr "Bersagli migliori: bunker, difese ed edifici"
+msgid "Best Targets: Bunkers, defenses, base structures"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7264,7 +7264,7 @@ msgstr "Aumenta i punti corazza e la velocità"
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-#: po/custom/fromJson.txt:1216
+#: po/custom/fromJson.txt:1210
 msgid "Body Points: Very low"
 msgstr "Punti corazza: molto bassi"
 
@@ -9869,21 +9869,21 @@ msgstr "Colpi HVAPFSDS per Cannone"
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
-msgid "HVC Cannon Emplacement"
-msgstr "Fortificazione con cannone HCV"
+msgid "HVC Emplacement"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
-msgid "HVC Cannon Hardpoint"
-msgstr "Postazione con cannone HCV"
+msgid "HVC Hardpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
-msgid "HVC Cannon Python Tracks"
-msgstr "Cannone HCV Python su ruote"
+msgid "HVC Python Tracks"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -11592,20 +11592,20 @@ msgid "New Systems Tower Available"
 msgstr "Nuova torre con sistemi disponibile"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4228
-msgid "New Systems Turret Available For Design"
-msgstr "Nuova torretta con sistemi disponibile"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4234
+#: po/custom/fromJson.txt:4230
 msgid "New Systems Turret Available for Design"
 msgstr "Nuova torretta con sistemi disponibile per la progettazione"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4234
+msgid "New Systems Turret Available For Design"
+msgstr "Nuova torretta con sistemi disponibile"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_SY_SU1.text[1]
@@ -13587,18 +13587,18 @@ msgid "Thermal Armor +35%"
 msgstr "Armatura Termica +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-#: po/custom/fromJson.txt:5538
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#: po/custom/fromJson.txt:5539
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Armatura Termica +40%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5543
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Armatura Termica +40%"
 
 #. TRANSLATORS:
@@ -15206,7 +15206,7 @@ msgstr "In attesa degli altri giocatori"
 msgid "Out of sync"
 msgstr "Fuori sincronia"
 
-#: src/display3d.cpp:2048
+#: src/display3d.cpp:2049
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr "Imposta ingrandimento a %.0f"
@@ -15255,7 +15255,7 @@ msgstr "Trasferimento unità fallito - limite unità superato"
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
-#: src/frontend.cpp:1909
+#: src/frontend.cpp:1904
 msgid "Normal"
 msgstr "Normale"
 
@@ -15356,11 +15356,11 @@ msgstr "ESERCITAZIONI"
 #: src/frontend.cpp:578
 #: src/frontend.cpp:650
 #: src/frontend.cpp:830
-#: src/frontend.cpp:1048
-#: src/frontend.cpp:1554
-#: src/frontend.cpp:1846
-#: src/frontend.cpp:1987
-#: src/frontend.cpp:2015
+#: src/frontend.cpp:1047
+#: src/frontend.cpp:1549
+#: src/frontend.cpp:1841
+#: src/frontend.cpp:1982
+#: src/frontend.cpp:2010
 msgctxt "menu"
 msgid "Return"
 msgstr "Indietro"
@@ -15495,14 +15495,14 @@ msgid "2×"
 msgstr "2×"
 
 #: src/frontend.cpp:722
-#: src/frontend.cpp:1203
+#: src/frontend.cpp:1202
 msgid "Fullscreen"
 msgstr "A schermo pieno"
 
 #: src/frontend.cpp:723
 #: src/frontend.cpp:734
 #: src/frontend.cpp:931
-#: src/frontend.cpp:1913
+#: src/frontend.cpp:1908
 msgid "Unsupported"
 msgstr "Non supportato"
 
@@ -15511,12 +15511,12 @@ msgstr "Non supportato"
 #: src/frontend.cpp:745
 #: src/frontend.cpp:750
 #: src/frontend.cpp:755
-#: src/frontend.cpp:1212
-#: src/frontend.cpp:1256
+#: src/frontend.cpp:1211
+#: src/frontend.cpp:1255
+#: src/frontend.cpp:1766
 #: src/frontend.cpp:1771
 #: src/frontend.cpp:1776
-#: src/frontend.cpp:1781
-#: src/frontend.cpp:1791
+#: src/frontend.cpp:1786
 msgid "Off"
 msgstr "Spento"
 
@@ -15533,11 +15533,11 @@ msgstr "Nero"
 #: src/frontend.cpp:745
 #: src/frontend.cpp:750
 #: src/frontend.cpp:755
-#: src/frontend.cpp:1258
+#: src/frontend.cpp:1257
+#: src/frontend.cpp:1766
 #: src/frontend.cpp:1771
 #: src/frontend.cpp:1776
-#: src/frontend.cpp:1781
-#: src/frontend.cpp:1791
+#: src/frontend.cpp:1786
 msgid "On"
 msgstr "Acceso"
 
@@ -15608,44 +15608,44 @@ msgstr "Abilitato"
 msgid "Auto"
 msgstr "Automatico"
 
-#: src/frontend.cpp:993
+#: src/frontend.cpp:992
 #: src/ingameop.cpp:149
 msgid "Voice Volume"
 msgstr "Volume della voce"
 
-#: src/frontend.cpp:998
+#: src/frontend.cpp:997
 #: src/ingameop.cpp:155
 msgid "FX Volume"
 msgstr "Volume degli effetti"
 
-#: src/frontend.cpp:1003
+#: src/frontend.cpp:1002
 #: src/ingameop.cpp:161
 msgid "Music Volume"
 msgstr "Volume della musica"
 
-#: src/frontend.cpp:1009
+#: src/frontend.cpp:1008
 #: src/ingameop.cpp:167
 msgid "Subtitles"
 msgstr "Sottotitoli"
 
-#: src/frontend.cpp:1014
+#: src/frontend.cpp:1013
 msgid "HRTF"
 msgstr "HRTF"
 
-#: src/frontend.cpp:1020
-#: src/frontend.cpp:1022
+#: src/frontend.cpp:1019
+#: src/frontend.cpp:1021
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "HRTF non è supportato sul tuo dispositivo / sistema / libreria OpenAL"
 
-#: src/frontend.cpp:1026
+#: src/frontend.cpp:1025
 msgid "Map Zoom"
 msgstr "Ingrandimento mappa"
 
-#: src/frontend.cpp:1031
+#: src/frontend.cpp:1030
 msgid "Map Zoom Rate"
 msgstr "Velocità d'ingrandimento mappa"
 
-#: src/frontend.cpp:1036
+#: src/frontend.cpp:1035
 msgid "Radar Zoom"
 msgstr "Ingrandimento del radar"
 
@@ -15653,229 +15653,229 @@ msgstr "Ingrandimento del radar"
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:1055
+#: src/frontend.cpp:1054
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr "OPZIONI AUDIO E INGRANDIMENTO"
 
-#: src/frontend.cpp:1167
+#: src/frontend.cpp:1166
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr "Nella modalità desktop a schermo intero, la risoluzione corrisponde a quella del desktop \n"
 "(o a quella consentita dal gestore delle finestre)."
 
-#: src/frontend.cpp:1169
+#: src/frontend.cpp:1168
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr "Puoi cambiare la risoluzione ridimensionando la finestra. (Prova a trascinare un lato / angolo.)"
 
-#: src/frontend.cpp:1199
+#: src/frontend.cpp:1198
 msgid "Desktop Full"
 msgstr "Desktop pieno"
 
-#: src/frontend.cpp:1201
+#: src/frontend.cpp:1200
 msgid "Windowed"
 msgstr "A finestra"
 
-#: src/frontend.cpp:1222
+#: src/frontend.cpp:1221
 msgid "Graphics Mode"
 msgstr "Modalità Grafica"
 
-#: src/frontend.cpp:1227
+#: src/frontend.cpp:1226
 msgid "Resolution"
 msgstr "Risoluzione"
 
-#: src/frontend.cpp:1232
+#: src/frontend.cpp:1231
 msgid "Display Scale"
 msgstr "Scala del display"
 
-#: src/frontend.cpp:1260
+#: src/frontend.cpp:1259
 msgid "Adaptive"
 msgstr "Adattivo"
 
-#: src/frontend.cpp:1475
+#: src/frontend.cpp:1470
 msgid "* Takes effect on game restart"
 msgstr "* Ha effetto al riavvio del gioco"
 
-#: src/frontend.cpp:1508
+#: src/frontend.cpp:1503
 msgid "Texture size"
 msgstr "Dimensione della Texture"
 
-#: src/frontend.cpp:1513
+#: src/frontend.cpp:1508
 #: src/ingameop.cpp:728
 msgid "Vertical sync"
 msgstr "Sincronia verticale"
 
-#: src/frontend.cpp:1518
+#: src/frontend.cpp:1513
 msgid "Antialiasing*"
 msgstr "Antialiasing*"
 
-#: src/frontend.cpp:1526
+#: src/frontend.cpp:1521
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr "Attenzione: Antialiasing può causare crash, specialmente con valori > 16"
 
-#: src/frontend.cpp:1539
+#: src/frontend.cpp:1534
 msgid "Graphics Backend*"
 msgstr "Motore grafico*"
 
-#: src/frontend.cpp:1551
+#: src/frontend.cpp:1546
 msgid "VIDEO OPTIONS"
 msgstr "OPZIONI VIDEO"
 
-#: src/frontend.cpp:1594
+#: src/frontend.cpp:1589
 msgid "Unable to change Window Mode"
 msgstr "Impossibile modificare la modalità a finestra"
 
-#: src/frontend.cpp:1594
+#: src/frontend.cpp:1589
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Warzone non è riuscito a modificare la modalità a finestra.\n"
 "Il sistema o il driver potrebbero non supportare altre modalità."
 
-#: src/frontend.cpp:1620
+#: src/frontend.cpp:1615
 msgid "Unable to change Vertical Sync"
 msgstr "Impossibile modificare la sincronizzazione verticale"
 
-#: src/frontend.cpp:1620
+#: src/frontend.cpp:1615
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Warzone non è riuscito a modificare la modalità di sincronizzazione verticale.\n"
 "Il sistema o il driver potrebbe non supportare altre modalità."
 
-#: src/frontend.cpp:1786
+#: src/frontend.cpp:1781
 msgid "Middle Mouse"
 msgstr "Pulsante centrale del mouse"
 
-#: src/frontend.cpp:1786
+#: src/frontend.cpp:1781
 msgid "Right Mouse"
 msgstr "Pulsante destro del mouse"
 
-#: src/frontend.cpp:1809
+#: src/frontend.cpp:1804
 #: src/ingameop.cpp:804
 msgid "Reverse Rotation"
 msgstr "Inverti la rotazione"
 
-#: src/frontend.cpp:1814
+#: src/frontend.cpp:1809
 #: src/ingameop.cpp:810
 msgid "Trap Cursor"
 msgstr "Blocca il cursore"
 
-#: src/frontend.cpp:1820
+#: src/frontend.cpp:1815
 #: src/ingameop.cpp:816
 msgid "Switch Mouse Buttons"
 msgstr "Inverti i pulsanti del mouse"
 
-#: src/frontend.cpp:1826
+#: src/frontend.cpp:1821
 #: src/ingameop.cpp:821
 msgid "Rotate Screen"
 msgstr "Ruota lo schermo"
 
-#: src/frontend.cpp:1831
+#: src/frontend.cpp:1826
 #: src/ingameop.cpp:826
 msgid "Colored Cursors"
 msgstr "Cursori colorati"
 
-#: src/frontend.cpp:1843
+#: src/frontend.cpp:1838
 msgid "MOUSE OPTIONS"
 msgstr "OPZIONI DEL MOUSE"
 
-#: src/frontend.cpp:1908
+#: src/frontend.cpp:1903
 #: src/multiint.cpp:234
 msgid "Easy"
 msgstr "Facile"
 
-#: src/frontend.cpp:1910
+#: src/frontend.cpp:1905
 #: src/multiint.cpp:234
 msgid "Hard"
 msgstr "Difficile"
 
-#: src/frontend.cpp:1911
+#: src/frontend.cpp:1906
 #: src/multiint.cpp:234
 msgid "Insane"
 msgstr "Pazzo"
 
-#: src/frontend.cpp:1942
-#: src/frontend.cpp:2016
+#: src/frontend.cpp:1937
+#: src/frontend.cpp:2011
 msgid "Language"
 msgstr "Lingua"
 
-#: src/frontend.cpp:1946
-#: src/frontend.cpp:2020
+#: src/frontend.cpp:1941
+#: src/frontend.cpp:2015
 msgid "Campaign Difficulty"
 msgstr "Difficoltà della campagna"
 
-#: src/frontend.cpp:1950
-#: src/frontend.cpp:2021
+#: src/frontend.cpp:1945
+#: src/frontend.cpp:2016
 msgid "Camera Speed"
 msgstr "Velocità della telecamera"
 
-#: src/frontend.cpp:1954
-#: src/frontend.cpp:2017
+#: src/frontend.cpp:1949
+#: src/frontend.cpp:2012
 msgid "Unit Colour:"
 msgstr "Colore delle unità:"
 
-#: src/frontend.cpp:1984
-#: src/frontend.cpp:2019
+#: src/frontend.cpp:1979
+#: src/frontend.cpp:2014
 msgid "Skirmish/Multiplayer"
 msgstr "Schermaglia / più giocatori"
 
-#: src/frontend.cpp:1990
+#: src/frontend.cpp:1985
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
 msgstr "Aiutaci a migliorare le traduzioni di Warzone 2100: %s"
 
-#: src/frontend.cpp:1992
+#: src/frontend.cpp:1987
 msgid "Click to open webpage."
 msgstr "Fai clic per aprire la pagina web."
 
-#: src/frontend.cpp:1995
-#: src/frontend.cpp:2014
+#: src/frontend.cpp:1990
+#: src/frontend.cpp:2009
 msgid "GAME OPTIONS"
 msgstr "OPZIONI DI GIOCO"
 
-#: src/frontend.cpp:2040
+#: src/frontend.cpp:2035
 msgid "Insane Difficulty"
 msgstr "Difficoltà Pazzo"
 
-#: src/frontend.cpp:2041
+#: src/frontend.cpp:2036
 msgid "This difficulty is for very experienced players!"
 msgstr "Questa difficoltà è per i giocatori molto esperti!"
 
-#: src/frontend.cpp:2143
+#: src/frontend.cpp:2138
 #: src/multiint.cpp:2965
 msgid "Mod: "
 msgstr "Mod: "
 
-#: src/frontend.cpp:2605
+#: src/frontend.cpp:2598
 msgid "Increase Game Display Scale?"
 msgstr "Aumentare la scala del display del gioco?"
 
-#: src/frontend.cpp:2607
+#: src/frontend.cpp:2600
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
 msgstr "Con le impostazioni di risoluzione e di scala del display correnti l'interfaccia del gioco può apparire piccola e la prospettiva di gioco distorta."
 
-#: src/frontend.cpp:2609
+#: src/frontend.cpp:2602
 msgid "You can fix this by increasing the game's Display Scale setting."
 msgstr "Puoi risolvere aumentando l'impostazione della scala del display del gioco."
 
-#: src/frontend.cpp:2611
+#: src/frontend.cpp:2604
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
 msgstr "Vuoi aumentare la scala del display del gioco a: %u%%?"
 
-#: src/frontend.cpp:2613
+#: src/frontend.cpp:2606
 msgid "Increase Display Scale"
 msgstr "Aumenta la scala del display"
 
-#: src/frontend.cpp:2630
+#: src/frontend.cpp:2623
 #, c-format
 msgid "Display Scale Increased to: %u%%"
 msgstr "Scala del display aumentata a: %u%%"
 
-#: src/frontend.cpp:2631
-#: src/frontend.cpp:2647
+#: src/frontend.cpp:2624
+#: src/frontend.cpp:2640
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
 msgstr "Puoi regolare la scala del display in qualsiasi momento nel menu delle opzioni video."
 
-#: src/frontend.cpp:2646
+#: src/frontend.cpp:2639
 msgid "Tip: Adjusting Display Scale"
 msgstr "Suggerimento: regolazione della scala del display"
 
@@ -15907,7 +15907,7 @@ msgstr "Il giocatore %u sta ottenendo una nuova unità per mezzo di trucchi (men
 
 #: src/hci.cpp:1658
 #: src/multiint.cpp:1426
-#: src/multimenu.cpp:686
+#: src/multimenu.cpp:768
 msgid "Power"
 msgstr "Energia"
 
@@ -16025,7 +16025,7 @@ msgstr "Carica Partita"
 
 #: src/ingameop.cpp:253
 #: src/ingameop.cpp:262
-#: src/mission.cpp:2430
+#: src/mission.cpp:2425
 msgid "Save Game"
 msgstr "Salva Partita"
 
@@ -17401,7 +17401,7 @@ msgstr "ASSEGNAZIONE TASTI"
 #: src/keyedit.cpp:575
 #: src/multiint.cpp:1504
 #: src/musicmanager.cpp:769
-#: src/titleui/gamefind.cpp:91
+#: src/titleui/gamefind.cpp:82
 #: src/titleui/protocol.cpp:81
 msgid "Return To Previous Screen"
 msgstr "Ritorna alla schermata precedente"
@@ -17432,42 +17432,42 @@ msgstr ""
 msgid "Could not save game!"
 msgstr "Non posso salvare la partita!"
 
-#: src/mission.cpp:1895
+#: src/mission.cpp:1890
 msgid "Load Transport"
 msgstr "Carica il trasporto"
 
-#: src/mission.cpp:2254
+#: src/mission.cpp:2249
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBIETTIVO RAGGIUNTO barando!"
 
-#: src/mission.cpp:2254
+#: src/mission.cpp:2249
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBIETTIVO RAGGIUNTO"
 
-#: src/mission.cpp:2260
+#: src/mission.cpp:2255
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "MISSIONE FALLITA e hai barato!"
 
-#: src/mission.cpp:2260
+#: src/mission.cpp:2255
 msgid "OBJECTIVE FAILED"
 msgstr "MISSIONE FALLITA"
 
-#: src/mission.cpp:2289
+#: src/mission.cpp:2284
 msgid "Continue Game"
 msgstr "Continua la Partita"
 
-#: src/mission.cpp:2299
-#: src/mission.cpp:2335
-#: src/mission.cpp:2449
+#: src/mission.cpp:2294
+#: src/mission.cpp:2330
+#: src/mission.cpp:2444
 msgid "Quit To Main Menu"
 msgstr "Esci al Menu Principale"
 
-#: src/mission.cpp:2329
-#: src/mission.cpp:2427
+#: src/mission.cpp:2324
+#: src/mission.cpp:2422
 msgid "Load Saved Game"
 msgstr "Carica Partita"
 
-#: src/mission.cpp:2395
+#: src/mission.cpp:2390
 msgid "GAME SAVED :"
 msgstr "PARTITA SALVATA!"
 
@@ -17599,7 +17599,7 @@ msgid "Select Game Name"
 msgstr "Seleziona il nome della partita"
 
 #: src/multiint.cpp:1334
-#: src/titleui/gamefind.cpp:579
+#: src/titleui/gamefind.cpp:279
 msgid "Game Name"
 msgstr "Nome della partita"
 
@@ -17634,7 +17634,7 @@ msgid "Select Player Name"
 msgstr "Seleziona il nome del giocatore"
 
 #: src/multiint.cpp:1415
-#: src/multimenu.cpp:674
+#: src/multimenu.cpp:772
 msgid "Alliances"
 msgstr "Alleanze"
 
@@ -17731,14 +17731,14 @@ msgstr "Squadra"
 
 #: src/multiint.cpp:1919
 #: src/multiint.cpp:3910
-#: src/multimenu.cpp:1242
+#: src/multimenu.cpp:1272
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "L'ospitante ha espulso %s dalla partita!"
 
 #: src/multiint.cpp:1920
 #: src/multiint.cpp:3912
-#: src/multimenu.cpp:1246
+#: src/multimenu.cpp:1276
 msgid "The host has kicked you from the game."
 msgstr "L'ospitante ti ha cacciato dal gioco."
 
@@ -17921,7 +17921,7 @@ msgid "HOST"
 msgstr "HOST"
 
 #: src/multiint.cpp:4940
-#: src/multimenu.cpp:693
+#: src/multimenu.cpp:769
 msgid "Ping"
 msgstr "Latenza"
 
@@ -17995,91 +17995,91 @@ msgstr "Limiti ripristinati ai valori predefiniti"
 msgid "Limits Reset To Default Values"
 msgstr "Limiti ripristinati ai valori predefiniti"
 
-#: src/multimenu.cpp:531
+#: src/multimenu.cpp:518
 msgid "Any number of players"
 msgstr "Qualsiasi numero di giocatori"
 
-#: src/multimenu.cpp:548
+#: src/multimenu.cpp:535
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d giocatore"
 msgstr[1] "%d giocatori"
 
-#: src/multimenu.cpp:676
-msgid "Score"
-msgstr "Punteggio"
-
-#: src/multimenu.cpp:678
-msgid "Kills"
-msgstr "Uccisioni"
-
-#: src/multimenu.cpp:680
-msgid "Units"
-msgstr "Unità"
-
-#: src/multimenu.cpp:697
+#: src/multimenu.cpp:770
 msgid "Structs"
 msgstr "Strutture"
 
-#: src/multimenu.cpp:709
+#: src/multimenu.cpp:773
+msgid "Score"
+msgstr "Punteggio"
+
+#: src/multimenu.cpp:774
+msgid "Kills"
+msgstr "Uccisioni"
+
+#: src/multimenu.cpp:775
+msgid "Units"
+msgstr "Unità"
+
+#: src/multimenu.cpp:824
+msgid "Channel"
+msgstr "Canale"
+
+#: src/multimenu.cpp:835
+msgid "Toggle Alliance State"
+msgstr "Cambia lo stato dell'alleanza"
+
+#: src/multimenu.cpp:856
+msgid "Give Visibility Report"
+msgstr "Invia un rapporto di visibilità"
+
+#: src/multimenu.cpp:861
+msgid "Leak Technology Documents"
+msgstr "Invia Documenti delle Tecnologie"
+
+#: src/multimenu.cpp:867
+msgid "Hand Over Selected Units"
+msgstr "Consegna le unità selezionate"
+
+#: src/multimenu.cpp:872
+msgid "Give Power To Player"
+msgstr "Invia energia al giocatore"
+
+#: src/multimenu.cpp:1075
 msgid "Sent/Received per sec —"
 msgstr "Inviati/ricevuti al secondo —"
 
-#: src/multimenu.cpp:709
+#: src/multimenu.cpp:1075
 msgid "Total Sent/Received —"
 msgstr "Totale inviati/ricevuti —"
 
-#: src/multimenu.cpp:714
+#: src/multimenu.cpp:1080
 #, c-format
 msgid "Traf: %lu/%lu"
 msgstr ""
 
-#: src/multimenu.cpp:718
+#: src/multimenu.cpp:1084
 #, c-format
 msgid "Uncompressed: %lu/%lu"
 msgstr "Non compresso: %lu/%lu"
 
-#: src/multimenu.cpp:722
+#: src/multimenu.cpp:1088
 #, c-format
 msgid "Pack: %lu/%lu"
 msgstr "Pacchetto: %lu/%lu"
 
-#: src/multimenu.cpp:1023
-msgid "Channel"
-msgstr "Canale"
-
-#: src/multimenu.cpp:1037
-msgid "Toggle Alliance State"
-msgstr "Cambia lo stato dell'alleanza"
-
-#: src/multimenu.cpp:1056
-msgid "Give Visibility Report"
-msgstr "Invia un rapporto di visibilità"
-
-#: src/multimenu.cpp:1062
-msgid "Leak Technology Documents"
-msgstr "Invia Documenti delle Tecnologie"
-
-#: src/multimenu.cpp:1069
-msgid "Hand Over Selected Units"
-msgstr "Consegna le unità selezionate"
-
-#: src/multimenu.cpp:1075
-msgid "Give Power To Player"
-msgstr "Invia energia al giocatore"
-
-#: src/multimenu.cpp:1244
+#: src/multimenu.cpp:1274
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "espulso %s: %s dal gioco e aggiunto alla lista dei bannati!"
 
-#: src/multiopt.cpp:305
+#: src/multiopt.cpp:332
 #: src/multiplay.cpp:1460
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr "Attenzione, questa è una Map-Mod, può alterare il normale gameplay."
 
-#: src/multiopt.cpp:306
+#: src/multiopt.cpp:333
 #: src/multiplay.cpp:1464
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "Attenzione, l'ospitante ha alterato il codice di gioco e non può essere ritenuto affidabile!"
@@ -18446,133 +18446,133 @@ msgstr "Premio della Struttura di Riparazione - Ripara"
 msgid "Repair Facility Award - Nothing"
 msgstr "Premio della Struttura di Riparazione - Niente"
 
-#: src/titleui/gamefind.cpp:88
+#: src/titleui/gamefind.cpp:79
 msgid "GAMES"
 msgstr "PARTITE"
 
-#: src/titleui/gamefind.cpp:96
+#: src/titleui/gamefind.cpp:87
 msgid "Refresh Games List"
 msgstr "Aggiorna la Lista Partite"
 
-#: src/titleui/gamefind.cpp:99
+#: src/titleui/gamefind.cpp:90
 msgid "Filter Games List"
 msgstr "Filtra la lista delle partite"
 
-#: src/titleui/gamefind.cpp:170
+#: src/titleui/gamefind.cpp:161
 msgid "Refreshing..."
 msgstr "Aggiornamento..."
 
-#: src/titleui/gamefind.cpp:196
+#: src/titleui/gamefind.cpp:187
 msgid "Searching"
 msgstr "Ricerca in corso..."
 
-#: src/titleui/gamefind.cpp:250
+#: src/titleui/gamefind.cpp:241
 msgid "Connecting to the lobby server..."
 msgstr "Connessione alla lobby..."
 
-#: src/titleui/gamefind.cpp:261
+#: src/titleui/gamefind.cpp:282
+msgid "Map Name"
+msgstr "Nome mappa"
+
+#: src/titleui/gamefind.cpp:285
+msgid "Players"
+msgstr "Giocatori"
+
+#: src/titleui/gamefind.cpp:288
+msgid "Status"
+msgstr "Stato"
+
+#: src/titleui/gamefind.cpp:306
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "La tua versione di Warzone non è compatibile con questa partita."
 
-#: src/titleui/gamefind.cpp:312
+#: src/titleui/gamefind.cpp:370
 msgid "[Password required]"
 msgstr "[Password richiesta]"
 
-#: src/titleui/gamefind.cpp:316
+#: src/titleui/gamefind.cpp:374
 msgid "[No Tanks]"
 msgstr "[No carri]"
 
-#: src/titleui/gamefind.cpp:320
+#: src/titleui/gamefind.cpp:378
 msgid "[No Cyborgs]"
 msgstr "[No Cyborg]"
 
-#: src/titleui/gamefind.cpp:324
+#: src/titleui/gamefind.cpp:382
 msgid "[No VTOLs]"
 msgstr "[No VTOL]"
 
-#: src/titleui/gamefind.cpp:329
+#: src/titleui/gamefind.cpp:387
 #, c-format
 msgid "Hosted by %s"
 msgstr "Ospitato da %s"
 
-#: src/titleui/gamefind.cpp:333
+#: src/titleui/gamefind.cpp:391
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr "Ospitato da %s —%s"
 
-#: src/titleui/gamefind.cpp:362
+#: src/titleui/gamefind.cpp:420
 msgid "Can't find any games for your version."
 msgstr "Impossibile trovare partite per la tua versione."
 
-#: src/titleui/gamefind.cpp:378
+#: src/titleui/gamefind.cpp:436
 msgid "There appears to be a game update available!"
 msgstr "Sembra che ci sia un aggiornamento disponibile!"
 
-#: src/titleui/gamefind.cpp:382
+#: src/titleui/gamefind.cpp:440
 msgid "No games are available for your version"
 msgstr "Non ci sono partite disponibili per la tua versione"
 
-#: src/titleui/gamefind.cpp:386
+#: src/titleui/gamefind.cpp:444
 msgid "Game is full"
 msgstr "La partita è piena"
 
-#: src/titleui/gamefind.cpp:390
+#: src/titleui/gamefind.cpp:448
 msgid "You were kicked!"
 msgstr "Sei stato kickato!"
 
-#: src/titleui/gamefind.cpp:393
+#: src/titleui/gamefind.cpp:451
 msgid "Wrong Game Version!"
 msgstr "Versione del gioco non corretta!"
 
-#: src/titleui/gamefind.cpp:396
+#: src/titleui/gamefind.cpp:454
 msgid "You have an incompatible mod."
 msgstr "Hai un mod incompatibile."
 
-#: src/titleui/gamefind.cpp:400
+#: src/titleui/gamefind.cpp:458
 msgid "Host couldn't send file?"
 msgstr "L'ospite non ha potuto inviare il file?"
 
-#: src/titleui/gamefind.cpp:404
+#: src/titleui/gamefind.cpp:462
 msgid "Incorrect Password!"
 msgstr "Password non corretta!"
 
-#: src/titleui/gamefind.cpp:407
+#: src/titleui/gamefind.cpp:465
 msgid "Host has dropped connection!"
 msgstr "L'ospite ha terminato la connessione!"
 
-#: src/titleui/gamefind.cpp:411
+#: src/titleui/gamefind.cpp:469
 msgid "Connection Error"
 msgstr "Errore di connessione"
 
-#: src/titleui/gamefind.cpp:462
+#: src/titleui/gamefind.cpp:520
 msgid "Can't connect to lobby server!"
 msgstr "Impossibile connettersi alla lobby!"
 
-#: src/titleui/gamefind.cpp:557
+#: src/titleui/gamefind.cpp:615
 #, c-format
 msgid "Mods: %s"
 msgstr "Mod: %s"
 
-#: src/titleui/gamefind.cpp:563
+#: src/titleui/gamefind.cpp:621
 msgid "Mods: None!"
 msgstr "Mods: Nessuna!"
 
-#: src/titleui/gamefind.cpp:569
+#: src/titleui/gamefind.cpp:627
 #, c-format
 msgid "Version: %s"
 msgstr "Versione: %s"
-
-#: src/titleui/gamefind.cpp:582
-msgid "Map Name"
-msgstr "Nome mappa"
-
-#: src/titleui/gamefind.cpp:585
-msgid "Players"
-msgstr "Giocatori"
-
-#: src/titleui/gamefind.cpp:588
-msgid "Status"
-msgstr "Stato"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
@@ -18620,37 +18620,58 @@ msgstr "Non c'è abbastanza spazio nel trasporto!"
 msgid "Reinforcements landing"
 msgstr "I rinforzi stanno atterrando"
 
-#: src/updatemanager.cpp:247
+#: src/updatemanager.cpp:273
 msgid "Update Available"
 msgstr "Aggiornamento disponibile"
 
-#: src/updatemanager.cpp:250
+#: src/updatemanager.cpp:276
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
 msgstr "È disponibile una nuova versione di Warzone (%s)!"
 
-#: src/updatemanager.cpp:254
+#: src/updatemanager.cpp:280
 msgid "A new build of Warzone 2100 is available!"
 msgstr "È disponibile una nuova versione di Warzone!"
 
-#: src/updatemanager.cpp:256
+#: src/updatemanager.cpp:282
 msgid "Get Update Now"
 msgstr "Aggiorna adesso"
 
+#: src/updatemanager.cpp:418
+msgid "Compatibility Warning"
+msgstr ""
+
+#: src/updatemanager.cpp:419
+msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
+msgstr ""
+
+#: src/updatemanager.cpp:421
+msgid "Please click the button below for more information on how to fix it."
+msgstr ""
+
+#: src/updatemanager.cpp:425
+#, c-format
+msgid "(Notice ID: %s)"
+msgstr ""
+
+#: src/updatemanager.cpp:427
+msgid "More Information"
+msgstr ""
+
 #. TRANSLATORS: Printed when compiling with uncommitted changes
-#: src/version.cpp:253
+#: src/version.cpp:249
 msgid " (modified locally)"
 msgstr " (modificato localmente)"
 
 #. TRANSLATORS: Printed in Debug builds
-#: src/version.cpp:260
+#: src/version.cpp:256
 msgid " - DEBUG"
 msgstr " - DEBUG"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:269
+#: src/version.cpp:265
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Versione: %s,%s Compilata: %s%s"
