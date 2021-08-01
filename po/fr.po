@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 06:22\n"
+"PO-Revision-Date: 2021-08-01 18:21\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -7145,7 +7145,7 @@ msgstr "Efficace contre : bâtiments"
 #. data/base/messages/resmessages3.json: $.RES_W_MS_MART.text[2]
 #: po/custom/fromJson.txt:1095
 msgid "Best Targets: Base structures, emplacements, cyborgs"
-msgstr ""
+msgstr "Efficace contre : bâtiments, emplacements, cyborgs"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_ASM_BB.text[2]
@@ -7166,7 +7166,7 @@ msgstr "Efficace contre : bunkers et ponts défensifs"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Efficace contre : Bunkers, défenses, bâtiments"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7199,7 +7199,7 @@ msgstr "Efficace contre : infanterie, bâtiments, véhicules à roues"
 #. data/base/messages/resmessages23.json: $.RES_W_MG4.text[2]
 #: po/custom/fromJson.txt:1149
 msgid "Best Targets: Infantry, wheeled and hover vehicles"
-msgstr ""
+msgstr "Efficace contre : infanterie, véhicules à roues et aéroglisseurs"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_CN1MK1.text[2]
@@ -7208,7 +7208,7 @@ msgstr ""
 #. ... + 5 refs
 #: po/custom/fromJson.txt:1155
 msgid "Best Targets: None. Average damage against all targets"
-msgstr ""
+msgstr "Efficace contre : Aucune. Dégâts moyens contre toutes les cibles"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessagesall.json: $.RES_W_PLASLAUNCH.text[2]
@@ -9867,20 +9867,20 @@ msgstr "Obus perforant haute vitesse à sabot détachable stabilisé par ailette
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Emplacement"
-msgstr ""
+msgstr "Emplacement à canon hypersonique"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Hardpoint"
-msgstr ""
+msgstr "Point défensif à canon hypersonique"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "Canon hypersonique Python chenilles"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -13195,7 +13195,7 @@ msgstr "Tour d'acier à mitrailleuse"
 #. data/base/messages/resmessages1.json: $.RES_TOWER2.text[1]
 #: po/custom/fromJson.txt:5270
 msgid "Steel tower with twin machinegun"
-msgstr ""
+msgstr "Tour en acier avec mitrailleuse jumelée"
 
 #. TRANSLATORS:
 #. data/mp/stats/research.json: $.R-Wpn-AALaser.name
@@ -13263,7 +13263,7 @@ msgstr "Super Cyborg à canon lourd"
 #. data/mp/stats/weapons.json: $.Cyb-Hvywpn-HPV.name
 #: po/custom/fromJson.txt:5317
 msgid "Super HVC Cyborg"
-msgstr ""
+msgstr "Super Cyborg à canon hypersonique"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Cyb-Hvy-RailGunner.name
@@ -13878,7 +13878,7 @@ msgstr "Tour de garde à mitrailleuses jumelées"
 #. data/base/stats/weapons.json: $.MG2-Tower.name
 #: po/custom/fromJson.txt:5725
 msgid "Twin Machinegun Tower"
-msgstr ""
+msgstr "Tour à mitrailleuse jumelée"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.ViperMG02Halftrack.name
@@ -15830,7 +15830,7 @@ msgstr "OPTIONS"
 
 #: src/frontend.cpp:2035
 msgid "Insane Difficulty"
-msgstr ""
+msgstr "Difficulté Déménte"
 
 #: src/frontend.cpp:2036
 msgid "This difficulty is for very experienced players!"
@@ -16095,7 +16095,7 @@ msgstr "Autres raccourcis clavier"
 
 #: src/input/context.cpp:56
 msgid "Gameplay"
-msgstr ""
+msgstr "Jeu"
 
 #: src/input/context.cpp:58
 msgid "Debug"
@@ -16103,11 +16103,11 @@ msgstr "Débogage"
 
 #: src/input/context.cpp:59
 msgid "Debug (level editor)"
-msgstr ""
+msgstr "Débogage (éditeur de niveau)"
 
 #: src/input/context.cpp:60
 msgid "Debug (selection)"
-msgstr ""
+msgstr "Débogage (sélection)"
 
 #: src/input/keyconfig.cpp:39
 msgid "Manufacture"
@@ -16750,11 +16750,11 @@ msgstr "Activer/désactiver Debug Mappings"
 
 #: src/input/keyconfig.cpp:207
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Prioriser les mappings de débogage"
 
 #: src/input/keyconfig.cpp:208
 msgid "Toggle Level Editor"
-msgstr ""
+msgstr "Activer/désactiver l'éditeur de niveau"
 
 #: src/input/keyconfig.cpp:209
 msgid "Toggle display of droid path"
@@ -17184,15 +17184,15 @@ msgstr "Réglage du zoom de radar à %u"
 
 #: src/keybind.cpp:1127
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Activer/désactiver la priorité de mapping de débogage: "
 
 #: src/keybind.cpp:1137
 msgid "Disabling level editor"
-msgstr ""
+msgstr "Désactivation de l'éditeur de niveau"
 
 #: src/keybind.cpp:1142
 msgid "Enabling level editor"
-msgstr ""
+msgstr "Activation de l'éditeur de niveau"
 
 #: src/keybind.cpp:1202
 msgid "God Mode ON"
@@ -18054,12 +18054,12 @@ msgstr "Total envoyés/reçus —"
 #: src/multimenu.cpp:1080
 #, c-format
 msgid "Traf: %lu/%lu"
-msgstr ""
+msgstr "Trafic : %lu/%lu"
 
 #: src/multimenu.cpp:1084
 #, c-format
 msgid "Uncompressed: %lu/%lu"
-msgstr ""
+msgstr "Décompressés : %lu/%lu"
 
 #: src/multimenu.cpp:1088
 #, c-format
@@ -18636,24 +18636,24 @@ msgstr "Mettre à jour maintenant"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Avertissement d'incompatibilité"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Un problème a été détecté qui pourrait affecter le fonctionnement / les performances de Warzone 2100."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Veuillez cliquer sur le bouton ci-dessous pour plus d'informations sur la façon de le corriger."
 
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(Notice ID: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Plus d'Informations"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:249
