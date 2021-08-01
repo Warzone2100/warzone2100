@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 06:22\n"
+"PO-Revision-Date: 2021-08-01 18:21\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -7170,7 +7170,7 @@ msgstr "Лучшие цели: Бункеры и Укреплённые точк
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Лучшие цели: Бункеры, оборонительные сооружения, базовые сооружения"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -9871,20 +9871,20 @@ msgstr "HVAPFSDS Снаряды Пушки"
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Emplacement"
-msgstr ""
+msgstr "Установка ГС пушки"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Hardpoint"
-msgstr ""
+msgstr "Укрепточка ГС пушки"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "ГС пушка Питон Гусеницы"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -16762,7 +16762,7 @@ msgstr "Переключить отладку с составлением кар
 
 #: src/input/keyconfig.cpp:207
 msgid "Prioritize Debug Mappings"
-msgstr ""
+msgstr "Предпочитать раскладку клавиатуры для отладки"
 
 #: src/input/keyconfig.cpp:208
 msgid "Toggle Level Editor"
@@ -17196,7 +17196,7 @@ msgstr "Установлено увеличение радара  %u"
 
 #: src/keybind.cpp:1127
 msgid "Toggling debug mapping priority: "
-msgstr ""
+msgstr "Переключаю приоритет раскладки клавиатуры для отладки: "
 
 #: src/keybind.cpp:1137
 msgid "Disabling level editor"
@@ -18656,24 +18656,24 @@ msgstr "Получить обновление сейчас"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Предупреждение о совместимости"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Обнаружена проблема, которая может повлиять на работу / производительность Warzone 2100."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Пожалуйста, нажмите на кнопку ниже, чтобы получить больше информации о том, как это исправить."
 
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(Нотификация: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Подробнее"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:249
