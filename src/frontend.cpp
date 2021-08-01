@@ -41,6 +41,8 @@
 #include "lib/widget/gridlayout.h"
 #include "lib/widget/margin.h"
 #include "lib/widget/alignment.h"
+#include "lib/widget/image.h"
+#include "lib/widget/resize.h"
 
 #include <limits>
 
@@ -2003,6 +2005,210 @@ static std::string gameOptionsCameraSpeedString()
 
 // ////////////////////////////////////////////////////////////////////////////
 // Game Options Menu
+
+class LanguagesModel
+{
+public:
+	typedef const std::vector<locale_info>::iterator iterator;
+	typedef const std::vector<locale_info>::const_iterator const_iterator;
+
+	LanguagesModel()
+	{
+		locales = getLocales();
+	}
+
+	const_iterator begin() const
+	{
+		return locales.begin();
+	}
+
+	const_iterator end() const
+	{
+		return locales.end();
+	}
+
+	void selectAt(size_t index) const
+	{
+		setLanguage(locales[index].code);
+	}
+
+	size_t getSelectedIndex() const
+	{
+		auto currentCode = getLanguage();
+		for (auto i = 0; i < locales.size(); i++)
+		{
+			if (strcmp(currentCode, locales[i].code) == 0)
+			{
+				return i;
+			}
+		}
+
+		return 0;
+	}
+
+private:
+	std::vector<locale_info> locales;
+};
+
+class ImageDropdownItem: public MarginWidget
+{
+protected:
+	ImageDropdownItem(): MarginWidget({5, HorizontalPadding})
+	{
+		setTransparentToMouse(false);
+	}
+
+	void initialize(const AtlasImageDef *image, const char *text)
+	{
+		auto iconAlignment = Alignment::center();
+		iconAlignment.resizing = Alignment::Resizing::Fit;
+
+		auto icon = std::make_shared<ImageWidget>(image);
+		icon->setTransparentToMouse(true);
+
+		label = std::make_shared<W_LABEL>();
+		label->setFont(font_large);
+		label->setString(text);
+		label->setFontColour(WZCOL_TEXT_MEDIUM);
+		label->setTransparentToMouse(true);
+
+		auto grid = std::make_shared<GridLayout>();
+		grid->place({0, 1, false}, {0}, Resize::fixed(25, 25).wrap(iconAlignment.wrap(icon)));
+		grid->place({1}, {0}, Margin(0, 0, 0, 5).wrap(label));
+		grid->setTransparentToMouse(true);
+		attach(grid);
+	}
+
+public:
+	static std::shared_ptr<ImageDropdownItem> make(const AtlasImageDef *image, const char *text)
+	{
+		class make_shared_enabler: public ImageDropdownItem {};
+		auto widget = std::make_shared<make_shared_enabler>();
+		widget->initialize(image, text);
+		return widget;
+	}
+
+public:
+	void display(int, int) override
+	{
+		label->setFontColour(isMouseOverWidget() ? WZCOL_TEXT_BRIGHT : WZCOL_TEXT_MEDIUM);
+	}
+
+	static const int HorizontalPadding = 10;
+
+private:
+	std::shared_ptr<W_LABEL> label;
+};
+
+static std::shared_ptr<WIDGET> makeLanguageDropdown()
+{
+	const std::map<WzString, const char *> iconsMap = {
+		{"", "icon-system.png"},
+		{"bg", "flag-BG.png"},
+		{"ca_ES", "flag-ES.png"},
+		{"cs_CZ", "flag-CZ.png"},
+		{"da", "flag-DK.png"},
+		{"de", "flag-DE.png"},
+		{"el_GR", "flag-GR.png"},
+		{"en", "flag-US.png"},
+		{"en_GB", "flag-GB.png"},
+		{"es", "flag-ES.png"},
+		{"et_EE", "flag-EE.png"},
+		{"eu_ES", "flag-ES.png"},
+		{"fi", "flag-FI.png"},
+		{"fr", "flag-FR.png"},
+		{"fy_NL", "flag-NL.png"},
+		{"ga_IE", "flag-IE.png"},
+		{"hr", "flag-HR.png"},
+		{"hu", "flag-HU.png"},
+		{"id", "flag-ID.png"},
+		{"it", "flag-IT.png"},
+		{"ko_KR", "flag-KR.png"},
+		{"la", "flag-VA.png"},
+		{"lt", "flag-LT.png"},
+		{"lv", "flag-LV.png"},
+		{"nb_NO", "flag-NO.png"},
+		{"nn_NO", "flag-NO.png"},
+		{"nl", "flag-NL.png"},
+		{"pl", "flag-PL.png"},
+		{"pt_BR", "flag-BR.png"},
+		{"pt", "flag-PT.png"},
+		{"ro", "flag-RO.png"},
+		{"ru", "flag-RU.png"},
+		{"sk", "flag-SK.png"},
+		{"sl_SI", "flag-SI.png"},
+		{"sv_SE", "flag-SE.png"},
+		{"sv", "flag-SE.png"},
+		{"tr", "flag-TR.png"},
+		{"uz", "flag-UZ.png"},
+		{"uk_UA", "flag-UA.png"},
+		{"zh_CN", "flag-CN.png"},
+		{"zh_TW", "flag-TW.png"},
+	};
+
+	auto dropdown = std::make_shared<DropdownWidget>();
+	dropdown->id = FRONTEND_LANGUAGE_R;
+	dropdown->setListHeight(FRONTEND_BUTHEIGHT * 5);
+
+	LanguagesModel model;
+	for (auto locale: model)
+	{
+		AtlasImageDef *icon = nullptr;
+		auto mapIcon = iconsMap.find(locale.code);
+		if (mapIcon != iconsMap.end())
+		{
+			icon = iV_GetImage(mapIcon->second);
+		}
+		auto option = ImageDropdownItem::make(icon, locale.name);
+		dropdown->addItem(option);
+	}
+
+	dropdown->setSelectedIndex(model.getSelectedIndex());
+
+	dropdown->setOnChange([model](DropdownWidget& dropdown) {
+		if (auto selectedIndex = dropdown.getSelectedIndex())
+		{
+			model.selectAt(selectedIndex.value());
+			/* Hack to reset current menu text, which looks fancy. */
+			widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
+			widgGetFromID(psWScreen, FRONTEND_QUIT)->setTip(P_("menu", "Return"));
+			widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
+			widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour:"));
+			widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
+			widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
+			widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
+			widgSetString(psWScreen, FRONTEND_CAMERASPEED, _("Camera Speed"));
+			widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
+
+			// hack to update translations of AI names and tooltips
+			readAIs();
+		}
+	});
+
+	return Margin(0, -ImageDropdownItem::HorizontalPadding).wrap(dropdown);
+}
+
+class SettingsGridBuilder
+{
+public:
+	SettingsGridBuilder(std::shared_ptr<GridLayout> grid): grid(grid), row(0, 1, true) {}
+
+	void addRow(std::shared_ptr<WIDGET> leftWidget, std::shared_ptr<WIDGET> rightWidget = nullptr)
+	{
+		Alignment alignment(Alignment::Vertical::Top, Alignment::Horizontal::Left);
+		grid->place({0}, row, addMargin(alignment.wrap(leftWidget)));
+		if (rightWidget)
+		{
+			grid->place({1, 1, false}, row, addMargin(alignment.wrap(rightWidget)));
+		}
+		row.start++;
+	}
+
+private:
+	std::shared_ptr<GridLayout> grid;
+	grid_allocation::slot row;
+};
+
 void startGameOptionsMenu()
 {
 	UDWORD	w, h;
@@ -2012,29 +2218,32 @@ void startGameOptionsMenu()
 	addTopForm(false);
 	addBottomForm();
 
+	auto grid = std::make_shared<GridLayout>();
+	SettingsGridBuilder gridBuilder(grid);
+
 	// language
-	addTextButton(FRONTEND_LANGUAGE,  FRONTEND_POS2X - 35, FRONTEND_POS2Y, _("Language"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_LANGUAGE_R,  FRONTEND_POS2M - 55, FRONTEND_POS2Y, getLanguageName(), WBUT_SECONDARY);
+	gridBuilder.addRow(
+		makeTextButton(FRONTEND_LANGUAGE, _("Language"), WBUT_SECONDARY),
+		makeLanguageDropdown()
+	);
 
 	// Difficulty
-	addTextButton(FRONTEND_DIFFICULTY,   FRONTEND_POS3X - 35, FRONTEND_POS3Y, _("Campaign Difficulty"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_DIFFICULTY_R, FRONTEND_POS3M - 55, FRONTEND_POS3Y, gameOptionsDifficultyString(), WBUT_SECONDARY);
+	gridBuilder.addRow(
+		makeTextButton(FRONTEND_DIFFICULTY, _("Campaign Difficulty"), WBUT_SECONDARY),
+		makeTextButton(FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString(), WBUT_SECONDARY)
+	);
 
 	// Camera speed
-	addTextButton(FRONTEND_CAMERASPEED, FRONTEND_POS4X - 35, FRONTEND_POS4Y, _("Camera Speed"), WBUT_SECONDARY);
-	addTextButton(FRONTEND_CAMERASPEED_R, FRONTEND_POS4M - 55, FRONTEND_POS4Y, gameOptionsCameraSpeedString(), WBUT_SECONDARY);
+	gridBuilder.addRow(
+		makeTextButton(FRONTEND_CAMERASPEED, _("Camera Speed"), WBUT_SECONDARY),
+		makeTextButton(FRONTEND_CAMERASPEED_R, gameOptionsCameraSpeedString(), WBUT_SECONDARY)
+	);
 
 	// Colour stuff
-	addTextButton(FRONTEND_COLOUR, FRONTEND_POS5X - 35, FRONTEND_POS5Y, _("Unit Colour:"), 0);
+	gridBuilder.addRow(makeTextButton(FRONTEND_COLOUR, _("Unit Colour:"), 0));
 
 	w = iV_GetImageWidth(FrontImages, IMAGE_PLAYERN);
 	h = iV_GetImageHeight(FrontImages, IMAGE_PLAYERN);
-
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P0, FRONTEND_POS6M + (0 * (w + 6)) -20, FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 0);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P4, FRONTEND_POS6M + (1 * (w + 6)) -20, FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 4);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P5, FRONTEND_POS6M + (2 * (w + 6)) -20, FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 5);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P6, FRONTEND_POS6M + (3 * (w + 6)) -20, FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 6);
-	addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_P7, FRONTEND_POS6M + (4 * (w + 6)) -20, FRONTEND_POS6Y, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, 7);
 
 	// FIXME: if playercolor = 1-3, then we Assert in widgSetButtonState() since we don't define FE_P1 - FE_P3
 	// I assume the reason is that in SP games, those are reserved for the AI?  Valid values are 0, 4-7.
@@ -2044,18 +2253,58 @@ void startGameOptionsMenu()
 	{
 		playercolor = 0;
 	}
-	widgSetButtonState(psWScreen, FE_P0 + playercolor, WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR_CAM, FRONTEND_POS6X - 20, FRONTEND_POS6Y, _("Campaign"), 0);
 
-	playercolor = war_getMPcolour();
+	auto campaignColor = std::make_shared<GridLayout>();
+	std::vector<int> availableCampaignColors = {0, 4, 5, 6, 7};
+	Margin unitColorMargin(0, 5, 5, 0);
+	for (uint32_t i = 0; i < availableCampaignColors.size(); i++)
+	{
+		auto colorId = availableCampaignColors[i];
+		auto button = makeMultiBut(FE_P0 + colorId, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colorId);
+		if (colorId == playercolor)
+		{
+			button->setState(WBUT_LOCK);
+		}
+		campaignColor->place({i}, {0}, unitColorMargin.wrap(button));
+	}
+
+	Margin colorsMargin(0, 0, 0, 20);
+	gridBuilder.addRow(
+		colorsMargin.wrap(
+			Alignment(Alignment::Vertical::Top, Alignment::Horizontal::Left).wrap(
+				makeTextButton(FRONTEND_COLOUR_CAM, _("Campaign"), 0)
+			)
+		),
+		campaignColor
+	);
+
+	auto multiplayerColor = std::make_shared<GridLayout>();
 	for (int colour = -1; colour < MAX_PLAYERS_IN_GUI; ++colour)
 	{
-		int cellX = (colour + 1) % 7;
-		int cellY = (colour + 1) / 7;
-		addMultiBut(psWScreen, FRONTEND_BOTFORM, FE_MP_PR + colour + 1, FRONTEND_POS7M + cellX * (w + 2) -20, FRONTEND_POS7Y + cellY * (h + 2) - 5, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colour >= 0 ? colour : MAX_PLAYERS + 1);
+		uint32_t cellX = (colour + 1) % 7;
+		uint32_t cellY = (colour + 1) / 7;
+		auto button = makeMultiBut(FE_MP_PR + colour + 1, w, h, nullptr, IMAGE_PLAYERN, IMAGE_PLAYERX, true, colour >= 0 ? colour : MAX_PLAYERS + 1);
+		if (colour == war_getMPcolour()) {
+			button->setState(WBUT_LOCK);
+		}
+		multiplayerColor->place({cellX}, {cellY}, unitColorMargin.wrap(button));
 	}
-	widgSetButtonState(psWScreen, FE_MP_PR + playercolor + 1, WBUT_LOCK);
-	addTextButton(FRONTEND_COLOUR_MP, FRONTEND_POS7X - 20, FRONTEND_POS7Y, _("Skirmish/Multiplayer"), 0);
+
+	gridBuilder.addRow(
+		colorsMargin.wrap(
+			Alignment(Alignment::Vertical::Top, Alignment::Horizontal::Left).wrap(
+				makeTextButton(FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"), 0)
+			)
+		),
+		multiplayerColor
+	);
+
+	grid->setGeometry(0, 0, FRONTEND_BUTWIDTH, grid->idealHeight());
+
+	auto scrollableList = ScrollableListWidget::make();
+	scrollableList->setGeometry(0, FRONTEND_POS2Y, FRONTEND_BOTFORMW - 1, FRONTEND_BOTFORMH - FRONTEND_POS2Y - 1);
+	scrollableList->addItem(grid);
+	widgGetFromID(psWScreen, FRONTEND_BOTFORM)->attach(scrollableList);
 
 	// Quit
 	addMultiBut(psWScreen, FRONTEND_BOTFORM, FRONTEND_QUIT, 10, 10, 30, 29, P_("menu", "Return"), IMAGE_RETURN, IMAGE_RETURN_HI, IMAGE_RETURN_HI);
@@ -2078,25 +2327,6 @@ bool runGameOptionsMenu()
 	{
 	case FRONTEND_HYPERLINK:
 		openURLInBrowser(TRANSLATION_URL);
-		break;
-	case FRONTEND_LANGUAGE:
-	case FRONTEND_LANGUAGE_R:
-
-		setNextLanguage(widgGetButtonKey_DEPRECATED(psWScreen) == WKEY_PRIMARY);
-		widgSetString(psWScreen, FRONTEND_LANGUAGE_R, getLanguageName());
-		/* Hack to reset current menu text, which looks fancy. */
-		widgSetString(psWScreen, FRONTEND_SIDETEXT, _("GAME OPTIONS"));
-		widgGetFromID(psWScreen, FRONTEND_QUIT)->setTip(P_("menu", "Return"));
-		widgSetString(psWScreen, FRONTEND_LANGUAGE, _("Language"));
-		widgSetString(psWScreen, FRONTEND_COLOUR, _("Unit Colour:"));
-		widgSetString(psWScreen, FRONTEND_COLOUR_CAM, _("Campaign"));
-		widgSetString(psWScreen, FRONTEND_COLOUR_MP, _("Skirmish/Multiplayer"));
-		widgSetString(psWScreen, FRONTEND_DIFFICULTY, _("Campaign Difficulty"));
-		widgSetString(psWScreen, FRONTEND_CAMERASPEED, _("Camera Speed"));
-		widgSetString(psWScreen, FRONTEND_DIFFICULTY_R, gameOptionsDifficultyString());
-
-		// hack to update translations of AI names and tooltips
-		readAIs();
 		break;
 
 	case FRONTEND_DIFFICULTY:
@@ -2738,9 +2968,10 @@ static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &tx
 	sButInit.id = id;
 
 	// Align
+	sButInit.FontID = font_large;
 	if (!(style & WBUT_TXTCENTRE))
 	{
-		sButInit.width = (short)iV_GetTextWidth(txt.c_str(), font_large);
+		sButInit.width = (short)iV_GetTextWidth(txt.c_str(), sButInit.FontID);
 	}
 	else
 	{
@@ -2763,7 +2994,6 @@ static std::shared_ptr<W_BUTTON> makeTextButton(UDWORD id, const std::string &tx
 
 	sButInit.height = FRONTEND_BUTHEIGHT;
 	sButInit.pDisplay = displayTextOption;
-	sButInit.FontID = font_large;
 	sButInit.pText = txt.c_str();
 
 	auto button = std::make_shared<W_BUTTON>(&sButInit);

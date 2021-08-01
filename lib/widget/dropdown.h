@@ -141,6 +141,17 @@ public:
 		return itemsList->idealWidth();
 	}
 
+	int32_t idealHeight() override
+	{
+		auto max = 0;
+		for (auto const &item: items)
+		{
+			max = std::max(max, item->idealHeight());
+		}
+
+		return max;
+	}
+
 private:
 	std::vector<std::shared_ptr<DropdownItemWrapper>> items;
 	std::shared_ptr<ScrollableListWidget> itemsList;

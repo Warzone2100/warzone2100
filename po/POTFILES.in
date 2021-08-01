@@ -337,9 +337,9 @@ lib/widget/jsontable.cpp
 lib/widget/label.cpp
 lib/widget/listwidget.cpp
 lib/widget/margin.cpp
-lib/widget/minsize.cpp
 lib/widget/multibutform.cpp
 lib/widget/paragraph.cpp
+lib/widget/resize.cpp
 lib/widget/scrollablelist.cpp
 lib/widget/scrollbar.cpp
 lib/widget/slider.cpp

@@ -17,38 +17,43 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
+#ifndef __INCLUDED_LIB_WIDGET_IMAGE_H__
+#define __INCLUDED_LIB_WIDGET_IMAGE_H__
+
 #include "lib/ivis_opengl/bitimage.h"
 #include "lib/ivis_opengl/pieblitfunc.h"
 #include "widget.h"
-#include "minsize.h"
 
-std::shared_ptr<MinSizeWidget> MinSize::wrap(std::shared_ptr<WIDGET> widget)
+class ImageWidget: public WIDGET
 {
-    auto wrap = std::make_shared<MinSizeWidget>(*this);
-    wrap->attach(widget);
-    return wrap;
-}
-
-void MinSizeWidget::geometryChanged()
-{
-    if (!children().empty())
+public:
+    ImageWidget(const AtlasImageDef *image): image(image)
     {
-        children().front()->setGeometry(0, 0, width(), height());
     }
-}
 
-int32_t MinSizeWidget::idealWidth()
-{
-    return std::max(
-		minSize.width.value_or(0),
-		children().empty() ? 0 : children().front()->idealWidth()
-	);
-}
+    int32_t idealWidth() override
+    {
+        return image ? image->Width : 0;
+    }
 
-int32_t MinSizeWidget::idealHeight()
-{
-    return std::max(
-		minSize.height.value_or(0),
-		children().empty() ? 0 : children().front()->idealHeight()
-	);
-}
+    int32_t idealHeight() override
+    {
+        return image ? image->Height : 0;
+    }
+
+protected:
+    void display(int xOffset, int yOffset) override
+    {
+        if (image && width() > 0 && height() > 0)
+        {
+            auto x0 = xOffset + x();
+            auto y0 = yOffset + y();
+            iV_DrawImage2(image, x0, y0, width(), height());
+        }
+    }
+
+private:
+    const AtlasImageDef *image;
+};
+
+#endif // __INCLUDED_LIB_WIDGET_IMAGE_H__

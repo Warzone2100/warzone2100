@@ -415,15 +415,15 @@ bool setLanguage(const char *language)
 #endif
 }
 
-
-void setNextLanguage(bool prev)
+std::vector<locale_info> getLocales()
 {
-	selectedLanguage = (selectedLanguage + ARRAY_SIZE(map) + (prev? -1 : 1)) % ARRAY_SIZE(map);
-
-	if (!setLanguage(map[selectedLanguage].language) && selectedLanguage != 0)
+	std::vector<locale_info> locales;
+	for (const auto &entry: map)
 	{
-		setNextLanguage(prev); // try next
+		locales.push_back({entry.language, entry.name});
 	}
+
+	return locales;
 }
 
 std::string wzBindTextDomain(const char *domainname, const char *dirname)
