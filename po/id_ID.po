@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
-"POT-Creation-Date: 2021-07-24 20:27+0000\n"
-"PO-Revision-Date: 2021-07-26 12:19\n"
+"POT-Creation-Date: 2021-08-01 03:46+0000\n"
+"PO-Revision-Date: 2021-08-01 06:22\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -1847,7 +1847,7 @@ msgstr "Memerlukan Pabrik Cyborg untuk diproduksi"
 #. data/mp/messages/resmessages2.json: $.RES_CYW_MG4.text[1]
 #: data/base/messages/strings/resstrings.txt:66
 #: data/mp/messages/strings/resstrings.txt:17
-#: po/custom/fromJson.txt:556
+#: po/custom/fromJson.txt:560
 msgid "Armed with Cyborg Assault Gun"
 msgstr "Dipersenjatai dengan Senapan Mesin Serbu Cyborg"
 
@@ -3416,7 +3416,7 @@ msgstr "Menjatuhkan bom klaster berdaya ledak tinggi"
 #. data/mp/messages/resmessages2.json: $.RES_W_BMB1.text[2]
 #: data/base/messages/strings/resstrings.txt:699
 #: data/mp/messages/strings/resstrings.txt:338
-#: po/custom/fromJson.txt:1084
+#: po/custom/fromJson.txt:1087
 msgid "Best Targets: Base Structures"
 msgstr "Target Terbaik: Struktur Markas"
 
@@ -3645,7 +3645,7 @@ msgstr "Howitzer 105mm dapat ditugaskan ke sebuah sensor"
 #: data/base/messages/strings/resstrings.txt:781
 #: data/mp/messages/strings/resstrings.txt:373
 #: data/mp/messages/strings/resstrings.txt:378
-#: po/custom/fromJson.txt:1107
+#: po/custom/fromJson.txt:1101
 msgid "Best Targets: Base Structures, infantry, wheeled vehicles"
 msgstr "Target Terbaik: Struktur Markas, infanteri, dan kendaraan beroda"
 
@@ -3849,7 +3849,7 @@ msgstr "Dapat ditugaskan ke sebuah sensor"
 #. ... + 7 refs
 #: data/base/messages/strings/resstrings.txt:893
 #: data/mp/messages/strings/resstrings.txt:413
-#: po/custom/fromJson.txt:1101
+#: po/custom/fromJson.txt:1107
 msgid "Best Targets: Base structures, infantry, wheeled vehicles"
 msgstr "Target Terbaik: Struktur Markas, infanteri, dan kendaraan beroda"
 
@@ -3860,7 +3860,7 @@ msgstr "Target Terbaik: Struktur Markas, infanteri, dan kendaraan beroda"
 #. ... + 29 refs
 #: data/base/messages/strings/resstrings.txt:894
 #: data/mp/messages/strings/resstrings.txt:414
-#: po/custom/fromJson.txt:1211
+#: po/custom/fromJson.txt:1216
 msgid "Body Points: Very Low"
 msgstr "Body Point: Sangat rendah"
 
@@ -4171,8 +4171,8 @@ msgstr "Komandan - buatlah unit komandan terlebih dahulu"
 #: src/intelmap.cpp:353
 #: src/intorder.cpp:609
 #: src/loadsave.cpp:265
-#: src/multimenu.cpp:435
-#: src/multimenu.cpp:1126
+#: src/multimenu.cpp:422
+#: src/multimenu.cpp:1146
 #: src/transporter.cpp:202
 #: src/transporter.cpp:263
 #: src/transporter.cpp:549
@@ -5779,8 +5779,8 @@ msgid "Menu"
 msgstr "Menu"
 
 #: lib/sound/cdaudio.cpp:63
-#: src/frontend.cpp:1974
-#: src/frontend.cpp:2018
+#: src/frontend.cpp:1969
+#: src/frontend.cpp:2013
 msgid "Campaign"
 msgstr "Kampanye"
 
@@ -6403,7 +6403,7 @@ msgstr "Rudal Malaikat Tinggi"
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
 #. data/mp/messages/resmessages3.json: $.RES_CYJ_MG4.text[1]
-#: po/custom/fromJson.txt:560
+#: po/custom/fromJson.txt:556
 msgid "Armed with Cyborg assault gun"
 msgstr "Dipersenjatai dengan Senapan Mesin Serbu Cyborg"
 
@@ -7139,7 +7139,7 @@ msgstr "Target Terbaik: Struktur Markas dan Cyborg"
 
 #. TRANSLATORS:
 #. data/mp/messages/resmessages12.json: $.RES_W_RK_MRL1.text[2]
-#: po/custom/fromJson.txt:1087
+#: po/custom/fromJson.txt:1084
 msgid "Best Targets: Base structures"
 msgstr "Target Terbaik: Struktur markas"
 
@@ -7168,8 +7168,8 @@ msgstr "Target Terbaik: Bunker dan Titik Keras"
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
-msgid "Best Targets: Bunkers, defenses, base buildings"
-msgstr "Target Terbaik: Bunker, Pertahanan, Struktur Markas"
+msgid "Best Targets: Bunkers, defenses, base structures"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7264,7 +7264,7 @@ msgstr "Body Point dan Kecepatan Ditingkatkan"
 #. data/base/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessages1.json: $.RES_FLAME1.text[3]
 #. data/mp/messages/resmessagesall.json: $.RES_PLFL.text[3]
-#: po/custom/fromJson.txt:1216
+#: po/custom/fromJson.txt:1210
 msgid "Body Points: Very low"
 msgstr "Body Point: Sangat rendah"
 
@@ -9869,21 +9869,21 @@ msgstr "Peluru Meriam HVAPFSDS"
 #. data/base/stats/research.json: $.R-Defense-Emplacement-HPVcannon.name
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
-msgid "HVC Cannon Emplacement"
-msgstr "Emplasemen Meriam Velositas Hiper"
+msgid "HVC Emplacement"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
-msgid "HVC Cannon Hardpoint"
-msgstr "Titik Keras dengan Meriam Velositas Hiper"
+msgid "HVC Hardpoint"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
-msgid "HVC Cannon Python Tracks"
-msgstr "HVC Cannon Python Tracks"
+msgid "HVC Python Tracks"
+msgstr ""
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -11592,19 +11592,19 @@ msgid "New Systems Tower Available"
 msgstr "Menara Sistem Baru Tersedia"
 
 #. TRANSLATORS:
-#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
-#: po/custom/fromJson.txt:4228
-msgid "New Systems Turret Available For Design"
-msgstr "Turet Sistem Baru Tersedia Untuk Desain"
-
-#. TRANSLATORS:
 #. data/base/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/base/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
 #. data/mp/messages/resmessages1.json: $.RES_C_CT1.text[0]
 #. data/mp/messages/resmessages12.json: $.RES_SY_CBSTU1.text[0]
-#: po/custom/fromJson.txt:4234
+#: po/custom/fromJson.txt:4230
 msgid "New Systems Turret Available for Design"
+msgstr "Turet Sistem Baru Tersedia Untuk Desain"
+
+#. TRANSLATORS:
+#. data/base/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#. data/mp/messages/resmessagesall.json: $.RES_SENSO1.text[0]
+#: po/custom/fromJson.txt:4234
+msgid "New Systems Turret Available For Design"
 msgstr "Turet Sistem Baru Tersedia Untuk Desain"
 
 #. TRANSLATORS:
@@ -13587,18 +13587,18 @@ msgid "Thermal Armor +35%"
 msgstr "Armor Termal +35%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
-#: po/custom/fromJson.txt:5538
+#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
+#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#: po/custom/fromJson.txt:5539
 #, no-c-format
-msgid "Thermal armor +40%"
+msgid "Thermal Armor +40%"
 msgstr "Armor Termal +40%"
 
 #. TRANSLATORS:
-#. data/mp/messages/resmessages3.json: $.RES_V_AH4.text[2]
-#. data/mp/messages/resmessagesall.json: $.RES_V_AH7.text[2]
+#. data/mp/messages/resmessages2.json: $.RES_V_AH1.text[2]
 #: po/custom/fromJson.txt:5543
 #, no-c-format
-msgid "Thermal Armor +40%"
+msgid "Thermal armor +40%"
 msgstr "Armor Termal +40%"
 
 #. TRANSLATORS:
@@ -15206,7 +15206,7 @@ msgstr "Menunggu pemain lain"
 msgid "Out of sync"
 msgstr "Tidak tersinkron"
 
-#: src/display3d.cpp:2048
+#: src/display3d.cpp:2049
 #, c-format
 msgid "Setting zoom to %.0f"
 msgstr "Menyetel perbesaran ke %.0f"
@@ -15251,7 +15251,7 @@ msgstr "Transfer unit gagal -- batas unit akan dilewati"
 
 #. TRANSLATORS: "Normal" Faction
 #: src/faction.cpp:198
-#: src/frontend.cpp:1909
+#: src/frontend.cpp:1904
 msgid "Normal"
 msgstr "Normal"
 
@@ -15352,11 +15352,11 @@ msgstr "TUTORIAL"
 #: src/frontend.cpp:578
 #: src/frontend.cpp:650
 #: src/frontend.cpp:830
-#: src/frontend.cpp:1048
-#: src/frontend.cpp:1554
-#: src/frontend.cpp:1846
-#: src/frontend.cpp:1987
-#: src/frontend.cpp:2015
+#: src/frontend.cpp:1047
+#: src/frontend.cpp:1549
+#: src/frontend.cpp:1841
+#: src/frontend.cpp:1982
+#: src/frontend.cpp:2010
 msgctxt "menu"
 msgid "Return"
 msgstr "Kembali"
@@ -15491,14 +15491,14 @@ msgid "2×"
 msgstr "2×"
 
 #: src/frontend.cpp:722
-#: src/frontend.cpp:1203
+#: src/frontend.cpp:1202
 msgid "Fullscreen"
 msgstr "Layar penuh"
 
 #: src/frontend.cpp:723
 #: src/frontend.cpp:734
 #: src/frontend.cpp:931
-#: src/frontend.cpp:1913
+#: src/frontend.cpp:1908
 msgid "Unsupported"
 msgstr "Tidak Didukung"
 
@@ -15507,12 +15507,12 @@ msgstr "Tidak Didukung"
 #: src/frontend.cpp:745
 #: src/frontend.cpp:750
 #: src/frontend.cpp:755
-#: src/frontend.cpp:1212
-#: src/frontend.cpp:1256
+#: src/frontend.cpp:1211
+#: src/frontend.cpp:1255
+#: src/frontend.cpp:1766
 #: src/frontend.cpp:1771
 #: src/frontend.cpp:1776
-#: src/frontend.cpp:1781
-#: src/frontend.cpp:1791
+#: src/frontend.cpp:1786
 msgid "Off"
 msgstr "Mati"
 
@@ -15529,11 +15529,11 @@ msgstr "Hitam"
 #: src/frontend.cpp:745
 #: src/frontend.cpp:750
 #: src/frontend.cpp:755
-#: src/frontend.cpp:1258
+#: src/frontend.cpp:1257
+#: src/frontend.cpp:1766
 #: src/frontend.cpp:1771
 #: src/frontend.cpp:1776
-#: src/frontend.cpp:1781
-#: src/frontend.cpp:1791
+#: src/frontend.cpp:1786
 msgid "On"
 msgstr "Di"
 
@@ -15604,44 +15604,44 @@ msgstr "Aktif"
 msgid "Auto"
 msgstr "Otomatis"
 
-#: src/frontend.cpp:993
+#: src/frontend.cpp:992
 #: src/ingameop.cpp:149
 msgid "Voice Volume"
 msgstr "Volume Suara"
 
-#: src/frontend.cpp:998
+#: src/frontend.cpp:997
 #: src/ingameop.cpp:155
 msgid "FX Volume"
 msgstr "Volume Efek Suara"
 
-#: src/frontend.cpp:1003
+#: src/frontend.cpp:1002
 #: src/ingameop.cpp:161
 msgid "Music Volume"
 msgstr "Volume Musik"
 
-#: src/frontend.cpp:1009
+#: src/frontend.cpp:1008
 #: src/ingameop.cpp:167
 msgid "Subtitles"
 msgstr "Teks Terjemahan"
 
-#: src/frontend.cpp:1014
+#: src/frontend.cpp:1013
 msgid "HRTF"
 msgstr "HRTF"
 
-#: src/frontend.cpp:1020
-#: src/frontend.cpp:1022
+#: src/frontend.cpp:1019
+#: src/frontend.cpp:1021
 msgid "HRTF is not supported on your device / system / OpenAL library"
 msgstr "HRTF tidak didukung di perangkat / sistem / perpustakaan OpenAL Anda"
 
-#: src/frontend.cpp:1026
+#: src/frontend.cpp:1025
 msgid "Map Zoom"
 msgstr "Perbesaran Peta"
 
-#: src/frontend.cpp:1031
+#: src/frontend.cpp:1030
 msgid "Map Zoom Rate"
 msgstr "Kecepatan Perbesaran Peta"
 
-#: src/frontend.cpp:1036
+#: src/frontend.cpp:1035
 msgid "Radar Zoom"
 msgstr "Perbesaran Radar"
 
@@ -15649,229 +15649,229 @@ msgstr "Perbesaran Radar"
 #. "OPTIONS" means "SETTINGS".
 #. To break this message into two lines, you can use the delimiter "\n",
 #. e.g. "AUDIO / ZOOM\nOPTIONS" would show "OPTIONS" in a second line.
-#: src/frontend.cpp:1055
+#: src/frontend.cpp:1054
 msgid "AUDIO / ZOOM OPTIONS"
 msgstr "OPSI AUDIO / PERBESARAN"
 
-#: src/frontend.cpp:1167
+#: src/frontend.cpp:1166
 msgid "In Desktop Fullscreen mode, the resolution matches that of your desktop \n"
 "(or what the window manager allows)."
 msgstr "Dalam modus desktop penuh, resolusi menyesuaikan dengan desktop\n"
 "(atau yang dibolehkan manajer jendela)."
 
-#: src/frontend.cpp:1169
+#: src/frontend.cpp:1168
 msgid "You can change the resolution by resizing the window normally. (Try dragging a corner / edge.)"
 msgstr "Anda dapat mengubah resolusi dengan mengatur ukuran jendela secara manual. (Cobalah menyeret ujung / sudut jendela.)"
 
-#: src/frontend.cpp:1199
+#: src/frontend.cpp:1198
 msgid "Desktop Full"
 msgstr "Desktop Penuh"
 
-#: src/frontend.cpp:1201
+#: src/frontend.cpp:1200
 msgid "Windowed"
 msgstr "Modus jendela"
 
-#: src/frontend.cpp:1222
+#: src/frontend.cpp:1221
 msgid "Graphics Mode"
 msgstr "Modus Grafik"
 
-#: src/frontend.cpp:1227
+#: src/frontend.cpp:1226
 msgid "Resolution"
 msgstr "Resolusi"
 
-#: src/frontend.cpp:1232
+#: src/frontend.cpp:1231
 msgid "Display Scale"
 msgstr "Skala Tampilan"
 
-#: src/frontend.cpp:1260
+#: src/frontend.cpp:1259
 msgid "Adaptive"
 msgstr "Adaptif"
 
-#: src/frontend.cpp:1475
+#: src/frontend.cpp:1470
 msgid "* Takes effect on game restart"
 msgstr "* Efek dapat terlihat setelah memulai ulang permainan"
 
-#: src/frontend.cpp:1508
+#: src/frontend.cpp:1503
 msgid "Texture size"
 msgstr "Ukuran Tekstur"
 
-#: src/frontend.cpp:1513
+#: src/frontend.cpp:1508
 #: src/ingameop.cpp:728
 msgid "Vertical sync"
 msgstr "Sinkronisasi Vertikal"
 
-#: src/frontend.cpp:1518
+#: src/frontend.cpp:1513
 msgid "Antialiasing*"
 msgstr "Antialiasing*"
 
-#: src/frontend.cpp:1526
+#: src/frontend.cpp:1521
 msgid "Warning: Antialiasing can cause crashes, especially with values > 16"
 msgstr "Peringatan: Antialiasing dapat menyebabkan crash, terutama jika nilai yang disetel > 16"
 
-#: src/frontend.cpp:1539
+#: src/frontend.cpp:1534
 msgid "Graphics Backend*"
 msgstr "Back-end Grafis*"
 
-#: src/frontend.cpp:1551
+#: src/frontend.cpp:1546
 msgid "VIDEO OPTIONS"
 msgstr "OPSI VIDEO"
 
-#: src/frontend.cpp:1594
+#: src/frontend.cpp:1589
 msgid "Unable to change Window Mode"
 msgstr "Warzone gagal mengganti modus tampilan"
 
-#: src/frontend.cpp:1594
+#: src/frontend.cpp:1589
 msgid "Warzone failed to change the Window mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Warzone gagal mengganti modus tampilan\n"
 "Sistem / Driver Anda mungkin tidak mendukung modus lain."
 
-#: src/frontend.cpp:1620
+#: src/frontend.cpp:1615
 msgid "Unable to change Vertical Sync"
 msgstr "Tidak dapat mengganti Sinkronisasi Vertikal / Vsync"
 
-#: src/frontend.cpp:1620
+#: src/frontend.cpp:1615
 msgid "Warzone failed to change the Vertical Sync mode.\n"
 "Your system / drivers may not support other modes."
 msgstr "Warzone gagal mengganti Sinkronisasi Vertikal / Vsync.\n"
 "Sistem / Driver Anda mungkin tidak mendukung modus lain."
 
-#: src/frontend.cpp:1786
+#: src/frontend.cpp:1781
 msgid "Middle Mouse"
 msgstr "Tetikus Tengah"
 
-#: src/frontend.cpp:1786
+#: src/frontend.cpp:1781
 msgid "Right Mouse"
 msgstr "Tetikus Kanan"
 
-#: src/frontend.cpp:1809
+#: src/frontend.cpp:1804
 #: src/ingameop.cpp:804
 msgid "Reverse Rotation"
 msgstr "Rotasi Terbalik"
 
-#: src/frontend.cpp:1814
+#: src/frontend.cpp:1809
 #: src/ingameop.cpp:810
 msgid "Trap Cursor"
 msgstr "Kursor Jebak"
 
-#: src/frontend.cpp:1820
+#: src/frontend.cpp:1815
 #: src/ingameop.cpp:816
 msgid "Switch Mouse Buttons"
 msgstr "Tukar Tombol Tetikus"
 
-#: src/frontend.cpp:1826
+#: src/frontend.cpp:1821
 #: src/ingameop.cpp:821
 msgid "Rotate Screen"
 msgstr "Putar Layar"
 
-#: src/frontend.cpp:1831
+#: src/frontend.cpp:1826
 #: src/ingameop.cpp:826
 msgid "Colored Cursors"
 msgstr "Kursor Berwarna"
 
-#: src/frontend.cpp:1843
+#: src/frontend.cpp:1838
 msgid "MOUSE OPTIONS"
 msgstr "OPSI TETIKUS"
 
-#: src/frontend.cpp:1908
+#: src/frontend.cpp:1903
 #: src/multiint.cpp:234
 msgid "Easy"
 msgstr "Mudah"
 
-#: src/frontend.cpp:1910
+#: src/frontend.cpp:1905
 #: src/multiint.cpp:234
 msgid "Hard"
 msgstr "Sulit"
 
-#: src/frontend.cpp:1911
+#: src/frontend.cpp:1906
 #: src/multiint.cpp:234
 msgid "Insane"
 msgstr "Gila"
 
-#: src/frontend.cpp:1942
-#: src/frontend.cpp:2016
+#: src/frontend.cpp:1937
+#: src/frontend.cpp:2011
 msgid "Language"
 msgstr "Bahasa"
 
-#: src/frontend.cpp:1946
-#: src/frontend.cpp:2020
+#: src/frontend.cpp:1941
+#: src/frontend.cpp:2015
 msgid "Campaign Difficulty"
 msgstr "Tingkat Kesulitan Kampanye"
 
-#: src/frontend.cpp:1950
-#: src/frontend.cpp:2021
+#: src/frontend.cpp:1945
+#: src/frontend.cpp:2016
 msgid "Camera Speed"
 msgstr "Kecepatan Kamera"
 
-#: src/frontend.cpp:1954
-#: src/frontend.cpp:2017
+#: src/frontend.cpp:1949
+#: src/frontend.cpp:2012
 msgid "Unit Colour:"
 msgstr "Warna Unit:"
 
-#: src/frontend.cpp:1984
-#: src/frontend.cpp:2019
+#: src/frontend.cpp:1979
+#: src/frontend.cpp:2014
 msgid "Skirmish/Multiplayer"
 msgstr "Skirmish/Multipemain"
 
-#: src/frontend.cpp:1990
+#: src/frontend.cpp:1985
 #, c-format
 msgid "Help us improve translations of Warzone 2100: %s"
 msgstr "Bantu kami meningkatkan pengalihbahasaan Warzone 2100: %s"
 
-#: src/frontend.cpp:1992
+#: src/frontend.cpp:1987
 msgid "Click to open webpage."
 msgstr "Klik untuk membuka laman."
 
-#: src/frontend.cpp:1995
-#: src/frontend.cpp:2014
+#: src/frontend.cpp:1990
+#: src/frontend.cpp:2009
 msgid "GAME OPTIONS"
 msgstr "PILIHAN PERMAINAN"
 
-#: src/frontend.cpp:2040
+#: src/frontend.cpp:2035
 msgid "Insane Difficulty"
 msgstr "Tingkat Kesulitan Gila"
 
-#: src/frontend.cpp:2041
+#: src/frontend.cpp:2036
 msgid "This difficulty is for very experienced players!"
 msgstr "Tingkat kesulitan ini diperuntukkan untuk pemain yang sudah berpengalaman!"
 
-#: src/frontend.cpp:2143
+#: src/frontend.cpp:2138
 #: src/multiint.cpp:2965
 msgid "Mod: "
 msgstr "Mod:"
 
-#: src/frontend.cpp:2605
+#: src/frontend.cpp:2598
 msgid "Increase Game Display Scale?"
 msgstr "Tingkatkan Skala Tampilan Permainan?"
 
-#: src/frontend.cpp:2607
+#: src/frontend.cpp:2600
 msgid "With your current resolution & display scale settings, the game's user interface may appear small, and the game perspective may appear distorted."
 msgstr "Dengan resolusi dan pengaturan tampilan Anda sekarang, tampilan permainan mungkin tampak kecil dan perspektif mungkin tampak terdistorsi."
 
-#: src/frontend.cpp:2609
+#: src/frontend.cpp:2602
 msgid "You can fix this by increasing the game's Display Scale setting."
 msgstr "Anda dapat membenarkan ini dengan meningkatkan Skala Tampilan permainan."
 
-#: src/frontend.cpp:2611
+#: src/frontend.cpp:2604
 #, c-format
 msgid "Would you like to increase the game's Display Scale to: %u%%?"
 msgstr "Apakah Anda ingin meningkatkan Skala Permainan ke: %u%%?"
 
-#: src/frontend.cpp:2613
+#: src/frontend.cpp:2606
 msgid "Increase Display Scale"
 msgstr "Tingkatkan Skala Tampilan Permainan"
 
-#: src/frontend.cpp:2630
+#: src/frontend.cpp:2623
 #, c-format
 msgid "Display Scale Increased to: %u%%"
 msgstr "Skala Tampilan Permainan Ditingkatkan ke: %u%%"
 
-#: src/frontend.cpp:2631
-#: src/frontend.cpp:2647
+#: src/frontend.cpp:2624
+#: src/frontend.cpp:2640
 msgid "You can adjust the Display Scale at any time in the Video Options menu."
 msgstr "Anda dapat mengatur Skala Tampilan Permainan kapan saja di menu Opsi Video."
 
-#: src/frontend.cpp:2646
+#: src/frontend.cpp:2639
 msgid "Tip: Adjusting Display Scale"
 msgstr "Tip: Mengatur Skala Tampilan Permainan"
 
@@ -15903,7 +15903,7 @@ msgstr "Pemain %u memunculkan unit baru melalui menu debug."
 
 #: src/hci.cpp:1658
 #: src/multiint.cpp:1426
-#: src/multimenu.cpp:686
+#: src/multimenu.cpp:768
 msgid "Power"
 msgstr "Daya"
 
@@ -16021,7 +16021,7 @@ msgstr "Muat Permainan"
 
 #: src/ingameop.cpp:253
 #: src/ingameop.cpp:262
-#: src/mission.cpp:2430
+#: src/mission.cpp:2425
 msgid "Save Game"
 msgstr "Simpan Permainan"
 
@@ -17397,7 +17397,7 @@ msgstr "PEMETAAN KUNCI"
 #: src/keyedit.cpp:575
 #: src/multiint.cpp:1504
 #: src/musicmanager.cpp:769
-#: src/titleui/gamefind.cpp:91
+#: src/titleui/gamefind.cpp:82
 #: src/titleui/protocol.cpp:81
 msgid "Return To Previous Screen"
 msgstr "Kembali Ke Layar Sebelumnya"
@@ -17428,42 +17428,42 @@ msgstr "curang"
 msgid "Could not save game!"
 msgstr "Tidak dapat menyimpan permainan!"
 
-#: src/mission.cpp:1895
+#: src/mission.cpp:1890
 msgid "Load Transport"
 msgstr "Muat Transporter"
 
-#: src/mission.cpp:2254
+#: src/mission.cpp:2249
 msgid "OBJECTIVE ACHIEVED by cheating!"
 msgstr "OBJEKTIF TERCAPAI dengan curang!"
 
-#: src/mission.cpp:2254
+#: src/mission.cpp:2249
 msgid "OBJECTIVE ACHIEVED"
 msgstr "OBJEKTIF TERCAPAI"
 
-#: src/mission.cpp:2260
+#: src/mission.cpp:2255
 msgid "OBJECTIVE FAILED--and you cheated!"
 msgstr "OBJEKTIF GAGAL--dan Anda curang!"
 
-#: src/mission.cpp:2260
+#: src/mission.cpp:2255
 msgid "OBJECTIVE FAILED"
 msgstr "OBJEKTIF GAGAL"
 
-#: src/mission.cpp:2289
+#: src/mission.cpp:2284
 msgid "Continue Game"
 msgstr "Lanjutkan Permainan"
 
-#: src/mission.cpp:2299
-#: src/mission.cpp:2335
-#: src/mission.cpp:2449
+#: src/mission.cpp:2294
+#: src/mission.cpp:2330
+#: src/mission.cpp:2444
 msgid "Quit To Main Menu"
 msgstr "Keluar ke Menu Utama"
 
-#: src/mission.cpp:2329
-#: src/mission.cpp:2427
+#: src/mission.cpp:2324
+#: src/mission.cpp:2422
 msgid "Load Saved Game"
 msgstr "Muat Permainan Tersimpan"
 
-#: src/mission.cpp:2395
+#: src/mission.cpp:2390
 msgid "GAME SAVED :"
 msgstr "PERMAINAN TERSIMPAN :"
 
@@ -17595,7 +17595,7 @@ msgid "Select Game Name"
 msgstr "Pilih Nama Permainan"
 
 #: src/multiint.cpp:1334
-#: src/titleui/gamefind.cpp:579
+#: src/titleui/gamefind.cpp:279
 msgid "Game Name"
 msgstr "Nama Permainan"
 
@@ -17630,7 +17630,7 @@ msgid "Select Player Name"
 msgstr "Pilih Nama Pemain"
 
 #: src/multiint.cpp:1415
-#: src/multimenu.cpp:674
+#: src/multimenu.cpp:772
 msgid "Alliances"
 msgstr "Aliansi"
 
@@ -17727,14 +17727,14 @@ msgstr "Tim"
 
 #: src/multiint.cpp:1919
 #: src/multiint.cpp:3910
-#: src/multimenu.cpp:1242
+#: src/multimenu.cpp:1272
 #, c-format
 msgid "The host has kicked %s from the game!"
 msgstr "Penyelenggara telah mengeluarkan %s dari permainan!"
 
 #: src/multiint.cpp:1920
 #: src/multiint.cpp:3912
-#: src/multimenu.cpp:1246
+#: src/multimenu.cpp:1276
 msgid "The host has kicked you from the game."
 msgstr "Penyelenggara telah mengeluarkan Anda dari permainan."
 
@@ -17917,7 +17917,7 @@ msgid "HOST"
 msgstr "PENYELENGGARA"
 
 #: src/multiint.cpp:4940
-#: src/multimenu.cpp:693
+#: src/multimenu.cpp:769
 msgid "Ping"
 msgstr "Ping"
 
@@ -17991,90 +17991,90 @@ msgstr "Batas-batas diatur ulang ke nilai default"
 msgid "Limits Reset To Default Values"
 msgstr "Batas-Batas Diatur Ulang ke Nilai Default"
 
-#: src/multimenu.cpp:531
+#: src/multimenu.cpp:518
 msgid "Any number of players"
 msgstr "Segala jumlah pemain"
 
-#: src/multimenu.cpp:548
+#: src/multimenu.cpp:535
 #, c-format
 msgid "%d player"
 msgid_plural "%d players"
 msgstr[0] "%d pemain"
 
-#: src/multimenu.cpp:676
-msgid "Score"
-msgstr "Skor"
-
-#: src/multimenu.cpp:678
-msgid "Kills"
-msgstr "Membunuh"
-
-#: src/multimenu.cpp:680
-msgid "Units"
-msgstr "Unit"
-
-#: src/multimenu.cpp:697
+#: src/multimenu.cpp:770
 msgid "Structs"
 msgstr "Struktur"
 
-#: src/multimenu.cpp:709
+#: src/multimenu.cpp:773
+msgid "Score"
+msgstr "Skor"
+
+#: src/multimenu.cpp:774
+msgid "Kills"
+msgstr "Membunuh"
+
+#: src/multimenu.cpp:775
+msgid "Units"
+msgstr "Unit"
+
+#: src/multimenu.cpp:824
+msgid "Channel"
+msgstr "Saluran"
+
+#: src/multimenu.cpp:835
+msgid "Toggle Alliance State"
+msgstr "Atur Keadaan Aliansi"
+
+#: src/multimenu.cpp:856
+msgid "Give Visibility Report"
+msgstr "Berikan Laporan Visibilitas"
+
+#: src/multimenu.cpp:861
+msgid "Leak Technology Documents"
+msgstr "Bocorkan Dokumen Teknologi"
+
+#: src/multimenu.cpp:867
+msgid "Hand Over Selected Units"
+msgstr "Berikan Unit yang Dipilih"
+
+#: src/multimenu.cpp:872
+msgid "Give Power To Player"
+msgstr "Berikan Daya Ke Pemain"
+
+#: src/multimenu.cpp:1075
 msgid "Sent/Received per sec —"
 msgstr "Terkirim/Diterima per detik —"
 
-#: src/multimenu.cpp:709
+#: src/multimenu.cpp:1075
 msgid "Total Sent/Received —"
 msgstr "Total Terkirim/Diterima —"
 
-#: src/multimenu.cpp:714
+#: src/multimenu.cpp:1080
 #, c-format
 msgid "Traf: %lu/%lu"
 msgstr ""
 
-#: src/multimenu.cpp:718
+#: src/multimenu.cpp:1084
 #, c-format
 msgid "Uncompressed: %lu/%lu"
 msgstr "Tidak Terkompres: %lu/%lu"
 
-#: src/multimenu.cpp:722
+#: src/multimenu.cpp:1088
 #, c-format
 msgid "Pack: %lu/%lu"
 msgstr ""
 
-#: src/multimenu.cpp:1023
-msgid "Channel"
-msgstr "Saluran"
-
-#: src/multimenu.cpp:1037
-msgid "Toggle Alliance State"
-msgstr "Atur Keadaan Aliansi"
-
-#: src/multimenu.cpp:1056
-msgid "Give Visibility Report"
-msgstr "Berikan Laporan Visibilitas"
-
-#: src/multimenu.cpp:1062
-msgid "Leak Technology Documents"
-msgstr "Bocorkan Dokumen Teknologi"
-
-#: src/multimenu.cpp:1069
-msgid "Hand Over Selected Units"
-msgstr "Berikan Unit yang Dipilih"
-
-#: src/multimenu.cpp:1075
-msgid "Give Power To Player"
-msgstr "Berikan Daya Ke Pemain"
-
-#: src/multimenu.cpp:1244
+#: src/multimenu.cpp:1274
 #, c-format
 msgid "kicked %s : %s from the game, and added them to the banned list!"
 msgstr "mengeluarkan %s : %s dari permainan, dan menambahkan mereka ke daftar blacklist!"
 
-#: src/multiopt.cpp:305
+#: src/multiopt.cpp:332
 #: src/multiplay.cpp:1460
 msgid "Warning, this is a map-mod, it could alter normal gameplay."
 msgstr "Perhatian, ini adalah map-mod yang dapat mempengaruhi jalan permainan normal."
 
-#: src/multiopt.cpp:306
+#: src/multiopt.cpp:333
 #: src/multiplay.cpp:1464
 msgid "Warning, HOST has altered the game code, and can't be trusted!"
 msgstr "Perhatian, PENYELENGGARA telah mengganti kode permainan, dan tidak dapat dipercaya!"
@@ -18438,133 +18438,133 @@ msgstr "Penghargaan Fasilitas Perbaikan - Perbaikan"
 msgid "Repair Facility Award - Nothing"
 msgstr "Penghargaan Fasilitas Perbaikan - Tidak Ada"
 
-#: src/titleui/gamefind.cpp:88
+#: src/titleui/gamefind.cpp:79
 msgid "GAMES"
 msgstr "PERMAINAN"
 
-#: src/titleui/gamefind.cpp:96
+#: src/titleui/gamefind.cpp:87
 msgid "Refresh Games List"
 msgstr "Segarkan Ulang Daftar Permainan"
 
-#: src/titleui/gamefind.cpp:99
+#: src/titleui/gamefind.cpp:90
 msgid "Filter Games List"
 msgstr "Saring Daftar Permainan"
 
-#: src/titleui/gamefind.cpp:170
+#: src/titleui/gamefind.cpp:161
 msgid "Refreshing..."
 msgstr "Menyegarkan..."
 
-#: src/titleui/gamefind.cpp:196
+#: src/titleui/gamefind.cpp:187
 msgid "Searching"
 msgstr "Mencari"
 
-#: src/titleui/gamefind.cpp:250
+#: src/titleui/gamefind.cpp:241
 msgid "Connecting to the lobby server..."
 msgstr "Menghubungkan ke lobi server..."
 
-#: src/titleui/gamefind.cpp:261
+#: src/titleui/gamefind.cpp:282
+msgid "Map Name"
+msgstr "Nama Peta"
+
+#: src/titleui/gamefind.cpp:285
+msgid "Players"
+msgstr "Pemain"
+
+#: src/titleui/gamefind.cpp:288
+msgid "Status"
+msgstr "Status"
+
+#: src/titleui/gamefind.cpp:306
 msgid "Your version of Warzone is incompatible with this game."
 msgstr "Versi Warzone Anda tidak kompatibel dengan permainan ini."
 
-#: src/titleui/gamefind.cpp:312
+#: src/titleui/gamefind.cpp:370
 msgid "[Password required]"
 msgstr "[Kata Sandi diperlukan]"
 
-#: src/titleui/gamefind.cpp:316
+#: src/titleui/gamefind.cpp:374
 msgid "[No Tanks]"
 msgstr "[Tidak Ada Tank]"
 
-#: src/titleui/gamefind.cpp:320
+#: src/titleui/gamefind.cpp:378
 msgid "[No Cyborgs]"
 msgstr "[Tidak Ada Cyborg]"
 
-#: src/titleui/gamefind.cpp:324
+#: src/titleui/gamefind.cpp:382
 msgid "[No VTOLs]"
 msgstr "[Tidak Ada VTOL]"
 
-#: src/titleui/gamefind.cpp:329
+#: src/titleui/gamefind.cpp:387
 #, c-format
 msgid "Hosted by %s"
 msgstr "Diselenggarakan oleh %s"
 
-#: src/titleui/gamefind.cpp:333
+#: src/titleui/gamefind.cpp:391
 #, c-format
 msgid "Hosted by %s —%s"
 msgstr "Diselenggarakan oleh %s —%s"
 
-#: src/titleui/gamefind.cpp:362
+#: src/titleui/gamefind.cpp:420
 msgid "Can't find any games for your version."
 msgstr "Tidak dapat menemukan permainan untuk versi Anda."
 
-#: src/titleui/gamefind.cpp:378
+#: src/titleui/gamefind.cpp:436
 msgid "There appears to be a game update available!"
 msgstr "Tampaknya ada pembaruan game tersedia!"
 
-#: src/titleui/gamefind.cpp:382
+#: src/titleui/gamefind.cpp:440
 msgid "No games are available for your version"
 msgstr "Tidak tersedia permainan untuk versi permainan Anda"
 
-#: src/titleui/gamefind.cpp:386
+#: src/titleui/gamefind.cpp:444
 msgid "Game is full"
 msgstr "Permainan penuh"
 
-#: src/titleui/gamefind.cpp:390
+#: src/titleui/gamefind.cpp:448
 msgid "You were kicked!"
 msgstr "Anda dikeluarkan dari permainan!"
 
-#: src/titleui/gamefind.cpp:393
+#: src/titleui/gamefind.cpp:451
 msgid "Wrong Game Version!"
 msgstr "Versi game salah!"
 
-#: src/titleui/gamefind.cpp:396
+#: src/titleui/gamefind.cpp:454
 msgid "You have an incompatible mod."
 msgstr "Anda mempunyai mod yang tidak kompatibel."
 
-#: src/titleui/gamefind.cpp:400
+#: src/titleui/gamefind.cpp:458
 msgid "Host couldn't send file?"
 msgstr "Host tidak dapat mengirim file?"
 
-#: src/titleui/gamefind.cpp:404
+#: src/titleui/gamefind.cpp:462
 msgid "Incorrect Password!"
 msgstr "Kata Sandi Salah!"
 
-#: src/titleui/gamefind.cpp:407
+#: src/titleui/gamefind.cpp:465
 msgid "Host has dropped connection!"
 msgstr "Host memutus sambungan!"
 
-#: src/titleui/gamefind.cpp:411
+#: src/titleui/gamefind.cpp:469
 msgid "Connection Error"
 msgstr "Kesalahan Sambungan"
 
-#: src/titleui/gamefind.cpp:462
+#: src/titleui/gamefind.cpp:520
 msgid "Can't connect to lobby server!"
 msgstr "Tidak dapat terhubung ke lobi server!"
 
-#: src/titleui/gamefind.cpp:557
+#: src/titleui/gamefind.cpp:615
 #, c-format
 msgid "Mods: %s"
 msgstr "Mod: %s"
 
-#: src/titleui/gamefind.cpp:563
+#: src/titleui/gamefind.cpp:621
 msgid "Mods: None!"
 msgstr "Mod: Tidak ada!"
 
-#: src/titleui/gamefind.cpp:569
+#: src/titleui/gamefind.cpp:627
 #, c-format
 msgid "Version: %s"
 msgstr "Versi: %s"
-
-#: src/titleui/gamefind.cpp:582
-msgid "Map Name"
-msgstr "Nama Peta"
-
-#: src/titleui/gamefind.cpp:585
-msgid "Players"
-msgstr "Pemain"
-
-#: src/titleui/gamefind.cpp:588
-msgid "Status"
-msgstr "Status"
 
 #: src/titleui/msgbox.cpp:64
 msgid "Continue"
@@ -18612,37 +18612,58 @@ msgstr "Tidak ada cukup ruang dalam Transporter!"
 msgid "Reinforcements landing"
 msgstr "Bala bantuan telah mendarat"
 
-#: src/updatemanager.cpp:247
+#: src/updatemanager.cpp:273
 msgid "Update Available"
 msgstr "Pembaruan Tersedia"
 
-#: src/updatemanager.cpp:250
+#: src/updatemanager.cpp:276
 #, c-format
 msgid "A new build of Warzone 2100 (%s) is available!"
 msgstr "Versi baru Warzone 2100 (%s) tersedia!"
 
-#: src/updatemanager.cpp:254
+#: src/updatemanager.cpp:280
 msgid "A new build of Warzone 2100 is available!"
 msgstr "Versi baru Warzone 2100 tersedia!"
 
-#: src/updatemanager.cpp:256
+#: src/updatemanager.cpp:282
 msgid "Get Update Now"
 msgstr "Dapatkan Perbaruan Sekarang"
 
+#: src/updatemanager.cpp:418
+msgid "Compatibility Warning"
+msgstr ""
+
+#: src/updatemanager.cpp:419
+msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
+msgstr ""
+
+#: src/updatemanager.cpp:421
+msgid "Please click the button below for more information on how to fix it."
+msgstr ""
+
+#: src/updatemanager.cpp:425
+#, c-format
+msgid "(Notice ID: %s)"
+msgstr ""
+
+#: src/updatemanager.cpp:427
+msgid "More Information"
+msgstr ""
+
 #. TRANSLATORS: Printed when compiling with uncommitted changes
-#: src/version.cpp:253
+#: src/version.cpp:249
 msgid " (modified locally)"
 msgstr " (dimodifikasi secara lokal)"
 
 #. TRANSLATORS: Printed in Debug builds
-#: src/version.cpp:260
+#: src/version.cpp:256
 msgid " - DEBUG"
 msgstr " - DEBUG"
 
 #. TRANSLATORS: This string looks as follows when expanded.
 #. "Version: <version name/number>, <working copy state>,
 #. Built: <BUILD DATE><BUILD TYPE>"
-#: src/version.cpp:269
+#: src/version.cpp:265
 #, c-format
 msgid "Version: %s,%s Built: %s%s"
 msgstr "Versi: %s,%s Built: %s%s"
