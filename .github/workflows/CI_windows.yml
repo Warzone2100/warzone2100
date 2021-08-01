@@ -294,6 +294,8 @@ jobs:
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\debugsymbols"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\archive"
         New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\error_logs"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\output\sentry_source_bundles"
+        New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\sentry_artifacts"
     - name: 'Download & Install Ninja-Build'
       id: ninja-dl
       run: |
@@ -578,6 +580,46 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}
         WZ_GITHUB_REF: ${{ steps.checkout-config.outputs.WZ_GITHUB_REF }}
+    #####################################################
+    # Create Sentry source bundle
+    #####################################################
+    - name: Create Sentry source bundle
+      if: success() && (matrix.support_sentry == true)
+      id: create-sentry-source-bundle
+      continue-on-error: true
+      working-directory: '${{ github.workspace }}\sentry_artifacts'
+      env:
+        WZ_REPO_PATH: ${{ steps.settings.outputs.WZ_REPO_PATH }}
+        WZ_ARCHIVE_PATH: '${{ github.workspace }}\output\archive\warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_archive.zip'
+        SOURCE_BUNDLE_OUTPUT_DIR: '${{ github.workspace }}\output\sentry_source_bundles'
+      run: |
+        # Download sentry-cli
+        echo "::group::Downloading sentry-cli ..."
+        cmake -P "${env:WZ_REPO_PATH}/.ci/githubactions/FetchSentryCLI.cmake"
+        echo "Downloading sentry-cli ... Done"
+        echo "::endgroup::"
+        # Extract the WZ archive to a temporary path
+        echo "::group::Expanding archive ..."
+        Expand-Archive -LiteralPath "${env:WZ_ARCHIVE_PATH}" -DestinationPath "$(pwd)\wz_extracted"
+        # Remove any .sym files from extracted archive
+        Remove-Item "$(pwd)\wz_extracted\bin\*" -Recurse -Include *.sym
+        echo "Expanding archive ... Done"
+        Get-ChildItem -Path "$(pwd)\wz_extracted\bin" -Recurse
+        echo "::endgroup::"
+        # Create the Sentry source bundle
+        echo "sentry-cli difutil bundle-sources ..."
+        & "$(pwd)\sentry-cli\sentry-cli.exe" difutil bundle-sources -o "${env:SOURCE_BUNDLE_OUTPUT_DIR}" "$(pwd)\wz_extracted\bin\warzone2100.pdb"
+        echo "sentry-cli difutil bundle-sources ... Done"
+        # List output bundles
+        Get-ChildItem -Path "${env:SOURCE_BUNDLE_OUTPUT_DIR}" -Recurse
+    - name: Upload Sentry source bundles
+      if: success() && (github.repository == 'Warzone2100/warzone2100') && (matrix.support_sentry == true) && (steps.settings.outputs.WZ_ENABLE_SENTRY == 'true') && (steps.create-sentry-source-bundle.outcome == 'success')
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'warzone2100_${{ steps.settings.outputs.WZ_BUILD_DESC }}_debug_sourcebundles'
+        path: '${{ github.workspace }}\output\sentry_source_bundles'
+        retention-days: 1
+        if-no-files-found: 'warn'
   upload-debug-symbols:
     strategy:
       matrix:
@@ -597,7 +639,8 @@ jobs:
       - name: Prep Environment
         run: |
           mkdir dl-archive
-      - name: Download Artifacts
+          mkdir dl-sourcebundle
+      - name: Download Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: 'warzone2100_win_${{ matrix.architecture }}_archive'
@@ -615,17 +658,27 @@ jobs:
             rm "${BREAKPAD_SYM}"
           fi
           echo "::set-output name=ARCHIVEDIR::${OUTPUTDIR}"
+      - name: Download Source Bundle
+        continue-on-error: true
+        uses: actions/download-artifact@v2
+        with:
+          name: 'warzone2100_win_${{ matrix.architecture }}_debug_sourcebundles'
+          path: ./dl-sourcebundle
       - name: 'Upload debug symbols'
         env:
           SENTRY_AUTH_TOKEN: '${{ secrets.SENTRY_AUTH_TOKEN }}'
           WZ_ARCHIVE_DIR: '${{ steps.extract.outputs.ARCHIVEDIR }}'
+          WZ_SOURCEBUNDLES_DIR: './dl-sourcebundle'
         run: |
           if [[ -z "${SENTRY_AUTH_TOKEN}" ]]; then
             echo "No SENTRY_AUTH_TOKEN - skipping"
             exit 0
           fi
           docker pull getsentry/sentry-cli
+          echo "Uploading debug symbols"
           docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --no-zips -o warzone2100 -p warzone2100 "${WZ_ARCHIVE_DIR}"
+          echo "Uploading source bundles"
+          docker run --rm -e SENTRY_AUTH_TOKEN -v "$(pwd):/work" getsentry/sentry-cli upload-dif --type sourcebundle -o warzone2100 -p warzone2100 "${WZ_SOURCEBUNDLES_DIR}"
   trigger-updates-json:
     name: 'Trigger Info Update'
     runs-on: ubuntu-latest
