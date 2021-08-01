@@ -7538,10 +7538,10 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG3Mk1",
-			"R-Wpn-MG-ROF03"
+			"R-Wpn-MG-ROF01"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"resultComponents": [
 			"CyborgRotMG",
 			"MG4ROTARY-VTOL",
@@ -7562,8 +7562,8 @@
 			"R-Struc-Research-Upgrade06",
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 12000,
-		"researchPower": 375,
+		"researchPoints": 10000,
+		"researchPower": 312,
 		"resultComponents": [
 			"MG5TWINROTARY"
 		],
