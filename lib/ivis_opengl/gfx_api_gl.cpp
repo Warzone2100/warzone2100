@@ -2064,9 +2064,9 @@ bool gl_context::initGLContext()
 	debug(LOG_3D, "  * KHR_DEBUG support %s detected", khr_debug ? "was" : "was NOT");
 	debug(LOG_3D, "  * glGenerateMipmap support %s detected", glGenerateMipmap ? "was" : "was NOT");
 
-	if (!GLAD_GL_VERSION_2_0 && !GLAD_GL_ES_VERSION_2_0)
+	if (!GLAD_GL_VERSION_2_1 && !GLAD_GL_ES_VERSION_2_0)
 	{
-		debug(LOG_FATAL, "OpenGL 2.0 / OpenGL ES 2.0 not supported! Please upgrade your drivers.");
+		debug(LOG_FATAL, "OpenGL 2.1+ / OpenGL ES 2.0+ not supported! Please upgrade your drivers.");
 		return false;
 	}
 
