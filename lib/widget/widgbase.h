@@ -341,7 +341,7 @@ private:
 	void setScreenPointer(const std::shared_ptr<W_SCREEN> &screen); ///< Set screen pointer for us and all children.
 public:
 	virtual bool processClickRecursive(W_CONTEXT *psContext, WIDGET_KEY key, bool wasPressed);
-	void runRecursive(W_CONTEXT *psContext);
+	virtual void runRecursive(W_CONTEXT *psContext);
 	void processCallbacksRecursive(W_CONTEXT *psContext);
 	virtual void displayRecursive(WidgetGraphicsContext const &context);  ///< Display this widget, and all visible children.
 	void displayRecursive()
