@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 06:22\n"
+"PO-Revision-Date: 2021-08-01 18:21\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -18640,15 +18640,15 @@ msgstr "Jetzt aktualisieren"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Kompatibilitätswarnung"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "Es wurde ein Problem entdeckt, das die Leistung von Warzone 2100 beeinflussen könnte."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Bitte klicke auf den Button unten, um weitere Informationen über die Behebung zu erhalten."
 
 #: src/updatemanager.cpp:425
 #, c-format
@@ -18657,7 +18657,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Mehr Informationen"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:249
