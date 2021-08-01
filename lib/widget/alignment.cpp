@@ -24,53 +24,59 @@
 
 std::shared_ptr<AlignmentWidget> Alignment::wrap(std::shared_ptr<WIDGET> widget)
 {
-    auto wrap = std::make_shared<AlignmentWidget>(*this);
-    wrap->attach(widget);
-    return wrap;
+	auto wrap = std::make_shared<AlignmentWidget>(*this);
+	wrap->attach(widget);
+	return wrap;
 }
 
 void AlignmentWidget::geometryChanged()
 {
-    if (children().empty())
-    {
-        return;
-    }
+	if (children().empty())
+	{
+		return;
+	}
 
-    auto &child = children().front();
-    auto childLeft = 0;
-    if (alignment.horizontal == Alignment::Horizontal::Center)
-    {
-        childLeft = std::max(0, width() - child->idealWidth()) / 2;
-    }
-    else if (alignment.horizontal == Alignment::Horizontal::Right)
-    {
-        childLeft = std::max(0, width() - child->idealWidth());
-    }
+	auto &child = children().front();
+	WzRect childRect(0, 0, 0, 0);
+	if (alignment.resizing == Alignment::Resizing::Shrink)
+	{
+		childRect.setWidth(std::min(width(), child->idealWidth()));
+		childRect.setHeight(std::min(height(), child->idealHeight()));
+	}
+	else if (alignment.resizing == Alignment::Resizing::Fit)
+	{
+		auto fitRatio = std::min(width() / (float)child->idealWidth(), height() / (float)child->idealHeight());
+		childRect.setWidth(static_cast<int>(child->idealWidth() * fitRatio));
+		childRect.setHeight(static_cast<int>(child->idealHeight() * fitRatio));
+	}
 
-    auto childTop = 0;
-    if (alignment.vertical == Alignment::Vertical::Center)
-    {
-        childTop = std::max(0, height() - child->idealHeight()) / 2;
-    }
-    else if (alignment.vertical == Alignment::Vertical::Bottom)
-    {
-        childTop = std::max(0, height() - child->idealHeight());
-    }
+	if (alignment.horizontal == Alignment::Horizontal::Center)
+	{
+		childRect.setX(std::max(0, width() - childRect.width()) / 2);
+	}
+	else if (alignment.horizontal == Alignment::Horizontal::Right)
+	{
+		childRect.setX(std::max(0, width() - childRect.width()));
+	}
 
-    child->setGeometry(
-        childLeft,
-        childTop,
-        std::min(width(), child->idealWidth()),
-        std::min(height(), child->idealHeight())
-    );
+	if (alignment.vertical == Alignment::Vertical::Center)
+	{
+		childRect.setY(std::max(0, height() - childRect.height()) / 2);
+	}
+	else if (alignment.vertical == Alignment::Vertical::Bottom)
+	{
+		childRect.setY(std::max(0, height() - childRect.height()));
+	}
+
+	child->setGeometry(childRect);
 }
 
 int32_t AlignmentWidget::idealWidth()
 {
-    return children().empty() ? WIDGET::idealWidth(): children().front()->idealWidth();
+	return children().empty() ? WIDGET::idealWidth(): children().front()->idealWidth();
 }
 
 int32_t AlignmentWidget::idealHeight()
 {
-    return children().empty() ? WIDGET::idealHeight(): children().front()->idealHeight();
+	return children().empty() ? WIDGET::idealHeight(): children().front()->idealHeight();
 }

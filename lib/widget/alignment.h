@@ -27,48 +27,59 @@
 class AlignmentWidget;
 struct Alignment
 {
-    enum class Vertical
-    {
-        Top,
-        Center,
-        Bottom
-    };
+	enum class Vertical
+	{
+		Top,
+		Center,
+		Bottom
+	};
 
-    enum class Horizontal
-    {
-        Left,
-        Center,
-        Right
-    };
+	enum class Horizontal
+	{
+		Left,
+		Center,
+		Right
+	};
 
-    Alignment(Vertical vertical, Horizontal horizontal)
-        : vertical(vertical)
-        , horizontal(horizontal)
-        {}
+	enum class Resizing
+	{
+		Shrink,
+		Fit
+	};
 
-    static Alignment center()
-    {
-        return { Vertical::Center, Horizontal::Center };
-    }
+	Alignment(Vertical vertical, Horizontal horizontal, Resizing resizing = Resizing::Shrink)
+		: vertical(vertical)
+		, horizontal(horizontal)
+		, resizing(resizing)
+	{}
 
-    std::shared_ptr<AlignmentWidget> wrap(std::shared_ptr<WIDGET> widget);
+	static Alignment center()
+	{
+		return { Vertical::Center, Horizontal::Center };
+	}
 
-    Vertical vertical;
-    Horizontal horizontal;
+	std::shared_ptr<AlignmentWidget> wrap(std::shared_ptr<WIDGET> widget);
+
+	Vertical vertical;
+	Horizontal horizontal;
+	Resizing resizing;
 };
 
 class AlignmentWidget: public WIDGET
 {
 public:
-    explicit AlignmentWidget(Alignment alignment): alignment(alignment) {}
+	explicit AlignmentWidget(Alignment alignment): alignment(alignment)
+	{
+		setTransparentToMouse(true);
+	}
 
 protected:
-    void geometryChanged() override;
-    int32_t idealWidth() override;
-    int32_t idealHeight() override;
+	void geometryChanged() override;
+	int32_t idealWidth() override;
+	int32_t idealHeight() override;
 
 private:
-    Alignment alignment;
+	Alignment alignment;
 };
 
 #endif // __INCLUDED_LIB_WIDGET_ALIGNMENT_H__

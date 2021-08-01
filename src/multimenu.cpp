@@ -28,7 +28,7 @@
 #include "lib/framework/physfs_ext.h"
 #include "lib/widget/gridlayout.h"
 #include "lib/widget/alignment.h"
-#include "lib/widget/minsize.h"
+#include "lib/widget/resize.h"
 #include "lib/widget/margin.h"
 #include "lib/widget/button.h"
 #include "lib/widget/label.h"
@@ -801,13 +801,13 @@ private:
 		structsLabel = makeLabel(_("Structs"));
 		place({0}, {0}, margin.wrap(Alignment::center().wrap(timerLabel)));
 		place({1}, {0}, margin.wrap(makeLabel(_("Alliances"))));
-		place({2}, {0}, MinSize::minWidth(100).wrap(margin.wrap(makeLabel(_("Score")))));
-		place({3}, {0}, MinSize::minWidth(50).wrap(margin.wrap(makeLabel(_("Kills")))));
-		place({4}, {0}, MinSize::minWidth(50).wrap(margin.wrap(makeLabel(_("Units")))));
-		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(powerLabel)));
-		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(pingLabel)));
-		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(structsLabel)));
-		place({6}, {0}, MinSize::minWidth(16).wrap(lastMargin.wrap(makeLabel(""))));
+		place({2}, {0}, Resize::width(100).wrap(margin.wrap(makeLabel(_("Score")))));
+		place({3}, {0}, Resize::width(50).wrap(margin.wrap(makeLabel(_("Kills")))));
+		place({4}, {0}, Resize::width(50).wrap(margin.wrap(makeLabel(_("Units")))));
+		place({5}, {0}, Resize::width(50).wrap(lastMargin.wrap(powerLabel)));
+		place({5}, {0}, Resize::width(50).wrap(lastMargin.wrap(pingLabel)));
+		place({5}, {0}, Resize::width(50).wrap(lastMargin.wrap(structsLabel)));
+		place({6}, {0}, Resize::width(16).wrap(lastMargin.wrap(makeLabel(""))));
 
 		for (auto player = 0; player < MAX_CONNECTED_PLAYERS; player++)
 		{

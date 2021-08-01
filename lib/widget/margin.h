@@ -49,7 +49,7 @@ class MarginWidget: public WIDGET
 public:
 	explicit MarginWidget(Margin margin): WIDGET(), margin(margin)
 	{
-        setTransparentToClicks(true);
+		setTransparentToMouse(true);
 	}
 
 protected:

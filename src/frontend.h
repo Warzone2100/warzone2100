@@ -137,9 +137,9 @@ struct DisplayTextOptionCache
 // ////////////////////////////////////////////////////////////////////////////
 // defines.
 
-#define FRONTEND_TOPFORMX		50
+#define FRONTEND_TOPFORMX		30
 #define FRONTEND_TOPFORMY		10
-#define FRONTEND_TOPFORMW		540
+#define FRONTEND_TOPFORMW		580
 #define FRONTEND_TOPFORMH		150
 
 
