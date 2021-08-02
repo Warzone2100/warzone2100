@@ -664,27 +664,6 @@ static void saveMissionData()
 	//clear out the audio
 	audio_StopAll();
 
-	//save the mission data
-	mission.psMapTiles = std::move(psMapTiles);
-	mission.mapWidth = mapWidth;
-	mission.mapHeight = mapHeight;
-	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
-	{
-		mission.psBlockMap[i] = std::move(psBlockMap[i]);
-	}
-	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
-	{
-		mission.psAuxMap[i] = std::move(psAuxMap[i]);
-	}
-	mission.scrollMinX = scrollMinX;
-	mission.scrollMinY = scrollMinY;
-	mission.scrollMaxX = scrollMaxX;
-	mission.scrollMaxY = scrollMaxY;
-	std::swap(mission.psGateways, gwGetGateways());
-	// save the selectedPlayer's LZ
-	mission.homeLZ_X = getLandingX(selectedPlayer);
-	mission.homeLZ_Y = getLandingY(selectedPlayer);
-
 	bRepairExists = false;
 	//set any structures currently being built to completed for the selected player
 	for (psStruct = apsStructLists[selectedPlayer]; psStruct; psStruct = psStruct->psNext)
@@ -738,6 +717,27 @@ static void saveMissionData()
 			orderDroid(psDroid, DORDER_STOP, ModeImmediate);
 		}
 	}
+
+	//save the mission data
+	mission.psMapTiles = std::move(psMapTiles);
+	mission.mapWidth = mapWidth;
+	mission.mapHeight = mapHeight;
+	for (int i = 0; i < ARRAY_SIZE(mission.psBlockMap); ++i)
+	{
+		mission.psBlockMap[i] = std::move(psBlockMap[i]);
+	}
+	for (int i = 0; i < ARRAY_SIZE(mission.psAuxMap); ++i)
+	{
+		mission.psAuxMap[i] = std::move(psAuxMap[i]);
+	}
+	mission.scrollMinX = scrollMinX;
+	mission.scrollMinY = scrollMinY;
+	mission.scrollMaxX = scrollMaxX;
+	mission.scrollMaxY = scrollMaxY;
+	std::swap(mission.psGateways, gwGetGateways());
+	// save the selectedPlayer's LZ
+	mission.homeLZ_X = getLandingX(selectedPlayer);
+	mission.homeLZ_Y = getLandingY(selectedPlayer);
 
 	for (inc = 0; inc < MAX_PLAYERS; inc++)
 	{
