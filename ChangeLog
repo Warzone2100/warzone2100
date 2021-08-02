@@ -1,3 +1,24 @@
+2021-08-02: Version 4.1.2:
+ * General:
+   * Fix: Various crash / cleanup fixes (too many commits, #2037, #2039, #2041, #2045, #2058, #2059, #2073, #2074)
+   * Fix: Reduce log-spam (commit:d92641fe8a207ed05b2b196c13cb6d709a68f447, commit:ac98d677f5f1c7db7650df850437ffcab0a48fa2, #2048, #2076)
+   * Fix: Wrong names for HVC (commit:35f68f6a9d3dc29f829939dad34ef90a4fad919e, #2054)
+   * Fix: Don't deselect droids when pressing RMB over something (commit:4bb8151efdeb1f7534fbb128d767f22a7ccb33d3, #2052)
+   * Fix: Various memory leaks (commit:a08b23f040b1d84398c40168c33f3eac008c458f, #2019)
+   * Fix: Do not play audio from assignments to commanders from other players (commit:ad91ba5193d5679ff370697b158dd35a1bcfdb05, #2063)
+   * Fix: When editing keymappings, ESC should unhighlight the selection (commit:afb112901ce8b205bf38c2033ed2b4916f1e4052, #2072)
+   * Fix: Correct minimum OpenGL version check (commit:d974dcc14cd2256e1698c57d10be89a0415d9182, #2082)
+ * Graphics:
+   * Fix: Vulkan: Crash due to late release of graphics resources (commit:3accfde52c96d48e804417e2f29d07666603e8f9, #2038)
+   * Fix: Statistics table overflow (commit:3ff4440bc45da4d2ce24c0ccea7b397b08e6ae97, #2029)
+   * Fix: Various widget improvements (too many commits, #2071, #2080)
+ * Campaign:
+   * Fix: Add new Twin MG Tower to transitionTech.js, move the second Cannon damage upgrade back to Alpha 04 (commit:d945b9371a9affb80264a6d08056955c3dcb2896, #2044)
+ * Multiplayer:
+   * Fix: Map request logic improvements (commit:843dc47dccd5c2a91eb6869c8bb33aa80087325c, #2043)
+ * Balance:
+   * Change: Additional editing of VTOL Rockets and Plasmite Bomb parameters (commit:f10e1582813fe1a067accd9418a656446705e2e3, #2065)
+
 2021-07-25: Version 4.1.1:
  * General:
    * Fix: Fix chat cursor position (commit:10f32bc6fc8e22e1046bb5f37ed5e5fda72189d7, commit:042e4c2276aa4569bf1687c00bd72d2834f02bc5, #1979)
