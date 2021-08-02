@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 18:21\n"
+"PO-Revision-Date: 2021-08-02 06:26\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: data/base/messages/strings/cam1strings.txt:20
 msgid "Load an attack force into the transport."
-msgstr ""
+msgstr "הטען כוח התקפה לתוך רכב התובלה."
 
 #: data/base/messages/strings/cam1strings.txt:21
 msgid "On landing, explore the ruins and recover any artifacts."
