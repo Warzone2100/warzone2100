@@ -911,8 +911,8 @@
 		"requiredResearch": [
 			"R-Wpn-HeavyPlasmaLauncher"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 14400,
+		"researchPower": 450,
 		"resultStructures": [
 			"Emplacement-HeavyPlasmaLauncher"
 		],
@@ -6600,8 +6600,8 @@
 			"R-Wpn-Flamer-Damage07",
 			"R-Wpn-PlasmaCannon"
 		],
-		"researchPoints": 9400,
-		"researchPower": 293,
+		"researchPoints": 14400,
+		"researchPower": 450,
 		"resultComponents": [
 			"PlasmaHeavy"
 		],
