@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 06:23\n"
+"PO-Revision-Date: 2021-08-02 06:26\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -7169,7 +7169,7 @@ msgstr "Bersagli migliori: bunker e postazioni"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Bersagli migliori: bunker, difese e strutture base"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -7723,7 +7723,7 @@ msgstr "Torretta di comando Mantis cingolata"
 #. data/mp/stats/templates.json: $.PythonComTracks.name
 #: po/custom/fromJson.txt:1499
 msgid "Command Turret Python Tracks"
-msgstr "Torretta di comando Python semicingolata"
+msgstr "Torretta di comando Python cingolata"
 
 #. TRANSLATORS:
 #. data/mp/stats/templates.json: $.Scorp-Trk-Com.name
@@ -9870,20 +9870,20 @@ msgstr "Colpi HVAPFSDS per Cannone"
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Emplacement"
-msgstr ""
+msgstr "Postazione con HVC"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Hardpoint"
-msgstr ""
+msgstr "Postazione con HVC"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "HVC Python cingolato"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -18639,15 +18639,15 @@ msgstr "Aggiorna adesso"
 
 #: src/updatemanager.cpp:418
 msgid "Compatibility Warning"
-msgstr ""
+msgstr "Avviso di compatibilità"
 
 #: src/updatemanager.cpp:419
 msgid "An issue has been detected that may affect Warzone 2100's operation / performance."
-msgstr ""
+msgstr "È stato rilevato un problema che può influenzare il funzionamento o le prestazioni di Warzone 2100."
 
 #: src/updatemanager.cpp:421
 msgid "Please click the button below for more information on how to fix it."
-msgstr ""
+msgstr "Fai clic sul pulsante qui sotto per ulteriori informazioni su come risolverlo."
 
 #: src/updatemanager.cpp:425
 #, c-format
@@ -18656,7 +18656,7 @@ msgstr ""
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
-msgstr ""
+msgstr "Maggiori informazioni"
 
 #. TRANSLATORS: Printed when compiling with uncommitted changes
 #: src/version.cpp:249
