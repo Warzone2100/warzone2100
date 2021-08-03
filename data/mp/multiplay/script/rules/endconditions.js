@@ -334,6 +334,11 @@ function conditions_eventGameInit()
 	}
 }
 
+function conditions_eventGameLoaded()
+{
+	createTeams();
+}
+
 function conditions_eventDroidBuilt(droid)
 {
 	if (droid.player != scavengerPlayer)
