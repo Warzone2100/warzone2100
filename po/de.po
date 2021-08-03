@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-02 18:28\n"
+"PO-Revision-Date: 2021-08-03 06:26\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -18653,7 +18653,7 @@ msgstr "Bitte klicke auf den Button unten, um weitere Informationen über die Be
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(Mitteilungs-ID: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
