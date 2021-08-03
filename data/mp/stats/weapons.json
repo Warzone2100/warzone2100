@@ -2044,7 +2044,7 @@
 		"weight": 5000
 	},
 	"Howitzer-Incendiary": {
-		"buildPoints": 1500,
+		"buildPoints": 1300,
 		"buildPower": 350,
 		"damage": 200,
 		"designable": 1,
@@ -2060,7 +2060,7 @@
 		"id": "Howitzer-Incendiary",
 		"lightWorld": 1,
 		"longHit": 50,
-		"longRange": 4992,
+		"longRange": 5120,
 		"maxElevation": 90,
 		"minRange": 128,
 		"minimumDamage": 33,
@@ -2091,8 +2091,8 @@
 		"weight": 10000
 	},
 	"Howitzer03-Rot": {
-		"buildPoints": 2000,
-		"buildPower": 500,
+		"buildPoints": 1600,
+		"buildPower": 450,
 		"damage": 200,
 		"designable": 1,
 		"effectSize": 225,
@@ -2129,7 +2129,7 @@
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "HOWITZERS",
 		"weaponWav": "lrgcan.ogg",
-		"weight": 15000
+		"weight": 20000
 	},
 	"Howitzer105Mk1": {
 		"buildPoints": 1000,
@@ -2148,7 +2148,7 @@
 		"id": "Howitzer105Mk1",
 		"lightWorld": 1,
 		"longHit": 50,
-		"longRange": 5120,
+		"longRange": 7040,
 		"maxElevation": 90,
 		"minRange": 128,
 		"minimumDamage": 33,
@@ -2173,8 +2173,8 @@
 		"weight": 10000
 	},
 	"Howitzer150Mk1": {
-		"buildPoints": 2000,
-		"buildPower": 500,
+		"buildPoints": 1600,
+		"buildPower": 450,
 		"damage": 350,
 		"designable": 1,
 		"effectSize": 350,
@@ -3009,7 +3009,7 @@
 		"weight": 400
 	},
 	"Missile-HvyArt": {
-		"buildPoints": 2500,
+		"buildPoints": 2000,
 		"buildPower": 500,
 		"damage": 160,
 		"designable": 1,
@@ -3038,7 +3038,7 @@
 		"name": "Archangel Missile",
 		"numExplosions": 1,
 		"numRounds": 6,
-		"radius": 96,
+		"radius": 64,
 		"radiusDamage": 160,
 		"radiusLife": 10,
 		"recoilValue": 25,
@@ -3050,7 +3050,7 @@
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "MISSILE",
 		"weaponWav": "rocket.ogg",
-		"weight": 12000
+		"weight": 20000
 	},
 	"Missile-HvySAM": {
 		"buildPoints": 1200,
@@ -3486,7 +3486,7 @@
 		"weight": 5000
 	},
 	"PlasmaHeavy": {
-		"buildPoints": 2500,
+		"buildPoints": 2000,
 		"buildPower": 500,
 		"damage": 250,
 		"designable": 1,
@@ -3527,7 +3527,7 @@
 		"weaponEffect": "ALL ROUNDER",
 		"weaponSubClass": "FLAME",
 		"weaponWav": "medcan.ogg",
-		"weight": 25000
+		"weight": 30000
 	},
 	"PlasmiteFlamer": {
 		"buildPoints": 400,
@@ -3974,7 +3974,7 @@
 		"weaponEffect": "ARTILLERY ROUND",
 		"weaponSubClass": "ROCKET",
 		"weaponWav": "rocket.ogg",
-		"weight": 10000
+		"weight": 20000
 	},
 	"Rocket-LtA-T": {
 		"buildPoints": 500,
