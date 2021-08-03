@@ -106,6 +106,7 @@ void SetFormAudioIDs(int OpenID, int CloseID)
 
 static void setBarGraphValue(W_BARGRAPH *barGraph, PIELIGHT colour, int value, int range)
 {
+	ASSERT_OR_RETURN(, range != 0, "range is 0");
 	barGraph->majorCol = colour;
 	barGraph->majorSize = PERNUM(WBAR_SCALE, clip(value, 0, range), range);
 	barGraph->show();
