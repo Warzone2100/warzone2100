@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-02 06:26\n"
+"PO-Revision-Date: 2021-08-03 06:26\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -51,7 +51,7 @@ msgstr "משימת בסיס אלפא: זוהה נחשול מתח"
 
 #: data/base/messages/strings/cam1strings.txt:12
 msgid "A power surge has been detected to the south of our position."
-msgstr ""
+msgstr "נחשול מתח זוהה מדרום למיקומנו."
 
 #: data/base/messages/strings/cam1strings.txt:13
 msgid "Investigate and secure the area."
