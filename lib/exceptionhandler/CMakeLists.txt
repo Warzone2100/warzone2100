@@ -53,9 +53,8 @@ if(DEFINED WZ_BUILD_SENTRY AND WZ_BUILD_SENTRY)
 	include(FetchContent)
 	FetchContent_Declare(
 		sentrynative
-		URL "https://github.com/getsentry/sentry-native/releases/download/0.4.11/sentry-native.zip"
-		URL_HASH SHA512=3d66295526c0cd068a0b7c2180dbeae7594775b3eb3199a74da7efe634cbc19cff6eba8d44b1479037c43c6eb58a9ba4fdaf8da6995767f27c585a0d42582c37
-		PATCH_COMMAND ${CMAKE_COMMAND} "-DSOURCE_DIR=<SOURCE_DIR>" -P "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/sentry/PatchSentryNative.cmake"
+		URL "https://github.com/getsentry/sentry-native/releases/download/0.4.12/sentry-native.zip"
+		URL_HASH SHA512=15da4407ed5e2c8d5e56e497ccc6006b29235aef6b3a81e034c93443e20a7cfdf95d55e31b88e552c55e824eb15d6f7fafe988c453a5a6f36fe45136d7268b19
 	)
 	FetchContent_GetProperties(sentrynative)
 	set(SENTRY_BUILD_SHARED_LIBS OFF CACHE BOOL "Sentry build shared libs" FORCE)
