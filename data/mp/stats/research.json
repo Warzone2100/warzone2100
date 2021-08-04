@@ -1326,8 +1326,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"Pillbox-RotMG"
 		],
@@ -1510,8 +1510,8 @@
 		"requiredResearch": [
 			"R-Defense-RotMG"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"Wall-RotMg"
 		],
@@ -1728,8 +1728,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG5"
 		],
-		"researchPoints": 15000,
-		"researchPower": 450,
+		"researchPoints": 4800,
+		"researchPower": 150,
 		"resultStructures": [
 			"WallTower-TwinAssaultGun"
 		],
@@ -7398,14 +7398,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -20
+				"value": -30
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -20
+				"value": -30
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7427,14 +7427,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -18
+				"value": -20
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -18
+				"value": -20
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7457,14 +7457,14 @@
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "FirePause",
-				"value": -8
+				"value": -10
 			},
 			{
 				"class": "Weapon",
 				"filterParameter": "ImpactClass",
 				"filterValue": "MACHINE GUN",
 				"parameter": "ReloadTime",
-				"value": -8
+				"value": -10
 			}
 		],
 		"statID": "MG1Mk1",
@@ -7540,10 +7540,10 @@
 		],
 		"requiredResearch": [
 			"R-Wpn-MG3Mk1",
-			"R-Wpn-MG-ROF03"
+			"R-Wpn-MG-ROF02"
 		],
-		"researchPoints": 7200,
-		"researchPower": 225,
+		"researchPoints": 6000,
+		"researchPower": 187,
 		"resultComponents": [
 			"CyborgRotMG",
 			"MG4ROTARY-VTOL",
@@ -7564,8 +7564,8 @@
 			"R-Struc-Research-Upgrade06",
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 12000,
-		"researchPower": 375,
+		"researchPoints": 10000,
+		"researchPower": 312,
 		"resultComponents": [
 			"MG5TWINROTARY"
 		],
