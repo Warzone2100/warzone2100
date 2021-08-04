@@ -20,6 +20,7 @@
 #ifndef __INCLUDED_SRC_ACTIVITY_H__
 #define __INCLUDED_SRC_ACTIVITY_H__
 
+#include "lib/framework/crc.h"
 #include "scores.h"
 #include "multiplay.h"
 #include "levels.h"
@@ -135,6 +136,9 @@ public:
 	// cheats used
 	virtual void cheatUsed(const std::string& cheatName) { }
 
+	// loaded mods changed
+	virtual void loadedModsChanged(const std::vector<Sha256>& loadedModHashes) { }
+
 public:
 	// Helper Functions
 	static std::string getTeamDescription(const ActivitySink::SkirmishGameInfo& info);
@@ -174,6 +178,9 @@ public:
 
 	// cheats used
 	void cheatUsed(const std::string& cheatName);
+
+	// mods reloaded / possibly changed
+	void rebuiltSearchPath();
 
 	// called when a joinable multiplayer game is hosted
 	// lobbyGameId is 0 if the lobby can't be contacted / the game is not registered with the lobby
@@ -238,6 +245,8 @@ private:
 		}
 	};
 	FoundLobbyGameDetails lastLobbyGameJoinAttempt;
+
+	std::vector<Sha256> lastLoadedMods;
 };
 
 #endif // __INCLUDED_SRC_ACTIVITY_H__
