@@ -911,8 +911,8 @@
 		"requiredResearch": [
 			"R-Wpn-HeavyPlasmaLauncher"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 28800,
+		"researchPower": 450,
 		"resultStructures": [
 			"Emplacement-HeavyPlasmaLauncher"
 		],
@@ -1326,8 +1326,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG4"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"Pillbox-RotMG"
 		],
@@ -1510,8 +1510,8 @@
 		"requiredResearch": [
 			"R-Defense-RotMG"
 		],
-		"researchPoints": 4800,
-		"researchPower": 150,
+		"researchPoints": 3600,
+		"researchPower": 112,
 		"resultStructures": [
 			"Wall-RotMg"
 		],
@@ -1728,8 +1728,8 @@
 		"requiredResearch": [
 			"R-Wpn-MG5"
 		],
-		"researchPoints": 15000,
-		"researchPower": 450,
+		"researchPoints": 4800,
+		"researchPower": 150,
 		"resultStructures": [
 			"WallTower-TwinAssaultGun"
 		],
@@ -6597,11 +6597,11 @@
 		"msgName": "RES_W_PLASLAUNCH",
 		"name": "Heavy Plasma Launcher",
 		"requiredResearch": [
-			"R-Wpn-Flamer-Damage07",
+			"R-Wpn-Flamer-Damage08",
 			"R-Wpn-PlasmaCannon"
 		],
-		"researchPoints": 9400,
-		"researchPower": 293,
+		"researchPoints": 28800,
+		"researchPower": 450,
 		"resultComponents": [
 			"PlasmaHeavy"
 		],
@@ -6809,11 +6809,12 @@
 		"msgName": "RES_W_HOWD4",
 		"name": "HEAP Howitzer Shells",
 		"requiredResearch": [
+			"R-Wpn-HvyHowitzer",
 			"R-Wpn-Howitzer-Damage03",
 			"R-Wpn-Cannon-Damage07"
 		],
-		"researchPoints": 14000,
-		"researchPower": 437,
+		"researchPoints": 14400,
+		"researchPower": 450,
 		"results": [
 			{
 				"class": "Weapon",
@@ -6847,7 +6848,7 @@
 		"requiredResearch": [
 			"R-Wpn-Howitzer-Damage04"
 		],
-		"researchPoints": 18000,
+		"researchPoints": 28800,
 		"researchPower": 450,
 		"results": [
 			{
@@ -6883,7 +6884,7 @@
 		"requiredResearch": [
 			"R-Wpn-Howitzer-Damage05"
 		],
-		"researchPoints": 20000,
+		"researchPoints": 43200,
 		"researchPower": 450,
 		"results": [
 			{
@@ -6920,10 +6921,10 @@
 		"name": "Incendiary Howitzer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Incendiary",
-			"R-Wpn-Howitzer-Damage01"
+			"R-Wpn-HowitzerMk1"
 		],
-		"researchPoints": 12000,
-		"researchPower": 375,
+		"researchPoints": 10000,
+		"researchPower": 312,
 		"resultComponents": [
 			"Howitzer-Incendiary"
 		],
@@ -6935,10 +6936,10 @@
 		"msgName": "RES_W_HOWRF1",
 		"name": "Howitzer Autoloader",
 		"requiredResearch": [
-			"R-Wpn-Howitzer-Damage01"
+			"R-Wpn-HvyHowitzer"
 		],
-		"researchPoints": 6000,
-		"researchPower": 187,
+		"researchPoints": 14400,
+		"researchPower": 450,
 		"results": [
 			{
 				"class": "Weapon",
@@ -6963,10 +6964,10 @@
 		"id": "R-Wpn-Howitzer-ROF02",
 		"name": "Howitzer Autoloader Mk2",
 		"requiredResearch": [
-			"R-Wpn-Howitzer03-Rot"
+			"R-Wpn-Howitzer-ROF01"
 		],
-		"researchPoints": 9000,
-		"researchPower": 281,
+		"researchPoints": 28800,
+		"researchPower": 450,
 		"results": [
 			{
 				"class": "Weapon",
@@ -6994,8 +6995,8 @@
 		"requiredResearch": [
 			"R-Wpn-Howitzer-ROF02"
 		],
-		"researchPoints": 12000,
-		"researchPower": 375,
+		"researchPoints": 43200,
+		"researchPower": 450,
 		"results": [
 			{
 				"class": "Weapon",
@@ -7024,7 +7025,7 @@
 		"requiredResearch": [
 			"R-Wpn-Howitzer-ROF03"
 		],
-		"researchPoints": 16000,
+		"researchPoints": 56600,
 		"researchPower": 450,
 		"results": [
 			{
@@ -7055,11 +7056,11 @@
 			"Howitzer105Mk1"
 		],
 		"requiredResearch": [
-			"R-Wpn-Howitzer-ROF01",
+			"R-Wpn-HowitzerMk1",
 			"R-Wpn-Mortar3"
 		],
-		"researchPoints": 12000,
-		"researchPower": 375,
+		"researchPoints": 10000,
+		"researchPower": 312,
 		"resultComponents": [
 			"Howitzer03-Rot"
 		],
@@ -7073,6 +7074,8 @@
 		"name": "Howitzer",
 		"requiredResearch": [
 			"R-Wpn-Mortar-Damage04",
+			"R-Wpn-Cannon-Accuracy02",
+			"R-Wpn-Cannon-Damage05",
 			"R-Sys-Sensor-Upgrade01"
 		],
 		"researchPoints": 9000,
@@ -7110,10 +7113,9 @@
 		"msgName": "RES_W_HH1",
 		"name": "Heavy Howitzer - Ground Shaker",
 		"requiredResearch": [
-			"R-Wpn-Howitzer-Damage05",
-			"R-Wpn-Howitzer-Accuracy02"
+			"R-Wpn-Howitzer-Damage02"
 		],
-		"researchPoints": 21100,
+		"researchPoints": 14400,
 		"researchPower": 450,
 		"resultComponents": [
 			"Howitzer150Mk1"
