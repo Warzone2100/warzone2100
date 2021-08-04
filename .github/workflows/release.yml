@@ -104,12 +104,10 @@ jobs:
           docker pull getsentry/sentry-cli
           # Check if release already exists
           echo "Checking if release exists: ${SENTRY_VERSION}"
-          docker run --rm -e SENTRY_AUTH_TOKEN -e SENTRY_ORG -v "$(pwd):/work" getsentry/sentry-cli releases info "${SENTRY_VERSION}" -q
-          RELEASE_STATUS=$?
-          if [ "$RELEASE_STATUS" -ne "0" ]; then
+          if ! docker run --rm -e SENTRY_AUTH_TOKEN -e SENTRY_ORG -v "$(pwd):/work" getsentry/sentry-cli releases info "${SENTRY_VERSION}" -q; then
             # Create the release
             echo "Creating the release: ${SENTRY_VERSION}"
-            docker run --rm -e SENTRY_AUTH_TOKEN -e SENTRY_ORG -v "$(pwd):/work" getsentry/sentry-cli releases new -p warzone2100 "${SENTRY_VERSION}"
+            docker run --rm -e SENTRY_AUTH_TOKEN -e SENTRY_ORG -v "$(pwd):/work" getsentry/sentry-cli releases new -p warzone2100 "${SENTRY_VERSION}" || echo "Failed to create the release?"
           fi
           # Associate commits with the release
           echo "Associate commits with the release: ${SENTRY_VERSION}"
