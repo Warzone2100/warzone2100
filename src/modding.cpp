@@ -30,14 +30,6 @@
 #include <vector>
 #include <algorithm>
 
-namespace {
-	struct LoadedMod
-	{
-		std::string name;
-		std::string filename;
-	};
-}
-
 std::vector<std::string> global_mods;
 std::vector<std::string> campaign_mods;
 std::vector<std::string> multiplay_mods;
@@ -46,7 +38,7 @@ std::vector<std::string> override_mods;
 std::string override_mod_list;
 bool use_override_mods = false;
 
-static std::vector<LoadedMod> loaded_mods;
+static std::vector<WzMods::LoadedMod> loaded_mods;
 static std::string mod_list;
 static std::vector<Sha256> mod_hash_list;
 
@@ -198,6 +190,11 @@ void clearLoadedMods()
 	loaded_mods.clear();
 	mod_list.clear();
 	mod_hash_list.clear();
+}
+
+std::vector<WzMods::LoadedMod> const &getLoadedMods()
+{
+	return loaded_mods;
 }
 
 std::string const &getModList()

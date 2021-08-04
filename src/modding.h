@@ -34,8 +34,17 @@ void printSearchPath();
 void setOverrideMods(char *modlist);
 void clearOverrideMods();
 
+namespace WzMods {
+struct LoadedMod
+{
+	std::string name;
+	std::string filename;
+};
+} // namespace WzMods
+
 void clearLoadedMods();
 std::string const &getModList();
+std::vector<WzMods::LoadedMod> const &getLoadedMods();
 std::vector<Sha256> const &getModHashList();
 std::string getModFilename(Sha256 const &hash);
 
