@@ -4026,7 +4026,7 @@
 		"name": "Heavy Body - Mantis",
 		"requiredResearch": [
 			"R-Vehicle-Body08",
-			"R-Vehicle-Engine04"
+			"R-Vehicle-Engine03"
 		],
 		"researchPoints": 3600,
 		"researchPower": 112,
