@@ -31,6 +31,7 @@
 #include "version.h"
 #include "urlhelpers.h"
 #include "activity.h"
+#include "modding.h"
 
 /* Crash-handling providers */
 
@@ -311,6 +312,35 @@ public:
 	virtual void endedMultiplayerGame(const MultiplayerGameInfo& info, GameEndReason result, const END_GAME_STATS_DATA& stats) override
 	{
 		gameStateToMenus();
+	}
+
+	// loaded mods changed
+	virtual void loadedModsChanged(const std::vector<Sha256>& loadedModHashes) override
+	{
+		auto loadedModList = getLoadedMods();
+		if (loadedModList.empty())
+		{
+			crashHandlingProviderSetTag_Sentry("wz.loaded_mods", "false");
+			sentry_remove_context("wz.mods");
+			return;
+		}
+		crashHandlingProviderSetTag_Sentry("wz.loaded_mods", "true");
+		nlohmann::json modsInfo = nlohmann::json::object();
+		for (size_t idx = 0; idx < loadedModList.size(); idx++)
+		{
+			nlohmann::json mod = nlohmann::json::object();
+			mod["name"] = loadedModList[idx].name;
+			if (idx < loadedModHashes.size())
+			{
+				mod["hash"] = loadedModHashes[idx].toString();
+			}
+			else
+			{
+				mod["hash"] = "<no hash available?>";
+			}
+			modsInfo["mod: " + std::to_string(idx)] = std::move(mod);
+		}
+		crashHandlingProviderSetContext_Sentry("wz.mods", modsInfo);
 	}
 };
 
