@@ -197,6 +197,7 @@ void clearLoadedMods()
 {
 	loaded_mods.clear();
 	mod_list.clear();
+	mod_hash_list.clear();
 }
 
 std::string const &getModList()
