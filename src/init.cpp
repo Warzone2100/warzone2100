@@ -460,6 +460,8 @@ bool rebuildSearchPath(searchPathMode mode, bool force, const char *current_map)
 #ifdef DEBUG
 		printSearchPath();
 #endif // DEBUG
+
+		ActivityManager::instance().rebuiltSearchPath();
 	}
 	else if (use_override_mods)
 	{

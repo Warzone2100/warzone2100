@@ -24,6 +24,7 @@
 #include "multiint.h"
 #include "mission.h"
 #include "challenge.h"
+#include "modding.h"
 #include <algorithm>
 #include <mutex>
 
@@ -165,6 +166,27 @@ public:
 	virtual void cheatUsed(const std::string& cheatName) override
 	{
 		debug(LOG_ACTIVITY, "- cheatUsed: %s", cheatName.c_str());
+	}
+
+	// loaded mods changed
+	virtual void loadedModsChanged(const std::vector<Sha256>& loadedModHashes) override
+	{
+		debug(LOG_ACTIVITY, "- loadedModsChanged: %s", modListToStr(loadedModHashes).c_str());
+	}
+
+private:
+	std::string modListToStr(const std::vector<Sha256>& modHashes) const
+	{
+		if (modHashes.empty())
+		{
+			return "[no mods]";
+		}
+		std::string result = "[" + std::to_string(modHashes.size()) + " mods]:";
+		for (auto& modHash : modHashes)
+		{
+			result += std::string(" ") + modHash.toString();
+		}
+		return result;
 	}
 };
 
@@ -508,6 +530,18 @@ void ActivityManager::endLoadingSettings()
 void ActivityManager::cheatUsed(const std::string& cheatName)
 {
 	for (auto sink : activitySinks) { sink->cheatUsed(cheatName); }
+}
+
+// mods reloaded / possibly changed
+void ActivityManager::rebuiltSearchPath()
+{
+	auto newLoadedModHashes = getModHashList();
+	if (newLoadedModHashes != lastLoadedMods)
+	{
+		// list of loaded mods changed!
+		for (auto sink : activitySinks) { sink->loadedModsChanged(newLoadedModHashes); }
+		lastLoadedMods = newLoadedModHashes;
+	}
 }
 
 // called when a joinable multiplayer game is hosted
