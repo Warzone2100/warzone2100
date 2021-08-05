@@ -151,7 +151,9 @@ public:
 
 	std::string getTip() override
 	{
-		return getMessageTitle(*psMsg);
+		ASSERT_OR_RETURN("", psMsg != nullptr, "Null message?");
+		const char* pMessageTitle = getMessageTitle(*psMsg);
+		return (pMessageTitle != nullptr) ? pMessageTitle : "";
 	}
 
 protected:
