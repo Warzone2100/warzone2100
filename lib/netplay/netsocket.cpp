@@ -821,11 +821,12 @@ void SocketSet_AddSocket(SocketSet *set, Socket *socket)
  */
 void SocketSet_DelSocket(SocketSet *set, Socket *socket)
 {
-	size_t i = std::find(set->fds.begin(), set->fds.end(), socket) - set->fds.begin();
-	if (i != set->fds.size())
+	auto it = std::find(set->fds.begin(), set->fds.end(), socket);
+	if (it != set->fds.end())
 	{
-		debug(LOG_NET, "Socket %p erased (set->fds[%lu])", static_cast<void *>(socket), (unsigned long)i);
-		set->fds.erase(set->fds.begin() + i);
+		size_t i = it - set->fds.begin();
+		debug(LOG_NET, "Socket %p erased (set->fds[%zu])", static_cast<void *>(socket), i);
+		set->fds.erase(it);
 	}
 }
 
