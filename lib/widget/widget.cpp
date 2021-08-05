@@ -494,7 +494,12 @@ void WIDGET::detach(const std::shared_ptr<WIDGET> &widget)
 
 	widget->parentWidget.reset();
 	widget->setScreenPointer(nullptr);
-	childWidgets.erase(std::find(childWidgets.begin(), childWidgets.end(), widget));
+
+	auto it = std::find(childWidgets.begin(), childWidgets.end(), widget);
+	if (it != childWidgets.end())
+	{
+		childWidgets.erase(it);
+	}
 
 	widgetLost(widget.get());
 }
