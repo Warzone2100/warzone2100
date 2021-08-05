@@ -2722,9 +2722,9 @@ bool NETrecvNet(NETQUEUE *queue, uint8_t *type)
 
 			if (NetPlay.isHost)
 			{
+				connected_bsocket[current] = nullptr;		// clear their socket
 				// Send message type specifically for dropped / disconnects
 				NETplayerDropped(current);
-				connected_bsocket[current] = nullptr;		// clear their socket
 			}
 			else
 			{
