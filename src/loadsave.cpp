@@ -440,6 +440,14 @@ bool closeLoadSave(bool goBack)
 	return true;
 }
 
+bool closeLoadSaveOnShutdown()
+{
+	// Workaround for ensuring psRequestScreen is freed on shutdown - ideally this whole screen could probably be implemented as an overlay screen now and simplified
+	bLoadSaveUp = false;
+	psRequestScreen = nullptr;
+	return true;
+}
+
 /***************************************************************************
 	Delete a savegame.  fileName should be a .gam extension save game
 	filename reference.  We delete this file, any .es file with the same

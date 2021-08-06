@@ -70,6 +70,7 @@ void drawBlueBoxInset(UDWORD x, UDWORD y, UDWORD w, UDWORD h);
 
 bool addLoadSave(LOADSAVE_MODE mode, const char *title);
 bool closeLoadSave(bool goBack = false);
+bool closeLoadSaveOnShutdown();
 bool runLoadSave(bool bResetMissionWidgets);
 bool displayLoadSave();
 
