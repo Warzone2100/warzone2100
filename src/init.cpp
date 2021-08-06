@@ -66,6 +66,7 @@
 #include "intdisplay.h"
 #include "levels.h"
 #include "lighting.h"
+#include "loadsave.h"
 #include "loop.h"
 #include "mapgrid.h"
 #include "mechanics.h"
@@ -927,6 +928,10 @@ bool frontendShutdown()
 	if (challengesUp)
 	{
 		closeChallenges(); // TODO: Ideally this would not be required here (refactor challenge.cpp / frontend.cpp?)
+	}
+	if (bLoadSaveUp)
+	{
+		closeLoadSaveOnShutdown(); // TODO: Ideally this would not be required here (refactor loadsave.cpp / frontend.cpp?)
 	}
 	interfaceShutDown();
 
