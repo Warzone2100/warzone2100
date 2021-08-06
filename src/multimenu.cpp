@@ -777,13 +777,11 @@ private:
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(pingLabel)));
 		place({5}, {0}, MinSize::minWidth(50).wrap(lastMargin.wrap(structsLabel)));
 
-		uint32_t row = 1;
 		for (auto player = 0; player < MAX_PLAYERS; player++)
 		{
 			if (isHumanPlayer(player) || (game.type == LEVEL_TYPE::SKIRMISH && player < game.maxPlayers && NetPlay.players[player].difficulty != AIDifficulty::DISABLED))
 			{
-				addPlayerWidgets(player, row);
-				row++;
+				addPlayerWidgets(player, 1 + NetPlay.players[player].position);
 			}
 		}
 	}
