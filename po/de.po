@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-01 18:21\n"
+"PO-Revision-Date: 2021-08-03 06:26\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -7169,7 +7169,7 @@ msgstr "Beste Ziele: Bunker und Aufhängungen"
 #. data/base/messages/resmessagesall.json: $.RES_W_RK_HVAT1.text[2]
 #: po/custom/fromJson.txt:1119
 msgid "Best Targets: Bunkers, defenses, base structures"
-msgstr ""
+msgstr "Beste Ziele: Bunker, Verteidigungsanlagen, Basisgebäude"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_W_LAS1.text[2]
@@ -9870,20 +9870,20 @@ msgstr "Panzerbrechende flügelstabilisierte Hochgeschwindigkeitstreibspiegelges
 #. data/base/stats/structure.json: $.Emplacement-HPVcannon.name
 #: po/custom/fromJson.txt:2950
 msgid "HVC Emplacement"
-msgstr ""
+msgstr "Stellung mit Hochgeschwindigkeitskanone"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-WallTower-HPVcannon.name
 #. data/base/stats/structure.json: $.WallTower-HPVcannon.name
 #: po/custom/fromJson.txt:2954
 msgid "HVC Hardpoint"
-msgstr ""
+msgstr "Aufhängung mit Hochgeschwindigkeitskanone"
 
 #. TRANSLATORS:
 #. data/base/stats/templates.json: $.P0cam3PyHPVcanTrk.name
 #: po/custom/fromJson.txt:2957
 msgid "HVC Python Tracks"
-msgstr ""
+msgstr "Hochgeschwindigkeitskanone Python Ketten"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-MG-ROF03.name
@@ -18653,7 +18653,7 @@ msgstr "Bitte klicke auf den Button unten, um weitere Informationen über die Be
 #: src/updatemanager.cpp:425
 #, c-format
 msgid "(Notice ID: %s)"
-msgstr ""
+msgstr "(Mitteilungs-ID: %s)"
 
 #: src/updatemanager.cpp:427
 msgid "More Information"
