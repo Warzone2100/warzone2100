@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-02 06:26\n"
+"PO-Revision-Date: 2021-08-07 23:32\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -4680,7 +4680,7 @@ msgstr "I satelliti NASDA erano inoltre armati con laser a impulsi progettati pe
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:12
 msgid "During the counterstrikes, these LasSats failed to fire. If brought into operation, these LasSats could inflict major damage on ground targets."
-msgstr "Durante i contrattacchi, questi Laser Satellitari non spararono. Se portati in funzione, questi LasSat potrebbero infliggere gravi danni ai bersagli terrestri."
+msgstr "Durante i contrattacchi, questi laser satellitari non spararono. Se portati in funzione potrebbero infliggere gravi danni ai bersagli a terra."
 
 #: data/base/sequenceaudio/cam2/cam22fmv.txt:14
 msgid "All nukes targeted at  North America found their targets."
@@ -5604,7 +5604,7 @@ msgstr "Nessun Sciacallo"
 #: data/mp/multiplay/script/rules/printsettings.js:12
 #: src/multiint.cpp:1416
 msgid "No Alliances"
-msgstr "Niente alleanze"
+msgstr "Nessuna alleanza"
 
 #: data/mp/multiplay/script/rules/printsettings.js:13
 #: src/multiint.cpp:1417
@@ -10601,7 +10601,7 @@ msgstr "Tempo di ricarica dei laser -15%"
 #. data/mp/stats/weapons.json: $.LasSat.name
 #: po/custom/fromJson.txt:3509
 msgid "Laser Satellite Command Post"
-msgstr "Centro di Comando per il Laser Satellitare"
+msgstr "Centro di comando per il laser satellitare"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessages3.json: $.RES_LASAC1.text[0]
@@ -13522,7 +13522,7 @@ msgstr "Tank Killer"
 #. ... + 3 refs
 #: po/custom/fromJson.txt:5499
 msgid "Tank Traps"
-msgstr "Trappole per Carri"
+msgstr "Trappole per carri armati"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Wpn-Howitzer-Accuracy02.name
@@ -14439,7 +14439,7 @@ msgstr "Cannone a rotaia per VTOL"
 #. data/mp/stats/structure.json: $.A0VtolPad.name
 #: po/custom/fromJson.txt:6079
 msgid "VTOL Rearming Pad"
-msgstr "Piattaforma di Riarmo VTOL"
+msgstr "Piattaforma di riarmo VTOL"
 
 #. TRANSLATORS:
 #. data/base/messages/resmessagesall.json: $.RES_ST_VF.text[2]
@@ -16422,11 +16422,11 @@ msgstr "Guarda a Nord"
 
 #: src/input/keyconfig.cpp:122
 msgid "View South"
-msgstr "Guarda a Sud"
+msgstr "Guarda a sud"
 
 #: src/input/keyconfig.cpp:123
 msgid "View East"
-msgstr "Guarda a Est"
+msgstr "Guarda a est"
 
 #: src/input/keyconfig.cpp:124
 msgid "View West"
@@ -16621,7 +16621,7 @@ msgstr "Seleziona tutti gli Hover"
 #: src/input/keyconfig.cpp:171
 #: src/intorder.cpp:182
 msgid "Return for Recycling"
-msgstr "Rientrare per il riciclo"
+msgstr "Rientra per il riciclo"
 
 #: src/input/keyconfig.cpp:172
 msgid "Select all Units on Screen"
@@ -16693,7 +16693,7 @@ msgstr "Seleziona tutti i trasporti"
 
 #: src/input/keyconfig.cpp:190
 msgid "Select all Repair Tanks"
-msgstr "Seleziona tutti i carri da Riparazione"
+msgstr "Seleziona tutti i carri da riparazione"
 
 #: src/input/keyconfig.cpp:191
 msgid "Select all Sensor Units"
@@ -17571,7 +17571,7 @@ msgstr "Collegamento satellitare disabilitato."
 
 #: src/multiint.cpp:1119
 msgid "Laser Satellite disabled."
-msgstr "Laser Satellitare disabilitato."
+msgstr "Laser satellitare disabilitato."
 
 #: src/multiint.cpp:1120
 msgid "Structure Limits Enforced."
@@ -18436,7 +18436,7 @@ msgstr "Premio della Fabbrica - Arma"
 
 #: src/structure.cpp:5712
 msgid "Factory Reward - Nothing"
-msgstr "Premio della Fabbrica - Niente"
+msgstr "Premio della fabbrica - nessuno"
 
 #: src/structure.cpp:5739
 msgid "Repair Facility Award - Repair"
@@ -18444,7 +18444,7 @@ msgstr "Premio della Struttura di Riparazione - Ripara"
 
 #: src/structure.cpp:5745
 msgid "Repair Facility Award - Nothing"
-msgstr "Premio della Struttura di Riparazione - Niente"
+msgstr "Premio della struttura di riparazione - nessuno"
 
 #: src/titleui/gamefind.cpp:79
 msgid "GAMES"
@@ -18605,7 +18605,7 @@ msgstr "IP"
 
 #: src/titleui/protocol.cpp:182
 msgid "IP Address or Machine Name"
-msgstr "Indirizzo IP o Nome Computer"
+msgstr "Indirizzo IP o nome del computer"
 
 #: src/transporter.cpp:300
 #: src/transporter.cpp:348
