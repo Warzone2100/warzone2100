@@ -2463,14 +2463,7 @@ void setUpBuildModule(DROID *psDroid)
 /* Just returns true if the droid's present body points aren't as high as the original*/
 bool	droidIsDamaged(const DROID *psDroid)
 {
-	if (psDroid->body < psDroid->originalBody)
-	{
-		return (true);
-	}
-	else
-	{
-		return (false);
-	}
+	return psDroid->body < psDroid->originalBody;
 }
 
 
