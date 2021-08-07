@@ -4429,8 +4429,6 @@ foundDroid:
 			}
 		}
 		ASSERT_OR_RETURN(false, psDroid, "Droid %d not found", id);
-
-		getIniDroidOrder(ini, "order", psDroid->order);
 		psDroid->listSize = clip(ini.value("orderList/size", 0).toInt(), 0, 10000);
 		psDroid->asOrderList.resize(psDroid->listSize);  // Must resize before setting any orders, and must set in-place, since pointers are updated later.
 		for (int droidIdx = 0; droidIdx < psDroid->listSize; ++droidIdx)
@@ -4461,6 +4459,7 @@ foundDroid:
 			ASSERT(psCommander, "Failed to find droid commander");
 			cmdDroidAddDroid(psCommander, psDroid);
 		}
+		getIniDroidOrder(ini, "order", psDroid->order);
 		ini.endGroup();
 	}
 	return true;
