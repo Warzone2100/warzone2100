@@ -246,7 +246,7 @@ private:
 	};
 	FoundLobbyGameDetails lastLobbyGameJoinAttempt;
 
-	std::vector<Sha256> lastLoadedMods;
+	optional<std::vector<Sha256>> lastLoadedMods;
 };
 
 #endif // __INCLUDED_SRC_ACTIVITY_H__

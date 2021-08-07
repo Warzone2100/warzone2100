@@ -536,7 +536,7 @@ void ActivityManager::cheatUsed(const std::string& cheatName)
 void ActivityManager::rebuiltSearchPath()
 {
 	auto newLoadedModHashes = getModHashList();
-	if (newLoadedModHashes != lastLoadedMods)
+	if (!lastLoadedMods.has_value() || newLoadedModHashes != lastLoadedMods.value())
 	{
 		// list of loaded mods changed!
 		for (auto sink : activitySinks) { sink->loadedModsChanged(newLoadedModHashes); }
