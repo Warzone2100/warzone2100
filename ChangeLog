@@ -1,3 +1,19 @@
+2021-08-09: Version 4.1.3:
+ * General:
+   * Fix: clearLoadedMods(): Clear mod_hash_list (commit:dbd3921a02df1f45579c77b22706b0ffdc7b93bc, #2096)
+ * Graphics:
+   * Fix: setBarGraphValue() divide-by-zero (commit:8b99babe058824b21ac9efc8a345147c154dc819, #2089)
+   * Fix: WIDGET::detach(): Check iterator before erasing (commit:2e5436dfedb8aa4d68c77680e9c7ba335b4d663f, #2101)
+   * Fix: IntMessageButton::getTip(): Add null-checks (commit:e1a51965749a9330f8ac370de9fc80959525e263, #2102)
+ * Campaign:
+   * Fix: Crash caused by saveMissionData() (commit:0cd0bc53cae655e79f3a5e3c6a4892c16617dd52, #2088)
+ * Multiplayer:
+   * Fix: Fix order of players in alliances screen (commit:dba9b4d252609047185a0449a88ac76189f7473c, #2105)
+ * Balance:
+   * Change: (Multiplayer) Reconstruct Howitzer branch and adjust artillery parameters (commit:2c6c4c9fbfae1d92dad194018f84ba73d896217a, #2070)
+   * Change: (Multiplayer) Make Mantis more accessible (commit:311838ff1e35057ecbc0fbd84aaefb8f8e74f5be, #2095)
+   * Change: (Multiplayer) Earlier access to Assault Gun, improve MG (commit:169f4637ead8885caacb22cd098543ba60af9268, #2094)
+
 2021-08-02: Version 4.1.2:
  * General:
    * Fix: Various crash / cleanup fixes (too many commits, #2037, #2039, #2041, #2045, #2058, #2059, #2073, #2074)
