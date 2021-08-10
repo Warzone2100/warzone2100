@@ -67,7 +67,7 @@ std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWOR
  **/
 std::shared_ptr<W_BUTTON> addMultiBut(const std::shared_ptr<W_SCREEN> &screen, UDWORD formid, UDWORD id, UDWORD x, UDWORD y, UDWORD width, UDWORD height, const char *tipres, UDWORD norm, UDWORD down, UDWORD hi, unsigned tc = MAX_PLAYERS, uint8_t alpha = 255);
 
-Image mpwidgetGetFrontHighlightImage(Image image);
+AtlasImage mpwidgetGetFrontHighlightImage(AtlasImage image);
 bool changeColour(unsigned player, int col, bool isHost);
 
 extern char sPlayer[128];

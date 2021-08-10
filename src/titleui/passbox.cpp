@@ -86,13 +86,13 @@ void WzPassBoxTitleUI::start()
 	auto buttonYes = std::make_shared<W_BUTTON>();
 	passwordForm->attach(buttonYes);
 	buttonYes->id = CON_PASSWORDYES;
-	buttonYes->setImages(Image(FrontImages, IMAGE_OK), Image(FrontImages, IMAGE_OK), mpwidgetGetFrontHighlightImage(Image(FrontImages, IMAGE_OK)));
+	buttonYes->setImages(AtlasImage(FrontImages, IMAGE_OK), AtlasImage(FrontImages, IMAGE_OK), mpwidgetGetFrontHighlightImage(AtlasImage(FrontImages, IMAGE_OK)));
 	buttonYes->move(180, 65);
 	buttonYes->setTip(_("OK"));
 	auto buttonNo = std::make_shared<W_BUTTON>();
 	passwordForm->attach(buttonNo);
 	buttonNo->id = CON_PASSWORDNO;
-	buttonNo->setImages(Image(FrontImages, IMAGE_NO), Image(FrontImages, IMAGE_NO), mpwidgetGetFrontHighlightImage(Image(FrontImages, IMAGE_NO)));
+	buttonNo->setImages(AtlasImage(FrontImages, IMAGE_NO), AtlasImage(FrontImages, IMAGE_NO), mpwidgetGetFrontHighlightImage(AtlasImage(FrontImages, IMAGE_NO)));
 	buttonNo->move(230, 65);
 	buttonNo->setTip(_("Cancel"));
 

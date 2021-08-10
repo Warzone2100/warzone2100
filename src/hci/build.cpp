@@ -203,7 +203,7 @@ protected:
 			intRefreshScreen();
 			return;
 		}
-		displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
+		displayIMD(AtlasImage(), ImdObject::Droid(droid), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -247,7 +247,7 @@ protected:
 	{
 		updateLayout();
 		auto stat = getStats();
-		displayIMD(Image(), stat ? ImdObject::StructureStat(stat): ImdObject::Component(nullptr), xOffset, yOffset);
+		displayIMD(AtlasImage(), stat ? ImdObject::StructureStat(stat): ImdObject::Component(nullptr), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -439,7 +439,7 @@ protected:
 		auto stat = getStats();
 		ASSERT_NOT_NULLPTR_OR_RETURN(, stat);
 
-		displayIMD(Image(), ImdObject::StructureStat(stat), xOffset, yOffset);
+		displayIMD(AtlasImage(), ImdObject::StructureStat(stat), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -579,11 +579,11 @@ private:
 		attach(obsoleteButton = std::make_shared<MultipleChoiceButton>());
 		obsoleteButton->style |= WBUT_SECONDARY;
 		obsoleteButton->setChoice(controller->shouldShowRedundantDesign());
-		obsoleteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
+		obsoleteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
 		obsoleteButton->setTip(false, _("Hiding Obsolete Tech"));
-		obsoleteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
+		obsoleteButton->setImages(true,  MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_OBSOLETE_SHOW_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_SHOW_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
 		obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
-		obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
+		obsoleteButton->move(4 + AtlasImage(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 
 		auto weakController = std::weak_ptr<BuildController>(controller);
 		obsoleteButton->addOnClickHandler([weakController](W_BUTTON &button) {
@@ -602,11 +602,11 @@ private:
 		attach(favoriteButton = std::make_shared<MultipleChoiceButton>());
 		favoriteButton->style |= WBUT_SECONDARY;
 		favoriteButton->setChoice(controller->shouldShowFavorites());
-		favoriteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH), Image(IntImages, IMAGE_ALLY_RESEARCH)));
+		favoriteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_ALLY_RESEARCH), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH)));
 		favoriteButton->setTip(false, _("Showing All Tech\nRight-click to add to Favorites"));
-		favoriteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC), Image(IntImages, IMAGE_ALLY_RESEARCH_TC)));
+		favoriteButton->setImages(true,  MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_ALLY_RESEARCH_TC), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH_TC), AtlasImage(IntImages, IMAGE_ALLY_RESEARCH_TC)));
 		favoriteButton->setTip(true, _("Showing Only Favorite Tech\nRight-click to remove from Favorites"));
-		favoriteButton->move(4 * 2 + Image(IntImages, IMAGE_FDP_UP).width() * 2 + 4 * 2, STAT_SLDY);
+		favoriteButton->move(4 * 2 + AtlasImage(IntImages, IMAGE_FDP_UP).width() * 2 + 4 * 2, STAT_SLDY);
 
 		auto weakController = std::weak_ptr<BuildController>(controller);
 		favoriteButton->addOnClickHandler([weakController](W_BUTTON &button) {

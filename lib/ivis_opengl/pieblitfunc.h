@@ -223,17 +223,17 @@ void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 
 void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), uint8_t alpha = 255);
 void iV_DrawImage2(const WzString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImage2(const ImageDef *image, float x, float y, float width = -0.0f, float height = -0.0f);
-void iV_DrawImageTc(Image image, Image imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
+void iV_DrawImageTc(AtlasImage image, AtlasImage imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), bool enableHorizontalTilingSeamWorkaround = false, BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);
 
-static inline void iV_DrawImageImage(Image image, int x, int y, uint8_t alpha = 255)
+static inline void iV_DrawImageImage(AtlasImage image, int x, int y, uint8_t alpha = 255)
 {
 	iV_DrawImage(image.images, image.id, x, y, defaultProjectionMatrix(), nullptr, alpha);
 }
 static inline void iV_DrawImageTc(IMAGEFILE *imageFile, unsigned id, unsigned idTc, int x, int y, PIELIGHT colour)
 {
-	iV_DrawImageTc(Image(imageFile, id), Image(imageFile, idTc), x, y, colour);
+	iV_DrawImageTc(AtlasImage(imageFile, id), AtlasImage(imageFile, idTc), x, y, colour);
 }
 
 void iV_TransBoxFill(float x0, float y0, float x1, float y1);

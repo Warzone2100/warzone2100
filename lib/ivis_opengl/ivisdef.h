@@ -181,7 +181,7 @@ struct ImageDef
 	gfx_api::gfxFloat invTextureSize;
 };
 
-struct Image;
+struct AtlasImage;
 
 struct IMAGEFILE
 {
@@ -191,16 +191,16 @@ struct IMAGEFILE
 		int size;  /// Size of texture in pixels. (Should be square.)
 	};
 
-	Image find(std::string const &name);  // Defined in bitimage.cpp.
+	AtlasImage find(std::string const &name);  // Defined in bitimage.cpp.
 
 	std::vector<Page> pages;          /// Texture pages.
 	std::vector<ImageDef> imageDefs;  /// Stored images.
 	std::vector<std::pair<std::string, int>> imageNames;  ///< Names of images, sorted by name. Can lookup indices from name.
 };
 
-struct Image
+struct AtlasImage
 {
-	Image(IMAGEFILE const *images = nullptr, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
+	AtlasImage(IMAGEFILE const *images = nullptr, unsigned id = 0) : images(const_cast<IMAGEFILE *>(images)), id(id) {}
 
 	bool isNull() const
 	{

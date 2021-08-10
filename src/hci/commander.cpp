@@ -126,7 +126,7 @@ protected:
 			intRefreshScreen();
 			return;
 		}
-		displayIMD(Image(), ImdObject::Droid(droid), xOffset, yOffset);
+		displayIMD(AtlasImage(), ImdObject::Droid(droid), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -210,7 +210,7 @@ protected:
 	{
 		updateLayout();
 		auto factory = controller->getAssignedFactoryAt(objectIndex);
-		displayIMD(Image(), factory ? ImdObject::Structure(factory): ImdObject::Component(nullptr), xOffset, yOffset);
+		displayIMD(AtlasImage(), factory ? ImdObject::Structure(factory): ImdObject::Component(nullptr), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 

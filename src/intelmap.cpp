@@ -793,7 +793,7 @@ void IntMessageButton::display(int xOffset, int yOffset)
 	RESEARCH		*pResearch = nullptr;
 	bool MovieButton = false;
 	ImdObject object;
-	Image image;
+	AtlasImage image;
 
 	initDisplay();
 
@@ -839,11 +839,11 @@ void IntMessageButton::display(int xOffset, int yOffset)
 		}
 		break;
 	case MSG_CAMPAIGN:
-		image = Image(IntImages, IMAGE_INTEL_CAMPAIGN);
+		image = AtlasImage(IntImages, IMAGE_INTEL_CAMPAIGN);
 		MovieButton = true;
 		break;
 	case MSG_MISSION:
-		image = Image(IntImages, IMAGE_INTEL_MISSION);
+		image = AtlasImage(IntImages, IMAGE_INTEL_MISSION);
 		MovieButton = true;
 		break;
 	default:
@@ -856,7 +856,7 @@ void IntMessageButton::display(int xOffset, int yOffset)
 	{
 		if (pResearch->iconID != NO_RESEARCH_ICON)
 		{
-			image = Image(IntImages, pResearch->iconID);
+			image = AtlasImage(IntImages, pResearch->iconID);
 		}
 
 		//do we have the same icon for the top right hand corner?
@@ -866,7 +866,7 @@ void IntMessageButton::display(int xOffset, int yOffset)
 		//draw buttons for mission and general messages
 	{
 		// Draw the button with the relevant image, don't add isDown() to the image ID if it's a movie button.
-		displayImage(MovieButton ? image : Image(image.images, image.id + isDown()), xOffset, yOffset);
+		displayImage(MovieButton ? image : AtlasImage(image.images, image.id + isDown()), xOffset, yOffset);
 	}
 	displayIfHighlight(xOffset, yOffset);
 }
