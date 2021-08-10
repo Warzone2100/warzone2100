@@ -234,6 +234,17 @@ bool sdl_OpenGL_Impl::createGLContext()
 	return true;
 }
 
+bool sdl_OpenGL_Impl::destroyGLContext()
+{
+	SDL_GLContext WZglcontext = SDL_GL_GetCurrentContext();
+	if (!WZglcontext)
+	{
+		return false;
+	}
+	SDL_GL_DeleteContext(WZglcontext);
+	return true;
+}
+
 void sdl_OpenGL_Impl::swapWindow()
 {
 #if defined(WZ_OS_MAC)
