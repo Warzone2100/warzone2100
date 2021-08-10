@@ -222,7 +222,7 @@ void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, 
 void iV_DrawImage(IMAGEFILE *ImageFile, UWORD ID, int x, int y, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr, uint8_t alpha = 255);
 void iV_DrawImageFileAnisotropic(IMAGEFILE *ImageFile, UWORD ID, int x, int y, Vector2f size, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), uint8_t alpha = 255);
 void iV_DrawImage2(const WzString &filename, float x, float y, float width = -0.0f, float height = -0.0f);
-void iV_DrawImage2(const ImageDef *image, float x, float y, float width = -0.0f, float height = -0.0f);
+void iV_DrawImage2(const AtlasImageDef *image, float x, float y, float width = -0.0f, float height = -0.0f);
 void iV_DrawImageTc(AtlasImage image, AtlasImage imageTc, int x, int y, PIELIGHT colour, const glm::mat4 &modelViewProjection = defaultProjectionMatrix());
 void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), bool enableHorizontalTilingSeamWorkaround = false, BatchedImageDrawRequests* pBatchedRequests = nullptr);
 void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Height, const glm::mat4 &modelViewProjection = defaultProjectionMatrix(), BatchedImageDrawRequests* pBatchedRequests = nullptr);

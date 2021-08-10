@@ -30,7 +30,7 @@
 #include <unordered_map>
 #include <vector>
 
-static std::unordered_map<WzString, ImageDef *> images;
+static std::unordered_map<WzString, AtlasImageDef *> images;
 static std::vector<IMAGEFILE *> files;
 
 struct ImageMergeRectangle
@@ -64,7 +64,7 @@ struct ImageMerge
 	std::vector<int> pages;  // List of page sizes, normally all pageSize, unless an image is too large for a normal page.
 };
 
-ImageDef *iV_GetImage(const WzString &filename)
+AtlasImageDef *iV_GetImage(const WzString &filename)
 {
 	auto it = images.find(filename);
 	if (it == images.end())
@@ -195,10 +195,10 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 	while (ptr < pFileData + pFileSize)
 	{
 		int temp, retval;
-		ImageDef *ImageDef = &imageFile->imageDefs[numImages];
+		AtlasImageDef *AtlasImageDef = &imageFile->imageDefs[numImages];
 
 		char tmpName[256];
-		retval = sscanf(ptr, "%d,%d,%255[^\r\n\",]%n", &ImageDef->XOffset, &ImageDef->YOffset, tmpName, &temp);
+		retval = sscanf(ptr, "%d,%d,%255[^\r\n\",]%n", &AtlasImageDef->XOffset, &AtlasImageDef->YOffset, tmpName, &temp);
 		if (retval != 3)
 		{
 			debug(LOG_ERROR, "Bad line in \"%s\".", fileName);
@@ -225,7 +225,7 @@ IMAGEFILE *iV_LoadImageFile(const char *fileName)
 		ptr += temp;
 		while (ptr < pFileData + pFileSize && *ptr++ != '\n') {} // skip rest of line
 
-		images.insert(std::make_pair(WzString::fromUtf8(tmpName), ImageDef));
+		images.insert(std::make_pair(WzString::fromUtf8(tmpName), AtlasImageDef));
 	}
 	free(pFileData);
 
