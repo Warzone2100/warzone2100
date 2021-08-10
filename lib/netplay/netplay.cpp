@@ -393,7 +393,7 @@ static size_t NET_fillBuffer(Socket **pSocket, SocketSet *pSocketSet, uint8_t *b
 			//Game is pretty much over --should just end everything when HOST dies.
 			NetPlay.isHostAlive = false;
 			ingame.localJoiningInProgress = false;
-			setLobbyError(ERROR_HOSTDROPPED);
+			setLobbyError(ERROR_NOERROR);
 			NETclose();
 			return 0;
 		}
