@@ -27,28 +27,28 @@
 static inline WZ_DECL_PURE unsigned short iV_GetImageWidth(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	ASSERT_OR_RETURN(0, ID < ImageFile->imageDefs.size(), "Invalid image ID: %u", (unsigned)ID);
-	return Image(ImageFile, ID).width();
+	return AtlasImage(ImageFile, ID).width();
 }
 
 
 static inline WZ_DECL_PURE unsigned short iV_GetImageHeight(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	ASSERT_OR_RETURN(0, ID < ImageFile->imageDefs.size(), "Invalid image ID: %u", (unsigned)ID);
-	return Image(ImageFile, ID).height();
+	return AtlasImage(ImageFile, ID).height();
 }
 
 
 static inline WZ_DECL_PURE short iV_GetImageXOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return Image(ImageFile, ID).xOffset();
+	return AtlasImage(ImageFile, ID).xOffset();
 }
 
 
 static inline WZ_DECL_PURE short iV_GetImageYOffset(const IMAGEFILE *ImageFile, const unsigned short ID)
 {
 	assert(ID < ImageFile->imageDefs.size());
-	return Image(ImageFile, ID).yOffset();
+	return AtlasImage(ImageFile, ID).yOffset();
 }
 
 ImageDef *iV_GetImage(const WzString &filename);

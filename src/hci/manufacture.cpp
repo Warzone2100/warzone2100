@@ -229,7 +229,7 @@ protected:
 			intRefreshScreen();
 			return;
 		}
-		displayIMD(Image(), ImdObject::Structure(factory), xOffset, yOffset);
+		displayIMD(AtlasImage(), ImdObject::Structure(factory), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -292,7 +292,7 @@ protected:
 		auto productionPending = factory && StructureIsManufacturingPending(factory);
 		auto objectImage = productionPending && production ? ImdObject::DroidTemplate(production): ImdObject::Component(nullptr);
 
-		displayIMD(Image(), objectImage, xOffset, yOffset);
+		displayIMD(AtlasImage(), objectImage, xOffset, yOffset);
 
 		if (productionPending && StructureIsOnHoldPending(factory))
 		{
@@ -431,7 +431,7 @@ protected:
 		auto stat = getStats();
 		ASSERT_NOT_NULLPTR_OR_RETURN(, stat);
 
-		displayIMD(Image(), ImdObject::DroidTemplate(stat), xOffset, yOffset);
+		displayIMD(AtlasImage(), ImdObject::DroidTemplate(stat), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -594,11 +594,11 @@ private:
 		attach(obsoleteButton);
 		obsoleteButton->style |= WBUT_SECONDARY;
 		obsoleteButton->setChoice(controller->shouldShowRedundantDesign());
-		obsoleteButton->setImages(false, MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_UP), Image(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
+		obsoleteButton->setImages(false, MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_HIDE_HI)));
 		obsoleteButton->setTip(false, _("Hiding Obsolete Tech"));
-		obsoleteButton->setImages(true,  MultipleChoiceButton::Images(Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_UP), Image(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
+		obsoleteButton->setImages(true,  MultipleChoiceButton::Images(AtlasImage(IntImages, IMAGE_OBSOLETE_SHOW_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_SHOW_UP), AtlasImage(IntImages, IMAGE_OBSOLETE_SHOW_HI)));
 		obsoleteButton->setTip(true, _("Showing Obsolete Tech"));
-		obsoleteButton->move(4 + Image(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
+		obsoleteButton->move(4 + AtlasImage(IntImages, IMAGE_FDP_UP).width() + 4, STAT_SLDY);
 
 		auto weakController = std::weak_ptr<ManufactureController>(controller);
 		obsoleteButton->addOnClickHandler([weakController](W_BUTTON &button) {
@@ -662,13 +662,13 @@ private:
 			{
 			default:
 			case REF_FACTORY:
-				setImages(Image(IntImages, IMAGE_FDP_UP), Image(IntImages, IMAGE_FDP_DOWN), Image(IntImages, IMAGE_FDP_HI));
+				setImages(AtlasImage(IntImages, IMAGE_FDP_UP), AtlasImage(IntImages, IMAGE_FDP_DOWN), AtlasImage(IntImages, IMAGE_FDP_HI));
 				break;
 			case REF_CYBORG_FACTORY:
-				setImages(Image(IntImages, IMAGE_CDP_UP), Image(IntImages, IMAGE_CDP_DOWN), Image(IntImages, IMAGE_CDP_HI));
+				setImages(AtlasImage(IntImages, IMAGE_CDP_UP), AtlasImage(IntImages, IMAGE_CDP_DOWN), AtlasImage(IntImages, IMAGE_CDP_HI));
 				break;
 			case REF_VTOL_FACTORY:
-				setImages(Image(IntImages, IMAGE_VDP_UP), Image(IntImages, IMAGE_VDP_DOWN), Image(IntImages, IMAGE_VDP_HI));
+				setImages(AtlasImage(IntImages, IMAGE_VDP_UP), AtlasImage(IntImages, IMAGE_VDP_DOWN), AtlasImage(IntImages, IMAGE_VDP_HI));
 				break;
 			}
 		}
@@ -685,7 +685,7 @@ private:
 		LoopProductionButton(const std::shared_ptr<ManufactureController> &controller): BaseWidget(), controller(controller)
 		{
 			style |= WBUT_SECONDARY;
-			setImages(Image(IntImages, IMAGE_LOOP_UP), Image(IntImages, IMAGE_LOOP_DOWN), Image(IntImages, IMAGE_LOOP_HI));
+			setImages(AtlasImage(IntImages, IMAGE_LOOP_UP), AtlasImage(IntImages, IMAGE_LOOP_DOWN), AtlasImage(IntImages, IMAGE_LOOP_HI));
 			setTip(_("Loop Production"));
 		}
 

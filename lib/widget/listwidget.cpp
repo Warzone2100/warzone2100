@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-TabSelectionStyle::TabSelectionStyle(Image tab, Image tabDown, Image tabHighlight, Image prev, Image prevDown, Image prevHighlight, Image next, Image nextDown, Image nextHighlight, int gap)
+TabSelectionStyle::TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap)
 	: tabSize(tab.width(), tab.height())
 	, scrollTabSize(0, 0)
 	, tabImage(tab), tabImageDown(tabDown), tabImageHighlight(tabHighlight)

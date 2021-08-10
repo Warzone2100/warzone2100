@@ -468,7 +468,7 @@ void W_BUTTON::setImages(Images const &images_)
 	}
 }
 
-void W_BUTTON::setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled)
+void W_BUTTON::setImages(AtlasImage image, AtlasImage imageDown, AtlasImage imageHighlight, AtlasImage imageDisabled)
 {
 	dirty = true;
 	setImages(Images(image, imageDown, imageHighlight, imageDisabled));

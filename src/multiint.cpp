@@ -297,8 +297,8 @@ struct WzMultiButton : public W_BUTTON
 
 	void display(int xOffset, int yOffset) override;
 
-	Image imNormal;
-	Image imDown;
+	AtlasImage imNormal;
+	AtlasImage imDown;
 	unsigned doHighlight;
 	unsigned tc;
 	uint8_t alpha = 255;
@@ -1354,7 +1354,7 @@ static bool canChangeMapOrRandomize()
 	return allowed;
 }
 
-static void addMultiButton(std::shared_ptr<MultibuttonWidget> mbw, int value, Image image, Image imageDown, char const *tip)
+static void addMultiButton(std::shared_ptr<MultibuttonWidget> mbw, int value, AtlasImage image, AtlasImage imageDown, char const *tip)
 {
 	auto button = std::make_shared<W_BUTTON>();
 	button->setImages(image, imageDown, mpwidgetGetFrontHighlightImage(image));
@@ -1460,10 +1460,10 @@ static void addGameOptions()
 	scavengerChoice->setLabel(_("Scavengers"));
 	if (game.mapHasScavengers)
 	{
-		addMultiButton(scavengerChoice, ULTIMATE_SCAVENGERS, Image(FrontImages, IMAGE_SCAVENGERS_ULTIMATE_ON), Image(FrontImages, IMAGE_SCAVENGERS_ULTIMATE_ON_HI), _("Ultimate Scavengers"));
-		addMultiButton(scavengerChoice, SCAVENGERS, Image(FrontImages, IMAGE_SCAVENGERS_ON), Image(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
+		addMultiButton(scavengerChoice, ULTIMATE_SCAVENGERS, AtlasImage(FrontImages, IMAGE_SCAVENGERS_ULTIMATE_ON), AtlasImage(FrontImages, IMAGE_SCAVENGERS_ULTIMATE_ON_HI), _("Ultimate Scavengers"));
+		addMultiButton(scavengerChoice, SCAVENGERS, AtlasImage(FrontImages, IMAGE_SCAVENGERS_ON), AtlasImage(FrontImages, IMAGE_SCAVENGERS_ON_HI), _("Scavengers"));
 	}
-	addMultiButton(scavengerChoice, NO_SCAVENGERS, Image(FrontImages, IMAGE_SCAVENGERS_OFF), Image(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
+	addMultiButton(scavengerChoice, NO_SCAVENGERS, AtlasImage(FrontImages, IMAGE_SCAVENGERS_OFF), AtlasImage(FrontImages, IMAGE_SCAVENGERS_OFF_HI), _("No Scavengers"));
 	scavengerChoice->enable(!locked.scavengers);
 	optionsList->addWidgetToLayout(scavengerChoice);
 
@@ -1471,10 +1471,10 @@ static void addGameOptions()
 	optionsList->attach(allianceChoice);
 	allianceChoice->id = MULTIOP_ALLIANCES;
 	allianceChoice->setLabel(_("Alliances"));
-	addMultiButton(allianceChoice, NO_ALLIANCES, Image(FrontImages, IMAGE_NOALLI), Image(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
-	addMultiButton(allianceChoice, ALLIANCES, Image(FrontImages, IMAGE_ALLI), Image(FrontImages, IMAGE_ALLI_HI), _("Allow Alliances"));
-	addMultiButton(allianceChoice, ALLIANCES_UNSHARED, Image(FrontImages, IMAGE_ALLI_UNSHARED), Image(FrontImages, IMAGE_ALLI_UNSHARED_HI), _("Locked Teams, No Shared Research"));
-	addMultiButton(allianceChoice, ALLIANCES_TEAMS, Image(FrontImages, IMAGE_ALLI_TEAMS), Image(FrontImages, IMAGE_ALLI_TEAMS_HI), _("Locked Teams"));
+	addMultiButton(allianceChoice, NO_ALLIANCES, AtlasImage(FrontImages, IMAGE_NOALLI), AtlasImage(FrontImages, IMAGE_NOALLI_HI), _("No Alliances"));
+	addMultiButton(allianceChoice, ALLIANCES, AtlasImage(FrontImages, IMAGE_ALLI), AtlasImage(FrontImages, IMAGE_ALLI_HI), _("Allow Alliances"));
+	addMultiButton(allianceChoice, ALLIANCES_UNSHARED, AtlasImage(FrontImages, IMAGE_ALLI_UNSHARED), AtlasImage(FrontImages, IMAGE_ALLI_UNSHARED_HI), _("Locked Teams, No Shared Research"));
+	addMultiButton(allianceChoice, ALLIANCES_TEAMS, AtlasImage(FrontImages, IMAGE_ALLI_TEAMS), AtlasImage(FrontImages, IMAGE_ALLI_TEAMS_HI), _("Locked Teams"));
 	allianceChoice->enable(!locked.alliances);
 	optionsList->addWidgetToLayout(allianceChoice);
 
@@ -1482,9 +1482,9 @@ static void addGameOptions()
 	optionsList->attach(powerChoice);
 	powerChoice->id = MULTIOP_POWER;
 	powerChoice->setLabel(_("Power"));
-	addMultiButton(powerChoice, LEV_LOW, Image(FrontImages, IMAGE_POWLO), Image(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
-	addMultiButton(powerChoice, LEV_MED, Image(FrontImages, IMAGE_POWMED), Image(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
-	addMultiButton(powerChoice, LEV_HI, Image(FrontImages, IMAGE_POWHI), Image(FrontImages, IMAGE_POWHI_HI), _("High Power Levels"));
+	addMultiButton(powerChoice, LEV_LOW, AtlasImage(FrontImages, IMAGE_POWLO), AtlasImage(FrontImages, IMAGE_POWLO_HI), _("Low Power Levels"));
+	addMultiButton(powerChoice, LEV_MED, AtlasImage(FrontImages, IMAGE_POWMED), AtlasImage(FrontImages, IMAGE_POWMED_HI), _("Medium Power Levels"));
+	addMultiButton(powerChoice, LEV_HI, AtlasImage(FrontImages, IMAGE_POWHI), AtlasImage(FrontImages, IMAGE_POWHI_HI), _("High Power Levels"));
 	powerChoice->enable(!locked.power);
 	optionsList->addWidgetToLayout(powerChoice);
 
@@ -1492,9 +1492,9 @@ static void addGameOptions()
 	optionsList->attach(baseTypeChoice);
 	baseTypeChoice->id = MULTIOP_BASETYPE;
 	baseTypeChoice->setLabel(_("Base"));
-	addMultiButton(baseTypeChoice, CAMP_CLEAN, Image(FrontImages, IMAGE_NOBASE), Image(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
-	addMultiButton(baseTypeChoice, CAMP_BASE, Image(FrontImages, IMAGE_SBASE), Image(FrontImages, IMAGE_SBASE_HI), _("Start with Bases"));
-	addMultiButton(baseTypeChoice, CAMP_WALLS, Image(FrontImages, IMAGE_LBASE), Image(FrontImages, IMAGE_LBASE_HI), _("Start with Advanced Bases"));
+	addMultiButton(baseTypeChoice, CAMP_CLEAN, AtlasImage(FrontImages, IMAGE_NOBASE), AtlasImage(FrontImages, IMAGE_NOBASE_HI), _("Start with No Bases"));
+	addMultiButton(baseTypeChoice, CAMP_BASE, AtlasImage(FrontImages, IMAGE_SBASE), AtlasImage(FrontImages, IMAGE_SBASE_HI), _("Start with Bases"));
+	addMultiButton(baseTypeChoice, CAMP_WALLS, AtlasImage(FrontImages, IMAGE_LBASE), AtlasImage(FrontImages, IMAGE_LBASE_HI), _("Start with Advanced Bases"));
 	baseTypeChoice->enable(!locked.bases);
 	optionsList->addWidgetToLayout(baseTypeChoice);
 
@@ -1502,7 +1502,7 @@ static void addGameOptions()
 	optionsList->attach(mapPreviewButton);
 	mapPreviewButton->id = MULTIOP_MAP_PREVIEW;
 	mapPreviewButton->setLabel(_("Map Preview"));
-	addMultiButton(mapPreviewButton, 0, Image(FrontImages, IMAGE_FOG_OFF), Image(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
+	addMultiButton(mapPreviewButton, 0, AtlasImage(FrontImages, IMAGE_FOG_OFF), AtlasImage(FrontImages, IMAGE_FOG_OFF_HI), _("Click to see Map"));
 	optionsList->addWidgetToLayout(mapPreviewButton);
 
 	/* Add additional controls if we are (or going to be) hosting the game */
@@ -1513,7 +1513,7 @@ static void addGameOptions()
 		optionsList->attach(structLimitsButton);
 		structLimitsButton->id = MULTIOP_STRUCTLIMITS;
 		structLimitsButton->setLabel(structureLimitsLabel);
-		addMultiButton(structLimitsButton, 0, Image(FrontImages, IMAGE_SLIM), Image(FrontImages, IMAGE_SLIM_HI), structureLimitsLabel);
+		addMultiButton(structLimitsButton, 0, AtlasImage(FrontImages, IMAGE_SLIM), AtlasImage(FrontImages, IMAGE_SLIM_HI), structureLimitsLabel);
 		optionsList->addWidgetToLayout(structLimitsButton);
 
 		/* ...and even more controls if we are not starting a challenge */
@@ -1523,7 +1523,7 @@ static void addGameOptions()
 			optionsList->attach(randomButton);
 			randomButton->id = MULTIOP_RANDOM;
 			randomButton->setLabel(_("Random Game Options"));
-			addMultiButton(randomButton, 0, Image(FrontImages, IMAGE_RELOAD), Image(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
+			addMultiButton(randomButton, 0, AtlasImage(FrontImages, IMAGE_RELOAD), AtlasImage(FrontImages, IMAGE_RELOAD), _("Random Game Options\nCan be blocked by players' votes"));
 			randomButton->setButtonMinClickInterval(GAME_TICKS_PER_SEC / 2);
 			optionsList->addWidgetToLayout(randomButton);
 
@@ -1535,10 +1535,10 @@ static void addGameOptions()
 				optionsList->attach(TechnologyChoice);
 				TechnologyChoice->id = MULTIOP_TECHLEVEL;
 				TechnologyChoice->setLabel(_("Tech"));
-				addMultiButton(TechnologyChoice, TECH_1, Image(FrontImages, IMAGE_TECHLO), Image(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
-				addMultiButton(TechnologyChoice, TECH_2, Image(FrontImages, IMAGE_TECHMED), Image(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
-				addMultiButton(TechnologyChoice, TECH_3, Image(FrontImages, IMAGE_TECHHI), Image(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
-				addMultiButton(TechnologyChoice, TECH_4, Image(FrontImages, IMAGE_COMPUTER_Y), Image(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
+				addMultiButton(TechnologyChoice, TECH_1, AtlasImage(FrontImages, IMAGE_TECHLO), AtlasImage(FrontImages, IMAGE_TECHLO_HI), _("Technology Level 1"));
+				addMultiButton(TechnologyChoice, TECH_2, AtlasImage(FrontImages, IMAGE_TECHMED), AtlasImage(FrontImages, IMAGE_TECHMED_HI), _("Technology Level 2"));
+				addMultiButton(TechnologyChoice, TECH_3, AtlasImage(FrontImages, IMAGE_TECHHI), AtlasImage(FrontImages, IMAGE_TECHHI_HI), _("Technology Level 3"));
+				addMultiButton(TechnologyChoice, TECH_4, AtlasImage(FrontImages, IMAGE_COMPUTER_Y), AtlasImage(FrontImages, IMAGE_COMPUTER_Y_HI), _("Technology Level 4"));
 				optionsList->addWidgetToLayout(TechnologyChoice);
 			}
 			/* If not hosting (yet), add the button for starting the host. */
@@ -1548,7 +1548,7 @@ static void addGameOptions()
 				optionsList->attach(hostButton);
 				hostButton->id = MULTIOP_HOST;
 				hostButton->setLabel(_("Start Hosting Game"));
-				addMultiButton(hostButton, 0, Image(FrontImages, IMAGE_HOST), Image(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
+				addMultiButton(hostButton, 0, AtlasImage(FrontImages, IMAGE_HOST), AtlasImage(FrontImages, IMAGE_HOST_HI), _("Start Hosting Game"));
 				optionsList->addWidgetToLayout(hostButton);
 			}
 		}
@@ -3386,21 +3386,21 @@ public:
 	void setSelected(bool selected);
 
 private:
-	inline Image getImageForSlotsReadyStatus() const
+	inline AtlasImage getImageForSlotsReadyStatus() const
 	{
 		if (totalAvailableSlots == 0)
 		{
-			return Image();
+			return AtlasImage();
 		}
 		if (numTakenSlots == 0)
 		{
-			return Image();
+			return AtlasImage();
 		}
 		if (numTakenSlots != numTakenSlotsReady)
 		{
-			return Image(FrontImages, IMAGE_LAMP_AMBER);
+			return AtlasImage(FrontImages, IMAGE_LAMP_AMBER);
 		}
-		return Image(FrontImages, IMAGE_LAMP_GREEN);
+		return AtlasImage(FrontImages, IMAGE_LAMP_GREEN);
 	}
 	void recalculateSlotsLabel();
 	void recalculateTitleLabel();
@@ -3458,7 +3458,7 @@ void WzPlayerBoxTabButton::recalculateTitleLabel()
 {
 	// size titleLabel to take up available space in the middle
 	int slotCountsLabelX0 = slotsCountsLabel->x();
-	int titleLabelX0 = borderWidth + elementPadding + (Image(FrontImages, IMAGE_LAMP_GREEN).width() / 2) + elementPadding;
+	int titleLabelX0 = borderWidth + elementPadding + (AtlasImage(FrontImages, IMAGE_LAMP_GREEN).width() / 2) + elementPadding;
 	int titleLabelY0 = (height() - titleLabel->height()) / 2;
 	int titleLabelWidth = slotCountsLabelX0 - elementPadding - titleLabelX0;
 	titleLabel->setGeometry(titleLabelX0, titleLabelY0, titleLabelWidth, titleLabel->height());
@@ -3505,7 +3505,7 @@ void WzPlayerBoxTabButton::display(int xOffset, int yOffset)
 	}
 
 	// draw ready status image
-	Image readyStatusImage = getImageForSlotsReadyStatus();
+	AtlasImage readyStatusImage = getImageForSlotsReadyStatus();
 	if (!readyStatusImage.isNull())
 	{
 		int imageDisplayWidth = readyStatusImage.width() / 2;
@@ -7720,30 +7720,30 @@ void displayMultiEditBox(WIDGET *psWidget, UDWORD xOffset, UDWORD yOffset)
 	}
 }
 
-Image mpwidgetGetFrontHighlightImage(Image image)
+AtlasImage mpwidgetGetFrontHighlightImage(AtlasImage image)
 {
 	if (image.isNull())
 	{
-		return Image();
+		return AtlasImage();
 	}
 	switch (image.width())
 	{
-	case 30: return Image(FrontImages, IMAGE_HI34);
-	case 60: return Image(FrontImages, IMAGE_HI64);
-	case 19: return Image(FrontImages, IMAGE_HI23);
-	case 27: return Image(FrontImages, IMAGE_HI31);
-	case 35: return Image(FrontImages, IMAGE_HI39);
-	case 37: return Image(FrontImages, IMAGE_HI41);
-	case 56: return Image(FrontImages, IMAGE_HI56);
+	case 30: return AtlasImage(FrontImages, IMAGE_HI34);
+	case 60: return AtlasImage(FrontImages, IMAGE_HI64);
+	case 19: return AtlasImage(FrontImages, IMAGE_HI23);
+	case 27: return AtlasImage(FrontImages, IMAGE_HI31);
+	case 35: return AtlasImage(FrontImages, IMAGE_HI39);
+	case 37: return AtlasImage(FrontImages, IMAGE_HI41);
+	case 56: return AtlasImage(FrontImages, IMAGE_HI56);
 	}
-	return Image();
+	return AtlasImage();
 }
 
 void WzMultiButton::display(int xOffset, int yOffset)
 {
 	int x0 = xOffset + x();
 	int y0 = yOffset + y();
-	Image hiToUse(nullptr, 0);
+	AtlasImage hiToUse(nullptr, 0);
 
 	// FIXME: This seems to be a way to conserve space, so you can use a
 	// transparent icon with these edit boxes.
@@ -7769,7 +7769,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 	bool down = (getState() & downStateMask) != 0;
 	bool grey = (getState() & greyStateMask) != 0;
 
-	Image toDraw[3];
+	AtlasImage toDraw[3];
 	int numToDraw = 0;
 
 	// now display
@@ -7787,7 +7787,7 @@ void WzMultiButton::display(int xOffset, int yOffset)
 
 	for (int n = 0; n < numToDraw; ++n)
 	{
-		Image tcImage(toDraw[n].images, toDraw[n].id + 1);
+		AtlasImage tcImage(toDraw[n].images, toDraw[n].id + 1);
 		if (tc == MAX_PLAYERS)
 		{
 			iV_DrawImageImage(toDraw[n], x0, y0, alpha);
@@ -7858,8 +7858,8 @@ std::shared_ptr<W_BUTTON> addMultiBut(WIDGET &parent, UDWORD id, UDWORD x, UDWOR
 	}
 	button->setGeometry(x, y, width, height);
 	button->setTip((tipres != nullptr) ? std::string(tipres) : std::string());
-	button->imNormal = Image(FrontImages, norm);
-	button->imDown = Image(FrontImages, down);
+	button->imNormal = AtlasImage(FrontImages, norm);
+	button->imDown = AtlasImage(FrontImages, down);
 	button->doHighlight = hi;
 	button->tc = tc;
 	button->alpha = alpha;

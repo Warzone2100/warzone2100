@@ -40,12 +40,12 @@ public:
 	struct Images
 	{
 		Images() {}
-		Images(Image normal, Image down, Image highlighted, Image disabled = Image()) : normal(normal), down(down), highlighted(highlighted), disabled(disabled) {}
+		Images(AtlasImage normal, AtlasImage down, AtlasImage highlighted, AtlasImage disabled = AtlasImage()) : normal(normal), down(down), highlighted(highlighted), disabled(disabled) {}
 
-		Image normal;       ///< The image for the button.
-		Image down;         ///< The image for the button, when down. Is overlaid over image.
-		Image highlighted;  ///< The image for the button, when highlighted. Is overlaid over image.
-		Image disabled;     ///< The image for the button, when disabled. Is overlaid over image.
+		AtlasImage normal;       ///< The image for the button.
+		AtlasImage down;         ///< The image for the button, when down. Is overlaid over image.
+		AtlasImage highlighted;  ///< The image for the button, when highlighted. Is overlaid over image.
+		AtlasImage disabled;     ///< The image for the button, when disabled. Is overlaid over image.
 	};
 
 public:
@@ -68,7 +68,7 @@ public:
 	void unlock();
 
 	void setImages(Images const &images);
-	void setImages(Image image, Image imageDown, Image imageHighlight, Image imageDisabled = Image());
+	void setImages(AtlasImage image, AtlasImage imageDown, AtlasImage imageHighlight, AtlasImage imageDisabled = AtlasImage());
 
 	using WIDGET::setString;
 	using WIDGET::setTip;

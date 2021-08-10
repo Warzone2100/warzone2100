@@ -35,13 +35,13 @@
 struct TabSelectionStyle
 {
 	TabSelectionStyle() {}
-	TabSelectionStyle(Image tab, Image tabDown, Image tabHighlight, Image prev, Image prevDown, Image prevHighlight, Image next, Image nextDown, Image nextHighlight, int gap);
+	TabSelectionStyle(AtlasImage tab, AtlasImage tabDown, AtlasImage tabHighlight, AtlasImage prev, AtlasImage prevDown, AtlasImage prevHighlight, AtlasImage next, AtlasImage nextDown, AtlasImage nextHighlight, int gap);
 
 	WzSize tabSize;
 	WzSize scrollTabSize;
-	Image tabImage, tabImageDown, tabImageHighlight;
-	Image prevScrollTabImage, prevScrollTabImageDown, prevScrollTabImageHighlight;
-	Image nextScrollTabImage, nextScrollTabImageDown, nextScrollTabImageHighlight;
+	AtlasImage tabImage, tabImageDown, tabImageHighlight;
+	AtlasImage prevScrollTabImage, prevScrollTabImageDown, prevScrollTabImageHighlight;
+	AtlasImage nextScrollTabImage, nextScrollTabImageDown, nextScrollTabImageHighlight;
 	int tabGap;
 };
 

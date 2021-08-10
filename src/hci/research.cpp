@@ -286,7 +286,7 @@ protected:
 			intRefreshScreen();
 			return;
 		}
-		displayIMD(Image(), ImdObject::Structure(facility), xOffset, yOffset);
+		displayIMD(AtlasImage(), ImdObject::Structure(facility), xOffset, yOffset);
 		displayIfHighlight(xOffset, yOffset);
 	}
 
@@ -363,7 +363,7 @@ protected:
 		auto researchPending = facility && structureIsResearchingPending(facility);
 		auto objectImage = researchPending && research ? getResearchObjectImage(research) : ImdObject::Component(nullptr);
 
-		displayIMD(Image(), objectImage, xOffset, yOffset);
+		displayIMD(AtlasImage(), objectImage, xOffset, yOffset);
 
 		if (researchPending && StructureIsOnHoldPending(facility))
 		{
@@ -504,7 +504,7 @@ private:
 		auto research = getStats();
 		ASSERT_NOT_NULLPTR_OR_RETURN(, research);
 
-		auto researchIcon = research->iconID != NO_RESEARCH_ICON ? Image(IntImages, research->iconID) : Image();
+		auto researchIcon = research->iconID != NO_RESEARCH_ICON ? AtlasImage(IntImages, research->iconID) : AtlasImage();
 		displayIMD(researchIcon, getResearchObjectImage(research), xOffset, yOffset);
 
 		if (research->subGroup != NO_RESEARCH_ICON)
