@@ -1972,7 +1972,7 @@ bool gl_context::initGLContext()
 	if (!func_GLGetProcAddress)
 	{
 		debug(LOG_FATAL, "backend_impl->getGLGetProcAddress() returned NULL");
-		exit(1);
+		return false;
 	}
 	gles = backend_impl->isOpenGLES();
 	if (!gles)
@@ -1980,7 +1980,7 @@ bool gl_context::initGLContext()
 		if (!gladLoadGLLoader(func_GLGetProcAddress))
 		{
 			debug(LOG_FATAL, "gladLoadGLLoader failed");
-			exit(1);
+			return false;
 		}
 	}
 	else
@@ -1988,7 +1988,7 @@ bool gl_context::initGLContext()
 		if (!gladLoadGLES2Loader(func_GLGetProcAddress))
 		{
 			debug(LOG_FATAL, "gladLoadGLLoader failed");
-			exit(1);
+			return false;
 		}
 	}
 
@@ -2157,7 +2157,6 @@ bool gl_context::initGLContext()
 		if (glGenVertexArrays == nullptr)
 		{
 			debug(LOG_FATAL, "glGenVertexArrays is not available, but context is OpenGL 3.0+");
-			exit(1);
 			return false;
 		}
 		glGenVertexArrays(1, &vaoId);
