@@ -32,6 +32,7 @@ public:
 
 	virtual GLADloadproc getGLGetProcAddress() override;
 	virtual bool createGLContext() override;
+	virtual bool destroyGLContext() override;
 	virtual void swapWindow() override;
 	virtual void getDrawableSize(int* w, int* h) override;
 

@@ -39,6 +39,9 @@ namespace gfx_api
 
 		// Creates an OpenGL context (double-buffered)
 		virtual bool createGLContext() = 0;
+
+		virtual bool destroyGLContext() = 0;
+
 		virtual void swapWindow() = 0;
 
 		// Use this function to get the size of a window's underlying drawable in pixels (for use with glViewport).
