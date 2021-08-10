@@ -1931,6 +1931,7 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 
 	if (!initGLContext())
 	{
+		backend_impl->destroyGLContext();
 		return false;
 	}
 
