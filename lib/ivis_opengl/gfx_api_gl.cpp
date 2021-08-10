@@ -41,10 +41,10 @@
 
 struct OPENGL_DATA
 {
-	char vendor[256];
-	char renderer[256];
-	char version[256];
-	char GLSLversion[256];
+	char vendor[256] = {};
+	char renderer[256] = {};
+	char version[256] = {};
+	char GLSLversion[256] = {};
 };
 OPENGL_DATA opengl;
 
@@ -414,9 +414,17 @@ const char * shaderVersionString(SHADER_VERSION_ES version)
 GLint wz_GetGLIntegerv(GLenum pname, GLint defaultValue = 0)
 {
 	GLint retVal = defaultValue;
-	while(glGetError() != GL_NO_ERROR) { } // clear the OpenGL error queue
+	ASSERT_OR_RETURN(retVal, glGetIntegerv != nullptr, "glGetIntegerv is null");
+	if (glGetError != nullptr)
+	{
+		while(glGetError() != GL_NO_ERROR) { } // clear the OpenGL error queue
+	}
 	glGetIntegerv(pname, &retVal);
-	GLenum err = glGetError();
+	GLenum err = GL_NO_ERROR;
+	if (glGetError != nullptr)
+	{
+		err = glGetError();
+	}
 	if (err != GL_NO_ERROR)
 	{
 		retVal = defaultValue;
@@ -1731,6 +1739,7 @@ static std::string getGLExtensions()
 	else
 	{
 		// OpenGL < 3.0
+		ASSERT_OR_RETURN(extensions, glGetString != nullptr, "glGetString is null");
 		const char *pExtensionsStr = (const char *) glGetString(GL_EXTENSIONS);
 		if (pExtensionsStr != nullptr)
 		{
@@ -1943,6 +1952,18 @@ bool gl_context::_initialize(const gfx_api::backend_Impl_Factory& impl, int32_t 
 	return true;
 }
 
+static const GLubyte* wzSafeGlGetString(GLenum name)
+{
+	static const GLubyte emptyString[1] = {0};
+	ASSERT_OR_RETURN(emptyString, glGetString != nullptr, "glGetString is null");
+	auto result = glGetString(name);
+	if (result == nullptr)
+	{
+		return emptyString;
+	}
+	return result;
+}
+
 bool gl_context::initGLContext()
 {
 	frameNum = 1;
@@ -1972,13 +1993,13 @@ bool gl_context::initGLContext()
 	}
 
 	/* Dump general information about OpenGL implementation to the console and the dump file */
-	ssprintf(opengl.vendor, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
+	ssprintf(opengl.vendor, "OpenGL Vendor: %s", wzSafeGlGetString(GL_VENDOR));
 	addDumpInfo(opengl.vendor);
 	debug(LOG_3D, "%s", opengl.vendor);
-	ssprintf(opengl.renderer, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
+	ssprintf(opengl.renderer, "OpenGL Renderer: %s", wzSafeGlGetString(GL_RENDERER));
 	addDumpInfo(opengl.renderer);
 	debug(LOG_3D, "%s", opengl.renderer);
-	ssprintf(opengl.version, "OpenGL Version: %s", glGetString(GL_VERSION));
+	ssprintf(opengl.version, "OpenGL Version: %s", wzSafeGlGetString(GL_VERSION));
 	addDumpInfo(opengl.version);
 	debug(LOG_3D, "%s", opengl.version);
 
