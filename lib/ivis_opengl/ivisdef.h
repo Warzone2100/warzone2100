@@ -167,7 +167,7 @@ struct iIMDShape
 //
 //*************************************************************************
 
-struct ImageDef
+struct AtlasImageDef
 {
 	size_t TPageID;   /**< Which associated file to read our info from */
 	unsigned int Tu;        /**< First vertex coordinate */
@@ -194,7 +194,7 @@ struct IMAGEFILE
 	AtlasImage find(std::string const &name);  // Defined in bitimage.cpp.
 
 	std::vector<Page> pages;          /// Texture pages.
-	std::vector<ImageDef> imageDefs;  /// Stored images.
+	std::vector<AtlasImageDef> imageDefs;  /// Stored images.
 	std::vector<std::pair<std::string, int>> imageNames;  ///< Names of images, sorted by name. Can lookup indices from name.
 };
 

@@ -320,7 +320,7 @@ void setReticuleFlash(int ButId, bool flash)
 // set up the button's size & hit-testing based on the dimensions of the "normal" image
 void setReticuleButtonDimensions(W_BUTTON &button, const WzString &filename)
 {
-	ImageDef *image = nullptr;
+	AtlasImageDef *image = nullptr;
 	if (!filename.isEmpty())
 	{
 		image = iV_GetImage(filename);

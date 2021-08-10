@@ -374,7 +374,7 @@ void iV_DrawImageTextClipped(gfx_api::texture& TextureID, Vector2i textureSize, 
 template<typename PSO>
 static inline void pie_DrawImageTemplate(IMAGEFILE *imageFile, int id, Vector2i size, const PIERECT *dest, PIELIGHT colour, const glm::mat4 &modelViewProjection, Vector2i textureInset = Vector2i(0, 0))
 {
-	ImageDef const &image2 = imageFile->imageDefs[id];
+	AtlasImageDef const &image2 = imageFile->imageDefs[id];
 	size_t texPage = imageFile->pages[image2.TPageID].id;
 	gfx_api::gfxFloat invTextureSize = 1.f / (float)imageFile->pages[image2.TPageID].size;
 	float tu = (float)(image2.Tu + textureInset.x) * invTextureSize;
@@ -405,7 +405,7 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 		// pie_DrawImage(request.imageFile, request.ID, request.size, &request.dest, request.colour, request.modelViewProjection, request.textureInset)
 		// but is tweaked to use custom implementation of iv_DrawImageImpl that does not disable the shader after every glDrawArrays call.
 
-		ImageDef const &image2 = request.imageFile->imageDefs[request.ID];
+		AtlasImageDef const &image2 = request.imageFile->imageDefs[request.ID];
 		size_t texPage = request.imageFile->pages[image2.TPageID].id;
 		gfx_api::gfxFloat invTextureSize = 1.f / (float)request.imageFile->pages[image2.TPageID].size;
 		float tu = (float)(image2.Tu + request.textureInset.x) * invTextureSize;
@@ -442,7 +442,7 @@ static void pie_DrawMultipleImages(const std::list<PieDrawImageRequest>& request
 
 static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, int x, int y)
 {
-	ImageDef const &image = imageFile->imageDefs[id];
+	AtlasImageDef const &image = imageFile->imageDefs[id];
 	Vector2i pieImage;
 	pieImage.x = image.Width;
 	pieImage.y = image.Height;
@@ -459,12 +459,12 @@ static Vector2i makePieImage(IMAGEFILE *imageFile, unsigned id, PIERECT *dest, i
 void iV_DrawImage2(const WzString &filename, float x, float y, float width, float height)
 {
 	if (filename.isEmpty()) { return; }
-	ImageDef *image = iV_GetImage(filename);
+	AtlasImageDef *image = iV_GetImage(filename);
 	ASSERT_OR_RETURN(, image != nullptr, "No image found for filename: %s", filename.toUtf8().c_str());
 	iV_DrawImage2(image, x, y, width, height);
 }
 
-void iV_DrawImage2(const ImageDef *image, float x, float y, float width, float height)
+void iV_DrawImage2(const AtlasImageDef *image, float x, float y, float width, float height)
 {
 	ASSERT_NOT_NULLPTR_OR_RETURN(, image);
 	const gfx_api::gfxFloat invTextureSize = image->invTextureSize;
@@ -548,7 +548,7 @@ void iV_DrawImageRepeatX(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Width
 	}
 
 	assertValidImage(ImageFile, ID);
-	const ImageDef *Image = &ImageFile->imageDefs[ID];
+	const AtlasImageDef *Image = &ImageFile->imageDefs[ID];
 
 	REND_MODE mode = REND_OPAQUE;
 
@@ -596,7 +596,7 @@ void iV_DrawImageRepeatY(IMAGEFILE *ImageFile, UWORD ID, int x, int y, int Heigh
 	}
 
 	assertValidImage(ImageFile, ID);
-	const ImageDef *Image = &ImageFile->imageDefs[ID];
+	const AtlasImageDef *Image = &ImageFile->imageDefs[ID];
 
 	REND_MODE mode = REND_OPAQUE;
 
