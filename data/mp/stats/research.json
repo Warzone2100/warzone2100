@@ -5271,7 +5271,7 @@
 		"msgName": "RES_W_BMB1",
 		"name": "Cluster Bomb Bay",
 		"requiredResearch": [
-			"R-Vehicle-Prop-VTOL"
+			"R-Struc-VTOLPad"
 		],
 		"researchPoints": 5500,
 		"researchPower": 171,
