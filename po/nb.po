@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: warzone2100\n"
 "Report-Msgid-Bugs-To: warzone2100-project@lists.sourceforge.net\n"
 "POT-Creation-Date: 2021-08-01 03:46+0000\n"
-"PO-Revision-Date: 2021-08-13 09:05\n"
+"PO-Revision-Date: 2021-08-13 21:13\n"
 "Last-Translator: \n"
 "Language-Team: Norwegian Bokmal\n"
 "Language: nb_NO\n"
@@ -1216,7 +1216,7 @@ msgstr "Tornado AA flak-område"
 #: data/mp/messages/strings/names.txt:241
 #: data/mp/messages/strings/names.txt:403
 msgid "Dragon's Teeth"
-msgstr ""
+msgstr "Dragetenner"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-Howitzer.name
@@ -1227,7 +1227,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:251
 #: po/custom/fromJson.txt:2899
 msgid "Howitzer Emplacement"
-msgstr ""
+msgstr "Haubitsstilling"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-HvyHowitzer.name
@@ -1238,7 +1238,7 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:252
 #: po/custom/fromJson.txt:2262
 msgid "Ground Shaker Emplacement"
-msgstr ""
+msgstr "Bakkeristestilling"
 
 #. TRANSLATORS:
 #. data/base/stats/research.json: $.R-Defense-RotHow.name
@@ -1249,17 +1249,17 @@ msgstr ""
 #: data/mp/messages/strings/names.txt:253
 #: po/custom/fromJson.txt:2710
 msgid "Hellstorm Emplacement"
-msgstr ""
+msgstr "Helvetesstormstilling"
 
 #: data/base/messages/strings/names.txt:228
 #: data/mp/messages/strings/names.txt:264
 msgid "Mortar Emplacement"
-msgstr ""
+msgstr "Bombekasterstilling"
 
 #: data/base/messages/strings/names.txt:229
 #: data/mp/messages/strings/names.txt:265
 msgid "Bombard Emplacement"
-msgstr ""
+msgstr "Bombardstilling"
 
 #: data/base/messages/strings/names.txt:230
 #: data/mp/messages/strings/names.txt:266
