@@ -94,6 +94,8 @@ static char	sCurrentConsoleText[MAX_CONSOLE_STRING_LENGTH];			//remember what us
 
 #define QUICKSAVE_CAM_FILENAME "savegames/campaign/QuickSave.gam"
 #define QUICKSAVE_SKI_FILENAME "savegames/skirmish/QuickSave.gam"
+#define QUICKSAVE_CAM_JSON_FILENAME "savegames/campaign/QuickSave/QuickSave.json"
+#define QUICKSAVE_SKI_JSON_FILENAME "savegames/skirmish/QuickSave/QuickSave.json"
 
 #define SPECTATOR_NO_OP() do { if (selectedPlayer >= MAX_PLAYERS || NetPlay.players[selectedPlayer].isSpectator) { return; } } while (0)
 
@@ -2564,7 +2566,8 @@ void kf_QuickLoad()
 	}
 
 	const char *filename = bMultiPlayer? QUICKSAVE_SKI_FILENAME : QUICKSAVE_CAM_FILENAME;
-	if (PHYSFS_exists(filename))
+	// check for .json version, because that's what going to be loaded anyway
+	if (PHYSFS_exists(filename) || PHYSFS_exists(bMultiPlayer? QUICKSAVE_SKI_JSON_FILENAME : QUICKSAVE_CAM_JSON_FILENAME))
 	{
 		console("QuickLoad");
 		audio_StopAll();
