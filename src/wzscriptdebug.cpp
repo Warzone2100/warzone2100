@@ -73,6 +73,7 @@
 #include "transporter.h"
 #include "template.h"
 #include "multiint.h"
+#include "challenge.h"
 
 #include "wzapi.h"
 #include "qtscript.h"
@@ -271,6 +272,7 @@ static nlohmann::ordered_json fillMainModel()
 	result["scavengerSlot"] = scavengerSlot();
 	result["scavengerPlayer"] = scavengerPlayer();
 	result["bMultiPlayer"] = bMultiPlayer;
+	result["challenge"] = challengeActive;
 	ASSERT(getDifficultyLevel() < difficulty_type.size(), "Bad DIFFICULTY_LEVEL");
 	result["difficultyLevel"] = difficulty_type.at(getDifficultyLevel());
 	result["loopPieCount"] = loopPieCount;
